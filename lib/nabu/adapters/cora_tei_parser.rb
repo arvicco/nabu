@@ -56,11 +56,15 @@ module Nabu
                            :genre, :topic, :text_type, :repository, :ms_idno,
                            :orig_date, :orig_place, :derived_from)
 
-      # One manuscript line: +page+ the pb @n (may be nil), +n+ the lb @n,
-      # +edition_lines+ the ed="2" labels that fell inside it, +text+ the
-      # raw diplomatic surface (caller normalizes), +tokens+ the token
-      # records (string-keyed Hashes).
-      Line = Data.define(:page, :n, :edition_lines, :text, :tokens)
+      # One manuscript line: +page+ the pb @n (may be nil), +column+ the
+      # cb @n when the codex is column-broken (nil otherwise — a fresh pb
+      # clears it), +n+ the lb @n, +edition_lines+ the ed="2" labels that
+      # fell inside it, +text+ the raw diplomatic surface (caller
+      # normalizes), +tokens+ the token records (string-keyed Hashes).
+      # Line numbering restarts per column in two-column codices (censused:
+      # M242, 1,863 folio.line collisions without the column key), so the
+      # column is citation data, not decoration.
+      Line = Data.define(:page, :column, :n, :edition_lines, :text, :tokens)
 
       # One file's body: the lines in document order plus the unrecognized-
       # element census (sorted name → count; empty = clean).
@@ -106,7 +110,7 @@ module Nabu
       # Read one file's <body> into lines + the loudness census.
       def body(path)
         walk = { path: path, in_body: false, lines: [], unrecognized: Hash.new(0),
-                 page: nil, line: nil, pending_ed2: [], word: nil, prev_join: nil }
+                 page: nil, column: nil, line: nil, pending_ed2: [], word: nil, prev_join: nil }
         each_node(path) do |node|
           case node.node_type
           when Nokogiri::XML::Reader::TYPE_ELEMENT then open_body_element(node, walk)
@@ -195,13 +199,28 @@ module Nabu
 
         case node.name
         when "ab" then nil # the token container; lines are the grain
-        when "pb" then walk[:page] = node.attribute("n")
+        when "pb" then open_page_break(node, walk)
+        when "cb" then open_column_break(node, walk)
         when "lb" then open_line_break(node, walk)
         when "w", "pc" then open_token(node, walk)
         when "unclear", "supplied" then walk[:word][:flags][node.name] = true if walk[:word]
         when "space" then walk[:word][:form] << (" " * (node.attribute("quantity") || "1").to_i) if walk[:word]
         else walk[:unrecognized][node.name] += 1
         end
+      end
+
+      # A fresh folio clears the column: the next <cb> declares its own.
+      def open_page_break(node, walk)
+        walk[:page] = node.attribute("n")
+        walk[:column] = nil
+      end
+
+      # ed="1" (or no @ed) tracks the manuscript column (two-column codices
+      # restart line numbers per column); other @ed values are edition
+      # layout with no citation weight.
+      def open_column_break(node, walk)
+        ed = node.attribute("ed")
+        walk[:column] = node.attribute("n") if ed.nil? || ed == "1"
       end
 
       # ed="1" (or no @ed) opens a manuscript line; any other @ed is edition
@@ -212,8 +231,8 @@ module Nabu
           n = node.attribute("n") or
             raise ParseError, "#{walk[:path]}: primary <lb> without @n — lines would be uncitable"
           flush_line(walk)
-          walk[:line] = { page: walk[:page], n: n, ed2: walk.delete(:pending_ed2) || [],
-                          text: +"", tokens: [] }
+          walk[:line] = { page: walk[:page], column: walk[:column], n: n,
+                          ed2: walk.delete(:pending_ed2) || [], text: +"", tokens: [] }
           walk[:pending_ed2] = []
         elsif walk[:line]
           walk[:line][:ed2] << node.attribute("n")
@@ -292,8 +311,8 @@ module Nabu
         walk[:prev_join] = nil
         return unless line && !line[:text].empty?
 
-        walk[:lines] << Line.new(page: line[:page], n: line[:n], edition_lines: line[:ed2],
-                                 text: line[:text], tokens: line[:tokens])
+        walk[:lines] << Line.new(page: line[:page], column: line[:column], n: line[:n],
+                                 edition_lines: line[:ed2], text: line[:text], tokens: line[:tokens])
       end
 
       # The streaming spine (house rule: Reader is the only Nokogiri entry

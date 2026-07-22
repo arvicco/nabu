@@ -27,6 +27,8 @@ class CoraTeiParserTest < Minitest::Test
   FIXTURES = Nabu::TestSupport.fixtures("rem")
   M058 = File.join(FIXTURES, "M058.xml")
   M218B = File.join(FIXTURES, "M218B.xml")
+  M242 = File.join(FIXTURES, "M242.xml")
+  M345 = File.join(FIXTURES, "M345.xml")
 
   def parser
     Nabu::Adapters::CoraTeiParser.new
@@ -151,6 +153,34 @@ class CoraTeiParserTest < Minitest::Test
       assert_equal expected, body.lines.sum { |l| l.tokens.size },
                    "#{File.basename(path)}: header extent counts w AND pc tokens"
     end
+  end
+
+  # --- columns (the P40-r1 collision fix) -----------------------------------
+
+  def test_primary_column_breaks_set_the_line_column
+    lines = parser.body(M242).lines
+    first_page = lines.select { |l| l.page == "5r" }
+    assert_equal %w[a b], first_page.map(&:column).uniq,
+                 "M242 is a two-column codex: <cb n='a'/'b' ed='1'> tracks the column"
+    assert(first_page.select { |l| l.column == "a" }.map(&:n).include?("1"))
+    assert(first_page.select { |l| l.column == "b" }.map(&:n).include?("1"),
+           "line numbering restarts per column — the collision the column key resolves")
+  end
+
+  def test_a_new_page_resets_the_column
+    lines = parser.body(M242).lines
+    page_starts = lines.chunk_while { |a, b| a.page == b.page }.map(&:first)
+    assert(page_starts.all? { |l| l.column.nil? || l.column == "a" },
+           "a fresh <pb> clears the previous folio's column until its own <cb>")
+  end
+
+  def test_a_column_less_file_has_nil_columns
+    assert(parser.body(M058).lines.all? { |l| l.column.nil? })
+  end
+
+  def test_cb_is_recognized_layout_not_censused
+    refute_includes parser.body(M242).unrecognized.keys, "cb",
+                    "the column break is layout vocabulary, not an unrecognized element"
   end
 
   # --- loudness -------------------------------------------------------------

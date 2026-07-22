@@ -169,7 +169,7 @@ germanic:
   instruments: |
     - **Gold-lemma languages:** got (Gothic, on the PROIEL and UD treebanks),
       ang (Old English — ASPR verse and ISWOC prose, the West-Saxon Mark), and
-      — live since the 2026-07-22 wave — gmh (ReM's 1.71M rows, instantly the
+      — live since the 2026-07-22 wave — gmh (ReM's 2.10M rows, instantly the
       corpus's third-largest gold pool), non (Menotec's PROIEL-scheme Old
       Norwegian and the Edda, 258K) and osx (HeliPaD's gold form-lemma
       Heliand). One lane is still staged: is (IcePaHC's first Icelandic lemma

@@ -41,7 +41,7 @@ material, and object type, with uncertain upstream attributions preserved
 as such.
 
 **Lemma search** (`search --lemma FORM`) queries by dictionary form rather
-than surface string, over 14.6 million gold lemma annotations in
+than surface string, over 15.0 million gold lemma annotations in
 twenty-six languages (Middle High German, Old Norse and Old Saxon joined
 on 22 July 2026) — inflection and suppletion included:
 

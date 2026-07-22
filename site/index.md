@@ -63,8 +63,8 @@ with every desk's member shelves and recipes, is
 
 ## The holdings, in brief
 
-As of **22 July 2026**, the catalog records **801,122 documents** comprising
-**27,978,978 passages** in 108 language codes — from proto-cuneiform
+As of **22 July 2026**, the catalog records **801,168 documents** comprising
+**28,046,116 passages** in 108 language codes — from proto-cuneiform
 tablets of the late fourth millennium BCE to Meiji-era Japanese. Literary
 Chinese is the largest language on the shelves (13.2 million passages —
 the Kanseki Repository and the CBETA Buddhist canon); the newest arrival
@@ -72,7 +72,7 @@ is the Germanic wave of 22 July: the Old Norwegian treebanks and the
 Poetic Edda, the Old Saxon *Heliand*, the Middle High German reference
 corpus, and the runic inscriptions of Scandinavia — a day behind the
 Japanese reading desk (Aozora Bunko, 3.0 million passages). Together with
-**1,310,763 dictionary entries** on the reference shelf and **14.6
+**1,310,763 dictionary entries** on the reference shelf and **15.0
 million gold-standard lemma annotations in twenty-six languages** (a
 further 8.2 million machine-suggested annotations are carried at an
 honestly labelled silver tier). All figures on this site are read

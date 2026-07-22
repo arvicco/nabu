@@ -89,9 +89,9 @@ goes offline, a Nabu library keeps working. The shelf survey is on
 
 ### What is included?
 
-As of 22 July 2026: 801,122 documents and 27,978,978 passages across 82
+As of 22 July 2026: 801,168 documents and 28,046,116 passages across 82
 registered, synced sources, plus 1,310,763 dictionary entries and
-14.6 million gold
+15.0 million gold
 lemma annotations in twenty-six languages — the classical Chinese
 library and the Buddhist canon (the corpus's largest holdings), classical
 Greek and Latin, papyri, Latin inscriptions, cuneiform and the Ancient

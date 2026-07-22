@@ -1,0 +1,799 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI version="4.6.0" xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc xml:id="M242">
+      <titleStmt>
+        <title>Wiener Notker</title>
+        <respStmt>
+          <resp>annotation by</resp>
+          <name>Kathrin Chlench (Bonn)</name>
+        </respStmt>
+        <respStmt>
+          <resp>collation by</resp>
+          <name>(Bochum)</name>
+        </respStmt>
+        <respStmt>
+          <resp>digitization by</resp>
+          <name>(Bochum)</name>
+        </respStmt>
+        <respStmt>
+          <resp>pre-editing by</resp>
+          <name>Susanne Strubel-Burgdorf (Bonn)</name>
+        </respStmt>
+        <respStmt>
+          <resp>proofreading by</resp>
+          <name>Thomas Klein, Kathrin Chlench (Bonn)</name>
+        </respStmt>
+      </titleStmt>
+      <editionStmt>
+        <edition>
+          <name>Version 2.1</name>
+          <idno type="--">--</idno>
+        </edition>
+      </editionStmt>
+      <extent>
+        <measure unit="tokens" quantity="20207">20207 annotated tokens</measure>
+      </extent>
+      <publicationStmt>
+        <publisher>
+          <persName>Adam Roussel</persName>
+          <persName>Thomas Klein</persName>
+          <persName>Stefanie Dipper</persName>
+          <persName>Klaus-Peter Wegera</persName>
+          <persName>Claudia Wich-Reif</persName>
+        </publisher>
+        <date>2024-10-28</date>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA)</licence>
+        </availability>
+        <idno type="hsc">--</idno>
+        <idno type="ddd">--</idno>
+        <idno type="mwb">--</idno>
+      </publicationStmt>
+      <seriesStmt>
+        <title>MiGraKo</title>
+      </seriesStmt>
+      <notesStmt>
+        <note>-</note>
+      </notesStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier>
+            <repository>Wien, Österr. Nationalbibl.</repository>
+            <idno>Cod. 2681</idno>
+          </msIdentifier>
+          <physDesc>
+            <p>-</p>
+            <objectDesc>
+              <supportDesc>
+                <support>
+                  <objectType>Handschrift</objectType>
+                </support>
+                <extent>Bl. 3ra-103rb,20, 108ra-212ra,20</extent>
+              </supportDesc>
+            </objectDesc>
+          </physDesc>
+          <history>
+            <origin>
+              <origDate unit="century">--</origDate>
+              <origPlace>-</origPlace>
+            </origin>
+          </history>
+        </msDesc>
+        <bibl>
+          <bibl>"Richard Heinzel und Wilhelm Scherer (Hg.), Notkers Psalmen nach der Wiener Handschrift, Straßburg/London 1876; Evelyn Scherabon Firchow unter Mitarbeit von Richard Hotchkiss (Hg.), Der Codex Vindobonensis 2681 aus dem bayerischen Kloster Wessobrunn um 1100. Diplomatische Textausgabe der Wiener Notker Psalmen, Cantica, Wessobrunner Predigten und katechetischen Denkmäler. Mit Konkordanzen und Wortlisten auf einer CD, Hildesheim/Zürich/New York 2009."</bibl>
+          <biblScope>5ra,6-44vb,9</biblScope>
+        </bibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <creation>
+        <persName>-</persName>
+        <origPlace>-</origPlace>
+        <origDate unit="century">--</origDate>
+      </creation>
+      <langUsage>
+        <language ident="gmh">mhd</language>
+        <language ident="gmh">oberdeutsch</language>
+        <language ident="gmh">ostoberdeutsch</language>
+        <language ident="gmh">bairisch</language>
+        <language ident="gmh">-</language>
+      </langUsage>
+      <textClass>
+        <keywords>
+          <term type="topic">Religion</term>
+          <term type="text-type">Psalmenübersetzung</term>
+        </keywords>
+        <classCode scheme="#genres">P</classCode>
+      </textClass>
+      <textDesc>
+        <channel>-</channel>
+        <constitution>-</constitution>
+        <derivation>
+          <title>-</title>
+        </derivation>
+        <domain>-</domain>
+        <factuality>-</factuality>
+        <interaction>-</interaction>
+        <preparedness>-</preparedness>
+        <purpose>-</purpose>
+      </textDesc>
+    </profileDesc>
+    <encodingDesc>
+      <p>Primary line breaks: Handschrift</p>
+      <p>Secondary line breaks: -</p>
+      <p>-</p>
+      <classDecl>
+        <taxonomy xml:id="genres">
+          <category xml:id="genres.P">
+            <catDesc>Prosa</catDesc>
+          </category>
+          <category xml:id="genres.V">
+            <catDesc>Vers</catDesc>
+          </category>
+          <category xml:id="genres.U">
+            <catDesc>Urkunde</catDesc>
+          </category>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <ab>
+        <pb n="5r" ed="1"/>
+        <cb n="a" ed="1"/>
+        <lb n="1" ed="1"/>
+        <w xml:id="t1_m1" norm="So" lemma="sô">So</w>
+        <w xml:id="t2_m1" norm="sin" lemma="sîn">ſin</w>
+        <w xml:id="t3_m1" norm="zorn" lemma="zorn">zorn</w>
+        <w xml:id="t4_m1" norm="irheizet" lemma="erheizet">irheizet</w>
+        <w xml:id="t5_m1" norm="in" lemma="in" join="right">in</w>
+        <w xml:id="t5_m2" norm="spuote" lemma="spuote" join="both">ſpuote</w>
+        <pc xml:id="t6_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="2" ed="1"/>
+        <w xml:id="t7_m1" norm="unde" lemma="unde">unde</w>
+        <w xml:id="t8_m1" norm="diu" lemma="diu">diu</w>
+        <w xml:id="t9_m1" norm="racha" lemma="râche">racha</w>
+        <w xml:id="t10_m1" norm="chumet" lemma="kumet">chumet</w>
+        <lb n="3" ed="1"/>
+        <w xml:id="t11_m1" norm="in" lemma="in">in</w>
+        <w xml:id="t12_m1" norm="demo" lemma="deme">demo</w>
+        <w xml:id="t13_m1" norm="slage" lemma="slage" join="right">ſlage</w>
+        <pc xml:id="t14_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t15_m1" norm="des" lemma="des">deſ</w>
+        <w xml:id="t16_m1" norm="ougen" lemma="ougen" join="right">ougen</w>
+        <pc xml:id="t17_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t18_m1" norm="so" lemma="sô">ſo</w>
+        <lb n="4" ed="1"/>
+        <w xml:id="t19_m1" norm="sint" lemma="sint">ſint</w>
+        <w xml:id="t20_m1" norm="salic" lemma="sælic" join="right">ſalic</w>
+        <pc xml:id="t21_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t22_m1" norm="alle" lemma="alle">alle</w>
+        <w xml:id="t23_m1" norm="die" lemma="die">die</w>
+        <w xml:id="t24_m1" norm="sih" lemma="sich">ſih</w>
+        <w xml:id="t25_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t26_m1" norm="imo" lemma="ime">imo</w>
+        <lb n="5" ed="1"/>
+        <w xml:id="t27_m1" norm="uersehent" lemma="versehent" join="right">uerſehent</w>
+        <pc xml:id="t28_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="6" ed="1"/>
+        <w xml:id="t29_m1" norm="Domine" lemma="domine">Domine</w>
+        <w xml:id="t30_m1" norm="quid" lemma="quit">quid</w>
+        <w xml:id="t31_m1" norm="multiplicati" lemma="multiplicati">multiplicati</w>
+        <lb n="7" ed="1"/>
+        <w xml:id="t32_m1" norm="sunt" lemma="sunt">sunt</w>
+        <w xml:id="t33_m1" norm="qui" lemma="qui">qui</w>
+        <w xml:id="t34_m1" norm="tribulant" lemma="tribulant">tribulant</w>
+        <w xml:id="t35_m1" norm="me" lemma="me" join="right">me</w>
+        <pc xml:id="t36_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t37_m1" norm="multi" lemma="multi">multi</w>
+        <lb n="8" ed="1"/>
+        <w xml:id="t38_m1" norm="insurgunt" lemma="insurgunt">insurgunt</w>
+        <w xml:id="t39_m1" norm="aduersum" lemma="adversum">aduersum</w>
+        <w xml:id="t40_m1" norm="me" lemma="me" join="right">me</w>
+        <pc xml:id="t41_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="9" ed="1"/>
+        <w xml:id="t42_m1" norm="Dauid" lemma="Dâvît">Dauid</w>
+        <w xml:id="t43_m1" norm="chuit" lemma="quît">chuit</w>
+        <w xml:id="t44_m1" norm="uone" lemma="vone">uone</w>
+        <w xml:id="t45_m1" norm="dero" lemma="dere">dero</w>
+        <lb n="10" ed="1"/>
+        <w xml:id="t46_m1" norm="genennidi" lemma="genennede">genennidi</w>
+        <w xml:id="t47_m1" norm="Christi" lemma="Christî" join="right">
+          <expan>Christ</expan>i</w>
+        <pc xml:id="t48_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t49_m1" norm="do" lemma="dô">do</w>
+        <w xml:id="t50_m1" norm="er" lemma="er">er</w>
+        <w xml:id="t51_m1" norm="sinen" lemma="sînen">ſinen</w>
+        <lb n="11" ed="1"/>
+        <w xml:id="t52_m1" norm="sun" lemma="sun">ſun</w>
+        <w xml:id="t53_m1" norm="floh" lemma="vlôch" join="right">floh</w>
+        <pc xml:id="t54_m1" norm="." lemma="--" join="left">.</pc>
+        <q>
+          <w xml:id="t55_m1" norm="zi" lemma="ze" join="right">zi</w>
+          <w xml:id="t55_m2" norm="uuiu" lemma="wiu" join="left">uuiu</w>
+          <w xml:id="t56_m1" norm="sint" lemma="sint">ſint</w>
+          <w xml:id="t57_m1" norm="hero" lemma="hêre">hero</w>
+          <lb n="12" ed="1"/>
+          <w xml:id="t58_m1" norm="dero" lemma="dere">dero</w>
+          <w xml:id="t59_m1" norm="so" lemma="sô">ſo</w>
+          <w xml:id="t60_m1" norm="manigi" lemma="manige">manigi</w>
+          <w xml:id="t61_m1" norm="die" lemma="die">die</w>
+          <w xml:id="t62_m1" norm="mih" lemma="mich">mih</w>
+          <w xml:id="t63_m1" norm="arbeitent" lemma="arbeitent">arbeitent</w>
+          <lb n="13" ed="1"/>
+          <w xml:id="t64_m1" norm="daz" lemma="daz">daz</w>
+          <w xml:id="t65_m1" norm="ioh" lemma="joch">ioh</w>
+          <w xml:id="t66_m1" norm="einer" lemma="einer">einer</w>
+          <w xml:id="t67_m1" norm="minero" lemma="mînere">minero</w>
+          <lb n="14" ed="1"/>
+          <w xml:id="t68_m1" norm="iungeron" lemma="jungeren">iungeron</w>
+          <w xml:id="t69_m1" norm="min" lemma="mîn">min</w>
+          <w xml:id="t70_m1" norm="ahtet" lemma="âhtet" join="right">ahtet</w>
+          <pc xml:id="t71_m1" norm="." lemma="--" join="left">.</pc>
+          <lb n="15" ed="1"/>
+          <w xml:id="t72_m1" norm="manige" lemma="manige">manige</w>
+          <w xml:id="t73_m1" norm="uf" lemma="ûf">uf</w>
+          <w xml:id="t74_m1" norm="rihtent" lemma="rihtent">rihtent</w>
+          <w xml:id="t75_m1" norm="sih" lemma="sich">ſih</w>
+          <w xml:id="t76_m1" norm="uuider" lemma="wider">uuider</w>
+          <lb n="16" ed="1"/>
+          <w xml:id="t77_m1" norm="mir" lemma="mir" join="right">mir</w>
+          <pc xml:id="t78_m1" norm="." lemma="--" join="left">.</pc>
+        </q>
+        <w xml:id="t79_m1" norm="Multi" lemma="multi">Multi</w>
+        <w xml:id="t80_m1" norm="dicunt" lemma="dicunt">dicunt</w>
+        <lb n="17" ed="1"/>
+        <w xml:id="t81_m1" norm="animae" lemma="animae">animae</w>
+        <w xml:id="t82_m1" norm="meae" lemma="meae" join="right">meae</w>
+        <pc xml:id="t83_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t84_m1" norm="non" lemma="non">non</w>
+        <w xml:id="t85_m1" norm="est" lemma="est">est</w>
+        <w xml:id="t86_m1" norm="salus" lemma="salus">salus</w>
+        <w xml:id="t87_m1" norm="illi" lemma="illi">illi</w>
+        <w xml:id="t88_m1" norm="in" lemma="in">in</w>
+        <lb n="18" ed="1"/>
+        <w xml:id="t89_m1" norm="deo" lemma="deo">deo</w>
+        <w xml:id="t90_m1" norm="eius" lemma="eius" join="right">eius</w>
+        <pc xml:id="t91_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t92_m1" norm="Manige" lemma="manige">Manige</w>
+        <w xml:id="t93_m1" norm="uersagent" lemma="versagent">uerſagent</w>
+        <w xml:id="t94_m1" norm="minero" lemma="mînere">minero</w>
+        <lb n="19" ed="1"/>
+        <w xml:id="t95_m1" norm="sela" lemma="sêle">ſela</w>
+        <w xml:id="t96_m1" norm="heili" lemma="heile" join="right">heili</w>
+        <w xml:id="t96_m2" norm="an" lemma="an" join="both">an</w>
+        <w xml:id="t96_m3" norm="iro" lemma="ire" join="left">iro</w>
+        <w xml:id="t97_m1" norm="gote" lemma="gote" join="right">gote</w>
+        <pc xml:id="t98_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t99_m1" norm="sie" lemma="sie">ſie</w>
+        <lb n="20" ed="1"/>
+        <w xml:id="t100_m1" norm="ne" lemma="ne" join="right">ne</w>
+        <w xml:id="t100_m2" norm="getruuent" lemma="getrûwent" join="left">getruuent</w>
+        <w xml:id="t101_m1" norm="daz" lemma="daz">daz</w>
+        <w xml:id="t102_m1" norm="ih" lemma="ich">ih</w>
+        <w xml:id="t103_m1" norm="irsten" lemma="erstên">irſten</w>
+        <lb n="21" ed="1"/>
+        <w xml:id="t104_m1" norm="sculi" lemma="schüle" join="right">ſculi</w>
+        <pc xml:id="t105_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t106_m1" norm="Tu" lemma="tu">Tu</w>
+        <w xml:id="t107_m1" norm="autem" lemma="autem">autem</w>
+        <w xml:id="t108_m1" norm="domine" lemma="domine">domine</w>
+        <w xml:id="t109_m1" norm="susceptor" lemma="susceptor">susceptor</w>
+        <lb n="22" ed="1"/>
+        <w xml:id="t110_m1" norm="meus" lemma="meus">meus</w>
+        <w xml:id="t111_m1" norm="es" lemma="es">es</w>
+        <w xml:id="t112_m1" norm="gloria" lemma="gloria">gloria</w>
+        <w xml:id="t113_m1" norm="mea" lemma="mea">mea</w>
+        <w xml:id="t114_m1" norm="et" lemma="et">et</w>
+        <w xml:id="t115_m1" norm="exaltans" lemma="exaltans">exaltans</w>
+        <lb n="23" ed="1"/>
+        <w xml:id="t116_m1" norm="caput" lemma="caput">caput</w>
+        <w xml:id="t117_m1" norm="meum" lemma="meum" join="right">meum</w>
+        <pc xml:id="t118_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t119_m1" norm="aua" lemma="abe">
+          <hi rend="initother">a</hi>ua</w>
+        <w xml:id="t120_m1" norm="du" lemma="dû">du</w>
+        <w xml:id="t121_m1" norm="got" lemma="got">got</w>
+        <w xml:id="t122_m1" norm="pist" lemma="bist">piſt</w>
+        <lb n="24" ed="1"/>
+        <w xml:id="t123_m1" norm="min" lemma="mîn">min</w>
+        <w xml:id="t124_m1" norm="imfahare" lemma="entvâhære" join="right">imfahare</w>
+        <pc xml:id="t125_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t126_m1" norm="mih" lemma="mich">mih</w>
+        <w xml:id="t127_m1" norm="imfienge" lemma="entvienge">im<space quantity="1" unit="chars"/>fi<space quantity="1" unit="chars"/>enge</w>
+        <cb n="b" ed="1"/>
+        <lb n="1" ed="1"/>
+        <w xml:id="t128_m1" norm="du" lemma="dû" join="right">du</w>
+        <pc xml:id="t129_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t130_m1" norm="mih" lemma="mich">mih</w>
+        <w xml:id="t131_m1" norm="menniscen" lemma="mennischen">menniſcen</w>
+        <w xml:id="t132_m1" norm="name" lemma="næme">name</w>
+        <lb n="2" ed="1"/>
+        <w xml:id="t133_m1" norm="du" lemma="dû">du</w>
+        <w xml:id="t134_m1" norm="an" lemma="an" join="right">an</w>
+        <w xml:id="t134_m2" norm="dih" lemma="dich" join="left">dih</w>
+        <w xml:id="t135_m1" norm="got" lemma="got" join="right">got</w>
+        <pc xml:id="t136_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t137_m1" norm="pediu" lemma="bediu">pediu</w>
+        <w xml:id="t138_m1" norm="getuost" lemma="getuost">getuoſt</w>
+        <lb n="3" ed="1"/>
+        <w xml:id="t139_m1" norm="tu" lemma="dû">tu</w>
+        <w xml:id="t140_m1" norm="mih" lemma="mich">mih</w>
+        <w xml:id="t141_m1" norm="ouh" lemma="ouch">ouh</w>
+        <w xml:id="t142_m1" norm="irsten" lemma="erstên">irſten</w>
+        <w xml:id="t143_m1" norm="uuider" lemma="wider">uuider</w>
+        <lb n="4" ed="1"/>
+        <w xml:id="t144_m1" norm="iro" lemma="ire">iro</w>
+        <w xml:id="t145_m1" norm="uuane" lemma="wâne" join="right">uuane</w>
+        <pc xml:id="t146_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t147_m1" norm="du" lemma="dû">du</w>
+        <w xml:id="t148_m1" norm="bist" lemma="bist">biſt</w>
+        <w xml:id="t149_m1" norm="min" lemma="mîn">min</w>
+        <w xml:id="t150_m1" norm="guotlichi" lemma="guotlîche" join="right">guotlichi</w>
+        <pc xml:id="t151_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="5" ed="1"/>
+        <w xml:id="t152_m1" norm="uone" lemma="vone">uone</w>
+        <w xml:id="t153_m1" norm="dir" lemma="dir">dir</w>
+        <w xml:id="t154_m1" norm="haban" lemma="haben">haban</w>
+        <w xml:id="t155_m1" norm="ih" lemma="ich">ih</w>
+        <w xml:id="t156_m1" norm="sia" lemma="sie" join="right">ſia</w>
+        <pc xml:id="t157_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="6" ed="1"/>
+        <w xml:id="t158_m1" norm="unde" lemma="unde">unde</w>
+        <w xml:id="t159_m1" norm="du" lemma="dû">du</w>
+        <w xml:id="t160_m1" norm="bist" lemma="bist">biſt</w>
+        <w xml:id="t161_m1" norm="irhohendo" lemma="erhôhente">irhohendo</w>
+        <lb n="7" ed="1"/>
+        <w xml:id="t162_m1" norm="min" lemma="mîn">min</w>
+        <w xml:id="t163_m1" norm="houbet" lemma="houbet" join="right">houbet</w>
+        <pc xml:id="t164_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t165_m1" norm="in" lemma="in" join="right">in</w>
+        <w xml:id="t165_m2" norm="dero" lemma="dere" join="left">dero</w>
+        <w xml:id="t166_m1" norm="urstendi" lemma="urstende" join="right">urſtendi</w>
+        <pc xml:id="t167_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="8" ed="1"/>
+        <w xml:id="t168_m1" norm="Voce" lemma="voce">Voce</w>
+        <w xml:id="t169_m1" norm="mea" lemma="mea">mea</w>
+        <w xml:id="t170_m1" norm="ad" lemma="at">ad</w>
+        <w xml:id="t171_m1" norm="dominum" lemma="dominum">dominum</w>
+        <w xml:id="t172_m1" norm="clamaui" lemma="clamavi">clamaui</w>
+        <lb n="9" ed="1"/>
+        <w xml:id="t173_m1" norm="et" lemma="et">et</w>
+        <w xml:id="t174_m1" norm="exaudiuit" lemma="exaudivit">exaudiuit</w>
+        <w xml:id="t175_m1" norm="me" lemma="me">me</w>
+        <w xml:id="t176_m1" norm="de" lemma="de">de</w>
+        <lb n="10" ed="1"/>
+        <w xml:id="t177_m1" norm="monte" lemma="monte">monte</w>
+        <w xml:id="t178_m1" norm="sancto" lemma="sancto">sancto</w>
+        <w xml:id="t179_m1" norm="suo" lemma="suo" join="right">suo</w>
+        <pc xml:id="t180_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t181_m1" norm="Mit" lemma="mit">Mit</w>
+        <w xml:id="t182_m1" norm="minero" lemma="mînere">minero</w>
+        <lb n="11" ed="1"/>
+        <w xml:id="t183_m1" norm="stimma" lemma="stimme" join="right">ſtimma</w>
+        <pc xml:id="t184_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t185_m1" norm="daz" lemma="daz">daz</w>
+        <w xml:id="t186_m1" norm="chuit" lemma="quît">chuit</w>
+        <w xml:id="t187_m1" norm="mit" lemma="mit">mit</w>
+        <lb n="12" ed="1"/>
+        <w xml:id="t188_m1" norm="des" lemma="des">deſ</w>
+        <w xml:id="t189_m1" norm="herzen" lemma="herzen">herzen</w>
+        <w xml:id="t190_m1" norm="stimma" lemma="stimme">ſtimma</w>
+        <w xml:id="t191_m1" norm="hareta" lemma="harete">hareta</w>
+        <w xml:id="t192_m1" norm="ih" lemma="ich">ih</w>
+        <lb n="13" ed="1"/>
+        <w xml:id="t193_m1" norm="ze" lemma="ze" join="right">ze</w>
+        <w xml:id="t193_m2" norm="dir" lemma="dir" join="both">dir</w>
+        <pc xml:id="t194_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t195_m1" norm="unde" lemma="unde">unde</w>
+        <w xml:id="t196_m1" norm="du" lemma="dû">du</w>
+        <w xml:id="t197_m1" norm="gehortest" lemma="gehôrtest">gehorteſt</w>
+        <lb n="14" ed="1"/>
+        <w xml:id="t198_m1" norm="mih" lemma="mich">mih</w>
+        <w xml:id="t199_m1" norm="uone" lemma="vone">uone</w>
+        <w xml:id="t200_m1" norm="dinemo" lemma="dîneme">dinemo</w>
+        <w xml:id="t201_m1" norm="heiligen" lemma="heiligen">heiligen</w>
+        <lb n="15" ed="1"/>
+        <w xml:id="t202_m1" norm="berge" lemma="berge" join="right">berge</w>
+        <pc xml:id="t203_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t204_m1" norm="daz" lemma="daz">da<supplied reason="missing">z</supplied>
+        </w>
+        <w xml:id="t205_m1" norm="chuit" lemma="quît">chuit</w>
+        <w xml:id="t206_m1" norm="uone" lemma="vone">uone</w>
+        <w xml:id="t207_m1" norm="dero" lemma="dere">dero</w>
+        <lb n="16" ed="1"/>
+        <w xml:id="t208_m1" norm="unsagelichun" lemma="unsegelîchen">unſagelichun</w>
+        <w xml:id="t209_m1" norm="hohi" lemma="hoehe">hohi</w>
+        <w xml:id="t210_m1" norm="dinero" lemma="dînere">dinero</w>
+        <lb n="17" ed="1"/>
+        <w xml:id="t211_m1" norm="gotheiti" lemma="goteheite" join="right">gotheiti</w>
+        <pc xml:id="t212_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t213_m1" norm="Ego" lemma="ego">Ego</w>
+        <w xml:id="t214_m1" norm="dormiui" lemma="dormivi">dormiui</w>
+        <w xml:id="t215_m1" norm="et" lemma="et">et</w>
+        <lb n="18" ed="1"/>
+        <w xml:id="t216_m1" norm="soporatus" lemma="soporatus">soporatus</w>
+        <w xml:id="t217_m1" norm="sum" lemma="sum" join="right">sum</w>
+        <pc xml:id="t218_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t219_m1" norm="et" lemma="et">et</w>
+        <w xml:id="t220_m1" norm="exsurrexi" lemma="exsurrexi">exsurrexi</w>
+        <w xml:id="t221_m1" norm="quia" lemma="quia">quia</w>
+        <w xml:id="t222_m1" norm="dominus" lemma="dominus">dominus</w>
+        <w xml:id="t223_m1" norm="suscepit" lemma="suscepit">suscepit</w>
+        <lb n="19" ed="1"/>
+        <w xml:id="t224_m1" norm="me" lemma="me" join="right">me</w>
+        <pc xml:id="t225_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t226_m1" norm="Ih" lemma="ich">Ih</w>
+        <w xml:id="t227_m1" norm="slief" lemma="slief">ſlief</w>
+        <w xml:id="t228_m1" norm="mines" lemma="mînes">mineſ</w>
+        <w xml:id="t229_m1" norm="danches" lemma="dankes">dancheſ</w>
+        <lb n="20" ed="1"/>
+        <w xml:id="t230_m1" norm="ana" lemma="âne">ana</w>
+        <w xml:id="t231_m1" norm="not" lemma="nôt" join="right">not</w>
+        <pc xml:id="t232_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t233_m1" norm="ih" lemma="ich">ih</w>
+        <w xml:id="t234_m1" norm="slief" lemma="slief">ſlief</w>
+        <w xml:id="t235_m1" norm="den" lemma="den">den</w>
+        <w xml:id="t236_m1" norm="slaf" lemma="slâf">ſlaf</w>
+        <w xml:id="t237_m1" norm="des" lemma="des">deſ</w>
+        <lb n="21" ed="1"/>
+        <w xml:id="t238_m1" norm="todes" lemma="tôdes" join="right">todeſ</w>
+        <pc xml:id="t239_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t240_m1" norm="unde" lemma="unde">unde</w>
+        <w xml:id="t241_m1" norm="slaf" lemma="slâf" join="right">ſlaf</w>
+        <w xml:id="t241_m2" norm="rauuota" lemma="râwete" join="left">rauuota</w>
+        <w xml:id="t242_m1" norm="mir" lemma="mir">mir</w>
+        <lb n="22" ed="1"/>
+        <w xml:id="t243_m1" norm="dar" lemma="dâr">dar</w>
+        <w xml:id="t244_m1" norm="ana" lemma="ane" join="right">ana</w>
+        <pc xml:id="t245_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t246_m1" norm="daz" lemma="daz">daz</w>
+        <w xml:id="t247_m1" norm="die" lemma="die">die</w>
+        <w xml:id="t248_m1" norm="sundigen" lemma="süntigen">ſundigen</w>
+        <lb n="23" ed="1"/>
+        <w xml:id="t249_m1" norm="ne" lemma="ne" join="right">ne</w>
+        <w xml:id="t249_m2" norm="tuont" lemma="tuont" join="both">tuont</w>
+        <pc xml:id="t250_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t251_m1" norm="uuanda" lemma="wande">uuanda</w>
+        <w xml:id="t252_m1" norm="er" lemma="er">er</w>
+        <w xml:id="t253_m1" norm="leitet" lemma="leitet">leitet</w>
+        <w xml:id="t254_m1" norm="sie" lemma="sie">ſie</w>
+        <lb n="24" ed="1"/>
+        <w xml:id="t255_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t256_m1" norm="unrauun" lemma="unrâwen" join="right">unrauun</w>
+        <pc xml:id="t257_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t258_m1" norm="unde" lemma="unde">unde</w>
+        <w xml:id="t259_m1" norm="ih" lemma="ich">ih</w>
+        <w xml:id="t260_m1" norm="irstuont" lemma="erstuont" join="right">irſtuont</w>
+        <pc xml:id="t261_m1" norm="." lemma="--" join="left">.</pc>
+        <pb n="5v" ed="1"/>
+        <cb n="a" ed="1"/>
+        <lb n="1" ed="1"/>
+        <w xml:id="t262_m1" norm="uuanda" lemma="wande">uuanda</w>
+        <w xml:id="t263_m1" norm="min" lemma="mîn">min</w>
+        <w xml:id="t264_m1" norm="trohtin" lemma="truhtîn">trohtin</w>
+        <w xml:id="t265_m1" norm="imphieng" lemma="entvienc">imphieng</w>
+        <lb n="2" ed="1"/>
+        <w xml:id="t266_m1" norm="mih" lemma="mich" join="right">mih</w>
+        <pc xml:id="t267_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t268_m1" norm="er" lemma="er">er</w>
+        <w xml:id="t269_m1" norm="nam" lemma="nam">nam</w>
+        <w xml:id="t270_m1" norm="mih" lemma="mich">mih</w>
+        <w xml:id="t271_m1" norm="ana" lemma="ane">ana</w>
+        <lb n="3" ed="1"/>
+        <w xml:id="t272_m1" norm="sih" lemma="sich" join="right">ſih</w>
+        <pc xml:id="t273_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t274_m1" norm="mit" lemma="mit">mit</w>
+        <w xml:id="t275_m1" norm="dero" lemma="dere">dero</w>
+        <w xml:id="t276_m1" norm="chrefte" lemma="krefte">chrefte</w>
+        <w xml:id="t277_m1" norm="irstuont" lemma="erstuont">irſtuont</w>
+        <lb n="4" ed="1"/>
+        <w xml:id="t278_m1" norm="ih" lemma="ich" join="right">ih</w>
+        <pc xml:id="t279_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t280_m1" norm="Non" lemma="non">Non</w>
+        <w xml:id="t281_m1" norm="timebo" lemma="timebo">timebo</w>
+        <w xml:id="t282_m1" norm="milia" lemma="milia">milia</w>
+        <w xml:id="t283_m1" norm="populi" lemma="populi">populi</w>
+        <lb n="5" ed="1"/>
+        <w xml:id="t284_m1" norm="circumdantis" lemma="circumdantis">circumdantis</w>
+        <w xml:id="t285_m1" norm="me" lemma="me" join="right">me</w>
+        <pc xml:id="t286_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t287_m1" norm="exurge" lemma="exurge">exurge</w>
+        <lb n="6" ed="1"/>
+        <w xml:id="t288_m1" norm="domine" lemma="domine">domine</w>
+        <w xml:id="t289_m1" norm="saluum" lemma="saluum">saluum</w>
+        <w xml:id="t290_m1" norm="me" lemma="me">me</w>
+        <w xml:id="t291_m1" norm="fac" lemma="fac">fac</w>
+        <w xml:id="t292_m1" norm="deus" lemma="deus">deus</w>
+        <w xml:id="t293_m1" norm="meus" lemma="meus" join="right">meus</w>
+        <pc xml:id="t294_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t295_m1" norm="Ih" lemma="ich">Ih</w>
+        <w xml:id="t296_m1" norm="ne" lemma="ne">ne</w>
+        <lb n="7" ed="1"/>
+        <w xml:id="t297_m1" norm="furhti" lemma="vürhte">furhti</w>
+        <w xml:id="t298_m1" norm="die" lemma="die">die</w>
+        <w xml:id="t299_m1" norm="menigi" lemma="menige">menigi</w>
+        <w xml:id="t300_m1" norm="des" lemma="des">deſ</w>
+        <w xml:id="t301_m1" norm="mih" lemma="mich">mih</w>
+        <lb n="8" ed="1"/>
+        <w xml:id="t302_m1" norm="umbestandentis" lemma="umbestantentes">umbeſtandentiſ</w>
+        <w xml:id="t303_m1" norm="liutes" lemma="liutes" join="right">liuteſ</w>
+        <pc xml:id="t304_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t305_m1" norm="samso" lemma="samesô">ſamſo</w>
+        <lb n="9" ed="1"/>
+        <w xml:id="t306_m1" norm="er" lemma="er">er</w>
+        <w xml:id="t307_m1" norm="mih" lemma="mich">mih</w>
+        <w xml:id="t308_m1" norm="erstarben" lemma="ersterben">erſtarben</w>
+        <w xml:id="t309_m1" norm="mege" lemma="mege" join="right">mege</w>
+        <pc xml:id="t310_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t311_m1" norm="ih" lemma="ich">ih</w>
+        <lb n="10" ed="1"/>
+        <w xml:id="t312_m1" norm="ne" lemma="ne">ne</w>
+        <w xml:id="t313_m1" norm="irsterbe" lemma="ersterbe">irſterbe</w>
+        <w xml:id="t314_m1" norm="gerno" lemma="gerne" join="right">gerno</w>
+        <pc xml:id="t315_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t316_m1" norm="stant" lemma="stant">ſtant</w>
+        <w xml:id="t317_m1" norm="uf" lemma="ûf">uf</w>
+        <lb n="11" ed="1"/>
+        <w xml:id="t318_m1" norm="trohtin" lemma="truhtîn">trohtin</w>
+        <w xml:id="t319_m1" norm="tuo" lemma="tuo">tuo</w>
+        <w xml:id="t320_m1" norm="mih" lemma="mich">mih</w>
+        <w xml:id="t321_m1" norm="gehaldenen" lemma="gehaltenen">gehaldenen</w>
+        <lb n="12" ed="1"/>
+        <w xml:id="t322_m1" norm="got" lemma="got">got</w>
+        <w xml:id="t323_m1" norm="miner" lemma="mîner" join="right">miner</w>
+        <pc xml:id="t324_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t325_m1" norm="kehalt" lemma="gehalt">kehalt</w>
+        <w xml:id="t326_m1" norm="mina" lemma="mîne">mina</w>
+        <w xml:id="t327_m1" norm="ecclesia-" lemma="ecclesiam" join="right">eccleſiā</w>
+        <pc xml:id="t328_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="13" ed="1"/>
+        <w xml:id="t329_m1" norm="diu" lemma="diu">diu</w>
+        <w xml:id="t330_m1" norm="min" lemma="mîn">min</w>
+        <w xml:id="t331_m1" norm="lichinamo" lemma="lîchename">lichinamo</w>
+        <w xml:id="t332_m1" norm="ist" lemma="ist" join="right">iſt</w>
+        <pc xml:id="t333_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="14" ed="1"/>
+        <w xml:id="t334_m1" norm="Quoniam" lemma="quoniam">Quoniam</w>
+        <w xml:id="t335_m1" norm="tu" lemma="tu">tu</w>
+        <w xml:id="t336_m1" norm="percussisti" lemma="percussisti">percussisti</w>
+        <w xml:id="t337_m1" norm="omnes" lemma="omnes">omnes</w>
+        <w xml:id="t338_m1" norm="aduersantes" lemma="adversantes">aduersantes</w>
+        <lb n="15" ed="1"/>
+        <w xml:id="t339_m1" norm="mihi" lemma="mihi">mihi</w>
+        <w xml:id="t340_m1" norm="sine" lemma="sine">sine</w>
+        <w xml:id="t341_m1" norm="causa" lemma="causa" join="right">causa</w>
+        <pc xml:id="t342_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t343_m1" norm="dentes" lemma="dentes">dentes</w>
+        <w xml:id="t344_m1" norm="peccatorum" lemma="peccatorum">peccatorum</w>
+        <lb n="16" ed="1"/>
+        <w xml:id="t345_m1" norm="contriuisti" lemma="contrivisti" join="right">contriuisti</w>
+        <pc xml:id="t346_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t347_m1" norm="Vuanda" lemma="wande">Vuanda</w>
+        <w xml:id="t348_m1" norm="du" lemma="dû">du</w>
+        <w xml:id="t349_m1" norm="habest" lemma="habest">habeſt</w>
+        <lb n="17" ed="1"/>
+        <w xml:id="t350_m1" norm="irslagen" lemma="erslagen">irſlagen</w>
+        <w xml:id="t351_m1" norm="daz" lemma="daz">daz</w>
+        <w xml:id="t352_m1" norm="chuit" lemma="quît">chuit</w>
+        <w xml:id="t353_m1" norm="du" lemma="dû">du</w>
+        <lb n="18" ed="1"/>
+        <w xml:id="t354_m1" norm="habest" lemma="habest">habeſt</w>
+        <w xml:id="t355_m1" norm="gesueigot" lemma="gesweiget">geſueigot</w>
+        <w xml:id="t356_m1" norm="alla" lemma="alle">alla</w>
+        <w xml:id="t357_m1" norm="die" lemma="die">die</w>
+        <lb n="19" ed="1"/>
+        <w xml:id="t358_m1" norm="mir" lemma="mir">mir</w>
+        <w xml:id="t359_m1" norm="be" lemma="bî" join="right">be</w>
+        <w xml:id="t359_m2" norm="unrehte" lemma="unrehte" join="left">unrehte</w>
+        <w xml:id="t360_m1" norm="uuidiri" lemma="widere">uuidiri</w>
+        <w xml:id="t361_m1" norm="uuarun" lemma="wâren" join="right">uuarun</w>
+        <pc xml:id="t362_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="20" ed="1"/>
+        <w xml:id="t363_m1" norm="so" lemma="sô">ſo</w>
+        <w xml:id="t364_m1" norm="chunt" lemma="kunt">chunt</w>
+        <w xml:id="t365_m1" norm="uuard" lemma="wart">uuard</w>
+        <w xml:id="t366_m1" norm="in" lemma="in">in</w>
+        <w xml:id="t367_m1" norm="min" lemma="mîn">min</w>
+        <lb n="21" ed="1"/>
+        <w xml:id="t368_m1" norm="urstenti" lemma="urstende">urſtenti</w>
+        <w xml:id="t369_m1" norm="daz" lemma="daz">daz</w>
+        <w xml:id="t370_m1" norm="si" lemma="si">ſi</w>
+        <w xml:id="t371_m1" norm="iro" lemma="ire">iro</w>
+        <w xml:id="t372_m1" norm="nehein" lemma="nehein">nehein</w>
+        <lb n="22" ed="1"/>
+        <w xml:id="t373_m1" norm="lougen" lemma="lougen">lougen</w>
+        <w xml:id="t374_m1" norm="ne" lemma="ne" join="right">ne</w>
+        <w xml:id="t374_m2" norm="getorston" lemma="getorsten" join="left">getorſton</w>
+        <w xml:id="t375_m1" norm="haben" lemma="haben" join="right">haben</w>
+        <pc xml:id="t376_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="23" ed="1"/>
+        <w xml:id="t377_m1" norm="dero" lemma="dere">dero</w>
+        <w xml:id="t378_m1" norm="sundigon" lemma="süntigen">ſundigon</w>
+        <w xml:id="t379_m1" norm="zene" lemma="zene">zene</w>
+        <w xml:id="t380_m1" norm="uermultost" lemma="vermültest">uermultoſt</w>
+        <lb n="24" ed="1"/>
+        <w xml:id="t381_m1" norm="du" lemma="dû" join="right">du</w>
+        <pc xml:id="t382_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t383_m1" norm="daz" lemma="daz">daz</w>
+        <w xml:id="t384_m1" norm="chuit" lemma="quît">chuit</w>
+        <w xml:id="t385_m1" norm="iro" lemma="ire">iro</w>
+        <w xml:id="t386_m1" norm="hindirsprachon" lemma="hindersprâchen">hindirſprachon</w>
+        <cb n="b" ed="1"/>
+        <lb n="1" ed="1"/>
+        <w xml:id="t387_m1" norm="uerzari" lemma="verzære">uerzari</w>
+        <w xml:id="t388_m1" norm="du" lemma="dû" join="right">du</w>
+        <pc xml:id="t389_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t390_m1" norm="sie" lemma="sie">ſie</w>
+        <w xml:id="t391_m1" norm="gisueigendi" lemma="gesweigente">giſueigendi</w>
+        <lb n="2" ed="1"/>
+        <w xml:id="t392_m1" norm="uerzare" lemma="verzære">uerzar<unclear>e</unclear>
+        </w>
+        <w xml:id="t393_m1" norm="du" lemma="dû">du</w>
+        <w xml:id="t394_m1" norm="iz" lemma="iz" join="right">iz</w>
+        <pc xml:id="t395_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t396_m1" norm="Domini" lemma="domini">Domini</w>
+        <w xml:id="t397_m1" norm="est" lemma="est">est</w>
+        <lb n="3" ed="1"/>
+        <w xml:id="t398_m1" norm="salus" lemma="salus" join="right">salus</w>
+        <pc xml:id="t399_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t400_m1" norm="et" lemma="et">et</w>
+        <w xml:id="t401_m1" norm="super" lemma="super">super</w>
+        <w xml:id="t402_m1" norm="populum" lemma="populum">populum</w>
+        <w xml:id="t403_m1" norm="tuum" lemma="tuum">tuum</w>
+        <w xml:id="t404_m1" norm="benedictio" lemma="benedictio">benedictio</w>
+        <lb n="4" ed="1"/>
+        <w xml:id="t405_m1" norm="tua" lemma="tua" join="right">tua</w>
+        <pc xml:id="t406_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t407_m1" norm="Da" lemma="dâ">Da</w>
+        <w xml:id="t408_m1" norm="scinet" lemma="schînet" join="right">ſcinet</w>
+        <pc xml:id="t409_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t410_m1" norm="daz" lemma="daz">daz</w>
+        <w xml:id="t411_m1" norm="gotes" lemma="gotes">goteſ</w>
+        <lb n="5" ed="1"/>
+        <w xml:id="t412_m1" norm="diu" lemma="diu">diu</w>
+        <w xml:id="t413_m1" norm="heili" lemma="heile">heili</w>
+        <w xml:id="t414_m1" norm="est" lemma="ist" join="right">
+          <expan>est</expan>
+        </w>
+        <pc xml:id="t415_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t416_m1" norm="du" lemma="dû">du</w>
+        <w xml:id="t417_m1" norm="got" lemma="got">got</w>
+        <w xml:id="t418_m1" norm="kibest" lemma="gibest">kibeſt</w>
+        <w xml:id="t419_m1" norm="sia" lemma="sie" join="right">ſia</w>
+        <pc xml:id="t420_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="6" ed="1"/>
+        <w xml:id="t421_m1" norm="unde" lemma="unde">unde</w>
+        <w xml:id="t422_m1" norm="din" lemma="dîn">din</w>
+        <w xml:id="t423_m1" norm="segen" lemma="segen">ſegen</w>
+        <w xml:id="t424_m1" norm="ist" lemma="ist">iſt</w>
+        <w xml:id="t425_m1" norm="uber" lemma="über">uber</w>
+        <w xml:id="t426_m1" norm="dinnen" lemma="dînen">dinnen</w>
+        <lb n="7" ed="1"/>
+        <w xml:id="t427_m1" norm="liut" lemma="liut" join="right">liut</w>
+        <pc xml:id="t428_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="8" ed="1"/>
+        <w xml:id="t429_m1" norm="Cum" lemma="cum">Cum</w>
+        <w xml:id="t430_m1" norm="inuocarem" lemma="invocarem">inuocarem</w>
+        <w xml:id="t431_m1" norm="exaudiuit" lemma="exaudivit">exaudiuit</w>
+        <lb n="9" ed="1"/>
+        <w xml:id="t432_m1" norm="me" lemma="me">me</w>
+        <w xml:id="t433_m1" norm="deus" lemma="deus">deus</w>
+        <w xml:id="t434_m1" norm="iusticiae" lemma="iusticiae">iusticiae</w>
+        <w xml:id="t435_m1" norm="meae" lemma="meae" join="right">meae</w>
+        <pc xml:id="t436_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t437_m1" norm="in" lemma="in">in</w>
+        <w xml:id="t438_m1" norm="tribulatione" lemma="tribulatione">tribulatione</w>
+        <lb n="10" ed="1"/>
+        <w xml:id="t439_m1" norm="dilatasti" lemma="dilatasti">dilatasti</w>
+        <w xml:id="t440_m1" norm="mihi" lemma="mihi" join="right">mihi</w>
+        <pc xml:id="t441_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t442_m1" norm="Ecclesia" lemma="ecclesia">Eccl<expan>esi</expan>a</w>
+        <lb n="11" ed="1"/>
+        <w xml:id="t443_m1" norm="chuit" lemma="quît" join="right">chuit</w>
+        <pc xml:id="t444_m1" norm="." lemma="--" join="left">.</pc>
+        <q>
+          <w xml:id="t445_m1" norm="got" lemma="got">got</w>
+          <w xml:id="t446_m1" norm="uone" lemma="vone">uone</w>
+          <w xml:id="t447_m1" norm="demo" lemma="deme">demo</w>
+          <w xml:id="t448_m1" norm="min" lemma="mîn">min</w>
+          <lb n="12" ed="1"/>
+          <w xml:id="t449_m1" norm="reht" lemma="reht">reht</w>
+          <w xml:id="t450_m1" norm="ist" lemma="ist" join="right">iſt</w>
+          <pc xml:id="t451_m1" norm="." lemma="--" join="left">.</pc>
+          <w xml:id="t452_m1" norm="gehorta" lemma="gehôrte">gehorta</w>
+          <w xml:id="t453_m1" norm="mih" lemma="mich" join="right">mih</w>
+          <pc xml:id="t454_m1" norm="." lemma="--" join="left">.</pc>
+          <w xml:id="t455_m1" norm="so" lemma="sô">ſo</w>
+          <w xml:id="t456_m1" norm="ih" lemma="ich">ih</w>
+          <w xml:id="t457_m1" norm="ze" lemma="ze">ze</w>
+          <lb n="13" ed="1"/>
+          <w xml:id="t458_m1" norm="imo" lemma="ime">imo</w>
+          <w xml:id="t459_m1" norm="harate" lemma="harete" join="right">harate</w>
+          <pc xml:id="t460_m1" norm="." lemma="--" join="left">.</pc>
+        </q>
+        <w xml:id="t461_m1" norm="ze" lemma="ze">ze</w>
+        <w xml:id="t462_m1" norm="demo" lemma="deme">demo</w>
+        <w xml:id="t463_m1" norm="selben" lemma="selben">ſelben</w>
+        <lb n="14" ed="1"/>
+        <w xml:id="t464_m1" norm="chuit" lemma="quît">chuit</w>
+        <w xml:id="t465_m1" norm="si" lemma="si" join="right">ſi</w>
+        <pc xml:id="t466_m1" norm="." lemma="--" join="left">.</pc>
+        <q>
+          <w xml:id="t467_m1" norm="du" lemma="dû" join="right">du</w>
+          <w xml:id="t467_m2" norm="kebreitost" lemma="gebreitest" join="left">kebreitoſt</w>
+          <w xml:id="t468_m1" norm="mih" lemma="mich">mih</w>
+          <w xml:id="t469_m1" norm="in" lemma="in">in</w>
+          <lb n="15" ed="1"/>
+          <w xml:id="t470_m1" norm="binon" lemma="pînen" join="right">binon</w>
+          <pc xml:id="t471_m1" norm="." lemma="--" join="left">.</pc>
+        </q>
+        <w xml:id="t472_m1" norm="uuande" lemma="wande">uuande</w>
+        <w xml:id="t473_m1" norm="in" lemma="in" join="right">in</w>
+        <w xml:id="t473_m2" norm="demo" lemma="deme" join="left">demo</w>
+        <w xml:id="t474_m1" norm="ahtisali" lemma="âhtesale">ahtiſali</w>
+        <lb n="16" ed="1"/>
+        <w xml:id="t475_m1" norm="manigualton" lemma="manicvalten">manigualton</w>
+        <w xml:id="t476_m1" norm="sih" lemma="sich">ſih</w>
+        <w xml:id="t477_m1" norm="die" lemma="die">die</w>
+        <w xml:id="t478_m1" norm="corone" lemma="coronê">corone</w>
+        <lb n="17" ed="1"/>
+        <w xml:id="t479_m1" norm="dero" lemma="dere">dero</w>
+        <w xml:id="t480_m1" norm="martirari" lemma="marterære" join="right">martirari</w>
+        <pc xml:id="t481_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t482_m1" norm="Miserere" lemma="miserere">Miserere</w>
+        <lb n="18" ed="1"/>
+        <w xml:id="t483_m1" norm="mei" lemma="mei" join="right">mei</w>
+        <pc xml:id="t484_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t485_m1" norm="et" lemma="et">et</w>
+        <w xml:id="t486_m1" norm="exaudi" lemma="exaudi">exaudi</w>
+        <w xml:id="t487_m1" norm="orationem" lemma="orationem">orationem</w>
+        <w xml:id="t488_m1" norm="meam" lemma="meam" join="right">meam</w>
+        <pc xml:id="t489_m1" norm="." lemma="--" join="left">.</pc>
+        <lb n="19" ed="1"/>
+        <w xml:id="t490_m1" norm="Gnade" lemma="genâde">Gnade</w>
+        <w xml:id="t491_m1" norm="mir" lemma="mir" join="right">mir</w>
+        <pc xml:id="t492_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t493_m1" norm="unde" lemma="unde">unde</w>
+        <w xml:id="t494_m1" norm="gehore" lemma="gehoere">gehore</w>
+        <w xml:id="t495_m1" norm="min" lemma="mîn">min</w>
+        <lb n="20" ed="1"/>
+        <w xml:id="t496_m1" norm="gebet" lemma="gebet" join="right">gebet</w>
+        <pc xml:id="t497_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t498_m1" norm="tuo" lemma="tuo">tuo</w>
+        <w xml:id="t499_m1" norm="so" lemma="sô">ſo</w>
+        <w xml:id="t500_m1" norm="du" lemma="dû">du</w>
+        <w xml:id="t501_m1" norm="tatist" lemma="tætest" join="right">tatiſt</w>
+        <pc xml:id="t502_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t503_m1" norm="gehore" lemma="gehoere">gehore</w>
+        <lb n="21" ed="1"/>
+        <w xml:id="t504_m1" norm="min" lemma="mîn">min</w>
+        <w xml:id="t505_m1" norm="gebet" lemma="gebet">gebet</w>
+        <w xml:id="t506_m1" norm="io" lemma="ie" join="right">io</w>
+        <pc xml:id="t507_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t508_m1" norm="Filii" lemma="filii">Filii</w>
+        <w xml:id="t509_m1" norm="hominum" lemma="hominum">hominum</w>
+        <lb n="22" ed="1"/>
+        <w xml:id="t510_m1" norm="usque" lemma="usque">usque</w>
+        <w xml:id="t511_m1" norm="quo" lemma="quo">quo</w>
+        <w xml:id="t512_m1" norm="graui" lemma="gravi">graui</w>
+        <w xml:id="t513_m1" norm="corde" lemma="corde">corde</w>
+        <w xml:id="t514_m1" norm="ut" lemma="ut">ut</w>
+        <lb n="23" ed="1"/>
+        <w xml:id="t515_m1" norm="quid" lemma="quit">quid</w>
+        <w xml:id="t516_m1" norm="diligitis" lemma="diligitis">diligitis</w>
+        <w xml:id="t517_m1" norm="uanitatem" lemma="vanitatem">uanitatem</w>
+        <w xml:id="t518_m1" norm="et" lemma="et">et</w>
+        <w xml:id="t519_m1" norm="queritis" lemma="queritis">queritis</w>
+        <lb n="24" ed="1"/>
+        <w xml:id="t520_m1" norm="mendacium" lemma="mendacium" join="right">mendacium</w>
+        <pc xml:id="t521_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t522_m1" norm="Menniscon" lemma="mennischen">Menniſcon</w>
+        <w xml:id="t523_m1" norm="chint" lemma="kint">chint</w>
+        </ab>
+    </body>
+  </text>
+</TEI>

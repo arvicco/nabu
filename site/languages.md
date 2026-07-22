@@ -139,8 +139,8 @@ sga, got, osx, bul, ang, xcl, peo, arc, hit, xhu, elx, uga`
 
 The treebanks, ORACC, goo300k, the DCS, ONCOJ, the Hebrew and Egyptian
 shelves, Coptic Scriptorium, and the Germanic wave feed these
-annotations — **14,607,443 gold rows** (22 July census; Sanskrit and
-Sumerian lead, and Middle High German debuted third at 1.71 million rows
+annotations — **15,000,556 gold rows** (22 July census; Sanskrit and
+Sumerian lead, and Middle High German debuted third at 2.10 million rows
 with the ReM sync). A further 8.2 million machine-suggested rows in
 eight languages ride an honestly labelled silver tier. Everything else
 is full-text-searchable but not yet lemma-searchable.

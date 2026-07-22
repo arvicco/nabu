@@ -1,7 +1,7 @@
 # Languages of the library
 
 **As of 2026-07-22** (post the Japanese reading desk and the P40 Germanic
-wave — 27,978,978 live passages across the 88-row registry; live
+wave — 28,046,116 live passages across the 88-row registry; live
 inventory: every code below appears in the catalog, the lemma index, or
 the reference shelf). This page explains the code system once, then lists
 the significant codes with one sentence each (the corpus now carries 108
@@ -84,7 +84,7 @@ extracts) is **filled** — 160 name records, feeding the inline
 | `ang` | Old English | Beowulf and the complete ASPR poetry plus the ISWOC prose/gospel treebank, ca. 700–1150. |
 | `sga` / `mga` | Old & Middle Irish | The CorPH Palaeohibernicum and the Ogham corpus — the Celtic axis, gold-lemmatized in CorPH. |
 | `got` | Gothic | Wulfila's Bible — the oldest substantial Germanic text, gold-lemmatized in PROIEL. |
-| `gmh` | Middle High German | The ReM reference corpus (1050–1350), synced live 2026-07-22: 360 manually annotated texts / 290,242 manuscript lines, diplomatic layer stored (long ſ folds to s — rule 5) — and instantly the corpus's **third-largest gold-lemma pool** (1.71M rows). |
+| `gmh` | Middle High German | The ReM reference corpus (1050–1350), synced live 2026-07-22: 406 manually annotated texts / 355,449 manuscript lines, diplomatic layer stored (long ſ folds to s — rule 5) — and instantly the corpus's **third-largest gold-lemma pool** (2.10M rows). |
 | `non` / `gmq-pro` | Old Norse / Proto-Norse | The North Germanic lane (synced live 2026-07-22): Menotec's seven Old Norwegian treebanks and the Poetic Edda of Codex Regius (gold PROIEL-scheme morphology), plus Rundata's runic corpus in transliteration with its Old-West-Norse normalisation lane — 39,923 passages; the urnordisk-dated inscriptions carry `gmq-pro` (the wiktionary-recon proto-code convention of rule 4 — no ISO code exists; 822 passages). |
 | `osx` | Old Saxon | The *Heliand* (HeliPaD, synced live 2026-07-22): 3,549 syntactically parsed tree blocks with gold form-lemma pairs — the 9th-century gospel harmony beside its Gothic and Old English gospel cousins. |
 | `is` | Icelandic (diachronic) | IcePaHC via UD — the 12th–21st c. under the one modern tag (the `orv`/Middle-Russian precedent of rule 3); **configured, arrives at the next `sync ud`** (no passages yet). |
@@ -137,8 +137,8 @@ library.md §8c/§8h/§8j/§8k/§8m/§8o/§8q/§8s/§8t enumerate them per phase
 sga, got, osx, bul, ang, xcl, peo, arc, hit, xhu, elx, uga` — the
 treebanks, ORACC, goo300k, DCS, ONCOJ, the Hebrew/Egyptian shelves,
 Coptic Scriptorium, and the P40 Germanic shelves feed these
-**14,607,443 gold rows** (ordered above by pool size: `san` 5.54M and
-`sux` 2.97M lead; **`gmh` debuts third at 1.71M** — the ReM sync of
+**15,000,556 gold rows** (ordered above by pool size: `san` 5.54M and
+`sux` 2.97M lead; **`gmh` debuts third at 2.10M** — the ReM sync of
 2026-07-22 — with `non` 258K and `osx` 47K landing in the same wave as
 gold languages #24–26). A parallel **silver layer** adds 8,244,309
 machine-suggested rows in 8 languages (chiefly Greek/Diorisis 7.54M and
