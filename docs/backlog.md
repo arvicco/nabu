@@ -10913,7 +10913,7 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 
 # P41 — the Arabic phase (owner-picked 2026-07-22: "A, full scope, display considerations, new arabic(islamic?) axes, whole shebang"; plan: .docs/p41-arabic-plan.md)
 
-## P41-g · OpenITI fixture groundwork + mARkdown census  [tier: opus/network — D41-d gated] [status: blocked: decision-item D41-a..e rulings]
+## P41-g · OpenITI fixture groundwork + mARkdown census  [tier: opus/network — D41-d gated] [status: in-progress — dispatched 2026-07-22; D41-a arabic / b nc / c PERSIAN NOW / d go ruled]
 Goal: format census from real files + 3-4 trimmed fixtures + metadata index + D41-e sizing.
 Acceptance: test/fixtures/openiti/ with P5-4 manifest+README; findings memo reshapes P41-1/2.
 
