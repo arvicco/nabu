@@ -2417,9 +2417,10 @@ class CLITest < Minitest::Test
       assert File.exist?(config.history_path), "the first sync creates the ledger"
       out, _err, status = with_config(config) { run_cli(["status"]) }
       assert_nil status
-      # P39-0 compact: on(a) source, bare stamp + delta (no "last "/"ok").
-      assert_match(/corpus\s+on\(a\)\s+source\s+up=\S+\s+docs=2 pass=3/, out)
-      assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2} \(\+2 ~0 -0 !0\)/, out)
+      # P40-s compact v2: enabled auto → bare `a`; UNPROBED (synced, no probe);
+      # fused humanized holdings 2/3; MM-DD HH:MM stamp + zero-suppressed +2.
+      assert_match(%r{corpus\s+a\s+UNPROBED\s+2/3}, out)
+      assert_match(/\d{2}-\d{2} \d{2}:\d{2} \+2\b/, out)
     end
   end
 
@@ -2432,7 +2433,7 @@ class CLITest < Minitest::Test
 
       out, _err, status = with_config(config) { run_cli(["status"]) }
       assert_nil status
-      assert_match(/corpus.*docs=2.*no run history/, out)
+      assert_match(%r{corpus.*2/3.*no run history}, out)
     end
   end
 
@@ -2445,9 +2446,10 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_equal(1, out.lines.count { |line| line.include?("a source appears under every desk") })
       assert_match(/^slavic — The Slavicist — Cyril and Methodius to the damaskini\.$/, out)
-      # The member row is the SAME status line (state, policy, up=, counts),
-      # merely indented under its axis; lex serves slavic AND reference.
-      assert_match(/^  lex\s+on\(f\)\s+source\s+up=frozen\s+docs=0 pass=0/, out)
+      # The member row is the SAME compact v2 status line (col2, liveness,
+      # holdings), merely indented under its axis; lex serves slavic AND
+      # reference. Enabled frozen → bare `f`, frozen is silent, holdings 0/0.
+      assert_match(%r{^  lex\s+f\s+0/0}, out)
       assert_operator out.index("  lex", out.index("slavic — ")), :<, out.index("reference — ")
       assert_operator out.index("  lex", out.index("reference — ")), :>, out.index("reference — ")
     end
@@ -2580,21 +2582,23 @@ class CLITest < Minitest::Test
     with_sync_env(enabled: true) do |config|
       with_config(config) { run_cli(%w[sync corpus --parse-only]) }
 
-      # Bare status before any probe: drift is unknown (?), but P39-0 shows the
-      # age of the last successful sync (last contact) — here 0d, just synced.
+      # Bare compact status before any probe: never probed → the UNPROBED mark.
+      # The detail view (status corpus) keeps the last-contact age — up=?(0d).
       before, = with_config(config) { run_cli(%w[status]) }
-      assert_match(/corpus.*up=\?\(0d\)/, before)
+      assert_match(/corpus.*UNPROBED/, before)
+      before_detail, = with_config(config) { run_cli(%w[status corpus]) }
+      assert_match(/liveness:\s+up=\?\(0d\)/, before_detail)
 
       # --remote probes inline and writes the cache.
-      out, _err, status = with_config(config) do
+      _out, _err, status = with_config(config) do
         with_stubbed_shell(->(*_argv) { "sha_head\tHEAD\n" }) { run_cli(%w[status --remote]) }
       end
       assert_nil status
-      assert_match(/corpus.*up=\S+\(0d\)/, out, "a freshly probed verdict (age 0d)")
 
-      # The verdict persists: a subsequent bare status reads it from the cache.
-      after, = with_config(config) { run_cli(%w[status]) }
-      assert_match(/corpus.*up=\S+\(0d\)/, after)
+      # The verdict persists: a subsequent status detail reads it from the
+      # cache — a freshly probed verdict at age 0d.
+      after_detail, = with_config(config) { run_cli(%w[status corpus]) }
+      assert_match(/liveness:\s+up=\S*\(0d\)/, after_detail, "a freshly probed verdict (age 0d)")
     end
   end
 

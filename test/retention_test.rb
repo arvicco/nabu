@@ -84,9 +84,11 @@ class RetentionTest < Minitest::Test
     export = Nabu::Query::Export.new(catalog: @db).run(format: "plain", lang: nil, license: nil).to_a
     assert(export.any? { |line| line.include?("μῆνιν") }, "retired passages export normally")
 
-    # status counts it; show labels it.
+    # status counts it (compact folds retired into 5/5; --long labels it).
     status = Nabu::StatusReport.render(registry: registry, db: @db, ledger: @ledger)
-    assert_match(/docs=5 pass=5 retired=1/, status)
+    assert_match(%r{\s5/5\b}, status)
+    long = Nabu::StatusReport.render(registry: registry, db: @db, ledger: @ledger, long: true)
+    assert_match(/docs=5 pass=5 retired=1/, long)
     shown = Nabu::Query::Show.new(catalog: @db).run(urn("alpha"))
     assert shown.retired_upstream
     refute shown.withdrawn
