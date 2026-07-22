@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (13): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`
+**Members** (14): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`
 
 ### slavic
 
@@ -83,7 +83,7 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 Old English poetry (ASPR) and prose (ISWOC) with Bosworth-Toller, and Gothic riding the proiel/ud treebanks.
 
-**Members** (5): `ud`, `proiel`, `iswoc`, `aspr`, `bosworth-toller`
+**Members** (6): `ud`, `proiel`, `iswoc`, `aspr`, `bosworth-toller`, `rundata`
 
 ### celtic
 

@@ -464,3 +464,42 @@ default is right.
 Every transform in column two is display-time and announced; `--display
 full` always shows the stored bytes, and the MCP surface never applies any
 of this.
+
+---
+
+## 4. Runic (Rundata / SRDB) — the transliteration IS the text
+
+*Added P40-6 (2026-07-22), with the rundata adapter.*
+
+What the corpus actually carries, so nobody goes hunting for runes that
+were never there:
+
+- **SRDB stores no runic codepoints.** The Scandinavian Runic-text
+  Database records every inscription in the scholarly **Latin
+  transliteration** (lower-case, `þ` thorn, `R` for the *yr*/ʀ rune, `o`
+  for the nasal ą rune) — verified zero U+16A0–16FF across the artifact.
+  The transliteration is the canonical text under the bare urn
+  (`urn:nabu:rundata:u-344`), not a display transform of anything.
+- **The notation legend is content, never stripped** (it encodes the
+  stone's state and the editor's judgment): `§A §B …` inscription
+  sides/sections, `|` word/rune boundaries and runes shared between words
+  (`o| |onklati`), `' + ¶ × :` separators as carved, `(i)` an uncertain
+  rune, `-` one illegible rune, `----` a run of lost runes, `[l]`
+  editorial restoration, and a leading `"` marking a proper name
+  (`"Ulfr`). `--display full` and default rendering show the same stored
+  bytes; no display.yml transform applies.
+- **The five lanes are sibling documents** — reach them with
+  `show --parallel` (the registry `siblings:` declaration): the bare urn
+  is the transliteration; `-fvn` (Old West Norse normalisation), `-rsv`
+  (runic Swedish normalisation), `-eng`/`-swe` (translations) sit beside
+  it, e.g. `bin/nabu show urn:nabu:rundata:u-344 --parallel`. Absent
+  lanes are simply absent.
+- **No display.yml entry** (the ogham/oracc no-entry logic): there is
+  nothing to strip and nothing to transliterate — the stored text is
+  already the romanized scholarly form, and the notation must survive
+  untouched. Censused need: none.
+- **Forward-looking:** if a future source ever carries real Runic-block
+  codepoints (U+16A0–16FF, `ᚠᚢᚦ…`), the terminal side is one cask —
+  `brew install --cask font-noto-sans-runic` joins the macOS fallback
+  cascade like the other script Notos (§2). Relevant only then; nabu
+  would still never transliterate Latin → runes on its own.
