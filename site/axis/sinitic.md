@@ -9,6 +9,8 @@ description: >-
 
 Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, and the kaikki zh extract riding wiktionary-recon.
 
+New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
+
 ## The shelves
 
 A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
@@ -25,7 +27,7 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `babelstone-ids` | dictionary | open | enabled · manual | 97,680 entries |
 | `cbeta` | texts | nc | enabled · manual | 3,679 docs / 8,749,319 passages |
 | `kanripo` | texts | attribution | enabled · manual | 5,028 docs / 4,436,181 passages |
-| `kr-gaiji` | texts | attribution | not enabled | nothing held yet |
+| `kr-gaiji` | feature module | attribution | not enabled | nothing held yet |
 | `tls` | dictionary | attribution | enabled · manual | 23,179 entries |
 
 ## The desk's instruments

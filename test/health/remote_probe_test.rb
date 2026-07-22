@@ -114,10 +114,11 @@ class RemoteProbeTest < Minitest::Test
     Nabu::Shell::Error.new("command failed (exit #{status}): git", status: status, stderr: stderr)
   end
 
-  def registry_of(*specs, policy: "manual")
+  def registry_of(*specs, policy: "manual", kind: "source")
     entries = specs.map do |slug, klass, enabled|
       Nabu::SourceRegistry::Entry.new(
-        slug: slug, adapter_class_name: klass, enabled: enabled || enabled.nil?, sync_policy: policy
+        slug: slug, adapter_class_name: klass, enabled: enabled || enabled.nil?,
+        sync_policy: policy, kind: kind
       )
     end
     Nabu::SourceRegistry.new(entries)
@@ -859,15 +860,15 @@ class RemoteProbeTest < Minitest::Test
     assert_equal "frozen", Nabu::Store::Probe.first(source_slug: "src").drift
   end
 
-  # -- P19-1: local-policy shelves ------------------------------------------
+  # -- P19-1/P39-0: kind: shelf memory shelves ------------------------------
 
-  # A local shelf has NO upstream: the probe must touch neither the shell nor
-  # the network (NO_SHELL raises on any ls-remote), read the frozen-style
-  # :local drift, and judge liveness by the canonical tree itself.
-  def test_local_policy_source_probes_no_network_and_reads_local
+  # A kind: shelf memory shelf has NO upstream: the probe must touch neither
+  # the shell nor the network (NO_SHELL raises on any ls-remote), read the
+  # frozen-style :local drift, and judge liveness by the canonical tree itself.
+  def test_shelf_kind_source_probes_no_network_and_reads_local
     Dir.mktmpdir do |root|
       seed_canonical(root, "local-language")
-      row = probe(registry_of(["local-language", "ProbeNonGithubAdapter", true], policy: "local"),
+      row = probe(registry_of(["local-language", "ProbeNonGithubAdapter", true], kind: "shelf"),
                   NO_SHELL, canonical_dir: root).rows.first
 
       assert_equal :alive, row.liveness.status
@@ -879,9 +880,9 @@ class RemoteProbeTest < Minitest::Test
     end
   end
 
-  def test_local_policy_source_with_a_missing_tree_reads_gone
+  def test_shelf_kind_source_with_a_missing_tree_reads_gone
     Dir.mktmpdir do |root|
-      row = probe(registry_of(["local-language", "ProbeNonGithubAdapter", true], policy: "local"),
+      row = probe(registry_of(["local-language", "ProbeNonGithubAdapter", true], kind: "shelf"),
                   NO_SHELL, canonical_dir: root).rows.first
 
       assert_equal :gone, row.liveness.status
@@ -904,12 +905,10 @@ class RemoteProbeTest < Minitest::Test
     assert_equal [["one", 1, 2], ["two", 2, 2]], seen
   end
 
-  # A NON-local-policy source whose adapter declares no upstream repos is a
-  # registration bug (the P24-1 local-notes slip: a local shelf registered
-  # without `sync_policy: local` fell through to the git probe and crashed
-  # `health --remote` outright). The probe must degrade to an honest broken
-  # row — never take the whole command down.
-  def test_source_with_no_upstream_repos_reads_broken_not_crash
+  # A source with NO canonical tree AND no upstream repos is a genuine
+  # registration gap (P39-0): the probe degrades to an honest broken row —
+  # never takes the whole command down.
+  def test_source_with_no_upstream_repos_and_no_tree_reads_broken_not_crash
     row = probe(registry_of(["orphan", "ProbeNoReposAdapter", true]), NO_SHELL).rows.first
 
     assert_equal :gone, row.liveness.status
@@ -918,15 +917,29 @@ class RemoteProbeTest < Minitest::Test
     assert_equal :unchecked, row.license.status
   end
 
-  # The real-registry pin behind the same regression: every local shelf MUST
-  # carry `sync_policy: local`, or `health --remote` routes it at the network.
-  def test_every_local_shelf_in_the_real_registry_declares_local_policy
+  # P39-0: a VENDORED no-git source (sabellic-loans shape: empty
+  # upstream_repo_urls, a canonical tree on disk) is read like a local shelf —
+  # alive by its tree, :local drift — never the broken :gone row.
+  def test_no_git_source_with_a_tree_reads_vendored_local
+    Dir.mktmpdir do |root|
+      seed_canonical(root, "orphan")
+      row = probe(registry_of(["orphan", "ProbeNoReposAdapter", true], policy: "frozen"),
+                  NO_SHELL, canonical_dir: root).rows.first
+
+      assert_equal :alive, row.liveness.status
+      assert_equal :local, row.drift
+    end
+  end
+
+  # The real-registry pin (P39-0): every local shelf adapter row MUST be
+  # kind: shelf, or `health --remote` routes it at the network.
+  def test_every_local_shelf_in_the_real_registry_is_kind_shelf
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     registry.each_source do |entry|
       next unless entry.adapter_class_name.start_with?("Nabu::Adapters::Local")
 
-      assert_equal "local", entry.sync_policy,
-                   "#{entry.slug} is a local shelf and must declare sync_policy: local"
+      assert_equal "shelf", entry.kind,
+                   "#{entry.slug} is a local shelf and must declare kind: shelf"
     end
   end
 

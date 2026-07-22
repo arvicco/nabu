@@ -93,12 +93,12 @@ class LocalCheckTest < Minitest::Test
     assert loud_report.any_loud?
   end
 
-  def test_stale_enabled_live_source_is_flagged
+  def test_stale_enabled_auto_source_is_flagged
     source = seed_source(slug: "old", enabled: true)
     seed_run(source, added: 5, updated: 0, errored: 0, finished_at: @now - (30 * 86_400))
     seed_docs(source, live: 5)
 
-    report = check(registry_of(["old", { enabled: true, sync_policy: "live" }]))
+    report = check(registry_of(["old", { enabled: true, sync_policy: "auto" }]))
     assert_includes report.sources.first.findings.map(&:kind), :stale
     refute report.any_loud?
   end
@@ -326,7 +326,7 @@ class LocalCheckTest < Minitest::Test
       opts ||= {}
       Nabu::SourceRegistry::Entry.new(
         slug: slug, adapter_class_name: "TestAdapter",
-        enabled: opts.fetch(:enabled, true), sync_policy: opts.fetch(:sync_policy, "live")
+        enabled: opts.fetch(:enabled, true), sync_policy: opts.fetch(:sync_policy, "auto")
       )
     end
     Nabu::SourceRegistry.new(entries)

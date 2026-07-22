@@ -105,6 +105,17 @@ module Nabu
       KUTEN_GAIJI = /\A(?<desc>.+)、第\d水準(?<men>\d+)-(?<ku>\d+)-(?<ten>\d+)(?:、(?<loc>.*))?\z/
       UNICODE_GAIJI = /\A(?<desc>.+)、[Uu]\+(?<hex>\h{4,6})(?:、(?<loc>.*))?\z/
 
+      # BARE men-ku-ten (P39-r1): `…、men-ku-ten[、loc]` with NO 第N水準 level
+      # prefix. 85% of the unresolved-gaiji pool (16,137 live occurrences, e.g.
+      # ※［＃二の字点、1-2-22］) state the JIS X 0213 plane-row-cell identity
+      # directly — the same identity claim as the prefixed form, so it resolves
+      # into the text identically; the level word 第N水準 was only documentation.
+      # men is [12] (JIS X 0213 has exactly two planes): the fence that stops a
+      # page locator from being read as a codepoint — 305-11 has two groups (not
+      # three) and a three-group locator would need men>2. Jis0213.resolve is
+      # the final guard: an unmapped cell stays the loud sentinel, never a guess.
+      BARE_KUTEN = /\A(?<desc>.+)、(?<men>[12])-(?<ku>\d+)-(?<ten>\d+)(?:、(?<loc>.*))?\z/
+
       # The KNOWN formatting-command vocabulary (survey §4d census + the two
       # fixture works). N admits ASCII, fullwidth and kanji numerals.
       N = /[0-9０-９一二三四五六七八九十]+/
@@ -129,7 +140,7 @@ module Nabu
       # +urn+ is the document urn the adapter minted; +metadata+ (the
       # adapter's index-derived fields) merges under the parse-derived keys.
       def parse(zip_path, urn:, metadata: {})
-        lines = decode(read_zip_member(zip_path)).split(/\r?\n/)
+        lines = decode(read_zip_member(zip_path), declared: metadata["file_encoding"]).split(/\r?\n/)
         sections = split_sections(zip_path, lines)
         state = { passages: [], pending: {}, unresolved: 0, unknown: [], orphans: 0, urn: urn }
         sections[:body].each { |line| consume_body_line(state, line) }
@@ -150,49 +161,71 @@ module Nabu
       # The zip holds exactly one .txt (name unpredictable); anything else is
       # upstream damage this parser must not guess around.
       #
+      # Extraction is IN-PROCESS via Nabu::ZipReader (P39-3): the live rebuild
+      # forked one `unzip` subprocess per work (~17k fork+execs, the load-cost
+      # hotspot); the stdlib reader removes them. The reader parses the zip
+      # structure honestly (central directory, not a PK\x03\x04 scan) so data
+      # descriptors and nested signature bytes cannot mislead it.
+      #
       # MEMBER NAMES ARE JUNK-BYTES-IN-THE-WILD (incident P38-i1, the live
       # first sync): the owner's canonical holds zips whose member names are
       # invalid in UTF-8 AND in CP932 (51135_ruby_65180.zip's member reads
-      # ken\xFCfekito_… — the regression fixture), and an encoding-aware
-      # String#split on the -Z1 listing raised ArgumentError, which escaped
-      # parse and ABORTED the whole 17.5k-doc sync. So: the listing is
-      # forced to BINARY and matched byte-wise (/…/n) — member names are
-      # NEVER decoded, never NFC'd (the NFC boundary is for text, not for
-      # upstream filename bytes). The normal single-member zip extracts
-      # positionally (`unzip -p <zip>`, no member argument), so the junk
-      # name is never even spoken; only a multi-member zip addresses its
-      # one .txt by byte-preserved name. And every failure on this path —
-      # junk listing bytes, a corrupt zip (upstream ships at least two with
-      # no central directory), a wrong member count — is a PER-DOCUMENT
-      # defect: ParseError → loud quarantine, sync continues (the adapter
-      # error contract; an escaping ArgumentError violated it).
+      # ken\xFCfekito_… — the regression fixture). ZipReader keeps names BINARY
+      # and never decodes them, so the byte-wise (/…/n) select below is safe —
+      # member names are NEVER NFC'd (the NFC boundary is for text, not for
+      # upstream filename bytes). And every failure on this path — a corrupt
+      # zip (upstream ships at least two with no central directory), a wrong
+      # member count — is a PER-DOCUMENT defect: ParseError → loud quarantine,
+      # sync continues (the adapter error contract).
       def read_zip_member(zip_path)
-        members = Shell.run("unzip", "-Z1", zip_path).force_encoding(Encoding::BINARY).split("\n")
-        texts = members.grep(/\.txt\z/in)
+        reader = Nabu::ZipReader.new(File.binread(zip_path))
+        texts = reader.entries.select { |entry| entry.name.match?(/\.txt\z/in) }
         if texts.size != 1
           raise ParseError,
-                "#{zip_path}: expected exactly one .txt member, found #{texts.size} of #{members.size} member(s)"
+                "#{zip_path}: expected exactly one .txt member, " \
+                "found #{texts.size} of #{reader.entries.size} member(s)"
         end
 
-        return Shell.run("unzip", "-p", zip_path) if members.size == 1
-
-        Shell.run("unzip", "-p", zip_path, texts.first)
-      rescue Shell::Error, ArgumentError, EncodingError => e
+        reader.extract(texts.first)
+      rescue Nabu::ZipReader::Error, SystemCallError => e
         raise ParseError, "#{zip_path}: unreadable zip (#{e.message})"
       end
 
-      def decode(bytes)
-        Nabu::Normalize.nfc(bytes.dup.force_encoding(Encoding::Windows_31J).encode(Encoding::UTF_8))
+      # CP932/Windows-31J is upstream's near-universal encoding (19,175 index
+      # rows), but the index self-declares per-file via テキストファイル符号化方式
+      # (carried into metadata as "file_encoding"): honor UTF-8 when it says so,
+      # default CP932 for "ShiftJIS"/blank/unknown. Ten rows (five works, all
+      # in-copyright + off-repo, so never discovered today) declare UTF-8 — the
+      # seam is honest correctness, not a guess, and future-proofs a PD UTF-8
+      # work. The NFC boundary applies whichever way we decode (jpn not exempt).
+      def decode(bytes, declared: nil)
+        source = bytes.dup.force_encoding(source_encoding(declared))
+        Nabu::Normalize.nfc(source.encode(Encoding::UTF_8))
       rescue EncodingError => e
-        raise ParseError, "CP932 decode failed: #{e.message}"
+        raise ParseError, "#{declared || 'CP932'} decode failed: #{e.message}"
+      end
+
+      def source_encoding(declared)
+        case declared
+        when /\AUTF-?8\z/i then Encoding::UTF_8
+        else Encoding::Windows_31J
+        end
       end
 
       # -- file structure -------------------------------------------------------
 
       # Header / legend / body / colophon on the delimiter pair + 底本：.
+      #
+      # A file with NO 55-hyphen delimiter at all takes the no-legend legacy
+      # shape (below) rather than quarantining — censused over the 1,191 first-
+      # sync quarantines (P39-2): 1,185 no-ruby _txt_ works and 5 of 6 legacy
+      # _ruby_ works are title/byline then blank then body then 底本 colophon,
+      # with no legend block to explain markup. This is a real upstream
+      # convention, not a loosening; genuinely structureless files (no title,
+      # or no blank separating header from body) still quarantine loudly.
       def split_sections(zip_path, lines)
         header, legend_and_rest = split_on_delimiter(lines)
-        raise ParseError, "#{zip_path}: no legend delimiter (not an Aozora ruby text?)" if legend_and_rest.nil?
+        return legacy_sections(zip_path, lines) if legend_and_rest.nil?
 
         _legend, rest = split_on_delimiter(legend_and_rest)
         raise ParseError, "#{zip_path}: unterminated legend block" if rest.nil?
@@ -201,7 +234,26 @@ module Nabu
         header_lines = header.reject { |line| blank?(line) }
         raise ParseError, "#{zip_path}: empty header block" if header_lines.empty?
 
-        { title: header_lines.first, header: header_lines.drop(1), body: body, colophon: colophon }
+        { title: header_lines.first, header: header_lines.drop(1), body: body, colophon: colophon,
+          shape: "legend" }
+      end
+
+      # The no-legend legacy shape: header = the leading run up to the first
+      # blank line (title, optional subtitle, byline), then body, then the
+      # optional 底本 colophon. The parse is stamped metadata["parser_shape"]=
+      # "no_legend" so the widened path is countable, never silent. Two genuine
+      # dead ends still quarantine: an empty file (no title) and a file with no
+      # blank line at all to separate header from body.
+      def legacy_sections(zip_path, lines)
+        title_at = lines.index { |line| !blank?(line) }
+        raise ParseError, "#{zip_path}: empty file (no header, not an Aozora text?)" if title_at.nil?
+
+        blank_at = ((title_at + 1)...lines.size).find { |i| blank?(lines[i]) }
+        raise ParseError, "#{zip_path}: no legend delimiter and no header/body separation" if blank_at.nil?
+
+        header = lines[title_at...blank_at].reject { |line| blank?(line) }
+        body, colophon = split_colophon(lines[(blank_at + 1)..] || [])
+        { title: header.first, header: header.drop(1), body: body, colophon: colophon, shape: "no_legend" }
       end
 
       def split_on_delimiter(lines)
@@ -292,7 +344,7 @@ module Nabu
       # character for classes (a)/(b), the verbatim notation sentinel
       # otherwise (never a guess, never a silent drop).
       def consume_gaiji(state, annotations, body)
-        if (match = KUTEN_GAIJI.match(body))
+        if (match = kuten_match(body))
           char = Jis0213.resolve(plane: match[:men].to_i, row: match[:ku].to_i, cell: match[:ten].to_i)
           if char
             return resolved_gaiji(annotations, match, char,
@@ -303,6 +355,13 @@ module Nabu
           return resolved_gaiji(annotations, match, char, "codepoint" => "U+#{match[:hex].upcase}")
         end
         unresolved_gaiji(state, annotations, body)
+      end
+
+      # The prefixed 第N水準 form and the bare men-ku-ten form (P39-r1) are the
+      # same identity claim; try the prefixed grammar first so its 第N水準 token
+      # is never left dangling in a bare match's desc.
+      def kuten_match(body)
+        KUTEN_GAIJI.match(body) || BARE_KUTEN.match(body)
       end
 
       def resolved_gaiji(annotations, match, char, identity)
@@ -394,6 +453,7 @@ module Nabu
           "colophon" => sections[:colophon].join("\n")
         )
         extract_colophon_fields(metadata, sections[:colophon])
+        metadata["parser_shape"] = sections[:shape] if sections[:shape] == "no_legend"
         metadata["gaiji_unresolved"] = state[:unresolved] if state[:unresolved].positive?
         metadata["ruby_orphans"] = state[:orphans] if state[:orphans].positive?
         metadata["unknown_commands"] = state[:unknown].uniq.sort unless state[:unknown].empty?

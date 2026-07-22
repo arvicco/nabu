@@ -30,6 +30,35 @@ neither a website nor a reading application: it is a pipeline and a database,
 operated from the command line, and designed to outlive the services it
 draws from.
 
+## Find your desk
+
+The collection is organized as eighteen **research desks** — scholarly hats,
+each gathering the shelves, instruments and terminal setup for one tradition.
+Find yours:
+
+- **[The Classicist]({{ '/axis/classical/' | relative_url }})** — Greek and Latin letters read whole, Homer to the late grammarians.
+- **[The Papyrologist-Epigraphist]({{ '/axis/epigraphy/' | relative_url }})** — reads what survives on stone, sherd, papyrus and tablet, lacunae and all.
+- **[The Slavicist]({{ '/axis/slavic/' | relative_url }})** — Cyril and Methodius to the damaskini, canon to vernacular.
+- **[The Germanicist]({{ '/axis/germanic/' | relative_url }})** — Gothic, Old English verse and prose, the northern word-hoard.
+- **[The Celticist]({{ '/axis/celtic/' | relative_url }})** — from Lepontic stones to the Old Irish glossators.
+- **[The Italicist]({{ '/axis/italic/' | relative_url }})** — the languages of pre-Roman Italy, Oscan to Etruscan to Raetic.
+- **[The Comparative Indo-Europeanist]({{ '/axis/etym/' | relative_url }})** — laryngeals, reflex chains, the long descent of words.
+- **[The Biblical scholar]({{ '/axis/biblical/' | relative_url }})** — one text across Hebrew, Greek, Latin, Syriac, Coptic and English witnesses.
+- **[The Hebraist]({{ '/axis/hebrew/' | relative_url }})** — Masoretic vowels, Qumran consonants, the Aramaic of the Targums.
+- **[The Syriacist]({{ '/axis/syriac/' | relative_url }})** — the Peshitta and the estrangela bookshelf.
+- **[The Hittitologist]({{ '/axis/hittite/' | relative_url }})** — Anatolia in cuneiform, KBo and KUB by tablet and line.
+- **[The Assyriologist]({{ '/axis/cuneiform/' | relative_url }})** — Sumerian, Akkadian, Ugaritic, Hittite: the tablet world entire.
+- **[The Egyptologist]({{ '/axis/egyptian/' | relative_url }})** — hieroglyphs to Coptic, one language across four millennia of script.
+- **[The Indologist]({{ '/axis/indic/' | relative_url }})** — Veda to sastra, the Sanskrit library and its instruments.
+- **[The Buddhologist]({{ '/axis/buddhist/' | relative_url }})** — the dharma across the Pali, Sanskrit and Chinese canons.
+- **[The Sinologist]({{ '/axis/sinitic/' | relative_url }})** — the classical Chinese written world and its phonological deep past.
+- **[The Japanologist]({{ '/axis/japonic/' | relative_url }})** — Old Japanese song to the Sino-Japanese dictionary tradition.
+- **[The Librarian]({{ '/axis/local/' | relative_url }})** — the owner's own shelves: dossiers, library, notes, and the sources' own records.
+
+Each desk is a reader's-eye view of the same collection; the full directory,
+with every desk's member shelves and recipes, is
+[Research axes]({{ '/axis/' | relative_url }}).
+
 ## The holdings, in brief
 
 As of **19 July 2026**, the catalog records **737,299 documents** comprising

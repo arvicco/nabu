@@ -35,6 +35,18 @@ class DiorisisTest < Minitest::Test
   THUC_URN = "urn:nabu:diorisis:0003:001"
   LXX_FILE = "Septuaginta (0527) - Abdias (040).xml"
 
+  # The P39-4 collision fixtures: three DISTINCT Diodorus volumes upstream all
+  # numbered work 001 (tlgAuthor 0060, tlgId 001 — the owner's `~3 updated`
+  # incident). The bare tlgAuthor:tlgId is not unique, so the adapter
+  # disambiguates a colliding group by a slug of each work's title while the
+  # non-colliding works (Thucydides, the Hymn) keep the bare base urn.
+  DIO_BASE = "urn:nabu:diorisis:0060:001"
+  DIO_URNS = %w[
+    urn:nabu:diorisis:0060:001:bibliotheca-historica-books-i-v
+    urn:nabu:diorisis:0060:001:bibliotheca-historica-books-xi-xvii
+    urn:nabu:diorisis:0060:001:bibliotheca-historica-books-xviii-xx
+  ].freeze
+
   def conformance_adapter
     Nabu::Adapters::Diorisis.new
   end
@@ -73,8 +85,35 @@ class DiorisisTest < Minitest::Test
 
   def test_discover_yields_the_non_lxx_files_sorted_by_urn
     refs = adapter.discover(workdir).to_a
-    assert_equal [THUC_URN, HYMN_URN], refs.map(&:id),
-                 "urn:nabu:diorisis:<tlgAuthor>:<tlgId>, sorted; the LXX file yields no ref"
+    assert_equal [THUC_URN, HYMN_URN, *DIO_URNS], refs.map(&:id),
+                 "urn:nabu:diorisis:<tlgAuthor>:<tlgId>, sorted; the LXX file yields no ref; " \
+                 "the three tlgId-colliding Diodorus volumes disambiguate by title slug"
+  end
+
+  # THE COLLISION FIX (P39-4). Three canonical files share tlgAuthor 0060,
+  # tlgId 001 (distinct book-range volumes); a bare tlgAuthor:tlgId minted the
+  # same urn three times and the last file parsed silently won (the owner's
+  # `~3 updated`). The adapter disambiguates the colliding group by a slug of
+  # each work's title, so all three mint DISTINCT, stable urns.
+  def test_colliding_tlg_ids_disambiguate_by_title_slug
+    ids = adapter.discover(workdir).to_a.map(&:id)
+    assert_equal DIO_URNS, ids.select { |id| id.start_with?("#{DIO_BASE}:") }.sort,
+                 "the three distinct 0060:001 volumes mint distinct title-slug urns"
+    assert_equal ids, ids.uniq, "every minted document urn is unique across the discover set"
+    refute_includes ids, DIO_BASE, "no file keeps the bare colliding base urn (all three shifted)"
+  end
+
+  # THE STABILITY PROOF (P39-4): disambiguation touches ONLY the colliding
+  # group. Every non-colliding file keeps the urn the bare tlgAuthor:tlgId rule
+  # always minted — byte-identical — so the fix re-mints no unaffected work.
+  def test_non_colliding_urns_stay_byte_identical_to_the_base_rule
+    refs = adapter.discover(workdir).to_a
+    non_colliding = refs.reject { |ref| ref.id.start_with?("#{DIO_BASE}:") }
+    assert_equal [THUC_URN, HYMN_URN].sort, non_colliding.map(&:id).sort
+    non_colliding.each do |ref|
+      base = "urn:nabu:diorisis:#{ref.metadata.fetch('tlg_author')}:#{ref.metadata.fetch('tlg_id')}"
+      assert_equal base, ref.id, "a non-colliding work must keep its bare tlgAuthor:tlgId urn"
+    end
   end
 
   def test_the_lxx_files_are_excluded_by_the_machine_readable_header_field
@@ -132,14 +171,18 @@ class DiorisisTest < Minitest::Test
     db = store_test_db
     source = create_source(db)
     first = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
-    assert_equal 2, first.added
+    assert_equal 5, first.added, "2 non-colliding + 3 disambiguated Diodorus volumes"
     assert_equal 0, first.errored
-    assert_equal 6, db[:passages].count, "3 hymn + 3 thucydides sentences"
+    assert_equal 0, first.updated,
+                 "a from-scratch load revises nothing — the tlgId collision no longer inflates revisions"
+    assert_equal 0, first.collided,
+                 "disambiguation gives every volume a distinct urn, so the loader sees no collision"
+    assert_equal 12, db[:passages].count, "3 hymn + 3 thucydides + 3×2 Diodorus sentences"
 
     second = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 0, second.errored
-    assert_equal 2, second.skipped, "a byte-identical reload skips every document"
-    assert_equal 6, db[:passages].count
+    assert_equal 5, second.skipped, "a byte-identical reload skips every document"
+    assert_equal 12, db[:passages].count
     assert_equal [1], db[:passages].distinct.select_map(:revision)
   end
 
@@ -221,7 +264,7 @@ class DiorisisTest < Minitest::Test
       assert File.file?(File.join(work, LXX_FILE)),
              "the LXX files land in canonical (the artifact is kept whole) — the exclusion " \
              "is a discovery rule, not a fetch mutilation"
-      assert_equal 2, adapter.discover(work).to_a.size
+      assert_equal 5, adapter.discover(work).to_a.size
     end
   end
 
@@ -258,7 +301,7 @@ class DiorisisTest < Minitest::Test
       assert_equal Digest::SHA256.hexdigest(body), report.sha,
                    "the sha pin verifies against the mirror-delivered body"
       assert_requested :get, mirror
-      assert_equal 2, adapter.discover(work).to_a.size
+      assert_equal 5, adapter.discover(work).to_a.size
     end
   end
 

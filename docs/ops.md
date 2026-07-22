@@ -441,6 +441,29 @@ intended, re-run that source with `nabu sync <slug> --force`. If it's a
 restructure/rename, the attic + rename detection should have handled it —
 re-run without `--force` and check `nabu status` for retired counts.
 
+### Derivation stamps read all-dirty after a fingerprint FORMULA change
+
+`rebuild --incremental --dry-run` showing every source dirty right after
+pulling a code change that only reworked how `Nabu::DerivationFingerprint`
+*spells* its digests (P39-1's language-scoped fold tokens were exactly this)
+does not mean the corpus needs re-deriving — the stored stamps are just
+written in the old spelling. **Owner-only** escape hatch:
+
+```sh
+rake "stamps:rebless[i-verified-current-full-rebuild]"
+```
+
+It recomputes every source's fingerprint against current code and rewrites
+the stamps, deriving nothing, printing each rewrite. The attestation string
+is mandatory and means what it says: this is valid **only immediately after
+a verified full rebuild, on canonical that has not changed since**, under
+code whose derivation semantics are unchanged. The blast radius of misuse
+is the worst failure Nabu has: a blessed stamp for rows current code would
+not produce means every future incremental **silently skips** that source —
+under-derivation with no error anywhere, discovered only when a query
+returns stale text. When in any doubt, run `nabu rebuild` instead; a wasted
+full rebuild costs hours, a false blessing costs correctness.
+
 ---
 
 ## 7. Notifications (optional, owner-configured)
@@ -495,6 +518,27 @@ launchctl kickstart -k "gui/$(id -u)/com.nabu.verify-nightly"   # fire now
 launchctl print "gui/$(id -u)/com.nabu.verify-nightly"          # inspect
 launchctl bootout "gui/$(id -u)/com.nabu.verify-nightly"        # uninstall
 ```
+
+### 8b. Rake task reference
+
+Every rake task, what it does, and when to reach for it (`rake -T`
+prints the live list; this table adds the *when* and the danger notes).
+On this box run them as `bundle exec rake …` (§2).
+
+| Task | What / when | Notes |
+|---|---|---|
+| `rake test` | Full offline suite. Before every commit; the gate. | Never piped — read the tail. |
+| `rake lint` / `rake lint:fix` | RuboCop / with safe autocorrections. The gate's second half. | `lint:fix` applies safe cops only. |
+| `rake census:check` | Era-bound literals carry `# census:`/`# const:` markers. Runs in the gate. | Miss = exit 1; recalibration doctrine (dev-loop §6b). |
+| `rake fixtures:check[source]` | Re-fetch upstream samples, drift-check against checked-in fixtures. Monthly cadence (§1); never overwrites. | Network; owner-fired. |
+| `rake fixtures:refresh[source]` | Re-fetch and OVERWRITE a source's fixtures — explicit adoption of upstream drift. | Network; deliberate act, review the diff. |
+| `rake fold:hani[variants_path]` | Regenerate the lzh/och trad↔simp↔variant fold module from held Unihan. | Fold change dirties the CJK shelves' stamps — re-derive owner-scheduled. |
+| `rake fold:jpn[mappings,kanjidic]` | Regenerate the jpn kyūjitai↔shinjitai fold (jinmeiyō + KANJIDIC2-jōyō lanes). | Same stamp caveat, jpn scope. |
+| `rake gaiji:aozora_ids[census]` | Regenerate the Aozora IDS display lane from the checked-in description census. | Pure function of the census tsv; drift-pinned by test. |
+| `rake site:axes` | Regenerate the 18 per-axis site pages + index from registry, fragments, and LIVE catalog counts. | Run only where the catalog exists (main checkout) — a catalog-less run degrades holdings. |
+| `rake site:check` | Drift check: source-dossier descriptions vs docs/library.md. | Exit 1 on drift; never generates. |
+| `rake ops:drill` | Fresh-machine restore drill against a throwaway copy (§9). | Long; owner-fired. |
+| `rake "bless[<attestation>]"` (alias: `stamps:rebless`) | Rewrite EVERY source's derivation stamp to assert current code — WITHOUT re-deriving. Escape hatch for fingerprint-formula or output-identical code changes, so a multi-hour rebuild isn't triggered by bookkeeping. | **Owner-only, dangerous.** Valid ONLY when the catalog's derived rows already match what current code would produce: right after a verified full rebuild, or after individually re-syncing every source whose output actually changed. Misuse = stamps that lie = silent under-derivation. The attestation argument (`i-verified-current-full-rebuild`) is the claim you must be able to make truthfully; the task refuses anything else. |
 
 ---
 

@@ -14,7 +14,7 @@ module Nabu
   # - A source whose canonical dir is missing or empty was never synced, so
   #   there is nothing local to replay: it is SKIPPED (a note, not an error, and
   #   no run row) rather than fetched.
-  # - sync_policy (live/manual/frozen) is irrelevant to rebuild: policies gate
+  # - sync_policy (auto/manual/frozen) is irrelevant to rebuild: policies gate
   #   network syncs, and rebuild does no network. We replay whatever is local.
   # - Disabled sources ARE replayed when their canonical dir exists: the data is
   #   already local and licensed, and `enabled` gates *future* syncs, not replay
@@ -233,8 +233,13 @@ module Nabu
     # the identity `rebuild --incremental` compares to skip clean sources. A
     # full rebuild re-derives everything, so stamping here is correct by
     # construction; a weak fingerprint writes no stamp (absent = dirty).
+    # P39-1: the fold digest is scoped by the source's language census, read
+    # AFTER the replay (this call site runs post-replay) so it describes
+    # exactly the derived rows the stamp vouches for.
     def stamp!(db, entry)
-      Store::DerivationStamp.stamp!(db, slug: entry.slug, fingerprint: fingerprints.for_source(entry))
+      languages = Store::DerivationStamp.derived_languages(db, entry.slug)
+      Store::DerivationStamp.stamp!(db, slug: entry.slug,
+                                        fingerprint: fingerprints.for_source(entry, languages: languages))
     end
 
     # Shared with IncrementalRebuild (subclass): one computer per run so the

@@ -7,7 +7,7 @@ description: >-
   biblical studies.
 ---
 
-Six short walk-throughs, one per discipline, using real commands and output
+Ten short walk-throughs, one per discipline, using real commands and output
 from live runs of 11–12 July 2026. Nothing below is a mock-up; trims are
 marked with ellipses. Each discipline is also a **research desk** — one of
 the eighteen [research axes]({{ '/axis/' | relative_url }}), where that
@@ -268,3 +268,11 @@ A note on scope: the library today serves the Hebrew Bible and Second
 Temple corpora. Rabbinic literature proper — Mishnah, Talmud, midrash —
 is a planned campaign of its own; the Targum shelf and the Jastrow
 dictionary scans are its first bridgeheads.
+
+## If your field is not here
+
+These walk-throughs sample the disciplines the library serves; they are not
+the whole of it. The desk index at [Research axes]({{ '/axis/' | relative_url }})
+covers all eighteen — the Germanicist, the Indologist and the Sinologist among
+those with no walk-through above — each with its own member shelves,
+instruments and CLI recipes.

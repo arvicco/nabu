@@ -77,7 +77,7 @@ module Nabu
         nabu sync --all
     HELP
     option :all, type: :boolean, default: false,
-                 desc: "Sync every enabled source with sync_policy: live"
+                 desc: "Sync every enabled kind: source with sync_policy: auto"
     option :axis, type: :string, banner: "NAME[,NAME...]",
                   desc: "Sync the enabled members of one or more research axes (config/axes.yml), " \
                         "grouped; disabled members are skipped by name (an axis is not an explicit request)"
@@ -2857,11 +2857,15 @@ module Nabu
       end
 
       # Registry facts on the header line; a catalog source missing from the
-      # registry is abnormal and reads loudly.
+      # registry is abnormal and reads loudly. Kind-aware (P39-0): a shelf reads
+      # local memory, a module reads machinery — neither has a cadence or an
+      # enablement to show.
       def registry_fragment(entry)
         return " · NOT IN REGISTRY" if entry.nil?
+        return " · shelf · local memory" if entry.shelf?
+        return " · module · machinery (no catalog rows)" if entry.feature_module?
 
-        " · sync #{entry.sync_policy} · #{entry.enabled ? 'on' : 'off'}"
+        " · source · sync #{entry.sync_policy} · #{entry.enabled ? 'on' : 'off'}"
       end
 
       def card_counts(card)
@@ -5299,6 +5303,9 @@ module Nabu
         raise Thor::Error, "sync: give a source slug or --all" if slug.nil?
 
         entry = registry[slug]
+        # P39-0: name a non-source row's nature up front, so an owner who fires
+        # `sync kr-gaiji` / `sync local-notes` knows what it does (and does not) do.
+        say kind_nature_note(entry), :yellow if entry && !entry.source?
         say "Note: #{slug} is disabled; syncing anyway (explicit request).", :yellow if entry && !entry.enabled
         outcome = runner.sync(slug, parse_only: options[:parse_only], force: options[:force],
                                     progress: progress_reporter)
@@ -5310,6 +5317,17 @@ module Nabu
         print_sync_warnings(outcome)
         print_citation_coverage(entry, db)
         run_review_hook(outcome, db, ledger) if options[:review]
+      end
+
+      # P39-0: the one-line nature note for a non-source sync target. A module
+      # refreshes reference machinery and mints no catalog rows; a shelf is
+      # gateway-written owner memory re-scanned locally with no network.
+      def kind_nature_note(entry)
+        if entry.feature_module?
+          "#{entry.slug}: feature module — refreshes canonical reference data; mints no catalog rows."
+        else
+          "#{entry.slug}: local memory shelf — gateway-written owner data; sync re-scans canonical (no network)."
+        end
       end
 
       # P18-7, the optional AI-review rider: assemble the JSON brief and pipe
@@ -5646,7 +5664,9 @@ module Nabu
 
         selected = report.added + report.updated + report.skipped
         skipped = report.skipped_by_rule + discovery.skipped_by_rule
-        unrecognized = report.errored + discovery.unrecognized
+        # A collided document (P39-4) was discovered but rejected keep-first, so
+        # it belongs in the loud not-ingested bucket, never among the selected.
+        unrecognized = report.errored + report.collided + discovery.unrecognized
         say("  discovery: #{selected} selected · #{skipped} skipped-by-rule · " \
             "#{unrecognized} unrecognized", unrecognized.positive? ? :yellow : nil)
         discovery.notes.each { |note| say("  ! #{note}", :yellow) }
@@ -5658,7 +5678,14 @@ module Nabu
         "#{outcome.slug.ljust(24)} #{fetched}  " \
           "+#{report.added} added  ~#{report.updated} updated  " \
           "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored" \
+          "#{format_collided(report)}" \
           "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}"
+      end
+
+      # P39-4: the within-pass collision tail — silent at zero (house
+      # compact-zero rule; collisions are pathological), loud when one bit.
+      def format_collided(report)
+        report.collided.positive? ? "  !#{report.collided} collision" : ""
       end
 
       # P26-5: syncs index incrementally, so the count is the SOURCE's live
@@ -5785,12 +5812,13 @@ module Nabu
           say format("  %-#{width}s  %10s  %5.1f%%", label, format_duration(secs), share * 100)
         end
         say "  #{'-' * (width + 20)}"
-        say format("  %-#{width}s  %10s   (of load)", "parse", format_duration(profile.parse_total))
+        say format("  %-#{width}s  %10s   (of load)", "parse (+fold)", format_duration(profile.parse_total))
         say format("  %-#{width}s  %10s   (of load)", "insert", format_duration(profile.insert_total))
         say format("  %-#{width}s  %10s", "load total", format_duration(profile.load_total))
         say format("  %-#{width}s  %10s", "corpus index total", format_duration(profile.index_total))
         say format("  %-#{width}s  %10s", "GRAND TOTAL", format_duration(profile.grand_total))
         say "  note: fts+lemma is one fused pass; parse/insert are per-document samples inside load."
+        say "  note: text-normalization/fold (search_form) runs at Passage build, so it is inside parse."
       end
 
       # Seconds → the rebuild-progress voice (Xs under a minute, else XmYYs).
@@ -5800,7 +5828,8 @@ module Nabu
 
       def format_report(label, report)
         "#{label.ljust(24)} +#{report.added} added  ~#{report.updated} updated  " \
-          "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored"
+          "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored" \
+          "#{format_collided(report)}"
       end
 
       def total_report(result)
@@ -5808,7 +5837,8 @@ module Nabu
         Nabu::Store::LoadReport.new(
           added: reports.sum(&:added), updated: reports.sum(&:updated),
           skipped: reports.sum(&:skipped), withdrawn: reports.sum(&:withdrawn),
-          errored: reports.sum(&:errored), skipped_by_rule: reports.sum(&:skipped_by_rule)
+          errored: reports.sum(&:errored), skipped_by_rule: reports.sum(&:skipped_by_rule),
+          collided: reports.sum(&:collided)
         )
       end
 

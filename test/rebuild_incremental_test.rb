@@ -104,13 +104,49 @@ class RebuildIncrementalTest < Minitest::Test
     with_db { |db| assert_equal 3, db[:derivation_stamps].count, "the re-derive re-stamps" }
   end
 
-  def test_a_fold_rules_change_dirties_every_source
+  def test_a_fold_wiring_change_dirties_every_source
+    # normalize.rb is the global fold wiring — it stays corpus-wide (P39-1).
     full_rebuilder.run
 
-    result = with_fold_digest("folds-changed") { incremental_rebuilder.run }
+    result = with_changed_fold_file("normalize.rb") { incremental_rebuilder.run }
 
     assert_equal %w[alpha beta lexica], result.outcomes.map(&:slug).sort
     assert_empty result.cleans
+  end
+
+  # -- fold-digest granularity (P39-1) -------------------------------------
+
+  def test_a_jpn_fold_module_change_dirties_only_jpn_sources
+    add_jpn_source
+    full_rebuilder.run
+
+    result = with_changed_fold_file("jpn.rb") { incremental_rebuilder.run }
+
+    assert_equal %w[gamma], result.outcomes.map(&:slug)
+    assert_equal %w[alpha beta lexica], result.cleans.map(&:slug).sort
+  end
+
+  def test_a_hani_fold_module_change_dirties_jpn_sources_too
+    # jpn composes THROUGH hani (the generated table bakes Hani.fold in), so
+    # a hani change dirties the jpn source; grc/lat sources stay clean.
+    add_jpn_source
+    full_rebuilder.run
+
+    result = with_changed_fold_file("hani.rb") { incremental_rebuilder.run }
+
+    assert_equal %w[gamma], result.outcomes.map(&:slug)
+    assert_equal %w[alpha beta lexica], result.cleans.map(&:slug).sort
+  end
+
+  def test_a_dirty_fold_verdict_names_the_changed_module
+    add_jpn_source
+    full_rebuilder.run
+
+    plan = with_changed_fold_file("jpn.rb") { incremental_rebuilder.plan }
+
+    verdicts = plan.verdicts.to_h { |v| [v.slug, [v.state, v.reason]] }
+    assert_equal [:dirty, "fold(jpn.rb)"], verdicts.fetch("gamma")
+    assert_equal [:clean, nil], verdicts.fetch("alpha")
   end
 
   def test_a_schema_behind_catalog_refuses_incremental_loudly
@@ -190,15 +226,33 @@ class RebuildIncrementalTest < Minitest::Test
 
   def write_sources(yaml) = File.write(@sources_path, yaml)
 
-  # Temporarily replace the fold-rules digest (no minitest/mock in this
-  # suite): define, yield, restore.
-  def with_fold_digest(value)
+  # Register the jpn-minting source beside the shared trio (the granularity
+  # tests' CJK counterpart; existing tests keep their exact slug lists).
+  def add_jpn_source
+    write_sources(<<~YAML)
+      alpha:
+        adapter: TestAdapter
+      beta:
+        adapter: TestAdapter
+      lexica:
+        adapter: Nabu::Adapters::Lexica
+      gamma:
+        adapter: JpnTestAdapter
+    YAML
+    write_canonical("gamma", "g.txt" => "草枕\n學問はどこまでも\n")
+  end
+
+  # Simulate a content change to ONE fold file (no minitest/mock in this
+  # suite): divert its digest; define, yield, restore.
+  def with_changed_fold_file(basename)
     singleton = Nabu::DerivationFingerprint.singleton_class
-    original = Nabu::DerivationFingerprint.method(:fold_digest)
-    singleton.define_method(:fold_digest) { value }
+    original = Nabu::DerivationFingerprint.method(:fold_file_digest)
+    singleton.define_method(:fold_file_digest) do |path|
+      File.basename(path) == basename ? "changed-#{basename}" : original.call(path)
+    end
     yield
   ensure
-    singleton.define_method(:fold_digest, original)
+    singleton.define_method(:fold_file_digest, original)
   end
 
   def write_canonical(slug, files)

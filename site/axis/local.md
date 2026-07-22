@@ -9,16 +9,18 @@ description: >-
 
 The canonical-memory shelves (architecture §16): local-language, local-library, local-notes, local-source.
 
+New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
+
 ## The shelves
 
 A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
-| `local-language` | language dossiers | open | enabled · local | 214 dossiers |
-| `local-library` | texts | research_private | enabled · local | 20 docs / 8,725 passages |
-| `local-notes` | owner notes | open | enabled · local | nothing held yet |
-| `local-source` | source records | open | enabled · local | 79 dossiers |
+| `local-language` | language dossiers | open | enabled · manual | 214 dossiers |
+| `local-library` | texts | research_private | enabled · manual | 20 docs / 8,725 passages |
+| `local-notes` | owner notes | open | enabled · manual | nothing held yet |
+| `local-source` | source records | open | enabled · manual | 79 dossiers |
 
 ## The desk's instruments
 

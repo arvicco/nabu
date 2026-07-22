@@ -53,7 +53,7 @@ class TestAdapter < Nabu::Adapter
     urn = document_ref.id
     document = Nabu::Document.new(
       urn: urn,
-      language: "grc",
+      language: language,
       title: title,
       canonical_path: document_ref.path
     )
@@ -62,7 +62,7 @@ class TestAdapter < Nabu::Adapter
       text = Nabu::Normalize.nfc(line)
       document << Nabu::Passage.new(
         urn: "#{urn}:#{index + 1}",
-        language: "grc",
+        language: language,
         text: text,
         sequence: index
       )
@@ -72,7 +72,21 @@ class TestAdapter < Nabu::Adapter
 
   private
 
+  # The language every minted document/passage carries. A seam so the
+  # fold-granularity tests (P39-1) can run a CJK sibling; grc is the rig's
+  # historical default.
+  def language = "grc"
+
   def document_urn(slug)
     "urn:nabu:#{SOURCE_ID}:#{slug}"
   end
+end
+
+# The jpn-minting sibling of the rig (P39-1 fold-digest granularity): same
+# plain-text format, every row tagged jpn — the language whose fold consults
+# lib/nabu/jpn.rb (and, through composition, hani.rb).
+class JpnTestAdapter < TestAdapter
+  private
+
+  def language = "jpn"
 end

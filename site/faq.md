@@ -19,8 +19,11 @@ papyri, cuneiform, Sanskrit, Old English, the Slavic canon, and more —
 built for scholars who want to hold their sources rather than query a
 service. It is a command-line pipeline and database, not a website or a
 reading application. What it is and why it exists is set out on
-[About]({{ '/about/' | relative_url }}); worked walk-throughs for six
-scholarly personas are on [Examples]({{ '/examples/' | relative_url }}).
+[About]({{ '/about/' | relative_url }}); worked walk-throughs for ten
+scholarly personas are on [Examples]({{ '/examples/' | relative_url }}), and
+the full set of eighteen [research desks]({{ '/axis/' | relative_url }}) —
+one scholarly hat per field, each with its own shelves and recipes — is the
+reader's-eye map of the whole collection.
 
 ### How do I try it in minutes?
 

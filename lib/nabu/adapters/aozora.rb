@@ -85,6 +85,7 @@ module Nabu
       COL_GIVEN = "名"
       COL_ROLE = "役割フラグ"
       COL_TEXT_URL = "テキストファイルURL"
+      COL_ENCODING = "テキストファイル符号化方式"
       PD_FLAG = "なし"
 
       MANIFEST = Nabu::SourceManifest.new(
@@ -191,9 +192,16 @@ module Nabu
             "card_url" => first[COL_CARD_URL],
             "ndc" => first[COL_NDC],
             "authors" => person_names(rows, "著者"),
-            "translators" => person_names(rows, "翻訳者")
+            "translators" => person_names(rows, "翻訳者"),
+            # Upstream's own per-file charset declaration (parser honors it,
+            # defaults CP932); carried only when non-empty (blank = CP932).
+            "file_encoding" => presence(first[COL_ENCODING])
           }.compact
         }
+      end
+
+      def presence(value)
+        value unless value.nil? || value.empty?
       end
 
       def person_names(rows, role)
@@ -237,17 +245,18 @@ module Nabu
       end
 
       def unzip_index(zip)
-        # Listing handled as BINARY, matched byte-wise \u2014 the P38-i1 rule
-        # (member names are junk-bytes-in-the-wild; never decode them). The
-        # index member is ASCII today, but an ArgumentError here would abort
-        # the sync at discover, so the same discipline applies.
-        members = Shell.run("unzip", "-Z1", zip).force_encoding(Encoding::BINARY).split("\n").grep(/\.csv\z/in)
+        # In-process via Nabu::ZipReader (P39-3, the same subprocess removal as
+        # the work zips). Member names are handled as BINARY and matched
+        # byte-wise (/\u2026/n) \u2014 the P38-i1 rule (never decode them). The index
+        # member is ASCII today, but the same discipline applies uniformly.
+        reader = Nabu::ZipReader.new(File.binread(zip))
+        members = reader.entries.select { |entry| entry.name.match?(/\.csv\z/in) }
         unless members.size == 1
-          raise Nabu::FetchError, "#{manifest.id}: expected one CSV in #{zip}, found #{members.inspect}"
+          raise Nabu::FetchError, "#{manifest.id}: expected one CSV in #{zip}, found #{members.map(&:name).inspect}"
         end
 
-        Shell.run("unzip", "-p", zip, members.first).force_encoding(Encoding::UTF_8).delete_prefix("\uFEFF")
-      rescue Shell::Error, ArgumentError, EncodingError => e
+        reader.extract(members.first).force_encoding(Encoding::UTF_8).delete_prefix("\uFEFF")
+      rescue Nabu::ZipReader::Error, SystemCallError => e
         raise Nabu::FetchError, "#{manifest.id}: unreadable index zip #{zip} (#{e.message})"
       end
 

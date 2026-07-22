@@ -9,15 +9,17 @@ description: >-
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
+New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
+
 ## The shelves
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
 |---|---|---|---|---|
-| `perseus-greek` | texts | attribution | enabled · live | 1,418 docs / 394,706 passages |
-| `perseus-latin` | texts | attribution | enabled · live | 534 docs / 391,785 passages |
-| `first1k-greek` | texts | attribution | enabled · live | 1,129 docs / 256,480 passages |
+| `perseus-greek` | texts | attribution | enabled · auto | 1,418 docs / 394,706 passages |
+| `perseus-latin` | texts | attribution | enabled · auto | 534 docs / 391,785 passages |
+| `first1k-greek` | texts | attribution | enabled · auto | 1,129 docs / 256,480 passages |
 | `ud` | treebank | nc | enabled · manual | 29 docs / 107,664 passages |
 | `proiel` | treebank | nc | enabled · frozen | 12 docs / 51,321 passages |
 | `lexica` | dictionary | attribution | enabled · manual | 168,133 entries |

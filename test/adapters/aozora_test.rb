@@ -178,6 +178,73 @@ class AozoraTest < Minitest::Test
     assert_match(/unreadable zip/, error.message)
   end
 
+  # --- parse: the no-legend legacy shape (P39-2 quarantine recovery) -----------
+
+  # The first full sync quarantined 1,191 works, ALL "no legend delimiter":
+  # 1,185 no-ruby _txt_ works + 6 legacy _ruby_ works that carry no 55-hyphen
+  # legend block (there is no markup to explain). Censused shape: title/byline,
+  # blank line, body, 底本 colophon. These two fixtures are REAL, WHOLE upstream
+  # zips from the owner's canonical (retrieved 2026-07-22), both formerly
+  # quarantined, both recover here. See test/fixtures/aozora/README.md.
+  LEGACY_TXT = "legacy/53411_txt_43155.zip"  # 看痾, 宮沢賢治 (no-ruby _txt_ variant)
+  LEGACY_RUBY = "legacy/4356_ruby_7914.zip"  # 五所川原, 太宰治 (_ruby_-named, no legend)
+
+  def test_no_legend_txt_variant_parses_via_the_legacy_shape
+    document = parse_zip(LEGACY_TXT, "urn:nabu:aozora:053411")
+    assert_equal "看痾", document.title, "line 0 is the title even with no legend delimiter"
+    assert_equal ["宮沢賢治"], document.metadata["header"], "the byline rides header metadata"
+    assert_equal "no_legend", document.metadata["parser_shape"], "the widened path is stamped, never silent"
+    assert_equal 4, document.size, "4 verse body lines mint passages; blanks and colophon do not"
+    assert_equal "七月はさやに来れど", document.passages.first.text
+    assert_equal "「新修宮沢賢治全集　第六巻」筑摩書房", document.metadata["teihon"]
+    document.each do |passage|
+      refute_includes passage.text, "底本", "colophon lines never leak into passages"
+    end
+  end
+
+  def test_no_legend_ruby_variant_parses_via_the_legacy_shape
+    document = parse_zip(LEGACY_RUBY, "urn:nabu:aozora:004356")
+    assert_equal "五所川原", document.title
+    assert_equal ["太宰治"], document.metadata["header"]
+    assert_equal "no_legend", document.metadata["parser_shape"]
+    assert_equal 3, document.size, "3 body paragraphs mint passages"
+    assert_includes document.passages.first.text, "叔母が五所川原にゐるので"
+    assert_equal "「太宰治全集　10」筑摩書房", document.metadata["teihon"]
+    assert_equal "砂場清隆", document.metadata["inputter"]
+  end
+
+  # The fence: a decoded file with no blank line separating a header from a
+  # body is genuinely structureless — it stays quarantined (never guessed at).
+  def test_a_structureless_file_still_quarantines
+    Dir.mktmpdir do |dir|
+      txt = File.join(dir, "junk.txt")
+      File.write(txt, "只有一行文字並無空行".encode(Encoding::Windows_31J), mode: "wb")
+      zip = File.join(dir, "900002_txt_1.zip")
+      Nabu::Shell.run("zip", "-q", "-j", zip, txt)
+      error = assert_raises(Nabu::ParseError) do
+        Nabu::Adapters::AozoraRubyParser.new.parse(zip, urn: "urn:nabu:aozora:900002")
+      end
+      assert_match(%r{no header/body separation}, error.message)
+    end
+  end
+
+  # --- parse: index-declared encoding (P39-2) ---------------------------------
+
+  # CP932 is the near-universal encoding, but the index self-declares per file
+  # (テキストファイル符号化方式). When it says UTF-8, the parser must honor it,
+  # not force CP932. (The 5 UTF-8 works upstream are all in-copyright + off-repo
+  # so never discovered today; this pins the honest seam, not a live case.)
+  def test_index_declared_utf8_encoding_is_honored
+    document = parse_rig("　これはユニコードの本文である。\n", encoding: Encoding::UTF_8, file_encoding: "UTF-8")
+    assert_equal "　これはユニコードの本文である。", document.passages.first.text
+  end
+
+  # Absent/blank declaration falls back to CP932 (the upstream default).
+  def test_absent_encoding_declaration_defaults_to_cp932
+    document = parse_rig("　通常のＣＰ９３２本文。\n")
+    assert_equal "　通常のＣＰ９３２本文。", document.passages.first.text
+  end
+
   # --- parse: structure --------------------------------------------------------
 
   def test_56078_parses_header_body_colophon
@@ -310,6 +377,81 @@ class AozoraTest < Minitest::Test
     assert_equal 1, document.metadata["gaiji_unresolved"]
   end
 
+  # P39-r1: the BARE men-ku-ten form ※［＃<name>、N-N-N［、loc］］ carries the
+  # SAME JIS X 0213 identity as the prefixed 第N水準 form — upstream states the
+  # plane-row-cell directly and the 第N水準 level word is documentation. The
+  # live census (2026-07-22) is 16,137 such occurrences, 85% of the unresolved
+  # pool; every one resolves through the shipped table. So the bare form
+  # resolves into the text exactly like the prefixed form. Notations below are
+  # the census's own top glyphs, never invented.
+  def test_bare_kuten_gaiji_resolves_into_the_text
+    document = parse_rig("　これは※［＃二の字点、1-2-22］の記号。\n")
+    passage = document.passages.first
+    refute_includes passage.text, "※［＃", "the bare-kuten notation resolves, leaving no sentinel"
+    assert_includes passage.text, "〻", "1-2-22 → 〻 (U+303B) goes into the text"
+    entry = passage.annotations["gaiji"].first
+    assert_equal({ "class" => "kuten", "desc" => "二の字点", "kuten" => "1-2-22", "char" => "〻" }, entry)
+    assert_equal 0, document.metadata.fetch("gaiji_unresolved", 0)
+  end
+
+  # The name may itself wrap 「…」 and a page locator may trail the code — both
+  # ride through. And a plane-2 identity resolves too: 「宀／成」、2-8-2 is a
+  # composition-STYLE name that nonetheless carries a real men-ku-ten, so the
+  # identity claim wins (the ／ is only documentation, U+5BAC 宬 the truth).
+  def test_bare_kuten_with_bracketed_name_locator_and_plane_two
+    document = parse_rig(<<~BODY)
+      　終わり※［＃終わり二重括弧、1-2-55、279-2］の記号。
+      　これは※［＃「宀／成」、2-8-2、199-10］の字。
+    BODY
+    first, second = document.passages
+    assert_includes first.text, [0xFF60].pack("U*"), "1-2-55 → ｠"
+    entry = first.annotations["gaiji"].first
+    assert_equal "kuten", entry["class"]
+    assert_equal "279-2", entry["loc"]
+    assert_includes second.text, "宬", "plane-2 2-8-2 → 宬 (U+5BAC)"
+    assert_equal "宀／成", second.annotations["gaiji"].first["desc"]
+    assert_equal 0, document.metadata.fetch("gaiji_unresolved", 0)
+  end
+
+  # A bare code the table cannot map is NEVER guessed — it falls to the same
+  # loud sentinel as an unmapped prefixed code (the resolve() guard, mirroring
+  # test_unmapped_kuten_...; ku 99 is out of the 1..94 range, so the cell is
+  # unmapped and the notation stays verbatim).
+  def test_unmapped_bare_kuten_falls_back_to_the_sentinel
+    notation = "※［＃感嘆符二つ、1-99-99］"
+    document = parse_rig("　例の#{notation}の字。\n")
+    passage = document.passages.first
+    assert_includes passage.text, notation
+    assert_equal "unresolved", passage.annotations["gaiji"].first["class"]
+    assert_equal 1, document.metadata["gaiji_unresolved"]
+  end
+
+  # DISJOINTNESS 1 — the P39-5 component-description lane is untouched: a
+  # composition formula whose trailing token is a PAGE locator (two numeric
+  # groups, 305-11) is NOT a men-ku-ten (three groups), so it never resolves
+  # and stays the loud verbatim sentinel. (「木／喬」 is a live census desc.)
+  def test_component_description_with_page_locator_is_not_read_as_kuten
+    notation = "※［＃「木／喬」、305-11］"
+    document = parse_rig("　その#{notation}の木。\n")
+    passage = document.passages.first
+    assert_includes passage.text, notation, "a 2-group page locator never resolves as a codepoint"
+    entry = passage.annotations["gaiji"].first
+    assert_equal "unresolved", entry["class"]
+    assert_equal "木／喬", entry["desc"]
+    assert_equal 1, document.metadata["gaiji_unresolved"]
+  end
+
+  # DISJOINTNESS 2 — a formatting command ［＃…］ (no ※) never enters the gaiji
+  # grammar: the ※ gate (GAIJI scanned before COMMAND) means the widened bare-
+  # kuten rule cannot swallow a bracket command.
+  def test_formatting_command_is_not_swallowed_by_bare_kuten
+    document = parse_rig("　本文［＃ここから２字下げ］の段落。\n")
+    passage = document.passages.first
+    assert_equal "　本文の段落。", passage.text
+    assert_nil passage.annotations["gaiji"], "no ［＃…］-without-※ ever becomes a gaiji"
+    assert_includes passage.annotations["commands"], "ここから２字下げ"
+  end
+
   # --- parse: formatting commands ---------------------------------------------
 
   def test_formatting_commands_never_reach_passage_text
@@ -433,6 +575,13 @@ class AozoraTest < Minitest::Test
     adapter.parse(ref)
   end
 
+  # Parse a real fixture zip directly (bypassing index discovery — the legacy
+  # fixtures live under legacy/, outside cards/*/files/, so they never disturb
+  # the discovery-skip census the cards/ fixtures pin).
+  def parse_zip(relative, urn)
+    Nabu::Adapters::AozoraRubyParser.new.parse(File.join(FIXTURES, relative), urn: urn)
+  end
+
   def find_passage(document, snippet)
     passage = document.find { |p| p.text.include?(snippet) }
     refute_nil passage, "no passage contains #{snippet.inspect}"
@@ -444,7 +593,7 @@ class AozoraTest < Minitest::Test
   # zipped like upstream. Used ONLY for shapes the two PD fixture works do
   # not carry (gaiji classes b/c, unknown commands, heading references) —
   # with the survey's verbatim upstream examples, never invented notation.
-  def parse_rig(body)
+  def parse_rig(body, encoding: Encoding::Windows_31J, file_encoding: nil)
     Dir.mktmpdir do |dir|
       txt = File.join(dir, "rig_no_sakuhin.txt")
       content = <<~TEXT
@@ -464,11 +613,13 @@ class AozoraTest < Minitest::Test
         入力：試驗
         校正：試驗
       TEXT
-      File.write(txt, content.encode(Encoding::Windows_31J), mode: "wb")
+      File.write(txt, content.encode(encoding), mode: "wb")
       zip = File.join(dir, "900001_ruby_1.zip")
       Nabu::Shell.run("zip", "-q", "-j", zip, txt)
+      metadata = { "work_id" => "900001" }
+      metadata["file_encoding"] = file_encoding if file_encoding
       Nabu::Adapters::AozoraRubyParser.new.parse(
-        zip, urn: "urn:nabu:aozora:900001", metadata: { "work_id" => "900001" }
+        zip, urn: "urn:nabu:aozora:900001", metadata: metadata
       )
     end
   end

@@ -9,6 +9,8 @@ description: >-
 
 The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the Leiden Latin dictionary, StarLing's bases, and the curated loan edges. Non-IE lanes of the same shelves ride their own axes too — dual-tagging, never folding.
 
+New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
+
 ## The shelves
 
 A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
@@ -20,7 +22,7 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 | `liv` | dictionary | attribution | enabled · manual | 305 entries |
 | `edl` | dictionary | nc | enabled · manual | 2,860 entries |
 | `starling` | etymological bases | attribution | enabled · manual | 27,397 entries |
-| `sabellic-loans` | dictionary | attribution | enabled · local | 85 entries |
+| `sabellic-loans` | dictionary | attribution | enabled · frozen | 85 entries |
 
 ## The desk's instruments
 
