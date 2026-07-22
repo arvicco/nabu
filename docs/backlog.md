@@ -10789,3 +10789,28 @@ census read after a clean pass.
 # 5. Carried: contentless-FTS5 implementation (P37-7 note), Aozora
 #    in-copyright per-work opt-ins, Bunkankun watch, KR2p,
 #    MAX_LEMMA_FORMS=400 watch, KR2o0001/KR3l0002 duplicate anchors.
+
+# ── Post-P38 rebuild journal (2026-07-22, first full rebuild on the
+# merged phase — owner log reviewed, verdict healthy; deferred items) ──
+#
+# CENSUS MOVED: 27,595,983 passages (was 24.4M — aozora 2.98M + desk
+#   re-syncs). DEFERRED by owner ruling: axis-page/docs/README census
+#   refresh waits for the next REGULAR docs update pass — pages
+#   currently show pre-rebuild counts; fold into the next docs packet.
+# DIORISIS URN COLLISION (confirmed in catalog): 0060:001 minted 3x
+#   (rev=3), 0086:029 2x in a from-scratch rebuild — two canonical
+#   files claim one URN each, last-writer-wins nondeterminism. Fix
+#   shape: loud collision (quarantine or refuse), never silent.
+# CBETA 50m26s — SLOWER than regression-era 35m51s despite the P37-7
+#   batch fix (kanripo improved to 47m34s with +47% docs). Suspect:
+#   hani/jpn fold translation over mega-passages at derive (pre-fold
+#   profile blind to it). One-source profile BEFORE further engine work.
+# AOZORA 49m16s / 17k docs ≈ 0.17s/doc — per-work unzip subprocess
+#   (~17k spawns). P39 optimization: in-process extraction.
+# PERSEUS-LATIN 27/561 quarantined (4.8%) vs greek 1/1419 — no P38
+#   parser change can explain it; check against the owner PRIOR full-
+#   rebuild log if retained (likely longstanding). Papyri 9,321 (13%)
+#   believed longstanding, biggest quarantine pool — standing note.
+# AOZORA QUARANTINE TRIAGE: 1,191 (6.9%) — classify by error message
+#   (index-vs-tree re-proof drift / delimiter-less legacy / UTF-8 five
+#   / corrupt zips) — already a P39 candidate, counts now live.
