@@ -14,7 +14,9 @@ re-run. The same walkthrough is published on the project site:
 - **Ruby 3.3+** and **git**. macOS (Apple Silicon) is the development
   platform; nothing in the core is known to be Mac-specific.
 - Disk: a single small source is a few MB; the full library as of
-  2026-07-11 is **7.9 GB canonical + 4.8 GB derived SQLite**. Start small.
+  2026-07-22 is **45 GB canonical + 43 GB derived SQLite** (the Chinese,
+  Japanese, and Germanic libraries dominate). Start small — the starter
+  shelf below is ~690 MB, and every shelf is an independent opt-in.
 
 ## 1. Install
 

@@ -25,19 +25,22 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-22** the shelves hold **768,917 documents / 27,595,983
-passages** in nearly a hundred language codes — from proto-cuneiform
-tablets of the late 4th millennium BCE to Meiji-era Japanese. The newest
-arrival is the Japanese reading desk: **Aozora Bunko's 16,004
-public-domain works (3.0 million passages)** beside the Chinese library,
-where **Literary Chinese remains the biggest language in the corpus at
-13.2 million passages** — the Kanseki Repository of classical Chinese and
-the CBETA Buddhist canon, beside the Ancient Near East (the Hittite tablet
-corpus, the CDLI's 353,156-artifact cuneiform catalog, the eBL
-Fragmentarium, a millennium of Syriac, and the Sumerian literary canon).
-Plus **1,168,775 dictionary entries** across fifty-four dictionary shelves
-and **over 12.5 million gold lemma annotations in 23 languages** (a further
-8.0 million ride an honestly labelled silver tier). (All numbers in this
+As of **2026-07-22** the shelves hold **801,122 documents / 27,978,978
+passages** in 108 language codes — from proto-cuneiform tablets of the
+late 4th millennium BCE to Meiji-era Japanese. The newest arrival is the
+**Germanic wave**: the Old Norwegian treebanks and the Poetic Edda
+(Menotec), the Old Saxon *Heliand*, the Middle High German reference
+corpus ReM, and ~6,800 Scandinavian runic inscriptions (Rundata) — joining
+the day-old Japanese reading desk (**Aozora Bunko's public-domain library,
+3.0 million passages**) and the Chinese library, where **Literary Chinese
+remains the biggest language in the corpus at 13.2 million passages** —
+the Kanseki Repository of classical Chinese and the CBETA Buddhist canon,
+beside the Ancient Near East (the Hittite tablet corpus, the CDLI's
+353,156-artifact cuneiform catalog, the eBL Fragmentarium, a millennium of
+Syriac, and the Sumerian literary canon).
+Plus **1,310,763 dictionary entries** across fifty-six dictionary shelves
+and **14.6 million gold lemma annotations in 26 languages** (a further
+8.2 million ride an honestly labelled silver tier). (All numbers in this
 README are read from the live catalog, never estimated.)
 
 ## Quickstart
@@ -255,7 +258,15 @@ abuts Lebanon."
   Gardena in geardagum*), the ISWOC treebank with West-Saxon Mark as an
   alignment-hub witness, and Bosworth-Toller on the dictionary shelf —
   `define aethele --lang ang` finds **æþele** through the æ/þ/ð folding.
-- **Linguists & digital humanists.** Over 2.85M gold lemma rows in 17 languages
+- **Germanicists.** All three branches on one desk since 2026-07-22:
+  Wulfila's Gothic (gold-lemmatized in PROIEL), the Old English shelves,
+  Menotec's seven Old Norwegian treebanks with the Poetic Edda of Codex
+  Regius, the *Heliand* parsed to the token, ReM's 290k gold-annotated
+  Middle High German manuscript lines (long ſ folded, so `swert` finds
+  `ſwert`), and the runestones of Rundata — each inscription with its
+  transliteration, Old-West-Norse and runic-Swedish normalisations, and
+  English/Swedish translations as `--parallel` lanes.
+- **Linguists & digital humanists.** 14.6M gold lemma rows in 26 languages
   with morphology facets (`search --lemma cyning --morph case=gen --lang
   ang`), distinctive-vocabulary profiles (`vocab urn:nabu:proiel:cic-off` →
   officium, honestas, decorum), and `export --format jsonl` streaming the
@@ -268,8 +279,11 @@ abuts Lebanon."
 
 ## What's on the shelves
 
-Live counts as of 2026-07-14; the full shelf map with research uses per
-shelf is **[docs/library.md](docs/library.md)**.
+A representative slice, not the whole registry (82 corpus sources as of
+2026-07-22); each row carries the date its counts were read. The full
+shelf map with research uses per shelf is
+**[docs/library.md](docs/library.md)**. Rows below without a date are the
+2026-07-14 census.
 
 | Shelf | What's on it | Size | License |
 |---|---|---|---|
@@ -286,14 +300,18 @@ shelf is **[docs/library.md](docs/library.md)**.
 | Old English poetry | The complete ASPR: Beowulf, the Exeter Book, Dream of the Rood… | 349 / 30,550 | CC BY-SA |
 | Slavic & Slovenian | CCMH OCS gospel codices, the ~1000 CE Freising Manuscripts, goo300k + IMP Early Modern Slovenian (1584–1899), the damaskini Balkan Slavic witnesses (15th–19th c., with English siblings) | 839 / 456,189 | CC BY (Freising BY-ND) |
 | Celtic | CorPH Early Irish (gold-lemmatized: Annals of Ulster, the great gloss corpora), RIIG Gaulish inscriptions (with French siblings), the Ogham in 3D stones (real Ogham codepoints + transliteration layers) | 1,387 / 20,318 | CC BY / MIT (ogham `nc` pending clarification) |
-| Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik (`nabu define` / `etym`) | 633,137 entries | CC BY-SA / CC BY / CC BY-NC-SA / grant |
+| Chinese library | Kanripo classical Chinese + the CBETA Buddhist canon (Taishō + Xuzangjing) — the corpus's largest language (`lzh`, 13.2M passages), trad/simp/z-variant spellings folded to one search skeleton (2026-07-22) | 13.2M passages | mostly CC BY-NC / CC BY |
+| Japanese reading desk | Aozora Bunko: the Japanese public-domain library, Meiji core with a classical tail — ruby readings as annotations, kyūjitai reachable via the reform fold (2026-07-22) | 17,195 / 2,991,807 | open (PD grant) |
+| Germanic wave | Menotec Old Norwegian treebanks + Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German (290k gold manuscript lines), Rundata runic inscriptions in five text lanes (2026-07-22) | 31,011 / 344,740 | nc / CC BY / CC BY-SA / odbl |
+| Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik + the Hebrew/Egyptian/Slovene desks and the Sino-Japanese lexicography (Unihan, KANJIDIC2/JMdict, HDIC, Guangyun) (`nabu define` / `etym`) | 1,310,763 entries / 56 shelves (2026-07-22) | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-The registry holds **78 sources + 4 local shelves + 2 feature modules**
+The registry holds **82 sources + 4 local shelves + 2 feature modules**
 (the kind-split census, 2026-07-22 — `sources.yml` distinguishes what a
 row IS: a corpus that mints catalog rows, an owner-authored local memory
 shelf, or machinery like `kr-gaiji`/`bridging` that fetches reference
-data but mints nothing to serve). All 78 sources are enabled —
-`aozora` joined 2026-07-21 with its first sync
+data but mints nothing to serve). All 82 sources are enabled —
+the **Germanic four** (`menotec`, `helipad`, `rem`, `rundata`) joined
+2026-07-22 with their owner-verified first syncs, a day after `aozora`
 (16,004 public-domain works, 2.98M passages) — the upstream corpora
 plus four local shelves (the language
 dossiers and source dossiers live, the owner's library shelf holding its
@@ -350,7 +368,7 @@ text, and `links`-wired to the passages its manifest entry names as
 | | |
 |---|---|
 | `nabu search QUERY` | FTS5 full-text search, bm25-ranked, diacritic-insensitive with per-language folding: `μηνιν` finds `μῆνιν`, `iuvenis`/`juvenis`/`iuuenis` all resolve. Filters: `--lang`, `--license`, `--source SLUG` (one shelf) and `--axis NAME[,NAME…]` (a research desk's shelves — the multi-source generalization of `--source`, e.g. `--axis celtic`), both composing with every other filter, `--lemma`/`--near`/`--fuzzy` included, the footer naming the desk; `--limit`. Date/place axis (163,821 dated/placed documents live — EDH inscriptions 81,416, HGV papyri, ORACC catalogue/regnal dates 21,558, TOROT chronicle annals, Slovene goo300k/IMP, Coptic manuscript dates — so `--century -7` reaches the Assyrian letters): `--from -300 --to -30` scopes by signed historical year (negative = BCE, no year 0), `--century 6` is one century's shorthand, `--place oxyrhynch%` filters provenance — `στρατηγ* --from 101 --to 300 --place oxyrhynch%` finds the Oxyrhynchite strategoi. Genre facets (256,518 rows live from EDH): `--type epitaph --province Britannia --material marble` composes with all of the above. Character-structure filters: Character-structure filters for the Han corpus (kept distinct from text FTS): `--radical N` (KangXi radical, Unihan), `--strokes A-B` (total-stroke range), `--char-component C` (characters containing C — KRADFILE ∪ BabelStone IDS transitive containment) AND together and compose with a text query as character-level filters on Han passages, the footer naming them. |
-| `nabu search --lemma FORM` | Dictionary-form search over 2.85M+ gold lemma rows in 17 languages (Old Irish and Bulgarian joined 2026-07-17) — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. Add `--morph case=dat,number=pl` (UD feature vocabulary) to keep only attestations with that morphology, decoded evidence shown per hit — one façade over UD `feats` and PROIEL positional tags. Beside gold and the labeled silver shelves, the **equivalence** tier: CEIPoM's scholar-curated Classical-Latin keys on pre-Roman Italy's Oscan/Umbrian/Faliscan passages — `search --lemma precor` reaches the Iguvine Tables' `pesnimu`, every hit tagged `[equivalence]`, never counted as attestation, `--gold-only` excludes. |
+| `nabu search --lemma FORM` | Dictionary-form search over 14.6M gold lemma rows in 26 languages (`gmh`/`non`/`osx` joined 2026-07-22) — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. Add `--morph case=dat,number=pl` (UD feature vocabulary) to keep only attestations with that morphology, decoded evidence shown per hit — one façade over UD `feats` and PROIEL positional tags. Beside gold and the labeled silver shelves, the **equivalence** tier: CEIPoM's scholar-curated Classical-Latin keys on pre-Roman Italy's Oscan/Umbrian/Faliscan passages — `search --lemma precor` reaches the Iguvine Tables' `pesnimu`, every hit tagged `[equivalence]`, never counted as attestation, `--gold-only` excludes. |
 | `nabu search --loans CODE` | The language-contact facet (Coptic Scriptorium today): keep only passages carrying loanwords from a donor language — `search ⲛⲟⲩⲧⲉ --lang cop --loans grc` (131K+ Greek loan tokens tagged), composing with text, `--lemma`, `--fuzzy`, `--near` and every catalog filter. `nabu list coptic-scriptorium --loans` prints the donor-language census; `--loans grc` enumerates the most loan-saturated documents. |
 | `nabu search A --near B [--window N]` | Proximity search: keep only hits where `B` is within `N` words of `A` in the same passage (FTS5 NEAR over the folded forms; default 10, `0` = adjacent, order-independent). `λόγος --near θεός` is John 1:1; composes with `--lemma` (the anchor expands to the lemma's attested surface forms first: `--lemma λέγω --near κύριος` finds `τάδε λέγει κύριος`) and `--lang`/`--license`/`--limit`. Both terms bracketed in the snippet. |
 | `nabu search --fuzzy FRAGMENT` | Damaged-text fragment search: substring matching ANYWHERE in a passage, mid-word included — `']μηνιν αει['` works typed straight off the edition (editorial brackets stripped, then the same per-language folding as plain search). Character-trigram index over the DOCUMENTARY shelves only (papyri-ddbdp + oracc + edh, `fuzzy_index: true` in the registry — corpus-wide would cost 15×), candidates verified by real substring match; every render names the indexed scope. The production index is LIVE (1,713,135 passages indexed as of 2026-07-14, EDH aboard). Fragments need ≥3 characters; composes with `--lang`/`--license`/`--limit`/date-place filters; `--long` prints the whole folded passage. For literary half-memories use plain search or `parallels`. |
@@ -474,7 +492,7 @@ useful to others.
 | [docs/02-sources.md](docs/02-sources.md) | The source inventory: every corpus scouted, scored, and license-checked. |
 | [docs/03-unlockable-sources.md](docs/03-unlockable-sources.md) | Sources not ingestible today, with concrete unlock paths. |
 | [docs/ops.md](docs/ops.md) | The runbook: maintenance cadence, launchd templates, what to do when a check goes red. |
-| [docs/maintenance-and-extension.md](docs/maintenance-and-extension.md) | How this stays alive across years of intermittent attention. |
+| [docs/maintenance-and-extension.md](docs/maintenance-and-extension.md) | How this stays alive across years of intermittent attention — leads with the **where-truth-lives map**: which surface is authoritative for every aspect, and what merely projects it. |
 
 ## How this is built
 
