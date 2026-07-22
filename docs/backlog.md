@@ -10847,7 +10847,7 @@ Within-pass URN re-encounter with different content = loud collision
 trimmed fixtures from the actual colliding files; upstream cause
 reported.
 
-## P39-5 · Aozora gaiji display wiring  [tier: opus] [status: dispatched — wave 2] [deps: P39-3]
+## P39-5 · Aozora gaiji display wiring  [tier: opus] [status: done 2026-07-22 — merged 359c477; 244 IDS derived (46.2% of composition occurrences); RIDER FLAGGED: bare-kuten named symbols = 85% of unresolved occurrences, parse-time widening → P39-r1 after P39-2] [deps: P39-3]
 Structured component descriptions → aozora IDS lane (conservative
 grammar; ＋→⿰, ／→⿱; unresolvable stays sentinel); display.yml
 aozora gaiji: ladder; resolvable census.
