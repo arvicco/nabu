@@ -85,6 +85,7 @@ module Nabu
       COL_GIVEN = "名"
       COL_ROLE = "役割フラグ"
       COL_TEXT_URL = "テキストファイルURL"
+      COL_ENCODING = "テキストファイル符号化方式"
       PD_FLAG = "なし"
 
       MANIFEST = Nabu::SourceManifest.new(
@@ -191,9 +192,16 @@ module Nabu
             "card_url" => first[COL_CARD_URL],
             "ndc" => first[COL_NDC],
             "authors" => person_names(rows, "著者"),
-            "translators" => person_names(rows, "翻訳者")
+            "translators" => person_names(rows, "翻訳者"),
+            # Upstream's own per-file charset declaration (parser honors it,
+            # defaults CP932); carried only when non-empty (blank = CP932).
+            "file_encoding" => presence(first[COL_ENCODING])
           }.compact
         }
+      end
+
+      def presence(value)
+        value unless value.nil? || value.empty?
       end
 
       def person_names(rows, role)

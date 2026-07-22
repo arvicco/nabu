@@ -47,3 +47,22 @@ the fixture keeps the inner CSV directly — the adapter reads the CSV
   live index has moved to 56151_ruby_70005.zip (upstream re-proof), so
   this zip doubles as the real stranded-zip exemplar for the unrecognized
   discovery census.
+
+## P39-2 no-legend legacy shape (added 2026-07-22, copied whole from the
+## owner's live canonical) — under legacy/, outside cards/*/files/
+
+The first full sync quarantined 1,191 works, ALL "no legend delimiter":
+1,185 no-ruby `_txt_` works + 6 legacy `_ruby_` works that ship no
+55-hyphen legend block (there is no ruby/gaiji markup to explain). The
+censused shape is title/byline, a blank line, the body, then the 底本
+colophon. P39-2 widened the parser to it (metadata `parser_shape` =
+`no_legend`). These two REAL, WHOLE, formerly-quarantined works pin it.
+They live under `legacy/` — not `cards/*/files/` — so the discovery-skip
+census (which globs `cards/*/files/*.zip`) is unaffected; the tests parse
+them directly by path.
+
+- `legacy/53411_txt_43155.zip` — 看痾 (Miyazawa Kenji), the no-ruby
+  `_txt_` variant (1,185 of 1,191). 512 B, 4 verse body lines, 底本 colophon.
+- `legacy/4356_ruby_7914.zip` — 五所川原 (Dazai Osamu), a `_ruby_`-named work
+  that still ships no legend block (5 of the 6 legacy `_ruby_` cases). 1.4 KB,
+  3 body paragraphs, 底本 colophon. Proves the filename does not imply the shape.
