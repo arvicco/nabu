@@ -10881,3 +10881,14 @@ aozora gaiji: ladder; resolvable census.
 # Phase-sized when picked up; not before a concrete need or the next
 # storage phase (contentless-FTS5 would touch the same index seams —
 # natural pairing).
+
+# ── Post-P39 (merged 728c70a, 2026-07-22) ──
+# P39-r3 (search --limit semantics + stored-text snippets) was IN
+# FLIGHT at merge time — owner ruling: "the fix goes into the next
+# phase." It lands as the opening packet of P40 (branch cut when the
+# agent delivers; spec + scope amendment recorded in the P39 plan
+# doc). Until it lands, jpn search snippets show the search skeleton
+# (known, documented) and --exact --limit reads as candidate-pool.
+# P40 direction still open: Germanic package vs Romance package
+# (.docs/surveys/) vs storage phase (contentless-FTS5 + searchable-
+# withdrawn + attic redesign pairing).
