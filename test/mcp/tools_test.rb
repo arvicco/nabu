@@ -244,8 +244,10 @@ module MCP
       hits = payload(call("nabu_search", { "query" => "λόγος", "near" => "θεός", "window" => 3 })).fetch("matches")
       assert_equal(%w[urn:d:jn:1], hits.map { |hit| hit.fetch("urn") })
       snippet = hits.first.fetch("snippet")
-      assert_includes snippet, "[θεοσ]"
-      assert_includes snippet, "[λογοσ]", "both proximity terms are bracketed in the snippet"
+      # P40-w: the proximity snippet brackets both terms in the STORED (accented)
+      # text now, not the folded θεοσ/λογοσ search skeleton the FTS snippet gave.
+      assert_includes snippet, "[θεὸς]"
+      assert_includes snippet, "[λόγος]", "both proximity terms are bracketed in the stored-text snippet"
     end
 
     def test_search_near_expands_a_lemma_anchor_to_surface_forms

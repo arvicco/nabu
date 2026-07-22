@@ -81,7 +81,9 @@ module Query
 
     # The fold-both-sides proof carried into NEAR: an UNACCENTED, final-sigma
     # -insensitive query finds the polytonic passage, and the SNIPPET brackets
-    # BOTH terms (the "both terms highlighted" requirement).
+    # BOTH terms — on the STORED (accented) text (P40-w: proximity left the
+    # folded FTS snippet, which bracketed the θεοσ/λογοσ search skeleton, for the
+    # pristine glyphs, exactly as plain/--exact search already did).
     def test_unaccented_query_matches_and_both_terms_are_highlighted
       doc = make_document(urn: "urn:d:grc")
       make_passage(doc, urn: "urn:d:grc:1", text: "θεὸς ἦν ὁ λόγος", sequence: 0)
@@ -91,8 +93,9 @@ module Query
       assert_equal 1, results.size
       assert_equal "θεὸς ἦν ὁ λόγος", results.first.text, "pristine text for display"
       snippet = results.first.snippet
-      assert_includes snippet, "[θεοσ]", "the near term is bracketed"
-      assert_includes snippet, "[λογοσ]", "the anchor term is bracketed too"
+      assert_includes snippet, "[θεὸς]", "the near term is bracketed in its stored spelling"
+      assert_includes snippet, "[λόγος]", "the anchor term is bracketed too, as stored"
+      refute_includes snippet, "θεοσ", "the folded search skeleton is never shown"
     end
 
     def test_near_is_order_independent
