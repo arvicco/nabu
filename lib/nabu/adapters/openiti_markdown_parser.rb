@@ -282,6 +282,12 @@ module Nabu
         auto = AUTO.match?(text)
         text = text.sub(AUTO, "") if auto
         walk[:stack] = (walk[:stack][0, level - 1] || []) << text
+        # A title-less header (bare `### |`, or nothing left after the AUTO
+        # strip — live corpus reality, P41-i1b) advances the section stack
+        # but mints NO unit: an empty passage is invalid downstream, and the
+        # census keeps the omission loud.
+        return walk[:census]["empty-section-header"] += 1 if text.strip.empty?
+
         unit = open_unit(walk)
         unit.merge!(kind: :section_header, text: text, level: level,
                     annotations: auto ? AUTO_ANNOTATIONS : EMPTY_ANNOTATIONS,

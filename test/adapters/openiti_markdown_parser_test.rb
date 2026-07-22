@@ -37,6 +37,22 @@ class OpenitiMarkdownParserTest < Minitest::Test
 
   # --- header: the four-vocabulary #META# block stays opaque ----------------
 
+  # P41-i1b (live first-sync catch): the wild corpus carries bare
+  # `### |` lines with NO title (and title-less levels after the AUTO
+  # strip) — an empty section_header unit minted an empty passage and
+  # quarantined the whole document. Empty headers are censused, never
+  # emitted; the section stack still advances (children keep their path).
+  def test_a_title_less_section_header_is_censused_not_emitted
+    body = parser.body(StringIO.new(<<~DOC))
+      ######OpenITI#
+      #META#Header#End#
+      ### |
+      # نص بعد الفاصل
+    DOC
+    assert_equal [:prose], body.units.map(&:kind)
+    assert_equal 1, body.census["empty-section-header"]
+  end
+
   def test_shamela_arabic_keyed_meta_survives_as_opaque_raw_lines
     header = parser.header(HADITH)
     assert_equal 20, header.meta_lines.size
