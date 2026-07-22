@@ -28,3 +28,14 @@ files:
     url: https://rundata.info/api/inscription/%C3%96g%20136
     whole: false
     trim: whole API record for signum Ög 136 (Rök, Östergötland — kortkvist, the longest inscription); JSON rendering of the SRDB row, kept complete; P40-g
+  - path: runes-trim.sqlite3
+    refetchable: false
+    provenance: local-trim
+    reason: schema-preserving 4-inscription trim (U 344, DR 42, N KJ101, Og 136) of the
+      real 45 MB runes.234feed5f77e.sqlite3 web artifact (fetched 2026-07-22, D40-d) —
+      full DDL incl. views copied, rows filtered by signature/meta relations, small
+      reference tables whole; the all_data view returns the 4 records on the trim
+    upstream: https://rundata.info/static/runes/runes.234feed5f77e.sqlite3
+    copied: 2026-07-22
+    whole: false
+    trim: 45 MB -> 248 KB, 4 inscriptions, schema+views intact
