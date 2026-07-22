@@ -10917,7 +10917,7 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 Goal: format census from real files + 3-4 trimmed fixtures + metadata index + D41-e sizing.
 Acceptance: test/fixtures/openiti/ with P5-4 manifest+README; findings memo reshapes P41-1/2.
 
-## P41-1 · mARkdown parser family  [tier: fable — first-of-family] [status: ready-after-g] [deps: P41-g]
+## P41-1 · mARkdown parser family  [tier: fable — first-of-family] [status: done 2026-07-22 — merged b36bfd6; end-of-page retro-assignment semantics; five fixture catches; census keys enumerated for the adapter]
 ## P41-2 · OpenITI adapter + fetch + AH timeline  [tier: fable] [status: ready — D41-e RULED primary+all-Persian 2026-07-22; Zenodo zip canonical, discovery-side scoping] [deps: P41-1]
 ## P41-3 · Arabic folding + display  [tier: fable — semantics-adjacent] [status: done 2026-07-22 — merged c923a21+f26675d; ara/fas shared fold, evidence-ruled; P41-2 MUST mint ara/fas not per; riders journaled: romanization mode, tashkeel display class, digit fold]
 ## P41-4 · arabic axis + registry + desk + news  [tier: opus] [deps: P41-2]
