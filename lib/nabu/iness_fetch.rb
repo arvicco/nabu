@@ -68,9 +68,12 @@ module Nabu
   # list-resources envelope are EVIDENCED by captured real responses (the
   # list-resources capture landed at the P40-i1 incident, 2026-07-22, after
   # the original reconstruction guessed an "id" key where upstream sends
-  # "name" — the real trim rides in test/fixtures/menotec/). Only
-  # get-treebank-documents remains reconstructed-from-flow, which is exactly
-  # why its shape errors carry the dump.
+  # "name" — the real trim rides in test/fixtures/menotec/).
+  # get-treebank-documents is evidenced too since P40-i2 (same day): its
+  # reconstruction ALSO guessed "id"; the shape_hint diagnostics caught the
+  # real key LIVE on the owner sync — keys ["documentId", "title"], title
+  # often null. All four envelopes carry evidence now; the dumps stay,
+  # because upstream can still drift.
   class InessFetch
     # HTTP-level failure or a malformed/inconsistent API response. Adapters
     # wrap it in Nabu::FetchError.
@@ -209,9 +212,9 @@ module Nabu
       end
 
       list.map do |entry|
-        id = entry.is_a?(Hash) ? entry["id"] : nil
+        id = entry.is_a?(Hash) ? entry["documentId"] : nil
         unless id.is_a?(String) && !id.empty?
-          raise Error, "#{@base_url}: get-treebank-documents(#{treebank}) has a document without an id — " \
+          raise Error, "#{@base_url}: get-treebank-documents(#{treebank}) has a document without a documentId — " \
                        "#{shape_hint(entry)}"
         end
 

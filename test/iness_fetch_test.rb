@@ -91,7 +91,7 @@ class InessFetchTest < Minitest::Test
   def stub_documents(treebank, doc_ids)
     stub_request(:get, REST)
       .with(query: hash_including("command" => "get-treebank-documents", "treebank" => treebank))
-      .to_return(**json("documents" => doc_ids.map { |d| { "id" => d } }))
+      .to_return(**json("documents" => doc_ids.map { |d| { "documentId" => d, "title" => nil } }))
   end
 
   # get-sentences -> the verbatim PROIEL-XML stream at sentences.data (EVIDENCED).
