@@ -83,7 +83,7 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 Old English poetry (ASPR) and prose (ISWOC) with Bosworth-Toller, Gothic riding the proiel/ud treebanks, and Middle High German manuscripts (ReM).
 
-**Members** (6): `ud`, `proiel`, `iswoc`, `aspr`, `bosworth-toller`, `rem`
+**Members** (7): `ud`, `proiel`, `iswoc`, `menotec`, `aspr`, `bosworth-toller`, `rem`
 
 ### celtic
 
