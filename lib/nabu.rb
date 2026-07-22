@@ -3,6 +3,7 @@
 require_relative "nabu/version"
 require_relative "nabu/errors"
 require_relative "nabu/shell"
+require_relative "nabu/zip_reader"
 require_relative "nabu/deva"
 require_relative "nabu/cyrl"
 require_relative "nabu/hebr"
