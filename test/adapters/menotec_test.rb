@@ -130,7 +130,7 @@ class MenotecTest < Minitest::Test
     refute_nil entry, "menotec must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Menotec, entry.adapter_class
     assert_equal "menotec", entry.manifest.id
-    refute entry.enabled, "menotec is enabled: false until the owner-fired first sync"
+    assert entry.enabled, "first sync verified + owner-flipped 2026-07-22 (7 treebanks / 20,308 sentences)"
     assert_equal "manual", entry.sync_policy
     assert entry.source?, "menotec is a plain source row"
     assert_includes entry.axes, "germanic"

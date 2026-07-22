@@ -187,7 +187,7 @@ iswoc:
 menotec:
   adapter: Nabu::Adapters::Menotec
   axes: [germanic]
-  enabled: false   # awaiting the owner-fired first sync + eyeball
+  enabled: true    # P40: first sync verified 2026-07-22 (7 treebanks / 20,308 sentences), owner-flipped
   # P40-2: Menotec (Old Norwegian treebanks + the Poetic Edda / Codex Regius),
   # gold PROIEL-scheme morphology + dependency syntax. Served ONLY through the
   # CLARINO INESS portal's ephemeral-session REST API (clarino.uib.no/iness/rest)
@@ -2027,7 +2027,7 @@ aozora:
 rem:
   adapter: Nabu::Adapters::Rem
   axes: [germanic]
-  enabled: false   # awaiting the owner-fired first real sync (checklist §6)
+  enabled: true    # P40: first sync verified 2026-07-22 (360 docs / 290,242 passages; 46 quarantined — gate-eyeball triage), owner-flipped
 
 rundata:
   adapter: Nabu::Adapters::Rundata
@@ -2035,7 +2035,7 @@ rundata:
   siblings: ["-(fvn|rsv|eng|swe)"]  # P40-6: the closed lane-tail set — signum slugs never end in these
   translations: true  # the -eng/-swe translation lanes (fvn/rsv normalisations are layers, always minted)
   license_watch: https://www.runforum.nordiska.uu.se/en/srd/
-  enabled: false   # CLAUDE.md checklist §6 — owner-fired first sync
+  enabled: true    # P40: first sync verified 2026-07-22 (30,643 lane-docs from ~6.8K inscriptions), owner-flipped
                    # (~45 MB runes.<hash>.sqlite3 off rundata.info), eyeball
                    # nabu show urn:nabu:rundata:u-344 (Yttergärde: "in ulfr
                    # hafiR o| |onklati…") beside its -fvn/-eng siblings,
@@ -2065,7 +2065,7 @@ rundata:
 helipad:
   adapter: Nabu::Adapters::Helipad
   axes: [germanic]
-  enabled: false   # P40-3: awaiting owner-fired first sync (CLAUDE.md checklist §6:
+  enabled: true    # P40: first sync verified 2026-07-22 (1 doc / 3,549 passages — the fixture-predicted count exactly), owner-flipped
                    # bin/nabu sync helipad, expect 1 document / 3,549 passages, eyeball
                    # `nabu show urn:nabu:helipad:OSHeliandC:1.1-5` + 5 random, then flip)
   # HeliPaD — the Heliand Parsed Database (Walkden): the Old Saxon Heliand
