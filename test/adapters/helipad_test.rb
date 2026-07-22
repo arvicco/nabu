@@ -145,7 +145,8 @@ class HelipadTest < Minitest::Test
     config = YAML.safe_load_file(File.expand_path("../../config/sources.yml", __dir__))
     row = config.fetch("helipad")
     assert_equal "Nabu::Adapters::Helipad", row.fetch("adapter")
-    assert_equal false, row.fetch("enabled"), "enabled: false until the owner-fired first sync"
+    assert_equal true, row.fetch("enabled"),
+                 "first sync verified + owner-flipped 2026-07-22 (3,549 passages, fixture-predicted exactly)"
     assert_equal "manual", row.fetch("sync_policy")
     assert_equal ["germanic"], row.fetch("axes")
   end
