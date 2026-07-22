@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI version="4.6.0" xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc xml:id="M058">
+      <titleStmt>
+        <title>Sangspruchstrophe MF 'Namenlos IV'</title>
+        <respStmt>
+          <resp>annotation by</resp>
+          <name>Bochum</name>
+        </respStmt>
+        <respStmt>
+          <resp>collation by</resp>
+          <name>Bochum</name>
+        </respStmt>
+        <respStmt>
+          <resp>digitization by</resp>
+          <name>Bochum</name>
+        </respStmt>
+        <respStmt>
+          <resp>pre-editing by</resp>
+          <name>Bochum</name>
+        </respStmt>
+        <respStmt>
+          <resp>proofreading by</resp>
+          <name>Bochum</name>
+        </respStmt>
+      </titleStmt>
+      <editionStmt>
+        <edition>
+          <name>Version 2.1</name>
+          <idno type="--">--</idno>
+        </edition>
+      </editionStmt>
+      <extent>
+        <measure unit="tokens" quantity="23">23 annotated tokens</measure>
+      </extent>
+      <publicationStmt>
+        <publisher>
+          <persName>Adam Roussel</persName>
+          <persName>Thomas Klein</persName>
+          <persName>Stefanie Dipper</persName>
+          <persName>Klaus-Peter Wegera</persName>
+          <persName>Claudia Wich-Reif</persName>
+        </publisher>
+        <date>2024-10-28</date>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA)</licence>
+        </availability>
+        <idno type="hsc">--</idno>
+        <idno type="ddd">--</idno>
+        <idno type="mwb">--</idno>
+      </publicationStmt>
+      <seriesStmt>
+        <title>ReM I</title>
+      </seriesStmt>
+      <notesStmt>
+        <note>-</note>
+      </notesStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier>
+            <repository>Wien, Österr. Nationalbibl.</repository>
+            <idno>Cod. 160</idno>
+          </msIdentifier>
+          <physDesc>
+            <p>Nachtrag von vier Versen in einer lat. Hs. des 11./12. Jh.s</p>
+            <objectDesc>
+              <supportDesc>
+                <support>
+                  <objectType>Handschrift</objectType>
+                </support>
+                <extent>100v</extent>
+              </supportDesc>
+            </objectDesc>
+          </physDesc>
+          <history>
+            <origin>
+              <origDate unit="century">--</origDate>
+              <origPlace>-</origPlace>
+            </origin>
+          </history>
+        </msDesc>
+        <bibl>
+          <bibl>Hermann Menhardt, Verzeichnis der altdeutschen literarischen Handschriften der Österreichischen Nationalbibliothek, Bd. 1 (Veröffentlichungen des Instituts für deutsche Sprache und Literatur 13), Berlin 1960, S. 35.</bibl>
+          <biblScope>-</biblScope>
+        </bibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <creation>
+        <persName>-</persName>
+        <origPlace>-</origPlace>
+        <origDate unit="century">--</origDate>
+      </creation>
+      <langUsage>
+        <language ident="gmh">mhd</language>
+        <language ident="gmh">oberdeutsch</language>
+        <language ident="gmh">ostoberdeutsch</language>
+        <language ident="gmh">bairisch</language>
+        <language ident="gmh">-</language>
+      </langUsage>
+      <textClass>
+        <keywords>
+          <term type="topic">Poesie</term>
+          <term type="text-type">Spruchdichtung</term>
+        </keywords>
+        <classCode scheme="#genres">V</classCode>
+      </textClass>
+      <textDesc>
+        <channel>-</channel>
+        <constitution>-</constitution>
+        <derivation>
+          <title>-</title>
+        </derivation>
+        <domain>-</domain>
+        <factuality>-</factuality>
+        <interaction>-</interaction>
+        <preparedness>-</preparedness>
+        <purpose>-</purpose>
+      </textDesc>
+    </profileDesc>
+    <encodingDesc>
+      <p>Primary line breaks: Hs.: Blatt (r/v), Zeile</p>
+      <p>Secondary line breaks: -</p>
+      <p>-</p>
+      <classDecl>
+        <taxonomy xml:id="genres">
+          <category xml:id="genres.P">
+            <catDesc>Prosa</catDesc>
+          </category>
+          <category xml:id="genres.V">
+            <catDesc>Vers</catDesc>
+          </category>
+          <category xml:id="genres.U">
+            <catDesc>Urkunde</catDesc>
+          </category>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <ab>
+        <pb n="100v" ed="1"/>
+        <lb n="5" ed="1"/>
+        <w xml:id="t1_m1" norm="al" lemma="al">
+          <unclear>al</unclear>
+        </w>
+        <w xml:id="t2_m1" norm="diu" lemma="diu">
+          <unclear>d</unclear>iu</w>
+        <w xml:id="t3_m1" norm="welt" lemma="werelt">welt</w>
+        <w xml:id="t4_m1" norm="mit" lemma="mit">mit</w>
+        <w xml:id="t5_m1" norm="grinme" lemma="grimme">grínme</w>
+        <w xml:id="t6_m1" norm="stet" lemma="stêt" join="right">ſtet</w>
+        <pc xml:id="t7_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t8_m1" norm="der" lemma="der">der</w>
+        <w xml:id="t9_m1" norm="dar" lemma="dâr" join="right">dar</w>
+        <w xml:id="t9_m2" norm="undir" lemma="under" join="left">undir</w>
+        <w xml:id="t10_m1" norm="muozic" lemma="müezic">muͦzic</w>
+        <w xml:id="t11_m1" norm="get" lemma="gêt" join="right">get</w>
+        <pc xml:id="t12_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t13_m1" norm="der" lemma="der">der</w>
+        <lb n="6" ed="1"/>
+        <w xml:id="t14_m1" norm="ginge" lemma="gienge">
+          <supplied reason="missing">gin</supplied>g<unclear>e</unclear>
+        </w>
+        <w xml:id="t15_m1" norm="wol" lemma="wole">wol</w>
+        <w xml:id="t16_m1" norm="uerwerden" lemma="verwerden" join="right">uerwerden</w>
+        <pc xml:id="t17_m1" norm="." lemma="--" join="left">.</pc>
+        <w xml:id="t18_m1" norm="sin" lemma="sîn">ſin</w>
+        <w xml:id="t19_m1" norm="ere" lemma="êre">ere</w>
+        <w xml:id="t20_m1" norm="muoz" lemma="muoz">muͦz</w>
+        <w xml:id="t21_m1" norm="ersterben" lemma="ersterben" join="right">erſterben</w>
+        <pc xml:id="t22_m1" norm="." lemma="--" join="left">.</pc>
+      </ab>
+    </body>
+  </text>
+</TEI>
