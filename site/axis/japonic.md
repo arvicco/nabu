@@ -17,6 +17,8 @@ text ONLY: discovery excludes the in-copyright works before any file is
 touched. Ruby (振り仮名) readings ride as annotations over the base text,
 never spliced into it; the 底本 colophon is carried as document metadata.
 
+New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
+
 ## The shelves
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.

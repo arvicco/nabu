@@ -9,6 +9,8 @@ description: >-
 
 The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon.
 
+New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
+
 ## The shelves
 
 A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.

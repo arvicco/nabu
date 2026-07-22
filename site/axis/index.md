@@ -26,6 +26,8 @@ self-description, printed verbatim by `nabu axis` — and links to its own
 page, where the member shelves, live holdings, instruments, CLI recipes
 and terminal setup live.
 
+New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
+
 ## The eighteen desks
 
 ### classical

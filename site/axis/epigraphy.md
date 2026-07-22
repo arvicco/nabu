@@ -9,6 +9,8 @@ description: >-
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
+New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
+
 ## The shelves
 
 A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
