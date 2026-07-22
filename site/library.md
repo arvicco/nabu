@@ -7,8 +7,8 @@ description: >-
   biblical editions, Old English and the Germanic wave, Slavic, and Celtic.
 ---
 
-Live counts as of **22 July 2026**: **801,175 documents / 28,176,484
-passages** across 82 registered, synced sources, plus **1,310,763
+Live counts as of **22 July 2026 (late)**: **810,254 documents / 62,807,983
+passages** across 83 registered, synced sources, plus **1,310,763
 dictionary entries** on the reference shelf and **16.2 million gold
 lemma annotations in twenty-eight languages** (censused 22 July 2026;
 a further 8,244,309 lemma rows in eight languages ride an honestly

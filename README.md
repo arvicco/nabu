@@ -25,19 +25,18 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-22** the shelves hold **801,175 documents / 28,176,484
-passages** in 108 language codes — from proto-cuneiform tablets of the
-late 4th millennium BCE to Meiji-era Japanese. The newest arrival is the
-**Germanic wave**: the Old Norwegian treebanks and the Poetic Edda
-(Menotec), the Old Saxon *Heliand*, the Middle High German reference
-corpus ReM, and ~6,800 Scandinavian runic inscriptions (Rundata) — joining
-the day-old Japanese reading desk (**Aozora Bunko's public-domain library,
-3.0 million passages**) and the Chinese library, where **Literary Chinese
-remains the biggest language in the corpus at 13.2 million passages** —
-the Kanseki Repository of classical Chinese and the CBETA Buddhist canon,
-beside the Ancient Near East (the Hittite tablet corpus, the CDLI's
-353,156-artifact cuneiform catalog, the eBL Fragmentarium, a millennium of
-Syriac, and the Sumerian literary canon).
+As of **2026-07-22** the shelves hold **810,254 documents / 62,807,983
+passages** in 110 language codes — from proto-cuneiform tablets of the
+late 4th millennium BCE to Meiji-era Japanese. The newest arrival more
+than doubled the library in a day: **the Arabic phase** — OpenITI, the
+premodern Islamicate library whole (Quran and hadith, history, fiqh,
+falsafa, the dīwāns) with its Persian shelf (Ḥāfiẓ, Ibn Sīnā) — making
+**Classical Arabic the largest language in the corpus at 33.3 million
+passages**, ahead of Literary Chinese (13.2M — the Kanseki Repository
+and the CBETA Buddhist canon), the same day the **Germanic wave**
+landed (the Poetic Edda, the *Heliand*, Middle High German, ~6,800
+runic inscriptions) beside the Japanese reading desk and the Ancient
+Near East.
 Plus **1,310,763 dictionary entries** across fifty-six dictionary shelves
 and **16.2 million gold lemma annotations in 28 languages** (a further
 8.2 million ride an honestly labelled silver tier). (All numbers in this

@@ -1,18 +1,19 @@
 # Languages of the library
 
 **As of 2026-07-22** (post the Japanese reading desk and the P40 Germanic
-wave — 28,176,484 live passages across the 88-row registry; live
+phase — 62,807,983 live passages across the 89-row registry; live
 inventory: every code below appears in the catalog, the lemma index, or
 the reference shelf). This page explains the code system once, then lists
 the significant codes with one sentence each (the corpus now carries 108
 passage languages; the long tail of single-inscription script variants is
 folded into grouped rows).
 
-**The headline has moved east.** With Kanripo and CBETA loaded, **`lzh`
-(Literary Chinese) is the library's largest language by a wide
-margin — 13.2M passages**, nearly the whole rest of the corpus put
-together; Sumerian (`sux`, 3.03M) is second, Japanese (`jpn`, 2.99M — the
-Aozora desk) third, and Ancient Greek (`grc`, 2.01M) leads the West.
+**The headline has moved again — to the Islamicate world.** With the
+OpenITI load (2026-07-22 evening), **`ara` (Classical Arabic) is the
+library's largest language — 33.3M passages**, more than the whole
+pre-Arabic corpus combined; `lzh` (Literary Chinese, 13.2M) is second,
+Sumerian (3.03M) third, Japanese (2.99M) fourth, and Ancient Greek
+(2.01M) still leads the West.
 
 **The desk reference is a command (P18-4), and languages are now
 file-backed (P19-1):** `nabu language CODE` explains any code this page
@@ -78,8 +79,8 @@ extracts) is **filled** — 160 name records, feeding the inline
 | `hbo` | Biblical Hebrew | The Masoretic shelves — OSHB Westminster Leningrad, the BHSA/ETCBC treebank, the Dead Sea Scrolls — gold-lemmatized, NFC-exempt (0.09M passages). |
 | `xeb` | Eblaite | The eBL/Ebla East-Semitic lexical material from the cuneiform fragment shelves (0.05M passages). |
 | `arc` | Aramaic / Targumic | The Sefaria Targum shelf, DSS Aramaic, and cuneiform-shelf traces — now 0.05M passages, gold-lemmatized where the Targums carry it. |
-| `ara` | Arabic | Premodern & early-modern literary Arabic — the OpenITI corpus (hadith, history and biography, law, falsafa, the dīwāns): **staged — arrives at the owner's first `sync openiti`** (~8,803 primary versions / ~1.08 B words), unannotated (no gold lemmas), cross-searchable with Persian under the P41-3 Arabic-script fold. |
-| `fas` | Persian | The Persian shelf of OpenITI (Ḥāfiẓ's verse, Ibn Sīnā's prose), minted from the `-per*` URI suffix — never `per`, so the fold keys on it: **staged — arrives at the owner's first `sync openiti`** (~688 primary versions / ~38.7M words), folded to the same Arabic-script skeleton as ara (ی/ي, ک/ک — P41-3). |
+| `ara` | Arabic | **The library's largest language (33,294,039 passages, loaded 2026-07-22)** — the OpenITI corpus: hadith, history and biography, law, falsafa, the dīwāns; unannotated (no gold lemmas — full-text and the AH timeline are the instruments), cross-searchable with Persian under the Arabic-script fold. |
+| `fas` | Persian | The Persian shelf of OpenITI (1,337,472 passages, loaded 2026-07-22 — Ḥāfiẓ, Niẓāmī, ʿAṭṭār, Ibn Sīnā), minted from the `-per*` URI suffix — never `per`, so the fold keys on it: folded to the same Arabic-script skeleton as ara (ی/ي, ک/ك), either keyboard finds either language. |
 | `chu` | Old Church Slavonic | The OCS canon: Codex Marianus, Suprasliensis, and the four CCMH gospel manuscripts (incl. Assemanianus and Savvina kniga). |
 | `orv` | Old East Slavic (incl. Middle Russian, Ruthenian) | Birchbark letters, chronicles, Avvakum, and the prosta mova chancery texts, 1025–1700. |
 | `ojp` | Old Japanese | The Oxford-NINJAL Corpus of Old Japanese (ONCOJ) — gold-morphology Man'yōshū-era verse, gold-lemma language #23 (123,002 rows). |
