@@ -45,6 +45,38 @@ module Nabu
 
         db[:derivation_stamps].select_order_map(:slug)
       end
+
+      # The language-bearing derived tables the census below unions. ALL of
+      # them or nothing: fold application (Normalize.search_form) is keyed by
+      # the language stored on the row it shaped, so a census missing one
+      # table could miss the one language that consults a fold module —
+      # silent under-rebuild, the sin.
+      CENSUS_TABLES = %i[sources documents passages
+                         dictionaries dictionary_entries dictionary_reflexes].freeze
+
+      # The distinct language tags across +slug+'s derived rows (documents,
+      # passages, dictionary headword languages, reflex languages), sorted —
+      # the honest per-source language set behind the fold-digest granularity
+      # (P39-1). There is no static declaration to read instead: the registry
+      # has no language key and adapters mint languages per passage (often
+      # from upstream data), so the catalog's own rows are the census.
+      # Withdrawn rows are deliberately included (dirty-more). Returns nil —
+      # "unknowable", which makes the fingerprint consult EVERY fold module —
+      # when the catalog cannot answer (pre-migration tables).
+      def derived_languages(db, slug)
+        return nil unless CENSUS_TABLES.all? { |table| db.table_exists?(table) }
+
+        source_id = db[:sources].where(slug: slug).get(:id)
+        return [] if source_id.nil?
+
+        documents = db[:documents].where(source_id: source_id)
+        dictionaries = db[:dictionaries].where(source_id: source_id)
+        entries = db[:dictionary_entries].where(dictionary_id: dictionaries.select(:id))
+        reflexes = db[:dictionary_reflexes].where(dictionary_entry_id: entries.select(:id))
+        [documents, db[:passages].where(document_id: documents.select(:id)), dictionaries, reflexes]
+          .flat_map { |dataset| dataset.exclude(language: nil).distinct.select_map(:language) }
+          .uniq.sort
+      end
     end
   end
 end

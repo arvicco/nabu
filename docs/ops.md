@@ -441,6 +441,29 @@ intended, re-run that source with `nabu sync <slug> --force`. If it's a
 restructure/rename, the attic + rename detection should have handled it —
 re-run without `--force` and check `nabu status` for retired counts.
 
+### Derivation stamps read all-dirty after a fingerprint FORMULA change
+
+`rebuild --incremental --dry-run` showing every source dirty right after
+pulling a code change that only reworked how `Nabu::DerivationFingerprint`
+*spells* its digests (P39-1's language-scoped fold tokens were exactly this)
+does not mean the corpus needs re-deriving — the stored stamps are just
+written in the old spelling. **Owner-only** escape hatch:
+
+```sh
+rake "stamps:rebless[i-verified-current-full-rebuild]"
+```
+
+It recomputes every source's fingerprint against current code and rewrites
+the stamps, deriving nothing, printing each rewrite. The attestation string
+is mandatory and means what it says: this is valid **only immediately after
+a verified full rebuild, on canonical that has not changed since**, under
+code whose derivation semantics are unchanged. The blast radius of misuse
+is the worst failure Nabu has: a blessed stamp for rows current code would
+not produce means every future incremental **silently skips** that source —
+under-derivation with no error anywhere, discovered only when a query
+returns stale text. When in any doubt, run `nabu rebuild` instead; a wasted
+full rebuild costs hours, a false blessing costs correctness.
+
 ---
 
 ## 7. Notifications (optional, owner-configured)

@@ -147,14 +147,89 @@ class DerivationFingerprintTest < Minitest::Test
     assert_equal :config, flagged.drift_against(stamp_row(plain))
   end
 
-  def test_fold_digest_moves_the_fingerprint
+  # -- fold-digest granularity (P39-1) -------------------------------------
+
+  def test_fold_digest_scopes_modules_by_language
+    assert_equal %w[normalize.rb], fold_module_names(["grc"])
+    assert_equal %w[normalize.rb hani.rb], fold_module_names(["lzh"])
+    assert_equal %w[normalize.rb hani.rb], fold_module_names(["och"])
+    # jpn composes THROUGH hani (the generated table bakes Hani.fold in at
+    # rake fold:jpn time) — a hani change must dirty jpn sources too.
+    assert_equal %w[normalize.rb hani.rb jpn.rb], fold_module_names(["jpn"])
+    # Union across a multi-language source; keyed by primary subtag.
+    assert_equal %w[normalize.rb hani.rb], fold_module_names(%w[grc lzh-Hant])
+  end
+
+  def test_unknowable_languages_consult_every_fold_module
+    # nil = "this source's language set is not reliably knowable" — it must
+    # include ALL fold modules (dirty-more, never dirty-less).
+    assert_equal %w[normalize.rb hani.rb jpn.rb], fold_module_names(nil)
+  end
+
+  def test_fold_wiring_change_moves_every_source
     write_tree("corpus", "one.txt" => "Iliad\nμῆνιν\n")
-    before = computer.for_source(entry)
-    after = with_fold_digest("folds-changed") do
-      computer(fresh: true).for_source(entry)
+    before = computer.for_source(entry, languages: ["grc"])
+    after = with_changed_fold_file("normalize.rb") do
+      computer(fresh: true).for_source(entry, languages: ["grc"])
     end
     refute_equal before.combined, after.combined
     assert_equal :fold, after.drift_against(stamp_row(before))
+    assert_equal %w[normalize.rb], after.fold_blame(stamp_row(before))
+  end
+
+  def test_jpn_module_change_moves_jpn_sources_only
+    write_tree("corpus", "one.txt" => "Iliad\nμῆνιν\n")
+    jpn_before = computer.for_source(entry, languages: ["jpn"])
+    grc_before = computer.for_source(entry, languages: ["grc"])
+    jpn_after, grc_after = with_changed_fold_file("jpn.rb") do
+      changed = computer(fresh: true)
+      [changed.for_source(entry, languages: ["jpn"]),
+       changed.for_source(entry, languages: ["grc"])]
+    end
+    refute_equal jpn_before.combined, jpn_after.combined
+    assert_equal :fold, jpn_after.drift_against(stamp_row(jpn_before))
+    assert_equal %w[jpn.rb], jpn_after.fold_blame(stamp_row(jpn_before))
+    assert_equal grc_before.combined, grc_after.combined,
+                 "a jpn fold change must not dirty a non-jpn source"
+  end
+
+  def test_hani_module_change_moves_lzh_och_and_jpn_sources_not_others
+    write_tree("corpus", "one.txt" => "Iliad\nμῆνιν\n")
+    before = %w[lzh och jpn lat].to_h { |code| [code, computer.for_source(entry, languages: [code])] }
+    after = with_changed_fold_file("hani.rb") do
+      changed = computer(fresh: true)
+      %w[lzh och jpn lat].to_h { |code| [code, changed.for_source(entry, languages: [code])] }
+    end
+    %w[lzh och jpn].each do |code|
+      refute_equal before[code].combined, after[code].combined, "#{code} must dirty on a hani change"
+      assert_equal %w[hani.rb], after[code].fold_blame(stamp_row(before[code]))
+    end
+    assert_equal before["lat"].combined, after["lat"].combined,
+                 "a hani change must not dirty a non-CJK source"
+  end
+
+  def test_fold_modules_left_the_shared_core_and_are_provably_covered
+    # The asymmetry doctrine: hani.rb/jpn.rb may leave the shared-core digest
+    # ONLY because the per-source fold digest provably covers them — every
+    # excluded fold module must have a digest path AND at least one consulting
+    # language, or its changes would silently under-rebuild (the sin).
+    excluded_folds = %w[hani.rb jpn.rb]
+    excluded_folds.each do |name|
+      assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, name
+    end
+    assert_equal excluded_folds.sort, Nabu::DerivationFingerprint::FOLD_MODULE_PATHS.keys.sort
+    consulted = Nabu::DerivationFingerprint::FOLD_LANGUAGES.values.flatten.uniq.sort
+    assert_equal excluded_folds.sort, consulted
+  end
+
+  def test_legacy_single_sha_fold_stamp_reads_dirty_with_full_blame
+    # Stamps written before P39-1 carry one whole-table sha: they must read
+    # dirty (:fold) — the rebless task, not silent acceptance, migrates them.
+    write_tree("corpus", "one.txt" => "Iliad\nμῆνιν\n")
+    current = computer.for_source(entry, languages: ["jpn"])
+    legacy = stamp_row(current).merge(fold_digest: "a" * 64, fingerprint: "b" * 64)
+    assert_equal :fold, current.drift_against(legacy)
+    assert_equal %w[hani.rb jpn.rb normalize.rb], current.fold_blame(legacy)
   end
 
   def test_weak_identity_has_no_combined_fingerprint
@@ -202,15 +277,24 @@ class DerivationFingerprintTest < Minitest::Test
     Nabu::DerivationFingerprint.canonical_identity(dir)
   end
 
-  # Temporarily replace the fold-rules digest (no minitest/mock in this
-  # suite): define, yield, restore.
-  def with_fold_digest(value)
+  # The module names (token prefixes) of the fold digest for +languages+.
+  def fold_module_names(languages)
+    Nabu::DerivationFingerprint.fold_digest(languages)
+                               .split.map { |token| token.split(":", 2).first }
+  end
+
+  # Simulate a content change to ONE fold file (normalize.rb / hani.rb /
+  # jpn.rb) by diverting its digest (no minitest/mock in this suite): define,
+  # yield, restore.
+  def with_changed_fold_file(basename)
     singleton = Nabu::DerivationFingerprint.singleton_class
-    original = Nabu::DerivationFingerprint.method(:fold_digest)
-    singleton.define_method(:fold_digest) { value }
+    original = Nabu::DerivationFingerprint.method(:fold_file_digest)
+    singleton.define_method(:fold_file_digest) do |path|
+      File.basename(path) == basename ? "changed-#{basename}" : original.call(path)
+    end
     yield
   ensure
-    singleton.define_method(:fold_digest, original)
+    singleton.define_method(:fold_file_digest, original)
   end
 
   # Identity of +dir+ as it would read without +subtree+ (computed by moving

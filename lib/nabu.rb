@@ -254,6 +254,7 @@ require_relative "nabu/ops/census_check"
 require_relative "nabu/ops/hani_fold_builder"
 require_relative "nabu/ops/jpn_fold_builder"
 require_relative "nabu/ops/axis_pages"
+require_relative "nabu/ops/stamp_rebless"
 require_relative "nabu/sync_runner"
 require_relative "nabu/cli"
 

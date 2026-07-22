@@ -3,6 +3,8 @@
 require "digest"
 require "json"
 
+require_relative "normalize"
+
 module Nabu
   # Per-source derivation fingerprint (P36-1): the honest identity behind
   # `rebuild --incremental`. A source may be SKIPPED by an incremental rebuild
@@ -19,10 +21,17 @@ module Nabu
   # 2. parser/pipeline code — a digest of the adapter's file closure within
   #    lib/nabu/adapters/ (constant-reference BFS, see #parser_files) plus the
   #    shared derivation core (loaders, indexers, models, script helpers).
-  # 3. fold rules — a digest of lib/nabu/normalize.rb (NFC, diacritic folds,
-  #    LANGUAGE_FOLDS, search_form). Folds shape passages.text_normalized and
-  #    every index row, so a fold edit dirties every source. A file digest is
-  #    chosen over a hand-bumped version constant: it cannot be forgotten.
+  # 3. fold rules — LANGUAGE-SCOPED since P39-1: a token list of
+  #    lib/nabu/normalize.rb (the wiring — NFC, diacritic folds,
+  #    LANGUAGE_FOLDS, search_form; global on purpose, rare changes) PLUS the
+  #    generated fold-table modules (hani.rb/jpn.rb) the source's derived
+  #    rows actually consult, per the declared FOLD_LANGUAGES map. A source
+  #    whose language set is unknowable consults ALL modules (dirty-more).
+  #    Before P39-1 a single normalize.rb digest dirtied every source; then
+  #    P38's Japanese-only fold change flipped all 86 registry rows dirty and
+  #    turned the owner's incremental into a full 3.5 h rebuild. File digests
+  #    are chosen over hand-bumped version constants: they cannot be
+  #    forgotten.
   # 4. schema — the latest migration number the running code carries.
   # 5. the entry's derivation-shaping registry flags (translations, classes,
   #    lemma_tier, fuzzy_index): they change derived rows with no byte or
@@ -39,12 +48,37 @@ module Nabu
     ADAPTERS_DIR = File.join(LIB_DIR, "adapters")
     FOLD_RULES_PATH = File.join(LIB_DIR, "normalize.rb")
 
+    # The generated fold-table modules (P39-1). Excluded from the shared core
+    # BECAUSE they are covered here per-source — the asymmetry doctrine's one
+    # sanctioned exit: a module may leave the global digest only when the
+    # scoped mechanism provably covers it (test-pinned: every name below is
+    # in EXCLUDED_FILES, has a path, and is consulted by >= 1 language).
+    FOLD_MODULE_PATHS = {
+      "hani.rb" => File.join(LIB_DIR, "hani.rb"),
+      "jpn.rb" => File.join(LIB_DIR, "jpn.rb")
+    }.freeze
+
+    # Which fold modules a language's search_form consults (primary subtag,
+    # exactly like Normalize::LANGUAGE_FOLDS). Explicit, not clever: this is
+    # a declared census, extended by hand when a fold module or language
+    # lands. jpn lists hani.rb too because the generated jpn table composes
+    # THROUGH Hani.fold at `rake fold:jpn` time — a hani change stales jpn's
+    # skeletons even though Jpn.fold never calls Hani at runtime. Languages
+    # not listed (grc, lat, ...) consult only the normalize.rb wiring.
+    FOLD_LANGUAGES = {
+      "lzh" => %w[hani.rb],
+      "och" => %w[hani.rb],
+      "jpn" => %w[jpn.rb hani.rb]
+    }.freeze
+
     # The shared derivation core is EVERYTHING under lib/nabu/ except
     # adapters/ (covered per-source by the closure), normalize.rb (input 3),
-    # and this exclusion list of provably read-only / non-derivation code.
-    # The failure modes are asymmetric: forgetting to exclude a file only
-    # over-rebuilds (safe); an include-list that missed one would silently
-    # under-rebuild (the sin). When in doubt, a file stays IN.
+    # hani.rb/jpn.rb (the fold-table modules — covered per-source by the
+    # language-scoped fold digest, FOLD_MODULE_PATHS above; P39-1), and this
+    # exclusion list of provably read-only / non-derivation code. The failure
+    # modes are asymmetric: forgetting to exclude a file only over-rebuilds
+    # (safe); an include-list that missed one would silently under-rebuild
+    # (the sin). When in doubt, a file stays IN.
     EXCLUDED_DIRS = %w[adapters mcp query health ops].freeze
     EXCLUDED_FILES = %w[
       cli.rb display.rb status_report.rb progress_reporter.rb version.rb
@@ -59,6 +93,7 @@ module Nabu
       ingest.rb language_shelf.rb library_shelf.rb source_shelf.rb
       note_shelf.rb
       normalize.rb
+      hani.rb jpn.rb
     ].freeze
 
     # Namespace wrappers every adapter file opens — as "definitions" they
@@ -98,6 +133,17 @@ module Nabu
 
         :config
       end
+
+      # The fold files whose identity drifted against +stamp+ — what the
+      # owner's dirty line names (`fold(jpn.rb)` vs the old opaque `fold`).
+      # A pre-P39-1 stamp carries one bare sha (no name:sha tokens): every
+      # currently consulted file is blamed, and `rake stamps:rebless` — not
+      # silent acceptance — migrates the stamp.
+      def fold_blame(stamp)
+        mine = DerivationFingerprint.fold_tokens(fold_digest)
+        theirs = DerivationFingerprint.fold_tokens(stamp && stamp[:fold_digest])
+        (mine.keys | theirs.keys).reject { |name| mine[name] == theirs[name] }.sort
+      end
     end
 
     def initialize(config:)
@@ -106,12 +152,16 @@ module Nabu
       @references = {}
     end
 
-    # Compute the full fingerprint for one registry +entry+.
-    def for_source(entry)
+    # Compute the full fingerprint for one registry +entry+. +languages+ is
+    # the source's derived-row language census (Store::DerivationStamp
+    # .derived_languages) scoping the fold digest; nil — the default, and the
+    # census's own "cannot answer" — means unknowable, which consults EVERY
+    # fold module (dirty-more, never dirty-less).
+    def for_source(entry, languages: nil)
       Fingerprint.new(
         canonical_identity: self.class.canonical_identity(File.join(@config.canonical_dir, entry.slug)),
         parser_digest: parser_digest(entry),
-        fold_digest: self.class.fold_digest,
+        fold_digest: self.class.fold_digest(languages),
         migration_level: self.class.migration_level,
         config_json: self.class.config_json(entry)
       )
@@ -148,8 +198,37 @@ module Nabu
         tokens && Digest::SHA256.hexdigest(tokens.sort.join("\n"))
       end
 
-      def fold_digest
-        Digest::SHA256.file(FOLD_RULES_PATH).hexdigest
+      # The language-scoped fold identity (P39-1): "name:sha" tokens, the
+      # normalize.rb wiring first, then the fold modules +languages+ consult
+      # (sorted; nil languages = unknowable = all of them). Stored verbatim in
+      # derivation_stamps.fold_digest so drift can NAME the changed file.
+      def fold_digest(languages = nil)
+        tokens = ["normalize.rb:#{fold_file_digest(FOLD_RULES_PATH)}"]
+        fold_modules_for(languages).each do |name|
+          tokens << "#{name}:#{fold_file_digest(FOLD_MODULE_PATHS.fetch(name))}"
+        end
+        tokens.join(" ")
+      end
+
+      # The fold-module names consulted by +languages+ (primary subtags,
+      # union across the set), sorted for a stable token order.
+      def fold_modules_for(languages)
+        return FOLD_MODULE_PATHS.keys.sort if languages.nil?
+
+        languages.flat_map { |tag| FOLD_LANGUAGES.fetch(Normalize.primary_subtag(tag), []) }
+                 .uniq.sort
+      end
+
+      # { name => sha } out of a fold_digest value. A pre-P39-1 stamp is one
+      # bare sha — no token parses, so blame falls on every current file.
+      def fold_tokens(digest)
+        digest.to_s.split
+              .filter_map { |token| token.split(":", 2) if token.include?(":") }.to_h
+      end
+
+      # Seam (tests divert one file to simulate a fold-table change).
+      def fold_file_digest(path)
+        Digest::SHA256.file(path).hexdigest
       end
 
       # The latest migration number the running code carries (the catalog's
