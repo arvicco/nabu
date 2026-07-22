@@ -93,10 +93,11 @@ module Store
 
     def beta = build_document("beta", [%w[1 ἄνδρα]])
 
-    def assert_report(report, added: 0, updated: 0, skipped: 0, withdrawn: 0, errored: 0, skipped_by_rule: 0)
+    def assert_report(report, added: 0, updated: 0, skipped: 0, withdrawn: 0, errored: 0,
+                      skipped_by_rule: 0, collided: 0)
       assert_equal(
         { added: added, updated: updated, skipped: skipped, withdrawn: withdrawn,
-          errored: errored, skipped_by_rule: skipped_by_rule },
+          errored: errored, skipped_by_rule: skipped_by_rule, collided: collided },
         report.to_h
       )
     end
@@ -356,6 +357,73 @@ module Store
       assert_equal 0, passage_row("alpha", "2").sequence
       assert_equal 1, passage_row("alpha", "1").sequence
       assert_equal [2, 2], [passage_row("alpha", "1").revision, passage_row("alpha", "2").revision]
+    end
+
+    # -- within-pass collision (P39-4) ---------------------------------------
+
+    # The discriminator these tests pin: DIFFERENT content under one urn is a
+    # legitimate revision ACROSS runs (test above) but a COLLISION within a
+    # single pass — two canonical files claiming one urn, which must be
+    # deterministic keep-first, never silent last-writer-wins.
+    def collides_with_alpha
+      build_document("alpha", [%w[1 μῆνιν], %w[2 θεά]]) # alpha's passage 2 is ἄειδε
+    end
+
+    def test_within_pass_collision_keeps_first_and_flags_loudly
+      report = @loader.load([alpha, collides_with_alpha, beta])
+
+      assert_report report, added: 2, collided: 1
+
+      # The FIRST file's content is kept: no revision, no last-writer overwrite.
+      row = doc_row("alpha")
+      assert_equal 1, row.revision
+      assert_equal "ἄειδε", passage_row("alpha", "2").text
+      assert_equal 1, passage_row("alpha", "2").revision
+
+      # Loud: a "collision" provenance breadcrumb naming both shas, and no
+      # spurious "revised" event for the kept document.
+      collision = provenance_events(event: "collision").last
+      refute_nil collision, "the rejected duplicate is journaled loudly"
+      params = JSON.parse(collision.params_json)
+      assert_equal doc_urn("alpha"), params.fetch("urn")
+      assert_equal row.content_sha256, params.fetch("kept_sha")
+      refute_equal params.fetch("kept_sha"), params.fetch("rejected_sha")
+      assert_empty provenance_events(document_id: row.id, event: "revised"),
+                   "a collision never bumps the kept document's revision"
+    end
+
+    def test_within_pass_identical_duplicate_is_an_idempotent_skip
+      report = @loader.load([alpha, alpha, beta])
+
+      assert_report report, added: 2, skipped: 1
+      assert_equal 1, doc_row("alpha").revision
+      assert_empty provenance_events(event: "collision"),
+                   "a byte-identical in-pass duplicate is harmless, not a collision"
+    end
+
+    # THE LINE, held from the other side: the same different-content document,
+    # loaded in a SEPARATE pass, is a normal revision — the collision seam only
+    # fires within one pass, so legitimate upstream updates still revise.
+    def test_across_run_revision_is_untouched_by_the_collision_seam
+      @loader.load([alpha])
+      report = @loader.load([collides_with_alpha])
+
+      assert_report report, updated: 1
+      assert_equal 2, doc_row("alpha").revision
+      assert_equal "θεά", passage_row("alpha", "2").text
+      assert_empty provenance_events(event: "collision")
+    end
+
+    # The owner's incident path: `nabu rebuild` loads in tx_batch mode, so the
+    # collision seam must hold when both colliding files land in one batch
+    # transaction (the earlier savepoint's insert is visible to the later one).
+    def test_collision_seam_holds_in_batch_mode
+      batched = Nabu::Store::Loader.new(db: @db, source: @source, ledger: @ledger, tx_batch: 10)
+      report = batched.load([alpha, collides_with_alpha])
+
+      assert_report report, added: 1, collided: 1
+      assert_equal 1, doc_row("alpha").revision
+      assert_equal "ἄειδε", passage_row("alpha", "2").text
     end
 
     # -- withdrawal ----------------------------------------------------------
