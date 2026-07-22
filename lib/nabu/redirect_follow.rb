@@ -34,11 +34,18 @@ module Nabu
     # raises +error+ (the caller's error class) for any other non-redirect
     # status, a redirect without a Location, a chain past MAX_REDIRECTS, or
     # a transport failure.
-    def self.get(url, http:, error:, headers: {}, accept: [200])
+    #
+    # +stream+ (P41-2, the 5.9 GB OpenITI artifact): a factory called at the
+    # START of every hop, returning that hop's Faraday on_data proc — the
+    # response body then streams through the proc chunk by chunk instead of
+    # buffering in memory. A factory (not a bare proc) because a redirect
+    # hop's body streams too: the caller resets its sink each hop, so only
+    # the terminal artifact's bytes survive.
+    def self.get(url, http:, error:, headers: {}, accept: [200], stream: nil)
       current = url
       hops = 0
       loop do
-        response = attempt(current, http: http, error: error, headers: headers)
+        response = attempt(current, http: http, error: error, headers: headers, on_data: stream&.call)
         return [response, current] if accept.include?(response.status)
         raise error, "HTTP #{response.status} for #{current}" unless REDIRECT_STATUSES.include?(response.status)
 
@@ -52,8 +59,13 @@ module Nabu
       end
     end
 
-    def self.attempt(url, http:, error:, headers:)
-      http.get(url, nil, headers)
+    def self.attempt(url, http:, error:, headers:, on_data: nil)
+      return http.get(url, nil, headers) if on_data.nil?
+
+      http.get(url) do |request|
+        request.headers.update(headers)
+        request.options.on_data = on_data
+      end
     rescue Faraday::Error => e
       raise error, "transport error for #{url}: #{e.message}"
     end

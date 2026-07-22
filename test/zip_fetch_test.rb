@@ -202,6 +202,77 @@ class ZipFetchTest < Minitest::Test
     refute result.not_modified
     assert_equal "alpha v2", File.read(File.join(@dir, "a.json"))
   end
+
+  # -- streaming + keep (P41-2, the OpenITI 5.9 GB artifact) -------------------
+
+  def streamed_fetch(keep: [])
+    Nabu::ZipFetch.new(url: URL, dir: @dir, attic_dir: @attic, stream: true, keep: keep)
+  end
+
+  def drive!(fetch, guard: nil)
+    fetch.prepare!
+    guard&.call(fetch.doomed_paths)
+    fetch.complete!
+  ensure
+    fetch.cleanup!
+  end
+
+  def test_streamed_fetch_unpacks_and_pins_both_sha256_and_md5
+    body = zip_body({ "a.json" => "alpha", "sub/b.json" => "beta" })
+    stub_request(:get, URL).to_return(status: 200, body: body,
+                                      headers: { "Last-Modified" => LAST_MODIFIED })
+    fetch = streamed_fetch
+    drive!(fetch)
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+    assert_equal "beta", File.read(File.join(@dir, "sub", "b.json"))
+    assert_equal Digest::SHA256.hexdigest(body), fetch.sha,
+                 "the sha256 pin is computed incrementally off the streamed bytes"
+    assert_equal Digest::MD5.hexdigest(body), fetch.md5,
+                 "stream mode also mints the body md5 (upstream-published-md5 pins, P41-2)"
+  end
+
+  def test_streamed_fetch_survives_a_redirect_with_the_terminal_body_pinned
+    body = zip_body({ "a.json" => "alpha" })
+    stub_request(:get, URL).to_return(status: 302, headers: { "Location" => MIRROR })
+    stub_request(:get, MIRROR).to_return(status: 200, body: body)
+    fetch = streamed_fetch
+    drive!(fetch)
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+    assert_equal Digest::SHA256.hexdigest(body), fetch.sha,
+                 "per-hop sink reset: only the terminal artifact's bytes reach the digest"
+    assert_equal Digest::MD5.hexdigest(body), fetch.md5
+  end
+
+  def test_streamed_304_replays_the_stored_pin_and_touches_nothing
+    stub_zip({ "a.json" => "alpha" })
+    first = streamed_fetch
+    drive!(first)
+    stub_request(:get, URL)
+      .with(headers: { "If-Modified-Since" => LAST_MODIFIED })
+      .to_return(status: 304)
+    second = streamed_fetch
+    drive!(second)
+    assert second.not_modified?
+    assert_equal first.sha, second.sha, "a 304 replays the previously pinned sha"
+    assert_nil second.md5, "no body → no md5; callers skip the pin check on 304"
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+  end
+
+  def test_kept_prefixes_are_never_doomed_and_survive_the_tree_swap
+    stub_zip({ "a.json" => "alpha" })
+    drive!(streamed_fetch)
+    # A sibling fetch arm owns metadata/ inside the same workdir (the OpenITI
+    # TSV): the zip swap must neither attic nor delete it.
+    FileUtils.mkdir_p(File.join(@dir, "metadata"))
+    File.write(File.join(@dir, "metadata", "index.tsv"), "kept")
+    stub_zip({ "a.json" => "alpha v2" })
+    seen = nil
+    drive!(streamed_fetch(keep: ["metadata"]), guard: ->(doomed) { seen = doomed })
+    assert_empty seen, "kept prefixes never read as upstream deletions"
+    assert_equal "kept", File.read(File.join(@dir, "metadata", "index.tsv"))
+    assert_equal "alpha v2", File.read(File.join(@dir, "a.json"))
+    refute Dir.exist?(@attic), "nothing was atticked"
+  end
 end
 
 # Vendored-intermediate contract: the default store must verify every PEM in
