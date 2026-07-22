@@ -190,6 +190,12 @@ module Nabu
       "sux" => CUNEIFORM_FOLD,
       "ang" => OLD_ENGLISH_FOLD,
       "sl" => ->(str) { str.tr("ſ", "s") },
+      # gmh (P40-5): the ReM diplomatic layer is full of long s (ſtet, ſin,
+      # erſterben — fixture census), exactly the sl Bohorič situation: one
+      # letter, two positional glyphs, and plain downcase leaves U+017F
+      # alone. The combining letters above (uͦ U+0366 etc.) fall to the
+      # generic Mn strip; the @norm layer rides annotations, never a fold.
+      "gmh" => ->(str) { str.tr("ſ", "s") },
       "gem" => PROTO_FOLD,
       "ine" => PROTO_FOLD,
       "sla" => PROTO_FOLD,

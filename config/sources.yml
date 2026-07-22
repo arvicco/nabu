@@ -1996,6 +1996,19 @@ aozora:
   enabled: true    # P38: first sync verified 2026-07-21 (16,004 works / 2.98M passages), owner-flipped
   sync_policy: manual
 
+# P40-5: Referenzkorpus Mittelhochdeutsch (1050-1350) v2.1, ~400 texts /
+# ~2M word forms of manually annotated MHG — the first cora-tei registrant
+# (ReA/ReN ride the family when their license replies land, backlog
+# №40-1/№40-2). One immutable Zenodo artifact (record 13982324,
+# ReM-v2.1_tei.zip, hard sha256 pin — the iecor mold) → manual. CC BY-SA
+# 4.0 (in-file <licence>, zip README and Zenodo record agree; parse
+# re-verifies per file and quarantines drift).
+rem:
+  adapter: Nabu::Adapters::Rem
+  axes: [germanic]
+  enabled: false   # awaiting the owner-fired first real sync (checklist §6)
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
