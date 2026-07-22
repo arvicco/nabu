@@ -16,9 +16,9 @@ manuscripts). **North** arrives in force: Old Icelandic through IcePaHC — a
 rule-based UD conversion of the Icelandic Parsed Historical Corpus, filed
 under `is` — Old Norwegian and the Poetic Edda of Codex Regius through
 Menotec (`non`), and, dual-tagged with the epigraphy desk, the runic
-inscriptions of Rundata. All five new shelves are adapter-ready with their
-first sync owner-scheduled, so their holdings below read "not synced yet"
-until the owner fires them.
+inscriptions of Rundata. The wave went live 2026-07-22 with the
+owner-verified first syncs — Menotec, HeliPaD, ReM and Rundata all hold
+their corpora below; IcePaHC alone still waits on the next `sync ud`.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
@@ -31,21 +31,22 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `ud` | treebank | nc | enabled · manual | 29 docs / 107,664 passages |
 | `proiel` | treebank | nc | enabled · frozen | 12 docs / 51,321 passages |
 | `iswoc` | texts | nc | enabled · frozen | 5 docs / 2,536 passages |
-| `menotec` | texts | nc | not enabled | not synced yet |
+| `menotec` | texts | nc | enabled · manual | 7 docs / 20,308 passages |
 | `aspr` | texts | attribution | enabled · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | enabled · manual | 62,815 entries |
-| `rem` | texts | attribution | not enabled | nothing held yet |
-| `rundata` | inscriptions | odbl | not enabled | not synced yet |
-| `helipad` | treebank | attribution | not enabled | not synced yet |
+| `rem` | texts | attribution | enabled · manual | 360 docs / 290,242 passages |
+| `rundata` | inscriptions | odbl | enabled · manual | 30,643 docs / 30,641 passages |
+| `helipad` | treebank | attribution | enabled · manual | 1 docs / 3,549 passages |
 
 ## The desk's instruments
 
-- **Gold-lemma languages:** got (Gothic, on the PROIEL and UD treebanks)
-  and ang (Old English — ASPR verse and ISWOC prose, the West-Saxon Mark).
-  The P40 Germanic wave stages the next joiners — is (IcePaHC's first
-  Icelandic lemma lane), non (Menotec's PROIEL-scheme Old Norwegian and the
-  Edda), osx (HeliPaD's gold form-lemma Heliand) and gmh (ReM) — each
-  adapter-ready, first sync owner-pending, uncounted until it lands.
+- **Gold-lemma languages:** got (Gothic, on the PROIEL and UD treebanks),
+  ang (Old English — ASPR verse and ISWOC prose, the West-Saxon Mark), and
+  — live since the 2026-07-22 wave — gmh (ReM's 1.71M rows, instantly the
+  corpus's third-largest gold pool), non (Menotec's PROIEL-scheme Old
+  Norwegian and the Edda, 258K) and osx (HeliPaD's gold form-lemma
+  Heliand). One lane is still staged: is (IcePaHC's first Icelandic lemma
+  lane) arrives at the next `sync ud`.
 - **Dictionary:** Bosworth-Toller (`nabu define aethele --lang ang` folds
   æ/þ/ð to find æþele).
 - **Alignment work:** `nt` — Gothic (Wulfila) and Old English (the ISWOC
@@ -60,8 +61,8 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 - **The timeline desk:** Rundata is the germanic desk's first dated lane —
   the RundataDates extractor puts each inscription's SRDB year envelope and
   find-spot on the calendar, so `--from/--to`, `--century` and `--place`
-  scope the runestones once synced. (gmq-pro tags the urnordisk-dated
-  inscriptions — Proto-Norse, for which no ISO code exists.)
+  scope the runestones. (gmq-pro tags the urnordisk-dated inscriptions —
+  Proto-Norse, for which no ISO code exists.)
 
 ## Working the germanic desk
 
@@ -82,10 +83,11 @@ nabu show urn:nabu:rundata:u-344 --parallel  # the Yttergärde runestone beside 
 nabu show urn:nabu:menotec:non-edda-regius-dep  # the Poetic Edda, Codex Regius (Menotec)
 nabu search --word cyning --lang ang  # whole-word match on an Old English form (ASPR/ISWOC)
 nabu search liudi --lang osx --axis germanic  # the Old Saxon Heliand text (HeliPaD)
-nabu search --lemma láta --lang is --axis germanic  # the IcePaHC Old Icelandic lemma lane
+nabu search --lemma konungr --lang non --axis germanic  # the Menotec gold lemma lane — kings across the Edda and the sagas
 nabu define aethele --lang ang        # Bosworth-Toller, with the æ/þ/ð fold
 nabu formulas urn:nabu:aspr:A4.1      # the Old English poetic formulas of Beowulf
 ```
+
 
 ## Terminal setup
 

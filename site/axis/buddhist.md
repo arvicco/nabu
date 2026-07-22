@@ -44,11 +44,11 @@ nabu sync buddhist                 # sync the desk's enabled members
 This desk's own surfaces:
 
 ```
-nabu search --axis buddhist WORD      # one query across the Pali, Sanskrit and Chinese canons
+nabu search dharma --axis buddhist    # one query across the Pali, Sanskrit and Chinese canons
 nabu search dukkha --lang pli --axis buddhist  # the Pali canon
-nabu search --lang lzh --axis buddhist WORD  # CBETA's Literary Chinese
-nabu parallels CBETA-OR-SUTTACENTRAL-URN  # reception and echo across the canon
-nabu vocab GRETIL-URN                 # a Buddhist text's vocabulary profile
+nabu search 涅槃 --lang lzh --axis buddhist  # CBETA's Literary Chinese — nirvāṇa in the Taishō
+nabu parallels urn:nabu:suttacentral:an1.11-20:an1.11:1.1  # reception and echo across the canon — the AN refrain found in SN
+nabu formulas urn:nabu:suttacentral:an1 --lang pli  # the repeated formulas of the Aṅguttara, mined from the Pali lane
 ```
 
 

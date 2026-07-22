@@ -41,9 +41,9 @@ nabu sync hittite                 # sync the desk's enabled members
 This desk's own surfaces:
 
 ```
-nabu search --lemma --lang hit --axis hittite WORD  # the gold UD Hittite morphology
+nabu search --lemma kuiš --lang hit --axis hittite  # the gold UD Hittite morphology (kuiš "who", clause by clause)
 nabu search --century -13 --axis hittite  # the tablets by date, where dated
-nabu search --axis hittite WORD       # a query across TLHdig and the treebank
+nabu search ḫatti --axis hittite      # a query across TLHdig and the treebank — Ḫatti on the tablets
 ```
 
 

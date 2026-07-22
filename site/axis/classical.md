@@ -24,7 +24,7 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 | `proiel` | treebank | nc | enabled · frozen | 12 docs / 51,321 passages |
 | `lexica` | dictionary | attribution | enabled · manual | 168,133 entries |
 | `vulgate` | texts | open | enabled · manual | 73 docs / 35,809 passages |
-| `diorisis` | texts | attribution | enabled · manual | 764 docs / 502,865 passages |
+| `diorisis` | texts | attribution | enabled · manual | 767 docs / 516,505 passages |
 
 ## The desk's instruments
 
