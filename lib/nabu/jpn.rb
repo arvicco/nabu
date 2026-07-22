@@ -178,9 +178,19 @@ module Nabu
 
     TABLE = FROM.each_char.zip(TO.each_char).to_h.freeze
 
+    # A character class of every foldable codepoint, compiled ONCE at load.
+    FOLD_RE = /[#{Regexp.escape(FROM)}]/
+
     # Fold a string to the shared kyūjitai/traditional skeleton.
+    #
+    # gsub(FOLD_RE, TABLE), NOT tr(FROM, TO): String#tr on a multibyte
+    # from/to rebuilds its translation table from the whole FROM on every
+    # call, so a short passage paid the full setup — the same per-call cost
+    # P39-3 removed on the hani lane (aozora jpn folds every passage). The
+    # regexp and hash are built once; byte-identical to tr (TABLE is dup-free
+    # 1→1).
     def self.fold(str)
-      str.tr(FROM, TO)
+      str.gsub(FOLD_RE, TABLE)
     end
 
     # The kyūjitai (old form) of a shinjitai reform pair, or nil.

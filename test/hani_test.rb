@@ -93,4 +93,23 @@ class HaniTest < Minitest::Test
     per_char = text.each_char.map { |c| Nabu::Hani.fold(c) }.join
     assert_equal whole, per_char
   end
+
+  def test_gsub_fold_is_byte_identical_to_the_tr_translation
+    # P39-3 replaced tr(FROM, TO) with gsub(FOLD_RE, TABLE) (the tr rebuilt
+    # its 6050-entry table on every call — the cbeta rebuild hotspot). The
+    # two must be BYTE-identical. Pin the whole table plus mixed real text
+    # (traditional lands unchanged, simplified/z-variants fold).
+    from = Nabu::Hani::FROM
+    to = Nabu::Hani::TO
+    assert_equal from.tr(from, to), Nabu::Hani.fold(from), "the whole FROM string"
+    assert_equal to, Nabu::Hani.fold(from), "…and the whole FROM folds to TO exactly"
+    [
+      "說説说語言文字", # z-variant + simplified + traditional mix
+      "不亦説乎，学而时习之", # a real lzh/och sentence
+      "漢字文獻裡沒有需要折疊的字", # traditional-only (fold is identity here)
+      ""
+    ].each do |sample|
+      assert_equal sample.tr(from, to), Nabu::Hani.fold(sample), "byte-identity on #{sample.inspect}"
+    end
+  end
 end

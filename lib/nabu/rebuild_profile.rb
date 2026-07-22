@@ -17,6 +17,12 @@ module Nabu
   #   the db-write transaction, sampled per document — coarse, never per
   #   passage). They are diagnostic sub-numbers: parse+insert ≲ :load for an
   #   instrumented loader, and they are never re-summed into the grand total.
+  #   NOTE :parse INCLUDES text-normalization/fold: search_form (the per-
+  #   language fold, e.g. the hani trad↔simp collapse for lzh/cbeta) runs at
+  #   Passage construction, which happens inside the adapter's parse call.
+  #   Splitting fold out would need a per-passage timer, which the always-on
+  #   budget forbids (same reason fts_lemma stays one stage) — fold-cost
+  #   attribution is a benchmark-harness job, not an always-on stage.
   #   A source whose loader is not instrumented (a dossier/note shelf) still
   #   carries its :load roll-up, just no parse/insert split.
   #
