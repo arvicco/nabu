@@ -10905,7 +10905,7 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 ## P40-5 · CorA family + ReM  [tier: fable] [status: ready] [deps: P40-g]
 ## P40-6 · Rundata + runic display  [tier: fable] [status: ready] [deps: P40-g schema sample]
 ## P40-7 · Organization + desk refresh  [tier: opus] [status: ready] [deps: ingests]
-## P40-9 · Site review  [tier: FABLE — orchestrator personally, owner-mandated no-delegation] [status: scheduled — phase end]
+## P40-9 · Docs architecture + site review  [tier: FABLE — orchestrator personally, owner-mandated no-delegation] [status: scheduled — phase end; TWO STAGES: source-of-truth map + authoritative-surface fixes first, site rebuilt ON it second]
 Stale Library/Languages/Sources; axis pages with off-desk examples
 (Greek search on the Celtic page); thoughtful page-by-page pass
 against the live catalog, generator/fragments improved so fixes
