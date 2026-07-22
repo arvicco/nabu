@@ -13,6 +13,27 @@ class ConfigTest < Minitest::Test
     end
   end
 
+  # P40-f: the focus profile path defaults to config/profile.yml and lives
+  # INSIDE config_dir, so `nabu backup` (which snapshots the whole config/
+  # tree) covers this owner-authored, non-derivable file for free.
+  def test_profile_path_defaults_under_config_and_is_backup_covered
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "config", "profile.yml"), config.profile_path
+      assert_equal config.config_dir, File.dirname(config.profile_path)
+    end
+  end
+
+  def test_profile_path_is_overridable_and_absolute_verbatim
+    Dir.mktmpdir do |root|
+      path = write_config(root, <<~YAML)
+        paths:
+          profile: /srv/nabu/focus.yml
+      YAML
+      assert_equal "/srv/nabu/focus.yml", Nabu::Config.load(path: path, root: root).profile_path
+    end
+  end
+
   def test_relative_paths_from_file_resolve_against_root
     Dir.mktmpdir do |root|
       path = write_config(root, <<~YAML)
