@@ -10919,7 +10919,7 @@ Acceptance: test/fixtures/openiti/ with P5-4 manifest+README; findings memo resh
 
 ## P41-1 · mARkdown parser family  [tier: fable — first-of-family] [status: ready-after-g] [deps: P41-g]
 ## P41-2 · OpenITI adapter + fetch + AH timeline  [tier: fable] [status: ready — D41-e RULED primary+all-Persian 2026-07-22; Zenodo zip canonical, discovery-side scoping] [deps: P41-1]
-## P41-3 · Arabic folding + display  [tier: fable — semantics-adjacent] [status: ready-after-g] [deps: P41-g]
+## P41-3 · Arabic folding + display  [tier: fable — semantics-adjacent] [status: done 2026-07-22 — merged c923a21+f26675d; ara/fas shared fold, evidence-ruled; P41-2 MUST mint ara/fas not per; riders journaled: romanization mode, tashkeel display class, digit fold]
 ## P41-4 · arabic axis + registry + desk + news  [tier: opus] [deps: P41-2]
 ## P41-5 · License-inquiry drafts  [tier: orchestrator] [status: done 2026-07-22 — №41-1 DASI / №41-2 MPCD / №41-3 TITUS-Avestan / №41-4 CEToM / №41-5 DĀMOS drafted in full, contacts researched (two bot-walled, browser-reveal noted); owner sends]
 
