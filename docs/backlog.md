@@ -10918,7 +10918,7 @@ Goal: format census from real files + 3-4 trimmed fixtures + metadata index + D4
 Acceptance: test/fixtures/openiti/ with P5-4 manifest+README; findings memo reshapes P41-1/2.
 
 ## P41-1 · mARkdown parser family  [tier: fable — first-of-family] [status: ready-after-g] [deps: P41-g]
-## P41-2 · OpenITI adapter + fetch + AH timeline  [tier: fable] [status: ready-after-g] [deps: P41-1]
+## P41-2 · OpenITI adapter + fetch + AH timeline  [tier: fable] [status: ready — D41-e RULED primary+all-Persian 2026-07-22; Zenodo zip canonical, discovery-side scoping] [deps: P41-1]
 ## P41-3 · Arabic folding + display  [tier: fable — semantics-adjacent] [status: ready-after-g] [deps: P41-g]
 ## P41-4 · arabic axis + registry + desk + news  [tier: opus] [deps: P41-2]
 ## P41-5 · License-inquiry drafts (DASI №41-1 + optional Romance)  [tier: opus] [status: optional]
