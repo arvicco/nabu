@@ -136,10 +136,19 @@ module Nabu
 
               TABLE = FROM.each_char.zip(TO.each_char).to_h.freeze
 
+              # A character class of every foldable codepoint, compiled ONCE.
+              FOLD_RE = /[\#{Regexp.escape(FROM)}]/
+
               # Per-codepoint 1→1 fold (fold_with_map-safe: folding a string
               # char-by-char equals folding it whole).
+              #
+              # gsub(FOLD_RE, TABLE), NOT tr(FROM, TO): String#tr on a
+              # multibyte from/to rebuilds a translation table from the whole
+              # FROM string on every call, so a short passage paid the full
+              # setup (the P39-3 cbeta hotspot). The regexp and hash are built
+              # once; byte-identical to tr because TABLE is dup-free 1→1.
               def self.fold(str)
-                str.tr(FROM, TO)
+                str.gsub(FOLD_RE, TABLE)
               end
             end
           end
