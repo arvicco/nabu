@@ -10899,11 +10899,11 @@ aozora gaiji: ladder; resolvable census.
 ## P40-g · Fixture groundwork  [tier: opus/network — D40-d pre-approved] [status: done 2026-07-22 — merged 6af11d4; findings: Menotec INESS-only (session API), Rundata bulk = 47MB sqlite + JSON API + ZERO runic codepoints, YCOE gated (owner fetch per FETCH-GATE.md)]
 Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/rundata; Rundata dump schema documented (feeds P40-6 design); YCOE gating verified (journal owner-fetch if click-through).
 ## P40-1 · IcePaHC via ud  [tier: opus] [status: done 2026-07-22 — merged cb06aeb; breaker latent-boundary catch; one stall-resume]
-## P40-2 · Menotec adapter  [tier: opus] [status: ready] [deps: P40-g]
-## P40-3 · Penn family + HeliPaD  [tier: fable] [status: ready] [deps: P40-g]
+## P40-2 · Menotec adapter  [tier: opus] [status: done 2026-07-22 — merged 6f186bc]
+## P40-3 · Penn family + HeliPaD  [tier: fable] [status: done 2026-07-22 — merged 016a021; fingerprint constant-poisoning trap found]
 ## P40-4 · YCOE — DROPPED (owner ruling 2026-07-22: ignore; OTA gate + nc terms not worth it)
-## P40-5 · CorA family + ReM  [tier: fable] [status: ready] [deps: P40-g]
-## P40-6 · Rundata + runic display  [tier: fable] [status: ready] [deps: P40-g schema sample]
+## P40-5 · CorA family + ReM  [tier: fable] [status: done 2026-07-22 — merged 074006a]
+## P40-6 · Rundata + runic display  [tier: fable] [status: done 2026-07-22 — merged cd862c1; odbl minted, migration 018]
 ## P40-7 · Organization + desk refresh  [tier: opus] [status: ready] [deps: ingests]
 ## P40-9 · Docs architecture + site review  [tier: FABLE — orchestrator personally, owner-mandated no-delegation] [status: scheduled — phase end; TWO STAGES: source-of-truth map + authoritative-surface fixes first, site rebuilt ON it second]
 Stale Library/Languages/Sources; axis pages with off-desk examples
