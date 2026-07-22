@@ -10905,4 +10905,4 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 ## P40-5 · CorA family + ReM  [tier: fable] [status: ready] [deps: P40-g]
 ## P40-6 · Rundata + runic display  [tier: fable] [status: ready] [deps: P40-g schema sample]
 ## P40-7 · Organization + desk refresh  [tier: opus] [status: ready] [deps: ingests]
-## P40-8 · License inquiry drafts  [tier: opus] [status: dispatched — report-only]
+## P40-8 · License inquiry drafts  [tier: opus] [status: done 2026-07-22 — 5 drafts in .docs/licensing-emails.md; contacts verified-live except INT servicedesk (eyeball first); DISCOVERY: Tarrin Wills heads BOTH Skaldic and ONP — one reply could resolve both]
