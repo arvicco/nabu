@@ -85,6 +85,32 @@ module Query
       assert_empty random(count: 20), "a document-level withdrawal hides its passages"
     end
 
+    # P41-r2 (owner report at the 62.8M-passage scale: --random took 2m19s —
+    # ORDER BY RANDOM() sorts the whole visible set). The sampler is now an
+    # id-probe: O(log n) per draw, near-uniform over bulk-loaded shelves.
+    # These pin the probe's correctness properties; uniformity honesty lives
+    # in the class comment.
+    def test_probe_survives_id_gaps_and_only_lands_on_visible_scope_rows
+      # interleaved id space: alpha rows, a beta row between them, a withdrawn
+      # alpha row — the probe must land only on visible alpha rows.
+      seed_document(source: @open, urn: "urn:a:one", count: 3)
+      seed_document(source: @nc, urn: "urn:b:mid", count: 2)
+      seed_document(source: @open, urn: "urn:a:two", count: 3)
+      seed_document(source: @open, urn: "urn:a:dead", count: 1, withdrawn: true)
+
+      urns = 40.times.flat_map { random(source: "alpha", count: 1).map(&:urn) }.uniq
+      refute_empty urns
+      assert(urns.all? { |u| u.start_with?("urn:a:") }, "the probe never leaks another source")
+      assert(urns.none? { |u| u.start_with?("urn:a:dead") }, "withdrawn rows never drawn")
+    end
+
+    def test_a_seeded_rng_makes_the_draw_deterministic
+      seed_document(source: @open, urn: "urn:a:seeded", count: 30)
+      a = Nabu::Query::Random.new(catalog: @catalog, rng: ::Random.new(7)).run(count: 3).map(&:urn)
+      b = Nabu::Query::Random.new(catalog: @catalog, rng: ::Random.new(7)).run(count: 3).map(&:urn)
+      assert_equal a, b
+    end
+
     def test_unknown_source_raises_a_clean_error
       seed_document(source: @open, urn: "urn:nabu:alpha:one", count: 2)
       error = assert_raises(Nabu::Query::Random::Error) { random(source: "nope") }

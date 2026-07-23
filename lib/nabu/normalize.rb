@@ -170,6 +170,41 @@ module Nabu
     HAN_FOLD = ->(str) { Hani.fold(str) }
     private_constant :HAN_FOLD
 
+    #   ara/fas  the Arabic-script fold (P41-3), one shared rule censused
+    #        against the OpenITI fixtures. What the generic fold ALREADY
+    #        does (pinned, not re-ruled): hamza-alefs أ/إ/آ/ؤ/ئ canonically
+    #        decompose, so NFD + Mn strip folds them bare (أ→ا …); tashkeel
+    #        (U+064B–0652) and the superscript alef (U+0670) are Mn and
+    #        strip. The rule adds what it cannot reach:
+    #        - alef wasla ٱ (U+0671, no decomposition) → ا (censused ×0 in
+    #          the fixtures; carried for the Quranic orthography the corpus
+    #          at large holds — packet-directed)
+    #        - alef maqsura ى → ي: the fixtures spell the SAME word both
+    #          ways (فى ×69 vs في ×53; the 0646 metadata writes the author's
+    #          nisba الخونجى AND الخونجي) — upstream is internally
+    #          inconsistent, so the fold is mandatory
+    #        - farsi yeh ی (U+06CC) → ي, keheh ک (U+06A9) → ك: the P41-g
+    #          cross-language pair — Persian files carry ONLY ی/ک, Arabic
+    #          files ONLY ي/ك, so both collapse to the Arabic skeleton (the
+    #          lower codepoints) and either keyboard finds either language
+    #        - taa marbuta ة → ه (Arabic-search practice; the Persian
+    #          fixture itself writes the Arabic loan وولاة with ة where
+    #          native Persian orthography writes ه)
+    #        - ZWNJ (U+200C, Cf) → space, the cuneiform precedent: each
+    #          member of a Persian compound (می‌دانی) becomes its own
+    #          searchable token; separator runs are FTS-invisible. A
+    #          fused-typed query (میدانم) does not match — accepted,
+    #          documented in conventions §9
+    #        - tatweel ـ (U+0640, Lm) dropped entirely — elongation, never
+    #          phonemic (the metadata Hijri marker هـ; 1→0 delete,
+    #          fold_with_map-safe)
+    #        Arabic-Indic digits (U+0660–0669, U+06F0–06F9) deliberately
+    #        have NO rule: censused ×0 across all six fixtures (the fused
+    #        footnote digits — حديث2 — are ASCII already). Persian-only
+    #        letters پ چ ژ گ stay: no Arabic counterpart to fold to.
+    ARABIC_FOLD = ->(str) { str.tr("ٱىیکة‌", "اييكه ").delete("ـ") }
+    private_constant :ARABIC_FOLD
+
     # jpn (P38-4): the Japanese kyūjitai↔shinjitai reform fold. Old and new
     # forms collapse to the shared traditional skeleton hani already assigns
     # (Nabu::Jpn composes through Hani.fold), so 國/国, 廣/広, 圓/円 index and
@@ -196,6 +231,8 @@ module Nabu
       # alone. The combining letters above (uͦ U+0366 etc.) fall to the
       # generic Mn strip; the @norm layer rides annotations, never a fold.
       "gmh" => ->(str) { str.tr("ſ", "s") },
+      "ara" => ARABIC_FOLD,
+      "fas" => ARABIC_FOLD,
       "gem" => PROTO_FOLD,
       "ine" => PROTO_FOLD,
       "sla" => PROTO_FOLD,

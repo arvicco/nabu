@@ -25,19 +25,18 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-22** the shelves hold **801,175 documents / 28,176,484
-passages** in 108 language codes — from proto-cuneiform tablets of the
-late 4th millennium BCE to Meiji-era Japanese. The newest arrival is the
-**Germanic wave**: the Old Norwegian treebanks and the Poetic Edda
-(Menotec), the Old Saxon *Heliand*, the Middle High German reference
-corpus ReM, and ~6,800 Scandinavian runic inscriptions (Rundata) — joining
-the day-old Japanese reading desk (**Aozora Bunko's public-domain library,
-3.0 million passages**) and the Chinese library, where **Literary Chinese
-remains the biggest language in the corpus at 13.2 million passages** —
-the Kanseki Repository of classical Chinese and the CBETA Buddhist canon,
-beside the Ancient Near East (the Hittite tablet corpus, the CDLI's
-353,156-artifact cuneiform catalog, the eBL Fragmentarium, a millennium of
-Syriac, and the Sumerian literary canon).
+As of **2026-07-22** the shelves hold **810,254 documents / 62,807,983
+passages** in 110 language codes — from proto-cuneiform tablets of the
+late 4th millennium BCE to Meiji-era Japanese. The newest arrival more
+than doubled the library in a day: **the Arabic phase** — OpenITI, the
+premodern Islamicate library whole (Quran and hadith, history, fiqh,
+falsafa, the dīwāns) with its Persian shelf (Ḥāfiẓ, Ibn Sīnā) — making
+**Classical Arabic the largest language in the corpus at 33.3 million
+passages**, ahead of Literary Chinese (13.2M — the Kanseki Repository
+and the CBETA Buddhist canon), the same day the **Germanic wave**
+landed (the Poetic Edda, the *Heliand*, Middle High German, ~6,800
+runic inscriptions) beside the Japanese reading desk and the Ancient
+Near East.
 Plus **1,310,763 dictionary entries** across fifty-six dictionary shelves
 and **16.2 million gold lemma annotations in 28 languages** (a further
 8.2 million ride an honestly labelled silver tier). (All numbers in this
@@ -228,8 +227,8 @@ abuts Lebanon."
   Heidelberg (CC BY-SA; a preservation snapshot of the archived upstream) —
   81,416 of them dated (2026-07-14 census), with the library's first genre
   facets: `search
-  --type epitaph --province Britannia --material marble` composes with the
-  date and place filters, and the stones are in the `--fuzzy` index. Since
+  manibus --type epitaph --province Britannia` composes the genre facets
+  with the date and place filters, and the stones are in the `--fuzzy` index. Since
   2026-07-17 the epigraphic shelves speak Celtic too: 428 Gaulish
   inscriptions (RIIG, with per-editor readings and French translations)
   and ~500 Irish ogham stones in real Ogham codepoints with aligned
@@ -305,11 +304,13 @@ shelf map with research uses per shelf is
 | Germanic wave | Menotec Old Norwegian treebanks + Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German (355k gold manuscript lines), Rundata runic inscriptions in five text lanes (2026-07-22) | 31,057 / 409,947 | nc / CC BY / CC BY-SA / odbl |
 | Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik + the Hebrew/Egyptian/Slovene desks and the Sino-Japanese lexicography (Unihan, KANJIDIC2/JMdict, HDIC, Guangyun) (`nabu define` / `etym`) | 1,310,763 entries / 56 shelves (2026-07-22) | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-The registry holds **82 sources + 4 local shelves + 2 feature modules**
+The registry holds **83 sources + 4 local shelves + 2 feature modules**
 (the kind-split census, 2026-07-22 — `sources.yml` distinguishes what a
 row IS: a corpus that mints catalog rows, an owner-authored local memory
 shelf, or machinery like `kr-gaiji`/`bridging` that fetches reference
-data but mints nothing to serve). All 82 sources are enabled —
+data but mints nothing to serve). 82 of the 83 are enabled — `openiti`,
+the staged Arabic phase, awaits its owner-fired first sync (~9,106
+primary texts / ~1.12 B words) —
 the **Germanic four** (`menotec`, `helipad`, `rem`, `rundata`) joined
 2026-07-22 with their owner-verified first syncs, a day after `aozora`
 (16,004 public-domain works, 2.98M passages) — the upstream corpora
@@ -367,7 +368,7 @@ text, and `links`-wired to the passages its manifest entry names as
 
 | | |
 |---|---|
-| `nabu search QUERY` | FTS5 full-text search, bm25-ranked, diacritic-insensitive with per-language folding: `μηνιν` finds `μῆνιν`, `iuvenis`/`juvenis`/`iuuenis` all resolve. Filters: `--lang`, `--license`, `--source SLUG` (one shelf) and `--axis NAME[,NAME…]` (a research desk's shelves — the multi-source generalization of `--source`, e.g. `--axis celtic`), both composing with every other filter, `--lemma`/`--near`/`--fuzzy` included, the footer naming the desk; `--limit`. Date/place axis (163,821 dated/placed documents live — EDH inscriptions 81,416, HGV papyri, ORACC catalogue/regnal dates 21,558, TOROT chronicle annals, Slovene goo300k/IMP, Coptic manuscript dates — so `--century -7` reaches the Assyrian letters): `--from -300 --to -30` scopes by signed historical year (negative = BCE, no year 0), `--century 6` is one century's shorthand, `--place oxyrhynch%` filters provenance — `στρατηγ* --from 101 --to 300 --place oxyrhynch%` finds the Oxyrhynchite strategoi. Genre facets (256,518 rows live from EDH): `--type epitaph --province Britannia --material marble` composes with all of the above. Character-structure filters: Character-structure filters for the Han corpus (kept distinct from text FTS): `--radical N` (KangXi radical, Unihan), `--strokes A-B` (total-stroke range), `--char-component C` (characters containing C — KRADFILE ∪ BabelStone IDS transitive containment) AND together and compose with a text query as character-level filters on Han passages, the footer naming them. |
+| `nabu search QUERY` | FTS5 full-text search, bm25-ranked, diacritic-insensitive with per-language folding: `μηνιν` finds `μῆνιν`, `iuvenis`/`juvenis`/`iuuenis` all resolve. Filters: `--lang`, `--license`, `--source SLUG` (one shelf) and `--axis NAME[,NAME…]` (a research desk's shelves — the multi-source generalization of `--source`, e.g. `--axis celtic`), both composing with every other filter, `--lemma`/`--near`/`--fuzzy` included, the footer naming the desk; `--limit`. Date/place axis (163,821 dated/placed documents live — EDH inscriptions 81,416, HGV papyri, ORACC catalogue/regnal dates 21,558, TOROT chronicle annals, Slovene goo300k/IMP, Coptic manuscript dates — so `--century -7` reaches the Assyrian letters): `--from -300 --to -30` scopes by signed historical year (negative = BCE, no year 0), `--century 6` is one century's shorthand, `--place oxyrhynch%` filters provenance — `στρατηγ* --from 101 --to 300 --place oxyrhynch%` finds the Oxyrhynchite strategoi. Genre facets (256,518 rows live from EDH): `--type epitaph --province Britannia --material marble` compose with a text query and all of the above. Character-structure filters: Character-structure filters for the Han corpus (kept distinct from text FTS): `--radical N` (KangXi radical, Unihan), `--strokes A-B` (total-stroke range), `--char-component C` (characters containing C — KRADFILE ∪ BabelStone IDS transitive containment) AND together and compose with a text query as character-level filters on Han passages, the footer naming them. |
 | `nabu search --lemma FORM` | Dictionary-form search over 16.2M gold lemma rows in 28 languages (`gmh`/`non`/`osx` joined 2026-07-22) — inflections, suppletion and all; hits carry glosses where the reference shelf knows the lemma. Add `--morph case=dat,number=pl` (UD feature vocabulary) to keep only attestations with that morphology, decoded evidence shown per hit — one façade over UD `feats` and PROIEL positional tags. Beside gold and the labeled silver shelves, the **equivalence** tier: CEIPoM's scholar-curated Classical-Latin keys on pre-Roman Italy's Oscan/Umbrian/Faliscan passages — `search --lemma precor` reaches the Iguvine Tables' `pesnimu`, every hit tagged `[equivalence]`, never counted as attestation, `--gold-only` excludes. |
 | `nabu search --loans CODE` | The language-contact facet (Coptic Scriptorium today): keep only passages carrying loanwords from a donor language — `search ⲛⲟⲩⲧⲉ --lang cop --loans grc` (131K+ Greek loan tokens tagged), composing with text, `--lemma`, `--fuzzy`, `--near` and every catalog filter. `nabu list coptic-scriptorium --loans` prints the donor-language census; `--loans grc` enumerates the most loan-saturated documents. |
 | `nabu search A --near B [--window N]` | Proximity search: keep only hits where `B` is within `N` words of `A` in the same passage (FTS5 NEAR over the folded forms; default 10, `0` = adjacent, order-independent). `λόγος --near θεός` is John 1:1; composes with `--lemma` (the anchor expands to the lemma's attested surface forms first: `--lemma λέγω --near κύριος` finds `τάδε λέγει κύριος`) and `--lang`/`--license`/`--limit`. Both terms bracketed in the snippet. |

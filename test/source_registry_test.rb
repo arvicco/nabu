@@ -670,8 +670,11 @@ class SourceRegistryTest < Minitest::Test
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
 
     assert_equal %w[classical epigraphy slavic germanic celtic italic etym biblical hebrew
-                    syriac hittite cuneiform egyptian indic buddhist sinitic japonic local],
-                 registry.axes.names, "the 18 ratified axes, in render order"
+                    syriac arabic hittite cuneiform egyptian indic buddhist sinitic japonic local],
+                 registry.axes.names,
+                 "the ratified axes, in render order (18 ratified D35 + arabic, minted P41-2 " \
+                 "with the openiti row — registry validation requires the definition; " \
+                 "the axis build-out is P41-4)"
 
     registry.each_source do |entry|
       refute_empty entry.axes, "#{entry.slug} must declare at least one research axis"

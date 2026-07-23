@@ -10911,6 +10911,30 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 
 ## P40-flips · [status: done 2026-07-22 — eb66f2f; owner-verified counts in sources.yml comments; IcePaHC landed at the owner's same-day `sync ud`]
 
+# P42 candidates — the scale phase (from .docs/p41-scale-review.md, owner picks)
+
+## P42-0 · source_stats + global census derived table  [tier: fable — first derived-stats table, invariants] — status/list/axis/language 130–250s → ms
+## P42-1 · vocab corpus lemma-frequency table  [tier: opus] — 17.9s → ms
+## P42-2 · ubiquitous-term guard (fts5vocab df → unranked corpus-order + honest footer)  [tier: fable — search semantics] — the الله class ~10s → sub-second
+## P42-3 · language column into passages_fts  [rides the owner's next FULL rebuild with the lzh re-derive + openiti timeline]
+## P42-4 · load hygiene: post-load bounded ANALYZE + PRAGMA pass  [tier: opus]
+
+## P41-r2 · --random instant (id-probe sampler)  [status: done 2026-07-23 — 98ef4b6; 2m19s → 0.3s; join-free probe pattern documented]
+
+## P41-r1 · Recipe honesty: term-less filtered search never existed  [status: done 2026-07-22 — six recipes + README/tools composed with live-verified queries; riders journaled: term-less filtered-browse mode, catalog-side filter window starvation (P40-r2 genus)]
+
+# P41 — the Arabic phase (owner-picked 2026-07-22: "A, full scope, display considerations, new arabic(islamic?) axes, whole shebang"; plan: .docs/p41-arabic-plan.md)
+
+## P41-g · OpenITI fixture groundwork + mARkdown census  [tier: opus/network — D41-d gated] [status: done 2026-07-22 — merged 7444280; findings in plan doc; D41-e evidence awaiting owner ruling]
+Goal: format census from real files + 3-4 trimmed fixtures + metadata index + D41-e sizing.
+Acceptance: test/fixtures/openiti/ with P5-4 manifest+README; findings memo reshapes P41-1/2.
+
+## P41-1 · mARkdown parser family  [tier: fable — first-of-family] [status: done 2026-07-22 — merged b36bfd6; end-of-page retro-assignment semantics; five fixture catches; census keys enumerated for the adapter]
+## P41-2 · OpenITI adapter + fetch + AH timeline  [tier: fable] [status: done 2026-07-22 — merged 5564340+b2dc180+dd46244; first wave ≈ 9,106 docs (MSS∩pri resolved), ~5,001 censused skips; streamed md5-pinned fetch; zip-nesting watch item for first sync]
+## P41-3 · Arabic folding + display  [tier: fable — semantics-adjacent] [status: done 2026-07-22 — merged c923a21+f26675d; ara/fas shared fold, evidence-ruled; P41-2 MUST mint ara/fas not per; riders journaled: romanization mode, tashkeel display class, digit fold]
+## P41-4 · arabic axis + registry + desk + news  [tier: opus] [status: done 2026-07-22 — merged f4e9a6f + completion dcde669; desk live at /axis/arabic/, dossiers installed, site:check clean]
+## P41-5 · License-inquiry drafts  [tier: orchestrator] [status: done 2026-07-22 — №41-1 DASI / №41-2 MPCD / №41-3 TITUS-Avestan / №41-4 CEToM / №41-5 DĀMOS drafted in full, contacts researched (two bot-walled, browser-reveal noted); owner sends]
+
 ## gate40 · [status: done 2026-07-22 — merged 65cf8ec (PR #52); v1.2.0 tagged at acc4c96, GitHub release published, Zenodo DOI auto-minting; D40-e ratified at merge]
 
 ## P40-r2 · --lang is dead on arrival  [tier: fable — orchestrator direct] [status: done 2026-07-22 — code_variants always includes the typed code (catalog stores `is`; 639-1 hop swallowed it) + --lemma lang filter moved INDEX-side (homograph window starvation); owner's runbook repro was the catch; gold now 16.24M in 28 langs (is #4, lzh joins)]

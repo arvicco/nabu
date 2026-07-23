@@ -56,7 +56,7 @@ This desk's own surfaces:
 ```
 nabu search --lemma precor --axis italic  # the CEIPoM equivalence key onto the Iguvine Tables
 nabu etym rufus                       # the Sabellic-loan etymon chain (Old Italic headwords)
-nabu search --century -3 --axis italic  # the pre-Roman inscriptions, where dated
+nabu search tular --axis italic       # the Etruscan boundary stones — tular raśnal
 nabu define "*deiwos"                 # a Proto-Italic reconstruction, with its attested reflexes
 ```
 

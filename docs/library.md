@@ -1,13 +1,13 @@
 # The Library — content review
 
-**As of 2026-07-22** (post the Japanese reading desk, 2026-07-21, and the
-Germanic wave, 2026-07-22; v1.1.0 cut 2026-07-19). Live totals:
-**801,175 documents / 28,176,484 passages and 1,310,763 dictionary
-entries** across the **88 registry rows** — 82 corpus sources + 4 local
-shelves + 2 feature modules, every corpus source enabled. Literary
-Chinese (`lzh`) remains the largest language at 13.2M passages; Japanese
-(`jpn`, §8v) and Middle High German (`gmh`, §8w) are the newest
-million-passage-scale arrivals. The reference shelf spans **56 dictionary
+**As of 2026-07-22 late** (post the Arabic phase load — the library
+more than doubled in a day; v1.2.0 cut earlier the same day). Live
+totals: **810,254 documents / 62,807,983 passages and 1,310,763
+dictionary entries** across the **88 registry rows** — 82 corpus sources + 4 local
+shelves + 2 feature modules, every corpus source enabled. **Classical Arabic (`ara`, §8x) is now the largest language at 33.3M
+passages** — the OpenITI load of 2026-07-22 evening — ahead of Literary
+Chinese (13.2M); Persian (`fas`, 1.3M), Japanese (`jpn`, §8v) and
+Middle High German (`gmh`, §8w) landed the same 48 hours. The reference shelf spans **56 dictionary
 shelves** (§8c, §8h, §8j, §8k, §8m, §8o, §8q, §8s, §8t). The lemma
 layer, censused fresh this date: **16,240,531 gold rows in 28
 languages** — the Germanic wave added `gmh` (2.10M rows, instantly the
@@ -635,6 +635,23 @@ Gothic and West-Saxon gospels beside the *Heliand* tradition, walk
 attested languages, and read the runestones with their normalisation and
 translation lanes via `--parallel`; the runic damage legend is searchable
 as stored.
+
+## 8x. The Arabic phase (`openiti`; loaded 2026-07-22, flip at the P41 gate)
+
+| | |
+|---|---|
+| **Category** | The premodern Islamicate library whole: Quran and hadith, history and biography, fiqh, kalām and falsafa, the dīwāns and adab — with the Persian shelf riding the same release |
+| **Languages** | Classical Arabic (`ara`, 33,294,039 passages — the corpus's largest language) and Persian (`fas`, 1,337,472; Ḥāfiẓ, Niẓāmī, ʿAṭṭār, Ibn Sīnā) |
+| **Size** | **9,079 documents / 34,631,499 passages** — the D41-e first wave (primary versions + all Persian); 4,568 secondary editions + 433 manuscript documents censused skip-by-rule; 27 malformed upstream files quarantined (0.3%, baselined) |
+| **Metadata** | One document per OpenITI text version (urn:nabu:openiti:<URI>); passages cited <volume>.<page>.<n>; section headers searchable as their own passages; verse hemistichs preserved as annotations; AH death-year termini feed the timeline at the next incremental rebuild |
+| **License** | CC BY-NC-SA 4.0 → `nc` (MCP-excluded, never redistributed) — the grant rests entirely on the Zenodo record metadata; recorded loudly |
+
+**Research uses:** the largest openly licensed historical corpus in
+existence, locally searchable: the Arabic-script fold strips tashkeel
+and bridges the Persian keyboard (ی/ي, ک/ك — Arabic-typed queries find
+Ḥāfiẓ and vice versa); a millennium of authors lands on the date axis
+once the timeline derives; unannotated by design — full-text and the
+timeline are the instruments.
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 
