@@ -66,13 +66,15 @@ module Nabu
 
       # +canonical_dir+ (P19-1) roots the local-shelf checks (dossier files
       # vs derived records; pinned files vs the tree); nil (callers that
-      # cannot name the corpus root) skips them honestly.
-      def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil)
+      # cannot name the corpus root) skips them honestly. +now+ picks the
+      # D42-a rotation slot (injected so the probe is testable).
+      def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil, now: Time.now)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
         @ledger = ledger
         @canonical_dir = canonical_dir
+        @now = now
       end
 
       # All invariant findings for one registry entry, in a stable order.
@@ -95,7 +97,8 @@ module Nabu
       def global
         [
           pending_migrations(@catalog, Store::MIGRATIONS_DIR, "catalog", "run nabu sync or nabu rebuild"),
-          pending_migrations(@ledger, Store::Ledger::MIGRATIONS_DIR, "ledger", "any write path (sync) applies them")
+          pending_migrations(@ledger, Store::Ledger::MIGRATIONS_DIR, "ledger", "any write path (sync) applies them"),
+          stats_drift
         ].compact
       end
 
@@ -330,6 +333,56 @@ module Nabu
           .where(source_slug: slug)
           .where(Sequel.like(:repo_url, "local:%"))
           .to_h { |row| [row[:repo_url].delete_prefix("local:"), row[:last_sync_sha]] }
+      end
+
+      # -- source_stats drift (D42-a, global) ----------------------------------
+
+      # Above this many stats-claimed live passages the probe stays at the
+      # document grain for the day's source: the passage truth is a real
+      # count over the passages join, cheap for small/mid shelves and
+      # seconds-scale for the giants — the doc grain (indexed counts) still
+      # watches every source, and the rotation reaches the small ones' rows.
+      STATS_PASSAGE_PROBE_CAP = 2_000_000
+
+      # The D42-a contract: source_stats is DERIVED and the LOADER is its
+      # only writer (rebuild re-derives wholesale). This probe holds ONE
+      # rotating source per run against its true counts — O(one source),
+      # never the corpus, so `nabu health` stays cheap while any write path
+      # that bypassed the loader (or a stats bug) surfaces loudly within a
+      # rotation. A catalog predating migration 019 has no table and
+      # produces nothing here (pending_migrations already says why).
+      def stats_drift
+        return nil unless table?(@catalog, :source_stats) && table?(@catalog, :sources)
+
+        sources = @catalog[:sources].order(:id).select_map(%i[id slug])
+        return nil if sources.empty?
+
+        id, slug = sources[@now.yday % sources.size]
+        drift = stats_drift_pairs(id)
+        return nil if drift.empty?
+
+        detail = drift.map { |field, (stated, actual)| "#{field} stats=#{stated} actual=#{actual}" }.join(", ")
+        Finding.new(
+          kind: :stats_drift, severity: :loud,
+          message: "source_stats drift on #{slug}: #{detail} — stats are derived and " \
+                   "loader-maintained; a write path bypassed the loader (a bug — report it). " \
+                   "nabu rebuild (or rebuild --incremental) re-derives"
+        )
+      end
+
+      # {field => [stated, actual]} for the day's source: the document grain
+      # always, the passage grain only under the cap and only when the doc
+      # grain is already clean (one loud line at a time).
+      def stats_drift_pairs(source_id)
+        stats = Store::SourceStats.fetch(@catalog, source_id)
+        drift = Store::SourceStats.document_truth(@catalog, source_id).filter_map do |field, actual|
+          [field, [stats.fetch(field), actual]] if stats.fetch(field) != actual
+        end.to_h
+        if drift.empty? && stats.fetch(:live_passages) <= STATS_PASSAGE_PROBE_CAP
+          actual = Store::SourceStats.passage_truth(@catalog, source_id)
+          drift[:live_passages] = [stats.fetch(:live_passages), actual] if stats.fetch(:live_passages) != actual
+        end
+        drift
       end
 
       # -- pending migrations (global) -----------------------------------------

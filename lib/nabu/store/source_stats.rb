@@ -74,6 +74,26 @@ module Nabu
             withdrawn_documents: 0, retired_documents: 0, license_overrides_json: "{}" }
       end
 
+      # -- D42-a truth probes (O(one source), riding the source_id index) ----
+
+      # The document-grain truth for one source, straight off the documents
+      # table — what the stats row MUST say.
+      def document_truth(db, source_id)
+        rows = db[:documents].where(source_id: source_id)
+        { live_documents: rows.where(withdrawn: false).count,
+          withdrawn_documents: rows.where(withdrawn: true).count,
+          retired_documents: rows.where(withdrawn: false, retired_upstream: true).count }
+      end
+
+      # The live-on-live passage count for one source.
+      def passage_truth(db, source_id)
+        db[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .where(Sequel[:documents][:source_id] => source_id,
+                 Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+          .count
+      end
+
       # The global roll-up, summed over the per-source rows.
       def rollup(db)
         row = db[TABLE].select(

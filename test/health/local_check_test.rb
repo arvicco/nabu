@@ -313,6 +313,10 @@ class LocalCheckTest < Minitest::Test
   private
 
   def check(registry, fulltext: nil, golden: [], ledger: @ledger)
+    # Rows here are seeded DIRECTLY (bypassing the loader) — re-derive the
+    # write-time census or the D42-a drift probe would loudly (and rightly)
+    # flag every rig.
+    Nabu::Store::SourceStats.derive!(@db, note: "test seed")
     Nabu::Health::LocalCheck.new(
       registry: registry, catalog: @db, fulltext: fulltext, ledger: ledger,
       golden_queries: golden, now: @now
