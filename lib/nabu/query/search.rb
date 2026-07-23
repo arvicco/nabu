@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+require_relative "../languages"
 require_relative "../normalize"
+require_relative "../store/indexer"
 require_relative "catalog_join"
 require_relative "stored_snippet"
 require_relative "term_frequency"
@@ -27,6 +29,28 @@ module Nabu
     # way the document was folded. And it cannot over-fold: variants are
     # ORed, so the generic variant still matches languages with no extra rule
     # (a Gothic "jah" stays findable even though the lat variant reads "iah").
+    #
+    # == --lang rides IN the MATCH when the index carries it (P42-3)
+    #
+    # The P40-r2 starvation genus, measured at P41 scale: a catalog-side
+    # --lang WHERE thins the bounded inner window AFTER the MATCH, so a term
+    # whose hits concentrate in other languages starves the page (empty at
+    # any realistic --limit while matches exist). When the fts table carries
+    # the P42-3 language column (feature-detected; the column appears at the
+    # owner's next full rebuild), the plain path composes the filter into
+    # the MATCH itself — `(<query>) AND language : ("0langgrc" OR …)`, the
+    # Indexer's sentinel tokens over the code_variants equivalence set — and
+    # drops the catalog-side language WHERE; visibility and license stay
+    # catalog-side. In-MATCH, lang can no longer starve the window, so it
+    # also stops counting toward the P35-6 incomplete-page hint. Two edges,
+    # both deliberate: the token mint is case-insensitive where the catalog
+    # WHERE was case-sensitive (a stored "san-Deva" is now reachable as
+    # --lang san-deva — a friendlier equality, documented on the Indexer);
+    # and --exact/--word keep the catalog-side filter (their paginated
+    # verify scan already reads every candidate's catalog row, and their
+    # --limit semantics never leaned on the inner window). Against a
+    # pre-rebuild index the old catalog-side path runs byte-identically,
+    # honesty hint included.
     #
     # Two-step id join (not ATTACH) and the exact-class license semantics are
     # documented on CatalogJoin, which owns that half.
@@ -76,7 +100,9 @@ module Nabu
       end
 
       # Pull more FTS hits than the caller's limit so that catalog-side filtering
-      # (language/license) can drop non-matching rows and still fill the page.
+      # (license, timeline, facets, source — and language only against a
+      # pre-P42-3 index; on the current shape --lang rides in the MATCH, class
+      # note) can drop non-matching rows and still fill the page.
       # Exhaustion is ANNOUNCED (P35-6): a full window + active filters + a
       # short page sets incomplete_hint (CatalogJoin::INCOMPLETE_PAGE_HINT).
       # census: 24415015, 2026-07-20, live passages (settled full rebuild; 3.76M at tuning)
@@ -128,7 +154,9 @@ module Nabu
       attr_reader :rank_note
 
       # Search +query+ and return up to +limit+ Result values in bm25 rank order.
-      # +lang+ filters on passage language; +license+ on effective license class.
+      # +lang+ filters on passage language — inside the MATCH when the index
+      # carries the P42-3 language column, catalog-side against an older index
+      # (class note); +license+ on effective license class.
       # +from+/+to+/+place+ (P15-2) filter on the document's timeline
       # (signed historical years, place LIKE pattern); +facets+ (P17-2) on the
       # document's facet rows ({facet name => pattern} — search --type/
@@ -186,17 +214,29 @@ module Nabu
       # filtered rows, trimmed to the page. --limit already means "displayed
       # hits" here — only catalog-side filters thin the window, and that
       # thinning is announced by the P35-6 exhausted-window hint.
-      # The P42-2 guard rides here: before ranking, the fts5vocab df probe
+      # The P42-3 lang seam rides FIRST: when the index carries the language
+      # column, --lang becomes a MATCH conjunct and leaves the catalog-side
+      # filter set entirely — the window cannot starve on it, and
+      # filters_active? honestly stops counting it toward the hint. On a
+      # pre-rebuild index index_language_match is nil and the filters hash
+      # passes through untouched: byte-identical to the old path.
+      # The P42-2 guard rides here too: before ranking, the fts5vocab df probe
       # bounds the candidate set the bm25 ORDER BY would have to score. Above
       # +ubiquity_threshold+ postings the rank is skipped — same MATCH, same
       # filters, same snippets, corpus (rowid) order — and #rank_note arms the
       # honest footer clause. Below (or when the probe is unavailable — nil —
       # or under the ranking-independent urn probe), byte-identical to before.
+      # (The probe reads the TEXT variants only; the sentinel language tokens
+      # are invisible to it, so the ceiling stays a valid upper bound — a
+      # lang-narrowed candidate set is only ever smaller.)
       def folded_page(variants, filters, limit:, urn:, ubiquity_threshold:)
+        lang_match = index_language_match(filters[:lang])
+        filters = filters.merge(lang: nil) if lang_match
         ranked = urn ? true : rank?(variants, ubiquity_threshold)
         @rank_note = ranked ? nil : RANK_SKIP_NOTE
         inner_limit = limit * INNER_LIMIT_FACTOR
-        hits = fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn, ranked: ranked)
+        hits = fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn,
+                                                        ranked: ranked, lang_match: lang_match)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
@@ -217,6 +257,32 @@ module Nabu
       def rank?(variants, threshold)
         ceiling = @term_frequency.candidate_ceiling(variants)
         ceiling.nil? || ceiling <= threshold
+      end
+
+      # The composed `language :` MATCH conjunct for +lang+ — nil when no
+      # --lang is active or the index predates the P42-3 column (the caller
+      # then leaves the filter catalog-side, exactly the old path). Tokens
+      # are the Indexer's sentinel mint over the code_variants equivalence
+      # set (P40-r2: the typed code always a member), ORed inside one column
+      # filter so any stored spelling of the language matches.
+      def index_language_match(lang)
+        return nil unless lang && index_language_column?
+
+        tokens = Nabu::Languages.code_variants(lang).map { |code| Store::Indexer.language_token(code) }
+        "language : (#{tokens.map { |token| %("#{token}") }.join(' OR ')})"
+      end
+
+      # Feature-detect, memoized per instance: does the live fts table carry
+      # the P42-3 language column? A missing fts table reads as false — the
+      # MATCH itself then raises exactly as it always has.
+      def index_language_column?
+        return @index_language_column if defined?(@index_language_column)
+
+        @index_language_column = begin
+          Store::Indexer.fts_language_column?(@fulltext)
+        rescue Sequel::DatabaseError
+          false
+        end
       end
 
       # --exact / --word paginated page (P39-r3 Defect 1, extended P40-w). A
@@ -315,13 +381,16 @@ module Nabu
       # retry ONCE with every token literal-quoted (internal quotes doubled
       # — the escaped form cannot syntax-error), so hyphenated words and
       # option-looking strings just search. Non-fts errors re-raise.
-      def fts_hits_with_literal_fallback(variants, inner_limit:, offset: 0, urn: nil, ranked: true)
-        fts_hits(match_expression(variants), inner_limit: inner_limit, offset: offset, urn: urn, ranked: ranked)
+      def fts_hits_with_literal_fallback(variants, inner_limit:, offset: 0, urn: nil, ranked: true,
+                                         lang_match: nil)
+        fts_hits(match_expression(variants), inner_limit: inner_limit, offset: offset, urn: urn,
+                                             ranked: ranked, lang_match: lang_match)
       rescue Sequel::DatabaseError => e
         raise unless e.message.match?(/fts5|unterminated string|no such column/)
 
         literal = variants.map { |variant| literal_expression(variant) }
-        fts_hits(match_expression(literal), inner_limit: inner_limit, offset: offset, urn: urn, ranked: ranked)
+        fts_hits(match_expression(literal), inner_limit: inner_limit, offset: offset, urn: urn,
+                                            ranked: ranked, lang_match: lang_match)
       end
 
       # Every whitespace token as a quoted FTS5 phrase (implicit AND), internal
@@ -350,7 +419,11 @@ module Nabu
       # +ranked: false+ (the P42-2 guard) keeps the identical MATCH but orders
       # by rowid — the index's insertion order, which the Indexer streams in
       # catalog (document/sequence) order — so no bm25 is computed at all.
-      def fts_hits(match, inner_limit:, offset: 0, urn: nil, ranked: true)
+      # +lang_match+ (P42-3) is the pre-built `language :` conjunct (or nil);
+      # AND-composed around the whole user expression — the user's own syntax
+      # stays intact inside its parentheses, on the literal-fallback retry too.
+      def fts_hits(match, inner_limit:, offset: 0, urn: nil, ranked: true, lang_match: nil)
+        match = "(#{match}) AND #{lang_match}" if lang_match
         dataset = @fulltext[Store::Indexer::TABLE]
                   .where(Sequel.lit("passages_fts MATCH ?", match))
         dataset = dataset.where(urn: urn) if urn # urn rides UNINDEXED in the index row

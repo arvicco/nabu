@@ -4828,11 +4828,13 @@ class CLITest < Minitest::Test
   # The P34 gate repro at the CLI: with_window_corpus (private helper below)
   # fills the limit×10 inner window with rows the catalog-side filter
   # rejects, so every search surface serves a clean-looking empty page —
-  # which must now announce itself.
+  # which must now announce itself. (P42-3: plain-search --lang left this
+  # filter class — it rides in the MATCH now, pinned below — so these pins
+  # starve on the still-catalog-side --license.)
 
   def test_search_incomplete_page_under_filters_prints_the_hint
     with_window_corpus do |config|
-      out, _err, status = with_config(config) { run_cli(%w[search arma --lang grc --limit 1]) }
+      out, _err, status = with_config(config) { run_cli(%w[search arma --license nc --limit 1]) }
       assert_nil status, "an incomplete page is a note, never a failure"
       assert_match(/no matches/i, out)
       assert_match(/page may be incomplete under these filters — raise --limit/, out,
@@ -4840,6 +4842,18 @@ class CLITest < Minitest::Test
 
       full, _err2, = with_config(config) { run_cli(%w[search arma --lang lat --limit 1]) }
       refute_match(/page may be incomplete/, full, "a full page carries no hint")
+    end
+  end
+
+  # P42-3 at the surface: the very command that USED to starve (the P34 gate
+  # repro, `--lang grc` against ten better-ranked lat homographs) now finds
+  # its hit — the language filter rides inside the MATCH — with no hint.
+  def test_search_lang_filter_no_longer_starves_at_the_cli
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search arma --lang grc --limit 1]) }
+      assert_nil status
+      assert_includes out, "urn:w:grc:1", "the wrong-language wall no longer hides the hit"
+      refute_match(/page may be incomplete/, out, "an in-MATCH lang filter cannot starve the window")
     end
   end
 
@@ -4874,11 +4888,12 @@ class CLITest < Minitest::Test
 
   # A guard-active page that comes back EMPTY under filters still announces
   # the corpus-order scan (alongside the P35-6 window hint) — never a
-  # clean-looking silence over a degraded path.
+  # clean-looking silence over a degraded path. (--license: the catalog-side
+  # starving filter since P42-3 moved --lang into the MATCH.)
   def test_search_ubiquitous_term_empty_page_still_notes_the_skipped_rank
     with_window_corpus do |config|
       out, _err, status = with_ubiquity_threshold(2) do
-        with_config(config) { run_cli(%w[search arma --lang grc --limit 1]) }
+        with_config(config) { run_cli(%w[search arma --license nc --limit 1]) }
       end
       assert_nil status
       assert_match(/no matches/i, out)
@@ -5257,8 +5272,9 @@ class CLITest < Minitest::Test
 
   # Ten short open/lat rows dominate the bm25 (and urn-ordered lemma) inner
   # window; the one row the filters WANT sits beyond it: a grc passage for
-  # --lang (text search / --near / --fuzzy), an nc λέγω attestation for
-  # --lemma --license nc. Fuzzy scope covers the whole corpus.
+  # --lang (--near / --fuzzy — plain text search finds it in-MATCH since
+  # P42-3), an nc λέγω attestation for --lemma --license nc. Fuzzy scope
+  # covers the whole corpus.
   def with_window_corpus
     Dir.mktmpdir("nabu-cli-window") do |root|
       sources = File.join(root, "sources.yml")
