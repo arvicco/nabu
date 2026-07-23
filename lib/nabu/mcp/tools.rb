@@ -1679,13 +1679,13 @@ module Nabu
         entries = dictionary_entry_counts(catalog)
         descriptions = source_descriptions(catalog)
         probes = probe_cache
+        stats = Store::SourceStats.available?(catalog)
         catalog[:sources].order(:slug).map do |source|
-          live_docs = catalog[:documents].where(source_id: source[:id], withdrawn: false)
+          holdings = source_holdings(catalog, source[:id], stats: stats)
           row = { slug: source[:slug], enabled: enabled_field(source),
                   license_class: source[:license_class],
-                  documents: live_docs.count,
-                  passages: catalog[:passages].where(withdrawn: false)
-                                              .where(document_id: live_docs.select(:id)).count,
+                  documents: holdings[:documents],
+                  passages: holdings[:passages],
                   # P11-10: a dictionary source's content is entries, not docs/passages;
                   # surfacing the entry count here stops the reference shelf (lexica,
                   # 168k entries) from reading as an empty docs=0 passages=0 source.
@@ -1699,6 +1699,28 @@ module Nabu
           row[:description] = description if description
           row
         end
+      end
+
+      # A source's live document/passage holdings (P42-7). When the
+      # source_stats derived table is present (maintained at write time) the
+      # counts are READ from it — retiring the O(corpus) live passage
+      # aggregation this casually-callable surface otherwise ran per
+      # invocation (measured minutes at 62.8M rows). A catalog predating
+      # migration 019 falls back to the live per-source aggregate with
+      # BYTE-IDENTICAL semantics (the reader-swap pattern of
+      # StatusReport#corpus_counts): live_documents excludes withdrawn, and
+      # live_passages is live-on-live (neither the passage nor its document
+      # withdrawn) — exactly what the fallback join counts.
+      def source_holdings(catalog, source_id, stats:)
+        if stats
+          row = Store::SourceStats.fetch(catalog, source_id)
+          return { documents: row.fetch(:live_documents), passages: row.fetch(:live_passages) }
+        end
+
+        live_docs = catalog[:documents].where(source_id: source_id, withdrawn: false)
+        { documents: live_docs.count,
+          passages: catalog[:passages].where(withdrawn: false)
+                                      .where(document_id: live_docs.select(:id)).count }
       end
 
       # { slug => description } from the derived source_records

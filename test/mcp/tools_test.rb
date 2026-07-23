@@ -82,6 +82,11 @@ module MCP
       make_passage(@secret, urn: "urn:nabu:adhoc:notes:1", text: "μυστικον ἄειδε σημειον",
                             sequence: 0)
       rebuild!
+      # These fixtures write documents/passages directly (bypassing the loader,
+      # the only sanctioned stats writer), so re-derive the source_stats table
+      # the P42-7 holdings read consumes — a real loaded corpus would have it
+      # maintained at write time.
+      Nabu::Store::SourceStats.derive!(@catalog, note: "test")
     end
 
     def call(name, arguments = {})
@@ -665,6 +670,30 @@ module MCP
       assert_match(/2026-07-01/, perseus.fetch("last_sync_at").to_s)
       assert_equal({ "grc" => 3, "eng" => 1 }, body.fetch("languages"))
       assert_equal({ "open" => 4 }, body.fetch("license_classes"))
+    end
+
+    # P42-7: the per-source holdings read the source_stats derived table (a
+    # write-time aggregate) when present, sinking the O(corpus) live passage
+    # aggregation this casually-callable surface otherwise ran per call. The
+    # MCP response is a FROZEN CONTRACT, so the swap must be value-identical:
+    # with the table present (seed_corpus derives it) and after dropping it
+    # (a catalog predating migration 019), the WHOLE status payload — holdings
+    # included — must come back byte-identical.
+    def test_status_holdings_read_source_stats_and_fall_back_identically
+      seed_corpus
+      with_stats = payload(call("nabu_status"))
+      # Sanity: the stats-fed holdings are the true live counts, not zeros.
+      perseus = with_stats.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
+      assert_equal 2, perseus.fetch("documents")
+      assert_equal 4, perseus.fetch("passages")
+
+      @catalog.drop_table(:source_stats_languages)
+      @catalog.drop_table(:source_stats)
+      refute Nabu::Store::SourceStats.available?(@catalog), "the derived table is gone (pre-019 catalog)"
+
+      without_stats = payload(call("nabu_status"))
+      assert_equal with_stats, without_stats,
+                   "the pre-019 live-aggregate fallback must be byte-identical to the stats read"
     end
 
     # P11-10: a dictionary source (lexica) reports its entry count in status —
