@@ -110,6 +110,27 @@ module Nabu
     # Negative cache_size is KiB of page cache; -262_144 → 256 MiB.
     REBUILD_CACHE_KIB = -262_144
 
+    # == Post-load ANALYZE (P42-4) — query-planner hygiene (ops §10)
+    #
+    # The live catalog had NEVER been ANALYZEd (measured 2026-07-20): SQLite's
+    # planner was choosing index/scan strategies off its hard-coded default
+    # row estimates, not the real distribution of a 62.8M-passage corpus.
+    # ANALYZE rewrites sqlite_stat1; +analysis_limit+ caps how many rows per
+    # index the pass samples so it stays BOUNDED on a huge table — the full
+    # pass is unbounded, the bounded pass measured 148s at 62.8M passages.
+    # 1000 is SQLite's own recommended bounded-analyze value: a fixed engine
+    # tuning knob (larger only buys marginally better estimates for more time),
+    # NOT a corpus measurement, so no growth wave can make it stale.
+    # const: SQLite-recommended bounded-ANALYZE sample cap (engine knob, growth-invariant)
+    ANALYSIS_LIMIT = 1000
+
+    # What a post-load ANALYZE did, for the one honest report line (P42-4).
+    # +seconds+ is the elapsed wall time; +scope+ names what was refreshed
+    # ("catalog" or "catalog + index"). A nil AnalyzeReport on a sync Outcome
+    # or rebuild Result means ANALYZE was SKIPPED (a non-bulk load, or a
+    # rebuild that re-derived nothing) — the reporting line stays silent.
+    AnalyzeReport = Data.define(:seconds, :scope)
+
     module_function
 
     # Open a Sequel database for +url+ (e.g. "sqlite::memory:" or a file path).
@@ -170,6 +191,22 @@ module Nabu
     # never contend anyway.
     def write_ahead_log!(db)
       db.fetch("PRAGMA journal_mode = wal").single_value
+    end
+
+    # Refresh +db+'s query-planner statistics with a BOUNDED ANALYZE (class
+    # doc / ops §10, P42-4): PRAGMA analysis_limit caps per-index sampling so
+    # the pass stays bounded on a huge table, then ANALYZE rewrites
+    # sqlite_stat1. Returns the elapsed wall time in seconds (Float). Safe on
+    # any connection — an in-memory or freshly-migrated db writes an
+    # sqlite_stat1 for whatever indexes it has (legal, tested). No-op for a
+    # non-sqlite handle (returns 0.0).
+    def analyze!(db)
+      return 0.0 unless db.database_type == :sqlite
+
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      db.run("PRAGMA analysis_limit = #{ANALYSIS_LIMIT}")
+      db.run("ANALYZE")
+      Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
     end
 
     # A bare filesystem path (no "scheme:" prefix) is taken as a SQLite file so
