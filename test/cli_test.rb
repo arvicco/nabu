@@ -3127,6 +3127,129 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- term-less filtered browse (P42-6) -------------------------------------
+  # The legality rule: a term-less `search` is legal iff a CONTENT-NARROWING
+  # filter is present (date window, --place, a genre facet, or --loans). The
+  # shelf-selectors (--lang/--license/--source/--axis) are NOT sufficient
+  # alone. Legal browses list the corpus in corpus order with the browse footer.
+
+  def test_browse_by_date_window_lists_the_corpus_in_corpus_order
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --from -300 --to 100]) }
+      assert_nil status, "a term-less browse under a date window succeeds"
+      assert_match("urn:nabu:ddbdp:a:1", out) # 113 BCE, in window
+      assert_match("urn:nabu:ddbdp:c:1", out) # 30 BCE, in window
+      refute_match("urn:nabu:ddbdp:b:1", out) # 591 CE, out of window
+      assert_match(/filtered browse — corpus order, no ranking/, out, "the footer names the mode")
+      assert_match(/dates: -300\.\.100/, out, "the footer names the active date window")
+    end
+  end
+
+  def test_browse_by_century_alone_is_legal
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --century 6]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:b:1", out) # 6th c. CE
+      refute_match("urn:nabu:ddbdp:a:1", out)
+      assert_match(/filtered browse/, out)
+    end
+  end
+
+  def test_browse_by_place_alone_is_legal_and_names_the_place
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --place oxyrhynch%]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out) # Arsinoites
+      assert_match(/place: oxyrhynch%/, out, "the footer names the active place filter")
+    end
+  end
+
+  def test_browse_by_genre_facet_alone_is_legal
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --type epitaph]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out) # votive
+      assert_match(/facets: genre=epitaph/, out, "the browse footer still names the facet")
+      assert_match(/filtered browse/, out)
+    end
+  end
+
+  def test_browse_by_loans_alone_is_legal
+    with_loans_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --loans grc]) }
+      assert_nil status
+      assert_match("urn:nabu:cs:a:1", out)
+      refute_match("urn:nabu:cs:b:1", out) # hbo/Akkadian only
+      assert_match(/loans: grc/, out)
+      assert_match(/filtered browse/, out)
+    end
+  end
+
+  def test_browse_composes_a_shelf_selector_with_a_content_filter
+    with_dated_corpus do |config|
+      # --source (a shelf selector) is legal BECAUSE --century is present.
+      out, _err, status = with_config(config) { run_cli(%w[search --century -2 --source p]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out) # 113 BCE
+      assert_match(/filtered browse/, out)
+    end
+  end
+
+  def test_browse_honors_the_limit
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --from -300 --to 700 --limit 1]) }
+      assert_nil status
+      assert_match(/^1 hit /, out, "--limit caps the browse page")
+    end
+  end
+
+  # -- the legality refusals: a shelf-selector alone is NOT a browse ----------
+
+  def test_bare_search_still_refuses_with_the_extended_message
+    _out, err, status = run_cli(%w[search])
+    assert_equal 1, status
+    assert_match(/give a query/, err)
+    assert_match(/content-narrowing filter/, err, "the refusal now says what WOULD make a browse legal")
+    assert_match(%r{--from/--to/--century}, err)
+    assert_match(/cannot stand alone/, err)
+  end
+
+  def test_lang_alone_is_refused_as_a_shelf_dump
+    _out, err, status = run_cli(%w[search --lang grc])
+    assert_equal 1, status
+    assert_match(/dump the shelf, not browse it/, err, "--lang selects a whole shelf — not a content filter")
+  end
+
+  def test_license_alone_is_refused_as_a_shelf_dump
+    _out, err, status = run_cli(%w[search --license open])
+    assert_equal 1, status
+    assert_match(/cannot stand alone/, err)
+  end
+
+  def test_source_alone_is_refused_as_a_shelf_dump
+    _out, err, status = run_cli(%w[search --source p])
+    assert_equal 1, status
+    assert_match(/cannot stand alone/, err)
+  end
+
+  def test_axis_alone_is_refused_as_a_shelf_dump
+    _out, err, status = run_cli(%w[search --axis epigraphy])
+    assert_equal 1, status
+    assert_match(/cannot stand alone/, err)
+  end
+
+  def test_term_less_browse_refuses_exact_and_word
+    _out, err, status = run_cli(%w[search --century 2 --exact])
+    assert_equal 1, status
+    assert_match(/cannot run a term-less browse/, err, "--exact needs a query term")
+
+    _out2, err2, status2 = run_cli(%w[search --century 2 --word])
+    assert_equal 1, status2
+    assert_match(/cannot run a term-less browse/, err2)
+  end
+
   # -- search --fuzzy (P16-4) ------------------------------------------------
 
   # The papyrologist's fragment, brackets and all: an infix hit on the
