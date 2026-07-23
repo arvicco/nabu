@@ -10924,9 +10924,9 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 ## P42-4 · load hygiene: post-load bounded ANALYZE  [tier: opus] [status: done 2026-07-23 — merged 60882e7; PRAGMA pass folded into P42-5's live re-measure]
 ## P42-5 · re-measure matrix + docs  [tier: orchestrator] [status: gate-time]
 ## P42-r1 · grant gate  [tier: opus] [status: done 2026-07-23 — merged 06ebceb+f11b9f4; starling gated, ledger migration 007, owner ack recorded]
-## P42-6 · term-less filtered browse  [tier: opus] [status: in-progress — dispatched 2026-07-23 (rebuild-parallel; legality rule: ≥1 content-narrowing filter)]
-## P42-7 · MCP nabu_status stats swap  [tier: opus] [status: in-progress — dispatched 2026-07-23 (the P42-0 flagged follow-up)]
-## P42-8 · health module-kind exemption  [tier: opus] [status: in-progress — dispatched 2026-07-23 (bridging/kr-gaiji zero-rows noise)]
+## P42-6 · term-less filtered browse  [tier: opus] [status: done 2026-07-23 — merged ce034fb+7b9dc89; recipes restored, P42-5 re-verifies live]
+## P42-7 · MCP nabu_status stats swap  [tier: opus] [status: done 2026-07-23 — merged a8a870a; RESIDUAL: license-filtered totals still live — measure at P42-5]
+## P42-8 · health module-kind exemption  [tier: opus] [status: done 2026-07-23 — merged bf761c2; info-grade note, kind-keyed]
 
 ## P41-r2 · --random instant (id-probe sampler)  [status: done 2026-07-23 — 98ef4b6; 2m19s → 0.3s; join-free probe pattern documented]
 
