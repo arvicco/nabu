@@ -29,6 +29,11 @@ module MCP
         content_sha256: "x", revision: 1
       )
       Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
+      # This rig writes documents/passages directly (bypassing the loader,
+      # the only sanctioned stats writer), so re-derive the source_stats
+      # table the P42-r2 status census reads — a real loaded corpus has it
+      # maintained at write time.
+      Nabu::Store::SourceStats.derive!(@catalog, note: "test")
       @server = Nabu::MCP::Server.new(
         tools: Nabu::MCP::Tools.new(catalog: @catalog, fulltext: @fulltext)
       )

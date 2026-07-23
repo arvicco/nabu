@@ -862,14 +862,17 @@ module Nabu
       def status(_args)
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
 
+        census = corpus_census(catalog)
         json(
           sources: source_rows(catalog),
-          languages: language_counts(catalog),
-          license_classes: license_counts(catalog, excluded: false),
-          excluded_by_default: license_counts(catalog, excluded: true),
-          totals: { documents: visible_documents(catalog).count,
-                    passages: visible_passages(catalog).count,
-                    dictionary_entries: dictionary_entry_counts(catalog).values.sum },
+          languages: census.fetch(:languages),
+          license_classes: census.fetch(:license_classes),
+          excluded_by_default: census.fetch(:excluded_by_default),
+          # Dictionary entries stay LIVE deliberately (P42-r2): the entry
+          # tables are shelf-bounded (~1.3M rows against 62.8M passages,
+          # measured 2.6s) — source_stats covers the corpus-mass grain only.
+          totals: census.fetch(:totals)
+                        .merge(dictionary_entries: dictionary_entry_counts(catalog).values.sum),
           index: index_state,
           note: "counts are live passages/documents (withdrawn excluded); " \
                 "research_private/restricted material is excluded from these counts and " \
@@ -1771,6 +1774,117 @@ module Nabu
           .where(Sequel[:dictionary_entries][:withdrawn] => false)
           .group_and_count(Sequel[:dictionaries][:source_id])
           .to_h { |row| [row[:source_id], row[:count]] }
+      end
+
+      # P42-r2: the corpus-wide census behind status (totals, languages,
+      # license classes). When the source_stats derived table is present the
+      # whole thing is COMPOSED from it plus ONE live query bounded by
+      # license-overridden documents — the previous live path ran four
+      # O(corpus) aggregates over the passages⋈documents⋈sources join per
+      # invocation (measured 2026-07-23 at 62.8M passages: ~70s per GROUP BY,
+      # 72.8s per license scan; the whole payload ~5 minutes). A catalog
+      # predating migration 019 falls back to the live aggregates with
+      # identical semantics (the P42-0 reader convention,
+      # StatusReport#corpus_counts).
+      def corpus_census(catalog)
+        Store::SourceStats.available?(catalog) ? stats_census(catalog) : live_census(catalog)
+      end
+
+      # The pre-019 fallback: the original four live aggregates, unchanged.
+      def live_census(catalog)
+        { languages: language_counts(catalog),
+          license_classes: license_counts(catalog, excluded: false),
+          excluded_by_default: license_counts(catalog, excluded: true),
+          totals: { documents: visible_documents(catalog).count,
+                    passages: visible_passages(catalog).count } }
+      end
+
+      # The stats-composed census. Doc grain is EXACT from stats alone: per
+      # source, live docs minus the stored override doc counts carry the
+      # source's license_class; each override class carries its stored count.
+      # Passage grain starts from the same base — all of a source's live
+      # passages and their per-language split attributed to the source's
+      # class — and then applies the override CORRECTION:
+      # license_overrides_json stores doc counts only (no passage counts, no
+      # language split), so one live query bounded by overridden live docs
+      # (probe-scale: 9,725 docs / ~290K passages against 62.8M, measured
+      # sub-second) moves each overridden document's live passages from the
+      # source-class bucket to the override-class bucket, per language.
+      def stats_census(catalog)
+        classes = catalog[:sources].select_hash(:id, :license_class)
+        documents = Hash.new(0) # {effective class => live doc count}
+        passages = Hash.new { |by_class, klass| by_class[klass] = Hash.new(0) } # {class => {language|nil => n}}
+        attribute_stats_base(catalog, classes, documents, passages)
+        apply_override_correction(catalog, classes, passages)
+        compose_census(documents, passages)
+      end
+
+      # Base attribution: every stats row lands whole on its source's class.
+      # NULL-language passages carry no child row (the 019 rule: NULL rides
+      # only in the parent total), so the nil bucket is the parent total
+      # minus the named-language rows — matching the live GROUP BY, where a
+      # NULL passages.language groups under a nil key.
+      def attribute_stats_base(catalog, classes, documents, passages)
+        by_language = catalog[Store::SourceStats::LANG_TABLE]
+                      .select_hash_groups(:source_id, %i[language passages])
+        catalog[Store::SourceStats::TABLE].each do |row|
+          klass = classes.fetch(row[:source_id])
+          overrides = JSON.parse(row[:license_overrides_json])
+          documents[klass] += row[:live_documents] - overrides.values.sum
+          overrides.each { |override, count| documents[override] += count }
+          named = 0
+          (by_language[row[:source_id]] || []).each do |language, count|
+            passages[klass][language] += count
+            named += count
+          end
+          passages[klass][nil] += row[:live_passages] - named
+        end
+      end
+
+      # The O(overrides) correction: live passages of live overridden docs,
+      # grouped by (source, override class, passage language). The withdrawn
+      # filter is the SAME two-level rule the stats derivation applies, so
+      # the moved counts match exactly what the base attribution included.
+      def apply_override_correction(catalog, classes, passages)
+        catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+          .exclude(Sequel[:documents][:license_override] => nil)
+          .group(Sequel[:documents][:source_id], Sequel[:documents][:license_override],
+                 Sequel[:passages][:language])
+          .select(Sequel[:documents][:source_id].as(:source_id),
+                  Sequel[:documents][:license_override].as(:override),
+                  Sequel[:passages][:language].as(:language),
+                  Sequel.function(:count).*.as(:n))
+          .each do |row|
+            passages[classes.fetch(row[:source_id])][row[:language]] -= row[:n]
+            passages[row[:override]][row[:language]] += row[:n]
+          end
+      end
+
+      # Fold the composed buckets into the frozen payload shape, mirroring
+      # what the live GROUP BYs emit: only classes/languages actually holding
+      # a live passage appear — a bucket emptied by the correction (every one
+      # of a class's passages overridden away) must not surface as a zero,
+      # because the live path never groups an empty class into existence.
+      def compose_census(documents, passages)
+        visible = passages.except(*EXCLUDED_LICENSE_CLASSES)
+        languages = Hash.new(0)
+        visible.each_value { |langs| langs.each { |language, count| languages[language] += count } }
+        { languages: languages.select { |_language, count| count.positive? },
+          license_classes: class_passage_totals(passages, excluded: false),
+          excluded_by_default: class_passage_totals(passages, excluded: true),
+          totals: { documents: documents.sum { |klass, count| EXCLUDED_LICENSE_CLASSES.include?(klass) ? 0 : count },
+                    passages: visible.each_value.sum { |langs| langs.each_value.sum } } }
+      end
+
+      def class_passage_totals(passages, excluded:)
+        passages.filter_map do |klass, langs|
+          next unless EXCLUDED_LICENSE_CLASSES.include?(klass) == excluded
+
+          total = langs.each_value.sum
+          [klass, total] if total.positive?
+        end.to_h
       end
 
       def language_counts(catalog)
