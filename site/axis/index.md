@@ -110,6 +110,14 @@ The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, ridi
 
 [Open the syriac desk]({{ '/axis/syriac/' | relative_url }})
 
+### arabic
+
+> The Arabist — the Islamicate library whole, Quran and hadith to falsafa and adab.
+
+The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3).
+
+[Open the arabic desk]({{ '/axis/arabic/' | relative_url }})
+
 ### hittite
 
 > The Hittitologist — Anatolia in cuneiform, KBo and KUB by tablet and line.

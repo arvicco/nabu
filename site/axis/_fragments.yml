@@ -107,12 +107,12 @@ epigraphy:
   recipes:
     - cmd: "nabu search --fuzzy ']ανδρα μοι εν['"
       note: damaged-line substring search, typed straight off the edition
-    - cmd: 'nabu search --type epitaph --province Britannia --material marble'
-      note: EDH genre facets composing together
+    - cmd: 'nabu search manibus --type epitaph --province Britannia'
+      note: EDH genre facets composing with a text query (dis manibus on British epitaphs)
     - cmd: 'nabu search "στρατηγ*" --from 101 --to 300 --place oxyrhynch%'
       note: the Oxyrhynchite strategoi by date and provenance
-    - cmd: 'nabu search --century -3 --axis epigraphy'
-      note: one century's stones (negative = BCE, no year 0)
+    - cmd: 'nabu search "στρατηγ*" --century 2 --axis epigraphy'
+      note: a query scoped to one century (negative = BCE, no year 0)
     - cmd: 'nabu show urn:nabu:ogham:e-dev-001 --parallel'
       note: an ogham stone beside its transliteration sibling
     - cmd: 'nabu search --lemma precor --axis epigraphy'
@@ -268,8 +268,8 @@ italic:
       note: the CEIPoM equivalence key onto the Iguvine Tables
     - cmd: 'nabu etym rufus'
       note: the Sabellic-loan etymon chain (Old Italic headwords)
-    - cmd: 'nabu search --century -3 --axis italic'
-      note: the pre-Roman inscriptions, where dated
+    - cmd: 'nabu search tular --axis italic'
+      note: the Etruscan boundary stones — tular raśnal
     - cmd: 'nabu define "*deiwos"'
       note: a Proto-Italic reconstruction, with its attested reflexes
   display: |
@@ -395,6 +395,62 @@ syriac:
       no dedicated Syriac font; use a Unicode font with Syriac coverage in the
       fallback cascade (Noto Sans Mono is the general recommendation).
 
+arabic:
+  blurb: |
+    The corpus is staged, not synced: OpenITI's ~9,106 primary texts /
+    ~1.12 B words arrive with the owner's first `nabu sync openiti` (the
+    fetch is a ~5.9 GB release zip plus its metadata index, md5-pinned
+    before any tree mutation), after which the holdings below fill in
+    live.
+  instruments: |
+    - **No gold lemmas — OpenITI is unannotated.** The corpus carries no
+      morphology or lemma layer, so `--lemma`, `vocab` and `formulas` do not
+      apply to this desk; its instruments are **full-text search** across the
+      whole Islamicate shelf and the **timeline**.
+    - **The ara/fas Arabic-script fold (P41-3):** one search skeleton across
+      the ی/ي and ک/ك keyboard split, maqsura, taa marbuta, tashkeel, tatweel
+      and ZWNJ — so a query typed on either keyboard reaches the stored form
+      whichever keyboard wrote it. Search-side only; the stored bytes stay
+      pristine (conventions §9), and `--lang ara` / `--lang fas` scope to one
+      shelf.
+    - **The AH death-year timeline:** every OpenITI urn opens with the
+      author's 4-digit hijrī death year, so the OpenitiDates extractor lands
+      each text on the calendar as a CE terminus — round(AH × 0.970225 +
+      621.57), the tabular conversion — and `--from/--to` and `--century`
+      scope the shelf by when its authors died (Ḥāfiẓ d. AH 792 = 1390 CE).
+      No gazetteer, so no `--place` on this desk.
+    - **License posture — `nc`** (CC BY-NC-SA 4.0, the Zenodo record's only
+      grant): the shelf is **MCP-excluded**, so the AI server never serves
+      OpenITI passages; the CLI reads them for local research.
+  recipes:
+    - cmd: 'nabu show urn:nabu:openiti:0792Hafiz.Muntasab.PDL00074-per1'
+      note: Ḥāfiẓ's Muntasab — Persian verse in the %~% hemistich notation
+    - cmd: 'nabu search الله --lang ara'
+      note: Allāh across the Arabic hadith, dīwān and falsafa shelves
+    - cmd: 'nabu search دانی --lang fas'
+      note: the cross-keyboard ی/ي fold (P41-3) — an Arabic-yeh query (U+064A) still finds Ḥāfiẓ's farsi-yeh دانی (U+06CC)
+    - cmd: 'nabu search الله --from 1300 --to 1400 --axis arabic'
+      note: the AH death-year timeline (lights at the owner's next incremental rebuild)
+  display: |
+    - **Arabic and Persian (ara/fas) are RTL** and reuse the hbo/arc
+      machinery: `isolates: true` wrapping, the same modes, the same honesty
+      footer. The terminal owns the direction — the **iTerm2 ≥ 3.6.0 RTL
+      toggle** (Settings → General → Experimental; Terminal.app has no bidi
+      at all).
+    - **Shaping stays degraded even with bidi on.** Arabic is a connected
+      script and a cell-grid terminal cannot fully join it, so what you get
+      is right-to-left, legible, *unligatured* Arabic — fine for scanning
+      search hits and citations, not for sustained reading (use `nabu export`
+      and a real text view for that). Font: `font-noto-naskh-arabic` — naskh
+      stays legible at terminal sizes; a dedicated iTerm2 reading profile with
+      it boosted a few points is the workable setup (docs/display.md §2).
+    - **Nothing to strip, and no `--display translit`.** The P41-g census
+      found consonantal standard-block text only (no tashkeel), so `default`,
+      `plain` and `full` render the same bytes (isolates aside); and Arabic
+      romanization is deliberately not built — the standards conflict and
+      unpointed text lacks the vowels a romanization needs, so ara/fas pass
+      through the translit mode unchanged (docs/display.md §1d).
+
 hittite:
   instruments: |
     - **The Hittite desk:** TLHdig's tablet corpus (KBo and KUB by tablet and
@@ -404,8 +460,8 @@ hittite:
   recipes:
     - cmd: 'nabu search --lemma kuiš --lang hit --axis hittite'
       note: the gold UD Hittite morphology (kuiš "who", clause by clause)
-    - cmd: 'nabu search --century -13 --axis hittite'
-      note: the tablets by date, where dated
+    - cmd: 'nabu show --random --source tlhdig'
+      note: pull a random tablet manuscript off the Hittite shelf
     - cmd: 'nabu search ḫatti --axis hittite'
       note: a query across TLHdig and the treebank — Ḫatti on the tablets
   display: |
@@ -428,8 +484,8 @@ cuneiform:
       note: pull a random tablet from the ORACC shelf
     - cmd: 'nabu show urn:nabu:oracc:saao-saa01:P224395:o.1-o.3 --parallel'
       note: Akkadian beside its running English translation
-    - cmd: 'nabu search --century -7 --axis cuneiform'
-      note: the 7th-century-BCE Assyrian letters, by regnal date
+    - cmd: 'nabu search LUGAL --century -7 --axis cuneiform'
+      note: kings in the 7th-century-BCE tablets, by regnal date
     - cmd: 'nabu search --fuzzy "a-na LUGAL" --axis cuneiform'
       note: trigram fragment search — "to the king", straight off the tablet
     - cmd: 'nabu search --lemma šarru --lang akk --axis cuneiform'

@@ -113,12 +113,21 @@ module Nabu
       Result.new(sha: fetch.sha, atticked: fetch.atticked, not_modified: fetch.not_modified?)
     end
 
-    def initialize(url:, dir:, attic_dir:, http: self.class.default_http, progress: nil)
+    # +stream+ (P41-2, the 5.9 GB OpenITI artifact): download to a staging
+    # FILE chunk by chunk — sha256 AND md5 minted incrementally, the body
+    # never held in memory — instead of the default in-memory body. +keep+:
+    # relative paths/prefixes under +dir+ that are NEVER treated as upstream
+    # deletions (a sibling fetch arm's files inside the same workdir — the
+    # OpenITI metadata TSV — must survive the zip tree swap).
+    def initialize(url:, dir:, attic_dir:, http: self.class.default_http, progress: nil,
+                   stream: false, keep: [])
       @url = url
       @dir = dir
       @attic_dir = attic_dir
       @http = http
       @progress = progress
+      @stream = stream
+      @keep = keep
       @doomed_relpaths = []
       @atticked = []
       @staging = nil
@@ -132,23 +141,25 @@ module Nabu
     # The sha256 of the fetched zip body; on a 304 the previously stored pin.
     attr_reader :sha
 
+    # The md5 of the fetched zip body — stream mode only (Zenodo publishes
+    # md5, not sha256; the OpenITI pins). nil on a 304 and in buffered mode.
+    attr_reader :md5
+
     def not_modified?
       @not_modified
     end
 
     # Phase 1 — download and unpack into staging; live tree untouched.
     def prepare!
-      response = get_zip
+      response = @stream ? stream_zip! : buffer_zip!
       if response.status == 304
         @not_modified = true
         @sha = state["sha256"]
         return
       end
 
-      body = response.body.to_s.b
-      @sha = Digest::SHA256.hexdigest(body)
       @new_last_modified = response.headers["last-modified"]
-      unpack!(body)
+      unpack!
       @doomed_relpaths = live_relpaths - staged_relpaths
     end
 
@@ -179,11 +190,58 @@ module Nabu
 
     # Redirects followed (figshare 302s to a mirror); a 304 — first hop or
     # post-redirect — is a terminal answer, not an error.
-    def get_zip(headers = conditional_headers)
+    def get_zip(stream: nil)
       @progress&.call("Downloading #{@url}…\n")
       response, = RedirectFollow.get(@url, http: @http, error: Error,
-                                           headers: headers, accept: [200, 304])
+                                           headers: conditional_headers, accept: [200, 304],
+                                           stream: stream)
       response
+    end
+
+    # The default download: whole body in memory (fine for the tens-of-MB
+    # artifacts every pre-P41 source ships).
+    def buffer_zip!
+      response = get_zip
+      return response if response.status == 304
+
+      body = response.body.to_s.b
+      @sha = Digest::SHA256.hexdigest(body)
+      File.binwrite(download_path, body)
+      response
+    end
+
+    # Stream mode: chunks land in the staging file as they arrive, sha256 +
+    # md5 minted incrementally. The per-hop sink factory truncates the file
+    # and resets the digests at the start of every hop, so a redirect hop's
+    # body can never pollute the terminal artifact. Some transports ignore
+    # on_data and buffer anyway — the fallback keeps the contract honest.
+    def stream_zip!
+      sha_digest = Digest::SHA256.new
+      md5_digest = Digest::MD5.new
+      response = nil
+      File.open(download_path, "wb") do |file|
+        sink = lambda do
+          file.truncate(0)
+          file.rewind
+          sha_digest.reset
+          md5_digest.reset
+          proc { |chunk, _received| write_chunk(chunk, file, sha_digest, md5_digest) }
+        end
+        response = get_zip(stream: sink)
+        return response if response.status == 304
+
+        streamed_bytes = file.size
+        fallback = response.body.to_s.b
+        write_chunk(fallback, file, sha_digest, md5_digest) if streamed_bytes.zero? && !fallback.empty?
+      end
+      @sha = sha_digest.hexdigest
+      @md5 = md5_digest.hexdigest
+      response
+    end
+
+    def write_chunk(chunk, file, *digests)
+      file.write(chunk)
+      digests.each { |digest| digest << chunk }
     end
 
     # If-Modified-Since only when a previous fetch stored Last-Modified AND
@@ -209,12 +267,17 @@ module Nabu
       File.write(File.join(@dir, STATE_FILE), JSON.pretty_generate(state))
     end
 
-    def unpack!(body)
-      @staging = Dir.mktmpdir("nabu-zip-fetch")
-      zip_path = File.join(@staging, "download.zip")
-      File.binwrite(zip_path, body)
-      unpacked = File.join(@staging, "unpacked")
-      Shell.run("unzip", "-q", zip_path, "-d", unpacked)
+    def staging
+      @staging ||= Dir.mktmpdir("nabu-zip-fetch")
+    end
+
+    def download_path
+      File.join(staging, "download.zip")
+    end
+
+    def unpack!
+      unpacked = File.join(staging, "unpacked")
+      Shell.run("unzip", "-q", download_path, "-d", unpacked)
       @tree = tree_root(unpacked)
     end
 
@@ -231,13 +294,23 @@ module Nabu
     end
 
     # Live files that upstream could delete: everything under +dir+ except
-    # the state file and (when nested inside) the attic.
+    # the state file, (when nested inside) the attic, and the caller's
+    # declared +keep+ paths.
     def live_relpaths
       return [] unless Dir.exist?(@dir)
 
       attic_prefix = attic_relprefix
       relative_files(@dir).reject do |rel|
-        rel == STATE_FILE || (attic_prefix && rel.start_with?(attic_prefix))
+        rel == STATE_FILE || (attic_prefix && rel.start_with?(attic_prefix)) || kept?(rel)
+      end
+    end
+
+    # Is +rel+ under one of the caller's keep paths (an exact file or a
+    # directory prefix)?
+    def kept?(rel)
+      @keep.any? do |entry|
+        prefix = entry.delete_suffix("/")
+        rel == prefix || rel.start_with?("#{prefix}/")
       end
     end
 

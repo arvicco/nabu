@@ -98,6 +98,10 @@ module Nabu
     # The sha256 of the fetched body; on a 304 the previously stored pin.
     attr_reader :sha
 
+    # The md5 of the fetched body (P41-2 — Zenodo publishes md5 checksums,
+    # the OpenITI TSV pin); nil on a 304.
+    attr_reader :md5
+
     def not_modified?
       @not_modified
     end
@@ -113,6 +117,7 @@ module Nabu
 
       @body = response.body.to_s.b
       @sha = Digest::SHA256.hexdigest(@body)
+      @md5 = Digest::MD5.hexdigest(@body)
       @new_last_modified = response.headers["last-modified"]
       @doomed_relpaths = live_relpaths - [@filename]
     end

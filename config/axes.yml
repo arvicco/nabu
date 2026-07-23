@@ -55,6 +55,10 @@ syriac:
   persona: "The Syriacist — the Peshitta and the estrangela bookshelf."
   desc: "The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, riding beside the biblical hat by design."
 
+arabic:
+  persona: "The Arabist — the Islamicate library whole, Quran and hadith to falsafa and adab."
+  desc: "The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3)."
+
 hittite:
   persona: "The Hittitologist — Anatolia in cuneiform, KBo and KUB by tablet and line."
   desc: "The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — its lines also carry Akkadian, Sumerian, Luwian, Hattic, Hurrian) and the UD Hittite treebank."

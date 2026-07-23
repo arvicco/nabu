@@ -6034,7 +6034,7 @@ module Nabu
               "open-etruscan #{result.axes.open_etruscan}, " \
               "lexlep #{result.axes.lexlep}, tir #{result.axes.tir}, " \
               "iip #{result.axes.iip}, cdli #{result.axes.cdli}, " \
-              "rundata #{result.axes.rundata})"
+              "rundata #{result.axes.rundata}, openiti #{result.axes.openiti})"
         end
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 

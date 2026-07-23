@@ -2082,6 +2082,32 @@ helipad:
   # new version is an owner re-pin decision → manual.
   sync_policy: manual
 
+openiti:
+  adapter: Nabu::Adapters::Openiti
+  axes: [arabic]
+  enabled: false   # P41-2: BUILT — awaiting the owner-fired first sync. The fetch is
+                   # BIG: ~5.9 GB zip (streamed to disk) + 12 MB metadata TSV, both
+                   # md5-pin-verified before any tree mutation. Expect ~9,106
+                   # documents (9,539 pri rows minus the 433 MSS-subcorpus pri rows,
+                   # skip-by-rule censused; ~4,651 rows censused skipped in all)
+                   # / ~1.12 B words. Checklist §6: bin/nabu sync openiti, eyeball
+                   # nabu show urn:nabu:openiti:0792Hafiz.Muntasab.PDL00074-per1
+                   # (Ḥāfiẓ, fas, %~% hemistichs) + 5 random passages, then flip.
+  # OpenITI — Open Islamicate Texts Initiative, release 2025.1.9 (Zenodo
+  # record 17767721, concept DOI 10.5281/zenodo.3082463): 14,107 text
+  # versions / 2.35 B words of premodern Arabic + Persian in OpenITI
+  # mARkdown. D41-e first wave: TSV status=pri MINUS the MSS documentary
+  # sub-corpus (sec + MSS are censused discovery skips; 3 works carry >1
+  # primary — both ingested). Document = version (urn:nabu:openiti:<uri>);
+  # language minted from the URI suffix: -ara*→ara, -per*→fas (the P41-3
+  # Arabic-script fold keys on the stored tag — never "per"). LICENSE nc:
+  # the Zenodo record's CC BY-NC-SA 4.0 is the ONLY grant (no LICENSE
+  # file, no in-file statements — D41-b, recorded in the manifest).
+  # Zenodo artifacts are immutable; pins are the upstream-published md5s
+  # (the sha256 lands in the ledger at first fetch); a new release is an
+  # owner re-pin → manual.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

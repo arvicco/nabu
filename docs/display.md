@@ -38,6 +38,8 @@ classes:
 languages:
   hbo: { strip: [cantillation], keep: [points, maqaf], isolates: true }
   arc: { strip: [cantillation], isolates: true }
+  ara: { isolates: true }           # OpenITI Arabic (P41-3) — isolates only, see §1d
+  fas: { isolates: true }           # OpenITI Persian — same row, same reasons
   san: { strip: [vedic-accents] }   # Devanagari-script text; IAST untouched
   chu: { strip: [titla] }
 ```
@@ -104,7 +106,12 @@ Registered transcoders, applied render-time only (footer:
 | `chu`, `orv`, `bul` | Cyrillic→scholarly Latin (`Nabu::Cyrl`) | the display direction of the P27-2 cross-script fold table (ѣ→ě, щ→št, ѫ→ǫ, оу→u); text the source already wrote in Latin (damaskini's diplomatic layer) passes through **byte-identical** — the render layer never rewrites the source's own surface. Combining marks (titla) stay on their letters: stripping is `default` mode's business, not the transcoder's. |
 
 A language with no registered transcoder passes through unchanged — never a
-guessed romanization. **Ogham** deliberately has no transcoder: the corpus
+guessed romanization. **Arabic/Persian (ara/fas)** deliberately have none
+(P41-3): romanization standards conflict (DIN 31635 / ALA-LC / IJMES), and
+unpointed Arabic lacks the vowels a readable romanization needs — the hbo
+transcoder is Hebrew-specific and reads the Masoretic points; there is no
+per-codepoint equivalent for consonantal Arabic (§1d). **Ogham**
+deliberately has no transcoder: the corpus
 itself ships the transliteration as a line-aligned *sibling document*
 (`…-translit`, same line numbers) — `nabu show <ogham-urn> --parallel`
 inlines it today, which is the honest surface (a display mode sees only
@@ -161,11 +168,37 @@ display: cantillation stripped (--display full shows all marks)
 display: apparatus simplified: sigla (--display diplomatic shows the edition marks)
 ```
 
-**RTL isolates.** With `isolates: true` (hbo/arc), rendered runs are wrapped
-in U+2067/U+2069 (RTL isolate / pop). In a bidi-capable terminal this keeps
-Hebrew runs coherent inside left-to-right layout lines; where bidi is absent
-the characters are invisible and harmless. Width math (KWIC columns) excludes
-them, so alignment never shifts.
+**RTL isolates.** With `isolates: true` (hbo/arc, and since P41-3 ara/fas),
+rendered runs are wrapped in U+2067/U+2069 (RTL isolate / pop). In a
+bidi-capable terminal this keeps Hebrew and Arabic-script runs coherent
+inside left-to-right layout lines; where bidi is absent the characters are
+invisible and harmless. Width math (KWIC columns) excludes them, so
+alignment never shifts.
+
+### 1d. Arabic and Persian (ara/fas — OpenITI, P41-3)
+
+The Arabic-script shelves reuse the hbo/arc machinery wholesale — the same
+`isolates: true` wrapping, the same modes, the same honesty footer. What is
+deliberately DIFFERENT from the Hebrew row:
+
+- **No mark classes, so nothing to strip.** The P41-g census of the OpenITI
+  fixtures found standard-block consonantal text only — no tashkeel
+  (U+064B–0652), no Quranic annotation marks. Census-first: a `tashkeel`
+  mark class (the obvious analogue of Hebrew `points`) is a future rule for
+  when a pointed Arabic corpus lands, argued then, not minted now. Until
+  then `default`, `plain` and `full` render the same bytes for ara/fas
+  (isolates aside).
+- **No `--display translit`.** Arabic romanization is contested — DIN
+  31635, ALA-LC, IJMES and EI conventions disagree, and any readable
+  romanization needs vowels the unpointed text does not carry (it would be
+  a vocalization engine, not a per-codepoint transcoder like `Nabu::Hebr`).
+  Deliberately not built; ara/fas pass through the translit mode unchanged,
+  per the no-guessed-romanization rule in §1a.
+- **The search fold is the sibling layer** (conventions §9, P41-3): one
+  Arabic-script skeleton across the ی/ي and ک/ك keyboard split, maqsura,
+  taa marbuta, tashkeel, tatweel and ZWNJ — search-side only, never
+  display. Stored bytes stay pristine; `StoredSnippet` restores them under
+  highlights via the fold map.
 
 ---
 
@@ -327,9 +360,10 @@ not something escape characters from nabu can force:
 
 - **iTerm2 ≥ 3.6.0** ships RTL support as an **experimental toggle**:
   **Settings → General → Experimental → "Right-to-left text support"**
-  (note: *not* under Profiles → Text). Turn it on for Hebrew reading.
-- **macOS Terminal.app has no bidi support at all.** Hebrew renders in
-  storage order; there is no setting to change it.
+  (note: *not* under Profiles → Text). Turn it on for Hebrew and
+  Arabic-script reading — it is the same knob for both.
+- **macOS Terminal.app has no bidi support at all.** Hebrew and Arabic
+  render in storage order; there is no setting to change it.
 - **Copy-paste garbling**: when display and storage disagree about
   direction, copied RTL text comes out scrambled. The bidi toggle fixes
   this; nothing nabu emits can.
@@ -349,6 +383,20 @@ not something escape characters from nabu can force:
 - Recommended scholarly Hebrew fonts: **Ezra SIL** (SIL OFL, purpose-built
   for pointed + cantillated Masoretic text) and **SBL Hebrew** (equally
   excellent; personal-use license).
+- **Arabic script (ara/fas, P41-3) — be honest about what a terminal can
+  do.** Arabic is a *connected* script: letters take initial/medial/final
+  shapes and join. Terminal emulators render per cell, so even with the
+  bidi toggle ON the character ORDER is right but the *shaping* is
+  degraded — most terminals draw isolated or only partially joined forms,
+  and no font choice fully fixes a cell-grid renderer. What the reader will
+  actually see in iTerm2 with RTL enabled: right-to-left, legible,
+  unligatured Arabic — adequate for scanning search hits and citations, not
+  for sustained reading (use `nabu export` and a real text view for that).
+  Font: `brew install --cask font-noto-naskh-arabic` — naskh is the
+  bookhand and stays legible at terminal sizes where kufi-style display
+  faces do not; it joins the fallback cascade once installed. For a
+  dedicated reading session, an iTerm2 profile with Noto Naskh Arabic
+  boosted a few points (the Ezra SIL pattern above) is the workable setup.
 - Script-specific Noto casks join the macOS font-fallback cascade once
   installed, even when not the chosen slot font — one command each:
   `brew install --cask font-noto-sans-ogham font-noto-sans-coptic
@@ -450,6 +498,7 @@ default is right.
 | Script | What nabu does (default) | What the terminal needs | Try it |
 |---|---|---|---|
 | Hebrew (hbo/arc) | strips cantillation, keeps points + maqaf, RTL isolates | iTerm2 RTL toggle; Ezra SIL / SBL Hebrew (profile) or Noto Sans Mono (slot) | `bin/nabu show urn:nabu:oshb:gen:1.1` |
+| Arabic/Persian (ara/fas) | RTL isolates only — nothing to strip (censused no tashkeel); search folds ی/ي, ک/ك, ى, ة, ZWNJ (conventions §9); no translit (§1d) | iTerm2 RTL toggle; `font-noto-naskh-arabic` (shaping stays degraded — §2) | `bin/nabu search "فى" --lang ara` (after the openiti sync) |
 | Greek (grc) | nothing (polytonic intact; `monotonic` opt-in) | any font with polytonic coverage | `bin/nabu show urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1` |
 | Cyrillic OCS (chu) | strips titla (titlo/pokrytie/superscripts); `--display translit` romanizes | Noto Sans Mono covers the combining range | `bin/nabu align "MARK 2.3"` |
 | Devanagari (san) | strips Vedic accents when present (IAST untouched); `--display translit` → IAST | conjunct-capable Devanagari fallback (system default is fine) | `bin/nabu search "dharma" --lang san` |

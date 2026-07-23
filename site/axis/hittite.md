@@ -42,7 +42,7 @@ This desk's own surfaces:
 
 ```
 nabu search --lemma kuiš --lang hit --axis hittite  # the gold UD Hittite morphology (kuiš "who", clause by clause)
-nabu search --century -13 --axis hittite  # the tablets by date, where dated
+nabu show --random --source tlhdig    # pull a random tablet manuscript off the Hittite shelf
 nabu search ḫatti --axis hittite      # a query across TLHdig and the treebank — Ḫatti on the tablets
 ```
 

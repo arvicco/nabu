@@ -62,9 +62,9 @@ This desk's own surfaces:
 
 ```
 nabu search --fuzzy ']ανδρα μοι εν['  # damaged-line substring search, typed straight off the edition
-nabu search --type epitaph --province Britannia --material marble  # EDH genre facets composing together
+nabu search manibus --type epitaph --province Britannia  # EDH genre facets composing with a text query (dis manibus on British epitaphs)
 nabu search "στρατηγ*" --from 101 --to 300 --place oxyrhynch%  # the Oxyrhynchite strategoi by date and provenance
-nabu search --century -3 --axis epigraphy  # one century's stones (negative = BCE, no year 0)
+nabu search "στρατηγ*" --century 2 --axis epigraphy  # a query scoped to one century (negative = BCE, no year 0)
 nabu show urn:nabu:ogham:e-dev-001 --parallel  # an ogham stone beside its transliteration sibling
 nabu search --lemma precor --axis epigraphy  # CEIPoM equivalence keys reach the Iguvine Tables' pesnimu
 ```

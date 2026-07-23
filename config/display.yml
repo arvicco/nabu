@@ -40,6 +40,13 @@
 languages:
   hbo: { strip: [cantillation], keep: [points, maqaf], isolates: true }
   arc: { strip: [cantillation], isolates: true }
+  # P41-3: Arabic/Persian (OpenITI) reuse the hbo/arc RTL isolate path.
+  # Isolates-only deliberately: the P41-g fixture census found NO tashkeel
+  # (U+064B-0652) or Quranic annotation marks in the corpus sample, so there
+  # is no mark class to strip — census-first, a `tashkeel` class is a future
+  # rule for when a pointed Arabic corpus lands, argued then.
+  ara: { isolates: true }
+  fas: { isolates: true }
   san: { strip: [vedic-accents] } # Devanagari-script text; the IAST shelves are untouched
   chu: { strip: [titla] }
   orv: {}
