@@ -107,6 +107,16 @@ module Nabu
       DOSSIER_TABLES = { language: :language_records, source: :source_records,
                          notes: :urn_notes }.freeze
 
+      # D42-a: above this many stats-claimed live passages the drift probe
+      # stays at the document grain for the day's source — the passage truth
+      # is a real count over the passages join, cheap for small/mid shelves,
+      # seconds-scale for the giants; the doc grain (indexed counts) still
+      # watches every source.
+      # census: 2000000, 2026-07-23, ~3% of the 62.8M-passage live corpus
+      # (the P41 scale review's census) — an indexed live-on-live join count
+      # at this size stays low-seconds, health's budget for one probe
+      STATS_PASSAGE_PROBE_CAP = 2_000_000
+
       private
 
       # -- last-run honesty ---------------------------------------------------
@@ -336,13 +346,6 @@ module Nabu
       end
 
       # -- source_stats drift (D42-a, global) ----------------------------------
-
-      # Above this many stats-claimed live passages the probe stays at the
-      # document grain for the day's source: the passage truth is a real
-      # count over the passages join, cheap for small/mid shelves and
-      # seconds-scale for the giants — the doc grain (indexed counts) still
-      # watches every source, and the rotation reaches the small ones' rows.
-      STATS_PASSAGE_PROBE_CAP = 2_000_000
 
       # The D42-a contract: source_stats is DERIVED and the LOADER is its
       # only writer (rebuild re-derives wholesale). This probe holds ONE
