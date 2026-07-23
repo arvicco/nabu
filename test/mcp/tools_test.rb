@@ -136,8 +136,9 @@ module MCP
 
     # The exhausted-inner-window honesty hint (P35-6, dev-loop §6b): MCP asks
     # limit+1, so limit 1 makes the inner window 20 — twenty short lat rows
-    # fill it, the one grc match sits beyond, and the lang filter empties the
-    # page. The note must announce the possibly-incomplete page.
+    # fill it, and a catalog-side filter (license here; lang rides in the
+    # MATCH since P42-3) empties the page. The note must announce the
+    # possibly-incomplete page.
     def test_search_incomplete_page_under_filters_notes_it
       lat = make_document(urn: "urn:w:lat", language: "lat")
       20.times do |i|
@@ -148,7 +149,7 @@ module MCP
                         text: "arma sits far down the rank because this passage carries many more words than the rest")
       rebuild!
 
-      result = call("nabu_search", { "query" => "arma", "lang" => "grc", "limit" => 1 })
+      result = call("nabu_search", { "query" => "arma", "license" => "nc", "limit" => 1 })
       refute result[:isError]
       body = payload(result)
       assert_empty body.fetch("matches")
@@ -157,6 +158,13 @@ module MCP
 
       honest = payload(call("nabu_search", { "query" => "arma", "lang" => "lat", "limit" => 1 }))
       refute_match(/page may be incomplete/, honest.fetch("note"), "a full page carries no hint")
+
+      # P42-3: the lang filter that USED to starve this exact corpus now
+      # rides in the MATCH — the grc hit beyond the old window is found.
+      fixed = payload(call("nabu_search", { "query" => "arma", "lang" => "grc", "limit" => 1 }))
+      assert_equal ["urn:w:grc:1"], fixed.fetch("matches").map { |hit| hit.fetch("urn") },
+                   "the in-MATCH lang filter reaches past the homograph wall over MCP too"
+      refute_match(/page may be incomplete/, fixed["note"].to_s)
     end
 
     # -- the ubiquitous-term guard (P42-2) over MCP ---------------------------
