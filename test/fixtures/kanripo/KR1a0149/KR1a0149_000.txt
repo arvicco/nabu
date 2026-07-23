@@ -1,0 +1,8 @@
+# -*- mode: mandoku-view -*-
+#+TITLE: 易翼說
+#+DATE: 2018-03-31 09:02:57.553884
+#+PROPERTY: ID KR1a0149
+#+PROPERTY: BASEEDITION WYG
+#+PROPERTY: WITNESS master    
+#+PROPERTY: JUAN 0
+<pb:KR1a0149_WYG_000-1a>¶

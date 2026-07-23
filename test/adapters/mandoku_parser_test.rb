@@ -349,16 +349,23 @@ class MandokuParserTest < Minitest::Test
     八
   STRAY
 
-  def test_stray_text_outside_any_witness_page_raises_parse_error
+  def test_stray_text_outside_any_witness_page_mints_a_front_matter_page
     # The REAL KR5a0004_000.txt is a header block plus one stray 八 — text
-    # with no page anchor anywhere. Unciteable text quarantines the text
-    # loudly (the file is kept out of the fixture mirror for exactly this
-    # reason; the trim is documented in the fixture README).
+    # with no page anchor anywhere. Pre-P43 this quarantined the whole text;
+    # under the D42-c recovery ruling the stray text mints the file's
+    # synthetic front-matter page instead — real content, never refused,
+    # never silent (the annotation keeps it machine-visible).
     with_mutated_text("KR5a0004") do |dir|
       File.write(File.join(dir, "KR5a0004_000.txt"), STRAY_KR5A0004_000)
 
-      error = assert_raises(Nabu::ParseError) { parse_dir(dir, "KR5a0004") }
-      assert_match(/text before the first page anchor/, error.message)
+      document = parse_dir(dir, "KR5a0004")
+      assert_equal 2, document.size
+      front = document.passages.first
+      assert_equal "urn:nabu:kanripo:KR5a0004:000:front", front.urn
+      assert_equal "八", front.text
+      assert front.annotations["front_matter"]
+      refute front.annotations.key?("anchor")
+      assert_equal "urn:nabu:kanripo:KR5a0004:02:048a", document.passages.last.urn
     end
   end
 
@@ -426,6 +433,11 @@ class MandokuParserTest < Minitest::Test
   end
 
   def test_duplicate_witness_page_anchor_raises
+    # Witness duplicates stay LOUD (P43-r2 kept this pin): the witness probes
+    # censused (juan, leaf-side) unique per repo in every case, and the
+    # cross-file page carry makes an unexpected witness duplicate look like
+    # mis-carried structure, not the leafside two-fascicle shape — no
+    # evidence, no tolerance.
     with_mutated_text("KR5i0030") do |dir|
       file = File.join(dir, "KR5i0030_002.txt")
       File.write(file, "#{File.read(file)}<pb:CK-KZ_KR5i0030_01p001a>¶\n再¶\n")
@@ -611,38 +623,127 @@ class MandokuParserTest < Minitest::Test
     end
   end
 
+  # -- P43-r2 censused tolerance (D42-c quarantine recovery, owner-ruled) ----
+  #
+  # The D42-c census: 133 quarantined Kanripo texts, 75 duplicate-anchor +
+  # 26 text-before-first-anchor recoverable. The duplicate exemplar
+  # (KR2f0037 三朝名臣言行錄, SBCK) shows what the duplicates ARE: upstream
+  # concatenated TWO source fascicles into one juan file (a fresh
+  # "#+PROPERTY: FILE" header block mid-file names the second print source),
+  # each restarting its own leaf-side pagination at 1a. The second sweep's
+  # pages disambiguate deterministically as `<key>#2` (document order),
+  # annotated "duplicate_anchor" — both fascicles load, urns stay unique and
+  # stable. The front-matter exemplar (KR1a0149 易翼說, WYG) opens juan 001
+  # with seven print lines BEFORE the first page anchor: prefatory text is
+  # real content — it mints the file's synthetic `<nnn>:front` page
+  # (the "front" component can never collide with a real page's
+  # `\d+[a-d]` / `\d+p\d+[ab]` grammar), annotated "front_matter".
+
+  def test_two_fascicle_file_disambiguates_the_second_pagination_sweep
+    document = parse("KR2f0037")
+
+    first = document.passages.find { |p| p.urn == "urn:nabu:kanripo:KR2f0037:042:1a" }
+    second = document.passages.find { |p| p.urn == "urn:nabu:kanripo:KR2f0037:042:1a#2" }
+    # Fascicle 1 (三朝名臣言行錄 卷九之三) vs fascicle 2 (五朝名臣言行錄
+    # 卷八之二) — both page 1a's load with their own text.
+    assert_includes first.text, "内翰蘇文忠公"
+    assert_includes second.text, "樞宻使狄武襄公"
+    refute first.annotations.key?("duplicate_anchor")
+    assert_equal 2, second.annotations["duplicate_anchor"]
+    assert_equal "KR2f0037_SBCK_042-1a", second.annotations["anchor"]
+  end
+
+  def test_two_fascicle_file_mints_the_censused_page_counts
+    document = parse("KR2f0037")
+
+    # census: 55 pages open in KR2f0037_042 (29 sweep-1 + 26 sweep-2); 15a
+    # and 13b#2 are empty (anchor at a fascicle/file seam) — dropped.
+    assert_equal 53, document.size
+    # census: 25 minted sweep-2 pages (26 minus the empty 13b#2).
+    disambiguated = document.passages.count { |p| p.annotations["duplicate_anchor"] }
+    assert_equal 25, disambiguated
+    assert_equal (1..53).to_a, document.map(&:sequence)
+  end
+
+  def test_reasserted_anchors_inside_the_second_sweep_are_still_no_ops
+    # Sweep 2 re-asserts 9b and 12b for the OPEN page (the P33-1 no-op shape,
+    # now against a disambiguated key): one page each, never a #3.
+    document = parse("KR2f0037")
+
+    urns = document.map(&:urn)
+    reasserted = urns.count { |urn| urn.end_with?(":042:9b#2") }
+    assert_equal 1, reasserted
+    assert_empty urns.grep(/#3/)
+  end
+
+  def test_duplicate_disambiguation_is_stable_across_two_parses
+    assert_equal parse("KR2f0037").map(&:urn), parse("KR2f0037").map(&:urn)
+  end
+
+  def test_text_before_the_first_anchor_mints_a_front_matter_page
+    document = parse("KR1a0149")
+
+    # census: 76 = the front page + 75 leaf-side pages (001-1a…001-38a);
+    # KR1a0149_000.txt is an anchor-only juan-0 file, zero passages.
+    assert_equal 76, document.size
+    front = document.passages.first
+    assert_equal "urn:nabu:kanripo:KR1a0149:001:front", front.urn
+    assert_equal 1, front.sequence
+    assert front.annotations["front_matter"]
+    refute front.annotations.key?("anchor")
+    assert front.text.start_with?("欽定四庫全書經部一易翼説卷一易類")
+    # The un-pilcrowed seventh line runs across the page seam: the print
+    # line's head closes the front matter, its tail opens page 1a.
+    assert front.text.end_with?("而乾坤為卦爻之宗也天")
+    page = document.passages[1]
+    assert_equal "urn:nabu:kanripo:KR1a0149:001:1a", page.urn
+    assert page.text.start_with?("地隂陽之體也乾坤卦也")
+  end
+
   # -- loud failure paths (synthetic defects on real bytes) ------------------
 
-  def test_duplicate_page_anchor_raises_parse_error
+  def test_duplicate_page_anchor_mints_a_disambiguated_page
+    # The pre-P43 loud duplicate, now the tolerance path on the same bytes:
+    # a re-opened CLOSED page keys as #2 and both pages load.
     with_mutated_text("KR3g0023") do |dir|
       file = File.join(dir, "KR3g0023_000.txt")
       content = File.read(file)
       File.write(file, "#{content}<pb:KR3g0023_WYG_000-1a>¶\n再¶\n")
 
-      error = assert_raises(Nabu::ParseError) { parse_dir(dir, "KR3g0023") }
-      assert_match(/duplicate page anchor/, error.message)
+      document = parse_dir(dir, "KR3g0023")
+      last = document.passages.last
+      assert_equal "urn:nabu:kanripo:KR3g0023:000:1a#2", last.urn
+      assert_equal "再", last.text
+      assert_equal 2, last.annotations["duplicate_anchor"]
     end
   end
 
-  def test_text_before_the_first_page_anchor_raises_parse_error
+  def test_text_before_the_first_page_anchor_mints_a_front_matter_page
     with_mutated_text("KR3g0023") do |dir|
       file = File.join(dir, "KR3g0023_000.txt")
       lines = File.readlines(file)
       lines.insert(6, "漂流文字¶\n") # before the 000-1a anchor at line 7
       File.write(file, lines.join)
 
-      error = assert_raises(Nabu::ParseError) { parse_dir(dir, "KR3g0023") }
-      assert_match(/text before the first page anchor/, error.message)
+      document = parse_dir(dir, "KR3g0023")
+      front = document.passages.first
+      assert_equal "urn:nabu:kanripo:KR3g0023:000:front", front.urn
+      assert_equal "漂流文字", front.text
+      assert front.annotations["front_matter"]
     end
   end
 
-  def test_text_file_with_content_but_no_anchor_raises_parse_error
+  def test_text_file_with_content_but_no_anchor_mints_a_front_matter_page
     with_mutated_text("KR1a0170") do |dir|
       file = File.join(dir, "KR1a0170_000.txt")
       File.write(file, "#{File.read(file)}無頁碼之文¶\n")
 
-      error = assert_raises(Nabu::ParseError) { parse_dir(dir, "KR1a0170") }
-      assert_match(/text before the first page anchor/, error.message)
+      document = parse_dir(dir, "KR1a0170")
+      front = document.passages.first
+      assert_equal "urn:nabu:kanripo:KR1a0170:000:front", front.urn
+      assert_equal "無頁碼之文", front.text
+      assert front.annotations["front_matter"]
+      assert_equal 4, document.size
     end
   end
 
