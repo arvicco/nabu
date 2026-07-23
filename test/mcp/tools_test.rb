@@ -252,7 +252,7 @@ module MCP
       refute result[:isError]
       body = payload(result)
       refute_empty body.fetch("matches")
-      assert_match(/term too common to rank — corpus order/, body.fetch("note"),
+      assert_match(/term too common to rank — corpus-wide sample/, body.fetch("note"),
                    "the skipped rank must be announced on the MCP surface too")
       body.fetch("matches").each do |hit|
         assert hit.key?("urn") && hit.key?("language") && hit.key?("license_class"),

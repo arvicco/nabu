@@ -4769,6 +4769,24 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P42-r4 (owner gate review): highlight brackets must live OUTSIDE the RTL
+  # isolates. Inside one passage-wide isolate the bracket pair is at the mercy
+  # of the terminal's bidi mirroring — the owner's renderer reorders RTL
+  # without mirroring paired brackets, so the logical [word] displayed as
+  # ]word[, facing away from the match. Cut at the brackets, each segment
+  # isolating on its own, the typed glyphs keep their LTR positions and face
+  # the match on every renderer class.
+  def test_rtl_snippet_highlight_brackets_stay_outside_the_isolates
+    with_hebrew_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search אלהים]) }
+      assert_nil status
+      assert_match(/\[⁧[^⁩]*⁩\]/, out,
+                   "the match is bracket-OUTSIDE-isolate: [ RLI word PDI ]")
+      refute_match(/⁧[^⁩]*\[/, out,
+                   "no isolate segment may contain an opening bracket")
+    end
+  end
+
   # KWIC width pin: the keyword column must sit at exactly --width display
   # CELLS (P35-7) — isolates and ANSI excluded, combining marks (Hebrew
   # points) counted 0 within their grapheme cluster, and the stripped
@@ -5000,7 +5018,7 @@ class CLITest < Minitest::Test
         with_config(config) { run_cli(%w[search arma --limit 3]) }
       end
       assert_nil status
-      assert_match(/matching is fold-aware; term too common to rank — corpus order\)/, out,
+      assert_match(/matching is fold-aware; term too common to rank — corpus-wide sample\)/, out,
                    "the hit-count parenthetical owns the skipped rank")
 
       ranked, _err2, = with_config(config) { run_cli(%w[search arma --limit 3]) }
@@ -5010,7 +5028,7 @@ class CLITest < Minitest::Test
   end
 
   # A guard-active page that comes back EMPTY under filters still announces
-  # the corpus-order scan (alongside the P35-6 window hint) — never a
+  # the sampled scan (alongside the P35-6 window hint) — never a
   # clean-looking silence over a degraded path. (--license: the catalog-side
   # starving filter since P42-3 moved --lang into the MATCH.)
   def test_search_ubiquitous_term_empty_page_still_notes_the_skipped_rank
@@ -5020,7 +5038,7 @@ class CLITest < Minitest::Test
       end
       assert_nil status
       assert_match(/no matches/i, out)
-      assert_match(/note: term too common to rank — corpus order/, out)
+      assert_match(/note: term too common to rank — corpus-wide sample/, out)
     end
   end
 
