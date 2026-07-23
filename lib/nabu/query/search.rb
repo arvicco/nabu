@@ -189,6 +189,37 @@ module Nabu
         page.map { |row| build_result(row, query, exact: exact, word: word) }
       end
 
+      # Term-less filtered browse (P42-6): a direct filtered page of the
+      # catalog in CORPUS ORDER — passages.id ascending, the catalog's
+      # insertion order, which mirrors the FTS index's rowid corpus order the
+      # ubiquity guard (#rank?) falls back to, so a browse and a rank-skipped
+      # search agree on what "corpus order" means. There is NO FTS MATCH and NO
+      # ranking here: the page is drawn straight from the catalog under the
+      # active filters. Two consequences, both deliberate: the page has no inner
+      # window (it is not a bounded FTS window the catalog join then thins), so
+      # the P35-6 incomplete-page hint CANNOT arm — page-fill is exact against
+      # +limit+ — and there is no rank to skip, so #rank_note stays nil. The
+      # snippet has no term to bracket: build_result with an empty query renders
+      # a leading window of the stored text (StoredSnippet's no-term path).
+      #
+      # The LEGALITY of a term-less browse — that at least one content-narrowing
+      # filter (date window, place, genre facet, or loans) must be present, and
+      # that --lang/--license/--source/--axis do not qualify alone — is enforced
+      # at the CLI seam, not here: this method lists whatever the filters select,
+      # exactly as visible_passages composes them for ranked search.
+      def browse(lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil,
+                 facets: nil, source: nil, sources: nil, loans: nil)
+        @incomplete_hint = nil
+        @rank_note = nil
+        rows = visible_passages(lang: lang, license: license, from: from, to: to, place: place,
+                                facets: facets, source: source, sources: sources, loans: loans)
+               .order(Sequel[:passages][:id])
+               .select(*catalog_columns)
+               .limit(limit)
+               .all
+        rows.map { |row| build_result(row, "", exact: false, word: false) }
+      end
+
       # --exact verification: every whitespace token of the NFC-normalized
       # query must appear as a glyph-literal substring in the NFC-normalized
       # stored text. Glyph-exact, NOT display-exact — the query is NFC-folded
