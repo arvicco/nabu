@@ -10913,6 +10913,10 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 
 # P43 candidates (rolling)
 
+## P43-? · UD historical wave  [config-only per the availability survey — ≥10 treebanks: first Classical Armenian (CAVaL 99K), Old/Middle French, Ottoman ×2, Bohairic Coptic, PTNK, Akkadian RIAO/PISANDUB; per-repo license gates]
+## P43-? · KITAB text-reuse over openiti  [51.5M alignments — the citation-network follow-on; license unverified, read the Zenodo record first]
+## P43-? · Trismegistos + Pleiades instruments  [Trismegistos NOW CC BY-SA 4.0 (quoted — supersedes the restrictive assumption); Pleiades CC BY dumps; the place/person enrichment lane]
+## P43-? · Axis-scale candidates from the availability survey  [EEBO-TCP early-modern English ~60K books · DTA German · OSTA medieval Iberian · Menota Nordic · GLAUx Greek — owner picks appetite]
 ## P43-? · TITUS Avestan adapter  [UNBLOCKED 2026-07-23 — №41-3 granted: non-commercial + TITUS-and-editors credit on every surface; one polite scripted pass; nc + mandatory credit line; per-text editor metadata]
 
 # P42 — the efficiency phase (owner-picked 2026-07-23: "make these commands fly, not crawl"; plan: .docs/p42-efficiency-plan.md)
