@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../store/indexer"
+require_relative "../store/lemma_frequencies"
 
 module Nabu
   module Query
@@ -123,6 +124,18 @@ module Nabu
       end
 
       def count_tiers(language, folded, out)
+        # P42-1: read the precomputed lemma-frequency census when present — a
+        # composite-index point lookup, not the per-language passage_lemmas
+        # scan the planner used to pick (a full scan of the language's millions
+        # of rows + a temp-b-tree GROUP BY, the measured etym 9.0s). The census
+        # is always tiered, so it serves both the old branches; a fulltext
+        # predating it falls through to the identical live passage_lemmas path.
+        if frequencies?
+          Store::LemmaFrequencies.language_tier_counts(@fulltext, language: language, folded: folded)
+                                 .each { |lf, tiers| out[[language, lf]] = tiers }
+          return
+        end
+
         dataset = @fulltext[Store::Indexer::LEMMA_TABLE].where(language: language, lemma_folded: folded)
         if tier_column?
           dataset.group_and_count(:lemma_folded, :tier).each do |row|
@@ -145,6 +158,13 @@ module Nabu
 
       def lemma_index?
         !@fulltext.nil? && @fulltext.table_exists?(Store::Indexer::LEMMA_TABLE)
+      end
+
+      # Whether the P42-1 lemma-frequency census is present (memoized).
+      def frequencies?
+        return @frequencies unless @frequencies.nil?
+
+        @frequencies = Store::LemmaFrequencies.available?(@fulltext)
       end
     end
   end

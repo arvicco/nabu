@@ -3,6 +3,7 @@
 require "json"
 
 require_relative "../normalize"
+require_relative "../store/lemma_frequencies"
 require_relative "range"
 
 module Nabu
@@ -259,7 +260,7 @@ module Nabu
       # the profile as the label.
       def gold_profile(scope, counts, total_tokens, limit:)
         corpus = corpus_frequencies(counts.keys)
-        corpus_total = gold_corpus_rows.count.to_f
+        corpus_total = corpus_total_count.to_f
         distinctive = rank_distinctive(counts, corpus, total_tokens, corpus_total, limit: limit)
         hapax = counts.select { |_, e| e[:count] == 1 }.map { |_, e| e[:raw] }.sort
 
@@ -272,11 +273,16 @@ module Nabu
         )
       end
 
-      # GOLD corpus passage-frequency per folded lemma (class note): an
-      # indexed lemma_folded IN GROUP BY, batched so a document with
-      # thousands of distinct lemmas never overruns SQLite's bound-variable
-      # limit. { folded => count }.
+      # GOLD corpus passage-frequency per folded lemma (class note). Since P42-1
+      # this reads the precomputed lemma-frequency census (a point-lookup on the
+      # composite index over a ~1-2M-row table) when it exists; a fulltext file
+      # predating the census falls back to the live lemma_folded IN GROUP BY over
+      # passage_lemmas — byte-identical numbers, the pre-build behaviour. Batched
+      # either way so a document with thousands of distinct lemmas never overruns
+      # SQLite's bound-variable limit. { folded => count }.
       def corpus_frequencies(folded_lemmas)
+        return Store::LemmaFrequencies.gold_frequencies(@fulltext, folded_lemmas) if frequencies?
+
         out = {}
         folded_lemmas.each_slice(500) do |slice|
           counted = gold_corpus_rows.where(lemma_folded: slice)
@@ -284,6 +290,22 @@ module Nabu
           counted.each { |row| out[row.fetch(:lemma_folded)] = row.fetch(:count) }
         end
         out
+      end
+
+      # The log-odds denominator: total gold passage-lemma rows. From the P42-1
+      # census (a SUM over the tiny freq table) when present — the 17.9s → ms
+      # fix — else the live COUNT(*) over gold passage_lemmas (identical value).
+      def corpus_total_count
+        return Store::LemmaFrequencies.gold_total(@fulltext) if frequencies?
+
+        gold_corpus_rows.count
+      end
+
+      # Whether the P42-1 lemma-frequency census is present in this fulltext.
+      def frequencies?
+        return @frequencies unless @frequencies.nil?
+
+        @frequencies = Store::LemmaFrequencies.available?(@fulltext)
       end
 
       # The gold-tier reference slice (class note; P26-4). A pre-tier index
@@ -365,9 +387,13 @@ module Nabu
       end
 
       # [[language, gold corpus_row_count], …] descending — the GOLD-bearing
-      # languages (the listing's own label; tier-scoped since P26-4),
-      # straight from the lemma index so the list never drifts.
+      # languages (the listing's own label; tier-scoped since P26-4). From the
+      # P42-1 census when present (this was vocab's last O(corpus) scan, the
+      # ~0.6s no-gold path), else straight from the lemma index so the list
+      # never drifts.
       def gold_languages
+        return Store::LemmaFrequencies.gold_languages(@fulltext) if frequencies?
+
         gold_corpus_rows
           .group_and_count(:language)
           .order(Sequel.desc(:count))

@@ -176,10 +176,31 @@ module Query
       make_passages(source: @gold, language: "chu", lemma: "богъ", form: "ба", count: 2)
       rebuild!(lemma_tiers: nil)
       @fulltext.alter_table(Nabu::Store::Indexer::LEMMA_TABLE) { drop_column :tier }
+      @fulltext.drop_table?(Nabu::Store::LemmaFrequencies::TABLE) # a pre-tier index predates the census
 
       view = chu_bog_view
       assert_equal 2, view.attested_count
       assert_nil view.silver_count
+    end
+
+    # P42-1: etym/define resolve attestation counts from the lemma-frequency
+    # census (a composite-index point lookup) instead of the per-language
+    # passage_lemmas scan that made etym 9.0s. A fulltext predating the census
+    # falls back to the live passage_lemmas path — identical counts.
+    def test_counts_identical_with_and_without_the_frequency_census
+      make_passages(source: @gold, language: "chu", lemma: "богъ", form: "ба", count: 2)
+      make_passages(source: @silver, language: "chu", lemma: "богъ", form: "богъ", count: 3)
+      rebuild!
+
+      with_census = chu_bog_view
+      assert_equal 2, with_census.attested_count
+      assert_equal 3, with_census.silver_count
+
+      @fulltext.drop_table(Nabu::Store::LemmaFrequencies::TABLE)
+      refute Nabu::Store::LemmaFrequencies.available?(@fulltext)
+      without_census = chu_bog_view
+      assert_equal with_census.attested_count, without_census.attested_count
+      assert_equal with_census.silver_count, without_census.silver_count
     end
   end
 end

@@ -211,6 +211,10 @@ module Nabu
           # per-row inserts. Still inside the fts_lemma stage and BEFORE the
           # reflex pass, which reads passage_lemmas by these very indexes.
           create_lemma_indexes(fulltext)
+          # P42-1: the corpus lemma-frequency census, one grouped INSERT-SELECT
+          # over the now-indexed lemma table (vocab's denominator + etym's
+          # per-reflex counts read it instead of re-aggregating per query).
+          LemmaFrequencies.rebuild!(fulltext)
         end
         timed(profile, :trigram) do
           rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
@@ -283,6 +287,11 @@ module Nabu
         count = 0
         lemmas_changed = false
         fulltext.transaction do
+          # P42-1: snapshot this source's lemma-frequency contribution BEFORE
+          # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
+          # freq table (same transaction). incremental_ready? guarantees the
+          # table exists here; both snapshots are urn-scoped and B-tree bounded.
+          before = LemmaFrequencies.snapshot(fulltext, urns)
           deleted = delete_source_lemma_rows(fulltext, urns)
           delete_fts_rows(fulltext, TABLE, ids)
           count, inserted = insert_passage_batches(
@@ -290,6 +299,7 @@ module Nabu
             source_tiers(catalog, lemma_tiers || {})
           )
           lemmas_changed = deleted.positive? || inserted.positive?
+          LemmaFrequencies.apply_delta(fulltext, before: before, after: LemmaFrequencies.snapshot(fulltext, urns))
           refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
         end
         refresh_alignment(catalog, fulltext, alignments, source_id)
@@ -328,7 +338,7 @@ module Nabu
       # lemma table cannot take tiered inserts). Anything missing → the
       # caller falls back to the full rebuild, which creates them all.
       def incremental_ready?(fulltext)
-        [TABLE, LEMMA_TABLE, TRIGRAM_TABLE, TRIGRAM_SCOPE_TABLE,
+        [TABLE, LEMMA_TABLE, LemmaFrequencies::TABLE, TRIGRAM_TABLE, TRIGRAM_SCOPE_TABLE,
          AlignmentIndexer::TABLE, ReflexRootsIndexer::TABLE, ReflexRootsIndexer::STATS_TABLE]
           .all? { |table| fulltext.table_exists?(table) } &&
           fulltext[LEMMA_TABLE].columns.include?(:tier)

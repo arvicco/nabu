@@ -169,6 +169,11 @@ time. `source_stats` is the first instance: maintained-at-write, exact, no
 caches and no TTLs — a derived table with the same rebuildability contract
 as every other one. New read surfaces follow it: an O(corpus) aggregate
 belongs in a loader/rebuild-maintained projection, not in a query.
+`lemma_frequencies` (P42-1) is the second instance — passage counts per
+(lemma_folded, language, tier), built by the Indexer beside passage_lemmas in
+fulltext.sqlite3 (so it is index-maintained, not migrated), read by `vocab`'s
+log-odds denominator (17.9s → ms) and `etym`'s per-reflex attestation counts
+(9.0s: the per-language passage_lemmas scan the planner picked, gone).
 
 The HISTORY LEDGER (history.sqlite3 — append-only, never derived, never dropped; P7-1):
 
