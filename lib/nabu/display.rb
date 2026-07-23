@@ -406,6 +406,15 @@ module Nabu
         modes.keys
       end
 
+      # Would #render wrap +language+ in RTL isolates under +mode+? The
+      # bracket-safe snippet path (P42-r4, the CLI's display_snippet) asks
+      # BEFORE rendering, so it can cut the isolate at highlight boundaries
+      # instead of letting the brackets ride inside the isolated run.
+      def isolates?(language:, mode:, policies:)
+        policy = policies[Normalize.primary_subtag(language)]
+        !policy.nil? && mode.isolates?(policy)
+      end
+
       # Render one run of +text+ for the terminal: look up the language's
       # policy (primary subtag, like the fold tables), let the mode transform,
       # then wrap in RTL isolates when both mode and policy say so. No policy,

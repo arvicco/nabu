@@ -2482,6 +2482,32 @@ module Nabu
         @display_applied ||= Set.new
       end
 
+      # Render a SNIPPET — StoredSnippet output with the match in [brackets] —
+      # for the terminal (P42-r4). For an RTL-isolated language the brackets
+      # must NOT ride inside the isolate: bidi bracket mirroring varies by
+      # terminal (the owner's renderer reorders RTL without mirroring paired
+      # brackets, so a logical [word] displayed as ]word[ — facing away),
+      # while a bracket left OUTSIDE the isolates keeps its typed glyph and
+      # its LTR position and faces the match on every renderer class, bidi or
+      # not. So the isolate is CUT at bracket boundaries: each text segment
+      # isolates on its own and the brackets stay in the line context. The
+      # price is that the line lays out segment-by-segment LTR (RTL inside
+      # each segment) — right for a scanning surface like a hit snippet.
+      # Everything else (LTR languages, modes without isolates) renders whole,
+      # byte-identical to display_text.
+      def display_snippet(text, language)
+        unless Nabu::Display.isolates?(language: language.to_s, mode: display_mode,
+                                       policies: display_policies)
+          return display_text(text, language)
+        end
+
+        text.to_s.split(/([\[\]])/).map do |segment|
+          next segment if segment.empty? || segment == "[" || segment == "]"
+
+          display_text(segment, language)
+        end.join
+      end
+
       # The source's three gaiji ladder lanes (P37-3/P38-2), each memoized per
       # source: config/gaiji/<source>.tsv (faithful), <source>-ids.tsv (IDS)
       # and <source>-substitutes.tsv (substitutes) — only kanripo ships them
@@ -3927,8 +3953,8 @@ module Nabu
                 "reform variants, e.g. 学↔學, 弁↔辨/瓣/辯)"
           end
           say "note: --word required a whole-word match (a fragment inside a longer word does not count)" if word
-          # The P42-2 guard scanned in corpus order — an empty page over a
-          # degraded path says so too, never a clean-looking silence.
+          # The P42-2 guard served a corpus-wide sample (P42-r3) — an empty
+          # page over a degraded path says so too, never a clean-looking silence.
           say "note: #{rank_note}" if rank_note
           say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
@@ -3936,7 +3962,7 @@ module Nabu
 
         results.each do |result|
           say "#{result.urn}#{" [#{result.language}]" if result.language}"
-          say "  #{display_text(result.snippet, result.language)}"
+          say "  #{display_snippet(result.snippet, result.language)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
             "(#{search_snippet_label(exact: exact, word: word, proximity: proximity,
@@ -3969,7 +3995,7 @@ module Nabu
       # paths now show the STORED text (P40-w carried proximity off the folded
       # index form); --exact / --word / proximity annotate what the match means.
       # +rank_note+ (P42-2, plain path only) appends the skipped-rank honesty
-      # clause: "…; term too common to rank — corpus order".
+      # clause: "…; term too common to rank — corpus-wide sample".
       def search_snippet_label(exact:, word: false, proximity: false, rank_note: nil, browse: false)
         return "filtered browse — corpus order, no ranking" if browse
         return "both terms bracketed; snippet shows the text as stored" if proximity
@@ -4009,7 +4035,7 @@ module Nabu
         else
           results.each do |result|
             say "#{result.urn}#{" [#{result.language}]" if result.language}"
-            say "  #{display_text(long ? result.folded_marked : result.snippet, result.language)}"
+            say "  #{display_snippet(long ? result.folded_marked : result.snippet, result.language)}"
           end
           say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
               "(fuzzy substring; highlights are diacritic-folded)#{facet_footer(facets, loans: loans, axis: axis)}"

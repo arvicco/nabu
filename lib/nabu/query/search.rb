@@ -97,8 +97,21 @@ module Nabu
 
       # The honest footer clause for a guard-skipped rank (the P35 rule:
       # a degraded page must say what it did). Shared verbatim by the CLI
-      # footer and the MCP note field.
-      RANK_SKIP_NOTE = "term too common to rank — corpus order"
+      # footer and the MCP note field. P42-r3: the skipped-rank page is a
+      # corpus-wide SAMPLE, not the head of the posting list — the owner's
+      # gate review showed the corpus-order page collapsing onto the first
+      # matching document in id space (twenty الله hits, all Abu Talib's
+      # dīwān), the same degenerate page for every guarded term.
+      RANK_SKIP_NOTE = "term too common to rank — corpus-wide sample"
+
+      # How many probe draws a sampled page may spend per needed hit before
+      # settling for what it has (anchors that collide on the same posting
+      # dedupe away — common when a term's postings cluster in one shelf's
+      # rowid range and every anchor before the cluster resolves to its first
+      # posting). The same bounded-retry idea as Random::PROBE_ATTEMPTS; a
+      # miss just means a shorter sample pool, never an error.
+      # const: bounded-retry budget per sampled hit (engine knob, not a corpus census)
+      SAMPLE_ATTEMPTS = 4
 
       # The guard threshold, as a stubbable seam for surface-level tests
       # (crossing 1M postings in a fixture corpus is not reasonable).
@@ -149,10 +162,13 @@ module Nabu
 
       # +term_frequency+ is the df probe seam (defaults to the real fts5vocab
       # reader over +fulltext+); tests inject a stub to pin the fail-open path.
-      def initialize(catalog:, fulltext:, term_frequency: nil)
+      # +rng+ (P42-r3) drives the sampled guarded page — injectable for
+      # deterministic tests, exactly the Random sampler's seam.
+      def initialize(catalog:, fulltext:, term_frequency: nil, rng: ::Random.new)
         @catalog = catalog
         @fulltext = fulltext
         @term_frequency = term_frequency || TermFrequency.new(fulltext: fulltext)
+        @rng = rng
       end
 
       # nil, or RANK_SKIP_NOTE when the last #run served its page in corpus
@@ -198,9 +214,9 @@ module Nabu
 
       # Term-less filtered browse (P42-6): a direct filtered page of the
       # catalog in CORPUS ORDER — passages.id ascending, the catalog's
-      # insertion order, which mirrors the FTS index's rowid corpus order the
-      # ubiquity guard (#rank?) falls back to, so a browse and a rank-skipped
-      # search agree on what "corpus order" means. There is NO FTS MATCH and NO
+      # insertion order. (A rank-skipped SEARCH page is, since P42-r3, a
+      # corpus-wide sample presented in this same order — browse stays a
+      # deterministic walk because its filters, not a term, bound the page.) There is NO FTS MATCH and NO
       # ranking here: the page is drawn straight from the catalog under the
       # active filters. Two consequences, both deliberate: the page has no inner
       # window (it is not a bounded FTS window the catalog join then thins), so
@@ -261,25 +277,41 @@ module Nabu
       # The P42-2 guard rides here too: before ranking, the fts5vocab df probe
       # bounds the candidate set the bm25 ORDER BY would have to score. Above
       # +ubiquity_threshold+ postings the rank is skipped — same MATCH, same
-      # filters, same snippets, corpus (rowid) order — and #rank_note arms the
-      # honest footer clause. Below (or when the probe is unavailable — nil —
-      # or under the ranking-independent urn probe), byte-identical to before.
+      # filters, same snippets — and #rank_note arms the honest footer clause.
+      # Below (or when the probe is unavailable — nil — or under the
+      # ranking-independent urn probe), byte-identical to before.
       # (The probe reads the TEXT variants only; the sentinel language tokens
       # are invisible to it, so the ceiling stays a valid upper bound — a
       # lang-narrowed candidate set is only ever smaller.)
+      # P42-r3: the skipped-rank window is a corpus-wide SAMPLE (rowid-anchor
+      # probes over the posting list), not the head of the list — the head
+      # window collapsed onto the first matching document in id space and
+      # served the identical degenerate page for every guarded term. The
+      # sampled hits present in passage-id order, so the page still reads as
+      # corpus order; it is just drawn from the whole corpus, announced by
+      # the note. A fixture-scale corpus samples exhaustively (the attempt
+      # budget dwarfs the posting list), where sample == the full match set.
       def folded_page(variants, filters, limit:, urn:, ubiquity_threshold:)
         lang_match = index_language_match(filters[:lang])
         filters = filters.merge(lang: nil) if lang_match
         ranked = urn ? true : rank?(variants, ubiquity_threshold)
         @rank_note = ranked ? nil : RANK_SKIP_NOTE
         inner_limit = limit * INNER_LIMIT_FACTOR
-        hits = fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn,
-                                                        ranked: ranked, lang_match: lang_match)
+        hits = if ranked
+                 fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn,
+                                                          ranked: true, lang_match: lang_match)
+               else
+                 sampled_hits_with_literal_fallback(variants, inner_limit: inner_limit,
+                                                              lang_match: lang_match)
+               end
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
         rows = catalog_rows(ordered_ids, **filters).to_h { |row| [row.fetch(:passage_id), row] }
         page = ordered_ids.filter_map { |id| rows[id] }.first(limit)
+        # A sampled page (guard fired) is cut in DRAW order for unbiasedness,
+        # then sorted for presentation — id order reads as corpus order.
+        page = page.sort_by { |row| row.fetch(:passage_id) } unless ranked
         note_page_completeness(
           window_exhausted: hits.size >= inner_limit,
           filters_active: filters_active?(filters), page_size: page.size, limit: limit
@@ -429,6 +461,51 @@ module Nabu
         literal = variants.map { |variant| literal_expression(variant) }
         fts_hits(match_expression(literal), inner_limit: inner_limit, offset: offset, urn: urn,
                                             ranked: ranked, lang_match: lang_match)
+      end
+
+      # The sampled guarded window (P42-r3), with the same literal-fallback
+      # symmetry as the ranked path.
+      def sampled_hits_with_literal_fallback(variants, inner_limit:, lang_match:)
+        sampled_hits(match_expression(variants), inner_limit: inner_limit, lang_match: lang_match)
+      rescue Sequel::DatabaseError => e
+        raise unless e.message.match?(/fts5|unterminated string|no such column/)
+
+        literal = variants.map { |variant| literal_expression(variant) }
+        sampled_hits(match_expression(literal), inner_limit: inner_limit, lang_match: lang_match)
+      end
+
+      # Corpus-spread sample of a guarded term's postings — the P41-r2
+      # id-probe pattern applied to the FTS posting walk. FTS5 honors rowid
+      # range constraints on a MATCH without materializing the posting list,
+      # so `MATCH term AND rowid >= anchor LIMIT 1` is one posting seek
+      # (measured 2026-07-23: 20 draws in 7ms against the الله list, vs 11.4s
+      # to bm25-rank it). Anchors are uniform over the index's rowid space,
+      # so a posting is drawn with probability proportional to the gap
+      # BEFORE it — the same near-uniform honesty as Random over bulk-loaded
+      # shelves — and anchors past the last posting simply miss (bounded by
+      # SAMPLE_ATTEMPTS). The final page presents in passage-id order: a stable
+      # corpus-order READING of an unbiased corpus-wide draw.
+      def sampled_hits(match, inner_limit:, lang_match:)
+        match = "(#{match}) AND #{lang_match}" if lang_match
+        max_rowid = @fulltext[Store::Indexer::TABLE].max(Sequel.lit("rowid"))
+        return [] unless max_rowid
+
+        seen = {}
+        (inner_limit * SAMPLE_ATTEMPTS).times do
+          break if seen.size >= inner_limit
+
+          row = @fulltext[Store::Indexer::TABLE]
+                .where(Sequel.lit("passages_fts MATCH ?", match))
+                .where(Sequel.lit("rowid >= ?", @rng.rand(1..max_rowid)))
+                .select(:passage_id).order(Sequel.lit("rowid")).limit(1).first
+          seen[row[:passage_id]] ||= row if row
+        end
+        # DRAW order, not id order: the page assembly takes the first +limit+
+        # survivors of the catalog filters, and only an order-free draw keeps
+        # that cut unbiased — sorting here would hand the page the lowest-id
+        # fraction of the sample, the head-bias this sampler exists to kill.
+        # The caller sorts the FINAL page for presentation.
+        seen.values
       end
 
       # Every whitespace token as a quoted FTS5 phrase (implicit AND), internal

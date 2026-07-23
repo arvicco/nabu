@@ -872,18 +872,56 @@ module Query
       rebuild!
     end
 
-    def test_ubiquitous_term_serves_corpus_order_and_announces_it
+    def test_ubiquitous_term_serves_a_sampled_page_in_corpus_order_and_announces_it
       seed_ubiquity_corpus
       searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
 
+      # A fixture-scale posting list is sampled exhaustively (the attempt
+      # budget dwarfs it), so the full match set comes back — presented in
+      # corpus (passage-id) order, dense row last, never bm25-led.
       results = searcher.run("aurora", ubiquity_threshold: 2)
       assert_equal %w[urn:d:1:0 urn:d:1:1 urn:d:1:2 urn:d:1:3 urn:d:1:dense],
                    results.map(&:urn),
-                   "above the df threshold the page is corpus order — the dense row no longer leads"
+                   "above the df threshold the page is a corpus-order-presented sample — the dense row no longer leads"
       assert_equal Nabu::Query::Search::RANK_SKIP_NOTE, searcher.rank_note,
                    "skipping the rank must be announced, never silent"
       assert_includes results.first.snippet, "[aurora]",
-                      "the corpus-order path still builds the stored-text snippet"
+                      "the guarded path still builds the stored-text snippet"
+    end
+
+    # The P42-r3 regression pin (owner gate review): the pre-sample guard
+    # served the HEAD of the posting list — twenty hits, all the first
+    # matching document in id space, the same degenerate page for every
+    # guarded term. The sampled page must draw across the corpus: with two
+    # documents' postings and a page smaller than either, both documents
+    # appear (seeded rng — the draw is deterministic under the seam).
+    def test_guarded_page_samples_across_documents_not_the_first_document_head
+      first = make_document(source: @open, urn: "urn:d:head", language: "lat")
+      30.times { |i| make_passage(first, urn: "urn:d:head:#{i}", text: "aurora #{i}", sequence: i, language: "lat") }
+      second = make_document(source: @open, urn: "urn:d:tail", language: "lat")
+      30.times { |i| make_passage(second, urn: "urn:d:tail:#{i}", text: "aurora #{i}", sequence: i, language: "lat") }
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, rng: ::Random.new(7))
+
+      results = searcher.run("aurora", limit: 5, ubiquity_threshold: 2)
+      assert_equal 5, results.size
+      documents = results.map { |result| result.urn.rpartition(":").first }.uniq
+      assert_operator documents.size, :>, 1,
+                      "a sampled guarded page spans documents — the head-window page never did"
+      insertion_order = results.map(&:urn).sort_by do |urn|
+        [urn.start_with?("urn:d:head") ? 0 : 1, urn.split(":").last.to_i]
+      end
+      assert_equal insertion_order, results.map(&:urn),
+                   "the sampled page presents in corpus (insertion) order"
+    end
+
+    def test_a_seeded_rng_makes_the_sampled_page_deterministic
+      seed_ubiquity_corpus
+      first = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, rng: ::Random.new(11))
+                                 .run("aurora", limit: 3, ubiquity_threshold: 2).map(&:urn)
+      second = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, rng: ::Random.new(11))
+                                  .run("aurora", limit: 3, ubiquity_threshold: 2).map(&:urn)
+      assert_equal first, second
     end
 
     def test_below_threshold_ranking_is_byte_identical_and_unannounced
