@@ -628,12 +628,19 @@ module Nabu
                            desc: "Record ledger pins for pre-ledger sources from local clones / state files; no network"
     option :all, type: :boolean, default: false,
                  desc: "Ignore the focus profile: check every source (modules + unfocused sources included)"
+    option :accept_creep, type: :string, banner: "SLUG",
+                          desc: "Record owner acceptance of SLUG's current quarantine baseline " \
+                                "(quiets the creep alarm; it re-arms past the accepted level)"
+    option :note, type: :string,
+                  desc: "Optional rationale recorded with --accept-creep"
     def health
       # Bare `health` is the local, no-network P5-5 check (run-history trends +
       # live golden replay). --remote is the P5-3 upstream probe.
-      # --backfill-pins (P15-7) is the one-shot pin recovery. Each keeps its own
-      # helper, db lifetime, and exit-code raise.
+      # --backfill-pins (P15-7) is the one-shot pin recovery. --accept-creep
+      # (P43-0) books a reviewed creep anomaly durably in the ledger. Each
+      # keeps its own helper, db lifetime, and exit-code raise.
       return run_backfill_pins if options[:backfill_pins]
+      return run_accept_creep(options[:accept_creep]) if options[:accept_creep]
 
       options[:remote] ? run_remote_health : run_local_health
     end
@@ -6380,6 +6387,41 @@ module Nabu
           registry: registry, ledger: ledger, canonical_dir: config.canonical_dir
         ).run
         ledger
+      end
+
+      # --accept-creep (P43-0, D42-c): the owner reviewed a quarantine-creep
+      # anomaly and accepts the source's CURRENT baseline. Durable by design —
+      # the acceptance lives in the history ledger (migration 008), so a
+      # rebuild never un-quiets a ruled-on alarm. A write path: create +
+      # migrate + lift, its own ledger lifetime. The active-anomaly probe runs
+      # BEFORE the acceptance lands (recording first would quiet the very
+      # finding the honesty line reports on).
+      def run_accept_creep(slug)
+        config = Nabu::Config.load
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        if registry[slug].nil?
+          raise Thor::Error, "accept-creep: unknown source '#{slug}' — not in #{config.sources_path}"
+        end
+
+        ledger = open_or_create_ledger(config)
+        active = Nabu::Health::QuarantineBaseline.creep_finding(ledger, slug)
+        accepted = Nabu::Health::QuarantineBaseline.accept!(ledger, slug, note: options[:note])
+        if accepted.nil?
+          raise Thor::Error, "accept-creep: no quarantine baseline recorded for '#{slug}' — nothing to accept " \
+                             "(a baseline is recorded at the source's first ok sync or rebuild)"
+        end
+        say "accepted quarantine baseline #{accepted} for #{slug} — the creep alarm re-arms past #{accepted}"
+        # Pre-accepting (no live anomaly, or one an earlier acceptance already
+        # quiets to the info note) is allowed but never passes silently.
+        say "(no active creep anomaly for #{slug} — recorded as a pre-acceptance)" if active.nil? || !anomaly?(active)
+      ensure
+        ledger&.disconnect
+      end
+
+      # A finding that affects (or warns toward) the exit code — as opposed to
+      # an info-grade note like an already-quieted creep.
+      def anomaly?(finding)
+        finding.loud? || finding.soft?
       end
 
       # Bare health (P5-5): run-history trends + live golden replay, no network.
