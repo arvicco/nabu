@@ -250,5 +250,24 @@ module Query
       error = assert_raises(Nabu::Query::Vocab::NotFound) { vocab("urn:d:nope") }
       assert_match(/urn not found/, error.message)
     end
+
+    # -- the P42-1 frequency census + its fallback ---------------------------
+
+    def test_denominator_and_corpus_freq_identical_with_and_without_the_census
+      seed_corpus
+      with_census = vocab("urn:d:lat")
+      # A fulltext predating the census: drop it and the reader falls back to
+      # the live passage_lemmas aggregate — the numbers must not move (the
+      # score depends on the corpus_total denominator, so identical scores
+      # prove the denominator matches too).
+      @fulltext.drop_table(Nabu::Store::LemmaFrequencies::TABLE)
+      without_census = vocab("urn:d:lat")
+
+      refute Nabu::Store::LemmaFrequencies.available?(@fulltext)
+      assert_equal with_census.total_tokens, without_census.total_tokens
+      assert_equal with_census.distinctive.map { |e| [e.lemma, e.corpus_freq, e.score] },
+                   without_census.distinctive.map { |e| [e.lemma, e.corpus_freq, e.score] },
+                   "corpus_freq + log-odds denominator identical from the census or the live scan"
+    end
   end
 end
