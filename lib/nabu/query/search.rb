@@ -3,6 +3,7 @@
 require_relative "../normalize"
 require_relative "catalog_join"
 require_relative "stored_snippet"
+require_relative "term_frequency"
 
 module Nabu
   # Query surface over the derived store (architecture §2: lib/nabu/query/).
@@ -46,6 +47,34 @@ module Nabu
       # the snippet from the pristine stored text via StoredSnippet, P40-w.)
       RANK_SQL = "bm25(passages_fts)"
 
+      # The ubiquitous-term guard (P42-2). MEASURED (P41 scale review): FTS5
+      # `ORDER BY rank` computes bm25 for EVERY matching row before LIMIT, so
+      # a term present in a large fraction of the corpus (الله across the
+      # Arabic shelves) cost ~10s a page while rare terms cost 0.27s — the
+      # curve is per-term document frequency. When the estimated candidate
+      # set (TermFrequency#candidate_ceiling — sum over ORed fold variants of
+      # the min df across each variant's ANDed tokens) exceeds this many
+      # postings, the ranked ORDER BY is skipped and the page is served in
+      # corpus (rowid) order, announced via #rank_note. TUNING RATIO: the
+      # measured endpoints put bm25 at roughly 0.3µs/candidate (10s over the
+      # ~31M-row candidate set of a ~50%-df term), so 1M candidates ≈ 0.3s —
+      # the house per-command budget — and 1M ≈ 1.6% of the 62.8M corpus.
+      # P42-5 (the orchestrator's live re-measure) should plot ranked latency
+      # at df ≈ 0.5M/1M/2M and move this to where the curve crosses ~0.5s.
+      # census: 62800000, 2026-07-23, live passages (P41 scale review; ranked latency 0.27s rare / ~10s at ~50% df)
+      UBIQUITY_THRESHOLD = 1_000_000
+
+      # The honest footer clause for a guard-skipped rank (the P35 rule:
+      # a degraded page must say what it did). Shared verbatim by the CLI
+      # footer and the MCP note field.
+      RANK_SKIP_NOTE = "term too common to rank — corpus order"
+
+      # The guard threshold, as a stubbable seam for surface-level tests
+      # (crossing 1M postings in a fixture corpus is not reasonable).
+      def self.ubiquity_threshold
+        UBIQUITY_THRESHOLD
+      end
+
       # Pull more FTS hits than the caller's limit so that catalog-side filtering
       # (language/license) can drop non-matching rows and still fill the page.
       # Exhaustion is ANNOUNCED (P35-6): a full window + active filters + a
@@ -85,10 +114,18 @@ module Nabu
         query.to_s.match?(SPACELESS_WORD_SCRIPTS) ? WORD_REFUSAL : nil
       end
 
-      def initialize(catalog:, fulltext:)
+      # +term_frequency+ is the df probe seam (defaults to the real fts5vocab
+      # reader over +fulltext+); tests inject a stub to pin the fail-open path.
+      def initialize(catalog:, fulltext:, term_frequency: nil)
         @catalog = catalog
         @fulltext = fulltext
+        @term_frequency = term_frequency || TermFrequency.new(fulltext: fulltext)
       end
+
+      # nil, or RANK_SKIP_NOTE when the last #run served its page in corpus
+      # order because the term was too common to rank (the P42-2 guard).
+      # Reset on every run, like incomplete_hint.
+      attr_reader :rank_note
 
       # Search +query+ and return up to +limit+ Result values in bm25 rank order.
       # +lang+ filters on passage language; +license+ on effective license class.
@@ -101,10 +138,13 @@ module Nabu
       # replay), not a pagination knob. +loans+ (P34-2) keeps only passages
       # whose stored annotations carry ≥1 loan token of that origin code
       # (passage-grain, read straight off annotations_json — no reparse).
+      # +ubiquity_threshold+ (P42-2) is the guard's candidate-postings ceiling
+      # (see UBIQUITY_THRESHOLD) — a seam for tests and for P42-5 tuning runs.
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
               facets: nil, source: nil, sources: nil, loans: nil, exact: false, word: false,
-              scan_ceiling: SCAN_CEILING)
+              scan_ceiling: SCAN_CEILING, ubiquity_threshold: self.class.ubiquity_threshold)
         @incomplete_hint = nil
+        @rank_note = nil
         raise Nabu::Error, WORD_REFUSAL if word && self.class.word_refusal_for(query)
 
         variants = Nabu::Normalize.query_forms(query.to_s)
@@ -116,7 +156,7 @@ module Nabu
                  verified_page(variants, query, filters, limit: limit, urn: urn,
                                                          scan_ceiling: scan_ceiling, exact: exact, word: word)
                else
-                 folded_page(variants, filters, limit: limit, urn: urn)
+                 folded_page(variants, filters, limit: limit, urn: urn, ubiquity_threshold: ubiquity_threshold)
                end
         page.map { |row| build_result(row, query, exact: exact, word: word) }
       end
@@ -146,9 +186,17 @@ module Nabu
       # filtered rows, trimmed to the page. --limit already means "displayed
       # hits" here — only catalog-side filters thin the window, and that
       # thinning is announced by the P35-6 exhausted-window hint.
-      def folded_page(variants, filters, limit:, urn:)
+      # The P42-2 guard rides here: before ranking, the fts5vocab df probe
+      # bounds the candidate set the bm25 ORDER BY would have to score. Above
+      # +ubiquity_threshold+ postings the rank is skipped — same MATCH, same
+      # filters, same snippets, corpus (rowid) order — and #rank_note arms the
+      # honest footer clause. Below (or when the probe is unavailable — nil —
+      # or under the ranking-independent urn probe), byte-identical to before.
+      def folded_page(variants, filters, limit:, urn:, ubiquity_threshold:)
+        ranked = urn ? true : rank?(variants, ubiquity_threshold)
+        @rank_note = ranked ? nil : RANK_SKIP_NOTE
         inner_limit = limit * INNER_LIMIT_FACTOR
-        hits = fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn)
+        hits = fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn, ranked: ranked)
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
@@ -159,6 +207,16 @@ module Nabu
           filters_active: filters_active?(filters), page_size: page.size, limit: limit
         )
         page
+      end
+
+      # The guard verdict: rank when the estimated candidate set is bounded
+      # (≤ threshold) or unknowable (nil — no vocabulary, fail open). The
+      # probe under-counts FTS power syntax to 0 by construction (quoted or
+      # starred tokens miss the vocabulary), so those queries always rank,
+      # exactly as before the guard.
+      def rank?(variants, threshold)
+        ceiling = @term_frequency.candidate_ceiling(variants)
+        ceiling.nil? || ceiling <= threshold
       end
 
       # --exact / --word paginated page (P39-r3 Defect 1, extended P40-w). A
@@ -257,13 +315,13 @@ module Nabu
       # retry ONCE with every token literal-quoted (internal quotes doubled
       # — the escaped form cannot syntax-error), so hyphenated words and
       # option-looking strings just search. Non-fts errors re-raise.
-      def fts_hits_with_literal_fallback(variants, inner_limit:, offset: 0, urn: nil)
-        fts_hits(match_expression(variants), inner_limit: inner_limit, offset: offset, urn: urn)
+      def fts_hits_with_literal_fallback(variants, inner_limit:, offset: 0, urn: nil, ranked: true)
+        fts_hits(match_expression(variants), inner_limit: inner_limit, offset: offset, urn: urn, ranked: ranked)
       rescue Sequel::DatabaseError => e
         raise unless e.message.match?(/fts5|unterminated string|no such column/)
 
         literal = variants.map { |variant| literal_expression(variant) }
-        fts_hits(match_expression(literal), inner_limit: inner_limit, offset: offset, urn: urn)
+        fts_hits(match_expression(literal), inner_limit: inner_limit, offset: offset, urn: urn, ranked: ranked)
       end
 
       # Every whitespace token as a quoted FTS5 phrase (implicit AND), internal
@@ -289,13 +347,16 @@ module Nabu
       # are pulled — the snippet is rebuilt from stored text (StoredSnippet),
       # never from the folded index column. +offset+ pages the candidate scan
       # for --exact (bm25 order is stable, so OFFSET paging is deterministic).
-      def fts_hits(match, inner_limit:, offset: 0, urn: nil)
+      # +ranked: false+ (the P42-2 guard) keeps the identical MATCH but orders
+      # by rowid — the index's insertion order, which the Indexer streams in
+      # catalog (document/sequence) order — so no bm25 is computed at all.
+      def fts_hits(match, inner_limit:, offset: 0, urn: nil, ranked: true)
         dataset = @fulltext[Store::Indexer::TABLE]
                   .where(Sequel.lit("passages_fts MATCH ?", match))
         dataset = dataset.where(urn: urn) if urn # urn rides UNINDEXED in the index row
         dataset
           .select(:passage_id)
-          .order(Sequel.lit(RANK_SQL))
+          .order(ranked ? Sequel.lit(RANK_SQL) : :rowid)
           .limit(inner_limit)
           .offset(offset)
           .all

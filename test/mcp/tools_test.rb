@@ -159,6 +159,38 @@ module MCP
       refute_match(/page may be incomplete/, honest.fetch("note"), "a full page carries no hint")
     end
 
+    # -- the ubiquitous-term guard (P42-2) over MCP ---------------------------
+    # nabu_search runs the same Query::Search plain path as the CLI, so the
+    # guard applies here too; the honesty clause rides the EXISTING free-text
+    # note field (additive — the frozen response shape gains no key). The
+    # census-scaled threshold is stubbed down to fire on a fixture corpus.
+    def with_ubiquity_threshold(value)
+      original = Nabu::Query::Search.method(:ubiquity_threshold)
+      Nabu::Query::Search.singleton_class.define_method(:ubiquity_threshold) { value }
+      yield
+    ensure
+      Nabu::Query::Search.singleton_class.define_method(:ubiquity_threshold, original)
+    end
+
+    def test_search_ubiquitous_term_note_rides_the_note_field
+      seed_corpus # ἄειδε appears in 4 passages — df 4 crosses a threshold of 2
+
+      result = with_ubiquity_threshold(2) { call("nabu_search", { "query" => "αειδε" }) }
+      refute result[:isError]
+      body = payload(result)
+      refute_empty body.fetch("matches")
+      assert_match(/term too common to rank — corpus order/, body.fetch("note"),
+                   "the skipped rank must be announced on the MCP surface too")
+      body.fetch("matches").each do |hit|
+        assert hit.key?("urn") && hit.key?("language") && hit.key?("license_class"),
+               "the corpus-order page keeps the frozen match shape"
+      end
+
+      ranked = payload(call("nabu_search", { "query" => "αειδε" }))
+      refute_match(/too common to rank/, ranked.fetch("note"),
+                   "below the real threshold the note is byte-identical to before P42-2")
+    end
+
     def test_search_lemma_mode_finds_inflected_attestations
       doc = make_document(urn: "urn:d:tb", title: "Treebank")
       make_passage(doc, urn: "urn:d:tb:1", text: "σὺ δὲ εἶπας.", sequence: 0,

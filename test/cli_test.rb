@@ -4745,6 +4745,49 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- the ubiquitous-term guard footer (P42-2) ------------------------------
+  # The threshold is census-scaled (~1M postings), so a fixture corpus can
+  # never cross it honestly; the class-method seam is stubbed down to fire
+  # the guard on with_window_corpus's 11 "arma" rows. (Hand-rolled stub:
+  # minitest 6 no longer ships minitest/mock.)
+
+  def with_ubiquity_threshold(value)
+    original = Nabu::Query::Search.method(:ubiquity_threshold)
+    Nabu::Query::Search.singleton_class.define_method(:ubiquity_threshold) { value }
+    yield
+  ensure
+    Nabu::Query::Search.singleton_class.define_method(:ubiquity_threshold, original)
+  end
+
+  def test_search_ubiquitous_term_footer_names_the_corpus_order
+    with_window_corpus do |config|
+      out, _err, status = with_ubiquity_threshold(2) do
+        with_config(config) { run_cli(%w[search arma --limit 3]) }
+      end
+      assert_nil status
+      assert_match(/matching is fold-aware; term too common to rank — corpus order\)/, out,
+                   "the hit-count parenthetical owns the skipped rank")
+
+      ranked, _err2, = with_config(config) { run_cli(%w[search arma --limit 3]) }
+      refute_match(/too common to rank/, ranked,
+                   "below the real threshold the footer is byte-identical to before P42-2")
+    end
+  end
+
+  # A guard-active page that comes back EMPTY under filters still announces
+  # the corpus-order scan (alongside the P35-6 window hint) — never a
+  # clean-looking silence over a degraded path.
+  def test_search_ubiquitous_term_empty_page_still_notes_the_skipped_rank
+    with_window_corpus do |config|
+      out, _err, status = with_ubiquity_threshold(2) do
+        with_config(config) { run_cli(%w[search arma --lang grc --limit 1]) }
+      end
+      assert_nil status
+      assert_match(/no matches/i, out)
+      assert_match(/note: term too common to rank — corpus order/, out)
+    end
+  end
+
   def test_proximity_incomplete_page_under_filters_prints_the_hint
     with_window_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[search arma --near cano --lang grc --limit 1]) }
