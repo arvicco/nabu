@@ -10911,13 +10911,26 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 
 ## P40-flips · [status: done 2026-07-22 — eb66f2f; owner-verified counts in sources.yml comments; IcePaHC landed at the owner's same-day `sync ud`]
 
-# P42 candidates — the scale phase (from .docs/p41-scale-review.md, owner picks)
+# P43 candidates (rolling)
 
-## P42-0 · source_stats + global census derived table  [tier: fable — first derived-stats table, invariants] — status/list/axis/language 130–250s → ms
-## P42-1 · vocab corpus lemma-frequency table  [tier: opus] — 17.9s → ms
-## P42-2 · ubiquitous-term guard (fts5vocab df → unranked corpus-order + honest footer)  [tier: fable — search semantics] — the الله class ~10s → sub-second
-## P42-3 · language column into passages_fts  [rides the owner's next FULL rebuild with the lzh re-derive + openiti timeline]
-## P42-4 · load hygiene: post-load bounded ANALYZE + PRAGMA pass  [tier: opus]
+## P43-? · UD historical wave  [config-only per the availability survey — ≥10 treebanks: first Classical Armenian (CAVaL 99K), Old/Middle French, Ottoman ×2, Bohairic Coptic, PTNK, Akkadian RIAO/PISANDUB; per-repo license gates]
+## P43-? · KITAB text-reuse over openiti  [51.5M alignments — the citation-network follow-on; license unverified, read the Zenodo record first]
+## P43-? · Trismegistos + Pleiades instruments  [Trismegistos NOW CC BY-SA 4.0 (quoted — supersedes the restrictive assumption); Pleiades CC BY dumps; the place/person enrichment lane]
+## P43-? · Axis-scale candidates from the availability survey  [EEBO-TCP early-modern English ~60K books · DTA German · OSTA medieval Iberian · Menota Nordic · GLAUx Greek — owner picks appetite]
+## P43-? · TITUS Avestan adapter  [UNBLOCKED 2026-07-23 — №41-3 granted: non-commercial + TITUS-and-editors credit on every surface; one polite scripted pass; nc + mandatory credit line; per-text editor metadata]
+
+# P42 — the efficiency phase (owner-picked 2026-07-23: "make these commands fly, not crawl"; plan: .docs/p42-efficiency-plan.md)
+
+## P42-0 · source_stats + global census derived table  [tier: fable] [status: done 2026-07-23 — merged 572b713..47f9843; equivalence braid green; readers byte-identical; D42-a rotating drift probe; MCP nabu_status flagged as follow-up]
+## P42-2 · ubiquitous-term guard  [tier: fable] [status: done 2026-07-23 — merged 266ce2b; TEMP-schema fts5vocab (readonly-safe, no reindex, MCP covered); live-verified 9.6s → 0.38s]
+## P42-1 · vocab lemma-frequency table + etym probe  [tier: opus] [status: done 2026-07-23 — merged 3908551; fulltext placement, no migration; etym cause proven via EXPLAIN; activates at rebuild]
+## P42-3 · language column into passages_fts  [tier: fable] [status: done 2026-07-23 — merged 46dd9d9+c666088; indexed sentinel tokens, guard-disjoint; activates at rebuild]
+## P42-4 · load hygiene: post-load bounded ANALYZE  [tier: opus] [status: done 2026-07-23 — merged 60882e7; PRAGMA pass folded into P42-5's live re-measure]
+## P42-5 · re-measure matrix + docs  [tier: orchestrator] [status: gate-time]
+## P42-r1 · grant gate  [tier: opus] [status: done 2026-07-23 — merged 06ebceb+f11b9f4; starling gated, ledger migration 007, owner ack recorded]
+## P42-6 · term-less filtered browse  [tier: opus] [status: done 2026-07-23 — merged ce034fb+7b9dc89; recipes restored, P42-5 re-verifies live]
+## P42-7 · MCP nabu_status stats swap  [tier: opus] [status: done 2026-07-23 — merged a8a870a; RESIDUAL: license-filtered totals still live — measure at P42-5]
+## P42-8 · health module-kind exemption  [tier: opus] [status: done 2026-07-23 — merged bf761c2; info-grade note, kind-keyed]
 
 ## P41-r2 · --random instant (id-probe sampler)  [status: done 2026-07-23 — 98ef4b6; 2m19s → 0.3s; join-free probe pattern documented]
 

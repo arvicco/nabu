@@ -113,6 +113,8 @@ epigraphy:
       note: the Oxyrhynchite strategoi by date and provenance
     - cmd: 'nabu search "στρατηγ*" --century 2 --axis epigraphy'
       note: a query scoped to one century (negative = BCE, no year 0)
+    - cmd: 'nabu search --century 2 --axis epigraphy'
+      note: term-less browse — every 2nd-c. inscription in corpus order, the century the content filter
     - cmd: 'nabu show urn:nabu:ogham:e-dev-001 --parallel'
       note: an ogham stone beside its transliteration sibling
     - cmd: 'nabu search --lemma precor --axis epigraphy'
@@ -429,8 +431,8 @@ arabic:
       note: Allāh across the Arabic hadith, dīwān and falsafa shelves
     - cmd: 'nabu search دانی --lang fas'
       note: the cross-keyboard ی/ي fold (P41-3) — an Arabic-yeh query (U+064A) still finds Ḥāfiẓ's farsi-yeh دانی (U+06CC)
-    - cmd: 'nabu search الله --from 1300 --to 1400 --axis arabic'
-      note: the AH death-year timeline (lights at the owner's next incremental rebuild)
+    - cmd: 'nabu search --from 1300 --to 1400 --axis arabic'
+      note: term-less browse of the 14th-c.-CE shelf on the AH death-year timeline (live-verified 23 July 2026)
   display: |
     - **Arabic and Persian (ara/fas) are RTL** and reuse the hbo/arc
       machinery: `isolates: true` wrapping, the same modes, the same honesty
@@ -484,8 +486,8 @@ cuneiform:
       note: pull a random tablet from the ORACC shelf
     - cmd: 'nabu show urn:nabu:oracc:saao-saa01:P224395:o.1-o.3 --parallel'
       note: Akkadian beside its running English translation
-    - cmd: 'nabu search LUGAL --century -7 --axis cuneiform'
-      note: kings in the 7th-century-BCE tablets, by regnal date
+    - cmd: 'nabu search --century -7 --axis cuneiform'
+      note: term-less browse — the 7th-century-BCE tablets on the regnal-date timeline, corpus order
     - cmd: 'nabu search --fuzzy "a-na LUGAL" --axis cuneiform'
       note: trigram fragment search — "to the king", straight off the tablet
     - cmd: 'nabu search --lemma šarru --lang akk --axis cuneiform'

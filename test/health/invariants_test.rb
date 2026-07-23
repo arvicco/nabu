@@ -118,6 +118,35 @@ class InvariantsTest < Minitest::Test
     assert_nil find(:synced_unpopulated, entry("lexica"))
   end
 
+  # P42-8: a kind: module row FETCHES reference data but mints NO catalog rows
+  # by design (bridging, kr-gaiji on the live box). A succeeded run + zero rows
+  # is EXPECTED for it, not the half-loaded signature — so it never raises the
+  # loud zero-rows anomaly; it downgrades to an :info line (never affects exit).
+  def test_feature_module_with_ok_run_and_zero_rows_is_info_not_anomaly
+    source = seed_source("bridging")
+    seed_run(source, status: "succeeded")
+
+    assert_nil find(:synced_unpopulated, module_entry("bridging")),
+               "a succeeded, zero-rows module must not raise the loud zero-rows anomaly"
+    info = find(:module_no_rows, module_entry("bridging"))
+    refute_nil info, "a succeeded, zero-rows module gets an informational note"
+    assert_equal :info, info.severity
+    refute_predicate info, :loud?
+  end
+
+  # The exemption is the zero-rows-after-SUCCESS rule alone: a module whose
+  # LATEST run FAILED still alarms normally (last_run_honesty), and never
+  # gets the by-design info note (which gates on a succeeded run).
+  def test_feature_module_with_failed_run_still_alarms
+    source = seed_source("kr-gaiji")
+    seed_run(source, status: "failed")
+
+    refute_nil find(:failed_run, module_entry("kr-gaiji")),
+               "a failed module run is still loud"
+    assert_nil find(:module_no_rows, module_entry("kr-gaiji"))
+    assert_nil find(:synced_unpopulated, module_entry("kr-gaiji"))
+  end
+
   # P24-1: the owner-notes shelf is populated by urn_notes rows — its own
   # grain, never the documents/entries test (which would read forever-empty).
   class NotesKindAdapter < Nabu::Adapter
@@ -288,6 +317,82 @@ class InvariantsTest < Minitest::Test
     assert_empty checker.global
   end
 
+  # -- source_stats drift (D42-a, global) -------------------------------------
+
+  # The contract: source_stats is DERIVED and the loader is its only writer.
+  # `nabu health` holds the table against one rotating source's true counts
+  # per run (O(one source), never the corpus) — a bypassing write path is a
+  # bug this probe catches loudly.
+
+  def test_matching_source_stats_produce_no_drift_finding
+    source = seed_source("texts")
+    seed_docs(source, 2)
+    Nabu::Store::SourceStats.derive!(@db, note: "test")
+
+    assert_nil global_finding(:stats_drift)
+  end
+
+  def test_tampered_source_stats_row_is_loud_drift_naming_the_numbers
+    source = seed_source("texts")
+    seed_docs(source, 2)
+    Nabu::Store::SourceStats.derive!(@db, note: "test")
+    @db[:source_stats].update(live_documents: 7)
+
+    finding = global_finding(:stats_drift)
+    assert_predicate finding, :loud?
+    assert_match(/texts/, finding.message)
+    assert_match(/live_documents stats=7 actual=2/, finding.message)
+    assert_match(/rebuild/, finding.message, "the remedy is named")
+  end
+
+  def test_documents_written_past_the_loader_read_as_drift_too
+    source = seed_source("texts")
+    Nabu::Store::SourceStats.derive!(@db, note: "test")
+    seed_docs(source, 2) # a direct write the loader never saw -> no stats row
+
+    finding = global_finding(:stats_drift)
+    assert_predicate finding, :loud?
+    assert_match(/live_documents stats=0 actual=2/, finding.message)
+  end
+
+  def test_tampered_passage_count_is_caught_under_the_probe_cap
+    source = seed_source("texts")
+    doc = seed_docs(source, 1).first
+    @db[:passages].insert(document_id: doc[:id], urn: "urn:t:texts:p1", sequence: 0,
+                          language: "grc", text: "t", text_normalized: "t",
+                          content_sha256: "x", withdrawn: false)
+    Nabu::Store::SourceStats.derive!(@db, note: "test")
+    @db[:source_stats].update(live_passages: 99)
+
+    finding = global_finding(:stats_drift)
+    assert_predicate finding, :loud?
+    assert_match(/live_passages stats=99 actual=1/, finding.message)
+  end
+
+  def test_probe_rotates_across_sources_by_day
+    first = seed_source("alpha")
+    second = seed_source("beta")
+    seed_docs(first, 1)
+    seed_docs(second, 1)
+    Nabu::Store::SourceStats.derive!(@db, note: "test")
+    @db[:source_stats].update(live_documents: 9) # both rows tampered
+
+    named = [Time.utc(2026, 7, 14), Time.utc(2026, 7, 15)].map do |now|
+      checker = Nabu::Health::Invariants.new(registry: nil, catalog: @db, fulltext: @fulltext,
+                                             ledger: @ledger, now: now)
+      checker.global.find { |f| f.kind == :stats_drift }.message[/on (\w+):/, 1]
+    end
+    assert_equal %w[alpha beta], named.sort, "consecutive days probe different sources"
+  end
+
+  def test_pre019_catalog_produces_no_drift_finding
+    seed_docs(seed_source("texts"), 2)
+    @db.drop_table(:source_stats_languages)
+    @db.drop_table(:source_stats)
+
+    assert_nil global_finding(:stats_drift), "pending_migrations covers the missing table"
+  end
+
   private
 
   # -- local shelves (P19-1): dossier files vs records; pins vs the tree ------
@@ -371,7 +476,12 @@ class InvariantsTest < Minitest::Test
   end
 
   def invariants(catalog: @db, fulltext: @fulltext, ledger: @ledger)
-    Nabu::Health::Invariants.new(registry: nil, catalog: catalog, fulltext: fulltext, ledger: ledger)
+    Nabu::Health::Invariants.new(registry: nil, catalog: catalog, fulltext: fulltext, ledger: ledger,
+                                 now: @now)
+  end
+
+  def global_finding(kind)
+    invariants.global.find { |finding| finding.kind == kind }
   end
 
   def find(kind, entry)
@@ -383,6 +493,12 @@ class InvariantsTest < Minitest::Test
       slug: slug, adapter_class_name: adapter, enabled: enabled,
       sync_policy: "manual", fuzzy_index: fuzzy
     )
+  end
+
+  # A kind: module registry row (P39-0): fetches reference data, mints no
+  # catalog rows (feature_module? true).
+  def module_entry(slug, adapter: "TestAdapter")
+    entry(slug, enabled: false, adapter: adapter).with(kind: "module")
   end
 
   def seed_source(slug)

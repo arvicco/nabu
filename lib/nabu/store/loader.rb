@@ -2,6 +2,7 @@
 
 require "json"
 require_relative "content_hash"
+require_relative "source_stats"
 
 module Nabu
   module Store
@@ -125,6 +126,11 @@ module Nabu
         @profile = profile
         @tx_batch = tx_batch
         @tx_batch_rows = tx_batch_rows
+        # P42-0: the write-time census. Each document mutation applies its
+        # contribution delta to source_stats INSIDE the same transaction, so
+        # the read surfaces stop aggregating the corpus per invocation. nil on
+        # a catalog predating migration 019 — every hook is then a no-op.
+        @stats = SourceStats.maintainer(db: db, source: source)
       end
 
       # Load an enumerable of Nabu::Document. Streams: only urns are retained
@@ -305,15 +311,37 @@ module Nabu
         if row.content_sha256 == doc_sha
           # Unchanged content: no revision bump, no passage work — only the
           # visibility flags, the license override (metadata, P10-4) and the
-          # document metadata (P17-2) may need reconciling.
-          restored = row.withdrawn && restore(row)
-          relabeled = reconcile_license_override?(row, document)
-          remetadata = reconcile_metadata?(row, document)
-          return :skipped unless reconcile_retirement?(row, retained) || restored || relabeled || remetadata
+          # document metadata (P17-2) may need reconciling. The need is judged
+          # READ-ONLY first (P42-0) so the idempotent-skip hot path never pays
+          # the stats snapshot; the reconcilers below re-check and so stay
+          # individually idempotent.
+          return :skipped unless reconcile_needed?(row, document, retained)
+
+          tracking_stats(row) do
+            restore(row) if row.withdrawn
+            reconcile_license_override?(row, document)
+            reconcile_metadata?(row, document)
+            reconcile_retirement?(row, retained)
+          end
         else
-          revise_document(row, document, passage_shas, doc_sha, retained)
+          tracking_stats(row) { revise_document(row, document, passage_shas, doc_sha, retained) }
         end
         :updated
+      end
+
+      # Read-only twin of the same-content reconcile block: does anything
+      # about this row disagree with what the adapter just emitted?
+      def reconcile_needed?(row, document, retained)
+        row.withdrawn ||
+          row.license_override != document.license_override ||
+          row.metadata_json != ContentHash.canonical_json(document.metadata) ||
+          row.retired_upstream != !retained.nil?
+      end
+
+      # P42-0: snapshot the row's stats contribution around a mutation and
+      # apply the delta (same transaction). Pass-through without stats.
+      def tracking_stats(row, &)
+        @stats ? @stats.around(row, &) : yield
       end
 
       # P39-4: journal a within-pass collision loudly and keep the first writer.
@@ -367,6 +395,9 @@ module Nabu
         # durable: false — an insert is not a transition (see class comment).
         journal_retirement_flip(row, false, retained, durable: false)
         document.passages.each { |passage| insert_passage(row.id, passage, passage_shas.fetch(passage.urn)) }
+        # P42-0: the insert contribution comes from the in-memory document —
+        # no extra query on the rebuild's bulk-insert path.
+        @stats&.added(document, retained: retained)
         :added
       end
 
@@ -540,12 +571,15 @@ module Nabu
       def sweep_withdrawn(seen_urns, counts)
         @db.transaction do
           Document.where(source_id: @source.id, withdrawn: false)
-                  .select_map(%i[id urn content_sha256]).each do |id, urn, sha|
+                  .select_map(%i[id urn content_sha256 language license_override retired_upstream])
+                  .each do |id, urn, sha, language, license_override, retired|
             next if seen_urns.include?(urn)
 
             Document.where(id: id).update(withdrawn: true)
             journal(event: "withdrawn", document_id: id)
             durable(event: "withdrawn", urn: urn, old_sha: sha)
+            # P42-0: the withdrawn doc's live contribution leaves the stats.
+            @stats&.swept(id: id, language: language, license_override: license_override, retired: retired)
             counts[:withdrawn] += 1
           end
         end

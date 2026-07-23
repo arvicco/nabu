@@ -139,6 +139,69 @@ module Store
       assert_equal [passage.id], fts.select_map(:passage_id)
     end
 
+    # -- the language column (P42-3) -----------------------------------------
+    # passages_fts carries each row's language as ONE indexed sentinel token
+    # ("0lang" + folded code) so Query::Search can put --lang INSIDE the
+    # MATCH (the P40-r2 window-starvation genus). Sentinel, not the bare
+    # code: bare codes are real words ("is") and would pollute both plain
+    # MATCHes and the P42-2 fts5vocab df probe.
+
+    # The pre-P42-3 table shape — the owner's live fulltext file until the
+    # next full rebuild.
+    OLD_FTS_DDL = <<~SQL
+      CREATE VIRTUAL TABLE passages_fts USING fts5(
+        text_normalized,
+        urn UNINDEXED,
+        passage_id UNINDEXED,
+        tokenize = 'unicode61 remove_diacritics 2'
+      )
+    SQL
+
+    def test_fresh_build_carries_the_language_sentinel_token
+      doc = make_document(urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "aurora", sequence: 0)
+      make_passage(doc, urn: "urn:d:1:2", text_normalized: "aurora", sequence: 1, language: "lat")
+      rebuild!
+
+      assert_includes fts.columns, :language, "a from-scratch build mints the P42-3 column"
+      assert_equal "0langgrc", fts.where(urn: "urn:d:1:1").get(:language)
+      hits = match(%{aurora AND language : ("0langlat")})
+      assert_equal %w[urn:d:1:2], hits.map { |row| row.fetch(:urn) },
+                   "the sentinel token filters the MATCH itself — the P42-3 point"
+    end
+
+    def test_language_token_collapses_multi_part_codes_to_one_equality_token
+      deva = make_document(urn: "urn:d:deva")
+      make_passage(deva, urn: "urn:d:deva:1", text_normalized: "dharman", sequence: 0,
+                         language: "san-Deva")
+      iast = make_document(urn: "urn:d:iast")
+      make_passage(iast, urn: "urn:d:iast:1", text_normalized: "dharman", sequence: 0,
+                         language: "san")
+      rebuild!
+
+      assert_equal "0langsandeva", fts.where(urn: "urn:d:deva:1").get(:language),
+                   "downcased, non-alphanumerics stripped — one token, never several"
+      assert_equal %w[urn:d:iast:1],
+                   match(%{dharman AND language : ("0langsan")}).map { |row| row.fetch(:urn) },
+                   "a san filter must NOT prefix-bleed into san-Deva rows (equality, as the catalog WHERE had)"
+    end
+
+    def test_incremental_refresh_writes_the_old_shape_into_a_pre_rebuild_table
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      # Downgrade to the pre-P42-3 shape: the openiti load pattern — the
+      # owner's live file keeps taking incremental syncs until the rebuild.
+      @fulltext.drop_table(:passages_fts)
+      @fulltext.run(OLD_FTS_DDL)
+
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      assert_equal 2, refresh!
+      refute_includes fts.columns, :language, "an incremental sync never upgrades the table shape"
+      assert_equal %w[urn:d:s:1 urn:d:s:2], fts.order(:urn).select_map(:urn),
+                   "new syncs land in the old shape unchanged"
+    end
+
     # -- the lemma index (P7-5) ----------------------------------------------
 
     def test_lemma_rows_built_from_stored_annotations

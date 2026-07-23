@@ -46,6 +46,10 @@ module MCP
       )
       fulltext = Nabu::Store.connect_fulltext(File.join(db_dir, "fulltext.sqlite3"))
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
+      # Direct writes bypass the loader (the only sanctioned stats writer),
+      # so re-derive the source_stats table the P42-r2 status census reads —
+      # a real loaded corpus has it maintained at write time.
+      Nabu::Store::SourceStats.derive!(catalog, note: "test")
       catalog.disconnect
       fulltext.disconnect
 

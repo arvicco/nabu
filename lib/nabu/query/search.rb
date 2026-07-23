@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require_relative "../languages"
 require_relative "../normalize"
+require_relative "../store/indexer"
 require_relative "catalog_join"
 require_relative "stored_snippet"
+require_relative "term_frequency"
 
 module Nabu
   # Query surface over the derived store (architecture §2: lib/nabu/query/).
@@ -27,6 +30,28 @@ module Nabu
     # ORed, so the generic variant still matches languages with no extra rule
     # (a Gothic "jah" stays findable even though the lat variant reads "iah").
     #
+    # == --lang rides IN the MATCH when the index carries it (P42-3)
+    #
+    # The P40-r2 starvation genus, measured at P41 scale: a catalog-side
+    # --lang WHERE thins the bounded inner window AFTER the MATCH, so a term
+    # whose hits concentrate in other languages starves the page (empty at
+    # any realistic --limit while matches exist). When the fts table carries
+    # the P42-3 language column (feature-detected; the column appears at the
+    # owner's next full rebuild), the plain path composes the filter into
+    # the MATCH itself — `(<query>) AND language : ("0langgrc" OR …)`, the
+    # Indexer's sentinel tokens over the code_variants equivalence set — and
+    # drops the catalog-side language WHERE; visibility and license stay
+    # catalog-side. In-MATCH, lang can no longer starve the window, so it
+    # also stops counting toward the P35-6 incomplete-page hint. Two edges,
+    # both deliberate: the token mint is case-insensitive where the catalog
+    # WHERE was case-sensitive (a stored "san-Deva" is now reachable as
+    # --lang san-deva — a friendlier equality, documented on the Indexer);
+    # and --exact/--word keep the catalog-side filter (their paginated
+    # verify scan already reads every candidate's catalog row, and their
+    # --limit semantics never leaned on the inner window). Against a
+    # pre-rebuild index the old catalog-side path runs byte-identically,
+    # honesty hint included.
+    #
     # Two-step id join (not ATTACH) and the exact-class license semantics are
     # documented on CatalogJoin, which owns that half.
     class Search
@@ -46,8 +71,58 @@ module Nabu
       # the snippet from the pristine stored text via StoredSnippet, P40-w.)
       RANK_SQL = "bm25(passages_fts)"
 
+      # The ubiquitous-term guard (P42-2). MEASURED (P41 scale review): FTS5
+      # `ORDER BY rank` computes bm25 for EVERY matching row before LIMIT, so
+      # a term present in a large fraction of the corpus (الله across the
+      # Arabic shelves) cost ~10s a page while rare terms cost 0.27s — the
+      # curve is per-term document frequency. When the estimated candidate
+      # set (TermFrequency#candidate_ceiling — sum over ORed fold variants of
+      # the min df across each variant's ANDed tokens) exceeds this many
+      # postings, the ranked ORDER BY is skipped and the page is served in
+      # corpus (rowid) order, announced via #rank_note. CALIBRATED (P42-5,
+      # post-rebuild live curve): ranked cost is NOT a pure function of df —
+      # posting/docsize locality dominates. Terms whose matches cluster in
+      # the early, well-cached rowid range (Greek/Latin: γαρ 220K→0.11s,
+      # εν 254K→0.48s, δε 457K→0.68s, και 739K→0.88s) ranked ~1.5µs/doc,
+      # while terms scattered across the 33M-row openiti tail measured
+      # 8–14µs/doc (اربع 154K→1.19s, اخذ 271K→2.28s, الملك 414K→5.53s,
+      # يوم 835K→7.24s, الله 6.8M→11.4s). The worst class crosses ~0.5s
+      # near df ≈ 100K, so the ceiling sits there: worst unguarded rank
+      # ≈ 1.4s, and everything newly guarded is function-word-frequency
+      # territory where bm25 ordering is noise. The old 1M ceiling was set
+      # from the well-clustered ratio and let the Arabic 0.4–1M band stall
+      # at 5–7s.
+      # census: 62789087, 2026-07-23, live passages (P42-5 calibration curve, this comment)
+      UBIQUITY_THRESHOLD = 100_000
+
+      # The honest footer clause for a guard-skipped rank (the P35 rule:
+      # a degraded page must say what it did). Shared verbatim by the CLI
+      # footer and the MCP note field. P42-r3: the skipped-rank page is a
+      # corpus-wide SAMPLE, not the head of the posting list — the owner's
+      # gate review showed the corpus-order page collapsing onto the first
+      # matching document in id space (twenty الله hits, all Abu Talib's
+      # dīwān), the same degenerate page for every guarded term.
+      RANK_SKIP_NOTE = "term too common to rank — corpus-wide sample"
+
+      # How many probe draws a sampled page may spend per needed hit before
+      # settling for what it has (anchors that collide on the same posting
+      # dedupe away — common when a term's postings cluster in one shelf's
+      # rowid range and every anchor before the cluster resolves to its first
+      # posting). The same bounded-retry idea as Random::PROBE_ATTEMPTS; a
+      # miss just means a shorter sample pool, never an error.
+      # const: bounded-retry budget per sampled hit (engine knob, not a corpus census)
+      SAMPLE_ATTEMPTS = 4
+
+      # The guard threshold, as a stubbable seam for surface-level tests
+      # (crossing 1M postings in a fixture corpus is not reasonable).
+      def self.ubiquity_threshold
+        UBIQUITY_THRESHOLD
+      end
+
       # Pull more FTS hits than the caller's limit so that catalog-side filtering
-      # (language/license) can drop non-matching rows and still fill the page.
+      # (license, timeline, facets, source — and language only against a
+      # pre-P42-3 index; on the current shape --lang rides in the MATCH, class
+      # note) can drop non-matching rows and still fill the page.
       # Exhaustion is ANNOUNCED (P35-6): a full window + active filters + a
       # short page sets incomplete_hint (CatalogJoin::INCOMPLETE_PAGE_HINT).
       # census: 24415015, 2026-07-20, live passages (settled full rebuild; 3.76M at tuning)
@@ -85,13 +160,26 @@ module Nabu
         query.to_s.match?(SPACELESS_WORD_SCRIPTS) ? WORD_REFUSAL : nil
       end
 
-      def initialize(catalog:, fulltext:)
+      # +term_frequency+ is the df probe seam (defaults to the real fts5vocab
+      # reader over +fulltext+); tests inject a stub to pin the fail-open path.
+      # +rng+ (P42-r3) drives the sampled guarded page — injectable for
+      # deterministic tests, exactly the Random sampler's seam.
+      def initialize(catalog:, fulltext:, term_frequency: nil, rng: ::Random.new)
         @catalog = catalog
         @fulltext = fulltext
+        @term_frequency = term_frequency || TermFrequency.new(fulltext: fulltext)
+        @rng = rng
       end
 
+      # nil, or RANK_SKIP_NOTE when the last #run served its page in corpus
+      # order because the term was too common to rank (the P42-2 guard).
+      # Reset on every run, like incomplete_hint.
+      attr_reader :rank_note
+
       # Search +query+ and return up to +limit+ Result values in bm25 rank order.
-      # +lang+ filters on passage language; +license+ on effective license class.
+      # +lang+ filters on passage language — inside the MATCH when the index
+      # carries the P42-3 language column, catalog-side against an older index
+      # (class note); +license+ on effective license class.
       # +from+/+to+/+place+ (P15-2) filter on the document's timeline
       # (signed historical years, place LIKE pattern); +facets+ (P17-2) on the
       # document's facet rows ({facet name => pattern} — search --type/
@@ -101,10 +189,13 @@ module Nabu
       # replay), not a pagination knob. +loans+ (P34-2) keeps only passages
       # whose stored annotations carry ≥1 loan token of that origin code
       # (passage-grain, read straight off annotations_json — no reparse).
+      # +ubiquity_threshold+ (P42-2) is the guard's candidate-postings ceiling
+      # (see UBIQUITY_THRESHOLD) — a seam for tests and for P42-5 tuning runs.
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
               facets: nil, source: nil, sources: nil, loans: nil, exact: false, word: false,
-              scan_ceiling: SCAN_CEILING)
+              scan_ceiling: SCAN_CEILING, ubiquity_threshold: self.class.ubiquity_threshold)
         @incomplete_hint = nil
+        @rank_note = nil
         raise Nabu::Error, WORD_REFUSAL if word && self.class.word_refusal_for(query)
 
         variants = Nabu::Normalize.query_forms(query.to_s)
@@ -116,9 +207,40 @@ module Nabu
                  verified_page(variants, query, filters, limit: limit, urn: urn,
                                                          scan_ceiling: scan_ceiling, exact: exact, word: word)
                else
-                 folded_page(variants, filters, limit: limit, urn: urn)
+                 folded_page(variants, filters, limit: limit, urn: urn, ubiquity_threshold: ubiquity_threshold)
                end
         page.map { |row| build_result(row, query, exact: exact, word: word) }
+      end
+
+      # Term-less filtered browse (P42-6): a direct filtered page of the
+      # catalog in CORPUS ORDER — passages.id ascending, the catalog's
+      # insertion order. (A rank-skipped SEARCH page is, since P42-r3, a
+      # corpus-wide sample presented in this same order — browse stays a
+      # deterministic walk because its filters, not a term, bound the page.) There is NO FTS MATCH and NO
+      # ranking here: the page is drawn straight from the catalog under the
+      # active filters. Two consequences, both deliberate: the page has no inner
+      # window (it is not a bounded FTS window the catalog join then thins), so
+      # the P35-6 incomplete-page hint CANNOT arm — page-fill is exact against
+      # +limit+ — and there is no rank to skip, so #rank_note stays nil. The
+      # snippet has no term to bracket: build_result with an empty query renders
+      # a leading window of the stored text (StoredSnippet's no-term path).
+      #
+      # The LEGALITY of a term-less browse — that at least one content-narrowing
+      # filter (date window, place, genre facet, or loans) must be present, and
+      # that --lang/--license/--source/--axis do not qualify alone — is enforced
+      # at the CLI seam, not here: this method lists whatever the filters select,
+      # exactly as visible_passages composes them for ranked search.
+      def browse(lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil,
+                 facets: nil, source: nil, sources: nil, loans: nil)
+        @incomplete_hint = nil
+        @rank_note = nil
+        rows = visible_passages(lang: lang, license: license, from: from, to: to, place: place,
+                                facets: facets, source: source, sources: sources, loans: loans)
+               .order(Sequel[:passages][:id])
+               .select(*catalog_columns)
+               .limit(limit)
+               .all
+        rows.map { |row| build_result(row, "", exact: false, word: false) }
       end
 
       # --exact verification: every whitespace token of the NFC-normalized
@@ -146,19 +268,91 @@ module Nabu
       # filtered rows, trimmed to the page. --limit already means "displayed
       # hits" here — only catalog-side filters thin the window, and that
       # thinning is announced by the P35-6 exhausted-window hint.
-      def folded_page(variants, filters, limit:, urn:)
+      # The P42-3 lang seam rides FIRST: when the index carries the language
+      # column, --lang becomes a MATCH conjunct and leaves the catalog-side
+      # filter set entirely — the window cannot starve on it, and
+      # filters_active? honestly stops counting it toward the hint. On a
+      # pre-rebuild index index_language_match is nil and the filters hash
+      # passes through untouched: byte-identical to the old path.
+      # The P42-2 guard rides here too: before ranking, the fts5vocab df probe
+      # bounds the candidate set the bm25 ORDER BY would have to score. Above
+      # +ubiquity_threshold+ postings the rank is skipped — same MATCH, same
+      # filters, same snippets — and #rank_note arms the honest footer clause.
+      # Below (or when the probe is unavailable — nil — or under the
+      # ranking-independent urn probe), byte-identical to before.
+      # (The probe reads the TEXT variants only; the sentinel language tokens
+      # are invisible to it, so the ceiling stays a valid upper bound — a
+      # lang-narrowed candidate set is only ever smaller.)
+      # P42-r3: the skipped-rank window is a corpus-wide SAMPLE (rowid-anchor
+      # probes over the posting list), not the head of the list — the head
+      # window collapsed onto the first matching document in id space and
+      # served the identical degenerate page for every guarded term. The
+      # sampled hits present in passage-id order, so the page still reads as
+      # corpus order; it is just drawn from the whole corpus, announced by
+      # the note. A fixture-scale corpus samples exhaustively (the attempt
+      # budget dwarfs the posting list), where sample == the full match set.
+      def folded_page(variants, filters, limit:, urn:, ubiquity_threshold:)
+        lang_match = index_language_match(filters[:lang])
+        filters = filters.merge(lang: nil) if lang_match
+        ranked = urn ? true : rank?(variants, ubiquity_threshold)
+        @rank_note = ranked ? nil : RANK_SKIP_NOTE
         inner_limit = limit * INNER_LIMIT_FACTOR
-        hits = fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn)
+        hits = if ranked
+                 fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn,
+                                                          ranked: true, lang_match: lang_match)
+               else
+                 sampled_hits_with_literal_fallback(variants, inner_limit: inner_limit,
+                                                              lang_match: lang_match)
+               end
         return [] if hits.empty?
 
         ordered_ids = hits.map { |row| row.fetch(:passage_id) }
         rows = catalog_rows(ordered_ids, **filters).to_h { |row| [row.fetch(:passage_id), row] }
         page = ordered_ids.filter_map { |id| rows[id] }.first(limit)
+        # A sampled page (guard fired) is cut in DRAW order for unbiasedness,
+        # then sorted for presentation — id order reads as corpus order.
+        page = page.sort_by { |row| row.fetch(:passage_id) } unless ranked
         note_page_completeness(
           window_exhausted: hits.size >= inner_limit,
           filters_active: filters_active?(filters), page_size: page.size, limit: limit
         )
         page
+      end
+
+      # The guard verdict: rank when the estimated candidate set is bounded
+      # (≤ threshold) or unknowable (nil — no vocabulary, fail open). The
+      # probe under-counts FTS power syntax to 0 by construction (quoted or
+      # starred tokens miss the vocabulary), so those queries always rank,
+      # exactly as before the guard.
+      def rank?(variants, threshold)
+        ceiling = @term_frequency.candidate_ceiling(variants)
+        ceiling.nil? || ceiling <= threshold
+      end
+
+      # The composed `language :` MATCH conjunct for +lang+ — nil when no
+      # --lang is active or the index predates the P42-3 column (the caller
+      # then leaves the filter catalog-side, exactly the old path). Tokens
+      # are the Indexer's sentinel mint over the code_variants equivalence
+      # set (P40-r2: the typed code always a member), ORed inside one column
+      # filter so any stored spelling of the language matches.
+      def index_language_match(lang)
+        return nil unless lang && index_language_column?
+
+        tokens = Nabu::Languages.code_variants(lang).map { |code| Store::Indexer.language_token(code) }
+        "language : (#{tokens.map { |token| %("#{token}") }.join(' OR ')})"
+      end
+
+      # Feature-detect, memoized per instance: does the live fts table carry
+      # the P42-3 language column? A missing fts table reads as false — the
+      # MATCH itself then raises exactly as it always has.
+      def index_language_column?
+        return @index_language_column if defined?(@index_language_column)
+
+        @index_language_column = begin
+          Store::Indexer.fts_language_column?(@fulltext)
+        rescue Sequel::DatabaseError
+          false
+        end
       end
 
       # --exact / --word paginated page (P39-r3 Defect 1, extended P40-w). A
@@ -257,13 +451,61 @@ module Nabu
       # retry ONCE with every token literal-quoted (internal quotes doubled
       # — the escaped form cannot syntax-error), so hyphenated words and
       # option-looking strings just search. Non-fts errors re-raise.
-      def fts_hits_with_literal_fallback(variants, inner_limit:, offset: 0, urn: nil)
-        fts_hits(match_expression(variants), inner_limit: inner_limit, offset: offset, urn: urn)
+      def fts_hits_with_literal_fallback(variants, inner_limit:, offset: 0, urn: nil, ranked: true,
+                                         lang_match: nil)
+        fts_hits(match_expression(variants), inner_limit: inner_limit, offset: offset, urn: urn,
+                                             ranked: ranked, lang_match: lang_match)
       rescue Sequel::DatabaseError => e
         raise unless e.message.match?(/fts5|unterminated string|no such column/)
 
         literal = variants.map { |variant| literal_expression(variant) }
-        fts_hits(match_expression(literal), inner_limit: inner_limit, offset: offset, urn: urn)
+        fts_hits(match_expression(literal), inner_limit: inner_limit, offset: offset, urn: urn,
+                                            ranked: ranked, lang_match: lang_match)
+      end
+
+      # The sampled guarded window (P42-r3), with the same literal-fallback
+      # symmetry as the ranked path.
+      def sampled_hits_with_literal_fallback(variants, inner_limit:, lang_match:)
+        sampled_hits(match_expression(variants), inner_limit: inner_limit, lang_match: lang_match)
+      rescue Sequel::DatabaseError => e
+        raise unless e.message.match?(/fts5|unterminated string|no such column/)
+
+        literal = variants.map { |variant| literal_expression(variant) }
+        sampled_hits(match_expression(literal), inner_limit: inner_limit, lang_match: lang_match)
+      end
+
+      # Corpus-spread sample of a guarded term's postings — the P41-r2
+      # id-probe pattern applied to the FTS posting walk. FTS5 honors rowid
+      # range constraints on a MATCH without materializing the posting list,
+      # so `MATCH term AND rowid >= anchor LIMIT 1` is one posting seek
+      # (measured 2026-07-23: 20 draws in 7ms against the الله list, vs 11.4s
+      # to bm25-rank it). Anchors are uniform over the index's rowid space,
+      # so a posting is drawn with probability proportional to the gap
+      # BEFORE it — the same near-uniform honesty as Random over bulk-loaded
+      # shelves — and anchors past the last posting simply miss (bounded by
+      # SAMPLE_ATTEMPTS). The final page presents in passage-id order: a stable
+      # corpus-order READING of an unbiased corpus-wide draw.
+      def sampled_hits(match, inner_limit:, lang_match:)
+        match = "(#{match}) AND #{lang_match}" if lang_match
+        max_rowid = @fulltext[Store::Indexer::TABLE].max(Sequel.lit("rowid"))
+        return [] unless max_rowid
+
+        seen = {}
+        (inner_limit * SAMPLE_ATTEMPTS).times do
+          break if seen.size >= inner_limit
+
+          row = @fulltext[Store::Indexer::TABLE]
+                .where(Sequel.lit("passages_fts MATCH ?", match))
+                .where(Sequel.lit("rowid >= ?", @rng.rand(1..max_rowid)))
+                .select(:passage_id).order(Sequel.lit("rowid")).limit(1).first
+          seen[row[:passage_id]] ||= row if row
+        end
+        # DRAW order, not id order: the page assembly takes the first +limit+
+        # survivors of the catalog filters, and only an order-free draw keeps
+        # that cut unbiased — sorting here would hand the page the lowest-id
+        # fraction of the sample, the head-bias this sampler exists to kill.
+        # The caller sorts the FINAL page for presentation.
+        seen.values
       end
 
       # Every whitespace token as a quoted FTS5 phrase (implicit AND), internal
@@ -289,13 +531,20 @@ module Nabu
       # are pulled — the snippet is rebuilt from stored text (StoredSnippet),
       # never from the folded index column. +offset+ pages the candidate scan
       # for --exact (bm25 order is stable, so OFFSET paging is deterministic).
-      def fts_hits(match, inner_limit:, offset: 0, urn: nil)
+      # +ranked: false+ (the P42-2 guard) keeps the identical MATCH but orders
+      # by rowid — the index's insertion order, which the Indexer streams in
+      # catalog (document/sequence) order — so no bm25 is computed at all.
+      # +lang_match+ (P42-3) is the pre-built `language :` conjunct (or nil);
+      # AND-composed around the whole user expression — the user's own syntax
+      # stays intact inside its parentheses, on the literal-fallback retry too.
+      def fts_hits(match, inner_limit:, offset: 0, urn: nil, ranked: true, lang_match: nil)
+        match = "(#{match}) AND #{lang_match}" if lang_match
         dataset = @fulltext[Store::Indexer::TABLE]
                   .where(Sequel.lit("passages_fts MATCH ?", match))
         dataset = dataset.where(urn: urn) if urn # urn rides UNINDEXED in the index row
         dataset
           .select(:passage_id)
-          .order(Sequel.lit(RANK_SQL))
+          .order(ranked ? Sequel.lit(RANK_SQL) : :rowid)
           .limit(inner_limit)
           .offset(offset)
           .all

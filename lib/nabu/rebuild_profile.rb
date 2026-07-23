@@ -49,10 +49,12 @@ module Nabu
     CORPUS_STAGE_LABELS = {
       timeline: "timeline",
       facets: "facets",
+      stats: "source stats",
       fts_lemma: "fts+lemma reindex",
       trigram: "trigram",
       alignment: "alignment refs",
-      reflex: "reflex roots"
+      reflex: "reflex roots",
+      analyze: "analyze" # P42-4: the bounded post-rebuild ANALYZE (catalog + index)
     }.freeze
 
     def initialize(clock: -> { Process.clock_gettime(Process::CLOCK_MONOTONIC) })

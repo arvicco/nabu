@@ -59,6 +59,52 @@ class RebuildTest < Minitest::Test
     assert_equal %w[corpus], second.outcomes.map(&:slug)
   end
 
+  # -- source_stats re-derivation (P42-0) -----------------------------------
+
+  # The write-time census is derived data: a rebuild must leave it wholesale-
+  # derived from the freshly replayed catalog (rebuildability invariant).
+  def test_rebuild_derives_source_stats_wholesale
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
+
+    rebuilder.run
+
+    with_db do |db|
+      row = db[:source_stats].first || flunk("rebuild left no source_stats row")
+      assert_equal 2, row[:live_documents]
+      assert_equal 3, row[:live_passages]
+      assert_equal "derived (rebuild)", row[:note]
+      assert_equal [%w[grc], [2], [3]],
+                   db[:source_stats_languages].select_map(%i[language documents passages]).transpose
+    end
+  end
+
+  # -- post-load ANALYZE (P42-4) --------------------------------------------
+
+  # A full rebuild leaves a fresh db with NO planner statistics; it must
+  # ANALYZE the catalog AND the fulltext index at the end (ops §10), and
+  # report the one honest line via Result#analyzed.
+  def test_rebuild_analyzes_catalog_and_index
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
+
+    result = rebuilder.run
+    refute_nil result.analyzed, "a rebuild always refreshes planner stats"
+    assert_equal "catalog + index", result.analyzed.scope
+    assert_operator result.analyzed.seconds, :>=, 0.0
+
+    with_db { |db| assert db.table_exists?(:sqlite_stat1), "the rebuilt catalog was ANALYZEd" }
+    with_fulltext { |ft| assert ft.table_exists?(:sqlite_stat1), "the rebuilt index was ANALYZEd" }
+  end
+
   # -- progress stages (owner feedback 2026-07-18: a long rebuild must say
   # which source it is on, and the CLI adds per-stage timing) ---------------
 
@@ -74,7 +120,7 @@ class RebuildTest < Minitest::Test
     reporter = Nabu::ProgressReporter.new(on_stage: ->(label) { stages << label })
     rebuilder.run(progress: reporter)
 
-    assert_equal ["corpus", "timeline", "facets", "fulltext index"], stages
+    assert_equal ["corpus", "timeline", "facets", "source stats", "fulltext index", "analyze"], stages
   end
 
   def test_progress_reporter_stage_is_nil_safe
@@ -110,6 +156,7 @@ class RebuildTest < Minitest::Test
     corpus_stages = profile.corpus_stages
     assert_includes corpus_stages, :timeline
     assert_includes corpus_stages, :facets
+    assert_includes corpus_stages, :stats
     assert_includes corpus_stages, :fts_lemma
     assert_includes corpus_stages, :trigram
 

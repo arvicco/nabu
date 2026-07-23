@@ -85,6 +85,9 @@ module Nabu
                         desc: "Skip fetch; re-parse the snapshot already on disk"
     option :force, type: :boolean, default: false,
                    desc: "Override the >20% withdrawal circuit breaker"
+    option :grant_acknowledged, type: :boolean, default: false,
+                                desc: "Acknowledge a grant-required source's terms non-interactively " \
+                                      "(scripted use); records the acknowledgment, then syncs. Single-source only."
     option :review, type: :string, banner: "CMD",
                     desc: "Pipe a JSON sync brief to CMD's stdin at sync end (advisory; " \
                           "the hook's exit status is reported, never fails the sync). " \
@@ -663,6 +666,18 @@ module Nabu
       REFUSED (use --exact for glyph-literal matching there). Hangul is
       space-delimited, so --word treats it like any alphabetic script.
 
+      BROWSE (term-less): run search with NO query to LIST the corpus, but only
+      when at least one CONTENT-NARROWING filter is present — a date window
+      (--from/--to/--century), --place, a genre facet (--type/--province/
+      --material), or --loans. The page is served in corpus order (no ranking),
+      the standard hit rendering with a stored-text window per passage, --limit
+      honored. --lang/--license/--source/--axis select whole shelves and are NOT
+      sufficient on their own — a term-less listing of a whole language is a
+      dump, not a browse — so combine them WITH a content filter to scope one
+      (`--century 2 --axis epigraphy` lists the 2nd-c. inscriptions). The
+      character-structure filters (--radical/--strokes/--char-component) are a
+      separate term-less path of their own.
+
       Query syntax (SQLite FTS5 over the folded text):
         μηνιν αειδε          all words must appear in the passage (implicit AND)
         '"μηνιν αειδε"'      exact adjacent phrase — FTS quotes, so shell-quote them
@@ -671,7 +686,9 @@ module Nabu
       and become ordinary search terms.
 
       Each hit prints the passage urn, its language, and a folded snippet
-      with the match in [brackets]. The snippet is the SEARCH form, not the
+      with the match in [brackets] (on an interactive terminal, RTL scripts
+      highlight the match in reverse video instead — bracket glyphs do not
+      survive bidi reordering; piped output keeps the brackets). The snippet is the SEARCH form, not the
       edition text — `nabu show <urn>` gives the pristine passage. DDbDP
       papyri render lost text as the […] gap marker.
 
@@ -794,6 +811,8 @@ module Nabu
         nabu search --fuzzy ']μηνιν αει['           # a damaged scrap, brackets and
                                                    #   all — infix match, papyri+oracc
         nabu search --fuzzy στρατηγ --century 6     # mid-word fragment, 6th c. papyri
+        nabu search --century 2 --axis epigraphy    # term-less browse: the 2nd-c.
+                                                   #   inscriptions, corpus order
         nabu search "dis manibus" --type epitaph --province "Germania superior"
                                                    # the D M formula on epitaphs of
                                                    #   one province (EDH facets)
@@ -913,7 +932,7 @@ module Nabu
       return proximity_search(query) if options[:near]
       return lemma_search(query) if options[:lemma]
       raise Thor::Error, "search: --morph requires --lemma (bare morphology search is out of scope)" if options[:morph]
-      raise Thor::Error, "search: give a query" if query.empty?
+      return browse_search if query.empty?
 
       validate_license!(options[:license])
       from, to = date_window
@@ -939,7 +958,7 @@ module Nabu
                                     loans: loans, exact: options[:exact], word: options[:word])
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
                                     incomplete: searcher.incomplete_hint, exact: options[:exact],
-                                    word: options[:word])
+                                    word: options[:word], rank_note: searcher.rank_note)
       print_display_footer
     ensure
       catalog&.disconnect
@@ -2388,6 +2407,13 @@ module Nabu
     # Edges shown per kind by `nabu links` before the "… and N more" tail
     # (--long lists all — the conventions §10 house rule).
     LINKS_COMPACT_ITEMS = 10
+    # RTL snippet highlight = SGR reverse video (P42-r4, strike 4 — the
+    # matrix ruling on the owner's iTerm2). Every CHARACTER-based highlight
+    # is at the mercy of the renderer's bidi treatment, and four attempts
+    # measured four failure modes; a cell ATTRIBUTE rides the glyph wherever
+    # reordering moves it and cannot be broken by any bidi algorithm.
+    RTL_HIGHLIGHT_ON = "\e[7m"
+    RTL_HIGHLIGHT_OFF = "\e[27m"
     # Batch-mining progress tick cadence (anchors per stderr line); a scope
     # smaller than one tick prints no progress at all — just the summary.
     BATCH_PROGRESS_EVERY = 200
@@ -2463,6 +2489,35 @@ module Nabu
 
       def display_applied
         @display_applied ||= Set.new
+      end
+
+      # Render a SNIPPET — StoredSnippet output with the match in [brackets] —
+      # for the terminal (P42-r4, four strikes deep). Square brackets inside
+      # RTL text are unrenderable-portably: they are a bidi-mirrored pair,
+      # and each character-based fix failed a different way on the owner's
+      # iTerm2 (mirrorless reversal showed ]word[; brackets cut OUT of the
+      # isolate were swept into the reversed segment anyway; the symmetric ‖
+      # detached at passage-edge matches; RLM gluing was ignored — invisible
+      # bidi controls do not extend that renderer's runs, though a VISIBLE
+      # strong-R paseq does, matrix line 8). The ruling fix highlights with
+      # a cell ATTRIBUTE instead of characters: SGR reverse video rides the
+      # glyph wherever reordering moves it and no bidi algorithm can touch
+      # it (matrix line 9 on the owner's screen). Gated by color_output?
+      # (mode + NO_COLOR/NABU_COLOR/tty): piped or colorless output keeps
+      # the logical [brackets] — no renderer, no bidi, and the documented
+      # grep/MCP contract stays byte-identical. ANSI escapes are ASCII —
+      # untouched by mark strips and NFC round-trips (the painted-tokens
+      # precedent). Only PAIRED brackets convert (a stored lone Leiden
+      # bracket stays literal); a stored [...] lacuna pair colors like a
+      # match — the same ambiguity the bracket convention always had.
+      def display_snippet(text, language)
+        unless Nabu::Display.isolates?(language: language.to_s, mode: display_mode,
+                                       policies: display_policies) && color_output?
+          return display_text(text, language)
+        end
+
+        marked = text.to_s.gsub(/\[([^\[\]]*)\]/) { "#{RTL_HIGHLIGHT_ON}#{Regexp.last_match(1)}#{RTL_HIGHLIGHT_OFF}" }
+        display_text(marked, language)
       end
 
       # The source's three gaiji ladder lanes (P37-3/P38-2), each memoized per
@@ -2676,6 +2731,70 @@ module Nabu
       def loans_filter
         code = options[:loans].to_s.strip
         code.empty? ? nil : code
+      end
+
+      # The content-narrowing filters that make a TERM-LESS browse legal
+      # (P42-6): a date window (--from/--to/--century), a provenance --place, a
+      # genre facet (--type/--province/--material), or the --loans facet — each
+      # narrows WHICH passages, not merely which shelf. --lang/--license/
+      # --source/--axis select whole shelves and are deliberately NOT sufficient
+      # alone: a term-less listing of a whole language (or license, or source,
+      # or axis) is a corpus DUMP, not a browse. The character-structure filters
+      # are already a legal term-less path and return earlier (char_structured_search).
+      def content_narrowing_filters?
+        options[:from] || options[:to] || options[:century] || options[:place] ||
+          facet_filters || loans_filter
+      end
+
+      # The refusal for a term-less `search` that carries no content-narrowing
+      # filter — the old "give a query" message, extended (P42-6) to say exactly
+      # what WOULD make a term-less browse legal, and why the shelf-selectors do not.
+      def browse_refusal_message
+        "search: give a query — or a content-narrowing filter to browse the corpus " \
+          "term-less: a date window (--from/--to/--century), --place, a genre facet " \
+          "(--type/--province/--material), or --loans. --lang/--license/--source/--axis " \
+          "select whole shelves and cannot stand alone (that would dump the shelf, not browse it)."
+      end
+
+      # Term-less filtered browse (P42-6): a legal empty-query `search` — one
+      # content-narrowing filter present — lists the corpus in corpus order
+      # (Search#browse: passages.id ascending, no ranking) under the standard
+      # filters and rendering. Reached only from #search on an empty query, and
+      # only after the char/fuzzy/near/lemma paths have returned, so the sole
+      # residual flags are the plain path's own; --exact/--word have no term to
+      # match here and are refused rather than silently ignored.
+      def browse_search
+        if options[:exact] || options[:word]
+          raise Thor::Error, "search: --exact/--word are glyph/word post-filters over a query term — " \
+                             "they cannot run a term-less browse (drop them, or add a query)"
+        end
+        raise Thor::Error, browse_refusal_message unless content_narrowing_filters?
+
+        validate_license!(options[:license])
+        from, to = date_window
+        place = options[:place]
+        facets = facet_filters
+        loans = loans_filter
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        require_timeline!(catalog) if from || to || place
+        require_facets!(catalog) if facets
+        validate_source!(catalog, options[:source])
+        axis_names, axis_slugs = axis_membership(command: "search", config: config)
+
+        searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.browse(lang: options[:lang], license: options[:license],
+                                  limit: options[:limit].to_i, from: from, to: to, place: place,
+                                  facets: facets, source: options[:source], sources: axis_slugs, loans: loans)
+        print_search_results(results, facets: facets, query: "", loans: loans, axis: axis_names,
+                                      browse: true, from: from, to: to, place: place)
+        print_display_footer
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
       end
 
       # --source SLUG (P22-1, search/export): reject an unknown slug up front,
@@ -3835,7 +3954,8 @@ module Nabu
       # --exact/--word scan-ceiling note) — printed whenever present, so a short
       # page never masquerades as a complete answer.
       def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
-                               exact: false, word: false, proximity: false)
+                               exact: false, word: false, proximity: false, rank_note: nil,
+                               browse: false, from: nil, to: nil, place: nil)
         if results.empty?
           say "no matches"
           # Empty-under-filter honesty (P35): --exact/--word suppressed the folded
@@ -3845,30 +3965,57 @@ module Nabu
                 "reform variants, e.g. 学↔學, 弁↔辨/瓣/辯)"
           end
           say "note: --word required a whole-word match (a fragment inside a longer word does not count)" if word
+          # The P42-2 guard served a corpus-wide sample (P42-r3) — an empty
+          # page over a degraded path says so too, never a clean-looking silence.
+          say "note: #{rank_note}" if rank_note
           say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
 
         results.each do |result|
           say "#{result.urn}#{" [#{result.language}]" if result.language}"
-          say "  #{display_text(result.snippet, result.language)}"
+          say "  #{display_snippet(result.snippet, result.language)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-            "(#{search_snippet_label(exact: exact, word: word, proximity: proximity)})" \
+            "(#{search_snippet_label(exact: exact, word: word, proximity: proximity,
+                                     rank_note: rank_note, browse: browse)})" \
+            "#{browse_window_footer(from: from, to: to, place: place) if browse}" \
             "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{incomplete}" if incomplete
+      end
+
+      # The date/place clause of a term-less browse footer (P42-6), naming the
+      # content filters that made the browse legal (facets/loans/axis are named
+      # by facet_footer); empty when neither is active (compact-footer rule).
+      def browse_window_footer(from:, to:, place:)
+        parts = []
+        parts << "dates: #{browse_year_window(from, to)}" if from || to
+        parts << "place: #{place}" if place
+        parts.empty? ? "" : " · #{parts.join(' · ')}"
+      end
+
+      # A signed-year window as a compact footer string: "-300..-30", "from
+      # 500", or "to 100" (BCE years negative — the --from/--to grammar).
+      def browse_year_window(from, to)
+        return "#{from}..#{to}" if from && to
+        return "from #{from}" if from
+
+        "to #{to}"
       end
 
       # The footer clause naming what the snippet shows, per path. All three
       # paths now show the STORED text (P40-w carried proximity off the folded
       # index form); --exact / --word / proximity annotate what the match means.
-      def search_snippet_label(exact:, word: false, proximity: false)
+      # +rank_note+ (P42-2, plain path only) appends the skipped-rank honesty
+      # clause: "…; term too common to rank — corpus-wide sample".
+      def search_snippet_label(exact:, word: false, proximity: false, rank_note: nil, browse: false)
+        return "filtered browse — corpus order, no ranking" if browse
         return "both terms bracketed; snippet shows the text as stored" if proximity
 
         stored = "snippet shows the text as stored"
         # A filtered path (--exact and/or --word) leads with what the match means;
         # plain search leads with the stored-text promise, then "fold-aware".
-        return "#{stored}; matching is fold-aware" unless exact || word
+        return ["#{stored}; matching is fold-aware", rank_note].compact.join("; ") unless exact || word
 
         mode = if exact && word then "glyph-exact, whole-word"
                elsif exact then "glyph-exact"
@@ -3900,7 +4047,7 @@ module Nabu
         else
           results.each do |result|
             say "#{result.urn}#{" [#{result.language}]" if result.language}"
-            say "  #{display_text(long ? result.folded_marked : result.snippet, result.language)}"
+            say "  #{display_snippet(long ? result.folded_marked : result.snippet, result.language)}"
           end
           say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
               "(fuzzy substring; highlights are diacritic-folded)#{facet_footer(facets, loans: loans, axis: axis)}"
@@ -5514,12 +5661,21 @@ module Nabu
       # through sync_one, then the named skip line for the disabled members.
       def sync_axis_group(runner, registry, name, db, ledger, synced)
         enabled, disabled = registry.axis_members(name).partition { |member| registry[member].enabled }
+        # P42-r1: an axis expansion is a batch, not an explicit per-source
+        # request, so a grant-blocked member is SKIPPED with the honest line —
+        # never prompted mid-group (the prompt is reserved for `sync <slug>`).
+        gate = Nabu::GrantGate.new(ledger: ledger)
+        grant_blocked, runnable = enabled.partition { |member| gate.blocked?(registry[member]) }
         say axis_header(registry.axes[name])
-        (enabled - synced).each do |member|
+        (runnable - synced).each do |member|
           sync_one(runner, registry, member, db, ledger)
           synced << member
         end
         say "skipped (disabled): #{disabled.join(', ')}" unless disabled.empty?
+        (grant_blocked - synced).each do |member|
+          say Nabu::GrantGate.skip_line(member)
+          synced << member
+        end
       end
 
       # The one-line axis header: the hat's persona verbatim (first-class
@@ -5551,6 +5707,10 @@ module Nabu
         # `sync kr-gaiji` / `sync local-notes` knows what it does (and does not) do.
         say kind_nature_note(entry), :yellow if entry && !entry.source?
         say "Note: #{slug} is disabled; syncing anyway (explicit request).", :yellow if entry && !entry.enabled
+        # P42-r1: the fetch-grant gate — a permission-bound source needs a
+        # recorded acknowledgment before its first fetch (interactive here, on
+        # the explicit path; the batch paths pre-skip blocked sources).
+        enforce_grant!(entry, ledger)
         outcome = runner.sync(slug, parse_only: options[:parse_only], force: options[:force],
                                     progress: progress_reporter)
         finish_progress
@@ -5559,8 +5719,42 @@ module Nabu
         say format_sync_outcome(outcome)
         print_discovery_accounting(outcome)
         print_sync_warnings(outcome)
+        print_analyzed(outcome.analyzed)
         print_citation_coverage(entry, db)
         run_review_hook(outcome, db, ledger) if options[:review]
+      end
+
+      # The fetch-grant gate (P42-r1) for an EXPLICIT `sync <slug>`. A grant-
+      # required source with no recorded acknowledgment shows its terms and
+      # requires a typed `granted` (or the scripted --grant-acknowledged flag),
+      # recording the acknowledgment durably in the ledger; refusal or a no-TTY
+      # environment aborts with the request scaffold (the on-ramp, never a bare
+      # wall). A non-grant or already-acknowledged source passes silently — so
+      # this is a no-op for every ordinary source and every second sync.
+      def enforce_grant!(entry, ledger)
+        return unless entry&.grant_required?
+
+        gate = Nabu::GrantGate.new(ledger: ledger)
+        return if gate.acknowledged?(entry.slug)
+
+        if options[:grant_acknowledged]
+          gate.record!(slug: entry.slug, terms: entry.grant.terms, how: "flag")
+          return say("#{entry.slug}: grant acknowledged (--grant-acknowledged) — recorded.", :yellow)
+        end
+
+        # No TTY to prompt: abort honestly with the terms + request scaffold,
+        # BEFORE any fetch (the ingest/note precedent).
+        raise Thor::Error, Nabu::GrantGate.abort_message(entry) unless $stdin.tty?
+
+        say Nabu::GrantGate.notice(entry), :yellow
+        say Nabu::GrantGate.prompt_line(entry)
+        # Plain $stdin.gets, NOT Thor's ask (the note precedent): ask routes
+        # through Readline, invisible to the suite's $stdin double and to pipes.
+        answer = $stdin.gets
+        raise Thor::Error, Nabu::GrantGate.abort_message(entry) unless Nabu::GrantGate.acknowledged_answer?(answer)
+
+        gate.record!(slug: entry.slug, terms: entry.grant.terms, how: "typed")
+        say "#{entry.slug}: grant acknowledged — recorded. Syncing.", :green
       end
 
       # P39-0: the one-line nature note for a non-source sync target. A module
@@ -5613,14 +5807,17 @@ module Nabu
 
         results.each do |slug, result|
           say("  #{sync_all_line(slug, result)}")
-          if result.is_a?(Nabu::SyncRunner::Outcome)
-            print_discovery_accounting(result)
-            print_sync_warnings(result)
-          end
+          next unless result.is_a?(Nabu::SyncRunner::Outcome)
+
+          print_discovery_accounting(result)
+          print_sync_warnings(result)
+          print_analyzed(result.analyzed)
         end
       end
 
       def sync_all_line(slug, result)
+        # P42-r1: a grant-blocked source was skipped, not run — the honest line.
+        return Nabu::GrantGate.skip_line(result.slug) if result.is_a?(Nabu::SyncRunner::GrantRequired)
         return "#{slug.ljust(24)} FAILED — #{result.message}" unless result.is_a?(Nabu::SyncRunner::Outcome)
         return "#{slug.ljust(24)} ABORTED — #{result.breaker.message}" if result.aborted?
 
@@ -5631,6 +5828,15 @@ module Nabu
       # in yellow, never affecting the exit code. Empty on a clean sync.
       def print_sync_warnings(outcome)
         outcome.warnings.each { |finding| say("  ! #{finding.message}", :yellow) }
+      end
+
+      # P42-4: the one honest planner-hygiene line — printed only when a bulk
+      # load or a rebuild actually refreshed the query-planner statistics,
+      # silent otherwise (a sub-threshold sync, a clean-swept incremental run).
+      def print_analyzed(analyzed)
+        return unless analyzed
+
+        say "  analyzed #{analyzed.scope} (planner stats refreshed, #{format('%.1f', analyzed.seconds)}s)"
       end
 
       # -- quickstart (P18-2) -------------------------------------------------
@@ -5663,6 +5869,7 @@ module Nabu
             say format_sync_outcome(outcome)
             print_discovery_accounting(outcome)
             print_sync_warnings(outcome)
+            print_analyzed(outcome.analyzed)
           end
         rescue Nabu::Error => e
           finish_progress
@@ -5999,6 +6206,7 @@ module Nabu
         say "  re-derived #{result.outcomes.size}, clean #{result.cleans.size}, " \
             "skipped #{result.skips.size}"
         say "  indexed #{result.indexed} passages" if result.indexed
+        print_analyzed(result.analyzed)
       end
 
       # --dry-run: report the plan, touch nothing.
@@ -6036,6 +6244,7 @@ module Nabu
               "iip #{result.axes.iip}, cdli #{result.axes.cdli}, " \
               "rundata #{result.axes.rundata}, openiti #{result.axes.openiti})"
         end
+        print_analyzed(result.analyzed)
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 
         say "  facets #{result.facets.rows} rows across #{result.facets.documents} documents"

@@ -17,8 +17,10 @@ require "fileutils"
 # annotations notes, and show --tokens' honest absences.
 class RenderConformanceTest < Minitest::Test
   CASES = {
+    # (--license, not --lang: P42-3 moved plain-search --lang into the MATCH,
+    # where it cannot starve; license stays catalog-side and still must announce.)
     "search: a filter-emptied page announces the exhausted inner window" =>
-      [%w[search arma --lang grc --limit 1],
+      [%w[search arma --license nc --limit 1],
        /page may be incomplete under these filters — raise --limit/],
     "search --near: the same announcement" =>
       [%w[search arma --near cano --lang grc --limit 1], /page may be incomplete under these filters/],

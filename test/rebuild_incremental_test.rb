@@ -67,6 +67,8 @@ class RebuildIncrementalTest < Minitest::Test
 
     assert_equal %w[beta], result.outcomes.map(&:slug)
     assert_equal %w[alpha lexica], result.cleans.map(&:slug).sort
+    # P42-4: a dirty replay shifted the distribution — planner stats refreshed.
+    assert_equal "catalog + index", result.analyzed&.scope
     # Clean sources are untouched at ROW IDENTITY: ids, revisions, bytes.
     assert_equal before_alpha, raw_rows(:passages, source: "alpha")
     assert_equal before_lexica, raw_rows(:dictionary_entries)
@@ -91,6 +93,7 @@ class RebuildIncrementalTest < Minitest::Test
     assert_equal before_fts, fts_snapshot
     assert_nil result.axes, "corpus-wide builders must not run when nothing is dirty"
     assert_nil result.facets
+    assert_nil result.analyzed, "a clean-swept run touched no rows — no ANALYZE (P42-4)"
   end
 
   def test_a_missing_stamp_means_dirty

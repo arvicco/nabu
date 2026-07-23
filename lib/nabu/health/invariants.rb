@@ -24,10 +24,14 @@ module Nabu
     #   liv case (2026-07-14) was a DISABLED source synced anyway to zero
     #   entries, silent because the original enabled-vs-populated check
     #   watched enabled sources only. A succeeded run promises rows whatever
-    #   the flag says. No exemption mechanism ships: the 2026-07-15 census of
-    #   the live catalog found every source populated in its own grain
-    #   (local-language holds language_records — the grain routing below), so
-    #   an honestly-empty-by-design source does not exist to exempt.
+    #   the flag says — with ONE by-design exemption (P42-8): a kind: module
+    #   registry row FETCHES reference data but mints NO catalog rows by design
+    #   (the registry kind-split, P39), so the promise is false for it; a
+    #   succeeded, zero-rows module downgrades to an :info line, keyed on the
+    #   registry kind (never a slug list). The 2026-07-15 census found every
+    #   ORDINARY source populated in its own grain (local-language holds
+    #   language_records — the grain routing below), so beyond modules no
+    #   honestly-empty-by-design source exists to exempt.
     # - Flag-vs-artifact: fuzzy_index flagged but the trigram index absent /
     #   empty / scope-less for the source (the flag was ON a full day with no
     #   trigram table); a timeline extractor family shipping for the source but
@@ -66,13 +70,15 @@ module Nabu
 
       # +canonical_dir+ (P19-1) roots the local-shelf checks (dossier files
       # vs derived records; pinned files vs the tree); nil (callers that
-      # cannot name the corpus root) skips them honestly.
-      def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil)
+      # cannot name the corpus root) skips them honestly. +now+ picks the
+      # D42-a rotation slot (injected so the probe is testable).
+      def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil, now: Time.now)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
         @ledger = ledger
         @canonical_dir = canonical_dir
+        @now = now
       end
 
       # All invariant findings for one registry entry, in a stable order.
@@ -95,7 +101,8 @@ module Nabu
       def global
         [
           pending_migrations(@catalog, Store::MIGRATIONS_DIR, "catalog", "run nabu sync or nabu rebuild"),
-          pending_migrations(@ledger, Store::Ledger::MIGRATIONS_DIR, "ledger", "any write path (sync) applies them")
+          pending_migrations(@ledger, Store::Ledger::MIGRATIONS_DIR, "ledger", "any write path (sync) applies them"),
+          stats_drift
         ].compact
       end
 
@@ -103,6 +110,16 @@ module Nabu
       # language shelf, P24-0 the source shelf).
       DOSSIER_TABLES = { language: :language_records, source: :source_records,
                          notes: :urn_notes }.freeze
+
+      # D42-a: above this many stats-claimed live passages the drift probe
+      # stays at the document grain for the day's source — the passage truth
+      # is a real count over the passages join, cheap for small/mid shelves,
+      # seconds-scale for the giants; the doc grain (indexed counts) still
+      # watches every source.
+      # census: 2000000, 2026-07-23, ~3% of the 62.8M-passage live corpus
+      # (the P41 scale review's census) — an indexed live-on-live join count
+      # at this size stays low-seconds, health's budget for one probe
+      STATS_PASSAGE_PROBE_CAP = 2_000_000
 
       private
 
@@ -170,16 +187,35 @@ module Nabu
 
       # Gates on the LATEST run having succeeded (a failed latest run is
       # last_run_honesty's one loud line, not two), and NEVER on `enabled` —
-      # class note (the liv case).
+      # class note (the liv case). The kind: module exemption (P42-8): a
+      # feature module FETCHES reference data but mints NO catalog rows BY
+      # DESIGN (the registry kind-split, P39), so "a succeeded run promises
+      # rows" is simply false for it — zero rows after a module's success is
+      # expected, not the half-loaded signature. It downgrades to one :info
+      # line (never affects exit) rather than a false anomaly; the criterion
+      # is the registry kind, never a slug list. A FAILED module run still
+      # alarms normally via last_run_honesty — this exemption is the
+      # zero-rows-after-success rule alone.
       def synced_unpopulated(entry)
         return nil unless @catalog && latest_run(entry.slug)&.fetch(:status) == "succeeded"
         return nil if populated?(entry)
+        return module_holds_no_rows if entry.feature_module?
 
         Finding.new(
           kind: :synced_unpopulated, severity: :loud,
           message: "latest run succeeded but zero documents/entries/records held " \
                    "(enabled or not — a succeeded run promises rows) — " \
                    "half-loaded catalog or synced-to-nothing? re-sync or rebuild"
+        )
+      end
+
+      # The by-design zero-rows note for a feature module (P42-8): informational,
+      # never an anomaly — it fetches reference data and mints no catalog rows.
+      def module_holds_no_rows
+        Finding.new(
+          kind: :module_no_rows, severity: :info,
+          message: "feature module (kind: module) holds no catalog rows — fetches reference data, " \
+                   "mints none by design; nothing to re-sync"
         )
       end
 
@@ -330,6 +366,49 @@ module Nabu
           .where(source_slug: slug)
           .where(Sequel.like(:repo_url, "local:%"))
           .to_h { |row| [row[:repo_url].delete_prefix("local:"), row[:last_sync_sha]] }
+      end
+
+      # -- source_stats drift (D42-a, global) ----------------------------------
+
+      # The D42-a contract: source_stats is DERIVED and the LOADER is its
+      # only writer (rebuild re-derives wholesale). This probe holds ONE
+      # rotating source per run against its true counts — O(one source),
+      # never the corpus, so `nabu health` stays cheap while any write path
+      # that bypassed the loader (or a stats bug) surfaces loudly within a
+      # rotation. A catalog predating migration 019 has no table and
+      # produces nothing here (pending_migrations already says why).
+      def stats_drift
+        return nil unless table?(@catalog, :source_stats) && table?(@catalog, :sources)
+
+        sources = @catalog[:sources].order(:id).select_map(%i[id slug])
+        return nil if sources.empty?
+
+        id, slug = sources[@now.yday % sources.size]
+        drift = stats_drift_pairs(id)
+        return nil if drift.empty?
+
+        detail = drift.map { |field, (stated, actual)| "#{field} stats=#{stated} actual=#{actual}" }.join(", ")
+        Finding.new(
+          kind: :stats_drift, severity: :loud,
+          message: "source_stats drift on #{slug}: #{detail} — stats are derived and " \
+                   "loader-maintained; a write path bypassed the loader (a bug — report it). " \
+                   "nabu rebuild (or rebuild --incremental) re-derives"
+        )
+      end
+
+      # {field => [stated, actual]} for the day's source: the document grain
+      # always, the passage grain only under the cap and only when the doc
+      # grain is already clean (one loud line at a time).
+      def stats_drift_pairs(source_id)
+        stats = Store::SourceStats.fetch(@catalog, source_id)
+        drift = Store::SourceStats.document_truth(@catalog, source_id).filter_map do |field, actual|
+          [field, [stats.fetch(field), actual]] if stats.fetch(field) != actual
+        end.to_h
+        if drift.empty? && stats.fetch(:live_passages) <= STATS_PASSAGE_PROBE_CAP
+          actual = Store::SourceStats.passage_truth(@catalog, source_id)
+          drift[:live_passages] = [stats.fetch(:live_passages), actual] if stats.fetch(:live_passages) != actual
+        end
+        drift
       end
 
       # -- pending migrations (global) -----------------------------------------

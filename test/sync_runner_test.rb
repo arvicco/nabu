@@ -292,6 +292,79 @@ class SyncRunnerTest < Minitest::Test
     assert_equal "succeeded", last_run_status
   end
 
+  # --- post-load ANALYZE (P42-4) ------------------------------------------
+
+  # The trigger is the changed-row count (added + updated + withdrawn) against
+  # ANALYZE_MIN_CHANGED_ROWS, strict >. A skip-run (nothing changed, only
+  # skipped) is never bulk — the waste case the threshold exists to avoid.
+  def test_bulk_load_predicate_fires_above_threshold_only
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    n = Nabu::SyncRunner::ANALYZE_MIN_CHANGED_ROWS
+
+    assert runner.send(:bulk_load?, load_report(added: n + 1)), "> threshold is bulk"
+    assert runner.send(:bulk_load?, load_report(updated: n, withdrawn: 1)), "u + w count too"
+    refute runner.send(:bulk_load?, load_report(added: n)), "= threshold is not bulk (strict >)"
+    refute runner.send(:bulk_load?, load_report(added: 5, skipped: 9_999_999)),
+           "a skip-run (only skipped) never analyzes"
+    refute runner.send(:bulk_load?, nil), "no load report → not bulk"
+  end
+
+  # A small real sync is far below the bulk floor, so it refreshes no planner
+  # stats and the report line stays silent (analyzed nil).
+  def test_sub_threshold_sync_skips_analyze_silently
+    BreakerAdapter.reset!(urns: (1..5).map { |i| "urn:cts:test:w#{i}" })
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+
+    outcome = runner.sync("breaker")
+    refute outcome.aborted?
+    assert_equal 5, outcome.load_report.added
+    assert_nil outcome.analyzed, "a 5-row load is far below the bulk threshold — no ANALYZE"
+    refute @db.table_exists?(:sqlite_stat1), "no ANALYZE ran, so no planner stats were written"
+  end
+
+  # A bulk load ANALYZEs the catalog AND the fulltext index (a passage source
+  # is not index-inert). A 10k-row fixture is impractical, so the bulk verdict
+  # is forced here — the threshold logic itself is pinned above.
+  def test_bulk_passage_sync_analyzes_catalog_and_index
+    BreakerAdapter.reset!(urns: (1..5).map { |i| "urn:cts:test:w#{i}" })
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+
+    force_bulk!(runner)
+    outcome = runner.sync("breaker")
+    refute_nil outcome.analyzed, "a bulk load refreshes planner stats"
+    assert_equal "catalog + index", outcome.analyzed.scope
+    assert_operator outcome.analyzed.seconds, :>=, 0.0
+    assert @db.table_exists?(:sqlite_stat1), "the catalog was ANALYZEd (legal on in-memory)"
+    ft = Nabu::Store.connect_fulltext(config.fulltext_path)
+    assert ft.table_exists?(:sqlite_stat1), "the fulltext index was ANALYZEd too"
+  ensure
+    ft&.disconnect
+  end
+
+  # An index-inert grain touches no index, so a bulk inert load ANALYZEs the
+  # catalog ONLY — and creates no fulltext file to analyze.
+  def test_bulk_inert_sync_analyzes_catalog_only
+    runner = make_runner(registry(entry(NotesShelf.slug, NotesShelf, enabled: true, kind: "shelf")))
+
+    force_bulk!(runner)
+    outcome = runner.sync(NotesShelf.slug)
+    assert_equal "catalog", outcome.analyzed.scope
+    refute File.exist?(config.fulltext_path), "an inert sync creates no fulltext file to analyze"
+  end
+
+  def load_report(added: 0, updated: 0, withdrawn: 0, skipped: 0, errored: 0)
+    Nabu::Store::LoadReport.new(added: added, updated: updated, withdrawn: withdrawn,
+                                skipped: skipped, errored: errored)
+  end
+
+  # Force the bulk-load verdict on ONE runner instance (no minitest/mock in
+  # this suite — a singleton override, the fold-file diversion pattern): a
+  # real 10k-row fixture is impractical, and the threshold logic itself is
+  # pinned by test_bulk_load_predicate_fires_above_threshold_only.
+  def force_bulk!(runner)
+    def runner.bulk_load?(_load_report) = true
+  end
+
   # --- parse-only ---------------------------------------------------------
 
   def test_parse_only_never_fetches
@@ -660,6 +733,32 @@ class SyncRunnerTest < Minitest::Test
     assert_equal 1, OkLive.fetches, "one source's failure must not stop the others"
   end
 
+  # --- grant gate in --all (P42-r1) ---------------------------------------
+
+  def test_sync_all_skips_a_grant_required_source_without_acknowledgment
+    [LiveEnabled, OkLive].each(&:reset!)
+    reg = registry(
+      entry("granted-src", LiveEnabled, enabled: true, sync_policy: "auto", grant_required: true),
+      entry("ok-live",     OkLive,      enabled: true, sync_policy: "auto")
+    )
+
+    results = make_runner(reg).sync_all
+    assert_instance_of Nabu::SyncRunner::GrantRequired, results["granted-src"]
+    assert_equal "granted-src", results["granted-src"].slug
+    assert_equal 0, LiveEnabled.fetches, "a grant-blocked source is never fetched mid-batch"
+    assert_kind_of Nabu::SyncRunner::Outcome, results["ok-live"], "the batch runs the others"
+  end
+
+  def test_sync_all_runs_a_grant_source_once_acknowledged
+    LiveEnabled.reset!
+    Nabu::GrantGate.new(ledger: @ledger).record!(slug: "granted-src", terms: "t", how: "flag")
+    reg = registry(entry("granted-src", LiveEnabled, enabled: true, sync_policy: "auto", grant_required: true))
+
+    results = make_runner(reg).sync_all
+    assert_kind_of Nabu::SyncRunner::Outcome, results["granted-src"]
+    assert_equal 1, LiveEnabled.fetches, "an acknowledged grant source syncs normally"
+  end
+
   # --- reference edges (P19-4) ---------------------------------------------
 
   def test_sync_refreshes_reference_edges_for_a_reference_edges_source
@@ -705,9 +804,17 @@ class SyncRunnerTest < Minitest::Test
     Nabu::SourceRegistry.new(entries)
   end
 
-  def entry(slug, klass, enabled:, sync_policy: "auto", kind: "source")
+  def entry(slug, klass, enabled:, sync_policy: "auto", kind: "source", grant_required: false)
     Nabu::SourceRegistry::Entry.new(
-      slug: slug, adapter_class_name: klass.name, enabled: enabled, sync_policy: sync_policy, kind: kind
+      slug: slug, adapter_class_name: klass.name, enabled: enabled, sync_policy: sync_policy, kind: kind,
+      grant_required: grant_required, grant: (grant_required ? sample_grant : nil)
+    )
+  end
+
+  def sample_grant
+    Nabu::SourceRegistry::Grant.new(
+      grantor: "G. Starostin", date: "2026-07-15", terms: "any use, per-base attribution required",
+      thread: "№1", request_hint: "ask George Starostin"
     )
   end
 

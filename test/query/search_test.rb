@@ -802,16 +802,21 @@ module Query
     # rows a catalog-side filter then rejects, so the page comes back short
     # (or empty) while matches exist beyond the window. The result semantics
     # stay as they are — but the surface must SAY the page may be incomplete.
+    # (P42-3: --lang left this class — it rides in the MATCH on the current
+    # index shape, so these pins exercise the still-catalog-side filters;
+    # the historical lang starvation pin lives on in the downgraded-index
+    # test below.)
 
     # Ten short Latin rows outrank (bm25 penalizes length) one longer Greek
-    # row; limit 1 makes the inner window exactly 10, so the Greek match sits
-    # beyond it and the lang filter empties the page.
+    # row on the nc source; limit 1 makes the inner window exactly 10, so
+    # the Greek match sits beyond it and a catalog-side filter (license,
+    # source — or lang on a pre-P42-3 index) empties the page.
     def seed_window_exhausting_corpus(lat_rows: 10)
       lat = make_document(source: @open, urn: "urn:d:lat", language: "lat")
       lat_rows.times do |i|
         make_passage(lat, urn: "urn:d:lat:#{i}", text: "arma virumque cano", sequence: i, language: "lat")
       end
-      grc = make_document(source: @open, urn: "urn:d:grc", language: "grc")
+      grc = make_document(source: @nc, urn: "urn:d:grc", language: "grc")
       make_passage(grc, urn: "urn:d:grc:1", sequence: 0, language: "grc",
                         text: "arma sits far down the rank because this passage carries many more words than the rest")
       rebuild!
@@ -821,7 +826,7 @@ module Query
       seed_window_exhausting_corpus
 
       query = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
-      results = query.run("arma", lang: "grc", limit: 1)
+      results = query.run("arma", license: "nc", limit: 1)
       assert_empty results, "the inner window holds only filter-rejected rows (the P34 gate repro)"
       assert_equal Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT, query.incomplete_hint,
                    "an empty page with matches beyond the window must announce itself"
@@ -831,7 +836,7 @@ module Query
       seed_window_exhausting_corpus(lat_rows: 3)
 
       query = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
-      results = query.run("arma", lang: "xcl", limit: 1)
+      results = query.run("arma", place: "nowhere%", limit: 1)
       assert_empty results
       assert_nil query.incomplete_hint, "the window held every match — this empty is the truth"
     end
@@ -845,6 +850,345 @@ module Query
 
       refute_empty query.run("arma", lang: "lat", limit: 1)
       assert_nil query.incomplete_hint, "a full page under filters needs no hint"
+    end
+
+    # -- the ubiquitous-term guard (P42-2) ------------------------------------
+    # MEASURED (P41 scale review, 62.8M passages): `ORDER BY rank` scores
+    # EVERY matching row before LIMIT, so a term in a large fraction of the
+    # corpus (الله) took ~10s while rare terms took 0.27s. Above a df
+    # threshold the ranked path is skipped and the page comes in CORPUS
+    # (rowid) order, announced via #rank_note. Below the threshold the
+    # behavior is byte-identical to before the guard.
+
+    # Four sparse rows, then one DENSE row (bm25 would rank it first). df=5
+    # crosses a threshold of 2: the page must come back in corpus order —
+    # dense row LAST — with the honest note armed.
+    def seed_ubiquity_corpus
+      doc = make_document(source: @open, urn: "urn:d:1", language: "lat")
+      4.times do |i|
+        make_passage(doc, urn: "urn:d:1:#{i}", text: "aurora nox #{i}", sequence: i, language: "lat")
+      end
+      make_passage(doc, urn: "urn:d:1:dense", text: "aurora aurora aurora", sequence: 4, language: "lat")
+      rebuild!
+    end
+
+    def test_ubiquitous_term_serves_a_sampled_page_in_corpus_order_and_announces_it
+      seed_ubiquity_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      # A fixture-scale posting list is sampled exhaustively (the attempt
+      # budget dwarfs it), so the full match set comes back — presented in
+      # corpus (passage-id) order, dense row last, never bm25-led.
+      results = searcher.run("aurora", ubiquity_threshold: 2)
+      assert_equal %w[urn:d:1:0 urn:d:1:1 urn:d:1:2 urn:d:1:3 urn:d:1:dense],
+                   results.map(&:urn),
+                   "above the df threshold the page is a corpus-order-presented sample — the dense row no longer leads"
+      assert_equal Nabu::Query::Search::RANK_SKIP_NOTE, searcher.rank_note,
+                   "skipping the rank must be announced, never silent"
+      assert_includes results.first.snippet, "[aurora]",
+                      "the guarded path still builds the stored-text snippet"
+    end
+
+    # The P42-r3 regression pin (owner gate review): the pre-sample guard
+    # served the HEAD of the posting list — twenty hits, all the first
+    # matching document in id space, the same degenerate page for every
+    # guarded term. The sampled page must draw across the corpus: with two
+    # documents' postings and a page smaller than either, both documents
+    # appear (seeded rng — the draw is deterministic under the seam).
+    def test_guarded_page_samples_across_documents_not_the_first_document_head
+      first = make_document(source: @open, urn: "urn:d:head", language: "lat")
+      30.times { |i| make_passage(first, urn: "urn:d:head:#{i}", text: "aurora #{i}", sequence: i, language: "lat") }
+      second = make_document(source: @open, urn: "urn:d:tail", language: "lat")
+      30.times { |i| make_passage(second, urn: "urn:d:tail:#{i}", text: "aurora #{i}", sequence: i, language: "lat") }
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, rng: ::Random.new(7))
+
+      results = searcher.run("aurora", limit: 5, ubiquity_threshold: 2)
+      assert_equal 5, results.size
+      documents = results.map { |result| result.urn.rpartition(":").first }.uniq
+      assert_operator documents.size, :>, 1,
+                      "a sampled guarded page spans documents — the head-window page never did"
+      insertion_order = results.map(&:urn).sort_by do |urn|
+        [urn.start_with?("urn:d:head") ? 0 : 1, urn.split(":").last.to_i]
+      end
+      assert_equal insertion_order, results.map(&:urn),
+                   "the sampled page presents in corpus (insertion) order"
+    end
+
+    def test_a_seeded_rng_makes_the_sampled_page_deterministic
+      seed_ubiquity_corpus
+      first = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, rng: ::Random.new(11))
+                                 .run("aurora", limit: 3, ubiquity_threshold: 2).map(&:urn)
+      second = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, rng: ::Random.new(11))
+                                  .run("aurora", limit: 3, ubiquity_threshold: 2).map(&:urn)
+      assert_equal first, second
+    end
+
+    def test_below_threshold_ranking_is_byte_identical_and_unannounced
+      seed_ubiquity_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("aurora", ubiquity_threshold: 10)
+      assert_equal "urn:d:1:dense", results.first.urn, "bm25 order exactly as before the guard"
+      assert_nil searcher.rank_note, "no note when the rank was honestly computed"
+
+      default = searcher.run("aurora")
+      assert_equal "urn:d:1:dense", default.first.urn,
+                   "the default threshold (~1M postings) never fires on a test-sized corpus"
+      assert_nil searcher.rank_note
+    end
+
+    # The multi-term rule: the candidate set is rows matching the WHOLE query
+    # (implicit AND), bounded by the RAREST term's df — a rare term ANDed with
+    # a ubiquitous one keeps the candidate set small and ranking cheap, so the
+    # guard must stay off even though one term alone would cross the threshold.
+    def test_rare_term_anded_with_ubiquitous_term_keeps_the_ranked_path
+      seed_ubiquity_corpus
+      doc = make_document(source: @open, urn: "urn:d:2", language: "lat")
+      make_passage(doc, urn: "urn:d:2:rara", text: "aurora rara", sequence: 0, language: "lat")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("aurora rara", ubiquity_threshold: 2)
+      assert_equal %w[urn:d:2:rara], results.map(&:urn), "only one row carries both terms"
+      assert_nil searcher.rank_note,
+                 "df(aurora)=6 crosses the threshold alone, but min-df is df(rara)=1 — ranking is cheap"
+    end
+
+    # The urn probe (the health golden replay) is ranking-independent by
+    # design — the guard never rewrites it.
+    def test_urn_probe_is_exempt_from_the_guard
+      seed_ubiquity_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("aurora", urn: "urn:d:1:dense", ubiquity_threshold: 2)
+      assert_equal %w[urn:d:1:dense], results.map(&:urn)
+      assert_nil searcher.rank_note, "the urn probe serves one known row — nothing to guard"
+    end
+
+    def test_guard_composes_with_the_lang_filter
+      seed_ubiquity_corpus
+      grc = make_document(source: @open, urn: "urn:d:grc", language: "grc")
+      make_passage(grc, urn: "urn:d:grc:1", text: "aurora", sequence: 0, language: "grc")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("aurora", lang: "grc", ubiquity_threshold: 2)
+      assert_equal %w[urn:d:grc:1], results.map(&:urn),
+                   "the corpus-order path applies the same filters (lang in-MATCH since P42-3)"
+      assert_equal Nabu::Query::Search::RANK_SKIP_NOTE, searcher.rank_note
+    end
+
+    # Feature-detect fallback: when the vocabulary probe is unavailable
+    # (pre-index db, an engine quirk — TermFrequency returns nil), the guard
+    # is skipped and behavior is exactly today's, even above the threshold.
+    def test_unavailable_probe_fails_open_to_the_ranked_path
+      seed_ubiquity_corpus
+      no_probe = Object.new
+      def no_probe.candidate_ceiling(_variants) = nil
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, term_frequency: no_probe)
+
+      results = searcher.run("aurora", ubiquity_threshold: 2)
+      assert_equal "urn:d:1:dense", results.first.urn, "no probe → ranked, exactly as before P42-2"
+      assert_nil searcher.rank_note
+    end
+
+    # --exact/--word run the verified-candidate path, not the plain ranked
+    # page; the guard is scoped to the plain path only.
+    def test_exact_path_is_outside_the_guard
+      seed_ubiquity_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("aurora", exact: true, ubiquity_threshold: 2)
+      refute_empty results
+      assert_nil searcher.rank_note
+    end
+
+    # -- index-side --lang (P42-3) --------------------------------------------
+    # The P40-r2 starvation genus, fixed at the index: passages_fts now
+    # carries a language sentinel token, so plain-search --lang rides INSIDE
+    # the MATCH and the inner window can no longer fill with wrong-language
+    # rows. Against a pre-rebuild index (no column) the catalog-side path
+    # runs byte-identically, honesty hint included — pinned via the
+    # downgrade helper below.
+
+    # The pre-P42-3 passages_fts shape — what the owner's live fulltext file
+    # holds until the next full rebuild.
+    OLD_FTS_DDL = <<~SQL
+      CREATE VIRTUAL TABLE passages_fts USING fts5(
+        text_normalized,
+        urn UNINDEXED,
+        passage_id UNINDEXED,
+        tokenize = 'unicode61 remove_diacritics 2'
+      )
+    SQL
+
+    # Rebuild passages_fts in its pre-P42-3 shape from the freshly built
+    # rows, preserving rowid (corpus) order.
+    def downgrade_index!
+      rows = @fulltext[:passages_fts]
+             .order(:rowid)
+             .select_map(%i[text_normalized urn passage_id])
+             .map { |text, urn, id| { text_normalized: text, urn: urn, passage_id: id } }
+      @fulltext.drop_table(:passages_fts)
+      @fulltext.run(OLD_FTS_DDL)
+      @fulltext[:passages_fts].multi_insert(rows)
+    end
+
+    def test_lang_no_longer_starves_the_window_on_the_new_index
+      seed_window_exhausting_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("arma", lang: "grc", limit: 1)
+      assert_equal %w[urn:d:grc:1], results.map(&:urn),
+                   "the in-MATCH lang filter reaches past the homograph wall (the P34/P40-r2 repro, fixed)"
+      assert_nil searcher.incomplete_hint,
+                 "lang rides in the MATCH — it cannot starve the window, so it no longer arms the hint"
+    end
+
+    def test_pre_rebuild_index_keeps_the_catalog_side_lang_path_byte_identical
+      seed_window_exhausting_corpus
+      downgrade_index!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("arma", lang: "grc", limit: 1)
+      assert_empty results, "the pre-P42-3 window starves exactly as before (the historical P34 pin)"
+      assert_equal Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT, searcher.incomplete_hint,
+                   "…and announces itself exactly as before"
+      page = searcher.run("arma", lang: "lat", limit: 1)
+      assert_equal %w[lat], page.map(&:language), "a filling lang filter serves the same page as today"
+      assert_nil searcher.incomplete_hint
+    end
+
+    def test_lang_filter_matches_the_typed_modern_code_index_side
+      doc = make_document(source: @open, urn: "urn:d:is", language: "is")
+      make_passage(doc, urn: "urn:d:is:1", text: "láta hann fara", sequence: 0, language: "is")
+      rebuild!
+
+      assert_equal %w[urn:d:is:1], search("láta", lang: "is").map(&:urn),
+                   "P40-r2 honored in the MATCH too: the typed code is a member of its own equivalence set"
+
+      downgrade_index!
+      assert_equal %w[urn:d:is:1], search("láta", lang: "is").map(&:urn),
+                   "the catalog-side fallback answers identically"
+    end
+
+    # The guard-composition pin: the language sentinel tokens live in the
+    # fts vocabulary, but a plain query term that HAPPENS to be a language
+    # code ("is" — English verb, Icelandic code) neither matches them nor
+    # inherits their document frequency in the ubiquity probe.
+    def test_language_tokens_neither_match_nor_trip_the_guard_for_code_shaped_words
+      eng = make_document(source: @open, urn: "urn:d:eng", language: "eng")
+      make_passage(eng, urn: "urn:d:eng:1", text: "this is the way", sequence: 0, language: "eng")
+      ice = make_document(source: @open, urn: "urn:d:is", language: "is")
+      5.times do |i|
+        make_passage(ice, urn: "urn:d:is:#{i}", text: "aurora #{i}", sequence: i, language: "is")
+      end
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("is", ubiquity_threshold: 3)
+      assert_equal %w[urn:d:eng:1], results.map(&:urn),
+                   "the Icelandic rows' language tokens are sentinel-prefixed — a plain 'is' cannot match them"
+      assert_nil searcher.rank_note,
+                 "df('is') counts the ONE text occurrence, not the 5 language tokens — the guard stays off"
+    end
+
+    # -- term-less filtered browse (P42-6) -----------------------------------
+    # The mode the shipped recipes always promised: no query, a content filter
+    # narrows WHICH passages, and the catalog is listed in corpus order with no
+    # ranking. The library method lists whatever the filters select (the
+    # legality rule is a CLI seam, exercised in cli_test).
+
+    def browse(**)
+      Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext).browse(**)
+    end
+
+    def test_browse_returns_the_filtered_page_in_corpus_insertion_order
+      # Insert z, then a, then m — corpus order is passage-id (insertion) order,
+      # NOT urn/alphabetical and NOT rank (a browse does not rank).
+      dated("urn:z", "zeta", 100, 100)
+      dated("urn:a", "alpha", 100, 100)
+      dated("urn:m", "mu", 100, 100)
+      rebuild!
+      assert_equal %w[urn:z:1 urn:a:1 urn:m:1], browse(from: 1, to: 200).map(&:urn),
+                   "corpus order is insertion (passage id) order, consistent with the ubiquity guard"
+    end
+
+    def test_browse_honors_the_limit
+      5.times { |i| dated("urn:d#{i}", "text#{i}", 100, 100) }
+      rebuild!
+      assert_equal 2, browse(from: 1, to: 200, limit: 2).size, "--limit caps a browse page exactly"
+    end
+
+    def test_browse_never_arms_the_incomplete_hint_even_on_a_short_page
+      # One dated doc, a generous limit: the page comes back SHORT under an
+      # active content filter — the exact shape that arms the ranked-search
+      # honesty hint. A browse has no inner window, so the hint must NOT arm.
+      dated("urn:a", "alpha", 100, 100)
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      page = searcher.browse(from: 1, to: 200, limit: 20)
+      assert_equal 1, page.size, "one match, well under the limit"
+      assert_nil searcher.incomplete_hint, "page-fill is exact for a browse — no incomplete-page hint"
+      assert_nil searcher.rank_note, "a browse does not rank — no rank-skip note"
+    end
+
+    def test_browse_snippet_is_a_leading_stored_window_with_no_brackets
+      dated("urn:a", "μῆνιν ἄειδε θεά", 100, 100)
+      rebuild!
+      hit = browse(from: 1, to: 200).first
+      assert_equal "μῆνιν ἄειδε θεά", hit.snippet,
+                   "no term to bracket — the pristine STORED text (accents intact), not the folded form"
+      refute_includes hit.snippet, "[", "a browse snippet carries no highlight"
+    end
+
+    def test_browse_lists_by_genre_facet_alone
+      faceted("urn:e:1", "dis manibus", { "genre" => %w[epitaph titsep] })
+      faceted("urn:e:2", "dis manibus", { "genre" => ["votive inscription", "titsac"] })
+      rebuild!
+      assert_equal %w[urn:e:1:1], browse(facets: { "genre" => "epitaph" }).map(&:urn),
+                   "a genre facet is a content filter — legal and selective, term-less"
+    end
+
+    def test_browse_lists_by_loans_facet_alone
+      loaned("urn:c:1", "ⲡⲛⲟⲩⲧⲉ ⲁⲅⲁⲑⲟⲥ", { "grc" => 2 })
+      loaned("urn:c:2", "ⲡⲛⲟⲩⲧⲉ", { "hbo" => 1 })
+      rebuild!
+      assert_equal %w[urn:c:1:1], browse(loans: "grc").map(&:urn),
+                   "the loans facet alone narrows content — a legal term-less browse"
+    end
+
+    # Composition with the shelf-selectors (--lang/--license/--axis) WHEN a
+    # content filter is present — the legal combined form.
+    def dated_in(urn, language:, source:, year: 100)
+      doc = make_document(source: source, urn: urn, language: language)
+      make_passage(doc, urn: "#{urn}:1", text: "verbum", sequence: 1, language: language)
+      @catalog[:document_axes].insert(document_id: doc.id, not_before: year, not_after: year,
+                                      precision: "x", axis_source: "x")
+    end
+
+    def test_browse_composes_with_lang_under_a_content_filter
+      dated_in("urn:g", language: "grc", source: @open)
+      dated_in("urn:l", language: "lat", source: @open)
+      rebuild!
+      assert_equal %w[urn:g:1], browse(from: 1, to: 200, lang: "grc").map(&:urn),
+                   "--lang scopes the browse the date filter made legal"
+    end
+
+    def test_browse_composes_with_license_under_a_content_filter
+      dated_in("urn:o", language: "grc", source: @open) # open
+      dated_in("urn:n", language: "grc", source: @nc)   # nc
+      rebuild!
+      assert_equal %w[urn:o:1], browse(from: 1, to: 200, license: "open").map(&:urn)
+    end
+
+    def test_browse_composes_with_a_source_membership_axis_under_a_content_filter
+      dated_in("urn:o", language: "grc", source: @open)
+      dated_in("urn:n", language: "grc", source: @nc)
+      rebuild!
+      assert_equal %w[urn:o:1], browse(from: 1, to: 200, sources: ["open"]).map(&:urn),
+                   "the --axis membership list scopes the browse, the date filter making it legal"
     end
   end
 end
