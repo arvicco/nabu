@@ -401,7 +401,7 @@ class OpenitiTest < Minitest::Test
     entry = registry["openiti"]
     refute_nil entry, "openiti must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Openiti, entry.adapter_class
-    refute entry.enabled, "enabled: false until the owner-fired 5.9 GB first sync is verified"
+    assert entry.enabled, "flipped 2026-07-23 after the owner-verified first sync (9,079 docs)"
     assert_equal Nabu::Adapters::Openiti.manifest, entry.manifest
   end
 
