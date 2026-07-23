@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these fourteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 July 2026)</span> |
 |---|---|---|---|---|
 | `papyri-ddbdp` | papyri | attribution | enabled · manual | 61,414 docs / 921,611 passages |
 | `edh` | inscriptions | attribution | enabled · frozen | 81,881 docs / 406,306 passages |
@@ -65,6 +65,7 @@ nabu search --fuzzy ']ανδρα μοι εν['  # damaged-line substring search,
 nabu search manibus --type epitaph --province Britannia  # EDH genre facets composing with a text query (dis manibus on British epitaphs)
 nabu search "στρατηγ*" --from 101 --to 300 --place oxyrhynch%  # the Oxyrhynchite strategoi by date and provenance
 nabu search "στρατηγ*" --century 2 --axis epigraphy  # a query scoped to one century (negative = BCE, no year 0)
+nabu search --century 2 --axis epigraphy  # term-less browse — every 2nd-c. inscription in corpus order, the century the content filter
 nabu show urn:nabu:ogham:e-dev-001 --parallel  # an ogham stone beside its transliteration sibling
 nabu search --lemma precor --axis epigraphy  # CEIPoM equivalence keys reach the Iguvine Tables' pesnimu
 ```

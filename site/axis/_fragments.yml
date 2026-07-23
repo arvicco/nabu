@@ -432,7 +432,7 @@ arabic:
     - cmd: 'nabu search دانی --lang fas'
       note: the cross-keyboard ی/ي fold (P41-3) — an Arabic-yeh query (U+064A) still finds Ḥāfiẓ's farsi-yeh دانی (U+06CC)
     - cmd: 'nabu search --from 1300 --to 1400 --axis arabic'
-      note: term-less browse of the 14th-c.-CE shelf — the AH death-year timeline (lights at the owner's next incremental rebuild)
+      note: term-less browse of the 14th-c.-CE shelf on the AH death-year timeline (live-verified 23 July 2026)
   display: |
     - **Arabic and Persian (ara/fas) are RTL** and reuse the hbo/arc
       machinery: `isolates: true` wrapping, the same modes, the same honesty

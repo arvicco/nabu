@@ -1,12 +1,12 @@
 # Languages of the library
 
-**As of 2026-07-22** (post the Japanese reading desk and the P40 Germanic
-phase — 62,807,983 live passages across the 89-row registry; live
-inventory: every code below appears in the catalog, the lemma index, or
-the reference shelf). This page explains the code system once, then lists
-the significant codes with one sentence each (the corpus now carries 108
-passage languages; the long tail of single-inscription script variants is
-folded into grouped rows).
+**As of 2026-07-23** (post the P42 full rebuild — 62,789,087 live
+passages across the 89-row registry; live inventory: every code below
+appears in the catalog, the lemma index, or the reference shelf). This
+page explains the code system once, then lists the significant codes
+with one sentence each (the corpus now carries 110 passage languages;
+the long tail of single-inscription script variants is folded into
+grouped rows).
 
 **The headline has moved again — to the Islamicate world.** With the
 OpenITI load (2026-07-22 evening), **`ara` (Classical Arabic) is the

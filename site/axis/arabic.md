@@ -21,9 +21,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 The single shelf below answers this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 July 2026)</span> |
 |---|---|---|---|---|
-| `openiti` | texts | nc | not enabled | 9,079 docs / 34,631,499 passages |
+| `openiti` | texts | nc | enabled · manual | 9,079 docs / 34,631,499 passages |
 
 ## The desk's instruments
 
@@ -64,7 +64,7 @@ This desk's own surfaces:
 nabu show urn:nabu:openiti:0792Hafiz.Muntasab.PDL00074-per1  # Ḥāfiẓ's Muntasab — Persian verse in the %~% hemistich notation
 nabu search الله --lang ara           # Allāh across the Arabic hadith, dīwān and falsafa shelves
 nabu search دانی --lang fas           # the cross-keyboard ی/ي fold (P41-3) — an Arabic-yeh query (U+064A) still finds Ḥāfiẓ's farsi-yeh دانی (U+06CC)
-nabu search الله --from 1300 --to 1400 --axis arabic  # the AH death-year timeline (lights at the owner's next incremental rebuild)
+nabu search --from 1300 --to 1400 --axis arabic  # term-less browse of the 14th-c.-CE shelf on the AH death-year timeline (live-verified 23 July 2026)
 ```
 
 

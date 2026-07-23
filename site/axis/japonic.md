@@ -23,7 +23,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 July 2026)</span> |
 |---|---|---|---|---|
 | `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
 | `unihan` | dictionary | open | enabled · manual | 102,998 entries |
@@ -32,7 +32,7 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 | `kradfile` | dictionary | attribution | enabled · manual | 6,355 entries |
 | `oncoj` | annotated corpus | attribution | enabled · frozen | 4,991 docs / 33,192 passages |
 | `oncoj-lexicon` | dictionary | attribution | enabled · frozen | 5,869 entries |
-| `aozora` | texts | open | enabled · manual | 17,195 docs / 2,991,807 passages |
+| `aozora` | texts | open | enabled · manual | 17,121 docs / 2,983,332 passages |
 
 ## The desk's instruments
 

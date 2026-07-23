@@ -63,8 +63,8 @@ with every desk's member shelves and recipes, is
 
 ## The holdings, in brief
 
-As of **22 July 2026**, the catalog records **810,254 documents** comprising
-**62,807,983 passages** in 110 language codes — from proto-cuneiform
+As of **23 July 2026**, the catalog records **810,180 documents** comprising
+**62,789,087 passages** in 110 language codes — from proto-cuneiform
 tablets of the late fourth millennium BCE to Meiji-era Japanese. The
 newest arrival more than doubled the library in a single day: the
 Arabic phase — OpenITI, the premodern Islamicate library, with its
