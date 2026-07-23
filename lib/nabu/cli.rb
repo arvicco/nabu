@@ -2405,6 +2405,10 @@ module Nabu
     # Edges shown per kind by `nabu links` before the "… and N more" tail
     # (--long lists all — the conventions §10 house rule).
     LINKS_COMPACT_ITEMS = 10
+    # The direction-symmetric snippet-highlight delimiter for RTL-isolated
+    # snippets (U+2016 DOUBLE VERTICAL LINE, P42-r4): its own mirror image,
+    # so no bidi treatment can make it face away; absent from stored text.
+    RTL_HIGHLIGHT = "‖"
     # Batch-mining progress tick cadence (anchors per stderr line); a scope
     # smaller than one tick prints no progress at all — just the summary.
     BATCH_PROGRESS_EVERY = 200
@@ -2483,29 +2487,29 @@ module Nabu
       end
 
       # Render a SNIPPET — StoredSnippet output with the match in [brackets] —
-      # for the terminal (P42-r4). For an RTL-isolated language the brackets
-      # must NOT ride inside the isolate: bidi bracket mirroring varies by
-      # terminal (the owner's renderer reorders RTL without mirroring paired
-      # brackets, so a logical [word] displayed as ]word[ — facing away),
-      # while a bracket left OUTSIDE the isolates keeps its typed glyph and
-      # its LTR position and faces the match on every renderer class, bidi or
-      # not. So the isolate is CUT at bracket boundaries: each text segment
-      # isolates on its own and the brackets stay in the line context. The
-      # price is that the line lays out segment-by-segment LTR (RTL inside
-      # each segment) — right for a scanning surface like a hit snippet.
-      # Everything else (LTR languages, modes without isolates) renders whole,
-      # byte-identical to display_text.
+      # for the terminal (P42-r4). Square brackets are the WRONG highlight
+      # glyphs inside RTL text: they are a bidi-mirrored pair, and how a
+      # terminal treats a mirrored pair inside a reversed run varies — the
+      # owner's renderer reorders RTL segments without mirroring, showing the
+      # logical [word] as ]word[, facing away. Two fix shapes were tried:
+      # cutting the isolate at bracket boundaries (so the brackets sat in the
+      # LTR line context) still rendered reversed on the owner's terminal,
+      # which sweeps neutrals BETWEEN two RTL runs into the reversed segment
+      # — no placement survives that. So the highlight delimiter itself
+      # changes: in an RTL-isolated language the brackets render as
+      # RTL_HIGHLIGHT (U+2016 ‖), a direction-symmetric glyph that is its own
+      # mirror image — no reordering, mirroring, or segment-sweeping can make
+      # it face wrong (censused ×0 in stored ara text, 2026-07-23, so it can
+      # never collide with edition marks). The passage keeps its single
+      # whole-line isolate — real RTL reading flow. LTR languages render
+      # byte-identical to display_text, brackets untouched.
       def display_snippet(text, language)
         unless Nabu::Display.isolates?(language: language.to_s, mode: display_mode,
                                        policies: display_policies)
           return display_text(text, language)
         end
 
-        text.to_s.split(/([\[\]])/).map do |segment|
-          next segment if segment.empty? || segment == "[" || segment == "]"
-
-          display_text(segment, language)
-        end.join
+        display_text(text.to_s.tr("[]", RTL_HIGHLIGHT * 2), language)
       end
 
       # The source's three gaiji ladder lanes (P37-3/P38-2), each memoized per
