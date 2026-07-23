@@ -56,8 +56,31 @@ module Nabu
     # exist; the collision-triggered implicit block (:b2…, DdbdpParser
     # P5-1) rides along defensively. <lb break="no"/> delimits like any lb
     # (the print-margin rule; upstream nests them INSIDE kept choice
-    # branches — ISic000451's annu|s). An lb missing @n is a ParseError
-    # (honest quarantine; 8 records corpus-wide).
+    # branches — ISic000451's annu|s).
+    #
+    # == Missing @n (P43-r1, the D42-c recovery ruling)
+    #
+    # A missing @n only matters when a urn must be MINTED from it, so the
+    # raise is deferred from element-open to line-finalization:
+    #
+    # - A bare <lb/> whose line folds gap-only is TOLERATED: it is the
+    #   corpus's lost-lines idiom (<lb/><gap unit="line"/> — ISic000030's
+    #   lost opening; every unnumbered lb corpus-wide at canonical commit
+    #   62e6a28, 35 records, opens such a line), and the line is dropped
+    #   before minting exactly like a NUMBERED gap-only line. Nothing is
+    #   invented, nothing is marked.
+    # - A CITABLE line missing its number falls back to document order —
+    #   the lb ordinal for lines, the textpart ordinal for the path —
+    #   only when its edition carries NO explicit numbering of that kind
+    #   at all (whole-edition fallback; ISic000419's four gallery
+    #   textparts). Fallback-numbered passages and their document carry
+    #   the machine-visible marker "numbering" => "document-order" —
+    #   invented numbering is never silent.
+    # - MIXED numbering (a citable unnumbered line/textpart beside
+    #   explicitly numbered ones) still quarantines: an implicit ordinal
+    #   could collide with the explicit numbers, and the honest move is
+    #   refusal (ISic001698's unnumbered border textpart beside monogram
+    #   n=1..4 — the one such record at 62e6a28).
     #
     # == Text policy (CelticLeiden + the I.Sicily dialect)
     #
@@ -93,10 +116,16 @@ module Nabu
     # the pinned commit (the one lb-less prose candidate, ISic002950,
     # keeps its words in a dropped <note>), kept so upstream adding
     # lb-less text can never silently vanish into a metadata-only stub.
-    # Full-corpus quarantine floor at commit db1a4959: 46 — 34 lb without
-    # @n, 7 textparts without @n, 5 records whose filename and in-file
-    # <idno type="filename"> disagree (upstream drift, e.g. ISic001733's
-    # idno says ISic001737) — all honest, none silent.
+    # Full-corpus quarantine floor at canonical commit 62e6a28
+    # (2026-07-23, after the P43-r1 @n recovery): 6 base records — 5
+    # whose filename and in-file <idno type="filename"> disagree
+    # (upstream drift, e.g. ISic001733's idno says ISic001737) and
+    # ISic001698's mixed textpart numbering — plus, with translations
+    # on, the quarantined bases' own -en/-it siblings and the records
+    # whose same-language translation divs collide on cite (ISic000469's
+    # doubled xml:lang="en") — all honest, none silent. (The pre-P43-r1
+    # floor was 75 documents; 61 were the recoverable missing-@n
+    # classes.)
     #
     # == Languages (honest mapping, script subtags kept)
     #
@@ -151,6 +180,13 @@ module Nabu
       # The whole-edition fallback's stable suffix (EDH P23-3c): minted
       # only when zero line suffixes exist — collision-free by rule.
       FALLBACK_SUFFIX = "text"
+
+      # The machine-visible marker for invented numbering (P43-r1, class
+      # note): rides the annotations of every passage whose urn contains a
+      # document-order fallback number, and the document's metadata, so
+      # the display/provenance layer can say so — never silent.
+      NUMBERING_KEY = "numbering"
+      NUMBERING_FALLBACK = "document-order"
 
       DROPPED_ELEMENTS = %w[note bibl figure desc rdg certainty am].freeze
 
@@ -225,9 +261,11 @@ module Nabu
         return transliteration_document(doc, urn: urn, path: path, language: language) if layer == TRANSLITERATION_LAYER
 
         extraction = extract(doc, path: path, document_language: language)
+        document_metadata = metadata(doc, text_layer: extraction.any?)
+        document_metadata[NUMBERING_KEY] = NUMBERING_FALLBACK if fallback_numbered?(extraction)
         document = Nabu::Document.new(
           urn: urn, language: language, title: title_of(doc), canonical_path: path,
-          metadata: metadata(doc, text_layer: extraction.any?)
+          metadata: document_metadata
         )
         append_lines(document, extraction, urn: urn)
         document
@@ -275,15 +313,23 @@ module Nabu
       # under the primary's own suffixes (line-for-line --parallel), a bare
       # layer marker, the record's mainLang identity.
       def transliteration_document(doc, urn:, path:, language:)
+        extraction = extract(doc, path: path, document_language: language,
+                                  subtypes: [TRANSLITERATION_SUBTYPE], fallback: false)
+        document_metadata = { "layer" => TRANSLITERATION_SUBTYPE }
+        document_metadata[NUMBERING_KEY] = NUMBERING_FALLBACK if fallback_numbered?(extraction)
         document = Nabu::Document.new(
           urn: urn, language: language,
           title: transliteration_title(title_of(doc)), canonical_path: path,
-          metadata: { "layer" => TRANSLITERATION_SUBTYPE }
+          metadata: document_metadata
         )
-        extraction = extract(doc, path: path, document_language: language,
-                                  subtypes: [TRANSLITERATION_SUBTYPE], fallback: false)
         append_lines(document, extraction, urn: urn)
         document
+      end
+
+      # True when any minted line rides invented document-order numbering
+      # (P43-r1) — the document-level echo of the per-passage marker.
+      def fallback_numbered?(extraction)
+        extraction.any? { |line| line.annotations[NUMBERING_KEY] }
       end
 
       def transliteration_title(title)
@@ -517,6 +563,9 @@ module Nabu
           @raw_lines = []
           @current = nil
           @textparts = []
+          @textpart_counters = [0]
+          @edition_lb_numbered = false
+          @edition_textpart_numbered = false
           @lb_ordinal = 0
           @words = [] # open <w> stack: {n:, form:, line:}
           @supplied_depth = 0
@@ -530,8 +579,20 @@ module Nabu
         def edition(node, language:, lemmas:)
           @language = language
           @lemmas = lemmas
+          # Each edition is its own numbering universe for the P43-r1
+          # whole-edition fallback verdicts: only WALKED lbs/textparts
+          # count (one inside a dropped <note> never does), so the
+          # verdicts are collected during the walk and stamped onto the
+          # lines the edition opened.
+          first_line = @raw_lines.size
+          @edition_lb_numbered = false
+          @edition_textpart_numbered = false
+          @textpart_counters = [0]
           node.element_children.each { |child| walk(child) }
           close_line
+          verdicts = { lb_fallback: !@edition_lb_numbered,
+                       textpart_fallback: !@edition_textpart_numbered }
+          @raw_lines[first_line..].each { |line| line.merge!(verdicts) }
         end
 
         def lines(fallback: true)
@@ -540,6 +601,7 @@ module Nabu
             text = CelticLeiden.fold(line[:buffer])
             next if CelticLeiden.gap_only?(text)
 
+            resolve_numbering(line)
             # A textpart is its own line-numbering universe: the implicit
             # restart block resets at its boundary (the EDH rule).
             scope = line[:textpath]
@@ -626,31 +688,39 @@ module Nabu
 
         # -- textparts ----------------------------------------------------------
 
+        # A textpart missing its @n pushes its document-order ordinal as
+        # an INTEGER placeholder (explicit @n values are strings) —
+        # resolved or refused at minting (resolve_numbering, class note).
         def division(node)
           return recurse(node) unless node["type"] == "textpart"
 
           n = node["n"].to_s.strip
-          raise ParseError, "#{@path}: div[@type=\"textpart\"] is missing its @n" if n.empty?
-
+          ordinal = (@textpart_counters[-1] += 1)
+          @edition_textpart_numbered = true unless n.empty?
           close_line
-          @textparts.push(n)
+          @textparts.push(n.empty? ? ordinal : n)
+          @textpart_counters.push(0)
           @block = 1
           recurse(node)
           close_line
           @textparts.pop
+          @textpart_counters.pop
           @block = 1
         end
 
         # -- lines ----------------------------------------------------------------
 
+        # A missing @n is recorded, not raised: it only matters if this
+        # line mints a urn (resolve_numbering, class note) — the corpus's
+        # bare <lb/> always opens a dropped gap-only lost-lines line.
         def line_break(node)
           @lb_ordinal += 1
           n = node["n"].to_s
-          raise ParseError, "#{@path}: <lb> ##{@lb_ordinal} (document order) is missing its @n" if n.empty?
-
+          @edition_lb_numbered = true unless n.empty?
           close_line
           @current = {
-            n: n, textpath: @textparts.dup, buffer: +"", words: [], gaps: [],
+            n: n, ordinal: @lb_ordinal, textpath: @textparts.dup,
+            buffer: +"", words: [], gaps: [],
             supplied: 0, unclear: 0, cancelled: @del_depth.positive?,
             language: @language
           }
@@ -726,6 +796,37 @@ module Nabu
 
         # -- finalization ---------------------------------------------------------
 
+        # The P43-r1 deferred missing-@n ruling, applied only to lines
+        # that survived the gap-only drop (a urn must now be minted): a
+        # missing number resolves to its document-order ordinal iff the
+        # line's edition carried NO explicit numbering of that kind
+        # (whole-edition fallback — marked, never silent); beside
+        # explicit numbers it refuses, because an implicit ordinal could
+        # collide with them (class note).
+        def resolve_numbering(line)
+          if line[:n].empty?
+            unless line[:lb_fallback]
+              raise ParseError, "#{@path}: <lb> ##{line[:ordinal]} (document order) is missing its @n"
+            end
+
+            line[:n] = line[:ordinal].to_s
+            line[:fallback_numbered] = true
+          end
+          resolve_textpath(line)
+        end
+
+        # The Integer segments division() pushed for unnumbered textparts
+        # become their document-order ordinals (or refuse — see
+        # resolve_numbering).
+        def resolve_textpath(line)
+          return unless line[:textpath].any?(Integer)
+
+          raise ParseError, "#{@path}: div[@type=\"textpart\"] is missing its @n" unless line[:textpart_fallback]
+
+          line[:textpath] = line[:textpath].map(&:to_s)
+          line[:fallback_numbered] = true
+        end
+
         # [<textpart path>]:[b<k>]:<lb n>, collision-safe (DdbdpParser P5-1).
         def mint_suffix(line)
           loop do
@@ -748,6 +849,9 @@ module Nabu
           )
           result["leiden"] = leiden unless leiden.empty?
           result["words"] = line[:words] unless line[:words].empty?
+          if line[:fallback_numbered]
+            result[IsicilyEpidocParser::NUMBERING_KEY] = IsicilyEpidocParser::NUMBERING_FALLBACK
+          end
           result
         end
       end
