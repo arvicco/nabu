@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 July 2026)</span> |
 |---|---|---|---|---|
 | `oracc` | tablets | open | enabled · manual | 104,722 docs / 1,588,133 passages |
 | `tlhdig` | tablets | attribution | enabled · manual | 23,486 docs / 402,195 passages |
@@ -51,7 +51,7 @@ This desk's own surfaces:
 ```
 nabu show --random --source oracc     # pull a random tablet from the ORACC shelf
 nabu show urn:nabu:oracc:saao-saa01:P224395:o.1-o.3 --parallel  # Akkadian beside its running English translation
-nabu search LUGAL --century -7 --axis cuneiform  # kings in the 7th-century-BCE tablets, by regnal date
+nabu search --century -7 --axis cuneiform  # term-less browse — the 7th-century-BCE tablets on the regnal-date timeline, corpus order
 nabu search --fuzzy "a-na LUGAL" --axis cuneiform  # trigram fragment search — "to the king", straight off the tablet
 nabu search --lemma šarru --lang akk --axis cuneiform  # the gold ORACC Akkadian lemmatization — šarru behind every LUGAL
 ```

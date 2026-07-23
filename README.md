@@ -25,7 +25,7 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-22** the shelves hold **810,254 documents / 62,807,983
+As of **2026-07-23** the shelves hold **810,180 documents / 62,789,087
 passages** in 110 language codes — from proto-cuneiform tablets of the
 late 4th millennium BCE to Meiji-era Japanese. The newest arrival more
 than doubled the library in a day: **the Arabic phase** — OpenITI, the
@@ -37,7 +37,7 @@ and the CBETA Buddhist canon), the same day the **Germanic wave**
 landed (the Poetic Edda, the *Heliand*, Middle High German, ~6,800
 runic inscriptions) beside the Japanese reading desk and the Ancient
 Near East.
-Plus **1,310,763 dictionary entries** across fifty-six dictionary shelves
+Plus **1,310,786 dictionary entries** across fifty-six dictionary shelves
 and **16.2 million gold lemma annotations in 28 languages** (a further
 8.2 million ride an honestly labelled silver tier). (All numbers in this
 README are read from the live catalog, never estimated.)

@@ -1,10 +1,16 @@
 # The Library — content review
 
-**As of 2026-07-22 late** (post the Arabic phase load — the library
-more than doubled in a day; v1.2.0 cut earlier the same day). Live
-totals: **810,254 documents / 62,807,983 passages and 1,310,763
-dictionary entries** across the **88 registry rows** — 82 corpus sources + 4 local
-shelves + 2 feature modules, every corpus source enabled. **Classical Arabic (`ara`, §8x) is now the largest language at 33.3M
+**As of 2026-07-23** (post the P42 full rebuild — the first clean
+derivation of the post-Arabic library; v1.2.0 cut the day before). Live
+totals: **810,180 documents / 62,789,087 passages and 1,310,786
+dictionary entries** across the **89 registry rows** — 83 corpus sources + 4 local
+shelves + 2 feature modules, every corpus source enabled (OpenITI's
+registry flip rides the P42 gate). The rebuild reconciled the
+incrementally-grown catalog against clean derivation at −74 documents /
+−18,896 passages (0.03%): re-parse quarantines under current parser
+strictness (papyri +9 flagged by the drift monitor) and four rundata
+URN collisions; per-source counts are byte-identical across the two
+most recent full rebuilds. **Classical Arabic (`ara`, §8x) is now the largest language at 33.3M
 passages** — the OpenITI load of 2026-07-22 evening — ahead of Literary
 Chinese (13.2M); Persian (`fas`, 1.3M), Japanese (`jpn`, §8v) and
 Middle High German (`gmh`, §8w) landed the same 48 hours. The reference shelf spans **56 dictionary
