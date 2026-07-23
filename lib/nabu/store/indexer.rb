@@ -138,17 +138,60 @@ module Nabu
       # Insert in slices so a 238k-passage corpus never materializes at once.
       BATCH_SIZE = 2_000
 
-      # FTS5 DDL (see class note). text_normalized is the sole indexed column;
-      # urn + passage_id ride along UNINDEXED so a hit joins back to the catalog
-      # (where the pristine text and annotations stay) without duplicating them.
+      # FTS5 DDL (see class note). text_normalized carries the folded search
+      # form; urn + passage_id ride along UNINDEXED so a hit joins back to the
+      # catalog (where the pristine text and annotations stay) without
+      # duplicating them.
+      #
+      # == The language column (P42-3) — index-side --lang
+      #
+      # MEASURED problem (the P40-r2 starvation genus, P41 scale review): a
+      # catalog-side --lang WHERE thins the bounded inner window AFTER the
+      # MATCH, so a term whose hits concentrate in other languages starves
+      # the page — empty results at any realistic --limit while matches
+      # exist. The honest fix puts the filter INSIDE the MATCH: `language`
+      # is an INDEXED fts5 column holding one sentinel token per row
+      # (language_token: "0lang" + the code downcased with non-alphanumerics
+      # stripped — "grc" → "0langgrc", "san-Deva" → "0langsandeva"), and
+      # Query::Search composes `... AND language : ("0langgrc")`, so the
+      # window can never fill with wrong-language rows.
+      #
+      # Why a SENTINEL token, not the bare code:
+      # - Bare codes are real words ("is" is both the Icelandic code and the
+      #   English verb). Indexed bare, every no---lang query for such a word
+      #   would match that whole language's rows through the language
+      #   column, and the P42-2 fts5vocab 'row' df probe (which aggregates
+      #   across ALL columns) would inflate that term's document frequency,
+      #   skewing the ubiquity guard. The leading-digit prefix makes the
+      #   language vocabulary DISJOINT from every natural-language token, so
+      #   plain MATCHes and the guard's df lookups cannot see it — neither
+      #   needed any change.
+      # - Multi-part stored codes ("san-Deva") would tokenize into several
+      #   tokens, breaking the equality semantics --lang has always had
+      #   (catalog `language IN (...)`): `language:san` would prefix-bleed
+      #   into san-Deva rows. The mint collapses each code to ONE token, so
+      #   the filter stays equality (case-insensitive — the one deliberate
+      #   widening over the case-sensitive catalog WHERE, documented on
+      #   Query::Search).
+      #
+      # The column appears when this table is next built FROM SCRATCH (the
+      # owner's scheduled full rebuild). Incremental refreshes write the
+      # shape the live table actually has (insert_passage_batches feature-
+      # detects), so a pre-P42-3 index keeps taking syncs unchanged until
+      # then, and Query::Search serves the old catalog-side path against it.
       CREATE_TABLE = <<~SQL
         CREATE VIRTUAL TABLE passages_fts USING fts5(
           text_normalized,
+          language,
           urn UNINDEXED,
           passage_id UNINDEXED,
           tokenize = 'unicode61 remove_diacritics 2'
         )
       SQL
+
+      # The language sentinel-token prefix (CREATE_TABLE note): a leading
+      # digit guarantees no natural-language token ever collides.
+      LANGUAGE_TOKEN_PREFIX = "0lang"
 
       # Trigram FTS5 DDL (class note; same raw-DDL exception as CREATE_TABLE —
       # virtual-table DDL has no Sequel API). Same column shape as
@@ -334,14 +377,34 @@ module Nabu
           fulltext[LEMMA_TABLE].columns.include?(:tier)
       end
 
+      # The language column's one-token search value for +code+ (CREATE_TABLE
+      # note): prefix + downcased code, non-alphanumerics stripped so a
+      # multi-part code stays one token. Shared by the write side here and by
+      # Query::Search's `language :` filter — the fold-both-sides contract,
+      # applied to language codes.
+      def language_token(code)
+        LANGUAGE_TOKEN_PREFIX + code.to_s.downcase.gsub(/[^a-z0-9]/, "")
+      end
+
+      # Whether the LIVE fts table carries the P42-3 language column — the
+      # write-side feature detect (insert_passage_batches) and Query::Search's
+      # read-side one. A fresh rebuild! always creates it; an incremental
+      # refresh into a pre-rebuild file honestly reports false and keeps
+      # writing the old shape.
+      def fts_language_column?(fulltext)
+        fulltext[TABLE].columns.include?(:language)
+      end
+
       # One streaming pass feeding the FTS and lemma tables (shared by
       # rebuild! and refresh_source!). Returns [passage count, lemma-row
-      # count].
+      # count]. The fts row shape is detected ONCE from the live table
+      # (CREATE_TABLE note): a pre-P42-3 table takes language-less rows.
       def insert_passage_batches(fulltext, dataset, tiers)
+        with_language = fts_language_column?(fulltext)
         count = 0
         lemma_count = 0
         dataset.each_slice(BATCH_SIZE) do |batch|
-          fulltext[TABLE].multi_insert(batch.map { |row| index_row(row) })
+          fulltext[TABLE].multi_insert(batch.map { |row| fts_row(row, language: with_language) })
           rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers) }
           fulltext[LEMMA_TABLE].multi_insert(rows)
           count += batch.size
@@ -527,12 +590,23 @@ module Nabu
       # Turn a catalog row into an FTS index row — a pure column mapping, NO
       # text transform (class note: text_normalized is already the search
       # form). Kept separate so that invariant is testable and obvious.
+      # This is the trigram table's whole row shape, and the passages_fts
+      # base that fts_row builds on.
       def index_row(row)
         {
           text_normalized: row.fetch(:text_normalized),
           urn: row.fetch(:urn),
           passage_id: row.fetch(:passage_id)
         }
+      end
+
+      # The passages_fts row: index_row plus — when the live table carries
+      # the P42-3 column — the language sentinel token. The language-less
+      # branch keeps incremental syncs into a pre-rebuild file unchanged.
+      def fts_row(row, language:)
+        return index_row(row) unless language
+
+        index_row(row).merge(language: language_token(row.fetch(:language)))
       end
 
       # The passage's lemma-index rows: one per distinct FOLDED lemma its
