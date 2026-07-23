@@ -104,6 +104,14 @@ module Nabu
         indexed = (indexed || 0) + refresh_index(db, fulltext, entry) unless index_inert?(entry)
       end
       replay_enrichments(db)
+      # P42-0: the loader hooks maintained source_stats through each dirty
+      # replay; re-deriving wholesale keeps the incremental run's stats
+      # content-equivalent to a full rebuild's (the sacred invariant). A
+      # skipped-everything run touched no rows, so stats need nothing.
+      if outcomes.any?
+        progress&.stage("source stats")
+        Store::SourceStats.derive!(db, note: "derived (incremental rebuild)")
+      end
       axes, facets = corpus_builders(db, progress) if outcomes.any?
       indexed = heal_index(db, fulltext, progress) if outcomes.empty? && !Store::Indexer.incremental_ready?(fulltext)
       Result.new(db_path: db_path, outcomes: outcomes, cleans: cleans, skips: skips,

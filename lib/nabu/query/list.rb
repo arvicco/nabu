@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+
 require_relative "../normalize"
 require_relative "catalog_join"
 
@@ -419,17 +421,29 @@ module Nabu
       end
 
       def language_passage_counts
-        @language_passage_counts ||= live_passages
-                                     .exclude(Sequel[:passages][:language] => nil)
-                                     .group(Sequel[:documents][:source_id], Sequel[:passages][:language])
-                                     .select(Sequel[:documents][:source_id].as(:source_id),
-                                             Sequel[:passages][:language].as(:language),
-                                             Sequel.function(:count).*.as(:count))
-                                     .all
-                                     .group_by { |row| row.fetch(:source_id) }
-                                     .transform_values do |rows|
-                                       rows.to_h { |row| [row.fetch(:language), row.fetch(:count)] }
+        @language_passage_counts ||= if stats?
+                                       @catalog[:source_stats_languages]
+                                         .where { passages >= 1 }
+                                         .select_map(%i[source_id language passages])
+                                         .group_by(&:first)
+                                         .transform_values { |rows| rows.to_h { |_, lang, n| [lang, n] } }
+                                     else
+                                       live_language_passage_counts
                                      end
+      end
+
+      def live_language_passage_counts
+        live_passages
+          .exclude(Sequel[:passages][:language] => nil)
+          .group(Sequel[:documents][:source_id], Sequel[:passages][:language])
+          .select(Sequel[:documents][:source_id].as(:source_id),
+                  Sequel[:passages][:language].as(:language),
+                  Sequel.function(:count).*.as(:count))
+          .all
+          .group_by { |row| row.fetch(:source_id) }
+          .transform_values do |rows|
+            rows.to_h { |row| [row.fetch(:language), row.fetch(:count)] }
+          end
       end
 
       def language_grain?(source)
@@ -503,34 +517,71 @@ module Nabu
       end
 
       # -- grouped counters (one query per table, assembled per source) -----
+      #
+      # P42-0: every corpus-mass counter below reads the source_stats derived
+      # table when it exists (maintained at write time by the loader,
+      # re-derived wholesale by rebuild) — the pre-019 fallback keeps the
+      # original aggregates with identical semantics. Dictionary entry
+      # counts stay LIVE either way: ~1.3M rows, indexed, milliseconds
+      # (measured 2026-07-23) — stats cover the passages-join grain only.
+
+      # The source_stats feature gate (migration 019).
+      def stats?
+        return @stats if defined?(@stats)
+
+        @stats = @catalog.table_exists?(:source_stats)
+      end
 
       def doc_counts
-        @doc_counts ||= @catalog[:documents]
-                        .group(:source_id)
-                        .select(
-                          :source_id,
-                          Sequel.function(:sum, Sequel.case({ { withdrawn: false } => 1 }, 0)).as(:docs),
-                          Sequel.function(:sum, Sequel.case({ { withdrawn: true } => 1 }, 0)).as(:withdrawn),
-                          Sequel.function(:sum, Sequel.case({ { retired_upstream: true, withdrawn: false } => 1 }, 0))
-                                .as(:retired)
-                        ).all
-                        .to_h { |row| [row.fetch(:source_id), row.slice(:docs, :withdrawn, :retired)] }
+        @doc_counts ||= if stats?
+                          @catalog[:source_stats].all.to_h do |row|
+                            [row.fetch(:source_id),
+                             { docs: row.fetch(:live_documents), withdrawn: row.fetch(:withdrawn_documents),
+                               retired: row.fetch(:retired_documents) }]
+                          end
+                        else
+                          live_doc_counts
+                        end
+      end
+
+      def live_doc_counts
+        @catalog[:documents]
+          .group(:source_id)
+          .select(
+            :source_id,
+            Sequel.function(:sum, Sequel.case({ { withdrawn: false } => 1 }, 0)).as(:docs),
+            Sequel.function(:sum, Sequel.case({ { withdrawn: true } => 1 }, 0)).as(:withdrawn),
+            Sequel.function(:sum, Sequel.case({ { retired_upstream: true, withdrawn: false } => 1 }, 0))
+                  .as(:retired)
+          ).all
+          .to_h { |row| [row.fetch(:source_id), row.slice(:docs, :withdrawn, :retired)] }
       end
 
       def passage_counts
-        @passage_counts ||= live_passages
-                            .group(Sequel[:documents][:source_id])
-                            .select(Sequel[:documents][:source_id].as(:source_id),
-                                    Sequel.function(:count).*.as(:count))
-                            .all.to_h { |row| [row.fetch(:source_id), row.fetch(:count)] }
+        @passage_counts ||= if stats?
+                              @catalog[:source_stats].select_hash(:source_id, :live_passages)
+                            else
+                              live_passages
+                                .group(Sequel[:documents][:source_id])
+                                .select(Sequel[:documents][:source_id].as(:source_id),
+                                        Sequel.function(:count).*.as(:count))
+                                .all.to_h { |row| [row.fetch(:source_id), row.fetch(:count)] }
+                            end
       end
 
       def census_languages
-        @census_languages ||= live_passages
-                              .exclude(Sequel[:passages][:language] => nil)
-                              .distinct
-                              .select_map([Sequel[:documents][:source_id], Sequel[:passages][:language]])
-                              .group_by(&:first).transform_values { |pairs| pairs.map(&:last) }
+        @census_languages ||= if stats?
+                                @catalog[:source_stats_languages]
+                                  .where { passages >= 1 }
+                                  .select_map(%i[source_id language])
+                                  .group_by(&:first).transform_values { |pairs| pairs.map(&:last) }
+                              else
+                                live_passages
+                                  .exclude(Sequel[:passages][:language] => nil)
+                                  .distinct
+                                  .select_map([Sequel[:documents][:source_id], Sequel[:passages][:language]])
+                                  .group_by(&:first).transform_values { |pairs| pairs.map(&:last) }
+                              end
       end
 
       def live_passages
@@ -539,13 +590,30 @@ module Nabu
           .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
       end
 
+      # Effective-class mix per source with live documents. Stats carry the
+      # OVERRIDE counts (never effective classes — sources.license_class can
+      # be relabeled without touching documents), so the effective mix is
+      # composed here: override classes + the source class when any live doc
+      # carries no override. Sources with zero live docs stay absent (the
+      # callers' fetch fallback reads the declared class), as before.
       def license_mix
-        @license_mix ||= @catalog[:documents]
-                         .join(:sources, id: Sequel[:documents][:source_id])
-                         .where(Sequel[:documents][:withdrawn] => false)
-                         .distinct
-                         .select_map([Sequel[:documents][:source_id], license_expr.as(:effective)])
-                         .group_by(&:first).transform_values { |pairs| pairs.map(&:last) }
+        @license_mix ||= if stats?
+                           classes = @catalog[:sources].select_hash(:id, :license_class)
+                           @catalog[:source_stats].where { live_documents >= 1 }.all.to_h do |row|
+                             overrides = JSON.parse(row.fetch(:license_overrides_json))
+                             mix = overrides.keys
+                             mix += [classes.fetch(row.fetch(:source_id))] if
+                               row.fetch(:live_documents) > overrides.values.sum
+                             [row.fetch(:source_id), mix.uniq]
+                           end
+                         else
+                           @catalog[:documents]
+                             .join(:sources, id: Sequel[:documents][:source_id])
+                             .where(Sequel[:documents][:withdrawn] => false)
+                             .distinct
+                             .select_map([Sequel[:documents][:source_id], license_expr.as(:effective)])
+                             .group_by(&:first).transform_values { |pairs| pairs.map(&:last) }
+                         end
       end
 
       def entry_counts
@@ -581,11 +649,18 @@ module Nabu
       # -- card details ------------------------------------------------------
 
       def card_languages(source_id)
-        live_passages
-          .where(Sequel[:documents][:source_id] => source_id)
-          .exclude(Sequel[:passages][:language] => nil)
-          .group_and_count(Sequel[:passages][:language])
-          .all.to_h { |row| [row.fetch(:language), row.fetch(:count)] }
+        if stats?
+          @catalog[:source_stats_languages]
+            .where(source_id: source_id).where { passages >= 1 }
+                                        .order(:language)
+            .select_hash(:language, :passages)
+        else
+          live_passages
+            .where(Sequel[:documents][:source_id] => source_id)
+            .exclude(Sequel[:passages][:language] => nil)
+            .group_and_count(Sequel[:passages][:language])
+            .all.to_h { |row| [row.fetch(:language), row.fetch(:count)] }
+        end
       end
 
       def dictionary_rows(source_id)

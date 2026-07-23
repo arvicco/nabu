@@ -192,8 +192,8 @@ module Nabu
       else
         return "—" if source.nil?
 
-        docs = Store::Document.where(source_id: source.id, withdrawn: false).count
-        "#{humanize(docs)}/#{humanize(passage_count(source.id))}"
+        counts = corpus_counts(source)
+        "#{humanize(counts.fetch(:docs))}/#{humanize(counts.fetch(:passages))}"
       end
     end
 
@@ -479,11 +479,28 @@ module Nabu
     def passage_pairs(source)
       return [["docs", 0], ["pass", 0]] if source.nil?
 
-      live = Store::Document.where(source_id: source.id, withdrawn: false)
-      pairs = [["docs", live.count], ["pass", passage_count(source.id)]]
-      retired = live.where(retired_upstream: true).count
-      pairs << ["retired", retired] if retired.positive?
+      counts = corpus_counts(source)
+      pairs = [["docs", counts.fetch(:docs)], ["pass", counts.fetch(:passages)]]
+      pairs << ["retired", counts.fetch(:retired)] if counts.fetch(:retired).positive?
       pairs
+    end
+
+    # P42-0: a passage source's holdings come from the source_stats derived
+    # table (maintained at write time — the doctrine: read time is for
+    # probes), never from a per-invocation aggregate over 60M+ passages. A
+    # catalog predating migration 019 falls back to the live aggregates with
+    # identical semantics.
+    def corpus_counts(source)
+      db = Store::Source.db
+      if Store::SourceStats.available?(db)
+        stats = Store::SourceStats.fetch(db, source.id)
+        { docs: stats.fetch(:live_documents), passages: stats.fetch(:live_passages),
+          retired: stats.fetch(:retired_documents) }
+      else
+        live = Store::Document.where(source_id: source.id, withdrawn: false)
+        { docs: live.count, passages: passage_count(source.id),
+          retired: live.where(retired_upstream: true).count }
+      end
     end
 
     def content_kind(entry)
@@ -528,6 +545,9 @@ module Nabu
       Store::SourceRecord.count
     end
 
+    # Deliberately LIVE, not source_stats (P42-0 measured decision): the
+    # entry tables total ~1.3M rows against 62.8M passages, and this indexed
+    # count is milliseconds — stats cover the corpus-mass grain only.
     def dictionary_entry_count(source)
       return 0 if source.nil?
 
@@ -535,6 +555,7 @@ module Nabu
       Store::DictionaryEntry.where(dictionary_id: dictionaries, withdrawn: false).count
     end
 
+    # The pre-019 fallback for #corpus_counts (and nothing else).
     def passage_count(source_id)
       live_documents = Store::Document.where(source_id: source_id, withdrawn: false).select(:id)
       Store::Passage.where(withdrawn: false).where(document_id: live_documents).count
