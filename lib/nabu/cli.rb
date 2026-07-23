@@ -666,6 +666,18 @@ module Nabu
       REFUSED (use --exact for glyph-literal matching there). Hangul is
       space-delimited, so --word treats it like any alphabetic script.
 
+      BROWSE (term-less): run search with NO query to LIST the corpus, but only
+      when at least one CONTENT-NARROWING filter is present — a date window
+      (--from/--to/--century), --place, a genre facet (--type/--province/
+      --material), or --loans. The page is served in corpus order (no ranking),
+      the standard hit rendering with a stored-text window per passage, --limit
+      honored. --lang/--license/--source/--axis select whole shelves and are NOT
+      sufficient on their own — a term-less listing of a whole language is a
+      dump, not a browse — so combine them WITH a content filter to scope one
+      (`--century 2 --axis epigraphy` lists the 2nd-c. inscriptions). The
+      character-structure filters (--radical/--strokes/--char-component) are a
+      separate term-less path of their own.
+
       Query syntax (SQLite FTS5 over the folded text):
         μηνιν αειδε          all words must appear in the passage (implicit AND)
         '"μηνιν αειδε"'      exact adjacent phrase — FTS quotes, so shell-quote them
@@ -797,6 +809,8 @@ module Nabu
         nabu search --fuzzy ']μηνιν αει['           # a damaged scrap, brackets and
                                                    #   all — infix match, papyri+oracc
         nabu search --fuzzy στρατηγ --century 6     # mid-word fragment, 6th c. papyri
+        nabu search --century 2 --axis epigraphy    # term-less browse: the 2nd-c.
+                                                   #   inscriptions, corpus order
         nabu search "dis manibus" --type epitaph --province "Germania superior"
                                                    # the D M formula on epitaphs of
                                                    #   one province (EDH facets)
@@ -916,7 +930,7 @@ module Nabu
       return proximity_search(query) if options[:near]
       return lemma_search(query) if options[:lemma]
       raise Thor::Error, "search: --morph requires --lemma (bare morphology search is out of scope)" if options[:morph]
-      raise Thor::Error, "search: give a query" if query.empty?
+      return browse_search if query.empty?
 
       validate_license!(options[:license])
       from, to = date_window
@@ -2681,6 +2695,70 @@ module Nabu
         code.empty? ? nil : code
       end
 
+      # The content-narrowing filters that make a TERM-LESS browse legal
+      # (P42-6): a date window (--from/--to/--century), a provenance --place, a
+      # genre facet (--type/--province/--material), or the --loans facet — each
+      # narrows WHICH passages, not merely which shelf. --lang/--license/
+      # --source/--axis select whole shelves and are deliberately NOT sufficient
+      # alone: a term-less listing of a whole language (or license, or source,
+      # or axis) is a corpus DUMP, not a browse. The character-structure filters
+      # are already a legal term-less path and return earlier (char_structured_search).
+      def content_narrowing_filters?
+        options[:from] || options[:to] || options[:century] || options[:place] ||
+          facet_filters || loans_filter
+      end
+
+      # The refusal for a term-less `search` that carries no content-narrowing
+      # filter — the old "give a query" message, extended (P42-6) to say exactly
+      # what WOULD make a term-less browse legal, and why the shelf-selectors do not.
+      def browse_refusal_message
+        "search: give a query — or a content-narrowing filter to browse the corpus " \
+          "term-less: a date window (--from/--to/--century), --place, a genre facet " \
+          "(--type/--province/--material), or --loans. --lang/--license/--source/--axis " \
+          "select whole shelves and cannot stand alone (that would dump the shelf, not browse it)."
+      end
+
+      # Term-less filtered browse (P42-6): a legal empty-query `search` — one
+      # content-narrowing filter present — lists the corpus in corpus order
+      # (Search#browse: passages.id ascending, no ranking) under the standard
+      # filters and rendering. Reached only from #search on an empty query, and
+      # only after the char/fuzzy/near/lemma paths have returned, so the sole
+      # residual flags are the plain path's own; --exact/--word have no term to
+      # match here and are refused rather than silently ignored.
+      def browse_search
+        if options[:exact] || options[:word]
+          raise Thor::Error, "search: --exact/--word are glyph/word post-filters over a query term — " \
+                             "they cannot run a term-less browse (drop them, or add a query)"
+        end
+        raise Thor::Error, browse_refusal_message unless content_narrowing_filters?
+
+        validate_license!(options[:license])
+        from, to = date_window
+        place = options[:place]
+        facets = facet_filters
+        loans = loans_filter
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        require_timeline!(catalog) if from || to || place
+        require_facets!(catalog) if facets
+        validate_source!(catalog, options[:source])
+        axis_names, axis_slugs = axis_membership(command: "search", config: config)
+
+        searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.browse(lang: options[:lang], license: options[:license],
+                                  limit: options[:limit].to_i, from: from, to: to, place: place,
+                                  facets: facets, source: options[:source], sources: axis_slugs, loans: loans)
+        print_search_results(results, facets: facets, query: "", loans: loans, axis: axis_names,
+                                      browse: true, from: from, to: to, place: place)
+        print_display_footer
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
       # --source SLUG (P22-1, search/export): reject an unknown slug up front,
       # naming the valid slugs (the define-miss pattern). Validated against
       # the CATALOG — what is held is what can be filtered.
@@ -3838,7 +3916,8 @@ module Nabu
       # --exact/--word scan-ceiling note) — printed whenever present, so a short
       # page never masquerades as a complete answer.
       def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
-                               exact: false, word: false, proximity: false, rank_note: nil)
+                               exact: false, word: false, proximity: false, rank_note: nil,
+                               browse: false, from: nil, to: nil, place: nil)
         if results.empty?
           say "no matches"
           # Empty-under-filter honesty (P35): --exact/--word suppressed the folded
@@ -3860,9 +3939,30 @@ module Nabu
           say "  #{display_text(result.snippet, result.language)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-            "(#{search_snippet_label(exact: exact, word: word, proximity: proximity, rank_note: rank_note)})" \
+            "(#{search_snippet_label(exact: exact, word: word, proximity: proximity,
+                                     rank_note: rank_note, browse: browse)})" \
+            "#{browse_window_footer(from: from, to: to, place: place) if browse}" \
             "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{incomplete}" if incomplete
+      end
+
+      # The date/place clause of a term-less browse footer (P42-6), naming the
+      # content filters that made the browse legal (facets/loans/axis are named
+      # by facet_footer); empty when neither is active (compact-footer rule).
+      def browse_window_footer(from:, to:, place:)
+        parts = []
+        parts << "dates: #{browse_year_window(from, to)}" if from || to
+        parts << "place: #{place}" if place
+        parts.empty? ? "" : " · #{parts.join(' · ')}"
+      end
+
+      # A signed-year window as a compact footer string: "-300..-30", "from
+      # 500", or "to 100" (BCE years negative — the --from/--to grammar).
+      def browse_year_window(from, to)
+        return "#{from}..#{to}" if from && to
+        return "from #{from}" if from
+
+        "to #{to}"
       end
 
       # The footer clause naming what the snippet shows, per path. All three
@@ -3870,7 +3970,8 @@ module Nabu
       # index form); --exact / --word / proximity annotate what the match means.
       # +rank_note+ (P42-2, plain path only) appends the skipped-rank honesty
       # clause: "…; term too common to rank — corpus order".
-      def search_snippet_label(exact:, word: false, proximity: false, rank_note: nil)
+      def search_snippet_label(exact:, word: false, proximity: false, rank_note: nil, browse: false)
+        return "filtered browse — corpus order, no ranking" if browse
         return "both terms bracketed; snippet shows the text as stored" if proximity
 
         stored = "snippet shows the text as stored"

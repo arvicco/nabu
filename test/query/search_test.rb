@@ -1055,5 +1055,102 @@ module Query
       assert_nil searcher.rank_note,
                  "df('is') counts the ONE text occurrence, not the 5 language tokens — the guard stays off"
     end
+
+    # -- term-less filtered browse (P42-6) -----------------------------------
+    # The mode the shipped recipes always promised: no query, a content filter
+    # narrows WHICH passages, and the catalog is listed in corpus order with no
+    # ranking. The library method lists whatever the filters select (the
+    # legality rule is a CLI seam, exercised in cli_test).
+
+    def browse(**)
+      Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext).browse(**)
+    end
+
+    def test_browse_returns_the_filtered_page_in_corpus_insertion_order
+      # Insert z, then a, then m — corpus order is passage-id (insertion) order,
+      # NOT urn/alphabetical and NOT rank (a browse does not rank).
+      dated("urn:z", "zeta", 100, 100)
+      dated("urn:a", "alpha", 100, 100)
+      dated("urn:m", "mu", 100, 100)
+      rebuild!
+      assert_equal %w[urn:z:1 urn:a:1 urn:m:1], browse(from: 1, to: 200).map(&:urn),
+                   "corpus order is insertion (passage id) order, consistent with the ubiquity guard"
+    end
+
+    def test_browse_honors_the_limit
+      5.times { |i| dated("urn:d#{i}", "text#{i}", 100, 100) }
+      rebuild!
+      assert_equal 2, browse(from: 1, to: 200, limit: 2).size, "--limit caps a browse page exactly"
+    end
+
+    def test_browse_never_arms_the_incomplete_hint_even_on_a_short_page
+      # One dated doc, a generous limit: the page comes back SHORT under an
+      # active content filter — the exact shape that arms the ranked-search
+      # honesty hint. A browse has no inner window, so the hint must NOT arm.
+      dated("urn:a", "alpha", 100, 100)
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      page = searcher.browse(from: 1, to: 200, limit: 20)
+      assert_equal 1, page.size, "one match, well under the limit"
+      assert_nil searcher.incomplete_hint, "page-fill is exact for a browse — no incomplete-page hint"
+      assert_nil searcher.rank_note, "a browse does not rank — no rank-skip note"
+    end
+
+    def test_browse_snippet_is_a_leading_stored_window_with_no_brackets
+      dated("urn:a", "μῆνιν ἄειδε θεά", 100, 100)
+      rebuild!
+      hit = browse(from: 1, to: 200).first
+      assert_equal "μῆνιν ἄειδε θεά", hit.snippet,
+                   "no term to bracket — the pristine STORED text (accents intact), not the folded form"
+      refute_includes hit.snippet, "[", "a browse snippet carries no highlight"
+    end
+
+    def test_browse_lists_by_genre_facet_alone
+      faceted("urn:e:1", "dis manibus", { "genre" => %w[epitaph titsep] })
+      faceted("urn:e:2", "dis manibus", { "genre" => ["votive inscription", "titsac"] })
+      rebuild!
+      assert_equal %w[urn:e:1:1], browse(facets: { "genre" => "epitaph" }).map(&:urn),
+                   "a genre facet is a content filter — legal and selective, term-less"
+    end
+
+    def test_browse_lists_by_loans_facet_alone
+      loaned("urn:c:1", "ⲡⲛⲟⲩⲧⲉ ⲁⲅⲁⲑⲟⲥ", { "grc" => 2 })
+      loaned("urn:c:2", "ⲡⲛⲟⲩⲧⲉ", { "hbo" => 1 })
+      rebuild!
+      assert_equal %w[urn:c:1:1], browse(loans: "grc").map(&:urn),
+                   "the loans facet alone narrows content — a legal term-less browse"
+    end
+
+    # Composition with the shelf-selectors (--lang/--license/--axis) WHEN a
+    # content filter is present — the legal combined form.
+    def dated_in(urn, language:, source:, year: 100)
+      doc = make_document(source: source, urn: urn, language: language)
+      make_passage(doc, urn: "#{urn}:1", text: "verbum", sequence: 1, language: language)
+      @catalog[:document_axes].insert(document_id: doc.id, not_before: year, not_after: year,
+                                      precision: "x", axis_source: "x")
+    end
+
+    def test_browse_composes_with_lang_under_a_content_filter
+      dated_in("urn:g", language: "grc", source: @open)
+      dated_in("urn:l", language: "lat", source: @open)
+      rebuild!
+      assert_equal %w[urn:g:1], browse(from: 1, to: 200, lang: "grc").map(&:urn),
+                   "--lang scopes the browse the date filter made legal"
+    end
+
+    def test_browse_composes_with_license_under_a_content_filter
+      dated_in("urn:o", language: "grc", source: @open) # open
+      dated_in("urn:n", language: "grc", source: @nc)   # nc
+      rebuild!
+      assert_equal %w[urn:o:1], browse(from: 1, to: 200, license: "open").map(&:urn)
+    end
+
+    def test_browse_composes_with_a_source_membership_axis_under_a_content_filter
+      dated_in("urn:o", language: "grc", source: @open)
+      dated_in("urn:n", language: "grc", source: @nc)
+      rebuild!
+      assert_equal %w[urn:o:1], browse(from: 1, to: 200, sources: ["open"]).map(&:urn),
+                   "the --axis membership list scopes the browse, the date filter making it legal"
+    end
   end
 end
