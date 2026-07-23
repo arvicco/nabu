@@ -1,14 +1,18 @@
-# Kanripo fixture — Kanseki Repository, waves 1–3 (P33-0, P33-1, P37-1)
+# Kanripo fixture — Kanseki Repository, waves 1–3 + recovery exemplars (P33-0, P33-1, P37-1, P43-r2)
 
-Fifteen real texts (2–3 per wave class KR1/KR2/KR3/KR4, five KR5) fetched
-individually from github.com/kanripo — one repo per text — plus trimmed
-slices of the KR-Catalog discovery index. The directory mirrors the
-canonical workdir the adapter fetches: `KR-Catalog/` beside per-text dirs
-named by KR id.
+Seventeen real texts (2–4 per wave class KR1/KR2/KR3/KR4, five KR5)
+fetched individually from github.com/kanripo — one repo per text — plus
+trimmed slices of the KR-Catalog discovery index. The directory mirrors
+the canonical workdir the adapter fetches: `KR-Catalog/` beside per-text
+dirs named by KR id.
 
 - **Retrieved:** 2026-07-20, via `git clone --depth 1
   https://github.com/kanripo/<name>` (master — Kanripo keeps alternate
   editions as git *branches*; master is the BASEEDITION working text).
+  The two P43-r2 dirs (KR1a0149, KR2f0037) were instead extracted from
+  the local canonical snapshot 2026-07-23 (byte-verbatim whole files;
+  canonical HEAD shas in the table) — quarantined texts have no
+  fresh-clone parse to eyeball, the canonical bytes ARE the evidence.
 - **Text files are byte-verbatim upstream wholes.** Two repos are trimmed
   at the *repo* grain (a subset of their per-juan files, each file whole);
   the catalog files are byte-verbatim *slices* (org header + the complete
@@ -18,10 +22,12 @@ named by KR id.
 
 | dir | text | class | edition | files | trim | sha |
 |---|---|---|---|---|---|---|
+| KR1a0149 | 易翼說 | KR1 | WYG | Readme + juan 000 + 001 of 9 | repo-trim: 7 juan files omitted | 12d3f6b87f340efbccfc694146ad76a20bb66d7a (canonical HEAD) |
 | KR1a0170 | 易緯坤靈圖 | KR1 | WYG | whole repo (000 header-only, 001, Readme) | none | 5067a9aa9992dd8328917c9f60598e6b6cd12db6 |
 | KR1h0004 | 論語 | KR1 | CHANT | Readme + juan 001 + 020 of 20 | repo-trim: 18 juan files omitted | 89b65734d4386e2478179c77741a968bfc627abb |
 | KR2a0001 | 史記 | KR2 | tls | Readme + section 201 of 14 section files | repo-trim: 13 section files omitted | 1c19dc6fa970b1c530fced9e8e3697d19163c26c |
 | KR2a0038 | 明史 | KR2 | WYG | Readme + juan 046 of 548 | repo-trim: 547 juan files omitted | eccd6fe93126bde61b837240e6142e1343c22639 |
+| KR2f0037 | 三朝名臣言行錄 | KR2 | SBCK | Readme + juan 042 of 56 | repo-trim: 55 juan files omitted | 5310198f9360d13ac25a9476a68829d0c8d5c85d (canonical HEAD) |
 | KR2g0007 | 杜工部年譜 | KR2 | WYG | whole repo (000, 001, Readme) | none | c5bdb391e82298514d20d679e23feebdf309a4d9 |
 | KR3a0001 | 孔子家語 | KR3 | SBCK | Readme + juan 001 of 11 | repo-trim: 000, 002–011 omitted | 47dc84abb7d01b95480800bff2e53be7a3440f6a |
 | KR3g0023 | 青囊奧語 | KR3 | WYG | whole repo (single 000 file) | none | 2b8bb8b4076807e5f9c9af5194c83ed584c9da71 |
@@ -78,8 +84,8 @@ header property echoing the file's last milestone); KR5a0004
 `<pb:KR5a0004_CK-KZ_02p048a>` (text id + witness — juan 006+007 pin the
 CROSS-FILE page carry: page 02p048a opens in `_006` and its last column is
 `_007`'s whole body; the omitted REAL `_000` is a header block plus one
-stray unciteable 八 — reproduced byte-verbatim in the parser test as the
-loud-quarantine case); KR5i0030 `<pb:CK-KZ_KR5i0030_01p001a>` (witness
+stray anchor-less 八 — reproduced byte-verbatim in the parser test; since
+P43-r2 it mints the `000:front` front-matter page instead of quarantining); KR5i0030 `<pb:CK-KZ_KR5i0030_01p001a>` (witness
 siglum + text id as container; `BASEEDITION CK-KZ` IS the witness, no
 `<md:>`, no `JUAN` property, `#-*- mode: org; -*-` mode line, and the
 `#+TITLE:唱道真言 Changdao Zhenyan` no-space/romanized title variant).
@@ -88,6 +94,25 @@ every milestone says `WYG` — the md edition is recorded verbatim, never
 validated. Witness (juan, leaf-side) pairs are unique per repo in every
 probe; KR5c0067 (probed, not fixtured) shows sorted file order need not
 follow witness page order (`_000` front matter at witness juan 03).
+
+The two P43-r2 texts (extracted from the local canonical snapshot
+2026-07-23) attest the D42-c quarantine-recovery census (owner-ruled at
+the P42 gate: 133 quarantined texts, 75 duplicate-anchor + 26
+text-before-first-anchor recoverable). KR2f0037 三朝名臣言行錄 juan 042
+is the duplicate-anchor exemplar: upstream concatenated TWO source
+fascicles into the one juan file — a fresh `#+PROPERTY: FILE` header
+block mid-file names the second print source (SB02n0032-093
+三朝名臣言行錄卷九之三, then SB02n0033-082 五朝名臣言行錄卷八之二) — and
+each fascicle restarts its own leaf-side pagination at 1a, so the second
+sweep re-opens closed page ids (it also re-asserts its own open pages,
+9b and 12b, the P33-1 no-op shape against a disambiguated key). Parsed:
+53 pages, the second sweep keyed `042:<page>#2`. KR1a0149 易翼說 is the
+text-before-first-anchor exemplar: juan 001 opens with seven prefatory
+print lines before `<pb:KR1a0149_WYG_001-1a>` (the seventh un-pilcrowed —
+the print line runs across the page seam); parsed: 76 pages, the
+prefatory text on the synthetic `001:front` page. `_000` is a real
+anchor-only juan-0 file (header + `<pb:…_000-1a>`, no text): zero
+passages.
 
 ## KR-Catalog slices (upstream HEAD 927469cd1543dfeed828151090b0bdd366b11ef4)
 
