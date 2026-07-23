@@ -10917,12 +10917,13 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 
 # P42 — the efficiency phase (owner-picked 2026-07-23: "make these commands fly, not crawl"; plan: .docs/p42-efficiency-plan.md)
 
-## P42-0 · source_stats + global census derived table  [tier: fable] [status: in-progress — dispatched 2026-07-23] — status/list/axis/language 130–250s → ms; migration 019; D42-a health invariant
-## P42-2 · ubiquitous-term guard  [tier: fable] [status: in-progress — dispatched 2026-07-23] — fts5vocab df probe; the الله class ~10s → sub-second
-## P42-1 · vocab lemma-frequency table + etym probe  [tier: opus] [status: ready] [deps: P42-0 (migration 020)]
-## P42-3 · language column into passages_fts  [tier: fable] [status: ready] — activates at the owner rebuild (D42-b)
+## P42-0 · source_stats + global census derived table  [tier: fable] [status: done 2026-07-23 — merged 572b713..47f9843; equivalence braid green; readers byte-identical; D42-a rotating drift probe; MCP nabu_status flagged as follow-up]
+## P42-2 · ubiquitous-term guard  [tier: fable] [status: done 2026-07-23 — merged 266ce2b; TEMP-schema fts5vocab (readonly-safe, no reindex, MCP covered); live-verified 9.6s → 0.38s]
+## P42-1 · vocab lemma-frequency table + etym probe  [tier: opus] [status: in-progress — dispatched 2026-07-23]
+## P42-3 · language column into passages_fts  [tier: fable] [status: in-progress — dispatched 2026-07-23]
 ## P42-4 · load hygiene: post-load bounded ANALYZE + PRAGMA pass  [tier: opus] [status: ready]
 ## P42-5 · re-measure matrix + docs  [tier: orchestrator] [status: gate-time]
+## P42-r1 · grant gate (permission-bound sources)  [tier: opus] [status: in-progress — dispatched 2026-07-23; owner: rider, no delay]
 ## P42-6 · term-less filtered browse  [tier: opus] [status: optional — rolled from P41-r1]
 
 ## P41-r2 · --random instant (id-probe sampler)  [status: done 2026-07-23 — 98ef4b6; 2m19s → 0.3s; join-free probe pattern documented]
