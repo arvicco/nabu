@@ -24,10 +24,14 @@ module Nabu
     #   liv case (2026-07-14) was a DISABLED source synced anyway to zero
     #   entries, silent because the original enabled-vs-populated check
     #   watched enabled sources only. A succeeded run promises rows whatever
-    #   the flag says. No exemption mechanism ships: the 2026-07-15 census of
-    #   the live catalog found every source populated in its own grain
-    #   (local-language holds language_records — the grain routing below), so
-    #   an honestly-empty-by-design source does not exist to exempt.
+    #   the flag says — with ONE by-design exemption (P42-8): a kind: module
+    #   registry row FETCHES reference data but mints NO catalog rows by design
+    #   (the registry kind-split, P39), so the promise is false for it; a
+    #   succeeded, zero-rows module downgrades to an :info line, keyed on the
+    #   registry kind (never a slug list). The 2026-07-15 census found every
+    #   ORDINARY source populated in its own grain (local-language holds
+    #   language_records — the grain routing below), so beyond modules no
+    #   honestly-empty-by-design source exists to exempt.
     # - Flag-vs-artifact: fuzzy_index flagged but the trigram index absent /
     #   empty / scope-less for the source (the flag was ON a full day with no
     #   trigram table); a timeline extractor family shipping for the source but
@@ -183,16 +187,35 @@ module Nabu
 
       # Gates on the LATEST run having succeeded (a failed latest run is
       # last_run_honesty's one loud line, not two), and NEVER on `enabled` —
-      # class note (the liv case).
+      # class note (the liv case). The kind: module exemption (P42-8): a
+      # feature module FETCHES reference data but mints NO catalog rows BY
+      # DESIGN (the registry kind-split, P39), so "a succeeded run promises
+      # rows" is simply false for it — zero rows after a module's success is
+      # expected, not the half-loaded signature. It downgrades to one :info
+      # line (never affects exit) rather than a false anomaly; the criterion
+      # is the registry kind, never a slug list. A FAILED module run still
+      # alarms normally via last_run_honesty — this exemption is the
+      # zero-rows-after-success rule alone.
       def synced_unpopulated(entry)
         return nil unless @catalog && latest_run(entry.slug)&.fetch(:status) == "succeeded"
         return nil if populated?(entry)
+        return module_holds_no_rows if entry.feature_module?
 
         Finding.new(
           kind: :synced_unpopulated, severity: :loud,
           message: "latest run succeeded but zero documents/entries/records held " \
                    "(enabled or not — a succeeded run promises rows) — " \
                    "half-loaded catalog or synced-to-nothing? re-sync or rebuild"
+        )
+      end
+
+      # The by-design zero-rows note for a feature module (P42-8): informational,
+      # never an anomaly — it fetches reference data and mints no catalog rows.
+      def module_holds_no_rows
+        Finding.new(
+          kind: :module_no_rows, severity: :info,
+          message: "feature module (kind: module) holds no catalog rows — fetches reference data, " \
+                   "mints none by design; nothing to re-sync"
         )
       end
 
