@@ -98,7 +98,7 @@ module Nabu
         # fold into each SourceCheck (plus the Report's global slot), so a green
         # library prints exactly what it printed before — nothing new.
         @invariants = Invariants.new(registry: registry, catalog: catalog, fulltext: fulltext,
-                                     ledger: ledger, canonical_dir: canonical_dir)
+                                     ledger: ledger, canonical_dir: canonical_dir, now: now)
       end
 
       def run

@@ -288,6 +288,82 @@ class InvariantsTest < Minitest::Test
     assert_empty checker.global
   end
 
+  # -- source_stats drift (D42-a, global) -------------------------------------
+
+  # The contract: source_stats is DERIVED and the loader is its only writer.
+  # `nabu health` holds the table against one rotating source's true counts
+  # per run (O(one source), never the corpus) — a bypassing write path is a
+  # bug this probe catches loudly.
+
+  def test_matching_source_stats_produce_no_drift_finding
+    source = seed_source("texts")
+    seed_docs(source, 2)
+    Nabu::Store::SourceStats.derive!(@db, note: "test")
+
+    assert_nil global_finding(:stats_drift)
+  end
+
+  def test_tampered_source_stats_row_is_loud_drift_naming_the_numbers
+    source = seed_source("texts")
+    seed_docs(source, 2)
+    Nabu::Store::SourceStats.derive!(@db, note: "test")
+    @db[:source_stats].update(live_documents: 7)
+
+    finding = global_finding(:stats_drift)
+    assert_predicate finding, :loud?
+    assert_match(/texts/, finding.message)
+    assert_match(/live_documents stats=7 actual=2/, finding.message)
+    assert_match(/rebuild/, finding.message, "the remedy is named")
+  end
+
+  def test_documents_written_past_the_loader_read_as_drift_too
+    source = seed_source("texts")
+    Nabu::Store::SourceStats.derive!(@db, note: "test")
+    seed_docs(source, 2) # a direct write the loader never saw -> no stats row
+
+    finding = global_finding(:stats_drift)
+    assert_predicate finding, :loud?
+    assert_match(/live_documents stats=0 actual=2/, finding.message)
+  end
+
+  def test_tampered_passage_count_is_caught_under_the_probe_cap
+    source = seed_source("texts")
+    doc = seed_docs(source, 1).first
+    @db[:passages].insert(document_id: doc[:id], urn: "urn:t:texts:p1", sequence: 0,
+                          language: "grc", text: "t", text_normalized: "t",
+                          content_sha256: "x", withdrawn: false)
+    Nabu::Store::SourceStats.derive!(@db, note: "test")
+    @db[:source_stats].update(live_passages: 99)
+
+    finding = global_finding(:stats_drift)
+    assert_predicate finding, :loud?
+    assert_match(/live_passages stats=99 actual=1/, finding.message)
+  end
+
+  def test_probe_rotates_across_sources_by_day
+    first = seed_source("alpha")
+    second = seed_source("beta")
+    seed_docs(first, 1)
+    seed_docs(second, 1)
+    Nabu::Store::SourceStats.derive!(@db, note: "test")
+    @db[:source_stats].update(live_documents: 9) # both rows tampered
+
+    named = [Time.utc(2026, 7, 14), Time.utc(2026, 7, 15)].map do |now|
+      checker = Nabu::Health::Invariants.new(registry: nil, catalog: @db, fulltext: @fulltext,
+                                             ledger: @ledger, now: now)
+      checker.global.find { |f| f.kind == :stats_drift }.message[/on (\w+):/, 1]
+    end
+    assert_equal %w[alpha beta], named.sort, "consecutive days probe different sources"
+  end
+
+  def test_pre019_catalog_produces_no_drift_finding
+    seed_docs(seed_source("texts"), 2)
+    @db.drop_table(:source_stats_languages)
+    @db.drop_table(:source_stats)
+
+    assert_nil global_finding(:stats_drift), "pending_migrations covers the missing table"
+  end
+
   private
 
   # -- local shelves (P19-1): dossier files vs records; pins vs the tree ------
@@ -371,7 +447,12 @@ class InvariantsTest < Minitest::Test
   end
 
   def invariants(catalog: @db, fulltext: @fulltext, ledger: @ledger)
-    Nabu::Health::Invariants.new(registry: nil, catalog: catalog, fulltext: fulltext, ledger: ledger)
+    Nabu::Health::Invariants.new(registry: nil, catalog: catalog, fulltext: fulltext, ledger: ledger,
+                                 now: @now)
+  end
+
+  def global_finding(kind)
+    invariants.global.find { |finding| finding.kind == kind }
   end
 
   def find(kind, entry)

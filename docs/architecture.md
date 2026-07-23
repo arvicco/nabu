@@ -148,7 +148,27 @@ language_records(id, lang_code, kind, body, source)
    -- local-language sync/rebuild (and incrementally by the LanguageShelf
    -- accretion path). Feeds `nabu language` ahead of the transitional
    -- ledger notes below.
+source_stats(id, source_id, live_documents, live_passages, withdrawn_documents,
+             retired_documents, license_overrides_json, updated_at, note)
+source_stats_languages(id, source_id, language, documents, passages)
+   -- P42-0: the write-time census behind status/list/axis/language. The
+   -- loader applies each document's delta in the SAME transaction as the
+   -- document write; rebuild re-derives wholesale; `nabu health` (D42-a)
+   -- holds a rotating source against its true counts — a write path that
+   -- bypasses the loader is a bug the drift probe catches. No stored
+   -- global row: the roll-up is SUM over per-source rows. Readers
+   -- feature-detect the table (pre-019 catalogs fall back to live
+   -- aggregates unchanged).
 ```
+
+**The write-time doctrine (P42-0):** anything O(corpus) runs at write time;
+read time is for probes. Measured at 62.8M passages, every read surface that
+re-aggregated the passages join per invocation (status, list, the axis and
+language cards) took minutes for numbers that change only at load/rebuild
+time. `source_stats` is the first instance: maintained-at-write, exact, no
+caches and no TTLs — a derived table with the same rebuildability contract
+as every other one. New read surfaces follow it: an O(corpus) aggregate
+belongs in a loader/rebuild-maintained projection, not in a query.
 
 The HISTORY LEDGER (history.sqlite3 — append-only, never derived, never dropped; P7-1):
 
