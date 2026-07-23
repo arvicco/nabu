@@ -61,7 +61,11 @@ module Query
                                       not_after: not_after, axis_source: "hgv")
     end
 
+    # Rows here are seeded DIRECTLY (bypassing the loader, the export-test
+    # pattern), so the write-time census must be re-derived before reading
+    # (P42-0: List reads source_stats when the table exists).
     def list
+      Nabu::Store::SourceStats.derive!(@catalog, note: "test seed")
       Nabu::Query::List.new(catalog: @catalog)
     end
 
@@ -110,6 +114,23 @@ module Query
       make_document(source: @ccmh, urn: "urn:nabu:ccmh:mar:open", license_override: "open")
       row = list.census.find { |r| r.slug == "ccmh" }
       assert_equal %w[nc open], row.license_classes.sort
+    end
+
+    # P42-0: the census reads source_stats when the table exists and falls
+    # back to the live aggregates when it does not — with IDENTICAL rows
+    # (cards too), the no-behavior-change contract for a pre-019 catalog.
+    def test_census_and_card_are_identical_with_and_without_source_stats
+      doc = seed_ccmh
+      make_passage(doc, urn: "urn:nabu:ccmh:mt:3", sequence: 2, language: "lat")
+      make_document(source: @ccmh, urn: "urn:nabu:ccmh:gone", withdrawn: true)
+      make_document(source: @ccmh, urn: "urn:nabu:ccmh:kept", license_override: "open", retired: true)
+
+      with_stats = [list.census, list.card("ccmh")]
+      @catalog.drop_table(:source_stats_languages)
+      @catalog.drop_table(:source_stats)
+      fallback = Nabu::Query::List.new(catalog: @catalog)
+      assert_equal with_stats, [fallback.census, fallback.card("ccmh")],
+                   "the pre-019 fallback must produce identical census rows and cards"
     end
 
     def test_census_source_without_content_reads_source_license_class

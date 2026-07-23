@@ -49,6 +49,7 @@ module Nabu
     CORPUS_STAGE_LABELS = {
       timeline: "timeline",
       facets: "facets",
+      stats: "source stats",
       fts_lemma: "fts+lemma reindex",
       trigram: "trigram",
       alignment: "alignment refs",

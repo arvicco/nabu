@@ -5028,6 +5028,8 @@ class CLITest < Minitest::Test
       seed_list_shelf(catalog)
       seed_list_lex(catalog)
       seed_list_library(catalog)
+      # Seeded directly (bypassing the loader) - re-derive the write-time census (P42-0).
+      Nabu::Store::SourceStats.derive!(catalog, note: "test seed")
       catalog.disconnect
       yield config
     end
@@ -5079,6 +5081,8 @@ class CLITest < Minitest::Test
       seed_list_shelf(catalog)
       seed_list_lex(catalog)
       seed_list_library(catalog)
+      # Seeded directly (bypassing the loader) - re-derive the write-time census (P42-0).
+      Nabu::Store::SourceStats.derive!(catalog, note: "test seed")
       catalog.disconnect
       yield config
     end

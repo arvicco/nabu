@@ -188,6 +188,9 @@ class StatusReportTest < Minitest::Test
     source = registry["fake-src"].sync_source!(db)
     Nabu::Store::Loader.new(db: db, source: source).load([seed_document])
     Nabu::Store::Document.first(urn: "urn:nabu:fake:doc1").update(retired_upstream: true)
+    # The direct flag flip above bypasses the loader (the only sanctioned
+    # stats writer, P42-0) — re-derive so holdings read the tampered state.
+    Nabu::Store::SourceStats.derive!(db, note: "test")
 
     compact = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
     assert_match(%r{\s1/2\s}, compact, "retired folds into the fused docs/pass column")
@@ -195,6 +198,23 @@ class StatusReportTest < Minitest::Test
 
     long = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db, long: true)
     assert_match(/docs=1 pass=2 retired=1/, long, "--long surfaces the labeled retired count")
+  end
+
+  # P42-0: holdings read the source_stats derived table when it exists; a
+  # catalog predating migration 019 falls back to the live aggregates with
+  # BYTE-IDENTICAL output — the no-behavior-change contract.
+  def test_holdings_render_identically_with_and_without_source_stats
+    db = store_test_db
+    registry = single_source_registry
+    source = registry["fake-src"].sync_source!(db)
+    Nabu::Store::Loader.new(db: db, source: source).load([seed_document])
+    ledger = ledger_test_db
+
+    with_stats = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+    db.drop_table(:source_stats_languages)
+    db.drop_table(:source_stats)
+    assert_equal with_stats, Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger),
+                 "the pre-019 fallback must render byte-identically"
   end
 
   # P11-10: a dictionary source renders its entry count as a single humanized
