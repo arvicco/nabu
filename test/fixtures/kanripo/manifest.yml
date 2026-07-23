@@ -7,10 +7,34 @@
 # catalog files (whole: false — a fresh GET returns the full catalog file,
 # fetched for URL-liveness only). adapter_test is null: the catalog slices
 # are trims, and the adapter test pins slice-level counts.
+# The two P43-r2 quarantine-recovery exemplar dirs (KR1a0149, KR2f0037)
+# were extracted from the local canonical snapshot 2026-07-23 (byte-verbatim
+# whole files; canonical HEAD shas in the README table) rather than a fresh
+# clone; urls point at the same upstream masters for liveness.
 source: kanripo
 adapter_test:
 retrieved: 2026-07-20
 files:
+  - path: KR1a0149/Readme.org
+    url: https://raw.githubusercontent.com/kanripo/KR1a0149/master/Readme.org
+    whole: true
+    trim: none (repo-trim - juan 002-008 of the 9 juan files omitted from the fixture dir)
+  - path: KR1a0149/KR1a0149_000.txt
+    url: https://raw.githubusercontent.com/kanripo/KR1a0149/master/KR1a0149_000.txt
+    whole: true
+    trim: none (anchor-only juan-0 file, real upstream shape)
+  - path: KR1a0149/KR1a0149_001.txt
+    url: https://raw.githubusercontent.com/kanripo/KR1a0149/master/KR1a0149_001.txt
+    whole: true
+    trim: none (the P43-r2 text-before-first-anchor exemplar)
+  - path: KR2f0037/Readme.org
+    url: https://raw.githubusercontent.com/kanripo/KR2f0037/master/Readme.org
+    whole: true
+    trim: none (repo-trim - 55 of 56 juan files omitted from the fixture dir)
+  - path: KR2f0037/KR2f0037_042.txt
+    url: https://raw.githubusercontent.com/kanripo/KR2f0037/master/KR2f0037_042.txt
+    whole: true
+    trim: none (the P43-r2 two-fascicle duplicate-anchor exemplar)
   - path: KR-Catalog/README.org
     url: https://raw.githubusercontent.com/kanripo/KR-Catalog/master/README.org
     whole: true
@@ -198,7 +222,7 @@ files:
   - path: KR5a0004/Readme.org
     url: https://raw.githubusercontent.com/kanripo/KR5a0004/master/Readme.org
     whole: true
-    trim: none (repo-trim - 9 of 11 juan files omitted, INCLUDING the real KR5a0004_000.txt whose stray unciteable text quarantines the text; its 181 bytes are reproduced verbatim in the parser test)
+    trim: none (repo-trim - 9 of 11 juan files omitted, INCLUDING the real KR5a0004_000.txt with stray anchor-less text; its 181 bytes are reproduced verbatim in the parser test - since P43-r2 a front-matter page, not a quarantine)
   - path: KR5a0004/KR5a0004_006.txt
     url: https://raw.githubusercontent.com/kanripo/KR5a0004/master/KR5a0004_006.txt
     whole: true
