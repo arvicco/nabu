@@ -154,6 +154,13 @@ module Nabu
       facets = profile.measure(scope: RebuildProfile::CORPUS, stage: :facets) do
         Store::FacetBuilder.rebuild!(catalog: db)
       end
+      # P42-0: the write-time census. The loader hooks maintained it through
+      # the replay; the wholesale derivation here is the rebuildability
+      # invariant made explicit — stats are exactly f(loaded catalog).
+      progress&.stage("source stats")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :stats) do
+        Store::SourceStats.derive!(db, note: "derived (rebuild)")
+      end
       # Reindex ONCE after all sources are back — the index is corpus-wide.
       progress&.stage("fulltext index")
       # The alignment registry (config, not derived) rides in so alignment_refs

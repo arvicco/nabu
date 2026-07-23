@@ -59,6 +59,30 @@ class RebuildTest < Minitest::Test
     assert_equal %w[corpus], second.outcomes.map(&:slug)
   end
 
+  # -- source_stats re-derivation (P42-0) -----------------------------------
+
+  # The write-time census is derived data: a rebuild must leave it wholesale-
+  # derived from the freshly replayed catalog (rebuildability invariant).
+  def test_rebuild_derives_source_stats_wholesale
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        enabled: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
+
+    rebuilder.run
+
+    with_db do |db|
+      row = db[:source_stats].first || flunk("rebuild left no source_stats row")
+      assert_equal 2, row[:live_documents]
+      assert_equal 3, row[:live_passages]
+      assert_equal "derived (rebuild)", row[:note]
+      assert_equal [%w[grc], [2], [3]],
+                   db[:source_stats_languages].select_map(%i[language documents passages]).transpose
+    end
+  end
+
   # -- progress stages (owner feedback 2026-07-18: a long rebuild must say
   # which source it is on, and the CLI adds per-stage timing) ---------------
 
@@ -74,7 +98,7 @@ class RebuildTest < Minitest::Test
     reporter = Nabu::ProgressReporter.new(on_stage: ->(label) { stages << label })
     rebuilder.run(progress: reporter)
 
-    assert_equal ["corpus", "timeline", "facets", "fulltext index"], stages
+    assert_equal ["corpus", "timeline", "facets", "source stats", "fulltext index"], stages
   end
 
   def test_progress_reporter_stage_is_nil_safe
@@ -110,6 +134,7 @@ class RebuildTest < Minitest::Test
     corpus_stages = profile.corpus_stages
     assert_includes corpus_stages, :timeline
     assert_includes corpus_stages, :facets
+    assert_includes corpus_stages, :stats
     assert_includes corpus_stages, :fts_lemma
     assert_includes corpus_stages, :trigram
 

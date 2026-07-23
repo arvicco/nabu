@@ -5,14 +5,24 @@ require_relative "../store/indexer"
 module Nabu
   module Query
     # Live relevance for `nabu language` (P18-4): what this library actually
-    # HOLDS in a language, computed from the db handles at query time —
-    # nothing cached, nothing stored (the §10/§11 stance). Every count is
-    # over the code as stored: corpus documents/passages (documents.language,
-    # passages.language), gold lemma rows (passage_lemmas.language),
-    # dictionary shelves (dictionaries.language), and reconstruction-
-    # crosswalk edges — where a code appears verbatim as the upstream
-    # lang_code AND where it appears as the catalog-side mapped tag (chu
-    # collects the cu-coded edges; both reported, never double-counted).
+    # HOLDS in a language. Every count is over the code as stored: corpus
+    # documents/passages (documents.language, passages.language), gold lemma
+    # rows (passage_lemmas.language), dictionary shelves
+    # (dictionaries.language), and reconstruction-crosswalk edges — where a
+    # code appears verbatim as the upstream lang_code AND where it appears
+    # as the catalog-side mapped tag (chu collects the cu-coded edges; both
+    # reported, never double-counted).
+    #
+    # P42-0: the corpus grain (documents/passages/per-source split) reads
+    # the source_stats derived table when it exists — the measured 131s
+    # language card was this class scanning 60M+ passages per code. Lemma
+    # rows, shelves, and reflex edges stay live: each is an indexed count
+    # over a table orders of magnitude smaller (passage_lemmas rides its
+    # language index; shelves/reflexes are reference-shelf-sized). A
+    # catalog predating migration 019 falls back to the live aggregates.
+    # One deliberate alignment: stats count LIVE passages (neither the
+    # passage nor its document withdrawn — the census rule), where the old
+    # inline count included withdrawn passages under live documents.
     class LanguageInfo
       Shelf = Data.define(:slug, :title, :entries)
       Relevance = Data.define(:documents, :passages, :lemma_rows, :shelves,
@@ -43,8 +53,8 @@ module Nabu
       # etymology tail (that is what `language CODE` is for).
       def held
         codes = Hash.new { |hash, key| hash[key] = { documents: 0, lemma_rows: 0, shelves: [] } }
-        live_documents.group_and_count(:language).each do |row|
-          codes[row.fetch(:language)][:documents] = row.fetch(:count) if row.fetch(:language)
+        held_document_counts.each do |language, count|
+          codes[language][:documents] = count
         end
         if lemma_index?
           gold_lemma_rows.group_and_count(:language).each do |row|
@@ -60,9 +70,21 @@ module Nabu
 
       private
 
-      def documents_count(code) = live_documents.where(language: code).count
+      # The source_stats feature gate (P42-0, migration 019).
+      def stats?
+        return @stats if defined?(@stats)
+
+        @stats = @catalog.table_exists?(:source_stats)
+      end
+
+      def documents_count(code)
+        return live_documents.where(language: code).count unless stats?
+
+        @catalog[:source_stats_languages].where(language: code).sum(:documents).to_i
+      end
 
       def passages_count(code)
+        return @catalog[:source_stats_languages].where(language: code).sum(:passages).to_i if stats?
         return 0 unless @catalog.table_exists?(:passages)
 
         @catalog[:passages]
@@ -121,16 +143,39 @@ module Nabu
       end
 
       def sources_breakdown(code)
-        live_documents
-          .join(:sources, id: :source_id)
-          .where(Sequel[:documents][:language] => code)
-          .group_and_count(Sequel[:sources][:slug])
-          .order(Sequel.desc(:count))
-          .to_h { |row| [row.fetch(:slug), row.fetch(:count)] }
+        unless stats?
+          return live_documents
+                 .join(:sources, id: :source_id)
+                 .where(Sequel[:documents][:language] => code)
+                 .group_and_count(Sequel[:sources][:slug])
+                 .order(Sequel.desc(:count))
+                 .to_h { |row| [row.fetch(:slug), row.fetch(:count)] }
+        end
+
+        @catalog[:source_stats_languages]
+          .join(:sources, id: Sequel[:source_stats_languages][:source_id])
+          .where(Sequel[:source_stats_languages][:language] => code)
+          .where { documents >= 1 }
+          .order(Sequel.desc(:documents))
+          .select_hash(Sequel[:sources][:slug], Sequel[:source_stats_languages][:documents])
       end
 
       def live_documents
         @catalog[:documents].where(withdrawn: false)
+      end
+
+      # {code => live document count} across the corpus, for #held.
+      def held_document_counts
+        if stats?
+          @catalog[:source_stats_languages]
+            .where { documents >= 1 }
+            .group(:language)
+            .select(:language, Sequel.function(:sum, :documents).as(:count))
+            .to_h { |row| [row.fetch(:language), row.fetch(:count).to_i] }
+        else
+          live_documents.exclude(language: nil).group_and_count(:language)
+                        .to_h { |row| [row.fetch(:language), row.fetch(:count)] }
+        end
       end
 
       def shelf_rows
