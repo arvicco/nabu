@@ -686,7 +686,9 @@ module Nabu
       and become ordinary search terms.
 
       Each hit prints the passage urn, its language, and a folded snippet
-      with the match in [brackets]. The snippet is the SEARCH form, not the
+      with the match in [brackets] (on an interactive terminal, RTL scripts
+      highlight the match in reverse video instead — bracket glyphs do not
+      survive bidi reordering; piped output keeps the brackets). The snippet is the SEARCH form, not the
       edition text — `nabu show <urn>` gives the pristine passage. DDbDP
       papyri render lost text as the […] gap marker.
 
@@ -2405,19 +2407,13 @@ module Nabu
     # Edges shown per kind by `nabu links` before the "… and N more" tail
     # (--long lists all — the conventions §10 house rule).
     LINKS_COMPACT_ITEMS = 10
-    # The direction-symmetric snippet-highlight delimiter for RTL-isolated
-    # snippets (U+2016 DOUBLE VERTICAL LINE, P42-r4): its own mirror image,
-    # so no bidi treatment can make it face away; absent from stored text.
-    RTL_HIGHLIGHT = "‖"
-    # Each delimiter is GLUED between two zero-width RIGHT-TO-LEFT MARKS
-    # (U+200F): a match at a passage EDGE leaves the outer delimiter with RTL
-    # text on one side only, and a renderer that reverses maximal RTL runs
-    # (sweeping only INTERIOR neutrals) then strands it at the far end of the
-    # line, detached from its word — the owner's second screenshot. With
-    # strong-R marks on both sides the delimiter is unconditionally interior
-    # to the RTL run and travels with the word on every renderer class. RLM
-    # is invisible and zero-width everywhere, bidi-aware or not.
-    RTL_GLUED_HIGHLIGHT = "‏‖‏"
+    # RTL snippet highlight = SGR reverse video (P42-r4, strike 4 — the
+    # matrix ruling on the owner's iTerm2). Every CHARACTER-based highlight
+    # is at the mercy of the renderer's bidi treatment, and four attempts
+    # measured four failure modes; a cell ATTRIBUTE rides the glyph wherever
+    # reordering moves it and cannot be broken by any bidi algorithm.
+    RTL_HIGHLIGHT_ON = "\e[7m"
+    RTL_HIGHLIGHT_OFF = "\e[27m"
     # Batch-mining progress tick cadence (anchors per stderr line); a scope
     # smaller than one tick prints no progress at all — just the summary.
     BATCH_PROGRESS_EVERY = 200
@@ -2496,29 +2492,32 @@ module Nabu
       end
 
       # Render a SNIPPET — StoredSnippet output with the match in [brackets] —
-      # for the terminal (P42-r4). Square brackets are the WRONG highlight
-      # glyphs inside RTL text: they are a bidi-mirrored pair, and how a
-      # terminal treats a mirrored pair inside a reversed run varies — the
-      # owner's renderer reorders RTL segments without mirroring, showing the
-      # logical [word] as ]word[, facing away. Two fix shapes were tried:
-      # cutting the isolate at bracket boundaries (so the brackets sat in the
-      # LTR line context) still rendered reversed on the owner's terminal,
-      # which sweeps neutrals BETWEEN two RTL runs into the reversed segment
-      # — no placement survives that. So the highlight delimiter itself
-      # changes: in an RTL-isolated language the brackets render as
-      # RTL_HIGHLIGHT (U+2016 ‖), a direction-symmetric glyph that is its own
-      # mirror image — no reordering, mirroring, or segment-sweeping can make
-      # it face wrong (censused ×0 in stored ara text, 2026-07-23, so it can
-      # never collide with edition marks). The passage keeps its single
-      # whole-line isolate — real RTL reading flow. LTR languages render
-      # byte-identical to display_text, brackets untouched.
+      # for the terminal (P42-r4, four strikes deep). Square brackets inside
+      # RTL text are unrenderable-portably: they are a bidi-mirrored pair,
+      # and each character-based fix failed a different way on the owner's
+      # iTerm2 (mirrorless reversal showed ]word[; brackets cut OUT of the
+      # isolate were swept into the reversed segment anyway; the symmetric ‖
+      # detached at passage-edge matches; RLM gluing was ignored — invisible
+      # bidi controls do not extend that renderer's runs, though a VISIBLE
+      # strong-R paseq does, matrix line 8). The ruling fix highlights with
+      # a cell ATTRIBUTE instead of characters: SGR reverse video rides the
+      # glyph wherever reordering moves it and no bidi algorithm can touch
+      # it (matrix line 9 on the owner's screen). Gated by color_output?
+      # (mode + NO_COLOR/NABU_COLOR/tty): piped or colorless output keeps
+      # the logical [brackets] — no renderer, no bidi, and the documented
+      # grep/MCP contract stays byte-identical. ANSI escapes are ASCII —
+      # untouched by mark strips and NFC round-trips (the painted-tokens
+      # precedent). Only PAIRED brackets convert (a stored lone Leiden
+      # bracket stays literal); a stored [...] lacuna pair colors like a
+      # match — the same ambiguity the bracket convention always had.
       def display_snippet(text, language)
         unless Nabu::Display.isolates?(language: language.to_s, mode: display_mode,
-                                       policies: display_policies)
+                                       policies: display_policies) && color_output?
           return display_text(text, language)
         end
 
-        display_text(text.to_s.gsub(/[\[\]]/, RTL_GLUED_HIGHLIGHT), language)
+        marked = text.to_s.gsub(/\[([^\[\]]*)\]/) { "#{RTL_HIGHLIGHT_ON}#{Regexp.last_match(1)}#{RTL_HIGHLIGHT_OFF}" }
+        display_text(marked, language)
       end
 
       # The source's three gaiji ladder lanes (P37-3/P38-2), each memoized per
