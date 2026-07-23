@@ -660,6 +660,32 @@ class SyncRunnerTest < Minitest::Test
     assert_equal 1, OkLive.fetches, "one source's failure must not stop the others"
   end
 
+  # --- grant gate in --all (P42-r1) ---------------------------------------
+
+  def test_sync_all_skips_a_grant_required_source_without_acknowledgment
+    [LiveEnabled, OkLive].each(&:reset!)
+    reg = registry(
+      entry("granted-src", LiveEnabled, enabled: true, sync_policy: "auto", grant_required: true),
+      entry("ok-live",     OkLive,      enabled: true, sync_policy: "auto")
+    )
+
+    results = make_runner(reg).sync_all
+    assert_instance_of Nabu::SyncRunner::GrantRequired, results["granted-src"]
+    assert_equal "granted-src", results["granted-src"].slug
+    assert_equal 0, LiveEnabled.fetches, "a grant-blocked source is never fetched mid-batch"
+    assert_kind_of Nabu::SyncRunner::Outcome, results["ok-live"], "the batch runs the others"
+  end
+
+  def test_sync_all_runs_a_grant_source_once_acknowledged
+    LiveEnabled.reset!
+    Nabu::GrantGate.new(ledger: @ledger).record!(slug: "granted-src", terms: "t", how: "flag")
+    reg = registry(entry("granted-src", LiveEnabled, enabled: true, sync_policy: "auto", grant_required: true))
+
+    results = make_runner(reg).sync_all
+    assert_kind_of Nabu::SyncRunner::Outcome, results["granted-src"]
+    assert_equal 1, LiveEnabled.fetches, "an acknowledged grant source syncs normally"
+  end
+
   # --- reference edges (P19-4) ---------------------------------------------
 
   def test_sync_refreshes_reference_edges_for_a_reference_edges_source
@@ -705,9 +731,17 @@ class SyncRunnerTest < Minitest::Test
     Nabu::SourceRegistry.new(entries)
   end
 
-  def entry(slug, klass, enabled:, sync_policy: "auto", kind: "source")
+  def entry(slug, klass, enabled:, sync_policy: "auto", kind: "source", grant_required: false)
     Nabu::SourceRegistry::Entry.new(
-      slug: slug, adapter_class_name: klass.name, enabled: enabled, sync_policy: sync_policy, kind: kind
+      slug: slug, adapter_class_name: klass.name, enabled: enabled, sync_policy: sync_policy, kind: kind,
+      grant_required: grant_required, grant: (grant_required ? sample_grant : nil)
+    )
+  end
+
+  def sample_grant
+    Nabu::SourceRegistry::Grant.new(
+      grantor: "G. Starostin", date: "2026-07-15", terms: "any use, per-base attribution required",
+      thread: "№1", request_hint: "ask George Starostin"
     )
   end
 

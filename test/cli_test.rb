@@ -1896,6 +1896,104 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- the fetch-grant gate (P42-r1) ---------------------------------------
+
+  # An explicit `sync <grant-slug>` shows the terms and demands a typed
+  # `granted`; on acknowledgment it records durably and syncs, and every LATER
+  # sync passes silently (the acknowledgment lives in the never-dropped ledger).
+  def test_grant_typed_acknowledgment_records_syncs_and_second_sync_is_silent
+    with_grant_sync_env do |config|
+      out, _err, status = with_config(config) do
+        with_stdin("granted\n", tty: true) { run_cli(%w[sync starling --parse-only]) }
+      end
+      assert_nil status
+      assert_match(/any use, per-base attribution required/, out, "terms shown before the prompt")
+      assert_match(/type `granted`/, out, "the typed-word prompt")
+      assert_match(/grant acknowledged — recorded/, out)
+      assert_match(/\+2 added/, out, "acknowledgment lets the sync proceed")
+
+      # Second sync: NO terms, NO prompt — the ledger record makes it silent
+      # even with no TTY to prompt on.
+      out2, _err2, status2 = with_config(config) do
+        with_stdin("", tty: false) { run_cli(%w[sync starling --parse-only]) }
+      end
+      assert_nil status2
+      refute_match(/type `granted`/, out2, "an acknowledged source never re-prompts")
+      refute_match(/fetch requires a GRANT/, out2)
+    end
+  end
+
+  # A wrong word aborts with the request scaffold and records NOTHING — the
+  # gate is an on-ramp, not a silent failure.
+  def test_grant_refusal_aborts_with_the_scaffold_and_records_nothing
+    with_grant_sync_env do |config|
+      _out, err, status = with_config(config) do
+        with_stdin("no thanks\n", tty: true) { run_cli(%w[sync starling --parse-only]) }
+      end
+      assert_equal 1, status
+      assert_match(/write to George Starostin/, err, "the request scaffold pointer")
+      assert_match(/Nothing was fetched/, err)
+      assert_equal 0, grant_ack_count(config, "starling"), "a refusal records nothing"
+    end
+  end
+
+  # No TTY to prompt on: abort honestly (with the scaffold), never hang.
+  def test_grant_without_a_tty_aborts_with_the_scaffold
+    with_grant_sync_env do |config|
+      _out, err, status = with_config(config) do
+        with_stdin("", tty: false) { run_cli(%w[sync starling --parse-only]) }
+      end
+      assert_equal 1, status
+      assert_match(/Nothing was fetched/, err)
+      assert_match(/--grant-acknowledged/, err, "the scripted escape hatch is taught")
+      assert_equal 0, grant_ack_count(config, "starling")
+    end
+  end
+
+  # --grant-acknowledged: the scripted path — records (how: flag) and syncs
+  # WITHOUT a prompt, even with no TTY (the owner's own box records this way).
+  def test_grant_flag_records_and_syncs_without_a_prompt
+    with_grant_sync_env do |config|
+      out, _err, status = with_config(config) do
+        with_stdin("", tty: false) { run_cli(%w[sync starling --parse-only --grant-acknowledged]) }
+      end
+      assert_nil status
+      refute_match(/type `granted`/, out, "the flag skips the prompt")
+      assert_match(/grant acknowledged \(--grant-acknowledged\)/, out)
+      assert_match(/\+2 added/, out)
+      assert_equal 1, grant_ack_count(config, "starling")
+      assert_equal "flag", grant_ack_how(config, "starling")
+    end
+  end
+
+  # `sync --all`: a grant-blocked source is SKIPPED with one honest line, never
+  # prompted mid-batch (and never fetched).
+  def test_grant_sync_all_skips_with_the_honest_line
+    with_grant_sync_env(policy: "auto") do |config|
+      out, _err, status = with_config(config) do
+        with_stdin("", tty: false) { run_cli(%w[sync --all]) }
+      end
+      assert_nil status
+      assert_match(/skipped \(grant required\): starling — run `nabu sync starling` to review/, out)
+      refute_match(/type `granted`/, out, "a batch never prompts")
+      assert_equal 0, grant_ack_count(config, "starling")
+    end
+  end
+
+  # An axis expansion skips a grant-blocked member (never prompts) while
+  # syncing its non-gated siblings.
+  def test_grant_axis_expansion_skips_the_gated_member
+    with_grant_axis_env do |config|
+      out, _err, status = with_config(config) do
+        with_stdin("", tty: false) { run_cli(%w[sync etym --parse-only]) }
+      end
+      assert_nil status
+      assert_match(/skipped \(grant required\): starling/, out)
+      refute_match(/type `granted`/, out, "an axis batch never prompts")
+      assert_match(/plain\s+parse-only/, out, "the non-gated member syncs")
+    end
+  end
+
   # -- progress reporting (P2-6) -------------------------------------------
 
   # When $stderr is a tty, the loader's per-document ticks render a \r-updating
@@ -6002,6 +6100,91 @@ class CLITest < Minitest::Test
       )
     end
   end
+
+  # P42-r1: a grant-required source (TestAdapter, canonical files on disk) so
+  # `sync starling --parse-only` drives the fetch-grant gate end to end. The
+  # ledger lives at config.history_path, so an acknowledgment persists across
+  # run_cli calls (the silent-second-sync proof). +policy+ puts it on the auto
+  # cadence for the `--all` skip test.
+  def with_grant_sync_env(policy: "manual")
+    Dir.mktmpdir("nabu-cli-grant") do |root|
+      dir = File.join(root, "canonical", "starling")
+      FileUtils.mkdir_p(dir)
+      File.write(File.join(dir, "one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+      File.write(File.join(dir, "two.txt"), "Odyssey\nἄνδρα\n")
+      sources = File.join(root, "sources.yml")
+      File.write(sources, grant_source_yaml("starling", policy: policy))
+      yield Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+    end
+  end
+
+  # A grant-gated member inside an axis, beside a non-gated sibling, so the
+  # axis-expansion skip path (P42-r1) has both to exercise.
+  def with_grant_axis_env
+    Dir.mktmpdir("nabu-cli-grant-axis") do |root|
+      %w[starling plain].each do |slug|
+        dir = File.join(root, "canonical", slug)
+        FileUtils.mkdir_p(dir)
+        File.write(File.join(dir, "#{slug}-one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+      end
+      File.write(File.join(root, "axes.yml"), "etym:\n  persona: \"The Etymologist.\"\n  desc: \"The etym lane.\"\n")
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "#{grant_source_yaml('starling', policy: 'manual', axes: 'etym')}" \
+                          "plain:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: manual\n  axes: [etym]\n")
+      yield Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+    end
+  end
+
+  def grant_source_yaml(slug, policy:, axes: nil)
+    axes_line = axes ? "  axes: [#{axes}]\n" : ""
+    <<~YAML
+      #{slug}:
+        adapter: TestAdapter
+        enabled: true
+        sync_policy: #{policy}
+      #{axes_line}  grant_required: true
+        grant:
+          grantor: G. Starostin
+          date: "2026-07-15"
+          terms: any use, per-base attribution required
+          thread: "№1"
+          request_hint: write to George Starostin for your own grant
+    YAML
+  end
+
+  # A $stdin double that both claims/denies a TTY and feeds typed input (the
+  # StringIO gives #gets; the singleton #tty? drives the gate's TTY branch).
+  def with_stdin(text, tty:)
+    original = $stdin
+    fake = StringIO.new(text)
+    fake.define_singleton_method(:tty?) { tty }
+    $stdin = fake
+    yield
+  ensure
+    $stdin = original
+  end
+
+  # Read the grant-acknowledgment ledger rows for +slug+ from the on-disk
+  # history ledger the CLI wrote (config.history_path).
+  def grant_ack_rows(config, slug)
+    return [] unless File.exist?(config.history_path)
+
+    db = Nabu::Store::Ledger.connect(config.history_path)
+    return [] unless db.table_exists?(:grant_acknowledgments)
+
+    db[:grant_acknowledgments].where(source_slug: slug).all
+  ensure
+    db&.disconnect
+  end
+
+  def grant_ack_count(config, slug) = grant_ack_rows(config, slug).size
+  def grant_ack_how(config, slug) = grant_ack_rows(config, slug).first&.fetch(:how)
 
   # An axis env (P35-2): a real axes.yml beside a sources.yml whose rows carry
   # `axes:` membership, so SourceRegistry.load builds the AxisRegistry and the

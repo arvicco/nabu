@@ -85,6 +85,9 @@ module Nabu
                         desc: "Skip fetch; re-parse the snapshot already on disk"
     option :force, type: :boolean, default: false,
                    desc: "Override the >20% withdrawal circuit breaker"
+    option :grant_acknowledged, type: :boolean, default: false,
+                                desc: "Acknowledge a grant-required source's terms non-interactively " \
+                                      "(scripted use); records the acknowledgment, then syncs. Single-source only."
     option :review, type: :string, banner: "CMD",
                     desc: "Pipe a JSON sync brief to CMD's stdin at sync end (advisory; " \
                           "the hook's exit status is reported, never fails the sync). " \
@@ -5519,12 +5522,21 @@ module Nabu
       # through sync_one, then the named skip line for the disabled members.
       def sync_axis_group(runner, registry, name, db, ledger, synced)
         enabled, disabled = registry.axis_members(name).partition { |member| registry[member].enabled }
+        # P42-r1: an axis expansion is a batch, not an explicit per-source
+        # request, so a grant-blocked member is SKIPPED with the honest line —
+        # never prompted mid-group (the prompt is reserved for `sync <slug>`).
+        gate = Nabu::GrantGate.new(ledger: ledger)
+        grant_blocked, runnable = enabled.partition { |member| gate.blocked?(registry[member]) }
         say axis_header(registry.axes[name])
-        (enabled - synced).each do |member|
+        (runnable - synced).each do |member|
           sync_one(runner, registry, member, db, ledger)
           synced << member
         end
         say "skipped (disabled): #{disabled.join(', ')}" unless disabled.empty?
+        (grant_blocked - synced).each do |member|
+          say Nabu::GrantGate.skip_line(member)
+          synced << member
+        end
       end
 
       # The one-line axis header: the hat's persona verbatim (first-class
@@ -5556,6 +5568,10 @@ module Nabu
         # `sync kr-gaiji` / `sync local-notes` knows what it does (and does not) do.
         say kind_nature_note(entry), :yellow if entry && !entry.source?
         say "Note: #{slug} is disabled; syncing anyway (explicit request).", :yellow if entry && !entry.enabled
+        # P42-r1: the fetch-grant gate — a permission-bound source needs a
+        # recorded acknowledgment before its first fetch (interactive here, on
+        # the explicit path; the batch paths pre-skip blocked sources).
+        enforce_grant!(entry, ledger)
         outcome = runner.sync(slug, parse_only: options[:parse_only], force: options[:force],
                                     progress: progress_reporter)
         finish_progress
@@ -5566,6 +5582,39 @@ module Nabu
         print_sync_warnings(outcome)
         print_citation_coverage(entry, db)
         run_review_hook(outcome, db, ledger) if options[:review]
+      end
+
+      # The fetch-grant gate (P42-r1) for an EXPLICIT `sync <slug>`. A grant-
+      # required source with no recorded acknowledgment shows its terms and
+      # requires a typed `granted` (or the scripted --grant-acknowledged flag),
+      # recording the acknowledgment durably in the ledger; refusal or a no-TTY
+      # environment aborts with the request scaffold (the on-ramp, never a bare
+      # wall). A non-grant or already-acknowledged source passes silently — so
+      # this is a no-op for every ordinary source and every second sync.
+      def enforce_grant!(entry, ledger)
+        return unless entry&.grant_required?
+
+        gate = Nabu::GrantGate.new(ledger: ledger)
+        return if gate.acknowledged?(entry.slug)
+
+        if options[:grant_acknowledged]
+          gate.record!(slug: entry.slug, terms: entry.grant.terms, how: "flag")
+          return say("#{entry.slug}: grant acknowledged (--grant-acknowledged) — recorded.", :yellow)
+        end
+
+        # No TTY to prompt: abort honestly with the terms + request scaffold,
+        # BEFORE any fetch (the ingest/note precedent).
+        raise Thor::Error, Nabu::GrantGate.abort_message(entry) unless $stdin.tty?
+
+        say Nabu::GrantGate.notice(entry), :yellow
+        say Nabu::GrantGate.prompt_line(entry)
+        # Plain $stdin.gets, NOT Thor's ask (the note precedent): ask routes
+        # through Readline, invisible to the suite's $stdin double and to pipes.
+        answer = $stdin.gets
+        raise Thor::Error, Nabu::GrantGate.abort_message(entry) unless Nabu::GrantGate.acknowledged_answer?(answer)
+
+        gate.record!(slug: entry.slug, terms: entry.grant.terms, how: "typed")
+        say "#{entry.slug}: grant acknowledged — recorded. Syncing.", :green
       end
 
       # P39-0: the one-line nature note for a non-source sync target. A module
@@ -5626,6 +5675,8 @@ module Nabu
       end
 
       def sync_all_line(slug, result)
+        # P42-r1: a grant-blocked source was skipped, not run — the honest line.
+        return Nabu::GrantGate.skip_line(result.slug) if result.is_a?(Nabu::SyncRunner::GrantRequired)
         return "#{slug.ljust(24)} FAILED — #{result.message}" unless result.is_a?(Nabu::SyncRunner::Outcome)
         return "#{slug.ljust(24)} ABORTED — #{result.breaker.message}" if result.aborted?
 

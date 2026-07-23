@@ -2,6 +2,8 @@
 
 Sources that need (or may eventually need) dedicated adapters. Scores are 1–5, higher is better. **Ease** = ease of integration (format cleanliness, bulk access, stability). **License** = openness/clarity (5 = CC/PD with bulk grant, 1 = restricted/unclear). Verify licenses and endpoints at implementation time — this table reflects the landscape as of mid-2026 and these projects do change terms and infrastructure.
 
+**Grant-gated sources (P42-r1):** where the right to *fetch* is a personal permission to this project's author rather than a public license (e.g. StarLing), the `config/sources.yml` row carries `grant_required: true` + a `grant:` block, and `nabu sync <slug>` requires a typed acknowledgment before the first fetch — see `docs/maintenance-and-extension.md` §4.
+
 ## Tier 1 — build first (large, open, clean formats)
 
 | # | Source | Content | Format | Size | Value | Ease | License | Notes |

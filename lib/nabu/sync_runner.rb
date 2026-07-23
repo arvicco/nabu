@@ -78,6 +78,12 @@ module Nabu
       def aborted? = !breaker.nil?
     end
 
+    # A `sync --all` result sentinel (P42-r1): a grant_required source with no
+    # recorded acknowledgment was SKIPPED, never prompted mid-batch — the CLI
+    # renders GrantGate.skip_line for it. Distinct from an Outcome (nothing was
+    # fetched or loaded) and from a captured Error (nothing went wrong).
+    GrantRequired = Data.define(:slug)
+
     # +db+ is the catalog; +ledger+ the history ledger (Store::Ledger, P7-1) —
     # runs, per-repo pins, and durable revisions are recorded there, keyed by
     # slug/url/urn so they survive `nabu rebuild`.
@@ -86,6 +92,7 @@ module Nabu
       @registry = registry
       @db = db
       @ledger = ledger
+      @grant_gate = GrantGate.new(ledger: ledger)
     end
 
     # Sync exactly the named source, disabled or not (explicit request). An
@@ -105,10 +112,16 @@ module Nabu
     def sync_all(parse_only: false, force: false, progress: nil)
       live_enabled.to_h do |entry|
         result =
-          begin
-            sync_entry(entry, parse_only: parse_only, force: force, progress: progress)
-          rescue Nabu::Error => e
-            e
+          if @grant_gate.blocked?(entry)
+            # A permission-bound source with no acknowledgment is SKIPPED, never
+            # prompted mid-batch (P42-r1) — the CLI renders the honest skip line.
+            GrantRequired.new(slug: entry.slug)
+          else
+            begin
+              sync_entry(entry, parse_only: parse_only, force: force, progress: progress)
+            rescue Nabu::Error => e
+              e
+            end
           end
         [entry.slug, result]
       end
