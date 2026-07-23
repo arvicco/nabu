@@ -10921,7 +10921,7 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 ## P42-2 · ubiquitous-term guard  [tier: fable] [status: done 2026-07-23 — merged 266ce2b; TEMP-schema fts5vocab (readonly-safe, no reindex, MCP covered); live-verified 9.6s → 0.38s]
 ## P42-1 · vocab lemma-frequency table + etym probe  [tier: opus] [status: done 2026-07-23 — merged 3908551; fulltext placement, no migration; etym cause proven via EXPLAIN; activates at rebuild]
 ## P42-3 · language column into passages_fts  [tier: fable] [status: done 2026-07-23 — merged 46dd9d9+c666088; indexed sentinel tokens, guard-disjoint; activates at rebuild]
-## P42-4 · load hygiene: post-load bounded ANALYZE + PRAGMA pass  [tier: opus] [status: ready]
+## P42-4 · load hygiene: post-load bounded ANALYZE  [tier: opus] [status: done 2026-07-23 — merged 60882e7; PRAGMA pass folded into P42-5's live re-measure]
 ## P42-5 · re-measure matrix + docs  [tier: orchestrator] [status: gate-time]
 ## P42-r1 · grant gate  [tier: opus] [status: done 2026-07-23 — merged 06ebceb+f11b9f4; starling gated, ledger migration 007, owner ack recorded]
 ## P42-6 · term-less filtered browse  [tier: opus] [status: optional — rolled from P41-r1]
