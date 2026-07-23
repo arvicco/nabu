@@ -1843,22 +1843,29 @@ module Nabu
 
       # The O(overrides) correction: live passages of live overridden docs,
       # grouped by (source, override class, passage language). The withdrawn
-      # filter is the SAME two-level rule the stats derivation applies, so
-      # the moved counts match exactly what the base attribution included.
+      # filter is the SAME two-level rule the stats derivation applies (doc
+      # withdrawn in the id-subquery, passage withdrawn in the outer scope),
+      # so the moved counts match exactly what the base attribution included.
+      # SHAPE (the P41-r2 lesson, measured live at 62.8M): grouping through
+      # the passages⋈documents join made the planner drive from the passages
+      # side — 64.5s. Scoping join-free (an id-subquery membership filter,
+      # grouped by document only, class attribution folded in Ruby off the
+      # tiny doc map) plans as per-document index probes: 7.8s, the honest
+      # floor for touching ~290K scattered rows at read time. Retiring even
+      # that cost means write-time override splits in source_stats
+      # (migration 020) — a flagged P43 candidate, not a read-path trick.
       def apply_override_correction(catalog, classes, passages)
+        overridden = catalog[:documents].exclude(license_override: nil).where(withdrawn: false)
+        doc_map = overridden.select_hash(:id, %i[source_id license_override])
         catalog[:passages]
-          .join(:documents, id: Sequel[:passages][:document_id])
-          .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
-          .exclude(Sequel[:documents][:license_override] => nil)
-          .group(Sequel[:documents][:source_id], Sequel[:documents][:license_override],
-                 Sequel[:passages][:language])
-          .select(Sequel[:documents][:source_id].as(:source_id),
-                  Sequel[:documents][:license_override].as(:override),
-                  Sequel[:passages][:language].as(:language),
-                  Sequel.function(:count).*.as(:n))
+          .where(withdrawn: false, document_id: overridden.select(:id))
+          .group(:document_id, :language)
+          .select_group(:document_id, :language)
+          .select_append { count.function.*.as(:n) }
           .each do |row|
-            passages[classes.fetch(row[:source_id])][row[:language]] -= row[:n]
-            passages[row[:override]][row[:language]] += row[:n]
+            source_id, override = doc_map.fetch(row[:document_id])
+            passages[classes.fetch(source_id)][row[:language]] -= row[:n]
+            passages[override][row[:language]] += row[:n]
           end
       end
 
