@@ -4769,21 +4769,24 @@ class CLITest < Minitest::Test
     end
   end
 
-  # P42-r4 (owner gate review): highlight brackets must live OUTSIDE the RTL
-  # isolates. Inside one passage-wide isolate the bracket pair is at the mercy
-  # of the terminal's bidi mirroring — the owner's renderer reorders RTL
-  # without mirroring paired brackets, so the logical [word] displayed as
-  # ]word[, facing away from the match. Cut at the brackets, each segment
-  # isolating on its own, the typed glyphs keep their LTR positions and face
-  # the match on every renderer class.
-  def test_rtl_snippet_highlight_brackets_stay_outside_the_isolates
+  # P42-r4 (owner gate review, second strike): square brackets are bidi-
+  # MIRRORED glyphs and no placement survives every terminal's RTL handling —
+  # the owner's renderer showed the logical [word] as ]word[ with the
+  # brackets inside the isolate, and STILL reversed with the brackets cut
+  # out of it (neutrals between two RTL runs get swept into the reversed
+  # segment). So an RTL-isolated snippet highlights with the direction-
+  # SYMMETRIC ‖ (its own mirror image — no bidi treatment can make it face
+  # away), keeps its single whole-line isolate, and carries no square
+  # brackets at all. LTR snippets keep [brackets], byte-identical.
+  def test_rtl_snippet_highlights_with_the_symmetric_delimiter_not_brackets
     with_hebrew_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[search אלהים]) }
       assert_nil status
-      assert_match(/\[⁧[^⁩]*⁩\]/, out,
-                   "the match is bracket-OUTSIDE-isolate: [ RLI word PDI ]")
-      refute_match(/⁧[^⁩]*\[/, out,
-                   "no isolate segment may contain an opening bracket")
+      hit = out.lines.find { |line| line.include?("‖") }
+      refute_nil hit, "the RTL snippet highlights with ‖"
+      assert_match(/‖[^‖]+‖/, hit, "the match is flanked: ‖word‖")
+      refute_includes hit, "[", "no mirrored bracket glyphs in an RTL snippet"
+      assert_includes hit, RLI, "the passage keeps its whole-line isolate"
     end
   end
 
