@@ -89,6 +89,66 @@ module MCP
       Nabu::Store::SourceStats.derive!(@catalog, note: "test")
     end
 
+    # P42-r2: the adversarial census corpus — every edge the stats-composed
+    # status must reproduce, with the effective-class truth worked out here:
+    #
+    # perseus (open):        urn:c:open:live        grc ×2 + eng ×1 live (+1 withdrawn grc)  → open
+    #                        urn:c:open:overridden  grc ×1 + lat ×1 live (+1 withdrawn eng),
+    #                                               override restricted (visible → excluded) → restricted
+    #                        urn:c:open:withdrawn   withdrawn doc, its passage dead both grains
+    # adhoc (research_private): urn:c:priv:live     grc ×1 + NULL-language ×1 → research_private
+    #                                               (the NULL passage must NOT leak into languages)
+    #                        urn:c:priv:freed       lat ×1 + grc ×1 live,
+    #                                               override open (excluded → visible) → open
+    # runic (odbl):          urn:c:runic:live       non ×1 + NULL-language ×1 → odbl
+    #
+    # Effective passage census: open 5 (grc 3, eng 1, lat 1), odbl 2 (non 1,
+    # NULL 1), restricted 2, research_private 2. Visible: 7 passages, 3 docs,
+    # languages {grc 3, eng 1, lat 1, non 1, NULL 1}.
+    def seed_census_corpus
+      @runic = Nabu::Store::Source.create(
+        slug: "runic", name: "Runic", adapter_class: "TestAdapter",
+        license_class: "odbl", enabled: true
+      )
+      seed_census_open_docs
+      seed_census_private_docs
+      seed_census_runic_docs
+    end
+
+    def seed_census_open_docs
+      live = make_document(urn: "urn:c:open:live")
+      make_passage(live, urn: "#{live.urn}:1", text: "alpha", sequence: 0)
+      make_passage(live, urn: "#{live.urn}:2", text: "beta", sequence: 1)
+      make_passage(live, urn: "#{live.urn}:3", text: "gamma", sequence: 2, language: "eng")
+      make_passage(live, urn: "#{live.urn}:4", text: "hidden", sequence: 3)
+      @catalog[:passages].where(urn: "#{live.urn}:4").update(withdrawn: true)
+
+      overridden = make_document(urn: "urn:c:open:overridden", license_override: "restricted")
+      make_passage(overridden, urn: "#{overridden.urn}:1", text: "delta", sequence: 0)
+      make_passage(overridden, urn: "#{overridden.urn}:2", text: "epsilon", sequence: 1, language: "lat")
+      make_passage(overridden, urn: "#{overridden.urn}:3", text: "gone", sequence: 2, language: "eng")
+      @catalog[:passages].where(urn: "#{overridden.urn}:3").update(withdrawn: true)
+
+      dead = make_document(urn: "urn:c:open:withdrawn", withdrawn: true)
+      make_passage(dead, urn: "#{dead.urn}:1", text: "zeta", sequence: 0)
+    end
+
+    def seed_census_private_docs
+      plain = make_document(source: @private, urn: "urn:c:priv:live")
+      make_passage(plain, urn: "#{plain.urn}:1", text: "eta", sequence: 0)
+      make_passage(plain, urn: "#{plain.urn}:2", text: "theta", sequence: 1, language: nil)
+
+      freed = make_document(source: @private, urn: "urn:c:priv:freed", license_override: "open")
+      make_passage(freed, urn: "#{freed.urn}:1", text: "iota", sequence: 0, language: "lat")
+      make_passage(freed, urn: "#{freed.urn}:2", text: "kappa", sequence: 1)
+    end
+
+    def seed_census_runic_docs
+      doc = make_document(source: @runic, urn: "urn:c:runic:live", language: "non")
+      make_passage(doc, urn: "#{doc.urn}:1", text: "runar", sequence: 0, language: "non")
+      make_passage(doc, urn: "#{doc.urn}:2", text: "stafr", sequence: 1, language: nil)
+    end
+
     def call(name, arguments = {})
       tools.call(name, arguments)
     end
@@ -694,6 +754,66 @@ module MCP
       without_stats = payload(call("nabu_status"))
       assert_equal with_stats, without_stats,
                    "the pre-019 live-aggregate fallback must be byte-identical to the stats read"
+    end
+
+    # P42-r2: the corpus-wide census fields (totals, languages,
+    # license_classes, excluded_by_default) are COMPOSED from source_stats
+    # plus ONE correction query bounded by license-overridden documents — the
+    # live GROUP BYs over the full passages join (measured ~70s each at 62.8M
+    # rows) run only on a pre-019 catalog. The MCP response is a frozen
+    # contract, so the composition must be value-identical to the live
+    # aggregation on an adversarial corpus: overrides in BOTH directions (a
+    # visible-class source holding a doc overridden to an excluded class, an
+    # excluded-class source holding a doc overridden to a visible class),
+    # withdrawn docs, withdrawn passages inside live docs — including inside
+    # an OVERRIDDEN doc, pinning the correction query to the same two-level
+    # withdrawn rule the stats derivation applies — NULL-language passages on
+    # both sides of the visibility line, and dictionary entries.
+    def test_status_census_from_stats_matches_the_live_aggregation_exactly
+      seed_census_corpus
+      seed_shelf
+      Nabu::Store::SourceStats.derive!(@catalog, note: "test")
+
+      from_stats = payload(call("nabu_status"))
+
+      @catalog.drop_table(:source_stats_languages)
+      @catalog.drop_table(:source_stats)
+      from_live = payload(call("nabu_status"))
+
+      %w[totals languages license_classes excluded_by_default].each do |field|
+        assert_equal from_live.fetch(field), from_stats.fetch(field),
+                     "#{field} composed from stats must equal the live aggregation"
+      end
+      # Belt and braces against both paths agreeing on a wrong number: the
+      # hand-computed truth for this corpus (worked out doc by doc in
+      # #seed_census_corpus).
+      assert_equal({ "open" => 5, "odbl" => 2 }, from_stats.fetch("license_classes"))
+      assert_equal({ "restricted" => 2, "research_private" => 2 }, from_stats.fetch("excluded_by_default"))
+      # The visible NULL-language passage rides as the "" key (a nil hash key
+      # serialized by JSON.generate) — the excluded source's NULL passage must
+      # NOT leak into it.
+      assert_equal({ "grc" => 3, "eng" => 1, "lat" => 1, "non" => 1, "" => 1 }, from_stats.fetch("languages"))
+      assert_equal 3, from_stats.fetch("totals").fetch("documents")
+      assert_equal 7, from_stats.fetch("totals").fetch("passages")
+      assert_operator from_stats.fetch("totals").fetch("dictionary_entries"), :>, 0,
+                      "dictionary entries stay live (shelf-bounded) and must still ride the totals"
+    end
+
+    # P42-r2: a catalog predating migration 019 (no source_stats tables at
+    # all) still serves the full live-aggregated census — the reader
+    # degrades to the pre-stats path, never crashes and never under-reports.
+    def test_status_census_falls_back_to_live_aggregation_without_stats
+      seed_census_corpus
+      @catalog.drop_table(:source_stats_languages)
+      @catalog.drop_table(:source_stats)
+      refute Nabu::Store::SourceStats.available?(@catalog), "the derived table is gone (pre-019 catalog)"
+
+      body = payload(call("nabu_status"))
+      assert_equal({ "open" => 5, "odbl" => 2 }, body.fetch("license_classes"))
+      assert_equal({ "restricted" => 2, "research_private" => 2 }, body.fetch("excluded_by_default"))
+      assert_equal({ "grc" => 3, "eng" => 1, "lat" => 1, "non" => 1, "" => 1 }, body.fetch("languages"))
+      assert_equal 3, body.fetch("totals").fetch("documents")
+      assert_equal 7, body.fetch("totals").fetch("passages")
     end
 
     # P11-10: a dictionary source (lexica) reports its entry count in status —
