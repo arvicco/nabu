@@ -118,6 +118,35 @@ class InvariantsTest < Minitest::Test
     assert_nil find(:synced_unpopulated, entry("lexica"))
   end
 
+  # P42-8: a kind: module row FETCHES reference data but mints NO catalog rows
+  # by design (bridging, kr-gaiji on the live box). A succeeded run + zero rows
+  # is EXPECTED for it, not the half-loaded signature — so it never raises the
+  # loud zero-rows anomaly; it downgrades to an :info line (never affects exit).
+  def test_feature_module_with_ok_run_and_zero_rows_is_info_not_anomaly
+    source = seed_source("bridging")
+    seed_run(source, status: "succeeded")
+
+    assert_nil find(:synced_unpopulated, module_entry("bridging")),
+               "a succeeded, zero-rows module must not raise the loud zero-rows anomaly"
+    info = find(:module_no_rows, module_entry("bridging"))
+    refute_nil info, "a succeeded, zero-rows module gets an informational note"
+    assert_equal :info, info.severity
+    refute_predicate info, :loud?
+  end
+
+  # The exemption is the zero-rows-after-SUCCESS rule alone: a module whose
+  # LATEST run FAILED still alarms normally (last_run_honesty), and never
+  # gets the by-design info note (which gates on a succeeded run).
+  def test_feature_module_with_failed_run_still_alarms
+    source = seed_source("kr-gaiji")
+    seed_run(source, status: "failed")
+
+    refute_nil find(:failed_run, module_entry("kr-gaiji")),
+               "a failed module run is still loud"
+    assert_nil find(:module_no_rows, module_entry("kr-gaiji"))
+    assert_nil find(:synced_unpopulated, module_entry("kr-gaiji"))
+  end
+
   # P24-1: the owner-notes shelf is populated by urn_notes rows — its own
   # grain, never the documents/entries test (which would read forever-empty).
   class NotesKindAdapter < Nabu::Adapter
@@ -464,6 +493,12 @@ class InvariantsTest < Minitest::Test
       slug: slug, adapter_class_name: adapter, enabled: enabled,
       sync_policy: "manual", fuzzy_index: fuzzy
     )
+  end
+
+  # A kind: module registry row (P39-0): fetches reference data, mints no
+  # catalog rows (feature_module? true).
+  def module_entry(slug, adapter: "TestAdapter")
+    entry(slug, enabled: false, adapter: adapter).with(kind: "module")
   end
 
   def seed_source(slug)
