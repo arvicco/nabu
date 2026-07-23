@@ -1,0 +1,1560 @@
+# sent_id = Septuagint-Genesis-19:1-grc
+# text = ἦλθον δὲ οἱ δύο ἄγγελοι εἰς Σόδομα ἑσπέρας· Λὼτ δὲ ἐκάθητο παρὰ τὴν πύλην Σοδόμων. ἰδὼν δὲ Λὼτ ἐξανέστη εἰς συνάντησιν αὐτοῖς καὶ προσεκύνησεν τῷ προσώπῳ ἐπὶ τὴν γῆν
+# parallel_id = bible/gen-19-1
+1	ἦλθον	ἔρχομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-come,go|Ref=GEN_19.1
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.1
+3	οἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	5	det	_	Gloss=the|Ref=GEN_19.1
+4	δύο	δύο	NUM	_	Case=Acc,Gen,Nom|Gender=Fem,Masc,Neut|Number=Sing|NumType=Card	5	nummod	_	Gloss=two|Ref=GEN_19.1
+5	ἄγγελοι	ἄγγελος	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	1	nsubj	_	Gloss=angel,messenger|Ref=GEN_19.1
+6	εἰς	εἰς	ADP	_	_	7	case	_	Gloss=into,unto,for|Ref=GEN_19.1
+7	Σόδομα	Σόδομα	PROPN	_	Case=Acc|Gender=Neut|Number=Sing	1	obl	_	Gloss=Sodom|Ref=GEN_19.1
+8	ἑσπέρας	ἑσπέρα	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	1	obl:tmod	_	Gloss=evening|Ref=GEN_19.1|SpaceAfter=No
+9	·	·	PUNCT	_	_	10	punct	_	Ref=GEN_19.1
+10	Λὼτ	Λώτ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	12	nsubj	_	Gloss=Lot|Ref=GEN_19.1
+11	δὲ	δέ	CCONJ	_	_	12	cc	_	Gloss=but,and,however|Ref=GEN_19.1
+12	ἐκάθητο	κάθημαι	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Mid,Pass	1	conj	_	Gloss=to-sit|Ref=GEN_19.1
+13	παρὰ	παρά	ADP	_	_	15	case	_	Gloss=+G=from;-+D=before;-+A=beside,along|Ref=GEN_19.1
+14	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	15	det	_	Gloss=the|Ref=GEN_19.1
+15	πύλην	πύλη	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	12	obl	_	Gloss=gate|Ref=GEN_19.1
+16	Σοδόμων	Σόδομα	PROPN	_	Case=Gen|Gender=Neut|Number=Plur	15	nmod:poss	_	Gloss=Sodom|Ref=GEN_19.1|SpaceAfter=No
+17	.	.	PUNCT	_	_	1	punct	_	Ref=GEN_19.1
+18	ἰδὼν	εἴδω	VERB	_	Aspect=Perf|Case=Nom|Gender=Masc|Number=Sing|VerbForm=Part|Voice=Act	21	advcl	_	Gloss=to-behold,see,know|Ref=GEN_19.1
+19	δὲ	δέ	CCONJ	_	_	21	cc	_	Gloss=but,and,however|Ref=GEN_19.1
+20	Λὼτ	Λώτ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	18	nsubj	_	Gloss=Lot|Ref=GEN_19.1
+21	ἐξανέστη	ἐξανίστημι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-arise|Ref=GEN_19.1
+22	εἰς	εἰς	ADP	_	_	23	case	_	Gloss=into,unto,for|Ref=GEN_19.1
+23	συνάντησιν	συνάντησις	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	21	obl	_	Gloss=meeting-with|Ref=GEN_19.1
+24	αὐτοῖς	αὐτός	PRON	_	Case=Dat|Gender=Masc,Neut|Number=Plur|PronType=Prs	23	nmod	_	Gloss=he,it,-self,same|Ref=GEN_19.1
+25	καὶ	καί	CCONJ	_	_	26	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.1
+26	προσεκύνησεν	προσκυνέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-worship|Ref=GEN_19.1
+27	τῷ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	28	det	_	Gloss=the|Ref=GEN_19.1
+28	προσώπῳ	πρόσωπον	NOUN	_	Case=Dat|Gender=Neut|Number=Sing	26	iobj	_	Gloss=face|Ref=GEN_19.1
+29	ἐπὶ	ἐπί	ADP	_	_	31	case	_	Gloss=on,upon,against|Ref=GEN_19.1
+30	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	31	det	_	Gloss=the|Ref=GEN_19.1
+31	γῆν	γῆ	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	26	obl	_	Gloss=earth,land|Ref=GEN_19.1
+
+# sent_id = Septuagint-Genesis-19:2-grc
+# text = καὶ εἶπεν, ἰδού, κύριοι, ἐκκλίνατε εἰς τὸν οἶκον τοῦ παιδὸς ὑμῶν καὶ καταλύσατε καὶ νίψασθε τοὺς πόδας ὑμῶν, καὶ ὀρθρίσαντες ἀπελεύσεσθε εἰς τὴν ὁδὸν ὑμῶν. εἶπαν δέ, οὐχί, ἀλλ᾿ ἐν τῇ πλατείᾳ καταλύσομεν.
+# parallel_id = bible/gen-19-2
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.2
+2	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-say|Ref=GEN_19.2|SpaceAfter=No
+3	,	,	PUNCT	_	_	4	punct	_	Ref=GEN_19.2
+4	ἰδού	ἰδού	INTJ	_	_	6	discourse	_	Gloss=look!,behold!|Ref=GEN_19.2|SpaceAfter=No
+5	,	,	PUNCT	_	_	4	punct	_	Ref=GEN_19.2
+6	κύριοι	κύριος	NOUN	_	Case=Nom,Voc|Gender=Masc|Number=Plur	2	ccomp	_	Gloss=lord|Ref=GEN_19.2|SpaceAfter=No
+7	,	,	PUNCT	_	_	8	punct	_	Ref=GEN_19.2
+8	ἐκκλίνατε	ἐκκλίνω	VERB	_	Aspect=Perf|Mood=Imp|Number=Plur|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	6	parataxis	_	Gloss=to-avoid,deviate|Ref=GEN_19.2
+9	εἰς	εἰς	ADP	_	_	11	case	_	Gloss=into,unto,for|Ref=GEN_19.2
+10	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	11	det	_	Gloss=the|Ref=GEN_19.2
+11	οἶκον	οἶκος	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	8	obl	_	Gloss=house,home|Ref=GEN_19.2
+12	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc,Neut|Number=Sing|PronType=Art	13	det	_	Gloss=the|Ref=GEN_19.2
+13	παιδὸς	παῖς	NOUN	_	Case=Gen|Gender=Fem,Masc|Number=Sing	11	nmod:poss	_	Gloss=child,servant|Ref=GEN_19.2
+14	ὑμῶν	ὑμεῖς	PRON	_	Case=Gen|Number=Plur|Person=2|PronType=Prs	13	nmod:poss	_	Gloss=you|Ref=GEN_19.2
+15	καὶ	καί	CCONJ	_	_	16	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.2
+16	καταλύσατε	καταλύω	VERB	_	Aspect=Perf|Mood=Imp|Number=Plur|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	8	conj	_	Gloss=to-rest,lodge,demolish|Ref=GEN_19.2
+17	καὶ	καί	CCONJ	_	_	18	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.2
+18	νίψασθε	νίπτω	VERB	_	Aspect=Perf|Mood=Imp|Number=Plur|Person=2|Tense=Past|VerbForm=Fin|Voice=Mid	8	conj	_	Gloss=to-wash|Ref=GEN_19.2
+19	τοὺς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	20	det	_	Gloss=the|Ref=GEN_19.2
+20	πόδας	πούς	NOUN	_	Case=Acc|Gender=Masc|Number=Plur	18	obj	_	Gloss=feet|Ref=GEN_19.2
+21	ὑμῶν	ὑμεῖς	PRON	_	Case=Gen|Number=Plur|Person=2|PronType=Prs	20	nmod:poss	_	Gloss=you|Ref=GEN_19.2|SpaceAfter=No
+22	,	,	PUNCT	_	_	23	punct	_	Ref=GEN_19.2
+23	καὶ	καί	CCONJ	_	_	25	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.2
+24	ὀρθρίσαντες	ὀρθρίζω	VERB	_	Aspect=Perf|Case=Nom|Gender=Masc|Number=Plur|VerbForm=Part|Voice=Act	25	advcl	_	Gloss=to-arise-early|Ref=GEN_19.2
+25	ἀπελεύσεσθε	ἀπέρχομαι	VERB	_	Aspect=Imp|Mood=Ind|Number=Plur|Person=2|Tense=Fut|VerbForm=Fin|Voice=Mid	8	conj	_	Gloss=to-depart|Ref=GEN_19.2
+26	εἰς	εἰς	ADP	_	_	28	case	_	Gloss=into,unto,for|Ref=GEN_19.2
+27	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	28	det	_	Gloss=the|Ref=GEN_19.2
+28	ὁδὸν	ὁδός	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	25	obl	_	Gloss=road,way|Ref=GEN_19.2
+29	ὑμῶν	ὑμεῖς	PRON	_	Case=Gen|Number=Plur|Person=2|PronType=Prs	28	nmod:poss	_	Gloss=you|Ref=GEN_19.2|SpaceAfter=No
+30	.	.	PUNCT	_	_	2	punct	_	Ref=GEN_19.2
+31	εἶπαν	λέγω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-say|Ref=GEN_19.2
+32	δέ	δέ	CCONJ	_	_	31	cc	_	Gloss=but,and,however|Ref=GEN_19.2|SpaceAfter=No
+33	,	,	PUNCT	_	_	34	punct	_	Ref=GEN_19.2
+34	οὐχί	οὐχί	ADV	_	Polarity=Neg	31	ccomp	_	Gloss=no-indeed|Ref=GEN_19.2|SpaceAfter=No
+35	,	,	PUNCT	_	_	36	punct	_	Ref=GEN_19.2
+36	ἀλλ᾿	ἀλλά	CCONJ	_	_	40	cc	_	Gloss=but|Ref=GEN_19.2
+37	ἐν	ἐν	ADP	_	_	39	case	_	Gloss=in,on,by,with,to|Ref=GEN_19.2
+38	τῇ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	39	det	_	Gloss=the|Ref=GEN_19.2
+39	πλατείᾳ	πλατεῖα	NOUN	_	Case=Dat|Gender=Fem|Number=Sing	40	obl	_	Gloss=wide,broad|Ref=GEN_19.2
+40	καταλύσομεν	καταλύω	VERB	_	Aspect=Imp|Mood=Ind|Number=Plur|Person=1|Tense=Fut|VerbForm=Fin|Voice=Act	34	conj	_	Gloss=to-rest,lodge,destroy|Ref=GEN_19.2|SpaceAfter=No
+41	.	.	PUNCT	_	_	40	punct	_	Ref=GEN_19.2
+
+# sent_id = Septuagint-Genesis-19:3-grc
+# text = καὶ κατεβιάζετο αὐτούς, καὶ ἐξέκλιναν πρὸς αὐτὸν καὶ εἰσῆλθον εἰς τὴν οἰκίαν αὐτοῦ. καὶ ἐποίησεν αὐτοῖς πότον, καὶ ἀζύμους ἔπεψεν αὐτοῖς, καὶ ἔφαγον.
+# parallel_id = bible/gen-19-3
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.3
+2	κατεβιάζετο	καταβιάζομαι	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Mid,Pass	0	root	_	Gloss=to-constrain|Ref=GEN_19.3
+3	αὐτούς	αὐτός	PRON	_	Case=Acc|Gender=Masc|Number=Plur|PronType=Prs	2	obj	_	Gloss=he,she,it,-self,same|Ref=GEN_19.3|SpaceAfter=No
+4	,	,	PUNCT	_	_	5	punct	_	Ref=GEN_19.3
+5	καὶ	καί	CCONJ	_	_	6	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.3
+6	ἐξέκλιναν	ἐκκλίνω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-turn-away|Ref=GEN_19.3
+7	πρὸς	πρός	ADP	_	_	8	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.3
+8	αὐτὸν	αὐτός	PRON	_	Case=Acc|Gender=Masc|Number=Sing|PronType=Prs	6	obl	_	Gloss=he,she,it,-self,same|Ref=GEN_19.3
+9	καὶ	καί	CCONJ	_	_	10	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.3
+10	εἰσῆλθον	εἰσέρχομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-enter|Ref=GEN_19.3
+11	εἰς	εἰς	ADP	_	_	13	case	_	Gloss=into,unto,for|Ref=GEN_19.3
+12	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	13	det	_	Gloss=the|Ref=GEN_19.3
+13	οἰκίαν	οἰκία	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	10	obl	_	Gloss=house,home|Ref=GEN_19.3
+14	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	13	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.3|SpaceAfter=No
+15	.	.	PUNCT	_	_	2	punct	_	Ref=GEN_19.3
+16	καὶ	καί	CCONJ	_	_	17	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.3
+17	ἐποίησεν	ποιέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-do,make|Ref=GEN_19.3
+18	αὐτοῖς	αὐτός	PRON	_	Case=Dat|Gender=Masc,Neut|Number=Plur|PronType=Prs	17	iobj	_	Gloss=he,it,-self,same|Ref=GEN_19.3
+19	πότον	πότος	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	17	obj	_	Gloss=banquet,feast|Ref=GEN_19.3|SpaceAfter=No
+20	,	,	PUNCT	_	_	21	punct	_	Ref=GEN_19.3
+21	καὶ	καί	CCONJ	_	_	23	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.3
+22	ἀζύμους	ἄζυμος	ADJ	_	Case=Acc|Gender=Fem,Masc|Number=Plur	23	obj	_	Gloss=unleavened-(bread)|Ref=GEN_19.3
+23	ἔπεψεν	πέσσω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-bake|Ref=GEN_19.3
+24	αὐτοῖς	αὐτός	PRON	_	Case=Dat|Gender=Masc,Neut|Number=Plur|PronType=Prs	23	iobj	_	Gloss=he,it,-self,same|Ref=GEN_19.3|SpaceAfter=No
+25	,	,	PUNCT	_	_	26	punct	_	Ref=GEN_19.3
+26	καὶ	καί	CCONJ	_	_	27	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.3
+27	ἔφαγον	ἐσθίω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-eat|Ref=GEN_19.3|SpaceAfter=No
+28	.	.	PUNCT	_	_	27	punct	_	Ref=GEN_19.3
+
+# sent_id = Septuagint-Genesis-19:4-grc
+# text = πρὸ τοῦ κοιμηθῆναι καὶ οἱ ἄνδρες τῆς πόλεως οἱ Σοδομῖται περιεκύκλωσαν τὴν οἰκίαν ἀπὸ νεανίσκου ἕως πρεσβυτέρου, ἅπας ὁ λαὸς ἅμα,
+# parallel_id = bible/gen-19-4
+1	πρὸ	πρό	ADP	_	_	3	case	_	Gloss=before,for|Outer=Yes|Ref=GEN_19.4
+2	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc,Neut|Number=Sing|PronType=Art	3	det	_	Gloss=the|Outer=Yes|Ref=GEN_19.4
+3	κοιμηθῆναι	κοιμάω	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Pass	11	obl	_	Gloss=to-go-to-bed,lie-down,fall-asleep|Ref=GEN_19.4
+4	καὶ	καί	CCONJ	_	_	11	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.4
+5	οἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	6	det	_	Gloss=the|Ref=GEN_19.4
+6	ἄνδρες	ἀνήρ	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	11	nsubj	_	Gloss=men,males|Ref=GEN_19.4
+7	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	8	det	_	Gloss=the|Ref=GEN_19.4
+8	πόλεως	πόλις	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	6	nmod:poss	_	Gloss=city|Ref=GEN_19.4
+9	οἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	10	det	_	Gloss=the|Ref=GEN_19.4
+10	Σοδομῖται	Σοδομῖτης	PROPN	_	Case=Nom|Gender=Masc|Number=Plur	6	appos	_	Gloss=Sodomites|Ref=GEN_19.4
+11	περιεκύκλωσαν	περικυκλόω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-surround|Ref=GEN_19.4
+12	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	13	det	_	Gloss=the|Ref=GEN_19.4
+13	οἰκίαν	οἰκία	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	11	obj	_	Gloss=house,home|Ref=GEN_19.4
+14	ἀπὸ	ἀπό	ADP	_	_	15	case	_	Gloss=from,away-from|Ref=GEN_19.4
+15	νεανίσκου	νεανίσκος	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	11	obl	_	Gloss=young-man|Ref=GEN_19.4
+16	ἕως	ἕως	CCONJ	_	_	17	case	_	Gloss=as-far-as,until,up-to|Ref=GEN_19.4
+17	πρεσβυτέρου	πρεσβύτερος	ADJ	_	Case=Gen|Degree=Cmp|Gender=Masc,Neut|Number=Sing	15	conj	_	Gloss=elder,older|Ref=GEN_19.4|SpaceAfter=No
+18	,	,	PUNCT	_	_	19	punct	_	Ref=GEN_19.4
+19	ἅπας	ἅπας	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	21	amod	_	Gloss=all,every|Ref=GEN_19.4
+20	ὁ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	21	det	_	Gloss=the;-oh|Ref=GEN_19.4
+21	λαὸς	λαός	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	11	dislocated	_	Gloss=people|Ref=GEN_19.4
+22	ἅμα	ἅμα	ADV	_	_	21	advmod	_	Gloss=together;-ἅμα-πρωῒ=early-in-the-morning|Ref=GEN_19.4|SpaceAfter=No|Unknown=Adverb/Preposition
+23	,	,	PUNCT	_	_	22	punct	_	Ref=GEN_19.4
+
+# sent_id = Septuagint-Genesis-19:5-grc
+# text = καὶ ἐξεκαλοῦντο τὸν Λὼτ καὶ ἔλεγον πρὸς αὐτόν, ποῦ εἰσιν οἱ ἄνδρες οἱ εἰσελθόντες πρὸς σὲ τὴν νύκτα; ἐξάγαγε αὐτοὺς πρὸς ἡμᾶς, ἵνα συγγενώμεθα αὐτοῖς.
+# parallel_id = bible/gen-19-5
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.5
+2	ἐξεκαλοῦντο	ἐκκαλέω	VERB	_	Aspect=Imp|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Mid,Pass	0	root	_	Gloss=to-call-out,call-forth|Ref=GEN_19.5
+3	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	4	det	_	Gloss=the|Ref=GEN_19.5
+4	Λὼτ	Λώτ	PROPN	_	Case=Acc|Gender=Masc|Number=Sing	2	obj	_	Gloss=Lot|Ref=GEN_19.5
+5	καὶ	καί	CCONJ	_	_	6	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.5
+6	ἔλεγον	λέγω	VERB	_	Aspect=Imp|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-say|Ref=GEN_19.5
+7	πρὸς	πρός	ADP	_	_	8	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.5
+8	αὐτόν	αὐτός	PRON	_	Case=Acc|Gender=Masc|Number=Sing|PronType=Prs	6	obl	_	Gloss=he,she,it,-self,same|Ref=GEN_19.5|SpaceAfter=No
+9	,	,	PUNCT	_	_	10	punct	_	Ref=GEN_19.5
+10	ποῦ	ποῦ	PART	_	_	6	ccomp	_	Gloss=where?|Ref=GEN_19.5
+11	εἰσιν	εἰμί	AUX	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	10	cop	_	Gloss=are|Ref=GEN_19.5
+12	οἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	13	det	_	Gloss=the|Ref=GEN_19.5
+13	ἄνδρες	ἀνήρ	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	10	nsubj	_	Gloss=men,males|Ref=GEN_19.5
+14	οἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	15	nsubj	_	Gloss=the|Ref=GEN_19.5
+15	εἰσελθόντες	εἰσέρχομαι	VERB	_	Aspect=Perf|Case=Nom|Gender=Masc|Number=Plur|VerbForm=Part|Voice=Act	13	acl:relcl	_	Gloss=to-enter|Ref=GEN_19.5
+16	πρὸς	πρός	ADP	_	_	17	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.5
+17	σὲ	σέ	PRON	_	Case=Acc|Number=Sing|Person=2|PronType=Prs	15	obl	_	Gloss=you|Ref=GEN_19.5
+18	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	19	det	_	Gloss=the|Ref=GEN_19.5
+19	νύκτα	νύξ	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	15	obl:tmod	_	Gloss=night|Ref=GEN_19.5|SpaceAfter=No
+20	;	;	PUNCT	_	_	21	punct	_	Ref=GEN_19.5
+21	ἐξάγαγε	ἐξάγω	VERB	_	Aspect=Perf|Mood=Imp|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	10	parataxis	_	Gloss=to-bring-out|Ref=GEN_19.5
+22	αὐτοὺς	αὐτός	PRON	_	Case=Acc|Gender=Masc|Number=Plur|PronType=Prs	21	obj	_	Gloss=he,she,it,-self,same|Ref=GEN_19.5
+23	πρὸς	πρός	ADP	_	_	24	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.5
+24	ἡμᾶς	ἡμεῖς	PRON	_	Case=Acc|Number=Plur|Person=1|PronType=Prs	21	obl	_	Gloss=us|Ref=GEN_19.5|SpaceAfter=No
+25	,	,	PUNCT	_	_	26	punct	_	Ref=GEN_19.5
+26	ἵνα	ἵνα	SCONJ	_	_	27	cc	_	Gloss=in-order-that|Ref=GEN_19.5
+27	συγγενώμεθα	συγγίνομαι	VERB	_	Aspect=Perf|Mood=Sub|Number=Plur|Person=1|Tense=Past|VerbForm=Fin|Voice=Mid	21	advcl	_	Gloss=to-be-intimate-with|Ref=GEN_19.5
+28	αὐτοῖς	αὐτός	PRON	_	Case=Dat|Gender=Masc,Neut|Number=Plur|PronType=Prs	27	iobj	_	Gloss=he,it,-self,same|Ref=GEN_19.5|SpaceAfter=No
+29	.	.	PUNCT	_	_	28	punct	_	Ref=GEN_19.5
+
+# sent_id = Septuagint-Genesis-19:6-grc
+# text = ἐξῆλθεν δὲ Λὼτ πρὸς αὐτοὺς πρὸς τὸ πρόθυρον, τὴν δὲ θύραν προσέῳξεν ὀπίσω αὐτοῦ.
+# parallel_id = bible/gen-19-6
+1	ἐξῆλθεν	ἐξέρχομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-go-out,come-out|Ref=GEN_19.6
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.6
+3	Λὼτ	Λώτ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	1	nsubj	_	Gloss=Lot|Ref=GEN_19.6
+4	πρὸς	πρός	ADP	_	_	5	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.6
+5	αὐτοὺς	αὐτός	PRON	_	Case=Acc|Gender=Masc|Number=Plur|PronType=Prs	1	obl	_	Gloss=he,she,it,-self,same|Ref=GEN_19.6
+6	πρὸς	πρός	ADP	_	_	8	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.6
+7	τὸ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	8	det	_	Gloss=the|Ref=GEN_19.6
+8	πρόθυρον	πρόθυρον	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	1	obl	_	Gloss=threshold,doorstep|Ref=GEN_19.6|SpaceAfter=No
+9	,	,	PUNCT	_	_	10	punct	_	Ref=GEN_19.6
+10	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	12	det	_	Gloss=the|Ref=GEN_19.6
+11	δὲ	δέ	CCONJ	_	_	13	cc	_	Gloss=but,and,however|Ref=GEN_19.6
+12	θύραν	θύρα	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	13	obj	_	Gloss=door,gate|Ref=GEN_19.6
+13	προσέῳξεν	προσοίγνυμι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-shut,close|Ref=GEN_19.6
+14	ὀπίσω	ὀπίσω	ADP	_	_	15	case	_	Gloss=back|Ref=GEN_19.6
+15	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	13	obl	_	Gloss=he,she,it,-self,same|Ref=GEN_19.6|SpaceAfter=No
+16	.	.	PUNCT	_	_	15	punct	_	Ref=GEN_19.6
+
+# sent_id = Septuagint-Genesis-19:7-grc
+# text = εἶπεν δὲ πρὸς αὐτούς, μηδαμῶς, ἀδελφοί, μὴ πονηρεύσησθε.
+# parallel_id = bible/gen-19-7
+1	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-say|Ref=GEN_19.7
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.7
+3	πρὸς	πρός	ADP	_	_	4	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.7
+4	αὐτούς	αὐτός	PRON	_	Case=Acc|Gender=Masc|Number=Plur|PronType=Prs	1	obl	_	Gloss=he,she,it,-self,same|Ref=GEN_19.7|SpaceAfter=No
+5	,	,	PUNCT	_	_	6	punct	_	Ref=GEN_19.7
+6	μηδαμῶς	μηδαμῶς	ADV	_	_	11	advmod	_	Gloss=by-no-means|Ref=GEN_19.7|SpaceAfter=No
+7	,	,	PUNCT	_	_	6	punct	_	Ref=GEN_19.7
+8	ἀδελφοί	ἀδελφός	NOUN	_	Case=Voc|Gender=Masc|Number=Plur	11	vocative	_	Gloss=brother|Ref=GEN_19.7|SpaceAfter=No
+9	,	,	PUNCT	_	_	8	punct	_	Ref=GEN_19.7
+10	μὴ	μή	ADV	_	Polarity=Neg	11	advmod	_	Gloss=no,not|Ref=GEN_19.7
+11	πονηρεύσησθε	πονηρεύομαι	VERB	_	Aspect=Perf|Mood=Sub|Number=Plur|Person=2|Tense=Past|VerbForm=Fin|Voice=Mid	1	ccomp	_	Gloss=to-be-evil,wicked|Ref=GEN_19.7|SpaceAfter=No
+12	.	.	PUNCT	_	_	11	punct	_	Ref=GEN_19.7
+
+# sent_id = Septuagint-Genesis-19:8-grc
+# text = εἰσὶν δέ μοι δύο θυγατέρες, αἳ οὐκ ἔγνωσαν ἄνδρα· ἐξάξω αὐτὰς πρὸς ὑμᾶς, καὶ χρήσασθε αὐταῖς, καθὰ ἄν ἀρέσκῃ ὑμῖν· μόνον εἰς τοὺς ἄνδρας τούτους μὴ ποιήσητε μηδὲν ἄδικον, οὗ εἵνεκεν εἰσῆλθον ὑπὸ τὴν σκέπην τῶν δοκῶν μου.
+# parallel_id = bible/gen-19-8
+1	εἰσὶν	εἰμί	AUX	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	3	cop	_	Gloss=to-be|Ref=GEN_19.8
+2	δέ	δέ	CCONJ	_	_	3	cc	_	Gloss=but,and,however|Ref=GEN_19.8
+3	μοι	ἐγώ	PRON	_	Case=Dat|Number=Sing|Person=1|PronType=Prs	0	root	_	Gloss=me|Ref=GEN_19.8
+4	δύο	δύο	NUM	_	Case=Acc,Gen,Nom|Gender=Fem,Masc,Neut|Number=Sing|NumType=Card	5	nummod	_	Gloss=two|Ref=GEN_19.8
+5	θυγατέρες	θυγάτηρ	NOUN	_	Case=Nom|Gender=Fem|Number=Plur	3	nsubj	_	Gloss=daughters|Ref=GEN_19.8|SpaceAfter=No
+6	,	,	PUNCT	_	_	7	punct	_	Ref=GEN_19.8
+7	αἳ	ὅς	PRON	_	Case=Nom|Gender=Fem|Number=Plur|PronType=Rel	9	nsubj	_	Gloss=who,which;-the|Ref=GEN_19.8
+8	οὐκ	οὐ	ADV	_	Polarity=Neg	9	advmod	_	Gloss=no,not|Ref=GEN_19.8
+9	ἔγνωσαν	γινώσκω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	5	acl:relcl	_	Gloss=to-know|Ref=GEN_19.8
+10	ἄνδρα	ἀνήρ	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	9	obj	_	Gloss=man|Ref=GEN_19.8|SpaceAfter=No
+11	·	·	PUNCT	_	_	12	punct	_	Ref=GEN_19.8
+12	ἐξάξω	ἐξάγω	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=1|Tense=Fut|VerbForm=Fin|Voice=Act	3	parataxis	_	Gloss=to-bring-forth|Ref=GEN_19.8
+13	αὐτὰς	αὐτός	PRON	_	Case=Acc|Gender=Fem|Number=Plur|PronType=Prs	12	obj	_	Gloss=she,-self,same|Ref=GEN_19.8
+14	πρὸς	πρός	ADP	_	_	15	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.8
+15	ὑμᾶς	ὑμεῖς	PRON	_	Case=Acc|Number=Plur|Person=2|PronType=Prs	12	obl	_	Gloss=you|Ref=GEN_19.8|SpaceAfter=No
+16	,	,	PUNCT	_	_	17	punct	_	Ref=GEN_19.8
+17	καὶ	καί	CCONJ	_	_	18	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.8
+18	χρήσασθε	χράω	VERB	_	Aspect=Perf|Mood=Imp|Number=Plur|Person=2|Tense=Past|VerbForm=Fin|Voice=Mid	12	conj	_	Gloss=to-use,treat|Ref=GEN_19.8
+19	αὐταῖς	αὐτός	PRON	_	Case=Dat|Gender=Fem|Number=Plur|PronType=Prs	18	iobj	_	Gloss=she,-self,same|Ref=GEN_19.8|SpaceAfter=No
+20	,	,	PUNCT	_	_	21	punct	_	Ref=GEN_19.8
+21	καθὰ	καθά	ADV	_	_	23	advmod	_	Gloss=as,just-as|Ref=GEN_19.8
+22	ἄν	ἄν	PART	_	_	23	mark	_	Gloss=whenever,whoever,whatever|Ref=GEN_19.8
+23	ἀρέσκῃ	ἀρέσκω	VERB	_	Aspect=Imp|Mood=Sub|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	18	advcl	_	Gloss=to-please|Ref=GEN_19.8
+24	ὑμῖν	ὑμεῖς	PRON	_	Case=Dat|Number=Plur|Person=2|PronType=Prs	23	iobj	_	Gloss=you|Ref=GEN_19.8|SpaceAfter=No
+25	·	·	PUNCT	_	_	26	punct	_	Ref=GEN_19.8
+26	μόνον	μόνος	ADV	_	_	32	advmod	_	Gloss=only,alone|Ref=GEN_19.8
+27	εἰς	εἰς	ADP	_	_	29	case	_	Gloss=into,unto,for|Ref=GEN_19.8
+28	τοὺς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	29	det	_	Gloss=the|Ref=GEN_19.8
+29	ἄνδρας	ἀνήρ	NOUN	_	Case=Acc|Gender=Masc|Number=Plur	32	obl	_	Gloss=men|Ref=GEN_19.8
+30	τούτους	οὗτος	PRON	_	Case=Acc|Gender=Masc|Number=Plur|PronType=Dem	29	det	_	Gloss=this|Ref=GEN_19.8
+31	μὴ	μή	ADV	_	Polarity=Neg	32	advmod	_	Gloss=no,not|Ref=GEN_19.8
+32	ποιήσητε	ποιέω	VERB	_	Aspect=Perf|Mood=Sub|Number=Plur|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	12	parataxis	_	Gloss=to-do,make|Ref=GEN_19.8
+33	μηδὲν	μηδείς	ADJ	_	Case=Acc|Gender=Neut|Number=Sing	34	amod	_	Gloss=no-one,nothing|Ref=GEN_19.8
+34	ἄδικον	ἄδικος	ADJ	_	Case=Acc|Gender=Fem,Masc,Neut|Number=Sing	32	obj	_	Gloss=unjust,unrighteous|Ref=GEN_19.8|SpaceAfter=No
+35	,	,	PUNCT	_	_	36	punct	_	Ref=GEN_19.8
+36	οὗ	ὅς	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Rel	38	obl	_	Gloss=where;-who,which,that|Ref=GEN_19.8
+37	εἵνεκεν	ἕνεκα	ADP	_	_	36	case	_	Gloss=because-of,on-account-of|Ref=GEN_19.8
+38	εἰσῆλθον	εἰσέρχομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	32	advcl	_	Gloss=to-enter|Ref=GEN_19.8
+39	ὑπὸ	ὑπό	ADP	_	_	41	case	_	Gloss=+-G-=-by-(agency);-+-A-=-under|Ref=GEN_19.8
+40	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	41	det	_	Gloss=the|Ref=GEN_19.8
+41	σκέπην	σκέπη	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	38	obl	_	Gloss=shelter,protection|Ref=GEN_19.8
+42	τῶν	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem,Masc,Neut|Number=Plur|PronType=Art	43	det	_	Gloss=the|Ref=GEN_19.8
+43	δοκῶν	δοκός	NOUN	_	Case=Gen|Gender=Fem,Masc|Number=Plur	41	nmod:poss	_	Gloss=beams|Ref=GEN_19.8
+44	μου	ἐγώ	PRON	_	Case=Gen|Number=Sing|Person=1|PronType=Prs	43	nmod:poss	_	Gloss=me,my|Ref=GEN_19.8|SpaceAfter=No
+45	.	.	PUNCT	_	_	44	punct	_	Ref=GEN_19.8
+
+# sent_id = Septuagint-Genesis-19:9-grc
+# text = εἶπαν δέ, ἀπόστα ἐκεῖ. εἷς ἦλθες παροικεῖν· μὴ καὶ κρίσιν; κρίνειν νῦν οὖν σὲ κακώσομεν μᾶλλον ἢ ἐκείνους. καὶ παρεβιάζοντο τὸν ἄνδρα τὸν Λὼτ σφόδρα καὶ ἤγγισαν συντρῖψαι τὴν θύραν.
+# parallel_id = bible/gen-19-9
+1	εἶπαν	λέγω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-say|Ref=GEN_19.9
+2	δέ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.9|SpaceAfter=No
+3	,	,	PUNCT	_	_	4	punct	_	Ref=GEN_19.9
+4	ἀπόστα	ἀφίστημι	VERB	_	Aspect=Perf|Mood=Imp|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-remove,depart|Ref=GEN_19.9
+5	ἐκεῖ	ἐκεῖ	ADV	_	_	4	advmod	_	Gloss=there|Ref=GEN_19.9|SpaceAfter=No
+6	.	.	PUNCT	_	_	4	punct	_	Ref=GEN_19.9
+7	εἷς	εἷς	NUM	_	Case=Nom|Gender=Masc|Number=Sing|NumType=Card	8	nsubj	_	Gloss=one|Ref=GEN_19.9
+8	ἦλθες	ἔρχομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	4	parataxis	_	Gloss=to-come,go|Ref=GEN_19.9
+9	παροικεῖν	παροικέω	VERB	_	Aspect=Imp|Tense=Pres|VerbForm=Inf|Voice=Act	8	xcomp	_	Gloss=to-reside,dwell|Ref=GEN_19.9|SpaceAfter=No
+10	·	·	PUNCT	_	_	11	punct	_	Ref=GEN_19.9
+11	μὴ	μή	ADV	_	Polarity=Neg	15	advmod	_	Gloss=no,not|Ref=GEN_19.9
+12	καὶ	καί	CCONJ	_	_	15	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.9
+13	κρίσιν	κρίσις	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	15	obl	_	Gloss=judgment,accusation|Ref=GEN_19.9|SpaceAfter=No
+14	;	;	PUNCT	_	_	13	punct	_	Ref=GEN_19.9
+15	κρίνειν	κρίνω	VERB	_	Aspect=Imp|Tense=Pres|VerbForm=Inf|Voice=Act	9	conj	_	Gloss=to-judge|Ref=GEN_19.9
+16	νῦν	νῦν	ADV	_	_	19	advmod	_	Gloss=now|Ref=GEN_19.9
+17	οὖν	οὖν	ADV	_	_	19	advmod	_	Gloss=now,therefore|Ref=GEN_19.9
+18	σὲ	σέ	PRON	_	Case=Acc|Number=Sing|Person=2|PronType=Prs	19	obj	_	Gloss=you|Ref=GEN_19.9
+19	κακώσομεν	κακόω	VERB	_	Aspect=Imp|Mood=Ind|Number=Plur|Person=1|Tense=Fut|VerbForm=Fin|Voice=Act	8	parataxis	_	Gloss=to-injure|Ref=GEN_19.9
+20	μᾶλλον	μᾶλλον	ADV	_	Degree=Cmp	22	case	_	Gloss=better,rather,more-than|Ref=GEN_19.9
+21	ἢ	ἤ	CCONJ	_	_	22	case	_	Gloss=or,either,than;-+πριν=before|Ref=GEN_19.9
+22	ἐκείνους	ἐκεῖνος	PRON	_	Case=Acc|Gender=Masc|Number=Plur|PronType=Dem	19	obl	_	Gloss=those,that|Ref=GEN_19.9|SpaceAfter=No
+23	.	.	PUNCT	_	_	1	punct	_	Ref=GEN_19.9
+24	καὶ	καί	CCONJ	_	_	25	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.9
+25	παρεβιάζοντο	παραβιάζομαι	VERB	_	Aspect=Imp|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Mid,Pass	1	conj	_	Gloss=to-compel,force|Ref=GEN_19.9
+26	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	27	det	_	Gloss=the|Ref=GEN_19.9
+27	ἄνδρα	ἀνήρ	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	25	obj	_	Gloss=man|Ref=GEN_19.9
+28	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	29	det	_	Gloss=the|Ref=GEN_19.9
+29	Λὼτ	Λώτ	PROPN	_	Case=Acc|Gender=Masc|Number=Sing	27	appos	_	Gloss=Lot|Ref=GEN_19.9
+30	σφόδρα	σφόδρα	ADV	_	_	25	advmod	_	Gloss=very-much|Ref=GEN_19.9
+31	καὶ	καί	CCONJ	_	_	32	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.9
+32	ἤγγισαν	ἐγγίζω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-approach,come-near|Ref=GEN_19.9
+33	συντρῖψαι	συντρίβω	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Act	32	xcomp	_	Gloss=to-bruise,break|Ref=GEN_19.9
+34	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	35	det	_	Gloss=the|Ref=GEN_19.9
+35	θύραν	θύρα	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	33	obj	_	Gloss=door,gate|Ref=GEN_19.9|SpaceAfter=No
+36	.	.	PUNCT	_	_	35	punct	_	Ref=GEN_19.9
+
+# sent_id = Septuagint-Genesis-19:10-grc
+# text = ἐκτείναντες δὲ οἱ ἄνδρες τὰς χεῖρας εἰσεσπάσαντο τὸν Λὼτ πρὸς ἑαυτοὺς εἰς τὸν οἶκον καὶ τὴν θύραν τοῦ οἴκου ἀπέκλεισαν·
+# parallel_id = bible/gen-19-10
+1	ἐκτείναντες	ἐκτείνω	VERB	_	Aspect=Perf|Case=Nom|Gender=Masc|Number=Plur|VerbForm=Part|Voice=Act	7	advcl	_	Gloss=to-stretch-out|Ref=GEN_19.10
+2	δὲ	δέ	CCONJ	_	_	7	cc	_	Gloss=but,and,however|Ref=GEN_19.10
+3	οἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	4	det	_	Gloss=the|Ref=GEN_19.10
+4	ἄνδρες	ἀνήρ	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	1	nsubj	_	Gloss=men,males|Ref=GEN_19.10
+5	τὰς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Plur|PronType=Art	6	det	_	Gloss=the|Ref=GEN_19.10
+6	χεῖρας	χείρ	NOUN	_	Case=Acc|Gender=Fem|Number=Plur	1	obj	_	Gloss=hands|Ref=GEN_19.10
+7	εἰσεσπάσαντο	εἰσσπάομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Mid	0	root	_	Gloss=to-pull-in,draw-in|Ref=GEN_19.10
+8	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	9	det	_	Gloss=the|Ref=GEN_19.10
+9	Λὼτ	Λώτ	PROPN	_	Case=Acc|Gender=Masc|Number=Sing	7	obj	_	Gloss=Lot|Ref=GEN_19.10
+10	πρὸς	πρός	ADP	_	_	11	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.10
+11	ἑαυτοὺς	ἑαυτοῦ	PRON	_	Case=Acc|Gender=Masc|Number=Plur|Person=3|PronType=Prs|Reflex=Yes	7	obl	_	Gloss=themselves|Ref=GEN_19.10
+12	εἰς	εἰς	ADP	_	_	14	case	_	Gloss=into,unto,for|Ref=GEN_19.10
+13	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	14	det	_	Gloss=the|Ref=GEN_19.10
+14	οἶκον	οἶκος	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	7	obl	_	Gloss=house,home|Ref=GEN_19.10
+15	καὶ	καί	CCONJ	_	_	20	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.10
+16	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	17	det	_	Gloss=the|Ref=GEN_19.10
+17	θύραν	θύρα	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	20	obj	_	Gloss=door,gate|Ref=GEN_19.10
+18	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	19	det	_	Gloss=the|Ref=GEN_19.10
+19	οἴκου	οἶκος	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	17	nmod:poss	_	Gloss=house,home|Ref=GEN_19.10
+20	ἀπέκλεισαν	ἀποκλείω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	7	conj	_	Gloss=to-shut,lock|Ref=GEN_19.10|SpaceAfter=No
+21	·	·	PUNCT	_	_	20	punct	_	Ref=GEN_19.10
+
+# sent_id = Septuagint-Genesis-19:11-grc
+# text = τοὺς δὲ ἄνδρας τοὺς ὄντας ἐπὶ τῆς θύρας τοῦ οἴκου ἐπάταξαν ἀορασίᾳ ἀπὸ μικροῦ ἕως μεγάλου, καὶ παρελύθησαν ζητοῦντες τὴν θύραν.
+# parallel_id = bible/gen-19-11
+1	τοὺς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	3	det	_	Gloss=the|Ref=GEN_19.11
+2	δὲ	δέ	CCONJ	_	_	11	cc	_	Gloss=but,and,however|Ref=GEN_19.11
+3	ἄνδρας	ἀνήρ	NOUN	_	Case=Acc|Gender=Masc|Number=Plur	11	obj	_	Gloss=men|Ref=GEN_19.11
+4	τοὺς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	8	nsubj	_	Gloss=the|Ref=GEN_19.11
+5	ὄντας	εἰμί	AUX	_	Case=Acc|Gender=Masc|Number=Plur|Tense=Pres|VerbForm=Part|Voice=Act	8	cop	_	Gloss=to-be|Ref=GEN_19.11
+6	ἐπὶ	ἐπί	ADP	_	_	8	case	_	Gloss=on,upon,against|Ref=GEN_19.11
+7	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	8	det	_	Gloss=the|Ref=GEN_19.11
+8	θύρας	θύρα	NOUN	_	Case=Acc|Gender=Fem|Number=Plur	3	acl:relcl	_	Gloss=door|Ref=GEN_19.11
+9	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	10	det	_	Gloss=the|Ref=GEN_19.11
+10	οἴκου	οἶκος	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	8	nmod:poss	_	Gloss=house,home|Ref=GEN_19.11
+11	ἐπάταξαν	πατάσσω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-smite,strike|Ref=GEN_19.11
+12	ἀορασίᾳ	ἀορασία	NOUN	_	Case=Dat|Gender=Fem|Number=Sing	11	iobj	_	Gloss=blindness|Ref=GEN_19.11
+13	ἀπὸ	ἀπό	ADP	_	_	14	case	_	Gloss=from,away-from|Ref=GEN_19.11
+14	μικροῦ	μικρός	ADJ	_	Case=Gen|Gender=Masc,Neut|Number=Sing	11	obl	_	Gloss=small|Ref=GEN_19.11
+15	ἕως	ἕως	CCONJ	_	_	16	case	_	Gloss=as-far-as,until,up-to|Ref=GEN_19.11
+16	μεγάλου	μέγας	ADJ	_	Case=Gen|Gender=Masc,Neut|Number=Sing	14	nmod	_	Gloss=big,great|Ref=GEN_19.11|SpaceAfter=No
+17	,	,	PUNCT	_	_	18	punct	_	Ref=GEN_19.11
+18	καὶ	καί	CCONJ	_	_	19	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.11
+19	παρελύθησαν	παραλύω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	11	conj	_	Gloss=to-be-weary|Ref=GEN_19.11
+20	ζητοῦντες	ζητέω	VERB	_	Aspect=Imp|Case=Nom|Gender=Masc|Number=Plur|Tense=Pres|VerbForm=Part|Voice=Act	19	advcl	_	Gloss=to-seek|Ref=GEN_19.11
+21	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	22	det	_	Gloss=the|Ref=GEN_19.11
+22	θύραν	θύρα	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	20	obj	_	Gloss=door,gate|Ref=GEN_19.11|SpaceAfter=No
+23	.	.	PUNCT	_	_	22	punct	_	Ref=GEN_19.11
+
+# sent_id = Septuagint-Genesis-19:12-grc
+# text = εἶπαν δὲ οἱ ἄνδρες πρὸς Λώτ, ἔστιν τίς σοί ὧδε, γαμβροὶ ἢ υἱοὶ ἢ θυγατέρες; ἢ εἴ τις σοί ἄλλος ἔστιν ἐν τῇ πόλει, ἐξάγαγε ἐκ τοῦ τόπου τούτου·
+# parallel_id = bible/gen-19-12
+1	εἶπαν	λέγω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-say|Ref=GEN_19.12
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.12
+3	οἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	4	det	_	Gloss=the|Ref=GEN_19.12
+4	ἄνδρες	ἀνήρ	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	1	nsubj	_	Gloss=men,males|Ref=GEN_19.12
+5	πρὸς	πρός	ADP	_	_	6	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.12
+6	Λώτ	Λώτ	PROPN	_	Gender=Masc|Number=Sing	1	obl	_	Gloss=Lot|Ref=GEN_19.12|SpaceAfter=No
+7	,	,	PUNCT	_	_	8	punct	_	Ref=GEN_19.12
+8	ἔστιν	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	10	cop	_	Gloss=to-be|Ref=GEN_19.12
+9	τίς	τίς	PRON	_	Case=Nom|Gender=Fem,Masc|Number=Sing|PronType=Int	10	nsubj	_	Gloss=who?,what?-why?;-+enclitic=someone,something|Ref=GEN_19.12
+10	σοί	σός	PRON	_	Case=Dat|Number=Sing|Person=2|Poss=Yes|PronType=Prs	1	ccomp	_	Gloss=you|Ref=GEN_19.12
+11	ὧδε	ὧδε	ADV	_	_	10	advmod	_	Gloss=here,hither,there|Ref=GEN_19.12|SpaceAfter=No
+12	,	,	PUNCT	_	_	13	punct	_	Ref=GEN_19.12
+13	γαμβροὶ	γαμβρός	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	10	dislocated	_	Gloss=sons-in-law|Ref=GEN_19.12
+14	ἢ	ἤ	CCONJ	_	_	15	cc	_	Gloss=or,either,than;-+πριν=before|Ref=GEN_19.12
+15	υἱοὶ	υἱός	NOUN	_	Case=Nom,Voc|Gender=Masc|Number=Plur	13	conj	_	Gloss=sons|Ref=GEN_19.12
+16	ἢ	ἤ	CCONJ	_	_	17	cc	_	Gloss=or,either,than;-+πριν=before|Ref=GEN_19.12
+17	θυγατέρες	θυγάτηρ	NOUN	_	Case=Nom,Voc|Gender=Fem|Number=Plur	13	conj	_	Gloss=daughters|Ref=GEN_19.12|SpaceAfter=No
+18	;	;	PUNCT	_	_	19	punct	_	Ref=GEN_19.12
+19	ἢ	ἤ	CCONJ	_	_	23	cc	_	Gloss=or,either,than;-+πριν=before|Ref=GEN_19.12
+20	εἴ	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=2|Tense=Pres|VerbForm=Fin|Voice=Act	23	cop	_	Gloss=Conj:-if;-Verb:-to-be|Ref=GEN_19.12
+21	τις	τίς	PRON	_	Case=Nom|Gender=Fem,Masc|Number=Sing|PronType=Int	23	nsubj	_	Gloss=someone,something|Ref=GEN_19.12
+22	σοί	σός	PRON	_	Case=Dat|Number=Sing|Person=2|Poss=Yes|PronType=Prs	23	iobj	_	Gloss=you|Ref=GEN_19.12
+23	ἄλλος	ἄλλος	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	13	conj	_	Gloss=other|Ref=GEN_19.12
+24	ἔστιν	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	23	cop	_	Gloss=to-be|Ref=GEN_19.12
+25	ἐν	ἐν	ADP	_	_	27	case	_	Gloss=in,on,by,with,to|Ref=GEN_19.12
+26	τῇ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	27	det	_	Gloss=the|Ref=GEN_19.12
+27	πόλει	πόλις	NOUN	_	Case=Dat|Gender=Fem|Number=Sing	23	obl	_	Gloss=city|Ref=GEN_19.12|SpaceAfter=No
+28	,	,	PUNCT	_	_	29	punct	_	Ref=GEN_19.12
+29	ἐξάγαγε	ἐξάγω	VERB	_	Aspect=Perf|Mood=Imp|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	10	parataxis	_	Gloss=to-bring-out|Ref=GEN_19.12
+30	ἐκ	ἐκ	ADP	_	_	32	case	_	Gloss=out,out-of|Ref=GEN_19.12
+31	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	32	det	_	Gloss=the|Ref=GEN_19.12
+32	τόπου	τόπος	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	29	obl	_	Gloss=place|Ref=GEN_19.12
+33	τούτου	οὗτος	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Dem	32	det	_	Gloss=this|Ref=GEN_19.12|SpaceAfter=No
+34	·	·	PUNCT	_	_	33	punct	_	Ref=GEN_19.12
+
+# sent_id = Septuagint-Genesis-19:13-grc
+# text = ὅτι ἀπόλλυμεν ἡμεῖς τὸν τόπον τοῦτον, ὅτι ὑψώθη ἡ κραυγὴ αὐτῶν ἐναντίον κυρίου, καὶ ἀπέστειλεν ἡμᾶς κύριος ἐκτρῖψαι αὐτήν.
+# parallel_id = bible/gen-19-13
+1	ὅτι	ὅτι	SCONJ	_	_	2	mark	_	Gloss=because,that-for|Ref=GEN_19.13
+2	ἀπόλλυμεν	ἀπόλλυμι	VERB	_	Aspect=Imp|Mood=Ind|Number=Plur|Person=1|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-destroy|Ref=GEN_19.13
+3	ἡμεῖς	ἡμεῖς	PRON	_	Case=Nom|Number=Plur|Person=1|PronType=Prs	2	nsubj	_	Gloss=we|Ref=GEN_19.13
+4	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	Gloss=the|Ref=GEN_19.13
+5	τόπον	τόπος	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	2	obj	_	Gloss=place|Ref=GEN_19.13
+6	τοῦτον	οὗτος	PRON	_	Case=Acc|Gender=Masc|Number=Sing|PronType=Dem	5	det	_	Gloss=this|Ref=GEN_19.13|SpaceAfter=No
+7	,	,	PUNCT	_	_	8	punct	_	Ref=GEN_19.13
+8	ὅτι	ὅτι	SCONJ	_	_	9	mark	_	Gloss=because,that-for|Ref=GEN_19.13
+9	ὑψώθη	ὑψόω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	2	advcl	_	Gloss=to-exalt|Ref=GEN_19.13
+10	ἡ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	11	det	_	Gloss=the|Ref=GEN_19.13
+11	κραυγὴ	κραυγή	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	9	nsubj:pass	_	Gloss=outcry|Ref=GEN_19.13
+12	αὐτῶν	αὐτός	PRON	_	Case=Gen|Gender=Fem,Masc,Neut|Number=Plur|PronType=Prs	11	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.13
+13	ἐναντίον	ἐναντίον	ADP	_	_	14	case	_	Gloss=before|Ref=GEN_19.13
+14	κυρίου	κύριος	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	9	obl	_	Gloss=lord|Ref=GEN_19.13|SpaceAfter=No
+15	,	,	PUNCT	_	_	16	punct	_	Ref=GEN_19.13
+16	καὶ	καί	CCONJ	_	_	17	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.13
+17	ἀπέστειλεν	ἀποστέλλω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-send-forth|Ref=GEN_19.13
+18	ἡμᾶς	ἡμεῖς	PRON	_	Case=Acc|Number=Plur|Person=1|PronType=Prs	17	obj	_	Gloss=us|Ref=GEN_19.13
+19	κύριος	κύριος	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	17	nsubj	_	Gloss=lord|Ref=GEN_19.13
+20	ἐκτρῖψαι	ἐκτρίβω	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Act	17	xcomp	_	Gloss=to-wipe-out|Ref=GEN_19.13
+21	αὐτήν	αὐτός	PRON	_	Case=Acc|Gender=Fem|Number=Sing|PronType=Prs	20	obj	_	Gloss=she,-self,same|Ref=GEN_19.13|SpaceAfter=No
+22	.	.	PUNCT	_	_	21	punct	_	Ref=GEN_19.13
+
+# sent_id = Septuagint-Genesis-19:14-grc
+# text = ἐξῆλθεν δὲ Λὼτ καὶ ἐλάλησεν πρὸς τοὺς γαμβροὺς αὐτοῦ τοὺς εἰληφότας τὰς θυγατέρας αὐτοῦ καὶ εἶπεν, ἀνάστητε καὶ ἐξέλθατε ἐκ τοῦ τόπου τούτου, ὅτι ἐκτρίβει κύριος τὴν πόλιν. ἔδοξεν δὲ γελοιάζειν ἐναντίον τῶν γαμβρῶν αὐτοῦ.
+# parallel_id = bible/gen-19-14
+1	ἐξῆλθεν	ἐξέρχομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-go-out,come-out|Ref=GEN_19.14
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.14
+3	Λὼτ	Λώτ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	1	nsubj	_	Gloss=Lot|Ref=GEN_19.14
+4	καὶ	καί	CCONJ	_	_	5	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.14
+5	ἐλάλησεν	λαλέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-speak,talk|Ref=GEN_19.14
+6	πρὸς	πρός	ADP	_	_	8	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.14
+7	τοὺς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	8	det	_	Gloss=the|Ref=GEN_19.14
+8	γαμβροὺς	γαμβρός	NOUN	_	Case=Acc|Gender=Masc|Number=Plur	5	obl	_	Gloss=sons-in-law|Ref=GEN_19.14
+9	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	8	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.14
+10	τοὺς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	11	det	_	Gloss=the|Ref=GEN_19.14
+11	εἰληφότας	λαμβάνω	VERB	_	Aspect=Perf|Case=Acc|Gender=Masc|Number=Plur|VerbForm=Part|Voice=Act	8	acl:relcl	_	Gloss=to-take,receive|Ref=GEN_19.14
+12	τὰς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Plur|PronType=Art	13	det	_	Gloss=the|Ref=GEN_19.14
+13	θυγατέρας	θυγάτηρ	NOUN	_	Case=Acc|Gender=Fem|Number=Plur	11	obj	_	Gloss=daughters|Ref=GEN_19.14
+14	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	13	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.14
+15	καὶ	καί	CCONJ	_	_	16	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.14
+16	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-say|Ref=GEN_19.14|SpaceAfter=No
+17	,	,	PUNCT	_	_	18	punct	_	Ref=GEN_19.14
+18	ἀνάστητε	ἀνίστημι	VERB	_	Aspect=Perf|Mood=Imp|Number=Plur|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	16	ccomp	_	Gloss=to-arise|Ref=GEN_19.14
+19	καὶ	καί	CCONJ	_	_	20	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.14
+20	ἐξέλθατε	ἐξέρχομαι	VERB	_	Aspect=Perf|Mood=Imp|Number=Plur|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	18	conj	_	Gloss=to-come-out,go-out|Ref=GEN_19.14
+21	ἐκ	ἐκ	ADP	_	_	23	case	_	Gloss=out,out-of|Ref=GEN_19.14
+22	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	23	det	_	Gloss=the|Ref=GEN_19.14
+23	τόπου	τόπος	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	20	obl	_	Gloss=place|Ref=GEN_19.14
+24	τούτου	οὗτος	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Dem	23	det	_	Gloss=this|Ref=GEN_19.14|SpaceAfter=No
+25	,	,	PUNCT	_	_	26	punct	_	Ref=GEN_19.14
+26	ὅτι	ὅτι	SCONJ	_	_	27	mark	_	Gloss=because,that-for|Ref=GEN_19.14
+27	ἐκτρίβει	ἐκτρίβω	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	20	advcl	_	Gloss=to-wipe-out|Ref=GEN_19.14
+28	κύριος	κύριος	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	27	nsubj	_	Gloss=lord|Ref=GEN_19.14
+29	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	30	det	_	Gloss=the|Ref=GEN_19.14
+30	πόλιν	πόλις	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	27	obj	_	Gloss=city|Ref=GEN_19.14|SpaceAfter=No
+31	.	.	PUNCT	_	_	1	punct	_	Ref=GEN_19.14
+32	ἔδοξεν	δοκέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-think,suppose|Ref=GEN_19.14
+33	δὲ	δέ	CCONJ	_	_	32	cc	_	Gloss=but,and,however|Ref=GEN_19.14
+34	γελοιάζειν	γελοιάζω	VERB	_	Aspect=Imp|Tense=Pres|VerbForm=Inf|Voice=Act	32	xcomp	_	Gloss=to-joke,jest|Ref=GEN_19.14
+35	ἐναντίον	ἐναντίον	ADP	_	_	37	case	_	Gloss=before|Ref=GEN_19.14
+36	τῶν	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	37	det	_	Gloss=the|Ref=GEN_19.14
+37	γαμβρῶν	γαμβρός	NOUN	_	Case=Gen|Gender=Masc|Number=Plur	34	obl	_	Gloss=sons-in-law|Ref=GEN_19.14
+38	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	37	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.14|SpaceAfter=No
+39	.	.	PUNCT	_	_	38	punct	_	Ref=GEN_19.14
+
+# sent_id = Septuagint-Genesis-19:15-grc
+# text = ἡνίκα δὲ ὄρθρος ἐγίνετο, ἐπεσπούδαζον οἱ ἄγγελοι τὸν Λὼτ λέγοντες, ἀναστὰς λαβὲ τὴν γυναῖκά σου καὶ τὰς δύο θυγατέρας σου ἃς ἔχεις, καὶ ἔξελθε, ἵνα μὴ συναπόλῃ ταῖς ἀνομίαις τῆς πόλεως.
+# parallel_id = bible/gen-19-15
+1	ἡνίκα	ἡνίκα	ADV	_	_	4	advmod	_	Gloss=when|Ref=GEN_19.15
+2	δὲ	δέ	CCONJ	_	_	6	cc	_	Gloss=but,and,however|Ref=GEN_19.15
+3	ὄρθρος	ὄρθρος	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	4	obl:tmod	_	Gloss=dawn,early-morning|Ref=GEN_19.15
+4	ἐγίνετο	γίνομαι	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Mid,Pass	6	advcl	_	Gloss=to-become,come-to-be|Ref=GEN_19.15|SpaceAfter=No
+5	,	,	PUNCT	_	_	4	punct	_	Ref=GEN_19.15
+6	ἐπεσπούδαζον	ἐπισπουδάζω	VERB	_	Aspect=Imp|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-hurry|Ref=GEN_19.15
+7	οἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	8	det	_	Gloss=the|Ref=GEN_19.15
+8	ἄγγελοι	ἄγγελος	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	6	nsubj	_	Gloss=angel,messenger|Ref=GEN_19.15
+9	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	10	det	_	Gloss=the|Ref=GEN_19.15
+10	Λὼτ	Λώτ	PROPN	_	Case=Acc|Gender=Masc|Number=Sing	6	obj	_	Gloss=Lot|Ref=GEN_19.15
+11	λέγοντες	λέγω	VERB	_	Aspect=Imp|Case=Nom|Gender=Masc|Number=Plur|Tense=Pres|VerbForm=Part|Voice=Act	6	advcl	_	Gloss=to-say|Ref=GEN_19.15|SpaceAfter=No
+12	,	,	PUNCT	_	_	13	punct	_	Ref=GEN_19.15
+13	ἀναστὰς	ἀνίστημι	VERB	_	Aspect=Perf|Case=Nom|Gender=Masc|Number=Sing|VerbForm=Part|Voice=Act	11	ccomp	_	Gloss=to-rise-up|Ref=GEN_19.15
+14	λαβὲ	λαμβάνω	VERB	_	Aspect=Perf|Mood=Imp|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	13	parataxis	_	Gloss=to-take,receive|Ref=GEN_19.15
+15	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	16	det	_	Gloss=the|Ref=GEN_19.15
+16	γυναῖκά	γυνή	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	14	obj	_	Gloss=woman,wife|Ref=GEN_19.15
+17	σου	σύ	PRON	_	Case=Gen|Number=Sing|Person=2|PronType=Prs	16	nmod:poss	_	Gloss=you,your|Ref=GEN_19.15
+18	καὶ	καί	CCONJ	_	_	21	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.15
+19	τὰς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Plur|PronType=Art	21	det	_	Gloss=the|Ref=GEN_19.15
+20	δύο	δύο	NUM	_	Case=Acc,Gen,Nom|Gender=Fem,Masc,Neut|Number=Sing|NumType=Card	21	nummod	_	Gloss=two|Ref=GEN_19.15
+21	θυγατέρας	θυγάτηρ	NOUN	_	Case=Acc|Gender=Fem|Number=Plur	16	conj	_	Gloss=daughters|Ref=GEN_19.15
+22	σου	σύ	PRON	_	Case=Gen|Number=Sing|Person=2|PronType=Prs	21	nmod:poss	_	Gloss=you,your|Ref=GEN_19.15
+23	ἃς	ὅς	PRON	_	Case=Acc|Gender=Fem|Number=Plur|PronType=Rel	24	obj	_	Gloss=who,which|Ref=GEN_19.15
+24	ἔχεις	ἔχις	NOUN	_	Case=Acc,Nom|Gender=Masc|Number=Plur	21	acl:relcl	_	Gloss=to-have,hold|Ref=GEN_19.15|SpaceAfter=No
+25	,	,	PUNCT	_	_	26	punct	_	Ref=GEN_19.15
+26	καὶ	καί	CCONJ	_	_	27	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.15
+27	ἔξελθε	ἐξέρχομαι	VERB	_	Aspect=Perf|Mood=Imp|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	14	conj	_	Gloss=to-come/go-out|Ref=GEN_19.15|SpaceAfter=No
+28	,	,	PUNCT	_	_	29	punct	_	Ref=GEN_19.15
+29	ἵνα	ἵνα	SCONJ	_	_	31	mark	_	Gloss=in-order-that|Ref=GEN_19.15
+30	μὴ	μή	ADV	_	Polarity=Neg	31	advmod	_	Gloss=no,not|Ref=GEN_19.15
+31	συναπόλῃ	συναπολύω	VERB	_	Aspect=Perf|Mood=Sub|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Mid,Pass	27	advcl	_	Gloss=to-destroy-together-with|Ref=GEN_19.15
+32	ταῖς	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Fem|Number=Plur|PronType=Art	33	det	_	Gloss=the|Ref=GEN_19.15
+33	ἀνομίαις	ἀνομία	NOUN	_	Case=Dat|Gender=Fem|Number=Plur	31	iobj	_	Gloss=iniquities|Ref=GEN_19.15
+34	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	35	det	_	Gloss=the|Ref=GEN_19.15
+35	πόλεως	πόλις	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	33	nmod:poss	_	Gloss=city|Ref=GEN_19.15|SpaceAfter=No
+36	.	.	PUNCT	_	_	35	punct	_	Ref=GEN_19.15
+
+# sent_id = Septuagint-Genesis-19:16-grc
+# text = καὶ ἐταράχθησαν· καὶ ἐκράτησαν οἱ ἄγγελοι τῆς χειρὸς αὐτοῦ καὶ τῆς χειρὸς τῆς γυναικὸς αὐτοῦ καὶ τῶν χειρῶν τῶν δύο θυγατέρων αὐτοῦ ἐν τῷ φείσασθαι κύριον αὐτοῦ.
+# parallel_id = bible/gen-19-16
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.16
+2	ἐταράχθησαν	ταράσσω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	0	root	_	Gloss=to-disturb,agitate|Ref=GEN_19.16|SpaceAfter=No
+3	·	·	PUNCT	_	_	4	punct	_	Ref=GEN_19.16
+4	καὶ	καί	CCONJ	_	_	5	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.16
+5	ἐκράτησαν	κρατέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-seize,hold-on|Ref=GEN_19.16
+6	οἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	7	det	_	Gloss=the|Ref=GEN_19.16
+7	ἄγγελοι	ἄγγελος	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	5	nsubj	_	Gloss=angel,messenger|Ref=GEN_19.16
+8	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	9	det	_	Gloss=the|Ref=GEN_19.16
+9	χειρὸς	χείρ	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	5	obl	_	Gloss=hand|Ref=GEN_19.16
+10	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	9	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.16
+11	καὶ	καί	CCONJ	_	_	13	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.16
+12	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	13	det	_	Gloss=the|Ref=GEN_19.16
+13	χειρὸς	χείρ	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	9	conj	_	Gloss=hand|Ref=GEN_19.16
+14	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	15	det	_	Gloss=the|Ref=GEN_19.16
+15	γυναικὸς	γυνή	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	13	nmod:poss	_	Gloss=wife,woman|Ref=GEN_19.16
+16	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	15	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.16
+17	καὶ	καί	CCONJ	_	_	19	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.16
+18	τῶν	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Plur|PronType=Art	19	det	_	Gloss=the|Ref=GEN_19.16
+19	χειρῶν	χείρ	NOUN	_	Case=Gen|Gender=Fem|Number=Plur	9	conj	_	Gloss=hand|Ref=GEN_19.16
+20	τῶν	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Plur|PronType=Art	22	det	_	Gloss=the|Ref=GEN_19.16
+21	δύο	δύο	NUM	_	Case=Acc,Gen,Nom|Gender=Fem,Masc,Neut|Number=Sing|NumType=Card	22	nummod	_	Gloss=two|Ref=GEN_19.16
+22	θυγατέρων	θυγάτηρ	NOUN	_	Case=Gen|Gender=Fem|Number=Plur	19	nmod:poss	_	Gloss=daughters|Ref=GEN_19.16
+23	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	22	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.16
+24	ἐν	ἐν	ADP	_	_	26	case	_	Gloss=in,on,by,with,to|Outer=Yes|Ref=GEN_19.16
+25	τῷ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Masc,Neut|Number=Sing|PronType=Art	26	det	_	Gloss=the|Outer=Yes|Ref=GEN_19.16
+26	φείσασθαι	φείδομαι	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Mid	5	obl	_	Gloss=to-spare|Ref=GEN_19.16
+27	κύριον	κύριος	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	26	nsubj	_	Gloss=lord|Ref=GEN_19.16
+28	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	26	obl	_	Gloss=he,she,it,-self,same|Ref=GEN_19.16|SpaceAfter=No
+29	.	.	PUNCT	_	_	28	punct	_	Ref=GEN_19.16
+
+# sent_id = Septuagint-Genesis-19:17-grc
+# text = καὶ ἐγένετο ἡνίκα ἐξήγαγον αὐτοὺς ἔξω. καὶ εἶπαν σῴζων σῷζε τὴν σεαυτοῦ ψυχήν· μὴ περιβλέψῃς εἰς τὰ ὀπίσω μηδὲ στῇς ἐν πάσῃ τῇ περιχώρῳ· εἰς τὸ ὄρος σῴζου, μήποτε συμπαραλημφθῇς.
+# parallel_id = bible/gen-19-17
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.17
+2	ἐγένετο	γίνομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Mid	0	root	_	Gloss=to-become,come-to-be|Ref=GEN_19.17
+3	ἡνίκα	ἡνίκα	ADV	_	_	4	advmod	_	Gloss=when|Ref=GEN_19.17
+4	ἐξήγαγον	ἐξάγω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	advcl	_	Gloss=to-lead-out,bring-forth|Ref=GEN_19.17
+5	αὐτοὺς	αὐτός	PRON	_	Case=Acc|Gender=Masc|Number=Plur|PronType=Prs	4	obj	_	Gloss=he,she,it,-self,same|Ref=GEN_19.17
+6	ἔξω	ἔξω	ADV	_	_	4	advmod	_	Gloss=outside|Ref=GEN_19.17|SpaceAfter=No
+7	.	.	PUNCT	_	_	2	punct	_	Ref=GEN_19.17
+8	καὶ	καί	CCONJ	_	_	9	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.17
+9	εἶπαν	λέγω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-say|Ref=GEN_19.17
+10	σῴζων	σώζω	VERB	_	Aspect=Imp|Case=Nom|Gender=Masc|Number=Sing|Tense=Pres|VerbForm=Part|Voice=Act	11	advcl	_	Gloss=to-save|Ref=GEN_19.17
+11	σῷζε	σώζω	VERB	_	Aspect=Imp|Mood=Imp|Number=Sing|Person=2|Tense=Pres|VerbForm=Fin|Voice=Act	9	ccomp	_	Gloss=to-save|Ref=GEN_19.17
+12	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	14	det	_	Gloss=the|Ref=GEN_19.17
+13	σεαυτοῦ	σεαυτοῦ	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|Person=2|PronType=Prs|Reflex=Yes	14	nmod:poss	_	Gloss=yourself|Ref=GEN_19.17|Unknown=Pronoun,
+14	ψυχήν	ψυχή	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	11	obj	_	Gloss=soul|Ref=GEN_19.17|SpaceAfter=No
+15	·	·	PUNCT	_	_	16	punct	_	Ref=GEN_19.17
+16	μὴ	μή	ADV	_	Polarity=Neg	17	advmod	_	Gloss=no,not|Ref=GEN_19.17
+17	περιβλέψῃς	περιβλέπω	VERB	_	Aspect=Perf|Mood=Sub|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	11	parataxis	_	Gloss=to-look-around|Ref=GEN_19.17
+18	εἰς	εἰς	ADP	_	_	20	case	_	Gloss=into,unto,for|Ref=GEN_19.17
+19	τὰ	ὁ	DET	_	Case=Acc,Nom|Definite=Def|Gender=Neut|Number=Plur|PronType=Art	20	det	_	Gloss=the|Ref=GEN_19.17
+20	ὀπίσω	ὀπίσω	ADV	_	_	17	obl	_	Gloss=back|Ref=GEN_19.17
+21	μηδὲ	μηδέ	CCONJ	_	Polarity=Neg	22	cc	_	Gloss=and-not,but-not;-neither-…-nor|Ref=GEN_19.17
+22	στῇς	ἵστημι	VERB	_	Aspect=Perf|Mood=Sub|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	17	conj	_	Gloss=to-stand|Ref=GEN_19.17
+23	ἐν	ἐν	ADP	_	_	26	case	_	Gloss=in,on,by,with,to|Ref=GEN_19.17
+24	πάσῃ	πᾶς	ADJ	_	Case=Dat|Gender=Fem|Number=Sing	26	amod	_	Gloss=all,every|Ref=GEN_19.17
+25	τῇ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	26	det	_	Gloss=the|Ref=GEN_19.17
+26	περιχώρῳ	περίχωρος	ADJ	_	Case=Dat|Gender=Fem|Number=Sing	22	obl	_	Gloss=surrounding-region|Ref=GEN_19.17|SpaceAfter=No
+27	·	·	PUNCT	_	_	28	punct	_	Ref=GEN_19.17
+28	εἰς	εἰς	ADP	_	_	30	case	_	Gloss=into,unto,for|Ref=GEN_19.17
+29	τὸ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	30	det	_	Gloss=the|Ref=GEN_19.17
+30	ὄρος	ὄρος	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	31	obl	_	Gloss=mountain|Ref=GEN_19.17
+31	σῴζου	σώζω	VERB	_	Aspect=Imp|Mood=Imp|Number=Sing|Person=2|Tense=Pres|VerbForm=Fin|Voice=Mid,Pass	17	parataxis	_	Gloss=to-save|Ref=GEN_19.17|SpaceAfter=No
+32	,	,	PUNCT	_	_	33	punct	_	Ref=GEN_19.17
+33	μήποτε	μήποτε	ADV	_	_	34	advmod	_	Gloss=lest|Ref=GEN_19.17
+34	συμπαραλημφθῇς	συμπαραλαμβάνω	VERB	_	Aspect=Perf|Mood=Sub|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Pass	31	advcl	_	Gloss=to-take-along-with|Ref=GEN_19.17|SpaceAfter=No
+35	.	.	PUNCT	_	_	34	punct	_	Ref=GEN_19.17
+
+# sent_id = Septuagint-Genesis-19:18-grc
+# text = εἶπεν δὲ Λὼτ πρὸς αὐτούς, δέομαι, κύριε·
+# parallel_id = bible/gen-19-18
+1	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-say|Ref=GEN_19.18
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.18
+3	Λὼτ	Λώτ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	1	nsubj	_	Gloss=Lot|Ref=GEN_19.18
+4	πρὸς	πρός	ADP	_	_	5	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.18
+5	αὐτούς	αὐτός	PRON	_	Case=Acc|Gender=Masc|Number=Plur|PronType=Prs	1	obl	_	Gloss=he,she,it,-self,same|Ref=GEN_19.18|SpaceAfter=No
+6	,	,	PUNCT	_	_	7	punct	_	Ref=GEN_19.18
+7	δέομαι	δέομαι	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=1|Tense=Pres|VerbForm=Fin|Voice=Mid,Pass	1	ccomp	_	Gloss=to-request,pray|Ref=GEN_19.18|SpaceAfter=No
+8	,	,	PUNCT	_	_	9	punct	_	Ref=GEN_19.18
+9	κύριε	κύριος	NOUN	_	Case=Voc|Gender=Masc|Number=Sing	7	vocative	_	Gloss=lord|Ref=GEN_19.18|SpaceAfter=No
+10	·	·	PUNCT	_	_	9	punct	_	Ref=GEN_19.18
+
+# sent_id = Septuagint-Genesis-19:19-grc
+# text = ἐπειδὴ εὗρεν ὁ παῖς σου ἔλεος ἐναντίον σου καὶ ἐμεγάλυνας τὴν δικαιοσύνην σου, ὃ ποιεῖς ἐπ᾿ ἐμέ, τοῦ ζῆν τὴν ψυχήν μου, ἐγὼ δὲ οὐ δυνήσομαι διασωθῆναι εἰς τὸ ὄρος, μὴ καταλάβῃ με τὰ κακὰ καὶ ἀποθάνω,
+# parallel_id = bible/gen-19-19
+1	ἐπειδὴ	ἐπειδή	SCONJ	_	_	2	mark	_	Gloss=then,after-that|Ref=GEN_19.19
+2	εὗρεν	εὑρίσκω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-find|Ref=GEN_19.19
+3	ὁ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	4	det	_	Gloss=the;-oh|Ref=GEN_19.19
+4	παῖς	παῖς	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	2	nsubj	_	Gloss=child,servant|Ref=GEN_19.19
+5	σου	σύ	PRON	_	Case=Gen|Number=Sing|Person=2|PronType=Prs	4	nmod:poss	_	Gloss=you,your|Ref=GEN_19.19
+6	ἔλεος	ἔλεος	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	2	obj	_	Gloss=mercy|Ref=GEN_19.19
+7	ἐναντίον	ἐναντίον	ADP	_	_	8	case	_	Gloss=before|Ref=GEN_19.19
+8	σου	σύ	PRON	_	Case=Gen|Number=Sing|Person=2|PronType=Prs	2	obl	_	Gloss=you,your|Ref=GEN_19.19
+9	καὶ	καί	CCONJ	_	_	10	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.19
+10	ἐμεγάλυνας	μεγαλύνω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-enlarge|Ref=GEN_19.19
+11	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	12	det	_	Gloss=the|Ref=GEN_19.19
+12	δικαιοσύνην	δικαιοσύνη	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	10	obj	_	Gloss=righteousness|Ref=GEN_19.19
+13	σου	σύ	PRON	_	Case=Gen|Number=Sing|Person=2|PronType=Prs	12	nmod:poss	_	Gloss=you,your|Ref=GEN_19.19|SpaceAfter=No
+14	,	,	PUNCT	_	_	15	punct	_	Ref=GEN_19.19
+15	ὃ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	16	obj	_	Gloss=who,which,that|Ref=GEN_19.19
+16	ποιεῖς	ποιέω	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=2|Tense=Pres|VerbForm=Fin|Voice=Act	12	acl:relcl	_	Gloss=to-do,make|Ref=GEN_19.19
+17	ἐπ᾿	ἐπί	ADP	_	_	18	case	_	Gloss=upon,against|Ref=GEN_19.19
+18	ἐμέ	ἐγώ	PRON	_	Case=Acc|Number=Sing|Person=1|PronType=Prs	16	obl	_	Gloss=me|Ref=GEN_19.19|SpaceAfter=No
+19	,	,	PUNCT	_	_	20	punct	_	Ref=GEN_19.19
+20	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc,Neut|Number=Sing|PronType=Art	21	det	_	Gloss=the|Outer=Yes|Ref=GEN_19.19
+21	ζῆν	ζάω	VERB	_	Aspect=Imp|Tense=Pres|VerbForm=Inf|Voice=Act	16	obl	_	Gloss=to-live|Ref=GEN_19.19
+22	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	23	det	_	Gloss=the|Ref=GEN_19.19
+23	ψυχήν	ψυχή	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	21	obj	_	Gloss=soul|Ref=GEN_19.19
+24	μου	ἐγώ	PRON	_	Case=Gen|Number=Sing|Person=1|PronType=Prs	23	nmod:poss	_	Gloss=me,my|Ref=GEN_19.19|SpaceAfter=No
+25	,	,	PUNCT	_	_	26	punct	_	Ref=GEN_19.19
+26	ἐγὼ	ἐγώ	PRON	_	Case=Nom|Number=Sing|Person=1|PronType=Prs	29	nsubj	_	Gloss=I|Ref=GEN_19.19
+27	δὲ	δέ	CCONJ	_	_	29	cc	_	Gloss=but,and,however|Ref=GEN_19.19
+28	οὐ	οὐ	ADV	_	Polarity=Neg	29	advmod	_	Gloss=no,not|Ref=GEN_19.19
+29	δυνήσομαι	δύναμαι	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=1|Tense=Fut|VerbForm=Fin|Voice=Mid	2	conj	_	Gloss=to-be-able|Ref=GEN_19.19
+30	διασωθῆναι	διασῴζω	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Pass	29	xcomp	_	Gloss=to-preserve,escape|Ref=GEN_19.19
+31	εἰς	εἰς	ADP	_	_	33	case	_	Gloss=into,unto,for|Ref=GEN_19.19
+32	τὸ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	33	det	_	Gloss=the|Ref=GEN_19.19
+33	ὄρος	ὄρος	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	30	obl	_	Gloss=mountain|Ref=GEN_19.19|SpaceAfter=No
+34	,	,	PUNCT	_	_	35	punct	_	Ref=GEN_19.19
+35	μὴ	μή	ADV	_	Polarity=Neg	36	advmod	_	Gloss=no,not|Ref=GEN_19.19
+36	καταλάβῃ	καταλαμβάνω	VERB	_	Aspect=Perf|Mood=Sub|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	29	parataxis	_	Gloss=to-pull-down,overtake|Ref=GEN_19.19
+37	με	ἐγώ	PRON	_	Case=Acc|Number=Sing|Person=1|PronType=Prs	36	obj	_	Gloss=me|Ref=GEN_19.19
+38	τὰ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Neut|Number=Plur|PronType=Art	39	det	_	Gloss=the|Ref=GEN_19.19
+39	κακὰ	κακός	ADJ	_	Case=Nom|Gender=Neut|Number=Plur	36	nsubj	_	Gloss=evil,bad|Ref=GEN_19.19
+40	καὶ	καί	CCONJ	_	_	41	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.19
+41	ἀποθάνω	ἀποθνήσκω	VERB	_	Aspect=Perf|Mood=Sub|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	36	conj	_	Gloss=to-die|Ref=GEN_19.19|SpaceAfter=No
+42	,	,	PUNCT	_	_	41	punct	_	Ref=GEN_19.19
+
+# sent_id = Septuagint-Genesis-19:20-grc
+# text = ἰδοὺ ἡ πόλις αὕτη ἐγγὺς τοῦ καταφυγεῖν με ἐκεῖ, ἥ ἐστιν μικρά, ἐκεῖ σωθήσομαι· οὐ μικρά ἐστιν; καὶ ζήσεται ἡ ψυχή μου.
+# parallel_id = bible/gen-19-20
+1	ἰδοὺ	ἰδού	INTJ	_	_	5	discourse	_	Gloss=look!,behold!|Ref=GEN_19.20
+2	ἡ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	3	det	_	Gloss=the|Ref=GEN_19.20
+3	πόλις	πόλις	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	5	nsubj	_	Gloss=city|Ref=GEN_19.20
+4	αὕτη	οὗτος	PRON	_	Case=Nom|Gender=Fem|Number=Sing|PronType=Dem	3	det	_	Gloss=this|Ref=GEN_19.20
+5	ἐγγὺς	ἐγγύς	ADV	_	_	0	root	_	Gloss=near|Ref=GEN_19.20
+6	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc,Neut|Number=Sing|PronType=Art	7	det	_	Gloss=the|Outer=Yes|Ref=GEN_19.20
+7	καταφυγεῖν	καταφεύγω	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Act	5	obl	_	Gloss=to-flee,escape|Ref=GEN_19.20
+8	με	ἐγώ	PRON	_	Case=Acc|Number=Sing|Person=1|PronType=Prs	7	nsubj	_	Gloss=me|Ref=GEN_19.20
+9	ἐκεῖ	ἐκεῖ	ADV	_	_	7	advmod	_	Gloss=there|Ref=GEN_19.20|SpaceAfter=No
+10	,	,	PUNCT	_	_	11	punct	_	Ref=GEN_19.20
+11	ἥ	ὅς	PRON	_	Case=Nom|Gender=Fem|Number=Sing|PronType=Rel	13	nsubj	_	Gloss=who,which,that;-+enclitic=the|Ref=GEN_19.20
+12	ἐστιν	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	13	cop	_	Gloss=to-be|Ref=GEN_19.20
+13	μικρά	μικρός	ADJ	_	Case=Acc,Nom|Gender=Neut|Number=Plur	5	conj	_	Gloss=small,little|Ref=GEN_19.20|SpaceAfter=No
+14	,	,	PUNCT	_	_	15	punct	_	Ref=GEN_19.20
+15	ἐκεῖ	ἐκεῖ	ADV	_	_	16	advmod	_	Gloss=there|Ref=GEN_19.20
+16	σωθήσομαι	σώζω	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=1|Tense=Fut|VerbForm=Fin|Voice=Pass	5	parataxis	_	Gloss=to-save|Ref=GEN_19.20|SpaceAfter=No
+17	·	·	PUNCT	_	_	18	punct	_	Ref=GEN_19.20
+18	οὐ	οὐ	ADV	_	Polarity=Neg	19	advmod	_	Gloss=no,not|Ref=GEN_19.20
+19	μικρά	μικρός	ADJ	_	Case=Acc,Nom|Gender=Neut|Number=Plur	16	parataxis	_	Gloss=small,little|Ref=GEN_19.20
+20	ἐστιν	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	19	cop	_	Gloss=to-be|Ref=GEN_19.20|SpaceAfter=No
+21	;	;	PUNCT	_	_	22	punct	_	Ref=GEN_19.20
+22	καὶ	καί	CCONJ	_	_	23	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.20
+23	ζήσεται	ζάω	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Fut|VerbForm=Fin|Voice=Mid	16	conj	_	Gloss=to-live|Ref=GEN_19.20
+24	ἡ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	25	det	_	Gloss=the|Ref=GEN_19.20
+25	ψυχή	ψυχή	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	23	nsubj	_	Gloss=soul|Ref=GEN_19.20
+26	μου	ἐγώ	PRON	_	Case=Gen|Number=Sing|Person=1|PronType=Prs	25	nmod:poss	_	Gloss=me,my|Ref=GEN_19.20|SpaceAfter=No
+27	.	.	PUNCT	_	_	26	punct	_	Ref=GEN_19.20
+
+# sent_id = Septuagint-Genesis-19:21-grc
+# text = καὶ εἶπεν αὐτῷ, ἰδοὺ ἐθαύμασά σου τὸ πρόσωπον καὶ ἐπὶ τῷ ῥήματι τούτῳ τοῦ μὴ καταστρέψαι τὴν πόλιν, περὶ ἧς ἐλάλησας·
+# parallel_id = bible/gen-19-21
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.21
+2	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-say|Ref=GEN_19.21
+3	αὐτῷ	αὐτός	PRON	_	Case=Dat|Gender=Masc,Neut|Number=Sing|PronType=Prs	2	iobj	_	Gloss=he,she,it,-self,same|Ref=GEN_19.21|SpaceAfter=No
+4	,	,	PUNCT	_	_	5	punct	_	Ref=GEN_19.21
+5	ἰδοὺ	ἰδού	INTJ	_	_	6	discourse	_	Gloss=look!,behold!|Ref=GEN_19.21
+6	ἐθαύμασά	θαυμάζω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	2	ccomp	_	Gloss=to-admire,wonder|Ref=GEN_19.21
+7	σου	σύ	PRON	_	Case=Gen|Number=Sing|Person=2|PronType=Prs	9	nmod:poss	_	Gloss=you,your|Ref=GEN_19.21
+8	τὸ	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	9	det	_	Gloss=the|Ref=GEN_19.21
+9	πρόσωπον	πρόσωπον	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	6	obj	_	Gloss=face|Ref=GEN_19.21
+10	καὶ	καί	CCONJ	_	_	13	advmod	_	Gloss=and,also,even,then,next|Ref=GEN_19.21
+11	ἐπὶ	ἐπί	ADP	_	_	13	case	_	Gloss=on,upon,against|Ref=GEN_19.21
+12	τῷ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	13	det	_	Gloss=the|Ref=GEN_19.21
+13	ῥήματι	ῥῆμα	NOUN	_	Case=Dat|Gender=Neut|Number=Sing	6	obl	_	Gloss=word|Ref=GEN_19.21
+14	τούτῳ	οὗτος	PRON	_	Case=Dat|Gender=Masc,Neut|Number=Sing|PronType=Dem	13	det	_	Gloss=this|Ref=GEN_19.21
+15	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc,Neut|Number=Sing|PronType=Art	17	det	_	Gloss=the|Outer=Yes|Ref=GEN_19.21
+16	μὴ	μή	ADV	_	Polarity=Neg	17	advmod	_	Gloss=no,not|Ref=GEN_19.21
+17	καταστρέψαι	καταστρέφω	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Act	6	obl	_	Gloss=to-overthrow|Ref=GEN_19.21
+18	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	19	det	_	Gloss=the|Ref=GEN_19.21
+19	πόλιν	πόλις	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	17	obj	_	Gloss=city|Ref=GEN_19.21|SpaceAfter=No
+20	,	,	PUNCT	_	_	21	punct	_	Ref=GEN_19.21
+21	περὶ	περί	ADP	_	_	22	case	_	Gloss=+G=about,concerning;-+A=around,about|Ref=GEN_19.21
+22	ἧς	ὅς	PRON	_	Case=Gen|Gender=Fem|Number=Sing|PronType=Rel	23	obl	_	Gloss=who,which,that|Ref=GEN_19.21
+23	ἐλάλησας	λαλέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	19	acl:relcl	_	Gloss=to-speak,talk|Ref=GEN_19.21|SpaceAfter=No
+24	·	·	PUNCT	_	_	23	punct	_	Ref=GEN_19.21
+
+# sent_id = Septuagint-Genesis-19:22-grc
+# text = σπεῦσον οὖν τοῦ σωθῆναι ἐκεῖ· οὐ γὰρ δυνήσομαι ποιῆσαι πρᾶγμα ἕως τοῦ σὲ εἰσελθεῖν ἐκεῖ. διὰ τοῦτο ἐκάλεσεν τὸ ὄνομα τῆς πόλεως ἐκείνης Σηγώρ.
+# parallel_id = bible/gen-19-22
+1	σπεῦσον	σπεύδω	VERB	_	Aspect=Perf|Mood=Imp|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-hurry|Ref=GEN_19.22
+2	οὖν	οὖν	ADV	_	_	1	advmod	_	Gloss=now,therefore|Ref=GEN_19.22
+3	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc,Neut|Number=Sing|PronType=Art	4	det	_	Gloss=the|Outer=Yes|Ref=GEN_19.22
+4	σωθῆναι	σώζω	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Pass	1	obl	_	Gloss=to-save|Ref=GEN_19.22
+5	ἐκεῖ	ἐκεῖ	ADV	_	_	4	advmod	_	Gloss=there|Ref=GEN_19.22|SpaceAfter=No
+6	·	·	PUNCT	_	_	7	punct	_	Ref=GEN_19.22
+7	οὐ	οὐ	ADV	_	Polarity=Neg	9	advmod	_	Gloss=no,not|Ref=GEN_19.22
+8	γὰρ	γάρ	SCONJ	_	_	9	mark	_	Gloss=for,because|Ref=GEN_19.22
+9	δυνήσομαι	δύναμαι	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=1|Tense=Fut|VerbForm=Fin|Voice=Mid	1	advcl	_	Gloss=to-be-able|Ref=GEN_19.22
+10	ποιῆσαι	ποιέω	VERB	_	Aspect=Perf|Mood=Opt|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	9	xcomp	_	Gloss=to-do,make|Ref=GEN_19.22
+11	πρᾶγμα	πρᾶγμα	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	10	obj	_	Gloss=thing,deed,matter|Ref=GEN_19.22
+12	ἕως	ἕως	ADP	_	_	15	case	_	Gloss=as-far-as,until,up-to|Outer=Yes|Ref=GEN_19.22
+13	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc,Neut|Number=Sing|PronType=Art	15	det	_	Gloss=the|Outer=Yes|Ref=GEN_19.22
+14	σὲ	σέ	PRON	_	Case=Acc|Number=Sing|Person=2|PronType=Prs	15	nsubj	_	Gloss=you|Ref=GEN_19.22
+15	εἰσελθεῖν	εἰσέρχομαι	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Act	9	obl	_	Gloss=to-enter|Ref=GEN_19.22
+16	ἐκεῖ	ἐκεῖ	ADV	_	_	15	advmod	_	Gloss=there|Ref=GEN_19.22|SpaceAfter=No
+17	.	.	PUNCT	_	_	1	punct	_	Ref=GEN_19.22
+18	διὰ	διά	ADP	_	_	19	case	_	Gloss=+G=through,by;-+A=because-of|Ref=GEN_19.22
+19	τοῦτο	οὗτος	PRON	_	Case=Nom|Gender=Neut|Number=Sing|PronType=Dem	20	obl	_	Gloss=this|Ref=GEN_19.22
+20	ἐκάλεσεν	καλέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	parataxis	_	Gloss=to-call|Ref=GEN_19.22
+21	τὸ	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	22	det	_	Gloss=the|Ref=GEN_19.22
+22	ὄνομα	ὄνομα	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	20	obj	_	Gloss=name|Ref=GEN_19.22
+23	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	24	det	_	Gloss=the|Ref=GEN_19.22
+24	πόλεως	πόλις	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	22	nmod:poss	_	Gloss=city|Ref=GEN_19.22
+25	ἐκείνης	ἐκεῖνος	PRON	_	Case=Gen|Gender=Fem|Number=Sing|PronType=Dem	24	det	_	Gloss=that|Ref=GEN_19.22
+26	Σηγώρ	Σηγώρ	PROPN	_	Number=Sing	20	xcomp	_	Gloss=Zoar|Ref=GEN_19.22|SpaceAfter=No
+27	.	.	PUNCT	_	_	26	punct	_	Ref=GEN_19.22
+
+# sent_id = Septuagint-Genesis-19:23-grc
+# text = ὁ ἥλιος ἐξῆλθεν ἐπὶ τὴν γῆν, καὶ Λὼτ εἰσῆλθεν εἰς Σηγώρ,
+# parallel_id = bible/gen-19-23
+1	ὁ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	2	det	_	Gloss=the;-oh|Ref=GEN_19.23
+2	ἥλιος	ἥλιος	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	3	nsubj	_	Gloss=sun|Ref=GEN_19.23
+3	ἐξῆλθεν	ἐξέρχομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-go-out,come-out|Ref=GEN_19.23
+4	ἐπὶ	ἐπί	ADP	_	_	6	case	_	Gloss=on,upon,against|Ref=GEN_19.23
+5	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	6	det	_	Gloss=the|Ref=GEN_19.23
+6	γῆν	γῆ	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	3	obl	_	Gloss=earth|Ref=GEN_19.23|SpaceAfter=No
+7	,	,	PUNCT	_	_	8	punct	_	Ref=GEN_19.23
+8	καὶ	καί	CCONJ	_	_	10	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.23
+9	Λὼτ	Λώτ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	10	nsubj	_	Gloss=Lot|Ref=GEN_19.23
+10	εἰσῆλθεν	εἰσέρχομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	3	conj	_	Gloss=to-enter|Ref=GEN_19.23
+11	εἰς	εἰς	ADP	_	_	12	case	_	Gloss=into,unto,for|Ref=GEN_19.23
+12	Σηγώρ	Σηγώρ	PROPN	_	Case=Acc|Number=Sing	10	obl	_	Gloss=Zoar|Ref=GEN_19.23|SpaceAfter=No
+13	,	,	PUNCT	_	_	12	punct	_	Ref=GEN_19.23
+
+# sent_id = Septuagint-Genesis-19:24-grc
+# text = καὶ κύριος ἔβρεξεν ἐπὶ Σόδομα καὶ Γόμορρα θεῖον καὶ πῦρ παρὰ κυρίου ἐκ τοῦ οὐρανοῦ
+# parallel_id = bible/gen-19-24
+1	καὶ	καί	CCONJ	_	_	3	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.24
+2	κύριος	κύριος	ADJ	_	Case=Nom|Gender=Masc|Number=Sing	3	nsubj	_	Gloss=lord|Ref=GEN_19.24
+3	ἔβρεξεν	βρέχω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-rain,moisten|Ref=GEN_19.24
+4	ἐπὶ	ἐπί	ADP	_	_	5	case	_	Gloss=on,upon,against|Ref=GEN_19.24
+5	Σόδομα	Σόδομα	PROPN	_	Gender=Neut|Number=Sing	3	obl	_	Gloss=Sodom|Ref=GEN_19.24
+6	καὶ	καί	CCONJ	_	_	7	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.24
+7	Γόμορρα	Γόμορρα	PROPN	_	Gender=Fem|Number=Sing	5	conj	_	Gloss=Gomorrah|Ref=GEN_19.24
+8	θεῖον	θεῖος	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	3	obj	_	Gloss=sulphur|Ref=GEN_19.24
+9	καὶ	καί	CCONJ	_	_	10	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.24
+10	πῦρ	πῦρ	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	8	conj	_	Gloss=fire|Ref=GEN_19.24
+11	παρὰ	παρά	ADP	_	_	12	case	_	Gloss=+G=from;-+D=before;-+A=beside,along|Ref=GEN_19.24
+12	κυρίου	κύριος	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	3	obl	_	Gloss=lord|Ref=GEN_19.24
+13	ἐκ	ἐκ	ADP	_	_	15	case	_	Gloss=out,out-of|Ref=GEN_19.24
+14	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	15	det	_	Gloss=the|Ref=GEN_19.24
+15	οὐρανοῦ	οὐρανός	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	3	obl	_	Gloss=heaven,sky|Ref=GEN_19.24
+
+# sent_id = Septuagint-Genesis-19:25-grc
+# text = καὶ κατέστρεψεν τὰς πόλεις ταύτας καὶ πᾶσαν τὴν περίοικον καὶ πάντας τοὺς κατοικοῦντας ἐν ταῖς πόλεσιν καὶ πάντα τὰ ἀνατέλλοντα ἐκ τῆς γῆς.
+# parallel_id = bible/gen-19-25
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.25
+2	κατέστρεψεν	καταστρέφω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-overthrow|Ref=GEN_19.25
+3	τὰς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Plur|PronType=Art	4	det	_	Gloss=the|Ref=GEN_19.25
+4	πόλεις	πόλις	NOUN	_	Case=Acc|Gender=Fem|Number=Plur	2	obj	_	Gloss=cities|Ref=GEN_19.25
+5	ταύτας	οὗτος	PRON	_	Case=Acc|Gender=Fem|Number=Plur|PronType=Dem	4	det	_	Gloss=those|Ref=GEN_19.25
+6	καὶ	καί	CCONJ	_	_	9	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.25
+7	πᾶσαν	πᾶς	ADJ	_	Case=Acc|Gender=Fem|Number=Sing	9	amod	_	Gloss=every,all|Ref=GEN_19.25
+8	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	9	det	_	Gloss=the|Ref=GEN_19.25
+9	περίοικον	περίοικος	ADJ	_	Case=Nom|Gender=Neut|Number=Sing	4	conj	_	Gloss=surrounding-area|Ref=GEN_19.25
+10	καὶ	καί	CCONJ	_	_	11	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.25
+11	πάντας	πᾶς	ADJ	_	Case=Acc|Gender=Masc|Number=Plur	4	conj	_	Gloss=all|Ref=GEN_19.25
+12	τοὺς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	13	nsubj	_	Gloss=the|Ref=GEN_19.25
+13	κατοικοῦντας	κατοικέω	VERB	_	Aspect=Imp|Case=Acc|Gender=Masc|Number=Plur|Tense=Pres|VerbForm=Part|Voice=Act	11	acl:relcl	_	Gloss=to-dwell|Ref=GEN_19.25
+14	ἐν	ἐν	ADP	_	_	16	case	_	Gloss=in,on,by,with,to|Ref=GEN_19.25
+15	ταῖς	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Fem|Number=Plur|PronType=Art	16	det	_	Gloss=the|Ref=GEN_19.25
+16	πόλεσιν	πόλις	NOUN	_	Case=Dat|Gender=Fem|Number=Plur	13	obl	_	Gloss=cities|Ref=GEN_19.25
+17	καὶ	καί	CCONJ	_	_	18	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.25
+18	πάντα	πᾶς	ADJ	_	Case=Acc|Gender=Masc|Number=Sing	4	conj	_	Gloss=all,every|Ref=GEN_19.25
+19	τὰ	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Neut|Number=Plur|PronType=Art	20	nsubj	_	Gloss=the|Ref=GEN_19.25
+20	ἀνατέλλοντα	ἀνατέλλω	VERB	_	Aspect=Imp|Case=Acc|Gender=Neut|Number=Plur|Tense=Pres|VerbForm=Part|Voice=Act	18	acl:relcl	_	Gloss=to-arise,spring-up|Ref=GEN_19.25
+21	ἐκ	ἐκ	ADP	_	_	23	case	_	Gloss=out,out-of|Ref=GEN_19.25
+22	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	23	det	_	Gloss=the|Ref=GEN_19.25
+23	γῆς	γῆ	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	20	obl	_	Gloss=earth,land|Ref=GEN_19.25|SpaceAfter=No
+24	.	.	PUNCT	_	_	23	punct	_	Ref=GEN_19.25
+
+# sent_id = Septuagint-Genesis-19:26-grc
+# text = καὶ ἐπέβλεψεν ἡ γυνὴ αὐτοῦ εἰς τὰ ὀπίσω καὶ ἐγένετο στήλη ἁλός.
+# parallel_id = bible/gen-19-26
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.26
+2	ἐπέβλεψεν	ἐπιβλέπω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-look-upon|Ref=GEN_19.26
+3	ἡ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	4	det	_	Gloss=the|Ref=GEN_19.26
+4	γυνὴ	γυνή	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	2	nsubj	_	Gloss=woman,wife|Ref=GEN_19.26
+5	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	4	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.26
+6	εἰς	εἰς	ADP	_	_	8	case	_	Gloss=into,unto,for|Ref=GEN_19.26
+7	τὰ	ὁ	DET	_	Case=Acc,Nom|Definite=Def|Gender=Neut|Number=Plur|PronType=Art	8	det	_	Gloss=the|Ref=GEN_19.26
+8	ὀπίσω	ὀπίσω	ADV	_	_	2	obl	_	Gloss=back|Ref=GEN_19.26
+9	καὶ	καί	CCONJ	_	_	10	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.26
+10	ἐγένετο	γίνομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Mid	2	conj	_	Gloss=to-become,come-to-be|Ref=GEN_19.26
+11	στήλη	στήλη	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	10	xcomp	_	Gloss=pillar,monument|Ref=GEN_19.26
+12	ἁλός	ἅλς	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	11	nmod:poss	_	Gloss=salt|Ref=GEN_19.26|SpaceAfter=No
+13	.	.	PUNCT	_	_	12	punct	_	Ref=GEN_19.26
+
+# sent_id = Septuagint-Genesis-19:27-grc
+# text = ὤρθρισεν δὲ Ἁβραὰμ τὸ πρωῒ εἰς τὸν τόπον, οὗ εἱστήκει ἐναντίον κυρίου,
+# parallel_id = bible/gen-19-27
+1	ὤρθρισεν	ὀρθρίζω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-arise-early|Ref=GEN_19.27
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.27
+3	Ἁβραὰμ	Ἁβραάμ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	1	nsubj	_	Gloss=Abraham|Ref=GEN_19.27
+4	τὸ	ὁ	DET	_	Case=Acc,Nom|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	5	det	_	Gloss=the|Ref=GEN_19.27
+5	πρωῒ	πρωΐ	ADV	_	_	1	obl:tmod	_	Gloss=morning,dawn|Ref=GEN_19.27
+6	εἰς	εἰς	ADP	_	_	8	case	_	Gloss=into,unto,for|Ref=GEN_19.27
+7	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	8	det	_	Gloss=the|Ref=GEN_19.27
+8	τόπον	τόπος	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	1	obl	_	Gloss=place|Ref=GEN_19.27|SpaceAfter=No
+9	,	,	PUNCT	_	_	10	punct	_	Ref=GEN_19.27
+10	οὗ	ὅς	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Rel	11	obl	_	Gloss=where;-who,which,that|Ref=GEN_19.27
+11	εἱστήκει	ἵστημι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Pqp|VerbForm=Fin|Voice=Act	8	advcl:relcl	_	Gloss=to-stand|Ref=GEN_19.27
+12	ἐναντίον	ἐναντίον	ADP	_	_	13	case	_	Gloss=before|Ref=GEN_19.27
+13	κυρίου	κύριος	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	11	obl	_	Gloss=lord|Ref=GEN_19.27|SpaceAfter=No
+14	,	,	PUNCT	_	_	13	punct	_	Ref=GEN_19.27
+
+# sent_id = Septuagint-Genesis-19:28-grc
+# text = καὶ ἐπέβλεψεν ἐπὶ πρόσωπον Σοδόμων καὶ Γομόρρας καὶ ἐπὶ πρόσωπον τῆς γῆς τῆς περιχώρου καὶ εἶδεν, καὶ ἰδοὺ ἀνέβαινεν φλὸξ τῆς γῆς ὡσεὶ ἀτμὶς καμίνου.
+# parallel_id = bible/gen-19-28
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.28
+2	ἐπέβλεψεν	ἐπιβλέπω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-look-upon|Ref=GEN_19.28
+3	ἐπὶ	ἐπί	ADP	_	_	4	case	_	Gloss=on,upon,against|Ref=GEN_19.28
+4	πρόσωπον	πρόσωπον	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	2	obl	_	Gloss=face|Ref=GEN_19.28
+5	Σοδόμων	Σόδομα	PROPN	_	Case=Gen|Gender=Neut|Number=Plur	4	nmod:poss	_	Gloss=Sodom|Ref=GEN_19.28
+6	καὶ	καί	CCONJ	_	_	7	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.28
+7	Γομόρρας	Γόμορρα	PROPN	_	Gender=Fem|Number=Sing	5	conj	_	Gloss=Gomorrah|Ref=GEN_19.28
+8	καὶ	καί	CCONJ	_	_	10	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.28
+9	ἐπὶ	ἐπί	ADP	_	_	10	case	_	Gloss=on,upon,against|Ref=GEN_19.28
+10	πρόσωπον	πρόσωπον	NOUN	_	Case=Nom|Gender=Neut|Number=Sing	4	conj	_	Gloss=face|Ref=GEN_19.28
+11	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	12	det	_	Gloss=the|Ref=GEN_19.28
+12	γῆς	γῆ	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	10	nmod:poss	_	Gloss=earth,land|Ref=GEN_19.28
+13	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	14	det	_	Gloss=the|Ref=GEN_19.28
+14	περιχώρου	περίχωρος	ADJ	_	Case=Gen|Gender=Fem|Number=Sing	12	amod	_	Gloss=surrounding-country|Ref=GEN_19.28
+15	καὶ	καί	CCONJ	_	_	16	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.28
+16	εἶδεν	ὁράω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-see,behold|Ref=GEN_19.28|SpaceAfter=No
+17	,	,	PUNCT	_	_	18	punct	_	Ref=GEN_19.28
+18	καὶ	καί	CCONJ	_	_	20	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.28
+19	ἰδοὺ	ἰδού	INTJ	_	_	20	discourse	_	Gloss=look!,behold!|Ref=GEN_19.28
+20	ἀνέβαινεν	ἀναβαίνω	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-ascend,mount|Ref=GEN_19.28
+21	φλὸξ	φλόξ	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	20	nsubj	_	Gloss=flame|Ref=GEN_19.28
+22	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	23	det	_	Gloss=the|Ref=GEN_19.28
+23	γῆς	γῆ	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	21	nmod:poss	_	Gloss=earth,land|Ref=GEN_19.28
+24	ὡσεὶ	ὡσεί	ADV	_	_	25	case	_	Gloss=similarly,as-if,about|Ref=GEN_19.28
+25	ἀτμὶς	ἀτμίς	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	20	obl	_	Gloss=vapour,steam|Ref=GEN_19.28
+26	καμίνου	κάμινος	NOUN	_	Case=Gen|Gender=Fem,Masc|Number=Sing	25	nmod:poss	_	Gloss=furnace|Ref=GEN_19.28|SpaceAfter=No
+27	.	.	PUNCT	_	_	26	punct	_	Ref=GEN_19.28
+
+# sent_id = Septuagint-Genesis-19:29-grc
+# text = καὶ ἐγένετο ἐν τῷ ἐκτρῖψαι κύριον πάσας τὰς πόλεις τῆς περιοίκου ἐμνήσθη ὁ θεὸς τοῦ Ἁβραὰμ καὶ ἐξαπέστειλεν τὸν Λὼτ ἐκ μέσου τῆς καταστροφῆς ἐν τῷ καταστρέψαι κύριον τὰς πόλεις, ἐν αἷς κατῴκει ἐν αὐταῖς Λώτ.
+# parallel_id = bible/gen-19-29
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.29
+2	ἐγένετο	γίνομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Mid	0	root	_	Gloss=to-become,come-to-be|Ref=GEN_19.29
+3	ἐν	ἐν	ADP	_	_	5	case	_	Gloss=in,on,by,with,to|Outer=Yes|Ref=GEN_19.29
+4	τῷ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Masc,Neut|Number=Sing|PronType=Art	5	det	_	Gloss=the|Outer=Yes|Ref=GEN_19.29
+5	ἐκτρῖψαι	ἐκτρίβω	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Act	2	obl	_	Gloss=to-wipe-out|Ref=GEN_19.29
+6	κύριον	κύριος	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	5	nsubj	_	Gloss=lord|Ref=GEN_19.29
+7	πάσας	πᾶς	ADJ	_	Case=Acc|Gender=Fem|Number=Plur	9	amod	_	Gloss=all,every|Ref=GEN_19.29
+8	τὰς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Plur|PronType=Art	9	det	_	Gloss=the|Ref=GEN_19.29
+9	πόλεις	πόλις	NOUN	_	Case=Acc|Gender=Fem|Number=Plur	5	obj	_	Gloss=cities|Ref=GEN_19.29
+10	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	11	det	_	Gloss=the|Ref=GEN_19.29
+11	περιοίκου	περίοικος	ADJ	_	Case=Gen|Gender=Fem|Number=Sing	9	nmod:poss	_	Gloss=surrounding-area|Ref=GEN_19.29
+12	ἐμνήσθη	μιμνήσκω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	2	conj	_	Gloss=to-remember|Ref=GEN_19.29
+13	ὁ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	14	det	_	Gloss=the;-oh|Ref=GEN_19.29
+14	θεὸς	θεός	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	12	nsubj:pass	_	Gloss=god|Ref=GEN_19.29
+15	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	16	det	_	Gloss=the|Ref=GEN_19.29
+16	Ἁβραὰμ	Ἁβραάμ	PROPN	_	Case=Gen|Gender=Masc|Number=Sing	12	obl	_	Gloss=Abraham|Ref=GEN_19.29
+17	καὶ	καί	CCONJ	_	_	18	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.29
+18	ἐξαπέστειλεν	ἐξαποστέλλω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-send-away,send-forth|Ref=GEN_19.29
+19	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	20	det	_	Gloss=the|Ref=GEN_19.29
+20	Λὼτ	Λώτ	PROPN	_	Case=Acc|Gender=Masc|Number=Sing	18	obj	_	Gloss=Lot|Ref=GEN_19.29
+21	ἐκ	ἐκ	ADP	_	_	24	case	_	Gloss=out,out-of|Ref=GEN_19.29
+22	μέσου	μέσος	ADJ	_	Case=Gen|Gender=Masc,Neut|Number=Sing	24	amod	_	Gloss=middle,midst|Ref=GEN_19.29
+23	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	24	det	_	Gloss=the|Ref=GEN_19.29
+24	καταστροφῆς	καταστροφή	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	18	obl	_	Gloss=overthrow|Ref=GEN_19.29
+25	ἐν	ἐν	ADP	_	_	27	case	_	Gloss=in,on,by,with,to|Outer=Yes|Ref=GEN_19.29
+26	τῷ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Masc,Neut|Number=Sing|PronType=Art	27	det	_	Gloss=the|Outer=Yes|Ref=GEN_19.29
+27	καταστρέψαι	καταστρέφω	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Act	18	obl	_	Gloss=to-overthrow|Ref=GEN_19.29
+28	κύριον	κύριος	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	27	nsubj	_	Gloss=lord|Ref=GEN_19.29
+29	τὰς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Plur|PronType=Art	30	det	_	Gloss=the|Ref=GEN_19.29
+30	πόλεις	πόλις	NOUN	_	Case=Acc|Gender=Fem|Number=Plur	27	obj	_	Gloss=cities|Ref=GEN_19.29|SpaceAfter=No
+31	,	,	PUNCT	_	_	32	punct	_	Ref=GEN_19.29
+32	ἐν	ἐν	ADP	_	_	33	case	_	Gloss=in,on,by,with,to|Ref=GEN_19.29
+33	αἷς	ὅς	PRON	_	Case=Dat|Gender=Fem|Number=Plur|PronType=Rel	34	obl	_	Gloss=whom,which|Ref=GEN_19.29
+34	κατῴκει	κατοικέω	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	30	advcl:relcl	_	Gloss=to-dwell|Ref=GEN_19.29
+35	ἐν	ἐν	ADP	_	_	36	case	_	Gloss=in,on,by,with,to|Ref=GEN_19.29
+36	αὐταῖς	αὐτός	PRON	_	Case=Dat|Gender=Fem|Number=Plur|PronType=Prs	34	obl	_	Gloss=she,-self,same|Ref=GEN_19.29
+37	Λώτ	Λώτ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	34	nsubj	_	Gloss=Lot|Ref=GEN_19.29|SpaceAfter=No
+38	.	.	PUNCT	_	_	37	punct	_	Ref=GEN_19.29
+
+# sent_id = Septuagint-Genesis-19:30-grc
+# text = ἀνέβη δὲ Λὼτ ἐκ Σηγὼρ καὶ ἐκάθητο ἐν τῷ ὄρει καὶ αἱ δύο θυγατέρες αὐτοῦ μετ᾿ αὐτοῦ· ἐφοβήθη γὰρ κατοικῆσαι ἐν Σηγώρ. καὶ ᾤκησεν ἐν τῷ σπηλαίῳ, αὐτὸς καὶ αἱ δύο θυγατέρες αὐτοῦ μετ᾿ αὐτοῦ.
+# parallel_id = bible/gen-19-30
+1	ἀνέβη	ἀναβαίνω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-ascend,mount|Ref=GEN_19.30
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.30
+3	Λὼτ	Λώτ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	1	nsubj	_	Gloss=Lot|Ref=GEN_19.30
+4	ἐκ	ἐκ	ADP	_	_	5	case	_	Gloss=out,out-of|Ref=GEN_19.30
+5	Σηγὼρ	Σηγώρ	PROPN	_	Number=Sing	1	obl	_	Gloss=Zoar|Ref=GEN_19.30
+6	καὶ	καί	CCONJ	_	_	7	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.30
+7	ἐκάθητο	κάθημαι	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Mid,Pass	1	conj	_	Gloss=to-sit|Ref=GEN_19.30
+8	ἐν	ἐν	ADP	_	_	10	case	_	Gloss=in,on,by,with,to|Ref=GEN_19.30
+9	τῷ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	10	det	_	Gloss=the|Ref=GEN_19.30
+10	ὄρει	ὄρος	NOUN	_	Case=Dat|Gender=Neut|Number=Sing	7	obl	_	Gloss=mountain|Ref=GEN_19.30
+11	καὶ	καί	CCONJ	_	_	17	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.30
+12	αἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Fem|Number=Plur|PronType=Art	14	det	_	Gloss=the|Ref=GEN_19.30
+13	δύο	δύο	NUM	_	Case=Acc,Gen,Nom|Gender=Fem,Masc,Neut|Number=Sing|NumType=Card	14	nummod	_	Gloss=two|Ref=GEN_19.30
+14	θυγατέρες	θυγάτηρ	NOUN	_	Case=Nom|Gender=Fem|Number=Plur	17	nsubj	_	Gloss=daughters|Ref=GEN_19.30
+15	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	14	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.30
+16	μετ᾿	μετά	ADP	_	_	17	case	_	Gloss=+G=with;-+A=after|Ref=GEN_19.30
+17	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	7	conj	_	Gloss=he,she,it,-self,same|Ref=GEN_19.30|SpaceAfter=No
+18	·	·	PUNCT	_	_	19	punct	_	Ref=GEN_19.30
+19	ἐφοβήθη	φοβέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	7	advcl	_	Gloss=to-fear|Ref=GEN_19.30
+20	γὰρ	γάρ	SCONJ	_	_	19	mark	_	Gloss=for,because|Ref=GEN_19.30
+21	κατοικῆσαι	κατοικέω	VERB	_	Aspect=Perf|Mood=Opt|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	19	xcomp	_	Gloss=to-dwell|Ref=GEN_19.30
+22	ἐν	ἐν	ADP	_	_	23	case	_	Gloss=in,on,by,with,to|Ref=GEN_19.30
+23	Σηγώρ	Σηγώρ	PROPN	_	Case=Dat|Number=Sing	21	obl	_	Gloss=Zoar|Ref=GEN_19.30|SpaceAfter=No
+24	.	.	PUNCT	_	_	1	punct	_	Ref=GEN_19.30
+25	καὶ	καί	CCONJ	_	_	26	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.30
+26	ᾤκησεν	οἰκέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-dwell|Ref=GEN_19.30
+27	ἐν	ἐν	ADP	_	_	29	case	_	Gloss=in,on,by,with,to|Ref=GEN_19.30
+28	τῷ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	29	det	_	Gloss=the|Ref=GEN_19.30
+29	σπηλαίῳ	σπήλαιον	NOUN	_	Case=Dat|Gender=Neut|Number=Sing	26	obl	_	Gloss=cave|Ref=GEN_19.30|SpaceAfter=No
+30	,	,	PUNCT	_	_	31	punct	_	Ref=GEN_19.30
+31	αὐτὸς	αὐτός	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Prs	26	nsubj	_	Gloss=he,she,it,-self,same|Ref=GEN_19.30
+32	καὶ	καί	CCONJ	_	_	35	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.30
+33	αἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Fem|Number=Plur|PronType=Art	35	det	_	Gloss=the|Ref=GEN_19.30
+34	δύο	δύο	NUM	_	Case=Acc,Gen,Nom|Gender=Fem,Masc,Neut|Number=Sing|NumType=Card	35	nummod	_	Gloss=two|Ref=GEN_19.30
+35	θυγατέρες	θυγάτηρ	NOUN	_	Case=Nom|Gender=Fem|Number=Plur	31	conj	_	Gloss=daughters|Ref=GEN_19.30
+36	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	35	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.30
+37	μετ᾿	μετά	ADP	_	_	38	case	_	Gloss=+G=with;-+A=after|Ref=GEN_19.30
+38	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	35	nmod	_	Gloss=he,she,it,-self,same|Ref=GEN_19.30|SpaceAfter=No
+39	.	.	PUNCT	_	_	38	punct	_	Ref=GEN_19.30
+
+# sent_id = Septuagint-Genesis-19:31-grc
+# text = εἶπεν δὲ ἡ πρεσβυτέρα πρὸς τὴν νεωτέραν, ὁ πατὴρ ἡμῶν πρεσβύτερος, καὶ οὐδείς ἐστιν ἐπὶ τῆς γῆς, ὃς εἰσελεύσεται πρὸς ἡμᾶς, ὡς καθήκει πάσῃ τῇ γῇ·
+# parallel_id = bible/gen-19-31
+1	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-say|Ref=GEN_19.31
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.31
+3	ἡ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	4	det	_	Gloss=the|Ref=GEN_19.31
+4	πρεσβυτέρα	πρεσβύτερος	ADJ	_	Case=Nom|Degree=Cmp|Gender=Fem|Number=Sing	1	nsubj	_	Gloss=older,elder|Ref=GEN_19.31
+5	πρὸς	πρός	ADP	_	_	7	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.31
+6	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	Gloss=the|Ref=GEN_19.31
+7	νεωτέραν	νεώτερος	ADJ	_	Case=Acc|Degree=Cmp|Gender=Fem|Number=Sing	1	obl	_	Gloss=younger|Ref=GEN_19.31|SpaceAfter=No
+8	,	,	PUNCT	_	_	9	punct	_	Ref=GEN_19.31
+9	ὁ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	10	det	_	Gloss=the;-oh|Ref=GEN_19.31
+10	πατὴρ	πατήρ	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	12	nsubj	_	Gloss=father|Ref=GEN_19.31
+11	ἡμῶν	ἡμεῖς	PRON	_	Case=Gen|Number=Plur|Person=1|PronType=Prs	10	nmod:poss	_	Gloss=us,our|Ref=GEN_19.31
+12	πρεσβύτερος	πρεσβύτερος	ADJ	_	Case=Nom|Degree=Cmp|Gender=Masc|Number=Sing	1	ccomp	_	Gloss=elder,older|Ref=GEN_19.31|SpaceAfter=No
+13	,	,	PUNCT	_	_	14	punct	_	Ref=GEN_19.31
+14	καὶ	καί	CCONJ	_	_	16	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.31
+15	οὐδείς	οὐθείς	ADJ	_	Case=Nom|Gender=Fem,Masc|Number=Plur	16	nsubj	_	Gloss=no-one,none,nothing|Ref=GEN_19.31
+16	ἐστιν	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	12	conj	_	Gloss=to-be|Ref=GEN_19.31
+17	ἐπὶ	ἐπί	ADP	_	_	19	case	_	Gloss=on,upon,against|Ref=GEN_19.31
+18	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	19	det	_	Gloss=the|Ref=GEN_19.31
+19	γῆς	γῆ	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	16	obl	_	Gloss=earth,land|Ref=GEN_19.31|SpaceAfter=No
+20	,	,	PUNCT	_	_	21	punct	_	Ref=GEN_19.31
+21	ὃς	ὅς	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Rel	22	nsubj	_	Gloss=who,which,that,what|Ref=GEN_19.31
+22	εἰσελεύσεται	εἰσέρχομαι	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Fut|VerbForm=Fin|Voice=Mid	16	advcl	_	Gloss=will-come-in|Ref=GEN_19.31
+23	πρὸς	πρός	ADP	_	_	24	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.31
+24	ἡμᾶς	ἡμεῖς	PRON	_	Case=Acc|Number=Plur|Person=1|PronType=Prs	22	obl	_	Gloss=us|Ref=GEN_19.31|SpaceAfter=No
+25	,	,	PUNCT	_	_	26	punct	_	Ref=GEN_19.31
+26	ὡς	ὡς	ADV	_	_	27	advmod	_	Gloss=as|Ref=GEN_19.31|Unknown=Preposition/Conjunction
+27	καθήκει	καθήκω	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	22	advcl	_	Gloss=to-come-down|Ref=GEN_19.31
+28	πάσῃ	πᾶς	ADJ	_	Case=Dat|Gender=Fem|Number=Sing	30	amod	_	Gloss=all,every|Ref=GEN_19.31
+29	τῇ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	30	det	_	Gloss=the|Ref=GEN_19.31
+30	γῇ	γῆ	NOUN	_	Case=Dat|Gender=Fem|Number=Sing	27	iobj	_	Gloss=earth,ground,land|Ref=GEN_19.31|SpaceAfter=No
+31	·	·	PUNCT	_	_	30	punct	_	Ref=GEN_19.31
+
+# sent_id = Septuagint-Genesis-19:32-grc
+# text = δεῦρο καὶ ποτίσωμεν τὸν πατέρα ἡμῶν οἶνον καὶ κοιμηθῶμεν μετ᾿ αὐτοῦ καὶ ἐξαναστήσωμεν ἐκ τοῦ πατρὸς ἡμῶν σπέρμα.
+# parallel_id = bible/gen-19-32
+1	δεῦρο	δεῦρ᾿	ADV	_	_	0	root	_	Gloss=come-here|Ref=GEN_19.32
+2	καὶ	καί	CCONJ	_	_	3	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.32
+3	ποτίσωμεν	ποτίζω	VERB	_	Aspect=Perf|Mood=Sub|Number=Plur|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-make-drink,water|Ref=GEN_19.32
+4	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	Gloss=the|Ref=GEN_19.32
+5	πατέρα	πατήρ	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	3	obj	_	Gloss=father|Ref=GEN_19.32
+6	ἡμῶν	ἡμεῖς	PRON	_	Case=Gen|Number=Plur|Person=1|PronType=Prs	5	nmod:poss	_	Gloss=us,our|Ref=GEN_19.32
+7	οἶνον	οἶνος	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	3	xcomp	_	Gloss=wine|Ref=GEN_19.32
+8	καὶ	καί	CCONJ	_	_	9	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.32
+9	κοιμηθῶμεν	κοιμάω	VERB	_	Aspect=Perf|Mood=Sub|Number=Plur|Person=1|Tense=Past|VerbForm=Fin|Voice=Pass	1	conj	_	Gloss=to-go-to-bed,lie-down,fall-asleep|Ref=GEN_19.32
+10	μετ᾿	μετά	ADP	_	_	11	case	_	Gloss=+G=with;-+A=after|Ref=GEN_19.32
+11	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	9	obl	_	Gloss=he,she,it,-self,same|Ref=GEN_19.32
+12	καὶ	καί	CCONJ	_	_	13	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.32
+13	ἐξαναστήσωμεν	ἐξανίστημι	VERB	_	Aspect=Perf|Mood=Sub|Number=Plur|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-raise-up,produce|Ref=GEN_19.32
+14	ἐκ	ἐκ	ADP	_	_	16	case	_	Gloss=out,out-of|Ref=GEN_19.32
+15	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	16	det	_	Gloss=the|Ref=GEN_19.32
+16	πατρὸς	πατήρ	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	13	obl	_	Gloss=father|Ref=GEN_19.32
+17	ἡμῶν	ἡμεῖς	PRON	_	Case=Gen|Number=Plur|Person=1|PronType=Prs	16	nmod:poss	_	Gloss=us,our|Ref=GEN_19.32
+18	σπέρμα	σπέρμα	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	13	obj	_	Gloss=seed|Ref=GEN_19.32|SpaceAfter=No
+19	.	.	PUNCT	_	_	18	punct	_	Ref=GEN_19.32
+
+# sent_id = Septuagint-Genesis-19:33-grc
+# text = ἐπότισαν δὲ τὸν πατέρα αὐτῶν οἶνον ἐν τῇ νυκτὶ ταύτῃ, καὶ εἰσελθοῦσα ἡ πρεσβυτέρα ἐκοιμήθη μετὰ τοῦ πατρὸς αὐτῆς τὴν νύκτα ἐκείνην, καὶ οὐκ ᾔδει ἐν τῷ κοιμηθῆναι αὐτὴν καὶ ἀναστῆναι.
+# parallel_id = bible/gen-19-33
+1	ἐπότισαν	ποτίζω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-make-drink|Ref=GEN_19.33
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.33
+3	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	4	det	_	Gloss=the|Ref=GEN_19.33
+4	πατέρα	πατήρ	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	1	obj	_	Gloss=father|Ref=GEN_19.33
+5	αὐτῶν	αὐτός	PRON	_	Case=Gen|Gender=Fem,Masc,Neut|Number=Plur|PronType=Prs	4	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.33
+6	οἶνον	οἶνος	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	1	xcomp	_	Gloss=wine|Ref=GEN_19.33
+7	ἐν	ἐν	ADP	_	_	9	case	_	Gloss=in,on,by,with,to|Ref=GEN_19.33
+8	τῇ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	9	det	_	Gloss=the|Ref=GEN_19.33
+9	νυκτὶ	νύξ	NOUN	_	Case=Dat|Gender=Fem|Number=Sing	1	obl:tmod	_	Gloss=night|Ref=GEN_19.33
+10	ταύτῃ	οὗτος	PRON	_	Case=Dat|Gender=Fem|Number=Sing|PronType=Dem	9	det	_	Gloss=this|Ref=GEN_19.33|SpaceAfter=No
+11	,	,	PUNCT	_	_	12	punct	_	Ref=GEN_19.33
+12	καὶ	καί	CCONJ	_	_	16	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.33
+13	εἰσελθοῦσα	εἰσέρχομαι	VERB	_	Aspect=Perf|Case=Nom|Gender=Fem|Number=Sing|VerbForm=Part|Voice=Act	16	advcl	_	Gloss=to-enter|Ref=GEN_19.33
+14	ἡ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	15	det	_	Gloss=the|Ref=GEN_19.33
+15	πρεσβυτέρα	πρεσβύτερος	ADJ	_	Case=Nom|Degree=Cmp|Gender=Fem|Number=Sing	13	nsubj	_	Gloss=older,elder|Ref=GEN_19.33
+16	ἐκοιμήθη	κοιμάω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	1	conj	_	Gloss=to-put-to-bed|Ref=GEN_19.33
+17	μετὰ	μετά	ADP	_	_	19	case	_	Gloss=+G=with;-+A=after|Ref=GEN_19.33
+18	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	19	det	_	Gloss=the|Ref=GEN_19.33
+19	πατρὸς	πατήρ	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	16	obl	_	Gloss=father|Ref=GEN_19.33
+20	αὐτῆς	αὐτός	PRON	_	Case=Gen|Gender=Fem|Number=Sing|PronType=Prs	19	nmod:poss	_	Gloss=she,-self,same|Ref=GEN_19.33
+21	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	22	det	_	Gloss=the|Ref=GEN_19.33
+22	νύκτα	νύξ	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	16	obl:tmod	_	Gloss=night|Ref=GEN_19.33
+23	ἐκείνην	ἐκεῖνος	PRON	_	Case=Acc|Gender=Fem|Number=Sing|PronType=Dem	22	det	_	Gloss=that|Ref=GEN_19.33|SpaceAfter=No
+24	,	,	PUNCT	_	_	25	punct	_	Ref=GEN_19.33
+25	καὶ	καί	CCONJ	_	_	27	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.33
+26	οὐκ	οὐ	ADV	_	Polarity=Neg	27	advmod	_	Gloss=no,not|Ref=GEN_19.33
+27	ᾔδει	εἴδω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Pqp|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-see-and-know|Ref=GEN_19.33
+28	ἐν	ἐν	ADP	_	_	30	case	_	Gloss=in,on,by,with,to|Outer=Yes|Ref=GEN_19.33
+29	τῷ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Masc,Neut|Number=Sing|PronType=Art	30	det	_	Gloss=the|Outer=Yes|Ref=GEN_19.33
+30	κοιμηθῆναι	κοιμάω	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Pass	27	obl	_	Gloss=to-go-to-bed,lie-down,fall-asleep|Ref=GEN_19.33
+31	αὐτὴν	αὐτός	PRON	_	Case=Acc|Gender=Fem|Number=Sing|PronType=Prs	30	nsubj:pass	_	Gloss=she,-self,same|Ref=GEN_19.33
+32	καὶ	καί	CCONJ	_	_	33	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.33
+33	ἀναστῆναι	ἀνίστημι	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Act	30	conj	_	Gloss=to-raise-up|Ref=GEN_19.33|SpaceAfter=No
+34	.	.	PUNCT	_	_	33	punct	_	Ref=GEN_19.33
+
+# sent_id = Septuagint-Genesis-19:34-grc
+# text = ἐγένετο δὲ τῇ ἐπαύριον καὶ εἶπεν ἡ πρεσβυτέρα πρὸς τὴν νεωτέραν ἰδοὺ ἐκοιμήθην ἐχθὲς μετὰ τοῦ πατρὸς ἡμῶν· ποτίσωμεν αὐτὸν οἶνον καὶ τὴν νύκτα ταύτην, καὶ εἰσελθοῦσα κοιμήθητι μετ᾿ αὐτοῦ, καὶ ἐξαναστήσωμεν ἐκ τοῦ πατρὸς ἡμῶν σπέρμα.
+# parallel_id = bible/gen-19-34
+1	ἐγένετο	γίνομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Mid	0	root	_	Gloss=to-become,come-to-be|Ref=GEN_19.34
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.34
+3	τῇ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	4	det	_	Gloss=the|Ref=GEN_19.34
+4	ἐπαύριον	ἐπαύριον	ADV	_	_	1	obl:tmod	_	Gloss=next-day|Ref=GEN_19.34
+5	καὶ	καί	CCONJ	_	_	6	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.34
+6	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-say|Ref=GEN_19.34
+7	ἡ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	8	det	_	Gloss=the|Ref=GEN_19.34
+8	πρεσβυτέρα	πρεσβύτερος	ADJ	_	Case=Nom|Degree=Cmp|Gender=Fem|Number=Sing	6	nsubj	_	Gloss=older,elder|Ref=GEN_19.34
+9	πρὸς	πρός	ADP	_	_	11	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_19.34
+10	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	11	det	_	Gloss=the|Ref=GEN_19.34
+11	νεωτέραν	νεώτερος	ADJ	_	Case=Acc|Degree=Cmp|Gender=Fem|Number=Sing	6	obl	_	Gloss=younger|Ref=GEN_19.34
+12	ἰδοὺ	ἰδού	INTJ	_	_	13	discourse	_	Gloss=look!,behold!|Ref=GEN_19.34
+13	ἐκοιμήθην	κοιμάω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Pass	6	ccomp	_	Gloss=to-lay-down|Ref=GEN_19.34
+14	ἐχθὲς	ἐχθές	ADV	_	_	13	obl:tmod	_	Gloss=yesterday|Ref=GEN_19.34
+15	μετὰ	μετά	ADP	_	_	17	case	_	Gloss=+G=with;-+A=after|Ref=GEN_19.34
+16	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	17	det	_	Gloss=the|Ref=GEN_19.34
+17	πατρὸς	πατήρ	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	13	obl	_	Gloss=father|Ref=GEN_19.34
+18	ἡμῶν	ἡμεῖς	PRON	_	Case=Gen|Number=Plur|Person=1|PronType=Prs	17	nmod:poss	_	Gloss=us,our|Ref=GEN_19.34|SpaceAfter=No
+19	·	·	PUNCT	_	_	20	punct	_	Ref=GEN_19.34
+20	ποτίσωμεν	ποτίζω	VERB	_	Aspect=Perf|Mood=Sub|Number=Plur|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	13	parataxis	_	Gloss=to-make-drink,water|Ref=GEN_19.34
+21	αὐτὸν	αὐτός	PRON	_	Case=Acc|Gender=Masc|Number=Sing|PronType=Prs	20	obj	_	Gloss=he,she,it,-self,same|Ref=GEN_19.34
+22	οἶνον	οἶνος	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	20	xcomp	_	Gloss=wine|Ref=GEN_19.34
+23	καὶ	καί	CCONJ	_	_	25	advmod	_	Gloss=and,also,even,then,next|Ref=GEN_19.34
+24	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	25	det	_	Gloss=the|Ref=GEN_19.34
+25	νύκτα	νύξ	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	20	obl:tmod	_	Gloss=night|Ref=GEN_19.34
+26	ταύτην	οὗτος	PRON	_	Case=Acc|Gender=Fem|Number=Sing|PronType=Dem	25	det	_	Gloss=this|Ref=GEN_19.34|SpaceAfter=No
+27	,	,	PUNCT	_	_	28	punct	_	Ref=GEN_19.34
+28	καὶ	καί	CCONJ	_	_	30	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.34
+29	εἰσελθοῦσα	εἰσέρχομαι	VERB	_	Aspect=Perf|Case=Nom|Gender=Fem|Number=Sing|VerbForm=Part|Voice=Act	30	advcl	_	Gloss=to-enter|Ref=GEN_19.34
+30	κοιμήθητι	κοιμάω	VERB	_	Aspect=Perf|Mood=Imp|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Pass	20	conj	_	Gloss=to-go-to-bed,lie-down,fall-asleep|Ref=GEN_19.34
+31	μετ᾿	μετά	ADP	_	_	32	case	_	Gloss=+G=with;-+A=after|Ref=GEN_19.34
+32	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	30	obl	_	Gloss=he,she,it,-self,same|Ref=GEN_19.34|SpaceAfter=No
+33	,	,	PUNCT	_	_	34	punct	_	Ref=GEN_19.34
+34	καὶ	καί	CCONJ	_	_	35	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.34
+35	ἐξαναστήσωμεν	ἐξανίστημι	VERB	_	Aspect=Perf|Mood=Sub|Number=Plur|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	20	conj	_	Gloss=to-raise-up,produce|Ref=GEN_19.34
+36	ἐκ	ἐκ	ADP	_	_	38	case	_	Gloss=out,out-of|Ref=GEN_19.34
+37	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	38	det	_	Gloss=the|Ref=GEN_19.34
+38	πατρὸς	πατήρ	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	35	obl	_	Gloss=father|Ref=GEN_19.34
+39	ἡμῶν	ἡμεῖς	PRON	_	Case=Gen|Number=Plur|Person=1|PronType=Prs	38	nmod:poss	_	Gloss=us,our|Ref=GEN_19.34
+40	σπέρμα	σπέρμα	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	35	obj	_	Gloss=seed|Ref=GEN_19.34|SpaceAfter=No
+41	.	.	PUNCT	_	_	40	punct	_	Ref=GEN_19.34
+
+# sent_id = Septuagint-Genesis-19:35-grc
+# text = ἐπότισαν δὲ καὶ ἐν τῇ νυκτὶ ἐκείνῃ τὸν πατέρα αὐτῶν οἶνον, καὶ εἰσελθοῦσα ἡ νεωτέρα ἐκοιμήθη μετὰ τοῦ πατρὸς αὐτῆς, καὶ οὐκ ᾔδει ἐν τῷ κοιμηθῆναι αὐτὴν καὶ ἀναστῆναι.
+# parallel_id = bible/gen-19-35
+1	ἐπότισαν	ποτίζω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-make-drink|Ref=GEN_19.35
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.35
+3	καὶ	καί	CCONJ	_	_	6	advmod	_	Gloss=and,also,even,then,next|Ref=GEN_19.35
+4	ἐν	ἐν	ADP	_	_	6	case	_	Gloss=in,on,by,with,to|Ref=GEN_19.35
+5	τῇ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	6	det	_	Gloss=the|Ref=GEN_19.35
+6	νυκτὶ	νύξ	NOUN	_	Case=Dat|Gender=Fem|Number=Sing	1	obl:tmod	_	Gloss=night|Ref=GEN_19.35
+7	ἐκείνῃ	ἐκεῖνος	PRON	_	Case=Dat|Gender=Fem|Number=Sing|PronType=Dem	6	det	_	Gloss=that|Ref=GEN_19.35
+8	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	9	det	_	Gloss=the|Ref=GEN_19.35
+9	πατέρα	πατήρ	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	1	obj	_	Gloss=father|Ref=GEN_19.35
+10	αὐτῶν	αὐτός	PRON	_	Case=Gen|Gender=Fem,Masc,Neut|Number=Plur|PronType=Prs	9	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.35
+11	οἶνον	οἶνος	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	1	xcomp	_	Gloss=wine|Ref=GEN_19.35|SpaceAfter=No
+12	,	,	PUNCT	_	_	13	punct	_	Ref=GEN_19.35
+13	καὶ	καί	CCONJ	_	_	17	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.35
+14	εἰσελθοῦσα	εἰσέρχομαι	VERB	_	Aspect=Perf|Case=Nom|Gender=Fem|Number=Sing|VerbForm=Part|Voice=Act	17	advcl	_	Gloss=to-enter|Ref=GEN_19.35
+15	ἡ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	16	det	_	Gloss=the|Ref=GEN_19.35
+16	νεωτέρα	νεώτερος	ADJ	_	Case=Nom|Degree=Cmp|Gender=Fem|Number=Sing	14	nsubj	_	Gloss=younger|Ref=GEN_19.35
+17	ἐκοιμήθη	κοιμάω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	1	conj	_	Gloss=to-put-to-bed|Ref=GEN_19.35
+18	μετὰ	μετά	ADP	_	_	20	case	_	Gloss=+G=with;-+A=after|Ref=GEN_19.35
+19	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	20	det	_	Gloss=the|Ref=GEN_19.35
+20	πατρὸς	πατήρ	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	17	obl	_	Gloss=father|Ref=GEN_19.35
+21	αὐτῆς	αὐτός	PRON	_	Case=Gen|Gender=Fem|Number=Sing|PronType=Prs	20	nmod:poss	_	Gloss=she,-self,same|Ref=GEN_19.35|SpaceAfter=No
+22	,	,	PUNCT	_	_	23	punct	_	Ref=GEN_19.35
+23	καὶ	καί	CCONJ	_	_	25	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.35
+24	οὐκ	οὐ	ADV	_	Polarity=Neg	25	advmod	_	Gloss=no,not|Ref=GEN_19.35
+25	ᾔδει	εἴδω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Pqp|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-see-and-know|Ref=GEN_19.35
+26	ἐν	ἐν	ADP	_	_	28	case	_	Gloss=in,on,by,with,to|Outer=Yes|Ref=GEN_19.35
+27	τῷ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Masc,Neut|Number=Sing|PronType=Art	28	det	_	Gloss=the|Outer=Yes|Ref=GEN_19.35
+28	κοιμηθῆναι	κοιμάω	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Pass	25	obl	_	Gloss=to-go-to-bed,lie-down,fall-asleep|Ref=GEN_19.35
+29	αὐτὴν	αὐτός	PRON	_	Case=Acc|Gender=Fem|Number=Sing|PronType=Prs	28	nsubj:pass	_	Gloss=she,-self,same|Ref=GEN_19.35
+30	καὶ	καί	CCONJ	_	_	31	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.35
+31	ἀναστῆναι	ἀνίστημι	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Act	28	conj	_	Gloss=to-raise-up|Ref=GEN_19.35|SpaceAfter=No
+32	.	.	PUNCT	_	_	31	punct	_	Ref=GEN_19.35
+
+# sent_id = Septuagint-Genesis-19:36-grc
+# text = καὶ συνέλαβον αἱ δύο θυγατέρες Λὼτ ἐκ τοῦ πατρὸς αὐτῶν.
+# parallel_id = bible/gen-19-36
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.36
+2	συνέλαβον	συλλαμβάνω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-conceive,capture|Ref=GEN_19.36
+3	αἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Fem|Number=Plur|PronType=Art	5	det	_	Gloss=the|Ref=GEN_19.36
+4	δύο	δύο	NUM	_	Case=Acc,Gen,Nom|Gender=Fem,Masc,Neut|Number=Sing|NumType=Card	5	nummod	_	Gloss=two|Ref=GEN_19.36
+5	θυγατέρες	θυγάτηρ	NOUN	_	Case=Nom|Gender=Fem|Number=Plur	2	nsubj	_	Gloss=daughters|Ref=GEN_19.36
+6	Λὼτ	Λώτ	PROPN	_	Case=Gen|Gender=Masc|Number=Sing	5	nmod:poss	_	Gloss=Lot|Ref=GEN_19.36
+7	ἐκ	ἐκ	ADP	_	_	9	case	_	Gloss=out,out-of|Ref=GEN_19.36
+8	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	9	det	_	Gloss=the|Ref=GEN_19.36
+9	πατρὸς	πατήρ	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	2	obl	_	Gloss=father|Ref=GEN_19.36
+10	αὐτῶν	αὐτός	PRON	_	Case=Gen|Gender=Fem,Masc,Neut|Number=Plur|PronType=Prs	9	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.36|SpaceAfter=No
+11	.	.	PUNCT	_	_	10	punct	_	Ref=GEN_19.36
+
+# sent_id = Septuagint-Genesis-19:37-grc
+# text = καὶ ἔτεκεν ἡ πρεσβυτέρα υἱὸν καὶ ἐκάλεσεν τὸ ὄνομα αὐτοῦ Μωὰβ λέγουσα, ἐκ τοῦ πατρός μου· οὗτος πατὴρ Μωαβιτῶν ἕως τῆς σήμερον ἡμέρας.
+# parallel_id = bible/gen-19-37
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.37
+2	ἔτεκεν	τίκτω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-give-birth-to|Ref=GEN_19.37
+3	ἡ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	4	det	_	Gloss=the|Ref=GEN_19.37
+4	πρεσβυτέρα	πρεσβύτερος	ADJ	_	Case=Nom|Degree=Cmp|Gender=Fem|Number=Sing	2	nsubj	_	Gloss=older,elder|Ref=GEN_19.37
+5	υἱὸν	υἱός	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	2	obj	_	Gloss=son|Ref=GEN_19.37
+6	καὶ	καί	CCONJ	_	_	7	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.37
+7	ἐκάλεσεν	καλέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-call|Ref=GEN_19.37
+8	τὸ	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	9	det	_	Gloss=the|Ref=GEN_19.37
+9	ὄνομα	ὄνομα	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	7	obj	_	Gloss=name|Ref=GEN_19.37
+10	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	9	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.37
+11	Μωὰβ	Μωάβ	PROPN	_	Gender=Masc|Number=Sing	7	xcomp	_	Gloss=Moab|Ref=GEN_19.37
+12	λέγουσα	λέγω	VERB	_	Aspect=Imp|Case=Nom|Gender=Fem|Number=Sing|Tense=Pres|VerbForm=Part|Voice=Act	7	advcl	_	Gloss=to-say|Ref=GEN_19.37|SpaceAfter=No
+13	,	,	PUNCT	_	_	14	punct	_	Ref=GEN_19.37
+14	ἐκ	ἐκ	ADP	_	_	16	case	_	Gloss=out,out-of|Ref=GEN_19.37
+15	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	16	det	_	Gloss=the|Ref=GEN_19.37
+16	πατρός	πατήρ	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	12	ccomp	_	Gloss=father|Ref=GEN_19.37
+17	μου	ἐγώ	PRON	_	Case=Gen|Number=Sing|Person=1|PronType=Prs	16	nmod:poss	_	Gloss=me,my|Ref=GEN_19.37|SpaceAfter=No
+18	·	·	PUNCT	_	_	19	punct	_	Ref=GEN_19.37
+19	οὗτος	οὗτος	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Dem	20	nsubj	_	Gloss=this|Ref=GEN_19.37
+20	πατὴρ	πατήρ	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	2	parataxis	_	Gloss=father|Ref=GEN_19.37
+21	Μωαβιτῶν	Μωαβίτης	PROPN	_	Case=Gen|Gender=Masc|Number=Plur	20	nmod:poss	_	Gloss=Moabites|Ref=GEN_19.37
+22	ἕως	ἕως	CCONJ	_	_	25	case	_	Gloss=as-far-as,until,up-to|Ref=GEN_19.37
+23	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	25	det	_	Gloss=the|Ref=GEN_19.37
+24	σήμερον	σήμερον	ADV	_	_	25	advmod	_	Gloss=today,this-day|Ref=GEN_19.37
+25	ἡμέρας	ἡμέρα	NOUN	_	Case=Acc|Gender=Fem|Number=Plur	20	obl:tmod	_	Gloss=days|Ref=GEN_19.37|SpaceAfter=No
+26	.	.	PUNCT	_	_	25	punct	_	Ref=GEN_19.37
+
+# sent_id = Septuagint-Genesis-19:38-grc
+# text = ἔτεκεν δὲ καὶ ἡ νεωτέρα υἱὸν καὶ ἐκάλεσεν τὸ ὄνομα αὐτοῦ Ἀμμὰν υἱὸς τοῦ γένους μου· οὗτος πατὴρ Ἀμμανιτῶν ἕως τῆς σήμερον ἡμέρας.
+# parallel_id = bible/gen-19-38
+1	ἔτεκεν	τίκτω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-give-birth-to|Ref=GEN_19.38
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_19.38
+3	καὶ	καί	CCONJ	_	_	5	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.38
+4	ἡ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	5	det	_	Gloss=the|Ref=GEN_19.38
+5	νεωτέρα	νεώτερος	ADJ	_	Case=Nom|Degree=Cmp|Gender=Fem|Number=Sing	1	nsubj	_	Gloss=younger|Ref=GEN_19.38
+6	υἱὸν	υἱός	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	1	obj	_	Gloss=son|Ref=GEN_19.38
+7	καὶ	καί	CCONJ	_	_	8	cc	_	Gloss=and,also,even,then,next|Ref=GEN_19.38
+8	ἐκάλεσεν	καλέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-call|Ref=GEN_19.38
+9	τὸ	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	10	det	_	Gloss=the|Ref=GEN_19.38
+10	ὄνομα	ὄνομα	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	8	obj	_	Gloss=name|Ref=GEN_19.38
+11	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	10	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_19.38
+12	Ἀμμὰν	Ἀμμάν	PROPN	_	Gender=Masc	8	xcomp	_	Gloss=Ammon|Ref=GEN_19.38
+13	υἱὸς	υἱός	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	12	appos	_	Gloss=son|Ref=GEN_19.38
+14	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	15	det	_	Gloss=the|Ref=GEN_19.38
+15	γένους	γένος	NOUN	_	Case=Gen|Gender=Neut|Number=Sing	13	nmod:poss	_	Gloss=generation,family|Ref=GEN_19.38
+16	μου	ἐγώ	PRON	_	Case=Gen|Number=Sing|Person=1|PronType=Prs	15	nmod:poss	_	Gloss=me,my|Ref=GEN_19.38|SpaceAfter=No
+17	·	·	PUNCT	_	_	18	punct	_	Ref=GEN_19.38
+18	οὗτος	οὗτος	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Dem	19	nsubj	_	Gloss=this|Ref=GEN_19.38
+19	πατὴρ	πατήρ	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	8	parataxis	_	Gloss=father|Ref=GEN_19.38
+20	Ἀμμανιτῶν	Ἀμμανίτης	PROPN	_	Case=Gen|Gender=Masc|Number=Plur	19	nmod:poss	_	Gloss=Ammonites|Ref=GEN_19.38
+21	ἕως	ἕως	CCONJ	_	_	24	case	_	Gloss=as-far-as,until,up-to|Ref=GEN_19.38
+22	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	24	det	_	Gloss=the|Ref=GEN_19.38
+23	σήμερον	σήμερον	ADV	_	_	24	advmod	_	Gloss=today,this-day|Ref=GEN_19.38
+24	ἡμέρας	ἡμέρα	NOUN	_	Case=Acc|Gender=Fem|Number=Plur	19	obl:tmod	_	Gloss=days|Ref=GEN_19.38|SpaceAfter=No
+25	.	.	PUNCT	_	_	24	punct	_	Ref=GEN_19.38
+
+# sent_id = Septuagint-Genesis-20:1-grc
+# text = καὶ ἐκίνησεν ἐκεῖθεν Ἁβραὰμ εἰς γῆν πρὸς λίβα καὶ ᾤκησεν ἀνὰ μέσον Κάδης καὶ ἀνὰ μέσον Σοὺρ καὶ παρῴκησεν ἐν Γεράροις.
+# parallel_id = bible/gen-20-1
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.1
+2	ἐκίνησεν	κινέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-move|Ref=GEN_20.1
+3	ἐκεῖθεν	ἐκεῖθεν	ADV	_	_	2	advmod	_	Gloss=from-there|Ref=GEN_20.1
+4	Ἁβραὰμ	Ἁβραάμ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	2	nsubj	_	Gloss=Abraham|Ref=GEN_20.1
+5	εἰς	εἰς	ADP	_	_	6	case	_	Gloss=into,unto,for|Ref=GEN_20.1
+6	γῆν	γῆ	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	2	obl	_	Gloss=earth,land|Ref=GEN_20.1
+7	πρὸς	πρός	ADP	_	_	8	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_20.1
+8	λίβα	λίψ	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	6	nmod	_	Gloss=southwest|Ref=GEN_20.1
+9	καὶ	καί	CCONJ	_	_	10	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.1
+10	ᾤκησεν	οἰκέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-dwell|Ref=GEN_20.1
+11	ἀνὰ	ἀνά	ADP	_	_	12	case	_	Gloss=up,again|Ref=GEN_20.1
+12	μέσον	μέσος	ADJ	_	Case=Acc|Gender=Masc,Neut|Number=Sing	10	obl	_	Gloss=between,middle,among|Ref=GEN_20.1
+13	Κάδης	Κάδης	PROPN	_	Case=Gen	12	nmod:poss	_	Gloss=Kadesh|Ref=GEN_20.1
+14	καὶ	καί	CCONJ	_	_	16	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.1
+15	ἀνὰ	ἀνά	ADP	_	_	16	case	_	Gloss=up,again|Ref=GEN_20.1
+16	μέσον	μέσος	ADJ	_	Case=Acc|Gender=Masc,Neut|Number=Sing	13	conj	_	Gloss=between,middle,among|Ref=GEN_20.1
+17	Σοὺρ	Σούρ	PROPN	_	Case=Gen	16	nmod:poss	_	Gloss=Shur|Ref=GEN_20.1
+18	καὶ	καί	CCONJ	_	_	19	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.1
+19	παρῴκησεν	παροικέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-dwell|Ref=GEN_20.1
+20	ἐν	ἐν	ADP	_	_	21	case	_	Gloss=in,on,by,with,to|Ref=GEN_20.1
+21	Γεράροις	Γέραρα	PROPN	_	Case=Dat|Gender=Masc|Number=Plur	19	obl	_	Gloss=Gerar|Ref=GEN_20.1|SpaceAfter=No
+22	.	.	PUNCT	_	_	21	punct	_	Ref=GEN_20.1
+
+# sent_id = Septuagint-Genesis-20:2-grc
+# text = εἶπεν δὲ Ἁβραὰμ περὶ Σάρρας τῆς γυναικὸς αὐτοῦ ὅτι ἀδελφή μού ἐστιν· ἐφοβήθη γὰρ εἰπεῖν ὅτι, γυνή μού ἐστιν, μήποτε ἀποκτείνωσιν αὐτὸν οἱ ἄνδρες τῆς πόλεως δι᾿ αὐτήν. ἀπέστειλεν δὲ Ἀβιμέλεχ βασιλεὺς Γεράρων καὶ ἔλαβεν τὴν Σάρραν.
+# parallel_id = bible/gen-20-2
+1	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-say|Ref=GEN_20.2
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_20.2
+3	Ἁβραὰμ	Ἁβραάμ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	1	nsubj	_	Gloss=Abraham|Ref=GEN_20.2
+4	περὶ	περί	ADP	_	_	5	case	_	Gloss=+G=about,concerning;-+A=around,about|Ref=GEN_20.2
+5	Σάρρας	Σάρρα	PROPN	_	Case=Nom|Gender=Fem|Number=Sing	1	obl	_	Gloss=Sarah|Ref=GEN_20.2
+6	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	Gloss=the|Ref=GEN_20.2
+7	γυναικὸς	γυνή	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	5	appos	_	Gloss=wife,woman|Ref=GEN_20.2
+8	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	7	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_20.2
+9	ὅτι	ὅτι	SCONJ	_	_	10	mark	_	Gloss=because,that-for|Ref=GEN_20.2
+10	ἀδελφή	ἀδελφή	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	1	ccomp	_	Gloss=sister|Ref=GEN_20.2
+11	μού	ἐγώ	PRON	_	Case=Gen|Number=Sing|Person=1|PronType=Prs	10	nmod:poss	_	Gloss=me,my|Ref=GEN_20.2
+12	ἐστιν	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	10	cop	_	Gloss=to-be|Ref=GEN_20.2|SpaceAfter=No
+13	·	·	PUNCT	_	_	14	punct	_	Ref=GEN_20.2
+14	ἐφοβήθη	φοβέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	1	advcl	_	Gloss=to-fear|Ref=GEN_20.2
+15	γὰρ	γάρ	SCONJ	_	_	14	mark	_	Gloss=for,because|Ref=GEN_20.2
+16	εἰπεῖν	εἶπον	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Act	14	xcomp	_	Gloss=to-say|Ref=GEN_20.2
+17	ὅτι	ὅτι	SCONJ	_	_	19	mark	_	Gloss=because,that-for|Ref=GEN_20.2|SpaceAfter=No
+18	,	,	PUNCT	_	_	17	punct	_	Ref=GEN_20.2
+19	γυνή	γυνή	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	16	ccomp	_	Gloss=wife,woman|Ref=GEN_20.2
+20	μού	ἐγώ	PRON	_	Case=Gen|Number=Sing|Person=1|PronType=Prs	19	nmod:poss	_	Gloss=me,my|Ref=GEN_20.2
+21	ἐστιν	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	19	cop	_	Gloss=to-be|Ref=GEN_20.2|SpaceAfter=No
+22	,	,	PUNCT	_	_	23	punct	_	Ref=GEN_20.2
+23	μήποτε	μήποτε	ADV	_	_	24	advmod	_	Gloss=lest|Ref=GEN_20.2
+24	ἀποκτείνωσιν	ἀποκτείνω	VERB	_	Aspect=Perf|Mood=Sub|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	16	advcl	_	Gloss=to-kill|Ref=GEN_20.2
+25	αὐτὸν	αὐτός	PRON	_	Case=Acc|Gender=Masc|Number=Sing|PronType=Prs	24	obj	_	Gloss=he,she,it,-self,same|Ref=GEN_20.2
+26	οἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	27	det	_	Gloss=the|Ref=GEN_20.2
+27	ἄνδρες	ἀνήρ	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	24	nsubj	_	Gloss=men,males|Ref=GEN_20.2
+28	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	29	det	_	Gloss=the|Ref=GEN_20.2
+29	πόλεως	πόλις	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	27	nmod:poss	_	Gloss=city|Ref=GEN_20.2
+30	δι᾿	διά	ADP	_	_	31	case	_	Gloss=+G=through,by;-+A=because-of|Ref=GEN_20.2
+31	αὐτήν	αὐτός	PRON	_	Case=Acc|Gender=Fem|Number=Sing|PronType=Prs	24	obl	_	Gloss=she,-self,same|Ref=GEN_20.2|SpaceAfter=No
+32	.	.	PUNCT	_	_	1	punct	_	Ref=GEN_20.2
+33	ἀπέστειλεν	ἀποστέλλω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=to-send-forth|Ref=GEN_20.2
+34	δὲ	δέ	CCONJ	_	_	33	cc	_	Gloss=but,and,however|Ref=GEN_20.2
+35	Ἀβιμέλεχ	Ἀβιμέλεχ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	33	nsubj	_	Gloss=Abimelech,Elimelech|Ref=GEN_20.2
+36	βασιλεὺς	βασιλεύς	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	35	appos	_	Gloss=king|Ref=GEN_20.2
+37	Γεράρων	Γέραρα	PROPN	_	Case=Gen|Gender=Masc|Number=Plur	36	nmod:poss	_	Gloss=Gerar|Ref=GEN_20.2
+38	καὶ	καί	CCONJ	_	_	39	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.2
+39	ἔλαβεν	λαμβάνω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	conj	_	Gloss=received,taken|Ref=GEN_20.2
+40	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	41	det	_	Gloss=the|Ref=GEN_20.2
+41	Σάρραν	Σάρρα	PROPN	_	Case=Acc|Gender=Fem|Number=Sing	39	obj	_	Gloss=Sarah|Ref=GEN_20.2|SpaceAfter=No
+42	.	.	PUNCT	_	_	41	punct	_	Ref=GEN_20.2
+
+# sent_id = Septuagint-Genesis-20:3-grc
+# text = καὶ εἰσῆλθεν ὁ θεὸς πρὸς Ἀβιμέλεχ ἐν ὕπνῳ τὴν νύκτα καὶ εἶπεν, ἰδοὺ σὺ ἀποθνῄσκεις περὶ τῆς γυναικός ἧς ἔλαβες αὕτη δέ ἐστιν συνῳκηκυῖα ἀνδρί.
+# parallel_id = bible/gen-20-3
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.3
+2	εἰσῆλθεν	εἰσέρχομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-enter|Ref=GEN_20.3
+3	ὁ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	4	det	_	Gloss=the;-oh|Ref=GEN_20.3
+4	θεὸς	θεός	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	2	nsubj	_	Gloss=god|Ref=GEN_20.3
+5	πρὸς	πρός	ADP	_	_	6	case	_	Gloss=+D=at;-+A=to,toward|Ref=GEN_20.3
+6	Ἀβιμέλεχ	Ἀβιμέλεχ	PROPN	_	Gender=Masc|Number=Sing	2	obl	_	Gloss=Abimelech,Elimelech|Ref=GEN_20.3
+7	ἐν	ἐν	ADP	_	_	8	case	_	Gloss=in,on,by,with,to|Ref=GEN_20.3
+8	ὕπνῳ	ὕπνος	NOUN	_	Case=Dat|Gender=Masc|Number=Sing	2	obl	_	Gloss=sleep|Ref=GEN_20.3
+9	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	10	det	_	Gloss=the|Ref=GEN_20.3
+10	νύκτα	νύξ	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	2	obl:tmod	_	Gloss=night|Ref=GEN_20.3
+11	καὶ	καί	CCONJ	_	_	12	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.3
+12	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-say|Ref=GEN_20.3|SpaceAfter=No
+13	,	,	PUNCT	_	_	14	punct	_	Ref=GEN_20.3
+14	ἰδοὺ	ἰδού	INTJ	_	_	16	discourse	_	Gloss=look!,behold!|Ref=GEN_20.3
+15	σὺ	σύ	PRON	_	Case=Nom|Number=Sing|Person=2|PronType=Prs	16	nsubj	_	Gloss=you|Ref=GEN_20.3
+16	ἀποθνῄσκεις	ἀποθνήσκω	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=2|Tense=Pres|VerbForm=Fin|Voice=Act	12	ccomp	_	Gloss=to-die|Ref=GEN_20.3
+17	περὶ	περί	ADP	_	_	19	case	_	Gloss=+G=about,concerning;-+A=around,about|Ref=GEN_20.3
+18	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	19	det	_	Gloss=the|Ref=GEN_20.3
+19	γυναικός	γυνή	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	16	obl	_	Gloss=woman,wife|Ref=GEN_20.3
+20	ἧς	ὅς	PRON	_	Case=Gen|Gender=Fem|Number=Sing|PronType=Rel	21	obl	_	Gloss=who,which,that|Ref=GEN_20.3
+21	ἔλαβες	λαμβάνω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	19	acl:relcl	_	Gloss=to-take,receive|Ref=GEN_20.3
+22	αὕτη	οὗτος	PRON	_	Case=Nom|Gender=Fem|Number=Sing|PronType=Dem	25	nsubj	_	Gloss=this|Ref=GEN_20.3
+23	δέ	δέ	CCONJ	_	_	25	cc	_	Gloss=but,and,however|Ref=GEN_20.3
+24	ἐστιν	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	25	aux	_	Gloss=to-be|Ref=GEN_20.3
+25	συνῳκηκυῖα	συνοικέω	VERB	_	Aspect=Perf|Case=Nom|Gender=Fem|Number=Sing|VerbForm=Part|Voice=Act	21	conj	_	Gloss=to-dwell-together|Ref=GEN_20.3
+26	ἀνδρί	ἀνήρ	NOUN	_	Case=Dat|Gender=Masc|Number=Sing	25	iobj	_	Gloss=man,husband|Ref=GEN_20.3|SpaceAfter=No
+27	.	.	PUNCT	_	_	26	punct	_	Ref=GEN_20.3
+
+# sent_id = Septuagint-Genesis-20:4-grc
+# text = Ἀβιμέλεχ δὲ οὐχ ἥψατο αὐτῆς καὶ εἶπεν κύριε, ἔθνος ἀγνοοῦν καὶ δίκαιον ἀπολεῖς;
+# parallel_id = bible/gen-20-4
+1	Ἀβιμέλεχ	Ἀβιμέλεχ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	4	nsubj	_	Gloss=Abimelech,Elimelech|Ref=GEN_20.4
+2	δὲ	δέ	CCONJ	_	_	4	cc	_	Gloss=but,and,however|Ref=GEN_20.4
+3	οὐχ	οὐ	ADV	_	Polarity=Neg	4	advmod	_	Gloss=no,not|Ref=GEN_20.4
+4	ἥψατο	ἅπτω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Mid	0	root	_	Gloss=to-touch|Ref=GEN_20.4
+5	αὐτῆς	αὐτός	PRON	_	Case=Gen|Gender=Fem|Number=Sing|PronType=Prs	4	obl	_	Gloss=she,-self,same|Ref=GEN_20.4
+6	καὶ	καί	CCONJ	_	_	7	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.4
+7	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	4	conj	_	Gloss=to-say|Ref=GEN_20.4
+8	κύριε	κύριος	NOUN	_	Case=Voc|Gender=Masc|Number=Sing	14	vocative	_	Gloss=lord|Ref=GEN_20.4|SpaceAfter=No
+9	,	,	PUNCT	_	_	8	punct	_	Ref=GEN_20.4
+10	ἔθνος	ἔθνος	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	14	obj	_	Gloss=nation,gentile|Ref=GEN_20.4
+11	ἀγνοοῦν	ἀγνοέω	VERB	_	Aspect=Imp|Case=Acc|Gender=Neut|Number=Sing|Tense=Pres|VerbForm=Part|Voice=Act	10	acl:relcl	_	Gloss=to-be-ignorant,unaware|Ref=GEN_20.4
+12	καὶ	καί	CCONJ	_	_	13	advmod	_	Gloss=and,also,even,then,next|Ref=GEN_20.4
+13	δίκαιον	δίκαιος	ADJ	_	Case=Acc|Gender=Masc,Neut|Number=Sing	11	amod	_	Gloss=righteous|Ref=GEN_20.4
+14	ἀπολεῖς	ἀπόλλυμι	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=2|Tense=Fut|VerbForm=Fin|Voice=Act	7	ccomp	_	Gloss=to-destroy,loose|Ref=GEN_20.4|SpaceAfter=No
+15	;	;	PUNCT	_	_	14	punct	_	Ref=GEN_20.4
+
+# sent_id = Septuagint-Genesis-20:5-grc
+# text = οὐκ αὐτός μοι εἶπεν, ἀδελφή μού ἐστιν; καὶ αὐτή μοι εἶπεν, ἀδελφός μού ἐστιν. ἐν καθαρᾷ καρδίᾳ καὶ ἐν δικαιοσύνῃ χειρῶν ἐποίησα τοῦτο.
+# parallel_id = bible/gen-20-5
+1	οὐκ	οὐ	ADV	_	Polarity=Neg	4	advmod	_	Gloss=no,not|Ref=GEN_20.5
+2	αὐτός	αὐτός	PRON	_	Case=Nom|Gender=Masc|Number=Sing|PronType=Prs	4	nsubj	_	Gloss=he,she,it,-self,same|Ref=GEN_20.5
+3	μοι	ἐγώ	PRON	_	Case=Dat|Number=Sing|Person=1|PronType=Prs	4	iobj	_	Gloss=me|Ref=GEN_20.5
+4	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-say|Ref=GEN_20.5|SpaceAfter=No
+5	,	,	PUNCT	_	_	6	punct	_	Ref=GEN_20.5
+6	ἀδελφή	ἀδελφή	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	4	ccomp	_	Gloss=sister|Ref=GEN_20.5
+7	μού	ἐγώ	PRON	_	Case=Gen|Number=Sing|Person=1|PronType=Prs	6	nmod:poss	_	Gloss=me,my|Ref=GEN_20.5
+8	ἐστιν	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	6	cop	_	Gloss=to-be|Ref=GEN_20.5|SpaceAfter=No
+9	;	;	PUNCT	_	_	10	punct	_	Ref=GEN_20.5
+10	καὶ	καί	CCONJ	_	_	13	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.5
+11	αὐτή	αὐτός	PRON	_	Case=Nom|Gender=Fem|Number=Sing|PronType=Prs	13	nsubj	_	Gloss=she,-self,same|Ref=GEN_20.5
+12	μοι	ἐγώ	PRON	_	Case=Dat|Number=Sing|Person=1|PronType=Prs	13	iobj	_	Gloss=me|Ref=GEN_20.5
+13	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	4	conj	_	Gloss=to-say|Ref=GEN_20.5|SpaceAfter=No
+14	,	,	PUNCT	_	_	15	punct	_	Ref=GEN_20.5
+15	ἀδελφός	ἀδελφός	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	13	ccomp	_	Gloss=brother|Ref=GEN_20.5
+16	μού	ἐγώ	PRON	_	Case=Gen|Number=Sing|Person=1|PronType=Prs	15	nmod:poss	_	Gloss=me,my|Ref=GEN_20.5
+17	ἐστιν	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	15	cop	_	Gloss=to-be|Ref=GEN_20.5|SpaceAfter=No
+18	.	.	PUNCT	_	_	4	punct	_	Ref=GEN_20.5
+19	ἐν	ἐν	ADP	_	_	21	case	_	Gloss=in,on,by,with,to|Ref=GEN_20.5
+20	καθαρᾷ	καθαρός	ADJ	_	Case=Dat|Gender=Fem|Number=Sing	21	amod	_	Gloss=clean,pure|Ref=GEN_20.5
+21	καρδίᾳ	καρδία	NOUN	_	Case=Dat|Gender=Fem|Number=Sing	26	obl	_	Gloss=heart|Ref=GEN_20.5
+22	καὶ	καί	CCONJ	_	_	24	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.5
+23	ἐν	ἐν	ADP	_	_	24	case	_	Gloss=in,on,by,with,to|Ref=GEN_20.5
+24	δικαιοσύνῃ	δικαιοσύνη	NOUN	_	Case=Dat|Gender=Fem|Number=Sing	21	conj	_	Gloss=righteousness|Ref=GEN_20.5
+25	χειρῶν	χείρ	NOUN	_	Case=Gen|Gender=Fem|Number=Plur	24	nmod:poss	_	Gloss=hand|Ref=GEN_20.5
+26	ἐποίησα	ποιέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	4	parataxis	_	Gloss=to-do,make|Ref=GEN_20.5
+27	τοῦτο	οὗτος	PRON	_	Case=Acc|Gender=Neut|Number=Sing|PronType=Dem	26	obj	_	Gloss=this|Ref=GEN_20.5|SpaceAfter=No
+28	.	.	PUNCT	_	_	27	punct	_	Ref=GEN_20.5
+
+# sent_id = Septuagint-Genesis-20:6-grc
+# text = εἶπεν δὲ αὐτῷ ὁ θεὸς καθ᾿ ὕπνον, κἀγὼ ἔγνων ὅτι ἐν καθαρᾷ καρδίᾳ ἐποίησας τοῦτο, καὶ ἐφεισάμην ἐγώ σου τοῦ μὴ ἁμαρτεῖν σὲ εἰς ἐμέ· ἕνεκεν τούτου οὐκ ἀφῆκά σὲ ἅψασθαι αὐτῆς.
+# parallel_id = bible/gen-20-6
+1	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-say|Ref=GEN_20.6
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_20.6
+3	αὐτῷ	αὐτός	PRON	_	Case=Dat|Gender=Masc,Neut|Number=Sing|PronType=Prs	1	iobj	_	Gloss=he,she,it,-self,same|Ref=GEN_20.6
+4	ὁ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	Gloss=the;-oh|Ref=GEN_20.6
+5	θεὸς	θεός	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	1	nsubj	_	Gloss=god|Ref=GEN_20.6
+6	καθ᾿	κατά	ADP	_	_	7	case	_	Gloss=+G=down-from,upon;-+A=according-to,along|Ref=GEN_20.6
+7	ὕπνον	ὕπνος	NOUN	_	Case=Acc|Gender=Masc|Number=Sing	1	obl	_	Gloss=sleep|Ref=GEN_20.6|SpaceAfter=No
+8	,	,	PUNCT	_	_	9	punct	_	Ref=GEN_20.6
+9-10	κἀγὼ	_	_	_	_	_	_	_	_
+9	καί	καί	CCONJ	_	_	11	cc	_	Gloss=and-I,even-I|Ref=GEN_20.6|Unknown=plus,Neuter,Singular
+10	ἐγώ	ἐγώ	PRON	_	Case=Nom|Number=Sing|Person=1|PronType=Prs	11	nsubj	_	Gloss=and-I,even-I|Ref=GEN_20.6
+11	ἔγνων	γινώσκω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	1	ccomp	_	Gloss=to-know|Ref=GEN_20.6
+12	ὅτι	ὅτι	SCONJ	_	_	16	mark	_	Gloss=because,that-for|Ref=GEN_20.6
+13	ἐν	ἐν	ADP	_	_	14	case	_	Gloss=in,on,by,with,to|Ref=GEN_20.6
+14	καθαρᾷ	καθαρός	ADJ	_	Case=Dat|Gender=Fem|Number=Sing	16	obl	_	Gloss=clean,pure|Ref=GEN_20.6
+15	καρδίᾳ	καρδία	NOUN	_	Case=Dat|Gender=Fem|Number=Sing	14	nmod	_	Gloss=heart|Ref=GEN_20.6
+16	ἐποίησας	ποιέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	11	ccomp	_	Gloss=to-do,make|Ref=GEN_20.6
+17	τοῦτο	οὗτος	PRON	_	Case=Acc|Gender=Neut|Number=Sing|PronType=Dem	16	obj	_	Gloss=this|Ref=GEN_20.6|SpaceAfter=No
+18	,	,	PUNCT	_	_	19	punct	_	Ref=GEN_20.6
+19	καὶ	καί	CCONJ	_	_	20	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.6
+20	ἐφεισάμην	φείδομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Mid	11	conj	_	Gloss=to-spare|Ref=GEN_20.6
+21	ἐγώ	ἐγώ	PRON	_	Case=Nom|Number=Sing|Person=1|PronType=Prs	20	nsubj	_	Gloss=I|Ref=GEN_20.6
+22	σου	σύ	PRON	_	Case=Gen|Number=Sing|Person=2|PronType=Prs	20	obl	_	Gloss=you,your|Ref=GEN_20.6
+23	τοῦ	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Masc,Neut|Number=Sing|PronType=Art	25	det	_	Gloss=the|Outer=Yes|Ref=GEN_20.6
+24	μὴ	μή	ADV	_	Polarity=Neg	25	advcl	_	Gloss=no,not|Ref=GEN_20.6
+25	ἁμαρτεῖν	ἁμαρτάνω	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Act	20	obl	_	Gloss=to-sin|Ref=GEN_20.6
+26	σὲ	σέ	PRON	_	Case=Acc|Number=Sing|Person=2|PronType=Prs	25	obj	_	Gloss=you|Ref=GEN_20.6
+27	εἰς	εἰς	ADP	_	_	28	case	_	Gloss=into,unto,for|Ref=GEN_20.6
+28	ἐμέ	ἐγώ	PRON	_	Case=Acc|Number=Sing|Person=1|PronType=Prs	25	obl	_	Gloss=me|Ref=GEN_20.6|SpaceAfter=No
+29	·	·	PUNCT	_	_	30	punct	_	Ref=GEN_20.6
+30	ἕνεκεν	ἕνεκα	ADP	_	_	31	case	_	Gloss=for-sake-of|Ref=GEN_20.6
+31	τούτου	οὗτος	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Dem	33	obl	_	Gloss=this|Ref=GEN_20.6
+32	οὐκ	οὐ	ADV	_	Polarity=Neg	33	advmod	_	Gloss=no,not|Ref=GEN_20.6
+33	ἀφῆκά	ἀφίημι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	11	parataxis	_	Gloss=to-dismiss,allow,forgive|Ref=GEN_20.6
+34	σὲ	σέ	PRON	_	Case=Acc|Number=Sing|Person=2|PronType=Prs	33	obj	_	Gloss=you|Ref=GEN_20.6
+35	ἅψασθαι	ἅπτω	VERB	_	Aspect=Perf|VerbForm=Inf|Voice=Mid	33	xcomp	_	Gloss=to-touch|Ref=GEN_20.6
+36	αὐτῆς	αὐτός	PRON	_	Case=Gen|Gender=Fem|Number=Sing|PronType=Prs	35	obl	_	Gloss=she,-self,same|Ref=GEN_20.6|SpaceAfter=No
+37	.	.	PUNCT	_	_	36	punct	_	Ref=GEN_20.6
+
+# sent_id = Septuagint-Genesis-20:7-grc
+# text = νῦν δὲ ἀπόδος τὴν γυναῖκα τῷ ἀνθρώπῳ, ὅτι προφήτης ἐστὶν καὶ προσεύξεται περὶ σου καὶ ζήσῃ· εἰ δὲ μὴ ἀποδίδως, γνῶθι ὅτι ἀποθανῇ σὺ καὶ πάντα τὰ σά.
+# parallel_id = bible/gen-20-7
+1	νῦν	νῦν	ADV	_	_	3	advmod	_	Gloss=now|Ref=GEN_20.7
+2	δὲ	δέ	CCONJ	_	_	3	cc	_	Gloss=but,and,however|Ref=GEN_20.7
+3	ἀπόδος	ἀποδίδωμι	VERB	_	Aspect=Perf|Mood=Imp|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-restore|Ref=GEN_20.7
+4	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	5	det	_	Gloss=the|Ref=GEN_20.7
+5	γυναῖκα	γυνή	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	3	obj	_	Gloss=woman,wife|Ref=GEN_20.7
+6	τῷ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	7	det	_	Gloss=the|Ref=GEN_20.7
+7	ἀνθρώπῳ	ἄνθρωπος	NOUN	_	Case=Dat|Gender=Masc|Number=Sing	3	iobj	_	Gloss=man|Ref=GEN_20.7|SpaceAfter=No
+8	,	,	PUNCT	_	_	9	punct	_	Ref=GEN_20.7
+9	ὅτι	ὅτι	SCONJ	_	_	10	mark	_	Gloss=because,that-for|Ref=GEN_20.7
+10	προφήτης	προφήτης	NOUN	_	Case=Nom|Gender=Masc|Number=Sing	3	advcl	_	Gloss=prophet|Ref=GEN_20.7
+11	ἐστὶν	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	10	cop	_	Gloss=to-be|Ref=GEN_20.7
+12	καὶ	καί	CCONJ	_	_	13	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.7
+13	προσεύξεται	προσεύχομαι	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Fut|VerbForm=Fin|Voice=Mid	3	conj	_	Gloss=to-offer-prayers|Ref=GEN_20.7
+14	περὶ	περί	ADP	_	_	15	case	_	Gloss=+G=about,concerning;-+A=around,about|Ref=GEN_20.7
+15	σου	σύ	PRON	_	Case=Gen|Number=Sing|Person=2|PronType=Prs	13	obl	_	Gloss=you,your|Ref=GEN_20.7
+16	καὶ	καί	CCONJ	_	_	17	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.7
+17	ζήσῃ	ζάω	VERB	_	Aspect=Perf|Mood=Sub|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	3	conj	_	Gloss=to-live|Ref=GEN_20.7|SpaceAfter=No
+18	·	·	PUNCT	_	_	19	punct	_	Ref=GEN_20.7
+19	εἰ	εἰ	SCONJ	_	_	21	mark	_	Gloss=Conj:-if,since|Ref=GEN_20.7
+20	δὲ	δέ	CCONJ	_	_	24	cc	_	Gloss=but,and,however|Ref=GEN_20.7
+21	μὴ	μή	ADV	_	Polarity=Neg	24	advmod	_	Gloss=no,not|Ref=GEN_20.7
+22	ἀποδίδως	ἀποδίδωμι	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=2|Tense=Pres|VerbForm=Fin|Voice=Act	21	xcomp	_	Gloss=to-restore|Ref=GEN_20.7|SpaceAfter=No
+23	,	,	PUNCT	_	_	21	punct	_	Ref=GEN_20.7
+24	γνῶθι	γινώσκω	VERB	_	Aspect=Perf|Mood=Imp|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	3	conj	_	Gloss=to-know|Ref=GEN_20.7
+25	ὅτι	ὅτι	SCONJ	_	_	26	mark	_	Gloss=because,that-for|Ref=GEN_20.7
+26	ἀποθανῇ	ἀποθνήσκω	VERB	_	Aspect=Perf|Mood=Sub|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Mid,Pass	24	ccomp	_	Gloss=to-die|Ref=GEN_20.7
+27	σὺ	σύ	PRON	_	Case=Nom|Number=Sing|Person=2|PronType=Prs	26	nsubj	_	Gloss=you|Ref=GEN_20.7
+28	καὶ	καί	CCONJ	_	_	29	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.7
+29	πάντα	πᾶς	ADJ	_	Case=Acc|Gender=Masc|Number=Sing	27	conj	_	Gloss=all,every|Ref=GEN_20.7
+30	τὰ	ὁ	DET	_	Case=Acc,Nom|Definite=Def|Gender=Neut|Number=Plur|PronType=Art	31	nsubj	_	Gloss=the|Ref=GEN_20.7
+31	σά	σός	PRON	_	Case=Acc,Nom|Gender=Neut|Number=Plur|Poss=Yes|PronType=Prs	29	acl:relcl	_	Gloss=you|Ref=GEN_20.7|SpaceAfter=No
+32	.	.	PUNCT	_	_	31	punct	_	Ref=GEN_20.7
+
+# sent_id = Septuagint-Genesis-20:8-grc
+# text = καὶ ὤρθρισεν Ἀβιμέλεχ τὸ πρωῒ καὶ ἐκάλεσεν πάντας τοὺς παῖδας αὐτοῦ καὶ ἐλάλησεν πάντα τὰ ῥήματα ταῦτα εἰς τὰ ὦτα αὐτῶν, ἐφοβήθησαν δὲ πάντες οἱ ἄνθρωποι σφόδρα.
+# parallel_id = bible/gen-20-8
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.8
+2	ὤρθρισεν	ὀρθρίζω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-arise-early|Ref=GEN_20.8
+3	Ἀβιμέλεχ	Ἀβιμέλεχ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	2	nsubj	_	Gloss=Abimelech,Elimelech|Ref=GEN_20.8
+4	τὸ	ὁ	DET	_	Case=Acc,Nom|Definite=Def|Gender=Neut|Number=Sing|PronType=Art	5	det	_	Gloss=the|Ref=GEN_20.8
+5	πρωῒ	πρωΐ	ADV	_	_	2	obl:tmod	_	Gloss=morning,dawn|Ref=GEN_20.8
+6	καὶ	καί	CCONJ	_	_	7	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.8
+7	ἐκάλεσεν	καλέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-call|Ref=GEN_20.8
+8	πάντας	πᾶς	ADJ	_	Case=Acc|Gender=Masc|Number=Plur	10	amod	_	Gloss=all|Ref=GEN_20.8
+9	τοὺς	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	10	det	_	Gloss=the|Ref=GEN_20.8
+10	παῖδας	παῖς	NOUN	_	Case=Acc|Gender=Masc|Number=Plur	7	obj	_	Gloss=children,servants|Ref=GEN_20.8
+11	αὐτοῦ	αὐτός	PRON	_	Case=Gen|Gender=Masc,Neut|Number=Sing|PronType=Prs	10	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_20.8
+12	καὶ	καί	CCONJ	_	_	13	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.8
+13	ἐλάλησεν	λαλέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-speak,talk|Ref=GEN_20.8
+14	πάντα	πᾶς	ADJ	_	Case=Acc|Gender=Masc|Number=Sing	16	amod	_	Gloss=all,every|Ref=GEN_20.8
+15	τὰ	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Neut|Number=Plur|PronType=Art	16	det	_	Gloss=the|Ref=GEN_20.8
+16	ῥήματα	ῥῆμα	NOUN	_	Case=Acc|Gender=Neut|Number=Plur	13	obj	_	Gloss=words|Ref=GEN_20.8
+17	ταῦτα	οὗτος	PRON	_	Case=Acc|Gender=Neut|Number=Plur|PronType=Dem	16	det	_	Gloss=these-things|Ref=GEN_20.8
+18	εἰς	εἰς	ADP	_	_	20	case	_	Gloss=into,unto,for|Ref=GEN_20.8
+19	τὰ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Neut|Number=Plur|PronType=Art	20	det	_	Gloss=the|Ref=GEN_20.8
+20	ὦτα	οὖς	NOUN	_	Case=Nom|Gender=Neut|Number=Plur	13	obl	_	Gloss=ears|Ref=GEN_20.8
+21	αὐτῶν	αὐτός	PRON	_	Case=Gen|Gender=Fem,Masc,Neut|Number=Plur|PronType=Prs	20	nmod:poss	_	Gloss=he,she,it,-self,same|Ref=GEN_20.8|SpaceAfter=No
+22	,	,	PUNCT	_	_	23	punct	_	Ref=GEN_20.8
+23	ἐφοβήθησαν	φοβέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	2	conj	_	Gloss=to-fear|Ref=GEN_20.8
+24	δὲ	δέ	CCONJ	_	_	23	cc	_	Gloss=but,and,however|Ref=GEN_20.8
+25	πάντες	πᾶς	ADJ	_	Case=Nom|Gender=Masc|Number=Plur	27	amod	_	Gloss=all,every|Ref=GEN_20.8
+26	οἱ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Plur|PronType=Art	27	det	_	Gloss=the|Ref=GEN_20.8
+27	ἄνθρωποι	ἄνθρωπος	NOUN	_	Case=Nom|Gender=Masc|Number=Plur	23	nsubj:pass	_	Gloss=man|Ref=GEN_20.8
+28	σφόδρα	σφόδρα	ADV	_	_	23	advmod	_	Gloss=very-much|Ref=GEN_20.8|SpaceAfter=No
+29	.	.	PUNCT	_	_	28	punct	_	Ref=GEN_20.8
+
+# sent_id = Septuagint-Genesis-20:9-grc
+# text = καὶ ἐκάλεσεν Ἀβιμέλεχ τὸν Ἁβραὰμ καὶ εἶπεν αὐτῷ, τί τοῦτο ἐποίησας ἡμῖν; μή τι ἡμάρτομεν εἰς σέ, ὅτι ἐπήγαγες ἐπ᾿ ἐμὲ καὶ ἐπὶ τὴν βασιλείαν μου ἁμαρτίαν μεγάλην; ἔργον, ὃ οὐδεὶς ποιήσει, πεποίηκάς μοι.
+# parallel_id = bible/gen-20-9
+1	καὶ	καί	CCONJ	_	_	2	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.9
+2	ἐκάλεσεν	καλέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-call|Ref=GEN_20.9
+3	Ἀβιμέλεχ	Ἀβιμέλεχ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	2	nsubj	_	Gloss=Abimelech,Elimelech|Ref=GEN_20.9
+4	τὸν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	Gloss=the|Ref=GEN_20.9
+5	Ἁβραὰμ	Ἁβραάμ	PROPN	_	Case=Acc|Gender=Masc|Number=Sing	2	obj	_	Gloss=Abraham|Ref=GEN_20.9
+6	καὶ	καί	CCONJ	_	_	7	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.9
+7	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	2	conj	_	Gloss=to-say|Ref=GEN_20.9
+8	αὐτῷ	αὐτός	PRON	_	Case=Dat|Gender=Masc,Neut|Number=Sing|PronType=Prs	7	iobj	_	Gloss=he,she,it,-self,same|Ref=GEN_20.9|SpaceAfter=No
+9	,	,	PUNCT	_	_	10	punct	_	Ref=GEN_20.9
+10	τί	τίς	PRON	_	Case=Acc|Gender=Neut|Number=Sing|PronType=Int	11	nsubj	_	Gloss=what?,which?;-+enclitic=anything,something|Ref=GEN_20.9
+11	τοῦτο	οὗτος	PRON	_	Case=Acc,Nom|Gender=Neut|Number=Sing|PronType=Dem	7	ccomp	_	Gloss=this|Ref=GEN_20.9
+12	ἐποίησας	ποιέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	11	acl:relcl	_	Gloss=to-do,make|Ref=GEN_20.9
+13	ἡμῖν	ἡμεῖς	PRON	_	Case=Dat|Number=Plur|Person=1|PronType=Prs	12	iobj	_	Gloss=us|Ref=GEN_20.9|SpaceAfter=No
+14	;	;	PUNCT	_	_	15	punct	_	Ref=GEN_20.9
+15	μή	μή	ADV	_	Polarity=Neg	17	advmod	_	Gloss=no,not|Ref=GEN_20.9
+16	τι	τίς	PRON	_	Case=Acc|Gender=Neut|Number=Sing|PronType=Int	17	obj	_	Gloss=anything,something|Ref=GEN_20.9
+17	ἡμάρτομεν	ἁμαρτάνω	VERB	_	Aspect=Perf|Mood=Ind|Number=Plur|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	11	parataxis	_	Gloss=to-sin|Ref=GEN_20.9
+18	εἰς	εἰς	ADP	_	_	19	case	_	Gloss=into,unto,for|Ref=GEN_20.9
+19	σέ	σέ	PRON	_	Case=Acc|Number=Sing|Person=2|PronType=Prs	17	obl	_	Gloss=you|Ref=GEN_20.9|SpaceAfter=No
+20	,	,	PUNCT	_	_	21	punct	_	Ref=GEN_20.9
+21	ὅτι	ὅτι	SCONJ	_	_	22	mark	_	Gloss=because,that-for|Ref=GEN_20.9
+22	ἐπήγαγες	ἐπάγω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	17	advcl	_	Gloss=to-lead,bring-upon|Ref=GEN_20.9
+23	ἐπ᾿	ἐπί	ADP	_	_	24	case	_	Gloss=upon,against|Ref=GEN_20.9
+24	ἐμὲ	ἐγώ	PRON	_	Case=Acc|Number=Sing|Person=1|PronType=Prs	22	obl	_	Gloss=me|Ref=GEN_20.9
+25	καὶ	καί	CCONJ	_	_	28	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.9
+26	ἐπὶ	ἐπί	ADP	_	_	28	case	_	Gloss=on,upon,against|Ref=GEN_20.9
+27	τὴν	ὁ	DET	_	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	28	det	_	Gloss=the|Ref=GEN_20.9
+28	βασιλείαν	βασιλεία	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	24	conj	_	Gloss=kingdom|Ref=GEN_20.9
+29	μου	ἐγώ	PRON	_	Case=Gen|Number=Sing|Person=1|PronType=Prs	28	nmod:poss	_	Gloss=me,my|Ref=GEN_20.9
+30	ἁμαρτίαν	ἁμαρτία	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	22	obj	_	Gloss=sin|Ref=GEN_20.9
+31	μεγάλην	μέγας	ADJ	_	Case=Acc|Gender=Fem|Number=Sing	30	amod	_	Gloss=big,great|Ref=GEN_20.9|SpaceAfter=No
+32	;	;	PUNCT	_	_	33	punct	_	Ref=GEN_20.9
+33	ἔργον	ἔργον	NOUN	_	Case=Acc|Gender=Neut|Number=Sing	39	obj	_	Gloss=work,deed|Ref=GEN_20.9|SpaceAfter=No
+34	,	,	PUNCT	_	_	35	punct	_	Ref=GEN_20.9
+35	ὃ	ὁ	DET	_	Case=Nom|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	37	nsubj	_	Gloss=who,which,that|Ref=GEN_20.9
+36	οὐδεὶς	οὐθείς	ADJ	_	Case=Acc,Nom|Gender=Fem,Masc|Number=Plur	37	advmod	_	Gloss=no-one,none,nothing|Ref=GEN_20.9
+37	ποιήσει	ποιέω	VERB	_	Aspect=Imp|Mood=Ind|Number=Sing|Person=3|Tense=Fut|VerbForm=Fin|Voice=Act	33	acl:relcl	_	Gloss=to-do,make|Ref=GEN_20.9|SpaceAfter=No
+38	,	,	PUNCT	_	_	33	punct	_	Ref=GEN_20.9
+39	πεποίηκάς	ποιέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=2|Tense=Pres|VerbForm=Fin|Voice=Act	11	parataxis	_	Gloss=to-do,make|Ref=GEN_20.9
+40	μοι	ἐγώ	PRON	_	Case=Dat|Number=Sing|Person=1|PronType=Prs	39	iobj	_	Gloss=me|Ref=GEN_20.9|SpaceAfter=No
+41	.	.	PUNCT	_	_	40	punct	_	Ref=GEN_20.9
+
+# sent_id = Septuagint-Genesis-20:10-grc
+# text = εἶπεν δὲ Ἀβιμέλεχ τῷ Ἁβραάμ, τί ἐνιδὼν ἐποίησας τοῦτο;
+# parallel_id = bible/gen-20-10
+1	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-say|Ref=GEN_20.10
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_20.10
+3	Ἀβιμέλεχ	Ἀβιμέλεχ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	1	nsubj	_	Gloss=Abimelech,Elimelech|Ref=GEN_20.10
+4	τῷ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	Gloss=the|Ref=GEN_20.10
+5	Ἁβραάμ	Ἁβραάμ	PROPN	_	Case=Dat|Gender=Masc|Number=Sing	1	iobj	_	Gloss=Abraham|Ref=GEN_20.10|SpaceAfter=No
+6	,	,	PUNCT	_	_	7	punct	_	Ref=GEN_20.10
+7	τί	τίς	PRON	_	Case=Acc|Gender=Neut|Number=Sing|PronType=Int	8	obj	_	Gloss=what?,which?;-+enclitic=anything,something|Ref=GEN_20.10
+8	ἐνιδὼν	ἐνοράω	VERB	_	Aspect=Perf|Case=Nom|Gender=Masc|Number=Sing|VerbForm=Part|Voice=Act	9	advcl	_	Gloss=to-see|Ref=GEN_20.10
+9	ἐποίησας	ποιέω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=2|Tense=Past|VerbForm=Fin|Voice=Act	1	ccomp	_	Gloss=to-do,make|Ref=GEN_20.10
+10	τοῦτο	οὗτος	PRON	_	Case=Acc|Gender=Neut|Number=Sing|PronType=Dem	9	obj	_	Gloss=this|Ref=GEN_20.10|SpaceAfter=No
+11	;	;	PUNCT	_	_	10	punct	_	Ref=GEN_20.10
+
+# sent_id = Septuagint-Genesis-20:11-grc
+# text = εἶπεν δὲ Ἁβραάμ, εἶπα γάρ, ἄρα οὐκ ἔστιν θεοσέβεια ἐν τῷ τόπῳ τούτῳ, ἐμέ τε ἀποκτενοῦσιν ἕνεκεν τῆς γυναικός μου.
+# parallel_id = bible/gen-20-11
+1	εἶπεν	εἶπον	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Gloss=to-say|Ref=GEN_20.11
+2	δὲ	δέ	CCONJ	_	_	1	cc	_	Gloss=but,and,however|Ref=GEN_20.11
+3	Ἁβραάμ	Ἁβραάμ	PROPN	_	Case=Nom|Gender=Masc|Number=Sing	1	nsubj	_	Gloss=Abraham|Ref=GEN_20.11|SpaceAfter=No
+4	,	,	PUNCT	_	_	5	punct	_	Ref=GEN_20.11
+5	εἶπα	λέγω	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	1	ccomp	_	Gloss=to-speak,say|Ref=GEN_20.11
+6	γάρ	γάρ	SCONJ	_	_	5	mark	_	Gloss=for,because|Ref=GEN_20.11|SpaceAfter=No
+7	,	,	PUNCT	_	_	8	punct	_	Ref=GEN_20.11
+8	ἄρα	ἄρα	PART	_	_	10	advmod	_	Gloss=then,therefore,perhaps|Ref=GEN_20.11
+9	οὐκ	οὐ	ADV	_	Polarity=Neg	10	advmod	_	Gloss=no,not|Ref=GEN_20.11
+10	ἔστιν	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	5	ccomp	_	Gloss=to-be|Ref=GEN_20.11
+11	θεοσέβεια	θεοσέβεια	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	10	nsubj	_	Gloss=godliness|Ref=GEN_20.11
+12	ἐν	ἐν	ADP	_	_	14	case	_	Gloss=in,on,by,with,to|Ref=GEN_20.11
+13	τῷ	ὁ	DET	_	Case=Dat|Definite=Def|Gender=Masc|Number=Sing|PronType=Art	14	det	_	Gloss=the|Ref=GEN_20.11
+14	τόπῳ	τόπος	NOUN	_	Case=Dat|Gender=Masc|Number=Sing	10	obl	_	Gloss=place|Ref=GEN_20.11
+15	τούτῳ	οὗτος	PRON	_	Case=Dat|Gender=Masc,Neut|Number=Sing|PronType=Dem	14	det	_	Gloss=this|Ref=GEN_20.11|SpaceAfter=No
+16	,	,	PUNCT	_	_	17	punct	_	Ref=GEN_20.11
+17	ἐμέ	ἐγώ	PRON	_	Case=Acc|Number=Sing|Person=1|PronType=Prs	19	obj	_	Gloss=me|Ref=GEN_20.11
+18	τε	τε	CCONJ	_	_	19	cc	_	Gloss=and,both,if|Ref=GEN_20.11|Unknown=particle/Conjunction
+19	ἀποκτενοῦσιν	ἀποκτείνω	VERB	_	Aspect=Imp|Mood=Ind|Number=Plur|Person=3|Tense=Fut|VerbForm=Fin|Voice=Act	5	conj	_	Gloss=to-kill|Ref=GEN_20.11
+20	ἕνεκεν	ἕνεκα	ADP	_	_	22	case	_	Gloss=for-sake-of|Ref=GEN_20.11
+21	τῆς	ὁ	DET	_	Case=Gen|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	22	det	_	Gloss=the|Ref=GEN_20.11
+22	γυναικός	γυνή	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	19	obl	_	Gloss=woman,wife|Ref=GEN_20.11
+23	μου	ἐγώ	PRON	_	Case=Gen|Number=Sing|Person=1|PronType=Prs	22	nmod:poss	_	Gloss=me,my|Ref=GEN_20.11|SpaceAfter=No
+24	.	.	PUNCT	_	_	23	punct	_	Ref=GEN_20.11
+
+# sent_id = Septuagint-Genesis-20:12-grc
+# text = καὶ γὰρ ἀληθῶς ἀδελφή μού ἐστιν ἐκ πατρός, ἀλλ᾿ οὐκ ἐκ μητρός· ἐγενήθη δέ μοι εἰς γυναῖκα.
+# parallel_id = bible/gen-20-12
+1	καὶ	καί	CCONJ	_	_	4	cc	_	Gloss=and,also,even,then,next|Ref=GEN_20.12
+2	γὰρ	γάρ	SCONJ	_	_	4	mark	_	Gloss=for,because|Ref=GEN_20.12
+3	ἀληθῶς	ἀληθῶς	ADV	_	_	4	advmod	_	Gloss=truly|Ref=GEN_20.12
+4	ἀδελφή	ἀδελφή	NOUN	_	Case=Nom|Gender=Fem|Number=Sing	0	root	_	Gloss=sister|Ref=GEN_20.12
+5	μού	ἐγώ	PRON	_	Case=Gen|Number=Sing|Person=1|PronType=Prs	4	nmod:poss	_	Gloss=me,my|Ref=GEN_20.12
+6	ἐστιν	εἰμί	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	4	cop	_	Gloss=to-be|Ref=GEN_20.12
+7	ἐκ	ἐκ	ADP	_	_	8	case	_	Gloss=out,out-of|Ref=GEN_20.12
+8	πατρός	πατήρ	NOUN	_	Case=Gen|Gender=Masc|Number=Sing	4	obl	_	Gloss=father|Ref=GEN_20.12|SpaceAfter=No
+9	,	,	PUNCT	_	_	10	punct	_	Ref=GEN_20.12
+10	ἀλλ᾿	ἀλλά	CCONJ	_	_	13	cc	_	Gloss=but|Ref=GEN_20.12
+11	οὐκ	οὐ	ADV	_	Polarity=Neg	13	advmod	_	Gloss=no,not|Ref=GEN_20.12
+12	ἐκ	ἐκ	ADP	_	_	13	case	_	Gloss=out,out-of|Ref=GEN_20.12
+13	μητρός	μήτηρ	NOUN	_	Case=Gen|Gender=Fem|Number=Sing	8	conj	_	Gloss=mother|Ref=GEN_20.12|SpaceAfter=No
+14	·	·	PUNCT	_	_	15	punct	_	Ref=GEN_20.12
+15	ἐγενήθη	γίνομαι	VERB	_	Aspect=Perf|Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Pass	4	conj	_	Gloss=to-become,come-to-be|Ref=GEN_20.12
+16	δέ	δέ	CCONJ	_	_	15	cc	_	Gloss=but,and,however|Ref=GEN_20.12
+17	μοι	ἐγώ	PRON	_	Case=Dat|Number=Sing|Person=1|PronType=Prs	15	iobj	_	Gloss=me|Ref=GEN_20.12
+18	εἰς	εἰς	ADP	_	_	19	case	_	Gloss=into,unto,for|Ref=GEN_20.12
+19	γυναῖκα	γυνή	NOUN	_	Case=Acc|Gender=Fem|Number=Sing	15	obl	_	Gloss=woman,wife|Ref=GEN_20.12|SpaceAfter=No
+20	.	.	PUNCT	_	_	15	punct	_	Ref=GEN_20.12
