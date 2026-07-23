@@ -777,6 +777,135 @@ class SourceRegistryTest < Minitest::Test
     assert_equal 1, Nabu::Store::Source.count
   end
 
+  # -- fetch-grant keys (P42-r1) -------------------------------------------
+
+  def test_grant_absent_by_default
+    entry = load_registry(<<~YAML)["src"]
+      src:
+        adapter: FakeAdapter
+        enabled: true
+    YAML
+    refute_predicate entry, :grant_required?
+    assert_nil entry.grant
+  end
+
+  def test_parses_a_valid_grant_block
+    entry = load_registry(<<~YAML)["src"]
+      src:
+        adapter: FakeAdapter
+        enabled: true
+        grant_required: true
+        grant:
+          grantor: G. Starostin
+          date: "2026-07-15"
+          terms: any use, per-base attribution required
+          thread: "№1"
+          request_hint: write to George Starostin for your own grant
+    YAML
+    assert_predicate entry, :grant_required?
+    assert_equal "G. Starostin", entry.grant.grantor
+    assert_equal "2026-07-15", entry.grant.date
+    assert_equal "any use, per-base attribution required", entry.grant.terms
+    assert_equal "№1", entry.grant.thread
+    assert_match(/your own grant/, entry.grant.request_hint)
+  end
+
+  def test_grant_required_without_a_block_is_an_error
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        src:
+          adapter: FakeAdapter
+          enabled: true
+          grant_required: true
+      YAML
+    end
+    assert_match(/grant_required: true needs a grant: block/, error.message)
+  end
+
+  def test_a_grant_block_without_the_flag_is_an_error
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        src:
+          adapter: FakeAdapter
+          enabled: true
+          grant:
+            grantor: X
+            date: "2026-07-15"
+            terms: t
+            thread: "№1"
+            request_hint: ask
+      YAML
+    end
+    assert_match(/grant: block requires grant_required: true/, error.message)
+  end
+
+  def test_grant_block_missing_a_field_is_an_error
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        src:
+          adapter: FakeAdapter
+          enabled: true
+          grant_required: true
+          grant:
+            grantor: X
+            date: "2026-07-15"
+            terms: t
+            request_hint: ask
+      YAML
+    end
+    assert_match(/grant\.thread must be a non-empty string/, error.message)
+  end
+
+  def test_an_unquoted_date_is_rejected_at_yaml_load
+    # A bare 2026-07-15 is a YAML Date, not a String — and the registry's
+    # YAML.safe_load refuses the Date class outright, so an unquoted grant date
+    # never even reaches the entry validator. Quoting keeps it a String the
+    # gate can render verbatim; this proves the guard rail exists.
+    assert_raises(Psych::DisallowedClass) do
+      load_registry(<<~YAML)
+        src:
+          adapter: FakeAdapter
+          enabled: true
+          grant_required: true
+          grant:
+            grantor: X
+            date: 2026-07-15
+            terms: t
+            thread: "№1"
+            request_hint: ask
+      YAML
+    end
+  end
+
+  def test_a_non_string_grant_field_is_a_validation_error
+    # The belt-and-suspenders: even if a non-String slipped past YAML load
+    # (e.g. a numeric thread), grant_field! names the offending key.
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        src:
+          adapter: FakeAdapter
+          enabled: true
+          grant_required: true
+          grant:
+            grantor: X
+            date: "2026-07-15"
+            terms: t
+            thread: 1
+            request_hint: ask
+      YAML
+    end
+    assert_match(/grant\.thread must be a non-empty string/, error.message)
+  end
+
+  def test_shipped_starling_row_carries_the_grant
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    starling = registry["starling"]
+    assert_predicate starling, :grant_required?, "starling arms the grant gate"
+    assert_equal "G. Starostin", starling.grant.grantor
+    # hdic's license contradiction was owner-resolved (GO, 2026-07-20) — NOT gated.
+    refute_predicate registry["hdic"], :grant_required?, "hdic was resolved, not gated"
+  end
+
   private
 
   def load_registry(yaml)
