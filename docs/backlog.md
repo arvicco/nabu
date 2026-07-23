@@ -10911,6 +10911,10 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 
 ## P40-flips · [status: done 2026-07-22 — eb66f2f; owner-verified counts in sources.yml comments; IcePaHC landed at the owner's same-day `sync ud`]
 
+# P43 candidates (rolling)
+
+## P43-? · TITUS Avestan adapter  [UNBLOCKED 2026-07-23 — №41-3 granted: non-commercial + TITUS-and-editors credit on every surface; one polite scripted pass; nc + mandatory credit line; per-text editor metadata]
+
 # P42 — the efficiency phase (owner-picked 2026-07-23: "make these commands fly, not crawl"; plan: .docs/p42-efficiency-plan.md)
 
 ## P42-0 · source_stats + global census derived table  [tier: fable] [status: in-progress — dispatched 2026-07-23] — status/list/axis/language 130–250s → ms; migration 019; D42-a health invariant
