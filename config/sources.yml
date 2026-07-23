@@ -101,7 +101,12 @@ first1k-greek:
 ud:
   adapter: Nabu::Adapters::UniversalDependencies
   # P35-0 vs the D35 draft: +celtic (two sga treebanks) +sinitic (two lzh treebanks) — TREEBANKS-verified
-  axes: [classical, slavic, germanic, celtic, hittite, indic, sinitic]
+  # P43-1: +cuneiform (akk RIAO/PISANDUB) +egyptian (cop Bohairic, egy PC)
+  # +hebrew (hbo PTNK) +biblical (Septuagint grc-ptnk, Masoretic hbo-ptnk,
+  # Bohairic Gospel of Mark cop) — existing axes that gain a treebank. The
+  # four new language lanes xcl/fro/frm/ota have NO existing desk, so they
+  # ride axis-less (minting new axes is an owner decision, not this packet's).
+  axes: [classical, slavic, germanic, celtic, hittite, indic, sinitic, cuneiform, egyptian, hebrew, biblical]
   enabled: true   # first real sync verified + owner sign-off 2026-07-04
   sync_policy: manual   # treebanks version independently and change rarely
   # P31-0 (2026-07-19): TREEBANKS grew to ten — hittite-hittb
@@ -169,6 +174,28 @@ ud:
   # clone; docs at UD's one-doc-per-treebank-split grain — IcePaHC ships
   # train/dev/test = +3 docs (~one witness per split of the ~11.9 MB dev &
   # test halves), is joins the lemma-indexed languages. Budget accordingly.
+  # P43-1 (2026-07-23): TREEBANKS grew to TWENTY-SIX — the historical wave,
+  # eleven treebanks (config-only, licenses read verbatim 2026-07-23):
+  #   FOUR NEW LANGUAGE LANES (axis-less — no existing desk):
+  #     classical-armenian-caval (xcl, CC BY-NC-SA 4.0 → nc),
+  #     old-french-profiterole (fro) + middle-french-profiterole (frm)
+  #       — CONFLICTING LICENSES (LICENSE.txt BY-SA vs README BY-NC-SA);
+  #         conservative nc, pending upstream clarification,
+  #     ottoman-boun + ottoman-dudu (ota, CC BY-SA 4.0 → attribution).
+  #   SEVEN UNDER EXISTING LANGUAGES/AXES:
+  #     greek-ptnk (grc, Septuagint; CC BY-SA 4.0 → attribution),
+  #     hebrew-ptnk (hbo, Masoretic; the first hbo TREEBANK lane, NFC-exempt
+  #       byte-verbatim; underlying ETCBC annotations CC BY-NC 4.0 → nc),
+  #     akkadian-riao (CC BY-SA 3.0) + akkadian-pisandub (CC BY-SA 4.0),
+  #     coptic-bohairic (cop, Gospel of Mark; CC BY 4.0 → attribution),
+  #     egyptian-pc (egy, Pyramid Texts; CC BY-SA 4.0 → attribution).
+  # Unlike the legacy bare-nc treebanks, EVERY P43-1 entry carries an explicit
+  # license_class (nc and attribution both); the source class stays nc.
+  # EXPECTED SYNC DELTA at the next owner-fired `bin/nabu sync ud`: +11 repo
+  # clones; each of these eleven treebanks contributes AT LEAST its test split
+  # = +11 docs at treebank-split grain (more if a repo ships train/dev too —
+  # the honest floor is +11), and xcl/fro/frm/ota/hbo enter the lemma-indexed
+  # languages (grc/akk/cop/egy already indexed). No new parser family.
 
 proiel:
   adapter: Nabu::Adapters::Proiel

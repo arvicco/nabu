@@ -115,7 +115,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (13): `vulgate`, `eng-web`, `sblgnt`, `coptic-scriptorium`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `hebrew-lexicon`, `peshitta`, `syriac-corpus`
+**Members** (14): `ud`, `vulgate`, `eng-web`, `sblgnt`, `coptic-scriptorium`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `hebrew-lexicon`, `peshitta`, `syriac-corpus`
 
 ### hebrew
 
@@ -123,7 +123,7 @@ The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Gre
 
 The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSHB, BHSA, DSS, SDBH and the lexicon shelf, the Sefaria Targums, the bridging crosswalk, and IIP's inscriptions of Israel/Palestine.
 
-**Members** (8): `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `iip`, `hebrew-lexicon`
+**Members** (9): `ud`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `iip`, `hebrew-lexicon`
 
 ### syriac
 
@@ -155,7 +155,7 @@ The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — it
 
 The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL's fragments, the Copenhagen Ugaritic Corpus (alphabetic cuneiform), and TLHdig shared with the Hittitologist.
 
-**Members** (6): `oracc`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`
+**Members** (7): `ud`, `oracc`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`
 
 ### egyptian
 
@@ -163,7 +163,7 @@ The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL'
 
 The Egyptian-Coptic continuum: the TLA corpora and word list (tla-hf, aes, aed), the Coptic lexicon with its egy-cop crosswalk, and Coptic Scriptorium.
 
-**Members** (5): `ccl`, `coptic-scriptorium`, `tla-hf`, `aes`, `aed`
+**Members** (6): `ud`, `ccl`, `coptic-scriptorium`, `tla-hf`, `aes`, `aed`
 
 ### indic
 
