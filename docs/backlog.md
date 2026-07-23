@@ -10911,6 +10911,16 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 
 ## P40-flips · [status: done 2026-07-22 — eb66f2f; owner-verified counts in sources.yml comments; IcePaHC landed at the owner's same-day `sync ud`]
 
+# P42 candidates — the scale phase (from .docs/p41-scale-review.md, owner picks)
+
+## P42-0 · source_stats + global census derived table  [tier: fable — first derived-stats table, invariants] — status/list/axis/language 130–250s → ms
+## P42-1 · vocab corpus lemma-frequency table  [tier: opus] — 17.9s → ms
+## P42-2 · ubiquitous-term guard (fts5vocab df → unranked corpus-order + honest footer)  [tier: fable — search semantics] — the الله class ~10s → sub-second
+## P42-3 · language column into passages_fts  [rides the owner's next FULL rebuild with the lzh re-derive + openiti timeline]
+## P42-4 · load hygiene: post-load bounded ANALYZE + PRAGMA pass  [tier: opus]
+
+## P41-r2 · --random instant (id-probe sampler)  [status: done 2026-07-23 — 98ef4b6; 2m19s → 0.3s; join-free probe pattern documented]
+
 ## P41-r1 · Recipe honesty: term-less filtered search never existed  [status: done 2026-07-22 — six recipes + README/tools composed with live-verified queries; riders journaled: term-less filtered-browse mode, catalog-side filter window starvation (P40-r2 genus)]
 
 # P41 — the Arabic phase (owner-picked 2026-07-22: "A, full scope, display considerations, new arabic(islamic?) axes, whole shebang"; plan: .docs/p41-arabic-plan.md)
