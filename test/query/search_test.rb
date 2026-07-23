@@ -802,16 +802,21 @@ module Query
     # rows a catalog-side filter then rejects, so the page comes back short
     # (or empty) while matches exist beyond the window. The result semantics
     # stay as they are — but the surface must SAY the page may be incomplete.
+    # (P42-3: --lang left this class — it rides in the MATCH on the current
+    # index shape, so these pins exercise the still-catalog-side filters;
+    # the historical lang starvation pin lives on in the downgraded-index
+    # test below.)
 
     # Ten short Latin rows outrank (bm25 penalizes length) one longer Greek
-    # row; limit 1 makes the inner window exactly 10, so the Greek match sits
-    # beyond it and the lang filter empties the page.
+    # row on the nc source; limit 1 makes the inner window exactly 10, so
+    # the Greek match sits beyond it and a catalog-side filter (license,
+    # source — or lang on a pre-P42-3 index) empties the page.
     def seed_window_exhausting_corpus(lat_rows: 10)
       lat = make_document(source: @open, urn: "urn:d:lat", language: "lat")
       lat_rows.times do |i|
         make_passage(lat, urn: "urn:d:lat:#{i}", text: "arma virumque cano", sequence: i, language: "lat")
       end
-      grc = make_document(source: @open, urn: "urn:d:grc", language: "grc")
+      grc = make_document(source: @nc, urn: "urn:d:grc", language: "grc")
       make_passage(grc, urn: "urn:d:grc:1", sequence: 0, language: "grc",
                         text: "arma sits far down the rank because this passage carries many more words than the rest")
       rebuild!
@@ -821,7 +826,7 @@ module Query
       seed_window_exhausting_corpus
 
       query = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
-      results = query.run("arma", lang: "grc", limit: 1)
+      results = query.run("arma", license: "nc", limit: 1)
       assert_empty results, "the inner window holds only filter-rejected rows (the P34 gate repro)"
       assert_equal Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT, query.incomplete_hint,
                    "an empty page with matches beyond the window must announce itself"
@@ -831,7 +836,7 @@ module Query
       seed_window_exhausting_corpus(lat_rows: 3)
 
       query = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
-      results = query.run("arma", lang: "xcl", limit: 1)
+      results = query.run("arma", place: "nowhere%", limit: 1)
       assert_empty results
       assert_nil query.incomplete_hint, "the window held every match — this empty is the truth"
     end
@@ -923,7 +928,7 @@ module Query
       assert_nil searcher.rank_note, "the urn probe serves one known row — nothing to guard"
     end
 
-    def test_guard_composes_with_catalog_filters
+    def test_guard_composes_with_the_lang_filter
       seed_ubiquity_corpus
       grc = make_document(source: @open, urn: "urn:d:grc", language: "grc")
       make_passage(grc, urn: "urn:d:grc:1", text: "aurora", sequence: 0, language: "grc")
@@ -932,7 +937,7 @@ module Query
 
       results = searcher.run("aurora", lang: "grc", ubiquity_threshold: 2)
       assert_equal %w[urn:d:grc:1], results.map(&:urn),
-                   "the corpus-order path applies the same catalog filters"
+                   "the corpus-order path applies the same filters (lang in-MATCH since P42-3)"
       assert_equal Nabu::Query::Search::RANK_SKIP_NOTE, searcher.rank_note
     end
 
@@ -959,6 +964,96 @@ module Query
       results = searcher.run("aurora", exact: true, ubiquity_threshold: 2)
       refute_empty results
       assert_nil searcher.rank_note
+    end
+
+    # -- index-side --lang (P42-3) --------------------------------------------
+    # The P40-r2 starvation genus, fixed at the index: passages_fts now
+    # carries a language sentinel token, so plain-search --lang rides INSIDE
+    # the MATCH and the inner window can no longer fill with wrong-language
+    # rows. Against a pre-rebuild index (no column) the catalog-side path
+    # runs byte-identically, honesty hint included — pinned via the
+    # downgrade helper below.
+
+    # The pre-P42-3 passages_fts shape — what the owner's live fulltext file
+    # holds until the next full rebuild.
+    OLD_FTS_DDL = <<~SQL
+      CREATE VIRTUAL TABLE passages_fts USING fts5(
+        text_normalized,
+        urn UNINDEXED,
+        passage_id UNINDEXED,
+        tokenize = 'unicode61 remove_diacritics 2'
+      )
+    SQL
+
+    # Rebuild passages_fts in its pre-P42-3 shape from the freshly built
+    # rows, preserving rowid (corpus) order.
+    def downgrade_index!
+      rows = @fulltext[:passages_fts]
+             .order(:rowid)
+             .select_map(%i[text_normalized urn passage_id])
+             .map { |text, urn, id| { text_normalized: text, urn: urn, passage_id: id } }
+      @fulltext.drop_table(:passages_fts)
+      @fulltext.run(OLD_FTS_DDL)
+      @fulltext[:passages_fts].multi_insert(rows)
+    end
+
+    def test_lang_no_longer_starves_the_window_on_the_new_index
+      seed_window_exhausting_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("arma", lang: "grc", limit: 1)
+      assert_equal %w[urn:d:grc:1], results.map(&:urn),
+                   "the in-MATCH lang filter reaches past the homograph wall (the P34/P40-r2 repro, fixed)"
+      assert_nil searcher.incomplete_hint,
+                 "lang rides in the MATCH — it cannot starve the window, so it no longer arms the hint"
+    end
+
+    def test_pre_rebuild_index_keeps_the_catalog_side_lang_path_byte_identical
+      seed_window_exhausting_corpus
+      downgrade_index!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("arma", lang: "grc", limit: 1)
+      assert_empty results, "the pre-P42-3 window starves exactly as before (the historical P34 pin)"
+      assert_equal Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT, searcher.incomplete_hint,
+                   "…and announces itself exactly as before"
+      page = searcher.run("arma", lang: "lat", limit: 1)
+      assert_equal %w[lat], page.map(&:language), "a filling lang filter serves the same page as today"
+      assert_nil searcher.incomplete_hint
+    end
+
+    def test_lang_filter_matches_the_typed_modern_code_index_side
+      doc = make_document(source: @open, urn: "urn:d:is", language: "is")
+      make_passage(doc, urn: "urn:d:is:1", text: "láta hann fara", sequence: 0, language: "is")
+      rebuild!
+
+      assert_equal %w[urn:d:is:1], search("láta", lang: "is").map(&:urn),
+                   "P40-r2 honored in the MATCH too: the typed code is a member of its own equivalence set"
+
+      downgrade_index!
+      assert_equal %w[urn:d:is:1], search("láta", lang: "is").map(&:urn),
+                   "the catalog-side fallback answers identically"
+    end
+
+    # The guard-composition pin: the language sentinel tokens live in the
+    # fts vocabulary, but a plain query term that HAPPENS to be a language
+    # code ("is" — English verb, Icelandic code) neither matches them nor
+    # inherits their document frequency in the ubiquity probe.
+    def test_language_tokens_neither_match_nor_trip_the_guard_for_code_shaped_words
+      eng = make_document(source: @open, urn: "urn:d:eng", language: "eng")
+      make_passage(eng, urn: "urn:d:eng:1", text: "this is the way", sequence: 0, language: "eng")
+      ice = make_document(source: @open, urn: "urn:d:is", language: "is")
+      5.times do |i|
+        make_passage(ice, urn: "urn:d:is:#{i}", text: "aurora #{i}", sequence: i, language: "is")
+      end
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("is", ubiquity_threshold: 3)
+      assert_equal %w[urn:d:eng:1], results.map(&:urn),
+                   "the Icelandic rows' language tokens are sentinel-prefixed — a plain 'is' cannot match them"
+      assert_nil searcher.rank_note,
+                 "df('is') counts the ONE text occurrence, not the 5 language tokens — the guard stays off"
     end
   end
 end
