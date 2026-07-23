@@ -17,21 +17,32 @@ class UniversalDependenciesTest < Minitest::Test
   FIXTURES = File.expand_path("../fixtures/ud", __dir__)
 
   EXPECTED_URNS = [
+    "urn:nabu:ud:akkadian-pisandub:akk_pisandub-ud-test-head50",
+    "urn:nabu:ud:akkadian-riao:akk_riao-ud-test-head50",
     "urn:nabu:ud:ancient-greek-perseus:grc_perseus-ud-test-head50",
+    "urn:nabu:ud:classical-armenian-caval:xcl_caval-ud-test-head50",
     "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-dev-slices",
     "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-test-head50",
     "urn:nabu:ud:classical-chinese-tuecl:lzh_tuecl-ud-test-head50",
+    "urn:nabu:ud:coptic-bohairic:cop_bohairic-ud-test-head50",
+    "urn:nabu:ud:egyptian-pc:egy_pc-ud-test-head50",
     "urn:nabu:ud:gothic-proiel:got_proiel-ud-test-head50",
     "urn:nabu:ud:greek-proiel:grc_proiel-ud-test-head50",
+    "urn:nabu:ud:greek-ptnk:grc_ptnk-ud-test-head50",
+    "urn:nabu:ud:hebrew-ptnk:hbo_ptnk-ud-test-head50",
     "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50",
     "urn:nabu:ud:icelandic-icepahc:is_icepahc-ud-dev-head50",
     "urn:nabu:ud:latin-ittb:la_ittb-ud-test-head50+mwt",
     "urn:nabu:ud:latin-perseus:la_perseus-ud-test-head50",
+    "urn:nabu:ud:middle-french-profiterole:frm_profiterole-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-rnc:orv_rnc-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50",
+    "urn:nabu:ud:old-french-profiterole:fro_profiterole-ud-test-head50",
     "urn:nabu:ud:old-irish-dipsgg:sga_dipsgg-ud-test-head50",
     "urn:nabu:ud:old-irish-dipwbg:sga_dipwbg-ud-test",
+    "urn:nabu:ud:ottoman-boun:ota_boun-ud-test-head50",
+    "urn:nabu:ud:ottoman-dudu:ota_dudu-ud-test-head50",
     "urn:nabu:ud:sanskrit-vedic:sa_vedic-ud-test-head50"
   ].freeze
 
@@ -154,6 +165,135 @@ class UniversalDependenciesTest < Minitest::Test
     assert_equal "is", icepahc[:language]
   end
 
+  # --- registration + license pins (P43-1, the historical wave) ------------
+  #
+  # The eleven treebanks of the historical wave: four brand-new language lanes
+  # (xcl/fro/frm/ota) and seven under languages the library already hosts
+  # (grc/hbo/akk/cop/egy). Config-only, one .conllu fixture each. Repo + language
+  # pinned here; licenses (read verbatim 2026-07-23) asserted in the override
+  # tests below. Unlike the legacy nc treebanks (which stay bare and inherit the
+  # source class), EVERY wave entry carries an EXPLICIT license_class — the nc
+  # ones because their nc is a real per-treebank grant (BY-NC-SA / BY-NC),
+  # sometimes conflicting across LICENSE.txt vs README, worth recording verbatim.
+  P43_WAVE = {
+    "classical-armenian-caval" => %w[UD_Classical_Armenian-CAVaL xcl nc],
+    "old-french-profiterole" => %w[UD_Old_French-PROFITEROLE fro nc],
+    "middle-french-profiterole" => %w[UD_Middle_French-PROFITEROLE frm nc],
+    "ottoman-boun" => %w[UD_Ottoman_Turkish-BOUN ota attribution],
+    "ottoman-dudu" => %w[UD_Ottoman_Turkish-DUDU ota attribution],
+    "greek-ptnk" => %w[UD_Ancient_Greek-PTNK grc attribution],
+    "hebrew-ptnk" => %w[UD_Ancient_Hebrew-PTNK hbo nc],
+    "akkadian-riao" => %w[UD_Akkadian-RIAO akk attribution],
+    "akkadian-pisandub" => %w[UD_Akkadian-PISANDUB akk attribution],
+    "coptic-bohairic" => %w[UD_Coptic-Bohairic cop attribution],
+    "egyptian-pc" => %w[UD_Egyptian-PC egy attribution]
+  }.freeze
+
+  # The verbatim license STRING per wave entry (scout-read 2026-07-23; the
+  # file's plain-short-name idiom, conflict nuance in the adapter comments).
+  P43_LICENSE_STRINGS = {
+    "classical-armenian-caval" => "CC BY-NC-SA 4.0",
+    "old-french-profiterole" => "CC BY-NC-SA 3.0",
+    "middle-french-profiterole" => "CC BY-NC-SA 4.0",
+    "ottoman-boun" => "CC BY-SA 4.0",
+    "ottoman-dudu" => "CC BY-SA 4.0",
+    "greek-ptnk" => "CC BY-SA 4.0",
+    "hebrew-ptnk" => "CC BY-NC 4.0",
+    "akkadian-riao" => "CC BY-SA 3.0",
+    "akkadian-pisandub" => "CC BY-SA 4.0",
+    "coptic-bohairic" => "CC BY 4.0",
+    "egyptian-pc" => "CC BY-SA 4.0"
+  }.freeze
+
+  def test_p43_wave_registers_repo_and_language_for_all_eleven
+    treebanks = Nabu::Adapters::UniversalDependencies::TREEBANKS
+    P43_WAVE.each do |slug, (repo, language, _class)|
+      entry = treebanks.fetch(slug)
+      assert_equal "https://github.com/UniversalDependencies/#{repo}", entry[:repo], slug
+      assert_equal language, entry[:language], slug
+    end
+  end
+
+  # Every wave entry carries an explicit license_class + verbatim license string
+  # (both the nc and attribution cases, unlike the legacy bare-nc treebanks).
+  def test_p43_wave_carries_explicit_license_class_and_string
+    treebanks = Nabu::Adapters::UniversalDependencies::TREEBANKS
+    P43_WAVE.each do |slug, (_repo, _language, license_class)|
+      assert_equal license_class, treebanks.fetch(slug)[:license_class], slug
+      assert_equal P43_LICENSE_STRINGS.fetch(slug), treebanks.fetch(slug)[:license], slug
+    end
+  end
+
+  # The license_class rides through parse to Document#license_override — the
+  # nc entries surface "nc", the BY-SA/BY entries "attribution" (the P10-4
+  # mechanics, now exercised for the explicit-nc case too).
+  def test_p43_wave_parse_surfaces_the_explicit_license_override
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    by_slug = adapter.discover(FIXTURES)
+                     .select { |ref| P43_WAVE.key?(ref.metadata["treebank"]) }
+                     .to_h { |ref| [ref.metadata["treebank"], adapter.parse(ref)] }
+    P43_WAVE.each do |slug, (_repo, _language, license_class)|
+      assert_equal license_class, by_slug.fetch(slug).license_override, slug
+    end
+    # The SOURCE class is unchanged — the most-restrictive present stays nc.
+    assert_equal "nc", Nabu::Adapters::UniversalDependencies.manifest.license_class
+  end
+
+  # Round-trip each wave fixture: 50 sentence blocks, the declared language, the
+  # opening passage urn (sent_id verbatim, colons and all) and a distinctive
+  # real token. Hebrew is NFC-EXEMPT — its passage text is asserted byte-equal
+  # to the source `# text` line (byte-honesty holds through ConlluParser with
+  # no parser change, because the PTNK text ships already in NFC order).
+  P43_OPENERS = {
+    "classical-armenian-caval" => ["MATT_6.1", "Զգոյշ"],
+    "old-french-profiterole" => ["633", "Se il fust vif"],
+    "middle-french-profiterole" => %w[30 Morvillier],
+    "ottoman-boun" => %w[nes_tn_76 Musahabeme],
+    "ottoman-dudu" => %w[kan_1013 güderleridi],
+    "greek-ptnk" => ["Septuagint-Genesis-19:1-grc", "ἄγγελοι"],
+    "akkadian-riao" => %w[Q006048-1 Aššur-dan],
+    "akkadian-pisandub" => %w[babylon7_amel-marduk_1_01 KÁ-DINGIR-RA-KI],
+    "coptic-bohairic" => %w[bohairic_mark-bohairic_Mark_01_s0001 ⲉⲩⲁⲅⲅⲉⲗⲓⲟⲛ],
+    "egyptian-pc" => %w[PT_Sethe_23_16a_Unas Wśr]
+  }.freeze
+
+  def test_p43_wave_round_trips_each_fixture
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    by_slug = adapter.discover(FIXTURES)
+                     .select { |ref| P43_WAVE.key?(ref.metadata["treebank"]) }
+                     .to_h { |ref| [ref.metadata["treebank"], adapter.parse(ref)] }
+
+    P43_WAVE.each do |slug, (_repo, language, _class)|
+      document = by_slug.fetch(slug)
+      assert_equal 50, document.size, "#{slug} must parse 50 sentence blocks"
+      assert_equal language, document.language, slug
+    end
+
+    P43_OPENERS.each do |slug, (sent_id, token)|
+      document = by_slug.fetch(slug)
+      opening = document.passages.first
+      assert_equal "#{document.urn}:#{sent_id}", opening.urn, slug
+      assert_includes opening.text, token, slug
+    end
+
+    # Hebrew PTNK (hbo) — NFC-exempt, byte-verbatim. The opening passage text
+    # must equal the source `# text` line exactly (Masoretic cantillation and
+    # combining-mark order preserved).
+    hbo_doc = by_slug.fetch("hebrew-ptnk")
+    hbo = hbo_doc.passages.first
+    assert_equal "#{hbo_doc.urn}:Masoretic-Genesis-19:1-hbo", hbo.urn
+    assert_equal first_source_text("hebrew-ptnk"), hbo.text
+    assert hbo.text.valid_encoding?, "hbo text must be well-formed UTF-8"
+  end
+
+  # The first `# text = …` comment of a treebank's fixture file, verbatim
+  # (used to pin the hbo byte-honesty assertion against upstream bytes).
+  def first_source_text(slug)
+    path = Dir.glob(File.join(FIXTURES, slug, "*.conllu")).first
+    line = File.foreach(path, mode: "r:UTF-8").find { |l| l.start_with?("# text = ") }
+    line.sub(/\A# text = /, "").chomp
+  end
+
   # --- per-treebank license override (P10-4; extended P25-2) ---------------
   #
   # UD's SOURCE class is nc (most-restrictive present, correct for the PROIEL-
@@ -225,7 +365,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_sixteen_files_sorted_by_urn
+  def test_discover_finds_exactly_twenty_seven_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
@@ -235,6 +375,17 @@ class UniversalDependenciesTest < Minitest::Test
     by_urn = refs.to_h { |ref| [ref.id, ref] }
 
     expected_languages = {
+      "urn:nabu:ud:akkadian-pisandub:akk_pisandub-ud-test-head50" => "akk",
+      "urn:nabu:ud:akkadian-riao:akk_riao-ud-test-head50" => "akk",
+      "urn:nabu:ud:classical-armenian-caval:xcl_caval-ud-test-head50" => "xcl",
+      "urn:nabu:ud:coptic-bohairic:cop_bohairic-ud-test-head50" => "cop",
+      "urn:nabu:ud:egyptian-pc:egy_pc-ud-test-head50" => "egy",
+      "urn:nabu:ud:greek-ptnk:grc_ptnk-ud-test-head50" => "grc",
+      "urn:nabu:ud:hebrew-ptnk:hbo_ptnk-ud-test-head50" => "hbo",
+      "urn:nabu:ud:middle-french-profiterole:frm_profiterole-ud-test-head50" => "frm",
+      "urn:nabu:ud:old-french-profiterole:fro_profiterole-ud-test-head50" => "fro",
+      "urn:nabu:ud:ottoman-boun:ota_boun-ud-test-head50" => "ota",
+      "urn:nabu:ud:ottoman-dudu:ota_dudu-ud-test-head50" => "ota",
       "urn:nabu:ud:ancient-greek-perseus:grc_perseus-ud-test-head50" => "grc",
       "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-dev-slices" => "lzh",
       "urn:nabu:ud:classical-chinese-kyoto:lzh_kyoto-ud-test-head50" => "lzh",
@@ -581,16 +732,16 @@ class UniversalDependenciesTest < Minitest::Test
       adapter = ud_pointing_at(upstreams)
       adapter.fetch(workdir)
 
-      # First repo gains a file; the LAST FOUR repos each lose their only
-      # treebank file (4 of #{slugs.size} ingestible files = 26.7% > 20% →
-      # trip; 4 is now the MINIMUM tripping count at fifteen treebanks —
-      # three deletions are 3/#{slugs.size} = 20.0%, exactly AT the breaker
+      # First repo gains a file; the LAST SIX repos each lose their only
+      # treebank file (6 of #{slugs.size} ingestible files = 23.1% > 20% →
+      # trip; 6 is now the MINIMUM tripping count at twenty-six treebanks —
+      # five deletions are 5/#{slugs.size} = 19.2%, BELOW the breaker
       # (the guard trips on strictly greater, `doomed > 0.2 × ingestible`),
-      # so 3 no longer trips now that the set has grown to fifteen with the
-      # Icelandic IcePaHC treebank, P40-1. Re-derived, not weakened:
-      # 4 > 0.2 × 15 = 3.0 holds; 3 > 3.0 does not).
+      # so 5 does NOT trip now that the P43-1 historical wave grew the set to
+      # twenty-six. Re-derived, not weakened: 6 > 0.2 × 26 = 5.2 holds;
+      # 5 > 5.2 does not).
       first = slugs.first
-      doomed = slugs.last(4)
+      doomed = slugs.last(6)
       File.write(File.join(upstreams[first], "new.txt"), "new\n")
       git(upstreams[first], "add", ".")
       git(upstreams[first], "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "grow")
@@ -608,7 +759,7 @@ class UniversalDependenciesTest < Minitest::Test
       refute Dir.exist?(File.join(workdir, ".attic"))
 
       report = adapter.fetch(workdir, force: true)
-      assert_includes report.notes, "atticked 4"
+      assert_includes report.notes, "atticked 6"
       doomed.each do |slug|
         assert File.file?(File.join(workdir, ".attic", slug, "#{slug}.conllu")),
                "the attic preserves the <treebank>/<file> shape discover expects"
