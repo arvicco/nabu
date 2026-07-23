@@ -50,7 +50,11 @@ module Query
       end
     end
 
+    # Rows here are seeded DIRECTLY (bypassing the loader), so the write-time
+    # census must be re-derived before reading (P42-0: the corpus grain reads
+    # source_stats when the table exists).
     def info
+      Nabu::Store::SourceStats.derive!(@catalog, note: "test seed")
       Nabu::Query::LanguageInfo.new(catalog: @catalog, fulltext: @fulltext)
     end
 
@@ -125,6 +129,23 @@ module Query
     def test_degrades_without_a_fulltext_handle
       rel = Nabu::Query::LanguageInfo.new(catalog: @catalog).relevance("chu")
       assert_equal 0, rel.lemma_rows
+    end
+
+    # P42-0: the corpus grain reads source_stats when present, live
+    # aggregates when not — same Relevance/Held either way (pre-019 catalog
+    # contract).
+    def test_relevance_and_held_are_identical_with_and_without_source_stats
+      make_document(source: @texts, language: "chu", urn: "urn:nabu:test:chu:1", passages: 2)
+      make_document(source: @more, language: "chu", urn: "urn:nabu:test:chu:2")
+      make_document(source: @texts, language: "chu", urn: "urn:nabu:test:chu:w", withdrawn: true)
+
+      with_stats = info
+      results = [with_stats.relevance("chu"), with_stats.held]
+      @catalog.drop_table(:source_stats_languages)
+      @catalog.drop_table(:source_stats)
+      fallback = Nabu::Query::LanguageInfo.new(catalog: @catalog, fulltext: @fulltext)
+      assert_equal results, [fallback.relevance("chu"), fallback.held],
+                   "the pre-019 fallback must produce identical relevance and held lists"
     end
   end
 end
