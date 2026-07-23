@@ -939,7 +939,7 @@ module Nabu
                                     loans: loans, exact: options[:exact], word: options[:word])
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
                                     incomplete: searcher.incomplete_hint, exact: options[:exact],
-                                    word: options[:word])
+                                    word: options[:word], rank_note: searcher.rank_note)
       print_display_footer
     ensure
       catalog&.disconnect
@@ -3835,7 +3835,7 @@ module Nabu
       # --exact/--word scan-ceiling note) — printed whenever present, so a short
       # page never masquerades as a complete answer.
       def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
-                               exact: false, word: false, proximity: false)
+                               exact: false, word: false, proximity: false, rank_note: nil)
         if results.empty?
           say "no matches"
           # Empty-under-filter honesty (P35): --exact/--word suppressed the folded
@@ -3845,6 +3845,9 @@ module Nabu
                 "reform variants, e.g. 学↔學, 弁↔辨/瓣/辯)"
           end
           say "note: --word required a whole-word match (a fragment inside a longer word does not count)" if word
+          # The P42-2 guard scanned in corpus order — an empty page over a
+          # degraded path says so too, never a clean-looking silence.
+          say "note: #{rank_note}" if rank_note
           say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
@@ -3854,7 +3857,7 @@ module Nabu
           say "  #{display_text(result.snippet, result.language)}"
         end
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
-            "(#{search_snippet_label(exact: exact, word: word, proximity: proximity)})" \
+            "(#{search_snippet_label(exact: exact, word: word, proximity: proximity, rank_note: rank_note)})" \
             "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{incomplete}" if incomplete
       end
@@ -3862,13 +3865,15 @@ module Nabu
       # The footer clause naming what the snippet shows, per path. All three
       # paths now show the STORED text (P40-w carried proximity off the folded
       # index form); --exact / --word / proximity annotate what the match means.
-      def search_snippet_label(exact:, word: false, proximity: false)
+      # +rank_note+ (P42-2, plain path only) appends the skipped-rank honesty
+      # clause: "…; term too common to rank — corpus order".
+      def search_snippet_label(exact:, word: false, proximity: false, rank_note: nil)
         return "both terms bracketed; snippet shows the text as stored" if proximity
 
         stored = "snippet shows the text as stored"
         # A filtered path (--exact and/or --word) leads with what the match means;
         # plain search leads with the stored-text promise, then "fold-aware".
-        return "#{stored}; matching is fold-aware" unless exact || word
+        return ["#{stored}; matching is fold-aware", rank_note].compact.join("; ") unless exact || word
 
         mode = if exact && word then "glyph-exact, whole-word"
                elsif exact then "glyph-exact"

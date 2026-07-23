@@ -642,12 +642,12 @@ module Nabu
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         window = clamp(args["window"], default: SEARCH_DEFAULT_WINDOW, max: SEARCH_MAX_WINDOW, min: 0)
-        results, incomplete = run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near,
-                                                     window: window, lang: args["lang"], license: license,
-                                                     limit: limit + 1, morph: morph,
-                                                     from: from, to: to, place: place)
+        results, incomplete, rank_note = run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near,
+                                                                window: window, lang: args["lang"], license: license,
+                                                                limit: limit + 1, morph: morph,
+                                                                from: from, to: to, place: place)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
-        render_search(results, limit: limit, catalog: catalog, incomplete: incomplete)
+        render_search(results, limit: limit, catalog: catalog, incomplete: incomplete, rank_note: rank_note)
       rescue Query::MorphFacets::Error => e
         raise InvalidArguments, e.message
       end
@@ -956,8 +956,11 @@ module Nabu
         [from, to, place]
       end
 
-      # Returns [results, incomplete_hint] — the hint is the query layer's
-      # exhausted-inner-window announcement (P35-6), nil on an honest page.
+      # Returns [results, incomplete_hint, rank_note] — the hint is the query
+      # layer's exhausted-inner-window announcement (P35-6), nil on an honest
+      # page; rank_note (P42-2) is Search's skipped-rank clause when the term
+      # was too common to rank (plain text mode only — the other searchers
+      # never guard, so theirs is always nil).
       def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
                      from: nil, to: nil, place: nil)
         results, searcher =
@@ -973,12 +976,13 @@ module Nabu
             [searcher.run(term, lang: lang, license: license, limit: limit,
                                 from: from, to: to, place: place), searcher]
           end
-        [results, searcher.incomplete_hint]
+        rank_note = searcher.respond_to?(:rank_note) ? searcher.rank_note : nil
+        [results, searcher.incomplete_hint, rank_note]
       end
 
-      def render_search(results, limit:, catalog:, incomplete: nil)
+      def render_search(results, limit:, catalog:, incomplete: nil, rank_note: nil)
         if results.empty?
-          return json(matches: [], note: ["no matches", incomplete].compact.join(" — "),
+          return json(matches: [], note: ["no matches", rank_note, incomplete].compact.join(" — "),
                       coverage: coverage_hint(catalog))
         end
 
@@ -990,6 +994,9 @@ module Nabu
                else
                  "#{shown.size} matches, showing #{shown.size}"
                end
+        # P42-2: the skipped-rank clause rides the existing free-text note —
+        # additive, the frozen response shape gains no key.
+        note = "#{note} — #{rank_note}" if rank_note
         note = "#{note} — #{incomplete}" if incomplete
         json(matches: shown.map { |result| match_payload(result, sources) }, note: note)
       end

@@ -846,5 +846,119 @@ module Query
       refute_empty query.run("arma", lang: "lat", limit: 1)
       assert_nil query.incomplete_hint, "a full page under filters needs no hint"
     end
+
+    # -- the ubiquitous-term guard (P42-2) ------------------------------------
+    # MEASURED (P41 scale review, 62.8M passages): `ORDER BY rank` scores
+    # EVERY matching row before LIMIT, so a term in a large fraction of the
+    # corpus (الله) took ~10s while rare terms took 0.27s. Above a df
+    # threshold the ranked path is skipped and the page comes in CORPUS
+    # (rowid) order, announced via #rank_note. Below the threshold the
+    # behavior is byte-identical to before the guard.
+
+    # Four sparse rows, then one DENSE row (bm25 would rank it first). df=5
+    # crosses a threshold of 2: the page must come back in corpus order —
+    # dense row LAST — with the honest note armed.
+    def seed_ubiquity_corpus
+      doc = make_document(source: @open, urn: "urn:d:1", language: "lat")
+      4.times do |i|
+        make_passage(doc, urn: "urn:d:1:#{i}", text: "aurora nox #{i}", sequence: i, language: "lat")
+      end
+      make_passage(doc, urn: "urn:d:1:dense", text: "aurora aurora aurora", sequence: 4, language: "lat")
+      rebuild!
+    end
+
+    def test_ubiquitous_term_serves_corpus_order_and_announces_it
+      seed_ubiquity_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("aurora", ubiquity_threshold: 2)
+      assert_equal %w[urn:d:1:0 urn:d:1:1 urn:d:1:2 urn:d:1:3 urn:d:1:dense],
+                   results.map(&:urn),
+                   "above the df threshold the page is corpus order — the dense row no longer leads"
+      assert_equal Nabu::Query::Search::RANK_SKIP_NOTE, searcher.rank_note,
+                   "skipping the rank must be announced, never silent"
+      assert_includes results.first.snippet, "[aurora]",
+                      "the corpus-order path still builds the stored-text snippet"
+    end
+
+    def test_below_threshold_ranking_is_byte_identical_and_unannounced
+      seed_ubiquity_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("aurora", ubiquity_threshold: 10)
+      assert_equal "urn:d:1:dense", results.first.urn, "bm25 order exactly as before the guard"
+      assert_nil searcher.rank_note, "no note when the rank was honestly computed"
+
+      default = searcher.run("aurora")
+      assert_equal "urn:d:1:dense", default.first.urn,
+                   "the default threshold (~1M postings) never fires on a test-sized corpus"
+      assert_nil searcher.rank_note
+    end
+
+    # The multi-term rule: the candidate set is rows matching the WHOLE query
+    # (implicit AND), bounded by the RAREST term's df — a rare term ANDed with
+    # a ubiquitous one keeps the candidate set small and ranking cheap, so the
+    # guard must stay off even though one term alone would cross the threshold.
+    def test_rare_term_anded_with_ubiquitous_term_keeps_the_ranked_path
+      seed_ubiquity_corpus
+      doc = make_document(source: @open, urn: "urn:d:2", language: "lat")
+      make_passage(doc, urn: "urn:d:2:rara", text: "aurora rara", sequence: 0, language: "lat")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("aurora rara", ubiquity_threshold: 2)
+      assert_equal %w[urn:d:2:rara], results.map(&:urn), "only one row carries both terms"
+      assert_nil searcher.rank_note,
+                 "df(aurora)=6 crosses the threshold alone, but min-df is df(rara)=1 — ranking is cheap"
+    end
+
+    # The urn probe (the health golden replay) is ranking-independent by
+    # design — the guard never rewrites it.
+    def test_urn_probe_is_exempt_from_the_guard
+      seed_ubiquity_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("aurora", urn: "urn:d:1:dense", ubiquity_threshold: 2)
+      assert_equal %w[urn:d:1:dense], results.map(&:urn)
+      assert_nil searcher.rank_note, "the urn probe serves one known row — nothing to guard"
+    end
+
+    def test_guard_composes_with_catalog_filters
+      seed_ubiquity_corpus
+      grc = make_document(source: @open, urn: "urn:d:grc", language: "grc")
+      make_passage(grc, urn: "urn:d:grc:1", text: "aurora", sequence: 0, language: "grc")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("aurora", lang: "grc", ubiquity_threshold: 2)
+      assert_equal %w[urn:d:grc:1], results.map(&:urn),
+                   "the corpus-order path applies the same catalog filters"
+      assert_equal Nabu::Query::Search::RANK_SKIP_NOTE, searcher.rank_note
+    end
+
+    # Feature-detect fallback: when the vocabulary probe is unavailable
+    # (pre-index db, an engine quirk — TermFrequency returns nil), the guard
+    # is skipped and behavior is exactly today's, even above the threshold.
+    def test_unavailable_probe_fails_open_to_the_ranked_path
+      seed_ubiquity_corpus
+      no_probe = Object.new
+      def no_probe.candidate_ceiling(_variants) = nil
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, term_frequency: no_probe)
+
+      results = searcher.run("aurora", ubiquity_threshold: 2)
+      assert_equal "urn:d:1:dense", results.first.urn, "no probe → ranked, exactly as before P42-2"
+      assert_nil searcher.rank_note
+    end
+
+    # --exact/--word run the verified-candidate path, not the plain ranked
+    # page; the guard is scoped to the plain path only.
+    def test_exact_path_is_outside_the_guard
+      seed_ubiquity_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("aurora", exact: true, ubiquity_threshold: 2)
+      refute_empty results
+      assert_nil searcher.rank_note
+    end
   end
 end
