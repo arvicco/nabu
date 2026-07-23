@@ -396,8 +396,11 @@ a cluster — expect a noisy first pass; treat as research-grade, flagged);
 downstream disambiguation (same name ≠ same person) is a discipline unto
 itself — v1 stops at attestation indexing, no identity claims.
 **Effort.** cluster-era fable design; note Trismegistos exists as the
-professional reference here (licensing restrictive — worth a scout on
-their open subsets before building).
+professional reference here — and its licensing verdict CHANGED
+(availability survey, 2026-07-23): trismegistos.org/dataservices now
+grants **CC BY-SA 4.0** (quoted), superseding the earlier "restrictive"
+reading. Any build here should start from the TM open data services,
+not from scratch.
 
 ### 3.6 ORACC English translations from ATF  [candidate — post-Phase-10]
 
