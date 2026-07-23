@@ -79,14 +79,21 @@ module Nabu
       # set (TermFrequency#candidate_ceiling — sum over ORed fold variants of
       # the min df across each variant's ANDed tokens) exceeds this many
       # postings, the ranked ORDER BY is skipped and the page is served in
-      # corpus (rowid) order, announced via #rank_note. TUNING RATIO: the
-      # measured endpoints put bm25 at roughly 0.3µs/candidate (10s over the
-      # ~31M-row candidate set of a ~50%-df term), so 1M candidates ≈ 0.3s —
-      # the house per-command budget — and 1M ≈ 1.6% of the 62.8M corpus.
-      # P42-5 (the orchestrator's live re-measure) should plot ranked latency
-      # at df ≈ 0.5M/1M/2M and move this to where the curve crosses ~0.5s.
-      # census: 62800000, 2026-07-23, live passages (P41 scale review; ranked latency 0.27s rare / ~10s at ~50% df)
-      UBIQUITY_THRESHOLD = 1_000_000
+      # corpus (rowid) order, announced via #rank_note. CALIBRATED (P42-5,
+      # post-rebuild live curve): ranked cost is NOT a pure function of df —
+      # posting/docsize locality dominates. Terms whose matches cluster in
+      # the early, well-cached rowid range (Greek/Latin: γαρ 220K→0.11s,
+      # εν 254K→0.48s, δε 457K→0.68s, και 739K→0.88s) ranked ~1.5µs/doc,
+      # while terms scattered across the 33M-row openiti tail measured
+      # 8–14µs/doc (اربع 154K→1.19s, اخذ 271K→2.28s, الملك 414K→5.53s,
+      # يوم 835K→7.24s, الله 6.8M→11.4s). The worst class crosses ~0.5s
+      # near df ≈ 100K, so the ceiling sits there: worst unguarded rank
+      # ≈ 1.4s, and everything newly guarded is function-word-frequency
+      # territory where bm25 ordering is noise. The old 1M ceiling was set
+      # from the well-clustered ratio and let the Arabic 0.4–1M band stall
+      # at 5–7s.
+      # census: 62789087, 2026-07-23, live passages (P42-5 calibration curve, this comment)
+      UBIQUITY_THRESHOLD = 100_000
 
       # The honest footer clause for a guard-skipped rank (the P35 rule:
       # a degraded page must say what it did). Shared verbatim by the CLI
