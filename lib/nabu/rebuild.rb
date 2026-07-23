@@ -56,7 +56,8 @@ module Nabu
 
     # What a rebuild did. +indexed+ is the passage count in the freshly rebuilt
     # fulltext index (architecture §2): a fresh index is part of "loaded".
-    Result = Data.define(:db_path, :db_existed, :outcomes, :skips, :indexed, :axes, :facets, :profile) do
+    Result = Data.define(:db_path, :db_existed, :outcomes, :skips, :indexed, :axes, :facets, :profile,
+                         :analyzed) do
       # +axes+ (P15-2) is the TimelineBuilder::Summary of the timeline
       # regenerated from canonical after replay; +facets+ (P17-2) the
       # FacetBuilder::Summary of the genre-facet table projected from the
@@ -64,7 +65,12 @@ module Nabu
       # RebuildProfile of per-source/per-stage wall times (nil only for the
       # pre-P36 construction paths). All default nil so every existing
       # construction stays valid.
-      def initialize(db_path:, db_existed:, outcomes:, skips:, indexed:, axes: nil, facets: nil, profile: nil)
+      # +analyzed+ (P42-4) is the Store::AnalyzeReport of the post-rebuild
+      # planner-stats refresh — a full rebuild re-derives the whole catalog and
+      # index, so it ALWAYS analyzes both (the freshly-loaded db had no
+      # sqlite_stat1 at all). nil only for the pre-P42-4 construction paths.
+      def initialize(db_path:, db_existed:, outcomes:, skips:, indexed:, axes: nil, facets: nil,
+                     profile: nil, analyzed: nil)
         super
       end
 
@@ -172,8 +178,17 @@ module Nabu
                                         fuzzy_slugs: @registry.fuzzy_slugs,
                                         lemma_tiers: @registry.lemma_tiers,
                                         profile: profile)
+      # P42-4: the fresh catalog+index have no planner statistics yet — ANALYZE
+      # both so the very first query off a rebuilt db plans against real row
+      # distributions (ops §10). A corpus stage in the always-on profile.
+      progress&.stage("analyze")
+      analyzed = profile.measure(scope: RebuildProfile::CORPUS, stage: :analyze) do
+        Store::AnalyzeReport.new(scope: "catalog + index",
+                                 seconds: Store.analyze!(db) + Store.analyze!(fulltext))
+      end
       Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes,
-                 skips: skips, indexed: indexed, axes: axes, facets: facets, profile: profile)
+                 skips: skips, indexed: indexed, axes: axes, facets: facets, profile: profile,
+                 analyzed: analyzed)
     ensure
       db&.disconnect
       fulltext&.disconnect

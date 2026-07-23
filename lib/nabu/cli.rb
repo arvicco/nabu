@@ -5580,6 +5580,7 @@ module Nabu
         say format_sync_outcome(outcome)
         print_discovery_accounting(outcome)
         print_sync_warnings(outcome)
+        print_analyzed(outcome.analyzed)
         print_citation_coverage(entry, db)
         run_review_hook(outcome, db, ledger) if options[:review]
       end
@@ -5667,10 +5668,11 @@ module Nabu
 
         results.each do |slug, result|
           say("  #{sync_all_line(slug, result)}")
-          if result.is_a?(Nabu::SyncRunner::Outcome)
-            print_discovery_accounting(result)
-            print_sync_warnings(result)
-          end
+          next unless result.is_a?(Nabu::SyncRunner::Outcome)
+
+          print_discovery_accounting(result)
+          print_sync_warnings(result)
+          print_analyzed(result.analyzed)
         end
       end
 
@@ -5687,6 +5689,15 @@ module Nabu
       # in yellow, never affecting the exit code. Empty on a clean sync.
       def print_sync_warnings(outcome)
         outcome.warnings.each { |finding| say("  ! #{finding.message}", :yellow) }
+      end
+
+      # P42-4: the one honest planner-hygiene line — printed only when a bulk
+      # load or a rebuild actually refreshed the query-planner statistics,
+      # silent otherwise (a sub-threshold sync, a clean-swept incremental run).
+      def print_analyzed(analyzed)
+        return unless analyzed
+
+        say "  analyzed #{analyzed.scope} (planner stats refreshed, #{format('%.1f', analyzed.seconds)}s)"
       end
 
       # -- quickstart (P18-2) -------------------------------------------------
@@ -5719,6 +5730,7 @@ module Nabu
             say format_sync_outcome(outcome)
             print_discovery_accounting(outcome)
             print_sync_warnings(outcome)
+            print_analyzed(outcome.analyzed)
           end
         rescue Nabu::Error => e
           finish_progress
@@ -6055,6 +6067,7 @@ module Nabu
         say "  re-derived #{result.outcomes.size}, clean #{result.cleans.size}, " \
             "skipped #{result.skips.size}"
         say "  indexed #{result.indexed} passages" if result.indexed
+        print_analyzed(result.analyzed)
       end
 
       # --dry-run: report the plan, touch nothing.
@@ -6092,6 +6105,7 @@ module Nabu
               "iip #{result.axes.iip}, cdli #{result.axes.cdli}, " \
               "rundata #{result.axes.rundata}, openiti #{result.axes.openiti})"
         end
+        print_analyzed(result.analyzed)
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
 
         say "  facets #{result.facets.rows} rows across #{result.facets.documents} documents"
