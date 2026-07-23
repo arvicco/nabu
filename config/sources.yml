@@ -46,6 +46,23 @@
 #                                        #   (multi-membership deliberate,
 #                                        #   whole-source grain); an axis name
 #                                        #   never equals a slug (validated)
+#     grant_required: true               # P42-r1: the right to FETCH is a
+#                                        #   PERSONAL permission to this project's
+#                                        #   author (StarLing), NOT conveyed by a
+#                                        #   public license — so `sync <slug>`
+#                                        #   demands a typed `granted` before the
+#                                        #   first fetch (recorded in the ledger,
+#                                        #   survives rebuild; --grant-acknowledged
+#                                        #   for scripts; batch/axis paths SKIP an
+#                                        #   un-acknowledged grant source). NOT the
+#                                        #   license machinery (CC BY-NC-SA needs
+#                                        #   no gate). Requires a grant: block.
+#     grant:                             # the block the gate renders (all five
+#       grantor: ...                     #   required, non-empty strings; QUOTE the
+#       date: "2026-07-15"               #   date so YAML keeps it a String, not a
+#       terms: ...                       #   parsed Date). terms = a short verbatim
+#       thread: "№1"                     #   quote; request_hint = whom a new user
+#       request_hint: ...                #   should ask + what to promise.
 #
 # Registered sources follow. `enabled: false` until a first real sync is
 # verified by hand (CLAUDE.md "add a new adapter" checklist).
@@ -596,6 +613,24 @@ starling:
   # surface renders them. Upstream is a hand-curated 2005-era package:
   # re-fetch is an owner decision.
   sync_policy: manual
+  # P42-r1: THE FETCH GRANT is personal to this project's author and a PUBLIC
+  # clone of nabu does NOT convey it — so `nabu sync starling` demands an
+  # explicit, recorded acknowledgment before its first fetch (the grant gate,
+  # docs/maintenance-and-extension.md §4). This is NOT the same as the CC/nc
+  # license machinery above (attribution obligations); the gate criterion is
+  # solely "the right to FETCH is not conveyed by a public license." Quote the
+  # date so YAML keeps it a String.
+  grant_required: true
+  grant:
+    grantor: G. Starostin
+    date: "2026-07-15"
+    terms: any use, per-base attribution required (credit each base's compilers)
+    thread: "№1"
+    request_hint: >-
+      Write to George Starostin (starlingdb.org) for your own use grant, and
+      promise to credit each base's compilers per
+      starlingdb.org/descrip.php?lan=en#bases (Pokorny, PIET, Vasmer, Germet,
+      Baltet) verbatim on every serving surface.
 
 sl-lexica:
   adapter: Nabu::Adapters::SlLexica
