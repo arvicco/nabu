@@ -4769,26 +4769,36 @@ class CLITest < Minitest::Test
     end
   end
 
-  # P42-r4 (owner gate review, second strike): square brackets are bidi-
-  # MIRRORED glyphs and no placement survives every terminal's RTL handling —
-  # the owner's renderer showed the logical [word] as ]word[ with the
-  # brackets inside the isolate, and STILL reversed with the brackets cut
-  # out of it (neutrals between two RTL runs get swept into the reversed
-  # segment). So an RTL-isolated snippet highlights with the direction-
-  # SYMMETRIC ‖ (its own mirror image — no bidi treatment can make it face
-  # away), keeps its single whole-line isolate, and carries no square
-  # brackets at all. LTR snippets keep [brackets], byte-identical.
-  def test_rtl_snippet_highlights_with_the_symmetric_delimiter_not_brackets
+  # P42-r4 (owner gate review, four strikes): every character-based RTL
+  # highlight failed a different bidi failure mode on the owner's terminal
+  # (mirrorless ]word[; out-of-isolate brackets swept anyway; symmetric ‖
+  # stranded at passage-edge matches; invisible RLM glue ignored). The
+  # ruling fix is an SGR cell attribute — reverse video rides the glyph
+  # through any reordering. Colorless/piped output keeps the logical
+  # [brackets]: no renderer, no bidi, the grep/MCP contract unchanged.
+  def test_rtl_snippet_highlights_with_reverse_video_when_color_is_on
+    with_hebrew_corpus do |config|
+      out, _err, status = with_env("NABU_COLOR" => "1") do
+        with_config(config) { run_cli(%w[search אלהים]) }
+      end
+      assert_nil status
+      hit = out.lines.find { |line| line.include?("\e[7m") }
+      refute_nil hit, "the RTL snippet highlights via SGR reverse video under color"
+      assert_match(/\e\[7m[^\e]+\e\[27m/, hit, "the match rides between on/off attributes")
+      refute_match(/\[[^\]]*\]/, hit.gsub(/\e\[[0-9;]*m/, ""),
+                   "no bracket glyphs remain in the colored RTL snippet")
+      assert_includes hit, RLI, "the passage keeps its whole-line isolate"
+    end
+  end
+
+  def test_rtl_snippet_keeps_logical_brackets_when_piped_or_colorless
     with_hebrew_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[search אלהים]) }
       assert_nil status
-      hit = out.lines.find { |line| line.include?("‖") }
-      refute_nil hit, "the RTL snippet highlights with ‖"
-      assert_match(/‖[^‖]+‖/, hit, "the match is flanked: ‖word‖")
-      assert_includes hit, "\u200F‖\u200F",
-                      "each delimiter is RLM-glued (edge matches must not strand it — owner strike 3)"
-      refute_includes hit, "[", "no mirrored bracket glyphs in an RTL snippet"
-      assert_includes hit, RLI, "the passage keeps its whole-line isolate"
+      refute_includes out, "\e[", "captured (non-tty) output carries no ANSI"
+      hit = out.lines.find { |line| line.include?("[") && line.include?(RLI) }
+      refute_nil hit, "the piped RTL snippet keeps its logical [brackets] — the grep contract"
+      assert_match(/\[[^\]]+\]/, hit)
     end
   end
 
