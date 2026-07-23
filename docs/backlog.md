@@ -10911,13 +10911,15 @@ Sample fixtures + manifests + READMEs for icepahc(ud)/menotec/helipad/ycoe/rem/r
 
 ## P40-flips · [status: done 2026-07-22 — eb66f2f; owner-verified counts in sources.yml comments; IcePaHC landed at the owner's same-day `sync ud`]
 
-# P42 candidates — the scale phase (from .docs/p41-scale-review.md, owner picks)
+# P42 — the efficiency phase (owner-picked 2026-07-23: "make these commands fly, not crawl"; plan: .docs/p42-efficiency-plan.md)
 
-## P42-0 · source_stats + global census derived table  [tier: fable — first derived-stats table, invariants] — status/list/axis/language 130–250s → ms
-## P42-1 · vocab corpus lemma-frequency table  [tier: opus] — 17.9s → ms
-## P42-2 · ubiquitous-term guard (fts5vocab df → unranked corpus-order + honest footer)  [tier: fable — search semantics] — the الله class ~10s → sub-second
-## P42-3 · language column into passages_fts  [rides the owner's next FULL rebuild with the lzh re-derive + openiti timeline]
-## P42-4 · load hygiene: post-load bounded ANALYZE + PRAGMA pass  [tier: opus]
+## P42-0 · source_stats + global census derived table  [tier: fable] [status: in-progress — dispatched 2026-07-23] — status/list/axis/language 130–250s → ms; migration 019; D42-a health invariant
+## P42-2 · ubiquitous-term guard  [tier: fable] [status: in-progress — dispatched 2026-07-23] — fts5vocab df probe; the الله class ~10s → sub-second
+## P42-1 · vocab lemma-frequency table + etym probe  [tier: opus] [status: ready] [deps: P42-0 (migration 020)]
+## P42-3 · language column into passages_fts  [tier: fable] [status: ready] — activates at the owner rebuild (D42-b)
+## P42-4 · load hygiene: post-load bounded ANALYZE + PRAGMA pass  [tier: opus] [status: ready]
+## P42-5 · re-measure matrix + docs  [tier: orchestrator] [status: gate-time]
+## P42-6 · term-less filtered browse  [tier: opus] [status: optional — rolled from P41-r1]
 
 ## P41-r2 · --random instant (id-probe sampler)  [status: done 2026-07-23 — 98ef4b6; 2m19s → 0.3s; join-free probe pattern documented]
 
