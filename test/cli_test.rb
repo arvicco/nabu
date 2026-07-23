@@ -1896,6 +1896,104 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- the fetch-grant gate (P42-r1) ---------------------------------------
+
+  # An explicit `sync <grant-slug>` shows the terms and demands a typed
+  # `granted`; on acknowledgment it records durably and syncs, and every LATER
+  # sync passes silently (the acknowledgment lives in the never-dropped ledger).
+  def test_grant_typed_acknowledgment_records_syncs_and_second_sync_is_silent
+    with_grant_sync_env do |config|
+      out, _err, status = with_config(config) do
+        with_stdin("granted\n", tty: true) { run_cli(%w[sync starling --parse-only]) }
+      end
+      assert_nil status
+      assert_match(/any use, per-base attribution required/, out, "terms shown before the prompt")
+      assert_match(/type `granted`/, out, "the typed-word prompt")
+      assert_match(/grant acknowledged — recorded/, out)
+      assert_match(/\+2 added/, out, "acknowledgment lets the sync proceed")
+
+      # Second sync: NO terms, NO prompt — the ledger record makes it silent
+      # even with no TTY to prompt on.
+      out2, _err2, status2 = with_config(config) do
+        with_stdin("", tty: false) { run_cli(%w[sync starling --parse-only]) }
+      end
+      assert_nil status2
+      refute_match(/type `granted`/, out2, "an acknowledged source never re-prompts")
+      refute_match(/fetch requires a GRANT/, out2)
+    end
+  end
+
+  # A wrong word aborts with the request scaffold and records NOTHING — the
+  # gate is an on-ramp, not a silent failure.
+  def test_grant_refusal_aborts_with_the_scaffold_and_records_nothing
+    with_grant_sync_env do |config|
+      _out, err, status = with_config(config) do
+        with_stdin("no thanks\n", tty: true) { run_cli(%w[sync starling --parse-only]) }
+      end
+      assert_equal 1, status
+      assert_match(/write to George Starostin/, err, "the request scaffold pointer")
+      assert_match(/Nothing was fetched/, err)
+      assert_equal 0, grant_ack_count(config, "starling"), "a refusal records nothing"
+    end
+  end
+
+  # No TTY to prompt on: abort honestly (with the scaffold), never hang.
+  def test_grant_without_a_tty_aborts_with_the_scaffold
+    with_grant_sync_env do |config|
+      _out, err, status = with_config(config) do
+        with_stdin("", tty: false) { run_cli(%w[sync starling --parse-only]) }
+      end
+      assert_equal 1, status
+      assert_match(/Nothing was fetched/, err)
+      assert_match(/--grant-acknowledged/, err, "the scripted escape hatch is taught")
+      assert_equal 0, grant_ack_count(config, "starling")
+    end
+  end
+
+  # --grant-acknowledged: the scripted path — records (how: flag) and syncs
+  # WITHOUT a prompt, even with no TTY (the owner's own box records this way).
+  def test_grant_flag_records_and_syncs_without_a_prompt
+    with_grant_sync_env do |config|
+      out, _err, status = with_config(config) do
+        with_stdin("", tty: false) { run_cli(%w[sync starling --parse-only --grant-acknowledged]) }
+      end
+      assert_nil status
+      refute_match(/type `granted`/, out, "the flag skips the prompt")
+      assert_match(/grant acknowledged \(--grant-acknowledged\)/, out)
+      assert_match(/\+2 added/, out)
+      assert_equal 1, grant_ack_count(config, "starling")
+      assert_equal "flag", grant_ack_how(config, "starling")
+    end
+  end
+
+  # `sync --all`: a grant-blocked source is SKIPPED with one honest line, never
+  # prompted mid-batch (and never fetched).
+  def test_grant_sync_all_skips_with_the_honest_line
+    with_grant_sync_env(policy: "auto") do |config|
+      out, _err, status = with_config(config) do
+        with_stdin("", tty: false) { run_cli(%w[sync --all]) }
+      end
+      assert_nil status
+      assert_match(/skipped \(grant required\): starling — run `nabu sync starling` to review/, out)
+      refute_match(/type `granted`/, out, "a batch never prompts")
+      assert_equal 0, grant_ack_count(config, "starling")
+    end
+  end
+
+  # An axis expansion skips a grant-blocked member (never prompts) while
+  # syncing its non-gated siblings.
+  def test_grant_axis_expansion_skips_the_gated_member
+    with_grant_axis_env do |config|
+      out, _err, status = with_config(config) do
+        with_stdin("", tty: false) { run_cli(%w[sync etym --parse-only]) }
+      end
+      assert_nil status
+      assert_match(/skipped \(grant required\): starling/, out)
+      refute_match(/type `granted`/, out, "an axis batch never prompts")
+      assert_match(/plain\s+parse-only/, out, "the non-gated member syncs")
+    end
+  end
+
   # -- progress reporting (P2-6) -------------------------------------------
 
   # When $stderr is a tty, the loader's per-document ticks render a \r-updating
@@ -3027,6 +3125,129 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match("urn:nabu:cs:b:1", out, "the verbatim upstream code (Akkadian) matches case-folded")
     end
+  end
+
+  # -- term-less filtered browse (P42-6) -------------------------------------
+  # The legality rule: a term-less `search` is legal iff a CONTENT-NARROWING
+  # filter is present (date window, --place, a genre facet, or --loans). The
+  # shelf-selectors (--lang/--license/--source/--axis) are NOT sufficient
+  # alone. Legal browses list the corpus in corpus order with the browse footer.
+
+  def test_browse_by_date_window_lists_the_corpus_in_corpus_order
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --from -300 --to 100]) }
+      assert_nil status, "a term-less browse under a date window succeeds"
+      assert_match("urn:nabu:ddbdp:a:1", out) # 113 BCE, in window
+      assert_match("urn:nabu:ddbdp:c:1", out) # 30 BCE, in window
+      refute_match("urn:nabu:ddbdp:b:1", out) # 591 CE, out of window
+      assert_match(/filtered browse — corpus order, no ranking/, out, "the footer names the mode")
+      assert_match(/dates: -300\.\.100/, out, "the footer names the active date window")
+    end
+  end
+
+  def test_browse_by_century_alone_is_legal
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --century 6]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:b:1", out) # 6th c. CE
+      refute_match("urn:nabu:ddbdp:a:1", out)
+      assert_match(/filtered browse/, out)
+    end
+  end
+
+  def test_browse_by_place_alone_is_legal_and_names_the_place
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --place oxyrhynch%]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out) # Arsinoites
+      assert_match(/place: oxyrhynch%/, out, "the footer names the active place filter")
+    end
+  end
+
+  def test_browse_by_genre_facet_alone_is_legal
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --type epitaph]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out) # votive
+      assert_match(/facets: genre=epitaph/, out, "the browse footer still names the facet")
+      assert_match(/filtered browse/, out)
+    end
+  end
+
+  def test_browse_by_loans_alone_is_legal
+    with_loans_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --loans grc]) }
+      assert_nil status
+      assert_match("urn:nabu:cs:a:1", out)
+      refute_match("urn:nabu:cs:b:1", out) # hbo/Akkadian only
+      assert_match(/loans: grc/, out)
+      assert_match(/filtered browse/, out)
+    end
+  end
+
+  def test_browse_composes_a_shelf_selector_with_a_content_filter
+    with_dated_corpus do |config|
+      # --source (a shelf selector) is legal BECAUSE --century is present.
+      out, _err, status = with_config(config) { run_cli(%w[search --century -2 --source p]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out) # 113 BCE
+      assert_match(/filtered browse/, out)
+    end
+  end
+
+  def test_browse_honors_the_limit
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --from -300 --to 700 --limit 1]) }
+      assert_nil status
+      assert_match(/^1 hit /, out, "--limit caps the browse page")
+    end
+  end
+
+  # -- the legality refusals: a shelf-selector alone is NOT a browse ----------
+
+  def test_bare_search_still_refuses_with_the_extended_message
+    _out, err, status = run_cli(%w[search])
+    assert_equal 1, status
+    assert_match(/give a query/, err)
+    assert_match(/content-narrowing filter/, err, "the refusal now says what WOULD make a browse legal")
+    assert_match(%r{--from/--to/--century}, err)
+    assert_match(/cannot stand alone/, err)
+  end
+
+  def test_lang_alone_is_refused_as_a_shelf_dump
+    _out, err, status = run_cli(%w[search --lang grc])
+    assert_equal 1, status
+    assert_match(/dump the shelf, not browse it/, err, "--lang selects a whole shelf — not a content filter")
+  end
+
+  def test_license_alone_is_refused_as_a_shelf_dump
+    _out, err, status = run_cli(%w[search --license open])
+    assert_equal 1, status
+    assert_match(/cannot stand alone/, err)
+  end
+
+  def test_source_alone_is_refused_as_a_shelf_dump
+    _out, err, status = run_cli(%w[search --source p])
+    assert_equal 1, status
+    assert_match(/cannot stand alone/, err)
+  end
+
+  def test_axis_alone_is_refused_as_a_shelf_dump
+    _out, err, status = run_cli(%w[search --axis epigraphy])
+    assert_equal 1, status
+    assert_match(/cannot stand alone/, err)
+  end
+
+  def test_term_less_browse_refuses_exact_and_word
+    _out, err, status = run_cli(%w[search --century 2 --exact])
+    assert_equal 1, status
+    assert_match(/cannot run a term-less browse/, err, "--exact needs a query term")
+
+    _out2, err2, status2 = run_cli(%w[search --century 2 --word])
+    assert_equal 1, status2
+    assert_match(/cannot run a term-less browse/, err2)
   end
 
   # -- search --fuzzy (P16-4) ------------------------------------------------
@@ -4548,6 +4769,39 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P42-r4 (owner gate review, four strikes): every character-based RTL
+  # highlight failed a different bidi failure mode on the owner's terminal
+  # (mirrorless ]word[; out-of-isolate brackets swept anyway; symmetric ‖
+  # stranded at passage-edge matches; invisible RLM glue ignored). The
+  # ruling fix is an SGR cell attribute — reverse video rides the glyph
+  # through any reordering. Colorless/piped output keeps the logical
+  # [brackets]: no renderer, no bidi, the grep/MCP contract unchanged.
+  def test_rtl_snippet_highlights_with_reverse_video_when_color_is_on
+    with_hebrew_corpus do |config|
+      out, _err, status = with_env("NABU_COLOR" => "1") do
+        with_config(config) { run_cli(%w[search אלהים]) }
+      end
+      assert_nil status
+      hit = out.lines.find { |line| line.include?("\e[7m") }
+      refute_nil hit, "the RTL snippet highlights via SGR reverse video under color"
+      assert_match(/\e\[7m[^\e]+\e\[27m/, hit, "the match rides between on/off attributes")
+      refute_match(/\[[^\]]*\]/, hit.gsub(/\e\[[0-9;]*m/, ""),
+                   "no bracket glyphs remain in the colored RTL snippet")
+      assert_includes hit, RLI, "the passage keeps its whole-line isolate"
+    end
+  end
+
+  def test_rtl_snippet_keeps_logical_brackets_when_piped_or_colorless
+    with_hebrew_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search אלהים]) }
+      assert_nil status
+      refute_includes out, "\e[", "captured (non-tty) output carries no ANSI"
+      hit = out.lines.find { |line| line.include?("[") && line.include?(RLI) }
+      refute_nil hit, "the piped RTL snippet keeps its logical [brackets] — the grep contract"
+      assert_match(/\[[^\]]+\]/, hit)
+    end
+  end
+
   # KWIC width pin: the keyword column must sit at exactly --width display
   # CELLS (P35-7) — isolates and ANSI excluded, combining marks (Hebrew
   # points) counted 0 within their grapheme cluster, and the stripped
@@ -4730,11 +4984,13 @@ class CLITest < Minitest::Test
   # The P34 gate repro at the CLI: with_window_corpus (private helper below)
   # fills the limit×10 inner window with rows the catalog-side filter
   # rejects, so every search surface serves a clean-looking empty page —
-  # which must now announce itself.
+  # which must now announce itself. (P42-3: plain-search --lang left this
+  # filter class — it rides in the MATCH now, pinned below — so these pins
+  # starve on the still-catalog-side --license.)
 
   def test_search_incomplete_page_under_filters_prints_the_hint
     with_window_corpus do |config|
-      out, _err, status = with_config(config) { run_cli(%w[search arma --lang grc --limit 1]) }
+      out, _err, status = with_config(config) { run_cli(%w[search arma --license nc --limit 1]) }
       assert_nil status, "an incomplete page is a note, never a failure"
       assert_match(/no matches/i, out)
       assert_match(/page may be incomplete under these filters — raise --limit/, out,
@@ -4742,6 +4998,62 @@ class CLITest < Minitest::Test
 
       full, _err2, = with_config(config) { run_cli(%w[search arma --lang lat --limit 1]) }
       refute_match(/page may be incomplete/, full, "a full page carries no hint")
+    end
+  end
+
+  # P42-3 at the surface: the very command that USED to starve (the P34 gate
+  # repro, `--lang grc` against ten better-ranked lat homographs) now finds
+  # its hit — the language filter rides inside the MATCH — with no hint.
+  def test_search_lang_filter_no_longer_starves_at_the_cli
+    with_window_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search arma --lang grc --limit 1]) }
+      assert_nil status
+      assert_includes out, "urn:w:grc:1", "the wrong-language wall no longer hides the hit"
+      refute_match(/page may be incomplete/, out, "an in-MATCH lang filter cannot starve the window")
+    end
+  end
+
+  # -- the ubiquitous-term guard footer (P42-2) ------------------------------
+  # The threshold is census-scaled (~1M postings), so a fixture corpus can
+  # never cross it honestly; the class-method seam is stubbed down to fire
+  # the guard on with_window_corpus's 11 "arma" rows. (Hand-rolled stub:
+  # minitest 6 no longer ships minitest/mock.)
+
+  def with_ubiquity_threshold(value)
+    original = Nabu::Query::Search.method(:ubiquity_threshold)
+    Nabu::Query::Search.singleton_class.define_method(:ubiquity_threshold) { value }
+    yield
+  ensure
+    Nabu::Query::Search.singleton_class.define_method(:ubiquity_threshold, original)
+  end
+
+  def test_search_ubiquitous_term_footer_names_the_corpus_order
+    with_window_corpus do |config|
+      out, _err, status = with_ubiquity_threshold(2) do
+        with_config(config) { run_cli(%w[search arma --limit 3]) }
+      end
+      assert_nil status
+      assert_match(/matching is fold-aware; term too common to rank — corpus-wide sample\)/, out,
+                   "the hit-count parenthetical owns the skipped rank")
+
+      ranked, _err2, = with_config(config) { run_cli(%w[search arma --limit 3]) }
+      refute_match(/too common to rank/, ranked,
+                   "below the real threshold the footer is byte-identical to before P42-2")
+    end
+  end
+
+  # A guard-active page that comes back EMPTY under filters still announces
+  # the sampled scan (alongside the P35-6 window hint) — never a
+  # clean-looking silence over a degraded path. (--license: the catalog-side
+  # starving filter since P42-3 moved --lang into the MATCH.)
+  def test_search_ubiquitous_term_empty_page_still_notes_the_skipped_rank
+    with_window_corpus do |config|
+      out, _err, status = with_ubiquity_threshold(2) do
+        with_config(config) { run_cli(%w[search arma --license nc --limit 1]) }
+      end
+      assert_nil status
+      assert_match(/no matches/i, out)
+      assert_match(/note: term too common to rank — corpus-wide sample/, out)
     end
   end
 
@@ -4985,6 +5297,8 @@ class CLITest < Minitest::Test
       seed_list_shelf(catalog)
       seed_list_lex(catalog)
       seed_list_library(catalog)
+      # Seeded directly (bypassing the loader) - re-derive the write-time census (P42-0).
+      Nabu::Store::SourceStats.derive!(catalog, note: "test seed")
       catalog.disconnect
       yield config
     end
@@ -5036,6 +5350,8 @@ class CLITest < Minitest::Test
       seed_list_shelf(catalog)
       seed_list_lex(catalog)
       seed_list_library(catalog)
+      # Seeded directly (bypassing the loader) - re-derive the write-time census (P42-0).
+      Nabu::Store::SourceStats.derive!(catalog, note: "test seed")
       catalog.disconnect
       yield config
     end
@@ -5112,8 +5428,9 @@ class CLITest < Minitest::Test
 
   # Ten short open/lat rows dominate the bm25 (and urn-ordered lemma) inner
   # window; the one row the filters WANT sits beyond it: a grc passage for
-  # --lang (text search / --near / --fuzzy), an nc λέγω attestation for
-  # --lemma --license nc. Fuzzy scope covers the whole corpus.
+  # --lang (--near / --fuzzy — plain text search finds it in-MATCH since
+  # P42-3), an nc λέγω attestation for --lemma --license nc. Fuzzy scope
+  # covers the whole corpus.
   def with_window_corpus
     Dir.mktmpdir("nabu-cli-window") do |root|
       sources = File.join(root, "sources.yml")
@@ -5955,6 +6272,91 @@ class CLITest < Minitest::Test
       )
     end
   end
+
+  # P42-r1: a grant-required source (TestAdapter, canonical files on disk) so
+  # `sync starling --parse-only` drives the fetch-grant gate end to end. The
+  # ledger lives at config.history_path, so an acknowledgment persists across
+  # run_cli calls (the silent-second-sync proof). +policy+ puts it on the auto
+  # cadence for the `--all` skip test.
+  def with_grant_sync_env(policy: "manual")
+    Dir.mktmpdir("nabu-cli-grant") do |root|
+      dir = File.join(root, "canonical", "starling")
+      FileUtils.mkdir_p(dir)
+      File.write(File.join(dir, "one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+      File.write(File.join(dir, "two.txt"), "Odyssey\nἄνδρα\n")
+      sources = File.join(root, "sources.yml")
+      File.write(sources, grant_source_yaml("starling", policy: policy))
+      yield Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+    end
+  end
+
+  # A grant-gated member inside an axis, beside a non-gated sibling, so the
+  # axis-expansion skip path (P42-r1) has both to exercise.
+  def with_grant_axis_env
+    Dir.mktmpdir("nabu-cli-grant-axis") do |root|
+      %w[starling plain].each do |slug|
+        dir = File.join(root, "canonical", slug)
+        FileUtils.mkdir_p(dir)
+        File.write(File.join(dir, "#{slug}-one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+      end
+      File.write(File.join(root, "axes.yml"), "etym:\n  persona: \"The Etymologist.\"\n  desc: \"The etym lane.\"\n")
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "#{grant_source_yaml('starling', policy: 'manual', axes: 'etym')}" \
+                          "plain:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: manual\n  axes: [etym]\n")
+      yield Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+    end
+  end
+
+  def grant_source_yaml(slug, policy:, axes: nil)
+    axes_line = axes ? "  axes: [#{axes}]\n" : ""
+    <<~YAML
+      #{slug}:
+        adapter: TestAdapter
+        enabled: true
+        sync_policy: #{policy}
+      #{axes_line}  grant_required: true
+        grant:
+          grantor: G. Starostin
+          date: "2026-07-15"
+          terms: any use, per-base attribution required
+          thread: "№1"
+          request_hint: write to George Starostin for your own grant
+    YAML
+  end
+
+  # A $stdin double that both claims/denies a TTY and feeds typed input (the
+  # StringIO gives #gets; the singleton #tty? drives the gate's TTY branch).
+  def with_stdin(text, tty:)
+    original = $stdin
+    fake = StringIO.new(text)
+    fake.define_singleton_method(:tty?) { tty }
+    $stdin = fake
+    yield
+  ensure
+    $stdin = original
+  end
+
+  # Read the grant-acknowledgment ledger rows for +slug+ from the on-disk
+  # history ledger the CLI wrote (config.history_path).
+  def grant_ack_rows(config, slug)
+    return [] unless File.exist?(config.history_path)
+
+    db = Nabu::Store::Ledger.connect(config.history_path)
+    return [] unless db.table_exists?(:grant_acknowledgments)
+
+    db[:grant_acknowledgments].where(source_slug: slug).all
+  ensure
+    db&.disconnect
+  end
+
+  def grant_ack_count(config, slug) = grant_ack_rows(config, slug).size
+  def grant_ack_how(config, slug) = grant_ack_rows(config, slug).first&.fetch(:how)
 
   # An axis env (P35-2): a real axes.yml beside a sources.yml whose rows carry
   # `axes:` membership, so SourceRegistry.load builds the AxisRegistry and the

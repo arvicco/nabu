@@ -54,6 +54,19 @@ module Nabu
     # (P26-5 Part A; pinned by an every-entry-point spy test).
     INDEX_INERT_KINDS = %i[notes language source].freeze
 
+    # Post-load ANALYZE fires only after a BULK load — a sync that
+    # added/updated/withdrew strictly more than this many rows (P42-4). The
+    # bounded ANALYZE is still seconds-scale on the live corpus (measured 148s),
+    # so re-planning after a 0-row skip-run — the common re-sync — is pure
+    # waste; a maintenance touch of a few rows leaves the planner's existing
+    # distribution representative. This counts the LOAD's size, not a fraction
+    # of the corpus: it asks "was this a bulk change worth re-planning for",
+    # which no corpus growth can make stale (a bulk load is a bulk load at any
+    # scale). `nabu rebuild` re-derives everything, so it always analyzes and
+    # backstops sub-threshold syncs regardless.
+    # const: changed-row floor that marks a load "bulk" (load-size, not corpus-fraction)
+    ANALYZE_MIN_CHANGED_ROWS = 10_000
+
     # What one source's sync did. Mirrors Rebuild::Outcome. On a tripped breaker
     # load_report is nil and #aborted? is true, with +breaker+ carrying the
     # Nabu::SyncAborted (its counts + message) for reporting; otherwise breaker
@@ -68,15 +81,25 @@ module Nabu
     # +references+ (P19-4) is the Nabu::LibraryReferences::Result for a
     # reference_edges? source (the manifests' related: urns refreshed into
     # the links journal after the load); nil for every other source.
+    # +analyzed+ (P42-4) is the Store::AnalyzeReport of the post-load
+    # planner-stats refresh when the load was bulk (see ANALYZE_MIN_CHANGED_ROWS);
+    # nil when the load was sub-threshold (the common re-sync) or on an aborted
+    # run — the CLI's report line stays silent then.
     Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings,
-                          :discovery, :references) do
+                          :discovery, :references, :analyzed) do
       def initialize(slug:, fetch_report:, load_report:, breaker:, indexed:, warnings:,
-                     discovery:, references: nil)
+                     discovery:, references: nil, analyzed: nil)
         super
       end
 
       def aborted? = !breaker.nil?
     end
+
+    # A `sync --all` result sentinel (P42-r1): a grant_required source with no
+    # recorded acknowledgment was SKIPPED, never prompted mid-batch — the CLI
+    # renders GrantGate.skip_line for it. Distinct from an Outcome (nothing was
+    # fetched or loaded) and from a captured Error (nothing went wrong).
+    GrantRequired = Data.define(:slug)
 
     # +db+ is the catalog; +ledger+ the history ledger (Store::Ledger, P7-1) —
     # runs, per-repo pins, and durable revisions are recorded there, keyed by
@@ -86,6 +109,7 @@ module Nabu
       @registry = registry
       @db = db
       @ledger = ledger
+      @grant_gate = GrantGate.new(ledger: ledger)
     end
 
     # Sync exactly the named source, disabled or not (explicit request). An
@@ -105,10 +129,16 @@ module Nabu
     def sync_all(parse_only: false, force: false, progress: nil)
       live_enabled.to_h do |entry|
         result =
-          begin
-            sync_entry(entry, parse_only: parse_only, force: force, progress: progress)
-          rescue Nabu::Error => e
-            e
+          if @grant_gate.blocked?(entry)
+            # A permission-bound source with no acknowledgment is SKIPPED, never
+            # prompted mid-batch (P42-r1) — the CLI renders the honest skip line.
+            GrantRequired.new(slug: entry.slug)
+          else
+            begin
+              sync_entry(entry, parse_only: parse_only, force: force, progress: progress)
+            rescue Nabu::Error => e
+              e
+            end
           end
         [entry.slug, result]
       end
@@ -164,7 +194,45 @@ module Nabu
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
                   breaker: nil, indexed: indexed,
                   warnings: warnings, discovery: discovery,
-                  references: refresh_references(entry))
+                  references: refresh_references(entry),
+                  analyzed: analyze_after_load(load_report, adapter))
+    end
+
+    # P42-4: after a BULK load, refresh the query-planner statistics — the
+    # catalog always (it holds the passages the planner mis-estimated), and the
+    # fulltext index too UNLESS the source is index-inert (its passage_lemmas
+    # table carries three b-tree indexes the lemma/etym/vocab joins choose
+    # between, so its stats plan too; ops §10). Returns a Store::AnalyzeReport,
+    # or nil when the load was sub-threshold so the report line stays silent.
+    def analyze_after_load(load_report, adapter)
+      return nil unless bulk_load?(load_report)
+
+      seconds = Store.analyze!(@db)
+      scope = "catalog"
+      unless index_inert?(adapter)
+        seconds += analyze_fulltext!
+        scope = "catalog + index"
+      end
+      Store::AnalyzeReport.new(seconds: seconds, scope: scope)
+    end
+
+    # A load counts as bulk when it changed strictly more than
+    # ANALYZE_MIN_CHANGED_ROWS rows (added + updated + withdrawn). A skip-run
+    # (nothing changed, only skipped) is never bulk — the waste case the
+    # threshold exists to avoid.
+    def bulk_load?(load_report)
+      return false unless load_report
+
+      (load_report.added + load_report.updated + load_report.withdrawn) > ANALYZE_MIN_CHANGED_ROWS
+    end
+
+    # Analyze the fulltext index through its own short-lived connection (the
+    # reindex! handle has already closed), mirroring reindex!'s connect/ensure.
+    def analyze_fulltext!
+      fulltext = Store.connect_fulltext(@config.fulltext_path)
+      Store.analyze!(fulltext)
+    ensure
+      fulltext&.disconnect
     end
 
     # P19-4/P25-0: after a reference_edges? source loads, re-derive its

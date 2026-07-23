@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 22 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 July 2026)</span> |
 |---|---|---|---|---|
 | `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
 | `isicily` | inscriptions | attribution | enabled · manual | 6,664 docs / 16,996 passages |

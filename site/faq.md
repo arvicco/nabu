@@ -89,8 +89,8 @@ goes offline, a Nabu library keeps working. The shelf survey is on
 
 ### What is included?
 
-As of 22 July 2026 (late): 810,254 documents and 62,807,983 passages across 83
-registered, synced sources, plus 1,310,763 dictionary entries and
+As of 23 July 2026: 810,180 documents and 62,789,087 passages across 83
+registered, synced sources, plus 1,310,786 dictionary entries and
 16.2 million gold
 lemma annotations in twenty-eight languages — the Islamicate library
 (OpenITI, the corpus's largest holding — Classical Arabic and Persian,

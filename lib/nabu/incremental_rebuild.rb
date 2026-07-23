@@ -52,7 +52,14 @@ module Nabu
     # What an incremental rebuild did. +indexed+ is the passage count
     # re-indexed across dirty sources (nil when none needed index work);
     # +axes+/+facets+ are nil when the corpus-wide builders did not run.
-    Result = Data.define(:db_path, :outcomes, :cleans, :skips, :indexed, :axes, :facets) do
+    # +analyzed+ (P42-4) is the Store::AnalyzeReport of the post-run planner-
+    # stats refresh — present when any source re-derived (the dirty replays
+    # shifted the catalog/index distribution), nil when everything was clean.
+    Result = Data.define(:db_path, :outcomes, :cleans, :skips, :indexed, :axes, :facets, :analyzed) do
+      def initialize(db_path:, outcomes:, cleans:, skips:, indexed:, axes:, facets:, analyzed: nil)
+        super
+      end
+
       def warnings = outcomes.select(&:warning?)
     end
 
@@ -104,10 +111,23 @@ module Nabu
         indexed = (indexed || 0) + refresh_index(db, fulltext, entry) unless index_inert?(entry)
       end
       replay_enrichments(db)
+      # P42-0: the loader hooks maintained source_stats through each dirty
+      # replay; re-deriving wholesale keeps the incremental run's stats
+      # content-equivalent to a full rebuild's (the sacred invariant). A
+      # skipped-everything run touched no rows, so stats need nothing.
+      if outcomes.any?
+        progress&.stage("source stats")
+        Store::SourceStats.derive!(db, note: "derived (incremental rebuild)")
+      end
       axes, facets = corpus_builders(db, progress) if outcomes.any?
       indexed = heal_index(db, fulltext, progress) if outcomes.empty? && !Store::Indexer.incremental_ready?(fulltext)
+      # P42-4: refresh the planner stats when dirty sources re-derived — their
+      # replays revised the catalog and (per source) the index, so the
+      # sqlite_stat1 both carry may no longer match (ops §10). A clean-swept run
+      # touched no rows, so the existing stats still describe them.
+      analyzed = analyze_after_incremental(db, fulltext) if outcomes.any?
       Result.new(db_path: db_path, outcomes: outcomes, cleans: cleans, skips: skips,
-                 indexed: indexed, axes: axes, facets: facets)
+                 indexed: indexed, axes: axes, facets: facets, analyzed: analyzed)
     ensure
       db&.disconnect
       fulltext&.disconnect
@@ -217,6 +237,13 @@ module Nabu
 
     def alignments
       @alignments ||= AlignmentRegistry.load(@config.alignments_path)
+    end
+
+    # P42-4: bounded ANALYZE of the catalog and the fulltext index after the
+    # dirty replays, mirroring the full rebuild's post-index refresh.
+    def analyze_after_incremental(db, fulltext)
+      Store::AnalyzeReport.new(scope: "catalog + index",
+                               seconds: Store.analyze!(db) + Store.analyze!(fulltext))
     end
   end
 end

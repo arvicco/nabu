@@ -790,6 +790,55 @@ Ground rules:
   them. Never delete or separate a `-wal` from its db by hand — backup handles
   the pair (§9).
 
+### Query-planner hygiene — the post-load ANALYZE (P42-4)
+
+The live catalog had **never been ANALYZEd** (found 2026-07-20): SQLite's
+planner was picking index-vs-scan strategies off its hard-coded default row
+estimates rather than the real distribution of a 62.8M-passage corpus. Since
+P42-4 every write path refreshes `sqlite_stat1` so the planner works from
+truth:
+
+- **`nabu rebuild`** (full) always ANALYZEs the fresh catalog **and** the
+  fulltext index at the end — the just-loaded db has no statistics at all.
+- **`nabu rebuild --incremental`** ANALYZEs both whenever any source was dirty
+  (a clean-swept run touched no rows, so the existing stats still hold).
+- **`nabu sync`** ANALYZEs only after a **bulk** load — one that
+  added/updated/withdrew more than `SyncRunner::ANALYZE_MIN_CHANGED_ROWS`
+  rows. The bounded pass is still seconds-scale (measured **148 s** at 62.8M
+  passages), so re-planning after the common 0-row skip-run would be pure
+  waste; a maintenance touch of a handful of rows leaves the distribution
+  representative. A sub-threshold sync prints nothing; a bulk one prints
+  `analyzed catalog + index (planner stats refreshed, N.Ns)`.
+
+**Bounded, not full.** `PRAGMA analysis_limit = 1000` (`Store::ANALYSIS_LIMIT`,
+SQLite's recommended value) caps how many rows per index the pass samples, so
+ANALYZE stays bounded on a huge table instead of running unbounded.
+
+**Why the fulltext index too, not just the catalog.** The catalog holds the
+passages the planner most mis-estimated, but the fulltext db plans as well:
+its `passage_lemmas` table is a **plain** table carrying **three** b-tree
+indexes (`lemma_folded`, `urn`, `language`) that the `search --lemma`, etym,
+and vocab joins choose between — a multi-index plain table is exactly where
+`sqlite_stat1` decides the right walk. (The `passages_fts` / `passages_trigram`
+FTS5 virtual tables run their own MATCH strategy and gain little from ANALYZE,
+but the bounded pass over them is cheap and harmless.) So the ruling is
+**yes** — analyze the index db alongside the catalog.
+
+### The join-free probe pattern (P41-r2/P42-1)
+
+A refreshed planner is only half the job; the query has to give it a shape it
+can walk. The measured lesson: **probing through a join defeats an index
+walk** — the planner drives from the join and scans. `Query::Random` measured
+**4 m 45 s** sampling *through* the `passages → documents → sources` join
+versus **0.4 s** probing the `passages` primary key bare. So **scope
+join-free**: reduce the constraint to an **id-set** first (the candidate
+`document_id`s for a source, prefiltered `withdrawn: false`), then filter the
+big table by set membership on its own indexed column, and re-apply full
+visibility at render. `Query::Random` (the `--random` sampler) and the
+`ReflexViews`/`LemmaFrequencies` closures (P42-1, which read the indexed
+`passage_lemmas` slice directly rather than re-aggregating per query) are the
+worked instances.
+
 ## 11. The postcondition checker & the post-sync review hook (P18-7)
 
 Every silent failure this section exists for actually happened: a rebuild

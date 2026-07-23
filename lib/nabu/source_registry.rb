@@ -60,6 +60,21 @@ module Nabu
     LEMMA_TIERS = %w[gold silver equivalence].freeze
     DEFAULT_LEMMA_TIER = "gold"
 
+    # The fetch-grant block (P42-r1): a permission-bound source whose right to
+    # fetch is NOT conveyed by a public license (StarLing's personal e-mail
+    # grant to the project author, the future TITUS Avestan). A public clone of
+    # nabu must not scrape under someone else's grant, so `grant_required: true`
+    # arms the sync-time gate and this block carries what the gate renders — the
+    # terms verbatim, who granted them and when, the thread reference, and a
+    # request_hint (whom a new user should ask + what to promise). DISTINCT from
+    # ordinary public-license obligations (CC BY-NC-SA needs no gate — the
+    # license-class machinery handles attribution/redistribution); the gate
+    # criterion is solely "the right to FETCH is not conveyed by a public
+    # license." All five fields are required, non-empty strings (quote the date
+    # in YAML so it stays a String, not a parsed Date).
+    Grant = Data.define(:grantor, :date, :terms, :thread, :request_hint)
+    GRANT_FIELDS = %w[grantor date terms thread request_hint].freeze
+
     # One registry line. adapter_class_name is a String resolved on demand.
     # +translations+ (P7-4): per-source opt-in to ingesting parallel
     # translations (default false — corpora stay original-only unless the
@@ -105,11 +120,18 @@ module Nabu
     # carry a sync_policy internally only for uniform construction — it is
     # never rendered or swept for them (enablement + cadence are moot; the
     # up= column reads structurally as local/module).
+    # +grant_required+ / +grant+ (P42-r1): a permission-bound source arms the
+    # sync-time grant gate (grant_required: true) and carries the Grant block
+    # the gate renders (grantor/date/terms/thread/request_hint). The two travel
+    # together — a grant block without the flag, or the flag without a block, is
+    # a configuration error caught at load. Absent on every ordinary source.
     Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :kind, :translations,
-                        :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings, :axes) do
+                        :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings, :axes,
+                        :grant_required, :grant) do
       def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false,
-                     lemma_tier: DEFAULT_LEMMA_TIER, classes: nil, siblings: nil, axes: [])
+                     lemma_tier: DEFAULT_LEMMA_TIER, classes: nil, siblings: nil, axes: [],
+                     grant_required: false, grant: nil)
         super
       end
 
@@ -119,6 +141,11 @@ module Nabu
       def shelf? = kind == "shelf"
       def feature_module? = kind == "module"
       def source? = kind == "source"
+
+      # This source's fetch right is not conveyed by a public license, so the
+      # sync-time gate (P42-r1) demands a recorded acknowledgment before a first
+      # fetch. Predicate spelling mirrors shelf?/source?.
+      def grant_required? = grant_required
 
       # Resolve the adapter constant lazily. A bad/missing class is a
       # configuration error, not a crash: surface it as a ValidationError
@@ -222,6 +249,7 @@ module Nabu
       kind = kind!(slug, config)
       enabled = enabled!(slug, config)
       kind_invariants!(slug, config, kind: kind, enabled: enabled)
+      grant_required, grant = grant!(slug, config)
 
       Entry.new(
         slug: slug, adapter_class_name: adapter,
@@ -232,10 +260,48 @@ module Nabu
         lemma_tier: lemma_tier!(slug, config),
         classes: classes!(slug, config),
         siblings: siblings!(slug, config),
-        axes: axes!(slug, config, axis_registry)
+        axes: axes!(slug, config, axis_registry),
+        grant_required: grant_required, grant: grant
       )
     end
     private_class_method :build_entry
+
+    # The fetch-grant gate keys (P42-r1). Returns [grant_required, Grant|nil].
+    # The flag and the block travel together: grant_required without a grant
+    # block is a config error (the gate would have nothing to render), and a
+    # grant block without the flag is a config error too (dead config that
+    # would gate nothing). A present block must carry every GRANT_FIELDS key as
+    # a non-empty String (quote the date in YAML so it is not parsed to a Date).
+    def self.grant!(slug, config)
+      required = boolean!(slug, config, "grant_required")
+      block = config.fetch("grant", nil)
+
+      if required && block.nil?
+        raise ValidationError, "source #{slug.inspect}: grant_required: true needs a grant: block " \
+                               "(#{GRANT_FIELDS.join('/')})"
+      end
+      if !required && !block.nil?
+        raise ValidationError, "source #{slug.inspect}: a grant: block requires grant_required: true"
+      end
+      return [false, nil] if block.nil?
+      unless block.is_a?(Hash)
+        raise ValidationError, "source #{slug.inspect}: grant must be a mapping, got #{block.class}"
+      end
+
+      values = GRANT_FIELDS.map { |key| grant_field!(slug, block, key) }
+      [true, Grant.new(grantor: values[0], date: values[1], terms: values[2],
+                       thread: values[3], request_hint: values[4])]
+    end
+    private_class_method :grant!
+
+    def self.grant_field!(slug, block, key)
+      value = block[key]
+      return value if value.is_a?(String) && !value.strip.empty?
+
+      raise ValidationError,
+            "source #{slug.inspect}: grant.#{key} must be a non-empty string, got #{value.inspect}"
+    end
+    private_class_method :grant_field!
 
     # The three P35-0 membership rules, at load like every other invariant:
     # once definitions exist, absent/empty axes is an error (every source
