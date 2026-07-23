@@ -4785,6 +4785,8 @@ class CLITest < Minitest::Test
       hit = out.lines.find { |line| line.include?("‖") }
       refute_nil hit, "the RTL snippet highlights with ‖"
       assert_match(/‖[^‖]+‖/, hit, "the match is flanked: ‖word‖")
+      assert_includes hit, "\u200F‖\u200F",
+                      "each delimiter is RLM-glued (edge matches must not strand it — owner strike 3)"
       refute_includes hit, "[", "no mirrored bracket glyphs in an RTL snippet"
       assert_includes hit, RLI, "the passage keeps its whole-line isolate"
     end

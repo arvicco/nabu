@@ -2409,6 +2409,15 @@ module Nabu
     # snippets (U+2016 DOUBLE VERTICAL LINE, P42-r4): its own mirror image,
     # so no bidi treatment can make it face away; absent from stored text.
     RTL_HIGHLIGHT = "‖"
+    # Each delimiter is GLUED between two zero-width RIGHT-TO-LEFT MARKS
+    # (U+200F): a match at a passage EDGE leaves the outer delimiter with RTL
+    # text on one side only, and a renderer that reverses maximal RTL runs
+    # (sweeping only INTERIOR neutrals) then strands it at the far end of the
+    # line, detached from its word — the owner's second screenshot. With
+    # strong-R marks on both sides the delimiter is unconditionally interior
+    # to the RTL run and travels with the word on every renderer class. RLM
+    # is invisible and zero-width everywhere, bidi-aware or not.
+    RTL_GLUED_HIGHLIGHT = "‏‖‏"
     # Batch-mining progress tick cadence (anchors per stderr line); a scope
     # smaller than one tick prints no progress at all — just the summary.
     BATCH_PROGRESS_EVERY = 200
@@ -2509,7 +2518,7 @@ module Nabu
           return display_text(text, language)
         end
 
-        display_text(text.to_s.tr("[]", RTL_HIGHLIGHT * 2), language)
+        display_text(text.to_s.gsub(/[\[\]]/, RTL_GLUED_HIGHLIGHT), language)
       end
 
       # The source's three gaiji ladder lanes (P37-3/P38-2), each memoized per
