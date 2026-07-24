@@ -13,10 +13,11 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
+| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
 | `oshb` | texts | open | enabled · manual | 39 docs / 23,213 passages |
 | `sdbh` | dictionary | attribution | enabled · manual | 7,932 entries |
 | `sefaria` | texts | open | enabled · manual | 103 docs / 57,095 passages |

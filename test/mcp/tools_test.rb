@@ -557,6 +557,37 @@ module MCP
       refute body.key?("passage_note_count")
     end
 
+    # P43-2, the credit duty: a credited source's TEXT-serving payloads carry
+    # the credit line; an ordinary source's never do (no uncredited key noise).
+    CREDIT = "TITUS (J. Gippert, Frankfurt) — Avesta ed. Geldner/Westergaard"
+
+    def test_credit_line_rides_show_and_search_payloads_for_a_credited_source
+      titus = Nabu::Store::Source.create(
+        slug: "titus", name: "TITUS", adapter_class: "TestAdapter",
+        license_class: "nc", enabled: true, credit: CREDIT
+      )
+      doc = make_document(source: titus, urn: "urn:nabu:titus-avestan:avest001", language: "ave")
+      make_passage(doc, urn: "urn:nabu:titus-avestan:avest001:Y.0.1.a",
+                        text: "frauuarāne mazdaiiasnō", sequence: 0, language: "ave")
+      rebuild!
+
+      shown = payload(call("nabu_show", { "urn" => "urn:nabu:titus-avestan:avest001:Y.0.1.a" }))
+      assert_equal CREDIT, shown.fetch("credit"), "nabu_show passage payload carries the credit"
+      docp = payload(call("nabu_show", { "urn" => "urn:nabu:titus-avestan:avest001" }))
+      assert_equal CREDIT, docp.fetch("credit"), "the document header carries it too"
+
+      hit = payload(call("nabu_search", { "query" => "mazdaiiasnō" })).fetch("matches").first
+      assert_equal CREDIT, hit.fetch("credit"), "nabu_search match payload carries it"
+    end
+
+    def test_uncredited_source_payloads_carry_no_credit_key
+      seed_corpus
+      shown = payload(call("nabu_show", { "urn" => "#{@grc.urn}:1.1" }))
+      refute shown.key?("credit"), "an uncredited source must not emit a credit key"
+      hit = payload(call("nabu_search", { "query" => "μηνιν" })).fetch("matches").first
+      refute hit.key?("credit")
+    end
+
     # The withholding rule: a note on a research_private/restricted document
     # follows the DOCUMENT's withholding — the withheld response carries no
     # notes, so a note can never leak a withheld text's content frame.

@@ -13,6 +13,11 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
   `latin-perseus`, packet P31-6) and for the two Classical Chinese treebanks
   (`classical-chinese-kyoto`, `classical-chinese-tuecl`, packet P32-0) — all
   from `master` of each treebank's UD repo via `raw.githubusercontent.com`.
+  **2026-07-23** for the ELEVEN historical-wave treebanks (packet P43-1):
+  `classical-armenian-caval`, `old-french-profiterole`,
+  `middle-french-profiterole`, `ottoman-boun`, `ottoman-dudu`, `greek-ptnk`,
+  `hebrew-ptnk`, `akkadian-riao`, `akkadian-pisandub`, `coptic-bohairic`,
+  `egyptian-pc` — all from `master` via `raw.githubusercontent.com`.
 - **Acquisition plan** approved by owner 2026-07-03 (dev-loop §8; packet P3-1);
   the first two OES treebanks added under packet P10-2 (survey pick #1,
   `.docs/surveys/slavic-survey.md` §1); the Ruthenian treebank under packet P13-1b
@@ -43,6 +48,17 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
 | `classical-chinese-kyoto/lzh_kyoto-ud-dev-slices.conllu` | `UD_Classical_Chinese-Kyoto/master/lzh_kyoto-ud-dev.conllu` | 3,032,014 | 9,831 | 18 |
 | `classical-chinese-tuecl/lzh_tuecl-ud-test-head50.conllu` | `UD_Classical_Chinese-TueCL/master/lzh_tuecl-ud-test.conllu` | 59,420 | 29,817 | 50 |
 | `icelandic-icepahc/is_icepahc-ud-dev-head50.conllu` | `UD_Icelandic-IcePaHC/master/is_icepahc-ud-dev.conllu` | 11,860,801 | 49,397 | 50 |
+| `classical-armenian-caval/xcl_caval-ud-test-head50.conllu` | `UD_Classical_Armenian-CAVaL/master/xcl_caval-ud-test.conllu` | 1,401,518 | 122,771 | 50 |
+| `old-french-profiterole/fro_profiterole-ud-test-head50.conllu` | `UD_Old_French-PROFITEROLE/master/fro_profiterole-ud-test.conllu` | 1,776,610 | 31,730 | 50 |
+| `middle-french-profiterole/frm_profiterole-ud-test-head50.conllu` | `UD_Middle_French-PROFITEROLE/master/frm_profiterole-ud-test.conllu` | 1,259,818 | 85,611 | 50 |
+| `ottoman-boun/ota_boun-ud-test-head50.conllu` | `UD_Ottoman_Turkish-BOUN/master/ota_boun-ud-test.conllu` | 648,806 | 80,671 | 50 |
+| `ottoman-dudu/ota_dudu-ud-test-head50.conllu` | `UD_Ottoman_Turkish-DUDU/master/ota_dudu-ud-test.conllu` | 868,264 | 38,529 | 50 |
+| `greek-ptnk/grc_ptnk-ud-test-head50.conllu` | `UD_Ancient_Greek-PTNK/master/grc_ptnk-ud-test.conllu` | 1,209,705 | 158,190 | 50 |
+| `hebrew-ptnk/hbo_ptnk-ud-test-head50.conllu` | `UD_Ancient_Hebrew-PTNK/master/hbo_ptnk-ud-test.conllu` | 3,246,453 | 293,919 | 50 |
+| `akkadian-riao/akk_riao-ud-test-head50.conllu` | `UD_Akkadian-RIAO/master/akk_riao-ud-test.conllu` | 1,963,720 | 51,089 | 50 |
+| `akkadian-pisandub/akk_pisandub-ud-test-head50.conllu` | `UD_Akkadian-PISANDUB/master/akk_pisandub-ud-test.conllu` | 101,792 | 43,648 | 50 |
+| `coptic-bohairic/cop_bohairic-ud-test-head50.conllu` | `UD_Coptic-Bohairic/master/cop_bohairic-ud-test.conllu` | 1,100,840 | 139,571 | 50 |
+| `egyptian-pc/egy_pc-ud-test-head50.conllu` | `UD_Egyptian-PC/master/egy_pc-ud-test.conllu` | 1,568,610 | 53,403 | 50 |
 
 (All URLs prefixed `https://raw.githubusercontent.com/UniversalDependencies/`.)
 
@@ -221,6 +237,70 @@ e.g. `1250.THETUBROT.NAR-SAG,1.1`), `# X_ID`, and `# text`. The LEMMA (col 3)
 column is fully populated; XPOS carries the IcePaHC/Penn constituency tags
 (`ADV`, `PRO-N`, `VBDI`), MISC an `IFD_tag=` field (the Icelandic Frequency
 Dictionary tag). Language tag `is`.
+
+### Historical-wave trim note (P43-1, 2026-07-23)
+
+The eleven historical-wave fixtures are each the plain **first 50 complete
+sentence blocks** of their upstream `*-ud-test.conllu`, retrieved from `master`.
+All comment lines inside the head are kept verbatim, including the block
+boundary markers (`# newdoc id` for `fro`/`hbo`/`cop`, `# doc_id` for `frm`).
+Notable per-treebank shapes:
+
+- **`hebrew-ptnk` (hbo) — NFC-EXEMPT.** hbo is on `Normalize::NFC_EXEMPT_LANGUAGES`
+  (Masoretic combining-mark order is not NFC-stable; owner ruling 2026-07-18),
+  so its passage text is stored **byte-verbatim**. The PTNK `# text` lines
+  already ship in NFC order (checked: NFC changes 0 of the head's text lines),
+  so `ConlluParser`'s boundary `Normalize.nfc` is a no-op and byte-honesty holds
+  with **no parser change**. The adapter test pins the opening passage byte-equal
+  to the source `# text` line. Rich MWT: 400 range lines inside the head (the
+  Latin-ITTB machinery), no empty nodes.
+- **`ottoman-boun`/`-dudu` (ota).** BOUN carries a `# text_arabic` comment per
+  block AND an Arabic-script surface form in each token's MISC column (with
+  internal spaces — still one tab-delimited field, 10 columns hold); both ride
+  through interpreted only where the parser looks (`sent_id`/`text`/`source`).
+- **`coptic-bohairic` (cop).** Bohairic Gospel of Mark; blocks carry a run of
+  `# meta::…`, `# global.Entity` and `# text_en` comments the parser ignores.
+  462 MWT range lines inside the head (Coptic article+noun bound groups).
+- **`greek-ptnk`/`hebrew-ptnk`** are `parallel_id`-aligned Septuagint/Masoretic
+  Pentateuch — a NEW grc treebank and the first hbo TREEBANK lane; no dedup
+  concern (distinct upstream data from greek-proiel/ancient-greek-perseus and
+  from the native OSHB/BHSA hebrew shelves).
+- **`egyptian-pc` (egy)** — Pyramid Texts (Sethe): transliteration with
+  combining diacritics (`č̣`, `ꞽ`); egy is NOT exempt, so its text is NFC per the
+  invariant. **`classical-armenian-caval` (xcl)**, **`old-`/`middle-french-
+  profiterole` (fro/frm)**, **`akkadian-riao`/`-pisandub` (akk)** are plain
+  head-50 slices with the MWT counts recorded in `manifest.yml`.
+
+### Historical-wave licenses (P43-1, read verbatim 2026-07-23)
+
+Read from each repo's `LICENSE.txt`/`README` by the packet scout; used exactly,
+never re-derived. The file's plain-short-name idiom is used for the `license:`
+string, the conflict/provenance nuance in the adapter comments. **The `ud`
+source class stays `nc`** (most-restrictive present), so the BY-SA/BY treebanks
+are never over-shared.
+
+- **UD_Classical_Armenian-CAVaL** — CC BY-NC-SA 4.0 → **nc** (explicit override).
+- **UD_Old_French-PROFITEROLE** — CONFLICTING: `LICENSE.txt` CC BY-SA 4.0 vs
+  README CC BY-NC-SA 3.0. Conservative ruling: NonCommercial controls → **nc**,
+  pending upstream clarification (re-read at next refresh, never from memory).
+- **UD_Middle_French-PROFITEROLE** — CONFLICTING: `LICENSE.txt` CC BY-SA 4.0 vs
+  README CC BY-NC-SA 4.0. Conservative → **nc**, pending clarification.
+- **UD_Ottoman_Turkish-BOUN** and **UD_Ottoman_Turkish-DUDU** — CC BY-SA 4.0 →
+  **attribution**.
+- **UD_Ancient_Greek-PTNK** — CC BY-SA 4.0 → **attribution**.
+- **UD_Ancient_Hebrew-PTNK** — the repo `LICENSE.txt` reads BY-SA, but the
+  underlying ETCBC (BHSA) annotations the treebank is built on are CC BY-NC 4.0;
+  the NC of the source annotations CONTROLS → **nc** (explicit override).
+- **UD_Akkadian-RIAO** — CC BY-SA 3.0 (older version, still ShareAlike) →
+  **attribution**. **UD_Akkadian-PISANDUB** — CC BY-SA 4.0 → **attribution**.
+- **UD_Coptic-Bohairic** — CC BY 4.0 (plain Attribution) → **attribution**.
+- **UD_Egyptian-PC** — CC BY-SA 4.0 → **attribution**.
+
+Every P43-1 entry carries an EXPLICIT `license_class` (both the nc and the
+attribution cases) — a small departure from the legacy bare-nc idiom, because
+these are real per-treebank grants worth recording verbatim; the nc entries'
+documents therefore carry `license_override = "nc"` (redundant with, never
+looser than, the source class).
 
 ### Latin-ITTB multiword-token (MWT) rule
 

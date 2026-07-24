@@ -217,6 +217,116 @@ module Nabu
         "icelandic-icepahc" => {
           repo: "https://github.com/UniversalDependencies/UD_Icelandic-IcePaHC",
           language: "is", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # P43-1 (the historical wave — ELEVEN treebanks, config-only, the
+        # P10-2/P31-0 shape): four brand-new language lanes (xcl/fro/frm/ota)
+        # and seven treebanks under languages the library already hosts
+        # (grc/hbo/akk/cop/egy). All licenses read verbatim from each repo's
+        # LICENSE.txt/README on 2026-07-23 by the packet scout — used exactly
+        # as given, never re-derived. The `license:` string follows the file's
+        # plain-short-name idiom; every conflict/provenance nuance lives in the
+        # comment above its entry (the fixture README carries the same, longer).
+        #
+        # WAVE LICENSE POSTURE — a small departure from the legacy bare-nc
+        # idiom, stated not hidden: unlike the four original treebanks and
+        # DipSGG/Perseus (which OMIT :license_class so their documents inherit
+        # the source's nc class with override NULL), EVERY P43-1 entry carries
+        # an EXPLICIT :license + :license_class — including the nc ones
+        # (Armenian, both French, Hebrew). Their nc is a real per-treebank grant
+        # (BY-NC-SA / BY-NC), sometimes conflicting across LICENSE.txt vs README,
+        # worth recording verbatim rather than folding silently into the source
+        # default; so those documents carry license_override = "nc" (redundant
+        # with, never looser than, the source class). The BY-SA/BY entries carry
+        # attribution exactly as birchbark/RNC/Hittite do. The SOURCE class stays
+        # nc (most-restrictive present) so nothing is ever over-shared.
+
+        # Classical Armenian — the CAVaL treebank (the 5th-c. Armenian NT and
+        # kin; language xcl, already known to the etym/cuneiform shelves via
+        # IE-CoR but the library's FIRST xcl TEXT lane). LICENSE.txt + README
+        # verbatim CC BY-NC-SA 4.0 → NonCommercial; explicit nc override.
+        "classical-armenian-caval" => {
+          repo: "https://github.com/UniversalDependencies/UD_Classical_Armenian-CAVaL",
+          language: "xcl", license: "CC BY-NC-SA 4.0", license_class: "nc"
+        },
+        # Old French — PROFITEROLE (fro; the library's first fro lane; the
+        # head opens on the Chanson de Roland). CONFLICTING GRANTS: LICENSE.txt
+        # reads CC BY-SA 4.0 but the README metadata reads CC BY-NC-SA 3.0 — a
+        # substantive attribution-vs-NC fork (not a version slip). Conservative
+        # ruling: the NonCommercial reading controls (treating BY-SA data as NC
+        # can never over-share; the reverse could) → nc, pending upstream
+        # clarification. Re-read at the next fixture refresh, never from memory.
+        "old-french-profiterole" => {
+          repo: "https://github.com/UniversalDependencies/UD_Old_French-PROFITEROLE",
+          language: "fro", license: "CC BY-NC-SA 3.0", license_class: "nc"
+        },
+        # Middle French — PROFITEROLE (frm; the library's first frm lane;
+        # 15th-c. prose, Commynes &c). SAME CONFLICT as Old French: LICENSE.txt
+        # CC BY-SA 4.0 vs README CC BY-NC-SA 4.0 — conservative NonCommercial
+        # ruling → nc, pending upstream clarification.
+        "middle-french-profiterole" => {
+          repo: "https://github.com/UniversalDependencies/UD_Middle_French-PROFITEROLE",
+          language: "frm", license: "CC BY-NC-SA 4.0", license_class: "nc"
+        },
+        # Ottoman Turkish — the TWO treebanks (ota; the library's first ota
+        # lane): BOUN (Boğaziçi; a `# text_arabic` line rides each block, kept
+        # verbatim in the MISC column of its tokens) and DUDU. Both LICENSE.txt
+        # + README verbatim CC BY-SA 4.0 → attribution override.
+        "ottoman-boun" => {
+          repo: "https://github.com/UniversalDependencies/UD_Ottoman_Turkish-BOUN",
+          language: "ota", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        "ottoman-dudu" => {
+          repo: "https://github.com/UniversalDependencies/UD_Ottoman_Turkish-DUDU",
+          language: "ota", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # Ancient Greek — PTNK (grc; the Greek of the Septuagint Pentateuch —
+        # a NEW grc treebank beside greek-proiel/ancient-greek-perseus, no
+        # dedup concern: distinct upstream data). Sibling to Ancient Hebrew
+        # PTNK below (parallel_id-aligned Genesis…). LICENSE.txt + README
+        # verbatim CC BY-SA 4.0 → attribution override.
+        "greek-ptnk" => {
+          repo: "https://github.com/UniversalDependencies/UD_Ancient_Greek-PTNK",
+          language: "grc", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # Ancient Hebrew — PTNK (hbo; the Masoretic Pentateuch — a NEW hbo
+        # TREEBANK lane, the first hbo through ConlluParser; hbo is NFC-EXEMPT
+        # (Normalize::NFC_EXEMPT_LANGUAGES) so its text is stored byte-verbatim
+        # — the PTNK `# text` lines already ship in NFC order, so the parser's
+        # boundary nfc is a no-op and byte-honesty holds with no parser change).
+        # LICENSE: the repo LICENSE.txt reads BY-SA, but the underlying ETCBC
+        # (BHSA) annotations the treebank is built on are CC BY-NC 4.0 — the NC
+        # of the source annotations CONTROLS → explicit nc override.
+        "hebrew-ptnk" => {
+          repo: "https://github.com/UniversalDependencies/UD_Ancient_Hebrew-PTNK",
+          language: "hbo", license: "CC BY-NC 4.0", license_class: "nc"
+        },
+        # Akkadian — the TWO treebanks (akk; a NEW akk TREEBANK lane beside the
+        # cuneiform shelves' native akk): RIAO (Royal Inscriptions of Assyria
+        # online; LICENSE.txt verbatim CC BY-SA 3.0 — an older version, still
+        # ShareAlike → attribution) and PISANDUB (LICENSE.txt CC BY-SA 4.0 →
+        # attribution).
+        "akkadian-riao" => {
+          repo: "https://github.com/UniversalDependencies/UD_Akkadian-RIAO",
+          language: "akk", license: "CC BY-SA 3.0", license_class: "attribution"
+        },
+        "akkadian-pisandub" => {
+          repo: "https://github.com/UniversalDependencies/UD_Akkadian-PISANDUB",
+          language: "akk", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # Coptic — Bohairic (cop; a NEW cop TREEBANK lane beside coptic-
+        # scriptorium's native Sahidic cop; this is the Bohairic Gospel of
+        # Mark, Marcion/Takla digital edition). LICENSE.txt + README verbatim
+        # CC BY 4.0 (plain Attribution, no ShareAlike) → attribution override.
+        "coptic-bohairic" => {
+          repo: "https://github.com/UniversalDependencies/UD_Coptic-Bohairic",
+          language: "cop", license: "CC BY 4.0", license_class: "attribution"
+        },
+        # Egyptian — PC (egy; the library's first egy TEXT lane beside the TLA
+        # word-list shelves; Pyramid Texts &c, Sethe edition). LICENSE.txt +
+        # README verbatim CC BY-SA 4.0 → attribution override.
+        "egyptian-pc" => {
+          repo: "https://github.com/UniversalDependencies/UD_Egyptian-PC",
+          language: "egy", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze
 

@@ -63,7 +63,11 @@ module Nabu
       # renders glyphs the passage never held (学 as 學, だ as た). It marks
       # WHERE the match is AND how the source spelled it. `license_class` is the
       # effective class after override.
-      Result = Data.define(:urn, :language, :text, :snippet, :document_title, :license_class)
+      # +credit+ (P43-2): the source's optional attribution line (nil on every
+      # ordinary source), for the credit duty a hit's text render carries.
+      Result = Data.define(:urn, :language, :text, :snippet, :document_title, :license_class, :credit) do
+        def initialize(credit: nil, **) = super
+      end
 
       # FTS5 default relevance rank; lower (more negative) is a better match.
       # (The old SNIPPET_SQL fragment is gone: neither plain search nor proximity
@@ -564,7 +568,8 @@ module Nabu
             text: row.fetch(:text), language: row.fetch(:language), terms: terms, exact: exact, word: word
           ),
           document_title: row.fetch(:document_title),
-          license_class: row.fetch(:license_class)
+          license_class: row.fetch(:license_class),
+          credit: row.fetch(:credit)
         )
       end
 

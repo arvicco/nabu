@@ -702,6 +702,36 @@ class SourceRegistryTest < Minitest::Test
                  "the two grains of one wiki share their desks"
   end
 
+  # P43-2: the shipped TITUS Avestan row is fetch-gated on the №41-3 grant, and
+  # its refusal notice is the on-ramp (terms + whom to ask), never a bare wall.
+  def test_shipped_titus_avestan_is_grant_gated_with_the_on_ramp
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    entry = registry["titus-avestan"]
+
+    assert_predicate entry, :grant_required?
+    assert_equal "2026-07-23", entry.grant.date
+    assert_equal "№41-3", entry.grant.thread
+    assert_match(/Gippert/, entry.grant.grantor)
+    assert_match(/non-commercial/, entry.grant.terms)
+
+    notice = Nabu::GrantGate.notice(entry)
+    assert_match(/titus-avestan: fetch requires a GRANT/, notice)
+    assert_match(/request your own:/, notice, "the refusal points at the request scaffold")
+    assert_match(/Gippert/, notice)
+  end
+
+  # The manifest's display posture: nc (servable + credited, not hidden) and a
+  # verbatim credit line the serving surfaces render (the grant's display duty).
+  def test_shipped_titus_avestan_manifest_is_nc_and_credited
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    manifest = registry["titus-avestan"].manifest
+
+    assert_equal "nc", manifest.license_class
+    refute_nil manifest.credit
+    assert_match(/TITUS/, manifest.credit)
+    assert_match(/Gippert/, manifest.credit)
+  end
+
   # -- lazy adapter resolution --------------------------------------------
 
   def test_unknown_adapter_class_is_lazy

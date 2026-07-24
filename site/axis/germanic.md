@@ -25,9 +25,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 36 docs / 238,032 passages |
+| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
 | `proiel` | treebank | nc | enabled · frozen | 12 docs / 51,321 passages |
 | `iswoc` | texts | nc | enabled · frozen | 5 docs / 2,536 passages |
 | `menotec` | texts | nc | enabled · manual | 7 docs / 20,308 passages |
