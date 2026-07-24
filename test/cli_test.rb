@@ -1322,7 +1322,7 @@ class CLITest < Minitest::Test
       assert_match(/^lex\s/, out, "the focused source shows")
       assert_match(/^library\s/, out, "the owner's shelf always shows")
       refute_match(/^shelf\s/, out, "a non-enabled source is hidden")
-      assert_match(/enabled: reference — 1 source hidden \(--all shows them\)/, err)
+      assert_match(/enabled: 1 entry — 1 source not enabled \(--all shows them\)/, err)
     end
   end
 
@@ -1404,7 +1404,7 @@ class CLITest < Minitest::Test
       assert_match(/^lex\s/, out)
       assert_match(/^library\s/, out)
       refute_match(/^shelf\s/, out)
-      assert_match(/enabled: reference/, err)
+      assert_match(/enabled: 1 entry — 1 source not enabled/, err)
     end
   end
 

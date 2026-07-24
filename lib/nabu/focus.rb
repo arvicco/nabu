@@ -146,14 +146,19 @@ module Nabu
       "no sources enabled — nabu enable <axis|source> (nabu quickstart for a starter set)"
     end
 
-    # Shown after a default (enabled) table: what is enabled and the exact count
-    # of rows --all would reveal (the P35 exact-count honesty rule). The hidden
-    # clause is zero-suppressed — nothing to reveal, nothing said.
+    # Shown after a default (enabled) table. The ROWS ARE the enabled set
+    # (P44-r3b), so re-naming them here was pure duplication (owner report
+    # 2026-07-24: "why are they listed TWICE?") — a focus-era leftover from
+    # when the footer named the trim over an everything-table. Now a count
+    # summary: how many enabled, how many --all would reveal (the P35
+    # exact-count honesty rule; hidden clause zero-suppressed), and the
+    # grow-the-set on-ramp.
     def footer_line(entries, hidden)
-      head = "enabled: #{entries.join(', ')}"
-      return head unless hidden.positive?
+      head = "enabled: #{entries.size} #{entries.size == 1 ? 'entry' : 'entries'}"
+      tail = " (nabu enable <axis|source> to add)"
+      return head + tail unless hidden.positive?
 
-      "#{head} — #{hidden} #{hidden == 1 ? 'source' : 'sources'} hidden (--all shows them)"
+      "#{head} — #{hidden} #{hidden == 1 ? 'source' : 'sources'} not enabled (--all shows them)"
     end
 
     # The registry-drift warning: names in the file that match nothing now.
