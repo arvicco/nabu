@@ -1,0 +1,80 @@
+@prefix lila:  <http://lila-erc.eu/ontologies/lila/> .
+@prefix lilaIpoLemma: <http://lila-erc.eu/data/id/hypolemma/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix lilaPrefix: <http://lila-erc.eu/data/id/prefix/> .
+@prefix lilaSuffix: <http://lila-erc.eu/data/id/suffix/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix lilaLemma: <http://lila-erc.eu/data/id/lemma/> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ontolex: <http://www.w3.org/ns/lemon/ontolex#> .
+@prefix lilaBase: <http://lila-erc.eu/data/id/base/> .
+
+lilaLemma:83005  a              lila:Lemma ;
+        rdfs:label              "subsides" ;
+        lila:hasGender          lila:masculine ;
+        lila:hasInflectionType  lila:n3 ;
+        lila:hasPOS             lila:noun ;
+        dcterms:isPartOf        lilaLemma:LemmaBank ;
+        ontolex:writtenRep      "subsides"@la .
+
+lilaLemma:169428  a             lila:Lemma ;
+        rdfs:label              "percrebreo" ;
+        lila:hasInflectionType  lila:v2r ;
+        lila:hasPOS             lila:verb ;
+        dcterms:isPartOf        lilaLemma:LemmaBank ;
+        ontolex:writtenRep      "percrebreo"@la .
+
+lilaLemma:96403  a              lila:Lemma ;
+        rdfs:label              "contutor" ;
+        lila:hasBase            lilaBase:1042 ;
+        lila:hasGender          lila:masculine ;
+        lila:hasInflectionType  lila:n3 ;
+        lila:hasPOS             lila:noun ;
+        lila:hasPrefix          lilaPrefix:6 ;
+        lila:hasSuffix          lilaSuffix:4 , lilaSuffix:15 ;
+        dcterms:isPartOf        lilaLemma:LemmaBank ;
+        ontolex:writtenRep      "contutor"@la .
+
+lilaLemma:105138  a             lila:Lemma ;
+        rdfs:label              "hamiger" ;
+        lila:hasBase            lilaBase:1776 , lilaBase:184 ;
+        lila:hasGender          lila:masculine ;
+        lila:hasInflectionType  lila:n2 ;
+        lila:hasPOS             lila:noun ;
+        dcterms:isPartOf        lilaLemma:LemmaBank ;
+        ontolex:writtenRep      "hamiger"@la , "amiger"@la .
+
+lilaLemma:85300  a              lila:Lemma ;
+        rdfs:label              "uirgastrum" ;
+        lila:hasGender          lila:neuter ;
+        lila:hasInflectionType  lila:n2n ;
+        lila:hasPOS             lila:noun ;
+        dcterms:isPartOf        lilaLemma:LemmaBank ;
+        ontolex:writtenRep      "uirgastrum"@la , "uirgastrom"@la .
+
+lilaLemma:119692  a             lila:Lemma ;
+        rdfs:label              "proeliaris" ;
+        lila:hasBase            lilaBase:2751 ;
+        lila:hasDegree          lila:positive ;
+        lila:hasInflectionType  lila:n7 ;
+        lila:hasPOS             lila:adjective ;
+        lila:hasSuffix          lilaSuffix:34 ;
+        dcterms:isPartOf        lilaLemma:LemmaBank ;
+        ontolex:writtenRep      "praeliaris"@la , "proeliaris"@la .
+
+lilaIpoLemma:97523  a           lila:Hypolemma ;
+        rdfs:label              "eclipsans" ;
+        lila:hasDegree          lila:positive ;
+        lila:hasInflectionType  lila:n71 ;
+        lila:hasPOS             lila:adjective ;
+        lila:isHypolemma        lilaLemma:48631 ;
+        dcterms:isPartOf        lilaLemma:LemmaBank ;
+        ontolex:writtenRep      "eclypsans"@la , "eclipsans"@la .
+
+lilaLemma:152269  a             lila:Lemma ;
+        rdfs:label              "tantipliciter" ;
+        lila:hasDegree          lila:positive ;
+        lila:hasInflectionType  lila:i ;
+        lila:hasPOS             lila:adverb ;
+        dcterms:isPartOf        lilaLemma:LemmaBank ;
+        ontolex:writtenRep      "tantipliciter"@la .
