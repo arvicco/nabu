@@ -1,0 +1,29 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# CroALa ships one TEI P5 file per work under txts/. All three fixtures are
+# WHOLE byte-identical copies of their upstream files; LICENSE.md is the repo's
+# in-file grant, kept WHOLE so the local-git fetch test seeds a real cone.
+# adapter_test is null — the source-specific test pins ids/counts/snippets a
+# full refetch would not false-fail, and the whole-file posture leaves any
+# re-snapshot to the operator's eyeballed diff.
+source: croala
+adapter_test:
+retrieved: 2026-07-24
+files:
+  - path: txts/albert-i-inscr.xml
+    url: https://raw.githubusercontent.com/nevenjovanovic/croatiae-auctores-latini-textus/master/txts/albert-i-inscr.xml
+    whole: true
+    trim: none
+  - path: txts/adam-radauanus-traditio.xml
+    url: https://raw.githubusercontent.com/nevenjovanovic/croatiae-auctores-latini-textus/master/txts/adam-radauanus-traditio.xml
+    whole: true
+    trim: none
+  - path: txts/andreis-f-carm-h46.xml
+    url: https://raw.githubusercontent.com/nevenjovanovic/croatiae-auctores-latini-textus/master/txts/andreis-f-carm-h46.xml
+    whole: true
+    trim: none
+  - path: LICENSE.md
+    url: https://raw.githubusercontent.com/nevenjovanovic/croatiae-auctores-latini-textus/master/LICENSE.md
+    whole: true
+    trim: none
