@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these fourteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these sixteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
@@ -23,6 +23,8 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 | `ogham` | inscriptions | nc | enabled · manual | 873 docs / 1,053 passages |
 | `isicily` | inscriptions | attribution | enabled · manual | 6,723 docs / 17,921 passages |
 | `itant` | inscriptions | nc | enabled · manual | 1,160 docs / 1,283 passages |
+| `trismegistos` | feature module | attribution | not enabled | nothing held yet |
+| `pleiades` | feature module | attribution | not enabled | nothing held yet |
 | `tlhdig` | tablets | attribution | enabled · manual | 23,486 docs / 402,195 passages |
 | `ceipom` | inscriptions | attribution | enabled · frozen | 3,871 docs / 5,303 passages |
 | `open-etruscan` | inscriptions | attribution | enabled · frozen | 8,047 docs / 8,047 passages |
