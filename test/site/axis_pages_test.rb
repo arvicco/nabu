@@ -149,10 +149,10 @@ class AxisPagesTest < Minitest::Test
   end
 
   # [[name, block-body], …] split on the ### axis headings under "## The
-  # eighteen desks".
+  # twenty desks".
   def index_blocks
-    section = index_body[/^## The eighteen desks\n(.*?)(?=^---\s*$)/m, 1]
-    refute_nil section, "the /axis/ index must carry a '## The eighteen desks' section"
+    section = index_body[/^## The twenty desks\n(.*?)(?=^---\s*$)/m, 1]
+    refute_nil section, "the /axis/ index must carry a '## The twenty desks' section"
     section.scan(/^### (.+?)\n(.*?)(?=^### |\z)/m)
   end
 
@@ -167,8 +167,8 @@ class AxisPagesTest < Minitest::Test
     body = index_body
     assert_includes body, QUICKSTART_POINTER,
                     "the /axis/ index must carry the Quickstart pointer (regenerate with `rake site:axes`)"
-    assert body.index(QUICKSTART_POINTER) < body.index("## The eighteen desks"),
-           "the /axis/ index pointer must sit before the '## The eighteen desks' heading"
+    assert body.index(QUICKSTART_POINTER) < body.index("## The twenty desks"),
+           "the /axis/ index pointer must sit before the '## The twenty desks' heading"
   end
 
   def test_index_pins_each_persona_verbatim_and_links_the_page

@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The eighteen research desks of the Nabu library — tags over the
+  The twenty research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The eighteen desks
+## The twenty desks
 
 ### classical
 
