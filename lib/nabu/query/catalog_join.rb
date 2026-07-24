@@ -166,7 +166,10 @@ module Nabu
           Sequel[:passages][:language],
           Sequel[:passages][:text],
           Sequel[:documents][:title].as(:document_title),
-          license_expr.as(:license_class)
+          license_expr.as(:license_class),
+          # P43-2: the source's optional credit line rides beside license_class
+          # (sources is already joined) so every index-backed hit can render it.
+          Sequel[:sources][:credit].as(:credit)
         ]
       end
     end
