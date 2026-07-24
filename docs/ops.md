@@ -29,10 +29,22 @@ What each command does and its exit contract:
 - **`nabu verify`** — re-parses every canonical file and compares content hashes
   against the catalog. Read-only, no network. **Exit 0** clean; **exit 1** on any
   mismatch / missing / unparseable document, with the offending URNs listed.
-- **`nabu sync --all`** — fetches and loads every *enabled*, `sync_policy: live`
-  source. Network + writes `canonical/` and `db/`. The >20% withdrawal
-  circuit-breaker aborts (exit 1) any source whose sync would gut it. One
-  source's failure does not stop the others.
+- **`nabu enable <axis|source…>` / `nabu disable <…>`** — the local enablement
+  config (`config/profile.yml`, P44-r3b). `enable` adds axes/sources to the set
+  active on this box; that set governs BOTH what `sync` acquires AND the default
+  row set of `list` / `status` / `health` and the MCP `nabu_status` sources
+  array. Enabling a grant-gated (`availability: blocked`) source by slug runs
+  its grant terms once; enabling an axis never drags a blocked member in. An
+  absent config on a box that already built a library **migrates once** (every
+  synced source is written out, announced) — no visibility is silently lost.
+  `nabu focus …` still works for one release as a deprecated alias.
+- **`nabu sync <source>`** — refuses a source not enabled on this box, printing
+  the `nabu enable` on-ramp; `--parse-only` (repair/rebuild, no acquisition) is
+  exempt.
+- **`nabu sync --all`** — fetches and loads the **enabled** live sources only,
+  naming the scope in its summary line. Network + writes `canonical/` and `db/`.
+  The >20% withdrawal circuit-breaker aborts (exit 1) any source whose sync
+  would gut it. One source's failure does not stop the others.
 - **`nabu health`** — local, no network. Run-history trends (quarantine spikes,
   added-count collapse, withdrawal/retirement creep, stale sources), the
   mechanical postcondition invariants (§11: failed/partial last runs,

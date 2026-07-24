@@ -155,6 +155,10 @@ module Nabu
     # `off(letter)` when disabled — the word "source" never prints.
     def col2(entry)
       return entry.kind unless entry.source?
+      # P44-r3b: a blocked (grant-gated private research) source, revealed only
+      # under --all, is marked in the status column — its existence is
+      # discoverable, its availability is not claimed.
+      return "blocked" if entry.blocked?
 
       letter = CADENCE_LETTER.fetch(entry.sync_policy, "?")
       entry.enabled ? letter : "off(#{letter})"
@@ -302,6 +306,7 @@ module Nabu
     # reads on(a)/off(m)/…; a shelf or module reads "-" (enablement is moot).
     def enablement(entry)
       return "-" unless entry.source?
+      return "blocked · grant required" if entry.blocked? # P44-r3b (--all reveal)
 
       "#{entry.enabled ? 'on' : 'off'}(#{CADENCE_LETTER.fetch(entry.sync_policy, '?')})"
     end
