@@ -14,6 +14,21 @@ class QuickstartFetchAdapter < TestAdapter
   end
 end
 
+# The re-acquisition rig (P44-i1 --redownload): fetch MATERIALIZES the two
+# fixture docs — so a wiped canonical tree round-trips through a real
+# re-download exactly as a live fetcher would.
+class RedownloadFetchAdapter < TestAdapter
+  def fetch(workdir, progress: nil, force: false) # rubocop:disable Lint/UnusedMethodArgument
+    FileUtils.mkdir_p(workdir)
+    slug = File.basename(workdir)
+    # The same two files the quickstart env pre-places, byte-identical: a
+    # re-download of an unchanged upstream re-materializes the same tree.
+    File.write(File.join(workdir, "#{slug}-one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+    File.write(File.join(workdir, "#{slug}-two.txt"), "Odyssey\nἄνδρα\n")
+    Nabu::FetchReport.new(sha: "deadbeefcafe", fetched_at: Time.now)
+  end
+end
+
 # The partial-failure rig: fetch always raises, as an unreachable upstream
 # would (Nabu::FetchError aborts THIS source's sync, never the batch).
 class QuickstartFailingAdapter < TestAdapter
@@ -2390,6 +2405,42 @@ class CLITest < Minitest::Test
         assert_match(/search --lemma/, out)
         assert_match(/define λόγος/, out)
         assert_match(%r{grow the library: bin/nabu sync --all}, out)
+      end
+    end
+  end
+
+  # P44-i1 (owner ruling): --redownload wipes the canonical snapshot
+  # (attic preserved) and re-acquires from scratch — the operator override
+  # for any partial state the fetcher believes is resumable.
+  def test_sync_redownload_wipes_except_attic_and_refetches
+    with_quickstart_env("alpha" => "RedownloadFetchAdapter") do |config|
+      with_starter_sources(%w[alpha]) do
+        _out, _err, status = with_config(config) { run_cli(%w[sync alpha]) }
+        assert_nil status
+        dir = File.join(config.canonical_dir, "alpha")
+        File.write(File.join(dir, "stale-partial-junk"), "wedged")
+        FileUtils.mkdir_p(File.join(dir, ".attic"))
+        File.write(File.join(dir, ".attic", "kept"), "history")
+
+        out, err_dbg, status = with_config(config) { run_cli(%w[sync alpha --redownload]) }
+        assert_nil status, "stderr was: #{err_dbg}"
+        assert_match(%r{redownload: wiped canonical/alpha \(attic preserved\)}, out)
+        refute File.exist?(File.join(dir, "stale-partial-junk")), "the snapshot was wiped"
+        assert File.exist?(File.join(dir, ".attic", "kept")), "the attic survives — history, not snapshot"
+        assert_match(/\+2 added|=2 skipped|~0 updated/, out, "the re-acquisition ran the normal sync path")
+      end
+    end
+  end
+
+  def test_sync_redownload_refuses_parse_only_and_all
+    with_quickstart_env("alpha" => "QuickstartFetchAdapter") do |config|
+      with_starter_sources(%w[alpha]) do
+        _out, err, status = with_config(config) { run_cli(%w[sync alpha --redownload --parse-only]) }
+        assert_equal 1, status
+        assert_match(/contradicts --parse-only/, err)
+        _out2, err2, status2 = with_config(config) { run_cli(%w[sync --all --redownload]) }
+        assert_equal 1, status2
+        assert_match(/per-source/, err2)
       end
     end
   end

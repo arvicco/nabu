@@ -85,6 +85,9 @@ module Nabu
                         desc: "Skip fetch; re-parse the snapshot already on disk"
     option :force, type: :boolean, default: false,
                    desc: "Override the >20% withdrawal circuit breaker"
+    option :redownload, type: :boolean, default: false,
+                        desc: "Wipe the source's canonical snapshot (attic preserved) and re-acquire " \
+                              "from scratch, regardless of any resumable/partial state"
     option :grant_acknowledged, type: :boolean, default: false,
                                 desc: "Acknowledge a grant-required source's terms non-interactively " \
                                       "(scripted use); records the acknowledgment, then syncs. Single-source only."
@@ -93,6 +96,13 @@ module Nabu
                           "the hook's exit status is reported, never fails the sync). " \
                           "Example: --review script/review-sync-claude. Single-source sync only."
     def sync(slug = nil)
+      # --redownload refusals up front (P44-i1): contradictory with
+      # --parse-only (nothing to re-download if we skip fetch), and
+      # per-source by design (a wipe is an explicit, named decision).
+      if options[:redownload]
+        raise Thor::Error, "sync: --redownload contradicts --parse-only" if options[:parse_only]
+        raise Thor::Error, "sync: --redownload is per-source — name one slug" if options[:all] || options[:axis]
+      end
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
       # Ledger FIRST: open_or_create_ledger lifts a pre-P7-1 catalog's history
@@ -6064,6 +6074,7 @@ module Nabu
         # recorded acknowledgment before its first fetch (interactive here, on
         # the explicit path; the batch paths pre-skip blocked sources).
         enforce_grant!(entry, ledger)
+        redownload_wipe!(config_for_runner(runner), slug) if options[:redownload]
         outcome = runner.sync(slug, parse_only: options[:parse_only], force: options[:force],
                                     progress: progress_reporter)
         finish_progress
@@ -6113,6 +6124,34 @@ module Nabu
       # P39-0: the one-line nature note for a non-source sync target. A module
       # refreshes reference machinery and mints no catalog rows; a shelf is
       # gateway-written owner memory re-scanned locally with no network.
+      # --redownload (P44-i1, owner ruling): wipe the source's canonical
+      # snapshot and re-acquire from scratch — the operator's override for
+      # any partial/wedged state the fetcher believes is resumable. The
+      # ATTIC is preserved (it is history, not snapshot); everything else
+      # under canonical/<slug> goes, announced. Composes with the atomic
+      # fresh-clone path: the re-acquisition either lands whole or not at
+      # all. Refused with --parse-only (contradictory) and --all (wipe is
+      # a per-source, explicit decision).
+      def redownload_wipe!(config, slug)
+        dir = File.join(config.canonical_dir, slug)
+        return unless Dir.exist?(dir)
+
+        kept_attic = false
+        Dir.children(dir).each do |child|
+          if child == ".attic"
+            kept_attic = true
+            next
+          end
+          FileUtils.remove_entry_secure(File.join(dir, child))
+        end
+        say "redownload: wiped canonical/#{slug}#{' (attic preserved)' if kept_attic} — re-acquiring from scratch",
+            :yellow
+      end
+
+      def config_for_runner(runner)
+        runner.config
+      end
+
       def kind_nature_note(entry)
         if entry.feature_module?
           "#{entry.slug}: feature module — refreshes canonical reference data; mints no catalog rows."
