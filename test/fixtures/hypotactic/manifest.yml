@@ -1,0 +1,16 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# One verbatim WHOLE per-work TSV from the mirror's tsv/ tree (whole: true — a
+# fresh GET returns the same file; the producer test asserts against these exact
+# bytes). adapter_test is null: hypotactic is a feature module (kind: module) —
+# discover yields nothing and parse is unreachable, so there is no adapter
+# round-trip to assert; the work is the HypotacticMeter producer, exercised in
+# test/hypotactic_meter_test.rb.
+source: hypotactic
+adapter_test:
+retrieved: 2026-07-24
+files:
+  - path: tsv/HHAphrodite.tsv
+    url: https://raw.githubusercontent.com/Urdatorn/hypotactic/HEAD/tsv/HHAphrodite.tsv
+    whole: true
