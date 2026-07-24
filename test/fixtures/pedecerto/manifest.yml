@@ -1,0 +1,27 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# LOCAL-TRIM PROVENANCE. Two author-work files trimmed from the pedecerto bulk
+# zip (allpedecertoscans.zip, 469 files). There is no per-file upstream URL —
+# the only artifact is the whole zip — so each entry is refetchable: false;
+# re-acquiring means downloading the zip and re-trimming, not a raw GET.
+source: pedecerto
+adapter_test: null
+retrieved: 2026-07-24
+files:
+  - path: allpedecertoscans/VERG-geor.xml
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from allpedecertoscans.zip (no per-file URL); re-acquiring = full zip download + re-trim, not a raw GET
+    upstream: https://www.pedecerto.eu/allpedecertoscans.zip
+    copied: 2026-07-24
+    whole: false
+    trim: head verbatim + book 1 lines 1-3 and book 2 lines 1-2
+  - path: allpedecertoscans/OV-ibis.xml
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from allpedecertoscans.zip (no per-file URL); re-acquiring = full zip download + re-trim, not a raw GET
+    upstream: https://www.pedecerto.eu/allpedecertoscans.zip
+    copied: 2026-07-24
+    whole: false
+    trim: head verbatim + lines 1-3 (single-book elegiac work, no division)
