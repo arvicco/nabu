@@ -94,10 +94,14 @@ module Nabu
       # nil. Literal-first: a real passage/document wins before a range is even
       # attempted (a passage urn holding a hyphen is never misparsed as one).
       # A range with a bad endpoint raises Range::Error (CLI → exit 1).
+      # Last, a CITATION PREFIX (P44, owner test-drive friction: a shortened
+      # urn between document and passage grain — …:avest020:Y.19.1 over
+      # passages Y.19.1.a/b — used to be "urn not found") lists everything
+      # below it, boundary-exact, through the RangeResult shape.
       def run(urn)
         return dictionary_entry(urn) if urn.start_with?(DICT_URN_PREFIX)
 
-        passage(urn) || document(urn) || range(urn)
+        passage(urn) || document(urn) || range(urn) || citation_prefix(urn)
       end
 
       # `define` prints minted dictionary-entry urns on every headline; show
@@ -118,6 +122,64 @@ module Nabu
       end
 
       private
+
+      # The citation-prefix listing (P44). The prefix's document is found by
+      # probing ever-shorter ":"-bounded heads of +urn+ against the documents
+      # table (document urns may themselves contain ":" — urn:cts:… — so the
+      # probe walks colon positions right-to-left; each probe is one indexed
+      # lookup). The children are the document's passages whose urns extend
+      # the full prefix across a CITATION BOUNDARY — ".", ":" or the P43-i2
+      # occurrence "#" — so Y.19.1 opens into Y.19.1.a/b and never swallows
+      # Y.19.10. Zero children stays nil: "urn not found", honestly.
+      def citation_prefix(urn)
+        document_row, = resolve_prefix_document(urn)
+        return nil if document_row.nil?
+
+        escaped = urn.gsub(/[\\%_]/) { |ch| "\\#{ch}" }
+        # No withdrawn filter: Show is the honest inspector (class doctrine) —
+        # withdrawn children list flagged, exactly like a document listing.
+        matches = @catalog[:passages]
+                  .where(document_id: document_row.fetch(:id))
+                  .where(
+                    Sequel.|(*%w[. : #].map { |b| Sequel.like(:urn, "#{escaped}#{b}%", { escape: "\\" }) })
+                  )
+                  .order(:sequence)
+                  .select(:urn, :text, :withdrawn, :annotations_json)
+                  .all
+        return nil if matches.empty?
+
+        build_prefix_result(document_row, matches)
+      end
+
+      # The longest document whose urn is a ":"-bounded proper prefix of
+      # +urn+, or nil. Walks the colon positions right-to-left — a handful of
+      # indexed point lookups, never a scan.
+      def resolve_prefix_document(urn)
+        head = urn.dup
+        while (cut = head.rindex(":"))
+          head = head[0...cut]
+          row = @catalog[:documents]
+                .join(:sources, id: Sequel[:documents][:source_id])
+                .where(Sequel[:documents][:urn] => head)
+                .select(*document_columns, Sequel[:documents][:id])
+                .first
+          return [row, head] if row
+        end
+        nil
+      end
+
+      def build_prefix_result(header, rows)
+        total = @catalog[:passages].where(document_id: header.fetch(:id)).count
+        RangeResult.new(
+          urn: header.fetch(:urn), title: header.fetch(:title), language: header.fetch(:language),
+          source_slug: header.fetch(:source_slug), license_class: header.fetch(:license_class),
+          revision: header.fetch(:revision), withdrawn: truthy?(header.fetch(:withdrawn)),
+          retired_upstream: truthy?(header.fetch(:retired_upstream)),
+          passages: rows.map { |row| passage_line(row) }, total: total,
+          start_urn: rows.first.fetch(:urn), end_urn: rows.last.fetch(:urn),
+          timeline: timeline_for(header.fetch(:id)), credit: header.fetch(:credit)
+        )
+      end
 
       # nil when +urn+ is not a range; otherwise the document header plus the
       # inclusive slice. Delegates the parse/precedence to Query::Range.
