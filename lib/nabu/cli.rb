@@ -421,7 +421,7 @@ module Nabu
         if options[:axis]
           print_axis_enable_hint(view, registry, selected_axes(registry.axes))
         else
-          print_focus_note(view, view.registry_hidden)
+          print_focus_note(view, view.registry_hidden_slugs)
         end
       else
         say status_report(registry, db, ledger, slug)
@@ -601,7 +601,9 @@ module Nabu
         warn_focus_drift(view)
         rows = scoped_census(query.census, view)
         print_census(rows, options[:long] ? query.descriptions : nil)
-        print_focus_note(view, query.census.size - rows.size)
+        # The hidden side here is CENSUS rows the view dropped (catalog-backed,
+        # so orphan slugs the registry no longer carries still count).
+        print_focus_note(view, query.census.map(&:slug) - rows.map(&:slug))
       elsif options[:documents] || implied == :documents
         say implied_mode_header(:documents, slug, options[:lang]) if implied
         print_list_documents(query.documents(slug, lang: options[:lang], license: options[:license],
@@ -3170,13 +3172,13 @@ module Nabu
       # A default view names the enabled set + the exact hidden count, or the
       # honest empty-state when nothing is enabled; --all (the full reveal) is
       # silent.
-      def print_focus_note(view, hidden)
+      def print_focus_note(view, hidden_slugs)
         return unless view.active?
 
         if view.resolution.slugs.empty?
           warn Nabu::Focus.empty_state_line
         else
-          warn Nabu::Focus.footer_line(view.entries, hidden)
+          warn Nabu::Focus.footer_line(view.entries, hidden_slugs)
         end
       end
 
@@ -3752,6 +3754,19 @@ module Nabu
         say "  credit: #{credit}" unless credit.empty?
       end
 
+      # P44-7: the meter line — shown only when the passage carries a scansion
+      # enrichment (pedecerto over held Perseus-Latin verse), byte-identical
+      # absence otherwise. "meter: H DSDS (pedecerto)": metrical code, foot
+      # pattern (omitted when empty), producer.
+      def print_meter(passage)
+        meter = passage.meter
+        return if meter.nil?
+
+        pattern = meter.pattern.to_s.strip
+        code = [meter.meter.to_s.strip, pattern].reject(&:empty?).join(" ")
+        say "  meter: #{code} (#{meter.producer})"
+      end
+
       def print_show_passage(passage)
         say "#{passage.urn}#{" [#{passage.language}]" if passage.language}#{withdrawn_tag(passage.withdrawn)}"
         say "  #{display_text(painted_passage_text(passage), passage.language,
@@ -3761,6 +3776,7 @@ module Nabu
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
         print_credit(passage)
         print_timeline(passage.timeline)
+        print_meter(passage)
         # H9 (P35-6): a corrupt annotation lane announces itself instead of
         # posing as an unannotated passage.
         say "  note: #{ANNOTATIONS_UNREADABLE_NOTE}" if annotations_unreadable?(passage)
@@ -6558,7 +6574,8 @@ module Nabu
           "+#{report.added} added  ~#{report.updated} updated  " \
           "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored" \
           "#{format_collided(report)}" \
-          "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}"
+          "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}" \
+          "#{format_sync_enrichments(outcome.enrichments)}"
       end
 
       # P39-4: the within-pass collision tail — silent at zero (house
@@ -6594,6 +6611,18 @@ module Nabu
         parts << "?#{refs.unknown_ids} unknown upstream" if refs.respond_to?(:unknown_ids) && refs.unknown_ids.positive?
         counts = parts.empty? ? "0" : parts.join(" ")
         "  refs #{counts}"
+      end
+
+      # P44-7: the meter-enrichment tail for a pedecerto sync — silent when the
+      # source mints no enrichments (nil). The HONEST CENSUS the packet demands:
+      # matched vs unmatched LINES (unmatched = works we do not hold or citation
+      # mismatches), never hidden. "meter 41 lines matched, 12 unmatched (2 works)".
+      def format_sync_enrichments(enr)
+        return "" if enr.nil?
+
+        works = enr.mapped_works + enr.unmapped_works
+        "  meter #{enr.matched} lines matched, #{enr.unmatched} unmatched " \
+          "(#{plural(enr.mapped_works, 'work')} of #{works})"
       end
 
       # rebuild --incremental (P36-1): dirty sources re-derive through the
@@ -6744,7 +6773,7 @@ module Nabu
         ).run(progress: remote_health_ticker)
         $stderr.print("\r\e[K") if $stderr.tty? # clear the ticker before the table
         print_remote_health(report)
-        print_focus_note(view, view.registry_hidden)
+        print_focus_note(view, view.registry_hidden_slugs)
         # A gone upstream is the only red finding; the table is already on stdout,
         # so raise for the exit-1 signal (Thor prints the summary to stderr).
         raise Thor::Error, remote_health_failure(report) if report.any_gone?
@@ -6870,7 +6899,7 @@ module Nabu
           canonical_dir: config.canonical_dir
         ).run
         print_local_health(report)
-        print_focus_note(view, view.registry_hidden)
+        print_focus_note(view, view.registry_hidden_slugs)
         raise Thor::Error, local_health_failure(report) if report.any_loud?
       ensure
         catalog&.disconnect

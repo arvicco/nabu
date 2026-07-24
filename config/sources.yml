@@ -1208,32 +1208,34 @@ hypotactic:
   axes: [classical]
   enabled: false   # PERMANENTLY false — a meter instrument, not a text source
                    # (the trismegistos/kitab precedent): discover mints no
-                   # documents. Its data is links-journal kind="meter" edges on
-                   # held Perseus lines, refreshed by the HypotacticMeter
-                   # producer after every sync. OWNER QUEUE (P44-6): bin/nabu
+                   # documents. Its data is per-passage enrichments rows
+                   # (kind="meter", model="hypotactic" — the P44-7 seam, beside
+                   # pedecerto's Latin rows) on held Perseus lines, refreshed
+                   # by the HypotacticMeter producer after every sync and
+                   # re-derived by rebuild. OWNER QUEUE (P44-6): bin/nabu
                    # sync hypotactic — sparse GitFetch cone tsv/ + README +
                    # LICENSE from github.com/Urdatorn/hypotactic, then the
                    # producer matches each TSV line by folded grc text against
                    # held Perseus passages of the mapped work (HHAphrodite →
-                   # tlg0013.tlg005). EXPECT an honest census on first sync:
-                   # matched/unmatched lines, mapped/unmapped works. Only
-                   # HHAphrodite is mapped in v1; every other TSV is censused as
-                   # an unmapped work (never guessed). Depends on held Perseus
-                   # greek editions for anything to match.
+                   # tlg0013.tlg005). EXPECT the honest meter census on first
+                   # sync: "meter N lines matched, M unmatched (K works of L)".
+                   # Only HHAphrodite is mapped in v1; every other TSV is
+                   # censused as an unmapped work (never guessed). Depends on
+                   # held Perseus greek editions for anything to match.
   # P44-6: Hypotactic — David Chamberlain's metrical scansions of GREEK verse
-  # (hypotactic.com). A NEW enrichment kind — meter — layered onto held Perseus
-  # lines: each matched line mints ONE kind="meter" edge (held passage urn →
-  # meter:<name>, detail = scansion + caesura + Chamberlain attribution). The
-  # links-journal placement (not catalog enrichments) keeps meter rebuild-
-  # surviving — the journal is nabu's store for derived data that survives a
-  # rebuild but a rerun replaces. LICENSE: the fetched mirror
+  # (hypotactic.com). The meter enrichment layer's Greek lane (the P44-7
+  # pedecerto seam): each matched line writes ONE enrichments row, payload
+  # {meter, pattern, caesura?, credit} verbatim from the TSV columns. `nabu
+  # show` renders "meter: dactylic hexameter -u u… (hypotactic)" — the shared
+  # line names the model; the FULL Chamberlain reference rides every payload's
+  # credit key (the show line cannot carry it — recorded here and in
+  # docs/02-sources.md). LICENSE: the fetched mirror
   # (github.com/Urdatorn/hypotactic) is CC BY 4.0, WITH Chamberlain's own
   # README statement verbatim: "you can use it as you wish, but if you make
   # significant or extensive use of it in published work you should reference me
-  # (David Chamberlain) and this site (hypotactic.com)" → class attribution;
-  # the reference is honored on every meter edge's detail. GREEK lane only (the
-  # Latin lane on hypotactic.com is JS-blocked; Pedecerto covers Latin meter on
-  # this same seam).
+  # (David Chamberlain) and this site (hypotactic.com)" → class attribution.
+  # GREEK lane only (the Latin lane on hypotactic.com is JS-blocked; Pedecerto
+  # covers Latin meter on this same seam).
   sync_policy: manual
 
 dss:
@@ -1434,6 +1436,36 @@ glaux:
   # sync_policy manual.
   sync_policy: manual
   lemma_tier: silver
+
+croala:
+  adapter: Nabu::Adapters::Croala
+  axes: [classical]
+  enabled: false   # NOT yet synced — awaits the owner-fired first real sync.
+                   # Sparse GitFetch of
+                   # github.com/nevenjovanovic/croatiae-auctores-latini-textus
+                   # scoped to the cone [txts, LICENSE.md, README.md]: a
+                   # blobless no-checkout clone (the DCS/GLAUx recipe),
+                   # skipping the schemas/ scripts/ oXygen cruft. The corpus is
+                   # ~569 TEI files / 5.8M words — a single-digit-MB text tree
+                   # (one file ~6 MB, why the parser streams). CLAUDE.md
+                   # checklist §6: bin/nabu sync croala, eyeball
+                   # urn:nabu:croala:albert-i-inscr:d1.p1 + 5 random passages
+                   # (`nabu show`), then flip.
+  # CroALa — Croatiae auctores Latini (Jovanović, ed.): the TEI P5 edition of
+  # Croatian Latin authors, 976 CE onward through the neo-Latin centuries — the
+  # classical desk's medieval-Latin edge (lat). A composed `croala-tei` parser
+  # (bespoke, sibling to SARIT — the compose-an-existing-family bet was refuted
+  # from the bytes: reading text lives in <opener>/<closer> that reading-TEI
+  # families drop, and a sparse every-fifth-line @n would corrupt an @n-first
+  # citation ladder). Passages at line grain (verse) / prose-block grain,
+  # addressed positionally: urn:nabu:croala:<work-id>:<div-path>.<l|p><n>. The
+  # teiHeader creation <date>/@notBefore feeds the timeline where present.
+  # LICENSE (D44-b): the in-repo LICENSE.md is CC BY 4.0 verbatim ("Attribution
+  # 4.0 International"; README: "freely available under a CC-BY license"),
+  # resolving the recorded site-vs-GitHub fork to the in-file grant → class
+  # attribution. Cite CroALa (croala.ffzg.unizg.hr), doi:10.5281/zenodo.10456561.
+  # Living edition (509 → 569 already) → sync_policy manual.
+  sync_policy: manual
 
 tla-hf:
   adapter: Nabu::Adapters::TlaHf
@@ -2413,6 +2445,34 @@ titus-avestan:
       non-commercial grant, and promise to credit TITUS and the editors
       (Avesta ed. Geldner/Westergaard; electronic text Sonja Fritz; corrections
       Gippert et al.) wherever any Avestan text is displayed.
+
+pedecerto:
+  adapter: Nabu::Adapters::Pedecerto
+  kind: module   # P44-7: machinery-only — a meter-enrichment instrument, zero catalog rows, up=module
+  axes: [classical]
+  enabled: false   # PERMANENTLY false — an enrichment instrument, not a text
+                   # source (the trismegistos/kitab precedent): discover mints
+                   # no documents. The row gives the owner the sanctioned fetch
+                   # path; its data is enrichments-table meter rows (kind=meter),
+                   # re-derived by the PedecertoScansions producer after every
+                   # sync AND by rebuild. OWNER QUEUE (P44-7): bin/nabu sync
+                   # pedecerto downloads + unpacks allpedecertoscans.zip (~12 MB,
+                   # 469 <AUTHOR>-<work>.xml) under canonical/pedecerto/, then
+                   # the producer resolves each scanned line to a held
+                   # Perseus-Latin passage (WORK_CROSSWALK seed) and attaches its
+                   # scansion. The sync tail prints the honest matched/unmatched
+                   # line census; extend WORK_CROSSWALK for more held works.
+  # P44-7: Pedecerto (Udine / Ca' Foscari) — Digital Latin Metre. XML metrical
+  # scansions of the Latin verse corpus (227,791 hexameter lines + pentameter/
+  # other verse), one file per author-work. NOT a text source: the passages
+  # already exist (held Perseus-Latin phi texts); the meter attaches as a
+  # per-passage enrichment (kind=meter) over the classical desk. LICENSE:
+  # per-file <rights> + site, verbatim CC BY-NC-ND 4.0 ("non ne è consentito
+  # alcun uso a scopi commerciali… purché i documenti non vengano alterati in
+  # alcun modo sostanziale… data, paternità e fonte originale") → nc,
+  # attribution + no substantial alteration (satisfied by canonical-means-
+  # canonical). Fetch is an owner decision (a 12 MB bulk zip).
+  sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
 #

@@ -1337,7 +1337,8 @@ class CLITest < Minitest::Test
       assert_match(/^lex\s/, out, "the focused source shows")
       assert_match(/^library\s/, out, "the owner's shelf always shows")
       refute_match(/^shelf\s/, out, "a non-enabled source is hidden")
-      assert_match(/enabled: 1 entry — 1 source not enabled \(--all shows them\)/, err)
+      assert_match(/enabled: 1 entry — not enabled: shelf \(--all shows it\)/, err,
+                   "a small gap is named, never a guessing-game count (P44-i2)")
     end
   end
 
@@ -1419,7 +1420,8 @@ class CLITest < Minitest::Test
       assert_match(/^lex\s/, out)
       assert_match(/^library\s/, out)
       refute_match(/^shelf\s/, out)
-      assert_match(/enabled: 1 entry — 1 source not enabled/, err)
+      assert_match(/enabled: 1 entry — not enabled: shelf \(--all shows it\)/, err,
+                   "the census footer names a small gap too (P44-i2)")
     end
   end
 
@@ -1656,6 +1658,31 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/^secret\s+blocked/, out, "the blocked source is marked in the status column")
       assert_match(/^pub\s/, out, "--all reveals the whole registry")
+    end
+  end
+
+  # P44-i2 (owner report 2026-07-24: "it's either blocked and not in the list
+  # OR unblocked and in the list"): once the grant is acknowledged on this box,
+  # the source is NOT blocked here — the status column says `granted`, and
+  # `blocked` remains only for the unacknowledged --all reveal (pinned above).
+  def test_status_shows_granted_not_blocked_once_the_grant_is_acknowledged
+    Dir.mktmpdir("nabu-cli-granted-status") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, blocked_grant_yaml("secret"))
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources, config_path: "(test)")
+      with_config(config) do
+        with_stdin("granted\n", tty: true) { run_cli(%w[enable secret]) }
+      end
+
+      out, _err, status = with_config(config) { run_cli(%w[status]) }
+      assert_nil status
+      assert_match(/^secret\s+granted\s/, out, "an acknowledged grant source reads granted")
+      refute_match(/^secret\s+blocked/, out, "'blocked' on a source available on this box is a contradiction")
+
+      long_out, _err2, long_status = with_config(config) { run_cli(%w[status --long]) }
+      assert_nil long_status
+      assert_match(/^secret\s+granted\(m\)/, long_out, "the long table fuses granted with the cadence letter")
     end
   end
 
