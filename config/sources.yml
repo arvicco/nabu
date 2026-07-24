@@ -1366,17 +1366,18 @@ diorisis:
 glaux:
   adapter: Nabu::Adapters::Glaux
   axes: [classical]
-  enabled: false   # NOT yet synced — awaits the owner-fired first real sync.
-                   # Sparse GitFetch of github.com/alekkeersmaekers/glaux
-                   # scoped to the cone [xml, metadata.txt, README.md]: a
-                   # blobless no-checkout clone (the DCS recipe). The xml tree
-                   # is ~20M tokens across 1,000 per-work files (6 KB – 31 MB
-                   # each) — expect a multi-hundred-MB working tree; git
-                   # compresses the annotation XML heavily on the wire.
-                   # CLAUDE.md checklist §6: bin/nabu sync glaux, eyeball
-                   # urn:nabu:glaux:0003-002:27421 (the μνῆμα epigram) + 5
-                   # random passages + `nabu search --lemma θεός --lang grc`
-                   # (expect [silver] labels throughout), then flip.
+  enabled: false   # SYNCED 2026-07-24 (the owner's from-scratch
+                   # `sync glaux --redownload` proof: wipe → staged sparse
+                   # clone → announced materialization → 1,421 discovered →
+                   # idempotent load, 0 errored — 1,421 docs / 968,578
+                   # passages) — flip is the OWNER's call after their own
+                   # verification (runbook in .docs/p44-plan.md OWNER
+                   # ACTIONS). Loop eyeball notes for that check: 5 random
+                   # passages sane (LXX, Galen, Strabo, Plato, Xenophon);
+                   # known silver artifact, verified upstream: words split at
+                   # source-edition page boundaries ride as split tokens with
+                   # per-fragment lemmas (ψυ|χροῖς, div_ed2page 77→78) —
+                   # canonical means canonical.
   # GLAUx — "the Greek Language Automated" (Keersmaekers): ~20M tokens of
   # Ancient Greek (8th c. BC – ~4th c. AD), AUTOMATICALLY annotated for
   # morphology, syntax, lemmas, animacy and word senses (AGDT guidelines).
