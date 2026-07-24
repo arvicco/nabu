@@ -3018,7 +3018,16 @@ module Nabu
       #                         seeds the tags → the honest empty-state).
       def effective_profile(config, registry, catalog: nil)
         path = config.profile_path
-        return Nabu::Profile.load(path) if Nabu::Profile.exist?(path)
+        if Nabu::Profile.exist?(path)
+          profile = Nabu::Profile.load(path)
+          # An EMPTY pre-promotion (P40-f focus-era) file means "no focus
+          # trim", never "nothing enabled" — it migrates exactly like an
+          # absent file (announced, once). Only an empty file SAVED UNDER
+          # THE ENABLEMENT HEADER governs as deliberately-empty (a
+          # disable-everything is re-saved with the new header, so it
+          # never re-migrates). Files with entries govern as-is either way.
+          return profile unless profile.empty? && !Nabu::Profile.enablement_header?(path)
+        end
 
         migrated = migrate_profile(config, registry, catalog)
         return migrated if migrated
