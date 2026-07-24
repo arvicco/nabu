@@ -99,12 +99,16 @@ module Nabu
     }.freeze
 
     # What one refresh did — the LibraryReferences::Result shape (so the CLI
-    # sync tail renders every producer identically) plus the two honesty
-    # counters: +external_edges+ (Type A) and +internal_edges+ (Type B), and
-    # +files+ (texrelations responses read).
+    # sync tail renders every producer identically) plus the honesty
+    # counters: +external_edges+ (Type A), +internal_edges+ (Type B),
+    # +files+ (texrelations responses read), and +unknown_ids+ (P43-i1:
+    # responses where TM answered "This TM ID is not in our database" —
+    # censused, never fatal; those tm: edges stay honestly dangling).
     Result = Data.define(:scope, :run_id, :edges_written, :edges_refreshed,
                          :superseded_runs, :superseded_edges,
-                         :external_edges, :internal_edges, :files)
+                         :external_edges, :internal_edges, :files, :unknown_ids) do
+      def initialize(unknown_ids: 0, **rest) = super
+    end
 
     # +catalog+ resolves partner urns to held witnesses; +journal+ is read
     # (which held urns reference each tm id) and written.
@@ -133,7 +137,7 @@ module Nabu
                  edges_written: counts[:inserted], edges_refreshed: counts[:refreshed],
                  superseded_runs: superseded[0], superseded_edges: superseded[1],
                  external_edges: counts[:external], internal_edges: counts[:internal],
-                 files: files.size)
+                 files: files.size, unknown_ids: counts[:unknown])
     end
 
     private
@@ -145,7 +149,12 @@ module Nabu
     end
 
     def write_file_edges(path, run_id, counts)
-      tm_id, partners = parse_crosswalk(path)
+      parsed = parse_crosswalk(path)
+      if parsed == :unknown_id
+        counts[:unknown] += 1
+        return
+      end
+      tm_id, partners = parsed
       return if tm_id.nil?
 
       tm_urn = "tm:#{tm_id}"
@@ -202,8 +211,21 @@ module Nabu
     # The texrelations array → [tm_id, { scheme => [values] }]. Null/empty
     # partner values are dropped (only asserted crosswalk ids mint edges);
     # a string value becomes a one-element list, an array stays as given.
+    # P43-i1 (the owner's first live sweep, 2026-07-24): TM answers an
+    # UNKNOWN id with HTTP 200 and {"Message":"This TM ID is not in our
+    # database."} — 2,296 of the sweep's 6,816 responses (a third of the
+    # library's referenced tm: ids; among them upstream defects like
+    # I.Sicily ISic001349's <idno type="TM"> carrying three ids
+    # concatenated with no separator). One such file aborted the whole
+    # producer run. An unknown id is a CENSUS FACT about upstream
+    # coverage, not a parse failure: it returns :unknown_id (no edges —
+    # the dangling tm: edge stays, honestly dangling) and the run counts
+    # it in Result#unknown_ids. Anything neither array nor
+    # Message-object still raises — genuinely malformed stays loud.
     def parse_crosswalk(path)
       entries = JSON.parse(File.read(path))
+      return :unknown_id if entries.is_a?(Hash) && entries.key?("Message")
+
       unless entries.is_a?(Array)
         raise ParseError, "#{path}: TexRelations response must be a JSON array of one-key objects"
       end

@@ -6153,7 +6153,14 @@ module Nabu
       end
 
       def format_sync_outcome(outcome)
-        fetched = outcome.fetch_report ? outcome.fetch_report.sha[0, 12] : "parse-only"
+        # P43-i1: an id-sweep fetch (trismegistos) has no single content
+        # sha — its FetchReport carries sha: nil honestly. Render the
+        # report's presence, not a sliced nil.
+        fetched = if outcome.fetch_report
+                    outcome.fetch_report.sha ? outcome.fetch_report.sha[0, 12] : "fetched"
+                  else
+                    "parse-only"
+                  end
         report = outcome.load_report
         "#{outcome.slug.ljust(24)} #{fetched}  " \
           "+#{report.added} added  ~#{report.updated} updated  " \
@@ -6189,6 +6196,12 @@ module Nabu
         parts << "+#{refs.edges_written}" if refs.edges_written.positive?
         parts << "~#{refs.edges_refreshed}" if refs.edges_refreshed.positive?
         parts << "-#{refs.superseded_edges}" if refs.superseded_edges.positive?
+        # P43-i1: producers that census unknown upstream ids say so — a
+        # third of the first TM sweep was "not in our database", and a
+        # silent zero would misread as full coverage.
+        if refs.respond_to?(:unknown_ids) && refs.unknown_ids.positive?
+          parts << "?#{refs.unknown_ids} unknown upstream"
+        end
         counts = parts.empty? ? "0" : parts.join(" ")
         "  refs #{counts}"
       end
