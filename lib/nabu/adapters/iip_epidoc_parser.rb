@@ -101,7 +101,8 @@ module Nabu
     #    "place" => {"region"/"settlement" (own text, excluding the
     #                embedded <geo> child)/"site" (geogName type=site)/
     #                "locus" (geogFeat)/"geo" (verbatim WGS84, 470
-    #                records)},
+    #                records)/"pleiades" (the settlement ref's numeric
+    #                id — the P44-2 cross-source key)},
     #    "text_layer" => "diplomatic"|"none" (only when not transcription)}
     #
     # NO concordance idnos exist corpus-wide (the only idno/@type is IIP
@@ -297,6 +298,12 @@ module Nabu
           folded = presence(value)
           result[key] = folded if folded
         end
+        # The uniform place.pleiades id (P44-2): IIP hangs its upstream
+        # Pleiades ref on the settlement ("Adding Pleiades IDs to origin/
+        # placenames", upstream changelog 2016-12-14) — normalized to bare
+        # digits; a settlement without a ref captures nothing.
+        pleiades = settlement && Nabu::Pleiades.ref_id(settlement["ref"])
+        result["pleiades"] = pleiades if pleiades
         result
       end
 

@@ -258,9 +258,11 @@ class IipTest < Minitest::Test
                    "site" => "Church complex", "locus" => "Room A",
                    "geo" => "31.565,35.1288" }, metadata["place"],
                  "settlement text excludes its embedded <geo> child; geo stays verbatim")
-    assert_equal({ "region" => "Coastal Plain", "settlement" => "Caesarea" },
+    assert_equal({ "region" => "Coastal Plain", "settlement" => "Caesarea",
+                   "pleiades" => "678401" },
                  parse("urn:nabu:iip:caes0371").metadata["place"],
-                 "empty site elements are honest absences")
+                 "empty site elements are honest absences; the settlement's " \
+                 "upstream Pleiades ref rides as the uniform place.pleiades id (P44-2)")
   end
 
   def test_summary_rides_as_metadata

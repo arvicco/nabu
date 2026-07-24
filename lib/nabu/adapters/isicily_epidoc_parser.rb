@@ -159,7 +159,8 @@ module Nabu
     #               "#julian"; plain notBefore/notAfter fallback)/"raw"/
     #               "cert"/"evidence"},
     #    "place" => {"region"/"ancient"/"modern"/"ancient_ref" (Pleiades)/
-    #                "modern_ref" (GeoNames)/"geo" (verbatim WGS84)}}
+    #                "modern_ref" (GeoNames)/"geo" (verbatim WGS84)/
+    #                "pleiades" (the P44-2 cross-source id, bare digits)}}
     #
     # The EDH concordance target is the CATALOG urn (urn:nabu:edh:hd…):
     # I.Sicily's Latin records may intersect EDH's Sicily holdings, and
@@ -477,6 +478,13 @@ module Nabu
           ref = node && presence(node["ref"])
           result[key] = ref if ref
         end
+        # The uniform place.pleiades id (P44-2): the upstream-asserted ref
+        # normalized to bare digits — the ancient lane first; the modern-ref
+        # fallback covers the corpus quirk where upstream hangs a Pleiades
+        # URL on the MODERN placeName (ISic001698 Gerace). Verbatim refs
+        # above are untouched; no ref, no id — never a guess.
+        id = Nabu::Pleiades.ref_id(result["ancient_ref"]) || Nabu::Pleiades.ref_id(result["modern_ref"])
+        result["pleiades"] = id if id
         result
       end
 

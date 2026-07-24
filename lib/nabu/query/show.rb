@@ -46,13 +46,23 @@ module Nabu
       # display layer's edition context (ketiv/qere word hashes ride there).
       # +credit+ (P43-2): the source's optional attribution line (nil on every
       # ordinary source), rendered on the card only when present.
+      # +findspot+ (P44-2): the document's captured Pleiades id resolved
+      # through the gazetteer dump, nil whenever anything is missing.
       PassageResult = Data.define(
         :urn, :language, :sequence, :revision, :withdrawn, :text,
         :document_urn, :document_title, :source_slug, :license_class, :provenance, :timeline,
-        :annotations, :credit, :meter
+        :annotations, :credit, :meter, :findspot
       ) do
-        def initialize(timeline: nil, annotations: {}, credit: nil, meter: nil, **) = super
+        def initialize(timeline: nil, annotations: {}, credit: nil, meter: nil, findspot: nil, **) = super
       end
+
+      # The findspot line's facts (P44-2): the captured Pleiades id resolved
+      # through the local gazetteer dump — title + place types, nothing more
+      # (maps and coordinate math are out by design). Rendered ONLY when the
+      # document's parse-captured metadata carries $.place.pleiades AND the
+      # dump is on disk AND it holds the id; nil otherwise, so a corpus
+      # without the dump renders byte-identically (the LiLa precedent).
+      Findspot = Data.define(:id, :title, :place_types)
 
       # A meter enrichment attached to a passage (P44-7): the metrical code
       # ("H" hexameter, "P" pentameter, …), the dactyl/spondee foot +pattern+,
@@ -76,9 +86,9 @@ module Nabu
       # (P17-2): the document's facet rows, [] when unfaceted.
       DocumentResult = Data.define(
         :urn, :title, :language, :source_slug, :license_class,
-        :revision, :withdrawn, :retired_upstream, :passages, :timeline, :facets, :credit
+        :revision, :withdrawn, :retired_upstream, :passages, :timeline, :facets, :credit, :findspot
       ) do
-        def initialize(timeline: nil, facets: [], credit: nil, **) = super
+        def initialize(timeline: nil, facets: [], credit: nil, findspot: nil, **) = super
       end
 
       # A range (P7-6): the document header, the inclusive slice of passages,
@@ -92,8 +102,16 @@ module Nabu
         def initialize(timeline: nil, credit: nil, **) = super
       end
 
-      def initialize(catalog:)
+      # +pleiades+ (P44-2): nil (default — note_shelf/mcp callers stay
+      # byte-identical), a loaded Nabu::Pleiades resolver (tests), or :auto —
+      # the CLI's setting, which feature-detects the canonical dump LAZILY:
+      # nothing loads until a shown document actually carries a captured
+      # $.place.pleiades id, and then once per Show instance (~3 s /
+      # ~3.9 GB peak RSS on the real dump — the P44-2 design datum, the
+      # accepted v1 cost of dumping-without-an-index).
+      def initialize(catalog:, pleiades: nil)
         @catalog = catalog
+        @pleiades = pleiades
       end
 
       # Resolve +urn+ to a PassageResult, a DocumentResult, a RangeResult, or
@@ -257,7 +275,8 @@ module Nabu
           timeline: timeline_for(row.fetch(:document_id)),
           annotations: parse_annotations(row),
           credit: row.fetch(:credit),
-          meter: meter_for(row.fetch(:passage_id))
+          meter: meter_for(row.fetch(:passage_id)),
+          findspot: findspot_for(row)
         )
       end
 
@@ -290,8 +309,41 @@ module Nabu
           retired_upstream: truthy?(row.fetch(:retired_upstream)),
           passages: document_passages(row.fetch(:document_id)),
           timeline: timeline_for(row.fetch(:document_id)),
-          facets: facets_for(row.fetch(:document_id)), credit: row.fetch(:credit)
+          facets: facets_for(row.fetch(:document_id)), credit: row.fetch(:credit),
+          findspot: findspot_for(row)
         )
+      end
+
+      # The findspot facts (P44-2), or nil — no captured id, no resolver
+      # (dump absent), or an id the dump lacks all degrade silently (the
+      # facets_for/timeline_for stance; class Findspot note).
+      def findspot_for(row)
+        id = captured_place_id(row[:document_metadata_json])
+        return nil if id.nil?
+
+        place = pleiades&.place(id)
+        place && Findspot.new(id: place.id, title: place.title, place_types: place.place_types)
+      end
+
+      # The parse-captured $.place.pleiades id out of documents.metadata_json
+      # (the P44-2 cross-source key), nil on absence or unreadable JSON.
+      def captured_place_id(json)
+        return nil if json.nil? || json.empty?
+
+        parsed = JSON.parse(json)
+        id = parsed.is_a?(Hash) ? parsed.dig("place", "pleiades") : nil
+        id.is_a?(String) && !id.empty? ? id : nil
+      rescue JSON::ParserError
+        nil
+      end
+
+      # Feature-detect + memoize the resolver (initialize note). :auto loads
+      # it from canonical/pleiades; an absent dump is nil, and the load only
+      # ever happens when a captured id needs resolving.
+      def pleiades
+        return @pleiades unless @pleiades == :auto
+
+        @pleiades = Nabu::Pleiades.load_default
       end
 
       # The document's facet rows (P17-2), [] when unfaceted or when the
@@ -387,6 +439,7 @@ module Nabu
           Sequel[:passages][:annotations_json],
           Sequel[:documents][:urn].as(:document_urn),
           Sequel[:documents][:title].as(:document_title),
+          Sequel[:documents][:metadata_json].as(:document_metadata_json),
           Sequel[:sources][:slug].as(:source_slug),
           license_expr.as(:license_class),
           Sequel[:sources][:credit].as(:credit)
@@ -402,6 +455,7 @@ module Nabu
           Sequel[:documents][:revision],
           Sequel[:documents][:withdrawn],
           Sequel[:documents][:retired_upstream],
+          Sequel[:documents][:metadata_json].as(:document_metadata_json),
           Sequel[:sources][:slug].as(:source_slug),
           license_expr.as(:license_class),
           Sequel[:sources][:credit].as(:credit)
