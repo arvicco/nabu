@@ -53,8 +53,14 @@ module Nabu
       # The anchor prefix every structural anchor carries.
       ANCHOR_PREFIX = "Avest._"
 
-      # The deepest structural level (book.chapter.paragraph.verse).
-      MAX_LEVELS = 4
+      # The deepest structural level: book.chapter.paragraph[.refrain].verse.
+      # P43-i2 (the owner's first full sync, all 248 live pages censused):
+      # the bracket-aware component histogram is {1:35, 2:228, 3:4587,
+      # 4:39105, 5:1157} — the fifth level is the liturgical REFRAIN
+      # (Y_3_20_R1_a: refrain 1, verse a); 42 pages carry it and were
+      # quarantined whole under the old ceiling of 4.
+      # census: 45112 anchors, 2026-07-24, all 248 live pages (P43-i2 histogram above)
+      MAX_LEVELS = 5
 
       # Parse one page's HTML into its ordered text-bearing sections (document
       # order == reading order == sequence). Raises Nabu::ParseError on a
@@ -110,11 +116,31 @@ module Nabu
         name = node["name"]
         return nil unless name&.start_with?(ANCHOR_PREFIX)
 
-        comps = name.delete_prefix(ANCHOR_PREFIX).split("_")
+        comps = split_components(name.delete_prefix(ANCHOR_PREFIX))
         return comps if (1..MAX_LEVELS).cover?(comps.size)
 
         raise Nabu::ParseError,
               "titus-avestan: anchor #{name.inspect} has #{comps.size} components (expected 1..#{MAX_LEVELS})"
+      end
+
+      # Split an anchor tail on underscores — except inside square brackets:
+      # some anchors embed a bracketed parallel citation whose own underscores
+      # are not level separators (P43-i2; the real
+      # `FrW_10_39[_Yt._22,_39]_a` is four levels, its third component
+      # carrying "[= Yt. 22,39]" verbatim).
+      def self.split_components(tail)
+        parts = [+""]
+        depth = 0
+        tail.each_char do |ch|
+          depth += 1 if ch == "["
+          depth -= 1 if ch == "]"
+          if ch == "_" && depth.zero?
+            parts << +""
+          else
+            parts.last << ch
+          end
+        end
+        parts
       end
 
       # A text node belongs to the running transliteration iff some ancestor is a
