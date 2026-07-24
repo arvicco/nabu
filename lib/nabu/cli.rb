@@ -2470,7 +2470,11 @@ module Nabu
         registry: registry,
         # The enabled-slug set (P44-r3b): nabu_status's sources array defaults
         # to this box's enabled sources, matching the CLI list/status default.
-        enabled_slugs: mcp_enabled_slugs(config, registry)
+        enabled_slugs: mcp_enabled_slugs(config, registry),
+        # The Pleiades gazetteer (P44-3): :auto = feature-detect the canonical
+        # dump lazily per call (nabu_place, nabu_show findspot) — an unsynced
+        # dump degrades exactly like the CLI, never crashes.
+        pleiades: :auto
       )
       $stdout.sync = true
       install_mcp_signal_traps
