@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "show"
+require_relative "../languages"
 
 module Nabu
   module Query
@@ -59,9 +60,10 @@ module Nabu
       end
 
       # N random visible passages as Show::PassageResults, optionally scoped
-      # to one source. count is clamped to [1, MAX_COUNT]. An unknown
-      # +source+ raises Error; a known source with nothing visible returns [].
-      def run(source: nil, count: 1)
+      # to one source and/or one passage language. count is clamped to
+      # [1, MAX_COUNT]. An unknown +source+ raises Error; a scope with
+      # nothing visible returns [].
+      def run(source: nil, lang: nil, count: 1)
         ensure_known_source!(source) if source
 
         n = count.to_i.clamp(1, MAX_COUNT)
@@ -73,6 +75,12 @@ module Nabu
         # per candidate corpus-wide), passages filter on their own withdrawn
         # flag, and Show re-applies full visibility on render.
         scope = @catalog[:passages].where(withdrawn: false)
+        # --lang (P44-r1) stays on the passages table itself — passages.language
+        # is a same-table column (indexed, migration 013), never the defeated
+        # documents/sources join — so both the id-probe walk and the small-scope
+        # fallback keep their index-backed cost. Passage-language grain, matching
+        # search/export --lang.
+        scope = scope.where(Sequel[:passages][:language] => Nabu::Languages.code_variants(lang)) if lang
         if source
           doc_ids = @catalog[:documents]
                     .where(source_id: @catalog[:sources].where(slug: source).select(:id))

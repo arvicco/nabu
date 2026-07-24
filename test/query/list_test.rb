@@ -287,6 +287,24 @@ module Query
       assert_nil list.entries("local-library")
     end
 
+    # -- natural_mode (P44-r1): the content-kind fact behind implied --lang ----
+
+    def test_natural_mode_is_entries_for_a_dictionary_source
+      seed_dictionary_shelf
+      assert_equal :entries, list.natural_mode("ccmh")
+    end
+
+    def test_natural_mode_is_documents_for_a_text_source
+      make_document(source: @library, urn: "urn:nabu:local-library:x")
+      assert_equal :documents, list.natural_mode("local-library")
+    end
+
+    def test_natural_mode_unknown_source_raises_naming_valid_slugs
+      seed_ccmh
+      error = assert_raises(Nabu::Query::List::Error) { list.natural_mode("nope") }
+      assert_match(/unknown source "nope"/, error.message)
+    end
+
     # -- collections -------------------------------------------------------------
 
     def test_collections_census_counts_manifest_segments
