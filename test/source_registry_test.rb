@@ -728,11 +728,11 @@ class SourceRegistryTest < Minitest::Test
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
 
     assert_equal %w[classical epigraphy slavic germanic celtic italic etym biblical hebrew
-                    syriac arabic hittite cuneiform egyptian indic buddhist sinitic japonic local],
+                    syriac arabic hittite cuneiform egyptian iranian indic buddhist sinitic japonic local],
                  registry.axes.names,
-                 "the ratified axes, in render order (18 ratified D35 + arabic, minted P41-2 " \
-                 "with the openiti row — registry validation requires the definition; " \
-                 "the axis build-out is P41-4)"
+                 "the ratified axes, in render order (18 ratified D35 + arabic minted P41-2 with " \
+                 "the openiti row + iranian minted P44-r2/D43-d, the Avesta desk between egyptian " \
+                 "and indic — the Indo-Iranian pair)"
 
     registry.each_source do |entry|
       refute_empty entry.axes, "#{entry.slug} must declare at least one research axis"
@@ -758,6 +758,20 @@ class SourceRegistryTest < Minitest::Test
     assert_includes registry["suttacentral"].axes, "sinitic", "the lzh Agamas (P32-1)"
     assert_equal registry["lexlep"].axes, registry["lexlep-words"].axes,
                  "the two grains of one wiki share their desks"
+
+    # P44-r2 (D43-d): the `iranian` desk. Evidence-ruled membership — the Avesta
+    # anchor (blocked, still on etym too) plus the Old Persian lane of oracc/cdli,
+    # whole-source and dual-tagged with cuneiform. The blocked anchor drops from
+    # the PUBLIC membership; oracc/cdli are the public shelves, in registry order.
+    assert_equal %w[etym iranian], registry["titus-avestan"].axes,
+                 "the Avesta anchors iranian and keeps etym (its forms feed the comparative shelves)"
+    assert_includes registry["oracc"].axes, "iranian", "ORACC's ario = Old Persian Achaemenid trilinguals"
+    assert_includes registry["cdli"].axes, "iranian", "CDLI catalogs Old Persian (peo) Achaemenid trilinguals"
+    assert_includes registry["oracc"].axes, "cuneiform", "still whole-source on the tablet desk"
+    assert_equal %w[oracc cdli], registry.public_axis_members("iranian"),
+                 "the public iranian shelves, in registry order (the blocked Avesta is not advertised)"
+    assert_equal %w[titus-avestan], registry.blocked_axis_members("iranian"),
+                 "the grant-gated Avesta rides iranian but is excluded from the public listing"
   end
 
   # P43-2: the shipped TITUS Avestan row is fetch-gated on the №41-3 grant, and
