@@ -90,7 +90,8 @@ module Adapters
     def test_mints_external_crosswalk_edges_from_the_tm_hub
       result = producer.run("trismegistos", workdir: FIXTURES)
 
-      assert_equal 2, result.files, "both fixture responses read"
+      assert_equal 3, result.files, "all fixture responses read (two crosswalks + the P43-i1 unknown-id answer)"
+      assert_equal 1, result.unknown_ids, "the unknown-id fixture censuses, never aborts"
       # 102617: PHI 228245 + CPI CPI-093 (neither held).
       phi = @journal[:links].first(from_urn: "tm:102617", to_urn: "phi:228245")
       refute_nil phi, "the tm hub now points outward to its PHI partner"
@@ -190,6 +191,25 @@ module Adapters
         FileUtils.mkdir_p(File.join(dir, "texrelations"))
         File.write(File.join(dir, "texrelations", "1.json"), "[{")
         assert_raises(Nabu::ParseError) { producer.run("trismegistos", workdir: dir) }
+      end
+    end
+
+    # P43-i1 (the owner's first live sweep): TM answers an unknown id with
+    # HTTP 200 + {"Message":"…not in our database."} — 2,296 of 6,816 swept
+    # ids. One such file must NOT abort the run: it is censused as
+    # unknown_ids, mints nothing, and the rest of the sweep still derives.
+    def test_unknown_id_message_response_is_censused_never_fatal
+      Dir.mktmpdir do |dir|
+        tex = File.join(dir, "texrelations")
+        FileUtils.mkdir_p(tex)
+        File.write(File.join(tex, "143394.json"),
+                   File.read(File.join(FIXTURES, "texrelations", "143394.json")))
+        File.write(File.join(tex, "175903.json"),
+                   File.read(File.join(FIXTURES, "texrelations", "175903.json")))
+        result = producer.run("trismegistos", workdir: dir)
+        assert_equal 1, result.unknown_ids, "the Message response counts as one unknown id"
+        assert_operator result.edges_written, :>, 0, "the healthy sibling still mints its edges"
+        assert_equal 2, result.files, "both files were read"
       end
     end
 
