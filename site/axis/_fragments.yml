@@ -523,6 +523,48 @@ egyptian:
     - **Hieroglyphic TLA text:** display.md names no hieroglyph font — read it
       through the TLA transcription rather than expecting glyph rendering.
 
+iranian:
+  blurb: |
+    The desk's heart, the **Avesta** (TITUS, `titus-avestan`), is grant-gated
+    PRIVATE research material — served locally under the owner's personal grant
+    №41-3 and credited on every serving surface (the grant's own condition), but
+    NOT a public library holding, so it is absent from the shelves table above and
+    the footnote there says so. What the desk publicly holds is the **Old Persian**
+    of the Achaemenid royal inscriptions, riding the shared cuneiform corpora
+    (ORACC's `ario`, the CDLI catalog) whole — only their Old Persian column is
+    Iranian.
+  instruments: |
+    - **The Avestan text lane (ave):** the TITUS Avesta — full-text `search --lang
+      ave` and citation `show` across the Yasna, Yašts and the rest. It is a text
+      edition, not a treebank, so there is **no gold-lemma or morphology layer** —
+      `--lemma`, `vocab` and `formulas` do not apply to this desk. Every serving
+      surface carries the verbatim TITUS credit line (the №41-3 grant's condition).
+    - **The Old Persian Achaemenid lane (peo):** the royal trilinguals — ORACC's
+      `ario` (Achaemenid Royal Inscriptions online) and the CDLI catalog carry the
+      Old Persian column of the Bīsotūn / Naqš-e Rostam inscriptions. Reach them
+      with a peo-scoped `search` or through the cuneiform desk (both are
+      whole-source members — only their Old Persian lane is Iranian).
+    - **Iranian comparanda through `etym`:** StarLing's PIE base carries Avestan
+      (`ae`) and Other-Iranian reflex columns, reachable with `nabu etym` and the
+      cognate lists — dual-tagging, so StarLing rides `etym` and its Iranian
+      reflexes surface through the crosswalk rather than as a separate shelf here.
+  recipes:
+    - cmd: 'nabu show urn:nabu:titus-avestan:avest001:Y.0.1.a'
+      note: the frauuarāne creed (Y 0.1 a), the Avesta rendered with its verbatim TITUS credit line
+    - cmd: 'nabu search mazda --lang ave'
+      note: Ahura Mazda across the Avestan lane (mazdaiiasnō, mazdā̊)
+    - cmd: 'nabu show urn:nabu:titus-avestan:avest020:Y.19.1'
+      note: a citation prefix opens into every passage below it (Y.19.1.a, .b …) — the P44 show
+  display: |
+    - **Avestan (ave):** the TITUS Avesta is a scholarly Latin transliteration with
+      combining diacritics (ā̊, ϑ, ṣ̌, t̰, ə) — no dedicated font is needed; any
+      Unicode font with extended-Latin coverage renders them, and **Noto Sans
+      Mono** in the terminal's non-ASCII slot gives uniform metrics. No RTL or CJK
+      concerns.
+    - **Old Persian (peo):** the Achaemenid inscriptions ride ORACC and CDLI stored
+      in Latin transliteration (the cuneiform desk's convention), so no cuneiform
+      font is needed.
+
 indic:
   instruments: |
     - **The Sanskrit, Prakrit and Pali lane:** GRETIL (780 editions — epic,

@@ -1,0 +1,86 @@
+---
+title: "Iranian — The Iranologist"
+permalink: /axis/iranian/
+description: >-
+  The Iranologist's desk: its shelves, instruments, CLI recipes and terminal setup.
+---
+
+> The Iranologist — the Avesta to the Achaemenid inscriptions, Old Iranian liturgy toward Middle Persian.
+
+The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world.
+
+The desk's heart, the **Avesta** (TITUS, `titus-avestan`), is grant-gated
+PRIVATE research material — served locally under the owner's personal grant
+№41-3 and credited on every serving surface (the grant's own condition), but
+NOT a public library holding, so it is absent from the shelves table above and
+the footnote there says so. What the desk publicly holds is the **Old Persian**
+of the Achaemenid royal inscriptions, riding the shared cuneiform corpora
+(ORACC's `ario`, the CDLI catalog) whole — only their Old Persian column is
+Iranian.
+
+New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
+
+## The shelves
+
+A source wears every desk it serves — these two answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+|---|---|---|---|---|
+| `oracc` | tablets | open | enabled · manual | not built in this checkout |
+| `cdli` | tablet catalog | attribution | enabled · manual | not built in this checkout |
+
+Private research materials under personal grants are not listed.
+
+## The desk's instruments
+
+- **The Avestan text lane (ave):** the TITUS Avesta — full-text `search --lang
+  ave` and citation `show` across the Yasna, Yašts and the rest. It is a text
+  edition, not a treebank, so there is **no gold-lemma or morphology layer** —
+  `--lemma`, `vocab` and `formulas` do not apply to this desk. Every serving
+  surface carries the verbatim TITUS credit line (the №41-3 grant's condition).
+- **The Old Persian Achaemenid lane (peo):** the royal trilinguals — ORACC's
+  `ario` (Achaemenid Royal Inscriptions online) and the CDLI catalog carry the
+  Old Persian column of the Bīsotūn / Naqš-e Rostam inscriptions. Reach them
+  with a peo-scoped `search` or through the cuneiform desk (both are
+  whole-source members — only their Old Persian lane is Iranian).
+- **Iranian comparanda through `etym`:** StarLing's PIE base carries Avestan
+  (`ae`) and Other-Iranian reflex columns, reachable with `nabu etym` and the
+  cognate lists — dual-tagging, so StarLing rides `etym` and its Iranian
+  reflexes surface through the crosswalk rather than as a separate shelf here.
+
+## Working the iranian desk
+
+The generic axis surfaces — every desk answers to these:
+
+```
+nabu list --axis iranian          # the shelf census, this desk only
+nabu axis iranian                 # the desk card: members, holdings, gold coverage
+nabu search WORD --axis iranian   # a query scoped to this desk's shelves
+nabu sync iranian                 # sync the desk's enabled members
+```
+
+This desk's own surfaces:
+
+```
+nabu show urn:nabu:titus-avestan:avest001:Y.0.1.a  # the frauuarāne creed (Y 0.1 a), the Avesta rendered with its verbatim TITUS credit line
+nabu search mazda --lang ave          # Ahura Mazda across the Avestan lane (mazdaiiasnō, mazdā̊)
+nabu show urn:nabu:titus-avestan:avest020:Y.19.1  # a citation prefix opens into every passage below it (Y.19.1.a, .b …) — the P44 show
+```
+
+
+## Terminal setup
+
+- **Avestan (ave):** the TITUS Avesta is a scholarly Latin transliteration with
+  combining diacritics (ā̊, ϑ, ṣ̌, t̰, ə) — no dedicated font is needed; any
+  Unicode font with extended-Latin coverage renders them, and **Noto Sans
+  Mono** in the terminal's non-ASCII slot gives uniform metrics. No RTL or CJK
+  concerns.
+- **Old Persian (peo):** the Achaemenid inscriptions ride ORACC and CDLI stored
+  in Latin transliteration (the cuneiform desk's convention), so no cuneiform
+  font is needed.
+
+The full guidance, per script, is on the [display page](https://github.com/arvicco/nabu/blob/main/docs/display.md).
+
+---
+
+One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
