@@ -17,7 +17,7 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 36 docs / 238,032 passages |
+| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
 | `vulgate` | texts | open | enabled · manual | 73 docs / 35,809 passages |
 | `eng-web` | texts | open | enabled · manual | 84 docs / 37,624 passages |
 | `sblgnt` | texts | attribution | enabled · manual | 27 docs / 7,939 passages |
