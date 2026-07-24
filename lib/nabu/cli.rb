@@ -100,7 +100,7 @@ module Nabu
       ledger = open_or_create_ledger(config)
       db = open_or_create_catalog(config)
       runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
-      run_sync(runner, registry, slug, db, ledger)
+      run_sync(runner, registry, slug, db, ledger, enabled: sync_enabled_slugs(config, registry, db))
     rescue Nabu::Error => e
       # Unknown slug (ValidationError), fetch failure (FetchError), ... all
       # surface as a clean stderr message and exit 1.
@@ -388,7 +388,7 @@ module Nabu
       # explicit intent; any source, focused or not). The bare/--long/--axis
       # tables scope to the focus profile (P40-f).
       if slug.empty?
-        view = focus_view(config, registry)
+        view = focus_view(config, registry, catalog: db)
         warn_focus_drift(view)
         say status_report(view.registry, db, ledger, slug)
         print_focus_note(view, view.registry_hidden)
@@ -538,7 +538,7 @@ module Nabu
       query = Nabu::Query::List.new(catalog: catalog)
       if options[:axis]
         registry = Nabu::SourceRegistry.load(config.sources_path)
-        view = focus_view(config, registry)
+        view = focus_view(config, registry, catalog: catalog)
         warn_focus_drift(view)
         rows = scoped_census(query.census, view)
         print_census_by_axis(rows, selected_axes(registry.axes), registry)
@@ -547,7 +547,7 @@ module Nabu
         print_source_map(query.source_groups, Nabu::SourceRegistry.load(config.sources_path))
       elsif slug.empty?
         registry = Nabu::SourceRegistry.load(config.sources_path)
-        view = focus_view(config, registry)
+        view = focus_view(config, registry, catalog: catalog)
         warn_focus_drift(view)
         rows = scoped_census(query.census, view)
         print_census(rows, options[:long] ? query.descriptions : nil)
@@ -2001,55 +2001,119 @@ module Nabu
       fulltext&.disconnect
     end
 
-    desc "focus [only|add|drop|clear] [NAMES…]", "Your research focus: scope status/list/health to a few desks"
+    # The one pointer line every deprecated `focus` alias prints (P44-r3b).
+    FOCUS_POINTER = "focus is now enable/disable; this alias goes away next release"
+
+    desc "enable AXIS|SOURCE...", "Enable sources or axes on this box (the local enablement config)"
     long_desc <<~HELP, wrap: false
-      The FOCUS PROFILE (config/profile.yml, P40-f) — a personal list of AXIS
-      NAMES and/or SOURCE SLUGS naming what you are working on now. When it is
-      set, the WHOLE-LIBRARY read views scope to it:
+      Add axes and/or sources to config/profile.yml — this box's ENABLEMENT
+      CONFIG (P44-r3b). The entries govern BOTH what `nabu sync` / `sync --all`
+      acquires AND the default row set of `nabu list` / `status` / `health` and
+      the MCP nabu_status sources array. `nabu search` / `show` / `export` stay
+      library-wide (enablement scopes acquisition + visibility, never reading).
 
-        nabu status · nabu list · nabu health   → focused sources only
+      enable is ADDITIVE: it APPENDS (never trims). An AXIS is recorded by name
+      (it expands to the axis's PUBLIC members); a SOURCE by slug. Enabling an
+      axis never implicitly enables its grant-gated (blocked) members — each is
+      skipped with the on-ramp line, so a private research source is only ever
+      enabled by naming it. Enabling a blocked source BY SLUG runs its grant
+      terms and demands a typed `granted` (or --grant-acknowledged) once,
+      recorded in the ledger; a later enable skips the prompt.
 
-      Your own shelves (kind: shelf) ALWAYS show; feature modules show only
-      under --all; and --all on any of those commands shows everything. The
-      focused set is (every member of each focused axis) ∪ (each named source).
+      Examples:
+        nabu enable germanic          # the germanic desk's public sources
+        nabu enable sblgnt proiel     # two sources by slug
+        nabu enable titus-avestan     # a grant-gated source: shows terms, asks
+    HELP
+    option :grant_acknowledged, type: :boolean, default: false,
+                                desc: "Acknowledge a grant-gated source's terms non-interactively " \
+                                      "(scripted use); records the acknowledgment, then enables."
+    def enable(*names)
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      names = names.map(&:strip).reject(&:empty?)
+      raise Thor::Error, "enable: name at least one axis or source to enable" if names.empty?
 
-      DELIBERATELY UNSCOPED, and staying that way:
-        nabu status SOURCE   an explicitly named source — explicit intent —
-                             shows regardless of focus.
-        nabu sync --all      cadence-based: a display preference must never
-                             cause silent staleness. Sync stays library-wide.
-        nabu search          library-wide is the product; a cross-desk hit is
-                             the whole point of the FTS index.
-        nabu list --sources  the one-page onboarding map is the whole library.
+      Nabu::Focus.validate_names!(names, registry)
+      ledger = open_or_create_ledger(config)
+      catalog = open_catalog(config) # read-only: only the migration detector needs it
+      run_enable(config, registry, names, ledger: ledger, catalog: catalog)
+    rescue Nabu::Focus::UnknownName => e
+      raise Thor::Error, "enable: #{e.message}"
+    rescue Nabu::Error => e
+      raise Thor::Error, e.message
+    ensure
+      catalog&.disconnect
+      ledger&.disconnect
+    end
 
-      Show / edit:
-        nabu focus                    # show the profile (axes vs sources) + count
-        nabu focus only germanic rem  # replace the profile with these names
-        nabu focus add slavic         # add names (idempotent, sorted)
-        nabu focus drop rem           # remove names
-        nabu focus clear              # remove the profile (back to everything)
+    desc "disable AXIS|SOURCE...", "Disable sources or axes on this box (synced data stays)"
+    long_desc <<~HELP, wrap: false
+      Remove axes and/or sources from config/profile.yml (the enablement
+      config). The synced data STAYS on disk — disabling only drops the entries
+      from the enabled set, so `sync`/`list`/`status` stop touching/showing them
+      by default (--all still reveals them). Withdrawal of data is a different,
+      existing concept. Removing a name the registry no longer knows (drift
+      after a hand-edit) is fine — disable never validates, so it also cleans up.
 
-      An unknown name on `only`/`add` is refused, naming near-misses. A name in
-      the file that the registry no longer knows (drift after a hand-edit) is
-      warned about and ignored — never fatal. The file is gitignored (personal)
-      and rides `nabu backup` (the config/ tree).
+      Examples:
+        nabu disable germanic
+        nabu disable proiel
+    HELP
+    def disable(*names)
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      names = names.map(&:strip).reject(&:empty?)
+      raise Thor::Error, "disable: name at least one axis or source to disable" if names.empty?
+
+      catalog = open_catalog(config)
+      run_disable(config, registry, names, catalog: catalog)
+    ensure
+      catalog&.disconnect
+    end
+
+    desc "focus [only|add|drop|clear] [NAMES…]", "DEPRECATED — alias for enable/disable (removed next release)"
+    long_desc <<~HELP, wrap: false
+      DEPRECATED (P44-r3b): the focus profile was promoted to the local
+      enablement config, and the verbs moved to `nabu enable` / `nabu disable`.
+      Each focus subcommand still works for one release as an alias, printing a
+      pointer to its replacement:
+
+        nabu focus only <names…>  →  clear, then nabu enable <names…>
+        nabu focus add  <names…>  →  nabu enable  <names…>
+        nabu focus drop <names…>  →  nabu disable <names…>
+        nabu focus clear          →  enable nothing (empty enabled set)
+        nabu focus                →  show the current enabled set
     HELP
     def focus(action = nil, *names)
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
-      profile = Nabu::Profile.load(config.profile_path)
       names = names.map(&:strip).reject(&:empty?)
+      say FOCUS_POINTER
+      ledger = open_or_create_ledger(config)
+      catalog = open_catalog(config) # read-only: only the migration detector needs it
       case action.to_s.strip
-      when "" then show_focus(profile, registry)
-      when "only" then write_focus(config, registry, names, verb: :only)
-      when "add" then write_focus(config, registry, profile.entries + names, verb: :add, given: names)
-      when "drop" then drop_focus(config, profile, names)
-      when "clear" then clear_focus(config, profile)
+      when "" then show_enablement(effective_profile(config, registry, catalog: catalog), registry)
+      when "only"
+        Nabu::Focus.validate_names!(names, registry)
+        Nabu::Profile.new([]).save(config.profile_path) # clear first (only = clear + enable)
+        run_enable(config, registry, names, ledger: ledger, catalog: catalog)
+      when "add"
+        Nabu::Focus.validate_names!(names, registry)
+        run_enable(config, registry, names, ledger: ledger, catalog: catalog)
+      when "drop" then run_disable(config, registry, names, catalog: catalog)
+      when "clear"
+        Nabu::Profile.new([]).save(config.profile_path)
+        say "cleared — no sources enabled (nabu enable <axis|source> to add)"
       else
-        raise Thor::Error, "focus: unknown action #{action.inspect} — use only, add, drop, clear, or no action to show"
+        raise Thor::Error, "focus: unknown action #{action.inspect} — use only, add, drop, clear " \
+                           "(or the new nabu enable/disable)"
       end
     rescue Nabu::Focus::UnknownName => e
       raise Thor::Error, "focus: #{e.message}"
+    ensure
+      catalog&.disconnect
+      ledger&.disconnect
     end
 
     desc "cognates TARGET", "Verses where aligned witnesses use reflexes of the same root (architecture §12)"
@@ -2261,6 +2325,7 @@ module Nabu
     def mcp
       config = Nabu::Config.load
       log = mcp_log(options[:log])
+      registry = Nabu::SourceRegistry.load(config.sources_path)
       # Lazy, memoizing, read-only openers (Procs, per the Tools contract):
       # resolved on every tool call, so a corpus that appears or is rebuilt
       # mid-session is picked up without a restart. nil when the file is absent
@@ -2287,7 +2352,10 @@ module Nabu
         # The source registry (P23-3b): authoritative for enablement, so
         # nabu_status renders a sources.yml flip immediately (the db row only
         # mirrors it at the source's next sync).
-        registry: Nabu::SourceRegistry.load(config.sources_path)
+        registry: registry,
+        # The enabled-slug set (P44-r3b): nabu_status's sources array defaults
+        # to this box's enabled sources, matching the CLI list/status default.
+        enabled_slugs: mcp_enabled_slugs(config, registry)
       )
       $stdout.sync = true
       install_mcp_signal_traps
@@ -2935,34 +3003,76 @@ module Nabu
         Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: options[:long])
       end
 
-      # -- focus profile (P40-f) --------------------------------------------
+      # -- the local enablement config (P44-r3b, promoted from P40-f focus) --
 
-      # The working scope for a read surface: the focus profile resolved
+      # The EFFECTIVE enablement profile for +config+ against +registry+. The
+      # promotion's default inversion (P44-r3b): an ABSENT config no longer
+      # means "everything". Three cases:
+      #   file EXISTS         → its entries are the enabled set, as-is.
+      #   absent + a library  → MIGRATION: write every registry source present
+      #                         in the catalog out once, announced (no silent
+      #                         visibility loss of a built library). Needs the
+      #                         catalog to detect it, so surfaces without one
+      #                         (remote health) pass catalog: nil and defer.
+      #   absent + fresh box  → the quickstart starter set (empty until r3c
+      #                         seeds the tags → the honest empty-state).
+      def effective_profile(config, registry, catalog: nil)
+        path = config.profile_path
+        return Nabu::Profile.load(path) if Nabu::Profile.exist?(path)
+
+        migrated = migrate_profile(config, registry, catalog)
+        return migrated if migrated
+
+        Nabu::Profile.new(Nabu::Profile.default_entries(registry))
+      end
+
+      # The one-time migration (P44-r3b): if the box already built a library
+      # (the catalog carries source rows) but has no enablement config yet,
+      # write one enabling every registry source present in the catalog, so the
+      # promotion never drops visibility of what the owner already synced.
+      # Returns the saved profile, or nil when there is nothing to migrate.
+      def migrate_profile(config, registry, catalog)
+        return nil unless catalog&.table_exists?(:sources)
+
+        present = catalog[:sources].select_map(:slug) & registry.slugs
+        return nil if present.empty?
+
+        profile = Nabu::Profile.new(present).save(config.profile_path)
+        warn "enablement: wrote config/profile.yml enabling your #{pluralize(present.size, 'synced source')} " \
+             "(the profile is now this box's enabled set — nabu enable/disable to adjust)."
+        profile
+      end
+
+      # The working scope for a read surface: the effective enablement resolved
       # against the registry, honoring --all. The filtered registry it carries
-      # is what status/list/health render instead of the full one.
-      def focus_view(config, registry)
+      # is what status/list/health render instead of the full one. +catalog+
+      # feeds the migration detector (nil where a surface has none open yet).
+      def focus_view(config, registry, catalog: nil)
         Nabu::Focus.view(
-          profile: Nabu::Profile.load(config.profile_path), registry: registry, all: options[:all]
+          profile: effective_profile(config, registry, catalog: catalog),
+          registry: registry, all: options[:all]
         )
       end
 
-      # Drop the census rows the view hides (a shelf/focused source stays, an
-      # unfocused source goes). A pass-through view keeps every row, so the
-      # unfocused census is byte-identical to before.
+      # Drop the census rows the view hides (a shelf/enabled source stays, a
+      # non-enabled source goes). Under --all the view is the pass-through and
+      # every row stays.
       def scoped_census(rows, view)
         view.active? ? rows.select { |row| view.visible?(row.slug) } : rows
       end
 
-      # The focus META lines go to STDERR, never stdout: piped output stays
-      # byte-identical to the unfocused table (the regression pin), while the
-      # terminal user still sees the context. With a profile: the footer naming
-      # the focus and the exact hidden count. Without one: the discoverability
-      # hint. Under --all (profile present but overridden): silence.
+      # The enablement META lines go to STDERR, never stdout: piped output stays
+      # byte-identical to the table, while the terminal user still sees context.
+      # A default view names the enabled set + the exact hidden count, or the
+      # honest empty-state when nothing is enabled; --all (the full reveal) is
+      # silent.
       def print_focus_note(view, hidden)
-        if view.active?
+        return unless view.active?
+
+        if view.resolution.slugs.empty?
+          warn Nabu::Focus.empty_state_line
+        else
           warn Nabu::Focus.footer_line(view.entries, hidden)
-        elsif view.profile.empty?
-          warn Nabu::Focus.hint_line
         end
       end
 
@@ -2972,59 +3082,101 @@ module Nabu
         warn Nabu::Focus.drift_line(view.unknown) unless view.unknown.empty?
       end
 
-      # `nabu focus` (bare): the profile as stored — axes vs sources
-      # distinguished, drift flagged — and the resolved source count, or the
-      # honest "none — showing everything".
-      def show_focus(profile, registry)
-        if profile.empty?
-          say "focus: none — showing everything"
-          return say(Nabu::Focus.hint_line)
+      # `nabu enable <axis|source…>`: additive. Validate the names, migrate an
+      # absent-but-built profile first (no visibility loss), then append —
+      # recording the AXIS NAME (the existing profile vocabulary; Focus expands
+      # it to its PUBLIC members, blocked ones skipped) or the source slug. A
+      # blocked (grant-gated private) source named BY SLUG runs the P42-r1 grant
+      # flow here, at the natural consent moment; enabling an AXIS never drags a
+      # blocked member in — each is skipped with the on-ramp line.
+      def run_enable(config, registry, names, ledger:, catalog:)
+        profile = effective_profile(config, registry, catalog: catalog)
+        entries = profile.entries.dup
+        added = []
+        names.each do |name|
+          if registry.axes[name]
+            note_blocked_axis_members(registry, name)
+          else
+            enable_source!(registry[name], ledger) # raises (adds nothing) on a refused grant
+          end
+          added << name unless entries.include?(name)
         end
+        Nabu::Profile.new(entries + added).save(config.profile_path)
+        announce_enablement(config, registry, verb: "enabled", changed: added, catalog: catalog)
+      end
 
+      # One source being enabled by slug: a grant-gated (blocked) source with a
+      # grant block runs the P42-r1 acknowledgment before it joins the enabled
+      # set — a refusal raises (and the caller adds nothing).
+      def enable_source!(entry, ledger)
+        return unless entry.blocked? && entry.grant_required?
+
+        enable_grant!(entry, ledger)
+      end
+
+      # Print the on-ramp line for every blocked (grant-gated) member an axis
+      # would otherwise drag in — enabling an axis never implicitly enables its
+      # private members (P44-r3b).
+      def note_blocked_axis_members(registry, axis_name)
+        registry.blocked_axis_members(axis_name).each do |slug|
+          say "#{slug} is grant-gated — enable it explicitly: nabu enable #{slug}", :yellow
+        end
+      end
+
+      # The P42-r1 grant flow AT ENABLE TIME: a recorded acknowledgment skips
+      # the prompt with an honest one-liner; --grant-acknowledged records
+      # non-interactively; otherwise show the terms and demand the typed word
+      # (no TTY / refusal aborts with the request scaffold, adding nothing).
+      def enable_grant!(entry, ledger)
+        gate = Nabu::GrantGate.new(ledger: ledger)
+        return say("#{entry.slug}: grant already acknowledged — enabling.", :yellow) if gate.acknowledged?(entry.slug)
+
+        if options[:grant_acknowledged]
+          gate.record!(slug: entry.slug, terms: entry.grant.terms, how: "flag")
+          return say("#{entry.slug}: grant acknowledged (--grant-acknowledged) — recorded, enabling.", :yellow)
+        end
+        raise Thor::Error, Nabu::GrantGate.abort_message(entry) unless $stdin.tty?
+
+        say Nabu::GrantGate.notice(entry), :yellow
+        say Nabu::GrantGate.prompt_line(entry)
+        answer = $stdin.gets
+        raise Thor::Error, Nabu::GrantGate.abort_message(entry) unless Nabu::GrantGate.acknowledged_answer?(answer)
+
+        gate.record!(slug: entry.slug, terms: entry.grant.terms, how: "typed")
+        say "#{entry.slug}: grant acknowledged — recorded, enabling.", :green
+      end
+
+      # `nabu disable <axis|source…>`: remove entries from the config (synced
+      # data stays — withdrawal is a different, existing concept). Removes any
+      # entry that matches a name given, whether it is an axis name or a slug.
+      def run_disable(config, registry, names, catalog:)
+        profile = effective_profile(config, registry, catalog: catalog)
+        removed = profile.entries & names
+        Nabu::Profile.new(profile.entries - names).save(config.profile_path)
+        announce_enablement(config, registry, verb: "disabled", changed: removed, catalog: catalog)
+      end
+
+      # Confirm a write: what changed, then the current enabled set.
+      def announce_enablement(config, registry, verb:, changed:, catalog:)
+        say(changed.empty? ? "nothing #{verb} (already so)" : "#{verb}: #{changed.sort.join(', ')}")
+        show_enablement(effective_profile(config, registry, catalog: catalog), registry)
+      end
+
+      # The current enabled set: axes vs sources distinguished, drift flagged,
+      # and the resolved source count — or the honest empty-state.
+      def show_enablement(profile, registry)
         resolution = Nabu::Focus.resolve(profile, registry)
+        return say(Nabu::Focus.empty_state_line) if resolution.slugs.empty?
+
         count = profile.entries.size
-        say "focus (#{count} #{count == 1 ? 'entry' : 'entries'}):"
+        say "enabled (#{count} #{count == 1 ? 'entry' : 'entries'}):"
         say "  axes:    #{resolution.axes.join(', ')}" unless resolution.axes.empty?
         say "  sources: #{resolution.sources.join(', ')}" unless resolution.sources.empty?
         unless resolution.unknown.empty?
           say "  unknown: #{resolution.unknown.join(', ')} (not a known axis or source — ignored)"
         end
-        # Modules never show on the scoped surfaces (only under --all), so the
-        # resolved count reflects the sources status/list/health will display.
         shown = resolution.slugs.count { |slug| !registry[slug]&.feature_module? }
-        say "resolved: #{pluralize(shown, 'source')} in focus " \
-            "(nabu status shows them; --all shows everything)"
-      end
-
-      # `focus only` / `focus add`: validate every WRITTEN name against the
-      # registry (unknown refused, near-misses named), then persist the sorted,
-      # de-duplicated profile. +given+ is the just-typed subset to validate for
-      # `add` (the existing entries are already trusted); +names+ is the full
-      # next entry list.
-      def write_focus(config, registry, names, verb:, given: names)
-        Nabu::Focus.validate_names!(given, registry)
-        profile = Nabu::Profile.new(names).save(config.profile_path)
-        announce_focus(profile, registry, verb)
-      end
-
-      def drop_focus(config, profile, names)
-        Nabu::Profile.new(profile.entries - names).save(config.profile_path)
-        announce_focus(Nabu::Profile.load(config.profile_path),
-                       Nabu::SourceRegistry.load(config.sources_path), :drop)
-      end
-
-      def clear_focus(config, profile)
-        return say("focus: already none — showing everything") if profile.empty?
-
-        Nabu::Profile.new([]).save(config.profile_path)
-        say "focus cleared — showing everything"
-      end
-
-      # After a write, confirm the new state (an empty result reads as cleared).
-      def announce_focus(profile, registry, _verb)
-        return say("focus: none — showing everything") if profile.empty?
-
-        show_focus(profile, registry)
+        say "resolved: #{pluralize(shown, 'source')} enabled (nabu status shows them; --all shows everything)"
       end
 
       def selected_axes(axis_registry)
@@ -5657,13 +5809,52 @@ module Nabu
       # name that is not a slug but is an axis is unambiguous; a name that is
       # neither is the unknown-target error (naming BOTH namespaces). A nil
       # name falls to sync_one's own "slug or --all" guard, unchanged.
-      def run_sync(runner, registry, slug, db, ledger)
-        return sync_all(runner) if options[:all]
+      def run_sync(runner, registry, slug, db, ledger, enabled:)
+        return sync_all(runner, enabled: enabled) if options[:all]
         return sync_axes(runner, registry, options[:axis].split(","), db, ledger) if options[:axis]
-        return sync_one(runner, registry, slug, db, ledger) if slug.nil? || registry[slug]
+
+        if slug.nil? || registry[slug]
+          # P44-r3b: the enablement acquisition gate is on the EXPLICIT
+          # single-source path only. Axis fan-out keeps its registry-enabled
+          # membership rule (below); --all applies the enabled-set filter itself.
+          enforce_enablement!(registry[slug], enabled) unless slug.nil?
+          return sync_one(runner, registry, slug, db, ledger)
+        end
         return sync_axes(runner, registry, [slug], db, ledger) if registry.axes[slug]
 
         raise Thor::Error, unknown_sync_target_message(registry, slug)
+      end
+
+      # The enabled-slug set governing sync acquisition (P44-r3b), or nil when
+      # the box is UNCONFIGURED (no enablement config file AND no library yet) —
+      # bootstrap, where sync stays ungated so a fresh box can acquire its first
+      # source without an enable dance. A present file or a built catalog means
+      # the profile governs.
+      def sync_enabled_slugs(config, registry, db)
+        return nil unless Nabu::Profile.exist?(config.profile_path) || catalog_has_sources?(db)
+
+        Nabu::Focus.resolve(effective_profile(config, registry, catalog: db), registry).slugs
+      end
+
+      def catalog_has_sources?(db)
+        db&.table_exists?(:sources) && db[:sources].any?
+      end
+
+      # The sync acquisition gate (P44-r3b): a real fetch of a non-enabled
+      # kind: source is refused with the enable on-ramp. Exemptions: --parse-only
+      # (repair/rebuild re-derives already-synced data — never an acquisition),
+      # an unconfigured box (enabled nil — bootstrap), and non-source rows
+      # (shelves are the owner's own; modules are machinery). A blocked source's
+      # grant terms are a separate, later gate (enforce_grant!).
+      def enforce_enablement!(entry, enabled)
+        return if options[:parse_only]
+        return if enabled.nil?
+        return unless entry&.source?
+        return if enabled.include?(entry.slug)
+
+        raise Thor::Error,
+              "#{entry.slug} is not enabled on this box — enable it first: nabu enable #{entry.slug} " \
+              "(or re-derive already-synced data with nabu sync #{entry.slug} --parse-only)"
       end
 
       # sync <axis> / --axis a,b: expand each named axis to its members and
@@ -5826,14 +6017,19 @@ module Nabu
         adapter_class.citation_coverage(catalog: db).each { |line| say("  #{line}") }
       end
 
-      # sync --all: enabled + live sources only; report each, never abort the
-      # batch on one source's error.
-      def sync_all(runner)
+      # sync --all: the ENABLED, live source set (P44-r3b), reported one per
+      # line, never aborting the batch on one source's error. The enabled-set
+      # filter is passed to the runner (nil = unconfigured/bootstrap or a repair
+      # --parse-only run → the registry's live-enabled sweep, unchanged). The
+      # summary line names the enabled scope honestly.
+      def sync_all(runner, enabled:)
+        filter = options[:parse_only] ? nil : enabled
         results = runner.sync_all(parse_only: options[:parse_only], force: options[:force],
-                                  progress: progress_reporter)
+                                  progress: progress_reporter, enabled: filter)
         finish_progress
         return say("Nothing to sync: no enabled, live sources.") if results.empty?
 
+        say "syncing #{pluralize(results.size, 'enabled source')}:"
         results.each do |slug, result|
           say("  #{sync_all_line(slug, result)}")
           next unless result.is_a?(Nabu::SyncRunner::Outcome)
@@ -6342,7 +6538,9 @@ module Nabu
       def run_remote_health
         config = Nabu::Config.load
         registry = Nabu::SourceRegistry.load(config.sources_path)
-        view = focus_view(config, registry)
+        catalog = open_catalog(config)
+        view = focus_view(config, registry, catalog: catalog)
+        catalog&.disconnect
         warn_focus_drift(view)
         ledger = open_or_create_ledger(config)
         report = Nabu::Health::RemoteProbe.new(
@@ -6465,9 +6663,9 @@ module Nabu
       def run_local_health
         config = Nabu::Config.load
         registry = Nabu::SourceRegistry.load(config.sources_path)
-        view = focus_view(config, registry)
-        warn_focus_drift(view)
         catalog = open_catalog(config)
+        view = focus_view(config, registry, catalog: catalog)
+        warn_focus_drift(view)
         fulltext = catalog ? open_fulltext(config) : nil
         ledger = open_ledger(config)
         report = Nabu::Health::LocalCheck.new(
@@ -6633,6 +6831,33 @@ module Nabu
           end
           handle
         end
+      end
+
+      # The enabled-slug set nabu_status defaults to (P44-r3b). READ-ONLY: unlike
+      # the CLI's effective_profile, the MCP server never WRITES a migration
+      # (serving is not the moment to touch config). It mirrors the same three
+      # cases in memory: a present config governs; an absent config on a built
+      # box uses the catalog's synced sources (no visibility loss); a fresh box
+      # falls to the quickstart default. nil is never returned — an explicit set
+      # (possibly empty) so the tool filters honestly.
+      def mcp_enabled_slugs(config, registry)
+        if Nabu::Profile.exist?(config.profile_path)
+          return Nabu::Focus.resolve(Nabu::Profile.load(config.profile_path), registry).slugs
+        end
+
+        present = mcp_catalog_slugs(config) & registry.slugs
+        present.empty? ? Nabu::Profile.default_entries(registry) : present
+      end
+
+      # The catalog's source slugs, read-only, for the MCP enablement fallback —
+      # [] when there is no catalog yet.
+      def mcp_catalog_slugs(config)
+        return [] unless File.exist?(config.catalog_path)
+
+        db = Nabu::Store.connect(config.catalog_path, readonly: true)
+        db.table_exists?(:sources) ? db[:sources].select_map(:slug) : []
+      ensure
+        db&.disconnect
       end
 
       # (device, inode) — a file replaced in place (delete + recreate) changes

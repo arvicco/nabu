@@ -1211,21 +1211,26 @@ class CLITest < Minitest::Test
     Nabu::Profile.new(entries).save(config.profile_path)
   end
 
-  def test_focus_show_none_when_no_profile
+  # P44-r3b: `focus` is a deprecated alias — bare `focus` prints the pointer and
+  # shows the (migrated) enabled set, since an absent config on a built library
+  # migrates to every synced source.
+  def test_focus_bare_prints_pointer_and_shows_enabled_set
     with_axis_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[focus]) }
       assert_nil status
-      assert_match(/focus: none — showing everything/, out)
-      assert_match(/nabu focus only <axes…> trims this to your desks/, out)
+      assert_match(%r{focus is now enable/disable}, out)
+      assert_match(/enabled \(3 entries\)/, out)
+      assert_match(/sources:.*lex.*library.*shelf/, out)
     end
   end
 
-  def test_focus_only_add_drop_clear_round_trip
+  # The focus subcommands still work as aliases onto enable/disable, each
+  # printing the pointer (P44-r3b).
+  def test_focus_aliases_onto_enable_disable_and_print_the_pointer
     with_axis_corpus do |config|
       out, = with_config(config) { run_cli(%w[focus only slavic lex]) }
-      assert_match(/axes:\s+slavic/, out)
-      assert_match(/sources:\s+lex/, out)
-      assert_equal %w[lex slavic], Nabu::Profile.load(config.profile_path).entries
+      assert_match(%r{focus is now enable/disable}, out, "only prints the pointer")
+      assert_equal %w[lex slavic], Nabu::Profile.load(config.profile_path).entries, "only = clear + enable"
 
       with_config(config) { run_cli(%w[focus add reference]) }
       assert_equal %w[lex reference slavic], Nabu::Profile.load(config.profile_path).entries
@@ -1234,7 +1239,8 @@ class CLITest < Minitest::Test
       assert_equal %w[reference slavic], Nabu::Profile.load(config.profile_path).entries
 
       out, = with_config(config) { run_cli(%w[focus clear]) }
-      assert_match(/focus cleared — showing everything/, out)
+      assert_match(%r{focus is now enable/disable}, out)
+      assert_match(/no sources enabled/, out)
       assert_predicate Nabu::Profile.load(config.profile_path), :empty?
     end
   end
@@ -1245,7 +1251,6 @@ class CLITest < Minitest::Test
       assert_equal 1, status
       assert_match(/unknown name "slavc"/, err)
       assert_match(/did you mean slavic/, err)
-      assert_predicate Nabu::Profile.load(config.profile_path), :empty?, "a refused write persists nothing"
     end
   end
 
@@ -1267,8 +1272,8 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/^lex\s/, out, "the focused source shows")
       assert_match(/^library\s/, out, "the owner's shelf always shows")
-      refute_match(/^shelf\s/, out, "an unfocused source is hidden")
-      assert_match(/focused on reference — 1 source hidden \(--all shows them\)/, err)
+      refute_match(/^shelf\s/, out, "a non-enabled source is hidden")
+      assert_match(/enabled: reference — 1 source hidden \(--all shows them\)/, err)
     end
   end
 
@@ -1282,12 +1287,33 @@ class CLITest < Minitest::Test
     end
   end
 
-  def test_status_without_a_profile_is_unfiltered_with_a_stderr_hint_only
+  # P44-r3b: an ABSENT config on a box that already built a library MIGRATES
+  # once — every synced source is written out and announced, so no visibility is
+  # silently lost. After migration the enabled set is exactly the synced sources,
+  # so `status` equals `status --all` on stdout (no modules here to differ).
+  def test_status_without_a_profile_migrates_the_built_library_once
     with_axis_corpus do |config|
-      focused_out, err, = with_config(config) { run_cli(%w[status]) }
+      refute Nabu::Profile.exist?(config.profile_path), "no config to start"
+      migrated_out, err, = with_config(config) { run_cli(%w[status]) }
+      assert_match(%r{wrote config/profile\.yml enabling your 3 synced sources}, err)
+      assert_equal %w[lex library shelf], Nabu::Profile.load(config.profile_path).entries
       all_out, = with_config(config) { run_cli(%w[status --all]) }
-      assert_equal all_out, focused_out, "an empty profile filters nothing (byte-identical stdout)"
-      assert_match(/nabu focus only <axes…> trims this to your desks/, err, "the hint rides stderr")
+      assert_equal all_out, migrated_out, "the migrated enabled set shows the whole built library"
+    end
+  end
+
+  # A truly fresh box (no library, no config, no quickstart tags) enables
+  # nothing by default — the honest empty-state, not "everything" (the inversion).
+  def test_status_on_a_fresh_box_shows_the_empty_state
+    Dir.mktmpdir("nabu-cli-fresh") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: auto\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources, config_path: "(test)")
+      _out, err, status = with_config(config) { run_cli(%w[status]) }
+      assert_nil status
+      assert_match(/no sources enabled — nabu enable/, err)
+      refute Nabu::Profile.exist?(config.profile_path), "the empty-state never writes a config"
     end
   end
 
@@ -1308,7 +1334,7 @@ class CLITest < Minitest::Test
       assert_match(/^lex\s/, out)
       assert_match(/^library\s/, out)
       refute_match(/^shelf\s/, out)
-      assert_match(/focused on reference/, err)
+      assert_match(/enabled: reference/, err)
     end
   end
 
@@ -1318,6 +1344,170 @@ class CLITest < Minitest::Test
       out, _err, = with_config(config) { run_cli(%w[health]) }
       assert_match(/^lex\s/, out, "a focused source is checked")
       refute_match(/^shelf\s+ok/, out, "an unfocused source is not in the check")
+    end
+  end
+
+  # -- enable / disable (P44-r3b) --------------------------------------------
+
+  # A blocked (grant-gated private research) source, with its grant block, so
+  # the enable-time grant flow and the axis skip line have something real.
+  def blocked_grant_yaml(slug, axes: nil)
+    axes_line = axes ? "  axes: [#{axes}]\n" : ""
+    <<~YAML
+      #{slug}:
+        adapter: TestAdapter
+        enabled: true
+        sync_policy: manual
+        availability: blocked
+      #{axes_line}  grant_required: true
+        grant:
+          grantor: G. Starostin
+          date: "2026-07-15"
+          terms: any use, per-base attribution required
+          thread: "№1"
+          request_hint: write to George Starostin for your own grant
+    YAML
+  end
+
+  def test_enable_disable_round_trip_axis_source_and_unknown_name
+    with_axis_corpus do |config|
+      out, = with_config(config) { run_cli(%w[enable reference]) }
+      assert_match(/enabled: reference/, out)
+      assert_includes Nabu::Profile.load(config.profile_path).entries, "reference"
+
+      with_config(config) { run_cli(%w[enable shelf]) } # a source by slug
+      assert_includes Nabu::Profile.load(config.profile_path).entries, "shelf"
+
+      with_config(config) { run_cli(%w[disable reference]) }
+      refute_includes Nabu::Profile.load(config.profile_path).entries, "reference"
+
+      _o, err, status = with_config(config) { run_cli(%w[enable bogus]) }
+      assert_equal 1, status
+      assert_match(/enable: unknown name "bogus"/, err)
+    end
+  end
+
+  def test_enable_blocked_source_runs_the_grant_flow_records_then_skips_on_ack
+    Dir.mktmpdir("nabu-cli-blocken") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, blocked_grant_yaml("secret"))
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources, config_path: "(test)")
+      out, _err, status = with_config(config) do
+        with_stdin("granted\n", tty: true) { run_cli(%w[enable secret]) }
+      end
+      assert_nil status
+      assert_match(/fetch requires a GRANT/, out, "the terms show at enable time")
+      assert_match(/type `granted`/, out)
+      assert_match(/grant acknowledged — recorded, enabling/, out)
+      assert_includes Nabu::Profile.load(config.profile_path).entries, "secret"
+      assert_equal 1, grant_ack_count(config, "secret")
+
+      out2, = with_config(config) do
+        with_stdin("", tty: false) { run_cli(%w[enable secret]) }
+      end
+      assert_match(/grant already acknowledged — enabling/, out2, "a recorded ack skips the prompt honestly")
+      refute_match(/type `granted`/, out2)
+    end
+  end
+
+  def test_enable_blocked_source_refusal_adds_nothing
+    Dir.mktmpdir("nabu-cli-blocken2") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, blocked_grant_yaml("secret"))
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources, config_path: "(test)")
+      _o, err, status = with_config(config) do
+        with_stdin("no\n", tty: true) { run_cli(%w[enable secret]) }
+      end
+      assert_equal 1, status
+      assert_match(/write to George Starostin/, err, "the request scaffold")
+      assert_predicate Nabu::Profile.load(config.profile_path), :empty?, "a refused grant enables nothing"
+      assert_equal 0, grant_ack_count(config, "secret")
+    end
+  end
+
+  def test_enable_axis_skips_blocked_members_with_the_on_ramp_line
+    Dir.mktmpdir("nabu-cli-axis-blocked") do |root|
+      File.write(File.join(root, "axes.yml"), "iranian:\n  persona: \"The Iranist.\"\n  desc: \"Iranian.\"\n")
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "peo:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: manual\n  " \
+                          "axes: [iranian]\n#{blocked_grant_yaml('secret', axes: 'iranian')}")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources, config_path: "(test)")
+      out, _err, status = with_config(config) { run_cli(%w[enable iranian]) }
+      assert_nil status
+      assert_match(/secret is grant-gated — enable it explicitly: nabu enable secret/, out)
+      assert_includes Nabu::Profile.load(config.profile_path).entries, "iranian"
+      assert_equal 0, grant_ack_count(config, "secret"), "an axis enable never acknowledges a blocked member"
+
+      _o2, err2, = with_config(config) { run_cli(%w[status --all]) }
+      # (status --all is the reveal; the default view hides the blocked member)
+      out3, _e3, = with_config(config) { run_cli(%w[status]) }
+      assert_match(/^peo\s/, out3, "the public axis member is enabled and shows")
+      refute_match(/^secret\s/, out3, "the blocked member was never implicitly enabled")
+      assert_empty err2.scan("no sources enabled"), "the axis enabled its public member"
+    end
+  end
+
+  # -- sync governance (P44-r3b) ---------------------------------------------
+
+  def test_sync_refuses_a_non_enabled_source_but_parse_only_is_the_repair_exception
+    Dir.mktmpdir("nabu-cli-gate") do |root|
+      %w[a b].each do |slug|
+        dir = File.join(root, "canonical", slug)
+        FileUtils.mkdir_p(dir)
+        File.write(File.join(dir, "#{slug}.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+      end
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "a:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: auto\n" \
+                          "b:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: auto\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources, config_path: "(test)")
+      Nabu::Profile.new(%w[a]).save(config.profile_path) # only a enabled
+
+      _o, err, status = with_config(config) { run_cli(%w[sync b]) }
+      assert_equal 1, status
+      assert_match(/b is not enabled on this box — enable it first: nabu enable b/, err)
+
+      out, _e, st = with_config(config) { run_cli(%w[sync b --parse-only]) }
+      assert_nil st, "parse-only is the repair exception — re-derive without acquiring"
+      assert_match(/b\s+parse-only/, out)
+    end
+  end
+
+  def test_sync_all_names_the_enabled_scope_and_syncs_only_the_enabled_set
+    Dir.mktmpdir("nabu-cli-allgate") do |root|
+      %w[a b].each do |slug|
+        dir = File.join(root, "canonical", slug)
+        FileUtils.mkdir_p(dir)
+        File.write(File.join(dir, "#{slug}.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+      end
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "a:\n  adapter: QuickstartFetchAdapter\n  enabled: true\n  sync_policy: auto\n" \
+                          "b:\n  adapter: QuickstartFetchAdapter\n  enabled: true\n  sync_policy: auto\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources, config_path: "(test)")
+      Nabu::Profile.new(%w[a]).save(config.profile_path) # only a enabled
+      out, _err, status = with_config(config) { run_cli(%w[sync --all]) }
+      assert_nil status
+      assert_match(/syncing 1 enabled source/, out, "the summary names the enabled scope")
+      assert_match(/^\s*a\s/, out, "the enabled source syncs")
+      refute_match(/^\s*b\s/, out, "a non-enabled source is not swept by --all")
+    end
+  end
+
+  def test_status_all_reveals_blocked_sources_marked
+    Dir.mktmpdir("nabu-cli-blocked-reveal") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "pub:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: manual\n" \
+                          "#{blocked_grant_yaml('secret')}")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources, config_path: "(test)")
+      out, _err, status = with_config(config) { run_cli(%w[status --all]) }
+      assert_nil status
+      assert_match(/^secret\s+blocked/, out, "the blocked source is marked in the status column")
+      assert_match(/^pub\s/, out, "--all reveals the whole registry")
     end
   end
 
@@ -2733,6 +2923,7 @@ class CLITest < Minitest::Test
   # (no HTTP), and with no catalog built drift reads never-synced.
   def test_health_remote_all_alive_exits_zero
     with_sync_env(enabled: true) do |config|
+      write_profile(config, "corpus") # P44-r3b: health scopes to the enabled set
       out, _err, status = with_config(config) do
         with_stubbed_shell(->(*_argv) { "sha_head\tHEAD\n" }) { run_cli(%w[health --remote]) }
       end
@@ -2750,6 +2941,7 @@ class CLITest < Minitest::Test
   # --remote, a gone upstream → GONE in the table (stdout) and exit 1.
   def test_health_remote_gone_upstream_exits_one
     with_sync_env(enabled: true) do |config|
+      write_profile(config, "corpus") # P44-r3b: health scopes to the enabled set
       dead = ->(*_argv) { raise Nabu::Shell::Error.new("x", status: 128, stderr: "remote: Repository not found.") }
       out, err, status = with_config(config) do
         with_stubbed_shell(dead) { run_cli(%w[health --remote]) }

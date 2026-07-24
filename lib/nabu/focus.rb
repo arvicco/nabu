@@ -36,9 +36,12 @@ module Nabu
     # A working scope over +registry+: the (possibly filtered) registry the
     # surface renders, the full one for hidden-count math, and the resolution.
     View = Data.define(:registry, :full_registry, :resolution, :profile, :all) do
-      # A profile is APPLIED (rows actually filtered) only when it is non-empty
-      # and --all was not passed. Empty or --all is the pass-through.
-      def active? = !profile.empty? && !all
+      # The enablement filter is APPLIED whenever --all was NOT passed (P44-r3b:
+      # the profile is now the box's ENABLED set, so it governs the default view
+      # even when empty — an empty enabled set shows only the owner's shelves,
+      # not the whole registry). --all is the pass-through: the full registry,
+      # with blocked sources marked at the render.
+      def active? = !all
 
       def entries = profile.entries
 
@@ -72,7 +75,11 @@ module Nabu
         else unknown << name
         end
       end
-      slugs = (axes.flat_map { |name| registry.axis_members(name) } + sources).uniq
+      # An AXIS expands to its PUBLIC members only (P44-r3b): a blocked
+      # (grant-gated private) source is never enabled implicitly by its desk —
+      # it joins the set only when named explicitly by slug (which the +sources+
+      # arm carries, blocked or not).
+      slugs = (axes.flat_map { |name| registry.public_axis_members(name) } + sources).uniq
       Resolution.new(axes: axes, sources: sources, unknown: unknown, slugs: slugs)
     end
 
@@ -82,7 +89,7 @@ module Nabu
     # order, carrying the same axes definitions so --axis grouping still works.
     def view(profile:, registry:, all:)
       resolution = resolve(profile, registry)
-      applied = !profile.empty? && !all
+      applied = !all
       filtered =
         if applied
           # A shelf ALWAYS shows; a module NEVER shows here (only under --all,
@@ -131,17 +138,19 @@ module Nabu
 
     # -- honesty lines (stderr meta) -----------------------------------------
 
-    # Shown after an UNFOCUSED table (no profile): the one-line nudge toward
-    # focusing. Verbatim owner phrasing.
-    def hint_line
-      "nabu focus only <axes…> trims this to your desks"
+    # The empty-state line (P44-r3b): shown after a default view whose ENABLED
+    # set resolves to zero sources (a fresh box, or an owner who disabled
+    # everything). The owner's shelves still show; there is just nothing enabled
+    # to acquire or list, so this names the on-ramp.
+    def empty_state_line
+      "no sources enabled — nabu enable <axis|source> (nabu quickstart for a starter set)"
     end
 
-    # Shown after a FOCUSED table: what is in focus and the exact count of rows
-    # --all would reveal (the P35 exact-count honesty rule). The hidden clause
-    # is zero-suppressed — nothing to reveal, nothing said.
+    # Shown after a default (enabled) table: what is enabled and the exact count
+    # of rows --all would reveal (the P35 exact-count honesty rule). The hidden
+    # clause is zero-suppressed — nothing to reveal, nothing said.
     def footer_line(entries, hidden)
-      head = "focused on #{entries.join(', ')}"
+      head = "enabled: #{entries.join(', ')}"
       return head unless hidden.positive?
 
       "#{head} — #{hidden} #{hidden == 1 ? 'source' : 'sources'} hidden (--all shows them)"
@@ -150,8 +159,8 @@ module Nabu
     # The registry-drift warning: names in the file that match nothing now.
     # Warned once and ignored, never fatal.
     def drift_line(unknown)
-      "focus: ignoring #{unknown.join(', ')} — not a known axis or source " \
-        "(registry drift; `nabu focus drop` to remove)"
+      "enablement: ignoring #{unknown.join(', ')} — not a known axis or source " \
+        "(registry drift; `nabu disable` to remove)"
     end
   end
 end
