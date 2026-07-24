@@ -111,15 +111,20 @@ module Nabu
     attr_reader :atticked
 
     # Phase 1 — objects only, working tree untouched. A fresh dir is cloned
-    # (--depth 1, the house budget for multi-GB corpora; nothing local exists
-    # to protect); an existing repo is `git fetch`ed and the upstream
-    # deletions recorded for the guard/attic.
+    # ATOMICALLY (P44-i1, owner ruling "sync should be atomic": clone +
+    # materialize into a sibling .partial staging dir, then one rename —
+    # an interrupt leaves only staging debris, swept + announced on the
+    # next run, never a half-canonical tree that a resume could mistake
+    # for a finished clone; --depth 1 stays the house budget); an existing
+    # repo is `git fetch`ed and the upstream deletions recorded for the
+    # guard/attic.
     def prepare!
+      sweep_stale_staging!
       if Dir.exist?(File.join(@dir, ".git"))
         git_fetch
         @doomed_relpaths = deleted_relpaths
       else
-        git_clone
+        atomic_clone!
         @cloned = true
       end
       exclude_attic!
@@ -147,6 +152,56 @@ module Nabu
 
     private
 
+    # The staging sibling for atomic fresh clones (P44-i1).
+    def staging_dir
+      "#{@dir}.partial"
+    end
+
+    # Debris from an interrupted earlier clone: announced, removed. Safe by
+    # construction — the staging dir is ours alone and never canonical.
+    def sweep_stale_staging!
+      return unless Dir.exist?(staging_dir)
+
+      @progress&.call("removing interrupted clone staging #{staging_dir}…\n")
+      FileUtils.remove_entry_secure(staging_dir)
+    end
+
+    # Clone + materialize into staging, verify, then ONE rename into place.
+    # ANY failure (including the verify) sweeps staging — a failed
+    # acquisition leaves neither a canonical tree nor debris.
+    def atomic_clone!
+      real_dir = @dir
+      staging = staging_dir
+      @dir = staging
+      begin
+        git_clone
+        verify_materialized!
+      rescue StandardError
+        FileUtils.rm_rf(staging)
+        raise
+      ensure
+        @dir = real_dir
+      end
+      File.rename(staging, real_dir)
+    end
+
+    # A sparse cone that materialized NOTHING is a failed acquisition, never
+    # a silent success (the P44-i1 zero-discovery lie): loud, with the cone
+    # named. Non-sparse clones always carry their tree.
+    def verify_materialized!
+      return unless @sparse
+
+      # Cone entries may be plain paths OR sparse-checkout glob patterns
+      # (cards/*/files/*.zip) — a pattern materialized iff it globs to
+      # anything, a path iff itself or anything beneath it exists.
+      materialized = @sparse.any? do |entry|
+        Dir.glob(File.join(@dir, entry)).any? || Dir.glob(File.join(@dir, entry, "**", "*")).any?
+      end
+      return if materialized
+
+      raise Nabu::FetchError, "sparse clone materialized nothing for cone #{@sparse.join(', ')} in #{@dir}"
+    end
+
     def git_clone
       pin = @ref ? ["--branch", @ref] : []
       return sparse_clone(pin) if @sparse
@@ -170,6 +225,11 @@ module Nabu
         Shell.run("git", *args)
       end
       Shell.run("git", "-C", @dir, "sparse-checkout", "set", "--no-cone", *@sparse)
+      # The cone materialization fetches every blob it needs on demand —
+      # on a corpus-sized cone this is the LONG step (minutes), and it used
+      # to run in captured silence that read as a hang (P44-i1). Announce.
+      @progress&.call("materializing #{@sparse.join(', ')} (first clone fetches the cone's blobs — " \
+                      "this can take minutes)…\n")
       Shell.run("git", "-C", @dir, "checkout", "--quiet")
     end
 

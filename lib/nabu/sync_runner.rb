@@ -104,6 +104,10 @@ module Nabu
     # +db+ is the catalog; +ledger+ the history ledger (Store::Ledger, P7-1) —
     # runs, per-repo pins, and durable revisions are recorded there, keyed by
     # slug/url/urn so they survive `nabu rebuild`.
+    # The loaded Nabu::Config (P44-i1: the CLI's --redownload wipe needs
+    # the canonical dir without re-loading config).
+    attr_reader :config
+
     def initialize(config:, registry:, db:, ledger:)
       @config = config
       @registry = registry
