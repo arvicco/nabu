@@ -171,7 +171,10 @@ class ItantEpidocParserTest < Minitest::Test
     place = parser.parse(OSCAN_2, urn: "urn:nabu:itant:oscan-2").metadata["place"]
     assert_equal "Aquilonia, Samnium", place["ancient"]
     assert_equal "Monte Vairano (Campobasso)", place["modern"]
-    assert_equal "https://pleiades.stoa.org/places/438681", place["pleiades"]
+    # P44-2: place.pleiades is the cross-source contract — the bare numeric
+    # id (the URL spelling this key held pre-P44-2 migrates; the id is the
+    # join key, and the URL is reconstructible from it).
+    assert_equal "438681", place["pleiades"]
     assert_equal "https://sws.geonames.org/3164966", place["geonames"]
   end
 
