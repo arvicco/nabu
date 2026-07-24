@@ -125,7 +125,7 @@ clients, the tool reference, and the quoting etiquette are in
 
 ## Grow the library
 
-Each further shelf is one `sync` command; `bin/nabu sync --all` re-syncs
+Each further shelf is one `nabu enable <source>` (or `enable <axis>` for a whole desk) followed by its `sync`; `bin/nabu sync --all` re-syncs
 every enabled live-policy source in one pass. The full menu is
 `config/sources.yml`; real on-disk sizes for the larger shelves, measured
 2026-07-13:

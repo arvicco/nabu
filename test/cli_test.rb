@@ -2282,6 +2282,21 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P44-r3c: quickstart ENABLES its set (additively, stderr-announced)
+  # before syncing — a fresh box's profile is written explicitly.
+  def test_quickstart_enables_the_starter_set_additively
+    with_quickstart_env("alpha" => "QuickstartFetchAdapter", "beta" => "QuickstartFetchAdapter") do |config|
+      with_starter_sources(%w[alpha beta]) do
+        Nabu::Profile.new(["preexisting"]).save(config.profile_path)
+        _out, err, status = with_config(config) { run_cli(%w[quickstart]) }
+        assert_nil status
+        assert_match(/enabled the starter shelf: alpha, beta/, err)
+        assert_equal %w[alpha beta preexisting], Nabu::Profile.load(config.profile_path).entries,
+                     "starter slugs merge additively; existing entries survive"
+      end
+    end
+  end
+
   # Idempotent by construction: a re-run is an ordinary re-sync (same content
   # on disk → =N skipped, nothing re-added), and the epilogue still prints.
   def test_quickstart_rerun_is_an_ordinary_resync

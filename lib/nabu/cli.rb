@@ -188,6 +188,11 @@ module Nabu
       ledger = open_or_create_ledger(config)
       db = open_or_create_catalog(config)
       runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
+      # P44-r3c: quickstart ENABLES its set before syncing — additive into
+      # the enablement config (never overwriting an existing profile's
+      # entries), so the sync gate passes deterministically and a fresh
+      # box's profile is written explicitly rather than by migration grace.
+      enable_starter_set(config)
       failures = run_starter_syncs(runner)
       print_quickstart_epilogue(failures)
       unless failures.empty?
@@ -6077,6 +6082,21 @@ module Nabu
 
       # `quickstart --list`: the starter set, sizes, and what each source
       # unlocks — no network, no db, nothing created.
+      # Additively enable the starter slugs in the enablement config
+      # (P44-r3c). Existing entries are preserved; the save carries the
+      # enablement header, so the file governs from here on.
+      def enable_starter_set(config)
+        profile = Nabu::Profile.exist?(config.profile_path) ? Nabu::Profile.load(config.profile_path) : Nabu::Profile.new([])
+        slugs = self.class.starter_sources.map(&:slug)
+        merged = (profile.entries + slugs).uniq
+        return if merged.sort == profile.entries.sort
+
+        Nabu::Profile.new(merged).save(config.profile_path)
+        # stderr, the r3b enablement-honesty convention: data stdout stays
+        # byte-identical/pipe-clean.
+        warn "enabled the starter shelf: #{slugs.join(', ')} (config/profile.yml)"
+      end
+
       def print_starter_list
         say "starter shelf (#{STARTER_TOTAL} canonical, minutes to sync):"
         self.class.starter_sources.each do |starter|
