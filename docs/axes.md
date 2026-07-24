@@ -107,7 +107,7 @@ The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, th
 
 The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the Leiden Latin dictionary, StarLing's bases, and the curated loan edges. Non-IE lanes of the same shelves ride their own axes too — dual-tagging, never folding.
 
-**Members** (6): `wiktionary-recon`, `iecor`, `liv`, `edl`, `starling`, `sabellic-loans`
+**Members** (7): `wiktionary-recon`, `iecor`, `liv`, `edl`, `starling`, `sabellic-loans`, `titus-avestan`
 
 ### biblical
 
