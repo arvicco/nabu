@@ -73,6 +73,13 @@ nabu search --lemma precor --axis epigraphy  # CEIPoM equivalence keys reach the
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“What survives from Segesta, across every corpus here?”** → `nabu_place Segesta` — The gazetteer card (Segesta/Egesta, Pleiades 462487 — settlement, archaic to late-antique, 37.94, 12.84) plus per-source holdings of documents carrying that upstream-asserted Pleiades id, and a labelled tail of findspot text-mentions not yet id-linked.
+- **“Wage receipts from Oxyrhynchus?”** → `nabu_search μισθός (place: oxyrhynch%)` — Documentary papyri hits with provenance-filtered dating — the DDbDP at the artifact grain, lacunae preserved.
+
 ## Terminal setup
 
 - **Ogham (pgl):** nabu spaces the letters with U+1680 (stemline-continuing)

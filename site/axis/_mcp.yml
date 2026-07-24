@@ -1,0 +1,209 @@
+# Per-axis MCP examples for the site/axis/<name>.md pages (P44-4).
+#
+# HAND-EDITED, READ-ONLY to the generator (`rake site:axes`,
+# Nabu::Ops::AxisPages#mcp_block) — the fragments precedent
+# (_fragments.yml). This file is the ONE curated home of the
+# user-perspective examples; the axis pages and docs/mcp.md §8 project
+# from it, never invent their own.
+#
+# Every example is REAL and was LIVE-VERIFIED against this library on
+# 2026-07-24 (the P4-2 no-fiction guard): `ask` is the question a person
+# at the desk puts to their model, `call` is the MCP tool composition
+# that answered it, `answer` summarizes what actually came back — no
+# invented output, ever. Shape per axis: mcp: [{ask, call, answer}].
+
+classical:
+  mcp:
+    - ask: "Who quotes the opening of the Iliad?"
+      call: 'nabu_parallels urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1'
+      answer: >-
+        The reception of μῆνιν ἄειδε across the library: Galen (De
+        placitis), Aristotle's Ars Rhetorica, Sextus Empiricus (seven
+        loci), Dio Chrysostom, a metrical handbook — each hit with the
+        shared folded phrase as evidence and a urn to open.
+    - ask: "What does LSJ say about this word, with citations I can open?"
+      call: 'nabu_define λόγος (lang: grc)'
+      answer: >-
+        The LSJ entry with senses as structured text; citations of works
+        this library holds carry resolved passage urns for nabu_show.
+
+epigraphy:
+  mcp:
+    - ask: "What survives from Segesta, across every corpus here?"
+      call: 'nabu_place Segesta'
+      answer: >-
+        The gazetteer card (Segesta/Egesta, Pleiades 462487 — settlement,
+        archaic to late-antique, 37.94, 12.84) plus per-source holdings of
+        documents carrying that upstream-asserted Pleiades id, and a
+        labelled tail of findspot text-mentions not yet id-linked.
+    - ask: "Wage receipts from Oxyrhynchus?"
+      call: 'nabu_search μισθός (place: oxyrhynch%)'
+      answer: >-
+        Documentary papyri hits with provenance-filtered dating — the DDbDP
+        at the artifact grain, lacunae preserved.
+
+slavic:
+  mcp:
+    - ask: "Show me MARK 2.3 in every witness — Greek against all four OCS codices."
+      call: 'nabu_align "MARK 2.3" (work: nt)'
+      answer: >-
+        Fourteen witness columns in one reply: PROIEL Greek, Vulgate,
+        Gothic, Armenian, Codex Marianus beside the CCMH Assemanianus /
+        Marianus / Savvina / Zographensis diplomatic transcriptions, the
+        West-Saxon Gospels, Sahidic Coptic, SBLGNT, WEB. `collate: true`
+        turns the columns into a witness apparatus.
+
+germanic:
+  mcp:
+    - ask: "Where does Gothic guþ come from, and who are its cousins?"
+      call: 'nabu_etym guþ (lang: got)'
+      answer: >-
+        Proto-Germanic *gudą with 64 cognates (nine attested in this
+        library, counts shown: Gothic 𐌲𐌿𐌸 ×914, Old Norse guð ×1,337,
+        Middle High German got ×6,995 …) and the PIE ancestors *ǵʰutós
+        "libated" / *gʷʰew- "to venerate" above it.
+
+celtic:
+  mcp:
+    - ask: "Find macc in the Old Irish glosses."
+      call: 'nabu_search macc (lang: sga)'
+      answer: >-
+        Hits from the Milan and Bern Servius glosses (CorPH) with exact
+        gloss-corpus citations — the diacritic fold means plain ASCII
+        queries reach the edited text.
+
+italic:
+  mcp:
+    - ask: "Etruscan inscriptions naming Larth?"
+      call: 'nabu_search larth (lang: ett)'
+      answer: >-
+        CIE 1772 with both faces of the stone transcribed — the Tyrsenian
+        shelves answer alongside the Sabellic ones on this desk.
+
+etym:
+  mcp:
+    - ask: "Walk прьстъ back as far as it goes."
+      call: 'nabu_etym прьстъ (lang: chu)'
+      answer: >-
+        The full chain *pьrstъ → Proto-Balto-Slavic *pírštan → PIE *per-
+        "before, in front", each shelf with glosses, licenses, and
+        corpus-attested cognate counts (Sanskrit pára ×9,769, Latin prīmus
+        ×1,345, Hittite peran, Greek πρίν with gold and silver counts
+        listed separately).
+
+biblical:
+  mcp:
+    - ask: "GEN 1.1 across all the versions at once."
+      call: 'nabu_align "GEN 1.1" (work: ot)'
+      answer: >-
+        Seven witnesses in one reply: LXX (Swete), Clementine Vulgate, both
+        Masoretic texts (OSHB and BHSA), Targum Onkelos, the Peshitta, and
+        the WEB English — every row carrying its own license class.
+
+hebrew:
+  mcp:
+    - ask: "Compare the two Masoretic editions of a verse."
+      call: 'nabu_align "GEN 1.1" (work: ot)'
+      answer: >-
+        OSHB (WLC) and BHSA (ETCBC) side by side with the Targum and
+        Peshitta columns — two independent Masoretic witnesses at
+        deliberately different annotation grains, never merged.
+
+syriac:
+  mcp:
+    - ask: "ܡܠܟܘܬܐ in the Syriac corpus?"
+      call: 'nabu_search ܡܠܟܘܬܐ (lang: syc)'
+      answer: >-
+        The Peshitta Mark ("a kingdom divided against itself…") beside
+        homiletic prose from the Digital Syriac Corpus — vocalized and
+        unvocalized spellings fold together.
+
+arabic:
+  mcp:
+    - ask: "Who reused this passage of Ibn Sīnā's Šifāʾ?"
+      call: 'nabu_links urn:nabu:openiti:0428IbnSina.ShifaAfcalWaInficalat.ALCorpus00001-ara2:1.223.4'
+      answer: >-
+        kind="reuse" edges from the KITAB pairwise data: the passage
+        reappears in Faḫr al-Dīn al-Rāzī's Mulaḫḫaṣ (two centuries later)
+        with character/word offsets riding the edge detail — upstream-
+        computed alignments, distinct from nabu's own intertext detection.
+
+hittite:
+  mcp:
+    - ask: "Find nepišaš — 'of heaven' — in the tablets."
+      call: 'nabu_search "ne-pi-ša-aš" (lang: hit)'
+      answer: >-
+        Mythological fragments (KBo 26.91, KBo 26.120) with damage brackets
+        preserved. The desk's lesson: TLHdig stores the syllabified
+        transliteration, so type it hyphenated — the diacritic fold maps
+        pí to pi for you.
+
+cuneiform:
+  mcp:
+    - ask: "Attestations of šarru 'king' — as lemma, not spelling."
+      call: 'nabu_search (lemma: šarru, lang: akk)'
+      answer: >-
+        Logographic LUGAL spellings resolved through ORACC's lemmatization
+        — the first hits are the Cyrus Cylinder's opening lines, each with
+        the surface form shown beside the lemma.
+
+egyptian:
+  mcp:
+    - ask: "Search the Egyptian sentences for nfr."
+      call: 'nabu_search nfr (lang: egy)'
+      answer: >-
+        AES hits in Egyptological transliteration (tomb inscriptions,
+        offering lists) — ꜣ and ꜥ fold to a, so an ASCII query reaches
+        them.
+
+iranian:
+  mcp:
+    - ask: "Where does the Avesta invoke Ahura Mazdā?"
+      call: 'nabu_search "ahura mazda" (lang: ave)'
+      answer: >-
+        Yasna and Yašt passages (Y.19.1, Y.58.8, Yt.3.2 …) served under
+        their nc class with the TITUS/editors credit line riding every
+        card — a personal research grant, honored in the payload.
+
+indic:
+  mcp:
+    - ask: "dharma across the Sanskrit corpus, by lemma."
+      call: 'nabu_search (lemma: dharma, lang: san)'
+      answer: >-
+        DCS hits with inflected surface forms (dharmeṇa, dharmaś) and the
+        lexicon gloss beside each — upaniṣads first, ranked by relevance.
+
+buddhist:
+  mcp:
+    - ask: "What are the Chinese parallels to the Saccavibhaṅga Sutta?"
+      call: 'nabu_links urn:nabu:suttacentral:mn141'
+      answer: >-
+        SuttaCentral's curated parallels as edges: MN 141 ↔ 中阿含經 31
+        (分別聖諦經, the Madhyama Āgama parallel, lzh) plus DN 22 and two
+        Ekottara Āgama parallels — cross-canon navigation in one call.
+
+sinitic:
+  mcp:
+    - ask: "Scan 仁義 usage across the Chinese canon."
+      call: 'nabu_concord 仁義 (lang: lzh)'
+      answer: >-
+        KWIC rows in corpus order from CBETA's historiographical treatises
+        — left context, keyword, right context in the pristine text.
+
+japonic:
+  mcp:
+    - ask: "Old Japanese lines about mountains?"
+      call: 'nabu_search yama (lang: ojp)'
+      answer: >-
+        Kojiki kayō and Man'yōshū lines (unebwi yama — Mount Unebi) — the
+        ONCOJ shelf stores romanized Old Japanese, so type romaji.
+
+local:
+  mcp:
+    - ask: "Is this language even covered here, before I conclude a word is unattested?"
+      call: 'nabu_status'
+      answer: >-
+        Per-source counts and recency, passages by language and license
+        class, and what is excluded by default — the tool a careful model
+        calls before trusting an empty search. Your own shelf notes ride
+        show/define payloads wherever they touch a urn.

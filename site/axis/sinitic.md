@@ -64,6 +64,12 @@ nabu show urn:nabu:kanripo:KR1h0004:001:1a --display reading  # gaiji &KR…; re
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Scan 仁義 usage across the Chinese canon.”** → `nabu_concord 仁義 (lang: lzh)` — KWIC rows in corpus order from CBETA's historiographical treatises — left context, keyword, right context in the pristine text.
+
 ## Terminal setup
 
 - **Han (lzh, kanripo):** nabu measures CJK cells (`Nabu::Display.width`),

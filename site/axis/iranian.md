@@ -68,6 +68,12 @@ nabu show urn:nabu:titus-avestan:avest020:Y.19.1  # a citation prefix opens into
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Where does the Avesta invoke Ahura Mazdā?”** → `nabu_search "ahura mazda" (lang: ave)` — Yasna and Yašt passages (Y.19.1, Y.58.8, Yt.3.2 …) served under their nc class with the TITUS/editors credit line riding every card — a personal research grant, honored in the payload.
+
 ## Terminal setup
 
 - **Avestan (ave):** the TITUS Avesta is a scholarly Latin transliteration with

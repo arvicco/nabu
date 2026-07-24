@@ -57,6 +57,12 @@ nabu define ⲛⲟⲩⲧⲉ                     # the Coptic lexicon, following 
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Search the Egyptian sentences for nfr.”** → `nabu_search nfr (lang: egy)` — AES hits in Egyptological transliteration (tomb inscriptions, offering lists) — ꜣ and ꜥ fold to a, so an ASCII query reaches them.
+
 ## Terminal setup
 
 - **Coptic:** nabu strips nothing; install `font-noto-sans-coptic` (Coptic

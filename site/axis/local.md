@@ -52,6 +52,12 @@ nabu sync local-language              # re-derive the language cards after editi
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Is this language even covered here, before I conclude a word is unattested?”** → `nabu_status` — Per-source counts and recency, passages by language and license class, and what is excluded by default — the tool a careful model calls before trusting an empty search. Your own shelf notes ride show/define payloads wherever they touch a urn.
+
 ## Terminal setup
 
 - Owner-authored Markdown, YAML and PDF — no ancient-script display

@@ -61,6 +61,12 @@ nabu list sl-lexica --entries --prefix bh  # headword-prefix browse into the Slo
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Show me MARK 2.3 in every witness — Greek against all four OCS codices.”** → `nabu_align "MARK 2.3" (work: nt)` — Fourteen witness columns in one reply: PROIEL Greek, Vulgate, Gothic, Armenian, Codex Marianus beside the CCMH Assemanianus / Marianus / Savvina / Zographensis diplomatic transcriptions, the West-Saxon Gospels, Sahidic Coptic, SBLGNT, WEB. `collate: true` turns the columns into a witness apparatus.
+
 ## Terminal setup
 
 - **Cyrillic OCS (chu):** nabu strips the titla (titlo, pokrytie,

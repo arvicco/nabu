@@ -182,4 +182,26 @@ class AxisPagesTest < Minitest::Test
                       "#{axis.name}: the index block must link to /axis/#{axis.name}/"
     end
   end
+
+  # P44-4: every axis with curated MCP examples (site/axis/_mcp.yml — the one
+  # hand-curated home, live-verified) renders an "## Ask your model" block
+  # carrying each example's ask + call verbatim; an axis without curated
+  # examples renders no such heading. The drift guard: edit _mcp.yml →
+  # regenerate, or the gate fails.
+  def test_mcp_examples_project_from_the_curated_home
+    examples = YAML.safe_load_file(File.join(AXIS_DIR, "_mcp.yml"))
+    axes.each_axis do |axis|
+      entries = examples.dig(axis.name, "mcp")
+      page = body(axis.name)
+      if entries.nil? || entries.empty?
+        refute_includes page, "## Ask your model", "#{axis.name}: no curated examples, no block"
+      else
+        assert_includes page, "## Ask your model", "#{axis.name}: curated examples must render"
+        entries.each do |entry|
+          assert_includes page, entry.fetch("ask"), "#{axis.name}: the ask renders verbatim"
+          assert_includes page, entry.fetch("call"), "#{axis.name}: the call renders verbatim"
+        end
+      end
+    end
+  end
 end

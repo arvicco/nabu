@@ -67,6 +67,12 @@ nabu list coptic-scriptorium --loans  # the donor-language census of the loan ta
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“GEN 1.1 across all the versions at once.”** → `nabu_align "GEN 1.1" (work: ot)` — Seven witnesses in one reply: LXX (Swete), Clementine Vulgate, both Masoretic texts (OSHB and BHSA), Targum Onkelos, the Peshitta, and the WEB English — every row carrying its own license class.
+
 ## Terminal setup
 
 - **Hebrew and Aramaic (hbo/arc):** nabu strips cantillation, keeps the

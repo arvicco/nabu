@@ -55,6 +55,12 @@ nabu vocab urn:nabu:dcs:143:1067      # distinctive vocabulary of a Rāmāyaṇa
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“dharma across the Sanskrit corpus, by lemma.”** → `nabu_search (lemma: dharma, lang: san)` — DCS hits with inflected surface forms (dharmeṇa, dharmaś) and the lexicon gloss beside each — upaniṣads first, ranked by relevance.
+
 ## Terminal setup
 
 - **Devanagari (san):** nabu strips Vedic accents when present (IAST is left

@@ -88,6 +88,12 @@ nabu formulas urn:nabu:aspr:A4.1      # the Old English poetic formulas of Beowu
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Where does Gothic guþ come from, and who are its cousins?”** → `nabu_etym guþ (lang: got)` — Proto-Germanic *gudą with 64 cognates (nine attested in this library, counts shown: Gothic 𐌲𐌿𐌸 ×914, Old Norse guð ×1,337, Middle High German got ×6,995 …) and the PIE ancestors *ǵʰutós "libated" / *gʷʰew- "to venerate" above it.
+
 ## Terminal setup
 
 - **Gothic (got):** nabu does nothing; install `font-noto-sans-gothic`.

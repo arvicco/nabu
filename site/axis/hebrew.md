@@ -59,6 +59,12 @@ nabu define אור --lang hbo            # Brown-Driver-Briggs on the Hebrew lex
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Compare the two Masoretic editions of a verse.”** → `nabu_align "GEN 1.1" (work: ot)` — OSHB (WLC) and BHSA (ETCBC) side by side with the Targum and Peshitta columns — two independent Masoretic witnesses at deliberately different annotation grains, never merged.
+
 ## Terminal setup
 
 - **Hebrew and Aramaic (hbo/arc):** cantillation stripped, points and maqaf

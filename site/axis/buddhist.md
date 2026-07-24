@@ -52,6 +52,12 @@ nabu formulas urn:nabu:suttacentral:an1 --lang pli  # the repeated formulas of t
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“What are the Chinese parallels to the Saccavibhaṅga Sutta?”** → `nabu_links urn:nabu:suttacentral:mn141` — SuttaCentral's curated parallels as edges: MN 141 ↔ 中阿含經 31 (分別聖諦經, the Madhyama Āgama parallel, lzh) plus DN 22 and two Ekottara Āgama parallels — cross-canon navigation in one call.
+
 ## Terminal setup
 
 - **Sanskrit / Pali (IAST):** **Noto Sans Mono**; Devanagari needs a
