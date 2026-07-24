@@ -23,8 +23,8 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `ogham` | inscriptions | nc | enabled · manual | 873 docs / 1,053 passages |
 | `isicily` | inscriptions | attribution | enabled · manual | 6,723 docs / 17,921 passages |
 | `itant` | inscriptions | nc | enabled · manual | 1,160 docs / 1,283 passages |
-| `trismegistos` | feature module | attribution | not enabled | nothing held yet |
-| `pleiades` | feature module | attribution | not enabled | nothing held yet |
+| `trismegistos` | feature module | attribution | not enabled | not synced yet |
+| `pleiades` | feature module | attribution | not enabled | not synced yet |
 | `tlhdig` | tablets | attribution | enabled · manual | 23,486 docs / 402,195 passages |
 | `ceipom` | inscriptions | attribution | enabled · frozen | 3,871 docs / 5,303 passages |
 | `open-etruscan` | inscriptions | attribution | enabled · frozen | 8,047 docs / 8,047 passages |

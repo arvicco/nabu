@@ -17,7 +17,7 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 36 docs / 238,032 passages |
+| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
 | `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
 | `suttacentral` | texts | open | enabled · manual | 12,348 docs / 697,650 passages |
 | `baxter-sagart` | dictionary | attribution | enabled · manual | 9,918 entries |
