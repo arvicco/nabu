@@ -161,15 +161,15 @@ class FocusTest < Minitest::Test
     assert_match(/nabu enable/, Nabu::Focus.empty_state_line)
   end
 
-  def test_footer_line_names_the_enabled_set_and_the_exact_hidden_count
-    assert_equal "enabled: germanic, rem — 3 sources hidden (--all shows them)",
+  def test_footer_line_is_a_count_summary_never_a_name_dump
+    assert_equal "enabled: 2 entries — 3 sources not enabled (--all shows them)",
                  Nabu::Focus.footer_line(%w[germanic rem], 3)
   end
 
   def test_footer_line_singular_and_zero_suppressed
-    assert_equal "enabled: germanic — 1 source hidden (--all shows them)",
+    assert_equal "enabled: 1 entry — 1 source not enabled (--all shows them)",
                  Nabu::Focus.footer_line(%w[germanic], 1)
-    assert_equal "enabled: germanic", Nabu::Focus.footer_line(%w[germanic], 0)
+    assert_equal "enabled: 1 entry (nabu enable <axis|source> to add)", Nabu::Focus.footer_line(%w[germanic], 0)
   end
 
   def test_drift_line_names_the_ignored_entries
