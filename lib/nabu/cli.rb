@@ -6199,9 +6199,7 @@ module Nabu
         # P43-i1: producers that census unknown upstream ids say so — a
         # third of the first TM sweep was "not in our database", and a
         # silent zero would misread as full coverage.
-        if refs.respond_to?(:unknown_ids) && refs.unknown_ids.positive?
-          parts << "?#{refs.unknown_ids} unknown upstream"
-        end
+        parts << "?#{refs.unknown_ids} unknown upstream" if refs.respond_to?(:unknown_ids) && refs.unknown_ids.positive?
         counts = parts.empty? ? "0" : parts.join(" ")
         "  refs #{counts}"
       end
