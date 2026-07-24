@@ -474,3 +474,46 @@ new, present-only keys.
 | `list SOURCE --lang` implying the mode (P44-r1) | `nabu list` | — | documented gap (subsumed by the list gap above; the filters themselves exist on every MCP tool that lists passages) |
 | Refusal parity | date/place × lemma/near refused; near × morph refused; morph without lemma refused | same refusals, as `isError` the model can self-correct | parity (pinned P13-6/P14-8/P15-2) |
 | Availability semantics after the `wired:` rename (P44-r4) | registry `wired:` drives `list`/`status` visibility | `nabu_status` — sources default to the enabled set; the frozen payload key stays **`enabled`**, mirroring `wired`; no payload byte changed | parity (pinned P44-3: `enabled` key asserted, `"wired"` asserted absent) |
+
+---
+
+## 8. The user perspective — one desk at a time (P44-4)
+
+The tools above are the plumbing. What a person actually does with them is
+ask their model desk-shaped questions — and the answer is almost always a
+short COMPOSITION of tools, not one call. This section documents that
+perspective; the per-desk examples live in ONE curated home,
+`site/axis/_mcp.yml`, projected onto every [axis page](
+https://arvicco.github.io/nabu/axis/) as its "Ask your model" block and
+summarized on the site's [MCP page](https://arvicco.github.io/nabu/mcp/).
+Every example there was run LIVE against this library before it was
+written down (the no-fiction guard): the asks are real, the calls are the
+ones that answered, and the result summaries describe actual payloads.
+
+Three walkthroughs showing the shape of the composition:
+
+**Reception.** "Who quotes the opening of the Iliad?" →
+`nabu_parallels urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1` returns
+the documents sharing its rare phrases — Galen, Aristotle's Ars Rhetorica,
+Sextus Empiricus (seven loci) — each with the folded phrase that matched
+and a best-passage urn; `nabu_show` on that urn reads the pristine
+context. Two calls, a reception史 sketch.
+
+**Comparative philology.** "Show me MARK 2.3 everywhere" →
+`nabu_align "MARK 2.3"` returns fourteen witness columns (Greek, Latin,
+Gothic, Armenian, four OCS codices, Old English, Coptic, English …);
+`nabu_cognates "LUKE 14.34" (langs: [got, chu])` then finds the verses
+where Gothic and OCS use reflexes of the SAME root — salt ~ соль under
+*sḗh₂l — and `nabu_etym` walks any single word's chain up the proto
+shelves with corpus-attested cognate counts.
+
+**A desk's own conventions.** Empty results usually mean a convention,
+not an absence — and `nabu_status` is the tool to check before concluding
+anything. Hittite is stored syllabified (`ne-pi-ša-aš`, not `nepišaš`);
+Old Japanese is romanized (`yama`, not 山 or 夜麻); Akkadian kingship
+hides behind the logogram LUGAL until you search `lemma: šarru`. The
+axis-page examples encode one such lesson per desk where it exists.
+
+Server note: a long-running MCP server serves the code it started with —
+after updating nabu, restart the server (re-open the client session) to
+pick up new tools and folds.

@@ -61,6 +61,12 @@ nabu define "*deiwos"                 # a Proto-Italic reconstruction, with its 
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Etruscan inscriptions naming Larth?”** → `nabu_search larth (lang: ett)` — CIE 1772 with both faces of the stone transcribed — the Tyrsenian shelves answer alongside the Sabellic ones on this desk.
+
 ## Terminal setup
 
 - **Old Italic (osc/xum):** the inscription text is stored in Latin

@@ -65,6 +65,13 @@ nabu define μῆνις                     # LSJ and Lewis & Short on the lexic
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Who quotes the opening of the Iliad?”** → `nabu_parallels urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1` — The reception of μῆνιν ἄειδε across the library: Galen (De placitis), Aristotle's Ars Rhetorica, Sextus Empiricus (seven loci), Dio Chrysostom, a metrical handbook — each hit with the shared folded phrase as evidence and a urn to open.
+- **“What does LSJ say about this word, with citations I can open?”** → `nabu_define λόγος (lang: grc)` — The LSJ entry with senses as structured text; citations of works this library holds carry resolved passage urns for nabu_show.
+
 ## Terminal setup
 
 - **Polytonic Greek (grc):** nabu leaves it intact (a `monotonic` display

@@ -49,6 +49,12 @@ nabu cognates ot --langs syriac,hbo   # Syriac against Hebrew, same-root verses
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“ܡܠܟܘܬܐ in the Syriac corpus?”** → `nabu_search ܡܠܟܘܬܐ (lang: syc)` — The Peshitta Mark ("a kingdom divided against itself…") beside homiletic prose from the Digital Syriac Corpus — vocalized and unvocalized spellings fold together.
+
 ## Terminal setup
 
 - **Syriac (estrangela) is RTL** — the same terminal requirement as Hebrew:

@@ -77,6 +77,12 @@ nabu search 吾輩は猫である --lang jpn        # Sōseki's opening line, to
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Old Japanese lines about mountains?”** → `nabu_search yama (lang: ojp)` — Kojiki kayō and Man'yōshū lines (unebwi yama — Mount Unebi) — the ONCOJ shelf stores romanized Old Japanese, so type romaji.
+
 ## Terminal setup
 
 - **Kana / kanji (ojp):** ONCOJ carries romanization and original layers by

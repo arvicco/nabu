@@ -58,6 +58,12 @@ nabu search --lemma šarru --lang akk --axis cuneiform  # the gold ORACC Akkadia
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Attestations of šarru 'king' — as lemma, not spelling.”** → `nabu_search (lemma: šarru, lang: akk)` — Logographic LUGAL spellings resolved through ORACC's lemmatization — the first hits are the Cyrus Cylinder's opening lines, each with the surface form shown beside the lemma.
+
 ## Terminal setup
 
 - ORACC, CDLI and ETCSL text is stored in **Latin transliteration**

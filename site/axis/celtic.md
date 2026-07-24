@@ -58,6 +58,12 @@ nabu define rí --lang sga             # the Old Irish card, with its Proto-Celt
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Find macc in the Old Irish glosses.”** → `nabu_search macc (lang: sga)` — Hits from the Milan and Bern Servius glosses (CorPH) with exact gloss-corpus citations — the diacritic fold means plain ASCII queries reach the edited text.
+
 ## Terminal setup
 
 - **Ogham (pgl):** nabu spaces the letters with U+1680 so the stemline

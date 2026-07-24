@@ -41,6 +41,7 @@ module Nabu
         @registry = registry
         @axes = registry.axes
         @fragments = load_fragments(fragments_path)
+        @fragments_path = fragments_path
         @output_dir = output_dir
         @catalog_path = catalog_path
         @as_of = as_of
@@ -137,7 +138,7 @@ module Nabu
           nabu sync #{axis.name}                 # sync the desk's enabled members
           ```
           #{recipes_block(axis)}
-          #{display_block(axis)}---
+          #{mcp_block(axis)}#{display_block(axis)}---
 
           #{footer(axis)}
         PAGE
@@ -318,6 +319,32 @@ module Nabu
         end
         lines << "```"
         "#{lines.join("\n")}\n"
+      end
+
+      # The per-desk MCP examples (P44-4): projected from the ONE curated
+      # home site/axis/_mcp.yml (the fragments precedent) — real questions a
+      # person at this desk asks their model, the tool composition that
+      # answered, and what actually came back, every example live-verified
+      # at curation time (the P4-2 no-fiction guard). No home entry, no block.
+      def mcp_block(axis)
+        entries = mcp_examples.dig(axis.name, "mcp")
+        return "" unless entries && !entries.empty?
+
+        lines = ["", "## Ask your model", "",
+                 "With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers " \
+                 "conversational research questions. Each example ran live against this library:", ""]
+        entries.each do |entry|
+          lines << "- **“#{entry.fetch('ask')}”** → `#{entry.fetch('call')}` — #{entry.fetch('answer').strip}"
+        end
+        "#{lines.join("\n")}\n"
+      end
+
+      # The curated MCP-examples home, a sibling of the fragments file.
+      def mcp_examples
+        @mcp_examples ||= begin
+          path = File.join(File.dirname(@fragments_path), "_mcp.yml")
+          File.exist?(path) ? (YAML.safe_load_file(path) || {}) : {}
+        end
       end
 
       def display_block(axis)

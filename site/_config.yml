@@ -33,6 +33,8 @@ nav:
     url: /axis/
   - title: Tools
     url: /tools/
+  - title: MCP
+    url: /mcp/
   - title: Examples
     url: /examples/
   - title: Languages
