@@ -4,13 +4,14 @@ require "test_helper"
 require "tmpdir"
 require "fileutils"
 
-# Nabu::HypotacticMeter (P44-6): the METER producer for the links journal — the
-# Hypotactic scansion instrument over held Perseus lines. Reads the canonical
-# tsv/ tree and mints ONE kind="meter" edge per line matched (by folded grc
-# text, not citation) against a held passage of the mapped work, from the held
-# passage urn to a meter:<name> descriptor node. Exercised against the REAL
-# staged TSV (HHAphrodite, retrieved 2026-07-24) laid out as the canonical tree
-# stores it, with in-memory grc passages seeded to match.
+# Nabu::HypotacticMeter (P44-6): the Greek METER enrichment producer — the
+# SECOND producer on the P44-7 meter seam (kind="meter", model="hypotactic",
+# coexisting with pedecerto's Latin rows under the same kind). Reads the
+# canonical tsv/ tree and writes ONE enrichments row per line matched (by
+# folded grc text, not citation) against a held passage of the mapped work.
+# Exercised against the REAL staged TSV (HHAphrodite, retrieved 2026-07-24)
+# laid out as the canonical tree stores it, with in-memory grc passages seeded
+# to match.
 class HypotacticMeterTest < Minitest::Test
   include StoreTestDB
 
@@ -32,15 +33,10 @@ class HypotacticMeterTest < Minitest::Test
 
   def setup
     @catalog = store_test_db
-    @journal = Nabu::Store::LinksJournal.migrate!(Nabu::Store::LinksJournal.connect("sqlite::memory:"))
-  end
-
-  def teardown
-    @journal.disconnect
   end
 
   def producer
-    Nabu::HypotacticMeter.new(catalog: @catalog, journal: @journal)
+    Nabu::HypotacticMeter.new(catalog: @catalog)
   end
 
   # --- TSV parse on the real fixture -----------------------------------------
@@ -68,33 +64,36 @@ class HypotacticMeterTest < Minitest::Test
 
   # --- fold-based matching: the HIT ------------------------------------------
 
-  def test_matches_lines_by_folded_text_and_mints_meter_edges
+  def test_matches_lines_by_folded_text_and_writes_meter_rows
     seed_hymn!(L1_URN => L1, L2_URN => L2, L9_URN => L9)
     result = producer.run("hypotactic", workdir: FIXTURES)
 
     assert_equal 1, result.files
+    assert_equal 293, result.lines_read
     assert_equal 1, result.mapped_works
     assert_equal 0, result.unmapped_works
-    assert_equal 3, result.matched_lines, "the three seeded lines matched by text"
-    assert_equal 3, result.edges_written
-    assert_equal ["meter"], @journal[:links].select_map(:kind).uniq, "the new enrichment kind"
+    assert_equal 3, result.matched, "the three seeded lines matched by text"
+    assert_equal 3, @catalog[:enrichments].count
+    assert_equal [["meter", "hypotactic"]],
+                 @catalog[:enrichments].select_map(%i[kind model]).uniq,
+                 "the shared meter kind, this producer's own model"
 
-    edge = edge_from(L1_URN)
-    assert_equal "meter:dactylic-hexameter", edge[:to_urn], "the grouping descriptor node"
-    assert_equal "scansion -u u -uu -u u--- uu-- · caesura feminine penthemimeral · " \
-                 "Hypotactic (D. Chamberlain, hypotactic.com)", edge[:detail],
-                 "scansion + caesura + the Chamberlain attribution ride the edge detail"
-    assert_nil edge[:score], "an upstream scansion is not a mined similarity score"
+    payload = meter_payload(L1_URN)
+    assert_equal "dactylic hexameter", payload["meter"]
+    assert_equal "-u u -uu -u u--- uu--", payload["pattern"],
+                 "the scansion stored as pattern — the shared show line renders it verbatim"
+    assert_equal "feminine penthemimeral", payload["caesura"]
+    assert_equal "Hypotactic (D. Chamberlain, hypotactic.com)", payload["credit"],
+                 "the Chamberlain reference rides every payload (the mirror README's ask)"
   end
 
-  def test_the_lyric_line_gets_its_own_meter_node_and_no_caesura
+  def test_the_lyric_line_omits_caesura_from_the_payload
     seed_hymn!(L9_URN => L9)
     producer.run("hypotactic", workdir: FIXTURES)
 
-    edge = edge_from(L9_URN)
-    assert_equal "meter:lyric", edge[:to_urn]
-    assert_equal "scansion - u u -uu -u u-uu -u-- · Hypotactic (D. Chamberlain, hypotactic.com)",
-                 edge[:detail], "no caesura fragment when the line carries none"
+    payload = meter_payload(L9_URN)
+    assert_equal "lyric", payload["meter"]
+    refute payload.key?("caesura"), "an empty caesura column stores NO key — an honest absence"
   end
 
   def test_matches_are_robust_to_elision_and_punctuation_spelling
@@ -103,8 +102,8 @@ class HypotacticMeterTest < Minitest::Test
     perseus_l2 = "Κύπριδος, ἥτε θεοῖσιν ἐπὶ γλυκὺν ἵμερον ὦρσε·"
     seed_hymn!(L2_URN => perseus_l2)
     result = producer.run("hypotactic", workdir: FIXTURES)
-    assert_equal 1, result.matched_lines, "the differently-punctuated held line still matches"
-    refute_nil edge_from(L2_URN)
+    assert_equal 1, result.matched, "the differently-punctuated held line still matches"
+    refute_nil meter_payload(L2_URN)
   end
 
   # --- the MISS + honest census ----------------------------------------------
@@ -113,20 +112,21 @@ class HypotacticMeterTest < Minitest::Test
     seed_hymn!(L1_URN => L1) # hold only one of the 293 lines
     result = producer.run("hypotactic", workdir: FIXTURES)
 
-    assert_equal 1, result.matched_lines
-    assert_equal 292, result.unmatched_lines, "the 292 unheld lines are censused, not guessed"
-    assert_equal 292, result.unknown_ids, "unmatched surfaces in the generic sync tail"
-    assert_equal 1, @journal[:links].count
+    assert_equal 1, result.matched
+    assert_equal 292, result.unmatched, "the 292 unheld lines are censused, not guessed"
+    assert_equal 1, @catalog[:enrichments].count
   end
 
   def test_a_mapped_work_with_no_held_passages_censuses_all_lines
-    # WORK_MAP knows HHAphrodite → tlg0013.tlg005, but nothing is held.
+    # WORK_MAP knows HHAphrodite → tlg0013.tlg005, but nothing is held: the
+    # file counts as an unmapped work (the pedecerto rule — a mapped work is
+    # one that resolved at least one line).
     result = producer.run("hypotactic", workdir: FIXTURES)
-    assert_equal 1, result.mapped_works
-    assert_equal 0, result.unmapped_works
-    assert_equal 0, result.matched_lines
-    assert_equal 293, result.unmatched_lines
-    assert_equal 0, @journal[:links].count
+    assert_equal 0, result.mapped_works
+    assert_equal 1, result.unmapped_works
+    assert_equal 0, result.matched
+    assert_equal 293, result.unmatched
+    assert_equal 0, @catalog[:enrichments].count
   end
 
   def test_an_unmapped_tsv_is_censused_as_an_unmapped_work
@@ -139,97 +139,109 @@ class HypotacticMeterTest < Minitest::Test
       result = producer.run("hypotactic", workdir: dir)
       assert_equal 0, result.mapped_works
       assert_equal 1, result.unmapped_works, "no WORK_MAP entry → an unmapped work, censused"
-      assert_equal 2, result.unmatched_lines
-      assert_equal 0, @journal[:links].count, "an unmapped work mints nothing — never guessed"
+      assert_equal 2, result.unmatched
+      assert_equal 0, @catalog[:enrichments].count, "an unmapped work mints nothing — never guessed"
     end
   end
 
-  # --- the consumer: meter surfaces in show's footer + nabu links ------------
+  # --- the consumer: the shared show meter line ------------------------------
 
-  def test_meter_edge_surfaces_in_the_show_linked_footer
-    seed_hymn!(L1_URN => L1)
+  def test_meter_surfaces_on_the_shared_show_line
+    seed_hymn!(L1_URN => L1, L2_URN => L2)
     producer.run("hypotactic", workdir: FIXTURES)
 
-    counts = Nabu::Store::LinksJournal.kind_counts(@journal, L1_URN)
-    assert_equal({ "meter" => 1 }, counts, "`show`'s linked footer counts it: 'linked: 1 meter'")
-    assert_empty Nabu::Store::LinksJournal.kind_counts(@journal, L2_URN),
-                 "a line with no meter edge shows nothing — zero-signal silence"
+    result = Nabu::Query::Show.new(catalog: @catalog).run(L1_URN)
+    meter = result.meter
+    refute_nil meter, "a scanned passage carries the meter enrichment on its show card"
+    assert_equal "dactylic hexameter", meter.meter
+    assert_equal "-u u -uu -u u--- uu--", meter.pattern
+    assert_equal "hypotactic", meter.producer, "the shared line names this producer as the model"
   end
 
-  def test_meter_lists_cleanly_in_nabu_links
-    seed_hymn!(L1_URN => L1)
+  def test_an_unscanned_passage_shows_no_meter
+    seed_hymn!(L1_URN => L1, "#{WORK_URN}:999" => "οὐδέν τι τοιοῦτον")
     producer.run("hypotactic", workdir: FIXTURES)
 
-    result = Nabu::Query::Links.new(catalog: @catalog, journal: @journal).run(L1_URN)
-    refute_nil result
-    edges = result.groups.fetch("meter")
-    assert_equal "meter:dactylic-hexameter", edges.first.urn
-    assert_includes edges.first.detail, "-u u -uu -u u--- uu--", "the scansion is on the edge"
-    refute edges.first.resolved?, "a meter descriptor node is honestly '(not in catalog)'"
+    result = Nabu::Query::Show.new(catalog: @catalog).run("#{WORK_URN}:999")
+    assert_nil result.meter, "no scansion, no meter line — byte-identical absence"
   end
 
-  # --- run mechanics: idempotency, supersede-scoped, rebuild-equivalence -----
+  # --- the (kind, model) coexistence with pedecerto --------------------------
 
-  def test_rerun_supersedes_and_is_idempotent
+  def test_supersede_is_scoped_to_this_model_pedecerto_rows_survive
+    seed_hymn!(L1_URN => L1)
+    passage_id = @catalog[:passages].where(urn: L1_URN).get(:id)
+    # a pedecerto row on the SAME passage under the same kind (the Latin
+    # overlap cannot happen live — the lanes split by language — but the
+    # supersede scope must still be (kind, model), never kind-wide)
+    Nabu::Store::Enrichment.write!(@catalog, passage_id: passage_id, kind: "meter",
+                                             model: "pedecerto", model_version: "test",
+                                             payload: { "meter" => "H", "pattern" => "DSDS" })
+    producer.run("hypotactic", workdir: FIXTURES)
+    producer.run("hypotactic", workdir: FIXTURES)
+
+    assert_equal 1, @catalog[:enrichments].where(model: "pedecerto").count,
+                 "supersede is scoped to (kind=meter, model=hypotactic) — pedecerto rows untouched"
+    assert_equal 1, @catalog[:enrichments].where(model: "hypotactic").count
+  end
+
+  # --- idempotency / rebuild-equivalence -------------------------------------
+
+  def test_rerun_supersedes_and_yields_identical_rows
     seed_hymn!(L1_URN => L1, L2_URN => L2, L9_URN => L9)
     first = producer.run("hypotactic", workdir: FIXTURES)
+    before = meter_rows
     second = producer.run("hypotactic", workdir: FIXTURES)
 
-    assert_equal first.matched_lines, second.matched_lines
-    assert_equal 1, second.superseded_runs
-    assert_equal first.edges_written, second.superseded_edges
-    assert_equal 3, @journal[:links].count, "the journal holds exactly the current meter graph"
-    run = @journal[:link_runs].first(id: second.run_id)
-    assert_equal "hypotactic", run[:producer]
-    assert_equal "hypotactic", run[:scope]
+    assert_equal first.matched, second.matched
+    assert_equal 3, second.superseded, "the prior run's rows are superseded, not duplicated"
+    assert_equal before, meter_rows, "a rerun re-derives identical rows"
+    assert_equal 3, @catalog[:enrichments].count
   end
 
-  def test_supersede_is_scoped_to_this_producer
-    seed_hymn!(L1_URN => L1)
-    foreign = Nabu::Store::LinksJournal.record_run!(@journal, producer: "parallels", scope: "perseus",
-                                                              params: {}, code_version: "test")
-    Nabu::Store::LinksJournal.write_edge!(@journal, from_urn: L1_URN, to_urn: L2_URN,
-                                                    kind: "parallel", score: 0.9, run_id: foreign)
-    producer.run("hypotactic", workdir: FIXTURES)
-    producer.run("hypotactic", workdir: FIXTURES)
-
-    assert_equal 1, @journal[:links].where(kind: "parallel").count,
-                 "supersede is scoped to (producer=hypotactic, scope=hypotactic) — parallel untouched"
-  end
-
-  def test_rebuild_equivalence_after_dropping_the_journal
+  # The rebuild seam: a fresh catalog + the same canonical corpus re-derives
+  # the identical meter layer (Rebuild#replay_enrichments drives exactly this).
+  def test_fresh_catalog_rebuild_equivalence
     seed_hymn!(L1_URN => L1, L2_URN => L2, L9_URN => L9)
     producer.run("hypotactic", workdir: FIXTURES)
-    before = meter_edges
+    before = meter_rows
 
-    @journal.disconnect
-    @journal = Nabu::Store::LinksJournal.migrate!(Nabu::Store::LinksJournal.connect("sqlite::memory:"))
+    @catalog = store_test_db
+    seed_hymn!(L1_URN => L1, L2_URN => L2, L9_URN => L9)
     producer.run("hypotactic", workdir: FIXTURES)
 
-    assert_equal before, meter_edges, "identical edges re-derived from canonical tsv + catalog"
+    assert_equal before, meter_rows, "identical rows re-derived from canonical + the fresh catalog"
   end
 
-  def test_a_workdir_without_the_tree_is_a_no_op_that_supersedes_nothing
+  def test_absent_corpus_is_a_noop_that_supersedes_nothing
     seed_hymn!(L1_URN => L1)
     producer.run("hypotactic", workdir: FIXTURES)
-    count = @journal[:links].count
+    count = @catalog[:enrichments].count
     Dir.mktmpdir do |empty|
       result = producer.run("hypotactic", workdir: empty)
-      assert_equal 0, result.edges_written
-      assert_equal 0, result.superseded_runs, "a parse-only sync before the fetch must not wipe edges"
-      assert_nil result.run_id
+      assert_equal 0, result.matched
+      assert_equal 0, result.superseded, "a parse-only sync before the fetch must not wipe the layer"
     end
-    assert_equal count, @journal[:links].count
+    assert_equal count, @catalog[:enrichments].count
   end
 
   private
 
-  def edge_from(urn)
-    @journal[:links].first(from_urn: urn)
+  # The stored payload for the passage at +urn+, or nil.
+  def meter_payload(urn)
+    passage_id = @catalog[:passages].where(urn: urn).get(:id)
+    row = @catalog[:enrichments].where(passage_id: passage_id, kind: "meter", model: "hypotactic").first
+    row && JSON.parse(row[:payload_json])
   end
 
-  def meter_edges
-    @journal[:links].where(kind: "meter").select_map(%i[from_urn to_urn detail]).sort
+  # Every hypotactic meter row keyed by passage URN (id-independent, so
+  # rebuild-equivalence compares across catalogs whose ids differ).
+  def meter_rows
+    @catalog[:enrichments]
+      .join(:passages, id: Sequel[:enrichments][:passage_id])
+      .where(kind: "meter", model: "hypotactic")
+      .select_map([Sequel[:passages][:urn], Sequel[:enrichments][:payload_json]])
+      .sort
   end
 
   # A held Perseus grc document with one passage per { urn => verbatim text }.

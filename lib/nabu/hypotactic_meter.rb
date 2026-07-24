@@ -3,50 +3,51 @@
 require_relative "normalize"
 
 module Nabu
-  # The METER producer (P44-6): Hypotactic's Greek metrical scansions
-  # (D. Chamberlain, hypotactic.com; mirror github.com/Urdatorn/hypotactic)
-  # layered onto held Perseus lines. Registered on the `hypotactic` feature
-  # module (kind: module) and run by SyncRunner after every hypotactic sync via
-  # Adapter.reference_producer — the same post-sync "re-derive a pure function
-  # of the loaded rows" seam the trismegistos/kitab instruments ride.
+  # The Greek METER enrichment producer (P44-6): Hypotactic's metrical
+  # scansions (D. Chamberlain, hypotactic.com; mirror
+  # github.com/Urdatorn/hypotactic) layered onto held Perseus lines as
+  # per-passage `enrichments` rows — the SECOND producer on the P44-7 meter
+  # seam (PedecertoScansions is the first): kind="meter", model="hypotactic",
+  # so the two coexist under one kind and each rerun supersedes only its own
+  # (kind, model) rows. Registered on the `hypotactic` feature module (kind:
+  # module) and driven by SyncRunner#refresh_enrichments after every
+  # hypotactic sync and by Rebuild#replay_enrichments on every rebuild.
   #
-  # == Placement: a links-journal kind="meter" edge, NOT a catalog enrichment
+  # == Placement: the enrichments table (the P44-7 seam), argued
   #
-  # Meter is a DERIVED per-passage analysis over lines nabu already holds from
-  # ANOTHER source (Perseus). Three placements were weighed against the store:
+  # A scansion is a PROPERTY OF ONE PASSAGE, not a relation between two urns —
+  # the enrichments table is its home (never passages.annotations_json: that
+  # row is Perseus's, written once through its own gateway at parse). The
+  # table lives in catalog.sqlite3 and keys on re-minted passage_ids, so it
+  # does not survive a rebuild passively; it is RE-DERIVED instead —
+  # Rebuild#replay_enrichments re-runs this producer against canonical + the
+  # fresh catalog, so meter is genuinely db = f(canonical) (the
+  # rebuildability invariant satisfied by construction, the pedecerto
+  # pattern). An earlier draft of this packet minted links-journal
+  # kind="meter" edges to meter:<slug> descriptor nodes; superseded by the
+  # orchestrator's seam ruling — an edge needs a second urn, and a meter
+  # descriptor node was a synthetic one.
   #
-  #   - passages.annotations_json — WRONG: that row is Perseus's, written once
-  #     through its own gateway at parse; a cross-source producer must never
-  #     mutate it (CLAUDE.md's one-write-gateway rule), and it is rebuilt from
-  #     Perseus's canonical XML, which carries no meter.
-  #   - the enrichments table — semantically apt (a derived per-passage payload)
-  #     but it lives IN the catalog, which `nabu rebuild` DROPS and regenerates
-  #     from each source's own parse; no adapter parse re-derives cross-source
-  #     meter, and rebuild's replay_enrichments hook is a no-op — so meter there
-  #     would silently vanish on the next rebuild (the derived-must-stay-
-  #     rebuildable invariant, broken).
-  #   - the links journal — CHOSEN. It is the dedicated store for derived data
-  #     that is "a function of (canonical, params, code) … must survive a
-  #     rebuild … but a rerun legitimately REPLACES its edges" (LinksJournal's
-  #     own header). rebuild never touches it; losing it costs one re-run. This
-  #     is exactly meter's lifecycle, and the plan (P44-6) lists the links-edge
-  #     placement explicitly.
+  # == The payload (the TSV columns, verbatim)
   #
-  # So each matched line mints ONE edge, kind="meter":
-  #   from  the held Perseus passage urn (catalog-resident by construction —
-  #         we only mint for a line we matched against a held passage)
-  #   to    meter:<meter-name-slug>  (e.g. meter:dactylic-hexameter) — a
-  #         descriptor node grouping every line of that meter; renders
-  #         "(not in catalog)" honestly, the tm:/dict: external-node precedent
-  #   detail  the scansion pattern + caesura + the Chamberlain attribution, so
-  #           `nabu links` shows the full per-line evidence and `nabu show`'s
-  #           footer counts it ("linked: N meter") for free.
+  #   { "meter"   => "dactylic hexameter",          (column 3)
+  #     "pattern" => "-u u -uu -u u--- uu--",       (column 2, the scansion)
+  #     "caesura" => "feminine penthemimeral",      (column 4; ABSENT when the
+  #                                                  line carries none)
+  #     "credit"  => CREDIT }
   #
-  # The attribution rides the edge detail (the README's ask: "if you make …
-  # extensive use … you should reference me (David Chamberlain) and this site").
-  # A feature module serves no passages of its own, so the source-level P43-2
-  # `credit:` line has no card to render on — the per-edge detail IS the honest
-  # attribution surface here.
+  # "pattern" (not "scansion") so the shared `show` meter line — which renders
+  # payload["meter"] + payload["pattern"] + the model name — carries the
+  # scansion with zero display changes: `meter: dactylic hexameter -u u -uu …
+  # (hypotactic)`. The caesura and the Chamberlain credit ride the payload for
+  # any richer consumer (the show line itself cannot carry them — recorded in
+  # the sources.yml row and docs/02-sources.md).
+  #
+  # The credit honors the mirror README's ask ("if you make significant or
+  # extensive use of it in published work you should reference me (David
+  # Chamberlain) and this site (hypotactic.com)") — a feature module serves no
+  # passages of its own, so the P43-2 source-level credit: seam has no card to
+  # render on; the payload is where Hypotactic data actually lives.
   #
   # == Resolution: match by TEXT, never by citation, never fuzzy
   #
@@ -58,28 +59,29 @@ module Nabu
   # (δ᾽ vs δ’), spacing and final punctuation cannot split a match — and look it
   # up EXACTLY against the same fold of the held passages within the mapped
   # work. Exact-key equality only: no fuzzy matching, ever (the plan's rule),
-  # so a mismatch is censused, never guessed into a false edge.
+  # so a mismatch is censused, never guessed into a false enrichment.
   #
   # == Census (HONEST, first-sync owner report)
   #
-  # Result carries files, mapped_works/unmapped_works and matched_lines/
-  # unmatched_lines. An UNMAPPED file (no WORK_MAP entry) and a mapped work
-  # whose target is not held both census their whole line count as unmatched —
-  # nothing is silently dropped. `unknown_ids` surfaces unmatched_lines in the
-  # generic sync tail ("?N unknown upstream" = N upstream scansion lines the
-  # held catalog cannot place), the trismegistos census precedent.
+  # Result mirrors PedecertoScansions::Result — files, lines_read,
+  # matched/unmatched (LINE counts), mapped_works/unmapped_works, superseded —
+  # so the shared sync tail renders both meter producers identically ("meter N
+  # lines matched, M unmatched (K works of L)"). An UNMAPPED file (no WORK_MAP
+  # entry) and a mapped work with no held witness both census their whole line
+  # count as unmatched — nothing is silently dropped.
   #
   # == Refresh mechanics (the standing producer contract)
   #
-  # Edges are a pure function of (canonical tsv/ tree, catalog, code): a rerun
-  # supersedes the prior (producer, scope) run atomically; a workdir WITHOUT the
+  # Rows are a pure function of (canonical tsv/ tree, catalog, code): a rerun
+  # supersedes this producer's prior (kind, model) rows; a workdir WITHOUT the
   # tree (every parse-only sync before the first fetch) is a no-op that
-  # supersedes nothing. Dropping the journal and re-running re-derives identical
-  # edges (the rebuild-equivalence test).
+  # supersedes nothing, so a standing meter layer survives. Superseding and
+  # re-running yields identical rows (the rebuild-equivalence test).
   class HypotacticMeter
     PRODUCER = "hypotactic"
     KIND = "meter"
-    CODE_VERSION = "hypotactic-meter/1 nabu/#{VERSION}".freeze
+    MODEL = "hypotactic"
+    CODE_VERSION = "hypotactic-meter/2 nabu/#{VERSION}".freeze
 
     # Where Adapters::Hypotactic#fetch lands the per-work TSVs.
     DIRNAME = "tsv"
@@ -87,7 +89,7 @@ module Nabu
     # The held grc lines are Perseus's; fold BOTH sides identically.
     MATCH_LANGUAGE = "grc"
 
-    # The attribution the README asks for, carried on every meter edge.
+    # The attribution the README asks for, carried in every payload.
     CREDIT = "Hypotactic (D. Chamberlain, hypotactic.com)"
 
     # == The filename → held-work map (evidence-commented; unmapped = censused)
@@ -111,87 +113,88 @@ module Nabu
       "HHAphrodite" => "tlg0013.tlg005"
     }.freeze
 
-    # The LibraryReferences::Result-shaped value the sync tail renders, plus the
-    # honesty census. edges_written/refreshed/superseded map to the reference
-    # tail's counters; unknown_ids surfaces unmatched_lines (class note).
-    Result = Data.define(:scope, :run_id, :edges_written, :edges_refreshed,
-                         :superseded_runs, :superseded_edges,
-                         :files, :mapped_works, :unmapped_works,
-                         :matched_lines, :unmatched_lines) do
-      def unknown_ids = unmatched_lines
+    # One refresh's census — the PedecertoScansions::Result shape, field for
+    # field, so the shared sync/rebuild tail renders both meter producers
+    # identically. matched/unmatched are LINE counts.
+    Result = Data.define(:scope, :files, :lines_read, :matched, :unmatched,
+                         :mapped_works, :unmapped_works, :superseded) do
+      def initialize(files: 0, lines_read: 0, matched: 0, unmatched: 0,
+                     mapped_works: 0, unmapped_works: 0, superseded: 0, **rest)
+        super
+      end
     end
 
-    def initialize(catalog:, journal:)
+    def initialize(catalog:)
       @catalog = catalog
-      @journal = journal
     end
 
-    # Re-derive every meter edge from <workdir>/tsv/*.tsv, superseding the prior
-    # run. A missing tree is the honest no-op (class note).
-    def run(slug, workdir: nil)
-      dir = workdir && File.join(workdir, DIRNAME)
-      files = dir && File.directory?(dir) ? Dir.glob(File.join(dir, "*.tsv")) : []
-      return absent_result(slug) if files.empty?
+    # Re-derive every hypotactic meter row from <workdir>/tsv/*.tsv,
+    # superseding this producer's prior (kind, model) rows. A missing tree is
+    # the honest no-op that supersedes nothing (class note).
+    def run(scope, workdir: nil)
+      files = corpus_files(workdir)
+      return Result.new(scope: scope) if files.empty?
 
       counts = Hash.new(0)
-      run_id = superseded = nil
-      @journal.transaction do
-        superseded = Store::LinksJournal.supersede!(@journal, producer: PRODUCER, scope: slug)
-        run_id = Store::LinksJournal.record_run!(@journal, producer: PRODUCER, scope: slug,
-                                                           params: { kind: KIND }, code_version: CODE_VERSION)
-        files.each { |path| write_file_edges(path, run_id, counts) }
+      @catalog.transaction do
+        counts[:superseded] = Store::Enrichment.supersede!(@catalog, kind: KIND, model: MODEL)
+        files.each { |path| ingest_file(path, counts) }
       end
-      build_result(slug, run_id, superseded, files.size, counts)
+      Result.new(scope: scope, files: files.size,
+                 lines_read: counts[:lines], matched: counts[:matched], unmatched: counts[:unmatched],
+                 mapped_works: counts[:mapped_works], unmapped_works: counts[:unmapped_works],
+                 superseded: counts[:superseded])
     end
 
     private
 
-    def build_result(slug, run_id, superseded, files, counts)
-      Result.new(scope: slug, run_id: run_id,
-                 edges_written: counts[:inserted], edges_refreshed: counts[:refreshed],
-                 superseded_runs: superseded[0], superseded_edges: superseded[1],
-                 files: files, mapped_works: counts[:mapped], unmapped_works: counts[:unmapped],
-                 matched_lines: counts[:inserted] + counts[:refreshed], unmatched_lines: counts[:unmatched])
+    def corpus_files(workdir)
+      return [] unless workdir
+
+      # Dir.glob returns a sorted list (Ruby 3+), so iteration order is stable.
+      Dir.glob(File.join(workdir, DIRNAME, "*.tsv"))
     end
 
-    def absent_result(slug)
-      Result.new(scope: slug, run_id: nil, edges_written: 0, edges_refreshed: 0,
-                 superseded_runs: 0, superseded_edges: 0, files: 0,
-                 mapped_works: 0, unmapped_works: 0, matched_lines: 0, unmatched_lines: 0)
-    end
-
-    # One TSV file → edges for every line that matches a held passage of the
-    # mapped work. Census, three states kept distinct:
+    # One TSV file → meter rows for every line matched against a held passage
+    # of the mapped work. Census, three states kept distinct:
     #   - no WORK_MAP entry           → unmapped_works++, all lines unmatched
-    #   - mapped but work not held    → mapped_works++,   all lines unmatched
+    #   - mapped but work not held    → unmapped_works++, all lines unmatched
+    #     (the pedecerto rule: a "mapped work" is one that resolved ≥1 line)
     #   - mapped and held             → mapped_works++,   line-by-line match
-    def write_file_edges(path, run_id, counts)
+    def ingest_file(path, counts)
       rows = parse_tsv(path)
+      counts[:lines] += rows.size
       work = WORK_MAP[File.basename(path, ".tsv")]
-      if work.nil?
-        counts[:unmapped] += 1
-        counts[:unmatched] += rows.size
-        return
+      index = work ? held_line_index(work) : {}
+      before = counts[:matched]
+      rows.each do |row|
+        passage_id = index[match_key(row[:text])]
+        if passage_id
+          write_meter(passage_id, row, counts)
+        else
+          counts[:unmatched] += 1
+        end
       end
-      counts[:mapped] += 1
-      index = held_line_index(work)
-      return counts[:unmatched] += rows.size if index.empty?
-
-      rows.each { |row| match_row(row, index, run_id, counts) }
+      counts[counts[:matched] > before ? :mapped_works : :unmapped_works] += 1
     end
 
-    def match_row(row, index, run_id, counts)
-      passage_urn = index[match_key(row[:text])]
-      return counts[:unmatched] += 1 if passage_urn.nil?
-
-      outcome = Store::LinksJournal.write_edge!(
-        @journal, from_urn: passage_urn, to_urn: meter_node(row[:meter]),
-                  kind: KIND, score: nil, run_id: run_id, detail: edge_detail(row)
-      )
-      counts[outcome == :inserted ? :inserted : :refreshed] += 1
+    def write_meter(passage_id, row, counts)
+      Store::Enrichment.write!(@catalog, passage_id: passage_id, kind: KIND, model: MODEL,
+                                         model_version: CODE_VERSION, payload: payload_for(row))
+      counts[:matched] += 1
     end
 
-    # { fold-key => passage_urn } over the held grc passages of every edition of
+    # The stored payload (class note): meter + pattern feed the shared show
+    # line verbatim; caesura only when the line carries one; the Chamberlain
+    # credit always.
+    def payload_for(row)
+      payload = { "meter" => row[:meter], "pattern" => row[:scansion] }
+      payload["caesura"] = row[:caesura] unless row[:caesura].empty?
+      payload["credit"] = CREDIT
+      payload
+    end
+
+    # { fold-key => passage_id } over the held grc passages of every edition of
     # the mapped work. First writer wins on a key collision (a repeated line in
     # one poem is vanishingly rare and either witness is a true attestation).
     def held_line_index(work)
@@ -200,12 +203,12 @@ module Nabu
              .join(:documents, id: Sequel[:passages][:document_id])
              .where(Sequel.like(Sequel[:documents][:urn], like))
              .where(Sequel[:passages][:language] => MATCH_LANGUAGE)
-             .select(Sequel[:passages][:urn].as(:urn), Sequel[:passages][:text].as(:text))
+             .select(Sequel[:passages][:id].as(:passage_id), Sequel[:passages][:text].as(:text))
              .all
       index = {}
       rows.each do |row|
         key = match_key(row[:text])
-        index[key] ||= row[:urn] unless key.empty?
+        index[key] ||= row[:passage_id] unless key.empty?
       end
       index
     end
@@ -218,24 +221,8 @@ module Nabu
       Normalize.search_form(text, language: MATCH_LANGUAGE).gsub(/[^[:alpha:]]/, "")
     end
 
-    # meter:<slug> — the grouping descriptor node ("dactylic hexameter" →
-    # meter:dactylic-hexameter, "lyric" → meter:lyric).
-    def meter_node(meter)
-      slug = meter.to_s.strip.downcase.gsub(/[^a-z0-9]+/, "-").gsub(/\A-|-\z/, "")
-      "meter:#{slug.empty? ? 'unknown' : slug}"
-    end
-
-    # scansion · caesura · credit — caesura omitted when the line carries none
-    # (the lyric lines and a few hexameters leave it blank).
-    def edge_detail(row)
-      parts = ["scansion #{row[:scansion]}"]
-      parts << "caesura #{row[:caesura]}" unless row[:caesura].empty?
-      parts << CREDIT
-      parts.join(" · ")
-    end
-
     # The four TAB columns — line text · scansion · meter · caesura — verbatim
-    # (only trailing whitespace trimmed per field). The filename carries the
+    # (only surrounding whitespace trimmed per field). The filename carries the
     # work; line order is the line number, but we resolve by text, not order.
     # A row without the four columns is a malformed file → loud ParseError.
     def parse_tsv(path)

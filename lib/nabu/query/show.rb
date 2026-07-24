@@ -49,10 +49,16 @@ module Nabu
       PassageResult = Data.define(
         :urn, :language, :sequence, :revision, :withdrawn, :text,
         :document_urn, :document_title, :source_slug, :license_class, :provenance, :timeline,
-        :annotations, :credit
+        :annotations, :credit, :meter
       ) do
-        def initialize(timeline: nil, annotations: {}, credit: nil, **) = super
+        def initialize(timeline: nil, annotations: {}, credit: nil, meter: nil, **) = super
       end
+
+      # A meter enrichment attached to a passage (P44-7): the metrical code
+      # ("H" hexameter, "P" pentameter, …), the dactyl/spondee foot +pattern+,
+      # and +producer+ (the enrichments row's model — "pedecerto"). nil when the
+      # passage carries no scansion (every ordinary passage).
+      Meter = Data.define(:meter, :pattern, :producer)
 
       # One line of a document listing: a passage's urn and text, in sequence
       # (+annotations+ for the display layer's edition context, P27-1).
@@ -250,8 +256,30 @@ module Nabu
           provenance: provenance_events(row.fetch(:passage_id)),
           timeline: timeline_for(row.fetch(:document_id)),
           annotations: parse_annotations(row),
-          credit: row.fetch(:credit)
+          credit: row.fetch(:credit),
+          meter: meter_for(row.fetch(:passage_id))
         )
+      end
+
+      # The passage's meter enrichment (P44-7), or nil when it carries none —
+      # the seam proving a consumer reads the enrichments layer. One row per
+      # passage per producer; the first (by id) is rendered. Degrades to nil on
+      # a catalog predating the enrichments table or on unreadable payload JSON,
+      # never crashes (the facets_for/timeline_for stance).
+      def meter_for(passage_id)
+        return nil unless @catalog.table_exists?(:enrichments)
+
+        row = @catalog[:enrichments]
+              .where(passage_id: passage_id, kind: "meter")
+              .order(:id)
+              .select(:model, :payload_json)
+              .first
+        return nil if row.nil?
+
+        payload = JSON.parse(row[:payload_json].to_s)
+        Meter.new(meter: payload["meter"], pattern: payload["pattern"], producer: row[:model])
+      rescue JSON::ParserError
+        nil
       end
 
       def build_document(row)

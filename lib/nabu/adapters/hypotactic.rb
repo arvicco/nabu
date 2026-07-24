@@ -4,11 +4,13 @@ module Nabu
   module Adapters
     # Hypotactic — David Chamberlain's metrical scansions of Greek verse
     # (hypotactic.com), registered as a FEATURE MODULE (kind: module), not a
-    # text source. It mints NO catalog rows: its data is a NEW enrichment kind —
-    # meter — layered onto held Perseus lines as links-journal kind="meter"
-    # edges (P44-6). The parse/load work lives entirely in the meter producer
-    # Nabu::HypotacticMeter, wired via reference_producer below and run by
-    # SyncRunner after every hypotactic sync — so, like the trismegistos and
+    # text source. It mints NO catalog rows: its data is the meter enrichment
+    # layer (P44-6) — per-passage `enrichments` rows (kind="meter",
+    # model="hypotactic") on held Perseus lines, the SECOND producer on the
+    # P44-7 meter seam beside Pedecerto's Latin lane. The parse/load work
+    # lives entirely in the meter producer Nabu::HypotacticMeter, wired via
+    # enrichment_producer below and run by SyncRunner after every hypotactic
+    # sync and by Rebuild#replay_enrichments — so, like the trismegistos and
     # kitab modules, discover yields NOTHING and parse is unreachable.
     #
     # GREEK LANE ONLY (v1). The Latin lane on hypotactic.com is JavaScript-
@@ -22,11 +24,12 @@ module Nabu
     # published work you should reference me (David Chamberlain) and this site
     # (hypotactic.com)." → class `attribution`. This IS extensive use (a whole
     # scansion database layered onto the library), so the reference expectation
-    # is honored: every minted meter edge carries the "Hypotactic (D.
-    # Chamberlain, hypotactic.com)" credit in its detail (HypotacticMeter::
-    # CREDIT). A feature module serves no passages, so the source-level P43-2
-    # `credit:` seam has no card to render on — the per-edge detail is the
-    # attribution surface.
+    # is honored: every minted meter row carries the "Hypotactic (D.
+    # Chamberlain, hypotactic.com)" credit in its payload (HypotacticMeter::
+    # CREDIT; the shared show meter line names the model — the full credit
+    # rides the payload). A feature module serves no passages, so the
+    # source-level P43-2 `credit:` seam has no card to render on — the payload
+    # is the attribution surface.
     #
     # == fetch: the sparse git clone (the glaux/lila posture — now atomic)
     #
@@ -49,7 +52,7 @@ module Nabu
                  "own statement quoted verbatim in its README: \"you can use it as you wish, but " \
                  "if you make significant or extensive use of it in published work you should " \
                  "reference me (David Chamberlain) and this site (hypotactic.com)\" — class " \
-                 "attribution; the reference is honored on every minted meter edge's detail. " \
+                 "attribution; the reference is honored in every minted meter row's payload. " \
                  "GREEK lane only (the Latin lane on hypotactic.com is JS-blocked; Pedecerto " \
                  "covers Latin).",
         license_class: "attribution",
@@ -61,18 +64,20 @@ module Nabu
         MANIFEST
       end
 
-      # This module's data rides the links journal via HypotacticMeter, refreshed
-      # by SyncRunner after every sync (the trismegistos/kitab reference-producer
-      # seam — mechanism-general: it re-derives a pure function of the loaded
-      # rows and returns a Result-shaped value for the sync tail).
-      def self.reference_edges? = true
+      # This module's data rides the ENRICHMENT seam (kind="meter",
+      # model="hypotactic") via HypotacticMeter, refreshed by SyncRunner after
+      # every sync and re-derived by rebuild — the pedecerto wiring, declared
+      # here beside content_kind so SyncRunner / Rebuild find the producer
+      # without special-casing the slug.
+      def self.enrichment_producer? = true
 
-      def self.reference_producer(catalog:, journal:)
-        Nabu::HypotacticMeter.new(catalog: catalog, journal: journal)
+      def self.enrichment_producer(catalog:)
+        Nabu::HypotacticMeter.new(catalog: catalog)
       end
 
-      # A feature module mints no documents — its data is meter edges, not
-      # passages. Empty by design, not by accident (the kitab/trismegistos shape).
+      # A feature module mints no documents — its data is meter enrichment
+      # rows, not passages. Empty by design, not by accident (the
+      # kitab/trismegistos shape).
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
@@ -81,7 +86,7 @@ module Nabu
 
       def parse(document_ref)
         raise ParseError, "#{document_ref.id}: hypotactic is a meter instrument, not a text source — " \
-                          "its scansions ride the links journal as kind=meter edges (P44-6, " \
+                          "its scansions ride the enrichments table as kind=meter rows (P44-6, " \
                           "HypotacticMeter); parse is unreachable"
       end
 
