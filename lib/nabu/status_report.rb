@@ -131,7 +131,7 @@ module Nabu
       end
       Layout.new(
         slug_w: entries.map { |entry| entry.slug.length }.max,
-        col2_w: entries.map { |entry| col2(entry).length }.max,
+        col2_w: entries.map { |entry| col2(entry, ledger).length }.max,
         mark_w: marks.values.map(&:length).max || 0,
         holdings_w: holdings.values.map(&:length).max || 0,
         marks: marks, holdings: holdings, db: db, ledger: ledger
@@ -139,7 +139,7 @@ module Nabu
     end
 
     def render_entry(entry, layout)
-      head = "#{entry.slug.ljust(layout.slug_w)}  #{col2(entry).ljust(layout.col2_w)}"
+      head = "#{entry.slug.ljust(layout.slug_w)}  #{col2(entry, layout.ledger).ljust(layout.col2_w)}"
       return "#{head}  no database (run nabu sync)" if layout.db.nil?
 
       cells = [head]
@@ -153,15 +153,25 @@ module Nabu
     # `shelf`, a module `module` (enablement + cadence are moot). A SOURCE
     # reads a BARE cadence letter when enabled (the unmarked default) or
     # `off(letter)` when disabled — the word "source" never prints.
-    def col2(entry)
+    def col2(entry, ledger)
       return entry.kind unless entry.source?
-      # P44-r3b: a blocked (grant-gated private research) source, revealed only
-      # under --all, is marked in the status column — its existence is
-      # discoverable, its availability is not claimed.
-      return "blocked" if entry.blocked?
+      # A grant-gated private source: `granted` once its grant is acknowledged
+      # on this box (P44-i2 — it IS available here; "blocked" on a source the
+      # owner enabled and syncs was a contradiction, owner report 2026-07-24),
+      # `blocked` while unacknowledged (the P44-r3b --all reveal — existence
+      # discoverable, availability not claimed).
+      return grant_acknowledged?(entry, ledger) ? "granted" : "blocked" if entry.blocked?
 
       letter = CADENCE_LETTER.fetch(entry.sync_policy, "?")
       entry.enabled ? letter : "off(#{letter})"
+    end
+
+    # Is this source's fetch grant acknowledged on THIS box (the P42-r1 ledger
+    # record)? Drives blocked → granted in both status tables.
+    def grant_acknowledged?(entry, ledger)
+      return false if ledger.nil?
+
+      GrantGate.new(ledger: ledger).acknowledged?(entry.slug)
     end
 
     # The COMPACT liveness MARK, or nil when the row is SILENT (healthy or
@@ -281,7 +291,7 @@ module Nabu
       end
       LongLayout.new(
         slug_w: entries.map { |entry| entry.slug.length }.max,
-        enable_w: entries.map { |entry| enablement(entry).length }.max,
+        enable_w: entries.map { |entry| enablement(entry, ledger).length }.max,
         kind_w: entries.map { |entry| entry.kind.length }.max,
         up_w: labels.values.map(&:length).max || 0,
         counts_w: counts.values.map(&:length).max || 0,
@@ -291,7 +301,7 @@ module Nabu
     end
 
     def render_entry_long(entry, layout)
-      head = "#{entry.slug.ljust(layout.slug_w)}  #{enablement(entry).ljust(layout.enable_w)}  " \
+      head = "#{entry.slug.ljust(layout.slug_w)}  #{enablement(entry, layout.ledger).ljust(layout.enable_w)}  " \
              "#{entry.kind.ljust(layout.kind_w)}"
       return "#{head}  no database (run nabu sync)" if layout.db.nil?
 
@@ -304,9 +314,16 @@ module Nabu
 
     # col2 for the LONG table (P39-0): enablement fused with cadence — a source
     # reads on(a)/off(m)/…; a shelf or module reads "-" (enablement is moot).
-    def enablement(entry)
+    # Grant-gated: granted(letter) once acknowledged on this box (P44-i2),
+    # else the P44-r3b --all reveal.
+    def enablement(entry, ledger)
       return "-" unless entry.source?
-      return "blocked · grant required" if entry.blocked? # P44-r3b (--all reveal)
+
+      if entry.blocked?
+        return "granted(#{CADENCE_LETTER.fetch(entry.sync_policy, '?')})" if grant_acknowledged?(entry, ledger)
+
+        return "blocked · grant required"
+      end
 
       "#{entry.enabled ? 'on' : 'off'}(#{CADENCE_LETTER.fetch(entry.sync_policy, '?')})"
     end

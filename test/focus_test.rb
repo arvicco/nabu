@@ -131,6 +131,14 @@ class FocusTest < Minitest::Test
     assert_equal 2, view.registry_hidden
   end
 
+  # P44-i2 (owner report 2026-07-24: "which one source is 'not enabled'? How
+  # am I supposed to guess it?") — the hidden rows are nameable, not just
+  # countable, so a small gap prints its slugs.
+  def test_registry_hidden_slugs_names_the_rows_all_would_reveal
+    view = Nabu::Focus.view(profile: profile("germanic"), registry: @registry, all: false)
+    assert_equal %w[ccmh lex], view.registry_hidden_slugs.sort
+  end
+
   def test_filtered_registry_keeps_axes_for_grouping
     view = Nabu::Focus.view(profile: profile("germanic"), registry: @registry, all: false)
     assert_equal @registry.axes.names, view.registry.axes.names
@@ -165,15 +173,25 @@ class FocusTest < Minitest::Test
     assert_match(/nabu enable/, Nabu::Focus.empty_state_line)
   end
 
-  def test_footer_line_is_a_count_summary_never_a_name_dump
-    assert_equal "enabled: 2 entries — 3 sources not enabled (--all shows them)",
-                 Nabu::Focus.footer_line(%w[germanic rem], 3)
+  # P44-i2: a small gap is NAMED — a bare count is a guessing game (owner
+  # report 2026-07-24), while the enabled rows are still never re-dumped.
+  def test_footer_line_names_a_small_gap
+    assert_equal "enabled: 2 entries — not enabled: ccmh, lex (--all shows them)",
+                 Nabu::Focus.footer_line(%w[germanic rem], %w[ccmh lex])
   end
 
   def test_footer_line_singular_and_zero_suppressed
-    assert_equal "enabled: 1 entry — 1 source not enabled (--all shows them)",
-                 Nabu::Focus.footer_line(%w[germanic], 1)
-    assert_equal "enabled: 1 entry (nabu enable <axis|source> to add)", Nabu::Focus.footer_line(%w[germanic], 0)
+    assert_equal "enabled: 1 entry — not enabled: lila (--all shows it)",
+                 Nabu::Focus.footer_line(%w[germanic], %w[lila])
+    assert_equal "enabled: 1 entry (nabu enable <axis|source> to add)", Nabu::Focus.footer_line(%w[germanic], [])
+  end
+
+  # Beyond the name cap the count summary stands (a fresh box hides ~90
+  # sources — naming them all IS the name dump the owner refused).
+  def test_footer_line_falls_back_to_a_count_beyond_the_name_cap
+    hidden = (1..7).map { |i| "s#{i}" }
+    assert_equal "enabled: 2 entries — 7 sources not enabled (--all shows them)",
+                 Nabu::Focus.footer_line(%w[germanic rem], hidden)
   end
 
   def test_drift_line_names_the_ignored_entries
