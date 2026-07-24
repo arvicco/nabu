@@ -57,6 +57,9 @@ module Nabu
       # The present structural levels, named — a verse carries all four, a
       # chapter-level rubric only book+chapter (deeper keys absent, not nil).
       SECTION_KEYS = %w[book chapter paragraph verse].freeze
+      # Five components (P43-i2) mean a liturgical refrain rides between
+      # paragraph and verse: book chapter paragraph REFRAIN verse.
+      SECTION_KEYS_WITH_REFRAIN = %w[book chapter paragraph refrain verse].freeze
 
       def self.manifest
         Nabu::SourceManifest.new(
@@ -95,11 +98,23 @@ module Nabu
           urn: document_ref.id, language: LANGUAGE, canonical_path: document_ref.path,
           title: title_for(document_ref.metadata["page"], sections)
         )
+        # P43-i2 (the owner's first full sync): the liturgy REPEATS — 48 of
+        # the 248 live pages re-anchor an identical citation for a repeated
+        # recitation (1,256 extra occurrences corpus-wide; Y.0.13's Q1c/Q1d
+        # pairs are the fixture exemplar), which collided at Document#<<.
+        # A repeat disambiguates as `<citation>#<occurrence>` in document
+        # order (the P43-r2 kanripo shape) and carries the honest
+        # "repetition" annotation — a repeated recitation is real text,
+        # never a defect and never silently merged.
+        seen = Hash.new(0)
         sections.each_with_index do |section, sequence|
+          occurrence = (seen[section.components.join(".")] += 1)
+          annotations = section_annotations(section)
+          annotations["repetition"] = occurrence if occurrence > 1
           document << Nabu::Passage.new(
-            urn: passage_urn(document_ref.id, section), language: LANGUAGE,
+            urn: passage_urn(document_ref.id, section, occurrence), language: LANGUAGE,
             text: section.text, sequence: sequence,
-            annotations: section_annotations(section)
+            annotations: annotations
           )
         end
         document
@@ -128,13 +143,17 @@ module Nabu
 
       # Passage urn nests under the document (page) urn — the house convention
       # (sefaria: <doc-urn>:<tail>) so `show`'s suffix labels work — with the
-      # section's dotted citation as the tail: book[.chapter[.paragraph[.verse]]].
-      def passage_urn(document_urn, section)
-        "#{document_urn}:#{section.components.join('.')}"
+      # section's dotted citation as the tail: book[.chapter[.paragraph[.verse]]],
+      # and `#<occurrence>` appended for a repeated recitation (P43-i2).
+      def passage_urn(document_urn, section, occurrence = 1)
+        tail = section.components.join(".")
+        tail = "#{tail}##{occurrence}" if occurrence > 1
+        "#{document_urn}:#{tail}"
       end
 
       def section_annotations(section)
-        SECTION_KEYS.zip(section.components).to_h.compact
+        keys = section.components.size == 5 ? SECTION_KEYS_WITH_REFRAIN : SECTION_KEYS
+        keys.zip(section.components).to_h.compact
       end
 
       def title_for(stem, sections)

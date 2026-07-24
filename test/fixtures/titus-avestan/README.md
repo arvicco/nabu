@@ -13,8 +13,11 @@ Trimmed but structurally-intact real pages from the TITUS Avestan Corpus
 ## Trimming
 
 `avest.htm` is the 1.2 KB frameset entry, kept verbatim. `avest001.htm` keeps
-the full editorial header (the credit block), Book **Y** (Yasna), Chapter 0 and
-Paragraphs 1–3, then the original "Next part" footer. `avest002.htm` keeps its
+the full editorial header (the credit block), Book **Y** (Yasna), Chapter 0,
+Paragraphs 1–3 AND Paragraph 13 (spliced in real document order, 2026-07-24 —
+P43-i2: paragraph 13 carries the repeated-recitation anchors Q1c/Q1d twice
+each, the liturgical-repetition genus that 48 of the 248 live pages show and
+the original 1–3 trim had cut away), then the original "Next part" footer. `avest002.htm` keeps its
 (header-less) continuation start — Chapter 1, Paragraph 1, verses a–k — then its
 footer. Bytes are otherwise untouched, so the fixtures document the real 1990s
 markup quirks the parser must survive: broken `</sPAN>` nesting, `<span id=x12>`

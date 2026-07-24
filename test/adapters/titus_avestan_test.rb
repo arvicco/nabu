@@ -89,7 +89,7 @@ class TitusAvestanTest < Minitest::Test
   # --- parse: structure -------------------------------------------------------
 
   def test_parse_mints_verse_passages_at_the_anchor_grain
-    assert_equal 39, passages_of("avest001").size
+    assert_equal 55, passages_of("avest001").size
     # 11 verses + the one chapter-level ritual rubric (zōt̰. u. rāspī.).
     assert_equal 12, passages_of("avest002").size
   end
@@ -116,6 +116,39 @@ class TitusAvestanTest < Minitest::Test
     labels = passages_of("avest001").select { |p| p.annotations.values_at("chapter", "paragraph") == %w[0 1] }
                                     .map { |p| p.annotations.fetch("verse") }
     assert_equal %w[Q1Aa Q1Ab Q1Ac Q1Ba Q1Bb Q1Bc Q1Ca Q1Cb Q1Cc Q1Da Q1Db Q1Dc a b c d e], labels
+  end
+
+  # P43-i2 (the owner's first full sync): the liturgy repeats — Y.0.13
+  # re-anchors Q1c and Q1d for a second recitation (48 of 248 live pages
+  # carry the genus; the original paragraph-1-3 trim had cut it away, so
+  # the fixture now splices paragraph 13 in). Repeats must mint BOTH
+  # passages, disambiguated deterministically, annotated, stable.
+  def test_repeated_recitation_anchors_disambiguate_with_occurrence
+    passages = passages_of("avest001")
+    q1c = passages.select { |p| p.urn.include?("Y.0.13.Q1c") }
+    assert_equal 2, q1c.size, "both recitations mint"
+    assert_equal %w[urn:nabu:titus-avestan:avest001:Y.0.13.Q1c
+                    urn:nabu:titus-avestan:avest001:Y.0.13.Q1c#2],
+                 q1c.map(&:urn), "the second occurrence carries the #2 tail"
+    assert_nil q1c[0].annotations["repetition"]
+    assert_equal 2, q1c[1].annotations["repetition"], "the repeat is annotated, never silent"
+    assert_equal passages.map(&:urn), passages_of("avest001").map(&:urn),
+                 "occurrence numbering is stable across two parses"
+  end
+
+  # P43-i2 second genus (live census, all 248 pages): 1,157 anchors carry a
+  # FIFTH level — the liturgical refrain (Y_3_20_R1_a) — and some embed a
+  # bracketed parallel citation whose internal underscores are NOT level
+  # separators (FrW_10_39[_Yt._22,_39]_a is FOUR levels). 42 pages
+  # quarantined whole under the old 4-level ceiling.
+  def test_five_level_refrain_anchor_components
+    comps = Nabu::Adapters::TitusAvestanParser.split_components("Y_3_20_R1_a")
+    assert_equal %w[Y 3 20 R1 a], comps
+  end
+
+  def test_bracketed_parallel_citation_is_one_component
+    comps = Nabu::Adapters::TitusAvestanParser.split_components("FrW_10_39[_Yt._22,_39]_a")
+    assert_equal ["FrW", "10", "39[_Yt._22,_39]", "a"], comps
   end
 
   # --- parse: text fidelity ---------------------------------------------------
