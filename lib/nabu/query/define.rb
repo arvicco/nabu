@@ -42,12 +42,16 @@ module Nabu
       # One dictionary entry hit. +citations+ are CitationView values in
       # entry order; +license_class+/+license+ come from the owning source;
       # +reflexes+ (P14-1) are ReflexViews::View values, [] off the
-      # reconstruction shelves.
+      # reconstruction shelves. +via_lila+ (P44-8) is nil for a direct hit and
+      # "<queried form> → <canonical form>" when the entry was reached only by
+      # the LiLa variant-form fallback (folded into the displayed headword so
+      # the provenance shows in `define` output — "via LiLa: eclypsans →
+      # eclipsans").
       Result = Data.define(:urn, :dictionary_slug, :dictionary_title, :language,
                            :headword, :key_raw, :gloss, :body,
                            :license, :license_class, :source_slug, :citations, :reflexes,
-                           :withdrawn) do
-        def initialize(withdrawn: false, **) = super
+                           :withdrawn, :via_lila) do
+        def initialize(withdrawn: false, via_lila: nil, **) = super
       end
 
       # One citation of an entry: display label always; resolved_urn is the
@@ -56,14 +60,31 @@ module Nabu
 
       DEFAULT_LIMIT = 5
 
-      def initialize(catalog:, fulltext: nil)
+      # LiLa is a Latin-only lemma spine (P44-8): the fallback fires only for a
+      # Latin-eligible query, and it folds/looks up in Latin.
+      LILA_LANGUAGE = "lat"
+
+      # +lila+ is the P44-8 LiLa lemma-spine resolver used for the Latin
+      # variant-form fallback (below). It defaults to :auto — feature-detected
+      # from canonical/lila at first use, so absent-tree behavior is
+      # byte-identical to before — and tests inject a fixture resolver (or nil
+      # to force the direct-only path).
+      def initialize(catalog:, fulltext: nil, lila: :auto)
         @catalog = catalog
         @reflex_views = ReflexViews.new(catalog: catalog, fulltext: fulltext)
+        @lila = lila
       end
 
       # Look up +lemma+; +lang+ filters by dictionary language (grc/lat/…);
       # a leading "*" scopes to the reconstruction shelves. Returns up to
       # +limit+ Results ordered (dictionary, entry_id).
+      #
+      # P44-8: a Latin-eligible MISS (no direct entry) retries through the LiLa
+      # Lemma Bank — if the queried form is a known orthographic VARIANT of a
+      # LiLa canonical form (eclypsans→eclipsans, praeliaris→proeliaris), the
+      # canonical form is looked up instead, and its hits carry a via_lila
+      # note. A miss that LiLa cannot map, or a canonical form still absent
+      # from the shelf, stays an honest miss.
       def run(lemma, lang: nil, limit: DEFAULT_LIMIT)
         return [] unless shelf?
 
@@ -73,7 +94,10 @@ module Nabu
         return [] if variants.first.strip.empty?
 
         rows = entry_rows(variants, lang: lang, limit: limit, recon_only: recon_only)
-        rows.map { |row| build_result(row) }
+        return rows.map { |row| build_result(row) } unless rows.empty?
+        return [] if recon_only # the reconstruction shelves are not LiLa's domain
+
+        lila_fallback(term, lang: lang, limit: limit)
       end
 
       # Batch short-gloss lookup for lemma-search integration (P11-4):
@@ -153,20 +177,72 @@ module Nabu
           .all
       end
 
-      def build_result(row)
+      def build_result(row, via_lila: nil)
         recon = row.fetch(:language).end_with?("-pro")
+        base_headword = recon ? "*#{row.fetch(:headword)}" : row.fetch(:headword)
         Result.new(
           urn: row.fetch(:urn), dictionary_slug: row.fetch(:dictionary_slug),
           dictionary_title: row.fetch(:dictionary_title), language: row.fetch(:language),
-          headword: recon ? "*#{row.fetch(:headword)}" : row.fetch(:headword),
+          # The via-LiLa provenance rides the displayed headword (the fenced
+          # CLI/MCP renderers print it as-is), so `define eclypsans` reads
+          # "via LiLa: eclypsans → eclipsans — A Latin Dictionary …".
+          headword: via_lila ? "via LiLa: #{via_lila}" : base_headword,
           key_raw: row.fetch(:key_raw),
           gloss: row.fetch(:gloss), body: row.fetch(:body),
           license: row.fetch(:license), license_class: row.fetch(:license_class),
           source_slug: row.fetch(:source_slug),
           citations: resolve_citations(row.fetch(:entry_row_id)),
           reflexes: recon ? @reflex_views.for_entry(row.fetch(:entry_row_id)) : [],
-          withdrawn: row[:withdrawn] ? true : false
+          withdrawn: row[:withdrawn] ? true : false,
+          via_lila: via_lila
         )
+      end
+
+      # -- the LiLa variant-form fallback (P44-8) ----------------------------------
+
+      # A Latin-eligible miss retries through the LiLa Lemma Bank: map the
+      # queried form via LiLa's variant→canonical mapping, then look the
+      # CANONICAL form up (Latin shelves), annotating each hit "<term> →
+      # <canonical>". No LiLa tree, a non-Latin --lang, an unmapped form, or a
+      # canonical form still absent from the shelf all yield [] — an honest
+      # miss, byte-identical to before when LiLa is absent.
+      def lila_fallback(term, lang:, limit:)
+        return [] unless lat_eligible?(lang)
+
+        resolver = lila or return []
+        canonicals = resolver.lookup(term).map(&:form).reject { |f| f.nil? || f.strip.empty? }
+        # Dedupe by folded canonical, keeping the display spelling; skip a
+        # canonical that folds back onto the term (LiLa knows the word but the
+        # shelf simply lacks it — the honest miss).
+        term_key = Nabu::Normalize.search_form(term, language: LILA_LANGUAGE)
+        seen = {}
+        canonicals.each do |canonical|
+          key = Nabu::Normalize.search_form(canonical, language: LILA_LANGUAGE)
+          next if key == term_key || seen.key?(key)
+
+          seen[key] = canonical
+        end
+
+        results = seen.values.flat_map do |canonical|
+          rows = entry_rows(Nabu::Normalize.query_forms(canonical),
+                            lang: LILA_LANGUAGE, limit: limit, recon_only: false)
+          rows.map { |row| build_result(row, via_lila: "#{term} → #{canonical}") }
+        end
+        limit ? results.first(limit) : results
+      end
+
+      # LiLa is Latin-only: fall back when the query is unconstrained (a bare
+      # `define <form>` carries no language) or --lang names Latin.
+      def lat_eligible?(lang)
+        lang.nil? || Nabu::Languages.code_variants(lang.to_s).include?(LILA_LANGUAGE)
+      end
+
+      # Feature-detect + memoize the resolver (class note). :auto loads it from
+      # canonical/lila; a genuine parse error surfaces, an absent tree is nil.
+      def lila
+        return @lila unless @lila == :auto
+
+        @lila = Nabu::Lila.load_default
       end
 
       # -- resolution --------------------------------------------------------------

@@ -392,5 +392,81 @@ module Query
       assert_equal "*gʷʰew-", root.headword
       assert_equal "ine-pro", root.language
     end
+
+    # -- the LiLa variant-form fallback (P44-8) --------------------------------
+
+    def lila_resolver
+      Nabu::Lila.load(File.join(Nabu::TestSupport.fixtures("lila"), "rdf", "lemmaBank.ttl"))
+    end
+
+    # A minimal Latin dictionary entry keyed by the house lat fold, owned by
+    # the lexica source (so license/class resolve).
+    def make_lat_entry(headword, slug: "test-lat", gloss: "the gloss", body: "the body")
+      dict = Nabu::Store::Dictionary.find(slug: slug) ||
+             Nabu::Store::Dictionary.create(source_id: @source.id, slug: slug,
+                                            title: "Test Latin Dictionary", language: "lat")
+      Nabu::Store::DictionaryEntry.create(
+        dictionary_id: dict.id, urn: "urn:nabu:dict:#{slug}:#{headword}", entry_id: headword,
+        key_raw: headword, headword: headword,
+        headword_folded: Nabu::Normalize.search_form(headword, language: "lat"),
+        gloss: gloss, body: body, content_sha256: "x", revision: 1, withdrawn: false
+      )
+    end
+
+    def define_lila(lemma, **)
+      Nabu::Query::Define.new(catalog: @catalog, lila: lila_resolver).run(lemma, **)
+    end
+
+    def test_a_latin_miss_is_retried_via_the_lila_canonical_mapping
+      entry = make_lat_entry("eclipsans")            # the LiLa canonical form
+      results = define_lila("eclypsans")             # queried as a LiLa variant
+      assert_equal 1, results.size, "the variant reaches its canonical entry via LiLa"
+      hit = results.first
+      assert_equal entry.urn, hit.urn
+      assert_equal "eclypsans → eclipsans", hit.via_lila
+      assert_equal "via LiLa: eclypsans → eclipsans", hit.headword,
+                   "the provenance rides the displayed headword (the fenced CLI prints it as-is)"
+    end
+
+    def test_the_ae_oe_orthographic_variant_also_resolves
+      make_lat_entry("proeliaris")
+      hit = define_lila("praeliaris").first
+      refute_nil hit, "praeliaris is a LiLa writtenRep of canonical proeliaris"
+      assert_equal "praeliaris → proeliaris", hit.via_lila
+    end
+
+    def test_a_direct_hit_never_triggers_the_fallback
+      make_lat_entry("eclipsans")
+      hit = define_lila("eclipsans").first           # already the canonical form
+      assert_nil hit.via_lila, "a direct dictionary hit is not a LiLa detour"
+      assert_equal "eclipsans", hit.headword
+    end
+
+    def test_a_form_lila_cannot_map_stays_an_honest_miss
+      make_lat_entry("eclipsans")
+      assert_empty define_lila("thisisnotalatinlemma"),
+                   "LiLa knows no such form — the miss stays honest"
+    end
+
+    def test_a_lila_variant_whose_canonical_is_absent_stays_an_honest_miss
+      # LiLa maps amiger → hamiger, but no dictionary holds hamiger.
+      make_lat_entry("eclipsans")
+      assert_empty define_lila("amiger"), "no shelf entry for the canonical → honest miss"
+    end
+
+    def test_the_fallback_is_skipped_for_a_non_latin_language
+      make_lat_entry("eclipsans")
+      assert_empty define_lila("eclypsans", lang: "grc"),
+                   "LiLa is Latin-only — a --lang grc query never detours through it"
+    end
+
+    def test_absent_lila_tree_is_byte_identical_no_fallback
+      make_lat_entry("eclipsans")
+      # lila: nil is exactly the no-canonical-tree state (load_default → nil).
+      absent = Nabu::Query::Define.new(catalog: @catalog, lila: nil)
+      assert_empty absent.run("eclypsans"), "without LiLa a variant miss is just a miss"
+      assert_equal "eclipsans", absent.run("eclipsans").first.headword,
+                   "and direct lookups are entirely unchanged"
+    end
   end
 end
