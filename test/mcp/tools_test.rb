@@ -34,9 +34,9 @@ module MCP
     # -- rig -------------------------------------------------------------------
 
     def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil, links: nil, registry: nil,
-              enabled_slugs: nil)
+              enabled_slugs: nil, pleiades: nil)
       Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger, links: links,
-                           registry: registry, enabled_slugs: enabled_slugs)
+                           registry: registry, enabled_slugs: enabled_slugs, pleiades: pleiades)
     end
 
     def make_document(source: @open, urn: "urn:d:1", title: "Iliad", language: "grc",
@@ -164,10 +164,10 @@ module MCP
 
     # -- definitions -----------------------------------------------------------
 
-    def test_definitions_lists_the_ten_tools_with_json_schemas
+    def test_definitions_lists_the_eleven_tools_with_json_schemas
       defs = tools.definitions
       assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_etym
-                      nabu_parallels nabu_cognates nabu_links nabu_status],
+                      nabu_parallels nabu_cognates nabu_links nabu_place nabu_status],
                    defs.map { |d| d[:name] })
       defs.each do |definition|
         refute_empty definition[:description]
@@ -587,6 +587,193 @@ module MCP
       refute shown.key?("credit"), "an uncredited source must not emit a credit key"
       hit = payload(call("nabu_search", { "query" => "μηνιν" })).fetch("matches").first
       refute hit.key?("credit")
+    end
+
+    # -- P44-3 parity pins: term-less browse, meter, findspot, place, reuse, wired --
+
+    # Term-less browse (the CLI's citation-prefix show): a shortened urn
+    # between document and passage grain lists everything below it through
+    # the RangeResult shape — boundary-exact, no search hit needed first.
+    def test_show_citation_prefix_lists_the_children_boundary_exact
+      doc = make_document(urn: "urn:nabu:titus-avestan:avest020", title: "Yasna", language: "ave")
+      make_passage(doc, urn: "#{doc.urn}:Y.19.1.a", text: "frauuarāne", sequence: 0, language: "ave")
+      make_passage(doc, urn: "#{doc.urn}:Y.19.1.b", text: "mazdaiiasnō", sequence: 1, language: "ave")
+      make_passage(doc, urn: "#{doc.urn}:Y.19.10.a", text: "zaraθuštriš", sequence: 2, language: "ave")
+      rebuild!
+
+      body = payload(call("nabu_show", { "urn" => "#{doc.urn}:Y.19.1" }))
+      assert_equal "range", body.fetch("type"), "a citation prefix serves the range shape"
+      assert_equal ["#{doc.urn}:Y.19.1.a", "#{doc.urn}:Y.19.1.b"],
+                   body.fetch("passages").map { |p| p.fetch("urn") },
+                   "boundary-exact: Y.19.1 opens into .a/.b and never swallows Y.19.10"
+      body.fetch("passages").each do |passage|
+        assert_equal %w[ave open], [passage.fetch("language"), passage.fetch("license_class")],
+                     "every listed child carries the contract fields"
+      end
+      assert_equal 3, body.fetch("total"), "total stays the document's full passage count"
+    end
+
+    # The meter enrichment (the CLI's P44-7 meter line): a scanned passage
+    # carries the additive meter object; every unscanned payload stays
+    # byte-identical (no key, never an empty one).
+    def test_show_passage_carries_the_meter_enrichment_when_scanned
+      seed_corpus
+      passage_id = @catalog[:passages].where(urn: "#{@grc.urn}:1.1").get(:id)
+      @catalog[:enrichments].insert(
+        passage_id: passage_id, kind: "meter", model: "pedecerto",
+        payload_json: JSON.generate({ "meter" => "H", "pattern" => "DSSS" }), at: Time.utc(2026, 7, 24)
+      )
+
+      scanned = payload(call("nabu_show", { "urn" => "#{@grc.urn}:1.1" }))
+      assert_equal({ "meter" => "H", "pattern" => "DSSS", "producer" => "pedecerto" },
+                   scanned.fetch("meter"), "the scansion rides the passage payload with provenance")
+
+      plain = payload(call("nabu_show", { "urn" => "#{@grc.urn}:1.2" }))
+      refute plain.key?("meter"), "an unscanned passage must not emit a meter key"
+    end
+
+    def lilybaeum_resolver
+      Nabu::Pleiades.from_entries([{
+                                    "id" => "462281", "title" => "Lilybaeum",
+                                    "reprPoint" => [12.43, 37.80], "placeTypes" => ["settlement"],
+                                    "names" => [{ "attestations" => [{ "timePeriod" => "archaic" },
+                                                                     { "timePeriod" => "roman" }] }]
+                                  }])
+    end
+
+    def seed_epigraphy
+      isicily = Nabu::Store::Source.create(
+        slug: "isicily", name: "I.Sicily", adapter_class: "TestAdapter",
+        license_class: "attribution", enabled: true
+      )
+      @stone = make_document(source: isicily, urn: "urn:nabu:isicily:ISic000001",
+                             title: "Funerary inscription", language: "lat")
+      @catalog[:documents].where(id: @stone.id)
+                          .update(metadata_json: JSON.generate({ "place" => { "pleiades" => "462281" } }))
+      make_passage(@stone, urn: "#{@stone.urn}:1", text: "dis manibus sacrum", sequence: 0, language: "lat")
+      unlinked = make_document(source: isicily, urn: "urn:nabu:isicily:ISic000002",
+                               title: "Fragment", language: "lat")
+      @catalog[:documents].where(id: unlinked.id)
+                          .update(metadata_json: JSON.generate({ "findspot" => "near Lilybaeum, west gate" }))
+      make_passage(unlinked, urn: "#{unlinked.urn}:1", text: "hic iacet", sequence: 0, language: "lat")
+      rebuild!
+    end
+
+    # The findspot line (the CLI's P44-2 show consumer): captured id + dump
+    # present → the additive findspot object on passage AND document payloads.
+    def test_show_findspot_rides_passage_and_document_payloads_when_the_dump_resolves
+      seed_epigraphy
+      rig = tools(pleiades: lilybaeum_resolver)
+
+      shown = payload(rig.call("nabu_show", { "urn" => "#{@stone.urn}:1" }))
+      assert_equal({ "pleiades_id" => "462281", "title" => "Lilybaeum", "place_types" => ["settlement"] },
+                   shown.fetch("findspot"), "the passage payload carries the resolved findspot")
+
+      docp = payload(rig.call("nabu_show", { "urn" => @stone.urn }))
+      assert_equal "Lilybaeum", docp.fetch("findspot").fetch("title"), "the document header carries it too"
+    end
+
+    # The dump may be ABSENT on MCP hosts: no findspot key, byte-identical to
+    # the pre-P44 payload (the CLI's exact degradation).
+    def test_show_findspot_absent_without_the_dump
+      seed_epigraphy
+      shown = payload(call("nabu_show", { "urn" => "#{@stone.urn}:1" }))
+      refute shown.key?("findspot"), "no dump → no findspot key, never a null one"
+      docp = payload(call("nabu_show", { "urn" => @stone.urn }))
+      refute docp.key?("findspot")
+    end
+
+    # -- nabu_place (P44-3: the place desk, added for CLI parity) ---------------
+
+    def test_place_by_id_returns_the_card_holdings_and_unlinked_tail
+      seed_epigraphy
+      body = payload(tools(pleiades: lilybaeum_resolver).call("nabu_place", { "query" => "462281" }))
+      assert_equal "place", body.fetch("type")
+      assert body.fetch("dump_loaded")
+      card = body.fetch("cards").fetch(0)
+      assert_equal ["462281", "Lilybaeum", ["settlement"], %w[archaic roman]],
+                   [card.fetch("pleiades_id"), card.fetch("title"),
+                    card.fetch("place_types"), card.fetch("time_periods")]
+      assert_equal [{ "source" => "isicily", "documents" => 1 }], card.fetch("holdings")
+      assert_equal "Lilybaeum", body.fetch("unlinked_term")
+      assert_equal [{ "source" => "isicily", "documents" => 1 }], body.fetch("unlinked"),
+                   "the id-less findspot-text mention is a labelled tail, never merged"
+      assert_match(/never merged/, body.fetch("note"))
+    end
+
+    def test_place_by_exact_title_and_unknown_title
+      seed_epigraphy
+      rig = tools(pleiades: lilybaeum_resolver)
+      body = payload(rig.call("nabu_place", { "query" => "lilybaeum" }))
+      assert_equal "462281", body.fetch("cards").fetch(0).fetch("pleiades_id"),
+                   "exact title match is case-insensitive"
+
+      miss = rig.call("nabu_place", { "query" => "Lilyb" })
+      assert miss[:isError], "a prefix is not a title — exact only, a caller-fixable error"
+      assert_match(/no place titled/, text_of(miss))
+    end
+
+    # Dump-absent degradation, exactly the CLI's: an id still counts holdings
+    # (fact-less card, honest note); a NAME lookup is a graceful state note
+    # with the sync hint, never a crash and never isError.
+    def test_place_without_the_dump_degrades_like_the_cli
+      seed_epigraphy
+      body = payload(call("nabu_place", { "query" => "462281" }))
+      refute body.fetch("dump_loaded")
+      card = body.fetch("cards").fetch(0)
+      assert_equal [{ "source" => "isicily", "documents" => 1 }], card.fetch("holdings"),
+                   "the catalog side needs no dump"
+      refute card.key?("title")
+      assert_match(/dump not synced/, card.fetch("note"))
+
+      name = call("nabu_place", { "query" => "Lilybaeum" })
+      refute name[:isError], "a missing dump is a corpus state, not a caller error"
+      assert_match(/sync pleiades/, text_of(name))
+    end
+
+    def test_place_needs_a_query
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_place", {}) }
+    end
+
+    # The "reuse" links kind (KITAB, upstream-computed alignments): the
+    # kind vocabulary is open — nabu_links serves reuse edges with their
+    # verbatim offset detail through the same grouped shape.
+    def test_links_serves_the_reuse_kind_with_its_offset_detail
+      seed_parallels
+      journal = seed_links_journal
+      run_id = Nabu::Store::LinksJournal.record_run!(
+        journal, producer: "kitab-text-reuse", scope: "all", params: { kind: "reuse" },
+                 code_version: "kitab-text-reuse/1"
+      )
+      Nabu::Store::LinksJournal.write_edge!(
+        journal, from_urn: "urn:d:od:1.1", to_urn: "urn:d:pol:1", kind: "reuse",
+                 score: nil, detail: "ms001→ms002 · b12-e40 · w3-w9", run_id: run_id
+      )
+      body = payload(tools(links: journal).call("nabu_links", { "urn" => "urn:d:od:1.1" }))
+      edge = body.dig("kinds", "reuse").fetch(0)
+      assert_equal "ms001→ms002 · b12-e40 · w3-w9", edge.fetch("detail"),
+                   "the milestone/offset evidence rides verbatim"
+      assert_equal "Histories", edge.fetch("document"), "the counterpart resolves like every kind"
+    ensure
+      journal&.disconnect
+    end
+
+    # P44-r4 byte-pin: the registry field rename (enabled: → wired:) must not
+    # change one MCP payload byte — the frozen key stays `enabled`, mirroring
+    # wired, and no `wired` key ever appears.
+    def test_status_wired_rename_kept_the_enabled_payload_key
+      seed_corpus
+      registry = Nabu::SourceRegistry.new([
+                                            Nabu::SourceRegistry::Entry.new(
+                                              slug: "perseus", adapter_class_name: "TestAdapter",
+                                              wired: false, sync_policy: "manual"
+                                            )
+                                          ])
+      result = tools(registry: registry).call("nabu_status", {})
+      body = payload(result)
+      perseus = body.fetch("sources").find { |s| s.fetch("slug") == "perseus" }
+      assert_equal false, perseus.fetch("enabled"), "the frozen `enabled` key mirrors registry wired"
+      refute_match(/"wired"/, text_of(result), "the rename must never surface a new payload key")
     end
 
     # The withholding rule: a note on a research_private/restricted document

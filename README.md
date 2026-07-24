@@ -271,10 +271,10 @@ abuts Lebanon."
   officium, honestas, decorum), and `export --format jsonl` streaming the
   corpus to your own tooling with license filters.
 - **AI-tooling builders.** A hand-rolled, dependency-free MCP server over
-  stdio (`bin/nabu mcp`, `.mcp.json` ships in-repo) exposes ten read-only
+  stdio (`bin/nabu mcp`, `.mcp.json` ships in-repo) exposes eleven read-only
   tools — search, show, concord, align, define, etym, parallels, cognates,
-  links, status — every passage carrying its license class, so a model can quote
-  *and* cite responsibly. See [docs/mcp.md](docs/mcp.md).
+  links, place, status — every passage carrying its license class, so a model
+  can quote *and* cite responsibly. See [docs/mcp.md](docs/mcp.md).
 
 ## What's on the shelves
 

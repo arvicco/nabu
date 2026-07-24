@@ -2,12 +2,12 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes ten tools — search, read
-by urn, concordance, cross-source alignment, dictionary lookup, the
+(Claude Code, Claude Desktop) over stdio. It exposes eleven tools — search,
+read by urn, concordance, cross-source alignment, dictionary lookup, the
 reconstruction walk, intertext (quotation/echo finding), cognates-in-parallel,
-the mined links graph, and coverage — so a model can look things up in your
-texts, quote them, and cite them, without any ability to change the
-collection.
+the mined links graph, the place desk, and coverage — so a model can look
+things up in your texts, quote them, and cite them, without any ability to
+change the collection.
 
 This is also a **rehearsal for `nabu.ac`** (concept §"eventual read-only query
 endpoint" / architecture §9): the same tool contract that will one day sit
@@ -35,7 +35,7 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The ten tools
+## 2. The eleven tools
 
 Every passage in every response carries **urn**, **language**, and
 **license_class** (search, concord, align, and parallels rows also carry the
@@ -84,11 +84,21 @@ Read the corpus by urn — the pristine edition text behind a search hit:
 - a whole **document** urn → the header and its passages in citation order,
   bounded by `max_passages` (default 50, cap 200) with a truncation note;
 - an inclusive **range** (`<document-urn>:1.1-1.10`) → a sequence-ordered slice;
+- a shortened **citation prefix** between document and passage grain
+  (`…:avest020:Y.19.1` over passages `Y.19.1.a/b`, P44) → everything below it,
+  boundary-exact (`Y.19.1` never swallows `Y.19.10`), served through the range
+  shape — term-less browsing without a search hit first;
 - `parallel: true` (with `parallel_lang`, default `eng`) → the same work's
   translation, aligned line by line / block by block (CTS editions and, since
   P13-4, ORACC tablets ↔ their `-en` sibling documents).
 
-Withdrawn and retired-upstream items appear, flagged.
+Withdrawn and retired-upstream items appear, flagged. The owner's notes on the
+urn ride in `notes` by default (P24-1). Two additive keys appear only when the
+fact exists (P44-3): `meter` — a scanned passage's metrical code, foot pattern,
+and producer (the Pedecerto/Hypotactic enrichments, P44-6/7) — and `findspot` —
+an epigraphic document's parse-captured Pleiades id resolved through the local
+gazetteer dump (id, title, place types; absent dump, absent id, or unknown id
+all leave the payload unchanged, exactly the CLI's degradation).
 
 ### `nabu_concord`
 
@@ -245,7 +255,11 @@ witness documents (a private witness's words never join).
 
 The links journal reader (P16-1/P16-2, design §7, architecture §15):
 batch-mined cross-reference edges touching a urn, grouped by kind
-(`parallel`, `formula`, `cognate`), **both directions** (`out` = this urn's
+(`parallel`, `formula`, `cognate`, and `reuse` — the KITAB import's
+upstream-computed pairwise Arabic text-reuse alignments, whose `detail`
+carries the milestone/offset spans verbatim; the kind vocabulary is open,
+so any future producer's kind flows through unchanged), **both directions**
+(`out` = this urn's
 batch anchor discovered the counterpart, `in` = the reverse), each
 counterpart resolved to document title/language/license against the current
 catalog (`null` when a rebuild dropped it — edges are urn-keyed and outlive
@@ -260,6 +274,27 @@ means no batch has covered the urn, *not* that no parallel exists
 owner-fired: `nabu parallels|formulas --batch SCOPE`, `nabu cognates --batch
 WORK`). Bounded per kind (default 20, max 100); the restricted-exclusion
 stance applies to counterparts.
+
+### `nabu_place`
+
+The place desk (P44-2's `nabu place`, exposed P44-3): one ancient place —
+resolved through the **local** Pleiades gazetteer dump — plus the library's
+holdings at that place, per source. `query` is a Pleiades numeric id, a
+`pleiades.stoa.org/places` URL, or an **exact** case-insensitive place title
+("Segesta" works, "Seges" does not — no fuzzy matching anywhere in the
+pipeline, by design; homonym titles return one card per bearer). Each card
+carries the gazetteer facts (title, place types, attested time-period
+vocabulary, representative point — display only, no maps, no coordinate math)
+and `holdings`: per-source counts of live documents whose parsers captured
+that upstream-asserted id from their headers (isicily, edh, iip, itant).
+Counts are **aggregate only** — reading the texts is `nabu_search`/`nabu_show`'s
+job. An honest labelled `unlinked` tail counts id-less documents whose captured
+findspot **text** mentions the name (exact substring), never merged into the
+id-matched holdings. Degradation is the CLI's exactly: with the dump absent on
+this box, a numeric id still counts holdings (fact-less card, honest note),
+and a name lookup returns a graceful state note with the sync hint — never an
+error. The dump load (~3 s / ~3.9 GB peak on the real 42k-place dump) is paid
+per call and released, the accepted P44-2 v1 cost.
 
 ### `nabu_status`
 
@@ -401,4 +436,41 @@ Commons classes require crediting the source edition per their terms (the
 `source` slug and the passage urn identify it; `nabu_status` and
 `docs/02-sources.md` name each source's upstream and license). The read-only
 surface hands you the fields; using them correctly downstream is the caller's
-responsibility.
+responsibility. A source carrying an owner-recorded **credit line**
+(`sources.credit` — a grant's "clearly indicated wherever displayed" duty)
+serves it as an additive `credit` key on every text-serving `nabu_show` /
+`nabu_search` payload; preserve it with the license fields.
+
+---
+
+## 7. Parity with the CLI (the P44-3 audit)
+
+The standing table: every CLI capability a conversational user would reach
+for, the MCP tool that answers it, and the honest status. Statuses: **parity**
+(same capability, pinned by a test on the MCP surface), **added P44-3** (gap
+found by this audit, fixed additively — no frozen payload key changed),
+**documented gap** (deliberately not exposed, with the reason). Frozen-contract
+rule: existing payload keys/shapes never change or disappear; additions are
+new, present-only keys.
+
+| Capability | CLI surface | MCP tool | Status |
+| --- | --- | --- | --- |
+| Term-less browse: whole document by urn | `nabu show <document-urn>` | `nabu_show` (document shape, bounded) | parity (pinned P8-1) |
+| Term-less browse: range slice | `nabu show <doc>:1.1-1.10` | `nabu_show` (range shape) | parity (pinned P8-1) |
+| Term-less browse: citation-prefix listing | `nabu show <doc>:Y.19.1` (shortened urn, P44) | `nabu_show` — the same `Query::Show` prefix walk, range shape, boundary-exact | parity (pinned P44-3) |
+| Term-less browse: enumerate a source's documents/entries | `nabu list SOURCE --documents/--entries` | — | documented gap: an unbounded per-source roll (sources run to 10⁵ documents) does not fit the bounded conversational surface; discovery flows through `nabu_search` → `nabu_show`, coverage through `nabu_status` |
+| Random sampling | `nabu show --random [--source] [--lang]` | — | documented gap: the sampler is the owner's sync-time eyeball ritual, not a citation-anchored lookup; exposing it would also mean relaxing `nabu_show`'s frozen required-`urn` input contract |
+| Owner notes on a urn / dictionary entry | `nabu note --list`, `show`/`define` note lines | `nabu_show` / `nabu_define` — `notes` lane served by default, withheld with a withheld target | parity (pinned P24-1) |
+| Guarded (research_private) library pages | CLI shows everything (owner surface) | default-excluded everywhere, per-call `include_restricted` opt-in; open-override pages served | parity-by-design (pinned P13-11/P41) — the never-leak stance is the surface's contract, not a missing feature |
+| Links kinds parallel/formula/cognate | `nabu links <urn>` | `nabu_links` | parity (pinned P16-1/2) |
+| Links kind `reuse` (KITAB) with offset detail | `nabu links <urn>` | `nabu_links` — the kind vocabulary is open; reuse edges flow through with verbatim detail | parity (pinned P44-3) |
+| Credit lines (`sources.credit`, migration 020) | `show`/`search` credit line | `nabu_show` / `nabu_search` — additive `credit` key, only when the source carries one | parity (verified; pinned P43-2) |
+| The place desk | `nabu place NAME\|ID` (P44-2) | `nabu_place` | **added P44-3** — new tool, read-only, `Query::Place` unchanged; dump-absent degradation mirrors the CLI (id counts holdings, name lookup notes the sync hint) |
+| Findspot line | `nabu show` findspot (P44-2) | `nabu_show` — additive `findspot` key when the captured id resolves through the dump | **added P44-3** (pinned, incl. the dump-absent byte-identical case) |
+| Meter line | `nabu show` meter (P44-6/7 enrichments) | `nabu_show` — additive `meter` key on scanned passages | **added P44-3** (pinned) |
+| `--lang` on search/concordance | `search`/`concord` `--lang` | `nabu_search` / `nabu_concord` `lang` | parity (pinned P8) |
+| `--lang`/`langs` on intertext/cognates | `parallels --lang`, `cognates --langs` | `nabu_parallels` `lang`, `nabu_cognates` `langs` | parity (pinned P15) |
+| Shelf-language scoping | `define --lang`, `etym --lang` | `nabu_define` / `nabu_etym` `lang` (define's enum live-derived) | parity (pinned P35-6) |
+| `list SOURCE --lang` implying the mode (P44-r1) | `nabu list` | — | documented gap (subsumed by the list gap above; the filters themselves exist on every MCP tool that lists passages) |
+| Refusal parity | date/place × lemma/near refused; near × morph refused; morph without lemma refused | same refusals, as `isError` the model can self-correct | parity (pinned P13-6/P14-8/P15-2) |
+| Availability semantics after the `wired:` rename (P44-r4) | registry `wired:` drives `list`/`status` visibility | `nabu_status` — sources default to the enabled set; the frozen payload key stays **`enabled`**, mirroring `wired`; no payload byte changed | parity (pinned P44-3: `enabled` key asserted, `"wired"` asserted absent) |
