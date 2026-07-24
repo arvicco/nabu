@@ -26,6 +26,7 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `vulgate` | texts | open | enabled · manual | 73 docs / 35,809 passages |
 | `lila` | feature module | attribution | not enabled | not synced yet |
 | `diorisis` | texts | attribution | enabled · manual | 767 docs / 516,505 passages |
+| `glaux` | texts | attribution | not enabled | not synced yet |
 
 ## The desk's instruments
 
