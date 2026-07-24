@@ -26,8 +26,8 @@ A source wears every desk it serves — these two answer this desk. Holdings are
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `oracc` | tablets | open | enabled · manual | not built in this checkout |
-| `cdli` | tablet catalog | attribution | enabled · manual | not built in this checkout |
+| `oracc` | tablets | open | enabled · manual | 104,722 docs / 1,588,133 passages |
+| `cdli` | tablet catalog | attribution | enabled · manual | 353,156 docs / 2,186,961 passages |
 
 Private research materials under personal grants are not listed.
 
@@ -83,4 +83,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

@@ -149,7 +149,7 @@ module Nabu
           title: Research axes
           permalink: /axis/
           description: >-
-            The eighteen research desks of the Nabu library — tags over the
+            The #{desk_count_word} research desks of the Nabu library — tags over the
             source list, each a scholarly hat with its own shelves, instruments
             and commands.
           ---
@@ -173,7 +173,7 @@ module Nabu
           page, where the member shelves, live holdings, instruments, CLI recipes
           and terminal setup live.
 
-          #{quickstart_pointer}## The eighteen desks
+          #{quickstart_pointer}## The #{desk_count_word} desks
 
           #{index_entries}
 
@@ -328,8 +328,17 @@ module Nabu
           "[display page](https://github.com/arvicco/nabu/blob/main/docs/display.md).\n\n"
       end
 
+      # The desk count as a word for the index/footer prose (P44-r2 flagged
+      # the hardcoded "eighteen" two desks stale) — derived from the live
+      # registry so a new axis can never stale it again; counts past
+      # WORD_NUMBERS fall back to digits honestly.
+      def desk_count_word
+        count = @registry.axes.names.size
+        WORD_NUMBERS.fetch(count) { count.to_s }
+      end
+
       def footer(_axis)
-        "One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat " \
+        "One of the [#{desk_count_word} research desks]({{ '/axis/' | relative_url }}); the flat " \
           "shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is " \
           "[docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md)."
       end
