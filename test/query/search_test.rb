@@ -57,6 +57,27 @@ module Query
 
     # -- tests ---------------------------------------------------------------
 
+    # P43-2: a hit from a credited source carries the credit line (the CLI
+    # search footer and the MCP match payload render from it); an ordinary hit
+    # carries nil.
+    def test_search_hit_carries_the_source_credit_when_present
+      credit = "TITUS (J. Gippert, Frankfurt) — Avesta ed. Geldner/Westergaard"
+      titus = Nabu::Store::Source.create(
+        slug: "titus", name: "TITUS", adapter_class: "TestAdapter",
+        license_class: "nc", credit: credit
+      )
+      doc = make_document(source: titus, urn: "urn:t:1", language: "ave")
+      make_passage(doc, urn: "urn:t:1:a", text: "frauuarāne mazdaiiasnō", sequence: 0, language: "ave")
+      plain = make_document(source: @open, urn: "urn:d:1", language: "eng")
+      make_passage(plain, urn: "urn:d:1:1", text: "frauuarāne the plain one", sequence: 0, language: "eng")
+      rebuild!
+
+      credited = search("frauuarāne").find { |r| r.urn == "urn:t:1:a" }
+      assert_equal credit, credited.credit
+      uncredited = search("frauuarāne").find { |r| r.urn == "urn:d:1:1" }
+      assert_nil uncredited.credit
+    end
+
     def test_lang_filter_accepts_the_equivalent_iso_code_spelling
       # ger/deu are one language in two legit ISO 639-2 spellings (aes vs
       # tla-hf); the filter expands the equivalence set, fold-both-sides.

@@ -3440,6 +3440,14 @@ module Nabu
         end
       end
 
+      # The source-level credit line (P43-2, the grant's "clearly indicated
+      # wherever displayed" duty), shown only when the source carries one — a
+      # nil/blank credit (every ordinary source) prints nothing.
+      def print_credit(result)
+        credit = result.credit.to_s.strip
+        say "  credit: #{credit}" unless credit.empty?
+      end
+
       def print_show_passage(passage)
         say "#{passage.urn}#{" [#{passage.language}]" if passage.language}#{withdrawn_tag(passage.withdrawn)}"
         say "  #{display_text(painted_passage_text(passage), passage.language,
@@ -3447,6 +3455,7 @@ module Nabu
         say "  document: #{passage.document_urn}#{" — #{passage.document_title}" if passage.document_title}"
         say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
+        print_credit(passage)
         print_timeline(passage.timeline)
         # H9 (P35-6): a corrupt annotation lane announces itself instead of
         # posing as an unannotated passage.
@@ -3506,6 +3515,7 @@ module Nabu
         lang = document.language ? " [#{document.language}]" : ""
         say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}#{retired_tag(document)}"
         say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
+        print_credit(document)
         print_timeline(document.timeline)
         print_facets(document.facets)
         say "  passages (#{document.passages.size}):"
@@ -3525,6 +3535,7 @@ module Nabu
         lang = range.language ? " [#{range.language}]" : ""
         say "#{range.urn}#{title}#{lang}#{withdrawn_tag(range.withdrawn)}#{retired_tag(range)}"
         say "  source: #{range.source_slug}   license: #{range.license_class}   revision: #{range.revision}"
+        print_credit(range)
         print_timeline(range.timeline)
         say "  range: #{range.start_urn} … #{range.end_urn}  " \
             "[#{range.passages.size} of #{range.total} passages]"
@@ -3989,6 +4000,17 @@ module Nabu
             "#{browse_window_footer(from: from, to: to, place: place) if browse}" \
             "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{incomplete}" if incomplete
+        print_search_credits(results)
+      end
+
+      # The credit duty on the search surface (P43-2): the DISTINCT source
+      # credits among the hits just shown, one line each — so a hit's text and
+      # the attribution its grant requires appear on the same page. Nothing when
+      # no shown source carries a credit (every ordinary search).
+      def print_search_credits(results)
+        results.filter_map { |r| r.credit&.strip }.reject(&:empty?).uniq.each do |credit|
+          say "credit: #{credit}"
+        end
       end
 
       # The date/place clause of a term-less browse footer (P42-6), naming the
