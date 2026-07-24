@@ -17,10 +17,10 @@ A source wears every desk it serves — these four answer this desk. Holdings ar
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `gretil` | texts | nc | enabled · manual | 780 docs / 703,068 passages |
-| `suttacentral` | texts | open | enabled · manual | 12,348 docs / 697,650 passages |
-| `sarit` | texts | attribution | enabled · manual | 78 docs / 345,601 passages |
-| `cbeta` | texts | nc | enabled · manual | 3,679 docs / 8,749,319 passages |
+| `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
+| `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,650 passages |
+| `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
+| `cbeta` | texts | nc | wired · manual | 3,679 docs / 8,749,319 passages |
 
 ## The desk's instruments
 

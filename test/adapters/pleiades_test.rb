@@ -26,7 +26,7 @@ module Adapters
       entry = registry["pleiades"]
       refute_nil entry, "pleiades must be registered in config/sources.yml"
       assert entry.feature_module?, "a resolver instrument is a kind: module row"
-      refute entry.enabled
+      refute entry.wired
       assert_equal "manual", entry.sync_policy
     end
 

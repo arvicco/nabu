@@ -162,7 +162,7 @@ class KradfileTest < Minitest::Test
     entry = registry["kradfile"]
     refute_nil entry, "config/sources.yml must register kradfile"
     assert_equal Nabu::Adapters::Kradfile, entry.adapter_class
-    assert entry.enabled, "owner-fired first sync verified + flipped 2026-07-21"
+    assert entry.wired, "owner-fired first sync verified + flipped 2026-07-21"
     assert_equal "manual", entry.sync_policy
   end
 end

@@ -26,8 +26,8 @@ A source wears every desk it serves — these two answer this desk. Holdings are
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `oracc` | tablets | open | enabled · manual | 104,722 docs / 1,588,133 passages |
-| `cdli` | tablet catalog | attribution | enabled · manual | 353,156 docs / 2,186,961 passages |
+| `oracc` | tablets | open | wired · manual | 104,722 docs / 1,588,133 passages |
+| `cdli` | tablet catalog | attribution | wired · manual | 353,156 docs / 2,186,961 passages |
 
 Private research materials under personal grants are not listed.
 

@@ -27,15 +27,15 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `proiel` | treebank | nc | enabled · frozen | 12 docs / 51,321 passages |
-| `iswoc` | texts | nc | enabled · frozen | 5 docs / 2,536 passages |
-| `menotec` | texts | nc | enabled · manual | 7 docs / 20,308 passages |
-| `aspr` | texts | attribution | enabled · manual | 349 docs / 30,550 passages |
-| `bosworth-toller` | dictionary | attribution | enabled · manual | 62,815 entries |
-| `rem` | texts | attribution | enabled · manual | 406 docs / 355,449 passages |
-| `rundata` | inscriptions | odbl | enabled · manual | 30,643 docs / 30,641 passages |
-| `helipad` | treebank | attribution | enabled · manual | 1 docs / 3,549 passages |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
+| `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
+| `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
+| `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
+| `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
+| `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
+| `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
+| `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 
 ## The desk's instruments
 

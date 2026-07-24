@@ -564,7 +564,7 @@ class AozoraTest < Minitest::Test
     refute_nil entry, "aozora must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Aozora, entry.adapter_class
     assert_equal "manual", entry.sync_policy
-    assert entry.enabled, "first real sync verified + owner-flipped 2026-07-21 (16,004 works)"
+    assert entry.wired, "first real sync verified + owner-flipped 2026-07-21 (16,004 works)"
   end
 
   private

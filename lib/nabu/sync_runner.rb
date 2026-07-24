@@ -164,7 +164,7 @@ module Nabu
       # (P39-0): shelves are local (no network) and modules mint no catalog
       # rows, so neither belongs in the unattended batch, and `manual`/`frozen`
       # sources are owner-fired by name.
-      @registry.each_source.select { |entry| entry.source? && entry.enabled && entry.sync_policy == "auto" }
+      @registry.each_source.select { |entry| entry.source? && entry.wired && entry.sync_policy == "auto" }
     end
 
     def sync_entry(entry, parse_only:, force:, progress:)

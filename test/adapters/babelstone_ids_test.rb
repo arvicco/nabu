@@ -147,7 +147,7 @@ class BabelstoneIdsTest < Minitest::Test
     entry = registry["babelstone-ids"]
     refute_nil entry, "config/sources.yml must register babelstone-ids"
     assert_equal Nabu::Adapters::BabelstoneIds, entry.adapter_class
-    assert entry.enabled, "owner-fired first sync verified + flipped 2026-07-21"
+    assert entry.wired, "owner-fired first sync verified + flipped 2026-07-21"
     assert_equal "manual", entry.sync_policy
   end
 end

@@ -25,32 +25,32 @@ class FocusTest < Minitest::Test
   SOURCES = <<~YAML
     rem:
       adapter: Nabu::Adapters::UniversalDependencies
-      enabled: true
+      wired: true
       sync_policy: manual
       axes: [germanic]
     helipad:
       adapter: Nabu::Adapters::UniversalDependencies
-      enabled: true
+      wired: true
       sync_policy: manual
       axes: [germanic]
     ccmh:
       adapter: Nabu::Adapters::UniversalDependencies
-      enabled: true
+      wired: true
       sync_policy: manual
       axes: [slavic]
     lex:
       adapter: Nabu::Adapters::UniversalDependencies
-      enabled: true
+      wired: true
       sync_policy: frozen
       axes: [reference]
     lib1:
       adapter: Nabu::Adapters::UniversalDependencies
-      enabled: true
+      wired: true
       kind: shelf
       axes: [slavic]
     mod1:
       adapter: Nabu::Adapters::UniversalDependencies
-      enabled: false
+      wired: false
       kind: module
       axes: [germanic]
   YAML
@@ -209,12 +209,12 @@ class FocusTest < Minitest::Test
     File.write(File.join(dir, "sources.yml"), <<~YAML)
       rem:
         adapter: Nabu::Adapters::UniversalDependencies
-        enabled: true
+        wired: true
         sync_policy: manual
         axes: [germanic]
       secret:
         adapter: Nabu::Adapters::UniversalDependencies
-        enabled: true
+        wired: true
         sync_policy: manual
         axes: [germanic]
         availability: blocked

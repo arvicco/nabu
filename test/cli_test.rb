@@ -824,7 +824,7 @@ class CLITest < Minitest::Test
       catalog.disconnect
       out, _err, status = with_config(config) { run_cli(%w[list shelf]) }
       assert_nil status
-      assert_match(/· sync manual · on$/, out, "registry enabled: true must win over the stale db row")
+      assert_match(/· sync manual · wired$/, out, "registry wired: true must win over the stale db row")
     end
   end
 
@@ -1144,20 +1144,20 @@ class CLITest < Minitest::Test
       File.write(config.sources_path, <<~YAML)
         shelf:
           adapter: TestAdapter
-          enabled: true
+          wired: true
           sync_policy: manual
         lex:
           adapter: TestAdapter
-          enabled: false
+          wired: false
           sync_policy: frozen
         library:
           adapter: TestAdapter
-          enabled: true
+          wired: true
           kind: shelf
       YAML
       out, _err, status = with_config(config) { run_cli(%w[list --sources]) }
       assert_nil status
-      assert_match(/^  lex \(off\) — no description/, out, "a disabled source stays visible, tagged (off)")
+      assert_match(/^  lex \(unwired\) — no description/, out, "an unwired source stays visible, tagged (unwired)")
       refute_match(/shelf \(off\)/, out)
     end
   end
@@ -1393,7 +1393,7 @@ class CLITest < Minitest::Test
   def test_status_on_a_fresh_box_shows_the_empty_state
     Dir.mktmpdir("nabu-cli-fresh") do |root|
       sources = File.join(root, "sources.yml")
-      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: auto\n")
+      File.write(sources, "corpus:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: auto\n")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
                                 sources_path: sources, config_path: "(test)")
       _out, err, status = with_config(config) { run_cli(%w[status]) }
@@ -1443,7 +1443,7 @@ class CLITest < Minitest::Test
     <<~YAML
       #{slug}:
         adapter: TestAdapter
-        enabled: true
+        wired: true
         sync_policy: manual
         availability: blocked
       #{axes_line}  grant_required: true
@@ -1518,7 +1518,7 @@ class CLITest < Minitest::Test
     Dir.mktmpdir("nabu-cli-axis-blocked") do |root|
       File.write(File.join(root, "axes.yml"), "iranian:\n  persona: \"The Iranist.\"\n  desc: \"Iranian.\"\n")
       sources = File.join(root, "sources.yml")
-      File.write(sources, "peo:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: manual\n  " \
+      File.write(sources, "peo:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n  " \
                           "axes: [iranian]\n#{blocked_grant_yaml('secret', axes: 'iranian')}")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
                                 sources_path: sources, config_path: "(test)")
@@ -1587,7 +1587,7 @@ class CLITest < Minitest::Test
     Dir.mktmpdir("nabu-cli-axis-hint-blocked") do |root|
       File.write(File.join(root, "axes.yml"), "iranian:\n  persona: \"The Iranist.\"\n  desc: \"Iranian.\"\n")
       sources = File.join(root, "sources.yml")
-      File.write(sources, "peo:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: manual\n  " \
+      File.write(sources, "peo:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n  " \
                           "axes: [iranian]\n#{blocked_grant_yaml('secret', axes: 'iranian')}")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
                                 sources_path: sources, config_path: "(test)")
@@ -1610,8 +1610,8 @@ class CLITest < Minitest::Test
         File.write(File.join(dir, "#{slug}.txt"), "Iliad\nμῆνιν\nἄειδε\n")
       end
       sources = File.join(root, "sources.yml")
-      File.write(sources, "a:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: auto\n" \
-                          "b:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: auto\n")
+      File.write(sources, "a:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: auto\n" \
+                          "b:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: auto\n")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
                                 sources_path: sources, config_path: "(test)")
       Nabu::Profile.new(%w[a]).save(config.profile_path) # only a enabled
@@ -1634,8 +1634,8 @@ class CLITest < Minitest::Test
         File.write(File.join(dir, "#{slug}.txt"), "Iliad\nμῆνιν\nἄειδε\n")
       end
       sources = File.join(root, "sources.yml")
-      File.write(sources, "a:\n  adapter: QuickstartFetchAdapter\n  enabled: true\n  sync_policy: auto\n" \
-                          "b:\n  adapter: QuickstartFetchAdapter\n  enabled: true\n  sync_policy: auto\n")
+      File.write(sources, "a:\n  adapter: QuickstartFetchAdapter\n  wired: true\n  sync_policy: auto\n" \
+                          "b:\n  adapter: QuickstartFetchAdapter\n  wired: true\n  sync_policy: auto\n")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
                                 sources_path: sources, config_path: "(test)")
       Nabu::Profile.new(%w[a]).save(config.profile_path) # only a enabled
@@ -1650,7 +1650,7 @@ class CLITest < Minitest::Test
   def test_status_all_reveals_blocked_sources_marked
     Dir.mktmpdir("nabu-cli-blocked-reveal") do |root|
       sources = File.join(root, "sources.yml")
-      File.write(sources, "pub:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: manual\n" \
+      File.write(sources, "pub:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n" \
                           "#{blocked_grant_yaml('secret')}")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
                                 sources_path: sources, config_path: "(test)")
@@ -1779,9 +1779,9 @@ class CLITest < Minitest::Test
       assert_match(/^alpha — The Alphaist — first letters, read whole\.$/, out, "persona verbatim")
       assert_match(/The alpha lane\./, out, "the membership rationale (desc)")
       assert_match(/members \(3\):/, out, "every member the desk tags")
-      assert_match(/red\s+on\s+docs=/, out, "an enabled, held member shows its counts")
-      assert_match(/green\s+on\s+docs=/, out)
-      assert_match(/blue\s+off\s+nothing held yet/, out, "a disabled, unheld member says so")
+      assert_match(/red\s+wired\s+docs=/, out, "a wired, held member shows its counts")
+      assert_match(/green\s+wired\s+docs=/, out)
+      assert_match(/blue\s+unwired\s+nothing held yet/, out, "a disabled, unheld member says so")
       assert_match(/gold lemmas:/, out, "the aggregate gold-lemma coverage line")
       assert_match(/commands: nabu list --axis alpha · nabu sync alpha/, out, "the shipped affordances")
     end
@@ -2048,7 +2048,7 @@ class CLITest < Minitest::Test
   # --parse-only skips fetch, so TestAdapter (whose #fetch is unimplemented)
   # loads straight off the canonical dir and the counts are reported.
   def test_sync_parse_only_loads_and_reports_counts
-    with_sync_env(enabled: true) do |config|
+    with_sync_env(wired: true) do |config|
       out, _err, status = with_config(config) { run_cli(%w[sync corpus --parse-only]) }
       assert_nil status
       assert_match(/corpus\s+parse-only/, out)
@@ -2072,7 +2072,7 @@ class CLITest < Minitest::Test
       File.write(sources, <<~YAML)
         local-language:
           adapter: Nabu::Adapters::LocalLanguage
-          enabled: true
+          wired: true
           kind: shelf
       YAML
       config = Nabu::Config.new(
@@ -2110,10 +2110,10 @@ class CLITest < Minitest::Test
   # Explicit beats config: a disabled source named by slug still syncs, with a
   # printed note.
   def test_sync_disabled_source_by_slug_prints_note_and_runs
-    with_sync_env(enabled: false) do |config|
+    with_sync_env(wired: false) do |config|
       out, _err, status = with_config(config) { run_cli(%w[sync corpus --parse-only]) }
       assert_nil status
-      assert_match(/disabled; syncing anyway/i, out)
+      assert_match(/not wired yet.*syncing anyway/i, out)
       assert_match(/\+2 added/, out)
     end
   end
@@ -2131,7 +2131,7 @@ class CLITest < Minitest::Test
       assert_match(/^axis alpha — The Alphaist/, out, "the axis header names the hat, persona verbatim")
       assert_match(/^red\s+parse-only\s+\+2 added/, out, "enabled member red synced")
       assert_match(/^green\s+parse-only\s+\+2 added/, out, "enabled member green synced")
-      assert_match(/^skipped \(disabled\): blue$/, out, "disabled member named on one skip line")
+      assert_match(/^skipped \(unwired\): blue$/, out, "disabled member named on one skip line")
       refute_match(/^blue\s+parse-only/, out, "a disabled axis member is never synced")
       refute_match(/^gold\s+parse-only/, out, "a member of another axis is not pulled in")
     end
@@ -2223,7 +2223,7 @@ class CLITest < Minitest::Test
   # The hook gets the JSON brief on stdin (tool-agnostic stub: a shell
   # command), its output is relayed, exit 0 reported.
   def test_sync_review_pipes_the_brief_and_relays_the_hook_output
-    with_sync_env(enabled: true) do |config|
+    with_sync_env(wired: true) do |config|
       sink = File.join(config.canonical_dir, "..", "brief.json")
       out, _err, status = with_config(config) do
         run_cli(["sync", "corpus", "--parse-only", "--review", "tee #{sink} >/dev/null && echo LGTM"])
@@ -2241,7 +2241,7 @@ class CLITest < Minitest::Test
 
   # NON-FATALITY: the hook's failure is reported and the sync still exits 0.
   def test_sync_review_hook_failure_never_fails_the_sync
-    with_sync_env(enabled: true) do |config|
+    with_sync_env(wired: true) do |config|
       out, _err, status = with_config(config) do
         run_cli(["sync", "corpus", "--parse-only", "--review", "cat >/dev/null; echo no thanks >&2; exit 7"])
       end
@@ -2254,7 +2254,7 @@ class CLITest < Minitest::Test
 
   # Off by default: no --review, no hook, no review lines.
   def test_sync_without_review_runs_no_hook
-    with_sync_env(enabled: true) do |config|
+    with_sync_env(wired: true) do |config|
       out, _err, status = with_config(config) { run_cli(%w[sync corpus --parse-only]) }
       assert_nil status
       refute_match(/review/, out)
@@ -2364,7 +2364,7 @@ class CLITest < Minitest::Test
   # When $stderr is a tty, the loader's per-document ticks render a \r-updating
   # "loading…" counter on $stderr; the final counts still land on $stdout.
   def test_sync_progress_hits_stderr_when_tty_stdout_counts_unchanged
-    with_sync_env(enabled: true) do |config|
+    with_sync_env(wired: true) do |config|
       out, err = with_config(config) do
         capture_with_tty(stderr_tty: true) { Nabu::CLI.start(%w[sync corpus --parse-only]) }
       end
@@ -2378,7 +2378,7 @@ class CLITest < Minitest::Test
   # Non-tty (the default in the suite): a small corpus stays completely silent
   # on $stderr — the per-100-docs line never triggers for two documents.
   def test_sync_non_tty_small_corpus_emits_no_progress
-    with_sync_env(enabled: true) do |config|
+    with_sync_env(wired: true) do |config|
       _out, err = with_config(config) do
         capture_with_tty(stderr_tty: false) { Nabu::CLI.start(%w[sync corpus --parse-only]) }
       end
@@ -2396,7 +2396,7 @@ class CLITest < Minitest::Test
     Nabu::CLI.starter_sources.each do |starter|
       entry = registry[starter.slug]
       refute_nil entry, "starter source #{starter.slug} must be registered in config/sources.yml"
-      assert entry.enabled, "starter source #{starter.slug} must be enabled"
+      assert entry.wired, "starter source #{starter.slug} must be wired"
     end
   end
 
@@ -2541,11 +2541,11 @@ class CLITest < Minitest::Test
       sources = <<~YAML
         local-library:
           adapter: Nabu::Adapters::LocalLibrary
-          enabled: true
+          wired: true
           kind: shelf
         local-language:
           adapter: Nabu::Adapters::LocalLanguage
-          enabled: true
+          wired: true
           kind: shelf
       YAML
       path = File.join(root, "sources.yml")
@@ -2777,10 +2777,10 @@ class CLITest < Minitest::Test
       sources = <<~YAML
         corpus:
           adapter: TestAdapter
-          enabled: true
+          wired: true
         local-notes:
           adapter: Nabu::Adapters::LocalNotes
-          enabled: true
+          wired: true
           kind: shelf
       YAML
       path = File.join(root, "sources.yml")
@@ -3039,7 +3039,7 @@ class CLITest < Minitest::Test
   # Fresh bootstrap: no ledger file exists; status degrades honestly, the
   # first sync creates it, and the recorded run shows up in status.
   def test_first_sync_creates_the_ledger_and_status_reads_it
-    with_sync_env(enabled: true) do |config|
+    with_sync_env(wired: true) do |config|
       refute File.exist?(config.history_path), "no ledger before the first sync"
 
       with_config(config) { run_cli(%w[sync corpus --parse-only]) }
@@ -3148,7 +3148,7 @@ class CLITest < Minitest::Test
   # TestAdapter's upstream is non-github, so the license check stays unchecked
   # (no HTTP), and with no catalog built drift reads never-synced.
   def test_health_remote_all_alive_exits_zero
-    with_sync_env(enabled: true) do |config|
+    with_sync_env(wired: true) do |config|
       write_profile(config, "corpus") # P44-r3b: health scopes to the enabled set
       out, _err, status = with_config(config) do
         with_stubbed_shell(->(*_argv) { "sha_head\tHEAD\n" }) { run_cli(%w[health --remote]) }
@@ -3166,7 +3166,7 @@ class CLITest < Minitest::Test
 
   # --remote, a gone upstream → GONE in the table (stdout) and exit 1.
   def test_health_remote_gone_upstream_exits_one
-    with_sync_env(enabled: true) do |config|
+    with_sync_env(wired: true) do |config|
       write_profile(config, "corpus") # P44-r3b: health scopes to the enabled set
       dead = ->(*_argv) { raise Nabu::Shell::Error.new("x", status: 128, stderr: "remote: Repository not found.") }
       out, err, status = with_config(config) do
@@ -3190,7 +3190,7 @@ class CLITest < Minitest::Test
       Nabu::Shell.run("git", "-C", corpus, "add", ".")
       Nabu::Shell.run("git", "-C", corpus, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "seed")
       sources = File.join(root, "sources.yml")
-      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: manual\n")
+      File.write(sources, "corpus:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources, config_path: "(test)"
@@ -3260,7 +3260,7 @@ class CLITest < Minitest::Test
   # A registered source that has never recorded a baseline (no ok sync since
   # ledger migration 005) has nothing to accept: a clean named error.
   def test_health_accept_creep_without_a_baseline_is_a_named_error
-    with_sync_env(enabled: true) do |config|
+    with_sync_env(wired: true) do |config|
       _out, err, status = with_config(config) { run_cli(%w[health --accept-creep corpus]) }
       assert_equal 1, status
       assert_match(/no quarantine baseline recorded for 'corpus'/, err)
@@ -3271,7 +3271,7 @@ class CLITest < Minitest::Test
   # ls-remote path as `health --remote`), persists the verdict, then renders the
   # up= column from that fresh cache — the one-command informed-update flow.
   def test_status_remote_probes_inline_persists_and_renders_up_column
-    with_sync_env(enabled: true) do |config|
+    with_sync_env(wired: true) do |config|
       with_config(config) { run_cli(%w[sync corpus --parse-only]) }
 
       # Bare compact status before any probe: never probed → the UNPROBED mark.
@@ -5674,7 +5674,7 @@ class CLITest < Minitest::Test
   # A config whose db/ has been fully built (catalog + fulltext index) by a real
   # parse-only sync of the two-document TestAdapter corpus. Yields the config.
   def with_indexed_corpus
-    with_sync_env(enabled: true) do |config|
+    with_sync_env(wired: true) do |config|
       with_config(config) do
         capture_io { Nabu::CLI.start(%w[sync corpus --parse-only]) }
       end
@@ -5791,15 +5791,15 @@ class CLITest < Minitest::Test
       File.write(sources, <<~YAML)
         shelf:
           adapter: TestAdapter
-          enabled: true
+          wired: true
           sync_policy: manual
         lex:
           adapter: TestAdapter
-          enabled: true
+          wired: true
           sync_policy: frozen
         library:
           adapter: TestAdapter
-          enabled: true
+          wired: true
           kind: shelf
       YAML
       config = Nabu::Config.new(
@@ -5841,17 +5841,17 @@ class CLITest < Minitest::Test
       File.write(sources, <<~YAML)
         shelf:
           adapter: TestAdapter
-          enabled: true
+          wired: true
           sync_policy: manual
           axes: [classical]
         lex:
           adapter: TestAdapter
-          enabled: true
+          wired: true
           sync_policy: frozen
           axes: [slavic, reference]
         library:
           adapter: TestAdapter
-          enabled: true
+          wired: true
           kind: shelf
           axes: [slavic]
       YAML
@@ -6369,7 +6369,7 @@ class CLITest < Minitest::Test
       File.write(File.join(corpus, "kwic.txt"),
                  "KWIC\nalpha μῆνιν beta gamma\ndelta μηνιτισι epsilon\n")
       sources = File.join(root, "sources.yml")
-      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: auto\n")
+      File.write(sources, "corpus:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: auto\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources, config_path: "(test)"
@@ -6391,7 +6391,7 @@ class CLITest < Minitest::Test
                    treebank)
       sources = File.join(root, "sources.yml")
       File.write(sources, "ud:\n  adapter: Nabu::Adapters::UniversalDependencies\n  " \
-                          "enabled: true\n  sync_policy: auto\n")
+                          "wired: true\n  sync_policy: auto\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources, config_path: "(test)"
@@ -6784,14 +6784,14 @@ class CLITest < Minitest::Test
 
   # One TestAdapter source "corpus" (two documents) with canonical data; the
   # caller stubs Config.load with the yielded config. +enabled+ seeds the row.
-  def with_sync_env(enabled:)
+  def with_sync_env(wired:)
     Dir.mktmpdir("nabu-cli-sync") do |root|
       corpus = File.join(root, "canonical", "corpus")
       FileUtils.mkdir_p(corpus)
       File.write(File.join(corpus, "one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
       File.write(File.join(corpus, "two.txt"), "Odyssey\nἄνδρα\n")
       sources = File.join(root, "sources.yml")
-      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: #{enabled}\n  sync_policy: auto\n")
+      File.write(sources, "corpus:\n  adapter: TestAdapter\n  wired: #{wired}\n  sync_policy: auto\n")
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources, config_path: "(test)"
@@ -6831,7 +6831,7 @@ class CLITest < Minitest::Test
       File.write(File.join(root, "axes.yml"), "etym:\n  persona: \"The Etymologist.\"\n  desc: \"The etym lane.\"\n")
       sources = File.join(root, "sources.yml")
       File.write(sources, "#{grant_source_yaml('starling', policy: 'manual', axes: 'etym')}" \
-                          "plain:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: manual\n  axes: [etym]\n")
+                          "plain:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n  axes: [etym]\n")
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources, config_path: "(test)"
@@ -6844,7 +6844,7 @@ class CLITest < Minitest::Test
     <<~YAML
       #{slug}:
         adapter: TestAdapter
-        enabled: true
+        wired: true
         sync_policy: #{policy}
       #{axes_line}  grant_required: true
         grant:
@@ -6894,10 +6894,10 @@ class CLITest < Minitest::Test
   def with_axis_sync_env
     Dir.mktmpdir("nabu-cli-axis") do |root|
       rows = {
-        "red" => { axes: %w[alpha], enabled: true },
-        "green" => { axes: %w[alpha], enabled: true },
-        "blue" => { axes: %w[alpha], enabled: false },
-        "gold" => { axes: %w[beta], enabled: true }
+        "red" => { axes: %w[alpha], wired: true },
+        "green" => { axes: %w[alpha], wired: true },
+        "blue" => { axes: %w[alpha], wired: false },
+        "gold" => { axes: %w[beta], wired: true }
       }
       sources = +""
       rows.each do |slug, spec|
@@ -6905,7 +6905,7 @@ class CLITest < Minitest::Test
         FileUtils.mkdir_p(dir)
         File.write(File.join(dir, "#{slug}-one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
         File.write(File.join(dir, "#{slug}-two.txt"), "Odyssey\nἄνδρα\n")
-        sources << "#{slug}:\n  adapter: TestAdapter\n  enabled: #{spec[:enabled]}\n  " \
+        sources << "#{slug}:\n  adapter: TestAdapter\n  wired: #{spec[:wired]}\n  " \
                    "sync_policy: auto\n  axes: [#{spec[:axes].join(', ')}]\n"
       end
       File.write(File.join(root, "axes.yml"), <<~YAML)
@@ -6951,7 +6951,7 @@ class CLITest < Minitest::Test
         FileUtils.mkdir_p(dir)
         File.write(File.join(dir, "#{slug}-one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
         File.write(File.join(dir, "#{slug}-two.txt"), "Odyssey\nἄνδρα\n")
-        sources << "#{slug}:\n  adapter: #{klass}\n  enabled: true\n  sync_policy: manual\n"
+        sources << "#{slug}:\n  adapter: #{klass}\n  wired: true\n  sync_policy: manual\n"
       end
       path = File.join(root, "sources.yml")
       File.write(path, sources)
@@ -7269,7 +7269,7 @@ class CLITest < Minitest::Test
       File.write(File.join(corpus, "one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
       File.write(File.join(corpus, "two.txt"), "Odyssey\nἄνδρα\n")
       sources = File.join(root, "sources.yml")
-      File.write(sources, "corpus:\n  adapter: TestAdapter\n  enabled: true\n")
+      File.write(sources, "corpus:\n  adapter: TestAdapter\n  wired: true\n")
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources, config_path: "(test)"

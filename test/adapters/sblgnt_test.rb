@@ -102,7 +102,7 @@ class SblgntTest < Minitest::Test
     entry = registry["sblgnt"]
     refute_nil entry, "sblgnt must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Sblgnt, entry.adapter_class
-    assert entry.enabled, "sblgnt is live (owner sign-off 2026-07-10 after first sync + eyeball)"
+    assert entry.wired, "sblgnt is live (owner sign-off 2026-07-10 after first sync + eyeball)"
     assert_equal Nabu::Adapters::Sblgnt.manifest, entry.manifest
   end
 

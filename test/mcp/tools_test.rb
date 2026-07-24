@@ -890,13 +890,13 @@ module MCP
       registry = Nabu::SourceRegistry.new([
                                             Nabu::SourceRegistry::Entry.new(
                                               slug: "perseus", adapter_class_name: "TestAdapter",
-                                              enabled: true, sync_policy: "manual"
+                                              wired: true, sync_policy: "manual"
                                             )
                                           ])
       body = payload(tools(registry: registry).call("nabu_status", {}))
       sources = body.fetch("sources")
       assert sources.find { |s| s.fetch("slug") == "perseus" }.fetch("enabled"),
-             "registry enabled: true must win over the stale db row"
+             "registry wired: true must win over the stale db row"
       # adhoc has no registry line: the db value is all there is.
       assert sources.find { |s| s.fetch("slug") == "adhoc" }.fetch("enabled")
     end
@@ -909,7 +909,7 @@ module MCP
       registry = Nabu::SourceRegistry.new(
         %w[perseus adhoc].map do |slug|
           Nabu::SourceRegistry::Entry.new(slug: slug, adapter_class_name: "TestAdapter",
-                                          enabled: true, sync_policy: "manual")
+                                          wired: true, sync_policy: "manual")
         end
       )
       slugs = payload(tools(registry: registry, enabled_slugs: %w[perseus])

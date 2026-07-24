@@ -161,7 +161,7 @@ module Nabu
       # sources.last_sync_at it survives rebuilds, so a rebuild neither hides
       # nor causes staleness.
       def stale_finding(entry, finished_at)
-        return nil unless entry.enabled && entry.sync_policy == "auto"
+        return nil unless entry.wired && entry.sync_policy == "auto"
 
         TrendRules.stale_source(last_sync_at: finished_at, now: @now)
       end

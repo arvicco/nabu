@@ -132,7 +132,7 @@ class PerseusLatinTest < Minitest::Test
 
   # --- registry round-trip ------------------------------------------------
 
-  # enabled: false until the owner-initiated first sync, but the entry must
+  # wired: false until the owner-initiated first sync, but the entry must
   # still resolve (the registry loads disabled sources too).
   def test_registry_resolves_perseus_latin_and_manifest_agrees
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))

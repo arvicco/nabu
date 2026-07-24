@@ -650,7 +650,7 @@ japonic:
   blurb: |
     The desk spans two eras of Japanese. Old Japanese (ojp) is live now
     through ONCOJ and its lexicon; the modern lane arrives with **Aozora
-    Bunko** (青空文庫, `enabled: false` pending the owner's first sync) — the
+    Bunko** (青空文庫, `wired: false` pending the owner's first sync) — the
     public-domain library at paragraph grain, ~17,488 works. Its scope is PD
     text ONLY: discovery excludes the in-copyright works before any file is
     touched. Ruby (振り仮名) readings ride as annotations over the base text,

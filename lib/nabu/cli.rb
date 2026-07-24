@@ -74,7 +74,7 @@ module Nabu
       syncs exactly as `sync <slug>` would, per-source report lines
       byte-unchanged, under a one-line axis header. The asymmetry to know:
       an axis expansion is NOT an explicit per-source request, so DISABLED
-      members are SKIPPED — reported by name on one `skipped (disabled): …`
+      members are SKIPPED — reported by name on one `skipped (unwired): …`
       line, never silently — whereas `sync <disabled-slug>` (explicit) still
       syncs. `--axis a,b` selects several axes and prints one group each, in
       order. `--all` is a flat batch (enabled + live sources), never grouped.
@@ -3424,7 +3424,7 @@ module Nabu
         say "  members (#{members.size}):"
         width = members.map(&:length).max || 0
         members.each do |slug|
-          state = registry[slug]&.enabled ? "on " : "off"
+          state = registry[slug]&.wired ? "wired  " : "unwired"
           say "    #{slug.ljust(width)}  #{state}  #{axis_member_holdings(by_slug[slug], census: census)}"
         end
         print_axis_gold(members, by_slug, info)
@@ -3476,8 +3476,8 @@ module Nabu
 
       def source_map_line(line, registry)
         entry = registry[line.slug]
-        enabled = entry ? entry.enabled : line.enabled
-        off = enabled ? "" : " (off)"
+        wired = entry ? entry.wired : line.enabled
+        off = wired ? "" : " (unwired)"
         return "#{line.slug}#{off} — no description; nabu ingest --shelf source #{line.slug}" unless line.description
 
         "#{line.slug}#{off} — #{truncate_line(first_sentence(line.description))}"
@@ -3516,7 +3516,7 @@ module Nabu
         return " · shelf · local memory" if entry.shelf?
         return " · module · machinery (no catalog rows)" if entry.feature_module?
 
-        " · source · sync #{entry.sync_policy} · #{entry.enabled ? 'on' : 'off'}"
+        " · source · sync #{entry.sync_policy} · #{entry.wired ? 'wired' : 'unwired'}"
       end
 
       def card_counts(card)
@@ -6030,7 +6030,7 @@ module Nabu
       # per-source report line is byte-identical to a direct sync — grouping
       # is pure fan-out. One axis header precedes each group; DISABLED members
       # are skipped (an axis expansion is not an explicit per-source request)
-      # and named on one `skipped (disabled): …` line, never silently. A slug
+      # and named on one `skipped (unwired): …` line, never silently. A slug
       # reachable via two selected axes syncs once, under its first group.
       def sync_axes(runner, registry, names, db, ledger)
         names = names.map(&:strip).reject(&:empty?)
@@ -6045,21 +6045,21 @@ module Nabu
         names.each { |name| sync_axis_group(runner, registry, name, db, ledger, synced) }
       end
 
-      # One axis's group: the header, then each not-yet-synced ENABLED member
-      # through sync_one, then the named skip line for the disabled members.
+      # One axis's group: the header, then each not-yet-synced WIRED member
+      # through sync_one, then the named skip line for the unwired members.
       def sync_axis_group(runner, registry, name, db, ledger, synced)
-        enabled, disabled = registry.axis_members(name).partition { |member| registry[member].enabled }
+        wired, unwired = registry.axis_members(name).partition { |member| registry[member].wired }
         # P42-r1: an axis expansion is a batch, not an explicit per-source
         # request, so a grant-blocked member is SKIPPED with the honest line —
         # never prompted mid-group (the prompt is reserved for `sync <slug>`).
         gate = Nabu::GrantGate.new(ledger: ledger)
-        grant_blocked, runnable = enabled.partition { |member| gate.blocked?(registry[member]) }
+        grant_blocked, runnable = wired.partition { |member| gate.blocked?(registry[member]) }
         say axis_header(registry.axes[name])
         (runnable - synced).each do |member|
           sync_one(runner, registry, member, db, ledger)
           synced << member
         end
-        say "skipped (disabled): #{disabled.join(', ')}" unless disabled.empty?
+        say "skipped (unwired): #{unwired.join(', ')}" unless unwired.empty?
         (grant_blocked - synced).each do |member|
           say Nabu::GrantGate.skip_line(member)
           synced << member
@@ -6094,7 +6094,10 @@ module Nabu
         # P39-0: name a non-source row's nature up front, so an owner who fires
         # `sync kr-gaiji` / `sync local-notes` knows what it does (and does not) do.
         say kind_nature_note(entry), :yellow if entry && !entry.source?
-        say "Note: #{slug} is disabled; syncing anyway (explicit request).", :yellow if entry && !entry.enabled
+        if entry && !entry.wired
+          say "Note: #{slug} is not wired yet (this sync is the verification); syncing anyway (explicit request).",
+              :yellow
+        end
         # P42-r1: the fetch-grant gate — a permission-bound source needs a
         # recorded acknowledgment before its first fetch (interactive here, on
         # the explicit path; the batch paths pre-skip blocked sources).
@@ -6224,7 +6227,7 @@ module Nabu
         results = runner.sync_all(parse_only: options[:parse_only], force: options[:force],
                                   progress: progress_reporter, enabled: filter)
         finish_progress
-        return say("Nothing to sync: no enabled, live sources.") if results.empty?
+        return say("Nothing to sync: no wired, auto-cadence sources.") if results.empty?
 
         say "syncing #{pluralize(results.size, 'enabled source')}:"
         results.each do |slug, result|

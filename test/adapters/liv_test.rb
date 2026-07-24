@@ -215,7 +215,7 @@ class LivTest < Minitest::Test
     entry = registry["liv"]
     refute_nil entry, "config/sources.yml must register liv"
     assert_equal Nabu::Adapters::Liv, entry.adapter_class
-    assert entry.enabled, "live (owner sign-off 2026-07-14 after first sync + eyeball)"
+    assert entry.wired, "live (owner sign-off 2026-07-14 after first sync + eyeball)"
     assert_equal "manual", entry.sync_policy
   end
 end

@@ -164,7 +164,7 @@ class UnihanTest < Minitest::Test
     entry = registry["unihan"]
     refute_nil entry, "config/sources.yml must register unihan"
     assert_equal Nabu::Adapters::Unihan, entry.adapter_class
-    assert entry.enabled, "live (owner order 2026-07-20: P32+P33 sources flipped, post-P34 gate)"
+    assert entry.wired, "live (owner order 2026-07-20: P32+P33 sources flipped, post-P34 gate)"
     assert_equal "manual", entry.sync_policy
   end
 end

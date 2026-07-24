@@ -25,7 +25,7 @@ module Adapters
       entry = registry["hypotactic"]
       refute_nil entry, "hypotactic must be registered in config/sources.yml"
       assert entry.feature_module?, "a meter instrument is a kind: module row"
-      refute entry.enabled, "a feature module serves no documents — enabled stays false permanently"
+      refute entry.wired, "a feature module serves no documents — enabled stays false permanently"
       assert_equal "manual", entry.sync_policy, "the sync is owner-fired"
       assert_equal %w[classical], entry.axes
     end

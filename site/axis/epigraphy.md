@@ -17,22 +17,22 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `papyri-ddbdp` | papyri | attribution | enabled · manual | 61,414 docs / 921,611 passages |
-| `edh` | inscriptions | attribution | enabled · frozen | 81,881 docs / 406,306 passages |
-| `riig` | inscriptions | attribution | enabled · manual | 495 docs / 1,357 passages |
-| `ogham` | inscriptions | nc | enabled · manual | 873 docs / 1,053 passages |
-| `isicily` | inscriptions | attribution | enabled · manual | 6,723 docs / 17,921 passages |
-| `itant` | inscriptions | nc | enabled · manual | 1,160 docs / 1,283 passages |
-| `trismegistos` | feature module | attribution | not enabled | nothing held yet |
-| `pleiades` | feature module | attribution | not enabled | nothing held yet |
-| `tlhdig` | tablets | attribution | enabled · manual | 23,486 docs / 402,195 passages |
-| `ceipom` | inscriptions | attribution | enabled · frozen | 3,871 docs / 5,303 passages |
-| `open-etruscan` | inscriptions | attribution | enabled · frozen | 8,047 docs / 8,047 passages |
-| `lexlep` | inscriptions | nc | enabled · manual | 494 docs / 570 passages |
-| `lexlep-words` | dictionary | nc | enabled · manual | 627 entries |
-| `tir` | inscriptions | nc | enabled · manual | 389 docs / 434 passages |
-| `iip` | inscriptions | nc | enabled · manual | 5,499 docs / 17,823 passages |
-| `rundata` | inscriptions | odbl | enabled · manual | 30,643 docs / 30,641 passages |
+| `papyri-ddbdp` | papyri | attribution | wired · manual | 61,414 docs / 921,611 passages |
+| `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
+| `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
+| `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
+| `isicily` | inscriptions | attribution | wired · manual | 6,723 docs / 17,921 passages |
+| `itant` | inscriptions | nc | wired · manual | 1,160 docs / 1,283 passages |
+| `trismegistos` | feature module | attribution | not yet wired | nothing held yet |
+| `pleiades` | feature module | attribution | not yet wired | nothing held yet |
+| `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
+| `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
+| `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |
+| `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
+| `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
+| `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
+| `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
+| `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
 
 ## The desk's instruments
 

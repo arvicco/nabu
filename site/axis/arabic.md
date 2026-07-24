@@ -23,8 +23,8 @@ A source wears every desk it serves — these two answer this desk. Holdings are
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `kitab` | feature module | nc | not enabled | nothing held yet |
-| `openiti` | texts | nc | enabled · manual | 9,079 docs / 34,631,499 passages |
+| `kitab` | feature module | nc | not yet wired | nothing held yet |
+| `openiti` | texts | nc | wired · manual | 9,079 docs / 34,631,499 passages |
 
 ## The desk's instruments
 

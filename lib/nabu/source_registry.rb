@@ -5,17 +5,24 @@ require "yaml"
 module Nabu
   # The source registry (architecture §5, config/sources.yml): the authoritative
   # list of corpora Nabu knows about — which adapter class ingests each, whether
-  # it is enabled, and its sync policy. Parsed and validated up front; adapter
+  # it is WIRED (adapter exists and is verified to sync), and its sync policy.
+  # NOMENCLATURE (owner ruling 2026-07-24): this registry marker was named
+  # `enabled:` before the P44-r3b enablement promotion gave `nabu enable` a
+  # different meaning (the box's profile.yml enabled set). The field is now
+  # `wired:` — profile enablement says WHICH sources this box works with;
+  # wired says the ADAPTER is built and first-sync-verified. Parsed and validated up front; adapter
   # classes resolve *lazily* (per entry, on demand) so `nabu status`/listing
   # never require every adapter to be loadable.
   #
   # Split of authority: the registry owns identity + metadata (name, adapter
   # class, license, upstream URL — all from the adapter manifest) AND
-  # enablement (revised 2026-07-04; re-affirmed P23-3b: status/list/MCP read
-  # `enabled` from the registry directly, since the db row only mirrors a
+  # the wired marker (revised 2026-07-04; re-affirmed P23-3b: status/list/MCP
+  # read `wired` from the registry directly, since the db row only mirrors a
   # sources.yml flip at the source's next sync); the catalog db owns sync
   # history (last_sync_*). #sync_source! reconciles the two, writing metadata
-  # + enabled into the sources row while preserving db-owned state.
+  # + wired into the sources row (the db COLUMN keeps its historical name
+  # `enabled` — a frozen mirror, renaming it buys nothing) while preserving
+  # db-owned state.
   class SourceRegistry
     # Closed set (docs/maintenance-and-extension.md §2), the honest CADENCE
     # vocabulary (P39-0): `auto` is swept by `sync --all` (the perseus/first1k
@@ -35,8 +42,8 @@ module Nabu
     #     local-* rows): no network, the local fetch strategy, up=local. kind
     #     IMPLIES the local fetch, so a shelf row declares NO sync_policy.
     #   module — MACHINERY only (kr-gaiji, bridging): a sanctioned fetch that
-    #     mints ZERO catalog rows, so there is nothing to serve or enable
-    #     (enabled: false is required) and nothing for `sync --all` to sweep.
+    #     mints ZERO catalog rows, so there is nothing to serve
+    #     (wired: false is required) and nothing for `sync --all` to sweep.
     KINDS = %w[source shelf module].freeze
     DEFAULT_KIND = "source"
 
@@ -69,7 +76,7 @@ module Nabu
     # license/scouting record of it, but must NOT advertise it as a library
     # holding — the public-doc/site generators exclude it and public counts
     # never include it. Orthogonal to `grant_required` (the sync-time gate) and
-    # to `enabled`: availability governs PUBLIC VISIBILITY of the row, not
+    # to `wired`: availability governs PUBLIC VISIBILITY of the row, not
     # whether it can be fetched or served locally. Owner ruling 2026-07-24.
     AVAILABILITIES = %w[public blocked].freeze
     DEFAULT_AVAILABILITY = "public"
@@ -111,7 +118,7 @@ module Nabu
     # (search --fuzzy). This is an OWNER POSTURE, not adapter metadata: the
     # documentary scope exists because of index economics (design §4: the
     # documentary shelves cost ~250–270 MB, the whole corpus 3.6–4.1 GB), so
-    # the flag lives here beside enabled/translations — flipped per-source in
+    # the flag lives here beside wired/translations — flipped per-source in
     # sources.yml with a sign-off comment, no code change when a future
     # documentary source (inscriptions) joins. A manifest field was rejected
     # (the manifest is intrinsic upstream identity/license, and editing it IS
@@ -122,7 +129,7 @@ module Nabu
     # gold, so existing entries never change).
     # +classes+ (P33-0): the acquisition scope of a many-repo source
     # (kanripo `classes: [KR1, KR3, KR4]`) — an owner posture like
-    # enabled/translations, passed to the adapter's `classes:` keyword by
+    # wired/translations, passed to the adapter's `classes:` keyword by
     # build_adapter. nil (the default) leaves the adapter's own default
     # scope; the adapter validates the class vocabulary.
     # +siblings+ (P34-0): the `--parallel` work-pattern declaration — HOW
@@ -149,10 +156,10 @@ module Nabu
     # the gate renders (grantor/date/terms/thread/request_hint). The two travel
     # together — a grant block without the flag, or the flag without a block, is
     # a configuration error caught at load. Absent on every ordinary source.
-    Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :kind, :translations,
+    Entry = Data.define(:slug, :adapter_class_name, :wired, :sync_policy, :kind, :translations,
                         :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings, :axes,
                         :grant_required, :grant, :availability, :quickstart) do
-      def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, kind: DEFAULT_KIND,
+      def initialize(slug:, adapter_class_name:, wired:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false,
                      lemma_tier: DEFAULT_LEMMA_TIER, classes: nil, siblings: nil, axes: [],
                      grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
@@ -221,17 +228,19 @@ module Nabu
 
       # Upsert this source's row from slug + manifest. Registry is authoritative
       # for identity/metadata (name, adapter_class, license, license_class,
-      # upstream_url) AND for `enabled` — the owner flips enabled in
+      # upstream_url) AND for the wired marker — the owner flips `wired:` in
       # sources.yml with a sign-off comment, and `sync --all` reads the yaml,
       # so the db row mirrors it on every reconcile (revised 2026-07-04; the
       # original db-owns-enabled split left `status` showing stale rows
-      # forever). The db stays authoritative for sync history (last_sync_*).
+      # forever). The db COLUMN stays named `enabled` (historical; a frozen
+      # mirror of wired). The db stays authoritative for sync history
+      # (last_sync_*).
       # Returns the Store::Source row.
       def sync_source!(db)
         attrs = {
           name: manifest.name, adapter_class: adapter_class_name,
           license: manifest.license, license_class: manifest.license_class,
-          credit: manifest.credit, upstream_url: manifest.upstream_url, enabled: enabled
+          credit: manifest.credit, upstream_url: manifest.upstream_url, enabled: wired
         }
         db.transaction do
           row = Store::Source.first(slug: slug)
@@ -284,13 +293,13 @@ module Nabu
       end
 
       kind = kind!(slug, config)
-      enabled = enabled!(slug, config)
-      kind_invariants!(slug, config, kind: kind, enabled: enabled)
+      wired = wired!(slug, config)
+      kind_invariants!(slug, config, kind: kind, wired: wired)
       grant_required, grant = grant!(slug, config)
 
       Entry.new(
         slug: slug, adapter_class_name: adapter,
-        enabled: enabled, sync_policy: sync_policy!(slug, config), kind: kind,
+        wired: wired, sync_policy: sync_policy!(slug, config), kind: kind,
         translations: boolean!(slug, config, "translations"),
         license_watch: license_watch!(slug, config),
         fuzzy_index: boolean!(slug, config, "fuzzy_index"),
@@ -446,10 +455,10 @@ module Nabu
     end
     private_class_method :license_watch!
 
-    def self.enabled!(slug, config)
-      boolean!(slug, config, "enabled")
+    def self.wired!(slug, config)
+      boolean!(slug, config, "wired")
     end
-    private_class_method :enabled!
+    private_class_method :wired!
 
     def self.boolean!(slug, config, key)
       value = config.fetch(key, false)
@@ -480,17 +489,17 @@ module Nabu
 
     # Cross-field kind invariants (P39-0): a shelf declares NO sync_policy (its
     # local fetch strategy is implied by kind), and a module mints no catalog
-    # rows so there is nothing to enable.
-    def self.kind_invariants!(slug, config, kind:, enabled:)
+    # rows so there is nothing to wire on.
+    def self.kind_invariants!(slug, config, kind:, wired:)
       if kind == "shelf" && config.key?("sync_policy")
         raise ValidationError,
               "source #{slug.inspect}: a kind: shelf row uses the local fetch strategy — " \
               "drop sync_policy (kind implies it)"
       end
-      return unless kind == "module" && enabled
+      return unless kind == "module" && wired
 
       raise ValidationError,
-            "source #{slug.inspect}: a kind: module row mints no catalog rows — must be enabled: false"
+            "source #{slug.inspect}: a kind: module row mints no catalog rows — must be wired: false"
     end
     private_class_method :kind_invariants!
 

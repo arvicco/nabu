@@ -62,12 +62,12 @@ class ProfileTest < Minitest::Test
       File.write(File.join(dir, "sources.yml"), <<~YAML)
         starter:
           adapter: TestAdapter
-          enabled: true
+          wired: true
           sync_policy: manual
           quickstart: true
         ordinary:
           adapter: TestAdapter
-          enabled: true
+          wired: true
           sync_policy: manual
       YAML
       registry = Nabu::SourceRegistry.load(File.join(dir, "sources.yml"))

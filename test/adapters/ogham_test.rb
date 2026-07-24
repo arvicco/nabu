@@ -175,7 +175,7 @@ class OghamTest < Minitest::Test
     entry = registry["ogham"]
     refute_nil entry, "ogham must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Ogham, entry.adapter_class
-    assert entry.enabled, "live (owner sign-off 2026-07-18: 834 docs, flipped; still nc pending registry #14)"
+    assert entry.wired, "live (owner sign-off 2026-07-18: 834 docs, flipped; still nc pending registry #14)"
     assert_equal "manual", entry.sync_policy
   end
 end

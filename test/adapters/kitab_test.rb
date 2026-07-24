@@ -31,7 +31,7 @@ module Adapters
       entry = registry["kitab"]
       refute_nil entry, "kitab must be registered in config/sources.yml"
       assert entry.feature_module?, "a links instrument is a kind: module row"
-      refute entry.enabled, "a feature module serves no documents — enabled stays false permanently"
+      refute entry.wired, "a feature module serves no documents — enabled stays false permanently"
       assert_equal "manual", entry.sync_policy, "the sweep is owner-fired"
       assert_equal %w[arabic], entry.axes
       assert_equal %w[ALCorpus00001-ara2], entry.classes,

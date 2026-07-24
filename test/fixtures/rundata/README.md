@@ -193,7 +193,7 @@ Vadim Frolov) and does **not** restate a data licence on its About page. The
 ODbL/DbCL grant above is the authoritative SRDB (Uppsala) licence — confirmed
 against the Uppsala runforum and Wikipedia's Scandinavian Runic-text Database
 article. The owner should re-confirm the ODbL grant at the point of a real
-sync / before flipping the adapter to `enabled: true`.
+sync / before flipping the adapter to `wired: true`.
 
 ## The SQLite trim (orchestrator, 2026-07-22)
 

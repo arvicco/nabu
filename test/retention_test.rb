@@ -188,7 +188,7 @@ class RetentionTest < Minitest::Test
   def registry
     Nabu::SourceRegistry.new(
       [Nabu::SourceRegistry::Entry.new(slug: SLUG, adapter_class_name: GitTestAdapter.name,
-                                       enabled: true, sync_policy: "auto")]
+                                       wired: true, sync_policy: "auto")]
     )
   end
 

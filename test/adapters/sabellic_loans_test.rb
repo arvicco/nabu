@@ -144,7 +144,7 @@ class SabellicLoansTest < Minitest::Test
     entry = registry["sabellic-loans"]
     refute_nil entry, "sabellic-loans must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::SabellicLoans, entry.adapter_class
-    assert entry.enabled, "enabled (owner order 2026-07-18: all pre-P30 sources flipped, riding the P30 PR)"
+    assert entry.wired, "enabled (owner order 2026-07-18: all pre-P30 sources flipped, riding the P30 PR)"
     assert_equal "source", entry.kind, "a real source (mints dictionary entries), not a shelf"
     assert_equal "frozen", entry.sync_policy,
                  "P39-0: no live upstream — the vendored curation IS the immutable artifact (was `local`)"
