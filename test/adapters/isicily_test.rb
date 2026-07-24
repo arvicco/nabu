@@ -3,23 +3,33 @@
 require "test_helper"
 require "tmpdir"
 
-# I.Sicily adapter tests (P29-4, siblings P34-0): discovery over the
-# cloned inscriptions/ tree, the isicily-epidoc line grain (textpart
-# paths, break="no", the kept bare <orig>, the metadata-only records),
-# the lemma-layer words annotations, the concordance reference-edge
-# targets, the honest language mapping, and the -translit/-en/-it
-# sibling minting. Includes the shared AdapterConformance suite;
-# fixtures are 12 whole real records (test/fixtures/isicily/README.md).
+# I.Sicily adapter tests (P29-4, siblings P34-0, @n fallback P43-r1):
+# discovery over the cloned inscriptions/ tree, the isicily-epidoc line
+# grain (textpart paths, break="no", the kept bare <orig>, the
+# metadata-only records), the lemma-layer words annotations, the
+# concordance reference-edge targets, the honest language mapping, the
+# -translit/-en/-it sibling minting, and the missing-@n doctrine
+# (tolerated lost-line lbs, document-order fallback, honest refusals).
+# Includes the shared AdapterConformance suite; fixtures are 17 whole
+# real records (test/fixtures/isicily/README.md) — the two permanently-
+# quarantining exemplars live under quarantine/, outside the
+# conformance workdir.
 class IsicilyTest < Minitest::Test
   include AdapterConformance
 
   FIXTURES = Nabu::TestSupport.fixtures("isicily")
 
+  # The two records whose parse MUST raise (fixtures README): discovered
+  # from their own subtree so conformance never round-trips them.
+  QUARANTINE_FIXTURES = File.join(FIXTURES, "quarantine")
+
   # Plain (translations-off) discovery: the base records + the ungated
   # -translit layer siblings (the itant -dipl stance), never -en/-it.
   ALL_URNS = %w[
     urn:nabu:isicily:isic000001 urn:nabu:isicily:isic000006
-    urn:nabu:isicily:isic000451 urn:nabu:isicily:isic000764
+    urn:nabu:isicily:isic000030 urn:nabu:isicily:isic000419
+    urn:nabu:isicily:isic000451 urn:nabu:isicily:isic000756
+    urn:nabu:isicily:isic000764
     urn:nabu:isicily:isic001510 urn:nabu:isicily:isic001620
     urn:nabu:isicily:isic001895 urn:nabu:isicily:isic002954
     urn:nabu:isicily:isic003360 urn:nabu:isicily:isic003360-translit
@@ -27,14 +37,14 @@ class IsicilyTest < Minitest::Test
     urn:nabu:isicily:isic020307 urn:nabu:isicily:isic020307-translit
   ].freeze
 
-  # The -en/-it siblings a translations-on discovery adds (the six
+  # The -en/-it siblings a translations-on discovery adds (the seven
   # fixtures with NON-EMPTY en prose; only ISic000006 carries it prose —
   # comment-only divs mint nothing).
   TRANSLATION_URNS = %w[
     urn:nabu:isicily:isic000001-en urn:nabu:isicily:isic000006-en
-    urn:nabu:isicily:isic000006-it urn:nabu:isicily:isic000451-en
-    urn:nabu:isicily:isic001620-en urn:nabu:isicily:isic001895-en
-    urn:nabu:isicily:isic003475-en
+    urn:nabu:isicily:isic000006-it urn:nabu:isicily:isic000030-en
+    urn:nabu:isicily:isic000451-en urn:nabu:isicily:isic001620-en
+    urn:nabu:isicily:isic001895-en urn:nabu:isicily:isic003475-en
   ].freeze
 
   def conformance_adapter
@@ -350,6 +360,105 @@ class IsicilyTest < Minitest::Test
            "later paragraphs carry NO invented alignment — they fall honestly one-sided"
   end
 
+  # --- missing @n: the document-order fallback doctrine (P43-r1) --------------
+
+  def test_a_bare_lb_before_a_lost_line_gap_is_tolerated
+    document = parse("urn:nabu:isicily:isic000030")
+    assert_equal %w[
+      urn:nabu:isicily:isic000030:1
+      urn:nabu:isicily:isic000030:2
+      urn:nabu:isicily:isic000030:3
+    ], document.map(&:urn),
+                 "the unnumbered <lb/> opens only the lost-lines gap — dropped like any " \
+                 "gap-only line, so upstream's own numbers stand untouched"
+    assert_equal "Hostilianus", document.first.text
+    assert(document.none? { |passage| passage.annotations.key?("numbering") },
+           "no number was invented — no fallback marker")
+    refute document.metadata.key?("numbering")
+  end
+
+  def test_all_unnumbered_textparts_take_document_order_paths_with_marker
+    document = parse("urn:nabu:isicily:isic000419")
+    assert_equal %w[
+      urn:nabu:isicily:isic000419:1:1
+      urn:nabu:isicily:isic000419:2:2
+      urn:nabu:isicily:isic000419:3:3
+      urn:nabu:isicily:isic000419:4:4
+    ], document.map(&:urn),
+                 "every gallery textpart lacks @n → whole-edition document-order paths " \
+                 "(the lbs carry their own global 1..4)"
+    assert_equal ["CIIINbbb", "CIIIINbbb", "CINNb[…]", "CIIINbbbb"], document.map(&:text)
+    assert_equal ["document-order"],
+                 document.map { |passage| passage.annotations["numbering"] }.uniq,
+                 "invented numbering is machine-visibly marked on every passage"
+    assert_equal "document-order", document.metadata["numbering"],
+                 "…and on the document, for the display/provenance layer"
+  end
+
+  def test_fallback_numbering_is_stable_across_two_parses
+    first = parse("urn:nabu:isicily:isic000419")
+    second = parse("urn:nabu:isicily:isic000419")
+    assert_equal first.map(&:urn), second.map(&:urn),
+                 "document-order fallback urns must be deterministic — the loader upserts on urn"
+  end
+
+  def test_an_all_unnumbered_gap_only_record_is_metadata_only
+    document = parse("urn:nabu:isicily:isic000756")
+    assert_equal 0, document.size,
+                 "the record's single unnumbered <lb/> opens an illegible-lines gap — " \
+                 "no citable line, a catalogued monument"
+    assert_equal "none", document.metadata["text_layer"]
+    refute document.metadata.key?("numbering"), "nothing minted, nothing invented"
+  end
+
+  # No record at canonical commit 62e6a28 carries CITABLE text under an
+  # all-unnumbered lb universe (census 2026-07-23: every bare <lb/>
+  # corpus-wide opens a gap-only line) — the next two tests pin the
+  # defense for upstream growing one, on variants derived from the real
+  # ISic000756 bytes by replacing its illegible-lines gap element (the
+  # freising bad.xml precedent for shapes fixtures cannot document).
+  def test_citable_lines_under_all_unnumbered_lbs_number_by_document_order
+    document = parse_doctored_isic000756("<lb/>pro <lb/>bono")
+    assert_equal %w[urn:nabu:isicily:isic000756:1 urn:nabu:isicily:isic000756:2],
+                 document.map(&:urn), "whole-edition fallback: lb ordinals become the line numbers"
+    assert_equal %w[pro bono], document.map(&:text)
+    assert_equal ["document-order"],
+                 document.map { |passage| passage.annotations["numbering"] }.uniq
+    assert_equal "document-order", document.metadata["numbering"]
+  end
+
+  def test_a_citable_unnumbered_lb_beside_numbered_ones_still_quarantines
+    error = assert_raises(Nabu::ParseError) do
+      parse_doctored_isic000756("<lb n=\"1\"/>pro <lb/>bono")
+    end
+    assert_match(/<lb> #2 \(document order\) is missing its @n/, error.message,
+                 "mixed numbering refuses — an implicit ordinal could collide with the " \
+                 "explicit numbers, and the honest move is quarantine")
+  end
+
+  def test_mixed_textpart_numbering_still_quarantines
+    error = assert_raises(Nabu::ParseError) { parse_quarantined("urn:nabu:isicily:isic001698") }
+    assert_match(/div\[@type="textpart"\] is missing its @n/, error.message,
+                 "the unnumbered border textpart carries citable text beside monogram " \
+                 "textparts n=1..4 — ordinal paths could collide with the explicit ones")
+  end
+
+  def test_a_quarantined_base_takes_its_translation_sibling_down_with_it
+    assert_raises(Nabu::ParseError) { parse_quarantined("urn:nabu:isicily:isic001698-en") }
+  end
+
+  # --- the out-of-scope quarantine classes stay quarantined (D42-c) -----------
+
+  def test_duplicate_translation_cites_still_quarantine_the_sibling_only
+    document = parse_quarantined("urn:nabu:isicily:isic000469")
+    assert_equal "Dedication to Apollo", document.title
+    assert_equal 2, document.size, "the BASE record is healthy and parses"
+    error = assert_raises(Nabu::ParseError) { parse_quarantined("urn:nabu:isicily:isic000469-en") }
+    assert_match(/duplicate passage urn/, error.message,
+                 "upstream tags its Italian translation xml:lang=\"en\" — both en divs mint " \
+                 "cite p1, a genuine upstream defect that must keep quarantining")
+  end
+
   # --- identity ---------------------------------------------------------------
 
   def test_urn_mismatch_is_a_parse_error
@@ -363,12 +472,30 @@ class IsicilyTest < Minitest::Test
 
   private
 
-  def parse(urn)
+  def parse(urn, workdir: FIXTURES)
     # translations on so the -en/-it sibling refs resolve; base + -translit
     # refs are identical either way.
     adapter = Nabu::Adapters::Isicily.new(translations: true)
-    ref = adapter.discover(FIXTURES).find { |r| r.id == urn }
+    ref = adapter.discover(workdir).find { |r| r.id == urn }
     refute_nil ref, "no ref #{urn}"
     adapter.parse(ref)
+  end
+
+  def parse_quarantined(urn)
+    parse(urn, workdir: QUARANTINE_FIXTURES)
+  end
+
+  # The real ISic000756 bytes with its one gap element swapped for
+  # +replacement+ (comment above the callers) — parsed from a tmpdir so
+  # the fixture tree stays real-bytes-only.
+  def parse_doctored_isic000756(replacement)
+    source = File.read(File.join(FIXTURES, "inscriptions", "ISic000756.xml"))
+    gap = %r{<lb/><gap reason="illegible" unit="line" extent="unknown"/>}
+    assert_match(gap, source, "the ISic000756 fixture no longer matches the doctored shape")
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "ISic000756.xml")
+      File.write(path, source.sub(gap, replacement))
+      Nabu::Adapters::IsicilyEpidocParser.new.parse(path, urn: "urn:nabu:isicily:isic000756")
+    end
   end
 end

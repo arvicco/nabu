@@ -194,7 +194,7 @@ module Nabu
         attrs = {
           name: manifest.name, adapter_class: adapter_class_name,
           license: manifest.license, license_class: manifest.license_class,
-          upstream_url: manifest.upstream_url, enabled: enabled
+          credit: manifest.credit, upstream_url: manifest.upstream_url, enabled: enabled
         }
         db.transaction do
           row = Store::Source.first(slug: slug)

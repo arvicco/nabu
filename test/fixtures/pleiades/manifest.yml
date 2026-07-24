@@ -1,0 +1,29 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Two verbatim Pleiades per-place responses (whole), refetchable from the
+# per-place JSON endpoint; dump.json is ASSEMBLED locally from them (a plain
+# JSON array of the two entries) to stand in for the quarterly release's
+# container, so it is non-refetchable. adapter_test is null: the pleiades
+# test pins fixture-exact place facts that a drifted upstream would
+# false-fail.
+source: pleiades
+adapter_test: null
+retrieved: 2026-07-24
+files:
+  - path: pleiades-462492.json
+    url: https://pleiades.stoa.org/places/462492/json
+    whole: true
+    trim: none (verbatim per-place response — Sicilia)
+  - path: pleiades-570685.json
+    url: https://pleiades.stoa.org/places/570685/json
+    whole: true
+    trim: none (verbatim per-place response — Sparta)
+  - path: dump.json
+    whole: false
+    refetchable: false
+    provenance: assembled
+    reason: >-
+      assembled from the two per-place fixtures (a JSON array [462492, 570685])
+      to stand in for the quarterly release dump container — see README.md; the
+      per-entry shape is the real dump's entry shape.

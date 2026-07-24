@@ -1,0 +1,1041 @@
+# sent_id = PT_Sethe_23_16a_Unas
+# title = PT
+# edition = Sethe
+# spell = 23
+# section = 16a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd7piZ5pZrUceohIbqW09xnA; IBUBdWfjUXae5UrZjn2Peb3DWVs
+# text = Wśr(.w) ꞽč n ⸗k mśč̣č̣.w Wnꞽś nb.w mṭw(.w) m rn ⸗f č̣w
+1	Wśr(.w)	Wśr.w	PROPN	_	Gender=Masc|NameType=God	2	vocative	_	Hiero=(𓊨:𓁹)|ID=49460
+2	ꞽč	ꞽči̯	VERB	_	Mood=Imp|Number=Sing|VerbClass=3aeinf|VerbForm=Fin	0	root	_	Hiero=𓇋𓎁|ID=33560
+3	n	n	ADP	_	Case=Dat|StatPrep=Pron	4	case	_	Hiero=𓈖|ID=400055
+4	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Emp	2	obl:arg	_	Hiero=𓎡|ID=10110
+5	mśč̣č̣.w	mśč̣i̯	VERB	_	Gender=Masc|Nominal=Yes|Number=Plur|Tense=Pres|VerbClass=4aeinf|VerbForm=Part|Voice=Act	2	obj	_	Hiero=𓋴𓅓(𓆓:𓆓)𓅱|ID=76210
+6	Wnꞽś	Wnꞽś	PROPN	_	Gender=Masc|NameType=King|Number=Sing	5	nmod:poss	_	Hiero=𓍹(𓃹:𓈖)𓇋𓋴𓍺|ID=800001
+7	nb.w	nb	ADJ	_	Gender=Masc|Number=Plur	5	amod	_	Hiero=𓎠𓅱|ID=81660
+8	mṭw(.w)	mṭwi̯	VERB	_	Gender=Masc|Nominal=Yes|Number=Plur|Tense=Pres|VerbClass=4aeinf|VerbForm=Part|Voice=Act	5	conj	_	Hiero=𓌃𓅓𓂧𓅱|ID=78140
+9	m	m	ADP	_	Case=Ess|StatPrep=Cons	10	case	_	Hiero=𓅓|ID=64362
+10	rn	rn	NOUN	_	Gender=Masc|Number=Sing	8	obl	_	Hiero=(𓂋:𓈖)|ID=94700
+11	⸗f	f	PRON	_	Gender=Masc|Number=Sing|Person=3|Poss=Yes|PronClass=Suffix|PronType=Prs	10	nmod	_	Hiero=𓆑|ID=10050
+12	č̣w	č̣w	ADV	_	AdvType=Man	8	advmod	_	Hiero=𓈋𓅱|ID=600473
+
+# sent_id = PT_Sethe_23_16b_Unas_(1)
+# title = PT
+# edition = Sethe
+# spell = 23
+# section = 16b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd8HurYDUDkyArs1uvprERJM; IBUBdQ1acC2jOE6qpojVFNeR8zo
+# text = Č̣ḥw.tꞽ ꞽ:sꞽ ꞽč św n Wśr(.w)
+1	Č̣ḥw.tꞽ	Č̣ḥw.tꞽ	PROPN	_	Gender=Masc|NameType=God	2	vocative	_	Hiero=𓅝|ID=185290
+2	ꞽ:sꞽ	sꞽ	VERB	_	Mood=Imp|Number=Sing|Prefix=Yodh|VerbClass=2lit|VerbForm=Fin	0	root	_	Hiero=𓇋𓊄|ID=127740
+3	ꞽč	ꞽči̯	VERB	_	Mood=Imp|Number=Sing|VerbClass=3aeinf|VerbForm=Fin	2	conj	_	Hiero=𓇋𓎁|ID=33560
+4	św	św	PRON	_	Gender=Masc|Number=Sing|Person=3|PronClass=Dep|PronType=Prs	3	obj	_	Hiero=𓇓𓅱|ID=129490
+5	n	n	ADP	_	StatPrep=Cons	4	case	_	Hiero=𓈖|ID=400055
+6	Wśr(.w)	Wśr.w	PROPN	_	Gender=Masc|NameType=God	3	obl:arg	_	Hiero=(𓊨:𓁹)|ID=49460
+
+# sent_id = PT_Sethe_23_16b_Unas_(2)
+# title = PT
+# edition = Sethe
+# spell = 23
+# section = 16b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd3NMAcLx9kQogCh0jKkEle8; IBUBdwG0Pby8H0aduRCvnGQZr3k
+# text = ꞽn mṭw m rn Wnꞽś č̣w
+1	ꞽn	ꞽni̯	VERB	_	Mood=Imp|Number=Sing|VerbClass=Anom|VerbForm=Fin	0	root	_	Hiero=(𓇋𓏎:𓈖)|ID=26870
+2	mṭw	mṭwi̯	VERB	_	Gender=Masc|Nominal=Yes|Number=Sing|Tense=Pres|VerbClass=4aeinf|VerbForm=Part|Voice=Act	1	obj	_	Hiero=𓌃𓅓𓂧𓅱|ID=78140
+3	m	m	ADP	_	Case=Ess|StatPrep=Cons	4	case	_	Hiero=𓅓|ID=64362
+4	rn	rn	NOUN	_	Gender=Masc|Number=Sing	2	obl	_	Hiero=(𓂋:𓈖)|ID=94700
+5	Wnꞽś	Wnꞽś	PROPN	_	Gender=Masc|NameType=King	4	nmod:poss	_	Hiero=𓍹(𓃹:𓈖)𓇋𓋴𓍺|ID=800001
+6	č̣w	č̣w	ADV	_	AdvType=Man	2	advmod	_	Hiero=𓈋𓅱|ID=600473
+
+# sent_id = PT_Sethe_23_16c_Unas_(1)
+# title = PT
+# edition = Sethe
+# spell = 23
+# section = 16c
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd8JU2VcJikVMlZOxWYrT1rQ; IBUBdz0TbLNWnUmeky7QHBKZEE8
+# text = (w)ṭ n ⸗k św m č̣r.t ⸗k
+1	(w)ṭ	wṭi̯	VERB	_	Mood=Imp|Number=Sing|VerbClass=3aeinf|VerbForm=Fin	0	root	_	Hiero=𓂧|ID=51510
+2	n	n	ADP	_	Case=Dat|StatPrep=Pron	3	case	_	Hiero=𓈖|ID=400055
+3	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Emp	1	obl:arg	_	Hiero=𓎡|ID=10110
+4	św	św	PRON	_	Gender=Masc|Number=Sing|Person=3|PronClass=Dep|PronType=Prs	1	obj	_	Hiero=𓇓𓅱|ID=129490
+5	m	m	ADP	_	Case=Loc|StatPrep=Cons	6	case	_	Hiero=𓅓|ID=400007
+6	č̣r.t	č̣r.t	NOUN	_	Gender=Fem|Number=Sing	1	obl	_	Hiero=(𓆓:𓂋:𓏏)𓂩|Hierocl=𓂩|ID=184630
+7	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	6	nmod	_	Hiero=𓎡|ID=10110
+
+# sent_id = PT_Sethe_23_16c_Unas_(2)
+# title = PT
+# edition = Sethe
+# spell = 23
+# section = 16c
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd0znvgJcWEpnla6IVJdb8xs; IBUBd2tQSBVA8UnYpPGtlP1Qs1c; IBUBd4rPGcYQo05pm7x3Z7Q21pE; IBUBd9MsudoeLk7CsMsNxZITDnA
+# text = č̣(ṭ) mṭw sp 4 (ꞽ)m ś:fḫḫ.w ⸗k ꞽm ⸗f
+1	č̣(ṭ)	č̣ṭ	VERB	_	Gender=Masc|VerbClass=2lit|VerbForm=Inf	0	root	_	Hiero=𓆓|ID=185810
+2	mṭw	mṭw	NOUN	_	Gender=Masc|Number=Sing	1	obj	_	Hiero=𓌃|ID=78150
+3	sp	sp	NOUN	_	Gender=Masc|Number=Sing	1	obl:unmarked	_	Hiero=𓊗|ID=132310
+4	4	4	NUM	_	NumType=Card	3	nummod	_	Hiero=𓏽|ID=850814
+5	(ꞽ)m	ꞽmi̯	AUX	_	Mood=Imp|Number=Sing|Polarity=Neg|VerbClass=Def|VerbForm=Fin|VerbType=Aux	6	aux	_	Hiero=𓅓|ID=64410
+6	ś:fḫḫ.w	fḫḫ	VERB	_	Conjug=Suffix|Mood=Ind|SubForm=Pred|Tense=Fut|VerbClass=Caus2aered|VerbForm=Fin|Voice=Act	1	ccomp:speech	_	Hiero=𓋴(𓆑:𓐍𓐍)|ID=852044
+7	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	6	nsubj	_	Hiero=𓎡|ID=10110
+8	ꞽm	m	ADP	_	Case=Ela|StatPrep=Pron	9	case	_	Hiero=𓇋𓅓|ID=400007
+9	⸗f	f	PRON	_	Gender=Masc|Number=Sing|Person=3|PronClass=Suffix|PronType=Prs	6	obl	_	Hiero=𓆑|ID=10050
+
+# sent_id = PT_Sethe_23_16d_Unas
+# title = PT
+# edition = Sethe
+# spell = 23
+# section = 16d
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd0D59WxhqErdgp0gzuvbXyQ; IBUBd2WOLQqqvUkWlewIIpKeJ4w; IBUBd8Py6hZYIEzkmWuXWFfvZTA; IBUBdxKMMDsyNEcDhPOODS9BiZg
+# text = sꜣ(u̯) (ꞽ)m ⸗k ś:fḫḫ.w ꞽm ⸗f | s(ꜣ)č
+1	sꜣ(u̯)	sꜣu̯	VERB	_	Mood=Imp|Number=Sing|VerbClass=3aeinf|VerbForm=Fin	0	root	_	Hiero=𓎂𓄿|ID=126290
+2	(ꞽ)m	ꞽmi̯	AUX	_	Conjug=Suffix|Mood=Sub|Polarity=Neg|VerbClass=Def|VerbForm=Fin|VerbType=Aux	4	aux	_	Hiero=𓅓|ID=25170
+3	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	4	nsubj	_	Hiero=𓎡|ID=10110
+4	ś:fḫḫ.w	fḫḫ	VERB	_	VerbClass=Caus2aered|VerbForm=Conv	1	advcl	_	Hiero=𓋴𓆑(𓐍:𓐍)𓅱|ID=852044
+5	ꞽm	m	ADP	_	Case=Ela|StatPrep=Pron	6	case	_	Hiero=𓇋𓅓|ID=400007
+6	⸗f	f	PRON	_	Gender=Masc|Number=Sing|Person=3|PronClass=Suffix|PronType=Prs	4	obl	_	Hiero=𓆑|ID=10050
+7	|	|	PUNCT	_	_	8	punct	_	ID=.|LINE=Punct
+8	s(ꜣ)č	sꜣč	VERB	_	Gender=Masc|VerbClass=3lit|VerbForm=Inf	1	parataxis	_	Hiero=(𓊃:𓍿)𔎆|ID=127610
+
+# sent_id = PT_Sethe_25_17a_Unas_(1)
+# title = PT
+# edition = Sethe
+# spell = 25
+# section = 17a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd6bWRcJdwk4th1LQh3uUdcw; IBUBd8F7zmVQIEYHujm8sg3go1M
+# text = sꞽ sꞽ ḥnꜥ kꜣ ⸗f
+1	sꞽ	sꞽ	VERB	_	Aspect=Perf|Conjug=Suffix|Mood=Ind|Tense=Past|VerbClass=2lit|VerbForm=Fin|Voice=Act	0	root	_	Hiero=𓊄|ID=127740
+2	sꞽ	sꞽ	VERB	_	Gender=Masc|Nominal=Yes|Number=Sing|Tense=Past|VerbClass=2lit|VerbForm=Part|Voice=Act	1	nsubj	_	Hiero=𓊄|ID=127740
+3	ḥnꜥ	ḥnꜥ	CCONJ	_	StatPrep=Cons	4	cc	_	Hiero=𓎛(𓈖:𓂝)|ID=550300
+4	kꜣ	kꜣ	NOUN	_	Gender=Masc|Number=Sing	2	conj	_	Hiero=𓂓|ID=162870
+5	⸗f	f	PRON	_	Gender=Masc|Number=Sing|Person=3|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓆑|ID=10050
+
+# sent_id = PT_Sethe_25_17a_Unas_(2)
+# title = PT
+# edition = Sethe
+# spell = 25
+# section = 17a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd36Omobw9EzumGvL7NjJ1Pw; IBUBdWFQ3SWteksJkRvYQZ3WQWw
+# text = sꞽ Ḥr.w ḥnꜥ kꜣ ⸗f
+1	sꞽ	sꞽ	VERB	_	Aspect=Perf|Conjug=Suffix|Mood=Ind|Tense=Past|VerbClass=2lit|VerbForm=Fin|Voice=Act	0	root	_	Hiero=𓊄|ID=127740
+2	Ḥr.w	Ḥr.w	PROPN	_	Gender=Masc|NameType=God	1	nsubj	_	Hiero=𓅃|ID=107500
+3	ḥnꜥ	ḥnꜥ	CCONJ	_	StatPrep=Cons	4	cc	_	Hiero=𓎛(𓈖:𓂝)|ID=550300
+4	kꜣ	kꜣ	NOUN	_	Gender=Masc|Number=Sing	2	conj	_	Hiero=𓂓|ID=162870
+5	⸗f	f	PRON	_	Gender=Masc|Number=Sing|Person=3|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓆑|ID=10050
+
+# sent_id = PT_Sethe_25_17a_Unas_(3)
+# title = PT
+# edition = Sethe
+# spell = 25
+# section = 17a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd9ticHmo8kO8nARHAYltV6I; IBUBdyLK8EiiYUR8nUYL8senQ6M
+# text = sꞽ Śtẖ ḥnꜥ kꜣ ⸗f
+1	sꞽ	sꞽ	VERB	_	Aspect=Perf|Conjug=Suffix|Mood=Ind|Tense=Past|VerbClass=2lit|VerbForm=Fin|Voice=Act	0	root	_	Hiero=𓊄|ID=127740
+2	Śtẖ	Śtẖ	PROPN	_	Gender=Masc|NameType=God	1	nsubj	_	Hiero=𓃫|ID=148520
+3	ḥnꜥ	ḥnꜥ	CCONJ	_	StatPrep=Cons	4	cc	_	Hiero=𓎛(𓈖:𓂝)|ID=550300
+4	kꜣ	kꜣ	NOUN	_	Gender=Masc|Number=Sing	2	conj	_	Hiero=𓂓|ID=162870
+5	⸗f	f	PRON	_	Gender=Masc|Number=Sing|Person=3|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓆑|ID=10050
+
+# sent_id = PT_Sethe_25_17b_Unas_(1)
+# title = PT
+# edition = Sethe
+# spell = 25
+# section = 17b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd1ONTZ3ZzU9emj4IEyAhzvs; IBUBdQadFfkbW0rVuFQqOcOSwKU
+# text = sꞽ Č̣ḥw.tꞽ ḥnꜥ kꜣ ⸗f
+1	sꞽ	sꞽ	VERB	_	Aspect=Perf|Conjug=Suffix|Mood=Ind|Tense=Past|VerbClass=2lit|VerbForm=Fin|Voice=Act	0	root	_	Hiero=𓊄|ID=127740
+2	Č̣ḥw.tꞽ	Č̣ḥw.tꞽ	PROPN	_	Gender=Masc|NameType=God	1	nsubj	_	Hiero=𓅝|ID=185290
+3	ḥnꜥ	ḥnꜥ	CCONJ	_	StatPrep=Cons	4	cc	_	Hiero=𓎛(𓈖:𓂝)|ID=550300
+4	kꜣ	kꜣ	NOUN	_	Gender=Masc|Number=Sing	2	conj	_	Hiero=𓂓|ID=162870
+5	⸗f	f	PRON	_	Gender=Masc|Number=Sing|Person=3|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓆑|ID=10050
+
+# sent_id = PT_Sethe_25_17b_Unas_(2)
+# title = PT
+# edition = Sethe
+# spell = 25
+# section = 17b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd7TLaIB5qEvvgLWAchBbkTs; IBUBd7oQNgWkWUQdh0zPRQEpWas
+# text = sꞽ Ṭwn-ꜥn.wꞽ ḥnꜥ kꜣ ⸗f
+1	sꞽ	sꞽ	VERB	_	Aspect=Perf|Conjug=Suffix|Mood=Ind|Tense=Past|VerbClass=2lit|VerbForm=Fin|Voice=Act	0	root	_	Hiero=𓊄|ID=127740
+2-3	Ṭwn-ꜥn.wꞽ	_	_	_	_	_	_	_	Hiero=𓅆|ID=850929
+2	Ṭwn	Ṭwn	PROPN	_	Gender=Masc|NameType=God|Number=Sing|Tense=Pres|VerbClass=3lit|VerbForm=Part|Voice=Act	1	nsubj	_	ID=178160
+3	ꜥn.wꞽ	ꜥn.w	NOUN	_	Gender=Masc|Number=Dual	2	flat:name	_	ID=856382
+4	ḥnꜥ	ḥnꜥ	CCONJ	_	StatPrep=Cons	5	cc	_	Hiero=𓎛(𓈖:𓂝)|ID=550300
+5	kꜣ	kꜣ	NOUN	_	Gender=Masc|Number=Sing	2	conj	_	Hiero=𓂓|ID=162870
+6	⸗f	f	PRON	_	Gender=Masc|Number=Sing|Person=3|Poss=Yes|PronClass=Suffix|PronType=Prs	5	nmod	_	Hiero=𓆑|ID=10050
+
+# sent_id = PT_Sethe_25_17b_Unas_(3)
+# title = PT
+# edition = Sethe
+# spell = 25
+# section = 17b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd7UkKMsYT0gnulFfYU1Ik0M; IBUBdxzgm3U1ckq4gNX6Y6BkiuY
+# text = sꞽ Wśr(.w) ḥnꜥ kꜣ ⸗f
+1	sꞽ	sꞽ	VERB	_	Aspect=Perf|Conjug=Suffix|Mood=Ind|Tense=Past|VerbClass=2lit|VerbForm=Fin|Voice=Act	0	root	_	Hiero=𓊄|ID=127740
+2	Wśr(.w)	Wśr.w	PROPN	_	Gender=Masc|NameType=God	1	nsubj	_	Hiero=(𓊨:𓁹)|ID=49460
+3	ḥnꜥ	ḥnꜥ	CCONJ	_	StatPrep=Cons	4	cc	_	Hiero=𓎛(𓈖:𓂝)|ID=550300
+4	kꜣ	kꜣ	NOUN	_	Gender=Masc|Number=Sing	2	conj	_	Hiero=𓂓|ID=162870
+5	⸗f	f	PRON	_	Gender=Masc|Number=Sing|Person=3|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓆑|ID=10050
+
+# sent_id = PT_Sethe_25_17c_Unas_(1)
+# title = PT
+# edition = Sethe
+# spell = 25
+# section = 17c
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd2G4TLRfcENNritoV4pzBq4; IBUBdWaQBZ9h2UpEjTYec3LRzlc
+# text = sꞽ Ḫnt(.ꞽ)-ꞽr.tꞽ ḥnꜥ kꜣ ⸗f
+1	sꞽ	sꞽ	VERB	_	Aspect=Perf|Conjug=Suffix|Mood=Ind|Tense=Past|VerbClass=2lit|VerbForm=Fin|Voice=Act	0	root	_	Hiero=𓊄|ID=127740
+2-3	Ḫnt(.ꞽ)-ꞽr.tꞽ	_	_	_	_	_	_	_	Hiero=(𓏃:𓏏)𓥻𓅌|ID=70005
+2	Ḫnt(.ꞽ)	ḫnt	PROPN	_	Gender=Masc|NameType=God|Nisba=DePrep	1	nsubj	_	Hiero=(𓏃:𓏏)|ID=119050
+3	ꞽr.tꞽ	ꞽr.t	NOUN	_	Gender=Fem|Number=Dual	2	flat:name	_	Hiero=𓥻𓅌|Hierocl=𓅌|ID=28250
+4	ḥnꜥ	ḥnꜥ	CCONJ	_	StatPrep=Cons	5	cc	_	Hiero=𓎛(𓈖:𓂝)|ID=550300
+5	kꜣ	kꜣ	NOUN	_	Gender=Masc|Number=Sing	2	conj	_	Hiero=𓂓|ID=162870
+6	⸗f	f	PRON	_	Gender=Masc|Number=Sing|Person=3|Poss=Yes|PronClass=Suffix|PronType=Prs	5	nmod	_	Hiero=𓆑|ID=10050
+
+# sent_id = PT_Sethe_25_17c_Unas_(2)
+# title = PT
+# edition = Sethe
+# spell = 25
+# section = 17c
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd4YFyY0YFUQvr3ByeLN90CU; IBUBdW7MAvmJekWWt9fffFhQOr8
+# text = sꞽ.t(ꞽ) č̣ṭk ḥnꜥ kꜣ ⸗k
+1	sꞽ.t(ꞽ)	sꞽ	VERB	_	Conjug=AfroAsia|Gender=Com|Mood=Ind|Number=Sing|Person=2|Tense=Past|VerbClass=2lit|VerbForm=Fin|Voice=Act	0	root	_	Hiero=(𓊄:𓏏)|ID=127740
+2	č̣ṭk	č̣ṭk	ADV	_	_	1	advmod	_	Hiero=(𓆓:𓂧)𓊽𓎡|ID=860051
+3	ḥnꜥ	ḥnꜥ	ADP	_	Case=Com|StatPrep=Cons	4	case	_	Hiero=𓎛(𓈖:𓂝)|ID=106200
+4	kꜣ	kꜣ	NOUN	_	Gender=Masc|Number=Sing	1	obl	_	Hiero=𓂓|ID=162870
+5	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓎡|ID=10110
+
+# sent_id = PT_Sethe_25_18a_Unas_(1)
+# title = PT
+# edition = Sethe
+# spell = 25
+# section = 18a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd3UBtApKuEE0vEKtoyJdGRI; IBUBd3tJmCaCWU4LqoIkL3niJcE
+# text = hꜣ Wnꞽś ꜥw kꜣ ⸗k m-bꜣḥ ⸗k
+1	hꜣ	hꜣ	INTJ	_	_	2	discourse	_	Hiero=𓉔𓄿|ID=97240
+2	Wnꞽś	Wnꞽś	PROPN	_	Gender=Masc|NameType=King	8	vocative	_	Hiero=𓍹(𓃹:𓈖)𓇋𓋴𓍺|ID=800001
+3	ꜥw	ꜥw	NOUN	_	Gender=Masc|Number=Sing	8	nsubj	_	Hiero=𓂝|ID=34320
+4	kꜣ	kꜣ	NOUN	_	Gender=Masc|Number=Sing	3	nmod:poss	_	Hiero=𓂓|ID=162870
+5	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓎡|ID=10110
+6-7	m-bꜣḥ	_	_	_	_	_	_	_	Hiero=𓅓𓂸|ID=64750
+6	m	m	ADP	_	Case=Loc|ExtPos=ADP|StatPrep=Pron	8	case	_	Hiero=𓅓|ID=400007
+7	bꜣḥ	bꜣḥ	NOUN	_	Gender=Masc|Number=Sing	6	fixed	_	Hiero=𓂸|ID=53510
+8	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	0	root	_	Hiero=𓎡|ID=10110
+
+# sent_id = PT_Sethe_25_18a_Unas_(2)
+# title = PT
+# edition = Sethe
+# spell = 25
+# section = 18a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd0M7fWRD1EuWq40qDQBeIPM; IBUBd2Y6RWgVvUo0hnsppDoca7s
+# text = hꜣ Wnꞽś ꜥw kꜣ ⸗k m-ḫt ⸗k
+1	hꜣ	hꜣ	INTJ	_	_	2	discourse	_	Hiero=𓉔𓄿|ID=97240
+2	Wnꞽś	Wnꞽś	PROPN	_	Gender=Masc|NameType=King	8	vocative	_	Hiero=𓍹(𓃹:𓈖)𓇋𓋴𓍺|ID=800001
+3	ꜥw	ꜥw	NOUN	_	Gender=Masc|Number=Sing	8	nsubj	_	Hiero=𓂝|ID=34320
+4	kꜣ	kꜣ	NOUN	_	Gender=Masc|Number=Sing	3	nmod:poss	_	Hiero=𓂓|ID=162870
+5	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓎡|ID=10110
+6-7	m-ḫt	_	_	_	_	_	_	_	Hiero=𓅓(𓆱:𓏏)|ID=400147
+6	m	m	ADP	_	Case=Loc|ExtPos=ADP|StatPrep=Pron	8	case	_	Hiero=𓅓|ID=400007
+7	ḫt	ḫt	NOUN	_	Gender=Masc|Number=Sing	6	fixed	_	Hiero=(𓆱:𓏏)|ID=858351
+8	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	0	root	_	Hiero=𓎡|ID=10110
+
+# sent_id = PT_Sethe_25_18b_Unas_(1)
+# title = PT
+# edition = Sethe
+# spell = 25
+# section = 18b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd0uS5ADaikeWoCUuNr0Vhqw; IBUBd8AgO568fUCnt4etYHIXBWc; IBUBdwwHPRYICEl4kkWWDQjmgnk
+# text = hꜣ Wnꞽś rṭ kꜣ ⸗k m-bꜣḥ ⸗k
+1	hꜣ	hꜣ	INTJ	_	_	2	discourse	_	Hiero=𓉔𓄿|ID=97240
+2	Wnꞽś	Wnꞽś	PROPN	_	Gender=Masc|NameType=King	8	vocative	_	Hiero=𓍹(𓃹:𓈖)𓇋𓋴𓍺|ID=800001
+3	rṭ	rṭ	NOUN	_	Gender=Masc|Number=Sing	8	nsubj	_	Hiero=𓂾|ID=96600
+4	kꜣ	kꜣ	NOUN	_	Gender=Masc|Number=Sing	3	nmod:poss	_	Hiero=𓂓|ID=162870
+5	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓎡|ID=10110
+6-7	m-bꜣḥ	_	_	_	_	_	_	_	Hiero=𓅓𓂸|ID=64750
+6	m	m	ADP	_	Case=Loc|ExtPos=ADP|StatPrep=Pron	8	case	_	Hiero=𓅓|ID=400007
+7	bꜣḥ	bꜣḥ	NOUN	_	Gender=Masc|Number=Sing	6	fixed	_	Hiero=𓂸|ID=53510
+8	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	0	root	_	Hiero=𓎡|ID=10110
+
+# sent_id = PT_Sethe_25_18b_Unas_(2)
+# title = PT
+# edition = Sethe
+# spell = 25
+# section = 18b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd0BqCfOpIkySqKOTnqpffWI; IBUBdyDSMHfiDkiEkStjw7uQc2I; IBUBdzZNeYPWE0sLvf8QHfxrQKU
+# text = hꜣ Wnꞽś rṭ kꜣ ⸗k m-ḫt ⸗k
+1	hꜣ	hꜣ	INTJ	_	_	2	discourse	_	Hiero=𓉔𓄿|ID=97240
+2	Wnꞽś	Wnꞽś	PROPN	_	Gender=Masc|NameType=King	8	vocative	_	Hiero=𓍹(𓃹:𓈖)𓇋𓋴𓍺|ID=800001
+3	rṭ	rṭ	NOUN	_	Gender=Masc|Number=Sing	8	nsubj	_	Hiero=𓂾|ID=96600
+4	kꜣ	kꜣ	NOUN	_	Gender=Masc|Number=Sing	3	nmod:poss	_	Hiero=𓂓|ID=162870
+5	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓎡|ID=10110
+6-7	m-ḫt	_	_	_	_	_	_	_	Hiero=𓅓(𓆱:𓏏)|ID=400147
+6	m	m	ADP	_	Case=Loc|ExtPos=ADP|StatPrep=Pron	8	case	_	Hiero=𓅓|ID=400007
+7	ḫt	ḫt	NOUN	_	Gender=Masc|Number=Sing	6	fixed	_	Hiero=(𓆱:𓏏)|ID=858351
+8	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	0	root	_	Hiero=𓎡|ID=10110
+
+# sent_id = PT_Sethe_25_18c-d_Unas
+# title = PT
+# edition = Sethe
+# spell = 25
+# section = 18c-d
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd1SLKadZiEzOiMvUOpLBMS8; IBUBd4ACF3IhcEl4vWD3FgRhjZQ; IBUBd5aLy07rIklvgU8eim7b1dE; IBUBd6Tll4z9MUWEhd4tXAE3ZxU; IBUBd6ZFrBWgbkZPjcaUDujo01w; IBUBd76qsk1ZEUx3vTKSolNXDas; IBUBd8XJ5AnuRU0Bgw8M2B4ekeA; IBUBd8i2LxgGdEuKrvkmUacTxIA; IBUBdWFWsbSgzklnmL0XhiaVMoc; IBUBdxK3Q9bLbUETlCq3MjgbUUA; IBUBdxq9QMgFb0PAh1oaXCC2yNs; IBUBdyQfHPFVcE4VlTQOjvNaQ30; IBUBdyhFl34sqks7raiyIfkSW1Q
+# text = Wśr(.w) Wnꞽś (r)č̣.n (⸗ꞽ) n ⸗k ꞽr.t Ḥr.w ḥtm(.w) ḥr ⸗k ꞽm ⸗ś pč̣pč̣ śč ꞽr.t Ḥr.w r ⸗k | č̣(ṭ) mṭw sp 4 śnčr ḫ.t
+1	Wśr(.w)	Wśr.w	PROPN	_	Gender=Masc|NameType=God	3	vocative	_	Hiero=(𓊨:𓁹)|ID=49460
+2	Wnꞽś	Wnꞽś	PROPN	_	Gender=Masc|NameType=King	1	appos	_	Hiero=𓍹(𓃹:𓈖)𓇋𓋴𓍺|ID=800001
+3	(r)č̣.n	rč̣i̯	VERB	_	Conjug=Suffix|Mood=Ind|SubForm=Pred|Tense=Past|VerbClass=Anom|VerbForm=Fin|Voice=Act	21	ccomp:speech	_	Hiero=𓏙𓈖|ID=872594
+4	(⸗ꞽ)	ꞽ	PRON	_	Gender=Com|Number=Sing|Person=1|PronClass=Suffix|PronType=Prs	3	nsubj	_	Hiero=No|ID=10030_Add
+5	n	n	ADP	_	Case=Dat|StatPrep=Pron	6	case	_	Hiero=𓈖|ID=400055
+6	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	3	obl:arg	_	Hiero=𓎡|ID=10110
+7	ꞽr.t	ꞽr.t	NOUN	_	Gender=Fem|Number=Sing	3	obj	_	Hiero=𓁹|ID=28250
+8	Ḥr.w	Ḥr.w	PROPN	_	Gender=Masc|NameType=God	7	nmod:poss	_	Hiero=𓅃|ID=107500
+9	ḥtm(.w)	ḥtm	VERB	_	Conjug=Suffix|Mood=Ind|SubForm=Pred|Tense=Fut|VerbClass=3lit|VerbForm=Fin|Voice=Pass	3	advcl:purp	_	Hiero=𓎛(𓅭:𓏏)|ID=111590
+10	ḥr	ḥr	NOUN	_	Gender=Masc|Number=Sing	9	nsubj:pass	_	Hiero=𓁷|ID=107510
+11	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	10	nmod	_	Hiero=𓎡|ID=10110
+12	ꞽm	m	ADP	_	Case=Ins|StatPrep=Pron	13	case	_	Hiero=𓇋𓅓|ID=64364
+13	⸗ś	ś	PRON	_	Gender=Fem|Number=Sing|Person=3|PronClass=Suffix|PronType=Prs	9	obl	_	Hiero=𓋴|ID=10090
+14	pč̣pč̣	pč̣pč̣	VERB	_	Conjug=Suffix|Mood=Ind|SubForm=Pred|Tense=Fut|VerbClass=3lit|VerbForm=Fin|Voice=Act	3	advcl:purp	_	Hiero=(𓊪:𓆓)(𓊪:𓆓)|ID=63390
+15	śč	śč	NOUN	_	Gender=Masc|Number=Sing	14	nsubj	_	Hiero=𓋴(𓍿:𓎤)|Hierocl=𓎤|ID=148990
+16	ꞽr.t	ꞽr.t	NOUN	_	Gender=Fem|Number=Sing	15	nmod:poss	_	Hiero=𓁹|ID=28250
+17	Ḥr.w	Ḥr.w	PROPN	_	Gender=Masc|NameType=God	16	nmod:poss	_	Hiero=𓅃|ID=107500
+18	r	r	ADP	_	Case=All|StatPrep=Pron	19	case	_	Hiero=𓂋|ID=91901
+19	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	14	obl	_	Hiero=𓎡|ID=10110
+20	|	|	PUNCT	_	_	21	punct	_	ID=.|LINE=Punct
+21	č̣(ṭ)	č̣ṭ	VERB	_	Gender=Masc|VerbClass=2lit|VerbForm=Inf	0	root	_	Hiero=𓆓|ID=185810
+22	mṭw	mṭw	NOUN	_	Gender=Masc|Number=Sing	21	obj	_	Hiero=𓌃|ID=78150
+23	sp	sp	NOUN	_	Gender=Masc|Number=Sing	21	obl:unmarked	_	Hiero=𓊗|ID=132310
+24	4	4	NUM	_	NumType=Card	23	nummod	_	Hiero=𓏽|ID=850814
+25	śnčr	śnčr	NOUN	_	Gender=Masc|Number=Sing	21	parataxis	_	Hiero=𓋴𓊹|ID=138670
+26	ḫ.t	ḫ.t	NOUN	_	Gender=Fem|Number=Sing	25	conj	_	Hiero=(𓐍:𓏏)𓊮|Hierocl=𓊮|ID=113020
+
+# sent_id = PT_Sethe_32_22a_Unas
+# title = PT
+# edition = Sethe
+# spell = 32
+# section = 22a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdweinb7pd0Q5nxV8yDD2QGM; IBUBdxQv7RReqkaBtT99iCsCLNA; IBUBdyKkXEjvWU8el2RRkWuWzlQ; IBUBdzZKqcngeU2Nsrw9q7y5VmU
+# text = ḳbḥ(.w) ⸗k ꞽpn Wśr(.w) ḳbḥ(.w) ⸗k ꞽpn hꜣ Wnꞽś pr.w ḫr sꜣ ⸗k pr.w ḫr Ḥr.w
+1	ḳbḥ(.w)	ḳbḥ.w	NOUN	_	Gender=Masc|Number=Sing	10	nsubj	_	Hiero=𓏂|ID=160330
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	ꞽpn	ꞽpn	DET	_	Gender=Masc|Number=Plur|PronType=Dem	1	det	_	Hiero=𓇋(𓊪:𓈖)|ID=24430
+4	Wśr(.w)	Wśr.w	PROPN	_	Gender=Masc|NameType=God	10	vocative	_	Hiero=(𓊨:𓁹)|ID=49460
+5	ḳbḥ(.w)	ḳbḥ.w	NOUN	_	Gender=Masc|Number=Sing	1	conj	_	Hiero=𓏂|ID=160330
+6	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	5	nmod	_	Hiero=𓎡|ID=10110
+7	ꞽpn	ꞽpn	DET	_	Gender=Masc|Number=Plur|PronType=Dem	5	det	_	Hiero=𓇋(𓊪:𓈖)|ID=24430
+8	hꜣ	hꜣ	INTJ	_	_	9	discourse	_	Hiero=𓉔𓄿|ID=97240
+9	Wnꞽś	Wnꞽś	PROPN	_	Gender=Masc|NameType=King	10	vocative	_	Hiero=𓍹(𓃹:𓈖)𓇋𓋴𓍺|ID=800001
+10	pr.w	pri̯	VERB	_	Conjug=AfroAsia|Gender=Com|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbClass=3aeinf|VerbForm=Fin|Voice=Act	0	root	_	Hiero=(𓉐:𓂋)𓅱|ID=60920
+11	ḫr	ḫr	ADP	_	Case=Ela|StatPrep=Cons	12	case	_	Hiero=(𓐍:𓂋)|ID=80011
+12	sꜣ	sꜣ	NOUN	_	Gender=Masc|Number=Sing	10	obl	_	Hiero=𓅭|ID=125510
+13	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	12	nmod	_	Hiero=𓎡|ID=10110
+14	pr.w	pri̯	VERB	_	Conjug=AfroAsia|Gender=Com|Mood=Ind|Number=Plur|Person=3|Tense=Past|VerbClass=3aeinf|VerbForm=Fin|Voice=Act	10	conj	_	Hiero=(𓉐:𓂋)𓅱|ID=60920
+15	ḫr	ḫr	ADP	_	Case=Ela|StatPrep=Cons	16	case	_	Hiero=(𓐍:𓂋)|ID=80011
+16	Ḥr.w	Ḥr.w	PROPN	_	Gender=Masc|NameType=God	14	obl	_	Hiero=𓅃|ID=107500
+
+# sent_id = PT_Sethe_32_22b_Unas_(1)
+# title = PT
+# edition = Sethe
+# spell = 32
+# section = 22b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd1pWpQTgxEAFiviLVLQe6f4; IBUBd7mbe7KQJ0SNnonbDPEN6fk; IBUBdQkk3vqvSkWjtONbIBUwGNg; IBUBdy60wrYocE3Aop59FOQDpJk
+# text = ꞽw.n (⸗ꞽ) ꞽn (⸗ꞽ) n ⸗k ꞽr.t Ḥr.w
+1	ꞽw.n	ꞽwi̯	VERB	_	Conjug=Suffix|Mood=Ind|SubForm=AbstRel|Tense=Past|VerbClass=Anom|VerbForm=Fin|Voice=Act	0	root	_	Hiero=𓂻𓅱𓈖|ID=21930
+2	(⸗ꞽ)	ꞽ	PRON	_	Gender=Com|Number=Sing|Person=1|PronClass=Suffix|PronType=Prs	1	nsubj	_	Hiero=No|ID=10030_Add
+3	ꞽn	ꞽni̯	VERB	_	Conjug=Suffix|Mood=Sub|VerbClass=Anom|VerbForm=Fin	1	advcl:purp	_	Hiero=(𓇋𓏎:𓈖)|ID=26870
+4	(⸗ꞽ)	ꞽ	PRON	_	Gender=Com|Number=Sing|Person=1|PronClass=Suffix|PronType=Prs	3	nsubj	_	Hiero=No|ID=10030_Add
+5	n	n	ADP	_	Case=Dat|StatPrep=Pron	6	case	_	Hiero=𓈖|ID=400055
+6	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	3	obl:arg	_	Hiero=𓎡|ID=10110
+7	ꞽr.t	ꞽr.t	NOUN	_	Gender=Fem|Number=Sing	3	obj	_	Hiero=(𓁹:𓏏𓏤)|ID=28250
+8	Ḥr.w	Ḥr.w	PROPN	_	Gender=Masc|NameType=God	7	nmod:poss	_	Hiero=𓅃|ID=107500
+
+# sent_id = PT_Sethe_32_22b_Unas_(2)
+# title = PT
+# edition = Sethe
+# spell = 32
+# section = 22b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd1pWpQTgxEAFiviLVLQe6f4; IBUBd7mbe7KQJ0SNnonbDPEN6fk; IBUBdQkk3vqvSkWjtONbIBUwGNg; IBUBdy60wrYocE3Aop59FOQDpJk
+# text = ḳb ꞽb ⸗k ẖr ⸗ś
+1	ḳb	ḳbb	VERB	_	Conjug=Suffix|Mood=Sub|VerbClass=2aered|VerbForm=Fin	0	root	_	Hiero=𓈎𓸃𓃀|ID=160170
+2	ꞽb	ꞽb	NOUN	_	Gender=Masc|Number=Sing	1	nsubj	_	Hiero=𓄣|ID=23290|MWE=Yes
+3	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	2	nmod	_	Hiero=𓎡|ID=10110
+4	ẖr	ẖr	ADP	_	Case=Ins|Poss=Yes|StatPrep=Pron	5	case	_	Hiero=(𓌨:𓂋)|ID=851508
+5	⸗ś	ś	PRON	_	Gender=Fem|Number=Sing|Person=3|PronClass=Suffix|PronType=Prs	1	obl	_	Hiero=𓋴|ID=10090
+
+# sent_id = PT_Sethe_32_22b_Unas_(3)
+# title = PT
+# edition = Sethe
+# spell = 32
+# section = 22b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd0AWlXcdVU5LtJz0a1Rc0U0; IBUBd2P7G153H0eLpnh5lYjyvls; IBUBd7OSTDGAx0FqoMnKvUYK9aU
+# text = ꞽn.n (⸗ꞽ) n ⸗k ś(ꞽ) ẖr kb.w(ꞽ) ⸗k
+1	ꞽn.n	ꞽni̯	VERB	_	Conjug=Suffix|Mood=Ind|SubForm=AbstRel|Tense=Past|VerbClass=Anom|VerbForm=Fin|Voice=Act	0	root	_	Hiero=(𓇋𓏎:𓈖)|ID=26870
+2	(⸗ꞽ)	ꞽ	PRON	_	Gender=Com|Number=Sing|Person=1|PronClass=Suffix|PronType=Prs	1	nsubj	_	Hiero=No|ID=10030_Add
+3	n	n	ADP	_	Case=Dat|StatPrep=Pron	4	case	_	Hiero=𓈖|ID=400055
+4	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	1	obl:arg	_	Hiero=𓎡|ID=10110
+5	ś(ꞽ)	śꞽ	PRON	_	Gender=Fem|Number=Sing|Person=3|PronClass=Dep|PronType=Prs	1	obj	_	Hiero=𓋴|ID=127770
+6	ẖr	ẖr	ADP	_	Case=Sub|StatPrep=Cons	7	case	_	Hiero=(𓌨:𓂋)|ID=123910
+7	kb.w(ꞽ)	kb	NOUN	_	Gender=Masc|Number=Dual	1	obl	_	Hiero=𓋸𓋸|ID=163950
+8	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	7	nmod	_	Hiero=𓎡|ID=10110
+
+# sent_id = PT_Sethe_32_23a_Unas
+# title = PT
+# edition = Sethe
+# spell = 32
+# section = 23a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd8Pfxh1df0R5kLQ9Wt0D9lA; IBUBdQDCOq8RnUeXh3IDFNzi6Qc; IBUBdxgi8QzNTEzEp3Dlxcb4jRw; IBUBdzP9Utak6EYJhm0dZVDwLqQ
+# text = m n ⸗k rč̣.w pr.ꞽ ꞽm ⸗k
+1	m	m	VERB	_	Mood=Imp|Number=Sing|VerbClass=Def|VerbForm=Fin	0	root	_	Hiero=𓌇|ID=67780
+2	n	n	ADP	_	Case=Dat|StatPrep=Pron	3	case	_	Hiero=𓈖|ID=400055
+3	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Emp	1	obl:arg	_	Hiero=𓎡|ID=10110
+4	rč̣.w	rč̣.w	NOUN	_	Gender=Masc|Number=Sing	1	obj	_	Hiero=(𓂋:𓈋)𓅱UC_No|Hierocl=UC_No|ID=97200
+5	pr.ꞽ	pri̯	VERB	_	Gender=Masc|Number=Sing|Tense=Past|VerbClass=3aeinf|VerbForm=Part|Voice=Act	4	acl	_	Hiero=(𓉐:𓂋)𓇋|ID=60920
+6	ꞽm	m	ADP	_	Case=Ela|StatPrep=Pron	7	case	_	Hiero=𓇋𓅓|ID=400007
+7	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	5	obl	_	Hiero=𓎡|ID=10110
+
+# sent_id = PT_Sethe_32_23b_Unas
+# title = PT
+# edition = Sethe
+# spell = 32
+# section = 23b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd117QM0RX0P8vWxddHwgwDc; IBUBd65H5DQXY0h5gmYAGhZihGA; IBUBd6ru55J77kbGorGicBEEnhs; IBUBd7C2jcW4qkqzt9G9y7n99zk; IBUBd8vZctQ7CEOwkhWj66D33Xw; IBUBd9BJBYpQM0zQlXLaZ7LLWT8; IBUBd9GBmsD4bkqOmQbSVoyPWjs; IBUBd9z7S9e4REK5mayg4xd5Xv0; IBUBdWOA4EbEZE7QrWiQYbQbCB8; IBUBdxo0JNIMt0tHtKXucaWNpBA; IBUBdyEURPIyakIWl5DzZxlbTjE
+# text = č̣(ṭ) mṭw sp 4 m pr-tꞽ n ⸗k ḫrw | ḳbḥ.w bṭ čꜣ 2
+1	č̣(ṭ)	č̣ṭ	VERB	_	Gender=Masc|VerbClass=2lit|VerbForm=Inf	0	root	_	Hiero=𓆓|ID=185810
+2	mṭw	mṭw	NOUN	_	Gender=Masc|Number=Sing	1	obj	_	Hiero=𓌃|ID=78150
+3	sp	sp	NOUN	_	Gender=Masc|Number=Sing	1	obl:unmarked	_	Hiero=𓊗|ID=132310
+4	4	4	NUM	_	NumType=Card	3	nummod	_	Hiero=𓏽|ID=850814
+5	m	m	VERB	_	Mood=Imp|Number=Sing|VerbClass=Def|VerbForm=Fin	1	ccomp:speech	_	Hiero=𓅓|ID=67770
+6-7	pr-tꞽ	_	_	_	_	_	_	_	Hiero=(𓉐:𓂋)𓍘𓇋
+6	pr	pri̯	VERB	_	Conjug=Suffix|Mood=Sub|VerbClass=3aeinf|VerbForm=Fin	5	advcl:purp	_	Hiero=(𓉐:𓂋)|ID=60920
+7	tꞽ	tꞽ	NOUN	_	Gender=Masc|Number=Sing	6	nsubj	_	Hiero=𓍘𓇋|ID=851185|Impersonal=Man
+8	n	n	ADP	_	Case=Dat|StatPrep=Pron	9	case	_	Hiero=𓈖|ID=400055
+9	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	6	obl:arg	_	Hiero=𓎡|ID=10110
+10	ḫrw	ḫrw	NOUN	_	Gender=Masc|Number=Sing	6	obl	_	Hiero=𓊤(𓐍:𓂋)𓃭|ID=120010|MWE=Yes
+11	|	|	PUNCT	_	_	12	punct	_	ID=.|LINE=Punct
+12	ḳbḥ.w	ḳbḥ.w	NOUN	_	Gender=Masc|Number=Sing	1	parataxis	_	Hiero=𓏂|ID=160330
+13	bṭ	bṭ	NOUN	_	Gender=Masc|Number=Sing	12	conj	_	Hiero=𔄄|ID=58400
+14	čꜣ	čꜣ	NOUN	_	Gender=Masc|Number=Sing	13	appos	_	Hiero=𓅷𓃉|Hierocl=𓃉|ID=173960
+15	2	2	NUM	_	NumType=Card	14	nummod	_	Hiero=𓏻|ID=850814
+
+# sent_id = PT_Sethe_34_26a_Unas
+# title = PT
+# edition = Sethe
+# spell = 34
+# section = 26a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdWmOdIS3O0nvqXuLtFb1L14
+# text = smꞽn smꞽn wpp rʾ ⸗k
+1	smꞽn	smꞽn	NOUN	_	_	2	nsubj	_	Hiero=𓊃𓅓𓏇𓈖|ID=135090
+2	smꞽn	smꞽn	NOUN	_	_	0	root	_	Hiero=𓊃𓅓𓏇𓈖|ID=135090
+3	wpp	wpi̯	VERB	_	Gender=Masc|Number=Sing|Tense=Pres|VerbClass=3aeinf|VerbForm=Part	2	acl	_	Hiero=𓅱(𓄋:𓊪𓊪)|ID=45640
+4	rʾ	rʾ	NOUN	_	Gender=Masc|Number=Sing	3	obj	_	Hiero=𓂋|ID=92560
+5	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓎡|ID=10110
+
+# sent_id = PT_Sethe_34_26b_Unas
+# title = PT
+# edition = Sethe
+# spell = 34
+# section = 26b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd3TLpWQVa0TkoMRF7H2y7lw
+# text = hꜣ Wnꞽś ꞽ:ṭp ⸗k ṭp.t ⸗f ḫnt sẖ(.w)-nčr(.w)
+1	hꜣ	hꜣ	INTJ	_	_	2	discourse	_	Hiero=𓉔𓄿|ID=97240
+2	Wnꞽś	Wnꞽś	PROPN	_	Gender=Masc|NameType=King	3	vocative	_	Hiero=𓍹(𓃹:𓈖)𓇋𓋴𓍺|ID=800001
+3	ꞽ:ṭp	ṭp	VERB	_	Conjug=Suffix|Mood=Sub|Prefix=Yodh|VerbClass=2lit|VerbForm=Fin	0	root	_	Hiero=𓇋(𓂧:𓊪)|ID=178970
+4	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	3	nsubj	_	Hiero=𓎡|ID=10110
+5	ṭp.t	ṭp.t	NOUN	_	Gender=Fem|Number=Sing	3	obj	_	Hiero=(𓂧:𓊪𓏏)|ID=179020
+6	⸗f	f	PRON	_	Gender=Masc|Number=Sing|Person=3|Poss=Yes|PronClass=Suffix|PronType=Prs	5	nmod	_	Hiero=𓆑|ID=10050
+7	ḫnt	ḫnt	ADP	_	Case=Loc|StatPrep=Cons	8	case	_	Hiero=(𓏃:𓏏)|ID=119040
+8-9	sẖ(.w)-nčr(.w)	_	_	_	_	_	_	_	Hiero=(𓾹:𓊹)(𓾹:𓊹)(𓾹:𓊹)|ID=140340
+8	sẖ(.w)	sẖ	NOUN	_	Gender=Masc|Number=Plur	3	obl	_	Hiero=_|ID=140250
+9	nčr(.w)	nčr	NOUN	_	Gender=Masc|Number=Plur	8	nmod:poss	_	Hiero=_|ID=90260
+
+# sent_id = PT_Sethe_34_26c_Unas
+# title = PT
+# edition = Sethe
+# spell = 34
+# section = 26c
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd9UEhZrzd0bUiSfBV1RtFuA
+# text = ꞽšš.w Ḥr.w smꞽn
+1	ꞽšš.w	ꞽšš	VERB	_	Gender=Masc|Nominal=Yes|Number=Sing|Tense=Pres|VerbClass=2aered|VerbForm=Part|Voice=Pass	0	root	_	Hiero=𓇋(𓈙:𓈙)𓦚|Hierocl=𓦚|ID=32070
+2	Ḥr.w	Ḥr.w	PROPN	_	Gender=Masc|NameType=God	1	nmod	_	Hiero=𓅃|ID=107500
+3	smꞽn	smꞽn	NOUN	_	_	1	nsubj	_	Hiero=𓊃𓅓𓏇𓈖|ID=135090
+
+# sent_id = PT_Sethe_34_26d_Unas
+# title = PT
+# edition = Sethe
+# spell = 34
+# section = 26d
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdxSJ2mICPkJ1siCLCv3u9Rs
+# text = ꞽšš.w Śtẖ smꞽn
+1	ꞽšš.w	ꞽšš	VERB	_	Gender=Masc|Nominal=Yes|Number=Sing|Tense=Pres|VerbClass=2aered|VerbForm=Part|Voice=Pass	0	root	_	Hiero=𓇋(𓈙:𓈙)𓦚|Hierocl=𓦚|ID=32070
+2	Śtẖ	Śtẖ	PROPN	_	Gender=Masc|NameType=God	1	nmod	_	Hiero=𓃫|ID=148520
+3	smꞽn	smꞽn	NOUN	_	_	1	nsubj	_	Hiero=𓊃𓅓𓏇𓈖|ID=135090
+
+# sent_id = PT_Sethe_34_26e_Unas
+# title = PT
+# edition = Sethe
+# spell = 34
+# section = 26e
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdzTQ2Df0kE86mtjtPOZLnZo
+# text = t(w)t ꞽb nb(.wꞽ) smꞽn
+1	t(w)t	twt	NOUN	_	Gender=Masc|Number=Sing	0	root	_	Hiero=(𓏏:𓏏)|ID=170480
+2	ꞽb	ꞽb	NOUN	_	Gender=Masc|Number=Sing	1	nmod:poss	_	Hiero=𓄣𓃀|ID=23290|MWE=Yes
+3	nb(.wꞽ)	nb	NOUN	_	Gender=Masc|Number=Dual	2	nmod:poss	_	Hiero=𓅅𓅅|ID=81910
+4	smꞽn	smꞽn	NOUN	_	_	1	nsubj	_	Hiero=𓊃𓅓𓏇𓈖|ID=135090
+
+# sent_id = PT_Sethe_34_26f_Unas
+# title = PT
+# edition = Sethe
+# spell = 34
+# section = 26f
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd855Iah380M9kuMaFCuahWc; IBUBd0s1NFUBRUsHtY5MhGxuu4E; IBUBd8zmd79T6UmqhnTFMnFzPR4
+# text = č̣(ṭ) mṭw sp 4 ḥsmn ⸗k m-ꜥb šmś.w-Ḥr.w | bṭ Šmꜥ.w čꜣ 5 Nḫb
+1	č̣(ṭ)	č̣ṭ	VERB	_	Gender=Masc|VerbClass=2lit|VerbForm=Inf	0	root	_	Hiero=𓆓|ID=185810
+2	mṭw	mṭw	NOUN	_	Gender=Masc|Number=Sing	1	obj	_	Hiero=𓌃|ID=78150
+3	sp	sp	NOUN	_	Gender=Masc|Number=Sing	1	obl:unmarked	_	Hiero=𓊗|ID=132310
+4	4	4	NUM	_	NumType=Card	3	nummod	_	Hiero=𓏽|ID=850814
+5	ḥsmn	ḥsmn	VERB	_	Conjug=Suffix|Mood=Ind|SubForm=AbstRel|Tense=Pres|VerbClass=4lit|VerbForm=Fin|Voice=Act	1	ccomp:speech	_	Hiero=𓎛𓊺(𓊃:𓏠)𓈖|ID=110030
+6	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	5	nsubj	_	Hiero=𓎡|ID=10110
+7-8	m-ꜥb	_	_	_	_	_	_	_	Hiero=𓅓𓄏𓃀|ID=64580
+7	m	m	ADP	_	Case=Loc|ExtPos=ADP|StatPrep=Cons	9	case	_	Hiero=𓅓|ID=400007
+8	ꜥb	ꜥb	NOUN	_	Gender=Masc|Number=Sing	7	fixed	_	Hiero=𓄏𓃀|ID=21680
+9-10	šmś.w-Ḥr.w	_	_	_	_	_	_	_	Hiero=𓅃UC_No𓅱𓅆𓅆𓅆|ID=155050
+9	šmś.w	šmś.w	NOUN	_	Gender=Masc|Number=Coll	5	obl	_	Hiero=UC_No𓅱𓅆𓅆𓅆|Hierocl=𓅆𓅆𓅆|ID=155040
+10	Ḥr.w	Ḥr.w	PROPN	_	Gender=Masc|NameType=God	9	compound	_	Hiero=𓅃|ID=107500|TransHon=Yes
+11	|	|	PUNCT	_	_	12	punct	_	ID=.|LINE=Punct
+12	bṭ	bṭ	NOUN	_	Gender=Masc|Number=Sing	1	parataxis	_	Hiero=𔄄|ID=58400
+13	Šmꜥ.w	Šmꜥ.w	PROPN	_	Gender=Masc|NameType=Place	12	nmod:poss	_	Hiero=𓇗|ID=154760
+14	čꜣ	čꜣ	NOUN	_	Gender=Masc|Number=Sing	12	appos	_	Hiero=𓅷𓃉|Hierocl=𓃉|ID=173960
+15	5	5	NUM	_	NumType=Card	14	nummod	_	Hiero=𓏾|ID=850814
+16	Nḫb	Nḫb	PROPN	_	NameType=Place	14	nmod:poss	_	Hiero=𓇑𓃀𓊖|Hierocl=𓊖|ID=87080
+
+# sent_id = PT_Sethe_35_27a_Unas_(1)
+# title = PT
+# edition = Sethe
+# spell = 35
+# section = 27a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd4PNHPuJa0ZItIW8MnSdGVE
+# text = nčr(.ꞽ) ⸗k nčr(.ꞽ) Ḥr.w
+1	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	3	nsubj	_	Hiero=𓊺𓂋|ID=90510
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	0	root	_	Hiero=𓊺𓂋|ID=90510
+4	Ḥr.w	Ḥr.w	PROPN	_	Gender=Masc|NameType=God	3	nmod:poss	_	Hiero=𓅃|ID=107500
+
+# sent_id = PT_Sethe_35_27a_Unas_(2)
+# title = PT
+# edition = Sethe
+# spell = 35
+# section = 27a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdy85d7Gjj0Q0ntO5m0m1TAE
+# text = nčr(.ꞽ) ⸗k nčr(.ꞽ) Śtẖ
+1	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	3	nsubj	_	Hiero=𓊺𓂋|ID=90510
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	0	root	_	Hiero=𓊺𓂋|ID=90510
+4	Śtẖ	Śtẖ	PROPN	_	Gender=Masc|NameType=God	3	nmod:poss	_	Hiero=𓃫|ID=148520
+
+# sent_id = PT_Sethe_35_27b_Unas_(1)
+# title = PT
+# edition = Sethe
+# spell = 35
+# section = 27b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdQpcFlg4Q0OcupzMuuMfXdE
+# text = nčr(.ꞽ) ⸗k nčr(.ꞽ) Č̣ḥw.tꞽ
+1	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	3	nsubj	_	Hiero=𓊺𓂋|ID=90510
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	0	root	_	Hiero=𓊺𓂋|ID=90510
+4	Č̣ḥw.tꞽ	Č̣ḥw.tꞽ	PROPN	_	Gender=Masc|NameType=God	3	nmod:poss	_	Hiero=𓅝|ID=185290
+
+# sent_id = PT_Sethe_35_27b_Unas_(2)
+# title = PT
+# edition = Sethe
+# spell = 35
+# section = 27b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdylnr4DDbkXomSSldtZPE0c
+# text = nčr(.ꞽ) ⸗k nčr(.ꞽ) Ṭwn-ꜥn.wꞽ
+1	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	3	nsubj	_	Hiero=𓊺𓂋|ID=90510
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	0	root	_	Hiero=𓊺𓂋|ID=90510
+4-5	Ṭwn-ꜥn.wꞽ	_	_	_	_	_	_	_	Hiero=𓅆|ID=850929
+4	Ṭwn	Ṭwn	PROPN	_	Gender=Masc|NameType=God|Number=Sing|Tense=Pres|VerbClass=3lit|VerbForm=Part|Voice=Act	3	nmod:poss	_	ID=178160
+5	ꜥn.wꞽ	ꜥn.w	NOUN	_	Gender=Masc|Number=Dual	4	flat:name	_	ID=856382
+
+# sent_id = PT_Sethe_35_27c_Unas
+# title = PT
+# edition = Sethe
+# spell = 35
+# section = 27c
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdxMQMxE90UORoz5iAAEYOp4
+# text = nčr(.ꞽ) ⸗k č̣ṭk{č} ꞽm.(w)t(ꞽ) ⸗śn
+1	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	5	nsubj	_	Hiero=𓊺𓂋|ID=90510
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	č̣ṭk{č}	č̣ṭk	ADV	_	_	5	advmod	_	Hiero=(𓆓:𓂧)𓊽𓎡{𓍿}|ID=860052
+4	ꞽm.(w)t(ꞽ)	ꞽm.wtꞽ	ADP	_	Case=Com|StatPrep=Pron	5	case	_	Hiero=𓇋𓅓𓏏|ID=25400
+5	⸗śn	śn	PRON	_	Gender=Com|Number=Plur|Person=3|PronClass=Suffix|PronType=Prs	0	root	_	Hiero=𓋴𓈖|ID=10100
+
+# sent_id = PT_Sethe_35_27d-e_Unas
+# title = PT
+# edition = Sethe
+# spell = 35
+# section = 27d-e
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdwIpOuSADUctpX4aCEBI2WI; IBUBd5qQRkffrUKcrSZIwNxLLP8
+# text = rʾ ⸗k rʾ n(.ꞽ) bḥs ꞽr(č).t hrw mś(.w) ⸗f ꞽm | bṭ Mḥ.w čꜣ 5 Š.t-p.t
+1	rʾ	rʾ	NOUN	_	Gender=Masc|Number=Sing	3	nsubj	_	Hiero=𓂋|ID=92560
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	rʾ	rʾ	NOUN	_	Gender=Masc|Number=Sing	0	root	_	Hiero=𓂋|ID=92560
+4	n(.ꞽ)	n	ADJ	_	Case=Gen|Gender=Masc|Nisba=DePrep|Number=Sing	3	amod	_	Hiero=𓈖|ID=79800
+5	bḥs	bḥs	NOUN	_	Gender=Masc|Number=Sing	4	obl:nisba	_	Hiero=𓃀𓎛(𓊃:𓄑)𓃔|Hierocl=𓃔|ID=56890
+6	ꞽr(č).t	ꞽrč.t	NOUN	_	Gender=Fem	5	nmod:poss	_	Hiero=𓇋(𓂋:𓏏)𓏈|Hierocl=𓏈|ID=30080
+7	hrw	hrw	NOUN	_	AdvType=Tim|Gender=Masc|Number=Sing	3	obl:unmarked	_	Hiero=𓇳|ID=99060
+8	mś(.w)	mśi̯	VERB	_	Conjug=Suffix|Mood=Ind|SubForm=AbstRel|Tense=Past|VerbClass=3aeinf|VerbForm=Fin|Voice=Pass	7	acl:relcl	_	Hiero=𓄟|ID=74950
+9	⸗f	f	PRON	_	Gender=Masc|Number=Sing|Person=3|PronClass=Suffix|PronType=Prs	8	nsubj:pass	_	Hiero=𓆑|ID=10050
+10	ꞽm	ꞽm	ADV	_	AdvType=Loc	8	advmod	_	Hiero=𓇋𓅓|ID=24640
+11	|	|	PUNCT	_	_	12	punct	_	ID=.|LINE=Punct
+12	bṭ	bṭ	NOUN	_	Gender=Masc|Number=Sing	3	parataxis	_	Hiero=𔄄|ID=58400
+13	Mḥ.w	Mḥ.w	PROPN	_	Gender=Masc|NameType=Place	12	nmod:poss	_	Hiero=𓇉|ID=73940
+14	čꜣ	čꜣ	NOUN	_	Gender=Masc|Number=Sing	12	appos	_	Hiero=𓅷𓃉|Hierocl=𓃉|ID=173960
+15	5	5	NUM	_	NumType=Card	14	nummod	_	Hiero=𓏾|ID=850814
+16-17	Š.t-p.t	_	_	_	_	_	_	_	Hiero=(𓈙:𓏏𓊪:𓇯:𓏏)|ID=157930
+16	Š.t	Š.t	PROPN	_	Gender=Fem|NameType=Place	14	nmod:poss	_	Hiero=(𓈙:𓏏)|ID=No
+17	p.t	p.t	NOUN	_	Gender=Fem|Number=Sing	16	flat:name	_	Hiero=(𓊪:𓇯:𓏏)|Hierocl=𓇯|ID=58710
+
+# sent_id = PT_Sethe_36_28a_Unas_(1)
+# title = PT
+# edition = Sethe
+# spell = 36
+# section = 28a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdwiJOMg9FEcaoEsnTcPJkB0
+# text = nčr(.ꞽ) ⸗k nčr(.ꞽ) Ḥr.w
+1	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	3	nsubj	_	Hiero=𓊺𓂋|ID=90510
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	0	root	_	Hiero=𓊺𓂋|ID=90510
+4	Ḥr.w	Ḥr.w	PROPN	_	Gender=Masc|NameType=God	3	nmod:poss	_	Hiero=𓅃|ID=107500
+
+# sent_id = PT_Sethe_36_28a_Unas_(2)
+# title = PT
+# edition = Sethe
+# spell = 36
+# section = 28a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdyLyyQlfx0BCr3wWLRZwNec
+# text = nčr(.ꞽ) ⸗k nčr(.ꞽ) Śtẖ
+1	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	3	nsubj	_	Hiero=𓊺𓂋|ID=90510
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	0	root	_	Hiero=𓊺𓂋|ID=90510
+4	Śtẖ	Śtẖ	PROPN	_	Gender=Masc|NameType=God	3	nmod:poss	_	Hiero=𓃫|ID=148520
+
+# sent_id = PT_Sethe_36_28a_Unas_(3)
+# title = PT
+# edition = Sethe
+# spell = 36
+# section = 28a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdwta7ASYZknWhTKlSfEIaDU
+# text = nčr(.ꞽ) ⸗k nčr(.ꞽ) Č̣ḥw.tꞽ
+1	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	3	nsubj	_	Hiero=𓊺𓂋|ID=90510
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	0	root	_	Hiero=𓊺𓂋|ID=90510
+4	Č̣ḥw.tꞽ	Č̣ḥw.tꞽ	PROPN	_	Gender=Masc|NameType=God	3	nmod:poss	_	Hiero=𓅝|ID=185290
+
+# sent_id = PT_Sethe_36_28b_Unas_(1)
+# title = PT
+# edition = Sethe
+# spell = 36
+# section = 28b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdxkRZMRR80PXoyJFSbekbZo
+# text = nčr(.ꞽ) ⸗k nčr(.ꞽ) Ṭwn-ꜥn.wꞽ
+1	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	3	nsubj	_	Hiero=𓊺𓂋|ID=90510
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	0	root	_	Hiero=𓊺𓂋|ID=90510
+4-5	Ṭwn-ꜥn.wꞽ	_	_	_	_	_	_	_	Hiero=𓅆|ID=850929
+4	Ṭwn	Ṭwn	PROPN	_	Gender=Masc|NameType=God|Number=Sing|Tense=Pres|VerbClass=3lit|VerbForm=Part|Voice=Act	3	nmod:poss	_	ID=178160
+5	ꜥn.wꞽ	ꜥn.w	NOUN	_	Gender=Masc|Number=Dual	4	flat:name	_	ID=856382
+
+# sent_id = PT_Sethe_36_28b_Unas_(2)
+# title = PT
+# edition = Sethe
+# spell = 36
+# section = 28b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd0ylQ6x0dkSrntWb1UssFJA
+# text = nčr(.ꞽ) ⸗k nčr(.ꞽ) kꜣ ⸗k
+1	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	3	nsubj	_	Hiero=𓊺𓂋|ID=90510
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	0	root	_	Hiero=𓊺𓂋|ID=90510
+4	kꜣ	kꜣ	NOUN	_	Gender=Masc|Number=Sing	3	nmod:poss	_	Hiero=𓂓|ID=162870
+5	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓎡|ID=10110
+
+# sent_id = PT_Sethe_36_28b_Unas_(3)
+# title = PT
+# edition = Sethe
+# spell = 36
+# section = 28b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdyJQnut5qUQPmehJlEkgy2Y
+# text = nčr(.ꞽ) ⸗k nčr(.ꞽ) nčr(.ꞽ) ⸗k
+1	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	3	nsubj	_	Hiero=𓊺𓂋|ID=90510
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	0	root	_	Hiero=𓊺𓂋|ID=90510
+4	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	3	nmod:poss	_	Hiero=𓊺𓂋|ID=90510
+5	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓎡|ID=10110
+
+# sent_id = PT_Sethe_36_28c_Unas
+# title = PT
+# edition = Sethe
+# spell = 36
+# section = 28c
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd3uyURQDnUtCm6rm2aRGjwo
+# text = nčr(.ꞽ) ⸗k č̣ṭč pn ꞽm.(w)t(ꞽ) śn.w ⸗k nčr(.w)
+1	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	6	nsubj	_	Hiero=𓊺𓂋|ID=90510
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	č̣ṭč	č̣ṭk	ADV	_	_	1	advmod	_	Hiero=(𓆓:𓂧)𓊽𓍿|ID=860052
+4	pn	pn	DET	_	Gender=Masc|Number=Sing|PronType=Dem	1	det	_	Hiero=(𓊪:𓈖)|ID=59920
+5	ꞽm.(w)t(ꞽ)	ꞽm.wtꞽ	ADP	_	Case=Com|StatPrep=Cons	6	case	_	Hiero=𓇋𓅓𓏏|ID=25400
+6	śn.w	śn	NOUN	_	Gender=Masc|Number=Plur	0	root	_	Hiero=𓌢𓌢𓌢𓅱|ID=136230
+7	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	6	nmod	_	Hiero=𓎡|ID=10110
+8	nčr(.w)	nčr	NOUN	_	Gender=Masc|Number=Plur	6	appos	_	Hiero=𓊹𓊹𓊹|ID=90260
+
+# sent_id = PT_Sethe_36_29a_Unas_(1)
+# title = PT
+# edition = Sethe
+# spell = 36
+# section = 29a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd8nOEZ1aAUdWu9v2xQgS4EQ
+# text = nčr(.ꞽ) ⸗k ṭp rʾ ⸗k
+1	nčr(.ꞽ)	nčr	NOUN	_	Gender=Masc|Number=Sing	4	nsubj	_	Hiero=𓊺𓂋|ID=90510
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	1	nmod	_	Hiero=𓎡|ID=10110
+3	ṭp	ṭp	ADP	_	Case=Sup|StatPrep=Cons	4	case	_	Hiero=𓁶|ID=170900
+4	rʾ	rʾ	NOUN	_	Gender=Masc|Number=Sing	0	root	_	Hiero=𓂋|ID=92560
+5	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	4	nmod	_	Hiero=𓎡|ID=10110
+
+# sent_id = PT_Sethe_36_29a_Unas_(2)
+# title = PT
+# edition = Sethe
+# spell = 36
+# section = 29a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdQdY8eZB70HQgmcF3hvYzLA
+# text = ś:wꜥb ⸗k ḳś(.w) ⸗k tm.ꞽw
+1	ś:wꜥb	wꜥb	VERB	_	Conjug=Suffix|Mood=Sub|VerbClass=Caus3lit|VerbForm=Fin	0	root	_	Hiero=𓋴𓃂|ID=130010
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	1	nsubj	_	Hiero=𓎡|ID=10110
+3	ḳś(.w)	ḳś	NOUN	_	Gender=Masc|Number=Plur	1	obj	_	Hiero=𓌟𓌟𓌟|ID=162200
+4	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	3	nmod	_	Hiero=𓎡|ID=10110
+5	tm.ꞽw	tm	VERB	_	Aspect=Stat|Conjug=AfroAsia|Gender=Masc|Mood=Ind|Number=Plur|Person=3|VerbClass=2lit|VerbForm=Fin	3	acl	_	Hiero=𓍃𓇋𓅱|ID=172000
+
+# sent_id = PT_Sethe_36_29a_Unas_(3)
+# title = PT
+# edition = Sethe
+# spell = 36
+# section = 29a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBdwm6UwsbOEnMkseYG83Ug08
+# text = ḥtm ⸗k ꞽr.t ⸗k
+1	ḥtm	ḥtm	VERB	_	Conjug=Suffix|Mood=Sub|VerbClass=3lit|VerbForm=Fin	0	root	_	Hiero=(𓎛𓅭:𓏏)|ID=111590
+2	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	1	nsubj	_	Hiero=𓎡|ID=10110
+3	ꞽr.t	r	NOUN	_	Gender=Fem|Nisba=DePrep|Number=Sing	1	obj	_	Hiero=𓇋(𓂋:𓏏)|ID=28500
+4	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	3	nmod	_	Hiero=𓎡|ID=10110
+
+# sent_id = PT_Sethe_36_29b-c_Unas
+# title = PT
+# edition = Sethe
+# spell = 36
+# section = 29b-c
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd52mav1LYkkjoYQJi0VZLQY; IBUBdw8lGGW8cEPcrQQbHnWXDP4; IBUBdzEMh9y4rkRBvC4pKBE7hLE
+# text = Wśr(.w) (r)č̣.n (⸗ꞽ) n ⸗k ꞽr.t Ḥr.w ḥtm(.w) ḥr ⸗k ꞽm ⸗ś pč̣pč̣(.w) | śnčr čꜣ 1
+1	Wśr(.w)	Wśr.w	PROPN	_	Gender=Masc|NameType=God	2	vocative	_	Hiero=(𓊨:𓁹)|ID=49460
+2	(r)č̣.n	rč̣i̯	VERB	_	Conjug=Suffix|Mood=Ind|SubForm=Pred|Tense=Past|VerbClass=Anom|VerbForm=Fin|Voice=Act	0	root	_	Hiero=𓏙𓈖|ID=872594
+3	(⸗ꞽ)	ꞽ	PRON	_	Gender=Com|Number=Sing|Person=1|PronClass=Suffix|PronType=Prs	2	nsubj	_	Hiero=No|ID=10030_Add
+4	n	n	ADP	_	Case=Dat|StatPrep=Pron	5	case	_	Hiero=𓈖|ID=400055
+5	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	2	obl:arg	_	Hiero=𓎡|ID=10110
+6	ꞽr.t	ꞽr.t	NOUN	_	Gender=Fem|Number=Sing	2	obj	_	Hiero=𓁹|ID=28250
+7	Ḥr.w	Ḥr.w	PROPN	_	Gender=Masc|NameType=God	6	nmod:poss	_	Hiero=𓅃|ID=107500
+8	ḥtm(.w)	ḥtm	VERB	_	Conjug=Suffix|Mood=Ind|SubForm=Pred|Tense=Fut|VerbClass=3lit|VerbForm=Fin|Voice=Pass	2	advcl:purp	_	Hiero=𓎛𓅭(𓍃:𓏏)|ID=111590
+9	ḥr	ḥr	NOUN	_	Gender=Masc|Number=Sing	8	nsubj:pass	_	Hiero=𓁷|ID=107510
+10	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	9	nmod	_	Hiero=𓎡|ID=10110
+11	ꞽm	m	ADP	_	Case=Ins|StatPrep=Pron	12	case	_	Hiero=𓇋𓅓|ID=64364
+12	⸗ś	ś	PRON	_	Gender=Fem|Number=Sing|Person=3|PronClass=Suffix|PronType=Prs	8	obl	_	Hiero=𓋴|ID=10090
+13	pč̣pč̣(.w)	pč̣pč̣	VERB	_	Aspect=Stat|Conjug=AfroAsia|Gender=Masc|Mood=Ind|Number=Sing|Person=3|VerbClass=4lit|VerbForm=Fin	8	advcl	_	Hiero=𓊪𓆓𓊪𓆓|ID=63390
+14	|	|	PUNCT	_	_	15	punct	_	ID=.|LINE=Punct
+15	śnčr	śnčr	NOUN	_	Gender=Masc|Number=Sing	2	parataxis	_	Hiero=𓋴𓊹(𓍿:𓂋)|ID=138670
+16	čꜣ	čꜣ	NOUN	_	Gender=Masc|Number=Sing	15	appos	_	Hiero=𓅷𓃉|Hierocl=𓃉|ID=173960
+17	1	1	NUM	_	NumType=Card	16	nummod	_	Hiero=𓏤|ID=850814
+
+# sent_id = PT_Sethe_37_30a_Unas
+# title = PT
+# edition = Sethe
+# spell = 37
+# section = 30a
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd5Jm5l7I9Userd33bRiWUvw; IBUBd6s2jiCyBEpJuAfWUIIsO9U
+# text = hꜣ Wnꞽś ꞽ:ś:mn (⸗ꞽ) n ⸗k ꜥr.t(ꞽ) ⸗k pśš.t(ꞽ) | pśš k(ꜣ)f
+1	hꜣ	hꜣ	INTJ	_	_	2	discourse	_	Hiero=𓉔𓄿|ID=97240
+2	Wnꞽś	Wnꞽś	PROPN	_	Gender=Masc|NameType=King	3	vocative	_	Hiero=𓍹(𓃹:𓈖)𓇋𓋴𓍺|ID=800001
+3	ꞽ:ś:mn	mn	VERB	_	Conjug=Suffix|Mood=Sub|Prefix=Yodh|VerbClass=Caus2lit|VerbForm=Fin	0	root	_	Hiero=𓇋𓋴(𓏠:𓈖)|ID=135100
+4	(⸗ꞽ)	ꞽ	PRON	_	Gender=Com|Number=Sing|Person=1|PronClass=Suffix|PronType=Prs	3	nsubj	_	Hiero=No|ID=10030_Add
+5	n	n	ADP	_	Case=Dat|StatPrep=Pron	6	case	_	Hiero=𓈖|ID=400055
+6	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	3	obl:arg	_	Hiero=𓎡|ID=10110
+7	ꜥr.t(ꞽ)	ꜥr.t	NOUN	_	Gender=Fem|Number=Dual	3	obj	_	Hiero=(𓂝:𓂋:𓏏)(𓄒:𓄒)|Hierocl=(𓄒:𓄒)|ID=39240
+8	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	7	nmod	_	Hiero=𓎡|ID=10110
+9	pśš.t(ꞽ)	pśš	VERB	_	Aspect=Stat|Conjug=AfroAsia|Gender=Fem|Mood=Ind|Number=Dual|Person=3|VerbClass=3lit|VerbForm=Fin	7	acl	_	Hiero=𓊪𓋴(𓈙:𓏏)|ID=62280
+10	|	|	PUNCT	_	_	11	punct	_	ID=.|LINE=Punct
+11	pśš	pśš	NOUN	_	Gender=Masc|Number=Sing	3	parataxis	_	Hiero=𓊪𓋴(𓈙:𔊉)|Hierocl=𔊉|ID=450149
+12	k(ꜣ)f	kꜣf	NOUN	_	Gender=Masc|Number=Sing	11	appos	_	Hiero=(𓎡:𓆑)𓏔|Hierocl=𓏔|ID=164090
+
+# sent_id = PT_Sethe_38_30b_Unas
+# title = PT
+# edition = Sethe
+# spell = 38
+# section = 30b
+# king = Unas
+# date = 5th Dynasty
+# lang = Old_Egyptian
+# genre = religious
+# place = Saqqara
+# TLA = IBUBd2ASRj41tUmbowrDRTQH49Q; IBUBdy2jMno3Rk6epVl9Y35d8aY
+# text = Wśr(.w) Wnꞽś wp ⸗ꞽ n ⸗k rʾ ⸗k | nčr Šmꜥ.w bꞽꜣ nčr Mḥ.w bꞽꜣ
+1	Wśr(.w)	Wśr.w	PROPN	_	Gender=Masc|NameType=God	3	vocative	_	Hiero=(𓊨:𓁹)|ID=49460
+2	Wnꞽś	Wnꞽś	PROPN	_	Gender=Masc|NameType=King	1	appos	_	Hiero=𓍹(𓃹:𓈖)𓇋𓋴𓍺|ID=800001
+3	wp	wpi̯	VERB	_	Conjug=Suffix|Mood=Sub|VerbClass=3aeinf|VerbForm=Fin	0	root	_	Hiero=𓅱(𓊪:𓄋)|ID=45640
+4	⸗ꞽ	ꞽ	PRON	_	Gender=Com|Number=Sing|Person=1|PronClass=Suffix|PronType=Prs	3	nsubj	_	Hiero=𓇋|ID=10030
+5	n	n	ADP	_	Case=Dat|StatPrep=Pron	6	case	_	Hiero=𓈖|ID=400055
+6	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|PronClass=Suffix|PronType=Prs	3	obl:arg	_	Hiero=𓎡|ID=10110
+7	rʾ	rʾ	NOUN	_	Gender=Masc|Number=Sing	3	obj	_	Hiero=(𓂋:𓏤)|Hierocl=𓏤|ID=92560
+8	⸗k	k	PRON	_	Gender=Masc|Number=Sing|Person=2|Poss=Yes|PronClass=Suffix|PronType=Prs	7	nmod	_	Hiero=𓎡|ID=10110
+9	|	|	PUNCT	_	_	10	punct	_	ID=.|LINE=Punct
+10	nčr	nčr	NOUN	_	Gender=Masc|Number=Sing	3	parataxis	_	Hiero=𓊹|ID=90260
+11	Šmꜥ.w	Šmꜥ.w	PROPN	_	Gender=Masc|NameType=Place	10	nmod:poss	_	Hiero=𓇗|ID=154760
+12	bꞽꜣ	bꞽꜣ	NOUN	_	Gender=Masc|Number=Sing	11	appos	_	Hiero=𓃀𓊌|ID=54320
+13	nčr	nčr	NOUN	_	Gender=Masc|Number=Sing	11	conj	_	Hiero=𓊹|ID=90260
+14	Mḥ.w	Mḥ.w	PROPN	_	Gender=Masc|NameType=Place	13	nmod:poss	_	Hiero=𓇉|ID=73940
+15	bꞽꜣ	bꞽꜣ	NOUN	_	Gender=Masc|Number=Sing	13	appos	_	Hiero=(𓈟:𓽇)𓊌|ID=54320

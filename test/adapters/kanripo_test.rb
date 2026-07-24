@@ -8,16 +8,17 @@ require "fileutils"
 # Nabu::Adapters::Kanripo (P33-0; KR2 wave 2 P33-1): nabu's first many-repo
 # source — the Kanseki Repository, one GitHub repo per text, discovered
 # through the KR-Catalog index and parsed by the mandoku family. Fixtures
-# are ten real texts (2–3 per wave class KR1/KR2/KR3/KR4) fetched
-# individually 2026-07-20 plus a trimmed KR-Catalog slice; see
+# are seventeen real texts (waves 1–3 fetched individually 2026-07-20, plus
+# the two P43-r2 quarantine-recovery exemplars extracted from the local
+# canonical snapshot 2026-07-23) and a trimmed KR-Catalog slice; see
 # test/fixtures/kanripo/README.md.
 class KanripoTest < Minitest::Test
   include AdapterConformance
 
   FIXTURES = File.expand_path("../fixtures/kanripo", __dir__)
 
-  TEXT_IDS = %w[KR1a0170 KR1h0004 KR2a0001 KR2a0038 KR2g0007
-                KR3a0001 KR3g0023 KR3i0042 KR4d0525 KR4j0026
+  TEXT_IDS = %w[KR1a0149 KR1a0170 KR1h0004 KR2a0001 KR2a0038 KR2f0037
+                KR2g0007 KR3a0001 KR3g0023 KR3i0042 KR4d0525 KR4j0026
                 KR5a0001 KR5a0004 KR5c0091 KR5g0001 KR5i0030].freeze
 
   def conformance_adapter
@@ -55,7 +56,7 @@ class KanripoTest < Minitest::Test
 
     classes = refs.map { |ref| ref.metadata["class"] }
     assert_equal TEXT_IDS.map { |id| "urn:nabu:kanripo:#{id}" }, refs.map(&:id)
-    assert_equal %w[KR1 KR1 KR2 KR2 KR2 KR3 KR3 KR3 KR4 KR4 KR5 KR5 KR5 KR5 KR5], classes
+    assert_equal %w[KR1 KR1 KR1 KR2 KR2 KR2 KR2 KR3 KR3 KR3 KR4 KR4 KR5 KR5 KR5 KR5 KR5], classes
     refs.each { |ref| assert File.directory?(ref.path), "ref path must be the text dir" }
   end
 
@@ -107,8 +108,41 @@ class KanripoTest < Minitest::Test
     adapter = conformance_adapter
     total = adapter.discover(FIXTURES).sum { |ref| adapter.parse(ref).size }
 
-    # 253 (waves 1–2) + 177 KR5 (109 + 1 + 42 + 16 + 9 — P37-1 census).
-    assert_equal 430, total
+    # census: 253 (waves 1–2) + 177 KR5 (109 + 1 + 42 + 16 + 9 — P37-1) +
+    # 129 P43-r2 recovery exemplars (53 KR2f0037 + 76 KR1a0149).
+    assert_equal 559, total
+  end
+
+  # -- P43-r2 quarantine recovery (D42-c census: 75 duplicate-anchor + 26
+  #    text-before-first-anchor texts recoverable of 133) --------------------
+
+  def test_two_fascicle_duplicate_anchors_parse_with_disambiguated_urns
+    # KR2f0037 juan 042 concatenates two source fascicles, each restarting
+    # leaf-side pagination at 1a — pre-P43 a quarantine, now the second
+    # sweep keys as #2 (see mandoku_parser_test for the family detail).
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |candidate| candidate.id.end_with?("KR2f0037") }
+    document = adapter.parse(ref)
+
+    assert_equal "三朝名臣言行錄", document.title
+    urns = document.map(&:urn)
+    assert_includes urns, "urn:nabu:kanripo:KR2f0037:042:1a"
+    assert_includes urns, "urn:nabu:kanripo:KR2f0037:042:1a#2"
+    assert_equal urns, adapter.parse(ref).map(&:urn)
+  end
+
+  def test_text_before_the_first_anchor_parses_onto_a_front_matter_page
+    # KR1a0149 juan 001 opens with prefatory print lines before the first
+    # page anchor — pre-P43 a quarantine, now the synthetic front page.
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |candidate| candidate.id.end_with?("KR1a0149") }
+    document = adapter.parse(ref)
+
+    assert_equal "易翼說", document.title
+    front = document.passages.first
+    assert_equal "urn:nabu:kanripo:KR1a0149:001:front", front.urn
+    assert front.annotations["front_matter"]
+    assert_equal document.map(&:urn), adapter.parse(ref).map(&:urn)
   end
 
   def test_wave_three_default_classes_include_the_daozang

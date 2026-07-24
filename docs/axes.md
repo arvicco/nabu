@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (14): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`
+**Members** (16): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `trismegistos`, `pleiades`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`
 
 ### slavic
 
@@ -107,7 +107,7 @@ The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, th
 
 The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the Leiden Latin dictionary, StarLing's bases, and the curated loan edges. Non-IE lanes of the same shelves ride their own axes too — dual-tagging, never folding.
 
-**Members** (6): `wiktionary-recon`, `iecor`, `liv`, `edl`, `starling`, `sabellic-loans`
+**Members** (7): `wiktionary-recon`, `iecor`, `liv`, `edl`, `starling`, `sabellic-loans`, `titus-avestan`
 
 ### biblical
 
@@ -115,7 +115,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (13): `vulgate`, `eng-web`, `sblgnt`, `coptic-scriptorium`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `hebrew-lexicon`, `peshitta`, `syriac-corpus`
+**Members** (14): `ud`, `vulgate`, `eng-web`, `sblgnt`, `coptic-scriptorium`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `hebrew-lexicon`, `peshitta`, `syriac-corpus`
 
 ### hebrew
 
@@ -123,7 +123,7 @@ The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Gre
 
 The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSHB, BHSA, DSS, SDBH and the lexicon shelf, the Sefaria Targums, the bridging crosswalk, and IIP's inscriptions of Israel/Palestine.
 
-**Members** (8): `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `iip`, `hebrew-lexicon`
+**Members** (9): `ud`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `iip`, `hebrew-lexicon`
 
 ### syriac
 
@@ -139,7 +139,7 @@ The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, ridi
 
 The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3).
 
-**Members** (1): `openiti`
+**Members** (2): `kitab`, `openiti`
 
 ### hittite
 
@@ -155,7 +155,7 @@ The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — it
 
 The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL's fragments, the Copenhagen Ugaritic Corpus (alphabetic cuneiform), and TLHdig shared with the Hittitologist.
 
-**Members** (6): `oracc`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`
+**Members** (7): `ud`, `oracc`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`
 
 ### egyptian
 
@@ -163,7 +163,7 @@ The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL'
 
 The Egyptian-Coptic continuum: the TLA corpora and word list (tla-hf, aes, aed), the Coptic lexicon with its egy-cop crosswalk, and Coptic Scriptorium.
 
-**Members** (5): `ccl`, `coptic-scriptorium`, `tla-hf`, `aes`, `aed`
+**Members** (6): `ud`, `ccl`, `coptic-scriptorium`, `tla-hf`, `aes`, `aed`
 
 ### indic
 

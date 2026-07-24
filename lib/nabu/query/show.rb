@@ -44,12 +44,14 @@ module Nabu
       # provenance trail, and the document's timeline (nil when undated).
       # +annotations+ (P27-1): the stored annotations_json parsed back — the
       # display layer's edition context (ketiv/qere word hashes ride there).
+      # +credit+ (P43-2): the source's optional attribution line (nil on every
+      # ordinary source), rendered on the card only when present.
       PassageResult = Data.define(
         :urn, :language, :sequence, :revision, :withdrawn, :text,
         :document_urn, :document_title, :source_slug, :license_class, :provenance, :timeline,
-        :annotations
+        :annotations, :credit
       ) do
-        def initialize(timeline: nil, annotations: {}, **) = super
+        def initialize(timeline: nil, annotations: {}, credit: nil, **) = super
       end
 
       # One line of a document listing: a passage's urn and text, in sequence
@@ -68,9 +70,9 @@ module Nabu
       # (P17-2): the document's facet rows, [] when unfaceted.
       DocumentResult = Data.define(
         :urn, :title, :language, :source_slug, :license_class,
-        :revision, :withdrawn, :retired_upstream, :passages, :timeline, :facets
+        :revision, :withdrawn, :retired_upstream, :passages, :timeline, :facets, :credit
       ) do
-        def initialize(timeline: nil, facets: [], **) = super
+        def initialize(timeline: nil, facets: [], credit: nil, **) = super
       end
 
       # A range (P7-6): the document header, the inclusive slice of passages,
@@ -79,9 +81,9 @@ module Nabu
       # passage_label reuse (it reads +urn+ + +passages+) works unchanged.
       RangeResult = Data.define(
         :urn, :title, :language, :source_slug, :license_class, :revision,
-        :withdrawn, :retired_upstream, :passages, :total, :start_urn, :end_urn, :timeline
+        :withdrawn, :retired_upstream, :passages, :total, :start_urn, :end_urn, :timeline, :credit
       ) do
-        def initialize(timeline: nil, **) = super
+        def initialize(timeline: nil, credit: nil, **) = super
       end
 
       def initialize(catalog:)
@@ -139,7 +141,7 @@ module Nabu
           retired_upstream: truthy?(header.fetch(:retired_upstream)),
           passages: slice_passages(slice), total: slice.total,
           start_urn: slice.start_urn, end_urn: slice.end_urn,
-          timeline: timeline_for(slice.document_id)
+          timeline: timeline_for(slice.document_id), credit: header.fetch(:credit)
         )
       end
 
@@ -185,7 +187,8 @@ module Nabu
           source_slug: row.fetch(:source_slug), license_class: row.fetch(:license_class),
           provenance: provenance_events(row.fetch(:passage_id)),
           timeline: timeline_for(row.fetch(:document_id)),
-          annotations: parse_annotations(row)
+          annotations: parse_annotations(row),
+          credit: row.fetch(:credit)
         )
       end
 
@@ -197,7 +200,7 @@ module Nabu
           retired_upstream: truthy?(row.fetch(:retired_upstream)),
           passages: document_passages(row.fetch(:document_id)),
           timeline: timeline_for(row.fetch(:document_id)),
-          facets: facets_for(row.fetch(:document_id))
+          facets: facets_for(row.fetch(:document_id)), credit: row.fetch(:credit)
         )
       end
 
@@ -295,7 +298,8 @@ module Nabu
           Sequel[:documents][:urn].as(:document_urn),
           Sequel[:documents][:title].as(:document_title),
           Sequel[:sources][:slug].as(:source_slug),
-          license_expr.as(:license_class)
+          license_expr.as(:license_class),
+          Sequel[:sources][:credit].as(:credit)
         ]
       end
 
@@ -309,7 +313,8 @@ module Nabu
           Sequel[:documents][:withdrawn],
           Sequel[:documents][:retired_upstream],
           Sequel[:sources][:slug].as(:source_slug),
-          license_expr.as(:license_class)
+          license_expr.as(:license_class),
+          Sequel[:sources][:credit].as(:credit)
         ]
       end
 
