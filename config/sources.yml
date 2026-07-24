@@ -1401,6 +1401,36 @@ glaux:
   sync_policy: manual
   lemma_tier: silver
 
+croala:
+  adapter: Nabu::Adapters::Croala
+  axes: [classical]
+  enabled: false   # NOT yet synced — awaits the owner-fired first real sync.
+                   # Sparse GitFetch of
+                   # github.com/nevenjovanovic/croatiae-auctores-latini-textus
+                   # scoped to the cone [txts, LICENSE.md, README.md]: a
+                   # blobless no-checkout clone (the DCS/GLAUx recipe),
+                   # skipping the schemas/ scripts/ oXygen cruft. The corpus is
+                   # ~569 TEI files / 5.8M words — a single-digit-MB text tree
+                   # (one file ~6 MB, why the parser streams). CLAUDE.md
+                   # checklist §6: bin/nabu sync croala, eyeball
+                   # urn:nabu:croala:albert-i-inscr:d1.p1 + 5 random passages
+                   # (`nabu show`), then flip.
+  # CroALa — Croatiae auctores Latini (Jovanović, ed.): the TEI P5 edition of
+  # Croatian Latin authors, 976 CE onward through the neo-Latin centuries — the
+  # classical desk's medieval-Latin edge (lat). A composed `croala-tei` parser
+  # (bespoke, sibling to SARIT — the compose-an-existing-family bet was refuted
+  # from the bytes: reading text lives in <opener>/<closer> that reading-TEI
+  # families drop, and a sparse every-fifth-line @n would corrupt an @n-first
+  # citation ladder). Passages at line grain (verse) / prose-block grain,
+  # addressed positionally: urn:nabu:croala:<work-id>:<div-path>.<l|p><n>. The
+  # teiHeader creation <date>/@notBefore feeds the timeline where present.
+  # LICENSE (D44-b): the in-repo LICENSE.md is CC BY 4.0 verbatim ("Attribution
+  # 4.0 International"; README: "freely available under a CC-BY license"),
+  # resolving the recorded site-vs-GitHub fork to the in-file grant → class
+  # attribution. Cite CroALa (croala.ffzg.unizg.hr), doi:10.5281/zenodo.10456561.
+  # Living edition (509 → 569 already) → sync_policy manual.
+  sync_policy: manual
+
 tla-hf:
   adapter: Nabu::Adapters::TlaHf
   axes: [egyptian]
