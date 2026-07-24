@@ -27,6 +27,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `lila` | feature module | attribution | not enabled | not synced yet |
 | `diorisis` | texts | attribution | enabled · manual | 767 docs / 516,505 passages |
 | `glaux` | texts | attribution | not enabled | not synced yet |
+| `croala` | texts | attribution | not enabled | not synced yet |
 
 ## The desk's instruments
 
