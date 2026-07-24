@@ -180,8 +180,21 @@ module Nabu
     # fuzz (out by design); homonym titles return every bearer, dump order.
     # A linear scan over ~42k places is microseconds next to the load.
     def titled(name)
-      @by_id.each_value.select { |place| place.title&.casecmp?(name) }
+      @by_id.each_value.select { |place| title_matches?(place.title, name) }
     end
+
+    # Exact, case-insensitive, zero fuzz — but variant-aware (P44-3 live
+    # finding): Pleiades joins name variants with "/" in one title
+    # ("Segesta/Egesta"), so each slash-separated segment is itself an exact
+    # variant name. Space-separated words are NOT variants ("Segesta
+    # Tigulliorum" only matches whole).
+    def title_matches?(title, name)
+      return false if title.nil?
+      return true if title.casecmp?(name)
+
+      title.include?("/") && title.split("/").any? { |segment| segment.strip.casecmp?(name) }
+    end
+    private :title_matches?
 
     # How many places the dump carried.
     def size

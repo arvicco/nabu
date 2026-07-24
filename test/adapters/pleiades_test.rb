@@ -123,6 +123,26 @@ module Adapters
       assert_empty resolver.titled("Spart")
     end
 
+    # P44-3 live finding: Pleiades joins name variants with "/" in one title
+    # ("Segesta/Egesta"), so whole-title equality misses the name every
+    # scholar types. A slash-separated SEGMENT is an exact variant name and
+    # matches; a space-separated word ("Segesta Tigulliorum") is NOT a
+    # variant and stays whole-title-only — still zero fuzz.
+    def test_titled_matches_slash_separated_variant_segments_exactly
+      resolver = Nabu::Pleiades.from_entries(
+        [
+          { "id" => "462487", "title" => "Segesta/Egesta", "reprPoint" => [12.83, 37.94] },
+          { "id" => "383775", "title" => "Segesta Tigulliorum" },
+          { "id" => "963441586", "title" => "Doric temple of Segesta" }
+        ]
+      )
+      assert_equal ["462487"], resolver.titled("segesta").map(&:id),
+                   "the variant segment matches; the multi-word and prose titles do not"
+      assert_equal ["462487"], resolver.titled("EGESTA").map(&:id)
+      assert_equal ["383775"], resolver.titled("Segesta Tigulliorum").map(&:id), "whole-title still matches"
+      assert_empty resolver.titled("Tigulliorum"), "a space-separated word is not a variant name"
+    end
+
     # --- load_default: feature detection (the LiLa precedent) ------------------
 
     def test_load_default_is_nil_without_a_canonical_dump
