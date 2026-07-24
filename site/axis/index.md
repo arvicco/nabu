@@ -142,6 +142,14 @@ The Egyptian-Coptic continuum: the TLA corpora and word list (tla-hf, aes, aed),
 
 [Open the egyptian desk]({{ '/axis/egyptian/' | relative_url }})
 
+### iranian
+
+> The Iranologist — the Avesta to the Achaemenid inscriptions, Old Iranian liturgy toward Middle Persian.
+
+The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world.
+
+[Open the iranian desk]({{ '/axis/iranian/' | relative_url }})
+
 ### indic
 
 > The Indologist — Veda to sastra, the Sanskrit library and its instruments.
