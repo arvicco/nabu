@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The dump is a documented TRIM of the full upstream 84 MB rdf/lemmaBank.ttl
+# (whole: false — a fresh GET returns the full file and is fetched for
+# URL-liveness only, never byte-compared). adapter_test is null: the lila
+# resolver test asserts slice-level records, which the untrimmed upstream file
+# would false-fail. Re-trim per the README recipe (prefix header + the eight
+# named subject blocks, byte-verbatim) after any refresh.
+source: lila
+adapter_test:
+retrieved: 2026-07-24
+files:
+  - path: rdf/lemmaBank.ttl
+    url: https://raw.githubusercontent.com/CIRCSE/LiLa_Lemma-Bank/HEAD/rdf/lemmaBank.ttl
+    whole: false
+    trim: prefix header + 8 real subject blocks, byte-verbatim (84 MB -> ~2 KB)
