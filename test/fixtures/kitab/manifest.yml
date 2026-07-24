@@ -1,0 +1,23 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema is documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Two REAL KITAB pairwise-alignment TSV files (whole, verbatim upstream),
+# refetchable from the GitHub mirror's raw per-file path. adapter_test is
+# null: the kitab test pins fixture-exact alignment rows (offsets, seq
+# values) that a drifted upstream recomputation would false-fail.
+#
+# NB the exact raw branch/path on the mirror is confirmed at the owner's
+# first real sync (the license authority is the Zenodo record, not the
+# mirror — see config/sources.yml and README.md).
+source: kitab
+adapter_test: null
+retrieved: 2026-07-24
+files:
+  - path: pairwise/ALCorpus00001-ara2/ALCorpus00001-ara2_Shia004016-ara1.csv
+    url: https://raw.githubusercontent.com/kitab-project-org/pairwise-light/master/data/ALCorpus00001-ara2/ALCorpus00001-ara2_Shia004016-ara1.csv
+    whole: true
+    trim: none (verbatim upstream file — header + 1 alignment row)
+  - path: pairwise/ALCorpus00001-ara2/ALCorpus00001-ara2_PV20230224-ara1.completed.csv
+    url: https://raw.githubusercontent.com/kitab-project-org/pairwise-light/master/data/ALCorpus00001-ara2/ALCorpus00001-ara2_PV20230224-ara1.completed.csv
+    whole: true
+    trim: none (verbatim upstream file — header + 83 alignment rows)

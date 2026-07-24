@@ -1,0 +1,1746 @@
+{
+    "features": [],
+    "contributors": [
+        {
+            "username": "bkiesling",
+            "homepage": null,
+            "name": "Brady Kiesling",
+            "uri": "https://pleiades.stoa.org/author/bkiesling"
+        },
+        {
+            "username": "sgillies",
+            "homepage": null,
+            "name": "Sean Gillies",
+            "uri": "https://pleiades.stoa.org/author/sgillies"
+        },
+        {
+            "username": "jbecker",
+            "homepage": null,
+            "name": "Jeffrey Becker",
+            "uri": "https://pleiades.stoa.org/author/jbecker"
+        },
+        {
+            "username": "thomase",
+            "homepage": null,
+            "name": "Tom Elliott",
+            "uri": "https://pleiades.stoa.org/author/thomase"
+        },
+        {
+            "username": "pmotylewicz",
+            "homepage": null,
+            "name": "Pierre Motylewicz",
+            "uri": "https://pleiades.stoa.org/author/pmotylewicz"
+        },
+        {
+            "username": "rssmith",
+            "homepage": null,
+            "name": "R. Scott Smith",
+            "uri": "https://pleiades.stoa.org/author/rssmith"
+        },
+        {
+            "username": null,
+            "name": "R. Talbert"
+        },
+        {
+            "username": "ghawes",
+            "homepage": null,
+            "name": "Greta Hawes",
+            "uri": "https://pleiades.stoa.org/author/ghawes"
+        },
+        {
+            "username": "enesy",
+            "homepage": null,
+            "name": "Enes Yılandiloğlu",
+            "uri": "https://pleiades.stoa.org/author/enesy"
+        }
+    ],
+    "locations": [],
+    "connections": [
+        {
+            "end": null,
+            "description": "",
+            "contributors": [
+                {
+                    "username": "thomase",
+                    "homepage": null,
+                    "name": "Tom Elliott",
+                    "uri": "https://pleiades.stoa.org/author/thomase"
+                }
+            ],
+            "created": "2016-07-13T13:45:56Z",
+            "associationCertainty": "certain",
+            "title": "Africum Mare",
+            "start": null,
+            "provenance": "Pleiades",
+            "uri": "https://pleiades.stoa.org/places/462492/776",
+            "connectionType": "abuts",
+            "id": "776",
+            "attestations": [],
+            "history": [
+                {
+                    "comment": "Initial revision",
+                    "modifiedBy": "thomase",
+                    "modified": "2022-04-05T18:56:33Z"
+                },
+                {
+                    "action": "Publish externally",
+                    "modifiedBy": "admin",
+                    "modified": "2016-07-13T13:46:07Z"
+                },
+                {
+                    "action": "Submit for review",
+                    "modifiedBy": "admin",
+                    "modified": "2016-07-13T13:46:07Z"
+                },
+                {
+                    "action": "Create",
+                    "modifiedBy": "admin",
+                    "modified": "2016-07-13T13:45:56Z"
+                }
+            ],
+            "connectsTo": "https://pleiades.stoa.org/places/776",
+            "details": "",
+            "references": [],
+            "review_state": "published",
+            "creators": [
+                {
+                    "username": "sgillies",
+                    "homepage": null,
+                    "name": "Sean Gillies",
+                    "uri": "https://pleiades.stoa.org/author/sgillies"
+                }
+            ],
+            "@type": "Connection",
+            "connectionTypeURI": "https://pleiades.stoa.org/vocabularies/relationship-types/abuts"
+        },
+        {
+            "end": null,
+            "description": "",
+            "contributors": [
+                {
+                    "username": "thomase",
+                    "homepage": null,
+                    "name": "Tom Elliott",
+                    "uri": "https://pleiades.stoa.org/author/thomase"
+                }
+            ],
+            "created": "2016-07-13T13:46:07Z",
+            "associationCertainty": "certain",
+            "title": "Tyrrhenum/Inferum Mare",
+            "start": null,
+            "provenance": "Pleiades",
+            "uri": "https://pleiades.stoa.org/places/462492/1356",
+            "connectionType": "abuts",
+            "id": "1356",
+            "attestations": [],
+            "history": [
+                {
+                    "comment": "Initial revision",
+                    "modifiedBy": "thomase",
+                    "modified": "2022-04-05T18:56:51Z"
+                },
+                {
+                    "action": "Publish externally",
+                    "modifiedBy": "admin",
+                    "modified": "2016-07-13T13:46:09Z"
+                },
+                {
+                    "action": "Submit for review",
+                    "modifiedBy": "admin",
+                    "modified": "2016-07-13T13:46:09Z"
+                },
+                {
+                    "action": "Create",
+                    "modifiedBy": "admin",
+                    "modified": "2016-07-13T13:46:07Z"
+                }
+            ],
+            "connectsTo": "https://pleiades.stoa.org/places/1356",
+            "details": "",
+            "references": [],
+            "review_state": "published",
+            "creators": [
+                {
+                    "username": "sgillies",
+                    "homepage": null,
+                    "name": "Sean Gillies",
+                    "uri": "https://pleiades.stoa.org/author/sgillies"
+                }
+            ],
+            "@type": "Connection",
+            "connectionTypeURI": "https://pleiades.stoa.org/vocabularies/relationship-types/abuts"
+        }
+    ],
+    "references": [
+        {
+            "alternateURI": "",
+            "accessURI": "http://www.worldcat.org/oclc/43970336",
+            "citationDetail": "47 C3 Sicilia",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "BAtlas",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/MIAGQ5C6",
+            "formattedCitation": "<div class=\"csl-entry\">Talbert, Richard J. A., ed. <i>Barrington Atlas of the Greek and Roman World</i>. Princeton, N.J.: Princeton University Press, 2000. http://www.worldcat.org/oclc/43970336.</div>",
+            "otherIdentifier": " ",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "http://www.worldcat.org/oclc/8494638",
+            "citationDetail": "44-45",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Manni 1981",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/U2CF7U8D",
+            "formattedCitation": "<div class=\"csl-entry\">Manni, Eugenio. <i>Geografia fisica e politica della Sicilia antica</i>. Supplementi a Kókalos 4. Rome: G. Bretschneider, 1981. http://www.worldcat.org/oclc/8494638.</div>",
+            "otherIdentifier": "",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "https://en.wikipedia.org/wiki/Sicily",
+            "citationDetail": "Sicily",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Wikipedia (English)",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/CI6F6W7W",
+            "formattedCitation": "<div class=\"csl-entry\"><i>Wikipedia: The Free Encyclopedia That Anyone Can Edit</i>. Wikimedia Foundation, 2001. https://en.wikipedia.org.</div>",
+            "otherIdentifier": " ",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "https://www.cambridge.org/us/talbert/talbertdatabase/TPPlace3014.html",
+            "citationDetail": "6C1 (Talbert 3014)",
+            "citationTypeURI": "http://purl.org/spar/cito/citesAsEvidence",
+            "shortTitle": "TP (Talbert: CUP)",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/QT8GLGGI",
+            "formattedCitation": "<div class=\"csl-entry\">Talbert, Richard. “Database: Peutinger Map Names and Features, with Commentary and User’s Guide.” In <i>Explore the Peutinger Map</i>. Cambridge UP, 2010. http://www.cambridge.org/us/talbert/talbertdatabase/prm.html.</div>",
+            "otherIdentifier": " ",
+            "type": "citesAsEvidence"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "https://doi.org/10.1163/1574-9347_bnp_e1111770",
+            "citationDetail": "Sicily (E. Olshausen)",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "New Pauly",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/DUTS58MJ",
+            "formattedCitation": "<div class=\"csl-entry\">Hubert Cancik, Helmuth Schneider, Manfred Landfester, Christine F. Salazar, and Francis G. Gentry, eds. <i>Brill’s New Pauly: Encyclopaedia of the Ancient World.</i> Brill, 2015. https://referenceworks.brillonline.com/browse/brill-s-new-pauly.</div>",
+            "otherIdentifier": " ",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "http://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0064%3Aalphabetic+letter%3DS%3Aentry+group%3D12%3Aentry%3Dsicilia-geo",
+            "citationDetail": "SICILIA",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Smith 1854 (Perseus)",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/BIA378QC",
+            "formattedCitation": "<div class=\"csl-entry\">Smith, William. <i>Dictionary of Greek and Roman Geography</i>. London: Murray, 1854. http://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.04.0064.</div>",
+            "otherIdentifier": " ",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "http://data.perseus.org/citations/urn:cts:greekLit:tlg0099.tlg001.perseus-grc1:2.5.19",
+            "citationDetail": "2.5.19",
+            "citationTypeURI": "http://purl.org/spar/cito/citesAsEvidence",
+            "shortTitle": "Str. (Meineke: Perseus)",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/FEVTVBA7",
+            "formattedCitation": "<div class=\"csl-entry\">Strabo. <i>Strabonis Geographica: recognovit Augustus Meineke.</i> Edited by August Meineke. 3 in 2 vols. Lipsiae, 1877. http://data.perseus.org/texts/urn:cts:greekLit:tlg0099.tlg001.perseus-grc1.</div>",
+            "otherIdentifier": " ",
+            "type": "citesAsEvidence"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "https://www.trismegistos.org/place/2132",
+            "citationDetail": "Geo 2132: Sicilia",
+            "citationTypeURI": "http://purl.org/spar/cito/citesAsRelated",
+            "shortTitle": "TM",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/TN3GJAU8",
+            "formattedCitation": "<div class=\"csl-entry\">Depauw, Mark, Tom Gheldof, Herbert Verreth, Nico Dogaer, Willy Clarysse, Yanne Broux, Gert Baetens, and Heinz-Josef Thissen. <i>Trismegistos: An Interdisciplinary Portal of the Ancient World</i>. Leuven, 2006. http://www.trismegistos.org/.</div>",
+            "otherIdentifier": " ",
+            "type": "citesAsRelated"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Leighton 1999",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/GWQV7MU8",
+            "formattedCitation": "<div class=\"csl-entry\">Leighton, Robert. <i>Sicily before History: An Archaeological Survey from the Palaeolithic to the Iron Age</i>. Ithaca, N.Y.: Cornell University Press, 1999.</div>",
+            "otherIdentifier": " ",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "https://ebookcentral.proquest.com/lib/nyulibrary-ebooks/detail.action?docID=178682",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Holloway 1991",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/3ZMPD72H",
+            "formattedCitation": "<div class=\"csl-entry\">Holloway, R. Ross. <i>The Archaeology of Ancient Sicily</i>. London; New York: Routledge, 2000. http://search.ebscohost.com/login.aspx?direct=true&amp;scope=site&amp;db=nlebk&amp;db=nlabk&amp;AN=83938.</div>",
+            "otherIdentifier": " ",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Pugliese Carratelli 1996",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/8MW8JNAP",
+            "formattedCitation": "<div class=\"csl-entry\">Pugliese Carratelli, Giovanni, Palazzo Grassi, and Rogers D. Spotswood Collection. <i>The Greek World: Art and Civilization in Magna Graecia and Sicily</i>. New York: Rizzoli, 1996.</div>",
+            "otherIdentifier": " ",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Pugliese Carratelli 1986",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/XN7CQRBH",
+            "formattedCitation": "<div class=\"csl-entry\">Pugliese Carratelli, Giovanni. <i>Sikanie: storia e civiltà della Sicilia greca</i>. Milano: Garzanti, 1986.</div>",
+            "otherIdentifier": " ",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "http://www.geonames.org/",
+            "citationDetail": "2523118: Sicily",
+            "citationTypeURI": "http://purl.org/spar/cito/citesAsRelated",
+            "shortTitle": "GeoNames",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/IIFE4W6M",
+            "formattedCitation": "<div class=\"csl-entry\">Marc Wick, and Christophe Boutreux. <i>GeoNames</i>, 2005. https://www.geonames.org/.</div>",
+            "otherIdentifier": " ",
+            "type": "citesAsRelated"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Booms 2019",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/M2JHP39P",
+            "formattedCitation": "<div class=\"csl-entry\">Booms, Dirk, and Peter John Higgs. <i>SICILY: Heritage of the World.</i> Place of publication not identified: CASEMATE ACADEMIC, 2019.</div>",
+            "otherIdentifier": "",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Colivicchi 2011",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/ETYN2598",
+            "formattedCitation": "<div class=\"csl-entry\">Colivicchi, Fabio, and Luigi M. Caliò, eds. <i>Local Cultures of South Italy and Sicily in the Late Republican Period: Between Hellenism and Rome</i>. Journal of Roman Archaeology 83. Portsmouth, R.I: Journal of Roman Archaeology, 2011.</div>",
+            "otherIdentifier": "",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "https://www.cambridge.org/core/journals/archaeological-reports/article/archaeology-in-sicily-198287/40E0B98465BE0CFCD58D82656C15A8ED",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Wilson 1987",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/PZWSC43T",
+            "formattedCitation": "<div class=\"csl-entry\">Wilson, R.J.A. “Archaeology in Sicily, 1982-87.” <i>Archaeological Reports</i> 34 (88 1987): 105–50. https://doi.org/https://doi.org/10.2307/581128.</div>",
+            "otherIdentifier": "",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "http://www.worldcat.org/oclc/1028581688",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Pfuntner 2019",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/586LTJ5X",
+            "formattedCitation": "<div class=\"csl-entry\">Pfuntner, Laura. <i>Urbanism and Empire in Roman Sicily</i>. Austin: University of Texas Press, 2019. http://www.worldcat.org/oclc/1028581688.</div>",
+            "otherIdentifier": "",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "https://tp-online.ku.de/trefferanzeige_en.php?id=2180",
+            "citationDetail": "2180: Sicilia",
+            "citationTypeURI": "http://purl.org/spar/cito/citesAsRelated",
+            "shortTitle": "KU TP Database (Rathmann)",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/KDZ6Q72N",
+            "formattedCitation": "<div class=\"csl-entry\">Ingolstadt, Katholische Universität Eichstätt-. “Tabula Peutingeriana.” Datenbank tp-online. Accessed June 4, 2025. https://www.ku.de/ggf/geschichte/alte-geschichte/forschung/datenbank-tp-online.</div>",
+            "otherIdentifier": "",
+            "type": "citesAsRelated"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "http://data.perseus.org/citations/urn:cts:greekLit:tlg0525.tlg001.perseus-grc1:8.11.12",
+            "citationDetail": "8.11.12",
+            "citationTypeURI": "http://purl.org/spar/cito/citesAsEvidence",
+            "shortTitle": "Paus. (Spiro: Perseus)",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/GTGBFEI9",
+            "formattedCitation": "<div class=\"csl-entry\">Pausanias. <i>Pausaniae Graeciae descriptio</i>. Edited by Friedrich Spiro. 3 vols. Bibliotheca Teubneriana. Lipsiae: Teubner, 1903. http://data.perseus.org/texts/urn:cts:greekLit:tlg0525.tlg001.perseus-grc1.</div>",
+            "otherIdentifier": "",
+            "type": "citesAsEvidence"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "https://resource.manto.unh.edu/8254007",
+            "citationDetail": "8254007: Sicily (island)",
+            "citationTypeURI": "http://purl.org/spar/cito/citesAsRelated",
+            "shortTitle": "MANTO",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/SLCUI2TB",
+            "formattedCitation": "<div class=\"csl-entry\">Hawes, Greta, and Scott Smith. <i>MANTO</i>. Accessed February 17, 2023. https://www.manto-myth.org/manto.</div>",
+            "otherIdentifier": "",
+            "type": "citesAsRelated"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "https://www.wikidata.org/wiki/Q4951156",
+            "citationDetail": "Sicily (Q4951156)",
+            "citationTypeURI": "http://purl.org/spar/cito/citesAsRelated",
+            "shortTitle": "Wikidata",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/BCQIKDKS",
+            "formattedCitation": "<div class=\"csl-entry\"><i>Wikidata: The Free Knowledge Base That Anyone Can Edit</i>. Wikimedia Foundation, 2014. https://www.wikidata.org/.</div>",
+            "otherIdentifier": "",
+            "type": "citesAsRelated"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "https://topostext.org/place/376145RSic",
+            "citationDetail": "Sicily region (Italy)",
+            "citationTypeURI": "http://purl.org/spar/cito/citesAsRelated",
+            "shortTitle": "ToposText",
+            "bibliographicURI": "https://www.zotero.org/groups/2533/items/MC9RGDVB",
+            "formattedCitation": "<div class=\"csl-entry\">Kiesling, Brady. <i>ToposText – a Reference Tool for Greek Civilization</i>. Version 2.0. Aikaterini Laskaridis Foundation, 2016. https://topostext.org/.</div>",
+            "otherIdentifier": "http://atlantides.org/bibliography/",
+            "type": "citesAsRelated"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "http://www.worldcat.org/oclc/6684340",
+            "citationDetail": "396",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "ItMiller",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/Q8X83VMV",
+            "formattedCitation": "<div class=\"csl-entry\">Miller, Konrad. <i>Itineraria romana: Römische Reisewege an der Hand der Tabula Peutingeriana</i>. Stuttgart: Strecker und Schröder, 1916. http://www.worldcat.org/oclc/6684340.</div>",
+            "otherIdentifier": "",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "http://www.worldcat.org/oclc/24295042",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Wilson 1990",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/3NGNDI8A",
+            "formattedCitation": "<div class=\"csl-entry\">Wilson, Roger John Anthony. <i>Sicily under the Roman Empire: The Archaeology of a Roman Province, 36BC-AD535</i>. Warminster, Wiltshire, England: Aris &amp; Phillips, 1990. http://www.worldcat.org/oclc/24295042.</div>",
+            "otherIdentifier": "",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "http://swbplus.bsz-bw.de/bsz38023887Xinh.htm",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Lyons 2013",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/GYC29AA8",
+            "formattedCitation": "<div class=\"csl-entry\">Lyons, Claire L., Michael J. Bennett, and Clemente Marconi. <i>Sicily: Art and Invention between Greece and Rome</i>. Los Angeles: J. Paul Getty Museum, 2013. http://swbplus.bsz-bw.de/bsz38023887Xinh.htm.</div>",
+            "otherIdentifier": "",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "https://arachne.dainst.org/entity/2229",
+            "citationDetail": "Sizilien Italien",
+            "citationTypeURI": "http://purl.org/spar/cito/citesAsRelated",
+            "shortTitle": "Arachne",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/HUWENJCW",
+            "formattedCitation": "<div class=\"csl-entry\">Reinhard Foertsch, ed. <i>Arachne: iDAI Objects</i>. Köln; Berlin: Archaeological Institute, University of Cologne; German Archaeological Institute, 2025. https://arachne.dainst.org/.</div>",
+            "otherIdentifier": "",
+            "type": "citesAsRelated"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Osanna and Torelli 2006",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/KRRTPH7E",
+            "formattedCitation": "<div class=\"csl-entry\">Osanna, Massimo, and Mario Torelli. <i>Sicilia Ellenistica, Consuetudo Italica: Alle Origini Dell’architettura Ellenistica d’Occidente : Spoleto, Complesso Monumentale Di S. Nicolò, 5-7 Novembre 2004</i>. Roma: Edizioni dell’Ateneo, 2006.</div>",
+            "otherIdentifier": "",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Fazello 1558",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/2BRQKQ73",
+            "formattedCitation": "<div class=\"csl-entry\">Fazello, Tommaso. <i>F. Thomae Fazelli ... De Rebus Siculis Decades Duae: Nunc Primum in Lucem Editae</i>. Panormi: Apud Ioannem Matthaeum Maidam, et Franciscum Carraram, 1558.</div>",
+            "otherIdentifier": "",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "https://worldcat.org/title/557865191",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Cluverius 1619",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/3A2J9PH4",
+            "formattedCitation": "<div class=\"csl-entry\">Cluverius, P. <i>Philippi Cluverii Sicilia Antiqua; Cum Minoribus Insulis, Ei Adjacentibus. Item, Sardinia et Corsica. Opus ... Elaboratissimum; Tabulis Geographicis, Ære Expressis, Illustratum</i>. Leiden, 1619. https://worldcat.org/title/557865191.</div>",
+            "otherIdentifier": "",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "D’Orville 1764",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/BMHSBPII",
+            "formattedCitation": "<div class=\"csl-entry\">D’Orville, Jacques Philippe, and Pieter Burman. <i>Jacobi Philippi d’Orville Sicula: Quibus Siciae Veteris Rudera, Additis Antiquitatum Tabulis, Illustrantur</i>. 2 pt. in 1 vols. Amstelaedami: Apud G. Tielenburg, 1764.</div>",
+            "otherIdentifier": "",
+            "type": "seeFurther"
+        },
+        {
+            "alternateURI": "",
+            "accessURI": "",
+            "citationDetail": "",
+            "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+            "shortTitle": "Houel 1782",
+            "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/9G99MBZQ",
+            "formattedCitation": "<div class=\"csl-entry\">Hoüel, Jean-Pierre-Laurent. <i>Voyage Pittoresque Des Isles de Sicile: De Malte et de Lipari, Où l’on Traite Des Antiquités Qui s’y Trouvent Encore; Des Principaux Phénomènes Que La Nature y Offre; Du Costume Des Habitans, &amp; de Quelques Usages</i>. 4 vols. Paris: Imprimerie de Monsieur, 1782.</div>",
+            "otherIdentifier": "",
+            "type": "seeFurther"
+        }
+    ],
+    "names": [
+        {
+            "nameType": "geographic",
+            "transcriptionAccuracy": "accurate",
+            "associationCertainty": "certain",
+            "romanized": "Sicilia",
+            "attestations": [
+                {
+                    "timePeriod": "archaic",
+                    "timePeriodURI": "https://pleiades.stoa.org/vocabularies/time-periods/archaic",
+                    "confidence": "confident",
+                    "confidenceURI": "https://pleiades.stoa.org/vocabularies/attestation-confidence/confident"
+                },
+                {
+                    "timePeriod": "classical",
+                    "timePeriodURI": "https://pleiades.stoa.org/vocabularies/time-periods/classical",
+                    "confidence": "confident",
+                    "confidenceURI": "https://pleiades.stoa.org/vocabularies/attestation-confidence/confident"
+                },
+                {
+                    "timePeriod": "hellenistic-republican",
+                    "timePeriodURI": "https://pleiades.stoa.org/vocabularies/time-periods/hellenistic-republican",
+                    "confidence": "confident",
+                    "confidenceURI": "https://pleiades.stoa.org/vocabularies/attestation-confidence/confident"
+                },
+                {
+                    "timePeriod": "roman",
+                    "timePeriodURI": "https://pleiades.stoa.org/vocabularies/time-periods/roman",
+                    "confidence": "confident",
+                    "confidenceURI": "https://pleiades.stoa.org/vocabularies/attestation-confidence/confident"
+                },
+                {
+                    "timePeriod": "late-antique",
+                    "timePeriodURI": "https://pleiades.stoa.org/vocabularies/time-periods/late-antique",
+                    "confidence": "confident",
+                    "confidenceURI": "https://pleiades.stoa.org/vocabularies/attestation-confidence/confident"
+                }
+            ],
+            "references": [
+                {
+                    "alternateURI": "",
+                    "accessURI": "https://www.cambridge.org/us/talbert/talbertdatabase/TPPlace3014.html",
+                    "citationDetail": "6C1 (Talbert 3014)",
+                    "citationTypeURI": "http://purl.org/spar/cito/citesAsEvidence",
+                    "shortTitle": "TP (Talbert: CUP)",
+                    "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/QT8GLGGI",
+                    "formattedCitation": "<div class=\"csl-entry\">Talbert, Richard. “Database: Peutinger Map Names and Features, with Commentary and User’s Guide.” In <i>Explore the Peutinger Map</i>. Cambridge UP, 2010. http://www.cambridge.org/us/talbert/talbertdatabase/prm.html.</div>",
+                    "otherIdentifier": "",
+                    "type": "citesAsEvidence"
+                }
+            ],
+            "id": "sicilia",
+            "end": 640,
+            "contributors": [
+                {
+                    "username": null,
+                    "name": "R. Talbert"
+                },
+                {
+                    "username": "sgillies",
+                    "homepage": null,
+                    "name": "Sean Gillies",
+                    "uri": "https://pleiades.stoa.org/author/sgillies"
+                },
+                {
+                    "username": "thomase",
+                    "homepage": null,
+                    "name": "Tom Elliott",
+                    "uri": "https://pleiades.stoa.org/author/thomase"
+                },
+                {
+                    "username": "jbecker",
+                    "homepage": null,
+                    "name": "Jeffrey Becker",
+                    "uri": "https://pleiades.stoa.org/author/jbecker"
+                }
+            ],
+            "provenance": "Barrington Atlas: BAtlas 47 C3 Sicilia",
+            "associationCertaintyURI": "https://pleiades.stoa.org/vocabularies/association-certainty/certain",
+            "start": -750,
+            "details": "",
+            "review_state": "published",
+            "description": "",
+            "transcriptionCompleteness": "complete",
+            "language": "la",
+            "created": "2025-09-27T22:07:03Z",
+            "uri": "https://pleiades.stoa.org/places/462492/sicilia",
+            "creators": [
+                {
+                    "username": null,
+                    "name": "R.J.A. Wilson"
+                }
+            ],
+            "attested": "SICILIA",
+            "@type": "Name",
+            "history": [
+                {
+                    "comment": "TP name TP reference Latin attested by @jbecker",
+                    "modifiedBy": "thomase",
+                    "modified": "2025-09-28T09:22:22Z"
+                },
+                {
+                    "comment": "Global migration and reindexing of citations and provenance, February 2012",
+                    "modifiedBy": "admin",
+                    "modified": "2012-02-15T05:23:39Z"
+                },
+                {
+                    "action": "Publish externally",
+                    "modifiedBy": "thomase",
+                    "modified": "2010-11-11T20:01:28Z"
+                },
+                {
+                    "action": "Submit for review",
+                    "modifiedBy": "sgillies",
+                    "modified": "2010-11-11T15:24:45Z"
+                },
+                {
+                    "action": "Create",
+                    "modifiedBy": "sgillies",
+                    "modified": "2010-11-11T15:14:55Z"
+                }
+            ]
+        },
+        {
+            "nameType": "geographic",
+            "transcriptionAccuracy": "accurate",
+            "associationCertainty": "certain",
+            "romanized": "Sicily",
+            "attestations": [
+                {
+                    "timePeriod": "modern",
+                    "timePeriodURI": "https://pleiades.stoa.org/vocabularies/time-periods/modern",
+                    "confidence": "confident",
+                    "confidenceURI": "https://pleiades.stoa.org/vocabularies/attestation-confidence/confident"
+                }
+            ],
+            "references": [],
+            "id": "sicily",
+            "end": 2100,
+            "contributors": [],
+            "provenance": "Pleiades",
+            "associationCertaintyURI": "https://pleiades.stoa.org/vocabularies/association-certainty/certain",
+            "start": 1700,
+            "details": "",
+            "review_state": "published",
+            "description": "",
+            "transcriptionCompleteness": "complete",
+            "language": "en",
+            "created": "2012-12-18T21:36:31Z",
+            "uri": "https://pleiades.stoa.org/places/462492/sicily",
+            "creators": [
+                {
+                    "username": "jbecker",
+                    "homepage": null,
+                    "name": "Jeffrey Becker",
+                    "uri": "https://pleiades.stoa.org/author/jbecker"
+                }
+            ],
+            "attested": "Sicily",
+            "@type": "Name",
+            "history": [
+                {
+                    "action": "Publish externally",
+                    "modifiedBy": "thomase",
+                    "modified": "2012-12-20T01:03:25Z"
+                },
+                {
+                    "action": "Submit for review",
+                    "modifiedBy": "jbecker",
+                    "modified": "2012-12-18T21:36:45Z"
+                },
+                {
+                    "comment": "added name",
+                    "modifiedBy": "jbecker",
+                    "modified": "2012-12-18T21:36:35Z"
+                },
+                {
+                    "action": "Create",
+                    "modifiedBy": "jbecker",
+                    "modified": "2012-12-18T21:36:32Z"
+                }
+            ]
+        },
+        {
+            "nameType": "geographic",
+            "transcriptionAccuracy": "accurate",
+            "associationCertainty": "certain",
+            "romanized": "Trinacria",
+            "attestations": [
+                {
+                    "timePeriod": "roman",
+                    "timePeriodURI": "https://pleiades.stoa.org/vocabularies/time-periods/roman",
+                    "confidence": "confident",
+                    "confidenceURI": "https://pleiades.stoa.org/vocabularies/attestation-confidence/confident"
+                }
+            ],
+            "references": [
+                {
+                    "alternateURI": "",
+                    "accessURI": "http://latin.packhum.org/loc/690/3/2/17551-17560,20067-20076,25265-25274,26541-26550",
+                    "citationDetail": "Aen. 3.384, 3.440, 3.554, 3.582",
+                    "citationTypeURI": "http://purl.org/spar/cito/citesAsEvidence",
+                    "shortTitle": "Verg. (Mynors: PHI)",
+                    "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/YMYCTNYR",
+                    "formattedCitation": "<div class=\"csl-entry\">Virgil, and R. A. B. Mynors. <i>Opera: recognovit brevique adnotatione critica instruxit R.A.B. Mynors.</i> Reprinted (with corrections). Scriptorum classicorum bibliotheca Oxoniensis. Oxonii (Oxford): E Typographeo Clarendoniano (Clarendon P.), 1972.</div>",
+                    "otherIdentifier": " ",
+                    "type": "citesAsEvidence"
+                },
+                {
+                    "alternateURI": "",
+                    "accessURI": "http://latin.packhum.org/loc/978/1/246/106-115",
+                    "citationDetail": "3.86.2",
+                    "citationTypeURI": "http://purl.org/spar/cito/citesAsEvidence",
+                    "shortTitle": "Plin., NH (Mayhoff: PHI)",
+                    "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/8AK7HSRG",
+                    "formattedCitation": "<div class=\"csl-entry\">Plinius Secundus Maior, C. <i>Naturalis Historiae</i>. Edited by Karl Friedrich Theodor Mayhoff. Bibliotheca Scriptorum Graecorum et Romanorum Teubneriana. Lipsiae: Teubner, 1906. http://latin.packhum.org/loc/978/1/0.</div>",
+                    "otherIdentifier": " ",
+                    "type": "citesAsEvidence"
+                }
+            ],
+            "id": "name.2015-01-13.4002092627",
+            "end": 300,
+            "contributors": [
+                {
+                    "username": "thomase",
+                    "homepage": null,
+                    "name": "Tom Elliott",
+                    "uri": "https://pleiades.stoa.org/author/thomase"
+                }
+            ],
+            "provenance": "Pleiades",
+            "associationCertaintyURI": "https://pleiades.stoa.org/vocabularies/association-certainty/certain",
+            "start": -30,
+            "details": "",
+            "review_state": "published",
+            "description": "",
+            "transcriptionCompleteness": "complete",
+            "language": "la",
+            "created": "2015-01-13T21:27:16Z",
+            "uri": "https://pleiades.stoa.org/places/462492/name.2015-01-13.4002092627",
+            "creators": [
+                {
+                    "username": "jbecker",
+                    "homepage": null,
+                    "name": "Jeffrey Becker",
+                    "uri": "https://pleiades.stoa.org/author/jbecker"
+                }
+            ],
+            "attested": "Trinacria",
+            "@type": "Name",
+            "history": [
+                {
+                    "comment": "update references",
+                    "modifiedBy": "jbecker",
+                    "modified": "2024-04-06T19:19:39Z"
+                },
+                {
+                    "action": "Publish externally",
+                    "modifiedBy": "thomase",
+                    "modified": "2016-05-23T20:25:00Z"
+                },
+                {
+                    "comment": "Edited",
+                    "modifiedBy": "thomase",
+                    "modified": "2016-05-23T20:24:49Z"
+                },
+                {
+                    "action": "Submit for review",
+                    "modifiedBy": "jbecker",
+                    "modified": "2015-09-09T01:26:32Z"
+                },
+                {
+                    "comment": "added reference",
+                    "modifiedBy": "jbecker",
+                    "modified": "2015-09-09T01:26:15Z"
+                },
+                {
+                    "comment": "added name",
+                    "modifiedBy": "jbecker",
+                    "modified": "2015-01-13T21:27:38Z"
+                },
+                {
+                    "action": "Create",
+                    "modifiedBy": "jbecker",
+                    "modified": "2015-01-13T21:27:26Z"
+                }
+            ]
+        },
+        {
+            "nameType": "geographic",
+            "transcriptionAccuracy": "accurate",
+            "associationCertainty": "certain",
+            "romanized": "Sizilien",
+            "attestations": [
+                {
+                    "timePeriod": "modern",
+                    "timePeriodURI": "https://pleiades.stoa.org/vocabularies/time-periods/modern",
+                    "confidence": "confident",
+                    "confidenceURI": "https://pleiades.stoa.org/vocabularies/attestation-confidence/confident"
+                }
+            ],
+            "references": [
+                {
+                    "alternateURI": "",
+                    "accessURI": "https://de.wikipedia.org/wiki/Sizilien",
+                    "citationDetail": "Sizilien",
+                    "citationTypeURI": "http://purl.org/spar/cito/citesAsEvidence",
+                    "shortTitle": "Wikipedia (German)",
+                    "bibliographicURI": "https://www.zotero.org/groups/2533/pleiades/items/itemKey/QVRBJVTM",
+                    "formattedCitation": "Wikipedia: Die freie Enzyklopädie (2001-), Sizilien.",
+                    "otherIdentifier": " ",
+                    "type": "citesAsEvidence"
+                },
+                {
+                    "alternateURI": "",
+                    "accessURI": "http://www.geonames.org/2523118/sicily.html",
+                    "citationDetail": "",
+                    "citationTypeURI": "http://purl.org/spar/cito/citesAsEvidence",
+                    "shortTitle": "",
+                    "bibliographicURI": "",
+                    "formattedCitation": "GeoNames 255620",
+                    "otherIdentifier": " ",
+                    "type": "citesAsEvidence"
+                }
+            ],
+            "id": "sizilien",
+            "end": 2100,
+            "contributors": [
+                {
+                    "username": "jbecker",
+                    "homepage": null,
+                    "name": "Jeffrey Becker",
+                    "uri": "https://pleiades.stoa.org/author/jbecker"
+                }
+            ],
+            "provenance": "Pleiades",
+            "associationCertaintyURI": "https://pleiades.stoa.org/vocabularies/association-certainty/certain",
+            "start": 1700,
+            "details": "",
+            "review_state": "published",
+            "description": "German name for Sicily.",
+            "transcriptionCompleteness": "complete",
+            "language": "de",
+            "created": "2015-09-09T06:24:56Z",
+            "uri": "https://pleiades.stoa.org/places/462492/sizilien",
+            "creators": [
+                {
+                    "username": "pmotylewicz",
+                    "homepage": null,
+                    "name": "Pierre Motylewicz",
+                    "uri": "https://pleiades.stoa.org/author/pmotylewicz"
+                }
+            ],
+            "attested": "Sizilien",
+            "@type": "Name",
+            "history": [
+                {
+                    "comment": "Edited",
+                    "modifiedBy": "jbecker",
+                    "modified": "2016-09-04T14:51:46Z"
+                },
+                {
+                    "action": "Publish externally",
+                    "modifiedBy": "jbecker",
+                    "modified": "2015-09-10T14:47:34Z"
+                },
+                {
+                    "comment": "added reference",
+                    "modifiedBy": "jbecker",
+                    "modified": "2015-09-10T14:46:34Z"
+                },
+                {
+                    "action": "Submit for review",
+                    "modifiedBy": "pmotylewicz",
+                    "modified": "2015-09-09T06:25:29Z"
+                },
+                {
+                    "comment": "Initial revision",
+                    "modifiedBy": "pmotylewicz",
+                    "modified": "2015-09-09T06:25:20Z"
+                },
+                {
+                    "action": "Create",
+                    "modifiedBy": "pmotylewicz",
+                    "modified": "2015-09-09T06:25:06Z"
+                }
+            ]
+        },
+        {
+            "nameType": "geographic",
+            "transcriptionAccuracy": "accurate",
+            "associationCertainty": "certain",
+            "romanized": "Sikelía, Sikelia",
+            "attestations": [
+                {
+                    "timePeriod": "classical",
+                    "timePeriodURI": "https://pleiades.stoa.org/vocabularies/time-periods/classical",
+                    "confidence": "confident",
+                    "confidenceURI": "https://pleiades.stoa.org/vocabularies/attestation-confidence/confident"
+                },
+                {
+                    "timePeriod": "hellenistic-roman-early-empire",
+                    "timePeriodURI": "https://pleiades.stoa.org/vocabularies/time-periods/hellenistic-roman-early-empire",
+                    "confidence": "confident",
+                    "confidenceURI": "https://pleiades.stoa.org/vocabularies/attestation-confidence/confident"
+                }
+            ],
+            "references": [
+                {
+                    "alternateURI": "",
+                    "accessURI": "https://doi.org/10.1163/1574-9347_bnp_e1111770",
+                    "citationDetail": "Sicily (E. Olshausen, et al.)",
+                    "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+                    "shortTitle": "New Pauly",
+                    "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/DUTS58MJ",
+                    "formattedCitation": "<div class=\"csl-entry\">Hubert Cancik, Helmuth Schneider, Manfred Landfester, Christine F. Salazar, and Francis G. Gentry, eds. <i>Brill’s New Pauly: Encyclopaedia of the Ancient World.</i> Brill, 2015. https://referenceworks.brillonline.com/browse/brill-s-new-pauly.</div>",
+                    "otherIdentifier": " ",
+                    "type": "seeFurther"
+                },
+                {
+                    "alternateURI": "",
+                    "accessURI": "http://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0199%3Abook%3D1%3Achapter%3D12%3Asection%3D4",
+                    "citationDetail": "1.12.4",
+                    "citationTypeURI": "http://purl.org/spar/cito/citesAsEvidence",
+                    "shortTitle": "Thuc. Hist. (Jones; Perseus)",
+                    "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/EFG24VXW",
+                    "formattedCitation": "<div class=\"csl-entry\">Thucydides. <i>Thucydidis Historiae; recognovit brevique adnotatione critica instruxit Henricus Stuart Jones ..</i> Edited by Henry Stuart Jones and J. Enoch Powell. 2 vols. Oxonii: e typographeo Clarendoniano, 1942. http://data.perseus.org/texts/urn:cts:greekLit:tlg0003.tlg001.perseus-grc1.</div>",
+                    "otherIdentifier": " ",
+                    "type": "citesAsEvidence"
+                },
+                {
+                    "alternateURI": "",
+                    "accessURI": "http://data.perseus.org/citations/urn:cts:greekLit:tlg0099.tlg001.perseus-grc1:2.5.19",
+                    "citationDetail": "2.5.19",
+                    "citationTypeURI": "http://purl.org/spar/cito/citesAsEvidence",
+                    "shortTitle": "Str. (Meineke: Perseus)",
+                    "bibliographicURI": "https://www.zotero.org/groups/pleiades/items/FEVTVBA7",
+                    "formattedCitation": "<div class=\"csl-entry\">Strabo. <i>Strabonis Geographica: recognovit Augustus Meineke.</i> Edited by August Meineke. 3 in 2 vols. Lipsiae, 1877. http://data.perseus.org/texts/urn:cts:greekLit:tlg0099.tlg001.perseus-grc1.</div>",
+                    "otherIdentifier": " ",
+                    "type": "citesAsEvidence"
+                }
+            ],
+            "id": "sikelia",
+            "end": 300,
+            "contributors": [
+                {
+                    "username": "thomase",
+                    "homepage": null,
+                    "name": "Tom Elliott",
+                    "uri": "https://pleiades.stoa.org/author/thomase"
+                }
+            ],
+            "provenance": "Pleiades",
+            "associationCertaintyURI": "https://pleiades.stoa.org/vocabularies/association-certainty/certain",
+            "start": -550,
+            "details": "",
+            "review_state": "published",
+            "description": "Ancient Greek name for Sicily.",
+            "transcriptionCompleteness": "complete",
+            "language": "grc",
+            "created": "2015-09-08T19:49:27Z",
+            "uri": "https://pleiades.stoa.org/places/462492/sikelia",
+            "creators": [
+                {
+                    "username": "pmotylewicz",
+                    "homepage": null,
+                    "name": "Pierre Motylewicz",
+                    "uri": "https://pleiades.stoa.org/author/pmotylewicz"
+                },
+                {
+                    "username": "jbecker",
+                    "homepage": null,
+                    "name": "Jeffrey Becker",
+                    "uri": "https://pleiades.stoa.org/author/jbecker"
+                }
+            ],
+            "attested": "Σικελία",
+            "@type": "Name",
+            "history": [
+                {
+                    "comment": "New Pauly reference -> see Further",
+                    "modifiedBy": "thomase",
+                    "modified": "2025-04-30T17:32:51Z"
+                },
+                {
+                    "comment": "reconnected Thucydides reference to Zotero; updated link for New Pauly reference",
+                    "modifiedBy": "thomase",
+                    "modified": "2025-04-30T17:32:21Z"
+                },
+                {
+                    "comment": "update references",
+                    "modifiedBy": "jbecker",
+                    "modified": "2023-09-29T11:49:24Z"
+                },
+                {
+                    "action": "Publish externally",
+                    "modifiedBy": "jbecker",
+                    "modified": "2015-09-09T01:21:20Z"
+                },
+                {
+                    "comment": "added reference",
+                    "modifiedBy": "jbecker",
+                    "modified": "2015-09-09T01:21:02Z"
+                },
+                {
+                    "action": "Submit for review",
+                    "modifiedBy": "pmotylewicz",
+                    "modified": "2015-09-08T19:50:14Z"
+                },
+                {
+                    "comment": "Initial revision",
+                    "modifiedBy": "pmotylewicz",
+                    "modified": "2015-09-08T19:49:45Z"
+                },
+                {
+                    "action": "Create",
+                    "modifiedBy": "pmotylewicz",
+                    "modified": "2015-09-08T19:49:35Z"
+                }
+            ]
+        },
+        {
+            "nameType": "geographic",
+            "transcriptionAccuracy": "accurate",
+            "associationCertainty": "certain",
+            "romanized": "Cezīre-i Ṣıḳılliye",
+            "attestations": [
+                {
+                    "timePeriod": "sixteenth-ce",
+                    "timePeriodURI": "https://pleiades.stoa.org/vocabularies/time-periods/sixteenth-ce",
+                    "confidence": "confident",
+                    "confidenceURI": "https://pleiades.stoa.org/vocabularies/attestation-confidence/confident"
+                }
+            ],
+            "references": [
+                {
+                    "alternateURI": "",
+                    "accessURI": "",
+                    "citationDetail": "1st Volume, 274, s.v. \"Cezīre-i Ṣıḳılliye\"",
+                    "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+                    "shortTitle": "Künhü'l-ahbâr",
+                    "bibliographicURI": "https://www.zotero.org/groups/2533/items/WKDD5W8W",
+                    "formattedCitation": "",
+                    "otherIdentifier": "",
+                    "type": "seeFurther"
+                }
+            ],
+            "id": "cezire-i-sikilliye",
+            "end": 1599,
+            "contributors": [],
+            "provenance": "Pleiades",
+            "associationCertaintyURI": "https://pleiades.stoa.org/vocabularies/association-certainty/certain",
+            "start": 1500,
+            "details": "<p class=\"p1\"><em>Cezīre-i Ṣıḳılliye</em>: Its circumference is seven hundred fifty miles. It is known for its triangular shape. (translated to English by the first creator of the entry)</p>",
+            "review_state": "published",
+            "description": "",
+            "transcriptionCompleteness": "complete",
+            "language": "ota",
+            "created": "2025-11-07T03:26:44Z",
+            "uri": "https://pleiades.stoa.org/places/462492/cezire-i-sikilliye",
+            "creators": [
+                {
+                    "username": "enesy",
+                    "homepage": null,
+                    "name": "Enes Yılandiloğlu",
+                    "uri": "https://pleiades.stoa.org/author/enesy"
+                }
+            ],
+            "attested": "",
+            "@type": "Name",
+            "history": [
+                {
+                    "action": "Publish externally",
+                    "modifiedBy": "jbecker",
+                    "modified": "2026-01-17T15:11:11Z"
+                },
+                {
+                    "action": "Submit for review",
+                    "modifiedBy": "enesy",
+                    "modified": "2025-11-07T03:27:22Z"
+                },
+                {
+                    "comment": "Initial revision",
+                    "modifiedBy": "enesy",
+                    "modified": "2025-11-07T03:26:51Z"
+                },
+                {
+                    "action": "Create",
+                    "modifiedBy": "enesy",
+                    "modified": "2025-11-07T03:26:44Z"
+                }
+            ]
+        },
+        {
+            "nameType": "geographic",
+            "transcriptionAccuracy": "accurate",
+            "associationCertainty": "certain",
+            "romanized": "Cezīre-i Messīne",
+            "attestations": [
+                {
+                    "timePeriod": "sixteenth-ce",
+                    "timePeriodURI": "https://pleiades.stoa.org/vocabularies/time-periods/sixteenth-ce",
+                    "confidence": "confident",
+                    "confidenceURI": "https://pleiades.stoa.org/vocabularies/attestation-confidence/confident"
+                }
+            ],
+            "references": [
+                {
+                    "alternateURI": "",
+                    "accessURI": "",
+                    "citationDetail": "1st Volume, 274, s.v. \"Cezīre-i Messīne\"",
+                    "citationTypeURI": "http://purl.org/spar/cito/seeFurther",
+                    "shortTitle": "Künhü'l-ahbâr",
+                    "bibliographicURI": "https://www.zotero.org/groups/2533/items/WKDD5W8W",
+                    "formattedCitation": "",
+                    "otherIdentifier": "",
+                    "type": "seeFurther"
+                }
+            ],
+            "id": "cezire-i-messine",
+            "end": 1599,
+            "contributors": [],
+            "provenance": "Pleiades",
+            "associationCertaintyURI": "https://pleiades.stoa.org/vocabularies/association-certainty/certain",
+            "start": 1500,
+            "details": "<p class=\"p1\"><em>Cezīre-i Messīne</em>: The name of this island is indeed Sicily... (partially translated to English by the first creator of the entry.)</p>",
+            "review_state": "published",
+            "description": "",
+            "transcriptionCompleteness": "complete",
+            "language": "ota",
+            "created": "2025-11-07T03:33:31Z",
+            "uri": "https://pleiades.stoa.org/places/462492/cezire-i-messine",
+            "creators": [
+                {
+                    "username": "enesy",
+                    "homepage": null,
+                    "name": "Enes Yılandiloğlu",
+                    "uri": "https://pleiades.stoa.org/author/enesy"
+                }
+            ],
+            "attested": "",
+            "@type": "Name",
+            "history": [
+                {
+                    "action": "Publish externally",
+                    "modifiedBy": "jbecker",
+                    "modified": "2026-01-17T15:10:40Z"
+                },
+                {
+                    "action": "Submit for review",
+                    "modifiedBy": "enesy",
+                    "modified": "2025-11-07T03:36:00Z"
+                },
+                {
+                    "comment": "Edited",
+                    "modifiedBy": "enesy",
+                    "modified": "2025-11-07T03:34:11Z"
+                },
+                {
+                    "comment": "Initial revision",
+                    "modifiedBy": "enesy",
+                    "modified": "2025-11-07T03:33:37Z"
+                },
+                {
+                    "action": "Create",
+                    "modifiedBy": "enesy",
+                    "modified": "2025-11-07T03:33:31Z"
+                }
+            ]
+        }
+    ],
+    "id": "462492",
+    "subject": [],
+    "title": "Sicilia (island)",
+    "provenance": "Barrington Atlas: BAtlas 47 C3 Sicilia",
+    "placeTypeURIs": [
+        "https://pleiades.stoa.org/vocabularies/place-types/island"
+    ],
+    "details": "<p>None</p>",
+    "@context": {
+        "snippet": "dcterms:abstract",
+        "rights": "dcterms:rights",
+        "description": "dcterms:description",
+        "title": "dcterms:title",
+        "dcterms": "http://purl.org/dc/terms/",
+        "subject": "dcterms:subject",
+        "uri": "@id",
+        "created": "dcterms:created"
+    },
+    "review_state": "published",
+    "type": "FeatureCollection",
+    "description": "Sicily is the largest island in the Mediterranean Sea and has been the site of human habitation since ca. 8,000 BC. In historical terms, Sicily has seen important settlement activity connected to numerous culture groups - Punic, Carthaginian, Greek, Roman, Vandalic, Ostrogothic, Byzantine, Arabic, and Norman.",
+    "reprPoint": [
+        14.046517222907195,
+        37.592530586002724
+    ],
+    "placeTypes": [
+        "island"
+    ],
+    "bbox": [
+        8.59403546876818,
+        36.683441,
+        15.6530796,
+        38.2678505
+    ],
+    "connectsWith": [
+        "https://pleiades.stoa.org/places/776",
+        "https://pleiades.stoa.org/places/1356",
+        "https://pleiades.stoa.org/places/465941",
+        "https://pleiades.stoa.org/places/465837",
+        "https://pleiades.stoa.org/places/659771156",
+        "https://pleiades.stoa.org/places/462216",
+        "https://pleiades.stoa.org/places/462164",
+        "https://pleiades.stoa.org/places/462324",
+        "https://pleiades.stoa.org/places/462493",
+        "https://pleiades.stoa.org/places/462355",
+        "https://pleiades.stoa.org/places/462099",
+        "https://pleiades.stoa.org/places/462821",
+        "https://pleiades.stoa.org/places/462450",
+        "https://pleiades.stoa.org/places/462356",
+        "https://pleiades.stoa.org/places/462437",
+        "https://pleiades.stoa.org/places/462461",
+        "https://pleiades.stoa.org/places/462152",
+        "https://pleiades.stoa.org/places/462222",
+        "https://pleiades.stoa.org/places/462371",
+        "https://pleiades.stoa.org/places/462129",
+        "https://pleiades.stoa.org/places/462176",
+        "https://pleiades.stoa.org/places/462497",
+        "https://pleiades.stoa.org/places/462451",
+        "https://pleiades.stoa.org/places/462440",
+        "https://pleiades.stoa.org/places/462532",
+        "https://pleiades.stoa.org/places/462299",
+        "https://pleiades.stoa.org/places/466019",
+        "https://pleiades.stoa.org/places/50391614",
+        "https://pleiades.stoa.org/places/462294",
+        "https://pleiades.stoa.org/places/462220",
+        "https://pleiades.stoa.org/places/106443043",
+        "https://pleiades.stoa.org/places/465929",
+        "https://pleiades.stoa.org/places/466011",
+        "https://pleiades.stoa.org/places/462422",
+        "https://pleiades.stoa.org/places/465905",
+        "https://pleiades.stoa.org/places/465943",
+        "https://pleiades.stoa.org/places/465958",
+        "https://pleiades.stoa.org/places/465944",
+        "https://pleiades.stoa.org/places/462171",
+        "https://pleiades.stoa.org/places/462510",
+        "https://pleiades.stoa.org/places/462343",
+        "https://pleiades.stoa.org/places/462359",
+        "https://pleiades.stoa.org/places/462444",
+        "https://pleiades.stoa.org/places/465948",
+        "https://pleiades.stoa.org/places/462377",
+        "https://pleiades.stoa.org/places/462238",
+        "https://pleiades.stoa.org/places/462375",
+        "https://pleiades.stoa.org/places/462518",
+        "https://pleiades.stoa.org/places/462509",
+        "https://pleiades.stoa.org/places/462325",
+        "https://pleiades.stoa.org/places/462331",
+        "https://pleiades.stoa.org/places/462448",
+        "https://pleiades.stoa.org/places/462174",
+        "https://pleiades.stoa.org/places/465986",
+        "https://pleiades.stoa.org/places/462116",
+        "https://pleiades.stoa.org/places/462297",
+        "https://pleiades.stoa.org/places/462151",
+        "https://pleiades.stoa.org/places/462149",
+        "https://pleiades.stoa.org/places/462500",
+        "https://pleiades.stoa.org/places/462140",
+        "https://pleiades.stoa.org/places/462253",
+        "https://pleiades.stoa.org/places/462241",
+        "https://pleiades.stoa.org/places/465912",
+        "https://pleiades.stoa.org/places/528052483",
+        "https://pleiades.stoa.org/places/465913",
+        "https://pleiades.stoa.org/places/465992",
+        "https://pleiades.stoa.org/places/155765601",
+        "https://pleiades.stoa.org/places/927604602",
+        "https://pleiades.stoa.org/places/462135",
+        "https://pleiades.stoa.org/places/157243532",
+        "https://pleiades.stoa.org/places/462302",
+        "https://pleiades.stoa.org/places/182402266",
+        "https://pleiades.stoa.org/places/466009",
+        "https://pleiades.stoa.org/places/462275",
+        "https://pleiades.stoa.org/places/462443",
+        "https://pleiades.stoa.org/places/465938",
+        "https://pleiades.stoa.org/places/462111",
+        "https://pleiades.stoa.org/places/465846",
+        "https://pleiades.stoa.org/places/465876",
+        "https://pleiades.stoa.org/places/462070",
+        "https://pleiades.stoa.org/places/462163",
+        "https://pleiades.stoa.org/places/463573",
+        "https://pleiades.stoa.org/places/463578",
+        "https://pleiades.stoa.org/places/466017",
+        "https://pleiades.stoa.org/places/462170",
+        "https://pleiades.stoa.org/places/462446",
+        "https://pleiades.stoa.org/places/465935",
+        "https://pleiades.stoa.org/places/462285",
+        "https://pleiades.stoa.org/places/462496",
+        "https://pleiades.stoa.org/places/465979",
+        "https://pleiades.stoa.org/places/462513",
+        "https://pleiades.stoa.org/places/462145",
+        "https://pleiades.stoa.org/places/863833176",
+        "https://pleiades.stoa.org/places/462452",
+        "https://pleiades.stoa.org/places/462370",
+        "https://pleiades.stoa.org/places/462385",
+        "https://pleiades.stoa.org/places/462147",
+        "https://pleiades.stoa.org/places/462153",
+        "https://pleiades.stoa.org/places/462154",
+        "https://pleiades.stoa.org/places/462156",
+        "https://pleiades.stoa.org/places/462159",
+        "https://pleiades.stoa.org/places/462161",
+        "https://pleiades.stoa.org/places/462162",
+        "https://pleiades.stoa.org/places/462166",
+        "https://pleiades.stoa.org/places/462169",
+        "https://pleiades.stoa.org/places/462175",
+        "https://pleiades.stoa.org/places/462177",
+        "https://pleiades.stoa.org/places/462179",
+        "https://pleiades.stoa.org/places/462184",
+        "https://pleiades.stoa.org/places/462185",
+        "https://pleiades.stoa.org/places/462187",
+        "https://pleiades.stoa.org/places/462188",
+        "https://pleiades.stoa.org/places/462191",
+        "https://pleiades.stoa.org/places/462303",
+        "https://pleiades.stoa.org/places/462195",
+        "https://pleiades.stoa.org/places/462197",
+        "https://pleiades.stoa.org/places/462198",
+        "https://pleiades.stoa.org/places/462201",
+        "https://pleiades.stoa.org/places/462202",
+        "https://pleiades.stoa.org/places/462203",
+        "https://pleiades.stoa.org/places/462209",
+        "https://pleiades.stoa.org/places/462210",
+        "https://pleiades.stoa.org/places/462214",
+        "https://pleiades.stoa.org/places/462217",
+        "https://pleiades.stoa.org/places/462221",
+        "https://pleiades.stoa.org/places/462225",
+        "https://pleiades.stoa.org/places/462227",
+        "https://pleiades.stoa.org/places/462228",
+        "https://pleiades.stoa.org/places/311205627",
+        "https://pleiades.stoa.org/places/462338",
+        "https://pleiades.stoa.org/places/333222070",
+        "https://pleiades.stoa.org/places/465841",
+        "https://pleiades.stoa.org/places/462346",
+        "https://pleiades.stoa.org/places/462479",
+        "https://pleiades.stoa.org/places/462223",
+        "https://pleiades.stoa.org/places/462095",
+        "https://pleiades.stoa.org/places/462457",
+        "https://pleiades.stoa.org/places/465928",
+        "https://pleiades.stoa.org/places/465937",
+        "https://pleiades.stoa.org/places/509519514",
+        "https://pleiades.stoa.org/places/797288429",
+        "https://pleiades.stoa.org/places/465848",
+        "https://pleiades.stoa.org/places/462269",
+        "https://pleiades.stoa.org/places/462401",
+        "https://pleiades.stoa.org/places/462345",
+        "https://pleiades.stoa.org/places/462454",
+        "https://pleiades.stoa.org/places/462335",
+        "https://pleiades.stoa.org/places/119040454",
+        "https://pleiades.stoa.org/places/104817942",
+        "https://pleiades.stoa.org/places/462318",
+        "https://pleiades.stoa.org/places/462322",
+        "https://pleiades.stoa.org/places/465983",
+        "https://pleiades.stoa.org/places/462208",
+        "https://pleiades.stoa.org/places/465971",
+        "https://pleiades.stoa.org/places/465924",
+        "https://pleiades.stoa.org/places/462526",
+        "https://pleiades.stoa.org/places/741493662",
+        "https://pleiades.stoa.org/places/462112",
+        "https://pleiades.stoa.org/places/462108",
+        "https://pleiades.stoa.org/places/462317",
+        "https://pleiades.stoa.org/places/636310449",
+        "https://pleiades.stoa.org/places/465931",
+        "https://pleiades.stoa.org/places/462194",
+        "https://pleiades.stoa.org/places/462342",
+        "https://pleiades.stoa.org/places/462137",
+        "https://pleiades.stoa.org/places/836462857",
+        "https://pleiades.stoa.org/places/466002",
+        "https://pleiades.stoa.org/places/462313",
+        "https://pleiades.stoa.org/places/462173",
+        "https://pleiades.stoa.org/places/462141",
+        "https://pleiades.stoa.org/places/462449",
+        "https://pleiades.stoa.org/places/462447",
+        "https://pleiades.stoa.org/places/462445",
+        "https://pleiades.stoa.org/places/504285206",
+        "https://pleiades.stoa.org/places/462353",
+        "https://pleiades.stoa.org/places/462330",
+        "https://pleiades.stoa.org/places/462259",
+        "https://pleiades.stoa.org/places/462360",
+        "https://pleiades.stoa.org/places/462268",
+        "https://pleiades.stoa.org/places/462525",
+        "https://pleiades.stoa.org/places/462089",
+        "https://pleiades.stoa.org/places/462323",
+        "https://pleiades.stoa.org/places/465911",
+        "https://pleiades.stoa.org/places/462352",
+        "https://pleiades.stoa.org/places/462361",
+        "https://pleiades.stoa.org/places/462079",
+        "https://pleiades.stoa.org/places/465843",
+        "https://pleiades.stoa.org/places/462131",
+        "https://pleiades.stoa.org/places/462193",
+        "https://pleiades.stoa.org/places/465997",
+        "https://pleiades.stoa.org/places/462234",
+        "https://pleiades.stoa.org/places/462236",
+        "https://pleiades.stoa.org/places/462237",
+        "https://pleiades.stoa.org/places/462239",
+        "https://pleiades.stoa.org/places/462240",
+        "https://pleiades.stoa.org/places/462244",
+        "https://pleiades.stoa.org/places/462245",
+        "https://pleiades.stoa.org/places/462246",
+        "https://pleiades.stoa.org/places/462247",
+        "https://pleiades.stoa.org/places/462251",
+        "https://pleiades.stoa.org/places/462252",
+        "https://pleiades.stoa.org/places/462254",
+        "https://pleiades.stoa.org/places/462258",
+        "https://pleiades.stoa.org/places/462261",
+        "https://pleiades.stoa.org/places/462263",
+        "https://pleiades.stoa.org/places/462266",
+        "https://pleiades.stoa.org/places/462267",
+        "https://pleiades.stoa.org/places/776618356",
+        "https://pleiades.stoa.org/places/462270",
+        "https://pleiades.stoa.org/places/462279",
+        "https://pleiades.stoa.org/places/462280",
+        "https://pleiades.stoa.org/places/462281",
+        "https://pleiades.stoa.org/places/462282",
+        "https://pleiades.stoa.org/places/462287",
+        "https://pleiades.stoa.org/places/462289",
+        "https://pleiades.stoa.org/places/462293",
+        "https://pleiades.stoa.org/places/462295",
+        "https://pleiades.stoa.org/places/462298",
+        "https://pleiades.stoa.org/places/462305",
+        "https://pleiades.stoa.org/places/462307",
+        "https://pleiades.stoa.org/places/462312",
+        "https://pleiades.stoa.org/places/462314",
+        "https://pleiades.stoa.org/places/462316",
+        "https://pleiades.stoa.org/places/462490",
+        "https://pleiades.stoa.org/places/462319",
+        "https://pleiades.stoa.org/places/465874",
+        "https://pleiades.stoa.org/places/462326",
+        "https://pleiades.stoa.org/places/462327",
+        "https://pleiades.stoa.org/places/235362439",
+        "https://pleiades.stoa.org/places/462328",
+        "https://pleiades.stoa.org/places/462332",
+        "https://pleiades.stoa.org/places/462336",
+        "https://pleiades.stoa.org/places/462337",
+        "https://pleiades.stoa.org/places/462341",
+        "https://pleiades.stoa.org/places/462344",
+        "https://pleiades.stoa.org/places/462347",
+        "https://pleiades.stoa.org/places/462348",
+        "https://pleiades.stoa.org/places/462349",
+        "https://pleiades.stoa.org/places/462351",
+        "https://pleiades.stoa.org/places/462354",
+        "https://pleiades.stoa.org/places/462358",
+        "https://pleiades.stoa.org/places/462362",
+        "https://pleiades.stoa.org/places/462363",
+        "https://pleiades.stoa.org/places/462364",
+        "https://pleiades.stoa.org/places/462365",
+        "https://pleiades.stoa.org/places/462369",
+        "https://pleiades.stoa.org/places/462372",
+        "https://pleiades.stoa.org/places/462376",
+        "https://pleiades.stoa.org/places/462378",
+        "https://pleiades.stoa.org/places/462379",
+        "https://pleiades.stoa.org/places/462381",
+        "https://pleiades.stoa.org/places/462383",
+        "https://pleiades.stoa.org/places/462384",
+        "https://pleiades.stoa.org/places/462386",
+        "https://pleiades.stoa.org/places/462388",
+        "https://pleiades.stoa.org/places/462389",
+        "https://pleiades.stoa.org/places/462393",
+        "https://pleiades.stoa.org/places/462395",
+        "https://pleiades.stoa.org/places/462399",
+        "https://pleiades.stoa.org/places/462408",
+        "https://pleiades.stoa.org/places/462410",
+        "https://pleiades.stoa.org/places/462413",
+        "https://pleiades.stoa.org/places/462414",
+        "https://pleiades.stoa.org/places/462416",
+        "https://pleiades.stoa.org/places/462423",
+        "https://pleiades.stoa.org/places/462424",
+        "https://pleiades.stoa.org/places/462429",
+        "https://pleiades.stoa.org/places/462431",
+        "https://pleiades.stoa.org/places/462432",
+        "https://pleiades.stoa.org/places/462435",
+        "https://pleiades.stoa.org/places/462439",
+        "https://pleiades.stoa.org/places/462442",
+        "https://pleiades.stoa.org/places/462453",
+        "https://pleiades.stoa.org/places/462455",
+        "https://pleiades.stoa.org/places/462456",
+        "https://pleiades.stoa.org/places/462459",
+        "https://pleiades.stoa.org/places/462466",
+        "https://pleiades.stoa.org/places/462468",
+        "https://pleiades.stoa.org/places/462469",
+        "https://pleiades.stoa.org/places/462470",
+        "https://pleiades.stoa.org/places/462471",
+        "https://pleiades.stoa.org/places/462474",
+        "https://pleiades.stoa.org/places/462476",
+        "https://pleiades.stoa.org/places/462477",
+        "https://pleiades.stoa.org/places/462483",
+        "https://pleiades.stoa.org/places/462484",
+        "https://pleiades.stoa.org/places/462485",
+        "https://pleiades.stoa.org/places/462427",
+        "https://pleiades.stoa.org/places/462495",
+        "https://pleiades.stoa.org/places/462498",
+        "https://pleiades.stoa.org/places/462501",
+        "https://pleiades.stoa.org/places/462511",
+        "https://pleiades.stoa.org/places/462512",
+        "https://pleiades.stoa.org/places/462514",
+        "https://pleiades.stoa.org/places/462520",
+        "https://pleiades.stoa.org/places/462523",
+        "https://pleiades.stoa.org/places/462534",
+        "https://pleiades.stoa.org/places/462536",
+        "https://pleiades.stoa.org/places/462538",
+        "https://pleiades.stoa.org/places/465839",
+        "https://pleiades.stoa.org/places/981549",
+        "https://pleiades.stoa.org/places/465853",
+        "https://pleiades.stoa.org/places/465859",
+        "https://pleiades.stoa.org/places/465884",
+        "https://pleiades.stoa.org/places/465922",
+        "https://pleiades.stoa.org/places/465930",
+        "https://pleiades.stoa.org/places/465951",
+        "https://pleiades.stoa.org/places/465970",
+        "https://pleiades.stoa.org/places/466007",
+        "https://pleiades.stoa.org/places/462286",
+        "https://pleiades.stoa.org/places/462436",
+        "https://pleiades.stoa.org/places/462127",
+        "https://pleiades.stoa.org/places/462438",
+        "https://pleiades.stoa.org/places/462478",
+        "https://pleiades.stoa.org/places/462441",
+        "https://pleiades.stoa.org/places/462124",
+        "https://pleiades.stoa.org/places/491524938",
+        "https://pleiades.stoa.org/places/109976884",
+        "https://pleiades.stoa.org/places/462530",
+        "https://pleiades.stoa.org/places/462516",
+        "https://pleiades.stoa.org/places/462368",
+        "https://pleiades.stoa.org/places/462434",
+        "https://pleiades.stoa.org/places/465972",
+        "https://pleiades.stoa.org/places/462062",
+        "https://pleiades.stoa.org/places/462063",
+        "https://pleiades.stoa.org/places/462066",
+        "https://pleiades.stoa.org/places/462067",
+        "https://pleiades.stoa.org/places/462069",
+        "https://pleiades.stoa.org/places/462071",
+        "https://pleiades.stoa.org/places/462073",
+        "https://pleiades.stoa.org/places/462074",
+        "https://pleiades.stoa.org/places/462077",
+        "https://pleiades.stoa.org/places/462082",
+        "https://pleiades.stoa.org/places/943504072",
+        "https://pleiades.stoa.org/places/462086",
+        "https://pleiades.stoa.org/places/462090",
+        "https://pleiades.stoa.org/places/462091",
+        "https://pleiades.stoa.org/places/462093",
+        "https://pleiades.stoa.org/places/462097",
+        "https://pleiades.stoa.org/places/462101",
+        "https://pleiades.stoa.org/places/462103",
+        "https://pleiades.stoa.org/places/462106",
+        "https://pleiades.stoa.org/places/462109",
+        "https://pleiades.stoa.org/places/462113",
+        "https://pleiades.stoa.org/places/462114",
+        "https://pleiades.stoa.org/places/462115",
+        "https://pleiades.stoa.org/places/462117",
+        "https://pleiades.stoa.org/places/462118",
+        "https://pleiades.stoa.org/places/462120",
+        "https://pleiades.stoa.org/places/462122",
+        "https://pleiades.stoa.org/places/462123",
+        "https://pleiades.stoa.org/places/462125",
+        "https://pleiades.stoa.org/places/462126",
+        "https://pleiades.stoa.org/places/462128",
+        "https://pleiades.stoa.org/places/462130",
+        "https://pleiades.stoa.org/places/462132",
+        "https://pleiades.stoa.org/places/462133",
+        "https://pleiades.stoa.org/places/462134",
+        "https://pleiades.stoa.org/places/462138",
+        "https://pleiades.stoa.org/places/462139",
+        "https://pleiades.stoa.org/places/462142",
+        "https://pleiades.stoa.org/places/462144",
+        "https://pleiades.stoa.org/places/880325202",
+        "https://pleiades.stoa.org/places/776",
+        "https://pleiades.stoa.org/places/462206",
+        "https://pleiades.stoa.org/places/465838",
+        "https://pleiades.stoa.org/places/465857",
+        "https://pleiades.stoa.org/places/462406",
+        "https://pleiades.stoa.org/places/465923",
+        "https://pleiades.stoa.org/places/465907",
+        "https://pleiades.stoa.org/places/462418",
+        "https://pleiades.stoa.org/places/386155228",
+        "https://pleiades.stoa.org/places/462367",
+        "https://pleiades.stoa.org/places/462366",
+        "https://pleiades.stoa.org/places/462522"
+    ],
+    "rights": "Copyright © The Contributors. Sharing and remixing permitted under terms of the Creative Commons Attribution 3.0 License (cc-by).",
+    "created": "2025-10-14T22:37:13Z",
+    "uri": "https://pleiades.stoa.org/places/462492",
+    "creators": [
+        {
+            "username": null,
+            "name": "R.J.A. Wilson"
+        }
+    ],
+    "@type": "Place",
+    "history": [
+        {
+            "comment": "update references",
+            "modifiedBy": "jbecker",
+            "modified": "2026-06-04T19:59:28Z"
+        },
+        {
+            "comment": "Osanna and Torelli 2006",
+            "modifiedBy": "jbecker",
+            "modified": "2026-06-04T03:23:35Z"
+        },
+        {
+            "comment": "update references",
+            "modifiedBy": "jbecker",
+            "modified": "2026-06-04T03:17:22Z"
+        },
+        {
+            "comment": "Edited",
+            "modifiedBy": "jbecker",
+            "modified": "2026-01-24T15:11:06Z"
+        },
+        {
+            "comment": "added references provided by bkiesling",
+            "modifiedBy": "admin",
+            "modified": "2025-10-14T22:37:24Z"
+        },
+        {
+            "comment": "Baseline created",
+            "modifiedBy": "admin",
+            "modified": "2025-10-14T22:37:12Z"
+        },
+        {
+            "comment": "KU TP Database (Rathmann)",
+            "modifiedBy": "jbecker",
+            "modified": "2025-09-27T22:06:40Z"
+        },
+        {
+            "comment": "update references",
+            "modifiedBy": "jbecker",
+            "modified": "2024-09-18T14:22:26Z"
+        },
+        {
+            "comment": "update references",
+            "modifiedBy": "jbecker",
+            "modified": "2024-03-31T02:45:43Z"
+        },
+        {
+            "comment": "added MANTO reference",
+            "modifiedBy": "thomase",
+            "modified": "2023-06-20T19:53:12Z"
+        },
+        {
+            "comment": "cleaned up references",
+            "modifiedBy": "thomase",
+            "modified": "2023-06-13T23:55:52Z"
+        },
+        {
+            "comment": "update references",
+            "modifiedBy": "jbecker",
+            "modified": "2023-06-05T13:17:10Z"
+        },
+        {
+            "comment": "partial reference clean up",
+            "modifiedBy": "jbecker",
+            "modified": "2020-01-31T21:19:27Z"
+        },
+        {
+            "comment": "Edited",
+            "modifiedBy": "jbecker",
+            "modified": "2018-02-14T13:12:26Z"
+        },
+        {
+            "comment": "Edited",
+            "modifiedBy": "jbecker",
+            "modified": "2016-09-03T13:36:25Z"
+        },
+        {
+            "comment": "added reference",
+            "modifiedBy": "jbecker",
+            "modified": "2015-09-11T12:25:23Z"
+        },
+        {
+            "comment": "added references",
+            "modifiedBy": "jbecker",
+            "modified": "2015-08-04T16:04:47Z"
+        },
+        {
+            "comment": "added references",
+            "modifiedBy": "jbecker",
+            "modified": "2015-05-16T20:20:31Z"
+        },
+        {
+            "comment": "Edited",
+            "modifiedBy": "jbecker",
+            "modified": "2014-12-19T16:48:18Z"
+        },
+        {
+            "comment": "added connection",
+            "modifiedBy": "jbecker",
+            "modified": "2013-03-22T16:44:26Z"
+        },
+        {
+            "comment": "added reference",
+            "modifiedBy": "jbecker",
+            "modified": "2013-02-04T01:42:38Z"
+        },
+        {
+            "comment": "Edited",
+            "modifiedBy": "thomase",
+            "modified": "2012-12-20T00:54:44Z"
+        },
+        {
+            "comment": "edited description; added references",
+            "modifiedBy": "jbecker",
+            "modified": "2012-12-18T21:36:02Z"
+        },
+        {
+            "comment": "Global migration and reindexing of citations and provenance, February 2012",
+            "modifiedBy": "admin",
+            "modified": "2012-02-15T05:23:38Z"
+        },
+        {
+            "action": "Publish externally",
+            "modifiedBy": "thomase",
+            "modified": "2010-11-11T20:01:28Z"
+        },
+        {
+            "action": "Submit for review",
+            "modifiedBy": "sgillies",
+            "modified": "2010-11-11T15:24:45Z"
+        },
+        {
+            "action": "Create",
+            "modifiedBy": "sgillies",
+            "modified": "2010-11-11T15:14:54Z"
+        }
+    ]
+}

@@ -1009,7 +1009,7 @@ module Nabu
           urn: result.urn, language: result.language, license_class: result.license_class,
           source: sources[result.urn], document: result.document_title,
           text: truncate(result.text)
-        }
+        }.merge(credit_field(result))
         if result.respond_to?(:lemma)
           # gloss (P11-4): the dictionary-shelf short gloss, nil-honest.
           # morph (P13-6): decoded morphology evidence, present only on a
@@ -1401,7 +1401,17 @@ module Nabu
           text: result.text, sequence: result.sequence, revision: result.revision,
           withdrawn: result.withdrawn,
           provenance: result.provenance.map { |e| { event: e.event, tool: e.tool, at: e.at.to_s } }
-        }
+        }.merge(credit_field(result))
+      end
+
+      # The source-level credit (P43-2): merged into a text-serving payload only
+      # when the source carries one (the grant's "clearly indicated wherever
+      # displayed" duty) — an empty hash for every ordinary source, so existing
+      # payloads are byte-identical and the key never appears uncredited.
+      def credit_field(result)
+        return {} unless result.respond_to?(:credit)
+
+        result.credit.to_s.strip.empty? ? {} : { credit: result.credit }
       end
 
       def document_payload(result, bound)
@@ -1434,7 +1444,7 @@ module Nabu
           license_class: result.license_class, source: result.source_slug,
           revision: result.revision, withdrawn: result.withdrawn,
           retired_upstream: result.retired_upstream
-        }
+        }.merge(credit_field(result))
       end
 
       # Owner notes (P24-1), served BY DEFAULT on show/define payloads:

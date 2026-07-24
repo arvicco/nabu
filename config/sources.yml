@@ -101,7 +101,12 @@ first1k-greek:
 ud:
   adapter: Nabu::Adapters::UniversalDependencies
   # P35-0 vs the D35 draft: +celtic (two sga treebanks) +sinitic (two lzh treebanks) — TREEBANKS-verified
-  axes: [classical, slavic, germanic, celtic, hittite, indic, sinitic]
+  # P43-1: +cuneiform (akk RIAO/PISANDUB) +egyptian (cop Bohairic, egy PC)
+  # +hebrew (hbo PTNK) +biblical (Septuagint grc-ptnk, Masoretic hbo-ptnk,
+  # Bohairic Gospel of Mark cop) — existing axes that gain a treebank. The
+  # four new language lanes xcl/fro/frm/ota have NO existing desk, so they
+  # ride axis-less (minting new axes is an owner decision, not this packet's).
+  axes: [classical, slavic, germanic, celtic, hittite, indic, sinitic, cuneiform, egyptian, hebrew, biblical]
   enabled: true   # first real sync verified + owner sign-off 2026-07-04
   sync_policy: manual   # treebanks version independently and change rarely
   # P31-0 (2026-07-19): TREEBANKS grew to ten — hittite-hittb
@@ -169,6 +174,28 @@ ud:
   # clone; docs at UD's one-doc-per-treebank-split grain — IcePaHC ships
   # train/dev/test = +3 docs (~one witness per split of the ~11.9 MB dev &
   # test halves), is joins the lemma-indexed languages. Budget accordingly.
+  # P43-1 (2026-07-23): TREEBANKS grew to TWENTY-SIX — the historical wave,
+  # eleven treebanks (config-only, licenses read verbatim 2026-07-23):
+  #   FOUR NEW LANGUAGE LANES (axis-less — no existing desk):
+  #     classical-armenian-caval (xcl, CC BY-NC-SA 4.0 → nc),
+  #     old-french-profiterole (fro) + middle-french-profiterole (frm)
+  #       — CONFLICTING LICENSES (LICENSE.txt BY-SA vs README BY-NC-SA);
+  #         conservative nc, pending upstream clarification,
+  #     ottoman-boun + ottoman-dudu (ota, CC BY-SA 4.0 → attribution).
+  #   SEVEN UNDER EXISTING LANGUAGES/AXES:
+  #     greek-ptnk (grc, Septuagint; CC BY-SA 4.0 → attribution),
+  #     hebrew-ptnk (hbo, Masoretic; the first hbo TREEBANK lane, NFC-exempt
+  #       byte-verbatim; underlying ETCBC annotations CC BY-NC 4.0 → nc),
+  #     akkadian-riao (CC BY-SA 3.0) + akkadian-pisandub (CC BY-SA 4.0),
+  #     coptic-bohairic (cop, Gospel of Mark; CC BY 4.0 → attribution),
+  #     egyptian-pc (egy, Pyramid Texts; CC BY-SA 4.0 → attribution).
+  # Unlike the legacy bare-nc treebanks, EVERY P43-1 entry carries an explicit
+  # license_class (nc and attribution both); the source class stays nc.
+  # EXPECTED SYNC DELTA at the next owner-fired `bin/nabu sync ud`: +11 repo
+  # clones; each of these eleven treebanks contributes AT LEAST its test split
+  # = +11 docs at treebank-split grain (more if a repo ships train/dev too —
+  # the honest floor is +11), and xcl/fro/frm/ota/hbo enter the lemma-indexed
+  # languages (grc/akk/cop/egy already indexed). No new parser family.
 
 proiel:
   adapter: Nabu::Adapters::Proiel
@@ -1054,6 +1081,94 @@ bridging:
   # 2019 Dirk Roorda") → attribution, the corph posture; the values surface
   # only on bhsa passages whose nc class governs serving. Upstream is a
   # completed comparison build → re-syncs are an owner decision.
+  sync_policy: manual
+
+trismegistos:
+  adapter: Nabu::Adapters::Trismegistos
+  kind: module   # P43-3: machinery-only — a links instrument, zero catalog rows, up=module
+  axes: [epigraphy]
+  enabled: false   # PERMANENTLY false — a links instrument, not a text source
+                   # (the bridging/kr-gaiji precedent): discover mints no
+                   # documents. The row gives the owner the sanctioned fetch
+                   # path; its data is links-journal edges, refreshed by the
+                   # TrismegistosCrosswalk producer (#8) after every sync.
+                   # OWNER QUEUE (P43-3): bin/nabu sync trismegistos — sweeps
+                   # ONLY the ~6,816 distinct tm:<id> targets already in the
+                   # links graph (a live read of links.sqlite3), sequential
+                   # with a ≥1s pause, resumable (skips ids already on disk),
+                   # landing one JSON per id under canonical/trismegistos/
+                   # texrelations/. The API fair-use terms are UNREAD (do not
+                   # render to the fetcher) — eyeball the endpoint's rate
+                   # policy before the first real sweep.
+  # P43-3: Trismegistos TexRelations — the cross-project concordance
+  # crosswalk (trismegistos.org/dataservices/texrelations/<id>). Makes the
+  # library's dangling tm:<id> reference edges resolvable: each response's
+  # partner ids (EDH/EDCS/EDR/ISic/DDBDP/HGV/PHI/CPI/… 80+) become kind=
+  # reference edges from the tm hub, and where two held sources witness one
+  # stone (an isicily record + the edh record its EDH partner names) the
+  # TrismegistosCrosswalk producer mints the same-stone internal edge
+  # urn:nabu:<held> ↔ urn:nabu:<held>. LICENSE: dataservices page verbatim
+  # "open access to our data on a CC BY-SA 4.0 license" → attribution (the
+  # house BY-SA class). Fetch is an owner decision (the sweep is thousands
+  # of polite sequential requests).
+  sync_policy: manual
+
+pleiades:
+  adapter: Nabu::Adapters::Pleiades
+  kind: module   # P43-3: machinery-only — a place resolver seam, zero catalog rows, up=module
+  axes: [epigraphy]
+  enabled: false   # PERMANENTLY false — a resolver instrument, not a text
+                   # source (the bridging/kr-gaiji precedent): discover mints
+                   # no documents, there is no migration and no catalog table.
+                   # The row gives the owner the sanctioned fetch path for the
+                   # gazetteer dump, resolved by Nabu::Pleiades (place id →
+                   # title/point/place-types/time-periods) and consumed by a
+                   # later display packet. OWNER QUEUE (P43-3): bin/nabu sync
+                   # pleiades lands the dump under canonical/pleiades/. Two
+                   # first-sync items (see lib/nabu/adapters/pleiades.rb):
+                   # PIN the fetch URL to the Zenodo 4.1 file (reproducible
+                   # snapshot) and CONFIRM the dump's outer container against
+                   # the downloaded file (the resolver already accepts every
+                   # plausible container + gzip).
+  # P43-3: Pleiades — the ancient-world gazetteer. v1 is a pure read seam
+  # over the numbered quarterly archival release (Zenodo 4.1, 2025-05-28),
+  # the openiti Zenodo posture. LICENSE: downloads page verbatim "Creative
+  # Commons Attribution 3.0 License (cc-by)" → attribution. Fetch is an
+  # owner decision (the dump is large + version-pinned).
+  sync_policy: manual
+
+kitab:
+  adapter: Nabu::Adapters::Kitab
+  kind: module   # P43-4: machinery-only — a text-reuse links instrument, zero catalog rows, up=module
+  axes: [arabic]
+  classes: [ALCorpus00001-ara2]   # the PILOT folder allowlist (the classes: owner-posture seam,
+                                   # kanripo precedent): one folder = one HELD openiti book's
+                                   # complete pairwise fan. Seeded with the P43-4 exemplar; the
+                                   # owner appends more held books' version ids here as wanted.
+  enabled: false   # PERMANENTLY false — a links instrument, not a text source
+                   # (the trismegistos/pleiades precedent): discover mints no
+                   # documents. The row gives the owner the sanctioned fetch
+                   # path; its data is links-journal kind="reuse" edges,
+                   # refreshed by the KitabTextReuse producer (#9) after every
+                   # sync. OWNER QUEUE (P43-4): bin/nabu sync kitab — lists each
+                   # pilot folder on the mirror and GETs its ~10 TSV leaves
+                   # sequentially (≥1s pause, resumable), landing them under
+                   # canonical/kitab/pairwise/<folder>/. First sync of the seed
+                   # folder (ALCorpus00001-ara2) is ~10 files, seconds. The
+                   # mirror's exact raw branch/path + any fair-use terms are
+                   # UNREAD (do not render to the fetcher) — eyeball them first.
+  # P43-4: KITAB Text Reuse Data — passim pairwise text-reuse alignments over
+  # OpenITI. Each alignment row becomes ONE kind="reuse" edge (upstream-computed,
+  # distinct from nabu's own kind=parallel intertext detection) from book1's
+  # passage at milestone seq1 to book2's passage at milestone seq2; a milestone
+  # outside our parse downgrades that side to the book's document urn (censused).
+  # LICENSE — TWO facts recorded verbatim: AUTHORITATIVE is the Zenodo record
+  # "KITAB Text Reuse Data" (DOI 10.5281/zenodo.11501559, CC BY-NC-SA 4.0,
+  # versioned per OpenITI release — current matches held OpenITI 2025.1.9) →
+  # class nc; the GitHub mirror (kitab-project-org/pairwise-light) this fetch
+  # reads carries NO in-repo license file — it is the same dataset's per-file
+  # access path, the grant is the Zenodo record's. The full 1.6M-file set (the
+  # Zenodo archive) is a documented FUTURE step; v1 is the pilot fan.
   sync_policy: manual
 
 dss:
@@ -2142,6 +2257,45 @@ openiti:
   # (the sha256 lands in the ledger at first fetch); a new release is an
   # owner re-pin → manual.
   sync_policy: manual
+
+titus-avestan:
+  adapter: Nabu::Adapters::TitusAvestan
+  axes: [etym]
+  enabled: false   # P43-2: BUILT, awaiting the owner's grant acknowledgment +
+                   # first sync. `nabu sync titus-avestan` REFUSES until the owner
+                   # types `granted` (the №41-3 grant gate); parse-only works
+                   # offline once pages land under canonical/titus-avestan/.
+                   # Checklist §6: after the acknowledged sync, eyeball
+                   # `nabu show urn:nabu:titus-avestan:avest001` (the frauuarāne
+                   # creed at :Y.0.1.a, the credit line rendered) + 5 random
+                   # passages, then flip. Axis home `etym` is provisional — a
+                   # dedicated `iranian` axis is an owner taxonomy call.
+  # TITUS Avestan Corpus (titus.uni-frankfurt.de) — the Avesta as a preliminary
+  # electronic edition on the basis of K.F. Geldner and N.L. Westergaard,
+  # prepared by Sonja Fritz (Berlin 1985-88), corrected by J. Gippert et al.
+  # One document per text page (avest001.htm …); verses (and chapter/paragraph
+  # ritual rubrics) are the passages, keyed off the <A NAME="Avest._…"> anchors.
+  # Served under the owner's PERSONAL grant №41-3 (Prof. Jost Gippert,
+  # 2026-07-23): non-commercial use, "TITUS and the editors clearly indicated
+  # wherever displayed." license_class `nc` (servable, NOT hidden — the grant
+  # wants it DISPLAYED, credited); the manifest carries the verbatim credit line,
+  # threaded onto every serving surface (show cards, search hits, MCP payloads).
+  sync_policy: manual
+  # P43-2: THE FETCH GRANT is personal to this project's author — a public clone
+  # does NOT convey it, so `nabu sync titus-avestan` demands an explicit, recorded
+  # acknowledgment before its first fetch (the grant gate — DISTINCT from the nc
+  # license's per-display credit duty). Quote the date so YAML keeps it a String.
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-07-23"
+    terms: non-commercial use; TITUS and the editors clearly indicated wherever displayed
+    thread: "№41-3"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors
+      (Avesta ed. Geldner/Westergaard; electronic text Sonja Fritz; corrections
+      Gippert et al.) wherever any Avestan text is displayed.
 
 # Template for the next source (leave commented until its adapter exists):
 #

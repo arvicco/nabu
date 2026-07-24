@@ -15,7 +15,11 @@ adapter_test:
 # under P10-2 were retrieved 2026-07-09; the two old-irish-* added under
 # P25-2 were retrieved 2026-07-17; hittite-hittb added under P31-0, the
 # two *-perseus treebanks added under P31-6 and the two classical-chinese-*
-# treebanks added under P32-0 were retrieved 2026-07-19 (see README).
+# treebanks added under P32-0 were retrieved 2026-07-19; icelandic-icepahc
+# under P40-g 2026-07-22; the ELEVEN P43-1 historical-wave treebanks
+# (classical-armenian-caval, old-/middle-french-profiterole, ottoman-boun/
+# -dudu, greek-ptnk, hebrew-ptnk, akkadian-riao/-pisandub, coptic-bohairic,
+# egyptian-pc) were retrieved 2026-07-23 from master (see README).
 retrieved: 2026-07-03
 files:
   - path: gothic-proiel/got_proiel-ud-test-head50.conllu
@@ -82,3 +86,51 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Icelandic-IcePaHC/master/is_icepahc-ud-dev.conllu
     whole: false
     trim: first 50 complete sentence blocks of is_icepahc-ud-dev.conllu (4,866 blocks upstream; 221 MWT range lines file-wide, 1 inside the head — láttu, block 30 — and no empty nodes; Old Norse/Icelandic, P40-g) (11,860,801 B -> 49,397 B)
+  # P43-1 (the historical wave — eleven treebanks retrieved 2026-07-23 from
+  # master): four new language lanes (xcl/fro/frm/ota) + seven under grc/hbo/
+  # akk/cop/egy. Each is the first 50 complete sentence blocks of its upstream
+  # *-ud-test.conllu (all newdoc/doc_id comment lines within the head kept).
+  - path: classical-armenian-caval/xcl_caval-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Classical_Armenian-CAVaL/master/xcl_caval-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of xcl_caval-ud-test.conllu (563 blocks upstream; 7 MWT range lines inside the head, no empty nodes; Classical Armenian, P43-1)
+  - path: old-french-profiterole/fro_profiterole-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Old_French-PROFITEROLE/master/fro_profiterole-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of fro_profiterole-ud-test.conllu (2,252 blocks upstream, one `# newdoc id` per verse; 6 MWT range lines inside the head, no empty nodes; Old French, P43-1)
+  - path: middle-french-profiterole/frm_profiterole-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Middle_French-PROFITEROLE/master/frm_profiterole-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of frm_profiterole-ud-test.conllu (906 blocks upstream, `# doc_id` comments; 29 MWT range lines inside the head, no empty nodes; Middle French, P43-1)
+  - path: ottoman-boun/ota_boun-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Ottoman_Turkish-BOUN/master/ota_boun-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of ota_boun-ud-test.conllu (400 blocks upstream; no MWT/empty-node lines in the head, each block carries a `# text_arabic` line and the token MISC column holds the Arabic-script form verbatim; Ottoman Turkish, P43-1)
+  - path: ottoman-dudu/ota_dudu-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Ottoman_Turkish-DUDU/master/ota_dudu-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of ota_dudu-ud-test.conllu (1,008 blocks upstream; 6 MWT range lines inside the head, no empty nodes; Ottoman Turkish, P43-1)
+  - path: greek-ptnk/grc_ptnk-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Ancient_Greek-PTNK/master/grc_ptnk-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of grc_ptnk-ud-test.conllu (410 blocks upstream — Septuagint Pentateuch; 1 MWT range line inside the head, no empty nodes; Ancient Greek, P43-1)
+  - path: hebrew-ptnk/hbo_ptnk-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Ancient_Hebrew-PTNK/master/hbo_ptnk-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of hbo_ptnk-ud-test.conllu (552 blocks upstream — Masoretic Pentateuch, 2 `# newdoc id` inside the head; 400 MWT range lines inside the head, no empty nodes; hbo is NFC-EXEMPT so stored byte-verbatim, the `# text` lines already ship in NFC order; P43-1)
+  - path: akkadian-riao/akk_riao-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Akkadian-RIAO/master/akk_riao-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of akk_riao-ud-test.conllu (1,874 blocks upstream — Royal Inscriptions of Assyria; 62 MWT range lines inside the head, no empty nodes; Akkadian, P43-1)
+  - path: akkadian-pisandub/akk_pisandub-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Akkadian-PISANDUB/master/akk_pisandub-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of akk_pisandub-ud-test.conllu (101 blocks upstream; no MWT/empty-node lines in the head; Akkadian, P43-1)
+  - path: coptic-bohairic/cop_bohairic-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Coptic-Bohairic/master/cop_bohairic-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of cop_bohairic-ud-test.conllu (358 blocks upstream — Bohairic Gospel of Mark, 2 `# newdoc id`/`# meta::` header runs inside the head; 462 MWT range lines inside the head, no empty nodes; Coptic, P43-1)
+  - path: egyptian-pc/egy_pc-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Egyptian-PC/master/egy_pc-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of egy_pc-ud-test.conllu (1,240 blocks upstream — Pyramid Texts, Sethe edition; 13 MWT range lines inside the head, no empty nodes; Egyptian, P43-1)

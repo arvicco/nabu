@@ -2789,6 +2789,66 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P43-0 (D42-c): `health --accept-creep SLUG` books the source's CURRENT
+  # baseline as owner-accepted, prints exactly what it recorded, and the next
+  # bare `health` downgrades the creep ANOMALY to an info-grade note (exit 0)
+  # — quiet, never silent.
+  def test_health_accept_creep_records_prints_and_quiets_the_alarm
+    with_indexed_corpus do |config|
+      seed_creep_baseline(config, errored: 1_000) # sync anchored 0; this drifts the baseline to 1000
+
+      _out, err, status = with_config(config) { run_cli(%w[health]) }
+      assert_equal 1, status, "unaccepted creep is a loud finding"
+      assert_match(/loud finding/i, err)
+
+      out, _err, status = with_config(config) { run_cli(%w[health --accept-creep corpus --note reviewed]) }
+      assert_nil status
+      assert_match(/accepted quarantine baseline 1000 for corpus — the creep alarm re-arms past 1000/, out)
+      refute_match(/no active creep anomaly/, out, "a live anomaly was quieted, not pre-accepted")
+
+      ledger = Nabu::Store::Ledger.open!(config.history_path)
+      acceptance = Nabu::Health::QuarantineBaseline.latest_acceptance(ledger, "corpus")
+      assert_equal 1_000, acceptance[:accepted_baseline]
+      assert_equal "reviewed", acceptance[:note]
+      ledger.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[health]) }
+      assert_nil status, "an accepted creep no longer fails health"
+      assert_match(/note quarantine creep accepted at 1000 \(owner, \d{4}-\d{2}-\d{2}\)/, out)
+      assert_match(/health: OK/, out)
+    end
+  end
+
+  # Accepting a source with no active creep anomaly still records (the owner
+  # may pre-accept) but says so honestly.
+  def test_health_accept_creep_without_an_active_anomaly_records_and_says_so
+    with_indexed_corpus do |config|
+      # The parse-only sync recorded baseline 0 / anchor 0 — no creep to quiet.
+      out, _err, status = with_config(config) { run_cli(%w[health --accept-creep corpus]) }
+      assert_nil status
+      assert_match(/accepted quarantine baseline 0 for corpus/, out)
+      assert_match(/no active creep anomaly/, out)
+    end
+  end
+
+  def test_health_accept_creep_unknown_slug_is_a_named_error
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[health --accept-creep nope]) }
+      assert_equal 1, status
+      assert_match(/unknown source 'nope'/, err)
+    end
+  end
+
+  # A registered source that has never recorded a baseline (no ok sync since
+  # ledger migration 005) has nothing to accept: a clean named error.
+  def test_health_accept_creep_without_a_baseline_is_a_named_error
+    with_sync_env(enabled: true) do |config|
+      _out, err, status = with_config(config) { run_cli(%w[health --accept-creep corpus]) }
+      assert_equal 1, status
+      assert_match(/no quarantine baseline recorded for 'corpus'/, err)
+    end
+  end
+
   # P14-12: `status --remote` runs the upstream probe inline (the SAME stubbed
   # ls-remote path as `health --remote`), persists the verdict, then renders the
   # up= column from that fresh cache — the one-command informed-update flow.
@@ -5896,6 +5956,16 @@ class CLITest < Minitest::Test
     now = Time.now
     Nabu::Store::Run.create(source_slug: "corpus", kind: "sync", started_at: now, finished_at: now,
                             status: "failed", notes: notes)
+  ensure
+    db&.disconnect
+  end
+
+  # Drift the just-synced "corpus" source's quarantine baseline upward: the
+  # parse-only sync recorded baseline 0 / anchor 0, so one record! at +errored+
+  # leaves baseline=errored over the low-water anchor 0 — an unaccepted creep.
+  def seed_creep_baseline(config, errored:)
+    db = Nabu::Store::Ledger.open!(config.history_path)
+    Nabu::Health::QuarantineBaseline.record!(db, "corpus", errored: errored)
   ensure
     db&.disconnect
   end

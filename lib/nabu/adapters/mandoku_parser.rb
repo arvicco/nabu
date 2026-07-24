@@ -38,10 +38,11 @@ module Nabu
     #   are listed in annotations "gaiji" — never resolved (KR-Gaiji is
     #   journaled, not ingested).
     # - Header-only files are real (KR1a0170_000.txt is five header lines):
-    #   they contribute no passages, silently. But TEXT lines outside any
-    #   page (before the first anchor, or in a file with no anchors) would
-    #   be silently lost or mis-cited — both raise Nabu::ParseError (loud
-    #   quarantine; every probed file is anchor-first).
+    #   they contribute no passages, silently. TEXT lines outside any page
+    #   (before a file's first anchor, or in a file with no anchors) mint
+    #   the file's synthetic `<nnn>:front` front-matter page (P43-r2 below;
+    #   pre-P43 both raised, which quarantined whole documents for real
+    #   prefatory content).
     #
     # == KR2 census additions (P33-1, seven KR2 + three KR5 repos probed
     #    2026-07-20)
@@ -50,8 +51,9 @@ module Nabu
     #   mid-page (SBCK 大清一統志: 1,507 instances across 178 of 210 files,
     #   every one the currently open page — zero closed-page repeats; WYG
     #   明史 re-asserts after an interleaved volume anchor). A re-assertion
-    #   is a no-op — same page continues; an anchor re-opening a CLOSED page
-    #   is still the loud duplicate ParseError.
+    #   is a no-op — same page continues; an anchor re-opening a CLOSED
+    #   leaf-side page disambiguates as `<key>#2` (P43-r2 below; pre-P43 the
+    #   loud duplicate ParseError, which quarantined the two-fascicle files).
     # - EDITION-VOLUME anchors `<pb:KR2a0038_WYG_WYG0297-0606c>`: the text's
     #   own id + edition, but an ALPHA-prefixed volume ordinal of the PRINT
     #   edition and an a/b/c register (the three text-registers of a 四庫
@@ -126,6 +128,32 @@ module Nabu
     # - KEEP-LOUD (deliberate): unresolved git merge-conflict markers
     #   ("<<<<<<< HEAD", KR1j0018) — both hunk versions present in the file;
     #   canonical damage a parser must never serve silently.
+    #
+    # == P43-r2 censused tolerance (the D42-c quarantine census, owner-ruled
+    #    at the P42 gate: 133 quarantined texts, 75 duplicate-anchor + 26
+    #    text-before-first-anchor recoverable; exemplars probed 2026-07-23)
+    #
+    # - DUPLICATE leaf-side anchors are two-fascicle concatenation: the
+    #   exemplar (KR2f0037_042/_043, SBCK 名臣言行錄) carries a fresh
+    #   `#+PROPERTY: FILE` header block MID-FILE naming a second print
+    #   source (SB02n0032-093 三朝名臣言行錄卷九之三, then SB02n0033-082
+    #   五朝名臣言行錄卷八之二), each fascicle restarting its own leaf-side
+    #   pagination at 1a. A re-opened CLOSED page therefore keys
+    #   deterministically as `<juan>:<page>#<occurrence>` in document order
+    #   (`042:1a#2`), annotated "duplicate_anchor" => occurrence — both
+    #   fascicles load, urns stay unique and stable. Re-assertions of the
+    #   OPEN page (matched on the un-disambiguated key) stay no-ops.
+    #   WITNESS duplicates stay the loud ParseError: every witness probe
+    #   censused (juan, leaf-side) unique per repo, and the cross-file page
+    #   carry makes an unexpected witness duplicate look like mis-carried
+    #   structure — no evidence, no tolerance.
+    # - TEXT BEFORE a file's first anchor is real prefatory content (the
+    #   exemplar KR1a0149_001 opens juan 001 with seven print lines before
+    #   `<pb:…_001-1a>`): it mints the file's synthetic front-matter page,
+    #   key `<file-nnn>:front` — "front" can never collide with the real
+    #   page grammar (`\d+[a-d]` / `\d+p\d+[ab]`) — annotated
+    #   "front_matter", no "anchor". Unrecognized anchors and missing juan
+    #   files keep raising exactly as before (out of the D42-c scope).
     class MandokuParser
       TEXT_FILE = /\A(?<id>KR\d[a-z]\d{4})_(?<nnn>\d+)\.txt\z/
       HEADER_LINE = /\A#(?:\+|\s|-|\z)/
@@ -326,19 +354,42 @@ module Nabu
 
       def open_page!(state, file, anchor, match, scheme)
         lock_scheme!(state, file, scheme, anchor)
-        key = "#{match[:juan]}:#{match[:page]}"
+        base = "#{match[:juan]}:#{match[:page]}"
         # Re-asserting the OPEN page's anchor is upstream's way of resuming
         # the pagination after an interleave (census: 1,507 instances in
-        # 大清一統志 alone, every one the open page) — no-op.
-        return if state[:page] && state[:page][:key] == key
+        # 大清一統志 alone, every one the open page) — matched on the
+        # un-disambiguated key, so a second fascicle's re-assertions stay
+        # no-ops too.
+        return if state[:page] && state[:page][:base] == base
 
         flush_page!(state)
-        raise ParseError, "#{file}: duplicate page anchor <pb:#{anchor}>" if state[:seen].key?(key)
+        occurrence = (state[:seen][base] || 0) + 1
+        # A re-opened CLOSED page: leaf-side disambiguates (the P43-r2
+        # two-fascicle census); witness duplicates stay loud (censused
+        # unique — an unexpected one would mean mis-carried structure).
+        raise ParseError, "#{file}: duplicate page anchor <pb:#{anchor}>" if occurrence > 1 && scheme == :witness
 
-        state[:seen][key] = true
-        annotations = state[:pending]
+        state[:seen][base] = occurrence
+        key = occurrence == 1 ? base : "#{base}##{occurrence}"
+        state[:page] = { key: key, base: base, anchor: anchor, lines: [],
+                         annotations: take_pending!(state) }
+        state[:page][:occurrence] = occurrence if occurrence > 1
+      end
+
+      # Text before a file's first page anchor is real prefatory content
+      # (P43-r2): the file's synthetic front-matter page, keyed on the file
+      # suffix — never on an anchor, so it cannot collide with real pages.
+      def open_front_matter!(state, file)
+        nnn = TEXT_FILE.match(File.basename(file))[:nnn]
+        key = "#{nnn}:front"
+        state[:page] = { key: key, base: key, anchor: nil, front_matter: true, lines: [],
+                         annotations: take_pending!(state) }
+      end
+
+      def take_pending!(state)
+        pending = state[:pending]
         state[:pending] = empty_annotations
-        state[:page] = { key: key, anchor: anchor, lines: [], annotations: annotations }
+        pending
       end
 
       def append_text(state, file, fragment)
@@ -346,8 +397,7 @@ module Nabu
         text = fragment.delete(PILCROW).strip
         return if text.empty?
 
-        raise ParseError, "#{file}: text before the first page anchor (#{text[0, 20].inspect})" unless state[:page]
-
+        open_front_matter!(state, file) unless state[:page]
         state[:page][:lines] << fragment.delete(PILCROW).rstrip
       end
 
@@ -408,7 +458,10 @@ module Nabu
       end
 
       def passage_annotations(page, text)
-        annotations = { "anchor" => page[:anchor] }
+        annotations = {}
+        annotations["anchor"] = page[:anchor] if page[:anchor]
+        annotations["front_matter"] = true if page[:front_matter]
+        annotations["duplicate_anchor"] = page[:occurrence] if page[:occurrence]
         gaiji = text.scan(GAIJI)
         annotations["gaiji"] = gaiji unless gaiji.empty?
         %w[headings src_refs edition_pages base_pages fw cruft].each do |key|

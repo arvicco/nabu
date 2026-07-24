@@ -1,0 +1,521 @@
+[
+    {
+        "TM_ID": [
+            "102617"
+        ]
+    },
+    {
+        "EDB": null
+    },
+    {
+        "EDH": null
+    },
+    {
+        "EDCS": null
+    },
+    {
+        "EDR": null
+    },
+    {
+        "HE": null
+    },
+    {
+        "UOXF": null
+    },
+    {
+        "RIB": null
+    },
+    {
+        "PHI": [
+            "228245"
+        ]
+    },
+    {
+        "LUPA": null
+    },
+    {
+        "ISic": null
+    },
+    {
+        "IRT": null
+    },
+    {
+        "IGCyR": null
+    },
+    {
+        "Orient": null
+    },
+    {
+        "CISP": null
+    },
+    {
+        "DeM": null
+    },
+    {
+        "PSI": null
+    },
+    {
+        "PapNav-Duke": null
+    },
+    {
+        "Lexicological_lep": null
+    },
+    {
+        "Berliner_papyri": null
+    },
+    {
+        "Bremen_papyri": null
+    },
+    {
+        "chartes": null
+    },
+    {
+        "HispEpOl": null
+    },
+    {
+        "NaBuCCo": null
+    },
+    {
+        "Ashmolean_latin_inscriptions": null
+    },
+    {
+        "PUG": null
+    },
+    {
+        "IIP": null
+    },
+    {
+        "Dresden_papyri": null
+    },
+    {
+        "GVCYR": null
+    },
+    {
+        "Vindolanda": null
+    },
+    {
+        "Ghent_papyri": null
+    },
+    {
+        "Köln_papyri": null
+    },
+    {
+        "DDBDP": null
+    },
+    {
+        "HGV": null
+    },
+    {
+        "CACHKaRN": null
+    },
+    {
+        "PapNav-Stanford": null
+    },
+    {
+        "PapNav-Fordham": null
+    },
+    {
+        "PapNav-Berenike": null
+    },
+    {
+        "PapNav-Oslo": null
+    },
+    {
+        "PapNav-Toronto": null
+    },
+    {
+        "PapNav-Lund": null
+    },
+    {
+        "PapNav-Hermitage": null
+    },
+    {
+        "PapNav-Wisconsin": null
+    },
+    {
+        "PapNav-UTS": null
+    },
+    {
+        "PapNav-UPenn": null
+    },
+    {
+        "PSR": null
+    },
+    {
+        "PTS": null
+    },
+    {
+        "PapNav-Perkins": null
+    },
+    {
+        "PapNav-Petra": null
+    },
+    {
+        "PapNav-Princeton": null
+    },
+    {
+        "Achemenet": null
+    },
+    {
+        "tir": null
+    },
+    {
+        "DaSi": null
+    },
+    {
+        "PetRaE": null
+    },
+    {
+        "DBMNT": null
+    },
+    {
+        "BritishMuseum": null
+    },
+    {
+        "PNCOL": null
+    },
+    {
+        "PapPal": null
+    },
+    {
+        "PapNav-SAC": null
+    },
+    {
+        "PapNav-Pull": null
+    },
+    {
+        "Runenprojekt_Kiel": null
+    },
+    {
+        "Penn_Museum": null
+    },
+    {
+        "SAAO": null
+    },
+    {
+        "CDLI": null
+    },
+    {
+        "OCIANA": null
+    },
+    {
+        "ONB": null
+    },
+    {
+        "TBP": null
+    },
+    {
+        "CLA": null
+    },
+    {
+        "DCLP": null
+    },
+    {
+        "NTVMR": null
+    },
+    {
+        "FerCan": null
+    },
+    {
+        "Vindolanda2": null
+    },
+    {
+        "DSS": null
+    },
+    {
+        "CSNTM": null
+    },
+    {
+        "MET": null
+    },
+    {
+        "Sorbonne": null
+    },
+    {
+        "Spurlock": null
+    },
+    {
+        "E-Codices": null
+    },
+    {
+        "Koptoo": null
+    },
+    {
+        "BIPAB": null
+    },
+    {
+        "Bodmer_Papyri": null
+    },
+    {
+        "Uni_Graz": null
+    },
+    {
+        "Harvard_Library": null
+    },
+    {
+        "AMS_Historica": null
+    },
+    {
+        "Suhu": null
+    },
+    {
+        "RINAP": null
+    },
+    {
+        "RIBo": null
+    },
+    {
+        "IG": null
+    },
+    {
+        "Wikipedia": null
+    },
+    {
+        "MertensPack": null
+    },
+    {
+        "RuneS": null
+    },
+    {
+        "PATHs(CLM)": null
+    },
+    {
+        "Philippoi": null
+    },
+    {
+        "FormaUrbis": null
+    },
+    {
+        "DotN": null
+    },
+    {
+        "MOL": null
+    },
+    {
+        "erfgoedinzicht": null
+    },
+    {
+        "british_library": null
+    },
+    {
+        "MLM": null
+    },
+    {
+        "PapNav-YALE": null
+    },
+    {
+        "TPOP": null
+    },
+    {
+        "PapNav-Leiden": null
+    },
+    {
+        "Ogham 3D": null
+    },
+    {
+        "MAMA IX": null
+    },
+    {
+        "ADRA": null
+    },
+    {
+        "Kyprianos": null
+    },
+    {
+        "IOSPE": null
+    },
+    {
+        "Inscriptiones_Antiquae": null
+    },
+    {
+        "PapNav-NYU": null
+    },
+    {
+        "IAPH": null
+    },
+    {
+        "Livius": null
+    },
+    {
+        "atticinscriptions": null
+    },
+    {
+        "wubonline": null
+    },
+    {
+        "saxons": null
+    },
+    {
+        "CPP": null
+    },
+    {
+        "bibGeneve": null
+    },
+    {
+        "Attalus": null
+    },
+    {
+        "AGRW": null
+    },
+    {
+        "CGRN": null
+    },
+    {
+        "PHRC": null
+    },
+    {
+        "US_Epigraphy": null
+    },
+    {
+        "ToposText": null
+    },
+    {
+        "Wikidata": null
+    },
+    {
+        "DPDP": null
+    },
+    {
+        "Louvre": null
+    },
+    {
+        "CASSS": null
+    },
+    {
+        "CIL": null
+    },
+    {
+        "damos": null
+    },
+    {
+        "PapNav-Berkeley": null
+    },
+    {
+        "CII": null
+    },
+    {
+        "BibAlex": null
+    },
+    {
+        "TLA": null
+    },
+    {
+        "ALA": null
+    },
+    {
+        "CPI": [
+            "CPI-093"
+        ]
+    },
+    {
+        "GLAUx": null
+    },
+    {
+        "Papyrus_Projekt": null
+    },
+    {
+        "GEM": null
+    },
+    {
+        "Innovating_knowledge": null
+    },
+    {
+        "PUL": null
+    },
+    {
+        "4CARE/DEChriM": null
+    },
+    {
+        "NYU_Amheida": null
+    },
+    {
+        "Trinity_college": null
+    },
+    {
+        "grammateus": null
+    },
+    {
+        "RIIG": null
+    },
+    {
+        "Mnamon": null
+    },
+    {
+        "EpRom": null
+    },
+    {
+        "Oxford": null
+    },
+    {
+        "IRCyr": null
+    },
+    {
+        "P._DimeData": null
+    },
+    {
+        "MQDQ": null
+    },
+    {
+        "CILs": null
+    },
+    {
+        "AGP": null
+    },
+    {
+        "Hamburg_KA": null
+    },
+    {
+        "AAR": null
+    },
+    {
+        "Ohio_KB": null
+    },
+    {
+        "EPSG": null
+    },
+    {
+        "CLEO": null
+    },
+    {
+        "Arachne": null
+    },
+    {
+        "CILAE": null
+    },
+    {
+        "PPRET": null
+    },
+    {
+        "Chester_Beatty": null
+    },
+    {
+        "Bodleian": null
+    },
+    {
+        "SMH": null
+    },
+    {
+        "GEI": null
+    },
+    {
+        "IGCyr_2nd_ed": null
+    },
+    {
+        "LUCL": null
+    },
+    {
+        "Duke_pap": null
+    },
+    {
+        "Elephantine": null
+    },
+    {
+        "Pinakes": null
+    },
+    {
+        "Papyrus_portal": null
+    },
+    {
+        "BL_Online": null
+    }
+]

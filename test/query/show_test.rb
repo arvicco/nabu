@@ -123,6 +123,41 @@ module Query
       assert_nil show("urn:d:nope")
     end
 
+    # -- credit (P43-2) ------------------------------------------------------
+
+    # The generic per-source credit line reaches every show grain (passage,
+    # document, range) — the CLI card and MCP payload render from these results.
+    CREDIT = "TITUS (J. Gippert, Frankfurt) — Avesta ed. Geldner/Westergaard, corr. Gippert et al."
+
+    def load_credited_document
+      source = Nabu::Store::Source.create(
+        slug: "titus", name: "TITUS", adapter_class: "TestAdapter",
+        license_class: "nc", credit: CREDIT
+      )
+      loader = Nabu::Store::Loader.new(db: @catalog, source: source)
+      document = Nabu::Document.new(urn: "urn:t:1", language: "ave", title: "Avesta",
+                                    canonical_path: "/canonical/titus/1.htm")
+      [%w[a frauuarāne], %w[b hāuuanə̄e], %w[c yasnāica]].each_with_index do |(suffix, text), index|
+        document << Nabu::Passage.new(urn: "urn:t:1:#{suffix}", language: "ave", text: text, sequence: index)
+      end
+      loader.load([document], full: false)
+    end
+
+    def test_credit_reaches_passage_document_and_range_results
+      load_credited_document
+
+      assert_equal CREDIT, show("urn:t:1:a").credit, "passage card carries the source credit"
+      assert_equal CREDIT, show("urn:t:1").credit, "document card carries it"
+      assert_equal CREDIT, show("urn:t:1:a-b").credit, "a range carries it too"
+    end
+
+    def test_credit_is_nil_for_an_ordinary_uncredited_source
+      load_document("1", [%w[1 μῆνιν], %w[2 ἄειδε]])
+
+      assert_nil show("urn:d:1:1").credit
+      assert_nil show("urn:d:1").credit
+    end
+
     # -- ranges (P7-6) -------------------------------------------------------
     # A range urn = a document urn + `:<start-suffix>-<end-suffix>`: an
     # inclusive, sequence-ordered slice of ONE document between two resolved

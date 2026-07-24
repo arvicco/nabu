@@ -1,14 +1,19 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml.
 #
-# Twelve byte-identical whole files from github.com/ISicily/ISicily at
-# commit db1a4959f4bb2fc42468e7f1ac0d017b2cafe928 (master, retrieved
-# 2026-07-18; ISic000006/003360/020307 added 2026-07-20 for the P34-0
-# sibling minting, extracted from the same pinned commit). sha below =
-# the git blob sha of each file at that commit (verifiable with
-# `git cat-file`/the GitHub blobs API); URL = the commit-pinned raw
+# Seventeen byte-identical whole files from github.com/ISicily/ISicily.
+# Twelve at commit db1a4959f4bb2fc42468e7f1ac0d017b2cafe928 (master,
+# retrieved 2026-07-18; ISic000006/003360/020307 added 2026-07-20 for
+# the P34-0 sibling minting, extracted from the same pinned commit).
+# Five more (ISic000030/000419/000756 + the two quarantine/ exemplars)
+# added 2026-07-23 for P43-r1, extracted from the LOCAL canonical
+# snapshot (the GitFetch clone of the same repo) at commit
+# 62e6a2868438ebb06a29f86fd88737e227043acd (master, 2026-07-19), blob
+# shas verified against that commit's tree with `git ls-tree`. sha
+# below = the git blob sha of each file at its pinned commit (verifiable
+# with `git cat-file`/the GitHub blobs API); URL = the commit-pinned raw
 # path. adapter_test stays null: adapter tests enumerate their own
-# expectations against this 12-record tree.
+# expectations against this tree.
 source: isicily
 adapter_test:
 retrieved: 2026-07-18
@@ -74,3 +79,28 @@ files:
     blob_sha: 0ae9d3cc8bfdb38560067d830ab6cc5508190f35
     whole: true
     trim: none (Elymian partial transliteration — translit lb n=2 only, of primary lines 1-2; empty en/it divs mint nothing, P34-0)
+  - path: inscriptions/ISic000030.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/62e6a2868438ebb06a29f86fd88737e227043acd/inscriptions/ISic000030.xml
+    blob_sha: 84d83576d355b93c05f05a1b754d196056baa2ff
+    whole: true
+    trim: none (bare <lb/> before a lost-line gap beside numbered lines 1-3 — the tolerated lost-lines idiom, P43-r1; extracted from the local canonical snapshot 2026-07-23)
+  - path: inscriptions/ISic000419.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/62e6a2868438ebb06a29f86fd88737e227043acd/inscriptions/ISic000419.xml
+    blob_sha: 4cd1b0603f38715b7023bc65d3ffe25854d88f07
+    whole: true
+    trim: none (all four textparts subtype="gallery-N" lack @n — the document-order path fallback exemplar, P43-r1; extracted from the local canonical snapshot 2026-07-23)
+  - path: inscriptions/ISic000756.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/62e6a2868438ebb06a29f86fd88737e227043acd/inscriptions/ISic000756.xml
+    blob_sha: 62b7d0fb87b9bc2253ef5f1f26d3396339627b8b
+    whole: true
+    trim: none (the sole all-unnumbered-lb record — its one <lb/> opens an illegible-lines gap, so it parses metadata-only, P43-r1; extracted from the local canonical snapshot 2026-07-23)
+  - path: quarantine/inscriptions/ISic001698.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/62e6a2868438ebb06a29f86fd88737e227043acd/inscriptions/ISic001698.xml
+    blob_sha: a3025a38f74b2b11b0d81fd93bed84c8e6d2cc2d
+    whole: true
+    trim: none (MIXED textpart numbering — unnumbered "border" with citable text beside monogram n=1..4; still quarantines, the P43-r1 refusal pin; extracted from the local canonical snapshot 2026-07-23)
+  - path: quarantine/inscriptions/ISic000469.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/62e6a2868438ebb06a29f86fd88737e227043acd/inscriptions/ISic000469.xml
+    blob_sha: 0879497b3886157bb704e584d597bb062ab28ae8
+    whole: true
+    trim: none (two xml:lang="en" translation divs both minting cite p1 — the duplicate-urn quarantine regression pin, out-of-scope class, P43-r1; extracted from the local canonical snapshot 2026-07-23)

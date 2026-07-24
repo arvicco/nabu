@@ -1,0 +1,19 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Two verbatim Trismegistos dataservices responses (whole, ~6 KB each),
+# refetchable from the documented texrelations endpoint. adapter_test is
+# null: the trismegistos test pins fixture-exact partner ids that a drifted
+# upstream response would false-fail.
+source: trismegistos
+adapter_test: null
+retrieved: 2026-07-24
+files:
+  - path: texrelations/102617.json
+    url: https://www.trismegistos.org/dataservices/texrelations/102617
+    whole: true
+    trim: none (verbatim dataservices response)
+  - path: texrelations/175903.json
+    url: https://www.trismegistos.org/dataservices/texrelations/175903
+    whole: true
+    trim: none (verbatim dataservices response)

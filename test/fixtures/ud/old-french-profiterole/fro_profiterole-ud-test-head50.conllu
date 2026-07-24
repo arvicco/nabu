@@ -1,0 +1,644 @@
+# text = Se il fust vif, jo l'oüsse amenet.
+# newdoc id = Roland_1100_verse
+# sent_id = 633
+1	Se	si3	SCONJ	CONsub	_	4	mark	_	XmlId=w_58_06214
+2	il	il	PRON	PROper	PronType=Prs	4	nsubj	_	XmlId=w_58_06215
+3	fust	estre	AUX	VERcjg	VerbForm=Fin	4	cop	_	XmlId=w_58_06216
+4	vif	vif	ADJ	ADJqua	_	9	advcl	_	SpaceAfter=No|XmlId=w_58_06217
+5	,	,	PUNCT	PONfbl	_	9	punct	_	XmlId=w_58_06218
+6	jo	je	PRON	PROper	PronType=Prs	9	nsubj	_	XmlId=w_58_06219
+7	l'	le	PRON	PROper	PronType=Prs	9	obj	_	SpaceAfter=No|XmlId=w_58_06220
+8	oüsse	avoir	AUX	VERcjg	VerbForm=Fin	9	aux	_	XmlId=w_58_06221
+9	amenet	amener	VERB	VERppe	Tense=Past|VerbForm=Part	0	root	_	SpaceAfter=No|XmlId=w_58_06222
+10	.	.	PUNCT	PONfrt	_	9	punct	_	XmlId=w_58_06223
+
+# text = Del rei paien, sire, par veir creez Ja ne verrez cest premer meis passet Qu'il vos sivrat en France le regnet,
+# newdoc id = Roland_1100_verse
+# sent_id = 634
+1-2	Del	_	_	_	_	_	_	_	cattex=PRE.DETdef|XmlId=w_58_06224
+1	de	_	ADP	_	_	3	case	_	_
+2	le	_	DET	_	Definite=Def|PronType=Art	3	det	_	_
+3	rei	roi1	NOUN	NOMcom	_	10	obl	_	XmlId=w_58_06225
+4	paien	païen	ADJ	ADJqua	_	3	amod	_	SpaceAfter=No|XmlId=w_58_06226
+5	,	,	PUNCT	PONfbl	_	6	punct	_	XmlId=w_58_06227
+6	sire	sire	NOUN	NOMcom	_	10	vocative	_	SpaceAfter=No|XmlId=w_58_06228
+7	,	,	PUNCT	PONfbl	_	6	punct	_	XmlId=w_58_06229
+8	par	par1	ADP	PRE	_	9	case	_	XmlId=w_58_06230
+9	veir	voir2	NOUN	NOMcom	_	10	obl	_	XmlId=w_58_06231
+10	creez	croire	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06232
+11	Ja	jà	ADV	ADVgen	_	13	advmod	_	XmlId=w_58_06233
+12	ne	ne1	ADV	ADVneg	Polarity=Neg	13	advmod	_	XmlId=w_58_06234
+13	verrez	voir1	VERB	VERcjg	VerbForm=Fin	10	ccomp	_	XmlId=w_58_06235
+14	cest	cist	DET	DETdem	PronType=Dem	16	det	_	XmlId=w_58_06236
+15	premer	premier1	NUM	ADJcar	NumType=Card	16	amod	_	XmlId=w_58_06237
+16	meis	mois	NOUN	NOMcom	_	13	obj	_	XmlId=w_58_06238
+17	passet	passer1	VERB	VERppe	Tense=Past|VerbForm=Part	13	xcomp	_	XmlId=w_58_06239
+18	Qu'	que	SCONJ	CONsub	_	21	mark	_	SpaceAfter=No|XmlId=w_58_06240
+19	il	il	PRON	PROper	PronType=Prs	21	nsubj	_	XmlId=w_58_06241
+20	vos	vous	PRON	PROper	PronType=Prs	21	obj	_	XmlId=w_58_06242
+21	sivrat	suivre	VERB	VERcjg	VerbForm=Fin	13	advcl	_	XmlId=w_58_06243
+22	en	en1	ADP	PRE	_	23	case	_	XmlId=w_58_06244
+23	France	France	PROPN	NOMpro	_	21	obl	_	XmlId=w_58_06245
+24	le	le	DET	DETdef	Definite=Def|PronType=Art	25	det	_	XmlId=w_58_06246
+25	regnet	règne	NOUN	NOMcom	_	23	appos	_	SpaceAfter=No|XmlId=w_58_06247
+26	,	,	PUNCT	PONfbl	_	10	punct	_	XmlId=w_58_06248
+
+# text = Si recevrat la lei que vos tenez,
+# newdoc id = Roland_1100_verse
+# sent_id = 635
+1	Si	si4	ADV	ADVgen	_	2	advmod	_	XmlId=w_58_06249
+2	recevrat	recevoir	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06250
+3	la	le	DET	DETdef	Definite=Def|PronType=Art	4	det	_	XmlId=w_58_06251
+4	lei	loi1	NOUN	NOMcom	_	2	obj	_	XmlId=w_58_06252
+5	que	que	PRON	PROrel	PronType=Prs,Rel	7	obj	_	XmlId=w_58_06253
+6	vos	vous	PRON	PROper	PronType=Prs	7	nsubj	_	XmlId=w_58_06254
+7	tenez	tenir	VERB	VERcjg	VerbForm=Fin	4	acl:relcl	_	SpaceAfter=No|XmlId=w_58_06255
+8	,	,	PUNCT	PONfbl	_	2	punct	_	XmlId=w_58_06256
+
+# text = Jointes ses mains iert vostre comandet ;
+# newdoc id = Roland_1100_verse
+# sent_id = 636
+1	Jointes	joindre	VERB	VERppe	Tense=Past|VerbForm=Part	6	advcl	_	XmlId=w_58_06257
+2	ses	son4	DET	DETpos	Poss=Yes	3	det	_	XmlId=w_58_06258
+3	mains	main1	NOUN	NOMcom	_	1	obj	_	XmlId=w_58_06259
+4	iert	estre	AUX	VERcjg	VerbForm=Fin	6	cop	_	XmlId=w_58_06260
+5	vostre	votre	DET	DETpos	Poss=Yes	6	det	_	XmlId=w_58_06261
+6	comandet	commander	NOUN	VERppe	Tense=Past|VerbForm=Part	0	root	_	XmlId=w_58_06262
+7	;	;	PUNCT	PONfbl	_	6	punct	_	XmlId=w_58_06263
+
+# text = De vos tendrat Espaigne le regnet. »
+# newdoc id = Roland_1100_verse
+# sent_id = 637
+1	De	de	ADP	PRE	_	2	case	_	XmlId=w_58_06264
+2	vos	vous	PRON	PROper	PronType=Prs	3	obl	_	XmlId=w_58_06265
+3	tendrat	tenir	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06266
+4	Espaigne	Espagne	PROPN	NOMpro	_	6	nmod	_	XmlId=w_58_06267
+5	le	le	DET	DETdef	Definite=Def|PronType=Art	6	det	_	XmlId=w_58_06268
+6	regnet	règne	NOUN	NOMcom	_	3	obj	_	SpaceAfter=No|XmlId=w_58_06269
+7	.	.	PUNCT	PONfrt	_	3	punct	_	XmlId=w_58_06270
+8	»	"	PUNCT	PONpdr	_	3	punct	_	XmlId=w_58_06271
+
+# text = Ço dist li reis :
+# newdoc id = Roland_1100_verse
+# sent_id = 638
+1	Ço	ce1	PRON	PROdem	PronType=Dem	2	obj	_	XmlId=w_58_06272
+2	dist	dire1	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06273
+3	li	le	DET	DETdef	Definite=Def|PronType=Art	4	det	_	XmlId=w_58_06274
+4	reis	roi1	NOUN	NOMcom	_	2	nsubj	_	XmlId=w_58_06275
+5	:	:	PUNCT	PONfbl	_	2	punct	_	XmlId=w_58_06276
+
+# text = « Gracïet en seit Deus !
+# newdoc id = Roland_1100_verse
+# sent_id = 639
+1	«	"	PUNCT	PONpga	_	2	punct	_	XmlId=w_58_06277
+2	Gracïet	gracier	VERB	VERppe	Tense=Past|VerbForm=Part	0	root	_	XmlId=w_58_06278
+3	en	en2	ADV	PROadv	PronType=Dem	2	obl	_	XmlId=w_58_06279
+4	seit	estre	AUX	VERcjg	VerbForm=Fin	2	aux:pass	_	XmlId=w_58_06280
+5	Deus	Dieu	PROPN	NOMpro	_	2	nsubj:pass	_	XmlId=w_58_06281
+6	!	!	PUNCT	PONfrt	_	2	punct	_	XmlId=w_58_06282
+
+# text = Ben l'avez fait,
+# newdoc id = Roland_1100_verse
+# sent_id = 640
+1	Ben	bien	ADV	ADVgen	_	4	advmod	_	XmlId=w_58_06283
+2	l'	le	PRON	PROper	PronType=Prs	4	obj	_	SpaceAfter=No|XmlId=w_58_06284
+3	avez	avoir	AUX	VERcjg	VerbForm=Fin	4	aux	_	XmlId=w_58_06285
+4	fait	faire	VERB	VERppe	Tense=Past|VerbForm=Part	0	root	_	SpaceAfter=No|XmlId=w_58_06286
+5	,	,	PUNCT	PONfbl	_	4	punct	_	XmlId=w_58_06287
+
+# text = mult grant prod i avrez. »
+# newdoc id = Roland_1100_verse
+# sent_id = 641
+1	mult	moult	ADV	ADVgen	_	2	advmod	_	XmlId=w_58_06288
+2	grant	grand	ADJ	ADJqua	_	3	amod	_	XmlId=w_58_06289
+3	prod	preu	NOUN	NOMcom	_	5	obj	_	XmlId=w_58_06290
+4	i	y2	ADV	PROadv	PronType=Dem	5	obl:mod	_	XmlId=w_58_06291
+5	avrez	avoir	VERB	VERcjg	VerbForm=Fin	0	root	_	SpaceAfter=No|XmlId=w_58_06292
+6	.	.	PUNCT	PONfrt	_	5	punct	_	XmlId=w_58_06293
+7	»	"	PUNCT	PONpdr	_	5	punct	_	XmlId=w_58_06294
+
+# text = Par mi cel ost funt mil grailles suner.
+# newdoc id = Roland_1100_verse
+# sent_id = 642
+1	Par	par1	ADP	PRE	_	4	case	_	XmlId=w_58_06295
+2	mi	mi1	NOUN	NOMcom	_	1	fixed	_	XmlId=w_58_06296
+3	cel	cil	DET	DETdem	PronType=Dem	4	det	_	XmlId=w_58_06297
+4	ost	ost	NOUN	NOMcom	_	8	obl	_	XmlId=w_58_06298
+5	funt	faire	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06299
+6	mil	mille1	NUM	DETcar	NumType=Card	7	amod	_	XmlId=w_58_06300
+7	grailles	grêle3	NOUN	NOMcom	_	5	obj	_	XmlId=w_58_06301
+8	suner	sonner	VERB	VERinf	VerbForm=Inf	5	xcomp	_	SpaceAfter=No|XmlId=w_58_06302
+9	.	.	PUNCT	PONfrt	_	8	punct	_	XmlId=w_58_06303
+
+# text = Franc desherbergent,
+# newdoc id = Roland_1100_verse
+# sent_id = 643
+1	Franc	Franc	PROPN	NOMpro	_	2	nsubj	_	XmlId=w_58_06304
+2	desherbergent	deshéberger	VERB	VERcjg	VerbForm=Fin	0	root	_	SpaceAfter=No|XmlId=w_58_06305
+3	,	,	PUNCT	PONfbl	_	2	punct	_	XmlId=w_58_06306
+
+# text = funt lur sumers trosser,
+# newdoc id = Roland_1100_verse
+# sent_id = 644
+1	funt	faire	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06307
+2	lur	leur2	DET	DETpos	Poss=Yes	3	det	_	XmlId=w_58_06308
+3	sumers	sommier1	NOUN	NOMcom	_	4	obj	_	XmlId=w_58_06309
+4	trosser	trousser	VERB	VERinf	VerbForm=Inf	1	xcomp	_	SpaceAfter=No|XmlId=w_58_06310
+5	,	,	PUNCT	PONfbl	_	1	punct	_	XmlId=w_58_06311
+
+# text = Vers dulce France tuit sunt achiminez.
+# newdoc id = Roland_1100_verse
+# sent_id = 645
+1	Vers	vers2	ADP	PRE	_	3	case	_	XmlId=w_58_06312
+2	dulce	doux	ADJ	ADJqua	_	3	amod	_	XmlId=w_58_06313
+3	France	France	PROPN	NOMpro	_	6	obl	_	XmlId=w_58_06314
+4	tuit	tous	PRON	PROind	PronType=Ind	6	nsubj:pass	_	XmlId=w_58_06315
+5	sunt	estre	AUX	VERcjg	VerbForm=Fin	6	aux:pass	_	XmlId=w_58_06316
+6	achiminez	acheminer	VERB	VERppe	Tense=Past|VerbForm=Part	0	root	_	SpaceAfter=No|XmlId=w_58_06317
+7	.	.	PUNCT	PONfrt	_	6	punct	_	XmlId=w_58_06318
+
+# text = Carles li magnes ad Espaigne guastede, Les castels pris, les citez violees.
+# newdoc id = Roland_1100_verse
+# sent_id = 646
+1	Carles	Charles	PROPN	NOMpro	_	6	nsubj	_	XmlId=w_58_06321
+2	li	le	DET	DETdef	Definite=Def|PronType=Art	3	det	_	XmlId=w_58_06322
+3	magnes	maigne	NOUN	NOMcom	_	1	appos	_	XmlId=w_58_06323
+4	ad	avoir	AUX	VERcjg	VerbForm=Fin	6	aux	_	XmlId=w_58_06324
+5	Espaigne	Espagne	PROPN	NOMpro	_	6	obj	_	XmlId=w_58_06325
+6	guastede	gâter	VERB	VERppe	Tense=Past|VerbForm=Part	0	root	_	SpaceAfter=No|XmlId=w_58_06326
+7	,	,	PUNCT	PONfbl	_	9	punct	_	XmlId=w_58_06327
+8	Les	le	DET	DETdef	Definite=Def|PronType=Art	9	det	_	XmlId=w_58_06328
+9	castels	château	NOUN	NOMcom	_	5	conj	_	XmlId=w_58_06329
+10	pris	prendre	VERB	VERppe	Tense=Past|VerbForm=Part	6	conj	_	SpaceAfter=No|XmlId=w_58_06330
+11	,	,	PUNCT	PONfbl	_	13	punct	_	XmlId=w_58_06331
+12	les	le	DET	DETdef	Definite=Def|PronType=Art	13	det	_	XmlId=w_58_06332
+13	citez	cité	NOUN	NOMcom	_	5	conj	_	XmlId=w_58_06333
+14	violees	violer1	VERB	VERppe	Tense=Past|VerbForm=Part	6	conj	_	SpaceAfter=No|XmlId=w_58_06334
+15	.	.	PUNCT	PONfrt	_	14	punct	_	XmlId=w_58_06335
+
+# text = Ço dit li reis que sa guere out finee.
+# newdoc id = Roland_1100_verse
+# sent_id = 647
+1	Ço	ce1	PRON	PROdem	PronType=Dem	2	obj	_	XmlId=w_58_06336
+2	dit	dire1	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06337
+3	li	le	DET	DETdef	Definite=Def|PronType=Art	4	det	_	XmlId=w_58_06338
+4	reis	roi1	NOUN	NOMcom	_	2	nsubj	_	XmlId=w_58_06339
+5	que	que	SCONJ	CONsub	_	9	mark	_	XmlId=w_58_06340
+6	sa	son4	DET	DETpos	Poss=Yes	7	det	_	XmlId=w_58_06341
+7	guere	guerre	NOUN	NOMcom	_	9	obj	_	XmlId=w_58_06342
+8	out	avoir	AUX	VERcjg	VerbForm=Fin	9	aux	_	XmlId=w_58_06343
+9	finee	finer1	VERB	VERppe	Tense=Past|VerbForm=Part	1	acl	_	SpaceAfter=No|XmlId=w_58_06344
+10	.	.	PUNCT	PONfrt	_	9	punct	_	XmlId=w_58_06345
+
+# text = Vers dulce France chevalchet l'emperere.
+# newdoc id = Roland_1100_verse
+# sent_id = 648
+1	Vers	vers2	ADP	PRE	_	3	case	_	XmlId=w_58_06346
+2	dulce	doux	ADJ	ADJqua	_	3	amod	_	XmlId=w_58_06347
+3	France	France	PROPN	NOMpro	_	4	obl	_	XmlId=w_58_06348
+4	chevalchet	chevaucher	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06349
+5	l'	le	DET	DETdef	Definite=Def|PronType=Art	6	det	_	SpaceAfter=No|XmlId=w_58_06350
+6	emperere	empereur	NOUN	NOMcom	_	4	nsubj	_	SpaceAfter=No|XmlId=w_58_06351
+7	.	.	PUNCT	PONfrt	_	4	punct	_	XmlId=w_58_06352
+
+# text = Li quens Rollant ad l'enseigne fermee, En sum un tertre cuntre le ciel levee.
+# newdoc id = Roland_1100_verse
+# sent_id = 649
+1	Li	le	DET	DETdef	Definite=Def|PronType=Art	2	det	_	XmlId=w_58_06353
+2	quens	comte	NOUN	NOMcom	_	7	nsubj	_	XmlId=w_58_06354
+3	Rollant	Roland	PROPN	NOMpro	_	2	flat	_	XmlId=w_58_06355
+4	ad	avoir	AUX	VERcjg	VerbForm=Fin	7	aux	_	XmlId=w_58_06356
+5	l'	le	DET	DETdef	Definite=Def|PronType=Art	6	det	_	SpaceAfter=No|XmlId=w_58_06357
+6	enseigne	enseigne	NOUN	NOMcom	_	7	obj	_	XmlId=w_58_06358
+7	fermee	fermer	VERB	VERppe	Tense=Past|VerbForm=Part	0	root	_	SpaceAfter=No|XmlId=w_58_06359
+8	,	,	PUNCT	PONfbl	_	7	punct	_	XmlId=w_58_06360
+9	En	en1	ADP	PRE	_	10	case	_	XmlId=w_58_06361
+10	sum	son3	NOUN	NOMcom	_	7	obl	_	XmlId=w_58_06362
+11	un	un	DET	DETndf	Definite=Ind|PronType=Art	12	det	_	XmlId=w_58_06363
+12	tertre	tertre	NOUN	NOMcom	_	10	nmod	_	XmlId=w_58_06364
+13	cuntre	contre3	ADP	PRE	_	15	case	_	XmlId=w_58_06365
+14	le	le	DET	DETdef	Definite=Def|PronType=Art	15	det	_	XmlId=w_58_06366
+15	ciel	ciel	NOUN	NOMcom	_	7	obl	_	XmlId=w_58_06367
+16	levee	lever	VERB	VERppe	Tense=Past|VerbForm=Part	7	conj	_	SpaceAfter=No|XmlId=w_58_06368
+17	.	.	PUNCT	PONfrt	_	7	punct	_	XmlId=w_58_06369
+
+# text = Franc se herbergent par tute la cuntree.
+# newdoc id = Roland_1100_verse
+# sent_id = 650
+1	Franc	Franc	PROPN	NOMpro	_	3	nsubj	_	XmlId=w_58_06370
+2	se	se1	PRON	PROper	PronType=Prs	3	obj	_	XmlId=w_58_06371
+3	herbergent	héberger	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06372
+4	par	par1	ADP	PRE	_	7	case	_	XmlId=w_58_06373
+5	tute	tout2	DET	DETind	PronType=Ind	7	det	_	XmlId=w_58_06374
+6	la	le	DET	DETdef	Definite=Def|PronType=Art	7	det	_	XmlId=w_58_06375
+7	cuntree	contrée	NOUN	NOMcom	_	3	obl	_	SpaceAfter=No|XmlId=w_58_06376
+8	.	.	PUNCT	PONfrt	_	3	punct	_	XmlId=w_58_06377
+
+# text = En un bruill par sum les puis remestrent.
+# newdoc id = Roland_1100_verse
+# sent_id = 651
+1	En	en1	ADP	PRE	_	3	case	_	XmlId=w_58_06404
+2	un	un	DET	DETndf	Definite=Ind|PronType=Art	3	det	_	XmlId=w_58_06406
+3	bruill	breuil	NOUN	NOMcom	_	8	obl	_	XmlId=w_58_06407
+4	par	par1	ADP	PRE	_	5	case	_	XmlId=w_58_06408
+5	sum	son3	NOUN	NOMcom	_	8	obl	_	XmlId=w_58_06409
+6	les	le	DET	DETdef	Definite=Def|PronType=Art	7	det	_	XmlId=w_58_06410
+7	puis	puy	NOUN	NOMcom	_	5	nmod	_	XmlId=w_58_06411
+8	remestrent	remanoir	VERB	VERcjg	VerbForm=Fin	0	root	_	SpaceAfter=No|XmlId=w_58_06412
+9	.	.	PUNCT	PONfrt	_	8	punct	_	XmlId=w_58_06413
+
+# text = .IIII. C. milie atendent l'ajurnee.
+# newdoc id = Roland_1100_verse
+# sent_id = 652
+1	.IIII.	quatre	NUM	PROcar	NumType=Card	3	amod	_	XmlId=w_58_06414
+2	C.	cent	NUM	PROcar	NumType=Card	1	flat	_	XmlId=w_58_06414_1
+3	milie	mille1	PRON	PROcar	NumType=Card	4	nsubj	_	XmlId=w_58_06415
+4	atendent	attendre1	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06416
+5	l'	le	DET	DETdef	Definite=Def|PronType=Art	6	det	_	SpaceAfter=No|XmlId=w_58_06417
+6	ajurnee	ajournée	NOUN	NOMcom	_	4	obj	_	SpaceAfter=No|XmlId=w_58_06418
+7	.	.	PUNCT	PONfrt	_	4	punct	_	XmlId=w_58_06419
+
+# text = Tresvait le jur,
+# newdoc id = Roland_1100_verse
+# sent_id = 653
+1	Tresvait	tresaller	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06432
+2	le	le	DET	DETdef	Definite=Def|PronType=Art	3	det	_	XmlId=w_58_06433
+3	jur	jour	NOUN	NOMcom	_	1	nsubj	_	SpaceAfter=No|XmlId=w_58_06434
+4	,	,	PUNCT	PONfbl	_	1	punct	_	XmlId=w_58_06435
+
+# text = la noit est aserie.
+# newdoc id = Roland_1100_verse
+# sent_id = 654
+1	la	le	DET	DETdef	Definite=Def|PronType=Art	2	det	_	XmlId=w_58_06436
+2	noit	nuit	NOUN	NOMcom	_	4	nsubj	_	XmlId=w_58_06437
+3	est	estre	AUX	VERcjg	VerbForm=Fin	4	cop	_	XmlId=w_58_06438
+4	aserie	asserir1	ADJ	ADJqua	_	0	root	_	SpaceAfter=No|XmlId=w_58_06439
+5	.	.	PUNCT	PONfrt	_	4	punct	_	XmlId=w_58_06440
+
+# text = Carles se dort, li empereres riches.
+# newdoc id = Roland_1100_verse
+# sent_id = 655
+1	Carles	Charles	PROPN	NOMpro	_	3	nsubj	_	XmlId=w_58_06441
+2	se	se1	PRON	PROper	PronType=Prs	3	expl	_	XmlId=w_58_06442
+3	dort	dormir	VERB	VERcjg	VerbForm=Fin	0	root	_	SpaceAfter=No|XmlId=w_58_06443
+4	,	,	PUNCT	PONfbl	_	3	punct	_	XmlId=w_58_06444
+5	li	le	DET	DETdef	Definite=Def|PronType=Art	6	det	_	XmlId=w_58_06445
+6	empereres	empereur	NOUN	NOMcom	_	1	appos	_	XmlId=w_58_06446
+7	riches	riche	ADJ	ADJqua	_	6	amod	_	SpaceAfter=No|XmlId=w_58_06447
+8	.	.	PUNCT	PONfrt	_	6	punct	_	XmlId=w_58_06448
+
+# text = Sunjat qu'il eret al greignurs porz de Sizer ;
+# newdoc id = Roland_1100_verse
+# sent_id = 656
+1	Sunjat	songer	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06449
+2	qu'	que	SCONJ	CONsub	_	4	mark	_	SpaceAfter=No|XmlId=w_58_06450
+3	il	il	PRON	PROper	PronType=Prs	4	nsubj	_	XmlId=w_58_06451
+4	eret	estre	VERB	VERcjg	VerbForm=Fin	1	ccomp	_	XmlId=w_58_06452
+5-6	al	_	_	_	_	_	_	_	cattex=PRE.DETdef|XmlId=w_58_06453
+5	a	_	ADP	_	_	8	case	_	_
+6	le	_	DET	_	Definite=Def|PronType=Art	8	det	_	_
+7	greignurs	graindre	ADJ	ADJqua	_	8	amod	_	XmlId=w_58_06454
+8	porz	port1	NOUN	NOMcom	_	4	obl	_	XmlId=w_58_06455
+9	de	de	ADP	PRE	_	10	case	_	XmlId=w_58_06456
+10	Sizer	Cize	PROPN	NOMpro	_	8	nmod	_	XmlId=w_58_06457
+11	;	;	PUNCT	PONfbl	_	1	punct	_	XmlId=w_58_06458
+
+# text = Entre ses poinz teneit sa hanste fraisnine ;
+# newdoc id = Roland_1100_verse
+# sent_id = 657
+1	Entre	entre	ADP	PRE	_	3	case	_	XmlId=w_58_06459
+2	ses	son4	DET	DETpos	Poss=Yes	3	det	_	XmlId=w_58_06460
+3	poinz	poing	NOUN	NOMcom	_	4	obl	_	XmlId=w_58_06461
+4	teneit	tenir	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06462
+5	sa	son4	DET	DETpos	Poss=Yes	6	det	_	XmlId=w_58_06463
+6	hanste	hanste	NOUN	NOMcom	_	4	obj	_	XmlId=w_58_06464
+7	fraisnine	fraisnin	ADJ	ADJqua	_	6	amod	_	XmlId=w_58_06465
+8	;	;	PUNCT	PONfbl	_	4	punct	_	XmlId=w_58_06466
+
+# text = Guenes li quens l'ad sur lui saisie ;
+# newdoc id = Roland_1100_verse
+# sent_id = 658
+1	Guenes	Ganelon	PROPN	NOMpro	_	8	nsubj	_	XmlId=w_58_06467
+2	li	le	DET	DETdef	Definite=Def|PronType=Art	3	det	_	XmlId=w_58_06468
+3	quens	comte	NOUN	NOMcom	_	1	appos	_	XmlId=w_58_06469
+4	l'	le	PRON	PROper	PronType=Prs	8	obj	_	SpaceAfter=No|XmlId=w_58_06470
+5	ad	avoir	AUX	VERcjg	VerbForm=Fin	8	aux	_	XmlId=w_58_06471
+6	sur	sur1	ADP	PRE	_	7	case	_	XmlId=w_58_06472
+7	lui	lui	PRON	PROper	PronType=Prs	8	obl	_	XmlId=w_58_06473
+8	saisie	saisir	VERB	VERppe	Tense=Past|VerbForm=Part	0	root	_	XmlId=w_58_06474
+9	;	;	PUNCT	PONfbl	_	8	punct	_	XmlId=w_58_06475
+
+# text = Par tel aïr l'at estrussee e brandie Qu'envers le cel en volent les escicles ;
+# newdoc id = Roland_1100_verse
+# sent_id = 659
+1	Par	par1	ADP	PRE	_	3	case	_	XmlId=w_58_06476
+2	tel	tel	DET	DETind	PronType=Ind	3	det	_	XmlId=w_58_06477
+3	aïr	aïr	NOUN	NOMcom	_	6	obl	_	XmlId=w_58_06478
+4	l'	le	PRON	PROper	PronType=Prs	6	obj	_	SpaceAfter=No|XmlId=w_58_06479
+5	at	avoir	AUX	VERcjg	VerbForm=Fin	6	aux	_	XmlId=w_58_06480
+6	estrussee	estrousser	VERB	VERppe	Tense=Past|VerbForm=Part	0	root	_	XmlId=w_58_06481
+7	e	et	CCONJ	CONcoo	_	8	cc	_	XmlId=w_58_06482
+8	brandie	brandir	VERB	VERppe	Tense=Past|VerbForm=Part	6	conj	_	XmlId=w_58_06483
+9	Qu'	que	SCONJ	CONsub	_	14	mark	_	SpaceAfter=No|XmlId=w_58_06484
+10	envers	envers2	ADP	PRE	_	12	case	_	XmlId=w_58_06485
+11	le	le	DET	DETdef	Definite=Def|PronType=Art	12	det	_	XmlId=w_58_06486
+12	cel	ciel	NOUN	NOMcom	_	14	obl	_	XmlId=w_58_06487
+13	en	en2	ADV	PROadv	PronType=Dem	14	obl	_	XmlId=w_58_06488
+14	volent	voler	VERB	VERcjg	VerbForm=Fin	3	acl	_	XmlId=w_58_06489
+15	les	le	DET	DETdef	Definite=Def|PronType=Art	16	det	_	XmlId=w_58_06490
+16	escicles	éclisse	NOUN	NOMcom	_	14	nsubj	_	XmlId=w_58_06491
+17	;	;	PUNCT	PONfbl	_	14	punct	_	XmlId=w_58_06492
+
+# text = Carles se dort, qu'il ne s'esveillet mie.
+# newdoc id = Roland_1100_verse
+# sent_id = 660
+1	Carles	Charles	PROPN	NOMpro	_	3	nsubj	_	XmlId=w_58_06493
+2	se	se1	PRON	PROper	PronType=Prs	3	expl	_	XmlId=w_58_06494
+3	dort	dormir	VERB	VERcjg	VerbForm=Fin	0	root	_	SpaceAfter=No|XmlId=w_58_06495
+4	,	,	PUNCT	PONfbl	_	3	punct	_	XmlId=w_58_06496
+5	qu'	que	SCONJ	CONsub	_	9	mark	_	SpaceAfter=No|XmlId=w_58_06497
+6	il	il	PRON	PROper	PronType=Prs	9	nsubj	_	XmlId=w_58_06498
+7	ne	ne1	ADV	ADVneg	Polarity=Neg	9	advmod	_	XmlId=w_58_06499
+8	s'	se1	PRON	PROper	PronType=Prs	9	obj	_	SpaceAfter=No|XmlId=w_58_06500
+9	esveillet	éveiller	VERB	VERcjg	VerbForm=Fin	3	advcl	_	XmlId=w_58_06501
+10	mie	mie3	ADV	ADVneg	Polarity=Neg	9	advmod	_	SpaceAfter=No|XmlId=w_58_06502
+11	.	.	PUNCT	PONfrt	_	3	punct	_	XmlId=w_58_06503
+
+# text = Aprés iceste altre avisiun sunjat, Qu'il ert en France, a sa capele ad Ais.
+# newdoc id = Roland_1100_verse
+# sent_id = 661
+1	Aprés	après	ADP	PRE	_	2	case	_	XmlId=w_58_06504
+2	iceste	cist	PRON	PROdem	PronType=Dem	5	obl	_	XmlId=w_58_06505
+3	altre	autre	ADJ	ADJind	PronType=Ind	4	amod	_	XmlId=w_58_06506
+4	avisiun	avision	NOUN	NOMcom	_	5	obj	_	XmlId=w_58_06507
+5	sunjat	songer	VERB	VERcjg	VerbForm=Fin	0	root	_	SpaceAfter=No|XmlId=w_58_06508
+6	,	,	PUNCT	PONfbl	_	5	punct	_	XmlId=w_58_06509
+7	Qu'	que	SCONJ	CONsub	_	9	mark	_	SpaceAfter=No|XmlId=w_58_06510
+8	il	il	PRON	PROper	PronType=Prs	9	nsubj	_	XmlId=w_58_06511
+9	ert	estre	VERB	VERcjg	VerbForm=Fin	4	acl	_	XmlId=w_58_06512
+10	en	en1	ADP	PRE	_	11	case	_	XmlId=w_58_06513
+11	France	France	PROPN	NOMpro	_	9	obl	_	SpaceAfter=No|XmlId=w_58_06514
+12	,	,	PUNCT	PONfbl	_	9	punct	_	XmlId=w_58_06515
+13	a	à	ADP	PRE	_	15	case	_	XmlId=w_58_06516
+14	sa	son4	DET	DETpos	Poss=Yes	15	det	_	XmlId=w_58_06517
+15	capele	chapelle1	NOUN	NOMcom	_	9	obl	_	XmlId=w_58_06518
+16	ad	à	ADP	PRE	_	17	case	_	XmlId=w_58_06519
+17	Ais	Aix	PROPN	NOMpro	_	9	obl	_	SpaceAfter=No|XmlId=w_58_06520
+18	.	.	PUNCT	PONfrt	_	9	punct	_	XmlId=w_58_06521
+
+# text = El destre braz li morst uns vers si mals ;
+# newdoc id = Roland_1100_verse
+# sent_id = 662
+1-2	El	_	_	_	_	_	_	_	cattex=PRE.DETdef|XmlId=w_58_06522
+1	en	_	ADP	_	_	4	case	_	_
+2	le	_	DET	_	Definite=Def|PronType=Art	4	det	_	_
+3	destre	dextre	ADJ	ADJqua	_	4	amod	_	XmlId=w_58_06523
+4	braz	bras	NOUN	NOMcom	_	6	obl	_	XmlId=w_58_06524
+5	li	li	PRON	PROper	PronType=Prs	6	iobj	_	XmlId=w_58_06525
+6	morst	mordre	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06526
+7	uns	un	DET	DETndf	Definite=Ind|PronType=Art	8	det	_	XmlId=w_58_06527
+8	vers	verrat	NOUN	NOMcom	_	6	nsubj	_	XmlId=w_58_06528
+9	si	si4	ADV	ADVgen	_	10	advmod	_	XmlId=w_58_06529
+10	mals	mal2	ADJ	ADJqua	_	8	amod	_	XmlId=w_58_06530
+11	;	;	PUNCT	PONfbl	_	6	punct	_	XmlId=w_58_06531
+
+# text = Devers Ardene vit venir uns leuparz,
+# newdoc id = Roland_1100_verse
+# sent_id = 663
+1	Devers	devers	ADP	PRE	_	2	case	_	XmlId=w_58_06532
+2	Ardene	Ardenne	PROPN	NOMpro	_	3	obl	_	XmlId=w_58_06533
+3	vit	voir1	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06534
+4	venir	venir	VERB	VERinf	VerbForm=Inf	3	xcomp	_	XmlId=w_58_06535
+5	uns	un	DET	DETndf	Definite=Ind|PronType=Art	6	det	_	XmlId=w_58_06536
+6	leuparz	léopard	NOUN	NOMcom	_	3	obj	_	SpaceAfter=No|XmlId=w_58_06537
+7	,	,	PUNCT	PONfbl	_	3	punct	_	XmlId=w_58_06538
+
+# text = Sun cors demenie mult fierement asalt.
+# newdoc id = Roland_1100_verse
+# sent_id = 664
+1	Sun	son4	DET	DETpos	Poss=Yes	2	det	_	XmlId=w_58_06539
+2	cors	corps	NOUN	NOMcom	_	6	obj	_	XmlId=w_58_06540
+3	demenie	demaine	ADJ	ADJqua	_	2	amod	_	XmlId=w_58_06541
+4	mult	moult	ADV	ADVgen	_	5	advmod	_	XmlId=w_58_06542
+5	fierement	fièrement	ADV	ADVgen	_	6	advmod	_	XmlId=w_58_06543
+6	asalt	assaillir	VERB	VERcjg	VerbForm=Fin	0	root	_	SpaceAfter=No|XmlId=w_58_06544
+7	.	.	PUNCT	PONfrt	_	6	punct	_	XmlId=w_58_06545
+
+# text = D'enz de sale uns veltres avalat, Que vint a Carles lé galops e les salz.
+# newdoc id = Roland_1100_verse
+# sent_id = 665
+1	D'	de	ADP	PRE	_	2	case	_	SpaceAfter=No|XmlId=w_58_06546
+2	enz	ens	ADV	ADVgen	_	4	advmod	_	XmlId=w_58_06547
+3	de	de	ADP	PRE	_	4	case	_	XmlId=w_58_06548
+4	sale	salle	NOUN	NOMcom	_	7	obl	_	XmlId=w_58_06549
+5	uns	un	DET	DETndf	Definite=Ind|PronType=Art	6	det	_	XmlId=w_58_06550
+6	veltres	vautre	NOUN	NOMcom	_	7	nsubj	_	XmlId=w_58_06551
+7	avalat	avaler	VERB	VERcjg	VerbForm=Fin	0	root	_	SpaceAfter=No|XmlId=w_58_06552
+8	,	,	PUNCT	PONfbl	_	7	punct	_	XmlId=w_58_06553
+9	Que	que	PRON	PROrel	PronType=Prs,Rel	10	nsubj	_	XmlId=w_58_06554
+10	vint	venir	VERB	VERcjg	VerbForm=Fin	6	acl:relcl	_	XmlId=w_58_06555
+11	a	à	ADP	PRE	_	12	case	_	XmlId=w_58_06556
+12	Carles	Charles	PROPN	NOMpro	_	10	obl	_	XmlId=w_58_06557
+13	lé	le	DET	DETdef	Definite=Def|PronType=Art	14	det	_	XmlId=w_58_06558
+14	galops	galop	NOUN	NOMcom	_	10	obl	_	XmlId=w_58_06559
+15	e	et	CCONJ	CONcoo	_	17	cc	_	XmlId=w_58_06560
+16	les	le	DET	DETdef	Definite=Def|PronType=Art	17	det	_	XmlId=w_58_06561
+17	salz	saut1	NOUN	NOMcom	_	14	conj	_	SpaceAfter=No|XmlId=w_58_06562
+18	.	.	PUNCT	PONfrt	_	10	punct	_	XmlId=w_58_06563
+
+# text = La destre oreille al premer ver trenchat,
+# newdoc id = Roland_1100_verse
+# sent_id = 666
+1	La	le	DET	DETdef	Definite=Def|PronType=Art	3	det	_	XmlId=w_58_06564
+2	destre	dextre	ADJ	ADJqua	_	3	amod	_	XmlId=w_58_06565
+3	oreille	oreille	NOUN	NOMcom	_	8	obj	_	XmlId=w_58_06566
+4-5	al	_	_	_	_	_	_	_	cattex=PRE.DETdef|XmlId=w_58_06567
+4	a	_	ADP	_	_	7	case	_	_
+5	le	_	DET	_	Definite=Def|PronType=Art	7	det	_	_
+6	premer	premier1	NUM	ADJcar	NumType=Card	7	amod	_	XmlId=w_58_06568
+7	ver	verrat	NOUN	NOMcom	_	8	obl	_	XmlId=w_58_06569
+8	trenchat	trancher	VERB	VERcjg	VerbForm=Fin	0	root	_	SpaceAfter=No|XmlId=w_58_06570
+9	,	,	PUNCT	PONfbl	_	8	punct	_	XmlId=w_58_06571
+
+# text = Ireement se cumbat al lepart.
+# newdoc id = Roland_1100_verse
+# sent_id = 667
+1	Ireement	irément	ADV	ADVgen	_	3	advmod	_	XmlId=w_58_06572
+2	se	se1	PRON	PROper	PronType=Prs	3	expl	_	XmlId=w_58_06573
+3	cumbat	combattre	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06574
+4-5	al	_	_	_	_	_	_	_	cattex=PRE.DETdef|XmlId=w_58_06575
+4	a	_	ADP	_	_	6	case	_	_
+5	le	_	DET	_	Definite=Def|PronType=Art	6	det	_	_
+6	lepart	léopard	NOUN	NOMcom	_	3	obl	_	SpaceAfter=No|XmlId=w_58_06576
+7	.	.	PUNCT	PONfrt	_	3	punct	_	XmlId=w_58_06577
+
+# text = Dient Franceis que grant bataille i ad ;
+# newdoc id = Roland_1100_verse
+# sent_id = 668
+1	Dient	dire1	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06578
+2	Franceis	Français	PROPN	NOMpro	_	1	nsubj	_	XmlId=w_58_06579
+3	que	que	SCONJ	CONsub	_	7	mark	_	XmlId=w_58_06580
+4	grant	grand	ADJ	ADJqua	_	5	amod	_	XmlId=w_58_06581
+5	bataille	bataille	NOUN	NOMcom	_	7	obj	_	XmlId=w_58_06582
+6	i	y2	ADV	PROadv	PronType=Dem	7	obl	_	XmlId=w_58_06583
+7	ad	avoir	VERB	VERcjg	VerbForm=Fin	1	ccomp	_	XmlId=w_58_06584
+8	;	;	PUNCT	PONfbl	_	1	punct	_	XmlId=w_58_06585
+
+# text = Il ne sevent liquels d'els la veintrat.
+# newdoc id = Roland_1100_verse
+# sent_id = 669
+1	Il	il	PRON	PROper	PronType=Prs	3	nsubj	_	XmlId=w_58_06586
+2	ne	ne1	ADV	ADVneg	Polarity=Neg	3	advmod	_	XmlId=w_58_06587
+3	sevent	savoir1	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06588
+4	liquels	lequel	PRON	PROint	PronType=Int	8	nsubj	_	XmlId=w_58_06589
+5	d'	de	ADP	PRE	_	6	case	_	SpaceAfter=No|XmlId=w_58_06590
+6	els	eux	PRON	PROper	PronType=Prs	4	nmod	_	XmlId=w_58_06591
+7	la	le	PRON	PROper	PronType=Prs	8	obj	_	XmlId=w_58_06592
+8	veintrat	vaincre	VERB	VERcjg	VerbForm=Fin	3	ccomp	_	SpaceAfter=No|XmlId=w_58_06593
+9	.	.	PUNCT	PONfrt	_	3	punct	_	XmlId=w_58_06594
+
+# text = Carles se dort,
+# newdoc id = Roland_1100_verse
+# sent_id = 670
+1	Carles	Charles	PROPN	NOMpro	_	3	nsubj	_	XmlId=w_58_06595
+2	se	se1	PRON	PROper	PronType=Prs	3	expl	_	XmlId=w_58_06596
+3	dort	dormir	VERB	VERcjg	VerbForm=Fin	0	root	_	SpaceAfter=No|XmlId=w_58_06597
+4	,	,	PUNCT	PONfbl	_	3	punct	_	XmlId=w_58_06598
+
+# text = mie ne s'esveillat.
+# newdoc id = Roland_1100_verse
+# sent_id = 671
+1	mie	mie3	ADV	ADVneg	Polarity=Neg	4	advmod	_	XmlId=w_58_06599
+2	ne	ne1	ADV	ADVneg	Polarity=Neg	4	advmod	_	XmlId=w_58_06600
+3	s'	se1	PRON	PROper	PronType=Prs	4	obj	_	SpaceAfter=No|XmlId=w_58_06601
+4	esveillat	éveiller	VERB	VERcjg	VerbForm=Fin	0	root	_	SpaceAfter=No|XmlId=w_58_06602
+5	.	.	PUNCT	PONfrt	_	4	punct	_	XmlId=w_58_06603
+
+# text = Tresvait la noit
+# newdoc id = Roland_1100_verse
+# sent_id = 672
+1	Tresvait	tresaller	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06606
+2	la	le	DET	DETdef	Definite=Def|PronType=Art	3	det	_	XmlId=w_58_06607
+3	noit	nuit	NOUN	NOMcom	_	1	nsubj	_	XmlId=w_58_06608
+
+# text = e apert la clere albe.
+# newdoc id = Roland_1100_verse
+# sent_id = 673
+1	e	et	CCONJ	CONcoo	_	2	cc:nc	_	XmlId=w_58_06609
+2	apert	apparoir	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06610
+3	la	le	DET	DETdef	Definite=Def|PronType=Art	5	det	_	XmlId=w_58_06611
+4	clere	clair1	ADJ	ADJqua	_	5	amod	_	XmlId=w_58_06612
+5	albe	aube1	NOUN	NOMcom	_	2	nsubj	_	SpaceAfter=No|XmlId=w_58_06613
+6	.	.	PUNCT	PONfrt	_	2	punct	_	XmlId=w_58_06614
+
+# text = Li empereres mult fierement chevalchet.
+# newdoc id = Roland_1100_verse
+# sent_id = 674
+1	Li	le	DET	DETdef	Definite=Def|PronType=Art	2	det	_	XmlId=w_58_06619
+2	empereres	empereur	NOUN	NOMcom	_	5	nsubj	_	XmlId=w_58_06620
+3	mult	moult	ADV	ADVgen	_	4	advmod	_	XmlId=w_58_06621
+4	fierement	fièrement	ADV	ADVgen	_	5	advmod	_	XmlId=w_58_06622
+5	chevalchet	chevaucher	VERB	VERcjg	VerbForm=Fin	0	root	_	SpaceAfter=No|XmlId=w_58_06623
+6	.	.	PUNCT	PONfrt	_	5	punct	_	XmlId=w_58_06624
+
+# text = « Seignurs barons, dist li emperere Carles, Veez les porz e les destreiz passages ;
+# newdoc id = Roland_1100_verse
+# sent_id = 675
+1	«	"	PUNCT	PONpga	_	10	punct	_	XmlId=w_58_06625
+2	Seignurs	seigneur	NOUN	NOMcom	_	10	vocative	_	XmlId=w_58_06626
+3	barons	baron	NOUN	NOMcom	_	2	flat	_	SpaceAfter=No|XmlId=w_58_06627
+4	,	,	PUNCT	PONfbl	_	5	punct	_	XmlId=w_58_06628
+5	dist	dire1	VERB	VERcjg	VerbForm=Fin	10	parataxis	_	XmlId=w_58_06629
+6	li	le	DET	DETdef	Definite=Def|PronType=Art	7	det	_	XmlId=w_58_06630
+7	emperere	empereur	NOUN	NOMcom	_	5	nsubj	_	XmlId=w_58_06631
+8	Carles	Charles	PROPN	NOMpro	_	7	flat	_	SpaceAfter=No|XmlId=w_58_06632
+9	,	,	PUNCT	PONfbl	_	5	punct	_	XmlId=w_58_06633
+10	Veez	voir1	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06634
+11	les	le	DET	DETdef	Definite=Def|PronType=Art	12	det	_	XmlId=w_58_06635
+12	porz	port1	NOUN	NOMcom	_	10	obj	_	XmlId=w_58_06636
+13	e	et	CCONJ	CONcoo	_	16	cc	_	XmlId=w_58_06637
+14	les	le	DET	DETdef	Definite=Def|PronType=Art	16	det	_	XmlId=w_58_06638
+15	destreiz	détroit1	ADJ	ADJqua	_	16	amod	_	XmlId=w_58_06639
+16	passages	passage	NOUN	NOMcom	_	12	conj	_	XmlId=w_58_06640
+17	;	;	PUNCT	PONfbl	_	10	punct	_	XmlId=w_58_06641
+
+# text = Kar me jugez ki ert en la rereguarde. »
+# newdoc id = Roland_1100_verse
+# sent_id = 676
+1	Kar	car	ADV	ADVgen	_	3	advmod	_	XmlId=w_58_06642
+2	me	me	PRON	PROper	PronType=Prs	3	iobj	_	XmlId=w_58_06643
+3	jugez	juger	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06644
+4	ki	qui1	PRON	PROrel	PronType=Prs,Rel	5	nsubj	_	XmlId=w_58_06645
+5	ert	estre	VERB	VERcjg	VerbForm=Fin	3	ccomp	_	XmlId=w_58_06646
+6	en	en1	ADP	PRE	_	8	case	_	XmlId=w_58_06647
+7	la	le	DET	DETdef	Definite=Def|PronType=Art	8	det	_	XmlId=w_58_06648
+8	rereguarde	reregarde	NOUN	NOMcom	_	5	obl	_	SpaceAfter=No|XmlId=w_58_06649
+9	.	.	PUNCT	PONfrt	_	3	punct	_	XmlId=w_58_06650
+10	»	"	PUNCT	PONpdr	_	3	punct	_	XmlId=w_58_06651
+
+# text = Guenes respunt :
+# newdoc id = Roland_1100_verse
+# sent_id = 677
+1	Guenes	Ganelon	PROPN	NOMpro	_	2	nsubj	_	XmlId=w_58_06652
+2	respunt	répondre	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06653
+3	:	:	PUNCT	PONfbl	_	2	punct	_	XmlId=w_58_06654
+
+# text = N'avez baron de si grant vasselage. »
+# newdoc id = Roland_1100_verse
+# sent_id = 678
+1	N'	ne1	ADV	ADVneg	Polarity=Neg	2	advmod	_	SpaceAfter=No|XmlId=w_58_06662
+2	avez	avoir	VERB	VERcjg	VerbForm=Fin	0	root	_	XmlId=w_58_06663
+3	baron	baron	NOUN	NOMcom	_	2	obj	_	XmlId=w_58_06664
+4	de	de	ADP	PRE	_	7	case	_	XmlId=w_58_06665
+5	si	si4	ADV	ADVgen	_	6	advmod	_	XmlId=w_58_06666
+6	grant	grand	ADJ	ADJqua	_	7	amod	_	XmlId=w_58_06667
+7	vasselage	vasselage	NOUN	NOMcom	_	3	nmod	_	SpaceAfter=No|XmlId=w_58_06668
+8	.	.	PUNCT	PONfrt	_	2	punct	_	XmlId=w_58_06669
+9	»	"	PUNCT	PONpdr	_	2	punct	_	XmlId=w_58_06670
+
+# text = Quant l'ot li reis, fierement le reguardet,
+# newdoc id = Roland_1100_verse
+# sent_id = 679
+1	Quant	quand	SCONJ	CONsub	_	3	mark	_	XmlId=w_58_06671
+2	l'	le	PRON	PROper	PronType=Prs	3	obj	_	SpaceAfter=No|XmlId=w_58_06672
+3	ot	ouïr	VERB	VERcjg	VerbForm=Fin	9	advcl	_	XmlId=w_58_06673
+4	li	le	DET	DETdef	Definite=Def|PronType=Art	5	det	_	XmlId=w_58_06674
+5	reis	roi1	NOUN	NOMcom	_	3	nsubj	_	SpaceAfter=No|XmlId=w_58_06675
+6	,	,	PUNCT	PONfbl	_	9	punct	_	XmlId=w_58_06676
+7	fierement	fièrement	ADV	ADVgen	_	9	advmod	_	XmlId=w_58_06677
+8	le	le	PRON	PROper	PronType=Prs	9	obj	_	XmlId=w_58_06678
+9	reguardet	regarder	VERB	VERcjg	VerbForm=Fin	0	root	_	SpaceAfter=No|XmlId=w_58_06679
+10	,	,	PUNCT	PONfbl	_	9	punct	_	XmlId=w_58_06680
+
+# text = Si li ad dit :
+# newdoc id = Roland_1100_verse
+# sent_id = 680
+1	Si	si4	ADV	ADVgen	_	4	advmod	_	XmlId=w_58_06681
+2	li	li	PRON	PROper	PronType=Prs	4	iobj	_	XmlId=w_58_06682
+3	ad	avoir	AUX	VERcjg	VerbForm=Fin	4	aux	_	XmlId=w_58_06683
+4	dit	dire1	VERB	VERppe	Tense=Past|VerbForm=Part	0	root	_	XmlId=w_58_06684
+5	:	:	PUNCT	PONfbl	_	4	punct	_	XmlId=w_58_06685
+
+# text = « Vos estes vifs dïables.
+# newdoc id = Roland_1100_verse
+# sent_id = 681
+1	«	"	PUNCT	PONpga	_	5	punct	_	XmlId=w_58_06686
+2	Vos	vous	PRON	PROper	PronType=Prs	5	nsubj	_	XmlId=w_58_06687
+3	estes	estre	AUX	VERcjg	VerbForm=Fin	5	cop	_	XmlId=w_58_06688
+4	vifs	vif	ADJ	ADJqua	_	5	amod	_	XmlId=w_58_06689
+5	dïables	diable	NOUN	NOMcom	_	0	root	_	SpaceAfter=No|XmlId=w_58_06690
+6	.	.	PUNCT	PONfrt	_	5	punct	_	XmlId=w_58_06691
+
+# text = El cors vos est entree mortel rage.
+# newdoc id = Roland_1100_verse
+# sent_id = 682
+1-2	El	_	_	_	_	_	_	_	cattex=PRE.DETdef|XmlId=w_58_06692
+1	en	_	ADP	_	_	3	case	_	_
+2	le	_	DET	_	Definite=Def|PronType=Art	3	det	_	_
+3	cors	corps	NOUN	NOMcom	_	6	obl	_	XmlId=w_58_06693
+4	vos	vous	PRON	PROper	PronType=Prs	6	iobj	_	XmlId=w_58_06694
+5	est	estre	AUX	VERcjg	VerbForm=Fin	6	aux	_	XmlId=w_58_06695
+6	entree	entrer	VERB	VERppe	Tense=Past|VerbForm=Part	0	root	_	XmlId=w_58_06696
+7	mortel	mortel1	ADJ	ADJqua	_	8	amod	_	XmlId=w_58_06697
+8	rage	rage	NOUN	NOMcom	_	6	nsubj	_	SpaceAfter=No|XmlId=w_58_06698
+9	.	.	PUNCT	PONfrt	_	6	punct	_	XmlId=w_58_06699
