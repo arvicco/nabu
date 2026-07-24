@@ -16,7 +16,9 @@ require "test_helper"
 #
 # What it pins: the axis heading list == AxisRegistry names in order; each
 # persona and desc == the registry definition verbatim; each member-slug list
-# and its count == SourceRegistry#axis_members. It reads the SHIPPED config
+# and its count == SourceRegistry#public_axis_members (P44-r3a: the PUBLIC atlas
+# excludes grant-gated private-research rows — availability: blocked — the same
+# way the site axis pages do). It reads the SHIPPED config
 # (Nabu::Config::PROJECT_ROOT), so a config change with no page update is red.
 class AxesPageTest < Minitest::Test
   ROOT = Nabu::Config::PROJECT_ROOT
@@ -58,12 +60,13 @@ class AxesPageTest < Minitest::Test
       members_line = body[/^\*\*Members\*\*[^:\n]*:(.+)$/, 1]
       refute_nil members_line, "#{axis.name}: expected a '**Members** (N): …' line"
       page_slugs = members_line.scan(/`([^`]+)`/).flatten
-      assert_equal registry.axis_members(axis.name), page_slugs,
-                   "#{axis.name}: the member slug list must equal SourceRegistry#axis_members, in order"
+      assert_equal registry.public_axis_members(axis.name), page_slugs,
+                   "#{axis.name}: the member slug list must equal SourceRegistry#public_axis_members " \
+                   "(blocked grant-gated rows are not advertised publicly), in order"
 
       count = body[/^\*\*Members\*\*\s*\((\d+)\):/, 1]
-      assert_equal registry.axis_members(axis.name).size.to_s, count,
-                   "#{axis.name}: the '(N)' member count must match the slug list"
+      assert_equal registry.public_axis_members(axis.name).size.to_s, count,
+                   "#{axis.name}: the '(N)' member count must match the (public) slug list"
 
       # The desc paragraph: the block's one content line that is neither the
       # persona blockquote nor the Members line — pinned verbatim.

@@ -2261,6 +2261,14 @@ openiti:
 titus-avestan:
   adapter: Nabu::Adapters::TitusAvestan
   axes: [etym]
+  # P44-r3a: grant-gated PRIVATE research material (the fetch right is the owner's
+  # personal grant №41-3, not conveyed by a public clone). The public repo keeps
+  # this license/scouting record, but must NOT advertise it as a library holding:
+  # `availability: blocked` excludes it from the generated site axis pages, the
+  # docs/axes.md memberships, and every public census (owner ruling 2026-07-24).
+  # Distinct from grant_required (the sync-time gate) and enabled — this governs
+  # PUBLIC VISIBILITY only; local fetch/serve are unaffected.
+  availability: blocked
   enabled: false   # P43-2: BUILT, awaiting the owner's grant acknowledgment +
                    # first sync. `nabu sync titus-avestan` REFUSES until the owner
                    # types `granted` (the №41-3 grant gate); parse-only works

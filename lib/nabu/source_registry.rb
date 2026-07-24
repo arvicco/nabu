@@ -60,6 +60,20 @@ module Nabu
     LEMMA_TIERS = %w[gold silver equivalence].freeze
     DEFAULT_LEMMA_TIER = "gold"
 
+    # The public-availability posture (P44-r3a). `public` (the default, absent
+    # on every ordinary row) means the source is part of the library as a
+    # PUBLIC holding — it appears on the generated site axis pages, in
+    # docs/axes.md memberships, and its holdings count toward public census
+    # surfaces. `blocked` means grant-gated PRIVATE research material (the
+    # fetch right is a personal grant, №41-3/№1): the public repo may keep a
+    # license/scouting record of it, but must NOT advertise it as a library
+    # holding — the public-doc/site generators exclude it and public counts
+    # never include it. Orthogonal to `grant_required` (the sync-time gate) and
+    # to `enabled`: availability governs PUBLIC VISIBILITY of the row, not
+    # whether it can be fetched or served locally. Owner ruling 2026-07-24.
+    AVAILABILITIES = %w[public blocked].freeze
+    DEFAULT_AVAILABILITY = "public"
+
     # The fetch-grant block (P42-r1): a permission-bound source whose right to
     # fetch is NOT conveyed by a public license (StarLing's personal e-mail
     # grant to the project author, the future TITUS Avestan). A public clone of
@@ -127,11 +141,11 @@ module Nabu
     # a configuration error caught at load. Absent on every ordinary source.
     Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :kind, :translations,
                         :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings, :axes,
-                        :grant_required, :grant) do
+                        :grant_required, :grant, :availability) do
       def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false,
                      lemma_tier: DEFAULT_LEMMA_TIER, classes: nil, siblings: nil, axes: [],
-                     grant_required: false, grant: nil)
+                     grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY)
         super
       end
 
@@ -146,6 +160,14 @@ module Nabu
       # sync-time gate (P42-r1) demands a recorded acknowledgment before a first
       # fetch. Predicate spelling mirrors shelf?/source?.
       def grant_required? = grant_required
+
+      # This source is grant-gated PRIVATE research material (P44-r3a): keep
+      # its license/scouting record, but never advertise it as a public
+      # library holding. The public-doc/site generators exclude it and public
+      # census surfaces never count it. Predicate spelling mirrors
+      # grant_required?/shelf?; the default (no `availability:` key) is public.
+      def blocked? = availability == "blocked"
+      def public? = !blocked?
 
       # Resolve the adapter constant lazily. A bad/missing class is a
       # configuration error, not a crash: surface it as a ValidationError
@@ -261,10 +283,25 @@ module Nabu
         classes: classes!(slug, config),
         siblings: siblings!(slug, config),
         axes: axes!(slug, config, axis_registry),
-        grant_required: grant_required, grant: grant
+        grant_required: grant_required, grant: grant,
+        availability: availability!(slug, config)
       )
     end
     private_class_method :build_entry
+
+    # The public-availability posture (P44-r3a). Absent = public (the default);
+    # `blocked` marks grant-gated private research material the public surfaces
+    # must not advertise. Any other value is a configuration error naming the
+    # slug, caught at load like every other vocabulary field.
+    def self.availability!(slug, config)
+      value = config.fetch("availability", DEFAULT_AVAILABILITY)
+      return value if AVAILABILITIES.include?(value)
+
+      raise ValidationError,
+            "source #{slug.inspect}: availability must be one of #{AVAILABILITIES.join(', ')}, " \
+            "got #{value.inspect}"
+    end
+    private_class_method :availability!
 
     # The fetch-grant gate keys (P42-r1). Returns [grant_required, Grant|nil].
     # The flag and the block travel together: grant_required without a grant
@@ -455,6 +492,30 @@ module Nabu
     # Unknown names return [] (the caller decides how loud to be).
     def axis_members(axis_name)
       @entries.each_value.select { |entry| entry.axes.include?(axis_name) }.map(&:slug)
+    end
+
+    # Axis members MINUS the blocked (grant-gated private) ones (P44-r3a) — the
+    # membership seam the PUBLIC surfaces read (the generated site axis pages
+    # and docs/axes.md). #axis_members stays the full list for the CLI/sync
+    # scopes (a blocked source is still fetchable/servable locally); only the
+    # public documentation excludes it.
+    def public_axis_members(axis_name)
+      axis_members(axis_name).reject { |slug| blocked?(slug) }
+    end
+
+    # The blocked (grant-gated private) slugs tagged with +axis_name+ — the
+    # complement of #public_axis_members, so a generator can decide whether to
+    # render the "private materials not listed" footnote.
+    def blocked_axis_members(axis_name)
+      axis_members(axis_name).select { |slug| blocked?(slug) }
+    end
+
+    # Is +slug+ a grant-gated private-research row (availability: blocked)?
+    # Unknown slugs are not blocked. The read path r3b (CLI/MCP visibility)
+    # builds on this.
+    def blocked?(slug)
+      entry = @entries[slug]
+      entry ? entry.blocked? : false
     end
 
     # Yield each Entry in registration order; returns an Enumerator without a
