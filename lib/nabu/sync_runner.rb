@@ -81,14 +81,17 @@ module Nabu
     # +references+ (P19-4) is the Nabu::LibraryReferences::Result for a
     # reference_edges? source (the manifests' related: urns refreshed into
     # the links journal after the load); nil for every other source.
+    # +enrichments+ (P44-7) is the enrichment producer's census Result for an
+    # enrichment_producer? source (pedecerto's meter scansions re-derived into
+    # the enrichments table after the load); nil for every other source.
     # +analyzed+ (P42-4) is the Store::AnalyzeReport of the post-load
     # planner-stats refresh when the load was bulk (see ANALYZE_MIN_CHANGED_ROWS);
     # nil when the load was sub-threshold (the common re-sync) or on an aborted
     # run — the CLI's report line stays silent then.
     Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings,
-                          :discovery, :references, :analyzed) do
+                          :discovery, :references, :enrichments, :analyzed) do
       def initialize(slug:, fetch_report:, load_report:, breaker:, indexed:, warnings:,
-                     discovery:, references: nil, analyzed: nil)
+                     discovery:, references: nil, enrichments: nil, analyzed: nil)
         super
       end
 
@@ -205,6 +208,7 @@ module Nabu
                   breaker: nil, indexed: indexed,
                   warnings: warnings, discovery: discovery,
                   references: refresh_references(entry),
+                  enrichments: refresh_enrichments(entry),
                   analyzed: analyze_after_load(load_report, adapter))
     end
 
@@ -266,6 +270,21 @@ module Nabu
       ensure
         journal.disconnect
       end
+    end
+
+    # P44-7: after an enrichment_producer? source loads, re-derive its meter
+    # enrichment layer via the adapter's declared producer — a pure function of
+    # (canonical corpus, catalog, code) that supersedes its prior rows in the
+    # enrichments table. Writes the CATALOG (@db) directly (the enrichments
+    # table lives there, unlike the links journal's separate file), so no extra
+    # store handle. +workdir+ is the source's canonical dir (the producer reads
+    # the unpacked corpus from it); a parse-only sync before the first fetch is
+    # the honest no-op that supersedes nothing.
+    def refresh_enrichments(entry)
+      return nil unless entry.adapter_class.enrichment_producer?
+
+      entry.adapter_class.enrichment_producer(catalog: @db)
+           .run(entry.slug, workdir: workdir_for(entry.slug))
     end
 
     # Persist the LOUD discovery notes (unrecognized ≥ 1 — a project tree with

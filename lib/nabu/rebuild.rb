@@ -270,10 +270,25 @@ module Nabu
       @fingerprints ||= DerivationFingerprint.new(config: @config)
     end
 
-    # Enrichment replay is OUT OF SCOPE for rebuild-of-text (architecture §6):
-    # once enrichers land, this is where rebuild will re-apply them from the
-    # provenance/enrichment journal after the text tables are back. No-op hook.
-    def replay_enrichments(_db) = nil
+    # Re-derive every enrichment_producer? source's layer into the fresh
+    # catalog (P44-7 — the first enricher to land here). The enrichments table
+    # lives in catalog.sqlite3 (dropped by this rebuild) and keys on the
+    # re-minted passage_id, so unlike the urn-keyed links journal it does NOT
+    # survive passively — it is RE-DERIVED from canonical + the just-replayed
+    # text tables, which is exactly the db = f(canonical) invariant. Each
+    # producer supersedes its own rows (idempotent), so a re-run yields
+    # byte-identical enrichments; a source with no local corpus is the honest
+    # no-op. Runs AFTER replay (the passages the producer resolves against are
+    # in place) and BEFORE the query-side index/facets stages.
+    def replay_enrichments(db)
+      @registry.each_source do |entry|
+        next unless entry.adapter_class.enrichment_producer?
+        next unless replayable?(entry)
+
+        entry.adapter_class.enrichment_producer(catalog: db)
+             .run(entry.slug, workdir: workdir_for(entry.slug))
+      end
+    end
 
     # Replayable iff there is local canonical data to parse. Deliberately
     # ignores `enabled` and `sync_policy` (see class comment).

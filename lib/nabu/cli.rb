@@ -3754,6 +3754,19 @@ module Nabu
         say "  credit: #{credit}" unless credit.empty?
       end
 
+      # P44-7: the meter line — shown only when the passage carries a scansion
+      # enrichment (pedecerto over held Perseus-Latin verse), byte-identical
+      # absence otherwise. "meter: H DSDS (pedecerto)": metrical code, foot
+      # pattern (omitted when empty), producer.
+      def print_meter(passage)
+        meter = passage.meter
+        return if meter.nil?
+
+        pattern = meter.pattern.to_s.strip
+        code = [meter.meter.to_s.strip, pattern].reject(&:empty?).join(" ")
+        say "  meter: #{code} (#{meter.producer})"
+      end
+
       def print_show_passage(passage)
         say "#{passage.urn}#{" [#{passage.language}]" if passage.language}#{withdrawn_tag(passage.withdrawn)}"
         say "  #{display_text(painted_passage_text(passage), passage.language,
@@ -3763,6 +3776,7 @@ module Nabu
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
         print_credit(passage)
         print_timeline(passage.timeline)
+        print_meter(passage)
         # H9 (P35-6): a corrupt annotation lane announces itself instead of
         # posing as an unannotated passage.
         say "  note: #{ANNOTATIONS_UNREADABLE_NOTE}" if annotations_unreadable?(passage)
@@ -6560,7 +6574,8 @@ module Nabu
           "+#{report.added} added  ~#{report.updated} updated  " \
           "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored" \
           "#{format_collided(report)}" \
-          "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}"
+          "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}" \
+          "#{format_sync_enrichments(outcome.enrichments)}"
       end
 
       # P39-4: the within-pass collision tail — silent at zero (house
@@ -6596,6 +6611,18 @@ module Nabu
         parts << "?#{refs.unknown_ids} unknown upstream" if refs.respond_to?(:unknown_ids) && refs.unknown_ids.positive?
         counts = parts.empty? ? "0" : parts.join(" ")
         "  refs #{counts}"
+      end
+
+      # P44-7: the meter-enrichment tail for a pedecerto sync — silent when the
+      # source mints no enrichments (nil). The HONEST CENSUS the packet demands:
+      # matched vs unmatched LINES (unmatched = works we do not hold or citation
+      # mismatches), never hidden. "meter 41 lines matched, 12 unmatched (2 works)".
+      def format_sync_enrichments(enr)
+        return "" if enr.nil?
+
+        works = enr.mapped_works + enr.unmapped_works
+        "  meter #{enr.matched} lines matched, #{enr.unmatched} unmatched " \
+          "(#{plural(enr.mapped_works, 'work')} of #{works})"
       end
 
       # rebuild --incremental (P36-1): dirty sources re-derive through the
