@@ -32,6 +32,11 @@ module Nabu
       WORD_NUMBERS = %w[zero one two three four five six seven eight nine ten eleven twelve
                         thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty].freeze
 
+      # The footnote line rendered ONLY on axis pages with ≥1 blocked member
+      # (P44-r3a): grant-gated private research materials are excluded from the
+      # member table and holdings above, so the page says so honestly.
+      BLOCKED_FOOTNOTE = "Private research materials under personal grants are not listed."
+
       def initialize(registry:, fragments_path:, output_dir:, catalog_path:, as_of: Date.today)
         @registry = registry
         @axes = registry.axes
@@ -96,7 +101,10 @@ module Nabu
       # ---- page rendering -------------------------------------------------
 
       def render_axis(axis, census)
-        members = @registry.axis_members(axis.name)
+        # PUBLIC surfaces exclude grant-gated private-research members (P44-r3a):
+        # the member table and holdings list only the public holdings, and a
+        # footnote fires when this axis has any blocked member.
+        members = @registry.public_axis_members(axis.name)
         <<~PAGE
           ---
           title: "#{axis.name.capitalize} — #{persona_lead(axis)}"
@@ -112,7 +120,7 @@ module Nabu
 
           #{shelves_intro(members)}
 
-          #{shelves_table(members, census)}
+          #{shelves_table(members, census)}#{blocked_footnote_block(axis)}
 
           ## The desk's instruments
 
@@ -230,6 +238,14 @@ module Nabu
                  "|---|---|---|---|---|"
         rows = members.map { |slug| shelf_row(slug, census) }
         ([header] + rows).join("\n")
+      end
+
+      # Empty unless this axis has ≥1 blocked (grant-gated private) member
+      # (P44-r3a): then a single honest footnote below the (public-only) table.
+      def blocked_footnote_block(axis)
+        return "" if @registry.blocked_axis_members(axis.name).empty?
+
+        "\n\n#{BLOCKED_FOOTNOTE}"
       end
 
       def shelf_row(slug, census)
