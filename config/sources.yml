@@ -1137,6 +1137,40 @@ pleiades:
   # owner decision (the dump is large + version-pinned).
   sync_policy: manual
 
+kitab:
+  adapter: Nabu::Adapters::Kitab
+  kind: module   # P43-4: machinery-only — a text-reuse links instrument, zero catalog rows, up=module
+  axes: [arabic]
+  classes: [ALCorpus00001-ara2]   # the PILOT folder allowlist (the classes: owner-posture seam,
+                                   # kanripo precedent): one folder = one HELD openiti book's
+                                   # complete pairwise fan. Seeded with the P43-4 exemplar; the
+                                   # owner appends more held books' version ids here as wanted.
+  enabled: false   # PERMANENTLY false — a links instrument, not a text source
+                   # (the trismegistos/pleiades precedent): discover mints no
+                   # documents. The row gives the owner the sanctioned fetch
+                   # path; its data is links-journal kind="reuse" edges,
+                   # refreshed by the KitabTextReuse producer (#9) after every
+                   # sync. OWNER QUEUE (P43-4): bin/nabu sync kitab — lists each
+                   # pilot folder on the mirror and GETs its ~10 TSV leaves
+                   # sequentially (≥1s pause, resumable), landing them under
+                   # canonical/kitab/pairwise/<folder>/. First sync of the seed
+                   # folder (ALCorpus00001-ara2) is ~10 files, seconds. The
+                   # mirror's exact raw branch/path + any fair-use terms are
+                   # UNREAD (do not render to the fetcher) — eyeball them first.
+  # P43-4: KITAB Text Reuse Data — passim pairwise text-reuse alignments over
+  # OpenITI. Each alignment row becomes ONE kind="reuse" edge (upstream-computed,
+  # distinct from nabu's own kind=parallel intertext detection) from book1's
+  # passage at milestone seq1 to book2's passage at milestone seq2; a milestone
+  # outside our parse downgrades that side to the book's document urn (censused).
+  # LICENSE — TWO facts recorded verbatim: AUTHORITATIVE is the Zenodo record
+  # "KITAB Text Reuse Data" (DOI 10.5281/zenodo.11501559, CC BY-NC-SA 4.0,
+  # versioned per OpenITI release — current matches held OpenITI 2025.1.9) →
+  # class nc; the GitHub mirror (kitab-project-org/pairwise-light) this fetch
+  # reads carries NO in-repo license file — it is the same dataset's per-file
+  # access path, the grant is the Zenodo record's. The full 1.6M-file set (the
+  # Zenodo archive) is a documented FUTURE step; v1 is the pilot fan.
+  sync_policy: manual
+
 dss:
   adapter: Nabu::Adapters::Dss
   axes: [biblical, hebrew]
