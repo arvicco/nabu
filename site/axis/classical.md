@@ -24,10 +24,10 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `proiel` | treebank | nc | enabled · frozen | 12 docs / 51,321 passages |
 | `lexica` | dictionary | attribution | enabled · manual | 168,133 entries |
 | `vulgate` | texts | open | enabled · manual | 73 docs / 35,809 passages |
-| `lila` | feature module | attribution | not enabled | not synced yet |
+| `lila` | feature module | attribution | not enabled | nothing held yet |
 | `diorisis` | texts | attribution | enabled · manual | 767 docs / 516,505 passages |
 | `glaux` | texts | attribution | not enabled | 1,421 docs / 968,578 passages |
-| `croala` | texts | attribution | not enabled | 198 docs / 86,319 passages |
+| `croala` | texts | attribution | not enabled | 570 docs / 309,180 passages |
 | `pedecerto` | feature module | nc | not enabled | not synced yet |
 
 ## The desk's instruments
