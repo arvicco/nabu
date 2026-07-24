@@ -164,6 +164,40 @@ module Query
     # citation suffixes. Split rule: literal passage/document FIRST (a real
     # urn is never misparsed as a range), then split on the LAST hyphen.
 
+    # P44 (owner test-drive friction): a CITATION PREFIX between document and
+    # passage grain — show urn:…:avest020:Y.19.1 when passages are Y.19.1.a,
+    # Y.19.1.b — must list everything below it, boundary-exact (Y.19.1 never
+    # swallows Y.19.10), and render through the existing RangeResult shape.
+    def test_citation_prefix_lists_the_passages_below_it
+      load_document("av", [["Y.19.1.a", "pərəsat̰"], ["Y.19.1.b", "zaraϑuštrō"],
+                           ["Y.19.10.a", "ahurəm"], ["Y.19.2.a", "mazdąm"]])
+
+      result = show("urn:d:av:Y.19.1")
+      assert_instance_of Nabu::Query::Show::RangeResult, result
+      assert_equal %w[urn:d:av:Y.19.1.a urn:d:av:Y.19.1.b],
+                   result.passages.map(&:urn),
+                   "the prefix opens into exactly its own children — Y.19.10 stays out"
+      assert_equal 4, result.total, "the [N of M] note carries the document total"
+    end
+
+    def test_citation_prefix_is_literal_first_but_reaches_occurrence_tails
+      load_document("rep", [["Y.0.13.Q1c", "first"], ["Y.0.13.Q1c#2", "second"]])
+
+      exact = show("urn:d:rep:Y.0.13.Q1c")
+      assert_instance_of Nabu::Query::Show::PassageResult, exact,
+                         "an exact passage urn stays literal-first — the class doctrine"
+
+      prefix = show("urn:d:rep:Y.0.13")
+      assert_equal ["urn:d:rep:Y.0.13.Q1c", "urn:d:rep:Y.0.13.Q1c#2"],
+                   prefix.passages.map(&:urn),
+                   "the prefix one level up lists both recitations, # tail included"
+    end
+
+    def test_citation_prefix_with_no_children_is_still_urn_not_found
+      load_document("z", [["1.1", "text"]])
+      assert_nil show("urn:d:z:9.9")
+    end
+
     def test_range_returns_inclusive_sequence_ordered_slice
       load_document("1", [%w[1 α], %w[2 β], %w[3 γ], %w[4 δ], %w[5 ε]])
 
