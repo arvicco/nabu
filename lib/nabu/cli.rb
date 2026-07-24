@@ -30,7 +30,16 @@ module Nabu
          all_commands.key?(normalize_command_name(given_args.first.to_s))
         given_args = ["help", given_args.first]
       end
+      # P44-i1b: a ^C is an OPERATOR DECISION, not a crash — one honest line
+      # and the conventional 130, never a thread-backtrace storm. (Open3's
+      # internal reader threads also die noisily at interrupt; bin/nabu turns
+      # their report_on_exception chatter off.) State safety is the atomic
+      # fetchers' job — an interrupted acquisition leaves staging debris the
+      # next run sweeps, announced.
       super
+    rescue Interrupt
+      warn "\ninterrupted — partial work is staged safely; the next run cleans up and starts fresh."
+      exit 130
     end
 
     # The --display flag, shared by every command that renders passage text to
