@@ -3,6 +3,8 @@
 require "test_helper"
 require "tmpdir"
 require "fileutils"
+require "stringio"
+require "zlib"
 
 # A TestAdapter whose #fetch succeeds WITHOUT any network: the quickstart rig
 # (P18-2). The canonical dir already holds the fixture files, so fetch is a
@@ -5679,6 +5681,124 @@ class CLITest < Minitest::Test
         capture_io { Nabu::CLI.start(%w[sync corpus --parse-only]) }
       end
       yield config
+    end
+  end
+
+  # -- place: the Pleiades desk card (P44-2) ---------------------------------
+
+  # An epigraphic corpus whose documents carry the parse-captured
+  # place.pleiades id (metadata_json), plus — when +dump+ — the two-place
+  # fixture gazetteer landed as canonical/pleiades/pleiades-places.json.gz,
+  # exactly where `nabu sync pleiades` puts the real one.
+  def with_place_corpus(dump: true)
+    Dir.mktmpdir("nabu-cli-place") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      if dump
+        dir = File.join(config.canonical_dir, "pleiades")
+        FileUtils.mkdir_p(dir)
+        File.binwrite(File.join(dir, "pleiades-places.json.gz"),
+                      gzip_bytes(File.read(File.join(Nabu::TestSupport.fixtures("pleiades"), "dump.json"))))
+      end
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_place_documents(catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def gzip_bytes(text)
+    io = StringIO.new
+    gz = Zlib::GzipWriter.new(io)
+    gz.write(text)
+    gz.close
+    io.string
+  end
+
+  def seed_place_documents(catalog)
+    { "isicily" => %w[a b], "edh" => %w[c] }.each do |slug, docs|
+      src = catalog[:sources].insert(slug: slug, name: slug, adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      docs.each do |doc|
+        doc_id = catalog[:documents].insert(
+          source_id: src, urn: "urn:t:#{slug}:#{doc}", title: "Stone #{doc}", language: "grc",
+          content_sha256: "x", revision: 1, withdrawn: false,
+          metadata_json: JSON.generate({ "place" => { "ancient" => "Sparta", "pleiades" => "570685" } })
+        )
+        catalog[:passages].insert(
+          document_id: doc_id, urn: "urn:t:#{slug}:#{doc}:1", sequence: 0, language: "grc",
+          text: "χαῖρε", text_normalized: "χαιρε",
+          content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+        )
+      end
+    end
+  end
+
+  def test_place_renders_the_card_and_holdings_for_an_exact_title
+    with_place_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[place sparta]) }
+      assert_nil status
+      assert_match(/Sparta, Pleiades 570685 — settlement/, out, "the resolver card headline")
+      assert_match(/37\.08, 22\.42/, out, "reprPoint as lat, lon")
+      assert_match(/holdings: 2 isicily · 1 edh/, out, "id-matched counts grouped by source")
+    end
+  end
+
+  def test_place_accepts_the_numeric_id_form
+    with_place_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[place 570685]) }
+      assert_nil status
+      assert_match(/Sparta, Pleiades 570685/, out)
+      assert_match(/holdings: 2 isicily · 1 edh/, out)
+    end
+  end
+
+  def test_place_without_the_dump_still_counts_holdings_for_an_id
+    with_place_corpus(dump: false) do |config|
+      out, _err, status = with_config(config) { run_cli(%w[place 570685]) }
+      assert_nil status
+      assert_match(/Pleiades 570685 — gazetteer dump not synced/, out)
+      assert_match(/nabu sync pleiades/, out)
+      assert_match(/holdings: 2 isicily · 1 edh/, out)
+    end
+  end
+
+  def test_place_without_the_dump_refuses_a_title_lookup_clearly
+    with_place_corpus(dump: false) do |config|
+      _out, err, status = with_config(config) { run_cli(%w[place Sparta]) }
+      assert_equal 1, status
+      assert_match(/nabu sync pleiades/, err)
+    end
+  end
+
+  def test_place_unknown_title_is_a_clean_error
+    with_place_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[place Atlantis]) }
+      assert_equal 1, status
+      assert_match(/no place titled/, err)
+    end
+  end
+
+  def test_show_renders_the_findspot_line_when_the_dump_is_on_disk
+    with_place_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:t:isicily:a]) }
+      assert_nil status
+      assert_match(/findspot: Sparta — Pleiades 570685 \(settlement/, out)
+    end
+  end
+
+  def test_show_without_the_dump_is_byte_identical_no_findspot_line
+    with_place_corpus(dump: false) do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:t:isicily:a]) }
+      assert_nil status
+      refute_match(/findspot/, out, "feature-detected: absent dump degrades silently (the LiLa precedent)")
     end
   end
 

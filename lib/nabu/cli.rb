@@ -1516,7 +1516,10 @@ module Nabu
         return print_display_footer
       end
 
-      result = Nabu::Query::Show.new(catalog: catalog).run(urn)
+      # pleiades: :auto — the findspot line (P44-2) feature-detects the
+      # gazetteer dump lazily; nothing loads unless the shown document
+      # carries a captured Pleiades id.
+      result = Nabu::Query::Show.new(catalog: catalog, pleiades: :auto).run(urn)
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
 
       print_show(result)
@@ -2007,6 +2010,57 @@ module Nabu
       catalog&.disconnect
       fulltext&.disconnect
       ledger&.disconnect
+    end
+
+    desc "place NAME|ID", "The place desk card: Pleiades gazetteer facts + the library's holdings there"
+    long_desc <<~HELP, wrap: false
+      The third dimension of the library (after language and time): one
+      ancient place, resolved through the local Pleiades gazetteer dump,
+      plus every source's holdings AT that place — counted over the
+      Pleiades ids the epigraphic parsers capture from their upstream
+      headers (isicily, edh, iip, itant). Only upstream-asserted ids ever
+      count: no fuzzy geo-matching anywhere in the pipeline.
+
+      Input is a Pleiades NUMERIC id (or a pleiades.stoa.org/places URL),
+      or an EXACT place title, matched case-insensitively against the dump
+      — "Segesta" works, "Seges" does not (exact only, by design). Homonym
+      titles print one card each.
+
+      The card: title, Pleiades id, place types, the attested time-period
+      span, and the representative point (lat, lon — display only; no maps,
+      no coordinate math). Then the holdings line, per source, descending.
+
+      An honest labelled tail follows when id-less documents mention the
+      name in their captured findspot TEXT (exact substring, case-
+      insensitive): "unlinked findspot mentions" — never merged into the
+      id-matched counts.
+
+      The gazetteer dump is the pleiades module's canonical asset
+      (`nabu sync pleiades`, ~42k places). Loading it costs ~3 s per
+      invocation — the accepted v1 cost. Without it on disk, a numeric id
+      still counts holdings (the catalog side needs no dump); a name
+      lookup is refused with the sync hint.
+
+      Examples:
+        nabu place Segesta          # exact title → card + holdings
+        nabu place 462281           # Lilybaeum by Pleiades id
+        nabu place https://pleiades.stoa.org/places/462281   # same
+    HELP
+    def place(*query_parts)
+      query = query_parts.join(" ").strip
+      raise Thor::Error, "place: give a Pleiades numeric id or an exact place title" if query.empty?
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+      resolver = Nabu::Pleiades.load_default(config: config)
+      result = Nabu::Query::Place.new(catalog: catalog, pleiades: resolver).run(query)
+      print_place(result)
+    rescue Nabu::Query::Place::Error => e
+      raise Thor::Error, e.message
+    ensure
+      catalog&.disconnect
     end
 
     desc "axis [NAME]", "The research-axis desk card: persona, members, holdings, gold coverage (config/axes.yml)"
@@ -3767,6 +3821,69 @@ module Nabu
         say "  meter: #{code} (#{meter.producer})"
       end
 
+      # Render `place` (P44-2): one card per matched place — headline,
+      # holdings per source — then the labelled unlinked tail once. The
+      # spec shape: "Lilybaeum, Pleiades 462281 — settlement · archaic…roman
+      # · 37.80, 12.43" over "holdings: 214 isicily · 12 edh · 2 iip".
+      def print_place(result)
+        result.cards.each_with_index do |card, index|
+          say "" if index.positive?
+          print_place_card(card, dump_loaded: result.dump_loaded)
+        end
+        return if result.unlinked.empty?
+
+        say "  unlinked findspot mentions of #{result.unlinked_term.inspect} " \
+            "(text match, no Pleiades id — not counted above): #{format_source_counts(result.unlinked)}"
+      end
+
+      def print_place_card(card, dump_loaded:)
+        place = card.place
+        if place
+          say "#{place.title}, Pleiades #{place.id}#{place_card_tail(place)}"
+        elsif dump_loaded
+          say "Pleiades #{card.pleiades_id} — not in the local gazetteer dump"
+        else
+          say "Pleiades #{card.pleiades_id} — gazetteer dump not synced " \
+              "(`nabu sync pleiades` adds the card)"
+        end
+        say "  holdings: #{card.holdings.empty? ? 'none' : format_source_counts(card.holdings)}"
+      end
+
+      # " — types · first…last period · lat, lon", each section only when
+      # the dump carries it. Periods render as the attested span endpoints
+      # (dump attestation order, not re-sorted — honest to upstream).
+      def place_card_tail(place)
+        sections = [
+          place.place_types.join(" · "),
+          period_span(place.time_periods),
+          place.lat && place.lon ? format("%<lat>.2f, %<lon>.2f", lat: place.lat, lon: place.lon) : nil
+        ].compact.reject(&:empty?)
+        sections.empty? ? "" : " — #{sections.join(' · ')}"
+      end
+
+      def period_span(periods)
+        return nil if periods.nil? || periods.empty?
+        return periods.first if periods.size == 1
+
+        "#{periods.first}…#{periods.last}"
+      end
+
+      def format_source_counts(counts)
+        counts.map { |slug, count| "#{count} #{slug}" }.join(" · ")
+      end
+
+      # P44-2: the findspot line — shown only when the document's parse-
+      # captured Pleiades id resolves through the local gazetteer dump
+      # (title + place types; maps and coordinate math are out by design).
+      # Absent dump, absent id, unknown id: no line, byte-identical output.
+      def print_findspot(result)
+        spot = result.findspot
+        return if spot.nil?
+
+        types = spot.place_types.empty? ? "" : " (#{spot.place_types.join(' · ')})"
+        say "  findspot: #{spot.title} — Pleiades #{spot.id}#{types}"
+      end
+
       def print_show_passage(passage)
         say "#{passage.urn}#{" [#{passage.language}]" if passage.language}#{withdrawn_tag(passage.withdrawn)}"
         say "  #{display_text(painted_passage_text(passage), passage.language,
@@ -3776,6 +3893,7 @@ module Nabu
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
         print_credit(passage)
         print_timeline(passage.timeline)
+        print_findspot(passage)
         print_meter(passage)
         # H9 (P35-6): a corrupt annotation lane announces itself instead of
         # posing as an unannotated passage.
@@ -3837,6 +3955,7 @@ module Nabu
         say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
         print_credit(document)
         print_timeline(document.timeline)
+        print_findspot(document)
         print_facets(document.facets)
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
