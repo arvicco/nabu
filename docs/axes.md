@@ -47,7 +47,7 @@ build if the page and the registry ever disagree.
 
 ## The desks
 
-Eighteen desks, in the ratified order of `config/axes.yml` (which is also
+Twenty desks, in the ratified order of `config/axes.yml` (which is also
 the order the command surfaces render). Each leads with its **persona** —
 the hat's one-line self-description, printed verbatim by `nabu list --axis`
 and `nabu sync` — then the membership rationale, then the member slugs the
