@@ -173,7 +173,7 @@ module Nabu
 
       begin
         run = Store::RunRecorder.record(source_slug: entry.slug) do
-          fetch_report = fetch(adapter, workdir, force: force, progress: progress) unless parse_only
+          fetch_report = fetch(adapter, workdir, slug: entry.slug, force: force, progress: progress) unless parse_only
           guard_withdrawal!(adapter, source, workdir, force: force)
           load_report = load(source, adapter, workdir, progress)
         end
@@ -326,8 +326,17 @@ module Nabu
       fulltext&.disconnect
     end
 
-    def fetch(adapter, workdir, force:, progress:)
-      adapter.fetch(workdir, progress: progress&.method(:fetch_line), force: force)
+    # The ONE seam every adapter's fetch flows through during a sync (the only
+    # call site is gated `unless parse_only`, so this is already the fetch
+    # phase and nothing else). P44-i1c: take the per-source acquisition lock
+    # around it so two nabu processes fetching the SAME source fail fast
+    # instead of racing on canonical/<slug> and its .partial staging (the glaux
+    # incident). AlreadyHeld propagates like any other fetch failure — the run
+    # is recorded failed for `sync <slug>`, captured per-source by `sync --all`.
+    def fetch(adapter, workdir, slug:, force:, progress:)
+      FetchLock.hold(canonical_dir: @config.canonical_dir, slug: slug) do
+        adapter.fetch(workdir, progress: progress&.method(:fetch_line), force: force)
+      end
     end
 
     # Route by the adapter's declared content kind (P11-4, architecture §11):
