@@ -2224,6 +2224,45 @@ openiti:
   # owner re-pin → manual.
   sync_policy: manual
 
+titus-avestan:
+  adapter: Nabu::Adapters::TitusAvestan
+  axes: [etym]
+  enabled: false   # P43-2: BUILT, awaiting the owner's grant acknowledgment +
+                   # first sync. `nabu sync titus-avestan` REFUSES until the owner
+                   # types `granted` (the №41-3 grant gate); parse-only works
+                   # offline once pages land under canonical/titus-avestan/.
+                   # Checklist §6: after the acknowledged sync, eyeball
+                   # `nabu show urn:nabu:titus-avestan:avest001` (the frauuarāne
+                   # creed at :Y.0.1.a, the credit line rendered) + 5 random
+                   # passages, then flip. Axis home `etym` is provisional — a
+                   # dedicated `iranian` axis is an owner taxonomy call.
+  # TITUS Avestan Corpus (titus.uni-frankfurt.de) — the Avesta as a preliminary
+  # electronic edition on the basis of K.F. Geldner and N.L. Westergaard,
+  # prepared by Sonja Fritz (Berlin 1985-88), corrected by J. Gippert et al.
+  # One document per text page (avest001.htm …); verses (and chapter/paragraph
+  # ritual rubrics) are the passages, keyed off the <A NAME="Avest._…"> anchors.
+  # Served under the owner's PERSONAL grant №41-3 (Prof. Jost Gippert,
+  # 2026-07-23): non-commercial use, "TITUS and the editors clearly indicated
+  # wherever displayed." license_class `nc` (servable, NOT hidden — the grant
+  # wants it DISPLAYED, credited); the manifest carries the verbatim credit line,
+  # threaded onto every serving surface (show cards, search hits, MCP payloads).
+  sync_policy: manual
+  # P43-2: THE FETCH GRANT is personal to this project's author — a public clone
+  # does NOT convey it, so `nabu sync titus-avestan` demands an explicit, recorded
+  # acknowledgment before its first fetch (the grant gate — DISTINCT from the nc
+  # license's per-display credit duty). Quote the date so YAML keeps it a String.
+  grant_required: true
+  grant:
+    grantor: Prof. Jost Gippert (TITUS, Frankfurt)
+    date: "2026-07-23"
+    terms: non-commercial use; TITUS and the editors clearly indicated wherever displayed
+    thread: "№41-3"
+    request_hint: >-
+      Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
+      non-commercial grant, and promise to credit TITUS and the editors
+      (Avesta ed. Geldner/Westergaard; electronic text Sonja Fritz; corrections
+      Gippert et al.) wherever any Avestan text is displayed.
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
