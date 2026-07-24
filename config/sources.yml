@@ -1202,6 +1202,40 @@ kitab:
   # Zenodo archive) is a documented FUTURE step; v1 is the pilot fan.
   sync_policy: manual
 
+hypotactic:
+  adapter: Nabu::Adapters::Hypotactic
+  kind: module   # P44-6: machinery-only — a METER enrichment instrument, zero catalog rows, up=module
+  axes: [classical]
+  enabled: false   # PERMANENTLY false — a meter instrument, not a text source
+                   # (the trismegistos/kitab precedent): discover mints no
+                   # documents. Its data is links-journal kind="meter" edges on
+                   # held Perseus lines, refreshed by the HypotacticMeter
+                   # producer after every sync. OWNER QUEUE (P44-6): bin/nabu
+                   # sync hypotactic — sparse GitFetch cone tsv/ + README +
+                   # LICENSE from github.com/Urdatorn/hypotactic, then the
+                   # producer matches each TSV line by folded grc text against
+                   # held Perseus passages of the mapped work (HHAphrodite →
+                   # tlg0013.tlg005). EXPECT an honest census on first sync:
+                   # matched/unmatched lines, mapped/unmapped works. Only
+                   # HHAphrodite is mapped in v1; every other TSV is censused as
+                   # an unmapped work (never guessed). Depends on held Perseus
+                   # greek editions for anything to match.
+  # P44-6: Hypotactic — David Chamberlain's metrical scansions of GREEK verse
+  # (hypotactic.com). A NEW enrichment kind — meter — layered onto held Perseus
+  # lines: each matched line mints ONE kind="meter" edge (held passage urn →
+  # meter:<name>, detail = scansion + caesura + Chamberlain attribution). The
+  # links-journal placement (not catalog enrichments) keeps meter rebuild-
+  # surviving — the journal is nabu's store for derived data that survives a
+  # rebuild but a rerun replaces. LICENSE: the fetched mirror
+  # (github.com/Urdatorn/hypotactic) is CC BY 4.0, WITH Chamberlain's own
+  # README statement verbatim: "you can use it as you wish, but if you make
+  # significant or extensive use of it in published work you should reference me
+  # (David Chamberlain) and this site (hypotactic.com)" → class attribution;
+  # the reference is honored on every meter edge's detail. GREEK lane only (the
+  # Latin lane on hypotactic.com is JS-blocked; Pedecerto covers Latin meter on
+  # this same seam).
+  sync_policy: manual
+
 dss:
   adapter: Nabu::Adapters::Dss
   axes: [biblical, hebrew]
