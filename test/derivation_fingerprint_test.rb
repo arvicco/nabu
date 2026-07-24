@@ -269,7 +269,7 @@ class DerivationFingerprintTest < Minitest::Test
 
   def entry(slug: "corpus", adapter: "TestAdapter", **flags)
     Nabu::SourceRegistry::Entry.new(
-      slug: slug, adapter_class_name: adapter, enabled: true, sync_policy: "manual", **flags
+      slug: slug, adapter_class_name: adapter, wired: true, sync_policy: "manual", **flags
     )
   end
 

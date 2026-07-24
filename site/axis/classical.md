@@ -17,19 +17,19 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `perseus-greek` | texts | attribution | enabled · auto | 1,418 docs / 394,706 passages |
-| `perseus-latin` | texts | attribution | enabled · auto | 534 docs / 391,785 passages |
-| `first1k-greek` | texts | attribution | enabled · auto | 1,129 docs / 256,480 passages |
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `proiel` | treebank | nc | enabled · frozen | 12 docs / 51,321 passages |
-| `lexica` | dictionary | attribution | enabled · manual | 168,133 entries |
-| `vulgate` | texts | open | enabled · manual | 73 docs / 35,809 passages |
-| `lila` | feature module | attribution | not enabled | nothing held yet |
-| `hypotactic` | feature module | attribution | not enabled | not synced yet |
-| `diorisis` | texts | attribution | enabled · manual | 767 docs / 516,505 passages |
-| `glaux` | texts | attribution | not enabled | 1,421 docs / 968,578 passages |
-| `croala` | texts | attribution | not enabled | 570 docs / 309,180 passages |
-| `pedecerto` | feature module | nc | not enabled | not synced yet |
+| `perseus-greek` | texts | attribution | wired · auto | 1,418 docs / 394,706 passages |
+| `perseus-latin` | texts | attribution | wired · auto | 534 docs / 391,785 passages |
+| `first1k-greek` | texts | attribution | wired · auto | 1,129 docs / 256,480 passages |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
+| `lexica` | dictionary | attribution | wired · manual | 168,133 entries |
+| `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
+| `lila` | feature module | attribution | not yet wired | nothing held yet |
+| `hypotactic` | feature module | attribution | not yet wired | not synced yet |
+| `diorisis` | texts | attribution | wired · manual | 767 docs / 516,505 passages |
+| `glaux` | texts | attribution | not yet wired | 1,421 docs / 968,578 passages |
+| `croala` | texts | attribution | not yet wired | 570 docs / 309,180 passages |
+| `pedecerto` | feature module | nc | not yet wired | not synced yet |
 
 ## The desk's instruments
 

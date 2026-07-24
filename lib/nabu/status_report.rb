@@ -9,9 +9,10 @@ module Nabu
   #
   #     slug   col2   [MARK]   holdings   MM-DD HH:MM   +A ~U -W !E
   #
-  # where col2 FUSES kind + enablement + cadence (`module` | `shelf` | bare
-  # `a`/`m`/`f` for an ENABLED source | `off(a)`/`off(m)`/`off(f)` when
-  # disabled — the word "source" never prints); the liveness cell is SILENT
+  # where col2 FUSES kind + the wired marker + cadence (`module` | `shelf` |
+  # bare `a`/`m`/`f` for a WIRED source | `unwired(a)`/`unwired(m)`/
+  # `unwired(f)` when the adapter awaits its first-sync verification — the
+  # word "source" never prints); the liveness cell is SILENT
   # when healthy/implied and prints a MARK only for exceptions (`OLD(Nd)`,
   # `DOWN`, `?REPROBE`, `UNPROBED`); holdings is one fused, humanized,
   # right-aligned column (`1.4K/395K` docs/passages, a single humanized number
@@ -87,7 +88,7 @@ module Nabu
     end
 
     # `nabu status <source>`: the full labeled detail block for ONE row — kind,
-    # enabled, cadence spelled out, liveness INCLUDING healthy states, exact
+    # wired, cadence spelled out, liveness INCLUDING healthy states, exact
     # thousands-separated counts, license class, full timestamp, full delta,
     # last-run status. Returns nil for an unregistered slug (the CLI owns the
     # not-found error, mirroring `list SOURCE`).
@@ -98,7 +99,7 @@ module Nabu
       source = db && Store::Source.first(slug: slug)
       lines = ["#{slug}  (#{entry_name(entry)})"]
       lines << detail_line("kind", entry.kind)
-      lines << detail_line("enabled", enabled_word(entry))
+      lines << detail_line("wired", wired_word(entry))
       lines << detail_line("cadence", cadence_word(entry))
       lines << detail_line("liveness", liveness_detail(entry, db, ledger))
       count_pairs(entry, source).each { |label, value| lines << detail_line(label, group_thousands(value)) }
@@ -149,10 +150,12 @@ module Nabu
       cells.join("  ")
     end
 
-    # col2 (P40-s): kind fused with enablement + cadence. A shelf reads
-    # `shelf`, a module `module` (enablement + cadence are moot). A SOURCE
-    # reads a BARE cadence letter when enabled (the unmarked default) or
-    # `off(letter)` when disabled — the word "source" never prints.
+    # col2 (P40-s, renamed P44-r4): kind fused with the wired marker +
+    # cadence. A shelf reads `shelf`, a module `module` (wiring + cadence are
+    # moot). A SOURCE reads a BARE cadence letter when wired (the unmarked
+    # default) or `unwired(letter)` while the adapter awaits its first-sync
+    # verification — the word "source" never prints. NOT the enable/disable
+    # profile state (that governs visibility, not this column).
     def col2(entry, ledger)
       return entry.kind unless entry.source?
       # A grant-gated private source: `granted` once its grant is acknowledged
@@ -163,7 +166,7 @@ module Nabu
       return grant_acknowledged?(entry, ledger) ? "granted" : "blocked" if entry.blocked?
 
       letter = CADENCE_LETTER.fetch(entry.sync_policy, "?")
-      entry.enabled ? letter : "off(#{letter})"
+      entry.wired ? letter : "unwired(#{letter})"
     end
 
     # Is this source's fetch grant acknowledged on THIS box (the P42-r1 ledger
@@ -312,8 +315,9 @@ module Nabu
       cells.join("  ")
     end
 
-    # col2 for the LONG table (P39-0): enablement fused with cadence — a source
-    # reads on(a)/off(m)/…; a shelf or module reads "-" (enablement is moot).
+    # col2 for the LONG table (P39-0, renamed P44-r4): the wired marker fused
+    # with cadence — a source reads wired(a)/unwired(m)/…; a shelf or module
+    # reads "-" (wiring is moot).
     # Grant-gated: granted(letter) once acknowledged on this box (P44-i2),
     # else the P44-r3b --all reveal.
     def enablement(entry, ledger)
@@ -325,7 +329,7 @@ module Nabu
         return "blocked · grant required"
       end
 
-      "#{entry.enabled ? 'on' : 'off'}(#{CADENCE_LETTER.fetch(entry.sync_policy, '?')})"
+      "#{entry.wired ? 'wired' : 'unwired'}(#{CADENCE_LETTER.fetch(entry.sync_policy, '?')})"
     end
 
     # The labeled, thousands-separated counts string for the long table (empty
@@ -359,10 +363,10 @@ module Nabu
       "  #{"#{label}:".ljust(11)}#{value}"
     end
 
-    def enabled_word(entry)
+    def wired_word(entry)
       return "n/a (#{entry.kind})" unless entry.source?
 
-      entry.enabled ? "yes" : "no"
+      entry.wired ? "yes" : "no"
     end
 
     def cadence_word(entry)

@@ -47,17 +47,17 @@ class SourceDossierExportTest < Minitest::Test
   SOURCES_YML = <<~YAML
     edh:
       adapter: Nabu::Adapters::Edh
-      enabled: true
+      wired: true
       sync_policy: frozen
 
     iecor:
       adapter: Nabu::Adapters::Iecor
-      enabled: true    # inline flag comment — a process note, never prose
+      wired: true    # inline flag comment — a process note, never prose
       sync_policy: manual
 
     sl-lexica:
       adapter: Nabu::Adapters::SlLexica
-      enabled: false
+      wired: false
       # The Slovenian historical dictionary shelf (ZRC SAZU / CLARIN.SI).
       # The deposits are frozen uploads: re-fetch is an owner decision.
       sync_policy: manual
@@ -65,7 +65,7 @@ class SourceDossierExportTest < Minitest::Test
 
     bare:
       adapter: Nabu::Adapters::Edh
-      enabled: false
+      wired: false
       sync_policy: manual
   YAML
 

@@ -19,7 +19,7 @@ module Adapters
       entry = registry["pedecerto"]
       refute_nil entry, "pedecerto must be registered in config/sources.yml"
       assert entry.feature_module?, "a meter-enrichment instrument is a kind: module row"
-      refute entry.enabled, "a feature module serves no documents — enabled stays false permanently"
+      refute entry.wired, "a feature module serves no documents — enabled stays false permanently"
       assert_equal "manual", entry.sync_policy
       assert_includes entry.axes, "classical", "the meter layer rides the classical desk"
     end

@@ -94,7 +94,7 @@ class DrillTest < Minitest::Test
 
     cfg = File.join(@root, "config")
     FileUtils.mkdir_p(cfg)
-    File.write(File.join(cfg, "sources.yml"), "corpus:\n  adapter: TestAdapter\n  enabled: true\n")
+    File.write(File.join(cfg, "sources.yml"), "corpus:\n  adapter: TestAdapter\n  wired: true\n")
     File.write(File.join(cfg, "nabu.yml"), "# nabu config\n")
   end
 

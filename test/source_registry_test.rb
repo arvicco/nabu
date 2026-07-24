@@ -27,14 +27,14 @@ class SourceRegistryTest < Minitest::Test
     registry = load_registry(<<~YAML)
       perseus-greek:
         adapter: Nabu::Adapters::Perseus
-        enabled: true
+        wired: true
         sync_policy: auto
     YAML
 
     entry = registry["perseus-greek"]
     assert_equal "perseus-greek", entry.slug
     assert_equal "Nabu::Adapters::Perseus", entry.adapter_class_name
-    assert entry.enabled
+    assert entry.wired
     assert_equal "auto", entry.sync_policy
     assert_equal "source", entry.kind, "kind defaults to source"
     assert_predicate entry, :source?
@@ -43,14 +43,14 @@ class SourceRegistryTest < Minitest::Test
     refute_predicate registry, :empty?
   end
 
-  def test_defaults_enabled_false_and_sync_policy_manual
+  def test_defaults_wired_false_and_sync_policy_manual
     registry = load_registry(<<~YAML)
       minimal-src:
         adapter: Some::Adapter
     YAML
 
     entry = registry["minimal-src"]
-    refute entry.enabled
+    refute entry.wired
     assert_equal "manual", entry.sync_policy
   end
 
@@ -101,7 +101,7 @@ class SourceRegistryTest < Minitest::Test
         local-language:
           adapter: Nabu::Adapters::LocalLanguage
           kind: shelf
-          enabled: true
+          wired: true
           sync_policy: local
       YAML
     end
@@ -116,7 +116,7 @@ class SourceRegistryTest < Minitest::Test
       local-language:
         adapter: Nabu::Adapters::LocalLanguage
         kind: shelf
-        enabled: true
+        wired: true
     YAML
     entry = registry["local-language"]
     assert_equal "shelf", entry.kind
@@ -124,19 +124,19 @@ class SourceRegistryTest < Minitest::Test
     refute_predicate entry, :source?
   end
 
-  # P39-0: a kind: module mints no catalog rows, so it MUST be enabled: false.
+  # P39-0: a kind: module mints no catalog rows, so it MUST be wired: false.
   def test_kind_module_must_be_disabled
     error = assert_raises(Nabu::ValidationError) do
       load_registry(<<~YAML)
         kr-gaiji:
           adapter: Nabu::Adapters::KrGaiji
           kind: module
-          enabled: true
+          wired: true
           sync_policy: manual
       YAML
     end
     assert_match(/kr-gaiji/, error.message)
-    assert_match(/module.*enabled: false|mints no catalog rows/, error.message)
+    assert_match(/module.*wired: false|mints no catalog rows/, error.message)
   end
 
   def test_kind_module_parses_when_disabled
@@ -144,7 +144,7 @@ class SourceRegistryTest < Minitest::Test
       kr-gaiji:
         adapter: Nabu::Adapters::KrGaiji
         kind: module
-        enabled: false
+        wired: false
         sync_policy: manual
     YAML
     entry = registry["kr-gaiji"]
@@ -189,23 +189,23 @@ class SourceRegistryTest < Minitest::Test
     error = assert_raises(Nabu::ValidationError) do
       load_registry(<<~YAML)
         my-src:
-          enabled: true
+          wired: true
       YAML
     end
     assert_match(/my-src/, error.message)
     assert_match(/adapter/, error.message)
   end
 
-  def test_non_boolean_enabled_raises_naming_the_slug
+  def test_non_boolean_wired_raises_naming_the_slug
     error = assert_raises(Nabu::ValidationError) do
       load_registry(<<~YAML)
         my-src:
           adapter: A
-          enabled: yesplease
+          wired: yesplease
       YAML
     end
     assert_match(/my-src/, error.message)
-    assert_match(/enabled/, error.message)
+    assert_match(/wired/, error.message)
   end
 
   def test_top_level_non_mapping_raises
@@ -890,7 +890,7 @@ class SourceRegistryTest < Minitest::Test
     entry = load_registry(<<~YAML)["fake-src"]
       fake-src:
         adapter: SourceRegistryTest::FakeAdapter
-        enabled: true
+        wired: true
     YAML
 
     source = entry.sync_source!(db)
@@ -917,7 +917,7 @@ class SourceRegistryTest < Minitest::Test
     entry = load_registry(<<~YAML)["fake-src"]
       fake-src:
         adapter: SourceRegistryTest::FakeAdapter
-        enabled: true
+        wired: true
     YAML
 
     source = entry.sync_source!(db)
@@ -937,7 +937,7 @@ class SourceRegistryTest < Minitest::Test
     entry = load_registry(<<~YAML)["src"]
       src:
         adapter: FakeAdapter
-        enabled: true
+        wired: true
     YAML
     refute_predicate entry, :grant_required?
     assert_nil entry.grant
@@ -947,7 +947,7 @@ class SourceRegistryTest < Minitest::Test
     entry = load_registry(<<~YAML)["src"]
       src:
         adapter: FakeAdapter
-        enabled: true
+        wired: true
         grant_required: true
         grant:
           grantor: G. Starostin
@@ -969,7 +969,7 @@ class SourceRegistryTest < Minitest::Test
       load_registry(<<~YAML)
         src:
           adapter: FakeAdapter
-          enabled: true
+          wired: true
           grant_required: true
       YAML
     end
@@ -981,7 +981,7 @@ class SourceRegistryTest < Minitest::Test
       load_registry(<<~YAML)
         src:
           adapter: FakeAdapter
-          enabled: true
+          wired: true
           grant:
             grantor: X
             date: "2026-07-15"
@@ -998,7 +998,7 @@ class SourceRegistryTest < Minitest::Test
       load_registry(<<~YAML)
         src:
           adapter: FakeAdapter
-          enabled: true
+          wired: true
           grant_required: true
           grant:
             grantor: X
@@ -1019,7 +1019,7 @@ class SourceRegistryTest < Minitest::Test
       load_registry(<<~YAML)
         src:
           adapter: FakeAdapter
-          enabled: true
+          wired: true
           grant_required: true
           grant:
             grantor: X
@@ -1038,7 +1038,7 @@ class SourceRegistryTest < Minitest::Test
       load_registry(<<~YAML)
         src:
           adapter: FakeAdapter
-          enabled: true
+          wired: true
           grant_required: true
           grant:
             grantor: X

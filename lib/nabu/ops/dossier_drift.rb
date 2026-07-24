@@ -77,7 +77,7 @@ module Nabu
 
           [Finding.new(slug: slug, message: "docs/library.md describes this shelf but the dossier has " \
                                             "no description — write one (nabu ingest --shelf source #{slug})")]
-        elsif !mentioned && entry&.enabled
+        elsif !mentioned && entry&.wired
           [Finding.new(slug: slug, message: "dossier describes an enabled shelf docs/library.md never " \
                                             "mentions — add its row/paragraph (MAINTENANCE.md duty 2)")]
         else

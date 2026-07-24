@@ -1768,7 +1768,7 @@ module Nabu
       # value for orphans / an unconfigured registry.
       def enabled_field(source)
         entry = @registry && @registry[source[:slug]]
-        return entry.enabled unless entry.nil?
+        return entry.wired unless entry.nil?
 
         [true, 1].include?(source[:enabled])
       end

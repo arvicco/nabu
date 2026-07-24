@@ -17,12 +17,12 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
-| `iecor` | cognacy dataset | attribution | enabled · manual | 4,981 entries |
-| `liv` | dictionary | attribution | enabled · manual | 305 entries |
-| `edl` | dictionary | nc | enabled · manual | 2,860 entries |
-| `starling` | etymological bases | attribution | enabled · manual | 27,397 entries |
-| `sabellic-loans` | dictionary | attribution | enabled · frozen | 85 entries |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
+| `iecor` | cognacy dataset | attribution | wired · manual | 4,981 entries |
+| `liv` | dictionary | attribution | wired · manual | 305 entries |
+| `edl` | dictionary | nc | wired · manual | 2,860 entries |
+| `starling` | etymological bases | attribution | wired · manual | 27,397 entries |
+| `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
 
 Private research materials under personal grants are not listed.
 

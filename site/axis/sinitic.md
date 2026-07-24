@@ -17,18 +17,18 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
-| `suttacentral` | texts | open | enabled · manual | 12,348 docs / 697,650 passages |
-| `baxter-sagart` | dictionary | attribution | enabled · manual | 9,918 entries |
-| `tshet-uinh` | dictionary | open | enabled · manual | 25,336 entries |
-| `unihan` | dictionary | open | enabled · manual | 102,998 entries |
-| `hdic` | dictionary | attribution | enabled · manual | 96,414 entries |
-| `babelstone-ids` | dictionary | open | enabled · manual | 97,680 entries |
-| `cbeta` | texts | nc | enabled · manual | 3,679 docs / 8,749,319 passages |
-| `kanripo` | texts | attribution | enabled · manual | 5,122 docs / 4,571,394 passages |
-| `kr-gaiji` | feature module | attribution | not enabled | nothing held yet |
-| `tls` | dictionary | attribution | enabled · manual | 23,179 entries |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
+| `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,650 passages |
+| `baxter-sagart` | dictionary | attribution | wired · manual | 9,918 entries |
+| `tshet-uinh` | dictionary | open | wired · manual | 25,336 entries |
+| `unihan` | dictionary | open | wired · manual | 102,998 entries |
+| `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
+| `babelstone-ids` | dictionary | open | wired · manual | 97,680 entries |
+| `cbeta` | texts | nc | wired · manual | 3,679 docs / 8,749,319 passages |
+| `kanripo` | texts | attribution | wired · manual | 5,122 docs / 4,571,394 passages |
+| `kr-gaiji` | feature module | attribution | not yet wired | nothing held yet |
+| `tls` | dictionary | attribution | wired · manual | 23,179 entries |
 
 ## The desk's instruments
 

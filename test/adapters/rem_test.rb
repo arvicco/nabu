@@ -258,7 +258,7 @@ class RemTest < Minitest::Test
     entry = registry["rem"]
     refute_nil entry, "rem must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Rem, entry.adapter_class
-    assert entry.enabled, "first sync verified + owner-flipped 2026-07-22"
+    assert entry.wired, "first sync verified + owner-flipped 2026-07-22"
     assert_equal Nabu::Adapters::Rem.manifest, entry.manifest
   end
 

@@ -40,7 +40,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
 
@@ -67,7 +67,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
 
@@ -92,7 +92,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
 
@@ -112,7 +112,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD)
 
@@ -133,7 +133,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
 
@@ -176,7 +176,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
 
@@ -199,7 +199,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
 
@@ -220,7 +220,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
 
@@ -244,7 +244,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       edh:
         adapter: Nabu::Adapters::Edh
-        enabled: false
+        wired: false
         sync_policy: frozen
     YAML
     # The checked-in edh fixture IS the canonical layout — replaying it
@@ -276,7 +276,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD)
 
@@ -403,7 +403,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: false
+        wired: false
     YAML
     write_canonical("corpus", "one.txt" => ILIAD)
 
@@ -422,7 +422,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       lexica:
         adapter: Nabu::Adapters::Lexica
-        enabled: false
+        wired: false
     YAML
     FileUtils.mkdir_p(@canonical)
     FileUtils.cp_r(Nabu::TestSupport.fixtures("lexica"), File.join(@canonical, "lexica"))
@@ -470,7 +470,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD)
     at = Time.utc(2026, 7, 1)
@@ -508,7 +508,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD)
     rebuilder.run # first build: the catalog exists, urns minted
@@ -547,7 +547,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD)
 
@@ -579,7 +579,7 @@ class RebuildTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD)
     build_legacy_catalog

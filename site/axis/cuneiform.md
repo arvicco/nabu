@@ -17,13 +17,13 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `oracc` | tablets | open | enabled · manual | 104,722 docs / 1,588,133 passages |
-| `tlhdig` | tablets | attribution | enabled · manual | 23,486 docs / 402,195 passages |
-| `etcsl` | texts | nc | enabled · frozen | 775 docs / 42,577 passages |
-| `cdli` | tablet catalog | attribution | enabled · manual | 353,156 docs / 2,186,961 passages |
-| `ebl` | tablets | nc | enabled · manual | 23,288 docs / 325,728 passages |
-| `cuc` | tablets | nc | enabled · manual | 279 docs / 7,544 passages |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `oracc` | tablets | open | wired · manual | 104,722 docs / 1,588,133 passages |
+| `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
+| `etcsl` | texts | nc | wired · frozen | 775 docs / 42,577 passages |
+| `cdli` | tablet catalog | attribution | wired · manual | 353,156 docs / 2,186,961 passages |
+| `ebl` | tablets | nc | wired · manual | 23,288 docs / 325,728 passages |
+| `cuc` | tablets | nc | wired · manual | 279 docs / 7,544 passages |
 
 ## The desk's instruments
 

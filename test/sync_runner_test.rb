@@ -253,7 +253,7 @@ class SyncRunnerTest < Minitest::Test
   def test_breaker_aborts_before_loading_and_force_overrides
     urns = (1..5).map { |i| "urn:cts:test:w#{i}" }
     BreakerAdapter.reset!(urns: urns)
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
 
     first = runner.sync("breaker")
     refute first.aborted?
@@ -280,7 +280,7 @@ class SyncRunnerTest < Minitest::Test
   def test_exactly_at_threshold_does_not_trip
     urns = (1..5).map { |i| "urn:cts:test:w#{i}" }
     BreakerAdapter.reset!(urns: urns)
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
     runner.sync("breaker")
 
     # discover yields 4 of 5 → would withdraw exactly 1 (= 20%); strict > → no trip.
@@ -300,7 +300,7 @@ class SyncRunnerTest < Minitest::Test
   # (flock is per open file description, so it excludes this one too).
   def test_held_fetch_lock_makes_a_concurrent_sync_fail_fast
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
 
     holder = hold_fetch_lock("breaker")
     begin
@@ -319,7 +319,7 @@ class SyncRunnerTest < Minitest::Test
   # (it may reindex concurrently with another process's fetch). Scope proof.
   def test_parse_only_is_not_blocked_by_a_held_fetch_lock
     BreakerAdapter.reset!(urns: (1..3).map { |i| "urn:cts:test:w#{i}" })
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
 
     holder = hold_fetch_lock("breaker")
     begin
@@ -340,7 +340,7 @@ class SyncRunnerTest < Minitest::Test
   # ANALYZE_MIN_CHANGED_ROWS, strict >. A skip-run (nothing changed, only
   # skipped) is never bulk — the waste case the threshold exists to avoid.
   def test_bulk_load_predicate_fires_above_threshold_only
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
     n = Nabu::SyncRunner::ANALYZE_MIN_CHANGED_ROWS
 
     assert runner.send(:bulk_load?, load_report(added: n + 1)), "> threshold is bulk"
@@ -355,7 +355,7 @@ class SyncRunnerTest < Minitest::Test
   # stats and the report line stays silent (analyzed nil).
   def test_sub_threshold_sync_skips_analyze_silently
     BreakerAdapter.reset!(urns: (1..5).map { |i| "urn:cts:test:w#{i}" })
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
 
     outcome = runner.sync("breaker")
     refute outcome.aborted?
@@ -369,7 +369,7 @@ class SyncRunnerTest < Minitest::Test
   # is forced here — the threshold logic itself is pinned above.
   def test_bulk_passage_sync_analyzes_catalog_and_index
     BreakerAdapter.reset!(urns: (1..5).map { |i| "urn:cts:test:w#{i}" })
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
 
     force_bulk!(runner)
     outcome = runner.sync("breaker")
@@ -386,7 +386,7 @@ class SyncRunnerTest < Minitest::Test
   # An index-inert grain touches no index, so a bulk inert load ANALYZEs the
   # catalog ONLY — and creates no fulltext file to analyze.
   def test_bulk_inert_sync_analyzes_catalog_only
-    runner = make_runner(registry(entry(NotesShelf.slug, NotesShelf, enabled: true, kind: "shelf")))
+    runner = make_runner(registry(entry(NotesShelf.slug, NotesShelf, wired: true, kind: "shelf")))
 
     force_bulk!(runner)
     outcome = runner.sync(NotesShelf.slug)
@@ -411,7 +411,7 @@ class SyncRunnerTest < Minitest::Test
 
   def test_parse_only_never_fetches
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
 
     outcome = runner.sync("breaker", parse_only: true)
     assert_equal 0, BreakerAdapter.fetch_count, "parse-only must never fetch"
@@ -422,7 +422,7 @@ class SyncRunnerTest < Minitest::Test
   def test_parse_only_keeps_prior_last_sync_sha
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
     BreakerAdapter.fetch_sha = "sha-abc"
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
 
     runner.sync("breaker") # real fetch pins sha-abc
     assert_equal "sha-abc", source_row("breaker").last_sync_sha
@@ -439,7 +439,7 @@ class SyncRunnerTest < Minitest::Test
   def test_success_updates_last_sync_at_and_sha
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
     BreakerAdapter.fetch_sha = "sha-head"
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
 
     runner.sync("breaker")
     row = source_row("breaker")
@@ -455,7 +455,7 @@ class SyncRunnerTest < Minitest::Test
                               "https://github.com/acme/one" => "sha-one",
                               "https://github.com/acme/two" => "sha-two"
                             })
-    runner = make_runner(registry(entry("multi", MultiRepoAdapter, enabled: true)))
+    runner = make_runner(registry(entry("multi", MultiRepoAdapter, wired: true)))
     runner.sync("multi")
 
     assert_equal({ "https://github.com/acme/one" => "sha-one",
@@ -468,7 +468,7 @@ class SyncRunnerTest < Minitest::Test
                               "https://github.com/acme/one" => "sha-one",
                               "https://github.com/acme/two" => "sha-two"
                             })
-    runner = make_runner(registry(entry(source, MultiRepoAdapter, enabled: true)))
+    runner = make_runner(registry(entry(source, MultiRepoAdapter, wired: true)))
     runner.sync(source)
 
     # A probe recorded a license baseline on the "one" pin; a sync must not wipe it.
@@ -490,7 +490,7 @@ class SyncRunnerTest < Minitest::Test
   def test_single_repo_sync_pins_its_declared_repo
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
     BreakerAdapter.fetch_sha = "sha-head"
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
     runner.sync("breaker")
 
     assert_equal({ "https://example.invalid/breaker" => "sha-head" }, ledger_pins("breaker"),
@@ -500,7 +500,7 @@ class SyncRunnerTest < Minitest::Test
   def test_parse_only_leaves_ledger_pins_untouched
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
     BreakerAdapter.fetch_sha = "sha-abc"
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
     runner.sync("breaker")
     assert_equal({ "https://example.invalid/breaker" => "sha-abc" }, ledger_pins("breaker"))
 
@@ -520,7 +520,7 @@ class SyncRunnerTest < Minitest::Test
   def test_fetch_error_propagates_and_records_failed_run
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
     BreakerAdapter.fetch_error = true
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
 
     assert_raises(Nabu::FetchError) { runner.sync("breaker") }
     assert_equal "failed", last_run_status
@@ -533,7 +533,7 @@ class SyncRunnerTest < Minitest::Test
   # just loaded are findable via FTS5 MATCH, and the count rides in the Outcome.
   def test_sync_populates_the_fulltext_index
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
 
     outcome = runner.sync("breaker")
     assert_equal 2, outcome.indexed, "the Outcome carries the indexed count"
@@ -549,7 +549,7 @@ class SyncRunnerTest < Minitest::Test
   # --parse-only still reindexes (content may have changed).
   def test_parse_only_sync_reindexes
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
 
     outcome = runner.sync("breaker", parse_only: true)
     assert_equal 1, outcome.indexed
@@ -564,7 +564,7 @@ class SyncRunnerTest < Minitest::Test
   def test_aborted_sync_reports_no_index_count
     urns = (1..5).map { |i| "urn:cts:test:w#{i}" }
     BreakerAdapter.reset!(urns: urns)
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
     runner.sync("breaker")
 
     BreakerAdapter.urns = urns.first(2) # would withdraw 3 of 5 → trips
@@ -604,7 +604,7 @@ class SyncRunnerTest < Minitest::Test
   # (the CLI omits the fragment). No fulltext file may even be created.
   def test_index_inert_shelf_syncs_perform_no_index_work
     [NotesShelf, LanguageShelfSrc, SourceShelfSrc].each do |klass|
-      runner = make_runner(registry(entry(klass.slug, klass, enabled: true, kind: "shelf")))
+      runner = make_runner(registry(entry(klass.slug, klass, wired: true, kind: "shelf")))
       outcome = forbidding_index_work { runner.sync(klass.slug) }
       refute outcome.aborted?
       assert_nil outcome.indexed, "#{klass.slug}: an inert sync carries no index count"
@@ -616,7 +616,7 @@ class SyncRunnerTest < Minitest::Test
   # count, never the corpus total — and the sync refreshes only its own slice.
   def test_sync_indexed_count_is_the_sources_not_the_corpus_total
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
     runner.sync("breaker")
 
     # Another source's rows land in the catalog between syncs (they enter the
@@ -637,7 +637,7 @@ class SyncRunnerTest < Minitest::Test
   def test_withdrawn_document_leaves_the_index_at_its_next_sync
     urns = (1..5).map { |i| "urn:cts:test:w#{i}" }
     BreakerAdapter.reset!(urns: urns)
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
     runner.sync("breaker")
 
     BreakerAdapter.urns = urns.first(4) # exactly at the 20% threshold — no trip
@@ -660,7 +660,7 @@ class SyncRunnerTest < Minitest::Test
   def test_sync_emits_quarantine_delta_warning_when_off_baseline
     seed_baseline("spiky", baseline: 2, anchor: 2)
     FileUtils.mkdir_p(File.join(@canonical, "spiky"))
-    runner = make_runner(registry(entry("spiky", SpikeAdapter, enabled: true)))
+    runner = make_runner(registry(entry("spiky", SpikeAdapter, wired: true)))
 
     outcome = runner.sync("spiky", parse_only: true)
     refute outcome.aborted?, "an advisory warning must never fail the sync"
@@ -677,7 +677,7 @@ class SyncRunnerTest < Minitest::Test
   def test_sync_is_silent_when_errored_matches_the_baseline
     seed_baseline("spiky", baseline: 90, anchor: 90)
     FileUtils.mkdir_p(File.join(@canonical, "spiky"))
-    runner = make_runner(registry(entry("spiky", SpikeAdapter, enabled: true)))
+    runner = make_runner(registry(entry("spiky", SpikeAdapter, wired: true)))
 
     outcome = runner.sync("spiky", parse_only: true)
     assert_equal 90, outcome.load_report.errored
@@ -688,7 +688,7 @@ class SyncRunnerTest < Minitest::Test
   # switchover is announced once (soft), never a phantom "regression".
   def test_first_sync_with_quarantines_announces_the_baseline_recording
     FileUtils.mkdir_p(File.join(@canonical, "spiky"))
-    runner = make_runner(registry(entry("spiky", SpikeAdapter, enabled: true)))
+    runner = make_runner(registry(entry("spiky", SpikeAdapter, wired: true)))
 
     outcome = runner.sync("spiky", parse_only: true)
     finding = outcome.warnings.fetch(0)
@@ -700,7 +700,7 @@ class SyncRunnerTest < Minitest::Test
   # rebuilds); the anchor is the low-water mark and never advances upward.
   def test_ok_sync_records_and_advances_the_quarantine_baseline
     FileUtils.mkdir_p(File.join(@canonical, "spiky"))
-    runner = make_runner(registry(entry("spiky", SpikeAdapter, enabled: true)))
+    runner = make_runner(registry(entry("spiky", SpikeAdapter, wired: true)))
 
     runner.sync("spiky", parse_only: true) # errored 90
     row = @ledger[:quarantine_baselines].where(source_slug: "spiky").first
@@ -718,7 +718,7 @@ class SyncRunnerTest < Minitest::Test
   # A clean sync against no history carries no warnings.
   def test_clean_sync_has_no_warnings
     BreakerAdapter.reset!(urns: %w[urn:cts:test:w1 urn:cts:test:w2])
-    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
     assert_empty runner.sync("breaker").warnings
   end
 
@@ -726,7 +726,7 @@ class SyncRunnerTest < Minitest::Test
 
   def test_dictionary_source_routes_to_the_dictionary_loader
     FileUtils.cp_r(Nabu::TestSupport.fixtures("lexica"), File.join(@canonical, "lexica"))
-    reg = registry(entry("lexica", Nabu::Adapters::Lexica, enabled: true, sync_policy: "manual"))
+    reg = registry(entry("lexica", Nabu::Adapters::Lexica, wired: true, sync_policy: "manual"))
 
     outcome = make_runner(reg).sync("lexica", parse_only: true)
 
@@ -745,12 +745,12 @@ class SyncRunnerTest < Minitest::Test
   def test_sync_all_runs_only_enabled_auto_sources
     [LiveEnabled, LiveDisabled, ManualSrc, FrozenSrc].each(&:reset!)
     reg = registry(
-      entry("auto-enabled",  LiveEnabled,  enabled: true,  sync_policy: "auto"),
-      entry("auto-disabled", LiveDisabled, enabled: false, sync_policy: "auto"),
-      entry("manual-src",    ManualSrc,    enabled: true,  sync_policy: "manual"),
-      entry("frozen-src",    FrozenSrc,    enabled: true,  sync_policy: "frozen"),
+      entry("auto-enabled",  LiveEnabled,  wired: true,  sync_policy: "auto"),
+      entry("auto-disabled", LiveDisabled, wired: false, sync_policy: "auto"),
+      entry("manual-src",    ManualSrc,    wired: true,  sync_policy: "manual"),
+      entry("frozen-src",    FrozenSrc,    wired: true,  sync_policy: "frozen"),
       # P39-0: an auto-cadence SHELF/MODULE is still excluded — only kind: source sweeps.
-      entry("auto-shelf",    ManualSrc,    enabled: true,  sync_policy: "auto", kind: "shelf")
+      entry("auto-shelf",    ManualSrc,    wired: true,  sync_policy: "auto", kind: "shelf")
     )
 
     results = make_runner(reg).sync_all
@@ -764,8 +764,8 @@ class SyncRunnerTest < Minitest::Test
   def test_sync_all_isolates_one_sources_failure
     [FailingLive, OkLive].each(&:reset!)
     reg = registry(
-      entry("failing-live", FailingLive, enabled: true, sync_policy: "auto"),
-      entry("ok-live",      OkLive,      enabled: true, sync_policy: "auto")
+      entry("failing-live", FailingLive, wired: true, sync_policy: "auto"),
+      entry("ok-live",      OkLive,      wired: true, sync_policy: "auto")
     )
 
     results = make_runner(reg).sync_all
@@ -780,8 +780,8 @@ class SyncRunnerTest < Minitest::Test
   def test_sync_all_skips_a_grant_required_source_without_acknowledgment
     [LiveEnabled, OkLive].each(&:reset!)
     reg = registry(
-      entry("granted-src", LiveEnabled, enabled: true, sync_policy: "auto", grant_required: true),
-      entry("ok-live",     OkLive,      enabled: true, sync_policy: "auto")
+      entry("granted-src", LiveEnabled, wired: true, sync_policy: "auto", grant_required: true),
+      entry("ok-live",     OkLive,      wired: true, sync_policy: "auto")
     )
 
     results = make_runner(reg).sync_all
@@ -794,7 +794,7 @@ class SyncRunnerTest < Minitest::Test
   def test_sync_all_runs_a_grant_source_once_acknowledged
     LiveEnabled.reset!
     Nabu::GrantGate.new(ledger: @ledger).record!(slug: "granted-src", terms: "t", how: "flag")
-    reg = registry(entry("granted-src", LiveEnabled, enabled: true, sync_policy: "auto", grant_required: true))
+    reg = registry(entry("granted-src", LiveEnabled, wired: true, sync_policy: "auto", grant_required: true))
 
     results = make_runner(reg).sync_all
     assert_kind_of Nabu::SyncRunner::Outcome, results["granted-src"]
@@ -805,8 +805,8 @@ class SyncRunnerTest < Minitest::Test
 
   def test_sync_refreshes_reference_edges_for_a_reference_edges_source
     BreakerAdapter.reset!(urns: ["urn:cts:test:w1"])
-    runner = make_runner(registry(entry("refsrc", ReferenceAdapter, enabled: true, sync_policy: "manual"),
-                                  entry("breaker", BreakerAdapter, enabled: true)))
+    runner = make_runner(registry(entry("refsrc", ReferenceAdapter, wired: true, sync_policy: "manual"),
+                                  entry("breaker", BreakerAdapter, wired: true)))
 
     outcome = runner.sync("refsrc")
     refute outcome.aborted?
@@ -846,9 +846,9 @@ class SyncRunnerTest < Minitest::Test
     Nabu::SourceRegistry.new(entries)
   end
 
-  def entry(slug, klass, enabled:, sync_policy: "auto", kind: "source", grant_required: false)
+  def entry(slug, klass, wired:, sync_policy: "auto", kind: "source", grant_required: false)
     Nabu::SourceRegistry::Entry.new(
-      slug: slug, adapter_class_name: klass.name, enabled: enabled, sync_policy: sync_policy, kind: kind,
+      slug: slug, adapter_class_name: klass.name, wired: wired, sync_policy: sync_policy, kind: kind,
       grant_required: grant_required, grant: (grant_required ? sample_grant : nil)
     )
   end

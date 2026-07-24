@@ -17,15 +17,15 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `oshb` | texts | open | enabled · manual | 39 docs / 23,213 passages |
-| `sdbh` | dictionary | attribution | enabled · manual | 7,932 entries |
-| `sefaria` | texts | open | enabled · manual | 103 docs / 57,095 passages |
-| `bhsa` | texts | nc | enabled · manual | 39 docs / 23,213 passages |
-| `bridging` | crosswalk module | attribution | not enabled | nothing held yet |
-| `dss` | texts | nc | enabled · manual | 1,001 docs / 52,895 passages |
-| `iip` | inscriptions | nc | enabled · manual | 5,499 docs / 17,823 passages |
-| `hebrew-lexicon` | dictionary | attribution | enabled · manual | 21,144 entries |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
+| `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
+| `sefaria` | texts | open | wired · manual | 103 docs / 57,095 passages |
+| `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
+| `bridging` | crosswalk module | attribution | not yet wired | nothing held yet |
+| `dss` | texts | nc | wired · manual | 1,001 docs / 52,895 passages |
+| `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
+| `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 
 ## The desk's instruments
 

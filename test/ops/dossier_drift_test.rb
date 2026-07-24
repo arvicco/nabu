@@ -10,7 +10,7 @@ module Ops
   # and docs/library.md, never verbatim equality. Red on drift, green on
   # match.
   class DossierDriftTest < Minitest::Test
-    Entry = Struct.new(:enabled)
+    Entry = Struct.new(:wired)
 
     FakeRegistry = Struct.new(:entries_by_slug) do
       def slugs = entries_by_slug.keys

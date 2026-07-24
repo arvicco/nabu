@@ -382,7 +382,7 @@ class WiktionaryReconTest < Minitest::Test
     entry = registry["wiktionary-recon"]
     refute_nil entry, "config/sources.yml must register wiktionary-recon"
     assert_equal Nabu::Adapters::WiktionaryRecon, entry.adapter_class
-    assert entry.enabled, "live (owner sign-off 2026-07-12 after first sync + etym eyeball)"
+    assert entry.wired, "live (owner sign-off 2026-07-12 after first sync + etym eyeball)"
     assert_equal "manual", entry.sync_policy
     assert_equal Nabu::Adapters::WiktionaryRecon.manifest, entry.manifest
   end

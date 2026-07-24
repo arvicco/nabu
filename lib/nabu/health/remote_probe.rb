@@ -336,7 +336,7 @@ module Nabu
         alive = canonical_tree?(entry.slug)
         detail = alive ? nil : "local tree missing — export/restore canonical/#{entry.slug}"
         SourceHealth.new(
-          slug: entry.slug, enabled: entry.enabled,
+          slug: entry.slug, enabled: entry.wired,
           upstream: "canonical/#{entry.slug} (local)",
           liveness: Liveness.new(status: alive ? :alive : :gone, detail: detail),
           drift: :local, drift_detail: nil,
@@ -353,7 +353,7 @@ module Nabu
         multi = probes.size > 1
         drift = source_drift(entry) { drift_status(probes, pins, multi: multi, no_pin: no_pin_verdict(entry)) }
         SourceHealth.new(
-          slug: entry.slug, enabled: entry.enabled,
+          slug: entry.slug, enabled: entry.wired,
           upstream: multi ? "#{urls.size} repos" : urls.first,
           liveness: aggregate_liveness(probes),
           drift: drift.status, drift_detail: drift.detail,
@@ -371,7 +371,7 @@ module Nabu
         return probe_local_source(entry) if canonical_tree?(entry.slug)
 
         SourceHealth.new(
-          slug: entry.slug, enabled: entry.enabled, upstream: "(none declared)",
+          slug: entry.slug, enabled: entry.wired, upstream: "(none declared)",
           liveness: Liveness.new(
             status: :gone,
             detail: "no upstream repos declared — registration gap?"
@@ -629,7 +629,7 @@ module Nabu
         multi = probes.size > 1
         drift = source_drift(entry) { zip_drift(probes, multi: multi, no_pin: no_pin_verdict(entry)) }
         SourceHealth.new(
-          slug: entry.slug, enabled: entry.enabled,
+          slug: entry.slug, enabled: entry.wired,
           upstream: multi ? "#{targets.size} projects" : targets.first&.zip_url,
           liveness: aggregate_liveness(probes),
           drift: drift.status, drift_detail: drift.detail,

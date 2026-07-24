@@ -17,16 +17,16 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
 |---|---|---|---|---|
-| `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
-| `isicily` | inscriptions | attribution | enabled · manual | 6,723 docs / 17,921 passages |
-| `itant` | inscriptions | nc | enabled · manual | 1,160 docs / 1,283 passages |
-| `sabellic-loans` | dictionary | attribution | enabled · frozen | 85 entries |
-| `ceipom` | inscriptions | attribution | enabled · frozen | 3,871 docs / 5,303 passages |
-| `open-etruscan` | inscriptions | attribution | enabled · frozen | 8,047 docs / 8,047 passages |
-| `larth-etp` | dictionary | attribution | enabled · manual | 1,122 entries |
-| `lexlep` | inscriptions | nc | enabled · manual | 494 docs / 570 passages |
-| `lexlep-words` | dictionary | nc | enabled · manual | 627 entries |
-| `tir` | inscriptions | nc | enabled · manual | 389 docs / 434 passages |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
+| `isicily` | inscriptions | attribution | wired · manual | 6,723 docs / 17,921 passages |
+| `itant` | inscriptions | nc | wired · manual | 1,160 docs / 1,283 passages |
+| `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
+| `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
+| `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |
+| `larth-etp` | dictionary | attribution | wired · manual | 1,122 entries |
+| `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
+| `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
+| `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
 
 ## The desk's instruments
 

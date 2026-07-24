@@ -282,7 +282,7 @@ module Nabu
       def status_label(entry)
         return "unknown" unless entry
 
-        entry.enabled ? "enabled · #{entry.sync_policy}" : "not enabled"
+        entry.wired ? "wired · #{entry.sync_policy}" : "not yet wired"
       end
 
       def holdings_cell(census, slug)
