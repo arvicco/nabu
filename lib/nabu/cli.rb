@@ -387,13 +387,21 @@ module Nabu
       # `status SOURCE` is the detail block — UNSCOPED (explicit naming is
       # explicit intent; any source, focused or not). The bare/--long/--axis
       # tables scope to the focus profile (P40-f).
+      view = focus_view(config, registry, catalog: db)
       if slug.empty?
-        view = focus_view(config, registry, catalog: db)
         warn_focus_drift(view)
         say status_report(view.registry, db, ledger, slug)
-        print_focus_note(view, view.registry_hidden)
+        # `status --axis` is SCOPED (P44-r1 addendum): the grouped table, then an
+        # enable hint for the axes' not-yet-enabled members — never the
+        # whole-library `enabled:` footer. Bare status keeps that footer.
+        if options[:axis]
+          print_axis_enable_hint(view, registry, selected_axes(registry.axes))
+        else
+          print_focus_note(view, view.registry_hidden)
+        end
       else
         say status_report(registry, db, ledger, slug)
+        print_source_enable_hint(view, registry, slug)
       end
     ensure
       db&.disconnect
@@ -444,6 +452,13 @@ module Nabu
       axis; `--axis a,b` those axes only. An unknown axis names the known
       set. The bare (ungrouped) census is unchanged.
 
+      A bare `nabu list SOURCE --lang CODE` (no enumeration flag) IMPLIES the
+      natural mode by the shelf's content kind — a dictionary shelf lists its
+      entries in that language, a text shelf its documents — and a header
+      announces the implication. Name --documents/--entries explicitly to
+      override. (--lang still needs a SOURCE, and does not compose with the
+      --collections/--loans census grains.)
+
       Enumerations (one per invocation, each honoring --limit, default 50,
       0 = all, with an honest "… N more" tail):
         --documents    every document: urn — title [lang] license, urn order,
@@ -475,6 +490,7 @@ module Nabu
         nabu list local-library --documents      # what did I ingest?
         nabu list local-library --collections    # …and how is it filed?
         nabu list lexica --entries --prefix log  # λόγος and its neighbors
+        nabu list iecor --lang xcl               # entries implied (a dictionary shelf)
         nabu list papyri-ddbdp --documents --century 6 --limit 5
         nabu list shelf --documents --withdrawn  # the stewardship lens
         nabu list coptic-scriptorium --loans     # the loan-origin census
@@ -499,7 +515,9 @@ module Nabu
                    desc: "Maximum rows per enumeration (default #{Nabu::Query::List::DEFAULT_LIMIT}; 0 = all)"
     option :prefix, type: :string, banner: "STR",
                     desc: "With --entries: folded headword prefix (bh finds *bʰer-)"
-    option :lang, type: :string, desc: "With --documents/--entries: restrict to one language"
+    option :lang, type: :string,
+                  desc: "Restrict to one language; bare `list SOURCE --lang CODE` implies the natural " \
+                        "mode (dictionary → entries, text → documents)"
     option :license, type: :string,
                      desc: "With --documents: restrict to an exact effective license class"
     option :withdrawn, type: :boolean, default: false,
@@ -536,13 +554,21 @@ module Nabu
 
       require_timeline!(catalog) if from || to
       query = Nabu::Query::List.new(catalog: catalog)
+      # Bare `list SOURCE --lang X` (P44-r1): with no explicit enumeration
+      # flag, --lang IMPLIES the natural mode by the shelf's content kind —
+      # a dictionary shelf lists entries, a text shelf documents — and the
+      # header announces the implication so it stays legible.
+      implied = implied_list_mode(query, slug)
       if options[:axis]
         registry = Nabu::SourceRegistry.load(config.sources_path)
         view = focus_view(config, registry, catalog: catalog)
         warn_focus_drift(view)
         rows = scoped_census(query.census, view)
-        print_census_by_axis(rows, selected_axes(registry.axes), registry)
-        print_focus_note(view, query.census.size - rows.size)
+        axes = selected_axes(registry.axes)
+        print_census_by_axis(rows, axes, registry)
+        # A SCOPED request (P44-r1 addendum): no whole-library `enabled:`
+        # footer — just an enable hint for THIS axis's not-yet-enabled members.
+        print_axis_enable_hint(view, registry, axes)
       elsif options[:sources]
         print_source_map(query.source_groups, Nabu::SourceRegistry.load(config.sources_path))
       elsif slug.empty?
@@ -552,11 +578,13 @@ module Nabu
         rows = scoped_census(query.census, view)
         print_census(rows, options[:long] ? query.descriptions : nil)
         print_focus_note(view, query.census.size - rows.size)
-      elsif options[:documents]
+      elsif options[:documents] || implied == :documents
+        say implied_mode_header(:documents, slug, options[:lang]) if implied
         print_list_documents(query.documents(slug, lang: options[:lang], license: options[:license],
                                                    withdrawn_only: options[:withdrawn], from: from, to: to,
                                                    limit: options[:limit].to_i, prefix: options[:prefix]))
-      elsif options[:entries]
+      elsif options[:entries] || implied == :entries
+        say implied_mode_header(:entries, slug, options[:lang]) if implied
         print_list_entries(slug, query.entries(slug, prefix: options[:prefix], lang: options[:lang],
                                                      limit: options[:limit].to_i))
       elsif options[:collections] then print_list_collections(slug, query.collections(slug))
@@ -567,7 +595,11 @@ module Nabu
           print_list_loan_documents(code, query.loan_documents(slug, code: code, limit: options[:limit].to_i))
         end
       else
-        print_list_card(query.card(slug), registry_entry(config, slug))
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        print_list_card(query.card(slug), registry[slug])
+        # A named SOURCE is a scoped request too: hint the enable on-ramp only
+        # when that source is not yet enabled (silence otherwise).
+        print_source_enable_hint(focus_view(config, registry, catalog: catalog), registry, slug)
       end
     rescue Nabu::Query::List::Error => e
       # Unknown source slug: a clean stderr line naming the valid slugs.
@@ -1427,6 +1459,8 @@ module Nabu
                     desc: "Show random passages instead of a urn (the eyeball ritual at a source flip)"
     option :source, type: :string, banner: "SLUG",
                     desc: "With --random: draw only from this source (default: the whole corpus)"
+    option :lang, type: :string, banner: "CODE",
+                  desc: "With --random: draw only passages in this language (grc, lat, … — the multi-lang eyeball)"
     option :count, type: :numeric, default: 1,
                    desc: "With --random: how many passages (default 1, cap #{Nabu::Query::Random::MAX_COUNT})"
     option :tokens, type: :boolean, default: false,
@@ -1448,6 +1482,7 @@ module Nabu
         return print_display_footer
       end
       raise Thor::Error, "show: --source requires --random" if options[:source]
+      raise Thor::Error, "show: --lang restricts --random draws — give a urn, or add --random" if options[:lang]
       raise Thor::Error, "show: give a urn" if urn.empty?
 
       if options[:parallel]
@@ -2954,7 +2989,43 @@ module Nabu
         end
         return if options[:lang].nil? || options[:documents] || options[:entries]
 
-        raise Thor::Error, "list: --lang composes with --documents or --entries"
+        # Bare `list SOURCE --lang X` no longer refuses — it IMPLIES the
+        # natural enumeration (dictionary → entries, text → documents;
+        # dispatched below). --lang stays refused only where it cannot imply
+        # a mode: with no SOURCE (the census spans the whole library), or on
+        # a census grain that does not filter by language (--collections /
+        # --loans have their own axes). Each refusal names what DOES work.
+        if slug.empty?
+          raise Thor::Error, "list: --lang needs a SOURCE (nabu list SOURCE --lang CODE) — " \
+                             "the bare census spans the whole library"
+        end
+        return unless options[:collections] || options[:loans]
+
+        grain = options[:collections] ? "collections" : "loans"
+        raise Thor::Error, "list: --lang filters a shelf's documents or dictionary entries " \
+                           "(bare `nabu list SOURCE --lang CODE`, or --documents/--entries) — not --#{grain}"
+      end
+
+      # Bare `list SOURCE --lang X` (P44-r1): with no explicit enumeration
+      # flag and a --lang present, the natural mode is IMPLIED by the shelf's
+      # content kind. Returns :documents / :entries, or nil when no
+      # implication applies (no SOURCE, no --lang, or an explicit mode/census
+      # grain already chosen — validate_list_flags! has already refused the
+      # meaningless combinations). Reads the catalog fact via the query
+      # object, so an unknown slug surfaces as the usual naming error.
+      def implied_list_mode(query, slug)
+        return nil if slug.empty? || options[:lang].nil?
+        return nil if options[:documents] || options[:entries] ||
+                      options[:collections] || options[:loans]
+
+        query.natural_mode(slug)
+      end
+
+      # The legible header for an implied enumeration: names the mode, the
+      # filter that implied it, and the content-kind reason.
+      def implied_mode_header(mode, slug, lang)
+        reason = mode == :entries ? "a dictionary shelf" : "a text shelf"
+        "#{mode} (implied by --lang #{lang}) — #{slug} is #{reason}"
       end
 
       # The registry entry for one slug, nil when the catalog source is not
@@ -3083,6 +3154,52 @@ module Nabu
         else
           warn Nabu::Focus.footer_line(view.entries, hidden)
         end
+      end
+
+      # The SCOPED enablement hint (P44-r1 addendum). A --axis or named-source
+      # request never prints the whole-library `enabled:` list (that is the
+      # unscoped view's job) — showing every enabled source under a request for
+      # ONE desk is noise. Instead, IFF the requested scope has members not yet
+      # enabled, one compact line names just those + the enable on-ramp; when
+      # everything requested is already enabled, silence (the zero-signal house
+      # rule). Blocked (grant-gated private) members are named INDIVIDUALLY with
+      # their grant marker — never folded into `enable <axis>`, which skips them
+      # (the r3b rule). Meta line → STDERR, like every enablement note.
+      def print_axis_enable_hint(view, registry, axes)
+        requested = axes.flat_map { |axis| registry.axis_members(axis.name) }.uniq
+        print_scoped_enable_hint(view, registry, requested, enable_axes: axes.map(&:name))
+      end
+
+      def print_source_enable_hint(view, registry, slug)
+        print_scoped_enable_hint(view, registry, [slug], enable_axes: [])
+      end
+
+      def print_scoped_enable_hint(view, registry, requested_slugs, enable_axes:)
+        return unless view.active? # --all is the full reveal — silent
+
+        enabled = view.resolution.slugs
+        gap = requested_slugs.uniq.reject do |slug|
+          entry = registry[slug]
+          # A shelf always shows and a module only under --all — neither is an
+          # `enable` target, so neither counts as an un-enabled gap.
+          entry.nil? || entry.shelf? || entry.feature_module? || enabled.include?(slug)
+        end
+        return if gap.empty?
+
+        blocked_gap, public_gap = gap.partition { |slug| registry.blocked?(slug) }
+        clauses = []
+        unless public_gap.empty?
+          axes = enable_axes.select { |name| registry.public_axis_members(name).intersect?(public_gap) }
+          clauses << if axes.empty?
+                       "nabu enable #{public_gap.join(' ')}"
+                     else
+                       "nabu enable #{axes.join(' ')} (#{public_gap.join(', ')})"
+                     end
+        end
+        blocked_gap.each { |slug| clauses << "#{slug} · grant required (nabu enable #{slug})" }
+
+        count = gap.size
+        warn "#{count} member#{'s' unless count == 1} not enabled — #{clauses.join('; ')}"
       end
 
       # Warn once about names the file carries that the registry no longer
@@ -3578,9 +3695,11 @@ module Nabu
         raise Thor::Error, "show: --random takes no urn (it picks passages for you)" unless urn.empty?
 
         results = Nabu::Query::Random.new(catalog: catalog)
-                                     .run(source: options[:source], count: options[:count].to_i)
+                                     .run(source: options[:source], lang: options[:lang], count: options[:count].to_i)
         if results.empty?
-          scope = options[:source] ? " in source #{options[:source]}" : ""
+          scope = +""
+          scope << " in source #{options[:source]}" if options[:source]
+          scope << " in #{options[:lang]}" if options[:lang]
           return say("no passages to show#{scope} (nothing visible — the corpus may be empty or all withdrawn)")
         end
 
