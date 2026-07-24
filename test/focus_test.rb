@@ -81,7 +81,8 @@ class FocusTest < Minitest::Test
   def test_resolution_unions_axis_members_with_named_sources
     # germanic → rem, helipad, mod1 ; plus the named source ccmh.
     res = Nabu::Focus.resolve(profile("germanic", "ccmh"), @registry)
-    assert_equal %w[rem helipad mod1 ccmh].sort, res.slugs.sort
+    assert_equal %w[rem helipad mod1 ccmh lib1].sort, res.slugs.sort,
+                 "axis members + named sources + shelves (implicitly always enabled)"
   end
 
   def test_resolution_dedupes_axis_source_overlap
@@ -93,14 +94,16 @@ class FocusTest < Minitest::Test
 
   # -- the view ---------------------------------------------------------------
 
-  def test_active_view_shows_focused_sources_shelves_always_modules_never
+  def test_active_view_shows_enabled_rows_with_shelves_always
     view = Nabu::Focus.view(profile: profile("germanic"), registry: @registry, all: false)
     assert_predicate view, :active?
     shown = view.registry.slugs.sort
-    assert_includes shown, "rem",  "a focused source shows"
+    assert_includes shown, "rem",  "an enabled source shows"
     assert_includes shown, "lib1", "a shelf always shows (owner's own), even off-axis"
-    refute_includes shown, "mod1", "a module stays hidden even when its axis is focused"
-    refute_includes shown, "ccmh", "an unfocused source is hidden"
+    assert_includes shown, "mod1",
+                    "a module enabled via its desk shows like any member (owner ruling 2026-07-24 — " \
+                    "the P40-f modules-only-under---all rule died with the enablement promotion)"
+    refute_includes shown, "ccmh", "a non-enabled source is hidden"
   end
 
   def test_all_flag_is_the_pass_through
@@ -122,9 +125,10 @@ class FocusTest < Minitest::Test
 
   def test_registry_hidden_counts_the_rows_all_would_reveal
     view = Nabu::Focus.view(profile: profile("germanic"), registry: @registry, all: false)
-    # 6 rows total; shown = rem, helipad, lib1 (shelf). Hidden = ccmh, lex, mod1.
-    assert_equal 3, view.registry.size
-    assert_equal 3, view.registry_hidden
+    # 6 rows total; shown = rem, helipad, mod1 (module on the enabled axis),
+    # lib1 (shelf). Hidden = ccmh, lex.
+    assert_equal 4, view.registry.size
+    assert_equal 2, view.registry_hidden
   end
 
   def test_filtered_registry_keeps_axes_for_grouping

@@ -79,25 +79,32 @@ module Nabu
       # (grant-gated private) source is never enabled implicitly by its desk —
       # it joins the set only when named explicitly by slug (which the +sources+
       # arm carries, blocked or not).
-      slugs = (axes.flat_map { |name| registry.public_axis_members(name) } + sources).uniq
+      # Shelves are implicitly ALWAYS in the enabled set (owner ruling
+      # 2026-07-24): the owner's own canonical memory never needs enabling,
+      # so no footer/hint ever claims a shelf is "not enabled".
+      shelf_slugs = registry.each_source.select(&:shelf?).map(&:slug)
+      slugs = (axes.flat_map { |name| registry.public_axis_members(name) } + sources + shelf_slugs).uniq
       Resolution.new(axes: axes, sources: sources, unknown: unknown, slugs: slugs)
     end
 
     # Build the View for +registry+ under +profile+ and the --all flag. When
-    # the profile is applied, the filtered registry keeps every shelf plus the
-    # focused sources (modules and unfocused sources drop out), in registration
-    # order, carrying the same axes definitions so --axis grouping still works.
+    # the profile is applied, the filtered registry keeps every shelf (always
+    # enabled) plus the enabled sources AND modules, in registration order,
+    # carrying the same axes definitions so --axis grouping still works.
     def view(profile:, registry:, all:)
       resolution = resolve(profile, registry)
       applied = !all
       filtered =
         if applied
-          # A shelf ALWAYS shows; a module NEVER shows here (only under --all,
-          # the pass-through branch), even when tagged to a focused axis; a
-          # source shows iff it is in the focused set.
+          # A shelf ALWAYS shows (implicitly always enabled — owner ruling
+          # 2026-07-24: your own shelves never need enabling); every other
+          # row — feature modules INCLUDED — shows iff enabled. The P40-f
+          # focus-era "a module never shows outside --all" rule died with
+          # the enablement promotion: under enablement semantics it read as
+          # "modules disabled" (owner report), and a module enabled via its
+          # desk or slug is as enabled as any source.
           visible = registry.each_source.select do |entry|
             next true if entry.shelf?
-            next false if entry.feature_module?
 
             resolution.slugs.include?(entry.slug)
           end
