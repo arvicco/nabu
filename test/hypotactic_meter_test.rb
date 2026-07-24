@@ -74,7 +74,7 @@ class HypotacticMeterTest < Minitest::Test
     assert_equal 0, result.unmapped_works
     assert_equal 3, result.matched, "the three seeded lines matched by text"
     assert_equal 3, @catalog[:enrichments].count
-    assert_equal [["meter", "hypotactic"]],
+    assert_equal [%w[meter hypotactic]],
                  @catalog[:enrichments].select_map(%i[kind model]).uniq,
                  "the shared meter kind, this producer's own model"
 
