@@ -199,6 +199,7 @@ ud:
 
 proiel:
   adapter: Nabu::Adapters::Proiel
+  quickstart: true   # the starter shelf (P44-r3c) — a fresh box's default enabled set
   axes: [classical, slavic, germanic]
   enabled: true   # first real sync verified + owner sign-off 2026-07-04
   # Upstream proiel-treebank is frozen at release 20180408; its successor is
@@ -221,6 +222,7 @@ torot:
 
 iswoc:
   adapter: Nabu::Adapters::Iswoc
+  quickstart: true   # the starter shelf (P44-r3c) — a fresh box's default enabled set
   axes: [germanic]
   enabled: true    # OWNER SIGN-OFF 2026-07-11 ("merged, flip"): synced, 5 OE texts /
                    # 2,536 sentences, OE Mark live as hub witness #9 (9-of-9 eyeballed).
@@ -331,6 +333,7 @@ oracc:
 
 lexica:
   adapter: Nabu::Adapters::Lexica
+  quickstart: true   # the starter shelf (P44-r3c) — a fresh box's default enabled set
   axes: [classical]
   enabled: true    # OWNER SIGN-OFF 2026-07-10 ("flip all sources enabled" after
                    # P11 merge): synced, 168,133 entries (LSJ + L&S incl. the
@@ -375,6 +378,7 @@ eng-web:
 
 sblgnt:
   adapter: Nabu::Adapters::Sblgnt
+  quickstart: true   # the starter shelf (P44-r3c) — a fresh box's default enabled set
   axes: [biblical]
   enabled: true    # OWNER SIGN-OFF 2026-07-10: synced, 27 books / 7,939 verses,
                    # NT witness live in align; show --random eyeballed.

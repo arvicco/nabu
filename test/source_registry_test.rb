@@ -753,6 +753,13 @@ class SourceRegistryTest < Minitest::Test
   # Loading the REAL config enforces all three invariants on the real mapping;
   # the pins below freeze the ratified structure (definitions order, the D35-d
   # dual-tagging ruling, the whole-source memberships).
+  # P44-r3c: the shipped starter shelf carries the quickstart tags — a
+  # fresh box's default enabled set is exactly the quickstart four.
+  def test_shipped_quickstart_tags_are_the_starter_shelf
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    assert_equal %w[iswoc lexica proiel sblgnt], registry.quickstart_slugs.sort
+  end
+
   def test_shipped_registry_mapping_is_valid_and_ratified
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
 

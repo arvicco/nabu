@@ -130,8 +130,10 @@ box, so you know what you're signing up for:
 with lemma search — are already on board from the starter shelf.)
 
 The full menu is `config/sources.yml`; the full shelf map with research
-uses is [library.md](library.md). `bin/nabu sync --all` syncs every
-enabled live-policy source in one go.
+uses is [library.md](library.md). Each further shelf is one
+`bin/nabu enable <source>` (or `enable <axis>` for a whole desk)
+followed by its `sync`; `bin/nabu sync --all` syncs every enabled
+live-policy source in one go.
 
 With the dictionaries on board:
 
