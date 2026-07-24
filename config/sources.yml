@@ -276,7 +276,9 @@ gretil:
 
 oracc:
   adapter: Nabu::Adapters::Oracc
-  axes: [cuneiform]
+  axes: [cuneiform, iranian]  # P44-r2: the `ario` project (Achaemenid Royal Inscriptions
+                              # online) carries the peo (Old Persian) column of the royal
+                              # trilinguals — whole-source, only that lane is Iranian.
   siblings: ["-[a-z]+"]  # P34-0 (was P13-4 frozen): any lowercase run — P/Q textids are hyphen-free
   enabled: true    # OWNER SIGN-OFF 2026-07-09: first real sync fired and
                    # eyeballed ("Enable oracc pls"). 1,794 docs / 21,080
@@ -1657,7 +1659,9 @@ etcsl:
   translations: true    # the English prose translations are half the packet's value
 cdli:
   adapter: Nabu::Adapters::Cdli
-  axes: [cuneiform]
+  axes: [cuneiform, iranian]  # P44-r2: the catalog carries Old Persian (peo) — the
+                              # Achaemenid trilinguals (ATF_LANGUAGES/CATALOG_LANGUAGES
+                              # "Persian" => peo); whole-source, only that lane is Iranian.
   enabled: true   # flipped 2026-07-19 (owner: rebuild verified — 353,156 docs / 2.19M passages, all P31 on for release)
                    # (checklist §6: bin/nabu sync cdli — GitFetch clone +
                    # LFS materialization, 154.8 MB csv + 86.9 MB atf —
@@ -2260,7 +2264,11 @@ openiti:
 
 titus-avestan:
   adapter: Nabu::Adapters::TitusAvestan
-  axes: [etym]
+  axes: [etym, iranian]  # P44-r2 (D43-d): the Avesta is the anchor of the new `iranian`
+                         # desk (ave, the Old Iranian liturgy). It keeps `etym` too — its
+                         # forms feed the comparative shelves. availability: blocked still
+                         # drops it from the PUBLIC iranian membership (the site page + docs
+                         # list only oracc/cdli and carry the private-materials footnote).
   # P44-r3a: grant-gated PRIVATE research material (the fetch right is the owner's
   # personal grant №41-3, not conveyed by a public clone). The public repo keeps
   # this license/scouting record, but must NOT advertise it as a library holding:
