@@ -139,7 +139,7 @@ The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, ridi
 
 The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3).
 
-**Members** (1): `openiti`
+**Members** (2): `kitab`, `openiti`
 
 ### hittite
 
