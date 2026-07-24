@@ -1291,6 +1291,27 @@ class CLITest < Minitest::Test
   # once — every synced source is written out and announced, so no visibility is
   # silently lost. After migration the enabled set is exactly the synced sources,
   # so `status` equals `status --all` on stdout (no modules here to differ).
+  # P44-r3b merge review: the owner's real box carried an EMPTY focus-era
+  # profile.yml (the P40-f scaffold, never used) — "no focus trim", not
+  # "nothing enabled". A legacy empty file migrates exactly like an absent
+  # one; an empty file saved under the NEW enablement header governs as
+  # deliberately empty (disable-everything never re-migrates).
+  def test_legacy_empty_profile_migrates_but_new_format_empty_governs
+    with_axis_corpus do |config|
+      File.write(config.profile_path, "# nabu focus profile — your personal research interest\nfocus: []\n")
+      out, err, status = with_config(config) { run_cli(%w[status]) }
+      assert_nil status
+      assert_match(/enablement: wrote/, err, "a legacy empty scaffold migrates like an absent file")
+      assert_match(/\blex\b/, out, "the migrated set shows the built library")
+
+      Nabu::Profile.new([]).save(config.profile_path)
+      out2, err2, status2 = with_config(config) { run_cli(%w[status]) }
+      assert_nil status2
+      refute_match(/enablement: wrote/, err2, "a new-format empty file never re-migrates")
+      refute_match(/\blex\b/, out2, "deliberately-empty governs: the source rows hide")
+    end
+  end
+
   def test_status_without_a_profile_migrates_the_built_library_once
     with_axis_corpus do |config|
       refute Nabu::Profile.exist?(config.profile_path), "no config to start"

@@ -35,6 +35,14 @@ module Nabu
 
     # The commented header written above the list — what the file is (the local
     # enablement config), that it is gitignored, and how to edit it.
+    # True when the file at +path+ was saved under the ENABLEMENT header
+    # (the P44-r3b promotion) rather than the P40-f focus-era one — the
+    # marker that lets an EMPTY new-format file govern as deliberately
+    # empty while a legacy empty scaffold migrates like an absent file.
+    def self.enablement_header?(path)
+      File.exist?(path) && File.read(path).include?("nabu enablement config")
+    end
+
     HEADER = <<~YAML
       # nabu enablement config (config/profile.yml) — the sources ENABLED on this box.
       #
