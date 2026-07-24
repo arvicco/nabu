@@ -292,6 +292,48 @@ class SyncRunnerTest < Minitest::Test
     assert_equal "succeeded", last_run_status
   end
 
+  # --- per-source fetch lock (P44-i1c) ------------------------------------
+
+  # A second process fetching the SAME source finds the lock held and fails
+  # fast with the named error — never queues, never races (the glaux incident).
+  # Here the "other process" is a second exclusive flock on the slug's lock file
+  # (flock is per open file description, so it excludes this one too).
+  def test_held_fetch_lock_makes_a_concurrent_sync_fail_fast
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+
+    holder = hold_fetch_lock("breaker")
+    begin
+      err = assert_raises(Nabu::FetchLock::AlreadyHeld) { runner.sync("breaker") }
+      assert_equal "breaker", err.slug
+      assert_includes err.message, "breaker"
+      assert_equal 0, BreakerAdapter.fetch_count, "the guarded adapter fetch never ran"
+      assert_equal 0, live_docs, "a lock-blocked sync loads nothing"
+    ensure
+      holder.flock(File::LOCK_UN)
+      holder.close
+    end
+  end
+
+  # --parse-only never enters the fetch phase, so a held lock does NOT block it
+  # (it may reindex concurrently with another process's fetch). Scope proof.
+  def test_parse_only_is_not_blocked_by_a_held_fetch_lock
+    BreakerAdapter.reset!(urns: (1..3).map { |i| "urn:cts:test:w#{i}" })
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, enabled: true)))
+
+    holder = hold_fetch_lock("breaker")
+    begin
+      outcome = runner.sync("breaker", parse_only: true)
+      refute outcome.aborted?
+      assert_equal 3, outcome.load_report.added
+      assert_equal 0, BreakerAdapter.fetch_count, "parse-only never fetches"
+      assert_equal "succeeded", last_run_status
+    ensure
+      holder.flock(File::LOCK_UN)
+      holder.close
+    end
+  end
+
   # --- post-load ANALYZE (P42-4) ------------------------------------------
 
   # The trigger is the changed-row count (added + updated + withdrawn) against
@@ -823,6 +865,18 @@ class SyncRunnerTest < Minitest::Test
   # Ledger pins for +slug+ (P7-1: pins live in the history ledger, slug-keyed).
   def ledger_pins(slug)
     Nabu::Store::Pin.where(source_slug: slug).select_hash(:repo_url, :last_sync_sha)
+  end
+
+  # Hold the fetch lock for +slug+ as another process would — a second
+  # exclusive flock on canonical/.locks/<slug>.lock. flock is bound to the open
+  # file description, so this excludes the runner's own non-blocking acquire.
+  # The caller unlocks + closes the returned handle in an ensure.
+  def hold_fetch_lock(slug)
+    locks = File.join(@canonical, Nabu::FetchLock::LOCKS_DIRNAME)
+    FileUtils.mkdir_p(locks)
+    file = File.open(File.join(locks, "#{slug}.lock"), File::RDWR | File::CREAT, 0o644) # rubocop:disable Style/FileOpen
+    file.flock(File::LOCK_EX | File::LOCK_NB) or raise "could not pre-hold #{slug} lock"
+    file
   end
 
   def live_docs = Nabu::Store::Document.where(withdrawn: false).count
