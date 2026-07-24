@@ -116,6 +116,51 @@ module Query
       refute result.withdrawn, "retired is not withdrawn"
     end
 
+    # -- the findspot line (P44-2: places as the third dimension) ------------
+
+    PLEIADES_DUMP = File.join(Nabu::TestSupport.fixtures("pleiades"), "dump.json")
+
+    def load_placed_document(slug, pleiades_id)
+      document = Nabu::Document.new(
+        urn: "urn:d:#{slug}", language: "grc", title: "Stone",
+        canonical_path: "/canonical/src/#{slug}.xml",
+        metadata: { "place" => { "ancient" => "Sparta", "pleiades" => pleiades_id }.compact }
+      )
+      document << Nabu::Passage.new(
+        urn: "urn:d:#{slug}:1", language: "grc", text: "χαῖρε",
+        text_normalized: "χαιρε", sequence: 0
+      )
+      @loader.load([document], full: false)
+    end
+
+    def test_findspot_resolves_the_captured_pleiades_id_through_the_dump
+      load_placed_document("p1", "570685")
+      show = Nabu::Query::Show.new(catalog: @catalog, pleiades: Nabu::Pleiades.load(PLEIADES_DUMP))
+
+      document = show.run("urn:d:p1")
+      refute_nil document.findspot
+      assert_equal "570685", document.findspot.id
+      assert_equal "Sparta", document.findspot.title
+      assert_equal %w[settlement temple temple-2 archaeological-site], document.findspot.place_types
+
+      passage = show.run("urn:d:p1:1")
+      assert_equal "Sparta", passage.findspot.title, "passage grain resolves through its document"
+    end
+
+    def test_findspot_is_nil_without_a_resolver_the_degrade_silently_contract
+      load_placed_document("p1", "570685")
+      result = Nabu::Query::Show.new(catalog: @catalog).run("urn:d:p1")
+      assert_nil result.findspot, "no dump on disk → byte-identical output (the LiLa precedent)"
+    end
+
+    def test_findspot_is_nil_when_no_id_was_captured_or_the_dump_lacks_the_place
+      load_placed_document("p1", nil)
+      load_placed_document("p2", "999999")
+      show = Nabu::Query::Show.new(catalog: @catalog, pleiades: Nabu::Pleiades.load(PLEIADES_DUMP))
+      assert_nil show.run("urn:d:p1").findspot, "no captured id → nothing to resolve"
+      assert_nil show.run("urn:d:p2").findspot, "an id the dump lacks stays silent, never invented"
+    end
+
     # -- edges ---------------------------------------------------------------
 
     def test_unknown_urn_returns_nil

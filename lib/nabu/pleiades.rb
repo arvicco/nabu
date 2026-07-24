@@ -12,8 +12,10 @@ module Nabu
   # module whose canonical asset is the numbered quarterly archival release
   # (Zenodo 4.1, 2025-05-28), and this resolver reads that dump directly,
   # like the suttacentral parallels graph is read directly by its producer.
-  # A later packet consumes it on display surfaces (an isicily/itant record's
-  # place metadata already carries an "ancient_ref" Pleiades id).
+  # Consumed since P44-2 by the place desk (`nabu place`, Query::Place) and
+  # the `nabu show` findspot line (Query::Show), joining on the uniform
+  # place.pleiades id the epigraphic parsers capture (isicily/edh/iip/itant
+  # — .ref_id below is their one shared normalization seam).
   #
   # == The dump shape (honest about what is verifiable offline)
   #
@@ -52,6 +54,43 @@ module Nabu
     # first sync via .from_entries (its Feature entries need mapping first).
     GRAPH_KEY = "@graph"
     private_constant :GRAPH_KEY
+
+    # The one place-ref normalization seam (P44-2). Parsers capture ONLY the
+    # Pleiades ids upstream itself asserts — a pleiades.stoa.org place URL in
+    # either scheme spelling (real I.Sicily headers write both http:// and
+    # https://), optionally slash-terminated, or bare digits (the oracc/EDH
+    # CSV spelling) — normalized to the numeric id string, the stable join
+    # key the query surfaces group on. Anything else (GeoNames, sub-resource
+    # URLs, prose) is nil: no fuzzy matching, ever.
+    PLACE_URL = %r{\Ahttps?://pleiades\.stoa\.org/places/(\d+)/?\z}
+    private_constant :PLACE_URL
+
+    def self.ref_id(ref)
+      value = ref.to_s.strip
+      return nil if value.empty?
+      return value if /\A\d+\z/.match?(value)
+
+      PLACE_URL.match(value)&.[](1)
+    end
+
+    # The dump filename `nabu sync pleiades` lands (Adapters::Pleiades::
+    # FILENAME — restated so this read seam stays require-independent, the
+    # Lila precedent) and its uncompressed sibling.
+    DUMP_BASENAMES = ["pleiades-places.json.gz", "pleiades-places.json"].freeze
+    private_constant :DUMP_BASENAMES
+
+    # Feature-detect the resolver from the owner's canonical tree (the
+    # `nabu place`/findspot auto-load): nil when `nabu sync pleiades` has not
+    # landed the dump, so a corpus without the gazetteer behaves
+    # byte-identically (the Lila.load_default shape). NOTE the cost datum
+    # (owner-verified on the real 42,242-place dump): ~3 s and ~3.9 GB peak
+    # RSS per load — callers load lazily, once per process, and only when a
+    # captured id actually needs resolving.
+    def self.load_default(config: Nabu::Config.load)
+      dir = File.join(config.canonical_dir, "pleiades")
+      path = DUMP_BASENAMES.map { |name| File.join(dir, name) }.find { |candidate| File.file?(candidate) }
+      path && load(path)
+    end
 
     # Build a resolver from a dump file (plain JSON or gzip; any of the
     # accepted containers — class note). Indexes every place by string id.
@@ -134,6 +173,14 @@ module Nabu
     # such place.
     def place(id)
       @by_id[id.to_s]
+    end
+
+    # Every place whose title equals +name+ case-insensitively (`nabu place`
+    # by name, P44-2). EXACT match only — no prefixes, no substrings, no
+    # fuzz (out by design); homonym titles return every bearer, dump order.
+    # A linear scan over ~42k places is microseconds next to the load.
+    def titled(name)
+      @by_id.each_value.select { |place| place.title&.casecmp?(name) }
     end
 
     # How many places the dump carried.
