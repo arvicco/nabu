@@ -1041,6 +1041,55 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- P44-r1: bare `list SOURCE --lang X` implies the natural mode ----------
+
+  def test_list_bare_lang_on_a_dictionary_shelf_implies_entries
+    with_list_corpus do |config|
+      # lex owns dictionary rows (sla-pro) → the natural mode is --entries.
+      out, _err, status = with_config(config) { run_cli(%w[list lex --lang sla-pro]) }
+      assert_nil status, "the implied mode lists, it does not refuse"
+      assert_match(/^entries \(implied by --lang sla-pro\) — lex is a dictionary shelf/, out,
+                   "the header announces the implication so it stays legible")
+      assert_match(/bʰer- \[sla-pro\] — to carry/, out, "the entries in that language list")
+      assert_match(/bogъ \[sla-pro\] — god/, out)
+    end
+  end
+
+  def test_list_bare_lang_on_a_text_shelf_implies_documents
+    with_list_corpus do |config|
+      # shelf owns passages, no dictionary rows → the natural mode is --documents.
+      out, _err, status = with_config(config) { run_cli(%w[list shelf --lang grc]) }
+      assert_nil status
+      assert_match(/^documents \(implied by --lang grc\) — shelf is a text shelf/, out,
+                   "the text-shelf header announces the documents implication")
+      assert_match(/urn:nabu:shelf:alpha — Alpha \[grc\]/, out, "the grc documents list")
+      refute_match(/urn:nabu:shelf:beta/, out, "the lat document is filtered out")
+    end
+  end
+
+  def test_list_bare_lang_still_refuses_where_no_mode_can_be_implied
+    with_list_corpus do |config|
+      with_config(config) do
+        # No SOURCE: the census spans the whole library — nothing to imply.
+        _out, err, status = run_cli(%w[list --lang grc])
+        assert_equal 1, status
+        assert_match(/--lang needs a SOURCE/, err)
+        assert_match(/nabu list SOURCE --lang CODE/, err, "the refusal names what works")
+
+        # --collections is a census grain that does not filter by language.
+        _out, err, status = run_cli(%w[list library --lang deu --collections])
+        assert_equal 1, status
+        assert_match(/--lang filters.*not --collections/, err)
+        assert_match(%r{--documents/--entries}, err, "the refusal names the lenses that DO filter by language")
+
+        # --loans has its own axis (loan-origin code), not language.
+        _out, err, status = run_cli(%w[list shelf --lang grc --loans])
+        assert_equal 1, status
+        assert_match(/--lang filters.*not --loans/, err)
+      end
+    end
+  end
+
   # -- P28-4: the grouped one-page source map (--sources) --------------------
 
   def seed_source_map(config)
@@ -1468,6 +1517,69 @@ class CLITest < Minitest::Test
       assert_match(/^peo\s/, out3, "the public axis member is enabled and shows")
       refute_match(/^secret\s/, out3, "the blocked member was never implicitly enabled")
       assert_empty err2.scan("no sources enabled"), "the axis enabled its public member"
+    end
+  end
+
+  # -- P44-r1 addendum: scoped list/status suppress the whole-library footer -
+
+  def test_list_axis_with_every_member_enabled_is_silent
+    with_axis_corpus do |config|
+      write_profile(config, "classical") # shelf is classical's only member
+      _out, err, status = with_config(config) { run_cli(%w[list --axis classical]) }
+      assert_nil status
+      refute_match(/enabled: /, err, "no whole-library footer on a scoped request")
+      refute_match(/not enabled/, err, "every requested member is enabled — zero-signal silence")
+    end
+  end
+
+  def test_list_axis_with_gaps_hints_only_the_unenabled_members
+    with_axis_corpus do |config|
+      write_profile(config, "classical") # shelf enabled; slavic's lex is not
+      _out, err, status = with_config(config) { run_cli(%w[list --axis slavic]) }
+      assert_nil status
+      refute_match(/enabled: /, err, "the whole-library footer is suppressed under --axis")
+      assert_match(/1 member not enabled — nabu enable slavic \(lex\)/, err,
+                   "the hint names just the gap + the axis on-ramp (library is a shelf, always shown)")
+    end
+  end
+
+  def test_status_axis_with_gaps_hints_the_enable_on_ramp_not_the_full_footer
+    with_axis_corpus do |config|
+      write_profile(config, "classical")
+      _out, err, status = with_config(config) { run_cli(%w[status --axis slavic]) }
+      assert_nil status
+      refute_match(/enabled: /, err)
+      assert_match(/not enabled — nabu enable slavic \(lex\)/, err)
+    end
+  end
+
+  def test_list_named_source_hints_enable_only_when_not_enabled
+    with_axis_corpus do |config|
+      write_profile(config, "reference") # lex enabled; shelf is not
+      _out, err, status = with_config(config) { run_cli(%w[list shelf]) }
+      assert_nil status
+      assert_match(/1 member not enabled — nabu enable shelf/, err)
+
+      _out, err, status = with_config(config) { run_cli(%w[list lex]) }
+      assert_nil status
+      refute_match(/not enabled/, err, "an enabled source is silent")
+    end
+  end
+
+  def test_scoped_axis_hint_names_a_blocked_member_individually_with_its_grant_marker
+    Dir.mktmpdir("nabu-cli-axis-hint-blocked") do |root|
+      File.write(File.join(root, "axes.yml"), "iranian:\n  persona: \"The Iranist.\"\n  desc: \"Iranian.\"\n")
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "peo:\n  adapter: TestAdapter\n  enabled: true\n  sync_policy: manual\n  " \
+                          "axes: [iranian]\n#{blocked_grant_yaml('secret', axes: 'iranian')}")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources, config_path: "(test)")
+      Nabu::Profile.new(%w[peo]).save(config.profile_path) # peo enabled; secret (blocked) is not
+      _out, err, status = with_config(config) { run_cli(%w[status --axis iranian]) }
+      assert_nil status
+      assert_match(/1 member not enabled — secret · grant required \(nabu enable secret\)/, err,
+                   "a blocked member is named with its grant marker, never folded into `enable iranian`")
+      refute_match(/nabu enable iranian/, err, "the axis enable never carries the blocked member")
     end
   end
 
@@ -4343,6 +4455,44 @@ class CLITest < Minitest::Test
       _out, err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one:1 --source test_adapter]) }
       assert_equal 1, status
       assert_match(/--source requires --random/, err)
+    end
+  end
+
+  # -- P44-r1: --random --lang (the multi-lang eyeball) ----------------------
+
+  def test_show_random_scopes_to_a_language
+    with_list_corpus do |config|
+      # shelf holds grc (alpha) and lat (beta) passages; --lang draws one only.
+      out, _err, status = with_config(config) do
+        run_cli(%w[show --random --source shelf --lang grc --count 5])
+      end
+      assert_nil status
+      urns = out.scan(/^urn:\S+/)
+      refute_empty urns, "grc has visible passages to draw"
+      assert(urns.all? { |urn| urn.start_with?("urn:nabu:shelf:alpha") },
+             "every draw is a grc passage (alpha), never the lat beta")
+      assert_match(/\[grc\]/, out)
+      refute_match(/\[lat\]/, out)
+    end
+  end
+
+  def test_show_random_language_with_nothing_visible_is_an_honest_note
+    with_list_corpus do |config|
+      out, _err, status = with_config(config) do
+        run_cli(%w[show --random --source shelf --lang cop])
+      end
+      assert_nil status, "an empty scope is an honest note, not an error"
+      assert_match(/no passages to show in source shelf in cop/, out)
+    end
+  end
+
+  def test_show_lang_without_random_exits_one
+    with_list_corpus do |config|
+      _out, err, status = with_config(config) do
+        run_cli(%w[show urn:nabu:shelf:alpha:1 --lang grc])
+      end
+      assert_equal 1, status
+      assert_match(/--lang restricts --random draws/, err)
     end
   end
 
