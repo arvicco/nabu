@@ -4,37 +4,50 @@ require "yaml"
 require "fileutils"
 
 module Nabu
-  # The personal focus profile (config/profile.yml, P40-f) — a plain list of
-  # AXIS NAMES and/or SOURCE SLUGS naming what the owner is working on right
-  # now. `nabu status`, `nabu list`, and `nabu health` scope their row set to
-  # the focused sources; an absent/empty file means no profile at all (current
-  # behavior everywhere).
+  # The local enablement config (config/profile.yml, promoted from the P40-f
+  # focus profile at P44-r3b) — a plain list of AXIS NAMES and/or SOURCE SLUGS
+  # naming the sources ENABLED on this box. The entries govern (a) what `nabu
+  # sync`/`sync --all` will acquire and (b) the DEFAULT row set of every read
+  # surface (list/status/health/language/axis cards and MCP nabu_status). The
+  # meaning shifted from "display preference" to "the box's active set"; the
+  # file KEY and vocabulary are unchanged (the existing `focus:` list, axis
+  # names and slugs) so no hand-edited file breaks.
   #
-  # This class is the FILE seam only: load, the stored entry list (sorted,
-  # de-duplicated), empty?, and save with a commented header. It knows nothing
-  # of the registry — resolving names to axes/sources (and flagging drift) is
-  # Nabu::Focus's job, which needs the registry the profile is silent about.
+  # THE DEFAULT INVERSION: an ABSENT file no longer means "everything" — it
+  # means the QUICKSTART DEFAULT SET (Profile.default_entries). The CLI's
+  # enablement resolution handles the one-time MIGRATION (an absent file on a
+  # box that already built a library writes every synced source out, announced)
+  # and the empty-state (a truly fresh box enables the quickstart-tagged rows,
+  # zero for now → the honest "no sources enabled" prompt).
+  #
+  # This class is the FILE seam only: load, exist?, the stored entry list
+  # (sorted, de-duplicated), empty?, default_entries, and save with a commented
+  # header. It knows nothing of the registry beyond default_entries' read — name
+  # resolution/drift is Nabu::Focus's job.
   #
   # The file is gitignored (personal research interest, not a publication) and
   # rides `nabu backup` for free: backup snapshots the whole config/ tree, so
   # this owner-authored, non-derivable file is already covered.
   class Profile
-    # The yaml key holding the focus list.
+    # The yaml key holding the enablement list (kept as `focus:` from P40-f so a
+    # hand-edited file survives the promotion — the vocabulary is unchanged).
     KEY = "focus"
 
-    # The commented header written above the list — what the file is, that it
-    # is gitignored, and how to edit it (by hand or via the focus subcommands).
+    # The commented header written above the list — what the file is (the local
+    # enablement config), that it is gitignored, and how to edit it.
     HEADER = <<~YAML
-      # nabu focus profile — your personal research interest (config/profile.yml).
+      # nabu enablement config (config/profile.yml) — the sources ENABLED on this box.
       #
-      # A plain list of AXIS NAMES and/or SOURCE SLUGS. `nabu status`, `nabu list`,
-      # and `nabu health` then show only the focused sources — your own shelves
-      # always show, and --all shows everything. `nabu search` and `nabu sync --all`
-      # stay library-wide on purpose (focus is a display preference, never a data
-      # or freshness decision).
+      # A plain list of AXIS NAMES and/or SOURCE SLUGS. These entries govern BOTH
+      # what `nabu sync` / `sync --all` acquires AND the default row set of
+      # `nabu list` / `status` / `health` / the axis+language cards / MCP nabu_status
+      # — your own shelves always show, and --all reveals the full registry.
+      # `nabu search` / `show` / `links` / `export` stay library-wide on purpose
+      # (enablement scopes acquisition + visibility, never the corpus you can read).
       #
-      # Gitignored: personal, not published. Rides `nabu backup` (the config/ tree).
-      # Edit by hand or via `nabu focus only|add|drop <names…>` / `nabu focus clear`.
+      # An ABSENT file means the quickstart starter set, NOT everything (the P44-r3b
+      # inversion). Gitignored: personal, not published. Rides `nabu backup`.
+      # Edit by hand or via `nabu enable|disable <axis|source…>`.
     YAML
 
     # The stored entries, sorted and de-duplicated (axis names and/or source
@@ -55,6 +68,23 @@ module Nabu
       raw = YAML.safe_load_file(path) || {}
       list = raw.is_a?(Hash) ? raw[KEY] : nil
       new(Array(list))
+    end
+
+    # Does the enablement config FILE exist (P44-r3b)? The migration seam needs
+    # to tell an ABSENT file (→ quickstart default / one-time migration) apart
+    # from a present-but-empty one (`focus: []` — the owner explicitly enabled
+    # nothing), which #load alone collapses to the same empty entry list.
+    def self.exist?(path)
+      File.exist?(path)
+    end
+
+    # The enablement default for an ABSENT config on a fresh, library-less box
+    # (P44-r3b): the registry rows tagged `quickstart: true`, recorded by slug.
+    # Empty until r3c seeds the tags — so the default is the empty set today and
+    # the honest "no sources enabled" empty-state shows. This is NOT a save; the
+    # caller uses it only to resolve visibility/sync when no file exists yet.
+    def self.default_entries(registry)
+      registry.quickstart_slugs
     end
 
     # A fresh profile with +entries+ (normalized on construction). The write

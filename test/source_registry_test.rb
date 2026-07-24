@@ -600,6 +600,35 @@ class SourceRegistryTest < Minitest::Test
     assert_equal [], registry.axis_members("nonexistent")
   end
 
+  # -- quickstart tag (P44-r3b) --------------------------------------------
+
+  def test_quickstart_defaults_false_and_parses_true
+    registry = load_registry(<<~YAML)
+      starter:
+        adapter: Some::Adapter
+        quickstart: true
+      ordinary:
+        adapter: Some::Adapter
+    YAML
+    assert_predicate registry["starter"], :quickstart?
+    refute_predicate registry["ordinary"], :quickstart?, "absent quickstart = false"
+  end
+
+  def test_quickstart_slugs_lists_tagged_rows_in_order
+    registry = load_registry(<<~YAML)
+      a:
+        adapter: Some::Adapter
+        quickstart: true
+      b:
+        adapter: Some::Adapter
+      c:
+        adapter: Some::Adapter
+        quickstart: true
+    YAML
+    assert_equal %w[a c], registry.quickstart_slugs
+    refute_predicate registry["b"], :quickstart?
+  end
+
   # -- availability (P44-r3a) ----------------------------------------------
 
   def test_availability_defaults_public

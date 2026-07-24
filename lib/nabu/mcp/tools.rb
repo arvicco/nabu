@@ -580,10 +580,17 @@ module Nabu
       # +alignments+ (P11-3): the Nabu::AlignmentRegistry (or a callable
       # returning one, or nil when the hub is unconfigured) — config-loaded by
       # the entrypoint, resolved per call like the connection slots.
-      def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil)
+      def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil,
+                     enabled_slugs: nil)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
+        # The enabled-slug set (P44-r3b): nabu_status's sources array defaults to
+        # the box's ENABLED sources (the CLI list/status default), plus the
+        # owner's own shelves (always) and any catalog orphans. nil = no
+        # enablement config resolved (older callers / unconfigured) → the full
+        # catalog, unfiltered (the pre-r3b behavior).
+        @enabled_slugs = enabled_slugs
         # The source registry (P23-3b): AUTHORITATIVE for enablement. The db
         # sources row mirrors a sources.yml flip only at that source's next
         # sync, so nabu_status reads enabled from the registry for registered
@@ -1693,7 +1700,7 @@ module Nabu
         descriptions = source_descriptions(catalog)
         probes = probe_cache
         stats = Store::SourceStats.available?(catalog)
-        catalog[:sources].order(:slug).map do |source|
+        catalog[:sources].order(:slug).to_a.select { |source| enabled_row?(source[:slug]) }.map do |source|
           holdings = source_holdings(catalog, source[:id], stats: stats)
           row = { slug: source[:slug], enabled: enabled_field(source),
                   license_class: source[:license_class],
@@ -1743,6 +1750,18 @@ module Nabu
         return {} unless catalog.table_exists?(:source_records)
 
         catalog[:source_records].where(kind: "description").select_hash(:slug, :body)
+      end
+
+      # Is +slug+ shown in nabu_status's default sources array (P44-r3b)? The
+      # ENABLED set, plus the owner's own shelves (always) and any catalog
+      # orphan the registry does not know (never silently dropped). A nil
+      # enabled set (unconfigured caller) shows everything, the pre-r3b default.
+      def enabled_row?(slug)
+        return true if @enabled_slugs.nil?
+        return true if @enabled_slugs.include?(slug)
+
+        entry = @registry && @registry[slug]
+        entry.nil? || entry.shelf?
       end
 
       # Registry truth for registered slugs (class note at @registry), the db

@@ -110,11 +110,14 @@ class FocusTest < Minitest::Test
     assert_equal 0, view.registry_hidden
   end
 
-  def test_empty_profile_is_the_pass_through
+  # P44-r3b: an empty enabled set is no longer the pass-through — the profile IS
+  # the box's enabled set, so an empty one shows only the owner's shelves (a
+  # source shows iff enabled; --all is the only pass-through).
+  def test_empty_enabled_set_shows_only_shelves
     view = Nabu::Focus.view(profile: profile, registry: @registry, all: false)
-    refute_predicate view, :active?
-    assert_equal @registry.slugs.sort, view.registry.slugs.sort
-    assert view.visible?("anything-at-all"), "the pass-through hides nothing"
+    assert_predicate view, :active?
+    assert_equal %w[lib1], view.registry.slugs, "only the shelf shows; no source is enabled"
+    refute view.visible?("rem"), "a non-enabled source is hidden"
   end
 
   def test_registry_hidden_counts_the_rows_all_would_reveal
@@ -153,24 +156,54 @@ class FocusTest < Minitest::Test
 
   # -- honesty lines ----------------------------------------------------------
 
-  def test_hint_line_is_the_owner_phrasing
-    assert_equal "nabu focus only <axes…> trims this to your desks", Nabu::Focus.hint_line
+  def test_empty_state_line_names_the_enable_on_ramp
+    assert_match(/no sources enabled/, Nabu::Focus.empty_state_line)
+    assert_match(/nabu enable/, Nabu::Focus.empty_state_line)
   end
 
-  def test_footer_line_names_the_focus_and_the_exact_hidden_count
-    assert_equal "focused on germanic, rem — 3 sources hidden (--all shows them)",
+  def test_footer_line_names_the_enabled_set_and_the_exact_hidden_count
+    assert_equal "enabled: germanic, rem — 3 sources hidden (--all shows them)",
                  Nabu::Focus.footer_line(%w[germanic rem], 3)
   end
 
   def test_footer_line_singular_and_zero_suppressed
-    assert_equal "focused on germanic — 1 source hidden (--all shows them)",
+    assert_equal "enabled: germanic — 1 source hidden (--all shows them)",
                  Nabu::Focus.footer_line(%w[germanic], 1)
-    assert_equal "focused on germanic", Nabu::Focus.footer_line(%w[germanic], 0)
+    assert_equal "enabled: germanic", Nabu::Focus.footer_line(%w[germanic], 0)
   end
 
   def test_drift_line_names_the_ignored_entries
     line = Nabu::Focus.drift_line(%w[bogus typo])
     assert_match(/ignoring bogus, typo/, line)
     assert_match(/registry drift/, line)
+  end
+
+  # P44-r3b: an AXIS enables its PUBLIC members only — a blocked (grant-gated)
+  # member never joins the enabled set implicitly; a blocked source named BY
+  # SLUG does.
+  def test_axis_expansion_excludes_blocked_members_but_a_named_slug_includes
+    dir = Dir.mktmpdir
+    File.write(File.join(dir, "axes.yml"), AXES)
+    File.write(File.join(dir, "sources.yml"), <<~YAML)
+      rem:
+        adapter: Nabu::Adapters::UniversalDependencies
+        enabled: true
+        sync_policy: manual
+        axes: [germanic]
+      secret:
+        adapter: Nabu::Adapters::UniversalDependencies
+        enabled: true
+        sync_policy: manual
+        axes: [germanic]
+        availability: blocked
+    YAML
+    registry = Nabu::SourceRegistry.load(File.join(dir, "sources.yml"))
+    by_axis = Nabu::Focus.resolve(Nabu::Profile.new(%w[germanic]), registry)
+    refute_includes by_axis.slugs, "secret", "an axis never drags a blocked member in"
+    assert_includes by_axis.slugs, "rem"
+    by_slug = Nabu::Focus.resolve(Nabu::Profile.new(%w[secret]), registry)
+    assert_includes by_slug.slugs, "secret", "a blocked source named by slug is enabled"
+  ensure
+    FileUtils.remove_entry(dir)
   end
 end
