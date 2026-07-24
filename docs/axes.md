@@ -59,7 +59,7 @@ registry currently tags to it.
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
-**Members** (10): `perseus-greek`, `perseus-latin`, `first1k-greek`, `ud`, `proiel`, `lexica`, `vulgate`, `lila`, `diorisis`, `glaux`
+**Members** (11): `perseus-greek`, `perseus-latin`, `first1k-greek`, `ud`, `proiel`, `lexica`, `vulgate`, `lila`, `diorisis`, `glaux`, `pedecerto`
 
 ### epigraphy
 

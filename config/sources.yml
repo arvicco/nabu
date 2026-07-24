@@ -2380,6 +2380,34 @@ titus-avestan:
       (Avesta ed. Geldner/Westergaard; electronic text Sonja Fritz; corrections
       Gippert et al.) wherever any Avestan text is displayed.
 
+pedecerto:
+  adapter: Nabu::Adapters::Pedecerto
+  kind: module   # P44-7: machinery-only — a meter-enrichment instrument, zero catalog rows, up=module
+  axes: [classical]
+  enabled: false   # PERMANENTLY false — an enrichment instrument, not a text
+                   # source (the trismegistos/kitab precedent): discover mints
+                   # no documents. The row gives the owner the sanctioned fetch
+                   # path; its data is enrichments-table meter rows (kind=meter),
+                   # re-derived by the PedecertoScansions producer after every
+                   # sync AND by rebuild. OWNER QUEUE (P44-7): bin/nabu sync
+                   # pedecerto downloads + unpacks allpedecertoscans.zip (~12 MB,
+                   # 469 <AUTHOR>-<work>.xml) under canonical/pedecerto/, then
+                   # the producer resolves each scanned line to a held
+                   # Perseus-Latin passage (WORK_CROSSWALK seed) and attaches its
+                   # scansion. The sync tail prints the honest matched/unmatched
+                   # line census; extend WORK_CROSSWALK for more held works.
+  # P44-7: Pedecerto (Udine / Ca' Foscari) — Digital Latin Metre. XML metrical
+  # scansions of the Latin verse corpus (227,791 hexameter lines + pentameter/
+  # other verse), one file per author-work. NOT a text source: the passages
+  # already exist (held Perseus-Latin phi texts); the meter attaches as a
+  # per-passage enrichment (kind=meter) over the classical desk. LICENSE:
+  # per-file <rights> + site, verbatim CC BY-NC-ND 4.0 ("non ne è consentito
+  # alcun uso a scopi commerciali… purché i documenti non vengano alterati in
+  # alcun modo sostanziale… data, paternità e fonte originale") → nc,
+  # attribution + no substantial alteration (satisfied by canonical-means-
+  # canonical). Fetch is an owner decision (a 12 MB bulk zip).
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

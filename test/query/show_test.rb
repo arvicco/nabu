@@ -352,5 +352,34 @@ module Query
       assert_equal "μῆνις", result.headword
       assert_nil Nabu::Query::Show.new(catalog: @catalog).run("urn:nabu:dict:lsj:missing")
     end
+
+    # -- meter enrichment (P44-7) ---------------------------------------------
+    # The consumer seam: a passage carrying a pedecerto scansion reports it; an
+    # ordinary passage reports nil (the CLI's meter line is absent byte-for-byte).
+
+    def attach_meter(urn, meter:, pattern:)
+      passage = Nabu::Store::Passage.first(urn: urn)
+      @catalog[:enrichments].insert(
+        passage_id: passage.id, kind: "meter", model: "pedecerto",
+        model_version: "pedecerto-scansions/1", at: Time.now,
+        payload_json: JSON.generate("meter" => meter, "pattern" => pattern, "words" => [])
+      )
+    end
+
+    def test_passage_with_a_meter_enrichment_reports_it
+      load_document("1", [%w[1 μῆνιν]])
+      attach_meter("urn:d:1:1", meter: "H", pattern: "DSDS")
+
+      meter = show("urn:d:1:1").meter
+      refute_nil meter
+      assert_equal "H", meter.meter
+      assert_equal "DSDS", meter.pattern
+      assert_equal "pedecerto", meter.producer
+    end
+
+    def test_passage_without_a_meter_enrichment_reports_nil
+      load_document("1", [%w[1 μῆνιν]])
+      assert_nil show("urn:d:1:1").meter, "an unscanned passage carries no meter"
+    end
   end
 end
