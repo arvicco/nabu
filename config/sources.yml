@@ -1083,6 +1083,60 @@ bridging:
   # completed comparison build → re-syncs are an owner decision.
   sync_policy: manual
 
+trismegistos:
+  adapter: Nabu::Adapters::Trismegistos
+  kind: module   # P43-3: machinery-only — a links instrument, zero catalog rows, up=module
+  axes: [epigraphy]
+  enabled: false   # PERMANENTLY false — a links instrument, not a text source
+                   # (the bridging/kr-gaiji precedent): discover mints no
+                   # documents. The row gives the owner the sanctioned fetch
+                   # path; its data is links-journal edges, refreshed by the
+                   # TrismegistosCrosswalk producer (#8) after every sync.
+                   # OWNER QUEUE (P43-3): bin/nabu sync trismegistos — sweeps
+                   # ONLY the ~6,816 distinct tm:<id> targets already in the
+                   # links graph (a live read of links.sqlite3), sequential
+                   # with a ≥1s pause, resumable (skips ids already on disk),
+                   # landing one JSON per id under canonical/trismegistos/
+                   # texrelations/. The API fair-use terms are UNREAD (do not
+                   # render to the fetcher) — eyeball the endpoint's rate
+                   # policy before the first real sweep.
+  # P43-3: Trismegistos TexRelations — the cross-project concordance
+  # crosswalk (trismegistos.org/dataservices/texrelations/<id>). Makes the
+  # library's dangling tm:<id> reference edges resolvable: each response's
+  # partner ids (EDH/EDCS/EDR/ISic/DDBDP/HGV/PHI/CPI/… 80+) become kind=
+  # reference edges from the tm hub, and where two held sources witness one
+  # stone (an isicily record + the edh record its EDH partner names) the
+  # TrismegistosCrosswalk producer mints the same-stone internal edge
+  # urn:nabu:<held> ↔ urn:nabu:<held>. LICENSE: dataservices page verbatim
+  # "open access to our data on a CC BY-SA 4.0 license" → attribution (the
+  # house BY-SA class). Fetch is an owner decision (the sweep is thousands
+  # of polite sequential requests).
+  sync_policy: manual
+
+pleiades:
+  adapter: Nabu::Adapters::Pleiades
+  kind: module   # P43-3: machinery-only — a place resolver seam, zero catalog rows, up=module
+  axes: [epigraphy]
+  enabled: false   # PERMANENTLY false — a resolver instrument, not a text
+                   # source (the bridging/kr-gaiji precedent): discover mints
+                   # no documents, there is no migration and no catalog table.
+                   # The row gives the owner the sanctioned fetch path for the
+                   # gazetteer dump, resolved by Nabu::Pleiades (place id →
+                   # title/point/place-types/time-periods) and consumed by a
+                   # later display packet. OWNER QUEUE (P43-3): bin/nabu sync
+                   # pleiades lands the dump under canonical/pleiades/. Two
+                   # first-sync items (see lib/nabu/adapters/pleiades.rb):
+                   # PIN the fetch URL to the Zenodo 4.1 file (reproducible
+                   # snapshot) and CONFIRM the dump's outer container against
+                   # the downloaded file (the resolver already accepts every
+                   # plausible container + gzip).
+  # P43-3: Pleiades — the ancient-world gazetteer. v1 is a pure read seam
+  # over the numbered quarterly archival release (Zenodo 4.1, 2025-05-28),
+  # the openiti Zenodo posture. LICENSE: downloads page verbatim "Creative
+  # Commons Attribution 3.0 License (cc-by)" → attribution. Fetch is an
+  # owner decision (the dump is large + version-pinned).
+  sync_policy: manual
+
 dss:
   adapter: Nabu::Adapters::Dss
   axes: [biblical, hebrew]

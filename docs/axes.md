@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (14): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`
+**Members** (16): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `trismegistos`, `pleiades`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`
 
 ### slavic
 
