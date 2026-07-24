@@ -125,9 +125,15 @@ module Nabu
 
     # Sync every ENABLED kind: source with sync_policy "auto". Returns { slug => Outcome |
     # Nabu::Error }: a source that raises is captured in the hash so the batch
-    # runs to completion (one failure never stops the others).
-    def sync_all(parse_only: false, force: false, progress: nil)
-      live_enabled.to_h do |entry|
+    # runs to completion (one failure never stops the others). +enabled+
+    # (P44-r3b) is the box's enabled-slug set: when given, the live-enabled
+    # sweep is intersected with it (sync --all = the enabled set only); nil
+    # keeps the whole registry sweep (an unconfigured box, or a --parse-only
+    # repair run — the CLI decides).
+    def sync_all(parse_only: false, force: false, progress: nil, enabled: nil)
+      sweep = live_enabled
+      sweep = sweep.select { |entry| enabled.include?(entry.slug) } unless enabled.nil?
+      sweep.to_h do |entry|
         result =
           if @grant_gate.blocked?(entry)
             # A permission-bound source with no acknowledgment is SKIPPED, never

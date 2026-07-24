@@ -74,6 +74,16 @@ module Nabu
     AVAILABILITIES = %w[public blocked].freeze
     DEFAULT_AVAILABILITY = "public"
 
+    # The quickstart starter tag (P44-r3b). `quickstart: true` marks a source as
+    # part of the CURATED starter set a fresh box meets first: when
+    # config/profile.yml is ABSENT and no library has been built yet, the
+    # enablement default is exactly these rows (Profile.default_entries). Absent
+    # = false (an ordinary source is not in the starter set). r3c seeds the tags;
+    # r3b only parses the field and wires the default seam — with zero rows
+    # tagged, the default is the empty set and the honest "no sources enabled"
+    # empty-state shows.
+    DEFAULT_QUICKSTART = false
+
     # The fetch-grant block (P42-r1): a permission-bound source whose right to
     # fetch is NOT conveyed by a public license (StarLing's personal e-mail
     # grant to the project author, the future TITUS Avestan). A public clone of
@@ -141,11 +151,12 @@ module Nabu
     # a configuration error caught at load. Absent on every ordinary source.
     Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :kind, :translations,
                         :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings, :axes,
-                        :grant_required, :grant, :availability) do
+                        :grant_required, :grant, :availability, :quickstart) do
       def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false,
                      lemma_tier: DEFAULT_LEMMA_TIER, classes: nil, siblings: nil, axes: [],
-                     grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY)
+                     grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
+                     quickstart: DEFAULT_QUICKSTART)
         super
       end
 
@@ -168,6 +179,10 @@ module Nabu
       # grant_required?/shelf?; the default (no `availability:` key) is public.
       def blocked? = availability == "blocked"
       def public? = !blocked?
+
+      # In the curated quickstart starter set (P44-r3b)? Drives
+      # Profile.default_entries on a fresh, library-less box.
+      def quickstart? = quickstart
 
       # Resolve the adapter constant lazily. A bad/missing class is a
       # configuration error, not a crash: surface it as a ValidationError
@@ -284,7 +299,8 @@ module Nabu
         siblings: siblings!(slug, config),
         axes: axes!(slug, config, axis_registry),
         grant_required: grant_required, grant: grant,
-        availability: availability!(slug, config)
+        availability: availability!(slug, config),
+        quickstart: boolean!(slug, config, "quickstart")
       )
     end
     private_class_method :build_entry
@@ -533,6 +549,13 @@ module Nabu
 
     def slugs
       @entries.keys
+    end
+
+    # Slugs in the curated quickstart starter set (P44-r3b), registration
+    # order — the fresh-box enablement default (Profile.default_entries). Empty
+    # until r3c seeds `quickstart: true` tags, so r3b's default is the empty set.
+    def quickstart_slugs
+      @entries.each_value.select(&:quickstart?).map(&:slug)
     end
 
     # Slugs opted into the trigram fragment index (search --fuzzy, P16-4) —

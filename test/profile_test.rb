@@ -34,9 +34,44 @@ class ProfileTest < Minitest::Test
       path = File.join(dir, "profile.yml")
       Nabu::Profile.new(%w[germanic rem]).save(path)
       text = File.read(path)
-      assert_match(/\A# nabu focus profile/, text)
+      # P44-r3b: the header now names the enablement config; the KEY stays `focus:`
+      # so a hand-edited P40-f file survives the promotion.
+      assert_match(/\A# nabu enablement config/, text)
+      assert_match(/ENABLED on this box/, text)
       assert_match(/gitignored/i, text)
       assert_match(/^focus:\n  - germanic\n  - rem\n/, text)
+    end
+  end
+
+  # P44-r3b: exist? distinguishes an ABSENT file (→ quickstart default /
+  # migration) from a present-but-empty one, which #load collapses to empty.
+  def test_exist_distinguishes_absent_from_present_but_empty
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "profile.yml")
+      refute Nabu::Profile.exist?(path), "an absent file"
+      Nabu::Profile.new([]).save(path)
+      assert Nabu::Profile.exist?(path), "a present-but-empty file exists"
+      assert_predicate Nabu::Profile.load(path), :empty?
+    end
+  end
+
+  # P44-r3b: default_entries is the quickstart-tagged slugs — empty until r3c
+  # seeds tags, which is the honest empty-state default for a fresh box.
+  def test_default_entries_are_the_quickstart_tagged_slugs
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, "sources.yml"), <<~YAML)
+        starter:
+          adapter: TestAdapter
+          enabled: true
+          sync_policy: manual
+          quickstart: true
+        ordinary:
+          adapter: TestAdapter
+          enabled: true
+          sync_policy: manual
+      YAML
+      registry = Nabu::SourceRegistry.load(File.join(dir, "sources.yml"))
+      assert_equal %w[starter], Nabu::Profile.default_entries(registry)
     end
   end
 

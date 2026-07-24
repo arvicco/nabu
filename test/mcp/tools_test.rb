@@ -33,9 +33,10 @@ module MCP
 
     # -- rig -------------------------------------------------------------------
 
-    def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil, links: nil, registry: nil)
+    def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil, links: nil, registry: nil,
+              enabled_slugs: nil)
       Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger, links: links,
-                           registry: registry)
+                           registry: registry, enabled_slugs: enabled_slugs)
     end
 
     def make_document(source: @open, urn: "urn:d:1", title: "Iliad", language: "grc",
@@ -898,6 +899,27 @@ module MCP
              "registry enabled: true must win over the stale db row"
       # adhoc has no registry line: the db value is all there is.
       assert sources.find { |s| s.fetch("slug") == "adhoc" }.fetch("enabled")
+    end
+
+    # P44-r3b: nabu_status's sources array defaults to the box's ENABLED set
+    # (the CLI list/status default), plus the owner's own shelves; a nil set
+    # (unconfigured caller) shows everything, unchanged.
+    def test_status_sources_default_to_the_enabled_set
+      seed_corpus
+      registry = Nabu::SourceRegistry.new(
+        %w[perseus adhoc].map do |slug|
+          Nabu::SourceRegistry::Entry.new(slug: slug, adapter_class_name: "TestAdapter",
+                                          enabled: true, sync_policy: "manual")
+        end
+      )
+      slugs = payload(tools(registry: registry, enabled_slugs: %w[perseus])
+                        .call("nabu_status", {})).fetch("sources").map { |s| s.fetch("slug") }
+      assert_includes slugs, "perseus", "the enabled source shows"
+      refute_includes slugs, "adhoc", "a non-enabled source is hidden by default"
+
+      all = payload(tools(registry: registry, enabled_slugs: nil)
+                      .call("nabu_status", {})).fetch("sources").map { |s| s.fetch("slug") }
+      assert_includes all, "adhoc", "a nil enabled set is the unfiltered pre-r3b default"
     end
 
     # P14-12: nabu_status surfaces the CACHED upstream-drift verdict per source
