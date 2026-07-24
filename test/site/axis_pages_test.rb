@@ -81,9 +81,42 @@ class AxisPagesTest < Minitest::Test
 
   def test_each_page_pins_the_member_slug_list_to_the_registry
     axes.each_axis do |axis|
-      assert_equal registry.axis_members(axis.name), table_slugs(axis.name),
+      assert_equal registry.public_axis_members(axis.name), table_slugs(axis.name),
                    "#{axis.name}: the shelves table's member slugs must equal " \
-                   "SourceRegistry#axis_members, in order (regenerate with `rake site:axes`)"
+                   "SourceRegistry#public_axis_members — blocked grant-gated rows " \
+                   "(availability: blocked) are not advertised publicly, in order " \
+                   "(regenerate with `rake site:axes`)"
+    end
+  end
+
+  # P44-r3a: an axis with a blocked (grant-gated private) member carries the
+  # honesty footnote below the (public-only) shelves table; an axis with none
+  # must NOT carry it. Pinned to the registry so a new blocked source without a
+  # page regeneration fails the gate.
+  FOOTNOTE = "Private research materials under personal grants are not listed."
+
+  def test_blocked_member_axes_carry_the_footnote_and_others_do_not
+    axes.each_axis do |axis|
+      has_blocked = !registry.blocked_axis_members(axis.name).empty?
+      body = body(axis.name)
+      if has_blocked
+        assert_includes body, FOOTNOTE,
+                        "#{axis.name}: has a blocked member — the page must carry the " \
+                        "private-materials footnote (regenerate with `rake site:axes`)"
+      else
+        refute_includes body, FOOTNOTE,
+                        "#{axis.name}: has no blocked member — the page must NOT carry the footnote"
+      end
+    end
+  end
+
+  # The excluded blocked slugs never appear in any public shelves table.
+  def test_blocked_members_never_appear_in_a_shelves_table
+    axes.each_axis do |axis|
+      registry.blocked_axis_members(axis.name).each do |slug|
+        refute_includes table_slugs(axis.name), slug,
+                        "#{axis.name}: blocked source #{slug} must not be listed in the public shelves table"
+      end
     end
   end
 

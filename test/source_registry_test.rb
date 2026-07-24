@@ -600,6 +600,64 @@ class SourceRegistryTest < Minitest::Test
     assert_equal [], registry.axis_members("nonexistent")
   end
 
+  # -- availability (P44-r3a) ----------------------------------------------
+
+  def test_availability_defaults_public
+    entry = load_registry(<<~YAML)["minimal-src"]
+      minimal-src:
+        adapter: Some::Adapter
+    YAML
+    assert_equal "public", entry.availability, "absent availability = public"
+    refute_predicate entry, :blocked?
+    assert_predicate entry, :public?
+  end
+
+  def test_availability_blocked_parses
+    entry = load_registry(<<~YAML)["gated-src"]
+      gated-src:
+        adapter: Some::Adapter
+        availability: blocked
+    YAML
+    assert_equal "blocked", entry.availability
+    assert_predicate entry, :blocked?
+    refute_predicate entry, :public?
+  end
+
+  def test_unknown_availability_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        gated-src:
+          adapter: Some::Adapter
+          availability: hidden
+      YAML
+    end
+    assert_match(/gated-src/, error.message)
+    assert_match(/availability must be one of public, blocked/, error.message)
+  end
+
+  # #public_axis_members / #blocked_axis_members / #blocked? — the seams the
+  # public site + docs surfaces read (blocked rows excluded), while
+  # #axis_members stays the full list for the CLI/sync scopes.
+  def test_public_axis_members_excludes_blocked_while_axis_members_keeps_them
+    registry = load_registry_with_axes(TWO_AXES, <<~YAML)
+      corph-src:
+        adapter: A
+        axes: [celtic]
+      gated-src:
+        adapter: B
+        axes: [celtic]
+        availability: blocked
+    YAML
+    assert_equal %w[corph-src gated-src], registry.axis_members("celtic"),
+                 "axis_members keeps the full membership (CLI/sync scope)"
+    assert_equal %w[corph-src], registry.public_axis_members("celtic"),
+                 "public_axis_members drops the blocked row"
+    assert_equal %w[gated-src], registry.blocked_axis_members("celtic")
+    assert registry.blocked?("gated-src")
+    refute registry.blocked?("corph-src")
+    refute registry.blocked?("nonexistent"), "unknown slug is not blocked"
+  end
+
   def test_source_without_axes_raises_once_definitions_exist
     error = assert_raises(Nabu::ValidationError) do
       load_registry_with_axes(TWO_AXES, <<~YAML)
@@ -718,6 +776,22 @@ class SourceRegistryTest < Minitest::Test
     assert_match(/titus-avestan: fetch requires a GRANT/, notice)
     assert_match(/request your own:/, notice, "the refusal points at the request scaffold")
     assert_match(/Gippert/, notice)
+  end
+
+  # P44-r3a: the fetch right is a PRIVATE personal grant, so the public repo
+  # must not advertise the row as a library holding — availability: blocked
+  # excludes it from public docs/site/census, and etym's public membership
+  # drops it (while the full axis_members list keeps it for CLI/sync scopes).
+  def test_shipped_titus_avestan_is_blocked_and_dropped_from_public_etym
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+
+    assert_predicate registry["titus-avestan"], :blocked?
+    assert registry.blocked?("titus-avestan")
+    assert_includes registry.axis_members("etym"), "titus-avestan",
+                    "the full membership (CLI/sync scope) still carries it"
+    refute_includes registry.public_axis_members("etym"), "titus-avestan",
+                    "the PUBLIC etym membership drops the grant-gated row"
+    assert_equal %w[titus-avestan], registry.blocked_axis_members("etym")
   end
 
   # The manifest's display posture: nc (servable + credited, not hidden) and a
