@@ -58,6 +58,10 @@ module Nabu
 
       # Registry rows hidden by the filter (sources + modules --all reveals).
       def registry_hidden = full_registry.size - registry.size
+
+      # Their slugs, registration order — a small gap is NAMED in the footer
+      # (P44-i2, owner report 2026-07-24: a bare count is a guessing game).
+      def registry_hidden_slugs = full_registry.slugs - registry.slugs
     end
 
     # Split +profile+'s entries against +registry+ and expand to the focused
@@ -153,19 +157,26 @@ module Nabu
       "no sources enabled — nabu enable <axis|source> (nabu quickstart for a starter set)"
     end
 
+    # A gap up to this size is NAMED in the footer; beyond it the count
+    # summary stands. A fresh box hides ~90 sources — naming them all is the
+    # name dump the owner refused — but "1 source not enabled" with no name
+    # is a guessing game (owner report 2026-07-24, P44-i2).
+    FOOTER_NAME_CAP = 6
+
     # Shown after a default (enabled) table. The ROWS ARE the enabled set
     # (P44-r3b), so re-naming them here was pure duplication (owner report
-    # 2026-07-24: "why are they listed TWICE?") — a focus-era leftover from
-    # when the footer named the trim over an everything-table. Now a count
-    # summary: how many enabled, how many --all would reveal (the P35
-    # exact-count honesty rule; hidden clause zero-suppressed), and the
-    # grow-the-set on-ramp.
-    def footer_line(entries, hidden)
+    # 2026-07-24: "why are they listed TWICE?"). The hidden side: a small gap
+    # names its slugs outright (P44-i2), a large one keeps the exact count
+    # (the P35 honesty rule); zero-suppressed with the grow-the-set on-ramp.
+    def footer_line(entries, hidden_slugs)
       head = "enabled: #{entries.size} #{entries.size == 1 ? 'entry' : 'entries'}"
-      tail = " (nabu enable <axis|source> to add)"
-      return head + tail unless hidden.positive?
+      return "#{head} (nabu enable <axis|source> to add)" if hidden_slugs.empty?
+      if hidden_slugs.size <= FOOTER_NAME_CAP
+        return "#{head} — not enabled: #{hidden_slugs.join(', ')} " \
+               "(--all shows #{hidden_slugs.size == 1 ? 'it' : 'them'})"
+      end
 
-      "#{head} — #{hidden} #{hidden == 1 ? 'source' : 'sources'} not enabled (--all shows them)"
+      "#{head} — #{hidden_slugs.size} sources not enabled (--all shows them)"
     end
 
     # The registry-drift warning: names in the file that match nothing now.
