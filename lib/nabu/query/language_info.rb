@@ -57,8 +57,17 @@ module Nabu
           codes[language][:documents] = count
         end
         if lemma_index?
-          gold_lemma_rows.group_and_count(:language).each do |row|
-            codes[row.fetch(:language)][:lemma_rows] = row.fetch(:count)
+          # P45-r3: the write-time freq shelf when it exists (the P42
+          # doctrine — probes at read time), the live aggregate only on a
+          # pre-P42-1 fulltext.
+          if Store::LemmaFrequencies.available?(@fulltext)
+            Store::LemmaFrequencies.gold_language_totals(@fulltext).each do |language, count|
+              codes[language][:lemma_rows] = count
+            end
+          else
+            gold_lemma_rows.group_and_count(:language).each do |row|
+              codes[row.fetch(:language)][:lemma_rows] = row.fetch(:count)
+            end
           end
         end
         shelf_rows.each { |shelf| codes[shelf[:language]][:shelves] << shelf[:title] }
@@ -93,8 +102,32 @@ module Nabu
           .count
       end
 
+      public
+
+      # The axis card's one-number probe (P45-r3): summed gold rows over a
+      # language set in ONE grouped query — never a per-code Relevance
+      # build (relevance also computes shelves/edges/breakdowns the card
+      # discards).
+      def gold_rows_for(codes)
+        return 0 unless lemma_index?
+
+        if Store::LemmaFrequencies.available?(@fulltext)
+          totals = Store::LemmaFrequencies.gold_language_totals(@fulltext)
+          return codes.sum { |code| totals[code.to_s].to_i }
+        end
+        gold_lemma_rows.where(language: codes.map(&:to_s)).count
+      end
+
+      private
+
       def lemma_rows(code)
         return 0 unless lemma_index?
+        # P45-r3 (the owner's 30 s `axis romance`: 18 member languages ×
+        # a live COUNT over the 16M-row lemma index): probe the write-time
+        # freq shelf; the live count survives only for a pre-P42-1 fulltext.
+        if Store::LemmaFrequencies.available?(@fulltext)
+          return Store::LemmaFrequencies.gold_language_total(@fulltext, code)
+        end
 
         gold_lemma_rows.where(language: code).count
       end

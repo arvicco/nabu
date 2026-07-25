@@ -3536,7 +3536,7 @@ module Nabu
         langs = members.flat_map { |slug| by_slug[slug]&.languages || [] }.uniq.sort
         return say("  gold lemmas: no held languages yet") if langs.empty?
 
-        total = info ? langs.sum { |code| info.relevance(code).lemma_rows } : 0
+        total = info ? info.gold_rows_for(langs) : 0
         if total.positive?
           say "  gold lemmas: #{commas(total)} rows across #{langs.join(', ')} (nabu search --lemma)"
         else
