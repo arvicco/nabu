@@ -63,5 +63,60 @@ module Adapters
       assert_equal "https://www.pedecerto.eu/allpedecertoscans.zip", target.zip_url
       assert_nil target.metadata_url, "the governing license lives in the artifact's own <rights>"
     end
+
+    # --- fetch (WebMock only, no network) — the P44-i3 live repro -------------
+    # The owner's first sync crashed in fetch_notes (`not_modified?` on a
+    # ZipFetch::Result, whose field is plain `not_modified`): nothing had ever
+    # driven fetch end to end, because a module row escapes the conformance
+    # suite's discover→parse round-trip. This test IS that drive: real zip
+    # body, both fetch outcomes (fresh unpack and 304), notes asserted.
+
+    # The real artifact's layout (verified in the 2026-07-25 first sync's
+    # landed bytes): TWO top-level entries — allpedecertoscans/ beside a
+    # macOS __MACOSX/ junk dir — so ZipFetch's single-top-dir strip does NOT
+    # fire and the xml files land under DIRNAME, where the producer reads
+    # them. A single-top-dir test zip would be stripped to the workdir root
+    # and assert a layout upstream doesn't ship.
+    def zip_body
+      @zip_body ||= Dir.mktmpdir do |tmp|
+        stage = File.join(tmp, "stage")
+        FileUtils.mkdir_p(stage)
+        FileUtils.cp_r(File.join(FIXTURES, Nabu::PedecertoScansions::DIRNAME),
+                       File.join(stage, Nabu::PedecertoScansions::DIRNAME))
+        junk = File.join(stage, "__MACOSX", Nabu::PedecertoScansions::DIRNAME)
+        FileUtils.mkdir_p(junk)
+        File.write(File.join(junk, "._.DS_Store"), "")
+        zip = File.join(tmp, "allpedecertoscans.zip")
+        Dir.chdir(stage) { Nabu::Shell.run("zip", "-qr", zip, Nabu::PedecertoScansions::DIRNAME, "__MACOSX") }
+        File.binread(zip)
+      end
+    end
+
+    def test_fetch_unpacks_the_zip_and_a_304_repeats_the_pin
+      stub_request(:get, Nabu::Adapters::Pedecerto::ZIP_URL).to_return(
+        status: 200, body: zip_body,
+        headers: { "Last-Modified" => "Mon, 18 Aug 2025 15:51:14 GMT" }
+      )
+      Dir.mktmpdir do |workdir|
+        report = Nabu::Adapters::Pedecerto.new.fetch(workdir)
+        assert_instance_of Nabu::FetchReport, report
+        assert_match(/\A\h{64}\z/, report.sha)
+        assert_includes report.notes, "allpedecertoscans.zip unpacked"
+        refute_empty Dir.glob(File.join(workdir, Nabu::PedecertoScansions::DIRNAME, "*.xml")),
+                     "the corpus xml files must land where PedecertoScansions reads them"
+
+        stub_request(:get, Nabu::Adapters::Pedecerto::ZIP_URL)
+          .with(headers: { "If-Modified-Since" => "Mon, 18 Aug 2025 15:51:14 GMT" })
+          .to_return(status: 304)
+        second = Nabu::Adapters::Pedecerto.new.fetch(workdir)
+        assert_equal report.sha, second.sha, "a 304 keeps the pinned sha"
+        assert_includes second.notes, "not modified (304)"
+      end
+    end
+
+    def test_fetch_wraps_http_failure_in_fetch_error
+      stub_request(:get, Nabu::Adapters::Pedecerto::ZIP_URL).to_return(status: 500)
+      Dir.mktmpdir { |workdir| assert_raises(Nabu::FetchError) { Nabu::Adapters::Pedecerto.new.fetch(workdir) } }
+    end
   end
 end

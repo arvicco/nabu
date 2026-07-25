@@ -127,7 +127,7 @@ module Nabu
       end
 
       def fetch_notes(result)
-        base = result.not_modified? ? "not modified (304)" : "allpedecertoscans.zip unpacked"
+        base = result.not_modified ? "not modified (304)" : "allpedecertoscans.zip unpacked"
         [base, attic_notes(result.atticked)].compact.join("; ")
       end
     end
