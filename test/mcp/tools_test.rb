@@ -338,6 +338,55 @@ module MCP
       end
     end
 
+    # -- nabu_search: the meter facet (P45-5) -----------------------------------
+
+    def seed_meter_corpus!
+      doc = make_document(urn: "urn:m:1", title: "Aeneid", language: "lat")
+      make_passage(doc, urn: "urn:m:1:1", text: "arma uirumque cano", sequence: 0, language: "lat")
+      make_passage(doc, urn: "urn:m:1:2", text: "arma alia linea", sequence: 1, language: "lat")
+      Nabu::Store::Enrichment.write!(
+        @catalog, passage_id: @catalog[:passages].where(urn: "urn:m:1:1").get(:id),
+                  kind: "meter", model: "pedecerto", model_version: "test",
+                  payload: { "meter" => "H", "pattern" => "DSDS" }
+      )
+      rebuild!
+    end
+
+    def test_search_meter_filters_hits_and_notes_its_source
+      seed_meter_corpus!
+      body = payload(call("nabu_search", { "query" => "arma", "meter" => "H" }))
+      assert_equal(%w[urn:m:1:1], body.fetch("matches").map { |hit| hit.fetch("urn") },
+                   "only the passage carrying a matching meter enrichment survives")
+      assert_match(/meter: pedecerto enrichments/, body.fetch("note"),
+                   "the meter facet names its source layer in the note")
+    end
+
+    def test_search_meter_empty_layer_explains_itself
+      doc = make_document(urn: "urn:m:1", title: "Aeneid", language: "lat")
+      make_passage(doc, urn: "urn:m:1:1", text: "arma uirumque cano", sequence: 0, language: "lat")
+      rebuild!
+      body = payload(call("nabu_search", { "query" => "arma", "meter" => "H" }))
+      assert_empty body.fetch("matches")
+      assert_match(/holds no meter enrichments/, body.fetch("note"),
+                   "no meter data explains itself — never a silent zero")
+    end
+
+    def test_search_meter_does_not_compose_with_lemma_or_near
+      seed_meter_corpus!
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "arma", "meter" => "H" })
+      end
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "query" => "arma", "near" => "cano", "meter" => "H" })
+      end
+    end
+
+    def test_search_schema_documents_the_meter_params
+      properties = Nabu::MCP::Tools::SEARCH_SCHEMA.fetch(:properties)
+      assert properties.key?(:meter), "the meter param is schema-documented"
+      assert properties.key?(:meter_pattern), "the meter_pattern param is schema-documented"
+    end
+
     # -- nabu_search: proximity (near/window) -----------------------------------
 
     def test_search_near_keeps_only_the_close_pair_both_terms_highlighted

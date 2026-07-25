@@ -79,10 +79,10 @@ class HypotacticMeterTest < Minitest::Test
     seed_hymn!(L1_URN => L1, L2_URN => L2, L9_URN => L9)
     result = producer.run("hypotactic", workdir: FIXTURES)
 
-    assert_equal 1, result.files
-    assert_equal 293, result.lines_read
+    assert_equal 2, result.files, "HHAphrodite + the iliad1 dedup fixture"
+    assert_equal 303, result.lines_read, "293 HHAphrodite + 10 iliad1 lines"
     assert_equal 1, result.mapped_works
-    assert_equal 0, result.unmapped_works
+    assert_equal 1, result.unmapped_works, "iliad1: mapped but not held here"
     assert_equal 3, result.matched, "the three seeded lines matched by text"
     assert_equal 3, @catalog[:enrichments].count
     assert_equal [%w[meter hypotactic]],
@@ -124,7 +124,7 @@ class HypotacticMeterTest < Minitest::Test
     result = producer.run("hypotactic", workdir: FIXTURES)
 
     assert_equal 1, result.matched
-    assert_equal 292, result.unmatched, "the 292 unheld lines are censused, not guessed"
+    assert_equal 302, result.unmatched, "the 292 unheld hymn lines + 10 iliad lines are censused, not guessed"
     assert_equal 1, @catalog[:enrichments].count
   end
 
@@ -134,9 +134,9 @@ class HypotacticMeterTest < Minitest::Test
     # one that resolved at least one line).
     result = producer.run("hypotactic", workdir: FIXTURES)
     assert_equal 0, result.mapped_works
-    assert_equal 1, result.unmapped_works
+    assert_equal 2, result.unmapped_works
     assert_equal 0, result.matched
-    assert_equal 293, result.unmatched
+    assert_equal 303, result.unmatched
     assert_equal 0, @catalog[:enrichments].count
   end
 
@@ -153,6 +153,64 @@ class HypotacticMeterTest < Minitest::Test
       assert_equal 2, result.unmatched
       assert_equal 0, @catalog[:enrichments].count, "an unmapped work mints nothing — never guessed"
     end
+  end
+
+  # --- the P45-5 map growth: representative pins + the dedup guard -----------
+
+  # A representative sample of the grown WORK_MAP (the full-map correctness
+  # argument is the per-entry evidence comments in the producer). Pins one of
+  # each SHAPE: a per-book Homer file, a single-work file, a multi-work array
+  # (one TSV spanning two held works), a textgroup value (one TSV spanning a
+  # whole collection), and two evaluated-and-censused absences.
+  def test_work_map_representative_entries
+    map = Nabu::HypotacticMeter::WORK_MAP
+    assert_equal "tlg0012.tlg001", map["iliad7"], "every iliadN book file maps to the one held Iliad"
+    assert_equal "tlg0012.tlg002", map["odyssey19"]
+    assert_equal "tlg0020.tlg002", map["worksanddays"]
+    assert_equal "tlg0085.tlg003", map["prometheus"]
+    assert_equal "tlg0033.tlg002", map["pythians"]
+    assert_equal %w[tlg0022.tlg001 tlg0022.tlg002], map["nicander"],
+                 "one TSV spans Theriaca + Alexipharmaca — a multi-work value"
+    assert_equal "tlg0013", map["HHymns"],
+                 "the collection file maps at textgroup grain (every held hymn)"
+    refute map.key?("aratus"), "Phaenomena is not held — censused, never guessed"
+    refute map.key?("colluthus"), "Colluthus is not held — censused, never guessed"
+  end
+
+  # Homer repeats whole formulaic lines VERBATIM (the iliad1 fixture carries
+  # the real Il. 1.13-16 = 1.372-375 repetition). Both occurrences resolve to
+  # the same held passage (first occurrence wins, either witness a true
+  # attestation of the same text) — but the passage gets ONE meter row, never
+  # a duplicate under the same (kind, model).
+  def test_repeated_formulaic_line_writes_one_row_per_passage
+    iliad_urn = "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2"
+    lines = File.readlines(File.join(FIXTURES, "tsv", "iliad1.tsv"), encoding: "UTF-8")
+                .map { |l| l.split("\t").first }
+    # Hold Il. 1.12-16 + 1.371 — the fixture's six DISTINCT lines (rows 7-10
+    # repeat rows 2-5 verbatim; row 6 differs from row 1).
+    seed_work!(iliad_urn, iliad_fixture_passages(iliad_urn, lines))
+    result = producer.run("hypotactic", workdir: FIXTURES)
+
+    assert_equal 10, result.matched, "every fixture line resolved to a held passage"
+    assert_equal 6, @catalog[:enrichments].where(model: "hypotactic").count,
+                 "one row per passage — the repeated lines never double-write"
+    repeated = @catalog[:passages].where(urn: "#{iliad_urn}:1.13").get(:id)
+    assert_equal 1, @catalog[:enrichments].where(passage_id: repeated, kind: "meter").count
+  end
+
+  # A rerun over a corpus with repeats stays byte-identical (the dedup guard
+  # resets per run — idempotency is not weakened by it).
+  def test_rerun_with_repeats_is_idempotent
+    iliad_urn = "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2"
+    lines = File.readlines(File.join(FIXTURES, "tsv", "iliad1.tsv"), encoding: "UTF-8")
+                .map { |l| l.split("\t").first }
+    seed_work!(iliad_urn, iliad_fixture_passages(iliad_urn, lines))
+    producer.run("hypotactic", workdir: FIXTURES)
+    before = meter_rows
+    second = producer.run("hypotactic", workdir: FIXTURES)
+
+    assert_equal 6, second.superseded
+    assert_equal before, meter_rows
   end
 
   # --- the consumer: the shared show meter line ------------------------------
@@ -256,11 +314,20 @@ class HypotacticMeterTest < Minitest::Test
   end
 
   # A held Perseus grc document with one passage per { urn => verbatim text }.
-  def seed_hymn!(passages)
-    source = Nabu::Store::Source.create(slug: "perseus", name: "Perseus",
+  def seed_hymn!(passages) = seed_work!(WORK_URN, passages, title: "Hymn 5 To Aphrodite")
+
+  # { full passage urn => text } for the iliad1 fixture's six distinct lines.
+  def iliad_fixture_passages(iliad_urn, lines)
+    %w[1.12 1.13 1.14 1.15 1.16 1.371].zip(lines[0..5])
+                                      .to_h { |citation, text| ["#{iliad_urn}:#{citation}", text] }
+  end
+
+  def seed_work!(doc_urn, passages, title: "work")
+    source = Nabu::Store::Source.first(slug: "perseus") ||
+             Nabu::Store::Source.create(slug: "perseus", name: "Perseus",
                                         adapter_class: "Nabu::Adapters::Perseus", license_class: "attribution")
-    doc = Nabu::Store::Document.create(source_id: source.id, urn: WORK_URN,
-                                       title: "Hymn 5 To Aphrodite", language: "grc",
+    doc = Nabu::Store::Document.create(source_id: source.id, urn: doc_urn,
+                                       title: title, language: "grc",
                                        metadata_json: "{}", content_sha256: "x", revision: 1, withdrawn: false)
     passages.each_with_index do |(urn, text), i|
       Nabu::Store::Passage.create(

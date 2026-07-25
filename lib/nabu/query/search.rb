@@ -180,6 +180,20 @@ module Nabu
       # Reset on every run, like incomplete_hint.
       attr_reader :rank_note
 
+      # nil, or the meter facet's honesty line after a #run/#browse with an
+      # active --meter/--meter-pattern (P45-5): the filter NAMES ITS SOURCE
+      # when it worked ("meter: pedecerto/hypotactic enrichments"), explains
+      # an EMPTY LAYER (no meter rows in this catalog) rather than serving a
+      # silent zero, and on a code that matches nothing corpus-wide lists the
+      # meters that ARE scannable. Reset on every run, like incomplete_hint.
+      attr_reader :meter_note
+
+      # How many distinct meter values the unknown-code miss note lists
+      # before eliding (the live layer holds ~5 distinct values).
+      # const: a render cap on the miss note's value list (elision is marked
+      # with … whenever it truncates), not a corpus census
+      METER_NOTE_VALUES = 12
+
       # Search +query+ and return up to +limit+ Result values in bm25 rank order.
       # +lang+ filters on passage language — inside the MATCH when the index
       # carries the P42-3 language column, catalog-side against an older index
@@ -195,24 +209,32 @@ module Nabu
       # (passage-grain, read straight off annotations_json — no reparse).
       # +ubiquity_threshold+ (P42-2) is the guard's candidate-postings ceiling
       # (see UBIQUITY_THRESHOLD) — a seam for tests and for P42-5 tuning runs.
+      # +meter+/+meter_pattern+ (P45-5) keep only passages carrying a meter
+      # enrichment whose code / foot pattern matches (case-insensitive; the
+      # CatalogJoin note argues the read-time cost). #meter_note carries the
+      # facet's honesty line afterwards.
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
-              facets: nil, source: nil, sources: nil, loans: nil, exact: false, word: false,
+              facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil,
+              exact: false, word: false,
               scan_ceiling: SCAN_CEILING, ubiquity_threshold: self.class.ubiquity_threshold)
         @incomplete_hint = nil
         @rank_note = nil
+        @meter_note = nil
         raise Nabu::Error, WORD_REFUSAL if word && self.class.word_refusal_for(query)
 
         variants = Nabu::Normalize.query_forms(query.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
         filters = { lang: lang, license: license, from: from, to: to, place: place,
-                    facets: facets, source: source, sources: sources, loans: loans }
+                    facets: facets, source: source, sources: sources, loans: loans,
+                    meter: meter, meter_pattern: meter_pattern }
         page = if exact || word
                  verified_page(variants, query, filters, limit: limit, urn: urn,
                                                          scan_ceiling: scan_ceiling, exact: exact, word: word)
                else
                  folded_page(variants, filters, limit: limit, urn: urn, ubiquity_threshold: ubiquity_threshold)
                end
+        note_meter(meter, meter_pattern, empty: page.empty?)
         page.map { |row| build_result(row, query, exact: exact, word: word) }
       end
 
@@ -235,15 +257,18 @@ module Nabu
       # at the CLI seam, not here: this method lists whatever the filters select,
       # exactly as visible_passages composes them for ranked search.
       def browse(lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil,
-                 facets: nil, source: nil, sources: nil, loans: nil)
+                 facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil)
         @incomplete_hint = nil
         @rank_note = nil
+        @meter_note = nil
         rows = visible_passages(lang: lang, license: license, from: from, to: to, place: place,
-                                facets: facets, source: source, sources: sources, loans: loans)
+                                facets: facets, source: source, sources: sources, loans: loans,
+                                meter: meter, meter_pattern: meter_pattern)
                .order(Sequel[:passages][:id])
                .select(*catalog_columns)
                .limit(limit)
                .all
+        note_meter(meter, meter_pattern, empty: rows.empty?)
         rows.map { |row| build_result(row, "", exact: false, word: false) }
       end
 
@@ -430,8 +455,37 @@ module Nabu
       end
 
       def filters_active?(filters)
-        %i[lang license from to place source loans].any? { |key| filters[key] } ||
+        %i[lang license from to place source loans meter meter_pattern].any? { |key| filters[key] } ||
           (filters[:facets] || {}).any? || Array(filters[:sources]).any?
+      end
+
+      # The meter facet's honesty line (the attr_reader note): set only when
+      # the filter is active. Probes are bounded by the meter LAYER (10⁵
+      # rows, ~40ms live — the CatalogJoin cost note), and the two miss
+      # probes run only on an empty page.
+      def note_meter(meter, pattern, empty:)
+        return unless meter || pattern
+
+        models = @catalog[:enrichments].where(kind: "meter").distinct.select_map(:model).compact.sort
+        @meter_note =
+          if models.empty?
+            "meter filter active, but this catalog holds no meter enrichments — " \
+              "the pedecerto/hypotactic syncs produce them"
+          elsif empty && meter_enrichments(meter, pattern).empty?
+            "#{meter ? "meter '#{meter}'" : "meter pattern '#{pattern}'"} matches no meter " \
+              "enrichment — known meters: #{known_meters.join(', ')}"
+          else
+            "meter: #{models.join('/')} enrichments"
+          end
+      end
+
+      # The distinct meter values actually held, for the miss note — capped
+      # for render honesty, elision marked.
+      def known_meters
+        values = @catalog[:enrichments].where(kind: "meter")
+                                       .distinct.select_map(Sequel.function(:json_extract, :payload_json, "$.meter"))
+                                       .compact.reject(&:empty?).sort
+        values.size > METER_NOTE_VALUES ? values.first(METER_NOTE_VALUES) + ["…"] : values
       end
 
       # The --exact/--word scan-ceiling truncation hint (P35 truncation honesty):
