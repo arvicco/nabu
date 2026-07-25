@@ -25,3 +25,11 @@ files:
     copied: 2026-07-24
     whole: false
     trim: head verbatim + lines 1-3 (single-book elegiac work, no division)
+  - path: allpedecertoscans/AVSON-appe.xml
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from allpedecertoscans.zip (no per-file URL); re-acquiring = full zip download + re-trim, not a raw GET
+    upstream: https://www.pedecerto.eu/allpedecertoscans.zip
+    copied: 2026-07-25
+    whole: false
+    trim: head verbatim + first line element; MALFORMED upstream (raw <emph> inside division/@title, 12 of 469 files ship this) — the P44-i3b census fixture, offending bytes preserved

@@ -117,9 +117,10 @@ module Nabu
     # field, so the shared sync/rebuild tail renders both meter producers
     # identically. matched/unmatched are LINE counts.
     Result = Data.define(:scope, :files, :lines_read, :matched, :unmatched,
-                         :mapped_works, :unmapped_works, :superseded) do
+                         :mapped_works, :unmapped_works, :superseded, :malformed_files) do
       def initialize(files: 0, lines_read: 0, matched: 0, unmatched: 0,
-                     mapped_works: 0, unmapped_works: 0, superseded: 0, **rest)
+                     mapped_works: 0, unmapped_works: 0, superseded: 0,
+                     malformed_files: [], **rest)
         super
       end
     end
@@ -136,14 +137,23 @@ module Nabu
       return Result.new(scope: scope) if files.empty?
 
       counts = Hash.new(0)
+      malformed = []
       @catalog.transaction do
         counts[:superseded] = Store::Enrichment.supersede!(@catalog, kind: KIND, model: MODEL)
-        files.each { |path| ingest_file(path, counts) }
+        # The P44-i3b census (the pedecerto AVSON incident, symmetric): a
+        # file that will not parse is censused BY NAME and skipped, never
+        # fatal to the batch. parse_tsv reads the whole file before any
+        # write, so a malformed file contributes no counts and no rows.
+        files.each do |path|
+          ingest_file(path, counts)
+        rescue ParseError
+          malformed << File.basename(path)
+        end
       end
       Result.new(scope: scope, files: files.size,
                  lines_read: counts[:lines], matched: counts[:matched], unmatched: counts[:unmatched],
                  mapped_works: counts[:mapped_works], unmapped_works: counts[:unmapped_works],
-                 superseded: counts[:superseded])
+                 superseded: counts[:superseded], malformed_files: malformed)
     end
 
     private
