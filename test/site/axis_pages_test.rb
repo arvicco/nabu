@@ -148,11 +148,21 @@ class AxisPagesTest < Minitest::Test
     File.read(File.join(AXIS_DIR, "index.md")).sub(/\A---\n.*?\n---\n/m, "")
   end
 
-  # [[name, block-body], …] split on the ### axis headings under "## The
-  # twenty desks".
+  # The desk-list heading, derived from the SAME registry-driven count logic
+  # the generator uses (P45-4 recalibrated the P44-r2 fix: a hardcoded
+  # "twenty" here went stale the moment the romance axis landed — the count
+  # is the registry's, never the test's).
+  def desk_heading
+    count = axes.names.size
+    word = Nabu::Ops::AxisPages::WORD_NUMBERS.fetch(count) { count.to_s }
+    "## The #{word} desks"
+  end
+
+  # [[name, block-body], …] split on the ### axis headings under the
+  # desk-list heading.
   def index_blocks
-    section = index_body[/^## The twenty desks\n(.*?)(?=^---\s*$)/m, 1]
-    refute_nil section, "the /axis/ index must carry a '## The twenty desks' section"
+    section = index_body[/^#{Regexp.escape(desk_heading)}\n(.*?)(?=^---\s*$)/m, 1]
+    refute_nil section, "the /axis/ index must carry a '#{desk_heading}' section"
     section.scan(/^### (.+?)\n(.*?)(?=^### |\z)/m)
   end
 
@@ -167,8 +177,8 @@ class AxisPagesTest < Minitest::Test
     body = index_body
     assert_includes body, QUICKSTART_POINTER,
                     "the /axis/ index must carry the Quickstart pointer (regenerate with `rake site:axes`)"
-    assert body.index(QUICKSTART_POINTER) < body.index("## The twenty desks"),
-           "the /axis/ index pointer must sit before the '## The twenty desks' heading"
+    assert body.index(QUICKSTART_POINTER) < body.index(desk_heading),
+           "the /axis/ index pointer must sit before the '#{desk_heading}' heading"
   end
 
   def test_index_pins_each_persona_verbatim_and_links_the_page

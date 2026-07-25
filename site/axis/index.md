@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The twenty research desks of the Nabu library — tags over the
+  The twenty-one research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The twenty desks
+## The twenty-one desks
 
 ### classical
 
@@ -77,6 +77,14 @@ Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogha
 The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, the Etruscan editions, TIR), Lepontic at the Celtic border, I.Sicily's island mix, and the Sabellic-to-Latin loan lane.
 
 [Open the italic desk]({{ '/axis/italic/' | relative_url }})
+
+### romance
+
+> The Romanist — Latin's daughters read in their own right, the Serments to Villon.
+
+The medieval Romance vernaculars: the Base de français médiéval's 219 Old and Middle French texts (BFM2022) — the first registrant; the Occitan, Italian and Iberian shelves as they arrive.
+
+[Open the romance desk]({{ '/axis/romance/' | relative_url }})
 
 ### etym
 
