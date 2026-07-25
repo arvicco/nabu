@@ -2466,6 +2466,38 @@ pedecerto:
   # canonical). Fetch is an owner decision (a 12 MB bulk zip).
   sync_policy: manual
 
+digiliblt:   # P45-3
+  adapter: Nabu::Adapters::Digiliblt
+  axes: [classical, romance]   # late-antique Latin: the classical desk's 2nd–7th c.
+                               # band AND the romance desk's ancestor shelf (dual-tag,
+                               # never folding — the D35 rule)
+  wired: false   # BUILT (P45-3); awaiting the owner-fired first sync
+                   # (sparse clone ~106 MB of tar.gz + ~700 MB extracted).
+  # digilibLT — Biblioteca digitale di testi latini tardoantichi (Vercelli /
+  # Università del Piemonte Orientale): 373 late-antique SECULAR Latin prose
+  # texts (2nd–7th c. AD — Ammianus, the grammarians, agrimensores, jurists),
+  # via CIRCSE's LiLa-linked CoNLL-U repo (github.com/CIRCSE/digilibLT):
+  # UDPipe lemma + UPOS on all 7.8M tokens, 1..4 LiLa lemma-bank IRIs per
+  # token (candidates kept when the automatic linking is ambiguous). SILVER:
+  # upstream's own README calls the upload "a *Bronze* version" ("The output
+  # of UDPipe still needs checking and disambiguating") → lemma_tier: silver,
+  # every count labeled, never gold (the GLAUx precedent); no hand-checked
+  # slice exists to promote. LICENSE (README, verbatim): "The *DigilibLT*
+  # texts are licensed under a Creative Commons Attribution-ShareAlike 4.0
+  # International License" → attribution; RECORDED FORK: the adjacent badge
+  # still links CC BY-NC-SA 3.0 (the digilibLT SITE's TEI license) — the
+  # repo's written BY-SA 4.0 grant governs this lane (the CroALa D44-b
+  # resolution shape). Fetch: sparse GitFetch cone [conllu, README.md] (the
+  # ~230 MB ttl/ LiLa RDF lane never transfers), then fetch EXTRACTS the four
+  # conllu/part*.tar.gz into texts/ (extraction-on-fetch, the ZipFetch
+  # pattern; additive — never deletes). One damaged upstream file (dlt000079,
+  # mangled bytes) quarantines by ParseError — expect 372/373 on first sync.
+  # No per-text dates in this lane (the timeline seam stays unfed; the TEI
+  # site and ttl/ lane are future options). No release cadence →
+  # sync_policy manual.
+  sync_policy: manual
+  lemma_tier: silver
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

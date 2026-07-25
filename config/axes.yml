@@ -91,6 +91,14 @@ japonic:
   persona: "The Japanologist — Old Japanese song to the Sino-Japanese dictionary tradition."
   desc: "The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon."
 
+# P45-3: minted with digilibLT, the first shelf of the Latin→Romance band the
+# P39-s2 scout mapped (the Romance end itself is still empty — the desk
+# honestly starts at the ancestor side; UD Romance rungs, openMGH and BFM are
+# the scouted next members).
+romance:
+  persona: "The Romanist — watches Latin become French, Italian and Spanish, charter by charter."
+  desc: "The Latin→Romance transition band: digilibLT's late-antique prose at the ancestor end, riding beside the classical desk by design. The daughter-language shelves (Old French, Old Italian, Iberian charters) are scouted but not yet held — the desk is honest about starting at the Latin side."
+
 local:
   persona: "The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records."
   desc: "The canonical-memory shelves (architecture §16): local-language, local-library, local-notes, local-source."

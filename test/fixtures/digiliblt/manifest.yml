@@ -1,0 +1,51 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# digilibLT ships its CoNLL-U files INSIDE conllu/part{1..4}.tar.gz (20–31 MB
+# each); no file below has an individual raw URL, so every entry is
+# refetchable: false (the papyri-ddbdp posture) — a re-check means fetching a
+# multi-MB archive and re-extracting, an operator decision. adapter_test is
+# null: two entries are documented trims, so a fresh-copy re-run would
+# false-fail the count assertions.
+source: digiliblt
+adapter_test:
+retrieved: 2026-07-25
+files:
+  - path: texts/part1/dlt000173.xml_linked.conllu
+    refetchable: false
+    reason: >-
+      member part1/dlt000173.xml_linked.conllu of conllu/part1.tar.gz in
+      github.com/CIRCSE/digilibLT@main (retrieved 2026-07-25) — whole,
+      byte-identical; no per-file raw URL exists
+    whole: true
+    trim: none
+  - path: texts/part4/dlt000619.xml_linked.conllu
+    refetchable: false
+    reason: >-
+      member part4/dlt000619.xml_linked.conllu of conllu/part4.tar.gz in
+      github.com/CIRCSE/digilibLT@main (retrieved 2026-07-25) — whole,
+      byte-identical; no per-file raw URL exists
+    whole: true
+    trim: none
+  - path: texts/part2/dlt000340.xml_linked.conllu
+    refetchable: false
+    reason: >-
+      member part2/dlt000340.xml_linked.conllu of conllu/part2.tar.gz in
+      github.com/CIRCSE/digilibLT@main (retrieved 2026-07-25) — trimmed;
+      no per-file raw URL exists
+    whole: false
+    trim: >-
+      doc header (with its real wrapped-docTitle continuation line) + the
+      first 2 of 662 sentence blocks, lines byte-verbatim; one terminating
+      blank line restored after the second block
+  - path: malformed/dlt000079-head.conllu
+    refetchable: false
+    reason: >-
+      member part1/dlt000079.xml_linked.conllu of conllu/part1.tar.gz in
+      github.com/CIRCSE/digilibLT@main (retrieved 2026-07-25) — trimmed
+      damage sample; no per-file raw URL exists
+    whole: false
+    trim: >-
+      the REAL first 14 lines of the one damaged upstream file (stray
+      "http" glued before the first header comment) — the ParseError
+      quarantine regression bytes; kept outside texts/ so discover skips it

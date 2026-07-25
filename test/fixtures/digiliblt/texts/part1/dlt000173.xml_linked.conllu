@@ -1,0 +1,1814 @@
+# docId=dlt000173
+# docTitle=De comoedia uel de fabula
+# contributor=Eleonora Litta, Marco Passarotti, Giovanni Moretti
+# corpusRef=http://lila-erc.eu/data/corpora/digiliblt/id/corpus
+# docAuthor=Euantius
+# seeAlso=https://digiliblt.uniupo.it
+# description=Source description: Evanzio, De fabula, introduzione, testo critico, traduzione e note di commento a cura di G. Cupaiuolo, Napoli 1992 (I. ed. 1979).
+
+# sent_id = 1
+# text = Initium tragoediae et comoediae a rebus diuinis est incohatum, quibus pro fructibus uota soluentes operabantur antiqui.
+1	Initium	initium	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/107903
+2	tragoediae	tragoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/128535
+3	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+4	comoediae	comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/95235
+5	a	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+6	rebus	res	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/121868
+7	diuinis	diuinus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/99944
+8	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+9	incohatum	incoho	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/107020
+10	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	
+11	quibus	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+12	pro	pro	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/118468
+13	fructibus	fructus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/103879	http://lila-erc.eu/data/id/lemma/103880
+14	uota	uotum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/131097
+15	soluentes	soluo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/125108
+16	operabantur	operor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/115028
+17	antiqui	antiquus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/87976
+18	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	
+
+# sent_id = 2
+# text = Namque, incensis iam altaribus et admoto hirco, id genus carminis, quod sacer chorus reddebat Libero patri, ' tragoedia ' dicebatur uel ἀπὸ τοῦ τράγου καὶ τῆς ᾠδῆς, hoc est ab hirco hoste uinearum et a cantilena
+1	Namque	namque	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/113344	http://lila-erc.eu/data/id/lemma/113345
+2	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	
+3	incensis	incendo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/106911
+4	iam	iam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/106025
+5	altaribus	altar	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/29385	http://lila-erc.eu/data/id/lemma/88454
+6	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+7	admoto	admoueo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/87568
+8	hirco	hircus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/105541
+9	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	
+10	id	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/109083
+11	genus	genus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/104498	http://lila-erc.eu/data/id/lemma/104499	http://lila-erc.eu/data/id/lemma/104504	http://lila-erc.eu/data/id/lemma/157698
+12	carminis	carmen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/92868	http://lila-erc.eu/data/id/lemma/96629
+13	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	
+14	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+15	sacer	sacer	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/123063
+16	chorus	chorus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/93846
+17	reddebat	reddo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/122458
+18	Libero	liber	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/11900
+19	patri	pater	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/116203
+20	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1|SpacesAfter=\s\s	
+21	'	'	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	
+22	tragoedia	tragoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/128535
+23	'	'	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1|SpacesAfter=\s\s	
+24	dicebatur	dico	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/99301	http://lila-erc.eu/data/id/lemma/99302
+25	uel	uel	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/129695
+26	ἀπὸ	ἀπὸ	X	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	
+27	τοῦ	τοῦ	X	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	
+28	τράγου	τράγου	X	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	
+29	καὶ	καὶ	X	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	
+30	τῆς	τῆς	X	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	
+31	ᾠδῆς	ᾠδῆς	X	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1|SpaceAfter=No	
+32	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	
+33	hoc	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/105455
+34	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+35	ab	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+36	hirco	hircus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/105541
+37	hoste	hostis	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/105757
+38	uinearum	uinea	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/130824
+39	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+40	a	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+41	cantilena	cantilena	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/92639
+
+# sent_id = 3
+# text = — cuius ipsius rei etiam apud Vergilium plena fit mentio —, uel quod hirco donabatur eius carminis poeta, uel quod uter eius musti plenus sollemne praemium cantatoribus fuerat, uel quod ora sua faecibus perlinebant scaenici ante usum personarum ab Aeschylo repertum:
+1	—	—	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	
+2	cuius	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/121354
+3	ipsius	ipse	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/108945
+4	rei	res	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/121868
+5	etiam	etiam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/101554
+6	apud	apud	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/89686
+7	Vergilium	uirgilius	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	
+8	plena	plenus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/118143
+9	fit	fio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/103328
+10	mentio	mentio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/112071
+11	—	—	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2|SpaceAfter=No	
+12	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	
+13	uel	uel	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/129695
+14	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/74854
+15	hirco	hircus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/105541
+16	donabatur	dono	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/100087
+17	eius	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/109083
+18	carminis	carmen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/92868	http://lila-erc.eu/data/id/lemma/96629
+19	poeta	poeta	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/118267
+20	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	
+21	uel	uel	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/129695
+22	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/74854
+23	uter	uter	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/130912
+24	eius	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/109083
+25	musti	mustum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/113149
+26	plenus	plenus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/118143
+27	sollemne	sollemnis	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/123629
+28	praemium	praemium	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/119037
+29	cantatoribus	cantator	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/92619
+30	fuerat	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+31	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	
+32	uel	uel	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/129695
+33	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/74854
+34	ora	os	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/68537	http://lila-erc.eu/data/id/lemma/115327	http://lila-erc.eu/data/id/lemma/115330
+35	sua	suus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/127165
+36	faecibus	faex	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/102817
+37	perlinebant	perlineo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	
+38	scaenici	scaenicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/123579
+39	ante	ante	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/89164
+40	usum	usus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/131133
+41	personarum	persona	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/117325
+42	ab	ab	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/86824
+43	Aeschylo	aeschylus	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	http://lila-erc.eu/data/id/lemma/6790
+44	repertum	reperio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/122659
+45	:	:	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_2	
+
+# sent_id = 4
+# text = faeces enim
+1	faeces	faex	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_3	http://lila-erc.eu/data/id/lemma/102817
+2	enim	enim	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_3	http://lila-erc.eu/data/id/lemma/101119
+
+# sent_id = 5
+# text = Graece dicuntur τρύγες. Et his quidem causis tragoediae nomen inuentum est.
+1	Graece	graece	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_4	http://lila-erc.eu/data/id/hypolemma/51625
+2	dicuntur	dico	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_4	http://lila-erc.eu/data/id/lemma/99301	http://lila-erc.eu/data/id/lemma/99302
+3	τρύγες	τρύγες	X	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_4|SpaceAfter=No	
+4	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_4	
+5	Et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_4	http://lila-erc.eu/data/id/lemma/101542
+6	his	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_4	http://lila-erc.eu/data/id/lemma/105455
+7	quidem	quidem	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_4	http://lila-erc.eu/data/id/lemma/121168
+8	causis	causa	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_4	http://lila-erc.eu/data/id/lemma/93253
+9	tragoediae	tragoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_4	http://lila-erc.eu/data/id/lemma/128535
+10	nomen	nomen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_4	http://lila-erc.eu/data/id/lemma/113797
+11	inuentum	inuenio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_4	http://lila-erc.eu/data/id/lemma/108806
+12	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_4|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+13	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_4|SpaceAfter=No	
+
+# sent_id = 6
+# text = At uero nondum coactis in urbem Atheniensibus, cum Apollini Νομίῳ uel Ἀγυιαίῳ, id est pastorum uicorumue praesidi deo, instructis aris in honorem diuinae rei circum Atticae uicos uillas pagos et compita festiuum carmen sollemniter cantaretur, ἀπὸ τῶν κωμῶν καὶ τῆς ᾠδῆς comoedia uocitata est, ut opinor, a pagis et cantilena composito nomine, uel ἀπὸ τοῦ κωμάζειν καὶ ἄδειν, quod est comessatum ire cantantes; quod appotis sollemni die uel amatorie lasciuientibus non absurdum est.
+1	At	at	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/87415
+2	uero	uero	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/hypolemma/111474
+3	nondum	nondum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/114073
+4	coactis	cogo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/94739
+5	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+6	urbem	urbs	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/130822
+7	Atheniensibus	atheniensis	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1|SpaceAfter=No	
+8	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+9	cum	cum	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/97202
+10	Apollini	apollo	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/20103	http://lila-erc.eu/data/id/lemma/20104
+11	Νομίῳ	Νομίῳ	X	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+12	uel	uel	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/129695
+13	Ἀγυιαίῳ	Ἀγυιαίῳ	X	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1|SpaceAfter=No	
+14	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+15	id	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/109083
+16	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+17	pastorum	pastor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/116187
+18	uicorumue	uicus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/130928	http://lila-erc.eu/data/id/lemma/130933
+19	praesidi	praesidium	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/119215
+20	deo	deus	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/4810
+21	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+22	instructis	instructus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/hypolemma/23122
+23	aris	ara	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/89737	http://lila-erc.eu/data/id/lemma/105157
+24	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+25	honorem	honor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/105647
+26	diuinae	diuinus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/99944
+27	rei	res	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/121868
+28	circum	circum	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/94065
+29	Atticae	atticus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/25921
+30	uicos	uicus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/130928	http://lila-erc.eu/data/id/lemma/130933
+31	uillas	uilla	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/130202
+32	pagos	pagus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/115652
+33	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+34	compita	compitum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/95330
+35	festiuum	festiuus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/103190
+36	carmen	carmen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/92868	http://lila-erc.eu/data/id/lemma/96629
+37	sollemniter	sollemniter	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/hypolemma/41120
+38	cantaretur	canto	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/92645
+39	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+40	ἀπὸ	ἀπὸ	X	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+41	τῶν	τῶν	X	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+42	κωμῶν	κωμῶν	X	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+43	καὶ	καὶ	X	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+44	τῆς	τῆς	X	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+45	ᾠδῆς	ᾠδῆς	X	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+46	comoedia	comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/95235
+47	uocitata	uocito	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/130728
+48	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+49	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+50	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/130906
+51	opinor	opinor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/115070
+52	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+53	a	a	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/86824
+54	pagis	pagus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/115652
+55	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+56	cantilena	cantilena	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/92639
+57	composito	compono	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/95367
+58	nomine	nomen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/113797
+59	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+60	uel	uel	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/129695
+61	ἀπὸ	ἀπὸ	X	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+62	τοῦ	τοῦ	X	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+63	κωμάζειν	κωμάζειν	X	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+64	καὶ	καὶ	X	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+65	ἄδειν	ἄδειν	X	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1|SpaceAfter=No	
+66	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+67	quod	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+68	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+69	comessatum	comesso	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+70	ire	eo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/101183
+71	cantantes	canto	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/92645
+72	;	;	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+73	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+74	appotis	appos	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	
+75	sollemni	sollemnis	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/123629
+76	die	dies	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/99334
+77	uel	uel	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/129695
+78	amatorie	amatorie	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/hypolemma/1941
+79	lasciuientibus	lasciuio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/109968
+80	non	non	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/114108
+81	absurdum	absurdus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1	http://lila-erc.eu/data/id/lemma/87045
+82	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+83	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_3,Sentence_1|SpaceAfter=No	
+
+# sent_id = 7
+# text = Itaque, ut rerum, ita etiam temporum reperto ordine, tragoedia prior prolata esse cognoscitur.
+1	Itaque	itaque	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/109129
+2	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1	
+3	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1	http://lila-erc.eu/data/id/lemma/130906
+4	rerum	res	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/121868
+5	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1	
+6	ita	ita	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1	http://lila-erc.eu/data/id/lemma/109126
+7	etiam	etiam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1	http://lila-erc.eu/data/id/lemma/101554
+8	temporum	tempus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1	http://lila-erc.eu/data/id/lemma/127522	http://lila-erc.eu/data/id/lemma/127796
+9	reperto	reperio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1	http://lila-erc.eu/data/id/lemma/122659
+10	ordine	ordo	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/115236
+11	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1	
+12	tragoedia	tragoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1	http://lila-erc.eu/data/id/lemma/128535
+13	prior	prior	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1	http://lila-erc.eu/data/id/lemma/119509
+14	prolata	profero	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1	http://lila-erc.eu/data/id/lemma/119705
+15	esse	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+16	cognoscitur	cognosco	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/94738
+17	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_1	
+
+# sent_id = 8
+# text = Nam ut ab incultu ac feris moribus paulatim peruentum est ad mansuetudinem urbesque sunt conditae et uita mitior atque otiosa processit, ita res tragicae longe ante comicas inuentae.
+1	Nam	nam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/113344
+2	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/130906
+3	ab	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/87344
+4	incultu	ncultus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	
+5	ac	ac	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/90490
+6	feris	ferus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/103755
+7	moribus	mos	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/66487	http://lila-erc.eu/data/id/lemma/112831
+8	paulatim	paulatim	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/116289
+9	peruentum	peruenio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/117445
+10	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/126689
+11	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/87344
+12	mansuetudinem	mansuetudo	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/111534
+13	urbesque	urbs	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/130822
+14	sunt	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/126689
+15	conditae	condo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/43284	http://lila-erc.eu/data/id/lemma/95677
+16	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+17	uita	uita	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/130393
+18	mitior	mitis	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/112492
+19	atque	atque	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/90490
+20	otiosa	otiosus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/115420
+21	processit	procedo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/119582
+22	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	
+23	ita	ita	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/109126
+24	res	res	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/121868
+25	tragicae	tragicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/128532
+26	longe	longe	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/hypolemma/25967
+27	ante	ante	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/89165
+28	comicas	comicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2	http://lila-erc.eu/data/id/lemma/95029
+29	inuentae	inuenio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/108806
+30	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_4,Sentence_2|SpaceAfter=No	
+
+# sent_id = 9
+# text = Quamuis igitur retro prisca uoluentibus reperiatur Thespis tragoediae primus inuentor et comoediae ueteris pater Eupolis cum Cratino Aristophaneque esse credatur, Homerus tamen, qui fere omnis poeticae largissimus fons est, etiam his carminibus exempla praebuit et uelut quandam suorum operum legem praescripsit:
+1	Quamuis	quamuis	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/121355	http://lila-erc.eu/data/id/hypolemma/37092
+2	igitur	igitur	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/106127
+3	retro	retro	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/121978
+4	prisca	priscus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/119513
+5	uoluentibus	uoluo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/130766
+6	reperiatur	reperio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/122659
+7	Thespis	Thespis	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/23463
+8	tragoediae	tragoedies	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	
+9	primus	primus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/119498
+10	inuentor	inuentor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/108811
+11	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+12	comoediae	comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/95235
+13	ueteris	uetus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/130070
+14	pater	pater	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/116203
+15	Eupolis	eupolis	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/6697
+16	cum	cum	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/97201
+17	Cratino	cratinus	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	
+18	Aristophaneque	Aristophan	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	
+19	esse	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+20	credatur	credo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/96881
+21	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	
+22	Homerus	homerus	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/9477
+23	tamen	tamen	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/127607
+24	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	
+25	qui	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+26	fere	fere	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/103104	http://lila-erc.eu/data/id/hypolemma/16548
+27	omnis	omnis	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/114954
+28	poeticae	poeticus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/117327
+29	largissimus	largus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/109949
+30	fons	fons	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/103593
+31	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+32	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	
+33	etiam	etiam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/101554
+34	his	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/105455
+35	carminibus	carmen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/92868	http://lila-erc.eu/data/id/lemma/96629
+36	exempla	exemplum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/101975
+37	praebuit	praebeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/118687
+38	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+39	uelut	uelut	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/129732
+40	quandam	quidam	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/121313
+41	suorum	suus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/127165
+42	operum	opus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/115170
+43	legem	lex	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	http://lila-erc.eu/data/id/lemma/110351
+44	praescripsit	praescribo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/119177
+45	:	:	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_1	
+
+# sent_id = 10
+# text = qui Iliadem ad instar tragoediae, Odyssiam ad imaginem comoediae fecisse monstratur.
+1	qui	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_2	http://lila-erc.eu/data/id/lemma/121354
+2	Iliadem	Iliadem	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_2	
+3	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_2	http://lila-erc.eu/data/id/lemma/87344
+4	instar	instar	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_2	http://lila-erc.eu/data/id/lemma/108241
+5	tragoediae	tragoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/128535
+6	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_2	
+7	Odyssiam	Odyssia	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_2	
+8	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_2	http://lila-erc.eu/data/id/lemma/87344
+9	imaginem	imago	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_2	http://lila-erc.eu/data/id/lemma/106319
+10	comoediae	comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_2	http://lila-erc.eu/data/id/lemma/95235
+11	fecisse	facio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_2	http://lila-erc.eu/data/id/lemma/102758
+12	monstratur	monstro	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/112737
+13	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_2	
+
+# sent_id = 11
+# text = Nam post illius tale tantumque documentum ab ingeniosissimis imitatoribus et digesta sunt in ordinem et diuisa sunt ea, quae etiam tum temere scribebantur, adhuc impolita atque in ipsis rudimentis, haud quaquam, ut postea facta sunt, decora atque leuia.
+1	Nam	nam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/113344
+2	post	post	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/118572
+3	illius	ille	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/106221
+4	tale	talis	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/127592
+5	tantumque	tantum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/hypolemma/110679
+6	documentum	documentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/99993
+7	ab	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/87344
+8	ingeniosissimis	ingeniosus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/107796
+9	imitatoribus	imitator	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/106361
+10	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/101542
+11	digesta	digero	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/99383
+12	sunt	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/126689
+13	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/106748
+14	ordinem	ordo	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/115236
+15	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/101542
+16	diuisa	diuido	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/99932
+17	sunt	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/126689
+18	ea	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/109083
+19	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	
+20	quae	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/121354
+21	etiam	etiam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/101554
+22	tum	tum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/129198
+23	temere	temere	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/127756
+24	scribebantur	scribo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/123840
+25	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	
+26	adhuc	adhuc	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/87443
+27	impolita	impolitus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/106630
+28	atque	atque	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/90490
+29	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/106748
+30	ipsis	ipse	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/108945
+31	rudimentis	rudimentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/122240
+32	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	
+33	haud	haud	PART	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/105206
+34	quaquam	quaquam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/hypolemma/37091
+35	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	
+36	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/130906
+37	postea	postea	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/118575
+38	facta	facio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/102758
+39	sunt	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+40	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	
+41	decora	decus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/46312	http://lila-erc.eu/data/id/lemma/98168	http://lila-erc.eu/data/id/lemma/98175
+42	atque	atque	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3	http://lila-erc.eu/data/id/lemma/90490
+43	leuia	leuis	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/110327	http://lila-erc.eu/data/id/lemma/110343
+44	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_5,Sentence_3|SpaceAfter=No	
+
+# sent_id = 12
+# text = Postquam demonstrandae originis causa de utriusque generis initio diximus, quod necesse est iam dicamus, adeo ut ea, quae proprie de tragoedia dicenda sunt, titulo propositi nunc operis instantes, in alia tempora differamus et de his fabulis iam loquamur, quas Terentius imitatus est.
+1	Postquam	postquam	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/120753
+2	demonstrandae	demonstrao	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	
+3	originis	origo	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/115263
+4	causa	causa	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/93253
+5	de	de	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/97932
+6	utriusque	uterque	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/135768
+7	generis	genus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/104498	http://lila-erc.eu/data/id/lemma/104499	http://lila-erc.eu/data/id/lemma/104504	http://lila-erc.eu/data/id/lemma/157698
+8	initio	initium	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/107903
+9	diximus	dico	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/99301	http://lila-erc.eu/data/id/lemma/99302
+10	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	
+11	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+12	necesse	necesse	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	
+13	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+14	iam	iam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/106025
+15	dicamus	dico	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/99301	http://lila-erc.eu/data/id/lemma/99302
+16	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	
+17	adeo	adeo	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/87420
+18	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/130906
+19	ea	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/109083
+20	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	
+21	quae	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+22	proprie	proprie	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/hypolemma/35914
+23	de	de	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/97932
+24	tragoedia	tragoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/128535
+25	dicenda	dico	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/99301	http://lila-erc.eu/data/id/lemma/99302
+26	sunt	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+27	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	
+28	titulo	titulus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/128926
+29	propositi	propono	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/119973
+30	nunc	nunc	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/113990
+31	operis	opera	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/115016
+32	instantes	insto	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/108272
+33	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	
+34	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+35	alia	alius	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/88481
+36	tempora	tempus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/127522	http://lila-erc.eu/data/id/lemma/127796
+37	differamus	differo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/99342
+38	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+39	de	de	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/97932
+40	his	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/105455
+41	fabulis	fabula	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/102732	http://lila-erc.eu/data/id/lemma/102741
+42	iam	iam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/106025
+43	loquamur	loquor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/110805
+44	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	
+45	quas	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+46	Terentius	terentius	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/23131
+47	imitatus	imitor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1	http://lila-erc.eu/data/id/lemma/106364
+48	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+49	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_6,Sentence_1|SpaceAfter=No	
+
+# sent_id = 13
+# text = Comoedia fere uetus, ut ipsa quoque olim tragoedia, simplex carmen, quemadmodum iam diximus, fuit, quod chorus circa aras fumantes nunc spatiatus nunc consistens nunc reuoluens gyros cum tibicine concinebat.
+1	Comoedia	Comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/95235
+2	fere	fere	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/103104	http://lila-erc.eu/data/id/hypolemma/16548
+3	uetus	uetus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/130070
+4	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	
+5	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/130906
+6	ipsa	ipse	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/108945
+7	quoque	quoque	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/hypolemma/110467
+8	olim	olim	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/114887
+9	tragoedia	tragoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/128535
+10	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	
+11	simplex	simplex	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/124840
+12	carmen	carmen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/92868	http://lila-erc.eu/data/id/lemma/96629
+13	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	
+14	quemadmodum	quemadmodum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/121350
+15	iam	iam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/106025
+16	diximus	dico	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/99301	http://lila-erc.eu/data/id/lemma/99302
+17	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	
+18	fuit	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+19	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	
+20	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+21	chorus	chorus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/93846
+22	circa	circa	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/94032
+23	aras	ara	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/89737	http://lila-erc.eu/data/id/lemma/105157
+24	fumantes	fumo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/103990
+25	nunc	nunc	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/113990
+26	spatiatus	spatior	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/125267
+27	nunc	nunc	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/113990
+28	consistens	consisto	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/96065
+29	nunc	nunc	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/113990
+30	reuoluens	reuoluo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/122825
+31	gyros	gyrus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/105009
+32	cum	cum	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/97201
+33	tibicine	tibicina	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1	http://lila-erc.eu/data/id/lemma/128237
+34	concinebat	concino	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/95524
+35	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_7,Sentence_1|SpaceAfter=No	
+
+# sent_id = 14
+# text = Sed pirmo una persona est subducta cantatoribus, quae respondens alternis id est choro locupletauit uariauitque rem musicam;
+1	Sed	sed	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/123994
+2	pirmo	pirmo	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	
+3	una	unus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/85636
+4	persona	persona	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/117325
+5	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+6	subducta	subduco	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/126076
+7	cantatoribus	cantator	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/92619
+8	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	
+9	quae	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+10	respondens	respondeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/122740
+11	alternis	alternus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/88469
+12	id	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/109083
+13	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+14	choro	chorus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/93846
+15	locupletauit	locupleto	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/110730
+16	uariauitque	uario	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/129583
+17	rem	res	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	http://lila-erc.eu/data/id/lemma/121868
+18	musicam	musica	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/113125	http://lila-erc.eu/data/id/lemma/113127
+19	;	;	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_1	
+
+# sent_id = 15
+# text = tum altera, tum tertia, et ad postremum crescente numero per auctores diuersos personae, pallae, cothurni, socci et ceteri ornatus atque insignia scaenicorum reperta, et ad hoc unicuique suus habitus; et ad ultimum qui primarum partium, qui secundarum partium tertiarumque, quarti loci atque quinti actores essent, distributum et diuisa quinquepartito actu est tota fabula.
+1	tum	tum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/129198
+2	altera	alter	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/88457
+3	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	
+4	tum	tum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/129198
+5	tertia	tertius	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/127957
+6	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	
+7	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+8	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/87344
+9	postremum	posterus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/120781
+10	crescente	cresco	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/96925
+11	numero	numerus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/113981
+12	per	per	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/116569
+13	auctores	auctor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/90615
+14	diuersos	diuersus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/hypolemma/13031
+15	personae	persona	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/117325
+16	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	
+17	pallae	palla	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/115696
+18	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	
+19	cothurni	cothurnum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2|SpaceAfter=No	
+20	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	
+21	socci	soccus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/124994
+22	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+23	ceteri	ceterus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/93624
+24	ornatus	ornatus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/115520	http://lila-erc.eu/data/id/lemma/157926
+25	atque	atque	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/90490
+26	insignia	insigne	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/108152
+27	scaenicorum	scenicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/123579
+28	reperta	reperio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/122659
+29	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	
+30	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+31	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/87344
+32	hoc	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/105455
+33	unicuique	unusquisque	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/131027
+34	suus	suus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/127165
+35	habitus	habitus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/105096
+36	;	;	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	
+37	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+38	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/87344
+39	ultimum	ultimum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/129473
+40	qui	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/121354
+41	primarum	primus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/119498
+42	partium	pars	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/116084
+43	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	
+44	qui	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/121354
+45	secundarum	secundus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/127502	http://lila-erc.eu/data/id/hypolemma/113585
+46	partium	pars	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/116084
+47	tertiarumque	tertiarus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2|SpaceAfter=No	
+48	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	
+49	quarti	quartum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/121110
+50	loci	locus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/110019
+51	atque	atque	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/90490
+52	quinti	quintus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/74825
+53	actores	actor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/87309
+54	essent	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+55	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	
+56	distributum	distribuo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/99877
+57	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+58	diuisa	diuido	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/99932
+59	quinquepartito	quinquepartito	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/hypolemma/115635
+60	actu	actus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/91175
+61	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/126689
+62	tota	totus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2	http://lila-erc.eu/data/id/lemma/128484	http://lila-erc.eu/data/id/lemma/129429
+63	fabula	fabula	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/102732	http://lila-erc.eu/data/id/lemma/102741
+64	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_8,Sentence_2|SpaceAfter=No	
+
+# sent_id = 16
+# text = Quae tamen in ipsis ortus sui uelut quibusdam cunabulis et uixdum incipiens ἀρχαία κωμῳδία es ἐπ ' ὀνόματος dicta est: ἀρχαία, idcirco, quia nobis pro nuper cognitis uetus est, ἐπ ' ὀνόματος autem, quia inest in ea uelut historica fides uerae narrationis et denominatio ciuium, de quibus libere describebatur.
+1	Quae	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+2	tamen	tamen	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/127607
+3	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+4	ipsis	ipse	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/108945
+5	ortus	ortus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/105734	http://lila-erc.eu/data/id/lemma/115521
+6	sui	suus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/127165
+7	uelut	uelut	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/129732
+8	quibusdam	quidam	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/121313
+9	cunabulis	cunabula	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/140848
+10	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+11	uixdum	uix	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/130478
+12	incipiens	incipio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/106965
+13	ἀρχαία	ἀρχαία	X	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+14	κωμῳδία	κωμῳδία	X	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+15	es	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+16	ἐπ	ἐπ	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+17	'	'	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+18	ὀνόματος	ὀνόματος	X	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+19	dicta	dico	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/99301	http://lila-erc.eu/data/id/lemma/99302
+20	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+21	:	:	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+22	ἀρχαία	ἀρχαία	X	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1|SpaceAfter=No	
+23	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+24	idcirco	idcirco	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/106080
+25	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+26	quia	quia	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/121166
+27	nobis	nos	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/hypolemma/110487
+28	pro	pro	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/118468
+29	nuper	nuper	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/114010
+30	cognitis	cognosco	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/94738
+31	uetus	uetus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/130070
+32	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+33	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+34	ἐπ	ἐπ	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+35	'	'	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+36	ὀνόματος	ὀνόματος	X	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+37	autem	autem	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/90828
+38	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+39	quia	quia	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/121166
+40	inest	insum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/108325
+41	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+42	ea	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/109083
+43	uelut	uelut	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/129732
+44	historica	historicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/105563
+45	fides	fides	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/103260	http://lila-erc.eu/data/id/lemma/103261
+46	uerae	uerus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/129978
+47	narrationis	narratio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/114087
+48	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+49	denominatio	denominatio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/98613
+50	ciuium	ciuis	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/94399
+51	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	
+52	de	de	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/97932
+53	quibus	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+54	libere	libere	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1	http://lila-erc.eu/data/id/hypolemma/25572
+55	describebatur	describo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/98869
+56	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_9,Sentence_1|SpaceAfter=No	
+
+# sent_id = 17
+# text = Etenim per priscos poetas non, ut nunc, penitus ficta argumenta, sed res gestae a ciuibus palam cum eorum saepe, qui gesserant, nomine decantabantur, idque ipsum suo tempore moribus multum profuit ciuitatis, cum unus quisque caueret culpam, ne spectaculo ceteris extitisset et domestico probro.
+1	Etenim	etenim	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/101543
+2	per	per	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/116569
+3	priscos	priscus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/119513
+4	poetas	poeta	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/118267
+5	non	non	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/114108
+6	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	
+7	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/130906
+8	nunc	nunc	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/113990
+9	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	
+10	penitus	penitus	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/116493
+11	ficta	fingo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/103319
+12	argumenta	argumentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/89946
+13	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	
+14	sed	sed	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/123994
+15	res	res	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/121868
+16	gestae	gero	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/104536
+17	a	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+18	ciuibus	ciuis	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/94399
+19	palam	palam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/115666
+20	cum	cum	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/97202
+21	eorum	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/109083
+22	saepe	saepe	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/123106
+23	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	
+24	qui	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+25	gesserant	gero	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/104536
+26	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	
+27	nomine	nomen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/113797
+28	decantabantur	decanto	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/97994
+29	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	
+30	idque	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/109083
+31	ipsum	ipse	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/108945
+32	suo	suus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/127165
+33	tempore	tempus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/127522	http://lila-erc.eu/data/id/lemma/127796
+34	moribus	mos	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/66487	http://lila-erc.eu/data/id/lemma/112831
+35	multum	multum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/hypolemma/111489
+36	profuit	prosum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/120122
+37	ciuitatis	ciuitas	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/94400
+38	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	
+39	cum	cum	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/97202
+40	unus	unus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/85636
+41	quisque	quisque	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/121320
+42	caueret	caueo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/40254	http://lila-erc.eu/data/id/lemma/93200
+43	culpam	culpa	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/97183
+44	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	
+45	ne	ne	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/113491
+46	spectaculo	spectaculum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/125290
+47	ceteris	ceterus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/93624
+48	extitisset	exsto	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/102360
+49	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+50	domestico	domesticus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	http://lila-erc.eu/data/id/lemma/100046
+51	probro	probrum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/119558	http://lila-erc.eu/data/id/lemma/119571
+52	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_1	
+
+# sent_id = 18
+# text = Sed cum poetae licentius abuti stilo et passim laedere ex libidine coepissent plures bonos, ne quisquam in alterum carmen infame componeret lata lege siluerunt.
+1	Sed	sed	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/123994
+2	cum	cum	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/97201
+3	poetae	poeta	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/118267
+4	licentius	licenter	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/hypolemma/112946
+5	abuti	abutor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/87058
+6	stilo	stilus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/125696
+7	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+8	passim	passim	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/116161
+9	laedere	laedo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/61029	http://lila-erc.eu/data/id/lemma/109718
+10	ex	ex	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/101716
+11	libidine	libido	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/110407
+12	coepissent	coepio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/94695
+13	plures	multus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/112998
+14	bonos	bonus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/91782
+15	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	
+16	ne	ne	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/113491
+17	quisquam	quisquam	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/121315
+18	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/106748
+19	alterum	alter	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/88457
+20	carmen	carmen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/92868	http://lila-erc.eu/data/id/lemma/96629
+21	infame	infamis	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/107599
+22	componeret	compono	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/95367
+23	lata	fero	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/103126
+24	lege	lex	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2	http://lila-erc.eu/data/id/lemma/110351
+25	siluerunt	sileo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/124777
+26	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_10,Sentence_2|SpaceAfter=No	
+
+# sent_id = 19
+# text = Et hinc deinde aliud genus fabulae, id est satyra, sumpsit exordium, quae a satyris, quos in iocis semper ac petulantes deos scilus esse, uocitata est, etsi alii aliunde nomen praue putant habere.
+1	Et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+2	hinc	hinc	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/105454
+3	deinde	deinde	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/98386
+4	aliud	alius	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/88481
+5	genus	genus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/104498	http://lila-erc.eu/data/id/lemma/104499	http://lila-erc.eu/data/id/lemma/104504	http://lila-erc.eu/data/id/lemma/157698
+6	fabulae	fabula	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/102732	http://lila-erc.eu/data/id/lemma/102741
+7	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	
+8	id	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/109083
+9	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+10	satyra	satira	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/123500
+11	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	
+12	sumpsit	sumo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/126707
+13	exordium	exordium	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/102102
+14	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	
+15	quae	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+16	a	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+17	satyris	satyrus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/123516
+18	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	
+19	quos	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+20	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+21	iocis	iocus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/108935
+22	semper	semper	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/124294
+23	ac	ac	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/90490
+24	petulantes	petulans	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/117564
+25	deos	deus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/47152	http://lila-erc.eu/data/id/lemma/99132
+26	scilus	scilus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	
+27	esse	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+28	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	
+29	uocitata	uocito	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/130728
+30	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+31	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	
+32	etsi	etsi	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/102562
+33	alii	alius	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/88481
+34	aliunde	aliunde	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/91101
+35	nomen	nomen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/113797
+36	praue	praue	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/hypolemma/35280
+37	putant	puto	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	http://lila-erc.eu/data/id/lemma/120610
+38	habere	habeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/105044
+39	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_1	
+
+# sent_id = 20
+# text = Haec satyra igitur eiusmodi fuit, ut in ea quamuis duro et uelut agresti ioco de uitiis ciuium, tamen sine ullo proprii nominis titulo, carmen esset.
+1	Haec	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/105455
+2	satyra	satira	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/123500
+3	igitur	igitur	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/106127
+4	eiusmodi	eiusmodi	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/102551
+5	fuit	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+6	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	
+7	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/130906
+8	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/106748
+9	ea	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/109083
+10	quamuis	quamuis	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/121355	http://lila-erc.eu/data/id/hypolemma/37092
+11	duro	durus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/100319
+12	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+13	uelut	uelut	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/129732
+14	agresti	agrestis	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/88170
+15	ioco	iocus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/108935
+16	de	de	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/97932
+17	uitiis	uitium	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/130432
+18	ciuium	ciuis	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/94399
+19	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	
+20	tamen	tamen	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/127607
+21	sine	sine	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/124883
+22	ullo	ullus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/130494
+23	proprii	proprius	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/119990
+24	nominis	nomen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/113797
+25	titulo	titulus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/128926
+26	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	
+27	carmen	carmen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	http://lila-erc.eu/data/id/lemma/92868	http://lila-erc.eu/data/id/lemma/96629
+28	esset	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+29	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_2	
+
+# sent_id = 21
+# text = Quod item genus comoediae multis obfuit poetis, cum in suspicionem potentibus ciuium uenissent illorum facta descripsisse in peius ac deformasse genus stilo carminis.
+1	Quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/74854
+2	item	item	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/109131
+3	genus	genus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/104498	http://lila-erc.eu/data/id/lemma/104499	http://lila-erc.eu/data/id/lemma/104504	http://lila-erc.eu/data/id/lemma/157698
+4	comoediae	comoedies	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	
+5	multis	multus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/112998
+6	obfuit	obsum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/114485
+7	poetis	poeta	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/118267
+8	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	
+9	cum	cum	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/97202
+10	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/106748
+11	suspicionem	suspicio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/127131
+12	potentibus	potens	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/hypolemma/110681
+13	ciuium	ciuis	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/94399
+14	uenissent	uenio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/84481	http://lila-erc.eu/data/id/lemma/129790
+15	illorum	ille	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/106221
+16	facta	facio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/102758
+17	descripsisse	descripso	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	
+18	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/106748
+19	peius	malus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/111418
+20	ac	ac	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/90490
+21	deformasse	deformor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	
+22	genus	genus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/104498	http://lila-erc.eu/data/id/lemma/104499	http://lila-erc.eu/data/id/lemma/104504	http://lila-erc.eu/data/id/lemma/157698
+23	stilo	stilus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	http://lila-erc.eu/data/id/lemma/125696
+24	carminis	carmen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/92868	http://lila-erc.eu/data/id/lemma/96629
+25	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_3	
+
+# sent_id = 22
+# text = Quod primus Lucilius nouo conscripsit modo, ut poesin inde fecisset, id est unius carminis plurimos libros.
+1	Quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	http://lila-erc.eu/data/id/lemma/74854
+2	primus	primus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	http://lila-erc.eu/data/id/lemma/119498
+3	Lucilius	lucilius	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	
+4	nouo	nouus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	http://lila-erc.eu/data/id/lemma/113900
+5	conscripsit	conscribo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	http://lila-erc.eu/data/id/lemma/95999
+6	modo	modo	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/113289
+7	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	
+8	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	http://lila-erc.eu/data/id/lemma/130906
+9	poesin	poesis	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	http://lila-erc.eu/data/id/lemma/118266
+10	inde	inde	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	http://lila-erc.eu/data/id/lemma/107259	http://lila-erc.eu/data/id/hypolemma/57506	http://lila-erc.eu/data/id/hypolemma/78827
+11	fecisset	facio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/102758
+12	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	
+13	id	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	http://lila-erc.eu/data/id/lemma/109083
+14	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	http://lila-erc.eu/data/id/lemma/126689
+15	unius	unius	NUM	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	
+16	carminis	carmen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	http://lila-erc.eu/data/id/lemma/92868	http://lila-erc.eu/data/id/lemma/96629
+17	plurimos	multus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4	http://lila-erc.eu/data/id/lemma/112998
+18	libros	liber	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/110382
+19	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_11,Sentence_4|SpaceAfter=No	
+
+# sent_id = 23
+# text = Hoc igitur quod supra diximus malo coacti omittere satyram aliud genus carminis, νέαν κωμῳδίαν, hoc est nouam comoediam, reppererunt poetae, quae argumento communi magis et generaliter ad omnes homines, qui mediocribus fortunis agunt, pertineret et minus amaritudinis spectatoribus et eadem opera multum delectationis afferret, concinna argumento, consuetudini congrua, utilis sententiis, grata salibus, apta metro.
+1	Hoc	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/105455
+2	igitur	igitur	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/106127
+3	quod	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+4	supra	supra	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/127065
+5	diximus	dico	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/99301	http://lila-erc.eu/data/id/lemma/99302
+6	malo	malus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/111418
+7	coacti	cogo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/94739
+8	omittere	omitto	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/114931
+9	satyram	satyra	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/123500
+10	aliud	alius	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/88481
+11	genus	genus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/104498	http://lila-erc.eu/data/id/lemma/104499	http://lila-erc.eu/data/id/lemma/104504	http://lila-erc.eu/data/id/lemma/157698
+12	carminis	carmen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/92868	http://lila-erc.eu/data/id/lemma/96629
+13	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	
+14	νέαν	νέαν	X	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	
+15	κωμῳδίαν	κωμῳδίαν	X	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1|SpaceAfter=No	
+16	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	
+17	hoc	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/105455
+18	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+19	nouam	nouus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/113900
+20	comoediam	comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/95235
+21	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	
+22	reppererunt	reperio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/122659
+23	poetae	poeta	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/118267
+24	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	
+25	quae	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+26	argumento	argumentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/89946
+27	communi	communis	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/97171
+28	magis	magis	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/111271
+29	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+30	generaliter	generaliter	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/hypolemma/17855
+31	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+32	omnes	omnis	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/114954
+33	homines	homo	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/105624
+34	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	
+35	qui	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+36	mediocribus	mediocris	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/111822
+37	fortunis	fortuna	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/103696
+38	agunt	ago	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/88140
+39	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	
+40	pertineret	pertineo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/117404
+41	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+42	minus	parum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/116130
+43	amaritudinis	amaritudo	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/88573
+44	spectatoribus	spectator	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/125295
+45	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+46	eadem	idem	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/109082
+47	opera	opus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/115170
+48	multum	multum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/hypolemma/111489
+49	delectationis	delectatio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/100388
+50	afferret	affero	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/27882	http://lila-erc.eu/data/id/lemma/88001
+51	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	
+52	concinna	concinnus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/95523
+53	argumento	argumentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/89946
+54	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	
+55	consuetudini	consuetudo	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/96179
+56	congrua	congruens	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/hypolemma/8785
+57	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	
+58	utilis	utilis	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/130917
+59	sententiis	sententia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/124342
+60	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	
+61	grata	gratus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/lemma/104886
+62	salibus	sal	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/123172
+63	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	
+64	apta	aptus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1	http://lila-erc.eu/data/id/hypolemma/2739	http://lila-erc.eu/data/id/hypolemma/2742
+65	metro	metrum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/112257
+66	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_12,Sentence_1|SpaceAfter=No	
+
+# sent_id = 24
+# text = Vt igitur superiores illae suis quaeque celebrantur auctoribus, ita haec νέα κωμῳδία cum multorum ante ac postea, tum praecipue Menandri Terentiique est.
+1	Vt	ut	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	
+2	igitur	igitur	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	http://lila-erc.eu/data/id/lemma/106127
+3	superiores	superus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	http://lila-erc.eu/data/id/lemma/126999
+4	illae	ille	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	http://lila-erc.eu/data/id/lemma/106221
+5	suis	suus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	http://lila-erc.eu/data/id/lemma/127165
+6	quaeque	quisque	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	http://lila-erc.eu/data/id/lemma/121320
+7	celebrantur	celebro	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	http://lila-erc.eu/data/id/lemma/93319
+8	auctoribus	auctor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/90615
+9	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	
+10	ita	ita	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	http://lila-erc.eu/data/id/lemma/109126
+11	haec	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	http://lila-erc.eu/data/id/lemma/105455
+12	νέα	νέα	X	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	
+13	κωμῳδία	κωμῳδία	X	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	
+14	cum	cum	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	http://lila-erc.eu/data/id/lemma/97202
+15	multorum	multi	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	
+16	ante	ante	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	http://lila-erc.eu/data/id/lemma/89165
+17	ac	ac	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	http://lila-erc.eu/data/id/lemma/90490
+18	postea	postea	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/118575
+19	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	
+20	tum	tum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	http://lila-erc.eu/data/id/lemma/129198
+21	praecipue	praecipue	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	http://lila-erc.eu/data/id/hypolemma/34255
+22	Menandri	Menandrus	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	
+23	Terentiique	Terentii	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	
+24	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+25	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_1	
+
+# sent_id = 25
+# text = De qua cum multa dicenda sint, sat erit tamen uelut admonendi lectoris causa quod de arte comica in ueterum chartis retinetur exponere.
+1	De	de	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/97932
+2	qua	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/121354
+3	cum	cum	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/97202
+4	multa	multus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/112998
+5	dicenda	dico	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/99301	http://lila-erc.eu/data/id/lemma/99302
+6	sint	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+7	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	
+8	sat	sat	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/123480
+9	erit	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/126689
+10	tamen	tamen	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/127607
+11	uelut	uelut	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/129732
+12	admonendi	admoneo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/87560
+13	lectoris	lector	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/110136
+14	causa	causa	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/93253
+15	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/74854
+16	de	de	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/97932
+17	arte	ars	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/90089
+18	comica	comicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/95029
+19	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/106748
+20	ueterum	uetus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/130070
+21	chartis	charta	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/93715
+22	retinetur	retineo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2	http://lila-erc.eu/data/id/lemma/122776
+23	exponere	expono	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/102214
+24	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_13,Sentence_2|SpaceAfter=No	
+
+# sent_id = 26
+# text = Comoedia uetus, ut ab initio chorus fuit paulatimque personarum numero in quinque actus processit, ita paulatim uelut attrito atque extenuato choro ad nouam comoediam sic peruenit, ut in ea non modo non inducatur chorus, sed ne locus quidem ullus iam relinquatur choro.
+1	Comoedia	Comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/95235
+2	uetus	uetus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/130070
+3	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	
+4	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/130906
+5	ab	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+6	initio	initium	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/107903
+7	chorus	chorus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/93846
+8	fuit	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+9	paulatimque	paulatim	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/116289
+10	personarum	persona	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/117325
+11	numero	numerus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/113981
+12	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+13	quinque	quinque	NUM	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/121223
+14	actus	actus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/91175
+15	processit	procedo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/119582
+16	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	
+17	ita	ita	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/109126
+18	paulatim	paulatim	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/116289
+19	uelut	uelut	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/129732
+20	attrito	attero	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/32946	http://lila-erc.eu/data/id/lemma/90539
+21	atque	atque	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/90490
+22	extenuato	extenuo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/102412
+23	choro	chorus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/93846
+24	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+25	nouam	nouus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/113900
+26	comoediam	comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/95235
+27	sic	sic	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/124690
+28	peruenit	peruenio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/117445
+29	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	
+30	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/130906
+31	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+32	ea	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/109083
+33	non	non	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/114108
+34	modo	modo	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/113289
+35	non	non	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/114108
+36	inducatur	induco	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/107435
+37	chorus	chorus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/93846
+38	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	
+39	sed	sed	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/123994
+40	ne	ne	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/113491
+41	locus	locus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/110019
+42	quidem	quidem	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/121168
+43	ullus	ullus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/130494
+44	iam	iam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/106025
+45	relinquatur	relinquo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	http://lila-erc.eu/data/id/lemma/122569
+46	choro	chorus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/93846
+47	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_1	
+
+# sent_id = 27
+# text = Nam postquam otioso tempore fastidiosior spectator effectus tum, cum ad cantatores ab actoribus fabula transibat, consurgere et abire coepisset, admonuit id poetas, ut primo quidem choros tollerent locum eis relinquentes — ut Menander fecit hac de causa, non ut alii existimant, alia —; postremo ne locum quidem reliquerunt
+1	Nam	nam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/113344
+2	postquam	postquam	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/120753
+3	otioso	otiosus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/115420
+4	tempore	tempus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/127522	http://lila-erc.eu/data/id/lemma/127796
+5	fastidiosior	fastidiosus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/102973
+6	spectator	spectator	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/125295
+7	effectus	effectus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/102681
+8	tum	tum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/129198
+9	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	
+10	cum	cum	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/97202
+11	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/87344
+12	cantatores	cantator	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/92619
+13	ab	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/87344
+14	actoribus	actor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/87309
+15	fabula	fabula	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/102732	http://lila-erc.eu/data/id/lemma/102741
+16	transibat	transeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/128591
+17	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	
+18	consurgere	consurgo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/96200
+19	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+20	abire	abeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/86873
+21	coepisset	coepio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/94695
+22	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	
+23	admonuit	admoneo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/87560
+24	id	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/109083
+25	poetas	poeta	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/118267
+26	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	
+27	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/130906
+28	primo	primo	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/hypolemma/35374
+29	quidem	quidem	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/121168
+30	choros	choer	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	
+31	tollerent	tollo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/128357
+32	locum	locus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/110019
+33	eis	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/109083
+34	relinquentes	relinquo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/122569
+35	—	—	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	
+36	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/130906
+37	Menander	Menander	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/14177
+38	fecit	facio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/102758
+39	hac	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/105455
+40	de	de	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/97932
+41	causa	causa	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/93253
+42	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	
+43	non	non	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/114108
+44	ut	ut	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/130905
+45	alii	alius	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/88481
+46	existimant	existimo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/102057
+47	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	
+48	alia	alius	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/88481
+49	—	—	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2|SpaceAfter=No	
+50	;	;	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	
+51	postremo	postremo	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/hypolemma/114058
+52	ne	ne	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/113491
+53	locum	locus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/110019
+54	quidem	quidem	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/121168
+55	reliquerunt	relinquo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_2	http://lila-erc.eu/data/id/lemma/122569
+
+# sent_id = 28
+# text = — quod Latini fecerunt comici, unde apud illos dirimere actus quinquepartitos difficile est —.
+1	—	—	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3	
+2	quod	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3	http://lila-erc.eu/data/id/lemma/121354
+3	Latini	latini	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3	
+4	fecerunt	facio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3	http://lila-erc.eu/data/id/lemma/102758
+5	comici	comicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/95029
+6	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3	
+7	unde	unde	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3	http://lila-erc.eu/data/id/lemma/130603
+8	apud	apud	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3	http://lila-erc.eu/data/id/lemma/89686
+9	illos	ille	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3	http://lila-erc.eu/data/id/lemma/106221
+10	dirimere	dirimo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3	http://lila-erc.eu/data/id/lemma/47520	http://lila-erc.eu/data/id/lemma/99576
+11	actus	actus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3	http://lila-erc.eu/data/id/lemma/91175
+12	quinquepartitos	quinquepartitus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3	http://lila-erc.eu/data/id/lemma/121242
+13	difficile	difficilis	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3	http://lila-erc.eu/data/id/lemma/99345
+14	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3	http://lila-erc.eu/data/id/lemma/126689
+15	—	—	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3|SpaceAfter=No	
+16	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_14,Sentence_3|SpaceAfter=No	
+
+# sent_id = 29
+# text = Tum etiam Graeci prologos non habent more nostrorum, quos Latini habent.
+1	Tum	tum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_1	http://lila-erc.eu/data/id/lemma/129198
+2	etiam	etiam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_1	http://lila-erc.eu/data/id/lemma/101554
+3	Graeci	graecus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_1	http://lila-erc.eu/data/id/lemma/8329
+4	prologos	prologos	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_1	
+5	non	non	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_1	http://lila-erc.eu/data/id/lemma/114108
+6	habent	habeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_1	http://lila-erc.eu/data/id/lemma/105044
+7	more	mos	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_1	http://lila-erc.eu/data/id/lemma/66487	http://lila-erc.eu/data/id/lemma/112831
+8	nostrorum	noster	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/113882
+9	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_1	
+10	quos	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+11	Latini	latini	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_1	
+12	habent	habeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/105044
+13	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_1	
+
+# sent_id = 30
+# text = Deinde θεοὺς ἀπὸ μηχανῆς, id est deos argumentis narrandis machinatos, ceteri Latini ad instar Graecorum habent, Terentius non habet.
+1	Deinde	deinde	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	http://lila-erc.eu/data/id/lemma/98386
+2	θεοὺς	θεοὺς	X	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	
+3	ἀπὸ	ἀπὸ	X	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	
+4	μηχανῆς	μηχανῆς	X	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2|SpaceAfter=No	
+5	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	
+6	id	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	http://lila-erc.eu/data/id/lemma/109083
+7	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	http://lila-erc.eu/data/id/lemma/126689
+8	deos	deus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	http://lila-erc.eu/data/id/lemma/47152	http://lila-erc.eu/data/id/lemma/99132
+9	argumentis	argumentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	http://lila-erc.eu/data/id/lemma/89946
+10	narrandis	narro	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	http://lila-erc.eu/data/id/lemma/113381
+11	machinatos	machinor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/111199
+12	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	
+13	ceteri	ceterus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	http://lila-erc.eu/data/id/lemma/93624
+14	Latini	latini	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	
+15	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	http://lila-erc.eu/data/id/lemma/87344
+16	instar	instar	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	http://lila-erc.eu/data/id/lemma/108241
+17	Graecorum	graeci	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	
+18	habent	habeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/105044
+19	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	
+20	Terentius	terentius	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	http://lila-erc.eu/data/id/lemma/23131
+21	non	non	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	http://lila-erc.eu/data/id/lemma/114108
+22	habet	habeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/105044
+23	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_2	
+
+# sent_id = 31
+# text = Ad hoc προτατικὰ πρόσωπα, id est personas extra argumentum accersitas, non facile ceteri habent, quibus Terentius saepe utitur, ut per harum inductiones facilius pateat argumentum.
+1	Ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/87344
+2	hoc	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/105455
+3	προτατικὰ	προτατικὰ	X	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	
+4	πρόσωπα	πρόσωπα	X	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3|SpaceAfter=No	
+5	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	
+6	id	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/109083
+7	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/126689
+8	personas	persona	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/117325
+9	extra	extra	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/102446
+10	argumentum	argumentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/89946
+11	accersitas	accersitas	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3|SpaceAfter=No	
+12	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	
+13	non	non	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/114108
+14	facile	facile	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/hypolemma/111576
+15	ceteri	ceteri	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	
+16	habent	habeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/105044
+17	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	
+18	quibus	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/121354
+19	Terentius	terentius	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/23131
+20	saepe	saepe	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/123106
+21	utitur	utor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/130923
+22	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	
+23	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/130906
+24	per	per	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/116569
+25	harum	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/105455
+26	inductiones	inductio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/107438
+27	facilius	facile	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/hypolemma/111576
+28	pateat	pateo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3	http://lila-erc.eu/data/id/lemma/116202
+29	argumentum	argumentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/89946
+30	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_15,Sentence_3|SpaceAfter=No	
+
+# sent_id = 32
+# text = Veteres etsi ipsi quoque in metris neglegentius egerunt, iambici uersus dumtaxat in secundo et quarto loco, tamen a Terentio uincuntur resolutione huius metri quantum potest comminuti ad imaginem prosae orationis.
+1	Veteres	Veter	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/130070
+2	etsi	etsi	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/102562
+3	ipsi	ipse	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/108945
+4	quoque	quoque	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/hypolemma/110467
+5	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+6	metris	meter	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	
+7	neglegentius	negligenter	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/hypolemma/113187
+8	egerunt	ago	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/88140
+9	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	
+10	iambici	iambicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/106028
+11	uersus	uersus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/130035
+12	dumtaxat	dumtaxat	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/100243
+13	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+14	secundo	secundus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/127502	http://lila-erc.eu/data/id/hypolemma/113585
+15	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+16	quarto	quartus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/121107
+17	loco	locus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/110019
+18	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	
+19	tamen	tamen	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/127607
+20	a	ab	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/86824
+21	Terentio	terentius	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/23131
+22	uincuntur	uinco	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/130232
+23	resolutione	resolutio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/121894
+24	huius	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/105455
+25	metri	meter	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	
+26	quantum	quantum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/hypolemma/110678
+27	potest	possum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/118569
+28	comminuti	comminuo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/95145
+29	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+30	imaginem	imago	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	http://lila-erc.eu/data/id/lemma/106319
+31	prosae	prodo	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1	
+32	orationis	oratio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/115179
+33	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_16,Sentence_1|SpaceAfter=No	
+
+# sent_id = 33
+# text = Tum personarum leges circa habitum, aetatem, officium, partes agendi nemo diligentius a Terentio custodiuit.
+1	Tum	tum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	http://lila-erc.eu/data/id/lemma/129198
+2	personarum	persona	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	http://lila-erc.eu/data/id/lemma/117325
+3	leges	lex	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	http://lila-erc.eu/data/id/lemma/110351
+4	circa	circa	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	http://lila-erc.eu/data/id/lemma/94032
+5	habitum	habitus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/105096
+6	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	
+7	aetatem	aetas	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/87955
+8	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	
+9	officium	officium	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/114811
+10	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	
+11	partes	pars	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	http://lila-erc.eu/data/id/lemma/116084
+12	agendi	ago	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	http://lila-erc.eu/data/id/lemma/88140
+13	nemo	nemo	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	http://lila-erc.eu/data/id/lemma/113605
+14	diligentius	diligenter	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	http://lila-erc.eu/data/id/lemma/47414
+15	a	ab	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	http://lila-erc.eu/data/id/lemma/86824
+16	Terentio	terentius	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	http://lila-erc.eu/data/id/lemma/23131
+17	custodiuit	custodio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/97393
+18	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_1	
+
+# sent_id = 34
+# text = Quin etiam solus ausus est, cum in fictis argumentis fidem ueritatis assequeretur, etiam contra praescripta comica meretrices interdum non malas introducere, quibus tamen et causa cur bonae sint, et uoluptas per ipsum, non defit.
+1	Quin	quin	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/121181
+2	etiam	etiam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/101554
+3	solus	solus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/125109
+4	ausus	audeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/90638
+5	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+6	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	
+7	cum	cum	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/97202
+8	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/106748
+9	fictis	fictus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/hypolemma/16656	http://lila-erc.eu/data/id/hypolemma/16688
+10	argumentis	argumentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/89946
+11	fidem	fides	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/103260	http://lila-erc.eu/data/id/lemma/103261
+12	ueritatis	ueritas	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/129876
+13	assequeretur	assequor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/90315
+14	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	
+15	etiam	etiam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/101554
+16	contra	contra	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/96322
+17	praescripta	praescribo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/119177
+18	comica	comicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/95029
+19	meretrices	meretrix	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/112117
+20	interdum	interdum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/108451
+21	non	non	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/114108
+22	malas	malus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/111418
+23	introducere	introduco	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/109581
+24	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	
+25	quibus	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/121354
+26	tamen	tamen	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/127607
+27	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+28	causa	causa	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/93253
+29	cur	cur	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/97300
+30	bonae	bonus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/91782
+31	sint	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+32	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	
+33	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+34	uoluptas	uoluptas	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/130771
+35	per	per	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/116569
+36	ipsum	ipse	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/108945
+37	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	
+38	non	non	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2	http://lila-erc.eu/data/id/lemma/114108
+39	defit	deficio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/98257
+40	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_17,Sentence_2|SpaceAfter=No	
+
+# sent_id = 35
+# text = Haec cum artificiosissima Terentius fecerit, tum illud est admirandum, quod et morem retinuit, ut comoediam scriberet, et temperauit affectum, ne in tragoediam transiliret.
+1	Haec	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/105455
+2	cum	cum	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/97202
+3	artificiosissima	artificiosus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/90123
+4	Terentius	terentius	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/23131
+5	fecerit	facio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/102758
+6	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	
+7	tum	tum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/129198
+8	illud	ille	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/106221
+9	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+10	admirandum	admiror	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/87541
+11	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	
+12	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+13	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+14	morem	mos	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/66487	http://lila-erc.eu/data/id/lemma/112831
+15	retinuit	retineo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/122776
+16	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	
+17	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/130906
+18	comoediam	comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/95235
+19	scriberet	scribo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/123840
+20	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	
+21	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+22	temperauit	tempero	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/127773
+23	affectum	affectus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/27876	http://lila-erc.eu/data/id/lemma/87975
+24	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	
+25	ne	ne	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/113491
+26	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+27	tragoediam	tragoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	http://lila-erc.eu/data/id/lemma/128535
+28	transiliret	transilio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/128631
+29	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_1	
+
+# sent_id = 36
+# text = Quod cum aliis rebus minime obtentum et a Plauto et ab Afranio et appio et multis fere magnis comicis inuenimus.
+1	Quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/74854
+2	cum	cum	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/97201
+3	aliis	alius	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/88481
+4	rebus	res	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/121868
+5	minime	parum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/116130
+6	obtentum	obtineo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/114504
+7	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+8	a	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/87344
+9	Plauto	plautus	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/18914
+10	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+11	ab	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/87344
+12	Afranio	afranius	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/7294
+13	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+14	appio	appium	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	
+15	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+16	multis	multus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/112998
+17	fere	fere	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/103104	http://lila-erc.eu/data/id/hypolemma/16548
+18	magnis	magnus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/111319
+19	comicis	comicus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	http://lila-erc.eu/data/id/lemma/95030
+20	inuenimus	inuenio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/108806
+21	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_2	
+
+# sent_id = 37
+# text = Illud quoque inter Terentianas uirtutes mirabile, quod eius fabulae eo sunt temperamento, ut neque extumescant ad tragicam celsitudinem neque abiciantur ad mimicam uilitatem.
+1	Illud	ille	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/106221
+2	quoque	quoque	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/hypolemma/110467
+3	inter	inter	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/108392
+4	Terentianas	Terentianus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/23129
+5	uirtutes	uirtus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/130356
+6	mirabile	mirabilis	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/112428
+7	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	
+8	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/74854
+9	eius	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/109083
+10	fabulae	fabula	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/102732	http://lila-erc.eu/data/id/lemma/102741
+11	eo	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/109083
+12	sunt	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/126689
+13	temperamento	temperamentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/127766
+14	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	
+15	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/130906
+16	neque	nec	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/113512
+17	extumescant	extumesco	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/102470
+18	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/87344
+19	tragicam	tragicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/128532
+20	celsitudinem	celsitudo	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/93359
+21	neque	nec	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/113512
+22	abiciantur	abicio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/86884
+23	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/87344
+24	mimicam	mimicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3	http://lila-erc.eu/data/id/lemma/112356
+25	uilitatem	uilitas	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/130200
+26	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_18,Sentence_3|SpaceAfter=No	
+
+# sent_id = 38
+# text = Adde quod nihil abstrusum ab eo ponitur aut quod ab historicis requirendum sit, quod saepius Plautus facit et eo est obscurior multis locis.
+1	Adde	Ads	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	
+2	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+3	nihil	nihil	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/114071
+4	abstrusum	abstrudeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	
+5	ab	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+6	eo	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/109083
+7	ponitur	pono	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/118414
+8	aut	aut	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/90827
+9	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+10	ab	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+11	historicis	historicus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/105565
+12	requirendum	requiro	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/122700
+13	sit	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+14	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	
+15	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+16	saepius	saepe	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/123106
+17	Plautus	plautus	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/18914
+18	facit	facio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/102758
+19	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+20	eo	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/109083
+21	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+22	obscurior	obscurior	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	
+23	multis	multus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1	http://lila-erc.eu/data/id/lemma/112998
+24	locis	locus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/110019
+25	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_19,Sentence_1|SpaceAfter=No	
+
+# sent_id = 39
+# text = Adde quod argumenti ac stili ita attente memor est, ut nusquam non aut cauerit aut curauerit quae obesse potuerunt, tum quod media primis atque postremis ita nexuit, ut nihil additum alteri, sed et aptum ex se totum et uno corpore uideatur esse compositum.
+1	Adde	Ads	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	
+2	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+3	argumenti	argumentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/89946
+4	ac	ac	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/90490
+5	stili	stilus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/125696
+6	ita	ita	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/109126
+7	attente	attente	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/hypolemma/112894
+8	memor	memor	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/135857
+9	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+10	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	
+11	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/130906
+12	nusquam	nusquam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/114085
+13	non	non	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/114108
+14	aut	aut	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/90827
+15	cauerit	caueo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/40254	http://lila-erc.eu/data/id/lemma/93200
+16	aut	aut	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/90827
+17	curauerit	curo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/97341
+18	quae	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+19	obesse	obsum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/114485
+20	potuerunt	possum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/118569
+21	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	
+22	tum	tum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/129198
+23	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+24	media	medius	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/111841
+25	primis	primus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/119498
+26	atque	atque	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/90490
+27	postremis	posterus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/120781
+28	ita	ita	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/109126
+29	nexuit	nexo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/113646	http://lila-erc.eu/data/id/lemma/113647
+30	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	
+31	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/130906
+32	nihil	nihil	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/114071
+33	additum	addo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/87401
+34	alteri	alter	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/88457
+35	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	
+36	sed	sed	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/123994
+37	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+38	aptum	aptus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/hypolemma/2739	http://lila-erc.eu/data/id/hypolemma/2742
+39	ex	ex	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/101716
+40	se	sui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/131255
+41	totum	totus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/128484	http://lila-erc.eu/data/id/lemma/129429
+42	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+43	uno	unus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/85636
+44	corpore	corpus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/96667
+45	uideatur	uideo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/130163
+46	esse	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+47	compositum	compono	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/95367
+48	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_20,Sentence_1|SpaceAfter=No	
+
+# sent_id = 40
+# text = Illud quoque mirabile in eo, primo quod non ita miscet quattuor personas, ut obscura sit earum distinctio, et item quod nihil ad populum facit actorem uelut extra comoediam loqui, quod uitium Plauti frequentissimum.
+1	Illud	ille	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/106221
+2	quoque	quoque	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/hypolemma/110467
+3	mirabile	mirabilis	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/112428
+4	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+5	eo	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/109083
+6	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	
+7	primo	primo	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/hypolemma/35374
+8	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+9	non	non	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/114108
+10	ita	ita	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/109126
+11	miscet	misceo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/112447
+12	quattuor	quatuor	NUM	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/121130
+13	personas	persona	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/117325
+14	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	
+15	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/130906
+16	obscura	obscurus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/114385
+17	sit	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+18	earum	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/109083
+19	distinctio	distinctio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/99862
+20	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	
+21	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+22	item	item	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/109131
+23	quod	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/121354
+24	nihil	nihil	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/114071
+25	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+26	populum	populus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/118463	http://lila-erc.eu/data/id/lemma/118501
+27	facit	facio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/102758
+28	actorem	actor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/87309
+29	uelut	uelut	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/129732
+30	extra	extra	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/102446
+31	comoediam	comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/95235
+32	loqui	loquor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/110805
+33	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	
+34	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+35	uitium	uitium	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/130432
+36	Plauti	plautus	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1	http://lila-erc.eu/data/id/lemma/18914
+37	frequentissimum	frequens	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/103777
+38	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_21,Sentence_1|SpaceAfter=No	
+
+# sent_id = 41
+# text = Illud etiam inter cetera eius laude dignum uidetur, quod locupletiora argumenta ex duplicibus negotiis delegerit ad scribendum.
+1	Illud	ille	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/106221
+2	etiam	etiam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/101554
+3	inter	inter	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/108392
+4	cetera	ceterus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/93624
+5	eius	is	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/109083
+6	laude	laus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/61588	http://lila-erc.eu/data/id/lemma/110103
+7	dignum	dignus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/99407
+8	uidetur	uideo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/130163
+9	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	
+10	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+11	locupletiora	locuples	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/110727
+12	argumenta	argumentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/89946
+13	ex	ex	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/101716
+14	duplicibus	duplex	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/100286
+15	negotiis	negotium	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/113566
+16	delegerit	deligo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/98470	http://lila-erc.eu/data/id/lemma/98471
+17	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+18	scribendum	scribo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/123840
+19	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_1	
+
+# sent_id = 42
+# text = Nam excepta Hecyra, in qua unius Pamphili amor est, ceterae quinque binos adulescentes habent.
+1	Nam	nam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2	http://lila-erc.eu/data/id/lemma/113344
+2	excepta	excipio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2	http://lila-erc.eu/data/id/lemma/101865
+3	Hecyra	Hecyra	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2|SpaceAfter=No	
+4	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2	
+5	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2	http://lila-erc.eu/data/id/lemma/106748
+6	qua	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2	http://lila-erc.eu/data/id/lemma/121354
+7	unius	unus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2	http://lila-erc.eu/data/id/lemma/85636
+8	Pamphili	pamphilus	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2	
+9	amor	amor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2	http://lila-erc.eu/data/id/lemma/88717
+10	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+11	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2	
+12	ceterae	ceterus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2	http://lila-erc.eu/data/id/lemma/93624
+13	quinque	quinque	NUM	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2	http://lila-erc.eu/data/id/lemma/121223
+14	binos	binus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2	http://lila-erc.eu/data/id/lemma/91622
+15	adulescentes	adolescens	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2	http://lila-erc.eu/data/id/hypolemma/559	http://lila-erc.eu/data/id/hypolemma/910
+16	habent	habeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/105044
+17	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_22,Sentence_2|SpaceAfter=No	
+
+# sent_id = 43
+# text = Illud uero tenendum est post νέαν κωμῳδίαν Latinos multa fabularum genera protulisse, ut togatas ab scaenicis atque argumentis Latinis, praetextatas a dignitate personarum tragicarum ex Latina historia, Atellanas a ciuitate Campaniae ubi actitatae sunt primae, Rhintonicas ab auctoris nomine, tabernarias ab humilitate argumenti ac stili, mimos a diuturna imitatione uilium rerum ac leuium personarum.
+1	Illud	ille	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/106221
+2	uero	uero	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/hypolemma/111474
+3	tenendum	teneo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/127822
+4	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+5	post	post	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/118573
+6	νέαν	νέαν	X	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	
+7	κωμῳδίαν	κωμῳδίαν	X	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	
+8	Latinos	latinus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/136266
+9	multa	multus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/112998
+10	fabularum	fabula	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/102732	http://lila-erc.eu/data/id/lemma/102741
+11	genera	genus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/104498	http://lila-erc.eu/data/id/lemma/104499	http://lila-erc.eu/data/id/lemma/104504	http://lila-erc.eu/data/id/lemma/157698
+12	protulisse	profero	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/119705
+13	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	
+14	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/130906
+15	togatas	togata	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/139500
+16	ab	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+17	scaenicis	scaenicus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	
+18	atque	atque	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/90490
+19	argumentis	argumentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/89946
+20	Latinis	latinus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/136266
+21	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	
+22	praetextatas	praetextatus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/119319
+23	a	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+24	dignitate	dignitas	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/99402
+25	personarum	persona	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/117325
+26	tragicarum	tragicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/128532
+27	ex	ex	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/101716
+28	Latina	latinus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/136266
+29	historia	historia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/105561
+30	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	
+31	Atellanas	Atellanus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/25722
+32	a	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+33	ciuitate	ciuitas	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/94400
+34	Campaniae	campania	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/2224
+35	ubi	ubi	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/129639
+36	actitatae	actito	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/87306
+37	sunt	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+38	primae	primus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/119498
+39	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	
+40	Rhintonicas	Rhintonicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	
+41	ab	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+42	auctoris	auctor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/90615
+43	nomine	nomen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/113797
+44	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	
+45	tabernarias	tabernaria	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/131514
+46	ab	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+47	humilitate	humilitas	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/105772
+48	argumenti	argumentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/89946
+49	ac	ac	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/90490
+50	stili	stilus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/125696
+51	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	
+52	mimos	mimus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/112350
+53	a	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+54	diuturna	diuturnus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/99965
+55	imitatione	imitatio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/106358
+56	uilium	uilis	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/91603
+57	rerum	res	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/121868
+58	ac	ac	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/90490
+59	leuium	leuis	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1	http://lila-erc.eu/data/id/lemma/110327	http://lila-erc.eu/data/id/lemma/110343
+60	personarum	persona	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/117325
+61	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_23,Sentence_1|SpaceAfter=No	
+
+# sent_id = 44
+# text = Inter tragoediam autem et comoediam cum multa tum inprimis hoc distat, quod in comoedia mediocres fortunae hominum, parui impetus pericula laetique sunt exitus actionum, at in tragoedia omnia contra: ingentes personae, magni timores, exitus funesti habentur;
+1	Inter	inter	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/108392
+2	tragoediam	tragoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/128535
+3	autem	autem	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/90828
+4	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+5	comoediam	comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/95235
+6	cum	cum	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/97201
+7	multa	multus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/112998
+8	tum	tum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/129198
+9	inprimis	imprimis	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/106674
+10	hoc	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/105455
+11	distat	disto	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/99868
+12	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	
+13	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/74854
+14	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+15	comoedia	comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/95235
+16	mediocres	mediocris	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/111822
+17	fortunae	fortuna	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/103696
+18	hominum	homo	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/105624
+19	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	
+20	parui	paruus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/116136
+21	impetus	impetus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/106560
+22	pericula	periculum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/116930
+23	laetique	laetus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/109739
+24	sunt	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+25	exitus	exitus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/102639
+26	actionum	actio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/87302
+27	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	
+28	at	at	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/87415
+29	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+30	tragoedia	tragoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/128535
+31	omnia	omnis	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/114954
+32	contra	contra	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/96323
+33	:	:	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	
+34	ingentes	ingens	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/107799	http://lila-erc.eu/data/id/hypolemma/80202
+35	personae	persona	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/117325
+36	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	
+37	magni	magnus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/111319
+38	timores	timor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/128271
+39	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	
+40	exitus	exitus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/102639
+41	funesti	funestus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	http://lila-erc.eu/data/id/lemma/104145
+42	habentur	habeo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/105044
+43	;	;	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_1	
+
+# sent_id = 45
+# text = et illic prima turbulenta, tranquilla ultima, in tragoedia contrario ordine res aguntur;
+1	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2	http://lila-erc.eu/data/id/lemma/101542
+2	illic	illic	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2	http://lila-erc.eu/data/id/hypolemma/19401
+3	prima	primus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2	http://lila-erc.eu/data/id/lemma/119498
+4	turbulenta	turbulentus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/129256
+5	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2	
+6	tranquilla	tranquillus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2	http://lila-erc.eu/data/id/lemma/128564
+7	ultima	ultimus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/130507
+8	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2	
+9	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2	http://lila-erc.eu/data/id/lemma/106748
+10	tragoedia	tragoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2	http://lila-erc.eu/data/id/lemma/128535
+11	contrario	contrarius	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2	http://lila-erc.eu/data/id/lemma/96344
+12	ordine	ordo	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2	http://lila-erc.eu/data/id/lemma/115236
+13	res	res	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2	http://lila-erc.eu/data/id/lemma/121868
+14	aguntur	ago	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/88140
+15	;	;	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_2	
+
+# sent_id = 46
+# text = tum quod in tragoedia fugienda uita, in comoedia capessenda exprimitur;
+1	tum	tum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_3	http://lila-erc.eu/data/id/lemma/129198
+2	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_3	http://lila-erc.eu/data/id/lemma/74854
+3	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_3	http://lila-erc.eu/data/id/lemma/106748
+4	tragoedia	tragoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_3	http://lila-erc.eu/data/id/lemma/128535
+5	fugienda	fugio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_3	http://lila-erc.eu/data/id/lemma/103922	http://lila-erc.eu/data/id/lemma/103923
+6	uita	uita	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/130393
+7	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_3	
+8	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_3	http://lila-erc.eu/data/id/lemma/106748
+9	comoedia	comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_3	http://lila-erc.eu/data/id/lemma/95235
+10	capessenda	capesso	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_3	http://lila-erc.eu/data/id/lemma/92667
+11	exprimitur	exprimo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_3|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/102229
+12	;	;	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_3	
+
+# sent_id = 47
+# text = postremo quod omnis comoedia de fictis est argumentis, tragoedia saepe de historica fide petitur.
+1	postremo	posterius	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4	http://lila-erc.eu/data/id/hypolemma/113036
+2	quod	quod	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4	http://lila-erc.eu/data/id/lemma/74854
+3	omnis	omnis	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4	http://lila-erc.eu/data/id/lemma/114954
+4	comoedia	comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4	http://lila-erc.eu/data/id/lemma/95235
+5	de	de	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4	http://lila-erc.eu/data/id/lemma/97932
+6	fictis	fictus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4	http://lila-erc.eu/data/id/hypolemma/16656	http://lila-erc.eu/data/id/hypolemma/16688
+7	est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4	http://lila-erc.eu/data/id/lemma/126689
+8	argumentis	argumentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/89946
+9	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4	
+10	tragoedia	tragoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4	http://lila-erc.eu/data/id/lemma/128535
+11	saepe	saepe	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4	http://lila-erc.eu/data/id/lemma/123106
+12	de	de	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4	http://lila-erc.eu/data/id/lemma/97932
+13	historica	historicus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4	http://lila-erc.eu/data/id/lemma/105563
+14	fide	fides	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4	http://lila-erc.eu/data/id/lemma/103260	http://lila-erc.eu/data/id/lemma/103261
+15	petitur	peto	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/117549
+16	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_24,Sentence_4|SpaceAfter=No	
+
+# sent_id = 48
+# text = Latinae fabulae primo a Liuio Andronico scriptae sunt adeo ut ad has res etiam tum recentes idem poeta et actor suarum fabularum fuisset.
+1	Latinae	latinus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/136266
+2	fabulae	fabula	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/102732	http://lila-erc.eu/data/id/lemma/102741
+3	primo	primo	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/hypolemma/35374
+4	a	ab	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/86824
+5	Liuio	Liuium	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	
+6	Andronico	andronicus	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	
+7	scriptae	scribo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/123840
+8	sunt	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+9	adeo	adeo	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/87420
+10	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/130906
+11	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+12	has	hic	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/105455
+13	res	res	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/121868
+14	etiam	etiam	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/101554
+15	tum	tum	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/129198
+16	recentes	recens	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/121510
+17	idem	idem	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/109082
+18	poeta	poetum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	
+19	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+20	actor	actor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/87309
+21	suarum	suus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/127165
+22	fabularum	fabula	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1	http://lila-erc.eu/data/id/lemma/102732	http://lila-erc.eu/data/id/lemma/102741
+23	fuisset	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/126689
+24	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_25,Sentence_1|SpaceAfter=No	
+
+# sent_id = 49
+# text = Comoediae autem motoriae sunt aut statariae aut mixtae.
+1	Comoediae	Comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_1	http://lila-erc.eu/data/id/lemma/95235
+2	autem	autem	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_1	http://lila-erc.eu/data/id/lemma/90828
+3	motoriae	motoria	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_1	http://lila-erc.eu/data/id/lemma/112844
+4	sunt	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_1	http://lila-erc.eu/data/id/lemma/126689
+5	aut	aut	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_1	http://lila-erc.eu/data/id/lemma/90827
+6	statariae	statarius	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_1	http://lila-erc.eu/data/id/lemma/125589
+7	aut	aut	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_1	http://lila-erc.eu/data/id/lemma/90827
+8	mixtae	misceo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/112447
+9	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_1	
+
+# sent_id = 50
+# text = Motoriae turbulentae, statariae quietiores, mixtae ex utroque actu consistentes.
+1	Motoriae	Motoria	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_2	
+2	turbulentae	turbulentus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/129256
+3	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_2	
+4	statariae	statarius	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_2	http://lila-erc.eu/data/id/lemma/125589
+5	quietiores	quies	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/121172
+6	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_2	
+7	mixtae	misceo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_2	http://lila-erc.eu/data/id/lemma/112447
+8	ex	ex	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_2	http://lila-erc.eu/data/id/lemma/101716
+9	utroque	uterque	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_2	http://lila-erc.eu/data/id/lemma/135768
+10	actu	actus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_2	http://lila-erc.eu/data/id/lemma/91175
+11	consistentes	consisto	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/96065
+12	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_26,Sentence_2|SpaceAfter=No	
+
+# sent_id = 51
+# text = Comoedia per quattuor partes diuiditur: prologum, protasin, epitasin, catastrophen.
+1	Comoedia	Comoedia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_1	http://lila-erc.eu/data/id/lemma/95235
+2	per	per	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_1	http://lila-erc.eu/data/id/lemma/116569
+3	quattuor	quatuor	NUM	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_1	http://lila-erc.eu/data/id/lemma/121130
+4	partes	pars	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_1	http://lila-erc.eu/data/id/lemma/116084
+5	diuiditur	diuido	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/99932
+6	:	:	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_1	
+7	prologum	prologus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/119804
+8	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_1	
+9	protasin	protasis	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/120126
+10	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_1	
+11	epitasin	epitasin	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_1|SpaceAfter=No	
+12	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_1	
+13	catastrophen.	catastrophen	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_1	
+
+# sent_id = 52
+# text = Est prologus uelut praefatio quaedam fabulae, in quo solo licet praeter argumentum aliquid ad populum uel ex poetae uel ex ipsius fabulae uel actoris commodo loqui;
+1	Est	sum	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/126689
+2	prologus	parologus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	
+3	uelut	uelut	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/129732
+4	praefatio	praefatio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/118876
+5	quaedam	quidam	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/121313
+6	fabulae	fabula	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/102732	http://lila-erc.eu/data/id/lemma/102741
+7	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	
+8	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/106748
+9	quo	qui	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/121354
+10	solo	solus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/125109
+11	licet	licet	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/110432
+12	praeter	praeter	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/119286
+13	argumentum	argumentum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/89946
+14	aliquid	aliquis	PRON	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/91108
+15	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/87344
+16	populum	populus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/118463	http://lila-erc.eu/data/id/lemma/118501
+17	uel	uel	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/129695
+18	ex	ex	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/101716
+19	poetae	poeta	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/118267
+20	uel	uel	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/129695
+21	ex	ex	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/101716
+22	ipsius	ipse	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/108945
+23	fabulae	fabula	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/102732	http://lila-erc.eu/data/id/lemma/102741
+24	uel	uel	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/129695
+25	actoris	actor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/87309
+26	commodo	commodum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	http://lila-erc.eu/data/id/lemma/95178
+27	loqui	loquor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/110805
+28	;	;	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_2	
+
+# sent_id = 53
+# text = protasis primus actus initiumque dramatis;
+1	protasis	protado	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_3	
+2	primus	primus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_3	http://lila-erc.eu/data/id/lemma/119498
+3	actus	actus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_3	http://lila-erc.eu/data/id/lemma/91175
+4	initiumque	initium	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_3	http://lila-erc.eu/data/id/lemma/107903
+5	dramatis	dramo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_3|SpaceAfter=No	
+6	;	;	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_3	
+
+# sent_id = 54
+# text = epitasis incrementum processusque turbarum ac totius, ut ita dixerim, nodus erroris;
+1	epitasis	epitasis	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4	http://lila-erc.eu/data/id/lemma/101312
+2	incrementum	incrementum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4	http://lila-erc.eu/data/id/lemma/107176
+3	processusque	processus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4	http://lila-erc.eu/data/id/lemma/120895
+4	turbarum	turba	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4	http://lila-erc.eu/data/id/lemma/129235
+5	ac	ac	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4	http://lila-erc.eu/data/id/lemma/90490
+6	totius	totus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/128484	http://lila-erc.eu/data/id/lemma/129429
+7	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4	
+8	ut	ut	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4	http://lila-erc.eu/data/id/lemma/130906
+9	ita	ita	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4	http://lila-erc.eu/data/id/lemma/109126
+10	dixerim	dico	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/99301	http://lila-erc.eu/data/id/lemma/99302
+11	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4	
+12	nodus	nodus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4	http://lila-erc.eu/data/id/lemma/113788
+13	erroris	error	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/102627
+14	;	;	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_4	
+
+# sent_id = 55
+# text = catastrophe conuersio rerum ad iucundos exitus, patefacta cunctis cognitione gestorum.
+1	catastrophe	catastrophus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_5	
+2	conuersio	conuersio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_5	http://lila-erc.eu/data/id/lemma/96440
+3	rerum	res	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_5	http://lila-erc.eu/data/id/lemma/121868
+4	ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_5	http://lila-erc.eu/data/id/lemma/87344
+5	iucundos	iucundus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_5	http://lila-erc.eu/data/id/lemma/109160
+6	exitus	exitus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_5|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/102639
+7	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_5	
+8	patefacta	patefacio	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_5	http://lila-erc.eu/data/id/lemma/116196
+9	cunctis	cunctus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_5	http://lila-erc.eu/data/id/lemma/97250
+10	cognitione	cognitio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_5	http://lila-erc.eu/data/id/lemma/94724
+11	gestorum	gestor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_5|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/104578
+12	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_27,Sentence_5|SpaceAfter=No	
