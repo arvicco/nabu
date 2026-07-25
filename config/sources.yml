@@ -2525,6 +2525,45 @@ digiliblt:   # P45-3
   # sync_policy manual.
   sync_policy: manual
   lemma_tier: silver
+# P45-2
+openmgh:
+  adapter: Nabu::Adapters::Openmgh
+  axes: [classical, romance]
+  wired: false   # BUILT P45-2, awaiting the owner-fired first sync. Scouted
+                   # live 2026-07-25: 153 volumes on the index page
+                   # (mgh.de/en/digital-mgh/openmgh/mgh-editions-in-openmgh),
+                   # one zip each at data.mgh.de/openmgh/<bsbid>.zip holding
+                   # exactly one <bsbid>.xml (48-525 KB zipped; the id space
+                   # is SPARSE — unlisted ids 404, so enumeration is the
+                   # index, never a sweep). OWNER QUEUE: `nabu sync openmgh`
+                   # fetches the D45-d first wave — the complete SS rer.
+                   # Germ. series (57 volumes, ~15 MB: Einhard, the Annales
+                   # regni Francorum/Bertiniani/Fuldenses, Widukind,
+                   # Liudprand, Nithard, Regino, Adam of Bremen, Helmold,
+                   # Otto of Freising, Hrotsvitha…) — then eyeball counts +
+                   # 5 random passages. Extend the scope with `classes:`
+                   # (a bsbid allowlist — the kanripo/kitab seam); the
+                   # remaining 96 volumes (Auct. ant., SS rer. Merov.,
+                   # Diplomata, QQ zur Geistesgesch., Dt. Chron., …) are a
+                   # documented future step the parser already handles.
+  # openMGH — Monumenta Germaniae Historica critical editions (MGH + Bayerische
+  # Staatsbibliothek, "digital MGH") as per-volume TEI-XML: medieval Latin
+  # chronicles, vitae, letters, charters — plus the Dt. Chron. series in Middle
+  # High German (gmh; no xml:lang upstream, the adapter's per-series table). A
+  # bespoke `openmgh-tei` parser family — the compose bet was REFUTED from the
+  # bytes: the body is a bare <pb>/<lb> milestone stream inside one <ab> (zero
+  # <p>/<l> reading elements — croala/sarit iterators find nothing), hyphenated
+  # words are <w> pairs that re-join across line AND page breaks, and Diplomata
+  # volumes are <teiCorpus> roots (one inner <TEI> per charter). Citations:
+  # w<k>.p<page> (work ordinal + PRINTED page — how MGH is cited) for
+  # Scriptores; c<charternum> (the edition's own charter number, medieval date
+  # verbatim in annotations) for Diplomata. LICENSE (page + every volume's
+  # in-file grant, read 2026-07-25, verbatim): "The resources are provided
+  # under the licence of Creative Commons Attribution 4.0 International
+  # (CC BY 4.0). The licence includes the annotations (tags)… The edited
+  # medieval texts themselves are free from copyright." Cite
+  # www.mgh.de/mgh-digital/openmgh + MGH + BSB → attribution.
+  sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
 #
