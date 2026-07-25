@@ -13,17 +13,18 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these seven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
-| `iecor` | cognacy dataset | attribution | enabled · manual | 4,981 entries |
-| `liv` | dictionary | attribution | enabled · manual | 305 entries |
-| `edl` | dictionary | nc | enabled · manual | 2,860 entries |
-| `starling` | etymological bases | attribution | enabled · manual | 27,397 entries |
-| `sabellic-loans` | dictionary | attribution | enabled · frozen | 85 entries |
-| `titus-avestan` | texts | nc | not enabled | not synced yet |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
+| `iecor` | cognacy dataset | attribution | wired · manual | 4,981 entries |
+| `liv` | dictionary | attribution | wired · manual | 305 entries |
+| `edl` | dictionary | nc | wired · manual | 2,860 entries |
+| `starling` | etymological bases | attribution | wired · manual | 27,397 entries |
+| `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
+
+Private research materials under personal grants are not listed.
 
 ## The desk's instruments
 
@@ -60,6 +61,12 @@ nabu language zle-ort                 # decode an etymology cognate-list languag
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Walk прьстъ back as far as it goes.”** → `nabu_etym прьстъ (lang: chu)` — The full chain *pьrstъ → Proto-Balto-Slavic *pírštan → PIE *per- "before, in front", each shelf with glosses, licenses, and corpus-attested cognate counts (Sanskrit pára ×9,769, Latin prīmus ×1,345, Hittite peran, Greek πρίν with gold and silver counts listed separately).
+
 ## Terminal setup
 
 - Mostly Latin and IPA reconstruction text. Cyrillic reflexes render under
@@ -70,4 +77,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

@@ -88,7 +88,8 @@ module Nabu
     #    "date" => {"not_before"/"not_after" (signed years from the
     #               notBefore-custom/notAfter-custom pair)/"raw"/"cert"/
     #               "evidence"},
-    #    "place" => {"ancient"/"modern"/"pleiades"/"geonames"},  # findspot
+    #    "place" => {"ancient"/"modern"/"pleiades" (bare numeric id,
+    #                the P44-2 cross-source key)/"geonames"},  # findspot
     #    "location" => {"settlement"/"ref"/"institution"},  # current home
     #    "editors" => ["Francesca Murano"]}
     #
@@ -327,7 +328,11 @@ module Nabu
           folded = presence(value)
           result[key] = folded if folded
         end
-        pleiades = ancient && presence(ancient["ref"])
+        # place.pleiades is the P44-2 cross-source contract: the bare numeric
+        # id (this key held the verbatim URL pre-P44-2; the id is the join
+        # key, scheme-stable, and the URL is reconstructible from it). A ref
+        # that is not a Pleiades place URL captures nothing — never a guess.
+        pleiades = ancient && Nabu::Pleiades.ref_id(ancient["ref"])
         result["pleiades"] = pleiades if pleiades
         geonames = modern && presence(modern["ref"])
         result["geonames"] = geonames if geonames

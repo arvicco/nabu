@@ -21,10 +21,10 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these two answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `kitab` | feature module | nc | not enabled | not synced yet |
-| `openiti` | texts | nc | enabled · manual | 9,079 docs / 34,631,499 passages |
+| `kitab` | feature module | nc | not yet wired | nothing held yet |
+| `openiti` | texts | nc | wired · manual | 9,079 docs / 34,631,499 passages |
 
 ## The desk's instruments
 
@@ -69,6 +69,12 @@ nabu search --from 1300 --to 1400 --axis arabic  # term-less browse of the 14th-
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Who reused this passage of Ibn Sīnā's Šifāʾ?”** → `nabu_links urn:nabu:openiti:0428IbnSina.ShifaAfcalWaInficalat.ALCorpus00001-ara2:1.223.4` — kind="reuse" edges from the KITAB pairwise data: the passage reappears in Faḫr al-Dīn al-Rāzī's Mulaḫḫaṣ (two centuries later) with character/word offsets riding the edge detail — upstream- computed alignments, distinct from nabu's own intertext detection.
+
 ## Terminal setup
 
 - **Arabic and Persian (ara/fas) are RTL** and reuse the hbo/arc
@@ -94,4 +100,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

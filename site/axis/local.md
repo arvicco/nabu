@@ -15,12 +15,12 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `local-language` | language dossiers | open | enabled · manual | 216 dossiers |
-| `local-library` | texts | research_private | enabled · manual | 20 docs / 8,725 passages |
-| `local-notes` | owner notes | open | enabled · manual | nothing held yet |
-| `local-source` | source records | open | enabled · manual | 89 dossiers |
+| `local-language` | language dossiers | open | wired · manual | 216 dossiers |
+| `local-library` | texts | research_private | wired · manual | 20 docs / 8,725 passages |
+| `local-notes` | owner notes | open | wired · manual | nothing held yet |
+| `local-source` | source records | open | wired · manual | 89 dossiers |
 
 ## The desk's instruments
 
@@ -52,6 +52,12 @@ nabu sync local-language              # re-derive the language cards after editi
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Is this language even covered here, before I conclude a word is unattested?”** → `nabu_status` — Per-source counts and recency, passages by language and license class, and what is excluded by default — the tool a careful model calls before trusting an empty search. Your own shelf notes ride show/define payloads wherever they touch a urn.
+
 ## Terminal setup
 
 - Owner-authored Markdown, YAML and PDF — no ancient-script display
@@ -61,4 +67,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

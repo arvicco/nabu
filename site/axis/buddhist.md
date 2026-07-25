@@ -15,12 +15,12 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `gretil` | texts | nc | enabled · manual | 780 docs / 703,068 passages |
-| `suttacentral` | texts | open | enabled · manual | 12,348 docs / 697,650 passages |
-| `sarit` | texts | attribution | enabled · manual | 78 docs / 345,601 passages |
-| `cbeta` | texts | nc | enabled · manual | 3,679 docs / 8,749,319 passages |
+| `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
+| `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,650 passages |
+| `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
+| `cbeta` | texts | nc | wired · manual | 3,679 docs / 8,749,319 passages |
 
 ## The desk's instruments
 
@@ -52,6 +52,12 @@ nabu formulas urn:nabu:suttacentral:an1 --lang pli  # the repeated formulas of t
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“What are the Chinese parallels to the Saccavibhaṅga Sutta?”** → `nabu_links urn:nabu:suttacentral:mn141` — SuttaCentral's curated parallels as edges: MN 141 ↔ 中阿含經 31 (分別聖諦經, the Madhyama Āgama parallel, lzh) plus DN 22 and two Ekottara Āgama parallels — cross-canon navigation in one call.
+
 ## Terminal setup
 
 - **Sanskrit / Pali (IAST):** **Noto Sans Mono**; Devanagari needs a
@@ -64,4 +70,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<head>
+		<author>Vergilius</author>
+		<title>georgicon</title>
+		<resp>
+			<institution>Università degli Studi di Udine</institution>
+			<institution>Università "Ca' Foscari" di Venezia</institution>
+			<orgName>Pedecerto. Digital Latin Metre <link>https://www.pedecerto.eu</link></orgName>
+			<persName>Emanuela Colombi</persName>
+			<persName>Luca Mondin</persName>
+			<persName>Luigi Tessarolo</persName>
+			<persName>Andrea Bacianini</persName>
+		</resp>
+		<rights>
+			<licence>https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode</licence>
+		</rights>
+	</head>
+	<body>
+		<division title="1">
+			<line name="1" meter="H" pattern="DSDS">
+				<word sy="1A" wb="CM">Quid</word>
+				<word sy="1b1c2A" wb="CM">faciat</word>
+				<word sy="2T3A" wb="CM">laetas</word>
+				<word sy="3b3c4A" wb="CM">segetes,</word>
+				<word sy="4T" wb="DI">quo</word>
+				<word sy="5A5b5c" wb="DI">sidere</word>
+				<word sy="6A6X">terram</word>
+			</line>
+			<line name="2" meter="H" pattern="DSSS">
+				<word sy="1A1b1c" wb="DI">Vertere,</word>
+				<word sy="2A2T3A" wb="CM">Maecenas,</word>
+				<word sy="3T4A" mf="SY">ulmisque</word>
+				<word sy="4T5A5b5c" wb="DI">adiungere</word>
+				<word sy="6A6X">uitis</word>
+			</line>
+			<line name="3" meter="H" pattern="DSDS">
+				<word sy="1A1b1c2A" wb="CM">Conueniat,</word>
+				<word sy="2T" wb="DI">quae</word>
+				<word sy="3A3b" wb="CF">cura</word>
+				<word sy="3c4A" wb="CM">boum,</word>
+				<word sy="4T" wb="DI">qui</word>
+				<word sy="5A5b" wb="CF">cultus</word>
+				<word sy="5c6A6X">habendo</word>
+			</line>
+		</division>
+		<division title="2">
+			<line name="1" meter="H" pattern="DSSS">
+				<word sy="1A1b1c" wb="DI">Hactenus</word>
+				<word sy="2A2T3A" wb="CM">aruorum</word>
+				<word sy="3T4A" wb="CM">cultus</word>
+				<word sy="4T" wb="DI">et</word>
+				<word sy="5A5b5c" wb="DI">sidera</word>
+				<word sy="6A6X">caeli;</word>
+			</line>
+			<line name="2" meter="H" pattern="SDSS">
+				<word sy="1A" wb="CM">Nunc</word>
+				<word sy="1T" wb="DI">te,</word>
+				<word sy="2A2b" wb="CF">Bacche,</word>
+				<word sy="2c3A" wb="CM">canam,</word>
+				<word sy="3T" wb="DI">nec</word>
+				<word sy="4A" wb="CM">non</word>
+				<word sy="4T5A5b5c" wb="DI">siluestria</word>
+				<word sy="6A6X">tecum</word>
+			</line>
+		</division>
+	</body>
+</document>

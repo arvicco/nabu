@@ -15,20 +15,20 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
-| `suttacentral` | texts | open | enabled · manual | 12,348 docs / 697,650 passages |
-| `baxter-sagart` | dictionary | attribution | enabled · manual | 9,918 entries |
-| `tshet-uinh` | dictionary | open | enabled · manual | 25,336 entries |
-| `unihan` | dictionary | open | enabled · manual | 102,998 entries |
-| `hdic` | dictionary | attribution | enabled · manual | 96,414 entries |
-| `babelstone-ids` | dictionary | open | enabled · manual | 97,680 entries |
-| `cbeta` | texts | nc | enabled · manual | 3,679 docs / 8,749,319 passages |
-| `kanripo` | texts | attribution | enabled · manual | 5,122 docs / 4,571,394 passages |
-| `kr-gaiji` | feature module | attribution | not enabled | nothing held yet |
-| `tls` | dictionary | attribution | enabled · manual | 23,179 entries |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
+| `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,650 passages |
+| `baxter-sagart` | dictionary | attribution | wired · manual | 9,918 entries |
+| `tshet-uinh` | dictionary | open | wired · manual | 25,336 entries |
+| `unihan` | dictionary | open | wired · manual | 102,998 entries |
+| `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
+| `babelstone-ids` | dictionary | open | wired · manual | 97,680 entries |
+| `cbeta` | texts | nc | wired · manual | 3,679 docs / 8,749,319 passages |
+| `kanripo` | texts | attribution | wired · manual | 5,122 docs / 4,571,394 passages |
+| `kr-gaiji` | feature module | attribution | not yet wired | nothing held yet |
+| `tls` | dictionary | attribution | wired · manual | 23,179 entries |
 
 ## The desk's instruments
 
@@ -64,6 +64,12 @@ nabu show urn:nabu:kanripo:KR1h0004:001:1a --display reading  # gaiji &KR…; re
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Scan 仁義 usage across the Chinese canon.”** → `nabu_concord 仁義 (lang: lzh)` — KWIC rows in corpus order from CBETA's historiographical treatises — left context, keyword, right context in the pristine text.
+
 ## Terminal setup
 
 - **Han (lzh, kanripo):** nabu measures CJK cells (`Nabu::Display.width`),
@@ -77,4 +83,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

@@ -15,10 +15,10 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these two answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `tlhdig` | tablets | attribution | enabled · manual | 23,486 docs / 402,195 passages |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 
 ## The desk's instruments
 
@@ -47,6 +47,12 @@ nabu search ḫatti --axis hittite      # a query across TLHdig and the treebank
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Find nepišaš — 'of heaven' — in the tablets.”** → `nabu_search "ne-pi-ša-aš" (lang: hit)` — Mythological fragments (KBo 26.91, KBo 26.120) with damage brackets preserved. The desk's lesson: TLHdig stores the syllabified transliteration, so type it hyphenated — the diacritic fold maps pí to pi for you.
+
 ## Terminal setup
 
 - **TLHdig tablets** are stored in Latin transliteration, so no cuneiform
@@ -57,4 +63,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

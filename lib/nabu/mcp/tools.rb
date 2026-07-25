@@ -18,6 +18,8 @@ require_relative "../query/collation"
 require_relative "../query/define"
 require_relative "../query/etym"
 require_relative "../query/cognates"
+require_relative "../query/place"
+require_relative "../pleiades"
 
 module Nabu
   module MCP
@@ -145,6 +147,9 @@ module Nabu
                       "`nabu rebuild` after one) to build it, then retry"
       NO_RECON_NOTE = "no reconstruction shelf in this catalog yet — run `nabu sync " \
                       "wiktionary-recon` (or `nabu rebuild` after one) to build it, then retry"
+      NO_GAZETTEER_NOTE = "place NAME lookup needs the Pleiades gazetteer dump on disk — the " \
+                          "owner runs `nabu sync pleiades` to add it; a numeric Pleiades id " \
+                          "(or a pleiades.stoa.org/places URL) still counts holdings without it"
       ALIGN_REBUILDING_NOTE = "alignment index rebuilding (or the fulltext index predates the " \
                               "alignment hub) — retry shortly, or run `nabu rebuild`"
       COGNATES_REBUILDING_NOTE = "cognate root index rebuilding (or the fulltext index predates " \
@@ -187,13 +192,20 @@ module Nabu
         "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1 · document: " \
         "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2 · range: <document-urn>:1.1-1.10 " \
         "(inclusive slice) · papyrus: urn:nabu:ddbdp:aegyptus:89:240:b2:5 · treebank " \
-        "sentence: urn:nabu:proiel:afnik:194690. `parallel: true` aligns the same work's " \
+        "sentence: urn:nabu:proiel:afnik:194690. A shortened CITATION PREFIX between document " \
+        "and passage grain (…:avest020:Y.19.1 over passages Y.19.1.a/b) lists everything below " \
+        "it, boundary-exact — term-less browsing needs no search hit first. `parallel: true` " \
+        "aligns the same work's " \
         "`parallel_lang` (default eng) edition line by line. Passage lists are bounded by " \
         "max_passages (default #{SHOW_DEFAULT_MAX_PASSAGES}, cap #{SHOW_MAX_PASSAGES_CAP}) " \
         "with an honest truncation note. Every passage carries urn, language, and " \
         "license_class — preserve them when quoting. Withdrawn/retired items appear, flagged. " \
         "The owner's own notes on the urn ride along in `notes` (documents also count " \
-        "passage-note children) — useful curatorial context.".freeze
+        "passage-note children) — useful curatorial context. A metrically scanned passage " \
+        "carries `meter` (code, foot pattern, producer); an epigraphic document whose " \
+        "parse-captured Pleiades findspot id resolves through the local gazetteer dump " \
+        "carries `findspot` (both keys absent otherwise — absence of the dump or of the " \
+        "enrichment, not a claimed absence of fact).".freeze
 
       CONCORD_DESCRIPTION =
         "Concordance (KWIC — keyword-in-context) over the local nabu corpus: one row per hit as " \
@@ -327,7 +339,9 @@ module Nabu
         "(kind=parallel from `nabu parallels --batch`; kind=formula from `formulas --batch`, a " \
         "star per refrain whose detail carries the gram and score its count; kind=cognate from " \
         "`cognates --batch`, cross-language witness pairs whose detail carries the meet: " \
-        "ref · root [shelf] — a gem-pro shelf under a Slavic witness suggests a borrowing). " \
+        "ref · root [shelf] — a gem-pro shelf under a Slavic witness suggests a borrowing; " \
+        "kind=reuse from the KITAB text-reuse import, UPSTREAM-computed pairwise Arabic " \
+        "alignments whose detail carries the milestone/offset spans verbatim). " \
         "READS ONLY what a batch run already persisted: for on-the-fly discovery use " \
         "nabu_parallels; an empty result means no batch has covered this urn, NOT that no " \
         "parallel exists. Edges come back grouped by kind, both directions (direction=out: this " \
@@ -511,6 +525,32 @@ module Nabu
         additionalProperties: false
       }.freeze
 
+      PLACE_DESCRIPTION =
+        "The place desk (P44-2): one ancient place — resolved through the LOCAL Pleiades " \
+        "gazetteer dump — plus the library's holdings AT that place, per source. `query` is a " \
+        "Pleiades numeric id, a pleiades.stoa.org/places URL, or an EXACT place title " \
+        "(case-insensitive; \"Segesta\" works, \"Seges\" does not — no fuzzy matching anywhere, " \
+        "by design; homonym titles return one card each). Holdings count live documents whose " \
+        "parsers captured that upstream-asserted Pleiades id (the epigraphic sources: isicily, " \
+        "edh, iip, itant) — aggregate counts only; read the texts with nabu_search/nabu_show. " \
+        "An honest labelled `unlinked` tail counts id-LESS documents whose captured findspot " \
+        "TEXT mentions the name (exact substring) — never merged into the id-matched holdings. " \
+        "Degrades honestly when the gazetteer dump is not on this box: a numeric id still " \
+        "counts holdings (the catalog side needs no dump, the card is just fact-less); a NAME " \
+        "lookup needs the dump and says so. Coordinates are display facts — no maps, no " \
+        "coordinate math."
+
+      PLACE_SCHEMA = {
+        type: "object",
+        properties: {
+          query: { type: "string",
+                   description: "A Pleiades numeric id (462281), a pleiades.stoa.org/places " \
+                                "URL, or an exact place title (Lilybaeum)." }
+        },
+        required: ["query"],
+        additionalProperties: false
+      }.freeze
+
       LINKS_SCHEMA = {
         type: "object",
         properties: {
@@ -553,7 +593,9 @@ module Nabu
       # Query classes) as a fourth entry with its own handler; P15-1 adds
       # nabu_parallels (the intertext engine) as the eighth; P15-3 adds
       # nabu_cognates (the hub × crosswalk join) as the ninth; P16-1 adds
-      # nabu_links (the links-journal reader) as the tenth.
+      # nabu_links (the links-journal reader) as the tenth; P44-3 adds
+      # nabu_place (the place desk over Query::Place) as the eleventh —
+      # nabu_status stays last, the coverage epilogue.
       TOOLS = {
         "nabu_search" => { description: SEARCH_DESCRIPTION, input_schema: SEARCH_SCHEMA,
                            handler: :search },
@@ -573,6 +615,8 @@ module Nabu
                              handler: :cognates },
         "nabu_links" => { description: LINKS_DESCRIPTION, input_schema: LINKS_SCHEMA,
                           handler: :links },
+        "nabu_place" => { description: PLACE_DESCRIPTION, input_schema: PLACE_SCHEMA,
+                          handler: :place },
         "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
                            handler: :status }
       }.freeze
@@ -580,10 +624,27 @@ module Nabu
       # +alignments+ (P11-3): the Nabu::AlignmentRegistry (or a callable
       # returning one, or nil when the hub is unconfigured) — config-loaded by
       # the entrypoint, resolved per call like the connection slots.
-      def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil)
+      def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil,
+                     enabled_slugs: nil, pleiades: nil)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
+        # The Pleiades gazetteer slot (P44-3): nil (dump-less — nabu_place id
+        # queries still count holdings, nabu_show serves no findspot key,
+        # byte-identical to the pre-P44 payloads), a loaded Nabu::Pleiades
+        # resolver (tests), or :auto — the entrypoint's setting, which
+        # feature-detects the canonical dump LAZILY per call (Query::Show's
+        # own :auto for findspot; #place_resolver for nabu_place). The load
+        # cost (~3 s / ~3.9 GB peak on the real dump, the P44-2 design datum)
+        # is paid per invocation and released — deliberately NOT memoized on
+        # this long-lived server object.
+        @pleiades = pleiades
+        # The enabled-slug set (P44-r3b): nabu_status's sources array defaults to
+        # the box's ENABLED sources (the CLI list/status default), plus the
+        # owner's own shelves (always) and any catalog orphans. nil = no
+        # enablement config resolved (older callers / unconfigured) → the full
+        # catalog, unfiltered (the pre-r3b behavior).
+        @enabled_slugs = enabled_slugs
         # The source registry (P23-3b): AUTHORITATIVE for enablement. The db
         # sources row mirrors a sources.yml flip only at that source's next
         # sync, so nabu_status reads enabled from the registry for registered
@@ -659,7 +720,7 @@ module Nabu
         include_restricted = args["include_restricted"] == true
         return show_parallel(catalog, urn, args, bound, include_restricted) if args["parallel"] == true
 
-        result = Query::Show.new(catalog: catalog).run(urn)
+        result = Query::Show.new(catalog: catalog, pleiades: @pleiades).run(urn)
         if result.nil?
           return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
                       "what this corpus holds")
@@ -751,6 +812,26 @@ module Nabu
         end
 
         render_links(result, limit: limit, include_restricted: args["include_restricted"] == true)
+      end
+
+      # nabu_place (P44-3): the place desk — Query::Place unchanged under an
+      # MCP shape. Degradation split: a dump-less NAME lookup is a corpus
+      # STATE (note, never isError — the owner syncs the dump, not the
+      # caller); an unknown title or empty query is caller-fixable
+      # (tool_error, SEP-1303). Holdings are aggregate per-source counts (no
+      # urns, no titles, no text — the license_counts stance), so no
+      # restricted-exclusion gate is needed here.
+      def place(args)
+        query = string_arg(args, "query") or
+          raise InvalidArguments, "nabu_place needs a query (a Pleiades id or an exact place title)"
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        resolver = place_resolver
+        return note(NO_GAZETTEER_NOTE) if resolver.nil? && Nabu::Pleiades.ref_id(query).nil?
+
+        result = Query::Place.new(catalog: catalog, pleiades: resolver).run(query)
+        json(place_payload(query, result))
+      rescue Query::Place::Error => e
+        tool_error(e.message)
       end
 
       def align(args)
@@ -1362,6 +1443,49 @@ module Nabu
         parts.join("; ")
       end
 
+      # -- place internals (P44-3) -------------------------------------------------
+
+      # Resolve the gazetteer slot for one nabu_place call: :auto
+      # feature-detects the canonical dump (nil when unsynced), per call and
+      # unmemoized — the initializer note carries the cost rationale.
+      def place_resolver
+        @pleiades == :auto ? Nabu::Pleiades.load_default : @pleiades
+      end
+
+      def place_payload(query, result)
+        {
+          type: "place", query: query, dump_loaded: result.dump_loaded,
+          cards: result.cards.map { |card| place_card_payload(card, result.dump_loaded) },
+          unlinked_term: result.unlinked_term,
+          unlinked: source_count_rows(result.unlinked),
+          note: "holdings count live documents whose parsers captured this upstream-asserted " \
+                "Pleiades id (no fuzzy matching anywhere); unlinked counts id-less documents " \
+                "whose captured findspot text mentions the name — never merged into holdings; " \
+                "counts are aggregate only, nabu_search/nabu_show read the texts"
+        }
+      end
+
+      # One resolver card. Gazetteer facts ride only when the dump resolved
+      # the id; a fact-less card says why honestly (dump unsynced vs id not
+      # in the dump) — the CLI's print_place_card degradation, shaped.
+      def place_card_payload(card, dump_loaded)
+        base = { pleiades_id: card.pleiades_id, holdings: source_count_rows(card.holdings) }
+        place = card.place
+        if place
+          base.merge(title: place.title, place_types: place.place_types,
+                     time_periods: place.time_periods, lat: place.lat, lon: place.lon)
+        elsif dump_loaded
+          base.merge(note: "id not in the local gazetteer dump")
+        else
+          base.merge(note: "gazetteer dump not synced (the owner runs `nabu sync pleiades` to " \
+                           "add the card) — holdings counted from the catalog alone")
+        end
+      end
+
+      def source_count_rows(counts)
+        counts.map { |slug, count| { source: slug, documents: count } }
+      end
+
       def parallels_note(result, hits:, echoes:, limit:)
         return "anchor too short for #{Query::Parallels::GRAM_SIZE}-word grams — no parallels" \
           if result.gram_count.zero?
@@ -1401,7 +1525,31 @@ module Nabu
           text: result.text, sequence: result.sequence, revision: result.revision,
           withdrawn: result.withdrawn,
           provenance: result.provenance.map { |e| { event: e.event, tool: e.tool, at: e.at.to_s } }
-        }.merge(credit_field(result))
+        }.merge(credit_field(result)).merge(meter_field(result)).merge(findspot_field(result))
+      end
+
+      # The meter enrichment (P44-3, mirroring the CLI's P44-7 meter line):
+      # merged only when the passage carries a scansion — every unscanned
+      # passage's payload stays byte-identical, and the key never appears
+      # empty. producer is the enrichments row's model ("pedecerto",
+      # "hypotactic") — provenance on the claim, per the enrichment doctrine.
+      def meter_field(result)
+        return {} unless result.respond_to?(:meter) && result.meter
+
+        { meter: { meter: result.meter.meter, pattern: result.meter.pattern,
+                   producer: result.meter.producer } }
+      end
+
+      # The findspot facts (P44-3, mirroring the CLI's P44-2 findspot line):
+      # merged only when the document's parse-captured Pleiades id resolved
+      # through the local gazetteer dump — an absent dump, absent id, or
+      # unknown id all leave the payload byte-identical (the CLI's exact
+      # degradation; the LiLa precedent).
+      def findspot_field(result)
+        return {} unless result.respond_to?(:findspot) && result.findspot
+
+        spot = result.findspot
+        { findspot: { pleiades_id: spot.id, title: spot.title, place_types: spot.place_types } }
       end
 
       # The source-level credit (P43-2): merged into a text-serving payload only
@@ -1444,7 +1592,7 @@ module Nabu
           license_class: result.license_class, source: result.source_slug,
           revision: result.revision, withdrawn: result.withdrawn,
           retired_upstream: result.retired_upstream
-        }.merge(credit_field(result))
+        }.merge(credit_field(result)).merge(findspot_field(result))
       end
 
       # Owner notes (P24-1), served BY DEFAULT on show/define payloads:
@@ -1693,7 +1841,7 @@ module Nabu
         descriptions = source_descriptions(catalog)
         probes = probe_cache
         stats = Store::SourceStats.available?(catalog)
-        catalog[:sources].order(:slug).map do |source|
+        catalog[:sources].order(:slug).to_a.select { |source| enabled_row?(source[:slug]) }.map do |source|
           holdings = source_holdings(catalog, source[:id], stats: stats)
           row = { slug: source[:slug], enabled: enabled_field(source),
                   license_class: source[:license_class],
@@ -1745,11 +1893,23 @@ module Nabu
         catalog[:source_records].where(kind: "description").select_hash(:slug, :body)
       end
 
+      # Is +slug+ shown in nabu_status's default sources array (P44-r3b)? The
+      # ENABLED set, plus the owner's own shelves (always) and any catalog
+      # orphan the registry does not know (never silently dropped). A nil
+      # enabled set (unconfigured caller) shows everything, the pre-r3b default.
+      def enabled_row?(slug)
+        return true if @enabled_slugs.nil?
+        return true if @enabled_slugs.include?(slug)
+
+        entry = @registry && @registry[slug]
+        entry.nil? || entry.shelf?
+      end
+
       # Registry truth for registered slugs (class note at @registry), the db
       # value for orphans / an unconfigured registry.
       def enabled_field(source)
         entry = @registry && @registry[source[:slug]]
-        return entry.enabled unless entry.nil?
+        return entry.wired unless entry.nil?
 
         [true, 1].include?(source[:enabled])
       end

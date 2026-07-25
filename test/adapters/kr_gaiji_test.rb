@@ -18,7 +18,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["kr-gaiji"]
       refute_nil entry, "kr-gaiji must be registered in config/sources.yml"
-      refute entry.enabled, "a feature module serves no documents — enabled stays false permanently"
+      refute entry.wired, "a feature module serves no documents — enabled stays false permanently"
       assert_equal "manual", entry.sync_policy
       assert_equal "kr-gaiji", entry.adapter_class.manifest.id
     end

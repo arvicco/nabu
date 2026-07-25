@@ -15,14 +15,14 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `gretil` | texts | nc | enabled · manual | 780 docs / 703,068 passages |
-| `mw` | dictionary | nc | enabled · manual | 193,890 entries |
-| `suttacentral` | texts | open | enabled · manual | 12,348 docs / 697,650 passages |
-| `sarit` | texts | attribution | enabled · manual | 78 docs / 345,601 passages |
-| `dcs` | treebank | attribution | enabled · manual | 15,741 docs / 753,093 passages |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
+| `mw` | dictionary | nc | wired · manual | 193,890 entries |
+| `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,650 passages |
+| `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
+| `dcs` | treebank | attribution | wired · manual | 15,741 docs / 753,093 passages |
 
 ## The desk's instruments
 
@@ -55,6 +55,12 @@ nabu vocab urn:nabu:dcs:143:1067      # distinctive vocabulary of a Rāmāyaṇa
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“dharma across the Sanskrit corpus, by lemma.”** → `nabu_search (lemma: dharma, lang: san)` — DCS hits with inflected surface forms (dharmeṇa, dharmaś) and the lexicon gloss beside each — upaniṣads first, ranked by relevance.
+
 ## Terminal setup
 
 - **Devanagari (san):** nabu strips Vedic accents when present (IAST is left
@@ -67,4 +73,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

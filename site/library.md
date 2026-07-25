@@ -8,7 +8,7 @@ description: >-
 ---
 
 Live counts as of **23 July 2026** (post the P42 full rebuild): **810,180 documents / 62,789,087
-passages** across 83 registered, synced sources, plus **1,310,786
+passages** across 82 registered, synced sources, plus **1,310,786
 dictionary entries** on the reference shelf and **16.2 million gold
 lemma annotations in twenty-eight languages** (censused 22 July 2026;
 a further 8,244,309 lemma rows in eight languages ride an honestly

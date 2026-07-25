@@ -271,10 +271,10 @@ abuts Lebanon."
   officium, honestas, decorum), and `export --format jsonl` streaming the
   corpus to your own tooling with license filters.
 - **AI-tooling builders.** A hand-rolled, dependency-free MCP server over
-  stdio (`bin/nabu mcp`, `.mcp.json` ships in-repo) exposes ten read-only
+  stdio (`bin/nabu mcp`, `.mcp.json` ships in-repo) exposes eleven read-only
   tools — search, show, concord, align, define, etym, parallels, cognates,
-  links, status — every passage carrying its license class, so a model can quote
-  *and* cite responsibly. See [docs/mcp.md](docs/mcp.md).
+  links, place, status — every passage carrying its license class, so a model
+  can quote *and* cite responsibly. See [docs/mcp.md](docs/mcp.md).
 
 ## What's on the shelves
 
@@ -304,14 +304,18 @@ shelf map with research uses per shelf is
 | Germanic wave | Menotec Old Norwegian treebanks + Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German (355k gold manuscript lines), Rundata runic inscriptions in five text lanes (2026-07-22) | 31,057 / 409,947 | nc / CC BY / CC BY-SA / odbl |
 | Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik + the Hebrew/Egyptian/Slovene desks and the Sino-Japanese lexicography (Unihan, KANJIDIC2/JMdict, HDIC, Guangyun) (`nabu define` / `etym`) | 1,310,763 entries / 56 shelves (2026-07-22) | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-The registry holds **83 sources + 4 local shelves + 2 feature modules**
-(the kind-split census, 2026-07-22 — `sources.yml` distinguishes what a
+The registry holds **86 sources + 4 local shelves + 8 feature modules**
+(the kind-split census, 2026-07-24 — `sources.yml` distinguishes what a
 row IS: a corpus that mints catalog rows, an owner-authored local memory
-shelf, or machinery like `kr-gaiji`/`bridging` that fetches reference
-data but mints nothing to serve). 82 of the 83 are enabled — `openiti`,
-the staged Arabic phase, awaits its owner-fired first sync (~9,106
-primary texts / ~1.12 B words) —
-the **Germanic four** (`menotec`, `helipad`, `rem`, `rundata`) joined
+shelf, or machinery like `pedecerto`/`bridging` that fetches reference
+data but mints no documents of its own). All 86 sources are **wired**
+— adapter built and first sync verified (2026-07-25); the newest
+arrivals are `glaux` (~20M-token silver-annotated Ancient Greek:
+968,578 passages) and `croala` (Croatian Latin, 976 CE onward).
+The **Arabic library** landed 2026-07-23: `openiti`'s
+owner-fired first sync brought 9,079 Islamicate text versions —
+34.6M passages of premodern Arabic and Persian. Before it, the
+**Germanic four** (`menotec`, `helipad`, `rem`, `rundata`) joined
 2026-07-22 with their owner-verified first syncs, a day after `aozora`
 (16,004 public-domain works, 2.98M passages) — the upstream corpora
 plus four local shelves (the language
@@ -392,7 +396,7 @@ text, and `links`-wired to the passages its manifest entry names as
 | `nabu sync SLUG` / `sync --all` | Fetch and load a source (git, zip, or single-file HTTP — or re-scan a local shelf); idempotent, non-destructive, every run recorded. The name resolves slug-first-then-axis: `sync celtic` (or `--axis a,b`) expands a research axis to its enabled members, grouped, and names any disabled members on one skip line (an axis is not an explicit request, so a disabled member is skipped where an explicit `sync SLUG` would sync it anyway). |
 | `nabu list [SOURCE]` | The what-is-held view (`status` is the sync-state view): bare, a content census — one line per shelf with document/passage/entry counts, languages, the effective license-class mix, withdrawn/retired counts when nonzero. With a SOURCE, one shelf's card (identity, credit line, counts, per-language breakdown, dictionaries, date-axis coverage, facet and collection summaries). `--documents` / `--entries` / `--collections` enumerate (default `--limit 50`, `0` = all, honest "… N more" tail), with `--lang`/`--license`/`--withdrawn`/`--from`/`--to`/`--century` filters on documents and `--prefix` folded headword-prefix filtering on entries (`bh` finds `*bʰer-`). `--axis` groups the census under the research axes (the owner's desks) — bare, every axis in ratified order with its persona line; `--axis slavic` or `--axis a,b` selects some — a source appearing under each axis it serves. |
 | `nabu status` / `health` / `verify` | Per-source counts and run history, each row carrying an `up=` upstream-drift column (`up=ok(2d)` / `up=BEHIND(2d)` / `up=stale(30d)` / `up=?(never)` / `up=?(re-probe)` when a cached verdict predates the last sync / `up=frozen`) so an update is an informed decision — `nabu status --remote` probes upstreams inline and refreshes it in one command; local trend + upstream drift checks; full bitrot/tamper re-verification of every canonical file. `health` also runs the mechanical postcondition invariants (P18-7): failed-run/partial-load surfacing, flag-vs-artifact and synced-vs-populated mismatches, pending migrations, and quarantine counts as a DELTA against an audited baseline — plus an optional `sync --review CMD` AI-review hook, off by default. |
-| `nabu mcp` | The read-only MCP server — ten tools for Claude Code/Desktop and any MCP client. Recipes in [docs/mcp.md](docs/mcp.md). |
+| `nabu mcp` | The read-only MCP server — eleven tools for Claude Code/Desktop and any MCP client. Recipes and the user-perspective walkthroughs in [docs/mcp.md](docs/mcp.md). |
 
 Two more tastes. Facing translation, span-grouped, honest when the English
 is coarser than the Greek:

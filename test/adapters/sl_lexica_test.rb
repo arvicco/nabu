@@ -321,7 +321,7 @@ class SlLexicaTest < Minitest::Test
     entry = registry["sl-lexica"]
     refute_nil entry, "config/sources.yml must register sl-lexica"
     assert_equal Nabu::Adapters::SlLexica, entry.adapter_class
-    assert entry.enabled, "live (owner sign-off 2026-07-16: synced 139,405 entries, eyeballed, flipped)"
+    assert entry.wired, "live (owner sign-off 2026-07-16: synced 139,405 entries, eyeballed, flipped)"
     assert_equal "manual", entry.sync_policy
   end
 end

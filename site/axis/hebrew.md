@@ -15,17 +15,17 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `oshb` | texts | open | enabled · manual | 39 docs / 23,213 passages |
-| `sdbh` | dictionary | attribution | enabled · manual | 7,932 entries |
-| `sefaria` | texts | open | enabled · manual | 103 docs / 57,095 passages |
-| `bhsa` | texts | nc | enabled · manual | 39 docs / 23,213 passages |
-| `bridging` | crosswalk module | attribution | not enabled | nothing held yet |
-| `dss` | texts | nc | enabled · manual | 1,001 docs / 52,895 passages |
-| `iip` | inscriptions | nc | enabled · manual | 5,499 docs / 17,823 passages |
-| `hebrew-lexicon` | dictionary | attribution | enabled · manual | 21,144 entries |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
+| `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
+| `sefaria` | texts | open | wired · manual | 103 docs / 57,095 passages |
+| `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
+| `bridging` | crosswalk module | attribution | not yet wired | nothing held yet |
+| `dss` | texts | nc | wired · manual | 1,001 docs / 52,895 passages |
+| `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
+| `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 
 ## The desk's instruments
 
@@ -59,6 +59,12 @@ nabu define אור --lang hbo            # Brown-Driver-Briggs on the Hebrew lex
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Compare the two Masoretic editions of a verse.”** → `nabu_align "GEN 1.1" (work: ot)` — OSHB (WLC) and BHSA (ETCBC) side by side with the Targum and Peshitta columns — two independent Masoretic witnesses at deliberately different annotation grains, never merged.
+
 ## Terminal setup
 
 - **Hebrew and Aramaic (hbo/arc):** cantillation stripped, points and maqaf
@@ -74,4 +80,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

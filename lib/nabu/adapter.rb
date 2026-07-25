@@ -149,6 +149,25 @@ module Nabu
       LibraryReferences.new(catalog: catalog, journal: journal)
     end
 
+    # Does this adapter carry a per-passage ENRICHMENT layer that a producer
+    # re-derives into the enrichments table (P44-7, pedecerto's meter scansions
+    # over the held Perseus-Latin passages)? Declared HERE beside content_kind
+    # and reference_edges? — the other loader-facing capability flags — so
+    # SyncRunner refreshes and Rebuild re-derives the enrichment after every
+    # load/rebuild without special-casing the slug. Default false. Distinct from
+    # reference_edges? because an enrichment is a property of ONE passage, not
+    # an edge between two urns — it rides the enrichments table, not the links
+    # journal.
+    def self.enrichment_producer? = false
+
+    # The producer SyncRunner/Rebuild runs for an enrichment_producer? source:
+    # anything with #run(scope, workdir:) returning a census Result, writing the
+    # enrichments table (kind-scoped, superseded per run) — a pure function of
+    # (canonical, catalog, code), so a rebuild re-derives identical rows.
+    # +workdir+ is the source's canonical dir (the producer reads the unpacked
+    # corpus from it). Default nil — no enrichment layer.
+    def self.enrichment_producer(catalog:) = nil # rubocop:disable Lint/UnusedMethodArgument
+
     # Remote-health probe strategy (P11-2). Default :git — the probe
     # ls-remotes each upstream_repo_urls. The HTTP-zip fetch path (ORACC,
     # Nabu::ZipFetch) has NO git repo to ls-remote, so it overrides to

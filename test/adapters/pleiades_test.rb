@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "fileutils"
 require "tmpdir"
 require "zlib"
 require "stringio"
@@ -26,7 +27,7 @@ module Adapters
       entry = registry["pleiades"]
       refute_nil entry, "pleiades must be registered in config/sources.yml"
       assert entry.feature_module?, "a resolver instrument is a kind: module row"
-      refute entry.enabled
+      refute entry.wired
       assert_equal "manual", entry.sync_policy
     end
 
@@ -79,6 +80,107 @@ module Adapters
 
     def test_dump_carries_both_fixture_places
       assert_equal 2, Nabu::Pleiades.load(DUMP).size
+    end
+
+    # --- ref_id: the shared upstream-ref → numeric id helper (P44-2) ----------
+    #
+    # The parsers capture ONLY ids upstream asserts (no fuzzy matching, ever);
+    # this helper is the one normalization seam — a pleiades.stoa.org place
+    # URL in either scheme spelling (both occur in real I.Sicily headers), or
+    # bare digits (the oracc/EDH CSV spelling), to the numeric id string.
+
+    def test_ref_id_reads_both_scheme_spellings_of_the_place_url
+      assert_equal "462487", Nabu::Pleiades.ref_id("https://pleiades.stoa.org/places/462487")
+      assert_equal "462372", Nabu::Pleiades.ref_id("http://pleiades.stoa.org/places/462372")
+      assert_equal "432808", Nabu::Pleiades.ref_id("https://pleiades.stoa.org/places/432808/"),
+                   "a trailing slash is still the same upstream assertion"
+    end
+
+    def test_ref_id_accepts_bare_digits
+      assert_equal "570685", Nabu::Pleiades.ref_id("570685")
+    end
+
+    def test_ref_id_rejects_everything_not_a_pleiades_place_ref
+      assert_nil Nabu::Pleiades.ref_id(nil)
+      assert_nil Nabu::Pleiades.ref_id("")
+      assert_nil Nabu::Pleiades.ref_id("https://sws.geonames.org/3164966"), "GeoNames is not Pleiades"
+      assert_nil Nabu::Pleiades.ref_id("https://pleiades.stoa.org/places/"), "no id, no capture"
+      assert_nil Nabu::Pleiades.ref_id("https://pleiades.stoa.org/places/462487/json"),
+                 "a sub-resource URL is not the place assertion shape"
+    end
+
+    # --- titled: exact case-insensitive title match (nabu place, P44-2) -------
+
+    def test_titled_matches_exact_titles_case_insensitively
+      resolver = Nabu::Pleiades.load(DUMP)
+      assert_equal ["570685"], resolver.titled("sparta").map(&:id)
+      assert_equal ["Sicilia (island)"], resolver.titled("SICILIA (ISLAND)").map(&:title)
+    end
+
+    def test_titled_is_exact_never_fuzzy
+      resolver = Nabu::Pleiades.load(DUMP)
+      assert_empty resolver.titled("Sicilia"), "a title prefix is not an exact match — no fuzzy, by design"
+      assert_empty resolver.titled("Spart")
+    end
+
+    # P44-3 live finding: Pleiades joins name variants with "/" in one title
+    # ("Segesta/Egesta"), so whole-title equality misses the name every
+    # scholar types. A slash-separated SEGMENT is an exact variant name and
+    # matches; a space-separated word ("Segesta Tigulliorum") is NOT a
+    # variant and stays whole-title-only — still zero fuzz.
+    def test_titled_matches_slash_separated_variant_segments_exactly
+      resolver = Nabu::Pleiades.from_entries(
+        [
+          { "id" => "462487", "title" => "Segesta/Egesta", "reprPoint" => [12.83, 37.94] },
+          { "id" => "383775", "title" => "Segesta Tigulliorum" },
+          { "id" => "963441586", "title" => "Doric temple of Segesta" }
+        ]
+      )
+      assert_equal ["462487"], resolver.titled("segesta").map(&:id),
+                   "the variant segment matches; the multi-word and prose titles do not"
+      assert_equal ["462487"], resolver.titled("EGESTA").map(&:id)
+      assert_equal ["383775"], resolver.titled("Segesta Tigulliorum").map(&:id), "whole-title still matches"
+      assert_empty resolver.titled("Tigulliorum"), "a space-separated word is not a variant name"
+    end
+
+    # --- load_default: feature detection (the LiLa precedent) ------------------
+
+    def test_load_default_is_nil_without_a_canonical_dump
+      Dir.mktmpdir do |root|
+        config = Nabu::Config.load(root: root)
+        assert_nil Nabu::Pleiades.load_default(config: config),
+                   "no canonical/pleiades dump → nil resolver → consumers degrade byte-identically"
+      end
+    end
+
+    def test_load_default_finds_the_synced_gzip_dump
+      Dir.mktmpdir do |root|
+        dir = File.join(root, "canonical", "pleiades")
+        FileUtils.mkdir_p(dir)
+        File.binwrite(File.join(dir, "pleiades-places.json.gz"), gzip(File.read(DUMP)))
+        resolver = Nabu::Pleiades.load_default(config: Nabu::Config.load(root: root))
+        refute_nil resolver
+        assert_equal "Sparta", resolver.place("570685").title
+      end
+    end
+
+    def test_load_default_accepts_an_uncompressed_dump_too
+      Dir.mktmpdir do |root|
+        dir = File.join(root, "canonical", "pleiades")
+        FileUtils.mkdir_p(dir)
+        FileUtils.cp(DUMP, File.join(dir, "pleiades-places.json"))
+        resolver = Nabu::Pleiades.load_default(config: Nabu::Config.load(root: root))
+        refute_nil resolver
+        assert_equal 2, resolver.size
+      end
+    end
+
+    def gzip(text)
+      io = StringIO.new
+      gz = Zlib::GzipWriter.new(io)
+      gz.write(text)
+      gz.close
+      io.string
     end
 
     # --- the container/gzip flexibility (the first-sync seam) ------------------

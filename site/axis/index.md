@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The eighteen research desks of the Nabu library — tags over the
+  The twenty research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The eighteen desks
+## The twenty desks
 
 ### classical
 
@@ -141,6 +141,14 @@ The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL'
 The Egyptian-Coptic continuum: the TLA corpora and word list (tla-hf, aes, aed), the Coptic lexicon with its egy-cop crosswalk, and Coptic Scriptorium.
 
 [Open the egyptian desk]({{ '/axis/egyptian/' | relative_url }})
+
+### iranian
+
+> The Iranologist — the Avesta to the Achaemenid inscriptions, Old Iranian liturgy toward Middle Persian.
+
+The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old Iranian liturgy — grant-gated private research, not a public holding) and the Old Persian of the Achaemenid royal inscriptions, which ride the ORACC and CDLI cuneiform shelves whole — their trilinguals' Old Persian column the desk's shared lane with the tablet world.
+
+[Open the iranian desk]({{ '/axis/iranian/' | relative_url }})
 
 ### indic
 

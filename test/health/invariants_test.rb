@@ -84,7 +84,7 @@ class InvariantsTest < Minitest::Test
     source = seed_source("liv")
     seed_run(source, status: "succeeded")
 
-    finding = find(:synced_unpopulated, entry("liv", enabled: false))
+    finding = find(:synced_unpopulated, entry("liv", wired: false))
     assert_predicate finding, :loud?
   end
 
@@ -488,9 +488,9 @@ class InvariantsTest < Minitest::Test
     invariants.for_source(entry).find { |finding| finding.kind == kind }
   end
 
-  def entry(slug, enabled: true, fuzzy: false, adapter: "TestAdapter")
+  def entry(slug, wired: true, fuzzy: false, adapter: "TestAdapter")
     Nabu::SourceRegistry::Entry.new(
-      slug: slug, adapter_class_name: adapter, enabled: enabled,
+      slug: slug, adapter_class_name: adapter, wired: wired,
       sync_policy: "manual", fuzzy_index: fuzzy
     )
   end
@@ -498,7 +498,7 @@ class InvariantsTest < Minitest::Test
   # A kind: module registry row (P39-0): fetches reference data, mints no
   # catalog rows (feature_module? true).
   def module_entry(slug, adapter: "TestAdapter")
-    entry(slug, enabled: false, adapter: adapter).with(kind: "module")
+    entry(slug, wired: false, adapter: adapter).with(kind: "module")
   end
 
   def seed_source(slug)

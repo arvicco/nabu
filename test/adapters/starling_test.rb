@@ -537,7 +537,7 @@ class StarlingTest < Minitest::Test
     entry = registry["starling"]
     refute_nil entry, "config/sources.yml must register starling"
     assert_equal Nabu::Adapters::Starling, entry.adapter_class
-    assert entry.enabled, "live (owner sign-off 2026-07-16: synced incl. piet 574-b, eyeballed, flipped)"
+    assert entry.wired, "live (owner sign-off 2026-07-16: synced incl. piet 574-b, eyeballed, flipped)"
     assert_equal "manual", entry.sync_policy
   end
 end

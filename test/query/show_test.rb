@@ -116,6 +116,74 @@ module Query
       refute result.withdrawn, "retired is not withdrawn"
     end
 
+    # -- the findspot line (P44-2: places as the third dimension) ------------
+
+    PLEIADES_DUMP = File.join(Nabu::TestSupport.fixtures("pleiades"), "dump.json")
+
+    def load_placed_document(slug, pleiades_id)
+      document = Nabu::Document.new(
+        urn: "urn:d:#{slug}", language: "grc", title: "Stone",
+        canonical_path: "/canonical/src/#{slug}.xml",
+        metadata: { "place" => { "ancient" => "Sparta", "pleiades" => pleiades_id }.compact }
+      )
+      document << Nabu::Passage.new(
+        urn: "urn:d:#{slug}:1", language: "grc", text: "χαῖρε",
+        text_normalized: "χαιρε", sequence: 0
+      )
+      @loader.load([document], full: false)
+    end
+
+    def test_findspot_resolves_the_captured_pleiades_id_through_the_dump
+      load_placed_document("p1", "570685")
+      show = Nabu::Query::Show.new(catalog: @catalog, pleiades: Nabu::Pleiades.load(PLEIADES_DUMP))
+
+      document = show.run("urn:d:p1")
+      refute_nil document.findspot
+      assert_equal "570685", document.findspot.id
+      assert_equal "Sparta", document.findspot.title
+      assert_equal %w[settlement temple temple-2 archaeological-site], document.findspot.place_types
+
+      passage = show.run("urn:d:p1:1")
+      assert_equal "Sparta", passage.findspot.title, "passage grain resolves through its document"
+    end
+
+    def test_findspot_is_nil_without_a_resolver_the_degrade_silently_contract
+      load_placed_document("p1", "570685")
+      result = Nabu::Query::Show.new(catalog: @catalog).run("urn:d:p1")
+      assert_nil result.findspot, "no dump on disk → byte-identical output (the LiLa precedent)"
+    end
+
+    def test_findspot_is_nil_when_no_id_was_captured_or_the_dump_lacks_the_place
+      load_placed_document("p1", nil)
+      load_placed_document("p2", "999999")
+      show = Nabu::Query::Show.new(catalog: @catalog, pleiades: Nabu::Pleiades.load(PLEIADES_DUMP))
+      assert_nil show.run("urn:d:p1").findspot, "no captured id → nothing to resolve"
+      assert_nil show.run("urn:d:p2").findspot, "an id the dump lacks stays silent, never invented"
+    end
+
+    # P44-i4 (live, the owner's croala verification): the place metadata key
+    # is NOT owned by the epigraphy sources — croala mints "place":"Split"
+    # (the teiHeader creation place, a plain string) where isicily/edh/iip/
+    # itant mint "place":{"pleiades":…}. A string there crashed show
+    # (String#dig). Any non-hash place value is simply not a captured id.
+    def test_findspot_tolerates_a_plain_string_place_the_croala_shape
+      document = Nabu::Document.new(
+        urn: "urn:d:croala", language: "lat", title: "Inscriptio",
+        canonical_path: "/canonical/src/croala.xml",
+        metadata: { "author" => "Alberti, Janko", "place" => "Split" }
+      )
+      document << Nabu::Passage.new(
+        urn: "urn:d:croala:1", language: "lat", text: "salve",
+        text_normalized: "salve", sequence: 0
+      )
+      @loader.load([document], full: false)
+
+      show = Nabu::Query::Show.new(catalog: @catalog, pleiades: Nabu::Pleiades.load(PLEIADES_DUMP))
+      result = show.run("urn:d:croala:1")
+      refute_nil result, "show must not crash on a string place"
+      assert_nil result.findspot, "a prose place name is not a captured Pleiades id"
+    end
+
     # -- edges ---------------------------------------------------------------
 
     def test_unknown_urn_returns_nil
@@ -163,6 +231,40 @@ module Query
     # inclusive, sequence-ordered slice of ONE document between two resolved
     # citation suffixes. Split rule: literal passage/document FIRST (a real
     # urn is never misparsed as a range), then split on the LAST hyphen.
+
+    # P44 (owner test-drive friction): a CITATION PREFIX between document and
+    # passage grain — show urn:…:avest020:Y.19.1 when passages are Y.19.1.a,
+    # Y.19.1.b — must list everything below it, boundary-exact (Y.19.1 never
+    # swallows Y.19.10), and render through the existing RangeResult shape.
+    def test_citation_prefix_lists_the_passages_below_it
+      load_document("av", [["Y.19.1.a", "pərəsat̰"], ["Y.19.1.b", "zaraϑuštrō"],
+                           ["Y.19.10.a", "ahurəm"], ["Y.19.2.a", "mazdąm"]])
+
+      result = show("urn:d:av:Y.19.1")
+      assert_instance_of Nabu::Query::Show::RangeResult, result
+      assert_equal %w[urn:d:av:Y.19.1.a urn:d:av:Y.19.1.b],
+                   result.passages.map(&:urn),
+                   "the prefix opens into exactly its own children — Y.19.10 stays out"
+      assert_equal 4, result.total, "the [N of M] note carries the document total"
+    end
+
+    def test_citation_prefix_is_literal_first_but_reaches_occurrence_tails
+      load_document("rep", [["Y.0.13.Q1c", "first"], ["Y.0.13.Q1c#2", "second"]])
+
+      exact = show("urn:d:rep:Y.0.13.Q1c")
+      assert_instance_of Nabu::Query::Show::PassageResult, exact,
+                         "an exact passage urn stays literal-first — the class doctrine"
+
+      prefix = show("urn:d:rep:Y.0.13")
+      assert_equal ["urn:d:rep:Y.0.13.Q1c", "urn:d:rep:Y.0.13.Q1c#2"],
+                   prefix.passages.map(&:urn),
+                   "the prefix one level up lists both recitations, # tail included"
+    end
+
+    def test_citation_prefix_with_no_children_is_still_urn_not_found
+      load_document("z", [["1.1", "text"]])
+      assert_nil show("urn:d:z:9.9")
+    end
 
     def test_range_returns_inclusive_sequence_ordered_slice
       load_document("1", [%w[1 α], %w[2 β], %w[3 γ], %w[4 δ], %w[5 ε]])
@@ -317,6 +419,35 @@ module Query
       assert_instance_of Nabu::Query::Define::Result, result
       assert_equal "μῆνις", result.headword
       assert_nil Nabu::Query::Show.new(catalog: @catalog).run("urn:nabu:dict:lsj:missing")
+    end
+
+    # -- meter enrichment (P44-7) ---------------------------------------------
+    # The consumer seam: a passage carrying a pedecerto scansion reports it; an
+    # ordinary passage reports nil (the CLI's meter line is absent byte-for-byte).
+
+    def attach_meter(urn, meter:, pattern:)
+      passage = Nabu::Store::Passage.first(urn: urn)
+      @catalog[:enrichments].insert(
+        passage_id: passage.id, kind: "meter", model: "pedecerto",
+        model_version: "pedecerto-scansions/1", at: Time.now,
+        payload_json: JSON.generate("meter" => meter, "pattern" => pattern, "words" => [])
+      )
+    end
+
+    def test_passage_with_a_meter_enrichment_reports_it
+      load_document("1", [%w[1 μῆνιν]])
+      attach_meter("urn:d:1:1", meter: "H", pattern: "DSDS")
+
+      meter = show("urn:d:1:1").meter
+      refute_nil meter
+      assert_equal "H", meter.meter
+      assert_equal "DSDS", meter.pattern
+      assert_equal "pedecerto", meter.producer
+    end
+
+    def test_passage_without_a_meter_enrichment_reports_nil
+      load_document("1", [%w[1 μῆνιν]])
+      assert_nil show("urn:d:1:1").meter, "an unscanned passage carries no meter"
     end
   end
 end

@@ -5,17 +5,24 @@ require "yaml"
 module Nabu
   # The source registry (architecture §5, config/sources.yml): the authoritative
   # list of corpora Nabu knows about — which adapter class ingests each, whether
-  # it is enabled, and its sync policy. Parsed and validated up front; adapter
+  # it is WIRED (adapter exists and is verified to sync), and its sync policy.
+  # NOMENCLATURE (owner ruling 2026-07-24): this registry marker was named
+  # `enabled:` before the P44-r3b enablement promotion gave `nabu enable` a
+  # different meaning (the box's profile.yml enabled set). The field is now
+  # `wired:` — profile enablement says WHICH sources this box works with;
+  # wired says the ADAPTER is built and first-sync-verified. Parsed and validated up front; adapter
   # classes resolve *lazily* (per entry, on demand) so `nabu status`/listing
   # never require every adapter to be loadable.
   #
   # Split of authority: the registry owns identity + metadata (name, adapter
   # class, license, upstream URL — all from the adapter manifest) AND
-  # enablement (revised 2026-07-04; re-affirmed P23-3b: status/list/MCP read
-  # `enabled` from the registry directly, since the db row only mirrors a
+  # the wired marker (revised 2026-07-04; re-affirmed P23-3b: status/list/MCP
+  # read `wired` from the registry directly, since the db row only mirrors a
   # sources.yml flip at the source's next sync); the catalog db owns sync
   # history (last_sync_*). #sync_source! reconciles the two, writing metadata
-  # + enabled into the sources row while preserving db-owned state.
+  # + wired into the sources row (the db COLUMN keeps its historical name
+  # `enabled` — a frozen mirror, renaming it buys nothing) while preserving
+  # db-owned state.
   class SourceRegistry
     # Closed set (docs/maintenance-and-extension.md §2), the honest CADENCE
     # vocabulary (P39-0): `auto` is swept by `sync --all` (the perseus/first1k
@@ -35,8 +42,8 @@ module Nabu
     #     local-* rows): no network, the local fetch strategy, up=local. kind
     #     IMPLIES the local fetch, so a shelf row declares NO sync_policy.
     #   module — MACHINERY only (kr-gaiji, bridging): a sanctioned fetch that
-    #     mints ZERO catalog rows, so there is nothing to serve or enable
-    #     (enabled: false is required) and nothing for `sync --all` to sweep.
+    #     mints ZERO catalog rows, so there is nothing to serve
+    #     (wired: false is required) and nothing for `sync --all` to sweep.
     KINDS = %w[source shelf module].freeze
     DEFAULT_KIND = "source"
 
@@ -59,6 +66,30 @@ module Nabu
     # and --gold-only excludes it like any non-gold tier.
     LEMMA_TIERS = %w[gold silver equivalence].freeze
     DEFAULT_LEMMA_TIER = "gold"
+
+    # The public-availability posture (P44-r3a). `public` (the default, absent
+    # on every ordinary row) means the source is part of the library as a
+    # PUBLIC holding — it appears on the generated site axis pages, in
+    # docs/axes.md memberships, and its holdings count toward public census
+    # surfaces. `blocked` means grant-gated PRIVATE research material (the
+    # fetch right is a personal grant, №41-3/№1): the public repo may keep a
+    # license/scouting record of it, but must NOT advertise it as a library
+    # holding — the public-doc/site generators exclude it and public counts
+    # never include it. Orthogonal to `grant_required` (the sync-time gate) and
+    # to `wired`: availability governs PUBLIC VISIBILITY of the row, not
+    # whether it can be fetched or served locally. Owner ruling 2026-07-24.
+    AVAILABILITIES = %w[public blocked].freeze
+    DEFAULT_AVAILABILITY = "public"
+
+    # The quickstart starter tag (P44-r3b). `quickstart: true` marks a source as
+    # part of the CURATED starter set a fresh box meets first: when
+    # config/profile.yml is ABSENT and no library has been built yet, the
+    # enablement default is exactly these rows (Profile.default_entries). Absent
+    # = false (an ordinary source is not in the starter set). r3c seeds the tags;
+    # r3b only parses the field and wires the default seam — with zero rows
+    # tagged, the default is the empty set and the honest "no sources enabled"
+    # empty-state shows.
+    DEFAULT_QUICKSTART = false
 
     # The fetch-grant block (P42-r1): a permission-bound source whose right to
     # fetch is NOT conveyed by a public license (StarLing's personal e-mail
@@ -87,7 +118,7 @@ module Nabu
     # (search --fuzzy). This is an OWNER POSTURE, not adapter metadata: the
     # documentary scope exists because of index economics (design §4: the
     # documentary shelves cost ~250–270 MB, the whole corpus 3.6–4.1 GB), so
-    # the flag lives here beside enabled/translations — flipped per-source in
+    # the flag lives here beside wired/translations — flipped per-source in
     # sources.yml with a sign-off comment, no code change when a future
     # documentary source (inscriptions) joins. A manifest field was rejected
     # (the manifest is intrinsic upstream identity/license, and editing it IS
@@ -98,7 +129,7 @@ module Nabu
     # gold, so existing entries never change).
     # +classes+ (P33-0): the acquisition scope of a many-repo source
     # (kanripo `classes: [KR1, KR3, KR4]`) — an owner posture like
-    # enabled/translations, passed to the adapter's `classes:` keyword by
+    # wired/translations, passed to the adapter's `classes:` keyword by
     # build_adapter. nil (the default) leaves the adapter's own default
     # scope; the adapter validates the class vocabulary.
     # +siblings+ (P34-0): the `--parallel` work-pattern declaration — HOW
@@ -125,13 +156,14 @@ module Nabu
     # the gate renders (grantor/date/terms/thread/request_hint). The two travel
     # together — a grant block without the flag, or the flag without a block, is
     # a configuration error caught at load. Absent on every ordinary source.
-    Entry = Data.define(:slug, :adapter_class_name, :enabled, :sync_policy, :kind, :translations,
+    Entry = Data.define(:slug, :adapter_class_name, :wired, :sync_policy, :kind, :translations,
                         :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings, :axes,
-                        :grant_required, :grant) do
-      def initialize(slug:, adapter_class_name:, enabled:, sync_policy:, kind: DEFAULT_KIND,
+                        :grant_required, :grant, :availability, :quickstart) do
+      def initialize(slug:, adapter_class_name:, wired:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false,
                      lemma_tier: DEFAULT_LEMMA_TIER, classes: nil, siblings: nil, axes: [],
-                     grant_required: false, grant: nil)
+                     grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
+                     quickstart: DEFAULT_QUICKSTART)
         super
       end
 
@@ -146,6 +178,18 @@ module Nabu
       # sync-time gate (P42-r1) demands a recorded acknowledgment before a first
       # fetch. Predicate spelling mirrors shelf?/source?.
       def grant_required? = grant_required
+
+      # This source is grant-gated PRIVATE research material (P44-r3a): keep
+      # its license/scouting record, but never advertise it as a public
+      # library holding. The public-doc/site generators exclude it and public
+      # census surfaces never count it. Predicate spelling mirrors
+      # grant_required?/shelf?; the default (no `availability:` key) is public.
+      def blocked? = availability == "blocked"
+      def public? = !blocked?
+
+      # In the curated quickstart starter set (P44-r3b)? Drives
+      # Profile.default_entries on a fresh, library-less box.
+      def quickstart? = quickstart
 
       # Resolve the adapter constant lazily. A bad/missing class is a
       # configuration error, not a crash: surface it as a ValidationError
@@ -184,17 +228,19 @@ module Nabu
 
       # Upsert this source's row from slug + manifest. Registry is authoritative
       # for identity/metadata (name, adapter_class, license, license_class,
-      # upstream_url) AND for `enabled` — the owner flips enabled in
+      # upstream_url) AND for the wired marker — the owner flips `wired:` in
       # sources.yml with a sign-off comment, and `sync --all` reads the yaml,
       # so the db row mirrors it on every reconcile (revised 2026-07-04; the
       # original db-owns-enabled split left `status` showing stale rows
-      # forever). The db stays authoritative for sync history (last_sync_*).
+      # forever). The db COLUMN stays named `enabled` (historical; a frozen
+      # mirror of wired). The db stays authoritative for sync history
+      # (last_sync_*).
       # Returns the Store::Source row.
       def sync_source!(db)
         attrs = {
           name: manifest.name, adapter_class: adapter_class_name,
           license: manifest.license, license_class: manifest.license_class,
-          credit: manifest.credit, upstream_url: manifest.upstream_url, enabled: enabled
+          credit: manifest.credit, upstream_url: manifest.upstream_url, enabled: wired
         }
         db.transaction do
           row = Store::Source.first(slug: slug)
@@ -247,13 +293,13 @@ module Nabu
       end
 
       kind = kind!(slug, config)
-      enabled = enabled!(slug, config)
-      kind_invariants!(slug, config, kind: kind, enabled: enabled)
+      wired = wired!(slug, config)
+      kind_invariants!(slug, config, kind: kind, wired: wired)
       grant_required, grant = grant!(slug, config)
 
       Entry.new(
         slug: slug, adapter_class_name: adapter,
-        enabled: enabled, sync_policy: sync_policy!(slug, config), kind: kind,
+        wired: wired, sync_policy: sync_policy!(slug, config), kind: kind,
         translations: boolean!(slug, config, "translations"),
         license_watch: license_watch!(slug, config),
         fuzzy_index: boolean!(slug, config, "fuzzy_index"),
@@ -261,10 +307,26 @@ module Nabu
         classes: classes!(slug, config),
         siblings: siblings!(slug, config),
         axes: axes!(slug, config, axis_registry),
-        grant_required: grant_required, grant: grant
+        grant_required: grant_required, grant: grant,
+        availability: availability!(slug, config),
+        quickstart: boolean!(slug, config, "quickstart")
       )
     end
     private_class_method :build_entry
+
+    # The public-availability posture (P44-r3a). Absent = public (the default);
+    # `blocked` marks grant-gated private research material the public surfaces
+    # must not advertise. Any other value is a configuration error naming the
+    # slug, caught at load like every other vocabulary field.
+    def self.availability!(slug, config)
+      value = config.fetch("availability", DEFAULT_AVAILABILITY)
+      return value if AVAILABILITIES.include?(value)
+
+      raise ValidationError,
+            "source #{slug.inspect}: availability must be one of #{AVAILABILITIES.join(', ')}, " \
+            "got #{value.inspect}"
+    end
+    private_class_method :availability!
 
     # The fetch-grant gate keys (P42-r1). Returns [grant_required, Grant|nil].
     # The flag and the block travel together: grant_required without a grant
@@ -393,10 +455,10 @@ module Nabu
     end
     private_class_method :license_watch!
 
-    def self.enabled!(slug, config)
-      boolean!(slug, config, "enabled")
+    def self.wired!(slug, config)
+      boolean!(slug, config, "wired")
     end
-    private_class_method :enabled!
+    private_class_method :wired!
 
     def self.boolean!(slug, config, key)
       value = config.fetch(key, false)
@@ -427,17 +489,17 @@ module Nabu
 
     # Cross-field kind invariants (P39-0): a shelf declares NO sync_policy (its
     # local fetch strategy is implied by kind), and a module mints no catalog
-    # rows so there is nothing to enable.
-    def self.kind_invariants!(slug, config, kind:, enabled:)
+    # rows so there is nothing to wire on.
+    def self.kind_invariants!(slug, config, kind:, wired:)
       if kind == "shelf" && config.key?("sync_policy")
         raise ValidationError,
               "source #{slug.inspect}: a kind: shelf row uses the local fetch strategy — " \
               "drop sync_policy (kind implies it)"
       end
-      return unless kind == "module" && enabled
+      return unless kind == "module" && wired
 
       raise ValidationError,
-            "source #{slug.inspect}: a kind: module row mints no catalog rows — must be enabled: false"
+            "source #{slug.inspect}: a kind: module row mints no catalog rows — must be wired: false"
     end
     private_class_method :kind_invariants!
 
@@ -457,6 +519,30 @@ module Nabu
       @entries.each_value.select { |entry| entry.axes.include?(axis_name) }.map(&:slug)
     end
 
+    # Axis members MINUS the blocked (grant-gated private) ones (P44-r3a) — the
+    # membership seam the PUBLIC surfaces read (the generated site axis pages
+    # and docs/axes.md). #axis_members stays the full list for the CLI/sync
+    # scopes (a blocked source is still fetchable/servable locally); only the
+    # public documentation excludes it.
+    def public_axis_members(axis_name)
+      axis_members(axis_name).reject { |slug| blocked?(slug) }
+    end
+
+    # The blocked (grant-gated private) slugs tagged with +axis_name+ — the
+    # complement of #public_axis_members, so a generator can decide whether to
+    # render the "private materials not listed" footnote.
+    def blocked_axis_members(axis_name)
+      axis_members(axis_name).select { |slug| blocked?(slug) }
+    end
+
+    # Is +slug+ a grant-gated private-research row (availability: blocked)?
+    # Unknown slugs are not blocked. The read path r3b (CLI/MCP visibility)
+    # builds on this.
+    def blocked?(slug)
+      entry = @entries[slug]
+      entry ? entry.blocked? : false
+    end
+
     # Yield each Entry in registration order; returns an Enumerator without a
     # block.
     def each_source(&block)
@@ -472,6 +558,13 @@ module Nabu
 
     def slugs
       @entries.keys
+    end
+
+    # Slugs in the curated quickstart starter set (P44-r3b), registration
+    # order — the fresh-box enablement default (Profile.default_entries). Empty
+    # until r3c seeds `quickstart: true` tags, so r3b's default is the empty set.
+    def quickstart_slugs
+      @entries.each_value.select(&:quickstart?).map(&:slug)
     end
 
     # Slugs opted into the trigram fragment index (search --fuzzy, P16-4) —

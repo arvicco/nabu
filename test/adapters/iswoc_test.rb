@@ -151,7 +151,7 @@ class IswocTest < Minitest::Test
     assert_equal Nabu::Adapters::Iswoc, entry.adapter_class
     assert_equal "iswoc", entry.manifest.id
     assert_equal "frozen", entry.sync_policy
-    assert entry.enabled, "iswoc is live (owner sign-off 2026-07-11 after first sync + eyeball)"
+    assert entry.wired, "iswoc is live (owner sign-off 2026-07-11 after first sync + eyeball)"
     assert_equal Nabu::Adapters::Iswoc.manifest, entry.manifest
   end
 end

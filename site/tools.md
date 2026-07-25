@@ -208,6 +208,21 @@ An unknown code is reported honestly, with a family hint;
 $ bin/nabu language gkm
 ```
 
+**Place cards** (`nabu place NAME|ID`) are the library's third dimension,
+after language and time: one ancient place resolved through the local
+Pleiades gazetteer dump — title, id, place types, attested period span,
+representative point — followed by each source's holdings at that place,
+counted over the Pleiades ids the epigraphic sources themselves assert in
+their headers (never fuzzy-matched). Input is a Pleiades numeric id or an
+exact title; id-less documents whose findspot text mentions the name are
+listed as a separate, honestly labelled tail. When a shown inscription
+carries such an id and the dump is on disk, `nabu show` adds a one-line
+findspot resolution too.
+
+```
+$ bin/nabu place Segesta
+```
+
 **Cognates in parallel** (`nabu cognates TARGET`) crosses the etymological
 crosswalk with the alignment hub: verses of an aligned work where witnesses
 in two or more languages use reflexes of the same reconstructed root, found

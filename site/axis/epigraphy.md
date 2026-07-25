@@ -15,24 +15,24 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these sixteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `papyri-ddbdp` | papyri | attribution | enabled · manual | 61,414 docs / 921,611 passages |
-| `edh` | inscriptions | attribution | enabled · frozen | 81,881 docs / 406,306 passages |
-| `riig` | inscriptions | attribution | enabled · manual | 495 docs / 1,357 passages |
-| `ogham` | inscriptions | nc | enabled · manual | 873 docs / 1,053 passages |
-| `isicily` | inscriptions | attribution | enabled · manual | 6,723 docs / 17,921 passages |
-| `itant` | inscriptions | nc | enabled · manual | 1,160 docs / 1,283 passages |
-| `trismegistos` | feature module | attribution | not enabled | not synced yet |
-| `pleiades` | feature module | attribution | not enabled | not synced yet |
-| `tlhdig` | tablets | attribution | enabled · manual | 23,486 docs / 402,195 passages |
-| `ceipom` | inscriptions | attribution | enabled · frozen | 3,871 docs / 5,303 passages |
-| `open-etruscan` | inscriptions | attribution | enabled · frozen | 8,047 docs / 8,047 passages |
-| `lexlep` | inscriptions | nc | enabled · manual | 494 docs / 570 passages |
-| `lexlep-words` | dictionary | nc | enabled · manual | 627 entries |
-| `tir` | inscriptions | nc | enabled · manual | 389 docs / 434 passages |
-| `iip` | inscriptions | nc | enabled · manual | 5,499 docs / 17,823 passages |
-| `rundata` | inscriptions | odbl | enabled · manual | 30,643 docs / 30,641 passages |
+| `papyri-ddbdp` | papyri | attribution | wired · manual | 61,414 docs / 921,611 passages |
+| `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
+| `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
+| `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
+| `isicily` | inscriptions | attribution | wired · manual | 6,723 docs / 17,921 passages |
+| `itant` | inscriptions | nc | wired · manual | 1,160 docs / 1,283 passages |
+| `trismegistos` | feature module | attribution | not yet wired | nothing held yet |
+| `pleiades` | feature module | attribution | not yet wired | nothing held yet |
+| `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
+| `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
+| `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |
+| `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
+| `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
+| `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
+| `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
+| `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
 
 ## The desk's instruments
 
@@ -73,6 +73,13 @@ nabu search --lemma precor --axis epigraphy  # CEIPoM equivalence keys reach the
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“What survives from Segesta, across every corpus here?”** → `nabu_place Segesta` — The gazetteer card (Segesta/Egesta, Pleiades 462487 — settlement, archaic to late-antique, 37.94, 12.84) plus per-source holdings of documents carrying that upstream-asserted Pleiades id, and a labelled tail of findspot text-mentions not yet id-linked.
+- **“Wage receipts from Oxyrhynchus?”** → `nabu_search μισθός (place: oxyrhynch%)` — Documentary papyri hits with provenance-filtered dating — the DDbDP at the artifact grain, lacunae preserved.
+
 ## Terminal setup
 
 - **Ogham (pgl):** nabu spaces the letters with U+1680 (stemline-continuing)
@@ -88,4 +95,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

@@ -240,6 +240,19 @@ class IsicilyTest < Minitest::Test
                  document.metadata["date"], "the timeline-bearing header still rides")
     assert_equal "Segesta", document.metadata.dig("place", "ancient")
     assert_equal "https://pleiades.stoa.org/places/462487", document.metadata.dig("place", "ancient_ref")
+    assert_equal "462487", document.metadata.dig("place", "pleiades"),
+                 "the uniform place.pleiades id (P44-2) rides next to the verbatim ref"
+  end
+
+  # P44-2: the upstream-asserted Pleiades id, normalized to bare digits under
+  # the cross-source place.pleiades key — captured at parse from canonical
+  # bytes (rebuild-honest), scheme-insensitive (the corpus writes both http://
+  # and https:// refs), never fuzzy-matched.
+  def test_place_pleiades_id_is_captured_from_either_scheme_spelling
+    assert_equal "462372", parse("urn:nabu:isicily:isic002954").metadata.dig("place", "pleiades"),
+                 "Morgantina's ref is the http:// spelling"
+    assert_nil parse("urn:nabu:isicily:isic000001").metadata.dig("place", "pleiades"),
+               "no ancient ref (GeoNames-only record) → an honest absence, never a guess"
   end
 
   # --- header metadata --------------------------------------------------------

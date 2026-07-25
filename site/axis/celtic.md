@@ -15,15 +15,15 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these seven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
-| `riig` | inscriptions | attribution | enabled · manual | 495 docs / 1,357 passages |
-| `ogham` | inscriptions | nc | enabled · manual | 873 docs / 1,053 passages |
-| `corph` | texts | attribution | enabled · manual | 76 docs / 17,942 passages |
-| `lexlep` | inscriptions | nc | enabled · manual | 494 docs / 570 passages |
-| `lexlep-words` | dictionary | nc | enabled · manual | 627 entries |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
+| `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
+| `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
+| `corph` | texts | attribution | wired · manual | 76 docs / 17,942 passages |
+| `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
+| `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
 
 ## The desk's instruments
 
@@ -58,6 +58,12 @@ nabu define rí --lang sga             # the Old Irish card, with its Proto-Celt
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Find macc in the Old Irish glosses.”** → `nabu_search macc (lang: sga)` — Hits from the Milan and Bern Servius glosses (CorPH) with exact gloss-corpus citations — the diacritic fold means plain ASCII queries reach the edited text.
+
 ## Terminal setup
 
 - **Ogham (pgl):** nabu spaces the letters with U+1680 so the stemline
@@ -71,4 +77,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

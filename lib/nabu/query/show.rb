@@ -46,13 +46,29 @@ module Nabu
       # display layer's edition context (ketiv/qere word hashes ride there).
       # +credit+ (P43-2): the source's optional attribution line (nil on every
       # ordinary source), rendered on the card only when present.
+      # +findspot+ (P44-2): the document's captured Pleiades id resolved
+      # through the gazetteer dump, nil whenever anything is missing.
       PassageResult = Data.define(
         :urn, :language, :sequence, :revision, :withdrawn, :text,
         :document_urn, :document_title, :source_slug, :license_class, :provenance, :timeline,
-        :annotations, :credit
+        :annotations, :credit, :meter, :findspot
       ) do
-        def initialize(timeline: nil, annotations: {}, credit: nil, **) = super
+        def initialize(timeline: nil, annotations: {}, credit: nil, meter: nil, findspot: nil, **) = super
       end
+
+      # The findspot line's facts (P44-2): the captured Pleiades id resolved
+      # through the local gazetteer dump — title + place types, nothing more
+      # (maps and coordinate math are out by design). Rendered ONLY when the
+      # document's parse-captured metadata carries $.place.pleiades AND the
+      # dump is on disk AND it holds the id; nil otherwise, so a corpus
+      # without the dump renders byte-identically (the LiLa precedent).
+      Findspot = Data.define(:id, :title, :place_types)
+
+      # A meter enrichment attached to a passage (P44-7): the metrical code
+      # ("H" hexameter, "P" pentameter, …), the dactyl/spondee foot +pattern+,
+      # and +producer+ (the enrichments row's model — "pedecerto"). nil when the
+      # passage carries no scansion (every ordinary passage).
+      Meter = Data.define(:meter, :pattern, :producer)
 
       # One line of a document listing: a passage's urn and text, in sequence
       # (+annotations+ for the display layer's edition context, P27-1).
@@ -70,9 +86,9 @@ module Nabu
       # (P17-2): the document's facet rows, [] when unfaceted.
       DocumentResult = Data.define(
         :urn, :title, :language, :source_slug, :license_class,
-        :revision, :withdrawn, :retired_upstream, :passages, :timeline, :facets, :credit
+        :revision, :withdrawn, :retired_upstream, :passages, :timeline, :facets, :credit, :findspot
       ) do
-        def initialize(timeline: nil, facets: [], credit: nil, **) = super
+        def initialize(timeline: nil, facets: [], credit: nil, findspot: nil, **) = super
       end
 
       # A range (P7-6): the document header, the inclusive slice of passages,
@@ -86,18 +102,30 @@ module Nabu
         def initialize(timeline: nil, credit: nil, **) = super
       end
 
-      def initialize(catalog:)
+      # +pleiades+ (P44-2): nil (default — note_shelf/mcp callers stay
+      # byte-identical), a loaded Nabu::Pleiades resolver (tests), or :auto —
+      # the CLI's setting, which feature-detects the canonical dump LAZILY:
+      # nothing loads until a shown document actually carries a captured
+      # $.place.pleiades id, and then once per Show instance (~3 s /
+      # ~3.9 GB peak RSS on the real dump — the P44-2 design datum, the
+      # accepted v1 cost of dumping-without-an-index).
+      def initialize(catalog:, pleiades: nil)
         @catalog = catalog
+        @pleiades = pleiades
       end
 
       # Resolve +urn+ to a PassageResult, a DocumentResult, a RangeResult, or
       # nil. Literal-first: a real passage/document wins before a range is even
       # attempted (a passage urn holding a hyphen is never misparsed as one).
       # A range with a bad endpoint raises Range::Error (CLI → exit 1).
+      # Last, a CITATION PREFIX (P44, owner test-drive friction: a shortened
+      # urn between document and passage grain — …:avest020:Y.19.1 over
+      # passages Y.19.1.a/b — used to be "urn not found") lists everything
+      # below it, boundary-exact, through the RangeResult shape.
       def run(urn)
         return dictionary_entry(urn) if urn.start_with?(DICT_URN_PREFIX)
 
-        passage(urn) || document(urn) || range(urn)
+        passage(urn) || document(urn) || range(urn) || citation_prefix(urn)
       end
 
       # `define` prints minted dictionary-entry urns on every headline; show
@@ -118,6 +146,64 @@ module Nabu
       end
 
       private
+
+      # The citation-prefix listing (P44). The prefix's document is found by
+      # probing ever-shorter ":"-bounded heads of +urn+ against the documents
+      # table (document urns may themselves contain ":" — urn:cts:… — so the
+      # probe walks colon positions right-to-left; each probe is one indexed
+      # lookup). The children are the document's passages whose urns extend
+      # the full prefix across a CITATION BOUNDARY — ".", ":" or the P43-i2
+      # occurrence "#" — so Y.19.1 opens into Y.19.1.a/b and never swallows
+      # Y.19.10. Zero children stays nil: "urn not found", honestly.
+      def citation_prefix(urn)
+        document_row, = resolve_prefix_document(urn)
+        return nil if document_row.nil?
+
+        escaped = urn.gsub(/[\\%_]/) { |ch| "\\#{ch}" }
+        # No withdrawn filter: Show is the honest inspector (class doctrine) —
+        # withdrawn children list flagged, exactly like a document listing.
+        matches = @catalog[:passages]
+                  .where(document_id: document_row.fetch(:id))
+                  .where(
+                    Sequel.|(*%w[. : #].map { |b| Sequel.like(:urn, "#{escaped}#{b}%", { escape: "\\" }) })
+                  )
+                  .order(:sequence)
+                  .select(:urn, :text, :withdrawn, :annotations_json)
+                  .all
+        return nil if matches.empty?
+
+        build_prefix_result(document_row, matches)
+      end
+
+      # The longest document whose urn is a ":"-bounded proper prefix of
+      # +urn+, or nil. Walks the colon positions right-to-left — a handful of
+      # indexed point lookups, never a scan.
+      def resolve_prefix_document(urn)
+        head = urn.dup
+        while (cut = head.rindex(":"))
+          head = head[0...cut]
+          row = @catalog[:documents]
+                .join(:sources, id: Sequel[:documents][:source_id])
+                .where(Sequel[:documents][:urn] => head)
+                .select(*document_columns, Sequel[:documents][:id])
+                .first
+          return [row, head] if row
+        end
+        nil
+      end
+
+      def build_prefix_result(header, rows)
+        total = @catalog[:passages].where(document_id: header.fetch(:id)).count
+        RangeResult.new(
+          urn: header.fetch(:urn), title: header.fetch(:title), language: header.fetch(:language),
+          source_slug: header.fetch(:source_slug), license_class: header.fetch(:license_class),
+          revision: header.fetch(:revision), withdrawn: truthy?(header.fetch(:withdrawn)),
+          retired_upstream: truthy?(header.fetch(:retired_upstream)),
+          passages: rows.map { |row| passage_line(row) }, total: total,
+          start_urn: rows.first.fetch(:urn), end_urn: rows.last.fetch(:urn),
+          timeline: timeline_for(header.fetch(:id)), credit: header.fetch(:credit)
+        )
+      end
 
       # nil when +urn+ is not a range; otherwise the document header plus the
       # inclusive slice. Delegates the parse/precedence to Query::Range.
@@ -188,8 +274,31 @@ module Nabu
           provenance: provenance_events(row.fetch(:passage_id)),
           timeline: timeline_for(row.fetch(:document_id)),
           annotations: parse_annotations(row),
-          credit: row.fetch(:credit)
+          credit: row.fetch(:credit),
+          meter: meter_for(row.fetch(:passage_id)),
+          findspot: findspot_for(row)
         )
+      end
+
+      # The passage's meter enrichment (P44-7), or nil when it carries none —
+      # the seam proving a consumer reads the enrichments layer. One row per
+      # passage per producer; the first (by id) is rendered. Degrades to nil on
+      # a catalog predating the enrichments table or on unreadable payload JSON,
+      # never crashes (the facets_for/timeline_for stance).
+      def meter_for(passage_id)
+        return nil unless @catalog.table_exists?(:enrichments)
+
+        row = @catalog[:enrichments]
+              .where(passage_id: passage_id, kind: "meter")
+              .order(:id)
+              .select(:model, :payload_json)
+              .first
+        return nil if row.nil?
+
+        payload = JSON.parse(row[:payload_json].to_s)
+        Meter.new(meter: payload["meter"], pattern: payload["pattern"], producer: row[:model])
+      rescue JSON::ParserError
+        nil
       end
 
       def build_document(row)
@@ -200,8 +309,45 @@ module Nabu
           retired_upstream: truthy?(row.fetch(:retired_upstream)),
           passages: document_passages(row.fetch(:document_id)),
           timeline: timeline_for(row.fetch(:document_id)),
-          facets: facets_for(row.fetch(:document_id)), credit: row.fetch(:credit)
+          facets: facets_for(row.fetch(:document_id)), credit: row.fetch(:credit),
+          findspot: findspot_for(row)
         )
+      end
+
+      # The findspot facts (P44-2), or nil — no captured id, no resolver
+      # (dump absent), or an id the dump lacks all degrade silently (the
+      # facets_for/timeline_for stance; class Findspot note).
+      def findspot_for(row)
+        id = captured_place_id(row[:document_metadata_json])
+        return nil if id.nil?
+
+        place = pleiades&.place(id)
+        place && Findspot.new(id: place.id, title: place.title, place_types: place.place_types)
+      end
+
+      # The parse-captured $.place.pleiades id out of documents.metadata_json
+      # (the P44-2 cross-source key), nil on absence or unreadable JSON. The
+      # place key is not shape-owned by the epigraphy sources — croala mints
+      # "place":"Split" (a plain teiHeader string) — so anything but the
+      # {"pleiades" => id} hash is simply not a captured id (P44-i4).
+      def captured_place_id(json)
+        return nil if json.nil? || json.empty?
+
+        parsed = JSON.parse(json)
+        place = parsed.is_a?(Hash) ? parsed["place"] : nil
+        id = place.is_a?(Hash) ? place["pleiades"] : nil
+        id.is_a?(String) && !id.empty? ? id : nil
+      rescue JSON::ParserError
+        nil
+      end
+
+      # Feature-detect + memoize the resolver (initialize note). :auto loads
+      # it from canonical/pleiades; an absent dump is nil, and the load only
+      # ever happens when a captured id needs resolving.
+      def pleiades
+        return @pleiades unless @pleiades == :auto
+
+        @pleiades = Nabu::Pleiades.load_default
       end
 
       # The document's facet rows (P17-2), [] when unfaceted or when the
@@ -297,6 +443,7 @@ module Nabu
           Sequel[:passages][:annotations_json],
           Sequel[:documents][:urn].as(:document_urn),
           Sequel[:documents][:title].as(:document_title),
+          Sequel[:documents][:metadata_json].as(:document_metadata_json),
           Sequel[:sources][:slug].as(:source_slug),
           license_expr.as(:license_class),
           Sequel[:sources][:credit].as(:credit)
@@ -312,6 +459,7 @@ module Nabu
           Sequel[:documents][:revision],
           Sequel[:documents][:withdrawn],
           Sequel[:documents][:retired_upstream],
+          Sequel[:documents][:metadata_json].as(:document_metadata_json),
           Sequel[:sources][:slug].as(:source_slug),
           license_expr.as(:license_class),
           Sequel[:sources][:credit].as(:credit)

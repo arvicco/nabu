@@ -80,6 +80,8 @@ module Nabu
     #   {"facets"  => {"genre" => {"value" => "epitaph", "raw" => "titsep"},
     #                  "province"/"material"/"object_type" => …},
     #    "persons" => [{"nomen" => "Nonia", …}, …],   # adapter-built, verbatim
+    #    "place"   => {"ancient" (origPlace placeName type="ancient")/
+    #                  "pleiades" (its ref as a bare id — P44-2)},
     #    "tm_nr"/"verse"/"find_year"/"repository"/"findspot"/"literature"/
     #    "people_uris"/"godot_uris" => …}              # only non-empty keys
     #
@@ -190,7 +192,23 @@ module Nabu
         facets = build_facets(header, csv)
         result["facets"] = facets unless facets.empty?
         result["persons"] = persons unless persons.nil? || persons.empty?
+        place = build_place(header)
+        result["place"] = place unless place.empty?
         annotation_fields(csv).each { |key, value| result[key] = value }
+        result
+      end
+
+      # The findspot (P44-2): the origPlace ancient placeName verbatim plus
+      # its upstream Pleiades ref normalized to the bare numeric id under
+      # the cross-source place.pleiades key (Nabu::Pleiades.ref_id — only
+      # ids the EpiDoc itself asserts, never a guess). Absent both → no
+      # "place" key at all (honest sparsity, the facets stance).
+      def build_place(header)
+        result = {}
+        ancient = presence(header[:ancient_place])
+        result["ancient"] = ancient if ancient
+        id = Nabu::Pleiades.ref_id(header[:ancient_ref])
+        result["pleiades"] = id if id
         result
       end
 
@@ -262,7 +280,8 @@ module Nabu
         private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS, :HEADER_CAPTURES
 
         # What the header phase collected: :title, :genre, :province,
-        # :material, :object_type (whitespace-collapsed, NFC).
+        # :material, :object_type (whitespace-collapsed, NFC), plus the
+        # findspot pair :ancient_place/:ancient_ref (P44-2).
         attr_reader :header, :lines
 
         def initialize(reader:, path:, urn:)
@@ -332,7 +351,19 @@ module Nabu
           when "idno"
             @capture = :local_id if node.attribute("type") == "localID" && !node.empty_element?
           when "placeName"
-            @capture = :province if node.attribute("type") == "province" && !node.empty_element?
+            case node.attribute("type")
+            when "province"
+              @capture = :province unless node.empty_element?
+            when "ancient"
+              # The findspot (P44-2): the ancient placeName's text + its
+              # upstream Pleiades ref, first occurrence wins (origPlace
+              # carries exactly one). Header-only — no line state touched.
+              if @header[:ancient_place].nil?
+                ref = node.attribute("ref")
+                @header[:ancient_ref] = ref if ref && !ref.empty?
+                @capture = :ancient_place unless node.empty_element?
+              end
+            end
           when "div"
             enter_edition(node) if node.attribute("type") == "edition"
           else
