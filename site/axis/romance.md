@@ -5,9 +5,9 @@ description: >-
   The Romanist's desk: its shelves, instruments, CLI recipes and terminal setup.
 ---
 
-> The Romanist — Latin's daughters read in their own right, the Serments to Villon.
+> The Romanist — the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours.
 
-The medieval Romance vernaculars: the Base de français médiéval's 219 Old and Middle French texts (BFM2022) — the first registrant; the Occitan, Italian and Iberian shelves as they arrive.
+The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
 The desk opens with **CroALa** (`croala`) — Croatian Latin from a 976 CE
 charter through the neo-Latin centuries, the continuum's Latin side
