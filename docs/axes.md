@@ -109,14 +109,6 @@ The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, th
 
 **Members** (10): `wiktionary-recon`, `isicily`, `itant`, `sabellic-loans`, `ceipom`, `open-etruscan`, `larth-etp`, `lexlep`, `lexlep-words`, `tir`
 
-### romance
-
-> The Romanist — Latin's daughters read in their own right, the Serments to Villon.
-
-The medieval Romance vernaculars: the Base de français médiéval's 219 Old and Middle French texts (BFM2022) — the first registrant; the Occitan, Italian and Iberian shelves as they arrive.
-
-**Members** (1): `bfm`
-
 ### etym
 
 > The Comparative Indo-Europeanist — laryngeals, reflex chains, the long descent of words.
