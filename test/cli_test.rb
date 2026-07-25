@@ -3720,6 +3720,58 @@ class CLITest < Minitest::Test
     assert_match(/cannot stand alone/, err)
   end
 
+  # -- search --meter (P45-5): the meter facet over the P44-6/7 enrichments --
+
+  def test_search_meter_filters_hits_and_names_its_source
+    with_meter_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search arma --meter H]) }
+      assert_nil status
+      assert_match("urn:nabu:vg:a:1", out, "the scanned hexameter line survives the filter")
+      refute_match("urn:nabu:vg:b:1", out, "the unscanned passage is filtered out")
+      assert_match(/note: meter: pedecerto enrichments/, out,
+                   "an active meter filter names its source layer")
+    end
+  end
+
+  def test_search_meter_pattern_composes
+    with_meter_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search arma --meter h --meter-pattern dsds]) }
+      assert_nil status, "codes and patterns match case-insensitively"
+      assert_match("urn:nabu:vg:a:1", out)
+    end
+  end
+
+  def test_browse_by_meter_alone_is_legal
+    with_meter_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --meter H]) }
+      assert_nil status, "the meter facet narrows content — a legal term-less browse"
+      assert_match("urn:nabu:vg:a:1", out)
+      refute_match("urn:nabu:vg:b:1", out)
+      assert_match(/filtered browse/, out)
+      assert_match(/meter: H/, out, "the browse footer names the active meter filter")
+    end
+  end
+
+  def test_search_meter_with_no_meter_data_explains_itself
+    with_meter_corpus(scanned: false) do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search arma --meter H]) }
+      assert_nil status
+      assert_match(/no matches/, out)
+      assert_match(/holds no meter enrichments/, out, "an empty meter layer explains itself")
+      assert_match(%r{pedecerto/hypotactic syncs}, out, "the note names the producing syncs")
+    end
+  end
+
+  def test_search_meter_refuses_lemma_near_and_fuzzy
+    _out, err, status = run_cli(%w[search --lemma arma --meter H])
+    assert_equal 1, status
+    assert_match(/--meter/, err, "the lemma path does not carry the meter filter — refused, not ignored")
+
+    _out2, err2, status2 = run_cli(%w[search --fuzzy arma --meter H])
+    assert_equal 1, status2
+    assert_match(/--meter/, err2)
+  end
+
   def test_term_less_browse_refuses_exact_and_word
     _out, err, status = run_cli(%w[search --century 2 --exact])
     assert_equal 1, status
@@ -6258,6 +6310,51 @@ class CLITest < Minitest::Test
   def seed_facet(catalog, doc_urn, facet, value, raw)
     doc_id = catalog[:documents].where(urn: doc_urn).get(:id)
     catalog[:document_facets].insert(document_id: doc_id, facet: facet, value: value, raw: raw)
+  end
+
+  # A meter (P45-5) corpus: one Latin source, one SCANNED passage (a P44-7
+  # pedecerto-model meter enrichment, kind="meter") + one unscanned passage
+  # sharing the search term. scanned: false leaves the meter layer empty (the
+  # explains-itself case).
+  def with_meter_corpus(scanned: true)
+    Dir.mktmpdir("nabu-cli-meter") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "vg", name: "Vergil", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      scanned_id = seed_plain_passage(catalog, src, "urn:nabu:vg:a", "arma uirumque cano")
+      seed_plain_passage(catalog, src, "urn:nabu:vg:b", "arma alia linea")
+      if scanned
+        Nabu::Store::Enrichment.write!(catalog, passage_id: scanned_id, kind: "meter",
+                                                model: "pedecerto", model_version: "test",
+                                                payload: { "meter" => "H", "pattern" => "DSDS" })
+      end
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_plain_passage(catalog, source_id, doc_urn, text)
+    doc_id = catalog[:documents].insert(
+      source_id: source_id, urn: doc_urn, title: doc_urn, language: "lat",
+      content_sha256: doc_urn, revision: 1, withdrawn: false
+    )
+    catalog[:passages].insert(
+      document_id: doc_id, urn: "#{doc_urn}:1", sequence: 0, language: "lat",
+      text: text, text_normalized: Nabu::Normalize.search_form(text, language: "lat"),
+      content_sha256: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
+    )
   end
 
   def seed_dated_passage(catalog, source_id, doc_urn, text, not_before, not_after, place)
