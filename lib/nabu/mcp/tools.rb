@@ -629,15 +629,17 @@ module Nabu
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
-        # The Pleiades gazetteer slot (P44-3): nil (dump-less — nabu_place id
-        # queries still count holdings, nabu_show serves no findspot key,
-        # byte-identical to the pre-P44 payloads), a loaded Nabu::Pleiades
+        # The Pleiades gazetteer slot (P44-3): nil (gazetteer-less —
+        # nabu_place id queries still count holdings, nabu_show serves no
+        # findspot key, byte-identical to the pre-P44 payloads), a loaded
         # resolver (tests), or :auto — the entrypoint's setting, which
-        # feature-detects the canonical dump LAZILY per call (Query::Show's
-        # own :auto for findspot; #place_resolver for nabu_place). The load
-        # cost (~3 s / ~3.9 GB peak on the real dump, the P44-2 design datum)
-        # is paid per invocation and released — deliberately NOT memoized on
-        # this long-lived server object.
+        # feature-detects LAZILY per call (Query::Show's own :auto for
+        # findspot; #place_resolver for nabu_place). Since P45-6 :auto
+        # prefers the derived catalog place index (instant, per-call, no
+        # memoization needed); the in-memory dump load (~3 s / ~3.9 GB peak
+        # on the real dump) is paid — per invocation, released after,
+        # deliberately NOT memoized on this long-lived server object — only
+        # while the index is not yet derived.
         @pleiades = pleiades
         # The enabled-slug set (P44-r3b): nabu_status's sources array defaults to
         # the box's ENABLED sources (the CLI list/status default), plus the
@@ -825,7 +827,7 @@ module Nabu
         query = string_arg(args, "query") or
           raise InvalidArguments, "nabu_place needs a query (a Pleiades id or an exact place title)"
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
-        resolver = place_resolver
+        resolver = place_resolver(catalog)
         return note(NO_GAZETTEER_NOTE) if resolver.nil? && Nabu::Pleiades.ref_id(query).nil?
 
         result = Query::Place.new(catalog: catalog, pleiades: resolver).run(query)
@@ -1446,10 +1448,11 @@ module Nabu
       # -- place internals (P44-3) -------------------------------------------------
 
       # Resolve the gazetteer slot for one nabu_place call: :auto
-      # feature-detects the canonical dump (nil when unsynced), per call and
-      # unmemoized — the initializer note carries the cost rationale.
-      def place_resolver
-        @pleiades == :auto ? Nabu::Pleiades.load_default : @pleiades
+      # feature-detects per call, unmemoized — the derived place index in
+      # +catalog+ first (P45-6), else the canonical dump, else nil
+      # (unsynced); the initializer note carries the cost rationale.
+      def place_resolver(catalog)
+        @pleiades == :auto ? Nabu::Pleiades.load_default(catalog: catalog) : @pleiades
       end
 
       def place_payload(query, result)

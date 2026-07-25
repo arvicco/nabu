@@ -111,6 +111,13 @@ module Nabu
         indexed = (indexed || 0) + refresh_index(db, fulltext, entry) unless index_inert?(entry)
       end
       replay_enrichments(db)
+      # P45-6: re-derive the place index only when its source was dirty (the
+      # dump changed) or the index is still unpopulated (self-heal after
+      # migration 021) — a clean stamped dump with a populated index skips
+      # the ~3 s / ~3.9 GB dump load, keeping clean incremental runs cheap
+      # while staying content-equivalent to a full rebuild (derive! is a
+      # pure function of the unchanged canonical bytes).
+      replay_place_index(db, dirty: outcomes.map(&:slug))
       # P42-0: the loader hooks maintained source_stats through each dirty
       # replay; re-deriving wholesale keeps the incremental run's stats
       # content-equivalent to a full rebuild's (the sacred invariant). A
