@@ -19,6 +19,11 @@ classical:
   persona: "The Classicist — Greek and Latin letters read whole, Homer to the late grammarians."
   desc: "The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one."
 
+# P45-r1 (owner ruling 2026-07-25: "axis romance"; D45-a: croala dual-tags).
+romance:
+  persona: "The Romanist — the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours."
+  desc: "The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land."
+
 epigraphy:
   persona: "The Papyrologist-Epigraphist — reads what survives on stone, sherd, papyrus and tablet, lacunae and all."
   desc: "Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep."
