@@ -7,15 +7,18 @@ require "zlib"
 module Nabu
   # A pure READ seam over the Pleiades gazetteer dump (P43-3): given a
   # Pleiades place id, return the handful of facts the display surfaces need
-  # — title, representative point, place types, time periods. There is NO
-  # catalog table and NO migration: Pleiades is registered as a feature
-  # module whose canonical asset is the numbered quarterly archival release
-  # (Zenodo 4.1, 2025-05-28), and this resolver reads that dump directly,
-  # like the suttacentral parallels graph is read directly by its producer.
-  # Consumed since P44-2 by the place desk (`nabu place`, Query::Place) and
-  # the `nabu show` findspot line (Query::Show), joining on the uniform
-  # place.pleiades id the epigraphic parsers capture (isicily/edh/iip/itant
-  # — .ref_id below is their one shared normalization seam).
+  # — title, representative point, place types, time periods. Pleiades is
+  # registered as a feature module whose canonical asset is the numbered
+  # quarterly archival release (Zenodo 4.1, 2025-05-28); this class parses
+  # that dump directly (the v1 path). Since P45-6 the dump is ALSO projected
+  # into the derived catalog place index at sync/rebuild time
+  # (Store::PlaceIndex, migration 021) and .load_default prefers it — the
+  # in-memory load below survives as the derivation input and the honest
+  # fallback while the index is not yet derived. Consumed since P44-2 by the
+  # place desk (`nabu place`, Query::Place) and the `nabu show` findspot
+  # line (Query::Show), joining on the uniform place.pleiades id the
+  # epigraphic parsers capture (isicily/edh/iip/itant — .ref_id below is
+  # their one shared normalization seam).
   #
   # == The dump shape (honest about what is verifiable offline)
   #
@@ -79,16 +82,32 @@ module Nabu
     DUMP_BASENAMES = ["pleiades-places.json.gz", "pleiades-places.json"].freeze
     private_constant :DUMP_BASENAMES
 
-    # Feature-detect the resolver from the owner's canonical tree (the
-    # `nabu place`/findspot auto-load): nil when `nabu sync pleiades` has not
-    # landed the dump, so a corpus without the gazetteer behaves
-    # byte-identically (the Lila.load_default shape). NOTE the cost datum
-    # (owner-verified on the real 42,242-place dump): ~3 s and ~3.9 GB peak
-    # RSS per load — callers load lazily, once per process, and only when a
-    # captured id actually needs resolving.
-    def self.load_default(config: Nabu::Config.load)
-      dir = File.join(config.canonical_dir, "pleiades")
-      path = DUMP_BASENAMES.map { |name| File.join(dir, name) }.find { |candidate| File.file?(candidate) }
+    # The synced dump file under +dir+ (canonical/pleiades), or nil — shared
+    # by load_default and the Store::PlaceIndex::Producer derivation seam.
+    def self.dump_path(dir)
+      DUMP_BASENAMES.map { |name| File.join(dir, name) }.find { |candidate| File.file?(candidate) }
+    end
+
+    # Feature-detect the resolver (the `nabu place`/findspot auto-load),
+    # fastest honest path first (P45-6):
+    #
+    # 1. a POPULATED derived place index in +catalog+ → the instant
+    #    Store::PlaceIndex::Resolver (same read surface, no JSON parse);
+    # 2. else the synced canonical dump → the v1 in-memory load (owner-
+    #    verified cost on the real 42,242-place dump: ~3 s / ~3.9 GB peak
+    #    RSS — the state between landing the dump and the sync/rebuild that
+    #    derives the index);
+    # 3. else nil, so a corpus without the gazetteer behaves byte-identically
+    #    (the Lila.load_default shape).
+    #
+    # +catalog+ nil (a caller with no db handle) skips straight to 2 —
+    # pre-P45-6 behavior, unchanged.
+    def self.load_default(config: nil, catalog: nil)
+      index = catalog && Store::PlaceIndex.resolver(catalog)
+      return index if index
+
+      config ||= Nabu::Config.load
+      path = dump_path(File.join(config.canonical_dir, "pleiades"))
       path && load(path)
     end
 
@@ -165,6 +184,28 @@ module Nabu
     end
     private_class_method :time_periods
 
+    # The one exact-match relation, shared verbatim by this in-memory
+    # resolver and the derived SQLite index (P45-6) so the two paths cannot
+    # diverge. name_key is Unicode full case folding — the String#casecmp?
+    # relation ("equal after Unicode case folding") made storable; folding
+    # in Ruby, never SQL, because SQLite's lower() is ASCII-only.
+    def self.name_key(name)
+      name.to_s.downcase(:fold)
+    end
+
+    # Every key under which +title+ is an exact match: the whole title, plus
+    # — variant-aware, the P44-3 live finding — each "/"-separated segment
+    # (stripped) when Pleiades joined name variants into one compound title
+    # ("Segesta/Egesta"). Space-separated words are NOT variants ("Segesta
+    # Tigulliorum" only matches whole). Zero fuzz, by design.
+    def self.title_keys(title)
+      return [] if title.nil?
+
+      keys = [name_key(title)]
+      keys.concat(title.split("/").map { |segment| name_key(segment.strip) }) if title.include?("/")
+      keys.uniq
+    end
+
     def initialize(by_id)
       @by_id = by_id
     end
@@ -180,21 +221,16 @@ module Nabu
     # fuzz (out by design); homonym titles return every bearer, dump order.
     # A linear scan over ~42k places is microseconds next to the load.
     def titled(name)
-      @by_id.each_value.select { |place| title_matches?(place.title, name) }
+      key = self.class.name_key(name)
+      @by_id.each_value.select { |place| self.class.title_keys(place.title).include?(key) }
     end
 
-    # Exact, case-insensitive, zero fuzz — but variant-aware (P44-3 live
-    # finding): Pleiades joins name variants with "/" in one title
-    # ("Segesta/Egesta"), so each slash-separated segment is itself an exact
-    # variant name. Space-separated words are NOT variants ("Segesta
-    # Tigulliorum" only matches whole).
-    def title_matches?(title, name)
-      return false if title.nil?
-      return true if title.casecmp?(name)
+    # Every place, dump order (the Store::PlaceIndex derivation input).
+    def each_place(&block)
+      return enum_for(:each_place) { @by_id.size } unless block
 
-      title.include?("/") && title.split("/").any? { |segment| segment.strip.casecmp?(name) }
+      @by_id.each_value(&block)
     end
-    private :title_matches?
 
     # How many places the dump carried.
     def size

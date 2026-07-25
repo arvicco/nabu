@@ -84,14 +84,18 @@ module Nabu
     # +enrichments+ (P44-7) is the enrichment producer's census Result for an
     # enrichment_producer? source (pedecerto's meter scansions re-derived into
     # the enrichments table after the load); nil for every other source.
+    # +place_index+ (P45-6) is the Store::PlaceIndex::Producer::Census for a
+    # place_index_producer? source (pleiades: the gazetteer dump re-derived
+    # into the catalog place index after the load); nil for every other
+    # source, and nil for a pleiades parse-only sync before the first fetch.
     # +analyzed+ (P42-4) is the Store::AnalyzeReport of the post-load
     # planner-stats refresh when the load was bulk (see ANALYZE_MIN_CHANGED_ROWS);
     # nil when the load was sub-threshold (the common re-sync) or on an aborted
     # run — the CLI's report line stays silent then.
     Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings,
-                          :discovery, :references, :enrichments, :analyzed) do
+                          :discovery, :references, :enrichments, :place_index, :analyzed) do
       def initialize(slug:, fetch_report:, load_report:, breaker:, indexed:, warnings:,
-                     discovery:, references: nil, enrichments: nil, analyzed: nil)
+                     discovery:, references: nil, enrichments: nil, place_index: nil, analyzed: nil)
         super
       end
 
@@ -209,6 +213,7 @@ module Nabu
                   warnings: warnings, discovery: discovery,
                   references: refresh_references(entry),
                   enrichments: refresh_enrichments(entry),
+                  place_index: refresh_place_index(entry),
                   analyzed: analyze_after_load(load_report, adapter))
     end
 
@@ -284,6 +289,18 @@ module Nabu
       return nil unless entry.adapter_class.enrichment_producer?
 
       entry.adapter_class.enrichment_producer(catalog: @db)
+           .run(entry.slug, workdir: workdir_for(entry.slug))
+    end
+
+    # P45-6: after a place_index_producer? source syncs, re-derive the catalog
+    # place index from the dump it just landed — a pure function of canonical
+    # bytes, superseded wholesale per run (Store::PlaceIndex.derive!), so
+    # reads never pay the per-invocation dump load again. A parse-only sync
+    # before the first fetch is the honest no-op (Census nil).
+    def refresh_place_index(entry)
+      return nil unless entry.adapter_class.place_index_producer?
+
+      entry.adapter_class.place_index_producer(catalog: @db)
            .run(entry.slug, workdir: workdir_for(entry.slug))
     end
 

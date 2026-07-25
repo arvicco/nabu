@@ -102,13 +102,14 @@ module Nabu
         def initialize(timeline: nil, credit: nil, **) = super
       end
 
-      # +pleiades+ (P44-2): nil (default — note_shelf/mcp callers stay
-      # byte-identical), a loaded Nabu::Pleiades resolver (tests), or :auto —
-      # the CLI's setting, which feature-detects the canonical dump LAZILY:
-      # nothing loads until a shown document actually carries a captured
-      # $.place.pleiades id, and then once per Show instance (~3 s /
-      # ~3.9 GB peak RSS on the real dump — the P44-2 design datum, the
-      # accepted v1 cost of dumping-without-an-index).
+      # +pleiades+ (P44-2): nil (default — note_shelf callers stay
+      # byte-identical), a loaded resolver (tests), or :auto — the CLI/MCP
+      # setting, which feature-detects LAZILY: nothing resolves until a
+      # shown document actually carries a captured $.place.pleiades id, and
+      # then once per Show instance. Since P45-6 :auto prefers the derived
+      # catalog place index (instant reads), paying the in-memory dump load
+      # (~3 s / ~3.9 GB peak RSS on the real dump) only while the index is
+      # not yet derived.
       def initialize(catalog:, pleiades: nil)
         @catalog = catalog
         @pleiades = pleiades
@@ -341,13 +342,14 @@ module Nabu
         nil
       end
 
-      # Feature-detect + memoize the resolver (initialize note). :auto loads
-      # it from canonical/pleiades; an absent dump is nil, and the load only
-      # ever happens when a captured id needs resolving.
+      # Feature-detect + memoize the resolver (initialize note). :auto
+      # prefers the catalog's derived place index (P45-6), else loads the
+      # canonical dump; neither present is nil, and resolution only ever
+      # happens when a captured id needs it.
       def pleiades
         return @pleiades unless @pleiades == :auto
 
-        @pleiades = Nabu::Pleiades.load_default
+        @pleiades = Nabu::Pleiades.load_default(catalog: @catalog)
       end
 
       # The document's facet rows (P17-2), [] when unfaceted or when the

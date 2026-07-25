@@ -23,15 +23,17 @@ module Nabu
     # capture). ASCII case folding only (SQLite lower()); a name that
     # differs only in non-ASCII case is missed rather than fuzzed.
     #
-    # == The resolver cost (the design datum)
+    # == The resolver (v2: the derived index, P45-6)
     #
-    # +pleiades+ is the loaded Nabu::Pleiades resolver or nil (dump not
-    # synced — the CLI feature-detects via Pleiades.load_default, ~3 s /
-    # ~3.9 GB peak RSS on the real 42,242-place dump, paid once per
-    # invocation; accepted for v1 over a derived index, which would need
-    # its own rebuild story). Without it, an id query still counts
-    # holdings (the catalog side needs no dump); a name query is refused
-    # with the sync hint.
+    # +pleiades+ is a place resolver — the Store::PlaceIndex::Resolver over
+    # the derived catalog place index (instant; what Pleiades.load_default
+    # hands back once a sync/rebuild has derived it), the in-memory
+    # Nabu::Pleiades dump load (~3 s / ~3.9 GB peak RSS on the real
+    # 42,242-place dump — the honest fallback while the index is underived),
+    # or nil (dump not synced). Both resolvers share the exact matching
+    # semantics (Pleiades.title_keys). Without one, an id query still counts
+    # holdings (the catalog side needs no gazetteer); a name query is
+    # refused with the sync hint.
     class Place
       class Error < Nabu::Error; end
 

@@ -319,6 +319,7 @@ end
 require_relative "store/ledger"
 require_relative "store/links_journal"
 require_relative "store/source_stats"
+require_relative "store/place_index"
 require_relative "store/loader"
 require_relative "store/dictionary_loader"
 require_relative "store/language_dossier_loader"

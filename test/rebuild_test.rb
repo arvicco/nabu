@@ -83,6 +83,32 @@ class RebuildTest < Minitest::Test
     end
   end
 
+  # -- place index re-derivation (P45-6) ------------------------------------
+
+  # The derived Pleiades place index is f(canonical dump): a rebuild must
+  # regenerate it into the fresh catalog from canonical/pleiades bytes alone,
+  # exactly like source_stats — the rebuildability invariant.
+  def test_rebuild_derives_the_place_index_from_the_canonical_dump
+    write_sources(<<~YAML)
+      pleiades:
+        adapter: Nabu::Adapters::Pleiades
+        kind: module
+        wired: false
+        sync_policy: manual
+    YAML
+    write_canonical("pleiades",
+                    "pleiades-places.json" => File.read(File.join(Nabu::TestSupport.fixtures("pleiades"),
+                                                                  "dump.json")))
+
+    rebuilder.run
+
+    with_db do |db|
+      resolver = Nabu::Store::PlaceIndex.resolver(db) || flunk("rebuild left the place index underived")
+      assert_equal 2, resolver.size
+      assert_equal "Sparta", resolver.place("570685").title
+    end
+  end
+
   # -- post-load ANALYZE (P42-4) --------------------------------------------
 
   # A full rebuild leaves a fresh db with NO planner statistics; it must
