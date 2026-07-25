@@ -313,7 +313,7 @@ $ bin/nabu list corph --documents --limit 10
 ```
 
 **Working by research desk.** The flat source list is also tagged into
-eighteen [research axes]({{ '/axis/' | relative_url }}) — the owner's
+twenty-one [research axes]({{ '/axis/' | relative_url }}) — the owner's
 scholarly desks (the Classicist, the Assyriologist, the Sinologist…). A
 source wears every desk it serves, and four surfaces read those tags:
 `nabu list --axis NAME` groups the census under a desk, `nabu search --axis

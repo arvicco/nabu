@@ -34,7 +34,7 @@ draws from.
 
 ## Find your desk
 
-The collection is organized as eighteen **research desks** — scholarly hats,
+The collection is organized as twenty-one **research desks** — scholarly hats,
 each gathering the shelves, instruments and terminal setup for one tradition.
 Find yours:
 
@@ -63,8 +63,8 @@ with every desk's member shelves and recipes, is
 
 ## The holdings, in brief
 
-As of **23 July 2026**, the catalog records **810,180 documents** comprising
-**62,789,087 passages** in 110 language codes — from proto-cuneiform
+As of **25 July 2026**, the catalog records **813,257 documents** comprising
+**65,130,037 passages** in 115 language codes — from proto-cuneiform
 tablets of the late fourth millennium BCE to Meiji-era Japanese. The
 newest arrival more than doubled the library in a single day: the
 Arabic phase — OpenITI, the premodern Islamicate library, with its
