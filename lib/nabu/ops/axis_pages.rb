@@ -30,7 +30,8 @@ module Nabu
       Result = Data.define(:path, :axis)
 
       WORD_NUMBERS = %w[zero one two three four five six seven eight nine ten eleven twelve
-                        thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty].freeze
+                        thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty
+                        twenty-one twenty-two twenty-three twenty-four twenty-five].freeze
 
       # The footnote line rendered ONLY on axis pages with ≥1 blocked member
       # (P44-r3a): grant-gated private research materials are excluded from the
