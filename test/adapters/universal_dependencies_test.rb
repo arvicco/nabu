@@ -33,7 +33,9 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50",
     "urn:nabu:ud:icelandic-icepahc:is_icepahc-ud-dev-head50",
     "urn:nabu:ud:latin-ittb:la_ittb-ud-test-head50+mwt",
+    "urn:nabu:ud:latin-llct:la_llct-ud-test-head50",
     "urn:nabu:ud:latin-perseus:la_perseus-ud-test-head50",
+    "urn:nabu:ud:latin-udante:la_udante-ud-test-head50",
     "urn:nabu:ud:middle-french-profiterole:frm_profiterole-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50",
     "urn:nabu:ud:old-east-slavic-rnc:orv_rnc-ud-test-head50",
@@ -43,6 +45,7 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:old-irish-dipwbg:sga_dipwbg-ud-test",
     "urn:nabu:ud:ottoman-boun:ota_boun-ud-test-head50",
     "urn:nabu:ud:ottoman-dudu:ota_dudu-ud-test-head50",
+    "urn:nabu:ud:romanian-nonstandard:ro_nonstandard-ud-test-head50",
     "urn:nabu:ud:sanskrit-vedic:sa_vedic-ud-test-head50"
   ].freeze
 
@@ -286,6 +289,125 @@ class UniversalDependenciesTest < Minitest::Test
     assert hbo.text.valid_encoding?, "hbo text must be well-formed UTF-8"
   end
 
+  # --- registration + license pins (P45-1, the Romance pack) ---------------
+  #
+  # The three treebanks of the Romance pack (licenses read verbatim from each
+  # repo's LICENSE.txt/README on 2026-07-25): two new Latin lanes — LLCT (Late
+  # Latin charters, Tuscany AD 774–897) and UDante (Dante's literary Medieval
+  # Latin) — and the library's first ro lane (UAIC-RoDia Old Romanian /
+  # nonstandard registers, Alba Iulia New Testament 1648 &c under UD's one
+  # modern `ro` tag — the IcePaHC/RNC diachronic honesty). The fourth Romance
+  # survey candidate, Old French PROFITEROLE, landed at P43-1 already (its
+  # license fork is thread №43-1) — pinned above, not re-registered here.
+  # NB: UDante's grant CONFLICTS (LICENSE.txt BY-SA 4.0 vs README BY-NC-SA
+  # 3.0) — the PROFITEROLE fork shape exactly, conservative nc ruling.
+  P45_WAVE = {
+    "latin-llct" => %w[UD_Latin-LLCT lat attribution],
+    "latin-udante" => %w[UD_Latin-UDante lat nc],
+    "romanian-nonstandard" => %w[UD_Romanian-Nonstandard ro attribution]
+  }.freeze
+
+  P45_LICENSE_STRINGS = {
+    "latin-llct" => "CC BY-SA 4.0",
+    "latin-udante" => "CC BY-NC-SA 3.0",
+    "romanian-nonstandard" => "CC BY-SA 4.0"
+  }.freeze
+
+  def test_p45_wave_registers_repo_language_license_class_and_string
+    treebanks = Nabu::Adapters::UniversalDependencies::TREEBANKS
+    P45_WAVE.each do |slug, (repo, language, license_class)|
+      entry = treebanks.fetch(slug)
+      assert_equal "https://github.com/UniversalDependencies/#{repo}", entry[:repo], slug
+      assert_equal language, entry[:language], slug
+      assert_equal license_class, entry[:license_class], slug
+      assert_equal P45_LICENSE_STRINGS.fetch(slug), entry[:license], slug
+    end
+  end
+
+  # Round-trip each Romance-pack fixture: 50 sentence blocks, the declared
+  # language, the opening passage urn (sent_id verbatim) and a distinctive real
+  # token; the license_class rides through parse to Document#license_override.
+  # UDante's head-50 carries 7 MWT range lines (first: `2-3 quare` → qua + re,
+  # sent DVE-19) — the ITTB essetque machinery on a third Latin treebank.
+  P45_OPENERS = {
+    "latin-llct" => %w[test-s1 Karolus],
+    "latin-udante" => %w[DVE-1 eloquentie],
+    "romanian-nonstandard" => %w[test-1 LEAGEA]
+  }.freeze
+
+  def test_p45_wave_round_trips_each_fixture
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    by_slug = adapter.discover(FIXTURES)
+                     .select { |ref| P45_WAVE.key?(ref.metadata["treebank"]) }
+                     .to_h { |ref| [ref.metadata["treebank"], adapter.parse(ref)] }
+
+    P45_WAVE.each do |slug, (_repo, language, license_class)|
+      document = by_slug.fetch(slug)
+      assert_equal 50, document.size, "#{slug} must parse 50 sentence blocks"
+      assert_equal language, document.language, slug
+      assert_equal license_class, document.license_override, slug
+    end
+
+    P45_OPENERS.each do |slug, (sent_id, token)|
+      opening = by_slug.fetch(slug).passages.first
+      assert_equal "#{by_slug.fetch(slug).urn}:#{sent_id}", opening.urn, slug
+      assert_includes opening.text, token, slug
+    end
+
+    # The first MWT sentence of UDante's head-50 must parse (2-3 quare).
+    mwt = by_slug.fetch("latin-udante").passages.find { |p| p.urn.end_with?(":DVE-19") }
+    refute_nil mwt, "the first MWT sentence of the UDante head-50 must parse"
+
+    # The SOURCE class is unchanged — the most-restrictive present stays nc.
+    assert_equal "nc", Nabu::Adapters::UniversalDependencies.manifest.license_class
+  end
+
+  # The Romance pack flows through the same unchanged annotation→index
+  # plumbing: the two Latin treebanks contribute rows to the ALREADY
+  # lemma-indexed lat lane (filtered by urn — latin-ittb/latin-perseus also
+  # populate lat), and `ro` becomes a lemma-indexed language (its first
+  # occupant; no other source mints ro today).
+  def test_fixture_load_produces_p45_lemma_rows_via_existing_plumbing
+    catalog = store_test_db
+    fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+    source = Nabu::Store::Source.create(
+      slug: "ud", name: "Universal Dependencies",
+      adapter_class: "Nabu::Adapters::UniversalDependencies", license_class: "nc"
+    )
+    Nabu::Store::Loader.new(db: catalog, source: source)
+                       .load_from(conformance_adapter, workdir: FIXTURES, full: true)
+    Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
+
+    lemmas = fulltext[:passage_lemmas]
+
+    # LLCT: the imperial dating clause of the opening charter — Karolus
+    # (Charlemagne), lemmatized to the classicizing Carolus (the charters'
+    # non-standard spelling is the corpus's whole point, kept verbatim in the
+    # surface form).
+    llct_urn = "urn:nabu:ud:latin-llct:la_llct-ud-test-head50:test-s1"
+    llct_row = lemmas.where(language: "lat", urn: llct_urn, lemma_raw: "Carolus").first
+    refute_nil llct_row, "expected a passage_lemmas row for the lat lemma Carolus"
+    assert_includes llct_row[:surface_forms], "Karolus"
+
+    # UDante: De vulgari eloquentia's opening sentence — eloquentia, attested
+    # by the medieval-orthography genitive eloquentie.
+    udante_urn = "urn:nabu:ud:latin-udante:la_udante-ud-test-head50:DVE-1"
+    udante_row = lemmas.where(language: "lat", urn: udante_urn, lemma_raw: "eloquentia").first
+    refute_nil udante_row, "expected a passage_lemmas row for the lat lemma eloquentia"
+    assert_includes udante_row[:surface_forms], "eloquentie"
+
+    # Romanian: the Alba Iulia New Testament title page — lege "law", attested
+    # by the 1648 title-case form LEAGEA.
+    assert_operator lemmas.where(language: "ro").count, :>, 0,
+                    "the Romanian treebank must contribute passage_lemmas rows"
+    ro_urn = "urn:nabu:ud:romanian-nonstandard:ro_nonstandard-ud-test-head50:test-1"
+    ro_row = lemmas.where(language: "ro", urn: ro_urn, lemma_raw: "lege").first
+    refute_nil ro_row, "expected a passage_lemmas row for the ro lemma lege"
+    assert_includes ro_row[:surface_forms], "LEAGEA"
+  ensure
+    fulltext&.disconnect
+  end
+
   # The first `# text = …` comment of a treebank's fixture file, verbatim
   # (used to pin the hbo byte-honesty assertion against upstream bytes).
   def first_source_text(slug)
@@ -365,7 +487,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_twenty_seven_files_sorted_by_urn
+  def test_discover_finds_exactly_thirty_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
@@ -395,7 +517,10 @@ class UniversalDependenciesTest < Minitest::Test
       "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50" => "hit",
       "urn:nabu:ud:icelandic-icepahc:is_icepahc-ud-dev-head50" => "is",
       "urn:nabu:ud:latin-ittb:la_ittb-ud-test-head50+mwt" => "lat",
+      "urn:nabu:ud:latin-llct:la_llct-ud-test-head50" => "lat",
       "urn:nabu:ud:latin-perseus:la_perseus-ud-test-head50" => "lat",
+      "urn:nabu:ud:latin-udante:la_udante-ud-test-head50" => "lat",
+      "urn:nabu:ud:romanian-nonstandard:ro_nonstandard-ud-test-head50" => "ro",
       "urn:nabu:ud:old-east-slavic-birchbark:orv_birchbark-ud-test-head50" => "orv",
       "urn:nabu:ud:old-east-slavic-rnc:orv_rnc-ud-test-head50" => "orv",
       "urn:nabu:ud:old-east-slavic-ruthenian:orv_ruthenian-ud-test-head50" => "orv",
@@ -733,13 +858,14 @@ class UniversalDependenciesTest < Minitest::Test
       adapter.fetch(workdir)
 
       # First repo gains a file; the LAST SIX repos each lose their only
-      # treebank file (6 of #{slugs.size} ingestible files = 23.1% > 20% →
-      # trip; 6 is now the MINIMUM tripping count at twenty-six treebanks —
-      # five deletions are 5/#{slugs.size} = 19.2%, BELOW the breaker
+      # treebank file (6 of #{slugs.size} ingestible files = 20.7% > 20% →
+      # trip; 6 is STILL the minimum tripping count at twenty-nine treebanks
+      # — five deletions are 5/#{slugs.size} = 17.2%, BELOW the breaker
       # (the guard trips on strictly greater, `doomed > 0.2 × ingestible`),
-      # so 5 does NOT trip now that the P43-1 historical wave grew the set to
-      # twenty-six. Re-derived, not weakened: 6 > 0.2 × 26 = 5.2 holds;
-      # 5 > 5.2 does not).
+      # so 5 does NOT trip now that the P45-1 Romance pack grew the set to
+      # twenty-nine. Re-derived, not weakened: 6 > 0.2 × 29 = 5.8 holds —
+      # just barely; a THIRTIETH treebank pushes the minimum to 7 —
+      # 5 > 5.8 does not).
       first = slugs.first
       doomed = slugs.last(6)
       File.write(File.join(upstreams[first], "new.txt"), "new\n")
