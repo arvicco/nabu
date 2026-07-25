@@ -18,6 +18,9 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
   `middle-french-profiterole`, `ottoman-boun`, `ottoman-dudu`, `greek-ptnk`,
   `hebrew-ptnk`, `akkadian-riao`, `akkadian-pisandub`, `coptic-bohairic`,
   `egyptian-pc` — all from `master` via `raw.githubusercontent.com`.
+  **2026-07-25** for the THREE Romance-pack treebanks (packet P45-1):
+  `latin-llct`, `latin-udante`, `romanian-nonstandard` — all from `master`
+  via `raw.githubusercontent.com`.
 - **Acquisition plan** approved by owner 2026-07-03 (dev-loop §8; packet P3-1);
   the first two OES treebanks added under packet P10-2 (survey pick #1,
   `.docs/surveys/slavic-survey.md` §1); the Ruthenian treebank under packet P13-1b
@@ -59,6 +62,9 @@ Real upstream samples from Universal Dependencies ancient-language treebanks
 | `akkadian-pisandub/akk_pisandub-ud-test-head50.conllu` | `UD_Akkadian-PISANDUB/master/akk_pisandub-ud-test.conllu` | 101,792 | 43,648 | 50 |
 | `coptic-bohairic/cop_bohairic-ud-test-head50.conllu` | `UD_Coptic-Bohairic/master/cop_bohairic-ud-test.conllu` | 1,100,840 | 139,571 | 50 |
 | `egyptian-pc/egy_pc-ud-test-head50.conllu` | `UD_Egyptian-PC/master/egy_pc-ud-test.conllu` | 1,568,610 | 53,403 | 50 |
+| `latin-llct/la_llct-ud-test-head50.conllu` | `UD_Latin-LLCT/master/la_llct-ud-test.conllu` | 2,345,127 | 163,620 | 50 |
+| `latin-udante/la_udante-ud-test-head50.conllu` | `UD_Latin-UDante/master/la_udante-ud-test.conllu` | 1,319,582 | 176,683 | 50 |
+| `romanian-nonstandard/ro_nonstandard-ud-test-head50.conllu` | `UD_Romanian-Nonstandard/master/ro_nonstandard-ud-test.conllu` | 1,904,846 | 199,466 | 50 |
 
 (All URLs prefixed `https://raw.githubusercontent.com/UniversalDependencies/`.)
 
@@ -301,6 +307,64 @@ attribution cases) — a small departure from the legacy bare-nc idiom, because
 these are real per-treebank grants worth recording verbatim; the nc entries'
 documents therefore carry `license_override = "nc"` (redundant with, never
 looser than, the source class).
+
+### Romance-pack trim note (P45-1, 2026-07-25)
+
+The three Romance-pack fixtures are each the plain **first 50 complete sentence
+blocks** of their upstream `*-ud-test.conllu`, retrieved from `master`. All
+comment lines inside the head are kept verbatim. Notable per-treebank shapes:
+
+- **`latin-llct` (lat)** — Late Latin Charter Treebank (LLCT2): Tuscan
+  charters AD 774–897, documentary non-standard Latin. Each block carries a
+  `# reference = document_id='…'-span='…'` comment (the ChLA charter/sentence
+  citation) the parser ignores. The head opens on an imperial dating clause
+  (`Karolus` — Charlemagne — lemmatized to the classicizing `Carolus`; the
+  non-standard surface spellings are the corpus's point and stay verbatim).
+  2 MWT range lines file-wide, NONE inside the head; no empty nodes.
+- **`latin-udante` (lat)** — Dante's literary Medieval Latin; the whole test
+  split is *De vulgari eloquentia* (sent_ids `DVE-…`), with
+  `# citation_hierarchy` comments per block. 7 MWT range lines inside the
+  head (first: `2-3 quare` → `qua` + `re`, sent `DVE-19` — the ITTB
+  `essetque` machinery on a third Latin treebank); no empty nodes.
+- **`romanian-nonstandard` (ro)** — the Alba Iulia New Testament (1648)
+  opens the test split (one `# newdoc id = New Testament 1648 Alba Iulia
+  Gospel-1-900` inside the head). QUIRKS kept verbatim: the file's very
+  first line is a **bare no-`=` comment** `# ro_nonstandard-ud-test` (the
+  TueCL shape), and blocks carry `# citation-part=…` comments (no spaces
+  around `=`) — both ride through ignored (only `sent_id`/`text`/`source`
+  are interpreted). No MWT/empty-node lines in the head. The register is
+  Old/pre-modern Romanian under UD's one modern `ro` tag — the
+  RNC-under-orv/IcePaHC-under-`is` diachronic honesty (recorded on the
+  adapter's TREEBANKS entry).
+
+### Romance-pack licenses (P45-1, read verbatim 2026-07-25)
+
+- **UD_Latin-LLCT** — **CC BY-SA 4.0**. `LICENSE.txt`, quoted verbatim:
+  > The treebank is licensed under the Creative Commons License Attribution-ShareAlike 4.0 International.
+  >
+  > The complete license text is available at:
+  > http://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+  and `README.md` machine-readable metadata: `License: CC BY-SA 4.0`.
+  Consistent → license class `attribution` via the P10-4 per-document
+  `license_override`.
+- **UD_Latin-UDante** — **CONFLICTING GRANTS, the PROFITEROLE fork shape**:
+  `LICENSE.txt` carries the same verbatim BY-SA 4.0 grant as LLCT (byte-for-
+  byte the "Attribution-ShareAlike 4.0 International" text above), **but**
+  the README says NonCommercial TWICE — prose: "The treebank is licensed
+  under the terms of [CC BY-NC-SA 3.0](http://creativecommons.org/licenses/by-nc-sa/3.0/)",
+  and machine-readable metadata: `License: CC BY-NC-SA 3.0`. A substantive
+  attribution-vs-NC fork, not a version slip. Conservative ruling: the
+  NonCommercial reading controls (treating BY-SA data as NC can never
+  over-share; the reverse could) → **nc** (explicit override), pending
+  upstream clarification — re-read at the next fixture refresh, never from
+  memory. (The Kyoto LICENSE.txt-is-authoritative precedent does NOT apply:
+  there the README side was LESS restrictive (`PD`), so LICENSE.txt was
+  itself the conservative reading.)
+- **UD_Romanian-Nonstandard** — **CC BY-SA 4.0**. `LICENSE.txt` is verbatim
+  the same BY-SA 4.0 grant as LLCT's, and `README.md` machine-readable
+  metadata agrees: `License: CC BY-SA 4.0`. Consistent → license class
+  `attribution` via the P10-4 per-document `license_override`.
 
 ### Latin-ITTB multiword-token (MWT) rule
 
