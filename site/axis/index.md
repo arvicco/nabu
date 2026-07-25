@@ -40,9 +40,9 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 ### romance
 
-> The Romanist — the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours.
+> The Romanist — Latin's daughters read in their own right, the Serments to Villon.
 
-The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
+The medieval Romance vernaculars: the Base de français médiéval's 219 Old and Middle French texts (BFM2022) — the first registrant; the Occitan, Italian and Iberian shelves as they arrive.
 
 [Open the romance desk]({{ '/axis/romance/' | relative_url }})
 

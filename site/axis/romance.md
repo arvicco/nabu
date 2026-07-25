@@ -5,9 +5,9 @@ description: >-
   The Romanist's desk: its shelves, instruments, CLI recipes and terminal setup.
 ---
 
-> The Romanist — the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours.
+> The Romanist — Latin's daughters read in their own right, the Serments to Villon.
 
-The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
+The medieval Romance vernaculars: the Base de français médiéval's 219 Old and Middle French texts (BFM2022) — the first registrant; the Occitan, Italian and Iberian shelves as they arrive.
 
 The desk opens with **CroALa** (`croala`) — Croatian Latin from a 976 CE
 charter through the neo-Latin centuries, the continuum's Latin side
@@ -19,7 +19,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
@@ -27,6 +27,7 @@ A source wears every desk it serves — these four answer this desk. Holdings ar
 | `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
 | `digiliblt` | texts | attribution | not yet wired | not synced yet |
 | `openmgh` | texts | attribution | not yet wired | not synced yet |
+| `bfm` | texts | attribution | not yet wired | not synced yet |
 
 ## The desk's instruments
 
