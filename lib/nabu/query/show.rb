@@ -326,12 +326,16 @@ module Nabu
       end
 
       # The parse-captured $.place.pleiades id out of documents.metadata_json
-      # (the P44-2 cross-source key), nil on absence or unreadable JSON.
+      # (the P44-2 cross-source key), nil on absence or unreadable JSON. The
+      # place key is not shape-owned by the epigraphy sources — croala mints
+      # "place":"Split" (a plain teiHeader string) — so anything but the
+      # {"pleiades" => id} hash is simply not a captured id (P44-i4).
       def captured_place_id(json)
         return nil if json.nil? || json.empty?
 
         parsed = JSON.parse(json)
-        id = parsed.is_a?(Hash) ? parsed.dig("place", "pleiades") : nil
+        place = parsed.is_a?(Hash) ? parsed["place"] : nil
+        id = place.is_a?(Hash) ? place["pleiades"] : nil
         id.is_a?(String) && !id.empty? ? id : nil
       rescue JSON::ParserError
         nil

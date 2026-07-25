@@ -161,6 +161,29 @@ module Query
       assert_nil show.run("urn:d:p2").findspot, "an id the dump lacks stays silent, never invented"
     end
 
+    # P44-i4 (live, the owner's croala verification): the place metadata key
+    # is NOT owned by the epigraphy sources — croala mints "place":"Split"
+    # (the teiHeader creation place, a plain string) where isicily/edh/iip/
+    # itant mint "place":{"pleiades":…}. A string there crashed show
+    # (String#dig). Any non-hash place value is simply not a captured id.
+    def test_findspot_tolerates_a_plain_string_place_the_croala_shape
+      document = Nabu::Document.new(
+        urn: "urn:d:croala", language: "lat", title: "Inscriptio",
+        canonical_path: "/canonical/src/croala.xml",
+        metadata: { "author" => "Alberti, Janko", "place" => "Split" }
+      )
+      document << Nabu::Passage.new(
+        urn: "urn:d:croala:1", language: "lat", text: "salve",
+        text_normalized: "salve", sequence: 0
+      )
+      @loader.load([document], full: false)
+
+      show = Nabu::Query::Show.new(catalog: @catalog, pleiades: Nabu::Pleiades.load(PLEIADES_DUMP))
+      result = show.run("urn:d:croala:1")
+      refute_nil result, "show must not crash on a string place"
+      assert_nil result.findspot, "a prose place name is not a captured Pleiades id"
+    end
+
     # -- edges ---------------------------------------------------------------
 
     def test_unknown_urn_returns_nil
