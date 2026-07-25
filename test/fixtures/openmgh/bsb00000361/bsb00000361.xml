@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+	schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<teiCorpus xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>MGH DD Rudolf.: Die Urkunden der burgundischen Rudolfinger</title>
+        <editor>Schieffer, Theodor</editor>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Monumenta Germaniae Historica (MGH)</publisher>
+        <publisher>Bavarian State Library (BSB), München</publisher>
+        <idno type="BSB">bsb00000361</idno>
+        <idno type="MGH">MGH DD Rudolf.</idno>
+        <availability>
+          <licence target="http://creativecommons.org/licenses/by/4.0/">
+            <p>Distributed under the Creative Commons Attribution 4.0 International (CC BY 4.0) license.</p>
+            <p>This license covers the annotations added by the Monumenta Germaniae Historica and the
+            Bavarian State Library, Munich, in the course of project "digital MGH"
+            <ref target="http://www.dmgh.de">http://www.dmgh.de</ref>, funded by the
+            German Research Foundation (DFG).</p>
+            <p>We do not claim any rights on the text itself which is believed to be in the public domain.</p>
+            <p>If you distribute a copy or a derivative version of this file, please indicate the source
+            of the file by mentioning the Monumenta Germaniae Historica (MGH) and the
+            Bavarian State Library, Munich (BSB).</p>
+          </licence>
+        </availability>
+        <date when="2020-06-16T12:47:03+01:00">2020-06-16, 12:47:03</date>
+      </publicationStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title>Die Urkunden der burgundischen Rudolfinger</title>
+            <editor>Schieffer, Theodor</editor>
+          </titleStmt>
+          <publicationStmt>
+            <publisher>Monumenta Germaniae Historica</publisher>
+            <pubPlace>München</pubPlace>
+            <date>1977</date>
+          </publicationStmt>
+          <seriesStmt>
+            <title>Die Urkunden der burgundischen Rudolfinger</title>
+            </seriesStmt>
+        </biblFull>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <TEI>
+<teiHeader>
+              <fileDesc>
+                <titleStmt>
+                  <title>MGH D Rudolf. 1</title>
+                </titleStmt>
+                <publicationStmt>
+                  <distributor>digital MGH</distributor>
+                  <date when="2020-06-16T12:47:03+01:00">2020-06-16, 12:47:03</date>
+                </publicationStmt>
+                <sourceDesc>
+                  <bibl>
+                    <ref corresp="http://www.mgh.de/dmgh/diplomata/resolving/D_Rudolf._1"/>
+                    <idno type="charternum">1</idno>
+                    <date>878 März 25.</date>
+                  </bibl>
+                </sourceDesc>
+              </fileDesc>
+            </teiHeader>
+
+
+<text>
+<body>
+<div type="tenor"><ab>
+<pb xml:id="bsb00000361_00111" n="92"/><lb n="40" xml:id="bsb00000361_00111_40"/>Priscorum legum auctoritates sancserunt, ut qualiscumque persona res <w lemma="aecclaesiasticas" xml:id="w1" corresp="#w1 #w2">aec-</w>
+<lb n="41" xml:id="bsb00000361_00111_41"/><w lemma="aecclaesiasticas" xml:id="w2" corresp="#w1 #w2">claesiasticas</w> sub usu beneficii in suis necessitatibus procurandis vel adsequendis
+<lb n="42" xml:id="bsb00000361_00111_42"/>adquirere voluerit, sub ipsius munificencia, qui capud aeclesiae praeesse dinoscitur,
+<lb n="43" xml:id="bsb00000361_00111_43"/>in nomine prestariae sive libelli eas tenere sub censo usque decem et novem annis
+<lb n="44" xml:id="bsb00000361_00111_44"/>debeat atque his expletis aut ipsum libellum renovare studeat aut certe rector aeclesiae
+<lb n="45" xml:id="bsb00000361_00111_45"/>ipsas res in suo iure ac dominatione recipiat. Quapropter ego in dei nomine Rhodulfus
+<pb xml:id="bsb00000361_00112" n="93"/><lb n="1" xml:id="bsb00000361_00112_1"/>humilis comes nec non et monasterii sancti Mauricii Agaunensis abba: dum non est
+<lb n="2" xml:id="bsb00000361_00112_2"/>incognitum, quod in regno Tusciae villam nuncupantem Paterno et Aciano cum
+<lb n="3" xml:id="bsb00000361_00112_3"/>apendiciis suis rectores iam fati monasterii semper tenuerunt et nos adhuc tenere
+<lb n="4" xml:id="bsb00000361_00112_4"/>dinoscimur, et postea vos, illustrissima Ingelberga augusta, a nobis expetistis, ut
+<lb n="5" xml:id="bsb00000361_00112_5"/>ipsam villam cum omnibus ad se apendiciis pertinentibus in nomine libelli sive
+<lb n="6" xml:id="bsb00000361_00112_6"/>prestariae vobis concedere deberemus, quod ita in dei nomine et fecimus, una cum
+<lb n="7" xml:id="bsb00000361_00112_7"/>consensu omnium fratrum inc praefato monasterio domino militantium. Igitur,
+<lb n="8" xml:id="bsb00000361_00112_8"/>sicut superius diximus, petitionem vestram libenti animo consencientes has litteras
+<lb n="9" xml:id="bsb00000361_00112_9"/>libelli nos in vobis conscribere placuit, eo videlicet tenore, ut iam dictam villam cum
+<lb n="10" xml:id="bsb00000361_00112_10"/>omnibus appendiciis vel adiacendis suis diebus vitae vestrae ad meliorandum vel <w lemma="excolendum" xml:id="w3" corresp="#w3 #w4">ex-</w>
+<lb n="11" xml:id="bsb00000361_00112_11"/><w lemma="excolendum" xml:id="w4" corresp="#w3 #w4">colendum</w> in beneficium habere debeatis et annis singulis ad praefatum monasterium
+<lb n="12" xml:id="bsb00000361_00112_12"/>seu etiam ipsius monasterii rectoribus solidos XV in censum prosolvere debeatis. Si
+<lb n="13" xml:id="bsb00000361_00112_13"/>vero, quod absit, ex ipso censo neglegens fueritis aut reddere recusaveritis vel, quod
+<lb n="14" xml:id="bsb00000361_00112_14"/>non credimus, ipsas res pegeraveritis, auro libras XXV ad ipsum monasterium <w lemma="eiusque" xml:id="w5" corresp="#w5 #w6">eius-</w>
+<lb n="15" xml:id="bsb00000361_00112_15"/><w lemma="eiusque" xml:id="w6" corresp="#w5 #w6">que</w> rectoribus prosolvere debeatis; et aliubi ipsas res nec dare nec vendere nec
+<lb n="16" xml:id="bsb00000361_00112_16"/>alienare nec naufragare pontifitium non habeatis. Et quamvis longeva sit vestr
+<lb n="17" xml:id="bsb00000361_00112_17"/>possessio, nullum praeiudicium contra nos nec contra partem praedicti monasterii
+<lb n="18" xml:id="bsb00000361_00112_18"/>generare non debeatis, sed post vestrum discessum, quando quidem deus voluerit,
+<lb n="19" xml:id="bsb00000361_00112_19"/>ipsas res cum omni re melioratas aut supra positas nos aut egentes ipsius monasterii
+<lb n="20" xml:id="bsb00000361_00112_20"/>absque ulla iudiciaria potestate vel cuiuscumque contraditione recipere debeamus. Et
+<lb n="21" xml:id="bsb00000361_00112_21"/>quod supra inserere debuimus, nunc emendantes, annis singulis in luminaribus sancti
+<lb n="22" xml:id="bsb00000361_00112_22"/>Mauricii pro salute animae vestrae ad supra memoratum placitum oleo modium unum
+<lb n="23" xml:id="bsb00000361_00112_23"/>dare studeatis. Et insuper huius libelli conscripcio  vestro in tempore Christo propicio
+<lb n="24" xml:id="bsb00000361_00112_24"/>inviolabilem obteneat firmitatem cum stipulatione subnixa.
+<lb n="25" xml:id="bsb00000361_00112_25"/>Signum (M.) Rhodulfi comitis, qui huius libelli paginam firmavi atque canonicis
+<lb n="26" xml:id="bsb00000361_00112_26"/>monasterii nostri firmare rogavi.
+<lb n="27" xml:id="bsb00000361_00112_27"/>Erifredus diacanus atque prepositus consensi et subscripsi (Signum). <w lemma="Raganoldus" xml:id="w7" corresp="#w7 #w8">Raga-</w>
+<lb n="28" xml:id="bsb00000361_00112_28"/><w lemma="Raganoldus" xml:id="w8" corresp="#w7 #w8">noldus</w> concripsit et subscripsit (M.). Manno diaconus consensi et subscripsi <w lemma="Signum" xml:id="w9" corresp="#w9 #w10">(Sig-</w>
+<lb n="29" xml:id="bsb00000361_00112_29"/><w lemma="Signum" xml:id="w10" corresp="#w9 #w10">num)</w>. Ualtadus presbiter conscripsi et subscripsi (Signum). Nithpertus presbiter
+<lb n="30" xml:id="bsb00000361_00112_30"/>consensi et subscripsi (M.). Auuarnus levita consensi et subscripsi (M.). Dado <w lemma="presbiter" xml:id="w11" corresp="#w11 #w12">pres-</w>
+<lb n="31" xml:id="bsb00000361_00112_31"/><w lemma="presbiter" xml:id="w12" corresp="#w11 #w12">biter</w> consensi et subscripsi (Signum). Fredolus humilis presbiter consensi et <w lemma="cripci" xml:id="w13" corresp="#w13 #w14">sub(M.)-</w>
+<lb n="32" xml:id="bsb00000361_00112_32"/><w lemma="cripci" xml:id="w14" corresp="#w13 #w14">cripci</w>. Emmo diaconus consensi et subscripsi (M.). Gisulfus presbiter consensit
+<lb n="33" xml:id="bsb00000361_00112_33"/>et subscripsit (Signum). Baltherius presbiter consensi et subscripsi (Signum)
+               
+               . Giso
+<lb n="34" xml:id="bsb00000361_00112_34"/>diaconus consensi et subscripsi (Signum)
+               
+               . Lantfredus diaconus consensi et subscripsi
+<lb n="35" xml:id="bsb00000361_00112_35"/>, (Signum). Adalarus presbiter consensit et subscripsit (Signum). Autramnus <w lemma="presbiter" xml:id="w15" corresp="#w15 #w16">pres-</w>
+<lb n="36" xml:id="bsb00000361_00112_36"/><w lemma="presbiter" xml:id="w16" corresp="#w15 #w16">biter</w> consensi et subscripsi (M.). Uuanuigus presbiter consensi et subscripsi
+<lb n="37" xml:id="bsb00000361_00112_37"/>(Signum). Siuuenus presbiter consensi et subscripsi (Signum). Dodo clericus consensi
+<lb n="38" xml:id="bsb00000361_00112_38"/>et subscripsi (M.). Auto diaconus consensi et subscripsi (M.). Andreas diaconus <w lemma="consensi" xml:id="w17" corresp="#w17 #w18">con-</w>
+<pb xml:id="bsb00000361_00113" n="94"/><lb n="1" xml:id="bsb00000361_00113_1"/><w lemma="consensi" xml:id="w18" corresp="#w17 #w18">sensi</w> et subscripsi (M.). Achardus diaconus consensi et subscripsiv (Signum). <w lemma="Berengerius" xml:id="w19" corresp="#w19 #w20">Beren-</w>
+<lb n="2" xml:id="bsb00000361_00113_2"/><w lemma="Berengerius" xml:id="w20" corresp="#w19 #w20">gerius</w> presbiter consensi et subscripsi (Signum).
+<lb n="3" xml:id="bsb00000361_00113_3"/>(C.) In dei nomine Baltherius presbiter hunc libellum praestatorium ceu <w lemma="benificialem" xml:id="w21" corresp="#w21 #w22">beni-</w>
+<lb n="4" xml:id="bsb00000361_00113_4"/><w lemma="benificialem" xml:id="w22" corresp="#w21 #w22">ficialem</w> iubente domino ac seniori meo Rhodulfo iuniori quondam Bertoldo dictavi,
+<lb n="5" xml:id="bsb00000361_00113_5"/>et ego postmodum relegi atque superius subscripsi; datavi die martis, VIII kal.
+<lb n="6" xml:id="bsb00000361_00113_6"/>aprilis, anno siquidem incarnationis domini DCCCLXXVII, regnantibus domnis <w lemma="regilus" xml:id="w23" corresp="#w23 #w24">regi-</w>
+<lb n="7" xml:id="bsb00000361_00113_7"/><w lemma="regilus" xml:id="w24" corresp="#w23 #w24">lus</w> nostris Karlomanno, Hludouuico et Karolo, in indictione secunda; feliciter.
+</ab></div>
+</body>
+</text>
+</TEI>
+<TEI>
+<teiHeader>
+              <fileDesc>
+                <titleStmt>
+                  <title>MGH D Rudolf. 2</title>
+                </titleStmt>
+                <publicationStmt>
+                  <distributor>digital MGH</distributor>
+                  <date when="2020-06-16T12:47:03+01:00">2020-06-16, 12:47:03</date>
+                </publicationStmt>
+                <sourceDesc>
+                  <bibl>
+                    <ref corresp="http://www.mgh.de/dmgh/diplomata/resolving/D_Rudolf._2"/>
+                    <idno type="charternum">2</idno>
+                    <date>Saint-Prex (885) August 13.</date>
+                  </bibl>
+                </sourceDesc>
+              </fileDesc>
+            </teiHeader>
+
+
+<text>
+<body>
+<div type="tenor"><ab>
+<pb xml:id="bsb00000361_00114" n="95"/><lb n="5" xml:id="bsb00000361_00114_5"/>Noticia vestitoria, qualiter vel quibus presentibus bonis hominibus veniens
+<lb n="6" xml:id="bsb00000361_00114_6"/>donnus Ro0dulfus comes nec non etiam inclitus marchius ad ecclesiam almi <w lemma="Prothasii" xml:id="w25" corresp="#w25 #w26">Pro-</w>
+<lb n="7" xml:id="bsb00000361_00114_7"/><w lemma="Prothasii" xml:id="w26" corresp="#w25 #w26">thasii</w> revestivit amabili episcopo Hieronimo Lausonensis ecclesie una cum canonicis
+<lb n="8" xml:id="bsb00000361_00114_8"/>eiusdem ecclesie, qui ibidem aderant, invice Reginolfi de ipsa ecclesia, que diu fuerat
+<lb n="9" xml:id="bsb00000361_00114_9"/>subtracta a prefato loco, simul cum Draciaco villa omnibusque ibidem aspicientibus
+<lb n="10" xml:id="bsb00000361_00114_10"/>cum integritate ob remedium predicti Reginolfi, sicut in ipsa carta donationis <w lemma="continetur" xml:id="w27" corresp="#w27 #w28">contine-</w>
+<lb n="11" xml:id="bsb00000361_00114_11"/><w lemma="continetur" xml:id="w28" corresp="#w27 #w28">tur</w>, quam ei fecit propter remunerationem vite eterne et ut memoriale ipsius annis
+<lb n="12" xml:id="bsb00000361_00114_12"/>singulis specialiter ibi celebrent, sicut in prefata carta insertum est; et tam ipse
+<lb n="13" xml:id="bsb00000361_00114_13"/>pontifex quamve successores illius potestatem habeant faciendi ex hoc quod <w lemma="voluerint" xml:id="w29" corresp="#w29 #w30">vo-</w>
+<lb n="14" xml:id="bsb00000361_00114_14"/><w lemma="voluerint" xml:id="w30" corresp="#w29 #w30">luerint</w>, tam secundum deum quam secundum seculum, sicut ipsa carta loquitur. Et
+<lb n="15" xml:id="bsb00000361_00114_15"/>ut vigorem firmitatis per cuncta evi curricula obtinere queat, nomina illorum, qui
+<lb n="16" xml:id="bsb00000361_00114_16"/>presentes fuerunt, subter habentur inserta.
+<lb n="17" xml:id="bsb00000361_00114_17"/>Hec sunt acta in ipsa ecclesia id. aug. cum stipulatione subnixa. Ruodulfus
+<lb n="18" xml:id="bsb00000361_00114_18"/>comes, qui hanc noticiam consensit. Arismundo, Turinberto, Ransone, Itone, <w lemma="Folcrado" xml:id="w31" corresp="#w31 #w32">Folc-</w>
+<lb n="19" xml:id="bsb00000361_00114_19"/><w lemma="Folcrado" xml:id="w32" corresp="#w31 #w32">rado</w>, Ruodperto, Ameldrico, Leuprant.
+</ab></div>
+</body>
+</text>
+</TEI>
+<TEI>
+<teiHeader>
+              <fileDesc>
+                <titleStmt>
+                  <title>MGH D Rudolf. 3</title>
+                </titleStmt>
+                <publicationStmt>
+                  <distributor>digital MGH</distributor>
+                  <date when="2020-06-16T12:47:03+01:00">2020-06-16, 12:47:03</date>
+                </publicationStmt>
+                <sourceDesc>
+                  <bibl>
+                    <ref corresp="http://www.mgh.de/dmgh/diplomata/resolving/D_Rudolf._3"/>
+                    <idno type="charternum">3</idno>
+                    <date>Uabre villa 888 Juni 10.</date>
+                  </bibl>
+                </sourceDesc>
+              </fileDesc>
+            </teiHeader>
+
+
+<text>
+<body>
+<div type="tenor"><ab>
+<pb xml:id="bsb00000361_00116" n="97"/><lb n="33" xml:id="bsb00000361_00116_33"/>In nomine sanctę et individuę trinitatis. Rodulfus divina favente dementia
+<lb n="34" xml:id="bsb00000361_00116_34"/>rex. Cum conveniat regiam eminentiam, ut erga subiectos benignum prębeat
+<lb n="35" xml:id="bsb00000361_00116_35"/>auditum et iustam petitionem eorum ad effectum perducat, decet maxime, ut qui
+<lb n="36" xml:id="bsb00000361_00116_36"/>promptissima devotione in eius servitio intendunt, liberalitatem clementer <w lemma="impertiat" xml:id="w33" corresp="#w33 #w34">im-</w>
+<lb n="37" xml:id="bsb00000361_00116_37"/><w lemma="impertiat" xml:id="w34" corresp="#w33 #w34">pertiat</w>. Ac per hoc noverit omnium sanctę dei aecclesię fidelium tam praesentium
+<lb n="38" xml:id="bsb00000361_00116_38"/>videlicet quam et futurorum sollertia, quoniam accessit ad clementiam <w lemma="magnitudinis" xml:id="w35" corresp="#w35 #w36">magnitu-</w>
+<lb n="39" xml:id="bsb00000361_00116_39"/><w lemma="magnitudinis" xml:id="w36" corresp="#w35 #w36">dinis</w> nostrae dulcissima ac dilectissima Adaleydis soror nostra petens et subplicans,
+<lb n="40" xml:id="bsb00000361_00116_40"/>ut abbatiam Romanis, quę constructa habetur in honore beati Petri apostolorum
+<lb n="41" xml:id="bsb00000361_00116_41"/>principis et est sita in comitatu Uualdense, per praeceptum nostrae regalis dignitatis
+<pb xml:id="bsb00000361_00117" n="98"/><lb n="1" xml:id="bsb00000361_00117_1"/>ei in vita sua concederemus et ut haberet post discessum
+                suum potestatem <w lemma="relinquendi" xml:id="w37" corresp="#w37 #w38">relin-</w>
+<lb n="2" xml:id="bsb00000361_00117_2"/><w lemma="relinquendi" xml:id="w38" corresp="#w37 #w38">quendi</w> cuicumque voluerit heredum suorum. Quam petitionem intimo ex
+<lb n="3" xml:id="bsb00000361_00117_3"/>corde suscepimus et per auctoritatem quam habemus principalem iam dictam
+<lb n="4" xml:id="bsb00000361_00117_4"/>abbatiam Romanis eidem largimus dum vixerit. Cum autem deus eam a corpore
+<lb n="5" xml:id="bsb00000361_00117_5"/>vocareʹ dignatusʹ fuerit, habeatʹ licentiam et omnem facultatem relinquere eam
+<lb n="6" xml:id="bsb00000361_00117_6"/>quemcumqueʹ elegeritʹ de heredibus suis. Adqueʹ utʹ haecʹ nostra largitio <w lemma="firmior" xml:id="w39" corresp="#w39 #w40">fir-</w>
+<lb n="7" xml:id="bsb00000361_00117_7"/><w lemma="firmior" xml:id="w40" corresp="#w39 #w40">mior</w> habeatur et per cuncta secula inconvulsʹ servetur, manu nostra subter <w lemma="firmavimus" xml:id="w41" corresp="#w41 #w42">firmavi-</w>
+<lb n="8" xml:id="bsb00000361_00117_8"/><w lemma="firmavimus" xml:id="w42" corresp="#w41 #w42">mus</w> et de anuli nostriʹ inpraessione sigillari praecepimus.
+<lb n="9" xml:id="bsb00000361_00117_9"/>Signumʹ (MF.)ʹ Rodulfi piissimi regis.
+<lb n="10" xml:id="bsb00000361_00117_10"/>Berengariusʹ notarius advicem Theoderici archiepiscopi et cancellarii recognovi
+<lb n="11" xml:id="bsb00000361_00117_11"/>(SR.)ʹ(SI. 1)ʹ
+<lb n="12" xml:id="bsb00000361_00117_12"/>Data IIIIʹ id. iuniasʹ anno Christo propitio Rodulfi piissimi regis primo,
+<lb n="13" xml:id="bsb00000361_00117_13"/>anno ab incarnatione domini DCCCLXXXVIIIʹ, indictione VI; actum Uabreʹ
+<lb n="14" xml:id="bsb00000361_00117_14"/>villa; inʹ dei nomineʹ feliciterʹ amen.
+</ab></div>
+</body>
+</text>
+</TEI>
+<TEI>
+<teiHeader>
+              <fileDesc>
+                <titleStmt>
+                  <title>MGH D Rudolf. 13</title>
+                </titleStmt>
+                <publicationStmt>
+                  <distributor>digital MGH</distributor>
+                  <date when="2020-06-16T12:47:03+01:00">2020-06-16, 12:47:03</date>
+                </publicationStmt>
+                <sourceDesc>
+                  <bibl>
+                    <ref corresp="http://www.mgh.de/dmgh/diplomata/resolving/D_Rudolf._13"/>
+                    <idno type="charternum">13</idno>
+                    <date>888.</date>
+                  </bibl>
+                </sourceDesc>
+              </fileDesc>
+            </teiHeader>
+
+
+<text>
+<body>
+<div type="tenor">
+</div>
+</body>
+</text>
+</TEI>
+</teiCorpus>

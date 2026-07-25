@@ -19,6 +19,12 @@ classical:
   persona: "The Classicist — Greek and Latin letters read whole, Homer to the late grammarians."
   desc: "The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one."
 
+romance:
+  # Minted P45-2 with the openmgh row (the packet's axes ruling; owner may
+  # reword persona/desc or reorder — file order is render order).
+  persona: "The Romanist — Latin after Rome, medieval latinity on its way to the vernaculars."
+  desc: "The medieval-Latin lane the classical desk hands off to: the MGH critical editions (openMGH — Carolingian and Ottonian chronicles, annals, charters, letters, vitae; dual-tagged classical). Whole-source caveat: the Dt. Chron. volumes inside the same shelf are Middle High German verse chronicles, not Latin."
+
 epigraphy:
   persona: "The Papyrologist-Epigraphist — reads what survives on stone, sherd, papyrus and tablet, lacunae and all."
   desc: "Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep."

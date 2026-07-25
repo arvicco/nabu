@@ -12,7 +12,7 @@ its Latin and at the Biblical scholar's for its scripture; the UD treebanks
 answer to nine desks at once. Multi-membership is the point, not an
 accident to be tidied away.
 
-Everything below documents **shipped behaviour** — the twenty desks
+Everything below documents **shipped behaviour** — the twenty-one desks
 defined in `config/axes.yml`, their memberships declared per source in
 `config/sources.yml`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
@@ -59,7 +59,15 @@ registry currently tags to it.
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
-**Members** (13): `perseus-greek`, `perseus-latin`, `first1k-greek`, `ud`, `proiel`, `lexica`, `vulgate`, `lila`, `hypotactic`, `diorisis`, `glaux`, `croala`, `pedecerto`
+**Members** (14): `perseus-greek`, `perseus-latin`, `first1k-greek`, `ud`, `proiel`, `lexica`, `vulgate`, `lila`, `hypotactic`, `diorisis`, `glaux`, `croala`, `pedecerto`, `openmgh`
+
+### romance
+
+> The Romanist — Latin after Rome, medieval latinity on its way to the vernaculars.
+
+The medieval-Latin lane the classical desk hands off to: the MGH critical editions (openMGH — Carolingian and Ottonian chronicles, annals, charters, letters, vitae; dual-tagged classical). Whole-source caveat: the Dt. Chron. volumes inside the same shelf are Middle High German verse chronicles, not Latin.
+
+**Members** (1): `openmgh`
 
 ### epigraphy
 
