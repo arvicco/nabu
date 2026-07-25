@@ -198,6 +198,38 @@ class GitFetchTest < Minitest::Test
     assert_equal "master moved on\n", File.read(File.join(@dir, "alpha.txt"))
   end
 
+  # --- atomic fresh clone (P44-i1, owner ruling "sync should be atomic") ---
+  # An interrupted clone must never leave a half-canonical tree a resume
+  # could mistake for a finished acquisition: fresh clones stage into a
+  # sibling .partial dir and land by ONE rename.
+
+  def test_fresh_clone_lands_atomically_with_no_staging_residue
+    make_repo("keep/a.txt" => "kept\n")
+    sync!(sparse: ["keep"])
+    refute Dir.exist?("#{@dir}.partial"), "staging is renamed away, never left beside the tree"
+    assert File.exist?(File.join(@dir, "keep", "a.txt"))
+  end
+
+  def test_stale_staging_debris_is_swept_before_a_fresh_clone
+    make_repo("keep/a.txt" => "kept\n")
+    FileUtils.mkdir_p(File.join("#{@dir}.partial", ".git"))
+    File.write(File.join("#{@dir}.partial", "junk"), "interrupted")
+    lines = []
+    sync!(sparse: ["keep"], progress: ->(line) { lines << line })
+    refute Dir.exist?("#{@dir}.partial"), "interrupt debris is removed"
+    assert lines.any? { |l| l.include?("removing interrupted clone staging") },
+           "the sweep announces itself"
+    assert File.exist?(File.join(@dir, "keep", "a.txt")), "the fresh clone proceeds normally"
+  end
+
+  def test_sparse_clone_of_a_cone_matching_nothing_is_a_loud_failure
+    make_repo("keep/a.txt" => "kept\n")
+    error = assert_raises(Nabu::FetchError) { sync!(sparse: ["no-such-dir"]) }
+    assert_match(/materialized nothing/, error.message)
+    refute Dir.exist?(@dir), "a failed acquisition leaves NO canonical tree (atomicity)"
+    refute Dir.exist?("#{@dir}.partial"), "and no staging residue either"
+  end
+
   # --- sparse checkout (P26-0) ----------------------------------------------
   # A sparse fetch scopes the working tree (and, over a real transport, the
   # blob transfer — local clones ignore --filter, warned and harmless) to the

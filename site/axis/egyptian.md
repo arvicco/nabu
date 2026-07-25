@@ -15,14 +15,14 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `ccl` | dictionary | attribution | enabled · manual | 11,284 entries |
-| `coptic-scriptorium` | texts | nc | enabled · manual | 482 docs / 74,169 passages |
-| `tla-hf` | texts | attribution | enabled · manual | 4 docs / 33,978 passages |
-| `aes` | texts | attribution | enabled · manual | 26,011 docs / 202,426 passages |
-| `aed` | dictionary | attribution | enabled · manual | 35,052 entries |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `ccl` | dictionary | attribution | wired · manual | 11,284 entries |
+| `coptic-scriptorium` | texts | nc | wired · manual | 482 docs / 74,169 passages |
+| `tla-hf` | texts | attribution | wired · manual | 4 docs / 33,978 passages |
+| `aes` | texts | attribution | wired · manual | 26,011 docs / 202,426 passages |
+| `aed` | dictionary | attribution | wired · manual | 35,052 entries |
 
 ## The desk's instruments
 
@@ -57,6 +57,12 @@ nabu define ⲛⲟⲩⲧⲉ                     # the Coptic lexicon, following 
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Search the Egyptian sentences for nfr.”** → `nabu_search nfr (lang: egy)` — AES hits in Egyptological transliteration (tomb inscriptions, offering lists) — ꜣ and ꜥ fold to a, so an ASCII query reaches them.
+
 ## Terminal setup
 
 - **Coptic:** nabu strips nothing; install `font-noto-sans-coptic` (Coptic
@@ -68,4 +74,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

@@ -1,0 +1,6 @@
+GLAUX_TEXT_ID	TLG	STARTDATE	ENDDATE	AUTHOR_STANDARD	TITLE_STANDARD	GENRE_STANDARD	DIALECT	SOURCE	SOURCE_LICENSE	SOURCE_FORMAT	TOKENS	TM_TEXT	TREEBANK_ANNOTATIONS	ORIGINAL_TREEBANK_LINK	TREEBANK_ANNOTATORS
+152	0028-001	-500	-401	Antiphon	In novercam	Oratory	Attic	Perseus	CC BY-SA 4.0	XML	2014	11202	Vanessa Gorman's Ancient Greek Prose Dependency Treebanks	https://github.com/vgorman1/Greek-Dependency-Trees	Vanessa Gorman
+183	0016-001	-500	-401	Herodotus	Historiae	History	Ionic	Perseus	CC BY-SA 4.0	XML	209843	176	PROIEL	https://github.com/proiel/proiel-treebank	Dag Trygve Truslew Haug, Þorsteinn Vilhjálmsson, Bergthora Aegisdottir, Michael Frotscher, Marek Majer, Dariusz Piwowarczyk, Ingibjörg Turchi
+201	0003-002	-500	-401	Thucydides	Epigramma	Lyric poetry	Ionic/Epic	Perseus	CC BY-SA 4.0	XML	36	12631	NA	NA	NA
+855	0068-001	-100	-1	Pseudo-Scymnus	Ad Nicomedem regem, vv. 1-980	Scientific Poetry		http://www.libridergi.org	CC BY-NC-SA 4.0	TXT	6400	467	NA	NA	NA
+1846	0004-002	201	300	Diogenes Laertius	Epigrammata	Lyric poetry		Perseus	CC BY-SA 4.0	XML	1244	12607	NA	NA	NA

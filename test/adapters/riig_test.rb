@@ -178,7 +178,7 @@ class RiigTest < Minitest::Test
     entry = registry["riig"]
     refute_nil entry, "riig must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Riig, entry.adapter_class
-    assert entry.enabled, "live (owner sign-off 2026-07-18: 477 docs, flipped; sibling-noise hotfix open)"
+    assert entry.wired, "live (owner sign-off 2026-07-18: 477 docs, flipped; sibling-noise hotfix open)"
     assert_equal "manual", entry.sync_policy
     assert entry.translations, "-fr siblings ride the registry flag"
   end

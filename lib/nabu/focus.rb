@@ -36,9 +36,12 @@ module Nabu
     # A working scope over +registry+: the (possibly filtered) registry the
     # surface renders, the full one for hidden-count math, and the resolution.
     View = Data.define(:registry, :full_registry, :resolution, :profile, :all) do
-      # A profile is APPLIED (rows actually filtered) only when it is non-empty
-      # and --all was not passed. Empty or --all is the pass-through.
-      def active? = !profile.empty? && !all
+      # The enablement filter is APPLIED whenever --all was NOT passed (P44-r3b:
+      # the profile is now the box's ENABLED set, so it governs the default view
+      # even when empty — an empty enabled set shows only the owner's shelves,
+      # not the whole registry). --all is the pass-through: the full registry,
+      # with blocked sources marked at the render.
+      def active? = !all
 
       def entries = profile.entries
 
@@ -55,6 +58,10 @@ module Nabu
 
       # Registry rows hidden by the filter (sources + modules --all reveals).
       def registry_hidden = full_registry.size - registry.size
+
+      # Their slugs, registration order — a small gap is NAMED in the footer
+      # (P44-i2, owner report 2026-07-24: a bare count is a guessing game).
+      def registry_hidden_slugs = full_registry.slugs - registry.slugs
     end
 
     # Split +profile+'s entries against +registry+ and expand to the focused
@@ -72,25 +79,36 @@ module Nabu
         else unknown << name
         end
       end
-      slugs = (axes.flat_map { |name| registry.axis_members(name) } + sources).uniq
+      # An AXIS expands to its PUBLIC members only (P44-r3b): a blocked
+      # (grant-gated private) source is never enabled implicitly by its desk —
+      # it joins the set only when named explicitly by slug (which the +sources+
+      # arm carries, blocked or not).
+      # Shelves are implicitly ALWAYS in the enabled set (owner ruling
+      # 2026-07-24): the owner's own canonical memory never needs enabling,
+      # so no footer/hint ever claims a shelf is "not enabled".
+      shelf_slugs = registry.each_source.select(&:shelf?).map(&:slug)
+      slugs = (axes.flat_map { |name| registry.public_axis_members(name) } + sources + shelf_slugs).uniq
       Resolution.new(axes: axes, sources: sources, unknown: unknown, slugs: slugs)
     end
 
     # Build the View for +registry+ under +profile+ and the --all flag. When
-    # the profile is applied, the filtered registry keeps every shelf plus the
-    # focused sources (modules and unfocused sources drop out), in registration
-    # order, carrying the same axes definitions so --axis grouping still works.
+    # the profile is applied, the filtered registry keeps every shelf (always
+    # enabled) plus the enabled sources AND modules, in registration order,
+    # carrying the same axes definitions so --axis grouping still works.
     def view(profile:, registry:, all:)
       resolution = resolve(profile, registry)
-      applied = !profile.empty? && !all
+      applied = !all
       filtered =
         if applied
-          # A shelf ALWAYS shows; a module NEVER shows here (only under --all,
-          # the pass-through branch), even when tagged to a focused axis; a
-          # source shows iff it is in the focused set.
+          # A shelf ALWAYS shows (implicitly always enabled — owner ruling
+          # 2026-07-24: your own shelves never need enabling); every other
+          # row — feature modules INCLUDED — shows iff enabled. The P40-f
+          # focus-era "a module never shows outside --all" rule died with
+          # the enablement promotion: under enablement semantics it read as
+          # "modules disabled" (owner report), and a module enabled via its
+          # desk or slug is as enabled as any source.
           visible = registry.each_source.select do |entry|
             next true if entry.shelf?
-            next false if entry.feature_module?
 
             resolution.slugs.include?(entry.slug)
           end
@@ -131,27 +149,41 @@ module Nabu
 
     # -- honesty lines (stderr meta) -----------------------------------------
 
-    # Shown after an UNFOCUSED table (no profile): the one-line nudge toward
-    # focusing. Verbatim owner phrasing.
-    def hint_line
-      "nabu focus only <axes…> trims this to your desks"
+    # The empty-state line (P44-r3b): shown after a default view whose ENABLED
+    # set resolves to zero sources (a fresh box, or an owner who disabled
+    # everything). The owner's shelves still show; there is just nothing enabled
+    # to acquire or list, so this names the on-ramp.
+    def empty_state_line
+      "no sources enabled — nabu enable <axis|source> (nabu quickstart for a starter set)"
     end
 
-    # Shown after a FOCUSED table: what is in focus and the exact count of rows
-    # --all would reveal (the P35 exact-count honesty rule). The hidden clause
-    # is zero-suppressed — nothing to reveal, nothing said.
-    def footer_line(entries, hidden)
-      head = "focused on #{entries.join(', ')}"
-      return head unless hidden.positive?
+    # A gap up to this size is NAMED in the footer; beyond it the count
+    # summary stands. A fresh box hides ~90 sources — naming them all is the
+    # name dump the owner refused — but "1 source not enabled" with no name
+    # is a guessing game (owner report 2026-07-24, P44-i2).
+    FOOTER_NAME_CAP = 6
 
-      "#{head} — #{hidden} #{hidden == 1 ? 'source' : 'sources'} hidden (--all shows them)"
+    # Shown after a default (enabled) table. The ROWS ARE the enabled set
+    # (P44-r3b), so re-naming them here was pure duplication (owner report
+    # 2026-07-24: "why are they listed TWICE?"). The hidden side: a small gap
+    # names its slugs outright (P44-i2), a large one keeps the exact count
+    # (the P35 honesty rule); zero-suppressed with the grow-the-set on-ramp.
+    def footer_line(entries, hidden_slugs)
+      head = "enabled: #{entries.size} #{entries.size == 1 ? 'entry' : 'entries'}"
+      return "#{head} (nabu enable <axis|source> to add)" if hidden_slugs.empty?
+      if hidden_slugs.size <= FOOTER_NAME_CAP
+        return "#{head} — not enabled: #{hidden_slugs.join(', ')} " \
+               "(--all shows #{hidden_slugs.size == 1 ? 'it' : 'them'})"
+      end
+
+      "#{head} — #{hidden_slugs.size} sources not enabled (--all shows them)"
     end
 
     # The registry-drift warning: names in the file that match nothing now.
     # Warned once and ignored, never fatal.
     def drift_line(unknown)
-      "focus: ignoring #{unknown.join(', ')} — not a known axis or source " \
-        "(registry drift; `nabu focus drop` to remove)"
+      "enablement: ignoring #{unknown.join(', ')} — not a known axis or source " \
+        "(registry drift; `nabu disable` to remove)"
     end
   end
 end

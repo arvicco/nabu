@@ -11,7 +11,7 @@ The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and 
 
 The desk spans two eras of Japanese. Old Japanese (ojp) is live now
 through ONCOJ and its lexicon; the modern lane arrives with **Aozora
-Bunko** (青空文庫, `enabled: false` pending the owner's first sync) — the
+Bunko** (青空文庫, `wired: false` pending the owner's first sync) — the
 public-domain library at paragraph grain, ~17,488 works. Its scope is PD
 text ONLY: discovery excludes the in-copyright works before any file is
 touched. Ruby (振り仮名) readings ride as annotations over the base text,
@@ -23,16 +23,16 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `wiktionary-recon` | dictionary | attribution | enabled · manual | 30,261 entries |
-| `unihan` | dictionary | open | enabled · manual | 102,998 entries |
-| `edrdg` | dictionary | attribution | enabled · manual | 231,129 entries |
-| `hdic` | dictionary | attribution | enabled · manual | 96,414 entries |
-| `kradfile` | dictionary | attribution | enabled · manual | 6,355 entries |
-| `oncoj` | annotated corpus | attribution | enabled · frozen | 4,991 docs / 33,192 passages |
-| `oncoj-lexicon` | dictionary | attribution | enabled · frozen | 5,869 entries |
-| `aozora` | texts | open | enabled · manual | 17,121 docs / 2,983,332 passages |
+| `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
+| `unihan` | dictionary | open | wired · manual | 102,998 entries |
+| `edrdg` | dictionary | attribution | wired · manual | 231,129 entries |
+| `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
+| `kradfile` | dictionary | attribution | wired · manual | 6,355 entries |
+| `oncoj` | annotated corpus | attribution | wired · frozen | 4,991 docs / 33,192 passages |
+| `oncoj-lexicon` | dictionary | attribution | wired · frozen | 5,869 entries |
+| `aozora` | texts | open | wired · manual | 17,121 docs / 2,983,332 passages |
 
 ## The desk's instruments
 
@@ -77,6 +77,12 @@ nabu search 吾輩は猫である --lang jpn        # Sōseki's opening line, to
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Old Japanese lines about mountains?”** → `nabu_search yama (lang: ojp)` — Kojiki kayō and Man'yōshū lines (unebwi yama — Mount Unebi) — the ONCOJ shelf stores romanized Old Japanese, so type romaji.
+
 ## Terminal setup
 
 - **Kana / kanji (ojp):** ONCOJ carries romanization and original layers by
@@ -98,4 +104,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

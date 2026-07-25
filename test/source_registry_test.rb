@@ -27,14 +27,14 @@ class SourceRegistryTest < Minitest::Test
     registry = load_registry(<<~YAML)
       perseus-greek:
         adapter: Nabu::Adapters::Perseus
-        enabled: true
+        wired: true
         sync_policy: auto
     YAML
 
     entry = registry["perseus-greek"]
     assert_equal "perseus-greek", entry.slug
     assert_equal "Nabu::Adapters::Perseus", entry.adapter_class_name
-    assert entry.enabled
+    assert entry.wired
     assert_equal "auto", entry.sync_policy
     assert_equal "source", entry.kind, "kind defaults to source"
     assert_predicate entry, :source?
@@ -43,14 +43,14 @@ class SourceRegistryTest < Minitest::Test
     refute_predicate registry, :empty?
   end
 
-  def test_defaults_enabled_false_and_sync_policy_manual
+  def test_defaults_wired_false_and_sync_policy_manual
     registry = load_registry(<<~YAML)
       minimal-src:
         adapter: Some::Adapter
     YAML
 
     entry = registry["minimal-src"]
-    refute entry.enabled
+    refute entry.wired
     assert_equal "manual", entry.sync_policy
   end
 
@@ -101,7 +101,7 @@ class SourceRegistryTest < Minitest::Test
         local-language:
           adapter: Nabu::Adapters::LocalLanguage
           kind: shelf
-          enabled: true
+          wired: true
           sync_policy: local
       YAML
     end
@@ -116,7 +116,7 @@ class SourceRegistryTest < Minitest::Test
       local-language:
         adapter: Nabu::Adapters::LocalLanguage
         kind: shelf
-        enabled: true
+        wired: true
     YAML
     entry = registry["local-language"]
     assert_equal "shelf", entry.kind
@@ -124,19 +124,19 @@ class SourceRegistryTest < Minitest::Test
     refute_predicate entry, :source?
   end
 
-  # P39-0: a kind: module mints no catalog rows, so it MUST be enabled: false.
+  # P39-0: a kind: module mints no catalog rows, so it MUST be wired: false.
   def test_kind_module_must_be_disabled
     error = assert_raises(Nabu::ValidationError) do
       load_registry(<<~YAML)
         kr-gaiji:
           adapter: Nabu::Adapters::KrGaiji
           kind: module
-          enabled: true
+          wired: true
           sync_policy: manual
       YAML
     end
     assert_match(/kr-gaiji/, error.message)
-    assert_match(/module.*enabled: false|mints no catalog rows/, error.message)
+    assert_match(/module.*wired: false|mints no catalog rows/, error.message)
   end
 
   def test_kind_module_parses_when_disabled
@@ -144,7 +144,7 @@ class SourceRegistryTest < Minitest::Test
       kr-gaiji:
         adapter: Nabu::Adapters::KrGaiji
         kind: module
-        enabled: false
+        wired: false
         sync_policy: manual
     YAML
     entry = registry["kr-gaiji"]
@@ -189,23 +189,23 @@ class SourceRegistryTest < Minitest::Test
     error = assert_raises(Nabu::ValidationError) do
       load_registry(<<~YAML)
         my-src:
-          enabled: true
+          wired: true
       YAML
     end
     assert_match(/my-src/, error.message)
     assert_match(/adapter/, error.message)
   end
 
-  def test_non_boolean_enabled_raises_naming_the_slug
+  def test_non_boolean_wired_raises_naming_the_slug
     error = assert_raises(Nabu::ValidationError) do
       load_registry(<<~YAML)
         my-src:
           adapter: A
-          enabled: yesplease
+          wired: yesplease
       YAML
     end
     assert_match(/my-src/, error.message)
-    assert_match(/enabled/, error.message)
+    assert_match(/wired/, error.message)
   end
 
   def test_top_level_non_mapping_raises
@@ -600,6 +600,93 @@ class SourceRegistryTest < Minitest::Test
     assert_equal [], registry.axis_members("nonexistent")
   end
 
+  # -- quickstart tag (P44-r3b) --------------------------------------------
+
+  def test_quickstart_defaults_false_and_parses_true
+    registry = load_registry(<<~YAML)
+      starter:
+        adapter: Some::Adapter
+        quickstart: true
+      ordinary:
+        adapter: Some::Adapter
+    YAML
+    assert_predicate registry["starter"], :quickstart?
+    refute_predicate registry["ordinary"], :quickstart?, "absent quickstart = false"
+  end
+
+  def test_quickstart_slugs_lists_tagged_rows_in_order
+    registry = load_registry(<<~YAML)
+      a:
+        adapter: Some::Adapter
+        quickstart: true
+      b:
+        adapter: Some::Adapter
+      c:
+        adapter: Some::Adapter
+        quickstart: true
+    YAML
+    assert_equal %w[a c], registry.quickstart_slugs
+    refute_predicate registry["b"], :quickstart?
+  end
+
+  # -- availability (P44-r3a) ----------------------------------------------
+
+  def test_availability_defaults_public
+    entry = load_registry(<<~YAML)["minimal-src"]
+      minimal-src:
+        adapter: Some::Adapter
+    YAML
+    assert_equal "public", entry.availability, "absent availability = public"
+    refute_predicate entry, :blocked?
+    assert_predicate entry, :public?
+  end
+
+  def test_availability_blocked_parses
+    entry = load_registry(<<~YAML)["gated-src"]
+      gated-src:
+        adapter: Some::Adapter
+        availability: blocked
+    YAML
+    assert_equal "blocked", entry.availability
+    assert_predicate entry, :blocked?
+    refute_predicate entry, :public?
+  end
+
+  def test_unknown_availability_raises_naming_the_slug
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        gated-src:
+          adapter: Some::Adapter
+          availability: hidden
+      YAML
+    end
+    assert_match(/gated-src/, error.message)
+    assert_match(/availability must be one of public, blocked/, error.message)
+  end
+
+  # #public_axis_members / #blocked_axis_members / #blocked? — the seams the
+  # public site + docs surfaces read (blocked rows excluded), while
+  # #axis_members stays the full list for the CLI/sync scopes.
+  def test_public_axis_members_excludes_blocked_while_axis_members_keeps_them
+    registry = load_registry_with_axes(TWO_AXES, <<~YAML)
+      corph-src:
+        adapter: A
+        axes: [celtic]
+      gated-src:
+        adapter: B
+        axes: [celtic]
+        availability: blocked
+    YAML
+    assert_equal %w[corph-src gated-src], registry.axis_members("celtic"),
+                 "axis_members keeps the full membership (CLI/sync scope)"
+    assert_equal %w[corph-src], registry.public_axis_members("celtic"),
+                 "public_axis_members drops the blocked row"
+    assert_equal %w[gated-src], registry.blocked_axis_members("celtic")
+    assert registry.blocked?("gated-src")
+    refute registry.blocked?("corph-src")
+    refute registry.blocked?("nonexistent"), "unknown slug is not blocked"
+  end
+
   def test_source_without_axes_raises_once_definitions_exist
     error = assert_raises(Nabu::ValidationError) do
       load_registry_with_axes(TWO_AXES, <<~YAML)
@@ -666,15 +753,22 @@ class SourceRegistryTest < Minitest::Test
   # Loading the REAL config enforces all three invariants on the real mapping;
   # the pins below freeze the ratified structure (definitions order, the D35-d
   # dual-tagging ruling, the whole-source memberships).
+  # P44-r3c: the shipped starter shelf carries the quickstart tags — a
+  # fresh box's default enabled set is exactly the quickstart four.
+  def test_shipped_quickstart_tags_are_the_starter_shelf
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    assert_equal %w[iswoc lexica proiel sblgnt], registry.quickstart_slugs.sort
+  end
+
   def test_shipped_registry_mapping_is_valid_and_ratified
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
 
     assert_equal %w[classical epigraphy slavic germanic celtic italic etym biblical hebrew
-                    syriac arabic hittite cuneiform egyptian indic buddhist sinitic japonic local],
+                    syriac arabic hittite cuneiform egyptian iranian indic buddhist sinitic japonic local],
                  registry.axes.names,
-                 "the ratified axes, in render order (18 ratified D35 + arabic, minted P41-2 " \
-                 "with the openiti row — registry validation requires the definition; " \
-                 "the axis build-out is P41-4)"
+                 "the ratified axes, in render order (18 ratified D35 + arabic minted P41-2 with " \
+                 "the openiti row + iranian minted P44-r2/D43-d, the Avesta desk between egyptian " \
+                 "and indic — the Indo-Iranian pair)"
 
     registry.each_source do |entry|
       refute_empty entry.axes, "#{entry.slug} must declare at least one research axis"
@@ -700,6 +794,20 @@ class SourceRegistryTest < Minitest::Test
     assert_includes registry["suttacentral"].axes, "sinitic", "the lzh Agamas (P32-1)"
     assert_equal registry["lexlep"].axes, registry["lexlep-words"].axes,
                  "the two grains of one wiki share their desks"
+
+    # P44-r2 (D43-d): the `iranian` desk. Evidence-ruled membership — the Avesta
+    # anchor (blocked, still on etym too) plus the Old Persian lane of oracc/cdli,
+    # whole-source and dual-tagged with cuneiform. The blocked anchor drops from
+    # the PUBLIC membership; oracc/cdli are the public shelves, in registry order.
+    assert_equal %w[etym iranian], registry["titus-avestan"].axes,
+                 "the Avesta anchors iranian and keeps etym (its forms feed the comparative shelves)"
+    assert_includes registry["oracc"].axes, "iranian", "ORACC's ario = Old Persian Achaemenid trilinguals"
+    assert_includes registry["cdli"].axes, "iranian", "CDLI catalogs Old Persian (peo) Achaemenid trilinguals"
+    assert_includes registry["oracc"].axes, "cuneiform", "still whole-source on the tablet desk"
+    assert_equal %w[oracc cdli], registry.public_axis_members("iranian"),
+                 "the public iranian shelves, in registry order (the blocked Avesta is not advertised)"
+    assert_equal %w[titus-avestan], registry.blocked_axis_members("iranian"),
+                 "the grant-gated Avesta rides iranian but is excluded from the public listing"
   end
 
   # P43-2: the shipped TITUS Avestan row is fetch-gated on the №41-3 grant, and
@@ -718,6 +826,22 @@ class SourceRegistryTest < Minitest::Test
     assert_match(/titus-avestan: fetch requires a GRANT/, notice)
     assert_match(/request your own:/, notice, "the refusal points at the request scaffold")
     assert_match(/Gippert/, notice)
+  end
+
+  # P44-r3a: the fetch right is a PRIVATE personal grant, so the public repo
+  # must not advertise the row as a library holding — availability: blocked
+  # excludes it from public docs/site/census, and etym's public membership
+  # drops it (while the full axis_members list keeps it for CLI/sync scopes).
+  def test_shipped_titus_avestan_is_blocked_and_dropped_from_public_etym
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+
+    assert_predicate registry["titus-avestan"], :blocked?
+    assert registry.blocked?("titus-avestan")
+    assert_includes registry.axis_members("etym"), "titus-avestan",
+                    "the full membership (CLI/sync scope) still carries it"
+    refute_includes registry.public_axis_members("etym"), "titus-avestan",
+                    "the PUBLIC etym membership drops the grant-gated row"
+    assert_equal %w[titus-avestan], registry.blocked_axis_members("etym")
   end
 
   # The manifest's display posture: nc (servable + credited, not hidden) and a
@@ -766,7 +890,7 @@ class SourceRegistryTest < Minitest::Test
     entry = load_registry(<<~YAML)["fake-src"]
       fake-src:
         adapter: SourceRegistryTest::FakeAdapter
-        enabled: true
+        wired: true
     YAML
 
     source = entry.sync_source!(db)
@@ -793,7 +917,7 @@ class SourceRegistryTest < Minitest::Test
     entry = load_registry(<<~YAML)["fake-src"]
       fake-src:
         adapter: SourceRegistryTest::FakeAdapter
-        enabled: true
+        wired: true
     YAML
 
     source = entry.sync_source!(db)
@@ -813,7 +937,7 @@ class SourceRegistryTest < Minitest::Test
     entry = load_registry(<<~YAML)["src"]
       src:
         adapter: FakeAdapter
-        enabled: true
+        wired: true
     YAML
     refute_predicate entry, :grant_required?
     assert_nil entry.grant
@@ -823,7 +947,7 @@ class SourceRegistryTest < Minitest::Test
     entry = load_registry(<<~YAML)["src"]
       src:
         adapter: FakeAdapter
-        enabled: true
+        wired: true
         grant_required: true
         grant:
           grantor: G. Starostin
@@ -845,7 +969,7 @@ class SourceRegistryTest < Minitest::Test
       load_registry(<<~YAML)
         src:
           adapter: FakeAdapter
-          enabled: true
+          wired: true
           grant_required: true
       YAML
     end
@@ -857,7 +981,7 @@ class SourceRegistryTest < Minitest::Test
       load_registry(<<~YAML)
         src:
           adapter: FakeAdapter
-          enabled: true
+          wired: true
           grant:
             grantor: X
             date: "2026-07-15"
@@ -874,7 +998,7 @@ class SourceRegistryTest < Minitest::Test
       load_registry(<<~YAML)
         src:
           adapter: FakeAdapter
-          enabled: true
+          wired: true
           grant_required: true
           grant:
             grantor: X
@@ -895,7 +1019,7 @@ class SourceRegistryTest < Minitest::Test
       load_registry(<<~YAML)
         src:
           adapter: FakeAdapter
-          enabled: true
+          wired: true
           grant_required: true
           grant:
             grantor: X
@@ -914,7 +1038,7 @@ class SourceRegistryTest < Minitest::Test
       load_registry(<<~YAML)
         src:
           adapter: FakeAdapter
-          enabled: true
+          wired: true
           grant_required: true
           grant:
             grantor: X

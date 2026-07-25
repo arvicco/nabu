@@ -205,7 +205,7 @@ class CbetaTest < Minitest::Test
     refute_nil entry, "cbeta must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Cbeta, entry.adapter_class
     assert_equal "manual", entry.sync_policy
-    assert entry.enabled, "live (owner order 2026-07-20: P32+P33 sources flipped, post-P34 gate)"
+    assert entry.wired, "live (owner order 2026-07-20: P32+P33 sources flipped, post-P34 gate)"
   end
 
   private

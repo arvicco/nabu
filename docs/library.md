@@ -831,7 +831,10 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   line, dossier description, per-language breakdown, timeline and facet
   coverage). `--documents`/`--entries`/`--collections` enumerate with
   filters; `--source SLUG` also joined search/export as a filter in the
-  same packet.
+  same packet. A bare `nabu list SOURCE --lang CODE` (no enumeration flag,
+  P44-r1) implies the natural mode by content kind — a dictionary shelf
+  lists entries, a text shelf documents — and announces the implication in
+  the header; name `--documents`/`--entries` to override.
 - **Owner notes** (`nabu note URN [TEXT]`, P24-1): annotations on any urn
   the corpus knows, resolution-checked before any write, stored as plain
   YAML on the `local-notes` shelf (§8i) and rendered on

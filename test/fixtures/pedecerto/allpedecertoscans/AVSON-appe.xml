@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<head>
+		<author>Ausonius</author>
+		<title>*appendix Ausoniana</title>
+		<resp>
+			<institution>Università degli Studi di Udine</institution>
+			<institution>Università "Ca' Foscari" di Venezia</institution>
+			<orgName>Pedecerto. Digital Latin Metre <link>https://www.pedecerto.eu</link></orgName>
+			<persName>Emanuela Colombi</persName>
+			<persName>Luca Mondin</persName>
+			<persName>Luigi Tessarolo</persName>
+			<persName>Andrea Bacianini</persName>
+		</resp>
+		<rights>
+			<licence>https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode</licence>
+		</rights>
+	</head>
+	<body>
+		<division title="1 = <emph style="font-style:italic">ecl.</emph> 2 <emph style="font-style:italic">extra textum</emph> Peiper = <emph style="font-style:italic">ecl.</emph> 1 <emph style="font-style:italic">extra textum</emph> Prete">
+			<line name="" meter="X">
+				<word>Haec</word>
+				<word>quidem</word>
+				<word>Pythagorica</word>
+				<word>est</word>
+				<word>apophasis</word>
+				<word>secundum</word>
+				<word>tale</word>
+				<word>quod</word>
+				<word>subiectum</word>
+				<word>est</word>
+				<word>distichon:</word>
+			</line>
+		</division>
+	</body>
+</document>

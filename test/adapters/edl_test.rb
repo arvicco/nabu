@@ -229,7 +229,7 @@ class EdlTest < Minitest::Test
     entry = registry["edl"]
     refute_nil entry, "config/sources.yml must register edl"
     assert_equal Nabu::Adapters::Edl, entry.adapter_class
-    assert entry.enabled, "live (owner sign-off 2026-07-14 after first sync + eyeball)"
+    assert entry.wired, "live (owner sign-off 2026-07-14 after first sync + eyeball)"
     assert_equal "manual", entry.sync_policy
   end
 end

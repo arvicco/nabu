@@ -25,17 +25,17 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `proiel` | treebank | nc | enabled · frozen | 12 docs / 51,321 passages |
-| `iswoc` | texts | nc | enabled · frozen | 5 docs / 2,536 passages |
-| `menotec` | texts | nc | enabled · manual | 7 docs / 20,308 passages |
-| `aspr` | texts | attribution | enabled · manual | 349 docs / 30,550 passages |
-| `bosworth-toller` | dictionary | attribution | enabled · manual | 62,815 entries |
-| `rem` | texts | attribution | enabled · manual | 406 docs / 355,449 passages |
-| `rundata` | inscriptions | odbl | enabled · manual | 30,643 docs / 30,641 passages |
-| `helipad` | treebank | attribution | enabled · manual | 1 docs / 3,549 passages |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
+| `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
+| `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
+| `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
+| `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
+| `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
+| `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
+| `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 
 ## The desk's instruments
 
@@ -88,6 +88,12 @@ nabu formulas urn:nabu:aspr:A4.1      # the Old English poetic formulas of Beowu
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Where does Gothic guþ come from, and who are its cousins?”** → `nabu_etym guþ (lang: got)` — Proto-Germanic *gudą with 64 cognates (nine attested in this library, counts shown: Gothic 𐌲𐌿𐌸 ×914, Old Norse guð ×1,337, Middle High German got ×6,995 …) and the PIE ancestors *ǵʰutós "libated" / *gʷʰew- "to venerate" above it.
+
 ## Terminal setup
 
 - **Gothic (got):** nabu does nothing; install `font-noto-sans-gothic`.
@@ -111,4 +117,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

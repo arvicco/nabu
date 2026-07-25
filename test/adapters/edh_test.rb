@@ -72,6 +72,19 @@ class EdhTest < Minitest::Test
     assert_equal "Latium et Campania (Regio I)", metadata.dig("facets", "province", "value")
   end
 
+  # P44-2: the origPlace ancient placeName + its upstream Pleiades ref land as
+  # document metadata under the cross-source place shape — the ancient name
+  # verbatim, the ref normalized to the bare numeric id (place.pleiades, the
+  # uniform key isicily/itant/iip share). Header-only capture: urns and
+  # passage text are untouched (the frozen-URN guard rides the existing
+  # conformance + snippet assertions of this file).
+  def test_ancient_place_and_pleiades_id_land_in_metadata
+    adapter = conformance_adapter
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:edh:hd000001" }
+    place = adapter.parse(ref).metadata["place"]
+    assert_equal({ "ancient" => "Cumae, bei", "pleiades" => "432808" }, place)
+  end
+
   def test_workdir_without_the_csvs_yields_nothing
     Dir.mktmpdir do |dir| # the attic-overlay shape: XML trees, no CSV sidecars
       FileUtils.mkdir_p(File.join(dir, "epidoc", "HD000001-HD010000"))

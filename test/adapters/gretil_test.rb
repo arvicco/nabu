@@ -338,7 +338,7 @@ class GretilTest < Minitest::Test
     refute_nil entry, "gretil must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Gretil, entry.adapter_class
     assert_equal "manual", entry.sync_policy
-    assert entry.enabled, "gretil is live (owner sign-off 2026-07-08 after first real sync + P9-4c recovery)"
+    assert entry.wired, "gretil is live (owner sign-off 2026-07-08 after first real sync + P9-4c recovery)"
   end
 
   private

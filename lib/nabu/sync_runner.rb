@@ -81,14 +81,17 @@ module Nabu
     # +references+ (P19-4) is the Nabu::LibraryReferences::Result for a
     # reference_edges? source (the manifests' related: urns refreshed into
     # the links journal after the load); nil for every other source.
+    # +enrichments+ (P44-7) is the enrichment producer's census Result for an
+    # enrichment_producer? source (pedecerto's meter scansions re-derived into
+    # the enrichments table after the load); nil for every other source.
     # +analyzed+ (P42-4) is the Store::AnalyzeReport of the post-load
     # planner-stats refresh when the load was bulk (see ANALYZE_MIN_CHANGED_ROWS);
     # nil when the load was sub-threshold (the common re-sync) or on an aborted
     # run — the CLI's report line stays silent then.
     Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings,
-                          :discovery, :references, :analyzed) do
+                          :discovery, :references, :enrichments, :analyzed) do
       def initialize(slug:, fetch_report:, load_report:, breaker:, indexed:, warnings:,
-                     discovery:, references: nil, analyzed: nil)
+                     discovery:, references: nil, enrichments: nil, analyzed: nil)
         super
       end
 
@@ -104,6 +107,10 @@ module Nabu
     # +db+ is the catalog; +ledger+ the history ledger (Store::Ledger, P7-1) —
     # runs, per-repo pins, and durable revisions are recorded there, keyed by
     # slug/url/urn so they survive `nabu rebuild`.
+    # The loaded Nabu::Config (P44-i1: the CLI's --redownload wipe needs
+    # the canonical dir without re-loading config).
+    attr_reader :config
+
     def initialize(config:, registry:, db:, ledger:)
       @config = config
       @registry = registry
@@ -125,9 +132,15 @@ module Nabu
 
     # Sync every ENABLED kind: source with sync_policy "auto". Returns { slug => Outcome |
     # Nabu::Error }: a source that raises is captured in the hash so the batch
-    # runs to completion (one failure never stops the others).
-    def sync_all(parse_only: false, force: false, progress: nil)
-      live_enabled.to_h do |entry|
+    # runs to completion (one failure never stops the others). +enabled+
+    # (P44-r3b) is the box's enabled-slug set: when given, the live-enabled
+    # sweep is intersected with it (sync --all = the enabled set only); nil
+    # keeps the whole registry sweep (an unconfigured box, or a --parse-only
+    # repair run — the CLI decides).
+    def sync_all(parse_only: false, force: false, progress: nil, enabled: nil)
+      sweep = live_enabled
+      sweep = sweep.select { |entry| enabled.include?(entry.slug) } unless enabled.nil?
+      sweep.to_h do |entry|
         result =
           if @grant_gate.blocked?(entry)
             # A permission-bound source with no acknowledgment is SKIPPED, never
@@ -151,7 +164,7 @@ module Nabu
       # (P39-0): shelves are local (no network) and modules mint no catalog
       # rows, so neither belongs in the unattended batch, and `manual`/`frozen`
       # sources are owner-fired by name.
-      @registry.each_source.select { |entry| entry.source? && entry.enabled && entry.sync_policy == "auto" }
+      @registry.each_source.select { |entry| entry.source? && entry.wired && entry.sync_policy == "auto" }
     end
 
     def sync_entry(entry, parse_only:, force:, progress:)
@@ -163,7 +176,7 @@ module Nabu
 
       begin
         run = Store::RunRecorder.record(source_slug: entry.slug) do
-          fetch_report = fetch(adapter, workdir, force: force, progress: progress) unless parse_only
+          fetch_report = fetch(adapter, workdir, slug: entry.slug, force: force, progress: progress) unless parse_only
           guard_withdrawal!(adapter, source, workdir, force: force)
           load_report = load(source, adapter, workdir, progress)
         end
@@ -195,6 +208,7 @@ module Nabu
                   breaker: nil, indexed: indexed,
                   warnings: warnings, discovery: discovery,
                   references: refresh_references(entry),
+                  enrichments: refresh_enrichments(entry),
                   analyzed: analyze_after_load(load_report, adapter))
     end
 
@@ -258,6 +272,21 @@ module Nabu
       end
     end
 
+    # P44-7: after an enrichment_producer? source loads, re-derive its meter
+    # enrichment layer via the adapter's declared producer — a pure function of
+    # (canonical corpus, catalog, code) that supersedes its prior rows in the
+    # enrichments table. Writes the CATALOG (@db) directly (the enrichments
+    # table lives there, unlike the links journal's separate file), so no extra
+    # store handle. +workdir+ is the source's canonical dir (the producer reads
+    # the unpacked corpus from it); a parse-only sync before the first fetch is
+    # the honest no-op that supersedes nothing.
+    def refresh_enrichments(entry)
+      return nil unless entry.adapter_class.enrichment_producer?
+
+      entry.adapter_class.enrichment_producer(catalog: @db)
+           .run(entry.slug, workdir: workdir_for(entry.slug))
+    end
+
     # Persist the LOUD discovery notes (unrecognized ≥ 1 — a project tree with
     # no ingestible content) into the run row so a silent gap leaves a durable,
     # queryable trace, not just a console line. A clean census leaves runs.notes
@@ -316,8 +345,17 @@ module Nabu
       fulltext&.disconnect
     end
 
-    def fetch(adapter, workdir, force:, progress:)
-      adapter.fetch(workdir, progress: progress&.method(:fetch_line), force: force)
+    # The ONE seam every adapter's fetch flows through during a sync (the only
+    # call site is gated `unless parse_only`, so this is already the fetch
+    # phase and nothing else). P44-i1c: take the per-source acquisition lock
+    # around it so two nabu processes fetching the SAME source fail fast
+    # instead of racing on canonical/<slug> and its .partial staging (the glaux
+    # incident). AlreadyHeld propagates like any other fetch failure — the run
+    # is recorded failed for `sync <slug>`, captured per-source by `sync --all`.
+    def fetch(adapter, workdir, slug:, force:, progress:)
+      FetchLock.hold(canonical_dir: @config.canonical_dir, slug: slug) do
+        adapter.fetch(workdir, progress: progress&.method(:fetch_line), force: force)
+      end
     end
 
     # Route by the adapter's declared content kind (P11-4, architecture §11):

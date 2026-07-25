@@ -17,8 +17,8 @@ class LocalCheckTest < Minitest::Test
   # -- run-history trends --------------------------------------------------
 
   def test_never_synced_source_is_informational_not_red
-    seed_source(slug: "quiet", enabled: true)
-    report = check(registry_of(["quiet", { enabled: true }]))
+    seed_source(slug: "quiet", wired: true)
+    report = check(registry_of(["quiet", { wired: true }]))
     findings = report.sources.first.findings
 
     assert_equal :never_synced, findings.first.kind
@@ -26,23 +26,23 @@ class LocalCheckTest < Minitest::Test
   end
 
   def test_healthy_source_has_no_findings
-    source = seed_source(slug: "ok", enabled: true)
+    source = seed_source(slug: "ok", wired: true)
     3.times { seed_run(source, added: 4, updated: 1, errored: 0, finished_at: @now - 86_400) }
     seed_docs(source, live: 20)
 
-    report = check(registry_of(["ok", { enabled: true }]))
+    report = check(registry_of(["ok", { wired: true }]))
     assert_empty report.sources.first.findings
     refute report.any_loud?
   end
 
   def test_quarantine_spike_is_a_loud_finding_and_sets_exit
-    source = seed_source(slug: "spiky", enabled: true)
+    source = seed_source(slug: "spiky", wired: true)
     seed_run(source, added: 5, updated: 0, errored: 1)
     seed_run(source, added: 5, updated: 0, errored: 2)
     seed_run(source, added: 5, updated: 0, errored: 80) # latest: huge jump
     seed_docs(source, live: 15) # populated — the P18-7 zero-rows invariant stays out of the way
 
-    report = check(registry_of(["spiky", { enabled: true }]))
+    report = check(registry_of(["spiky", { wired: true }]))
     kinds = report.sources.first.findings.map(&:kind)
     assert_includes kinds, :quarantine_spike
     assert report.any_loud?, "a quarantine spike must fail the health check"
@@ -50,26 +50,26 @@ class LocalCheckTest < Minitest::Test
 
   # 0→1 quarantine across otherwise-clean runs must NOT flag.
   def test_no_spike_on_a_single_stray_quarantine
-    source = seed_source(slug: "calm", enabled: true)
+    source = seed_source(slug: "calm", wired: true)
     seed_run(source, added: 3, updated: 0, errored: 0)
     seed_run(source, added: 3, updated: 0, errored: 0)
     seed_run(source, added: 3, updated: 0, errored: 1)
     seed_docs(source, live: 9)
 
-    report = check(registry_of(["calm", { enabled: true }]))
+    report = check(registry_of(["calm", { wired: true }]))
     refute report.any_loud?
     refute_includes report.sources.first.findings.map(&:kind), :quarantine_spike
   end
 
   def test_added_collapse_is_a_soft_warning
-    source = seed_source(slug: "dead", enabled: true)
+    source = seed_source(slug: "dead", wired: true)
     seed_run(source, added: 9, updated: 2, errored: 0) # historically active
     seed_run(source, added: 0, updated: 0, errored: 0)
     seed_run(source, added: 0, updated: 0, errored: 0)
     seed_run(source, added: 0, updated: 0, errored: 0)
     seed_docs(source, live: 11)
 
-    report = check(registry_of(["dead", { enabled: true }]))
+    report = check(registry_of(["dead", { wired: true }]))
     findings = report.sources.first.findings
     assert_includes findings.map(&:kind), :added_collapse
     refute report.any_loud?, "added collapse is soft — exit 0"
@@ -77,47 +77,47 @@ class LocalCheckTest < Minitest::Test
   end
 
   def test_withdrawal_creep_soft_then_loud
-    soft = seed_source(slug: "shedding", enabled: true)
+    soft = seed_source(slug: "shedding", wired: true)
     seed_run(soft, added: 100, updated: 0, errored: 0)
     seed_docs(soft, live: 90, withdrawn: 10) # 10% → soft
-    soft_report = check(registry_of(["shedding", { enabled: true }]))
+    soft_report = check(registry_of(["shedding", { wired: true }]))
     soft_finding = soft_report.sources.first.findings.find { |f| f.kind == :withdrawal_creep }
     assert soft_finding.soft?
     refute soft_report.any_loud?
 
     @db[:documents].where(source_id: soft.id).delete
     seed_docs(soft, live: 80, retired: 20) # 20% (retired counts) → loud
-    loud_report = check(registry_of(["shedding", { enabled: true }]))
+    loud_report = check(registry_of(["shedding", { wired: true }]))
     loud_finding = loud_report.sources.first.findings.find { |f| f.kind == :withdrawal_creep }
     assert loud_finding.loud?
     assert loud_report.any_loud?
   end
 
   def test_stale_enabled_auto_source_is_flagged
-    source = seed_source(slug: "old", enabled: true)
+    source = seed_source(slug: "old", wired: true)
     seed_run(source, added: 5, updated: 0, errored: 0, finished_at: @now - (30 * 86_400))
     seed_docs(source, live: 5)
 
-    report = check(registry_of(["old", { enabled: true, sync_policy: "auto" }]))
+    report = check(registry_of(["old", { wired: true, sync_policy: "auto" }]))
     assert_includes report.sources.first.findings.map(&:kind), :stale
     refute report.any_loud?
   end
 
   # A manual/frozen source is expected to sit still — never "stale".
   def test_manual_source_not_flagged_stale
-    source = seed_source(slug: "manual", enabled: true)
+    source = seed_source(slug: "manual", wired: true)
     seed_run(source, added: 5, updated: 0, errored: 0, finished_at: @now - (400 * 86_400))
     seed_docs(source, live: 5)
 
-    report = check(registry_of(["manual", { enabled: true, sync_policy: "manual" }]))
+    report = check(registry_of(["manual", { wired: true, sync_policy: "manual" }]))
     refute_includes report.sources.first.findings.map(&:kind), :stale
   end
 
   # P7-1: a fresh machine has no ledger at all — every source degrades to the
   # honest informational "never synced", never an error, never loud.
   def test_missing_ledger_reads_as_no_history
-    seed_source(slug: "quiet", enabled: true)
-    report = check(registry_of(["quiet", { enabled: true }]), ledger: nil)
+    seed_source(slug: "quiet", wired: true)
+    report = check(registry_of(["quiet", { wired: true }]), ledger: nil)
 
     finding = report.sources.first.findings.first
     assert_equal :never_synced, finding.kind
@@ -128,18 +128,18 @@ class LocalCheckTest < Minitest::Test
   # P7-1: rebuild replays are recorded kind=rebuild and excluded from trends —
   # a replay re-adds the whole corpus, which must not read as sync history.
   def test_rebuild_runs_do_not_feed_trends
-    source = seed_source(slug: "rebuilt", enabled: true)
+    source = seed_source(slug: "rebuilt", wired: true)
     # Only rebuild-kind history: trend-wise this source was never synced.
     seed_run(source, added: 60_000, updated: 0, errored: 90, kind: "rebuild")
     seed_docs(source, live: 12) # populated — replay landed; only the TREND reading is at stake
-    report = check(registry_of(["rebuilt", { enabled: true }]))
+    report = check(registry_of(["rebuilt", { wired: true }]))
     assert_equal :never_synced, report.sources.first.findings.first.kind
 
     # A giant rebuild between two modest syncs neither spikes nor collapses.
     seed_run(source, added: 5, updated: 0, errored: 1)
     seed_run(source, added: 60_000, updated: 0, errored: 90, kind: "rebuild")
     seed_run(source, added: 4, updated: 1, errored: 0, finished_at: @now - 86_400)
-    report = check(registry_of(["rebuilt", { enabled: true }]))
+    report = check(registry_of(["rebuilt", { wired: true }]))
     assert_empty report.sources.first.findings
   end
 
@@ -148,12 +148,12 @@ class LocalCheckTest < Minitest::Test
   # The motivating gap: a source whose most recent run FAILED previously
   # surfaced NOTHING here (trends read successes only). Now it is loud.
   def test_failed_last_run_is_loud_even_with_healthy_prior_trends
-    source = seed_source(slug: "coptic", enabled: true)
+    source = seed_source(slug: "coptic", wired: true)
     seed_run(source, added: 400, updated: 0, errored: 1, finished_at: @now - 86_400)
     seed_docs(source, live: 400)
     seed_run(source, added: 0, updated: 0, errored: 0, status: "failed", finished_at: @now)
 
-    report = check(registry_of(["coptic", { enabled: true }]))
+    report = check(registry_of(["coptic", { wired: true }]))
     findings = report.sources.first.findings
     assert_includes findings.map(&:kind), :failed_run
     assert report.any_loud?, "a failed last run must fail the health check"
@@ -161,33 +161,33 @@ class LocalCheckTest < Minitest::Test
 
   # A source with ONLY a failed run is "last run FAILED", not "never synced".
   def test_failed_first_sync_beats_the_never_synced_note
-    source = seed_source(slug: "firstfail", enabled: true)
+    source = seed_source(slug: "firstfail", wired: true)
     seed_run(source, added: 0, updated: 0, errored: 0, status: "failed")
 
-    kinds = check(registry_of(["firstfail", { enabled: true }])).sources.first.findings.map(&:kind)
+    kinds = check(registry_of(["firstfail", { wired: true }])).sources.first.findings.map(&:kind)
     assert_includes kinds, :failed_run
     refute_includes kinds, :never_synced
   end
 
   # The half-loaded-catalog signature: ledger says succeeded, catalog empty.
   def test_enabled_source_with_ok_run_and_no_rows_is_loud
-    source = seed_source(slug: "hollow", enabled: true)
+    source = seed_source(slug: "hollow", wired: true)
     seed_run(source, added: 500, updated: 0, errored: 0)
 
-    report = check(registry_of(["hollow", { enabled: true }]))
+    report = check(registry_of(["hollow", { wired: true }]))
     assert_includes report.sources.first.findings.map(&:kind), :synced_unpopulated
     assert report.any_loud?
   end
 
   # Quarantine creep (the auto-advance backstop) joins the per-source findings.
   def test_quarantine_creep_surfaces_in_health
-    source = seed_source(slug: "creeper", enabled: true)
+    source = seed_source(slug: "creeper", wired: true)
     seed_run(source, added: 5, updated: 0, errored: 0)
     seed_docs(source, live: 5)
     @ledger[:quarantine_baselines].insert(source_slug: "creeper", baseline: 1_200,
                                           anchor: 1_000, recorded_at: @now)
 
-    report = check(registry_of(["creeper", { enabled: true }]))
+    report = check(registry_of(["creeper", { wired: true }]))
     assert_includes report.sources.first.findings.map(&:kind), :quarantine_creep
     assert report.any_loud?
   end
@@ -195,13 +195,13 @@ class LocalCheckTest < Minitest::Test
   # The global slot: fully-migrated fixture dbs report nothing (a healthy
   # library prints nothing new); a behind ledger surfaces softly.
   def test_global_findings_empty_on_migrated_dbs_and_soft_when_ledger_behind
-    seed_source(slug: "s", enabled: true)
-    assert_empty check(registry_of(["s", { enabled: true }])).global
+    seed_source(slug: "s", wired: true)
+    assert_empty check(registry_of(["s", { wired: true }])).global
 
     stale = Nabu::Store::Ledger.connect("sqlite::memory:")
     require "sequel/extensions/migration"
     Sequel::Migrator.run(stale, Nabu::Store::Ledger::MIGRATIONS_DIR, target: 4)
-    report = check(registry_of(["s", { enabled: true }]), ledger: stale)
+    report = check(registry_of(["s", { wired: true }]), ledger: stale)
     assert_equal [:pending_migrations], report.global.map(&:kind)
     refute report.any_loud?, "pending migrations are advisory (soft)"
     assert_operator report.soft_count, :>=, 1
@@ -292,9 +292,9 @@ class LocalCheckTest < Minitest::Test
   end
 
   def test_catalog_without_index_reports_no_index
-    seed_source(slug: "s", enabled: true)
+    seed_source(slug: "s", wired: true)
     report = Nabu::Health::LocalCheck.new(
-      registry: registry_of(["s", { enabled: true }]), catalog: @db, fulltext: nil, ledger: @ledger,
+      registry: registry_of(["s", { wired: true }]), catalog: @db, fulltext: nil, ledger: @ledger,
       golden_queries: [{ "query" => "x", "expect_urn" => "y" }]
     ).run
     assert_equal :no_index, report.corpus
@@ -330,16 +330,16 @@ class LocalCheckTest < Minitest::Test
       opts ||= {}
       Nabu::SourceRegistry::Entry.new(
         slug: slug, adapter_class_name: "TestAdapter",
-        enabled: opts.fetch(:enabled, true), sync_policy: opts.fetch(:sync_policy, "auto")
+        wired: opts.fetch(:enabled, true), sync_policy: opts.fetch(:sync_policy, "auto")
       )
     end
     Nabu::SourceRegistry.new(entries)
   end
 
-  def seed_source(slug:, enabled:, last_sync_at: nil)
+  def seed_source(slug:, wired:, last_sync_at: nil)
     Nabu::Store::Source.create(
       slug: slug, name: slug, adapter_class: "TestAdapter", license_class: "open",
-      enabled: enabled, last_sync_at: last_sync_at
+      enabled: wired, last_sync_at: last_sync_at
     )
   end
 
@@ -372,7 +372,7 @@ class LocalCheckTest < Minitest::Test
   # +annotations+ (a Hash) rides along as annotations_json so the lemma index
   # (P7-5) gets rows too.
   def build_indexed_passage(text:, annotations: nil)
-    source = seed_source(slug: "corpus", enabled: true)
+    source = seed_source(slug: "corpus", wired: true)
     doc = Nabu::Store::Document.create(
       source_id: source.id, urn: "urn:test:doc", content_sha256: "x"
     )

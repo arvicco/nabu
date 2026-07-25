@@ -85,7 +85,7 @@ class StatusReportTest < Minitest::Test
     registry = load_registry(<<~YAML)
       fake-src:
         adapter: StatusReportTest::FakeAdapter
-        enabled: true
+        wired: true
         sync_policy: auto
     YAML
 
@@ -101,7 +101,7 @@ class StatusReportTest < Minitest::Test
     registry = load_registry(<<~YAML)
       fake-src:
         adapter: StatusReportTest::FakeAdapter
-        enabled: true
+        wired: true
         sync_policy: auto
       never-src:
         adapter: StatusReportTest::FakeAdapter
@@ -126,7 +126,7 @@ class StatusReportTest < Minitest::Test
     refute_match(/\bok\b/, fake, "the noise-OK token is gone on a succeeded run")
 
     never = lines.grep(/never-src/).first
-    assert_match(/never-src\s+off\(m\)/, never, "disabled manual → off(m)")
+    assert_match(/never-src\s+unwired\(m\)/, never, "disabled manual → off(m)")
     assert_match(/—/, never, "a never-synced corpus reads the em dash")
     assert_match(/\bnever\b/, never)
   end
@@ -138,27 +138,27 @@ class StatusReportTest < Minitest::Test
     stale = load_registry(<<~YAML)
       fake-src:
         adapter: StatusReportTest::FakeAdapter
-        enabled: false
+        wired: false
     YAML
-    stale["fake-src"].sync_source!(db) # db row now carries enabled: false
+    stale["fake-src"].sync_source!(db) # db row now carries wired: false
 
     flipped = load_registry(<<~YAML)
       fake-src:
         adapter: StatusReportTest::FakeAdapter
-        enabled: true
+        wired: true
     YAML
     out = Nabu::StatusReport.render(registry: flipped, db: db, ledger: ledger_test_db)
-    assert_match(/fake-src\s+m\b/, out, "a registry enabled: true shows bare m, stale db row or not")
+    assert_match(/fake-src\s+m\b/, out, "a registry wired: true shows bare m, stale db row or not")
 
     # And the reverse: flipped OFF in the registry, db row still on.
     Nabu::Store::Source.first(slug: "fake-src").update(enabled: true)
     unflipped = load_registry(<<~YAML)
       fake-src:
         adapter: StatusReportTest::FakeAdapter
-        enabled: false
+        wired: false
     YAML
     out = Nabu::StatusReport.render(registry: unflipped, db: db, ledger: ledger_test_db)
-    assert_match(/fake-src\s+off\(m\)/, out)
+    assert_match(/fake-src\s+unwired\(m\)/, out)
   end
 
   def test_withdrawn_rows_excluded_from_counts
@@ -224,7 +224,7 @@ class StatusReportTest < Minitest::Test
     registry = load_registry(<<~YAML)
       fake-dict:
         adapter: StatusReportTest::FakeDictAdapter
-        enabled: true
+        wired: true
         sync_policy: auto
     YAML
     source = registry["fake-dict"].sync_source!(db)
@@ -256,7 +256,7 @@ class StatusReportTest < Minitest::Test
     registry = load_registry(<<~YAML)
       bosworth-toller:
         adapter: Nabu::Adapters::BosworthToller
-        enabled: false
+        wired: false
         sync_policy: manual
     YAML
     source = registry["bosworth-toller"].sync_source!(db)
@@ -273,7 +273,7 @@ class StatusReportTest < Minitest::Test
     end
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
-    assert_match(/bosworth-toller\s+off\(m\)\s+UNPROBED\s+2\s+never/, out)
+    assert_match(/bosworth-toller\s+unwired\(m\)\s+UNPROBED\s+2\s+never/, out)
     refute_match(/bosworth-toller.*docs=/, out)
   end
 
@@ -287,7 +287,7 @@ class StatusReportTest < Minitest::Test
     YAML
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger_test_db)
-    assert_match(/fake-dict\s+off\(m\)\s+UNPROBED\s+—\s+never/, out)
+    assert_match(/fake-dict\s+unwired\(m\)\s+UNPROBED\s+—\s+never/, out)
     refute_match(/entries=|docs=/, out)
   end
 
@@ -318,13 +318,13 @@ class StatusReportTest < Minitest::Test
     registry["fake-src"].sync_source!(db)
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
-    assert_match(%r{fake-src\s+off\(m\)\s+UNPROBED\s+0/0\s+never}, out)
+    assert_match(%r{fake-src\s+unwired\(m\)\s+UNPROBED\s+0/0\s+never}, out)
   end
 
   # ok → SILENT: a fresh CURRENT probe prints no mark at all.
   def test_upstream_current_recent_is_silent
     out = render_with_probe(drift: "current", checked_at: Time.now - (2 * 86_400))
-    assert_match(%r{fake-src\s+off\(m\)\s+0/0\s+never}, out)
+    assert_match(%r{fake-src\s+unwired\(m\)\s+0/0\s+never}, out)
     refute_match(/up=|OLD|DOWN|REPROBE|UNPROBED/, out, "a healthy ok verdict is silent")
   end
 
@@ -363,7 +363,7 @@ class StatusReportTest < Minitest::Test
     registry = load_registry(<<~YAML)
       frozen-src:
         adapter: StatusReportTest::FakeAdapter
-        enabled: false
+        wired: false
         sync_policy: frozen
     YAML
     registry["frozen-src"].sync_source!(db)
@@ -372,7 +372,7 @@ class StatusReportTest < Minitest::Test
                               drift: "behind", license: "unchanged", detail: nil)
 
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
-    assert_match(%r{frozen-src\s+off\(f\)\s+0/0\s+never}, out)
+    assert_match(%r{frozen-src\s+unwired\(f\)\s+0/0\s+never}, out)
     refute_match(/OLD|BEHIND|DOWN|REPROBE|UNPROBED/, out, "a frozen source is silent")
   end
 
@@ -394,7 +394,7 @@ class StatusReportTest < Minitest::Test
       local-language:
         adapter: StatusReportTest::LanguageFakeAdapter
         kind: shelf
-        enabled: true
+        wired: true
     YAML
     registry["local-language"].sync_source!(db)
     db[:language_records].insert(lang_code: "chu", kind: "name", body: "OCS", source: "dossier")
@@ -425,7 +425,7 @@ class StatusReportTest < Minitest::Test
       local-notes:
         adapter: StatusReportTest::NotesFakeAdapter
         kind: shelf
-        enabled: true
+        wired: true
     YAML
     registry["local-notes"].sync_source!(db)
     db[:urn_notes].insert(urn: "urn:nabu:ccmh:mar:mt", note: "collate first", topic: "notes",
@@ -444,16 +444,16 @@ class StatusReportTest < Minitest::Test
     registry = load_registry(<<~YAML)
       zsrc:
         adapter: StatusReportTest::FakeAdapter
-        enabled: true
+        wired: true
         sync_policy: auto
       ashelf:
         adapter: StatusReportTest::LanguageFakeAdapter
         kind: shelf
-        enabled: true
+        wired: true
       amod:
         adapter: StatusReportTest::FakeAdapter
         kind: module
-        enabled: false
+        wired: false
         sync_policy: manual
     YAML
 
@@ -469,7 +469,7 @@ class StatusReportTest < Minitest::Test
       amod:
         adapter: StatusReportTest::FakeAdapter
         kind: module
-        enabled: false
+        wired: false
         sync_policy: manual
     YAML
     registry["amod"].sync_source!(db)
@@ -572,7 +572,7 @@ class StatusReportTest < Minitest::Test
     out = Nabu::StatusReport.render_source(registry: registry, db: db, ledger: ledger, slug: "fake-src")
     assert_match(/^fake-src\s+\(Fake Source\)/, out)
     assert_match(/kind:\s+source/, out)
-    assert_match(/enabled:\s+no/, out)
+    assert_match(/wired:\s+no/, out)
     assert_match(/cadence:\s+manual/, out)
     assert_match(/liveness:\s+up=ok\(2d\)/, out, "the detail view keeps the healthy verdict")
     assert_match(/docs:\s+1/, out)
@@ -589,7 +589,7 @@ class StatusReportTest < Minitest::Test
     registry = load_registry(<<~YAML)
       fake-dict:
         adapter: StatusReportTest::FakeDictAdapter
-        enabled: true
+        wired: true
         sync_policy: auto
     YAML
     source = registry["fake-dict"].sync_source!(db)
@@ -632,7 +632,7 @@ class StatusReportTest < Minitest::Test
     out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: true)
     # The P39-0 table shape: enablement+cadence, kind, verbose up=, labeled
     # counts, license class, full stamp + full delta (zeros included).
-    assert_match(/fake-src\s+off\(m\)\s+source\s+up=ok\(2d\)\s+docs=1 pass=2\s+attribution/, out)
+    assert_match(/fake-src\s+unwired\(m\)\s+source\s+up=ok\(2d\)\s+docs=1 pass=2\s+attribution/, out)
     assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2} \(\+1 ~0 -0 !0\)/, out)
   end
 

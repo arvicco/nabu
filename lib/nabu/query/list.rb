@@ -199,6 +199,17 @@ module Nabu
         page(dataset.order(Sequel[:documents][:urn]), limit) { |row| build_doc_row(row) }
       end
 
+      # The natural listing mode for +slug+ by content kind (P44-r1): a
+      # dictionary source (one that owns dictionary rows — the same catalog
+      # fact #entries gates on) enumerates :entries; every other shelf
+      # :documents. Drives `nabu list SOURCE --lang`, which IMPLIES the mode
+      # instead of refusing. Unknown slug raises Error naming the valid
+      # slugs, like the enumerations themselves.
+      def natural_mode(slug)
+        source = source_row!(slug)
+        dictionary_source?(source.fetch(:id)) ? :entries : :documents
+      end
+
       # Enumerate a dictionary source's live entries (headword + gloss) in
       # (dictionary, entry_id) order. nil when the source owns no dictionaries
       # (the CLI words the honest miss). +prefix+ filters headwords by FOLDED

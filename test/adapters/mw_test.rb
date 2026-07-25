@@ -247,7 +247,7 @@ class MwTest < Minitest::Test
     entry = registry["mw"]
     refute_nil entry, "config/sources.yml must register mw"
     assert_equal Nabu::Adapters::Mw, entry.adapter_class
-    assert entry.enabled, "live (owner sign-off 2026-07-13 after first sync + eyeball)"
+    assert entry.wired, "live (owner sign-off 2026-07-13 after first sync + eyeball)"
     assert_equal "manual", entry.sync_policy
     assert_equal Nabu::Adapters::Mw.manifest, entry.manifest
   end

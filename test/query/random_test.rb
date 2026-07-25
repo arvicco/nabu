@@ -20,8 +20,8 @@ module Query
       )
     end
 
-    def random(source: nil, count: 1)
-      Nabu::Query::Random.new(catalog: @catalog).run(source: source, count: count)
+    def random(source: nil, lang: nil, count: 1)
+      Nabu::Query::Random.new(catalog: @catalog).run(source: source, lang: lang, count: count)
     end
 
     # Seed +n+ passages under one document; returns the document urn.
@@ -73,6 +73,30 @@ module Query
       urns = random(source: "alpha", count: 20).map(&:urn)
       assert_equal 4, urns.size
       assert(urns.all? { |urn| urn.start_with?("urn:nabu:alpha:") }, "only the scoped source is drawn")
+    end
+
+    # P44-r1: --lang scopes the draw to one passage language. The filter stays
+    # on the passages table itself (never the defeated documents/sources join),
+    # so probing survives — here it composes with the source scope too.
+    def test_language_scope_restricts_to_that_passage_language
+      seed_document(source: @open, urn: "urn:nabu:alpha:grc", count: 4, language: "grc")
+      seed_document(source: @open, urn: "urn:nabu:alpha:lat", count: 4, language: "lat")
+      urns = random(lang: "lat", count: 20).map(&:urn)
+      assert_equal 4, urns.size
+      assert(urns.all? { |urn| urn.start_with?("urn:nabu:alpha:lat:") }, "only lat passages are drawn")
+    end
+
+    def test_language_scope_composes_with_the_source_scope
+      seed_document(source: @open, urn: "urn:nabu:alpha:grc", count: 3, language: "grc")
+      seed_document(source: @nc, urn: "urn:nabu:beta:grc", count: 3, language: "grc")
+      urns = random(source: "alpha", lang: "grc", count: 20).map(&:urn)
+      assert_equal 3, urns.size
+      assert(urns.all? { |urn| urn.start_with?("urn:nabu:alpha:grc:") }, "both scopes apply")
+    end
+
+    def test_language_scope_with_nothing_visible_is_empty
+      seed_document(source: @open, urn: "urn:nabu:alpha:grc", count: 3, language: "grc")
+      assert_empty random(lang: "cop", count: 5), "a language the corpus lacks is honest emptiness"
     end
 
     def test_withdrawn_passages_are_never_drawn

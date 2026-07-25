@@ -117,7 +117,7 @@ class RemoteProbeTest < Minitest::Test
   def registry_of(*specs, policy: "manual", kind: "source")
     entries = specs.map do |slug, klass, enabled|
       Nabu::SourceRegistry::Entry.new(
-        slug: slug, adapter_class_name: klass, enabled: enabled || enabled.nil?,
+        slug: slug, adapter_class_name: klass, wired: enabled || enabled.nil?,
         sync_policy: policy, kind: kind
       )
     end
@@ -323,7 +323,7 @@ class RemoteProbeTest < Minitest::Test
   # with a configured watch url — the escape hatch the key exists for.
   def watch_registry(adapter: "ProbeNonGithubAdapter")
     entry = Nabu::SourceRegistry::Entry.new(
-      slug: "wsrc", adapter_class_name: adapter, enabled: true,
+      slug: "wsrc", adapter_class_name: adapter, wired: true,
       sync_policy: "manual", license_watch: WATCH_URL
     )
     Nabu::SourceRegistry.new([entry])

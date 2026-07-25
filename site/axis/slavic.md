@@ -15,18 +15,18 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `proiel` | treebank | nc | enabled · frozen | 12 docs / 51,321 passages |
-| `torot` | treebank | nc | enabled · manual | 40 docs / 33,085 passages |
-| `ccmh` | texts | attribution | enabled · manual | 19 docs / 28,786 passages |
-| `goo300k` | texts | attribution | enabled · manual | 89 docs / 8,397 passages |
-| `imp` | texts | attribution | enabled · manual | 658 docs / 404,897 passages |
-| `damaskini` | texts | attribution | enabled · manual | 46 docs / 12,072 passages |
-| `wiktionary-cu` | dictionary | attribution | enabled · manual | 4,615 entries |
-| `freising` | texts | research_private | enabled · manual | 27 docs / 2,037 passages |
-| `sl-lexica` | dictionary | attribution | enabled · manual | 139,405 entries |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
+| `torot` | treebank | nc | wired · manual | 40 docs / 33,085 passages |
+| `ccmh` | texts | attribution | wired · manual | 19 docs / 28,786 passages |
+| `goo300k` | texts | attribution | wired · manual | 89 docs / 8,397 passages |
+| `imp` | texts | attribution | wired · manual | 658 docs / 404,897 passages |
+| `damaskini` | texts | attribution | wired · manual | 46 docs / 12,072 passages |
+| `wiktionary-cu` | dictionary | attribution | wired · manual | 4,615 entries |
+| `freising` | texts | research_private | wired · manual | 27 docs / 2,037 passages |
+| `sl-lexica` | dictionary | attribution | wired · manual | 139,405 entries |
 
 ## The desk's instruments
 
@@ -61,6 +61,12 @@ nabu list sl-lexica --entries --prefix bh  # headword-prefix browse into the Slo
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“Show me MARK 2.3 in every witness — Greek against all four OCS codices.”** → `nabu_align "MARK 2.3" (work: nt)` — Fourteen witness columns in one reply: PROIEL Greek, Vulgate, Gothic, Armenian, Codex Marianus beside the CCMH Assemanianus / Marianus / Savvina / Zographensis diplomatic transcriptions, the West-Saxon Gospels, Sahidic Coptic, SBLGNT, WEB. `collate: true` turns the columns into a witness apparatus.
+
 ## Terminal setup
 
 - **Cyrillic OCS (chu):** nabu strips the titla (titlo, pokrytie,
@@ -72,4 +78,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

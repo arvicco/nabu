@@ -50,7 +50,7 @@ classes are the gate that decides what may pass.
 
 ## Corpus sources
 
-All 82 sources below are synced and live as of 22 July 2026. Grouped by the
+All 85 sources below are synced and live as of 24 July 2026. Grouped by the
 owner's research desks rather than alphabetically — with each desk's member
 shelves, license mix and sync status on one page — the same sources appear on
 the [research axes]({{ '/axis/' | relative_url }}).
@@ -138,9 +138,22 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | `rem` | [Referenzkorpus Mittelhochdeutsch](https://zenodo.org/records/13982324) (Bochum/Bonn) | 360 gold-annotated Middle High German texts, 1050–1350, diplomatic layer preserved (synchronized 22 July 2026) | CC BY-SA 4.0 |
 | `rundata` | [Samnordisk runtextdatabas / Rundata](https://www.runforum.nordiska.uu.se/srd/) (Uppsala, via rundata.info) | ~6,800 Scandinavian runic inscriptions in up to five text lanes: transliteration, Old-West-Norse and runic-Swedish normalisations, English and Swedish translations (synchronized 22 July 2026) | ODbL 1.0 + DbCL 1.0 — *based on the Scandinavian Runic-text Database* |
 
-Two further registry rows are **feature modules**, not corpora — `bridging`
-(the OSHB↔BHSA crosswalk) and `kr-gaiji` (the Kanripo gaiji map): they fetch
-reference data but mint no documents of their own.
+| `openiti` | [OpenITI — Open Islamicate Texts Initiative](https://openiti.org/) (2025.1.9 Zenodo release) | The Islamicate library at corpus scale: 9,079 primary text versions of premodern Arabic and Persian — hadith, falsafa, history, poetry — 34.6M passages parsed from OpenITI mARkdown (synchronized 23 July 2026) | CC BY-NC-SA 4.0 (the Zenodo record's grant) |
+| `glaux` | [GLAUx](https://github.com/alekkeersmaekers/glaux) (Keersmaekers, Leuven) | ~20M tokens of Ancient Greek, 8th c. BCE – 4th c. CE, automatically annotated for lemma/morphology/syntax — the analysis-side complement to the held editions and the library's silver lemma tier, labeled as such on every hit: 1,421 works / 968,578 passages (synchronized 24 July 2026) | CC BY-SA (72 restrictively licensed texts carried as `nc`) |
+| `croala` | [CroALa — Croatiae auctores Latini](https://croala.ffzg.unizg.hr/) (Jovanović, Zagreb) | Croatian Latin from 976 CE through the neo-Latin centuries — charters, orations, carmina: 570 documents / 309,180 passages, the classical desk's medieval-Latin edge (synchronized 24 July 2026) | CC BY 4.0 |
+
+Eight further registry rows are **feature modules**, not corpora —
+machinery that fetches reference data but mints no documents of its own:
+`bridging` (the OSHB↔BHSA crosswalk), `kr-gaiji` (the Kanripo gaiji
+map), `trismegistos` (the Trismegistos TexRelations concordance
+crosswalk that resolves `tm:` reference edges across epigraphic
+corpora), `pleiades` (the ancient-world gazetteer behind `nabu place`
+and the findspot line, CC BY 3.0), `lila` (the LiLa Latin lemma bank
+behind `nabu define`'s variant-spelling fallback, CC BY-SA 4.0),
+`kitab` (KITAB text-reuse alignments over the OpenITI library,
+CC BY-NC-SA 4.0), and the two metrical-scansion lanes — `pedecerto`
+(Latin, CC BY-NC-ND 4.0) and `hypotactic` (Greek, CC BY 4.0) — that
+annotate held verse passages with meter, pattern and caesura.
 
 ## The local shelves
 

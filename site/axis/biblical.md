@@ -15,22 +15,22 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these fourteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | enabled · manual | 64 docs / 285,143 passages |
-| `vulgate` | texts | open | enabled · manual | 73 docs / 35,809 passages |
-| `eng-web` | texts | open | enabled · manual | 84 docs / 37,624 passages |
-| `sblgnt` | texts | attribution | enabled · manual | 27 docs / 7,939 passages |
-| `coptic-scriptorium` | texts | nc | enabled · manual | 482 docs / 74,169 passages |
-| `oshb` | texts | open | enabled · manual | 39 docs / 23,213 passages |
-| `sdbh` | dictionary | attribution | enabled · manual | 7,932 entries |
-| `sefaria` | texts | open | enabled · manual | 103 docs / 57,095 passages |
-| `bhsa` | texts | nc | enabled · manual | 39 docs / 23,213 passages |
-| `bridging` | crosswalk module | attribution | not enabled | nothing held yet |
-| `dss` | texts | nc | enabled · manual | 1,001 docs / 52,895 passages |
-| `hebrew-lexicon` | dictionary | attribution | enabled · manual | 21,144 entries |
-| `peshitta` | texts | nc | enabled · manual | 65 docs / 31,341 passages |
-| `syriac-corpus` | texts | attribution | enabled · manual | 632 docs / 134,726 passages |
+| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
+| `eng-web` | texts | open | wired · manual | 84 docs / 37,624 passages |
+| `sblgnt` | texts | attribution | wired · manual | 27 docs / 7,939 passages |
+| `coptic-scriptorium` | texts | nc | wired · manual | 482 docs / 74,169 passages |
+| `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
+| `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
+| `sefaria` | texts | open | wired · manual | 103 docs / 57,095 passages |
+| `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
+| `bridging` | crosswalk module | attribution | not yet wired | nothing held yet |
+| `dss` | texts | nc | wired · manual | 1,001 docs / 52,895 passages |
+| `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
+| `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
+| `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
 
 ## The desk's instruments
 
@@ -67,6 +67,12 @@ nabu list coptic-scriptorium --loans  # the donor-language census of the loan ta
 ```
 
 
+## Ask your model
+
+With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+
+- **“GEN 1.1 across all the versions at once.”** → `nabu_align "GEN 1.1" (work: ot)` — Seven witnesses in one reply: LXX (Swete), Clementine Vulgate, both Masoretic texts (OSHB and BHSA), Targum Onkelos, the Peshitta, and the WEB English — every row carrying its own license class.
+
 ## Terminal setup
 
 - **Hebrew and Aramaic (hbo/arc):** nabu strips cantillation, keeps the
@@ -84,4 +90,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

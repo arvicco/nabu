@@ -42,7 +42,7 @@ class VerifyTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD, "two.txt" => ODYSSEY)
     Nabu::Rebuild.new(config: config, registry: registry).run # seed the catalog
@@ -132,10 +132,10 @@ class VerifyTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
       ghost:
         adapter: TestAdapter
-        enabled: true
+        wired: true
     YAML
 
     result = verify
@@ -156,7 +156,7 @@ class VerifyTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: SkippingVerifyAdapter
-        enabled: true
+        wired: true
     YAML
     Nabu::Rebuild.new(config: config, registry: registry).run # seeds only Iliad
 
@@ -178,13 +178,13 @@ class VerifyTest < Minitest::Test
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
-        enabled: true
+        wired: true
       lexica:
         adapter: Nabu::Adapters::Lexica
-        enabled: true
+        wired: true
       bosworth-toller:
         adapter: Nabu::Adapters::BosworthToller
-        enabled: true
+        wired: true
     YAML
     FileUtils.cp_r(Nabu::TestSupport.fixtures("lexica"), File.join(@canonical, "lexica"))
     FileUtils.cp_r(Nabu::TestSupport.fixtures("bosworth-toller"), File.join(@canonical, "bosworth-toller"))
@@ -211,7 +211,7 @@ class VerifyTest < Minitest::Test
     write_sources(<<~YAML)
       lexica:
         adapter: Nabu::Adapters::Lexica
-        enabled: true
+        wired: true
     YAML
     lexica_dir = File.join(@canonical, "lexica")
     FileUtils.cp_r(Nabu::TestSupport.fixtures("lexica"), lexica_dir)
@@ -235,7 +235,7 @@ class VerifyTest < Minitest::Test
     write_sources(<<~YAML)
       local-language:
         adapter: Nabu::Adapters::LocalLanguage
-        enabled: true
+        wired: true
         kind: shelf
     YAML
     FileUtils.cp_r(Nabu::TestSupport.fixtures("local-language"), File.join(@canonical, "local-language"))
@@ -277,7 +277,7 @@ class VerifyTest < Minitest::Test
     write_sources(<<~YAML)
       local-notes:
         adapter: Nabu::Adapters::LocalNotes
-        enabled: true
+        wired: true
         kind: shelf
     YAML
     FileUtils.cp_r(Nabu::TestSupport.fixtures("local-notes"), File.join(@canonical, "local-notes"))

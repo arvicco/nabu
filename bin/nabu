@@ -4,4 +4,9 @@
 require "bundler/setup"
 require_relative "../lib/nabu"
 
+# P44-i1b: at ^C, Open3's internal reader threads die with IOError chatter
+# before the CLI's clean Interrupt handler can speak — silence the thread
+# diagnostics; the CLI prints the one honest interrupt line itself.
+Thread.report_on_exception = false
+
 Nabu::CLI.start(ARGV)

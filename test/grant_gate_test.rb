@@ -15,7 +15,7 @@ class GrantGateTest < Minitest::Test
 
   def grant_entry(slug: "starling", grant_required: true)
     Nabu::SourceRegistry::Entry.new(
-      slug: slug, adapter_class_name: "TestAdapter", enabled: true, sync_policy: "manual",
+      slug: slug, adapter_class_name: "TestAdapter", wired: true, sync_policy: "manual",
       grant_required: grant_required, grant: (grant_required ? sample_grant : nil)
     )
   end

@@ -32,10 +32,16 @@ module Nabu
       WORD_NUMBERS = %w[zero one two three four five six seven eight nine ten eleven twelve
                         thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty].freeze
 
+      # The footnote line rendered ONLY on axis pages with ≥1 blocked member
+      # (P44-r3a): grant-gated private research materials are excluded from the
+      # member table and holdings above, so the page says so honestly.
+      BLOCKED_FOOTNOTE = "Private research materials under personal grants are not listed."
+
       def initialize(registry:, fragments_path:, output_dir:, catalog_path:, as_of: Date.today)
         @registry = registry
         @axes = registry.axes
         @fragments = load_fragments(fragments_path)
+        @fragments_path = fragments_path
         @output_dir = output_dir
         @catalog_path = catalog_path
         @as_of = as_of
@@ -96,7 +102,10 @@ module Nabu
       # ---- page rendering -------------------------------------------------
 
       def render_axis(axis, census)
-        members = @registry.axis_members(axis.name)
+        # PUBLIC surfaces exclude grant-gated private-research members (P44-r3a):
+        # the member table and holdings list only the public holdings, and a
+        # footnote fires when this axis has any blocked member.
+        members = @registry.public_axis_members(axis.name)
         <<~PAGE
           ---
           title: "#{axis.name.capitalize} — #{persona_lead(axis)}"
@@ -112,7 +121,7 @@ module Nabu
 
           #{shelves_intro(members)}
 
-          #{shelves_table(members, census)}
+          #{shelves_table(members, census)}#{blocked_footnote_block(axis)}
 
           ## The desk's instruments
 
@@ -129,7 +138,7 @@ module Nabu
           nabu sync #{axis.name}                 # sync the desk's enabled members
           ```
           #{recipes_block(axis)}
-          #{display_block(axis)}---
+          #{mcp_block(axis)}#{display_block(axis)}---
 
           #{footer(axis)}
         PAGE
@@ -141,7 +150,7 @@ module Nabu
           title: Research axes
           permalink: /axis/
           description: >-
-            The eighteen research desks of the Nabu library — tags over the
+            The #{desk_count_word} research desks of the Nabu library — tags over the
             source list, each a scholarly hat with its own shelves, instruments
             and commands.
           ---
@@ -165,7 +174,7 @@ module Nabu
           page, where the member shelves, live holdings, instruments, CLI recipes
           and terminal setup live.
 
-          #{quickstart_pointer}## The eighteen desks
+          #{quickstart_pointer}## The #{desk_count_word} desks
 
           #{index_entries}
 
@@ -232,6 +241,14 @@ module Nabu
         ([header] + rows).join("\n")
       end
 
+      # Empty unless this axis has ≥1 blocked (grant-gated private) member
+      # (P44-r3a): then a single honest footnote below the (public-only) table.
+      def blocked_footnote_block(axis)
+        return "" if @registry.blocked_axis_members(axis.name).empty?
+
+        "\n\n#{BLOCKED_FOOTNOTE}"
+      end
+
       def shelf_row(slug, census)
         entry = @registry[slug]
         holds = holds_label(slug, entry)
@@ -266,7 +283,7 @@ module Nabu
       def status_label(entry)
         return "unknown" unless entry
 
-        entry.enabled ? "enabled · #{entry.sync_policy}" : "not enabled"
+        entry.wired ? "wired · #{entry.sync_policy}" : "not yet wired"
       end
 
       def holdings_cell(census, slug)
@@ -304,6 +321,32 @@ module Nabu
         "#{lines.join("\n")}\n"
       end
 
+      # The per-desk MCP examples (P44-4): projected from the ONE curated
+      # home site/axis/_mcp.yml (the fragments precedent) — real questions a
+      # person at this desk asks their model, the tool composition that
+      # answered, and what actually came back, every example live-verified
+      # at curation time (the P4-2 no-fiction guard). No home entry, no block.
+      def mcp_block(axis)
+        entries = mcp_examples.dig(axis.name, "mcp")
+        return "" unless entries && !entries.empty?
+
+        lines = ["", "## Ask your model", "",
+                 "With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers " \
+                 "conversational research questions. Each example ran live against this library:", ""]
+        entries.each do |entry|
+          lines << "- **“#{entry.fetch('ask')}”** → `#{entry.fetch('call')}` — #{entry.fetch('answer').strip}"
+        end
+        "#{lines.join("\n")}\n"
+      end
+
+      # The curated MCP-examples home, a sibling of the fragments file.
+      def mcp_examples
+        @mcp_examples ||= begin
+          path = File.join(File.dirname(@fragments_path), "_mcp.yml")
+          File.exist?(path) ? (YAML.safe_load_file(path) || {}) : {}
+        end
+      end
+
       def display_block(axis)
         text = fragment(axis.name)["display"]
         return "" unless text
@@ -312,8 +355,17 @@ module Nabu
           "[display page](https://github.com/arvicco/nabu/blob/main/docs/display.md).\n\n"
       end
 
+      # The desk count as a word for the index/footer prose (P44-r2 flagged
+      # the hardcoded "eighteen" two desks stale) — derived from the live
+      # registry so a new axis can never stale it again; counts past
+      # WORD_NUMBERS fall back to digits honestly.
+      def desk_count_word
+        count = @registry.axes.names.size
+        WORD_NUMBERS.fetch(count) { count.to_s }
+      end
+
       def footer(_axis)
-        "One of the [eighteen research desks]({{ '/axis/' | relative_url }}); the flat " \
+        "One of the [#{desk_count_word} research desks]({{ '/axis/' | relative_url }}); the flat " \
           "shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is " \
           "[docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md)."
       end

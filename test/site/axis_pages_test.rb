@@ -81,9 +81,42 @@ class AxisPagesTest < Minitest::Test
 
   def test_each_page_pins_the_member_slug_list_to_the_registry
     axes.each_axis do |axis|
-      assert_equal registry.axis_members(axis.name), table_slugs(axis.name),
+      assert_equal registry.public_axis_members(axis.name), table_slugs(axis.name),
                    "#{axis.name}: the shelves table's member slugs must equal " \
-                   "SourceRegistry#axis_members, in order (regenerate with `rake site:axes`)"
+                   "SourceRegistry#public_axis_members — blocked grant-gated rows " \
+                   "(availability: blocked) are not advertised publicly, in order " \
+                   "(regenerate with `rake site:axes`)"
+    end
+  end
+
+  # P44-r3a: an axis with a blocked (grant-gated private) member carries the
+  # honesty footnote below the (public-only) shelves table; an axis with none
+  # must NOT carry it. Pinned to the registry so a new blocked source without a
+  # page regeneration fails the gate.
+  FOOTNOTE = "Private research materials under personal grants are not listed."
+
+  def test_blocked_member_axes_carry_the_footnote_and_others_do_not
+    axes.each_axis do |axis|
+      has_blocked = !registry.blocked_axis_members(axis.name).empty?
+      body = body(axis.name)
+      if has_blocked
+        assert_includes body, FOOTNOTE,
+                        "#{axis.name}: has a blocked member — the page must carry the " \
+                        "private-materials footnote (regenerate with `rake site:axes`)"
+      else
+        refute_includes body, FOOTNOTE,
+                        "#{axis.name}: has no blocked member — the page must NOT carry the footnote"
+      end
+    end
+  end
+
+  # The excluded blocked slugs never appear in any public shelves table.
+  def test_blocked_members_never_appear_in_a_shelves_table
+    axes.each_axis do |axis|
+      registry.blocked_axis_members(axis.name).each do |slug|
+        refute_includes table_slugs(axis.name), slug,
+                        "#{axis.name}: blocked source #{slug} must not be listed in the public shelves table"
+      end
     end
   end
 
@@ -116,10 +149,10 @@ class AxisPagesTest < Minitest::Test
   end
 
   # [[name, block-body], …] split on the ### axis headings under "## The
-  # eighteen desks".
+  # twenty desks".
   def index_blocks
-    section = index_body[/^## The eighteen desks\n(.*?)(?=^---\s*$)/m, 1]
-    refute_nil section, "the /axis/ index must carry a '## The eighteen desks' section"
+    section = index_body[/^## The twenty desks\n(.*?)(?=^---\s*$)/m, 1]
+    refute_nil section, "the /axis/ index must carry a '## The twenty desks' section"
     section.scan(/^### (.+?)\n(.*?)(?=^### |\z)/m)
   end
 
@@ -134,8 +167,8 @@ class AxisPagesTest < Minitest::Test
     body = index_body
     assert_includes body, QUICKSTART_POINTER,
                     "the /axis/ index must carry the Quickstart pointer (regenerate with `rake site:axes`)"
-    assert body.index(QUICKSTART_POINTER) < body.index("## The eighteen desks"),
-           "the /axis/ index pointer must sit before the '## The eighteen desks' heading"
+    assert body.index(QUICKSTART_POINTER) < body.index("## The twenty desks"),
+           "the /axis/ index pointer must sit before the '## The twenty desks' heading"
   end
 
   def test_index_pins_each_persona_verbatim_and_links_the_page
@@ -147,6 +180,28 @@ class AxisPagesTest < Minitest::Test
                    "#{axis.name}: the index persona must be VERBATIM from config/axes.yml"
       assert_includes block, "/axis/#{axis.name}/",
                       "#{axis.name}: the index block must link to /axis/#{axis.name}/"
+    end
+  end
+
+  # P44-4: every axis with curated MCP examples (site/axis/_mcp.yml — the one
+  # hand-curated home, live-verified) renders an "## Ask your model" block
+  # carrying each example's ask + call verbatim; an axis without curated
+  # examples renders no such heading. The drift guard: edit _mcp.yml →
+  # regenerate, or the gate fails.
+  def test_mcp_examples_project_from_the_curated_home
+    examples = YAML.safe_load_file(File.join(AXIS_DIR, "_mcp.yml"))
+    axes.each_axis do |axis|
+      entries = examples.dig(axis.name, "mcp")
+      page = body(axis.name)
+      if entries.nil? || entries.empty?
+        refute_includes page, "## Ask your model", "#{axis.name}: no curated examples, no block"
+      else
+        assert_includes page, "## Ask your model", "#{axis.name}: curated examples must render"
+        entries.each do |entry|
+          assert_includes page, entry.fetch("ask"), "#{axis.name}: the ask renders verbatim"
+          assert_includes page, entry.fetch("call"), "#{axis.name}: the call renders verbatim"
+        end
+      end
     end
   end
 end

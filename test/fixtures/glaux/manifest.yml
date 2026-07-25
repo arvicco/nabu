@@ -1,0 +1,26 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# GLAUx ships one raw XML file per work under xml/ plus a repo-root
+# metadata.txt (the per-text license census). The two XML files are WHOLE
+# byte-identical copies of their upstream files; metadata.txt is a documented
+# TRIM (header + 5 real rows of 1,421). Because one entry is trimmed,
+# adapter_test is null — the adapter test asserts specific ids/counts that a
+# full-metadata refetch would not false-fail, but the trimmed-source posture
+# (as for diorisis) leaves the re-run to the operator's eyeballed diff.
+source: glaux
+adapter_test:
+retrieved: 2026-07-24
+files:
+  - path: xml/0003-002.xml
+    url: https://raw.githubusercontent.com/alekkeersmaekers/glaux/main/xml/0003-002.xml
+    whole: true
+    trim: none
+  - path: xml/0004-002.xml
+    url: https://raw.githubusercontent.com/alekkeersmaekers/glaux/main/xml/0004-002.xml
+    whole: true
+    trim: none
+  - path: metadata.txt
+    url: https://raw.githubusercontent.com/alekkeersmaekers/glaux/main/metadata.txt
+    whole: false
+    trim: "header + 5 real rows (0003-002, 0004-002, 0068-001, 0016-001, 0028-001) of 1,421 — the two fixture works plus the D44-a census's NC-source and PROIEL/Gorman NC-annotation cases; tabs preserved byte-for-byte"
