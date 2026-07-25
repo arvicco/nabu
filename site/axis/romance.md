@@ -5,9 +5,9 @@ description: >-
   The Romanist's desk: its shelves, instruments, CLI recipes and terminal setup.
 ---
 
-> The Romanist — watches Latin become French, Italian and Spanish, charter by charter.
+> The Romanist — the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours.
 
-The Latin→Romance transition band: digilibLT's late-antique prose at the ancestor end, riding beside the classical desk by design. The daughter-language shelves (Old French, Old Italian, Iberian charters) are scouted but not yet held — the desk is honest about starting at the Latin side.
+The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
 The desk opens with **CroALa** (`croala`) — Croatian Latin from a 976 CE
 charter through the neo-Latin centuries, the continuum's Latin side
