@@ -196,6 +196,34 @@ ud:
   # = +11 docs at treebank-split grain (more if a repo ships train/dev too —
   # the honest floor is +11), and xcl/fro/frm/ota/hbo enter the lemma-indexed
   # languages (grc/akk/cop/egy already indexed). No new parser family.
+  # P45-1 (2026-07-25): TREEBANKS grew to TWENTY-NINE — the Romance pack,
+  # three treebanks (config-only, licenses read verbatim 2026-07-25; the
+  # fourth Romance survey candidate, Old French PROFITEROLE, landed at P43-1
+  # above — its license fork rides thread №43-1):
+  #   latin-llct (lat; Late Latin Charter Treebank — 521 Tuscan charters
+  #     AD 774–897, 9,023 sentences / 242,411 words by stats.xml census;
+  #     LICENSE.txt + README consistent CC BY-SA 4.0 → attribution),
+  #   latin-udante (lat; Dante's Latin — De vulgari eloquentia, Monarchia,
+  #     letters, Questio, Eclogues; 1,723 sentences / 55,553 words.
+  #     CONFLICTING LICENSES, the PROFITEROLE fork shape: LICENSE.txt BY-SA
+  #     4.0 vs README BY-NC-SA 3.0 (prose AND metadata) — conservative nc,
+  #     pending upstream clarification),
+  #   romanian-nonstandard (ro, the library's first ro lane; UAIC-RoDia Old
+  #     Romanian register — Alba Iulia NT 1648, Dosoftei Psalter 1673,
+  #     Neculce's Chronicle, folk verse — under UD's one modern `ro` tag,
+  #     the RNC-under-orv/IcePaHC precedent; LICENSE.txt + README consistent
+  #     CC BY-SA 4.0 → attribution).
+  # SCALE HONESTY: romanian-nonstandard is 26,225 sentences / 572,436 words
+  # (stats.xml census 2026-07-25) — the ud source's SECOND-LARGEST treebank
+  # after Kyoto, bigger than everything else in the P43-1 wave combined.
+  # EXPECTED SYNC DELTA at the next owner-fired `bin/nabu sync ud`: +3 repo
+  # clones; all three ship train/dev/test = +9 docs / +36,971 passages
+  # (9,023 + 1,723 + 26,225), lat gains treebank-gold rows and ro enters the
+  # lemma-indexed languages at ~572k token rows in one bite. Budget sync
+  # time accordingly. AXIS NOTE: the `romance` axis is NOT declared here —
+  # axes are validated against config/axes.yml at load (SourceRegistry
+  # raises on an unknown name), so the axis mint packet must add `romance`
+  # to axes.yml AND to this row's axes list in the same change.
 
 proiel:
   adapter: Nabu::Adapters::Proiel

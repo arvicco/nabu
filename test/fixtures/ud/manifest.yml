@@ -19,7 +19,9 @@ adapter_test:
 # under P40-g 2026-07-22; the ELEVEN P43-1 historical-wave treebanks
 # (classical-armenian-caval, old-/middle-french-profiterole, ottoman-boun/
 # -dudu, greek-ptnk, hebrew-ptnk, akkadian-riao/-pisandub, coptic-bohairic,
-# egyptian-pc) were retrieved 2026-07-23 from master (see README).
+# egyptian-pc) were retrieved 2026-07-23 from master (see README); the three
+# P45-1 Romance-pack treebanks (latin-llct, latin-udante,
+# romanian-nonstandard) were retrieved 2026-07-25 from master (see README).
 retrieved: 2026-07-03
 files:
   - path: gothic-proiel/got_proiel-ud-test-head50.conllu
@@ -134,3 +136,19 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Egyptian-PC/master/egy_pc-ud-test.conllu
     whole: false
     trim: first 50 complete sentence blocks of egy_pc-ud-test.conllu (1,240 blocks upstream — Pyramid Texts, Sethe edition; 13 MWT range lines inside the head, no empty nodes; Egyptian, P43-1)
+  # P45-1 (the Romance pack — three treebanks retrieved 2026-07-25 from
+  # master): two new Latin lanes (LLCT charters + UDante) and the library's
+  # first ro lane. Each is the first 50 complete sentence blocks of its
+  # upstream *-ud-test.conllu.
+  - path: latin-llct/la_llct-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Latin-LLCT/master/la_llct-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of la_llct-ud-test.conllu (884 blocks upstream — Tuscan charters AD 774–897, `# reference` ChLA citation comments per block; 2 MWT range lines file-wide, NONE inside the head, no empty nodes; Late Latin, P45-1)
+  - path: latin-udante/la_udante-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Latin-UDante/master/la_udante-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of la_udante-ud-test.conllu (421 blocks upstream — the whole test split is De vulgari eloquentia, `# citation_hierarchy` comments per block; 7 MWT range lines inside the head, first `2-3 quare` at sent DVE-19, no empty nodes; Dante's Latin, P45-1)
+  - path: romanian-nonstandard/ro_nonstandard-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Romanian-Nonstandard/master/ro_nonstandard-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of ro_nonstandard-ud-test.conllu (1,052 blocks upstream — Alba Iulia New Testament 1648; a bare no-`=` comment line `# ro_nonstandard-ud-test` opens the file and `# citation-part=…` comments ride the blocks, both ignored by the parser; no MWT/empty-node lines in the head; Old Romanian under UD's one `ro` tag, P45-1)
