@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The twenty research desks of the Nabu library — tags over the
+  The twenty-one research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The twenty desks
+## The twenty-one desks
 
 ### classical
 
@@ -181,6 +181,14 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
 [Open the japonic desk]({{ '/axis/japonic/' | relative_url }})
+
+### romance
+
+> The Romanist — watches Latin become French, Italian and Spanish, charter by charter.
+
+The Latin→Romance transition band: digilibLT's late-antique prose at the ancestor end, riding beside the classical desk by design. The daughter-language shelves (Old French, Old Italian, Iberian charters) are scouted but not yet held — the desk is honest about starting at the Latin side.
+
+[Open the romance desk]({{ '/axis/romance/' | relative_url }})
 
 ### local
 

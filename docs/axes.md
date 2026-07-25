@@ -12,7 +12,7 @@ its Latin and at the Biblical scholar's for its scripture; the UD treebanks
 answer to nine desks at once. Multi-membership is the point, not an
 accident to be tidied away.
 
-Everything below documents **shipped behaviour** — the twenty desks
+Everything below documents **shipped behaviour** — the twenty-one desks
 defined in `config/axes.yml`, their memberships declared per source in
 `config/sources.yml`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
@@ -47,7 +47,7 @@ build if the page and the registry ever disagree.
 
 ## The desks
 
-Twenty desks, in the ratified order of `config/axes.yml` (which is also
+Twenty-one desks, in the ratified order of `config/axes.yml` (which is also
 the order the command surfaces render). Each leads with its **persona** —
 the hat's one-line self-description, printed verbatim by `nabu list --axis`
 and `nabu sync` — then the membership rationale, then the member slugs the
@@ -59,7 +59,7 @@ registry currently tags to it.
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
-**Members** (13): `perseus-greek`, `perseus-latin`, `first1k-greek`, `ud`, `proiel`, `lexica`, `vulgate`, `lila`, `hypotactic`, `diorisis`, `glaux`, `croala`, `pedecerto`
+**Members** (14): `perseus-greek`, `perseus-latin`, `first1k-greek`, `ud`, `proiel`, `lexica`, `vulgate`, `lila`, `hypotactic`, `diorisis`, `glaux`, `croala`, `pedecerto`, `digiliblt`
 
 ### epigraphy
 
@@ -204,6 +204,14 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
 **Members** (8): `wiktionary-recon`, `unihan`, `edrdg`, `hdic`, `kradfile`, `oncoj`, `oncoj-lexicon`, `aozora`
+
+### romance
+
+> The Romanist — watches Latin become French, Italian and Spanish, charter by charter.
+
+The Latin→Romance transition band: digilibLT's late-antique prose at the ancestor end, riding beside the classical desk by design. The daughter-language shelves (Old French, Old Italian, Iberian charters) are scouted but not yet held — the desk is honest about starting at the Latin side.
+
+**Members** (1): `digiliblt`
 
 ### local
 
