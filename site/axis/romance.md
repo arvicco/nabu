@@ -23,11 +23,11 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
-| `digiliblt` | texts | attribution | not yet wired | not synced yet |
-| `openmgh` | texts | attribution | not yet wired | not synced yet |
-| `bfm` | texts | attribution | not yet wired | not synced yet |
+| `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
+| `openmgh` | texts | attribution | wired · manual | 57 docs / 9,594 passages |
+| `bfm` | texts | attribution | wired · manual | 219 docs / 333,819 passages |
 
 ## The desk's instruments
 

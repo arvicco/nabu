@@ -2498,8 +2498,9 @@ digiliblt:   # P45-3
   axes: [classical, romance]   # late-antique Latin: the classical desk's 2nd–7th c.
                                # band AND the romance desk's ancestor shelf (dual-tag,
                                # never folding — the D35 rule)
-  wired: false   # BUILT (P45-3); awaiting the owner-fired first sync
-                   # (sparse clone ~106 MB of tar.gz + ~700 MB extracted).
+  wired: true    # Owner flip 2026-07-25 ("wire all the sources"; first
+                   # sync same day: 370 docs / 457,560 passages, 3 honest
+                   # quarantines incl. the known damaged dlt000079).
   # digilibLT — Biblioteca digitale di testi latini tardoantichi (Vercelli /
   # Università del Piemonte Orientale): 373 late-antique SECULAR Latin prose
   # texts (2nd–7th c. AD — Ammianus, the grammarians, agrimensores, jurists),
@@ -2528,7 +2529,9 @@ digiliblt:   # P45-3
 openmgh:
   adapter: Nabu::Adapters::Openmgh
   axes: [classical, romance]
-  wired: false   # BUILT P45-2, awaiting the owner-fired first sync. Scouted
+  wired: true    # Owner flip 2026-07-25 ("wire all the sources"; D45-d
+                   # first wave synced same day: 57/57 SS rer. Germ. volumes,
+                   # 9,594 passages, 0 errored, eyeballed). Scouted
                    # live 2026-07-25: 153 volumes on the index page
                    # (mgh.de/en/digital-mgh/openmgh/mgh-editions-in-openmgh),
                    # one zip each at data.mgh.de/openmgh/<bsbid>.zip holding
@@ -2565,9 +2568,9 @@ openmgh:
 bfm:   # P45-4
   adapter: Nabu::Adapters::Bfm
   axes: [romance]
-  wired: false   # awaiting the owner-fired first sync (~164 MB: 219 files
-                   # downloaded one by one from the sha1-addressed NAKALA
-                   # file API — resumable, verify-or-skip per file)
+  wired: true    # Owner flip 2026-07-25 ("wire all the sources"; first
+                   # sync same day — owner eyeballed; the 219-file NAKALA
+                   # inventory downloads sha1-verified and resumable)
   # P45-4: BFM — Base de français médiéval, corpus BFM2022 (ENS de Lyon /
   # UMR 5317 IHRIM; resp. Céline Guillot-Barbance, digital resp. Alexei
   # Lavrentiev). 219 TEI P5 texts / ~6.45M words of medieval French, the
