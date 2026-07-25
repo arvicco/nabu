@@ -213,14 +213,6 @@ The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and 
 
 **Members** (8): `wiktionary-recon`, `unihan`, `edrdg`, `hdic`, `kradfile`, `oncoj`, `oncoj-lexicon`, `aozora`
 
-### romance
-
-> The Romanist — watches Latin become French, Italian and Spanish, charter by charter.
-
-The Latin→Romance transition band: digilibLT's late-antique prose at the ancestor end, riding beside the classical desk by design. The daughter-language shelves (Old French, Old Italian, Iberian charters) are scouted but not yet held — the desk is honest about starting at the Latin side.
-
-**Members** (1): `digiliblt`
-
 ### local
 
 > The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records.
