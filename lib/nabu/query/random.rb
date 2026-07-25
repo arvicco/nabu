@@ -89,7 +89,24 @@ module Nabu
           scope = scope.where(document_id: doc_ids)
         end
 
-        urns = probe_urns(scope, n, check_document: source.nil?)
+        # P45-i1 (live, the openMGH first sync): the id-probe's
+        # near-uniformity assumes the scope's id band is DENSE — true for a
+        # one-shot bulk load, false when a source's syncs interleave with
+        # other sources' (openmgh landed as thin clusters around a 467K-id
+        # foreign gap; the probe funneled every draw to the gap's edge row
+        # and the eyeball ritual showed one passage forever). A
+        # source-scoped draw goes DOCUMENT-first instead: a source's
+        # documents are few and indexed, a random document then a random
+        # passage within it is instant, reaches every id cluster by
+        # construction, and gives the ritual what it actually wants —
+        # document variety. Honesty: that distribution is uniform over
+        # documents, then within one — a small document weighs more per
+        # passage than a large one, stated here rather than pretended away.
+        urns = if source
+                 probe_document_first(scope, n, doc_ids)
+               else
+                 probe_urns(scope, n, check_document: true)
+               end
         show = Show.new(catalog: @catalog)
         # Show reveals the same passage the sampler drew (visibility already
         # applied); reusing it keeps --random byte-identical to `show <urn>`.
@@ -117,6 +134,37 @@ module Nabu
           end
         end
         urns.size < count ? sorted_fallback(scope, count, check_document: check_document) : urns
+      end
+
+      # The P45-i1 source-scoped sampler: random document (via @rng, so
+      # seeded draws stay deterministic in WHICH documents they visit), then
+      # a random visible passage within it (per-document row counts are
+      # small, so ORDER BY RANDOM() is instant there). A document whose
+      # passages the scope filters out entirely (language filter, all
+      # withdrawn) is a miss that retries; a scope the misses can't fill
+      # falls back to the exact sampler like the probe does.
+      def probe_document_first(scope, count, doc_ids_dataset)
+        # Document ids come from the DOCUMENTS table (source_id indexed,
+        # thousands of rows at most) — never DISTINCT over the passages
+        # scope, which would walk a 34M-entry index for the biggest shelf.
+        doc_ids = doc_ids_dataset.select_map(:id)
+        return [] if doc_ids.empty?
+
+        urns = []
+        misses = 0
+        while urns.size < count && misses < count * PROBE_ATTEMPTS
+          doc_id = doc_ids[@rng.rand(doc_ids.size)]
+          urn = scope.where(document_id: doc_id)
+                     .order(Sequel.function(:random))
+                     .limit(1)
+                     .get(:urn)
+          if urn.nil? || urns.include?(urn)
+            misses += 1
+          else
+            urns << urn
+          end
+        end
+        urns.size < count ? sorted_fallback(scope, count, check_document: false) : urns
       end
 
       # First visible scope row at or after +r+ in rowid order, wrapping to

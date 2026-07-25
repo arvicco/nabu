@@ -582,6 +582,43 @@ class StatusReportTest < Minitest::Test
     assert_match(/status:\s+succeeded/, out)
   end
 
+  # P45-r2 (owner rider, from live `status edh` output): the detail card
+  # names every desk the row serves — the axes list, comma-joined in
+  # registry order, right under kind. An axis-less registry (the minimal
+  # test harness — a real registry requires >= 1 axis per row once
+  # definitions exist) renders NO axes line: honest absence, never a blank.
+  def test_render_source_detail_lists_the_axes
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = Dir.mktmpdir do |dir|
+      File.write(File.join(dir, "axes.yml"), <<~YAML)
+        classical:
+          persona: "The Classicist."
+          desc: "Test desk."
+        romance:
+          persona: "The Romanist."
+          desc: "Test desk."
+      YAML
+      File.write(File.join(dir, "sources.yml"), <<~YAML)
+        fake-src:
+          adapter: StatusReportTest::FakeAdapter
+          axes: [classical, romance]
+      YAML
+      break Nabu::SourceRegistry.load(File.join(dir, "sources.yml"))
+    end
+
+    out = Nabu::StatusReport.render_source(registry: registry, db: db, ledger: ledger, slug: "fake-src")
+    assert_match(/axes:\s+classical, romance/, out, "the desks the row serves, in registry order")
+  end
+
+  def test_render_source_omits_the_axes_line_when_the_registry_has_no_axes
+    db = store_test_db
+    ledger = ledger_test_db
+    out = Nabu::StatusReport.render_source(registry: single_source_registry, db: db, ledger: ledger,
+                                           slug: "fake-src")
+    refute_match(/axes:/, out, "no declared axes → no line (honest absence)")
+  end
+
   # Thousands separators in the detail counts (the owner's example shape).
   def test_render_source_thousands_separators
     db = store_test_db

@@ -1211,5 +1211,97 @@ module Query
       assert_equal %w[urn:o:1], browse(from: 1, to: 200, sources: ["open"]).map(&:urn),
                    "the --axis membership list scopes the browse, the date filter making it legal"
     end
+
+    # -- the meter facet (P45-5): search --meter over the P44-6/7 enrichments --
+
+    def meter_doc!(scanned_text: "arma uirumque cano", plain_text: "arma alia linea",
+                   meter: "H", pattern: "DSDS", model: "pedecerto")
+      doc = make_document(source: @open, urn: "urn:m:1", language: "lat")
+      make_passage(doc, urn: "urn:m:1:1", text: scanned_text, sequence: 0, language: "lat")
+      make_passage(doc, urn: "urn:m:1:2", text: plain_text, sequence: 1, language: "lat")
+      add_meter!("urn:m:1:1", meter: meter, pattern: pattern, model: model)
+    end
+
+    def add_meter!(urn, meter:, pattern: "DSDS", model: "pedecerto")
+      Nabu::Store::Enrichment.write!(
+        @catalog, passage_id: @catalog[:passages].where(urn: urn).get(:id),
+                  kind: "meter", model: model, model_version: "test",
+                  payload: { "meter" => meter, "pattern" => pattern }
+      )
+    end
+
+    def searcher
+      @searcher ||= Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+    end
+
+    def test_meter_filter_restricts_hits_to_scanned_passages_and_names_its_source
+      meter_doc!
+      rebuild!
+      results = searcher.run("arma", meter: "H")
+      assert_equal %w[urn:m:1:1], results.map(&:urn),
+                   "only the passage carrying a matching meter enrichment survives the filter"
+      assert_equal "meter: pedecerto enrichments", searcher.meter_note,
+                   "an active meter filter names its source layer"
+      searcher.run("arma")
+      assert_nil searcher.meter_note, "no meter filter, no note — reset per run"
+    end
+
+    def test_meter_filter_is_case_insensitive_and_composes_with_pattern
+      meter_doc!
+      rebuild!
+      assert_equal %w[urn:m:1:1], searcher.run("arma", meter: "h").map(&:urn),
+                   "meter codes match case-insensitively (pedecerto H, hypotactic lowercase names)"
+      assert_equal %w[urn:m:1:1], searcher.run("arma", meter: "H", meter_pattern: "dsds").map(&:urn)
+      assert_empty searcher.run("arma", meter: "H", meter_pattern: "SSSS"),
+                   "a non-matching foot pattern excludes the hit"
+      assert_equal %w[urn:m:1:1], searcher.run("arma", meter_pattern: "DSDS").map(&:urn),
+                   "the pattern filter stands alone too"
+    end
+
+    def test_meter_filter_with_no_meter_data_explains_itself
+      doc = make_document(source: @open, urn: "urn:m:1", language: "lat")
+      make_passage(doc, urn: "urn:m:1:1", text: "arma uirumque cano", sequence: 0, language: "lat")
+      rebuild!
+      assert_empty searcher.run("arma", meter: "H")
+      assert_match(/no meter enrichments/, searcher.meter_note,
+                   "an empty meter layer explains itself — never a silent zero")
+      assert_match(/pedecerto|hypotactic/, searcher.meter_note, "the note names the producing syncs")
+    end
+
+    def test_meter_filter_unknown_code_names_the_known_values
+      meter_doc!
+      add_meter!("urn:m:1:2", meter: "dactylic hexameter", pattern: "-uu", model: "hypotactic")
+      rebuild!
+      assert_empty searcher.run("arma", meter: "Q")
+      assert_match(/'Q' matches no meter enrichment/, searcher.meter_note)
+      assert_match(/known meters: .*H/, searcher.meter_note, "the miss lists what IS scannable")
+      assert_match(/dactylic hexameter/, searcher.meter_note)
+    end
+
+    def test_meter_note_names_every_producer_present
+      meter_doc!
+      add_meter!("urn:m:1:2", meter: "H", pattern: "-uu", model: "hypotactic")
+      rebuild!
+      searcher.run("arma", meter: "H")
+      assert_equal "meter: hypotactic/pedecerto enrichments", searcher.meter_note,
+                   "both live producers named, stable order"
+    end
+
+    def test_browse_lists_by_meter_filter_alone
+      meter_doc!
+      rebuild!
+      assert_equal %w[urn:m:1:1], searcher.browse(meter: "H").map(&:urn),
+                   "the meter facet narrows content — a legal term-less browse"
+      assert_equal "meter: pedecerto enrichments", searcher.meter_note
+    end
+
+    def test_meter_filter_counts_as_an_active_filter_for_page_honesty
+      meter_doc!
+      rebuild!
+      # The scanned passage exists but the query only matches the unscanned
+      # one — the filtered page is empty, honestly, with the source note.
+      assert_empty searcher.run("alia", meter: "H")
+      assert_equal "meter: pedecerto enrichments", searcher.meter_note
+    end
   end
 end

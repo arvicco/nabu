@@ -1,0 +1,41 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# openMGH ships one zip per volume at data.mgh.de/openmgh/<bsbid>.zip, each
+# holding exactly one <bsbid>.xml; the fixture layout mirrors the adapter's
+# per-volume unpack (<bsbid>/<bsbid>.xml). Two volumes are UNMODIFIED upstream
+# files (the zips' single members, byte-identical to the member) — but the
+# sentinel's raw GET returns the ZIP body, never the member, so every entry
+# here is whole: false (fetch-checked for reachability, not byte-compared;
+# the member-vs-GET mismatch would otherwise ring a false drift alarm). The
+# Diplomata volume is additionally a documented TRIM (595 KB → 19 KB).
+# adapter_test is null — the source-specific test pins ids/counts/snippets
+# directly.
+source: openmgh
+adapter_test:
+retrieved: 2026-07-25
+files:
+  - path: bsb00000728/bsb00000728.xml
+    url: https://data.mgh.de/openmgh/bsb00000728.zip
+    whole: false
+    trim: >-
+      none to the XML itself — the file is the upstream zip's single member
+      bsb00000728.xml, extracted whole (the raw GET body is the zip, so no
+      byte-compare)
+    provenance: single member of the upstream zip, extracted whole
+  - path: bsb00000776/bsb00000776.xml
+    url: https://data.mgh.de/openmgh/bsb00000776.zip
+    whole: false
+    trim: >-
+      none to the XML itself — the file is the upstream zip's single member
+      bsb00000776.xml, extracted whole (the raw GET body is the zip, so no
+      byte-compare)
+    provenance: single member of the upstream zip, extracted whole
+  - path: bsb00000361/bsb00000361.xml
+    url: https://data.mgh.de/openmgh/bsb00000361.zip
+    whole: false
+    trim: >-
+      corpus prologue (everything before the first inner <TEI>) + inner <TEI>
+      blocks 1, 2, 3 and 13 (charters 1-3 with text, charter 13 an empty-tenor
+      deperditum) spliced verbatim in file order, </teiCorpus> appended; no
+      kept line altered. See README.md.

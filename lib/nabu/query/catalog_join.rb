@@ -56,9 +56,10 @@ module Nabu
       # document-grained facet filter ({facet name => pattern}); +source+
       # (P22-1) scopes to one source slug.
       def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
-                       sources: nil, loans: nil)
+                       sources: nil, loans: nil, meter: nil, meter_pattern: nil)
         visible_passages(lang: lang, license: license, from: from, to: to, place: place,
-                         facets: facets, source: source, sources: sources, loans: loans)
+                         facets: facets, source: source, sources: sources, loans: loans,
+                         meter: meter, meter_pattern: meter_pattern)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(*catalog_columns).all
       end
@@ -84,7 +85,7 @@ module Nabu
       # list is treated as no filter (never a silent `IN ()`); it AND-composes
       # with +source+ when both are given.
       def visible_passages(lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
-                           sources: nil, loans: nil)
+                           sources: nil, loans: nil, meter: nil, meter_pattern: nil)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
@@ -97,7 +98,40 @@ module Nabu
         dataset = dataset.where(timeline_exists(from: from, to: to, place: place)) if from || to || place
         (facets || {}).each { |facet, pattern| dataset = dataset.where(facet_exists(facet, pattern)) }
         dataset = dataset.where(loans_exists(loans)) if loans
+        if meter || meter_pattern
+          dataset = dataset.where(Sequel[:passages][:id] => meter_enrichments(meter, meter_pattern)
+                                                            .select(:passage_id))
+        end
         dataset
+      end
+
+      # The meter facet (P45-5, `search --meter`): passages carrying a P44-6/7
+      # meter enrichment (kind="meter" — pedecerto's Latin scansions,
+      # hypotactic's Greek ones) whose payload meter code / foot pattern
+      # matches case-insensitively (pedecerto codes are "H"/"P", hypotactic
+      # names are lowercase — one filter must reach both).
+      #
+      # COST, measured on the live catalog 2026-07-25 (P42 rule — justify
+      # read-time work from reality): the meter layer is 65,185 rows, and a
+      # full kind-scan with json_extract costs ~40ms; as an IN-subquery it is
+      # computed once per page and semi-joined, so both the windowed search
+      # path (≤ limit×10 candidate ids) and a term-less browse stay well
+      # under the probe budget. That is why there is NO derived column and NO
+      # new index: the layer is bounded by scanned verse (10⁵ rows), not by
+      # the corpus (10⁷ passages) — a write-time projection would buy nothing
+      # measurable and cost a migration + rebuild bookkeeping. Revisit only
+      # if the meter layer ever grows corpus-shaped.
+      def meter_enrichments(meter, pattern)
+        dataset = @catalog[:enrichments].where(kind: "meter")
+        dataset = dataset.where(payload_field("meter") => meter.to_s.downcase) if meter
+        dataset = dataset.where(payload_field("pattern") => pattern.to_s.downcase) if pattern
+        dataset
+      end
+
+      # lower(json_extract(payload_json, '$.<key>')) — the case-insensitive
+      # probe into the enrichment payload.
+      def payload_field(key)
+        Sequel.function(:lower, Sequel.function(:json_extract, :payload_json, "$.#{key}"))
       end
 
       # A correlated EXISTS over document_axes for the current document. The

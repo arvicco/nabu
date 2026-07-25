@@ -17,6 +17,8 @@ module Adapters
   # only on names attestations, empty locations) and 570685 Sparta (populated
   # names AND locations, four place types).
   class PleiadesTest < Minitest::Test
+    include StoreTestDB
+
     FIXTURES = Nabu::TestSupport.fixtures("pleiades")
     DUMP = File.join(FIXTURES, "dump.json")
 
@@ -172,6 +174,53 @@ module Adapters
         resolver = Nabu::Pleiades.load_default(config: Nabu::Config.load(root: root))
         refute_nil resolver
         assert_equal 2, resolver.size
+      end
+    end
+
+    # --- the derived place index (P45-6) ---------------------------------------
+
+    def test_adapter_declares_and_builds_the_place_index_producer
+      assert Nabu::Adapters::Pleiades.place_index_producer?,
+             "the gazetteer derives the catalog's place index at sync/rebuild time"
+      producer = Nabu::Adapters::Pleiades.place_index_producer(catalog: :db_placeholder)
+      assert_kind_of Nabu::Store::PlaceIndex::Producer, producer
+    end
+
+    def test_base_adapter_default_has_no_place_index_producer
+      refute Nabu::Adapter.place_index_producer?, "the capability is opt-in"
+      assert_nil Nabu::Adapter.place_index_producer(catalog: :db_placeholder)
+    end
+
+    def test_load_default_prefers_the_derived_catalog_index_over_the_dump
+      db = store_test_db
+      Nabu::Store::PlaceIndex.derive!(db, places: Nabu::Pleiades.load(DUMP).each_place)
+      Dir.mktmpdir do |root|
+        resolver = Nabu::Pleiades.load_default(config: Nabu::Config.load(root: root), catalog: db)
+        refute_nil resolver, "a populated index answers even with NO dump on disk — reads never re-parse JSON"
+        refute_kind_of Nabu::Pleiades, resolver, "the index path must not be the 3.9 GB in-memory load"
+        assert_equal "Sparta", resolver.place("570685").title
+        assert_equal ["570685"], resolver.titled("sparta").map(&:id)
+      end
+    end
+
+    def test_load_default_falls_back_to_the_dump_while_the_index_is_underived
+      db = store_test_db
+      Dir.mktmpdir do |root|
+        dir = File.join(root, "canonical", "pleiades")
+        FileUtils.mkdir_p(dir)
+        FileUtils.cp(DUMP, File.join(dir, "pleiades-places.json"))
+        resolver = Nabu::Pleiades.load_default(config: Nabu::Config.load(root: root), catalog: db)
+        assert_kind_of Nabu::Pleiades, resolver,
+                       "dump synced, index not yet derived → the honest v1 JSON path, unchanged"
+        assert_equal 2, resolver.size
+      end
+    end
+
+    def test_load_default_is_nil_with_neither_dump_nor_index
+      db = store_test_db
+      Dir.mktmpdir do |root|
+        assert_nil Nabu::Pleiades.load_default(config: Nabu::Config.load(root: root), catalog: db),
+                   "no dump, no derived index → nil resolver → byte-identical degradation"
       end
     end
 

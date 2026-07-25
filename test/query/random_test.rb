@@ -128,6 +128,25 @@ module Query
       assert(urns.none? { |u| u.start_with?("urn:a:dead") }, "withdrawn rows never drawn")
     end
 
+    # P45-i1 (live, the openMGH first sync): a source whose loads interleave
+    # with other sources' occupies a SPARSE id band — thin clusters around a
+    # huge foreign gap. The id-probe's near-uniformity assumption breaks
+    # there: almost every uniform draw lands in the gap and resolves to the
+    # SAME first-row-after-it (openmgh live: 467K-id band, 9,594 rows, seven
+    # identical "random" draws). A source-scoped draw goes DOCUMENT-first
+    # now, so repeated draws must reach BOTH clusters.
+    def test_source_scope_reaches_all_clusters_of_an_interleaved_id_band
+      seed_document(source: @open, urn: "urn:a:early", count: 5)
+      seed_document(source: @nc, urn: "urn:b:bulk", count: 2000)
+      seed_document(source: @open, urn: "urn:a:late", count: 5)
+
+      sampler = Nabu::Query::Random.new(catalog: @catalog, rng: ::Random.new(11))
+      urns = 60.times.flat_map { sampler.run(source: "alpha", count: 1).map(&:urn) }
+      docs = urns.map { |u| u.rpartition(":").first }.uniq.sort
+      assert_equal %w[urn:a:early urn:a:late], docs,
+                   "scoped draws must reach both id clusters, not funnel to the gap's edge row"
+    end
+
     def test_a_seeded_rng_makes_the_draw_deterministic
       seed_document(source: @open, urn: "urn:a:seeded", count: 30)
       a = Nabu::Query::Random.new(catalog: @catalog, rng: ::Random.new(7)).run(count: 3).map(&:urn)

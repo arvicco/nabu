@@ -99,6 +99,10 @@ module Nabu
       source = db && Store::Source.first(slug: slug)
       lines = ["#{slug}  (#{entry_name(entry)})"]
       lines << detail_line("kind", entry.kind)
+      # P45-r2: the desks this row serves, registry order. A row without
+      # axes (only possible while no axis definitions exist) renders no
+      # line — honest absence over a blank.
+      lines << detail_line("axes", entry.axes.join(", ")) unless entry.axes.empty?
       lines << detail_line("wired", wired_word(entry))
       lines << detail_line("cadence", cadence_word(entry))
       lines << detail_line("liveness", liveness_detail(entry, db, ledger))

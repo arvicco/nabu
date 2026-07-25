@@ -21,7 +21,7 @@ service. It is a command-line pipeline and database, not a website or a
 reading application. What it is and why it exists is set out on
 [About]({{ '/about/' | relative_url }}); worked walk-throughs for ten
 scholarly personas are on [Examples]({{ '/examples/' | relative_url }}), and
-the full set of eighteen [research desks]({{ '/axis/' | relative_url }}) —
+the full set of twenty-one [research desks]({{ '/axis/' | relative_url }}) —
 one scholarly hat per field, each with its own shelves and recipes — is the
 reader's-eye map of the whole collection.
 
@@ -89,10 +89,10 @@ goes offline, a Nabu library keeps working. The shelf survey is on
 
 ### What is included?
 
-As of 23 July 2026: 810,180 documents and 62,789,087 passages across 82
+As of 25 July 2026: 813,257 documents and 65,130,037 passages across 88
 registered, synced sources, plus 1,310,786 dictionary entries and
-16.2 million gold
-lemma annotations in twenty-eight languages — the Islamicate library
+17.4 million gold
+lemma annotations in thirty-two languages — the Islamicate library
 (OpenITI, the corpus's largest holding — Classical Arabic and Persian,
 added 22 July 2026), the classical Chinese library and the Buddhist
 canon, classical

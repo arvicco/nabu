@@ -70,7 +70,14 @@ Cross-passage adjacency is out (the passage is the unit); `near` does not
 compose with `morph`.
 
 Optional `lang` (ISO-639-3), `license` (exact class), `limit` (default 10, max
-50). Hits are relevance-ranked and bounded, with an honest "showing k of N"
+50). Optional `meter` / `meter_pattern` (P45-5, text search only — refused
+with `lemma`/`near`): restrict hits to metrically **scanned** passages — the
+pedecerto (Latin) / hypotactic (Greek) meter enrichment layer — matching the
+meter code/name (`H`, `P`, `dactylic hexameter`) and/or the exact foot
+pattern (`DSDS`), case-insensitively. The response note names the source
+layer when the facet is active, and an empty layer or unknown code explains
+itself (known meters listed) rather than returning a silent zero. Hits are
+relevance-ranked and bounded, with an honest "showing k of N"
 note; a no-match response carries a one-line coverage hint so an empty result
 is interpretable. Each hit returns urn, language, license_class, source, the
 document title, and a bounded text/snippet (lemma hits also return the matched
@@ -293,8 +300,11 @@ findspot **text** mentions the name (exact substring), never merged into the
 id-matched holdings. Degradation is the CLI's exactly: with the dump absent on
 this box, a numeric id still counts holdings (fact-less card, honest note),
 and a name lookup returns a graceful state note with the sync hint — never an
-error. The dump load (~3 s / ~3.9 GB peak on the real 42k-place dump) is paid
-per call and released, the accepted P44-2 v1 cost.
+error. Since P45-6 lookups read the derived catalog place index (instant;
+derived at every pleiades sync/rebuild); the in-memory dump load (~3 s /
+~3.9 GB peak on the real 42k-place dump, paid per call and released — the
+P44-2 v1 cost) survives only as the fallback while the index is not yet
+derived.
 
 ### `nabu_status`
 
@@ -468,6 +478,7 @@ new, present-only keys.
 | The place desk | `nabu place NAME\|ID` (P44-2) | `nabu_place` | **added P44-3** — new tool, read-only, `Query::Place` unchanged; dump-absent degradation mirrors the CLI (id counts holdings, name lookup notes the sync hint) |
 | Findspot line | `nabu show` findspot (P44-2) | `nabu_show` — additive `findspot` key when the captured id resolves through the dump | **added P44-3** (pinned, incl. the dump-absent byte-identical case) |
 | Meter line | `nabu show` meter (P44-6/7 enrichments) | `nabu_show` — additive `meter` key on scanned passages | **added P44-3** (pinned) |
+| Meter search facet | `search --meter CODE [--meter-pattern PATTERN]` (P45-5) | `nabu_search` `meter`/`meter_pattern` — text mode only, refusal parity with lemma/near; the honesty note (source layer named, empty layer explained) rides the free-text `note` | **added P45-5** (pinned; no frozen payload key changed) |
 | `--lang` on search/concordance | `search`/`concord` `--lang` | `nabu_search` / `nabu_concord` `lang` | parity (pinned P8) |
 | `--lang`/`langs` on intertext/cognates | `parallels --lang`, `cognates --langs` | `nabu_parallels` `lang`, `nabu_cognates` `langs` | parity (pinned P15) |
 | Shelf-language scoping | `define --lang`, `etym --lang` | `nabu_define` / `nabu_etym` `lang` (define's enum live-derived) | parity (pinned P35-6) |

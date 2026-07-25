@@ -50,7 +50,7 @@ classes are the gate that decides what may pass.
 
 ## Corpus sources
 
-All 85 sources below are synced and live as of 24 July 2026. Grouped by the
+All 88 sources below are synced and live as of 25 July 2026. Grouped by the
 owner's research desks rather than alphabetically — with each desk's member
 shelves, license mix and sync status on one page — the same sources appear on
 the [research axes]({{ '/axis/' | relative_url }}).
@@ -141,6 +141,10 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | `openiti` | [OpenITI — Open Islamicate Texts Initiative](https://openiti.org/) (2025.1.9 Zenodo release) | The Islamicate library at corpus scale: 9,079 primary text versions of premodern Arabic and Persian — hadith, falsafa, history, poetry — 34.6M passages parsed from OpenITI mARkdown (synchronized 23 July 2026) | CC BY-NC-SA 4.0 (the Zenodo record's grant) |
 | `glaux` | [GLAUx](https://github.com/alekkeersmaekers/glaux) (Keersmaekers, Leuven) | ~20M tokens of Ancient Greek, 8th c. BCE – 4th c. CE, automatically annotated for lemma/morphology/syntax — the analysis-side complement to the held editions and the library's silver lemma tier, labeled as such on every hit: 1,421 works / 968,578 passages (synchronized 24 July 2026) | CC BY-SA (72 restrictively licensed texts carried as `nc`) |
 | `croala` | [CroALa — Croatiae auctores Latini](https://croala.ffzg.unizg.hr/) (Jovanović, Zagreb) | Croatian Latin from 976 CE through the neo-Latin centuries — charters, orations, carmina: 570 documents / 309,180 passages, the classical desk's medieval-Latin edge (synchronized 24 July 2026) | CC BY 4.0 |
+
+| `digiliblt` | [digilibLT](https://digiliblt.uniupo.it/) (Vercelli/UniUPO, via CIRCSE) | 373 late-antique secular Latin prose texts, 2nd–7th c. — the classical→medieval transition band, UDPipe-lemmatized (the silver tier, labelled as such): 370 documents / 457,560 passages (synchronized 25 July 2026) | CC BY-SA 4.0 (in-repo grant) |
+| `openmgh` | [openMGH](https://www.mgh.de/en/digital-mgh/openmgh) (Monumenta Germaniae Historica + Bayerische Staatsbibliothek) | The critical-edition backbone of medieval Latin as TEI: first wave = the complete SS rerum Germanicarum series, 57 volumes / 9,594 passages — Einhard, the Frankish annals, Widukind, Adam of Bremen (synchronized 25 July 2026; 96 further volumes are a documented future step) | CC BY 4.0 (texts themselves free of copyright) |
+| `bfm` | [Base de français médiéval](https://bfm.ens-lyon.fr/) (ENS de Lyon / IHRIM, via NAKALA) | BFM2022: Old and Middle French from the 842 Serments de Strasbourg through the 15th century, TEI with lemmas (silver): 6.4M words (synchronized 25 July 2026) | Licence Ouverte / Etalab (8 files' critical apparatus, CC BY-NC-SA, is excluded at parse) |
 
 Eight further registry rows are **feature modules**, not corpora —
 machinery that fetches reference data but mints no documents of its own:

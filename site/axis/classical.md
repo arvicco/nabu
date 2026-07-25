@@ -13,14 +13,14 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
 | `perseus-greek` | texts | attribution | wired · auto | 1,418 docs / 394,706 passages |
 | `perseus-latin` | texts | attribution | wired · auto | 534 docs / 391,785 passages |
 | `first1k-greek` | texts | attribution | wired · auto | 1,129 docs / 256,480 passages |
-| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
 | `lexica` | dictionary | attribution | wired · manual | 168,133 entries |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
@@ -30,6 +30,8 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 | `glaux` | texts | attribution | wired · manual | 1,421 docs / 968,578 passages |
 | `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
 | `pedecerto` | feature module | nc | not yet wired | nothing held yet |
+| `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
+| `openmgh` | texts | attribution | wired · manual | 57 docs / 9,594 passages |
 
 ## The desk's instruments
 
@@ -84,4 +86,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-one research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

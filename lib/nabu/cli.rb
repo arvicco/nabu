@@ -885,6 +885,11 @@ module Nabu
                                                    # V S L M on sandstone votives
         nabu search ⲡⲛⲟⲩⲧⲉ --loans grc --lang cop   # "God" in verses that carry
                                                    #   Greek loan tokens
+        nabu search arma --meter H                  # hits restricted to scanned
+                                                    #   hexameters (P44 meter layer:
+                                                    #   pedecerto/hypotactic)
+        nabu search --meter P --lang lat            # term-less browse: every scanned
+                                                    #   pentameter line
         nabu search --lemma ⲕⲁϩ --loans grc         # a Coptic lemma's attestations
                                                    #   inside the Greek-contact zone
 
@@ -927,6 +932,13 @@ module Nabu
     option :loans, type: :string, banner: "CODE",
                    desc: "Loan-origin facet: only passages with ≥1 token borrowed from CODE " \
                          "(grc, hbo, arc, lat, egy — Coptic Scriptorium)"
+    option :meter, type: :string, banner: "CODE",
+                   desc: "Meter facet: only passages carrying a meter enrichment with this code " \
+                         "(pedecerto codes H, P, …) or name (hypotactic 'dactylic hexameter'); " \
+                         "case-insensitive; composes with a text query or stands alone as a browse"
+    option :meter_pattern, type: :string, banner: "PATTERN",
+                           desc: "Meter facet: exact foot/scansion pattern (pedecerto DSDS, " \
+                                 "hypotactic '-u u -uu …'); composes with --meter or stands alone"
     option :radical, type: :numeric, banner: "N",
                      desc: "Character filter: KangXi radical number 1-214 (Unihan kRSUnicode); " \
                            "composes with --strokes/--char-component and a text query"
@@ -962,6 +974,12 @@ module Nabu
       if options[:fuzzy] && (options[:near] || options[:lemma] || options[:morph])
         raise Thor::Error, "search: --fuzzy is literal substring matching — it does not combine " \
                            "with --lemma/--near/--morph"
+      end
+      if (options[:meter] || options[:meter_pattern]) &&
+         (options[:near] || options[:lemma] || options[:fuzzy] || char_filter_options?)
+        raise Thor::Error, "search: --meter/--meter-pattern filter the meter enrichment layer and " \
+                           "compose with plain text search or a term-less browse only — not " \
+                           "--lemma/--near/--fuzzy or the character-structure filters"
       end
       if options[:gold_only] && (!options[:lemma] || options[:near])
         raise Thor::Error, "search: --gold-only filters the lemma tier — it requires --lemma " \
@@ -1020,10 +1038,13 @@ module Nabu
       results = searcher.run(query, lang: options[:lang], license: options[:license],
                                     limit: options[:limit].to_i, from: from, to: to, place: place,
                                     facets: facets, source: options[:source], sources: axis_slugs,
-                                    loans: loans, exact: options[:exact], word: options[:word])
+                                    loans: loans, meter: options[:meter],
+                                    meter_pattern: options[:meter_pattern],
+                                    exact: options[:exact], word: options[:word])
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
                                     incomplete: searcher.incomplete_hint, exact: options[:exact],
-                                    word: options[:word], rank_note: searcher.rank_note)
+                                    word: options[:word], rank_note: searcher.rank_note,
+                                    meter_note: searcher.meter_note)
       print_display_footer
     ensure
       catalog&.disconnect
@@ -2036,10 +2057,12 @@ module Nabu
       id-matched counts.
 
       The gazetteer dump is the pleiades module's canonical asset
-      (`nabu sync pleiades`, ~42k places). Loading it costs ~3 s per
-      invocation — the accepted v1 cost. Without it on disk, a numeric id
-      still counts holdings (the catalog side needs no dump); a name
-      lookup is refused with the sync hint.
+      (`nabu sync pleiades`, ~42k places). Since P45-6 the sync also
+      derives a place index into the catalog, so lookups here read it
+      instantly; the ~3 s in-memory dump load is paid only while that
+      index is not yet derived (re-sync or rebuild derives it). Without
+      the dump on disk, a numeric id still counts holdings (the catalog
+      side needs no dump); a name lookup is refused with the sync hint.
 
       Examples:
         nabu place Segesta          # exact title → card + holdings
@@ -2054,7 +2077,7 @@ module Nabu
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
-      resolver = Nabu::Pleiades.load_default(config: config)
+      resolver = Nabu::Pleiades.load_default(config: config, catalog: catalog)
       result = Nabu::Query::Place.new(catalog: catalog, pleiades: resolver).run(query)
       print_place(result)
     rescue Nabu::Query::Place::Error => e
@@ -2471,9 +2494,11 @@ module Nabu
         # The enabled-slug set (P44-r3b): nabu_status's sources array defaults
         # to this box's enabled sources, matching the CLI list/status default.
         enabled_slugs: mcp_enabled_slugs(config, registry),
-        # The Pleiades gazetteer (P44-3): :auto = feature-detect the canonical
-        # dump lazily per call (nabu_place, nabu_show findspot) — an unsynced
-        # dump degrades exactly like the CLI, never crashes.
+        # The Pleiades gazetteer (P44-3): :auto = feature-detect lazily per
+        # call (nabu_place, nabu_show findspot) — the derived catalog place
+        # index when a sync/rebuild has built it (P45-6, instant), else the
+        # canonical dump; an unsynced box degrades exactly like the CLI,
+        # never crashes.
         pleiades: :auto
       )
       $stdout.sync = true
@@ -2937,7 +2962,7 @@ module Nabu
       # are already a legal term-less path and return earlier (char_structured_search).
       def content_narrowing_filters?
         options[:from] || options[:to] || options[:century] || options[:place] ||
-          facet_filters || loans_filter
+          facet_filters || loans_filter || options[:meter] || options[:meter_pattern]
       end
 
       # The refusal for a term-less `search` that carries no content-narrowing
@@ -2946,7 +2971,8 @@ module Nabu
       def browse_refusal_message
         "search: give a query — or a content-narrowing filter to browse the corpus " \
           "term-less: a date window (--from/--to/--century), --place, a genre facet " \
-          "(--type/--province/--material), or --loans. --lang/--license/--source/--axis " \
+          "(--type/--province/--material), --loans, or --meter/--meter-pattern. " \
+          "--lang/--license/--source/--axis " \
           "select whole shelves and cannot stand alone (that would dump the shelf, not browse it)."
       end
 
@@ -2982,9 +3008,12 @@ module Nabu
         searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
         results = searcher.browse(lang: options[:lang], license: options[:license],
                                   limit: options[:limit].to_i, from: from, to: to, place: place,
-                                  facets: facets, source: options[:source], sources: axis_slugs, loans: loans)
+                                  facets: facets, source: options[:source], sources: axis_slugs,
+                                  loans: loans, meter: options[:meter],
+                                  meter_pattern: options[:meter_pattern])
         print_search_results(results, facets: facets, query: "", loans: loans, axis: axis_names,
-                                      browse: true, from: from, to: to, place: place)
+                                      browse: true, from: from, to: to, place: place,
+                                      meter_note: searcher.meter_note)
         print_display_footer
       ensure
         catalog&.disconnect
@@ -3507,7 +3536,7 @@ module Nabu
         langs = members.flat_map { |slug| by_slug[slug]&.languages || [] }.uniq.sort
         return say("  gold lemmas: no held languages yet") if langs.empty?
 
-        total = info ? langs.sum { |code| info.relevance(code).lemma_rows } : 0
+        total = info ? info.gold_rows_for(langs) : 0
         if total.positive?
           say "  gold lemmas: #{commas(total)} rows across #{langs.join(', ')} (nabu search --lemma)"
         else
@@ -4416,7 +4445,7 @@ module Nabu
       # page never masquerades as a complete answer.
       def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
                                exact: false, word: false, proximity: false, rank_note: nil,
-                               browse: false, from: nil, to: nil, place: nil)
+                               browse: false, from: nil, to: nil, place: nil, meter_note: nil)
         if results.empty?
           say "no matches"
           # Empty-under-filter honesty (P35): --exact/--word suppressed the folded
@@ -4429,6 +4458,10 @@ module Nabu
           # The P42-2 guard served a corpus-wide sample (P42-r3) — an empty
           # page over a degraded path says so too, never a clean-looking silence.
           say "note: #{rank_note}" if rank_note
+          # The meter facet's honesty line (P45-5): an empty page under
+          # --meter says what layer it filtered on — or that the layer is
+          # empty / the code unknown — never a silent zero.
+          say "note: #{meter_note}" if meter_note
           say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
@@ -4442,6 +4475,7 @@ module Nabu
                                      rank_note: rank_note, browse: browse)})" \
             "#{browse_window_footer(from: from, to: to, place: place) if browse}" \
             "#{facet_footer(facets, loans: loans, axis: axis)}"
+        say "note: #{meter_note}" if meter_note
         say "note: #{incomplete}" if incomplete
         print_search_credits(results)
       end
@@ -4504,6 +4538,10 @@ module Nabu
         parts = []
         parts << "facets: #{facets.map { |facet, pattern| "#{facet}=#{pattern}" }.join(' ')}" if facets&.any?
         parts << "loans: #{loans}" if loans
+        # The meter facet (P45-5) names its active filter in the footer like
+        # every other facet; the source-layer note is a separate line.
+        parts << "meter: #{[options[:meter], options[:meter_pattern]].compact.join(' ')}" if
+          options[:meter] || options[:meter_pattern]
         parts << "axis: #{Array(axis).join(',')}" if axis && !Array(axis).empty?
         parts.empty? ? "" : " · #{parts.join(' · ')}"
       end
@@ -6701,7 +6739,7 @@ module Nabu
           "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored" \
           "#{format_collided(report)}" \
           "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}" \
-          "#{format_sync_enrichments(outcome.enrichments)}"
+          "#{format_sync_enrichments(outcome.enrichments)}#{format_sync_place_index(outcome.place_index)}"
       end
 
       # P39-4: the within-pass collision tail — silent at zero (house
@@ -6749,6 +6787,16 @@ module Nabu
         works = enr.mapped_works + enr.unmapped_works
         "  meter #{enr.matched} lines matched, #{enr.unmatched} unmatched " \
           "(#{plural(enr.mapped_works, 'work')} of #{works})#{format_malformed_files(enr.malformed_files)}"
+      end
+
+      # P45-6: the place-index tail for a pleiades sync — silent for every
+      # source that derives no place index (nil, including a pleiades
+      # parse-only sync before the first fetch). "place index 42242 places
+      # derived (3.1s)".
+      def format_sync_place_index(census)
+        return "" if census.nil?
+
+        "  place index #{census.places} places derived (#{format('%.1f', census.seconds)}s)"
       end
 
       # The P44-i3b honesty tail: unreadable upstream files are named (the

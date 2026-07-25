@@ -14,3 +14,11 @@ files:
   - path: tsv/HHAphrodite.tsv
     url: https://raw.githubusercontent.com/Urdatorn/hypotactic/HEAD/tsv/HHAphrodite.tsv
     whole: true
+  - path: tsv/iliad1.tsv
+    refetchable: false
+    provenance: local-trim
+    reason: ten real rows (upstream rows 12-16 + 371-375) of the mirror's iliad1.tsv — the verbatim formulaic repetition (Il. 1.372-375 = 1.13-16) for the P45-5 dedup-guard test; re-acquiring = fetch the whole file and re-trim
+    upstream: https://raw.githubusercontent.com/Urdatorn/hypotactic/HEAD/tsv/iliad1.tsv
+    copied: 2026-07-25
+    whole: false
+    trim: rows 12-16 and 371-375, byte-verbatim

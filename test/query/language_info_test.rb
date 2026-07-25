@@ -92,6 +92,27 @@ module Query
       assert_equal 2, held.lemma_rows
     end
 
+    # P45-r3 (owner report: `axis romance` took ~30 s): per-language gold
+    # lemma counts are a read-time PROBE against the write-time
+    # lemma_frequencies shelf (P42-1) — never a live COUNT over the
+    # 16M-row passage_lemmas index (the P42 doctrine: corpus-cost work at
+    # write time, probes at read time). Proof of path: with the freq shelf
+    # built, the live rows can vanish and the counts still serve.
+    def test_lemma_counts_read_the_write_time_freq_shelf_not_the_live_index
+      make_document(source: @texts, language: "chu", urn: "urn:nabu:test:chu:1",
+                    passages: 2, lemma: "богъ")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
+      @fulltext[Nabu::Store::Indexer::LEMMA_TABLE].delete
+
+      assert_equal 2, info.relevance("chu").lemma_rows,
+                   "relevance must read lemma_frequencies, not count passage_lemmas live"
+      held = info.held.find { |h| h.code == "chu" }
+      refute_nil held, "held must still list the language off the freq shelf"
+      assert_equal 2, held.lemma_rows
+      assert_equal 2, info.gold_rows_for(%w[chu qqq]),
+                   "the axis card's one-query set probe reads the shelf too"
+    end
+
     def test_relevance_for_a_shelf_language_counts_entries
       rel = info.relevance("sla-pro")
       shelf = rel.shelves.find { |s| s.slug == "wiktionary-sla-pro" } || flunk("sla-pro shelf missing")

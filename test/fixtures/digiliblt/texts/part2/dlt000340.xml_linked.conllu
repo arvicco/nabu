@@ -1,0 +1,63 @@
+# docId=dlt000340
+# docTitle=De uerborum Graeci et Latini differentiis vel societatibus excerpta [=Iohannis Scoti
+     defloratio de Macrobio]
+# contributor=Eleonora Litta, Marco Passarotti, Giovanni Moretti
+# corpusRef=http://lila-erc.eu/data/corpora/digiliblt/id/corpus
+# docAuthor=Macrobius Ambrosius Theodosius
+# seeAlso=https://digiliblt.uniupo.it
+# description=Source description: De uerborum Graeci et Latini differentiis vel societatibus excerpta, ed. Paolo de Paolis, Urbino 1990, pp. 5-171
+
+# sent_id = 1
+# text = Theodosius Symmacho suo salutem dicit.
+1	Theodosius	theodosius	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	
+2	Symmacho	Symmachus	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/22647
+3	suo	suus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/127165
+4	salutem	salus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/123273	http://lila-erc.eu/data/id/lemma/123276
+5	dicit	dico	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/99301	http://lila-erc.eu/data/id/lemma/99302
+6	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	
+
+# sent_id = 2
+# text = Cum vel natura vel usus loquendi linguas gentium multiplici diversitate variasset, ceteris aut anhelitu aut sibilo explicantibus loqui suum, solis Graecae Latinaeque et soni leporem et artis disciplinam atque in ipsa loquendi mansuetudine similem cultum et coniunctissimam congnationem dedit.
+1	Cum	cum	SCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/97202
+2	vel	uel	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/129695
+3	natura	natura	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/113421
+4	vel	uel	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/129695
+5	usus	usus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/131133
+6	loquendi	loquor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/110805
+7	linguas	lingua	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/110562
+8	gentium	gens	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/104490
+9	multiplici	multiplex	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/112969
+10	diversitate	diversitas	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/99921
+11	variasset	uario	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/129583
+12	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	
+13	ceteris	ceterus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/93624
+14	aut	aut	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/90827
+15	anhelitu	anhelitus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/89059
+16	aut	aut	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/90827
+17	sibilo	sibilum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/124686
+18	explicantibus	explico	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/102202
+19	loqui	loquor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/110805
+20	suum	suus	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/127165
+21	,	,	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	
+22	solis	sol	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/81101	http://lila-erc.eu/data/id/lemma/125027
+23	Graecae	graecus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/8329
+24	Latinaeque	Latinus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/136266
+25	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+26	soni	sonus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/125146	http://lila-erc.eu/data/id/lemma/125147
+27	leporem	lepor	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/110266
+28	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+29	artis	ars	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/90089
+30	disciplinam	disciplina	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/99609
+31	atque	atque	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/90490
+32	in	in	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/106748
+33	ipsa	ipse	DET	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/108945
+34	loquendi	loquor	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/110805
+35	mansuetudine	mansuetudo	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/111534
+36	similem	similis	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/124826
+37	cultum	cultus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/97670
+38	et	et	CCONJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/lemma/101542
+39	coniunctissimam	coniunctus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	http://lila-erc.eu/data/id/hypolemma/8834
+40	congnationem	congnatio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1	
+41	dedit	do	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/99970
+42	.	.	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_2,Sentence_1|SpaceAfter=No	
+

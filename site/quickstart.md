@@ -152,7 +152,7 @@ The same walkthrough, kept in the repository alongside the code, is
 
 The starter shelf is running; the natural next move is to find the desk for
 your own field. `bin/nabu list --axis` prints the shelf census grouped under
-the eighteen [research desks]({{ '/axis/' | relative_url }}) — scholarly hats
+the twenty-one [research desks]({{ '/axis/' | relative_url }}) — scholarly hats
 over the same sources, from the Classicist to the Assyriologist. Pick the one
 that fits and sync its members in a single command — `bin/nabu sync celtic`,
 or whichever axis is yours — then open its page: each desk carries its own
