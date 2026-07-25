@@ -51,7 +51,7 @@ class PedecertoScansionsTest < Minitest::Test
     hold_work(GEOR, citations: GEOR_CITATIONS)
     result = producer.run("pedecerto", workdir: FIXTURES)
 
-    assert_equal 2, result.files, "both fixture files read"
+    assert_equal 3, result.files, "all fixture files seen (including the malformed Ausonius)"
     assert_equal 8, result.lines_read, "5 Georgics lines + 3 Ibis lines"
     assert_equal 5, result.matched, "every held Georgics line matched"
     assert_equal 3, result.unmatched, "the unheld Ovid Ibis lines are counted, never silent"
@@ -72,6 +72,24 @@ class PedecertoScansionsTest < Minitest::Test
     assert_equal "Quid", first_word["text"]
     assert_equal "1A", first_word["sy"], "the syllable positions ride verbatim"
     assert_equal "CM", first_word["wb"]
+  end
+
+  # --- malformed upstream files are censused, never fatal (P44-i3b) --------
+  # AVSON-appe.xml is REAL upstream bytes: raw <emph> markup inside a
+  # division title attribute — 12 of the artifact's 469 files ship this way
+  # (the whole Ausonius set + SEN-epig, verified 2026-07-25 in the owner's
+  # landed first sync, which this producer then aborted on). One unreadable
+  # file must never abort the other works' re-derivation: it is censused BY
+  # NAME on the Result and contributes no lines and no works.
+  def test_a_malformed_file_is_censused_and_the_rest_still_ingest
+    hold_work(GEOR, citations: GEOR_CITATIONS)
+    result = producer.run("pedecerto", workdir: FIXTURES)
+
+    assert_equal ["AVSON-appe.xml"], result.malformed_files
+    assert_equal 8, result.lines_read, "the malformed file contributes no lines"
+    assert_equal 5, result.matched, "the readable works still ingest fully"
+    assert_equal 2, result.mapped_works + result.unmapped_works,
+                 "a malformed file is neither mapped nor unmapped — its own census bucket"
   end
 
   # The scansion attaches to exactly the right passage (citation resolution).

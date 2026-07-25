@@ -53,12 +53,23 @@ class HypotacticMeterTest < Minitest::Test
     assert_equal "", parsed[8][:caesura], "the 4th column can be empty (verified against bytes)"
   end
 
-  def test_a_malformed_row_raises_parse_error
+  # P44-i3b (the pedecerto AVSON incident, applied symmetrically): a file
+  # that fails to parse raises at the parse_tsv grain — but run CENSUSES it
+  # by name and carries on; one bad file must never abort the whole batch.
+  # The prior expectation here (run raises) was refuted live: the owner's
+  # first pedecerto sync died on 1 unreadable file of 466.
+  def test_a_malformed_file_is_censused_never_fatal
     Dir.mktmpdir do |dir|
       FileUtils.mkdir_p(File.join(dir, "tsv"))
-      File.write(File.join(dir, "tsv", "HHAphrodite.tsv"), "onecol\tscansion\tmeter\n")
-      error = assert_raises(Nabu::ParseError) { producer.run("hypotactic", workdir: dir) }
+      File.write(File.join(dir, "tsv", "Broken.tsv"), "onecol\tscansion\tmeter\n")
+      FileUtils.cp(File.join(FIXTURES, "tsv", "HHAphrodite.tsv"), File.join(dir, "tsv"))
+
+      error = assert_raises(Nabu::ParseError) { producer.send(:parse_tsv, File.join(dir, "tsv", "Broken.tsv")) }
       assert_match(/4 TAB columns/, error.message)
+
+      result = producer.run("hypotactic", workdir: dir)
+      assert_equal ["Broken.tsv"], result.malformed_files
+      assert_equal 293, result.lines_read, "the readable file still ingests"
     end
   end
 

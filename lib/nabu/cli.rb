@@ -6748,7 +6748,18 @@ module Nabu
 
         works = enr.mapped_works + enr.unmapped_works
         "  meter #{enr.matched} lines matched, #{enr.unmatched} unmatched " \
-          "(#{plural(enr.mapped_works, 'work')} of #{works})"
+          "(#{plural(enr.mapped_works, 'work')} of #{works})#{format_malformed_files(enr.malformed_files)}"
+      end
+
+      # The P44-i3b honesty tail: unreadable upstream files are named (the
+      # status-footer idiom — a bare count is a guessing game), first three
+      # outright, the rest as a count.
+      def format_malformed_files(names)
+        return "" if names.empty?
+
+        shown = names.first(3).join(", ")
+        more = names.size > 3 ? " +#{names.size - 3} more" : ""
+        "; #{names.size} malformed upstream, skipped: #{shown}#{more}"
       end
 
       # rebuild --incremental (P36-1): dirty sources re-derive through the

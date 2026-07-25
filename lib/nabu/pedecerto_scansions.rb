@@ -106,9 +106,10 @@ module Nabu
     # are crosswalked files that resolved ≥1 line, +unmapped_works+ crosswalked
     # files present on disk with no held witness (or no crosswalk entry).
     Result = Data.define(:scope, :files, :lines_read, :matched, :unmatched,
-                         :mapped_works, :unmapped_works, :superseded) do
+                         :mapped_works, :unmapped_works, :superseded, :malformed_files) do
       def initialize(files: 0, lines_read: 0, matched: 0, unmatched: 0,
-                     mapped_works: 0, unmapped_works: 0, superseded: 0, **rest)
+                     mapped_works: 0, unmapped_works: 0, superseded: 0,
+                     malformed_files: [], **rest)
         super
       end
     end
@@ -131,15 +132,25 @@ module Nabu
       return Result.new(scope: scope) if files.empty?
 
       counts = Hash.new(0)
+      malformed = []
       @doc_cache = {}
       @catalog.transaction do
         counts[:superseded] = Store::Enrichment.supersede!(@catalog, kind: KIND, model: MODEL)
-        files.each { |path| ingest_file(path, counts) }
+        # A file that will not parse is censused BY NAME and skipped — one
+        # unreadable upstream export (P44-i3b: 12 of the artifact's 469 files
+        # ship raw <emph> markup inside title attributes) must never abort
+        # the other works' re-derivation. The DOM parse happens before any
+        # yield, so a malformed file contributes no counts and no rows.
+        files.each do |path|
+          ingest_file(path, counts)
+        rescue ParseError
+          malformed << File.basename(path)
+        end
       end
       Result.new(scope: scope, files: files.size,
                  lines_read: counts[:lines], matched: counts[:matched], unmatched: counts[:unmatched],
                  mapped_works: counts[:mapped_works], unmapped_works: counts[:unmapped_works],
-                 superseded: counts[:superseded])
+                 superseded: counts[:superseded], malformed_files: malformed)
     end
 
     private
@@ -177,8 +188,9 @@ module Nabu
     # either component is unclean (→ unmatched). One <AUTHOR>-<work>.xml parses
     # by DOM (the biggest, Statius' Thebaid, is 3.1 MB — under the ~5 MB
     # Reader threshold; each file's tree is freed before the next). A malformed
-    # file raises ParseError (loud, per-file — the batch quarantines it, never a
-    # silent drop) exactly like the adapters.
+    # file raises ParseError at this grain; run rescues it per file into the
+    # malformed_files census — loud in the sync tail, never a silent drop, and
+    # never fatal to the batch.
     def each_line(path)
       doc = Nokogiri::XML(File.read(path, encoding: "UTF-8"), &:strict)
       doc.xpath("//body//line").each do |line|
