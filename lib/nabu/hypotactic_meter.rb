@@ -94,24 +94,89 @@ module Nabu
 
     # == The filename → held-work map (evidence-commented; unmapped = censused)
     #
-    # The value is a CTS work id "tlg0013.tlgNNN"; the producer resolves it to
-    # every held grc document whose urn is urn:cts:greekLit:<work>.<edition>
-    # (perseus-grc1/grc2 — whichever the box holds), so it never hard-codes an
-    # edition token. Seeded for the ONE clear case the staged bytes give us:
+    # Grown P45-5 to the full unambiguous held intersection. Three value
+    # shapes, all resolved to every held grc EDITION via the urn prefix
+    # urn:cts:greekLit:<value>. (never a hard-coded edition token):
     #
-    #   HHAphrodite = the Homeric Hymn to Aphrodite. The Homeric Hymns are TLG
-    #   author group tlg0013, one work id per hymn in traditional numbering —
-    #   confirmed by the held Perseus fixture, whose tlg0013.tlg013 is titled
-    #   "Hymn 13 To Demeter" (tlgNNN == Hymn NNN). The Hymn to Aphrodite is
-    #   Hymn 5, so tlg0013.tlg005.
+    #   "tlg0012.tlg001"    — one work; several files may share it (the
+    #                         per-book iliadN/odysseyN files — resolution is
+    #                         by TEXT, so the book split costs nothing);
+    #   ["tlgA.tlgX", ...]  — one TSV spanning SEVERAL held works (nicander =
+    #                         Theriaca + Alexipharmaca in one file);
+    #   "tlg0013"           — a TEXTGROUP: one TSV spanning a whole collection
+    #                         (HHymns = the Homeric Hymns not covered by the
+    #                         four dedicated hymn files).
     #
-    # Every OTHER Hypotactic TSV (the full mirror ships one per work) is left
-    # UNMAPPED on purpose: it is censused as an unmapped work, never guessed.
-    # The owner extends this map as more works are confirmed against the held
-    # canon (grep the greekLit urns; one evidence line per entry).
+    # EVIDENCE DISCIPLINE (P45-5): every entry was verified against the REAL
+    # catalog on 2026-07-25 — the held document's title matches the filename's
+    # work, recorded per entry. Text-matching means a wrong entry can only
+    # census (no citation collision exists to mint a false row), but the
+    # don't-guess doctrine still holds: an id whose identification is not
+    # evident stays OUT (the censused-out note below).
+    #
+    # The original seed's evidence, still the naming key for the hymn files:
+    # the Homeric Hymns are TLG group tlg0013, one work per hymn in
+    # traditional numbering — the held tlg0013.tlg013 is titled "Hymn 13 to
+    # Demeter" (tlgNNN == Hymn NNN).
     WORK_MAP = {
-      "HHAphrodite" => "tlg0013.tlg005"
+      # Homer — held "Iliad" tlg0012.tlg001 / "Odyssey" tlg0012.tlg002; the
+      # mirror ships one TSV per book (iliad1..24, odyssey1..24).
+      **(1..24).to_h { |n| ["iliad#{n}", "tlg0012.tlg001"] },
+      **(1..24).to_h { |n| ["odyssey#{n}", "tlg0012.tlg002"] },
+      "batmumach" => "tlg1220.tlg001", # held "Batrachomyomachia" (the frog-mouse battle)
+      # The Homeric Hymns (group evidence above).
+      "HHAphrodite" => "tlg0013.tlg005", # held "Hymn 5 to Aphrodite" (the long hymn)
+      "HHApollo" => "tlg0013.tlg003",    # held "Hymn 3 to Delian and Pythian Apollo"
+      "HHDemeter" => "tlg0013.tlg002",   # held "Hymn 2 to Demeter"
+      "HHermes" => "tlg0013.tlg004",     # held "Hymn 4 to Hermes"
+      "HHymns" => "tlg0013", # the collection file (its first line is Hymn 1 to
+      #   Dionysus 1.1) — textgroup grain covers every held hymn; the shared
+      #   closing formulae dedupe via the one-row-per-passage guard below
+      # Hesiod — held under tlg0020.
+      "theogony" => "tlg0020.tlg001",     # held "Theogony"
+      "worksanddays" => "tlg0020.tlg002", # held "Works and Days"
+      "scutum" => "tlg0020.tlg003",       # held "Shield of Heracles"
+      # Aeschylus — held under tlg0085 (perseus-grc2 AND 1st1K-grc1 editions;
+      # the urn-prefix resolution takes both).
+      "persians" => "tlg0085.tlg002",   # held "Persians"
+      "prometheus" => "tlg0085.tlg003", # held "Prometheus Bound"
+      "seven" => "tlg0085.tlg004",      # held "Seven Against Thebes"
+      # Pindar — held Olympian/Pythian/Nemean/Isthmean odes, line-grain.
+      "olympians" => "tlg0033.tlg001", # held "Olympian"
+      "pythians" => "tlg0033.tlg002",  # held "Pythian"
+      "nemeans" => "tlg0033.tlg003",   # held "Nemean"
+      "isthmians" => "tlg0033.tlg004", # held "Isthmean"
+      # Hellenistic epos and didactic.
+      **(1..4).to_h { |n| ["apollonius#{n}", "tlg0001.tlg001"] }, # held "Argonautica"
+      #   (Apollonius Rhodius; one TSV per book)
+      **(1..4).to_h { |n| ["theoc#{n}", "tlg0005.tlg001"] }, # held "Εἰδύλλια"
+      #   (Theocritus' Idylls; the four files partition the collection)
+      "nicander" => %w[tlg0022.tlg001 tlg0022.tlg002], # ONE file spans both held
+      #   Nicander works: "Theriaca" + "Alexipharmaca" (1st1K editions)
+      "ophal" => "tlg0023.tlg001", # held "Halieutica" (Oppian)
+      "opcyn" => "tlg0024.tlg001", # held "Cynegetica" (ps.-Oppian of Apamea)
+      # Callimachus — held hymns (perseus-grc4) and epigrams.
+      "callimachusHymns" => %w[tlg0533.tlg015 tlg0533.tlg016 tlg0533.tlg017
+                               tlg0533.tlg018 tlg0533.tlg019 tlg0533.tlg020],
+      #   held "Hymn to Zeus/Apollo/Artemis/Delos/Athena/Demeter" — one TSV,
+      #   six held works
+      "callimachusEp" => %w[tlg0533.tlg003 tlg0533.tlg004], # held "Epigrams" +
+      #   "Epigrams and Fragments" (two held editions-as-works)
+      # Bucolic minora — one TSV per AUTHOR, several held works each.
+      "bion" => "tlg0036", # held Bion: "Epitaphius Adonis", "Epithalamium
+      #   Achillis et Deidameiae", "Fragmenta" — textgroup grain
+      "moschus" => "tlg0035" # held Moschus: "Eros Drapeta", "Europa",
+      #   "Epitaphius Bios", "Megara", "Fragmenta" — textgroup grain
     }.freeze
+
+    # == Censused OUT (P45-5), so the next grower need not re-litigate ==
+    #
+    # Evaluated against the held canon and excluded — the works are simply
+    # not held: aratus (no Phaenomena), cleanthes (no Hymn to Zeus),
+    # colluthus, lycophron (tlg0082 in the catalog is Apollonius Dyscolus's
+    # grammar, not the Alexandra), semonides, solon (tlg0007.tlg007 is
+    # Plutarch's LIFE of Solon), theognis, tyrtaeus, tryph (Tryphiodorus).
+    # They census as unmapped works until the canon grows.
 
     # One refresh's census — the PedecertoScansions::Result shape, field for
     # field, so the shared sync/rebuild tail renders both meter producers
@@ -138,6 +203,8 @@ module Nabu
 
       counts = Hash.new(0)
       malformed = []
+      @index_cache = {}   # WORK_MAP value => fold index, shared by per-book files
+      @written_ids = {}   # passage_id => true, the one-row-per-passage guard
       @catalog.transaction do
         counts[:superseded] = Store::Enrichment.supersede!(@catalog, kind: KIND, model: MODEL)
         # The P44-i3b census (the pedecerto AVSON incident, symmetric): a
@@ -188,10 +255,21 @@ module Nabu
       counts[counts[:matched] > before ? :mapped_works : :unmapped_works] += 1
     end
 
+    # One meter row PER PASSAGE per run (P45-5): Homer repeats whole formulaic
+    # lines verbatim (Il. 1.372-375 = 1.13-16), and with per-book files sharing
+    # one work index — plus the HHymns collection overlapping the dedicated
+    # hymn files on the shared closing formulae — a repeated line resolves to
+    # the same first-occurrence passage more than once. The line still COUNTS
+    # as matched (it did resolve, and the scansion of an identical line is
+    # identical), but the passage keeps ONE row — never a duplicate under the
+    # same (kind, model). Reset per run, so reruns stay byte-identical.
     def write_meter(passage_id, row, counts)
+      counts[:matched] += 1
+      return if @written_ids[passage_id]
+
+      @written_ids[passage_id] = true
       Store::Enrichment.write!(@catalog, passage_id: passage_id, kind: KIND, model: MODEL,
                                          model_version: CODE_VERSION, payload: payload_for(row))
-      counts[:matched] += 1
     end
 
     # The stored payload (class note): meter + pattern feed the shared show
@@ -204,23 +282,32 @@ module Nabu
       payload
     end
 
-    # { fold-key => passage_id } over the held grc passages of every edition of
-    # the mapped work. First writer wins on a key collision (a repeated line in
-    # one poem is vanishingly rare and either witness is a true attestation).
-    def held_line_index(work)
-      like = "urn:cts:greekLit:#{work}.%"
-      rows = @catalog[:passages]
-             .join(:documents, id: Sequel[:passages][:document_id])
-             .where(Sequel.like(Sequel[:documents][:urn], like))
-             .where(Sequel[:passages][:language] => MATCH_LANGUAGE)
-             .select(Sequel[:passages][:id].as(:passage_id), Sequel[:passages][:text].as(:text))
-             .all
-      index = {}
-      rows.each do |row|
-        key = match_key(row[:text])
-        index[key] ||= row[:passage_id] unless key.empty?
+    # { fold-key => passage_id } over the held grc passages of every edition
+    # of the mapped work(s) — a WORK_MAP value verbatim: one work id, an array
+    # of them, or a bare textgroup (the urn LIKE prefix covers all three, the
+    # WORK_MAP note). First occurrence wins on a key collision (a repeated
+    # formulaic line — either witness is a true attestation of the same
+    # text). Memoized per run under the map value, so the 24 per-book Homer
+    # files build their shared work index once, not 24 times.
+    def held_line_index(works)
+      @index_cache[works] ||= begin
+        index = {}
+        held_line_rows(works).each do |row|
+          key = match_key(row[:text])
+          index[key] ||= row[:passage_id] unless key.empty?
+        end
+        index
       end
-      index
+    end
+
+    def held_line_rows(works)
+      likes = Array(works).map { |work| Sequel.like(Sequel[:documents][:urn], "urn:cts:greekLit:#{work}.%") }
+      @catalog[:passages]
+        .join(:documents, id: Sequel[:passages][:document_id])
+        .where(Sequel.|(*likes))
+        .where(Sequel[:passages][:language] => MATCH_LANGUAGE)
+        .select(Sequel[:passages][:id].as(:passage_id), Sequel[:passages][:text].as(:text))
+        .all
     end
 
     # The house grc fold reduced to letters only: ς→σ, downcase, accents/

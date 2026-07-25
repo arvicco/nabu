@@ -19,6 +19,8 @@ class PedecertoScansionsTest < Minitest::Test
   GEOR_CITATIONS = %w[1.1 1.2 1.3 2.1 2.2].freeze
   IBIS = "phi0959.phi010" # Ovid, Ibis — OV-ibis (no division)
   IBIS_CITATIONS = %w[1 2 3].freeze
+  PROP = "phi0620.phi001" # Propertius, Elegiae — PROP-ele1 (book-prefix file: divisions are
+  PROP_CITATIONS = %w[1.1.1 1.1.2 1.1.3 1.2.1 1.2.2].freeze # POEMS of book 1, Perseus cites book.poem.line
 
   def setup
     @catalog = store_test_db
@@ -51,12 +53,12 @@ class PedecertoScansionsTest < Minitest::Test
     hold_work(GEOR, citations: GEOR_CITATIONS)
     result = producer.run("pedecerto", workdir: FIXTURES)
 
-    assert_equal 3, result.files, "all fixture files seen (including the malformed Ausonius)"
-    assert_equal 8, result.lines_read, "5 Georgics lines + 3 Ibis lines"
+    assert_equal 4, result.files, "all fixture files seen (including the malformed Ausonius)"
+    assert_equal 13, result.lines_read, "5 Georgics + 3 Ibis + 5 Propertius lines"
     assert_equal 5, result.matched, "every held Georgics line matched"
-    assert_equal 3, result.unmatched, "the unheld Ovid Ibis lines are counted, never silent"
+    assert_equal 8, result.unmatched, "the unheld Ibis + Propertius lines are counted, never silent"
     assert_equal 1, result.mapped_works, "Georgics resolved ≥1 line"
-    assert_equal 1, result.unmapped_works, "Ibis: crosswalked but not held"
+    assert_equal 2, result.unmapped_works, "Ibis + Propertius: crosswalked but not held"
 
     rows = meter_rows
     assert_equal 5, rows.size
@@ -86,9 +88,9 @@ class PedecertoScansionsTest < Minitest::Test
     result = producer.run("pedecerto", workdir: FIXTURES)
 
     assert_equal ["AVSON-appe.xml"], result.malformed_files
-    assert_equal 8, result.lines_read, "the malformed file contributes no lines"
+    assert_equal 13, result.lines_read, "the malformed file contributes no lines"
     assert_equal 5, result.matched, "the readable works still ingest fully"
-    assert_equal 2, result.mapped_works + result.unmapped_works,
+    assert_equal 3, result.mapped_works + result.unmapped_works,
                  "a malformed file is neither mapped nor unmapped — its own census bucket"
   end
 
@@ -125,7 +127,7 @@ class PedecertoScansionsTest < Minitest::Test
     result = producer.run("pedecerto", workdir: FIXTURES)
 
     assert_equal 2, result.matched
-    assert_equal 6, result.unmatched, "3 unheld Georgics lines + 3 Ibis lines"
+    assert_equal 11, result.unmatched, "3 unheld Georgics lines + 3 Ibis + 5 Propertius lines"
     assert_equal 2, meter_rows.size
   end
 
@@ -134,10 +136,46 @@ class PedecertoScansionsTest < Minitest::Test
     result = producer.run("pedecerto", workdir: FIXTURES)
 
     assert_equal 0, result.matched
-    assert_equal 8, result.unmatched, "every line counted even with zero holdings"
+    assert_equal 13, result.unmatched, "every line counted even with zero holdings"
     assert_equal 0, result.mapped_works
-    assert_equal 2, result.unmapped_works
+    assert_equal 3, result.unmapped_works
     assert_empty meter_rows
+  end
+
+  # --- the P45-5 map growth: the book-prefix files + representative pins ----
+
+  # A per-book pedecerto file (PROP-ele1 = "elegiae 1") numbers its divisions
+  # by POEM within that book, while Perseus cites book.poem.line — the
+  # crosswalk's [tg.work, book] form prepends the book so the citations meet.
+  # The fixture is the real upstream head of PROP-ele1 (poems 1-2 trimmed).
+  def test_book_prefix_file_resolves_three_level_citations
+    hold_work(PROP, citations: PROP_CITATIONS, edition: "perseus-lat3")
+    result = producer.run("pedecerto", workdir: FIXTURES)
+
+    assert_equal 5, result.matched, "every held Propertius 1.x.y line matched via the book prefix"
+    passage = @catalog[:passages].first(urn: "urn:cts:latinLit:#{PROP}.perseus-lat3:1.2.1")
+    row = @catalog[:enrichments].first(passage_id: passage[:id], kind: "meter")
+    refute_nil row, "division 2 line 1 under book prefix 1 lands on Perseus 1.2.1"
+    assert_equal "H", JSON.parse(row[:payload_json])["meter"], "Propertius 1.2.1 opens a hexameter couplet"
+  end
+
+  # A representative sample of the grown crosswalk (the full-map correctness
+  # argument is the per-entry evidence comments in the producer): the two
+  # entries the live catalog REFUTED (P45-5 audit), one of each new shape,
+  # and two evaluated-and-censused absences.
+  def test_crosswalk_representative_entries
+    map = Nabu::PedecertoScansions::WORK_CROSSWALK
+    assert_equal "phi0550.phi001", map["LVCR-rena"],
+                 "the catalog holds De Rerum Natura at phi0550 — phi0472 is Catullus (the P45-5 fix)"
+    assert_equal "phi0472.phi001", map["CATVLL-carm"], "Catullus' Carmina, poem.line on both sides"
+    assert_equal "phi1020.phi003", map["STAT-achi"],
+                 "the catalog holds the Achilleid at phi1020.phi003 — phi002 is the Silvae (the P45-5 fix)"
+    assert_equal %w[phi0620.phi001 1], map["PROP-ele1"], "per-book file → [work, book-prefix]"
+    assert_equal %w[phi1294.phi002 7], map["MART-ep07"]
+    assert_equal %w[phi0959.phi008 2.1], map["OV-tri2"],
+                 "Tristia 2 is one poem — Perseus cites it as 2.1.line, the file has no divisions"
+    refute map.key?("BOETH-cons"), "Perseus holds the Consolatio at metrum grain — censused, not forced"
+    refute map.key?("VERG_APP-aetn"), "the held phi0692 documents carry no titles — identity unverifiable"
   end
 
   # --- the language guard: never attach to an English translation ----------
