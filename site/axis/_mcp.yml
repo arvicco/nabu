@@ -27,6 +27,17 @@ classical:
         The LSJ entry with senses as structured text; citations of works
         this library holds carry resolved passage urns for nabu_show.
 
+romance:
+  mcp:
+    - ask: "Who sang of Ragusa in Latin?"
+      call: 'nabu_search ragusa (lang: lat)'
+      answer: >-
+        Croatian Latin verse from the CroALa shelf (live-verified
+        2026-07-25): Filelfo's 1470 Ragusaeis (AFFECTUS RAGVSA TVAE
+        CLARISSIMA LAVDI) and Palmotić's carmina — the medieval-Latin
+        edge of the continuum, positionally cited (d1.d2.l198) for
+        nabu_show.
+
 epigraphy:
   mcp:
     - ask: "What survives from Segesta, across every corpus here?"

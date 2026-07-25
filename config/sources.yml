@@ -1435,7 +1435,7 @@ glaux:
 
 croala:
   adapter: Nabu::Adapters::Croala
-  axes: [classical]
+  axes: [classical, romance]  # D45-a (owner 2026-07-25): the continuum's Latin side
   wired: true    # Owner flip 2026-07-25 (first sync 2026-07-24: 570 docs /
                    # 309,180 passages; eyeballed via
                    # urn:nabu:croala:albert-i-inscr:d1.p1 + random passages —

@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The twenty research desks of the Nabu library — tags over the
+  The twenty-one research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The twenty desks
+## The twenty-one desks
 
 ### classical
 
@@ -37,6 +37,14 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
 [Open the classical desk]({{ '/axis/classical/' | relative_url }})
+
+### romance
+
+> The Romanist — the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours.
+
+The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
+
+[Open the romance desk]({{ '/axis/romance/' | relative_url }})
 
 ### epigraphy
 
