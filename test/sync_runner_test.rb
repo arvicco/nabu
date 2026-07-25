@@ -434,6 +434,36 @@ class SyncRunnerTest < Minitest::Test
     assert_equal "sha-abc", source_row("breaker").last_sync_sha, "parse-only keeps the prior sha"
   end
 
+  # --- the derived place index (P45-6) ------------------------------------
+
+  # A pleiades sync re-derives the catalog place index from the dump it just
+  # landed (here: parse-only over an already-present dump — the same seam),
+  # so reads never pay the per-invocation JSON load again. The census rides
+  # the Outcome for the CLI's report line; every other source stays nil.
+  def test_sync_derives_the_place_index_for_a_place_index_producer_module
+    dir = File.join(@canonical, "pleiades")
+    FileUtils.mkdir_p(dir)
+    FileUtils.cp(File.join(Nabu::TestSupport.fixtures("pleiades"), "dump.json"),
+                 File.join(dir, "pleiades-places.json"))
+    runner = make_runner(registry(entry("pleiades", Nabu::Adapters::Pleiades,
+                                        wired: false, sync_policy: "manual", kind: "module")))
+
+    outcome = runner.sync("pleiades", parse_only: true)
+
+    refute outcome.aborted?
+    assert_equal 2, outcome.place_index.places, "the honest census rides the Outcome"
+    resolver = Nabu::Store::PlaceIndex.resolver(@db) || flunk("sync left the place index underived")
+    assert_equal "Sparta", resolver.place("570685").title
+  end
+
+  def test_sync_of_an_ordinary_source_derives_no_place_index
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+    outcome = runner.sync("breaker")
+    assert_nil outcome.place_index
+    refute Nabu::Store::PlaceIndex.populated?(@db)
+  end
+
   # --- success bookkeeping ------------------------------------------------
 
   def test_success_updates_last_sync_at_and_sha

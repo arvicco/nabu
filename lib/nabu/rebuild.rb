@@ -143,6 +143,7 @@ module Nabu
         end
       end
       replay_enrichments(db)
+      replay_place_index(db)
       # P36-2: the bulk insert is done — build the deferred secondary indexes in
       # one pass BEFORE the query-side stages (timeline/facets/indexer) that join
       # on passages.document_id.
@@ -286,6 +287,25 @@ module Nabu
         next unless replayable?(entry)
 
         entry.adapter_class.enrichment_producer(catalog: db)
+             .run(entry.slug, workdir: workdir_for(entry.slug))
+      end
+    end
+
+    # Re-derive the place index from every place_index_producer? source's
+    # canonical dump (P45-6 — pleiades). Like source_stats and the
+    # enrichments replay, the index lives in the dropped catalog and is a
+    # pure function of canonical bytes, so a full rebuild always re-derives
+    # it. +dirty+ (IncrementalRebuild) restricts the re-derive to sources it
+    # names — an incremental run whose dump is stamped clean AND whose index
+    # is already populated skips the ~3 s / ~3.9 GB dump load; an EMPTY index
+    # (the just-migrated catalog) still derives, the self-heal path.
+    def replay_place_index(db, dirty: nil)
+      @registry.each_source do |entry|
+        next unless entry.adapter_class.place_index_producer?
+        next unless replayable?(entry)
+        next if dirty && !dirty.include?(entry.slug) && Store::PlaceIndex.populated?(db)
+
+        entry.adapter_class.place_index_producer(catalog: db)
              .run(entry.slug, workdir: workdir_for(entry.slug))
       end
     end

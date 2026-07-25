@@ -293,8 +293,11 @@ findspot **text** mentions the name (exact substring), never merged into the
 id-matched holdings. Degradation is the CLI's exactly: with the dump absent on
 this box, a numeric id still counts holdings (fact-less card, honest note),
 and a name lookup returns a graceful state note with the sync hint — never an
-error. The dump load (~3 s / ~3.9 GB peak on the real 42k-place dump) is paid
-per call and released, the accepted P44-2 v1 cost.
+error. Since P45-6 lookups read the derived catalog place index (instant;
+derived at every pleiades sync/rebuild); the in-memory dump load (~3 s /
+~3.9 GB peak on the real 42k-place dump, paid per call and released — the
+P44-2 v1 cost) survives only as the fallback while the index is not yet
+derived.
 
 ### `nabu_status`
 
