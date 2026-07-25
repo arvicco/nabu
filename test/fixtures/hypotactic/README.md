@@ -29,6 +29,13 @@ There is NO citation column: the file NAME carries the work and line ORDER is
 the line number. The producer nonetheless resolves by TEXT, not order (see
 `lib/nabu/hypotactic_meter.rb`).
 
+`tsv/iliad1.tsv` (added P45-5, trimmed 2026-07-25 from the same 2026-07-24
+mirror clone) is TEN REAL rows of the mirror's Iliad book-1 TSV: upstream
+rows 12–16 and 371–375 (= Il. 1.12–16 and 1.371–375). Kept because Homer
+repeats whole formulaic lines VERBATIM — rows 372–375 repeat rows 13–16
+byte-for-byte (modulo final punctuation) — the real-bytes case for the
+producer's one-row-per-passage dedup guard.
+
 ## Refresh
 
 A fresh clone of the mirror re-fetches `tsv/HHAphrodite.tsv` whole; drop it in

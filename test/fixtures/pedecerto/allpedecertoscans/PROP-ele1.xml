@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<head>
+		<author>Propertius</author>
+		<title>elegiae 1</title>
+		<resp>
+			<institution>Università degli Studi di Udine</institution>
+			<institution>Università "Ca' Foscari" di Venezia</institution>
+			<orgName>Pedecerto. Digital Latin Metre <link>https://www.pedecerto.eu</link></orgName>
+			<persName>Emanuela Colombi</persName>
+			<persName>Luca Mondin</persName>
+			<persName>Luigi Tessarolo</persName>
+			<persName>Andrea Bacianini</persName>
+		</resp>
+		<rights>
+			<licence>https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode</licence>
+		</rights>
+	</head>
+	<body>
+		<division title="1">
+			<line name="1" meter="H" pattern="DDDS">
+				<word sy="1A1b1c" wb="DI">Cynthia</word>
+				<word sy="2A2b" wb="CF">prima</word>
+				<word sy="2c3A" wb="CM">suis</word>
+				<word sy="3b3c4A" wb="CM">miserum</word>
+				<word sy="4T" wb="DI">me</word>
+				<word sy="5A5b" wb="CF">cepit</word>
+				<word sy="5c6A6X">ocellis,</word>
+			</line>
+			<line name="2" meter="P" pattern="SS-|DD-">
+				<word sy="1A1T2A" wb="CM">Contactum</word>
+				<word sy="2T3A" wb="CM">nullis</word>
+				<word sy="4A4b" wb="CF">ante</word>
+				<word sy="4c5A5b5c6X">Cupidinibus.</word>
+			</line>
+			<line name="3" meter="H" pattern="DSSS">
+				<word sy="1A" wb="CM">Tum</word>
+				<word sy="1b1c" wb="DI">mihi</word>
+				<word sy="2A2T3A" wb="CM">constantis</word>
+				<word sy="3T4A4T" wb="DI">deiecit</word>
+				<word sy="5A5b5c" wb="DI">lumina</word>
+				<word sy="6A6X">fastus</word>
+			</line>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		</division>
+		<division title="2">
+			<line name="1" meter="H" pattern="DSSD">
+				<word sy="1A" wb="CM">Quid</word>
+				<word sy="1b1c" wb="DI">iuuat</word>
+				<word sy="2A2T3A" wb="CM">ornato</word>
+				<word sy="3T4A4b4c" wb="DI">procedere,</word>
+				<word sy="5A5b" wb="CF">uita,</word>
+				<word sy="5c6A6X">capillo</word>
+			</line>
+			<line name="2" meter="P" pattern="DS-|DD-">
+				<word sy="1A" wb="CM">Et</word>
+				<word sy="1b1c2A" wb="CM">tenuis</word>
+				<word sy="2T3A" wb="CM">Coa</word>
+				<word sy="4A4b" wb="CF">ueste</word>
+				<word sy="4c5A5b" wb="CF">mouere</word>
+				<word sy="5c6X">sinus,</word>
+			</line>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		</division>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</body>
+</document>
