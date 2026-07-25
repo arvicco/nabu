@@ -1,0 +1,14 @@
+http# docId=dlt000079
+# docTitle=De medicina
+# contributor=Eleonora Litta, Marco Passarotti, Giovanni Moretti
+# corpusRef=http://lila-erc.eu/data/corpora/digiliblt/id/corpus
+# docAuthor=Cassius Felix
+# seeAlso= http://digiliblt.uniupo.it
+# description=Source description: Cassius Felix, De la médicine, texte établi, traduit et annoté par Anne Fraisse, Les Belles Lettres, Paris 2002
+
+# sent_id = 1
+# text = Praefatio I. Ad capitis dolorem II. Ad tineas capitis III. Ad pediculos IV. Ad capillorum defluxionem V. Ad alopiciam VI. Ad cantabriem capitis VII. Ad papillas uultus VIII. Ad maculas albas IX. Ad maculas nigras X. Ad perniones XI. Ad impetigines id est zernas XII. Ad uerrucas XIII. Ad stigmata XIV. Ad labia hiantia XV. Ad scabiem XVI. Ad pruriginem XVII. Ad parotidas XVIII. Ad collectiones XIX. Ad pendigines
+1	Praefatio	praefatio	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/118876
+2	I.	I.	NUM	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1
+3	Ad	ad	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/87344
+4	capitis	caput	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1		http://lila-erc.eu/data/id/lemma/92796

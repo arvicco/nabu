@@ -106,7 +106,7 @@ ud:
   # Bohairic Gospel of Mark cop) — existing axes that gain a treebank. The
   # four new language lanes xcl/fro/frm/ota have NO existing desk, so they
   # ride axis-less (minting new axes is an owner decision, not this packet's).
-  axes: [classical, slavic, germanic, celtic, hittite, indic, sinitic, cuneiform, egyptian, hebrew, biblical]
+  axes: [classical, romance, slavic, germanic, celtic, hittite, indic, sinitic, cuneiform, egyptian, hebrew, biblical]  # romance: P45-1 (llct/udante Latin continuum + ro-nonstandard + the P43-1 profiterole Old French)
   wired: true   # first real sync verified + owner sign-off 2026-07-04
   sync_policy: manual   # treebanks version independently and change rarely
   # P31-0 (2026-07-19): TREEBANKS grew to ten — hittite-hittb
@@ -196,6 +196,34 @@ ud:
   # = +11 docs at treebank-split grain (more if a repo ships train/dev too —
   # the honest floor is +11), and xcl/fro/frm/ota/hbo enter the lemma-indexed
   # languages (grc/akk/cop/egy already indexed). No new parser family.
+  # P45-1 (2026-07-25): TREEBANKS grew to TWENTY-NINE — the Romance pack,
+  # three treebanks (config-only, licenses read verbatim 2026-07-25; the
+  # fourth Romance survey candidate, Old French PROFITEROLE, landed at P43-1
+  # above — its license fork rides thread №43-1):
+  #   latin-llct (lat; Late Latin Charter Treebank — 521 Tuscan charters
+  #     AD 774–897, 9,023 sentences / 242,411 words by stats.xml census;
+  #     LICENSE.txt + README consistent CC BY-SA 4.0 → attribution),
+  #   latin-udante (lat; Dante's Latin — De vulgari eloquentia, Monarchia,
+  #     letters, Questio, Eclogues; 1,723 sentences / 55,553 words.
+  #     CONFLICTING LICENSES, the PROFITEROLE fork shape: LICENSE.txt BY-SA
+  #     4.0 vs README BY-NC-SA 3.0 (prose AND metadata) — conservative nc,
+  #     pending upstream clarification),
+  #   romanian-nonstandard (ro, the library's first ro lane; UAIC-RoDia Old
+  #     Romanian register — Alba Iulia NT 1648, Dosoftei Psalter 1673,
+  #     Neculce's Chronicle, folk verse — under UD's one modern `ro` tag,
+  #     the RNC-under-orv/IcePaHC precedent; LICENSE.txt + README consistent
+  #     CC BY-SA 4.0 → attribution).
+  # SCALE HONESTY: romanian-nonstandard is 26,225 sentences / 572,436 words
+  # (stats.xml census 2026-07-25) — the ud source's SECOND-LARGEST treebank
+  # after Kyoto, bigger than everything else in the P43-1 wave combined.
+  # EXPECTED SYNC DELTA at the next owner-fired `bin/nabu sync ud`: +3 repo
+  # clones; all three ship train/dev/test = +9 docs / +36,971 passages
+  # (9,023 + 1,723 + 26,225), lat gains treebank-gold rows and ro enters the
+  # lemma-indexed languages at ~572k token rows in one bite. Budget sync
+  # time accordingly. AXIS NOTE: the `romance` axis is NOT declared here —
+  # axes are validated against config/axes.yml at load (SourceRegistry
+  # raises on an unknown name), so the axis mint packet must add `romance`
+  # to axes.yml AND to this row's axes list in the same change.
 
 proiel:
   adapter: Nabu::Adapters::Proiel
@@ -1121,26 +1149,25 @@ trismegistos:
 
 pleiades:
   adapter: Nabu::Adapters::Pleiades
-  kind: module   # P43-3: machinery-only — a place resolver seam, zero catalog rows, up=module
+  kind: module   # P43-3: machinery-only — a place resolver seam, zero document rows, up=module
   axes: [epigraphy]
   wired: false   # PERMANENTLY false — a resolver instrument, not a text
                    # source (the bridging/kr-gaiji precedent): discover mints
-                   # no documents, there is no migration and no catalog table.
-                   # The row gives the owner the sanctioned fetch path for the
-                   # gazetteer dump, resolved by Nabu::Pleiades (place id →
-                   # title/point/place-types/time-periods) and consumed by a
-                   # later display packet. OWNER QUEUE (P43-3): bin/nabu sync
-                   # pleiades lands the dump under canonical/pleiades/. Two
-                   # first-sync items (see lib/nabu/adapters/pleiades.rb):
-                   # PIN the fetch URL to the Zenodo 4.1 file (reproducible
-                   # snapshot) and CONFIRM the dump's outer container against
-                   # the downloaded file (the resolver already accepts every
-                   # plausible container + gzip).
-  # P43-3: Pleiades — the ancient-world gazetteer. v1 is a pure read seam
-  # over the numbered quarterly archival release (Zenodo 4.1, 2025-05-28),
-  # the openiti Zenodo posture. LICENSE: downloads page verbatim "Creative
-  # Commons Attribution 3.0 License (cc-by)" → attribution. Fetch is an
-  # owner decision (the dump is large + version-pinned).
+                   # no documents, zero holdings. The row gives the owner the
+                   # sanctioned fetch path for the gazetteer dump, resolved by
+                   # Nabu::Pleiades (place id → title/point/place-types/
+                   # time-periods) for the P44-2 place desk + findspot line.
+                   # Since P45-6 each sync ALSO derives the catalog place
+                   # index from the dump (place_index/place_index_names,
+                   # migration 021, Store::PlaceIndex — a derived lookup
+                   # table with the source_stats rebuild contract, still no
+                   # document rows), so those surfaces read instantly.
+  # P43-3: Pleiades — the ancient-world gazetteer over the numbered
+  # quarterly archival release (Zenodo 4.1, 2025-05-28), the openiti Zenodo
+  # posture; first-synced 2026-07-24 (container confirmed @graph, 42,242
+  # places). LICENSE: downloads page verbatim "Creative Commons Attribution
+  # 3.0 License (cc-by)" → attribution. Fetch is an owner decision (the
+  # dump is large + version-pinned; the Zenodo URL-pin stays optional).
   sync_policy: manual
 
 lila:
@@ -1435,7 +1462,7 @@ glaux:
 
 croala:
   adapter: Nabu::Adapters::Croala
-  axes: [classical]
+  axes: [classical, romance]  # D45-a (owner 2026-07-25): the continuum's Latin side
   wired: true    # Owner flip 2026-07-25 (first sync 2026-07-24: 570 docs /
                    # 309,180 passages; eyeballed via
                    # urn:nabu:croala:albert-i-inscr:d1.p1 + random passages —
@@ -2464,6 +2491,113 @@ pedecerto:
   # alcun modo sostanziale… data, paternità e fonte originale") → nc,
   # attribution + no substantial alteration (satisfied by canonical-means-
   # canonical). Fetch is an owner decision (a 12 MB bulk zip).
+  sync_policy: manual
+
+digiliblt:   # P45-3
+  adapter: Nabu::Adapters::Digiliblt
+  axes: [classical, romance]   # late-antique Latin: the classical desk's 2nd–7th c.
+                               # band AND the romance desk's ancestor shelf (dual-tag,
+                               # never folding — the D35 rule)
+  wired: true    # Owner flip 2026-07-25 ("wire all the sources"; first
+                   # sync same day: 370 docs / 457,560 passages, 3 honest
+                   # quarantines incl. the known damaged dlt000079).
+  # digilibLT — Biblioteca digitale di testi latini tardoantichi (Vercelli /
+  # Università del Piemonte Orientale): 373 late-antique SECULAR Latin prose
+  # texts (2nd–7th c. AD — Ammianus, the grammarians, agrimensores, jurists),
+  # via CIRCSE's LiLa-linked CoNLL-U repo (github.com/CIRCSE/digilibLT):
+  # UDPipe lemma + UPOS on all 7.8M tokens, 1..4 LiLa lemma-bank IRIs per
+  # token (candidates kept when the automatic linking is ambiguous). SILVER:
+  # upstream's own README calls the upload "a *Bronze* version" ("The output
+  # of UDPipe still needs checking and disambiguating") → lemma_tier: silver,
+  # every count labeled, never gold (the GLAUx precedent); no hand-checked
+  # slice exists to promote. LICENSE (README, verbatim): "The *DigilibLT*
+  # texts are licensed under a Creative Commons Attribution-ShareAlike 4.0
+  # International License" → attribution; RECORDED FORK: the adjacent badge
+  # still links CC BY-NC-SA 3.0 (the digilibLT SITE's TEI license) — the
+  # repo's written BY-SA 4.0 grant governs this lane (the CroALa D44-b
+  # resolution shape). Fetch: sparse GitFetch cone [conllu, README.md] (the
+  # ~230 MB ttl/ LiLa RDF lane never transfers), then fetch EXTRACTS the four
+  # conllu/part*.tar.gz into texts/ (extraction-on-fetch, the ZipFetch
+  # pattern; additive — never deletes). One damaged upstream file (dlt000079,
+  # mangled bytes) quarantines by ParseError — expect 372/373 on first sync.
+  # No per-text dates in this lane (the timeline seam stays unfed; the TEI
+  # site and ttl/ lane are future options). No release cadence →
+  # sync_policy manual.
+  sync_policy: manual
+  lemma_tier: silver
+# P45-2
+openmgh:
+  adapter: Nabu::Adapters::Openmgh
+  axes: [classical, romance]
+  wired: true    # Owner flip 2026-07-25 ("wire all the sources"; D45-d
+                   # first wave synced same day: 57/57 SS rer. Germ. volumes,
+                   # 9,594 passages, 0 errored, eyeballed). Scouted
+                   # live 2026-07-25: 153 volumes on the index page
+                   # (mgh.de/en/digital-mgh/openmgh/mgh-editions-in-openmgh),
+                   # one zip each at data.mgh.de/openmgh/<bsbid>.zip holding
+                   # exactly one <bsbid>.xml (48-525 KB zipped; the id space
+                   # is SPARSE — unlisted ids 404, so enumeration is the
+                   # index, never a sweep). OWNER QUEUE: `nabu sync openmgh`
+                   # fetches the D45-d first wave — the complete SS rer.
+                   # Germ. series (57 volumes, ~15 MB: Einhard, the Annales
+                   # regni Francorum/Bertiniani/Fuldenses, Widukind,
+                   # Liudprand, Nithard, Regino, Adam of Bremen, Helmold,
+                   # Otto of Freising, Hrotsvitha…) — then eyeball counts +
+                   # 5 random passages. Extend the scope with `classes:`
+                   # (a bsbid allowlist — the kanripo/kitab seam); the
+                   # remaining 96 volumes (Auct. ant., SS rer. Merov.,
+                   # Diplomata, QQ zur Geistesgesch., Dt. Chron., …) are a
+                   # documented future step the parser already handles.
+  # openMGH — Monumenta Germaniae Historica critical editions (MGH + Bayerische
+  # Staatsbibliothek, "digital MGH") as per-volume TEI-XML: medieval Latin
+  # chronicles, vitae, letters, charters — plus the Dt. Chron. series in Middle
+  # High German (gmh; no xml:lang upstream, the adapter's per-series table). A
+  # bespoke `openmgh-tei` parser family — the compose bet was REFUTED from the
+  # bytes: the body is a bare <pb>/<lb> milestone stream inside one <ab> (zero
+  # <p>/<l> reading elements — croala/sarit iterators find nothing), hyphenated
+  # words are <w> pairs that re-join across line AND page breaks, and Diplomata
+  # volumes are <teiCorpus> roots (one inner <TEI> per charter). Citations:
+  # w<k>.p<page> (work ordinal + PRINTED page — how MGH is cited) for
+  # Scriptores; c<charternum> (the edition's own charter number, medieval date
+  # verbatim in annotations) for Diplomata. LICENSE (page + every volume's
+  # in-file grant, read 2026-07-25, verbatim): "The resources are provided
+  # under the licence of Creative Commons Attribution 4.0 International
+  # (CC BY 4.0). The licence includes the annotations (tags)… The edited
+  # medieval texts themselves are free from copyright." Cite
+  # www.mgh.de/mgh-digital/openmgh + MGH + BSB → attribution.
+bfm:   # P45-4
+  adapter: Nabu::Adapters::Bfm
+  axes: [romance]
+  wired: true    # Owner flip 2026-07-25 ("wire all the sources"; first
+                   # sync same day — owner eyeballed; the 219-file NAKALA
+                   # inventory downloads sha1-verified and resumable)
+  # P45-4: BFM — Base de français médiéval, corpus BFM2022 (ENS de Lyon /
+  # UMR 5317 IHRIM; resp. Céline Guillot-Barbance, digital resp. Alexei
+  # Lavrentiev). 219 TEI P5 texts / ~6.45M words of medieval French, the
+  # Serments de Strasbourg (842) through the end of the 15th century — the
+  # Old French text mass, first registrant of the `romance` axis. One
+  # NAKALA data per text under collection doi:10.34847/nkl.93ee3ts1
+  # (published 2022-11-07 — a VERSIONED, frozen release, hence the pinned
+  # inventory and manual policy; a re-pin against a future BFM20xx release
+  # is a conscious owner act). LICENSE (D45-c, from bytes): per-data
+  # dcterms:rights verbatim "Texte : Domaine public" + "Suppléments
+  # numériques (balisage XML-TEI, métadonnées, annotations linguistiques) :
+  # Sous licence Etalab" (Licence Ouverte 2.0: reuse/adapt/redistribute/
+  # commercial, "Sous réserve de : mentionner la paternité") → attribution;
+  # the collection note flags 8 files (AlexisRaM, ChaceOisiiT, eulaliBfm,
+  # ImMondePrK, PsArundP, qgraal_cm, QJoyesKa, strasbBfm) whose APPARAT
+  # CRITIQUE is CC BY-NC-SA 3.0 FR — the parser drops that layer (<note>
+  # subtrees, editorial-French <head xml:lang="fr">) from the reading
+  # stream by construction, so one class suffices and no NC bytes are
+  # served; the per-file <licence target> rides each document metadata.
+  # Upstream language tag: fro on ALL 219 datas (no frm split upstream —
+  # 15th-c. texts included) → the whole shelf is fro. Lemmatization is
+  # per-text and MACHINE-armed (the corpus self-describes as "annotated
+  # automatically for morphosyntax and lemmatized"; a minority of texts
+  # carry inline <w lemma> — AlexisRaM even under a div
+  # type="étiquetage-vérifié" flag, a future gold-subset candidate) →
+  # lemma_tier: silver, every count labeled (the GLAUx/diorisis precedent).
+  lemma_tier: silver
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

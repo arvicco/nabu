@@ -148,11 +148,20 @@ class AxisPagesTest < Minitest::Test
     File.read(File.join(AXIS_DIR, "index.md")).sub(/\A---\n.*?\n---\n/m, "")
   end
 
-  # [[name, block-body], …] split on the ### axis headings under "## The
-  # twenty desks".
+  # The index's desk-list heading, derived from the LIVE registry count via
+  # the generator's own word-number rule ("## The twenty-one desks") — never
+  # an era-bound literal, so minting an axis cannot silently stale this test.
+  def desks_heading
+    count = axes.size
+    word = Nabu::Ops::AxisPages::WORD_NUMBERS.fetch(count) { count.to_s }
+    "## The #{word} desks"
+  end
+
+  # [[name, block-body], …] split on the ### axis headings under the desk-list
+  # heading.
   def index_blocks
-    section = index_body[/^## The twenty desks\n(.*?)(?=^---\s*$)/m, 1]
-    refute_nil section, "the /axis/ index must carry a '## The twenty desks' section"
+    section = index_body[/^#{Regexp.escape(desks_heading)}\n(.*?)(?=^---\s*$)/m, 1]
+    refute_nil section, "the /axis/ index must carry a '#{desks_heading}' section"
     section.scan(/^### (.+?)\n(.*?)(?=^### |\z)/m)
   end
 
@@ -167,8 +176,8 @@ class AxisPagesTest < Minitest::Test
     body = index_body
     assert_includes body, QUICKSTART_POINTER,
                     "the /axis/ index must carry the Quickstart pointer (regenerate with `rake site:axes`)"
-    assert body.index(QUICKSTART_POINTER) < body.index("## The twenty desks"),
-           "the /axis/ index pointer must sit before the '## The twenty desks' heading"
+    assert body.index(QUICKSTART_POINTER) < body.index(desks_heading),
+           "the /axis/ index pointer must sit before the '#{desks_heading}' heading"
   end
 
   def test_index_pins_each_persona_verbatim_and_links_the_page

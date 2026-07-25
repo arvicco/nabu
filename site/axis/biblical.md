@@ -17,7 +17,7 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 64 docs / 285,143 passages |
+| `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 | `eng-web` | texts | open | wired · manual | 84 docs / 37,624 passages |
 | `sblgnt` | texts | attribution | wired · manual | 27 docs / 7,939 passages |
@@ -90,4 +90,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-one research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

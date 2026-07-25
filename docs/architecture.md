@@ -159,6 +159,24 @@ source_stats_languages(id, source_id, language, documents, passages)
    -- global row: the roll-up is SUM over per-source rows. Readers
    -- feature-detect the table (pre-019 catalogs fall back to live
    -- aggregates unchanged).
+place_index(pleiades_id PK, title, lat, lon, place_types_json,
+            time_periods_json, position)
+place_index_names(pleiades_id, name_key)
+   -- P45-6: the derived Pleiades place index (migration 021,
+   -- Store::PlaceIndex) — the gazetteer dump projected wholesale at
+   -- sync/rebuild time (the adapter-declared place_index_producer seam,
+   -- the P44-7 enrichment-producer shape) so `nabu place` / the show
+   -- findspot line / MCP nabu_place stop re-parsing the 129 MB dump per
+   -- invocation (measured: 4.7 s + 3.7 GB RSS → 4 ms). name_key rows are
+   -- the exact-match keys (whole title + "/"-variant segments,
+   -- Unicode-case-folded IN RUBY at derive time — SQLite lower() is
+   -- ASCII-only; Nabu::Pleiades.title_keys is the one shared relation, so
+   -- the index and the in-memory dump path cannot diverge). Deliberately
+   -- surrogate-key-free: re-deriving the same dump is row-identical
+   -- (test-pinned). Readers feature-detect a POPULATED index
+   -- (Pleiades.load_default(catalog:)) and fall back to the direct dump
+   -- load while it is underived — an empty table never reads as an empty
+   -- gazetteer.
 ```
 
 **The write-time doctrine (P42-0):** anything O(corpus) runs at write time;
@@ -174,6 +192,9 @@ belongs in a loader/rebuild-maintained projection, not in a query.
 fulltext.sqlite3 (so it is index-maintained, not migrated), read by `vocab`'s
 log-odds denominator (17.9s → ms) and `etym`'s per-reflex attestation counts
 (9.0s: the per-language passage_lemmas scan the planner picked, gone).
+`place_index` (P45-6) is the third — the Pleiades gazetteer dump derived into
+catalog tables at sync/rebuild time, retiring the P44-2 per-invocation dump
+load (4.7 s / 3.7 GB RSS → 4 ms per place lookup).
 
 The HISTORY LEDGER (history.sqlite3 — append-only, never derived, never dropped; P7-1):
 

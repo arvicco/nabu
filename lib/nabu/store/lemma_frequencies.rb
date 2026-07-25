@@ -166,6 +166,24 @@ module Nabu
         fulltext[TABLE].where(tier: Indexer::GOLD_TIER).sum(:passage_count) || 0
       end
 
+      # Per-language gold totals for the language/axis cards (P45-r3 — the
+      # owner's 30 s `axis romance`): the read-time probe replacing per-code
+      # live COUNTs over passage_lemmas. Same identity as gold_total: a
+      # language's sum here == its gold row count on the live index, exactly.
+      def gold_language_totals(fulltext)
+        out = {}
+        fulltext[TABLE].where(tier: Indexer::GOLD_TIER)
+                       .group(:language)
+                       .select(:language, Sequel.function(:sum, :passage_count).as(:count))
+                       .each { |row| out[row[:language]] = row[:count].to_i }
+        out
+      end
+
+      def gold_language_total(fulltext, code)
+        fulltext[TABLE].where(tier: Indexer::GOLD_TIER, language: code)
+                       .sum(:passage_count).to_i
+      end
+
       # vocab's corpus_frequencies: GOLD passage-frequency per folded lemma,
       # SUMMED across languages (vocab folds per the passage's language and
       # groups by lemma_folded alone). { folded => count }; batched under

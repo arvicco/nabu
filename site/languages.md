@@ -6,7 +6,7 @@ description: >-
   dictionaries, and the gold-lemma index, with the code conventions.
 ---
 
-As of **22 July 2026** — a live inventory: every code below appears in the
+As of **25 July 2026** — a live inventory: every code below appears in the
 catalog, the lemma index, or the reference shelf. The maintained original of
 this page is
 [docs/languages.md](https://github.com/arvicco/nabu/blob/main/docs/languages.md)
@@ -132,11 +132,16 @@ extracts as of 17 July 2026.</p>
 
 ## Gold-lemma languages
 
-Twenty-eight languages are searchable by dictionary form (`search --lemma`)
-as of 22 July 2026:
+Thirty-two languages are searchable by dictionary form (`search --lemma`)
+as of 25 July 2026:
 
 `san, sux, gmh, is, egy, lat, grc, orv, lzh, akk, hbo, non, cop, sl,
-chu, ojp, sga, got, osx, bul, ang, xcl, peo, arc, hit, xhu, elx, uga`
+chu, ojp, sga, got, osx, bul, ang, xcl, peo, arc, hit, xhu, elx, uga,
+fro, frm, ro, ota`
+
+The four newest — Old and Middle French, Romanian, and an Ottoman
+Turkish slice — arrived 25 July 2026 with the UD Romance treebank
+pack.
 
 The treebanks, ORACC, goo300k, the DCS, ONCOJ, the Hebrew and Egyptian
 shelves, Coptic Scriptorium, and the Germanic wave feed these
@@ -147,4 +152,4 @@ eight languages ride an honestly labelled silver tier. Everything else
 is full-text-searchable but not yet lemma-searchable.
 
 The same languages, grouped by the scholar who reads them rather than by code,
-are the eighteen [research desks]({{ '/axis/' | relative_url }}).
+are the twenty-one [research desks]({{ '/axis/' | relative_url }}).

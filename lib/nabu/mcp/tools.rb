@@ -183,8 +183,10 @@ module Nabu
         "relevance-ranked and bounded (default " \
         "#{SEARCH_DEFAULT_LIMIT}, max #{SEARCH_MAX_LIMIT}) with an honest 'showing k' note; " \
         "each carries urn, language, license_class, and source — PRESERVE the license fields " \
-        "when quoting. Use nabu_show with a hit's urn for the full passage, nabu_status for " \
-        "what the corpus covers.".freeze
+        "when quoting. `meter`/`meter_pattern` (text search only) restrict hits to metrically " \
+        "SCANNED passages — the pedecerto (Latin) / hypotactic (Greek) meter enrichment layer; " \
+        "the note names that layer or explains an empty one. Use nabu_show with a hit's urn for " \
+        "the full passage, nabu_status for what the corpus covers.".freeze
 
       SHOW_DESCRIPTION =
         "Read the nabu corpus by urn: one passage, a whole document, an inclusive range, or " \
@@ -392,6 +394,17 @@ module Nabu
                                   "BCE); mutually exclusive with from/to." },
           place: { type: "string",
                    description: "Provenance place LIKE filter (Oxyrhynchus, oxyrhynch%) — dated papyri." },
+          meter: { type: "string",
+                   description: "Meter facet (P45-5): only passages carrying a meter enrichment " \
+                                "(the pedecerto/hypotactic scansion layer) whose meter code/name " \
+                                "matches case-insensitively (pedecerto codes H, P, …; hypotactic " \
+                                "names like 'dactylic hexameter'). Text search only (not lemma/" \
+                                "near); most of the corpus is unscanned and absent under it. The " \
+                                "note names the source layer, or explains an empty/unknown one." },
+          meter_pattern: { type: "string",
+                           description: "Meter facet: exact foot/scansion pattern, case-insensitive " \
+                                        "(pedecerto DSDS, hypotactic '-u u -uu …'); composes with " \
+                                        "meter or stands alone. Text search only." },
           limit: { type: "integer", minimum: 1, maximum: SEARCH_MAX_LIMIT,
                    default: SEARCH_DEFAULT_LIMIT, description: "Maximum hits returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
@@ -629,15 +642,17 @@ module Nabu
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
-        # The Pleiades gazetteer slot (P44-3): nil (dump-less — nabu_place id
-        # queries still count holdings, nabu_show serves no findspot key,
-        # byte-identical to the pre-P44 payloads), a loaded Nabu::Pleiades
+        # The Pleiades gazetteer slot (P44-3): nil (gazetteer-less —
+        # nabu_place id queries still count holdings, nabu_show serves no
+        # findspot key, byte-identical to the pre-P44 payloads), a loaded
         # resolver (tests), or :auto — the entrypoint's setting, which
-        # feature-detects the canonical dump LAZILY per call (Query::Show's
-        # own :auto for findspot; #place_resolver for nabu_place). The load
-        # cost (~3 s / ~3.9 GB peak on the real dump, the P44-2 design datum)
-        # is paid per invocation and released — deliberately NOT memoized on
-        # this long-lived server object.
+        # feature-detects LAZILY per call (Query::Show's own :auto for
+        # findspot; #place_resolver for nabu_place). Since P45-6 :auto
+        # prefers the derived catalog place index (instant, per-call, no
+        # memoization needed); the in-memory dump load (~3 s / ~3.9 GB peak
+        # on the real dump) is paid — per invocation, released after,
+        # deliberately NOT memoized on this long-lived server object — only
+        # while the index is not yet derived.
         @pleiades = pleiades
         # The enabled-slug set (P44-r3b): nabu_status's sources array defaults to
         # the box's ENABLED sources (the CLI list/status default), plus the
@@ -698,17 +713,20 @@ module Nabu
         end
 
         from, to, place = search_date(args, mode, near)
+        meter, meter_pattern = search_meter(args, mode, near)
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         fulltext = search_index(mode) or return note(mode == :lemma ? LEMMA_REBUILDING_NOTE : REBUILDING_NOTE)
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         window = clamp(args["window"], default: SEARCH_DEFAULT_WINDOW, max: SEARCH_MAX_WINDOW, min: 0)
-        results, incomplete, rank_note = run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near,
-                                                                window: window, lang: args["lang"], license: license,
-                                                                limit: limit + 1, morph: morph,
-                                                                from: from, to: to, place: place)
+        results, incomplete, rank_note, meter_note =
+          run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near,
+                                 window: window, lang: args["lang"], license: license,
+                                 limit: limit + 1, morph: morph, from: from, to: to, place: place,
+                                 meter: meter, meter_pattern: meter_pattern)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
-        render_search(results, limit: limit, catalog: catalog, incomplete: incomplete, rank_note: rank_note)
+        render_search(results, limit: limit, catalog: catalog, incomplete: incomplete, rank_note: rank_note,
+                               meter_note: meter_note)
       rescue Query::MorphFacets::Error => e
         raise InvalidArguments, e.message
       end
@@ -825,7 +843,7 @@ module Nabu
         query = string_arg(args, "query") or
           raise InvalidArguments, "nabu_place needs a query (a Pleiades id or an exact place title)"
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
-        resolver = place_resolver
+        resolver = place_resolver(catalog)
         return note(NO_GAZETTEER_NOTE) if resolver.nil? && Nabu::Pleiades.ref_id(query).nil?
 
         result = Query::Place.new(catalog: catalog, pleiades: resolver).run(query)
@@ -1046,7 +1064,7 @@ module Nabu
       # was too common to rank (plain text mode only — the other searchers
       # never guard, so theirs is always nil).
       def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
-                     from: nil, to: nil, place: nil)
+                     from: nil, to: nil, place: nil, meter: nil, meter_pattern: nil)
         results, searcher =
           if near
             searcher = Query::Proximity.new(catalog: catalog, fulltext: fulltext)
@@ -1058,15 +1076,31 @@ module Nabu
           else
             searcher = Query::Search.new(catalog: catalog, fulltext: fulltext)
             [searcher.run(term, lang: lang, license: license, limit: limit,
-                                from: from, to: to, place: place), searcher]
+                                from: from, to: to, place: place,
+                                meter: meter, meter_pattern: meter_pattern), searcher]
           end
         rank_note = searcher.respond_to?(:rank_note) ? searcher.rank_note : nil
-        [results, searcher.incomplete_hint, rank_note]
+        meter_note = searcher.respond_to?(:meter_note) ? searcher.meter_note : nil
+        [results, searcher.incomplete_hint, rank_note, meter_note]
       end
 
-      def render_search(results, limit:, catalog:, incomplete: nil, rank_note: nil)
+      # The meter facet args (P45-5), text mode only — the lemma/proximity
+      # query classes do not carry the filter, so it is refused, never
+      # silently ignored (the refusal-parity rule).
+      def search_meter(args, mode, near)
+        meter = string_arg(args, "meter")
+        pattern = string_arg(args, "meter_pattern")
+        return [nil, nil] unless meter || pattern
+
+        raise InvalidArguments, "meter/meter_pattern compose with text search only, not lemma/near" if
+          mode == :lemma || near
+
+        [meter, pattern]
+      end
+
+      def render_search(results, limit:, catalog:, incomplete: nil, rank_note: nil, meter_note: nil)
         if results.empty?
-          return json(matches: [], note: ["no matches", rank_note, incomplete].compact.join(" — "),
+          return json(matches: [], note: ["no matches", rank_note, meter_note, incomplete].compact.join(" — "),
                       coverage: coverage_hint(catalog))
         end
 
@@ -1079,8 +1113,10 @@ module Nabu
                  "#{shown.size} matches, showing #{shown.size}"
                end
         # P42-2: the skipped-rank clause rides the existing free-text note —
-        # additive, the frozen response shape gains no key.
+        # additive, the frozen response shape gains no key. The meter facet's
+        # source line (P45-5) rides the same way.
         note = "#{note} — #{rank_note}" if rank_note
+        note = "#{note} — #{meter_note}" if meter_note
         note = "#{note} — #{incomplete}" if incomplete
         json(matches: shown.map { |result| match_payload(result, sources) }, note: note)
       end
@@ -1446,10 +1482,11 @@ module Nabu
       # -- place internals (P44-3) -------------------------------------------------
 
       # Resolve the gazetteer slot for one nabu_place call: :auto
-      # feature-detects the canonical dump (nil when unsynced), per call and
-      # unmemoized — the initializer note carries the cost rationale.
-      def place_resolver
-        @pleiades == :auto ? Nabu::Pleiades.load_default : @pleiades
+      # feature-detects per call, unmemoized — the derived place index in
+      # +catalog+ first (P45-6), else the canonical dump, else nil
+      # (unsynced); the initializer note carries the cost rationale.
+      def place_resolver(catalog)
+        @pleiades == :auto ? Nabu::Pleiades.load_default(catalog: catalog) : @pleiades
       end
 
       def place_payload(query, result)

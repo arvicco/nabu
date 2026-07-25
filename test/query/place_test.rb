@@ -104,6 +104,25 @@ module Query
       assert_equal [["isicily", 1]], place_query.run("570685").cards.first.holdings
     end
 
+    # -- the derived index resolver (P45-6) ------------------------------------
+
+    # The place desk takes whatever resolver load_default hands it — the
+    # in-memory dump load or the SQLite-backed index. Same query, same
+    # result, either way (the index resolver duck-types place/titled/size).
+    def test_index_backed_resolver_answers_identically_to_the_dump_path
+      load_document(source: "isicily", slug: "a", place: { "pleiades" => "570685" })
+      Nabu::Store::PlaceIndex.derive!(@catalog, places: resolver.each_place)
+      indexed = Nabu::Store::PlaceIndex.resolver(@catalog) || flunk("derive left no resolver")
+
+      from_dump = place_query.run("sparta")
+      from_index = place_query(pleiades: indexed).run("sparta")
+      assert_equal from_dump.cards.map(&:pleiades_id), from_index.cards.map(&:pleiades_id)
+      assert_equal(from_dump.cards.map { |card| card.place.title },
+                   from_index.cards.map { |card| card.place.title })
+      assert_equal from_dump.cards.map(&:holdings), from_index.cards.map(&:holdings)
+      assert_equal from_dump.unlinked, from_index.unlinked
+    end
+
     # -- the dump-absent degradation -------------------------------------------
 
     def test_without_the_dump_an_id_still_counts_holdings

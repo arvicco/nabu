@@ -25,10 +25,14 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-23** the shelves hold **810,180 documents / 62,789,087
-passages** in 110 language codes — from proto-cuneiform tablets of the
-late 4th millennium BCE to Meiji-era Japanese. The newest arrival more
-than doubled the library in a day: **the Arabic phase** — OpenITI, the
+As of **2026-07-25** the shelves hold **813,257 documents / 65,130,037
+passages** in 115 language codes — from proto-cuneiform tablets of the
+late 4th millennium BCE to Meiji-era Japanese, and now the medieval
+Latin-to-vernacular continuum: **the Romance wave** (2026-07-25)
+brought the MGH critical editions, digilibLT's late-antique prose,
+and the Base de français médiéval's Old French beside CroALa. Two
+days earlier a single arrival had more than doubled the library:
+**the Arabic phase** — OpenITI, the
 premodern Islamicate library whole (Quran and hadith, history, fiqh,
 falsafa, the dīwāns) with its Persian shelf (Ḥāfiẓ, Ibn Sīnā) — making
 **Classical Arabic the largest language in the corpus at 33.3 million
@@ -304,14 +308,16 @@ shelf map with research uses per shelf is
 | Germanic wave | Menotec Old Norwegian treebanks + Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German (355k gold manuscript lines), Rundata runic inscriptions in five text lanes (2026-07-22) | 31,057 / 409,947 | nc / CC BY / CC BY-SA / odbl |
 | Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik + the Hebrew/Egyptian/Slovene desks and the Sino-Japanese lexicography (Unihan, KANJIDIC2/JMdict, HDIC, Guangyun) (`nabu define` / `etym`) | 1,310,763 entries / 56 shelves (2026-07-22) | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-The registry holds **86 sources + 4 local shelves + 8 feature modules**
+The registry holds **89 sources + 4 local shelves + 8 feature modules**
 (the kind-split census, 2026-07-24 — `sources.yml` distinguishes what a
 row IS: a corpus that mints catalog rows, an owner-authored local memory
 shelf, or machinery like `pedecerto`/`bridging` that fetches reference
-data but mints no documents of its own). All 86 sources are **wired**
+data but mints no documents of its own). All 89 sources are **wired**
 — adapter built and first sync verified (2026-07-25); the newest
-arrivals are `glaux` (~20M-token silver-annotated Ancient Greek:
-968,578 passages) and `croala` (Croatian Latin, 976 CE onward).
+arrivals are the Romance wave's `openmgh` (the MGH critical editions),
+`digiliblt` (late-antique Latin, silver-annotated) and `bfm` (Old
+French), joining `glaux` (~20M-token silver-annotated Ancient Greek)
+and `croala` (Croatian Latin) from the day before.
 The **Arabic library** landed 2026-07-23: `openiti`'s
 owner-fired first sync brought 9,079 Islamicate text versions —
 34.6M passages of premodern Arabic and Persian. Before it, the
@@ -489,7 +495,7 @@ useful to others.
 |---|---|
 | [docs/quickstart.md](docs/quickstart.md) | Zero to first search, copy-pasteable, honest about sizes and timings. |
 | [docs/library.md](docs/library.md) | The shelf map: every corpus with contents, counts, licenses, and research uses. |
-| [docs/axes.md](docs/axes.md) | The research axes: the eighteen scholarly desks, their personas, and which sources each tags. |
+| [docs/axes.md](docs/axes.md) | the research axes: the twenty-one scholarly desks, their personas, and which sources each tags. |
 | [docs/01-concept.md](docs/01-concept.md) | The vision: what Nabu is, workflows, principles, what success looks like. |
 | [docs/mcp.md](docs/mcp.md) | The MCP server: ten read-only tools, registration recipes, quoting etiquette. |
 | [docs/conventions.md](docs/conventions.md) | Field notes for working with ancient-text corpora (Unicode/NFC, citations, editions, licensing) — start here if you're new to the domain. |

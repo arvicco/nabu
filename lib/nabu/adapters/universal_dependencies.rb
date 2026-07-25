@@ -327,6 +327,62 @@ module Nabu
         "egyptian-pc" => {
           repo: "https://github.com/UniversalDependencies/UD_Egyptian-PC",
           language: "egy", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # P45-1 (the Romance pack — THREE treebanks, config-only, the P43-1
+        # shape): two new Latin lanes and the library's first ro lane. The
+        # fourth Romance survey candidate, Old French PROFITEROLE, landed at
+        # P43-1 above (license fork on thread №43-1) — not re-registered.
+        # Licenses read verbatim from each repo's LICENSE.txt/README on
+        # 2026-07-25; every entry carries an explicit :license +
+        # :license_class (the P43-1 posture); the SOURCE class stays nc.
+
+        # Late Latin Charter Treebank (LLCT/LLCT2): 521 original charters
+        # written in Tuscia (Tuscany) AD 774–897 — documentary, non-standard
+        # Late Latin at 9,023 sentences / 242,411 words (stats.xml census
+        # 2026-07-25; the README's own split table sums the same). No dedup
+        # concern with latin-ittb/latin-perseus (different upstream data; the
+        # charters' non-standard spellings — Karolus for Carolus — are the
+        # corpus's whole point, kept verbatim, classicized only in LEMMA).
+        # LICENSE GATE PASSED 2026-07-25: LICENSE.txt is verbatim the BY-SA
+        # grant ("The treebank is licensed under the Creative Commons License
+        # Attribution-ShareAlike 4.0 International") + README metadata
+        # `License: CC BY-SA 4.0`, consistent → the P10-4 per-document
+        # attribution override, the birchbark/RNC/Hittite mechanics exactly.
+        "latin-llct" => {
+          repo: "https://github.com/UniversalDependencies/UD_Latin-LLCT",
+          language: "lat", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # UDante — Dante's literary Medieval Latin (De vulgari eloquentia,
+        # Monarchia, the Letters, Questio, Eclogues; DanteSearch corpus,
+        # 1,723 sentences / 55,553 words by stats.xml census 2026-07-25).
+        # CONFLICTING GRANTS, the PROFITEROLE fork shape exactly: LICENSE.txt
+        # reads CC BY-SA 4.0 but the README — BOTH its prose ("licensed under
+        # the terms of CC BY-NC-SA 3.0") and its machine-readable metadata
+        # (`License: CC BY-NC-SA 3.0`) — says NonCommercial. Conservative
+        # ruling: the NC reading controls (treating BY-SA data as NC can
+        # never over-share; the reverse could) → nc, pending upstream
+        # clarification. Re-read at the next fixture refresh, never from
+        # memory. (NOT the Kyoto precedent — that applies when the README
+        # side is LESS restrictive, so LICENSE.txt is itself conservative.)
+        "latin-udante" => {
+          repo: "https://github.com/UniversalDependencies/UD_Latin-UDante",
+          language: "lat", license: "CC BY-NC-SA 3.0", license_class: "nc"
+        },
+        # Romanian Nonstandard (UAIC-RoDia) — the library's first ro lane:
+        # the Alba Iulia New Testament (1648, the first Romanian NT), the
+        # Dosoftei verse Psalter (1673), Neculce's Chronicle (1743),
+        # Caragea's Law (1818) and folk verse — 26,225 sentences / 572,436
+        # words by stats.xml census 2026-07-25, the ud source's SECOND
+        # LARGEST treebank after Kyoto. DIACHRONIC HONESTY: an Old/pre-modern
+        # Romanian register filed under UD's one modern tag `ro` — the
+        # RNC-under-orv / IcePaHC-under-is precedent (P10-2/P40-1), recorded
+        # not hidden (ISO 639-3 has no Old Romanian code to reach for).
+        # LICENSE GATE PASSED 2026-07-25: LICENSE.txt is verbatim the same
+        # BY-SA grant + README metadata `License: CC BY-SA 4.0`, consistent →
+        # the P10-4 per-document attribution override.
+        "romanian-nonstandard" => {
+          repo: "https://github.com/UniversalDependencies/UD_Romanian-Nonstandard",
+          language: "ro", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze
 
