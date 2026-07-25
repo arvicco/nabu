@@ -59,7 +59,7 @@ registry currently tags to it.
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
-**Members** (13): `perseus-greek`, `perseus-latin`, `first1k-greek`, `ud`, `proiel`, `lexica`, `vulgate`, `lila`, `hypotactic`, `diorisis`, `glaux`, `croala`, `pedecerto`
+**Members** (14): `perseus-greek`, `perseus-latin`, `first1k-greek`, `ud`, `proiel`, `lexica`, `vulgate`, `lila`, `hypotactic`, `diorisis`, `glaux`, `croala`, `pedecerto`, `digiliblt`
 
 ### romance
 
@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (2): `ud`, `croala`
+**Members** (3): `ud`, `croala`, `digiliblt`
 
 ### epigraphy
 
@@ -212,6 +212,14 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
 **Members** (8): `wiktionary-recon`, `unihan`, `edrdg`, `hdic`, `kradfile`, `oncoj`, `oncoj-lexicon`, `aozora`
+
+### romance
+
+> The Romanist — watches Latin become French, Italian and Spanish, charter by charter.
+
+The Latin→Romance transition band: digilibLT's late-antique prose at the ancestor end, riding beside the classical desk by design. The daughter-language shelves (Old French, Old Italian, Iberian charters) are scouted but not yet held — the desk is honest about starting at the Latin side.
+
+**Members** (1): `digiliblt`
 
 ### local
 
