@@ -1,0 +1,35 @@
+# docId=dlt000619
+# docTitle=Decretum provinciae Africae
+# contributor=Eleonora Litta, Marco Passarotti, Giovanni Moretti
+# corpusRef=http://lila-erc.eu/data/corpora/digiliblt/id/corpus
+# docAuthor=No author
+# seeAlso=https://digiliblt.uniupo.it
+# description=Source description: CIL VIII, n. 11017
+
+# sent_id = 1
+# text = Genio senatus ob spectatam iustitiam servatae defensaeque p(rovinciae) A(fricae) Gigthenses publice ex d(ecreto) p(rovinciae) A(fricae)
+1	Genio	genius	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/7972
+2	senatus	senatus	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/124309
+3	ob	ob	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/114173
+4	spectatam	spectatus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/hypolemma/41355
+5	iustitiam	iustitia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/109264
+6	servatae	seruo	VERB	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/124551
+7	defensaeque	defensaes	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	
+8	p(	p(	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	
+9	rovinciae	rovintia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	
+10	)	)	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	
+11	A(	A(	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	
+12	fricae	fricus	ADJ	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	
+13	)	)	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	
+14	Gigthenses	Gigthenses	PROPN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	
+15	publice	publice	ADV	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/hypolemma/36248
+16	ex	ex	ADP	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	http://lila-erc.eu/data/id/lemma/101716
+17	d(	d(	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	
+18	ecreto	ecretum	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	
+19	)	)	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	
+20	p(	p(	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	
+21	rovinciae	rovintia	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	
+22	)	)	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1	
+23	A(	A(	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	
+24	fricae	frica	NOUN	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	http://lila-erc.eu/data/id/lemma/53605
+25	)	)	PUNCT	_	_	_	_	_	CitationHierarchy=Paragraphus_1,Sentence_1|SpaceAfter=No	
