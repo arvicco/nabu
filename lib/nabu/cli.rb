@@ -2036,10 +2036,12 @@ module Nabu
       id-matched counts.
 
       The gazetteer dump is the pleiades module's canonical asset
-      (`nabu sync pleiades`, ~42k places). Loading it costs ~3 s per
-      invocation — the accepted v1 cost. Without it on disk, a numeric id
-      still counts holdings (the catalog side needs no dump); a name
-      lookup is refused with the sync hint.
+      (`nabu sync pleiades`, ~42k places). Since P45-6 the sync also
+      derives a place index into the catalog, so lookups here read it
+      instantly; the ~3 s in-memory dump load is paid only while that
+      index is not yet derived (re-sync or rebuild derives it). Without
+      the dump on disk, a numeric id still counts holdings (the catalog
+      side needs no dump); a name lookup is refused with the sync hint.
 
       Examples:
         nabu place Segesta          # exact title → card + holdings
@@ -2054,7 +2056,7 @@ module Nabu
       catalog = open_catalog(config)
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
-      resolver = Nabu::Pleiades.load_default(config: config)
+      resolver = Nabu::Pleiades.load_default(config: config, catalog: catalog)
       result = Nabu::Query::Place.new(catalog: catalog, pleiades: resolver).run(query)
       print_place(result)
     rescue Nabu::Query::Place::Error => e
@@ -2471,9 +2473,11 @@ module Nabu
         # The enabled-slug set (P44-r3b): nabu_status's sources array defaults
         # to this box's enabled sources, matching the CLI list/status default.
         enabled_slugs: mcp_enabled_slugs(config, registry),
-        # The Pleiades gazetteer (P44-3): :auto = feature-detect the canonical
-        # dump lazily per call (nabu_place, nabu_show findspot) — an unsynced
-        # dump degrades exactly like the CLI, never crashes.
+        # The Pleiades gazetteer (P44-3): :auto = feature-detect lazily per
+        # call (nabu_place, nabu_show findspot) — the derived catalog place
+        # index when a sync/rebuild has built it (P45-6, instant), else the
+        # canonical dump; an unsynced box degrades exactly like the CLI,
+        # never crashes.
         pleiades: :auto
       )
       $stdout.sync = true
@@ -6701,7 +6705,7 @@ module Nabu
           "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored" \
           "#{format_collided(report)}" \
           "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}" \
-          "#{format_sync_enrichments(outcome.enrichments)}"
+          "#{format_sync_enrichments(outcome.enrichments)}#{format_sync_place_index(outcome.place_index)}"
       end
 
       # P39-4: the within-pass collision tail — silent at zero (house
@@ -6749,6 +6753,16 @@ module Nabu
         works = enr.mapped_works + enr.unmapped_works
         "  meter #{enr.matched} lines matched, #{enr.unmatched} unmatched " \
           "(#{plural(enr.mapped_works, 'work')} of #{works})#{format_malformed_files(enr.malformed_files)}"
+      end
+
+      # P45-6: the place-index tail for a pleiades sync — silent for every
+      # source that derives no place index (nil, including a pleiades
+      # parse-only sync before the first fetch). "place index 42242 places
+      # derived (3.1s)".
+      def format_sync_place_index(census)
+        return "" if census.nil?
+
+        "  place index #{census.places} places derived (#{format('%.1f', census.seconds)}s)"
       end
 
       # The P44-i3b honesty tail: unreadable upstream files are named (the

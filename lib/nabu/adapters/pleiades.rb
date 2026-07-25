@@ -3,14 +3,18 @@
 module Nabu
   module Adapters
     # Pleiades — the ancient-world gazetteer, registered as a FEATURE MODULE
-    # (kind: module), not a text source. It mints NO catalog rows and needs
-    # NO migration: v1 is a pure READ seam. `nabu sync pleiades` (owner-run)
-    # lands the gazetteer dump under canonical/pleiades/, and Nabu::Pleiades
-    # resolves a place id → {title, representative point, place types, time
-    # periods} straight off that dump. A later packet consumes it on display
-    # surfaces (an isicily/itant record's place metadata already carries an
-    # "ancient_ref" Pleiades id). So, like bridging, discover yields NOTHING
-    # and parse is unreachable.
+    # (kind: module), not a text source. It mints NO documents — like
+    # bridging, discover yields NOTHING and parse is unreachable. `nabu sync
+    # pleiades` (owner-run) lands the gazetteer dump under
+    # canonical/pleiades/, and Nabu::Pleiades resolves a place id → {title,
+    # representative point, place types, time periods}. v1 (P43-3) read that
+    # dump directly per invocation; since P45-6 the sync ALSO derives the
+    # catalog place index from it (place_index_producer below →
+    # Store::PlaceIndex, migration 021 — still zero document rows, zero
+    # holdings; the index is a derived lookup table with the source_stats
+    # rebuild contract), and the display surfaces (`nabu place`, the show
+    # findspot line, MCP nabu_place) read the index instantly, falling back
+    # to the direct dump load only while the index is underived.
     #
     # == fetch: the pinnable quarterly release (the openiti Zenodo posture)
     #
@@ -51,6 +55,15 @@ module Nabu
 
       def self.manifest
         MANIFEST
+      end
+
+      # The dump derives the catalog place index at sync/rebuild time
+      # (P45-6): SyncRunner runs the producer after every pleiades sync,
+      # Rebuild after replay — the class-note contract.
+      def self.place_index_producer? = true
+
+      def self.place_index_producer(catalog:)
+        Nabu::Store::PlaceIndex::Producer.new(catalog: catalog)
       end
 
       # A feature module mints no documents — its data is a read seam

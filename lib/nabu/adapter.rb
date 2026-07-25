@@ -168,6 +168,21 @@ module Nabu
     # corpus from it). Default nil — no enrichment layer.
     def self.enrichment_producer(catalog:) = nil # rubocop:disable Lint/UnusedMethodArgument
 
+    # Does this adapter's canonical asset derive the catalog's place index
+    # (P45-6 — the Pleiades gazetteer dump projected into place_index /
+    # place_index_names so reads stop re-parsing the dump)? Declared HERE
+    # beside the other capability flags so SyncRunner refreshes and
+    # Rebuild re-derives the index without special-casing the slug.
+    # Default false.
+    def self.place_index_producer? = false
+
+    # The producer SyncRunner/Rebuild runs for a place_index_producer?
+    # source: anything with #run(slug, workdir:) returning a census (or nil
+    # for the honest no-dump no-op), deriving the place index wholesale — a
+    # pure function of canonical bytes, so a rebuild re-derives identical
+    # rows. Default nil — no place index.
+    def self.place_index_producer(catalog:) = nil # rubocop:disable Lint/UnusedMethodArgument
+
     # Remote-health probe strategy (P11-2). Default :git — the probe
     # ls-remotes each upstream_repo_urls. The HTTP-zip fetch path (ORACC,
     # Nabu::ZipFetch) has NO git repo to ls-remote, so it overrides to
