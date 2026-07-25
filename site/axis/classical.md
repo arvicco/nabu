@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 24 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
 | `perseus-greek` | texts | attribution | wired · auto | 1,418 docs / 394,706 passages |
 | `perseus-latin` | texts | attribution | wired · auto | 534 docs / 391,785 passages |
@@ -25,11 +25,11 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 | `lexica` | dictionary | attribution | wired · manual | 168,133 entries |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
 | `lila` | feature module | attribution | not yet wired | nothing held yet |
-| `hypotactic` | feature module | attribution | not yet wired | not synced yet |
+| `hypotactic` | feature module | attribution | not yet wired | nothing held yet |
 | `diorisis` | texts | attribution | wired · manual | 767 docs / 516,505 passages |
-| `glaux` | texts | attribution | not yet wired | 1,421 docs / 968,578 passages |
-| `croala` | texts | attribution | not yet wired | 570 docs / 309,180 passages |
-| `pedecerto` | feature module | nc | not yet wired | not synced yet |
+| `glaux` | texts | attribution | wired · manual | 1,421 docs / 968,578 passages |
+| `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
+| `pedecerto` | feature module | nc | not yet wired | nothing held yet |
 
 ## The desk's instruments
 

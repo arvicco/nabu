@@ -308,11 +308,11 @@ The registry holds **86 sources + 4 local shelves + 8 feature modules**
 (the kind-split census, 2026-07-24 — `sources.yml` distinguishes what a
 row IS: a corpus that mints catalog rows, an owner-authored local memory
 shelf, or machinery like `pedecerto`/`bridging` that fetches reference
-data but mints no documents of its own). 83 of the 86 sources are
-**wired** — adapter built and first sync verified; the newest arrivals,
-`glaux` (~20M-token silver-annotated Ancient Greek: 968,578 passages)
-and `croala` (Croatian Latin, 976 CE onward), are synced and in owner
-verification. The **Arabic library** landed 2026-07-23: `openiti`'s
+data but mints no documents of its own). All 86 sources are **wired**
+— adapter built and first sync verified (2026-07-25); the newest
+arrivals are `glaux` (~20M-token silver-annotated Ancient Greek:
+968,578 passages) and `croala` (Croatian Latin, 976 CE onward).
+The **Arabic library** landed 2026-07-23: `openiti`'s
 owner-fired first sync brought 9,079 Islamicate text versions —
 34.6M passages of premodern Arabic and Persian. Before it, the
 **Germanic four** (`menotec`, `helipad`, `rem`, `rundata`) joined
