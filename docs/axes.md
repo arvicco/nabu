@@ -12,7 +12,7 @@ its Latin and at the Biblical scholar's for its scripture; the UD treebanks
 answer to nine desks at once. Multi-membership is the point, not an
 accident to be tidied away.
 
-Everything below documents **shipped behaviour** — the twenty desks
+Everything below documents **shipped behaviour** — the twenty-one desks
 defined in `config/axes.yml`, their memberships declared per source in
 `config/sources.yml`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
@@ -100,6 +100,14 @@ Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogha
 The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, the Etruscan editions, TIR), Lepontic at the Celtic border, I.Sicily's island mix, and the Sabellic-to-Latin loan lane.
 
 **Members** (10): `wiktionary-recon`, `isicily`, `itant`, `sabellic-loans`, `ceipom`, `open-etruscan`, `larth-etp`, `lexlep`, `lexlep-words`, `tir`
+
+### romance
+
+> The Romanist — Latin's daughters read in their own right, the Serments to Villon.
+
+The medieval Romance vernaculars: the Base de français médiéval's 219 Old and Middle French texts (BFM2022) — the first registrant; the Occitan, Italian and Iberian shelves as they arrive.
+
+**Members** (1): `bfm`
 
 ### etym
 
