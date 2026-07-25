@@ -1,0 +1,1895 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+	schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:tei="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>MGH Dt. Chron. 1,2: Der Trierer Silvester</title>
+        <editor>Kraus, Carl</editor>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Monumenta Germaniae Historica (MGH)</publisher>
+        <publisher>Bavarian State Library (BSB), München</publisher>
+        <idno type="BSB">bsb00000776</idno>
+        <idno type="MGH">MGH Dt. Chron. 1,2</idno>
+        <availability>
+          <licence target="http://creativecommons.org/licenses/by/4.0/">
+            <p>Distributed under the Creative Commons Attribution 4.0 International (CC BY 4.0) license.</p>
+            <p>This license covers the annotations added by the Monumenta Germaniae Historica and the
+            Bavarian State Library, Munich, in the course of project "digital MGH"
+            <ref target="http://www.dmgh.de">http://www.dmgh.de</ref>, funded by the
+            German Research Foundation (DFG).</p>
+            <p>We do not claim any rights on the text itself which is believed to be in the public domain.</p>
+            <p>If you distribute a copy or a derivative version of this file, please indicate the source
+            of the file by mentioning the Monumenta Germaniae Historica (MGH) and the
+            Bavarian State Library, Munich (BSB).</p>
+          </licence>
+        </availability>
+        <date when="2016-11-28T16:25:37+01:00">2016-11-28, 16:25:37</date>
+      </publicationStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title>Der Trierer Silvester</title>
+            <editor>Kraus, Carl</editor>
+          </titleStmt>
+          <publicationStmt>
+            <publisher>Hahn</publisher>
+            <pubPlace>Hannover</pubPlace>
+            <date>1895</date>
+          </publicationStmt>
+          <seriesStmt>
+            <title>Deutsche Chroniken</title>
+            <biblScope unit="volume">1,2</biblScope>
+          </seriesStmt>
+        </biblFull>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+<body>
+<div type="volume">
+<div n="Trierer Silvester" type="work"><ab>
+<pb xml:id="bsb00000776_00049" n="(46)"/><lb n="1" xml:id="bsb00000776_00049_1"/><hi rend="BOLD">VON SENTE SILUESTRE.</hi>
+<cb type="sequential" n="1" spanTo="#cb9"/><lb n="2" xml:id="bsb00000776_00049_2"/>Nv̊ tůnt mir eine stille
+<lb n="3" xml:id="bsb00000776_00049_3"/>durch eines gůten liedis | willen,
+<lb n="4" xml:id="bsb00000776_00049_4"/>so wil ich ívch uon einen gotelichen din | gen
+<lb n="5" xml:id="bsb00000776_00049_5"/>eine uil suze rede uůre bringen,
+<lb n="6" xml:id="bsb00000776_00049_6"/>ir sult | sie uil gerne virnemen: (K. 3–14)
+<lb n="7" xml:id="bsb00000776_00049_7"/>ouch mac ivch uil wole gezemen
+<lb n="8" xml:id="bsb00000776_00049_8"/>ze horene alle frivmicheit.
+<lb n="9" xml:id="bsb00000776_00049_9"/>die tum <hi rend="ITALICS">men dunkit iz arbeit,</hi>
+<lb n="10" xml:id="bsb00000776_00049_10"/><hi rend="ITALICS">sulen sie immer icht gelernen</hi>
+<lb n="11" xml:id="bsb00000776_00049_11"/><hi rend="ITALICS">odir ir ivisheit gemeren.</hi>
+<lb n="12" xml:id="bsb00000776_00049_12"/><hi rend="ITALICS">die sint unnuzze</hi>
+<lb n="13" xml:id="bsb00000776_00049_13"/><hi rend="ITALICS">vnde phlegent niet gůter wizze,</hi>
+<lb n="14" xml:id="bsb00000776_00049_14"/><hi rend="ITALICS">daz sie ungerne horent sagen,</hi>
+<lb n="15" xml:id="bsb00000776_00049_15"/>dannen sie uil wole <hi rend="ITALICS">mochten</hi> haben
+<lb n="16" xml:id="bsb00000776_00049_16"/>wisheit vnde ere
+<lb n="17" xml:id="bsb00000776_00049_17"/>vnde hulfe ouch <hi rend="ITALICS">der sele.</hi>
+<lb n="18" xml:id="bsb00000776_00049_18"/>Iz wirbit in diesen geciten <hi rend="ITALICS">(K. 27–</hi>42)
+<lb n="19" xml:id="bsb00000776_00049_19"/>ein <hi rend="ITALICS">gewoneheit</hi> witen:
+<lb n="20" xml:id="bsb00000776_00049_20"/>gnv̊ge ir| denkint in lvgene
+<lb n="21" xml:id="bsb00000776_00049_21"/><hi rend="ITALICS">vnde uůgent</hi> die ze samene
+<lb n="22" xml:id="bsb00000776_00049_22"/>mit schoflichen <hi rend="ITALICS">worten.</hi>
+<anchor xml:id="cb9"/><cb type="sequential" n="2" spanTo="#cb10"/><lb n="23" xml:id="bsb00000776_00049_23"/><hi rend="ITALICS">ich</hi> uorchte uil harte,|
+<lb n="24" xml:id="bsb00000776_00049_24"/>daz die sele drumme <hi rend="ITALICS">můze</hi> Irinnen
+<lb n="25" xml:id="bsb00000776_00049_25"/>iz is al widir | gotis minne.
+<lb n="26" xml:id="bsb00000776_00049_26"/>vnde lerit <hi rend="ITALICS">man die l</hi>ugene die kint:|
+<lb n="27" xml:id="bsb00000776_00049_27"/>die nach in kunftic <hi rend="ITALICS">sint,</hi>
+<lb n="28" xml:id="bsb00000776_00049_28"/><hi rend="ITALICS">die</hi> wollent sie al so behaben
+<lb n="29" xml:id="bsb00000776_00049_29"/>vnde wollint <hi rend="ITALICS">sie</hi> uůr war sagen.
+<lb n="30" xml:id="bsb00000776_00049_30"/>luge | ne vnde ubirmut
+<lb n="31" xml:id="bsb00000776_00049_31"/>die <hi rend="ITALICS">sint z</hi>v̊ der sele nebore gůt .
+<lb n="32" xml:id="bsb00000776_00049_32"/>die wisen horent dar <hi rend="ITALICS">ungerne</hi> abe sagen.
+<lb n="33" xml:id="bsb00000776_00049_33"/>nv̊ | uahe wir diet gvte <hi rend="ITALICS">liet ane.</hi>
+<lb n="34" xml:id="bsb00000776_00049_34"/>Die riche die | stunden lere, (K. 7806–7811)
+<lb n="35" xml:id="bsb00000776_00049_35"/>die kunen <hi rend="ITALICS">Romere</hi>
+<lb n="36" xml:id="bsb00000776_00049_36"/>irweleten sente Helenen sun,
+<lb n="37" xml:id="bsb00000776_00049_37"/>den turen <hi rend="ITALICS">Constantinum.</hi>
+<lb n="38" xml:id="bsb00000776_00049_38"/>der kivninc was beiden
+<lb n="39" xml:id="bsb00000776_00049_39"/>vnde was doch so <hi rend="ITALICS">wole</hi> bescheiden:
+<lb n="40" xml:id="bsb00000776_00049_40"/>alle rechte | dinc die waren ime liep,
+<lb n="41" xml:id="bsb00000776_00049_41"/><hi rend="ITALICS">wen</hi> des gewaren gelou | ben nekanter niet,
+<lb n="42" xml:id="bsb00000776_00049_42"/><hi rend="ITALICS">vnze in i</hi>me uil genote
+<lb n="43" xml:id="bsb00000776_00049_43"/>got ir offenote.
+<anchor xml:id="cb10"/><pb xml:id="bsb00000776_00050" n="47"/><cb type="sequential" n="1" spanTo="#cb11"/><lb n="1" xml:id="bsb00000776_00050_1"/>uon sinen <hi rend="ITALICS">gnaden iz</hi> quam, (K. 7812–7813)
+<lb n="2" xml:id="bsb00000776_00050_2"/>daz der herre sie chen began:
+<lb n="3" xml:id="bsb00000776_00050_3"/>daz dem gewaldigen man
+<lb n="4" xml:id="bsb00000776_00050_4"/>ze grozer selic|heite quam.
+<lb n="5" xml:id="bsb00000776_00050_5"/>her wart dir mite gewiset
+<lb n="6" xml:id="bsb00000776_00050_6"/>den wec zv̊ dem | paradise.
+<lb n="7" xml:id="bsb00000776_00050_7"/>sin unmacht die was abir so <hi rend="ITALICS">(K. </hi>7814–7823)
+<lb n="8" xml:id="bsb00000776_00050_8"/>getan: |
+<lb n="9" xml:id="bsb00000776_00050_9"/>in der werlde newas nichein man,
+<lb n="10" xml:id="bsb00000776_00050_10"/>der ime dir zv̊ | urůme mochte sin.
+<lb n="11" xml:id="bsb00000776_00050_11"/>alle arzete die schívheten in, |
+<lb n="12" xml:id="bsb00000776_00050_12"/>wen ein ebreis man.
+<lb n="13" xml:id="bsb00000776_00050_13"/>der sprach: 'herre, woldis minen | rat han
+<lb n="14" xml:id="bsb00000776_00050_14"/>vnde wollit ir mir geuolgen,
+<lb n="15" xml:id="bsb00000776_00050_15"/>so gebietet u wern heimelichen holden,
+<lb n="16" xml:id="bsb00000776_00050_16"/>daz sie gewinnen al di kin|delin,
+<lb n="17" xml:id="bsb00000776_00050_17"/>die in zwein iaren geboren sin
+<lb n="18" xml:id="bsb00000776_00050_18"/>inbinnen uwir | me riche.
+<lb n="19" xml:id="bsb00000776_00050_19"/>daz wizzent werliche:
+<lb n="20" xml:id="bsb00000776_00050_20"/>in der blůte sal | ich ivch baden, (K. 7824–7827)
+<lb n="21" xml:id="bsb00000776_00050_21"/>so můget ir den lip widir haben.
+<lb n="22" xml:id="bsb00000776_00050_22"/>ne | mache ich ivch nicht gesunt odir heilen,
+<lb n="23" xml:id="bsb00000776_00050_23"/>so lazet | mich antwedir habenodir steinen'.
+<lb n="24" xml:id="bsb00000776_00050_24"/>Do diet mere be | quam
+<lb n="25" xml:id="bsb00000776_00050_25"/>in die burc ubir al,
+<lb n="26" xml:id="bsb00000776_00050_26"/>manic Romere
+<lb n="27" xml:id="bsb00000776_00050_27"/>wart ir | strůb[e]t sere,
+<lb n="28" xml:id="bsb00000776_00050_28"/>daz ir wenigen kindelin
+<lb n="29" xml:id="bsb00000776_00050_29"/>al uirloren | solden sin.
+<lb n="30" xml:id="bsb00000776_00050_30"/>na des arzatis rate
+<lb n="31" xml:id="bsb00000776_00050_31"/>der kuninc uil drate
+<anchor xml:id="cb11"/><cb type="sequential" n="2" spanTo="#cb12"/><lb n="32" xml:id="bsb00000776_00050_32"/>si|nen boten sante
+<lb n="33" xml:id="bsb00000776_00050_33"/>zv̊ Italien in deme lande
+<lb n="34" xml:id="bsb00000776_00050_34"/>vnde hiez | die kindelin gewinnen, (K.7828–7829)
+<lb n="35" xml:id="bsb00000776_00050_35"/>ilende uůr sich bringen.
+<lb n="36" xml:id="bsb00000776_00050_36"/>daz wart schiere getan.
+<lb n="37" xml:id="bsb00000776_00050_37"/>do iz der kuninc gebot, do můste iz irgan.
+<lb n="38" xml:id="bsb00000776_00050_38"/>Do sie alle gesamenit waren
+<lb n="39" xml:id="bsb00000776_00050_39"/>vnde di mv̊ tire ze Rome quamen
+<lb n="40" xml:id="bsb00000776_00050_40"/>vnde in kunt wart getan, |
+<lb n="41" xml:id="bsb00000776_00050_41"/>wie iz drumme solde irgan,
+<lb n="42" xml:id="bsb00000776_00050_42"/>do begunden sie al gemei ne
+<lb n="43" xml:id="bsb00000776_00050_43"/>clagen vnde weinen
+<lb n="44" xml:id="bsb00000776_00050_44"/>uiel wunderen sere
+<lb n="45" xml:id="bsb00000776_00050_45"/>uor dem palase des herren.
+<lb n="46" xml:id="bsb00000776_00050_46"/>als iz der kivninc irhorte,
+<lb n="47" xml:id="bsb00000776_00050_47"/>do irquam her is uil harte,
+<lb n="48" xml:id="bsb00000776_00050_48"/>her sprach: 'ich ne weiz, waz daz mei net,
+<lb n="49" xml:id="bsb00000776_00050_49"/>daz daz livt so sere claget vnde weinet.
+<lb n="50" xml:id="bsb00000776_00050_50"/>ich ne ma[c] di[t] mort niet getůn.
+<lb n="51" xml:id="bsb00000776_00050_51"/>heizet sie balde uon dem . . . .
+<lb n="52" xml:id="bsb00000776_00050_52"/> <hi rend="ITALICS">[lücke von ca. </hi>5 <hi rend="ITALICS">versen]</hi>
+<lb n="53" xml:id="bsb00000776_00050_53"/>. . . . <hi rend="ITALICS">iu</hi> gint uirloren sal . . . .
+<lb n="54" xml:id="bsb00000776_00050_54"/><hi rend="ITALICS">do</hi> sprach der kivninc riche
+<lb n="55" xml:id="bsb00000776_00050_55"/>uil harte | tugentliche:
+<lb n="56" xml:id="bsb00000776_00050_56"/><hi rend="ITALICS">'mir ist ein</hi> ubil rat getan; (K. 7832–7833)
+<lb n="57" xml:id="bsb00000776_00050_57"/>ich newil ir nuwit laze <hi rend="ITALICS">slan.</hi>
+<lb n="58" xml:id="bsb00000776_00050_58"/><hi rend="ITALICS">bezzir</hi> ist, daz ich eine irsterbe, (K. 7838–7839)
+<lb n="59" xml:id="bsb00000776_00050_59"/>dan durch mich u<hi rend="ITALICS">irwer</hi>de
+<lb n="60" xml:id="bsb00000776_00050_60"/>alsus manic kindelin'. (K. 7836)
+<lb n="61" xml:id="bsb00000776_00050_61"/>do sprach der kivninc <hi rend="ITALICS">Constantin:</hi>
+<anchor xml:id="cb12"/><pb xml:id="bsb00000776_00051" n="48"/><cb type="sequential" n="1" spanTo="#cb13"/><lb n="1" xml:id="bsb00000776_00051_1"/>'Romere wilen des sietes phla gen,
+<lb n="2" xml:id="bsb00000776_00051_2"/>in swilch <hi rend="ITALICS">lant wir</hi> quamen,
+<lb n="3" xml:id="bsb00000776_00051_3"/>daz sich widir vns saz | te,
+<lb n="4" xml:id="bsb00000776_00051_4"/>swenne wir <hi rend="ITALICS">iz b</hi>etwungen hatten,
+<lb n="5" xml:id="bsb00000776_00051_5"/>swie uiel der man | ne irsturbe,
+<lb n="6" xml:id="bsb00000776_00051_6"/><hi rend="ITALICS">mit</hi> den swerten irslagen wurde,
+<lb n="7" xml:id="bsb00000776_00051_7"/>wip | vnde kint <hi rend="ITALICS">liezen wir</hi> genesen:
+<lb n="8" xml:id="bsb00000776_00051_8"/>den ne wolde wir nechein | ubil wesin.
+<lb n="9" xml:id="bsb00000776_00051_9"/><hi rend="ITALICS">solde wir</hi> unse eigenen geburt nv <w lemma="irslan" xml:id="w1" corresp="#w1 #w2">ir-</w>
+<lb n="10" xml:id="bsb00000776_00051_10"/><w lemma="irslan" xml:id="w2" corresp="#w1 #w2">slan</w>, |
+<lb n="11" xml:id="bsb00000776_00051_11"/>daz were <hi rend="ITALICS">widir unsen</hi> eren getan',
+<lb n="12" xml:id="bsb00000776_00051_12"/>her gebot sinen kame reren,
+<lb n="13" xml:id="bsb00000776_00051_13"/>die truric <hi rend="ITALICS">dar</hi> kv̊men weren,
+<lb n="14" xml:id="bsb00000776_00051_14"/>daz man in gewant | vnde spise gebe
+<lb n="15" xml:id="bsb00000776_00051_15"/><hi rend="ITALICS">vnde tete</hi> sie uroliche dannen keren.
+<lb n="16" xml:id="bsb00000776_00051_16"/>'alsus | getanis arzetvmis <hi rend="ITALICS">sture</hi> (K. 7840–7841)
+<lb n="17" xml:id="bsb00000776_00051_17"/>negere ich nicht', sprach der ture | herre.
+<lb n="18" xml:id="bsb00000776_00051_18"/>[D]o diet <hi rend="ITALICS">kunt</hi> was getan,
+<lb n="19" xml:id="bsb00000776_00051_19"/>zv̊ lande hůben si sich | san.
+<lb n="20" xml:id="bsb00000776_00051_20"/>des uroweten <hi rend="ITALICS">sich</hi> werliche
+<lb n="21" xml:id="bsb00000776_00051_21"/>die engele in hiemilri che,
+<lb n="22" xml:id="bsb00000776_00051_22"/>daz der <hi rend="ITALICS">heidene man</hi>
+<lb n="23" xml:id="bsb00000776_00051_23"/>so guten willen ie g[ewa]n.
+<lb n="24" xml:id="bsb00000776_00051_24"/>iz ne | wart geurist<hi rend="ITALICS">et</hi> <hi rend="ITALICS">nicht</hi> langir;
+<lb n="25" xml:id="bsb00000776_00051_25"/>sine gnade ime got san | te.
+<anchor xml:id="cb13"/><cb type="sequential" n="2" spanTo="#cb14"/><lb n="26" xml:id="bsb00000776_00051_26"/>Do der kuninc des nachtis (ir. 7842–7847)
+<lb n="27" xml:id="bsb00000776_00051_27"/>an sinem bette lac –
+<lb n="28" xml:id="bsb00000776_00051_28"/>uile | [michil] was sin unkraft, –
+<lb n="29" xml:id="bsb00000776_00051_29"/>do irschienen ime die herren,
+<lb n="30" xml:id="bsb00000776_00051_30"/>die | gotis boten bede,
+<lb n="31" xml:id="bsb00000776_00051_31"/>sente Peter vnde sente Paulus.
+<lb n="32" xml:id="bsb00000776_00051_32"/>Silues|ter hiez der pabis,
+<lb n="33" xml:id="bsb00000776_00051_33"/>der in sint bekerte
+<lb n="34" xml:id="bsb00000776_00051_34"/>vnde den rechten | gelouben lerte.
+<lb n="35" xml:id="bsb00000776_00051_35"/>offinliche her sie ane sach. <hi rend="ITALICS">(K. </hi>7848–7865)
+<lb n="36" xml:id="bsb00000776_00051_36"/>sente Pe|ter ime zv̊ sprach:
+<lb n="37" xml:id="bsb00000776_00051_37"/>'dv̊ suchis nv̊ uil lange,
+<lb n="38" xml:id="bsb00000776_00051_38"/>mit | grozen sůchten bist dv beuangen.
+<lb n="39" xml:id="bsb00000776_00051_39"/>dv̊ sůchis werlt|liche arzate:
+<lb n="40" xml:id="bsb00000776_00051_40"/>n<hi rend="ITALICS">v̊</hi> t<hi rend="ITALICS">v̊</hi> als ich dir rate,
+<lb n="41" xml:id="bsb00000776_00051_41"/>bi Rome ist | ein man,
+<lb n="42" xml:id="bsb00000776_00051_42"/>deme salt dv̊ wer[den v]ndirtan,
+<lb n="43" xml:id="bsb00000776_00051_43"/>den Tarqui nius uirtreip.
+<lb n="44" xml:id="bsb00000776_00051_44"/>michil ist [si]n arbeit:
+<lb n="45" xml:id="bsb00000776_00051_45"/>in eime ho | le ist her uirborgen,
+<lb n="46" xml:id="bsb00000776_00051_46"/>groz sint sine sorge.
+<lb n="47" xml:id="bsb00000776_00051_47"/>her is gehei|zen Siluester, (ir. 7856–7859)
+<lb n="48" xml:id="bsb00000776_00051_48"/>din geistliche uater wirt her:
+<lb n="49" xml:id="bsb00000776_00051_49"/>tv̊ | alse her dich lere
+<lb n="50" xml:id="bsb00000776_00051_50"/>vnde uolge deme heiligen herren.
+<lb n="51" xml:id="bsb00000776_00051_51"/>her | machet dir ein bat,
+<anchor xml:id="cb14"/><pb xml:id="bsb00000776_00052" n="49"/><cb type="sequential" n="1" spanTo="#cb15"/><lb n="1" xml:id="bsb00000776_00052_1"/>zware ich dir daz sagen mac, |
+<lb n="2" xml:id="bsb00000776_00052_2"/>daz dv̊ in einer livzzelen stunt <hi rend="ITALICS">(K. </hi>7862–7867)
+<lb n="3" xml:id="bsb00000776_00052_3"/>an dineme libe | wirdis gesunt'.
+<lb n="4" xml:id="bsb00000776_00052_4"/>Kv̊me irbeite der kivninc here,
+<lb n="5" xml:id="bsb00000776_00052_5"/>unz ime der morginsterre
+<lb n="6" xml:id="bsb00000776_00052_6"/>kůnte den tac.
+<lb n="7" xml:id="bsb00000776_00052_7"/>do sante | [her si]ne boteschaf
+<lb n="8" xml:id="bsb00000776_00052_8"/>nach dem beilegen man.
+<lb n="9" xml:id="bsb00000776_00052_9"/>vnde alse der bot[e] hine quam,
+<lb n="10" xml:id="bsb00000776_00052_10"/>da her den pabís ansach, <hi rend="ITALICS">(K. </hi>7868–7879)
+<lb n="11" xml:id="bsb00000776_00052_11"/>gezogenliche | her [zv̊] ime sprach:
+<lb n="12" xml:id="bsb00000776_00052_12"/>'herre, durch minne vnde durch liebe |
+<lb n="13" xml:id="bsb00000776_00052_13"/>so [salt] dv̊ kv̊men schiere
+<lb n="14" xml:id="bsb00000776_00052_14"/>Konstantine deme kunin|ge,
+<lb n="15" xml:id="bsb00000776_00052_15"/>der gehabet sich leider ubile.
+<lb n="16" xml:id="bsb00000776_00052_16"/>dv̊ ne salt niet sumen, |
+<lb n="17" xml:id="bsb00000776_00052_17"/>wander irbeite [t] din lebindinc kv̊me'.
+<lb n="18" xml:id="bsb00000776_00052_18"/>der pabis was ge recht vnde gare:
+<lb n="19" xml:id="bsb00000776_00052_19"/>uil willicliche hůb her sich dare.
+<lb n="20" xml:id="bsb00000776_00052_20"/>her wande, daz her solde irsterben,
+<lb n="21" xml:id="bsb00000776_00052_21"/>durch got gemartelet werden. |
+<lb n="22" xml:id="bsb00000776_00052_22"/>sine kardinale
+<lb n="23" xml:id="bsb00000776_00052_23"/>die sorgeten zware.
+<lb n="24" xml:id="bsb00000776_00052_24"/>do troste sie der | pabis g[ůte]
+<lb n="25" xml:id="bsb00000776_00052_25"/>mit stetlichem můte.
+<lb n="26" xml:id="bsb00000776_00052_26"/>her sprach: 'wir mv̊ |. . . .
+<lb n="27" xml:id="bsb00000776_00052_27"/> <hi rend="ITALICS">[lücke von ca. </hi>6 <hi rend="ITALICS">versen]</hi>
+<lb n="28" xml:id="bsb00000776_00052_28"/>Do <hi rend="ITALICS">her gesach den heiligen man,</hi>
+<lb n="29" xml:id="bsb00000776_00052_29"/><hi rend="ITALICS">uiel schone</hi> her in gruzen began.
+<lb n="30" xml:id="bsb00000776_00052_30"/>'Siluester', <hi rend="ITALICS">sprach</hi> <hi rend="ITALICS">her, li</hi>eber <hi rend="ITALICS">(K. </hi>7882–7887)
+<lb n="31" xml:id="bsb00000776_00052_31"/>man,
+<anchor xml:id="cb15"/><cb type="sequential" n="2" spanTo="#cb16"/><lb n="32" xml:id="bsb00000776_00052_32"/>dv̊ | has uiel ubile getan,
+<lb n="33" xml:id="bsb00000776_00052_33"/>daz dv̊ <hi rend="ITALICS">mich daz</hi> hele,
+<lb n="34" xml:id="bsb00000776_00052_34"/>daz dv̊ so | gůt arzet were,
+<lb n="35" xml:id="bsb00000776_00052_35"/>daz dv̊ niet <hi rend="ITALICS">ne queme</hi> incit
+<lb n="36" xml:id="bsb00000776_00052_36"/>vnde gehulfes mir widir an den lip:
+<lb n="37" xml:id="bsb00000776_00052_37"/>so <hi rend="ITALICS">tetich dich</hi> ce Rome here, |
+<lb n="38" xml:id="bsb00000776_00052_38"/>gewaldic maniger eren,
+<lb n="39" xml:id="bsb00000776_00052_39"/>vnde alle <hi rend="ITALICS">dine holden,</hi>
+<lb n="40" xml:id="bsb00000776_00052_40"/>die dis intfa hen wolden,
+<lb n="41" xml:id="bsb00000776_00052_41"/>den gebich groze richeit.
+<lb n="42" xml:id="bsb00000776_00052_42"/><hi rend="ITALICS">ich</hi> uirgulde dir din arjbeit'.
+<lb n="43" xml:id="bsb00000776_00052_43"/>Der heilige pabes  <hi rend="ITALICS">(K. </hi>7888–7901)
+<lb n="44" xml:id="bsb00000776_00052_44"/>der antwurte <hi rend="ITALICS">ime des:</hi>
+<lb n="45" xml:id="bsb00000776_00052_45"/>'herre, wer | hat dir gesaget daz,
+<lb n="46" xml:id="bsb00000776_00052_46"/>daz ich sie <hi rend="ITALICS">arzat?</hi>
+<lb n="47" xml:id="bsb00000776_00052_47"/><hi rend="ITALICS">daz</hi> wizze vn sir trechtin,
+<lb n="48" xml:id="bsb00000776_00052_48"/>daz ich iz niet ne <hi rend="ITALICS">bin,</hi>
+<lb n="49" xml:id="bsb00000776_00052_49"/><hi rend="ITALICS">noch</hi> nie werltlie ches arzetv̊mes ne phlac
+<lb n="50" xml:id="bsb00000776_00052_50"/>vnz an <hi rend="ITALICS">diesen</hi> hutegen tac'. |
+<lb n="51" xml:id="bsb00000776_00052_51"/>do sprach der kuninc Constantin:
+<lb n="52" xml:id="bsb00000776_00052_52"/>'die <hi rend="ITALICS">rede</hi> ensal niet so sin. |
+<lb n="53" xml:id="bsb00000776_00052_53"/>mir irschienen hienacht zwene <hi rend="ITALICS">man,</hi>
+<lb n="54" xml:id="bsb00000776_00052_54"/><hi rend="ITALICS">z</hi>wein goten ge|lich getan,
+<lb n="55" xml:id="bsb00000776_00052_55"/>die trosten mich dir  <hi rend="ITALICS">z</hi>v̊,
+<lb n="56" xml:id="bsb00000776_00052_56"/><hi rend="ITALICS">ob</hi> dv̊ iz woldis tv̊,|
+<lb n="57" xml:id="bsb00000776_00052_57"/>dv̊ kundis mich wole geheilen
+<lb n="58" xml:id="bsb00000776_00052_58"/><hi rend="ITALICS">vnde uon</hi> minen sunden | gereinen'.
+<lb n="59" xml:id="bsb00000776_00052_59"/>Do sprach der selige bote:
+<lb n="60" xml:id="bsb00000776_00052_60"/>'<hi rend="ITALICS">iz ne</hi> waren niet wen | zwene gote,
+<lb n="61" xml:id="bsb00000776_00052_61"/>iz waren zwene <hi rend="ITALICS">gotis knechte.</hi>
+<lb n="62" xml:id="bsb00000776_00052_62"/>uolge in, so tv̊stu rechte'.
+<anchor xml:id="cb16"/><pb xml:id="bsb00000776_00053" n="50"/><cb type="sequential" n="1" spanTo="#cb17"/><lb n="1" xml:id="bsb00000776_00053_1"/>dv̊ uragete der <hi rend="ITALICS">kuninc</hi> here,
+<lb n="2" xml:id="bsb00000776_00053_2"/>ob [sie] Iren ge| malet weren.
+<lb n="3" xml:id="bsb00000776_00053_3"/>her sprach: 'ir antlieze <hi rend="ITALICS">waren</hi> so rechte
+<lb n="4" xml:id="bsb00000776_00053_4"/>wole | getan,
+<lb n="5" xml:id="bsb00000776_00053_5"/>ich gesehese abir gerne, daz ist war'.
+<lb n="6" xml:id="bsb00000776_00053_6"/>Der pa bis uiel nider an sine <hi rend="ITALICS">(K. </hi>7920)
+<lb n="7" xml:id="bsb00000776_00053_7"/>uenie.
+<lb n="8" xml:id="bsb00000776_00053_8"/>dv̊ bette her v̊f ze hime | le,
+<lb n="9" xml:id="bsb00000776_00053_9"/>daz got durch sine gute
+<lb n="10" xml:id="bsb00000776_00053_10"/>den kivninc geheilote
+<lb n="11" xml:id="bsb00000776_00053_11"/>an li|be, an der seien,
+<lb n="12" xml:id="bsb00000776_00053_12"/>vnde her in wolde bekeren
+<lb n="13" xml:id="bsb00000776_00053_13"/>uon der starken hei denschefte
+<lb n="14" xml:id="bsb00000776_00053_14"/>mit des heiligen geistes krefte,
+<lb n="15" xml:id="bsb00000776_00053_15"/>vnde her sinen | armen holden
+<lb n="16" xml:id="bsb00000776_00053_16"/>uriede machen wolde.
+<lb n="17" xml:id="bsb00000776_00053_17"/>wande sie Heden uil mie chile note
+<lb n="18" xml:id="bsb00000776_00053_18"/>uor der beiden ubirmute.
+<lb n="19" xml:id="bsb00000776_00053_19"/>Alse dit gebet | was getan,
+<lb n="20" xml:id="bsb00000776_00053_20"/>v̊f hůb her sich san.
+<lb n="21" xml:id="bsb00000776_00053_21"/>dv̊ hiez her sinen cape | lan <hi rend="ITALICS">(K. </hi>7906–7913)
+<lb n="22" xml:id="bsb00000776_00053_22"/>sente Petirs bielede vnde sente Paulses
+<lb n="23" xml:id="bsb00000776_00053_23"/>dar uor tra gen
+<lb n="24" xml:id="bsb00000776_00053_24"/>vnde liez den kuninc schowen,
+<lb n="25" xml:id="bsb00000776_00053_25"/>ob her mochte getru|wen,
+<lb n="26" xml:id="bsb00000776_00053_26"/>ob sie den herren gelích weren.
+<lb n="27" xml:id="bsb00000776_00053_27"/>do sprach der kv ninc mere:
+<lb n="28" xml:id="bsb00000776_00053_28"/>'diet sint die seibin man,
+<lb n="29" xml:id="bsb00000776_00053_29"/>die ich hinacht gesehen han.
+<lb n="30" xml:id="bsb00000776_00053_30"/>der eine der was gra, <hi rend="ITALICS">(K. </hi>7916–7919)
+<lb n="31" xml:id="bsb00000776_00053_31"/>alse her nv̊ schinet da,
+<lb n="32" xml:id="bsb00000776_00053_32"/>der | andere der was kale.
+<lb n="33" xml:id="bsb00000776_00053_33"/>ich bekenne sie bede harte wa le'.
+<anchor xml:id="cb17"/><cb type="sequential" n="2" spanTo="#cb18"/><lb n="34" xml:id="bsb00000776_00053_34"/>Dv̊ sprach der heilige man:
+<lb n="35" xml:id="bsb00000776_00053_35"/>'nv̊ salt dv̊ gote wer | den vndirtan <hi rend="ITALICS">(K. </hi>7923–7929)
+<lb n="36" xml:id="bsb00000776_00053_36"/>vnde uolge siner leren,
+<lb n="37" xml:id="bsb00000776_00053_37"/>diet sint die sei bin herren,
+<lb n="38" xml:id="bsb00000776_00053_38"/>die dich anme libe machint gesunden
+<lb n="39" xml:id="bsb00000776_00053_39"/>vnde | die dich uon der sele sunden <w lemma="intbindent" xml:id="w3" corresp="#w3 #w4">int-</w>
+<lb n="40" xml:id="bsb00000776_00053_40"/><w lemma="intbindent" xml:id="w4" corresp="#w3 #w4">bindent</w>.
+<lb n="41" xml:id="bsb00000776_00053_41"/>so bin ich der | arzat,
+<lb n="42" xml:id="bsb00000776_00053_42"/>der diz gotis wort uor saget'.
+<lb n="43" xml:id="bsb00000776_00053_43"/>Dir pabis hiez eine toufe tragen.
+<lb n="44" xml:id="bsb00000776_00053_44"/>her sprach 'nů salt du in des namen baden,
+<lb n="45" xml:id="bsb00000776_00053_45"/>die den hiemil v̊f heldit
+<lb n="46" xml:id="bsb00000776_00053_46"/>vnde der erden weldit. |
+<lb n="47" xml:id="bsb00000776_00053_47"/>der bekennit al die din[c],
+<lb n="48" xml:id="bsb00000776_00053_48"/>die da inzívssen sin[t].
+<lb n="49" xml:id="bsb00000776_00053_49"/>sus su len sie al genesen,
+<lb n="50" xml:id="bsb00000776_00053_50"/>die sine kint willent wesen:
+<lb n="51" xml:id="bsb00000776_00053_51"/>swer | in der tovfe wirt gereinet,
+<lb n="52" xml:id="bsb00000776_00053_52"/>der ist in dem ewigen libe geheilet,
+<lb n="53" xml:id="bsb00000776_00053_53"/>so salt dv̊, keiser here,
+<lb n="54" xml:id="bsb00000776_00053_54"/>uolgen miner lere. |
+<lb n="55" xml:id="bsb00000776_00053_55"/>dv̊ has uile wider gotis hulden getan:
+<lb n="56" xml:id="bsb00000776_00053_56"/>dv̊ hieze die kristenheit irslan
+<lb n="57" xml:id="bsb00000776_00053_57"/>vnde uirguzze dir mertelere <hi rend="ITALICS">blůt</hi>
+<lb n="58" xml:id="bsb00000776_00053_58"/> <hi rend="ITALICS">[lücke von ca. </hi>6 <hi rend="ITALICS">versen]</hi>
+<lb n="59" xml:id="bsb00000776_00053_59"/>. . . . <hi rend="ITALICS">harte</hi> gůt rat.
+<lb n="60" xml:id="bsb00000776_00053_60"/><hi rend="ITALICS">Swaz</hi> <hi rend="ITALICS">der pabis</hi>  geriet,
+<lb n="61" xml:id="bsb00000776_00053_61"/>der keisir iz alliz ane gienc.
+<lb n="62" xml:id="bsb00000776_00053_62"/><hi rend="ITALICS">her</hi> geloubte uaste ane | got.
+<lb n="63" xml:id="bsb00000776_00053_63"/>ůz zoch her <hi rend="ITALICS">den phellilmen</hi> roc,
+<lb n="64" xml:id="bsb00000776_00053_64"/>einen | wullen leite her <hi rend="ITALICS">ane sich.</hi>
+<lb n="65" xml:id="bsb00000776_00053_65"/>harte bezzirte her | sich,
+<lb n="66" xml:id="bsb00000776_00053_66"/>her was uil <hi rend="ITALICS">stete</hi>
+<anchor xml:id="cb18"/><pb xml:id="bsb00000776_00054" n="51"/><cb type="sequential" n="1" spanTo="#cb19"/><lb n="1" xml:id="bsb00000776_00054_1"/>allir gůttete.
+<lb n="2" xml:id="bsb00000776_00054_2"/>her | wart ein lobelicher <hi rend="ITALICS">man,</hi>
+<lb n="3" xml:id="bsb00000776_00054_3"/>alse iz gote uon hiemele | wole gezam.
+<lb n="4" xml:id="bsb00000776_00054_4"/>do <hi rend="ITALICS">der sibende</hi> tac quam,
+<lb n="5" xml:id="bsb00000776_00054_5"/>der pabis in | mit der hant nam,
+<lb n="6" xml:id="bsb00000776_00054_6"/><hi rend="ITALICS">selbe</hi> her mit íme gienc, |
+<lb n="7" xml:id="bsb00000776_00054_7"/>da her die cristenheit <hi rend="ITALICS">intfienc.</hi>
+<lb n="8" xml:id="bsb00000776_00054_8"/><hi rend="ITALICS">zv̊</hi> der toufe do quam |
+<lb n="9" xml:id="bsb00000776_00054_9"/>manic geistlicher <hi rend="ITALICS">man.</hi>
+<lb n="10" xml:id="bsb00000776_00054_10"/><hi rend="ITALICS">die</hi> lasen vnde sungen
+<lb n="11" xml:id="bsb00000776_00054_11"/>daz | beste, daz sie kunden.
+<lb n="12" xml:id="bsb00000776_00054_12"/><hi rend="ITALICS">des</hi> grewaren gelouben her | uiríach,
+<lb n="13" xml:id="bsb00000776_00054_13"/>den leiden <hi rend="ITALICS">tuuil her</hi> uirsprach.
+<lb n="14" xml:id="bsb00000776_00054_14"/>alsus | redete der keiser Con- <hi rend="ITALICS">(K. </hi>7932–7941)
+<lb n="15" xml:id="bsb00000776_00054_15"/><hi rend="ITALICS">stantin</hi> :
+<lb n="16" xml:id="bsb00000776_00054_16"/>'mine dinc die mv̊ zen alle an gote sin.
+<lb n="17" xml:id="bsb00000776_00054_17"/>meister, wole getruwe | ich dir dir zv̊:
+<lb n="18" xml:id="bsb00000776_00054_18"/>alliz, <hi rend="ITALICS">daz dů. </hi>wilt, daz ich daz tv̊n |
+<lb n="19" xml:id="bsb00000776_00054_19"/>in der waren minne,
+<lb n="20" xml:id="bsb00000776_00054_20"/>des beginnich nach <hi rend="ITALICS">dime</hi> willen'.
+<lb n="21" xml:id="bsb00000776_00054_21"/>Der pabis sege | nete den brunnen.
+<lb n="22" xml:id="bsb00000776_00054_22"/>do <hi rend="ITALICS">wart</hi> die meiste wunne,
+<lb n="23" xml:id="bsb00000776_00054_23"/>die | da uore ce Rome ie <hi rend="ITALICS">geschach.</hi>
+<lb n="24" xml:id="bsb00000776_00054_24"/>den gelouben her ime | uore sprach,
+<lb n="25" xml:id="bsb00000776_00054_25"/>wol geuiel ime der rat,
+<anchor xml:id="cb19"/><cb type="sequential" n="2" spanTo="#cb20"/><lb n="26" xml:id="bsb00000776_00054_26"/>abe wůs her | die alden meintat.
+<lb n="27" xml:id="bsb00000776_00054_27"/>her besoufte in drie stunt, <hi rend="ITALICS">(K. </hi>7942–7951)
+<lb n="28" xml:id="bsb00000776_00054_28"/>do | wart her harte wole gesunt.
+<lb n="29" xml:id="bsb00000776_00054_29"/>do her die cristenhe it intfienc,
+<lb n="30" xml:id="bsb00000776_00054_30"/>die hut ime gare intfiel.
+<lb n="31" xml:id="bsb00000776_00054_31"/>ime wart | al der lip sin
+<lb n="32" xml:id="bsb00000776_00054_32"/>als ein nuwe geboren kindelin;
+<lb n="33" xml:id="bsb00000776_00054_33"/>her | wart schone vnde gesunt.
+<lb n="34" xml:id="bsb00000776_00054_34"/>der kuninc rief an der | stunt,
+<lb n="35" xml:id="bsb00000776_00054_35"/>daz got gewisse were
+<lb n="36" xml:id="bsb00000776_00054_36"/>ein gewarer hei | lere.
+<lb n="37" xml:id="bsb00000776_00054_37"/>Do minnete der keiser here <hi rend="ITALICS">(K. </hi>7958–7900)
+<lb n="38" xml:id="bsb00000776_00054_38"/>al geistliche | lere.
+<lb n="39" xml:id="bsb00000776_00054_39"/>her wart gote vndertan,
+<lb n="40" xml:id="bsb00000776_00054_40"/>als iz sime heiligen | namen wole gezam.
+<lb n="41" xml:id="bsb00000776_00054_41"/>den armen was her uile <hi rend="ITALICS">(K. </hi>7964–7969)
+<lb n="42" xml:id="bsb00000776_00054_42"/>holt:
+<lb n="43" xml:id="bsb00000776_00054_43"/>her | gaben silbir vnde golt,
+<lb n="44" xml:id="bsb00000776_00054_44"/>die kuninclichen gewete.
+<lb n="45" xml:id="bsb00000776_00054_45"/>her was durch got frů vnde spete.
+<lb n="46" xml:id="bsb00000776_00054_46"/>daz lar|te in sin meister.
+<lb n="47" xml:id="bsb00000776_00054_47"/>der pabis sente Siluester.
+<lb n="48" xml:id="bsb00000776_00054_48"/>der | wolf der wart ce schafe. <hi rend="ITALICS">(K. </hi>7952–7954)
+<lb n="49" xml:id="bsb00000776_00054_49"/>Romere die můsten la|zen
+<lb n="50" xml:id="bsb00000776_00054_50"/>al ir abgot,
+<anchor xml:id="cb20"/><pb xml:id="bsb00000776_00055" n="52"/><cb type="sequential" n="1" spanTo="#cb21"/><lb n="1" xml:id="bsb00000776_00055_1"/>alse der kuninc selbe gebot.
+<lb n="2" xml:id="bsb00000776_00055_2"/>ze | Rome wart sanc vnde lob: (K. 7956–7957)
+<lb n="3" xml:id="bsb00000776_00055_3"/>dit wolde unser her | re got.
+<lb n="4" xml:id="bsb00000776_00055_4"/>An dem anderen tage, <hi rend="ITALICS">(K. </hi>7970–7988)
+<lb n="5" xml:id="bsb00000776_00055_5"/>als ich nv̊ wil | sagen,
+<lb n="6" xml:id="bsb00000776_00055_6"/>do gerwete sich der pabis
+<lb n="7" xml:id="bsb00000776_00055_7"/>in dem munste re sente Petris
+<lb n="8" xml:id="bsb00000776_00055_8"/>mit allir siner antreit.
+<lb n="9" xml:id="bsb00000776_00055_9"/>uon der ubirsten wisheit
+<lb n="10" xml:id="bsb00000776_00055_10"/>sanc her eine messe,
+<lb n="11" xml:id="bsb00000776_00055_11"/>die | got uon hiemele wole wesse.
+<lb n="12" xml:id="bsb00000776_00055_12"/>der keiser Constantínus
+<lb n="13" xml:id="bsb00000776_00055_13"/>der bette alsus:
+<lb n="14" xml:id="bsb00000776_00055_14"/>'owol dich, der alwaldige got,
+<lb n="15" xml:id="bsb00000776_00055_15"/>dv̊ mih | uon der heidinschefte has <w lemma="irledigot" xml:id="w5" corresp="#w5 #w6">ir-</w>
+<lb n="16" xml:id="bsb00000776_00055_16"/><w lemma="irledigot" xml:id="w6" corresp="#w5 #w6">ledigot</w>,
+<lb n="17" xml:id="bsb00000776_00055_17"/>ich beuelhe dir, | herre,
+<lb n="18" xml:id="bsb00000776_00055_18"/>minen lip vnde mine sele'.
+<lb n="19" xml:id="bsb00000776_00055_19"/>do dir segen was | getan, <hi rend="ITALICS">(K. </hi>7986–7989)
+<lb n="20" xml:id="bsb00000776_00055_20"/>mit handen nam in der heilie man
+<lb n="21" xml:id="bsb00000776_00055_21"/>vnde saz|zen aniz gerichte
+<lb n="22" xml:id="bsb00000776_00055_22"/>vnde richten eine pachte. |
+<lb n="23" xml:id="bsb00000776_00055_23"/>des was der cristenheite not.
+<lb n="24" xml:id="bsb00000776_00055_24"/>der riche keiser | gebot,
+<lb n="25" xml:id="bsb00000776_00055_25"/>daz man die heidenschaf uirschielde
+<lb n="26" xml:id="bsb00000776_00055_26"/>vnde | die cristenheit ane gienge.
+<lb n="27" xml:id="bsb00000776_00055_27"/>daz was sin edictum: |
+<lb n="28" xml:id="bsb00000776_00055_28"/>do ereten sie den gotis sun.
+<lb n="29" xml:id="bsb00000776_00055_29"/>Mercurius wart uir schupfet,
+<lb n="30" xml:id="bsb00000776_00055_30"/>die cristenheit uůre gezivckit.
+<lb n="31" xml:id="bsb00000776_00055_31"/>der | abgote sie nicht mer (K. 7992–7997)
+<lb n="32" xml:id="bsb00000776_00055_32"/>nephlegeten,
+<lb n="33" xml:id="bsb00000776_00055_33"/>an einen got | sie betten,
+<lb n="34" xml:id="bsb00000776_00055_34"/>die dir liez geworden
+<lb n="35" xml:id="bsb00000776_00055_35"/>den hiemil | vnde die erden;
+<lb n="36" xml:id="bsb00000776_00055_36"/>der ist ein gewar heilere.
+<lb n="37" xml:id="bsb00000776_00055_37"/>des uro wete sich manic Romere.
+<anchor xml:id="cb21"/><cb type="sequential" n="2" spanTo="#cb22"/><lb n="38" xml:id="bsb00000776_00055_38"/>Do stalte der kuninc | here
+<lb n="39" xml:id="bsb00000776_00055_39"/><hi rend="ITALICS">ze</hi> Rome groz ere.
+<lb n="40" xml:id="bsb00000776_00055_40"/>her sazte sines selbis hof, | <hi rend="ITALICS">(K. </hi>8100–8101)
+<lb n="41" xml:id="bsb00000776_00055_41"/>alse her uon rechte solde sten noch,
+<lb n="42" xml:id="bsb00000776_00055_42"/>her berichte dem pa|bise sinen stůl,
+<lb n="43" xml:id="bsb00000776_00055_43"/>als her uon rechte solde tun.
+<lb n="44" xml:id="bsb00000776_00055_44"/>her sazte im v̂f die <hi rend="ITALICS">cronen </hi> – <hi rend="ITALICS">(K. </hi>8121–8122)
+<lb n="45" xml:id="bsb00000776_00055_45"/>dit gab her ime ze lone –
+<lb n="46" xml:id="bsb00000776_00055_46"/>vnde intfienc sie wiedir uon siner hant,
+<lb n="47" xml:id="bsb00000776_00055_47"/>vnde liez ime den gewalt, | (K. 8056)
+<lb n="48" xml:id="bsb00000776_00055_48"/>daz her immer meister were
+<lb n="49" xml:id="bsb00000776_00055_49"/>ubir alle irdische richtere.
+<lb n="50" xml:id="bsb00000776_00055_50"/>her berichte widemen vnde zehenden, <hi rend="ITALICS">(K. </hi>8081)
+<lb n="51" xml:id="bsb00000776_00055_51"/>daz man | gote dir miete dienete;
+<lb n="52" xml:id="bsb00000776_00055_52"/>her berichte bischoffe vnde | <hi rend="ITALICS">(K. </hi>8077–8078)
+<lb n="53" xml:id="bsb00000776_00055_53"/>ewarten,
+<lb n="54" xml:id="bsb00000776_00055_54"/>daz sie daz livt bewarten;
+<lb n="55" xml:id="bsb00000776_00055_55"/>her berichte | patriarchen vnde <hi rend="ITALICS">(K. </hi>8075–8076)
+<lb n="56" xml:id="bsb00000776_00055_56"/>cardinale
+<lb n="57" xml:id="bsb00000776_00055_57"/>vnde alle, die vndir in wa | ren,
+<lb n="58" xml:id="bsb00000776_00055_58"/>vnde al geistlich leben, <hi rend="ITALICS">(K. </hi>8079–8080)
+<lb n="59" xml:id="bsb00000776_00055_59"/>in wilher gehorsame sie | solden wesen,
+<lb n="60" xml:id="bsb00000776_00055_60"/>vnde daz Rome ein houbit were <hi rend="ITALICS">(K. </hi>8082–8083)
+<lb n="61" xml:id="bsb00000776_00055_61"/>al der, | die der kristenheite beiehen.
+<lb n="62" xml:id="bsb00000776_00055_62"/>Der keiser here
+<lb n="63" xml:id="bsb00000776_00055_63"/>her | richte ouch mere.
+<lb n="64" xml:id="bsb00000776_00055_64"/>her gebot, daz man der abgote hûs | lieze
+<lb n="65" xml:id="bsb00000776_00055_65"/>stan,
+<lb n="66" xml:id="bsb00000776_00055_66"/>die dir weren so lussam,
+<lb n="67" xml:id="bsb00000776_00055_67"/>daz sie dar zv̊ | tochten,
+<lb n="68" xml:id="bsb00000776_00055_68"/>daz man gote drinne gedienen mochte.
+<lb n="69" xml:id="bsb00000776_00055_69"/>[sumeliche her sparte], (K. 8035)
+<lb n="70" xml:id="bsb00000776_00055_70"/>gnv̊ | ge her der brante.
+<lb n="71" xml:id="bsb00000776_00055_71"/>dv̊ der tuuil des uirhancte, (<hi rend="ITALICS">K. </hi>8036–8039)
+<lb n="72" xml:id="bsb00000776_00055_72"/>daz | her iz niet ne ante,
+<lb n="73" xml:id="bsb00000776_00055_73"/>do wart der cristinheite ere |
+<lb n="74" xml:id="bsb00000776_00055_74"/>breit vnde mere.
+<anchor xml:id="cb22"/><pb xml:id="bsb00000776_00056" n="53"/><cb type="sequential" n="1" spanTo="#cb23"/><lb n="1" xml:id="bsb00000776_00056_1"/>Sechs tage her anme gerichte saz, |
+<lb n="2" xml:id="bsb00000776_00056_2"/>die buch sagent uns daz.
+<lb n="3" xml:id="bsb00000776_00056_3"/>an deme sibinden tage, | <hi rend="ITALICS">(K. </hi>8084–8085)
+<lb n="4" xml:id="bsb00000776_00056_4"/>alse wir iz gelesen haben,
+<lb n="5" xml:id="bsb00000776_00056_5"/>der keiser here
+<lb n="6" xml:id="bsb00000776_00056_6"/>do richte | her ouch mere.
+<lb n="7" xml:id="bsb00000776_00056_7"/>her sazte der rittere leben,
+<lb n="8" xml:id="bsb00000776_00056_8"/>in wielhir | ordinunge sie sulen wesen;
+<lb n="9" xml:id="bsb00000776_00056_9"/>daz sie daz swert | umme gurten <hi rend="ITALICS">(K. </hi>8106–8109)
+<lb n="10" xml:id="bsb00000776_00056_10"/>vnde daz cruce drane uůrten,
+<lb n="11" xml:id="bsb00000776_00056_11"/>be siegelit inme swerte,
+<lb n="12" xml:id="bsb00000776_00056_12"/><hi rend="ITALICS">widir des tuuiles geuerte, \</hi>
+<lb n="13" xml:id="bsb00000776_00056_13"/>daz sie den armen <hi rend="ITALICS">uogete weren,</hi>
+<lb n="14" xml:id="bsb00000776_00056_14"/><hi rend="ITALICS">der witewen vnde weisen \ </hi>phlegen,
+<lb n="15" xml:id="bsb00000776_00056_15"/>vnde ob die <hi rend="ITALICS">in decheinen noten we </hi>| ren,
+<lb n="16" xml:id="bsb00000776_00056_16"/>daz sie <hi rend="ITALICS">in helfe beren,</hi>
+<lb n="17" xml:id="bsb00000776_00056_17"/><hi rend="ITALICS">daz sie die cristenheit \ beschermeten</hi>  vnde
+<lb n="18" xml:id="bsb00000776_00056_18"/><hi rend="ITALICS">beuogeten</hi>. <hi rend="ITALICS">(K. </hi>sno)
+<lb n="19" xml:id="bsb00000776_00056_19"/> <hi rend="ITALICS">[lücke von ca. </hi>24 <hi rend="ITALICS">versen]</hi>
+<lb n="20" xml:id="bsb00000776_00056_20"/><hi rend="ITALICS">an des segenes </hi>ende <hi rend="ITALICS">(K. 8135–</hi>8138)
+<lb n="21" xml:id="bsb00000776_00056_21"/>der keiser an eíne hohe trat,
+<lb n="22" xml:id="bsb00000776_00056_22"/>einer stille her bat. |
+<lb n="23" xml:id="bsb00000776_00056_23"/>her sprach: 'nv̊ uirnemit, ir Romani,
+<lb n="24" xml:id="bsb00000776_00056_24"/>nv̊ můge wir wo | le uro sin,
+<lb n="25" xml:id="bsb00000776_00056_25"/>daz uns got hat gegeben
+<lb n="26" xml:id="bsb00000776_00056_26"/>diet wunnecliche | leben.
+<lb n="27" xml:id="bsb00000776_00056_27"/>her geruchte sich ce irbarmene <hi rend="ITALICS">(K. 8140–8199)</hi>
+<lb n="28" xml:id="bsb00000776_00056_28"/>ubir uns uiel armen
+<lb n="29" xml:id="bsb00000776_00056_29"/>vnde sante vns sines selbis sůn
+<lb n="30" xml:id="bsb00000776_00056_30"/>ce irlosene  uon | den sivndun.
+<lb n="31" xml:id="bsb00000776_00056_31"/>e bette wir al gemeine
+<lb n="32" xml:id="bsb00000776_00056_32"/>an holz vnde an steíne:
+<lb n="33" xml:id="bsb00000776_00056_33"/>daz was des tuuiles getroc.
+<lb n="34" xml:id="bsb00000776_00056_34"/>nů tůtiz durh | got,
+<lb n="35" xml:id="bsb00000776_00056_35"/>lat ivch ruwen, daz ir wiedir ime hat getan,
+<anchor xml:id="cb23"/><cb type="sequential" n="2" spanTo="#cb24"/><lb n="36" xml:id="bsb00000776_00056_36"/>vnde weset ime gehorsam,
+<lb n="37" xml:id="bsb00000776_00056_37"/>der ivch uon nichte geschaf|fen hat.
+<lb n="38" xml:id="bsb00000776_00056_38"/>an sinen gnaden al unse leben stat.
+<lb n="39" xml:id="bsb00000776_00056_39"/>Den hie | mel vnde die erden
+<lb n="40" xml:id="bsb00000776_00056_40"/>die hiez her bede gewerden.
+<lb n="41" xml:id="bsb00000776_00056_41"/>her | heizet vnse rechte uater vnde wir
+<lb n="42" xml:id="bsb00000776_00056_42"/>sin sine kint.
+<lb n="43" xml:id="bsb00000776_00056_43"/>alle, | die ime gehorsam sint,
+<lb n="44" xml:id="bsb00000776_00056_44"/>die besizzent sin riche.
+<lb n="45" xml:id="bsb00000776_00056_45"/>nv̊ sult ir widir grifen
+<lb n="46" xml:id="bsb00000776_00056_46"/>zv̊ uwirme schepfere
+<lb n="47" xml:id="bsb00000776_00056_47"/>vnde lazit iû wesen unmere
+<lb n="48" xml:id="bsb00000776_00056_48"/>die uil bosen abgot,
+<lb n="49" xml:id="bsb00000776_00056_49"/>die unse uatere hant | gemaehot.
+<lb n="50" xml:id="bsb00000776_00056_50"/>swer sie in daz für wirfet
+<lb n="51" xml:id="bsb00000776_00056_51"/>vnde in drûz ni|ne hilfet,
+<lb n="52" xml:id="bsb00000776_00056_52"/>sie muzen al ze puluere uirbirnen.
+<lb n="53" xml:id="bsb00000776_00056_53"/>waz | mochte wir an den geminnen ?
+<lb n="54" xml:id="bsb00000776_00056_54"/>swaz mennischen hant | mac gemachen,
+<lb n="55" xml:id="bsb00000776_00056_55"/>daz mac ouch mennischen hant wole | <w lemma="zebrechen" xml:id="w7" corresp="#w7 #w8">ze-</w>
+<lb n="56" xml:id="bsb00000776_00056_56"/><w lemma="zebrechen" xml:id="w8" corresp="#w7 #w8">brechen</w> .
+<lb n="57" xml:id="bsb00000776_00056_57"/>sie habint ougen vnde ne sehint niet,
+<lb n="58" xml:id="bsb00000776_00056_58"/>sie ne | bekennint daz uinstere noch daz
+<lb n="59" xml:id="bsb00000776_00056_59"/>Hecht,
+<lb n="60" xml:id="bsb00000776_00056_60"/>sie habint | oren
+<lb n="61" xml:id="bsb00000776_00056_61"/>vnde ne můgen niet gehören,
+<lb n="62" xml:id="bsb00000776_00056_62"/>sie nehabint necheine | craft,
+<lb n="63" xml:id="bsb00000776_00056_63"/>sie ne wizzen tac noch nacht,
+<lb n="64" xml:id="bsb00000776_00056_64"/>sie nemugen mit | den munde
+<lb n="65" xml:id="bsb00000776_00056_65"/>gesprechen zv̊ necheiner stunde,
+<lb n="66" xml:id="bsb00000776_00056_66"/>sich ne | ůbe der tuuíl drinne;
+<lb n="67" xml:id="bsb00000776_00056_67"/>sie hant kele ane stimme,
+<lb n="68" xml:id="bsb00000776_00056_68"/>houbit noch hende
+<lb n="69" xml:id="bsb00000776_00056_69"/>inmůgen sie niergen gewenden,
+<lb n="70" xml:id="bsb00000776_00056_70"/>sie habint | uůze ane ganc,
+<anchor xml:id="cb24"/><pb xml:id="bsb00000776_00057" n="54"/><cb type="sequential" n="1" spanTo="#cb25"/><lb n="1" xml:id="bsb00000776_00057_1"/>sie ne habint sin noch gedanc,
+<lb n="2" xml:id="bsb00000776_00057_2"/>sie sint | betalle unreine.
+<lb n="3" xml:id="bsb00000776_00057_3"/>nů sult ir al gemeine
+<lb n="4" xml:id="bsb00000776_00057_4"/>gelouben an den | got,
+<lb n="5" xml:id="bsb00000776_00057_5"/>den Siluester hat gepredigot.
+<lb n="6" xml:id="bsb00000776_00057_6"/>gehabet ivch zv̊ dem | heiligen Criste:
+<lb n="7" xml:id="bsb00000776_00057_7"/>der ist ein gruntfeste
+<lb n="8" xml:id="bsb00000776_00057_8"/>allir gůter dinge. |
+<lb n="9" xml:id="bsb00000776_00057_9"/>zv̊ ime so habit minne.
+<lb n="10" xml:id="bsb00000776_00057_10"/>der ist daz anegenge vnde daz en de'.
+<lb n="11" xml:id="bsb00000776_00057_11"/>sie hůben ůf ir hende
+<lb n="12" xml:id="bsb00000776_00057_12"/>vnde lobeten minen trechtin |
+<lb n="13" xml:id="bsb00000776_00057_13"/><hi rend="ITALICS">der michelen</hi> gnaden [sin],
+<lb n="14" xml:id="bsb00000776_00057_14"/>der her zv̊ in hete getan,
+<lb n="15" xml:id="bsb00000776_00057_15"/>alse wir | <hi rend="ITALICS">die bůch hören sagen.</hi>
+<lb n="16" xml:id="bsb00000776_00057_16"/><hi rend="ITALICS">ir</hi> wart getouft an der stunt |
+<lb n="17" xml:id="bsb00000776_00057_17"/><hi rend="ITALICS">mer denne siben tusunt</hi>
+<lb n="18" xml:id="bsb00000776_00057_18"/><hi rend="ITALICS">ane wip</hi> vnde ane kint.
+<lb n="19" xml:id="bsb00000776_00057_19"/>diet | <hi rend="ITALICS">waren lobeliche dinc.</hi>
+<lb n="20" xml:id="bsb00000776_00057_20"/> <hi rend="ITALICS">[lücke von ca. </hi>28 <hi rend="ITALICS">versen]</hi>
+<lb n="21" xml:id="bsb00000776_00057_21"/>'edile keisir Constantin,
+<lb n="22" xml:id="bsb00000776_00057_22"/>dir intbutit din muter holden | můt,
+<lb n="23" xml:id="bsb00000776_00057_23"/>heil unde allis liebis gnv̊c,
+<anchor xml:id="cb25"/><cb type="sequential" n="2" spanTo="#cb26"/><lb n="24" xml:id="bsb00000776_00057_24"/>vnde loben des [den] ewigen | got,
+<lb n="25" xml:id="bsb00000776_00057_25"/>daz dv̊ [d]er abgote has uirloukinot.
+<lb n="26" xml:id="bsb00000776_00057_26"/>wen ein dinc han ic[h k]v̊[m]e ertragen ,
+<lb n="27" xml:id="bsb00000776_00057_27"/>daz ich uon dir hören sagen: |
+<lb n="28" xml:id="bsb00000776_00057_28"/>daz du geloubis ane Krist,
+<lb n="29" xml:id="bsb00000776_00057_29"/>der uon den iuden geboren | ist
+<lb n="30" xml:id="bsb00000776_00057_30"/>vnde zv̊ Iherusalem leit den tot,
+<lb n="31" xml:id="bsb00000776_00057_31"/>durch wäre schůlt | [uir]damnot.
+<lb n="32" xml:id="bsb00000776_00057_32"/>des rechten wisen mannis můt
+<lb n="33" xml:id="bsb00000776_00057_33"/>bescheidet | ub[il] vnde gv̊t
+<lb n="34" xml:id="bsb00000776_00057_34"/>vnde richtet sich nach der warheit,
+<lb n="35" xml:id="bsb00000776_00057_35"/>die a[n] allen dingen uor geit.
+<lb n="36" xml:id="bsb00000776_00057_36"/>die kuninge, die uor dir wa | ren,
+<lb n="37" xml:id="bsb00000776_00057_37"/>die betten zware
+<lb n="38" xml:id="bsb00000776_00057_38"/>an die abgote al gemeine, |
+<lb n="39" xml:id="bsb00000776_00057_39"/>wen dv̊ altirseine.
+<lb n="40" xml:id="bsb00000776_00057_40"/>wande dv des abe bis gegan,
+<lb n="41" xml:id="bsb00000776_00057_41"/>uon | div so hat dich got getan
+<lb n="42" xml:id="bsb00000776_00057_42"/>gesunt uon dinen siech tagen.
+<lb n="43" xml:id="bsb00000776_00057_43"/>zware wil ich dir daz sagen:
+<lb n="44" xml:id="bsb00000776_00057_44"/>swenne dv̅ dich bikeris
+<lb n="45" xml:id="bsb00000776_00057_45"/>na der iudischer ewe,
+<lb n="46" xml:id="bsb00000776_00057_46"/>so wirdes dv̊ uil here, |
+<lb n="47" xml:id="bsb00000776_00057_47"/>also riche vnde also mere
+<anchor xml:id="cb26"/><pb xml:id="bsb00000776_00058" n="55"/><cb type="sequential" n="1" spanTo="#cb27"/><lb n="1" xml:id="bsb00000776_00058_1"/>alse Salemon vnde Dauid.
+<lb n="2" xml:id="bsb00000776_00058_2"/>din | gewalt wirt also wit,
+<lb n="3" xml:id="bsb00000776_00058_3"/>daz dir in ertriche
+<lb n="4" xml:id="bsb00000776_00058_4"/>neche in kuninc ne mac gelichen'.
+<lb n="5" xml:id="bsb00000776_00058_5"/>Konstantin der gute (K. 8306)
+<lb n="6" xml:id="bsb00000776_00058_6"/>wart trureges můtes.
+<lb n="7" xml:id="bsb00000776_00058_7"/>her inbot sinem meistir, <hi rend="ITALICS">(K. 8308–</hi>8309)
+<lb n="8" xml:id="bsb00000776_00058_8"/>dem pabise sen|te Siluester,
+<lb n="9" xml:id="bsb00000776_00058_9"/>waz her drumme tete,
+<lb n="10" xml:id="bsb00000776_00058_10"/>daz sin můter sus | geredit bete,
+<lb n="11" xml:id="bsb00000776_00058_11"/>der pabis sprach dem boten zv̊ : <hi rend="ITALICS">(K. </hi>8322–8327)
+<lb n="12" xml:id="bsb00000776_00058_12"/>'nv̊ sagit Con | stantino,
+<lb n="13" xml:id="bsb00000776_00058_13"/>her muge wole uro sin:
+<lb n="14" xml:id="bsb00000776_00058_14"/>nv̊ wil selbe vnser | trechtin
+<lb n="15" xml:id="bsb00000776_00058_15"/>sinen namen an ime geeren
+<lb n="16" xml:id="bsb00000776_00058_16"/>vnde die cristenheit gemeren,
+<lb n="17" xml:id="bsb00000776_00058_17"/>her tůz ime zv̊ minnen – (K. 7930–7931)
+<lb n="18" xml:id="bsb00000776_00058_18"/>her wil noch manige | ren dienistman
+<lb n="19" xml:id="bsb00000776_00058_19"/>gwinnen, –
+<lb n="20" xml:id="bsb00000776_00058_20"/>her intbiete der kuni[n]ginne  | <hi rend="ITALICS">(K. </hi>8346–8347)
+<lb n="21" xml:id="bsb00000776_00058_21"/>suneliche minne.
+<lb n="22" xml:id="bsb00000776_00058_22"/>wir mv̊zenis einen sent dar um|me
+<lb n="23" xml:id="bsb00000776_00058_23"/>loben <hi rend="ITALICS">(K. </hi>8328–8331)
+<lb n="24" xml:id="bsb00000776_00058_24"/>vnde lazen sie al ze samene kv̊men,
+<lb n="25" xml:id="bsb00000776_00058_25"/>iungen vnde alden,
+<lb n="26" xml:id="bsb00000776_00058_26"/>die der ê vndir den iuden vnde vndir den
+<lb n="27" xml:id="bsb00000776_00058_27"/>kristen walden'. |
+<lb n="28" xml:id="bsb00000776_00058_28"/>Den kuninc důchte der rat (K:. 8342–8344)
+<lb n="29" xml:id="bsb00000776_00058_29"/>gv̊t
+<lb n="30" xml:id="bsb00000776_00058_30"/>sin uil truriger mv̊t
+<lb n="31" xml:id="bsb00000776_00058_31"/>ime senftigen began.
+<lb n="32" xml:id="bsb00000776_00058_32"/>die geistlichen herren die | (besante her ubir al
+<anchor xml:id="cb27"/><cb type="sequential" n="2" spanTo="#cb28"/><lb n="33" xml:id="bsb00000776_00058_33"/>vnde liez tichten einen brief.
+<lb n="34" xml:id="bsb00000776_00058_34"/>siner | můter inbot her alliz liep,
+<lb n="35" xml:id="bsb00000776_00058_35"/>alliz daz ein sun si <hi rend="ITALICS">ner </hi>muter <hi rend="ITALICS">(K. </hi>8348–8349)
+<lb n="36" xml:id="bsb00000776_00058_36"/>intbieten solde,
+<lb n="37" xml:id="bsb00000776_00058_37"/>ob sie ires zornigen mv̊ | tis intwichen
+<lb n="38" xml:id="bsb00000776_00058_38"/>wolde.
+<lb n="39" xml:id="bsb00000776_00058_39"/>an dem brieue in <hi rend="ITALICS">sime namen \</hi>
+<lb n="40" xml:id="bsb00000776_00058_40"/>was ze samene getragen
+<lb n="41" xml:id="bsb00000776_00058_41"/>. . . . . . . . . . . . . . . | . . . . die d . .
+<lb n="42" xml:id="bsb00000776_00058_42"/> <hi rend="ITALICS">[lücke von ca. </hi>28 <hi rend="ITALICS">versen]</hi>
+<lb n="43" xml:id="bsb00000776_00058_43"/>. . . . . . . . heite
+<lb n="44" xml:id="bsb00000776_00058_44"/>wes her sule gelouben,
+<lb n="45" xml:id="bsb00000776_00058_45"/>iz ne wolle ime got | selbe irougen.
+<lb n="46" xml:id="bsb00000776_00058_46"/>Nv̊ uirnim et, wes ich gedacht han. |
+<lb n="47" xml:id="bsb00000776_00058_47"/>dunket ez dich gůt getan,
+<lb n="48" xml:id="bsb00000776_00058_48"/>so ile besenden
+<lb n="49" xml:id="bsb00000776_00058_49"/>die iuden | in allen enden ,
+<lb n="50" xml:id="bsb00000776_00058_50"/>die allir bezzist sin gelart.
+<lb n="51" xml:id="bsb00000776_00058_51"/>die nim mit dir an díne vart
+<lb n="52" xml:id="bsb00000776_00058_52"/>vnde kvm her ze Rome | san
+<lb n="53" xml:id="bsb00000776_00058_53"/>vnde zv̊ Lateran,
+<lb n="54" xml:id="bsb00000776_00058_54"/>dar brenge ich mit mir
+<lb n="55" xml:id="bsb00000776_00058_55"/>di | kristenheit ingagen dir
+<lb n="56" xml:id="bsb00000776_00058_56"/>vnde dar zv̊ minen meister, |
+<lb n="57" xml:id="bsb00000776_00058_57"/>den pabis sente Siluester,
+<lb n="58" xml:id="bsb00000776_00058_58"/>vnde lazen die teil beide
+<lb n="59" xml:id="bsb00000776_00058_59"/>mit worten undirscheiden,
+<lb n="60" xml:id="bsb00000776_00058_60"/>wediris rede war si.
+<lb n="61" xml:id="bsb00000776_00058_61"/>da nestan ich niemanne bi.
+<lb n="62" xml:id="bsb00000776_00058_62"/>swer sinen gelouben da be | werit,
+<lb n="63" xml:id="bsb00000776_00058_63"/>her si des wole geerit.
+<lb n="64" xml:id="bsb00000776_00058_64"/>sie sin íuden odir heiden, |
+<anchor xml:id="cb28"/><pb xml:id="bsb00000776_00059" n="56"/><cb type="sequential" n="1" spanTo="#cb29"/><lb n="1" xml:id="bsb00000776_00059_1"/>ê <hi rend="ITALICS">sie</hi> dannen gescheiden,
+<lb n="2" xml:id="bsb00000776_00059_2"/>wollint sie mine hůlde han, |
+<lb n="3" xml:id="bsb00000776_00059_3"/>sie můzen zv̊ rechtir ewe uan'.
+<lb n="4" xml:id="bsb00000776_00059_4"/>Alse Helena | diesen brief (K. 8296–8297)
+<lb n="5" xml:id="bsb00000776_00059_5"/>gelas,
+<lb n="6" xml:id="bsb00000776_00059_6"/>a wie uro ir herze do was ! |
+<lb n="7" xml:id="bsb00000776_00059_7"/>do sprach die kuninginne:
+<lb n="8" xml:id="bsb00000776_00059_8"/>'mich iamirt na mi | me kinde.
+<lb n="9" xml:id="bsb00000776_00059_9"/>iz ist mir uil swere, <hi rend="ITALICS">(K. </hi>8372–8375)
+<lb n="10" xml:id="bsb00000776_00059_10"/>daz iz eime | aldin trugenere
+<lb n="11" xml:id="bsb00000776_00059_11"/>geuolgete ie so uerre.
+<lb n="12" xml:id="bsb00000776_00059_12"/>den sent | den suche ich gerne:
+<lb n="13" xml:id="bsb00000776_00059_13"/>ich wil gewisse dare ků men
+<lb n="14" xml:id="bsb00000776_00059_14"/>vnde wil rechte uirnemen,
+<lb n="15" xml:id="bsb00000776_00059_15"/>wie diese dinc sin | gesehen', (K. 8377)
+<lb n="16" xml:id="bsb00000776_00059_16"/>sprach die urowe uil her,
+<lb n="17" xml:id="bsb00000776_00059_17"/>'daz min sun ist wurden cristen. <hi rend="ITALICS">(K. </hi>8378–8385)
+<lb n="18" xml:id="bsb00000776_00059_18"/>Siluester nehelfent nechei|ne sine argen
+<lb n="19" xml:id="bsb00000776_00059_19"/>liste:
+<lb n="20" xml:id="bsb00000776_00059_20"/>wirt her da ubirwunden,
+<lb n="21" xml:id="bsb00000776_00059_21"/>her | mv̊z an den stůnden
+<lb n="22" xml:id="bsb00000776_00059_22"/>sterbin lestirliche.
+<lb n="23" xml:id="bsb00000776_00059_23"/>dar zv̊ | zestorich al romische riche'.
+<lb n="24" xml:id="bsb00000776_00059_24"/>Helena nebeite ne cheiner wilen,
+<lb n="25" xml:id="bsb00000776_00059_25"/>sie hiez brieue sehriben. (K. 8385)
+<lb n="26" xml:id="bsb00000776_00059_26"/>iren boten | sie do sante (K. 8402–8404)
+<lb n="27" xml:id="bsb00000776_00059_27"/>after alleme deme lande
+<lb n="28" xml:id="bsb00000776_00059_28"/>nach den | wisisten herren,
+<lb n="29" xml:id="bsb00000776_00059_29"/>die undir den luden vnde undir <hi rend="ITALICS">(K. </hi>8576)
+<lb n="30" xml:id="bsb00000776_00059_30"/>den beide nen weren,
+<lb n="31" xml:id="bsb00000776_00059_31"/>vnde alle die swert mochtin leiten, <hi rend="ITALICS">(K. </hi>8390–8399)
+<anchor xml:id="cb29"/><cb type="sequential" n="2" spanTo="#cb30"/><lb n="32" xml:id="bsb00000776_00059_32"/>daz sie | quemen wider der cristenheite.
+<lb n="33" xml:id="bsb00000776_00059_33"/>mochte sie iz geuůgen, |
+<lb n="34" xml:id="bsb00000776_00059_34"/>sie wolde al zefuren.
+<lb n="35" xml:id="bsb00000776_00059_35"/>daz mere witene ulouc
+<lb n="36" xml:id="bsb00000776_00059_36"/>ubir | al heidenen uolc.
+<lb n="37" xml:id="bsb00000776_00059_37"/>liep was in die boteschafe,
+<lb n="38" xml:id="bsb00000776_00059_38"/>des uro wete sich die heidenische <w lemma="herschaft" xml:id="w9" corresp="#w9 #w10">her-</w>
+<lb n="39" xml:id="bsb00000776_00059_39"/><w lemma="herschaft" xml:id="w10" corresp="#w9 #w10">schaft</w>.
+<lb n="40" xml:id="bsb00000776_00059_40"/>Der pabis | <hi rend="ITALICS">was spete vnde urů,</hi>
+<lb n="41" xml:id="bsb00000776_00059_41"/><hi rend="ITALICS">des ne</hi> irrete in nechein mv̊. |
+<lb n="42" xml:id="bsb00000776_00059_42"/><hi rend="ITALICS">her sante boten einen holden,</hi>
+<lb n="43" xml:id="bsb00000776_00059_43"/>die her zv̊ der rede ha <hi rend="ITALICS">bin wolde,</hi>
+<lb n="44" xml:id="bsb00000776_00059_44"/><hi rend="ITALICS">allin ivole gelerten </hi>herren, <hi rend="ITALICS">(K. </hi>8404–8409)
+<lb n="45" xml:id="bsb00000776_00059_45"/>daz sie | <hi rend="ITALICS">durch gotis ere,</hi>
+<lb n="46" xml:id="bsb00000776_00059_46"/><hi rend="ITALICS">alden vnde</hi> iungen,
+<lb n="47" xml:id="bsb00000776_00059_47"/>dar quemen | <hi rend="ITALICS">z</hi>v̊<hi rend="ITALICS"> der samenunge</hi>
+<lb n="48" xml:id="bsb00000776_00059_48"/><hi rend="ITALICS">vnde z</hi>v̊<hi rend="ITALICS"> helfe der cristenheit.</hi>
+<lb n="49" xml:id="bsb00000776_00059_49"/><hi rend="ITALICS">uiele michil was sin arbeit</hi>
+<lb n="50" xml:id="bsb00000776_00059_50"/> [<hi rend="ITALICS">lücke von ca. </hi>26 <hi rend="ITALICS">versen]</hi>
+<lb n="51" xml:id="bsb00000776_00059_51"/>. . . . . . . . .ein urteil
+<lb n="52" xml:id="bsb00000776_00059_52"/>durch daz ewige h | <hi rend="ITALICS">eil</hi>.
+<lb n="53" xml:id="bsb00000776_00059_53"/><hi rend="ITALICS">do daz lut diese</hi> were uirnam,
+<lb n="54" xml:id="bsb00000776_00059_54"/>do ilete man uůre m | an, <hi rend="ITALICS">(K. </hi>8429–8433)
+<lb n="55" xml:id="bsb00000776_00059_55"/><hi rend="ITALICS">do nam allir mannegelich</hi> 
+<lb n="56" xml:id="bsb00000776_00059_56"/>ein rot cruce uůr sich. |
+<lb n="57" xml:id="bsb00000776_00059_57"/><hi rend="ITALICS">mit herzen vnde mit</hi> wenden
+<lb n="58" xml:id="bsb00000776_00059_58"/>mines trechtenes lob sie <hi rend="ITALICS">s\ungen.</hi>
+<lb n="59" xml:id="bsb00000776_00059_59"/><hi rend="ITALICS">sie baten got</hi> den gůten
+<lb n="60" xml:id="bsb00000776_00059_60"/>mit stetigem můte, |
+<lb n="61" xml:id="bsb00000776_00059_61"/><hi rend="ITALICS">daz her ir geverie</hi> were, (K. 8436–8437)
+<lb n="62" xml:id="bsb00000776_00059_62"/>vnde aller ir dinge phl <hi rend="ITALICS">ege.</hi>
+<anchor xml:id="cb30"/><pb xml:id="bsb00000776_00060" n="57"/><cb type="sequential" n="1" spanTo="#cb31"/><lb n="1" xml:id="bsb00000776_00060_1"/><hi rend="ITALICS">Z</hi>v̊<hi rend="ITALICS"> Turaz</hi> wart der sent (K. 8488–8495)
+<lb n="2" xml:id="bsb00000776_00060_2"/>gelobet:
+<lb n="3" xml:id="bsb00000776_00060_3"/>daz gebot der | <hi rend="ITALICS">romische uoget,</hi>
+<lb n="4" xml:id="bsb00000776_00060_4"/>mit samint ime sin meister,
+<lb n="5" xml:id="bsb00000776_00060_5"/>der | <hi rend="ITALICS">gůte sente</hi> Siluester.
+<lb n="6" xml:id="bsb00000776_00060_6"/>zv̊ deme sende quamen
+<lb n="7" xml:id="bsb00000776_00060_7"/>patr | <hi rend="ITALICS">iarche </hi> <hi rend="ITALICS">vnde</hi> cardinale
+<lb n="8" xml:id="bsb00000776_00060_8"/>vnde eilf hůndert krummer s | <hi rend="ITALICS">tabe,</hi>
+<lb n="9" xml:id="bsb00000776_00060_9"/><hi rend="ITALICS">also wir</hi> daz bůch horen sagen,
+<lb n="10" xml:id="bsb00000776_00060_10"/>vnde achzene <hi rend="ITALICS">altherren,</hi>
+<lb n="11" xml:id="bsb00000776_00060_11"/><hi rend="ITALICS">der</hi> kristenheite zv̊ eren.
+<lb n="12" xml:id="bsb00000776_00060_12"/>Die cristenen za | <hi rend="ITALICS">lten sich</hi> (K. 8496–8499)
+<lb n="13" xml:id="bsb00000776_00060_13"/>an der stunt:
+<lb n="14" xml:id="bsb00000776_00060_14"/>sie beten uechtendis uolk|is <hi rend="ITALICS">zehinzic</hi>
+<lb n="15" xml:id="bsb00000776_00060_15"/>tvsunt,
+<lb n="16" xml:id="bsb00000776_00060_16"/>zware sagen ich iz iv,
+<lb n="17" xml:id="bsb00000776_00060_17"/>vnde dr <hi rend="ITALICS">izic tvsunt</hi> vnde driv.
+<lb n="18" xml:id="bsb00000776_00060_18"/>Helena die urowe <hi rend="ITALICS">(K. </hi>8460–8465)
+<lb n="19" xml:id="bsb00000776_00060_19"/>wolde d[o] | <hi rend="ITALICS">ir</hi> here [scho]wen.
+<lb n="20" xml:id="bsb00000776_00060_20"/>michil [wart] der heidenen schal; |
+<lb n="21" xml:id="bsb00000776_00060_21"/>[die uu]lten berc vnde tal.
+<lb n="22" xml:id="bsb00000776_00060_22"/>sie [he]ten grozen ubir | můt,
+<lb n="23" xml:id="bsb00000776_00060_23"/>alse ie der unselige tůt.
+<lb n="24" xml:id="bsb00000776_00060_24"/>Helena die ku|ningin
+<lb n="25" xml:id="bsb00000776_00060_25"/>die brachte manigen Sarracin,
+<lb n="26" xml:id="bsb00000776_00060_26"/>iuden | vnde Turken.
+<lb n="27" xml:id="bsb00000776_00060_27"/>die leideten [gote ha]rte:
+<lb n="28" xml:id="bsb00000776_00060_28"/>daz was ein | vnselige  diet.
+<lb n="29" xml:id="bsb00000776_00060_29"/>die ne [uůreii] durch got niet |
+<lb n="30" xml:id="bsb00000776_00060_30"/>mit bogen vnde mit wicwere.
+<lb n="31" xml:id="bsb00000776_00060_31"/>do sie gezalten | ir here,
+<lb n="32" xml:id="bsb00000776_00060_32"/>daz wizzent wole zware,
+<lb n="33" xml:id="bsb00000776_00060_33"/>dru hunldirt tusint ir waren
+<lb n="34" xml:id="bsb00000776_00060_34"/>vnde fünf tusent dar ube re. <hi rend="ITALICS">(K. </hi>8468–8487)
+<anchor xml:id="cb31"/><cb type="sequential" n="2" spanTo="#cb32"/><lb n="35" xml:id="bsb00000776_00060_35"/>die heidenen dachten ubile:
+<lb n="36" xml:id="bsb00000776_00060_36"/>sie wanden | mit gewalde
+<lb n="37" xml:id="bsb00000776_00060_37"/>in romischeme lande
+<lb n="38" xml:id="bsb00000776_00060_38"/>al iren | willen uolle bringen;
+<lb n="39" xml:id="bsb00000776_00060_39"/>dar nach begunden sie | uaste ringen.
+<lb n="40" xml:id="bsb00000776_00060_40"/>Konstantin der gůte
+<lb n="41" xml:id="bsb00000776_00060_41"/>der int | bot siner můter,
+<lb n="42" xml:id="bsb00000776_00060_42"/>daz sie durch kunincliche | ere
+<lb n="43" xml:id="bsb00000776_00060_43"/>vz irwelete fivnf hundirt altherren, |
+<lb n="44" xml:id="bsb00000776_00060_44"/>die in den zivchten weren,
+<lb n="45" xml:id="bsb00000776_00060_45"/>daz sie sentrecht | uirnemen.
+<lb n="46" xml:id="bsb00000776_00060_46"/>vnde daz sie urideliche quemen in die stat.
+<lb n="47" xml:id="bsb00000776_00060_47"/>uil [ture] her des sine muter bat:
+<lb n="48" xml:id="bsb00000776_00060_48"/>'wande so getan uolc
+<lb n="49" xml:id="bsb00000776_00060_49"/>zv̊ dirre rede niene touc;
+<lb n="50" xml:id="bsb00000776_00060_50"/>mít | den nemac sentrecht nicht sin.'
+<lb n="51" xml:id="bsb00000776_00060_51"/>do sprach die | here kuningin,
+<lb n="52" xml:id="bsb00000776_00060_52"/>daz sie uil gerne tete,
+<lb n="53" xml:id="bsb00000776_00060_53"/>des sie ir lieber sun gebete.
+<lb n="54" xml:id="bsb00000776_00060_54"/>Dar zv̊ sie uz irwele | ten <hi rend="ITALICS">(K. </hi>8574–8585)
+<lb n="55" xml:id="bsb00000776_00060_55"/>zwelfe der allirbest gelerten,
+<lb n="56" xml:id="bsb00000776_00060_56"/>die under | den beiden vnde under den
+<lb n="57" xml:id="bsb00000776_00060_57"/>iuden waren,
+<lb n="58" xml:id="bsb00000776_00060_58"/>den sie alle der meisterscheft[e ia]hen,
+<lb n="59" xml:id="bsb00000776_00060_59"/>die den gewaren gotis [h]olde[n]
+<lb n="60" xml:id="bsb00000776_00060_60"/>mit recht[e ube]nvin[den solden]. |
+<lb n="61" xml:id="bsb00000776_00060_61"/><hi rend="ITALICS">zv̊</hi> deme sende wart ein gelvbde getan: |
+<lb n="62" xml:id="bsb00000776_00060_62"/>dar ne queme nechein man,
+<lb n="63" xml:id="bsb00000776_00060_63"/>der da icht zv̊ tors|te reden,
+<lb n="64" xml:id="bsb00000776_00060_64"/>her ne wolde den hals ze wandele |
+<lb n="65" xml:id="bsb00000776_00060_65"/>drumme legen,
+<lb n="66" xml:id="bsb00000776_00060_66"/>wan zwene philosophi:
+<lb n="67" xml:id="bsb00000776_00060_67"/>die ir | kv̊ren sie dabi,
+<anchor xml:id="cb32"/><pb xml:id="bsb00000776_00061" n="58"/><cb type="sequential" n="1" spanTo="#cb33"/><lb n="1" xml:id="bsb00000776_00061_1"/>daz sie des sendes richtere | <hi rend="ITALICS">(K. </hi>8588–8589)
+<lb n="2" xml:id="bsb00000776_00061_2"/>weren
+<lb n="3" xml:id="bsb00000776_00061_3"/>vnde der [rechten zivchte] phlegen
+<lb n="4" xml:id="bsb00000776_00061_4"/>vnde | daz sie nichtes ne <hi rend="ITALICS">(K. </hi>8592–8593)
+<lb n="5" xml:id="bsb00000776_00061_5"/>[iehen],
+<lb n="6" xml:id="bsb00000776_00061_6"/>[w]an alse sie geh[or]ten <hi rend="ITALICS">vnde gesehen.</hi>
+<lb n="7" xml:id="bsb00000776_00061_7"/> <hi rend="ITALICS">[lücke von ca. </hi>28 <hi rend="ITALICS">versen]</hi>
+<lb n="8" xml:id="bsb00000776_00061_8"/>.... uil getruwe vnde so <hi rend="ITALICS">stete,</hi>
+<lb n="9" xml:id="bsb00000776_00061_9"/><hi rend="ITALICS">daz her</hi> iz durch al die werlt niene tete,
+<lb n="10" xml:id="bsb00000776_00061_10"/>daz her <hi rend="ITALICS">der war | </hi>heite neiehe,
+<lb n="11" xml:id="bsb00000776_00061_11"/>vnde ob is durft geschehe,
+<lb n="12" xml:id="bsb00000776_00061_12"/><hi rend="ITALICS">her lieze sin</hi> | houbit abe slan,
+<lb n="13" xml:id="bsb00000776_00061_13"/>ê her einer lugenen <hi rend="ITALICS">wolde gestan. </hi>|
+<lb n="14" xml:id="bsb00000776_00061_14"/>Kraton der gerechte man
+<lb n="15" xml:id="bsb00000776_00061_15"/>der gienc an eine <hi rend="ITALICS">hohe stan</hi> |
+<lb n="16" xml:id="bsb00000776_00061_16"/>vnde gebot eine stille,
+<lb n="17" xml:id="bsb00000776_00061_17"/>her sprah: 'alle, die an <hi rend="ITALICS">deme sen</hi> | de
+<lb n="18" xml:id="bsb00000776_00061_18"/>wesen willen,
+<lb n="19" xml:id="bsb00000776_00061_19"/>die uirnemen, waz ich <hi rend="ITALICS">zelle.</hi>
+<lb n="20" xml:id="bsb00000776_00061_20"/><hi rend="ITALICS">ich vnde</hi> | Zenophilus, min geselle,
+<lb n="21" xml:id="bsb00000776_00061_21"/>wir sulen des <hi rend="ITALICS">sendes phle</hi> | gen.
+<lb n="22" xml:id="bsb00000776_00061_22"/>den gewalt hat vns geben
+<lb n="23" xml:id="bsb00000776_00061_23"/>der riche <hi rend="ITALICS">keiser Constantin.</hi> |
+<lb n="24" xml:id="bsb00000776_00061_24"/>der ne wil selbe nicht sin
+<anchor xml:id="cb33"/><cb type="sequential" n="2" spanTo="#cb34"/><lb n="25" xml:id="bsb00000776_00061_25"/>dar ubir <hi rend="ITALICS">richtere,</hi>
+<lb n="26" xml:id="bsb00000776_00061_26"/><hi rend="ITALICS">wande</hi> | iz ungezeme were,
+<lb n="27" xml:id="bsb00000776_00061_27"/>daz her der kristenheite <hi rend="ITALICS">phlege</hi> |
+<lb n="28" xml:id="bsb00000776_00061_28"/>vnde urteil ubir die luden gebe;
+<lb n="29" xml:id="bsb00000776_00061_29"/>so spreche <hi rend="ITALICS">man ce rech</hi> | te,
+<lb n="30" xml:id="bsb00000776_00061_30"/>iz were unrecht sin gerichte.
+<lb n="31" xml:id="bsb00000776_00061_31"/>der <hi rend="ITALICS">keisir, der | </hi>unsir herre ist,
+<lb n="32" xml:id="bsb00000776_00061_32"/>der geloubit an Crist
+<lb n="33" xml:id="bsb00000776_00061_33"/><hi rend="ITALICS">vnde kerit sinen</hi> | fliz grozen,
+<lb n="34" xml:id="bsb00000776_00061_34"/>wie her beschirme sine <hi rend="ITALICS">genoze.</hi>
+<lb n="35" xml:id="bsb00000776_00061_35"/><hi rend="ITALICS">sin</hi> | mvͦter ist in der iudischen ê
+<lb n="36" xml:id="bsb00000776_00061_36"/>vnde wil, <hi rend="ITALICS">daz die wole ge</hi>|<hi rend="ITALICS">ste.</hi>
+<lb n="37" xml:id="bsb00000776_00061_37"/>ez ist recht, swenne wir striten,
+<lb n="38" xml:id="bsb00000776_00061_38"/><hi rend="ITALICS">daz sie auch des</hi> | dritten biten,
+<lb n="39" xml:id="bsb00000776_00061_39"/>der [sie beri]chte vnde <hi rend="ITALICS">beleite</hi>
+<lb n="40" xml:id="bsb00000776_00061_40"/><hi rend="ITALICS">uile</hi> | wole na der warheite.
+<lb n="41" xml:id="bsb00000776_00061_41"/>ich vnde <hi rend="ITALICS">Zenophilus wir sin</hi> | heiden.
+<lb n="42" xml:id="bsb00000776_00061_42"/>irwelit hat [uns der keisir <hi rend="ITALICS">b]eide,</hi>
+<lb n="43" xml:id="bsb00000776_00061_43"/><hi rend="ITALICS">daz wir</hi> | diesen strit [sli]chten,
+<lb n="44" xml:id="bsb00000776_00061_44"/>wande wir <hi rend="ITALICS">mit dewedirer e</hi> | we h[aben]
+<lb n="45" xml:id="bsb00000776_00061_45"/>phlichte.
+<lb n="46" xml:id="bsb00000776_00061_46"/>[nvͦ urst]et umme <hi rend="ITALICS">diesen sent</hi> also:
+<lb n="47" xml:id="bsb00000776_00061_47"/>in dieseme concilio
+<lb n="48" xml:id="bsb00000776_00061_48"/>wirt ein <hi rend="ITALICS">rede gefru</hi>|m<hi rend="ITALICS">it,</hi>
+<lb n="49" xml:id="bsb00000776_00061_49"/>die al der werkle ze heile kumit.
+<lb n="50" xml:id="bsb00000776_00061_50"/><hi rend="ITALICS">hie inne</hi> | ne sal nieman mere sprechen,
+<anchor xml:id="cb34"/><pb xml:id="bsb00000776_00062" n="59"/><cb type="sequential" n="1" spanTo="#cb35"/><lb n="1" xml:id="bsb00000776_00062_1"/>wen der <hi rend="ITALICS">die war</hi> | heit gezechit,
+<lb n="2" xml:id="bsb00000776_00062_2"/>daz necheines mannes lere
+<lb n="3" xml:id="bsb00000776_00062_3"/><hi rend="ITALICS">uns der</hi> | rechten rede nicht uirstore;
+<lb n="4" xml:id="bsb00000776_00062_4"/>vnde swenne <hi rend="ITALICS">der eine</hi> | wirt uirwunnen,
+<lb n="5" xml:id="bsb00000776_00062_5"/>so sule wir eineme anderen <hi rend="ITALICS">ane sin</hi> | nen,
+<lb n="6" xml:id="bsb00000776_00062_6"/>daz her beschirme sine rede,
+<lb n="7" xml:id="bsb00000776_00062_7"/>so <hi rend="ITALICS">daz her sie ge</hi> | bezziren mege;
+<lb n="8" xml:id="bsb00000776_00062_8"/>vnde swer an gesiege <hi rend="ITALICS">an deme</hi> | ende,
+<lb n="9" xml:id="bsb00000776_00062_9"/>deme [.......] dicke wir
+<lb n="10" xml:id="bsb00000776_00062_10"/>ui ......... |
+<lb n="11" xml:id="bsb00000776_00062_11"/>vnde sulen sin ewe ane gan.
+<lb n="12" xml:id="bsb00000776_00062_12"/>die gelvbde <hi rend="ITALICS">werde hie ge</hi> | tan,
+<lb n="13" xml:id="bsb00000776_00062_13"/>vnde swer iz da widir rede,
+<lb n="14" xml:id="bsb00000776_00062_14"/>daz <hi rend="ITALICS">der selbe des | </hi>landis si uirtriben'.
+<lb n="15" xml:id="bsb00000776_00062_15"/>Helena an daz <hi rend="ITALICS">gerichte ge</hi> saz, (K. 8516–8518)
+<lb n="16" xml:id="bsb00000776_00062_16"/>die buch die sagent uns daz.
+<lb n="17" xml:id="bsb00000776_00062_17"/>der <hi rend="ITALICS">kuninc leite den pabis dare</hi>
+<lb n="18" xml:id="bsb00000776_00062_18"/> <hi rend="ITALICS">[lücke von ca. </hi>28 <hi rend="ITALICS">versen]</hi>
+<lb n="19" xml:id="bsb00000776_00062_19"/><hi rend="ITALICS">her ist nvͦ allir</hi> eris uolle (K. 8543–8558)
+<lb n="20" xml:id="bsb00000776_00062_20"/>kvmen,
+<lb n="21" xml:id="bsb00000776_00062_21"/>daz her <hi rend="ITALICS">irkennit | daz ware liecht.</hi>
+<lb n="22" xml:id="bsb00000776_00062_22"/>ich neloukene des niet,
+<lb n="23" xml:id="bsb00000776_00062_23"/>iz ne si | <hi rend="ITALICS">min wille.</hi>
+<lb n="24" xml:id="bsb00000776_00062_24"/>ich han uil gůt gedinge,
+<lb n="25" xml:id="bsb00000776_00062_25"/>daz ich uil | <hi rend="ITALICS">balde dich brenge</hi> an daz
+<lb n="26" xml:id="bsb00000776_00062_26"/>selbe leben.
+<lb n="27" xml:id="bsb00000776_00062_27"/>nvͦ intfa des hei <hi rend="ITALICS">ligen geistes</hi> gebe
+<lb n="28" xml:id="bsb00000776_00062_28"/>vnde geloube an den Crist,
+<lb n="29" xml:id="bsb00000776_00062_29"/>der durh | <hi rend="ITALICS">dinen willen</hi> gemarterit ist.
+<anchor xml:id="cb35"/><cb type="sequential" n="2" spanTo="#cb36"/><lb n="30" xml:id="bsb00000776_00062_30"/>wirdis dvͦ in der | <hi rend="ITALICS">toufe naz,</hi>
+<lb n="31" xml:id="bsb00000776_00062_31"/>zeware sagen ich dir daz:
+<lb n="32" xml:id="bsb00000776_00062_32"/>her lonet | <hi rend="ITALICS">dir mit sineme</hi> riche;
+<lb n="33" xml:id="bsb00000776_00062_33"/>da wonis dvͦ ewicliche,
+<lb n="34" xml:id="bsb00000776_00062_34"/>da | <hi rend="ITALICS">ist die</hi> allir meiste wunne,
+<lb n="35" xml:id="bsb00000776_00062_35"/>me denne alle men | <hi rend="ITALICS">nischen zungen</hi>
+<lb n="36" xml:id="bsb00000776_00062_36"/>můgen gekunden'.
+<lb n="37" xml:id="bsb00000776_00062_37"/>Do sprach der heili | <hi rend="ITALICS">ge man:</hi>
+<lb n="38" xml:id="bsb00000776_00062_38"/><hi rend="ITALICS">'</hi>zware ich sal dir mer sagen:
+<lb n="39" xml:id="bsb00000776_00062_39"/>silberine gote | <hi rend="ITALICS">vnde guldin (K. </hi>8563–8573)
+<lb n="40" xml:id="bsb00000776_00062_40"/>die nemůgen dir nichein urůme sin. |
+<lb n="41" xml:id="bsb00000776_00062_41"/><hi rend="ITALICS">daz sint</hi> unreine geiste.
+<lb n="42" xml:id="bsb00000776_00062_42"/>swer in dienit allir meiste |
+<lb n="43" xml:id="bsb00000776_00062_43"/><hi rend="ITALICS">vnde sich</hi> zvͦ in gesellet,
+<lb n="44" xml:id="bsb00000776_00062_44"/>sie lonent ime mit [d]er | <hi rend="ITALICS">helle,</hi>
+<lb n="45" xml:id="bsb00000776_00062_45"/><hi rend="ITALICS">die da</hi> immer wellit.
+<lb n="46" xml:id="bsb00000776_00062_46"/>ere dvͦ dinen schepfere'. |
+<lb n="47" xml:id="bsb00000776_00062_47"/><hi rend="ITALICS">die kuningin</hi> hiez ir wise redenere
+<lb n="48" xml:id="bsb00000776_00062_48"/>antworten | <hi rend="ITALICS">deme heiligen</hi> man:
+<lb n="49" xml:id="bsb00000776_00062_49"/>da mite hůb sich der sent ane. |
+<lb n="50" xml:id="bsb00000776_00062_50"/><hi rend="ITALICS">Ůf stůnt </hi>der iudin archisina- <hi rend="ITALICS">(K. </hi>8602–8605)
+<lb n="51" xml:id="bsb00000776_00062_51"/>gogus,
+<lb n="52" xml:id="bsb00000776_00062_52"/>die rede | <hi rend="ITALICS">erhůb her</hi> alsus –
+<lb n="53" xml:id="bsb00000776_00062_53"/>der herre hiez Abiatar, –
+<lb n="54" xml:id="bsb00000776_00062_54"/>her | <hi rend="ITALICS">sprach: </hi>'Siluester, ist daz war,
+<lb n="55" xml:id="bsb00000776_00062_55"/>daz got uzir sinem | <hi rend="ITALICS">munde (K. 8608–</hi>8621)
+<lb n="56" xml:id="bsb00000776_00062_56"/><hi rend="ITALICS">deme</hi> herren Moysese kunte:
+<lb n="57" xml:id="bsb00000776_00062_57"/>„hore, Israhel, ich | <hi rend="ITALICS">wil dich leren.</hi>
+<lb n="58" xml:id="bsb00000776_00062_58"/>[ic]h bin din herre,
+<anchor xml:id="cb36"/><pb xml:id="bsb00000776_00063" n="60"/><cb type="sequential" n="1" spanTo="#cb37"/><lb n="1" xml:id="bsb00000776_00063_1"/>ich bin din geware | <hi rend="ITALICS">got;</hi>
+<lb n="2" xml:id="bsb00000776_00063_2"/><hi rend="ITALICS">vnde irfullis</hi> dvͦ min gebot,
+<lb n="3" xml:id="bsb00000776_00063_3"/>ich geben dir min riche"?
+<lb n="4" xml:id="bsb00000776_00063_4"/><hi rend="ITALICS">nvͦ widirredis</hi> dvͦ daz werliche
+<lb n="5" xml:id="bsb00000776_00063_5"/>vnde wilt drie  | <hi rend="ITALICS">gote haben.</hi>
+<lb n="6" xml:id="bsb00000776_00063_6"/>swer an der rede wil uolle stan,
+<lb n="7" xml:id="bsb00000776_00063_7"/>der | <hi rend="ITALICS">zebrichit</hi> gotis ê vnde sin gibot,
+<lb n="8" xml:id="bsb00000776_00063_8"/>der ist ewicliche | tot,
+<lb n="9" xml:id="bsb00000776_00063_9"/><hi rend="ITALICS">alse dů</hi> selbe macht lesen;
+<lb n="10" xml:id="bsb00000776_00063_10"/>der ne sal ce iungist | <hi rend="ITALICS">nicht</hi> genesen'.
+<lb n="11" xml:id="bsb00000776_00063_11"/>Der pabis schiere antwurte |
+<lb n="12" xml:id="bsb00000776_00063_12"/>[mit schoneme antlietze]. (K. 8624)
+<lb n="13" xml:id="bsb00000776_00063_13"/><hi rend="ITALICS">her sprach: 'du</hi> bist ein wole (K. 8626–8653)
+<lb n="14" xml:id="bsb00000776_00063_14"/>geleret man,
+<lb n="15" xml:id="bsb00000776_00063_15"/>warumme <hi rend="ITALICS">newiltu</hi> [d]er [b]ůche niet
+<lb n="16" xml:id="bsb00000776_00063_16"/>uirstan?
+<lb n="17" xml:id="bsb00000776_00063_17"/>do got mit <hi rend="ITALICS">si</hi>|<hi rend="ITALICS">ner hende</hi>
+<lb n="18" xml:id="bsb00000776_00063_18"/>ivch iuden irloste uon Egiptenl[a]nde, |
+<lb n="19" xml:id="bsb00000776_00063_19"/><hi rend="ITALICS">uon sckalclichen</hi> uorchten,
+<lb n="20" xml:id="bsb00000776_00063_20"/>wunder her durch ivch | <hi rend="ITALICS">da worchte.</hi>
+<lb n="21" xml:id="bsb00000776_00063_21"/>her gab iv [al des iv] dvrft was, |
+<lb n="22" xml:id="bsb00000776_00063_22"/><hi rend="ITALICS">daz iv nichtes ne gebrast,</hi>
+<lb n="23" xml:id="bsb00000776_00063_23"/><hi rend="ITALICS">dar ubir</hi> [guz]zit ir die getroc
+<lb n="24" xml:id="bsb00000776_00063_24"/>vnde bettet an die | <hi rend="ITALICS">abgot</hi>
+<lb n="25" xml:id="bsb00000776_00063_25"/><hi rend="ITALICS">gelich. </hi> eineme st[ie]re
+<lb n="26" xml:id="bsb00000776_00063_26"/>[v]nde uirgazit mines <hi rend="ITALICS">trechtines schiere.</hi>
+<lb n="27" xml:id="bsb00000776_00063_27"/><hi rend="ITALICS">alle die in der werlde do lebeten,</hi>
+<anchor xml:id="cb37"/><cb type="sequential" n="2" spanTo="#cb38"/><lb n="28" xml:id="bsb00000776_00063_28"/><hi rend="ITALICS">iuden</hi> vnde heiden, an die abgote sie
+<lb n="29" xml:id="bsb00000776_00063_29"/>b | <hi rend="ITALICS">etten.</hi>
+<lb n="30" xml:id="bsb00000776_00063_30"/><hi rend="ITALICS">do irbalc</hi> sich got uil sere,
+<lb n="31" xml:id="bsb00000776_00063_31"/>ie vnze Mo|<hi rend="ITALICS">yses der heilige</hi> herre
+<lb n="32" xml:id="bsb00000776_00063_32"/>uil innecliche sin geb | <hi rend="ITALICS">et</hi>
+<lb n="33" xml:id="bsb00000776_00063_33"/><hi rend="ITALICS">nůr sie hin ce</hi> gote tete,
+<lb n="34" xml:id="bsb00000776_00063_34"/>vnze her ime den zor | <hi rend="ITALICS">n </hi>ui<hi rend="ITALICS">rlie,</hi>
+<lb n="35" xml:id="bsb00000776_00063_35"/><hi rend="ITALICS">wande her </hi>die <hi rend="ITALICS">ê</hi> uon ime intfie.
+<lb n="36" xml:id="bsb00000776_00063_36"/>durch <hi rend="ITALICS">die uil mich</hi>ilen not
+<lb n="37" xml:id="bsb00000776_00063_37"/>so sprach der almilde g | <hi rend="ITALICS">ot</hi>
+<lb n="38" xml:id="bsb00000776_00063_38"/><hi rend="ITALICS">zvͦ der I</hi>srahelischer diet,
+<lb n="39" xml:id="bsb00000776_00063_39"/>die ime dann <hi rend="ITALICS">och was ui</hi>le liep:
+<lb n="40" xml:id="bsb00000776_00063_40"/><hi rend="ITALICS">„</hi>Israhel, habe mich mit e | <hi rend="ITALICS">ren.</hi>
+<lb n="41" xml:id="bsb00000776_00063_41"/><hi rend="ITALICS">ich bin din</hi> got vnde bin din herre,
+<lb n="42" xml:id="bsb00000776_00063_42"/>ich bin | <hi rend="ITALICS">ein ware got eine".</hi>
+<lb n="43" xml:id="bsb00000776_00063_43"/>diese rede ist mit drien namin un | <hi rend="ITALICS"></hi><w lemma="dirscheiden" xml:id="w11" corresp="#w11 #w12"><hi rend="ITALICS">dir</hi>-</w>
+<lb n="44" xml:id="bsb00000776_00063_44"/><w lemma="dirscheiden" xml:id="w12" corresp="#w11 #w12"><hi rend="ITALICS">scheiden</hi></w><hi rend="ITALICS">.</hi>
+<lb n="45" xml:id="bsb00000776_00063_45"/>Nvͦ woldis ivch niet bedriezen,
+<lb n="46" xml:id="bsb00000776_00063_46"/><hi rend="ITALICS">ich sal iv uon</hi> der driualdicheite intsliezen,
+<lb n="47" xml:id="bsb00000776_00063_47"/>w | <hi rend="ITALICS">ie</hi> <hi rend="ITALICS">daz</hi> Abraham uwir uater wart
+<lb n="48" xml:id="bsb00000776_00063_48"/>geher | <hi rend="ITALICS">it,</hi>
+<lb n="49" xml:id="bsb00000776_00063_49"/><hi rend="ITALICS">qui</hi> tres uidit, unum adorauit:
+<lb n="50" xml:id="bsb00000776_00063_50"/>daz quit, da | z <hi rend="ITALICS">her drie</hi> zvͦ ime gan
+<lb n="51" xml:id="bsb00000776_00063_51"/>sach,
+<lb n="52" xml:id="bsb00000776_00063_52"/>do her in sineme h | <hi rend="ITALICS">use gesaz:</hi>
+<lb n="53" xml:id="bsb00000776_00063_53"/>mit in[ni]cli[chem] můte
+<lb n="54" xml:id="bsb00000776_00063_54"/>uůr einen her [sie he] | te.
+<anchor xml:id="cb38"/><pb xml:id="bsb00000776_00064" n="61"/><cb type="sequential" n="1" spanTo="#cb39"/><lb n="1" xml:id="bsb00000776_00064_1"/>des tagis was her nun vnde nunzic iar alt,
+<lb n="2" xml:id="bsb00000776_00064_2"/>[alse] | vns daz bůch hat [gezalt].
+<lb n="3" xml:id="bsb00000776_00064_3"/>an der selben stunt
+<lb n="4" xml:id="bsb00000776_00064_4"/>[wart] ime sin bescherunge kunt,
+<lb n="5" xml:id="bsb00000776_00064_5"/>vnde daz sin wip [i] | ren Ysaachen solde
+<lb n="6" xml:id="bsb00000776_00064_6"/>intfan
+<lb n="7" xml:id="bsb00000776_00064_7"/>vnde daz Sodoma vnde | Gomorra solde
+<lb n="8" xml:id="bsb00000776_00064_8"/>undirgan.
+<lb n="9" xml:id="bsb00000776_00064_9"/>durch sinen gr[ozen] g[e] | louben
+<lb n="10" xml:id="bsb00000776_00064_10"/>iroffenete ime got die tougen,
+<lb n="11" xml:id="bsb00000776_00064_11"/>[wander] wiste daz daz was
+<lb n="12" xml:id="bsb00000776_00064_12"/>die heilige sancta trinitas.
+<lb n="13" xml:id="bsb00000776_00064_13"/>do bekante her den uater vnde <hi rend="ITALICS">(K. </hi>8654–8677)
+<lb n="14" xml:id="bsb00000776_00064_14"/>den sun vnde den heiligen geist;
+<lb n="15" xml:id="bsb00000776_00064_15"/>durch unse brode nam her an sich | bein
+<lb n="16" xml:id="bsb00000776_00064_16"/>vnde uleisch.
+<lb n="17" xml:id="bsb00000776_00064_17"/>daz was der werliche got. |
+<lb n="18" xml:id="bsb00000776_00064_18"/>swer des niet geloubot
+<lb n="19" xml:id="bsb00000776_00064_19"/>an [den einen] got | mit drien namen,
+<lb n="20" xml:id="bsb00000776_00064_20"/>der můz immer in der | helle sin begraben'.
+<lb n="21" xml:id="bsb00000776_00064_21"/>Do sprach Abiatar:
+<lb n="22" xml:id="bsb00000776_00064_22"/>'Sil | uester, ich sagen dir uur war,
+<lb n="23" xml:id="bsb00000776_00064_23"/>wilent vndir | vns altherren waren,
+<anchor xml:id="cb39"/><cb type="sequential" n="2" spanTo="#cb40"/><lb n="24" xml:id="bsb00000776_00064_24"/>die grozir wisheite | vndir den iuden
+<lb n="25" xml:id="bsb00000776_00064_25"/>phlagen,
+<lb n="26" xml:id="bsb00000776_00064_26"/>die uon [gote den] | gewalt heten,
+<lb n="27" xml:id="bsb00000776_00064_27"/>daz sie irquicten die toten; |
+<lb n="28" xml:id="bsb00000776_00064_28"/>daz hiemiluůr brante
+<lb n="29" xml:id="bsb00000776_00064_29"/>ir uiande;
+<lb n="30" xml:id="bsb00000776_00064_30"/>gebvͦ ten sie in des meris grunt,
+<lb n="31" xml:id="bsb00000776_00064_31"/>daz geschach an | der stunt;
+<lb n="32" xml:id="bsb00000776_00064_32"/>gebvͦten sie in die hohe der hie mele
+<lb n="33" xml:id="bsb00000776_00064_33"/>da ne stůnt nicht [wi]dere.
+<lb n="34" xml:id="bsb00000776_00064_34"/>sie lie | zen die sunnen schinen
+<lb n="35" xml:id="bsb00000776_00064_35"/>sieben vnde uierzec [wi]len,
+<lb n="36" xml:id="bsb00000776_00064_36"/>daz sie uon der stete  nemochte kvͦmen . |
+<lb n="37" xml:id="bsb00000776_00064_37"/>nvͦ ist daz alliz...... unuirnumen,
+<lb n="38" xml:id="bsb00000776_00064_38"/>daz iz uon dicheineme cristenen rechte
+<lb n="39" xml:id="bsb00000776_00064_39"/>geschehe ;
+<lb n="40" xml:id="bsb00000776_00064_40"/>daz ne mochte nie [man] beweren,
+<lb n="41" xml:id="bsb00000776_00064_41"/>daz [iz ů]f erden
+<lb n="42" xml:id="bsb00000776_00064_42"/>ie | mer gewerde'.
+<lb n="43" xml:id="bsb00000776_00064_43"/>Do sprach der heilige <hi rend="ITALICS">(K. 8678–</hi>8679)
+<lb n="44" xml:id="bsb00000776_00064_44"/>[ma]n: |
+<lb n="45" xml:id="bsb00000776_00064_45"/>'nvͦ laz dir zware [sagen]
+<lb n="46" xml:id="bsb00000776_00064_46"/>
+<anchor xml:id="cb40"/></ab></div>
+<div n="Annolied" type="work"><ab>
+<pb xml:id="bsb00000776_00118" n="(115)"/><lb n="1" xml:id="bsb00000776_00118_1"/><hi rend="BOLD">DAS ANNOLIED.</hi>
+<cb type="sequential" n="1" spanTo="#cb65"/><lb n="2" xml:id="bsb00000776_00118_2"/>Wir hôrten ie dikke singen I
+<lb n="3" xml:id="bsb00000776_00118_3"/>von alten dingen:
+<lb n="4" xml:id="bsb00000776_00118_4"/>wî snelle helide vâhten,
+<lb n="5" xml:id="bsb00000776_00118_5"/>wî si veste burge brâchen,
+<lb n="6" xml:id="bsb00000776_00118_6"/>wî sich liebin winiscefte schieden,
+<lb n="7" xml:id="bsb00000776_00118_7"/>wî rîche kunige al zegiengen.
+<lb n="8" xml:id="bsb00000776_00118_8"/>nû ist cîht, daz wir denken,
+<lb n="9" xml:id="bsb00000776_00118_9"/>wi wir selve sulin enden.
+<lb n="10" xml:id="bsb00000776_00118_10"/>Crist, der unser hêro guot,
+<lb n="11" xml:id="bsb00000776_00118_11"/>wî manigiu ceichen her uns vure duot!
+<lb n="12" xml:id="bsb00000776_00118_12"/>alser uffin Sigeberg havit gedân
+<lb n="13" xml:id="bsb00000776_00118_13"/>durch den diurlîchen man,
+<lb n="14" xml:id="bsb00000776_00118_14"/>den heiligen bischof Annen
+<lb n="15" xml:id="bsb00000776_00118_15"/>durch den sînin willen
+<lb n="16" xml:id="bsb00000776_00118_16"/>dabî wir uns sulin bewarin,
+<lb n="17" xml:id="bsb00000776_00118_17"/>wante wir noch sulin varin
+<anchor xml:id="cb65"/><cb type="sequential" n="2" spanTo="#cb66"/><lb n="18" xml:id="bsb00000776_00118_18"/>von disime ellendin libe hin ein êwin,
+<lb n="19" xml:id="bsb00000776_00118_19"/>dâ wir îmer sulin sîn.
+<lb n="20" xml:id="bsb00000776_00118_20"/>In der werilde aneginna, II
+<lb n="21" xml:id="bsb00000776_00118_21"/>duo liht ward unte stimma,
+<lb n="22" xml:id="bsb00000776_00118_22"/>duo diu vrône godis hant
+<lb n="23" xml:id="bsb00000776_00118_23"/>diu spêhin werch gescuoph so manigvalt,
+<lb n="24" xml:id="bsb00000776_00118_24"/>duo deilti got sîniu werch al in zuei.
+<lb n="25" xml:id="bsb00000776_00118_25"/>disiu werlt ist daz eine deil,
+<lb n="26" xml:id="bsb00000776_00118_26"/>daz ander ist geistîn:
+<lb n="27" xml:id="bsb00000776_00118_27"/>dannini lisit man, daz zuâ werilte sîn.
+<lb n="28" xml:id="bsb00000776_00118_28"/>[diu eine, dâ wir inne birin,
+<lb n="29" xml:id="bsb00000776_00118_29"/>diu ander ist geistîn.]
+<lb n="30" xml:id="bsb00000776_00118_30"/>duo gemengite der wîse godis list
+<lb n="31" xml:id="bsb00000776_00118_31"/>von den zuein ein werch, daz der <w lemma="mennisch" xml:id="w13" corresp="#w13 #w14">men-</w>
+<lb n="32" xml:id="bsb00000776_00118_32"/><w lemma="mennisch" xml:id="w14" corresp="#w13 #w14">nisch</w> ist,
+<anchor xml:id="cb66"/><pb xml:id="bsb00000776_00119" n="116"/><cb type="sequential" n="1" spanTo="#cb67"/><lb n="1" xml:id="bsb00000776_00119_1"/>der beide ist, corpus unte geist.
+<lb n="2" xml:id="bsb00000776_00119_2"/>dannin ist her nâ dim engele allermeist.
+<lb n="3" xml:id="bsb00000776_00119_3"/>alliu gescaft ist an dem mennischun,
+<lb n="4" xml:id="bsb00000776_00119_4"/>soiz sagit daz evangelium.
+<lb n="5" xml:id="bsb00000776_00119_5"/>wir sulin un cir dritten werilde celin,
+<lb n="6" xml:id="bsb00000776_00119_6"/>sô wir daz die Crichen hôrin redin.
+<lb n="7" xml:id="bsb00000776_00119_7"/>cen selben êrin ward gescaphin Adâm,
+<lb n="8" xml:id="bsb00000776_00119_8"/>havit er sich behaltan.
+<lb n="9" xml:id="bsb00000776_00119_9"/>Duo sich Lucifer duo ce ubile <w lemma="gevieng" xml:id="w15" corresp="#w15 #w16">ge-</w>
+<lb n="10" xml:id="bsb00000776_00119_10"/><w lemma="gevieng" xml:id="w16" corresp="#w15 #w16">vieng</w> III
+<lb n="11" xml:id="bsb00000776_00119_11"/>unt Adam diu godis wort ubirgieng,
+<lb n="12" xml:id="bsb00000776_00119_12"/>duo balch sigis got desti mêr,
+<lb n="13" xml:id="bsb00000776_00119_13"/>daz her anderiu sîniu werch sach
+<lb n="14" xml:id="bsb00000776_00119_14"/>rehte g2ên.
+<lb n="15" xml:id="bsb00000776_00119_15"/>der mâne unter sunne,
+<lb n="16" xml:id="bsb00000776_00119_16"/>die gebint ire liht mit wunnen;
+<lb n="17" xml:id="bsb00000776_00119_17"/>die sterrin bihaltent ire vart,
+<lb n="18" xml:id="bsb00000776_00119_18"/>si geberent vrost unte hizze sô starc;
+<lb n="19" xml:id="bsb00000776_00119_19"/>daz fuir havit ûfwert sînin zug,
+<lb n="20" xml:id="bsb00000776_00119_20"/>dunnir unte wint irin vlug;
+<lb n="21" xml:id="bsb00000776_00119_21"/>di wolken dragint den reginguz,
+<anchor xml:id="cb67"/><cb type="sequential" n="2" spanTo="#cb68"/><lb n="22" xml:id="bsb00000776_00119_22"/>nidir wendint diu wazzer irin vluz;
+<lb n="23" xml:id="bsb00000776_00119_23"/>mit bluomin cierint sich diu lant,
+<lb n="24" xml:id="bsb00000776_00119_24"/>mit loube dekkit sich der walt;
+<lb n="25" xml:id="bsb00000776_00119_25"/>daz wilt havit den sînin ganc,
+<lb n="26" xml:id="bsb00000776_00119_26"/>scône ist der vugilsanc.
+<lb n="27" xml:id="bsb00000776_00119_27"/>ein îwelich ding die ê noch hât,
+<lb n="28" xml:id="bsb00000776_00119_28"/>diemi got van êrist virgab,
+<lb n="29" xml:id="bsb00000776_00119_29"/>ne wêre die zuâ gescephte,
+<lb n="30" xml:id="bsb00000776_00119_30"/>dî her gescuoph die bezziste:
+<lb n="31" xml:id="bsb00000776_00119_31"/>die virkêrten sich in die dobeheit.
+<lb n="32" xml:id="bsb00000776_00119_32"/>dannin huobin sich diu leiht.
+<lb n="33" xml:id="bsb00000776_00119_33"/>Kunt ist, wî der vîent virspuon den
+<lb n="34" xml:id="bsb00000776_00119_34"/>man: IV
+<lb n="35" xml:id="bsb00000776_00119_35"/>zi scalke wolter un hân.
+<lb n="36" xml:id="bsb00000776_00119_36"/>sô vuorter cir hellin
+<lb n="37" xml:id="bsb00000776_00119_37"/>die vunf werlt alli,
+<lb n="38" xml:id="bsb00000776_00119_38"/>unze got gesante sînin sun:
+<lb n="39" xml:id="bsb00000776_00119_39"/>der irlôste uns von den sundun.
+<lb n="40" xml:id="bsb00000776_00119_40"/>ce opfere wart her vur uns brâht,
+<lb n="41" xml:id="bsb00000776_00119_41"/>dem dôde nam her sîni maht.
+<lb n="42" xml:id="bsb00000776_00119_42"/>ce hellin vuor her âne sunden,
+<anchor xml:id="cb68"/><pb xml:id="bsb00000776_00120" n="117"/><cb type="sequential" n="1" spanTo="#cb69"/><lb n="1" xml:id="bsb00000776_00120_1"/>her herite si mit gewelde.
+<lb n="2" xml:id="bsb00000776_00120_2"/>der tiuvel virlôs den sînin gewalt,
+<lb n="3" xml:id="bsb00000776_00120_3"/>wir wurdin al in vrîe gezalt.
+<lb n="4" xml:id="bsb00000776_00120_4"/>in der doufe wurde wir Cristis man:
+<lb n="5" xml:id="bsb00000776_00120_5"/>den hêirrin snlin wir minnan.
+<lb n="6" xml:id="bsb00000776_00120_6"/>Up huof Crist sînis crûcis vanin, V
+<lb n="7" xml:id="bsb00000776_00120_7"/>die zueilf bodin hiz her in diu lant varin.
+<lb n="8" xml:id="bsb00000776_00120_8"/>vane himele gaf her un die craft,
+<lb n="9" xml:id="bsb00000776_00120_9"/>daz si ubirwunden die heidinscapht.
+<lb n="10" xml:id="bsb00000776_00120_10"/>Rôme ubirwant Pêtrus,
+<lb n="11" xml:id="bsb00000776_00120_11"/>die Criechen der wîse Paulus;
+<lb n="12" xml:id="bsb00000776_00120_12"/>seint Andrêas starf in Pâtras,
+<lb n="13" xml:id="bsb00000776_00120_13"/>in India der guode Thômas;
+<lb n="14" xml:id="bsb00000776_00120_14"/>Mathêus in Ethŷopiâ,
+<lb n="15" xml:id="bsb00000776_00120_15"/>Sŷmon unte Jûdas in Persiâ;
+<lb n="16" xml:id="bsb00000776_00120_16"/>seinte Jacôbus in Hierusalêm –
+<lb n="17" xml:id="bsb00000776_00120_17"/>nu is her dar in Galîciâ bistên;
+<lb n="18" xml:id="bsb00000776_00120_18"/>Jôhannes dâr in Ephesô –
+<lb n="19" xml:id="bsb00000776_00120_19"/>vili suoze konder predigôn.
+<lb n="20" xml:id="bsb00000776_00120_20"/>ûz des grabi noch wehsit himilbrôt,
+<lb n="21" xml:id="bsb00000776_00120_21"/>daz dekkit manigir slahte nôht.
+<lb n="22" xml:id="bsb00000776_00120_22"/>andre mertirêre manige,
+<lb n="23" xml:id="bsb00000776_00120_23"/>soiz wîtin ist ci sagine,
+<anchor xml:id="cb69"/><cb type="sequential" n="2" spanTo="#cb70"/><lb n="24" xml:id="bsb00000776_00120_24"/>mit heiligem irin bluode
+<lb n="25" xml:id="bsb00000776_00120_25"/>irvuldin Cristis gemuode.
+<lb n="26" xml:id="bsb00000776_00120_26"/>mit arbeiden quâmen si cirin hêirrin:
+<lb n="27" xml:id="bsb00000776_00120_27"/>nû havit her si mit êrin.
+<lb n="28" xml:id="bsb00000776_00120_28"/>Die Trojânischen Vranken, VI
+<lb n="29" xml:id="bsb00000776_00120_29"/>si sulin is iemir gode danken,
+<lb n="30" xml:id="bsb00000776_00120_30"/>daz her un sô manigin heiligin havit
+<lb n="31" xml:id="bsb00000776_00120_31"/>gesant,
+<lb n="32" xml:id="bsb00000776_00120_32"/>soiz dâr in Koln ist gewant,
+<lb n="33" xml:id="bsb00000776_00120_33"/>da dir restit ein sulich menige
+<lb n="34" xml:id="bsb00000776_00120_34"/>van senti Maurîciin herige
+<lb n="35" xml:id="bsb00000776_00120_35"/>unt eilf tûsent megide
+<lb n="36" xml:id="bsb00000776_00120_36"/>durch Cristis minn irslagine,
+<lb n="37" xml:id="bsb00000776_00120_37"/>manige bischof alsô hêrin,
+<lb n="38" xml:id="bsb00000776_00120_38"/>die dir ceichinhaftig wârin,
+<lb n="39" xml:id="bsb00000776_00120_39"/>als iz mêr ist vane sent Annin.
+<lb n="40" xml:id="bsb00000776_00120_40"/>des love wir Crist mit sangi.
+<lb n="41" xml:id="bsb00000776_00120_41"/>Ce Kolne was her gewîhet bischof. VII
+<lb n="42" xml:id="bsb00000776_00120_42"/>des sal diu stat iemir loben got,
+<lb n="43" xml:id="bsb00000776_00120_43"/>daz in der scônistir burge,
+<lb n="44" xml:id="bsb00000776_00120_44"/>diu in Diutischemi lande ie wurde,
+<lb n="45" xml:id="bsb00000776_00120_45"/>rihtêre was der vrumigisti man,
+<anchor xml:id="cb70"/><pb xml:id="bsb00000776_00121" n="118"/><cb type="sequential" n="1" spanTo="#cb71"/><lb n="1" xml:id="bsb00000776_00121_1"/>der ie ci Rîni biquam;
+<lb n="2" xml:id="bsb00000776_00121_2"/>ci diu, daz diu stat desti hêror 0diuhte,
+<lb n="3" xml:id="bsb00000776_00121_3"/>wandi si ein sô wîse hêrduom <w lemma="irliuhte" xml:id="w17" corresp="#w17 #w18">ir-</w>
+<lb n="4" xml:id="bsb00000776_00121_4"/><w lemma="irliuhte" xml:id="w18" corresp="#w17 #w18">liuhte</w> ,
+<lb n="5" xml:id="bsb00000776_00121_5"/>unte diu sîn dugint desti pertir wêri,
+<lb n="6" xml:id="bsb00000776_00121_6"/>daz her einir sô hêrin stedi plêgi.
+<lb n="7" xml:id="bsb00000776_00121_7"/>Koln ist der hêristin burge ein:
+<lb n="8" xml:id="bsb00000776_00121_8"/>sent Anno brâht ir êre wole heim.
+<lb n="9" xml:id="bsb00000776_00121_9"/>Ob ir willit bekennin VIII
+<lb n="10" xml:id="bsb00000776_00121_10"/>der burge aneginni,
+<lb n="11" xml:id="bsb00000776_00121_11"/>so virnemit umbi die grimmin <w lemma="heidinscapht" xml:id="w19" corresp="#w19 #w20">heidin-</w>
+<lb n="12" xml:id="bsb00000776_00121_12"/><w lemma="heidinscapht" xml:id="w20" corresp="#w19 #w20">scapht</w>,
+<lb n="13" xml:id="bsb00000776_00121_13"/>dannin den aldin burgin quam diu crapht.
+<lb n="14" xml:id="bsb00000776_00121_14"/>Nînus hîz der êristi man,
+<lb n="15" xml:id="bsb00000776_00121_15"/>der dir ie volcwîgis bigan.
+<lb n="16" xml:id="bsb00000776_00121_16"/>her saminôdi schilt unti sper –
+<lb n="17" xml:id="bsb00000776_00121_17"/>des lobis was her vili ger –,
+<lb n="18" xml:id="bsb00000776_00121_18"/>halspergi unti brunigen –
+<lb n="19" xml:id="bsb00000776_00121_19"/>duo gart er sich ci sturme –,
+<lb n="20" xml:id="bsb00000776_00121_20"/>die helmi stâlîn heirti –
+<lb n="21" xml:id="bsb00000776_00121_21"/>duo stifter heriveirti.
+<lb n="22" xml:id="bsb00000776_00121_22"/>diu liute wârin unz an diu
+<lb n="23" xml:id="bsb00000776_00121_23"/>vil ungeleidigetiu ,
+<lb n="24" xml:id="bsb00000776_00121_24"/>ir îwelich haviti sîn laut,
+<lb n="25" xml:id="bsb00000776_00121_25"/>an din andirin sich niwiht ni want.
+<lb n="26" xml:id="bsb00000776_00121_26"/>ungewenit wârin si ci wîge:
+<lb n="27" xml:id="bsb00000776_00121_27"/>vili lieb was daz Nînô.
+<anchor xml:id="cb71"/><cb type="sequential" n="2" spanTo="#cb72"/><lb n="28" xml:id="bsb00000776_00121_28"/>Nînus lêirti sîni man IX
+<lb n="29" xml:id="bsb00000776_00121_29"/>aribeiti lîdan
+<lb n="30" xml:id="bsb00000776_00121_30"/>in gewêfinin rîtin,
+<lb n="31" xml:id="bsb00000776_00121_31"/>daz si vreisin gidorstin irbîtin,
+<lb n="32" xml:id="bsb00000776_00121_32"/>schiezin unti schirmin;
+<lb n="33" xml:id="bsb00000776_00121_33"/>her ni lîz si nî gehirmin
+<lb n="34" xml:id="bsb00000776_00121_34"/>unz er gewan ci sîner hant
+<lb n="35" xml:id="bsb00000776_00121_35"/>elliu Asiânischiu lant,
+<lb n="36" xml:id="bsb00000776_00121_36"/>dâ stiphter eine burg sît,
+<lb n="37" xml:id="bsb00000776_00121_37"/>einir dageweidi wîht,
+<lb n="38" xml:id="bsb00000776_00121_38"/>drîir dageweidi lank.
+<lb n="39" xml:id="bsb00000776_00121_39"/>michil was der sîn gewalt.
+<lb n="40" xml:id="bsb00000776_00121_40"/>die burg nanter nâh imo Nînivê,
+<lb n="41" xml:id="bsb00000776_00121_41"/>dâ sint der merevisch Jônam ûz
+<lb n="42" xml:id="bsb00000776_00121_42"/>spê.
+<lb n="43" xml:id="bsb00000776_00121_43"/>Sîn wîf diu hîz Semîramis. X
+<lb n="44" xml:id="bsb00000776_00121_44"/>die alten Babilonie stiphti si
+<lb n="45" xml:id="bsb00000776_00121_45"/>van cîgelin den alten,
+<lb n="46" xml:id="bsb00000776_00121_46"/>die die gigandi branten,
+<lb n="47" xml:id="bsb00000776_00121_47"/>duo Nimbrot der michilo
+<lb n="48" xml:id="bsb00000776_00121_48"/>gerîht un dumplîcho,
+<lb n="49" xml:id="bsb00000776_00121_49"/>daz si widir godis vorhtin
+<lb n="50" xml:id="bsb00000776_00121_50"/>einen turn worhtin
+<lb n="51" xml:id="bsb00000776_00121_51"/>van erdin ûf ce himele.
+<lb n="52" xml:id="bsb00000776_00121_52"/>des dreif si got widere,
+<lb n="53" xml:id="bsb00000776_00121_53"/>duo her mit sînir gewalt
+<lb n="54" xml:id="bsb00000776_00121_54"/>gedeilti si sô manigvalt
+<anchor xml:id="cb72"/><pb xml:id="bsb00000776_00122" n="119"/><cb type="sequential" n="1" spanTo="#cb73"/><lb n="1" xml:id="bsb00000776_00122_1"/>in zungin sibenzoch ;
+<lb n="2" xml:id="bsb00000776_00122_2"/>sô steit iz in der werlti noch.
+<lb n="3" xml:id="bsb00000776_00122_3"/>von demi geziugi des stiphtis
+<lb n="4" xml:id="bsb00000776_00122_4"/>worti diu Semîramis
+<lb n="5" xml:id="bsb00000776_00122_5"/>die burchmûra viereggehtich,
+<lb n="6" xml:id="bsb00000776_00122_6"/>vieri mîlin lank unti sescich.
+<lb n="7" xml:id="bsb00000776_00122_7"/>des turnis bistuont dannoch
+<lb n="8" xml:id="bsb00000776_00122_8"/>vieriu dûsent lâfterin hôch.
+<lb n="9" xml:id="bsb00000776_00122_9"/>in der burch sint wârin
+<lb n="10" xml:id="bsb00000776_00122_10"/>die  kuninge vili mêre.
+<lb n="11" xml:id="bsb00000776_00122_11"/>dâ havitin ir gesez inne
+<lb n="12" xml:id="bsb00000776_00122_12"/>Chaldêi die grimmen.
+<lb n="13" xml:id="bsb00000776_00122_13"/>die heritin after lanten
+<lb n="14" xml:id="bsb00000776_00122_14"/>unzi si Hierusalêm virbranten.
+<lb n="15" xml:id="bsb00000776_00122_15"/>In den cîdin iz gescach, XI
+<lb n="16" xml:id="bsb00000776_00122_16"/>als der wîse Danihêl gesprach,
+<lb n="17" xml:id="bsb00000776_00122_17"/>duo her sîni troume sagiti,
+<lb n="18" xml:id="bsb00000776_00122_18"/>wî her gesîn haviti
+<lb n="19" xml:id="bsb00000776_00122_19"/>viere winde disir werilte
+<lb n="20" xml:id="bsb00000776_00122_20"/>in dem michilin meri vehtinde,
+<lb n="21" xml:id="bsb00000776_00122_21"/>unz ûz dem meri giengin
+<lb n="22" xml:id="bsb00000776_00122_22"/>vreislîchir dieri vieriu.
+<lb n="23" xml:id="bsb00000776_00122_23"/>viere winde biceichenint vier engele,
+<lb n="24" xml:id="bsb00000776_00122_24"/>die plegint werilt allere;
+<anchor xml:id="cb73"/><cb type="sequential" n="2" spanTo="#cb74"/><lb n="25" xml:id="bsb00000776_00122_25"/>diu dier vier kunincrîche,
+<lb n="26" xml:id="bsb00000776_00122_26"/>diu die werilt soldin al umbegrîfen.
+<lb n="27" xml:id="bsb00000776_00122_27"/>Diz êristi dier was ein leuwin; XII
+<lb n="28" xml:id="bsb00000776_00122_28"/>si havite mennislîchin sin.
+<lb n="29" xml:id="bsb00000776_00122_29"/>diu beceichenit uns alle kuninge,
+<lb n="30" xml:id="bsb00000776_00122_30"/>die der wârin in Babilonie.
+<lb n="31" xml:id="bsb00000776_00122_31"/>dere crapht unt ire wîsheit
+<lb n="32" xml:id="bsb00000776_00122_32"/>gidâdun ire rîche vili breiht.
+<lb n="33" xml:id="bsb00000776_00122_33"/>Daz ander dier was ein beri wilde; XIII
+<lb n="34" xml:id="bsb00000776_00122_34"/>her havide drîvalde zeinde.
+<lb n="35" xml:id="bsb00000776_00122_35"/>her cibrach al daz her anequam
+<lb n="36" xml:id="bsb00000776_00122_36"/>unti citrat iz undir sînin clâwan.
+<lb n="37" xml:id="bsb00000776_00122_37"/>der bizeichinôte driu kunicrîche,
+<lb n="38" xml:id="bsb00000776_00122_38"/>diu cisamine al bigondin grîfen
+<lb n="39" xml:id="bsb00000776_00122_39"/>bî den cîdin, duo Cîrus unti Dârius
+<lb n="40" xml:id="bsb00000776_00122_40"/>gewunnin Chaldêschiu hûs.
+<lb n="41" xml:id="bsb00000776_00122_41"/>die zwêne rîche kuninge,
+<lb n="42" xml:id="bsb00000776_00122_42"/>si cistôrtin Babilonie.
+<lb n="43" xml:id="bsb00000776_00122_43"/>Daz dritti dier was ein lêbarte; XIV
+<lb n="44" xml:id="bsb00000776_00122_44"/>vier arinvederich her havite.
+<lb n="45" xml:id="bsb00000776_00122_45"/>der beceichinote den Criechiskin <w lemma="Alexandrin" xml:id="w21" corresp="#w21 #w22">Alexan-</w>
+<lb n="46" xml:id="bsb00000776_00122_46"/><w lemma="Alexandrin" xml:id="w22" corresp="#w21 #w22">drin</w> ,
+<anchor xml:id="cb74"/><pb xml:id="bsb00000776_00123" n="120"/><cb type="sequential" n="1" spanTo="#cb75"/><lb n="1" xml:id="bsb00000776_00123_1"/>der mit vier herin vuor aftir lantin
+<lb n="2" xml:id="bsb00000776_00123_2"/>unz er dir werilt einde
+<lb n="3" xml:id="bsb00000776_00123_3"/>bî guldînin siulin bikante.
+<lb n="4" xml:id="bsb00000776_00123_4"/>in Indiâ her die wuosti durchbrach,
+<lb n="5" xml:id="bsb00000776_00123_5"/>mit zuein boumin her sich dâr gesprach.
+<lb n="6" xml:id="bsb00000776_00123_6"/>mit zuein grîfen vuor her cin liuften,
+<lb n="7" xml:id="bsb00000776_00123_7"/>in eimo glase liezer sich in den sê.
+<lb n="8" xml:id="bsb00000776_00123_8"/>duo wurfin sîn ungetrûwe man
+<lb n="9" xml:id="bsb00000776_00123_9"/>die  kettinin in daz meri vram.
+<lb n="10" xml:id="bsb00000776_00123_10"/>si quâdin 'Obi du wollis sihen wunter,
+<lb n="11" xml:id="bsb00000776_00123_11"/>sô walz iemir in demo grunte'.
+<lb n="12" xml:id="bsb00000776_00123_12"/>duo sach her vure sich vlîzin
+<lb n="13" xml:id="bsb00000776_00123_13"/>manigin visc grôzin,
+<lb n="14" xml:id="bsb00000776_00123_14"/>half visc, half man.
+<lb n="15" xml:id="bsb00000776_00123_15"/>dad diuht un vili harte vreissam.
+<lb n="16" xml:id="bsb00000776_00123_16"/>Duo gedâchti der listige man, XV
+<lb n="17" xml:id="bsb00000776_00123_17"/>wî her sich mohte generian.
+<lb n="18" xml:id="bsb00000776_00123_18"/>der wâg vuort in in demo grunte,
+<lb n="19" xml:id="bsb00000776_00123_19"/>durch das glas sach her manigiu wunter
+<lb n="20" xml:id="bsb00000776_00123_20"/>unz er mit einim bluote
+<lb n="21" xml:id="bsb00000776_00123_21"/>daz scarphe meri gruozte.
+<lb n="22" xml:id="bsb00000776_00123_22"/>alsi diu vluot des bluotis inpfant,
+<lb n="23" xml:id="bsb00000776_00123_23"/>si warf den hêirin aniz lant:
+<lb n="24" xml:id="bsb00000776_00123_24"/>sô quam her widir in sîn rîche.
+<lb n="25" xml:id="bsb00000776_00123_25"/>wol intfingin un die Criechen,
+<lb n="26" xml:id="bsb00000776_00123_26"/>manigis wunderis genîhte sich der selbe
+<lb n="27" xml:id="bsb00000776_00123_27"/>man.
+<lb n="28" xml:id="bsb00000776_00123_28"/>driu deil her der werilte zume gewan.
+<lb n="29" xml:id="bsb00000776_00123_29"/>Daz vierde dier ein ebir was: XVI
+<lb n="30" xml:id="bsb00000776_00123_30"/>die cuonin Rômêre meindi daz.
+<anchor xml:id="cb75"/><cb type="sequential" n="2" spanTo="#cb76"/><lb n="31" xml:id="bsb00000776_00123_31"/>iz haviti îsirne clâwin –
+<lb n="32" xml:id="bsb00000776_00123_32"/>daz ne condi nieman gevâhin –,
+<lb n="33" xml:id="bsb00000776_00123_33"/>îsirni ceine vreisam –
+<lb n="34" xml:id="bsb00000776_00123_34"/>wî soldiz iemir werdin zam?
+<lb n="35" xml:id="bsb00000776_00123_35"/>wole biceichinit uns daz waltsuîn,
+<lb n="36" xml:id="bsb00000776_00123_36"/>daz did rîche ci Rôme sal vrî sîn.
+<lb n="37" xml:id="bsb00000776_00123_37"/>der ebir cîn horn truog,
+<lb n="38" xml:id="bsb00000776_00123_38"/>mit ten her sîni vîanti nidirsluog.
+<lb n="39" xml:id="bsb00000776_00123_39"/>her was sô michil unti vorhtsam:
+<lb n="40" xml:id="bsb00000776_00123_40"/>ci Rôme wart diu werlt al gehôrsam.
+<lb n="41" xml:id="bsb00000776_00123_41"/>Cîn horn meintin cîn kuninge, XVII
+<lb n="42" xml:id="bsb00000776_00123_42"/>dî mit Rômêrin rittin ci sturme,
+<lb n="43" xml:id="bsb00000776_00123_43"/>daz eilfti horn wuos unz an den himil –
+<lb n="44" xml:id="bsb00000776_00123_44"/>die sterrin vuhtin imi widir;
+<lb n="45" xml:id="bsb00000776_00123_45"/>iz hât ougin unti munt –
+<lb n="46" xml:id="bsb00000776_00123_46"/>sulich ni wart uns ê kunt;
+<lb n="47" xml:id="bsb00000776_00123_47"/>manigiu wort iz widir gode sprach –
+<lb n="48" xml:id="bsb00000776_00123_48"/>daz her vili schiere gerach.
+<lb n="49" xml:id="bsb00000776_00123_49"/>daz biceichinit uns den Anticrist,
+<lb n="50" xml:id="bsb00000776_00123_50"/>der noch in dise. werlt kunftig ist,
+<lb n="51" xml:id="bsb00000776_00123_51"/>den got mit sînir gewelti
+<lb n="52" xml:id="bsb00000776_00123_52"/>cir hellin sal gesendin.
+<lb n="53" xml:id="bsb00000776_00123_53"/>der troum allir sô irgieng,
+<lb n="54" xml:id="bsb00000776_00123_54"/>son der engil vane himele gischiet.
+<lb n="55" xml:id="bsb00000776_00123_55"/>Rômêre scrivin cisamine XVIII
+<lb n="56" xml:id="bsb00000776_00123_56"/>in einir guldînen tavilen
+<lb n="57" xml:id="bsb00000776_00123_57"/>driuhunterit althêirrin,
+<lb n="58" xml:id="bsb00000776_00123_58"/>dî dir plêgin zuht unt êrin,
+<lb n="59" xml:id="bsb00000776_00123_59"/>die dagis unti nahtis riedin,
+<lb n="60" xml:id="bsb00000776_00123_60"/>wî si ir êrin bihieldin.
+<anchor xml:id="cb76"/><pb xml:id="bsb00000776_00124" n="121"/><cb type="sequential" n="1" spanTo="#cb77"/><lb n="1" xml:id="bsb00000776_00124_1"/>den volgedin die herzogin al,
+<lb n="2" xml:id="bsb00000776_00124_2"/>wanti si ni woldin kuning hân.
+<lb n="3" xml:id="bsb00000776_00124_3"/>duo santin si den edelin Cesarem,
+<lb n="4" xml:id="bsb00000776_00124_4"/>dannin noch hiude kuninge heizzint
+<lb n="5" xml:id="bsb00000776_00124_5"/>keisere.
+<lb n="6" xml:id="bsb00000776_00124_6"/>si gâvin imi manige scar in hant,
+<lb n="7" xml:id="bsb00000776_00124_7"/>si hiezin un vehtin wider Diutschiu lant.
+<lb n="8" xml:id="bsb00000776_00124_8"/>dâ aribeiti Cêsar, daz ist wâr,
+<lb n="9" xml:id="bsb00000776_00124_9"/>mêr dan cîn jâr,
+<lb n="10" xml:id="bsb00000776_00124_10"/>sô her die meinstreinge man
+<lb n="11" xml:id="bsb00000776_00124_11"/>niconde nie biduingan.
+<lb n="12" xml:id="bsb00000776_00124_12"/>ci jungist gewan hers al ci gedinge:
+<lb n="13" xml:id="bsb00000776_00124_13"/>daz soltin cin êrin bringen.
+<lb n="14" xml:id="bsb00000776_00124_14"/>Undir bergin ingegin Suâben XIX
+<lb n="15" xml:id="bsb00000776_00124_15"/>hîz her vanin ûf haben,
+<lb n="16" xml:id="bsb00000776_00124_16"/>deri vordirin wîlin mit heri
+<lb n="17" xml:id="bsb00000776_00124_17"/>dari cumin wârin ubir meri.
+<lb n="18" xml:id="bsb00000776_00124_18"/>mit mislîchemo volke
+<lb n="19" xml:id="bsb00000776_00124_19"/>si sluogen iri gecelte
+<lb n="20" xml:id="bsb00000776_00124_20"/>ane dem berge Suêvo:
+<lb n="21" xml:id="bsb00000776_00124_21"/>dannin wurdin si geheizin Suâbo.
+<anchor xml:id="cb77"/><cb type="sequential" n="2" spanTo="#cb78"/><lb n="22" xml:id="bsb00000776_00124_22"/>ein liuht, ci râdi vollin guot,
+<lb n="23" xml:id="bsb00000776_00124_23"/>redispêhe genuog,
+<lb n="24" xml:id="bsb00000776_00124_24"/>die sich dikke des vure nâmin,
+<lb n="25" xml:id="bsb00000776_00124_25"/>daz si guode rekkin wêrin,
+<lb n="26" xml:id="bsb00000776_00124_26"/>woli vertig unti wîchaft;
+<lb n="27" xml:id="bsb00000776_00124_27"/>doch bedwang Cêsar al iri craft.
+<lb n="28" xml:id="bsb00000776_00124_28"/>Duo sich Beirelant wider in virmaz, XX
+<lb n="29" xml:id="bsb00000776_00124_29"/>die mêrin Reginsburch her sâ bisaz.
+<lb n="30" xml:id="bsb00000776_00124_30"/>dâ vanter inne
+<lb n="31" xml:id="bsb00000776_00124_31"/>heim unti brunigen,
+<lb n="32" xml:id="bsb00000776_00124_32"/>manigin helit guodin,
+<lb n="33" xml:id="bsb00000776_00124_33"/>die dere burg huohdin.
+<lb n="34" xml:id="bsb00000776_00124_34"/>wiliche knehti dir wêrin,
+<lb n="35" xml:id="bsb00000776_00124_35"/>deist in heidnischin buochin mêri:
+<lb n="36" xml:id="bsb00000776_00124_36"/>dâ lisit man 'Noricus ensis',
+<lb n="37" xml:id="bsb00000776_00124_37"/>daz diudit 'ein suert Beierisch',
+<lb n="38" xml:id="bsb00000776_00124_38"/>wanti si woldin wizzen,
+<lb n="39" xml:id="bsb00000776_00124_39"/>daz ingeiniu baz nibizzen,
+<lb n="40" xml:id="bsb00000776_00124_40"/>diu man dikke durch den heim sluog.
+<lb n="41" xml:id="bsb00000776_00124_41"/>demo liute was ie diz ellen guot.
+<lb n="42" xml:id="bsb00000776_00124_42"/>dere geslebte dare quam wîlin êre
+<anchor xml:id="cb78"/><pb xml:id="bsb00000776_00125" n="122"/><cb type="sequential" n="1" spanTo="#cb79"/><lb n="1" xml:id="bsb00000776_00125_1"/>von Armenie der hêrin,
+<lb n="2" xml:id="bsb00000776_00125_2"/>dâ Nôê ûz der arkin gieng,
+<lb n="3" xml:id="bsb00000776_00125_3"/>dur diz olizuî von der tûvin intfieng.
+<lb n="4" xml:id="bsb00000776_00125_4"/>iri ceichin noch du archa hât
+<lb n="5" xml:id="bsb00000776_00125_5"/>ûf den bergin Ararât.
+<lb n="6" xml:id="bsb00000776_00125_6"/>man sagit, daz dâr in halvin noch sîn
+<lb n="7" xml:id="bsb00000776_00125_7"/>die dir Diutischin sprechin,
+<lb n="8" xml:id="bsb00000776_00125_8"/>ingegin India vili verro. –
+<lb n="9" xml:id="bsb00000776_00125_9"/>Peiere vuorin ie ciwîge gerno.
+<lb n="10" xml:id="bsb00000776_00125_10"/>den sigin, den Cêsar an un gewan,
+<lb n="11" xml:id="bsb00000776_00125_11"/>mit bluote muoster in geltan.
+<lb n="12" xml:id="bsb00000776_00125_12"/>Der Sahsin wankeliz muot XXI
+<lb n="13" xml:id="bsb00000776_00125_13"/>dedimo leidis genuog:
+<lb n="14" xml:id="bsb00000776_00125_14"/>sor si wând al ubirwundini,
+<lb n="15" xml:id="bsb00000776_00125_15"/>sô wârin simi aver widiri.
+<lb n="16" xml:id="bsb00000776_00125_16"/>die lisit man daz si wîlin wêrin al
+<lb n="17" xml:id="bsb00000776_00125_17"/>des wunterlîchin Alexandris man,
+<lb n="18" xml:id="bsb00000776_00125_18"/>der die werlt in jârin zuelevin
+<lb n="19" xml:id="bsb00000776_00125_19"/>irvuor unz an did einti.
+<lb n="20" xml:id="bsb00000776_00125_20"/>duo her ci Babilonie sîn einti genam,
+<anchor xml:id="cb79"/><cb type="sequential" n="2" spanTo="#cb80"/><lb n="21" xml:id="bsb00000776_00125_21"/>duo cideiltin diz rîchi viere sîni man,
+<lb n="22" xml:id="bsb00000776_00125_22"/>dî dir al duo woltin kuninge sîn.
+<lb n="23" xml:id="bsb00000776_00125_23"/>dandere vuorin irri
+<lb n="24" xml:id="bsb00000776_00125_24"/>unz ir ein deil mit scifmenigin
+<lb n="25" xml:id="bsb00000776_00125_25"/>quâmin nidir cir Eilbin ,
+<lb n="26" xml:id="bsb00000776_00125_26"/>dâ die Duringe duo sâzin,
+<lb n="27" xml:id="bsb00000776_00125_27"/>die sich wider un vermâzin.
+<lb n="28" xml:id="bsb00000776_00125_28"/>ein Duringin duo dir siddi was,
+<lb n="29" xml:id="bsb00000776_00125_29"/>daz si mihhiliu mezzir hiezin sahs,
+<lb n="30" xml:id="bsb00000776_00125_30"/>der di rekkin manigiz druogin,
+<lb n="31" xml:id="bsb00000776_00125_31"/>damidi si die Duringe sluogin
+<lb n="32" xml:id="bsb00000776_00125_32"/>mit untrûwin ceiner sprâchin,
+<lb n="33" xml:id="bsb00000776_00125_33"/>die ci vridin si gelobit hâtin.
+<lb n="34" xml:id="bsb00000776_00125_34"/>von den mezzerin alsô wahsin
+<lb n="35" xml:id="bsb00000776_00125_35"/>wurdin si geheizzin Sahsin. –
+<lb n="36" xml:id="bsb00000776_00125_36"/>svie si doch ire ding ane viengen,
+<lb n="37" xml:id="bsb00000776_00125_37"/>si muostin Rômêrin alle dienen.
+<lb n="38" xml:id="bsb00000776_00125_38"/>Cêsar bigonde nâhin XXII
+<lb n="39" xml:id="bsb00000776_00125_39"/>zu den sînin altin mâgin,
+<lb n="40" xml:id="bsb00000776_00125_40"/>cen Franken din. edilin.
+<anchor xml:id="cb80"/><pb xml:id="bsb00000776_00126" n="123"/><cb type="sequential" n="1" spanTo="#cb81"/><lb n="1" xml:id="bsb00000776_00126_1"/>iri beidere vordirin
+<lb n="2" xml:id="bsb00000776_00126_2"/>quâmin von Troie der altin,
+<lb n="3" xml:id="bsb00000776_00126_3"/>duo die Criechin die burch civaltin,
+<lb n="4" xml:id="bsb00000776_00126_4"/>duo ubir diu heri beidiu
+<lb n="5" xml:id="bsb00000776_00126_5"/>got sîn urteil sô irsceinte,
+<lb n="6" xml:id="bsb00000776_00126_6"/>daz die Troiêri sum intrunnin,
+<lb n="7" xml:id="bsb00000776_00126_7"/>die Criechin ni gitorstin heim wendin.
+<lb n="8" xml:id="bsb00000776_00126_8"/>want in den cîn jârin,
+<lb n="9" xml:id="bsb00000776_00126_9"/>duo si ci dere sâzin wârin,
+<lb n="10" xml:id="bsb00000776_00126_10"/>so gehîetin heimi al iri wîf,
+<lb n="11" xml:id="bsb00000776_00126_11"/>si rieten an iri manni lîf.
+<lb n="12" xml:id="bsb00000776_00126_12"/>des ward irslagin der kuning Agamemno,
+<lb n="13" xml:id="bsb00000776_00126_13"/>irri vuorin danderon,
+<lb n="14" xml:id="bsb00000776_00126_14"/>unz Ulixis gesindin
+<lb n="15" xml:id="bsb00000776_00126_15"/>der Ciclops vrâz in Siciliin,
+<lb n="16" xml:id="bsb00000776_00126_16"/>daz Ulixes mit spiezin wol gerach,
+<lb n="17" xml:id="bsb00000776_00126_17"/>duor slâfinde imi sîn ouge ûz stach.
+<lb n="18" xml:id="bsb00000776_00126_18"/>daz gesiebte deri Ciclôpin
+<lb n="19" xml:id="bsb00000776_00126_19"/>was dannoch in Siciliin
+<lb n="20" xml:id="bsb00000776_00126_20"/>alsô hô sô tanpoume;
+<lb n="21" xml:id="bsb00000776_00126_21"/>an dem einde hatten si ein ouge.
+<lb n="22" xml:id="bsb00000776_00126_22"/>nû havit si got van uns virtribin hinnân
+<lb n="23" xml:id="bsb00000776_00126_23"/>in daz geweide hinehalf Indiâ.
+<anchor xml:id="cb81"/><cb type="sequential" n="2" spanTo="#cb82"/><lb n="24" xml:id="bsb00000776_00126_24"/>Troiêri vuorin in der werilte XXIII
+<lb n="25" xml:id="bsb00000776_00126_25"/>widin irri after sedile,
+<lb n="26" xml:id="bsb00000776_00126_26"/>unz Elenus, ein virherit man,
+<lb n="27" xml:id="bsb00000776_00126_27"/>des kuonin Ektoris witiwin genam,
+<lb n="28" xml:id="bsb00000776_00126_28"/>mit ter her dâ ci Criechin
+<lb n="29" xml:id="bsb00000776_00126_29"/>bisaz sînir vîanti rîchi.
+<lb n="30" xml:id="bsb00000776_00126_30"/>si worhtin dâr eini Troie,
+<lb n="31" xml:id="bsb00000776_00126_31"/>dî man lange sint mohte scouwen.
+<lb n="32" xml:id="bsb00000776_00126_32"/>Antênor was gevarn dannin êr,
+<lb n="33" xml:id="bsb00000776_00126_33"/>duor irchôs daz Troie solti cigên.
+<lb n="34" xml:id="bsb00000776_00126_34"/>der stifte uns die burg Pitavium
+<lb n="35" xml:id="bsb00000776_00126_35"/>bî demi wazzere Timavio.
+<lb n="36" xml:id="bsb00000776_00126_36"/>Enêas irvaht im Walilant,
+<lb n="37" xml:id="bsb00000776_00126_37"/>dar die sû mit trîzig jungin vant.
+<lb n="38" xml:id="bsb00000776_00126_38"/>dâ worhten si die burg Albâne;
+<lb n="39" xml:id="bsb00000776_00126_39"/>dannin wart sint gestiftit Rôme.
+<lb n="40" xml:id="bsb00000776_00126_40"/>Franko gesaz mit den sînin
+<lb n="41" xml:id="bsb00000776_00126_41"/>vili verre nidir bî Rîni.
+<lb n="42" xml:id="bsb00000776_00126_42"/>da worhtin si duo mit vroudin
+<lb n="43" xml:id="bsb00000776_00126_43"/>eini luzzele Troii.
+<lb n="44" xml:id="bsb00000776_00126_44"/>den bach hîzin si Sante
+<lb n="45" xml:id="bsb00000776_00126_45"/>nâ demi wazzere in iri lante;
+<lb n="46" xml:id="bsb00000776_00126_46"/>den Rîn havitin si vure diz meri.
+<anchor xml:id="cb82"/><pb xml:id="bsb00000776_00127" n="124"/><cb type="sequential" n="1" spanTo="#cb83"/><lb n="1" xml:id="bsb00000776_00127_1"/>dannin wuohsin sint Vreinkischiu heri.
+<lb n="2" xml:id="bsb00000776_00127_2"/>diu wurden Cesari al unterdân;
+<lb n="3" xml:id="bsb00000776_00127_3"/>si wann imi îdoch sorchsam.
+<lb n="4" xml:id="bsb00000776_00127_4"/>Duo Cêsar duo widere ci XXIV
+<lb n="5" xml:id="bsb00000776_00127_5"/>Rôme gesan,
+<lb n="6" xml:id="bsb00000776_00127_6"/>si ni woltin sîn niht intfâhan.
+<lb n="7" xml:id="bsb00000776_00127_7"/>si quâdin, daz her durch sînin geil
+<lb n="8" xml:id="bsb00000776_00127_8"/>haviti virlorin des heris ein michil deil,
+<lb n="9" xml:id="bsb00000776_00127_9"/>daz her in vremidimo lante
+<lb n="10" xml:id="bsb00000776_00127_10"/>ân urlof sô lange havite.
+<lb n="11" xml:id="bsb00000776_00127_11"/>mit zorne her duo widir wante
+<lb n="12" xml:id="bsb00000776_00127_12"/>ci Diutischimo lante,
+<lb n="13" xml:id="bsb00000776_00127_13"/>dâ her hât irkunnôt
+<lb n="14" xml:id="bsb00000776_00127_14"/>manigin helit vili guot.
+<lb n="15" xml:id="bsb00000776_00127_15"/>her sante zu den hêirrin,
+<lb n="16" xml:id="bsb00000776_00127_16"/>die dâr in rîche wârin;
+<lb n="17" xml:id="bsb00000776_00127_17"/>her clagitin allin sîni nôht,
+<lb n="18" xml:id="bsb00000776_00127_18"/>her bôt un golt vili rôt;
+<lb n="19" xml:id="bsb00000776_00127_19"/>her quad, daz her si wolti gern irgezzin,
+<lb n="20" xml:id="bsb00000776_00127_20"/>obir un ieht ci leide gedân hetti.
+<lb n="21" xml:id="bsb00000776_00127_21"/>Duo si virnâmin sînin wille , XXV
+<lb n="22" xml:id="bsb00000776_00127_22"/>si saminôtin sich dar alle,
+<lb n="23" xml:id="bsb00000776_00127_23"/>ûzir Gallia unti Germânia
+<lb n="24" xml:id="bsb00000776_00127_24"/>quâmin imi scarin maniga
+<lb n="25" xml:id="bsb00000776_00127_25"/>mit schînintin helmen,
+<lb n="26" xml:id="bsb00000776_00127_26"/>mit vestin halspergen.
+<lb n="27" xml:id="bsb00000776_00127_27"/>si brâhtin manigin scônin schiltrant,
+<anchor xml:id="cb83"/><cb type="sequential" n="2" spanTo="#cb84"/><lb n="28" xml:id="bsb00000776_00127_28"/>als ein vluot vuorin sin daz lant.
+<lb n="29" xml:id="bsb00000776_00127_29"/>duo ci Rôme her bigondi nâhan,
+<lb n="30" xml:id="bsb00000776_00127_30"/>duo irvorthim dâr manig man,
+<lb n="31" xml:id="bsb00000776_00127_31"/>wanti si sâgin schînin
+<lb n="32" xml:id="bsb00000776_00127_32"/>sô breite scarin sîni.
+<lb n="33" xml:id="bsb00000776_00127_33"/>vanin ingegin ni burthin,
+<lb n="34" xml:id="bsb00000776_00127_34"/>des lîbis si alle vorhtin.
+<lb n="35" xml:id="bsb00000776_00127_35"/>Cato unti Pompêjus
+<lb n="36" xml:id="bsb00000776_00127_36"/>rûmiti Rômischiu hûs;
+<lb n="37" xml:id="bsb00000776_00127_37"/>al der senatus,
+<lb n="38" xml:id="bsb00000776_00127_38"/>mit sorgen vluhin si dirûz.
+<lb n="39" xml:id="bsb00000776_00127_39"/>her vuor un nâh jaginta,
+<lb n="40" xml:id="bsb00000776_00127_40"/>wîtini slahinta
+<lb n="41" xml:id="bsb00000776_00127_41"/>unz in Egyptilant:
+<lb n="42" xml:id="bsb00000776_00127_42"/>sô michil ward der herebrant.
+<lb n="43" xml:id="bsb00000776_00127_43"/>Wer mohte gecelin al die XXVI
+<lb n="44" xml:id="bsb00000776_00127_44"/>menige,
+<lb n="45" xml:id="bsb00000776_00127_45"/>die Cesari îltin ingegine
+<lb n="46" xml:id="bsb00000776_00127_46"/>van ôstrit allinthalbin,
+<lb n="47" xml:id="bsb00000776_00127_47"/>alsi der snê vellit uffin albin?
+<lb n="48" xml:id="bsb00000776_00127_48"/>mit scarin unti mit volkin,
+<lb n="49" xml:id="bsb00000776_00127_49"/>alsi der hagil verit van den wolkin?
+<lb n="50" xml:id="bsb00000776_00127_50"/>mit minnerigem herige
+<lb n="51" xml:id="bsb00000776_00127_51"/>genanter an die menige.
+<lb n="52" xml:id="bsb00000776_00127_52"/>duo ward diz hertisti volcwîg,
+<lb n="53" xml:id="bsb00000776_00127_53"/>alsô diz buoch quît,
+<lb n="54" xml:id="bsb00000776_00127_54"/>daz in disim merigarten
+<lb n="55" xml:id="bsb00000776_00127_55"/>ie gevrumit wurde.
+<anchor xml:id="cb84"/><pb xml:id="bsb00000776_00128" n="125"/><cb type="sequential" n="1" spanTo="#cb85"/><lb n="1" xml:id="bsb00000776_00128_1"/>Oy wî diu wîfini clungin XXVII
+<lb n="2" xml:id="bsb00000776_00128_2"/>dâ diu marih cisamine sprungin!
+<lb n="3" xml:id="bsb00000776_00128_3"/>herehorn duzzin,
+<lb n="4" xml:id="bsb00000776_00128_4"/>beche bluotis vluzzin,
+<lb n="5" xml:id="bsb00000776_00128_5"/>derde diruntini diuniti,
+<lb n="6" xml:id="bsb00000776_00128_6"/>diu helli ingegine gliumiti
+<lb n="7" xml:id="bsb00000776_00128_7"/>dâ di hêristin in der werilte
+<lb n="8" xml:id="bsb00000776_00128_8"/>suohtin sich mit suerten.
+<lb n="9" xml:id="bsb00000776_00128_9"/>duo gelach dir manig breitiu scari,
+<lb n="10" xml:id="bsb00000776_00128_10"/>mit bluote birunnin gari.
+<lb n="11" xml:id="bsb00000776_00128_11"/>dâ mohte man sîn douwen,
+<lb n="12" xml:id="bsb00000776_00128_12"/>durch helme virhouwen,
+<lb n="13" xml:id="bsb00000776_00128_13"/>des rîchin Pompêjis man.
+<lb n="14" xml:id="bsb00000776_00128_14"/>Cêsar dâ den sige nam.
+<lb n="15" xml:id="bsb00000776_00128_15"/>Duo vrouwite sich der junge man, XXVIII
+<lb n="16" xml:id="bsb00000776_00128_16"/>daz her diu rîche al gewan.
+<lb n="17" xml:id="bsb00000776_00128_17"/>her vuor duo mit gewelte
+<lb n="18" xml:id="bsb00000776_00128_18"/>ci Rôme, suî so her wolte.
+<lb n="19" xml:id="bsb00000776_00128_19"/>Rômêre, duo sin infiengin,
+<anchor xml:id="cb85"/><cb type="sequential" n="2" spanTo="#cb86"/><lb n="20" xml:id="bsb00000776_00128_20"/>einin nûwin sidde aneviengin:
+<lb n="21" xml:id="bsb00000776_00128_21"/>si begondin igîzin den hêirrin –
+<lb n="22" xml:id="bsb00000776_00128_22"/>daz vundin simi cêrin,
+<lb n="23" xml:id="bsb00000776_00128_23"/>wanter eini duo habite allin gewalt,
+<lb n="24" xml:id="bsb00000776_00128_24"/>der ê gideilit was in manigvalt.
+<lb n="25" xml:id="bsb00000776_00128_25"/>den sidde hîz er duo cêrin
+<lb n="26" xml:id="bsb00000776_00128_26"/>Diutischiu liute lêrin.
+<lb n="27" xml:id="bsb00000776_00128_27"/>ci Rôme deddir ûf daz scazhûs,
+<lb n="28" xml:id="bsb00000776_00128_28"/>manig cieri nam her dan ûz.
+<lb n="29" xml:id="bsb00000776_00128_29"/>her gebite sînin holdin
+<lb n="30" xml:id="bsb00000776_00128_30"/>mit pellin joch mit goldi.
+<lb n="31" xml:id="bsb00000776_00128_31"/>sidir wârin Diutschi man
+<lb n="32" xml:id="bsb00000776_00128_32"/>ci Rôme lîf unti wertsam.
+<lb n="33" xml:id="bsb00000776_00128_33"/>Duo Cêsar sîn einti genam XXIX
+<lb n="34" xml:id="bsb00000776_00128_34"/>unte der sîn neve guot diu rîchi gewan,
+<lb n="35" xml:id="bsb00000776_00128_35"/>Augustus der mêre man –
+<lb n="36" xml:id="bsb00000776_00128_36"/>Owisburg ist nâ imi geheizan;
+<lb n="37" xml:id="bsb00000776_00128_37"/>die stifte ein sîn stîfsun,
+<lb n="38" xml:id="bsb00000776_00128_38"/>genant was er Drûsus –,
+<anchor xml:id="cb86"/><pb xml:id="bsb00000776_00129" n="126"/><cb type="sequential" n="1" spanTo="#cb87"/><lb n="1" xml:id="bsb00000776_00129_1"/>duo ward gesant hêirro Agrippa,
+<lb n="2" xml:id="bsb00000776_00129_2"/>daz her diu lant birihta,
+<lb n="3" xml:id="bsb00000776_00129_3"/>daz her eini burg worhte
+<lb n="4" xml:id="bsb00000776_00129_4"/>ci diu, daz in dad liuht vorhte.
+<lb n="5" xml:id="bsb00000776_00129_5"/>die burg hîz her Colônia –
+<lb n="6" xml:id="bsb00000776_00129_6"/>dâ wârin sint hêrrin maniga;
+<lb n="7" xml:id="bsb00000776_00129_7"/>avir nâ selb demo namin sînin
+<lb n="8" xml:id="bsb00000776_00129_8"/>ist si geheizin Agrippîna.
+<lb n="9" xml:id="bsb00000776_00129_9"/>Ci dere burg vili dikki quâmin XXX
+<lb n="10" xml:id="bsb00000776_00129_10"/>di waltpodin vane Rômi,
+<lb n="11" xml:id="bsb00000776_00129_11"/>dî 0dir oug êr dâr in lantin
+<lb n="12" xml:id="bsb00000776_00129_12"/>veste burge havitin:
+<lb n="13" xml:id="bsb00000776_00129_13"/>Wurmiz unti Spîri,
+<lb n="14" xml:id="bsb00000776_00129_14"/>die si worhtin al die wîli
+<lb n="15" xml:id="bsb00000776_00129_15"/>duo Cêsar dâr in lante was
+<lb n="16" xml:id="bsb00000776_00129_16"/>unt er die Vrankin untersaz.
+<lb n="17" xml:id="bsb00000776_00129_17"/>duo worhter dâ bî Rine
+<lb n="18" xml:id="bsb00000776_00129_18"/>sedilhove sîne.
+<lb n="19" xml:id="bsb00000776_00129_19"/>Meginza was duo ein kastei,
+<lb n="20" xml:id="bsb00000776_00129_20"/>iz gemêrhte manig helit snel.
+<lb n="21" xml:id="bsb00000776_00129_21"/>(da ist nû dere kuninge wîchtuom,
+<lb n="22" xml:id="bsb00000776_00129_22"/>dis pâbis senitstuol.)
+<lb n="23" xml:id="bsb00000776_00129_23"/>Mezze stifte ein Cesaris man,
+<lb n="24" xml:id="bsb00000776_00129_24"/>Mezius geheizan.
+<lb n="25" xml:id="bsb00000776_00129_25"/>Triere was ein burg alt –
+<lb n="26" xml:id="bsb00000776_00129_26"/>si cierti Rômêre gewalt –,
+<lb n="27" xml:id="bsb00000776_00129_27"/>dannin man unter dir erdin
+<lb n="28" xml:id="bsb00000776_00129_28"/>den wîn santi verri
+<lb n="29" xml:id="bsb00000776_00129_29"/>mit steinînin rinnin,
+<lb n="30" xml:id="bsb00000776_00129_30"/>den hêrrin al ci minnin,
+<lb n="31" xml:id="bsb00000776_00129_31"/>die ci Kolne wârin sedilhaft.
+<lb n="32" xml:id="bsb00000776_00129_32"/>vili michil was diu iri craft.
+<anchor xml:id="cb87"/><cb type="sequential" n="2" spanTo="#cb88"/><lb n="33" xml:id="bsb00000776_00129_33"/>In des Augusti cîtin gescach, XXXI
+<lb n="34" xml:id="bsb00000776_00129_34"/>daz got vane himele nider gesach.
+<lb n="35" xml:id="bsb00000776_00129_35"/>duo ward giborin ein kuning,
+<lb n="36" xml:id="bsb00000776_00129_36"/>demi dienit himilschi dugint:
+<lb n="37" xml:id="bsb00000776_00129_37"/>Jesus Christus, godis sun,
+<lb n="38" xml:id="bsb00000776_00129_38"/>von der megide sente Mâriun.
+<lb n="39" xml:id="bsb00000776_00129_39"/>des erschinin sân ci Rôme
+<lb n="40" xml:id="bsb00000776_00129_40"/>godis ceichin vrône:
+<lb n="41" xml:id="bsb00000776_00129_41"/>ûzir erdin diz lûter olei spranc –
+<lb n="42" xml:id="bsb00000776_00129_42"/>scône ranniz ubir lant –;
+<lb n="43" xml:id="bsb00000776_00129_43"/>umbe die sunnin ein creiz stuont?
+<lb n="44" xml:id="bsb00000776_00129_44"/>alsô rôht sô viur unti bluot.
+<lb n="45" xml:id="bsb00000776_00129_45"/>wanti duo bigondi nâhin
+<lb n="46" xml:id="bsb00000776_00129_46"/>dannin uns allin quam diu genâdi,
+<lb n="47" xml:id="bsb00000776_00129_47"/>ein niuwe kunincrîchi.
+<lb n="48" xml:id="bsb00000776_00129_48"/>demi muoz diu werilt al intwîchin.
+<lb n="49" xml:id="bsb00000776_00129_49"/>Senti Pêtir, dir boto vrône, XXXII
+<lb n="50" xml:id="bsb00000776_00129_50"/>den diuvil ubirwantir ci Rôme.
+<lb n="51" xml:id="bsb00000776_00129_51"/>her rihti dâ ûf dis heiligin crûcis ceichin,
+<lb n="52" xml:id="bsb00000776_00129_52"/>her screif die burg ci Cristis eigine.
+<lb n="53" xml:id="bsb00000776_00129_53"/>dannin santir drî heilige man,
+<lb n="54" xml:id="bsb00000776_00129_54"/>ci predigenne den Vrankan:
+<lb n="55" xml:id="bsb00000776_00129_55"/>Eucharium unti Valêrium,
+<lb n="56" xml:id="bsb00000776_00129_56"/>der dritti geinti uffin leige.
+<lb n="57" xml:id="bsb00000776_00129_57"/>dâ kêrdin di zvêne widere,
+<lb n="58" xml:id="bsb00000776_00129_58"/>senti Pêtri daz ci clagene.
+<lb n="59" xml:id="bsb00000776_00129_59"/>dari santer duo sînin staf,
+<lb n="60" xml:id="bsb00000776_00129_60"/>den legitin si uffe Maternis graf.
+<lb n="61" xml:id="bsb00000776_00129_61"/>si hîzin un wider von dem tôd erstân,
+<lb n="62" xml:id="bsb00000776_00129_62"/>in senti Pêtiris gibote mit un ci Vrankin
+<lb n="63" xml:id="bsb00000776_00129_63"/>gân.
+<lb n="64" xml:id="bsb00000776_00129_64"/>duo her sînis meistens namin virnam,
+<anchor xml:id="cb88"/><pb xml:id="bsb00000776_00130" n="127"/><cb type="sequential" n="1" spanTo="#cb89"/><lb n="1" xml:id="bsb00000776_00130_1"/>her ward un sân gihôrsam.
+<lb n="2" xml:id="bsb00000776_00130_2"/>duo intlôich sich diu molta,
+<lb n="3" xml:id="bsb00000776_00130_3"/>als iz got wolta.
+<lb n="4" xml:id="bsb00000776_00130_4"/>her vieng sich ci demi grasi,
+<lb n="5" xml:id="bsb00000776_00130_5"/>schiere îlter ûz demo gravi,
+<lb n="6" xml:id="bsb00000776_00130_6"/>dâr vîrcig dagi hatti gilegin.
+<lb n="7" xml:id="bsb00000776_00130_7"/>duo muoster vîrcig jâr lebin.
+<lb n="8" xml:id="bsb00000776_00130_8"/>cêrist si duo ci Trierin lêrtin,
+<lb n="9" xml:id="bsb00000776_00130_9"/>darnâ si Kolni bikêrtin,
+<lb n="10" xml:id="bsb00000776_00130_10"/>dâ bischof ward derselbe man,
+<lb n="11" xml:id="bsb00000776_00130_11"/>der vane demi tôdi was irstantan.
+<lb n="12" xml:id="bsb00000776_00130_12"/>Duo gewunnin si dâ ci Vrankan XXXIII
+<lb n="13" xml:id="bsb00000776_00130_13"/>ci godis dienisti vili manigin man
+<lb n="14" xml:id="bsb00000776_00130_14"/>mit beizzirimo wîge,
+<lb n="15" xml:id="bsb00000776_00130_15"/>dan si Cêsar gewunne wîlen.
+<lb n="16" xml:id="bsb00000776_00130_16"/>si lêrtin si widir sunde vehtin,
+<lb n="17" xml:id="bsb00000776_00130_17"/>daz si ci godi wêrin guode knehti.
+<lb n="18" xml:id="bsb00000776_00130_18"/>dere lêre sint wole plâgin
+<lb n="19" xml:id="bsb00000776_00130_19"/>dî bischove nâh in wârin,
+<lb n="20" xml:id="bsb00000776_00130_20"/>drî unti drîzig gezalt
+<lb n="21" xml:id="bsb00000776_00130_21"/>unz ane seint Annin gewalt.
+<lb n="22" xml:id="bsb00000776_00130_22"/>dere sint nû heilig sibine.
+<lb n="23" xml:id="bsb00000776_00130_23"/>die schînint uns von himile,
+<lb n="24" xml:id="bsb00000776_00130_24"/>als iz sibin sterrin nahtis duont.
+<lb n="25" xml:id="bsb00000776_00130_25"/>seint Annin lieht is hêr unti guot.
+<lb n="26" xml:id="bsb00000776_00130_26"/>untir dandere brâhter sînin schîm
+<lb n="27" xml:id="bsb00000776_00130_27"/>alsi der jachant in diz guldini vingerlîn.
+<lb n="28" xml:id="bsb00000776_00130_28"/>Den vili tiurlîchin man XXXIV
+<lb n="29" xml:id="bsb00000776_00130_29"/>muge wir nû ci bîspili hân,
+<lb n="30" xml:id="bsb00000776_00130_30"/>den als ein spiegil anesehin
+<anchor xml:id="cb89"/><cb type="sequential" n="2" spanTo="#cb90"/><lb n="31" xml:id="bsb00000776_00130_31"/>die tugint unti wârheiti wollen plegin. –
+<lb n="32" xml:id="bsb00000776_00130_32"/>duo ,der dritte keiser Heinrîch
+<lb n="33" xml:id="bsb00000776_00130_33"/>demi seibin hêirrin bival sich
+<lb n="34" xml:id="bsb00000776_00130_34"/>unti der godis willo was irgangin,
+<lb n="35" xml:id="bsb00000776_00130_35"/>daz her ci Kolne ward mit lobe intfangin,
+<lb n="36" xml:id="bsb00000776_00130_36"/>duo gieng her mit liutcrefte,
+<lb n="37" xml:id="bsb00000776_00130_37"/>alsi diu sunni duoht in den liuften?
+<lb n="38" xml:id="bsb00000776_00130_38"/>diu inzuschin erden unti himili gêt,
+<lb n="39" xml:id="bsb00000776_00130_39"/>beiden halbin schînet.
+<lb n="40" xml:id="bsb00000776_00130_40"/>alsô gieng der bischof Anno
+<lb n="41" xml:id="bsb00000776_00130_41"/>vure gode unti vure mannon.
+<lb n="42" xml:id="bsb00000776_00130_42"/>in der phelinzin sîn tugint sulich was,
+<lb n="43" xml:id="bsb00000776_00130_43"/>daz un daz rîch al untersaz;
+<lb n="44" xml:id="bsb00000776_00130_44"/>ci godis diensti in den gebêrin,
+<lb n="45" xml:id="bsb00000776_00130_45"/>samir ein engil wêri.
+<lb n="46" xml:id="bsb00000776_00130_46"/>sîn êre gihîlter wole beidinthalb:
+<lb n="47" xml:id="bsb00000776_00130_47"/>dannin ward her ci rehtimi hêrtuomi
+<lb n="48" xml:id="bsb00000776_00130_48"/>gezalt.
+<lb n="49" xml:id="bsb00000776_00130_49"/>Sîn guote bikanti vil unmanig
+<lb n="50" xml:id="bsb00000776_00130_50"/>man. XXXV
+<lb n="51" xml:id="bsb00000776_00130_51"/>nu virnemit, wî sîni siddi wârin gedân.
+<lb n="52" xml:id="bsb00000776_00130_52"/>offen was her sînir worte,
+<lb n="53" xml:id="bsb00000776_00130_53"/>vure dir wârheite niemannin her ni
+<lb n="54" xml:id="bsb00000776_00130_54"/>vorte.
+<lb n="55" xml:id="bsb00000776_00130_55"/>als ein lewo saz her vur din viuristin,
+<lb n="56" xml:id="bsb00000776_00130_56"/>als ein lamb ginc her untir diurftigin.
+<lb n="57" xml:id="bsb00000776_00130_57"/>den ubilin was her sceirphe,
+<lb n="58" xml:id="bsb00000776_00130_58"/>den guotin was her einste.
+<lb n="59" xml:id="bsb00000776_00130_59"/>weisin unti widewin,
+<lb n="60" xml:id="bsb00000776_00130_60"/>die lobitin wole sînin siddi.
+<lb n="61" xml:id="bsb00000776_00130_61"/>sîni predigi unti sîn ablâz
+<anchor xml:id="cb90"/><pb xml:id="bsb00000776_00131" n="128"/><cb type="sequential" n="1" spanTo="#cb91"/><lb n="1" xml:id="bsb00000776_00131_1"/>nimohti nichein bischof duon baz,
+<lb n="2" xml:id="bsb00000776_00131_2"/>also gotlîche,
+<lb n="3" xml:id="bsb00000776_00131_3"/>dad iz mit rehte solte lîchen
+<lb n="4" xml:id="bsb00000776_00131_4"/>allir irdischir diet.
+<lb n="5" xml:id="bsb00000776_00131_5"/>gode was her vili liep.
+<lb n="6" xml:id="bsb00000776_00131_6"/>sêliclîche stuont Kolnischiu werlt,
+<lb n="7" xml:id="bsb00000776_00131_7"/>duo si sulichis bischovis wârin werbt.
+<lb n="8" xml:id="bsb00000776_00131_8"/>Sô diz liuht nahtis ward slâfin al, XXXVI
+<lb n="9" xml:id="bsb00000776_00131_9"/>sô stuont imi ûf der vili guote man;
+<lb n="10" xml:id="bsb00000776_00131_10"/>mit lûterer sînir venige
+<lb n="11" xml:id="bsb00000776_00131_11"/>suohter munistere manige.
+<lb n="12" xml:id="bsb00000776_00131_12"/>sîn oblei her mit imi druog:
+<lb n="13" xml:id="bsb00000776_00131_13"/>dir armin vant her genuog,
+<lb n="14" xml:id="bsb00000776_00131_14"/>die dir selide niht hâtin
+<lb n="15" xml:id="bsb00000776_00131_15"/>unt imi dâ ware dâdin.
+<lb n="16" xml:id="bsb00000776_00131_16"/>dâ diz armi wîf mit demi kindi lag,
+<lb n="17" xml:id="bsb00000776_00131_17"/>der dir nieman ni plag,
+<lb n="18" xml:id="bsb00000776_00131_18"/>dari gienc der bischof vrôno;
+<lb n="19" xml:id="bsb00000776_00131_19"/>her gebettidi iri selbe scôno,
+<lb n="20" xml:id="bsb00000776_00131_20"/>sô her mit rehte mohte heizin
+<lb n="21" xml:id="bsb00000776_00131_21"/>vatir allir weisin:
+<lb n="22" xml:id="bsb00000776_00131_22"/>sô harte was er in genêdig.
+<lb n="23" xml:id="bsb00000776_00131_23"/>nû havitis imi got gelônit.
+<lb n="24" xml:id="bsb00000776_00131_24"/>Vili sêliclîche diz rîche alliz XXXVII
+<lb n="25" xml:id="bsb00000776_00131_25"/>stuont,
+<lb n="26" xml:id="bsb00000776_00131_26"/>duo dis girihtis plag der hêirre guot,
+<lb n="27" xml:id="bsb00000776_00131_27"/>duo her zô ci demi rîchi
+<lb n="28" xml:id="bsb00000776_00131_28"/>den jungen Heinrîchi.
+<lb n="29" xml:id="bsb00000776_00131_29"/>wilich rihtêre her wêre,
+<anchor xml:id="cb91"/><cb type="sequential" n="2" spanTo="#cb92"/><lb n="30" xml:id="bsb00000776_00131_30"/>daz quam wîtini mêre.
+<lb n="31" xml:id="bsb00000776_00131_31"/>van Criechin unt Engelantin
+<lb n="32" xml:id="bsb00000776_00131_32"/>die kuninge imi gebi santin;
+<lb n="33" xml:id="bsb00000776_00131_33"/>sô dedde man von Denemarkin,
+<lb n="34" xml:id="bsb00000776_00131_34"/>von Vlanterin unti Riuzinlanti.
+<lb n="35" xml:id="bsb00000776_00131_35"/>manig eigin her ci Kolni gewan.
+<lb n="36" xml:id="bsb00000776_00131_36"/>diu munister cierter ubiral.
+<lb n="37" xml:id="bsb00000776_00131_37"/>ci demi tiurin gotis lobe stift er
+<lb n="38" xml:id="bsb00000776_00131_38"/>selbo vier munister.
+<lb n="39" xml:id="bsb00000776_00131_39"/>diz vunfti ist Sigeberg, sîn vili liebiu
+<lb n="40" xml:id="bsb00000776_00131_40"/>stat;
+<lb n="41" xml:id="bsb00000776_00131_41"/>dar uffe steit nî sîn grap.
+<lb n="42" xml:id="bsb00000776_00131_42"/>Ni avir diu michil êre XXXVIII
+<lb n="43" xml:id="bsb00000776_00131_43"/>iewiht wurre sînir sêlin,
+<lb n="44" xml:id="bsb00000776_00131_44"/>sô dede imi got, alsô dir goltsmid duot.
+<lb n="45" xml:id="bsb00000776_00131_45"/>sor wirkin willit eine nuschin guot,
+<lb n="46" xml:id="bsb00000776_00131_46"/>diz golt siudit her in eimi viure,
+<lb n="47" xml:id="bsb00000776_00131_47"/>mit wêhim werki duot her si tiure,
+<lb n="48" xml:id="bsb00000776_00131_48"/>mit wierin alsô cleinin.
+<lb n="49" xml:id="bsb00000776_00131_49"/>wole slîft her die goltsteine,
+<lb n="50" xml:id="bsb00000776_00131_50"/>mit manigir slahti gigerwa
+<lb n="51" xml:id="bsb00000776_00131_51"/>gewinnit er in die variwa.
+<lb n="52" xml:id="bsb00000776_00131_52"/>alsô sleif got seint Annin
+<lb n="53" xml:id="bsb00000776_00131_53"/>mit arbeidin manigin.
+<lb n="54" xml:id="bsb00000776_00131_54"/>Dikki in anevuhtin di lant- XXXIX
+<lb n="55" xml:id="bsb00000776_00131_55"/>hêirrin:
+<lb n="56" xml:id="bsb00000776_00131_56"/>ci jungis brâht iz got al ci sînin êrin.
+<lb n="57" xml:id="bsb00000776_00131_57"/>vili dikki un anerietin
+<lb n="58" xml:id="bsb00000776_00131_58"/>dî une soltin bihuotin.
+<anchor xml:id="cb92"/><pb xml:id="bsb00000776_00132" n="129"/><cb type="sequential" n="1" spanTo="#cb93"/><lb n="1" xml:id="bsb00000776_00132_1"/>wî dikki une dî virmanitin,
+<lb n="2" xml:id="bsb00000776_00132_2"/>dî her ci êirin brâht haviti.
+<lb n="3" xml:id="bsb00000776_00132_3"/>ci jungis niwart daz niht virmidin,
+<lb n="4" xml:id="bsb00000776_00132_4"/>her niwurde mit gewêfinin ûze dir burg
+<lb n="5" xml:id="bsb00000776_00132_5"/>virtribin,
+<lb n="6" xml:id="bsb00000776_00132_6"/>als Absalôn wîlin
+<lb n="7" xml:id="bsb00000776_00132_7"/>virtreib vater sînin,
+<lb n="8" xml:id="bsb00000776_00132_8"/>den vili guotin Dâvîd.
+<lb n="9" xml:id="bsb00000776_00132_9"/>disiu zuei dinc, harti si wârin gelîch.
+<lb n="10" xml:id="bsb00000776_00132_10"/>leidis unte arbeide genuog
+<lb n="11" xml:id="bsb00000776_00132_11"/>genîhte sich der hêirro guot
+<lb n="12" xml:id="bsb00000776_00132_12"/>al nâh dis heiligin Cristis bilide.
+<lb n="13" xml:id="bsb00000776_00132_13"/>duo suont iz got van himile.
+<lb n="14" xml:id="bsb00000776_00132_14"/>Dar nâh ving sich ane der ubile XL
+<lb n="15" xml:id="bsb00000776_00132_15"/>strît,
+<lb n="16" xml:id="bsb00000776_00132_16"/>des manig man virlôs den lîp,
+<lb n="17" xml:id="bsb00000776_00132_17"/>duo demi vierden Heinriche
+<lb n="18" xml:id="bsb00000776_00132_18"/>virworrin wart diz riche.
+<lb n="19" xml:id="bsb00000776_00132_19"/>morht, roub unti brant
+<lb n="20" xml:id="bsb00000776_00132_20"/>civuortin kirichin unti laut,
+<lb n="21" xml:id="bsb00000776_00132_21"/>von Tenemarc unz in Apuliam,
+<lb n="22" xml:id="bsb00000776_00132_22"/>van Kerlingin unz an Ungiran.
+<lb n="23" xml:id="bsb00000776_00132_23"/>den niman nimohte widirstên,
+<lb n="24" xml:id="bsb00000776_00132_24"/>obi si woltin mit trûwin unsamit gên,
+<lb n="25" xml:id="bsb00000776_00132_25"/>die stiftin heriverte grôze
+<lb n="26" xml:id="bsb00000776_00132_26"/>wider nevin unti hûsgenôze.
+<lb n="27" xml:id="bsb00000776_00132_27"/>diz rîche alliz bikêrte sîn gewêtfine
+<lb n="28" xml:id="bsb00000776_00132_28"/>in sîn eigin inêdire.
+<lb n="29" xml:id="bsb00000776_00132_29"/>mit siginuftlîcher ceswe
+<lb n="30" xml:id="bsb00000776_00132_30"/>ubirwant iz sich selbe,
+<lb n="31" xml:id="bsb00000776_00132_31"/>daz di gidouftin lîchâmin
+<lb n="32" xml:id="bsb00000776_00132_32"/>umbigravin ciworfin lâgin
+<anchor xml:id="cb93"/><cb type="sequential" n="2" spanTo="#cb94"/><lb n="33" xml:id="bsb00000776_00132_33"/>ci âse den bellindin,
+<lb n="34" xml:id="bsb00000776_00132_34"/>den grâwin walthundin.
+<lb n="35" xml:id="bsb00000776_00132_35"/>duo daz ni trûite bisuonin seint Anno,
+<lb n="36" xml:id="bsb00000776_00132_36"/>duo bidrôz une lebin langor.
+<lb n="37" xml:id="bsb00000776_00132_37"/>Her reiht ci Salivelt in Duringe lant: XLI
+<lb n="38" xml:id="bsb00000776_00132_38"/>da irbaritimi got die sîni hant.
+<lb n="39" xml:id="bsb00000776_00132_39"/>einis dagis ingegin nône
+<lb n="40" xml:id="bsb00000776_00132_40"/>dir himil indedde sich scône.
+<lb n="41" xml:id="bsb00000776_00132_41"/>dâ sach her inne
+<lb n="42" xml:id="bsb00000776_00132_42"/>die gotelîche wunne,
+<lb n="43" xml:id="bsb00000776_00132_43"/>dî her nidorsti kundin
+<lb n="44" xml:id="bsb00000776_00132_44"/>nicheinimo weriltlîchim manni.
+<lb n="45" xml:id="bsb00000776_00132_45"/>duo her uflfe sînim wagene lag
+<lb n="46" xml:id="bsb00000776_00132_46"/>unter sînis gebeddis plag,
+<lb n="47" xml:id="bsb00000776_00132_47"/>sulich mâncraft un umbevieng,
+<lb n="48" xml:id="bsb00000776_00132_48"/>daz man sescein ros ci demo wagine spien,
+<lb n="49" xml:id="bsb00000776_00132_49"/>duo dûht un, daz her sêge
+<lb n="50" xml:id="bsb00000776_00132_50"/>suad sô dir iemir kunftig wêre.
+<lb n="51" xml:id="bsb00000776_00132_51"/>vili harte untirquam sigis der heilige
+<lb n="52" xml:id="bsb00000776_00132_52"/>man:
+<lb n="53" xml:id="bsb00000776_00132_53"/>duo bigondir dannin sîchan.
+<lb n="54" xml:id="bsb00000776_00132_54"/>Einis  nahtis der hêirro duo gesach, XLII
+<lb n="55" xml:id="bsb00000776_00132_55"/>wî her quam in einin vili kuniglîchin sal
+<lb n="56" xml:id="bsb00000776_00132_56"/>ci wuntirlîchimi gesidele,
+<lb n="57" xml:id="bsb00000776_00132_57"/>so iz mit rehti solde sîn ci himele.
+<lb n="58" xml:id="bsb00000776_00132_58"/>duo dûht un in sînim troume,
+<lb n="59" xml:id="bsb00000776_00132_59"/>wîz allinthalvin wêre bihangin mit golde.
+<lb n="60" xml:id="bsb00000776_00132_60"/>di vili tiurin steini liuhtin dâr ubiral,
+<lb n="61" xml:id="bsb00000776_00132_61"/>sanc unti wunne was dir grôz unti manigvalt.
+<lb n="62" xml:id="bsb00000776_00132_62"/>duo sâzin dâr bischove manige,
+<lb n="63" xml:id="bsb00000776_00132_63"/>si schinin alsô die sterrin cisamine.
+<anchor xml:id="cb94"/><pb xml:id="bsb00000776_00133" n="130"/><cb type="sequential" n="1" spanTo="#cb95"/><lb n="1" xml:id="bsb00000776_00133_1"/>dir bischof Bardo  was ir ein,
+<lb n="2" xml:id="bsb00000776_00133_2"/>santi Heribret gleiz dâr als ein goltstein,
+<lb n="3" xml:id="bsb00000776_00133_3"/>andere hêirin genuog;
+<lb n="4" xml:id="bsb00000776_00133_4"/>un was ein lebin unt ein muoht.
+<lb n="5" xml:id="bsb00000776_00133_5"/>duo stuont dir ein stuol ledig unt êirlîch:
+<lb n="6" xml:id="bsb00000776_00133_6"/>seint Anno wart sigis vili vrôlîch.
+<lb n="7" xml:id="bsb00000776_00133_7"/>her was ci sînin êrin dar gesat:
+<lb n="8" xml:id="bsb00000776_00133_8"/>nu lobit hers got, dad iz also gescach.
+<lb n="9" xml:id="bsb00000776_00133_9"/>ô wî gerne her duo gesêze,
+<lb n="10" xml:id="bsb00000776_00133_10"/>den lîbin stuol wî gerner bigriffe!
+<lb n="11" xml:id="bsb00000776_00133_11"/>dad ni woltin geloubin di vurstin
+<lb n="12" xml:id="bsb00000776_00133_12"/>durch einin vlekken vure sînin brustin.
+<lb n="13" xml:id="bsb00000776_00133_13"/>Ûf stuont der hêirrin ein, hîz XLIII
+<lb n="14" xml:id="bsb00000776_00133_14"/>Arnolt;
+<lb n="15" xml:id="bsb00000776_00133_15"/>ci Wurmizi was her wîlin bischof.
+<lb n="16" xml:id="bsb00000776_00133_16"/>seint Annin nam her mit handin –
+<lb n="17" xml:id="bsb00000776_00133_17"/>sô quâmin si dar bihalvin.
+<lb n="18" xml:id="bsb00000776_00133_18"/>mit suozir redin her un duo bistuont.
+<lb n="19" xml:id="bsb00000776_00133_19"/>her sprach: 'Trôsti dig, hêirro, godis
+<lb n="20" xml:id="bsb00000776_00133_20"/>drût!
+<lb n="21" xml:id="bsb00000776_00133_21"/>disin vlekkin wîsi hine geduon!
+<lb n="22" xml:id="bsb00000776_00133_22"/>ci wâre, dir is gereit der êwige stuol.
+<lb n="23" xml:id="bsb00000776_00133_23"/>daz sal sîn in curtin stundin,
+<lb n="24" xml:id="bsb00000776_00133_24"/>sô bistu disin hêirrin willicumin.
+<lb n="25" xml:id="bsb00000776_00133_25"/>untir un nimaht tu nû blîvin:
+<lb n="26" xml:id="bsb00000776_00133_26"/>wî lûtir iz sal sîn, dad si willin lîdin!
+<lb n="27" xml:id="bsb00000776_00133_27"/>Crist havit tir disiu ding irougit.
+<lb n="28" xml:id="bsb00000776_00133_28"/>ô wî, hêirro, wad tir êrin unti genâdin
+<lb n="29" xml:id="bsb00000776_00133_29"/>volgit!'
+<anchor xml:id="cb95"/><cb type="sequential" n="2" spanTo="#cb96"/><lb n="30" xml:id="bsb00000776_00133_30"/>harti ginc iz imi ci herein,
+<lb n="31" xml:id="bsb00000776_00133_31"/>daz her widere kêrin solde zir erdin,
+<lb n="32" xml:id="bsb00000776_00133_32"/>ni wêrit duo ci stundin sô gewant,
+<lb n="33" xml:id="bsb00000776_00133_33"/>durch alle disi werilt ni rûmiter daz
+<lb n="34" xml:id="bsb00000776_00133_34"/>paradysilant:
+<lb n="35" xml:id="bsb00000776_00133_35"/>sulich is diu himilschi wunne.
+<lb n="36" xml:id="bsb00000776_00133_36"/>dar sule wir denkin, alt unti jungen.
+<lb n="37" xml:id="bsb00000776_00133_37"/>von demi slâfe dir hêirro duo gestuont,
+<lb n="38" xml:id="bsb00000776_00133_38"/>wole wister, wad her solde duon.
+<lb n="39" xml:id="bsb00000776_00133_39"/>Kolnêrin virgab her sîni hulte;
+<lb n="40" xml:id="bsb00000776_00133_40"/>daz her si hazzite, wî grôz daz wârin ere
+<lb n="41" xml:id="bsb00000776_00133_41"/>sculte!
+<lb n="42" xml:id="bsb00000776_00133_42"/>Duo dat cît duo bigonde nâhen, XLIV
+<lb n="43" xml:id="bsb00000776_00133_43"/>daz imi got wolte lônen,
+<lb n="44" xml:id="bsb00000776_00133_44"/>duo ward her gikeistigit,
+<lb n="45" xml:id="bsb00000776_00133_45"/>alsi dir heilig! Jôb wîlin,
+<lb n="46" xml:id="bsb00000776_00133_46"/>vane vuozin unz an diz hoibit
+<lb n="47" xml:id="bsb00000776_00133_47"/>sô harti al bitoibit.
+<lb n="48" xml:id="bsb00000776_00133_48"/>sô schît diu tiure sêla
+<lb n="49" xml:id="bsb00000776_00133_49"/>von mennislîchimo sêra,
+<lb n="50" xml:id="bsb00000776_00133_50"/>von disiino siechin lîbi
+<lb n="51" xml:id="bsb00000776_00133_51"/>in daz êwigi paradysi.
+<lb n="52" xml:id="bsb00000776_00133_52"/>diz vleisc intfinc du erda,
+<lb n="53" xml:id="bsb00000776_00133_53"/>dir geist vuor up ci berga.
+<lb n="54" xml:id="bsb00000776_00133_54"/>dari sule wiriemir nâh imo deinkin,
+<lb n="55" xml:id="bsb00000776_00133_55"/>wâ wir ci jungist sulin leintin.
+<lb n="56" xml:id="bsb00000776_00133_56"/>Alser duo ci godis antwurte quam, XLV
+<lb n="57" xml:id="bsb00000776_00133_57"/>ein êwigin ginâdan,
+<anchor xml:id="cb96"/><pb xml:id="bsb00000776_00134" n="131"/><cb type="sequential" n="1" spanTo="#cb97"/><lb n="1" xml:id="bsb00000776_00134_1"/>duo dedde der hêirro edile gemuot
+<lb n="2" xml:id="bsb00000776_00134_2"/>alsô dir ari sînin jungin duot,
+<lb n="3" xml:id="bsb00000776_00134_3"/>sor si spanin willit ûz vliegin.
+<lb n="4" xml:id="bsb00000776_00134_4"/>her sueimit ob in ce cierin,
+<lb n="5" xml:id="bsb00000776_00134_5"/>her wintit sich ûf ci berge,
+<lb n="6" xml:id="bsb00000776_00134_6"/>daz sint duont die jungin gerne.
+<lb n="7" xml:id="bsb00000776_00134_7"/>alsô woldir uns gespanin,
+<lb n="8" xml:id="bsb00000776_00134_8"/>wari wir nâ imi soldin varin:
+<lb n="9" xml:id="bsb00000776_00134_9"/>her zoigit uns hînidine,
+<lb n="10" xml:id="bsb00000776_00134_10"/>wilich lebin sî in himile.
+<lb n="11" xml:id="bsb00000776_00134_11"/>ci demi gravi, dâ sini woltin dôht hân,
+<lb n="12" xml:id="bsb00000776_00134_12"/>dâ worhtir scîniu ceichan:
+<lb n="13" xml:id="bsb00000776_00134_13"/>die sîchin unti die crumbe,
+<lb n="14" xml:id="bsb00000776_00134_14"/>di wurdin dâ gesunte.
+<lb n="15" xml:id="bsb00000776_00134_15"/>Arnolt hiez ein vollin guot kneht, XLVI
+<lb n="16" xml:id="bsb00000776_00134_16"/>der havit einin vogitman, hiez Volpreht,
+<lb n="17" xml:id="bsb00000776_00134_17"/>der durch werltlîche sculde
+<lb n="18" xml:id="bsb00000776_00134_18"/>virlôs sînis hêirrin hulde.
+<lb n="19" xml:id="bsb00000776_00134_19"/>duo bigonder godi missitrûwin,
+<lb n="20" xml:id="bsb00000776_00134_20"/>helphe suohter an din tiuvil:
+<lb n="21" xml:id="bsb00000776_00134_21"/>her kôs un imi ci vogite
+<lb n="22" xml:id="bsb00000776_00134_22"/>wider Arnolde.
+<lb n="23" xml:id="bsb00000776_00134_23"/>einis âbindis ginc her einin ganc
+<lb n="24" xml:id="bsb00000776_00134_24"/>nâ sînimo rosse, einis veldis lanc.
+<lb n="25" xml:id="bsb00000776_00134_25"/>da irschein imi der tiuvil offene,
+<lb n="26" xml:id="bsb00000776_00134_26"/>her virbôt imi alle Cristis ê
+<lb n="27" xml:id="bsb00000776_00134_27"/>unt her nîmanni daz ni sagite,
+<lb n="28" xml:id="bsb00000776_00134_28"/>wî her un gesîn havite.
+<lb n="29" xml:id="bsb00000776_00134_29"/>her quad, giwuoge hers eincheinim
+<lb n="30" xml:id="bsb00000776_00134_30"/>manne,
+<lb n="31" xml:id="bsb00000776_00134_31"/>her cibrêchin ci stukkelînin allen;
+<anchor xml:id="cb97"/><cb type="sequential" n="2" spanTo="#cb98"/><lb n="32" xml:id="bsb00000776_00134_32"/>wolter avir imi volgin,
+<lb n="33" xml:id="bsb00000776_00134_33"/>sô hetter imi gewissin holdin.
+<lb n="34" xml:id="bsb00000776_00134_34"/>mit drôn unti mit geheizan
+<lb n="35" xml:id="bsb00000776_00134_35"/>virleitter duo den tumbin man,
+<lb n="36" xml:id="bsb00000776_00134_36"/>daz her gelîz sich eis vîantis trûwin.
+<lb n="37" xml:id="bsb00000776_00134_37"/>daz ward imi sint ci rûwin.
+<lb n="38" xml:id="bsb00000776_00134_38"/>Des andren tagis her mit Arnolde XLVII
+<lb n="39" xml:id="bsb00000776_00134_39"/>reiht;
+<lb n="40" xml:id="bsb00000776_00134_40"/>dis tiuvilis geheizi was her vili gemeit.
+<lb n="41" xml:id="bsb00000776_00134_41"/>mit misselîchin redin her dar zuo quam.
+<lb n="42" xml:id="bsb00000776_00134_42"/>daz her godis bigonde virlouchinan.
+<lb n="43" xml:id="bsb00000776_00134_43"/>godis heiligin bigonder lasterin,
+<lb n="44" xml:id="bsb00000776_00134_44"/>daz nîman nisolti gebaldin,
+<lb n="45" xml:id="bsb00000776_00134_45"/>unzi duo der vili tumbe man
+<lb n="46" xml:id="bsb00000776_00134_46"/>bigondi lasterin seint Annan.
+<lb n="47" xml:id="bsb00000776_00134_47"/>her quad, dad her iz al wol irkante,
+<lb n="48" xml:id="bsb00000776_00134_48"/>iz wîr al triugeheit unti scante;
+<lb n="49" xml:id="bsb00000776_00134_49"/>Anno lebit ie mit suntin –
+<lb n="50" xml:id="bsb00000776_00134_50"/>wad ceichine her getuon solti?
+<lb n="51" xml:id="bsb00000776_00134_51"/>dere vrebelîchin schelti
+<lb n="52" xml:id="bsb00000776_00134_52"/>muoster sân intgeltin:
+<lb n="53" xml:id="bsb00000776_00134_53"/>dâ cistede sîn ouge winister
+<lb n="54" xml:id="bsb00000776_00134_54"/>vuor imi ûz als ein wazzer.
+<lb n="55" xml:id="bsb00000776_00134_55"/>duo der ungeloubige man
+<lb n="56" xml:id="bsb00000776_00134_56"/>ni wolti sich irkeinnan,
+<lb n="57" xml:id="bsb00000776_00134_57"/>her niwolti seint Annin sceltin,
+<lb n="58" xml:id="bsb00000776_00134_58"/>duo muoste hers mêr intgeltin.
+<lb n="59" xml:id="bsb00000776_00134_59"/>durch sîn hoibit quam ein slag,
+<lb n="60" xml:id="bsb00000776_00134_60"/>daz her dir nidiri gelag;
+<lb n="61" xml:id="bsb00000776_00134_61"/>als ein gescôz daz ouge ceswe
+<lb n="62" xml:id="bsb00000776_00134_62"/>spreiz ûz imi verre.
+<anchor xml:id="cb98"/><pb xml:id="bsb00000776_00135" n="132"/><cb type="sequential" n="1" spanTo="#cb99"/><lb n="1" xml:id="bsb00000776_00135_1"/>duo vîl her nidir an did gras,
+<lb n="2" xml:id="bsb00000776_00135_2"/>her schrei, als imi was.
+<lb n="3" xml:id="bsb00000776_00135_3"/>harti irquâmin si sich des ubiral;
+<lb n="4" xml:id="bsb00000776_00135_4"/>si bedditin ci gote in crûcestal.
+<lb n="5" xml:id="bsb00000776_00135_5"/>Arnolt hîz drâdi rennin, XLVIII
+<lb n="6" xml:id="bsb00000776_00135_6"/>paffen imi dari gewinnin.
+<lb n="7" xml:id="bsb00000776_00135_7"/>sô vuorhtin si in ceinir kirichun,
+<lb n="8" xml:id="bsb00000776_00135_8"/>si lêrtin un sîni pigihti tuon,
+<lb n="9" xml:id="bsb00000776_00135_9"/>unzi duo der sêregi man
+<lb n="10" xml:id="bsb00000776_00135_10"/>sent Annin anedingin bigan.
+<lb n="11" xml:id="bsb00000776_00135_11"/>her bat sînir genâdin,
+<lb n="12" xml:id="bsb00000776_00135_12"/>daz her den gesunt imi virgâbi.
+<lb n="13" xml:id="bsb00000776_00135_13"/>michil wunter sâgin
+<lb n="14" xml:id="bsb00000776_00135_14"/>alli, dî duo dâ wârin,
+<lb n="15" xml:id="bsb00000776_00135_15"/>in den îtilin ougistirnin
+<lb n="16" xml:id="bsb00000776_00135_16"/>wuohsin niuwiu ougin widiri,
+<lb n="17" xml:id="bsb00000776_00135_17"/>daz her sân ci stundin woli gesach.
+<lb n="18" xml:id="bsb00000776_00135_18"/>sô scône ist diu godis craft.
+<lb n="19" xml:id="bsb00000776_00135_19"/>Von altin êwin ist daz kunt, XLIX
+<lb n="20" xml:id="bsb00000776_00135_20"/>wî sich wîlin ûf tedde der merigrunt,
+<lb n="21" xml:id="bsb00000776_00135_21"/>duo Moyses daz liut Israêl
+<anchor xml:id="cb99"/><cb type="sequential" n="2" spanTo="#cb100"/><lb n="22" xml:id="bsb00000776_00135_22"/>mit trukkenim weg geleite ubir sê
+<lb n="23" xml:id="bsb00000776_00135_23"/>ci demi allir bezzistin lante,
+<lb n="24" xml:id="bsb00000776_00135_24"/>des die guotin ouch sulin walten,
+<lb n="25" xml:id="bsb00000776_00135_25"/>dâ die beche miliche  vluzzin,
+<lb n="26" xml:id="bsb00000776_00135_26"/>diz suoze honig dâr inzuschin;
+<lb n="27" xml:id="bsb00000776_00135_27"/>diz olei ûz eime steine sprunge,
+<lb n="28" xml:id="bsb00000776_00135_28"/>sân dir bî der suoze brunne;
+<lb n="29" xml:id="bsb00000776_00135_29"/>diz brôt vane himele reginte ,
+<lb n="30" xml:id="bsb00000776_00135_30"/>allis guodis si seide habiten.
+<lb n="31" xml:id="bsb00000776_00135_31"/>mit wuntirlîchin ceichinin
+<lb n="32" xml:id="bsb00000776_00135_32"/>êrete got Moysen, den heiligin,
+<lb n="33" xml:id="bsb00000776_00135_33"/>unz ein sîn selbis suster
+<lb n="34" xml:id="bsb00000776_00135_34"/>bigondimi sprechin laster.
+<lb n="35" xml:id="bsb00000776_00135_35"/>ô wî starche si diu misilsuht bistuont
+<lb n="36" xml:id="bsb00000776_00135_36"/>unz iri gewegete der bruoder guot!
+<lb n="37" xml:id="bsb00000776_00135_37"/>alsô gewegete seint Anno disim man,
+<lb n="38" xml:id="bsb00000776_00135_38"/>daz her sînin gesunt gewan,
+<lb n="39" xml:id="bsb00000776_00135_39"/>ci diu daz wir virstuontin
+<lb n="40" xml:id="bsb00000776_00135_40"/>des rîchin godis guote,
+<lb n="41" xml:id="bsb00000776_00135_41"/>wî her sô lônit unti richit
+<lb n="42" xml:id="bsb00000776_00135_42"/>suaz man sînim holtin sprichit,
+<lb n="43" xml:id="bsb00000776_00135_43"/>der sô suoze leidit albihanten
+<lb n="44" xml:id="bsb00000776_00135_44"/>ci demi scônin paradysilante.
+<anchor xml:id="cb100"/></ab></div>
+</div>
+</body>
+</text>
+</TEI>
