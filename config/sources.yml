@@ -106,7 +106,7 @@ ud:
   # Bohairic Gospel of Mark cop) — existing axes that gain a treebank. The
   # four new language lanes xcl/fro/frm/ota have NO existing desk, so they
   # ride axis-less (minting new axes is an owner decision, not this packet's).
-  axes: [classical, slavic, germanic, celtic, hittite, indic, sinitic, cuneiform, egyptian, hebrew, biblical]
+  axes: [classical, romance, slavic, germanic, celtic, hittite, indic, sinitic, cuneiform, egyptian, hebrew, biblical]  # romance: P45-1 (llct/udante Latin continuum + ro-nonstandard + the P43-1 profiterole Old French)
   wired: true   # first real sync verified + owner sign-off 2026-07-04
   sync_policy: manual   # treebanks version independently and change rarely
   # P31-0 (2026-07-19): TREEBANKS grew to ten — hittite-hittb
