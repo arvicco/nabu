@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:me="http://www.menota.org/ns/1.0" xmlns:bfm="http://bfm.ens-lsh.fr/ns/1.0">
+   <teiHeader>
+  <fileDesc>
+    <titleStmt>
+      <title type="main">Vie de saint Alexis</title>
+      <title type="formal">alexis</title>
+      <title type="reference">AlexisRaM</title>
+      <title type="DEAF">AlexisRaM*</title>
+      <title type="gmd">transcription électronique</title>
+      <author xml:id="anonyme">anonyme</author>
+      <editor>Équipe de la Base de français médiéval - ENS de Lyon / UMR 5317 IHRIM</editor>
+      <funder>Laboratoire IHRIM</funder>
+    </titleStmt>
+    <editionStmt>
+      <edition>transcripion électronique</edition>
+      <respStmt xml:id="annotator2">
+        <resp>balisage du discours direct</resp>
+        <name xml:id="AL">Alexei Lavrentiev</name>
+      </respStmt>
+      <respStmt xml:id="proofreader1">
+        <resp>Relecture et révision</resp>
+        <name xml:id="CMN">Christiane Marchello-Nizia</name>
+      </respStmt>
+      <respStmt xml:id="encoder2">
+        <resp>corrections ponctuelles</resp>
+        <name xml:id="TMR">Thomas Rainsford</name>
+      </respStmt>
+    </editionStmt>
+    <extent>- Numéros de pages saisies : de 29v à 34v ;
+            - Nombre de mots d'après la base des descripteurs : <num xml:id="nb_mots_given">4696</num> ;
+            - Nombre de tokens (mots et ponctuations) d'après la base des descripteurs : <num xml:id="nb_tokens_given">5586</num>.
+    </extent>
+    <publicationStmt>
+      <publisher><name>Projet BFM, ENS de Lyon / UMR 5317 IHRIM</name></publisher>
+      <address>
+        <addrLine>15, parvis René Descartes</addrLine>
+        <addrLine>69342 Lyon BP7000 Cedex 07</addrLine>
+        <addrLine>Tél : 04 37 37 63 10</addrLine>
+        <addrLine>Mèl : bfm@ens-lyon.fr</addrLine>
+        <addrLine>http://bfm.ens-lyon.fr</addrLine>
+      </address>
+      <idno type="bfm">http://catalog.bfm-corpus.org/AlexisRaM</idno>
+      <idno type="doi">10.34847/nkl.7bbe37x6</idno>
+      <availability status="free">
+        <licence target="http://creativecommons.org/licenses/by-nc-sa/3.0/fr">
+          <ab type="availability_bfm" subtype="libre_1b">Les Conditions générales d'utilisation de la Base de Français Médiéval (http://txm.bfm-corpus.org/bfm/files/CGU.pdf), 
+            et notamment son Article 5 « PROPRIETE INTELLECTUELLE », s'appliquent à tous les textes de la BFM.</ab>
+          <ab type="how_to_cite">
+            <label>Comment citer ce texte :</label>
+            <bibl>Vie de saint Alexis, édité par Thomas Rainsford et Christiane Marchello-Nizia, Lyon, 2022. 
+              Publié en ligne par la Base de français médiéval, http://catalog.bfm-corpus.org/AlexisRaM.
+              Dernière révision le 2018-10-24.</bibl>
+            D'autres formules de citation de la BFM sont proposées sur la page web suivante :
+            http://bfm.ens-lyon.fr/article.php3?id_article=281.</ab>
+          <ab type="availability_file">
+            <label>Conditions d'utilisation de ce fichier :</label>
+              Ce fichier numérique est composé du corps de texte médiéval (restauré par son ou ses éditeur(s) scientifique(s)), des apparats critiques (introductions, notes, glossaires, explications, du texte d'origine (ou des enrichissements) qui ont été réalisés dans le cadre de la restauration des textes par les Editeurs Scientifiques) et des suppléments numériques : balisage XML-TEI, métadonnées (teiHeader), balisage du discours direct, étiquetage morpho-syntaxique, lemmatisation. Le texte et les suppléments numériques sont libres de droit et peuvent à ce titre être téléchargés et réutilisés librement. Les apparats critiques sont soumis à une licence de type CC BY-NC-SA 3.0 FR  http://creativecommons.org/licenses/by-nc-sa/3.0/fr. Les Utilisateurs s’engagent à respecter les termes de cette licence. 
+            </ab>
+            <ab type="availability_txmweb" subtype="illimité">
+              <label>Conditions d'utilisation par le portail BFM :</label>
+              Pas de limitation dans l'usage des fonctionnalités. Téléchargement autorisé.</ab>
+        </licence>
+      </availability>
+    </publicationStmt>
+    <sourceDesc>
+      <biblFull>
+        <titleStmt>
+          <title>Vie de saint Alexis. Édition numérique interactive</title>
+          <respStmt>
+            <resp xml:id="editor">Éditeur scientifique</resp>
+            <name type="person">Thomas Rainsford</name>
+            <name type="person">Christiane Marchello-Nizia</name>
+          </respStmt>
+        </titleStmt>
+          <extent>11 page(s)
+        </extent>
+        <publicationStmt>
+          <publisher>ENS de Lyon</publisher>
+          <pubPlace>Lyon</pubPlace>
+          <date>2022</date>
+          <idno type="sigle_DEAF">AlexisRaM*</idno>
+        </publicationStmt>
+      </biblFull>
+    </sourceDesc>
+  </fileDesc>
+  <encodingDesc>
+    <projectDesc>
+      <p>Projet :<name type="project">BFM - Base de français médiéval</name>
+        Resp. : <name type="person">Céline Guillot-Barbance</name>
+        Équipe : Base de français médiéval
+        Laboratoire : UMR 5317 IHRIM
+        Institution : ENS de Lyon
+        <address>
+          <addrLine>15, parvis René Descartes</addrLine>
+          <addrLine>69342 Lyon BP7000 Cedex 07</addrLine>
+          <addrLine>Tél : 04 37 37 63 10</addrLine>
+          <addrLine>Mèl : bfm@ens-lyon.fr</addrLine>
+          <addrLine>http://bfm.ens-lyon.fr</addrLine>
+        </address>
+      </p>
+    </projectDesc>
+    <editorialDecl>
+      <p>Voir le <ref target="http://bfm.ens-lyon.fr/IMG/pdf/Manuel_Encodage_TEI.pdf">Manuel d'encodage XML-TEI de la BFM</ref>
+        et les <ref target="http://bfm.ens-lyon.fr/IMG/pdf/Consignes_BFM.pdf">Consignes aux relecteurs de la BFM</ref>.</p>
+    </editorialDecl>
+    <tagsDecl>
+      <namespace name="http://www.tei-c.org/ns/1.0">
+        <tagUsage gi="ab" occurs="129"/>
+        <tagUsage gi="body" occurs="1"/>
+        <tagUsage gi="choice" occurs="3"/>
+        <tagUsage gi="corr" occurs="3"/>
+        <tagUsage gi="del" occurs="2"/>
+        <tagUsage gi="div" occurs="1"/>
+        <tagUsage gi="front" occurs="1"/>
+        <tagUsage gi="gap" occurs="6"/>
+        <tagUsage gi="hi" occurs="4"/>
+        <tagUsage gi="lb" occurs="625"/>
+        <tagUsage gi="mentioned" occurs="293"/>
+        <tagUsage gi="milestone" occurs="322"/>
+        <tagUsage gi="note" occurs="135"/>
+        <tagUsage gi="pb" occurs="11"/>
+        <tagUsage gi="q" occurs="55"/>
+        <tagUsage gi="sic" occurs="3"/>
+        <tagUsage gi="space" occurs="1"/>
+        <tagUsage gi="supplied" occurs="3"/>
+        <tagUsage gi="surplus" occurs="3"/>
+        <tagUsage gi="text" occurs="1"/>
+        <tagUsage gi="w" occurs="5532"/>
+      </namespace>
+    </tagsDecl>
+  </encodingDesc>
+  <profileDesc>
+    <creation>
+      <name type="author">anonyme</name>
+      <title>Vie de saint Alexis</title>
+      <date type="compo" when="1050-01-01" notBefore="1025-01-01" notAfter="1075-01-01" n="11">ca. 1050</date>
+      <date type="compo_periode">ancien</date>
+      <date type="compo_sous_siecle" n="11_2">milieu</date>
+      <date type="ms" when="1120-01-01" notBefore="1110-01-01" notAfter="1129-12-31">ca. 1120</date>
+      <idno type="msIdentifier">Hildesheim, St. Godehardi</idno>
+      <region type="dialecte_auteur">normand</region>
+    </creation>
+    <langUsage>
+      <language ident="fro" usage="100">Le texte est entièrement écrit en vers en ancien français.</language>
+    </langUsage>
+    <textDesc>
+      <channel mode="w">print</channel>
+      <constitution type="single"/>
+      <derivation type="original"/>
+      <domain type="religieux"/>
+    <factuality type="fiction"/>
+      <interaction type="none"/>
+      <preparedness type="prepared"/>
+      <purpose type="narrative"/></textDesc>
+    <textClass>
+      <keywords scheme="http://authorities.bfm-corpus.org">
+        <term type="domaine">religieux</term>
+        <term type="genre">hagiographie</term>
+        <term type="forme">vers</term>
+        <term type="relation">original</term>
+      </keywords>
+    </textClass>
+  </profileDesc>
+  <revisionDesc>
+    <change who="#AL" when="2016-02-09">création du descripteur</change>
+    <change who="#CMN" when="2018-06-30">Relecture et révision</change>
+    <change who="#TMR" when="2018-06-30">Trancription primaire multi-facettes</change>
+    <change who="#TMR" when="2018-06-30">étiquetage morphosyntaxique</change>
+    <change who="#AL" when="2018-07-06">balisage du discours direct</change>
+    <change who="#AL" when="2018-07-06">conversion TEI P5 BFM</change>
+    <change who="#TMR" when="2018-10-24">corrections ponctuelles</change>
+    <change who="#TMR" when="2018-10-24">lemmatisation</change>
+    <change when="2018-10-24">Dernière modification du texte</change>
+    <change when="2022-11-04">Création de cet entête</change>
+  </revisionDesc>
+</teiHeader>
+   <text>
+      <front/>
+      <body>
+         <pb ed="facs" n="29v"/>
+         <div type="étiquetage-vérifié">
+         <milestone unit="lb-facs" n="1"/>
+         <ab n="1" rend="strophe">
+            <lb ed="norm" n="1"/>
+            <w type="ADJqua" lemma="bon" ana="#pos_syn_ADJqua #pos_syn_max_ADJquasmnp #lemma_src_DMF #oldid_w_AlexisBfm_0001" xml:id="w_AlexisRaM_1">Bons</w>
+            <note resp="#eds">Le manuscrit L est copié à pleines lignes. Une majuscule
+                    marque le début des strophes, les vers sont séparés par un point non suivi
+                    de majuscule. Dans les mss anglo-normands il n'est pas rare que les vers ne
+                    commencent pas par une majuscule.</note>
+            <w type="VERcjg" lemma="être" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpsp3s #lemma_src_DMF #oldid_w_AlexisBfm_0002" xml:id="w_AlexisRaM_2">fut</w>
+            <w type="DETdef" lemma="le" ana="#pos_syn_DETdef #pos_syn_max_DETdefsmn #lemma_src_DMF #oldid_w_AlexisBfm_0003" rend="simple" xml:id="w_AlexisRaM_3">li</w>
+            <w type="NOMcom" lemma="siècle" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsmn #lemma_src_DMF #oldid_w_AlexisBfm_0004" xml:id="w_AlexisRaM_4">secles</w>
+            <w type="PRE.DETdef" lemma="à.le" ana="#pos_syn_PRE.DETdef #pos_syn_max_PRE.DETdefsmr #lemma_src_DMF #oldid_w_AlexisBfm_0005 #agglCert_low" rend="simple" xml:id="w_AlexisRaM_5">al</w>
+            <w type="NOMcom" lemma="temps" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsmr #lemma_src_DMF #oldid_w_AlexisBfm_0006" xml:id="w_AlexisRaM_6">tens</w>
+            <w type="ADJqua" lemma="anciennour" ana="#pos_syn_ADJqua #pos_syn_max_ADJquasmrp #lemma_src_DMF #oldid_w_AlexisBfm_0007" xml:id="w_AlexisRaM_7">ancïenur</w>
+            <lb ed="norm" n="2"/>
+            <w type="CONcoo" lemma="car" ana="#pos_syn_CONcoo #pos_syn_max_CONcoo #lemma_src_DMF #oldid_w_AlexisBfm_0008" xml:id="w_AlexisRaM_8">quer</w>
+            <milestone unit="lb-facs" n="2"/>
+            <w type="NOMcom" lemma="foi1" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsfn #lemma_src_DMF #oldid_w_AlexisBfm_0009" xml:id="w_AlexisRaM_9">feit</w>
+            <w type="PROadv" lemma="y2" ana="#pos_syn_PROadv #pos_syn_max_PROadv #lemma_src_DMF #oldid_w_AlexisBfm_0010" rend="simple" xml:id="w_AlexisRaM_10">i</w>
+            <w type="VERcjg" lemma="être" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindipf3s #lemma_src_DMF #oldid_w_AlexisBfm_0011" xml:id="w_AlexisRaM_11">ert</w>
+            <w type="CONcoo" lemma="et" ana="#pos_syn_CONcoo #pos_syn_max_CONcoo #lemma_src_DMF #oldid_w_AlexisBfm_0012 #agglCert_low" rend="simple" xml:id="w_AlexisRaM_12">e</w>
+            <w type="NOMcom" lemma="justice" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsfn #lemma_src_DMF #oldid_w_AlexisBfm_0013" xml:id="w_AlexisRaM_13">justise</w>
+            <w type="CONcoo" lemma="et" ana="#pos_syn_CONcoo #pos_syn_max_CONcoo #lemma_src_DMF #oldid_w_AlexisBfm_0014" xml:id="w_AlexisRaM_14">et</w>
+            <note resp="#eds">Le copiste distingue systématiquement ET devant consonne, qu'il
+                    graphie <mentioned>e</mentioned>, et ET devant voyelle, toujours  indiqué par
+                    une abréviation, l'esperluette, que nous résolvons par <mentioned>et</mentioned>. 
+                    Notre choix en faveur de la transcription <mentioned>et</mentioned>, en l'absence
+                    de toute graphie en clair, a trois raisons : 1) Dans le ms. L, le copiste écrit en
+                    clair les cas où QUE se trouve devant voyelle, et il utilise alors soit 
+                    <mentioned>quet</mentioned> (6 fois), soit <mentioned>qued</mentioned> (9 fois, 
+                    voir note au v. 65). Il connait donc deux variantes pour QUE. Mais utilisait-il
+                    les deux mêmes variantes, <mentioned>et</mentioned> ou <mentioned>ed</mentioned>,
+                    pour ET ? Rien ne l'assure. C'est cependant sur le nombre plus élevé (9 contre 6)
+                    de graphies de QUE en clair par <mentioned>qued</mentioned> que Storey, Rohlfs,
+                    Perugi ont opté pour la transcription de l'esperluette par <mentioned>ed</mentioned>.
+                    2) Dans le ms. L, dans le seul cas où la conjonction de coordination NE se trouve
+                    devant voyelle, le copiste la transcrit en clair (v. 265), et il utilise <mentioned>net</mentioned>
+                    (et non pas <mentioned>ned</mentioned>). 
+                    3) Dans <mentioned>Serments</mentioned>, et dans <mentioned>Roland</mentioned>, les seuls
+                    cas de transcription de ET en clair sont en <mentioned>Et</mentioned> (il s'agit de début de
+                    phrases). Et c'est l'usage qui se généralisera chez les copistes.
+                    
+                </note>
+            <w type="NOMcom" lemma="amour1" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsfn #lemma_src_DMF #oldid_w_AlexisBfm_0015" xml:id="w_AlexisRaM_15">amur</w>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_16">,</w>
+            <lb ed="norm" n="3"/>
+            <w type="ADVgen" lemma="si4" ana="#pos_syn_ADVgen #pos_syn_max_ADVgenp #lemma_src_DMF #oldid_w_AlexisBfm_0016 #agglCert_low" rend="simple" xml:id="w_AlexisRaM_17">si</w>
+            <note resp="#eds">
+               <mentioned>Si</mentioned> pourrait être interprété comme
+                        <mentioned>s'i</mentioned> mais il n'y a aucun autre cas d'élision de
+                    l'adverbe <mentioned>si</mentioned> dans cette version, et
+                        <mentioned>i</mentioned> n'est pas obligatoire dans la construction
+                    existentielle du verbe <mentioned>estre</mentioned>. En outre,
+                        <mentioned>si</mentioned> peut être le résultat de la fusion phonétique
+                    entre l'<mentioned>i</mentioned> final de <mentioned>si</mentioned> et l'<mentioned>i</mentioned> de l'adverbe
+                    pronominal locatif <mentioned>i</mentioned>.</note>
+            <w type="VERcjg" lemma="être" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindipf3s #lemma_src_DMF #oldid_w_AlexisBfm_0017" xml:id="w_AlexisRaM_18">ert</w>
+            <w type="NOMcom" lemma="créance1" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsfn #lemma_src_DMF #oldid_w_AlexisBfm_0018" xml:id="w_AlexisRaM_19">creance</w>
+            <milestone unit="lb-facs" n="3"/>
+            <w type="PROrel" lemma="dont" ana="#pos_syn_PROrel #pos_syn_max_PROrelsfr #lemma_src_DMF #oldid_w_AlexisBfm_0019" xml:id="w_AlexisRaM_20">dunt</w>
+            <w type="ADVgen" lemma="or2" ana="#pos_syn_ADVgen #pos_syn_max_ADVgenp #lemma_src_DMF #oldid_w_AlexisBfm_0020" xml:id="w_AlexisRaM_21">ore</w>
+            <w type="ADVneg" lemma="ne1" ana="#pos_syn_ADVneg #pos_syn_max_ADVneg #lemma_src_DMF #oldid_w_AlexisBfm_0021" rend="elision" xml:id="w_AlexisRaM_22">n'</w>
+            <w type="PROadv" lemma="y2" ana="#pos_syn_PROadv #pos_syn_max_PROadv #lemma_src_DMF #oldid_w_AlexisBfm_0022" rend="simple" xml:id="w_AlexisRaM_23">i</w>
+            <w type="VERcjg" lemma="avoir" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpst0s #lemma_src_DMF #oldid_w_AlexisBfm_0023" xml:id="w_AlexisRaM_24">at</w>
+            <w type="DETind" lemma="nul" ana="#pos_syn_DETind #pos_syn_max_DETindsmr #lemma_src_DMF #oldid_w_AlexisBfm_0024" xml:id="w_AlexisRaM_25">nul</w>
+            <w type="NOMcom" lemma="preu" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsmr #lemma_src_DMF #oldid_w_AlexisBfm_0025" xml:id="w_AlexisRaM_26">prut</w>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_27">,</w>
+            <lb ed="norm" n="4"/>
+            <w type="PROind" lemma="tout" ana="#pos_syn_PROind #pos_syn_max_PROindsmr #lemma_src_DMF #oldid_w_AlexisBfm_0026" xml:id="w_AlexisRaM_28">tut</w>
+            <w type="VERcjg" lemma="être" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpst3s #lemma_src_DMF #oldid_w_AlexisBfm_0027" xml:id="w_AlexisRaM_29">est</w>
+            <w type="VERppe" lemma="muer" ana="#pos_syn_VERppe #pos_syn_max_VERppesmn #lemma_src_DMF #oldid_w_AlexisBfm_0028" xml:id="w_AlexisRaM_30">müez</w>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_31">,</w>
+            <milestone unit="lb-facs" n="4"/>
+            <w type="VERppe" lemma="perdre" ana="#pos_syn_VERppe #pos_syn_max_VERppesnr #lemma_src_DMF #oldid_w_AlexisBfm_0029" xml:id="w_AlexisRaM_32">perdut</w>
+            <w type="VERcjg" lemma="avoir" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpst3s #lemma_src_DMF #oldid_w_AlexisBfm_0030 #agglCert_low" rend="simple" xml:id="w_AlexisRaM_33">ad</w>
+            <w type="DETpos" lemma="son4" ana="#pos_syn_DETpos #pos_syn_max_DETpos3sfr #lemma_src_DMF #oldid_w_AlexisBfm_0031" rend="simple" xml:id="w_AlexisRaM_34">sa</w>
+            <w type="NOMcom" lemma="couleur1" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsfr #lemma_src_DMF #oldid_w_AlexisBfm_0032" xml:id="w_AlexisRaM_35">colur</w>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_36">,</w>
+            <lb ed="norm" n="5"/>
+            <w type="ADVgen" lemma="jà" ana="#pos_syn_ADVgen #pos_syn_max_ADVgenp #lemma_src_DMF #oldid_w_AlexisBfm_0033" xml:id="w_AlexisRaM_37">ja</w>
+            <w type="ADVgen" lemma="mais1" ana="#pos_syn_ADVgen #pos_syn_max_ADVgenp #lemma_src_DMF #oldid_w_AlexisBfm_0034" xml:id="w_AlexisRaM_38">mais</w>
+            <note resp="#eds">Le copiste écrit <mentioned>ja-mais</mentioned> le plus souvent en un mot,
+                    comme au v. 8, parfois en deux mots comme ici. Nous respectons son usage.</note>
+            <w type="ADVneg" lemma="ne1" ana="#pos_syn_ADVneg #pos_syn_max_ADVneg #lemma_src_DMF #oldid_w_AlexisBfm_0035" rend="elision" xml:id="w_AlexisRaM_39">n'</w>
+            <w type="VERcjg" lemma="être" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindfut3s #lemma_src_DMF #oldid_w_AlexisBfm_0036" xml:id="w_AlexisRaM_40">iert</w>
+            <w type="ADJind" lemma="tel" ana="#pos_syn_ADJind #pos_syn_max_ADJindsxx #lemma_src_DMF #oldid_w_AlexisBfm_0037" xml:id="w_AlexisRaM_41">tel</w>
+            <w type="CONsub" lemma="comme" ana="#pos_syn_CONsub #pos_syn_max_CONsub #lemma_src_DMF #oldid_w_AlexisBfm_0038" xml:id="w_AlexisRaM_42">cum</w>
+            <milestone unit="lb-facs" n="5"/>
+            <w type="VERcjg" lemma="être" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpsp3s #lemma_src_DMF #oldid_w_AlexisBfm_0039" xml:id="w_AlexisRaM_43">fut</w>
+            <w type="PRE.DETdef" lemma="à.le" ana="#pos_syn_PRE.DETdef #pos_syn_max_PRE.DETdefpmr #lemma_src_DMF #oldid_w_AlexisBfm_0040" xml:id="w_AlexisRaM_44">as</w>
+            <w type="NOMcom" lemma="ancêtre" ana="#pos_syn_NOMcom #pos_syn_max_NOMcompmr #lemma_src_DMF #oldid_w_AlexisBfm_0041" xml:id="w_AlexisRaM_45">anceisurs</w>
+            <w type="PONfrt" lemma="." ana="#lemma_src=DMF #pos_syn_PONfrt" xml:id="w_AlexisRaM_46">.</w>
+         </ab>
+         <ab n="2" rend="strophe">
+            <lb ed="norm" n="6"/>
+            <w type="PRE.DETdef" lemma="à.le" ana="#pos_syn_PRE.DETdef #pos_syn_max_PRE.DETdefsmr #lemma_src_DMF #oldid_w_AlexisBfm_0042" rend="simple" xml:id="w_AlexisRaM_47">Al</w>
+            <w type="NOMcom" lemma="temps" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsmr #lemma_src_DMF #oldid_w_AlexisBfm_0043" xml:id="w_AlexisRaM_48">tens</w>
+            <w type="NOMpro" lemma="Noé" ana="#pos_syn_NOMpro #pos_syn_max_NOMprosmr #lemma_src_DMF #oldid_w_AlexisBfm_0044" xml:id="w_AlexisRaM_49">Noé</w>
+            <w type="CONcoo" lemma="et" ana="#pos_syn_CONcoo #pos_syn_max_CONcoo #lemma_src_DMF #oldid_w_AlexisBfm_0045" xml:id="w_AlexisRaM_50">et</w>
+            <w type="PRE.DETdef" lemma="à.le" ana="#pos_syn_PRE.DETdef #pos_syn_max_PRE.DETdefsmr #lemma_src_DMF #oldid_w_AlexisBfm_0046" rend="simple" xml:id="w_AlexisRaM_51">al</w>
+            <w type="NOMcom" lemma="temps" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsmr #lemma_src_DMF #oldid_w_AlexisBfm_0047" xml:id="w_AlexisRaM_52">tens</w>
+            <milestone unit="lb-facs" n="6"/>
+            <w type="NOMpro" lemma="Abraham" ana="#pos_syn_NOMpro #pos_syn_max_NOMprosmr #lemma_src_DMF #oldid_w_AlexisBfm_0048" xml:id="w_AlexisRaM_53">Abraham</w>
+            <lb ed="norm" n="7"/>
+            <w type="CONcoo" lemma="et" ana="#pos_syn_CONcoo #pos_syn_max_CONcoo #lemma_src_DMF #oldid_w_AlexisBfm_0049" xml:id="w_AlexisRaM_54">et</w>
+            <w type="PRE.DETdef" lemma="à.le" ana="#pos_syn_PRE.DETdef #pos_syn_max_PRE.DETdefsmr #lemma_src_DMF #oldid_w_AlexisBfm_0050" xml:id="w_AlexisRaM_55">al</w>
+            <w type="NOMpro" lemma="David" ana="#pos_syn_NOMpro #pos_syn_max_NOMprosmr #lemma_src_DMF #oldid_w_AlexisBfm_0051" xml:id="w_AlexisRaM_56">David</w>
+            <w type="PROrel" lemma="qui1" ana="#pos_syn_PROrel #pos_syn_max_PROrelsmn #lemma_src_DMF #oldid_w_AlexisBfm_0052" xml:id="w_AlexisRaM_57">qui</w>
+            <note resp="#eds">L'emploi du cas sujet <mentioned>Deus</mentioned>, systématiquement opposé
+                    par le copiste au cas régime <mentioned>Deu</mentioned> dans ce texte, confirme que
+                    <mentioned>qui</mentioned> est ici objet direct de <mentioned>amat</mentioned>.</note>
+            <w type="NOMpro" lemma="Dieu" ana="#pos_syn_NOMpro #pos_syn_max_NOMprosmn #lemma_src_DMF #oldid_w_AlexisBfm_0053" xml:id="w_AlexisRaM_58">Deus</w>
+            <w type="ADVgen" lemma="par2" ana="#pos_syn_ADVgen #pos_syn_max_ADVgenp #lemma_src_DMF #oldid_w_AlexisBfm_0054" xml:id="w_AlexisRaM_59">par</w>
+            <w type="VERcjg" lemma="aimer" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpsp3s #lemma_src_DMF #oldid_w_AlexisBfm_0055" xml:id="w_AlexisRaM_60">amat</w>
+            <milestone unit="lb-facs" n="7"/>
+            <w type="ADVgen" lemma="tant" ana="#pos_syn_ADVgen #pos_syn_max_ADVgenp #lemma_src_DMF #oldid_w_AlexisBfm_0056" xml:id="w_AlexisRaM_61">tant</w>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_62">,</w>
+            <lb ed="norm" n="8"/>
+            <w type="ADJqua" lemma="bon" ana="#pos_syn_ADJqua #pos_syn_max_ADJquasmnp #lemma_src_DMF #oldid_w_AlexisBfm_0057" xml:id="w_AlexisRaM_63">bons</w>
+            <w type="VERcjg" lemma="être" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpsp3s #lemma_src_DMF #oldid_w_AlexisBfm_0058" xml:id="w_AlexisRaM_64">fut</w>
+            <w type="DETdef" lemma="le" ana="#pos_syn_DETdef #pos_syn_max_DETdefsmn #lemma_src_DMF #oldid_w_AlexisBfm_0059" rend="simple" xml:id="w_AlexisRaM_65">li</w>
+            <w type="NOMcom" lemma="siècle" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsmn #lemma_src_DMF #oldid_w_AlexisBfm_0060" xml:id="w_AlexisRaM_66">secles</w>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_67">,</w>
+            <w type="ADVgen" lemma="jamais" ana="#pos_syn_ADVgen #pos_syn_max_ADVgenp #lemma_src_DMF #oldid_w_AlexisBfm_0061" xml:id="w_AlexisRaM_68">jamais</w>
+            <w type="ADVneg" lemma="ne1" ana="#pos_syn_ADVneg #pos_syn_max_ADVneg #lemma_src_DMF #oldid_w_AlexisBfm_0062" rend="elision" xml:id="w_AlexisRaM_69">n'</w>
+            <w type="VERcjg" lemma="être" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindfut3s #lemma_src_DMF #oldid_w_AlexisBfm_0063" xml:id="w_AlexisRaM_70">ert</w>
+            <w type="ADVgen" lemma="si4" ana="#pos_syn_ADVgen #pos_syn_max_ADVgenp #lemma_src_DMF #oldid_w_AlexisBfm_0064 #agglCert_low" rend="simple" xml:id="w_AlexisRaM_71">si</w>
+            <w type="ADJqua" lemma="vaillant" ana="#pos_syn_ADJqua #pos_syn_max_ADJquasmrp #lemma_src_DMF #oldid_w_AlexisBfm_0065" xml:id="w_AlexisRaM_72">vailant</w>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_73">,</w>
+            <lb ed="norm" n="9"/>
+            <milestone unit="lb-facs" n="8"/>
+            <w type="ADJqua" lemma="vieux" ana="#pos_syn_ADJqua #pos_syn_max_ADJquasmnp #lemma_src_DMF #oldid_w_AlexisBfm_0066" xml:id="w_AlexisRaM_74">velz</w>
+            <w type="VERcjg" lemma="être" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpst3s #lemma_src_DMF #oldid_w_AlexisBfm_0067" xml:id="w_AlexisRaM_75">est</w>
+            <w type="CONcoo" lemma="et" ana="#pos_syn_CONcoo #pos_syn_max_CONcoo #lemma_src_DMF #oldid_w_AlexisBfm_0068" rend="simple" xml:id="w_AlexisRaM_76">e</w>
+            <w type="ADJqua" lemma="frêle" ana="#pos_syn_ADJqua #pos_syn_max_ADJquasmnp #lemma_src_DMF #oldid_w_AlexisBfm_0069" xml:id="w_AlexisRaM_77">frailes</w>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_78">,</w>
+            <w type="PROind" lemma="tout" ana="#pos_syn_PROind #pos_syn_max_PROindsmr #lemma_src_DMF #oldid_w_AlexisBfm_0070" xml:id="w_AlexisRaM_79">tut</w>
+            <w type="PROper" lemma="se1" ana="#pos_syn_PROper #pos_syn_max_PROper3smr #lemma_src_DMF #oldid_w_AlexisBfm_0071" rend="elision" xml:id="w_AlexisRaM_80">s'</w>
+            <w type="PROadv" lemma="en2" ana="#pos_syn_PROadv #pos_syn_max_PROadv #lemma_src_DMF #oldid_w_AlexisBfm_0072" xml:id="w_AlexisRaM_81">en</w>
+            <w type="VERcjg" lemma="aller" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpst3s #lemma_src_DMF #oldid_w_AlexisBfm_0073" xml:id="w_AlexisRaM_82">vat</w>
+            <w type="VERppa" lemma="remanoir" ana="#pos_syn_VERppa #pos_syn_max_VERppa--- #lemma_src_DMF #oldid_w_AlexisBfm_0074" xml:id="w_AlexisRaM_83">remanant</w>
+            <note resp="#eds">Les vers 9 et 10 ont le même mot en finale ; deux manuscrits plus tardifs,
+                    A et P, donnent <mentioned>declinant</mentioned>.</note>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_84">,</w>
+            <lb ed="norm" n="10"/>
+            <milestone unit="lb-facs" n="9"/>
+            <w type="ADVgen" lemma="si4" ana="#pos_syn_ADVgen #pos_syn_max_ADVgenp #lemma_src_DMF #oldid_w_AlexisBfm_0075" rend="elision" xml:id="w_AlexisRaM_85">si'</w>
+            <w type="VERcjg" lemma="être" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpst3s #lemma_src_DMF #oldid_w_AlexisBfm_0076" xml:id="w_AlexisRaM_86">st</w>
+            <note resp="#eds"> Aphérèse de la voyelle initiale d'<mentioned>est</mentioned> à
+                    cause de l'enclise. </note>
+            <w type="VERppe" lemma="empirer" ana="#pos_syn_VERppe #pos_syn_max_VERppesmr #lemma_src_DMF #oldid_w_AlexisBfm_0077" xml:id="w_AlexisRaM_87">ampairét</w>
+            <note resp="#eds">Nous graphions <mentioned>é</mentioned> le /E/ final accentué
+                    devant <mentioned>t</mentioned> pour le distinguer des finales
+                    inaccentuées /əθ/, graphiées <mentioned>et</mentioned>, comme dans 
+                    <mentioned>peiset</mentioned> (v. 22).</note>
+            <w type="DETind" lemma="tout" ana="#pos_syn_DETind #pos_syn_max_DETindsmr #lemma_src_DMF #oldid_w_AlexisBfm_0078" xml:id="w_AlexisRaM_88">tut</w>
+            <w type="NOMcom" lemma="bien" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsmr #lemma_src_DMF #oldid_w_AlexisBfm_0079" xml:id="w_AlexisRaM_89">bien</w>
+            <w type="VERcjg" lemma="aller" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpst3s #lemma_src_DMF #oldid_w_AlexisBfm_0080" xml:id="w_AlexisRaM_90">vait</w>
+            <w type="VERppa" lemma="remanoir" ana="#pos_syn_VERppa #pos_syn_max_VERppa--- #lemma_src_DMF #oldid_w_AlexisBfm_0081" xml:id="w_AlexisRaM_91">remanant</w>
+            <w type="PONfrt" lemma="." ana="#lemma_src=DMF #pos_syn_PONfrt" xml:id="w_AlexisRaM_92">.</w>
+         </ab>
+         <ab n="10" rend="strophe">
+            <lb ed="norm" n="46"/>
+            <w type="VERcjg" lemma="donner" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpst3p #lemma_src_DMF #oldid_w_AlexisBfm_0334" xml:id="w_AlexisRaM_387">Do<choice>
+                  <sic>m</sic>
+                  <corr resp="#eds">nn</corr>
+               </choice>ent</w>
+            <note resp="#eds">La plupart des éditeurs voient ici une erreur du rubriqueur et
+                    lisent <mentioned>noment</mentioned>, <mentioned>cf.</mentioned> également
+                    manuscrits AMPS, et corrigent <mentioned>lur</mentioned> en
+                        <mentioned>le</mentioned>. Cependant, nous comprenons : ‘Ils leur donnent,
+                    aux enfants, la date de leur bonheur’, en lisant donc
+                        <mentioned>donnent</mentioned>.</note>
+            <w type="PROper" lemma="leur1" ana="#pos_syn_PROper #pos_syn_max_PROper3pmi #lemma_src_DMF #oldid_w_AlexisBfm_0335" xml:id="w_AlexisRaM_388">lur</w>
+            <w type="NOMcom" lemma="terme" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsmr #lemma_src_DMF #oldid_w_AlexisBfm_0336" xml:id="w_AlexisRaM_389">terme</w>
+            <w type="PRE" lemma="de" ana="#pos_syn_PRE #pos_syn_max_PRE #lemma_src_DMF #oldid_w_AlexisBfm_0337 #agglCert_low" rend="simple" xml:id="w_AlexisRaM_390">de</w>
+            <w type="DETpos" lemma="leur2" ana="#pos_syn_DETpos #pos_syn_max_DETpos3smr #lemma_src_DMF #oldid_w_AlexisBfm_0338" xml:id="w_AlexisRaM_391">lur</w>
+            <w type="NOMcom" lemma="aaisement" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsmr #lemma_src_DMF #oldid_w_AlexisBfm_0339" xml:id="w_AlexisRaM_392">adaisement</w>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_393">,</w>
+            <lb ed="norm" n="47"/>
+            <w type="CONsub" lemma="quand" ana="#pos_syn_CONsub #pos_syn_max_CONsub #lemma_src_DMF #oldid_w_AlexisBfm_0340" xml:id="w_AlexisRaM_394">quant</w>
+            <w type="VERcjg" lemma="venir" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpsp3s #lemma_src_DMF #oldid_w_AlexisBfm_0341" xml:id="w_AlexisRaM_395">vint</w>
+            <w type="PRE.DETdef" lemma="à.le" ana="#pos_syn_PRE.DETdef #pos_syn_max_PRE.DETdefsmr #lemma_src_DMF #oldid_w_AlexisBfm_0342 #agglCert_low" rend="simple" xml:id="w_AlexisRaM_396">al</w>
+            <w type="VERinf" lemma="faire" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsmr #lemma_src_DMF #oldid_w_AlexisBfm_0343" xml:id="w_AlexisRaM_397">fare</w>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_398">,</w>
+            <w type="ADVgen" lemma="donc" ana="#pos_syn_ADVgen #pos_syn_max_ADVgenp #lemma_src_DMF #oldid_w_AlexisBfm_0344 #agglCert_low" rend="simple" xml:id="w_AlexisRaM_399">dunc</w>
+            <w type="PROper" lemma="le" ana="#pos_syn_PROper #pos_syn_max_PROper3snr #lemma_src_DMF #oldid_w_AlexisBfm_0345 #agglCert_low" rend="simple" xml:id="w_AlexisRaM_400">le</w>
+            <w type="VERcjg" lemma="faire" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpst3p #lemma_src_DMF #oldid_w_AlexisBfm_0346" xml:id="w_AlexisRaM_401">funt</w>
+            <w type="ADVgen" lemma="gentement" ana="#pos_syn_ADVgen #pos_syn_max_ADVgenp #lemma_src_DMF #oldid_w_AlexisBfm_0347" xml:id="w_AlexisRaM_402">gentement</w>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_403">,</w>
+            <lb ed="norm" n="48"/>
+            <w type="NOMcom" lemma="dan" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsmn #lemma_src_DMF #oldid_w_AlexisBfm_0348" xml:id="w_AlexisRaM_404">danz</w>
+            <w type="NOMpro" lemma="Alexis" ana="#pos_syn_NOMpro #pos_syn_max_NOMprosmn #lemma_src_DMF #oldid_w_AlexisBfm_0349" xml:id="w_AlexisRaM_405">Alexis</w>
+            <milestone unit="lb-facs" n="35"/>
+            <w type="PROper" lemma="le" ana="#pos_syn_PROper #pos_syn_max_PROper3sfr #lemma_src_DMF #oldid_w_AlexisBfm_0350" rend="elision" xml:id="w_AlexisRaM_406">l'</w>
+            <w type="VERcjg" lemma="épouser" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpst3s #lemma_src_DMF #oldid_w_AlexisBfm_0351" xml:id="w_AlexisRaM_407">espuset</w>
+            <w type="ADVgen" lemma="bellement" ana="#pos_syn_ADVgen #pos_syn_max_ADVgenp #lemma_src_DMF #oldid_w_AlexisBfm_0352" xml:id="w_AlexisRaM_408">belament</w>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_409">,</w>
+            <lb ed="norm" n="49"/>
+            <w type="CONcoo" lemma="mais1" ana="#pos_syn_CONcoo #pos_syn_max_CONcoo #lemma_src_DMF #oldid_w_AlexisBfm_0353" xml:id="w_AlexisRaM_410">mais</w>
+            <w type="PROdem" lemma="ce1" ana="#pos_syn_PROdem #pos_syn_max_PROdemsnn #lemma_src_DMF #oldid_w_AlexisBfm_0354" xml:id="w_AlexisRaM_411">ço</w>
+            <w type="VERcjg" lemma="être" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpst3s #lemma_src_DMF #oldid_w_AlexisBfm_0355" xml:id="w_AlexisRaM_412">est</w>
+            <w type="DETind" lemma="tel" ana="#pos_syn_DETind #pos_syn_max_DETindsmr #lemma_src_DMF #oldid_w_AlexisBfm_0356" xml:id="w_AlexisRaM_413">tel</w>
+            <w type="NOMcom" lemma="plaid" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsmr #lemma_src_DMF #oldid_w_AlexisBfm_0357" xml:id="w_AlexisRaM_414">plait</w>
+            <w type="PROrel" lemma="dont" ana="#pos_syn_PROrel #pos_syn_max_PROrelsmr #lemma_src_DMF #oldid_w_AlexisBfm_0358" xml:id="w_AlexisRaM_415">dunt</w>
+            <w type="ADVneg" lemma="ne1" ana="#pos_syn_ADVneg #pos_syn_max_ADVneg #lemma_src_DMF #oldid_w_AlexisBfm_0359" xml:id="w_AlexisRaM_416">ne</w>
+            <w type="VERcjg" lemma="vouloir" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgsubipf3s #lemma_src_DMF #oldid_w_AlexisBfm_0360" xml:id="w_AlexisRaM_417">volsist</w>
+            <w type="PROind" lemma="tout" ana="#pos_syn_PROind #pos_syn_max_PROindsmr #lemma_src_DMF #oldid_w_AlexisBfm_0361" xml:id="w_AlexisRaM_418">nïent</w>
+            <w type="PONfbl" lemma="," ana="#lemma_src=DMF #pos_syn_PONfbl" xml:id="w_AlexisRaM_419">,</w>
+            <pb ed="facs" n="30r"/>
+            <lb ed="norm" n="50"/>
+            <milestone unit="lb-facs" n="1"/>
+            <w type="PRE" lemma="de" ana="#pos_syn_PRE #pos_syn_max_PRE #lemma_src_DMF #oldid_w_AlexisBfm_0362" rend="simple" xml:id="w_AlexisRaM_420">de</w>
+            <w type="PROind" lemma="tout" ana="#pos_syn_PROind #pos_syn_max_PROindsmr #lemma_src_DMF #oldid_w_AlexisBfm_0363" xml:id="w_AlexisRaM_421">tut</w>
+            <w type="PRE" lemma="en1" ana="#pos_syn_PRE #pos_syn_max_PRE #lemma_src_DMF #oldid_w_AlexisBfm_0364" rend="simple" xml:id="w_AlexisRaM_422">an</w>
+            <w type="PROind" lemma="tout" ana="#pos_syn_PROind #pos_syn_max_PROindsmr #lemma_src_DMF #oldid_w_AlexisBfm_0365" xml:id="w_AlexisRaM_423">tut</w>
+            <w type="VERcjg" lemma="avoir" ana="#pos_syn_VERcjg #pos_syn_max_VERcjgindpst3s #lemma_src_DMF #oldid_w_AlexisBfm_0366" xml:id="w_AlexisRaM_424">ad</w>
+            <w type="PRE" lemma="à" ana="#pos_syn_PRE #pos_syn_max_PRE #lemma_src_DMF #oldid_w_AlexisBfm_0367" rend="simple" xml:id="w_AlexisRaM_425">a</w>
+            <w type="NOMpro" lemma="Dieu" ana="#pos_syn_NOMpro #pos_syn_max_NOMprosmr #lemma_src_DMF #oldid_w_AlexisBfm_0368 #agglCert_low" rend="simple" xml:id="w_AlexisRaM_426">Deu</w>
+            <w type="DETpos" lemma="son4" ana="#pos_syn_DETpos #pos_syn_max_DETpos3smr #lemma_src_DMF #oldid_w_AlexisBfm_0369" xml:id="w_AlexisRaM_427">sun</w>
+            <w type="NOMcom" lemma="talent" ana="#pos_syn_NOMcom #pos_syn_max_NOMcomsmr #lemma_src_DMF #oldid_w_AlexisBfm_0370" xml:id="w_AlexisRaM_428">talent</w>
+            <w type="PONfrt" lemma="." ana="#lemma_src=DMF #pos_syn_PONfrt" xml:id="w_AlexisRaM_429">.</w>
+         </ab>
+         </div>
+      </body>
+   </text>
+</TEI>

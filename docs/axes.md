@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (4): `ud`, `croala`, `digiliblt`, `openmgh`
+**Members** (5): `ud`, `croala`, `digiliblt`, `openmgh`, `bfm`
 
 ### epigraphy
 
@@ -108,6 +108,14 @@ Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogha
 The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, the Etruscan editions, TIR), Lepontic at the Celtic border, I.Sicily's island mix, and the Sabellic-to-Latin loan lane.
 
 **Members** (10): `wiktionary-recon`, `isicily`, `itant`, `sabellic-loans`, `ceipom`, `open-etruscan`, `larth-etp`, `lexlep`, `lexlep-words`, `tir`
+
+### romance
+
+> The Romanist — Latin's daughters read in their own right, the Serments to Villon.
+
+The medieval Romance vernaculars: the Base de français médiéval's 219 Old and Middle French texts (BFM2022) — the first registrant; the Occitan, Italian and Iberian shelves as they arrive.
+
+**Members** (1): `bfm`
 
 ### etym
 

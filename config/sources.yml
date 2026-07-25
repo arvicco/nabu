@@ -2563,6 +2563,39 @@ openmgh:
   # (CC BY 4.0). The licence includes the annotations (tags)… The edited
   # medieval texts themselves are free from copyright." Cite
   # www.mgh.de/mgh-digital/openmgh + MGH + BSB → attribution.
+bfm:   # P45-4
+  adapter: Nabu::Adapters::Bfm
+  axes: [romance]
+  wired: false   # awaiting the owner-fired first sync (~164 MB: 219 files
+                   # downloaded one by one from the sha1-addressed NAKALA
+                   # file API — resumable, verify-or-skip per file)
+  # P45-4: BFM — Base de français médiéval, corpus BFM2022 (ENS de Lyon /
+  # UMR 5317 IHRIM; resp. Céline Guillot-Barbance, digital resp. Alexei
+  # Lavrentiev). 219 TEI P5 texts / ~6.45M words of medieval French, the
+  # Serments de Strasbourg (842) through the end of the 15th century — the
+  # Old French text mass, first registrant of the `romance` axis. One
+  # NAKALA data per text under collection doi:10.34847/nkl.93ee3ts1
+  # (published 2022-11-07 — a VERSIONED, frozen release, hence the pinned
+  # inventory and manual policy; a re-pin against a future BFM20xx release
+  # is a conscious owner act). LICENSE (D45-c, from bytes): per-data
+  # dcterms:rights verbatim "Texte : Domaine public" + "Suppléments
+  # numériques (balisage XML-TEI, métadonnées, annotations linguistiques) :
+  # Sous licence Etalab" (Licence Ouverte 2.0: reuse/adapt/redistribute/
+  # commercial, "Sous réserve de : mentionner la paternité") → attribution;
+  # the collection note flags 8 files (AlexisRaM, ChaceOisiiT, eulaliBfm,
+  # ImMondePrK, PsArundP, qgraal_cm, QJoyesKa, strasbBfm) whose APPARAT
+  # CRITIQUE is CC BY-NC-SA 3.0 FR — the parser drops that layer (<note>
+  # subtrees, editorial-French <head xml:lang="fr">) from the reading
+  # stream by construction, so one class suffices and no NC bytes are
+  # served; the per-file <licence target> rides each document metadata.
+  # Upstream language tag: fro on ALL 219 datas (no frm split upstream —
+  # 15th-c. texts included) → the whole shelf is fro. Lemmatization is
+  # per-text and MACHINE-armed (the corpus self-describes as "annotated
+  # automatically for morphosyntax and lemmatized"; a minority of texts
+  # carry inline <w lemma> — AlexisRaM even under a div
+  # type="étiquetage-vérifié" flag, a future gold-subset candidate) →
+  # lemma_tier: silver, every count labeled (the GLAUx/diorisis precedent).
+  lemma_tier: silver
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

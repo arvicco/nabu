@@ -1,0 +1,31 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# BFM2022 serves each text at a sha1-ADDRESSED NAKALA url, so whole-file
+# fixtures are refetchable byte-for-byte at their recorded address (a
+# changed upstream file would change its address — drift shows as a dead
+# URL, not silent bytes). AlexisRaM.xml is a documented TRIM of a 971 KB
+# upstream file, so adapter_test stays null (the perseus precedent: a
+# count-based test re-run against the untrimmed upstream would false-fail).
+source: bfm
+adapter_test:
+retrieved: 2026-07-25
+files:
+  - path: xml/nabaret.xml
+    url: https://api.nakala.fr/data/10.34847/nkl.03afsboc/a3d8560ca71e887d81beac20b6478400063bbb9b
+    whole: true
+    trim: none
+  - path: xml/RegleSBenCotton.xml
+    url: https://api.nakala.fr/data/10.34847/nkl.879d4s17/15281692ce5d64b8acb258806d501df4aa020fdc
+    whole: true
+    trim: none
+  - path: xml/strasbBfm.xml
+    url: https://api.nakala.fr/data/10.34847/nkl.f57b23q4/e0536f7f8410fde651354d1a840ff141bc067be2
+    whole: true
+    trim: none
+  - path: xml/AlexisRaM.xml
+    url: https://api.nakala.fr/data/10.34847/nkl.7bbe37x6/e06c6409b82b905ba38a353942d690afa12cb431
+    whole: false
+    trim: teiHeader + body opening + strophes 1, 2 and 10 (ab n="1|2|10", with
+      their notes and the in-word choice/sic/corr) + closing tags; kept ranges
+      byte-identical to upstream
