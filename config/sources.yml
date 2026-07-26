@@ -645,6 +645,25 @@ wold:
   # (its "Old Norse" is noon1243 = Glottolog's Noone; see cldf-spine row).
   sync_policy: manual
 
+clics:
+  adapter: Nabu::Adapters::Clics
+  axes: [etym]
+  wired: false   # P46-6: awaiting the owner-fired first sync (12 MB zip →
+                   # 67 MB gml; CLAUDE.md checklist §6: bin/nabu sync clics,
+                   # eyeball `nabu define moon` / `nabu define 'earth (soil)'`
+                   # for the ↔ colexification lines, then flip). Projected:
+                   # ~2,900 concept entries (edge-bearing nodes of the
+                   # 2,919-node / 4,228-edge network).
+  # CLICS³ — Database of Cross-Linguistic Colexifications (Rzymski,
+  # Tresoldi et al. 2019, CC BY 4.0; DOI 10.17613/5awv-6w15). SCOPE,
+  # argued in the adapter header: the AGGREGATE family-aware network
+  # (clics3-network.gml at tag v1.1 — per-pair family/variety/word weights
+  # + family lists), not the 90 MB per-variety sqlite; the pair network is
+  # the research surface, the word lists behind it stay upstream. A tagged
+  # raw blob is byte-stable: sha-pinned like the Zenodo posture; a new
+  # CLICS release is a new tag the owner re-pins.
+  sync_policy: manual
+
 liv:
   adapter: Nabu::Adapters::Liv
   axes: [etym]

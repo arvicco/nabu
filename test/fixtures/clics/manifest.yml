@@ -1,0 +1,16 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The network gml lives INSIDE the tag-pinned release zip (no per-file raw
+# URL), so it is a documented TRIM (whole: false) — kept node/edge blocks
+# byte-verbatim, block set reduced per the README recipe. The sentinel
+# fetches the zip URL for liveness only (a tagged git blob: drift is an
+# incident, never an update).
+source: clics
+adapter_test: test/adapters/clics_test.rb
+retrieved: 2026-07-26
+files:
+  - path: graphs/network-3-families.gml
+    url: https://raw.githubusercontent.com/clics/clics3/v1.1/clics3-network.gml.zip
+    whole: false
+    trim: 3 of 2,919 nodes + 3 of 4,228 edges — the in-law triangle (Concepticon 1060/2264/2266, graph ids 2550/1855/1856); recipe in README.md
