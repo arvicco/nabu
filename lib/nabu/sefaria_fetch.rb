@@ -4,6 +4,7 @@ require "cgi"
 require "digest"
 require "fileutils"
 require "json"
+require "tmpdir"
 require "faraday"
 
 require_relative "redirect_follow"
@@ -31,10 +32,11 @@ module Nabu
   # preserved under the attic with a GitFetch-format manifest (first copy
   # wins; the manifest records the index sha the file vanished at), and any
   # HTTP failure aborts with the tree byte-unchanged (version files are
-  # staged in memory and written only after every GET succeeded — the whole
-  # selected shelf is ~16 MB, well within staging). The fetch pin
-  # (FetchReport sha) is the INDEX body's sha256 — the one hash that names
-  # the whole fetched scope.
+  # staged in a TEMPDIR SPOOL and moved onto the tree only after every GET
+  # succeeded — P46-1: the Rabbinic wave is ~750 files / ~180 MB, past any
+  # sane in-memory staging; the spool block-scopes to the sync and leaves
+  # no residue on failure). The fetch pin (FetchReport sha) is the INDEX
+  # body's sha256 — the one hash that names the whole fetched scope.
   #
   # Bucket keys contain spaces, commas and (one versionTitle) a trailing
   # space; the wire URL percent-encodes each path segment while the on-disk
@@ -115,17 +117,20 @@ module Nabu
       @doomed_relpaths.map { |rel| File.join(@dir, rel) }
     end
 
-    # Phase 2 — download the selected files (all staged in memory before any
-    # write, so a mid-flight failure leaves the tree byte-unchanged), then
-    # attic the doomed, land everything, pin the state.
+    # Phase 2 — download the selected files (all staged in a tempdir spool
+    # before any write, so a mid-flight failure leaves the tree
+    # byte-unchanged), then attic the doomed, land everything, pin the
+    # state.
     def complete!
       return if @not_modified
 
-      staged = download_selected
-      attic_doomed!
-      write_tree!(staged)
-      @doomed_relpaths.each { |rel| FileUtils.rm_f(File.join(@dir, rel)) }
-      write_state!(staged)
+      Dir.mktmpdir("sefaria-spool") do |spool|
+        staged = download_selected(spool)
+        attic_doomed!
+        write_tree!(staged)
+        @doomed_relpaths.each { |rel| FileUtils.rm_f(File.join(@dir, rel)) }
+        write_state!(staged)
+      end
     end
 
     private
@@ -170,15 +175,19 @@ module Nabu
       raise Error, "#{@index_url}: malformed index JSON: #{e.message}"
     end
 
-    # rel => [body, last_modified] for files upstream said changed; a
-    # per-file 304 keeps the on-disk copy and its pin.
-    def download_selected
+    # rel => [spool path, last_modified, sha256] for files upstream said
+    # changed — bodies go straight to the spool, one file in memory at a
+    # time; a per-file 304 keeps the on-disk copy and its pin.
+    def download_selected(spool)
       pins = state.fetch("files", {})
       @selected.each_with_object({}) do |(rel, url), staged|
         response = get(encode(url), conditional: file_conditional_headers(rel, pins))
         next if response.status == 304
 
-        staged[rel] = [response.body.to_s.b, response.headers["last-modified"]]
+        body = response.body.to_s.b
+        spooled = File.join(spool, staged.size.to_s)
+        File.binwrite(spooled, body)
+        staged[rel] = [spooled, response.headers["last-modified"], Digest::SHA256.hexdigest(body)]
         @downloaded += 1
       end
     end
@@ -186,10 +195,10 @@ module Nabu
     def write_tree!(staged)
       FileUtils.mkdir_p(@dir)
       File.binwrite(File.join(@dir, INDEX_FILE), @index_body)
-      staged.each do |rel, (body, _last_modified)|
+      staged.each do |rel, (spooled, _last_modified, _sha)|
         path = File.join(@dir, rel)
         FileUtils.mkdir_p(File.dirname(path))
-        File.binwrite(path, body)
+        FileUtils.mv(spooled, path)
       end
     end
 
@@ -200,8 +209,8 @@ module Nabu
       old = state.fetch("files", {})
       files = @selected.keys.to_h do |rel|
         pin = if staged.key?(rel)
-                body, last_modified = staged[rel]
-                { "last_modified" => last_modified, "sha256" => Digest::SHA256.hexdigest(body) }
+                _spooled, last_modified, sha = staged[rel]
+                { "last_modified" => last_modified, "sha256" => sha }
               else
                 old.fetch(rel, {})
               end

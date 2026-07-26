@@ -1,0 +1,36 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All five fixtures are whole zip MEMBERS extracted byte-for-byte from
+# EDR.zip (Zenodo record 18468635, 267,683,094 B). A raw GET of the url
+# returns the ZIP, not the member file, so whole: false — fetched for
+# URL-liveness only, never byte-compared. Re-extract the members after any
+# refresh.
+source: edr
+adapter_test: test/adapters/edr_test.rb
+retrieved: 2026-07-26
+files:
+  - path: 000001-025000/aEDR000002.xml
+    url: https://zenodo.org/api/records/18468635/files/EDR.zip/content
+    whole: false
+    trim: whole zip member 000001-025000/aEDR000002.xml (Latin cippus, choice/surplus/g exemplar), kept byte-for-byte uncut; extracted from EDR.zip (267,683,094 B); P46-4
+  - path: 000001-025000/aEDR006167.xml
+    url: https://zenodo.org/api/records/18468635/files/EDR.zip/content
+    whole: false
+    trim: whole zip member 000001-025000/aEDR006167.xml (gap-only edition — the :text fallback exemplar, one of 234 censused), kept byte-for-byte uncut; P46-4
+  - path: 100001-125000/aEDR123437.xml
+    url: https://zenodo.org/api/records/18468635/files/EDR.zip/content
+    whole: false
+    trim: whole zip member 100001-125000/aEDR123437.xml (symbol-only carving, self-closed g type="fulmen" — the metadata-only text_layer:none exemplar), kept byte-for-byte uncut; P46-4
+  - path: 125001-150000/aEDR125195.xml
+    url: https://zenodo.org/api/records/18468635/files/EDR.zip/content
+    whole: false
+    trim: whole zip member 125001-150000/aEDR125195.xml (Greek edition xml:lang="grc" under a root that says "la" — the language-minting exemplar), kept byte-for-byte uncut; P46-4
+  - path: 200001-225000/aEDR200440.xml
+    url: https://zenodo.org/api/records/18468635/files/EDR.zip/content
+    whole: false
+    trim: whole zip member 200001-225000/aEDR200440.xml (textpart record — textpart-relative line urns), kept byte-for-byte uncut; P46-4
+  - path: quarantine/175001-200000/aEDR188615.xml
+    url: https://zenodo.org/api/records/18468635/files/EDR.zip/content
+    whole: false
+    trim: whole zip member 175001-200000/aEDR188615.xml (THE release's one malformed file — overlapping supplied/l hierarchy), kept byte-for-byte uncut, parked under quarantine/ outside the discover glob; P46-4
