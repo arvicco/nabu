@@ -1,0 +1,906 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="http://elephantine.smb.museum/tei/css/tei_oxygen_ERC_elephantine.css"?>
+<!DOCTYPE TEI SYSTEM "http://elephantine.smb.museum/tei/css/tei_erc_elephantine.dtd">
+<TEI xml:id="elephantine_erc_db_collections" xmlns="http://www.tei-c.org/ns/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>collections of interest for objects from Elephantine island</title>
+                <editor>Verena M. Lepper</editor>
+                <respStmt>
+                    <resp>TEI encoding</resp>
+                    <persName ref="http://www.sandro-schwarz.com">Sandro Schwarz</persName>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <ab />
+            </publicationStmt>
+            <sourceDesc>
+                <ab />
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <settingDesc>
+                <listPlace>
+                    <place type="country" xml:id="c1">
+                        <placeName xml:lang="en">Egypt</placeName>
+                        <link target="http://www.trismegistos.org/geo/detail.php?tm=49" />
+                        <place type="region" xml:id="r1">
+                            <region xml:lang="en">Upper Egypt, 1st nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=13441" />
+                            <place type="settlement" xml:id="s3">
+                                <placeName xml:lang="en">Elephantine</placeName>
+                                <placeName>Ꜣbw</placeName>
+                                <placeName>Yb</placeName>
+                                <placeName>YbꜢ</placeName>
+                                <placeName>YbꜤ</placeName>
+                                <placeName>Ἐλεφαντίνη, יב , ⲉⲓⲏⲃ</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=621" />
+                            </place>
+                            <place type="settlement" xml:id="s8">
+                                <placeName xml:lang="en">Aswan / Syene</placeName>
+                                <placeName>Swn</placeName>
+                                <placeName>Συήνη, סונ, ⲥⲟⲩⲁⲁⲛ</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2207" />
+                            </place>
+                            <place type="settlement" xml:id="s15">
+                                <placeName xml:lang="en">Philae</placeName>
+                                <placeName>Pr-(ı͗w-)rq</placeName>
+                                <placeName>Pr-ı͗w-lq</placeName>
+                                <placeName>Pr-ı͗w-rq</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=1767" />
+                            </place>
+                            <place type="settlement" xml:id="s16">
+                                <placeName xml:lang="en">Biggeh or Philae</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s19">
+                                <placeName xml:lang="en">Aphonte (near Syene)</placeName>
+                                <placeName>Ꜥfnṱ</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s24">
+                                <placeName xml:lang="en">district of Elephantine</placeName>
+                                <placeName>tꜢ sḫ.t Yb nomos Elephantinites</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=13441" />
+                            </place>
+                            <place type="settlement" xml:id="s26">
+                                <placeName xml:lang="en">Bige</placeName>
+                                <placeName>PꜢ-wꜢḥ-wꜤb / Pr-wꜤb</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=13" />
+                            </place>
+                            <place type="settlement" xml:id="s39">
+                                <placeName xml:lang="en">Per-uqer (to be checked if this toponym might be a variant for Philae!)</placeName>
+                                <placeName>Pr-w-qr</placeName>
+                                <placeName>Pr-w-rq</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s41">
+                                <placeName xml:lang="en">southern land</placeName>
+                                <placeName>pꜢ TꜢ-št-rsy</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s44">
+                                <placeName xml:lang="en">central quarter of Elephantine</placeName>
+                                <placeName>tꜢ ı͗wy.t ḥry-ı͗b m Yb</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=621" />
+                            </place>
+                            <place type="settlement" xml:id="s62">
+                                <placeName xml:lang="en">Ombites</placeName>
+                                <placeName>pȝ tš n Nb</placeName>
+                                <placeName>Ὀμβίτης</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2975" />
+                            </place>
+                            <place type="settlement" xml:id="s82">
+                                <placeName xml:lang="en">Tmousanis / Senmet</placeName>
+                                <placeName>Snm.t</placeName>
+                                <placeName>Τμουσανις</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=7661" />
+                            </place>
+                            <place type="settlement" xml:id="s107">
+                                <placeName xml:lang="en">on the way from Elephantine to Nubia</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s121">
+                                <placeName xml:lang="en">The western bank of the nile opposite Aswan</placeName>
+                                <placeName>Λιβυης</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s149">
+                                <placeName xml:lang="en">Abaton</placeName>
+                                <placeName>Pr-ı͗w-wꜥb</placeName>
+                                <placeName>Ἀβατων</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s150">
+                                <placeName xml:lang="en">resting place of Chnoum</placeName>
+                                <placeName>pꜣ ꜥ.wy-ḥtp H̱nm</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s151">
+                                <placeName xml:lang="en">house of Petosiris, son of Espmetis, which is in the northern quarter of Elephantine </placeName>
+                                <placeName>pr Pꜣ-ḏı͗-Wsı͗r sꜣ Ns-pꜣ-mty nty (m) tꜣ ı͗w(y.t) mḥ n Yb</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s152">
+                                <placeName xml:lang="en">northern quarter of Elephantine </placeName>
+                                <placeName>tꜣ ı͗wy.t mḥ n Yb</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s153">
+                                <placeName xml:lang="en">Wall-of-Pharaoh</placeName>
+                                <placeName>Pꜣ-sb.t-pr-ꜥꜣ</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s154">
+                                <placeName xml:lang="en">Prim / Ibrim /Qasr Ibrim</placeName>
+                                <placeName>ⲡⲣⲓⲙ</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=1916" />
+                            </place>
+                            <place type="settlement" xml:id="s156">
+                                <placeName xml:lang="en">Thebais (nome of Thebes)</placeName>
+                                <placeName>pꜣ tš N.t</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s158">
+                                <placeName xml:lang="en">Faras</placeName>
+                                <placeName>ⲡⲁⲭⲱⲣⲁⲥ</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=3170" />
+                            </place>
+                            <place type="settlement" xml:id="s159">
+                                <placeName xml:lang="en">Tꜣ-stj</placeName>
+                                <placeName>Taseti</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s160">
+                                <placeName xml:lang="en">Aphrodision</placeName>
+                                <placeName>Ἀφροδισειον</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=53113" />
+                            </place>
+                            <place type="settlement" xml:id="s162">
+                                <placeName xml:lang="en">Quebbet el-Hawa</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s164">
+                                <placeName xml:lang="en">cataract</placeName>
+                                <placeName>Καταρακτίτης</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s165">
+                                <placeName xml:lang="en">Pselkis</placeName>
+                                <placeName>Ψέλκεως</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s168">
+                                <placeName xml:lang="en">Pouramounis</placeName>
+                                <placeName>Πουραμοῦνι</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s171">
+                                <placeName xml:lang="en">Upper Thebais</placeName>
+                                <placeName>Ἄ̣ν̣ω̣ Θ[η]β̣αε̣ίδος</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=13305" />
+                            </place>
+                            <place type="settlement" xml:id="s180">
+                                <placeName xml:lang="en">Arabia (east side)</placeName>
+                                <placeName>Ἀραβίας</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=9755" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r2">
+                            <region xml:lang="en">Upper Egypt, 6th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2997" />
+                            <place type="settlement" xml:id="s66">
+                                <placeName xml:lang="en">Tentyris (Dendera)</placeName>
+                                <placeName>Ỉwn.t (Ỉwn)</placeName>
+                                <placeName>Ỉwn.t-tȝ-nṯr.t</placeName>
+                                <placeName>Ỉwn.t-n-pȝ-nṯr</placeName>
+                                <placeName>Ỉwn.t-n-Ptḥ</placeName>
+                                <placeName>Ỉwn.t-n-Nw.t</placeName>
+                                <placeName>Tȝ-bẖn-n-Ḥw.t-Ḥr?</placeName>
+                                <placeName>Τεντυρις</placeName>
+                                <placeName>Τεντυρα</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2312" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r3">
+                            <region xml:lang="en">Upper Egypt, 5th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2975" />
+                            <place type="settlement" xml:id="s11">
+                                <placeName xml:lang="en">Kom Ombo (Ombos)</placeName>
+                                <placeName>Ὄμβοι</placeName>
+                                <placeName>Nby</placeName>
+                                <placeName>I͗mbt</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=1499" />
+                            </place>
+                            <place type="settlement" xml:id="s65">
+                                <placeName xml:lang="en">Koptites</placeName>
+                                <placeName>tȝ qḥ n Gbt</placeName>
+                                <placeName>Κοπτίτης</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2996" />
+                            </place>
+                            <place type="settlement" xml:id="s86">
+                                <placeName xml:lang="en">The temple of Haroeris in Kom Ombo</placeName>
+                                <placeName>Pr-ꜥꜣ-ı͗ꜣwy</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s184">
+                                <placeName xml:lang="en">Phel</placeName>
+                                <placeName>τῷ εὐαγεῖ μοναστηρίῳ Φελ</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2979" />
+                            </place>
+                            <place type="settlement" xml:id="s186">
+                                <placeName xml:lang="en">Kos</placeName>
+                                <placeName>ⲕⲱⲥ</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=270" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r4">
+                            <region xml:lang="en">Upper Egypt, 4th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2849" />
+                            <place type="settlement" xml:id="s2">
+                                <placeName xml:lang="en">Thebes</placeName>
+                                <placeName>N.t</placeName>
+                                <placeName>Διὸς̣ πόλις ἡ μεγάλη</placeName>
+                                <placeName>נא</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=1341" />
+                            </place>
+                            <place type="settlement" xml:id="s5">
+                                <placeName xml:lang="en">Hermonthis</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=812" />
+                            </place>
+                            <place type="settlement" xml:id="s6">
+                                <placeName xml:lang="en">Luxor</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=576" />
+                            </place>
+                            <place type="settlement" xml:id="s7">
+                                <placeName xml:lang="en">Thebes-East</placeName>
+                                <placeName>wꜢst</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=576" />
+                            </place>
+                            <place type="settlement" xml:id="s50">
+                                <placeName xml:lang="en">Thebes-West, Memnoneia</placeName>
+                                <placeName>Memnoneia</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=1341" />
+                            </place>
+                            <place type="settlement" xml:id="s63">
+                                <placeName xml:lang="en">Pathyrites</placeName>
+                                <placeName>pȝ tš n Pr-Ḥw.t-Ḥr</placeName>
+                                <placeName>Παθυρίτης</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2849" />
+                            </place>
+                            <place type="settlement" xml:id="s64">
+                                <placeName xml:lang="en">Dios Polis (Thebes East)</placeName>
+                                <placeName>Nw.t</placeName>
+                                <placeName>Nw.t-rsy.t</placeName>
+                                <placeName>Nw.t-n-Ỉmn</placeName>
+                                <placeName>Pȝ-dmỉ-Ỉmn</placeName>
+                                <placeName>Ỉwnw-Šmʿ</placeName>
+                                <placeName>Ḥ.t-Sḫm</placeName>
+                                <placeName>Διὸς Πόλις Μεγάλη</placeName>
+                                <placeName>Θῆβαι</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=576" />
+                            </place>
+                            <place type="settlement" xml:id="s104">
+                                <placeName xml:lang="en">Krokodilopolis</placeName>
+                                <placeName>Jw-m-jtrw</placeName>
+                                <placeName>Κροκοδίλων Πόλις</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=1183" />
+                            </place>
+                            <place type="settlement" xml:id="s129">
+                                <placeName xml:lang="en">Madamud</placeName>
+                                <placeName>ⲡⲉⲧⲉⲙⲟⲩⲧ  </placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=1281" />
+                            </place>
+                            <place type="settlement" xml:id="s148">
+                                <placeName xml:lang="en">Tape / Ape</placeName>
+                                <placeName>ⲧⲁⲡⲉ</placeName>
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r5">
+                            <region xml:lang="en">Upper Egypt, 3rd nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2978" />
+                            <place type="settlement" xml:id="s48">
+                                <placeName xml:lang="en">Hierakonpolis</placeName>
+                                <placeName>Mḫn</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=848" />
+                            </place>
+                            <place type="settlement" xml:id="s103">
+                                <placeName xml:lang="en">Hierakonpolis</placeName>
+                                <placeName>Nḫn</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=848" />
+                            </place>
+                            <place type="settlement" xml:id="s145">
+                                <placeName xml:lang="en">Iamu</placeName>
+                                <placeName>Jmꜣ-w</placeName>
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r6">
+                            <region xml:lang="en">Upper Egypt, 2nd nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2717" />
+                            <place type="settlement" xml:id="s53">
+                                <placeName xml:lang="en">Psebtomit</placeName>
+                                <placeName>Ψεβτομιτ</placeName>
+                                <placeName>PꜢ-sbd-mḥty</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=8131" />
+                            </place>
+                            <place type="settlement" xml:id="s56">
+                                <placeName xml:lang="en">Apollonopolites</placeName>
+                                <placeName>pꜣ tš Dbꜣ</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s178">
+                                <placeName xml:lang="en">Tmounetol</placeName>
+                                <placeName>Τμουνε̣τὸλ</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=7657" />
+                            </place>
+                            <place type="settlement" xml:id="s179">
+                                <placeName xml:lang="en">Renebeios</placeName>
+                                <placeName>Ῥενεβειος</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=7005" />
+                            </place>
+                            <place type="settlement" xml:id="s181">
+                                <placeName xml:lang="en">Arsinoe</placeName>
+                                <placeName>Ἀρσινόηι</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=323" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r7">
+                            <region xml:lang="en">Upper Egypt, 7th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2998" />
+                            <place type="settlement" xml:id="s10">
+                                <placeName xml:lang="en">Diospolis Parva (Hiu)</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=577" />
+                            </place>
+                            <place type="settlement" xml:id="s140">
+                                <placeName xml:lang="en">Bat</placeName>
+                                <placeName>Bꜣ.t</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s183">
+                                <placeName xml:lang="en">Bau</placeName>
+                                <placeName>Βαῦ </placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=8985" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r8">
+                            <region xml:lang="en">Upper Egypt, 8th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2999" />
+                            <place type="settlement" xml:id="s45">
+                                <placeName xml:lang="en">Abydos</placeName>
+                                <placeName>Ꜣbḏ.w  אבוט</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=34" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r9">
+                            <region xml:lang="en">Upper Egypt, 9th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2719" />
+                            <place type="settlement" xml:id="s68">
+                                <placeName xml:lang="en">Panopolites</placeName>
+                                <placeName>tȝ qḥ n Ḫnty-Mỉn</placeName>
+                                <placeName>pȝ tš n H̱b?</placeName>
+                                <placeName>Πανοπολίτης</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2719" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r10">
+                            <region xml:lang="en">Upper Egypt, 10th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=4226" />
+                            <place type="settlement" xml:id="s142">
+                                <placeName xml:lang="en">Tjebu</placeName>
+                                <placeName>Ṯbw</placeName>
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r11">
+                            <region xml:lang="en">Upper Egypt, 11th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=12465" />
+                            <place type="settlement" xml:id="s9">
+                                <placeName xml:lang="en">Apollonopolis Parva (Qus) /Dio- kletianou polis</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=270" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r12">
+                            <region xml:lang="en">Upper Egypt, 12th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=3020" />
+                        </place>
+                        <place type="region" xml:id="r13">
+                            <region xml:lang="en">Upper Egypt, 13th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=11513" />
+                            <place type="settlement" xml:id="s13">
+                                <placeName xml:lang="en">Schutb / Shas-hotep</placeName>
+                                <placeName>šꜢs-ḥtp</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=864" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r14">
+                            <region xml:lang="en">Upper Egypt, 14th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=11514" />
+                        </place>
+                        <place type="region" xml:id="r15">
+                            <region xml:lang="en">Upper Egypt, 15th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=11515" />
+                            <place type="settlement" xml:id="s146">
+                                <placeName xml:lang="en">Mait</placeName>
+                                <placeName>Mꜣj</placeName>
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r16">
+                            <region xml:lang="en">Upper Egypt, 16th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=11516" />
+                        </place>
+                        <place type="region" xml:id="r17">
+                            <region xml:lang="en">Upper Egypt, 17th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=11517" />
+                        </place>
+                        <place type="region" xml:id="r18">
+                            <region xml:lang="en">Upper Egypt, 18th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2713" />
+                            <place type="settlement" xml:id="s144">
+                                <placeName xml:lang="en">Nemti</placeName>
+                                <placeName>Nmt.j</placeName>
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r19">
+                            <region xml:lang="en">Upper Egypt, 19th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=7869" />
+                            <place type="settlement" xml:id="s69">
+                                <placeName xml:lang="en">Oxyrynchites</placeName>
+                                <placeName>pȝ tš n Pr-Mḏ</placeName>
+                                <placeName>Ὀξυρυγχίτης</placeName>
+                                <placeName>Ἰουστινουπολίτης</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2722" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r20">
+                            <region xml:lang="en">Upper Egypt, 20th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=7329" />
+                            <place type="settlement" xml:id="s78">
+                                <placeName xml:lang="en">Herakleopolis Magna</placeName>
+                                <placeName>Nn-nswt</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=801" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r21">
+                            <region xml:lang="en">Upper Egypt, 21st nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=11521" />
+                        </place>
+                        <place type="region" xml:id="r22">
+                            <region xml:lang="en">Upper Egypt, 22nd nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=11266" />
+                        </place>
+                        <place type="region" xml:id="r23">
+                            <region xml:lang="en">Lower Egypt, 1st nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2714" />
+                            <place type="settlement" xml:id="s14">
+                                <placeName xml:lang="en">Memphis</placeName>
+                                <placeName>Mn-nfr</placeName>
+                                <placeName>Ḥw.t-kꜣ-Ptḥ</placeName>
+                                <placeName>מפי, מנפי</placeName>
+                                <placeName>rs.j-jnb=f, jnb-ḥḏ</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=1344" />
+                            </place>
+                            <place type="settlement" xml:id="s76">
+                                <placeName xml:lang="en">Anch-tawi (Memphis)</placeName>
+                                <placeName>ꜥnḫ-tꜣ.wj</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=10723" />
+                            </place>
+                            <place type="settlement" xml:id="s118">
+                                <placeName xml:lang="en">Rosetau</placeName>
+                                <placeName>Rꜣ-sṯꜣ.w</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=11159" />
+                            </place>
+                            <place type="settlement" xml:id="s120">
+                                <placeName xml:lang="en">Letopolis</placeName>
+                                <placeName>Sḫm</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=1245" />
+                            </place>
+                            <place type="settlement" xml:id="s143">
+                                <placeName xml:lang="en">Shenu</placeName>
+                                <placeName>Šnw</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s155">
+                                <placeName xml:lang="en">Piauo</placeName>
+                                <placeName>Πιαυω</placeName>
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r24">
+                            <region xml:lang="en">Lower Egypt, 2nd nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=3079" />
+                        </place>
+                        <place type="region" xml:id="r25">
+                            <region xml:lang="en">Lower Egypt, 3rd nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=3080" />
+                        </place>
+                        <place type="region" xml:id="r26">
+                            <region xml:lang="en">Lower Egypt, 4th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=11525" />
+                        </place>
+                        <place type="region" xml:id="r27">
+                            <region xml:lang="en">Lower Egypt, 5th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=11526" />
+                            <place type="settlement" xml:id="s60">
+                                <placeName xml:lang="en">Sais</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2072" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r28">
+                            <region xml:lang="en">Lower Egypt, 6th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=11905" />
+                            <place type="settlement" xml:id="s114">
+                                <placeName xml:lang="en">Dep</placeName>
+                                <placeName>Dp</placeName>
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r29">
+                            <region xml:lang="en">Lower Egypt, 7th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=3072" />
+                        </place>
+                        <place type="region" xml:id="r30">
+                            <region xml:lang="en">Lower Egypt, 8th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=11907" />
+                        </place>
+                        <place type="region" xml:id="r31">
+                            <region xml:lang="en">Lower Egypt, 9th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=3115" />
+                            <place type="settlement" xml:id="s116">
+                                <placeName xml:lang="en">Bousiris</placeName>
+                                <placeName>Ḏd.w</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=469" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r32">
+                            <region xml:lang="en">Lower Egypt, 10th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=3086" />
+                        </place>
+                        <place type="region" xml:id="r33">
+                            <region xml:lang="en">Lower Egypt, 11th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=3087" />
+                        </place>
+                        <place type="region" xml:id="r34">
+                            <region xml:lang="en">Lower Egypt, 12th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2715" />
+                        </place>
+                        <place type="region" xml:id="r35">
+                            <region xml:lang="en">Lower Egypt, 13th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=3088" />
+                            <place type="settlement" xml:id="s79">
+                                <placeName xml:lang="en">Heliopolis</placeName>
+                                <placeName>Iwnw</placeName>
+                                <placeName>Ελιου Πόλις</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=761" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r36">
+                            <region xml:lang="en">Lower Egypt, 14th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=3089" />
+                        </place>
+                        <place type="region" xml:id="r37">
+                            <region xml:lang="en">Lower Egypt, 15th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=11537" />
+                        </place>
+                        <place type="region" xml:id="r38">
+                            <region xml:lang="en">Lower Egypt, 16th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=3090" />
+                        </place>
+                        <place type="region" xml:id="r39">
+                            <region xml:lang="en">Lower Egypt, 17th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=3224" />
+                        </place>
+                        <place type="region" xml:id="r40">
+                            <region xml:lang="en">Lower Egypt, 18th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=11742" />
+                        </place>
+                        <place type="region" xml:id="r41">
+                            <region xml:lang="en">Lower Egypt, 19th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2957" />
+                        </place>
+                        <place type="region" xml:id="r42">
+                            <region xml:lang="en">Lower Egypt, 20th nome</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=282" />
+                        </place>
+                        <place type="region" xml:id="r43">
+                            <region xml:lang="en">Upper Egypt</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2766" />
+                            <place type="settlement" xml:id="s52">
+                                <placeName xml:lang="en">unknown (in Upper Egypt)</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2766" />
+                            </place>
+                            <place type="settlement" xml:id="s131">
+                                <placeName xml:lang="en">Qūṣ</placeName>
+                                <placeName>قوص</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s132">
+                                <placeName xml:lang="en">the monastery of Philotheos</placeName>
+                                <placeName>دير فيلوتاوس</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s133">
+                                <placeName xml:lang="en">Qifṭ</placeName>
+                                <placeName>قفط</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s136">
+                                <placeName xml:lang="en">Ta-set-taiu-Neıth</placeName>
+                                <placeName>Tꜣ-s.t-tꜣy=w-N.t</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s137">
+                                <placeName xml:lang="en">Upper Egypt</placeName>
+                                <placeName>الصعيد الاعلى</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s138">
+                                <placeName xml:lang="en">Assiut</placeName>
+                                <placeName>Sꜣ.wtj</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s172">
+                                <placeName xml:lang="en">Thebais</placeName>
+                                <placeName>τοῦ Θηβαϊκοῦ λιμίτου</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2982" />
+                            </place>
+                            <place type="settlement" xml:id="s173">
+                                <placeName xml:lang="en">Petlares</placeName>
+                                <placeName>Πετλαρης </placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=6546" />
+                            </place>
+                            <place type="settlement" xml:id="s203">
+                                <placeName xml:lang="en">Natho</placeName>
+                                <placeName>Nꜣy.w-tꜣ-ḥ.wt</placeName>
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r44">
+                            <region xml:lang="en">Lower Egypt</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2712" />
+                            <place type="settlement" xml:id="s12">
+                                <placeName xml:lang="en">unknown (in Lower Egypt)</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2712" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r45">
+                            <region xml:lang="en">Lower Nubia / Wawat</region>
+                            <place type="settlement" xml:id="s122">
+                                <placeName xml:lang="en">Korte</placeName>
+                                <placeName>ⲕⲟⲩⲣⲧ</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=5325" />
+                            </place>
+                            <place type="settlement" xml:id="s123">
+                                <placeName xml:lang="en">Kyrshe</placeName>
+                                <placeName>ⲕⲩⲣϣⲏ</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s124">
+                                <placeName xml:lang="en">Pordippa</placeName>
+                                <placeName>ⲡⲟⲣⲇⲓⲡⲡⲁ</placeName>
+                            </place>
+                            <place type="settlement" xml:id="s128">
+                                <placeName xml:lang="en">Kalabsha (Talmis)</placeName>
+                                <placeName>ⲧⲁⲗⲙⲓⲥ</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2787" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r46">
+                            <region xml:lang="en">Sinai</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=37251" />
+                            <place type="settlement" xml:id="s61">
+                                <placeName xml:lang="en">Migdol (Tell el-Heir)</placeName>
+                                <placeName>Mktr</placeName>
+                                <placeName>Μαγδωλος</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2698" />
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r48">
+                            <region xml:lang="en">Fayum</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=332" />
+                            <place type="settlement" xml:id="s202">
+                                <placeName xml:lang="en">Naqlūn</placeName>
+                                <placeName>نقلون</placeName>
+                            </place>
+                        </place>
+                        <place type="region" xml:id="r55">
+                            <region xml:lang="en">Pamunpara/Nasunpara</region>
+                        </place>
+                        <place type="region" xml:id="r56">
+                            <region xml:lang="en">Eastern Dessert, Porphyrites</region>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2771" />
+                            <place type="settlement" xml:id="s169">
+                                <placeName xml:lang="en">Porphyrites</placeName>
+                                <placeName>Πορφυρίτου</placeName>
+                                <link target="http://www.trismegistos.org/geo/detail.php?tm=2771" />
+                            </place>
+                        </place>
+                        <place type="settlement" xml:id="s18">
+                            <placeName xml:lang="en">Akhmim / Khemmis</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=1589" />
+                        </place>
+                        <place type="settlement" xml:id="s20">
+                            <placeName xml:lang="en">Afti</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s22">
+                            <placeName xml:lang="en">Alexandria; the fortress; the city</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=100" />
+                        </place>
+                        <place type="settlement" xml:id="s23">
+                            <placeName xml:lang="en">district (?) of Ta-set-taiu-net</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s29">
+                            <placeName xml:lang="en">Edfou / Apollonpolis magna</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=269" />
+                        </place>
+                        <place type="settlement" xml:id="s30">
+                            <placeName xml:lang="en">Elkab / Eileithyiaspolis</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=611" />
+                        </place>
+                        <place type="settlement" xml:id="s31">
+                            <placeName xml:lang="en">Esna / Latopolis</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=1227" />
+                        </place>
+                        <place type="settlement" xml:id="s35">
+                            <placeName xml:lang="en">Tmounpsobthis</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s36">
+                            <placeName xml:lang="en">Nomos Ombites</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2975" />
+                        </place>
+                        <place type="settlement" xml:id="s40">
+                            <placeName xml:lang="en">Ptolemais</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=5259" />
+                        </place>
+                        <place type="settlement" xml:id="s43">
+                            <placeName xml:lang="en">Tkoitow</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=7622" />
+                        </place>
+                        <place type="settlement" xml:id="s47">
+                            <placeName xml:lang="en">Hermopolis Magna</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=816" />
+                        </place>
+                        <place type="settlement" xml:id="s49">
+                            <placeName xml:lang="en">Cairo</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2740" />
+                        </place>
+                        <place type="settlement" xml:id="s54">
+                            <placeName xml:lang="en">Soknopaiu Nesos</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2157" />
+                        </place>
+                        <place type="settlement" xml:id="s81">
+                            <placeName xml:lang="en">Domain of Khnoum</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s83">
+                            <placeName xml:lang="en">Domain of Amun</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s84">
+                            <placeName xml:lang="en">Domain of Anukis</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s85">
+                            <placeName xml:lang="en">Domain of Month</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s87">
+                            <placeName xml:lang="en">Gebel es-Silsile</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s89">
+                            <placeName xml:lang="en">Edfou-Behedet</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s98">
+                            <placeName xml:lang="en">Dandara</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s100">
+                            <placeName xml:lang="en">Chenoboskia</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s108">
+                            <placeName xml:lang="en">Tshetres</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s111">
+                            <placeName xml:lang="en">Sile</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=2109" />
+                        </place>
+                        <place type="settlement" xml:id="s113">
+                            <placeName xml:lang="en">Elephantine / Syene</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s117">
+                            <placeName xml:lang="en">Fayum</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s130">
+                            <placeName xml:lang="en">Egypt</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s166">
+                            <placeName xml:lang="en">Cairo / ʿAin al-ṣira</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s167">
+                            <placeName xml:lang="en">Damascus</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s174">
+                            <placeName xml:lang="en">Tsenane</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=7740" />
+                        </place>
+                        <place type="settlement" xml:id="s176">
+                            <placeName xml:lang="en">Nikopolis</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s177">
+                            <placeName xml:lang="en">Antinooupolis</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s185">
+                            <placeName xml:lang="en">Both Lands</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s191">
+                            <placeName xml:lang="en">The-Canal-of-Iunet</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s192">
+                            <placeName xml:lang="en">The-Morringpost-of-the-Canal-of-Sobk-Ra</placeName>
+                        </place>
+                    </place>
+                    <place type="country" xml:id="c2">
+                        <placeName xml:lang="en">Germany</placeName>
+                        <link target="http://www.trismegistos.org/geo/detail.php?tm=3245" />
+                        <place type="settlement" xml:id="s1">
+                            <placeName xml:lang="en">Berlin</placeName>
+                            <link target="http://www.trismegistos.org/geo/detail.php?tm=20102" />
+                        </place>
+                    </place>
+                    <place type="country" xml:id="c3">
+                        <placeName xml:lang="en">Sudan</placeName>
+                        <link target="http://www.trismegistos.org/geo/detail.php?tm=5081" />
+                    </place>
+                    <place type="country" xml:id="c4">
+                        <placeName xml:lang="en">Libya</placeName>
+                        <link target="http://www.trismegistos.org/geo/detail.php?tm=1252" />
+                    </place>
+                    <place type="country" xml:id="c5">
+                        <placeName xml:lang="en">Israel</placeName>
+                        <link target="http://www.trismegistos.org/geo/detail.php?tm=4678" />
+                        <place type="region" xml:id="r53">
+                            <region xml:lang="en">Judah</region>
+                        </place>
+                        <place type="region" xml:id="r54">
+                            <region xml:lang="en">Samaria</region>
+                        </place>
+                        <place type="settlement" xml:id="s72">
+                            <placeName xml:lang="en">Jerusalem</placeName>
+                        </place>
+                    </place>
+                    <place type="country" xml:id="c6">
+                        <placeName xml:lang="en">Lebanon</placeName>
+                        <link target="http://www.trismegistos.org/geo/detail.php?tm=37511" />
+                    </place>
+                    <place type="country" xml:id="c7">
+                        <placeName xml:lang="en">Syria</placeName>
+                        <link target="http://www.trismegistos.org/geo/detail.php?tm=2211" />
+                        <place type="settlement" xml:id="s119">
+                            <placeName xml:lang="en">Dakkeh, Nubia</placeName>
+                        </place>
+                    </place>
+                    <place type="country" xml:id="c8">
+                        <placeName xml:lang="en">Cyprus</placeName>
+                        <link target="http://www.trismegistos.org/geo/detail.php?tm=528" />
+                    </place>
+                    <place type="country" xml:id="c9">
+                        <placeName xml:lang="en">Greece</placeName>
+                        <link target="http://www.trismegistos.org/geo/detail.php?tm=762" />
+                    </place>
+                    <place type="country" xml:id="c10">
+                        <placeName xml:lang="en">Italy</placeName>
+                        <link target="http://www.trismegistos.org/geo/detail.php?tm=30284" />
+                    </place>
+                    <place type="country" xml:id="c11">
+                        <placeName xml:lang="en">France</placeName>
+                        <link target="http://www.trismegistos.org/geo/detail.php?tm=693" />
+                        <place type="settlement" xml:id="s71">
+                            <placeName xml:lang="en">Paris</placeName>
+                        </place>
+                    </place>
+                    <place type="country" xml:id="c12">
+                        <placeName xml:lang="en">Belgium</placeName>
+                        <place type="settlement" xml:id="s70">
+                            <placeName xml:lang="en">Bruxelles</placeName>
+                        </place>
+                    </place>
+                    <place type="country" xml:id="c13">
+                        <placeName xml:lang="en">Austria</placeName>
+                        <place type="settlement" xml:id="s73">
+                            <placeName xml:lang="en">Vienna</placeName>
+                        </place>
+                    </place>
+                    <place type="country" xml:id="c14">
+                        <placeName xml:lang="en">United Kingdom</placeName>
+                        <place type="settlement" xml:id="s74">
+                            <placeName xml:lang="en">London</placeName>
+                        </place>
+                        <place type="settlement" xml:id="s102">
+                            <placeName xml:lang="en">Oxford</placeName>
+                        </place>
+                    </place>
+                    <place type="country" xml:id="c15">
+                        <placeName xml:lang="en">Switzerland</placeName>
+                        <place type="settlement" xml:id="s75">
+                            <placeName xml:lang="en">Zurich</placeName>
+                        </place>
+                    </place>
+                    <place type="country" xml:id="c16">
+                        <placeName xml:lang="en">Ashur</placeName>
+                    </place>
+                    <place type="country" xml:id="c17">
+                        <placeName xml:lang="en">Unknown</placeName>
+                    </place>
+                </listPlace>
+            </settingDesc>
+        </profileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div />
+        </body>
+    </text>
+</TEI>
