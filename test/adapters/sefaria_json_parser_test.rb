@@ -16,6 +16,9 @@ class SefariaJsonParserTest < Minitest::Test
   TARGUM = File.join(FIXTURES, "json/Tanakh/Targum")
 
   OBADIAH = File.join(TARGUM, "Targum Jonathan/Prophets/Targum Jonathan on Obadiah/Hebrew/Mikraot Gedolot.json")
+  TAMID_WIKISOURCE = File.join(FIXTURES, "json/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/Wikisource Talmud Bavli.json")
+  TAMID_SCT_EN = File.join(FIXTURES,
+                           "json/Talmud/Bavli/Seder Kodashim/Tamid/English/Sefaria Community Translation.json")
   JONAH_EN = File.join(TARGUM,
                        "Targum Jonathan/Prophets/Targum Jonathan on Jonah/English/Sefaria Community Translation.json")
   SHENI = File.join(TARGUM,
@@ -59,6 +62,49 @@ class SefariaJsonParserTest < Minitest::Test
   def test_sequence_is_reading_order
     document = parse(OBADIAH)
     assert_equal (0..20).to_a, document.map(&:sequence)
+  end
+
+  # --- daf citations (P46-1; sectionNames[0] == "Daf") ------------------------
+  #
+  # Bavli version files declare ["Daf","Line"] and serialize `text` as a
+  # jagged array POSITIONAL FROM DAF 1a: 1-based position p is daf
+  # ceil(p/2), amud "a" when p is odd — so a tractate's opening dafs are
+  # empty leading arrays. THE ARITHMETIC IS FROZEN ONCE MINTED: these pins
+  # are the P46-1 scouting facts verified against the live bucket
+  # (2026-07-25) — Wikisource Tamid starts at 25b (the real Vilna start)
+  # and ends 33b; Davidson Chagigah runs 2a..27a.
+
+  def test_daf_citation_arithmetic_pins
+    daf = Nabu::Adapters::SefariaJsonParser.method(:daf_citation)
+    assert_equal "1a", daf.call(1)
+    assert_equal "1b", daf.call(2)
+    assert_equal "2a", daf.call(3), "Davidson Chagigah: first non-empty 0-based index 2 -> 2a"
+    assert_equal "2b", daf.call(4)
+    assert_equal "25b", daf.call(50), "Wikisource Tamid: first non-empty 0-based index 49 -> 25b"
+    assert_equal "27a", daf.call(53), "Davidson Chagigah: last non-empty 0-based index 52 -> 27a"
+    assert_equal "33b", daf.call(66), "Wikisource Tamid: last non-empty 0-based index 65 -> 33b"
+  end
+
+  def test_daf_mode_mints_daf_amud_citations_for_the_wikisource_tamid_fixture
+    document = parse(TAMID_WIKISOURCE, urn: "urn:nabu:sefaria:tamid:he:wikisource-talmud-bavli")
+    assert_equal 207, document.size
+    assert_equal "urn:nabu:sefaria:tamid:he:wikisource-talmud-bavli:25b.1", document.first.urn,
+                 "Tamid's gemara begins at daf 25b — the leading 49 dafs are honest empty arrays"
+    assert_equal "33b.12", document.passages.last.urn.split(":").last
+    assert(document.none? { |p| p.urn.match?(/:\d+\.\d+\z/) },
+           "every passage cites daf.amud, never a bare positional index")
+  end
+
+  def test_daf_mode_holds_for_the_one_line_sct_tamid_partial
+    document = parse(TAMID_SCT_EN, language: "eng")
+    assert_equal 1, document.size
+    assert_equal "26a.1", document.first.urn.split(":").last
+  end
+
+  def test_non_daf_section_names_keep_plain_positional_citations
+    document = parse(OBADIAH)
+    assert_equal "1.1", document.first.urn.split(":").last,
+                 'only sectionNames[0] == "Daf" flips daf mode — Chapter/Verse stays numeric'
   end
 
   # --- text discipline --------------------------------------------------------
