@@ -2633,6 +2633,34 @@ bfm:   # P45-4
   lemma_tier: silver
   sync_policy: manual
 
+edr:   # P46-4
+  adapter: Nabu::Adapters::Edr
+  axes: [epigraphy]
+  wired: false   # awaiting the owner-fired first sync: ONE ~268 MB Zenodo GET
+                   # (streamed, sha256-pinned), ~650 MB canonical unpacked.
+  # P46-4: EDR — Epigraphic Database Roma (edr-edr.it; Sapienza), the
+  # inscriptions of ITALY: the geographic complement of held EDH (the
+  # provinces). Data release = ONE Zenodo artifact, record 18468635
+  # (version 12, concept DOI 10.5281/zenodo.3931222), EDR.zip 267,683,094 B,
+  # md5 d679b73ce95537406b84468cac64753c verified on the 2026-07-26 census
+  # download, sha256 pinned in the adapter. MEASURED census (whole zip, not
+  # estimated): 115,591 EpiDoc files in nine range dirs, ids aEDR<nnnnnn>
+  # all unique, zero non-XML members; 1 malformed file (aEDR188615 —
+  # overlapping supplied/l hierarchy, the honest quarantine); edition-div
+  # xml:lang la 110,006 / grc 5,584 (the ROOT tag says "la" on every record
+  # — never trusted). Full-tree dry parse 2026-07-26: expect 115,590 docs
+  # (88 symbol-only metadata-only records) / 596,064 passages (170 :text
+  # fallbacks) / 1 quarantine at first sync. LICENSE, two layers recorded:
+  # the Zenodo DEPOSIT is CC BY 4.0 (deposited by the EDR project
+  # leadership — the redistribution grant) while every file's in-file
+  # <licence> still carries the EAGLE-era "Reserved Rights - Free access"
+  # (europeana rr-f) statement, pinned at parse → attribution. EDR and EDH
+  # share border inscriptions conceptually — separate authorities,
+  # provenance-distinct witnesses, never deduped (standing doctrine).
+  # Re-releases are NEW Zenodo versions: the owner re-pins url+sha and
+  # re-syncs.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.stoa.org/epidoc/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:space="preserve" xml:lang="la" xml:base="ex-epidoctemplate.xml">
+		<teiHeader>
+			<fileDesc>
+				<titleStmt>
+				<title>Inscription from Puteoli</title>
+				</titleStmt>  
+				<publicationStmt>
+				<authority>Epigraphic Database Roma</authority>
+				<idno type="URI">http://www.edr-edr.it/edr_programmi/res_complex_comune.php?id_nr=EDR188615</idno>
+				<idno type="TM"/>
+				<idno type="localID">EDR188615</idno>	
+				<availability>
+					<licence target=" http://www.europeana.eu/rights/rr-f/">Reserved Rights - Free access via Epigraphic Database Roma</licence>
+				</availability>
+				</publicationStmt>
+				<sourceDesc>
+				<msDesc>
+					<msIdentifier>
+						
+						
+						
+						<repository>Napoli, Museo Archeologico Nazionale, depositi (inv. 3269)</repository>
+						<collection/>
+						<idno/>
+					</msIdentifier>
+					<physDesc>
+						<objectDesc>
+						<supportDesc>
+							<support>
+								<objectType ref="http://www.eagle-network.eu/voc/objtyp/lod/53">basis</objectType>
+								<material ref="http://www.eagle-network.eu/voc/material/lod/48">marmor</material>
+								<p/>
+								<dimensions unit="cm">
+								<height>26.00</height>
+								<width>25.00</width>
+								<depth>12.50</depth>
+								</dimensions>
+								<rs type="decoration" ref="http://www.eagle-network.eu/voc/decor/lod/1000" xml:lang="en">no decoration</rs>
+								<rs type="statPreserv">tit. mutilus</rs>
+							</support>
+						</supportDesc>
+						<layoutDesc>
+							<layout>
+								<rs type="execution" ref="http://www.eagle-network.eu/voc/writing/lod/1">scalpro</rs>
+							</layout>
+						</layoutDesc>
+						</objectDesc>
+						<handDesc>
+						<handNote>
+							<width unit="cm"/>
+							<height unit="cm">0,9-1,3</height>
+						</handNote>
+						</handDesc>
+					</physDesc>
+					
+					<history>
+						<origin>
+
+						<origPlace><placeName type="provinceItalicRegion">Latium et Campania cum insulis (Regio I)</placeName><placeName>Puteoli</placeName></origPlace>
+						<origDate notBefore-custom="312" notAfter-custom="340" datingMethod="http://en.wikipedia.org/wiki/Julian_calendar">312 AD - 340 AD</origDate>
+							
+						
+						</origin>
+						<provenance type="found"> 
+						<placeName>Pozzuoli (Napoli)</placeName>                     
+						<placeName type="locus">Pozzuoli (Napoli), ignoratur; poi Napoli, coll. G. Fusco (metà XIX sec.), infine Museo Archeologico</placeName>
+						<placeName type="modern_region"/><placeName type="modernCountry">Italia</placeName></provenance>
+					</history>
+				</msDesc>
+				</sourceDesc>
+			</fileDesc>
+				
+			<encodingDesc>
+				<p>Marked-up according to the EpiDoc Guidelines</p>
+				<classDecl>
+				<taxonomy>
+					<category xml:id="representation">
+						<catDesc>Digitized other representations</catDesc>
+					</category>
+				</taxonomy>
+				</classDecl>
+			</encodingDesc>
+			<profileDesc>
+				<textClass>
+		<keywords>
+		<term ref="http://www.eagle-network.eu/voc/typeins/lod/232">honorarius</term>
+		</keywords>
+		</textClass>
+
+				<langUsage>
+				<language ident="ar">Arabic</language>
+				<language ident="en">English</language>
+				<language ident="fr">French</language>
+				<language ident="de">German</language>
+				<language ident="grc">Ancient Greek</language>
+				<language ident="grc-Latn">Transliterated Greek</language>
+				<language ident="el">Modern Greek</language>
+				<language ident="he">Hebrew</language>
+				<language ident="it">Italian</language>
+				<language ident="la">Latin</language>
+				<language ident="sp">Spanish</language>
+				</langUsage>
+			<creation>EAGLE - Europeana Network of Ancient Greek and Latin Epigraphy</creation></profileDesc>
+			<revisionDesc>
+			<change when="2023-07-01" who="Giuseppe CAMODECA">
+			</change>
+
+			</revisionDesc>
+		</teiHeader>
+		
+			<facsimile>
+			
+					<graphic url="http://www.edr-edr.it/foto_epigrafi/immagini_uso/188/188615.jpg">
+					<desc>Dedica ad un ignoto console
+					<ref type="licence" target="http://www.europeana.eu/rights/rr-f/">Rights Reserved - Free Access via Epigraphic Database Roma</ref>	
+					</desc>
+					</graphic>
+				
+					<graphic url="http://www.edr-edr.it/foto_epigrafi/immagini_uso/188/188615-1.jpg">
+					<desc>Dedica per un ignoto console
+					<ref type="licence" target="http://www.europeana.eu/rights/rr-f/">Rights Reserved - Free Access via Epigraphic Database Roma</ref>	
+					</desc>
+					</graphic>
+				
+			</facsimile>
+			
+		<text>
+			<body>
+					
+				<div type="bibliography">
+				<listBibl>
+		
+					<bibl>
+						CIL 10, 01709 (1)
+					</bibl> 
+			
+					<bibl>
+						CLE 0030 (2)
+					</bibl> 
+			
+					<bibl>
+						ILCV 00058 (3)
+					</bibl> 
+			
+					<bibl>
+						I segni del potere. Realtà e immaginario della sovranità nella Roma imperiale, Bari 2011, p. 48 sg. (Cl. Panella) (su queste insegne concesse al console alla sua entrata in carica, simile a quelle del trionfatore) (4)
+					</bibl> 
+			
+				</listBibl>
+				</div>
+				
+				
+				<!--
+				- - - - - - / [- - -]+LVCA++Ọ[- - -] / [- - - f]avente principum / [c]ui maximus / [dat co]nsulatus cuncta ha=/[b]ẹre insignia, / [sellam cu]rulem, scipịọṇẹṃ, / [pur]puṛạm.
+				--><div type="edition" xml:lang="la"><head>Text</head><ab><lb n="0"/>
+				<gap reason="lost" extent="unknown" unit="line"/><lb n="1"/><gap reason="lost" extent="unknown" unit="character"/><gap reason="illegible" quantity="1" unit="character"/>LVCA<gap reason="illegible" quantity="2" unit="character"/><unclear>O</unclear><gap reason="lost" extent="unknown" unit="character"/><lg><l><lb n="2"/><gap reason="lost" extent="unknown" unit="character"/><supplied reason="lost"> f</supplied>avente principum</l><l><lb n="3"/><supplied reason="lost">c</supplied>ui maximus<lb n="4"/><supplied reason="lost">dat</l><l> co</supplied>nsulatus cuncta</l><l> ha<lb break="no" n="5"/><supplied reason="lost">b</supplied><unclear>e</unclear>re insignia,</l><l><lb n="6"/><supplied reason="lost">sellam cu</supplied>rulem,</l><l> scip<unclear>ionem</unclear>,<lb n="7"/><supplied reason="lost">pur</supplied>pu<unclear>ra</unclear>m</l>.
+				</lg></ab></div>
+
+				<div type="apparatus">
+		
+					<p>
+						Textus secundum (1)-(2), contulit G. Camodeca a. 1990&lt;br&gt;v. 1: [---]LVCALDO[---] (1)-(3); [--- il]luc ad do[mum? ---] (2)&lt;br&gt;v. 2: [deo f]avente (2)-(3)&lt;br&gt;v. 4: [princeps co]nsulatus (1)&lt;br&gt;v. 6: [permisit sellam cu]rulem (1)&lt;br&gt;vv. 2-3: l'imperatore secondo (2)-(3) potrebbe essere Costantino maximus Augustus dal 312/315, su cui Th. Gruenewald, Constantinus Maximus Augustus: Herrschaftspropaganda in der zeitgenössischen Überlieferung, Stuttgart 1990. pp. 86 sgg. 
+					</p> 
+			
+				</div>
+			
+				<div type="commentary">
+				<p/>
+				</div>
+
+			</body>
+		</text>
+		</TEI>
