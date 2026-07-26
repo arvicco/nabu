@@ -250,13 +250,14 @@ module Nabu
       parts.join(" ")
     end
 
-    # `MM-DD HH:MM`; the clock is dropped when the sync is older than 24h; the
-    # year is prefixed only when it is not the current year (P40-s).
+    # `MM-DD HH:MM`, always — one column, one format (P46-r5; the P40-s
+    # drop-the-clock-after-24h compaction made fresh and old rows speak two
+    # registers, and the mix read as a defect). The year is prefixed only
+    # when it is not the current year.
     def timestamp(at)
       time = at.is_a?(Time) ? at : Time.parse(at.to_s)
-      now = Time.now
-      stamp = time.strftime((now - time) < 86_400 ? "%m-%d %H:%M" : "%m-%d")
-      time.year == now.year ? stamp : "#{time.year}-#{stamp}"
+      stamp = time.strftime("%m-%d %H:%M")
+      time.year == Time.now.year ? stamp : "#{time.year}-#{stamp}"
     end
 
     # Zero-suppressed delta: only the non-zero components (`+1418 !27`); the
