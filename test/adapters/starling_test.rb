@@ -25,6 +25,7 @@ class StarlingTest < Minitest::Test
 
   FIXTURES = Nabu::TestSupport.fixtures("starling")
   ZIP_URL = "https://starlingdb.org/download/IE.exe"
+  KART_URL = "https://starlingdb.org/download/KART.exe"
 
   def adapter = Nabu::Adapters::Starling.new
 
@@ -59,6 +60,17 @@ class StarlingTest < Minitest::Test
                  license, "vasmer credit: the roster's actual words (vasmer.inf is blank)")
   end
 
+  # P46-6: the sixth base — the Kartvelian etymological dictionary (KART.exe,
+  # a second package under the SAME 2026-07-15 site-wide grant). Credit is the
+  # kartet.inf DBINFO sentence + the descrip.php roster item 6, both verbatim.
+  def test_manifest_carries_the_kart_credit_verbatim
+    manifest = adapter.manifest
+    assert_match(/Kartvelian/, manifest.name)
+    assert_match(/compiled by S\. Starostin on the basis of G\. Klimov's and Faehnrich-Sardhveladze's/,
+                 manifest.license, "kart credit: the kartet.inf DBINFO sentence")
+    assert_match(/Compiled by Sergei Starostin/, manifest.license, "kart credit: the roster's own words")
+  end
+
   def test_content_kind_is_dictionary_and_the_source_promises_reflexes
     assert_equal :dictionary, Nabu::Adapters::Starling.content_kind
     assert Nabu::Adapters::Starling.reflex_bearing?
@@ -70,8 +82,8 @@ class StarlingTest < Minitest::Test
     refs = adapter.discover(FIXTURES).to_a
     assert_equal ["starling-pokorny:pokorny.dbf", "starling-piet:piet.dbf",
                   "starling-vasmer:vasmer.dbf", "starling-germet:germet.dbf",
-                  "starling-baltet:baltet.dbf"], refs.map(&:id)
-    assert_equal %w[starling] * 5, refs.map(&:source_id)
+                  "starling-baltet:baltet.dbf", "starling-kart:kartet.dbf"], refs.map(&:id)
+    assert_equal %w[starling] * 6, refs.map(&:source_id)
     Dir.mktmpdir { |empty| assert_empty adapter.discover(empty).to_a }
   end
 
@@ -269,6 +281,60 @@ class StarlingTest < Minitest::Test
     assert_equal "dalìs", entries[1].reflexes.first.word, "the second duplicate mints its own rows"
   end
 
+  # --- the kart base (P46-6: the Kartvelian dictionary, second package) -------------
+
+  # The Klimov pin: kartet #1 *abed- 'tinder' — decoded output verified
+  # against the live starlingdb.org CGI rendering on 2026-07-26 (fixture
+  # README). The shelf language ccs-pro is minted by the family-code +
+  # -pro convention (the bat-pro precedent; ISO 639-5 ccs = Kartvelian).
+  def test_parse_kart_yields_the_ccs_pro_shelf_pinned_against_klimov
+    document = parse("starling-kart")
+    assert_kind_of Nabu::DictionaryDocument, document
+    assert_equal "starling-kart", document.slug
+    assert_equal "ccs-pro", document.language
+    entry = document.entries.to_h { |e| [e.entry_id, e] }["1"]
+    assert_equal "abed-", entry.headword, "headword = PROTO minus the display asterisk"
+    assert_equal "*abed-", entry.key_raw, "the upstream asterisk stays verbatim in key_raw"
+    assert_equal "abed-", entry.headword_folded, "root fold keeps the trailing stem hyphen"
+    assert_equal "tinder", entry.gloss
+    assert_includes entry.body, "Russian meaning: трут", "field labels are the kartet.inf aliases"
+    assert_includes entry.body, "Georgian: abed-"
+    assert_includes entry.body, "Svan: haböd-, habed-, hobed-"
+    assert_includes entry.body, "Notes and references: ЭСКЯ 43."
+  end
+
+  def test_kart_single_language_columns_mint_reflex_rows
+    entry = parse("starling-kart").entries.to_h { |e| [e.entry_id, e] }["1"]
+    assert_equal [%w[GRU ka], %w[MEG xmf], %w[SVA sva], %w[LAZ lzz]],
+                 entry.reflexes.map { |r| [r.lang_code, r.language] },
+                 "lang_code = the upstream column verbatim, language = the catalog tag"
+    words = entry.reflexes.to_h { |r| [r.lang_code, r] }
+    assert_equal "abed-", words["GRU"].word
+    assert_equal "obed-", words["MEG"].word
+    assert_equal "haböd-", words["SVA"].word, "the leading citation form only — variants stay in the body"
+    assert_equal "Georgian", words["GRU"].lang_name, "the .inf field alias feeds the language census"
+    assert entry.reflexes.none?(&:borrowed)
+  end
+
+  def test_kart_nostratic_crosslink_rides_the_body_like_piets
+    entry = parse("starling-kart").entries.to_h { |e| [e.entry_id, e] }["2"]
+    assert_equal "ac̣-", entry.headword
+    assert_includes entry.body, "Nostratic etymology: #1207",
+                    "PRNUM points into the unheld nostret base — a body line, exactly piet's PRNUM"
+  end
+
+  # kart's own upstream NUMBER collision (censused on the full 1,310-record
+  # base: 48 twice, 134 twice — the second 134 sits at file position 1133,
+  # evidently a dropped leading "1", piet's #574 shape exactly). The fixture
+  # keeps both 48 records; the mechanical -b suffix + body note apply.
+  def test_kart_duplicate_numbers_disambiguate_stably
+    entries = parse("starling-kart").entries.to_a
+    assert_equal %w[1 2 21 48 48-b], entries.map(&:entry_id)
+    assert_equal "berq-", entries[3].headword, "file order rules: the foot/step record wears the NUMBER"
+    assert_equal "ćwet-", entries[4].headword
+    assert_includes entries[4].body, "note: upstream NUMBER collision"
+  end
+
   # --- the reflex verdict (journaled in docs/backlog.md P22-0) ---------------------
 
   def test_single_language_attested_columns_mint_reflex_rows
@@ -354,26 +420,56 @@ class StarlingTest < Minitest::Test
   # --- fetch (WebMock only) ---------------------------------------------------------
 
   BASE_FILES = %w[pokorny piet vasmer germet baltet].flat_map { |base| ["#{base}.dbf", "#{base}.var"] }.freeze
+  KART_FILES = %w[kartet.dbf kartet.var].freeze
 
-  def zip_body
-    @zip_body ||= Dir.mktmpdir do |dir|
-      BASE_FILES.each { |name| FileUtils.cp(File.join(FIXTURES, name), dir) }
-      zip = File.join(dir, "IE.zip")
-      Dir.chdir(dir) { Nabu::Shell.run("zip", "-q", zip, *BASE_FILES) }
+  def zip_of(dir_files)
+    Dir.mktmpdir do |dir|
+      dir_files.each { |src, name| FileUtils.cp(src, File.join(dir, name)) }
+      zip = File.join(dir, "package.zip")
+      Dir.chdir(dir) { Nabu::Shell.run("zip", "-q", zip, *dir_files.map(&:last)) }
       File.binread(zip)
     end
   end
 
-  def test_fetch_unpacks_the_package_and_discovers_all_five_bases
+  def zip_body
+    @zip_body ||= zip_of(BASE_FILES.map { |name| [File.join(FIXTURES, name), name] })
+  end
+
+  def kart_zip_body
+    @kart_zip_body ||= zip_of(KART_FILES.map { |name| [File.join(FIXTURES, "kart", name), name] })
+  end
+
+  def stub_packages
     stub_request(:get, ZIP_URL).to_return(status: 200, body: zip_body)
+    stub_request(:get, KART_URL).to_return(status: 200, body: kart_zip_body)
+  end
+
+  def test_fetch_unpacks_both_packages_and_discovers_all_six_bases
+    stub_packages
     Dir.mktmpdir do |workdir|
       report = adapter.fetch(workdir)
       assert_match(/\A\h{64}\z/, report.sha)
       refs = adapter.discover(workdir).to_a
       assert_equal ["starling-pokorny:pokorny.dbf", "starling-piet:piet.dbf",
                     "starling-vasmer:vasmer.dbf", "starling-germet:germet.dbf",
-                    "starling-baltet:baltet.dbf"], refs.map(&:id)
+                    "starling-baltet:baltet.dbf", "starling-kart:kartet.dbf"], refs.map(&:id)
+      assert File.file?(File.join(workdir, "kart", "kartet.dbf")),
+             "the second package lands in its own subdir with its own fetch state"
       assert_equal 3, adapter.parse(refs.first).size
+    end
+  end
+
+  # The kart subdir must survive a LATER IE.exe re-fetch: the root ZipFetch's
+  # retention sweep would otherwise read the sibling package as an upstream
+  # deletion and attic it (the P46-6 keep: contract).
+  def test_refetching_the_ie_package_never_attics_the_kart_subdir
+    stub_packages
+    Dir.mktmpdir do |workdir|
+      adapter.fetch(workdir)
+      adapter.fetch(workdir)
+      assert File.file?(File.join(workdir, "kart", "kartet.dbf")), "kart survives the IE re-fetch sweep"
+      refute Dir.exist?(File.join(workdir, ".attic", "kart")), "nothing kart-shaped was atticked"
+      assert_equal 6, adapter.discover(workdir).to_a.size
     end
   end
 
@@ -382,12 +478,15 @@ class StarlingTest < Minitest::Test
     Dir.mktmpdir { |workdir| assert_raises(Nabu::FetchError) { adapter.fetch(workdir) } }
   end
 
-  def test_probe_heads_the_package_zip
+  def test_probe_heads_both_package_zips
     assert_equal :http_zip, Nabu::Adapters::Starling.remote_probe_strategy
     targets = Nabu::Adapters::Starling.http_probe_targets
-    assert_equal [ZIP_URL], targets.map(&:zip_url)
-    assert_nil targets.first.metadata_url, "the grant lives in e-mail + descrip.php, not a probe endpoint"
-    assert_equal Nabu::ZipFetch::STATE_FILE, targets.first.state_file
+    assert_equal [ZIP_URL, KART_URL], targets.map(&:zip_url)
+    assert_equal ["", "kart"], targets.map(&:state_subdir),
+                 "the kart package keeps its own .zip-fetch.json under its subdir"
+    assert targets.all? { |t| t.metadata_url.nil? },
+           "the grant lives in e-mail + descrip.php, not a probe endpoint"
+    assert_equal [Nabu::ZipFetch::STATE_FILE] * 2, targets.map(&:state_file)
   end
 
   # --- DictionaryLoader contract -----------------------------------------------------
@@ -405,28 +504,30 @@ class StarlingTest < Minitest::Test
   def test_loading_twice_is_idempotent_with_stable_urns_reflex_rows_and_name_census
     db, loader = loader_setup
     first = loader.load_from(adapter, workdir: FIXTURES)
-    assert_equal 19, first.added,
-                 "3 records per base + both halves of each fixture NUMBER collision + the two headword-less pins"
+    assert_equal 24, first.added,
+                 "3 records per IE base + 5 kart + both halves of each fixture NUMBER collision + " \
+                 "the two headword-less pins"
     assert_equal 0, first.errored
     second = loader.load_from(adapter, workdir: FIXTURES)
     assert_equal 0, second.added
-    assert_equal 19, second.skipped
+    assert_equal 24, second.skipped
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal "urn:nabu:dict:starling-pokorny:1089",
                  db[:dictionary_entries].where(entry_id: "1089").get(:urn)
     assert_equal "urn:nabu:dict:starling-vasmer:12561",
                  db[:dictionary_entries].where(entry_id: "12561").get(:urn),
                  "piet #1501's `Vasmer: #12561` body line now names a live entry id"
-    assert_equal ["urn:nabu:dict:starling-baltet:76-b", "urn:nabu:dict:starling-piet:574-b"],
+    assert_equal ["urn:nabu:dict:starling-baltet:76-b", "urn:nabu:dict:starling-kart:48-b",
+                  "urn:nabu:dict:starling-piet:574-b"],
                  db[:dictionary_entries].where(Sequel.like(:entry_id, "%-b")).select_order_map(:urn),
                  "the duplicate-NUMBER disambiguation is urn-stable"
-    assert_equal 36, db[:dictionary_reflexes].count,
-                 "piet 5 + germet 24 (10+14+0, stop-gated) + baltet 7 (3+2+2)"
-    assert_equal ["Albanian", "Avestan", "Danish", "Dutch", "English", "German", "Gothic",
-                  "Latin", "Lettish", "Lithuanian", "Middle Dutch", "Middle High German",
-                  "Middle Low German", "Norwegian", "Old English", "Old Frisian",
-                  "Old High German", "Old Indian", "Old Norse", "Old Prussian",
-                  "Old Saxon", "Swedish"],
+    assert_equal 54, db[:dictionary_reflexes].count,
+                 "piet 5 + germet 24 (10+14+0, stop-gated) + baltet 7 (3+2+2) + kart 18 (4+3+4+3+4)"
+    assert_equal ["Albanian", "Avestan", "Danish", "Dutch", "English", "Georgian", "German",
+                  "Gothic", "Latin", "Laz", "Lettish", "Lithuanian", "Megrel", "Middle Dutch",
+                  "Middle High German", "Middle Low German", "Norwegian", "Old English",
+                  "Old Frisian", "Old High German", "Old Indian", "Old Norse", "Old Prussian",
+                  "Old Saxon", "Svan", "Swedish"],
                  db[:language_names].select_map(:name).sort.uniq,
                  "the .inf aliases feed the language census reflex_bearing health checks"
   end
@@ -477,9 +578,11 @@ class StarlingTest < Minitest::Test
       assert_match(/Vasmer/, shelf.load("rus").section("witness:starling").body)
       assert_match(/Common Germanic/, shelf.load("gem-pro").section("witness:starling").body)
       assert_match(/Proto-Baltic/, shelf.load("bat-pro").section("witness:starling").body)
-      before = %w[ine-pro rus gem-pro bat-pro].map { |code| File.read(shelf.path_for(code)) }
+      assert_match(/Klimov/, shelf.load("ccs-pro").section("witness:starling").body)
+      before = %w[ine-pro rus gem-pro bat-pro ccs-pro].map { |code| File.read(shelf.path_for(code)) }
       loader.load_from(adapter, workdir: FIXTURES)
-      assert_equal before, %w[ine-pro rus gem-pro bat-pro].map { |code| File.read(shelf.path_for(code)) },
+      assert_equal before,
+                   %w[ine-pro rus gem-pro bat-pro ccs-pro].map { |code| File.read(shelf.path_for(code)) },
                    "a second load accretes nothing new"
     end
   end

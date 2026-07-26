@@ -7,10 +7,10 @@ description: >-
   biblical editions, Old English and the Germanic wave, Slavic, and Celtic.
 ---
 
-Live counts as of **25 July 2026**: **813,257 documents / 65,130,037
-passages** across 88 registered, synced sources, plus **1,310,786
-dictionary entries** on the reference shelf and **17.4 million gold
-lemma annotations in thirty-two languages** (censused 25 July 2026;
+Live counts as of **26 July 2026**: **947,273 documents / 66,755,518
+passages** across 95 registered, synced sources, plus **1,391,759
+dictionary entries** on the reference shelf and **19.2 million gold
+lemma annotations in thirty-seven languages** (censused 26 July 2026;
 a further 28,054,494 lemma rows in ten languages ride an honestly
 labelled silver tier — machine-suggested or upstream-undisambiguated,
 excluded from gold-only search). The authoritative shelf map, refreshed at every

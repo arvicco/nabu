@@ -207,6 +207,19 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P46-r6 (owner report 2026-07-26, off a WOLD hit: "definition carries no
+  # language code(s). It should"): the define header names the entry's
+  # language, the etym-entry style — obvious for LSJ, load-bearing for the
+  # multi-language shelves (WOLD's 41 vocabularies, the recon shelves).
+  def test_define_header_carries_the_entry_language_code
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define *zima]) }
+      assert_nil status
+      assert_match(/\*zima \[sla-pro\] — /, out,
+                   "the headword line names the entry's language before the shelf title")
+    end
+  end
+
   def test_define_reflexes_are_capped_by_default
     with_recon_shelf do |config|
       out, _err, status = with_config(config) { run_cli(%w[define *zima]) }
@@ -501,14 +514,14 @@ class CLITest < Minitest::Test
 
   # The genuine total miss enumerates the crosswalk shelves DB-DRIVEN (the
   # P11/P18 hardcoded-list lesson): the starling fixture crosswalk holds
-  # bat-pro/gem-pro/ine-pro (vasmer's rus mints no reflex rows and must
-  # not appear); the stale Wiktionary proto-shelf roll call is gone; the
-  # '*form' quoting hint stays.
+  # bat-pro/ccs-pro/gem-pro/ine-pro (P46-6: the kart base joined; vasmer's
+  # rus mints no reflex rows and must not appear); the stale Wiktionary
+  # proto-shelf roll call is gone; the '*form' quoting hint stays.
   def test_etym_total_miss_enumerates_the_live_crosswalk_shelves
     with_starling_shelf do |config|
       out, _err, status = with_config(config) { run_cli(%w[etym зззз]) }
       assert_nil status
-      assert_match(/the crosswalk covers bat-pro, gem-pro, ine-pro\b/, out,
+      assert_match(/the crosswalk covers bat-pro, ccs-pro, gem-pro, ine-pro\b/, out,
                    "db-derived enumeration — exactly the shelves with reflex rows")
       refute_match(%r{Proto-Slavic/PIE/Proto-Germanic}, out, "the hardcoded enumeration is gone")
       assert_match(/'\*form'/, out, "the quoting hint stays")
@@ -683,7 +696,8 @@ class CLITest < Minitest::Test
     with_iecor_shelf do |config|
       out, _err, status = with_config(config) { run_cli(%w[define kerd-]) }
       assert_nil status
-      assert_match(/^\*k̑erd- — IE-CoR/, out)
+      assert_match(/^\*k̑erd- \[ine\] — IE-CoR/, out,
+                   "the header carries the entry language (P46-r6 format)")
       assert_match(/cognate set 6458/, out)
       assert_match(/Proto-Indo-European/, out)
     end
@@ -1354,6 +1368,63 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P46-r3 (owner: "we need nabu status/list --disabled in addition to
+  # --all"): the browse-the-menu view — ONLY the rows enable would add.
+  def test_status_disabled_shows_the_not_enabled_complement
+    with_axis_corpus do |config|
+      write_profile(config, "reference") # → lex enabled; `shelf` (a source) not
+      out, err, status = with_config(config) { run_cli(%w[status --disabled]) }
+      assert_nil status
+      assert_match(/^shelf\s/, out, "the not-enabled source IS the view")
+      refute_match(/^lex\s/, out, "an enabled source is hidden")
+      refute_match(/^library\s/, out, "a shelf is always enabled — never in the complement")
+      assert_match(/not enabled: 1 row — nabu enable/, err, "the on-ramp footer")
+    end
+  end
+
+  def test_status_disabled_with_everything_enabled_says_so
+    with_axis_corpus do |config|
+      write_profile(config, "classical", "reference", "slavic")
+      out, err, status = with_config(config) { run_cli(%w[status --disabled]) }
+      assert_nil status
+      refute_match(/^(shelf|lex|library)\s/, out, "nothing to show — the complement is empty")
+      refute_match(/No sources registered/, out,
+                   "the empty-registry banner never fires on an empty menu (stderr carries the state)")
+      assert_match(/everything registered is enabled on this box/, err)
+    end
+  end
+
+  def test_status_refuses_all_with_disabled
+    with_axis_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[status --all --disabled]) }
+      refute_nil status, "contradictory flags must refuse"
+      assert_match(/--all and --disabled are exclusive/, err)
+    end
+  end
+
+  # P46-r3 follow-up (owner report 2026-07-26: `list --disabled` printed
+  # "nothing held yet — run nabu sync" while `status --disabled` showed the
+  # row): the disabled MENU is registry-driven — a never-synced complement
+  # row is the norm there, not an absence. Census fragments where the
+  # catalog holds the slug; an honest per-row "nothing held yet" where not.
+  def test_list_disabled_shows_the_not_enabled_complement
+    with_axis_corpus do |config|
+      File.write(config.sources_path, "#{File.read(config.sources_path)}ghost:\n  " \
+                                      "adapter: TestAdapter\n  wired: false\n  " \
+                                      "sync_policy: manual\n  axes: [classical]\n")
+      write_profile(config, "reference")
+      out, err, status = with_config(config) { run_cli(%w[list --disabled]) }
+      assert_nil status
+      assert_match(/^shelf\s+docs=/, out, "a synced not-enabled source shows its census row")
+      assert_match(/^ghost\s+nothing held yet/, out,
+                   "a NEVER-synced complement row still shows — the menu is registry-driven")
+      refute_match(/^lex\s/, out, "an enabled source is hidden")
+      refute_match(/nothing held yet — run nabu sync/, out,
+                   "the empty-catalog banner never fires on the menu view")
+      assert_match(/not enabled: 2 rows — nabu enable/, err)
+    end
+  end
+
   # P44-r3b: an ABSENT config on a box that already built a library MIGRATES
   # once — every synced source is written out and announced, so no visibility is
   # silently lost. After migration the enabled set is exactly the synced sources,
@@ -1780,10 +1851,17 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/^alpha — The Alphaist — first letters, read whole\.$/, out, "persona verbatim")
       assert_match(/The alpha lane\./, out, "the membership rationale (desc)")
-      assert_match(/members \(3\):/, out, "every member the desk tags")
+      assert_match(/members \(4\):/, out, "every member the desk tags")
       assert_match(/red\s+wired\s+docs=/, out, "a wired, held member shows its counts")
       assert_match(/green\s+wired\s+docs=/, out)
       assert_match(/blue\s+unwired\s+nothing held yet/, out, "a disabled, unheld member says so")
+      # P46-r1 (owner report off the live hebrew card: "why is bridging
+      # suddenly 'unwired'?"): a kind: module row is PERMANENTLY wired: false
+      # by registry invariant — nothing to flip, so the axis card must name
+      # its nature, never imply an adapter awaiting first-sync verification.
+      assert_match(/meter\s+module\s+nothing held yet/, out,
+                   "a feature module wears its kind, not the unwired label")
+      refute_match(/meter\s+unwired/, out)
       assert_match(/gold lemmas:/, out, "the aggregate gold-lemma coverage line")
       assert_match(/commands: nabu list --axis alpha · nabu sync alpha/, out, "the shipped affordances")
     end
@@ -2134,6 +2212,8 @@ class CLITest < Minitest::Test
       assert_match(/^red\s+parse-only\s+\+2 added/, out, "enabled member red synced")
       assert_match(/^green\s+parse-only\s+\+2 added/, out, "enabled member green synced")
       assert_match(/^skipped \(unwired\): blue$/, out, "disabled member named on one skip line")
+      assert_match(/^skipped \(module — sync directly\): meter$/, out,
+                   "a module is skipped under its nature, never as unwired (P46-r1)")
       refute_match(/^blue\s+parse-only/, out, "a disabled axis member is never synced")
       refute_match(/^gold\s+parse-only/, out, "a member of another axis is not pulled in")
     end
@@ -7114,6 +7194,7 @@ class CLITest < Minitest::Test
         "red" => { axes: %w[alpha], wired: true },
         "green" => { axes: %w[alpha], wired: true },
         "blue" => { axes: %w[alpha], wired: false },
+        "meter" => { axes: %w[alpha], wired: false, kind: "module" },
         "gold" => { axes: %w[beta], wired: true }
       }
       sources = +""
@@ -7122,8 +7203,9 @@ class CLITest < Minitest::Test
         FileUtils.mkdir_p(dir)
         File.write(File.join(dir, "#{slug}-one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
         File.write(File.join(dir, "#{slug}-two.txt"), "Odyssey\nἄνδρα\n")
+        kind = spec[:kind] ? "  kind: #{spec[:kind]}\n" : ""
         sources << "#{slug}:\n  adapter: TestAdapter\n  wired: #{spec[:wired]}\n  " \
-                   "sync_policy: auto\n  axes: [#{spec[:axes].join(', ')}]\n"
+                   "sync_policy: auto\n  axes: [#{spec[:axes].join(', ')}]\n#{kind}"
       end
       File.write(File.join(root, "axes.yml"), <<~YAML)
         alpha:

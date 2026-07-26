@@ -27,9 +27,9 @@ $ bin/nabu search 'στρατηγ*' --from 101 --to 300 --place oxyrhynch%
 ```
 
 finds the strategoi of the Oxyrhynchite nome in the papyri of the second
-and third centuries. The chronological axis covers 163,821 dated and
-placed documents as of 14 July 2026 — the Heidelberg inscriptions (81,416)
-and the papyri foremost among them. On the faceted shelves
+and third centuries. The chronological axis covers 549,771 dated and
+placed documents as of 26 July 2026 — the CDLI tablets (337,572), the
+Heidelberg inscriptions (81,441) and the papyri foremost among them. On the faceted shelves
 (currently the inscriptions), genre facets compose with the same filters:
 
 ```
@@ -41,9 +41,9 @@ material, and object type, with uncertain upstream attributions preserved
 as such.
 
 **Lemma search** (`search --lemma FORM`) queries by dictionary form rather
-than surface string, over 16.2 million gold lemma annotations in
-twenty-eight languages (Middle High German, Old Norse, Old Saxon, and
-Icelandic joined on 22 July 2026) — inflection and suppletion included:
+than surface string, over 18.6 million gold lemma annotations in
+thirty-three languages (Urartian and Middle Low German the newest,
+joined 26 July 2026) — inflection and suppletion included:
 
 ```
 $ bin/nabu search --lemma λέγω --limit 3
@@ -313,15 +313,16 @@ $ bin/nabu list corph --documents --limit 10
 ```
 
 **Working by research desk.** The flat source list is also tagged into
-twenty-one [research axes]({{ '/axis/' | relative_url }}) — the owner's
+twenty-two [research axes]({{ '/axis/' | relative_url }}) — the owner's
 scholarly desks (the Classicist, the Assyriologist, the Sinologist…). A
 source wears every desk it serves, and four surfaces read those tags:
-`nabu list --axis NAME` groups the census under a desk, `nabu search --axis
-NAME` scopes a query to a desk's shelves (the multi-source generalization of
-`--source`), `nabu sync NAME` syncs a desk's enabled members, and `nabu axis
-NAME` prints the desk card — members, live holdings, and gold coverage. Each
-desk's own page collects its shelves, instruments, CLI recipes and terminal
-setup.
+`nabu enable NAME` puts a desk's shelves in this box's profile (the first-time
+step — `sync` acquires only enabled sources), `nabu list --axis NAME` groups
+the census under a desk, `nabu search --axis NAME` scopes a query to a desk's
+shelves (the multi-source generalization of `--source`), `nabu sync NAME`
+syncs a desk's enabled members, and `nabu axis NAME` prints the desk card —
+members, live holdings, and gold coverage. Each desk's own page collects its
+shelves, instruments, CLI recipes and terminal setup.
 
 ```
 $ bin/nabu axis celtic

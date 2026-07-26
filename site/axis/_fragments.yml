@@ -48,6 +48,7 @@ kinds:
   ogham: inscriptions
   rundata: inscriptions
   lexlep: inscriptions
+  edr: inscriptions
   # cuneiform tablet corpora
   tlhdig: tablets
   oracc: tablets
@@ -70,9 +71,19 @@ classical:
     - **Alignment works:** `nt` (Greek NT, Vulgate, SBLGNT) and — through the
       LXX and the Vulgate — `ot` and `psalms`. The Classicist owns both
       LXX-side witnesses.
+    - **The meter layer (P44–P45):** 167,732 scanned verse lines ride the
+      catalog as enrichments — Latin from Pedecerto's scansions, Greek from
+      Hypotactic — so `search --meter H` filters hits to hexameters (codes:
+      H hexameter, D distich, and the scanner's full repertoire), and a
+      scanned line's `nabu show` carries its meter. *Iliad* 1.1 knows it is
+      a hexameter.
   recipes:
     - cmd: 'nabu align "MARK 2.3"'
       note: the parallel-witness card, Greek NT beside the Vulgate
+    - cmd: 'nabu search --meter H --lang lat'
+      note: metrical browse — every scanned Latin hexameter, corpus order
+    - cmd: 'nabu search vesper --meter H --lang lat'
+      note: a text query filtered to hexameters (Catullus 62 opens the hits)
     - cmd: 'nabu parallels urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1'
       note: intertext and reception off Iliad 1.1
     - cmd: 'nabu vocab urn:nabu:proiel:cic-off'
@@ -90,18 +101,25 @@ classical:
       with **Noto Sans Mono** at the same size as the ASCII font.
     - **Latin (lat):** nothing special — the terminal's default font suffices.
 
-# P45-r1: the desk opens with one shelf; instruments/recipes grow as the
-# P45 packets (openMGH, digilibLT, BFM, the UD Romance treebanks) land.
+# P46 refresh (owner report): the P45 wave LANDED — the stale "landing
+# shelf by shelf" blurb replaced with the desk as it stands.
 romance:
   blurb: |
-    The desk opens with **CroALa** (`croala`) — Croatian Latin from a 976 CE
-    charter through the neo-Latin centuries, the continuum's Latin side
-    (dual-tagged with `classical`). The vernacular side — Old French
-    treebanks and texts, the late-antique band, the MGH critical editions —
-    is landing shelf by shelf.
+    The continuum is on the shelves end to end: **digilibLT**'s late-antique
+    secular prose (2nd–7th c.), **CroALa**'s Croatian Latin (a 976 CE charter
+    through the neo-Latin centuries, dual-tagged with `classical`), the
+    **openMGH** critical editions (the *SS rerum Germanicarum* first wave —
+    Einhard, Widukind, Adam of Bremen), **BFM**'s Old and Middle French from
+    the 842 *Serments de Strasbourg* onward, and the **UD Romance treebanks**
+    (Tuscan charters, Dante's Latin, Old French, Old Romanian) carrying the
+    gold annotation — four gold-lemma languages: `fro`, `frm`, `ro`, `ota`.
   recipes:
+    - cmd: "nabu search chevalier --lang fro"
+      note: "Old French across BFM — Erec's chevalier at the head of the hits"
     - cmd: "nabu search ragusa --source croala"
       note: "Filelfo's 1470 Ragusaeis and Palmotić's carmina — Dubrovnik in Latin verse"
+    - cmd: 'nabu search --lemma miles --lang lat --axis romance'
+      note: "lemma search on the desk's Latin — digilibLT answers at an honest [silver] tag; --gold-only narrows to the treebanks"
 
 epigraphy:
   instruments: |
@@ -114,10 +132,18 @@ epigraphy:
       shelves — **papyri-ddbdp, EDH, ORACC and open-etruscan**. The other
       epigraphic shelves (RIIG, ogham, ItAnt, Rundata…) are searched with
       plain `search --axis epigraphy`.
-    - **The timeline desk:** 163,821 documents carry a date or place, so
-      `--from/--to`, `--century` and `--place` scope the stones and sherds by
-      when and where. EDH's genre facets (`--type/--province/--material`) live.
+    - **The timeline desk:** 549,771 documents carry a date or place (as of
+      26 July 2026 — CDLI's tablets, the Heidelberg inscriptions and the
+      papyri foremost), so `--from/--to`, `--century` and `--place` scope
+      the stones and sherds by when and where. EDH's genre facets
+      (`--type/--province/--material`) live.
+    - **The gazetteer (P44–P46):** `nabu place NAME` resolves a findspot
+      against the Pleiades gazetteer (42,242 places in a derived index —
+      millisecond lookups) and counts this library's holdings found there;
+      an inscription's `nabu show` names its findspot with the Pleiades id.
   recipes:
+    - cmd: 'nabu place Segesta'
+      note: the place card — Pleiades id, period band, coordinates, holdings found there
     - cmd: "nabu search --fuzzy ']ανδρα μοι εν['"
       note: damaged-line substring search, typed straight off the edition
     - cmd: 'nabu search manibus --type epitaph --province Britannia'
@@ -180,6 +206,9 @@ germanic:
     Menotec (`non`), and, dual-tagged with the epigraphy desk, the runic
     inscriptions of Rundata. The wave went live 2026-07-22 with the
     owner-verified first syncs — all five shelves hold their corpora below.
+    Newest on the desk: ReN, the Middle Low German / Low Rhenish reference
+    corpus (1200–1650, `gml` — the Hanseatic rung between ReM and the Norse
+    shelves): 235 texts, 1.49 M gold-annotated tokens, live below.
   instruments: |
     - **Gold-lemma languages:** got (Gothic, on the PROIEL and UD treebanks),
       ang (Old English — ASPR verse and ISWOC prose, the West-Saxon Mark), and
@@ -410,13 +439,41 @@ syriac:
       no dedicated Syriac font; use a Unicode font with Syriac coverage in the
       fallback cascade (Noto Sans Mono is the general recommendation).
 
+# P46-2 (2026-07-26): the desk minted with the Geʿez wave.
+ethiopic:
+  blurb: |
+    The desk opens with the **Beta maṣāḥǝft Works** transcriptions
+    (Hamburg): the Geʿez Bible at verse grain — near-complete OT, all four
+    Gospels — beside **1 Enoch** and **Jubilees**, books that survive
+    complete *only* in Geʿez, the *Kebra Nagast*, and the royal chronicles.
+    **Dillmann's Lexicon** (13,727 entries) and the **TraCES** analyzed
+    corpus (75,440 morph-annotated tokens, lemma-linked into Dillmann's
+    entries) complete the trio as their syncs land.
+  instruments: |
+    - **Verse-grain citations:** the Works TEI carries upstream verse
+      numbering, so `urn:nabu:betamasaheft-works:LIT2711Mark:1.1` is Mark
+      1:1, citable and shown with its per-document transcription credit.
+    - **The dictionary crosswalk:** TraCES tokens carry `lex` links into
+      Dillmann entry ids — lemma to lexicon in one ecosystem (both shelves
+      `nc`-classed, held locally, MCP-excluded).
+  recipes:
+    - cmd: 'nabu show urn:nabu:betamasaheft-works:LIT2711Mark:1.1'
+      note: "Mark 1:1 in Geʿez — ቀዳሚሁ፡ ለወንጌለ፡ …"
+    - cmd: 'nabu search ወንጌል --lang gez'
+      note: "the word 'gospel' across the Geʿez shelf, fold-aware"
+  display: |
+    - **Ethiopic script (gez):** fidäl needs a font with Ethiopic coverage —
+      install `font-noto-sans-ethiopic` (or fill the terminal's non-ASCII
+      slot with a Noto face). The script is NFC-stable; nabu stores it
+      byte-faithful with its explicit word dividers (፡) intact.
+
 arabic:
   blurb: |
-    The corpus is staged, not synced: OpenITI's ~9,106 primary texts /
-    ~1.12 B words arrive with the owner's first `nabu sync openiti` (the
-    fetch is a ~5.9 GB release zip plus its metadata index, md5-pinned
-    before any tree mutation), after which the holdings below fill in
-    live.
+    The premodern Islamicate library is LIVE: OpenITI's ~9,079 primary
+    texts (~1.12 B words, the 2026 release zip md5-pinned into canonical)
+    made **Classical Arabic the largest language on the shelves — 33.3
+    million passages** — with the Persian lane (`fas`) riding the same
+    corpus. Holdings below are read live.
   instruments: |
     - **No gold lemmas — OpenITI is unannotated.** The corpus carries no
       morphology or lemma layer, so `--lemma`, `vocab` and `formulas` do not
@@ -661,12 +718,11 @@ sinitic:
 
 japonic:
   blurb: |
-    The desk spans two eras of Japanese. Old Japanese (ojp) is live now
-    through ONCOJ and its lexicon; the modern lane arrives with **Aozora
-    Bunko** (青空文庫, `wired: false` pending the owner's first sync) — the
-    public-domain library at paragraph grain, ~17,488 works. Its scope is PD
-    text ONLY: discovery excludes the in-copyright works before any file is
-    touched. Ruby (振り仮名) readings ride as annotations over the base text,
+    The desk spans two eras of Japanese. Old Japanese (ojp) is live
+    through ONCOJ and its lexicon; the modern lane is **Aozora Bunko**
+    (青空文庫) — the public-domain library at paragraph grain, 17,121
+    works live below. Its scope is PD text ONLY: discovery excludes the
+    in-copyright works before any file is touched. Ruby (振り仮名) readings ride as annotations over the base text,
     never spliced into it; the 底本 colophon is carried as document metadata.
   instruments: |
     - **The Japanese lane:** the ONCOJ Old Japanese corpus and its lexicon,

@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 July 2026)</span> |
 |---|---|---|---|---|
 | `perseus-greek` | texts | attribution | wired · auto | 1,418 docs / 394,706 passages |
 | `perseus-latin` | texts | attribution | wired · auto | 534 docs / 391,785 passages |
@@ -43,22 +43,32 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 - **Alignment works:** `nt` (Greek NT, Vulgate, SBLGNT) and — through the
   LXX and the Vulgate — `ot` and `psalms`. The Classicist owns both
   LXX-side witnesses.
+- **The meter layer (P44–P45):** 167,732 scanned verse lines ride the
+  catalog as enrichments — Latin from Pedecerto's scansions, Greek from
+  Hypotactic — so `search --meter H` filters hits to hexameters (codes:
+  H hexameter, D distich, and the scanner's full repertoire), and a
+  scanned line's `nabu show` carries its meter. *Iliad* 1.1 knows it is
+  a hexameter.
 
 ## Working the classical desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable classical               # first time: put this desk's shelves in this box's profile
+nabu sync classical                 # fetch/refresh the desk's enabled members
 nabu list --axis classical          # the shelf census, this desk only
 nabu axis classical                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis classical   # a query scoped to this desk's shelves
-nabu sync classical                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:
 
 ```
 nabu align "MARK 2.3"                 # the parallel-witness card, Greek NT beside the Vulgate
+nabu search --meter H --lang lat      # metrical browse — every scanned Latin hexameter, corpus order
+nabu search vesper --meter H --lang lat  # a text query filtered to hexameters (Catullus 62 opens the hits)
 nabu parallels urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1.1  # intertext and reception off Iliad 1.1
 nabu vocab urn:nabu:proiel:cic-off    # distinctive vocabulary of Cicero, De officiis
 nabu formulas urn:cts:greekLit:tlg0012.tlg001.perseus-grc2  # Homer's repeated formulas, ranked by count x length
@@ -86,4 +96,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-one research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

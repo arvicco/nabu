@@ -1,10 +1,10 @@
 # The Library — content review
 
-**As of 2026-07-23** (post the P42 full rebuild — the first clean
-derivation of the post-Arabic library; v1.2.0 cut the day before). Live
-totals: **810,180 documents / 62,789,087 passages and 1,310,786
-dictionary entries** across the **89 registry rows** — 83 corpus sources + 4 local
-shelves + 2 feature modules, every corpus source enabled (OpenITI's
+**As of 2026-07-26** (post the P46 wave — the Rabbinic library, the
+Geʿez shelf, EDR, ReN, the Oracc CC0 pack, the comparativist CLDF
+pack). Live totals: **947,273 documents / 66,755,518 passages and
+1,391,759 dictionary entries** across the **109 registry rows** — 96 corpus
+sources + 4 local shelves + 9 feature modules, every corpus source wired (OpenITI's
 registry flip rides the P42 gate). The rebuild reconciled the
 incrementally-grown catalog against clean derivation at −74 documents /
 −18,896 passages (0.03%): re-parse quarantines under current parser
@@ -734,10 +734,10 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   indexed scope at its 2026-07-13 sync (§8g) — and the BGU 6.1470 mid-word
   Odyssey demo runs against the real index.
 - **Timeline** (P15-2, extended P16-3 and P17-2): `document_axes`
-  (migration 008) holds **165,334 dated/placed records covering 163,821
-  documents live** — EDH inscription dates (81,416, the largest
-  contributor since that shelf's 2026-07-13 sync), HGV for the papyri
-  (60,923 records), ORACC catalogue/period/regnal dates (21,558), the
+  (migration 008) holds **567,564 dated/placed records covering 549,771
+  documents live** (as of 2026-07-26) — CDLI tablet dates (337,572
+  documents, the largest contributor), EDH inscription dates (81,441),
+  HGV for the papyri (59,777), ORACC catalogue/period/regnal dates (24,818), the
   Slovene goo300k/IMP year-suffixed urns (747), Coptic manuscript dates
   (340), and TOROT chronicle AM annals (350 records over 5 chronicles).
   `search --from/--to/--century/--place` scope by signed historical year

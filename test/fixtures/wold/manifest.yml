@@ -1,0 +1,33 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All five tables live INSIDE the immutable Zenodo release zip (no per-file
+# raw URL), so none is whole-file byte-comparable by a plain GET: every
+# file is a documented TRIM (whole: false) — kept records byte-verbatim,
+# record set reduced per the README recipe. The sentinel fetches the zip
+# URL for liveness only. Zenodo records are immutable: a drift at this URL
+# is an incident, never an update (a new WOLD release mints a NEW DOI).
+source: wold
+adapter_test: test/adapters/wold_test.rb
+retrieved: 2026-07-26
+files:
+  - path: cldf/languages.csv
+    url: https://zenodo.org/records/21415389/files/lexibank/wold-v4.2.zip?download=1
+    whole: false
+    trim: 3 of 41 vocabularies — English, OldHighGerman (blank-ISO pin), Swahili; recipe in README.md
+  - path: cldf/parameters.csv
+    url: https://zenodo.org/records/21415389/files/lexibank/wold-v4.2.zip?download=1
+    whole: false
+    trim: 6 of 1,814 meanings — 1-1, 1-51, 3-47, 3-77, 5-92, 23-395 (each with its Concepticon id — the cldf-spine pins)
+  - path: cldf/forms.csv
+    url: https://zenodo.org/records/21415389/files/lexibank/wold-v4.2.zip?download=1
+    whole: false
+    trim: 9 of 65,332 lexemes — the README's per-form pin list (world/sky/wine/street, weralt/mûl/helfant, dunia/ulimwengu)
+  - path: cldf/borrowings.csv
+    url: https://zenodo.org/records/21415389/files/lexibank/wold-v4.2.zip?download=1
+    whole: false
+    trim: 9 of 21,624 events — those targeting the kept forms (incl. the noon1243 and mode1248 donor-glottocode defect pins)
+  - path: cldf/contributions.csv
+    url: https://zenodo.org/records/21415389/files/lexibank/wold-v4.2.zip?download=1
+    whole: false
+    trim: 3 of 41 contributor rows — the kept vocabularies' citations

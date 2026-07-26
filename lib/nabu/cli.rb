@@ -397,7 +397,11 @@ module Nabu
                         "ratified order, NAME[,NAME…] = those axes only. A source appears under each axis it serves"
     option :all, type: :boolean, default: false,
                  desc: "Ignore the focus profile: show every row (modules + unfocused sources included)"
+    option :disabled, type: :boolean, default: false,
+                      desc: "The complement view: ONLY the rows nabu enable would add " \
+                            "(shelves are always enabled and never appear)"
     def status(slug = nil)
+      refuse_all_with_disabled!("status")
       slug = slug.to_s.strip
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -414,7 +418,10 @@ module Nabu
       view = focus_view(config, registry, catalog: db)
       if slug.empty?
         warn_focus_drift(view)
-        say status_report(view.registry, db, ledger, slug)
+        # An EMPTY --disabled complement renders no table (the "No sources
+        # registered." banner belongs to a truly empty registry, not to an
+        # exhausted menu — the stderr footer carries the all-enabled state).
+        say status_report(view.registry, db, ledger, slug) unless view.disabled && view.registry.slugs.empty?
         # `status --axis` is SCOPED (P44-r1 addendum): the grouped table, then an
         # enable hint for the axes' not-yet-enabled members — never the
         # whole-library `enabled:` footer. Bare status keeps that footer.
@@ -565,7 +572,11 @@ module Nabu
                        desc: "With --export-source-dossiers: report without writing"
     option :all, type: :boolean, default: false,
                  desc: "Ignore the focus profile: census every source (--sources map is always whole-library)"
+    option :disabled, type: :boolean, default: false,
+                      desc: "The complement view: ONLY the rows nabu enable would add " \
+                            "(shelves are always enabled and never appear)"
     def list(slug = nil)
+      refuse_all_with_disabled!("list")
       slug = slug.to_s.strip
       validate_list_flags!(slug)
       validate_license!(options[:license])
@@ -600,7 +611,11 @@ module Nabu
         view = focus_view(config, registry, catalog: catalog)
         warn_focus_drift(view)
         rows = scoped_census(query.census, view)
-        print_census(rows, options[:long] ? query.descriptions : nil)
+        if view.disabled
+          print_disabled_census(view, rows)
+        else
+          print_census(rows, options[:long] ? query.descriptions : nil)
+        end
         # The hidden side here is CENSUS rows the view dropped (catalog-backed,
         # so orphan slugs the registry no longer carries still count).
         print_focus_note(view, query.census.map(&:slug) - rows.map(&:slug))
@@ -3150,6 +3165,25 @@ module Nabu
       # +descriptions+ (P24-0, --long): { slug => dossier description } — one
       # line under each source that has one (zero fields suppressed, the
       # house rule; the dossier shelf is the census's own metadata).
+      # The --disabled census (P46-r3 follow-up, owner report: `list
+      # --disabled` printed the empty-catalog banner while `status
+      # --disabled` showed the row): the menu is REGISTRY-driven — a
+      # never-synced complement row is the norm there, not an absence.
+      # Census fragments where the catalog holds the slug; an honest
+      # per-row "nothing held yet" where it does not. An empty complement
+      # prints no table (the stderr footer carries the all-enabled state).
+      def print_disabled_census(view, census_rows)
+        slugs = view.registry.slugs
+        return if slugs.empty?
+
+        by_slug = census_rows.to_h { |row| [row.slug, row] }
+        width = slugs.map(&:length).max
+        slugs.each do |slug|
+          row = by_slug[slug]
+          say "#{slug.ljust(width)}  #{row ? census_fragments(row).join('  ') : 'nothing held yet'}"
+        end
+      end
+
       def print_census(rows, descriptions = nil)
         return say("nothing held yet — run nabu sync") if rows.empty?
 
@@ -3243,8 +3277,17 @@ module Nabu
       def focus_view(config, registry, catalog: nil)
         Nabu::Focus.view(
           profile: effective_profile(config, registry, catalog: catalog),
-          registry: registry, all: options[:all]
+          registry: registry, all: options[:all], disabled: options[:disabled] || false
         )
+      end
+
+      # --all is everything, --disabled the not-yet-enabled complement —
+      # together they name contradictory row sets (P46-r3).
+      def refuse_all_with_disabled!(command)
+        return unless options[:all] && options[:disabled]
+
+        raise Thor::Error, "#{command}: --all and --disabled are exclusive — " \
+                           "--all shows every row, --disabled only the rows nabu enable would add"
       end
 
       # Drop the census rows the view hides (a shelf/enabled source stays, a
@@ -3260,6 +3303,10 @@ module Nabu
       # honest empty-state when nothing is enabled; --all (the full reveal) is
       # silent.
       def print_focus_note(view, hidden_slugs)
+        # The --disabled complement (P46-r3): the rows shown ARE the enable
+        # menu, so the footer is the on-ramp (or the all-enabled state) —
+        # never the enabled-set summary, never the empty-state.
+        return warn(Nabu::Focus.disabled_footer_line(view.registry.slugs)) if view.disabled
         return unless view.active?
 
         if view.resolution.slugs.empty?
@@ -3511,7 +3558,15 @@ module Nabu
         say "  members (#{members.size}):"
         width = members.map(&:length).max || 0
         members.each do |slug|
-          state = registry[slug]&.wired ? "wired  " : "unwired"
+          entry = registry[slug]
+          # P46-r1: a kind: module row is PERMANENTLY wired: false (nothing
+          # mints, nothing to flip) — its cell names the nature; "unwired"
+          # is reserved for adapters genuinely awaiting first-sync proof.
+          state = if entry&.feature_module?
+                    "module "
+                  else
+                    entry&.wired ? "wired  " : "unwired"
+                  end
           say "    #{slug.ljust(width)}  #{state}  #{axis_member_holdings(by_slug[slug], census: census)}"
         end
         print_axis_gold(members, by_slug, info)
@@ -5497,8 +5552,12 @@ module Nabu
 
       # One entry, the define house format — shared verbatim by `show` on a
       # dictionary-entry urn (P22-2), where a withdrawn entry reads honestly.
+      # The language code rides the header (P46-r6, owner report: a WOLD hit
+      # named no language — obvious for LSJ, load-bearing for the
+      # multi-language shelves), the etym-entry style.
       def print_define_entry(result)
-        say "#{result.headword} — #{result.dictionary_title} [#{result.license_class}]" \
+        lang = result.language.to_s.empty? ? "" : " [#{result.language}]"
+        say "#{result.headword}#{lang} — #{result.dictionary_title} [#{result.license_class}]" \
             "#{' (withdrawn)' if result.withdrawn}  #{result.urn}"
         say "  gloss: #{result.gloss}" if result.gloss
         say ""
@@ -6210,6 +6269,10 @@ module Nabu
       # through sync_one, then the named skip line for the unwired members.
       def sync_axis_group(runner, registry, name, db, ledger, synced)
         wired, unwired = registry.axis_members(name).partition { |member| registry[member].wired }
+        # P46-r1: modules are PERMANENTLY wired: false (registry invariant) —
+        # their sync is an explicit owner act (`sync <slug>`), so the batch
+        # skip is right, but the label must name the nature, not "unwired".
+        modules, unwired = unwired.partition { |member| registry[member].feature_module? }
         # P42-r1: an axis expansion is a batch, not an explicit per-source
         # request, so a grant-blocked member is SKIPPED with the honest line —
         # never prompted mid-group (the prompt is reserved for `sync <slug>`).
@@ -6221,6 +6284,7 @@ module Nabu
           synced << member
         end
         say "skipped (unwired): #{unwired.join(', ')}" unless unwired.empty?
+        say "skipped (module — sync directly): #{modules.join(', ')}" unless modules.empty?
         (grant_blocked - synced).each do |member|
           say Nabu::GrantGate.skip_line(member)
           synced << member

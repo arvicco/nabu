@@ -13,9 +13,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these fourteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 July 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
@@ -24,13 +24,14 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 | `coptic-scriptorium` | texts | nc | wired · manual | 482 docs / 74,169 passages |
 | `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
-| `sefaria` | texts | open | wired · manual | 103 docs / 57,095 passages |
+| `sefaria` | texts | open | wired · manual | 839 docs / 435,059 passages |
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
 | `bridging` | crosswalk module | attribution | not yet wired | nothing held yet |
 | `dss` | texts | nc | wired · manual | 1,001 docs / 52,895 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
+| `betamasaheft-works` | texts | attribution | wired · manual | 3,796 docs / 66,516 passages |
 
 ## The desk's instruments
 
@@ -46,13 +47,15 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 
 ## Working the biblical desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable biblical               # first time: put this desk's shelves in this box's profile
+nabu sync biblical                 # fetch/refresh the desk's enabled members
 nabu list --axis biblical          # the shelf census, this desk only
 nabu axis biblical                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis biblical   # a query scoped to this desk's shelves
-nabu sync biblical                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:
@@ -90,4 +93,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-one research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

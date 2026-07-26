@@ -500,6 +500,28 @@ class StatusReportTest < Minitest::Test
     assert_match(/liveness:\s+up=\?\(5d\)/, detail, "the last-contact age is kept in the detail block")
   end
 
+  # P46-r5 (owner report 2026-07-26: "UNPROBED sources report in different
+  # timestamp format"): the last-run column spoke TWO registers — MM-DD HH:MM
+  # inside 24h, bare MM-DD after (the P40-s clock drop) — and the mix read
+  # as a defect, not a design. One column, one format: the clock always
+  # shows; only the year stays conditional (foreign years prefix it).
+  def test_last_run_stamp_format_is_uniform_regardless_of_age
+    db = store_test_db
+    ledger = ledger_test_db
+    registry = single_source_registry
+    source = registry["fake-src"].sync_source!(db)
+    old = Time.now - (5 * 86_400)
+    Nabu::Store::Run.create(
+      source_slug: source.slug, kind: "sync",
+      started_at: old, finished_at: old,
+      status: "succeeded", added: 0, updated: 0, withdrawn_count: 0, errored: 0
+    )
+
+    out = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
+    assert_match(/#{old.strftime('%m-%d %H:%M')}/, out,
+                 "a five-day-old run carries its clock exactly like a fresh one")
+  end
+
   # A ledger predating source_probes degrades to UNPROBED, no crash.
   def test_upstream_ledger_without_probe_table_degrades_to_unprobed
     db = store_test_db

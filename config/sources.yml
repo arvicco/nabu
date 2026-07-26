@@ -339,6 +339,23 @@ oracc:
                    # royal 101, earlylit 1, admin/ur3 0); a handful of
                    # catalog-only skeletons skip by rule (census honestly,
                    # quarantine loudly — the standing unknown-node guard).
+                   # P46-3 (2026-07-26) extended to 102: the CC0 extension
+                   # pack, +64 projects — ecut (URARTIAN xur enters, gold-
+                   # lemmatized), aemw/amarna + aemw/alalakh/idrimi, the 22
+                   # ATAE and 27 TCMA site subprojects (their parents are
+                   # proxy PORTALS owning no texts — not registered; atae's
+                   # saao-hosted 5,233 stay saao's), cmawro/cmawr1-3+maqlu,
+                   # hbtin, cams/gkab (overlap vs held blms+dcclt = 4 texts,
+                   # ruled immaterial — see Oracc::PROJECTS), dccmt, ccpo,
+                   # obmc, obta, akklove, suhu. ALL 64 CC0 verbatim, read
+                   # from each zip's metadata.json 2026-07-26 via the LMU
+                   # mirror (primary DOWN for days → the same packet wires
+                   # ZipFetch's fallback host: primary → mirror, pins stay
+                   # primary). EXCLUDED: tcma/bderi + ctij (broken builds,
+                   # HTTP 500), oimea (aggregator, parked pending a dedup
+                   # audit vs held rinap/riao/ribo). EXPECTED SYNC DELTAS
+                   # (owner-fired, no wired flip): ≈185 MB of new zips,
+                   # ~7,712 new tablet docs + ~6,339 crawled -en siblings.
   # Per-project HTTP zips (the first non-git fetch path); re-syncing is an
   # owner decision, not a scheduled one.
   sync_policy: manual
@@ -624,6 +641,48 @@ iecor:
   # future release is a NEW DOI the owner re-pins (URL + RELEASE_SHA256,
   # the Coptic RELEASE_TAG pattern) before firing a re-sync.
 
+wold:
+  adapter: Nabu::Adapters::Wold
+  axes: [etym]
+  wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box)
+                 # P46-6 pre-flip runbook (16 MB Zenodo
+                   # zip, sha-pinned; CLAUDE.md checklist §6: bin/nabu sync
+                   # wold, eyeball `nabu define wine --lang eng` for the
+                   # donor apparatus and `nabu etym vinum` for the Latin→
+                   # English loan edge, then flip). Projected: 64,289 entries
+                   # across 41 vocabulary shelves (wold-english,
+                   # wold-oldhighgerman, …) / ~20.6k borrowed donor edges.
+  # WOLD — World Loanword Database (lexibank/wold v4.2, CC BY 4.0; cite
+  # Haspelmath & Tadmor eds. 2009, MPI-EVA). The etym desk's loanword-FLOW
+  # layer: every lexeme carries a curated five-point borrowed status;
+  # borrowing events mint donor reflex edges (Latin/Sanskrit/Old Norse/
+  # Classical Arabic… — the ancient donors are the held join surface). The
+  # Zenodo versioned record is immutable; a future release is a NEW DOI the
+  # owner re-pins (URL + RELEASE_SHA256, the iecor pattern) before re-sync.
+  # Donor map keys on languoid NAMES — WOLD's own glottocodes are unreliable
+  # (its "Old Norse" is noon1243 = Glottolog's Noone; see cldf-spine row).
+  sync_policy: manual
+
+clics:
+  adapter: Nabu::Adapters::Clics
+  axes: [etym]
+  wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box)
+                 # P46-6 pre-flip runbook (12 MB zip →
+                   # 67 MB gml; CLAUDE.md checklist §6: bin/nabu sync clics,
+                   # eyeball `nabu define moon` / `nabu define 'earth (soil)'`
+                   # for the ↔ colexification lines, then flip). Projected:
+                   # ~2,900 concept entries (edge-bearing nodes of the
+                   # 2,919-node / 4,228-edge network).
+  # CLICS³ — Database of Cross-Linguistic Colexifications (Rzymski,
+  # Tresoldi et al. 2019, CC BY 4.0; DOI 10.17613/5awv-6w15). SCOPE,
+  # argued in the adapter header: the AGGREGATE family-aware network
+  # (clics3-network.gml at tag v1.1 — per-pair family/variety/word weights
+  # + family lists), not the 90 MB per-variety sqlite; the pair network is
+  # the research surface, the word lists behind it stay upstream. A tagged
+  # raw blob is byte-stable: sha-pinned like the Zenodo posture; a new
+  # CLICS release is a new tag the owner re-pins.
+  sync_policy: manual
+
 liv:
   adapter: Nabu::Adapters::Liv
   axes: [etym]
@@ -661,7 +720,12 @@ starling:
                    # CLAUDE.md checklist §6 — eyeball `nabu define '*bher-'`
                    # (Pokorny credit), `nabu define 'сигать'` (vasmer credit),
                    # `nabu etym hals` (germet got/ang gold joins), then flip.
-  # StarLing / Tower of Babel IE package (G. Starostin's e-mail grant,
+                   # P46-6 OWNER QUEUE: the sixth base starling-kart (KART.exe,
+                   # 207 KB second package → kart/ subdir, 1,310 Kartvelian
+                   # etymologies, ccs-pro) lands at the NEXT owner-fired
+                   # `bin/nabu sync starling`; eyeball `nabu define '*abed-'`
+                   # (Klimov credit + GRU/MEG/SVA/LAZ reflex rows).
+  # StarLing / Tower of Babel package (G. Starostin's e-mail grant,
   # 2026-07-15: any use "as long as the source is properly acknowledged" →
   # attribution). THE GRANT'S CONDITION: credit the specific compilers of
   # each base (roster: starlingdb.org/descrip.php?lan=en#bases) — Pokorny:
@@ -669,10 +733,13 @@ starling:
   # compiled by S. L. Nikolayev (after Walde-Pokorny), Hitt./Tokh. reflexes
   # by S. Starostin; Vasmer: the project's scan/OCR/database conversion of
   # M. Vasmer's dictionary (roster; vasmer.inf is blank); Germanic + Baltic:
-  # compiled by S. Nikolayev, subordinate to the PIE base (.inf DBINFO) —
-  # all carried verbatim in the adapter MANIFEST.license so every serving
-  # surface renders them. Upstream is a hand-curated 2005-era package:
-  # re-fetch is an owner decision.
+  # compiled by S. Nikolayev, subordinate to the PIE base (.inf DBINFO);
+  # Kartvelian (P46-6, the KART.exe second package under the SAME site-wide
+  # grant — "all etymological data"): compiled by S. Starostin after
+  # G. Klimov and Fähnrich–Sardshveladze (kartet.inf DBINFO + roster item
+  # 6) — all carried verbatim in the adapter MANIFEST.license so every
+  # serving surface renders them. Upstream is a hand-curated 2005-era
+  # package family: re-fetch is an owner decision.
   sync_policy: manual
   # P42-r1: THE FETCH GRANT is personal to this project's author and a PUBLIC
   # clone of nabu does NOT convey it — so `nabu sync starling` demands an
@@ -691,7 +758,7 @@ starling:
       Write to George Starostin (starlingdb.org) for your own use grant, and
       promise to credit each base's compilers per
       starlingdb.org/descrip.php?lan=en#bases (Pokorny, PIET, Vasmer, Germet,
-      Baltet) verbatim on every serving surface.
+      Baltet, Kartet) verbatim on every serving surface.
 
 sl-lexica:
   adapter: Nabu::Adapters::SlLexica
@@ -1034,28 +1101,44 @@ sdbh:
 sefaria:
   adapter: Nabu::Adapters::Sefaria
   axes: [biblical, hebrew]
-  wired: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
-                   # §6): bin/nabu sync sefaria — index-driven fetch, books.json
-                   # (~20 MB) + the 118 in-scope named Targum files ≈ 15 MB —
-                   # then eyeball nabu show
-                   # urn:nabu:sefaria:targum-jonathan-on-obadiah:mikraot-gedolot:1.1,
-                   # 5 random passages, and `align "GEN 1.1"` (the Aramaic
-                   # column beside MT ↔ LXX ↔ Vulgate), then flip.
-                   # Expected ≈104 documents: 121 named versions − 3 Tafsir
-                   # Rasag (excluded title) − 13 "unknown" − 1 absent license;
-                   # 12 CC-BY-NC + 1 CC-BY-NC-SA ride license_override: nc,
-                   # 9 CC-BY + 5 CC-BY-SA ride attribution, 77 PD/CC0 open.
-  # Sefaria — the TARGUM SHELF only this phase (P30-3). Upstream restructured:
-  # the git repo is a monthly books.json index (19,705 version entries), texts
-  # live in the public gs://sefaria-export bucket (~26 GB, never wholesale).
-  # NEW fetch shape (Nabu::SefariaFetch): GET index → select the Targum
-  # category's NAMED versions → named-file GETs; the index rides in canonical
-  # so scope is reproducible. THE LICENSE GATE per version, machine-readable
-  # "license" field: PD/CC0 → open, CC-BY/CC-BY-SA → attribution override,
-  # CC-BY-NC(-SA) → nc override (P10-4, MCP-excluded); "unknown"/absent →
+  wired: true # flipped 2026-07-19 (Targum shelf synced, owner sign-off);
+                   # P46-1 adds the Rabbinic wave-1 shelves to the SAME wired
+                   # source — the wave sync is OWNER-FIRED: bin/nabu sync
+                   # sefaria refetches the index and pulls ≈864 named files
+                   # (118 targum ≈ 15 MB re-pinned, 634 wave-1 open-lane
+                   # ≈ 78 MB, 112 Davidson nc ≈ 99 MB), then eyeball
+                   # urn:nabu:sefaria:tamid:he:wikisource-talmud-bavli:25b.1
+                   # (the frozen daf start), a Kaufmann Mishnah passage, and
+                   # 5 randoms. Expected ≈848 documents: ≈104 targum
+                   # (unchanged, urns FROZEN) + 744 wave-1 (746 fetched − the
+                   # 2 file-level "unknown"s: Kaufmann Pirkei Avot, Davidson
+                   # Yerushalmi Shekalim English — censused at discovery).
+  # Sefaria — Targum shelf (P30-3) + RABBINIC WAVE 1 (P46-1). Upstream
+  # restructured: the git repo is a monthly books.json index (19,705 version
+  # entries at the pinned 2026-07-02 generation), texts live in the public
+  # gs://sefaria-export bucket (~26 GB, never wholesale). Fetch shape
+  # (Nabu::SefariaFetch): GET index → the PINNED SHELF TABLE
+  # (Sefaria::SHELVES) selects NAMED versions → named-file GETs staged via a
+  # tempdir spool; the index rides in canonical so scope is reproducible.
+  # Wave-1 shelves (owner-ratified): Mishnah (he Vilna 1913 + Torat Emet 357
+  # + Kaufmann MS; en Kulp + SCT + Open Mishnah), Bavli (he Wikisource; en
+  # SCT partials; + the Davidson nc lane en/arc/vocalized), Minor Tractates
+  # (Vilna 1883 + Cohen Soncino + SCT), Yerushalmi (Guggenheimer he+en +
+  # Davidson Shekalim en), Tosefta (Lieberman codex-Vienna + SCT).
+  # Commentary/Rishonim/Acharonim/Guides subtrees and non-named editions
+  # (Venice, Mechon-Mamre…) are out by rule. THE LICENSE GATE per version
+  # FILE (the index carries no license field): PD (both spellings, D46-f)/
+  # CC0 → open, CC-BY/CC-BY-SA → attribution override, CC-BY-NC(-SA) → nc
+  # override (P10-4, MCP-excluded — the Davidson lane); "unknown"/absent →
   # never ingested; merged.json never fetched or ingested (pinned in tests).
-  # Sefaria's "Hebrew" column on this shelf IS Aramaic → arc (NFC-exempt,
-  # byte-verbatim); Tafsir Rasag (Judeo-Arabic) excluded by rule. The ot
+  # LANGUAGE RULINGS (D46-e, per shelf on actualLanguage): Targum he→arc
+  # (axis-keyed, frozen); Mishnah + Tosefta he→hbo; Bavli + Minor +
+  # Yerushalmi he→arc; en→eng; hbo/arc NFC-exempt byte-verbatim; an unmapped
+  # actualLanguage (he-axis ar/yi, en-axis de/fr/pt/es/ru/hu) quarantines
+  # loudly at parse. URNs: targum <title>:<version> (FROZEN); later shelves
+  # <title>:<he|en>:<version> (3 corpus-wide title/version collisions across
+  # the axis). Bavli passages cite daf.amud (25b.1 — positional from daf 1a,
+  # frozen arithmetic). Tafsir Rasag (Judeo-Arabic) excluded by rule. The ot
   # alignment hub's Aramaic leg (config/alignments.yml). Index regenerates
   # monthly; a re-sync is an owner decision → manual.
 bhsa:
@@ -1193,6 +1276,36 @@ lila:
   # LICENSE verbatim "Attribution-ShareAlike 4.0 International" (CC BY-SA 4.0;
   # citable Zenodo DOI 10.5281/zenodo.4017229) → attribution. Fetch is an
   # owner decision (the clone is large + version-pinned).
+  sync_policy: manual
+
+cldf-spine:
+  adapter: Nabu::Adapters::CldfSpine
+  kind: module   # P46-6: machinery-only — a concept/languoid resolver seam, zero document rows
+  axes: [etym]
+  wired: false   # PERMANENTLY false — a reference resolver instrument, not a
+                   # text source (the pleiades/lila precedent): discover mints
+                   # no documents, no migration, no catalog table. The row
+                   # gives the owner the sanctioned fetch path for TWO thin
+                   # tag-pinned reference files, resolved by Nabu::CldfSpine:
+                   # Concepticon id → {gloss, semantic field, definition,
+                   # replacement pointer} and glottocode → {name, ISO, level,
+                   # one-hop family}. Consumers: the WOLD/CLICS shelves'
+                   # Concepticon-id body lines and donor glottocodes (and
+                   # IE-CoR's Concepticon-linked meanings). OWNER QUEUE
+                   # (P46-6): bin/nabu sync cldf-spine GETs concepticon.tsv
+                   # (concepticon-data v3.4.0, 453 KB, sha256 f96a72b8dc18…)
+                   # + languages.csv (glottolog-cldf v5.3, 2.4 MB, sha256
+                   # 1a50a393bc81…) into per-subdir FileFetch states.
+  # P46-6: the CLDF reference spine — Concepticon (4,033 concepts) +
+  # Glottolog (27,177 languoids), THIN by design: the id-and-name spine plus
+  # what WOLD/CLICS rows need to resolve, never the full datasets. LICENSE:
+  # both CC BY 4.0 verbatim (Concepticon .zenodo.json at v3.4.0; the
+  # glottolog-cldf bundle's own dc:license at v5.3) → attribution. A new
+  # upstream release is a new tag: owner re-pins the two URL constants in
+  # lib/nabu/adapters/cldf_spine.rb and re-syncs. Known upstream quirk,
+  # pinned in tests: WOLD tags its "Old Norse" donor glottocode noon1243,
+  # which Glottolog resolves to Noone (Atlantic-Congo) — real Old Norse is
+  # oldn1244; the WOLD donor map therefore keys on languoid NAMES.
   sync_policy: manual
 
 kitab:
@@ -2391,6 +2504,42 @@ helipad:
   # new version is an owner re-pin decision → manual.
   sync_policy: manual
 
+ren:
+  adapter: Nabu::Adapters::Ren
+  axes: [germanic]
+  wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box)
+                 # P46-5: adapter + fixtures landed 2026-07-26; first sync was
+                   # owner-fired. Checklist §6: bin/nabu sync ren — expect 235
+                   # documents (161 annotated + 74 transcribed-only; ~297,594
+                   # manuscript lines measured across the deposit), eyeball
+                   # nabu show urn:nabu:ren:hamb-uk-1301-1350:1.01 (charter
+                   # opener "Dit se witlic alle den ghoͤnen…", gold
+                   # pos/msd/lemma tokens) + 5 random passages, then flip.
+  license_watch: https://www.fdr.uni-hamburg.de/record/9195
+  # ReN — Referenzkorpus Mittelniederdeutsch/Niederrheinisch (1200–1650),
+  # v1.1 (fdr.uni-hamburg.de record 9195, DOI 10.25592/uhhfdm.9195,
+  # published 2021-01-06): the Hanseatic rung between ReM (gmh) and the
+  # Norse/Old English shelves — 161 annotated texts / 1,485,963 tokens
+  # with gold pos+msd+lemma (measured; equals the deposit's claimed 1.49M)
+  # plus 74 transcribed-only texts / 838,400 tokens (id+form only), from
+  # manuscripts, prints and inscriptions. SECOND cora-tei registrant: the
+  # tei_1.1.zip export (21,829,154 B of the record's 983.7 MB total — the
+  # other archives are CorA-XML/relANNIS/html/pdf renderings of the same
+  # texts) parsed by RenTeiParser, the censused ReN dialect (no teiHeader,
+  # pos/msd not norm, <s> sentence containers, apparatus-in-token,
+  # join="both"). Language gml for all 235 texts; the 28 texts upstream's
+  # CorA-XML headers class as niederrheinisch carry metadata
+  # upstream_language (censused list in the adapter — upstream couples
+  # the lanes, no dum split invented). Dating/localization live ONLY in
+  # the CorA-XML sibling's headers — documented follow-up, the inverse of
+  # ReM's pos/msd gap. LICENSE: CC BY 4.0 on the deposit record itself
+  # (verified 2026-07-25; no in-file licence exists) → attribution; cite
+  # record + DOI. Fetch: ONE versioned-immutable artifact via ZipFetch
+  # (302 → signed S3, RedirectFollow; single top dir strips), hard sha256
+  # pin checked between download and any tree mutation (the rem/iecor
+  # mold). A future 1.2 is a new record version: owner re-pins → manual.
+  sync_policy: manual
+
 openiti:
   adapter: Nabu::Adapters::Openiti
   axes: [arabic]
@@ -2598,6 +2747,96 @@ bfm:   # P45-4
   # type="étiquetage-vérifié" flag, a future gold-subset candidate) →
   # lemma_tier: silver, every count labeled (the GLAUx/diorisis precedent).
   lemma_tier: silver
+  sync_policy: manual
+
+edr:   # P46-4
+  adapter: Nabu::Adapters::Edr
+  axes: [epigraphy]
+  wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box) — 115,590 docs / 596,064 passages / 1 predicted quarantine, D46-i license ruling 2026-07-26
+                 # First sync shape: ONE ~268 MB Zenodo GET
+                   # (streamed, sha256-pinned), ~650 MB canonical unpacked.
+  # P46-4: EDR — Epigraphic Database Roma (edr-edr.it; Sapienza), the
+  # inscriptions of ITALY: the geographic complement of held EDH (the
+  # provinces). Data release = ONE Zenodo artifact, record 18468635
+  # (version 12, concept DOI 10.5281/zenodo.3931222), EDR.zip 267,683,094 B,
+  # md5 d679b73ce95537406b84468cac64753c verified on the 2026-07-26 census
+  # download, sha256 pinned in the adapter. MEASURED census (whole zip, not
+  # estimated): 115,591 EpiDoc files in nine range dirs, ids aEDR<nnnnnn>
+  # all unique, zero non-XML members; 1 malformed file (aEDR188615 —
+  # overlapping supplied/l hierarchy, the honest quarantine); edition-div
+  # xml:lang la 110,006 / grc 5,584 (the ROOT tag says "la" on every record
+  # — never trusted). Full-tree dry parse 2026-07-26: expect 115,590 docs
+  # (88 symbol-only metadata-only records) / 596,064 passages (170 :text
+  # fallbacks) / 1 quarantine at first sync. LICENSE, two layers recorded:
+  # the Zenodo DEPOSIT is CC BY 4.0 (deposited by the EDR project
+  # leadership — the redistribution grant) while every file's in-file
+  # <licence> still carries the EAGLE-era "Reserved Rights - Free access"
+  # (europeana rr-f) statement, pinned at parse → attribution. EDR and EDH
+  # share border inscriptions conceptually — separate authorities,
+  # provenance-distinct witnesses, never deduped (standing doctrine).
+  # Re-releases are NEW Zenodo versions: the owner re-pins url+sha and
+  # re-syncs.
+
+# ============ P46-2: the Geʿez shelf (D46-a/b/c, owner-ratified 2026-07-26) ============
+
+betamasaheft-works:   # P46-2, 02-sources row 123
+  adapter: Nabu::Adapters::BetamasaheftWorks
+  # ethiopic: the shelf mints the axis (D46-c); biblical: it carries the Gǝʿǝz
+  # Bible — near-complete OT (Genesis..Ezekiel, Psalms), all four Gospels,
+  # Acts/Epistles/Revelation. FOLLOW-UP (not this packet): the Gǝʿǝz Mark can
+  # join the nt alignment hub as a witness (config/alignments.yml untouched).
+  axes: [ethiopic, biblical]
+  wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box)
+  # Beta maṣāḥǝft Works (Hiob-Ludolf-Zentrum, Univ. Hamburg): 6,548 TEI work
+  # records, one file per work; MOST are catalog-only (no transcription) and
+  # skip BY RULE, quietly. Text-bearing selection = in-file BY-SA licence +
+  # edition div + Ethiopic script (censused in discovery_skips; a non-BY-SA
+  # licence would render UNRECOGNIZED, loudly). LICENSE = D46-a: the
+  # per-document in-file <licence> CC BY-SA 4.0 grant governs (6,545 of 6,548
+  # files) -> attribution; the betamasaheft.eu WEBSITE blankets its pages
+  # CC BY-NC-SA — a recorded discrepancy, the site statement does not govern
+  # these files. Per-document transcription credits (Ran HaCohen's Octateuch)
+  # ride document metadata. EXPECTED FIRST SYNC (~69 MB shallow, sparse
+  # **/*.xml cone): ~3.9k text-bearing docs at verse/prose grain (census
+  # 2026-07-26: 3,923 records show Ethiopic in their edition region; 272 are
+  # substantial transcriptions >= 1,000 chars — near-complete OT, the four
+  # Gospels, 1 Enoch 179k chars, Jubilees 188k, Kebra nagast 174k, royal
+  # chronicles; the long tail is incipit/explicit-only mini-documents, honest
+  # and small). Living edition -> manual re-syncs.
+  sync_policy: manual
+
+dillmann:   # P46-2, 02-sources row 124
+  adapter: Nabu::Adapters::Dillmann
+  axes: [ethiopic]
+  wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box)
+  # The Gǝʿǝz dictionary shelf: Dillmann, Lexicon linguae aethiopicae (1865)
+  # in the TraCES TEI digitization — 13,727 entry files, one <entry> each
+  # (github.com/BetaMasaheft/DillmannData; the sibling `Dillmann` repo is
+  # only the eXist-db app). content_kind :dictionary, language gez, urns
+  # urn:nabu:dict:dillmann:<L-id> — the ids the traces corpus's lemma links
+  # point at. LICENSE QUIRK (recorded): every file's licence target URL is
+  # MALFORMED ("…/licenses/by-sa-nc/4.0/", a slug CC does not serve; http
+  # x12,453 + https x1,274); the prose names Attribution-ShareAlike Non
+  # Commercial 4.0 -> CC BY-NC-SA 4.0, class nc (MCP default-excluded).
+  # EXPECTED FIRST SYNC (~15 MB, sparse **/*.xml cone): 13,727 entries.
+  sync_policy: manual
+
+traces:   # P46-2, 02-sources row 125
+  adapter: Nabu::Adapters::Traces
+  axes: [ethiopic]
+  wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box)
+  # TraCES TEI-Ling export (ERC Advanced Grant 338756, Hamburg): 15 files /
+  # 75,440 morphologically analyzed Gǝʿǝz word tokens — Matthew 12,212,
+  # Kebra nagast prologue+25 chs 3,784, ʿAmda Ṣǝyon chronicle 10,704,
+  # Testamentum Domini 12,471, "MM" 18,685, "AK" 15,599, Gadla Libānos
+  # excerpts, seven Aksumite royal inscriptions (RIE 187-232). One passage
+  # per word token (fidäl text; translit + morphology + Dillmann-entry lemma
+  # link in annotations) — the gold lemma lane of the Geʿez shelf. LICENSE =
+  # D46-b: no in-repo license; the official archive deposit governs —
+  # CC BY-NC-ND 4.0 (fdr.uni-hamburg.de record 707, DOI 10.25592/uhhfdm.707)
+  # -> nc (MCP default-excluded). EXPECTED FIRST SYNC (~137 MB clone): 15
+  # docs / 75,440 passages; the stray Alpheios export skips by rule.
+  # Project ended, export effectively frozen -> manual.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

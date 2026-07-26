@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 July 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
@@ -44,13 +44,15 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 
 ## Working the sinitic desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable sinitic               # first time: put this desk's shelves in this box's profile
+nabu sync sinitic                 # fetch/refresh the desk's enabled members
 nabu list --axis sinitic          # the shelf census, this desk only
 nabu axis sinitic                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis sinitic   # a query scoped to this desk's shelves
-nabu sync sinitic                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:
@@ -83,4 +85,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-one research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

@@ -1,0 +1,33 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All five fixtures are members of tei_1.1.zip (21,829,154 B) from the
+# fdr.uni-hamburg.de record 9195. A raw GET of the url returns the ZIP (via
+# a short-lived signed S3 redirect), not the member file, so whole: false —
+# fetched for URL-liveness only, never byte-compared (the trim note records
+# which members are themselves uncut). Re-extract from the zip after any
+# refresh; trim procedure in README.md.
+source: ren
+adapter_test: test/adapters/ren_test.rb
+retrieved: 2026-07-26
+files:
+  - path: anno/Hamb._Uk._1301-1350.tei
+    url: https://www.fdr.uni-hamburg.de/record/9195/files/tei_1.1.zip?download=1
+    whole: false
+    trim: whole zip member tei_1.1/anno/Hamb._Uk._1301-1350.tei (Hamburg charter 1329, 202 tokens — the smallest annotated text), kept byte-for-byte uncut; extracted from tei_1.1.zip (21,829,154 B); P46-5
+  - path: trans/Dub._Uk._1301-1350.tei
+    url: https://www.fdr.uni-hamburg.de/record/9195/files/tei_1.1.zip?download=1
+    whole: false
+    trim: whole zip member tei_1.1/trans/Dub._Uk._1301-1350.tei (Duisburg charter 1345, transcribed-only, niederrheinisch — the smallest trans text), kept byte-for-byte uncut; extracted from tei_1.1.zip; P46-5
+  - path: anno/Brs._Ält._DegB_Altst._I.tei
+    url: https://www.fdr.uni-hamburg.de/record/9195/files/tei_1.1.zip?download=1
+    whole: false
+    trim: structural trim of tei_1.1/anno/Brs._Ält._DegB_Altst._I.tei (the TWO-COLUMN + umlaut-sigle exemplar; head byte-for-byte, body cut at the </s> before the third editorial note keeping pb 1r + 1v with their a/b columns whose line numbers restart per column, closing tags appended); P46-5
+  - path: anno/Lüb._Uk._1351-1400.tei
+    url: https://www.fdr.uni-hamburg.de/record/9195/files/tei_1.1.zip?download=1
+    whole: false
+    trim: structural trim of tei_1.1/anno/Lüb._Uk._1351-1400.tei (the entry-restart exemplar — charters Lub 1352a + Lub 1353a BOTH restarting at pb 1r / lb 01 with no container element, the :b2 shape; head byte-for-byte, body cut before the third charter's editorial note, closing tags appended); P46-5
+  - path: anno/Reval_Schragen_1351-1500.tei
+    url: https://www.fdr.uni-hamburg.de/record/9195/files/tei_1.1.zip?download=1
+    whole: false
+    trim: structural trim of tei_1.1/anno/Reval_Schragen_1351-1500.tei (the apparatus exemplar — join="both" multi-part tokens, add/del/gap/unclear, in-token notes with nested markup, a pb+lb pair inside a token; head byte-for-byte, body cut at the </s> before pb 26r, closing tags appended); P46-5

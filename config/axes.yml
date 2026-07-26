@@ -34,7 +34,7 @@ slavic:
 
 germanic:
   persona: "The Germanicist — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches."
-  desc: "Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), and the runic inscriptions (Rundata, dual-tagged epigraphy)."
+  desc: "Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), and the runic inscriptions (Rundata, dual-tagged epigraphy)."
 
 celtic:
   persona: "The Celticist — from Lepontic stones to the Old Irish glossators."
@@ -59,6 +59,11 @@ hebrew:
 syriac:
   persona: "The Syriacist — the Peshitta and the estrangela bookshelf."
   desc: "The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, riding beside the biblical hat by design."
+
+# P46-2 (owner ruling D46-c 2026-07-26: mint `ethiopic` with the Geʿez shelf).
+ethiopic:
+  persona: "The Ethiopicist — Aksum to the scriptoria: Enoch, Jubilees, and the Geʿez Bible."
+  desc: "The Ethiopic (Gǝʿǝz) desk in the Oriental-Christian neighborhood: the Beta maṣāḥǝft transcriptions (the Geʿez Bible, 1 Enoch, Jubilees, the Kebra nagast, royal chronicles), Dillmann's Lexicon, and the TraCES analyzed corpus with its Aksumite inscriptions — riding beside the biblical hat by design."
 
 arabic:
   persona: "The Arabist — the Islamicate library whole, Quran and hadith to falsafa and adab."

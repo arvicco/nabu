@@ -13,9 +13,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these sixteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these seventeen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 July 2026)</span> |
 |---|---|---|---|---|
 | `papyri-ddbdp` | papyri | attribution | wired · manual | 61,414 docs / 921,611 passages |
 | `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
@@ -33,6 +33,7 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
 | `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
+| `edr` | inscriptions | attribution | wired · manual | 115,590 docs / 596,064 passages |
 
 ## The desk's instruments
 
@@ -45,24 +46,33 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
   shelves — **papyri-ddbdp, EDH, ORACC and open-etruscan**. The other
   epigraphic shelves (RIIG, ogham, ItAnt, Rundata…) are searched with
   plain `search --axis epigraphy`.
-- **The timeline desk:** 163,821 documents carry a date or place, so
-  `--from/--to`, `--century` and `--place` scope the stones and sherds by
-  when and where. EDH's genre facets (`--type/--province/--material`) live.
+- **The timeline desk:** 549,771 documents carry a date or place (as of
+  26 July 2026 — CDLI's tablets, the Heidelberg inscriptions and the
+  papyri foremost), so `--from/--to`, `--century` and `--place` scope
+  the stones and sherds by when and where. EDH's genre facets
+  (`--type/--province/--material`) live.
+- **The gazetteer (P44–P46):** `nabu place NAME` resolves a findspot
+  against the Pleiades gazetteer (42,242 places in a derived index —
+  millisecond lookups) and counts this library's holdings found there;
+  an inscription's `nabu show` names its findspot with the Pleiades id.
 
 ## Working the epigraphy desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable epigraphy               # first time: put this desk's shelves in this box's profile
+nabu sync epigraphy                 # fetch/refresh the desk's enabled members
 nabu list --axis epigraphy          # the shelf census, this desk only
 nabu axis epigraphy                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis epigraphy   # a query scoped to this desk's shelves
-nabu sync epigraphy                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:
 
 ```
+nabu place Segesta                    # the place card — Pleiades id, period band, coordinates, holdings found there
 nabu search --fuzzy ']ανδρα μοι εν['  # damaged-line substring search, typed straight off the edition
 nabu search manibus --type epitaph --province Britannia  # EDH genre facets composing with a text query (dis manibus on British epitaphs)
 nabu search "στρατηγ*" --from 101 --to 300 --place oxyrhynch%  # the Oxyrhynchite strategoi by date and provenance
@@ -95,4 +105,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-one research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

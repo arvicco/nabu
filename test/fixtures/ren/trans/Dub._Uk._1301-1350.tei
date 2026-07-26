@@ -1,0 +1,566 @@
+<?xml version='1.0' encoding='utf-8'?>
+<text>
+  <body>
+    <ab>
+      <note type="editorial">ASnA Ortspunkt-Corpus Duisburg Dub 1345</note>
+      <s part="I">
+        <pb n="1r"/>
+        <lb n="01"/>
+        <w xml:id="t1_m1">Allen</w>
+        <w xml:id="t2_m1">guden</w>
+        <w xml:id="t3_m1">luden</w>
+        <w xml:id="t4_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t5_m1">de</w>
+        <w xml:id="t6_m1">desen</w>
+        <w xml:id="t7_m1">brif</w>
+        <w xml:id="t8_m1">solen</w>
+        <w xml:id="t9_m1">syen</w>
+        <w xml:id="t10_m1">of</w>
+        <w xml:id="t11_m1">horen</w>
+        <w xml:id="t12_m1">lesen</w>
+        <w xml:id="t13_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t14_m1">do</w>
+        <w xml:id="t15_m1">ich</w>
+        <w xml:id="t16_m1">herman</w>
+        <w xml:id="t17_m1">dy</w>
+        <w xml:id="t18_m1">heked</w>
+        <w xml:id="t19_m1">kondich</w>
+      </s>
+      <s>
+        <w xml:id="t20_m1">tughe</w>
+        <w xml:id="t21_m1">,</w>
+      </s>
+      <s part="F">
+        <w xml:id="t22_m1">end</w>
+        <w xml:id="t23_m1">bekenne</w>
+        <w xml:id="t24_m1">open-<lb n="02"/>bare</w>
+        <w xml:id="t25_m1">in</w>
+        <w xml:id="t26_m1">desen</w>
+        <w xml:id="t27_m1">briue</w>
+        <w xml:id="t28_m1">,</w>
+      </s>
+      <s part="I">
+        <w xml:id="t29_m1">dad</w>
+        <w xml:id="t30_m1">her</w>
+        <w xml:id="t31_m1">alberd</w>
+        <w xml:id="t32_m1">scakke</w>
+        <w xml:id="t33_m1">min</w>
+        <w xml:id="t34_m1">swagher</w>
+        <w xml:id="t35_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t36_m1">di</w>
+        <w xml:id="t37_m1">nu</w>
+        <w xml:id="t38_m1">is</w>
+        <w xml:id="t39_m1">en</w>
+        <w xml:id="t40_m1">bruder</w>
+        <w xml:id="t41_m1">des</w>
+        <w xml:id="t42_m1">oerden</w>
+        <w xml:id="t43_m1" join="right">van</w>
+        <w xml:id="t43_m2" join="left">me</w>
+        <w xml:id="t44_m1">duysschen</w>
+        <w xml:id="t45_m1">huͦs</w>
+        <w xml:id="t46_m1">,</w>
+      </s>
+      <s part="F">
+        <w xml:id="t47_m1">dad</w>
+        <lb n="03"/>
+        <w xml:id="t48_m1">gud</w>
+        <w xml:id="t49_m1">genompd</w>
+        <w xml:id="t50_m1">to</w>
+        <w xml:id="t51_m1">distelwich</w>
+        <w xml:id="t52_m1">,</w>
+        <w xml:id="t53_m1">mid</w>
+        <w xml:id="t54_m1">al</w>
+        <w xml:id="t55_m1">siner</w>
+        <w xml:id="t56_m1">tobehoringhe</w>
+        <w xml:id="t57_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t58_m1">mi</w>
+        <w xml:id="t59_m1">hadde</w>
+        <w xml:id="t60_m1">opgedraghen</w>
+        <w xml:id="t61_m1">,</w>
+        <w xml:id="t62_m1">vor</w>
+        <w xml:id="t63_m1">den</w>
+        <w xml:id="t64_m1">gerichte</w>
+        <w xml:id="t65_m1">to</w>
+        <w xml:id="t66_m1">mederic</w>
+        <w xml:id="t67_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t68_m1">ende</w>
+        <w xml:id="t69_m1">satte</w>
+        <w xml:id="t70_m1">mi</w>
+        <w xml:id="t71_m1">des</w>
+        <lb n="04"/>
+        <w xml:id="t72_m1">gudes</w>
+        <w xml:id="t73_m1">enen</w>
+        <w xml:id="t74_m1">vormonder</w>
+        <w xml:id="t75_m1">vm</w>
+        <w xml:id="t76_m1">sonderliken</w>
+        <w xml:id="t77_m1">geloue</w>
+        <w xml:id="t78_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t79_m1">den</w>
+        <w xml:id="t80_m1">he</w>
+        <w xml:id="t81_m1">to</w>
+        <w xml:id="t82_m1">mi</w>
+        <w xml:id="t83_m1">hadde</w>
+        <w xml:id="t84_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t85_m1">op</w>
+        <w xml:id="t86_m1">dad</w>
+        <w xml:id="t87_m1">ich</w>
+        <w xml:id="t88_m1">,</w>
+        <w xml:id="t89_m1">dad</w>
+        <w xml:id="t90_m1">guͦd</w>
+        <w xml:id="t91_m1">,</w>
+        <w xml:id="t92_m1">verantwarde</w>
+        <w xml:id="t93_m1">van</w>
+        <w xml:id="t94_m1">siner</w>
+        <w xml:id="t95_m1">wegen</w>
+        <w xml:id="t96_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t97_m1">Dad</w>
+        <lb n="05"/>
+        <w xml:id="t98_m1">guͦd</w>
+        <w xml:id="t99_m1">als</w>
+        <w xml:id="t100_m1">he</w>
+        <w xml:id="t101_m1">mi</w>
+        <w xml:id="t102_m1">dad</w>
+        <w xml:id="t103_m1">hadde</w>
+        <w xml:id="t104_m1">opgedraghen</w>
+        <w xml:id="t105_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t106_m1">dad</w>
+        <w xml:id="t107_m1">drege</w>
+        <w xml:id="t108_m1">ich</w>
+        <w xml:id="t109_m1">om</w>
+        <w xml:id="t110_m1">,</w>
+        <w xml:id="t111_m1">end</w>
+        <w xml:id="t112_m1">den</w>
+        <w xml:id="t113_m1">huͦs</w>
+        <w xml:id="t114_m1">to</w>
+        <w xml:id="t115_m1">welhem</w>
+        <w xml:id="t116_m1">weder</w>
+        <w xml:id="t117_m1">op</w>
+        <w xml:id="t118_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t119_m1">wand</w>
+        <w xml:id="t120_m1">he</w>
+        <w xml:id="t121_m1">dar</w>
+        <w xml:id="t122_m1">en</w>
+        <w xml:id="t123_m1">bruder</w>
+        <w xml:id="t124_m1">is</w>
+        <w xml:id="t125_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t126_m1">end</w>
+        <lb n="06"/>
+        <w xml:id="t127_m1">beken<expan>n</expan>e</w>
+        <w xml:id="t128_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t129_m1">dad</w>
+        <w xml:id="t130_m1">noch</w>
+        <w xml:id="t131_m1">ich</w>
+        <w xml:id="t132_m1">,</w>
+        <w xml:id="t133_m1">noch</w>
+        <w xml:id="t134_m1">mine</w>
+        <w xml:id="t135_m1">eruen</w>
+        <w xml:id="t136_m1">,</w>
+        <w xml:id="t137_m1">noch</w>
+        <w xml:id="t138_m1">nimen</w>
+        <w xml:id="t139_m1">van</w>
+        <w xml:id="t140_m1">miner</w>
+        <w xml:id="t141_m1">weghen</w>
+        <w xml:id="t142_m1">,</w>
+        <w xml:id="t143_m1">an</w>
+        <w xml:id="t144_m1">den</w>
+        <w xml:id="t145_m1">gude</w>
+        <w xml:id="t146_m1" join="right">ne</w>
+        <w xml:id="t146_m2" join="left">gien</w>
+        <w xml:id="t147_m1">recht</w>
+        <w xml:id="t148_m1">en</w>
+        <w xml:id="t149_m1">hadden</w>
+      </s>
+      <s>
+        <w xml:id="t150_m1">nogh</w>
+        <w xml:id="t151_m1">en</w>
+        <w xml:id="t152_m1">hebben</w>
+        <w xml:id="t153_m1">,</w>
+        <lb n="07"/>
+        <w xml:id="t154_m1">dan</w>
+        <w xml:id="t155_m1">alleyne</w>
+        <w xml:id="t156_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t157_m1">dad</w>
+        <w xml:id="t158_m1">ich</w>
+        <w xml:id="t159_m1">des</w>
+        <w xml:id="t160_m1">gudes</w>
+        <w xml:id="t161_m1">en</w>
+        <w xml:id="t162_m1">vormonder</w>
+        <w xml:id="t163_m1">was</w>
+        <w xml:id="t164_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t165_m1">als</w>
+        <w xml:id="t166_m1">vorsproken</w>
+        <w xml:id="t167_m1">is</w>
+        <w xml:id="t168_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t169_m1">Vordmer</w>
+        <w xml:id="t170_m1">om</w>
+        <w xml:id="t171_m1">minen</w>
+        <w xml:id="t172_m1">deinst</w>
+        <w xml:id="t173_m1">,</w>
+        <w xml:id="t174_m1">end</w>
+        <w xml:id="t175_m1">mine</w>
+        <w xml:id="t176_m1">kost</w>
+        <w xml:id="t177_m1">,</w>
+        <w xml:id="t178_m1">end</w>
+        <w xml:id="t179_m1">arbeith</w>
+        <w xml:id="t180_m1">,</w>
+      </s>
+      <s>
+        <lb n="08"/>
+        <w xml:id="t181_m1">de</w>
+        <w xml:id="t182_m1">ich</w>
+        <w xml:id="t183_m1">hebbe</w>
+        <w xml:id="t184_m1">an</w>
+        <w xml:id="t185_m1">dad</w>
+        <w xml:id="t186_m1">gud</w>
+        <w xml:id="t187_m1">geleeged</w>
+        <w xml:id="t188_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t189_m1">op</w>
+        <w xml:id="t190_m1">dad</w>
+        <w xml:id="t191_m1">ich</w>
+        <w xml:id="t192_m1">dad</w>
+        <w xml:id="t193_m1">gud</w>
+        <w xml:id="t194_m1">verantwarde</w>
+      </s>
+      <s>
+        <w xml:id="t195_m1">war</w>
+        <w xml:id="t196_m1">des</w>
+        <w xml:id="t197_m1">to</w>
+        <w xml:id="t198_m1">done</w>
+        <w xml:id="t199_m1">was</w>
+        <w xml:id="t200_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t201_m1">so</w>
+        <w xml:id="t202_m1">heued</w>
+        <w xml:id="t203_m1">mi</w>
+        <w xml:id="t204_m1">her</w>
+        <w xml:id="t205_m1">alberd</w>
+        <w xml:id="t206_m1">schakke</w>
+        <w xml:id="t207_m1">vor=<lb n="09"/>genompd</w>
+        <w xml:id="t208_m1">eyne</w>
+        <w xml:id="t209_m1">gonste</w>
+        <w xml:id="t210_m1">,</w>
+        <w xml:id="t211_m1">ende</w>
+        <w xml:id="t212_m1">eyn</w>
+        <w xml:id="t213_m1"><unclear>...</unclear>enscap</w>
+        <w xml:id="t214_m1">gedaen</w>
+        <w xml:id="t215_m1">,</w>
+        <w xml:id="t216_m1">an</w>
+        <w xml:id="t217_m1">den</w>
+        <w xml:id="t218_m1">gude</w>
+        <w xml:id="t219_m1">to</w>
+        <w xml:id="t220_m1">minen</w>
+        <w xml:id="t221_m1">liue</w>
+        <w xml:id="t222_m1">,</w>
+        <w xml:id="t223_m1">end</w>
+        <w xml:id="t224_m1">nid</w>
+        <w xml:id="t225_m1">langer</w>
+        <w xml:id="t226_m1">,</w>
+        <w xml:id="t227_m1">al<space quantity="1" unit="chars"/>so</w>
+      </s>
+      <s>
+        <w xml:id="t228_m1">dad</w>
+        <w xml:id="t229_m1">ich</w>
+        <w xml:id="t230_m1">sal</w>
+        <w xml:id="t231_m1">obboren</w>
+        <lb n="10"/>
+        <w xml:id="t232_m1">alle</w>
+        <w xml:id="t233_m1">mine</w>
+        <w xml:id="t234_m1">daghe</w>
+        <w xml:id="t235_m1">,</w>
+        <w xml:id="t236_m1">ende</w>
+        <w xml:id="t237_m1">nid</w>
+        <w xml:id="t238_m1">langer</w>
+        <w xml:id="t239_m1">half</w>
+        <w xml:id="t240_m1">di</w>
+        <w xml:id="t241_m1">rente</w>
+      </s>
+      <s>
+        <w xml:id="t242_m1">di</w>
+        <w xml:id="t243_m1">van</w>
+        <w xml:id="t244_m1">den</w>
+        <w xml:id="t245_m1">gude</w>
+        <w xml:id="t246_m1">jarlix</w>
+        <w xml:id="t247_m1">vallen</w>
+        <w xml:id="t248_m1">.</w>
+      </s>
+      <s>
+        <w xml:id="t249_m1">di</w>
+        <w xml:id="t250_m1">sal</w>
+        <w xml:id="t251_m1">ic</w>
+        <w xml:id="t252_m1">besitten</w>
+        <w xml:id="t253_m1">mine</w>
+        <w xml:id="t254_m1">dage</w>
+        <w xml:id="t255_m1">,</w>
+        <w xml:id="t256_m1">end</w>
+        <w xml:id="t257_m1">nid</w>
+        <lb n="11"/>
+        <w xml:id="t258_m1">langher</w>
+        <w xml:id="t259_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t260_m1">als</w>
+        <w xml:id="t261_m1">vorsproken</w>
+        <w xml:id="t262_m1">is</w>
+        <w xml:id="t263_m1">,</w>
+      </s>
+      <s part="I">
+        <w xml:id="t264_m1">end</w>
+        <w xml:id="t265_m1">na</w>
+        <w xml:id="t266_m1">minen</w>
+        <w xml:id="t267_m1">dagen</w>
+        <w xml:id="t268_m1">velled</w>
+        <w xml:id="t269_m1">al</w>
+        <w xml:id="t270_m1">di</w>
+        <w xml:id="t271_m1">gonst</w>
+        <w xml:id="t272_m1">,</w>
+        <w xml:id="t273_m1">end</w>
+        <w xml:id="t274_m1">di</w>
+        <w xml:id="t275_m1">genade</w>
+      </s>
+      <s>
+        <w xml:id="t276_m1">de</w>
+        <w xml:id="t277_m1">he</w>
+        <w xml:id="t278_m1">mi</w>
+        <w xml:id="t279_m1">dar</w>
+        <w xml:id="t280_m1">an</w>
+        <w xml:id="t281_m1">gedaen</w>
+        <w xml:id="t282_m1">heued</w>
+        <w xml:id="t283_m1">,</w>
+      </s>
+      <s part="F">
+        <w xml:id="t284_m1">an</w>
+        <w xml:id="t285_m1">hern</w>
+        <lb n="12"/>
+        <w xml:id="t286_m1">alberd</w>
+        <w xml:id="t287_m1">,</w>
+        <w xml:id="t288_m1">en<expan>d</expan></w>
+        <w xml:id="t289_m1">an</w>
+        <w xml:id="t290_m1">dad</w>
+        <w xml:id="t291_m1">huͦs</w>
+        <w xml:id="t292_m1">to</w>
+        <w xml:id="t293_m1">welhem</w>
+      </s>
+      <s>
+        <w xml:id="t294_m1">als</w>
+        <w xml:id="t295_m1">vorsproken</w>
+        <w xml:id="t296_m1">is</w>
+        <w xml:id="t297_m1">,</w>
+      </s>
+      <s part="I">
+        <w xml:id="t298_m1">end</w>
+        <w xml:id="t299_m1">van</w>
+        <w xml:id="t300_m1">der</w>
+        <w xml:id="t301_m1">rente</w>
+      </s>
+      <s>
+        <w xml:id="t302_m1">di</w>
+        <w xml:id="t303_m1">mi</w>
+        <w xml:id="t304_m1">van</w>
+        <w xml:id="t305_m1">genaden</w>
+        <w xml:id="t306_m1">gedaen</w>
+        <w xml:id="t307_m1">is</w>
+        <w xml:id="t308_m1">to</w>
+        <w xml:id="t309_m1">minen</w>
+        <w xml:id="t310_m1">daghen</w>
+      </s>
+      <s part="F">
+        <lb n="13"/>
+        <w xml:id="t311_m1" join="right">an</w>
+        <w xml:id="t311_m2" join="left">den</w>
+        <w xml:id="t312_m1">gude</w>
+        <w xml:id="t313_m1">sal</w>
+        <w xml:id="t314_m1">ich</w>
+        <w xml:id="t315_m1">jarlix</w>
+        <w xml:id="t316_m1">betalen</w>
+        <w xml:id="t317_m1">,</w>
+        <w xml:id="t318_m1">vijr</w>
+        <w xml:id="t319_m1">malder</w>
+        <w xml:id="t320_m1">roggen</w>
+        <w xml:id="t321_m1">tod</w>
+        <w xml:id="t322_m1">oren</w>
+        <w xml:id="t323_m1">liue</w>
+        <w xml:id="t324_m1">,</w>
+        <w xml:id="t325_m1">druden</w>
+        <w xml:id="t326_m1">van</w>
+        <w xml:id="t327_m1">den</w>
+        <w xml:id="t328_m1">wijngarden</w>
+        <w xml:id="t329_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t330_m1">di</w>
+        <w xml:id="t331_m1">wijle</w>
+        <w xml:id="t332_m1">dad</w>
+        <w xml:id="t333_m1">se</w>
+        <lb n="14"/>
+        <w xml:id="t334_m1">leued</w>
+        <w xml:id="t335_m1">,</w>
+        <w xml:id="t336_m1">na</w>
+        <w xml:id="t337_m1">aller</w>
+        <w xml:id="t338_m1">manijr</w>
+      </s>
+      <s>
+        <w xml:id="t339_m1">dad</w>
+        <w xml:id="t340_m1">se</w>
+        <w xml:id="t341_m1">drude</w>
+        <w xml:id="t342_m1">vorgenompd</w>
+        <w xml:id="t343_m1">Jarlix</w>
+        <w xml:id="t344_m1">vijr</w>
+        <w xml:id="t345_m1">malder</w>
+        <w xml:id="t346_m1">rogghen</w>
+        <w xml:id="t347_m1">tod</w>
+        <w xml:id="t348_m1">oren</w>
+        <w xml:id="t349_m1">liue</w>
+        <w xml:id="t350_m1">vt</w>
+        <w xml:id="t351_m1">ten</w>
+        <w xml:id="t352_m1">gude</w>
+        <w xml:id="t353_m1">gecocht</w>
+        <w xml:id="t354_m1">had=<lb n="15"/>de</w>
+        <w xml:id="t355_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t356_m1">Al</w>
+        <w xml:id="t357_m1">argelist</w>
+        <w xml:id="t358_m1">vtgesad</w>
+        <w xml:id="t359_m1">,</w>
+        <w xml:id="t360_m1">End</w>
+        <w xml:id="t361_m1">om</w>
+        <w xml:id="t362_m1">ein</w>
+        <w xml:id="t363_m1">getugh</w>
+        <w xml:id="t364_m1">enre</w>
+        <w xml:id="t365_m1">warheid</w>
+        <w xml:id="t366_m1">deser</w>
+        <w xml:id="t367_m1">dinghe</w>
+        <w xml:id="t368_m1">heb</w>
+        <w xml:id="t369_m1">ich</w>
+        <w xml:id="t370_m1">min</w>
+        <w xml:id="t371_m1">segel</w>
+        <w xml:id="t372_m1">an</w>
+        <w xml:id="t373_m1">desen</w>
+        <w xml:id="t374_m1">brif</w>
+        <w xml:id="t375_m1">gehangen</w>
+        <w xml:id="t376_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t377_m1">vord</w>
+        <lb n="16"/>
+        <w xml:id="t378_m1">om</w>
+        <w xml:id="t379_m1">ene</w>
+        <w xml:id="t380_m1">meerre</w>
+        <w xml:id="t381_m1">sekerheid</w>
+        <w xml:id="t382_m1">deser</w>
+        <w xml:id="t383_m1">dinch</w>
+        <w xml:id="t384_m1">heb</w>
+        <w xml:id="t385_m1">ich</w>
+        <w xml:id="t386_m1">gebeden</w>
+        <w xml:id="t387_m1">Rutger</w>
+        <w xml:id="t388_m1">van</w>
+        <w xml:id="t389_m1">der</w>
+        <w xml:id="t390_m1">knippenborgh</w>
+        <w xml:id="t391_m1">,</w>
+        <w xml:id="t392_m1">end</w>
+        <w xml:id="t393_m1">Gocen</w>
+        <w xml:id="t394_m1">Scakke</w>
+        <w xml:id="t395_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t396_m1">dad</w>
+        <w xml:id="t397_m1">se</w>
+        <w xml:id="t398_m1">oyc</w>
+        <w xml:id="t399_m1">or</w>
+        <w xml:id="t400_m1">segele</w>
+        <lb n="17"/>
+        <w xml:id="t401_m1">hebben</w>
+        <w xml:id="t402_m1">gehangen</w>
+        <w xml:id="t403_m1">an</w>
+        <w xml:id="t404_m1">desen</w>
+        <w xml:id="t405_m1">brif</w>
+        <w xml:id="t406_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t407_m1">En<expan>d</expan></w>
+        <w xml:id="t408_m1">wi</w>
+        <w xml:id="t409_m1">Rutger</w>
+        <w xml:id="t410_m1">van</w>
+        <w xml:id="t411_m1">der</w>
+        <w xml:id="t412_m1">knippenborgh</w>
+        <w xml:id="t413_m1">,</w>
+        <w xml:id="t414_m1">end</w>
+        <w xml:id="t415_m1">Gocen</w>
+        <w xml:id="t416_m1">bekennen</w>
+        <w xml:id="t417_m1">,</w>
+      </s>
+      <s>
+        <w xml:id="t418_m1">dad</w>
+        <w xml:id="t419_m1">wi</w>
+        <w xml:id="t420_m1">om</w>
+        <w xml:id="t421_m1">bede</w>
+        <w xml:id="t422_m1">hermans</w>
+        <w xml:id="t423_m1">des</w>
+        <lb n="18"/>
+        <w xml:id="t424_m1">heekeds</w>
+        <w xml:id="t425_m1">hebben</w>
+        <w xml:id="t426_m1">onse</w>
+        <w xml:id="t427_m1">segel</w>
+        <w xml:id="t428_m1">an</w>
+        <w xml:id="t429_m1">desen</w>
+        <w xml:id="t430_m1">brif</w>
+        <w xml:id="t431_m1">gehanghen</w>
+        <w xml:id="t432_m1">,</w>
+      </s>
+      <w xml:id="t433_m1">Gegeuen</w>
+      <w xml:id="t434_m1">in</w>
+      <w xml:id="t435_m1">den</w>
+      <w xml:id="t436_m1">Jare</w>
+      <w xml:id="t437_m1">ons</w>
+      <w xml:id="t438_m1">heren</w>
+      <w xml:id="t439_m1">dusend</w>
+      <w xml:id="t440_m1">drihonderd</w>
+      <w xml:id="t441_m1">in</w>
+      <w xml:id="t442_m1">den</w>
+      <w xml:id="t443_m1">vijfende</w>
+      <lb n="19"/>
+      <w xml:id="t444_m1">virtighten</w>
+      <w xml:id="t445_m1">Jare</w>
+      <w xml:id="t446_m1">op</w>
+      <w xml:id="t447_m1">den</w>
+      <w xml:id="t448_m1">dach</w>
+      <w xml:id="t449_m1">der</w>
+      <w xml:id="t450_m1">elfdusend</w>
+      <w xml:id="t451_m1">megeden</w>
+    </ab>
+  </body>
+</text>
+
