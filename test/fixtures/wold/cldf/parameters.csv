@@ -1,0 +1,7 @@
+ID,Name,Concepticon_ID,Concepticon_Gloss,Core_list,Semantic_category,Semantic_field,Borrowed_score,Age_score,Simplicity_score
+1-1,the world,965,WORLD,yes,Noun,The physical world,0.401886792453,0.836981132075,0.858490566038
+1-51,the sky,1732,SKY,yes,Noun,The physical world,0.273542600897,0.911808669656,0.906576980568
+3-47,the mule,890,MULE,yes,Noun,Animals,0.6875,0.8515625,0.8828125
+3-77,the elephant,1290,ELEPHANT,yes,Noun,Animals,0.641176470588,0.788235294118,0.982352941176
+5-92,the wine,1524,WINE,yes,Noun,Food and drink,0.739406779661,0.842372881356,0.96186440678
+23-395,the street,1362,STREET,yes,Noun,Modern world,0.492890995261,0.803791469194,0.917061611374
