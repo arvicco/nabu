@@ -1789,7 +1789,7 @@ module MCP
       assert_empty result.fetch("entries")
       refute result.key?("dictionary_entries"), "nothing anywhere — no fallback block"
       note = result.fetch("note")
-      assert_match(/bat-pro, gem-pro, ine-pro\b/, note, "derived from the live catalog")
+      assert_match(/bat-pro, ccs-pro, gem-pro, ine-pro\b/, note, "derived from the live catalog")
       refute_match(%r{Proto-Slavic/PIE/Proto-Germanic}, note, "the hardcoded enumeration is gone")
       assert_match(/'\*form'/, note, "the quoting hint stays")
     end

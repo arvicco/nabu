@@ -13,16 +13,19 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
 | `iecor` | cognacy dataset | attribution | wired · manual | 4,981 entries |
+| `wold` | dictionary | attribution | not yet wired | nothing held yet |
+| `clics` | dictionary | attribution | not yet wired | nothing held yet |
 | `liv` | dictionary | attribution | wired · manual | 305 entries |
 | `edl` | dictionary | nc | wired · manual | 2,860 entries |
 | `starling` | etymological bases | attribution | wired · manual | 27,397 entries |
 | `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
+| `cldf-spine` | feature module | attribution | not yet wired | nothing held yet |
 
 Private research materials under personal grants are not listed.
 
