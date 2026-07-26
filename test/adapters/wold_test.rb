@@ -224,7 +224,7 @@ class WoldTest < Minitest::Test
     entry = registry["wold"]
     refute_nil entry, "config/sources.yml must register wold"
     assert_equal Nabu::Adapters::Wold, entry.adapter_class
-    refute entry.wired, "wired flips only after the owner-fired first sync (CLAUDE.md checklist §6)"
+    assert entry.wired, "flipped 2026-07-26 (owner ruling \"flip all wired\"; first sync verified)"
     assert_equal "manual", entry.sync_policy
     assert_includes entry.axes, "etym"
   end

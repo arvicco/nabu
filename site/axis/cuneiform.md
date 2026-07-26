@@ -18,7 +18,7 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 July 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
-| `oracc` | tablets | open | wired · manual | 104,722 docs / 1,588,133 passages |
+| `oracc` | tablets | open | wired · manual | 118,366 docs / 1,800,130 passages |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 | `etcsl` | texts | nc | wired · frozen | 775 docs / 42,577 passages |
 | `cdli` | tablet catalog | attribution | wired · manual | 353,156 docs / 2,186,961 passages |

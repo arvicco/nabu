@@ -20,7 +20,7 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
-| `sefaria` | texts | open | wired · manual | 825 docs / 395,199 passages |
+| `sefaria` | texts | open | wired · manual | 839 docs / 435,059 passages |
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
 | `bridging` | crosswalk module | attribution | not yet wired | nothing held yet |
 | `dss` | texts | nc | wired · manual | 1,001 docs / 52,895 passages |

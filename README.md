@@ -25,13 +25,19 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-25** the shelves hold **813,257 documents / 65,130,037
-passages** in 115 language codes — from proto-cuneiform tablets of the
-late 4th millennium BCE to Meiji-era Japanese, and now the medieval
-Latin-to-vernacular continuum: **the Romance wave** (2026-07-25)
-brought the MGH critical editions, digilibLT's late-antique prose,
-and the Base de français médiéval's Old French beside CroALa. Two
-days earlier a single arrival had more than doubled the library:
+As of **2026-07-26** the shelves hold **947,273 documents / 66,755,518
+passages** in 116 language codes — from proto-cuneiform tablets of the
+late 4th millennium BCE to Meiji-era Japanese. The newest wave
+(2026-07-26) opened the Rabbinic library (Mishnah, both Talmuds at
+daf-grain citation, Tosefta), the Geʿez shelf (**1 Enoch and
+Jubilees, complete only in Geʿez**, with Dillmann's lexicon and the
+TraCES gold corpus), the inscriptions of Italy (EDR, 115,590
+records), Urartian (Oracc's eCUT, gold-lemmatized), Middle Low
+German (ReN), and the comparativist loanword layer (WOLD/CLICS³) —
+a day after **the Romance wave** brought the MGH critical editions,
+digilibLT's late-antique prose, and the Base de français médiéval's
+Old French beside CroALa. Days earlier a single arrival had more
+than doubled the library:
 **the Arabic phase** — OpenITI, the
 premodern Islamicate library whole (Quran and hadith, history, fiqh,
 falsafa, the dīwāns) with its Persian shelf (Ḥāfiẓ, Ibn Sīnā) — making
@@ -41,9 +47,9 @@ and the CBETA Buddhist canon), the same day the **Germanic wave**
 landed (the Poetic Edda, the *Heliand*, Middle High German, ~6,800
 runic inscriptions) beside the Japanese reading desk and the Ancient
 Near East.
-Plus **1,310,786 dictionary entries** across fifty-six dictionary shelves
-and **16.2 million gold lemma annotations in 28 languages** (a further
-8.2 million ride an honestly labelled silver tier). (All numbers in this
+Plus **1,391,759 dictionary entries** across one hundred dictionary
+shelves and **19.2 million gold lemma annotations in 37 languages** (a
+further 28.1 million ride an honestly labelled silver tier). (All numbers in this
 README are read from the live catalog, never estimated.)
 
 ## Quickstart
@@ -308,13 +314,14 @@ shelf map with research uses per shelf is
 | Germanic wave | Menotec Old Norwegian treebanks + Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German (355k gold manuscript lines), Rundata runic inscriptions in five text lanes (2026-07-22) | 31,057 / 409,947 | nc / CC BY / CC BY-SA / odbl |
 | Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik + the Hebrew/Egyptian/Slovene desks and the Sino-Japanese lexicography (Unihan, KANJIDIC2/JMdict, HDIC, Guangyun) (`nabu define` / `etym`) | 1,310,763 entries / 56 shelves (2026-07-22) | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-The registry holds **89 sources + 4 local shelves + 8 feature modules**
-(the kind-split census, 2026-07-24 — `sources.yml` distinguishes what a
+The registry holds **96 sources + 4 local shelves + 9 feature modules**
+(the kind-split census, 2026-07-26 — `sources.yml` distinguishes what a
 row IS: a corpus that mints catalog rows, an owner-authored local memory
 shelf, or machinery like `pedecerto`/`bridging` that fetches reference
-data but mints no documents of its own). All 89 sources are **wired**
-— adapter built and first sync verified (2026-07-25); the newest
-arrivals are the Romance wave's `openmgh` (the MGH critical editions),
+data but mints no documents of its own). All 96 sources are **wired**
+— adapter built and first sync verified (2026-07-26); the newest
+arrivals are the P46 wave's `edr`, `ren`, the Geʿez trio, `wold` and
+`clics`, after the Romance wave's `openmgh` (the MGH critical editions),
 `digiliblt` (late-antique Latin, silver-annotated) and `bfm` (Old
 French), joining `glaux` (~20M-token silver-annotated Ancient Greek)
 and `croala` (Croatian Latin) from the day before.

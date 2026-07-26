@@ -25,9 +25,9 @@ A source wears every desk it serves — these three answer this desk. Holdings a
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 July 2026)</span> |
 |---|---|---|---|---|
-| `betamasaheft-works` | texts | attribution | not yet wired | 3,796 docs / 66,516 passages |
-| `dillmann` | dictionary | nc | not yet wired | 13,727 entries |
-| `traces` | texts | nc | not yet wired | not synced yet |
+| `betamasaheft-works` | texts | attribution | wired · manual | 3,796 docs / 66,516 passages |
+| `dillmann` | dictionary | nc | wired · manual | 13,727 entries |
+| `traces` | texts | nc | wired · manual | 15 docs / 75,436 passages |
 
 ## The desk's instruments
 

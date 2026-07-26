@@ -165,7 +165,7 @@ class ClicsTest < Minitest::Test
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["clics"]
     refute_nil entry, "config/sources.yml must register clics"
-    refute entry.wired, "wired flips only after the owner-fired first sync"
+    assert entry.wired, "flipped 2026-07-26 (owner ruling \"flip all wired\"; first sync verified)"
     assert_equal "manual", entry.sync_policy
     assert_includes entry.axes, "etym"
   end

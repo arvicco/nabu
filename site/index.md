@@ -67,22 +67,22 @@ with every desk's member shelves and recipes, is
 
 ## The holdings, in brief
 
-As of **25 July 2026**, the catalog records **813,257 documents** comprising
-**65,130,037 passages** in 115 language codes — from proto-cuneiform
+As of **26 July 2026**, the catalog records **947,273 documents** comprising
+**66,755,518 passages** in 116 language codes — from proto-cuneiform
 tablets of the late fourth millennium BCE to Meiji-era Japanese. The
-newest arrival more than doubled the library in a single day: the
-Arabic phase — OpenITI, the premodern Islamicate library, with its
-Persian shelf — making **Classical Arabic the largest language on the
-shelves (33.3 million passages)**, ahead of Literary Chinese (13.2
-million), the same day the Germanic wave landed (the Poetic Edda, the
-*Heliand*, Middle High German, the runestones) beside the day-old
-Japanese reading desk. Together with
-**1,310,763 dictionary entries** on the reference shelf and **16.2
-million gold-standard lemma annotations in twenty-eight languages** (a
-further 8.2 million machine-suggested annotations are carried at an
-honestly labelled silver tier). All figures on this site are read
-from the live catalog, never estimated, and carry the date on which they
-were read.
+newest wave opened the Rabbinic library (Mishnah, both Talmuds cited
+at daf grain, Tosefta), the Geʿez shelf (1 Enoch and Jubilees —
+books that survive complete only in Geʿez), the inscriptions of
+Italy (115,590 EDR records), Urartian, and Middle Low German — days
+after the Romance wave and the Arabic phase that made **Classical
+Arabic the largest language on the shelves (33.3 million passages)**,
+ahead of Literary Chinese (13.2 million). Together with
+**1,391,759 dictionary entries** across one hundred reference shelves
+and **19.2 million gold-standard lemma annotations in thirty-seven
+languages** (a further 28.1 million machine-suggested annotations are
+carried at an honestly labelled silver tier). All figures on this
+site are read from the live catalog, never estimated, and carry the
+date on which they were read.
 
 A survey of the collections is given on [The Library]({{ '/library/' | relative_url }})
 page; the full attribution and licensing record is on

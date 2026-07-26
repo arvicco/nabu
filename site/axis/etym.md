@@ -19,11 +19,11 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 |---|---|---|---|---|
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
 | `iecor` | cognacy dataset | attribution | wired · manual | 4,981 entries |
-| `wold` | dictionary | attribution | not yet wired | 64,289 entries |
-| `clics` | dictionary | attribution | not yet wired | 1,647 entries |
+| `wold` | dictionary | attribution | wired · manual | 64,289 entries |
+| `clics` | dictionary | attribution | wired · manual | 1,647 entries |
 | `liv` | dictionary | attribution | wired · manual | 305 entries |
 | `edl` | dictionary | nc | wired · manual | 2,860 entries |
-| `starling` | etymological bases | attribution | wired · manual | 27,397 entries |
+| `starling` | etymological bases | attribution | wired · manual | 28,707 entries |
 | `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
 | `cldf-spine` | feature module | attribution | not yet wired | nothing held yet |
 
