@@ -221,6 +221,20 @@ class SefariaFetchTest < Minitest::Test
     refute File.exist?(File.join(@dir, "books.json")), "a failed sync writes nothing"
   end
 
+  def test_a_late_file_failure_leaves_earlier_downloads_off_the_tree
+    # P46-1: the Rabbinic wave is ~750 files / ~180 MB, so staging moved
+    # from memory to a tempdir SPOOL — the abort contract must survive the
+    # move: files that already downloaded before a later one fails never
+    # reach the live tree (and the spool is temp-scoped, not under dir/).
+    stub_index([entry(OBADIAH_REL), entry(TAJ_REL)])
+    stub_file(OBADIAH_ENC, "obadiah-bytes")
+    stub_request(:get, TAJ_ENC).to_return(status: 500)
+    assert_raises(Nabu::SefariaFetch::Error) { sync! }
+    refute File.exist?(File.join(@dir, OBADIAH_REL)), "the tree stays byte-unchanged on any failure"
+    refute File.exist?(File.join(@dir, "books.json"))
+    assert_empty Dir.glob(File.join(@dir, "**/*")), "no spool residue under the canonical dir"
+  end
+
   def test_index_http_failure_raises
     stub_request(:get, INDEX_URL).to_return(status: 500)
     assert_raises(Nabu::SefariaFetch::Error) { sync! }
