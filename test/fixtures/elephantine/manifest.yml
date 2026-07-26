@@ -1,0 +1,50 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The six TEI records + the places authority file are WHOLE byte-for-byte
+# raw GETs of the frozen upstream export (Last-Modified 2022-11-24) —
+# adapter_test re-runs against fresh copies. The two listing pages are
+# POST results (the objects search form), which a raw GET cannot
+# reproduce: refetchable: false with the POST recipe in the reason.
+source: elephantine
+adapter_test: test/adapters/elephantine_test.rb
+retrieved: 2026-07-26
+files:
+  - path: elephantine_erc_db_002881.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_002881.tei.xml
+    whole: true
+    trim: none (Greek marriage contract, the 4-digit-id zero-padding exemplar; P47-1)
+  - path: elephantine_erc_db_307762.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_307762.tei.xml
+    whole: true
+    trim: none (Imperial Aramaic Document of Wifehood, TAD B3.3 — RTL, damage/supplied/mod, TM link; P47-1)
+  - path: elephantine_erc_db_100007.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_100007.tei.xml
+    whole: true
+    trim: none (Demotic writing exercise — R/V pages, empty lb @n label lines, rs titles; P47-1)
+  - path: elephantine_erc_db_100117.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_100117.tei.xml
+    whole: true
+    trim: none (Demotic name list — damage idiom, surname/surplus, leading-space translation lang; P47-1)
+  - path: elephantine_erc_db_100141.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_100141.tei.xml
+    whole: true
+    trim: none (all-lacunae flagged edition + trailing-space taxonomy id — the readable-predicate exemplar; P47-1)
+  - path: elephantine_erc_db_100009.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_100009.tei.xml
+    whole: true
+    trim: none (catalog-only record — self-closed edition/translation divs; P47-1)
+  - path: elephantine_erc_db_places.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_places.tei.xml
+    whole: true
+    trim: none (places authority file — the discovery skip-by-rule exemplar; P47-1)
+  - path: objects-listing-marriage.html
+    refetchable: false
+    whole: true
+    trim: none (kept byte-for-byte as served)
+    reason: POST result, not raw-GETtable — POST https://elephantine.smb.museum/objects/index.php with body searchtext=marriage&showresults=15000 (23 Results, 2026-07-26)
+  - path: objects-listing-truncated.html
+    refetchable: false
+    whole: false
+    trim: the 15 rows after the first 8 spliced out of objects-listing-marriage.html, header untouched — the session-truncation shape (README)
+    reason: documented local trim of the marriage POST result; re-acquiring means re-running the POST and re-trimming
