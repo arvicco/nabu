@@ -49,6 +49,7 @@ kinds:
   rundata: inscriptions
   lexlep: inscriptions
   edr: inscriptions
+  elephantine: papyri & ostraca
   # cuneiform tablet corpora
   tlhdig: tablets
   oracc: tablets
