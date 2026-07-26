@@ -1,0 +1,19 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Both files are documented TRIMS (whole: false) of tag-pinned raw files —
+# kept rows byte-verbatim, row set reduced per the README recipe. The
+# sentinel fetches each raw URL for liveness only (a tag-pinned raw URL is
+# a stable git blob: drift is an incident, never an update).
+source: cldf-spine
+adapter_test: test/adapters/cldf_spine_test.rb
+retrieved: 2026-07-26
+files:
+  - path: concepticon/concepticon.tsv
+    url: https://raw.githubusercontent.com/concepticon/concepticon-data/v3.4.0/concepticondata/concepticon.tsv
+    whole: false
+    trim: 10 of 4,033 concepts — the WOLD fixture's six (965/1732/890/1290/1524/1362), the CLICS triangle's three (1060/2264/2266), and retired 170 (REPLACEMENT_ID → 2691); recipe in README.md
+  - path: glottolog/languages.csv
+    url: https://raw.githubusercontent.com/glottolog/glottolog-cldf/v5.3/cldf/languages.csv
+    whole: false
+    trim: 11 of 27,177 languoids — WOLD vocabulary + donor codes, oldn1244 + the noon1243 upstream-defect pin, and the three one-hop family rows (indo1319/afro1255/atla1278); recipe in README.md

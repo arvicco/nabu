@@ -1203,6 +1203,36 @@ lila:
   # owner decision (the clone is large + version-pinned).
   sync_policy: manual
 
+cldf-spine:
+  adapter: Nabu::Adapters::CldfSpine
+  kind: module   # P46-6: machinery-only — a concept/languoid resolver seam, zero document rows
+  axes: [etym]
+  wired: false   # PERMANENTLY false — a reference resolver instrument, not a
+                   # text source (the pleiades/lila precedent): discover mints
+                   # no documents, no migration, no catalog table. The row
+                   # gives the owner the sanctioned fetch path for TWO thin
+                   # tag-pinned reference files, resolved by Nabu::CldfSpine:
+                   # Concepticon id → {gloss, semantic field, definition,
+                   # replacement pointer} and glottocode → {name, ISO, level,
+                   # one-hop family}. Consumers: the WOLD/CLICS shelves'
+                   # Concepticon-id body lines and donor glottocodes (and
+                   # IE-CoR's Concepticon-linked meanings). OWNER QUEUE
+                   # (P46-6): bin/nabu sync cldf-spine GETs concepticon.tsv
+                   # (concepticon-data v3.4.0, 453 KB, sha256 f96a72b8dc18…)
+                   # + languages.csv (glottolog-cldf v5.3, 2.4 MB, sha256
+                   # 1a50a393bc81…) into per-subdir FileFetch states.
+  # P46-6: the CLDF reference spine — Concepticon (4,033 concepts) +
+  # Glottolog (27,177 languoids), THIN by design: the id-and-name spine plus
+  # what WOLD/CLICS rows need to resolve, never the full datasets. LICENSE:
+  # both CC BY 4.0 verbatim (Concepticon .zenodo.json at v3.4.0; the
+  # glottolog-cldf bundle's own dc:license at v5.3) → attribution. A new
+  # upstream release is a new tag: owner re-pins the two URL constants in
+  # lib/nabu/adapters/cldf_spine.rb and re-syncs. Known upstream quirk,
+  # pinned in tests: WOLD tags its "Old Norse" donor glottocode noon1243,
+  # which Glottolog resolves to Noone (Atlantic-Congo) — real Old Norse is
+  # oldn1244; the WOLD donor map therefore keys on languoid NAMES.
+  sync_policy: manual
+
 kitab:
   adapter: Nabu::Adapters::Kitab
   kind: module   # P43-4: machinery-only — a text-reuse links instrument, zero catalog rows, up=module
