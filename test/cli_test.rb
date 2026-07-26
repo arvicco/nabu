@@ -1374,6 +1374,8 @@ class CLITest < Minitest::Test
       out, err, status = with_config(config) { run_cli(%w[status --disabled]) }
       assert_nil status
       refute_match(/^(shelf|lex|library)\s/, out, "nothing to show — the complement is empty")
+      refute_match(/No sources registered/, out,
+                   "the empty-registry banner never fires on an empty menu (stderr carries the state)")
       assert_match(/everything registered is enabled on this box/, err)
     end
   end
@@ -1386,14 +1388,26 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P46-r3 follow-up (owner report 2026-07-26: `list --disabled` printed
+  # "nothing held yet — run nabu sync" while `status --disabled` showed the
+  # row): the disabled MENU is registry-driven — a never-synced complement
+  # row is the norm there, not an absence. Census fragments where the
+  # catalog holds the slug; an honest per-row "nothing held yet" where not.
   def test_list_disabled_shows_the_not_enabled_complement
     with_axis_corpus do |config|
+      File.write(config.sources_path, "#{File.read(config.sources_path)}ghost:\n" \
+                                      "  adapter: TestAdapter\n  wired: false\n" \
+                                      "  sync_policy: manual\n  axes: [classical]\n")
       write_profile(config, "reference")
       out, err, status = with_config(config) { run_cli(%w[list --disabled]) }
       assert_nil status
-      assert_match(/^shelf\s/, out, "the not-enabled source's census row shows")
+      assert_match(/^shelf\s+docs=/, out, "a synced not-enabled source shows its census row")
+      assert_match(/^ghost\s+nothing held yet/, out,
+                   "a NEVER-synced complement row still shows — the menu is registry-driven")
       refute_match(/^lex\s/, out, "an enabled source is hidden")
-      assert_match(/not enabled: 1 row — nabu enable/, err)
+      refute_match(/nothing held yet — run nabu sync/, out,
+                   "the empty-catalog banner never fires on the menu view")
+      assert_match(/not enabled: 2 rows — nabu enable/, err)
     end
   end
 
