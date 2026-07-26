@@ -46,7 +46,11 @@ module Nabu
     #
     # One zip per project from https://oracc.museum.upenn.edu/json/<slug>.zip,
     # served with Last-Modified (replayed as If-Modified-Since — change
-    # detection without a re-download). The UD two-phase choreography: ALL
+    # detection without a re-download). P46-3: each zip carries the LMU
+    # mirror as its ZipFetch fallback host and the whole run (zips + the
+    # translation crawl) shares one Failover memo — a dead primary (the
+    # 2026-07 outage) costs one timeout, then the run is mirror-served;
+    # pins and state stay keyed to the primary URLs (see MIRROR_BASE_URL). The UD two-phase choreography: ALL
     # projects are downloaded and staged (live trees untouched), the
     # mass-deletion breaker sees the deletions of the whole set, then each
     # staged tree swaps in — upstream-dropped files land in
@@ -122,6 +126,47 @@ module Nabu
       # five verified CC0 verbatim at fixture time (2026-07-19,
       # metadata.json read from each zip); the license gate re-reads at
       # every sync — 38 projects.
+      #
+      # P46-3 (2026-07-26) the CC0 extension pack, +64 → 102 projects.
+      # Evidence read from the ACTUAL project zips — all 67 candidate zips
+      # downloaded and walked (the primary host was down for days; the LMU
+      # mirror served everything, which is why this packet also wires the
+      # MIRROR_* fallback below): every registered project CC0 VERBATIM in
+      # its zip's metadata.json, every layout verified against project_dir.
+      # * ecut (806 texts) — URARTIAN enters the library: l-nodes tagged
+      #   xur (plus script variants xur-946/xur-944 folding to base xur),
+      #   gold-lemmatized (gloss-xur ships). Language is data, not config
+      #   (the peo/elx precedent).
+      # * aemw/amarna (305) — the Amarna letters, akk-x-mbperi; and
+      #   aemw/alalakh/idrimi (2) — the Statue of Idrimi under its TRUE
+      #   three-segment path (the epsd2/admin/ur3 shape; bare idrimi and
+      #   aemw/idrimi answer HTTP 500).
+      # * the 22 ATAE site subprojects (2,254 texts). The atae PARENT is a
+      #   proxy portal (type:corpus, 7,285 proxies) owning NO corpusjson:
+      #   5,233 proxies point at the already-held saao projects (those
+      #   texts stay saao's), 2,052 at the site corpora registered here —
+      #   so the parent is NOT registered (riao/ribo hindsight: register
+      #   the text-owning subprojects, not the portal).
+      # * the 27 TCMA site subprojects (2,259 Middle Assyrian texts) —
+      #   same portal shape. tcma/bderi EXCLUDED: its zip is a broken
+      #   upstream build (HTTP 500 on both hosts, the ctij shape; 1 text).
+      # * cmawro/cmawr1 cmawr2 cmawr3 + cmawro/maqlu (261 — anti-witchcraft
+      #   rituals incl. Maqlû; the cmawro parent is the same portal shape).
+      # * hbtin (485), cams/gkab (585), dccmt (250), ccpo (205), obmc
+      #   (201), obta (35), akklove (31), suhu (33).
+      # * cams/gkab OVERLAP RULING (the packet's named check): text-ID
+      #   overlap of its 585 local corpusjson vs the held library = 13 ids
+      #   (vs the named blms+dcclt: 4 — 3 dcclt, 1 blms; 0.7%) — ruled
+      #   immaterial, INCLUDED. Its 162 blms/ccpo/dcclt-hosted texts are
+      #   upstream PROXIES (pointers, not local files) and cannot
+      #   double-ingest by construction. Same-tablet re-editions across
+      #   projects (~115 ids across the whole pack, ≈1.5%) are the normal
+      #   ORACC reality already present in the held set, distinct URNs.
+      # * oimea stays PARKED by ruling (6,877-text aggregator — needs a
+      #   dedup audit vs held rinap/riao/ribo first); ctij excluded
+      #   (broken build, HTTP 500).
+      # ≈185 MB of new zips; ~7,712 new tablet docs + 6,339 tr-en
+      # fragments expected at the owner-fired first sync.
       PROJECTS = %w[
         rimanum etcsri saao/saa01 rinap/rinap1 dcclt
         saao/saa02 saao/saa03 saao/saa04 saao/saa05 saao/saa06 saao/saa07
@@ -131,6 +176,21 @@ module Nabu
         riao ribo blms
         dcclt/ebla dcclt/jena dcclt/nineveh dcclt/signlists
         ario epsd2/literary epsd2/royal epsd2/earlylit epsd2/admin/ur3
+        ecut aemw/amarna aemw/alalakh/idrimi
+        atae/assurmisc atae/burmarina atae/ctn1 atae/ctn2 atae/ctn3
+        atae/ctn6 atae/durkatlimmu atae/guzana atae/huzirina
+        atae/imgurenlil atae/mallanate atae/marqasu atae/rfdn17
+        atae/saab0509 atae/samal atae/stat1 atae/stat2 atae/stat3
+        atae/szibaniba atae/tilbarsip atae/tuszhan atae/wvdog152
+        tcma/ali1 tcma/amarna tcma/assur tcma/barri tcma/bazmusian
+        tcma/billa tcma/brak tcma/chuera tcma/emar tcma/fekheriye
+        tcma/giricano tcma/hana tcma/haradum tcma/hatti tcma/kalhu
+        tcma/kartn tcma/kulishinas tcma/miscellaneous tcma/nineveh
+        tcma/nippur tcma/qitar tcma/rimah tcma/suri tcma/taban
+        tcma/tsa1 tcma/tsh1 tcma/ugarit
+        hbtin cams/gkab dccmt
+        cmawro/cmawr1 cmawro/cmawr2 cmawro/cmawr3 cmawro/maqlu
+        ccpo obmc obta akklove suhu
       ].freeze
 
       # Translation-crawl scope. Stage 1 (P13-4, owner 2026-07-11 "Two-stage
@@ -161,6 +221,20 @@ module Nabu
       # https://oracc.museum.upenn.edu/<project>/metadata.json → 200
       # application/json; the /json/<project>/metadata.json path 500s).
       METADATA_BASE_URL = "https://oracc.museum.upenn.edu"
+
+      # The official LMU build mirror (P46-3): during the 2026-07 outage the
+      # primary answered nothing for DAYS while this host served every
+      # project zip AND the per-text /html fragments. Registered as the
+      # ZipFetch fallback host (primary → mirror; pins stay on the primary
+      # URLs) and as the crawl's fragment fallback, sharing one
+      # ZipFetch::Failover memo per fetch run so a dead primary costs one
+      # timeout, not one per project. Plain HTTP — the host serves no TLS;
+      # NB it answers a MISSING zip with HTTP 500 (not 404), and its
+      # standalone metadata.json bodies are empty exactly like the
+      # primary's. Health probes stay on the primary (an outage should read
+      # unreachable there, honestly).
+      MIRROR_BASE_URL = "http://oracc.ub.uni-muenchen.de"
+      MIRROR_ZIP_BASE_URL = "#{MIRROR_BASE_URL}/json".freeze
 
       # Upstream license strings → our license_class enum, matched in order.
       # Anything unmatched is a STOP (see class note).
@@ -305,7 +379,8 @@ module Nabu
       # or unzip failure aborts the sync as Nabu::FetchError; a tripped
       # breaker as Nabu::SyncAborted (+force+ overrides).
       def fetch(workdir, progress: nil, force: false)
-        fetches = zip_fetches(workdir, progress)
+        failover = ZipFetch::Failover.new # one memo per run — zips AND crawl share it
+        fetches = zip_fetches(workdir, progress, failover)
         begin
           fetches.each_value(&:prepare!)
           guard_mass_deletion!(workdir, fetches.values.flat_map(&:doomed_paths), force: force)
@@ -313,7 +388,7 @@ module Nabu
         ensure
           fetches.each_value(&:cleanup!)
         end
-        crawl_notes = crawl_translations!(workdir, fetches, progress: progress)
+        crawl_notes = crawl_translations!(workdir, fetches, progress: progress, failover: failover)
         report(workdir, fetches, crawl_notes)
       rescue ZipFetch::Error, Nabu::Shell::Error => e
         raise Nabu::FetchError, "oracc fetch failed into #{workdir}: #{e.message}"
@@ -355,11 +430,12 @@ module Nabu
       # singleton, though the house pattern here is WebMock stubs.
       def zip_url(project) = "#{ZIP_BASE_URL}/#{slug(project)}.zip"
 
-      def zip_fetches(workdir, progress)
+      def zip_fetches(workdir, progress, failover)
         PROJECTS.to_h do |project|
           [project, Nabu::ZipFetch.new(
             url: zip_url(project), dir: File.join(workdir, slug(project)),
-            attic_dir: File.join(workdir, ATTIC_DIRNAME, slug(project)), progress: progress
+            attic_dir: File.join(workdir, ATTIC_DIRNAME, slug(project)), progress: progress,
+            fallback_url: "#{MIRROR_ZIP_BASE_URL}/#{slug(project)}.zip", failover: failover
           )]
         end
       end
@@ -392,7 +468,7 @@ module Nabu
       # human note fragments ("saao-saa01 html-en: 264 fetched, 0 cached,
       # 1 missing"). Silent (empty) when translations are off or nothing is
       # listed.
-      def crawl_translations!(workdir, fetches, progress: nil)
+      def crawl_translations!(workdir, fetches, progress: nil, failover: nil)
         return [] unless @translations
 
         TRANSLATION_PROJECTS.filter_map do |project|
@@ -400,7 +476,8 @@ module Nabu
           next nil if ids.empty?
 
           progress&.call("Crawling #{project} translations (#{ids.size} texts)…\n")
-          counts = crawl_project!(workdir, project, ids, zip_changed: !fetches.fetch(project).not_modified?)
+          counts = crawl_project!(workdir, project, ids,
+                                  zip_changed: !fetches.fetch(project).not_modified?, failover: failover)
           "#{slug(project)} html-en: #{counts[:fetched]} fetched, " \
             "#{counts[:cached]} cached, #{counts[:missing]} missing"
         end
@@ -423,7 +500,7 @@ module Nabu
       # per-fragment Last-Modified upstream — the zip's is the build's).
       # Soft-404 bodies are counted missing, never written; a write is
       # tmp+rename so an interrupted crawl never leaves a torn fragment.
-      def crawl_project!(workdir, project, ids, zip_changed:)
+      def crawl_project!(workdir, project, ids, zip_changed:, failover: nil)
         dir = File.join(workdir, TRANSLATIONS_DIRNAME, slug(project))
         FileUtils.mkdir_p(dir)
         counts = { fetched: 0, cached: 0, missing: 0 }
@@ -432,7 +509,7 @@ module Nabu
           next counts[:cached] += 1 if File.file?(target) && !zip_changed
 
           sleep(@crawl_delay) if @crawl_delay.positive? && (counts[:fetched] + counts[:missing]).positive?
-          body = get_fragment(project, id)
+          body = get_fragment(project, id, failover)
           next counts[:missing] += 1 if soft_404?(body)
 
           File.binwrite("#{target}.tmp", body)
@@ -442,8 +519,28 @@ module Nabu
         counts
       end
 
-      def get_fragment(project, id)
-        url = "#{METADATA_BASE_URL}/#{project}/#{id}/html"
+      # The fragment GET rides the same host failover as the zips (P46-3;
+      # the mirror serves the per-text /html fragments too — verified
+      # 2026-07-26): a memo already tripped by the zip phase sends the whole
+      # crawl straight to the mirror; a primary hard-failure mid-crawl trips
+      # it for the rest of the run. Soft-404s are 200s and never fail over —
+      # a missing text is missing on both hosts.
+      def get_fragment(project, id, failover = nil)
+        return fragment_body(fragment_url(MIRROR_BASE_URL, project, id)) if failover&.primary_down?
+
+        begin
+          fragment_body(fragment_url(METADATA_BASE_URL, project, id))
+        rescue Nabu::FetchError
+          raise if failover.nil?
+
+          failover.primary_down!
+          fragment_body(fragment_url(MIRROR_BASE_URL, project, id))
+        end
+      end
+
+      def fragment_url(base, project, id) = "#{base}/#{project}/#{id}/html"
+
+      def fragment_body(url)
         response = ZipFetch.default_http.get(url)
         unless response.status == 200
           raise Nabu::FetchError, "oracc translation crawl: HTTP #{response.status} for #{url}"

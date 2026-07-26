@@ -203,6 +203,86 @@ class ZipFetchTest < Minitest::Test
     assert_equal "alpha v2", File.read(File.join(@dir, "a.json"))
   end
 
+  # -- fallback host (P46-3: oracc.museum.upenn.edu down for days; the LMU
+  # mirror serves the same per-project zips) -----------------------------------
+  #
+  # Distinct from the redirect follow above: upstream never POINTS at the
+  # mirror — the CALLER registers a known-good fallback URL, tried only after
+  # the primary hard-fails (5xx status or transport error/timeout). Identity
+  # (state file, sha pins, FetchReport.repos keys) stays keyed to the primary
+  # URL, so a mirror-served sync pins exactly like a primary-served one.
+
+  FALLBACK = "http://mirror.example.de/json/proj.zip"
+
+  def sync_with_fallback!(failover: nil)
+    Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic,
+                         fallback_url: FALLBACK, failover: failover)
+  end
+
+  def test_primary_500_falls_back_to_the_mirror_and_keys_state_off_the_primary
+    stub_request(:get, URL).to_return(status: 500)
+    stub_zip({ "a.json" => "alpha" }, url: FALLBACK)
+
+    result = sync_with_fallback!
+
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+    refute result.not_modified
+    state = JSON.parse(File.read(File.join(@dir, Nabu::ZipFetch::STATE_FILE)))
+    assert_equal URL, state["url"], "state keys off the PRIMARY url — the mirror is a stand-in"
+  end
+
+  def test_primary_timeout_falls_back_to_the_mirror
+    stub_request(:get, URL).to_timeout
+    stub_zip({ "a.json" => "alpha" }, url: FALLBACK)
+
+    sync_with_fallback!
+
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+  end
+
+  def test_a_healthy_primary_never_touches_the_fallback
+    stub_zip({ "a.json" => "alpha" })
+    stub_zip({ "a.json" => "mirror copy" }, url: FALLBACK)
+
+    sync_with_fallback!
+
+    assert_equal "alpha", File.read(File.join(@dir, "a.json"))
+    assert_not_requested :get, FALLBACK
+  end
+
+  def test_both_hosts_failing_is_an_honest_error
+    stub_request(:get, URL).to_return(status: 500)
+    stub_request(:get, FALLBACK).to_return(status: 502)
+
+    error = assert_raises(Nabu::ZipFetch::Error) { sync_with_fallback! }
+    assert_match(/502/, error.message)
+    assert_match(/mirror\.example\.de/, error.message, "the failing fallback host is named")
+  end
+
+  def test_a_shared_failover_memo_skips_the_primary_for_the_rest_of_the_run
+    # The multi-project shape (Oracc, 100+ zips): once the primary host has
+    # hard-failed for ONE project, sibling fetches sharing the memo go
+    # straight to the mirror — a fully-down primary costs one timeout, not
+    # one per project.
+    failover = Nabu::ZipFetch::Failover.new
+    stub_request(:get, URL).to_return(status: 500)
+    stub_zip({ "a.json" => "alpha" }, url: FALLBACK)
+    sync_with_fallback!(failover: failover)
+    assert_predicate failover, :primary_down?
+
+    # Second project: its primary URL is deliberately UNSTUBBED — WebMock
+    # fails the test if the memo-aware fetch were to touch it.
+    url2 = "https://example.org/json/proj2.zip"
+    fallback2 = "http://mirror.example.de/json/proj2.zip"
+    stub_zip({ "b.json" => "beta" }, url: fallback2)
+    dir2 = File.join(@root, "proj2")
+    Nabu::ZipFetch.sync!(url: url2, dir: dir2, attic_dir: File.join(@root, ".attic", "proj2"),
+                         fallback_url: fallback2, failover: failover)
+
+    assert_equal "beta", File.read(File.join(dir2, "b.json")),
+                 "the memo-aware fetch is served entirely by the mirror"
+  end
+
   # -- streaming + keep (P41-2, the OpenITI 5.9 GB artifact) -------------------
 
   def streamed_fetch(keep: [])
