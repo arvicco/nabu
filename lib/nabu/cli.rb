@@ -397,7 +397,11 @@ module Nabu
                         "ratified order, NAME[,NAME…] = those axes only. A source appears under each axis it serves"
     option :all, type: :boolean, default: false,
                  desc: "Ignore the focus profile: show every row (modules + unfocused sources included)"
+    option :disabled, type: :boolean, default: false,
+                      desc: "The complement view: ONLY the rows nabu enable would add " \
+                            "(shelves are always enabled and never appear)"
     def status(slug = nil)
+      refuse_all_with_disabled!("status")
       slug = slug.to_s.strip
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -565,7 +569,11 @@ module Nabu
                        desc: "With --export-source-dossiers: report without writing"
     option :all, type: :boolean, default: false,
                  desc: "Ignore the focus profile: census every source (--sources map is always whole-library)"
+    option :disabled, type: :boolean, default: false,
+                      desc: "The complement view: ONLY the rows nabu enable would add " \
+                            "(shelves are always enabled and never appear)"
     def list(slug = nil)
+      refuse_all_with_disabled!("list")
       slug = slug.to_s.strip
       validate_list_flags!(slug)
       validate_license!(options[:license])
@@ -3243,8 +3251,17 @@ module Nabu
       def focus_view(config, registry, catalog: nil)
         Nabu::Focus.view(
           profile: effective_profile(config, registry, catalog: catalog),
-          registry: registry, all: options[:all]
+          registry: registry, all: options[:all], disabled: options[:disabled] || false
         )
+      end
+
+      # --all is everything, --disabled the not-yet-enabled complement —
+      # together they name contradictory row sets (P46-r3).
+      def refuse_all_with_disabled!(command)
+        return unless options[:all] && options[:disabled]
+
+        raise Thor::Error, "#{command}: --all and --disabled are exclusive — " \
+                           "--all shows every row, --disabled only the rows nabu enable would add"
       end
 
       # Drop the census rows the view hides (a shelf/enabled source stays, a
@@ -3260,6 +3277,10 @@ module Nabu
       # honest empty-state when nothing is enabled; --all (the full reveal) is
       # silent.
       def print_focus_note(view, hidden_slugs)
+        # The --disabled complement (P46-r3): the rows shown ARE the enable
+        # menu, so the footer is the on-ramp (or the all-enabled state) —
+        # never the enabled-set summary, never the empty-state.
+        return warn(Nabu::Focus.disabled_footer_line(view.registry.slugs)) if view.disabled
         return unless view.active?
 
         if view.resolution.slugs.empty?

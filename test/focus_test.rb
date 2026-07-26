@@ -144,6 +144,31 @@ class FocusTest < Minitest::Test
     assert_equal @registry.axes.names, view.registry.axes.names
   end
 
+  # P46-r3 (owner: "we need nabu status/list --disabled in addition to
+  # --all"): the COMPLEMENT view — only the rows `nabu enable` would add.
+  # Shelves are always enabled (owner ruling 2026-07-24), so they never
+  # appear; enabled sources AND modules are hidden.
+  def test_disabled_view_is_the_not_enabled_complement
+    view = Nabu::Focus.view(profile: profile("germanic"), registry: @registry, all: false, disabled: true)
+    assert_predicate view, :active?
+    shown = view.registry.slugs.sort
+    assert_includes shown, "ccmh", "a not-enabled source is the complement"
+    assert_includes shown, "lex", "every not-enabled source shows"
+    refute_includes shown, "rem",  "an enabled source is hidden"
+    refute_includes shown, "mod1", "a module enabled via its desk is hidden"
+    refute_includes shown, "lib1", "a shelf is always enabled — never in the complement"
+    assert view.visible?("ccmh")
+    refute view.visible?("rem")
+  end
+
+  def test_disabled_footer_names_the_on_ramp_or_the_all_enabled_state
+    line = Nabu::Focus.disabled_footer_line(%w[ccmh lex])
+    assert_match(/not enabled: 2 rows/, line)
+    assert_match(/nabu enable/, line)
+    assert_equal "everything registered is enabled on this box",
+                 Nabu::Focus.disabled_footer_line([])
+  end
+
   # -- write validation -------------------------------------------------------
 
   def test_validate_names_passes_known_axes_and_slugs
