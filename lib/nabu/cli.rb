@@ -3511,7 +3511,15 @@ module Nabu
         say "  members (#{members.size}):"
         width = members.map(&:length).max || 0
         members.each do |slug|
-          state = registry[slug]&.wired ? "wired  " : "unwired"
+          entry = registry[slug]
+          # P46-r1: a kind: module row is PERMANENTLY wired: false (nothing
+          # mints, nothing to flip) — its cell names the nature; "unwired"
+          # is reserved for adapters genuinely awaiting first-sync proof.
+          state = if entry&.feature_module?
+                    "module "
+                  else
+                    entry&.wired ? "wired  " : "unwired"
+                  end
           say "    #{slug.ljust(width)}  #{state}  #{axis_member_holdings(by_slug[slug], census: census)}"
         end
         print_axis_gold(members, by_slug, info)
@@ -6210,6 +6218,10 @@ module Nabu
       # through sync_one, then the named skip line for the unwired members.
       def sync_axis_group(runner, registry, name, db, ledger, synced)
         wired, unwired = registry.axis_members(name).partition { |member| registry[member].wired }
+        # P46-r1: modules are PERMANENTLY wired: false (registry invariant) —
+        # their sync is an explicit owner act (`sync <slug>`), so the batch
+        # skip is right, but the label must name the nature, not "unwired".
+        modules, unwired = unwired.partition { |member| registry[member].feature_module? }
         # P42-r1: an axis expansion is a batch, not an explicit per-source
         # request, so a grant-blocked member is SKIPPED with the honest line —
         # never prompted mid-group (the prompt is reserved for `sync <slug>`).
@@ -6221,6 +6233,7 @@ module Nabu
           synced << member
         end
         say "skipped (unwired): #{unwired.join(', ')}" unless unwired.empty?
+        say "skipped (module — sync directly): #{modules.join(', ')}" unless modules.empty?
         (grant_blocked - synced).each do |member|
           say Nabu::GrantGate.skip_line(member)
           synced << member
