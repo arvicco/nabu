@@ -1,0 +1,12 @@
+ID,Name,Macroarea,Latitude,Longitude,Glottocode,ISO639P3code,Level,Countries,Family_ID,Language_ID,Closest_ISO369P3code,First_Year_Of_Documentation,Last_Year_Of_Documentation,Is_Isolate
+atla1278,Atlantic-Congo,Africa;North America,9.740651528353272,-8.642391653270476,atla1278,,family,,,,,,,
+indo1319,Indo-European,Africa;Australia;Eurasia;North America;Papunesia;South America,41.836725358943056,33.20682024440928,indo1319,,family,,,,,,,
+afro1255,Afro-Asiatic,Africa;Eurasia,18.798147391507207,24.740099624194006,afro1255,,family,,,,,,,
+lati1261,Latin,Eurasia,41.9026,12.4502,lati1261,lat,language,VA,indo1319,,lat,-100,100,false
+oldn1244,Old Norse,Eurasia,63.42,10.38,oldn1244,non,language,NO,indo1319,,non,800,1150,false
+stan1318,Standard Arabic,Eurasia,27.9625,43.8525,stan1318,arb,language,AE;BH;DJ;DZ;EG;ER;IL;IQ;JO;KM;KW;LB;LY;MA;OM;PS;QA;SA;SD;SO;SY;TD;TN;TZ;YE,afro1255,,arb,,,false
+oldh1241,Old High German (ca. 750-1050),Eurasia,52.0,10.0,oldh1241,goh,language,DE,indo1319,,goh,750,1050,false
+noon1243,Noone,Africa,6.37256,10.5707,noon1243,nhu,language,CM,atla1278,,nhu,,,false
+mode1248,Modern Greek,Eurasia,38.36,23.13,mode1248,ell,language,AL;BG;CY;EG;GR;IT;MK;RO;TR;UA,indo1319,,ell,,,false
+stan1293,English,Africa;Eurasia;South America,53.0,-1.0,stan1293,eng,language,AU;BM;BR;BZ;CA;CC;CK;CU;CX;DO;FK;GB;GG;GI;GP;GS;GT;GY;HN;IE;IM;IO;JE;KY;LR;MX;NF;PN;SH;SR;UM;US;VE;ZA,indo1319,,eng,,,false
+swah1253,Swahili,Africa,-8.25605,37.624,swah1253,swh,language,BI;KE;MZ;RW;SO;TZ;UG,atla1278,,swh,,,false
