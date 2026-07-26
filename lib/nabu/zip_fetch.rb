@@ -101,8 +101,8 @@ module Nabu
     # One-shot fetch for a single zip. +guard+, when given, is called with
     # the absolute live-tree paths the fresh unpack would delete — BEFORE any
     # tree mutation — and may raise (Nabu::SyncAborted) to abort.
-    def self.sync!(url:, dir:, attic_dir:, http: default_http, progress: nil, guard: nil)
-      fetch = new(url: url, dir: dir, attic_dir: attic_dir, http: http, progress: progress)
+    def self.sync!(url:, dir:, attic_dir:, http: default_http, progress: nil, guard: nil, keep: [])
+      fetch = new(url: url, dir: dir, attic_dir: attic_dir, http: http, progress: progress, keep: keep)
       begin
         fetch.prepare!
         guard&.call(fetch.doomed_paths)
