@@ -30,13 +30,15 @@ A source wears every desk it serves — these two answer this desk. Holdings are
 
 ## Working the syriac desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable syriac               # first time: put this desk's shelves in this box's profile
+nabu sync syriac                 # fetch/refresh the desk's enabled members
 nabu list --axis syriac          # the shelf census, this desk only
 nabu axis syriac                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis syriac   # a query scoped to this desk's shelves
-nabu sync syriac                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:

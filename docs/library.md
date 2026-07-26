@@ -734,10 +734,10 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   indexed scope at its 2026-07-13 sync (§8g) — and the BGU 6.1470 mid-word
   Odyssey demo runs against the real index.
 - **Timeline** (P15-2, extended P16-3 and P17-2): `document_axes`
-  (migration 008) holds **165,334 dated/placed records covering 163,821
-  documents live** — EDH inscription dates (81,416, the largest
-  contributor since that shelf's 2026-07-13 sync), HGV for the papyri
-  (60,923 records), ORACC catalogue/period/regnal dates (21,558), the
+  (migration 008) holds **567,564 dated/placed records covering 549,771
+  documents live** (as of 2026-07-26) — CDLI tablet dates (337,572
+  documents, the largest contributor), EDH inscription dates (81,441),
+  HGV for the papyri (59,777), ORACC catalogue/period/regnal dates (24,818), the
   Slovene goo300k/IMP year-suffixed urns (747), Coptic manuscript dates
   (340), and TOROT chronicle AM annals (350 records over 5 chronicles).
   `search --from/--to/--century/--place` scope by signed historical year

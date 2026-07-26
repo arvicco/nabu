@@ -19,13 +19,13 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 |---|---|---|---|---|
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
 | `iecor` | cognacy dataset | attribution | wired · manual | 4,981 entries |
-| `wold` | dictionary | attribution | not yet wired | not synced yet |
-| `clics` | dictionary | attribution | not yet wired | not synced yet |
+| `wold` | dictionary | attribution | not yet wired | 64,289 entries |
+| `clics` | dictionary | attribution | not yet wired | 1,647 entries |
 | `liv` | dictionary | attribution | wired · manual | 305 entries |
 | `edl` | dictionary | nc | wired · manual | 2,860 entries |
 | `starling` | etymological bases | attribution | wired · manual | 27,397 entries |
 | `sabellic-loans` | dictionary | attribution | wired · frozen | 85 entries |
-| `cldf-spine` | feature module | attribution | not yet wired | not synced yet |
+| `cldf-spine` | feature module | attribution | not yet wired | nothing held yet |
 
 Private research materials under personal grants are not listed.
 
@@ -44,13 +44,15 @@ Private research materials under personal grants are not listed.
 
 ## Working the etym desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable etym               # first time: put this desk's shelves in this box's profile
+nabu sync etym                 # fetch/refresh the desk's enabled members
 nabu list --axis etym          # the shelf census, this desk only
 nabu axis etym                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis etym   # a query scoped to this desk's shelves
-nabu sync etym                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:

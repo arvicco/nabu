@@ -33,7 +33,7 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
 | `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
-| `edr` | inscriptions | attribution | not yet wired | not synced yet |
+| `edr` | inscriptions | attribution | not yet wired | 115,590 docs / 596,064 passages |
 
 ## The desk's instruments
 
@@ -46,24 +46,33 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
   shelves — **papyri-ddbdp, EDH, ORACC and open-etruscan**. The other
   epigraphic shelves (RIIG, ogham, ItAnt, Rundata…) are searched with
   plain `search --axis epigraphy`.
-- **The timeline desk:** 163,821 documents carry a date or place, so
-  `--from/--to`, `--century` and `--place` scope the stones and sherds by
-  when and where. EDH's genre facets (`--type/--province/--material`) live.
+- **The timeline desk:** 549,771 documents carry a date or place (as of
+  26 July 2026 — CDLI's tablets, the Heidelberg inscriptions and the
+  papyri foremost), so `--from/--to`, `--century` and `--place` scope
+  the stones and sherds by when and where. EDH's genre facets
+  (`--type/--province/--material`) live.
+- **The gazetteer (P44–P46):** `nabu place NAME` resolves a findspot
+  against the Pleiades gazetteer (42,242 places in a derived index —
+  millisecond lookups) and counts this library's holdings found there;
+  an inscription's `nabu show` names its findspot with the Pleiades id.
 
 ## Working the epigraphy desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable epigraphy               # first time: put this desk's shelves in this box's profile
+nabu sync epigraphy                 # fetch/refresh the desk's enabled members
 nabu list --axis epigraphy          # the shelf census, this desk only
 nabu axis epigraphy                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis epigraphy   # a query scoped to this desk's shelves
-nabu sync epigraphy                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:
 
 ```
+nabu place Segesta                    # the place card — Pleiades id, period band, coordinates, holdings found there
 nabu search --fuzzy ']ανδρα μοι εν['  # damaged-line substring search, typed straight off the edition
 nabu search manibus --type epitaph --province Britannia  # EDH genre facets composing with a text query (dis manibus on British epitaphs)
 nabu search "στρατηγ*" --from 101 --to 300 --place oxyrhynch%  # the Oxyrhynchite strategoi by date and provenance

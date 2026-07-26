@@ -9,12 +9,11 @@ description: >-
 
 The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
-The desk spans two eras of Japanese. Old Japanese (ojp) is live now
-through ONCOJ and its lexicon; the modern lane arrives with **Aozora
-Bunko** (青空文庫, `wired: false` pending the owner's first sync) — the
-public-domain library at paragraph grain, ~17,488 works. Its scope is PD
-text ONLY: discovery excludes the in-copyright works before any file is
-touched. Ruby (振り仮名) readings ride as annotations over the base text,
+The desk spans two eras of Japanese. Old Japanese (ojp) is live
+through ONCOJ and its lexicon; the modern lane is **Aozora Bunko**
+(青空文庫) — the public-domain library at paragraph grain, 17,121
+works live below. Its scope is PD text ONLY: discovery excludes the
+in-copyright works before any file is touched. Ruby (振り仮名) readings ride as annotations over the base text,
 never spliced into it; the 底本 colophon is carried as document metadata.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
@@ -54,13 +53,15 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 
 ## Working the japonic desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable japonic               # first time: put this desk's shelves in this box's profile
+nabu sync japonic                 # fetch/refresh the desk's enabled members
 nabu list --axis japonic          # the shelf census, this desk only
 nabu axis japonic                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis japonic   # a query scoped to this desk's shelves
-nabu sync japonic                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:

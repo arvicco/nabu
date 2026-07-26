@@ -130,13 +130,15 @@ module Nabu
 
           ## Working the #{axis.name} desk
 
-          The generic axis surfaces — every desk answers to these:
+          The generic axis surfaces — every desk answers to these, in working
+          order (enable once, sync, then query):
 
           ```
+          nabu enable #{axis.name}               # first time: put this desk's shelves in this box's profile
+          nabu sync #{axis.name}                 # fetch/refresh the desk's enabled members
           nabu list --axis #{axis.name}          # the shelf census, this desk only
           nabu axis #{axis.name}                 # the desk card: members, holdings, gold coverage
           nabu search WORD --axis #{axis.name}   # a query scoped to this desk's shelves
-          nabu sync #{axis.name}                 # sync the desk's enabled members
           ```
           #{recipes_block(axis)}
           #{mcp_block(axis)}#{display_block(axis)}---
@@ -337,7 +339,12 @@ module Nabu
         entries.each do |entry|
           lines << "- **“#{entry.fetch('ask')}”** → `#{entry.fetch('call')}` — #{entry.fetch('answer').strip}"
         end
-        "#{lines.join("\n")}\n"
+        # The trailing blank line is load-bearing (owner report, 2026-07-26:
+        # the romance page rendered its MCP bullet as a giant heading): with
+        # no display block after this one, the page's closing `---` lands
+        # directly under the last bullet and kramdown reads it as a setext
+        # underline, not a rule.
+        "#{lines.join("\n")}\n\n"
       end
 
       # The curated MCP-examples home, a sibling of the fragments file.
@@ -352,7 +359,10 @@ module Nabu
         text = fragment(axis.name)["display"]
         return "" unless text
 
-        "\n## Terminal setup\n\n#{text.strip}\n\nThe full guidance, per script, is on the " \
+        # No leading newline: the preceding block (recipes or MCP) ends with
+        # its own blank line, so pages with and without an MCP block render
+        # the same seam.
+        "## Terminal setup\n\n#{text.strip}\n\nThe full guidance, per script, is on the " \
           "[display page](https://github.com/arvicco/nabu/blob/main/docs/display.md).\n\n"
       end
 

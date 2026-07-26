@@ -27,9 +27,9 @@ $ bin/nabu search 'στρατηγ*' --from 101 --to 300 --place oxyrhynch%
 ```
 
 finds the strategoi of the Oxyrhynchite nome in the papyri of the second
-and third centuries. The chronological axis covers 163,821 dated and
-placed documents as of 14 July 2026 — the Heidelberg inscriptions (81,416)
-and the papyri foremost among them. On the faceted shelves
+and third centuries. The chronological axis covers 549,771 dated and
+placed documents as of 26 July 2026 — the CDLI tablets (337,572), the
+Heidelberg inscriptions (81,441) and the papyri foremost among them. On the faceted shelves
 (currently the inscriptions), genre facets compose with the same filters:
 
 ```

@@ -20,7 +20,7 @@ inscriptions of Rundata. The wave went live 2026-07-22 with the
 owner-verified first syncs — all five shelves hold their corpora below.
 Newest on the desk: ReN, the Middle Low German / Low Rhenish reference
 corpus (1200–1650, `gml` — the Hanseatic rung between ReM and the Norse
-shelves), landed P46-5 and awaiting its first sync.
+shelves): 235 texts, 1.49 M gold-annotated tokens, live below.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
@@ -39,7 +39,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
-| `ren` | texts | attribution | not yet wired | not synced yet |
+| `ren` | texts | attribution | not yet wired | 235 docs / 297,504 passages |
 
 ## The desk's instruments
 
@@ -69,13 +69,15 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 
 ## Working the germanic desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable germanic               # first time: put this desk's shelves in this box's profile
+nabu sync germanic                 # fetch/refresh the desk's enabled members
 nabu list --axis germanic          # the shelf census, this desk only
 nabu axis germanic                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis germanic   # a query scoped to this desk's shelves
-nabu sync germanic                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:
