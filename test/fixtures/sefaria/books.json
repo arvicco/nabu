@@ -41,6 +41,225 @@
    "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Aramaic Targum/Writings/Aramaic Targum to Ruth/Hebrew/Mikraot Gedolot.json"
   },
   {
+   "title": "Avot DeRabbi Natan",
+   "language": "English",
+   "versionTitle": "Sefaria Community Translation",
+   "categories": [
+    "Talmud",
+    "Bavli",
+    "Minor Tractates"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Bavli/Minor Tractates/Avot DeRabbi Natan/English/Sefaria Community Translation.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Bavli/Minor Tractates/Avot DeRabbi Natan/English/Sefaria Community Translation.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Bavli/Minor Tractates/Avot DeRabbi Natan/English/Sefaria Community Translation.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Bavli/Minor Tractates/Avot DeRabbi Natan/English/Sefaria Community Translation.json"
+  },
+  {
+   "title": "Bartenura on Mishnah Bava Kamma",
+   "language": "English",
+   "versionTitle": "Sefaria Community Translation",
+   "categories": [
+    "Mishnah",
+    "Rishonim on Mishnah",
+    "Bartenura",
+    "Seder Nezikin"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Mishnah/Rishonim on Mishnah/Bartenura/Seder Nezikin/Bartenura on Mishnah Bava Kamma/English/Sefaria Community Translation.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Mishnah/Rishonim on Mishnah/Bartenura/Seder Nezikin/Bartenura on Mishnah Bava Kamma/English/Sefaria Community Translation.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Mishnah/Rishonim on Mishnah/Bartenura/Seder Nezikin/Bartenura on Mishnah Bava Kamma/English/Sefaria Community Translation.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Mishnah/Rishonim on Mishnah/Bartenura/Seder Nezikin/Bartenura on Mishnah Bava Kamma/English/Sefaria Community Translation.json"
+  },
+  {
+   "title": "Binyan Yehoshua on Avot D'Rabbi Natan",
+   "language": "Hebrew",
+   "versionTitle": "Talmud Bavli, Vilna 1883 ed.",
+   "categories": [
+    "Talmud",
+    "Bavli",
+    "Commentary on Minor Tractates",
+    "Binyan Yehoshua"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Bavli/Commentary on Minor Tractates/Binyan Yehoshua/Binyan Yehoshua on Avot D'Rabbi Natan/Hebrew/Talmud Bavli, Vilna 1883 ed..json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Bavli/Commentary on Minor Tractates/Binyan Yehoshua/Binyan Yehoshua on Avot D'Rabbi Natan/Hebrew/Talmud Bavli, Vilna 1883 ed..txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Bavli/Commentary on Minor Tractates/Binyan Yehoshua/Binyan Yehoshua on Avot D'Rabbi Natan/Hebrew/Talmud Bavli, Vilna 1883 ed..json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Bavli/Commentary on Minor Tractates/Binyan Yehoshua/Binyan Yehoshua on Avot D'Rabbi Natan/Hebrew/Talmud Bavli, Vilna 1883 ed..json"
+  },
+  {
+   "title": "Introductions to the Babylonian Talmud",
+   "language": "English",
+   "versionTitle": "William Davidson Edition - English",
+   "categories": [
+    "Talmud",
+    "Bavli",
+    "Guides"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Bavli/Guides/Introductions to the Babylonian Talmud/English/William Davidson Edition - English.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Bavli/Guides/Introductions to the Babylonian Talmud/English/William Davidson Edition - English.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Bavli/Guides/Introductions to the Babylonian Talmud/English/William Davidson Edition - English.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Bavli/Guides/Introductions to the Babylonian Talmud/English/William Davidson Edition - English.json"
+  },
+  {
+   "title": "Jerusalem Talmud Horayot",
+   "language": "English",
+   "versionTitle": "The Jerusalem Talmud, translation and commentary by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015",
+   "categories": [
+    "Talmud",
+    "Yerushalmi",
+    "Seder Nezikin"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Yerushalmi/Seder Nezikin/Jerusalem Talmud Horayot/English/The Jerusalem Talmud, translation and commentary by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Yerushalmi/Seder Nezikin/Jerusalem Talmud Horayot/English/The Jerusalem Talmud, translation and commentary by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Yerushalmi/Seder Nezikin/Jerusalem Talmud Horayot/English/The Jerusalem Talmud, translation and commentary by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Yerushalmi/Seder Nezikin/Jerusalem Talmud Horayot/English/The Jerusalem Talmud, translation and commentary by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015.json"
+  },
+  {
+   "title": "Jerusalem Talmud Horayot",
+   "language": "Hebrew",
+   "versionTitle": "The Jerusalem Talmud, edition by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015",
+   "categories": [
+    "Talmud",
+    "Yerushalmi",
+    "Seder Nezikin"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Yerushalmi/Seder Nezikin/Jerusalem Talmud Horayot/Hebrew/The Jerusalem Talmud, edition by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Yerushalmi/Seder Nezikin/Jerusalem Talmud Horayot/Hebrew/The Jerusalem Talmud, edition by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Yerushalmi/Seder Nezikin/Jerusalem Talmud Horayot/Hebrew/The Jerusalem Talmud, edition by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Yerushalmi/Seder Nezikin/Jerusalem Talmud Horayot/Hebrew/The Jerusalem Talmud, edition by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015.json"
+  },
+  {
+   "title": "Jerusalem Talmud Horayot",
+   "language": "Hebrew",
+   "versionTitle": "Venice Edition",
+   "categories": [
+    "Talmud",
+    "Yerushalmi",
+    "Seder Nezikin"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Yerushalmi/Seder Nezikin/Jerusalem Talmud Horayot/Hebrew/Venice Edition.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Yerushalmi/Seder Nezikin/Jerusalem Talmud Horayot/Hebrew/Venice Edition.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Yerushalmi/Seder Nezikin/Jerusalem Talmud Horayot/Hebrew/Venice Edition.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Yerushalmi/Seder Nezikin/Jerusalem Talmud Horayot/Hebrew/Venice Edition.json"
+  },
+  {
+   "title": "Jerusalem Talmud Shekalim",
+   "language": "English",
+   "versionTitle": "William Davidson Edition - English",
+   "categories": [
+    "Talmud",
+    "Yerushalmi",
+    "Seder Moed"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Yerushalmi/Seder Moed/Jerusalem Talmud Shekalim/English/William Davidson Edition - English.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Yerushalmi/Seder Moed/Jerusalem Talmud Shekalim/English/William Davidson Edition - English.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Yerushalmi/Seder Moed/Jerusalem Talmud Shekalim/English/William Davidson Edition - English.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Yerushalmi/Seder Moed/Jerusalem Talmud Shekalim/English/William Davidson Edition - English.json"
+  },
+  {
+   "title": "Mishnah Berakhot",
+   "language": "English",
+   "versionTitle": "Open Mishnah",
+   "categories": [
+    "Mishnah",
+    "Seder Zeraim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Mishnah/Seder Zeraim/Mishnah Berakhot/English/Open Mishnah.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Mishnah/Seder Zeraim/Mishnah Berakhot/English/Open Mishnah.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Mishnah/Seder Zeraim/Mishnah Berakhot/English/Open Mishnah.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Mishnah/Seder Zeraim/Mishnah Berakhot/English/Open Mishnah.json"
+  },
+  {
+   "title": "Mishnah Tamid",
+   "language": "English",
+   "versionTitle": "Mishnah Yomit by Dr. Joshua Kulp",
+   "categories": [
+    "Mishnah",
+    "Seder Kodashim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Mishnah/Seder Kodashim/Mishnah Tamid/English/Mishnah Yomit by Dr. Joshua Kulp.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Mishnah/Seder Kodashim/Mishnah Tamid/English/Mishnah Yomit by Dr. Joshua Kulp.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Mishnah/Seder Kodashim/Mishnah Tamid/English/Mishnah Yomit by Dr. Joshua Kulp.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Mishnah/Seder Kodashim/Mishnah Tamid/English/Mishnah Yomit by Dr. Joshua Kulp.json"
+  },
+  {
+   "title": "Mishnah Tamid",
+   "language": "English",
+   "versionTitle": "Sefaria Community Translation",
+   "categories": [
+    "Mishnah",
+    "Seder Kodashim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Mishnah/Seder Kodashim/Mishnah Tamid/English/Sefaria Community Translation.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Mishnah/Seder Kodashim/Mishnah Tamid/English/Sefaria Community Translation.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Mishnah/Seder Kodashim/Mishnah Tamid/English/Sefaria Community Translation.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Mishnah/Seder Kodashim/Mishnah Tamid/English/Sefaria Community Translation.json"
+  },
+  {
+   "title": "Mishnah Tamid",
+   "language": "Hebrew",
+   "versionTitle": "Mishnah based on the Kaufmann manuscript, edited by Dan Be'eri",
+   "categories": [
+    "Mishnah",
+    "Seder Kodashim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/Mishnah based on the Kaufmann manuscript, edited by Dan Be'eri.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/Mishnah based on the Kaufmann manuscript, edited by Dan Be'eri.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/Mishnah based on the Kaufmann manuscript, edited by Dan Be'eri.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/Mishnah based on the Kaufmann manuscript, edited by Dan Be'eri.json"
+  },
+  {
+   "title": "Mishnah Tamid",
+   "language": "Hebrew",
+   "versionTitle": "Mishnah, ed. Romm, Vilna 1913",
+   "categories": [
+    "Mishnah",
+    "Seder Kodashim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/Mishnah, ed. Romm, Vilna 1913.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/Mishnah, ed. Romm, Vilna 1913.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/Mishnah, ed. Romm, Vilna 1913.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/Mishnah, ed. Romm, Vilna 1913.json"
+  },
+  {
+   "title": "Mishnah Tamid",
+   "language": "Hebrew",
+   "versionTitle": "Torat Emet 357",
+   "categories": [
+    "Mishnah",
+    "Seder Kodashim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/Torat Emet 357.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/Torat Emet 357.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/Torat Emet 357.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/Torat Emet 357.json"
+  },
+  {
+   "title": "Mishnah Tamid",
+   "language": "Hebrew",
+   "versionTitle": "merged",
+   "categories": [
+    "Mishnah",
+    "Seder Kodashim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/merged.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/merged.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/merged.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/merged.json"
+  },
+  {
+   "title": "Notes by Heinrich Guggenheimer on Jerusalem Talmud",
+   "language": "English",
+   "versionTitle": "The Jerusalem Talmud, translation and commentary by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015",
+   "categories": [
+    "Talmud",
+    "Yerushalmi",
+    "Commentary"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Yerushalmi/Commentary/Notes by Heinrich Guggenheimer on Jerusalem Talmud/English/The Jerusalem Talmud, translation and commentary by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Yerushalmi/Commentary/Notes by Heinrich Guggenheimer on Jerusalem Talmud/English/The Jerusalem Talmud, translation and commentary by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Yerushalmi/Commentary/Notes by Heinrich Guggenheimer on Jerusalem Talmud/English/The Jerusalem Talmud, translation and commentary by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Yerushalmi/Commentary/Notes by Heinrich Guggenheimer on Jerusalem Talmud/English/The Jerusalem Talmud, translation and commentary by Heinrich W. Guggenheimer. Berlin, De Gruyter, 1999-2015.json"
+  },
+  {
    "title": "Onkelos Genesis",
    "language": "Hebrew",
    "versionTitle": "Targum Onkelos, vocalized according to the Yemenite Taj ",
@@ -71,6 +290,35 @@
    "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Onkelos/Torah/Onkelos Numbers/Hebrew/Sifsei Chachomim Chumash, Metsudah Publications, 2009.json"
   },
   {
+   "title": "Pirkei Avot",
+   "language": "Hebrew",
+   "versionTitle": "Mishnah based on the Kaufmann manuscript, edited by Dan Be'eri",
+   "categories": [
+    "Mishnah",
+    "Seder Nezikin"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Mishnah/Seder Nezikin/Pirkei Avot/Hebrew/Mishnah based on the Kaufmann manuscript, edited by Dan Be'eri.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Mishnah/Seder Nezikin/Pirkei Avot/Hebrew/Mishnah based on the Kaufmann manuscript, edited by Dan Be'eri.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Mishnah/Seder Nezikin/Pirkei Avot/Hebrew/Mishnah based on the Kaufmann manuscript, edited by Dan Be'eri.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Mishnah/Seder Nezikin/Pirkei Avot/Hebrew/Mishnah based on the Kaufmann manuscript, edited by Dan Be'eri.json"
+  },
+  {
+   "title": "Steinsaltz on Jerusalem Talmud Shekalim",
+   "language": "Hebrew",
+   "versionTitle": "William Davidson Edition - Hebrew",
+   "categories": [
+    "Talmud",
+    "Yerushalmi",
+    "Modern Commentary on Talmud",
+    "Steinsaltz",
+    "Seder Moed"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Yerushalmi/Modern Commentary on Talmud/Steinsaltz/Seder Moed/Steinsaltz on Jerusalem Talmud Shekalim/Hebrew/William Davidson Edition - Hebrew.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Yerushalmi/Modern Commentary on Talmud/Steinsaltz/Seder Moed/Steinsaltz on Jerusalem Talmud Shekalim/Hebrew/William Davidson Edition - Hebrew.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Yerushalmi/Modern Commentary on Talmud/Steinsaltz/Seder Moed/Steinsaltz on Jerusalem Talmud Shekalim/Hebrew/William Davidson Edition - Hebrew.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Yerushalmi/Modern Commentary on Talmud/Steinsaltz/Seder Moed/Steinsaltz on Jerusalem Talmud Shekalim/Hebrew/William Davidson Edition - Hebrew.json"
+  },
+  {
    "title": "Tafsir Rasag",
    "language": "English",
    "versionTitle": "Sefaria Community Translation",
@@ -83,6 +331,76 @@
    "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Tafsir Rasag/Tafsir Rasag/English/Sefaria Community Translation.txt",
    "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Tafsir Rasag/Tafsir Rasag/English/Sefaria Community Translation.json",
    "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Tafsir Rasag/Tafsir Rasag/English/Sefaria Community Translation.json"
+  },
+  {
+   "title": "Tamid",
+   "language": "English",
+   "versionTitle": "Sefaria Community Translation",
+   "categories": [
+    "Talmud",
+    "Bavli",
+    "Seder Kodashim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Bavli/Seder Kodashim/Tamid/English/Sefaria Community Translation.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Bavli/Seder Kodashim/Tamid/English/Sefaria Community Translation.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Bavli/Seder Kodashim/Tamid/English/Sefaria Community Translation.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Bavli/Seder Kodashim/Tamid/English/Sefaria Community Translation.json"
+  },
+  {
+   "title": "Tamid",
+   "language": "English",
+   "versionTitle": "William Davidson Edition - English",
+   "categories": [
+    "Talmud",
+    "Bavli",
+    "Seder Kodashim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Bavli/Seder Kodashim/Tamid/English/William Davidson Edition - English.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Bavli/Seder Kodashim/Tamid/English/William Davidson Edition - English.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Bavli/Seder Kodashim/Tamid/English/William Davidson Edition - English.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Bavli/Seder Kodashim/Tamid/English/William Davidson Edition - English.json"
+  },
+  {
+   "title": "Tamid",
+   "language": "Hebrew",
+   "versionTitle": "Wikisource Talmud Bavli",
+   "categories": [
+    "Talmud",
+    "Bavli",
+    "Seder Kodashim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/Wikisource Talmud Bavli.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/Wikisource Talmud Bavli.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/Wikisource Talmud Bavli.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/Wikisource Talmud Bavli.json"
+  },
+  {
+   "title": "Tamid",
+   "language": "Hebrew",
+   "versionTitle": "William Davidson Edition - Aramaic",
+   "categories": [
+    "Talmud",
+    "Bavli",
+    "Seder Kodashim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/William Davidson Edition - Aramaic.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/William Davidson Edition - Aramaic.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/William Davidson Edition - Aramaic.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/William Davidson Edition - Aramaic.json"
+  },
+  {
+   "title": "Tamid",
+   "language": "Hebrew",
+   "versionTitle": "William Davidson Edition - Vocalized Aramaic",
+   "categories": [
+    "Talmud",
+    "Bavli",
+    "Seder Kodashim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/William Davidson Edition - Vocalized Aramaic.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/William Davidson Edition - Vocalized Aramaic.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/William Davidson Edition - Vocalized Aramaic.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/William Davidson Edition - Vocalized Aramaic.json"
   },
   {
    "title": "Targum Jerusalem",
@@ -201,6 +519,62 @@
    "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tanakh/Targum/Aramaic Targum/Writings/Targum Sheni on Esther/English/Sefaria Community Translation.txt",
    "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tanakh/Targum/Aramaic Targum/Writings/Targum Sheni on Esther/English/Sefaria Community Translation.json",
    "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tanakh/Targum/Aramaic Targum/Writings/Targum Sheni on Esther/English/Sefaria Community Translation.json"
+  },
+  {
+   "title": "Tosefta Berakhot",
+   "language": "English",
+   "versionTitle": "Sefaria Community Translation",
+   "categories": [
+    "Tosefta",
+    "Vilna Edition",
+    "Seder Zeraim"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tosefta/Vilna Edition/Seder Zeraim/Tosefta Berakhot/English/Sefaria Community Translation.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tosefta/Vilna Edition/Seder Zeraim/Tosefta Berakhot/English/Sefaria Community Translation.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tosefta/Vilna Edition/Seder Zeraim/Tosefta Berakhot/English/Sefaria Community Translation.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tosefta/Vilna Edition/Seder Zeraim/Tosefta Berakhot/English/Sefaria Community Translation.json"
+  },
+  {
+   "title": "Tosefta Chagigah (Lieberman)",
+   "language": "Hebrew",
+   "versionTitle": "The Tosefta according to to codex Vienna. Third Augmented Edition, JTS 2001",
+   "categories": [
+    "Tosefta",
+    "Lieberman Edition",
+    "Seder Moed"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Tosefta/Lieberman Edition/Seder Moed/Tosefta Chagigah (Lieberman)/Hebrew/The Tosefta according to to codex Vienna. Third Augmented Edition, JTS 2001.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Tosefta/Lieberman Edition/Seder Moed/Tosefta Chagigah (Lieberman)/Hebrew/The Tosefta according to to codex Vienna. Third Augmented Edition, JTS 2001.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Tosefta/Lieberman Edition/Seder Moed/Tosefta Chagigah (Lieberman)/Hebrew/The Tosefta according to to codex Vienna. Third Augmented Edition, JTS 2001.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Tosefta/Lieberman Edition/Seder Moed/Tosefta Chagigah (Lieberman)/Hebrew/The Tosefta according to to codex Vienna. Third Augmented Edition, JTS 2001.json"
+  },
+  {
+   "title": "Tractate Kutim",
+   "language": "English",
+   "versionTitle": "The Minor Tractates of the Talmud, trans. A. Cohen, London Soncino Press, 1965",
+   "categories": [
+    "Talmud",
+    "Bavli",
+    "Minor Tractates"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Bavli/Minor Tractates/Tractate Kutim/English/The Minor Tractates of the Talmud, trans. A. Cohen, London Soncino Press, 1965.json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Bavli/Minor Tractates/Tractate Kutim/English/The Minor Tractates of the Talmud, trans. A. Cohen, London Soncino Press, 1965.txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Bavli/Minor Tractates/Tractate Kutim/English/The Minor Tractates of the Talmud, trans. A. Cohen, London Soncino Press, 1965.json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Bavli/Minor Tractates/Tractate Kutim/English/The Minor Tractates of the Talmud, trans. A. Cohen, London Soncino Press, 1965.json"
+  },
+  {
+   "title": "Tractate Kutim",
+   "language": "Hebrew",
+   "versionTitle": "Talmud Bavli, Vilna 1883 ed.",
+   "categories": [
+    "Talmud",
+    "Bavli",
+    "Minor Tractates"
+   ],
+   "json_url": "https://storage.googleapis.com/sefaria-export/json/Talmud/Bavli/Minor Tractates/Tractate Kutim/Hebrew/Talmud Bavli, Vilna 1883 ed..json",
+   "txt_url": "https://storage.googleapis.com/sefaria-export/txt/Talmud/Bavli/Minor Tractates/Tractate Kutim/Hebrew/Talmud Bavli, Vilna 1883 ed..txt",
+   "cltk_full_url": "https://storage.googleapis.com/sefaria-export/cltk-full/Talmud/Bavli/Minor Tractates/Tractate Kutim/Hebrew/Talmud Bavli, Vilna 1883 ed..json",
+   "cltk_flat_url": "https://storage.googleapis.com/sefaria-export/cltk-flat/Talmud/Bavli/Minor Tractates/Tractate Kutim/Hebrew/Talmud Bavli, Vilna 1883 ed..json"
   }
  ]
 }
