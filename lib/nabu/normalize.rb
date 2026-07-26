@@ -231,6 +231,22 @@ module Nabu
       # alone. The combining letters above (uͦ U+0366 etc.) fall to the
       # generic Mn strip; the @norm layer rides annotations, never a fold.
       "gmh" => ->(str) { str.tr("ſ", "s") },
+      # gml (P46-5): the ReN lemma notation, argued from a census of ALL
+      # 1,333,166 non-null anno-layer lemmas in the 1.1 deposit. Homograph
+      # superscripts ¹–⁷ (×1.3M; with an optional variant letter tail —
+      # dat²A, achte¹ᵃ) plus the editorial marks the generic fold cannot
+      # reach: superscript vowels ᵉⁱ (Lm — êⁱn, vorlêᵉnen; dropped, the
+      # PROTO_FOLD ˀ precedent: no ASCII typist spells them), the °
+      # proper-name mark (marcus°), the * uncertainty and α/β variant
+      # tags, the = name line-break (Bam=berges°), and the ()/[] optional-
+      # letter brackets (went(e) → wente — brackets drop, letters stay).
+      # ReN's long-vowel diacritics (ê, ō, ĩ, ȫ, ü̂) all fall to the
+      # generic Mn strip; the corpus surface carries NO long ſ (censused:
+      # zero corpus-wide), so no ſ rule. Comma-chained lemma sets
+      # (dê¹,dê¹,dat²A → de,de,dat) stay chains — upstream's own single
+      # tag value, a documented search limitation. Runs after downcase,
+      # so the variant tail matches lowercased a/b.
+      "gml" => ->(str) { str.gsub(/[¹²³⁴⁵⁶⁷][abᵃᵇ]?/, "").delete("ᵉⁱᵃᵇ°*αβ=()[]") },
       "ara" => ARABIC_FOLD,
       "fas" => ARABIC_FOLD,
       "gem" => PROTO_FOLD,

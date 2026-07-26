@@ -181,6 +181,9 @@ germanic:
     Menotec (`non`), and, dual-tagged with the epigraphy desk, the runic
     inscriptions of Rundata. The wave went live 2026-07-22 with the
     owner-verified first syncs — all five shelves hold their corpora below.
+    Newest on the desk: ReN, the Middle Low German / Low Rhenish reference
+    corpus (1200–1650, `gml` — the Hanseatic rung between ReM and the Norse
+    shelves), landed P46-5 and awaiting its first sync.
   instruments: |
     - **Gold-lemma languages:** got (Gothic, on the PROIEL and UD treebanks),
       ang (Old English — ASPR verse and ISWOC prose, the West-Saxon Mark), and

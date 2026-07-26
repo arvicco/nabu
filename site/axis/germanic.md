@@ -7,7 +7,7 @@ description: >-
 
 > The Germanicist — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches.
 
-Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), and the runic inscriptions (Rundata, dual-tagged epigraphy).
+Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
 The desk spans all three Germanic branches. **East** is Gothic (Wulfila,
 gold-lemmatized in PROIEL). **West** runs Old English (ASPR verse, ISWOC
@@ -18,12 +18,15 @@ under `is` — Old Norwegian and the Poetic Edda of Codex Regius through
 Menotec (`non`), and, dual-tagged with the epigraphy desk, the runic
 inscriptions of Rundata. The wave went live 2026-07-22 with the
 owner-verified first syncs — all five shelves hold their corpora below.
+Newest on the desk: ReN, the Middle Low German / Low Rhenish reference
+corpus (1200–1650, `gml` — the Hanseatic rung between ReM and the Norse
+shelves), landed P46-5 and awaiting its first sync.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
 |---|---|---|---|---|
@@ -36,6 +39,7 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
+| `ren` | texts | attribution | not yet wired | not synced yet |
 
 ## The desk's instruments
 
