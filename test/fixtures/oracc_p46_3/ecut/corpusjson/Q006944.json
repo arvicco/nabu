@@ -1,0 +1,509 @@
+{
+  "type": "cdl",
+  "project": "ecut",
+  "source": "http://oracc.org/ecut",
+  "license": "This data is released under the CC0 license",
+  "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "more-info": "http://oracc.org/doc/opendata/",
+  "UTC-timestamp": "2023-03-20T08:10:22",
+  "textid": "Q006944",
+  "cdl": [
+    {
+      "node": "c",
+      "type": "text",
+      "id": "Q006944.U0",
+      "cdl": [
+        {
+          "node": "d",
+          "type": "object",
+          "ref": ""
+        },
+        {
+          "node": "d",
+          "type": "surface",
+          "ref": ""
+        },
+        {
+          "node": "c",
+          "type": "discourse",
+          "subtype": "body",
+          "id": "Q006944.U1",
+          "cdl": [
+            {
+              "node": "c",
+              "type": "sentence",
+              "implicit": "yes",
+              "id": "Q006944.U2",
+              "cdl": [
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": "Q006944.1"
+                },
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": "Q006944.1l",
+                  "n": "1",
+                  "label": "1",
+                  "score-block-ref": "sb.Q006944.1"
+                },
+                {
+                  "node": "l",
+                  "frag": "{d}hal-di-ni-ni",
+                  "id": "Q006944.l035b5",
+                  "ref": "Q006944.1.1",
+                  "inst": "Haldi=i=NI=ni[Urartian national god]DN",
+                  "sig": "@ecut%xur:{d}hal-di-ni-ni=Haldi[Urartian national god//Urartian national god]DN'DN$Haldi=i=NI=ni",
+                  "f": {
+                    "lang": "xur",
+                    "form": "{d}hal-di-ni-ni",
+                    "delim": "",
+                    "gdl": [
+                      {
+                        "det": "semantic",
+                        "pos": "pre",
+                        "seq": [
+                          {
+                            "v": "d",
+                            "utf8": "𒀭",
+                            "id": "Q006944.1.1.0"
+                          }
+                        ]
+                      },
+                      {
+                        "v": "hal",
+                        "utf8": "𒄬",
+                        "id": "Q006944.1.1.1",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "di",
+                        "utf8": "𒁲",
+                        "id": "Q006944.1.1.2",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "ni",
+                        "utf8": "𒉌",
+                        "id": "Q006944.1.1.3",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "ni",
+                        "utf8": "𒉌",
+                        "id": "Q006944.1.1.4"
+                      }
+                    ],
+                    "cf": "Haldi",
+                    "gw": "Urartian national god",
+                    "sense": "Urartian national god",
+                    "norm": "Haldi=i=NI=ni",
+                    "pos": "DN",
+                    "epos": "DN"
+                  },
+                  "props": [
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "ngram": "-1",
+                      "ref": "Q006944.1.1"
+                    },
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "Q006944.1.1"
+                    }
+                  ]
+                },
+                {
+                  "node": "l",
+                  "frag": "uš-ma-a-[ši-ni]",
+                  "id": "Q006944.l035b6",
+                  "ref": "Q006944.1.2",
+                  "inst": "ušmaši=ni[protection]N",
+                  "sig": "@ecut%xur:uš-ma-a-ši-ni=ušmaše[protection//protection]N'N$ušmaši=ni",
+                  "f": {
+                    "lang": "xur",
+                    "form": "uš-ma-a-ši-ni",
+                    "gdl": [
+                      {
+                        "v": "uš",
+                        "utf8": "𒍑",
+                        "id": "Q006944.1.2.0",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "ma",
+                        "utf8": "𒈠",
+                        "id": "Q006944.1.2.1",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "a",
+                        "utf8": "𒀀",
+                        "id": "Q006944.1.2.2",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "ši",
+                        "utf8": "𒅆",
+                        "id": "Q006944.1.2.3",
+                        "breakStart": "1",
+                        "o": "[",
+                        "break": "missing",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "ni",
+                        "utf8": "𒉌",
+                        "id": "Q006944.1.2.4",
+                        "break": "missing",
+                        "o": "]",
+                        "breakEnd": "Q006944.1.2.3"
+                      }
+                    ],
+                    "cf": "ušmaše",
+                    "gw": "protection",
+                    "sense": "protection",
+                    "norm": "ušmaši=ni",
+                    "pos": "N",
+                    "epos": "N"
+                  },
+                  "props": [
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "ngram": "-1",
+                      "ref": "Q006944.1.2"
+                    },
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "Q006944.1.2"
+                    }
+                  ]
+                },
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": "Q006944.2"
+                },
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": "Q006944.2l",
+                  "n": "2",
+                  "label": "2",
+                  "score-block-ref": "sb.Q006944.2"
+                },
+                {
+                  "node": "l",
+                  "frag": "{m}mi₃-nu-a-še",
+                  "id": "Q006944.l035c1",
+                  "ref": "Q006944.2.1",
+                  "inst": "Minua=še[king of Urartu, son of Išpuini]RN",
+                  "sig": "@ecut%xur:{m}mi₃-nu-a-še=Minua[king of Urartu, son of Išpuini//king of Urartu, son of Išpuini]RN'RN$Minua=še",
+                  "f": {
+                    "lang": "xur",
+                    "form": "{m}mi₃-nu-a-še",
+                    "delim": "",
+                    "gdl": [
+                      {
+                        "det": "semantic",
+                        "pos": "pre",
+                        "seq": [
+                          {
+                            "v": "m",
+                            "utf8": "𒁹",
+                            "id": "Q006944.2.1.0"
+                          }
+                        ]
+                      },
+                      {
+                        "v": "mi₃",
+                        "utf8": "𒈨",
+                        "id": "Q006944.2.1.1",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "nu",
+                        "utf8": "𒉡",
+                        "id": "Q006944.2.1.2",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "a",
+                        "utf8": "𒀀",
+                        "id": "Q006944.2.1.3",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "še",
+                        "utf8": "𒊺",
+                        "id": "Q006944.2.1.4"
+                      }
+                    ],
+                    "cf": "Minua",
+                    "gw": "king of Urartu, son of Išpuini",
+                    "sense": "king of Urartu, son of Išpuini",
+                    "norm": "Minua=še",
+                    "pos": "RN",
+                    "epos": "RN"
+                  },
+                  "props": [
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "ngram": "-1",
+                      "ref": "Q006944.2.1"
+                    },
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "Q006944.2.1"
+                    }
+                  ]
+                },
+                {
+                  "node": "l",
+                  "frag": "{d}hal-di-ni-[li",
+                  "id": "Q006944.l035c2",
+                  "ref": "Q006944.2.2",
+                  "inst": "Haldi=i=NI=li[Urartian national god]DN",
+                  "sig": "@ecut%xur:{d}hal-di-ni-li=Haldi[Urartian national god//Urartian national god]DN'DN$Haldi=i=NI=li",
+                  "f": {
+                    "lang": "xur",
+                    "form": "{d}hal-di-ni-li",
+                    "delim": "",
+                    "gdl": [
+                      {
+                        "det": "semantic",
+                        "pos": "pre",
+                        "seq": [
+                          {
+                            "v": "d",
+                            "utf8": "𒀭",
+                            "id": "Q006944.2.2.0"
+                          }
+                        ]
+                      },
+                      {
+                        "v": "hal",
+                        "utf8": "𒄬",
+                        "id": "Q006944.2.2.1",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "di",
+                        "utf8": "𒁲",
+                        "id": "Q006944.2.2.2",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "ni",
+                        "utf8": "𒉌",
+                        "id": "Q006944.2.2.3",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "li",
+                        "utf8": "𒇷",
+                        "id": "Q006944.2.2.4",
+                        "breakStart": "1",
+                        "o": "[",
+                        "break": "missing"
+                      }
+                    ],
+                    "cf": "Haldi",
+                    "gw": "Urartian national god",
+                    "sense": "Urartian national god",
+                    "norm": "Haldi=i=NI=li",
+                    "pos": "DN",
+                    "epos": "DN"
+                  },
+                  "props": [
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "ngram": "-1",
+                      "ref": "Q006944.2.2"
+                    },
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "Q006944.2.2"
+                    }
+                  ]
+                },
+                {
+                  "node": "l",
+                  "frag": "KA₂]",
+                  "id": "Q006944.l035c3",
+                  "ref": "Q006944.2.3",
+                  "inst": "KA₂[gate]N",
+                  "sig": "@ecut%xur-946:KA₂=KA₂[gate//gate]N'N$KA₂",
+                  "f": {
+                    "lang": "xur-946",
+                    "form": "KA₂",
+                    "gdl": [
+                      {
+                        "gg": "logo",
+                        "gdl_type": "logo",
+                        "group": [
+                          {
+                            "s": "KA₂",
+                            "utf8": "𒆍",
+                            "id": "Q006944.2.3.0",
+                            "break": "missing",
+                            "role": "logo",
+                            "logolang": "sux",
+                            "o": "]",
+                            "breakEnd": "Q006944.2.2.4"
+                          }
+                        ]
+                      }
+                    ],
+                    "cf": "KA₂",
+                    "gw": "gate",
+                    "sense": "gate",
+                    "norm": "KA₂",
+                    "pos": "N",
+                    "epos": "N"
+                  },
+                  "props": [
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "ngram": "-1",
+                      "ref": "Q006944.2.3"
+                    },
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "Q006944.2.3"
+                    }
+                  ]
+                },
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": "Q006944.3"
+                },
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": "Q006944.3l",
+                  "n": "3",
+                  "label": "3",
+                  "score-block-ref": "sb.Q006944.3"
+                },
+                {
+                  "node": "l",
+                  "frag": "ši-i-di-i-⸢iš-tu₂-a⸣-[li]",
+                  "id": "Q006944.l035ce",
+                  "ref": "Q006944.3.1",
+                  "inst": "šidišt=u=a=li[build]V",
+                  "sig": "@ecut%xur:ši-i-di-i-iš-tu₂-a-li=šidišt-[build//build]V'V$šidišt=u=a=li",
+                  "f": {
+                    "lang": "xur",
+                    "form": "ši-i-di-i-iš-tu₂-a-li",
+                    "gdl": [
+                      {
+                        "v": "ši",
+                        "utf8": "𒅆",
+                        "id": "Q006944.3.1.0",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "i",
+                        "utf8": "𒄿",
+                        "id": "Q006944.3.1.1",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "di",
+                        "utf8": "𒁲",
+                        "id": "Q006944.3.1.2",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "i",
+                        "utf8": "𒄿",
+                        "id": "Q006944.3.1.3",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "iš",
+                        "utf8": "𒅖",
+                        "id": "Q006944.3.1.4",
+                        "break": "damaged",
+                        "ho": "1",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "tu₂",
+                        "utf8": "𒌓",
+                        "id": "Q006944.3.1.5",
+                        "break": "damaged",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "a",
+                        "utf8": "𒀀",
+                        "id": "Q006944.3.1.6",
+                        "break": "damaged",
+                        "delim": "-",
+                        "hc": "1"
+                      },
+                      {
+                        "v": "li",
+                        "utf8": "𒇷",
+                        "id": "Q006944.3.1.7",
+                        "breakStart": "1",
+                        "o": "]",
+                        "break": "missing",
+                        "breakEnd": "Q006944.3.1.7"
+                      }
+                    ],
+                    "cf": "šidišt-",
+                    "gw": "build",
+                    "sense": "build",
+                    "norm": "šidišt=u=a=li",
+                    "pos": "V",
+                    "epos": "V"
+                  },
+                  "props": [
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "ngram": "-1",
+                      "ref": "Q006944.3.1"
+                    },
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "Q006944.3.1"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
