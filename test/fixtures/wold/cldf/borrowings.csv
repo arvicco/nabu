@@ -1,0 +1,10 @@
+ID,Target_Form_ID,Source_Form_ID,Comment,Source,Source_relation,Source_word,Source_meaning,Source_certain,Source_languoid,Source_languoid_glottocode
+8044,Swahili-1-1-1,,,,immediate,dunyā,world,yes,Arabic,stan1318
+8478,Swahili-1-1-2,,,,immediate,lˁmān + ˁālmyān,luminousness + inhabitants of the world,yes,Arabic,stan1318
+10027,English-1-51-1,,,,immediate,ský,cloud,yes,Old Norse,noon1243
+10207,English-5-92-1,,,,immediate,vīnum,wine,yes,Latin,lati1261
+10673,English-23-395-1,,,,immediate,(via) strāta,laid down (way),yes,Latin,lati1261
+11236,OldHighGerman-3-47-1,,,,immediate,mūlus,mule,yes,Latin,lati1261
+11242,OldHighGerman-3-77-1,,,,immediate,elephantus,elephant,yes,Latin,lati1261
+14785,English-5-92-1,,,,earlier,(w)oînos,wine,yes,Greek,mode1248
+15143,OldHighGerman-3-77-1,,,,earlier,"elephas, -ntos",elephant,yes,Greek,mode1248

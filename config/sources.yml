@@ -641,6 +641,46 @@ iecor:
   # future release is a NEW DOI the owner re-pins (URL + RELEASE_SHA256,
   # the Coptic RELEASE_TAG pattern) before firing a re-sync.
 
+wold:
+  adapter: Nabu::Adapters::Wold
+  axes: [etym]
+  wired: false   # P46-6: awaiting the owner-fired first sync (16 MB Zenodo
+                   # zip, sha-pinned; CLAUDE.md checklist §6: bin/nabu sync
+                   # wold, eyeball `nabu define wine --lang eng` for the
+                   # donor apparatus and `nabu etym vinum` for the Latin→
+                   # English loan edge, then flip). Projected: 64,289 entries
+                   # across 41 vocabulary shelves (wold-english,
+                   # wold-oldhighgerman, …) / ~20.6k borrowed donor edges.
+  # WOLD — World Loanword Database (lexibank/wold v4.2, CC BY 4.0; cite
+  # Haspelmath & Tadmor eds. 2009, MPI-EVA). The etym desk's loanword-FLOW
+  # layer: every lexeme carries a curated five-point borrowed status;
+  # borrowing events mint donor reflex edges (Latin/Sanskrit/Old Norse/
+  # Classical Arabic… — the ancient donors are the held join surface). The
+  # Zenodo versioned record is immutable; a future release is a NEW DOI the
+  # owner re-pins (URL + RELEASE_SHA256, the iecor pattern) before re-sync.
+  # Donor map keys on languoid NAMES — WOLD's own glottocodes are unreliable
+  # (its "Old Norse" is noon1243 = Glottolog's Noone; see cldf-spine row).
+  sync_policy: manual
+
+clics:
+  adapter: Nabu::Adapters::Clics
+  axes: [etym]
+  wired: false   # P46-6: awaiting the owner-fired first sync (12 MB zip →
+                   # 67 MB gml; CLAUDE.md checklist §6: bin/nabu sync clics,
+                   # eyeball `nabu define moon` / `nabu define 'earth (soil)'`
+                   # for the ↔ colexification lines, then flip). Projected:
+                   # ~2,900 concept entries (edge-bearing nodes of the
+                   # 2,919-node / 4,228-edge network).
+  # CLICS³ — Database of Cross-Linguistic Colexifications (Rzymski,
+  # Tresoldi et al. 2019, CC BY 4.0; DOI 10.17613/5awv-6w15). SCOPE,
+  # argued in the adapter header: the AGGREGATE family-aware network
+  # (clics3-network.gml at tag v1.1 — per-pair family/variety/word weights
+  # + family lists), not the 90 MB per-variety sqlite; the pair network is
+  # the research surface, the word lists behind it stay upstream. A tagged
+  # raw blob is byte-stable: sha-pinned like the Zenodo posture; a new
+  # CLICS release is a new tag the owner re-pins.
+  sync_policy: manual
+
 liv:
   adapter: Nabu::Adapters::Liv
   axes: [etym]
@@ -678,7 +718,12 @@ starling:
                    # CLAUDE.md checklist §6 — eyeball `nabu define '*bher-'`
                    # (Pokorny credit), `nabu define 'сигать'` (vasmer credit),
                    # `nabu etym hals` (germet got/ang gold joins), then flip.
-  # StarLing / Tower of Babel IE package (G. Starostin's e-mail grant,
+                   # P46-6 OWNER QUEUE: the sixth base starling-kart (KART.exe,
+                   # 207 KB second package → kart/ subdir, 1,310 Kartvelian
+                   # etymologies, ccs-pro) lands at the NEXT owner-fired
+                   # `bin/nabu sync starling`; eyeball `nabu define '*abed-'`
+                   # (Klimov credit + GRU/MEG/SVA/LAZ reflex rows).
+  # StarLing / Tower of Babel package (G. Starostin's e-mail grant,
   # 2026-07-15: any use "as long as the source is properly acknowledged" →
   # attribution). THE GRANT'S CONDITION: credit the specific compilers of
   # each base (roster: starlingdb.org/descrip.php?lan=en#bases) — Pokorny:
@@ -686,10 +731,13 @@ starling:
   # compiled by S. L. Nikolayev (after Walde-Pokorny), Hitt./Tokh. reflexes
   # by S. Starostin; Vasmer: the project's scan/OCR/database conversion of
   # M. Vasmer's dictionary (roster; vasmer.inf is blank); Germanic + Baltic:
-  # compiled by S. Nikolayev, subordinate to the PIE base (.inf DBINFO) —
-  # all carried verbatim in the adapter MANIFEST.license so every serving
-  # surface renders them. Upstream is a hand-curated 2005-era package:
-  # re-fetch is an owner decision.
+  # compiled by S. Nikolayev, subordinate to the PIE base (.inf DBINFO);
+  # Kartvelian (P46-6, the KART.exe second package under the SAME site-wide
+  # grant — "all etymological data"): compiled by S. Starostin after
+  # G. Klimov and Fähnrich–Sardshveladze (kartet.inf DBINFO + roster item
+  # 6) — all carried verbatim in the adapter MANIFEST.license so every
+  # serving surface renders them. Upstream is a hand-curated 2005-era
+  # package family: re-fetch is an owner decision.
   sync_policy: manual
   # P42-r1: THE FETCH GRANT is personal to this project's author and a PUBLIC
   # clone of nabu does NOT convey it — so `nabu sync starling` demands an
@@ -708,7 +756,7 @@ starling:
       Write to George Starostin (starlingdb.org) for your own use grant, and
       promise to credit each base's compilers per
       starlingdb.org/descrip.php?lan=en#bases (Pokorny, PIET, Vasmer, Germet,
-      Baltet) verbatim on every serving surface.
+      Baltet, Kartet) verbatim on every serving surface.
 
 sl-lexica:
   adapter: Nabu::Adapters::SlLexica
@@ -1226,6 +1274,36 @@ lila:
   # LICENSE verbatim "Attribution-ShareAlike 4.0 International" (CC BY-SA 4.0;
   # citable Zenodo DOI 10.5281/zenodo.4017229) → attribution. Fetch is an
   # owner decision (the clone is large + version-pinned).
+  sync_policy: manual
+
+cldf-spine:
+  adapter: Nabu::Adapters::CldfSpine
+  kind: module   # P46-6: machinery-only — a concept/languoid resolver seam, zero document rows
+  axes: [etym]
+  wired: false   # PERMANENTLY false — a reference resolver instrument, not a
+                   # text source (the pleiades/lila precedent): discover mints
+                   # no documents, no migration, no catalog table. The row
+                   # gives the owner the sanctioned fetch path for TWO thin
+                   # tag-pinned reference files, resolved by Nabu::CldfSpine:
+                   # Concepticon id → {gloss, semantic field, definition,
+                   # replacement pointer} and glottocode → {name, ISO, level,
+                   # one-hop family}. Consumers: the WOLD/CLICS shelves'
+                   # Concepticon-id body lines and donor glottocodes (and
+                   # IE-CoR's Concepticon-linked meanings). OWNER QUEUE
+                   # (P46-6): bin/nabu sync cldf-spine GETs concepticon.tsv
+                   # (concepticon-data v3.4.0, 453 KB, sha256 f96a72b8dc18…)
+                   # + languages.csv (glottolog-cldf v5.3, 2.4 MB, sha256
+                   # 1a50a393bc81…) into per-subdir FileFetch states.
+  # P46-6: the CLDF reference spine — Concepticon (4,033 concepts) +
+  # Glottolog (27,177 languoids), THIN by design: the id-and-name spine plus
+  # what WOLD/CLICS rows need to resolve, never the full datasets. LICENSE:
+  # both CC BY 4.0 verbatim (Concepticon .zenodo.json at v3.4.0; the
+  # glottolog-cldf bundle's own dc:license at v5.3) → attribution. A new
+  # upstream release is a new tag: owner re-pins the two URL constants in
+  # lib/nabu/adapters/cldf_spine.rb and re-syncs. Known upstream quirk,
+  # pinned in tests: WOLD tags its "Old Norse" donor glottocode noon1243,
+  # which Glottolog resolves to Noone (Atlantic-Congo) — real Old Norse is
+  # oldn1244; the WOLD donor map therefore keys on languoid NAMES.
   sync_policy: manual
 
 kitab:

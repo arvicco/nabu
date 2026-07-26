@@ -51,3 +51,11 @@ files:
     url: https://starlingdb.org/download/IE.exe
     whole: false
     trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte
+  - path: kart/kartet.dbf
+    url: https://starlingdb.org/download/KART.exe
+    whole: false
+    trim: 5 of 1,310 records — NUMBER 1 (*abed- 'tinder', the Klimov pin, live-CGI-verified), 2 (*ac̣-, the Nostratic PRNUM body-line pin), 21 (*baba, all four reflex columns), 48 BOTH TIMES (*berq- + *ćwet-, one of kart's two duplicate-NUMBER pairs → entry ids 48/48-b); header + field descriptors verbatim, var-pointers rewritten
+  - path: kart/kartet.var
+    url: https://starlingdb.org/download/KART.exe
+    whole: false
+    trim: the kept records' payload byte runs, verbatim, compacted behind the mirrored \x13 header byte

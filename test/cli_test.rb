@@ -501,14 +501,14 @@ class CLITest < Minitest::Test
 
   # The genuine total miss enumerates the crosswalk shelves DB-DRIVEN (the
   # P11/P18 hardcoded-list lesson): the starling fixture crosswalk holds
-  # bat-pro/gem-pro/ine-pro (vasmer's rus mints no reflex rows and must
-  # not appear); the stale Wiktionary proto-shelf roll call is gone; the
-  # '*form' quoting hint stays.
+  # bat-pro/ccs-pro/gem-pro/ine-pro (P46-6: the kart base joined; vasmer's
+  # rus mints no reflex rows and must not appear); the stale Wiktionary
+  # proto-shelf roll call is gone; the '*form' quoting hint stays.
   def test_etym_total_miss_enumerates_the_live_crosswalk_shelves
     with_starling_shelf do |config|
       out, _err, status = with_config(config) { run_cli(%w[etym зззз]) }
       assert_nil status
-      assert_match(/the crosswalk covers bat-pro, gem-pro, ine-pro\b/, out,
+      assert_match(/the crosswalk covers bat-pro, ccs-pro, gem-pro, ine-pro\b/, out,
                    "db-derived enumeration — exactly the shelves with reflex rows")
       refute_match(%r{Proto-Slavic/PIE/Proto-Germanic}, out, "the hardcoded enumeration is gone")
       assert_match(/'\*form'/, out, "the quoting hint stays")

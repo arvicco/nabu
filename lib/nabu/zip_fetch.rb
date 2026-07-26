@@ -135,9 +135,9 @@ module Nabu
     # the absolute live-tree paths the fresh unpack would delete — BEFORE any
     # tree mutation — and may raise (Nabu::SyncAborted) to abort.
     def self.sync!(url:, dir:, attic_dir:, http: default_http, progress: nil, guard: nil,
-                   fallback_url: nil, failover: nil)
+                   fallback_url: nil, failover: nil, keep: [])
       fetch = new(url: url, dir: dir, attic_dir: attic_dir, http: http, progress: progress,
-                  fallback_url: fallback_url, failover: failover)
+                  fallback_url: fallback_url, failover: failover, keep: keep)
       begin
         fetch.prepare!
         guard&.call(fetch.doomed_paths)
