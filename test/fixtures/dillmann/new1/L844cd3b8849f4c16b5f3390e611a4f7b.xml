@@ -1,0 +1,70 @@
+<?xml-model href="https://raw.githubusercontent.com/BetaMasaheft/Dillmann/master/schema/Dillmann.rng"
+schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="https://raw.githubusercontent.com/BetaMasaheft/Dillmann/master/schema/Dillmann.rng"
+type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?><TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title xml:lang="gez">ደረባ</title>
+            <editor>Alessandro Bausi</editor>
+         </titleStmt>
+         <publicationStmt>
+            <authority>Hiob-Ludolf-Zentrum für Äthiopistik</authority>
+            <publisher>Hiob-Ludolf-Zentrum für Äthiopistik</publisher>
+            <pubPlace>Hamburg</pubPlace>
+            <availability>
+               <licence target="https://creativecommons.org/licenses/by-sa-nc/4.0/"> This file is
+                  licensed under the Creative Commons Attribution-ShareAlike Non Commercial 4.0.
+               </licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <p>The origin of the lexicon is in a thoroughly elaborated txt version of <ref xml:id="dillmann" target="https://archive.org/details/lexiconlinguaeae00dilluoft">Dillmann, Christian Friedrich August. <emph>Lexicon linguae aethiopicae, cum
+                     indice latino. Adiectum est vocabularium tigre dialecti septentrionalis
+                     compilatum</emph> a W. Munziger. Lipsiae: Th.O. Weigel, 1865.</ref></p>
+            <p>Additional records were created by the project <ref xml:id="traces" target="https://www.traces.uni-hamburg.de/"> TraCES (ERC Advanced Grant, Grant
+                  Agreement 338756)</ref></p>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <p>A digital edition of the Lexicon in TEI.</p>
+         <listPrefixDef>
+            <prefixDef ident="bm" matchPattern="([a-zA-Z0-9]+)" replacementPattern="https://www.zotero.org/groups/358366/ethiostudies/items/tag/bm:$1"/>
+         </listPrefixDef>
+      </encodingDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="en">English</language>
+            <language ident="la">latin</language>
+            <language ident="it">Italian</language>
+            <language ident="gez">Gǝʿǝz</language>
+            <language ident="grc">Ancient Greek</language>
+            <language ident="syr">Syriac</language>
+            <language ident="ar">Arabic</language>
+            <language ident="sa">Sanskrit</language>
+            <language ident="geo">Georgian</language>
+            <language ident="cop">Coptic</language>
+            <language ident="osa">Old South Arabian</language>
+         </langUsage>
+      </profileDesc>
+      <revisionDesc>
+         <change who="MK" when="2022-06-30">added entry</change>
+      </revisionDesc>
+   </teiHeader>
+   <text>
+      <body>
+         <div>
+            <entry xml:id="L844cd3b8849f4c16b5f3390e611a4f7b" n="12860">
+               <form><foreign xml:lang="gez">ደረባ</foreign></form>
+               <sense xml:id="Tmain" xml:lang="en" source="#traces">
+                  <cit type="transcription" xml:lang="gez">
+                     <t:quote xmlns:t="http://www.tei-c.org/ns/1.0">darabā</t:quote>
+                  </cit> meaning unknown <sense n="C">for <foreign xml:lang="gez">ዣን፡ ደረባ፡</foreign>
+                     <lbl expand="videas">vid.</lbl>
+                     <foreign xml:lang="gez">ዣን፡</foreign></sense>
+                  <nd/>
+               </sense>
+            </entry>
+         </div>
+      </body>
+   </text>
+</TEI>

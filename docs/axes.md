@@ -123,7 +123,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (14): `ud`, `vulgate`, `eng-web`, `sblgnt`, `coptic-scriptorium`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `hebrew-lexicon`, `peshitta`, `syriac-corpus`
+**Members** (15): `ud`, `vulgate`, `eng-web`, `sblgnt`, `coptic-scriptorium`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `hebrew-lexicon`, `peshitta`, `syriac-corpus`, `betamasaheft-works`
 
 ### hebrew
 
@@ -140,6 +140,14 @@ The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSH
 The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, riding beside the biblical hat by design.
 
 **Members** (2): `peshitta`, `syriac-corpus`
+
+### ethiopic
+
+> The Ethiopicist — Aksum to the scriptoria: Enoch, Jubilees, and the Geʿez Bible.
+
+The Ethiopic (Gǝʿǝz) desk in the Oriental-Christian neighborhood: the Beta maṣāḥǝft transcriptions (the Geʿez Bible, 1 Enoch, Jubilees, the Kebra nagast, royal chronicles), Dillmann's Lexicon, and the TraCES analyzed corpus with its Aksumite inscriptions — riding beside the biblical hat by design.
+
+**Members** (3): `betamasaheft-works`, `dillmann`, `traces`
 
 ### arabic
 

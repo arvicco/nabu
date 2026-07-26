@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The twenty-one research desks of the Nabu library — tags over the
+  The twenty-two research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The twenty-one desks
+## The twenty-two desks
 
 ### classical
 
@@ -117,6 +117,14 @@ The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSH
 The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, riding beside the biblical hat by design.
 
 [Open the syriac desk]({{ '/axis/syriac/' | relative_url }})
+
+### ethiopic
+
+> The Ethiopicist — Aksum to the scriptoria: Enoch, Jubilees, and the Geʿez Bible.
+
+The Ethiopic (Gǝʿǝz) desk in the Oriental-Christian neighborhood: the Beta maṣāḥǝft transcriptions (the Geʿez Bible, 1 Enoch, Jubilees, the Kebra nagast, royal chronicles), Dillmann's Lexicon, and the TraCES analyzed corpus with its Aksumite inscriptions — riding beside the biblical hat by design.
+
+[Open the ethiopic desk]({{ '/axis/ethiopic/' | relative_url }})
 
 ### arabic
 
