@@ -119,3 +119,27 @@ germet #513; the table is the authority).
   block), **1634** (*kakla- 'neck; throat': PRNUM=562 ⇄ piet #562
   BALTNUM=1634 — the both-ways pair; Cyrillic glosses inside LITH
   cells; NOTES body line).
+- `kart/kartet.dbf`/`kart/kartet.var` (P46-6) — the SECOND package:
+  **`KART.exe`** (a plain zip like IE.exe), retrieved 2026-07-26 from
+  <https://starlingdb.org/download/KART.exe> — 211,769 B, sha256
+  `311ed963131fd3ee031b060c55d210a64a6497fd76e64e9281d6c7677ef6602e`;
+  full-base census at retrieval: `kartet.dbf` 1,310 records (matching
+  the `kartet.inf` DBINFO's own "1310 entries"), non-empty reflex cells
+  GRU 1,241 / MEG 1,010 / SVA 659 / LAZ 722, duplicate NUMBERs 48 and
+  134 (×2 each — the second 134 sits at file position 1133, piet's
+  dropped-leading-digit shape). Credit (kartet.inf DBINFO verbatim):
+  "compiled by S. Starostin on the basis of G. Klimov's and
+  Faehnrich-Sardhveladze's etymological dictionaries of Kartvelian
+  languages"; roster item 6 concurs ("Compiled by Sergei Starostin …
+  (G. Klimov and H. Faehnrich-Z. Sardzhveladze)"). Same trim recipe as
+  the IE bases (records byte-verbatim, var-pointers rewritten against a
+  compacted `.var`; no trailing `0x1A` — kartet.dbf has none upstream).
+  Records kept: **1** (\*abed- 'tinder' — decoded PROTO/RUSMEAN/GRU/MEG/
+  SVA/LAZ/NOTES verified against the live starlingdb.org CGI rendering
+  on 2026-07-26, including the Svan comma-multiform "haböd-, habed-,
+  hobed-"), **2** (\*ac̣- — PRNUM=1207 → the unheld Nostratic base, the
+  body-line crosslink pin; empty SVA cell), **21** (\*baba — all four
+  reflex columns mint), **48 BOTH TIMES** (\*berq- 'foot, step' at file
+  position 47 keeps the plain id; \*ćwet- at position 147 mints `48-b`
+  + the body note; its GRU cell "cwet-/cwit-/cwt-" pins the unspaced
+  slash-variant token minting as one form).
