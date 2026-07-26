@@ -60,6 +60,11 @@ syriac:
   persona: "The Syriacist — the Peshitta and the estrangela bookshelf."
   desc: "The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, riding beside the biblical hat by design."
 
+# P46-2 (owner ruling D46-c 2026-07-26: mint `ethiopic` with the Geʿez shelf).
+ethiopic:
+  persona: "The Ethiopicist — Aksum to the scriptoria: Enoch, Jubilees, and the Geʿez Bible."
+  desc: "The Ethiopic (Gǝʿǝz) desk in the Oriental-Christian neighborhood: the Beta maṣāḥǝft transcriptions (the Geʿez Bible, 1 Enoch, Jubilees, the Kebra nagast, royal chronicles), Dillmann's Lexicon, and the TraCES analyzed corpus with its Aksumite inscriptions — riding beside the biblical hat by design."
+
 arabic:
   persona: "The Arabist — the Islamicate library whole, Quran and hadith to falsafa and adab."
   desc: "The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3)."

@@ -2600,6 +2600,68 @@ bfm:   # P45-4
   lemma_tier: silver
   sync_policy: manual
 
+# ============ P46-2: the Geʿez shelf (D46-a/b/c, owner-ratified 2026-07-26) ============
+
+betamasaheft-works:   # P46-2, 02-sources row 123
+  adapter: Nabu::Adapters::BetamasaheftWorks
+  # ethiopic: the shelf mints the axis (D46-c); biblical: it carries the Gǝʿǝz
+  # Bible — near-complete OT (Genesis..Ezekiel, Psalms), all four Gospels,
+  # Acts/Epistles/Revelation. FOLLOW-UP (not this packet): the Gǝʿǝz Mark can
+  # join the nt alignment hub as a witness (config/alignments.yml untouched).
+  axes: [ethiopic, biblical]
+  wired: false   # flip after the owner-fired first sync is verified (checklist §6)
+  # Beta maṣāḥǝft Works (Hiob-Ludolf-Zentrum, Univ. Hamburg): 6,548 TEI work
+  # records, one file per work; MOST are catalog-only (no transcription) and
+  # skip BY RULE, quietly. Text-bearing selection = in-file BY-SA licence +
+  # edition div + Ethiopic script (censused in discovery_skips; a non-BY-SA
+  # licence would render UNRECOGNIZED, loudly). LICENSE = D46-a: the
+  # per-document in-file <licence> CC BY-SA 4.0 grant governs (6,545 of 6,548
+  # files) -> attribution; the betamasaheft.eu WEBSITE blankets its pages
+  # CC BY-NC-SA — a recorded discrepancy, the site statement does not govern
+  # these files. Per-document transcription credits (Ran HaCohen's Octateuch)
+  # ride document metadata. EXPECTED FIRST SYNC (~69 MB shallow, sparse
+  # **/*.xml cone): ~3.9k text-bearing docs at verse/prose grain (census
+  # 2026-07-26: 3,923 records show Ethiopic in their edition region; 272 are
+  # substantial transcriptions >= 1,000 chars — near-complete OT, the four
+  # Gospels, 1 Enoch 179k chars, Jubilees 188k, Kebra nagast 174k, royal
+  # chronicles; the long tail is incipit/explicit-only mini-documents, honest
+  # and small). Living edition -> manual re-syncs.
+  sync_policy: manual
+
+dillmann:   # P46-2, 02-sources row 124
+  adapter: Nabu::Adapters::Dillmann
+  axes: [ethiopic]
+  wired: false   # flip after the owner-fired first sync is verified (checklist §6)
+  # The Gǝʿǝz dictionary shelf: Dillmann, Lexicon linguae aethiopicae (1865)
+  # in the TraCES TEI digitization — 13,727 entry files, one <entry> each
+  # (github.com/BetaMasaheft/DillmannData; the sibling `Dillmann` repo is
+  # only the eXist-db app). content_kind :dictionary, language gez, urns
+  # urn:nabu:dict:dillmann:<L-id> — the ids the traces corpus's lemma links
+  # point at. LICENSE QUIRK (recorded): every file's licence target URL is
+  # MALFORMED ("…/licenses/by-sa-nc/4.0/", a slug CC does not serve; http
+  # x12,453 + https x1,274); the prose names Attribution-ShareAlike Non
+  # Commercial 4.0 -> CC BY-NC-SA 4.0, class nc (MCP default-excluded).
+  # EXPECTED FIRST SYNC (~15 MB, sparse **/*.xml cone): 13,727 entries.
+  sync_policy: manual
+
+traces:   # P46-2, 02-sources row 125
+  adapter: Nabu::Adapters::Traces
+  axes: [ethiopic]
+  wired: false   # flip after the owner-fired first sync is verified (checklist §6)
+  # TraCES TEI-Ling export (ERC Advanced Grant 338756, Hamburg): 15 files /
+  # 75,440 morphologically analyzed Gǝʿǝz word tokens — Matthew 12,212,
+  # Kebra nagast prologue+25 chs 3,784, ʿAmda Ṣǝyon chronicle 10,704,
+  # Testamentum Domini 12,471, "MM" 18,685, "AK" 15,599, Gadla Libānos
+  # excerpts, seven Aksumite royal inscriptions (RIE 187-232). One passage
+  # per word token (fidäl text; translit + morphology + Dillmann-entry lemma
+  # link in annotations) — the gold lemma lane of the Geʿez shelf. LICENSE =
+  # D46-b: no in-repo license; the official archive deposit governs —
+  # CC BY-NC-ND 4.0 (fdr.uni-hamburg.de record 707, DOI 10.25592/uhhfdm.707)
+  # -> nc (MCP default-excluded). EXPECTED FIRST SYNC (~137 MB clone): 15
+  # docs / 75,440 passages; the stray Alpheios export skips by rule.
+  # Project ended, export effectively frozen -> manual.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
