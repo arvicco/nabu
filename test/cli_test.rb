@@ -1780,10 +1780,17 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/^alpha — The Alphaist — first letters, read whole\.$/, out, "persona verbatim")
       assert_match(/The alpha lane\./, out, "the membership rationale (desc)")
-      assert_match(/members \(3\):/, out, "every member the desk tags")
+      assert_match(/members \(4\):/, out, "every member the desk tags")
       assert_match(/red\s+wired\s+docs=/, out, "a wired, held member shows its counts")
       assert_match(/green\s+wired\s+docs=/, out)
       assert_match(/blue\s+unwired\s+nothing held yet/, out, "a disabled, unheld member says so")
+      # P46-r1 (owner report off the live hebrew card: "why is bridging
+      # suddenly 'unwired'?"): a kind: module row is PERMANENTLY wired: false
+      # by registry invariant — nothing to flip, so the axis card must name
+      # its nature, never imply an adapter awaiting first-sync verification.
+      assert_match(/meter\s+module\s+nothing held yet/, out,
+                   "a feature module wears its kind, not the unwired label")
+      refute_match(/meter\s+unwired/, out)
       assert_match(/gold lemmas:/, out, "the aggregate gold-lemma coverage line")
       assert_match(/commands: nabu list --axis alpha · nabu sync alpha/, out, "the shipped affordances")
     end
@@ -2134,6 +2141,8 @@ class CLITest < Minitest::Test
       assert_match(/^red\s+parse-only\s+\+2 added/, out, "enabled member red synced")
       assert_match(/^green\s+parse-only\s+\+2 added/, out, "enabled member green synced")
       assert_match(/^skipped \(unwired\): blue$/, out, "disabled member named on one skip line")
+      assert_match(/^skipped \(module — sync directly\): meter$/, out,
+                   "a module is skipped under its nature, never as unwired (P46-r1)")
       refute_match(/^blue\s+parse-only/, out, "a disabled axis member is never synced")
       refute_match(/^gold\s+parse-only/, out, "a member of another axis is not pulled in")
     end
@@ -7114,6 +7123,7 @@ class CLITest < Minitest::Test
         "red" => { axes: %w[alpha], wired: true },
         "green" => { axes: %w[alpha], wired: true },
         "blue" => { axes: %w[alpha], wired: false },
+        "meter" => { axes: %w[alpha], wired: false, kind: "module" },
         "gold" => { axes: %w[beta], wired: true }
       }
       sources = +""
@@ -7122,8 +7132,9 @@ class CLITest < Minitest::Test
         FileUtils.mkdir_p(dir)
         File.write(File.join(dir, "#{slug}-one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
         File.write(File.join(dir, "#{slug}-two.txt"), "Odyssey\nἄνδρα\n")
+        kind = spec[:kind] ? "  kind: #{spec[:kind]}\n" : ""
         sources << "#{slug}:\n  adapter: TestAdapter\n  wired: #{spec[:wired]}\n  " \
-                   "sync_policy: auto\n  axes: [#{spec[:axes].join(', ')}]\n"
+                   "sync_policy: auto\n  axes: [#{spec[:axes].join(', ')}]\n#{kind}"
       end
       File.write(File.join(root, "axes.yml"), <<~YAML)
         alpha:
