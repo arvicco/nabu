@@ -63,6 +63,22 @@ class ZipFetchTest < Minitest::Test
     refute result.not_modified
   end
 
+  # P46-6 (the starling second package): a sibling fetch's subtree declared
+  # via keep: survives this zip's retention sweep — sync! passes it through
+  # to the constructor exactly like the streaming path does.
+  def test_sync_keep_shields_a_sibling_subtree_from_the_attic_sweep
+    kart = File.join(@dir, "kart", "kartet.dbf")
+    FileUtils.mkdir_p(File.dirname(kart))
+    File.write(kart, "sibling package")
+    stub_zip({ "a.json" => "alpha" })
+    seen = nil
+    result = Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, keep: ["kart"],
+                                  guard: ->(doomed) { seen = doomed })
+    assert_empty seen, "the kept subtree must never be offered as doomed"
+    assert_empty result.atticked
+    assert_equal "sibling package", File.read(kart), "the kept subtree survives the sweep"
+  end
+
   def test_second_fetch_sends_if_modified_since_and_304_means_untouched
     stub_zip({ "a.json" => "alpha" })
     first = sync!
