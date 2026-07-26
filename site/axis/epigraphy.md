@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these seventeen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 July 2026)</span> |
 |---|---|---|---|---|
 | `papyri-ddbdp` | papyri | attribution | wired · manual | 61,414 docs / 921,611 passages |
 | `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
@@ -33,7 +33,7 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
 | `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
-| `edr` | inscriptions | attribution | not yet wired | nothing held yet |
+| `edr` | inscriptions | attribution | not yet wired | not synced yet |
 
 ## The desk's instruments
 
@@ -96,4 +96,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-one research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

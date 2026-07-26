@@ -21,7 +21,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 July 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
@@ -58,4 +58,4 @@ With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers
 - **“Who sang of Ragusa in Latin?”** → `nabu_search ragusa (lang: lat)` — Croatian Latin verse from the CroALa shelf (live-verified 2026-07-25): Filelfo's 1470 Ragusaeis (AFFECTUS RAGVSA TVAE CLARISSIMA LAVDI) and Palmotić's carmina — the medieval-Latin edge of the continuum, positionally cited (d1.d2.l198) for nabu_show.
 ---
 
-One of the [twenty-one research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
