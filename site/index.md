@@ -34,11 +34,12 @@ draws from.
 
 ## Find your desk
 
-The collection is organized as twenty-one **research desks** — scholarly hats,
+The collection is organized as twenty-two **research desks** — scholarly hats,
 each gathering the shelves, instruments and terminal setup for one tradition.
 Find yours:
 
 - **[The Classicist]({{ '/axis/classical/' | relative_url }})** — Greek and Latin letters read whole, Homer to the late grammarians.
+- **[The Romanist]({{ '/axis/romance/' | relative_url }})** — the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours.
 - **[The Papyrologist-Epigraphist]({{ '/axis/epigraphy/' | relative_url }})** — reads what survives on stone, sherd, papyrus and tablet, lacunae and all.
 - **[The Slavicist]({{ '/axis/slavic/' | relative_url }})** — Cyril and Methodius to the damaskini, canon to vernacular.
 - **[The Germanicist]({{ '/axis/germanic/' | relative_url }})** — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches.
@@ -48,9 +49,12 @@ Find yours:
 - **[The Biblical scholar]({{ '/axis/biblical/' | relative_url }})** — one text across Hebrew, Greek, Latin, Syriac, Coptic and English witnesses.
 - **[The Hebraist]({{ '/axis/hebrew/' | relative_url }})** — Masoretic vowels, Qumran consonants, the Aramaic of the Targums.
 - **[The Syriacist]({{ '/axis/syriac/' | relative_url }})** — the Peshitta and the estrangela bookshelf.
+- **[The Ethiopicist]({{ '/axis/ethiopic/' | relative_url }})** — Aksum to the scriptoria: Enoch, Jubilees, and the Geʿez Bible.
+- **[The Arabist]({{ '/axis/arabic/' | relative_url }})** — the Islamicate library whole, Quran and hadith to falsafa and adab.
 - **[The Hittitologist]({{ '/axis/hittite/' | relative_url }})** — Anatolia in cuneiform, KBo and KUB by tablet and line.
 - **[The Assyriologist]({{ '/axis/cuneiform/' | relative_url }})** — Sumerian, Akkadian, Ugaritic, Hittite: the tablet world entire.
 - **[The Egyptologist]({{ '/axis/egyptian/' | relative_url }})** — hieroglyphs to Coptic, one language across four millennia of script.
+- **[The Iranologist]({{ '/axis/iranian/' | relative_url }})** — the Avesta to the Achaemenid inscriptions, Old Iranian liturgy toward Middle Persian.
 - **[The Indologist]({{ '/axis/indic/' | relative_url }})** — Veda to sastra, the Sanskrit library and its instruments.
 - **[The Buddhologist]({{ '/axis/buddhist/' | relative_url }})** — the dharma across the Pali, Sanskrit and Chinese canons.
 - **[The Sinologist]({{ '/axis/sinitic/' | relative_url }})** — the classical Chinese written world and its phonological deep past.

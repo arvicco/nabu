@@ -49,8 +49,8 @@ rake fixtures:refresh[source]           # re-snapshot upstream sample (network, 
 2. `rake fixtures:refresh[<source>]` won't exist yet — manually snapshot 2–3 small real documents into `test/fixtures/<source>/`, with a `README.md` noting retrieval date and URL.
 3. Write `test/adapters/<source>_test.rb`: include conformance suite, add source-specific assertions (expected URNs, passage counts, a known text snippet).
 4. Implement `lib/nabu/adapters/<source>.rb`, composing an existing parser family if one fits. If a new parser family is needed, it gets its own class + tests first.
-5. Register in `config/sources.yml` (`enabled: false` until first real sync is verified).
-6. Run a real `bin/nabu sync <source>` manually; eyeball `nabu status` counts and 5 random passages (`nabu show`); then flip `enabled: true`.
+5. Register in `config/sources.yml` (`wired: false` until first real sync is verified).
+6. `bin/nabu enable <source>` (the box-local profile step — sync refuses un-enabled sources), then run a real `bin/nabu sync <source>` manually; eyeball `nabu status` counts and 5 random passages (`nabu show`); then flip `wired: true`.
 7. Update `docs/02-sources.md` status column.
 
 ## Claude Code working agreements
