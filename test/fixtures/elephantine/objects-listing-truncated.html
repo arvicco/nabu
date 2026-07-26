@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+<title>Texts &amp; Scripts from Elephantine: Objects</title>
+<link href="../elephantine.css" rel="stylesheet" type="text/css" />
+<link href="../einbinden/tablesorter-master/css/theme.jui.css" rel="stylesheet">
+<script type="text/javascript" src="../programme/jquery/js/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="../programme/jquery/js/jquery-ui-1.8.1.custom.min.js"></script>
+<script type="text/javascript" src="../einbinden/tablesorter-master/js/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="../einbinden/tablesorter-master/js/jquery.tablesorter.widgets.js"></script>
+<script type="text/javascript">
+<!--
+//http://stackoverflow.com/questions/15367481/jquery-click-toggle-animation
+
+$(function(){
+  $('table').tablesorter({
+    // options here
+	//theme:'jui'
+  });
+});
+
+-->
+</script>
+<script type="text/javascript">
+/*
+$(document).ready(function() {
+
+$('.regions').select2({
+    placeholder: "all"
+});
+		$('.towns').select2({
+    placeholder: "all"
+});
+		$('.deitystag').select2({
+    placeholder: "all"
+});
+        $('.deitygroups').select2({
+    placeholder: "all"
+});
+		$('.festivals').select2({
+    placeholder: "all"
+});
+		$('.suppliers').select2({
+    placeholder: "all"
+});
+		$('.personnels').select2({
+    placeholder: "all"
+});
+		$('.others').select2({
+    placeholder: "all"
+});
+
+});
+
+
+document.onreadystatechange = function () {
+  var state = document.readyState
+  if (state == 'complete') {
+         document.getElementById('interactive');
+         document.getElementById('load').style.visibility="hidden";
+  }
+}
+*/
+</script>
+<script type="text/javascript" src="../einbinden/highslide/highslide-with-html.js"></script>
+<link rel="stylesheet" type="text/css" href="../einbinden/highslide/highslide.css" />
+<script type="text/javascript">
+    // override Highslide settings here
+    // instead of editing the highslide.js file
+    hs.graphicsDir = '../einbinden/highslide/graphics/';
+	hs.captionOverlay.position = "rightpanel";
+	hs.captionOverlay.width = "220px";
+	
+	hs.outlineType = 'rounded-white';
+</script>
+<link rel="stylesheet" href="../css/font-awesome/css/all.css">
+<style type="text/css">
+<!--
+.zelle li{
+	font-family: noto;
+	font-size: 0.8em;
+	font-weight: normal;
+	margin-left: -24px;
+	margin-bottom: 4px;
+	margin-top: 0px;
+	line-height: 0.83em;
+}
+
+.filtertag {
+	position: relative;
+	font-family: noto;
+	font-size: 0.9em;
+	font-style: normal;
+	line-height: 1.1em;
+	font-weight: normal;
+	color: #000;
+	text-decoration: none;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #999;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #999;
+	background-color: #E8E1DA;
+	border-top-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-left-style: solid;
+	border-top-color: #999;
+	border-left-color: #999;
+	margin: 5px;
+	padding: 4px;
+	float: left;
+	display: inline-block;
+}
+
+.button {
+        font-family: noto;
+		display: inline-block;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        color: #ffffff;
+        background-color:RGB(0,53,97);
+        border-radius: 6px;
+        outline: 1px;
+		box-shadow: 2px 2px 4px #AAA;
+      }
+
+.show {
+	font-family: noto;
+	font-size: 0.75em;
+	font-style: normal;
+	line-height: 1em;
+	padding:3px;
+}
+-->
+</style>
+</head>
+<body>
+<div id="titelzeile1">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td width="40">&nbsp;</td>
+      <td height="80"><div id="logo"><a href="../index.html" target="_self"><img src="../layout/Elepantine_Signet_4x3_C.svg" alt="" height="70" border="0" /></a></div></td>
+      <td width="40" align="center"><a href="../index.html" title="Information about the Project" target="_self" class="navigation1">Home</a></td>
+      <td width="40" align="center"><a href="../project/" title="Information about the Project" target="_self" class="navigation1">Project</a></td>
+      <td width="40" align="center"><a href="../search/" title="The Search-Page for the Textual Objects studied by the Project" class="navigation1">Search</a></td>
+      <td width="40" align="center"><a href="../objects/" title="The Textual Objects studied by the Project" class="navigation1_aktiv">Objects</a></td>
+      <td width="40" align="center"><a href="../places/" title="Ancient Places attested in Elephantine" class="navigation1">Places</a></td>
+      <td width="200" align="center"><a href="../persons/" title="Ancient Persons attested in Elephantine" class="navigation1">Persons & Deities</a></td>
+      <td width="100" align="center">&nbsp;</td>
+    </tr>
+  </table>
+  <div id="filter">
+  <form action="index.php" method="post" name="searchtexts" target="_self" id="searchtexts">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="40" valign="top">&nbsp;</td>
+        <td width="200" valign="top"><p style="margin:0px"><strong>Search in Objects</strong><br />
+<span style="font-size:0.75em">23 Results of 10745 Data Sets</span></p></td>
+        <td width="400" valign="top"><p style="margin:0px">
+          <input name="searchtext" type="text" class="formSearch" id="searchtext" value="" size="60" />
+          <br />
+          <span style="font-size:0.75em">(submit with enter)</span></p></td>
+        <td width="150" valign="middle"><p><a href="objects_list.php" style="color:RGB(0,53,97)" title="List of Objects"><i class="fas fa-list fa-2x"></i></a>&nbsp;&nbsp;│&nbsp;&nbsp;<a href="objects_preview.php" style="color:#999" title="Picture Preview of Objects"><i class="fas fa-th fa-2x"></i></a></p></td>
+        <td width="200" valign="middle"><p><a class="button" href="objects_search.php" title="Filter the Data" onclick="return hs.htmlExpand(this, { objectType: 'iframe', width: 880} )">Filter Objects</a></p></td>
+        <td valign="top" class="show">For reasons of loading speed, we limit the display of results to 500.
+            <br />
+            <select name="showresults" id="showresults" title="showresults" onchange="document.searchtexts.submit();" style="width:70px; margin-top:8px">
+              <option value="500" >500</option>
+    <option value="1000" >1000</option>
+    <option value="2000" >2000</option>
+    <option value="15000" SELECTED>all (slow)</option>
+</select>
+          </td>
+        <td width="80">&nbsp;</td>
+        </tr>
+    </table>
+  </form>
+</div>
+</div>
+  <div id="inhalt_breit">
+  <h3>Active Filters</h3>
+  <p>
+	     <div class="filtertag">showresults: 15000 <a href="index.php?dt=showresults" style="color: #B1783D; text-decoration:none"><i class="fas fa-times"></i></a></div>
+	     <div class="filtertag">searchtext: marriage <a href="index.php?dt=searchtext" style="color: #B1783D; text-decoration:none"><i class="fas fa-times"></i></a></div>
+	 </p>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+     <thead id="tabellenkopf">
+      <tr>
+        <td colspan="40" align="center" class="zelle" style="background-color:RGB(0,53,97); font-size:0.75em; color:#F6F6F6">Click on the column title to sort the corresponding column in ascending or descending order.</td>
+        </tr>
+      <tr bgcolor="#F1F1F1">
+        <td width="40" valign="top" class="zelle"><strong>Text</strong></td>
+        <td width="180" valign="top" class="zelle"><strong>Inv.No.</strong></td>
+        <td valign="top" class="zelle"><strong>Modern Title</strong></td>
+        <td valign="top" class="zelle"><strong>Summary of content</strong></td>
+                                                                                                                                                                                                                                                                                                      </tr>
+      <tr>
+        <td height="2" colspan="40" bgcolor="#333333"></td>
+        </tr>
+      </thead>
+      <tbody>
+              <tr>
+            <td align="center" valign="top" class="zelle"></td>
+            <td valign="top" class="zelle"><a href="object.php?o=100275" class="textlink" target="_self">Pap. Berlin P. 13600</a></td>
+            <td valign="top" class="zelle">Marriage contract</td>
+            <td valign="top" class="zelle">Marriage contract</td>
+                                                                                                                                    			                                                                                                                                                                                                                                                                                                          </tr>
+              <tr>
+            <td align="center" valign="top" class="zelle"></td>
+            <td valign="top" class="zelle"><a href="object.php?o=100349" class="textlink" target="_self">Pap. Berlin P. 23697</a></td>
+            <td valign="top" class="zelle">marriage contract</td>
+            <td valign="top" class="zelle">Fragment of a marriage contract of Petamounis, son of [///], possibly a pilot. The name of the wife is lost.</td>
+                                                                                                                                    			                                                                                                                                                                                                                                                                                                          </tr>
+              <tr>
+            <td align="center" valign="top" class="zelle"><a href="../texts/view.php?t=100351" style="color:RGB(0,53,97)" title="View the Text" onclick="return hs.htmlExpand(this, { objectType: 'iframe', width: 860} )"><i class="far fa-file-code"></i></a></td>
+            <td valign="top" class="zelle"><a href="object.php?o=100351" class="textlink" target="_self">Pap. Berlin P. 23698</a></td>
+            <td valign="top" class="zelle">marriage contract</td>
+            <td valign="top" class="zelle">Marriage contract of a woman for a man. The content remains unclear due to the fragmentaray condition.</td>
+                                                                                                                                    			                                                                                                                                                                                                                                                                                                          </tr>
+              <tr>
+            <td align="center" valign="top" class="zelle"><a href="../texts/view.php?t=100449" style="color:RGB(0,53,97)" title="View the Text" onclick="return hs.htmlExpand(this, { objectType: 'iframe', width: 860} )"><i class="far fa-file-code"></i></a></td>
+            <td valign="top" class="zelle"><a href="object.php?o=100449" class="textlink" target="_self">Pap. Berlin P. 13593</a></td>
+            <td valign="top" class="zelle">marriage contract</td>
+            <td valign="top" class="zelle">Marriage contract between Petosiris, son of Patseous and his mother Tachnumis, and Sennesis, daughter of Petepnebtous and her mother Telaias. The text contains agreements concerning the dowry, a detailed list of the property which she will bring with her, agreements for inheritance and divorce. With autographic witness signatures.</td>
+                                                                                                                                    			                                                                                                                                                                                                                                                                                                          </tr>
+              <tr>
+            <td align="center" valign="top" class="zelle"><a href="../texts/view.php?t=100461" style="color:RGB(0,53,97)" title="View the Text" onclick="return hs.htmlExpand(this, { objectType: 'iframe', width: 860} )"><i class="far fa-file-code"></i></a></td>
+            <td valign="top" class="zelle"><a href="object.php?o=100461" class="textlink" target="_self">Pap. Berlin P. 13614</a></td>
+            <td valign="top" class="zelle">Marriage contract</td>
+            <td valign="top" class="zelle">Marriage contract of Hapertais, son of Teos and his mother Taiu-nacht, with Seniah, daughter of Pa-anch-i-ı͗r-iy and her mother Tetesatis. With autographic witness signatures.</td>
+                                                                                                                                    			                                                                                                                                                                                                                                                                                                          </tr>
+              <tr>
+            <td align="center" valign="top" class="zelle"></td>
+            <td valign="top" class="zelle"><a href="object.php?o=100473" class="textlink" target="_self">Pap. Berlin P. 13601</a></td>
+            <td valign="top" class="zelle">release document</td>
+            <td valign="top" class="zelle">Peteharoeris, son of Petosiris, and Osoroeris, son of Petosiris, are confirmed by their mother Senesis, daughter of Petepnebtous and her mother Telaias, that they have released all "female things" which are listed in her (Senesis') marriage contract (= Pap Berlin P. 13593).</td>
+                                                                                                                                    			                                                                                                                                                                                                                                                                                                          </tr>
+              <tr>
+            <td align="center" valign="top" class="zelle"><a href="../texts/view.php?t=2881" style="color:RGB(0,53,97)" title="View the Text" onclick="return hs.htmlExpand(this, { objectType: 'iframe', width: 860} )"><i class="far fa-file-code"></i></a></td>
+            <td valign="top" class="zelle"><a href="object.php?o=2881" class="textlink" target="_self">Ostr. Berlin P. 10774</a></td>
+            <td valign="top" class="zelle">contract of marriage</td>
+            <td valign="top" class="zelle">contract between Philotera and Akesandros concerning arrangements of living together in marriage
+
+</td>
+                                                                                                                                    			                                                                                                                                                                                                                                                                                                          </tr>
+              <tr>
+            <td align="center" valign="top" class="zelle"><a href="../texts/view.php?t=307138" style="color:RGB(0,53,97)" title="View the Text" onclick="return hs.htmlExpand(this, { objectType: 'iframe', width: 860} )"><i class="far fa-file-code"></i></a></td>
+            <td valign="top" class="zelle"><a href="object.php?o=307138" class="textlink" target="_self">Pap. Berlin P. 13500</a></td>
+            <td valign="top" class="zelle">marriage contract</td>
+            <td valign="top" class="zelle">Marriage contract between Herakleides, a free Temnian, and Demetria, a free woman of Kos, daughter of Leptines und the mother Philotis, also from Kos, who brings a dowry consisting of clothing and jewelry worth 1000 drachmas. Further legal arrangements for ill behavior on both sides and sanctions are set out. The contract is signed and sealed by 6 witnesses.
+
+</td>
+                                                                                                                                    			                                                                                                                                                                                                                                                                                                          </tr>
+              
+            </tbody>
+    </table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</div>
+<div id="footer">
+	<div id="footer-container">
+    <div class="footer-item"><a href="../index.html" target="_self">Home</a></div>
+    <div class="footer-item"><a href="../project/index.html#Contact" target="_self">Contact</a></div>
+    <div class="footer-item"><a href="../project/legal_notice.html" target="_self">Legal Notice & Privacy</a></div>
+    <div class="footer-item"><a href="https://www.datalino.de" target="_self">Made by datalino 2023</a></div>
+    <div class="footer-item" style="float:right; margin-right:3vw;"><a href="https://erc.europa.eu/" title="" target="_blank"><img src="../layout/LOGO_ERC-FLAG_EU__lang___inv.png" height="60" border="0"/></a></div>
+    <div class="footer-item" style="float:right;"><a href="https://www.smb.museum/home/" title="" target="_blank"><img src="../layout/Logo_SMB_PMS_SC_©SPK_inv weiss.png" height="40" border="0" align="middle" /></a></div>
+</div>
+</div>
+</body>
+</html>
