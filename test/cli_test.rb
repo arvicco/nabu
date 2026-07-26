@@ -207,6 +207,19 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P46-r6 (owner report 2026-07-26, off a WOLD hit: "definition carries no
+  # language code(s). It should"): the define header names the entry's
+  # language, the etym-entry style — obvious for LSJ, load-bearing for the
+  # multi-language shelves (WOLD's 41 vocabularies, the recon shelves).
+  def test_define_header_carries_the_entry_language_code
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[define *zima]) }
+      assert_nil status
+      assert_match(/\*zima \[sla-pro\] — /, out,
+                   "the headword line names the entry's language before the shelf title")
+    end
+  end
+
   def test_define_reflexes_are_capped_by_default
     with_recon_shelf do |config|
       out, _err, status = with_config(config) { run_cli(%w[define *zima]) }
@@ -683,7 +696,8 @@ class CLITest < Minitest::Test
     with_iecor_shelf do |config|
       out, _err, status = with_config(config) { run_cli(%w[define kerd-]) }
       assert_nil status
-      assert_match(/^\*k̑erd- — IE-CoR/, out)
+      assert_match(/^\*k̑erd- \[ine\] — IE-CoR/, out,
+                   "the header carries the entry language (P46-r6 format)")
       assert_match(/cognate set 6458/, out)
       assert_match(/Proto-Indo-European/, out)
     end
