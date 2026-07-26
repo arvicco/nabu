@@ -1,0 +1,37 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Beta maṣāḥǝft Works ships one TEI file per work under thousand-range
+# directories plus new/. Four records + repo.xml are WHOLE byte-identical
+# upstream copies; LIT2711Mark.xml is the one trim (chapters 1-2 of 16,
+# structurally intact — teiHeader + edition div + closers). adapter_test is
+# null — the source-specific test pins ids/counts/snippets a full refetch
+# would not false-fail.
+source: betamasaheft-works
+adapter_test:
+retrieved: 2026-07-26
+files:
+  - path: 2001-3000/LIT2711Mark.xml
+    url: https://raw.githubusercontent.com/BetaMasaheft/Works/master/2001-3000/LIT2711Mark.xml
+    whole: false
+    trim: teiHeader + bibliography div + edition chapters 1-2 + appended closers (212 KB -> 26 KB; upstream carries 16 chapters / 678 numbered <l>)
+  - path: 2001-3000/LIT2229RuthBo.xml
+    url: https://raw.githubusercontent.com/BetaMasaheft/Works/master/2001-3000/LIT2229RuthBo.xml
+    whole: true
+    trim: none
+  - path: 2001-3000/LIT2006Mazmur.xml
+    url: https://raw.githubusercontent.com/BetaMasaheft/Works/master/2001-3000/LIT2006Mazmur.xml
+    whole: true
+    trim: none
+  - path: 1001-2000/LIT1882MarkGo.xml
+    url: https://raw.githubusercontent.com/BetaMasaheft/Works/master/1001-2000/LIT1882MarkGo.xml
+    whole: true
+    trim: none
+  - path: 1-1000/LIT0017MMDZ.xml
+    url: https://raw.githubusercontent.com/BetaMasaheft/Works/master/1-1000/LIT0017MMDZ.xml
+    whole: true
+    trim: none
+  - path: repo.xml
+    url: https://raw.githubusercontent.com/BetaMasaheft/Works/master/repo.xml
+    whole: true
+    trim: none
