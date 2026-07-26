@@ -216,6 +216,27 @@ class NormalizeTest < Minitest::Test
     assert_equal "grinme", form("grínme", "gmh")
   end
 
+  def test_middle_low_german_folds_the_ren_lemma_notation
+    # P46-5 (the ReN census — all 1,333,166 non-null anno lemmas): homograph
+    # superscripts ¹–⁷ with optional variant tails, the Lm superscript
+    # vowels ᵉⁱ, the ° name mark, and the ()/[] optional-letter brackets
+    # all survive the generic fold; every value below is a real deposit
+    # lemma. Long vowels (ē, ê, ȫ) fall to the generic Mn strip.
+    assert_equal "wesen", form("wēsen²", "gml")
+    assert_equal "de,de,dat", form("dê¹,dê¹,dat²A", "gml"),
+                 "the ²A homograph+variant tail drops whole; the comma chain is upstream's own value"
+    assert_equal "en", form("êⁱn¹", "gml")
+    assert_equal "vorlenen", form("vorlêᵉnen", "gml")
+    assert_equal "marcus", form("marcus°", "gml")
+    assert_equal "wente", form("went(e)", "gml"), "optional-letter brackets drop, letters stay"
+    assert_equal "saterstdach", form("sāter(s[t])dach", "gml")
+    assert_equal "achte", form("achte¹ᵃ", "gml")
+    # the diplomatic SURFACE has no ſ (censused: zero corpus-wide) and its
+    # combining letters fall to the generic strip, the gmh situation
+    assert_equal "ghonen", form("ghoͤnen", "gml")
+    assert_equal "tu", form("tuͦ", "gml")
+  end
+
   def test_reconstruction_shelves_fold_modifier_letters_to_ascii
     # P14-10 (conventions.md §9): the phonetic superscripts ʰ (U+02B0) → h and
     # ʷ (U+02B7) → w — the ONLY Unicode modifier letters (Lm) in the three
