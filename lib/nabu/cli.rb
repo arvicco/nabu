@@ -418,7 +418,10 @@ module Nabu
       view = focus_view(config, registry, catalog: db)
       if slug.empty?
         warn_focus_drift(view)
-        say status_report(view.registry, db, ledger, slug)
+        # An EMPTY --disabled complement renders no table (the "No sources
+        # registered." banner belongs to a truly empty registry, not to an
+        # exhausted menu — the stderr footer carries the all-enabled state).
+        say status_report(view.registry, db, ledger, slug) unless view.disabled && view.registry.slugs.empty?
         # `status --axis` is SCOPED (P44-r1 addendum): the grouped table, then an
         # enable hint for the axes' not-yet-enabled members — never the
         # whole-library `enabled:` footer. Bare status keeps that footer.
@@ -608,7 +611,11 @@ module Nabu
         view = focus_view(config, registry, catalog: catalog)
         warn_focus_drift(view)
         rows = scoped_census(query.census, view)
-        print_census(rows, options[:long] ? query.descriptions : nil)
+        if view.disabled
+          print_disabled_census(view, rows)
+        else
+          print_census(rows, options[:long] ? query.descriptions : nil)
+        end
         # The hidden side here is CENSUS rows the view dropped (catalog-backed,
         # so orphan slugs the registry no longer carries still count).
         print_focus_note(view, query.census.map(&:slug) - rows.map(&:slug))
@@ -3158,6 +3165,25 @@ module Nabu
       # +descriptions+ (P24-0, --long): { slug => dossier description } — one
       # line under each source that has one (zero fields suppressed, the
       # house rule; the dossier shelf is the census's own metadata).
+      # The --disabled census (P46-r3 follow-up, owner report: `list
+      # --disabled` printed the empty-catalog banner while `status
+      # --disabled` showed the row): the menu is REGISTRY-driven — a
+      # never-synced complement row is the norm there, not an absence.
+      # Census fragments where the catalog holds the slug; an honest
+      # per-row "nothing held yet" where it does not. An empty complement
+      # prints no table (the stderr footer carries the all-enabled state).
+      def print_disabled_census(view, census_rows)
+        slugs = view.registry.slugs
+        return if slugs.empty?
+
+        by_slug = census_rows.to_h { |row| [row.slug, row] }
+        width = slugs.map(&:length).max
+        slugs.each do |slug|
+          row = by_slug[slug]
+          say "#{slug.ljust(width)}  #{row ? census_fragments(row).join('  ') : 'nothing held yet'}"
+        end
+      end
+
       def print_census(rows, descriptions = nil)
         return say("nothing held yet — run nabu sync") if rows.empty?
 
