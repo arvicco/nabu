@@ -1354,6 +1354,49 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P46-r3 (owner: "we need nabu status/list --disabled in addition to
+  # --all"): the browse-the-menu view — ONLY the rows enable would add.
+  def test_status_disabled_shows_the_not_enabled_complement
+    with_axis_corpus do |config|
+      write_profile(config, "reference") # → lex enabled; `shelf` (a source) not
+      out, err, status = with_config(config) { run_cli(%w[status --disabled]) }
+      assert_nil status
+      assert_match(/^shelf\s/, out, "the not-enabled source IS the view")
+      refute_match(/^lex\s/, out, "an enabled source is hidden")
+      refute_match(/^library\s/, out, "a shelf is always enabled — never in the complement")
+      assert_match(/not enabled: 1 row — nabu enable/, err, "the on-ramp footer")
+    end
+  end
+
+  def test_status_disabled_with_everything_enabled_says_so
+    with_axis_corpus do |config|
+      write_profile(config, "classical", "reference", "slavic")
+      out, err, status = with_config(config) { run_cli(%w[status --disabled]) }
+      assert_nil status
+      refute_match(/^(shelf|lex|library)\s/, out, "nothing to show — the complement is empty")
+      assert_match(/everything registered is enabled on this box/, err)
+    end
+  end
+
+  def test_status_refuses_all_with_disabled
+    with_axis_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[status --all --disabled]) }
+      refute_nil status, "contradictory flags must refuse"
+      assert_match(/--all and --disabled are exclusive/, err)
+    end
+  end
+
+  def test_list_disabled_shows_the_not_enabled_complement
+    with_axis_corpus do |config|
+      write_profile(config, "reference")
+      out, err, status = with_config(config) { run_cli(%w[list --disabled]) }
+      assert_nil status
+      assert_match(/^shelf\s/, out, "the not-enabled source's census row shows")
+      refute_match(/^lex\s/, out, "an enabled source is hidden")
+      assert_match(/not enabled: 1 row — nabu enable/, err)
+    end
+  end
+
   # P44-r3b: an ABSENT config on a box that already built a library MIGRATES
   # once — every synced source is written out and announced, so no visibility is
   # silently lost. After migration the enabled set is exactly the synced sources,
