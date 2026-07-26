@@ -1,0 +1,23 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# DillmannData ships one TEI <entry> per file under numbered directories
+# plus new/ and new1/. All three fixtures are WHOLE byte-identical upstream
+# copies. adapter_test is null — the source-specific test pins ids/
+# headwords/glosses a full refetch would not false-fail.
+source: dillmann
+adapter_test:
+retrieved: 2026-07-26
+files:
+  - path: 1/L3c8821a46d56420283fc3bdedc1c341a.xml
+    url: https://raw.githubusercontent.com/BetaMasaheft/DillmannData/master/1/L3c8821a46d56420283fc3bdedc1c341a.xml
+    whole: true
+    trim: none
+  - path: 1/L2d417be91261494990015aae6b9b5d81.xml
+    url: https://raw.githubusercontent.com/BetaMasaheft/DillmannData/master/1/L2d417be91261494990015aae6b9b5d81.xml
+    whole: true
+    trim: none
+  - path: new1/L844cd3b8849f4c16b5f3390e611a4f7b.xml
+    url: https://raw.githubusercontent.com/BetaMasaheft/DillmannData/master/new1/L844cd3b8849f4c16b5f3390e611a4f7b.xml
+    whole: true
+    trim: none

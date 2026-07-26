@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-model href="https://raw.githubusercontent.com/BetaMasaheft/Schema/master/tei-betamesaheft.rng" 
+schematypens="http://relaxng.org/ns/structure/1.0"?><?xml-model href="https://raw.githubusercontent.com/BetaMasaheft/Schema/master/tei-betamesaheft.rng" 
+type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?><TEI xmlns="http://www.tei-c.org/ns/1.0" type="work" xml:lang="en" xml:id="LIT2711Mark">
+   <teiHeader xml:base="https://betamasaheft.eu/">
+      <fileDesc>
+         <titleStmt>
+            <title xml:lang="gez" xml:id="t1">ብስራተ፡ ማርቆስ፡</title>
+            <title xml:lang="gez" corresp="#t1" type="normalized">Bǝsrāta Mārqos</title>
+            <title xml:lang="en" corresp="#t1" type="main">Gospel of Mark</title>
+            <title corresp="#t1" type="short">Mk</title>
+            <editor role="generalEditor" key="AB"/>
+            <funder>Akademie der Wissenschaften in Hamburg</funder>
+         </titleStmt>
+         <publicationStmt>
+            <authority>Hiob-Ludolf-Zentrum für Äthiopistik</authority>
+            <publisher>Die Schriftkultur des christlichen Äthiopiens und Eritreas: Eine multimediale Forschungsumgebung / Beta maṣāḥǝft</publisher>
+            <pubPlace>Hamburg</pubPlace>
+            <availability>
+               <licence target="http://creativecommons.org/licenses/by-sa/4.0/">
+                 
+                                    This file is licensed under the Creative Commons
+                                    Attribution-ShareAlike 4.0. 
+               </licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <p>Work of the literatures of Ethiopia and Eritrea</p>
+         </sourceDesc>
+         
+      </fileDesc>
+      <encodingDesc>
+         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="https://raw.githubusercontent.com/BetaMasaheft/Documentation/master/prefixDef.xml">
+            <xi:fallback>
+               <p>Definitions of prefixes used.</p>
+            </xi:fallback>
+         </xi:include>
+      </encodingDesc>
+      <profileDesc>
+         <langUsage><language ident="en">English</language><language ident="gez">Gǝʿǝz</language></langUsage>
+         <textClass>
+            <keywords scheme="#ethioauthlist">
+               <term key="Bible"/>
+               <term key="NewTestament"/>
+            </keywords>
+         </textClass>
+      </profileDesc>
+      <revisionDesc>
+         <change who="PL" when="2016-07-26">Created XML record from Ethio authority google spreadsheet</change>
+         <change when="2017-02-10" who="MV">Added title and keywords</change>
+         <change when="2025-06-05" who="ES">added text</change>
+      </revisionDesc>
+   </teiHeader>
+   <text xml:base="https://betamasaheft.eu/">
+      <body>
+         <div type="bibliography">
+            <!--Bǝsrāta Marqos-->
+               <listRelation>
+               <relation name="saws:formsPartOf" active="LIT2711Mark" passive="LIT1882MarkGo">
+                  </relation>
+            </listRelation>
+         </div>
+         <div type="edition" xml:lang="gez">
+   <note>Text of the EOTC printed Bible</note>
+   <div type="textpart" subtype="chapter" n="1" xml:id="chapter1">
+      <label>ምዕራፍ 1</label>
+      <ab>
+         
+         <l>በእንተ፡ ስብከተ፡ ዮሐንስ</l>
+         <l n="1">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=1"/>ቀዳሚሁ፡ ለወንጌለ፡ እግዚእነ፡ ኢየሱስ፡ ክርስቶስ። ወልደ፡ እግዚአብሔር፡ ሕያው።</l>
+         <l n="2">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=2"/>በከመ፡ ጽሑፍ፡ ውስተ፡ መጻሕፍተ፡ ነቢያት። ናሁ፡ አነ፡ እፌኑ፡ መልአክየ፡ ቅድመ፡ ገጽከ፡ ዘይጸይሕ፡ ፍኖተከ።</l>
+         <l n="3">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=3"/>ቃለ፡ ዐዋዲ፡ ዘይሰብክ፡ በገዳም፡ ወይብል። ጺሑአ፡ ፍኖተ፡ እግዚአብሔር፡ ወዐርዩ፡ መጽያሕቶ።</l>
+         <l n="4">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=4"/>ወሀሎ፡ ዮሐንስ፡ ያጠምቅ፡ በገዳም፡ ወይሰብክ፡ ጥምቀተ። ከመ፡ ይነስሑ፡ ወይትኀደግ፡ ሎሙ፡ ኀጢአቶሙ።</l>
+         <l n="5">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=5"/>ወየሐውሩ፡ ኀቤሁ፡ ኵሉ፡ ሰብአ፡ ይሁዳ፡ ወኢየሩሳሌም። ወያጠምቆሙ፡ ለኵሎሙ፡ በፈለገ፡ ዮርዳኖስ፡ እንዘ፡ ይትአመኑ፡ ኀጢአቶሙ።</l>
+         <l n="6">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=6"/>ወልብሱ፡ ለዮሐንስ፡ ኮነ፡ ዘጸጕረ፡ ገመል። ወቅናቱ፡ ዘአዲም፡ ውስተ፡ ሐቌሁ። ወሲሳዩ፡ አንበጣ፡ ወመዓረ፡ ጸደና።</l>
+         <l n="7">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=7"/>ወሰበከ፡ ወይቤ፡ ይመጽእ፡ እምድኅሬየ፡ ዘይጸንዕ፡ እምኔየ። ዘኢይደልወኒ፡ እድንን፡ ወእፍታሕ፡ ቶታነ፡ አሣእኒሁ፡ እምእገሪሁ።</l>
+         <l n="8">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=8"/>ወአንሰ፡ አጠምቀክሙ፡ በማይ። ወውእቱሰ፡ ያጠምቀክሙ፡ በመንፈስ፡ ቅዱስ።</l>
+         <l>በእንተ፡ ጥምቀት፡ ወተመክሮት፡ ዘእግዚእ፡ ኢየሱስ</l>
+         <l n="9">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=9"/>ወይእተ፡ አሚረ፡ መጽአ፡ እግዚእ፡ ኢየሱስ፡ እምናዝሬት፡ ዘገሊላ። ወአጥመቆ፡ ዮሐንስ፡ በፈለገ፡ ዮርዳኖስ።</l>
+         <l n="10">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=10"/>ወወፂኦ፡ እማይ፡ ርእየ፡ ተሠጥቀ፡ ሰማይ። ወወረደ፡ መንፈስ፡ ቅዱስ፡ ከመ፡ ርግብ፡ ወነበረ፡ ዲቤሁ።</l>
+         <l n="11">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=11"/>ወመጽአ፡ ቃል፡ እምሰማይ፡ ዘይብል፡ አንተ፡ ውእቱ፡ ወልድየ፡ ዘአፈቅር። ወኪያከ፡ ሠመርኩ።</l>
+         <l n="12">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=12"/>ወአውፅኦ፡ መንፈስ፡ ሶቤሃ፡ ገዳመ።</l>
+         <l n="13">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=13"/>ወነበረ፡ ሐቅለ፡ አርብዓ፡ መዓልተ፡ ወአርብዓ፡ ሌሊተ፡ ወያሜክሮ፡ ሰይጣን። ወነበረ፡ ምስለ፡ አራዊት፡ ወይትለአክዎ፡ መላእክት።</l>
+         <l>በእንተ፡ ዘከመ፡ አኀዘ፡ እግዚእ፡ ኢየሱስ፡ ይስብክ</l>
+         <l>ወይኅረይ፡ ቀደመተ፡ ሐዋርያተ</l>
+         <l n="14">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=14"/>ወእምድኅረ፡ አኀዝዎ፡ ወሞቅሕዎ፡ ለዮሐንስ። መጽአ፡ እግዚእ፡ ኢየሱስ፡ ገሊላ። ወሰበከ፡ ወንጌለ፡ መንግሥተ፡ እግዚአብሔር።</l>
+         <l n="15">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=15"/>ወይቤ፡ በጽሐ፡ ጊዜሁ፡ ወቀርበት፡ መንግሥተ፡ ሰማያት። ነስሑ፡ ወእመኑ፡ በወንጌል።</l>
+         <l n="16">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=16"/>ወእንዘ፡ የኀልፍ፡ መንገለ፡ ባሕረ፡ ገሊላ። ረከቦሙ፡ ለስምዖን፡ ወለእንድርያስ፡ እኁሁ። እንዘ፡ ያሤግሩ፡ ውስተ፡ ባሕር። እስመ፡ መሠግራነ፡ ዓሣ፡ እሙንቱ።</l>
+         <l n="17">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=17"/>ወይቤሎሙ፡ እግዚእ፡ ኢየሱስ፡ ንዑ፡ ትልዉኒ። ወእሬስየክሙ፡ መሠግራነ፡ ሰብእ።</l>
+         <l n="18">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=18"/>ወኀደጉ፡ መሣግሪሆሙ፡ ወተለውዎ፡ ሶቤሃ።</l>
+         <l n="19">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=19"/>ወኀሊፎ፡ እምህየ፡ ሕቀ። ረከቦሙ፡ ለያዕቆብ፡ ወለዮሐንስ፡ እኁሁ፡ ደቂቀ፡ ዘብዴዎስ። ወለሊሁኒ፡ ምስሌሆሙ፡ ውስተ፡ ሐመር። እንዘ፡ ይሠርዑ፡ ወያስተሣንዩ፡ መሣግሪሆሙ።</l>
+         <l n="20">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=20"/>ወጸውዖሙ፡ በጊዜሃ፡ ወኀደጉ፡ ዘብዴዎስሃ፡ አቡሆሙ፡ ምስለ፡ ዐሳቡ፡ ውስተ፡ ሐመር። ወሖሩ፡ ወተለውዎ።</l>
+         <l n="21">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=21"/>ወሖሩ፡ ቅፍርናሆም። ወቦአ፡ በሰንበት፡ ምኵራበ፡ ወአኀዘ፡ ይምሀሮሙ።</l>
+         <l n="22">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=22"/>ወአንከሩ፡ ምህሮቶ፡ እስመ፡ ከመ፡ መኰንን፡ ይሜህሮሙ። ወአኮ፡ ከመ፡ ጸሐፍቶሙ።</l>
+         <l>በእንተ፡ ዘጋኔን</l>
+         <l n="23">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=23"/>ወሀሎ፡ ብእሲ፡ ዘጋኔን፡ ውስተ፡ ምኵራብ፡ ወዐውየወ።</l>
+         <l n="24">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=24"/>ወይቤ፡ ምንት፡ ብየ፡ ምስሌከ፡ ኢየሱስ፡ ናዝራዊ። መጻእክኑ፡ ታጥፍአነ፡ ነአምረከ፡ ከመ፡ አንተ፡ ቅዱሱ፡ ለእግዚአብሔር።</l>
+         <l n="25">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=25"/>ወገሠጾ፡ እግዚእ፡ ኢየሱስ፡ ወይቤሎ። ተፈፀም፡ ወፃእ፡ እምኔሁ።</l>
+         <l n="26">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=26"/>ወአስተራገፆ፡ ውእቱ፡ ጋኔን፡ እኩይ። ወዐውየወ፡ በዐቢይ፡ ቃል፡ ወወፅአ፡ እምኔሁ።</l>
+         <l n="27">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=27"/>ወደንገፁ፡ ኵሎሙ፡ ወይቤሉ፡ በበይናቲሆሙ። ምንትኑ፡ ዝንቱ፡ ትምህርት፡ ሐዲስ። እስመ፡ በትእዛዝ፡ ይኤዝዞሙ፡ ለአጋንንት፡ ርኩሳን፡ ወይትኤዘዙ፡ ሎቱ።</l>
+         <l n="28">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=28"/>ወተሰምዐ፡ ነገሩ፡ ውስተ፡ ኵሉ፡ በሓውርተ፡ ገሊላ።</l>
+         <l>በእንተ፡ ሐማተ፡ ጴጥሮስ</l>
+         <l n="29">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=29"/>ወወፂኦ፡ እምኵራብ፡ ቦአ፡ ቤተ፡ ስምዖን። ወምስሌሁ፡ እንድርያስ፡ ወያዕቆብ፡ ወዮሐንስ።</l>
+         <l n="30">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=30"/>ወሐማቱ፡ ለስምዖን፡ ትፈፅን፡ ወነገርዎ፡ በእንቲኣሃ።</l>
+         <l n="31">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=31"/>ወቀርበ፡ ኀቤሃ፡ ወአኀዛ፡ እዴሃ፡ ወአንሥኣ። ወኀደጋ፡ ፈፀንታ፡ ሶቤሃ፡ ወተንሥአት፡ ወተልእከቶሙ።</l>
+         <l>በእንተ፡ እለ፡ ተፈወሱ፡ እምብዙኅ፡ ደዌ</l>
+         <l n="32">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=32"/>ወመስዮ፡ ጊዜ፡ የዐርብ፡ ፀሓይ። አምጽኡ፡ ኀቤሁ፡ ኵሎ፡ ድዉያነ፡ ወእለሂ፡ እኁዛነ፡ አጋንንት።</l>
+         <l n="33">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=33"/>ወተጋብኡ፡ ኀቤሁ፡ ኵሎሙ፡ ሰብአ፡ ሀገር፡ ኀበ፡ አንቀጽ።</l>
+         <l n="34">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=34"/>ወፈወሶሙ፡ ለብዙኃን፡ ድዉያን፡ ወሕሙማን። ወአውፅኦሙ፡ ለብዙኃን፡ አጋንንት፡ ወኢያብሖሙ፡ ይንብቡ። እስመ፡ አእመርዎ፡ ከመ፡ ውእቱ፡ ክርስቶስ።</l>
+         <l n="35">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=35"/>ወበጽባሕ፡ ተንሥአ፡ ወአሌለየ፡ ጥቀ። ወወፂኦ፡ ሖረ፡ ሐቅለ፡ ወጸለየ፡ በህየ።</l>
+         <l n="36">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=36"/>ወዴገንዎ፡ ስምዖን፡ ወእለ፡ ምስሌሁ።</l>
+         <l n="37">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=37"/>ወሶበ፡ ረከብዎ፡ ይቤልዎ፡ እንጋ፡ ኵሉ፡ ሕዝብ፡ የኀሥሡከ።</l>
+         <l n="38">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=38"/>ወይቤሎሙ፡ ተንሥኡ፡ ንሑር፡ ካልኣተኒ፡ አህጉረ። ከመ፡ በህየኒ፡ እስብክ፡ እስመ፡ እንበይነ፡ ዝ፡ ግብር፡ መጻእኩ።</l>
+         <l n="39">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=39"/>ወሖረ፡ ወሰበከ፡ በምኵራባቲሆሙ፡ በኵሉ፡ ገሊላ፡ ወያወፅእ፡ አጋንንተ።</l>
+         <l>በእንተ፡ ዘለምጽ</l>
+         <l n="40">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=40"/>ወመጽአ፡ ኀቤሁ፡ ዘለምጽ፡ ወአስተብረከ፡ ወአስተብቊዖ፡ ወይቤሎ። እግዚኦ፡ እመሰ፡ ፈቀድከ፡ ትክል፡ አንጽሖትየ።</l>
+         <l n="41">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=41"/>ወምሕሮ፡ እግዚእ፡ ኢየሱስ፡ ወሰፍሐ፡ እዴሁ፡ ወገሰሶ። ወይቤሎ፡ እፈቅድ፡ ንጻሕ።</l>
+         <l n="42">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=42"/>ወሶበ፡ ከመ፡ ዝ፡ ይቤሎ፡ ሐይወ፡ እምለምጹ፡ ሶቤሃ።</l>
+         <l n="43">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=43"/>ወገሠጾ፡ ወፈነዎ፡ ወይቤሎ። ዑቅ፡ ኢትንግር፡ ወኢ፡ ለመኑሂ።</l>
+         <l n="44">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=44"/>ወሑር፡ ወአፍትን፡ ርእሰከ፡ ለካህን፡ ወአብእ፡ መባአከ፡ በእንተ፡ ዘነጻሕከ። በከመ፡ አዘዘ፡ ሙሴ፡ ከመ፡ ይኩን፡ ስምዐ፡ ላዕሌሆሙ።</l>
+         <l n="45">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=1&amp;verse=45"/>ወወፂኦ፡ አኀዘ፡ ይስብክ፡ ወይንግር፡ ብዙኀ፡ እስከ፡ ያነክሩ፡ ኵሉ፡ ሀገር። ወስእነ፡ በዊአ፡ ሀገር፡ ክሡተ። አላ፡ አፍኣ፡ ገዳመ፡ ይነብር። ወይመጽኡ፡ ኀቤሁ፡ እምኵለሄ።</l>
+      </ab>
+   </div>
+   <div type="textpart" subtype="chapter" n="2" xml:id="chapter2">
+      <label>ምዕራፍ 2</label>
+      <ab>
+         
+         <l n="1">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=1"/>ወቦአ፡ ካዕበ፡ ሀገረ፡ ቅፍርናሆም፡ ወጐንድዮ፡ ሕቀ። ሰምዑ፡ ሰብእ፡ ዜናሁ፡ ከመ፡ ሀሎ፡ ውስተ፡ ቤት።</l>
+         <l n="2">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=2"/>ወተጋብኡ፡ ኀቤሁ፡ ብዙኃን፡ ሰብእ። እስከ፡ ኢያገምሮሙ፡ መካን፡ ውስተ፡ ቤት፡ ወኢ፡ ኀበ፡ ኆኅት። ወኮነ፡ ይነግሮሙ፡ ቃሎ፡ ለእለ፡ መጽኡ፡ ኀቤሁ።</l>
+         <l>በእንተ፡ መፃጕዕ</l>
+         <l n="3">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=3"/>ወአምጽኡ፡ ኀቤሁ፡ ድዉየ፡ ወመፃጕዐ። እንዘ፡ ይጸውርዎ፡ በዐራት፡ አርባዕቱ፡ ዕደው።</l>
+         <l n="4">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=4"/>ወሶበ፡ ስእኑ፡ አብኦቱ፡ ኀቤሁ፡ እስመ፡ ጽፉቅ፡ ሰብእ። ኀበ፡ ሀሎ፡ እግዚእ፡ ኢየሱስ፡ ዐርጉ፡ ናሕሰ። ወነሠቱ፡ ጠፈረ፡ ወአውረድዎ፡ ምስለ፡ ዐራቱ። ዘዲቤሁ፡ ይሰክብ፡ ውእቱ፡ መፃጕዕ።</l>
+         <l n="5">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=5"/>ወርእዮ፡ እግዚእ፡ ኢየሱስ፡ ሃይማኖቶሙ፡ ይቤሎ፡ ለውእቱ፡ መፃጕዕ። ወልድየ፡ ተኀድገ፡ ለከ፡ ኀጢአትከ።</l>
+         <l n="6">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=6"/>ወሀለዉ፡ ህየ፡ ጸሐፍት፡ ይነብሩ፡ ወኀለዩ፡ በልቦሙ።</l>
+         <l n="7">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=7"/>ወይቤሉ፡ ምንትኑ፡ ዝ፡ ዘከመ፡ ዝ፡ ይነብብ፡ ፅርፈተ። ወመኑ፡ ይክል፡ ኀዲገ፡ ኀጢአት፡ ዘእንበለ፡ አሐዱ፡ እግዚአብሔር።</l>
+         <l n="8">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=8"/>ወአእመሮሙ፡ እግዚእ፡ ኢየሱስ፡ በመንፈሱ፡ ከመ፡ ከመ፡ ዝ፡ ይኄልዩ። ወይቤሎሙ፡ ለምንት፡ ከመ፡ ዝ፡ ትኄልዩ፡ በልብክሙ።</l>
+         <l n="9">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=9"/>ምንት፡ ይቀልል፡ እምብሂሎቱ፡ ለዝ፡ መፃጕዕ። ተኀድገ፡ ለከ፡ ኀጢአትከ፡ ወእምብሂሎቱ። ተንሥእ፡ ወንሣእ፡ ዐራተከ፡ ወሑር፡ በእገሪከ።</l>
+         <l n="10">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=10"/>ወከመ፡ ታእምሩ፡ ከመ፡ ብዉሕ፡ ሎቱ፡ ለወልደ፡ ዕጓለ፡ እመሕያው። ከመ፡ ይኅድግ፡ ኀጢአተ፡ በዲበ፡ ምድር።</l>
+         <l n="11">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=11"/>ወካዕበ፡ ይቤሎ፡ ለውእቱ፡ ድዉይ። ለከ፡ እብለከ፡ ተንሥእ፡ ወንሣእ፡ ዐራተከ፡ ወእቱ፡ ቤተከ።</l>
+         <l n="12">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=12"/>ወተንሥአ፡ ሶቤሃ፡ ወነሥአ፡ ዐራቶ፡ ወወፅአ፡ በቅድመ፡ ኵሉ፡ ሰብእ። ወደንገፁ፡ ኵሎሙ፡ ወአእኰትዎ፡ ለእግዚአብሔር። ወይቤሉ፡ ግሙራ፡ ኢርኢነ፡ ዘከመ፡ ዝ።</l>
+         <l n="13">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=13"/>ወእምዝ፡ ሖረ፡ እግዚእ፡ ኢየሱስ፡ ካዕበ፡ መንገለ፡ ጽንፈ፡ ባሕር። ወሖሩ፡ ኀቤሁ፡ ኵሉ፡ ሕዝብ፡ ወመሀሮሙ።</l>
+         <l>በእንተ፡ ሌዊ፡ መጸብሓዊ</l>
+         <l n="14">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=14"/>ወኀሊፎ፡ እምህየ፡ ርእዮ፡ ለሌዊ፡ መጸብሓዊ፡ ወልደ፡ እልፍዮስ። እንዘ፡ ይነብር፡ ኀበ፡ ምጽባሕ። ወይቤሎ፡ ነዐ፡ ትልወኒ፡ ወተንሥአ፡ ወተለዎ።</l>
+         <l n="15">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=15"/>ወእምዝ፡ መስሐ፡ በቤቱ፡ እግዚእ፡ ኢየሱስ። ወብዙኃን፡ ኃጥኣን፡ ወመጸብሓን፡ ረፈቁ፡ ምስለ፡ እግዚእ፡ ኢየሱስ፡ ወአርዳኢሁ። እስመ፡ ብዙኃን፡ እሙንቱ፡ እለ፡ ተለውዎ።</l>
+         <l n="16">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=16"/>ወርእዮሙ፡ ጸሐፍት፡ ወፈሪሳውያን። ከመ፡ ይበልዕ፡ ወይሰቲ፡ ምስለ፡ ኃጥኣን፡ ወመጸብሓን። ይቤልዎሙ፡ ለአርዳኢሁ። ለምንት፡ ሊቅክሙ፡ ይበልዕ፡ ወይሰቲ፡ ምስለ፡ ኃጥኣን፡ ወመጸብሓን።</l>
+         <l n="17">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=17"/>ወሰሚዖ፡ እግዚእ፡ ኢየሱስ፡ ይቤሎሙ። ሕሙማን፡ ይፈቅድዎ፡ ለዐቃቤ፡ ሥራይ። ወአኮ፡ ጥዑያን፡ ኃጥኣነ፡ እጸውዕ፡ መጻእኩ፡ ወአኮ፡ ጻድቃነ።</l>
+         <l>በእንተ፡ ጾም፡ ዘክርስቲያን</l>
+         <l n="18">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=18"/>ወአርዳኢሁሰ፡ ለዮሐንስ፡ ወእለሂ፡ ፈሪሳውያን፡ ኮኑ፡ ይጸውሙ። ወሖሩ፡ ወይቤልዎ፡ አርዳኢሁ፡ ለዮሐንስ። ወአርዳኢሆሙ፡ ለፈሪሳውያን፡ ይጸውሙ፡ ወአርዳኢከሰ፡ በእፎ፡ ኢይጸውሙ።</l>
+         <l n="19">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=19"/>ወይቤሎሙ፡ እግዚእ፡ ኢየሱስ፡ ይክሉኑ፡ ደቂቁ፡ ለመርዓዊ፡ ጸዊመ። አምጣነ፡ ሀሎ፡ መርዓዊ፡ ምስሌሆሙ።</l>
+         <l n="20">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=20"/>ወባሕቱ፡ ይበጽሕ፡ መዋዕል፡ አመ፡ ይነሥእዎ፡ ለመርዓዊ፡ እምኔሆሙ። ወይእተ፡ አሚረ፡ ይጸውሙ።</l>
+         <l n="21">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=21"/>ወአልቦ፡ ዘይጠቅብ፡ ግምደ፡ ደርግሐ፡ ውስተ፡ ስጠተ፡ ልብስ፡ ብሉይ። ወእመ፡ አኮሰ፡ ያነቅዖ፡ ጥቅበቱ፡ ሐዲስ፡ ለብሉይ፡ ወያዐብዮ፡ ለስጠቱ።</l>
+         <l n="22">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=22"/>ወአልቦ፡ ዘይወዲ፡ ወይነ፡ ሐዲስ፡ ውስተ፡ ዝቅ፡ ብሉይ። እስመ፡ ያነቅዖ፡ ወይን፡ ሐዲስ፡ ለዝቅ፡ ብሉይ። ወወይኑሂ፡ ይትከዐው፡ ወዝቁሂ፡ ይትሀጐል። ወለወይንሰ፡ ሐዲስ፡ ውስተ፡ ዝቅ፡ ሐዲስ። ይወድይዎ፡ ወይትዐቀቡ፡ በበይናቲሆሙ።</l>
+         <l>በእንተ፡ ሰዊት፡ ወሰንበት</l>
+         <l n="23">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=23"/>ወእምዝ፡ ካዕበ፡ ወፈረ፡ እግዚእ፡ ኢየሱስ፡ በሰንበት። እንተ፡ ማእከለ፡ ገራውህ፡ ወአርዳኢሁኒ፡ ምስሌሁ። ወአኀዙ፡ ይምሐዉ፡ ሰዊተ፡ ወይብልዑ፡ ወይጺሑ፡ ሎቱ፡ ፍኖተ።</l>
+         <l n="24">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=24"/>ወይቤልዎ፡ ፈሪሳውያን፡ ርኢ፡ ዘይገብሩ፡ አርዳኢከ። ዘኢይከውን፡ ገቢረ፡ በሰንበት።</l>
+         <l n="25">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=25"/>ወይቤሎሙ፡ እግዚእ፡ ኢየሱስ፡ ግሙራ፡ ኢያንበብክሙኑ። ዘገብረ፡ ዳዊት፡ አመ፡ ርኅበ፡ ውእቱኒ፡ ወእለሂ፡ ምስሌሁ።</l>
+         <l n="26">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=26"/>ዘከመ፡ ቦአ፡ ቤተ፡ እግዚአብሔር፡ እንዘ፡ አብያታር፡ ሊቀ፡ ካህናት። ወበልዐ፡ ኅብስተ፡ መሥዋዕት፡ ዘኢይከውኖ፡ ለበሊዕ። ዘእንበለ፡ ለካህናት፡ ለባሕቲቶሙ። ወወሀቦሙ፡ ለእለ፡ ምስሌሁ።</l>
+         <l n="27">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=27"/>ወይቤሎሙ፡ ሰንበትሰ፡ በእንተ፡ ሰብእ፡ ተፈጥረት። ወአኮ፡ ሰብእ፡ በእንተ፡ ሰንበት።</l>
+         <l n="28">
+            <ref target="http://classic.net.bible.org/verse.php?book=Mar&amp;chapter=2&amp;verse=28"/>ወወልደ፡ ዕጓለ፡ እመሕያው፡ ውእቱ፡ እግዚኣ፡ ለሰንበት።</l>
+      </ab>
+   </div>
+</div>
+      </body>
+   </text>
+</TEI>
