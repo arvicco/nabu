@@ -75,7 +75,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (17): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `trismegistos`, `pleiades`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`, `edr`
+**Members** (18): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `trismegistos`, `pleiades`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`, `edr`, `elephantine`
 
 ### slavic
 
@@ -131,7 +131,7 @@ The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Gre
 
 The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSHB, BHSA, DSS, SDBH and the lexicon shelf, the Sefaria Targums, the bridging crosswalk, and IIP's inscriptions of Israel/Palestine.
 
-**Members** (9): `ud`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `iip`, `hebrew-lexicon`
+**Members** (10): `ud`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `iip`, `hebrew-lexicon`, `elephantine`
 
 ### syriac
 
@@ -179,7 +179,7 @@ The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL'
 
 The Egyptian-Coptic continuum: the TLA corpora and word list (tla-hf, aes, aed), the Coptic lexicon with its egy-cop crosswalk, and Coptic Scriptorium.
 
-**Members** (6): `ud`, `ccl`, `coptic-scriptorium`, `tla-hf`, `aes`, `aed`
+**Members** (7): `ud`, `ccl`, `coptic-scriptorium`, `tla-hf`, `aes`, `aed`, `elephantine`
 
 ### iranian
 
