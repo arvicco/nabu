@@ -1051,28 +1051,44 @@ sdbh:
 sefaria:
   adapter: Nabu::Adapters::Sefaria
   axes: [biblical, hebrew]
-  wired: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
-                   # §6): bin/nabu sync sefaria — index-driven fetch, books.json
-                   # (~20 MB) + the 118 in-scope named Targum files ≈ 15 MB —
-                   # then eyeball nabu show
-                   # urn:nabu:sefaria:targum-jonathan-on-obadiah:mikraot-gedolot:1.1,
-                   # 5 random passages, and `align "GEN 1.1"` (the Aramaic
-                   # column beside MT ↔ LXX ↔ Vulgate), then flip.
-                   # Expected ≈104 documents: 121 named versions − 3 Tafsir
-                   # Rasag (excluded title) − 13 "unknown" − 1 absent license;
-                   # 12 CC-BY-NC + 1 CC-BY-NC-SA ride license_override: nc,
-                   # 9 CC-BY + 5 CC-BY-SA ride attribution, 77 PD/CC0 open.
-  # Sefaria — the TARGUM SHELF only this phase (P30-3). Upstream restructured:
-  # the git repo is a monthly books.json index (19,705 version entries), texts
-  # live in the public gs://sefaria-export bucket (~26 GB, never wholesale).
-  # NEW fetch shape (Nabu::SefariaFetch): GET index → select the Targum
-  # category's NAMED versions → named-file GETs; the index rides in canonical
-  # so scope is reproducible. THE LICENSE GATE per version, machine-readable
-  # "license" field: PD/CC0 → open, CC-BY/CC-BY-SA → attribution override,
-  # CC-BY-NC(-SA) → nc override (P10-4, MCP-excluded); "unknown"/absent →
+  wired: true # flipped 2026-07-19 (Targum shelf synced, owner sign-off);
+                   # P46-1 adds the Rabbinic wave-1 shelves to the SAME wired
+                   # source — the wave sync is OWNER-FIRED: bin/nabu sync
+                   # sefaria refetches the index and pulls ≈864 named files
+                   # (118 targum ≈ 15 MB re-pinned, 634 wave-1 open-lane
+                   # ≈ 78 MB, 112 Davidson nc ≈ 99 MB), then eyeball
+                   # urn:nabu:sefaria:tamid:he:wikisource-talmud-bavli:25b.1
+                   # (the frozen daf start), a Kaufmann Mishnah passage, and
+                   # 5 randoms. Expected ≈848 documents: ≈104 targum
+                   # (unchanged, urns FROZEN) + 744 wave-1 (746 fetched − the
+                   # 2 file-level "unknown"s: Kaufmann Pirkei Avot, Davidson
+                   # Yerushalmi Shekalim English — censused at discovery).
+  # Sefaria — Targum shelf (P30-3) + RABBINIC WAVE 1 (P46-1). Upstream
+  # restructured: the git repo is a monthly books.json index (19,705 version
+  # entries at the pinned 2026-07-02 generation), texts live in the public
+  # gs://sefaria-export bucket (~26 GB, never wholesale). Fetch shape
+  # (Nabu::SefariaFetch): GET index → the PINNED SHELF TABLE
+  # (Sefaria::SHELVES) selects NAMED versions → named-file GETs staged via a
+  # tempdir spool; the index rides in canonical so scope is reproducible.
+  # Wave-1 shelves (owner-ratified): Mishnah (he Vilna 1913 + Torat Emet 357
+  # + Kaufmann MS; en Kulp + SCT + Open Mishnah), Bavli (he Wikisource; en
+  # SCT partials; + the Davidson nc lane en/arc/vocalized), Minor Tractates
+  # (Vilna 1883 + Cohen Soncino + SCT), Yerushalmi (Guggenheimer he+en +
+  # Davidson Shekalim en), Tosefta (Lieberman codex-Vienna + SCT).
+  # Commentary/Rishonim/Acharonim/Guides subtrees and non-named editions
+  # (Venice, Mechon-Mamre…) are out by rule. THE LICENSE GATE per version
+  # FILE (the index carries no license field): PD (both spellings, D46-f)/
+  # CC0 → open, CC-BY/CC-BY-SA → attribution override, CC-BY-NC(-SA) → nc
+  # override (P10-4, MCP-excluded — the Davidson lane); "unknown"/absent →
   # never ingested; merged.json never fetched or ingested (pinned in tests).
-  # Sefaria's "Hebrew" column on this shelf IS Aramaic → arc (NFC-exempt,
-  # byte-verbatim); Tafsir Rasag (Judeo-Arabic) excluded by rule. The ot
+  # LANGUAGE RULINGS (D46-e, per shelf on actualLanguage): Targum he→arc
+  # (axis-keyed, frozen); Mishnah + Tosefta he→hbo; Bavli + Minor +
+  # Yerushalmi he→arc; en→eng; hbo/arc NFC-exempt byte-verbatim; an unmapped
+  # actualLanguage (he-axis ar/yi, en-axis de/fr/pt/es/ru/hu) quarantines
+  # loudly at parse. URNs: targum <title>:<version> (FROZEN); later shelves
+  # <title>:<he|en>:<version> (3 corpus-wide title/version collisions across
+  # the axis). Bavli passages cite daf.amud (25b.1 — positional from daf 1a,
+  # frozen arithmetic). Tafsir Rasag (Judeo-Arabic) excluded by rule. The ot
   # alignment hub's Aramaic leg (config/alignments.yml). Index regenerates
   # monthly; a re-sync is an owner decision → manual.
 bhsa:
