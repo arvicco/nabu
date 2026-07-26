@@ -1,10 +1,10 @@
 # The Library — content review
 
-**As of 2026-07-23** (post the P42 full rebuild — the first clean
-derivation of the post-Arabic library; v1.2.0 cut the day before). Live
-totals: **810,180 documents / 62,789,087 passages and 1,310,786
-dictionary entries** across the **89 registry rows** — 83 corpus sources + 4 local
-shelves + 2 feature modules, every corpus source enabled (OpenITI's
+**As of 2026-07-26** (post the P46 wave — the Rabbinic library, the
+Geʿez shelf, EDR, ReN, the Oracc CC0 pack, the comparativist CLDF
+pack). Live totals: **947,273 documents / 66,755,518 passages and
+1,391,759 dictionary entries** across the **109 registry rows** — 96 corpus
+sources + 4 local shelves + 9 feature modules, every corpus source wired (OpenITI's
 registry flip rides the P42 gate). The rebuild reconciled the
 incrementally-grown catalog against clean derivation at −74 documents /
 −18,896 passages (0.03%): re-parse quarantines under current parser

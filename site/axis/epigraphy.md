@@ -33,7 +33,7 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
 | `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
-| `edr` | inscriptions | attribution | not yet wired | 115,590 docs / 596,064 passages |
+| `edr` | inscriptions | attribution | wired · manual | 115,590 docs / 596,064 passages |
 
 ## The desk's instruments
 

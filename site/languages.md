@@ -6,7 +6,7 @@ description: >-
   dictionaries, and the gold-lemma index, with the code conventions.
 ---
 
-As of **25 July 2026** — a live inventory: every code below appears in the
+As of **26 July 2026** — a live inventory: every code below appears in the
 catalog, the lemma index, or the reference shelf. The maintained original of
 this page is
 [docs/languages.md](https://github.com/arvicco/nabu/blob/main/docs/languages.md)
@@ -73,6 +73,9 @@ catalog on sync.
 | `ar` | Arabic | A handful of early Islamic-era documentary papyri. |
 | `hit` | Hittite | The TLHdig corpus — 23,486 tablet manuscripts, >98% of published Hittite fragments, with candidate morphology at an honest silver tier — plus the gold HitTB treebank and the lexical-list traces (grown 19 July 2026). |
 | `xhu` | Hurrian | Isolated lexical-list column entries from the cuneiform shelf. |
+| `xur` | Urartian | The cuneiform state language of the kingdom of Urartu (added 26 July 2026): Oracc's eCUT corpus, 699 texts gold-lemmatized — Hurrian's only known relative. |
+| `gez` | Geʿez | Classical Ethiopic (added 26 July 2026): the Beta maṣāḥǝft transcriptions — the Ethiopic Bible at verse grain, 1 Enoch and Jubilees complete only here — with Dillmann's lexicon and TraCES's 75,440 gold-analyzed tokens. |
+| `gml` | Middle Low German | The ReN reference corpus (added 26 July 2026): 235 Hanseatic texts, 1200–1650, 1.49M gold-annotated tokens — straight into the gold top five. |
 | `got` | Gothic | Wulfila's Bible — the oldest substantial Germanic text, gold-lemmatized in PROIEL. |
 | `san` | Sanskrit (Vedic) | The Universal Dependencies Vedic treebank's gold-annotated sentences. |
 | `pol` / `ita` / `ger` / `deu` | Polish / Italian / German | Modern scholarly translation layers (Freising, ItAnt, the Egyptian shelves — `ger` and `deu` are both accepted at every query filter). |
@@ -132,23 +135,24 @@ extracts as of 17 July 2026.</p>
 
 ## Gold-lemma languages
 
-Thirty-two languages are searchable by dictionary form (`search --lemma`)
-as of 25 July 2026:
+Thirty-seven languages are searchable by dictionary form (`search --lemma`)
+as of 26 July 2026, in descending row order:
 
-`san, sux, gmh, is, egy, lat, grc, orv, lzh, akk, hbo, non, cop, sl,
-chu, ojp, sga, got, osx, bul, ang, xcl, peo, arc, hit, xhu, elx, uga,
-fro, frm, ro, ota`
+`san, sux, gmh, gml, lat, egy, akk, is, grc, ro, orv, lzh, hbo, non,
+cop, sl, fro, chu, ojp, sga, got, xcl, gez, frm, osx, bul, ota, ang,
+xur, peo, arc, hit, xhu, elx, uga, qur, hlu`
 
-The four newest — Old and Middle French, Romanian, and an Ottoman
-Turkish slice — arrived 25 July 2026 with the UD Romance treebank
-pack.
+The newest five — Middle Low German (ReN, straight into the top
+five), Geʿez (TraCES), Urartian (eCUT, with its qur variant lane),
+and Hieroglyphic Luwian — arrived 26 July 2026 with the P46 wave,
+a day after the UD Romance pack's fro/frm/ro/ota.
 
 The treebanks, ORACC, goo300k, the DCS, ONCOJ, the Hebrew and Egyptian
 shelves, Coptic Scriptorium, and the Germanic wave feed these
-annotations — **16,240,531 gold rows** (22 July census; Sanskrit and
-Sumerian lead; Middle High German debuted third with the ReM sync and
-Icelandic fourth with IcePaHC, both the same day). A further 8.2 million machine-suggested rows in
-eight languages ride an honestly labelled silver tier. Everything else
+annotations — **19,223,970 gold rows** (26 July census; Sanskrit and
+Sumerian lead, Middle Low German debuted fourth with the ReN sync). A
+further 28.1 million machine-suggested rows in
+ten languages ride an honestly labelled silver tier. Everything else
 is full-text-searchable but not yet lemma-searchable.
 
 The same languages, grouped by the scholar who reads them rather than by code,

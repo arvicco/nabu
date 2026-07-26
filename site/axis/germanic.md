@@ -39,7 +39,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
-| `ren` | texts | attribution | not yet wired | 235 docs / 297,504 passages |
+| `ren` | texts | attribution | wired · manual | 235 docs / 297,504 passages |
 
 ## The desk's instruments
 

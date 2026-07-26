@@ -24,14 +24,14 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `coptic-scriptorium` | texts | nc | wired · manual | 482 docs / 74,169 passages |
 | `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
-| `sefaria` | texts | open | wired · manual | 825 docs / 395,199 passages |
+| `sefaria` | texts | open | wired · manual | 839 docs / 435,059 passages |
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
 | `bridging` | crosswalk module | attribution | not yet wired | nothing held yet |
 | `dss` | texts | nc | wired · manual | 1,001 docs / 52,895 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
-| `betamasaheft-works` | texts | attribution | not yet wired | 3,796 docs / 66,516 passages |
+| `betamasaheft-works` | texts | attribution | wired · manual | 3,796 docs / 66,516 passages |
 
 ## The desk's instruments
 

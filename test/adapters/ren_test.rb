@@ -247,7 +247,7 @@ class RenTest < Minitest::Test
     entry = registry["ren"]
     refute_nil entry, "ren must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Ren, entry.adapter_class
-    refute entry.wired, "wired: false until the owner-fired first sync is verified"
+    assert entry.wired, "flipped 2026-07-26 (owner ruling \"flip all wired\"; first sync verified)"
     assert_equal Nabu::Adapters::Ren.manifest, entry.manifest
   end
 
