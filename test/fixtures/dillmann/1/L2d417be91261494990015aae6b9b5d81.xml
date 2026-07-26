@@ -1,0 +1,82 @@
+<?xml-model href="https://raw.githubusercontent.com/BetaMasaheft/Dillmann/master/schema/Dillmann.rng" schematypens="http://relaxng.org/ns/structure/1.0" ?><?xml-model href="https://raw.githubusercontent.com/BetaMasaheft/Dillmann/master/schema/Dillmann.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron" ?><TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="la">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title> ሞተ </title>
+            <author>Alessandro Bausi</author>
+            <author>Andreas Ellwardt</author>
+         </titleStmt>
+         <publicationStmt>
+            <authority>Hiob-Ludolf-Zentrum für Äthiopistik</authority>
+            <publisher>TraCES project. https://www.traces.uni-hamburg.de/</publisher>
+            <pubPlace>Hamburg</pubPlace>
+            <availability>
+               <licence target="http://creativecommons.org/licenses/by-sa-nc/4.0/"> This file is
+                  licensed under the Creative Commons Attribution-ShareAlike Non Commercial 4.0.
+               </licence>
+            </availability>
+         </publicationStmt>
+         <sourceDesc>
+            <p>A thoroughly elaborated txt version of <ref xml:id="dillmann" target="https://archive.org/details/lexiconlinguaeae00dilluoft">Dillmann,
+                  Christian Friedrich August. <emph>Lexicon linguae aethiopicae, cum indice latino.
+                     Adiectum est vocabularium tigre dialecti septentrionalis compilatum</emph> a W.
+                  Munziger. Lipsiae: Th.O. Weigel, 1865.</ref>
+            </p>
+            <p>
+                    <ref xml:id="traces" target="https://www.traces.uni-hamburg.de/">ERC Advanced Grant
+                  TraCES (Grant Agreement 338756)</ref>
+                </p>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <p>A digital edition of the Lexicon in TEI.</p>
+      <listPrefixDef><prefixDef ident="bm" matchPattern="([a-zA-Z0-9]+)" replacementPattern="https://www.zotero.org/groups/358366/ethiostudies/items/tag/bm:$1"/></listPrefixDef></encodingDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="en">English</language>
+            <language ident="la">latin</language>
+            <language ident="it">Italian</language>
+            <language ident="gez">Gǝʿǝz</language>
+            <language ident="grc">Ancient Greek</language>
+            <language ident="syr">Syriac</language>
+            <language ident="ar">Arabic</language>
+            <language ident="sa">Sanskrit</language>
+            <language ident="geo">Georgian</language>
+            <language ident="cop">Coptic</language>
+            <language ident="osa">Old South Arabian</language>
+         </langUsage>
+      </profileDesc>
+      <revisionDesc>
+         <change who="AE" when="2016-11-22">updated txt file and doc file of Lexicon</change>
+         <change who="PL" when="2017-01-16">exported from lexicon to XML</change>
+         <change who="AE" when="2017-04-19">last updated txt file and doc file of Lexicon</change>
+         <change who="PL" when="2017-01-16">updated lexicon XML file adding nested senses</change>
+      <change who="LB" when="2018-02-14">root</change>
+        <change who="MK" when="2024-02-09">added Gr and Les</change><change who="MK" when="2024-02-09">added Les 2 </change></revisionDesc>
+   </teiHeader>
+   <text>
+      <body>
+         <div>
+            <entry xml:id="L2d417be91261494990015aae6b9b5d81" n="1472">
+               <form>
+                  <foreign xml:lang="gez">ሞተ</foreign>
+               <rs type="root"/>
+                    </form>
+               <sense xml:id="Dmain" xml:lang="la" source="#dillmann"> <subc>I,1</subc> [i.q. <foreign xml:lang="he">מוּת</foreign> <foreign xml:lang="syr">ܡܺܝܬ</foreign> <foreign xml:lang="ar">مَاتَ</foreign>; amh. <foreign xml:lang="gez">ሞተ፡</foreign>] <gramGrp> <pos expand="Subjunctivus">Subj.</pos> </gramGrp> <foreign xml:lang="gez">ይሙት፡</foreign> <sense n="1" xml:id="D1"> <cit type="translation" xml:lang="la"><quote> mori </quote></cit>, de hominibus sexcenties, ut <ref cRef="Matth." loc="9,24">Matth. 9,24</ref>; <ref cRef="Marc." loc="15,44">Marc. 15,44</ref>; <ref cRef="Joh." loc="11,39">Joh. 11,39</ref>; <foreign xml:lang="gez">እስመ፡ ጌሠመ፡ ንመውት፡</foreign> <ref cRef="Jes." loc="22,13">Jes. 22,13</ref>; <foreign xml:lang="gez">እምድኅረ፡ ሞተ፡</foreign> <ref cRef="Sir." loc="39,11">Sir. 39,11</ref>; <foreign xml:lang="gez">እለ፡ ሞቱ፡</foreign> <cit type="translation" xml:lang="la"><quote> mortui </quote></cit> <ref cRef="Ruth" loc="1,8">Ruth 1,8</ref>; <ref cRef="Ruth" loc="4,5">Ruth 4,5</ref>; <foreign xml:lang="gez">ሙት፡</foreign> <ref cRef="Job" loc="2,9">Job 2,9</ref>; <foreign xml:lang="gez">መዊቶሂ፡ ተነበየ፡ በድኑ፡</foreign> <ref cRef="Sir." loc="48,13">Sir. 48,13</ref>; <foreign xml:lang="gez">ሐይውኒ፡ ወመዊትኒ፡</foreign> <ref cRef="Sir." loc="11,14">Sir. 11,14</ref>; <foreign xml:lang="gez">ሞተ፡ ትመውቱ፡</foreign> <ref cRef="Gen." loc="2,17">Gen. 2,17</ref>; <ref cRef="1 Reg." loc="22,16">1 Reg. 22,16</ref>; <ref cRef="Jer." loc="33,8">Jer. 33,8</ref>; <foreign xml:lang="gez">ሞተ፡ እመዊት፡ ይሙት፡</foreign> <ref cRef="Kuf." loc="2">Kuf. 2</ref>; <foreign xml:lang="gez">በሞት፡ ለይሙት፡</foreign> <ref cRef="Ex." loc="19,12">Ex. 19,12</ref>; de bestiis <ref cRef="Matth." loc="8,32">Matth. 8,32</ref>; <ref cRef="Ex." loc="11,5">Ex. 11,5</ref>; neque solum de iis qui morte naturali sed etiam de iis, qui morte violenta moriuntur: <ref cRef="Deut." loc="19,11">Deut. 19,11</ref>; <ref cRef="Luc. " loc="23,15">Luc.  23,15</ref>; <foreign xml:lang="grc">θανατούσθω</foreign> <foreign xml:lang="gez">ይሙት፡</foreign> <ref cRef="Ex." loc="21,12">Ex. 21,12</ref>; <ref cRef="Ex." loc="31,14">Ex. 31,14</ref>; <foreign xml:lang="grc">ἀπολοῦνται</foreign> <ref cRef="Jes. " loc="60,12">Jes.  60,12</ref>; <foreign xml:lang="grc">πίπτειν</foreign> <ref cRef="Jud." loc="20,32">Jud. 20,32</ref>; <ref cRef="3 Reg." loc="20,25">3 Reg. 20,25</ref>; <lbl expand="construitur cum">c.c.</lbl> <foreign xml:lang="gez">በ፡</foreign> causae vel instrumenti <ref cRef="4 Reg." loc="13,14">4 Reg. 13,14</ref>; <ref cRef="Hez. " loc="34,29">Hez.  34,29</ref>; <foreign xml:lang="gez">ሞተ፡ በቍር፡</foreign> <ref cRef="Job" loc="31,18">Job 31,18</ref>; <ref cRef="Jos." loc="10,11">Jos. 10,11</ref>; <ref cRef="Num." loc="35,23">Num. 35,23</ref>; <ref cRef="Jer." loc="11,22">Jer. 11,22</ref>; <foreign xml:lang="gez">ትመውት፡ አንተ፡ በእበደ፡ ዚአሁ፡</foreign> <ref cRef="Sir." loc="8,15">Sir. 8,15</ref>; <lbl expand="cum">c.</lbl> <foreign xml:lang="gez">እንበይነ፡</foreign>, ut: <foreign xml:lang="gez">እለ፡ ሞቱ፡ እንበይነ፡ ሐዘን፡</foreign> <ref cRef="Sir." loc="38,18">Sir. 38,18</ref>. <cit type="translation" xml:lang="la"><quote> Immortalitas </quote></cit> est <foreign xml:lang="gez">ኢመዊት፡</foreign> <ref cRef="Sap." loc="4,1">Sap. 4,1</ref>; <cit type="translation" xml:lang="la"><quote> immortalis </quote></cit> <foreign xml:lang="gez">ዘኢይመውት፡</foreign> <ref cRef="4 Esr." loc="7,12">4 Esr. 7,12</ref>; <ref cRef="4 Esr." loc="14,12">4 Esr. 14,12</ref>; <ref cRef="1 Cor." loc="15,53">1 Cor. 15,53</ref>; 1 <ref cRef="Cor." loc="15,54">Cor. 15,54</ref>; <ref cRef="Rom." loc="1,23">Rom. 1,23</ref>; <ref cRef="1 Tim." loc="1,17">1 Tim. 1,17</ref>; <foreign xml:lang="gez">ሕይወት፡ ዘኢይመውት፡</foreign> <ref cRef="Hen." loc="15,6">Hen. 15,6</ref>. 
+</sense> <sense n="2" xml:id="D2"> <lbl expand="translate">transl.</lbl> dicitur <sense n="a" xml:id="D2a"> de plantis: <foreign xml:lang="gez">እመ፡ ሞተ፡ አዕጹቂሁ፡</foreign> <ref cRef="Job" loc="14,8">Job 14,8</ref>; <ref cRef="Jon." loc="4,10">Jon. 4,10</ref>; <ref cRef="Joh." loc="12,24">Joh. 12,24</ref>; <ref cRef="Judae" loc="12.">Judae 12.</ref> 
+</sense> <sense n="b" xml:id="D2b"> de sole (eclipsi obscurato) <ref cRef="Luc." loc="23,44">Luc. 23,44</ref>. 
+</sense> <sense n="c" xml:id="D2c"> de animi facultatibus et affectionibus: <ref cRef="1 Reg." loc="25,37">1 Reg. 25,37</ref>; <foreign xml:lang="gez">ሞተት፡ ኅሊና፡ እምኔሁ፡</foreign> <ref cRef="Kedr f." loc="73.">Kedr f. 73.</ref> 
+</sense> <sense n="d" xml:id="D2d"> de hominibus, qui vires vel consuetudines ex se enecant, <lbl expand="construitur cum">c.c.</lbl> <foreign xml:lang="gez">እምነ፡</foreign> consuetudinis: <foreign xml:lang="gez">ሞትነ፡ እምኀጢአት፡</foreign> <ref cRef="Rom." loc="6,2">Rom. 6,2</ref> Platt; <ref cRef="Rom." loc="7,4">Rom. 7,4</ref>; <ref cRef="Col." loc="2,20">Col. 2,20</ref>; <foreign xml:lang="gez">ሙት፡ እምነ፡ ፍትወታቲሁ፡ ለዝ፡ ዓለም፡</foreign> <ref cRef="Phlx." loc="3.">Phlx. 3.</ref> 
+</sense> 
+</sense> </sense>
+               
+            <sense xml:id="Tmain" xml:lang="en" source="#traces"> <cit type="transcription" xml:lang="gez"><quote>mota</quote></cit> <sense n="G" xml:id="TG"> <foreign xml:lang="gez">ሞተ፡</foreign> <cit type="transcription" xml:lang="gez"><quote>mota</quote></cit> <subc>I,1</subc> <foreign xml:lang="gez">ይመውት፡</foreign>, <foreign xml:lang="gez">ይሙት፡</foreign> «<cit type="translation" xml:lang="fr"><quote>mourir</quote></cit>» ― <foreign xml:lang="am">ሞተ፡</foreign> Ms. <ref type="BM" target="BNFabb217">BNFabb217</ref>, fol. 43v. <lb/>
+ <bibl><ptr target="bm:Grebaut1952SuppLexicon"/><citedRange unit="page"> 104</citedRange></bibl> 
+</sense> <sense n="L" xml:id="TL"> <cit type="transcription" xml:lang="gez"><quote>mwt</quote></cit> <foreign xml:lang="gez">ሞተ</foreign> <cit type="transcription" xml:lang="gez"><quote>mota</quote></cit> (yǝmut) <cit type="translation" xml:lang="en"><quote>die</quote></cit> <lb/>
+ <foreign xml:lang="gez">ዘይመውት</foreign> <cit type="transcription" xml:lang="gez"><quote>zayǝmawwǝt</quote></cit> <cit type="translation" xml:lang="en"><quote>mortal</quote></cit> <lb/>
+ <foreign xml:lang="gez">ዘኢይመውት</foreign> <cit type="transcription" xml:lang="gez"><quote>zaʾiyyǝmawwǝt</quote></cit> <cit type="translation" xml:lang="en"><quote>immortal</quote></cit> <bibl><ptr target="bm:Leslau1987dic"/><citedRange unit="page"> 375b</citedRange></bibl> 
+</sense> </sense></entry>
+         </div>
+      </body>
+   </text>
+</TEI>
