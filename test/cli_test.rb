@@ -1395,9 +1395,9 @@ class CLITest < Minitest::Test
   # catalog holds the slug; an honest per-row "nothing held yet" where not.
   def test_list_disabled_shows_the_not_enabled_complement
     with_axis_corpus do |config|
-      File.write(config.sources_path, "#{File.read(config.sources_path)}ghost:\n" \
-                                      "  adapter: TestAdapter\n  wired: false\n" \
-                                      "  sync_policy: manual\n  axes: [classical]\n")
+      File.write(config.sources_path, "#{File.read(config.sources_path)}ghost:\n  " \
+                                      "adapter: TestAdapter\n  wired: false\n  " \
+                                      "sync_policy: manual\n  axes: [classical]\n")
       write_profile(config, "reference")
       out, err, status = with_config(config) { run_cli(%w[list --disabled]) }
       assert_nil status
