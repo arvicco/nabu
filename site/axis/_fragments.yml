@@ -48,6 +48,7 @@ kinds:
   ogham: inscriptions
   rundata: inscriptions
   lexlep: inscriptions
+  edr: inscriptions
   # cuneiform tablet corpora
   tlhdig: tablets
   oracc: tablets
