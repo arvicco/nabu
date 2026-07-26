@@ -16,7 +16,8 @@ module Nabu
     # `text` is either
     # - a JAGGED ARRAY of strings — nested to the depth `sectionNames`
     #   declares (["Chapter","Verse"] across the Tanakh shelf;
-    #   ["Chapter","Verse","Paragraph"] on Targum Sheni), or
+    #   ["Chapter","Verse","Paragraph"] on Targum Sheni; ["Daf","Line"] on
+    #   the Bavli shelves; ["Chapter","Halakhah","Segment"] on Yerushalmi), or
     # - a DICT of jagged arrays keyed by schema-node enTitle (complex titles:
     #   Targum Jerusalem spans the five Torah books under one title, no
     #   sectionNames, a `schema.nodes` list carrying the node order).
@@ -24,8 +25,18 @@ module Nabu
     # trusting a declared depth: citation = the 1-based index path joined
     # with "." ("1.2", "1.2.9"), prefixed with the node slug for dict texts
     # ("genesis.1.2"). Passage urn = <doc-urn>:<citation>. EMPTY LEAVES are
-    # the corpus's honest lacunae (Targum Jerusalem attests fragments only)
-    # and never mint passages.
+    # the corpus's honest lacunae (Targum Jerusalem attests fragments only;
+    # a Bavli tractate's pre-start dafs) and never mint passages.
+    #
+    # == Daf citation mode (P46-1; FROZEN once minted)
+    #
+    # When `sectionNames[0] == "Daf"` the TOP level of the jagged array is
+    # positional from daf 1a — 1-based position p is daf ceil(p/2), amud
+    # "a" for odd p — and the citation's first token is `<daf><amud>`
+    # ("25b.1" = daf 25 amud b line 1). Verified against the live bucket
+    # 2026-07-25: Wikisource Tamid's first non-empty position is 50 → 25b
+    # (Tamid's real Vilna start) and its last 66 → 33b; Davidson Chagigah
+    # runs 2a..27a. Deeper levels stay numeric.
     #
     # == Text discipline
     #
@@ -48,6 +59,13 @@ module Nabu
       # used (standing rule) — changing this fold re-mints every urn.
       def self.slug(value)
         value.to_s.downcase.gsub(/[^a-z0-9]+/, "-").gsub(/\A-|-\z/, "")
+      end
+
+      # Daf-mode top-level citation token (see the class note): 1-based
+      # position → "<daf><amud>". FROZEN — changing this re-mints every
+      # Bavli passage urn.
+      def self.daf_citation(position)
+        "#{(position + 1) / 2}#{position.odd? ? 'a' : 'b'}"
       end
 
       def parse(path, urn:, language:, metadata: {}, license_override: nil)
@@ -91,17 +109,25 @@ module Nabu
       # back to the dict's own key order when a node is not listed).
       def each_leaf(data, path, language, &block)
         text = data["text"]
+        daf = daf_mode?(data)
         case text
         in Hash
           node_order(data, text).each do |key|
             walk(text.fetch(key), [self.class.slug(key)], language, path, &block)
           end
         in Array
-          walk(text, [], language, path, &block)
+          walk(text, [], language, path, daf: daf, &block)
         else
           raise ParseError, "#{path}: text must be a jagged array or a schema-node dict, " \
                             "got #{text.class}"
         end
+      end
+
+      # sectionNames serializes AFTER text in the bucket files but rides the
+      # same object; ["Daf", ...] flips the top level to daf.amud citations.
+      def daf_mode?(data)
+        sections = data["sectionNames"]
+        sections.is_a?(Array) && sections.first == "Daf"
       end
 
       def node_order(data, text)
@@ -112,13 +138,16 @@ module Nabu
         listed + (text.keys - listed)
       end
 
-      def walk(value, indices, language, path, &block)
+      def walk(value, indices, language, path, daf: false, &block)
         case value
         in String
           text, footnotes = clean(value, language)
           yield(indices.join("."), text, footnotes) unless text.empty?
         in Array
-          value.each_with_index { |element, i| walk(element, indices + [i + 1], language, path, &block) }
+          value.each_with_index do |element, i|
+            token = daf && indices.empty? ? self.class.daf_citation(i + 1) : i + 1
+            walk(element, indices + [token], language, path, &block)
+          end
         else
           raise ParseError, "#{path}: text leaf at #{indices.join('.')} must be a String or Array, " \
                             "got #{value.class}"
