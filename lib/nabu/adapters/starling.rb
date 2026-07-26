@@ -50,6 +50,23 @@ module Nabu
     #                    dangling BALTNUM links): the first keeps the NUMBER
     #                    as entry id, a repeat gets a stable ".2" file-order
     #                    suffix (canonical bytes untouched).
+    #   starling-kart   (ccs-pro, P46-6) — 1,310 Proto-Kartvelian etymologies
+    #                    from a SECOND package (KART.exe, same site, same
+    #                    grant): S. Starostin's database "on the basis of
+    #                    G. Klimov's and Faehnrich-Sardhveladze's etymological
+    #                    dictionaries of Kartvelian languages" (kartet.inf
+    #                    DBINFO), Klimov's reconstruction preferred verbatim.
+    #                    GRU/MEG/SVA/LAZ single-language columns (+ per-column
+    #                    Rus./Engl. meaning fields), PRNUM → the unheld
+    #                    Nostratic base (a body line, exactly piet's PRNUM).
+    #                    Fetched into the kart/ subdir with its own ZipFetch
+    #                    state; the root IE.exe fetch declares keep: so a
+    #                    re-fetch of one package never attics the other.
+    #                    Two records carry a duplicated NUMBER (48, 134 —
+    #                    the second 134 sits at file position 1133, piet's
+    #                    dropped-leading-digit shape): the -b suffix rule.
+    #                    ccs-pro is minted by the family-code + -pro
+    #                    convention (ISO 639-5 ccs; the bat-pro precedent).
     #
     # P22-0 promised the follow-up bases as CONFIGURATION, not code: BASES
     # rows name every per-base policy (dbf file, headword/gloss/body fields,
@@ -114,8 +131,8 @@ module Nabu
     class Starling < Nabu::Adapter
       MANIFEST = Nabu::SourceManifest.new(
         id: "starling",
-        name: "StarLing / Tower of Babel — Indo-European etymological databases " \
-              "(Pokorny IEW + PIET + Vasmer + Germanic + Baltic)",
+        name: "StarLing / Tower of Babel — etymological databases " \
+              "(Pokorny IEW + PIET + Vasmer + Germanic + Baltic + Kartvelian)",
         license: "Free for any use with acknowledgment (G. Starostin, e-mail 2026-07-15: \"all " \
                  "etymological data are free for anybody to use for any purposes as long as the " \
                  "source is properly acknowledged\"); required per-base credit — Pokorny base: " \
@@ -127,11 +144,24 @@ module Nabu
                  "Russian\" (project roster); Germanic base: \"The Common Germanic database, " \
                  "compiled by S. Nikolayev and subordinate to the Common Indo-European database\"; " \
                  "Baltic base: \"The Baltic database, compiled by S. Nikolayev and subordinate to " \
-                 "the Proto-Indo-European database\"",
+                 "the Proto-Indo-European database\"; Kartvelian base: \"compiled by S. Starostin " \
+                 "on the basis of G. Klimov's and Faehnrich-Sardhveladze's etymological " \
+                 "dictionaries of Kartvelian languages\" (kartet.inf DBINFO; roster: \"Compiled by " \
+                 "Sergei Starostin on the basis of the best comparative Kartvelian dictionaries " \
+                 "available (G. Klimov and H. Faehnrich-Z. Sardzhveladze), with notes ... added by " \
+                 "Starostin\")",
         license_class: "attribution",
         upstream_url: "https://starlingdb.org/download/IE.exe",
         parser_family: "starling-dbf"
       )
+
+      # The second package (P46-6): the Kartvelian etymological dictionary,
+      # same starlingdb.org download shelf, same 2026-07-15 grant. A plain
+      # zip despite the name, like IE.exe (206 KB; kartet.dbf/.var/.inf +
+      # a LEXSTAT Swadesh table). Fetched into KART_SUBDIR with its own
+      # ZipFetch state so each package's retention sweep sees only itself.
+      KART_URL = "https://starlingdb.org/download/KART.exe"
+      KART_SUBDIR = "kart"
 
       # Per-base ingestion policy (registry order = discover order). Labels
       # are the upstream .inf field aliases verbatim; :crosslinks maps a
@@ -239,6 +269,31 @@ module Nabu
             "OLITH" => ["olt", "Old Lithuanian"].freeze, "LITH" => %w[lt Lithuanian].freeze,
             "LETT" => %w[lv Lettish].freeze, "OPRUS" => ["prg", "Old Prussian"].freeze
           }.freeze
+        }.freeze,
+        # P46-6. Labels: kartet.inf aliases verbatim. All four Kartvelian
+        # columns are single-language attested columns and mint (censused on
+        # the full base: GRU 1,241 / MEG 1,010 / SVA 659 / LAZ 722 non-empty
+        # cells); the per-column Rus./Engl. meaning fields ride the body.
+        # PRNUM points into the unheld Nostratic base — body line only.
+        "starling-kart" => {
+          dbf: "kartet.dbf", language: "ccs-pro",
+          title: "Kartvelian etymology (S. Starostin, after G. Klimov and " \
+                 "Faehnrich-Sardshveladze; StarLing database)",
+          headword: "PROTO", gloss: "MEANING",
+          body: {
+            "RUSMEAN" => "Russian meaning", "GRU" => "Georgian",
+            "GRMEAN" => "Georgian meaning (Rus.)", "EGRMEAN" => "Georgian meaning (Engl.)",
+            "MEG" => "Megrel", "MGMEAN" => "Megrel meaning (Rus.)",
+            "EMGMEAN" => "Megrel meaning (Eng.)", "SVA" => "Svan",
+            "SVMEAN" => "Svan meaning (Rus.)", "ESVMEAN" => "Svan meaning (Eng.)",
+            "LAZ" => "Laz", "LZMEAN" => "Laz meaning (Rus.)", "ELZMEAN" => "Laz meaning (Eng.)",
+            "NOTES" => "Notes and references"
+          }.freeze,
+          crosslinks: { "PRNUM" => "Nostratic etymology" }.freeze,
+          reflexes: {
+            "GRU" => %w[ka Georgian].freeze, "MEG" => %w[xmf Megrel].freeze,
+            "SVA" => %w[sva Svan].freeze, "LAZ" => %w[lzz Laz].freeze
+          }.freeze
         }.freeze
       }.freeze
 
@@ -300,7 +355,15 @@ module Nabu
          "etymologies subordinate to the PIE database, with Old Lithuanian/Lithuanian/Lettish/" \
          "Old Prussian reflex columns — this library's first Proto-Baltic shelf. The tag bat-pro " \
          "is minted by the family-code + -pro convention (Wiktionary reconstructs Balto-Slavic, " \
-         "ine-bsl-pro, not Proto-Baltic — no upstream shelf to unify with)."].freeze
+         "ine-bsl-pro, not Proto-Baltic — no upstream shelf to unify with)."].freeze,
+        ["ccs-pro", "witness:starling",
+         "StarLing/Tower of Babel Kartvelian database (S. Starostin; same grant, P46-6): 1,310 " \
+         "Proto-Kartvelian etymologies compiled \"on the basis of G. Klimov's and " \
+         "Faehnrich-Sardhveladze's etymological dictionaries of Kartvelian languages\" — Klimov's " \
+         "reconstruction preferred verbatim, Fähnrich–Sardshveladze's where Klimov is silent, " \
+         "with Georgian/Megrel/Svan/Laz reflex columns and Nostratic crosslinks (unheld base, " \
+         "body lines). This library's first Kartvelian shelf; ccs-pro is minted by the " \
+         "family-code + -pro convention (ISO 639-5 ccs — the bat-pro precedent)."].freeze
       ].freeze
 
       def self.manifest
@@ -318,7 +381,11 @@ module Nabu
         [Nabu::Adapter::HttpProbeTarget.new(
           label: "IE.exe", zip_url: MANIFEST.upstream_url, metadata_url: nil,
           state_subdir: "", state_file: Nabu::ZipFetch::STATE_FILE
-        )]
+        ),
+         Nabu::Adapter::HttpProbeTarget.new(
+           label: "KART.exe", zip_url: KART_URL, metadata_url: nil,
+           state_subdir: KART_SUBDIR, state_file: Nabu::ZipFetch::STATE_FILE
+         )]
       end
 
       # [lang_code, kind, body] rows for the language-notes rider.
@@ -355,19 +422,39 @@ module Nabu
         raise Nabu::ParseError, "starling: #{document_ref.id}: #{e.message}"
       end
 
+      # Two packages, two ZipFetch states (P46-6): IE.exe maps onto the
+      # workdir root exactly as before (existing live trees keep their
+      # layout), declaring keep: on the kart/ subdir so its sweep never
+      # reads the sibling package as an upstream deletion; KART.exe lands
+      # in kart/ with its own state + attic (the sl-lexica subdir posture).
       def fetch(workdir, progress: nil, force: false)
-        result = Nabu::ZipFetch.sync!(
-          url: manifest.upstream_url, dir: workdir,
+        kart_dir = File.join(workdir, KART_SUBDIR)
+        ie = Nabu::ZipFetch.sync!(
+          url: manifest.upstream_url, dir: workdir, keep: [KART_SUBDIR],
           attic_dir: File.join(workdir, ATTIC_DIRNAME), progress: progress,
           guard: ->(doomed) { guard_mass_deletion!(workdir, doomed, force: force) }
         )
-        notes = [result.not_modified ? "unchanged (304)" : nil, attic_notes(result.atticked)].compact
-        FetchReport.new(sha: result.sha, fetched_at: Time.now, notes: notes.empty? ? nil : notes.join("; "))
+        kart = Nabu::ZipFetch.sync!(
+          url: KART_URL, dir: kart_dir,
+          attic_dir: File.join(workdir, ATTIC_DIRNAME, KART_SUBDIR), progress: progress,
+          guard: ->(doomed) { guard_mass_deletion!(kart_dir, doomed, force: force) }
+        )
+        FetchReport.new(sha: ie.sha, fetched_at: Time.now, notes: fetch_notes(ie, kart),
+                        repos: { manifest.upstream_url => ie.sha, KART_URL => kart.sha })
       rescue ZipFetch::Error, Nabu::Shell::Error => e
         raise Nabu::FetchError, "starling fetch failed into #{workdir}: #{e.message}"
       end
 
       private
+
+      def fetch_notes(ie_result, kart_result)
+        notes = []
+        notes << "IE.exe unchanged (304)" if ie_result.not_modified
+        notes << "KART.exe unchanged (304)" if kart_result.not_modified
+        notes << attic_notes(ie_result.atticked + kart_result.atticked)
+        notes.compact!
+        notes.empty? ? nil : notes.join("; ")
+      end
 
       def build_entry(base, record, seen)
         number = record.fetch("NUMBER").to_s.strip

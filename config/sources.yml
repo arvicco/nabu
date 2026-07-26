@@ -661,7 +661,12 @@ starling:
                    # CLAUDE.md checklist §6 — eyeball `nabu define '*bher-'`
                    # (Pokorny credit), `nabu define 'сигать'` (vasmer credit),
                    # `nabu etym hals` (germet got/ang gold joins), then flip.
-  # StarLing / Tower of Babel IE package (G. Starostin's e-mail grant,
+                   # P46-6 OWNER QUEUE: the sixth base starling-kart (KART.exe,
+                   # 207 KB second package → kart/ subdir, 1,310 Kartvelian
+                   # etymologies, ccs-pro) lands at the NEXT owner-fired
+                   # `bin/nabu sync starling`; eyeball `nabu define '*abed-'`
+                   # (Klimov credit + GRU/MEG/SVA/LAZ reflex rows).
+  # StarLing / Tower of Babel package (G. Starostin's e-mail grant,
   # 2026-07-15: any use "as long as the source is properly acknowledged" →
   # attribution). THE GRANT'S CONDITION: credit the specific compilers of
   # each base (roster: starlingdb.org/descrip.php?lan=en#bases) — Pokorny:
@@ -669,10 +674,13 @@ starling:
   # compiled by S. L. Nikolayev (after Walde-Pokorny), Hitt./Tokh. reflexes
   # by S. Starostin; Vasmer: the project's scan/OCR/database conversion of
   # M. Vasmer's dictionary (roster; vasmer.inf is blank); Germanic + Baltic:
-  # compiled by S. Nikolayev, subordinate to the PIE base (.inf DBINFO) —
-  # all carried verbatim in the adapter MANIFEST.license so every serving
-  # surface renders them. Upstream is a hand-curated 2005-era package:
-  # re-fetch is an owner decision.
+  # compiled by S. Nikolayev, subordinate to the PIE base (.inf DBINFO);
+  # Kartvelian (P46-6, the KART.exe second package under the SAME site-wide
+  # grant — "all etymological data"): compiled by S. Starostin after
+  # G. Klimov and Fähnrich–Sardshveladze (kartet.inf DBINFO + roster item
+  # 6) — all carried verbatim in the adapter MANIFEST.license so every
+  # serving surface renders them. Upstream is a hand-curated 2005-era
+  # package family: re-fetch is an owner decision.
   sync_policy: manual
   # P42-r1: THE FETCH GRANT is personal to this project's author and a PUBLIC
   # clone of nabu does NOT convey it — so `nabu sync starling` demands an
@@ -691,7 +699,7 @@ starling:
       Write to George Starostin (starlingdb.org) for your own use grant, and
       promise to credit each base's compilers per
       starlingdb.org/descrip.php?lan=en#bases (Pokorny, PIET, Vasmer, Germet,
-      Baltet) verbatim on every serving surface.
+      Baltet, Kartet) verbatim on every serving surface.
 
 sl-lexica:
   adapter: Nabu::Adapters::SlLexica
