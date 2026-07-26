@@ -3,13 +3,15 @@
 require "test_helper"
 require "tmpdir"
 
-# Sefaria adapter tests (P30-3): the Targum shelf from Sefaria's restructured
-# export. Discovery is GLOB-DRIVEN over the fetched version files (each file
-# is self-describing: title/versionTitle/license ride beside the text), so
-# the attic rediscovers without the index; the index (books.json) only
-# drives fetch selection. THE LICENSE GATE is the heart of the adapter:
-# ingest NAMED versions only, license class per version, merged files and
-# unlicensed versions never become refs.
+# Sefaria adapter tests (P30-3 Targum shelf; P46-1 Rabbinic wave 1):
+# Sefaria's restructured export. Discovery is GLOB-DRIVEN over the fetched
+# version files (each file is self-describing: title/versionTitle/license/
+# categories ride beside the text), so the attic rediscovers without the
+# index; the index (books.json) only drives fetch selection — now through
+# the PINNED SHELF TABLE (Sefaria::SHELVES: category prefixes, per-shelf
+# language rulings, named-version fetch selection). THE LICENSE GATE is
+# the heart of the adapter: license class per version file, merged files
+# and unlicensed versions never become refs.
 class SefariaTest < Minitest::Test
   include AdapterConformance
 
@@ -17,6 +19,14 @@ class SefariaTest < Minitest::Test
   TARGUM = File.join(FIXTURES, "json/Tanakh/Targum")
   OBADIAH_FIXTURE = File.join(TARGUM, "Targum Jonathan/Prophets/Targum Jonathan on Obadiah/" \
                                       "Hebrew/Mikraot Gedolot.json")
+  KAUFMANN_FIXTURE = File.join(FIXTURES, "json/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/" \
+                                         "Mishnah based on the Kaufmann manuscript, edited by Dan Be'eri.json")
+  TAMID_WIKISOURCE_URN = "urn:nabu:sefaria:tamid:he:wikisource-talmud-bavli"
+  KAUFMANN_URN = "urn:nabu:sefaria:mishnah-tamid:he:mishnah-based-on-the-kaufmann-manuscript-" \
+                 "edited-by-dan-be-eri"
+  TOSEFTA_URN = "urn:nabu:sefaria:tosefta-chagigah-lieberman:he:the-tosefta-according-to-to-" \
+                "codex-vienna-third-augmented-edition-jts-2001"
+  MISHNAH_REL = "json/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/V.json"
 
   def conformance_adapter
     Nabu::Adapters::Sefaria.new
@@ -43,16 +53,39 @@ class SefariaTest < Minitest::Test
   def test_discover_mints_title_slash_version_urns_sorted
     urns = refs.map(&:id)
     assert_equal urns.sort, urns
-    assert_equal %w[
-      urn:nabu:sefaria:aramaic-targum-to-ruth:mikraot-gedolot
-      urn:nabu:sefaria:onkelos-genesis:targum-onkelos-vocalized-according-to-the-yemenite-taj
-      urn:nabu:sefaria:onkelos-numbers:sifsei-chachomim-chumash-metsudah-publications-2009
-      urn:nabu:sefaria:targum-jerusalem:targum-jerusalem-on-torah
-      urn:nabu:sefaria:targum-jonathan-on-obadiah:mikraot-gedolot
-      urn:nabu:sefaria:targum-jonathan-on-jonah:sefaria-community-translation
-      urn:nabu:sefaria:targum-neofiti:sefaria-community-translation
-      urn:nabu:sefaria:targum-sheni-on-esther:sefaria-community-translation
-    ].sort, urns, "8 licensed named versions; merged, unlicensed and excluded titles never mint"
+    assert_equal (TARGUM_URNS + %W[
+      urn:nabu:sefaria:mishnah-tamid:en:mishnah-yomit-by-dr-joshua-kulp
+      #{KAUFMANN_URN}
+      urn:nabu:sefaria:tamid:en:sefaria-community-translation
+      #{TAMID_WIKISOURCE_URN}
+      #{TOSEFTA_URN}
+    ]).sort, urns, "13 licensed named versions; merged, unlicensed and excluded titles never mint"
+  end
+
+  # --- the Targum regression (P46-1: URNs FROZEN — the wave must not re-mint) -
+
+  TARGUM_URNS = %w[
+    urn:nabu:sefaria:aramaic-targum-to-ruth:mikraot-gedolot
+    urn:nabu:sefaria:onkelos-genesis:targum-onkelos-vocalized-according-to-the-yemenite-taj
+    urn:nabu:sefaria:onkelos-numbers:sifsei-chachomim-chumash-metsudah-publications-2009
+    urn:nabu:sefaria:targum-jerusalem:targum-jerusalem-on-torah
+    urn:nabu:sefaria:targum-jonathan-on-obadiah:mikraot-gedolot
+    urn:nabu:sefaria:targum-jonathan-on-jonah:sefaria-community-translation
+    urn:nabu:sefaria:targum-neofiti:sefaria-community-translation
+    urn:nabu:sefaria:targum-sheni-on-esther:sefaria-community-translation
+  ].freeze
+
+  def test_targum_urns_are_byte_identical_to_the_p30_3_minting
+    targum = refs.select { |r| r.path.start_with?(TARGUM) }
+    assert_equal TARGUM_URNS.sort, targum.map(&:id).sort,
+                 "the P30-3 shelf keeps producing EXACTLY its pre-wave documents — no axis " \
+                 "segment, no re-mint (synced URNs are frozen forever)"
+  end
+
+  def test_targum_passage_urns_and_languages_are_unchanged
+    document = conformance_adapter.parse(ref("urn:nabu:sefaria:targum-jonathan-on-obadiah:mikraot-gedolot"))
+    assert_equal "urn:nabu:sefaria:targum-jonathan-on-obadiah:mikraot-gedolot:1.1", document.first.urn
+    assert_equal "arc", document.language
   end
 
   # --- THE LICENSE GATE (pinned per the P30-3 spec) ---------------------------
@@ -103,6 +136,26 @@ class SefariaTest < Minitest::Test
     assert_equal "CC-BY-NC", document.metadata["license"], "the verbatim upstream grant rides the metadata"
   end
 
+  def test_the_literal_pd_string_maps_to_open
+    document = conformance_adapter.parse(ref(KAUFMANN_URN))
+    assert_nil document.license_override,
+               'the Kaufmann MS files say literally "PD" (not "Public Domain") — owner-ratified ' \
+               "D46-f: a PD grant in either spelling is the open source class"
+    assert_equal "PD", document.metadata["license"], "the verbatim upstream string rides the metadata"
+  end
+
+  def test_a_stub_file_with_zero_text_leaves_quarantines_honestly
+    with_version({ "text" => [[], ["", ""]] }, fixture: KAUFMANN_FIXTURE, rel: MISHNAH_REL) do |dir|
+      adapter = conformance_adapter
+      stub_refs = adapter.discover(dir).to_a
+      assert_equal 1, stub_refs.size, "an SCT-style stub is licensed — it discovers, then quarantines"
+      error = assert_raises(Nabu::ParseError) { adapter.parse(stub_refs.first) }
+      assert_match(/no non-empty text leaves/, error.message,
+                   "the known SCT stub noise (e.g. the Yerushalmi CC0 stubs) must quarantine " \
+                   "per document, never crash the sync")
+    end
+  end
+
   def test_an_unmapped_license_string_stops_discovery_loudly
     with_version({ "license" => "Sefaria Community License 1.0" }) do |dir|
       error = assert_raises(Nabu::FetchError) { conformance_adapter.discover(dir).to_a }
@@ -120,7 +173,7 @@ class SefariaTest < Minitest::Test
     assert_empty(refs.select { |r| r.path == tafsir })
   end
 
-  # --- languages --------------------------------------------------------------
+  # --- languages (the per-shelf rulings, owner-ratified D46-e) ----------------
 
   def test_hebrew_column_maps_to_aramaic_and_english_to_eng
     assert_equal "arc", ref("urn:nabu:sefaria:targum-jonathan-on-obadiah:mikraot-gedolot")
@@ -134,6 +187,44 @@ class SefariaTest < Minitest::Test
   def test_an_unknown_upstream_language_stops_discovery_loudly
     with_version({ "language" => "fr" }) do |dir|
       assert_raises(Nabu::FetchError) { conformance_adapter.discover(dir).to_a }
+    end
+  end
+
+  def test_the_rabbinic_shelf_rulings_mishnah_tosefta_hbo_bavli_arc
+    assert_equal "hbo", ref(KAUFMANN_URN).metadata.fetch("language"),
+                 "Mishnah is Mishnaic HEBREW (hbo, NFC-exempt) — the Targum-era blanket " \
+                 "he->arc mapping is dead"
+    assert_equal "hbo", ref(TOSEFTA_URN).metadata.fetch("language")
+    assert_equal "arc", ref(TAMID_WIKISOURCE_URN).metadata.fetch("language"),
+                 "Bavli gemara -> arc (Jewish Babylonian Aramaic)"
+    assert_equal "eng", ref("urn:nabu:sefaria:tamid:en:sefaria-community-translation")
+      .metadata.fetch("language")
+  end
+
+  def test_an_unmapped_actual_language_on_a_rabbinic_shelf_quarantines_loudly
+    # Real upstream noise: he-axis files with actualLanguage ar/yi, en-axis
+    # files in de/fr/pt/es/ru/hu. Excluded LOUDLY-BY-RULE (D46-e): the ref
+    # mints (deterministic urn), parse raises ParseError -> the loader
+    # quarantines and journals that one document; the sync never crashes
+    # and nothing slips through silently mislabeled.
+    with_version({ "actualLanguage" => "yi" }, fixture: KAUFMANN_FIXTURE, rel: MISHNAH_REL) do |dir|
+      adapter = conformance_adapter
+      yid_refs = adapter.discover(dir).to_a
+      assert_equal 1, yid_refs.size
+      error = assert_raises(Nabu::ParseError) { adapter.parse(yid_refs.first) }
+      assert_match(/actualLanguage "yi"/, error.message)
+      assert_match(/D46-e/, error.message, "the error names the ruling to extend — an owner decision")
+    end
+  end
+
+  def test_the_targum_shelf_ruling_stays_axis_keyed
+    # The one on-disk Targum file whose actualLanguage differs from the
+    # axis ([fr], license-unknown) predates the wave; the Targum shelf's
+    # frozen P30-3 behavior keys on the axis field alone.
+    with_version({ "actualLanguage" => "fr" }) do |dir|
+      urns = conformance_adapter.discover(dir).map(&:id)
+      assert_equal 1, urns.size, "a Targum-shelf file discovers on the axis ruling regardless " \
+                                 "of actualLanguage — pre-wave behavior byte-frozen"
     end
   end
 
@@ -171,8 +262,57 @@ class SefariaTest < Minitest::Test
                    "urn:nabu:sefaria:targum-jonathan-on-obadiah:mikraot-gedolot" => 21,
                    "urn:nabu:sefaria:targum-jonathan-on-jonah:sefaria-community-translation" => 48,
                    "urn:nabu:sefaria:targum-neofiti:sefaria-community-translation" => 8,
-                   "urn:nabu:sefaria:targum-sheni-on-esther:sefaria-community-translation" => 7
+                   "urn:nabu:sefaria:targum-sheni-on-esther:sefaria-community-translation" => 7,
+                   TAMID_WIKISOURCE_URN => 207,
+                   "urn:nabu:sefaria:tamid:en:sefaria-community-translation" => 1,
+                   KAUFMANN_URN => 34,
+                   "urn:nabu:sefaria:mishnah-tamid:en:mishnah-yomit-by-dr-joshua-kulp" => 34,
+                   TOSEFTA_URN => 57
                  }, counts)
+  end
+
+  # --- the P46-1 wave: identity, daf citations, deep-path facets --------------
+
+  def test_rabbinic_urns_carry_the_axis_segment_between_title_and_version
+    # 3 known corpus-wide collisions (Ein Yaakov Glick, Otzar Midrashim NY
+    # 1915, Tosefta Menachot Feuer) put the SAME title/versionTitle in both
+    # language dirs — every post-Targum shelf disambiguates with the
+    # upstream axis value ("he"/"en") as a urn segment. Same title, both
+    # axes, distinct urns:
+    assert_equal KAUFMANN_URN, ref(KAUFMANN_URN).id
+    assert_equal "urn:nabu:sefaria:mishnah-tamid:en:mishnah-yomit-by-dr-joshua-kulp",
+                 ref("urn:nabu:sefaria:mishnah-tamid:en:mishnah-yomit-by-dr-joshua-kulp").id
+    assert_equal 2, refs.map(&:id).grep(/^urn:nabu:sefaria:mishnah-tamid:/).size
+  end
+
+  def test_bavli_passages_cite_daf_amud
+    document = conformance_adapter.parse(ref(TAMID_WIKISOURCE_URN))
+    assert_equal "#{TAMID_WIKISOURCE_URN}:25b.1", document.first.urn,
+                 "Tamid's gemara starts at 25b (the real Vilna start) — the daf arithmetic " \
+                 "is FROZEN before the first sync"
+    assert_equal "33b.12", document.passages.last.urn.split(":").last
+  end
+
+  def test_deep_rabbinic_category_paths_generalize_the_facets
+    tosefta = conformance_adapter.parse(ref(TOSEFTA_URN))
+    assert_equal ["Tosefta", "Lieberman Edition", "Seder Moed"], tosefta.metadata["categories"]
+    assert_equal({ "value" => "lieberman-edition", "raw" => "Lieberman Edition" },
+                 tosefta.metadata.dig("facets", "subshelf"))
+    assert_equal({ "value" => "seder-moed", "raw" => "Seder Moed" },
+                 tosefta.metadata.dig("facets", "division"))
+    assert_equal "The Tosefta according to to codex Vienna. Third Augmented Edition, JTS 2001",
+                 tosefta.metadata["version_title"],
+                 'upstream\'s own double "to" rides verbatim — canonical means canonical'
+
+    bavli = conformance_adapter.parse(ref(TAMID_WIKISOURCE_URN))
+    assert_equal({ "value" => "seder-kodashim", "raw" => "Seder Kodashim" },
+                 bavli.metadata.dig("facets", "subshelf"))
+    assert_nil bavli.metadata.dig("facets", "division"),
+               "categories = [Talmud, Bavli, Seder Kodashim] — nothing beyond the subshelf"
+
+    mishnah = conformance_adapter.parse(ref(KAUFMANN_URN))
+    assert_equal({ "value" => "seder-kodashim", "raw" => "Seder Kodashim" },
+                 mishnah.metadata.dig("facets", "subshelf"))
   end
 
   # --- discovery census (P11-7) ----------------------------------------------
@@ -182,6 +322,16 @@ class SefariaTest < Minitest::Test
     assert_equal 4, skips.skipped_by_rule,
                  "1 merged + 1 absent-license + 1 unknown-license + 1 excluded title"
     assert_predicate skips, :clean?
+  end
+
+  def test_a_file_outside_every_shelf_is_a_rule_skip
+    with_version({ "categories" => ["Jewish Thought", "Modern"] },
+                 fixture: KAUFMANN_FIXTURE, rel: "json/Jewish Thought/Modern/X/Hebrew/V.json") do |dir|
+      assert_empty conformance_adapter.discover(dir).to_a,
+                   "a licensed file whose categories match no shelf never mints — scope is the " \
+                   "shelf table, not whatever lands on disk"
+      assert_equal 1, conformance_adapter.discovery_skips(dir).skipped_by_rule
+    end
   end
 
   def test_a_json_tree_with_an_unreadable_file_is_censused_as_unrecognized
@@ -198,13 +348,49 @@ class SefariaTest < Minitest::Test
 
   def test_fetch_selects_named_targum_shelf_entries_only
     select = Nabu::Adapters::Sefaria.method(:shelf_entry?)
-    targum = { "title" => "Onkelos Genesis", "versionTitle" => "Onkelos Genesis",
+    targum = { "title" => "Onkelos Genesis", "language" => "Hebrew", "versionTitle" => "Onkelos Genesis",
                "categories" => %w[Tanakh Targum Onkelos Torah], "json_url" => "https://b/x.json" }
     assert select.call(targum)
     refute select.call(targum.merge("versionTitle" => "merged")), "merged files are never fetched"
     refute select.call(targum.merge("title" => "Tafsir Rasag")), "the Judeo-Arabic tafsir stays out"
-    refute select.call(targum.merge("categories" => %w[Tanakh Torah])), "only the Targum shelf this phase"
+    refute select.call(targum.merge("categories" => %w[Tanakh Torah])), "the Tanakh text shelves are not ours"
     refute select.call(targum.merge("json_url" => nil)), "an entry without a json file cannot be fetched"
+  end
+
+  def test_fetch_selects_rabbinic_shelves_by_named_version_only
+    select = Nabu::Adapters::Sefaria.method(:shelf_entry?)
+    mishnah = { "title" => "Mishnah Tamid", "language" => "Hebrew", "versionTitle" => "Torat Emet 357",
+                "categories" => ["Mishnah", "Seder Kodashim"], "json_url" => "https://b/x.json" }
+    assert select.call(mishnah)
+    refute select.call(mishnah.merge("versionTitle" => "The Mishna with Obadiah Bartenura by Rabbi " \
+                                                       "Shraga Silverstein")),
+           "wave 1 is the NAMED editions only — an unlisted version never fetches"
+    refute select.call(mishnah.merge("language" => "English")),
+           "the named-version selection is axis-scoped (Torat Emet is a Hebrew-dir edition)"
+    refute select.call(mishnah.merge("categories" => ["Mishnah", "Rishonim on Mishnah", "Bartenura"])),
+           "commentary subtrees are out of shelf scope"
+  end
+
+  # The census the fixture index slice pins: exactly which of its 40 entries
+  # the shelf table selects (10 Targum + 21 wave-1). The 9 out: Berkovits
+  # (no shelf), Tafsir Rasag (excluded title), 2 merged, Davidson Guides,
+  # Vilna-1883-under-Commentary-on-Minor-Tractates, Bartenura SCT (Mishnah
+  # commentary subtree), Venice (not a named version), Steinsaltz Davidson-
+  # Hebrew (Modern Commentary + unlisted version).
+  def test_fetch_selection_census_over_the_pinned_index_slice
+    index = JSON.parse(File.read(File.join(FIXTURES, "books.json")))
+    selected = index.fetch("books").select { |e| Nabu::Adapters::Sefaria.shelf_entry?(e) }
+    grouped = selected.group_by { |e| e["categories"].first }.transform_values(&:size)
+    assert_equal({ "Tanakh" => 10, "Mishnah" => 7, "Talmud" => 12, "Tosefta" => 2 }, grouped)
+    rejected = index.fetch("books").reject { |e| Nabu::Adapters::Sefaria.shelf_entry?(e) }
+    assert_equal 9, rejected.size
+    assert_includes rejected.map { |e| e["versionTitle"] }, "Venice Edition",
+                    "license-unknown Yerushalmi editions are not even fetched — not named"
+    assert_includes rejected.map { |e| e["title"] }, "Introductions to the Babylonian Talmud",
+                    "the Davidson Guides volume is not a tractate"
+    davidson = selected.select { |e| e["versionTitle"].start_with?("William Davidson") }
+    assert_equal 4, davidson.size,
+                 "the fixture slice's Davidson lane: Tamid en/arc/vocalized + Yerushalmi Shekalim en"
   end
 
   def test_fetch_lands_index_and_shelf_through_sefaria_fetch
@@ -250,17 +436,17 @@ class SefariaTest < Minitest::Test
 
   private
 
-  # A minimal tmp workdir holding ONE version file derived from the real
-  # Obadiah fixture with a single field changed (or raw +body+) — the gate's
-  # error paths need shapes upstream does not currently ship.
-  def with_version(overrides, body: nil)
+  # A minimal tmp workdir holding ONE version file derived from a real
+  # fixture with a single field changed (or raw +body+) — the gate's error
+  # paths need shapes upstream does not currently ship.
+  def with_version(overrides, body: nil, fixture: OBADIAH_FIXTURE, rel: "json/Tanakh/Targum/T/Hebrew/V.json")
     Dir.mktmpdir do |dir|
-      path = File.join(dir, "json/Tanakh/Targum/T/Hebrew/V.json")
+      path = File.join(dir, rel)
       FileUtils.mkdir_p(File.dirname(path))
       if body
         File.write(path, body)
       else
-        data = JSON.parse(File.read(OBADIAH_FIXTURE)).merge(overrides)
+        data = JSON.parse(File.read(fixture)).merge(overrides)
         File.write(path, JSON.generate(data))
       end
       yield dir
