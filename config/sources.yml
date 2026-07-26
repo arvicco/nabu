@@ -2391,6 +2391,41 @@ helipad:
   # new version is an owner re-pin decision → manual.
   sync_policy: manual
 
+ren:
+  adapter: Nabu::Adapters::Ren
+  axes: [germanic]
+  wired: false   # P46-5: adapter + fixtures landed 2026-07-26; first real sync is
+                   # owner-fired. Checklist §6: bin/nabu sync ren — expect 235
+                   # documents (161 annotated + 74 transcribed-only; ~297,594
+                   # manuscript lines measured across the deposit), eyeball
+                   # nabu show urn:nabu:ren:hamb-uk-1301-1350:1.01 (charter
+                   # opener "Dit se witlic alle den ghoͤnen…", gold
+                   # pos/msd/lemma tokens) + 5 random passages, then flip.
+  license_watch: https://www.fdr.uni-hamburg.de/record/9195
+  # ReN — Referenzkorpus Mittelniederdeutsch/Niederrheinisch (1200–1650),
+  # v1.1 (fdr.uni-hamburg.de record 9195, DOI 10.25592/uhhfdm.9195,
+  # published 2021-01-06): the Hanseatic rung between ReM (gmh) and the
+  # Norse/Old English shelves — 161 annotated texts / 1,485,963 tokens
+  # with gold pos+msd+lemma (measured; equals the deposit's claimed 1.49M)
+  # plus 74 transcribed-only texts / 838,400 tokens (id+form only), from
+  # manuscripts, prints and inscriptions. SECOND cora-tei registrant: the
+  # tei_1.1.zip export (21,829,154 B of the record's 983.7 MB total — the
+  # other archives are CorA-XML/relANNIS/html/pdf renderings of the same
+  # texts) parsed by RenTeiParser, the censused ReN dialect (no teiHeader,
+  # pos/msd not norm, <s> sentence containers, apparatus-in-token,
+  # join="both"). Language gml for all 235 texts; the 28 texts upstream's
+  # CorA-XML headers class as niederrheinisch carry metadata
+  # upstream_language (censused list in the adapter — upstream couples
+  # the lanes, no dum split invented). Dating/localization live ONLY in
+  # the CorA-XML sibling's headers — documented follow-up, the inverse of
+  # ReM's pos/msd gap. LICENSE: CC BY 4.0 on the deposit record itself
+  # (verified 2026-07-25; no in-file licence exists) → attribution; cite
+  # record + DOI. Fetch: ONE versioned-immutable artifact via ZipFetch
+  # (302 → signed S3, RedirectFollow; single top dir strips), hard sha256
+  # pin checked between download and any tree mutation (the rem/iecor
+  # mold). A future 1.2 is a new record version: owner re-pins → manual.
+  sync_policy: manual
+
 openiti:
   adapter: Nabu::Adapters::Openiti
   axes: [arabic]

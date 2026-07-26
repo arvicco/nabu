@@ -1,0 +1,258 @@
+<?xml version='1.0' encoding='utf-8'?>
+<text>
+  <body>
+    <ab>
+      <note type="editorial">HBG1</note>
+      <note type="editorial">Hbg 1329</note>
+      <s>
+        <pb n="1"/>
+        <lb n="01"/>
+        <w xml:id="t1_m1" pos="DPDS&lt;DD" msd="Neut.Nom.Sg" lemma="desse,desse,dit">Dit</w>
+        <w xml:id="t2_m1" pos="VVFIN&lt;VV" msd="Irr.3.Sg.Pres.Konj" lemma="wēsen²">se</w>
+        <w xml:id="t3_m1" pos="ADJD&lt;ADJ" msd="Pos" lemma="witlĩk">witlic</w>
+        <w xml:id="t4_m1" pos="DIA&lt;DI" msd="_.Dat.Pl" lemma="al">alle</w>
+        <w xml:id="t5_m1" pos="DDARTA&lt;DD" msd="_.Dat.Pl" lemma="dê¹,dê¹,dat²A">den</w>
+        <w xml:id="t6_m1" pos="DPDS&lt;DD" msd="_.Dat.Pl" lemma="gȫne">ghoͤnen</w>
+      </s>
+      <s>
+        <w xml:id="t7_m1" pos="DPRELS&lt;DD" msd="_.Nom.Pl" lemma="dê¹,dê¹,dat²A">de</w>
+        <w xml:id="t8_m1" pos="DDA&lt;DD" msd="Masc.Akk.Sg" lemma="desse,desse,dit">dessen</w>
+        <w xml:id="t9_m1" pos="NA&lt;NA" msd="Masc.Akk.Sg" lemma="brêf">bref</w>
+        <w xml:id="t10_m1" pos="VVFIN&lt;VV" msd="St.3.Pl.Pres.*" lemma="sên">sen</w>
+        <w xml:id="t11_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+      <s>
+        <w xml:id="t12_m1" pos="KON&lt;KO" msd="--" lemma="unde²">vnde</w>
+        <w xml:id="t13_m1" pos="VVFIN&lt;VV" msd="Sw.3.Pl.Pres.*" lemma="hö̂ren²">hoͤren</w>
+        <w xml:id="t14_m1" pos="VVINF&lt;VV" msd="--" lemma="lēsen¹">lesen</w>
+        <w xml:id="t15_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+      <s>
+        <w xml:id="t16_m1" pos="KOUS&lt;KO" msd="--" lemma="dat²B">dat</w>
+        <w xml:id="t17_m1" pos="PPER&lt;PPER" msd="1.Pl._.Nom" lemma="wî¹">we</w>
+        <w xml:id="t18_m1" pos="NA&lt;NA" msd="Masc.Nom.Sg" lemma="hêre⁴">her</w>
+        <lb n="02"/>
+        <w xml:id="t19_m1" pos="NE&lt;NE" msd="Masc.Nom.Sg" lemma="willeken°">willeken</w>
+        <w xml:id="t20_m1" pos="DDARTA&lt;DD" msd="Masc.Nom.Sg" lemma="dê¹,dê¹,dat²A">de</w>
+        <w xml:id="t21_m1" pos="NA&lt;NA" msd="Masc.Nom.Sg" lemma="prōvest">prouest</w>
+        <w xml:id="t22_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+        <w xml:id="t23_m1" pos="NA&lt;NA" msd="Fem.Nom.Sg" lemma="ver³">ver</w>
+        <w xml:id="t24_m1" pos="NE&lt;NE" msd="Fem.Nom.Sg" lemma="Mechtilt°">Mechtilt</w>
+        <w xml:id="t25_m1" pos="DDARTA&lt;DD" msd="Fem.Nom.Sg" lemma="dê¹,dê¹,dat²A">de</w>
+        <w xml:id="t26_m1" pos="NA&lt;NA" msd="Fem.Nom.Sg" lemma="ebbedische">ebbedische</w>
+        <w xml:id="t27_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+        <w xml:id="t28_m1" pos="KON&lt;KO" msd="--" lemma="unde²">vnde</w>
+        <w xml:id="t29_m1" pos="DDARTA&lt;DD" msd="Masc.Nom.Sg" lemma="dê¹,dê¹,dat²A">de</w>
+        <w xml:id="t30_m1" pos="ADJA&lt;ADJ" msd="Pos.Masc.Nom.Sg.Sw" lemma="gemêⁱne¹">mene</w>
+        <w xml:id="t31_m1" pos="NA&lt;NA" msd="Masc.Nom.Sg" lemma="konvent¹">conuent</w>
+        <w xml:id="t32_m1" pos="APPR&lt;AP" msd="Dat" lemma="tô¹">tuͦ</w>
+        <w xml:id="t33_m1" pos="DDARTA&lt;DD" msd="Masc-Neut.Dat.Sg" lemma="dê¹,dê¹,dat²A">deme</w>
+        <w xml:id="t34_m1" pos="NE&lt;NE" msd="Masc-Neut.Dat.Sg" lemma="juncvrûwendā̆l">Junc<lb n="03"/>vrowen<space quantity="1" unit="chars"/>dale</w>
+        <w xml:id="t35_m1" pos="VAFIN&lt;VA" msd="Sw.3.Pl.Pres.Ind" lemma="hebben">hebbet</w>
+        <w xml:id="t36_m1" pos="VVPP&lt;VV" msd="--" lemma="vorkôpen²">ver<space quantity="1" unit="chars"/>koft</w>
+        <w xml:id="t37_m1" pos="DDARTA&lt;DD" msd="Masc.Dat.Sg" lemma="dê¹,dê¹,dat²A">deme</w>
+        <w xml:id="t38_m1" pos="ADJA&lt;ADJ" msd="Pos.Masc.Dat.Sg.*" lemma="êrlĩk¹">erliken</w>
+        <w xml:id="t39_m1" pos="NA&lt;NA" msd="Masc.Dat.Sg" lemma="man¹">manne</w>
+        <w xml:id="t40_m1" pos="NE&lt;NE" msd="Masc.Dat.Sg" lemma="woltere°">woltere</w>
+        <w xml:id="t41_m1" pos="APPR&lt;AP" msd="Dat-Akk" lemma="van¹">van</w>
+        <w xml:id="t42_m1" pos="NE&lt;NE" msd="*.Dat-Akk.Sg" lemma="bucstehude°">bucstehude</w>
+        <w xml:id="t43_m1" pos="DIARTA&lt;DI" msd="Masc.Dat-Akk.Sg" lemma="êⁱn¹,êⁱne¹,êⁱn¹">enen</w>
+        <lb n="04"/>
+        <w xml:id="t44_m1" pos="ADJA&lt;ADJ" msd="Pos.Masc.Dat-Akk.Sg.*" lemma="êwich¹">eweghen</w>
+        <w xml:id="t45_m1" pos="NA&lt;NA" msd="Masc.Dat-Akk.Sg" lemma="wîkschēpel">wischepel</w>
+        <w xml:id="t46_m1" pos="NA&lt;NA" msd="Neut.Gen.Sg" lemma="roggengelt">roken<space quantity="1" unit="chars"/>gheldes</w>
+        <w xml:id="t47_m1" pos="APPR&lt;AP" msd="Dat" lemma="in²">in</w>
+        <w xml:id="t48_m1" pos="DDARTA&lt;DD" msd="Fem.Dat.Sg" lemma="dê¹,dê¹,dat²A">der</w>
+        <w xml:id="t49_m1" pos="NA&lt;NA" msd="Fem.Dat.Sg" lemma="mȫle">moͤlen</w>
+        <w xml:id="t50_m1" pos="APPR&lt;AP" msd="Dat" lemma="tô¹">toͧ</w>
+        <w xml:id="t51_m1" pos="NE&lt;NE" msd="*.Dat.Sg" lemma="Hamborch">hamborch</w>
+        <w xml:id="t52_m1" pos="APPR&lt;AP" msd="Dat" lemma="in²">in</w>
+        <w xml:id="t53_m1" pos="DPOSA&lt;DPOS" msd="Neut.Dat.Sg" lemma="unse¹">vseme</w>
+        <w xml:id="t54_m1" pos="ADJA&lt;ADJ" msd="Sup.Neut.Dat.Sg.*" lemma="gôt²">besten</w>
+        <w xml:id="t55_m1" pos="NA&lt;NA" msd="Neut.Dat.Sg" lemma="gôt³">goͧde</w>
+        <lb n="05"/>
+        <w xml:id="t56_m1" pos="APPR&lt;AP" msd="Dat-Akk" lemma="vȫr³">vor</w>
+        <w xml:id="t57_m1" pos="CARDA&lt;CARD" msd="Fem.Dat-Akk" lemma="vîf">viue</w>
+        <w xml:id="t58_m1" pos="KON&lt;KO" msd="--" lemma="unde²">vnde</w>
+        <w xml:id="t59_m1" pos="CARDA&lt;CARD" msd="Fem.Dat-Akk" lemma="sestich">sestech</w>
+        <w xml:id="t60_m1" pos="NA&lt;NA" msd="Fem.Dat-Akk.Pl" lemma="mark³">mark</w>
+        <w xml:id="t61_m1" pos="ADJA&lt;ADJ" msd="Pos.Masc.Gen.Pl.St" lemma="hambörger">hamborgher</w>
+        <w xml:id="t62_m1" pos="NA&lt;NA" msd="Masc.Gen.Pl" lemma="penninc">pennighe</w>
+        <w xml:id="t63_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+      <s>
+        <w xml:id="t64_m1" pos="DPRELS&lt;DD" msd="Masc-Fem.Akk.Pl" lemma="dê¹,dê¹,dat²A">de</w>
+        <w xml:id="t65_m1" pos="PPER&lt;PPER" msd="3.Sg.Masc.Nom" lemma="hê¹,sê¹,et¹">he</w>
+        <w xml:id="t66_m1" pos="PPER&lt;PPER" msd="1.Pl._.Dat-Akk" lemma="wî¹">vs</w>
+        <w xml:id="t67_m1" pos="DDARTA&lt;DD" msd="Masc.Akk.Sg" lemma="dê¹,dê¹,dat²A">den</w>
+        <w xml:id="t68_m1" pos="ADJA&lt;ADJ" msd="Sup.Masc.Akk.Sg.*" lemma="êrst¹">ersten</w>
+        <w xml:id="t69_m1" pos="NA&lt;NA" msd="Masc.Akk.Sg" lemma="penninc">pennigh</w>
+        <w xml:id="t70_m1" pos="APPR&lt;AP" msd="Dat" lemma="mit">mit</w>
+        <lb n="06"/>
+        <w xml:id="t71_m1" pos="DDARTA&lt;DD" msd="Masc.Dat.Sg" lemma="dê¹,dê¹,dat²A">deme</w>
+        <w xml:id="t72_m1" pos="ADJS&lt;ADJ" msd="Sup.Masc.Dat.Sg.*" lemma="lat³">lesten</w>
+        <w xml:id="t73_m1" pos="VVPP&lt;VV" msd="--" lemma="betālen">betalet</w>
+        <w xml:id="t74_m1" pos="VAFIN&lt;VA" msd="Sw.3.Sg.Pres.Ind" lemma="hebben">heft</w>
+        <w xml:id="t75_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+      <s>
+        <w xml:id="t76_m1" pos="KON&lt;KO" msd="--" lemma="unde²">vnde</w>
+        <w xml:id="t77_m1" pos="VVFIN&lt;VV" msd="St.3.Sg.Pres.Ind" lemma="vorbinden¹">verbindet</w>
+        <w xml:id="t78_m1" pos="PPER&lt;PPER" msd="1.Pl._.Dat-Akk" lemma="wî¹">vsic</w>
+        <w xml:id="t79_m1" pos="PAVKO&lt;AVD" msd="--" lemma="dâr¹">dar</w>
+        <w xml:id="t80_m1" pos="PAVAP&lt;AP" msd="--" lemma="tô¹">toͧ</w>
+        <w xml:id="t81_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+      <s>
+        <w xml:id="t82_m1" pos="KOUS&lt;KO" msd="--" lemma="dat²B">dat</w>
+        <w xml:id="t83_m1" pos="PPER&lt;PPER" msd="1.Pl._.Nom" lemma="wî¹">we</w>
+        <w xml:id="t84_m1" pos="APPR&lt;AP" msd="Dat" lemma="van¹">van</w>
+        <w xml:id="t85_m1" pos="DDA&lt;DD" msd="Masc.Dat.Sg" lemma="desse,desse,dit">desseme</w>
+        <w xml:id="t86_m1" pos="ADJA&lt;VVPP" msd="Pos.Masc.Dat.Sg.*" lemma="vȫrsprōken">vorespro<lb n="07"/>kenen</w>
+        <w xml:id="t87_m1" pos="NA&lt;NA" msd="Masc.Dat.Sg" lemma="wîkschēpel">wischepel</w>
+        <w xml:id="t88_m1" pos="NA&lt;NA" msd="Masc.Gen-Dat-Akk.*" lemma="rogge¹">roken</w>
+        <w xml:id="t89_m1" pos="VMFIN&lt;VM" msd="Prpr.3.Pl.Pres.*" lemma="schȫlen¹">scoͤlen</w>
+        <w xml:id="t90_m1" pos="VVINF&lt;VV" msd="--" lemma="kö̂pen">koͤpen</w>
+        <w xml:id="t91_m1" pos="DIARTA&lt;DI" msd="Fem.Akk.Sg" lemma="êⁱn¹,êⁱne¹,êⁱn¹">ene</w>
+        <w xml:id="t92_m1" pos="NA&lt;NA" msd="Fem.Akk.Sg" lemma="tunne">tunnen</w>
+        <w xml:id="t93_m1" pos="NA&lt;NA" msd="Masc.Gen.Sg" lemma="hârinc">haringhes</w>
+        <w xml:id="t94_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+      <s>
+        <w xml:id="t95_m1" pos="KON&lt;KO" msd="--" lemma="unde²">vnde</w>
+        <w xml:id="t96_m1" pos="DPRELS&lt;DD" msd="_.Nom.Sg" lemma="wat(te)³">wot</w>
+        <w xml:id="t97_m1" pos="APPR&lt;AP" msd="Dat-Akk" lemma="van¹">van</w>
+        <w xml:id="t98_m1" pos="NA&lt;NA" msd="Masc.Dat-Akk.*" lemma="rogge¹">roken</w>
+        <w xml:id="t99_m1" pos="PAVKO&lt;AVD" msd="--" lemma="dâr¹">dar</w>
+        <lb n="08"/>
+        <w xml:id="t100_m1" pos="PAVAP&lt;AP" msd="--" lemma="bōven²">bouene</w>
+        <w xml:id="t101_m1" pos="VVFIN&lt;VV" msd="St.3.Sg.Pres.Ind" lemma="blîven">blift</w>
+      </s>
+      <s>
+        <w xml:id="t102_m1" pos="VMFIN&lt;VM" msd="Prpr.3.Pl.Pres.*" lemma="schȫlen¹">scoͤlen</w>
+        <w xml:id="t103_m1" pos="VVINF&lt;VV" msd="--" lemma="lâten¹">laten</w>
+        <w xml:id="t104_m1" pos="VVINF&lt;VV" msd="--" lemma="backen¹">backen</w>
+        <w xml:id="t105_m1" pos="NA&lt;NA" msd="Neut.Akk.*" lemma="brôt¹">brot</w>
+        <w xml:id="t106_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+      <s>
+        <w xml:id="t107_m1" pos="KON&lt;KO" msd="--" lemma="unde²">vnde</w>
+        <w xml:id="t108_m1" pos="VMFIN&lt;VM" msd="Prpr.3.Pl.Pres.*" lemma="schȫlen¹">scoͤlen</w>
+        <w xml:id="t109_m1" pos="VVINF&lt;VV" msd="--" lemma="gēven">gheuen</w>
+        <w xml:id="t110_m1" pos="APPR&lt;AP" msd="Dat" lemma="in²">in</w>
+        <w xml:id="t111_m1" pos="DDARTA&lt;DD" msd="Masc.Dat.Sg" lemma="dê¹,dê¹,dat²A">deme</w>
+        <w xml:id="t112_m1" pos="ADJA&lt;ADJ" msd="Pos.Masc.Dat.Sg.*" lemma="gôt²">goͧden</w>
+        <w xml:id="t113_m1" pos="NA&lt;NA" msd="Masc.Dat.Sg" lemma="dōnerdach">donres<lb n="09"/>daghe</w>
+        <w xml:id="t114_m1" pos="DIA&lt;DI" msd="Masc-Neut.Dat.Sg" lemma="iewel(ĩ)k">giwelikeme</w>
+        <w xml:id="t115_m1" pos="ADJA&lt;ADJ" msd="Pos.Masc-Neut.Dat.Sg.*" lemma="arm¹">armen</w>
+        <w xml:id="t116_m1" pos="NA&lt;NA" msd="Masc-Neut.Dat.Sg" lemma="minsche">mynschen</w>
+        <w xml:id="t117_m1" pos="APPR&lt;AP" msd="Akk" lemma="dȫr¹">dor</w>
+        <w xml:id="t118_m1" pos="DDARTA&lt;DD" msd="Fem.Akk.*" lemma="dê¹,dê¹,dat²A">de</w>
+        <w xml:id="t119_m1" pos="NA&lt;NA" msd="Fem.Akk.*" lemma="lêve¹">leue</w>
+        <w xml:id="t120_m1" pos="NA&lt;NA" msd="Masc.Gen.Sg" lemma="got¹">godes</w>
+        <w xml:id="t121_m1" pos="DIARTA&lt;DI" msd="Neut.Akk.Sg" lemma="êⁱn¹,êⁱne¹,êⁱn¹">en</w>
+        <w xml:id="t122_m1" pos="NA&lt;NA" msd="Neut.Akk.Sg" lemma="brôt¹">brot</w>
+        <w xml:id="t123_m1" pos="KON&lt;KO" msd="--" lemma="unde²">vnde</w>
+        <w xml:id="t124_m1" pos="DIARTA&lt;DI" msd="Masc.Akk.Sg" lemma="êⁱn¹,êⁱne¹,êⁱn¹">enen</w>
+        <w xml:id="t125_m1" pos="NA&lt;NA" msd="Masc.Akk.Sg" lemma="hârinc">haringh</w>
+        <w xml:id="t126_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+        <w xml:id="t127_m1" pos="APPR&lt;AP" msd="Dat" lemma="tô¹">toͧ</w>
+        <lb n="10"/>
+        <w xml:id="t128_m1" pos="NA&lt;NA" msd="Fem.Dat.Sg" lemma="hülpe¹">helpe</w>
+        <w xml:id="t129_m1" pos="KON&lt;KO" msd="--" lemma="unde²">vnde</w>
+        <w xml:id="t130_m1" pos="APPR&lt;AP" msd="Dat" lemma="tô¹">toͧ</w>
+        <w xml:id="t131_m1" pos="NA&lt;NA" msd="Masc.Dat.Sg" lemma="trôst">troste</w>
+        <w xml:id="t132_m1" pos="DPOSA&lt;DPOS" msd="Fem.Gen-Dat.Sg" lemma="sîn⁴,ēr¹,sîn⁴">siner</w>
+        <w xml:id="t133_m1" pos="NA&lt;NA" msd="Fem.Gen-Dat.Sg" lemma="sêle⁴">sele</w>
+        <w xml:id="t134_m1" pos="DDARTA&lt;DD" msd="Masc.Gen.Sg" lemma="dê¹,dê¹,dat²A">des</w>
+        <w xml:id="t135_m1" pos="ADJA&lt;VVPP" msd="Pos.Masc.Gen.Sg.*" lemma="vȫrsprōken">voresprokenen</w>
+        <w xml:id="t136_m1" pos="NE&lt;NE" msd="Masc.Gen.Sg" lemma="wolteres°">wolteres</w>
+        <w xml:id="t137_m1" pos="APPR&lt;AP" msd="Dat-Akk" lemma="van¹">van</w>
+        <w xml:id="t138_m1" pos="NE&lt;NE" msd="*.Dat-Akk.Sg" lemma="bucstehude°">bucstehude</w>
+        <w xml:id="t139_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+      <s>
+        <w xml:id="t140_m1" pos="KOUS&lt;KO" msd="--" lemma="dat²B">Dat</w>
+        <w xml:id="t141_m1" pos="DDA&lt;DD" msd="Neut.Nom.Pl" lemma="desse,desse,dit">desse</w>
+        <lb n="11"/>
+        <w xml:id="t142_m1" pos="ADJA&lt;VVPP" msd="Pos.Neut.Nom.Pl.Sw" lemma="vȫrsprōken">voresprokenen</w>
+        <w xml:id="t143_m1" pos="NA&lt;NA" msd="Neut.Nom.Pl" lemma="dinc">dingh</w>
+        <w xml:id="t144_m1" pos="ADJV&lt;ADJ" msd="Pos" lemma="êwich¹">ewich</w>
+        <w xml:id="t145_m1" pos="KON&lt;KO" msd="--" lemma="unde²">vnde</w>
+        <w xml:id="t146_m1" pos="AVD&lt;AVD" msd="--" lemma="iem(m)ermêr(e)">iuͤmmer<space quantity="1" unit="chars"/>mere</w>
+        <w xml:id="t147_m1" pos="VVFIN&lt;VV" msd="St.3.Pl.Pres.*" lemma="blîven">bliuen</w>
+        <w xml:id="t148_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+      <s>
+        <w xml:id="t149_m1" pos="KON&lt;KO" msd="--" lemma="unde²">vnde</w>
+        <w xml:id="t150_m1" pos="APPR&lt;AP" msd="Dat" lemma="van¹">van</w>
+        <w xml:id="t151_m1" pos="DPOSA&lt;DPOS" msd="Neut.Dat.Sg" lemma="unse¹">vseme</w>
+        <w xml:id="t152_m1" pos="NA&lt;NA" msd="Neut.Dat.Sg" lemma="klôster">klostere</w>
+        <w xml:id="t153_m1" pos="VVPP&lt;VV" msd="--" lemma="hōlden">ghe<lb n="12"/>holden</w>
+        <w xml:id="t154_m1" pos="VAFIN&lt;VA" msd="St.3.Pl.Pres.*" lemma="wērden¹">werden</w>
+        <w xml:id="t155_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+      <s>
+        <w xml:id="t156_m1" pos="DPDS&lt;DD" msd="Neut.Gen.Sg" lemma="dê¹,dê¹,dat²A">des</w>
+        <w xml:id="t157_m1" pos="VVFIN&lt;VV" msd="St.1.Pl.Pres.*" lemma="vorbinden¹">verbinde</w>
+        <w xml:id="t158_m1" pos="PPER&lt;PPER" msd="1.Pl._.Nom" lemma="wî¹">we</w>
+        <w xml:id="t159_m1" pos="PRF&lt;PRF" msd="1.Pl.Dat-Akk" lemma="wî¹">vsic</w>
+        <w xml:id="t160_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+      <s>
+        <w xml:id="t161_m1" pos="KON&lt;KO" msd="--" lemma="unde²">vnde</w>
+        <w xml:id="t162_m1" pos="APPR&lt;AP" msd="Dat" lemma="tô¹">toͧ</w>
+        <w xml:id="t163_m1" pos="DIARTA&lt;DI" msd="Fem.Dat.Sg" lemma="êⁱn¹,êⁱne¹,êⁱn¹">ener</w>
+        <w xml:id="t164_m1" pos="ADJA&lt;ADJ" msd="Pos.Fem.Dat.Sg.Sw" lemma="ōpenbâr">oppenbaren</w>
+        <w xml:id="t165_m1" pos="NA&lt;NA" msd="Fem.Dat.Sg" lemma="betü̂ginge">betuͤghinghe</w>
+        <w xml:id="t166_m1" pos="VAFIN&lt;VA" msd="Sw.1.Pl.Pres.*" lemma="hebben">hebbe</w>
+        <w xml:id="t167_m1" pos="PPER&lt;PPER" msd="1.Pl._.Nom" lemma="wî¹">we</w>
+        <lb n="13"/>
+        <w xml:id="t168_m1" pos="DDA&lt;DD" msd="Masc.Akk.Sg" lemma="desse,desse,dit">dessen</w>
+        <w xml:id="t169_m1" pos="NA&lt;NA" msd="Masc.Akk.Sg" lemma="brêf">bref</w>
+        <w xml:id="t170_m1" pos="APPR&lt;AP" msd="Dat" lemma="mit">mit</w>
+        <w xml:id="t171_m1" pos="DPOSA&lt;DPOS" msd="Masc-Neut.Dat.Pl" lemma="unse¹">vsen</w>
+        <w xml:id="t172_m1" pos="NA&lt;NA" msd="Masc-Neut.Dat.Pl" lemma="ingesēgel">ingheseghelen</w>
+        <w xml:id="t173_m1" pos="VVPP&lt;VV" msd="--" lemma="besēgelen²">beseghelet</w>
+        <w xml:id="t174_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+      <s part="I">
+        <w xml:id="t175_m1" pos="DPDS&lt;DD" msd="Neut.Nom.Sg" lemma="desse,desse,dit">Dit</w>
+        <w xml:id="t176_m1" pos="VAFIN&lt;VA" msd="Irr.3.Sg.Pres.Ind" lemma="wēsen²">is</w>
+        <w xml:id="t177_m1" pos="VVPP&lt;VV" msd="--" lemma="schên">ghescen</w>
+        <w xml:id="t178_m1" pos="APPR&lt;AP" msd="Dat" lemma="in²">in</w>
+        <w xml:id="t179_m1" pos="DDARTA&lt;DD" msd="Neut.Dat.Sg" lemma="dê¹,dê¹,dat²A">deme</w>
+        <w xml:id="t180_m1" pos="NA&lt;NA" msd="Neut.Dat.Sg" lemma="jâr">yare</w>
+      </s>
+      <s>
+        <w xml:id="t181_m1" pos="KOUS&lt;KO" msd="--" lemma="dat²B">dat</w>
+        <w xml:id="t182_m1" pos="NA&lt;NA" msd="Masc.Nom.Sg" lemma="got¹">god</w>
+        <lb n="14"/>
+        <w xml:id="t183_m1" pos="VVPP&lt;VV" msd="--" lemma="(ge)bēren¹">gheboren</w>
+        <w xml:id="t184_m1" pos="VAFIN&lt;VA" msd="St.3.Sg.Past.Ind" lemma="wērden¹">wart</w>
+        <w xml:id="t185_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+      <s part="F">
+        <w xml:id="t186_m1" pos="ADJN&lt;ADJ" msd="Pos.Neut.Dat.Sg.*" lemma="dûsentst">dusendesten</w>
+        <w xml:id="t187_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+        <w xml:id="t188_m1" pos="ADJN&lt;ADJ" msd="Pos.Neut.Dat.Sg.*" lemma="drêhunderst*">drehunderdesten</w>
+        <w xml:id="t189_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+        <w xml:id="t190_m1" pos="CARDN&lt;CARD" msd="Neut.Dat" lemma="nēgen³" join="right">neghen</w>
+        <w xml:id="t190_m2" pos="KON&lt;KO" msd="--" lemma="unde²" join="both">en</w>
+        <w xml:id="t190_m3" pos="ADJN&lt;ADJ" msd="Pos.Neut.Dat.Sg.*" lemma="twintigeste*" join="left">twinteghesten</w>
+        <w xml:id="t191_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+        <w xml:id="t192_m1" pos="APPR&lt;AP" msd="Dat" lemma="in²">in</w>
+        <w xml:id="t193_m1" pos="DDARTA&lt;DD" msd="Masc.Dat.Sg" lemma="dê¹,dê¹,dat²A">deme</w>
+        <w xml:id="t194_m1" pos="NA&lt;NA" msd="Masc.Dat.Sg" lemma="dach">daghe</w>
+        <lb n="15"/>
+        <w xml:id="t195_m1" pos="ADJA&lt;ADJ" msd="Pos.Masc.Gen.Sg.*" lemma="sünte">suͤnte</w>
+        <w xml:id="t196_m1" pos="NE&lt;NE" msd="Masc.Gen.Sg" lemma="matheus°">matheus</w>
+        <w xml:id="t197_m1" pos="NA&lt;NA" msd="Masc.Gen.Sg" lemma="apostel¹">aposteles</w>
+        <w xml:id="t198_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+        <w xml:id="t199_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+        <w xml:id="t200_m1" pos="$;&lt;$;" msd="--" lemma="--">.</w>
+      </s>
+    </ab>
+  </body>
+</text>
+
