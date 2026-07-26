@@ -1,0 +1,41 @@
+{
+ "type": "catalogue",
+ "project": "aemw/amarna",
+ "source": "http://oracc.org/aemw/amarna",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2024-07-05T11:19:22",
+ "members": {
+  "P271176": {
+   "project": "aemw/amarna",
+   "ancient_author": "[missing]",
+   "credits": "Edition by Jacob Lauinger and Tyler Yoder.  Released under a CC-BY-SA 3.0 license",
+   "designation": "EA 172",
+   "genre": "letter",
+   "id_text": "P271176",
+   "museum-nos": "VAT 1877",
+   "copies": "Winckler and Abel 1889-1890: 224; Schröder 1915c No. 96",
+   "editions": "Knudtzon 1915/I: 680-81; Mercer 1939: 542-43; Mynářová 2007: 221-22 (ll.1-7); Rainey 2015: 840-41, 1519-20",
+   "secondary-literatures": "Goren, Finkelstein, and Naʾaman 2004: 75; Vita 2015a: 10",
+   "mus_no": "VAT 01877",
+   "period": "Middle Babylonian",
+   "provenience": "Unknown location",
+   "publication_history": "WA 224 (copy); VS 11, 96 (copy); Moran, AL (1992), p. 259 (translation)",
+   "recipient": "[missing]",
+   "subgenre": "client letter",
+   "title": "Unknown location",
+   "supergenre": "unknown",
+   "xproject": "CDLI",
+   "uri": "http://cdli.ucla.edu/P271176",
+   "public": "no",
+   "images": [],
+   "trans": [
+    "en"
+   ]
+  }
+ },
+ "summaries": {
+  "P271176": "<p id=\"P271176\">aemw/amarna:P271176 = EA 172. Middle Babylonian Unknown location (letter/&gt;client letter)</p>"
+ }
+}

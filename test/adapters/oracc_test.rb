@@ -289,6 +289,136 @@ module Adapters
       fulltext&.disconnect
     end
 
+    # -- P46-3: the CC0 extension pack (ecut, amarna, ATAE, TCMA, …) -----------
+    #
+    # 64 new PROJECTS rows ride the existing machinery against their own
+    # fixture tree (the oracc_p14_9/p31_0 own-tree precedent). What the tree
+    # pins:
+    #   * ecut (electronic Corpus of Urartian Texts): URARTIAN (`xur`) enters
+    #     the library as data — l-nodes tagged xur upstream (with the script
+    #     variants xur-946/xur-944 whose BASE subtag folds to xur under the
+    #     standing primary-language rule), gold-lemmatized (gloss-xur).
+    #   * aemw/amarna (the Amarna letters): peripheral Middle Babylonian
+    #     tagged `akk-x-mbperi` upstream → base akk, the standing fold.
+    #   * both trees use the REAL zip roots: ecut top-level, aemw/amarna
+    #     nested one deep (aemw-amarna/amarna/…, the saao-saa01 shape).
+    EXTENSION46 = Nabu::TestSupport.fixtures("oracc_p46_3")
+
+    def test_projects_includes_the_p46_extension_rows
+      %w[
+        ecut aemw/amarna aemw/alalakh/idrimi atae/assurmisc atae/durkatlimmu
+        atae/wvdog152 tcma/assur tcma/tsh1 tcma/ugarit hbtin cams/gkab dccmt
+        cmawro/cmawr1 cmawro/maqlu ccpo obmc obta akklove suhu
+      ].each do |project|
+        assert_includes Nabu::Adapters::Oracc::PROJECTS, project
+      end
+      assert_equal 102, Nabu::Adapters::Oracc::PROJECTS.size,
+                   "P46-3 extends the 38 P31-0 projects by the 64-row CC0 pack"
+      # Pinned EXCLUSIONS (evidence 2026-07-26, LMU mirror): tcma/bderi is a
+      # broken upstream build (HTTP 500, its 1 text unfetchable — the ctij
+      # shape); the atae/tcma/cmawro PARENTS are proxy portals owning no
+      # corpusjson (riao precedent) and are not registered.
+      %w[tcma/bderi atae tcma cmawro ctij oimea].each do |excluded|
+        refute_includes Nabu::Adapters::Oracc::PROJECTS, excluded
+      end
+    end
+
+    def test_discover_finds_ecut_and_amarna_under_their_real_roots
+      ids = Nabu::Adapters::Oracc.new.discover(EXTENSION46).map(&:id)
+      assert_equal %w[
+        urn:nabu:oracc:aemw-amarna:P271176
+        urn:nabu:oracc:ecut:Q006944
+        urn:nabu:oracc:ecut:Q007897
+      ], ids
+    end
+
+    def test_discover_resolves_extension_titles_from_the_catalogue
+      refs = Nabu::Adapters::Oracc.new.discover(EXTENSION46).to_h { |ref| [ref.id, ref] }
+      assert_equal "eCUT A 05-046", refs["urn:nabu:oracc:ecut:Q006944"].metadata["title"]
+      assert_equal "EA 172", refs["urn:nabu:oracc:aemw-amarna:P271176"].metadata["title"]
+    end
+
+    def test_parse_derives_urartian_from_the_ecut_data
+      adapter = Nabu::Adapters::Oracc.new
+      refs = adapter.discover(EXTENSION46).to_h { |ref| [ref.id, ref] }
+
+      # eCUT A 05-046 (Minua gate inscription): pure Urartian, lemmatized.
+      rich = adapter.parse(refs["urn:nabu:oracc:ecut:Q006944"])
+      assert_equal "xur", rich.language
+      assert_equal "urn:nabu:oracc:ecut:Q006944:1", rich.first.urn
+      assert_equal "{d}hal-di-ni-ni uš-ma-a-ši-ni", rich.first.text
+      token_langs = rich.flat_map { |p| p.annotations["tokens"].filter_map { |t| t["lang"] } }.uniq.sort
+      assert_equal %w[xur xur-946], token_langs,
+                   "the xur-946 script variant stays on the token; the base subtag decides the primary"
+      lemmas = rich.flat_map { |p| p.annotations["tokens"].filter_map { |t| t["lemma"] } }
+      assert_includes lemmas, "Haldi", "ecut is gold-lemmatized (gloss-xur)"
+
+      # eCUT B 18-02: the minimal single-line case.
+      minimal = adapter.parse(refs["urn:nabu:oracc:ecut:Q007897"])
+      assert_equal "xur", minimal.language
+      assert_equal 1, minimal.size
+
+      # URN stability across two parses (the conformance identity, pinned
+      # here for the new language too).
+      assert_equal rich.map(&:urn), adapter.parse(refs["urn:nabu:oracc:ecut:Q006944"]).map(&:urn)
+    end
+
+    def test_parse_reads_the_amarna_letters_as_peripheral_akkadian
+      adapter = Nabu::Adapters::Oracc.new
+      ref = adapter.discover(EXTENSION46).find { |r| r.id == "urn:nabu:oracc:aemw-amarna:P271176" }
+      document = adapter.parse(ref)
+      assert_equal "akk", document.language, "akk-x-mbperi folds to its base subtag"
+      assert_equal 5, document.size
+      assert_equal "urn:nabu:oracc:aemw-amarna:P271176:o.001'", document.first.urn
+      token_langs = document.flat_map { |p| p.annotations["tokens"].filter_map { |t| t["lang"] } }.uniq
+      assert_equal %w[akk-x-mbperi], token_langs
+    end
+
+    def test_extension_fixture_load_produces_xur_lemma_rows
+      catalog = store_test_db
+      fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+      source = Nabu::Store::Source.create(
+        slug: "oracc", name: "ORACC", adapter_class: "Nabu::Adapters::Oracc", license_class: "open"
+      )
+      Nabu::Store::Loader.new(db: catalog, source: source)
+                         .load_from(Nabu::Adapters::Oracc.new, workdir: EXTENSION46, full: true)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
+
+      lemmas = fulltext[:passage_lemmas]
+      assert_operator lemmas.where(language: "xur").count, :>, 0,
+                      "Urartian citation forms flow through the unchanged cf plumbing"
+      row = lemmas.where(language: "xur", lemma_raw: "Haldi").first
+      refute_nil row, "expected a passage_lemmas row for the xur lemma Haldi"
+      assert_equal "urn:nabu:oracc:ecut:Q006944:1", row[:urn]
+    ensure
+      fulltext&.disconnect
+    end
+
+    # -- P46-3: the LMU-mirror failover through a real fetch -------------------
+
+    def test_fetch_fails_over_to_the_lmu_mirror_when_the_primary_is_down
+      Dir.mktmpdir do |root|
+        # Everything served by the MIRROR; the primary answers 500 for the
+        # FIRST project only — every other primary URL is deliberately
+        # unstubbed, so WebMock fails the test unless the shared failover
+        # memo routes the rest of the run (zips AND the translation crawl)
+        # straight to the mirror.
+        stub_project_zips(root, zip_base: Nabu::Adapters::Oracc::MIRROR_ZIP_BASE_URL,
+                                fragment_base: Nabu::Adapters::Oracc::MIRROR_BASE_URL)
+        stub_request(:get, RIMANUM_URL).to_return(status: 500)
+        workdir = File.join(root, "work")
+
+        report = conformance_adapter.fetch(workdir)
+
+        assert File.file?(File.join(workdir, "rimanum", "corpusjson", "P405432.json"))
+        assert File.file?(File.join(workdir, "html-en", "saao-saa01", "P224395.html")),
+               "the translation crawl rides the same failover"
+        assert_equal Nabu::Adapters::Oracc::PROJECTS.map { |project|
+          "#{Nabu::Adapters::Oracc::ZIP_BASE_URL}/#{project.tr('/', '-')}.zip"
+        }, report.repos.keys, "pins stay keyed to the PRIMARY urls — the mirror is a stand-in"
+      end
+    end
+
     # -- license (read per project, never hardcoded) --------------------------
 
     def test_discover_accepts_the_machine_read_cc0_license
@@ -500,7 +630,11 @@ module Adapters
     def test_fetch_wraps_a_crawl_http_failure_in_fetch_error
       Dir.mktmpdir do |root|
         stub_project_zips(root)
+        # P46-3: a primary fragment failure first fails over to the mirror;
+        # only BOTH hosts failing is the honest crawl abort.
         stub_request(:get, SAA_HTML_URL).to_return(status: 500)
+        stub_request(:get, "#{Nabu::Adapters::Oracc::MIRROR_BASE_URL}/saao/saa01/P224395/html")
+          .to_return(status: 500)
         assert_raises(Nabu::FetchError) { conformance_adapter.fetch(File.join(root, "work")) }
       end
     end
@@ -553,7 +687,11 @@ module Adapters
 
     def test_fetch_wraps_http_failure_in_fetch_error
       Dir.mktmpdir do |root|
+        # P46-3: only BOTH hosts failing aborts — the primary 500 alone now
+        # fails over to the mirror.
         stub_request(:get, RIMANUM_URL).to_return(status: 500)
+        stub_request(:get, "#{Nabu::Adapters::Oracc::MIRROR_ZIP_BASE_URL}/rimanum.zip")
+          .to_return(status: 500)
         assert_raises(Nabu::FetchError) { conformance_adapter.fetch(File.join(root, "work")) }
       end
     end
@@ -566,38 +704,65 @@ module Adapters
     # <root>/zips and stub every project URL with the recorded response shape
     # (200, application/zip, Last-Modified), plus the two stage-1 crawl
     # endpoints. +drop+ omits entries (path(s) relative to the zips root),
-    # simulating upstream deletions in the next build.
-    def stub_project_zips(root, drop: [])
+    # simulating upstream deletions in the next build. +zip_base+ /
+    # +fragment_base+ repoint the stubs at the mirror host (the P46-3
+    # failover test); the default is the primary.
+    def stub_project_zips(root, drop: [], zip_base: Nabu::Adapters::Oracc::ZIP_BASE_URL,
+                          fragment_base: "https://oracc.museum.upenn.edu")
       drops = Array(drop)
       zips = File.join(root, "zips-#{drops.empty? ? 'full' : 'dropped'}")
       Nabu::Adapters::Oracc::PROJECTS.each do |project|
         slug = project.tr("/", "-")
-        staging = File.join(zips, slug)
-        FileUtils.mkdir_p(File.dirname(staging))
-        if FIXTURED_PROJECTS.include?(project)
-          FileUtils.cp_r(File.join(FIXTURES, slug), staging)
-          trim_tr_en!(staging, slug)
-        else
-          stub_envelope_project(staging)
-        end
-        drops.each { |dropped| FileUtils.rm_f(File.join(zips, dropped)) if dropped.start_with?("#{slug}/") }
-        zip_path = File.join(zips, "#{slug}.zip")
-        Nabu::Shell.run("zip", "-q", "-r", zip_path, slug, chdir: zips)
-        stub_request(:get, "#{Nabu::Adapters::Oracc::ZIP_BASE_URL}/#{slug}.zip").to_return(
-          status: 200, body: File.binread(zip_path),
+        body = if FIXTURED_PROJECTS.include?(project)
+                 fixtured_zip_body(zips, slug, drops)
+               else
+                 envelope_zip_body(slug)
+               end
+        stub_request(:get, "#{zip_base}/#{slug}.zip").to_return(
+          status: 200, body: body,
           headers: { "Content-Type" => "application/zip", "Last-Modified" => LAST_MODIFIED }
         )
       end
-      stub_request(:get, SAA_HTML_URL).to_return(
+      stub_fragments(fragment_base)
+    end
+
+    def fixtured_zip_body(zips, slug, drops)
+      staging = File.join(zips, slug)
+      FileUtils.mkdir_p(File.dirname(staging))
+      FileUtils.cp_r(File.join(FIXTURES, slug), staging)
+      trim_tr_en!(staging, slug)
+      drops.each { |dropped| FileUtils.rm_f(File.join(zips, dropped)) if dropped.start_with?("#{slug}/") }
+      zip_path = File.join(zips, "#{slug}.zip")
+      Nabu::Shell.run("zip", "-q", "-r", zip_path, slug, chdir: zips)
+      File.binread(zip_path)
+    end
+
+    # The envelope-only projects (no corpus fixture) zip to IDENTICAL bodies
+    # across tests, so the ~100 `zip` forks per stubbed fetch are paid once
+    # per suite, not once per test.
+    ENVELOPE_ZIP_CACHE = {} # rubocop:disable Style/MutableConstant -- a deliberate suite-lifetime cache
+
+    def envelope_zip_body(slug)
+      ENVELOPE_ZIP_CACHE[slug] ||= Dir.mktmpdir do |staging_root|
+        staging = File.join(staging_root, slug)
+        stub_envelope_project(staging)
+        zip_path = File.join(staging_root, "#{slug}.zip")
+        Nabu::Shell.run("zip", "-q", "-r", zip_path, slug, chdir: staging_root)
+        File.binread(zip_path)
+      end
+    end
+
+    def stub_fragments(fragment_base)
+      stub_request(:get, "#{fragment_base}/saao/saa01/P224395/html").to_return(
         status: 200, body: File.binread(File.join(FIXTURES, "html-en", "saao-saa01", "P224395.html")),
         headers: { "Content-Type" => "text/html; charset=utf-8" }
       )
-      stub_request(:get, SAA_MISSING_URL).to_return(
+      stub_request(:get, "#{fragment_base}/saao/saa01/P224485/html").to_return(
         status: 200, body: "404\n", headers: { "Content-Type" => "text/html; charset=utf-8" }
       )
-      RIM_HTML_URLS.each do |url|
-        stub_request(:get, url).to_return(
-          status: 200, body: File.binread(File.join(FIXTURES, "html-en", "rimanum", "#{url.split('/')[-2]}.html")),
+      %w[P405134 P405432].each do |id|
+        stub_request(:get, "#{fragment_base}/rimanum/#{id}/html").to_return(
+          status: 200, body: File.binread(File.join(FIXTURES, "html-en", "rimanum", "#{id}.html")),
           headers: { "Content-Type" => "text/html; charset=utf-8" }
         )
       end

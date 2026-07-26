@@ -339,6 +339,23 @@ oracc:
                    # royal 101, earlylit 1, admin/ur3 0); a handful of
                    # catalog-only skeletons skip by rule (census honestly,
                    # quarantine loudly — the standing unknown-node guard).
+                   # P46-3 (2026-07-26) extended to 102: the CC0 extension
+                   # pack, +64 projects — ecut (URARTIAN xur enters, gold-
+                   # lemmatized), aemw/amarna + aemw/alalakh/idrimi, the 22
+                   # ATAE and 27 TCMA site subprojects (their parents are
+                   # proxy PORTALS owning no texts — not registered; atae's
+                   # saao-hosted 5,233 stay saao's), cmawro/cmawr1-3+maqlu,
+                   # hbtin, cams/gkab (overlap vs held blms+dcclt = 4 texts,
+                   # ruled immaterial — see Oracc::PROJECTS), dccmt, ccpo,
+                   # obmc, obta, akklove, suhu. ALL 64 CC0 verbatim, read
+                   # from each zip's metadata.json 2026-07-26 via the LMU
+                   # mirror (primary DOWN for days → the same packet wires
+                   # ZipFetch's fallback host: primary → mirror, pins stay
+                   # primary). EXCLUDED: tcma/bderi + ctij (broken builds,
+                   # HTTP 500), oimea (aggregator, parked pending a dedup
+                   # audit vs held rinap/riao/ribo). EXPECTED SYNC DELTAS
+                   # (owner-fired, no wired flip): ≈185 MB of new zips,
+                   # ~7,712 new tablet docs + ~6,339 crawled -en siblings.
   # Per-project HTTP zips (the first non-git fetch path); re-syncing is an
   # owner decision, not a scheduled one.
   sync_policy: manual

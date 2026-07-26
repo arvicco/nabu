@@ -1,0 +1,52 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ZIP-EXTRACT PROVENANCE (P46-3 extension projects). ORACC serves NO raw
+# per-file URLs — the delivery unit is the per-project zip; every entry was
+# extracted 2026-07-26 from its project zip. THE HOST FACT: the primary
+# oracc.museum.upenn.edu was down (connection timeouts), so both zips were
+# fetched from the official LMU mirror http://oracc.ub.uni-muenchen.de/json/
+# (sha256 + Last-Modified recorded in the README). A raw GET of any listed
+# path is impossible, so every entry is refetchable: false. Re-acquiring
+# means re-fetching the project zip (either host) and re-applying the README
+# extract/trim procedure. corpusjson members and metadata.json byte-verbatim
+# whole; catalogue.json trimmed to the fixtured ids.
+source: oracc_p46_3
+adapter_test:
+retrieved: 2026-07-26
+files:
+  - path: ecut/metadata.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted whole from http://oracc.ub.uni-muenchen.de/json/ecut.zip (primary host down) — no raw per-file URL exists
+    upstream: http://oracc.ub.uni-muenchen.de/json/ecut.zip
+  - path: ecut/catalogue.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from ecut.zip, members trimmed to the 2 fixtured Q-numbers (README recipe)
+    upstream: http://oracc.ub.uni-muenchen.de/json/ecut.zip
+  - path: ecut/corpusjson/Q006944.json
+    refetchable: false
+    provenance: zip-extract
+    reason: byte-verbatim member of ecut.zip (eCUT A 05-046 — the rich Urartian exemplar, xur + xur-946, lemmatized)
+    upstream: http://oracc.ub.uni-muenchen.de/json/ecut.zip
+  - path: ecut/corpusjson/Q007897.json
+    refetchable: false
+    provenance: zip-extract
+    reason: byte-verbatim member of ecut.zip (eCUT B 18-02 — the minimal single-line pure-xur case)
+    upstream: http://oracc.ub.uni-muenchen.de/json/ecut.zip
+  - path: aemw-amarna/amarna/metadata.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted whole from http://oracc.ub.uni-muenchen.de/json/aemw-amarna.zip (nested root aemw/amarna/) — no raw per-file URL exists
+    upstream: http://oracc.ub.uni-muenchen.de/json/aemw-amarna.zip
+  - path: aemw-amarna/amarna/catalogue.json
+    refetchable: false
+    provenance: zip-extract
+    reason: extracted from aemw-amarna.zip, members trimmed to the fixtured P-number (README recipe)
+    upstream: http://oracc.ub.uni-muenchen.de/json/aemw-amarna.zip
+  - path: aemw-amarna/amarna/corpusjson/P271176.json
+    refetchable: false
+    provenance: zip-extract
+    reason: byte-verbatim member of aemw-amarna.zip (EA 172 — damaged-letter exemplar, akk-x-mbperi, primed labels)
+    upstream: http://oracc.ub.uni-muenchen.de/json/aemw-amarna.zip
