@@ -5552,8 +5552,12 @@ module Nabu
 
       # One entry, the define house format — shared verbatim by `show` on a
       # dictionary-entry urn (P22-2), where a withdrawn entry reads honestly.
+      # The language code rides the header (P46-r6, owner report: a WOLD hit
+      # named no language — obvious for LSJ, load-bearing for the
+      # multi-language shelves), the etym-entry style.
       def print_define_entry(result)
-        say "#{result.headword} — #{result.dictionary_title} [#{result.license_class}]" \
+        lang = result.language.to_s.empty? ? "" : " [#{result.language}]"
+        say "#{result.headword}#{lang} — #{result.dictionary_title} [#{result.license_class}]" \
             "#{' (withdrawn)' if result.withdrawn}  #{result.urn}"
         say "  gloss: #{result.gloss}" if result.gloss
         say ""
