@@ -34,11 +34,12 @@ draws from.
 
 ## Find your desk
 
-The collection is organized as twenty-one **research desks** — scholarly hats,
+The collection is organized as twenty-two **research desks** — scholarly hats,
 each gathering the shelves, instruments and terminal setup for one tradition.
 Find yours:
 
 - **[The Classicist]({{ '/axis/classical/' | relative_url }})** — Greek and Latin letters read whole, Homer to the late grammarians.
+- **[The Romanist]({{ '/axis/romance/' | relative_url }})** — the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours.
 - **[The Papyrologist-Epigraphist]({{ '/axis/epigraphy/' | relative_url }})** — reads what survives on stone, sherd, papyrus and tablet, lacunae and all.
 - **[The Slavicist]({{ '/axis/slavic/' | relative_url }})** — Cyril and Methodius to the damaskini, canon to vernacular.
 - **[The Germanicist]({{ '/axis/germanic/' | relative_url }})** — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches.
@@ -48,9 +49,12 @@ Find yours:
 - **[The Biblical scholar]({{ '/axis/biblical/' | relative_url }})** — one text across Hebrew, Greek, Latin, Syriac, Coptic and English witnesses.
 - **[The Hebraist]({{ '/axis/hebrew/' | relative_url }})** — Masoretic vowels, Qumran consonants, the Aramaic of the Targums.
 - **[The Syriacist]({{ '/axis/syriac/' | relative_url }})** — the Peshitta and the estrangela bookshelf.
+- **[The Ethiopicist]({{ '/axis/ethiopic/' | relative_url }})** — Aksum to the scriptoria: Enoch, Jubilees, and the Geʿez Bible.
+- **[The Arabist]({{ '/axis/arabic/' | relative_url }})** — the Islamicate library whole, Quran and hadith to falsafa and adab.
 - **[The Hittitologist]({{ '/axis/hittite/' | relative_url }})** — Anatolia in cuneiform, KBo and KUB by tablet and line.
 - **[The Assyriologist]({{ '/axis/cuneiform/' | relative_url }})** — Sumerian, Akkadian, Ugaritic, Hittite: the tablet world entire.
 - **[The Egyptologist]({{ '/axis/egyptian/' | relative_url }})** — hieroglyphs to Coptic, one language across four millennia of script.
+- **[The Iranologist]({{ '/axis/iranian/' | relative_url }})** — the Avesta to the Achaemenid inscriptions, Old Iranian liturgy toward Middle Persian.
 - **[The Indologist]({{ '/axis/indic/' | relative_url }})** — Veda to sastra, the Sanskrit library and its instruments.
 - **[The Buddhologist]({{ '/axis/buddhist/' | relative_url }})** — the dharma across the Pali, Sanskrit and Chinese canons.
 - **[The Sinologist]({{ '/axis/sinitic/' | relative_url }})** — the classical Chinese written world and its phonological deep past.
@@ -63,22 +67,22 @@ with every desk's member shelves and recipes, is
 
 ## The holdings, in brief
 
-As of **25 July 2026**, the catalog records **813,257 documents** comprising
-**65,130,037 passages** in 115 language codes — from proto-cuneiform
+As of **26 July 2026**, the catalog records **947,273 documents** comprising
+**66,755,518 passages** in 116 language codes — from proto-cuneiform
 tablets of the late fourth millennium BCE to Meiji-era Japanese. The
-newest arrival more than doubled the library in a single day: the
-Arabic phase — OpenITI, the premodern Islamicate library, with its
-Persian shelf — making **Classical Arabic the largest language on the
-shelves (33.3 million passages)**, ahead of Literary Chinese (13.2
-million), the same day the Germanic wave landed (the Poetic Edda, the
-*Heliand*, Middle High German, the runestones) beside the day-old
-Japanese reading desk. Together with
-**1,310,763 dictionary entries** on the reference shelf and **16.2
-million gold-standard lemma annotations in twenty-eight languages** (a
-further 8.2 million machine-suggested annotations are carried at an
-honestly labelled silver tier). All figures on this site are read
-from the live catalog, never estimated, and carry the date on which they
-were read.
+newest wave opened the Rabbinic library (Mishnah, both Talmuds cited
+at daf grain, Tosefta), the Geʿez shelf (1 Enoch and Jubilees —
+books that survive complete only in Geʿez), the inscriptions of
+Italy (115,590 EDR records), Urartian, and Middle Low German — days
+after the Romance wave and the Arabic phase that made **Classical
+Arabic the largest language on the shelves (33.3 million passages)**,
+ahead of Literary Chinese (13.2 million). Together with
+**1,391,759 dictionary entries** across one hundred reference shelves
+and **19.2 million gold-standard lemma annotations in thirty-seven
+languages** (a further 28.1 million machine-suggested annotations are
+carried at an honestly labelled silver tier). All figures on this
+site are read from the live catalog, never estimated, and carry the
+date on which they were read.
 
 A survey of the collections is given on [The Library]({{ '/library/' | relative_url }})
 page; the full attribution and licensing record is on

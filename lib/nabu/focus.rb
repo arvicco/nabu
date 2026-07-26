@@ -35,7 +35,9 @@ module Nabu
 
     # A working scope over +registry+: the (possibly filtered) registry the
     # surface renders, the full one for hidden-count math, and the resolution.
-    View = Data.define(:registry, :full_registry, :resolution, :profile, :all) do
+    # +disabled+ (P46-r3) marks the COMPLEMENT view — the registry holds only
+    # the rows `nabu enable` would add.
+    View = Data.define(:registry, :full_registry, :resolution, :profile, :all, :disabled) do
       # The enablement filter is APPLIED whenever --all was NOT passed (P44-r3b:
       # the profile is now the box's ENABLED set, so it governs the default view
       # even when empty — an empty enabled set shows only the owner's shelves,
@@ -95,11 +97,20 @@ module Nabu
     # the profile is applied, the filtered registry keeps every shelf (always
     # enabled) plus the enabled sources AND modules, in registration order,
     # carrying the same axes definitions so --axis grouping still works.
-    def view(profile:, registry:, all:)
+    # +disabled+ (P46-r3, owner request) inverts the filter: ONLY the rows
+    # `nabu enable` would add — shelves (always enabled) and enabled rows
+    # drop out. The CLI refuses all+disabled together, so the arms never race.
+    def view(profile:, registry:, all:, disabled: false)
       resolution = resolve(profile, registry)
-      applied = !all
       filtered =
-        if applied
+        if disabled
+          complement = registry.each_source.reject do |entry|
+            entry.shelf? || resolution.slugs.include?(entry.slug)
+          end
+          SourceRegistry.new(complement, axes: registry.axes)
+        elsif all
+          registry
+        else
           # A shelf ALWAYS shows (implicitly always enabled — owner ruling
           # 2026-07-24: your own shelves never need enabling); every other
           # row — feature modules INCLUDED — shows iff enabled. The P40-f
@@ -113,10 +124,9 @@ module Nabu
             resolution.slugs.include?(entry.slug)
           end
           SourceRegistry.new(visible, axes: registry.axes)
-        else
-          registry
         end
-      View.new(registry: filtered, full_registry: registry, resolution: resolution, profile: profile, all: all)
+      View.new(registry: filtered, full_registry: registry, resolution: resolution,
+               profile: profile, all: all, disabled: disabled)
     end
 
     # -- write validation -----------------------------------------------------
@@ -177,6 +187,17 @@ module Nabu
       end
 
       "#{head} — #{hidden_slugs.size} sources not enabled (--all shows them)"
+    end
+
+    # The --disabled view's footer (P46-r3): the shown rows ARE the
+    # complement, so the line carries the on-ramp — or the honest
+    # all-enabled state when there is nothing left to enable.
+    def disabled_footer_line(shown_slugs)
+      return "everything registered is enabled on this box" if shown_slugs.empty?
+
+      "not enabled: #{shown_slugs.size} #{shown_slugs.size == 1 ? 'row' : 'rows'} — " \
+        "nabu enable <axis|source> adds #{shown_slugs.size == 1 ? 'it' : 'them'} " \
+        "(the bare view shows the enabled set)"
     end
 
     # The registry-drift warning: names in the file that match nothing now.

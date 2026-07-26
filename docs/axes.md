@@ -12,7 +12,7 @@ its Latin and at the Biblical scholar's for its scripture; the UD treebanks
 answer to nine desks at once. Multi-membership is the point, not an
 accident to be tidied away.
 
-Everything below documents **shipped behaviour** — the twenty-one desks
+Everything below documents **shipped behaviour** — the twenty-two desks
 defined in `config/axes.yml`, their memberships declared per source in
 `config/sources.yml`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
@@ -75,7 +75,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (16): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `trismegistos`, `pleiades`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`
+**Members** (17): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `trismegistos`, `pleiades`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`, `edr`
 
 ### slavic
 
@@ -89,9 +89,9 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 > The Germanicist — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches.
 
-Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), and the runic inscriptions (Rundata, dual-tagged epigraphy).
+Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
-**Members** (9): `ud`, `proiel`, `iswoc`, `menotec`, `aspr`, `bosworth-toller`, `rem`, `rundata`, `helipad`
+**Members** (10): `ud`, `proiel`, `iswoc`, `menotec`, `aspr`, `bosworth-toller`, `rem`, `rundata`, `helipad`, `ren`
 
 ### celtic
 
@@ -115,7 +115,7 @@ The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, th
 
 The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the Leiden Latin dictionary, StarLing's bases, and the curated loan edges. Non-IE lanes of the same shelves ride their own axes too — dual-tagging, never folding.
 
-**Members** (6): `wiktionary-recon`, `iecor`, `liv`, `edl`, `starling`, `sabellic-loans`
+**Members** (9): `wiktionary-recon`, `iecor`, `wold`, `clics`, `liv`, `edl`, `starling`, `sabellic-loans`, `cldf-spine`
 
 ### biblical
 
@@ -123,7 +123,7 @@ The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the 
 
 The cross-language scripture hat: the Masoretic shelves and the Scrolls, the Greek NT, Vulgate and WEB, Peshitta and the Syriac corpus, Coptic Scriptorium, the Targums, and the OSHB-BHSA bridging module. The hebrew and syriac language desks coexist with this hat by design.
 
-**Members** (14): `ud`, `vulgate`, `eng-web`, `sblgnt`, `coptic-scriptorium`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `hebrew-lexicon`, `peshitta`, `syriac-corpus`
+**Members** (15): `ud`, `vulgate`, `eng-web`, `sblgnt`, `coptic-scriptorium`, `oshb`, `sdbh`, `sefaria`, `bhsa`, `bridging`, `dss`, `hebrew-lexicon`, `peshitta`, `syriac-corpus`, `betamasaheft-works`
 
 ### hebrew
 
@@ -140,6 +140,14 @@ The Hebrew-and-Aramaic language desk beside the cross-language biblical hat: OSH
 The Syriac language desk: the ETCBC Peshitta and the Digital Syriac Corpus, riding beside the biblical hat by design.
 
 **Members** (2): `peshitta`, `syriac-corpus`
+
+### ethiopic
+
+> The Ethiopicist — Aksum to the scriptoria: Enoch, Jubilees, and the Geʿez Bible.
+
+The Ethiopic (Gǝʿǝz) desk in the Oriental-Christian neighborhood: the Beta maṣāḥǝft transcriptions (the Geʿez Bible, 1 Enoch, Jubilees, the Kebra nagast, royal chronicles), Dillmann's Lexicon, and the TraCES analyzed corpus with its Aksumite inscriptions — riding beside the biblical hat by design.
+
+**Members** (3): `betamasaheft-works`, `dillmann`, `traces`
 
 ### arabic
 
@@ -230,6 +238,14 @@ to a desk. They come in three families: the **grouped views** (`list`/`status
 filter** (`search`/`export --axis`), which scopes a query to a desk's shelves;
 and the **desk card** (`nabu axis`), the reference page for one desk.
 
+- **`nabu enable <axis>`** (and `enable <source>`) — the first-time step:
+  adds the desk's members (or one source) to `config/profile.yml`, this
+  box's enablement config (P44-r3b). Enablement governs what `sync` /
+  `sync --all` acquires and the default row set of `list`/`status`/
+  `health`; `search`/`show`/`export` always see everything held. A desk is
+  workable only after `enable <axis>` → `sync <axis>` — every desk page
+  teaches the quartet in that order.
+
 - **`nabu list --axis`** — the shelf census grouped under the desks. Bare
   `--axis` renders every desk in the ratified order; `--axis slavic` renders
   one; `--axis slavic,celtic` renders those, in the order named. Each desk
@@ -251,11 +267,13 @@ and the **desk card** (`nabu axis`), the reference page for one desk.
   byte-unchanged, under a one-line axis header.
 
   **The asymmetry to know:** an axis expansion is *not* an explicit
-  per-source request, so **disabled members are skipped** — reported by name
-  on one `skipped (disabled): …` line, never silently — whereas
-  `sync <disabled-slug>` (an explicit request) syncs the disabled source
-  anyway, with a note. The desk is a convenience over the enabled shelf; the
-  slug is a direct order.
+  per-source request, so **unwired members are skipped** — reported by name
+  on one `skipped (unwired): …` line, never silently — and feature modules
+  are skipped under their own honest label, `skipped (module — sync
+  directly): …` (P46-r1: a module is permanently `wired: false` by
+  invariant; its sync is an explicit owner act). An explicit
+  `sync <unwired-slug>` syncs that source anyway, with a note. The desk is
+  a convenience over the wired shelf; the slug is a direct order.
 
 - **`nabu search --axis NAME[,NAME…]`** and **`nabu export --axis`** — the
   membership *filter*: the named desks expand to the union of their member
@@ -279,12 +297,13 @@ and the **desk card** (`nabu axis`), the reference page for one desk.
   persona and membership, holdings reading `no database`.
 
   ```
+  nabu enable celtic                    # first time: the desk onto this box's profile
+  nabu sync celtic                      # the celtic desk's enabled members
+  nabu sync --axis celtic,italic --parse-only
   nabu list --axis                      # the whole census, grouped by desk
   nabu list --axis slavic               # one desk's shelves
   nabu status --axis celtic,italic      # two desks' health
+  nabu axis celtic                      # the Celticist's desk card
   nabu search μηνιν --axis celtic       # search scoped to the celtic shelves
   nabu export --format jsonl --axis biblical > scripture.jsonl
-  nabu axis celtic                      # the Celticist's desk card
-  nabu sync celtic                      # the celtic desk's enabled members
-  nabu sync --axis celtic,italic --parse-only
   ```

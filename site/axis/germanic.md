@@ -7,7 +7,7 @@ description: >-
 
 > The Germanicist — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches.
 
-Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), and the runic inscriptions (Rundata, dual-tagged epigraphy).
+Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
 The desk spans all three Germanic branches. **East** is Gothic (Wulfila,
 gold-lemmatized in PROIEL). **West** runs Old English (ASPR verse, ISWOC
@@ -18,14 +18,17 @@ under `is` — Old Norwegian and the Poetic Edda of Codex Regius through
 Menotec (`non`), and, dual-tagged with the epigraphy desk, the runic
 inscriptions of Rundata. The wave went live 2026-07-22 with the
 owner-verified first syncs — all five shelves hold their corpora below.
+Newest on the desk: ReN, the Middle Low German / Low Rhenish reference
+corpus (1200–1650, `gml` — the Hanseatic rung between ReM and the Norse
+shelves): 235 texts, 1.49 M gold-annotated tokens, live below.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 July 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
@@ -36,6 +39,7 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
+| `ren` | texts | attribution | wired · manual | 235 docs / 297,504 passages |
 
 ## The desk's instruments
 
@@ -65,13 +69,15 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 
 ## Working the germanic desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable germanic               # first time: put this desk's shelves in this box's profile
+nabu sync germanic                 # fetch/refresh the desk's enabled members
 nabu list --axis germanic          # the shelf census, this desk only
 nabu axis germanic                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis germanic   # a query scoped to this desk's shelves
-nabu sync germanic                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:
@@ -117,4 +123,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-one research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

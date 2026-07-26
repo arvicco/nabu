@@ -25,13 +25,19 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-25** the shelves hold **813,257 documents / 65,130,037
-passages** in 115 language codes — from proto-cuneiform tablets of the
-late 4th millennium BCE to Meiji-era Japanese, and now the medieval
-Latin-to-vernacular continuum: **the Romance wave** (2026-07-25)
-brought the MGH critical editions, digilibLT's late-antique prose,
-and the Base de français médiéval's Old French beside CroALa. Two
-days earlier a single arrival had more than doubled the library:
+As of **2026-07-26** the shelves hold **947,273 documents / 66,755,518
+passages** in 116 language codes — from proto-cuneiform tablets of the
+late 4th millennium BCE to Meiji-era Japanese. The newest wave
+(2026-07-26) opened the Rabbinic library (Mishnah, both Talmuds at
+daf-grain citation, Tosefta), the Geʿez shelf (**1 Enoch and
+Jubilees, complete only in Geʿez**, with Dillmann's lexicon and the
+TraCES gold corpus), the inscriptions of Italy (EDR, 115,590
+records), Urartian (Oracc's eCUT, gold-lemmatized), Middle Low
+German (ReN), and the comparativist loanword layer (WOLD/CLICS³) —
+a day after **the Romance wave** brought the MGH critical editions,
+digilibLT's late-antique prose, and the Base de français médiéval's
+Old French beside CroALa. Days earlier a single arrival had more
+than doubled the library:
 **the Arabic phase** — OpenITI, the
 premodern Islamicate library whole (Quran and hadith, history, fiqh,
 falsafa, the dīwāns) with its Persian shelf (Ḥāfiẓ, Ibn Sīnā) — making
@@ -41,9 +47,9 @@ and the CBETA Buddhist canon), the same day the **Germanic wave**
 landed (the Poetic Edda, the *Heliand*, Middle High German, ~6,800
 runic inscriptions) beside the Japanese reading desk and the Ancient
 Near East.
-Plus **1,310,786 dictionary entries** across fifty-six dictionary shelves
-and **16.2 million gold lemma annotations in 28 languages** (a further
-8.2 million ride an honestly labelled silver tier). (All numbers in this
+Plus **1,391,759 dictionary entries** across one hundred dictionary
+shelves and **19.2 million gold lemma annotations in 37 languages** (a
+further 28.1 million ride an honestly labelled silver tier). (All numbers in this
 README are read from the live catalog, never estimated.)
 
 ## Quickstart
@@ -308,13 +314,14 @@ shelf map with research uses per shelf is
 | Germanic wave | Menotec Old Norwegian treebanks + Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German (355k gold manuscript lines), Rundata runic inscriptions in five text lanes (2026-07-22) | 31,057 / 409,947 | nc / CC BY / CC BY-SA / odbl |
 | Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik + the Hebrew/Egyptian/Slovene desks and the Sino-Japanese lexicography (Unihan, KANJIDIC2/JMdict, HDIC, Guangyun) (`nabu define` / `etym`) | 1,310,763 entries / 56 shelves (2026-07-22) | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-The registry holds **89 sources + 4 local shelves + 8 feature modules**
-(the kind-split census, 2026-07-24 — `sources.yml` distinguishes what a
+The registry holds **96 sources + 4 local shelves + 9 feature modules**
+(the kind-split census, 2026-07-26 — `sources.yml` distinguishes what a
 row IS: a corpus that mints catalog rows, an owner-authored local memory
 shelf, or machinery like `pedecerto`/`bridging` that fetches reference
-data but mints no documents of its own). All 89 sources are **wired**
-— adapter built and first sync verified (2026-07-25); the newest
-arrivals are the Romance wave's `openmgh` (the MGH critical editions),
+data but mints no documents of its own). All 96 sources are **wired**
+— adapter built and first sync verified (2026-07-26); the newest
+arrivals are the P46 wave's `edr`, `ren`, the Geʿez trio, `wold` and
+`clics`, after the Romance wave's `openmgh` (the MGH critical editions),
 `digiliblt` (late-antique Latin, silver-annotated) and `bfm` (Old
 French), joining `glaux` (~20M-token silver-annotated Ancient Greek)
 and `croala` (Croatian Latin) from the day before.
@@ -399,7 +406,8 @@ text, and `links`-wired to the passages its manifest entry names as
 | `nabu export --format plain\|jsonl` | Stream the corpus out, with `--lang`/`--license`/`--source`/`--axis NAME[,NAME…]` filters (`--axis` is the multi-source generalization of `--source` — a whole research desk's shelves) — the longevity-hedge exit formats. |
 | `nabu ingest FILE-or-URL...` | The intake front door for your own material: copies a PDF/scan/article into the local-library shelf (`research_private` by default — never served or redistributed) — or downloads an http(s) URL first, recording it in the manifest — derives metadata candidates mechanically, confirms them interactively / AI-assisted (`--assist CMD`) / scripted (`--yes`), then syncs and prints the minted urn. `--shelf language CODE` scaffolds a language dossier, `--shelf source SLUG` a source dossier. |
 | `nabu note URN [TEXT]` | Owner annotations — scholia of one's own — on any urn the corpus knows (documents, passages, ranges, dictionary entries), resolution-checked before any write, stored as plain YAML on the local-notes shelf. Bare `nabu note URN` reads back what you said; `--list` enumerates; `--force` records a deliberately dangling note on planned material. Notes render on `show`/`define`/`links` and are served over MCP with their target's withholding rules. |
-| `nabu sync SLUG` / `sync --all` | Fetch and load a source (git, zip, or single-file HTTP — or re-scan a local shelf); idempotent, non-destructive, every run recorded. The name resolves slug-first-then-axis: `sync celtic` (or `--axis a,b`) expands a research axis to its enabled members, grouped, and names any disabled members on one skip line (an axis is not an explicit request, so a disabled member is skipped where an explicit `sync SLUG` would sync it anyway). |
+| `nabu enable AXIS\|SOURCE...` | The first-time step before `sync`: adds sources and/or whole desks to `config/profile.yml`, this box's enablement config — enablement governs what `sync`/`sync --all` acquires and the default row set of `list`/`status`/`health` (query commands always see everything held). Grant-gated sources prompt for the recorded acknowledgment (`--grant-acknowledged` for scripted use). Browse the menu first with `status --disabled` / `list --disabled` — the complement view: only the rows `enable` would add (`--all` is everything). |
+| `nabu sync SLUG` / `sync --all` | Fetch and load a source (git, zip, or single-file HTTP — or re-scan a local shelf); idempotent, non-destructive, every run recorded. The name resolves slug-first-then-axis: `sync celtic` (or `--axis a,b`) expands a research axis to its enabled members, grouped, and names any unwired members on one skip line — feature modules on their own `skipped (module — sync directly)` line — (an axis is not an explicit request, so an unwired member is skipped where an explicit `sync SLUG` would sync it anyway). |
 | `nabu list [SOURCE]` | The what-is-held view (`status` is the sync-state view): bare, a content census — one line per shelf with document/passage/entry counts, languages, the effective license-class mix, withdrawn/retired counts when nonzero. With a SOURCE, one shelf's card (identity, credit line, counts, per-language breakdown, dictionaries, date-axis coverage, facet and collection summaries). `--documents` / `--entries` / `--collections` enumerate (default `--limit 50`, `0` = all, honest "… N more" tail), with `--lang`/`--license`/`--withdrawn`/`--from`/`--to`/`--century` filters on documents and `--prefix` folded headword-prefix filtering on entries (`bh` finds `*bʰer-`). `--axis` groups the census under the research axes (the owner's desks) — bare, every axis in ratified order with its persona line; `--axis slavic` or `--axis a,b` selects some — a source appearing under each axis it serves. |
 | `nabu status` / `health` / `verify` | Per-source counts and run history, each row carrying an `up=` upstream-drift column (`up=ok(2d)` / `up=BEHIND(2d)` / `up=stale(30d)` / `up=?(never)` / `up=?(re-probe)` when a cached verdict predates the last sync / `up=frozen`) so an update is an informed decision — `nabu status --remote` probes upstreams inline and refreshes it in one command; local trend + upstream drift checks; full bitrot/tamper re-verification of every canonical file. `health` also runs the mechanical postcondition invariants (P18-7): failed-run/partial-load surfacing, flag-vs-artifact and synced-vs-populated mismatches, pending migrations, and quarantine counts as a DELTA against an audited baseline — plus an optional `sync --review CMD` AI-review hook, off by default. |
 | `nabu mcp` | The read-only MCP server — eleven tools for Claude Code/Desktop and any MCP client. Recipes and the user-perspective walkthroughs in [docs/mcp.md](docs/mcp.md). |
@@ -495,7 +503,7 @@ useful to others.
 |---|---|
 | [docs/quickstart.md](docs/quickstart.md) | Zero to first search, copy-pasteable, honest about sizes and timings. |
 | [docs/library.md](docs/library.md) | The shelf map: every corpus with contents, counts, licenses, and research uses. |
-| [docs/axes.md](docs/axes.md) | the research axes: the twenty-one scholarly desks, their personas, and which sources each tags. |
+| [docs/axes.md](docs/axes.md) | the research axes: the twenty-two scholarly desks, their personas, and which sources each tags. |
 | [docs/01-concept.md](docs/01-concept.md) | The vision: what Nabu is, workflows, principles, what success looks like. |
 | [docs/mcp.md](docs/mcp.md) | The MCP server: ten read-only tools, registration recipes, quoting etiquette. |
 | [docs/conventions.md](docs/conventions.md) | Field notes for working with ancient-text corpora (Unicode/NFC, citations, editions, licensing) — start here if you're new to the domain. |

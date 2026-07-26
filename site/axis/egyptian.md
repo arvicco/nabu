@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 July 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `ccl` | dictionary | attribution | wired · manual | 11,284 entries |
@@ -38,13 +38,15 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 
 ## Working the egyptian desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable egyptian               # first time: put this desk's shelves in this box's profile
+nabu sync egyptian                 # fetch/refresh the desk's enabled members
 nabu list --axis egyptian          # the shelf census, this desk only
 nabu axis egyptian                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis egyptian   # a query scoped to this desk's shelves
-nabu sync egyptian                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:
@@ -74,4 +76,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-one research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

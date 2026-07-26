@@ -1,0 +1,23 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The TraCES TEI-Ling export keeps its files flat at the repo root, spaces
+# in filenames and all. All three fixtures are WHOLE byte-identical
+# upstream copies. adapter_test is null — the source-specific test pins
+# ids/token counts/lemma links a full refetch would not false-fail.
+source: traces
+adapter_test:
+retrieved: 2026-07-26
+files:
+  - path: RIE232TEILing.xml
+    url: https://raw.githubusercontent.com/BetaMasaheft/traces/master/RIE232TEILing.xml
+    whole: true
+    trim: none
+  - path: RIE193IITEILing.xml
+    url: https://raw.githubusercontent.com/BetaMasaheft/traces/master/RIE193IITEILing.xml
+    whole: true
+    trim: none
+  - path: "alpheios2021-09-30T120552.85 0200.xml"
+    url: "https://raw.githubusercontent.com/BetaMasaheft/traces/master/alpheios2021-09-30T120552.85%200200.xml"
+    whole: true
+    trim: none

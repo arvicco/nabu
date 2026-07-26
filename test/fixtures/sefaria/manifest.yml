@@ -18,7 +18,7 @@ files:
   - path: books.json
     url: https://raw.githubusercontent.com/Sefaria/Sefaria-Export/master/books.json
     whole: false
-    trim: index header + first special_files entry + 13 of 19,705 book entries kept (the fixture files below, one merged sibling, one non-Targum selector negative); entry blocks byte-identical (20.2 MB -> 12 KB)
+    trim: index header + first special_files entry + 40 of 19,705 book entries kept (the fixture files below, merged siblings, and the P46-1 shelf-table census cases -- positives for every wave-1 named version plus commentary-subtree/Guides/Venice/Davidson-Hebrew negatives); entry blocks byte-identical (20.2 MB -> 36 KB)
   - path: json/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Obadiah/Hebrew/Mikraot Gedolot.json
     url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum%20Jonathan/Prophets/Targum%20Jonathan%20on%20Obadiah/Hebrew/Mikraot%20Gedolot.json
     whole: true
@@ -67,3 +67,23 @@ files:
     url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Onkelos/Torah/Onkelos%20Numbers/Hebrew/Sifsei%20Chachomim%20Chumash%2C%20Metsudah%20Publications%2C%202009.json
     whole: false
     trim: text sliced to chapter 1; metadata byte-identical (300 KB -> 13 KB; original sha256 in README.md)
+  - path: json/Talmud/Bavli/Seder Kodashim/Tamid/Hebrew/Wikisource Talmud Bavli.json
+    url: https://storage.googleapis.com/sefaria-export/json/Talmud/Bavli/Seder%20Kodashim/Tamid/Hebrew/Wikisource%20Talmud%20Bavli.json
+    whole: true
+    trim: none (complete tractate, copied whole 2026-07-26; CC-BY-SA Aramaic gemara, sectionNames [Daf, Line] -- pins the daf arithmetic, 25b start / 33b end)
+  - path: json/Talmud/Bavli/Seder Kodashim/Tamid/English/Sefaria Community Translation.json
+    url: https://storage.googleapis.com/sefaria-export/json/Talmud/Bavli/Seder%20Kodashim/Tamid/English/Sefaria%20Community%20Translation.json
+    whole: true
+    trim: none (complete file, copied whole 2026-07-26; a real one-line SCT partial -- daf 26a only)
+  - path: json/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/Mishnah based on the Kaufmann manuscript, edited by Dan Be'eri.json
+    url: https://storage.googleapis.com/sefaria-export/json/Mishnah/Seder%20Kodashim/Mishnah%20Tamid/Hebrew/Mishnah%20based%20on%20the%20Kaufmann%20manuscript%2C%20edited%20by%20Dan%20Be%27eri.json
+    whole: true
+    trim: none (complete tractate, copied whole 2026-07-26; the literal "PD" license spelling -- owner ruling D46-f)
+  - path: json/Mishnah/Seder Kodashim/Mishnah Tamid/English/Mishnah Yomit by Dr. Joshua Kulp.json
+    url: https://storage.googleapis.com/sefaria-export/json/Mishnah/Seder%20Kodashim/Mishnah%20Tamid/English/Mishnah%20Yomit%20by%20Dr.%20Joshua%20Kulp.json
+    whole: true
+    trim: none (complete tractate, copied whole 2026-07-26; CC-BY English, same title as the Kaufmann file across the axis -- the urn axis-segment exemplar)
+  - path: json/Tosefta/Lieberman Edition/Seder Moed/Tosefta Chagigah (Lieberman)/Hebrew/The Tosefta according to to codex Vienna. Third Augmented Edition, JTS 2001.json
+    url: https://storage.googleapis.com/sefaria-export/json/Tosefta/Lieberman%20Edition/Seder%20Moed/Tosefta%20Chagigah%20%28Lieberman%29/Hebrew/The%20Tosefta%20according%20to%20to%20codex%20Vienna.%20Third%20Augmented%20Edition%2C%20JTS%202001.json
+    whole: true
+    trim: none (complete tractate, copied whole 2026-07-26; CC-BY, upstream's own double "to" in the versionTitle verbatim; depth-3 Tosefta categories)

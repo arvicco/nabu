@@ -128,16 +128,16 @@ clients, the tool reference, and the quoting etiquette are in
 Each further shelf is one `nabu enable <source>` (or `enable <axis>` for a whole desk) followed by its `sync`; `bin/nabu sync --all` re-syncs
 every enabled live-policy source in one pass. The full menu is
 `config/sources.yml`; real on-disk sizes for the larger shelves, measured
-2026-07-13:
+2026-07-26:
 
 | Sync | Unlocks | Canonical size |
 |---|---|---|
 | `bin/nabu sync vulgate` + `sync eng-web` | the Clementine Latin and English witnesses for `align`, Old Testament included | 357 MB each |
-| `bin/nabu sync perseus-greek` | the Greek canon with aligned English translations | 910 MB |
-| `bin/nabu sync perseus-latin` | the Latin classics | 220 MB |
+| `bin/nabu sync perseus-greek` | the Greek canon with aligned English translations | 921 MB |
+| `bin/nabu sync perseus-latin` | the Latin classics | 224 MB |
 | `bin/nabu sync gretil` | 780 Sanskrit editions | 303 MB |
-| `bin/nabu sync papyri-ddbdp` | 61k documentary papyri | 2.3 GB |
-| `bin/nabu sync oracc` | 21k cuneiform documents | 4.1 GB |
+| `bin/nabu sync papyri-ddbdp` | 61k documentary papyri | 4.8 GB |
+| `bin/nabu sync oracc` | 105k cuneiform documents, translations and the P46 CC0 project pack (Urartian among them) included | 16 GB |
 
 What each shelf is good for is surveyed on [The Library]({{ '/library/' | relative_url }});
 every text keeps its upstream license, recorded per document — the classes
@@ -152,7 +152,7 @@ The same walkthrough, kept in the repository alongside the code, is
 
 The starter shelf is running; the natural next move is to find the desk for
 your own field. `bin/nabu list --axis` prints the shelf census grouped under
-the twenty-one [research desks]({{ '/axis/' | relative_url }}) — scholarly hats
+the twenty-two [research desks]({{ '/axis/' | relative_url }}) — scholarly hats
 over the same sources, from the Classicist to the Assyriologist. Pick the one
 that fits and sync its members in a single command — `bin/nabu sync celtic`,
 or whichever axis is yours — then open its page: each desk carries its own

@@ -1,0 +1,129 @@
+{
+  "type": "cdl",
+  "project": "ecut",
+  "source": "http://oracc.org/ecut",
+  "license": "This data is released under the CC0 license",
+  "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "more-info": "http://oracc.org/doc/opendata/",
+  "UTC-timestamp": "2023-03-20T08:11:33",
+  "textid": "Q007897",
+  "cdl": [
+    {
+      "node": "c",
+      "type": "text",
+      "id": "Q007897.U0",
+      "cdl": [
+        {
+          "node": "d",
+          "type": "object",
+          "ref": ""
+        },
+        {
+          "node": "d",
+          "type": "surface",
+          "ref": ""
+        },
+        {
+          "node": "c",
+          "type": "discourse",
+          "subtype": "body",
+          "id": "Q007897.U1",
+          "cdl": [
+            {
+              "node": "c",
+              "type": "sentence",
+              "implicit": "yes",
+              "id": "Q007897.U2",
+              "label": "1",
+              "cdl": [
+                {
+                  "node": "d",
+                  "type": "line-start",
+                  "ref": "Q007897.1",
+                  "n": "1",
+                  "label": "1"
+                },
+                {
+                  "node": "l",
+                  "frag": "{m}mi₃-nu-a-hi-[...]",
+                  "id": "Q007897.l07e4a",
+                  "ref": "Q007897.1.1",
+                  "inst": "Minua[king of Urartu, son of Išpuini]RN$Minua=hi=X(?)",
+                  "bad": "yes",
+                  "f": {
+                    "lang": "xur",
+                    "form": "{m}mi₃-nu-a-hi-x",
+                    "gdl": [
+                      {
+                        "det": "semantic",
+                        "pos": "pre",
+                        "seq": [
+                          {
+                            "v": "m",
+                            "utf8": "𒁹",
+                            "id": "Q007897.1.1.0"
+                          }
+                        ]
+                      },
+                      {
+                        "v": "mi₃",
+                        "utf8": "𒈨",
+                        "id": "Q007897.1.1.1",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "nu",
+                        "utf8": "𒉡",
+                        "id": "Q007897.1.1.2",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "a",
+                        "utf8": "𒀀",
+                        "id": "Q007897.1.1.3",
+                        "delim": "-"
+                      },
+                      {
+                        "v": "hi",
+                        "utf8": "𒄭",
+                        "id": "Q007897.1.1.4",
+                        "delim": "-"
+                      },
+                      {
+                        "x": "ellipsis",
+                        "id": "Q007897.1.1.5",
+                        "breakStart": "1",
+                        "break": "missing",
+                        "o": "]",
+                        "breakEnd": "Q007897.1.1.5"
+                      }
+                    ],
+                    "cf": "Minua",
+                    "gw": "king of Urartu, son of Išpuini",
+                    "norm": "Minua=hi=X(?)",
+                    "pos": "RN"
+                  },
+                  "props": [
+                    {
+                      "name": "field",
+                      "group": "env",
+                      "ngram": "-1",
+                      "ref": "Q007897.1.1"
+                    },
+                    {
+                      "name": "discourse",
+                      "group": "env",
+                      "value": "body",
+                      "ngram": "-1",
+                      "ref": "Q007897.1.1"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

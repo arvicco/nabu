@@ -63,12 +63,45 @@ module Nabu
   # CONTENTS become the tree (the project dir maps onto +dir+ directly);
   # otherwise the unpack root itself is the tree. Unzipping goes through
   # Nabu::Shell.run + the system `unzip` (no new gem — house rule).
+  #
+  # == Fallback host (P46-3)
+  #
+  # Distinct from the redirect follow: upstream never POINTS at a mirror —
+  # the CALLER registers a known-good +fallback_url+ (the 2026-07 ORACC
+  # outage: oracc.museum.upenn.edu down for days while the LMU mirror
+  # oracc.ub.uni-muenchen.de served every project zip). The fallback is
+  # tried only after the primary HARD-fails (non-2xx/304 status, transport
+  # error, timeout); a healthy primary never touches it. Identity — the
+  # state file, sha pins, and the caller's FetchReport keys — stays on the
+  # PRIMARY url, so a mirror-served sync pins exactly like a primary-served
+  # one (the hosts' Last-Modified values may differ; the worst case is one
+  # honest re-download, never staleness). Multi-project adapters share one
+  # Failover memo across their fetches: after one hard failure the whole
+  # run goes straight to the mirror — a fully-down primary costs ONE
+  # timeout, not one per project.
   class ZipFetch
     # HTTP-level failure (non-200/304, transport error). Adapters wrap it in
     # Nabu::FetchError like they wrap Shell::Error from git/unzip.
     class Error < Nabu::Error; end
 
     STATE_FILE = ".zip-fetch.json"
+
+    # The shared primary-host memo for a multi-project run (see class note).
+    # Once ANY sharing fetch marks the primary down, the rest of the run
+    # skips it and goes straight to the fallback.
+    class Failover
+      def initialize
+        @primary_down = false
+      end
+
+      def primary_down!
+        @primary_down = true
+      end
+
+      def primary_down?
+        @primary_down
+      end
+    end
 
     # What one completed sync did: the zip body's sha256 (the pin), the
     # relative paths newly copied into the attic, and whether upstream said
@@ -101,8 +134,10 @@ module Nabu
     # One-shot fetch for a single zip. +guard+, when given, is called with
     # the absolute live-tree paths the fresh unpack would delete — BEFORE any
     # tree mutation — and may raise (Nabu::SyncAborted) to abort.
-    def self.sync!(url:, dir:, attic_dir:, http: default_http, progress: nil, guard: nil)
-      fetch = new(url: url, dir: dir, attic_dir: attic_dir, http: http, progress: progress)
+    def self.sync!(url:, dir:, attic_dir:, http: default_http, progress: nil, guard: nil,
+                   fallback_url: nil, failover: nil, keep: [])
+      fetch = new(url: url, dir: dir, attic_dir: attic_dir, http: http, progress: progress,
+                  fallback_url: fallback_url, failover: failover, keep: keep)
       begin
         fetch.prepare!
         guard&.call(fetch.doomed_paths)
@@ -120,7 +155,7 @@ module Nabu
     # deletions (a sibling fetch arm's files inside the same workdir — the
     # OpenITI metadata TSV — must survive the zip tree swap).
     def initialize(url:, dir:, attic_dir:, http: self.class.default_http, progress: nil,
-                   stream: false, keep: [])
+                   stream: false, keep: [], fallback_url: nil, failover: nil)
       @url = url
       @dir = dir
       @attic_dir = attic_dir
@@ -128,6 +163,8 @@ module Nabu
       @progress = progress
       @stream = stream
       @keep = keep
+      @fallback_url = fallback_url
+      @failover = failover
       @doomed_relpaths = []
       @atticked = []
       @staging = nil
@@ -189,12 +226,29 @@ module Nabu
     private
 
     # Redirects followed (figshare 302s to a mirror); a 304 — first hop or
-    # post-redirect — is a terminal answer, not an error.
+    # post-redirect — is a terminal answer, not an error. A hard failure
+    # (5xx, transport error, timeout) retries once against the registered
+    # fallback host — see the class note; without a fallback it raises as
+    # before.
     def get_zip(stream: nil)
-      @progress&.call("Downloading #{@url}…\n")
-      response, = RedirectFollow.get(@url, http: @http, error: Error,
-                                           headers: conditional_headers, accept: [200, 304],
-                                           stream: stream)
+      return request_zip(@fallback_url, stream: stream) if @fallback_url && @failover&.primary_down?
+
+      begin
+        request_zip(@url, stream: stream)
+      rescue Error => e
+        raise unless @fallback_url
+
+        @failover&.primary_down!
+        @progress&.call("Primary failed (#{e.message}); retrying via fallback #{@fallback_url}…\n")
+        request_zip(@fallback_url, stream: stream)
+      end
+    end
+
+    def request_zip(url, stream: nil)
+      @progress&.call("Downloading #{url}…\n")
+      response, = RedirectFollow.get(url, http: @http, error: Error,
+                                          headers: conditional_headers, accept: [200, 304],
+                                          stream: stream)
       response
     end
 

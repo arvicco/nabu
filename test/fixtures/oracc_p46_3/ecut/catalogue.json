@@ -1,0 +1,74 @@
+{
+ "type": "catalogue",
+ "project": "ecut",
+ "source": "http://oracc.org/ecut",
+ "license": "This data is released under the CC0 license",
+ "license-url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "more-info": "http://oracc.org/doc/opendata/",
+ "UTC-timestamp": "2023-03-20T08:10:02",
+ "members": {
+  "Q006944": {
+   "langs": "0x01000000",
+   "project": "ecut",
+   "author": "Salvini",
+   "collection": "Van Museum, Van, Turkey",
+   "credits": "Based on Mirjo Salvini, Corpus dei Testi Urartei (CTU), Volume I–V, 2008–2018: Adapted, revised, lemmatized, and translated into English, by Birgit Christiansen (2016-) for the Munich Open-access Cuneiform Corpus Initiative (MOCCI), a corpus-building initiative funded by LMU Munich and the Alexander von Humboldt Foundation (through the establishment of the Alexander von Humboldt Chair for Ancient History of the Near and Middle East) and based at the Historisches Seminar - Abteilung Alte Geschichte of Ludwig-Maximilians-Universität München. The annotated edition is released under the Creative Commons Attribution Share-Alike license 3.0. Please cite this page as http://oracc.org/ecut/Q006944/.",
+   "designation": "eCUT A 05-046",
+   "display_name": "eCUT A 05-046",
+   "genre": "Royal stone inscription",
+   "id_composite": "Q006944",
+   "language": "Urartian",
+   "material": "stone",
+   "object_type": "stone block",
+   "period": "9th/8th century",
+   "popular_name": "Minua, son of Išpuini: A 5-46",
+   "primary_publication": "CTU A 05-046",
+   "provenience": "Kevenli",
+   "publication_date": "2008",
+   "ruler": "Minua, son of Išpuini",
+   "script": "Urartian",
+   "script_remarks": "inscribed",
+   "script_type": "Cuneiform",
+   "subgenre": "Minua, son of Išpuini (A 05)",
+   "dynastic_seat": "Urartu",
+   "supergenre": "unknown",
+   "trans": [
+    "en"
+   ]
+  },
+  "Q007897": {
+   "langs": "0x01000000",
+   "project": "ecut",
+   "author": "Salvini",
+   "credits": "Based on Mirjo Salvini, Corpus dei Testi Urartei (CTU), Volume I–V, 2008–2018: Adapted, revised, lemmatized, and translated into English, by Birgit Christiansen (2016-) for the Munich Open-access Cuneiform Corpus Initiative (MOCCI), a corpus-building initiative funded by LMU Munich and the Alexander von Humboldt Foundation (through the establishment of the Alexander von Humboldt Chair for Ancient History of the Near and Middle East) and based at the Historisches Seminar - Abteilung Alte Geschichte of Ludwig-Maximilians-Universität München. The annotated edition is released under the Creative Commons Attribution Share-Alike license 3.0. Please cite this page as http://oracc.org/ecut/Q007897/.",
+   "designation": "eCUT B 18-02",
+   "display_name": "eCUT CTU 4 B 18-02",
+   "genre": "Royal metal inscription",
+   "id_composite": "Q007897",
+   "language": "Urartian",
+   "material": "bronze",
+   "object_type": "shield boss",
+   "period": "unclear date",
+   "popular_name": "uncertain attribution: B 18-2",
+   "primary_publication": "CTU B 18-02",
+   "provenience": "Karmir-blur",
+   "pleiades_id": "863822",
+   "pleiades_coord": "[44.4502581,40.1551476]",
+   "publication_date": "2012",
+   "ruler": "Uncertain attribution",
+   "script": "Urartian",
+   "script_remarks": "inscribed",
+   "script_type": "Cuneiform",
+   "subgenre": "Uncertain Attribution (B 18)",
+   "dynastic_seat": "Urartu",
+   "supergenre": "unknown",
+   "trans": [
+    "en"
+   ]
+  }
+ },
+ "summaries": {
+  "Q006944": "<p id=\"Q006944\">ecut:Q006944 = eCUT A 05-046. 9th/8th century Kevenli (Royal stone inscription/&gt;Minua, son of Išpuini (A 05))</p>",
+  "Q007897": "<p id=\"Q007897\">ecut:Q007897 = eCUT B 18-02. unclear date Karmir-blur (Royal metal inscription/&gt;Uncertain Attribution (B 18))</p>"
+ }
+}

@@ -15,9 +15,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 25 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 July 2026)</span> |
 |---|---|---|---|---|
-| `local-language` | language dossiers | open | wired · manual | 216 dossiers |
+| `local-language` | language dossiers | open | wired · manual | 304 dossiers |
 | `local-library` | texts | research_private | wired · manual | 20 docs / 8,725 passages |
 | `local-notes` | owner notes | open | wired · manual | nothing held yet |
 | `local-source` | source records | open | wired · manual | 89 dossiers |
@@ -33,13 +33,15 @@ A source wears every desk it serves — these four answer this desk. Holdings ar
 
 ## Working the local desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable local               # first time: put this desk's shelves in this box's profile
+nabu sync local                 # fetch/refresh the desk's enabled members
 nabu list --axis local          # the shelf census, this desk only
 nabu axis local                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis local   # a query scoped to this desk's shelves
-nabu sync local                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:
@@ -67,4 +69,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-one research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
