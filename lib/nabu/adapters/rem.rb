@@ -9,9 +9,9 @@ module Nabu
     # Dipper, Wegera, Wich-Reif 2024; ISLRN 937-948-254-174-0), ~400 texts /
     # ~2M word forms of manually annotated MHG, the gold flagship of the
     # High-German-before-print stretch of the germanic axis. First registrant
-    # of the cora-tei family (the CorA-derived DDD TEI dialect); ReA (OHG +
-    # Old Saxon) and ReN (Middle Low German) ride the same family when their
-    # license replies land (backlog №40-1/№40-2).
+    # of the cora-tei family (the CorA-derived DDD TEI dialect); ReN (Middle
+    # Low German) is the second (P46-5, its own dialect subclass); ReA (OHG +
+    # Old Saxon) joins when its license reply lands (backlog №40-1).
     #
     # == Identity (FROZEN minting)
     #

@@ -6,9 +6,10 @@ module Nabu
   module Adapters
     # Streaming parser for the cora-tei family (P40-5): the TEI P5
     # serialisation of the CorA-derived DDD reference corpora of historical
-    # German — ReM (Middle High German) now; ReA (Old High German + Old
-    # Saxon) and ReN (Middle Low German) ride the same family when their
-    # licenses confirm (backlog №40-1/№40-2). Censused from the two whole
+    # German — ReM (Middle High German) here; ReN (Middle Low German) rides
+    # the family since P46-5 through the RenTeiParser subclass (its dialect
+    # censused there); ReA (Old High German + Old Saxon) joins when its
+    # license reply lands (backlog №40-1). Censused from the two whole
     # ReM v2.1 texts in test/fixtures/rem/ (never invented):
     #
     #   <body><ab>
@@ -268,6 +269,9 @@ module Nabu
 
       # A finished token joins the line: text glued per @join, record
       # compacted (nil/empty attributes and the "--" null lemma drop).
+      # join="both" (censused in ReN — 708 tokens, e.g. the multi-part
+      # Latin dates; ReM carries none, so this is behavior-neutral there)
+      # glues on both sides.
       def close_token(walk)
         word = walk.delete(:word) or return
         line = walk[:line]
@@ -276,7 +280,8 @@ module Nabu
           return
         end
 
-        joined = line[:text].empty? || word["join"] == "left" || walk[:prev_join] == "right"
+        joined = line[:text].empty? || %w[left both].include?(word["join"]) ||
+                 %w[right both].include?(walk[:prev_join])
         line[:text] << " " unless joined
         line[:text] << word[:form]
         walk[:prev_join] = word["join"]
