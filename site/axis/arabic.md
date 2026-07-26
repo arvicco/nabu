@@ -9,11 +9,11 @@ description: >-
 
 The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3).
 
-The corpus is staged, not synced: OpenITI's ~9,106 primary texts /
-~1.12 B words arrive with the owner's first `nabu sync openiti` (the
-fetch is a ~5.9 GB release zip plus its metadata index, md5-pinned
-before any tree mutation), after which the holdings below fill in
-live.
+The premodern Islamicate library is LIVE: OpenITI's ~9,079 primary
+texts (~1.12 B words, the 2026 release zip md5-pinned into canonical)
+made **Classical Arabic the largest language on the shelves — 33.3
+million passages** — with the Persian lane (`fas`) riding the same
+corpus. Holdings below are read live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
@@ -50,13 +50,15 @@ A source wears every desk it serves — these two answer this desk. Holdings are
 
 ## Working the arabic desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable arabic               # first time: put this desk's shelves in this box's profile
+nabu sync arabic                 # fetch/refresh the desk's enabled members
 nabu list --axis arabic          # the shelf census, this desk only
 nabu axis arabic                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis arabic   # a query scoped to this desk's shelves
-nabu sync arabic                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:

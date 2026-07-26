@@ -39,13 +39,15 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 
 ## Working the celtic desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable celtic               # first time: put this desk's shelves in this box's profile
+nabu sync celtic                 # fetch/refresh the desk's enabled members
 nabu list --axis celtic          # the shelf census, this desk only
 nabu axis celtic                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis celtic   # a query scoped to this desk's shelves
-nabu sync celtic                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:

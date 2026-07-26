@@ -35,13 +35,15 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 
 ## Working the indic desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable indic               # first time: put this desk's shelves in this box's profile
+nabu sync indic                 # fetch/refresh the desk's enabled members
 nabu list --axis indic          # the shelf census, this desk only
 nabu axis indic                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis indic   # a query scoped to this desk's shelves
-nabu sync indic                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:

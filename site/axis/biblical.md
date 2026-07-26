@@ -24,14 +24,14 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `coptic-scriptorium` | texts | nc | wired · manual | 482 docs / 74,169 passages |
 | `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
-| `sefaria` | texts | open | wired · manual | 103 docs / 57,095 passages |
+| `sefaria` | texts | open | wired · manual | 825 docs / 395,199 passages |
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
 | `bridging` | crosswalk module | attribution | not yet wired | nothing held yet |
 | `dss` | texts | nc | wired · manual | 1,001 docs / 52,895 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
-| `betamasaheft-works` | texts | attribution | not yet wired | not synced yet |
+| `betamasaheft-works` | texts | attribution | not yet wired | 3,796 docs / 66,516 passages |
 
 ## The desk's instruments
 
@@ -47,13 +47,15 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 
 ## Working the biblical desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable biblical               # first time: put this desk's shelves in this box's profile
+nabu sync biblical                 # fetch/refresh the desk's enabled members
 nabu list --axis biblical          # the shelf census, this desk only
 nabu axis biblical                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis biblical   # a query scoped to this desk's shelves
-nabu sync biblical                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:

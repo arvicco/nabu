@@ -44,13 +44,15 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 
 ## Working the sinitic desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable sinitic               # first time: put this desk's shelves in this box's profile
+nabu sync sinitic                 # fetch/refresh the desk's enabled members
 nabu list --axis sinitic          # the shelf census, this desk only
 nabu axis sinitic                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis sinitic   # a query scoped to this desk's shelves
-nabu sync sinitic                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:

@@ -50,13 +50,15 @@ Private research materials under personal grants are not listed.
 
 ## Working the iranian desk
 
-The generic axis surfaces — every desk answers to these:
+The generic axis surfaces — every desk answers to these, in working
+order (enable once, sync, then query):
 
 ```
+nabu enable iranian               # first time: put this desk's shelves in this box's profile
+nabu sync iranian                 # fetch/refresh the desk's enabled members
 nabu list --axis iranian          # the shelf census, this desk only
 nabu axis iranian                 # the desk card: members, holdings, gold coverage
 nabu search WORD --axis iranian   # a query scoped to this desk's shelves
-nabu sync iranian                 # sync the desk's enabled members
 ```
 
 This desk's own surfaces:
