@@ -243,7 +243,18 @@ module Nabu
         value = tag.to_s.strip
         return nil if value.empty?
 
-        primary = value.split("-").first.downcase
+        # P47-i3 (owner live incident): the real corpus carries a literal
+        # mainLang="-" (language undeclared) and script-only "-Egyd"/"-Egyp"
+        # (script declared, language subtag missing) — a hyphen-led value
+        # splits to NO primary subtag. Script-only Egyptian still maps
+        # home; a bare hyphen is an honest und (the caller's fallback).
+        primary = value.split("-").first.to_s.downcase
+        if primary.empty?
+          return "egy-Egyd" if value.match?(/Egyd/)
+          return "egy" if value.match?(/Egy[ph]/)
+
+          return nil
+        end
         return value.match?(/Egyd/) ? "egy-Egyd" : "egy" if primary == "egy"
         return LANGUAGE_MAP.fetch(primary) if LANGUAGE_MAP.key?(primary)
 
