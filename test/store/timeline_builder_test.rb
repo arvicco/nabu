@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "json"
 
 module Store
   # Nabu::Store::TimelineBuilder (P15-2): the date/place extractors over trimmed-real
@@ -33,6 +34,59 @@ module Store
 
     def build!
       Nabu::Store::TimelineBuilder.rebuild!(catalog: @db, canonical_dir: FIXTURE_DIR)
+    end
+
+    # -- MetadataDates (P47-r2): the shared EDR/Elephantine catalog shape ----
+
+    def seed_metadata_doc(slug, urn, metadata)
+      source = Nabu::Store::Source.where(slug: slug).first ||
+               Nabu::Store::Source.create(slug: slug, name: slug, adapter_class: "T",
+                                          license_class: "attribution")
+      Nabu::Store::Document.create(
+        source_id: source.id, urn: urn, title: urn, language: "arc",
+        content_sha256: urn, revision: 1, withdrawn: false,
+        metadata_json: JSON.generate(metadata)
+      )
+    end
+
+    def test_metadata_dates_mint_axis_rows_for_both_shape_sources
+      seed_metadata_doc("elephantine", "urn:nabu:elephantine:100067",
+                        { "date" => { "not_before" => -223, "raw" => "date in text" },
+                          "place" => { "ancient" => "Elephantine" } })
+      seed_metadata_doc("edr", "urn:nabu:edr:edr000001",
+                        { "date" => { "not_before" => -50, "not_after" => 1, "raw" => "-50 BC - 1 AD" },
+                          "place" => { "ancient" => "Roma" } })
+      summary = build!
+      assert_equal 1, summary.elephantine
+      assert_equal 1, summary.edr
+
+      row = timeline_for("urn:nabu:elephantine:100067")
+      assert_equal(-223, row[:not_before])
+      assert_nil row[:not_after]
+      assert_equal "Elephantine", row[:place_name]
+      assert_equal "elephantine", row[:axis_source]
+      assert_equal 1, timeline_for("urn:nabu:edr:edr000001")[:not_after]
+    end
+
+    def test_metadata_dates_place_only_document_gets_a_place_row
+      seed_metadata_doc("elephantine", "urn:nabu:elephantine:100001",
+                        { "place" => { "ancient" => "Syene" } })
+      build!
+      row = timeline_for("urn:nabu:elephantine:100001")
+      assert_equal "Syene", row[:place_name]
+      assert_nil row[:not_before]
+    end
+
+    def test_metadata_dates_skip_undated_unplaced_and_translation_docs
+      seed_metadata_doc("elephantine", "urn:nabu:elephantine:100002",
+                        { "inventory" => "Ostr. X" })
+      seed_metadata_doc("elephantine", "urn:nabu:elephantine:100067-en",
+                        { "kind" => "translation",
+                          "date" => { "not_before" => -223 } })
+      summary = build!
+      assert_equal 0, summary.elephantine
+      assert_nil timeline_for("urn:nabu:elephantine:100067-en"),
+                 "a translation sibling never mints its own timeline row"
     end
 
     # -- HGV extractor: the five date shapes ----------------------------------
