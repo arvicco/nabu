@@ -335,6 +335,25 @@ class ElephantineTest < Minitest::Test
     end
   end
 
+  # P47-i1: a promised-but-missing record is censused by the fetch and the
+  # sync tail NAMES it — never a silent gap, never an abort.
+  def test_fetch_tail_names_promised_but_missing_records
+    listing = File.read(File.join(FIXTURES, "objects-listing-marriage.html"))
+    stub_request(:post, "https://elephantine.smb.museum/objects/index.php")
+      .with(body: "showresults=15000")
+      .to_return(status: 200, body: listing)
+    stub_request(:get, %r{https://elephantine\.smb\.museum/xml/elephantine_erc_db_.+\.tei\.xml})
+      .to_return(status: 200, body: "<TEI/>")
+    stub_request(:get, "https://elephantine.smb.museum/xml/elephantine_erc_db_002881.tei.xml")
+      .to_return(status: 404)
+    Dir.mktmpdir do |workdir|
+      report = Nabu::Adapters::Elephantine.new(delay: 0).fetch(workdir)
+      assert_match(/1 promised id 404 upstream \(002881/, report.notes,
+                   "the tail names the hole (the live listing outruns the frozen export)")
+      refute File.exist?(File.join(workdir, "elephantine_erc_db_002881.tei.xml"))
+    end
+  end
+
   def test_fetch_wraps_crawl_failure_in_fetch_error
     stub_request(:post, "https://elephantine.smb.museum/objects/index.php").to_return(status: 500)
     Dir.mktmpdir do |workdir|

@@ -190,14 +190,44 @@ class ElephantineFetchTest < Minitest::Test
 
   # --- anomalies -------------------------------------------------------------
 
-  def test_a_404_on_a_manifest_id_is_a_hard_anomaly
+  # P47-i1 (owner live incident 2026-07-27: the first real crawl died at
+  # record 3,905/10,744 on id 311131 — 404 on BOTH the TEI and its object
+  # page, an upstream DB row the live-generated listing still promises).
+  # A LONE hole is upstream damage to CENSUS, never a reason to abort a
+  # 3-hour polite crawl: record the id, skip, keep crawling, report in the
+  # sync tail. Only a SYSTEMIC miss rate (the URL scheme broke, the export
+  # moved) aborts.
+  def test_a_404_on_a_manifest_id_is_censused_and_the_crawl_continues
     stub_listing
     stub_records
     stub_authorities
     stub_request(:get, "#{BASE}/xml/elephantine_erc_db_002881.tei.xml").to_return(status: 404)
+    result = sync!
+    assert_equal ["002881"], result.missing, "the hole is censused by padded id"
+    assert_equal 22, result.fetched, "every other record still lands"
+    refute File.exist?(File.join(@dir, "elephantine_erc_db_002881.tei.xml")),
+           "no file is written for a missing record"
+  end
+
+  def test_a_systemic_miss_rate_still_aborts
+    stub_listing
+    stub_authorities
+    # Every record 404s — the URL scheme or export is broken, not one hole.
+    stub_request(:get, %r{#{BASE}/xml/elephantine_erc_db_\d{6}\.tei\.xml})
+      .to_return(status: 404)
     error = assert_raises(Nabu::ElephantineFetch::Error) { sync! }
-    assert_match(/002881/, error.message, "the anomaly names the id the manifest promised")
-    assert_match(/404/, error.message)
+    assert_match(/systemic/i, error.message)
+    assert_match(/23 of 23/, error.message, "the abort names the miss rate")
+  end
+
+  def test_a_404_on_an_authority_file_stays_hard
+    stub_listing
+    stub_records
+    stub_authorities
+    stub_request(:get, "#{BASE}/xml/elephantine_erc_db_places.tei.xml").to_return(status: 404)
+    error = assert_raises(Nabu::ElephantineFetch::Error) { sync! }
+    assert_match(/places/, error.message,
+                 "the four authority files are known-present — absence is real breakage")
   end
 
   def test_a_5xx_is_retried_with_backoff_then_succeeds
