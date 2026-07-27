@@ -2841,6 +2841,10 @@ traces:   # P46-2, 02-sources row 125
 
 elephantine:   # P47-1, 02-sources row 131
   adapter: Nabu::Adapters::Elephantine
+  siblings: ["-en"]  # P47-r1 (owner report: "--parallel doesn't work at all here"):
+                     # the damaskini mold — record ids are digits-only ID6, so the
+                     # literal -en tail is unambiguous; show --parallel pairs
+                     # 100067 ↔ 100067-en by identical page.line suffixes.
   # epigraphy: documentary papyri/ostraca at the artifact grain; hebrew: the
   # library's first substantial Imperial Aramaic document shelf (1,193
   # objects, Hebrew script — the Judean garrison's archives beside the

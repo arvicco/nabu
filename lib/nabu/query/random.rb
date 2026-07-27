@@ -53,6 +53,12 @@ module Nabu
       # const: a retry bound, not a corpus claim
       PROBE_ATTEMPTS = 8
 
+      # The cross-source translation-sibling marker on documents.metadata_json
+      # (elephantine -en, aes -de, rundata, suttacentral…): a random draw is
+      # always an ORIGINAL (P47-r1, owner ruling).
+      # const: a metadata convention, not a corpus claim
+      TRANSLATION_MARKER = '%"kind":"translation"%'
+
       # +rng+ is injectable for deterministic tests.
       def initialize(catalog:, rng: ::Random.new)
         @catalog = catalog
@@ -85,6 +91,7 @@ module Nabu
           doc_ids = @catalog[:documents]
                     .where(source_id: @catalog[:sources].where(slug: source).select(:id))
                     .where(withdrawn: false)
+                    .exclude(Sequel.like(:metadata_json, TRANSLATION_MARKER))
                     .select(:id)
           scope = scope.where(document_id: doc_ids)
         end
@@ -116,8 +123,10 @@ module Nabu
       private
 
       # +check_document+: corpus-wide probes carry no document prefilter (no
-      # IN-list), so a candidate's document withdrawal is checked per draw —
-      # withdrawn documents are rare, a miss just retries.
+      # IN-list), so a candidate's document withdrawal — and its translation
+      # marker (P47-r1: a draw must always be an ORIGINAL; translation
+      # siblings are ~4% of the corpus, a miss just retries) — is checked
+      # per draw.
       def probe_urns(scope, count, check_document:)
         min = scope.min(:id)
         max = scope.max(:id)
@@ -172,7 +181,7 @@ module Nabu
       def probe_one(scope, probe_id, floor, check_document:)
         row = first_at_or_after(scope, probe_id) || first_at_or_after(scope, floor)
         return nil unless row
-        return nil if check_document && document_withdrawn?(row[:document_id])
+        return nil if check_document && document_excluded?(row[:document_id])
 
         row[:urn]
       end
@@ -185,8 +194,14 @@ module Nabu
              .first
       end
 
-      def document_withdrawn?(document_id)
-        @catalog[:documents].where(id: document_id).get(:withdrawn) ? true : false
+      # A document the sampler must never surface: withdrawn, or a
+      # translation sibling (P47-r1 — the cross-source metadata marker;
+      # originals only, on every path).
+      def document_excluded?(document_id)
+        row = @catalog[:documents].where(id: document_id).select(:withdrawn, :metadata_json).first
+        return true if row.nil? || row[:withdrawn]
+
+        row[:metadata_json].to_s.include?('"kind":"translation"')
       end
 
       # The exact sampler for scopes the probe cannot fill (tiny or
@@ -194,7 +209,7 @@ module Nabu
       # exactly those sizes.
       def sorted_fallback(scope, count, check_document:)
         rows = scope.order(Sequel.function(:random)).limit(count * 2).select_map(%i[urn document_id])
-        rows.reject { |_, doc_id| check_document && document_withdrawn?(doc_id) }
+        rows.reject { |_, doc_id| check_document && document_excluded?(doc_id) }
             .map(&:first)
             .first(count)
       end
