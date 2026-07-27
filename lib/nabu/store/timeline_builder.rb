@@ -64,7 +64,7 @@ module Nabu
       # valid.
       Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini,
                             :corph, :riig, :tla_hf, :aes, :ceipom, :isicily, :open_etruscan,
-                            :lexlep, :tir, :iip, :cdli, :rundata, :openiti, :edr, :elephantine,
+                            :lexlep, :tir, :iip, :cdli, :rundata, :openiti, :metadata_dates,
                             :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
                             :coptic_invalid, :edh_undated, :edh_invalid, :corph_undated,
                             :riig_undated, :riig_invalid, :tla_hf_undated, :aes_undated,
@@ -86,14 +86,14 @@ module Nabu
                        iip: 0, iip_undated: 0, iip_invalid: 0,
                        cdli: 0, cdli_undated: 0, cdli_invalid: 0,
                        rundata: 0, rundata_undated: 0, openiti: 0, openiti_undated: 0,
-                       edr: 0, elephantine: 0, **)
+                       metadata_dates: {}, **)
           super
         end
 
         def total
           hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig +
             tla_hf + aes + ceipom + isicily + open_etruscan + lexlep + tir + iip + cdli +
-            rundata + openiti + edr + elephantine
+            rundata + openiti + metadata_dates.values.sum
         end
       end
 
@@ -126,7 +126,7 @@ module Nabu
         openiti = OpenitiDates.build(catalog: catalog, canonical_dir: canonical_dir)
         metadata = MetadataDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
-                    edr: metadata.fetch("edr"), elephantine: metadata.fetch("elephantine"),
+                    metadata_dates: metadata,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
                     damaskini: damaskini[:documents], corph: corph[:documents],
