@@ -181,7 +181,19 @@ module Nabu
       def fetch_notes(result)
         base = "objects listing verified (#{result.manifest_count} ids, #{result.records} records; " \
                "#{result.fetched} fetched, #{result.cached} already on disk)"
-        [base, attic_notes(result.atticked)].compact.join("; ")
+        [base, missing_notes(result.missing), attic_notes(result.atticked)].compact.join("; ")
+      end
+
+      # P47-i1: promised-but-missing upstream records, censused by the
+      # fetch — named (first 3) so the tail is honest, never a guessing
+      # game.
+      def missing_notes(missing)
+        return nil if missing.empty?
+
+        named = missing.first(3).join(", ")
+        tail = missing.size > 3 ? ", …" : ""
+        "#{missing.size} promised id#{'s' if missing.size > 1} 404 upstream " \
+          "(#{named}#{tail} — the live listing outruns the frozen 2022 export)"
       end
     end
   end

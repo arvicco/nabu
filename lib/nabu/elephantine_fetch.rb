@@ -60,11 +60,17 @@ module Nabu
   #              safe exactly because a mid-crawl failure resumes at the
   #              file grain.
   #
-  # A 404 on a manifest-promised id is a HARD anomaly (loud Error, sync
-  # aborts); 5xx/timeouts retry 3× with exponential backoff. The fetch pin is
-  # an aggregate sha256 over the sorted (filename, body-sha) set of records +
-  # authority files — a reproducible content identity, the non-git ledger
-  # mold.
+  # A 404 on a manifest-promised RECORD id is CENSUSED and skipped (P47-i1,
+  # owner live incident 2026-07-27: the first real crawl died at record
+  # 3,905/10,744 on id 311131 — missing on BOTH the TEI path and its object
+  # page, an upstream DB row the live-generated listing still promises; a
+  # lone hole is upstream damage to report, never a reason to abort a 3-hour
+  # polite crawl). A SYSTEMIC miss rate (> MISSING_CAP) still aborts — that
+  # shape means the URL scheme or export moved, not a hole. Authority-file
+  # 404s stay hard (four known-present files). 5xx/timeouts retry 3× with
+  # exponential backoff. The fetch pin is an aggregate sha256 over the
+  # sorted (filename, body-sha) set of records + authority files — a
+  # reproducible content identity, the non-git ledger mold.
   class ElephantineFetch
     # HTTP failure, a truncated/malformed listing, or a manifest-promised id
     # that 404s. Adapters wrap it in Nabu::FetchError.
@@ -94,15 +100,23 @@ module Nabu
     # const: retry ceiling, not a corpus claim
     MAX_ATTEMPTS = 3
 
-    # Retriable statuses; 404 is deliberately NOT here — on a
-    # manifest-promised id it is a hard anomaly, never a retry.
+    # Retriable statuses; 404 is deliberately NOT here — a missing record
+    # is censused (P47-i1) or, on an authority file, a hard anomaly; never
+    # a retry either way.
     # const: HTTP semantics, not a corpus claim
     RETRIABLE_STATUSES = [500, 502, 503, 504].freeze
 
     USER_AGENT = "nabu/#{Nabu::VERSION} (personal research corpus; " \
                  "+https://github.com/arvicco/nabu; contact: arvicco@nabu.ac)".freeze
 
-    Result = Data.define(:sha, :atticked, :fetched, :cached, :records, :manifest_count)
+    Result = Data.define(:sha, :atticked, :fetched, :cached, :records, :manifest_count, :missing)
+
+    # Miss-rate ceiling before the crawl calls the export broken (P47-i1):
+    # a fraction of the manifest, floored so tiny manifests (tests, a
+    # future shrunken export) don't abort on one hole.
+    # const: abort threshold, not a corpus claim
+    MISSING_CAP_FRACTION = 0.01
+    MISSING_CAP_FLOOR = 20
 
     # The padded per-id TEI URL — ID6 zero-padding is load-bearing (the
     # unpadded URL 404s upstream).
@@ -124,7 +138,8 @@ module Nabu
       guard&.call(fetch.doomed_paths)
       fetch.complete!
       Result.new(sha: fetch.sha, atticked: fetch.atticked, fetched: fetch.fetched,
-                 cached: fetch.cached, records: fetch.records, manifest_count: fetch.manifest_count)
+                 cached: fetch.cached, records: fetch.records, manifest_count: fetch.manifest_count,
+                 missing: fetch.missing)
     end
 
     def initialize(base_url:, dir:, attic_dir:, http: ZipFetch.default_http,
@@ -142,9 +157,10 @@ module Nabu
       @fetched = 0
       @cached = 0
       @requests = 0
+      @missing = []
     end
 
-    attr_reader :atticked, :sha, :fetched, :cached, :manifest_count
+    attr_reader :atticked, :sha, :fetched, :cached, :manifest_count, :missing
 
     def records = @ids.size
 
@@ -223,9 +239,23 @@ module Nabu
         end
 
         @progress&.call("Elephantine record #{index + 1}/#{@ids.size} (#{id})…\n") if (index % 100).zero?
-        write!(name, get_with_retry(self.class.record_url(@base_url, id), id: id))
+        body = get_with_retry(self.class.record_url(@base_url, id), id: id, missing_ok: true)
+        if body.nil?
+          # P47-i1: a promised-but-missing record — census, skip, keep
+          # crawling. The tail reports it; a systemic rate aborts below.
+          @missing << id
+          @progress&.call("Elephantine record #{id}: 404 (promised by the listing — censused, crawl continues)\n")
+          next
+        end
+        write!(name, body)
         @fetched += 1
       end
+      cap = [(@ids.size * MISSING_CAP_FRACTION).ceil, MISSING_CAP_FLOOR].max
+      return if @missing.size <= cap
+
+      raise Error, "#{@missing.size} of #{@ids.size} manifest ids 404 — a systemic miss, not " \
+                   "holes: the TEI URL scheme or the export itself has moved upstream " \
+                   "(first missing: #{@missing.first(3).join(', ')})"
     end
 
     def fetch_authorities!
@@ -235,10 +265,11 @@ module Nabu
       end
     end
 
-    # One GET: 200 wins; 404 on a manifest-promised id is a HARD anomaly
-    # (the id-list and the file tree are one frozen export — a hole is
-    # damage, never routine); 5xx/timeout retries with exponential backoff.
-    def get_with_retry(url, id:)
+    # One GET: 200 wins; a 404 returns nil when the caller can census it
+    # (record crawl, P47-i1) and raises when it cannot (authority files —
+    # four known-present names, absence is real breakage); 5xx/timeout
+    # retries with exponential backoff.
+    def get_with_retry(url, id:, missing_ok: false)
       attempt = 0
       begin
         attempt += 1
@@ -249,6 +280,8 @@ module Nabu
         case response.status
         when 200 then response.body.to_s
         when 404
+          return nil if missing_ok
+
           raise Error, "HTTP 404 for #{url} — the objects listing promises id #{id} but the TEI " \
                        "file is missing: a hard anomaly in the frozen export, investigate upstream"
         else
