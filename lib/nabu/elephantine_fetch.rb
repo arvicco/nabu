@@ -267,16 +267,22 @@ module Nabu
 
     # One GET: 200 wins; a 404 returns nil when the caller can census it
     # (record crawl, P47-i1) and raises when it cannot (authority files —
-    # four known-present names, absence is real breakage); 5xx/timeout
-    # retries with exponential backoff.
+    # four known-present names, absence is real breakage); 5xx AND
+    # transport-level failures (P47-i2: a dropped TLS handshake at record
+    # ~9,900 of the owner's crawl — transient by nature) retry with the
+    # same exponential backoff.
     def get_with_retry(url, id:, missing_ok: false)
       attempt = 0
       begin
         attempt += 1
         pause
-        response, = RedirectFollow.get(url, http: @http, error: Error,
-                                            headers: { "User-Agent" => USER_AGENT },
-                                            accept: [200, 404, *RETRIABLE_STATUSES])
+        response = begin
+          RedirectFollow.get(url, http: @http, error: TransportFailure,
+                                  headers: { "User-Agent" => USER_AGENT },
+                                  accept: [200, 404, *RETRIABLE_STATUSES]).first
+        rescue TransportFailure => e
+          raise RetriableFailure, e.message
+        end
         case response.status
         when 200 then response.body.to_s
         when 404
@@ -298,6 +304,11 @@ module Nabu
     # Internal marker for a retriable HTTP failure (5xx); never escapes
     # get_with_retry.
     class RetriableFailure < StandardError; end
+
+    # RedirectFollow's error channel for one attempt — transport failures
+    # and redirect pathologies land here and feed the retry loop (P47-i2);
+    # never escapes get_with_retry.
+    class TransportFailure < StandardError; end
     private_constant :RetriableFailure
 
     def pause

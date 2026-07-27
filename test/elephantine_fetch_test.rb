@@ -230,6 +230,33 @@ class ElephantineFetchTest < Minitest::Test
                  "the four authority files are known-present — absence is real breakage")
   end
 
+  # P47-i2 (owner live incident 2026-07-27, second crawl attempt: an SSL
+  # "unexpected eof" at record ~9,900/10,744 aborted the run — only 5xx
+  # STATUSES retried; transport-level failures bypassed the backoff). A
+  # dropped TLS handshake on request nine-thousand-odd of a 3-hour polite
+  # crawl is transient by nature: same retry ceiling, same backoff.
+  def test_a_transport_error_is_retried_with_backoff_then_succeeds
+    stub_listing
+    stub_records
+    stub_authorities
+    stub_request(:get, "#{BASE}/xml/elephantine_erc_db_002881.tei.xml")
+      .to_raise(Faraday::ConnectionFailed.new("SSL_connect returned=1 errno=0 state=error: " \
+                                              "unexpected eof while reading"))
+      .then.to_return(status: 200, body: "<TEI/>")
+    result = sync!
+    assert_equal 23, result.fetched, "one dropped handshake never kills the crawl"
+  end
+
+  def test_a_persistent_transport_error_is_fatal_after_the_retry_ceiling
+    stub_listing
+    stub_records
+    stub_authorities
+    stub_request(:get, "#{BASE}/xml/elephantine_erc_db_002881.tei.xml")
+      .to_raise(Faraday::ConnectionFailed.new("unexpected eof while reading"))
+    error = assert_raises(Nabu::ElephantineFetch::Error) { sync! }
+    assert_match(/attempts/, error.message, "the ceiling is named — persistent failure stays loud")
+  end
+
   def test_a_5xx_is_retried_with_backoff_then_succeeds
     stub_listing
     stub_records
