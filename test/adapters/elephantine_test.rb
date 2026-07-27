@@ -127,6 +127,26 @@ class ElephantineTest < Minitest::Test
                  "mainLang=\"egy-x-dempr-Egyd-x-Egydmdlt \" carries the census's trailing space"
   end
 
+  # P47-i3 (owner live incident 2026-07-27: the load crashed at doc ~266 —
+  # NoMethodError on nil.downcase): the real corpus carries a literal
+  # mainLang="-" (language undeclared) and script-only tags "-Egyd"/"-Egyp"
+  # (script declared, language subtag missing) — a hyphen-led value splits
+  # to no primary subtag. Script-only Egyptian still maps home; a bare
+  # hyphen is an honest und. Values verbatim from the 10,740-file census.
+  def test_hyphen_led_mainlang_never_crashes_and_maps_honestly
+    parser = Nabu::Adapters::ElephantineTeiParser
+    {
+      "-" => "und",
+      "-Egyd" => "egy-Egyd",
+      "-Egyp" => "egy",
+      "" => "und",
+      nil => "und"
+    }.each do |tag, expected|
+      assert_equal expected, parser.new.send(:map_language, tag) || "und",
+                   "mainLang=#{tag.inspect}"
+    end
+  end
+
   # --- the Aramaic legal exemplar (RTL, damage idiom, del, choice) ------------
 
   def test_aramaic_document_line_urns_are_page_scoped
