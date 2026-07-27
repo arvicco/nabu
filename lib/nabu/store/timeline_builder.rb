@@ -64,7 +64,7 @@ module Nabu
       # valid.
       Summary = Data.define(:hgv, :goo300k, :imp, :oracc, :torot, :coptic, :edh, :damaskini,
                             :corph, :riig, :tla_hf, :aes, :ceipom, :isicily, :open_etruscan,
-                            :lexlep, :tir, :iip, :cdli, :rundata, :openiti,
+                            :lexlep, :tir, :iip, :cdli, :rundata, :openiti, :edr, :elephantine,
                             :hgv_files, :hgv_invalid, :oracc_undated, :torot_annals,
                             :coptic_invalid, :edh_undated, :edh_invalid, :corph_undated,
                             :riig_undated, :riig_invalid, :tla_hf_undated, :aes_undated,
@@ -85,14 +85,15 @@ module Nabu
                        tir: 0, tir_undated: 0, tir_invalid: 0,
                        iip: 0, iip_undated: 0, iip_invalid: 0,
                        cdli: 0, cdli_undated: 0, cdli_invalid: 0,
-                       rundata: 0, rundata_undated: 0, openiti: 0, openiti_undated: 0, **)
+                       rundata: 0, rundata_undated: 0, openiti: 0, openiti_undated: 0,
+                       edr: 0, elephantine: 0, **)
           super
         end
 
         def total
           hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig +
             tla_hf + aes + ceipom + isicily + open_etruscan + lexlep + tir + iip + cdli +
-            rundata + openiti
+            rundata + openiti + edr + elephantine
         end
       end
 
@@ -123,7 +124,9 @@ module Nabu
         cdli = CdliDates.build(catalog: catalog, canonical_dir: canonical_dir)
         rundata = RundataDates.build(catalog: catalog, canonical_dir: canonical_dir)
         openiti = OpenitiDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        metadata = MetadataDates.build(catalog: catalog, canonical_dir: canonical_dir)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
+                    edr: metadata.fetch("edr"), elephantine: metadata.fetch("elephantine"),
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
                     damaskini: damaskini[:documents], corph: corph[:documents],
@@ -299,6 +302,7 @@ require_relative "timeline_builder/oracc_dates"
 require_relative "timeline_builder/chronicle_annals"
 require_relative "timeline_builder/coptic_scriptorium_dates"
 require_relative "timeline_builder/edh_dates"
+require_relative "timeline_builder/metadata_dates"
 require_relative "timeline_builder/damaskini_dates"
 require_relative "timeline_builder/corph_dates"
 require_relative "timeline_builder/riig_dates"
