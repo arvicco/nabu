@@ -208,6 +208,7 @@ module Nabu
       # SOURCE's live passage count — never the corpus total. `nabu rebuild`
       # keeps the full Indexer.rebuild! as the from-scratch guarantee.
       indexed = index_inert?(adapter) ? nil : reindex!(entry, adapter)
+      refresh_catalog_lanes(entry, load_report)
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
                   breaker: nil, indexed: indexed,
                   warnings: warnings, discovery: discovery,
@@ -215,6 +216,22 @@ module Nabu
                   enrichments: refresh_enrichments(entry),
                   place_index: refresh_place_index(entry),
                   analyzed: analyze_after_load(load_report, adapter))
+    end
+
+    # P47-r3 (the lane-drift audit — owner: "generalize and find out what
+    # else could've been impacted"): the catalog-projected lanes (facets;
+    # metadata-shape timeline rows) refreshed ONLY at full rebuild, so
+    # every sync since the last rebuild served stale facet/timeline lanes
+    # (EDR, IIP, Elephantine, the Sefaria Rabbinic wave — all found dark
+    # in the audit). Both projections are cheap catalog reads; refresh the
+    # synced source's slice post-load, mirroring Indexer.refresh_source!.
+    # Canonical-walking timeline extractors (HGV, EDH…) stay rebuild-scoped
+    # — their sources' syncs are rare and their walks are not cheap.
+    def refresh_catalog_lanes(entry, load_report)
+      return if load_report.nil? || (load_report.added.zero? && load_report.updated.zero?)
+
+      Store::FacetBuilder.refresh_source!(catalog: @db, slug: entry.slug)
+      Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: entry.slug)
     end
 
     # P42-4: after a BULK load, refresh the query-planner statistics — the

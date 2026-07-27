@@ -57,8 +57,8 @@ module Store
                         { "date" => { "not_before" => -50, "not_after" => 1, "raw" => "-50 BC - 1 AD" },
                           "place" => { "ancient" => "Roma" } })
       summary = build!
-      assert_equal 1, summary.elephantine
-      assert_equal 1, summary.edr
+      assert_equal 1, summary.metadata_dates.fetch("elephantine")
+      assert_equal 1, summary.metadata_dates.fetch("edr")
 
       row = timeline_for("urn:nabu:elephantine:100067")
       assert_equal(-223, row[:not_before])
@@ -84,9 +84,57 @@ module Store
                         { "kind" => "translation",
                           "date" => { "not_before" => -223 } })
       summary = build!
-      assert_equal 0, summary.elephantine
+      assert_equal 0, summary.metadata_dates.fetch("elephantine")
       assert_nil timeline_for("urn:nabu:elephantine:100067-en"),
                  "a translation sibling never mints its own timeline row"
+    end
+
+    # P47-r3 (the generalized audit): the three shape handlers, values
+    # verbatim from the live catalog inspection.
+    def test_metadata_dates_shapes_for_itant_bfm_and_croala
+      seed_metadata_doc("itant", "urn:nabu:itant:oscan-9",
+                        { "date" => { "not_before" => -425, "not_after" => -375, "cert" => "low",
+                                      "raw" => "end of the 5th - beginning of the 4th century BC" } })
+      seed_metadata_doc("bfm", "urn:nabu:bfm:AlexisRaM",
+                        { "date" => "ca. 1050", "date_not_before" => "1025-01-01",
+                          "date_not_after" => "1075-01-01" })
+      seed_metadata_doc("croala", "urn:nabu:croala:grauisius",
+                        { "date" => "1565-1650" })
+      seed_metadata_doc("croala", "urn:nabu:croala:fuzzy",
+                        { "date" => "saec. XVI" })
+      seed_metadata_doc("croala", "urn:nabu:croala:split-doc",
+                        { "date" => "1490", "place" => "Split" })
+      summary = build!
+      itant = timeline_for("urn:nabu:itant:oscan-9")
+      assert_equal([-425, -375], [itant[:not_before], itant[:not_after]])
+      bfm = timeline_for("urn:nabu:bfm:AlexisRaM")
+      assert_equal([1025, 1075, "ca. 1050"], [bfm[:not_before], bfm[:not_after], bfm[:date_raw]])
+      croala = timeline_for("urn:nabu:croala:grauisius")
+      assert_equal([1565, 1650], [croala[:not_before], croala[:not_after]])
+      assert_nil timeline_for("urn:nabu:croala:fuzzy"),
+                 "an unparseable prose dating is skipped honestly, never guessed"
+      split = timeline_for("urn:nabu:croala:split-doc")
+      assert_equal ["Split", 1490], [split[:place_name], split[:not_before]],
+                   "croala's STRING place (the P44-i4 shape) IS the place name"
+      assert_equal 2, summary.metadata_dates.fetch("croala")
+    end
+
+    # P47-r3: the per-source refresh seam SyncRunner calls post-load — the
+    # lane never lags a sync again (the class this audit exists to kill).
+    def test_metadata_dates_refresh_source_replaces_only_that_source
+      seed_metadata_doc("elephantine", "urn:nabu:elephantine:200001",
+                        { "date" => { "not_before" => -450 } })
+      seed_metadata_doc("edr", "urn:nabu:edr:edr900001",
+                        { "date" => { "not_before" => -50 } })
+      build!
+      seed_metadata_doc("elephantine", "urn:nabu:elephantine:200002",
+                        { "date" => { "not_before" => -410 } })
+      rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: "elephantine")
+      assert_equal 2, rows
+      refute_nil timeline_for("urn:nabu:elephantine:200002"), "the post-refresh doc joins the lane"
+      refute_nil timeline_for("urn:nabu:edr:edr900001"), "other sources' rows survive untouched"
+      assert_equal 0, Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: "papyri-ddbdp"),
+                   "an unregistered slug is a no-op"
     end
 
     # -- HGV extractor: the five date shapes ----------------------------------
