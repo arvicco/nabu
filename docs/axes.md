@@ -221,6 +221,14 @@ The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and 
 
 **Members** (8): `wiktionary-recon`, `unihan`, `edrdg`, `hdic`, `kradfile`, `oncoj`, `oncoj-lexicon`, `aozora`
 
+### tibetan
+
+> The Tibetologist — the Old Tibetan documentary world, Dunhuang scrolls to the pillar inscriptions.
+
+The Old Tibetan lane: OTDO's 414 critical editions — the Dunhuang manuscripts (Pelliot tibétain, IOL Tib J, Or.15000, Stein), the imperial pillar and rock inscriptions, and the five Old Zhangzhung texts — with the Annals and Chronicle instruments joining as their shelves land.
+
+**Members** (1): `otdo`
+
 ### local
 
 > The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records.

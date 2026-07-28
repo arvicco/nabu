@@ -101,6 +101,14 @@ japonic:
   persona: "The Japanologist — Old Japanese song to the Sino-Japanese dictionary tradition."
   desc: "The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon."
 
+# P48-5: PLACEHOLDER MINT so the otdo registry row validates in the packet
+# worktree — the P48-1 packet owns the axis's ratified definition; on merge
+# its persona/desc supersede these lines (docs/axes.md + site pages
+# regenerate mechanically via `rake site:axes`).
+tibetan:
+  persona: "The Tibetologist — the Old Tibetan documentary world, Dunhuang scrolls to the pillar inscriptions."
+  desc: "The Old Tibetan lane: OTDO's 414 critical editions — the Dunhuang manuscripts (Pelliot tibétain, IOL Tib J, Or.15000, Stein), the imperial pillar and rock inscriptions, and the five Old Zhangzhung texts — with the Annals and Chronicle instruments joining as their shelves land."
+
 # P45-3: minted with digilibLT, the first shelf of the Latin→Romance band the
 local:
   persona: "The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records."
