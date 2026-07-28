@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "feature"
+require_relative "verb_lemma_builder"
 
 module Nabu
   module DataBuild
@@ -14,10 +15,11 @@ module Nabu
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
-    # doctrine). Every feature is :planned in P50-W1: the rail lands first,
-    # builders are later packets (W2–W4), and `nabu data build` refuses
-    # politely until a builder flips its feature to :available. The doc
-    # table in docs/nabu-data.md is drift-guarded against this list.
+    # doctrine). P50-W1 landed the rail with every feature :planned; each
+    # builder packet flips its own feature to :available as the builder
+    # lands (P50-W4: xct/verb-lemma) — `nabu data build` refuses politely
+    # until then. The doc table in docs/nabu-data.md is drift-guarded
+    # against this list.
     REGISTRY = [
       Feature.new(
         slug: "san/form-lemma", language: LANGUAGES.fetch("san"),
@@ -44,12 +46,14 @@ module Nabu
       Feature.new(
         slug: "xct/verb-lemma", language: LANGUAGES.fetch("xct"),
         title: "Tibetan verb stem → paradigm-lemma map (from the Tibetan Verb Database)",
-        status: :planned, tier: "gold-derived", anchoring: "none",
+        status: :available, tier: "gold-derived", anchoring: "none",
         inputs: ["tibetan-verbs"], canonical_cones: ["tibetan-verbs"],
         rationale: "Maps the 2,491 TVD stem tuples (present/past/future/imperative, grammarians' " \
                    "disagreements kept uncollapsed) to a paradigm lemma, enabling verb-form-aware " \
-                   "lookup across Classical Tibetan.",
-        maintenance: "re-derive after tibetan-verbs sync; upstream is stable (CC0)"
+                   "lookup across Classical Tibetan. The table half only: the anchored layer over " \
+                   "the canon is deferred behind xct/segmentation.",
+        maintenance: "re-derive after tibetan-verbs sync; upstream is stable (CC0)",
+        builder: VerbLemmaBuilder
       ),
       Feature.new(
         slug: "xct/segmentation", language: LANGUAGES.fetch("xct"),
