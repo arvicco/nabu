@@ -2909,7 +2909,7 @@ e84000:   # P48-2, 02-sources row 133
   # P48-1's to create, so this list gains `tibetan` at the phase-48 merge,
   # not before — a sources.yml axes reference must never precede its
   # axes.yml definition (registry validation).
-  axes: [buddhist]
+  axes: [tibetan, buddhist]
   wired: false
   # 84000 "Translating the Words of the Buddha" — the ENGLISH translation
   # layer of the Tibetan canon (github.com/84000/data-tei, ~282 MB repo).
