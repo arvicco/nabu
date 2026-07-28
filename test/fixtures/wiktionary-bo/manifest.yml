@@ -1,0 +1,20 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The one file is a documented TRIM (whole: false) of the 4.5 MB upstream
+# JSONL (172 of 3,651 lines, selected strata; every kept line byte-verbatim),
+# so a fresh GET returns the full extract and is fetched for URL-liveness
+# only, never byte-compared. Re-apply the README extraction recipe after any
+# refresh. NOTE the upstream file carries the wiktionary-cu DEPRECATION
+# caveat (wiktextract #1178) though it serves today; if the URL 404s, the
+# fallback is filtering the full enwiktionary extract by lang_code == "bo"
+# (README). The xct/otb sibling extracts do not exist upstream (404s
+# verified 2026-07-28).
+source: wiktionary-bo
+adapter_test: test/adapters/wiktionary_bo_test.rb
+retrieved: 2026-07-28
+files:
+  - path: kaikki.org-dictionary-Tibetan.jsonl
+    url: https://kaikki.org/dictionary/Tibetan/kaikki.org-dictionary-Tibetan.jsonl
+    whole: false
+    trim: 172 stratified lines (demo lemmas incl. སངས་རྒྱས/བྱང་ཆུབ་སེམས་དཔའ/ཆོས; all 18 entry-id collision groups; both no-gloss records; first 15 descendant-bearing + every sa-descendant record incl. བོད; every 32nd line) — 4,547,518 B -> 235,476 B; recipes in README.md

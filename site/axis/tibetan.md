@@ -13,12 +13,13 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these two answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 July 2026)</span> |
 |---|---|---|---|---|
 | `mvp` | dictionary | open | not yet wired | not synced yet |
 | `tibetan-verbs` | dictionary | open | not yet wired | not synced yet |
+| `wiktionary-bo` | dictionary | attribution | not yet wired | not synced yet |
 
 ## The desk's instruments
 
