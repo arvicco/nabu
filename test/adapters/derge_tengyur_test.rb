@@ -33,7 +33,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["derge-tengyur"]
       refute_nil entry, "derge-tengyur must be registered in config/sources.yml"
-      refute entry.wired, "wired stays false until the owner-fired first sync is verified"
+      assert entry.wired, "flipped 2026-07-28 (owner ruling; first sync verified live)"
       assert_equal "manual", entry.sync_policy
       assert_equal %w[tibetan buddhist], entry.axes
       assert_equal "open", entry.adapter_class.manifest.license_class

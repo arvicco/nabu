@@ -283,7 +283,7 @@ class MvpTest < Minitest::Test
     entry = registry["mvp"]
     refute_nil entry, "config/sources.yml must register mvp"
     assert_equal Nabu::Adapters::Mvp, entry.adapter_class
-    refute entry.wired, "unwired until the owner-fired first sync + eyeball (CLAUDE.md checklist §6)"
+    assert entry.wired, "flipped 2026-07-28 (owner ruling; first sync verified live)"
     assert_equal "manual", entry.sync_policy
     assert_equal %w[tibetan buddhist], entry.axes
     assert_equal Nabu::Adapters::Mvp.manifest, entry.manifest

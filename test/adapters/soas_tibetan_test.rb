@@ -171,7 +171,7 @@ class SoasTibetanTest < Minitest::Test
     entry = registry["soas-tibetan"]
     refute_nil entry, "soas-tibetan must be registered in config/sources.yml"
     assert_equal "Nabu::Adapters::SoasTibetan", entry.adapter_class_name
-    refute entry.wired, "wired: false until the owner-fired first sync"
+    assert entry.wired, "flipped 2026-07-28 (owner ruling; first sync verified live)"
     assert_equal "manual", entry.sync_policy, "a versioned-immutable Zenodo record"
     assert_includes entry.axes, "tibetan"
     assert_equal "attribution", entry.manifest.license_class, "CC BY 4.0"

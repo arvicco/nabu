@@ -207,7 +207,7 @@ class OldTibetanTest < Minitest::Test
     entry = registry["old-tibetan"]
     refute_nil entry, "old-tibetan must be registered in config/sources.yml"
     assert_equal "Nabu::Adapters::OldTibetan", entry.adapter_class_name
-    refute entry.wired, "wired: false until the owner-fired first sync"
+    assert entry.wired, "flipped 2026-07-28 (owner ruling; first sync verified live)"
     assert_equal "manual", entry.sync_policy
     assert entry.translations, "the Dotson -en sibling is the registry posture"
     assert_equal ["-en"], entry.siblings
