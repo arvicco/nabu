@@ -1,0 +1,24 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All three entries are documented trims of files in the git repo (raw URLs
+# exist, but a fresh fetch returns the FULL file), so adapter_test stays
+# null — a fresh-copy re-run would false-fail the count assertions.
+source: old-tibetan
+adapter_test:
+retrieved: 2026-07-28
+files:
+  - path: conllu/otannals.conllu
+    url: https://raw.githubusercontent.com/tibetan-nlp/old-tibetan-corpus/17c01c96a024604b86911a3b707ac73d4757f7c6/conllu/otannals.conllu
+    whole: false
+    trim: the REAL first 5 of 546 sentence blocks, lines byte-verbatim
+  - path: conllu/otchronicle.conllu
+    url: https://raw.githubusercontent.com/tibetan-nlp/old-tibetan-corpus/17c01c96a024604b86911a3b707ac73d4757f7c6/conllu/otchronicle.conllu
+    whole: false
+    trim: the REAL first 3 of 1,577 sentence blocks, lines byte-verbatim
+  - path: archive/otannals-normalized.conllu
+    url: https://raw.githubusercontent.com/tibetan-nlp/old-tibetan-corpus/17c01c96a024604b86911a3b707ac73d4757f7c6/archive/otannals-normalized.conllu
+    whole: false
+    trim: >-
+      the first sentence block of the legacy normalized export — the
+      discovery-skip census sample, never a DocumentRef

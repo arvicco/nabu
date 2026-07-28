@@ -25,8 +25,8 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-28** the shelves hold **962,812 documents / 66,824,868
-passages** in 119 language codes — from proto-cuneiform tablets of the
+As of **2026-07-28** the shelves hold **968,182 documents / 68,324,790
+passages** in 121 language codes — from proto-cuneiform tablets of the
 late 4th millennium BCE to Meiji-era Japanese. The newest wave
 (2026-07-26) opened the Rabbinic library (Mishnah, both Talmuds at
 daf-grain citation, Tosefta), the Geʿez shelf (**1 Enoch and
@@ -47,7 +47,7 @@ and the CBETA Buddhist canon), the same day the **Germanic wave**
 landed (the Poetic Edda, the *Heliand*, Middle High German, ~6,800
 runic inscriptions) beside the Japanese reading desk and the Ancient
 Near East.
-Plus **1,391,759 dictionary entries** across one hundred dictionary
+Plus **1,407,280 dictionary entries** across 103 dictionary
 shelves and **19.2 million gold lemma annotations in 37 languages** (a
 further 28.1 million ride an honestly labelled silver tier). (All numbers in this
 README are read from the live catalog, never estimated.)
@@ -314,11 +314,11 @@ shelf map with research uses per shelf is
 | Germanic wave | Menotec Old Norwegian treebanks + Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German (355k gold manuscript lines), Rundata runic inscriptions in five text lanes (2026-07-22) | 31,057 / 409,947 | nc / CC BY / CC BY-SA / odbl |
 | Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik + the Hebrew/Egyptian/Slovene desks and the Sino-Japanese lexicography (Unihan, KANJIDIC2/JMdict, HDIC, Guangyun) (`nabu define` / `etym`) | 1,310,763 entries / 56 shelves (2026-07-22) | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-The registry holds **97 sources + 4 local shelves + 9 feature modules**
+The registry holds **106 sources + 4 local shelves + 9 feature modules**
 (the kind-split census, 2026-07-28 — `sources.yml` distinguishes what a
 row IS: a corpus that mints catalog rows, an owner-authored local memory
 shelf, or machinery like `pedecerto`/`bridging` that fetches reference
-data but mints no documents of its own). All 97 sources are **wired**
+data but mints no documents of its own). All 106 sources are **wired**
 — adapter built and first sync verified (2026-07-26); the newest
 arrivals are the P46 wave's `edr`, `ren`, the Geʿez trio, `wold` and
 `clics`, after the Romance wave's `openmgh` (the MGH critical editions),

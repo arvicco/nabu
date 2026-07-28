@@ -20,6 +20,8 @@ A source wears every desk it serves — these two answer this desk. Holdings are
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `syc` 697.
+
 ## The desk's instruments
 
 - **The Syriac language desk:** the ETCBC Peshitta (Leiden VTS / Codex
@@ -68,4 +70,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-three research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

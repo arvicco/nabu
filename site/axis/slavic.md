@@ -28,6 +28,8 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `freising` | texts | research_private | wired · manual | 27 docs / 2,037 passages |
 | `sl-lexica` | dictionary | attribution | wired · manual | 139,405 entries |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `sl` 140,164 · `chu` 4,644 · `orv` 43 · `eng` 26 · `bul` 20 · `lat` 20 · `grc` 12 · `ota` 5 · `got` 4 · `lzh` 4 … and 15 more (`nabu axis slavic` lists all).
+
 ## The desk's instruments
 
 - **Gold-lemma languages:** chu (Old Church Slavonic) and orv (Old Russian)
@@ -80,4 +82,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-three research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

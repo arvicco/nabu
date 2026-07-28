@@ -50,7 +50,7 @@ classes are the gate that decides what may pass.
 
 ## Corpus sources
 
-All 96 sources below are synced and live as of 28 July 2026. Grouped by the
+All 105 sources below are synced and live as of 28 July 2026. Grouped by the
 owner's research desks rather than alphabetically — with each desk's member
 shelves, license mix and sync status on one page — the same sources appear on
 the [research axes]({{ '/axis/' | relative_url }}).
@@ -131,6 +131,15 @@ the [research axes]({{ '/axis/' | relative_url }}).
 
 | `kanripo` | [Kanseki Repository 漢籍リポジトリ](https://github.com/kanripo) (Wittern, Kyoto) | The classical Chinese library — KR1 classics through KR5 Daoist canon; with CBETA it makes Literary Chinese the corpus's largest language (synchronized 20 July 2026) | CC BY-SA 4.0 (org-level grant) |
 | `cbeta` | [CBETA](https://www.cbeta.org/) (cbeta-org/xml-p5) | The Chinese Buddhist canon: Taishō + Xuzangjing in TEI P5 (synchronized 20 July 2026) | CC BY-NC-SA 4.0 |
+| `derge-kangyur` | [Digital Derge Kangyur](https://github.com/Esukhia/derge-kangyur) (Esukhia, on the UVA-SOAS eKangyur) | The Tibetan Buddhist canon's first half: 1,200 Toh-numbered texts / 461,304 woodblock lines, exact-representation of the Degé blocks (synchronized 28 July 2026) | Public Domain (the repo's own declaration) |
+| `derge-tengyur` | [Digital Derge Tengyur](https://github.com/Esukhia/derge-tengyur) (Esukhia) | The canon's second half — the treatises: 3,362 texts / 897,142 lines (synchronized 28 July 2026) | Public Domain (the repo's own declaration) |
+| `e84000` | [84000 — Translating the Words of the Buddha](https://84000.co/) (data-tei) | English translations of 388 Kangyur texts at Reading-Room citation grain, folio-anchored so `--parallel` pairs them with the Tibetan (synchronized 28 July 2026) | CC BY-NC-ND 3.0 |
+| `otdo` | [Old Tibetan Documents Online](https://otdo.aa-ken.jp/) (ILCAA, Tokyo) | 413 critical editions of Old Tibetan: the Dunhuang scrolls, the imperial pillar inscriptions, five Old Zhangzhung texts (synchronized 28 July 2026) | CC BY 4.0 |
+| `soas-tibetan` | [SOAS gold POS corpus](https://doi.org/10.5281/zenodo.574878) (Hill & Garrett) | Four classical texts with hand-corrected segmentation and POS — 991 lines / 318K tokens (synchronized 28 July 2026) | CC BY 4.0 |
+| `old-tibetan` | [Old Tibetan Corpus](https://github.com/tibetan-nlp/old-tibetan-corpus) | The Old Tibetan Annals and Chronicle, annotated, the Annals paired with Dotson's English translation (synchronized 28 July 2026) | MIT |
+| `mvp` | [Mahāvyutpatti](https://glossaries.dila.edu.tw/glossaries/MVP) (DILA TEI edition) | The 9th-century imperial Sanskrit–Tibetan–Chinese glossary: 9,379 entries beside Monier-Williams (synchronized 28 July 2026) | Public Domain (DILA's stated belief) |
+| `tibetan-verbs` | [Tibetan Verbs Database](https://github.com/tibetan-nlp/tibetan-verbs-database) | 2,491 verb tense-stem tuples (synchronized 28 July 2026) | CC0 |
+| `wiktionary-bo` | Wiktionary Tibetan (kaikki extract) | 3,651 entries with reflex edges (synchronized 28 July 2026) | Wiktionary dual license (CC BY-SA) |
 | `tls` | [Thesaurus Linguae Sericae](https://hxwd.org/) (tls-kr/tls-data) | Concept and word nets over classical Chinese with sense-level attributions into the classics (synchronized 20 July 2026) | CC BY-SA 4.0 |
 | `unihan` | [Unihan](https://www.unicode.org/reports/tr38/) — the Unicode Han Database | 65,092 Han codepoint records: radicals, strokes, variants, readings (synchronized 20 July 2026) | Unicode License V3 |
 | `tshet-uinh` | [tshet-uinh-data](https://github.com/nk2028/tshet-uinh-data) (nk2028) | The 廣韻 Guangyun critical edition — Qieyun-system Middle Chinese phonology (synchronized 19 July 2026) | CC0 1.0 |

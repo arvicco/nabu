@@ -688,6 +688,34 @@ buddhist:
       **Jigmo** for rare Ext-B+ Han, and keep iTerm2's "treat ambiguous-width
       as double-width" **off** to match nabu's narrow measurement.
 
+# P48-1: minted with the Derge canon (derge-kangyur + derge-tengyur). No
+# recipes yet — the desk is not yet wired, and recipes are live-verified
+# prose (they land with the owner's first sync).
+tibetan:
+  blurb: |
+    The desk opens with the complete canon: the **Digital Derge Kangyur**
+    (103 volumes, Toh 1–1108) and **Tengyur** (213 volumes, Toh 1109–4569)
+    — Esukhia's Public-Domain exact-representation of the Derge woodblocks,
+    carved mistakes and archaic spellings preserved, every passage cited by
+    folio and line. Tohoku numbers are the documents' names
+    (`urn:nabu:derge-kangyur:toh846`), the crosswalk key shared with 84000,
+    rKTs and the catalog literature.
+  instruments: |
+    - **The Toh crosswalk:** every text is its Tohoku number (`toh1`,
+      `toh1-1` subindexes, `toh846a` Tohoku-gap texts) — the join key for
+      translations, catalogs and parallel corpora as they land.
+    - **Exact-representation reading:** the woodblocks' own readings stay
+      in the text; the proofreaders' `(error,correction)` suggestions,
+      archaic/modern pairs and error candidates ride each passage's
+      apparatus annotations.
+    - Syllables, not words: tsheg-delimited text is stored verbatim — word
+      segmentation is enrichment-land, not parse.
+  display: |
+    - **Tibetan script (xct):** dbu-can needs stacked-consonant rendering —
+      install `font-noto-serif-tibetan` (or Noto Sans Tibetan) and let the
+      terminal take its non-ASCII slot from it. Text is stored decomposed
+      (NFD ≡ NFC for Tibetan); no special handling needed beyond the font.
+
 sinitic:
   instruments: |
     - **Literary and classical Chinese with its phonology:** Kanripo (the

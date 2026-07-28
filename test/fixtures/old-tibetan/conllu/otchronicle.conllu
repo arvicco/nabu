@@ -1,0 +1,30 @@
+# sent_id = otchronicle:001:T1
+# text = ༆།༔།
+1	༆	༆་	PUNCT	_	_	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T1
+2	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T2
+3	༔	༔་	PUNCT	_	_	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T4
+4	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otchronicle:001:T6
+
+# sent_id = otchronicle:001:T3
+# text = དྲྀ་གུམ་བཙན་པོ་སྐུ་ཆུང་བ་འྀ་ཚེ་མཚན་ཇྀར་གདགས་ཤེས༎
+1	དྲྀ་གུམ་བཙན་པོ་	དྲི་གུམ་བཙན་པོ་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T3
+2	སྐུ་	སྐུ་	NOUN	_	Number=Sing	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T11
+3	ཆུང་བ་	ཆུང་	VERB	_	Tense=Pres|VerbForm=Vnoun	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T12
+4	འྀ་	འི་	ADP	_	Case=Gen	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T13
+5	ཚེ་	ཚེ་	NOUN	_	NounType=Rel	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T14
+6	མཚན་	མཚན་	NOUN	_	Number=Sing	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T15
+7	ཇྀ	ཇི་	PRON	_	_	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T5
+8	ར་	ར་	ADP	_	Case=Ter	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T16
+9	གདགས་	འདོགས་	VERB	_	Tense=Fut	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T17
+10	ཤེས	ཅེས་√cl	VERB	_	Mood=Qot	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T18
+11	༎	༎་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otchronicle:001:T19
+
+# sent_id = otchronicle:001:T21
+# text = མ་མ་གྲོ་ཞ་མ་སྐྱི་བརླིང་མ་ལ་དྲྀས་ན།
+1	མ་མ་	མ་མ་	NOUN	_	Number=Sing	4	arg1	_	SpaceAfter=No|Tokenid=otchronicle:001:T21
+2	གྲོ་ཞ་མ་སྐྱི་བརླིང་མ་	གྲོ་ཞ་མ་སྐྱི་བརླིང་མ་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T7
+3	ལ་	ལ་	ADP	_	Case=All	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T28
+4	དྲྀས་	འདྲི་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T29
+5	ན	ན་	SCONJ	_	Case=Loc	0	root	_	SpaceAfter=No|Tokenid=otchronicle:001:T30
+6	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otchronicle:001:T31
+

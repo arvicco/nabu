@@ -12,7 +12,7 @@ its Latin and at the Biblical scholar's for its scripture; the UD treebanks
 answer to nine desks at once. Multi-membership is the point, not an
 accident to be tidied away.
 
-Everything below documents **shipped behaviour** — the twenty-two desks
+Everything below documents **shipped behaviour** — the twenty-three desks
 defined in `config/axes.yml`, their memberships declared per source in
 `config/sources.yml`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
@@ -47,7 +47,7 @@ build if the page and the registry ever disagree.
 
 ## The desks
 
-Twenty-one desks, in the ratified order of `config/axes.yml` (which is also
+Twenty-three desks, in the ratified order of `config/axes.yml` (which is also
 the order the command surfaces render). Each leads with its **persona** —
 the hat's one-line self-description, printed verbatim by `nabu list --axis`
 and `nabu sync` — then the membership rationale, then the member slugs the
@@ -199,11 +199,19 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 ### buddhist
 
-> The Buddhologist — the dharma across the Pali, Sanskrit and Chinese canons.
+> The Buddhologist — the dharma across the Pali, Sanskrit, Chinese and Tibetan canons.
 
-Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist.
+Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and, since P48, the Derge Kangyur and Tengyur: the fourth canon leg.
 
-**Members** (4): `gretil`, `suttacentral`, `sarit`, `cbeta`
+**Members** (8): `gretil`, `suttacentral`, `sarit`, `cbeta`, `e84000`, `derge-kangyur`, `derge-tengyur`, `mvp`
+
+### tibetan
+
+> The Tibetologist — the Land of Snows from Dunhuang documents to the complete Derge canon.
+
+The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key), 84000's English translation layer, OTDO's Old Tibetan documents, and the gold-annotation lane (SOAS POS, the Annals and Chronicle); the lexicon shelves join as their packets land.
+
+**Members** (9): `e84000`, `otdo`, `soas-tibetan`, `old-tibetan`, `derge-kangyur`, `derge-tengyur`, `mvp`, `tibetan-verbs`, `wiktionary-bo`
 
 ### sinitic
 
@@ -291,10 +299,15 @@ and the **desk card** (`nabu axis`), the reference page for one desk.
   `nabu axis celtic` prints the full card: the persona verbatim, the
   membership rationale, every member source with its enablement and live
   holdings (documents/passages, entries, languages, license mix — a member
-  holding nothing says so), the aggregate gold-lemma coverage across the
-  desk's held languages, and the shipped affordances (`list --axis NAME`,
-  `sync NAME`). Zero fields are suppressed; no corpus yet still prints the
-  persona and membership, holdings reading `no database`.
+  holding nothing says so), the desk's language codes with one merged
+  doc-or-entry count each (holdings descending — a multilingual pack's
+  three-document spillover reads honestly beside a 40K holding; compact
+  shows ten codes, `--long` lifts), the aggregate gold-lemma coverage
+  across the desk's held languages, and the shipped affordances
+  (`list --axis NAME`, `sync NAME`). Zero fields are suppressed; no corpus
+  yet still prints the persona and membership, holdings reading
+  `no database`. The reverse view rides `nabu language CODE`: its `axes:`
+  line names the desks whose shelves hold the code.
 
   ```
   nabu enable celtic                    # first time: the desk onto this box's profile

@@ -33,6 +33,8 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
 | `openmgh` | texts | attribution | wired · manual | 57 docs / 9,594 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `grc` 120,553 · `lat` 53,078 · `eng` 872 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 · `egy` 3 … and 10 more (`nabu axis classical` lists all).
+
 ## The desk's instruments
 
 - **Gold-lemma languages:** grc and lat — the Perseus canons, First1KGreek,
@@ -96,4 +98,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-three research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

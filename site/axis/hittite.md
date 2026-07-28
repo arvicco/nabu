@@ -20,6 +20,8 @@ A source wears every desk it serves — these two answer this desk. Holdings are
 | `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `hit` 21,210 · `akk` 936 · `xhu` 698 · `xht` 326 · `xlu` 206 · `sux` 80 · `plq` 30 · `lat` 11 · `grc` 9 · `orv` 9 … and 14 more (`nabu axis hittite` lists all).
+
 ## The desk's instruments
 
 - **The Hittite desk:** TLHdig's tablet corpus (KBo and KUB by tablet and
@@ -65,4 +67,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-three research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

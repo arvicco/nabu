@@ -661,6 +661,33 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P48-r3: the language card's related-desks line — the axes whose member
+  # sources hold this code (≥1 doc or a dictionary shelf), in ratified
+  # (file) order, never holdings order.
+  def test_language_card_axes_line_lists_desks_in_ratified_order
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[language sla-pro]) }
+      assert_nil status
+      assert_match(/^  axes: slavic, reference$/, out,
+                   "the shelf's source rides both desks, file order")
+      out, _err, _status = with_config(config) { run_cli(%w[language deu]) }
+      assert_match(/^  axes: slavic$/, out, "a doc-held code names its holding source's desk")
+      refute_match(/^  axes:.*classical/, out, "a desk holding none of this code stays off the line")
+    end
+  end
+
+  # A code held by no axis-tagged source prints no axes line (the house
+  # zero-field rule) — here the registry defines no axes at all.
+  def test_language_card_axes_line_suppressed_without_axis_tagged_holders
+    with_recon_shelf do |config|
+      with_config(config) do
+        out, _err, status = run_cli(%w[language sla-pro])
+        assert_nil status
+        refute_match(/^  axes:/, out, "no axes registry — the line prints nothing")
+      end
+    end
+  end
+
   def test_language_without_code_or_flag_errors
     with_recon_shelf do |config|
       _out, err, status = with_config(config) { run_cli(%w[language]) }
@@ -1903,6 +1930,40 @@ class CLITest < Minitest::Test
       assert_match(/^  beta\s+The Betaist — second letters, read whole\.$/, out)
       assert_operator out.index("alpha"), :<, out.index("beta"), "ratified file order"
       assert_match(/nabu axis NAME for the full desk card/, out)
+    end
+  end
+
+  # P48-r3: the desk card's languages line — the codes the member sources
+  # hold with one merged doc-or-entry count each, holdings descending. The
+  # counts are the honesty mechanism: a shelf's 2 entries read as 2 beside
+  # a 3-document lane, never hidden behind a bare code list.
+  def test_axis_card_languages_line_merges_counts_descending
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[axis slavic]) }
+      assert_nil status
+      assert_match(/^  languages: deu 3 · sla-pro 2$/, out,
+                   "doc counts and shelf entry counts merge, holdings descending")
+      out, _err, _status = with_config(config) { run_cli(%w[axis classical]) }
+      assert_match(/^  languages: grc 1 · lat 1$/, out, "ties break by code")
+    end
+  end
+
+  # The house render-cap rule (cap at render, announce truncation): the
+  # compact languages line shows ten codes and an honest "… and N more"
+  # tail; --long lifts the cap.
+  def test_axis_card_languages_line_caps_at_ten_with_an_honest_tail
+    with_axis_polyglot_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[axis poly]) }
+      assert_nil status
+      line = out[/^  languages: (.+)$/, 1]
+      refute_nil line, "the poly desk must print a languages line"
+      assert line.start_with?("big 3 · l01 1"), "holdings descending, ties by code — got: #{line}"
+      assert_match(/… and 2 more \(--long lists all\)/, line)
+      refute_includes line, "l11", "codes past the cap elide"
+
+      out, _err, _status = with_config(config) { run_cli(%w[axis poly --long]) }
+      assert_includes out, "l11 1", "--long lifts the cap"
+      refute_match(/and \d+ more/, out)
     end
   end
 
@@ -4787,6 +4848,30 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- show --parallel cross-source (P48-r2, the Kangyur↔84000 folio pairing) --
+
+  def test_show_parallel_pairs_cross_source_over_a_translation_edge
+    with_buddhist_corpus do |config|
+      out, _err, status =
+        with_config(config) { run_cli(%w[show urn:nabu:derge-kangyur:toh846a:3b --parallel]) }
+      assert_nil status, "the runbook shape works out of the gate — no new flag"
+      assert_match(/parallel: urn:nabu:e84000:toh846a — The Threefold Ritual \[en\]/, out)
+      assert_match(/xct {2}ཀ/, out, "the woodblock lines render first")
+      assert_match(/en \[:1\.1–:1\.2 — covers :3b\.1–:3b\.6\]/, out,
+                   "the covering chunks render once, coverage-labeled in the Degé numbering")
+      assert_match(/Brahmā, great king Śakra\. Bali, the leader\./, out)
+    end
+  end
+
+  def test_show_parallel_names_the_language_the_translation_edge_serves
+    with_buddhist_corpus do |config|
+      _out, err, status =
+        with_config(config) { run_cli(%w[show urn:nabu:derge-kangyur:toh846a --parallel lat]) }
+      assert_equal 1, status
+      assert_match(/try --parallel en/, err, "the honest error names the language that would work")
+    end
+  end
+
   # -- show --parallel (P7-4, span-grouped P8-1b) ----------------------------
 
   # OSHB Gen 1:1 / TOROT zogr exactly as the parsers store them (P27-0
@@ -6215,6 +6300,45 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P48-r3: one desk (poly), one member (pack) holding MANY languages —
+  # "big" with 3 docs, l01..l11 with one each — the axis card's languages
+  # render-cap rig (compact shows ten + "… and 2 more"; --long lifts).
+  def with_axis_polyglot_corpus
+    Dir.mktmpdir("nabu-cli-poly") do |root|
+      File.write(File.join(root, "axes.yml"), <<~YAML)
+        poly:
+          persona: "The Polyglot — every language at one desk."
+          desc: "The multilingual pack lane."
+      YAML
+      sources = File.join(root, "sources.yml")
+      File.write(sources, <<~YAML)
+        pack:
+          adapter: TestAdapter
+          wired: true
+          sync_policy: manual
+          axes: [poly]
+      YAML
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "pack", name: "Pack", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      3.times { |i| seed_list_document(catalog, src, "urn:nabu:pack:big#{i}", "Big #{i}", "big") }
+      (1..11).each do |i|
+        code = format("l%02d", i)
+        seed_list_document(catalog, src, "urn:nabu:pack:#{code}", code, code)
+      end
+      Nabu::Store::SourceStats.derive!(catalog, note: "test seed")
+      catalog.disconnect
+      yield config
+    end
+  end
+
   def seed_list_shelf(catalog)
     src = catalog[:sources].insert(slug: "shelf", name: "Shelf", adapter_class: "TestAdapter",
                                    license: "CC BY-NC 4.0 (compiled by Test)",
@@ -6874,6 +6998,66 @@ class CLITest < Minitest::Test
       document << Nabu::Passage.new(urn: "#{urn}:#{suffix}", language: language, text: text, sequence: index)
     end
     document
+  end
+
+  # The P48-r2 cross-source pair: a Derge page of woodblock lines, its 84000
+  # English publication with the parser's folio annotations, and the P48-6
+  # kind=translation edge in the links journal — the surface the owner's
+  # post-sync runbook exercises.
+  def with_buddhist_corpus
+    Dir.mktmpdir("nabu-cli-buddhist") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      load_buddhist_documents(db)
+      db.disconnect
+      seed_buddhist_edge(config)
+      yield config
+    end
+  end
+
+  def load_buddhist_documents(db)
+    derge = Nabu::Store::Source.create(
+      slug: "derge-kangyur", name: "Derge", adapter_class: "TestAdapter", license_class: "open"
+    )
+    tibetan = Nabu::Document.new(urn: "urn:nabu:derge-kangyur:toh846a", language: "xct",
+                                 title: "Toh 846a", canonical_path: "/canonical/derge-kangyur/100.txt")
+    %w[ཀ ཁ ག ང ཅ ཆ].each_with_index do |text, index|
+      tibetan << Nabu::Passage.new(urn: "urn:nabu:derge-kangyur:toh846a:3b.#{index + 1}",
+                                   language: "xct", text: text, sequence: index)
+    end
+    Nabu::Store::Loader.new(db: db, source: derge).load([tibetan], full: false)
+
+    e84000 = Nabu::Store::Source.create(
+      slug: "e84000", name: "84000", adapter_class: "TestAdapter", license_class: "nc"
+    )
+    english = Nabu::Document.new(urn: "urn:nabu:e84000:toh846a", language: "en",
+                                 title: "The Threefold Ritual",
+                                 canonical_path: "/canonical/e84000/toh846a.xml")
+    [["s.1", "Summary.", {}],
+     ["1.1", "Brahmā, great king Śakra.", { "folios" => ["3b"] }],
+     ["1.2", "Bali, the leader.", { "folios" => ["3b"] }]].each_with_index do |(suffix, text, ann), index|
+      english << Nabu::Passage.new(urn: "urn:nabu:e84000:toh846a:#{suffix}", language: "en",
+                                   text: text, annotations: ann, sequence: index)
+    end
+    Nabu::Store::Loader.new(db: db, source: e84000).load([english], full: false)
+  end
+
+  def seed_buddhist_edge(config)
+    journal = Nabu::Store::LinksJournal.open!(config.links_path)
+    run_id = Nabu::Store::LinksJournal.record_run!(
+      journal, producer: "e84000", scope: "e84000", params: { kind: "translation" }, code_version: "t/1"
+    )
+    Nabu::Store::LinksJournal.write_edge!(
+      journal, from_urn: "urn:nabu:e84000:toh846a", to_urn: "urn:nabu:derge-kangyur:toh846a",
+               kind: "translation", score: nil, run_id: run_id, detail: "translates toh846a"
+    )
+    journal.disconnect
   end
 
   # A verse-for-verse corpus (grc :1/:2/:3 ↔ eng :1/:2/:3, all 1:1) for the

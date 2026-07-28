@@ -29,6 +29,8 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 
 Private research materials under personal grants are not listed.
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `rus` 18,239 · `ine-pro` 9,117 · `gem-pro` 7,711 · `sga` 6,564 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `ine` 4,981 · `ote` 2,558 · `ron` 2,270 · `itc-pro` 2,211 … and 51 more (`nabu axis etym` lists all).
+
 ## The desk's instruments
 
 - **The reconstruction shelves:** the kaikki proto-extracts
@@ -82,4 +84,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-three research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

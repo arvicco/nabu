@@ -1482,7 +1482,10 @@ module Nabu
       plus a clip note when a range shows only part of a card. ORACC's
       paragraph-grained SAA units render as exactly such blocks over the
       tablet's o.1/r.5 lines. A suffix present in only one edition renders
-      honestly one-sided, never fuzzed. Works with --full-urn.
+      honestly one-sided, never fuzzed. Works with --full-urn. Where a
+      kind=translation link edge joins documents across sources (the
+      Kangyur↔84000 crosswalk), --parallel pairs them at Degé folio/page
+      grain — no extra flag.
 
       Examples:
         nabu show urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
@@ -1541,7 +1544,7 @@ module Nabu
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
       if options[:random]
-        show_random(catalog, urn)
+        show_random(catalog, urn, config)
         return print_display_footer
       end
       raise Thor::Error, "show: --source requires --random" if options[:source]
@@ -1564,10 +1567,11 @@ module Nabu
       print_linked_footer(config, result.urn)
       print_notes_footer(catalog, result)
       print_display_footer
-    rescue Nabu::Query::Range::Error, Nabu::Query::Random::Error => e
+    rescue Nabu::Query::Range::Error, Nabu::Query::Random::Error,
+           Nabu::Query::Parallel::TranslationMismatch => e
       # A range urn that names two endpoints but can't be honoured (endpoint
-      # missing, or reversed), or an unknown --random --source: a clean stderr
-      # message + exit 1.
+      # missing, or reversed), an unknown --random --source, or a --parallel
+      # LANG the translation link cannot serve: a clean stderr message + exit 1.
       raise Thor::Error, e.message
     ensure
       catalog&.disconnect
@@ -2000,7 +2004,9 @@ module Nabu
         either it says so honestly. (Libraries that predate the dossier
         migration keep reading the ledger's language notes unchanged.)
       - RELEVANCE, live from the db: documents/passages, gold-lemma rows,
-        dictionary shelves, reconstruction-crosswalk edges. Zero fields
+        dictionary shelves, reconstruction-crosswalk edges, and the related
+        research axes (the desks whose member sources hold the code, in
+        ratified order — nabu axis NAME for any desk card). Zero fields
         are suppressed.
 
       --long adds where-it-appears detail: per-source document counts and
@@ -2041,7 +2047,8 @@ module Nabu
         term = code.to_s.strip
         raise Thor::Error, "language: give a code (chu, gkm, zle-ort…) or --list" if term.empty?
 
-        print_language_card(term, languages, info)
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        print_language_card(term, languages, info, registry: registry)
       end
     ensure
       catalog&.disconnect
@@ -2119,6 +2126,10 @@ module Nabu
         (documents/passages, dictionary entries, dossiers, languages, license
         mix — the same census fragments `nabu list` prints). Zero fields are
         suppressed; a member holding nothing yet says so.
+      - LANGUAGES, the codes the member sources hold, one merged doc-or-entry
+        count each, holdings descending — the counts keep a multilingual
+        pack's spillover honest (kat 3 beside hbo 40,000 explains itself).
+        Compact shows ten codes with an honest "… and N more"; --long lifts.
       - GOLD COVERAGE, the aggregate gold-lemma rows across the desk's held
         languages (nabu search --lemma) — honest zero when none are gold.
       - the shipped affordances: `nabu list --axis NAME`, `nabu sync NAME`.
@@ -2130,8 +2141,10 @@ module Nabu
       Examples:
         nabu axis                  # every desk, one persona line each
         nabu axis celtic           # the Celticist's desk, full card
-        nabu axis biblical         # the cross-language scripture hat
+        nabu axis biblical --long  # the scripture hat, every language code
     HELP
+    option :long, type: :boolean, default: false,
+                  desc: "Lift the languages-line cap (compact shows ten codes)"
     def axis(name = nil)
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -2642,6 +2655,10 @@ module Nabu
     # Edges shown per kind by `nabu links` before the "… and N more" tail
     # (--long lists all — the conventions §10 house rule).
     LINKS_COMPACT_ITEMS = 10
+    # Language codes shown by the `nabu axis` desk card's languages line
+    # before the "… and N more" tail (P48-r3; --long lists all — the same
+    # house render-cap rule).
+    AXIS_LANGUAGES_ITEMS = 10
     # RTL snippet highlight = SGR reverse video (P42-r4, strike 4 — the
     # matrix ruling on the owner's iTerm2). Every CHARACTER-based highlight
     # is at the mercy of the renderer's bidi treatment, and four attempts
@@ -3570,8 +3587,28 @@ module Nabu
                   end
           say "    #{slug.ljust(width)}  #{state}  #{axis_member_holdings(by_slug[slug], census: census)}"
         end
+        print_axis_languages(members, info)
         print_axis_gold(members, by_slug, info)
         say "  commands: nabu list --axis #{axis.name} · nabu sync #{axis.name}"
+      end
+
+      # The desk's held language codes (P48-r3): one merged doc-or-entry
+      # count per code over the member sources, holdings descending. The
+      # counts ARE the honesty mechanism — a multilingual pack's 3-doc
+      # spillover reads as 3 beside a 40K holding, never hidden. No catalog,
+      # no line (the member cells already say "no database"); a desk holding
+      # nothing says so.
+      def print_axis_languages(members, info)
+        return unless info
+
+        holdings = info.language_holdings_for(members)
+        return say("  languages: none held yet") if holdings.empty?
+
+        shown = options[:long] ? holdings : holdings.first(AXIS_LANGUAGES_ITEMS)
+        line = shown.map { |code, count| "#{code} #{commas(count)}" }.join(" · ")
+        hidden = holdings.size - shown.size
+        line += " … and #{hidden} more (--long lists all)" if hidden.positive?
+        say "  languages: #{line}"
       end
 
       # One member's holdings cell: the census fragments when the source holds
@@ -3860,9 +3897,9 @@ module Nabu
       # passage layout — the eyeball ritual at a source flip. A urn alongside
       # --random is contradictory (it picks passages for you); an empty result
       # is an honest note, not an error.
-      def show_random(catalog, urn)
+      def show_random(catalog, urn, config)
         raise Thor::Error, "show: --random takes no urn (it picks passages for you)" unless urn.empty?
-        return show_random_parallel(catalog) if options[:parallel]
+        return show_random_parallel(catalog, config) if options[:parallel]
 
         results = Nabu::Query::Random.new(catalog: catalog)
                                      .run(source: options[:source], lang: options[:lang], count: options[:count].to_i)
@@ -3885,9 +3922,10 @@ module Nabu
       # in the requested language, render the paired view; a scope that
       # yields none in the attempt budget (12 draws per requested passage —
       # a retry bound, not a corpus claim) says so honestly.
-      def show_random_parallel(catalog)
+      def show_random_parallel(catalog, config)
         random = Nabu::Query::Random.new(catalog: catalog)
-        parallel = Nabu::Query::Parallel.new(catalog: catalog)
+        journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+        parallel = Nabu::Query::Parallel.new(catalog: catalog, journal: journal)
         wanted = options[:count].to_i.clamp(1, Nabu::Query::Random::MAX_COUNT)
         shown = []
         attempts = 0
@@ -3897,7 +3935,13 @@ module Nabu
           break if draw.nil?
           next if shown.include?(draw.urn)
 
-          pair = parallel.run(draw.urn, lang: options[:parallel])
+          # A draw whose translation edge cannot serve the requested lang is
+          # simply not a parallel-bearing draw (P48-r2) — keep drawing.
+          pair = begin
+            parallel.run(draw.urn, lang: options[:parallel])
+          rescue Nabu::Query::Parallel::TranslationMismatch
+            nil
+          end
           next if pair.nil? || pair.right.nil?
 
           say "" unless shown.empty?
@@ -3910,6 +3954,8 @@ module Nabu
         say "no parallel-bearing draw#{scope} after #{attempts} attempts — the scope may hold no " \
             "#{options[:parallel]} siblings (`show <urn> --parallel` pairs a known document; " \
             "`show --random` alone draws unpaired)"
+      ensure
+        journal&.disconnect
       end
 
       # Render `show`: a passage in the context of its document, or a document
@@ -4155,19 +4201,27 @@ module Nabu
 
       # -- show --parallel (P7-4) ------------------------------------------
 
-      # Resolve + align + render, with the two honest failure modes: unknown
-      # urn (exit 1, same message as plain show) and no LANG sibling of the
-      # work in the catalog (exit 1, names the language).
+      # Resolve + align + render, with the honest failure modes: unknown urn
+      # (exit 1, same message as plain show), no LANG sibling or translation
+      # edge in the catalog (exit 1, names the language), and a translation
+      # edge that cannot serve LANG (exit 1 via TranslationMismatch, naming
+      # the language that would work). The links journal rides along
+      # read-only so the P48-r2 kind=translation edges (Kangyur↔84000) pair
+      # cross-source with no extra flag.
       def show_parallel(catalog, urn, lang, config)
-        result = Nabu::Query::Parallel.new(catalog: catalog).run(urn, lang: lang)
+        journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+        result = Nabu::Query::Parallel.new(catalog: catalog, journal: journal).run(urn, lang: lang)
         raise Thor::Error, "urn not found: #{urn}" if result.nil?
         if result.right.nil?
           raise Thor::Error, "no #{lang} parallel edition of this work in the catalog for #{urn} " \
-                             "(--parallel pairs sibling CTS editions WITHIN one source; is " \
+                             "(--parallel pairs sibling CTS editions within one source, or " \
+                             "cross-source over a kind=translation link edge; is " \
                              "`translations: true` set and the source resynced?)#{align_hint(urn, config)}"
         end
 
         print_parallel(result)
+      ensure
+        journal&.disconnect
       end
 
       # Cosmetic rider (P11-8): --parallel's "is translations: true set" hint is
@@ -5938,7 +5992,7 @@ module Nabu
       # notes (P18-5 — "iecor: IE-CoR variety: …", one line per kind), then
       # live relevance with zero fields suppressed. An unknown code misses
       # honestly, with a family hint when the prefix is a known family.
-      def print_language_card(code, languages, info)
+      def print_language_card(code, languages, info, registry: nil)
         name = languages.name(code)
         context = languages.context(code)
         extras = languages.extra_notes(code)
@@ -5953,6 +6007,22 @@ module Nabu
         extras.each { |kind, body| say_wrapped("#{kind}: #{body}", indent: 2) }
         print_language_witnesses(code, languages)
         print_language_relevance(code, relevance) if relevance
+        print_language_axes(code, info, registry)
+      end
+
+      # P48-r3: the related research desks — every axis whose member
+      # sources hold this code (≥1 live document or a dictionary shelf),
+      # in ratified (file) order. A code held by no axis-tagged source
+      # prints nothing (the house zero-field rule).
+      def print_language_axes(code, info, registry)
+        return unless info && registry && !registry.axes.empty?
+
+        slugs = info.holding_slugs(code)
+        return if slugs.empty?
+
+        names = registry.axes.each_axis.map(&:name)
+                        .select { |name| registry.axis_members(name).intersect?(slugs) }
+        say "  axes: #{names.join(', ')}" unless names.empty?
       end
 
       # P18-6: the per-source witness notes (kind "witness:<slug>" — what

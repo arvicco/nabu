@@ -1,0 +1,23 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All three files are documented TRIMS (line ranges) of multi-megabyte
+# volume files at the PINNED archival commit a582cf471b7c85a101035071078032f106a8e536
+# (the repo is archived — frozen since 2022-06-24), so `check` fetches them
+# for URL-liveness only, never byte-compares, and adapter_test stays null.
+source: derge-kangyur
+adapter_test: null
+retrieved: 2026-07-28
+files:
+  - path: text/001_འདུལ་བ།_ཀ.txt
+    url: https://raw.githubusercontent.com/Esukhia/derge-kangyur/a582cf471b7c85a101035071078032f106a8e536/text/001_%E0%BD%A0%E0%BD%91%E0%BD%B4%E0%BD%A3%E0%BC%8B%E0%BD%96%E0%BC%8D_%E0%BD%80.txt
+    whole: false
+    trim: lines 1-60, 760-770, 2070-2085, 4418-4430, 4950-4958 of the 4,958-line original (see README.md)
+  - path: text/002_འདུལ་བ།_ཁ.txt
+    url: https://raw.githubusercontent.com/Esukhia/derge-kangyur/a582cf471b7c85a101035071078032f106a8e536/text/002_%E0%BD%A0%E0%BD%91%E0%BD%B4%E0%BD%A3%E0%BC%8B%E0%BD%96%E0%BC%8D_%E0%BD%81.txt
+    whole: false
+    trim: lines 1-20 of the 5,055-line original (a marker-less continuation volume head)
+  - path: text/100_གཟུངས་འདུས།_ཨེ.txt
+    url: https://raw.githubusercontent.com/Esukhia/derge-kangyur/a582cf471b7c85a101035071078032f106a8e536/text/100_%E0%BD%82%E0%BD%9F%E0%BD%B4%E0%BD%84%E0%BD%A6%E0%BC%8B%E0%BD%A0%E0%BD%91%E0%BD%B4%E0%BD%A6%E0%BC%8D_%E0%BD%A8%E0%BD%BA.txt
+    whole: false
+    trim: lines 1-60, 855-860, 990-998 of the 4,479-line original (see README.md)
