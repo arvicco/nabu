@@ -1,0 +1,96 @@
+ID,Tibetan,EWTS,Kind,Codepoints,Comment
+consonant-0f40,ཀ,k,consonant,U+0F40,
+consonant-0f41,ཁ,kh,consonant,U+0F41,
+consonant-0f42,ག,g,consonant,U+0F42,
+consonant-0f44,ང,ng,consonant,U+0F44,
+consonant-0f45,ཅ,c,consonant,U+0F45,
+consonant-0f46,ཆ,ch,consonant,U+0F46,
+consonant-0f47,ཇ,j,consonant,U+0F47,
+consonant-0f49,ཉ,ny,consonant,U+0F49,
+consonant-0f4a,ཊ,T,consonant,U+0F4A,retroflex loan letter (Sanskrit ṭa)
+consonant-0f4b,ཋ,Th,consonant,U+0F4B,retroflex loan letter (Sanskrit ṭha)
+consonant-0f4c,ཌ,D,consonant,U+0F4C,retroflex loan letter (Sanskrit ḍa)
+consonant-0f4e,ཎ,N,consonant,U+0F4E,retroflex loan letter (Sanskrit ṇa)
+consonant-0f4f,ཏ,t,consonant,U+0F4F,
+consonant-0f50,ཐ,th,consonant,U+0F50,
+consonant-0f51,ད,d,consonant,U+0F51,
+consonant-0f53,ན,n,consonant,U+0F53,
+consonant-0f54,པ,p,consonant,U+0F54,
+consonant-0f55,ཕ,ph,consonant,U+0F55,
+consonant-0f56,བ,b,consonant,U+0F56,
+consonant-0f58,མ,m,consonant,U+0F58,
+consonant-0f59,ཙ,ts,consonant,U+0F59,
+consonant-0f5a,ཚ,tsh,consonant,U+0F5A,
+consonant-0f5b,ཛ,dz,consonant,U+0F5B,
+consonant-0f5d,ཝ,w,consonant,U+0F5D,
+consonant-0f5e,ཞ,zh,consonant,U+0F5E,
+consonant-0f5f,ཟ,z,consonant,U+0F5F,
+consonant-0f60,འ,',consonant,U+0F60,a-chung: consonant slot; as syllable coda it is the ' suffix (dga' vs dag disambiguator)
+consonant-0f61,ཡ,y,consonant,U+0F61,
+consonant-0f62,ར,r,consonant,U+0F62,
+consonant-0f63,ལ,l,consonant,U+0F63,
+consonant-0f64,ཤ,sh,consonant,U+0F64,
+consonant-0f65,ཥ,Sh,consonant,U+0F65,retroflex loan letter (Sanskrit ṣa)
+consonant-0f66,ས,s,consonant,U+0F66,
+consonant-0f67,ཧ,h,consonant,U+0F67,
+consonant-0f68,ཨ,a,consonant,U+0F68,"a-chen, the vowel carrier: bare = a; with a vowel sign the sign's value alone (never *ao)"
+subjoined-0f90,ྐ,k,subjoined,U+0F90,
+subjoined-0f91,ྑ,kh,subjoined,U+0F91,
+subjoined-0f92,ྒ,g,subjoined,U+0F92,
+subjoined-0f94,ྔ,ng,subjoined,U+0F94,
+subjoined-0f95,ྕ,c,subjoined,U+0F95,
+subjoined-0f96,ྖ,ch,subjoined,U+0F96,
+subjoined-0f97,ྗ,j,subjoined,U+0F97,
+subjoined-0f99,ྙ,ny,subjoined,U+0F99,
+subjoined-0f9a,ྚ,T,subjoined,U+0F9A,
+subjoined-0f9b,ྛ,Th,subjoined,U+0F9B,
+subjoined-0f9c,ྜ,D,subjoined,U+0F9C,
+subjoined-0f9e,ྞ,N,subjoined,U+0F9E,
+subjoined-0f9f,ྟ,t,subjoined,U+0F9F,
+subjoined-0fa0,ྠ,th,subjoined,U+0FA0,
+subjoined-0fa1,ྡ,d,subjoined,U+0FA1,
+subjoined-0fa3,ྣ,n,subjoined,U+0FA3,
+subjoined-0fa4,ྤ,p,subjoined,U+0FA4,
+subjoined-0fa5,ྥ,ph,subjoined,U+0FA5,
+subjoined-0fa6,ྦ,b,subjoined,U+0FA6,
+subjoined-0fa8,ྨ,m,subjoined,U+0FA8,
+subjoined-0fa9,ྩ,ts,subjoined,U+0FA9,
+subjoined-0faa,ྪ,tsh,subjoined,U+0FAA,
+subjoined-0fab,ྫ,dz,subjoined,U+0FAB,
+subjoined-0fad,ྭ,w,subjoined,U+0FAD,wazur (as in grwa)
+subjoined-0fae,ྮ,zh,subjoined,U+0FAE,
+subjoined-0faf,ྯ,z,subjoined,U+0FAF,
+subjoined-0fb1,ྱ,y,subjoined,U+0FB1,
+subjoined-0fb2,ྲ,r,subjoined,U+0FB2,
+subjoined-0fb3,ླ,l,subjoined,U+0FB3,
+subjoined-0fb4,ྴ,sh,subjoined,U+0FB4,
+subjoined-0fb5,ྵ,Sh,subjoined,U+0FB5,
+subjoined-0fb6,ྶ,s,subjoined,U+0FB6,
+subjoined-0fb7,ྷ,h,subjoined,U+0FB7,carries the NFC-decomposed aspirates: gha = U+0F42 U+0FB7 etc.
+vowel-0f71,ཱ,A,vowel,U+0F71,a-chung vowel lengthener; A+i = I and A+u = U (the NFC decompositions of U+0F73/U+0F75)
+vowel-0f72,ི,i,vowel,U+0F72,
+vowel-0f74,ུ,u,vowel,U+0F74,
+vowel-0f7a,ེ,e,vowel,U+0F7A,
+vowel-0f7b,ཻ,ai,vowel,U+0F7B,Sanskrit diphthong (gi-gu doubled)
+vowel-0f7c,ོ,o,vowel,U+0F7C,
+vowel-0f7d,ཽ,au,vowel,U+0F7D,Sanskrit diphthong (na-ro doubled)
+vowel-0f80,ྀ,-i,vowel,U+0F80,"reversed gi-gu (Old Tibetan orthography, Sanskrit ṛ/ḷ stacks)"
+mark-0f7e,ཾ,M,mark,U+0F7E,anusvara (rjes su nga ro)
+mark-0f7f,ཿ,H,mark,U+0F7F,visarga (rnam bcad)
+mark-0f83,ྃ,~M,mark,U+0F83,candrabindu (sna ldan)
+punctuation-0f04,༄,@,punctuation,U+0F04,yig mgo mdun ma (head mark opening canon texts)
+punctuation-0f05,༅,#,punctuation,U+0F05,yig mgo sgab ma (head mark continuation)
+punctuation-0f0b,་, ,punctuation,U+0F0B,"tsheg, the syllable delimiter — the space-analogue"
+punctuation-0f0c,༌,*,punctuation,U+0F0C,non-breaking tsheg (tsheg bstar)
+punctuation-0f0d,།,/,punctuation,U+0F0D,shad
+punctuation-0f0e,༎,//,punctuation,U+0F0E,nyis shad
+digit-0f20,༠,0,digit,U+0F20,
+digit-0f21,༡,1,digit,U+0F21,
+digit-0f22,༢,2,digit,U+0F22,
+digit-0f23,༣,3,digit,U+0F23,
+digit-0f24,༤,4,digit,U+0F24,
+digit-0f25,༥,5,digit,U+0F25,
+digit-0f26,༦,6,digit,U+0F26,
+digit-0f27,༧,7,digit,U+0F27,
+digit-0f28,༨,8,digit,U+0F28,
+digit-0f29,༩,9,digit,U+0F29,
