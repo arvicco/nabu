@@ -1070,11 +1070,19 @@ TexRelations concordance), #9 `KitabTextReuse` (P43-4, kind=reuse), and
 publication's part-suffix-stripped Toh keys, the parser-pinned `toh_base`
 metadata, joined to the derge shelves' Toh-slug documents,
 shelf routed by the publication's own `collection` cone; deliberately
-DOCUMENT grain: 84000 cites Reading-Room section.paragraph, Derge cites
-woodblock folio page.line — no shared citation vocabulary and no upstream
-alignment, so a passage-grain edge would be invented, and for the same
-reason no multi-canon Buddhist work earns a §10 alignment-hub entry: the
-CBETA witnesses cite Taishō page-register-line, a third disjoint scheme).
+DOCUMENT grain: the edges assert "X translates Y", nothing finer.
+CORRECTION (P48-r2, superseding the P48-6 wording "no shared citation
+vocabulary"): the 84000 TEI embeds INLINE Degé folio anchors —
+`<ref cRef="F.3.b" type="folio"/>` (~33k across the 396 published Kangyur
+files) plus `V<n>` volume refs carrying actual eKangyur volume numbers —
+which ARE a shared vocabulary with the Esukhia shelves' page.line refs at
+PAGE grain. The parser captures them as per-chunk `folios` /
+`folios_by_toh` annotations and `show --parallel` derives the pairing at
+read time over these very edges (Query::FolioParallel), so the edges
+STAY document grain — page pairing is derivation, not minting. The
+alignment-hub verdict stands: the CBETA witnesses cite Taishō
+page-register-line, a genuinely disjoint scheme, so no multi-canon
+Buddhist work earns a §10 hub entry.)
 SyncRunner re-runs the adapter's declared producer
 (`Adapter.reference_producer`) after every load of a `reference_edges?`
 source, passing the source's canonical workdir — the seam for the

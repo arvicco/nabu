@@ -24,9 +24,10 @@ module Query
 
     # -- helpers -------------------------------------------------------------
 
-    def load_edition(urn, language, passages, title: nil)
+    def load_edition(urn, language, passages, title: nil, metadata: nil)
       document = Nabu::Document.new(
-        urn: urn, language: language, title: title, canonical_path: "/canonical/src/#{urn.split(':').last}.xml"
+        urn: urn, language: language, title: title, metadata: metadata || {},
+        canonical_path: "/canonical/src/#{urn.split(':').last}.xml"
       )
       passages.each_with_index do |(suffix, text, annotations), index|
         document << Nabu::Passage.new(
@@ -545,6 +546,187 @@ module Query
 
       result = run_parallel(ISIC_URN, lang: "eng")
       assert_nil result.right, "an -en document of a DIFFERENT record is not a sibling"
+    end
+
+    # -- the citation-prefix form (P48-r2, owner repro) --------------------------
+
+    # `show urn:…:1` (a citation prefix plain show lists via the P44 path)
+    # used to be "urn not found" under --parallel — the locate chain lacked
+    # the prefix probe. --parallel must resolve exactly where show does.
+    def test_citation_prefix_urn_resolves_exactly_like_plain_show
+      load_card_pair
+
+      result = run_parallel("#{GRC_URN}:1")
+      refute_nil result, "a prefix urn plain `show` lists must not be 'urn not found' under --parallel"
+      assert_equal ENG_URN, result.right.urn
+      assert_equal %i[block block], kinds(result), "the prefix slice covers both cards, unclipped"
+      refute result.groups.first.clipped
+    end
+
+    def test_citation_prefix_with_no_children_stays_an_honest_miss
+      load_card_pair
+      assert_nil run_parallel("#{GRC_URN}:9"), "a prefix opening onto nothing is still urn-not-found"
+    end
+
+    # -- cross-source pairing over the translation edge (P48-r2) -----------------
+    #
+    # The Kangyur↔84000 crosswalk: no sibling edition exists within either
+    # source, but the links journal holds a kind=translation edge and the
+    # e84000 passages carry the parser's folio annotations — the shared Degé
+    # page vocabulary. Pairing is at PAGE grain, rendered through the
+    # existing :block shapes.
+
+    DK846A = "urn:nabu:derge-kangyur:toh846a"
+    E84846A = "urn:nabu:e84000:toh846a"
+
+    def teardown
+      @translation_journal&.disconnect
+    end
+
+    def translation_journal
+      @translation_journal ||=
+        Nabu::Store::LinksJournal.migrate!(Nabu::Store::LinksJournal.connect("sqlite::memory:"))
+    end
+
+    def seed_translation_edge(from:, to:)
+      run_id = Nabu::Store::LinksJournal.record_run!(
+        translation_journal, producer: "e84000", scope: "e84000",
+                             params: { kind: "translation" }, code_version: "test"
+      )
+      Nabu::Store::LinksJournal.write_edge!(
+        translation_journal, from_urn: from, to_urn: to, kind: "translation",
+                             score: nil, run_id: run_id, detail: "translates"
+      )
+    end
+
+    def run_cross(urn, lang: "eng")
+      Nabu::Query::Parallel.new(catalog: @catalog, journal: translation_journal).run(urn, lang: lang)
+    end
+
+    def load_buddhist_pair
+      load_edition(DK846A, "xct",
+                   [["3b.1", "ཀ"], ["3b.2", "ཁ"], ["3b.3", "ག"],
+                    ["3b.4", "ང"], ["3b.5", "ཅ"], ["3b.6", "ཆ"]], title: "Toh 846a")
+      load_edition(E84846A, "en",
+                   [["s.1", "Summary."],
+                    ["1.1", "Brahmā, great king Śakra.", { "folios" => ["3b"] }],
+                    ["1.2", "Bali, the leader.", { "folios" => ["3b"] }]],
+                   title: "The Threefold Ritual")
+      seed_translation_edge(from: E84846A, to: DK846A)
+    end
+
+    def test_translation_edge_pairs_kangyur_pages_with_english_folio_blocks
+      load_buddhist_pair
+
+      result = run_cross(DK846A)
+      assert_equal E84846A, result.right&.urn, "the kind=translation edge IS the sibling"
+      assert_equal [:block], kinds(result), "one coarse block per folio page run"
+      block = result.groups.first
+      assert_equal %w[ཀ ཁ ག ང ཅ ཆ], block.originals.map(&:text), "the page's woodblock lines, in order"
+      assert_equal ":3b.1", block.covers_first
+      assert_equal ":3b.6", block.covers_last
+      assert_equal "Brahmā, great king Śakra. Bali, the leader.", block.translation.text,
+                   "the covering chunks render once, joined — folio grain is the honest grain"
+      assert_equal 0, result.groups.count { |g| g.kind == :translation },
+                   "the folio-less summary chunk translates nothing here and never renders one-sided"
+    end
+
+    def test_translation_pairing_composes_with_the_page_prefix_form
+      load_buddhist_pair
+
+      result = run_cross("#{DK846A}:3b")
+      refute_nil result, "the runbook shape: show urn:…:toh846a:3b --parallel"
+      assert_equal [:block], kinds(result)
+      refute result.groups.first.clipped, "the 3b prefix covers the whole page"
+
+      scoped = run_cross("#{DK846A}:3b.2")
+      assert_equal ":3b.2", scoped.scope
+      block = scoped.groups.first
+      assert block.clipped
+      assert_equal ["ཁ"], block.originals.map(&:text)
+      assert_equal ":3b.1", block.covers_first, "coverage stays honest under the clip"
+    end
+
+    def test_translation_pairing_works_from_the_english_side
+      load_buddhist_pair
+
+      result = run_cross(E84846A, lang: "xct")
+      assert_equal DK846A, result.right&.urn
+      assert_equal %i[original block], kinds(result),
+                   "the folio-less summary stays an honest one-sided left row; the folio chunks block"
+      block = result.groups.last
+      assert_equal ["Brahmā, great king Śakra.", "Bali, the leader."], block.originals.map(&:text)
+      assert_equal "ཀ ཁ ག ང ཅ ཆ", block.translation.text, "page 3b's lines render once, joined"
+
+      bo = run_cross(E84846A, lang: "bo")
+      assert_equal DK846A, bo.right&.urn, "bo reaches the xct shelf (the Tibetan stage fold)"
+    end
+
+    def test_translation_pairing_refuses_a_lang_the_edge_cannot_serve
+      load_buddhist_pair
+
+      error = assert_raises(Nabu::Query::Parallel::TranslationMismatch) { run_cross(DK846A, lang: "lat") }
+      assert_match(/\ben\b/, error.message, "the honest error names the counterpart's language")
+    end
+
+    def test_no_translation_edge_stays_an_honest_miss
+      load_edition(DK846A, "xct", [["3b.1", "ཀ"]], title: "Toh 846a")
+
+      result = run_cross(DK846A)
+      assert_nil result.right, "a journal without an edge changes nothing"
+      assert_empty result.groups
+    end
+
+    def test_multi_volume_pairing_matches_volume_prefixed_page_tokens
+      load_edition("urn:nabu:derge-kangyur:toh1", "xct", [], title: "Toh 1 (container)",
+                                                             metadata: { "container" => true })
+      load_edition("urn:nabu:derge-kangyur:toh1-6", "xct",
+                   [["1.277b.6", "ka"], ["1.277b.7", "kha"], ["2.1b.1", "ga"]],
+                   title: "Toh 1-6", metadata: { "parent" => "toh1" })
+      load_edition("urn:nabu:e84000:toh1-6", "en",
+                   [["p.1", "Medicines.", { "folios" => ["1.277b"] }],
+                    ["2.1", "The boundary.", { "folios" => ["1.277b", "2.1b"] }]],
+                   title: "The Chapter on Medicines",
+                   metadata: { "collection" => "kangyur", "toh" => ["toh1-6"], "toh_base" => ["toh1"] })
+      seed_translation_edge(from: "urn:nabu:e84000:toh1-6", to: "urn:nabu:derge-kangyur:toh1")
+
+      result = run_cross("urn:nabu:derge-kangyur:toh1-6")
+      assert_equal "urn:nabu:e84000:toh1-6", result.right&.urn,
+                   "the subtext reaches the edge minted on its toh1 container parent"
+      assert_equal [:block], kinds(result), "the straddling chunk pulls both volumes' pages into one run"
+      block = result.groups.first
+      assert_equal ":1.277b.6", block.covers_first
+      assert_equal ":2.1b.1", block.covers_last, "volume-prefixed tokens pair across the volume break"
+
+      back = run_cross("urn:nabu:e84000:toh1-6", lang: "xct")
+      assert_equal "urn:nabu:derge-kangyur:toh1-6", back.right&.urn,
+                   "from the English side the container edge refines to the passage-bearing subtext"
+    end
+
+    # The strongest claim: BOTH fixture shelves through their real adapters,
+    # edges minted by the real P48-6 producer — the owner's post-sync
+    # runbook, end to end.
+    def test_fixture_end_to_end_the_runbook_pairs_out_of_the_gate
+      %w[e84000 derge-kangyur].each do |slug|
+        adapter_class = slug == "e84000" ? Nabu::Adapters::E84000 : Nabu::Adapters::DergeKangyur
+        source = Nabu::Store::Source.create(slug: slug, name: slug,
+                                            adapter_class: adapter_class.name, license_class: "open")
+        Nabu::Store::Loader.new(db: @catalog, source: source)
+                           .load_from(adapter_class.new, workdir: Nabu::TestSupport.fixtures(slug), full: true)
+      end
+      Nabu::E84000Translations.new(catalog: @catalog, journal: translation_journal).run("e84000")
+
+      result = run_cross("#{DK846A}:3b")
+      assert_equal E84846A, result.right&.urn
+      block = result.groups.find { |g| g.kind == :block }
+      refute_nil block, "real folio annotations pair the real woodblock page"
+      assert_equal 6, block.originals.size, "Degé 846a fills six lines of folio 3b"
+      assert_match(/Brahmā, great king Śakra/, block.translation.text)
+
+      multi = run_cross("urn:nabu:derge-kangyur:toh1-6")
+      assert_equal "urn:nabu:e84000:toh1-6", multi.right&.urn,
+                   "the part publication pairs through its container edge, volume-prefixed"
+      assert(multi.groups.any? { |g| g.kind == :block }, "volume-prefixed folio tokens meet")
     end
 
     # -- visibility (show-family semantics) --------------------------------------

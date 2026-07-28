@@ -3,6 +3,7 @@
 require "json"
 
 require_relative "sibling_families"
+require_relative "folio_parallel"
 
 module Nabu
   module Query
@@ -76,9 +77,30 @@ module Nabu
     # source declares no family (papyri, treebanks) has no work notion and
     # therefore no siblings — Result#right is nil and the CLI says so.
     #
+    # == Cross-source translation links (P48-r2)
+    #
+    # A document with NO sibling edition may still carry a links-journal
+    # `kind=translation` edge (the Kangyur↔84000 crosswalk, producer #10).
+    # When a +journal+ handle is given, such documents pair CROSS-SOURCE at
+    # Degé folio/page grain through FolioParallel (see its class note for
+    # the full design: page-run :block groups, both directions, the
+    # container hop, the honest TranslationMismatch on a lang the edge
+    # cannot serve). No journal / no edge keeps today's right-nil Result.
+    #
+    # == Resolution parity with `show` (P48-r2)
+    #
+    # locate() mirrors Show#run exactly — passage, document, range, then
+    # the P44 CITATION PREFIX (`…:toh846a:3b` listing the page's lines):
+    # whatever argument plain `show` resolves, `--parallel` resolves too,
+    # slicing the queried side to the prefix's children.
+    #
     # Show-family semantics: withdrawn passages are included, flagged — this is
     # an inspection surface (see Show's header for the rationale).
     class Parallel
+      # A translation edge exists but --parallel LANG names a language the
+      # edge's one counterpart is not in (CLI/MCP → honest error naming the
+      # language that would work).
+      class TranslationMismatch < Nabu::Error; end
       # One side's passage: its citation suffix, urn, text, withdrawn flag.
       # +anchor+ is the suffix this line aligns AT when it differs from its
       # own citation — upstream's "corresp" annotation on prose-paragraph
@@ -118,31 +140,44 @@ module Nabu
       # the shipped sources.yml compile. The ten per-source regex constants
       # that used to live here retired into `siblings:` declarations; see
       # SiblingFamilies for the design note on what each encoded.
-      def initialize(catalog:, families: SiblingFamilies.default)
+      # +journal+ (P48-r2): a read handle on the links journal, or nil —
+      # enables the cross-source translation-edge arm (class note).
+      def initialize(catalog:, families: SiblingFamilies.default, journal: nil)
         @catalog = catalog
         @families = families
+        @journal = journal
       end
 
-      # Resolve +urn+ (document, passage, or range) and align against the +lang+
-      # sibling. Returns a Result, or nil when the urn is unknown. A range with
-      # a bad endpoint raises Range::Error (CLI → exit 1).
+      # Resolve +urn+ (document, passage, range, or citation prefix) and
+      # align against the +lang+ sibling — or, when no sibling exists, the
+      # translation-edge counterpart (class note). Returns a Result, or nil
+      # when the urn is unknown. A range with a bad endpoint raises
+      # Range::Error; a lang the translation edge cannot serve raises
+      # TranslationMismatch (CLI → exit 1 either way).
       def run(urn, lang: "eng")
         document, scope, slice = locate(urn)
         return nil if document.nil?
 
         sibling = sibling_edition(document, lang)
-        return Result.new(left: side(document), right: nil, groups: [], scope: scope) if sibling.nil?
+        right, groups =
+          if sibling
+            [sibling, build_groups(document, sibling)]
+          else
+            pairing = FolioParallel.new(catalog: @catalog, journal: @journal).pair(document, lang: lang)
+            pairing ? [pairing.counterpart, pairing.groups] : [nil, []]
+          end
+        return Result.new(left: side(document), right: nil, groups: [], scope: scope) if right.nil?
 
-        groups = build_groups(document, sibling)
         groups = clip(groups, scope ? [scope] : slice) if scope || slice
-        Result.new(left: side(document), right: side(sibling), groups: groups, scope: scope)
+        Result.new(left: side(document), right: side(right), groups: groups, scope: scope)
       end
 
       private
 
       # [document row, scope suffix, slice suffixes]: the urn itself as a
-      # document ([doc, nil, nil]); a passage ([doc, its-suffix, nil]); or a
-      # range ([doc, nil, the slice's suffixes]). nil when unknown.
+      # document ([doc, nil, nil]); a passage ([doc, its-suffix, nil]); a
+      # range or citation prefix ([doc, nil, the slice's suffixes]) —
+      # Show#run's exact resolution order (class note). nil when unknown.
       def locate(urn)
         row = document_by(urn: urn)
         return [row, nil, nil] if row
@@ -153,7 +188,7 @@ module Nabu
           return [document, passage.fetch(:urn).delete_prefix(document.fetch(:urn)), nil]
         end
 
-        locate_range(urn)
+        locate_range(urn) || locate_prefix(urn)
       end
 
       # A range urn → its document + the ordered list of in-slice suffixes, or
@@ -170,6 +205,33 @@ module Nabu
                    .select_map(:urn)
                    .map { |passage_urn| passage_urn.delete_prefix(document.fetch(:urn)) }
         [document, nil, suffixes]
+      end
+
+      # The P44 citation-prefix form, mirrored from Show#citation_prefix: the
+      # longest ":"-bounded document head, sliced to the passages whose urns
+      # extend the full prefix across a citation boundary (".", ":", "#") —
+      # `…:toh846a:3b` opens into 3b.1…3b.6 and never swallows 3b2. Zero
+      # children stays nil ("urn not found", exactly like plain show).
+      def locate_prefix(urn)
+        head = urn.dup
+        document = nil
+        while (cut = head.rindex(":"))
+          head = head[0...cut]
+          document = document_by(urn: head)
+          break if document
+        end
+        return nil if document.nil?
+
+        escaped = urn.gsub(/[\\%_]/) { |ch| "\\#{ch}" }
+        suffixes = @catalog[:passages]
+                   .where(document_id: document.fetch(:id))
+                   .where(
+                     Sequel.|(*%w[. : #].map { |b| Sequel.like(:urn, "#{escaped}#{b}%", { escape: "\\" }) })
+                   )
+                   .order(:sequence)
+                   .select_map(:urn)
+                   .map { |passage_urn| passage_urn.delete_prefix(document.fetch(:urn)) }
+        suffixes.empty? ? nil : [document, nil, suffixes]
       end
 
       def document_by(criteria)

@@ -40,11 +40,12 @@ class E84000TranslationsTest < Minitest::Test
     load_e84000!
     result = producer.run("e84000")
 
-    assert_equal 6, result.edges_written,
-                 "toh846a + toh761 + toh3156 mint one each; the multi-Toh toh539e,774,1074 mints three"
+    assert_equal 7, result.edges_written,
+                 "toh846a + toh761 + toh3156 + the toh1-6 part publication mint one each; " \
+                 "the multi-Toh toh539e,774,1074 mints three"
     assert_equal 0, result.edges_refreshed
     assert_equal 0, result.skipped_unmapped
-    assert_equal 6, @journal[:links].count
+    assert_equal 7, @journal[:links].count
     assert_equal ["translation"], @journal[:links].select_map(:kind).uniq
     assert_equal [nil], @journal[:links].select_map(:score).uniq,
                  "a curated translation record is not a mined similarity — no fake number"
@@ -130,7 +131,7 @@ class E84000TranslationsTest < Minitest::Test
                            metadata: { "collection" => "kangyur" })
     result = producer.run("e84000")
 
-    assert_equal 6, result.edges_written
+    assert_equal 7, result.edges_written
     assert_equal 1, result.skipped_unmapped,
                  "a document without toh_base metadata mints nothing and is counted"
   end
@@ -142,7 +143,7 @@ class E84000TranslationsTest < Minitest::Test
                                        "toh_base" => ["toh9999"] })
     result = producer.run("e84000")
 
-    assert_equal 6, result.edges_written,
+    assert_equal 7, result.edges_written,
                  "an unknown collection routes to no derge shelf — never guessed"
     assert_equal 1, result.skipped_unmapped
   end
@@ -152,7 +153,7 @@ class E84000TranslationsTest < Minitest::Test
     @catalog[:documents].where(urn: E_TOH846A).update(withdrawn: true)
     result = producer.run("e84000")
 
-    assert_equal 5, result.edges_written
+    assert_equal 6, result.edges_written
     assert_nil @journal[:links].first(from_urn: E_TOH846A)
   end
 
@@ -188,7 +189,7 @@ class E84000TranslationsTest < Minitest::Test
     ensure
       empty_catalog.disconnect
     end
-    assert_equal 6, @journal[:links].count
+    assert_equal 7, @journal[:links].count
   end
 
   private
@@ -217,10 +218,10 @@ class E84000TranslationsTest < Minitest::Test
   end
 
   # The producer's input contract is catalog rows carrying the P48-2 parser's
-  # pinned metadata keys; the in-tree fixture set has no part publication, so
-  # this row supplies one in exactly the shape the parser tests pin
-  # (test/adapters/e84000_test.rb) — a producer-contract row, not a faked
-  # upstream file.
+  # pinned metadata keys; the fixture set's own part publication (toh1-6,
+  # P48-r2) is a different chapter, so this row supplies toh1-1 in exactly
+  # the shape the parser tests pin (test/adapters/e84000_test.rb) — a
+  # producer-contract row, not a faked upstream file.
   def insert_e84000_document(urn:, title:, metadata:)
     source_id = @catalog[:sources].where(slug: "e84000").get(:id)
     @catalog[:documents].insert(
