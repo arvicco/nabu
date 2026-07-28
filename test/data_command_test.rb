@@ -59,12 +59,22 @@ class DataCommandTest < Minitest::Test
     assert_match(/own authorship/, out, "an inputs-free feature says so instead of printing nothing")
   end
 
+  # A spliced planned rig rather than a registry feature: builder packets
+  # flip the real features one by one, and this refusal must outlive them all.
   def test_data_build_refuses_a_planned_feature_by_name
+    planned = Nabu::DataBuild::Feature.new(
+      slug: "san/planned-rig", language: Nabu::DataBuild::LANGUAGES.fetch("san"),
+      title: "Planned rig (no builder yet)", status: :planned, tier: "gold", anchoring: "none",
+      inputs: [], canonical_cones: [], rationale: "Exists to pin the planned refusal.",
+      maintenance: "never — test rig only"
+    )
     out_dir = Dir.mktmpdir("nabu-data-cli")
-    out, err, status = run_cli(["data", "build", "san/form-lemma", "--into", out_dir])
+    out, err, status = with_features(Nabu::DataBuild::REGISTRY + [planned]) do
+      run_cli(["data", "build", "san/planned-rig", "--into", out_dir])
+    end
     assert_equal 1, status
     assert_match(/planned/, err)
-    assert_match(%r{san/form-lemma}, err)
+    assert_match(%r{san/planned-rig}, err)
     assert_empty Dir.children(out_dir), "a refusal must write nothing"
     assert_empty out
   ensure

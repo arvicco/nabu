@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "feature"
+require_relative "form_lemma"
 
 module Nabu
   module DataBuild
@@ -14,16 +15,16 @@ module Nabu
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
-    # doctrine). Every feature is :planned in P50-W1: the rail lands first,
-    # builders are later packets (W2–W4), and `nabu data build` refuses
-    # politely until a builder flips its feature to :available. The doc
-    # table in docs/nabu-data.md is drift-guarded against this list.
+    # doctrine). The rail landed first (P50-W1) with every feature :planned;
+    # builder packets (W2–W4) flip their feature to :available as each
+    # builder lands, and `nabu data build` refuses politely until then. The
+    # doc table in docs/nabu-data.md is drift-guarded against this list.
     REGISTRY = [
       Feature.new(
         slug: "san/form-lemma", language: LANGUAGES.fetch("san"),
         title: "Sanskrit form→lemma table derived from DCS gold annotations",
-        status: :planned, tier: "gold-derived", anchoring: "none",
-        inputs: ["dcs"], canonical_cones: ["dcs"],
+        status: :available, tier: "gold-derived", anchoring: "none",
+        inputs: ["dcs"], canonical_cones: ["dcs"], builder: FormLemma,
         rationale: "Bridges inflected surface forms (and unsandhied padapāṭha forms) to lemmas " \
                    "using only human-annotated gold data — powers dictionary-headword lookup for " \
                    "query expansion (the successor to Nabu's rule-generated Sanskrit stem variants).",
