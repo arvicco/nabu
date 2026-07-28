@@ -3,9 +3,11 @@
 require "test_helper"
 
 # The nabu-data feature census (P50-W1): four registered features, every field
-# present and well-shaped; features ship :planned until their builder packet
-# lands and flips them. The registry is EXPLICIT — no discovery magic —
-# so this test pins the ratified metadata, not just the shape.
+# present and well-shaped. The rail landed first with everything :planned;
+# builder packets flip their own feature as each builder lands (P50-W2:
+# san/form-lemma, P50-W4: xct/verb-lemma). The registry is EXPLICIT — no
+# discovery magic — so this test pins the ratified metadata, not just the
+# shape.
 class DataBuildRegistryTest < Minitest::Test
   EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation].freeze
 
@@ -18,14 +20,13 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal features.size, features.map(&:slug).uniq.size
   end
 
-  def test_status_and_builder_agree_for_every_feature
-    features.each do |feature|
-      if feature.available?
-        refute_nil feature.builder, "#{feature.slug}: :available means the builder landed"
-      else
-        assert_nil feature.builder, "#{feature.slug}: :planned must not carry a builder"
-      end
-    end
+  def test_the_builder_status_census
+    # The rail landed with every feature :planned; each builder packet flips
+    # exactly its own feature as the builder lands (W2: form-lemma, W4:
+    # verb-lemma; W3 wylie-fold flips at its merge).
+    assert_equal %w[san/form-lemma xct/verb-lemma], features.select(&:available?).map(&:slug)
+    features.select(&:planned?).each { |feature| assert_nil feature.builder }
+    features.select(&:available?).each { |feature| refute_nil feature.builder }
   end
 
   def test_every_field_is_present_and_well_shaped
@@ -63,9 +64,13 @@ class DataBuildRegistryTest < Minitest::Test
     assert_empty wylie.canonical_cones
 
     verb = Nabu::DataBuild.feature("xct/verb-lemma")
+    assert_equal :available, verb.status, "P50-W4: the verb-lemma builder has landed"
+    assert_equal Nabu::DataBuild::VerbLemmaBuilder, verb.builder
     assert_equal "gold-derived", verb.tier
     assert_equal ["tibetan-verbs"], verb.inputs
     assert_match(/2,491/, verb.rationale)
+    assert_match(%r{deferred behind xct/segmentation}, verb.rationale,
+                 "the anchored-layer deferral is stated where the owner reads it")
 
     segmentation = Nabu::DataBuild.feature("xct/segmentation")
     assert_equal "silver", segmentation.tier

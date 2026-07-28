@@ -126,7 +126,7 @@ no page update is a red suite, and vice versa.
 | --- | --- | --- | --- | --- |
 | `san/form-lemma` | available | gold-derived | san | dcs |
 | `xct/wylie-fold` | planned | gold | xct | — |
-| `xct/verb-lemma` | planned | gold-derived | xct | tibetan-verbs |
+| `xct/verb-lemma` | available | gold-derived | xct | tibetan-verbs |
 | `xct/segmentation` | planned | silver | xct | derge-kangyur, soas-tibetan |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
@@ -147,9 +147,9 @@ A hand-curated transliteration rule table letting Tibetan-script and Wylie-roman
 
 ### `xct/verb-lemma` — Tibetan verb stem → paradigm-lemma map (from the Tibetan Verb Database)
 
-**Status**: planned · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: tibetan-verbs
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: tibetan-verbs
 
-Maps the 2,491 TVD stem tuples (present/past/future/imperative, grammarians' disagreements kept uncollapsed) to a paradigm lemma, enabling verb-form-aware lookup across Classical Tibetan.
+Maps the 2,491 TVD stem tuples (present/past/future/imperative, grammarians' disagreements kept uncollapsed) to a paradigm lemma, enabling verb-form-aware lookup across Classical Tibetan. The table half only: the anchored layer over the canon is deferred behind xct/segmentation.
 
 **Maintenance**: re-derive after tibetan-verbs sync; upstream is stable (CC0)
 

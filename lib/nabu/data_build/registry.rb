@@ -2,6 +2,7 @@
 
 require_relative "feature"
 require_relative "form_lemma"
+require_relative "verb_lemma_builder"
 
 module Nabu
   module DataBuild
@@ -16,9 +17,10 @@ module Nabu
 
     # The explicit feature census (no discovery magic — the sources.yml
     # doctrine). The rail landed first (P50-W1) with every feature :planned;
-    # builder packets (W2–W4) flip their feature to :available as each
-    # builder lands, and `nabu data build` refuses politely until then. The
-    # doc table in docs/nabu-data.md is drift-guarded against this list.
+    # builder packets flip their feature to :available as each builder lands
+    # (P50-W2: san/form-lemma, P50-W4: xct/verb-lemma), and `nabu data build`
+    # refuses politely until then. The doc table in docs/nabu-data.md is
+    # drift-guarded against this list.
     REGISTRY = [
       Feature.new(
         slug: "san/form-lemma", language: LANGUAGES.fetch("san"),
@@ -45,12 +47,14 @@ module Nabu
       Feature.new(
         slug: "xct/verb-lemma", language: LANGUAGES.fetch("xct"),
         title: "Tibetan verb stem → paradigm-lemma map (from the Tibetan Verb Database)",
-        status: :planned, tier: "gold-derived", anchoring: "none",
+        status: :available, tier: "gold-derived", anchoring: "none",
         inputs: ["tibetan-verbs"], canonical_cones: ["tibetan-verbs"],
         rationale: "Maps the 2,491 TVD stem tuples (present/past/future/imperative, grammarians' " \
                    "disagreements kept uncollapsed) to a paradigm lemma, enabling verb-form-aware " \
-                   "lookup across Classical Tibetan.",
-        maintenance: "re-derive after tibetan-verbs sync; upstream is stable (CC0)"
+                   "lookup across Classical Tibetan. The table half only: the anchored layer over " \
+                   "the canon is deferred behind xct/segmentation.",
+        maintenance: "re-derive after tibetan-verbs sync; upstream is stable (CC0)",
+        builder: VerbLemmaBuilder
       ),
       Feature.new(
         slug: "xct/segmentation", language: LANGUAGES.fetch("xct"),
