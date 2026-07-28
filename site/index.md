@@ -67,8 +67,8 @@ with every desk's member shelves and recipes, is
 
 ## The holdings, in brief
 
-As of **26 July 2026**, the catalog records **947,273 documents** comprising
-**66,755,518 passages** in 116 language codes — from proto-cuneiform
+As of **28 July 2026**, the catalog records **962,812 documents** comprising
+**66,824,868 passages** in 119 language codes — from proto-cuneiform
 tablets of the late fourth millennium BCE to Meiji-era Japanese. The
 newest wave opened the Rabbinic library (Mishnah, both Talmuds cited
 at daf grain, Tosefta), the Geʿez shelf (1 Enoch and Jubilees —
