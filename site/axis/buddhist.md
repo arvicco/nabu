@@ -21,10 +21,10 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 | `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,650 passages |
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
 | `cbeta` | texts | nc | wired · manual | 3,679 docs / 8,749,319 passages |
-| `e84000` | texts | nc | not yet wired | not synced yet |
-| `derge-kangyur` | texts | open | not yet wired | not synced yet |
-| `derge-tengyur` | texts | open | not yet wired | not synced yet |
-| `mvp` | dictionary | open | not yet wired | not synced yet |
+| `e84000` | texts | nc | not yet wired | 388 docs / 124,223 passages |
+| `derge-kangyur` | texts | open | wired · manual | 1,200 docs / 461,304 passages |
+| `derge-tengyur` | texts | open | wired · manual | 3,362 docs / 897,142 passages |
+| `mvp` | dictionary | open | wired · manual | 9,379 entries |
 
 ## The desk's instruments
 

@@ -25,15 +25,15 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 July 2026)</span> |
 |---|---|---|---|---|
-| `e84000` | texts | nc | not yet wired | not synced yet |
-| `otdo` | texts | attribution | not yet wired | not synced yet |
-| `soas-tibetan` | texts | attribution | not yet wired | not synced yet |
-| `old-tibetan` | texts | attribution | not yet wired | not synced yet |
-| `derge-kangyur` | texts | open | not yet wired | not synced yet |
-| `derge-tengyur` | texts | open | not yet wired | not synced yet |
-| `mvp` | dictionary | open | not yet wired | not synced yet |
-| `tibetan-verbs` | dictionary | open | not yet wired | not synced yet |
-| `wiktionary-bo` | dictionary | attribution | not yet wired | not synced yet |
+| `e84000` | texts | nc | not yet wired | 388 docs / 124,223 passages |
+| `otdo` | texts | attribution | wired · manual | 413 docs / 13,593 passages |
+| `soas-tibetan` | texts | attribution | wired · manual | 4 docs / 991 passages |
+| `old-tibetan` | texts | attribution | wired · manual | 3 docs / 2,669 passages |
+| `derge-kangyur` | texts | open | wired · manual | 1,200 docs / 461,304 passages |
+| `derge-tengyur` | texts | open | wired · manual | 3,362 docs / 897,142 passages |
+| `mvp` | dictionary | open | wired · manual | 9,379 entries |
+| `tibetan-verbs` | dictionary | open | wired · manual | 2,491 entries |
+| `wiktionary-bo` | dictionary | attribution | wired · manual | 3,651 entries |
 
 ## The desk's instruments
 

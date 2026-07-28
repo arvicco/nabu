@@ -172,7 +172,7 @@ class TibetanVerbsTest < Minitest::Test
     entry = registry["tibetan-verbs"]
     refute_nil entry, "config/sources.yml must register tibetan-verbs"
     assert_equal Nabu::Adapters::TibetanVerbs, entry.adapter_class
-    refute entry.wired, "unwired until the owner-fired first sync + eyeball (CLAUDE.md checklist §6)"
+    assert entry.wired, "flipped 2026-07-28 (owner ruling; first sync verified live)"
     assert_equal "manual", entry.sync_policy
     assert_equal %w[tibetan], entry.axes
     assert_equal Nabu::Adapters::TibetanVerbs.manifest, entry.manifest
