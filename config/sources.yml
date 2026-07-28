@@ -2978,6 +2978,79 @@ otdo:   # P48-5, 02-sources row 132
   # urn:nabu:otdo:<slug>:<line-label>.
   sync_policy: manual
 
+# P48-3: the Tibetan gold-annotation lane — two rows (the wold/clics shape:
+# one row per upstream artifact/license/fetch posture), one new axis tag.
+# LANGUAGE RULING (P48-3): Classical Tibetan texts are `xct` (the gretil
+# xct_ precedent), Old Tibetan is `otb`; `bo` stays kaikki's modern
+# dictionary shelf. The codes become held-language cards after first sync.
+soas-tibetan:
+  adapter: Nabu::Adapters::SoasTibetan
+  axes: [tibetan]
+  wired: false   # awaiting the owner-fired first sync (1.8 MB Zenodo zip,
+                   # sha-pinned; CLAUDE.md checklist §6: bin/nabu enable
+                   # soas-tibetan && bin/nabu sync soas-tibetan — expect 4
+                   # documents / 991 passages (mdzangsblun 310, buston 309,
+                   # mila 192, marpa 180; 318,230 form|tag tokens), eyeball
+                   # nabu show urn:nabu:soas-tibetan:mdzangsblun:1 ("།མཛངས་
+                   # བླུན་ཞེས་བྱ་བའི་མདོ།…", gold pos tokens) + 5 random
+                   # passages, then flip.
+  # SOAS Classical Tibetan gold POS corpus — "A part-of-speech (POS) tagged
+  # corpus of Classical Tibetan" (Hill, Garrett et al.; AHRC "Tibetan in
+  # Digital Communication", SOAS 2012–2015; Zenodo record 574878, DOI
+  # 10.5281/zenodo.574878, VERIFIED CC BY 4.0 on the record). Four texts
+  # with HAND-CORRECTED gold segmentation + gold POS (tag set Garrett et
+  # al. 2014/2015): Mdzaṅs blun (9th c., canonical), Bu ston chos ḥbyuṅ
+  # (13th c.), Mi la ras paḥi rnam thar + Mar paḥi rnam thar (15th c.) —
+  # the Tibetan desk's quality anchor, language xct all four. Format is its
+  # own small family (`soas-pos`): one line = one passage, space-separated
+  # form|tag tokens, NO lemma column anywhere → the source mints ZERO lemma
+  # rows (honest absence — no lemma_tier posture, nothing exists to label);
+  # the -lex renderings (undisambiguated lexicon tags) are censused
+  # discovery skips. Fetch: ONE versioned-immutable Texts.zip via ZipFetch,
+  # hard sha256 pin (RELEASE_SHA256, the wold/ren mold; md5 cross-checked
+  # against Zenodo's). A future release is a NEW DOI the owner re-pins.
+  sync_policy: manual
+
+old-tibetan:
+  adapter: Nabu::Adapters::OldTibetan
+  axes: [tibetan]
+  siblings: ["-en"]  # the elephantine/damaskini mold — text stems are
+                     # otannals/otchronicle, so the literal -en tail is
+                     # unambiguous; show --parallel pairs otannals ↔
+                     # otannals-en by identical <section>:<brat-id> suffixes.
+  translations: true  # Dotson 2009's aligned English of the Annals rides
+                      # `# text_en` per sentence → the -en sibling document;
+                      # the Chronicle has no translation lane and its -en
+                      # ref skips by rule (DocumentSkipped).
+  wired: false   # awaiting the owner-fired first sync (small git clone;
+                   # CLAUDE.md checklist §6: bin/nabu enable old-tibetan &&
+                   # bin/nabu sync old-tibetan — expect 3 documents / 2,669
+                   # passages (otannals 546 otb + otannals-en 546 eng +
+                   # otchronicle 1,577 otb; ~17.5k syllable-tokens), eyeball
+                   # nabu show urn:nabu:old-tibetan:otannals:000:T55
+                   # --parallel (the Dotson pairing) + 5 random passages,
+                   # then flip.
+  # Old Tibetan Corpus (github.com/tibetan-nlp/old-tibetan-corpus): the Old
+  # Tibetan ANNALS (OTDO Pt_1288) + CHRONICLE (Pt_1287) — Tibet's first
+  # history and its epic companion, Dunhuang manuscripts, Unicode-converted
+  # from OTDO's Wylie, language otb. Gold by upstream's claim: segmentation,
+  # POS and the verb-argument dependency layer (arg1/arg2/arg2:lvc…),
+  # hand-corrected in BRAT (Faggionato/Garrett/Meelen, AHRC "Lexicography
+  # in Motion" 2017–2020). NOT gold: the LEMMA column is the ot2ct
+  # constraint-grammar NORMALIZED Classical Tibetan citation form
+  # (√-marked) — a pipeline product → lemma_tier: silver, every hit labeled
+  # (the cdli/ebl defensive-honesty shape). Composes the shared ConlluParser
+  # (clean 10-column files; citation hook strips the `<stem>:` sent_id
+  # prefix). archive/*.conllu legacy normalized exports are censused
+  # discovery skips (they would double-load in the wrong orthography).
+  # LICENSE, recorded choice: repo LICENSE is MIT (© 2018 Tibetan NLP) →
+  # attribution — the license basis for this lane; the Zenodo twin lists
+  # only "Other (Open)", and the README's per-text tables additionally
+  # stamp CC BY 4.0 (both attribution-class, no conflict). Upstream dormant
+  # since 2021 → manual.
+  sync_policy: manual
+  lemma_tier: silver
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

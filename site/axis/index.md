@@ -200,9 +200,9 @@ The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and 
 
 ### tibetan
 
-> The Tibetologist — the Old Tibetan documentary world, Dunhuang scrolls to the pillar inscriptions.
+> The Tibetologist — Dunhuang's first histories to the classical canon, syllable by tagged syllable.
 
-The Old Tibetan lane: OTDO's 414 critical editions — the Dunhuang manuscripts (Pelliot tibétain, IOL Tib J, Or.15000, Stein), the imperial pillar and rock inscriptions, and the five Old Zhangzhung texts — with the Annals and Chronicle instruments joining as their shelves land.
+The Tibetan gold-annotation lane: the SOAS Classical Tibetan POS corpus (xct) and the Old Tibetan Annals and Chronicle with Dotson's aligned translation (otb), beside kaikki's bo extract riding wiktionary-recon.
 
 [Open the tibetan desk]({{ '/axis/tibetan/' | relative_url }})
 
