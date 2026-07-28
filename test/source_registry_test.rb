@@ -629,6 +629,46 @@ class SourceRegistryTest < Minitest::Test
     refute_predicate registry["b"], :quickstart?
   end
 
+  # -- multilingual pack marker (P49-r4) -----------------------------------
+
+  def test_multilingual_defaults_false_and_parses_true
+    registry = load_registry(<<~YAML)
+      pack:
+        adapter: Some::Adapter
+        multilingual: true
+      mono:
+        adapter: Some::Adapter
+    YAML
+    assert_predicate registry["pack"], :multilingual?
+    refute_predicate registry["mono"], :multilingual?, "absent multilingual = false"
+  end
+
+  def test_multilingual_rejects_non_boolean
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        pack:
+          adapter: Some::Adapter
+          multilingual: sometimes
+      YAML
+    end
+    assert_match(/pack.*multilingual must be true or false/, error.message)
+  end
+
+  # The registry-level lookup the attribution surfaces read (the blocked?
+  # mold): unknown slugs are not multilingual.
+  def test_registry_multilingual_lookup_by_slug
+    registry = load_registry(<<~YAML)
+      pack:
+        adapter: Some::Adapter
+        multilingual: true
+      mono:
+        adapter: Some::Adapter
+    YAML
+    assert registry.multilingual?("pack")
+    refute registry.multilingual?("mono")
+    refute registry.multilingual?("nope"), "an unknown slug is not multilingual"
+  end
+
   # -- availability (P44-r3a) ----------------------------------------------
 
   def test_availability_defaults_public

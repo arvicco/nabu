@@ -91,6 +91,22 @@ module Nabu
     # empty-state shows.
     DEFAULT_QUICKSTART = false
 
+    # The multilingual pack marker (P49-r4). `multilingual: true` marks a
+    # source whose language list is STRUCTURALLY UNBOUNDED — a pack of
+    # per-language sub-corpora (UD's ~40 treebanks, WOLD's 41 vocabularies,
+    # the kaikki per-language extracts) where upstream can add any language
+    # and the source's whole-grain `axes:` union does not describe any single
+    # held language. The count-less membership-attribution surfaces (the
+    # language card's `axes:` line, the axis card's gold-lemma language set)
+    # EXCLUDE multilingual members: a pack's few hbo documents must not drag
+    # its romance/germanic/sinitic desks onto the hbo card. Counts-bearing
+    # surfaces (the axis card's `languages:` line) deliberately KEEP pack
+    # holdings — there the counts are the honesty mechanism. Absent = false:
+    # an ordinary source, even one holding several languages, attributes
+    # normally (a bounded spread — a site archive, a script corpus — is its
+    # desks' own subject matter, not spillover).
+    DEFAULT_MULTILINGUAL = false
+
     # The fetch-grant block (P42-r1): a permission-bound source whose right to
     # fetch is NOT conveyed by a public license (StarLing's personal e-mail
     # grant to the project author, the future TITUS Avestan). A public clone of
@@ -158,12 +174,12 @@ module Nabu
     # a configuration error caught at load. Absent on every ordinary source.
     Entry = Data.define(:slug, :adapter_class_name, :wired, :sync_policy, :kind, :translations,
                         :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings, :axes,
-                        :grant_required, :grant, :availability, :quickstart) do
+                        :grant_required, :grant, :availability, :quickstart, :multilingual) do
       def initialize(slug:, adapter_class_name:, wired:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false,
                      lemma_tier: DEFAULT_LEMMA_TIER, classes: nil, siblings: nil, axes: [],
                      grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
-                     quickstart: DEFAULT_QUICKSTART)
+                     quickstart: DEFAULT_QUICKSTART, multilingual: DEFAULT_MULTILINGUAL)
         super
       end
 
@@ -190,6 +206,11 @@ module Nabu
       # In the curated quickstart starter set (P44-r3b)? Drives
       # Profile.default_entries on a fresh, library-less box.
       def quickstart? = quickstart
+
+      # A structurally-unbounded language pack (P49-r4, DEFAULT_MULTILINGUAL
+      # note above)? The count-less attribution surfaces exclude this source
+      # when mapping languages onto research desks.
+      def multilingual? = multilingual
 
       # Resolve the adapter constant lazily. A bad/missing class is a
       # configuration error, not a crash: surface it as a ValidationError
@@ -309,7 +330,8 @@ module Nabu
         axes: axes!(slug, config, axis_registry),
         grant_required: grant_required, grant: grant,
         availability: availability!(slug, config),
-        quickstart: boolean!(slug, config, "quickstart")
+        quickstart: boolean!(slug, config, "quickstart"),
+        multilingual: boolean!(slug, config, "multilingual")
       )
     end
     private_class_method :build_entry
@@ -541,6 +563,15 @@ module Nabu
     def blocked?(slug)
       entry = @entries[slug]
       entry ? entry.blocked? : false
+    end
+
+    # Is +slug+ a multilingual pack (P49-r4)? Unknown slugs are not — the
+    # blocked? mold. The count-less attribution surfaces (language-card
+    # `axes:`, axis-card gold-lemma language set) read this to exclude pack
+    # spillover.
+    def multilingual?(slug)
+      entry = @entries[slug]
+      entry ? entry.multilingual? : false
     end
 
     # Yield each Entry in registration order; returns an Enumerator without a
