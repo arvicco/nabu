@@ -152,6 +152,72 @@ module Query
       assert_equal 0, rel.lemma_rows
     end
 
+    # P48-r3: the axis card's languages line — one merged doc-or-entry
+    # count per code over a member slug set, holdings descending (ties by
+    # code). The counts are the honesty mechanism: a code a member barely
+    # touches reads as its real small number beside the big holdings.
+    def test_language_holdings_for_merges_doc_and_entry_counts_descending
+      make_document(source: @texts, language: "chu", urn: "urn:nabu:test:chu:1", passages: 2)
+      make_document(source: @texts, language: "chu", urn: "urn:nabu:test:chu:2")
+      make_document(source: @texts, language: "lat", urn: "urn:nabu:test:lat:1")
+      make_document(source: @more, language: "chu", urn: "urn:nabu:test:chu:3")
+      make_document(source: @texts, language: "got", urn: "urn:nabu:test:got:w", withdrawn: true)
+
+      holdings = info.language_holdings_for(%w[texts wiktionary-recon])
+      counts = holdings.to_h
+      assert_equal 2, counts["chu"], "documents count, not passages — and only the named slugs"
+      assert_equal 1, counts["lat"]
+      refute_includes counts.keys, "got", "withdrawn documents never count"
+      sla = counts.fetch("sla-pro") { flunk "shelf languages must ride entry counts" }
+      assert_operator sla, :>, 0
+      assert_equal holdings.sort_by { |code, count| [-count, code] }, holdings,
+                   "holdings descending, ties by code"
+      assert_empty info.language_holdings_for(%w[nope]), "an unknown slug set holds nothing"
+    end
+
+    # P48-r3 + P42 doctrine: the doc counts behind the languages line are a
+    # read-time probe of the write-time source_stats_languages shelf — never
+    # a live documents scan at card time. Proof of path: with stats derived,
+    # the live rows can vanish and the counts still serve.
+    def test_language_holdings_read_the_write_time_stats_not_live_documents
+      make_document(source: @texts, language: "chu", urn: "urn:nabu:test:chu:1", passages: 2)
+      make_document(source: @texts, language: "chu", urn: "urn:nabu:test:chu:2")
+      probe = info
+      @catalog[:passages].delete
+      @catalog[:documents].delete
+
+      assert_equal [["chu", 2]], probe.language_holdings_for(%w[texts]),
+                   "doc counts must read source_stats_languages, not scan documents live"
+    end
+
+    # The pre-019 catalog contract: without the stats tables the live
+    # fallback produces the identical holdings list.
+    def test_language_holdings_fallback_without_stats_is_identical
+      make_document(source: @texts, language: "chu", urn: "urn:nabu:test:chu:1", passages: 2)
+      make_document(source: @texts, language: "lat", urn: "urn:nabu:test:lat:1")
+
+      with_stats = info.language_holdings_for(%w[texts wiktionary-recon])
+      @catalog.drop_table(:source_stats_languages)
+      @catalog.drop_table(:source_stats)
+      fallback = Nabu::Query::LanguageInfo.new(catalog: @catalog)
+      assert_equal with_stats, fallback.language_holdings_for(%w[texts wiktionary-recon]),
+                   "the pre-019 fallback must produce the identical holdings list"
+    end
+
+    # P48-r3: the language card's axes seam — every source slug holding a
+    # code, by live document (stats-backed) or dictionary shelf.
+    def test_holding_slugs_names_doc_and_shelf_sources
+      make_document(source: @texts, language: "chu", urn: "urn:nabu:test:chu:1")
+      make_document(source: @more, language: "got", urn: "urn:nabu:test:got:w", withdrawn: true)
+
+      probe = info
+      assert_equal %w[texts], probe.holding_slugs("chu")
+      assert_equal %w[wiktionary-recon], probe.holding_slugs("sla-pro"),
+                   "a shelf language names its dictionary's source"
+      assert_empty probe.holding_slugs("got"), "a withdrawn-only code has no holder"
+      assert_empty probe.holding_slugs("qqq")
+    end
+
     # P42-0: the corpus grain reads source_stats when present, live
     # aggregates when not — same Relevance/Held either way (pre-019 catalog
     # contract).
