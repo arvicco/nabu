@@ -32,6 +32,8 @@ A source wears every desk it serves — these five answer this desk. Holdings ar
 | `openmgh` | texts | attribution | wired · manual | 57 docs / 9,594 passages |
 | `bfm` | texts | attribution | wired · manual | 219 docs / 333,819 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `lat` 1,010 · `fro` 222 · `grc` 9 · `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 · `frm` 3 · `got` 3 … and 8 more (`nabu axis romance` lists all).
+
 ## The desk's instruments
 
 No axis-specific instruments curated yet — the generic surfaces above apply.

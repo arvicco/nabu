@@ -33,6 +33,8 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
 | `betamasaheft-works` | texts | attribution | wired · manual | 3,796 docs / 66,516 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `hbo` 30,232 · `gez` 3,774 · `syc` 697 · `eng` 488 · `cop` 485 · `arc` 361 · `lat` 84 · `grc` 36 · `amh` 22 · `orv` 9 … and 13 more (`nabu axis biblical` lists all).
+
 ## The desk's instruments
 
 - **Every alignment work at once.** `nt`: SBLGNT (grc), the Vulgate (lat),

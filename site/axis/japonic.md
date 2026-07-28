@@ -33,6 +33,8 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 | `oncoj-lexicon` | dictionary | attribution | wired · frozen | 5,869 entries |
 | `aozora` | texts | open | wired · manual | 17,121 docs / 2,983,332 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `jpn` 287,212 · `zho` 102,998 · `lzh` 63,807 · `ojp` 11,392 · `sga` 6,564 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `ine-pro` 1,905 · `iir-pro` 799 … and 6 more (`nabu axis japonic` lists all).
+
 ## The desk's instruments
 
 - **The Japanese lane:** the ONCOJ Old Japanese corpus and its lexicon,

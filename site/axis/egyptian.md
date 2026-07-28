@@ -25,6 +25,8 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 | `aed` | dictionary | attribution | wired · manual | 35,052 entries |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `egy` 51,130 · `ger` 12,985 · `cop` 12,222 · `eng` 4,861 · `grc` 3,311 · `egy-Egyd` 1,424 · `arc` 1,189 · `ara` 962 · `und` 168 · `phn` 94 … and 19 more (`nabu axis egyptian` lists all).
+
 ## The desk's instruments
 
 - **The hieroglyph-to-Coptic continuum:** the TLA corpora and word list

@@ -41,6 +41,8 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 | `ren` | texts | attribution | wired · manual | 235 docs / 297,504 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `ang` 63,169 · `non` 19,623 · `eng` 6,812 · `swe` 3,393 · `gmq-pro` 822 · `gmh` 406 · `gml` 235 · `lat` 17 · `grc` 12 · `orv` 9 … and 17 more (`nabu axis germanic` lists all).
+
 ## The desk's instruments
 
 - **Gold-lemma languages:** got (Gothic, on the PROIEL and UD treebanks),

@@ -11,7 +11,7 @@
 #                                        #   NO sync_policy). module = machinery
 #                                        #   (kr-gaiji/bridging): sanctioned
 #                                        #   fetch, zero catalog rows, MUST be
-#                                        #   wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 388 / 124,223 (exact prediction)).
+#                                        #   wired: false.
 #     wired: false                     # THIS FILE is authoritative — flips
 #                                        #   here reach the db on any
 #                                        #   sync/rebuild/health reconcile
@@ -2910,7 +2910,7 @@ e84000:   # P48-2, 02-sources row 133
   # not before — a sources.yml axes reference must never precede its
   # axes.yml definition (registry validation).
   axes: [tibetan, buddhist]
-  wired: false
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired" + "Re-wire e84000"; first sync verified live: 388 docs / 124,223 passages, exact prediction)
   # 84000 "Translating the Words of the Buddha" — the ENGLISH translation
   # layer of the Tibetan canon (github.com/84000/data-tei, ~282 MB repo).
   # Census (commit bdfc81c, 2026-07-28): 396 published Kangyur TEI under
