@@ -6,6 +6,16 @@ require "json"
 # datapackage.json (P50-W1): Frictionless Data Package v2 shape + the
 # namespaced nabu block, byte-stable for diffability (golden file), with a
 # derivation fingerprint that changes iff inputs or recipe change.
+#
+# The fixture is a GOLDEN OUTPUT, not an upstream sample (hence no fixture
+# README.md/manifest.yml — that convention marks real-source dirs). Its
+# inputs live in ONE place, DataBuildFake.golden_manifest_args, so test and
+# fixture cannot drift. Regenerate after an INTENDED shape change (and say
+# why in the commit):
+#
+#   bundle exec ruby -Itest -Ilib -e 'require "test_helper";
+#     File.write("test/fixtures/data_build/datapackage.json",
+#                Nabu::DataBuild::Manifest.generate(**DataBuildFake.golden_manifest_args))'
 class DataBuildManifestTest < Minitest::Test
   MANIFEST = Nabu::DataBuild::Manifest
   FIXTURE = File.join(Nabu::TestSupport::FIXTURES_ROOT, "data_build", "datapackage.json")
