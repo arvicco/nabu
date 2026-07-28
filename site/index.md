@@ -67,8 +67,8 @@ with every desk's member shelves and recipes, is
 
 ## The holdings, in brief
 
-As of **28 July 2026**, the catalog records **962,812 documents** comprising
-**66,824,868 passages** in 119 language codes — from proto-cuneiform
+As of **28 July 2026**, the catalog records **968,182 documents** comprising
+**68,324,790 passages** in 121 language codes — from proto-cuneiform
 tablets of the late fourth millennium BCE to Meiji-era Japanese. The
 newest wave opened the Rabbinic library (Mishnah, both Talmuds cited
 at daf grain, Tosefta), the Geʿez shelf (1 Enoch and Jubilees —
@@ -77,7 +77,7 @@ Italy (115,590 EDR records), Urartian, and Middle Low German — days
 after the Romance wave and the Arabic phase that made **Classical
 Arabic the largest language on the shelves (33.3 million passages)**,
 ahead of Literary Chinese (13.2 million). Together with
-**1,391,759 dictionary entries** across one hundred reference shelves
+**1,407,280 dictionary entries** across 103 reference shelves
 and **19.2 million gold-standard lemma annotations in thirty-seven
 languages** (a further 28.1 million machine-suggested annotations are
 carried at an honestly labelled silver tier). All figures on this
