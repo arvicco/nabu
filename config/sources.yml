@@ -3051,6 +3051,56 @@ old-tibetan:
   sync_policy: manual
   lemma_tier: silver
 
+derge-kangyur:
+  adapter: Nabu::Adapters::DergeKangyur
+  axes: [tibetan, buddhist]  # P48-1: mints the tibetan desk; the buddhist axis
+                             # gains its fourth canon leg (Pali/Sanskrit/Chinese
+                             # → now the Tibetan Kangyur+Tengyur)
+  wired: false   # awaiting the owner-fired first sync (CLAUDE.md checklist §6:
+                 # bin/nabu enable derge-kangyur, bin/nabu sync derge-kangyur —
+                 # git clone ~300 MB text / 103 volumes, expect ~1,100+ Toh
+                 # documents at page.line grain — eyeball
+                 # nabu show urn:nabu:derge-kangyur:toh846:1b.1 and 5 random
+                 # passages, then flip).
+  # Digital Derge Kangyur — Esukhia/Barom Theksum Choling proofreading
+  # (2014–2018) of the UVA-SOAS 2013 eKangyur; exact-representation of the
+  # LoC Derge woodblocks (spelling/carving mistakes preserved on purpose).
+  # 103 volume files, 300,157,458 bytes UTF-8 plain text, Toh 1–1108.
+  # Repo ARCHIVED June 2022 (frozen) — the adapter PINS the archival HEAD
+  # a582cf471b7c (2022-06-24) and aborts loudly on drift; the OpenPecha
+  # successor is deliberately NOT followed (per-pecha licensing minefield,
+  # P47-s2 survey — the CC0 org claim was refuted there).
+  # LICENSE verbatim (README §License, README-ONLY declaration — no LICENSE
+  # file, recorded honestly): "This work is a mechanical reproduction of a
+  # Public Domain work, and as such is also in the Public Domain." → open.
+  # Language xct (Classical Tibetan); text NFD-by-convention upstream, the
+  # standard NFC boundary is deterministic (Tibetan precomposed chars are
+  # composition-excluded). Document per {D<toh>} marker (the e84000
+  # crosswalk key); multi-volume documents volume-prefix passage refs —
+  # the adapter/family headers carry the full doctrine.
+  sync_policy: manual
+
+derge-tengyur:
+  adapter: Nabu::Adapters::DergeTengyur
+  axes: [tibetan, buddhist]  # P48-1: the canon's commentarial half — same desks
+  wired: false   # awaiting the owner-fired first sync (checklist §6: git clone
+                 # ~617 MB text / 213 volumes, expect ~3,400+ Toh documents —
+                 # eyeball nabu show urn:nabu:derge-tengyur:toh1109:1b.1 and 5
+                 # random passages, then flip).
+  # Digital Derge Tengyur — Esukhia/Barom Theksum Choling's annotated
+  # faithful copy of the Derge Tengyur. 213 volume files, 617,471,152 bytes,
+  # Toh 1109–4569 (disjoint from the Kangyur by Tohoku design — verified on
+  # real volumes: kangyur vol 101 ends D1108, tengyur vol 001 opens D1109).
+  # Upstream NOT archived but dormant (last push 2021-10-20) — the adapter
+  # PINS HEAD 174653137d62 and aborts loudly on drift (owner re-pin).
+  # Quirks censused and handled by the shared esukhia-text family: UTF-8 BOM
+  # on every volume (README claims none), # peydurma note anchors, [X] error
+  # candidates, vol 213 (dkar chag) carrying no markers (rides the last open
+  # document). LICENSE verbatim (README §License, README-ONLY declaration —
+  # no LICENSE file): "This work is a mechanical reproduction of a Public
+  # domain work, and as such is also in the Public domain." → open.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

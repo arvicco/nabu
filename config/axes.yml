@@ -90,8 +90,14 @@ indic:
   desc: "The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon."
 
 buddhist:
-  persona: "The Buddhologist — the dharma across the Pali, Sanskrit and Chinese canons."
-  desc: "Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist."
+  persona: "The Buddhologist — the dharma across the Pali, Sanskrit, Chinese and Tibetan canons."
+  desc: "Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and, since P48, the Derge Kangyur and Tengyur: the fourth canon leg."
+
+# P48-1: minted with the Derge canon (derge-kangyur + derge-tengyur), per the
+# owner-ordered P47-s2 Tibetan survey ("mint the axis").
+tibetan:
+  persona: "The Tibetologist — the Land of Snows from Dunhuang documents to the complete Derge canon."
+  desc: "The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key); Dunhuang documents and the lexicon shelves join as their licensing unlocks."
 
 sinitic:
   persona: "The Sinologist — the classical Chinese written world and its phonological deep past."
@@ -100,14 +106,6 @@ sinitic:
 japonic:
   persona: "The Japanologist — Old Japanese song to the Sino-Japanese dictionary tradition."
   desc: "The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon."
-
-# P48-5: PLACEHOLDER MINT so the otdo registry row validates in the packet
-# worktree — the P48-1 packet owns the axis's ratified definition; on merge
-# its persona/desc supersede these lines (docs/axes.md + site pages
-# regenerate mechanically via `rake site:axes`).
-tibetan:
-  persona: "The Tibetologist — the Old Tibetan documentary world, Dunhuang scrolls to the pillar inscriptions."
-  desc: "The Old Tibetan lane: OTDO's 414 critical editions — the Dunhuang manuscripts (Pelliot tibétain, IOL Tib J, Or.15000, Stein), the imperial pillar and rock inscriptions, and the five Old Zhangzhung texts — with the Annals and Chronicle instruments joining as their shelves land."
 
 # P45-3: minted with digilibLT, the first shelf of the Latin→Romance band the
 local:
