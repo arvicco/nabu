@@ -30,3 +30,9 @@ end
 
 require_relative "data_build/feature"
 require_relative "data_build/registry"
+require_relative "data_build/csv_writer"
+require_relative "data_build/builder"
+require_relative "data_build/languages_table"
+require_relative "data_build/sources_bib"
+require_relative "data_build/manifest"
+require_relative "data_build/runner"
