@@ -1,0 +1,37 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# 84000/data-tei keeps published Kangyur TEI under
+# translations/kangyur/translations/ (Tengyur: translations/tengyur/
+# publications/) with placeholder stubs in sibling placeholders/ dirs; the
+# fixture tree mirrors that layout. The toh761 pair is TRIMMED (README trim
+# procedure) — upstream keeps both halves of a duplicate publication and the
+# fixture preserves the phenomenon at header + first-chunks size.
+source: e84000
+adapter_test:
+retrieved: 2026-07-28
+files:
+  - path: translations/kangyur/translations/100-002_toh846a-the_threefold_ritual.xml
+    url: https://raw.githubusercontent.com/84000/data-tei/master/translations/kangyur/translations/100-002_toh846a-the_threefold_ritual.xml
+    whole: true
+    trim: none
+  - path: "translations/kangyur/translations/088-034_toh539e,774,1074-the_dharani_for_polishing_a_gem.xml"
+    url: "https://raw.githubusercontent.com/84000/data-tei/master/translations/kangyur/translations/088-034_toh539e%2C774%2C1074-the_dharani_for_polishing_a_gem.xml"
+    whole: true
+    trim: none
+  - path: translations/kangyur/translations/096-010_toh761-the_dharani_of_the_iron_beak.xml
+    url: https://raw.githubusercontent.com/84000/data-tei/master/translations/kangyur/translations/096-010_toh761-the_dharani_of_the_iron_beak.xml
+    whole: false
+    trim: "teiHeader + summary div + first two body chunks (README procedure)"
+  - path: translations/kangyur/translations/096-010_toh761-the_incantation_of_lohatunda.xml
+    url: https://raw.githubusercontent.com/84000/data-tei/master/translations/kangyur/translations/096-010_toh761-the_incantation_of_lohatunda.xml
+    whole: false
+    trim: "teiHeader + summary div + first two body chunks (README procedure)"
+  - path: translations/tengyur/publications/075-017_toh3156-the_dharani_of_simhanada.xml
+    url: https://raw.githubusercontent.com/84000/data-tei/master/translations/tengyur/publications/075-017_toh3156-the_dharani_of_simhanada.xml
+    whole: true
+    trim: none
+  - path: translations/kangyur/placeholders/096-016_toh767-tantra_of_the_supreme_dancer_of_the_yaksas.xml
+    url: https://raw.githubusercontent.com/84000/data-tei/master/translations/kangyur/placeholders/096-016_toh767-tantra_of_the_supreme_dancer_of_the_yaksas.xml
+    whole: true
+    trim: none
