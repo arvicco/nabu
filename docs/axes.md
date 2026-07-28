@@ -203,15 +203,7 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist.
 
-**Members** (5): `gretil`, `suttacentral`, `sarit`, `cbeta`, `mvp`
-
-### tibetan
-
-> The Tibetologist — the translators' language: the Kangyur-Tengyur world and its Sanskrit shadow.
-
-The Tibetan lane, dictionary-first: the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and the kaikki bo extract; the Derge canon shelves join as they land.
-
-**Members** (3): `mvp`, `tibetan-verbs`, `wiktionary-bo`
+**Members** (6): `gretil`, `suttacentral`, `sarit`, `cbeta`, `e84000`, `mvp`
 
 ### sinitic
 
@@ -228,6 +220,14 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
 **Members** (8): `wiktionary-recon`, `unihan`, `edrdg`, `hdic`, `kradfile`, `oncoj`, `oncoj-lexicon`, `aozora`
+
+### tibetan
+
+> The Tibetologist — Dunhuang scrolls and pillar inscriptions to the translators' glossaries and their Sanskrit shadow.
+
+The Tibetan lane, two-fronted while the canon shelves land: OTDO's 414 Old Tibetan critical editions — the Dunhuang manuscripts (Pelliot tibétain, IOL Tib J, Or.15000, Stein), the imperial pillar and rock inscriptions, and the five Old Zhangzhung texts — beside the dictionary shelves: the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and the kaikki bo extract.
+
+**Members** (4): `otdo`, `mvp`, `tibetan-verbs`, `wiktionary-bo`
 
 ### local
 
