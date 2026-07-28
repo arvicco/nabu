@@ -186,7 +186,7 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 
 > The Tibetologist — the Land of Snows from Dunhuang documents to the complete Derge canon.
 
-The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key); Dunhuang documents and the lexicon shelves join as their licensing unlocks.
+The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key), 84000's English translation layer, OTDO's Old Tibetan documents, and the gold-annotation lane (SOAS POS, the Annals and Chronicle); the lexicon shelves join as their packets land.
 
 [Open the tibetan desk]({{ '/axis/tibetan/' | relative_url }})
 
@@ -205,14 +205,6 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
 [Open the japonic desk]({{ '/axis/japonic/' | relative_url }})
-
-### tibetan
-
-> The Tibetologist — Dunhuang's first histories to the classical canon, syllable by tagged syllable.
-
-The Tibetan gold-annotation lane: the SOAS Classical Tibetan POS corpus (xct) and the Old Tibetan Annals and Chronicle with Dotson's aligned translation (otb), beside kaikki's bo extract riding wiktionary-recon.
-
-[Open the tibetan desk]({{ '/axis/tibetan/' | relative_url }})
 
 ### local
 

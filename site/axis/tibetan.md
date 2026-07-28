@@ -7,7 +7,7 @@ description: >-
 
 > The Tibetologist — the Land of Snows from Dunhuang documents to the complete Derge canon.
 
-The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key); Dunhuang documents and the lexicon shelves join as their licensing unlocks.
+The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key), 84000's English translation layer, OTDO's Old Tibetan documents, and the gold-annotation lane (SOAS POS, the Annals and Chronicle); the lexicon shelves join as their packets land.
 
 The desk opens with the complete canon: the **Digital Derge Kangyur**
 (103 volumes, Toh 1–1108) and **Tengyur** (213 volumes, Toh 1109–4569)
@@ -21,12 +21,19 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these two answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 July 2026)</span> |
 |---|---|---|---|---|
+| `e84000` | texts | nc | not yet wired | not synced yet |
+| `otdo` | texts | attribution | not yet wired | not synced yet |
+| `soas-tibetan` | texts | attribution | not yet wired | not synced yet |
+| `old-tibetan` | texts | attribution | not yet wired | not synced yet |
 | `derge-kangyur` | texts | open | not yet wired | not synced yet |
 | `derge-tengyur` | texts | open | not yet wired | not synced yet |
+| `mvp` | dictionary | open | not yet wired | not synced yet |
+| `tibetan-verbs` | dictionary | open | not yet wired | not synced yet |
+| `wiktionary-bo` | dictionary | attribution | not yet wired | not synced yet |
 
 ## The desk's instruments
 
