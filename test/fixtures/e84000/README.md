@@ -42,6 +42,23 @@ is the operative license (P47-s2 survey, owner-acknowledged).
   same publication (same UT id UT22084-096-010, same volume-position
   096-010); discovery keeps the highest edition version and censuses the
   loser as a skip. 11 such pairs exist upstream (census 2026-07-28).
+- `translations/kangyur/translations/001-006_toh1-6-chapter_6_on_medicinal_materials.xml`
+  — TRIMMED (48 KB of 4.2 MB, retrieved 2026-07-28 from the local canonical
+  sync of the same master tree): teiHeader whole; front cut to the en
+  summary div; body keeps the translation-div heads, the whole prologue div
+  (the `<ref cRef="V1" type="volume"/>` + `F.277.b` folio anchors), chapter
+  1 as its bare head (no chunks — keeps the shared numbered-division
+  counter honest), and chapter 2 cut to the section 2-5 window from
+  milestone UT22084-001-006-665 through `<p tid="608">` — the REAL Degé
+  volume boundary: `F.311.a`, then `V2` + `F.1.b` + a `B25` bampo ref
+  mid-chunk, then `F.2.a`; back dropped. Nokogiri node-removal trim (kept
+  bytes verbatim). 9 chunks: s.1 p.1-2 2.1-6. This is the MULTI-VOLUME
+  part-publication fixture (bibl key `toh1-6`, toh_base `toh1`): its folio
+  anchors carry the eKangyur volume numbers the Esukhia shelf paginates by
+  (`1.277b` … `2.1b` — the P48-r2 folio crosswalk). Trim artifact, noted:
+  chunk 2.1's inherited start folio reads `1.277b` because the anchors
+  between the prologue and the kept window are trimmed away; its mid-chunk
+  `F.311.a` anchor and everything after are upstream-true.
 - `translations/tengyur/publications/075-017_toh3156-the_dharani_of_simhanada.xml`
   — WHOLE (47 KB). One of the THREE Tengyur publications; `<tei:div>`
   prefixed markup throughout, a `colophon` division (→ c.1), Sanskrit

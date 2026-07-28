@@ -97,7 +97,9 @@ Read the corpus by urn — the pristine edition text behind a search hit:
   shape — term-less browsing without a search hit first;
 - `parallel: true` (with `parallel_lang`, default `eng`) → the same work's
   translation, aligned line by line / block by block (CTS editions and, since
-  P13-4, ORACC tablets ↔ their `-en` sibling documents).
+  P13-4, ORACC tablets ↔ their `-en` sibling documents; since P48-r2 also
+  cross-source over a `kind=translation` link edge, paired at Degé
+  folio/page grain — the Kangyur↔84000 crosswalk).
 
 Withdrawn and retired-upstream items appear, flagged. The owner's notes on the
 urn ride in `notes` by default (P24-1). Two additive keys appear only when the
