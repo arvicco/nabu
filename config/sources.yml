@@ -2902,6 +2902,44 @@ elephantine:   # P47-1, 02-sources row 131
   # future links-layer bonus, no edge producer in this packet).
   sync_policy: manual
 
+otdo:   # P48-5, 02-sources row 132
+  adapter: Nabu::Adapters::Otdo
+  # tibetan: the axis's founding shelf (the tag rides here; the axis mint is
+  # P48-1's — the stanza in config/axes.yml is a packet placeholder).
+  axes: [tibetan]
+  wired: false   # flip after the owner-fired first sync (checklist step 6)
+  # P48-5: OTDO — Old Tibetan Documents Online (otdo.aa-ken.jp; Research
+  # Institute for Languages and Cultures of Asia and Africa, Tokyo): 414
+  # critically edited Old Tibetan texts in Wylie transliteration — Dunhuang
+  # manuscripts (Or_15000 234 · Pt 84 · ITJ 39 · S 18), imperial-period
+  # inscriptions (insc 34: Zhol, the 821/822 Treaty pillar, the Ldan-ma
+  # rocks…) and 5 Old Zhangzhung texts (OZ -> language xzh; everything else
+  # otb). CENSUS (2026-07-28, ~12 polite requests, verified): the /archives
+  # catalog is ONE numbered table, rows 1..414 == 414 unique datatxt[]
+  # checkbox slugs == the packet's promised count, exactly; no robots.txt
+  # (404); per-document pages at /archives?p=<slug> (slugs carry
+  # apostrophes — insc_'Bis2 — percent-encoded on the wire). Page shape:
+  # <h2> slug header; numbered metadata fields (Content/Note on
+  # manuscripts; +Location/Date/Condition on inscriptions — Date is FREE
+  # TEXT, "post 763": no MetadataDates timeline shape, flagged for the
+  # orchestrator); div.textBody1 transliteration at the edition's own line
+  # grain (labels "1"…"536" | r/v | e/s/n faces), tooltip glosses (OTDO's
+  # re-segmentation, bgyisna -> "bgyis na") ride annotations, never the
+  # text. FETCH (OtdoFetch, the ElephantineFetch mold mirrored): one
+  # catalog GET (count-assertion defense: unique slugs == table rows ==
+  # top row number, abort before any write) + per-slug GETs at 1 req/s
+  # (~7 min whole corpus), resume at the file grain, 404 on a promised
+  # slug censused (P47-i1), transport/5xx retry 3x backoff (P47-i2),
+  # attic + breaker retention. Live app (per-request CSRF token, no
+  # Last-Modified) -> the catalog sidecar stays out of the ledger pin;
+  # probe is reachability-only. LICENSE (P47-s2, re-verified live
+  # 2026-07-28): /about Site Policy verbatim "The materials published on
+  # this site is licensed under a Creative Commons Attribution 4.0
+  # International License (CC-BY)" -> class attribution. EXPECTED FIRST
+  # SYNC: 414 documents, ~15-20k line passages (Pt_1287 alone is 536),
+  # urn:nabu:otdo:<slug>:<line-label>.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
