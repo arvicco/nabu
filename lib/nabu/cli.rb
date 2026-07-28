@@ -1482,7 +1482,10 @@ module Nabu
       plus a clip note when a range shows only part of a card. ORACC's
       paragraph-grained SAA units render as exactly such blocks over the
       tablet's o.1/r.5 lines. A suffix present in only one edition renders
-      honestly one-sided, never fuzzed. Works with --full-urn.
+      honestly one-sided, never fuzzed. Works with --full-urn. Where a
+      kind=translation link edge joins documents across sources (the
+      Kangyur↔84000 crosswalk), --parallel pairs them at Degé folio/page
+      grain — no extra flag.
 
       Examples:
         nabu show urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:1.1
@@ -1541,7 +1544,7 @@ module Nabu
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
       if options[:random]
-        show_random(catalog, urn)
+        show_random(catalog, urn, config)
         return print_display_footer
       end
       raise Thor::Error, "show: --source requires --random" if options[:source]
@@ -1564,10 +1567,11 @@ module Nabu
       print_linked_footer(config, result.urn)
       print_notes_footer(catalog, result)
       print_display_footer
-    rescue Nabu::Query::Range::Error, Nabu::Query::Random::Error => e
+    rescue Nabu::Query::Range::Error, Nabu::Query::Random::Error,
+           Nabu::Query::Parallel::TranslationMismatch => e
       # A range urn that names two endpoints but can't be honoured (endpoint
-      # missing, or reversed), or an unknown --random --source: a clean stderr
-      # message + exit 1.
+      # missing, or reversed), an unknown --random --source, or a --parallel
+      # LANG the translation link cannot serve: a clean stderr message + exit 1.
       raise Thor::Error, e.message
     ensure
       catalog&.disconnect
@@ -3860,9 +3864,9 @@ module Nabu
       # passage layout — the eyeball ritual at a source flip. A urn alongside
       # --random is contradictory (it picks passages for you); an empty result
       # is an honest note, not an error.
-      def show_random(catalog, urn)
+      def show_random(catalog, urn, config)
         raise Thor::Error, "show: --random takes no urn (it picks passages for you)" unless urn.empty?
-        return show_random_parallel(catalog) if options[:parallel]
+        return show_random_parallel(catalog, config) if options[:parallel]
 
         results = Nabu::Query::Random.new(catalog: catalog)
                                      .run(source: options[:source], lang: options[:lang], count: options[:count].to_i)
@@ -3885,9 +3889,10 @@ module Nabu
       # in the requested language, render the paired view; a scope that
       # yields none in the attempt budget (12 draws per requested passage —
       # a retry bound, not a corpus claim) says so honestly.
-      def show_random_parallel(catalog)
+      def show_random_parallel(catalog, config)
         random = Nabu::Query::Random.new(catalog: catalog)
-        parallel = Nabu::Query::Parallel.new(catalog: catalog)
+        journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+        parallel = Nabu::Query::Parallel.new(catalog: catalog, journal: journal)
         wanted = options[:count].to_i.clamp(1, Nabu::Query::Random::MAX_COUNT)
         shown = []
         attempts = 0
@@ -3897,7 +3902,13 @@ module Nabu
           break if draw.nil?
           next if shown.include?(draw.urn)
 
-          pair = parallel.run(draw.urn, lang: options[:parallel])
+          # A draw whose translation edge cannot serve the requested lang is
+          # simply not a parallel-bearing draw (P48-r2) — keep drawing.
+          pair = begin
+            parallel.run(draw.urn, lang: options[:parallel])
+          rescue Nabu::Query::Parallel::TranslationMismatch
+            nil
+          end
           next if pair.nil? || pair.right.nil?
 
           say "" unless shown.empty?
@@ -3910,6 +3921,8 @@ module Nabu
         say "no parallel-bearing draw#{scope} after #{attempts} attempts — the scope may hold no " \
             "#{options[:parallel]} siblings (`show <urn> --parallel` pairs a known document; " \
             "`show --random` alone draws unpaired)"
+      ensure
+        journal&.disconnect
       end
 
       # Render `show`: a passage in the context of its document, or a document
@@ -4155,19 +4168,27 @@ module Nabu
 
       # -- show --parallel (P7-4) ------------------------------------------
 
-      # Resolve + align + render, with the two honest failure modes: unknown
-      # urn (exit 1, same message as plain show) and no LANG sibling of the
-      # work in the catalog (exit 1, names the language).
+      # Resolve + align + render, with the honest failure modes: unknown urn
+      # (exit 1, same message as plain show), no LANG sibling or translation
+      # edge in the catalog (exit 1, names the language), and a translation
+      # edge that cannot serve LANG (exit 1 via TranslationMismatch, naming
+      # the language that would work). The links journal rides along
+      # read-only so the P48-r2 kind=translation edges (Kangyur↔84000) pair
+      # cross-source with no extra flag.
       def show_parallel(catalog, urn, lang, config)
-        result = Nabu::Query::Parallel.new(catalog: catalog).run(urn, lang: lang)
+        journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+        result = Nabu::Query::Parallel.new(catalog: catalog, journal: journal).run(urn, lang: lang)
         raise Thor::Error, "urn not found: #{urn}" if result.nil?
         if result.right.nil?
           raise Thor::Error, "no #{lang} parallel edition of this work in the catalog for #{urn} " \
-                             "(--parallel pairs sibling CTS editions WITHIN one source; is " \
+                             "(--parallel pairs sibling CTS editions within one source, or " \
+                             "cross-source over a kind=translation link edge; is " \
                              "`translations: true` set and the source resynced?)#{align_hint(urn, config)}"
         end
 
         print_parallel(result)
+      ensure
+        journal&.disconnect
       end
 
       # Cosmetic rider (P11-8): --parallel's "is translations: true set" hint is

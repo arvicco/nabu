@@ -4787,6 +4787,30 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- show --parallel cross-source (P48-r2, the Kangyur↔84000 folio pairing) --
+
+  def test_show_parallel_pairs_cross_source_over_a_translation_edge
+    with_buddhist_corpus do |config|
+      out, _err, status =
+        with_config(config) { run_cli(%w[show urn:nabu:derge-kangyur:toh846a:3b --parallel]) }
+      assert_nil status, "the runbook shape works out of the gate — no new flag"
+      assert_match(/parallel: urn:nabu:e84000:toh846a — The Threefold Ritual \[en\]/, out)
+      assert_match(/xct {2}ཀ/, out, "the woodblock lines render first")
+      assert_match(/en \[:1\.1–:1\.2 — covers :3b\.1–:3b\.6\]/, out,
+                   "the covering chunks render once, coverage-labeled in the Degé numbering")
+      assert_match(/Brahmā, great king Śakra\. Bali, the leader\./, out)
+    end
+  end
+
+  def test_show_parallel_names_the_language_the_translation_edge_serves
+    with_buddhist_corpus do |config|
+      _out, err, status =
+        with_config(config) { run_cli(%w[show urn:nabu:derge-kangyur:toh846a --parallel lat]) }
+      assert_equal 1, status
+      assert_match(/try --parallel en/, err, "the honest error names the language that would work")
+    end
+  end
+
   # -- show --parallel (P7-4, span-grouped P8-1b) ----------------------------
 
   # OSHB Gen 1:1 / TOROT zogr exactly as the parsers store them (P27-0
@@ -6874,6 +6898,66 @@ class CLITest < Minitest::Test
       document << Nabu::Passage.new(urn: "#{urn}:#{suffix}", language: language, text: text, sequence: index)
     end
     document
+  end
+
+  # The P48-r2 cross-source pair: a Derge page of woodblock lines, its 84000
+  # English publication with the parser's folio annotations, and the P48-6
+  # kind=translation edge in the links journal — the surface the owner's
+  # post-sync runbook exercises.
+  def with_buddhist_corpus
+    Dir.mktmpdir("nabu-cli-buddhist") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      load_buddhist_documents(db)
+      db.disconnect
+      seed_buddhist_edge(config)
+      yield config
+    end
+  end
+
+  def load_buddhist_documents(db)
+    derge = Nabu::Store::Source.create(
+      slug: "derge-kangyur", name: "Derge", adapter_class: "TestAdapter", license_class: "open"
+    )
+    tibetan = Nabu::Document.new(urn: "urn:nabu:derge-kangyur:toh846a", language: "xct",
+                                 title: "Toh 846a", canonical_path: "/canonical/derge-kangyur/100.txt")
+    %w[ཀ ཁ ག ང ཅ ཆ].each_with_index do |text, index|
+      tibetan << Nabu::Passage.new(urn: "urn:nabu:derge-kangyur:toh846a:3b.#{index + 1}",
+                                   language: "xct", text: text, sequence: index)
+    end
+    Nabu::Store::Loader.new(db: db, source: derge).load([tibetan], full: false)
+
+    e84000 = Nabu::Store::Source.create(
+      slug: "e84000", name: "84000", adapter_class: "TestAdapter", license_class: "nc"
+    )
+    english = Nabu::Document.new(urn: "urn:nabu:e84000:toh846a", language: "en",
+                                 title: "The Threefold Ritual",
+                                 canonical_path: "/canonical/e84000/toh846a.xml")
+    [["s.1", "Summary.", {}],
+     ["1.1", "Brahmā, great king Śakra.", { "folios" => ["3b"] }],
+     ["1.2", "Bali, the leader.", { "folios" => ["3b"] }]].each_with_index do |(suffix, text, ann), index|
+      english << Nabu::Passage.new(urn: "urn:nabu:e84000:toh846a:#{suffix}", language: "en",
+                                   text: text, annotations: ann, sequence: index)
+    end
+    Nabu::Store::Loader.new(db: db, source: e84000).load([english], full: false)
+  end
+
+  def seed_buddhist_edge(config)
+    journal = Nabu::Store::LinksJournal.open!(config.links_path)
+    run_id = Nabu::Store::LinksJournal.record_run!(
+      journal, producer: "e84000", scope: "e84000", params: { kind: "translation" }, code_version: "t/1"
+    )
+    Nabu::Store::LinksJournal.write_edge!(
+      journal, from_urn: "urn:nabu:e84000:toh846a", to_urn: "urn:nabu:derge-kangyur:toh846a",
+               kind: "translation", score: nil, run_id: run_id, detail: "translates toh846a"
+    )
+    journal.disconnect
   end
 
   # A verse-for-verse corpus (grc :1/:2/:3 ↔ eng :1/:2/:3, all 1:1) for the
