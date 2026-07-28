@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../../schema/current/translation.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="mainTitle" xml:lang="en">The Dhāraṇī of the Iron Beak [1]</title>
+                <title type="mainTitle" xml:lang="Sa-Ltn">Lohatuṇḍa­dhāraṇī</title>
+                <title type="mainTitle" xml:lang="bo">ལྕགས་མཆུའི་གཟུངས།</title>
+                <title type="mainTitle" xml:lang="Bo-Ltn">lcags mchu’i gzungs</title>
+                <title type="longTitle" xml:lang="en">The Noble Dhāraṇī of the Iron Beak [1]</title>
+                <title type="longTitle" xml:lang="Sa-Ltn">Ārya­lohatuṇḍa­nāma­dhāraṇī</title>
+                <title type="longTitle" xml:lang="bo">འཕགས་པ་ལྕགས་མཆུ་ཞེས་བྱ་བའི་གཟུངས།</title>
+                <title type="longTitle" xml:lang="Bo-Ltn">’phags pa lcags mchu zhes bya ba’i
+                    gzungs</title>
+                <author role="translatorMain" xml:id="UT22084-096-010-1"><!--84000 Associate Translators--></author>
+                <author role="translatorEng" xml:id="UT22084-096-010-2">Lowell Cook</author>
+                <editor role="projectEditor" xml:id="UT22084-096-010-13">Torsten Gerloff</editor>
+                <editor role="copyEditor" xml:id="UT22084-096-010-22">Dawn Collins</editor>
+                <editor role="projectEditor" xml:id="UT22084-096-010-34">Andreas Doctor</editor>
+                <editor role="TEImarkupEditor" xml:id="UT22084-096-010-43">Martina Cotter</editor>
+                <editor role="finalReviewer" xml:id="UT22084-096-010-137">Andreas Doctor</editor>
+            </titleStmt>
+            <editionStmt>
+                <edition>v 1.0.1 <date>2025</date>
+                </edition>
+            </editionStmt>
+            <publicationStmt>
+                <publisher>
+                    <name>84000: Translating the Words of the Buddha</name> is a global
+                    non-profit initiative to translate all the Buddha’s words into modern languages,
+                    and to make them available to everyone. </publisher>
+                <availability status="1.a">
+                    <licence>
+                        <graphic url="http://i.creativecommons.org/l/by-nc-nd/2.0/88x31.png"/>
+                        <p>This work is provided under the protection of a Creative Commons CC
+                            BY-NC-ND (Attribution - Non-commercial - No-derivatives) 3.0 copyright.
+                            It may be copied or printed for fair use, but only with full
+                            attribution, and not for commercial advantage or personal compensation.
+                            For full details, see the Creative Commons license.</p>
+                    </licence>
+                </availability>
+                <idno xml:id="UT22084-096-010"/>
+                <note>An early mistake in the assigning of UT numbers within the 84000 project means
+                    that these ids diverge slightly from the standard logic.</note>
+                <date>2025-01-21</date>
+            </publicationStmt>
+            <sourceDesc>
+                <bibl key="toh761" type="text">
+                    <ref>Toh 761</ref>
+                    <biblScope>Degé Kangyur, vol. 96 (rgyud ’bum, wa), folios 52.a–53.a</biblScope>
+                    <location work="UT4CZ5369" count-pages="3">
+                        <volume number="96" start-page="103" end-page="105"/>
+                    </location>
+                    <idno parent-id="O1JC114941JC21415" work="http://read.84000.co/sections"/>
+                    <idno source-id="O1JC114941JC12507" work="W22084"/>
+                </bibl>
+            </sourceDesc>
+            <notesStmt/>
+            <revisionDesc>
+                <change who="#line-tofte" when="2023-03-14T08:48:30.505Z" type="translation-status" status="3" xml:id="UT22084-096-010-3">
+                    <desc>3</desc>
+                </change>
+                <change who="#line-tofte" when="2023-03-14T08:48:30.505Z" type="text-version" status="0.0.1" xml:id="UT22084-096-010-4">
+                    <desc>0.0.1</desc>
+                </change>
+                <change who="#line-tofte" when="2023-03-14T08:49:10.003Z" type="text-version" status="0.0.2" xml:id="UT22084-096-010-5">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#admin" when="2023-07-30T22:39:48.323Z" type="text-version" status="0.0.3" xml:id="UT22084-096-010-6">
+                    <desc>TEI migrated to 2.19.0</desc>
+                </change>
+                <change who="#line-tofte" when="2023-12-22T10:18:21.225Z" type="translation-status" status="2.h" xml:id="UT22084-096-010-7">
+                    <desc>2.h</desc>
+                </change>
+                <change who="#line-tofte" when="2023-12-22T10:18:21.225Z" type="text-version" status="0.0.4" xml:id="UT22084-096-010-8">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-09-02T09:48:51.419Z" type="translation-status" status="2.g" xml:id="UT22084-096-010-9">
+                    <desc>2.g</desc>
+                </change>
+                <change who="#line-tofte" when="2024-09-02T09:48:51.419Z" type="text-version" status="0.0.5" xml:id="UT22084-096-010-10">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-09-02T09:49:22.508Z" type="text-version" status="0.0.6" xml:id="UT22084-096-010-14">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-09-16T14:21:47.095Z" type="translation-status" status="2.f" xml:id="UT22084-096-010-15">
+                    <desc>2.f</desc>
+                </change>
+                <change who="#line-tofte" when="2024-09-16T14:21:47.095Z" type="text-version" status="0.0.7" xml:id="UT22084-096-010-16">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-10-17T13:37:37.623Z" type="translation-status" status="2.e" xml:id="UT22084-096-010-17">
+                    <desc>2.e</desc>
+                </change>
+                <change who="#line-tofte" when="2024-10-17T13:37:37.623Z" type="text-version" status="0.0.8" xml:id="UT22084-096-010-18">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-10-17T13:38:09.186Z" type="text-version" status="0.0.9" xml:id="UT22084-096-010-23">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-11-19T12:20:50.231Z" type="translation-status" status="2.d" xml:id="UT22084-096-010-24">
+                    <desc>2.d</desc>
+                </change>
+                <change who="#line-tofte" when="2024-11-19T12:20:50.231Z" type="text-version" status="0.0.10" xml:id="UT22084-096-010-25">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-11-28T15:23:08.724Z" type="translation-status" status="2.c" xml:id="UT22084-096-010-26">
+                    <desc>2.c</desc>
+                </change>
+                <change who="#line-tofte" when="2024-11-28T15:23:08.724Z" type="text-version" status="0.0.11" xml:id="UT22084-096-010-27">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-12-16T16:00:23.022Z" type="translation-status" status="2.b" xml:id="UT22084-096-010-28">
+                    <desc>2.b</desc>
+                </change>
+                <change who="#line-tofte" when="2024-12-16T16:00:23.022Z" type="text-version" status="0.0.12" xml:id="UT22084-096-010-29">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2024-12-16T16:01:11.408Z" type="text-version" status="0.0.13" xml:id="UT22084-096-010-35">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#line-tofte" when="2025-01-03T10:28:08.136Z" type="translation-status" status="2.a" xml:id="UT22084-096-010-36">
+                    <desc>2.a</desc>
+                </change>
+                <change who="#line-tofte" when="2025-01-03T10:28:08.136Z" type="text-version" status="0.0.14" xml:id="UT22084-096-010-37">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2025-01-03T10:28:42.698Z" type="text-version" status="0.0.15" xml:id="UT22084-096-010-44">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#line-tofte" when="2025-01-16T13:08:45.394Z" type="translation-status" status="2" xml:id="UT22084-096-010-129">
+                    <desc>2</desc>
+                </change>
+                <change who="#line-tofte" when="2025-01-16T13:08:45.394Z" type="text-version" status="0.0.16" xml:id="UT22084-096-010-130">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2025-01-20T10:51:30.187Z" type="text-version" status="0.0.17" xml:id="UT22084-096-010-138">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#martina-cotter" when="2025-01-21T21:36:45.202Z" type="translation-status" status="1.a" xml:id="UT22084-096-010-139">
+                    <desc>1.a</desc>
+                </change>
+                <change who="#martina-cotter" when="2025-01-21T21:36:45.202Z" type="text-version" status="1.0.1" xml:id="UT22084-096-010-140">
+                    <desc>First published version.</desc>
+                </change>
+            </revisionDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <front>
+            <tei:div xmlns:tei="http://www.tei-c.org/ns/1.0" type="summary" xml:id="UT22084-096-010-summary">
+                <head type="summary" tid="1">Summary</head>
+                <milestone unit="chunk" xml:id="UT22084-096-010-45"/>
+                <p tid="2">
+                    <title xml:lang="en">The Dhāraṇī of the Iron Beak [1]</title> is the third of the
+                    “five beak dhāraṇīs” (<title xml:lang="Bo-Ltn">mchu sde lnga</title>, Toh
+                    759–763) and among the few scriptures in the Degé Kangyur concerned with weather
+                    control practices. In Indra’s Rock Cave on Vaidehaka Mountain, Śakra requests the
+                    Buddha for the wrathful means with which to protect the Buddhist teachings. The
+                    Buddha then recites the dhāraṇī of the iron beak along with a short discourse on
+                    its efficacy, ritual instructions for weather control, and an exhortation for
+                    secrecy.</p>
+            </tei:div>
+        </front>
+        <body>
+            <tei:div xmlns:tei="http://www.tei-c.org/ns/1.0" type="translation" xml:id="UT22084-096-010-translation">
+                <head type="translation">The Translation</head>
+                <head type="titleMain" tid="14">The Noble Dhāraṇī of the Iron Beak [1]</head>
+                <tei:div type="section" xml:id="UT22084-096-010-section">
+                    <milestone unit="chunk" xml:id="UT22084-096-010-56"/>
+                    <p tid="18">
+                        <ref cRef="F.52.a" type="folio" xml:id="UT22084-096-010-121"/> Homage to all buddhas and bodhisattvas.</p>
+                    <lb/>
+                    <milestone unit="chunk" xml:id="UT22084-096-010-57"/>
+                    <p tid="19">Thus did I hear at one time. The Blessed One was traveling through the land
+                        of Magadha when he arrived at a mango grove. At that mango grove, he took up
+                        residence in the Indra’s Rock Cave on Vaidehaka Mountain. Śakra the lord of the
+                        devas then appeared before the Blessed One. He bowed his head at the Blessed
+                        One’s feet and sat to one side.</p>
+                </tei:div>
+            </tei:div>
+        </body>
+    </text>
+</TEI>

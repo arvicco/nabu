@@ -203,7 +203,7 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist.
 
-**Members** (4): `gretil`, `suttacentral`, `sarit`, `cbeta`
+**Members** (5): `gretil`, `suttacentral`, `sarit`, `cbeta`, `e84000`
 
 ### sinitic
 
