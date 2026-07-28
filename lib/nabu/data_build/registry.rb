@@ -3,6 +3,7 @@
 require_relative "feature"
 require_relative "form_lemma"
 require_relative "verb_lemma_builder"
+require_relative "wylie_fold_builder"
 
 module Nabu
   module DataBuild
@@ -18,9 +19,9 @@ module Nabu
     # The explicit feature census (no discovery magic — the sources.yml
     # doctrine). The rail landed first (P50-W1) with every feature :planned;
     # builder packets flip their feature to :available as each builder lands
-    # (P50-W2: san/form-lemma, P50-W4: xct/verb-lemma), and `nabu data build`
-    # refuses politely until then. The doc table in docs/nabu-data.md is
-    # drift-guarded against this list.
+    # (P50-W2 san/form-lemma, P50-W3 xct/wylie-fold, P50-W4 xct/verb-lemma),
+    # and `nabu data build` refuses the still-planned politely. The doc table
+    # in docs/nabu-data.md is drift-guarded against this list.
     REGISTRY = [
       Feature.new(
         slug: "san/form-lemma", language: LANGUAGES.fetch("san"),
@@ -36,13 +37,14 @@ module Nabu
       Feature.new(
         slug: "xct/wylie-fold", language: LANGUAGES.fetch("xct"),
         title: "Tibetan script ↔ EWTS (Wylie) neutralization rule table",
-        status: :planned, tier: "gold", anchoring: "none",
+        status: :available, tier: "gold", anchoring: "none",
         inputs: [], canonical_cones: [], # own authorship + Unicode character data
         rationale: "A hand-curated transliteration rule table letting Tibetan-script and " \
                    "Wylie-romanized text meet in one query space — doubles as the source for " \
                    "Nabu's generated Tibetan transcoder module.",
         maintenance: "on rule corrections only; each change re-derives the Tibetan shelves " \
-                     "(fold modules are fingerprinted derivation inputs)"
+                     "(fold modules are fingerprinted derivation inputs)",
+        builder: WylieFoldBuilder
       ),
       Feature.new(
         slug: "xct/verb-lemma", language: LANGUAGES.fetch("xct"),
