@@ -61,6 +61,15 @@ class LanguagesTest < Minitest::Test
     assert_equal %w[en eng], Nabu::Languages.code_variants("en").sort
   end
 
+  # P48-4: the Tibetan shelves store 639-3 "bod" (the san/chu convention);
+  # kaikki and everyday typing spell it "bo", ISO 639-2 kept the
+  # bibliographic "tib" — all three must reach the same rows.
+  def test_code_variants_accepts_tibetan_in_all_three_spellings
+    assert_equal %w[bo bod tib], Nabu::Languages.code_variants("bo").sort
+    assert_equal %w[bod tib], Nabu::Languages.code_variants("bod").sort
+    assert_equal %w[bod tib], Nabu::Languages.code_variants("tib").sort
+  end
+
   # P40-r2 (live gate-runbook catch, 2026-07-22): the catalog STORES
   # Icelandic as the modern two-letter tag "is" (IcePaHC, rule 3 of
   # languages.md), but the 639-1 convenience hop swallowed the typed code

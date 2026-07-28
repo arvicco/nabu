@@ -1,0 +1,15 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The one file is a documented TRIM (whole: false) of the 146,676 B upstream
+# CSV (28 of 2,491 data rows, every kept line byte-verbatim), so a fresh GET
+# returns the full file and is fetched for URL-liveness only, never
+# byte-compared. Re-apply the README trim recipe after any refresh.
+source: tibetan-verbs
+adapter_test: test/adapters/tibetan_verbs_test.rb
+retrieved: 2026-07-28
+files:
+  - path: db.csv
+    url: https://raw.githubusercontent.com/tibetan-nlp/tibetan-verbs-database/master/db.csv
+    whole: false
+    trim: header + first 24 data rows + 4 appended lines (the present-only ཁ row 125; the བྱེད duplicate 4-tuple pair 1560/1562 with the intervening GT variant 1561) — 146,676 B -> 1,820 B; recipe in README.md

@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The one file is a documented TRIM (whole: false) of the 6.8 MB XML member
+# inside the upstream zip (15 of 9,379 entries across 8 of 308 divs; every
+# kept span byte-verbatim), so a fresh GET returns the zip and is fetched
+# for URL-liveness only, never byte-compared. Re-apply the README trim
+# recipe after any refresh. Upstream zip is dated 2017-03-20 and the
+# adapter pins its sha256 — a byte drift there is an owner re-pin decision.
+source: mvp
+adapter_test: test/adapters/mvp_test.rb
+retrieved: 2026-07-28
+files:
+  - path: mahavyutpatti.dila.tei.p5.xml
+    url: https://glossaries.dila.edu.tw/data/mahavyutpatti.dila.tei.p5.xml.zip
+    whole: false
+    trim: 8 of 308 divs / 15 of 9,379 entries (both dup-key pairs 1055/2347; trailing-space keys 7752a/b; letter key 731a; del/add/sic-corr and empty-quote exemplars 1040/2/625/8418; the bodhisattva golden 625; multi bod-Tibt 3824/3825) — 6,788,944 B member -> 13,084 B; recipe in README.md. NB the fixture is the EXTRACTED member; upstream serves a zip.

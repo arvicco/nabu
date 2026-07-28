@@ -3099,6 +3099,77 @@ derge-tengyur:
   # document). LICENSE verbatim (README §License, README-ONLY declaration —
   # no LICENSE file): "This work is a mechanical reproduction of a Public
   # domain work, and as such is also in the Public domain." → open.
+# P48-4: the tibetan-lexica packet — the Tibetan desk opens dictionary-first
+# (P47 survey; the axis itself is P48-1's mint). Three dictionary shelves:
+# the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and
+# the kaikki bo extract.
+
+mvp:
+  adapter: Nabu::Adapters::Mvp
+  # Dual-tagged like sdbh (domain + language desk): the 9th-c. glossary IS
+  # the Tibetan translators' instrument AND a Buddhist-studies reference.
+  # NOT indic — mw itself rides [indic] alone; MVP's Sanskrit side serves
+  # the crosswalk, and whole-source membership here is the Tibetan and
+  # Buddhist desks' (multi-tagging is dual, not maximal — the house rule).
+  axes: [tibetan, buddhist]
+  wired: false   # CLAUDE.md checklist §6: bin/nabu enable mvp && bin/nabu
+                   # sync mvp (one ~600 KiB sha-pinned zip GET), expect
+                   # 9,379 entries; eyeball `nabu define bodhisattvaḥ`
+                   # (Mvy. 625 beside MW's entry), `define dharmaḥ`, and 5
+                   # random entries, then flip.
+  # The Mahāvyutpatti (bye brag rtog byed), early 9th c. — THE imperial
+  # Sanskrit→Tibetan translation glossary (Chinese added later), in the
+  # DILA / Dharma Drum TEI P5 digital edition (glossaries.dila.edu.tw/
+  # glossaries/MVP). 9,379 entries / 308 sections censused 2026-07-28;
+  # every entry = IAST + Devanāgarī orth pair, Wylie + Tibetan-script +
+  # Chinese translation cits. Dictionary language "san" (the glossary's own
+  # Sanskrit-headed organization — sits beside mw, so `define` aggregates
+  # both); Tibetan/Chinese equivalents ride gloss/body lanes — structured
+  # crosswalk surfacing is the P48-6 alignment packet's seam, not this
+  # row's. Mvy. numbers are the standard scholarly citation → entry ids =
+  # upstream keys (urn:nabu:dict:mvp:625 is a citable address). LICENSE,
+  # verbatim from the glossary page (the honest-license doctrine): "We
+  # believe this text is in the public domain." — the digitizer's PD-belief
+  # assertion on a 9th-century text → class open. Upstream zip is frozen
+  # (2017-03-20; sha256-pinned in the adapter): re-fetches are expected
+  # no-ops, a drift is an owner re-pin decision.
+  sync_policy: manual
+
+tibetan-verbs:
+  adapter: Nabu::Adapters::TibetanVerbs
+  axes: [tibetan]
+  wired: false   # CLAUDE.md checklist §6: bin/nabu enable tibetan-verbs &&
+                   # bin/nabu sync tibetan-verbs (a ~150 KB git clone),
+                   # expect 2,491 entries; eyeball `nabu define ཀློག` (the
+                   # classic "read" paradigm) and 5 random entries, then
+                   # flip.
+  # The Tibetan Verbs Database (github.com/tibetan-nlp/tibetan-verbs-database):
+  # 2,491 rows of verb tense stems — present/past/future/imperative in
+  # Tibetan script — each attributed to its lexicographic sources (TDC/PH/
+  # GT/KN columns; upstream deliberately preserves the grammarians'
+  # disagreements as separate rows, uncollapsed). The tense stems ARE the
+  # entry apparatus (body lanes); no glosses upstream — gloss nil is
+  # honest. LICENSE: CC0-1.0 (repo LICENSE file, verified 2026-07-28) →
+  # class open. Small and occasionally edited: re-syncs are an owner call.
+  sync_policy: manual
+
+wiktionary-bo:
+  adapter: Nabu::Adapters::WiktionaryBo
+  axes: [tibetan]
+  wired: false   # CLAUDE.md checklist §6: bin/nabu enable wiktionary-bo &&
+                   # bin/nabu sync wiktionary-bo (one ~4.5 MB JSONL GET),
+                   # expect 3,651 entries; eyeball `nabu define
+                   # བྱང་ཆུབ་སེམས་དཔའ` and 5 random entries, then flip.
+  # English Wiktionary's Tibetan entries via the kaikki.org wiktextract
+  # extraction (the wiktionary-cu shape exactly): 3,651 records / 3,394
+  # words censused 2026-07-28, stored language bod. The per-language JSONL
+  # carries the same DEPRECATION caveat as wiktionary-cu (wiktextract
+  # #1178); fallback = filter the full enwiktionary extract by
+  # lang_code == "bo". The Classical Tibetan (xct) and Old Tibetan (otb)
+  # extracts do NOT exist upstream (404s verified 2026-07-28) — the bo
+  # extract is the one kaikki Tibetan artifact. Descendants crosswalk as
+  # reflexes (134 bearing records / 307 edges censused). Same CC-BY-SA +
+  # GFDL statement → attribution.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
