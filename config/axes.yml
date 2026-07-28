@@ -101,6 +101,14 @@ japonic:
   persona: "The Japanologist — Old Japanese song to the Sino-Japanese dictionary tradition."
   desc: "The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon."
 
+# P48-3 PLACEHOLDER MINT — P48-1 owns the authoritative tibetan entry
+# (persona/desc); at merge, KEEP P48-1's block and drop this one. Present
+# only so the soas-tibetan/old-tibetan rows' `axes: [tibetan]` tags load
+# (registry validation requires every declared axis defined here).
+tibetan:
+  persona: "The Tibetologist — Dunhuang's first histories to the classical canon, syllable by tagged syllable."
+  desc: "The Tibetan gold-annotation lane: the SOAS Classical Tibetan POS corpus (xct) and the Old Tibetan Annals and Chronicle with Dotson's aligned translation (otb), beside kaikki's bo extract riding wiktionary-recon."
+
 # P45-3: minted with digilibLT, the first shelf of the Latin→Romance band the
 local:
   persona: "The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records."

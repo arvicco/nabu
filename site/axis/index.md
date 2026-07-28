@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The twenty-two research desks of the Nabu library — tags over the
+  The twenty-three research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The twenty-two desks
+## The twenty-three desks
 
 ### classical
 
@@ -197,6 +197,14 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
 [Open the japonic desk]({{ '/axis/japonic/' | relative_url }})
+
+### tibetan
+
+> The Tibetologist — Dunhuang's first histories to the classical canon, syllable by tagged syllable.
+
+The Tibetan gold-annotation lane: the SOAS Classical Tibetan POS corpus (xct) and the Old Tibetan Annals and Chronicle with Dotson's aligned translation (otb), beside kaikki's bo extract riding wiktionary-recon.
+
+[Open the tibetan desk]({{ '/axis/tibetan/' | relative_url }})
 
 ### local
 

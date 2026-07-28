@@ -12,7 +12,7 @@ its Latin and at the Biblical scholar's for its scripture; the UD treebanks
 answer to nine desks at once. Multi-membership is the point, not an
 accident to be tidied away.
 
-Everything below documents **shipped behaviour** — the twenty-two desks
+Everything below documents **shipped behaviour** — the twenty-three desks
 defined in `config/axes.yml`, their memberships declared per source in
 `config/sources.yml`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
@@ -220,6 +220,14 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
 **Members** (8): `wiktionary-recon`, `unihan`, `edrdg`, `hdic`, `kradfile`, `oncoj`, `oncoj-lexicon`, `aozora`
+
+### tibetan
+
+> The Tibetologist — Dunhuang's first histories to the classical canon, syllable by tagged syllable.
+
+The Tibetan gold-annotation lane: the SOAS Classical Tibetan POS corpus (xct) and the Old Tibetan Annals and Chronicle with Dotson's aligned translation (otb), beside kaikki's bo extract riding wiktionary-recon.
+
+**Members** (2): `soas-tibetan`, `old-tibetan`
 
 ### local
 
