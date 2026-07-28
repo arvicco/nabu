@@ -56,7 +56,7 @@ module Nabu
       # passes through as itself when it is a shape-valid tag, else nil
       # (the lone "ML." Medieval-Latin code in the wild): display-only,
       # never a crosswalk join candidate.
-      LANG_CODE_MAP = { "cu" => "chu", "la" => "lat", "sa" => "san" }.freeze
+      LANG_CODE_MAP = { "cu" => "chu", "la" => "lat", "sa" => "san", "bo" => "bod" }.freeze
 
       # The historical-phonology sound tags (P32-3, opt-in below): the
       # kaikki Chinese extract carries per-entry `sounds` rows tagged
