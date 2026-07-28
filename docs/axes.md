@@ -12,7 +12,7 @@ its Latin and at the Biblical scholar's for its scripture; the UD treebanks
 answer to nine desks at once. Multi-membership is the point, not an
 accident to be tidied away.
 
-Everything below documents **shipped behaviour** — the twenty-two desks
+Everything below documents **shipped behaviour** — the twenty-three desks
 defined in `config/axes.yml`, their memberships declared per source in
 `config/sources.yml`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
@@ -47,7 +47,7 @@ build if the page and the registry ever disagree.
 
 ## The desks
 
-Twenty-one desks, in the ratified order of `config/axes.yml` (which is also
+Twenty-three desks, in the ratified order of `config/axes.yml` (which is also
 the order the command surfaces render). Each leads with its **persona** —
 the hat's one-line self-description, printed verbatim by `nabu list --axis`
 and `nabu sync` — then the membership rationale, then the member slugs the
@@ -199,11 +199,19 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 ### buddhist
 
-> The Buddhologist — the dharma across the Pali, Sanskrit and Chinese canons.
+> The Buddhologist — the dharma across the Pali, Sanskrit, Chinese and Tibetan canons.
 
-Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist.
+Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and, since P48, the Derge Kangyur and Tengyur: the fourth canon leg.
 
-**Members** (4): `gretil`, `suttacentral`, `sarit`, `cbeta`
+**Members** (6): `gretil`, `suttacentral`, `sarit`, `cbeta`, `derge-kangyur`, `derge-tengyur`
+
+### tibetan
+
+> The Tibetologist — the Land of Snows from Dunhuang documents to the complete Derge canon.
+
+The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key); Dunhuang documents and the lexicon shelves join as their licensing unlocks.
+
+**Members** (2): `derge-kangyur`, `derge-tengyur`
 
 ### sinitic
 

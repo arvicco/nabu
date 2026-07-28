@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The twenty-two research desks of the Nabu library — tags over the
+  The twenty-three research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The twenty-two desks
+## The twenty-three desks
 
 ### classical
 
@@ -176,11 +176,19 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 ### buddhist
 
-> The Buddhologist — the dharma across the Pali, Sanskrit and Chinese canons.
+> The Buddhologist — the dharma across the Pali, Sanskrit, Chinese and Tibetan canons.
 
-Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist.
+Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and, since P48, the Derge Kangyur and Tengyur: the fourth canon leg.
 
 [Open the buddhist desk]({{ '/axis/buddhist/' | relative_url }})
+
+### tibetan
+
+> The Tibetologist — the Land of Snows from Dunhuang documents to the complete Derge canon.
+
+The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key); Dunhuang documents and the lexicon shelves join as their licensing unlocks.
+
+[Open the tibetan desk]({{ '/axis/tibetan/' | relative_url }})
 
 ### sinitic
 
