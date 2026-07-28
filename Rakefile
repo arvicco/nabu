@@ -117,6 +117,18 @@ namespace :fold do
          "dropped #{census.nfc_identity_dropped} NFC-identity"
     puts "NOTE: a changed table changes jpn text_normalized — plan the §9 rebuild (owner-scheduled)."
   end
+
+  desc "Regenerate lib/nabu/xct.rb from config/ewts/rules.csv (or [rules_path])"
+  task :xct, [:rules_path] do |_task, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    path = args[:rules_path] || Nabu::Ops::XctFoldBuilder::RULES_PATH
+    builder = Nabu::Ops::XctFoldBuilder.new(rules_path: path)
+    File.write(File.expand_path("lib/nabu/xct.rb", __dir__), builder.render)
+    puts "lib/nabu/xct.rb regenerated: #{builder.rows.size} rules (sha256 #{builder.rules_sha256[0, 12]})"
+    puts "NOTE: a changed table changes xct/bod/otb text_normalized — plan the §9 rebuild (owner-scheduled)."
+  end
 end
 
 # The Aozora gaiji IDS lane (P39-5). Regenerates config/gaiji/aozora-ids.tsv

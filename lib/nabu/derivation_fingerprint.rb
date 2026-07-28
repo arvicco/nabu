@@ -55,7 +55,8 @@ module Nabu
     # in EXCLUDED_FILES, has a path, and is consulted by >= 1 language).
     FOLD_MODULE_PATHS = {
       "hani.rb" => File.join(LIB_DIR, "hani.rb"),
-      "jpn.rb" => File.join(LIB_DIR, "jpn.rb")
+      "jpn.rb" => File.join(LIB_DIR, "jpn.rb"),
+      "xct.rb" => File.join(LIB_DIR, "xct.rb")
     }.freeze
 
     # Which fold modules a language's search_form consults (primary subtag,
@@ -65,10 +66,17 @@ module Nabu
     # THROUGH Hani.fold at `rake fold:jpn` time — a hani change stales jpn's
     # skeletons even though Jpn.fold never calls Hani at runtime. Languages
     # not listed (grc, lat, ...) consult only the normalize.rb wiring.
+    # xct/bod/otb consult xct.rb (P50-W3): the generated Tibetan→EWTS
+    # transcoder shapes text_normalized for the Tibetan-script shelves via
+    # Normalize::SCRIPT_NEUTRALIZATIONS, so a rule-table regeneration
+    # (`rake fold:xct`) dirties exactly the Tibetan-consulting sources.
     FOLD_LANGUAGES = {
       "lzh" => %w[hani.rb],
       "och" => %w[hani.rb],
-      "jpn" => %w[jpn.rb hani.rb]
+      "jpn" => %w[jpn.rb hani.rb],
+      "xct" => %w[xct.rb],
+      "bod" => %w[xct.rb],
+      "otb" => %w[xct.rb]
     }.freeze
 
     # The shared derivation core is EVERYTHING under lib/nabu/ except
@@ -93,7 +101,7 @@ module Nabu
       ingest.rb language_shelf.rb library_shelf.rb source_shelf.rb
       note_shelf.rb
       normalize.rb
-      hani.rb jpn.rb
+      hani.rb jpn.rb xct.rb
     ].freeze
 
     # Namespace wrappers every adapter file opens — as "definitions" they
