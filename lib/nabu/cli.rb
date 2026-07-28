@@ -825,9 +825,10 @@ module Nabu
       before matching, so `']μηνιν αει['` works as typed. Built on a
       character-trigram index over the folded search form (same
       diacritic/case folding as plain search), so fragments need at least 3
-      characters. Scope is DOCUMENTARY sources only (papyri-ddbdp, oracc —
-      registry `fuzzy_index: true`): papyrus lines and tablets are where
-      fragment search earns its index bytes; every result footer names the
+      characters. Scope is DOCUMENTARY sources only (papyri-ddbdp, oracc,
+      edh, open-etruscan, edr, elephantine — registry `fuzzy_index: true`):
+      papyrus lines, tablets and damaged inscriptions are where fragment
+      search earns its index bytes; every result footer names the
       live scope. For half-remembered LITERARY quotations use plain search
       or `nabu parallels` — the literary corpus is deliberately not
       trigram-indexed (it would grow the index 15×). Composes with --lang,

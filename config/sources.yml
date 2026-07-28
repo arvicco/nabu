@@ -2751,6 +2751,9 @@ bfm:   # P45-4
 
 edr:   # P46-4
   adapter: Nabu::Adapters::Edr
+  # P47 D47-g (owner ruling 2026-07-28): 596K passages of damaged Latin
+  # inscriptions — the fragment desk's biggest constituency by far.
+  fuzzy_index: true
   axes: [epigraphy]
   wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box) — 115,590 docs / 596,064 passages / 1 predicted quarantine, D46-i license ruling 2026-07-26
                  # First sync shape: ONE ~268 MB Zenodo GET
@@ -2841,6 +2844,9 @@ traces:   # P46-2, 02-sources row 125
 
 elephantine:   # P47-1, 02-sources row 131
   adapter: Nabu::Adapters::Elephantine
+  # P47 D47-g (owner ruling 2026-07-28): documentary ostraca/papyri with
+  # damage-riddled editions — exactly the fragment desk's constituency.
+  fuzzy_index: true
   siblings: ["-en"]  # P47-r1 (owner report: "--parallel doesn't work at all here"):
                      # the damaskini mold — record ids are digits-only ID6, so the
                      # literal -en tail is unambiguous; show --parallel pairs
@@ -2851,9 +2857,10 @@ elephantine:   # P47-1, 02-sources row 131
   # Targums desk); egyptian: Demotic/hieratic/Middle Egyptian + Coptic
   # slices of the same island corpus.
   axes: [epigraphy, hebrew, egyptian]
-  wired: false   # first real sync owner-fired and verified before the flip;
-                 # LICENSE ruling D47-d pending (see below) — do not wire
-                 # before the owner rules.
+  wired: true    # flipped 2026-07-28 (owner ruling; D47-d ruled per-file 07-27,
+                 # first sync verified live: 15,539 docs / 69,350 passages,
+                 # eyeball rounds incl. daf-grain... page.line URNs, parallels,
+                 # timeline all owner-exercised).
   translations: true  # the per-record English translation div as a -en
                       # parallel sibling (the aes -de / oracc -en mold)
   # P47-1: Elephantine — the Berlin ERC project "Localizing 4000 Years of

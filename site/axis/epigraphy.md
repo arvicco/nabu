@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eighteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 26 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 July 2026)</span> |
 |---|---|---|---|---|
 | `papyri-ddbdp` | papyri | attribution | wired · manual | 61,414 docs / 921,611 passages |
 | `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
@@ -34,7 +34,7 @@ A source wears every desk it serves — these eighteen answer this desk. Holding
 | `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
 | `edr` | inscriptions | attribution | wired · manual | 115,590 docs / 596,064 passages |
-| `elephantine` | papyri & ostraca | attribution | not yet wired | not synced yet |
+| `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
 
 ## The desk's instruments
 
@@ -44,7 +44,8 @@ A source wears every desk it serves — these eighteen answer this desk. Holding
   and Raetic (TIR) editions, ogham stones, Hittite tablets (TLHdig), and
   the Levant (IIP).
 - **The fragment desk:** the `--fuzzy` trigram index covers the documentary
-  shelves — **papyri-ddbdp, EDH, ORACC and open-etruscan**. The other
+  shelves — **papyri-ddbdp, EDH, EDR, Elephantine, ORACC and
+  open-etruscan** (3.8M passages as of 28 July 2026). The other
   epigraphic shelves (RIIG, ogham, ItAnt, Rundata…) are searched with
   plain `search --axis epigraphy`.
 - **The timeline desk:** 549,771 documents carry a date or place (as of
