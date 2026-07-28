@@ -2902,6 +2902,82 @@ elephantine:   # P47-1, 02-sources row 131
   # future links-layer bonus, no edge producer in this packet).
   sync_policy: manual
 
+e84000:   # P48-2, 02-sources row 133
+  adapter: Nabu::Adapters::E84000
+  # AXES NOTE (single-minter discipline): the row ALSO belongs to the
+  # `tibetan` axis minted by P48-1 (derge-kangyur); the axis entry is
+  # P48-1's to create, so this list gains `tibetan` at the phase-48 merge,
+  # not before — a sources.yml axes reference must never precede its
+  # axes.yml definition (registry validation).
+  axes: [buddhist]
+  wired: false
+  # 84000 "Translating the Words of the Buddha" — the ENGLISH translation
+  # layer of the Tibetan canon (github.com/84000/data-tei, ~282 MB repo).
+  # Census (commit bdfc81c, 2026-07-28): 396 published Kangyur TEI under
+  # translations/kangyur/translations/ + 3 Tengyur publications under
+  # translations/tengyur/publications/; 560 + 3,366 placeholder stubs in
+  # sibling placeholders/ dirs SKIP by rule, censused. Document slugs are
+  # the texts' own Toh numbers (urn:nabu:e84000:toh<N>) — FROZEN, the
+  # crosswalk key to the derge-kangyur shelf (P48-6 alignment): multi-Toh
+  # texts (94) slug by the FIRST number and record all in metadata;
+  # part-publications (toh1-1..toh44-45, upstream's own bibl keys) keep
+  # the part suffix and expose "toh_base"; 11 upstream duplicate pairs
+  # (same UT id, renamed copies) resolve to the highest edition version,
+  # losers censused. Passages mirror the Reading Room's published grain:
+  # one milestone chunk = one numbered paragraph (s.1/ac.1/i.3/1.5/c.1,
+  # verified live 2026-07-28). Tibetan (bo) + Wylie titles, UT ids and
+  # translators ride document metadata; the glossary's bo/Wylie/Sanskrit
+  # entity records are the named P48 follow-up. LICENSE: CC BY-NC-ND 3.0
+  # stated verbatim in the repo README ("These works are provided under
+  # the protection of a Creative Commons CC BY-NC-ND (Attribution -
+  # Non-commercial - No-derivatives) 3.0 copyright.") -> class nc (the
+  # TraCES BY-NC-ND precedent; MCP default-excluded). CAVEAT (P47-s2,
+  # owner-acknowledged): the README's linked Terms_of_Use.md
+  # (84000/all-data) layers "data partnership" registration language for
+  # bulk external use — the README grant is the operative license.
+  # FETCH: GitFetch sparse to the translations/ cone (206 of ~216 MB of
+  # blobs are translations/; knowledgebase/, sections/, schema/ stay out
+  # of canonical). EXPECTED FIRST SYNC: 388 documents (399 published
+  # files - 11 duplicate losers), chunk-grain passages; 3,926 stub +
+  # 11 duplicate skips censused. Upstream actively publishes -> manual.
+otdo:   # P48-5, 02-sources row 132
+  adapter: Nabu::Adapters::Otdo
+  # tibetan: the axis's founding shelf (the tag rides here; the axis mint is
+  # P48-1's — the stanza in config/axes.yml is a packet placeholder).
+  axes: [tibetan]
+  wired: false   # flip after the owner-fired first sync (checklist step 6)
+  # P48-5: OTDO — Old Tibetan Documents Online (otdo.aa-ken.jp; Research
+  # Institute for Languages and Cultures of Asia and Africa, Tokyo): 414
+  # critically edited Old Tibetan texts in Wylie transliteration — Dunhuang
+  # manuscripts (Or_15000 234 · Pt 84 · ITJ 39 · S 18), imperial-period
+  # inscriptions (insc 34: Zhol, the 821/822 Treaty pillar, the Ldan-ma
+  # rocks…) and 5 Old Zhangzhung texts (OZ -> language xzh; everything else
+  # otb). CENSUS (2026-07-28, ~12 polite requests, verified): the /archives
+  # catalog is ONE numbered table, rows 1..414 == 414 unique datatxt[]
+  # checkbox slugs == the packet's promised count, exactly; no robots.txt
+  # (404); per-document pages at /archives?p=<slug> (slugs carry
+  # apostrophes — insc_'Bis2 — percent-encoded on the wire). Page shape:
+  # <h2> slug header; numbered metadata fields (Content/Note on
+  # manuscripts; +Location/Date/Condition on inscriptions — Date is FREE
+  # TEXT, "post 763": no MetadataDates timeline shape, flagged for the
+  # orchestrator); div.textBody1 transliteration at the edition's own line
+  # grain (labels "1"…"536" | r/v | e/s/n faces), tooltip glosses (OTDO's
+  # re-segmentation, bgyisna -> "bgyis na") ride annotations, never the
+  # text. FETCH (OtdoFetch, the ElephantineFetch mold mirrored): one
+  # catalog GET (count-assertion defense: unique slugs == table rows ==
+  # top row number, abort before any write) + per-slug GETs at 1 req/s
+  # (~7 min whole corpus), resume at the file grain, 404 on a promised
+  # slug censused (P47-i1), transport/5xx retry 3x backoff (P47-i2),
+  # attic + breaker retention. Live app (per-request CSRF token, no
+  # Last-Modified) -> the catalog sidecar stays out of the ledger pin;
+  # probe is reachability-only. LICENSE (P47-s2, re-verified live
+  # 2026-07-28): /about Site Policy verbatim "The materials published on
+  # this site is licensed under a Creative Commons Attribution 4.0
+  # International License (CC-BY)" -> class attribution. EXPECTED FIRST
+  # SYNC: 414 documents, ~15-20k line passages (Pt_1287 alone is 536),
+  # urn:nabu:otdo:<slug>:<line-label>.
+  sync_policy: manual
+
 # P48-4: the tibetan-lexica packet — the Tibetan desk opens dictionary-first
 # (P47 survey; the axis itself is P48-1's mint). Three dictionary shelves:
 # the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and

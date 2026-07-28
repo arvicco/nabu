@@ -5,18 +5,19 @@ description: >-
   The Tibetologist's desk: its shelves, instruments, CLI recipes and terminal setup.
 ---
 
-> The Tibetologist — the translators' language: the Kangyur-Tengyur world and its Sanskrit shadow.
+> The Tibetologist — Dunhuang scrolls and pillar inscriptions to the translators' glossaries and their Sanskrit shadow.
 
-The Tibetan lane, dictionary-first: the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and the kaikki bo extract; the Derge canon shelves join as they land.
+The Tibetan lane, two-fronted while the canon shelves land: OTDO's 414 Old Tibetan critical editions — the Dunhuang manuscripts (Pelliot tibétain, IOL Tib J, Or.15000, Stein), the imperial pillar and rock inscriptions, and the five Old Zhangzhung texts — beside the dictionary shelves: the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and the kaikki bo extract.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 July 2026)</span> |
 |---|---|---|---|---|
+| `otdo` | texts | attribution | not yet wired | not synced yet |
 | `mvp` | dictionary | open | not yet wired | not synced yet |
 | `tibetan-verbs` | dictionary | open | not yet wired | not synced yet |
 | `wiktionary-bo` | dictionary | attribution | not yet wired | not synced yet |

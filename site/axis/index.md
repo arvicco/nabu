@@ -182,14 +182,6 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 
 [Open the buddhist desk]({{ '/axis/buddhist/' | relative_url }})
 
-### tibetan
-
-> The Tibetologist — the translators' language: the Kangyur-Tengyur world and its Sanskrit shadow.
-
-The Tibetan lane, dictionary-first: the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and the kaikki bo extract; the Derge canon shelves join as they land.
-
-[Open the tibetan desk]({{ '/axis/tibetan/' | relative_url }})
-
 ### sinitic
 
 > The Sinologist — the classical Chinese written world and its phonological deep past.
@@ -205,6 +197,14 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
 [Open the japonic desk]({{ '/axis/japonic/' | relative_url }})
+
+### tibetan
+
+> The Tibetologist — Dunhuang scrolls and pillar inscriptions to the translators' glossaries and their Sanskrit shadow.
+
+The Tibetan lane, two-fronted while the canon shelves land: OTDO's 414 Old Tibetan critical editions — the Dunhuang manuscripts (Pelliot tibétain, IOL Tib J, Or.15000, Stein), the imperial pillar and rock inscriptions, and the five Old Zhangzhung texts — beside the dictionary shelves: the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and the kaikki bo extract.
+
+[Open the tibetan desk]({{ '/axis/tibetan/' | relative_url }})
 
 ### local
 
