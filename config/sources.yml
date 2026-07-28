@@ -2956,6 +2956,25 @@ tibetan-verbs:
   # class open. Small and occasionally edited: re-syncs are an owner call.
   sync_policy: manual
 
+wiktionary-bo:
+  adapter: Nabu::Adapters::WiktionaryBo
+  axes: [tibetan]
+  wired: false   # CLAUDE.md checklist §6: bin/nabu enable wiktionary-bo &&
+                   # bin/nabu sync wiktionary-bo (one ~4.5 MB JSONL GET),
+                   # expect 3,651 entries; eyeball `nabu define
+                   # བྱང་ཆུབ་སེམས་དཔའ` and 5 random entries, then flip.
+  # English Wiktionary's Tibetan entries via the kaikki.org wiktextract
+  # extraction (the wiktionary-cu shape exactly): 3,651 records / 3,394
+  # words censused 2026-07-28, stored language bod. The per-language JSONL
+  # carries the same DEPRECATION caveat as wiktionary-cu (wiktextract
+  # #1178); fallback = filter the full enwiktionary extract by
+  # lang_code == "bo". The Classical Tibetan (xct) and Old Tibetan (otb)
+  # extracts do NOT exist upstream (404s verified 2026-07-28) — the bo
+  # extract is the one kaikki Tibetan artifact. Descendants crosswalk as
+  # reflexes (134 bearing records / 307 edges censused). Same CC-BY-SA +
+  # GFDL statement → attribution.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
