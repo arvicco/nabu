@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The twenty-two research desks of the Nabu library — tags over the
+  The twenty-three research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The twenty-two desks
+## The twenty-three desks
 
 ### classical
 
@@ -181,6 +181,14 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist.
 
 [Open the buddhist desk]({{ '/axis/buddhist/' | relative_url }})
+
+### tibetan
+
+> The Tibetologist — the translators' language: the Kangyur-Tengyur world and its Sanskrit shadow.
+
+The Tibetan lane, dictionary-first: the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and the kaikki bo extract; the Derge canon shelves join as they land.
+
+[Open the tibetan desk]({{ '/axis/tibetan/' | relative_url }})
 
 ### sinitic
 

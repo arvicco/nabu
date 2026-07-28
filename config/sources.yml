@@ -2902,6 +2902,42 @@ elephantine:   # P47-1, 02-sources row 131
   # future links-layer bonus, no edge producer in this packet).
   sync_policy: manual
 
+# P48-4: the tibetan-lexica packet — the Tibetan desk opens dictionary-first
+# (P47 survey; the axis itself is P48-1's mint). Three dictionary shelves:
+# the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and
+# the kaikki bo extract.
+
+mvp:
+  adapter: Nabu::Adapters::Mvp
+  # Dual-tagged like sdbh (domain + language desk): the 9th-c. glossary IS
+  # the Tibetan translators' instrument AND a Buddhist-studies reference.
+  # NOT indic — mw itself rides [indic] alone; MVP's Sanskrit side serves
+  # the crosswalk, and whole-source membership here is the Tibetan and
+  # Buddhist desks' (multi-tagging is dual, not maximal — the house rule).
+  axes: [tibetan, buddhist]
+  wired: false   # CLAUDE.md checklist §6: bin/nabu enable mvp && bin/nabu
+                   # sync mvp (one ~600 KiB sha-pinned zip GET), expect
+                   # 9,379 entries; eyeball `nabu define bodhisattvaḥ`
+                   # (Mvy. 625 beside MW's entry), `define dharmaḥ`, and 5
+                   # random entries, then flip.
+  # The Mahāvyutpatti (bye brag rtog byed), early 9th c. — THE imperial
+  # Sanskrit→Tibetan translation glossary (Chinese added later), in the
+  # DILA / Dharma Drum TEI P5 digital edition (glossaries.dila.edu.tw/
+  # glossaries/MVP). 9,379 entries / 308 sections censused 2026-07-28;
+  # every entry = IAST + Devanāgarī orth pair, Wylie + Tibetan-script +
+  # Chinese translation cits. Dictionary language "san" (the glossary's own
+  # Sanskrit-headed organization — sits beside mw, so `define` aggregates
+  # both); Tibetan/Chinese equivalents ride gloss/body lanes — structured
+  # crosswalk surfacing is the P48-6 alignment packet's seam, not this
+  # row's. Mvy. numbers are the standard scholarly citation → entry ids =
+  # upstream keys (urn:nabu:dict:mvp:625 is a citable address). LICENSE,
+  # verbatim from the glossary page (the honest-license doctrine): "We
+  # believe this text is in the public domain." — the digitizer's PD-belief
+  # assertion on a 9th-century text → class open. Upstream zip is frozen
+  # (2017-03-20; sha256-pinned in the adapter): re-fetches are expected
+  # no-ops, a drift is an owner re-pin decision.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
