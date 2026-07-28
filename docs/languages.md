@@ -19,7 +19,9 @@ Sumerian (3.03M) third, Japanese (2.99M) fourth, and Ancient Greek
 file-backed (P19-1):** `nabu language CODE` explains any code this page
 covers AND the **803-code** Wiktionary etymology universe the `etym`
 cognate lists surface (`gkm`, `zle-ort`, `zlw-opl`…) — name, family,
-curated context, and live holdings, in ~0.2 s. **The curation's home is
+curated context, live holdings, and (since 2026-07-28) the related
+research axes: an `axes:` line naming the desks whose shelves hold the
+code, in ~0.2 s. **The curation's home is
 the `canonical/local-language/` dossier shelf (architecture §16)** — one
 Markdown file per code, edit it in any editor, then `nabu sync
 local-language` re-derives the card. The owner-fired migration is
