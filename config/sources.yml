@@ -2902,6 +2902,46 @@ elephantine:   # P47-1, 02-sources row 131
   # future links-layer bonus, no edge producer in this packet).
   sync_policy: manual
 
+e84000:   # P48-2, 02-sources row 133
+  adapter: Nabu::Adapters::E84000
+  # AXES NOTE (single-minter discipline): the row ALSO belongs to the
+  # `tibetan` axis minted by P48-1 (derge-kangyur); the axis entry is
+  # P48-1's to create, so this list gains `tibetan` at the phase-48 merge,
+  # not before — a sources.yml axes reference must never precede its
+  # axes.yml definition (registry validation).
+  axes: [buddhist]
+  wired: false
+  # 84000 "Translating the Words of the Buddha" — the ENGLISH translation
+  # layer of the Tibetan canon (github.com/84000/data-tei, ~282 MB repo).
+  # Census (commit bdfc81c, 2026-07-28): 396 published Kangyur TEI under
+  # translations/kangyur/translations/ + 3 Tengyur publications under
+  # translations/tengyur/publications/; 560 + 3,366 placeholder stubs in
+  # sibling placeholders/ dirs SKIP by rule, censused. Document slugs are
+  # the texts' own Toh numbers (urn:nabu:e84000:toh<N>) — FROZEN, the
+  # crosswalk key to the derge-kangyur shelf (P48-6 alignment): multi-Toh
+  # texts (94) slug by the FIRST number and record all in metadata;
+  # part-publications (toh1-1..toh44-45, upstream's own bibl keys) keep
+  # the part suffix and expose "toh_base"; 11 upstream duplicate pairs
+  # (same UT id, renamed copies) resolve to the highest edition version,
+  # losers censused. Passages mirror the Reading Room's published grain:
+  # one milestone chunk = one numbered paragraph (s.1/ac.1/i.3/1.5/c.1,
+  # verified live 2026-07-28). Tibetan (bo) + Wylie titles, UT ids and
+  # translators ride document metadata; the glossary's bo/Wylie/Sanskrit
+  # entity records are the named P48 follow-up. LICENSE: CC BY-NC-ND 3.0
+  # stated verbatim in the repo README ("These works are provided under
+  # the protection of a Creative Commons CC BY-NC-ND (Attribution -
+  # Non-commercial - No-derivatives) 3.0 copyright.") -> class nc (the
+  # TraCES BY-NC-ND precedent; MCP default-excluded). CAVEAT (P47-s2,
+  # owner-acknowledged): the README's linked Terms_of_Use.md
+  # (84000/all-data) layers "data partnership" registration language for
+  # bulk external use — the README grant is the operative license.
+  # FETCH: GitFetch sparse to the translations/ cone (206 of ~216 MB of
+  # blobs are translations/; knowledgebase/, sections/, schema/ stay out
+  # of canonical). EXPECTED FIRST SYNC: 388 documents (399 published
+  # files - 11 duplicate losers), chunk-grain passages; 3,926 stub +
+  # 11 duplicate skips censused. Upstream actively publishes -> manual.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
