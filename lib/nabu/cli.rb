@@ -3588,7 +3588,7 @@ module Nabu
           say "    #{slug.ljust(width)}  #{state}  #{axis_member_holdings(by_slug[slug], census: census)}"
         end
         print_axis_languages(members, info)
-        print_axis_gold(members, by_slug, info)
+        print_axis_gold(members, by_slug, info, registry: registry)
         say "  commands: nabu list --axis #{axis.name} · nabu sync #{axis.name}"
       end
 
@@ -3598,6 +3598,9 @@ module Nabu
       # spillover reads as 3 beside a 40K holding, never hidden. No catalog,
       # no line (the member cells already say "no database"); a desk holding
       # nothing says so.
+      # P49-r4, the deliberate asymmetry: this line KEEPS multilingual pack
+      # members (the counts self-explain), while the count-less attribution
+      # surfaces (print_language_axes, print_axis_gold) exclude them.
       def print_axis_languages(members, info)
         return unless info
 
@@ -3625,8 +3628,16 @@ module Nabu
       # the languages its members actually hold (nabu search --lemma). Honest
       # zero when the held languages carry no gold, honest "no held languages"
       # when the desk holds nothing dated in a language yet.
-      def print_axis_gold(members, by_slug, info)
-        langs = members.flat_map { |slug| by_slug[slug]&.languages || [] }.uniq.sort
+      # P49-r4: languages reachable ONLY via multilingual pack members stay
+      # off the gold claim — the same exclusion rule (and the same rejected-
+      # threshold reasoning) as the language card's axes: line, so the hebrew
+      # desk stops claiming a treebank pack's kat/phn/xcl gold rows. The
+      # languages: line above deliberately KEEPS pack holdings: its per-code
+      # counts self-explain a three-doc spillover; this count-less language
+      # list cannot.
+      def print_axis_gold(members, by_slug, info, registry:)
+        attributable = members.reject { |slug| registry.multilingual?(slug) }
+        langs = attributable.flat_map { |slug| by_slug[slug]&.languages || [] }.uniq.sort
         return say("  gold lemmas: no held languages yet") if langs.empty?
 
         total = info ? info.gold_rows_for(langs) : 0
@@ -6014,10 +6025,21 @@ module Nabu
       # sources hold this code (≥1 live document or a dictionary shelf),
       # in ratified (file) order. A code held by no axis-tagged source
       # prints nothing (the house zero-field rule).
+      # P49-r4: multilingual packs (the registry marker) never attribute —
+      # a pack's whole-grain axes union describes no single held language,
+      # so its three hbo docs must not drag twelve desks onto the hbo card.
+      # The desks keep the code via any DEDICATED source that holds it.
+      # The simple exclusion was chosen over a dominance/share threshold
+      # deliberately (era-bound-constants doctrine): any tuned cutoff is a
+      # census claim that rots as packs grow, while "packs never attribute,
+      # dedicated holders always do" stays true at every census. A pack-only
+      # code honestly gets no axes line; its desks still surface the code
+      # WITH COUNTS on the axis card's languages: line — the deliberate
+      # asymmetry (counts are the honesty mechanism there, print_axis_languages).
       def print_language_axes(code, info, registry)
         return unless info && registry && !registry.axes.empty?
 
-        slugs = info.holding_slugs(code)
+        slugs = info.holding_slugs(code).reject { |slug| registry.multilingual?(slug) }
         return if slugs.empty?
 
         names = registry.axes.each_axis.map(&:name)
