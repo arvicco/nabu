@@ -21,10 +21,11 @@ class DataBuildRegistryTest < Minitest::Test
   end
 
   def test_the_builder_status_census
-    # The rail landed with every feature :planned; each builder packet flips
-    # exactly its own feature as the builder lands (W2: form-lemma, W4:
-    # verb-lemma; W3 wylie-fold flips at its merge).
-    assert_equal %w[san/form-lemma xct/verb-lemma], features.select(&:available?).map(&:slug)
+    # The rail landed with every feature :planned; each builder packet flipped
+    # exactly its own feature (W2 form-lemma, W3 wylie-fold, W4 verb-lemma).
+    # Only segmentation remains planned (next phase).
+    assert_equal %w[san/form-lemma xct/wylie-fold xct/verb-lemma],
+                 features.select(&:available?).map(&:slug)
     features.select(&:planned?).each { |feature| assert_nil feature.builder }
     features.select(&:available?).each { |feature| refute_nil feature.builder }
   end

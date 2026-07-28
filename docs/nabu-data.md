@@ -125,7 +125,7 @@ no page update is a red suite, and vice versa.
 | Feature | Status | Tier | Language | Inputs |
 | --- | --- | --- | --- | --- |
 | `san/form-lemma` | available | gold-derived | san | dcs |
-| `xct/wylie-fold` | planned | gold | xct | — |
+| `xct/wylie-fold` | available | gold | xct | — |
 | `xct/verb-lemma` | available | gold-derived | xct | tibetan-verbs |
 | `xct/segmentation` | planned | silver | xct | derge-kangyur, soas-tibetan |
 
@@ -139,7 +139,7 @@ Bridges inflected surface forms (and unsandhied padapāṭha forms) to lemmas us
 
 ### `xct/wylie-fold` — Tibetan script ↔ EWTS (Wylie) neutralization rule table
 
-**Status**: planned · **Tier**: gold · **Anchoring**: none · **Inputs**: —
+**Status**: available · **Tier**: gold · **Anchoring**: none · **Inputs**: —
 
 A hand-curated transliteration rule table letting Tibetan-script and Wylie-romanized text meet in one query space — doubles as the source for Nabu's generated Tibetan transcoder module.
 
