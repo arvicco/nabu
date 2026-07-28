@@ -1,0 +1,32 @@
+# sent_id = otannals:000:T55
+# text = [---]་འཁུས་ནས། སྙིང་དྲུང་[---]་པར། མཐའ་དག་གྱང་[---]་སྣང་གློ་བ་རིངས་ནས། ཁོ་ནའི་བྲན་པ་ཙབ་གྱིམ་པོ་[---]་བཀྱོན་ཕབ་ནས་བཀུམ་མོ།
+# text_en = ... became treacherous, and at Snying-drung ... [Myang Mang-po-rje Zhang-snang bought about the submission] of all the Sum-pa also. [Then after x years when Myang Zhang-]snang became disloyal, his subject Pa-tsab [betrayed him so that Zhang-snang] was accused and put to death.
+1	[---]་	[---]་	X	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T55
+2	འཁུས་	འཁུ་	VERB	_	Tense=Past|Mood=Ind	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T36
+3	ནས	ནས་√cv	ADP	_	Case=Ela	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T32
+4	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T77
+5	སྙིང་དྲུང་	སྙིང་དྲུང་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T33
+6	[---]་པ	[---]་པ་	X	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T70
+7	ར	དུ་√case	ADP	_	Case=Ter	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T23
+8	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T76
+9	མཐའ་དག་	མཐའ་དག་	ADJ	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T34
+10	གྱང་	འང་√cl	PART	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T35
+11	[---]་	[---]་	X	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T71
+12	སྣང་	སྣང་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T37
+13	གློ་བ་	གློ་བ་	NOUN	_	_	14	arg2:lvc	_	SpaceAfter=No|Tokenid=otannals:000:T69
+14	རིངས་	འདྲིང་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T68
+15	ནས	ནས་√cv	SCONJ	_	Case=Ela	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T17
+16	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T78
+17	ཁོ་ན	ཁོ་ན་	PRON	_	PronType=Prs	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T38
+18	འི་	གྱི་√case	ADP	_	Case=Gen	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T25
+19	བྲན་	བྲན་	NOUN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T40
+20	པ་ཙབ་	པ་ཙབ་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T39
+21	གྱིམ་པོ་	གྱིམ་པོ་	NOUN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T67
+22	[---]་	[---]་	X	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T72
+23	བཀྱོན་	བཀྱོན་	NOUN	_	_	24	arg2	_	SpaceAfter=No|Tokenid=otannals:000:T42
+24	ཕབ་	འབེབས་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T41
+25	ནས་	ནས་√cv	SCONJ	_	Case=Ela	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T28
+26	བཀུམ་	འགུམས་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T43
+27	མོ	འོ་√cv	PART	_	Mood=Ind	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T20
+28	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T79
+

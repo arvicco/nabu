@@ -772,8 +772,8 @@ class SourceRegistryTest < Minitest::Test
                  "and indic — the Indo-Iranian pair + romance minted P45-r1, owner ruling " \
                  "2026-07-25, beside classical — the Latin continuum pair + ethiopic minted " \
                  "P46-2/D46-c, owner-ratified 2026-07-26, after syriac — the Oriental-Christian " \
-                 "neighborhood + tibetan carried as a P48-5 PLACEHOLDER with the otdo row, " \
-                 "pending the P48-1 mint and the owner's ratification)"
+                 "neighborhood + tibetan tagged P48-3 with the soas-tibetan/old-tibetan rows — " \
+                 "PLACEHOLDER mint pending P48-1's authoritative entry, after japonic)"
 
     registry.each_source do |entry|
       refute_empty entry.axes, "#{entry.slug} must declare at least one research axis"

@@ -5,19 +5,20 @@ description: >-
   The Tibetologist's desk: its shelves, instruments, CLI recipes and terminal setup.
 ---
 
-> The Tibetologist — the Old Tibetan documentary world, Dunhuang scrolls to the pillar inscriptions.
+> The Tibetologist — Dunhuang's first histories to the classical canon, syllable by tagged syllable.
 
-The Old Tibetan lane: OTDO's 414 critical editions — the Dunhuang manuscripts (Pelliot tibétain, IOL Tib J, Or.15000, Stein), the imperial pillar and rock inscriptions, and the five Old Zhangzhung texts — with the Annals and Chronicle instruments joining as their shelves land.
+The Tibetan gold-annotation lane: the SOAS Classical Tibetan POS corpus (xct) and the Old Tibetan Annals and Chronicle with Dotson's aligned translation (otb), beside kaikki's bo extract riding wiktionary-recon.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-The single shelf below answers this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these two answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 July 2026)</span> |
 |---|---|---|---|---|
-| `otdo` | texts | attribution | not yet wired | not synced yet |
+| `soas-tibetan` | texts | attribution | not yet wired | not synced yet |
+| `old-tibetan` | texts | attribution | not yet wired | not synced yet |
 
 ## The desk's instruments
 
