@@ -53,7 +53,12 @@ module Adapters
       axis = registry.axes.each_axis.find { |a| a.name == "tibetan" }
       refute_nil axis, "config/axes.yml must mint the tibetan axis"
       assert_includes axis.persona, "Tibetologist"
-      assert_equal %w[derge-kangyur derge-tengyur], registry.public_axis_members("tibetan")
+      members = registry.public_axis_members("tibetan")
+      # The desk grew the same day it was minted (e84000/otdo/treebanks/mvp
+      # packets merged alongside) — pin the canon's membership and the
+      # single mint, never a closed list.
+      assert_includes members, "derge-kangyur"
+      assert_includes members, "derge-tengyur"
     end
 
     # -- discover: Toh-boundary splitting -------------------------------------
