@@ -211,7 +211,7 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 
 The Tibetan lane, dictionary-first: the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and the kaikki bo extract; the Derge canon shelves join as they land.
 
-**Members** (1): `mvp`
+**Members** (2): `mvp`, `tibetan-verbs`
 
 ### sinitic
 
