@@ -27,6 +27,7 @@ class E84000Test < Minitest::Test
   TOH539E = "urn:nabu:e84000:toh539e"
   TOH761 = "urn:nabu:e84000:toh761"
   TOH3156 = "urn:nabu:e84000:toh3156"
+  TOH1_6 = "urn:nabu:e84000:toh1-6"
 
   def conformance_adapter = Nabu::Adapters::E84000.new
 
@@ -42,7 +43,7 @@ class E84000Test < Minitest::Test
 
   def test_discover_yields_toh_slugs_from_both_publication_cones
     refs = adapter.discover(workdir).to_a
-    assert_equal [TOH3156, TOH539E, TOH761, TOH846A], refs.map(&:id),
+    assert_equal [TOH1_6, TOH3156, TOH539E, TOH761, TOH846A], refs.map(&:id),
                  "one ref per published text, slugged by its first Toh number, sorted; " \
                  "placeholders and the duplicate loser never become refs"
     assert(refs.all? { |ref| ref.source_id == "e84000" })
@@ -73,6 +74,69 @@ class E84000Test < Minitest::Test
     assert_equal "toh44", Nabu::Adapters::E84000.toh_base("toh44-45")
     assert_equal "toh846a", Nabu::Adapters::E84000.toh_base("toh846a"),
                  "letter suffixes are part of the Toh number itself, never stripped"
+
+    metadata = adapter.parse(ref_for(TOH1_6)).metadata
+    assert_equal ["toh1-6"], metadata["toh"]
+    assert_equal ["toh1"], metadata["toh_base"],
+                 "the in-tree part publication: slug keeps the part, the base joins the toh1 container"
+  end
+
+  # -- folio anchors (P48-r2): the Degé page vocabulary rides each chunk -------
+
+  def test_folio_anchor_starts_the_chunk_folio_and_later_chunks_inherit_it
+    document = adapter.parse(ref_for(TOH846A))
+    first = document.find { |p| p.urn.end_with?(":1.1") }
+    assert_equal ["3b"], first.annotations["folios"],
+                 "the F.3.b ref mid-chunk is the Degé folio anchor — same vocabulary as " \
+                 "urn:nabu:derge-kangyur:toh846a:3b.1"
+    %w[1.2 1.3 1.4 1.5].each do |ref|
+      chunk = document.find { |p| p.urn.end_with?(":#{ref}") }
+      assert_equal ["3b"], chunk.annotations["folios"], "#{ref} inherits the running folio"
+    end
+  end
+
+  def test_front_chunks_before_any_anchor_carry_no_folios
+    document = adapter.parse(ref_for(TOH846A))
+    %w[s.1 ac.1 i.1 i.2 i.3].each do |ref|
+      chunk = document.find { |p| p.urn.end_with?(":#{ref}") }
+      assert_nil chunk.annotations["folios"], "#{ref} precedes every folio anchor — honest absence"
+    end
+  end
+
+  def test_keyed_folio_anchors_ride_per_witness_streams
+    document = adapter.parse(ref_for(TOH539E))
+    first = document.find { |p| p.urn.end_with?(":1.1") }
+    assert_equal({ "toh539e" => ["100b"], "toh774" => ["112b"], "toh1074" => ["239b"] },
+                 first.annotations["folios_by_toh"],
+                 "a multi-Toh publication anchors each Degé witness by its OWN folio (@key refs)")
+    assert_nil first.annotations["folios"], "no unkeyed anchor exists in this file"
+  end
+
+  def test_untyped_folio_refs_are_alternate_printings_and_never_captured
+    # <ref cRef="F.83.b" key="toh539e" work="W22084"/> (no type="folio") is the
+    # par-phud alternate-printing foliation — Degé toh539e sits at 100b in the
+    # eKangyur pagination the Esukhia shelf carries, so capturing 83b would
+    # poison the crosswalk. Only type="folio" refs anchor.
+    document = adapter.parse(ref_for(TOH539E))
+    document.each do |passage|
+      streams = (passage.annotations["folios_by_toh"] || {}).values.flatten
+      refute_includes streams, "83b", "#{passage.urn}: untyped F.83.b must not be captured"
+    end
+  end
+
+  def test_volume_refs_prefix_folio_tokens_with_the_ekangyur_volume_number
+    document = adapter.parse(ref_for(TOH1_6))
+    chunks = document.to_h { |p| [p.urn.split(":").last, p.annotations["folios"]] }
+    assert_equal ["1.277b"], chunks.fetch("p.1"),
+                 "after <ref cRef=\"V1\" type=\"volume\"/>, F.277.b mints the volume-prefixed " \
+                 "token — the derge multi-volume passage vocabulary (toh1-6:1.277b.6)"
+    assert_equal ["1.277b"], chunks.fetch("p.2"), "the next chunk inherits it"
+    assert_equal ["1.311a"], chunks.fetch("2.2")
+    assert_equal ["1.311a", "2.1b"], chunks.fetch("2.3"),
+                 "the REAL volume boundary rides one chunk: V2 + F.1.b mid-chunk — the straddle"
+    assert_equal ["2.1b"], chunks.fetch("2.4")
+    assert_equal ["2.1b", "2.2a"], chunks.fetch("2.6")
+    assert_nil chunks.fetch("s.1"), "the summary precedes every anchor"
   end
 
   # -- the published citation grain (s. / ac. / i. / 1.N / c.) -----------------
@@ -176,14 +240,15 @@ class E84000Test < Minitest::Test
     db = store_test_db
     source = create_source(db)
     first = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
-    assert_equal 4, first.added
+    assert_equal 5, first.added
     assert_equal 0, first.errored
-    assert_equal 38, db[:passages].count, "10 toh846a + 10 toh539e + 3 toh761(trim) + 15 toh3156"
+    assert_equal 47, db[:passages].count,
+                 "10 toh846a + 10 toh539e + 3 toh761(trim) + 15 toh3156 + 9 toh1-6(trim)"
 
     second = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 0, second.errored
-    assert_equal 4, second.skipped
-    assert_equal 38, db[:passages].count
+    assert_equal 5, second.skipped
+    assert_equal 47, db[:passages].count
   ensure
     db&.disconnect
   end

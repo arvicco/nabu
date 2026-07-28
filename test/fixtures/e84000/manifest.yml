@@ -27,6 +27,10 @@ files:
     url: https://raw.githubusercontent.com/84000/data-tei/master/translations/kangyur/translations/096-010_toh761-the_incantation_of_lohatunda.xml
     whole: false
     trim: "teiHeader + summary div + first two body chunks (README procedure)"
+  - path: translations/kangyur/translations/001-006_toh1-6-chapter_6_on_medicinal_materials.xml
+    url: https://raw.githubusercontent.com/84000/data-tei/master/translations/kangyur/translations/001-006_toh1-6-chapter_6_on_medicinal_materials.xml
+    whole: false
+    trim: "teiHeader + summary div + prologue div + the chapter-2-5 volume-boundary window (README procedure, P48-r2)"
   - path: translations/tengyur/publications/075-017_toh3156-the_dharani_of_simhanada.xml
     url: https://raw.githubusercontent.com/84000/data-tei/master/translations/tengyur/publications/075-017_toh3156-the_dharani_of_simhanada.xml
     whole: true

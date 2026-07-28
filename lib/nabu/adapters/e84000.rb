@@ -37,7 +37,11 @@ module Nabu
     #
     # The `e84000-tei` family (see E84000TeiParser): one passage per
     # `milestone unit="chunk"`, cited by the Reading Room's own published
-    # section.paragraph labels (s.1 / ac.1 / i.3 / 1.5 / c.1).
+    # section.paragraph labels (s.1 / ac.1 / i.3 / 1.5 / c.1). Each chunk
+    # additionally records the Degé folio span it covers ("folios" /
+    # "folios_by_toh" annotations, P48-r2 — the inline F.<n>.<a|b> anchors
+    # + V<n> volume refs), the page vocabulary `show --parallel` pairs
+    # against the derge shelves at read time.
     #
     # == License — nc, with the Terms_of_Use caveat recorded
     #
