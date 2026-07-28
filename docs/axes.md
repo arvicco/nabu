@@ -299,10 +299,15 @@ and the **desk card** (`nabu axis`), the reference page for one desk.
   `nabu axis celtic` prints the full card: the persona verbatim, the
   membership rationale, every member source with its enablement and live
   holdings (documents/passages, entries, languages, license mix — a member
-  holding nothing says so), the aggregate gold-lemma coverage across the
-  desk's held languages, and the shipped affordances (`list --axis NAME`,
-  `sync NAME`). Zero fields are suppressed; no corpus yet still prints the
-  persona and membership, holdings reading `no database`.
+  holding nothing says so), the desk's language codes with one merged
+  doc-or-entry count each (holdings descending — a multilingual pack's
+  three-document spillover reads honestly beside a 40K holding; compact
+  shows ten codes, `--long` lifts), the aggregate gold-lemma coverage
+  across the desk's held languages, and the shipped affordances
+  (`list --axis NAME`, `sync NAME`). Zero fields are suppressed; no corpus
+  yet still prints the persona and membership, holdings reading
+  `no database`. The reverse view rides `nabu language CODE`: its `axes:`
+  line names the desks whose shelves hold the code.
 
   ```
   nabu enable celtic                    # first time: the desk onto this box's profile

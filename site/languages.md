@@ -16,7 +16,10 @@ The library also carries this reference as a command: `nabu language CODE`
 explains any code the tools surface — the corpus languages below and the
 803 Wiktionary etymology codes that appear in `etym` cognate lists — on
 one card: name, family, curated historical context, and live holdings. An
-unknown code is reported honestly, with a family hint. Since 14 July 2026
+unknown code is reported honestly, with a family hint. Since 28 July 2026
+the card also carries an `axes:` line — the [research desks]({{ '/axis/'
+| relative_url }}) whose shelves hold the code, each a `nabu axis NAME`
+card away. Since 14 July 2026
 the curated layer behind these cards is file-backed: one plain Markdown
 dossier per language code on the library's local
 language-dossier shelf, editable in any editor and re-derived into the
