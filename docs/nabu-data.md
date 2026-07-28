@@ -124,14 +124,14 @@ no page update is a red suite, and vice versa.
 
 | Feature | Status | Tier | Language | Inputs |
 | --- | --- | --- | --- | --- |
-| `san/form-lemma` | planned | gold-derived | san | dcs |
+| `san/form-lemma` | available | gold-derived | san | dcs |
 | `xct/wylie-fold` | planned | gold | xct | — |
 | `xct/verb-lemma` | planned | gold-derived | xct | tibetan-verbs |
 | `xct/segmentation` | planned | silver | xct | derge-kangyur, soas-tibetan |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
-**Status**: planned · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: dcs
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: dcs
 
 Bridges inflected surface forms (and unsandhied padapāṭha forms) to lemmas using only human-annotated gold data — powers dictionary-headword lookup for query expansion (the successor to Nabu's rule-generated Sanskrit stem variants).
 

@@ -3,8 +3,8 @@
 require "test_helper"
 
 # The nabu-data feature census (P50-W1): four registered features, every field
-# present and well-shaped, all :planned in this packet (the rail lands first;
-# builders are later packets). The registry is EXPLICIT — no discovery magic —
+# present and well-shaped; features ship :planned until their builder packet
+# lands and flips them. The registry is EXPLICIT — no discovery magic —
 # so this test pins the ratified metadata, not just the shape.
 class DataBuildRegistryTest < Minitest::Test
   EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation].freeze
@@ -18,9 +18,14 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal features.size, features.map(&:slug).uniq.size
   end
 
-  def test_every_feature_is_planned_in_this_packet
-    assert(features.all?(&:planned?), "P50-W1 is the rail only — every real feature ships :planned")
-    assert(features.all? { |feature| feature.builder.nil? })
+  def test_status_and_builder_agree_for_every_feature
+    features.each do |feature|
+      if feature.available?
+        refute_nil feature.builder, "#{feature.slug}: :available means the builder landed"
+      else
+        assert_nil feature.builder, "#{feature.slug}: :planned must not carry a builder"
+      end
+    end
   end
 
   def test_every_field_is_present_and_well_shaped
@@ -44,6 +49,8 @@ class DataBuildRegistryTest < Minitest::Test
 
   def test_the_ratified_metadata
     form_lemma = Nabu::DataBuild.feature("san/form-lemma")
+    assert form_lemma.available?, "P50-W2 landed the builder"
+    assert_equal Nabu::DataBuild::FormLemma, form_lemma.builder
     assert_equal "gold-derived", form_lemma.tier
     assert_equal ["dcs"], form_lemma.inputs
     assert_equal ["dcs"], form_lemma.canonical_cones

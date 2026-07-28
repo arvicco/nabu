@@ -65,10 +65,21 @@ class DataBuildRunnerTest < Minitest::Test
     end
   end
 
+  # An inline planned rig rather than a registry feature: builder packets
+  # flip the real features one by one, and this refusal must outlive them all.
+  def planned_feature
+    Nabu::DataBuild::Feature.new(
+      slug: "san/planned-rig", language: Nabu::DataBuild::LANGUAGES.fetch("san"),
+      title: "Planned rig (no builder yet)", status: :planned, tier: "gold", anchoring: "none",
+      inputs: [], canonical_cones: [], rationale: "Exists to pin the planned refusal.",
+      maintenance: "never — test rig only"
+    )
+  end
+
   def test_run_refuses_a_planned_feature
     with_env do |root, _config, runner|
       error = assert_raises(Nabu::DataBuild::Error) do
-        runner.run(feature: Nabu::DataBuild.feature("san/form-lemma"), into: File.join(root, "out"))
+        runner.run(feature: planned_feature, into: File.join(root, "out"))
       end
       assert_match(/planned/, error.message)
     end
