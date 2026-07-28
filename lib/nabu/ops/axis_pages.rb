@@ -38,6 +38,11 @@ module Nabu
       # member table and holdings above, so the page says so honestly.
       BLOCKED_FOOTNOTE = "Private research materials under personal grants are not listed."
 
+      # Language codes shown by the desks' languages line before the "… and
+      # N more" tail — the `nabu axis` card's compact cap, mirrored (the
+      # house render-cap rule, P48-r3).
+      LANGUAGES_ITEMS = 10
+
       def initialize(registry:, fragments_path:, output_dir:, catalog_path:, as_of: Date.today)
         @registry = registry
         @axes = registry.axes
@@ -53,10 +58,10 @@ module Nabu
       def generate!
         require "fileutils"
         FileUtils.mkdir_p(@output_dir)
-        census = read_census
+        census, language_holdings = read_catalog
         results = @axes.each_axis.map do |axis|
           path = File.join(@output_dir, "#{axis.name}.md")
-          File.write(path, render_axis(axis, census))
+          File.write(path, render_axis(axis, census, language_holdings))
           Result.new(path: path, axis: axis.name)
         end
         index_path = File.join(@output_dir, "index.md")
@@ -87,22 +92,30 @@ module Nabu
         @fragments.fetch(axis_name, nil) || {}
       end
 
-      # Open the catalog READ-ONLY and take the content census (one row per
-      # source), or nil when no catalog exists in this checkout. Tolerates the
+      # Open the catalog READ-ONLY once and take both live projections — the
+      # content census (one row per source) and the per-desk language
+      # holdings (P48-r3, the `nabu axis` languages line: doc-or-entry
+      # counts over each desk's PUBLIC members, holdings descending) — or
+      # [nil, nil] when no catalog exists in this checkout. Tolerates the
       # live db's locks via the store's busy timeout.
-      def read_census
-        return nil unless File.exist?(@catalog_path)
+      def read_catalog
+        return [nil, nil] unless File.exist?(@catalog_path)
 
         catalog = Nabu::Store.connect(@catalog_path, readonly: true)
         Nabu::Store.setup!(catalog)
-        Nabu::Query::List.new(catalog: catalog).census.to_h { |row| [row.slug, row] }
+        census = Nabu::Query::List.new(catalog: catalog).census.to_h { |row| [row.slug, row] }
+        info = Nabu::Query::LanguageInfo.new(catalog: catalog)
+        holdings = @axes.each_axis.to_h do |axis|
+          [axis.name, info.language_holdings_for(@registry.public_axis_members(axis.name))]
+        end
+        [census, holdings]
       ensure
         catalog&.disconnect
       end
 
       # ---- page rendering -------------------------------------------------
 
-      def render_axis(axis, census)
+      def render_axis(axis, census, language_holdings)
         # PUBLIC surfaces exclude grant-gated private-research members (P44-r3a):
         # the member table and holdings list only the public holdings, and a
         # footnote fires when this axis has any blocked member.
@@ -124,7 +137,7 @@ module Nabu
 
           #{shelves_table(members, census)}#{blocked_footnote_block(axis)}
 
-          ## The desk's instruments
+          #{languages_block(axis, language_holdings)}## The desk's instruments
 
           #{instruments_block(axis)}
 
@@ -301,6 +314,29 @@ module Nabu
         parts << "#{commas(row.entries)} entries" if row.entries.positive?
         parts << "#{commas(row.dossiers)} dossiers" if row.dossiers.positive?
         parts.empty? ? "nothing held yet" : parts.join(" / ")
+      end
+
+      # The desk's language codes (P48-r3): the same live-derived list the
+      # `nabu axis` card prints — one merged doc-or-entry count per code
+      # over the desk's public members, holdings descending, dated like the
+      # holdings cells (never pinned; it drifts by design). The counts keep
+      # a multilingual pack's spillover honest. A catalog-less checkout and
+      # a nothing-synced desk each say so (the holdings-cell precedent).
+      def languages_block(axis, holdings)
+        "**Languages on this desk** #{languages_cell(axis, holdings)}\n\n"
+      end
+
+      def languages_cell(axis, holdings)
+        return "— not built in this checkout." if holdings.nil?
+
+        list = holdings.fetch(axis.name) { [] }
+        return "— nothing held yet." if list.empty?
+
+        shown = list.first(LANGUAGES_ITEMS).map { |code, count| "`#{code}` #{commas(count)}" }
+        hidden = list.size - shown.size
+        tail = hidden.positive? ? " … and #{hidden} more (`nabu axis #{axis.name}` lists all)" : ""
+        "<span title=\"read live from the catalog\">(live doc-or-entry counts as of " \
+          "#{as_of_human})</span>: #{shown.join(' · ')}#{tail}."
       end
 
       def instruments_block(axis)
