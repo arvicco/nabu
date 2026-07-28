@@ -2004,7 +2004,9 @@ module Nabu
         either it says so honestly. (Libraries that predate the dossier
         migration keep reading the ledger's language notes unchanged.)
       - RELEVANCE, live from the db: documents/passages, gold-lemma rows,
-        dictionary shelves, reconstruction-crosswalk edges. Zero fields
+        dictionary shelves, reconstruction-crosswalk edges, and the related
+        research axes (the desks whose member sources hold the code, in
+        ratified order — nabu axis NAME for any desk card). Zero fields
         are suppressed.
 
       --long adds where-it-appears detail: per-source document counts and
@@ -2045,7 +2047,8 @@ module Nabu
         term = code.to_s.strip
         raise Thor::Error, "language: give a code (chu, gkm, zle-ort…) or --list" if term.empty?
 
-        print_language_card(term, languages, info)
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        print_language_card(term, languages, info, registry: registry)
       end
     ensure
       catalog&.disconnect
@@ -2123,6 +2126,10 @@ module Nabu
         (documents/passages, dictionary entries, dossiers, languages, license
         mix — the same census fragments `nabu list` prints). Zero fields are
         suppressed; a member holding nothing yet says so.
+      - LANGUAGES, the codes the member sources hold, one merged doc-or-entry
+        count each, holdings descending — the counts keep a multilingual
+        pack's spillover honest (kat 3 beside hbo 40,000 explains itself).
+        Compact shows ten codes with an honest "… and N more"; --long lifts.
       - GOLD COVERAGE, the aggregate gold-lemma rows across the desk's held
         languages (nabu search --lemma) — honest zero when none are gold.
       - the shipped affordances: `nabu list --axis NAME`, `nabu sync NAME`.
@@ -2134,8 +2141,10 @@ module Nabu
       Examples:
         nabu axis                  # every desk, one persona line each
         nabu axis celtic           # the Celticist's desk, full card
-        nabu axis biblical         # the cross-language scripture hat
+        nabu axis biblical --long  # the scripture hat, every language code
     HELP
+    option :long, type: :boolean, default: false,
+                  desc: "Lift the languages-line cap (compact shows ten codes)"
     def axis(name = nil)
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
@@ -2646,6 +2655,10 @@ module Nabu
     # Edges shown per kind by `nabu links` before the "… and N more" tail
     # (--long lists all — the conventions §10 house rule).
     LINKS_COMPACT_ITEMS = 10
+    # Language codes shown by the `nabu axis` desk card's languages line
+    # before the "… and N more" tail (P48-r3; --long lists all — the same
+    # house render-cap rule).
+    AXIS_LANGUAGES_ITEMS = 10
     # RTL snippet highlight = SGR reverse video (P42-r4, strike 4 — the
     # matrix ruling on the owner's iTerm2). Every CHARACTER-based highlight
     # is at the mercy of the renderer's bidi treatment, and four attempts
@@ -3574,8 +3587,28 @@ module Nabu
                   end
           say "    #{slug.ljust(width)}  #{state}  #{axis_member_holdings(by_slug[slug], census: census)}"
         end
+        print_axis_languages(members, info)
         print_axis_gold(members, by_slug, info)
         say "  commands: nabu list --axis #{axis.name} · nabu sync #{axis.name}"
+      end
+
+      # The desk's held language codes (P48-r3): one merged doc-or-entry
+      # count per code over the member sources, holdings descending. The
+      # counts ARE the honesty mechanism — a multilingual pack's 3-doc
+      # spillover reads as 3 beside a 40K holding, never hidden. No catalog,
+      # no line (the member cells already say "no database"); a desk holding
+      # nothing says so.
+      def print_axis_languages(members, info)
+        return unless info
+
+        holdings = info.language_holdings_for(members)
+        return say("  languages: none held yet") if holdings.empty?
+
+        shown = options[:long] ? holdings : holdings.first(AXIS_LANGUAGES_ITEMS)
+        line = shown.map { |code, count| "#{code} #{commas(count)}" }.join(" · ")
+        hidden = holdings.size - shown.size
+        line += " … and #{hidden} more (--long lists all)" if hidden.positive?
+        say "  languages: #{line}"
       end
 
       # One member's holdings cell: the census fragments when the source holds
@@ -5959,7 +5992,7 @@ module Nabu
       # notes (P18-5 — "iecor: IE-CoR variety: …", one line per kind), then
       # live relevance with zero fields suppressed. An unknown code misses
       # honestly, with a family hint when the prefix is a known family.
-      def print_language_card(code, languages, info)
+      def print_language_card(code, languages, info, registry: nil)
         name = languages.name(code)
         context = languages.context(code)
         extras = languages.extra_notes(code)
@@ -5974,6 +6007,22 @@ module Nabu
         extras.each { |kind, body| say_wrapped("#{kind}: #{body}", indent: 2) }
         print_language_witnesses(code, languages)
         print_language_relevance(code, relevance) if relevance
+        print_language_axes(code, info, registry)
+      end
+
+      # P48-r3: the related research desks — every axis whose member
+      # sources hold this code (≥1 live document or a dictionary shelf),
+      # in ratified (file) order. A code held by no axis-tagged source
+      # prints nothing (the house zero-field rule).
+      def print_language_axes(code, info, registry)
+        return unless info && registry && !registry.axes.empty?
+
+        slugs = info.holding_slugs(code)
+        return if slugs.empty?
+
+        names = registry.axes.each_axis.map(&:name)
+                        .select { |name| registry.axis_members(name).intersect?(slugs) }
+        say "  axes: #{names.join(', ')}" unless names.empty?
       end
 
       # P18-6: the per-source witness notes (kind "witness:<slug>" — what

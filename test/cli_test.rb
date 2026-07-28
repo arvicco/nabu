@@ -661,6 +661,33 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P48-r3: the language card's related-desks line — the axes whose member
+  # sources hold this code (≥1 doc or a dictionary shelf), in ratified
+  # (file) order, never holdings order.
+  def test_language_card_axes_line_lists_desks_in_ratified_order
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[language sla-pro]) }
+      assert_nil status
+      assert_match(/^  axes: slavic, reference$/, out,
+                   "the shelf's source rides both desks, file order")
+      out, _err, _status = with_config(config) { run_cli(%w[language deu]) }
+      assert_match(/^  axes: slavic$/, out, "a doc-held code names its holding source's desk")
+      refute_match(/^  axes:.*classical/, out, "a desk holding none of this code stays off the line")
+    end
+  end
+
+  # A code held by no axis-tagged source prints no axes line (the house
+  # zero-field rule) — here the registry defines no axes at all.
+  def test_language_card_axes_line_suppressed_without_axis_tagged_holders
+    with_recon_shelf do |config|
+      with_config(config) do
+        out, _err, status = run_cli(%w[language sla-pro])
+        assert_nil status
+        refute_match(/^  axes:/, out, "no axes registry — the line prints nothing")
+      end
+    end
+  end
+
   def test_language_without_code_or_flag_errors
     with_recon_shelf do |config|
       _out, err, status = with_config(config) { run_cli(%w[language]) }
@@ -1903,6 +1930,40 @@ class CLITest < Minitest::Test
       assert_match(/^  beta\s+The Betaist — second letters, read whole\.$/, out)
       assert_operator out.index("alpha"), :<, out.index("beta"), "ratified file order"
       assert_match(/nabu axis NAME for the full desk card/, out)
+    end
+  end
+
+  # P48-r3: the desk card's languages line — the codes the member sources
+  # hold with one merged doc-or-entry count each, holdings descending. The
+  # counts are the honesty mechanism: a shelf's 2 entries read as 2 beside
+  # a 3-document lane, never hidden behind a bare code list.
+  def test_axis_card_languages_line_merges_counts_descending
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[axis slavic]) }
+      assert_nil status
+      assert_match(/^  languages: deu 3 · sla-pro 2$/, out,
+                   "doc counts and shelf entry counts merge, holdings descending")
+      out, _err, _status = with_config(config) { run_cli(%w[axis classical]) }
+      assert_match(/^  languages: grc 1 · lat 1$/, out, "ties break by code")
+    end
+  end
+
+  # The house render-cap rule (cap at render, announce truncation): the
+  # compact languages line shows ten codes and an honest "… and N more"
+  # tail; --long lifts the cap.
+  def test_axis_card_languages_line_caps_at_ten_with_an_honest_tail
+    with_axis_polyglot_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[axis poly]) }
+      assert_nil status
+      line = out[/^  languages: (.+)$/, 1]
+      refute_nil line, "the poly desk must print a languages line"
+      assert line.start_with?("big 3 · l01 1"), "holdings descending, ties by code — got: #{line}"
+      assert_match(/… and 2 more \(--long lists all\)/, line)
+      refute_includes line, "l11", "codes past the cap elide"
+
+      out, _err, _status = with_config(config) { run_cli(%w[axis poly --long]) }
+      assert_includes out, "l11 1", "--long lifts the cap"
+      refute_match(/and \d+ more/, out)
     end
   end
 
@@ -6233,6 +6294,45 @@ class CLITest < Minitest::Test
       seed_list_lex(catalog)
       seed_list_library(catalog)
       # Seeded directly (bypassing the loader) - re-derive the write-time census (P42-0).
+      Nabu::Store::SourceStats.derive!(catalog, note: "test seed")
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  # P48-r3: one desk (poly), one member (pack) holding MANY languages —
+  # "big" with 3 docs, l01..l11 with one each — the axis card's languages
+  # render-cap rig (compact shows ten + "… and 2 more"; --long lifts).
+  def with_axis_polyglot_corpus
+    Dir.mktmpdir("nabu-cli-poly") do |root|
+      File.write(File.join(root, "axes.yml"), <<~YAML)
+        poly:
+          persona: "The Polyglot — every language at one desk."
+          desc: "The multilingual pack lane."
+      YAML
+      sources = File.join(root, "sources.yml")
+      File.write(sources, <<~YAML)
+        pack:
+          adapter: TestAdapter
+          wired: true
+          sync_policy: manual
+          axes: [poly]
+      YAML
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "pack", name: "Pack", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      3.times { |i| seed_list_document(catalog, src, "urn:nabu:pack:big#{i}", "Big #{i}", "big") }
+      (1..11).each do |i|
+        code = format("l%02d", i)
+        seed_list_document(catalog, src, "urn:nabu:pack:#{code}", code, code)
+      end
       Nabu::Store::SourceStats.derive!(catalog, note: "test seed")
       catalog.disconnect
       yield config
