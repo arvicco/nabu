@@ -201,7 +201,9 @@ ud:
   #     classical-armenian-caval (xcl, CC BY-NC-SA 4.0 → nc),
   #     old-french-profiterole (fro) + middle-french-profiterole (frm)
   #       — CONFLICTING LICENSES (LICENSE.txt BY-SA vs README BY-NC-SA);
-  #         conservative nc, pending upstream clarification,
+  #         conservative nc CONFIRMED upstream 2026-07-28 (Prévost, thread
+  #         №43-1: restrictive governs until their next-release fix, direction
+  #         unstated) — re-read both grants at the next UD release (~Nov 2026),
   #     ottoman-boun + ottoman-dudu (ota, CC BY-SA 4.0 → attribution).
   #   SEVEN UNDER EXISTING LANGUAGES/AXES:
   #     greek-ptnk (grc, Septuagint; CC BY-SA 4.0 → attribution),
