@@ -1054,22 +1054,42 @@ journal's own forward-only track: nullable, in-place, zero data loss):
 meet under a Slavic witness reads as a borrowing (§12). Scope = the work id;
 common-word suppression stays on (`--all` lifts it, recorded in params_json).
 
-**Reference producers (#4–#8).** The sync-driven kind=`reference` lane
-(each documented in its class comment): #4 `LibraryReferences` (P19-4, the
+**Reference producers (#4–#10).** The sync-driven lane (each documented in
+its class comment): #4 `LibraryReferences` (P19-4, the
 manifests' `related:` urns — also instantiated under a source's own
 producer name for the concordance adapters, P25-1), #5
 `CorphDilReferences` (P25-0, token DIL ids), #6 `CclEtymologies` (P28-3,
 kind=etymology), #7 `SuttacentralParallels` (P32-6, the sc-data
 parallels graph — 195,287 document-grain edges expanded per upstream's own
-loader semantics), and #8 `KyotoKanripoCrosswalk` (P33-3, the UD Kyoto
+loader semantics), #8 `KyotoKanripoCrosswalk` (P33-3, the UD Kyoto
 treebank's own `# newdoc id` Kanripo ids — document-grain edges treebank
 split-file ↔ `urn:nabu:kanripo:<KR-id>`, minted dangling-but-stable until
-each Kanripo wave syncs). SyncRunner re-runs the adapter's declared producer
+each Kanripo wave syncs) and `TrismegistosCrosswalk` (P43-3, the
+TexRelations concordance), #9 `KitabTextReuse` (P43-4, kind=reuse), and
+#10 `E84000Translations` (P48-6, kind=translation — each 84000
+publication's part-suffix-stripped Toh keys, the parser-pinned `toh_base`
+metadata, joined to the derge shelves' Toh-slug documents,
+shelf routed by the publication's own `collection` cone; deliberately
+DOCUMENT grain: the edges assert "X translates Y", nothing finer.
+CORRECTION (P48-r2, superseding the P48-6 wording "no shared citation
+vocabulary"): the 84000 TEI embeds INLINE Degé folio anchors —
+`<ref cRef="F.3.b" type="folio"/>` (~33k across the 396 published Kangyur
+files) plus `V<n>` volume refs carrying actual eKangyur volume numbers —
+which ARE a shared vocabulary with the Esukhia shelves' page.line refs at
+PAGE grain. The parser captures them as per-chunk `folios` /
+`folios_by_toh` annotations and `show --parallel` derives the pairing at
+read time over these very edges (Query::FolioParallel), so the edges
+STAY document grain — page pairing is derivation, not minting. The
+alignment-hub verdict stands: the CBETA witnesses cite Taishō
+page-register-line, a genuinely disjoint scheme, so no multi-canon
+Buddhist work earns a §10 hub entry.)
+SyncRunner re-runs the adapter's declared producer
 (`Adapter.reference_producer`) after every load of a `reference_edges?`
 source, passing the source's canonical workdir — the seam for the
 producers whose input is a canonical FILE (read-only, like the loader)
-rather than catalog rows; #7 without its fetched graph file (and #8
-without the kyoto treebank on disk) is a no-op that supersedes nothing,
+rather than catalog rows; #7 without its fetched graph file (#8
+without the kyoto treebank on disk, #10 without loaded e84000 catalog
+rows) is a no-op that supersedes nothing,
 so standing edges survive parse-only syncs.
 
 **Read surface.** `nabu links <urn>` — edges BOTH directions grouped by

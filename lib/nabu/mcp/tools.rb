@@ -1667,7 +1667,9 @@ module Nabu
 
       def show_parallel(catalog, urn, args, bound, include_restricted)
         lang = string_arg(args, "parallel_lang") || "eng"
-        result = Query::Parallel.new(catalog: catalog).run(urn, lang: lang)
+        # The links journal rides along (P48-r2) so kind=translation edges
+        # pair cross-source at folio grain — the CLI's show --parallel parity.
+        result = Query::Parallel.new(catalog: catalog, journal: resolve(@links)).run(urn, lang: lang)
         if result.nil?
           return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
                       "what this corpus holds")
@@ -1681,7 +1683,7 @@ module Nabu
         return withheld(result.right.urn, right_license) if withhold?(right_license, include_restricted)
 
         json(parallel_payload(result, bound, left_license, right_license))
-      rescue Query::Range::Error => e
+      rescue Query::Range::Error, Query::Parallel::TranslationMismatch => e
         tool_error(e.message)
       end
 

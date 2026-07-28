@@ -118,6 +118,29 @@ module Nabu
         gold_lemma_rows.where(language: codes.map(&:to_s)).count
       end
 
+      # The axis card's languages line (P48-r3): [[code, count], …] over a
+      # member slug set — live document counts per language (stats-backed,
+      # the P42 doctrine: probes at read time, never a documents scan at
+      # card time) plus dictionary entry counts for shelf languages, one
+      # merged doc-or-entry count per code, holdings descending (ties by
+      # code). The counts are the honesty mechanism: a multilingual pack's
+      # three-document spillover reads as 3 beside a 40K holding.
+      def language_holdings_for(slugs)
+        slugs = slugs.map(&:to_s)
+        counts = Hash.new(0)
+        document_counts_for(slugs).each { |code, count| counts[code] += count }
+        entry_counts_for(slugs).each { |code, count| counts[code] += count }
+        counts.sort_by { |code, count| [-count, code] }
+      end
+
+      # The language card's axes seam (P48-r3): every source slug holding
+      # +code+ — ≥1 live document (stats-backed) or a dictionary shelf in
+      # it. The CLI maps these onto the research desks they serve.
+      def holding_slugs(code)
+        code = code.to_s
+        (sources_breakdown(code).keys + shelf_source_slugs(code)).uniq
+      end
+
       private
 
       def lemma_rows(code)
@@ -191,6 +214,58 @@ module Nabu
           .where { documents >= 1 }
           .order(Sequel.desc(:documents))
           .select_hash(Sequel[:sources][:slug], Sequel[:source_stats_languages][:documents])
+      end
+
+      # {code => live document count} restricted to +slugs+ — the stats
+      # shelf when it exists (P42-0), the live aggregate on a pre-019
+      # catalog.
+      def document_counts_for(slugs)
+        if stats?
+          @catalog[:source_stats_languages]
+            .join(:sources, id: Sequel[:source_stats_languages][:source_id])
+            .where(Sequel[:sources][:slug] => slugs)
+            .where { documents >= 1 }
+            .group(Sequel[:source_stats_languages][:language])
+            .select(Sequel[:source_stats_languages][:language].as(:language),
+                    Sequel.function(:sum, Sequel[:source_stats_languages][:documents]).as(:count))
+            .to_h { |row| [row.fetch(:language), row.fetch(:count).to_i] }
+        else
+          live_documents
+            .join(:sources, id: Sequel[:documents][:source_id])
+            .where(Sequel[:sources][:slug] => slugs)
+            .exclude(Sequel[:documents][:language] => nil)
+            .group(Sequel[:documents][:language])
+            .select(Sequel[:documents][:language].as(:language),
+                    Sequel.function(:count).*.as(:count))
+            .to_h { |row| [row.fetch(:language), row.fetch(:count)] }
+        end
+      end
+
+      # {code => live dictionary entry count} restricted to +slugs+ — the
+      # entry tables are shelf-bounded, so a live count is the P42-r2
+      # posture, same as #shelves.
+      def entry_counts_for(slugs)
+        return {} unless @catalog.table_exists?(:dictionaries)
+
+        @catalog[:dictionary_entries]
+          .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
+          .join(:sources, id: Sequel[:dictionaries][:source_id])
+          .where(Sequel[:sources][:slug] => slugs, Sequel[:dictionary_entries][:withdrawn] => false)
+          .group(Sequel[:dictionaries][:language])
+          .select(Sequel[:dictionaries][:language].as(:language),
+                  Sequel.function(:count).*.as(:count))
+          .to_h { |row| [row.fetch(:language), row.fetch(:count)] }
+      end
+
+      # Source slugs with a dictionary shelf in +code+.
+      def shelf_source_slugs(code)
+        return [] unless @catalog.table_exists?(:dictionaries)
+
+        @catalog[:dictionaries]
+          .join(:sources, id: Sequel[:dictionaries][:source_id])
+          .where(Sequel[:dictionaries][:language] => code)
+          .distinct
+          .select_map(Sequel[:sources][:slug])
       end
 
       def live_documents

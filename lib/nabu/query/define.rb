@@ -64,6 +64,34 @@ module Nabu
       # Latin-eligible query, and it folds/looks up in Latin.
       LILA_LANGUAGE = "lat"
 
+      # P48-r1 (D48-a): the curated Sanskrit stem-class rule — nominative ↔
+      # stem candidates for a Latin/IAST-scripted query. Candidates that
+      # don't exist as headwords simply match nothing; that existence check
+      # IS the disambiguation (tapaḥ → tapa AND tapas; MW's s-stem entry is
+      # the one that answers). Non-Latin scripts generate nothing.
+      # const: a citation-practice crosswalk, not a morphology engine —
+      # the general form→lemma table is nabu-data material.
+      SANSKRIT_IASTISH = /\A[a-zāīūṛṝḷḹṃḥśṣṭḍṇñṅ]+\z/i
+      def self.sanskrit_stem_variants(term)
+        word = Nabu::Normalize.nfc(term.to_s.strip).downcase
+        return [] unless word.match?(SANSKRIT_IASTISH)
+
+        out = []
+        # nominative → stem
+        out << word.delete_suffix("ḥ") << word.sub(/aḥ\z/, "as") if word.end_with?("aḥ")
+        out << word.delete_suffix("ḥ") << word.sub(/iḥ\z/, "is") if word.end_with?("iḥ")
+        out << word.delete_suffix("ḥ") << word.sub(/uḥ\z/, "us") if word.end_with?("uḥ")
+        out << word.sub(/ā\z/, "an") if word.end_with?("ā")
+        out << "#{word}n" if word.end_with?("ma") # karma → karman
+        # stem → nominative
+        out << "#{word}ḥ" if word.match?(/[aiu]\z/) && !word.end_with?("ā")
+        out << word.sub(/as\z/, "aḥ") if word.end_with?("as")
+        out << word.sub(/is\z/, "iḥ") if word.end_with?("is")
+        out << word.sub(/us\z/, "uḥ") if word.end_with?("us")
+        out << word.delete_suffix("n") << word.sub(/an\z/, "ā") if word.end_with?("an")
+        (out - [word]).uniq
+      end
+
       # +lila+ is the P44-8 LiLa lemma-spine resolver used for the Latin
       # variant-form fallback (below). It defaults to :auto — feature-detected
       # from canonical/lila at first use, so absent-tree behavior is
@@ -90,8 +118,22 @@ module Nabu
 
         term = lemma.to_s.strip
         recon_only = term.start_with?("*")
-        variants = Nabu::Normalize.query_forms(term.delete_prefix("*"))
+        bare = term.delete_prefix("*")
+        variants = Nabu::Normalize.query_forms(bare)
         return [] if variants.first.strip.empty?
+
+        # P48-r1 (D48-a, owner-ruled 2026-07-28): Sanskrit citation practice
+        # splits the shelves — MW/DCS cite STEMS (bodhisattva, manas), the
+        # Mahāvyutpatti cites NOMINATIVES (bodhisattvaḥ, manaḥ). Candidates
+        # are generated per stem class and validated BY EXISTENCE (the
+        # lookup only returns real entries), so tapaḥ proposes tapa AND
+        # tapas without blanket visarga-stripping ever corrupting an
+        # s-stem. The general form→lemma table (derived from DCS gold) is
+        # nabu-data material, deliberately not built here.
+        unless recon_only
+          variants = (variants + self.class.sanskrit_stem_variants(bare)
+                                     .flat_map { |v| Nabu::Normalize.query_forms(v) }).uniq
+        end
 
         rows = entry_rows(variants, lang: lang, limit: limit, recon_only: recon_only)
         return rows.map { |row| build_result(row) } unless rows.empty?

@@ -248,6 +248,49 @@ module Query
                                               workdir: Nabu::TestSupport.fixtures("mw"))
     end
 
+    def seed_mvp_shelf
+      mvp = Nabu::Store::Source.create(
+        slug: "mvp", name: "Mahāvyutpatti", adapter_class: "Nabu::Adapters::Mvp",
+        license: "PD (believed)", license_class: "open"
+      )
+      Nabu::Store::DictionaryLoader.new(db: @catalog, source: mvp)
+                                   .load_from(Nabu::Adapters::Mvp.new,
+                                              workdir: Nabu::TestSupport.fixtures("mvp"))
+    end
+
+    # P48-r1 (D48-a, owner-ruled 2026-07-28): the curated Sanskrit
+    # query-variant rule — MVP's inflected-nominative headwords
+    # (bodhisattvaḥ) and MW's stems (bodhisattva) reach each other from
+    # either spelling. Candidates are generated per stem class and
+    # VALIDATED BY EXISTENCE (the lookup only returns real shelf entries),
+    # so tapaḥ can propose both tapa and tapas without corrupting either.
+    # Tier 2 (the general form→lemma table derived from DCS gold) is
+    # nabu-data material, deliberately NOT built here.
+    def test_sanskrit_stem_query_reaches_the_nominative_headword
+      seed_mvp_shelf
+      results = define("bodhisattva", lang: "san")
+      assert results.any? { |r| r.urn == "urn:nabu:dict:mvp:625" },
+             "the stem spelling must reach MVP's nominative entry (bodhisattvaḥ)"
+    end
+
+    def test_sanskrit_nominative_query_still_finds_its_own_entry
+      seed_mvp_shelf
+      results = define("bodhisattvaḥ", lang: "san")
+      assert(results.any? { |r| r.urn == "urn:nabu:dict:mvp:625" })
+    end
+
+    def test_sanskrit_variant_generator_covers_the_stem_classes
+      v = Nabu::Query::Define.sanskrit_stem_variants("tapaḥ")
+      assert_includes v, "tapa", "a-stem candidate"
+      assert_includes v, "tapas", "s-stem candidate — never blanket-stripped"
+      assert_includes Nabu::Query::Define.sanskrit_stem_variants("manas"), "manaḥ"
+      assert_includes Nabu::Query::Define.sanskrit_stem_variants("karman"), "karma"
+      assert_includes Nabu::Query::Define.sanskrit_stem_variants("rājā"), "rājan"
+      assert_includes Nabu::Query::Define.sanskrit_stem_variants("haviḥ"), "havis"
+      assert_empty Nabu::Query::Define.sanskrit_stem_variants("λόγος"),
+                   "non-Latin scripts generate nothing — the rule is IAST/ASCII-scoped"
+    end
+
     # THE transcode payoff: ASCII "amsa" reaches both aṃśa and aṃsa — the
     # same folded shape GRETIL's IAST produces (survey §2, no fold-rule
     # change).

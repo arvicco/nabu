@@ -55,7 +55,7 @@ module Nabu
       "la" => "lat", "el" => "ell", "nl" => "nld", "cs" => "ces",
       "cy" => "cym", "is" => "isl", "sq" => "sqi", "eu" => "eus",
       "fa" => "fas", "ro" => "ron", "sk" => "slk", "mk" => "mkd",
-      "ka" => "kat", "hy" => "hye"
+      "ka" => "kat", "hy" => "hye", "bo" => "bod"
     }.freeze
 
     # Every code that means the same language as +code+ — the TYPED code

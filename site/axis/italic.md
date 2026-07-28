@@ -28,6 +28,8 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
 | `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `ett` 7,874 · `sga` 6,564 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `eng` 3,290 · `grc` 3,201 · `lat` 2,662 · `ine-pro` 1,905 · `osc` 954 … and 24 more (`nabu axis italic` lists all).
+
 ## The desk's instruments
 
 - **The languages of pre-Roman Italy:** Sabellic — Oscan, Umbrian,
@@ -81,4 +83,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-three research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

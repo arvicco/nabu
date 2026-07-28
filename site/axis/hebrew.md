@@ -28,6 +28,8 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `hbo` 30,232 · `grc` 6,297 · `eng` 5,265 · `arc` 3,331 · `egy` 3,050 · `egy-Egyd` 1,424 · `ara` 962 · `cop` 456 · `heb` 408 · `lat` 317 … and 20 more (`nabu axis hebrew` lists all).
+
 ## The desk's instruments
 
 - **The Hebrew-and-Aramaic language desk:** OSHB (the Westminster Leningrad
@@ -83,4 +85,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-three research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

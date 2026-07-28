@@ -90,8 +90,14 @@ indic:
   desc: "The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon."
 
 buddhist:
-  persona: "The Buddhologist — the dharma across the Pali, Sanskrit and Chinese canons."
-  desc: "Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist."
+  persona: "The Buddhologist — the dharma across the Pali, Sanskrit, Chinese and Tibetan canons."
+  desc: "Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and, since P48, the Derge Kangyur and Tengyur: the fourth canon leg."
+
+# P48-1: minted with the Derge canon (derge-kangyur + derge-tengyur), per the
+# owner-ordered P47-s2 Tibetan survey ("mint the axis").
+tibetan:
+  persona: "The Tibetologist — the Land of Snows from Dunhuang documents to the complete Derge canon."
+  desc: "The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key), 84000's English translation layer, OTDO's Old Tibetan documents, and the gold-annotation lane (SOAS POS, the Annals and Chronicle); the lexicon shelves join as their packets land."
 
 sinitic:
   persona: "The Sinologist — the classical Chinese written world and its phonological deep past."

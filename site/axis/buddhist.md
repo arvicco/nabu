@@ -5,15 +5,15 @@ description: >-
   The Buddhologist's desk: its shelves, instruments, CLI recipes and terminal setup.
 ---
 
-> The Buddhologist — the dharma across the Pali, Sanskrit and Chinese canons.
+> The Buddhologist — the dharma across the Pali, Sanskrit, Chinese and Tibetan canons.
 
-Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist.
+Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and, since P48, the Derge Kangyur and Tengyur: the fourth canon leg.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 July 2026)</span> |
 |---|---|---|---|---|
@@ -21,6 +21,12 @@ A source wears every desk it serves — these four answer this desk. Holdings ar
 | `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,650 passages |
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
 | `cbeta` | texts | nc | wired · manual | 3,679 docs / 8,749,319 passages |
+| `e84000` | texts | nc | wired · manual | 388 docs / 124,223 passages |
+| `derge-kangyur` | texts | open | wired · manual | 1,200 docs / 461,304 passages |
+| `derge-tengyur` | texts | open | wired · manual | 3,362 docs / 897,142 passages |
+| `mvp` | dictionary | open | wired · manual | 9,379 entries |
+
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `san` 9,379 · `pli` 7,288 · `eng` 4,766 · `xct` 4,563 · `lzh` 3,951 · `san-Latn` 817 · `en` 389 · `san-Deva` 32 · `pra` 22 · `bra-Deva` 3 … and 3 more (`nabu axis buddhist` lists all).
 
 ## The desk's instruments
 
@@ -72,4 +78,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-three research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

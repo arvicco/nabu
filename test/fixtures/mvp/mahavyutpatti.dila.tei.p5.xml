@@ -1,0 +1,354 @@
+<?oxygen RNGSchema="http://buddhistinformatics.ddbc.edu.tw/glossaries/schemas/ddbc.glossaries.odd.rng" type="xml"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Mahāvyutpatti - DDBC version</title>
+      </titleStmt>
+      <publicationStmt>
+        <p>This digital edition of the Mahāvyutpatti was created by the Glossaries Team at Dharma Drum Buddhist College (法鼓佛教學院), Taiwan.</p>
+        <p>See http://buddhistinformatics.ddbc.edu.tw/glossaries/ or email glossaries@ddbc.edu.tw for more information.</p>
+      </publicationStmt>
+      <sourceDesc>
+        <p>The Mahāvyutpatti (bye brag rtog byed) was first compiled in the early 9th century as a glossary to aid the translation of Sanskrit Buddhist scriptures into Tibetan. Later Chinese, Mongolian and Manchu equivalents were added. This version contains Sanskrit, Tibetan and Chinese.</p>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <langUsage xml:lang="eng-Latn">
+        <language ident="zho-Hant">Chinese in Traditional Han characters</language>
+        <language ident="san-Latn">Sanskrit in Latin script (IAST)</language>
+        <language ident="san-Deva">Sanskrit in Devanāgarī script</language>
+        <language ident="bod-Latn">Tibetan in Latin script (Wylie)</language>
+        <language ident="bod-Tibt">Tibetan in Tibetan script</language>
+      </langUsage>
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div>
+        <head>如来名號</head>
+        <entry key="1">
+          <form>
+            <orth xml:lang="san-Latn">buddhaḥ</orth>
+            <orth xml:lang="san-Deva">बुद्धः</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>正覺</quote>
+          </cit>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>佛</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>sangs rgyas</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>སངས་རྒྱས་</quote>
+          </cit>
+        </entry>
+        <entry key="2">
+          <form>
+            <orth xml:lang="san-Latn">bhagavān</orth>
+            <orth xml:lang="san-Deva">भगवान्</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>出有壞</quote>
+          </cit>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>薄伽梵</quote>
+          </cit>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>
+              <add resp="ddbc">世尊</add>
+            </quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>bcom ldan 'das</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>བཅོམ་ལྡན་འདས་</quote>
+          </cit>
+        </entry>
+        <entry key="3">
+          <form>
+            <orth xml:lang="san-Latn">tathāgataḥ</orth>
+            <orth xml:lang="san-Deva">तथागतः</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>如來</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>de bzhin gshegs pa</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>དེ་བཞིན་གཤེགས་པ་</quote>
+          </cit>
+        </entry>
+      </div>
+      <div>
+        <head>菩薩通稱</head>
+        <entry key="625">
+          <form>
+            <orth xml:lang="san-Latn">bodhisattvaḥ</orth>
+            <orth xml:lang="san-Deva">बोधिसत्त्वः</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>
+              <choice>
+                <sic>菩薩</sic>
+                <corr resp="ddbc">菩提薩埵</corr>
+              </choice>
+            </quote>
+          </cit>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>
+              <add resp="ddbc">開士</add>
+            </quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>byang chub sems dpa'</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>བྱང་ཆུབ་སེམས་དཔའ་</quote>
+          </cit>
+        </entry>
+      </div>
+      <div>
+        <head>菩薩名號</head>
+        <entry key="731a">
+          <form>
+            <orth xml:lang="san-Latn">sucandraḥ</orth>
+            <orth xml:lang="san-Deva">सुचन्द्रः</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>妙月</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>zla mdzes</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>ཟླ་མཛེས་</quote>
+          </cit>
+        </entry>
+      </div>
+      <div>
+        <head>聲聞</head>
+        <entry key="1040">
+          <form>
+            <orth xml:lang="san-Latn">ānandaḥ</orth>
+            <orth xml:lang="san-Deva">आनन्दः</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>阿難</quote>
+          </cit>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>阿難陀</quote>
+          </cit>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>
+              <del resp="ddbc"/>
+            </quote>
+          </cit>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>
+              <del resp="ddbc">喜</del>
+            </quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>kun dga' bo</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>ཀུན་དགའ་བོ་</quote>
+          </cit>
+        </entry>
+        <entry key="1055">
+          <form>
+            <orth xml:lang="san-Latn">mahāpanthakaḥ</orth>
+            <orth xml:lang="san-Deva">महापन्थकः</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>
+              <choice>
+                <sic>摩訶槃陀伽</sic>
+                <corr resp="ddbc">摩訶槃陀迦</corr>
+              </choice>
+            </quote>
+          </cit>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>
+              <del resp="ddbc">大路邊</del>
+            </quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>lam chen bstan</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>ལམ་ཆེན་བསྟན་</quote>
+          </cit>
+        </entry>
+        <entry key="1055">
+          <form>
+            <orth xml:lang="san-Latn">śroṇakoṭīviṃśaḥ (śroṇakoṭīvīṣaḥ)</orth>
+            <orth xml:lang="san-Deva">श्रोणकोटीविंशः (श्रोणकोटीवीषः)</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>二十億耳</quote>
+          </cit>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>
+              <del resp="ddbc">室縷多頻設底俱胝</del>
+            </quote>
+          </cit>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>
+              <del resp="ddbc">聞二百億</del>
+            </quote>
+          </cit>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>
+              <del resp="ddbc">或云耳有珠環</del>
+            </quote>
+          </cit>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>
+              <del resp="ddbc">價值一憶</del>
+            </quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>gro bzhin skyes bye ba nyi shu pa</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>གྲོ་བཞིན་སྐྱེས་བྱེ་བ་ཉི་ཤུ་པ་</quote>
+          </cit>
+        </entry>
+      </div>
+      <div>
+        <head>世間八法</head>
+        <entry key="2347">
+          <form>
+            <orth xml:lang="san-Latn">praśaṃsā. prasaṃsā</orth>
+            <orth xml:lang="san-Deva">प्रशंसा. प्रसंसा</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>譽</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>bstod pa</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>བསྟོད་པ་</quote>
+          </cit>
+        </entry>
+        <entry key="2347">
+          <form>
+            <orth xml:lang="san-Latn">sukham</orth>
+            <orth xml:lang="san-Deva">सुखम्</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>樂</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>bde ba</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>བདེ་བ་</quote>
+          </cit>
+        </entry>
+      </div>
+      <div>
+        <head>人次第</head>
+        <entry key="3824">
+          <form>
+            <orth xml:lang="san-Latn">kārṣikaḥ</orth>
+            <orth xml:lang="san-Deva">कार्षिकः</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>耕田者</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>zhing pa</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>ཞིང་རྨོད་པ་</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>ཞིང་རྨོད་པ་</quote>
+          </cit>
+        </entry>
+        <entry key="3825">
+          <form>
+            <orth xml:lang="san-Latn">kṛṣīvalaḥ</orth>
+            <orth xml:lang="san-Deva">कृषीवलः</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>耕田者</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>zhing rmod pa</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt"> 
+            <quote>ཞིང་རྨོད་པ་</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>ཞིང་རྨོད་པ་</quote>
+          </cit>
+        </entry>
+      </div>
+      <div>
+        <head>佛華嚴經・數</head>
+        <entry key="7752a ">
+          <form>
+            <orth xml:lang="san-Latn">sumātraḥ (amātraḥ)</orth>
+            <orth xml:lang="san-Deva">सुमात्रः (अमात्रः)</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>
+              <choice>
+                <sic>阿摩怛羅</sic>
+                <corr resp="ddbc">阿麼怛羅</corr>
+              </choice>
+            </quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>gzhal yas</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>གཞལ་ཡས་</quote>
+          </cit>
+        </entry>
+        <entry key="7752b ">
+          <form>
+            <orth xml:lang="san-Latn">bhramātraḥ</orth>
+            <orth xml:lang="san-Deva">भ्रमात्रः</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>勃麼怛羅</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>gzhal thim</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote>གཞལ་ཐིམ</quote>
+          </cit>
+        </entry>
+      </div>
+      <div>
+        <head>九十墮</head>
+        <entry key="8418">
+          <form>
+            <orth xml:lang="san-Latn">śuddha prāyaścittikāḥ</orth>
+            <orth xml:lang="san-Deva">शुद्ध प्रायश्चित्तिकाः</orth>
+          </form>
+          <cit type="translation" xml:lang="zho-Hant">
+            <quote>犯諸令墮者</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Latn">
+            <quote>ltung byed 'ba' zhig tu 'gyur ba rnams pa</quote>
+          </cit>
+          <cit type="translation" xml:lang="bod-Tibt">
+            <quote></quote>
+          </cit>
+        </entry>
+      </div>
+    </body>
+  </text>
+</TEI>

@@ -1,0 +1,48 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ALL entries are non-refetchable: the site is a live application whose
+# every page body carries a per-request CSRF _token input, so a fresh GET
+# of the same URL never byte-matches (content identical, token bytes not).
+# Three document pages are whole as served; Pt_1287 and the two catalog
+# fixtures are documented trims (README).
+source: otdo
+adapter_test: test/adapters/otdo_test.rb
+retrieved: 2026-07-28
+files:
+  - path: Pt_1287.html
+    url: https://otdo.aa-ken.jp/archives?p=Pt_1287
+    refetchable: false
+    whole: false
+    trim: transliteration lines (13)-(536) spliced out (kept through <br id="br11">, resume after <br id="br535">); header, metadata block and page furniture intact (127 KB -> 10 KB)
+    reason: live-app page — a fresh GET re-stamps the CSRF _token, never byte-identical; re-acquire by GET + re-applying the README trim
+  - path: insc_Zhol.html
+    url: https://otdo.aa-ken.jp/archives?p=insc_Zhol
+    refetchable: false
+    whole: true
+    trim: none (the Zhol pillar inscription — face-prefixed e/s/n line labels, inscription metadata fields incl. free-text Date "post 763"; P48-5)
+    reason: live-app page — a fresh GET re-stamps the CSRF _token, never byte-identical
+  - path: Or_15000_0018.html
+    url: https://otdo.aa-ken.jp/archives?p=Or_15000_0018
+    refetchable: false
+    whole: true
+    trim: none (Or.15000/18 wood-slip letter — r/v line labels, lacuna brackets verbatim; P48-5)
+    reason: live-app page — a fresh GET re-stamps the CSRF _token, never byte-identical
+  - path: OZ_5.html
+    url: https://otdo.aa-ken.jp/archives?p=OZ_5
+    refetchable: false
+    whole: true
+    trim: none (Old Zhangzhung text 5 — the xzh language exemplar, 47 lines; P48-5)
+    reason: live-app page — a fresh GET re-stamps the CSRF _token, never byte-identical
+  - path: fetch/archives-6rows.html
+    url: https://otdo.aa-ken.jp/archives
+    refetchable: false
+    whole: false
+    trim: rows 7..414 spliced out of the real catalog table (rows 1..6 kept, numbering self-consistent); header, form and footer untouched
+    reason: documented local trim of the live catalog (which also re-stamps its CSRF _token per GET); re-acquire by GET + re-trimming per README
+  - path: fetch/archives-truncated.html
+    url: https://otdo.aa-ken.jp/archives
+    refetchable: false
+    whole: false
+    trim: rows 2-3 spliced out of archives-6rows.html (4 rows under a top row number of 6) — the count-assertion abort shape (README)
+    reason: documented local trim of the 6-row trim; re-acquiring means re-running both splices

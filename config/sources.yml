@@ -2902,6 +2902,276 @@ elephantine:   # P47-1, 02-sources row 131
   # future links-layer bonus, no edge producer in this packet).
   sync_policy: manual
 
+e84000:   # P48-2, 02-sources row 133
+  adapter: Nabu::Adapters::E84000
+  # AXES NOTE (single-minter discipline): the row ALSO belongs to the
+  # `tibetan` axis minted by P48-1 (derge-kangyur); the axis entry is
+  # P48-1's to create, so this list gains `tibetan` at the phase-48 merge,
+  # not before — a sources.yml axes reference must never precede its
+  # axes.yml definition (registry validation).
+  axes: [tibetan, buddhist]
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired" + "Re-wire e84000"; first sync verified live: 388 docs / 124,223 passages, exact prediction)
+  # 84000 "Translating the Words of the Buddha" — the ENGLISH translation
+  # layer of the Tibetan canon (github.com/84000/data-tei, ~282 MB repo).
+  # Census (commit bdfc81c, 2026-07-28): 396 published Kangyur TEI under
+  # translations/kangyur/translations/ + 3 Tengyur publications under
+  # translations/tengyur/publications/; 560 + 3,366 placeholder stubs in
+  # sibling placeholders/ dirs SKIP by rule, censused. Document slugs are
+  # the texts' own Toh numbers (urn:nabu:e84000:toh<N>) — FROZEN, the
+  # crosswalk key to the derge-kangyur shelf (P48-6 alignment): multi-Toh
+  # texts (94) slug by the FIRST number and record all in metadata;
+  # part-publications (toh1-1..toh44-45, upstream's own bibl keys) keep
+  # the part suffix and expose "toh_base"; 11 upstream duplicate pairs
+  # (same UT id, renamed copies) resolve to the highest edition version,
+  # losers censused. Passages mirror the Reading Room's published grain:
+  # one milestone chunk = one numbered paragraph (s.1/ac.1/i.3/1.5/c.1,
+  # verified live 2026-07-28). Tibetan (bo) + Wylie titles, UT ids and
+  # translators ride document metadata; the glossary's bo/Wylie/Sanskrit
+  # entity records are the named P48 follow-up. LICENSE: CC BY-NC-ND 3.0
+  # stated verbatim in the repo README ("These works are provided under
+  # the protection of a Creative Commons CC BY-NC-ND (Attribution -
+  # Non-commercial - No-derivatives) 3.0 copyright.") -> class nc (the
+  # TraCES BY-NC-ND precedent; MCP default-excluded). CAVEAT (P47-s2,
+  # owner-acknowledged): the README's linked Terms_of_Use.md
+  # (84000/all-data) layers "data partnership" registration language for
+  # bulk external use — the README grant is the operative license.
+  # FETCH: GitFetch sparse to the translations/ cone (206 of ~216 MB of
+  # blobs are translations/; knowledgebase/, sections/, schema/ stay out
+  # of canonical). EXPECTED FIRST SYNC: 388 documents (399 published
+  # files - 11 duplicate losers), chunk-grain passages; 3,926 stub +
+  # 11 duplicate skips censused. Upstream actively publishes -> manual.
+otdo:   # P48-5, 02-sources row 132
+  adapter: Nabu::Adapters::Otdo
+  # tibetan: the axis's founding shelf (the tag rides here; the axis mint is
+  # P48-1's — the stanza in config/axes.yml is a packet placeholder).
+  axes: [tibetan]
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 413 / 13,593 (1 upstream hole censused))
+  # P48-5: OTDO — Old Tibetan Documents Online (otdo.aa-ken.jp; Research
+  # Institute for Languages and Cultures of Asia and Africa, Tokyo): 414
+  # critically edited Old Tibetan texts in Wylie transliteration — Dunhuang
+  # manuscripts (Or_15000 234 · Pt 84 · ITJ 39 · S 18), imperial-period
+  # inscriptions (insc 34: Zhol, the 821/822 Treaty pillar, the Ldan-ma
+  # rocks…) and 5 Old Zhangzhung texts (OZ -> language xzh; everything else
+  # otb). CENSUS (2026-07-28, ~12 polite requests, verified): the /archives
+  # catalog is ONE numbered table, rows 1..414 == 414 unique datatxt[]
+  # checkbox slugs == the packet's promised count, exactly; no robots.txt
+  # (404); per-document pages at /archives?p=<slug> (slugs carry
+  # apostrophes — insc_'Bis2 — percent-encoded on the wire). Page shape:
+  # <h2> slug header; numbered metadata fields (Content/Note on
+  # manuscripts; +Location/Date/Condition on inscriptions — Date is FREE
+  # TEXT, "post 763": no MetadataDates timeline shape, flagged for the
+  # orchestrator); div.textBody1 transliteration at the edition's own line
+  # grain (labels "1"…"536" | r/v | e/s/n faces), tooltip glosses (OTDO's
+  # re-segmentation, bgyisna -> "bgyis na") ride annotations, never the
+  # text. FETCH (OtdoFetch, the ElephantineFetch mold mirrored): one
+  # catalog GET (count-assertion defense: unique slugs == table rows ==
+  # top row number, abort before any write) + per-slug GETs at 1 req/s
+  # (~7 min whole corpus), resume at the file grain, 404 on a promised
+  # slug censused (P47-i1), transport/5xx retry 3x backoff (P47-i2),
+  # attic + breaker retention. Live app (per-request CSRF token, no
+  # Last-Modified) -> the catalog sidecar stays out of the ledger pin;
+  # probe is reachability-only. LICENSE (P47-s2, re-verified live
+  # 2026-07-28): /about Site Policy verbatim "The materials published on
+  # this site is licensed under a Creative Commons Attribution 4.0
+  # International License (CC-BY)" -> class attribution. EXPECTED FIRST
+  # SYNC: 414 documents, ~15-20k line passages (Pt_1287 alone is 536),
+  # urn:nabu:otdo:<slug>:<line-label>.
+  sync_policy: manual
+
+# P48-3: the Tibetan gold-annotation lane — two rows (the wold/clics shape:
+# one row per upstream artifact/license/fetch posture), one new axis tag.
+# LANGUAGE RULING (P48-3): Classical Tibetan texts are `xct` (the gretil
+# xct_ precedent), Old Tibetan is `otb`; `bo` stays kaikki's modern
+# dictionary shelf. The codes become held-language cards after first sync.
+soas-tibetan:
+  adapter: Nabu::Adapters::SoasTibetan
+  axes: [tibetan]
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 4 / 991 (exact))
+                   # sha-pinned; CLAUDE.md checklist §6: bin/nabu enable
+                   # soas-tibetan && bin/nabu sync soas-tibetan — expect 4
+                   # documents / 991 passages (mdzangsblun 310, buston 309,
+                   # mila 192, marpa 180; 318,230 form|tag tokens), eyeball
+                   # nabu show urn:nabu:soas-tibetan:mdzangsblun:1 ("།མཛངས་
+                   # བླུན་ཞེས་བྱ་བའི་མདོ།…", gold pos tokens) + 5 random
+                   # passages, then flip.
+  # SOAS Classical Tibetan gold POS corpus — "A part-of-speech (POS) tagged
+  # corpus of Classical Tibetan" (Hill, Garrett et al.; AHRC "Tibetan in
+  # Digital Communication", SOAS 2012–2015; Zenodo record 574878, DOI
+  # 10.5281/zenodo.574878, VERIFIED CC BY 4.0 on the record). Four texts
+  # with HAND-CORRECTED gold segmentation + gold POS (tag set Garrett et
+  # al. 2014/2015): Mdzaṅs blun (9th c., canonical), Bu ston chos ḥbyuṅ
+  # (13th c.), Mi la ras paḥi rnam thar + Mar paḥi rnam thar (15th c.) —
+  # the Tibetan desk's quality anchor, language xct all four. Format is its
+  # own small family (`soas-pos`): one line = one passage, space-separated
+  # form|tag tokens, NO lemma column anywhere → the source mints ZERO lemma
+  # rows (honest absence — no lemma_tier posture, nothing exists to label);
+  # the -lex renderings (undisambiguated lexicon tags) are censused
+  # discovery skips. Fetch: ONE versioned-immutable Texts.zip via ZipFetch,
+  # hard sha256 pin (RELEASE_SHA256, the wold/ren mold; md5 cross-checked
+  # against Zenodo's). A future release is a NEW DOI the owner re-pins.
+  sync_policy: manual
+
+old-tibetan:
+  adapter: Nabu::Adapters::OldTibetan
+  axes: [tibetan]
+  siblings: ["-en"]  # the elephantine/damaskini mold — text stems are
+                     # otannals/otchronicle, so the literal -en tail is
+                     # unambiguous; show --parallel pairs otannals ↔
+                     # otannals-en by identical <section>:<brat-id> suffixes.
+  translations: true  # Dotson 2009's aligned English of the Annals rides
+                      # `# text_en` per sentence → the -en sibling document;
+                      # the Chronicle has no translation lane and its -en
+                      # ref skips by rule (DocumentSkipped).
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 3 / 2,669 (exact))
+                   # CLAUDE.md checklist §6: bin/nabu enable old-tibetan &&
+                   # bin/nabu sync old-tibetan — expect 3 documents / 2,669
+                   # passages (otannals 546 otb + otannals-en 546 eng +
+                   # otchronicle 1,577 otb; ~17.5k syllable-tokens), eyeball
+                   # nabu show urn:nabu:old-tibetan:otannals:000:T55
+                   # --parallel (the Dotson pairing) + 5 random passages,
+                   # then flip.
+  # Old Tibetan Corpus (github.com/tibetan-nlp/old-tibetan-corpus): the Old
+  # Tibetan ANNALS (OTDO Pt_1288) + CHRONICLE (Pt_1287) — Tibet's first
+  # history and its epic companion, Dunhuang manuscripts, Unicode-converted
+  # from OTDO's Wylie, language otb. Gold by upstream's claim: segmentation,
+  # POS and the verb-argument dependency layer (arg1/arg2/arg2:lvc…),
+  # hand-corrected in BRAT (Faggionato/Garrett/Meelen, AHRC "Lexicography
+  # in Motion" 2017–2020). NOT gold: the LEMMA column is the ot2ct
+  # constraint-grammar NORMALIZED Classical Tibetan citation form
+  # (√-marked) — a pipeline product → lemma_tier: silver, every hit labeled
+  # (the cdli/ebl defensive-honesty shape). Composes the shared ConlluParser
+  # (clean 10-column files; citation hook strips the `<stem>:` sent_id
+  # prefix). archive/*.conllu legacy normalized exports are censused
+  # discovery skips (they would double-load in the wrong orthography).
+  # LICENSE, recorded choice: repo LICENSE is MIT (© 2018 Tibetan NLP) →
+  # attribution — the license basis for this lane; the Zenodo twin lists
+  # only "Other (Open)", and the README's per-text tables additionally
+  # stamp CC BY 4.0 (both attribution-class, no conflict). Upstream dormant
+  # since 2021 → manual.
+  sync_policy: manual
+  lemma_tier: silver
+
+derge-kangyur:
+  adapter: Nabu::Adapters::DergeKangyur
+  axes: [tibetan, buddhist]  # P48-1: mints the tibetan desk; the buddhist axis
+                             # gains its fourth canon leg (Pali/Sanskrit/Chinese
+                             # → now the Tibetan Kangyur+Tengyur)
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 1,200 docs / 461,304 passages)
+                 # bin/nabu enable derge-kangyur, bin/nabu sync derge-kangyur —
+                 # git clone ~300 MB text / 103 volumes, expect ~1,100+ Toh
+                 # documents at page.line grain — eyeball
+                 # nabu show urn:nabu:derge-kangyur:toh846:1b.1 and 5 random
+                 # passages, then flip).
+  # Digital Derge Kangyur — Esukhia/Barom Theksum Choling proofreading
+  # (2014–2018) of the UVA-SOAS 2013 eKangyur; exact-representation of the
+  # LoC Derge woodblocks (spelling/carving mistakes preserved on purpose).
+  # 103 volume files, 300,157,458 bytes UTF-8 plain text, Toh 1–1108.
+  # Repo ARCHIVED June 2022 (frozen) — the adapter PINS the archival HEAD
+  # a582cf471b7c (2022-06-24) and aborts loudly on drift; the OpenPecha
+  # successor is deliberately NOT followed (per-pecha licensing minefield,
+  # P47-s2 survey — the CC0 org claim was refuted there).
+  # LICENSE verbatim (README §License, README-ONLY declaration — no LICENSE
+  # file, recorded honestly): "This work is a mechanical reproduction of a
+  # Public Domain work, and as such is also in the Public Domain." → open.
+  # Language xct (Classical Tibetan); text NFD-by-convention upstream, the
+  # standard NFC boundary is deterministic (Tibetan precomposed chars are
+  # composition-excluded). Document per {D<toh>} marker (the e84000
+  # crosswalk key); multi-volume documents volume-prefix passage refs —
+  # the adapter/family headers carry the full doctrine.
+  sync_policy: manual
+
+derge-tengyur:
+  adapter: Nabu::Adapters::DergeTengyur
+  axes: [tibetan, buddhist]  # P48-1: the canon's commentarial half — same desks
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 3,362 / 897,142)
+                 # ~617 MB text / 213 volumes, expect ~3,400+ Toh documents —
+                 # eyeball nabu show urn:nabu:derge-tengyur:toh1109:1b.1 and 5
+                 # random passages, then flip).
+  # Digital Derge Tengyur — Esukhia/Barom Theksum Choling's annotated
+  # faithful copy of the Derge Tengyur. 213 volume files, 617,471,152 bytes,
+  # Toh 1109–4569 (disjoint from the Kangyur by Tohoku design — verified on
+  # real volumes: kangyur vol 101 ends D1108, tengyur vol 001 opens D1109).
+  # Upstream NOT archived but dormant (last push 2021-10-20) — the adapter
+  # PINS HEAD 174653137d62 and aborts loudly on drift (owner re-pin).
+  # Quirks censused and handled by the shared esukhia-text family: UTF-8 BOM
+  # on every volume (README claims none), # peydurma note anchors, [X] error
+  # candidates, vol 213 (dkar chag) carrying no markers (rides the last open
+  # document). LICENSE verbatim (README §License, README-ONLY declaration —
+  # no LICENSE file): "This work is a mechanical reproduction of a Public
+  # domain work, and as such is also in the Public domain." → open.
+# P48-4: the tibetan-lexica packet — the Tibetan desk opens dictionary-first
+# (P47 survey; the axis itself is P48-1's mint). Three dictionary shelves:
+# the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and
+# the kaikki bo extract.
+
+mvp:
+  adapter: Nabu::Adapters::Mvp
+  # Dual-tagged like sdbh (domain + language desk): the 9th-c. glossary IS
+  # the Tibetan translators' instrument AND a Buddhist-studies reference.
+  # NOT indic — mw itself rides [indic] alone; MVP's Sanskrit side serves
+  # the crosswalk, and whole-source membership here is the Tibetan and
+  # Buddhist desks' (multi-tagging is dual, not maximal — the house rule).
+  axes: [tibetan, buddhist]
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 9,379 entries (exact))
+                   # sync mvp (one ~600 KiB sha-pinned zip GET), expect
+                   # 9,379 entries; eyeball `nabu define bodhisattvaḥ`
+                   # (Mvy. 625 beside MW's entry), `define dharmaḥ`, and 5
+                   # random entries, then flip.
+  # The Mahāvyutpatti (bye brag rtog byed), early 9th c. — THE imperial
+  # Sanskrit→Tibetan translation glossary (Chinese added later), in the
+  # DILA / Dharma Drum TEI P5 digital edition (glossaries.dila.edu.tw/
+  # glossaries/MVP). 9,379 entries / 308 sections censused 2026-07-28;
+  # every entry = IAST + Devanāgarī orth pair, Wylie + Tibetan-script +
+  # Chinese translation cits. Dictionary language "san" (the glossary's own
+  # Sanskrit-headed organization — sits beside mw, so `define` aggregates
+  # both); Tibetan/Chinese equivalents ride gloss/body lanes — structured
+  # crosswalk surfacing is the P48-6 alignment packet's seam, not this
+  # row's. Mvy. numbers are the standard scholarly citation → entry ids =
+  # upstream keys (urn:nabu:dict:mvp:625 is a citable address). LICENSE,
+  # verbatim from the glossary page (the honest-license doctrine): "We
+  # believe this text is in the public domain." — the digitizer's PD-belief
+  # assertion on a 9th-century text → class open. Upstream zip is frozen
+  # (2017-03-20; sha256-pinned in the adapter): re-fetches are expected
+  # no-ops, a drift is an owner re-pin decision.
+  sync_policy: manual
+
+tibetan-verbs:
+  adapter: Nabu::Adapters::TibetanVerbs
+  axes: [tibetan]
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 2,491 entries (exact))
+                   # bin/nabu sync tibetan-verbs (a ~150 KB git clone),
+                   # expect 2,491 entries; eyeball `nabu define ཀློག` (the
+                   # classic "read" paradigm) and 5 random entries, then
+                   # flip.
+  # The Tibetan Verbs Database (github.com/tibetan-nlp/tibetan-verbs-database):
+  # 2,491 rows of verb tense stems — present/past/future/imperative in
+  # Tibetan script — each attributed to its lexicographic sources (TDC/PH/
+  # GT/KN columns; upstream deliberately preserves the grammarians'
+  # disagreements as separate rows, uncollapsed). The tense stems ARE the
+  # entry apparatus (body lanes); no glosses upstream — gloss nil is
+  # honest. LICENSE: CC0-1.0 (repo LICENSE file, verified 2026-07-28) →
+  # class open. Small and occasionally edited: re-syncs are an owner call.
+  sync_policy: manual
+
+wiktionary-bo:
+  adapter: Nabu::Adapters::WiktionaryBo
+  axes: [tibetan]
+  wired: true   # flipped 2026-07-28 (owner ruling "flip them all wired"; first sync verified live: 3,651 entries (exact))
+                   # bin/nabu sync wiktionary-bo (one ~4.5 MB JSONL GET),
+                   # expect 3,651 entries; eyeball `nabu define
+                   # བྱང་ཆུབ་སེམས་དཔའ` and 5 random entries, then flip.
+  # English Wiktionary's Tibetan entries via the kaikki.org wiktextract
+  # extraction (the wiktionary-cu shape exactly): 3,651 records / 3,394
+  # words censused 2026-07-28, stored language bod. The per-language JSONL
+  # carries the same DEPRECATION caveat as wiktionary-cu (wiktextract
+  # #1178); fallback = filter the full enwiktionary extract by
+  # lang_code == "bo". The Classical Tibetan (xct) and Old Tibetan (otb)
+  # extracts do NOT exist upstream (404s verified 2026-07-28) — the bo
+  # extract is the one kaikki Tibetan artifact. Descendants crosswalk as
+  # reflexes (134 bearing records / 307 edges censused). Same CC-BY-SA +
+  # GFDL statement → attribution.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

@@ -24,6 +24,8 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
 | `dcs` | treebank | attribution | wired · manual | 15,741 docs / 753,093 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `san` 209,634 · `pli` 7,288 · `eng` 4,766 · `san-Latn` 817 · `lzh` 276 · `san-Deva` 32 · `pra` 22 · `lat` 11 · `grc` 9 · `orv` 9 … and 19 more (`nabu axis indic` lists all).
+
 ## The desk's instruments
 
 - **The Sanskrit, Prakrit and Pali lane:** GRETIL (780 editions — epic,
@@ -75,4 +77,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-three research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

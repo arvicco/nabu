@@ -25,6 +25,8 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 | `ebl` | tablets | nc | wired · manual | 23,288 docs / 325,728 passages |
 | `cuc` | tablets | nc | wired · manual | 279 docs / 7,544 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `sux` 242,884 · `akk` 127,402 · `und` 74,261 · `hit` 35,888 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 · `elx` 2,723 · `uga` 1,387 · `xhu` 729 … and 31 more (`nabu axis cuneiform` lists all).
+
 ## The desk's instruments
 
 - **The tablet world:** ORACC (royal inscriptions, lexical lists, gold
@@ -76,4 +78,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-two research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-three research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

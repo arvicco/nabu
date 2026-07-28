@@ -1,0 +1,20 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Both files are documented TRIMS (line ranges) of multi-megabyte volume
+# files at the PINNED commit 174653137d62af481f53c6ae3dc842bf8629323e
+# (upstream dormant since 2021-10-20; the adapter aborts on drift), so
+# `check` fetches them for URL-liveness only, never byte-compares, and
+# adapter_test stays null.
+source: derge-tengyur
+adapter_test: null
+retrieved: 2026-07-28
+files:
+  - path: text/001_བསྟོད་ཚོགས།_ཀ.txt
+    url: https://raw.githubusercontent.com/Esukhia/derge-tengyur/174653137d62af481f53c6ae3dc842bf8629323e/text/001_%E0%BD%96%E0%BD%A6%E0%BE%9F%E0%BD%BC%E0%BD%91%E0%BC%8B%E0%BD%9A%E0%BD%BC%E0%BD%82%E0%BD%A6%E0%BC%8D_%E0%BD%80.txt
+    whole: false
+    trim: lines 1-80, 693-700, 4072-4078 of the 4,105-line original (BOM kept; see README.md)
+  - path: text/212_སྣ་ཚོགས།_པོ.txt
+    url: https://raw.githubusercontent.com/Esukhia/derge-tengyur/174653137d62af481f53c6ae3dc842bf8629323e/text/212_%E0%BD%A6%E0%BE%A3%E0%BC%8B%E0%BD%9A%E0%BD%BC%E0%BD%82%E0%BD%A6%E0%BC%8D_%E0%BD%94%E0%BD%BC.txt
+    whole: false
+    trim: lines 1-12, 1100-1106, 2012-2020, 3800-3806 of the 5,210-line original (BOM kept; see README.md)
