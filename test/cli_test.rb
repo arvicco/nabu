@@ -676,6 +676,23 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P49-r4: a multilingual pack's whole-grain axes never attribute through
+  # the language card — a code the pack barely touches keeps only the desks
+  # of its DEDICATED holders, and a pack-only code gets no axes line at all.
+  # (The pack's holdings still show with counts on the axis card's
+  # languages: line — the deliberate asymmetry.)
+  def test_language_card_axes_line_excludes_multilingual_pack_holders
+    with_axis_pack_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[language shared]) }
+      assert_nil status
+      assert_match(/^  axes: mono$/, out, "only the dedicated holder's desk attributes")
+      refute_match(/^  axes:.*poly/, out, "the pack's desks must not ride in via its one shared doc")
+
+      out, _err, _status = with_config(config) { run_cli(%w[language packish]) }
+      refute_match(/^  axes:/, out, "a pack-only code gets no axes attribution")
+    end
+  end
+
   # A code held by no axis-tagged source prints no axes line (the house
   # zero-field rule) — here the registry defines no axes at all.
   def test_language_card_axes_line_suppressed_without_axis_tagged_holders
@@ -1964,6 +1981,28 @@ class CLITest < Minitest::Test
       out, _err, _status = with_config(config) { run_cli(%w[axis poly --long]) }
       assert_includes out, "l11 1", "--long lifts the cap"
       refute_match(/and \d+ more/, out)
+    end
+  end
+
+  # P49-r4: the desk's gold-lemma language set excludes languages ONLY
+  # reachable via multilingual members — the pack's packish/shared gold
+  # stays off the poly line, the dedicated deskmate's anchor stays on —
+  # while the counts-bearing languages: line KEEPS the pack's holdings
+  # (the deliberate asymmetry: counts are the honesty mechanism there).
+  def test_axis_card_gold_line_excludes_pack_only_languages
+    with_axis_pack_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[axis poly]) }
+      assert_nil status
+      assert_match(/^  gold lemmas: 2 rows across anchor \(nabu search --lemma\)$/, out,
+                   "only the dedicated member's language carries the desk's gold claim")
+      refute_match(/gold lemmas:.*(packish|shared)/, out,
+                   "pack-only languages stay off the gold line")
+      assert_match(/^  languages: packish 2 · anchor 1 · shared 1$/, out,
+                   "the languages: line keeps pack holdings — counts self-explain")
+
+      out, _err, _status = with_config(config) { run_cli(%w[axis mono]) }
+      assert_match(/^  gold lemmas: 3 rows across shared /, out,
+                   "a dedicated holder keeps its language's full gold claim")
     end
   end
 
@@ -6311,12 +6350,17 @@ class CLITest < Minitest::Test
           desc: "The multilingual pack lane."
       YAML
       sources = File.join(root, "sources.yml")
+      # multilingual: true (P49-r4) makes the cap test double as the
+      # asymmetry proof: the counts-bearing languages: line is UNCHANGED
+      # by the marker (only the count-less attribution surfaces exclude
+      # the pack).
       File.write(sources, <<~YAML)
         pack:
           adapter: TestAdapter
           wired: true
           sync_policy: manual
           axes: [poly]
+          multilingual: true
       YAML
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
@@ -6336,6 +6380,89 @@ class CLITest < Minitest::Test
       Nabu::Store::SourceStats.derive!(catalog, note: "test seed")
       catalog.disconnect
       yield config
+    end
+  end
+
+  # P49-r4: the pack-vs-dedicated attribution rig. Desk poly holds pack
+  # (multilingual: true — the structurally-unbounded language pack) and
+  # deskmate (a dedicated source, language anchor); desk mono holds
+  # dedicated, whose language shared the pack ALSO touches with one doc.
+  # Gold lemma rows ride the real Indexer so the desk gold line has
+  # something to sum: anchor 2 rows (deskmate), packish 2 + shared 1
+  # (pack — from the poly desk, reachable only via the pack) and shared 2
+  # more (dedicated).
+  def with_axis_pack_corpus
+    Dir.mktmpdir("nabu-cli-pack") do |root|
+      File.write(File.join(root, "axes.yml"), <<~YAML)
+        poly:
+          persona: "The Polyglot — every language at one desk."
+          desc: "The multilingual pack lane."
+        mono:
+          persona: "The Monoglot — one language, read deep."
+          desc: "The dedicated lane."
+      YAML
+      sources = File.join(root, "sources.yml")
+      File.write(sources, <<~YAML)
+        pack:
+          adapter: TestAdapter
+          wired: true
+          sync_policy: manual
+          axes: [poly]
+          multilingual: true
+        deskmate:
+          adapter: TestAdapter
+          wired: true
+          sync_policy: manual
+          axes: [poly]
+        dedicated:
+          adapter: TestAdapter
+          wired: true
+          sync_policy: manual
+          axes: [mono]
+      YAML
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      pack = catalog[:sources].insert(slug: "pack", name: "Pack", adapter_class: "TestAdapter",
+                                      license_class: "open", enabled: true)
+      seed_lemma_document(catalog, pack, "urn:nabu:pack:shared", "shared", lemmas: %w[s1])
+      seed_lemma_document(catalog, pack, "urn:nabu:pack:pk1", "packish", lemmas: %w[p1])
+      seed_lemma_document(catalog, pack, "urn:nabu:pack:pk2", "packish", lemmas: %w[p2])
+      mate = catalog[:sources].insert(slug: "deskmate", name: "Deskmate", adapter_class: "TestAdapter",
+                                      license_class: "open", enabled: true)
+      seed_lemma_document(catalog, mate, "urn:nabu:deskmate:a1", "anchor", lemmas: %w[a1 a2])
+      dedicated = catalog[:sources].insert(slug: "dedicated", name: "Dedicated",
+                                           adapter_class: "TestAdapter",
+                                           license_class: "open", enabled: true)
+      seed_lemma_document(catalog, dedicated, "urn:nabu:dedicated:s1", "shared", lemmas: %w[d1])
+      seed_lemma_document(catalog, dedicated, "urn:nabu:dedicated:s2", "shared", lemmas: %w[d2])
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
+      fulltext.disconnect
+      Nabu::Store::SourceStats.derive!(catalog, note: "test seed")
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  # One document with one passage per lemma, each passage carrying one
+  # gold-lemmatized token (the Indexer mints the passage_lemmas rows).
+  def seed_lemma_document(catalog, source_id, urn, language, lemmas:)
+    doc = catalog[:documents].insert(
+      source_id: source_id, urn: urn, title: urn.split(":").last, language: language,
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+    lemmas.each_with_index do |lemma, i|
+      catalog[:passages].insert(
+        document_id: doc, urn: "#{urn}:#{i + 1}", sequence: i, language: language,
+        text: lemma, text_normalized: lemma, content_sha256: "x", revision: 1, withdrawn: false,
+        annotations_json: JSON.generate({ "tokens" => [{ "lemma" => lemma, "form" => lemma }] })
+      )
     end
   end
 
