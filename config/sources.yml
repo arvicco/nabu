@@ -2751,6 +2751,9 @@ bfm:   # P45-4
 
 edr:   # P46-4
   adapter: Nabu::Adapters::Edr
+  # P47 D47-g (owner ruling 2026-07-28): 596K passages of damaged Latin
+  # inscriptions — the fragment desk's biggest constituency by far.
+  fuzzy_index: true
   axes: [epigraphy]
   wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box) — 115,590 docs / 596,064 passages / 1 predicted quarantine, D46-i license ruling 2026-07-26
                  # First sync shape: ONE ~268 MB Zenodo GET
@@ -2837,6 +2840,66 @@ traces:   # P46-2, 02-sources row 125
   # -> nc (MCP default-excluded). EXPECTED FIRST SYNC (~137 MB clone): 15
   # docs / 75,440 passages; the stray Alpheios export skips by rule.
   # Project ended, export effectively frozen -> manual.
+  sync_policy: manual
+
+elephantine:   # P47-1, 02-sources row 131
+  adapter: Nabu::Adapters::Elephantine
+  # P47 D47-g (owner ruling 2026-07-28): documentary ostraca/papyri with
+  # damage-riddled editions — exactly the fragment desk's constituency.
+  fuzzy_index: true
+  siblings: ["-en"]  # P47-r1 (owner report: "--parallel doesn't work at all here"):
+                     # the damaskini mold — record ids are digits-only ID6, so the
+                     # literal -en tail is unambiguous; show --parallel pairs
+                     # 100067 ↔ 100067-en by identical page.line suffixes.
+  # epigraphy: documentary papyri/ostraca at the artifact grain; hebrew: the
+  # library's first substantial Imperial Aramaic document shelf (1,193
+  # objects, Hebrew script — the Judean garrison's archives beside the
+  # Targums desk); egyptian: Demotic/hieratic/Middle Egyptian + Coptic
+  # slices of the same island corpus.
+  axes: [epigraphy, hebrew, egyptian]
+  wired: true    # flipped 2026-07-28 (owner ruling; D47-d ruled per-file 07-27,
+                 # first sync verified live: 15,539 docs / 69,350 passages,
+                 # eyeball rounds incl. daf-grain... page.line URNs, parallels,
+                 # timeline all owner-exercised).
+  translations: true  # the per-record English translation div as a -en
+                      # parallel sibling (the aes -de / oracc -en mold)
+  # P47-1: Elephantine — the Berlin ERC project "Localizing 4000 Years of
+  # Cultural History" (elephantine.smb.museum), the island's multilingual
+  # documentary corpus. CENSUS (2026-07-26, ~250 polite requests, verified):
+  # 10,744 objects (listing header "10744 Results" == extracted id set);
+  # 5,223 carry the transcription flag (ADVISORY only — the parser's
+  # readable predicate rules; 2/52 flagged samples were all-lacunae).
+  # Per-language (total/with-text): Greek 3,326/2,473 · Imperial Aramaic
+  # 1,193/892 · Demotic 1,427/833 · Coptic 454/417 · hieratic ostraca
+  # 2,080/26 · Middle Egyptian family 941/320 · Arabic 962/72 · Phoenician
+  # 94/93 · Latin 22/11 · Meroitic 13/0 · Carian 2/1 · Syriac 2/1; 62
+  # records lack a primary language (-> und). TEI P5 against a project DTD
+  # (NOT EpiDoc), ~25 KB identical taxonomy boilerplate per file (never
+  # stored in derived tables); whole corpus ~315 MB. FETCH: one
+  # session-stateful listing POST (showresults=15000; truncation defense:
+  # ids MUST equal the page's "N Results" header) + per-id GETs of
+  # /xml/elephantine_erc_db_<ID6>.tei.xml (ID6 zero-padded — unpadded
+  # 404s) at 1 req/s (~3 h), + 4 authority files; resume at the file
+  # grain; 404 on a promised id = hard anomaly. Upstream is a single
+  # FROZEN 2022 export (all sampled files Last-Modified 2022-11-24; the
+  # ERC project ended 2022) -> sync_policy manual, re-syncs expected no-op.
+  # LICENSE (D47-d, owner pre-wire ruling REQUIRED): every record's own
+  # <licence target="http://creativecommons.org/licenses/by-sa/3.0/">
+  # reads "Licence for this TEI document: Creative Commons,
+  # Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)" — zero deviations
+  # across 76 censused files, re-pinned at every parse. The site legal
+  # notice (/project/legal_notice.html) CONTRADICTS it, verbatim: "Texts
+  # and images of this website are licensed under a Creative Commons
+  # Attribution-NonCommercial-ShareAlike 3.0 Germany (CC BY-NC-SA 3.0 DE)
+  # licence" (the census's recorded reading of the notice). Per the D46-a
+  # precedent the per-file grant governs -> class attribution; the
+  # discrepancy stays recorded here and in docs/02-sources.md until the
+  # owner rules D47-d. Images (<surrogates>) are out of scope, never
+  # fetched. EXPECTED FIRST SYNC: 10,744 records crawled whole
+  # (catalog-only records land as metadata-only documents feeding
+  # dating/TM links); ~5.2k text-bearing docs at line grain + their -en
+  # translation siblings; Trismegistos ids ride document metadata (a
+  # future links-layer bonus, no edge producer in this packet).
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

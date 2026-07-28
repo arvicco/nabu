@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "json"
 
 module Query
   # Nabu::Query::Random (P11-9): the `show --random` sampler. Honest randomness
@@ -25,10 +26,12 @@ module Query
     end
 
     # Seed +n+ passages under one document; returns the document urn.
-    def seed_document(source:, urn:, count:, language: "grc", withdrawn: false, doc_withdrawn: false)
+    def seed_document(source:, urn:, count:, language: "grc", withdrawn: false, doc_withdrawn: false,
+                      metadata: nil)
       doc_id = @catalog[:documents].insert(
         source_id: source.id, urn: urn, title: urn.split(":").last, language: language,
-        content_sha256: "x", revision: 1, withdrawn: doc_withdrawn
+        content_sha256: "x", revision: 1, withdrawn: doc_withdrawn,
+        **(metadata ? { metadata_json: JSON.generate(metadata) } : {})
       )
       count.times do |i|
         @catalog[:passages].insert(
@@ -53,6 +56,33 @@ module Query
       urns = random(count: 4).map(&:urn)
       assert_equal 4, urns.size
       assert_equal 4, urns.uniq.size, "no passage is drawn twice"
+    end
+
+    # P47-r1 (owner report 2026-07-27, off live elephantine draws: "--random
+    # should only ever show original items, NOT translations"): documents
+    # carrying the cross-source translation marker (metadata_json
+    # "kind":"translation" — elephantine -en, aes -de, rundata, suttacentral
+    # …) never enter the pool, on EITHER sampler path.
+    def test_source_scoped_draws_never_yield_translation_documents
+      seed_document(source: @open, urn: "urn:nabu:alpha:doc", count: 2)
+      seed_document(source: @open, urn: "urn:nabu:alpha:doc-en", count: 2,
+                    language: "eng", metadata: { "kind" => "translation" })
+      20.times do
+        random(source: "alpha", count: 2).each do |result|
+          refute_match(/-en:/, result.urn, "a translation sibling must never be drawn")
+        end
+      end
+    end
+
+    def test_bare_draws_never_yield_translation_documents
+      seed_document(source: @open, urn: "urn:nabu:alpha:orig", count: 3)
+      seed_document(source: @open, urn: "urn:nabu:alpha:orig-en", count: 3,
+                    language: "eng", metadata: { "kind" => "translation" })
+      20.times do
+        random(count: 2).each do |result|
+          refute_match(/-en:/, result.urn, "the corpus-wide probe treats a translation hit as a miss")
+        end
+      end
     end
 
     def test_count_is_capped_at_the_max

@@ -49,6 +49,7 @@ kinds:
   rundata: inscriptions
   lexlep: inscriptions
   edr: inscriptions
+  elephantine: papyri & ostraca
   # cuneiform tablet corpora
   tlhdig: tablets
   oracc: tablets
@@ -129,7 +130,8 @@ epigraphy:
       and Raetic (TIR) editions, ogham stones, Hittite tablets (TLHdig), and
       the Levant (IIP).
     - **The fragment desk:** the `--fuzzy` trigram index covers the documentary
-      shelves — **papyri-ddbdp, EDH, ORACC and open-etruscan**. The other
+      shelves — **papyri-ddbdp, EDH, EDR, Elephantine, ORACC and
+      open-etruscan** (3.8M passages as of 28 July 2026). The other
       epigraphic shelves (RIIG, ogham, ItAnt, Rundata…) are searched with
       plain `search --axis epigraphy`.
     - **The timeline desk:** 549,771 documents carry a date or place (as of

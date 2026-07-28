@@ -393,6 +393,38 @@ class InvariantsTest < Minitest::Test
     assert_nil global_finding(:stats_drift), "pending_migrations covers the missing table"
   end
 
+  # -- lane drift (P47-r3: the generalized EDR/Elephantine audit) ------------
+
+  def seed_lane_doc(slug, urn, metadata_json)
+    source_id = @db[:sources].where(slug: slug).get(:id) || seed_source(slug)[:id]
+    @db[:documents].insert(
+      source_id: source_id, urn: urn, title: urn, language: "grc",
+      content_sha256: urn, revision: 1, withdrawn: false, metadata_json: metadata_json
+    )
+  end
+
+  def test_facet_lane_drift_fires_for_a_dark_source_and_clears_with_rows
+    doc_id = seed_lane_doc("edr", "urn:nabu:edr:x1", '{"facets":{"genre":{"value":"epitaph"}}}')
+    finding = global_finding(:facet_lane_drift)
+    refute_nil finding, "facet metadata with zero rows is a dark lane"
+    assert_match(/edr/, finding.message)
+
+    @db[:document_facets].insert(document_id: doc_id, facet: "genre", value: "epitaph")
+    assert_nil global_finding(:facet_lane_drift), "one projected row clears the source"
+  end
+
+  def test_timeline_lane_drift_fires_for_a_dark_source_and_clears_with_rows
+    doc_id = seed_lane_doc("newsource", "urn:nabu:newsource:x1",
+                           '{"date":{"not_before":-450}}')
+    finding = global_finding(:timeline_lane_drift)
+    refute_nil finding, "date bounds with zero axis rows is a dark lane"
+    assert_match(/newsource/, finding.message)
+    assert_match(/MetadataDates::SHAPES/, finding.message, "the remedy names the roster")
+
+    @db[:document_axes].insert(document_id: doc_id, not_before: -450, axis_source: "newsource")
+    assert_nil global_finding(:timeline_lane_drift)
+  end
+
   private
 
   # -- local shelves (P19-1): dossier files vs records; pins vs the tree ------

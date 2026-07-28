@@ -825,9 +825,10 @@ module Nabu
       before matching, so `']μηνιν αει['` works as typed. Built on a
       character-trigram index over the folded search form (same
       diacritic/case folding as plain search), so fragments need at least 3
-      characters. Scope is DOCUMENTARY sources only (papyri-ddbdp, oracc —
-      registry `fuzzy_index: true`): papyrus lines and tablets are where
-      fragment search earns its index bytes; every result footer names the
+      characters. Scope is DOCUMENTARY sources only (papyri-ddbdp, oracc,
+      edh, open-etruscan, edr, elephantine — registry `fuzzy_index: true`):
+      papyrus lines, tablets and damaged inscriptions are where fragment
+      search earns its index bytes; every result footer names the
       live scope. For half-remembered LITERARY quotations use plain search
       or `nabu parallels` — the literary corpus is deliberately not
       trigram-indexed (it would grow the index 15×). Composes with --lang,
@@ -3861,6 +3862,7 @@ module Nabu
       # is an honest note, not an error.
       def show_random(catalog, urn)
         raise Thor::Error, "show: --random takes no urn (it picks passages for you)" unless urn.empty?
+        return show_random_parallel(catalog) if options[:parallel]
 
         results = Nabu::Query::Random.new(catalog: catalog)
                                      .run(source: options[:source], lang: options[:lang], count: options[:count].to_i)
@@ -3875,6 +3877,39 @@ module Nabu
           say "" if index.positive?
           print_show_passage(result)
         end
+      end
+
+      # P47-r1 (owner: "elephantine is perfect for --parallel showcase!"):
+      # --random composes with --parallel — draw ORIGINALS (the sampler
+      # already excludes translation siblings) until one carries a parallel
+      # in the requested language, render the paired view; a scope that
+      # yields none in the attempt budget (12 draws per requested passage —
+      # a retry bound, not a corpus claim) says so honestly.
+      def show_random_parallel(catalog)
+        random = Nabu::Query::Random.new(catalog: catalog)
+        parallel = Nabu::Query::Parallel.new(catalog: catalog)
+        wanted = options[:count].to_i.clamp(1, Nabu::Query::Random::MAX_COUNT)
+        shown = []
+        attempts = 0
+        while shown.size < wanted && attempts < wanted * 12
+          attempts += 1
+          draw = random.run(source: options[:source], lang: options[:lang], count: 1).first
+          break if draw.nil?
+          next if shown.include?(draw.urn)
+
+          pair = parallel.run(draw.urn, lang: options[:parallel])
+          next if pair.nil? || pair.right.nil?
+
+          say "" unless shown.empty?
+          print_parallel(pair)
+          shown << draw.urn
+        end
+        return unless shown.empty?
+
+        scope = options[:source] ? " in source #{options[:source]}" : ""
+        say "no parallel-bearing draw#{scope} after #{attempts} attempts — the scope may hold no " \
+            "#{options[:parallel]} siblings (`show <urn> --parallel` pairs a known document; " \
+            "`show --random` alone draws unpaired)"
       end
 
       # Render `show`: a passage in the context of its document, or a document

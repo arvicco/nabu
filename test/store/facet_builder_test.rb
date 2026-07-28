@@ -44,6 +44,26 @@ module Store
       assert_equal "titsep?", rows.first[:raw], "the ? certainty survives in raw"
     end
 
+    # P47-r3 (the lane-drift audit's health check caught it live): IIP
+    # mints PLURAL "values" arrays ({"genre" => {"raw" => "#dedicatory",
+    # "values" => ["dedicatory"]}}) — the singular-"value" reader skipped
+    # every IIP facet and the source stayed dark through a full rebuild.
+    # One row per value; both spellings first-class.
+    def test_plural_values_arrays_project_one_row_per_value
+      doc = make_document("urn:nabu:iip:zoor0001",
+                          metadata: { "facets" => {
+                            "genre" => { "raw" => "#dedicatory", "values" => ["dedicatory"] },
+                            "religion" => { "values" => %w[jewish samaritan] }
+                          } })
+      summary = Nabu::Store::FacetBuilder.rebuild!(catalog: @db)
+      assert_equal 1, summary.documents
+      assert_equal 3, summary.rows
+      rows = @db[:document_facets].where(document_id: doc.id).order(:facet, :value).all
+      assert_equal([%w[genre dedicatory], %w[religion jewish], %w[religion samaritan]],
+                   rows.map { |row| [row[:facet], row[:value]] })
+      assert_equal "#dedicatory", rows.first[:raw]
+    end
+
     def test_documents_without_facets_contribute_nothing
       make_document("urn:nabu:edh:hd000002", metadata: { "tm_nr" => "9" })
       summary = Nabu::Store::FacetBuilder.rebuild!(catalog: @db)

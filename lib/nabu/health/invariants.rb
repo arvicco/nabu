@@ -102,7 +102,9 @@ module Nabu
         [
           pending_migrations(@catalog, Store::MIGRATIONS_DIR, "catalog", "run nabu sync or nabu rebuild"),
           pending_migrations(@ledger, Store::Ledger::MIGRATIONS_DIR, "ledger", "any write path (sync) applies them"),
-          stats_drift
+          stats_drift,
+          facet_lane_drift,
+          timeline_lane_drift
         ].compact
       end
 
@@ -377,6 +379,68 @@ module Nabu
       # that bypassed the loader (or a stats bug) surfaces loudly within a
       # rotation. A catalog predating migration 019 has no table and
       # produces nothing here (pending_migrations already says why).
+      # P47-r3 (the lane-drift audit — owner: "generalize and find out what
+      # else could've been impacted"): a source whose documents carry facet
+      # metadata but whose facet lane holds ZERO rows is serving dark
+      # filters (the EDR/IIP/Elephantine/Sefaria finding — their post-
+      # rebuild syncs minted metadata the FacetBuilder never projected).
+      # Sync now refreshes the lane per source; this check catches the
+      # residue class (a new adapter minting facets before anyone wires or
+      # syncs it, a bypassed write path).
+      def facet_lane_drift
+        return nil unless table?(@catalog, :document_facets)
+
+        dark = @catalog[:sources].order(:slug).select_map(%i[id slug]).filter_map do |id, slug|
+          has = @catalog[:documents]
+                .where(source_id: id, withdrawn: false)
+                .where(Sequel.like(:metadata_json, '%"facets"%')).limit(1).count
+          next nil if has.zero?
+
+          rows = @catalog[:document_facets]
+                 .where(document_id: @catalog[:documents].where(source_id: id).select(:id))
+                 .limit(1).count
+          rows.zero? ? slug : nil
+        end
+        return nil if dark.empty?
+
+        Finding.new(
+          kind: :facet_lane_drift, severity: :loud,
+          message: "facet lane dark for #{dark.join(', ')}: documents carry facet metadata but " \
+                   "document_facets holds no rows — a re-sync (or nabu rebuild) projects them"
+        )
+      end
+
+      # The timeline twin: a source with structured date bounds in
+      # metadata_json ("not_before" — the shared shape) but zero
+      # document_axes rows is dark on --from/--to/--century. Sources with
+      # their own canonical-walking extractors have rows and never trip
+      # this; a NEW metadata-dating source trips it until registered in
+      # TimelineBuilder::MetadataDates::SHAPES (or given its own
+      # extractor).
+      def timeline_lane_drift
+        return nil unless table?(@catalog, :document_axes)
+
+        dark = @catalog[:sources].order(:slug).select_map(%i[id slug]).filter_map do |id, slug|
+          has = @catalog[:documents]
+                .where(source_id: id, withdrawn: false)
+                .where(Sequel.like(:metadata_json, '%"not_before"%')).limit(1).count
+          next nil if has.zero?
+
+          rows = @catalog[:document_axes]
+                 .where(document_id: @catalog[:documents].where(source_id: id).select(:id))
+                 .limit(1).count
+          rows.zero? ? slug : nil
+        end
+        return nil if dark.empty?
+
+        Finding.new(
+          kind: :timeline_lane_drift, severity: :loud,
+          message: "timeline lane dark for #{dark.join(', ')}: documents carry date bounds but " \
+                   "document_axes holds no rows — register the source in MetadataDates::SHAPES " \
+                   "(or its own extractor), then re-sync or rebuild"
+        )
+      end
+
       def stats_drift
         return nil unless table?(@catalog, :source_stats) && table?(@catalog, :sources)
 

@@ -89,7 +89,7 @@ goes offline, a Nabu library keeps working. The shelf survey is on
 
 ### What is included?
 
-As of 26 July 2026: 947,273 documents and 66,755,518 passages across 95
+As of 28 July 2026: 962,812 documents and 66,824,868 passages across 96
 registered, synced sources, plus 1,391,759 dictionary entries and
 19.2 million gold
 lemma annotations in thirty-seven languages — the Islamicate library
