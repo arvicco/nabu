@@ -1,0 +1,113 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/datapackage.json",
+  "name": "san-fake-forms",
+  "title": "Fake Sanskrit forms table (test rig)",
+  "version": "1.0.0",
+  "licenses": [
+    {
+      "name": "CC-BY-4.0",
+      "path": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  ],
+  "contributors": [
+    {
+      "title": "Ar Vicco",
+      "role": "author"
+    }
+  ],
+  "sources": [
+    {
+      "title": "Digital Corpus of Sanskrit (fake pin)",
+      "path": "https://example.invalid/dcs",
+      "version": "1111222233334444555566667777888899990000",
+      "licenses": [
+        {
+          "name": "CC-BY-4.0"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "name": "forms",
+      "path": "forms.csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "ID",
+            "type": "string"
+          },
+          {
+            "name": "Language_ID",
+            "type": "string"
+          },
+          {
+            "name": "Form",
+            "type": "string"
+          },
+          {
+            "name": "Headword",
+            "type": "string"
+          }
+        ],
+        "primaryKey": [
+          "ID"
+        ]
+      }
+    },
+    {
+      "name": "languages",
+      "path": "languages.csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "ID",
+            "type": "string"
+          },
+          {
+            "name": "Name",
+            "type": "string"
+          },
+          {
+            "name": "Glottocode",
+            "type": "string"
+          },
+          {
+            "name": "ISO639P3code",
+            "type": "string"
+          }
+        ],
+        "primaryKey": [
+          "ID"
+        ]
+      }
+    },
+    {
+      "name": "sources",
+      "path": "sources.bib",
+      "format": "bibtex",
+      "mediatype": "text/x-bibtex"
+    }
+  ],
+  "nabu": {
+    "producer": "nabu data build san/fake-forms",
+    "nabu_version": "0.0.0-golden",
+    "derivation": {
+      "inputs": {
+        "dcs": {
+          "canonical_sha": "1111222233334444555566667777888899990000",
+          "cone": "dcs"
+        }
+      },
+      "recipe": "fake-forms v1: two hand-written rows, no catalog reads",
+      "fingerprint": "30c650af6b9f41a819ecfb2a5b989d9926a33e7c07207c58e5a094a9197912be"
+    },
+    "anchoring": {
+      "kind": "none"
+    },
+    "tier": "gold-derived",
+    "counts": {
+      "rows": 3
+    }
+  }
+}

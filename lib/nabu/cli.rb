@@ -5,6 +5,105 @@ require_relative "version"
 require_relative "display"
 
 module Nabu
+  # The `nabu data` command family (P50-W1, architecture §17): the production
+  # rail for the public nabu-data repository. `list` is the self-documentation
+  # surface (every registered feature with rationale and recommended
+  # maintenance — the owner ruling); `build` runs an available feature's
+  # builder and writes the dataset directory into the owner's nabu-data
+  # working clone. The rail writes FILES there and never runs git operations —
+  # publishing the data repo is the owner's explicit act.
+  class DataCLI < Thor
+    def self.exit_on_failure?
+      true
+    end
+
+    desc "list", "Document every dataset the rail can produce (rationale + maintenance included)"
+    long_desc <<~HELP, wrap: false
+      The rail's own documentation: one block per registered feature — slug,
+      status (available | planned), title, language, tier, anchoring kind,
+      input sources, the rationale for the dataset's existence, and the
+      recommended maintenance/periodicity. Planned features are listed too:
+      the census is the roadmap, and `data build` refuses them by name.
+    HELP
+    def list
+      features = Nabu::DataBuild.features
+      say "nabu-data build rail — #{features.size} registered feature(s):"
+      features.each do |feature|
+        inputs = feature.inputs.empty? ? "(own authorship)" : feature.inputs.join(", ")
+        say ""
+        say "#{feature.slug} — #{feature.status}"
+        say "  #{feature.title}"
+        say "  language: #{feature.language_code} (#{feature.language.name})   tier: #{feature.tier}   " \
+            "anchoring: #{feature.anchoring}   inputs: #{inputs}"
+        say "  rationale: #{feature.rationale}"
+        say "  maintenance: #{feature.maintenance}"
+      end
+      say ""
+      say "Build an available feature: nabu data build <lang>/<feature> --into <path to your nabu-data clone>"
+    end
+
+    desc "build SLUG", "Build one dataset into PATH/<lang>/<feature>/ (files only — never git)"
+    long_desc <<~HELP, wrap: false
+      Runs the feature's builder and writes the complete dataset directory —
+      CSVs, languages.csv, sources.bib, datapackage.json (Frictionless Data
+      Package v2 + the nabu derivation block), README.md — under
+      --into PATH/<lang>/<feature>/. PATH is your nabu-data development
+      clone; the command writes files, prints an honest summary (rows,
+      paths, fingerprint), and stops. It NEVER runs git operations there —
+      review, commit, and push yourself.
+
+      Canonical inputs are named honestly: a git-backed cone must be clean
+      (its HEAD sha is recorded); a dirty tree is refused, not misdescribed.
+
+      Example:
+        nabu data build san/form-lemma --into ~/Dev/nabu-data
+    HELP
+    option :into, type: :string, required: true, banner: "PATH",
+                  desc: "Your nabu-data working clone — files are written under PATH/<lang>/<feature>/; " \
+                        "git is never touched"
+    def build(slug)
+      feature = Nabu::DataBuild.feature(slug)
+      if feature.nil?
+        raise Thor::Error, "data build: unknown feature #{slug.inspect}. Registered: " \
+                           "#{Nabu::DataBuild.features.map(&:slug).join(', ')} (see nabu data list)"
+      end
+      if feature.planned?
+        raise Thor::Error, "data build: #{feature.slug} is planned — its builder has not landed yet. " \
+                           "#{available_features_hint}"
+      end
+
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      catalog = File.exist?(config.catalog_path) ? Nabu::Store.connect(config.catalog_path, readonly: true) : nil
+      runner = Nabu::DataBuild::Runner.new(config: config, registry: registry, catalog: catalog)
+      summary = runner.run(feature: feature, into: options[:into])
+
+      say "Built #{summary.slug} → #{summary.out_dir}"
+      summary.files.each do |path, rows|
+        if rows.nil?
+          say "  #{path}"
+        else
+          say format("  %-18<path>s %<rows>d row%<plural>s", path: path, rows: rows, plural: rows == 1 ? "" : "s")
+        end
+      end
+      say "#{summary.rows} data row(s) total; derivation fingerprint #{summary.fingerprint[0, 12]}"
+      say "No git operations were performed in #{options[:into]} — review, commit, and push there yourself."
+    rescue Nabu::Error => e
+      raise Thor::Error, "data build: #{e.message}"
+    end
+
+    no_commands do
+      def available_features_hint
+        available = Nabu::DataBuild.features.select(&:available?).map(&:slug)
+        if available.empty?
+          "No builders have shipped yet — nabu data list documents the roadmap."
+        else
+          "Available now: #{available.join(', ')} (nabu data list documents the roadmap)."
+        end
+      end
+    end
+  end
+
   # Command-line entry point. Only `version` is functional in Phase 0; the
   # ingest/query subcommands are stubs that report "not implemented" and exit 1
   # so scripts and CI can rely on the failure signal before the real work lands.
@@ -60,6 +159,9 @@ module Nabu
     def version
       say Nabu::VERSION
     end
+
+    desc "data SUBCOMMAND ...ARGS", "The nabu-data production rail: document and build publishable derived datasets"
+    subcommand "data", DataCLI
 
     desc "sync [SOURCE]", "Fetch and load a source, an axis's members, or --all live sources"
     long_desc <<~HELP, wrap: false
