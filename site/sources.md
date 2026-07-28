@@ -50,7 +50,7 @@ classes are the gate that decides what may pass.
 
 ## Corpus sources
 
-All 95 sources below are synced and live as of 26 July 2026. Grouped by the
+All 96 sources below are synced and live as of 28 July 2026. Grouped by the
 owner's research desks rather than alphabetically — with each desk's member
 shelves, license mix and sync status on one page — the same sources appear on
 the [research axes]({{ '/axis/' | relative_url }}).
@@ -80,6 +80,7 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | `mw` | [Cologne Digital Sanskrit Lexicon](https://www.sanskrit-lexicon.uni-koeln.de/) | Monier-Williams Sanskrit-English Dictionary (1899), 193,890 entries | CC BY-NC-SA 3.0 |
 | `edh` | [Epigraphic Database Heidelberg](https://edh.ub.uni-heidelberg.de/) | 81,881 Latin inscriptions (upstream archived 2021 — a preservation snapshot) | CC BY-SA 4.0 |
 | `edr` | [Epigraphic Database Roma](http://www.edr-edr.it/) (Sapienza; Zenodo release v12) | The inscriptions of Italy — EDH's geographic complement: 115,590 EpiDoc records / 596,064 passages, Latin and Greek (synchronized 26 July 2026) | CC BY 4.0 (the project leadership's Zenodo deposit grant) |
+| `elephantine` | [Texts and Scripts from Elephantine Island](https://elephantine.smb.museum/) (Staatliche Museen zu Berlin, ERC ELEPHANTINE) | The island's 4,000-year multilingual archive: 15,539 documents / 69,350 passages — the Judean garrison's Imperial Aramaic (892 texts, Hebrew script), Greek, Demotic and Hieratic in transliteration, Coptic, Arabic — with English translation siblings and daf-free page.line citations (synchronized 27 July 2026) | CC BY-SA 3.0 (per-document in-file grants; the site's stricter blanket notice recorded — owner ruling D47-d) |
 | `iecor` | [IE-CoR](https://iecor.clld.org/) (lexibank/iecor via Zenodo) | The Indo-European cognacy database: 4,981 expert-curated cognate sets with loan events (synchronized 14 July 2026) | CC BY 4.0 |
 | `liv` | [LiLa / CIRCSE LIV-LOD](https://lila-erc.eu/) | *Lexikon der indogermanischen Verben* linked-data edition: 305 PIE verbal etymons (synchronized 14 July 2026) | CC BY-SA 4.0 (with publisher permission) |
 | `edl` | [LiLa / CIRCSE](https://lila-erc.eu/) | De Vaan, *Etymological Dictionary of Latin* (linked-data skeleton): 2,860 etymons (synchronized 14 July 2026) | CC BY-NC-SA 4.0 |
