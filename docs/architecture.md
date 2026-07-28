@@ -1316,3 +1316,27 @@ the links journal keeps batch edges; `nabu language`'s command surface is
 unchanged. Future local shelves follow the same pattern: files + manifest +
 adapter + one sanctioned write gateway, with `nabu ingest` as the shared
 intake front door.
+
+## 17. The nabu-data production rail (P50-W1)
+
+Nabu's derived knowledge also publishes OUTWARD: the separate public
+repository nabu-data (github.com/arvicco/nabu-data) holds derived datasets —
+CSV in CLDF nomenclature plus Frictionless Data Package v2 manifests — and is
+100% passive data. ALL production code lives here, in `lib/nabu/data_build/`,
+behind the `nabu data` command family: `data list` is the self-documentation
+surface (every registered feature with slug, status, tier, anchoring, inputs,
+rationale, and recommended maintenance — the census IS the roadmap, planned
+features included), and `data build <lang>/<feature> --into PATH` writes one
+dataset directory into the owner's nabu-data working clone. The rail writes
+files and NEVER runs git operations there — publishing is the owner's act.
+
+Honesty is the load-bearing property: canonical inputs are named by sha
+before anything builds (a git cone must be porcelain-clean or the build
+refuses — the §"derivation fingerprint" weak-identity doctrine hardened from
+"never skip" to "never publish"), and each manifest carries a namespaced
+`nabu` block with the derivation inputs, the builder's recipe, and a
+fingerprint that changes iff inputs or recipe change. Builders are read-only
+on `canonical/` and the catalog. The full producer-side contract (Feature
+fields, manifest anatomy, CLDF column rules, the ID discipline) is
+docs/nabu-data.md; its feature census is drift-guarded against
+`Nabu::DataBuild::REGISTRY`.
