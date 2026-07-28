@@ -47,7 +47,7 @@ build if the page and the registry ever disagree.
 
 ## The desks
 
-Twenty-one desks, in the ratified order of `config/axes.yml` (which is also
+Twenty-three desks, in the ratified order of `config/axes.yml` (which is also
 the order the command surfaces render). Each leads with its **persona** —
 the hat's one-line self-description, printed verbatim by `nabu list --axis`
 and `nabu sync` — then the membership rationale, then the member slugs the
@@ -203,7 +203,15 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist.
 
-**Members** (4): `gretil`, `suttacentral`, `sarit`, `cbeta`
+**Members** (5): `gretil`, `suttacentral`, `sarit`, `cbeta`, `mvp`
+
+### tibetan
+
+> The Tibetologist — the translators' language: the Kangyur-Tengyur world and its Sanskrit shadow.
+
+The Tibetan lane, dictionary-first: the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and the kaikki bo extract; the Derge canon shelves join as they land.
+
+**Members** (1): `mvp`
 
 ### sinitic
 

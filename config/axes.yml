@@ -93,6 +93,16 @@ buddhist:
   persona: "The Buddhologist — the dharma across the Pali, Sanskrit and Chinese canons."
   desc: "Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist."
 
+# P48-4 PROVISIONAL DEFINITION — P48-1 is the single minter of the tibetan
+# axis (P47 survey: "mint the axis"); this placeholder exists so the packet's
+# three tibetan-tagged rows load green in a parallel worktree. AT MERGE:
+# P48-1's ratified persona/desc REPLACE this block wholesale (duplicate-axis
+# grep discipline, the P46 ethiopic precedent); only the name `tibetan` is
+# load-bearing here.
+tibetan:
+  persona: "The Tibetologist — the translators' language: the Kangyur-Tengyur world and its Sanskrit shadow."
+  desc: "The Tibetan lane, dictionary-first: the Mahāvyutpatti crosswalk glossary, the verb tense-stem database, and the kaikki bo extract; the Derge canon shelves join as they land."
+
 sinitic:
   persona: "The Sinologist — the classical Chinese written world and its phonological deep past."
   desc: "Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, and the kaikki zh extract riding wiktionary-recon."
