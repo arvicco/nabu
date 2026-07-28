@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "../e84000_translations"
 require_relative "e84000_tei_parser"
 
 module Nabu
@@ -99,6 +100,15 @@ module Nabu
 
       def self.manifest
         MANIFEST
+      end
+
+      # The Kangyur↔84000 translation crosswalk (P48-6): after every e84000
+      # sync, each publication's toh_base keys re-derive kind=translation
+      # edges to the derge shelves (see E84000Translations).
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        E84000Translations.new(catalog: catalog, journal: journal)
       end
 
       # The canonical Toh-base rule (part suffix strips, letter suffixes

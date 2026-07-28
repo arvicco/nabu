@@ -217,6 +217,15 @@ class E84000Test < Minitest::Test
     adapter.discover(workdir).to_a.find { |ref| ref.id == urn } || flunk("no ref #{urn}")
   end
 
+  # --- the translation crosswalk rider (P48-6) --------------------------------
+
+  def test_declares_the_translation_crosswalk_reference_producer
+    assert Nabu::Adapters::E84000.reference_edges?,
+           "each publication's toh_base keys mint kind=translation edges after each sync"
+    producer = Nabu::Adapters::E84000.reference_producer(catalog: nil, journal: nil)
+    assert_instance_of Nabu::E84000Translations, producer
+  end
+
   def create_source(_db)
     Nabu::Store::Source.create(
       slug: "e84000", name: "84000 English Kangyur translations",
