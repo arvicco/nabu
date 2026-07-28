@@ -764,16 +764,16 @@ class SourceRegistryTest < Minitest::Test
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
 
     assert_equal %w[classical romance epigraphy slavic germanic celtic italic etym biblical hebrew
-                    syriac ethiopic arabic hittite cuneiform egyptian iranian indic buddhist sinitic
-                    japonic tibetan local],
+                    syriac ethiopic arabic hittite cuneiform egyptian iranian indic buddhist tibetan
+                    sinitic japonic local],
                  registry.axes.names,
                  "the ratified axes, in render order (18 ratified D35 + arabic minted P41-2 with " \
                  "the openiti row + iranian minted P44-r2/D43-d, the Avesta desk between egyptian " \
                  "and indic — the Indo-Iranian pair + romance minted P45-r1, owner ruling " \
                  "2026-07-25, beside classical — the Latin continuum pair + ethiopic minted " \
                  "P46-2/D46-c, owner-ratified 2026-07-26, after syriac — the Oriental-Christian " \
-                 "neighborhood + tibetan tagged P48-3 with the soas-tibetan/old-tibetan rows — " \
-                 "PLACEHOLDER mint pending P48-1's authoritative entry, after japonic)"
+                 "neighborhood + tibetan minted P48-1 with the Derge canon rows, per the " \
+                 "owner-ordered P47-s2 survey, after buddhist — its nearest neighbor)"
 
     registry.each_source do |entry|
       refute_empty entry.axes, "#{entry.slug} must declare at least one research axis"

@@ -47,7 +47,7 @@ build if the page and the registry ever disagree.
 
 ## The desks
 
-Twenty-one desks, in the ratified order of `config/axes.yml` (which is also
+Twenty-three desks, in the ratified order of `config/axes.yml` (which is also
 the order the command surfaces render). Each leads with its **persona** —
 the hat's one-line self-description, printed verbatim by `nabu list --axis`
 and `nabu sync` — then the membership rationale, then the member slugs the
@@ -199,11 +199,19 @@ The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-
 
 ### buddhist
 
-> The Buddhologist — the dharma across the Pali, Sanskrit and Chinese canons.
+> The Buddhologist — the dharma across the Pali, Sanskrit, Chinese and Tibetan canons.
 
-Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist.
+Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — membership is whole-source, so GRETIL rides here although only part of its shelf is Buddhist — and, since P48, the Derge Kangyur and Tengyur: the fourth canon leg.
 
-**Members** (5): `gretil`, `suttacentral`, `sarit`, `cbeta`, `e84000`
+**Members** (6): `gretil`, `suttacentral`, `sarit`, `cbeta`, `derge-kangyur`, `derge-tengyur`
+
+### tibetan
+
+> The Tibetologist — the Land of Snows from Dunhuang documents to the complete Derge canon.
+
+The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key); Dunhuang documents and the lexicon shelves join as their licensing unlocks.
+
+**Members** (2): `derge-kangyur`, `derge-tengyur`
 
 ### sinitic
 
@@ -220,14 +228,6 @@ Literary and classical Chinese with its reconstruction instruments: Kanripo and 
 The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and Unihan shared with the Sinologist, and the kaikki ojp extract riding wiktionary-recon.
 
 **Members** (8): `wiktionary-recon`, `unihan`, `edrdg`, `hdic`, `kradfile`, `oncoj`, `oncoj-lexicon`, `aozora`
-
-### tibetan
-
-> The Tibetologist — the Old Tibetan documentary world, Dunhuang scrolls to the pillar inscriptions.
-
-The Old Tibetan lane: OTDO's 414 critical editions — the Dunhuang manuscripts (Pelliot tibétain, IOL Tib J, Or.15000, Stein), the imperial pillar and rock inscriptions, and the five Old Zhangzhung texts — with the Annals and Chronicle instruments joining as their shelves land.
-
-**Members** (1): `otdo`
 
 ### local
 
