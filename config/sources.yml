@@ -46,6 +46,21 @@
 #                                        #   (multi-membership deliberate,
 #                                        #   whole-source grain); an axis name
 #                                        #   never equals a slug (validated)
+#     multilingual: true                 # P49-r4: this source is a PACK whose
+#                                        #   language list is structurally
+#                                        #   UNBOUNDED (per-language sub-corpora;
+#                                        #   upstream can add any language), so
+#                                        #   its whole-grain axes union describes
+#                                        #   no single held language. Count-less
+#                                        #   attribution surfaces (the language
+#                                        #   card's axes: line, the axis card's
+#                                        #   gold-lemma language set) EXCLUDE it;
+#                                        #   counts-bearing surfaces (the axis
+#                                        #   card's languages: line) keep it —
+#                                        #   there the counts are the honesty.
+#                                        #   Default false: a bounded spread (a
+#                                        #   site archive, a script corpus) is
+#                                        #   its desks' own subject matter.
 #     grant_required: true               # P42-r1: the right to FETCH is a
 #                                        #   PERSONAL permission to this project's
 #                                        #   author (StarLing), NOT conveyed by a
@@ -107,6 +122,12 @@ ud:
   # four new language lanes xcl/fro/frm/ota have NO existing desk, so they
   # ride axis-less (minting new axes is an owner decision, not this packet's).
   axes: [classical, romance, slavic, germanic, celtic, hittite, indic, sinitic, cuneiform, egyptian, hebrew, biblical]  # romance: P45-1 (llct/udante Latin continuum + ro-nonstandard + the P43-1 profiterole Old French)
+  # P49-r4 audit: THE archetype pack — ~40 treebanks in 18+ languages serving
+  # twelve desks, and upstream adds treebanks in any language at all. Whole-
+  # grain attribution made `nabu language hbo` claim all twelve desks off
+  # three PTNK docs; the count-less surfaces now exclude ud (each desk still
+  # gets its languages via the dedicated sources that hold them).
+  multilingual: true
   wired: true   # first real sync verified + owner sign-off 2026-07-04
   sync_policy: manual   # treebanks version independently and change rarely
   # P31-0 (2026-07-19): TREEBANKS grew to ten — hittite-hittb
@@ -535,6 +556,13 @@ wiktionary-recon:
   # P35-0 vs the D35 draft: +celtic/italic/sinitic/japonic — the manifest's own attested extracts
   # (sga/mga/wlm Celtic, xum/ett Italic-Etruscan, zho, ojp); etym stays the primary desk
   axes: [etym, celtic, italic, sinitic, japonic]
+  # P49-r4 audit: a pack of per-language kaikki extracts (13 shelves and
+  # counting — P17-3/P32-3/P32-5 each added more; any kaikki language can
+  # join), whose five-desk axes union is the ud disease in miniature: the
+  # sla-pro card claimed celtic/italic/sinitic/japonic off shelves that
+  # have nothing to do with Proto-Slavic. Excluded from count-less
+  # attribution; the etym desk's languages: line keeps every shelf's counts.
+  multilingual: true
   wired: true    # OWNER SIGN-OFF 2026-07-12 ("w-recon scanned, etym works,
                    # flip it on"): synced, 13,053 entries across the three
                    # proto-extracts; etym walk eyeballed by owner.
@@ -644,6 +672,13 @@ iecor:
 wold:
   adapter: Nabu::Adapters::Wold
   axes: [etym]
+  # P49-r4 audit: 41 vocabulary shelves in 41 recipient languages sampled
+  # worldwide by typological design (eng/goh/jpn/vie/yaq/…) — structurally
+  # unbounded, dictionary-side. Whole-grain attribution put "axes: etym" on
+  # every recipient code's language card and folded all 41 codes into the
+  # etym desk's gold-lemma language set (claiming e.g. goh gold rows held
+  # by the germanic desk's sources); excluded from count-less surfaces.
+  multilingual: true
   wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box)
                  # P46-6 pre-flip runbook (16 MB Zenodo
                    # zip, sha-pinned; CLAUDE.md checklist §6: bin/nabu sync

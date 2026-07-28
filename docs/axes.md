@@ -309,6 +309,22 @@ and the **desk card** (`nabu axis`), the reference page for one desk.
   `no database`. The reverse view rides `nabu language CODE`: its `axes:`
   line names the desks whose shelves hold the code.
 
+  **Multilingual packs and attribution.** A source marked
+  `multilingual: true` in `config/sources.yml` (UD's ~40 treebanks, WOLD's
+  41 vocabularies, the per-language Wiktionary reconstruction extracts) is
+  a pack whose language list is structurally unbounded — its whole-source
+  `axes:` union describes no single held language. The count-less
+  attribution surfaces therefore exclude packs: the language card's
+  `axes:` line only names desks whose *dedicated* sources hold the code
+  (three Hebrew treebank documents no longer drag a pack's twelve desks
+  onto the `hbo` card), and the desk card's gold-lemma coverage sums only
+  over languages its non-pack members hold. The counts-bearing
+  `languages:` line deliberately *keeps* pack holdings — there a
+  three-document spillover reads as `3` beside a 40K holding, and the
+  counts are the honesty mechanism. A fixed exclusion was chosen over a
+  dominance threshold: any tuned cutoff is an era-bound census claim that
+  rots as packs grow.
+
   ```
   nabu enable celtic                    # first time: the desk onto this box's profile
   nabu sync celtic                      # the celtic desk's enabled members
