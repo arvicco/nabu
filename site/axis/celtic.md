@@ -25,6 +25,8 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 | `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
 | `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `sga` 6,672 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `ine-pro` 1,905 · `iir-pro` 799 · `mga` 770 · `wlm` 766 · `itc-pro` 745 · `xlp` 633 … and 43 more (`nabu axis celtic` lists all).
+
 ## The desk's instruments
 
 - **Gold-lemma language:** sga (Early Irish — CorPH's Annals of Ulster and

@@ -26,6 +26,8 @@ A source wears every desk it serves — these two answer this desk. Holdings are
 | `kitab` | feature module | nc | not yet wired | nothing held yet |
 | `openiti` | texts | nc | wired · manual | 9,079 docs / 34,631,499 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `ara` 8,728 · `fas` 351.
+
 ## The desk's instruments
 
 - **No gold lemmas — OpenITI is unannotated.** The corpus carries no

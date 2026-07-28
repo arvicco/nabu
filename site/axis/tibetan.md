@@ -25,7 +25,7 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 July 2026)</span> |
 |---|---|---|---|---|
-| `e84000` | texts | nc | not yet wired | 388 docs / 124,223 passages |
+| `e84000` | texts | nc | wired · manual | 388 docs / 124,223 passages |
 | `otdo` | texts | attribution | wired · manual | 413 docs / 13,593 passages |
 | `soas-tibetan` | texts | attribution | wired · manual | 4 docs / 991 passages |
 | `old-tibetan` | texts | attribution | wired · manual | 3 docs / 2,669 passages |
@@ -34,6 +34,8 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `mvp` | dictionary | open | wired · manual | 9,379 entries |
 | `tibetan-verbs` | dictionary | open | wired · manual | 2,491 entries |
 | `wiktionary-bo` | dictionary | attribution | wired · manual | 3,651 entries |
+
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `san` 9,379 · `bod` 6,142 · `xct` 4,566 · `otb` 410 · `en` 388 · `xzh` 5 · `eng` 1.
 
 ## The desk's instruments
 

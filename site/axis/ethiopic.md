@@ -29,6 +29,8 @@ A source wears every desk it serves — these three answer this desk. Holdings a
 | `dillmann` | dictionary | nc | wired · manual | 13,727 entries |
 | `traces` | texts | nc | wired · manual | 15 docs / 75,436 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `gez` 17,516 · `amh` 22.
+
 ## The desk's instruments
 
 - **Verse-grain citations:** the Works TEI carries upstream verse

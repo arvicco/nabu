@@ -20,6 +20,8 @@ A source wears every desk it serves — these two answer this desk. Holdings are
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `syc` 697.
+
 ## The desk's instruments
 
 - **The Syriac language desk:** the ETCBC Peshitta (Leiden VTS / Codex

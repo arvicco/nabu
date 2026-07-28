@@ -30,6 +30,8 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `kr-gaiji` | feature module | attribution | not yet wired | nothing held yet |
 | `tls` | dictionary | attribution | wired · manual | 23,179 entries |
 
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `zho` 200,678 · `lzh` 72,884 · `jpn` 32,607 · `ltc` 30,295 · `och` 28,138 · `pli` 7,288 · `sga` 6,566 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 … and 27 more (`nabu axis sinitic` lists all).
+
 ## The desk's instruments
 
 - **Literary and classical Chinese with its phonology:** Kanripo (the
