@@ -1,0 +1,1282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../../schema/current/translation.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="mainTitle" xml:lang="en">The Chapter on Medicines</title>
+                <title type="mainTitle" xml:lang="Sa-Ltn">Bhaiṣajya­vastu</title>
+                <title type="mainTitle" xml:lang="bo">སྨན་གྱི་གཞི།</title>
+                <title type="mainTitle" xml:lang="Bo-Ltn">sman gyi gzhi</title>
+                <title type="longTitle" xml:lang="en">“The Chapter on Medicines” from The Chapters on Monastic
+                    Discipline</title>
+                <title type="longTitle" xml:lang="Sa-Ltn">Vinaya­vastuni Bhaiṣajya­vastu</title>
+                <title type="longTitle" xml:lang="bo">འདུལ་བ་གཞི་ལས། སྨན་གྱི་གཞི།</title>
+                <title type="longTitle" xml:lang="Bo-Ltn">’dul ba gzhi las/ sman gyi gzhi</title>
+                <title type="otherTitle" xml:lang="zh">《 律儀根本 》 之《藥本事》</title>
+                <title type="otherTitle" xml:lang="zh">藥事</title>
+                <author role="translatorMain" xml:id="UT22084-001-006-300028">Translated by the Bhaiṣajyavastu
+                    Translation Team<lb/> under the patronage and supervision of 84000: Translating the Words
+                    of the Buddha </author>
+                <author role="translatorEng" xml:id="UT22084-001-006-300029">Fumi Yao</author>
+                <editor role="proofreader" xml:id="UT22084-001-006-300030">Shayne Clarke</editor>
+                <editor role="projectEditor" xml:id="UT22084-001-006-300031">Nathaniel Rich</editor>
+                <editor role="projectEditor" xml:id="UT22084-001-006-300032">Andreas Doctor</editor>
+                <editor role="copyEditor" xml:id="UT22084-001-006-300033">Konchog Norbu</editor>
+                <editor role="projectEditor" xml:id="UT22084-001-006-300034">Tom Tillemans</editor>
+                <consultant role="projectManager" xml:id="UT22084-001-006-300035">Fumi Yao</consultant>
+                <editor role="finalReviewer" xml:id="UT22084-001-006-300036">Andreas Doctor</editor>
+                <editor role="TEImarkupEditor" xml:id="UT22084-001-006-300037">Laura Goetz</editor>
+                <editor role="TEImarkupEditor" xml:id="UT22084-001-006-300038">Celso Wilkinson</editor>
+                <sponsor xml:id="UT22084-001-006-300039">Leo Tong Chen and his family</sponsor>
+                <sponsor xml:id="UT22084-001-006-300040">Zhang Wei, Li Mo, Zhang Mo Tong and Zhang Mo Lin</sponsor>
+                <sponsor xml:id="UT22084-001-006-300041">(Chi Xian Ren) Mao Gui Rong and Chi Mei</sponsor>
+                <sponsor xml:id="UT22084-001-006-300042">Joseph Tse 謝偉傑, Patricia Tse 鄒碧玲 and family, in dedication to all eczema sufferers</sponsor>
+            </titleStmt>
+            <editionStmt>
+                <edition>v 1.1.4 <date>2024</date>
+                </edition>
+            </editionStmt>
+            <publicationStmt>
+                <publisher>
+                    <name>84000: Translating the Words of the Buddha</name> is a global non-profit initiative
+                    to translate all the Buddha’s words into modern languages, and to make them available to
+                    everyone. </publisher>
+                <availability status="1">
+                    <licence>
+                        <graphic url="http://i.creativecommons.org/l/by-nc-nd/2.0/88x31.png"/>
+                        <p>This work is provided under the protection of a Creative Commons CC BY-NC-ND
+                            (Attribution - Non-commercial - No-derivatives) 3.0 copyright. It may be copied or
+                            printed for fair use, but only with full attribution, and not for commercial
+                            advantage or personal compensation. For full details, see the Creative Commons
+                            license.</p>
+                    </licence>
+                </availability>
+                <idno xml:id="UT22084-001-006"/>
+                <note>An early mistake in the assigning of UT numbers within the 84000 project means that
+                    these ids diverge slightly from the standard logic.</note>
+                <date>2021-04-20</date>
+            </publicationStmt>
+            <sourceDesc>
+                <bibl key="toh1-6" type="chapter">
+                    <ref>Toh 1-6</ref>
+                    <biblScope>Degé Kangyur vol. 1 (’dul ba, ka), folios 277.b–311.a; vol. 2 (’dul ba, kha),
+                        folios 1.a–317.a; and vol. 3 (’dul ba, ga), folios 1.a–50.a</biblScope>
+                    <author role="translatorTib" xml:id="UT22084-001-006-300076">Palgyi Lhünpo</author>
+                    <author role="translatorTib" xml:id="UT22084-001-006-300077">Sarvajñādeva</author>
+                    <author role="translatorTib" xml:id="UT22084-001-006-300078">Vidyākaraprabha</author>
+                    <author role="translatorTib" xml:id="UT22084-001-006-300079">Dharmākara</author>
+                    <author role="translatorTib" xml:id="UT22084-001-006-300080">Paltsek</author>
+                    <location work="UT4CZ5369" count-pages="794">
+                        <volume number="1" start-page="554" end-page="621"/>
+                        <volume number="2" start-page="2" end-page="633"/>
+                        <volume number="3" start-page="2" end-page="99"/>
+                    </location>
+                    <idno parent-id="O1JC114941JC11497" work="http://read.84000.co/sections"/>
+                    <idno source-id="O1JC114941JC12910" work="W22084"/>
+                </bibl>
+            </sourceDesc>
+            <notesStmt/>
+            <revisionDesc>
+                <change who="#admin" when="2019-12-20T12:56:48.575Z" type="text-version" status="v 0.0.1" xml:id="UT22084-001-006-300043">
+                    <desc>Automated version increment</desc>
+                </change>
+                <change who="#mike" when="2020-01-27T12:57:27.804Z" type="translation-status" status="2.h" xml:id="UT22084-001-006-300044">
+                    <desc>2.h</desc>
+                </change>
+                <change who="#line-tofte" when="2020-03-13T08:11:31.655Z" type="translation-status" status="2.f" xml:id="UT22084-001-006-300045">
+                    <desc>2.f</desc>
+                </change>
+                <change who="#line-tofte" when="2020-03-16T14:03:33.149Z" type="translation-status" status="2.g" xml:id="UT22084-001-006-300046">
+                    <desc>2.g</desc>
+                </change>
+                <change who="#line-tofte" when="2020-04-14T10:05:41.667Z" type="translation-status" status="2.e" xml:id="UT22084-001-006-300047">
+                    <desc>2.e</desc>
+                </change>
+                <change who="#line-tofte" when="2020-08-17T08:10:06.511Z" type="translation-status" status="2.d" xml:id="UT22084-001-006-300048">
+                    <desc>2.d</desc>
+                </change>
+                <change who="#line-tofte" when="2021-01-18T10:06:57.08Z" type="translation-status" status="2.b" xml:id="UT22084-001-006-300049">
+                    <desc>2.b</desc>
+                </change>
+                <change who="#line-tofte" when="2021-01-18T10:06:57.08Z" type="text-version" status="0.0.3" xml:id="UT22084-001-006-300050">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#mike" when="2021-01-18T10:52:10.251Z" type="translation-status" status="2.a" xml:id="UT22084-001-006-300051">
+                    <desc>2.a</desc>
+                </change>
+                <change who="#mike" when="2021-01-18T10:52:10.251Z" type="text-version" status="0.0.4" xml:id="UT22084-001-006-300052">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#mike" when="2021-01-18T10:52:10.251Z" type="text-version" status="0.0.5" xml:id="UT22084-001-006-300053">
+                    <desc>Update to sponsor expression</desc>
+                </change>
+                <change who="#mike" when="2021-02-26T20:18:44.297Z" type="translation-status" status="2" xml:id="UT22084-001-006-300054">
+                    <desc>2</desc>
+                </change>
+                <change who="#mike" when="2021-02-26T20:18:44.297Z" type="text-version" status="0.0.6" xml:id="UT22084-001-006-300055">
+                    <desc>Auto (update-publication-status)</desc>
+                </change>
+                <change who="#line-tofte" when="2021-04-06T08:03:35.741Z" type="text-version" status="0.0.7" xml:id="UT22084-001-006-300056">
+                    <desc>Auto (update-sponsorship)</desc>
+                </change>
+                <change who="#line-tofte" when="2021-04-20T14:17:52.303Z" type="text-version" status="0.0.8" xml:id="UT22084-001-006-300057">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#mike" when="2021-04-20T15:02:59.806Z" type="translation-status" status="1" xml:id="UT22084-001-006-300058">
+                    <desc>1</desc>
+                </change>
+                <change who="#admin" when="2021-04-20T12:00:00.000Z" type="translation-status" status="1.a" xml:id="UT22084-001-006-300059">
+                    <desc>Note added retrospectively based on date of status '1'</desc>
+                </change>
+                <change who="#mike" when="2021-04-20T15:02:59.806Z" type="text-version" status="1.0.0" xml:id="UT22084-001-006-300060">
+                    <desc>First Published Version</desc>
+                </change>
+                <change who="#celso" when="2021-04-21T21:31:05.009Z" type="text-version" status="1.0.1" xml:id="UT22084-001-006-300061">
+                    <desc>add @xml:lang tag to a few Chinese strings that were missing</desc>
+                </change>
+                <change who="#laura" when="2021-06-08T15:22:35.947Z" type="text-version" status="1.0.2" xml:id="UT22084-001-006-300062">
+                    <desc>Added citations for Toh 317</desc>
+                </change>
+                <change who="#mike" when="2021-06-15T23:18:58.078Z" type="text-version" status="1.0.4" xml:id="UT22084-001-006-300063">
+                    <desc>Konchog's corrections added</desc>
+                </change>
+                <change who="#john" when="2021-06-23T17:05:23.785Z" type="text-version" status="1.0.5" xml:id="UT22084-001-006-300064">
+                    <desc>Minor edits to Introduction.</desc>
+                </change>
+                <change who="#celso" when="2021-09-09T18:38:01.326Z" type="text-version" status="1.0.6" xml:id="UT22084-001-006-300065">
+                    <desc>activated pending links</desc>
+                </change>
+                <change who="#line-tofte" when="2021-11-02T08:18:36.963Z" type="text-version" status="1.0.7" xml:id="UT22084-001-006-300066">
+                    <desc>Auto (update-contributors)</desc>
+                </change>
+                <change who="#andre" when="2021-11-18T08:27:11.028Z" type="text-version" status="1.0.8" xml:id="UT22084-001-006-300067">
+                    <desc>correction to skt glossary entry</desc>
+                </change>
+                <change who="#celso" when="2022-01-06T14:46:35.179Z" type="text-version" status="1.0.9" xml:id="UT22084-001-006-300068">
+                    <desc>1.0.9</desc>
+                </change>
+                <change who="#celso" when="2022-03-01T20:58:56.356Z" type="text-version" status="1.0.10" xml:id="UT22084-001-006-300069">
+                    <desc>recached a few glossary entries, added &lt;term&gt; to "lesser difilements"</desc>
+                </change>
+                <change who="#laura" when="2022-04-11T13:23:45.2Z" type="text-version" status="1.0.11" xml:id="UT22084-001-006-300070">
+                    <desc>Bibliography update</desc>
+                </change>
+                <change who="#martina-cotter" when="2022-06-07T11:09:35.438Z" type="text-version" status="1.0.12" xml:id="UT22084-001-006-300071">
+                    <desc>Updated translation in milestone 8.10.</desc>
+                </change>
+                <change who="#admin" when="2022-06-27T09:59:07.153Z" type="text-version" status="1.0.14" xml:id="UT22084-001-006-300072">
+                    <desc>Auto (script-increment-version-published)</desc>
+                </change>
+                <change who="#laura" when="2022-07-13T14:14:42.326Z" type="text-version" status="1.0.15" xml:id="UT22084-001-006-300073">
+                    <desc>Minor correction to bibliography</desc>
+                </change>
+                <change who="#celso" when="2023-01-18T16:58:06.914Z" type="text-version" status="1.0.16" xml:id="UT22084-001-006-300074">
+                    <desc>Auto (remove-tid-from-back-list-items)</desc>
+                </change>
+                <change who="#admin" when="2023-07-30T22:39:48.323Z" type="text-version" status="1.0.17" xml:id="UT22084-001-006-300075">
+                    <desc>TEI migrated to 2.19.0</desc>
+                </change>
+                <change who="#celso" when="2023-10-13T11:48:10.305Z" type="text-version" status="1.0.18" xml:id="UT22084-001-006-300081">
+                    <desc>reapplied capital letters in Wylie and covert to TibUni-glossary</desc>
+                </change>
+                <change who="#martina-cotter" when="2023-10-20T14:29:00.938Z" type="text-version" status="1.0.19" xml:id="UT22084-001-006-300083">
+                    <desc>Added pending links.</desc>
+                </change>
+                <change who="#martina-cotter" when="2023-10-23T20:12:07.974Z" type="text-version" status="1.0.20" xml:id="UT22084-001-006-300084">
+                    <desc>updated ellipses</desc>
+                </change>
+                <change who="#martina-cotter" when="2023-11-08T14:07:31.555Z" type="text-version" status="1.0.21" xml:id="UT22084-001-006-300085">
+                    <desc>changed "khumba" to "khumba"</desc>
+                </change>
+                <change who="#andre" when="2024-01-02T10:27:51.242Z" type="text-version" status="1.0.22" xml:id="UT22084-001-006-300086">
+                    <desc>Definition for kalandaka­nivāpa replaced with standard</desc>
+                </change>
+                <change who="#konchog" when="2024-02-06T16:20:47.391Z" type="text-version" status="1.0.23" xml:id="UT22084-001-006-300087">
+                    <desc>Small fix at 6.32, relevant to a standard definition link.</desc>
+                </change>
+                <change who="#celso" when="2024-03-28T18:57:09.257Z" type="text-version" status="1.0.24" xml:id="UT22084-001-006-300088">
+                    <desc>Added type attributes to the lg "summaries" (sdom)</desc>
+                </change>
+                <change who="#john" when="2024-05-10T15:57:19.317Z" type="text-version" status="1.0.25" xml:id="UT22084-001-006-300128">
+                    <desc>Added cross-refs to Toh 99.</desc>
+                </change>
+                <change who="#andre" when="2024-06-28T16:45:48.892Z" type="text-version" status="1.0.26" xml:id="UT22084-001-006-300130">
+                    <desc>Approved rendering "Jetavana, Anāthapiṇḍada’s Park" applied</desc>
+                </change>
+                <change who="#celso" when="2024-08-08T21:43:52.54Z" type="text-version" status="1.1.0" xml:id="UT22084-001-006-300131">
+                    <desc>Added links to the summary verses</desc>
+                </change>
+                <change who="#celso" when="2024-08-08T22:27:35.845Z" type="text-version" status="1.1.1" xml:id="UT22084-001-006-300132">
+                    <desc>minor edit to glossary</desc>
+                </change>
+                <change who="#john" when="2024-09-30T08:51:04.787Z" type="text-version" status="1.1.2" xml:id="UT22084-001-006-300133">
+                    <desc>Modified format of titles in translation section.</desc>
+                </change>
+                <change who="#cabie-sim" when="2024-10-15T02:34:56.216Z" type="text-version" status="1.1.3" xml:id="UT22084-001-006-300134">
+                    <desc>Auto (update-sponsorship)</desc>
+                </change>
+                <change who="#konchog" when="2024-11-30T16:25:56.141Z" type="text-version" status="1.1.4" xml:id="UT22084-001-006-300135">
+                    <desc>One fix to a list based on John's talk!</desc>
+                </change>
+            </revisionDesc>
+        </fileDesc>
+    </teiHeader>
+    <!--
+   Contents:
+Summary
+Acknowledgments
+Introduction
+Translation
+Chapter One: Medicines
+
+I. The Authorization of Medicines 
+II. Fat
+III. Scabies
+IV. Collyrium
+V. A Man Gone Mad
+VI. Pilinda
+VII. Revata
+A. Rice Flour and Guḍa
+B. Barley Flour and Guḍa
+VIII. Sauvīraka
+
+Chapter Two: Mahāsenā
+
+I. Mahāsenā
+II. Flesh
+A.	Elephant Flesh
+B.	Nāga Flesh
+III. Hemorrhoids
+IV. One Who Has a Wind Illness
+V. Pūrṇa
+VI. Agnidatta
+	A. The Story of the Two Nāga Kings and King Bimbisāra
+	B. The Quarrel between the Brahmin Agnidatta and the Citizens of Rājagṛha
+
+
+Chapter Three: Rājagṛha
+I.	Rājagṛha
+A. The Disaster of Rājagṛha and Its End
+B. The Epidemic in Vaiśālī
+
+II. Nālandā
+III. Veṇuyaṣṭikā
+IV. Pāṭali Village
+	A. The Sermon at Pāṭali Village
+	B. The Donation by the Brahmin Varśākāra
+	C. The Donation of Parasols
+	D. A Story of a Former Life of the Buddha: King Mahāsudarśana
+
+V. The Ganges
+VI. Mahāpraṇāda
+A.	The Appearance of King Mahāpraṇāda’s Pillar
+B.	The Former Life of the Monk Bhaddālin
+C.	The Prediction of the Appearance of the Buddha Maitreya and the Wheel-Turning King Śaṅkha
+D.	The Former Lives of the Buddha Maitreya and the Wheel-Turning King Śaṅkha
+E.	The Sermon in Kuṭi Village
+F.	The Sermon in Nādikā
+G.	The Invitation by Āmrapālī
+
+VII. Vaiśālī
+A. The Visit of Āmrapālī 
+B. The Visit of the Licchavis
+C. The Sermon to Āmrapālī
+D. The Former Lives of the Licchavis
+E. The End of the Epidemic in Vaiśālī
+
+Chapter Four: Veṇu
+
+I. Veṇu
+II. Middle Village
+III. Mithilā
+IV. Videha
+V. Sālā
+VI. The Well
+VII. Bhārgava
+VIII. Kaśāya
+IX. Crown of the Head
+X. Kanthaka
+XI. Gośālaka
+XII. Pāpā
+XIII. Kuśinagarī
+
+Chapter Five: The Carpenter
+
+I. The Axe
+II. Devadṛśa
+III. Lumbinī
+IV. Kapila
+V. Where There Is Cotton
+VI. Kanakamuni
+VII. Kārṣaka
+VIII. A Robe
+IX. Bath
+X. Sikatin
+
+Chapter Six: Icchānaṅgalā
+
+I. Icchānaṅgalā
+II. Utkaṭā
+III. Saptaparṇa
+IV. Sunrise
+V. Śrāvastī
+VI. Valaya
+VII. Where There Is Ground
+VIII. Lion Village
+IX. New Village
+X. City
+XI. Pīṭha
+XII. Nyagrodhikā
+
+Chapter Seven: Kimpilā
+
+I. Kimpilā
+II. Ahicchattra
+III. Mathurā
+IV. Rāṣṭrapāla
+V. Hastināpura
+VI. The Great City
+VII. Śrughnā
+VIII. Brahmin Village
+A. A Fire Caused by an Old Man from the Śākya Clan
+B. The Former Life of the Old Man
+IX. The City of Kāla
+X. Rohitaka
+A. Offerings of the Yakṣa Elephant Power
+B. Departure to the Northern Region
+C. Awakened Power in Heaped Up
+D. Dharma Power in Retuka
+E. Great Cup in the Indus, Feet
+F. Having a Shaved Head and Water Jar
+G. Apalāla
+H. The Nāga Huluḍa
+I. Bhraṣṭolā, Ṛṣi, Āpannaka
+J. Kanthā
+K. In Dhānyapura, Converting the Mother of Best Army
+L. The Potter in Naitarī
+XI. Śādvalā
+A. The Great Yakṣa of Śādvalā
+B. Pālitakūṭa
+XII. Nandivardhana
+A. Nandivardhana, Bhavadeva, Caṇḍālī’s Seven Sons’ Conversion, the Yakṣa Earth-Protector
+B. Giving an Image to Nāgas, Aśvaka, and Punarvasuka
+C. Converting Nāḍikā and Naḍadaryā
+D. In the City of Kuntī the Yakṣiṇī Named Kuntī
+E. Kharjūrikā and the Stupa of Dust
+
+Chapter Eight: Ādirājya
+
+I. Ādirājya
+II. Bhadrāśva
+III. Mathurā
+A. The Prediction about Upagupta
+B. The Former Life of Upagupta
+C. The Brahmin Nīlabhūti
+D. The Obstruction of the Buddha’s Way by a Goddess
+E. The Yakṣa Gardabha
+IV. Otalā Park
+A. The Visit of the Brahmin Otalāyana
+B. Kacaṅgalā
+V. Vairambhya
+A. The Brahmin in a Park
+B. King Agnidatta’s Offer
+C. Breaking a Hut
+D. A Brahmin Who Abused the Buddha Vipaśyin
+VI. Ayodhyā
+A. The Simile of a Log and the Going Forth of Nanda, the Herdsman
+B. The Former Lives of Nanda and the Frog
+VII. The Ganges
+A. Haṃsas, Fish, and Turtles
+B. The Former Lives of the Haṃsas, Fish, and Turtles
+VIII. Hungry Ghosts
+A. The Conversation with the Five Hundred Hungry Ghosts
+B. The Previous Lives of the Five Hundred Hungry Ghosts
+IX. Velāma
+
+Chapter Nine: Kumāravardana
+
+I. Kumāravardana
+II. Krauñcāna
+III. Aṅgadikā
+IV. Maṇivatī
+V. Sālabalā
+VI. Sālibalā
+VII. Suvarṇaprastha
+VIII. Sāketā
+IX. Rice Soup
+A. The Peasants’ Going Forth and the Oxen’s Rebirth in Heaven
+B. The Former Lives of the Peasants and Oxen
+C. Toyikā
+X. Śrāvastī
+A. A Leprous Beggar Woman’s Offering of Water Used for Boiling Rice
+B. The Offerings by King Prasenajit
+C. The Former Life of King Prasenajit
+D. The Offering of a Lamp by a Beggar Woman
+E. The Question of King Prasenajit: The Offerings Made by the Buddha in His Former Lives
+F. Former Life Stories I
+1. Māndhātṛ
+a. The Story of King Māndhātṛ
+b. A Former Life of King Māndhātṛ: The Son of the Head of a Guild
+c. A Former Life of King Māndhātṛ: A Grain Merchant
+2. Mahāsudarśana
+3. Velāma
+4. Kuśa
+a. The Story of Prince Kuśa
+b. The Former Life of Prince Kuśa
+5. Triśaṅku
+6. Mahādeva
+7. King Nimi
+8. Ādarśamukha
+9. Sudhana
+a. The Story of King Sudhana
+b. The Story of Prince Sudhana
+10. Viśvantara
+a. Viśvantara’s Story I
+b. Viśvantara’s Story II
+11. Saṃdhāna
+G. Former Life Stories II
+1. Bālāha
+2. A King
+3. The Snake
+4. Two Heads
+5. The Lapwing
+6. The Parrot
+7. The Banquet
+8. The Turtle
+9. Susena
+10. Merchants
+H. Former Life Stories III
+1. Six Tusks
+2. The Rabbit
+3. Parents
+a. The Story of Śyāma
+b. Breaking Wrong Laws
+4. Water Born
+5. Words of the Forest
+6. The Elephant
+7. The Nāga
+8. Dhṛtarāṣṭra
+I. The Bodhisattva as Four Teachers
+1. The Story of the Teacher Sunetra
+2. The Story of the Teacher Mūkapaṅgu
+3. The Story of the Teacher Araṇemi
+4. The Story of the Teacher Govinda
+	J. The First Resolution and the First Veneration of a Buddha
+		5. The Story of King Prabhāsa
+		6. 6. The Story of the Potter Bṛhaddyuti
+K. The Question of King Prasenajit: The Veneration of Past Buddhas
+L. The Question of Ānanda or Section of Many Buddhas
+M. The Insult by the Brahmin Girl Cañcā
+
+XI. Anavatapta
+A. The Buddha’s Visit to Lake Anavatapta
+B. The Contest of Magical Power between Śāriputra and Mahā­maudgalyāyana
+1. A Story of the Present
+2. A Story of the Past: The Painter and the Mechanic
+3. A Story of the Past: The Two Painters
+4. A Story of the Past: The Ṛṣis Śaṅkha and Likhita (1)
+5. A Story of the Past: The Ṛṣis Śaṅkha and Likhita (2)
+6. A Story of the Past: The Ivory Carver and the Painter
+C. Verses of the Elders I
+1. Kāśyapa
+2. Śāriputra
+3. Maudgalyāyana
+4. Śobhita
+5. Sumanas
+6. Koṭīviṃśa
+7. Vāgīśa
+8. Piṇḍola
+9. Svāgata
+10. Nandika
+D. Verses of the Elders II
+1. Yaśas (1)
+2. Śaivala
+3. Bakkula
+4. Sthavira
+5. The Three
+6. Yaśas (2)
+7. Jyotiṣka
+8. Rāṣṭrapāla
+9. Svāti
+10. Jaṅghākāśyapa
+E. Verses of the Elders III
+1. Panthaka
+2. Sarpadāsa
+3. Aniruddha
+4. Kāla
+5. Rāhula
+6. Nanda
+7. Dravya
+8. Upasena
+9. Bhadrika
+10. Lavaṇabhadrika
+F. Verses of the Elders IV
+1. Madhuvāsiṣṭha
+2. Hetu
+3. Kauṇḍinya
+4. Upālin
+5. Prabhākara
+6. Revata
+7. The Sugata (Prose)
+a. The Son of a Householder
+b. A Caravan Leader
+c. A Young Brahmin
+d. Bharadvāja
+e. The Cause of the False Slander by Cañcā
+I) A Brahmin
+II) Mṛṇāla
+f. A Brahmin Who Falsely Accused a Buddha
+g. Uttara
+h. A Physician
+i. The Son of a Fisherman
+j. A Wrestler
+8. The Sugata (Verse)
+a. Introduction
+b. Mṛṇāla
+c. A Brahmin
+d. Bharadvāja
+e. The Son of a Householder
+f. A Caravan Leader
+g. The Son of a Fisherman
+h. A Brahmin Who Falsely Accused a Buddha
+i. A Physician
+j. A Wrestler
+k. Uttara
+l. Conclusion
+G. The Invitation by Viśākhā
+XII. Nagarabindu
+XIII. Vaiśālī
+A. The Invitation by Dhanika and His Family
+B. The Former Lives of Dhanika and His Family
+C. The Rules on Food
+
+Chapter Ten: Sick People
+
+I. The Sick
+II. Foods
+III. Breakfast
+IV. Leftovers
+A. Alms-Food Obtained Previously
+B. Leftovers Taken by Monks to the Monastery
+C. Leftovers Brought by Laymen
+V. Fruits Growing in the Forest
+VI. Lotus
+VII. Lotus Roots
+VIII. Miṇḍhaka
+A. The Conversion of Miṇḍhaka
+B. Invitation after Mealtime
+C. The Acceptance of Money
+D. The Acceptance of Guḍa
+E. The Former Lives of the Miṇḍhaka Family
+
+Chapter Eleven: Kaineya
+
+I. The Drink Offered by Kaineya Was Received
+A. The Conversion of Kaineya and Śaila (Prose)
+1. The Sermon to the Four Great Kings
+2. The Former Lives of the Four Great Kings
+3. Kaineya Offers Drinks to the Blessed One
+4. Śaila and Kaineya Go Forth
+5. The Instruction by Three Disciples of the Buddha
+6. The Former Lives of the Three Disciples
+B. The Conversion of Kaineya and Śaila (Verse)
+II. The Town of Kāśi, Barley Porridge
+III. Khādyaka in Pāpā
+IV. Doubts
+V. Foul Foods
+A. A Story of the Present about the Great Peacock Charm
+B. Stories of the Buddha’s Former Lives Related to the Great Peacock Charm
+
+
+Notes
+Bibliography
+-->
+    <text>
+        <front>
+            <div type="summary" xml:id="UT22084-001-006-summary">
+                <head type="summary" tid="4">Summary</head>
+                <!--FROM PLACEHOLDER
+                <p tid="1">Discusses the medicines allowed to monastics, such as ghee, oil, honey, and molasses; what monastics should not consume, such as
+                    human flesh; and related subjects such as how medicine should be stored, under what circumstances monastics are allowed to cook for
+                    themselves, and how to respond to a hostile doctor.</p>-->
+                <milestone unit="chunk" xml:id="UT22084-001-006-1"/>
+                <p tid="8">The <title xml:lang="Sa-Ltn">Bhaiṣajyavastu</title>, “The Chapter on Medicines,” is
+                    a part of the Mūlasarvāstivāda Vinaya, the corpus of monastic law of one of the most
+                    influential Buddhist schools in India. This chapter deals with monastic regulations about
+                    medicines. At the same time, it also includes various <term>elements</term> not restricted
+                    to such rules: stories of the Buddha and his disciples, a lengthy story of the Buddha’s
+                    journey for the purpose of quelling an epidemic and converting a nāga, a number of stories
+                    of the Buddha’s former lives narrated by the Buddha himself, and a series of verses
+                    recited by the Buddha and his disciples about their former lives. Thus, this chapter
+                    preserves not only interesting information about medical knowledge shared by ancient
+                    Indian Buddhist monastics but also an abundance of Buddhist narrative literature.</p>
+            </div>
+            
+            
+            
+        </front>
+        <body>
+            <div type="translation" xml:id="UT22084-001-006-translation">
+                <head type="translation"> The Translation</head>
+                <head type="titleHon" tid="30">From <title xml:lang="en">The Chapters on Monastic Discipline</title>
+                </head>
+                <head type="titleMain" tid="31">The Chapter on Medicines</head>
+                <div type="prologue" xml:id="UT22084-001-006-prologue">
+                    <head type="prologue" tid="6301"> General Summary of the Contents of the Chapter on
+                        Medicines</head>
+                    <milestone unit="chunk" xml:id="UT22084-001-006-20"/>
+                    <!--<p tid="34"><ref cRef="F.277.b" type="folio" xml:id="UT22084-001-006-7829"/> General Summary of the Contents of the Chapter on
+                  Medicines:</p>-->
+                    <lg tid="35" type="spyi_sdom">
+                        <!--bsdus pa’i sdom-->
+                        <l>
+                            <ref cRef="V1" type="volume" xml:id="UT22084-001-006-9435"/>
+                            <ref cRef="F.277.b" type="folio" xml:id="UT22084-001-006-7829"/>
+                            <ptr type="subdivision" target="#UT22084-001-006-chapter-1">Medicines</ptr>, <ptr type="subdivision" target="#UT22084-001-006-chapter-2">Mahāsenā</ptr>, </l>
+                        <l>
+                            <ptr type="subdivision" target="#UT22084-001-006-chapter-3">Rājagṛha</ptr>, <ptr type="subdivision" target="#UT22084-001-006-chapter-4">Veṇu</ptr>,</l>
+                        <l>
+                            <ptr type="subdivision" target="#UT22084-001-006-chapter-5">Carpenter</ptr>, <ptr type="subdivision" target="#UT22084-001-006-chapter-6">Icchānaṅgalā</ptr>, </l>
+                        <l>
+                            <ptr type="subdivision" target="#UT22084-001-006-chapter-7">Kimpilā</ptr>, <ptr type="subdivision" target="#UT22084-001-006-chapter-8">Ādirājya</ptr>,</l>
+                        <l>
+                            <ptr type="subdivision" target="#UT22084-001-006-chapter-9">Kumāravardhana</ptr>,
+                                <ptr type="subdivision" target="#UT22084-001-006-chapter-10">Sick
+                            People</ptr>, and <ptr type="subdivision" target="#UT22084-001-006-chapter-11">Kaineya</ptr>.</l>
+                    </lg>
+                    <milestone unit="chunk" xml:id="UT22084-001-006-9438"/>
+                    <p tid="39">The entire chapter is thus summarized.</p>
+                </div>
+                <div type="chapter" xml:id="UT22084-001-006-chapter-1">
+                    <head type="chapter" tid="40">Chapter One</head>
+                    
+                    
+
+                    
+
+
+                    
+
+
+                    
+
+
+                    
+
+
+                    
+
+
+                    
+
+
+                    
+
+
+                    
+
+
+                    
+                </div>
+                <div type="chapter" xml:id="UT22084-001-006-chapter-2">
+                    <head type="chapter" tid="185">Chapter Two</head>
+                    
+                    
+
+                    
+
+
+                    
+
+
+                    
+
+
+                    
+
+
+                    
+
+
+                    <div type="section" xml:id="UT22084-001-006-chapter-2-5">
+                        <head type="section" tid="310">V. Pūrṇa<note place="end" xml:id="UT22084-001-006-338">
+                                This story of Pūrṇa has a parallel in the <title xml:lang="Sa-Ltn">Pūrṇāvadāna</title>, chapter 2 of the Divy (English trsl. Tatelman 2000;
+                                Rotman 2008–17, i).</note>
+                        </head>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <milestone unit="chunk" xml:id="UT22084-001-006-665"/>
+                        <p tid="602">Then the Blessed One <ref cRef="F.311.a" type="folio" xml:id="UT22084-001-006-7896"/> washed his feet outside the monastery, entered
+                            inside, sat on the prepared seat, stretched his back, and focused his mind on a
+                            point in front of himself. When the Blessed One put his foot down with a specific
+                            intention in the perfume chamber, the great earth quaked in six ways. This great
+                            earth quaked, quaked furiously, and quaked absolutely furiously. It roared, roared
+                            furiously, and roared absolutely furiously. When the eastern side rose, the
+                            western side sank. When the western side rose, the eastern side sank. When the
+                            southern side rose, the northern side sank. When the northern side rose, the
+                            southern side sank. When the periphery rose, the middle sank. When the middle
+                            rose, the periphery sank. The king asked Pūrṇa, “Noble one Pūrṇa, what is this?” </p>
+                        <milestone unit="chunk" xml:id="UT22084-001-006-666"/>
+                        <p tid="603">Pūrṇa answered, “Because the Blessed One put his foot down with a
+                            specific intention in the perfume chamber, the great earth quaked in six
+                            ways.”</p>
+                        <milestone unit="chunk" xml:id="UT22084-001-006-667"/>
+                        <p tid="604">The Blessed One then emanated a ray of light colored like the radiance of
+                            gold, by which the continent of Jambu blazed like molten gold. Again the king
+                            stared in surprise<note place="end" xml:id="UT22084-001-006-668"> S <foreign xml:lang="Bo-Ltn" type="quote">ngo mtshar du gyur pas</foreign>; D
+                                    <foreign xml:lang="Bo-Ltn" type="quote"> pa’i</foreign>.</note> and asked,
+                            “Noble one Pūrṇa, what is this?”</p>
+                        <p tid="605">Pūrṇa answered, “Great King, the Blessed One emanated a ray of light
+                            colored like the radiance of gold.” <ref cRef="V2" type="volume" xml:id="UT22084-001-006-9436"/>
+                            <ref cRef="F.1.b" type="folio" xml:id="UT22084-001-006-7897"/>
+                            <ref cRef="B25" type="bampo"/>
+                        </p>
+                        <milestone unit="chunk" xml:id="UT22084-001-006-670"/>
+                        <p tid="606">The Blessed One then went to Sūrpāraka together with five hundred arhats,
+                            himself tamed and his assembly tamed, himself pacified and his assembly
+                            pacified.</p>
+                        <milestone unit="chunk" xml:id="UT22084-001-006-671"/>
+                        <p tid="607">A god who lived in the Jetavana followed the Blessed One, holding a
+                            branch of vakula with which he provided shade for him. The Blessed One knew the
+                            god’s thinking, proclivity, disposition, and nature, preached the Dharma that was
+                            appropriate for him, and caused him to penetrate the four truths of the noble
+                            ones. When the god had heard the Dharma, he leveled the twenty high peaks of the
+                            mountain chain of the false view of individuality with the vajra of knowledge and
+                            actualized the fruit of stream-entry.</p>
+                        <milestone unit="chunk" xml:id="UT22084-001-006-672"/>
+                        <p tid="608">There then lived in another place about five hundred widows, and they saw
+                            the Blessed One, who was fully ornamented with the thirty-two marks of a great
+                            man, illuminated by the eighty minor marks, <ref cRef="F.2.a" type="folio" xml:id="UT22084-001-006-7898"/> ornamented with a fathom-wide halo, and
+                            beautiful like a moving mountain of jewels whose light surpasses a thousand suns.
+                            As soon as the five hundred widows saw him, great faith in the Blessed One arose
+                            in them.</p></div>
+
+
+                    
+                </div>
+
+
+                
+
+
+                
+
+
+                
+
+
+                
+
+
+                
+
+
+                
+
+
+                
+                
+                
+            </div>
+            <!--<div type="colophon" xml:id="UT22084-001-006-colophon">
+               <head type="colophon" tid="6292">Colophon</head>
+               <milestone unit="chunk" xml:id="UT22084-001-006-7425"/>
+               <p tid="6293">[Insert the colophon at the end of the text here. The Colophon’s heading uses a “Heading 2” style, but if it has
+                  subdivisions (such as a Tibetan and Sanskrit Colophon, use the “Heading 3” style to demarcate them)]</p>
+            </div>-->
+        </body>
+        
+    </text>
+</TEI>

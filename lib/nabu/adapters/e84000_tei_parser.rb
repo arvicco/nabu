@@ -46,6 +46,26 @@ module Nabu
     # contribute nothing. Whitespace collapses, output is NFC (en). A chunk
     # that flattens to nothing emits no passage but keeps its ordinal.
     #
+    # == Folio anchors (P48-r2 — the Degé page crosswalk vocabulary)
+    #
+    # The translation body embeds the Degé woodblock pagination inline:
+    # `<ref cRef="F.<n>.<a|b>" type="folio"/>` marks where folio n recto/
+    # verso begins in the English, and `<ref cRef="V<k>" type="volume"/>`
+    # (multi-volume texts only) carries the ACTUAL eKangyur volume number —
+    # both verified against the Esukhia derge shelves' own page.line refs
+    # (F.3.b ↔ …derge-kangyur:toh846a:3b.N; V2 + F.1.b ↔ …toh1-6:2.1b.N).
+    # Each emitted chunk therefore records the folio span it covers as
+    # annotations: "folios" — the ordered page tokens ("3b"; volume-prefixed
+    # "2.1b" once a volume ref has been seen) — where an anchor mid-chunk
+    # appends the new folio (the straddle) and chunks between anchors
+    # inherit the running folio. Multi-Toh publications anchor each Degé
+    # witness separately via @key refs; those ride "folios_by_toh"
+    # ({"toh774" => ["112b"], …}). Refs WITHOUT type="folio" (they carry
+    # @work) are alternate-printing foliation (the par phud) and are never
+    # captured — Degé toh539e sits at 100b (typed), not 83b (untyped).
+    # Anchors inside dropped subtrees (<note> quoting another folio) are
+    # apparatus and never move the running state.
+    #
     # Both markup spellings parse identically: plain <div> and the
     # namespace-prefixed <tei:div> variant that newer exports carry.
     #
@@ -146,6 +166,11 @@ module Nabu
         ].freeze
         DROPPED_ELEMENTS = %w[head note].freeze
         SEPARATOR_ELEMENTS = %w[lb pb].freeze
+        # The inline Degé anchors (class note "Folio anchors"): typed folio
+        # refs and the multi-volume volume refs. Untyped F.* refs (alternate
+        # printings) match neither shape's guard and are ignored.
+        FOLIO_CREF = /\AF\.(\d+)\.([ab])\z/
+        VOLUME_CREF = /\AV(\d+)\z/
         # The Reading Room's own division labels (class comment).
         DIVISION_LABELS = {
           "summary" => "s", "acknowledgment" => "ac", "preface" => "pf",
@@ -159,7 +184,7 @@ module Nabu
         }.freeze
         private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS, :SEPARATOR_ELEMENTS,
                          :DIVISION_LABELS, :NUMBERED_DIVISION_TYPES, :HEADER_CONTAINERS,
-                         :TITLE_LANG_KEYS
+                         :TITLE_LANG_KEYS, :FOLIO_CREF, :VOLUME_CREF
 
         Result = Data.define(:units, :title, :metadata)
 
@@ -183,8 +208,13 @@ module Nabu
           @division_depth = nil
           @numbered = 0             # the shared chapter/section/part counter
           @drop_depth = nil
-          @chunk = nil              # { citation:, id:, division:, text: }
+          @chunk = nil              # { citation:, id:, division:, text:, folios:, inherited: }
           @units = []
+          # folio state (class note "Folio anchors"): the running folio per
+          # witness stream (nil key = the unkeyed main stream) and the
+          # current eKangyur volume number (nil until a volume ref appears).
+          @folio = {}
+          @volume = nil
         end
 
         def call
@@ -220,6 +250,7 @@ module Nabu
           case name
           when "div" then open_div(node)
           when "milestone" then milestone(node)
+          when "ref" then reference(node)
           when *SEPARATOR_ELEMENTS then separator
           end
         end
@@ -377,8 +408,42 @@ module Nabu
             citation: "#{division[:label]}.#{division[:chunks]}",
             id: presence(node.attribute("xml:id")),
             division: division[:type],
-            text: +""
+            text: +"",
+            folios: {},           # stream key → explicit in-chunk anchor tokens
+            inherited: @folio.dup # the running folio at chunk open, per stream
           }
+        end
+
+        # An inline <ref> (class note "Folio anchors"): a volume ref moves
+        # the running eKangyur volume; a TYPED folio ref anchors its stream
+        # (@key, nil = main). Everything else — link refs, bampo refs, the
+        # untyped alternate-printing F.* refs — is transparent.
+        def reference(node)
+          cref = node.attribute("cRef").to_s
+          if node.attribute("type") == "volume"
+            match = VOLUME_CREF.match(cref)
+            @volume = Integer(match[1], 10) if match
+          elsif node.attribute("type") == "folio" && (match = FOLIO_CREF.match(cref))
+            folio_anchor(presence(node.attribute("key")), "#{match[1]}#{match[2]}")
+          end
+        end
+
+        # Anchor stream +key+ at Degé page +page+: update the running state
+        # and, when a chunk is open, extend its explicit span — seeded with
+        # the inherited folio only when reading text already preceded the
+        # anchor (an anchor before any text means the chunk STARTS here).
+        def folio_anchor(key, page)
+          token = @volume ? "#{@volume}.#{page}" : page
+          previous = @folio[key]
+          @folio[key] = token
+          return unless @chunk
+
+          list = @chunk[:folios][key] ||= begin
+            seed = []
+            seed << previous if previous && !@chunk[:text].strip.empty?
+            seed
+          end
+          list << token unless list.last == token
         end
 
         # A chunk milestone outside any division (not seen upstream, but a
@@ -401,12 +466,23 @@ module Nabu
         end
 
         def annotations_for(chunk)
+          folios = folio_spans(chunk)
           {
             "addressing" => "84000-chunk",
             "unit" => "chunk",
             "division" => chunk[:division],
-            "chunk_id" => chunk[:id]
+            "chunk_id" => chunk[:id],
+            "folios" => folios.delete(nil),
+            "folios_by_toh" => (folios unless folios.empty?)
           }.compact
+        end
+
+        # The chunk's folio span per stream: the explicit in-chunk anchor
+        # list where anchors fired, the inherited running folio otherwise.
+        def folio_spans(chunk)
+          spans = chunk[:inherited].transform_values { |token| [token] }
+          spans.merge!(chunk[:folios].reject { |_key, list| list.empty? })
+          spans
         end
 
         def separator
