@@ -18,9 +18,13 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal features.size, features.map(&:slug).uniq.size
   end
 
-  def test_every_feature_is_planned_in_this_packet
-    assert(features.all?(&:planned?), "P50-W1 is the rail only — every real feature ships :planned")
-    assert(features.all? { |feature| feature.builder.nil? })
+  def test_statuses_match_the_landed_builders
+    # The rail landed all-:planned (P50-W1); builder packets flip features
+    # one by one. Landed so far: xct/wylie-fold (P50-W3).
+    available = features.select(&:available?)
+    assert_equal %w[xct/wylie-fold], available.map(&:slug)
+    assert(available.all?(&:builder), ":available requires a landed builder")
+    assert(features.select(&:planned?).all? { |feature| feature.builder.nil? })
   end
 
   def test_every_field_is_present_and_well_shaped
