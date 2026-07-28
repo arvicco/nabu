@@ -195,6 +195,32 @@ class CLITest < Minitest::Test
   # default and --long must expand every one, grouped by language. The
   # attested list is already unbounded, so it needs no flag.
 
+  # P47-r1 (owner report off live elephantine: "--random --parallel …
+  # doesn't work at all"): the flags now COMPOSE — draw originals until one
+  # carries a parallel sibling, render the paired view. Translations never
+  # appear on the left (the sampler excludes them); a scope with no
+  # siblings says so honestly instead of silently dropping --parallel.
+  def test_show_random_parallel_draws_an_original_and_renders_the_pairing
+    with_sibling_corpus do |config|
+      out, err, status = with_config(config) { run_cli(%w[show --random --source elephantine --parallel]) }
+      assert_nil status, "stderr: #{err}"
+      assert_match(/parallel: urn:nabu:elephantine:d1-en/, out,
+                   "the drawn original renders WITH its English sibling")
+      assert_match(/paired/, out)
+      refute_match(/^urn:nabu:elephantine:d1-en:/, out.lines.first.to_s,
+                   "the left side is always the original, never the translation")
+    end
+  end
+
+  def test_show_random_parallel_without_siblings_reports_honestly
+    with_sibling_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show --random --source lone --parallel]) }
+      assert_nil status
+      assert_match(/no parallel-bearing draw/, out,
+                   "a scope with no siblings says so — never a silent plain draw")
+    end
+  end
+
   def test_show_resolves_the_urn_define_prints
     with_recon_shelf do |config|
       out, = with_config(config) { run_cli(%w[define *zima]) }
@@ -6076,6 +6102,70 @@ class CLITest < Minitest::Test
   # sources.yml) and an `axes:` membership on every source (P35-1). shelf is
   # the classicist's; lex is dual-tagged slavic AND reference (D35 dual-tagging);
   # library is the slavicist's. Personas are custom so tests can pin verbatim.
+  # P47-r1: a minimal corpus for `show --random --parallel` — one source
+  # declaring the -en sibling family, one translated document (matching
+  # suffixes), one untranslated, the -en sibling marked kind=translation.
+  # (Named distinctly: an older with_parallel_corpus rig exists below.)
+  def with_sibling_corpus
+    Dir.mktmpdir("nabu-cli-siblings") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, <<~YAML)
+        elephantine:
+          adapter: TestAdapter
+          wired: true
+          sync_policy: manual
+          siblings: ["-en"]
+        lone:
+          adapter: TestAdapter
+          wired: true
+          sync_policy: manual
+      YAML
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      # The slug is a SHIPPED one on purpose: SiblingFamilies.default reads
+      # the installation's own sources.yml (a global grammar fact, never the
+      # test config) — elephantine's siblings: ["-en"] declaration is what
+      # this rig exercises end-to-end.
+      src = catalog[:sources].insert(slug: "elephantine", name: "Elephantine", adapter_class: "TestAdapter",
+                                     license_class: "attribution", enabled: true)
+      seed = lambda do |urn, language, metadata, texts|
+        doc = catalog[:documents].insert(
+          source_id: src, urn: urn, title: urn.split(":").last, language: language,
+          content_sha256: "x", revision: 1, metadata_json: JSON.generate(metadata)
+        )
+        texts.each_with_index do |(suffix, text), index|
+          catalog[:passages].insert(
+            document_id: doc, urn: "#{urn}:#{suffix}", sequence: index, language: language,
+            text: text, text_normalized: text, content_sha256: "x", revision: 1
+          )
+        end
+      end
+      seed.call("urn:nabu:elephantine:d1", "grc", {}, [%w[1 μῆνιν], %w[2 ἄειδε]])
+      seed.call("urn:nabu:elephantine:d1-en", "eng", { "kind" => "translation" },
+                [%w[1 Wrath], %w[2 sing]])
+      seed.call("urn:nabu:elephantine:d2", "grc", {}, [%w[1 ἄνδρα]])
+      lone = catalog[:sources].insert(slug: "lone", name: "Lone", adapter_class: "TestAdapter",
+                                      license_class: "attribution", enabled: true)
+      doc = catalog[:documents].insert(
+        source_id: lone, urn: "urn:nabu:lone:solo", title: "solo", language: "grc",
+        content_sha256: "x", revision: 1
+      )
+      catalog[:passages].insert(
+        document_id: doc, urn: "urn:nabu:lone:solo:1", sequence: 0, language: "grc",
+        text: "t", text_normalized: "t", content_sha256: "x", revision: 1
+      )
+      Nabu::Store::SourceStats.derive!(catalog, note: "test seed")
+      catalog.disconnect
+      yield config
+    end
+  end
+
   def with_axis_corpus
     Dir.mktmpdir("nabu-cli-axis") do |root|
       File.write(File.join(root, "axes.yml"), <<~YAML)

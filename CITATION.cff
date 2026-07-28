@@ -1,7 +1,7 @@
 # Citation metadata (Citation File Format 1.2.0, https://citation-file-format.github.io/).
 # `version` and `date-released` are bumped at each tagged release (ops §12).
 # release; the release checklist (docs/ops.md §12) updates both at each tag.
-cff-version: 1.2.0
+cff-version: 1.3.0
 message: >-
   If you use Nabu in your research, please cite it as below. Every ingested
   text keeps its upstream license and attribution — cite the underlying
@@ -28,6 +28,6 @@ keywords:
   - philology
   - epigraphy
   - lexicography
-version: 1.2.0
+version: 1.3.0
 doi: 10.5281/zenodo.21361957
-date-released: "2026-07-22"
+date-released: "2026-07-26"

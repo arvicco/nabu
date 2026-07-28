@@ -126,6 +126,21 @@ module Query
       assert_equal "ita", run_parallel("urn:nabu:itant:oscan-2:1", lang: "ita").right&.language
     end
 
+    # P47-r1 (owner report: "elephantine is perfect for --parallel showcase!
+    # but it doesn't work at all here"): the registry's siblings: ["-en"]
+    # declaration (damaskini mold) pairs ID6 records with their translation
+    # siblings by identical page.line suffixes.
+    def test_elephantine_en_siblings_pair
+      load_edition("urn:nabu:elephantine:100067", "grc",
+                   [["convex.1", "(ἔτους) κε"], ["convex.2", "Παμουνι"]], title: "receipt")
+      load_edition("urn:nabu:elephantine:100067-en", "eng",
+                   [["convex.1", "25th regnal year"], ["convex.2", "Pamounis"]], title: "receipt")
+
+      result = run_parallel("urn:nabu:elephantine:100067:convex.1", lang: "eng")
+      assert_equal "eng", result.right&.language
+      assert_equal [:pair], kinds(result)
+    end
+
     # ISO 639-2 B/T equivalence (owner repro 2026-07-18: tla-hf siblings are
     # deu, aes siblings are ger — `--parallel ger` must find a deu edition
     # and vice versa, fold-both-sides style).

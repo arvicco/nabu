@@ -27,9 +27,10 @@ $ bin/nabu search 'στρατηγ*' --from 101 --to 300 --place oxyrhynch%
 ```
 
 finds the strategoi of the Oxyrhynchite nome in the papyri of the second
-and third centuries. The chronological axis covers 549,771 dated and
-placed documents as of 26 July 2026 — the CDLI tablets (337,572), the
-Heidelberg inscriptions (81,441) and the papyri foremost among them. On the faceted shelves
+and third centuries. The chronological axis covers 687,393 dated and
+placed documents as of 28 July 2026 — the CDLI tablets, Italy's EDR
+(115,590), the Heidelberg inscriptions and the papyri foremost among
+them. On the faceted shelves
 (currently the inscriptions), genre facets compose with the same filters:
 
 ```
@@ -86,10 +87,10 @@ fuzzy index covers: oracc, papyri-ddbdp
 — BGU 6.1470, a Hellenistic writing exercise breaking off mid-word through
 the opening line of the *Odyssey*. The character-trigram index behind this
 is scoped to the documentary shelves, where fragment search earns its
-cost; the run above predates the Heidelberg inscriptions, which joined the
-indexed scope on 13 July 2026 — the production index covers 1,713,135
-passages across the papyri, cuneiform, and inscription shelves as of
-14 July 2026.
+cost; the scope has grown in waves — the Heidelberg inscriptions joined
+13 July 2026, Italy's EDR and the Elephantine archives 28 July 2026 —
+and the production index covers 3,801,508 passages across the papyri,
+cuneiform, and inscription shelves as of 28 July 2026.
 
 **Concordance** (`nabu concord QUERY`) prints classic keyword-in-context
 lines, column-aligned in the pristine (accented) text and in corpus order —

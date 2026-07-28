@@ -45,15 +45,47 @@ module Nabu
         Summary.new(documents: documents, rows: rows)
       end
 
-      def insert_facets(catalog, document_id, facets)
-        facets.count do |facet, entry|
-          next false unless entry.is_a?(Hash) && entry["value"]
+      # The per-source seam (P47-r3, the lane-drift audit): drop this
+      # source's facet rows, re-project its facet-bearing documents —
+      # SyncRunner calls it post-load so the facet lane never lags a sync
+      # (before this, facets refreshed only at full rebuild; EDR, IIP,
+      # Elephantine and the Sefaria Rabbinic wave all served zero facet
+      # rows until the next rebuild).
+      def refresh_source!(catalog:, slug:)
+        source_id = catalog[:sources].where(slug: slug).get(:id)
+        return 0 if source_id.nil?
 
-          catalog[:document_facets].insert(
-            document_id: document_id, facet: facet,
-            value: entry["value"], raw: entry["raw"]
-          )
-          true
+        doc_ids = catalog[:documents].where(source_id: source_id).select(:id)
+        catalog[:document_facets].where(document_id: doc_ids).delete
+        rows = 0
+        catalog[:documents]
+          .where(source_id: source_id, withdrawn: false)
+          .where(Sequel.like(:metadata_json, '%"facets"%'))
+          .select_map(%i[id metadata_json]).each do |id, json|
+            facets = JSON.parse(json)["facets"]
+            next unless facets.is_a?(Hash) && !facets.empty?
+
+            rows += insert_facets(catalog, id, facets)
+          end
+        rows
+      end
+
+      # A facet entry carries a singular "value" (EDH, EDR, Elephantine…)
+      # or a plural "values" array (IIP — one row per value; P47-r3, the
+      # lane-drift audit: the singular-only reader left IIP dark through a
+      # full rebuild).
+      def insert_facets(catalog, document_id, facets)
+        facets.sum do |facet, entry|
+          next 0 unless entry.is_a?(Hash)
+
+          values = entry.key?("values") ? Array(entry["values"]) : [entry["value"]]
+          values.compact.count do |value|
+            catalog[:document_facets].insert(
+              document_id: document_id, facet: facet,
+              value: value, raw: entry["raw"]
+            )
+            true
+          end
         end
       end
     end
