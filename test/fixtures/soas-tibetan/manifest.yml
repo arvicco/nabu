@@ -1,0 +1,37 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The deposit is ONE versioned-immutable Zenodo zip (Texts.zip, sha-pinned in
+# the adapter); no file has an individual raw URL, so every entry is
+# refetchable: false (the digiliblt posture). adapter_test is null: all three
+# entries are documented trims, so a fresh-copy re-run would false-fail the
+# count assertions.
+source: soas-tibetan
+adapter_test:
+retrieved: 2026-07-28
+files:
+  - path: Texts/mdzangsblun-horizontal.txt
+    refetchable: false
+    reason: >-
+      member Texts/mdzangsblun-horizontal.txt of Texts.zip on Zenodo record
+      574878 (DOI 10.5281/zenodo.574878, retrieved 2026-07-28) — trimmed; no
+      per-file raw URL exists
+    whole: false
+    trim: the REAL first 3 of 310 lines, byte-verbatim
+  - path: Texts/marpa-horizontal.txt
+    refetchable: false
+    reason: >-
+      member Texts/marpa-horizontal.txt of Texts.zip on Zenodo record 574878
+      (DOI 10.5281/zenodo.574878, retrieved 2026-07-28) — trimmed; no
+      per-file raw URL exists
+    whole: false
+    trim: the REAL first 2 of 180 lines, byte-verbatim
+  - path: Texts/mila-horizontal-lex.txt
+    refetchable: false
+    reason: >-
+      member Texts/mila-horizontal-lex.txt of Texts.zip on Zenodo record
+      574878 (DOI 10.5281/zenodo.574878, retrieved 2026-07-28) — trimmed
+      discovery-skip sample (the undisambiguated -lex rendering); no
+      per-file raw URL exists
+    whole: false
+    trim: the REAL first 1 of 192 lines, byte-verbatim

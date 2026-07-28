@@ -1,0 +1,135 @@
+# sent_id = otannals:000:T55
+# text = [---]་འཁུས་ནས། སྙྀང་དྲུང་[---]་པར། མཐའ་དག་གྱང་[---]་སྣང་གློ་བ་རྀངས་ནས། ཁོ་ནའྀ་བྲན་པ་ཙབ་གྱྀམ་པོ་[---]་བཀྱོན་ཕབ་ནས་བཀུམོ།
+# text_en = ... became treacherous, and at Snying-drung ... [Myang Mang-po-rje Zhang-snang bought about the submission] of all the Sum-pa also. [Then after x years when Myang Zhang-]snang became disloyal, his subject Pa-tsab [betrayed him so that Zhang-snang] was accused and put to death.
+1	[---]་	[---]་	X	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T55
+2	འཁུས་	འཁུ་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T36
+3	ནས	ནས་√cv	ADP	_	Case=Ela	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T32
+4	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T77
+5	སྙྀང་དྲུང་	སྙིང་དྲུང་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T33
+6	[---]་པ	[---]་པ་	X	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T70
+7	ར	དུ་√case	ADP	_	Case=Ter	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T23
+8	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T76
+9	མཐའ་དག་	མཐའ་དག་	ADJ	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T34
+10	གྱང་	འང་√cl	PART	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T35
+11	[---]་	[---]་	X	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T71
+12	སྣང་	སྣང་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T37
+13	གློ་བ་	གློ་བ་	NOUN	_	_	14	arg2:lvc	_	SpaceAfter=No|Tokenid=otannals:000:T69
+14	རྀངས་	རིངས་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T68
+15	ནས	ནས་√cv	SCONJ	_	Case=Ela	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T17
+16	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T78
+17	ཁོ་ན	ཁོ་ན་	PRON	_	PronType=Prs	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T38
+18	འྀ་	གྱི་√case	ADP	_	Case=Gen	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T25
+19	བྲན་	བྲན་	NOUN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T40
+20	པ་ཙབ་	པ་ཙབ་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T39
+21	གྱྀམ་པོ་	གྱིམ་པོ་	NOUN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T67
+22	[---]་	[---]་	X	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T72
+23	བཀྱོན་	བཀྱོན་	NOUN	_	_	24	arg2	_	SpaceAfter=No|Tokenid=otannals:000:T42
+24	ཕབ་	འབེབས་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T41
+25	ནས་	ནས་√cv	SCONJ	_	Case=Ela	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T28
+26-27	བཀུམོ	_	_	_	_	_	_	_	SpaceAfter=No
+26	བཀུམ་	འགུམས་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T43
+27	མོ	འོ་√cv	PART	_	Mood=Ind	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T20
+28	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T79
+
+# sent_id = otannals:000:T44
+# text = མཁར་སྡུར་བ་བཤྀག་གོ། [---]།
+# text_en = The stronghold Sdur-ba was destroyed.
+1	མཁར་	མཁར་	NOUN	_	_	3	arg2	_	SpaceAfter=No|Tokenid=otannals:000:T44
+2	སྡུར་བ་	སྡུར་བ་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T45
+3	བཤྀག་	འཇིག་√2	VERB	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T46
+4	གོ	འོ་√cv	PART	_	Mood=Ind	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T18
+5	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T93
+6	[---]	[---]་	X	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T73
+7	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T74
+
+# sent_id = otannals:000:T10
+# text = བཙན་པོ་ཁྲྀ་སྲོང་རྩན་གྱྀས། ཤུལད་བྱང་ལམ་དུ་པྱུང་སྟེ། འ་ཞ་དང་རྒྱ་ལ་[---]་དང་འ་ཞ་གཉྀས་གྱྀས་དཔྱའ་གཅལད་ཏོ། [---]་ནའ།
+# text_en = [Then after x years] the Btsan-po Khri Srong-rtsan set out on the north road and [made war] on the 'A-zha and China. Both China and the 'A-zha offered tribute.
+1	བཙན་པོ་	བཙན་པོ་	NOUN	_	_	9	arg1	_	SpaceAfter=No|Tokenid=otannals:000:T10
+2	ཁྲྀ་སྲོང་རྩན་	ཁྲི་སྲོང་རྩན་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T11
+3	གྱྀས	གྱིས་	ADP	_	Case=Agn	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T12
+4	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T75
+5	ཤུལད་	ཤུལད་	NOUN	_	_	9	obl	_	SpaceAfter=No|Tokenid=otannals:000:T52
+6	བྱང་	བྱང་	NOUN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T51
+7	ལམ་	ལམ་	NOUN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T49
+8	དུ་	དུ་√case	ADP	_	Case=Ter	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T24
+9	པྱུང་	འབྱུང་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T50
+10	སྟེ	ཏེ་√cv	SCONJ	_	Case=Sem	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T26
+11	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T80
+12	འ་ཞ་	འ་ཞ་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T1
+13	དང་	དང་√case	ADP	_	Case=Com	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T21
+14	རྒྱ་	རྒྱ་	NOUN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T47
+15	ལ་	ལ་√case	ADP	_	Case=All	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T48
+16	[---]་	[---]་	X	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T81
+17	དང་	དང་√case	ADP	_	Case=Com	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T14
+18	འ་ཞ་	འ་ཞ་	PROPN	_	_	22	arg1	_	SpaceAfter=No|Tokenid=otannals:000:T2
+19	གཉྀས་	གཉིས་	NUM	_	NumType=Card	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T3
+20	གྱྀས་	གྱིས་	ADP	_	Case=Agn	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T4
+21	དཔྱའ་	དཔྱ་	NOUN	_	_	22	arg2	_	SpaceAfter=No|Tokenid=otannals:000:T54
+22-23	གཅལྟོ	_	_	_	_	_	_	_	SpaceAfter=No
+22	གཅལད་	འཚོལ་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T53
+23	ཏོ	འོ་√cv	PART	_	Mood=Ind	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T19
+24	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T92
+25	[---]་	[---]་	X	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T83
+26	ནའ	ན་	ADP	_	Case=Loc	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T5
+27	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T84
+
+# sent_id = otannals:000:T6
+# text = བཙན་པོ་གཅེན་སྲོང་རྩན་དང། གཅུང་བཙན་སྲོང་གཉྀས་ནོལད་ནས། གཅུང་[---]་ལྟ་མཁའས་སྲེགས་འཁུསྟེ། མཉལད་གྱྀ་གཟེན་དུ། གཅུང་བཙན་སྲོང། ཞུགསུ་[---]་སོ།
+# text_en = [Then] after [x] years, when the Btsan-po, the elder brother Srong-rtsan, and the younger brother Btsansrong were fighting. . . lta, Mkha's-sregs became treacherous, and at Gzen in Gnyald, the younger brother Btsan-srong, to fire. . .
+1	བཙན་པོ་	བཙན་པོ་	NOUN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T6
+2	གཅེན་	གཅེན་	NOUN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T56
+3	སྲོང་རྩན་	སྲོང་རྩན་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T7
+4	དང	དང་√case	ADP	_	Case=Com	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T15
+5	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T85
+6	གཅུང་	གཅུང་	NOUN	_	_	9	arg1	_	SpaceAfter=No|Tokenid=otannals:000:T57
+7	བཙན་སྲོང་	བཙན་སྲོང་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T8
+8	གཉྀས་	གཉིས་	NUM	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T9
+9	ནོལད་	ནོལ་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T58
+10	ནས	ནས་√cv	SCONJ	_	Case=Ela	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T29
+11	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T86
+12	གཅུང་	གཅུང་	NOUN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T59
+13	[---]་ལྟ་	[---]་ལྟ་	X	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T87
+14	མཁའས་སྲེགས་	མཁས་སྲེགས་	PROPN	_	_	15	arg1	_	SpaceAfter=No|Tokenid=otannals:000:T60
+22-23	འཁུསྟེ	_	_	_	_	_	_	_	SpaceAfter=No
+15	འཁུས་	འཁུ་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T61
+16	ཏེ	ཏེ་√cv	SCONJ	_	Case=Sem	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T27
+17	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T88
+18	མཉལད་	མཉལད་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T62
+19	གྱྀ་	གྱི་√case	ADP	_	Case=Gen	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T30
+20	གཟེན་	གཟེན་	PROPN	_	_	26	obl	_	SpaceAfter=No|Tokenid=otannals:000:T63
+21	དུ	དུ་√case	ADP	_	Case=Ter	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T22
+22	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T89
+23	གཅུང་	གཅུང་	NOUN	_	_	26	arg1	_	SpaceAfter=No|Tokenid=otannals:000:T64
+24	བཙན་སྲོང	བཙན་སྲོང་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T65
+25	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T94
+26-27	ཞུགསུ་	_	_	_	_	_	_	_	SpaceAfter=No
+26	ཞུགས་	བཞུགས་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T66
+27	སུ་	དུ་√case	ADP	_	Case=Ter	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T16
+28	[---]་	[---]་	X	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T90
+29	སོ	འོ་√cv	PART	_	Mood=Ind	0	root	_	SpaceAfter=No|Tokenid=otannals:000:T13
+30	།	།་	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:000:T91
+
+# sent_id = otannals:001:T1
+# text = བཙན་མོ་མུན་ཆང་ཀོང་ཅོ། མགར་སྟོང་རྩན་ཡུལ་ཟུང་གྱྀས་སྤྱན་དྲངསྟེ་བོད་ཡུལ་དུ་གཤེགསོ། བལ་པོ་ཡུ་སྣ་ཀུག་ཏི་བཀུམ།
+# text_en = The princess, Mun-chang Kong-co, having been invited by Mgar Stong-rtsan Yul-zung, came to the land of Tibet. They killed the Nepalese Yu-sna-kug-ti.
+1	བཙན་མོ་	བཙན་མོ་	NOUN	_	_	7	arg3	_	SpaceAfter=No|Tokenid=otannals:001:T1
+2	མུན་ཆང་ཀོང་ཅོ	མུན་ཆང་ཀོང་ཅོ་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:001:T2
+3	།	།	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:001:T3
+4	མགར་སྟོང་རྩན་ཡུལ་ཟུང་	མགར་སྟོང་རྩན་ཡུལ་ཟུང་	PROPN	_	_	7	arg1	_	SpaceAfter=No|Tokenid=otannals:001:T5
+5	གྱྀས་	གྱིས་√case	ADP	_	Case=Agn	0	root	_	SpaceAfter=No|Tokenid=otannals:001:T8
+6	སྤྱན་	སྤྱན་	NOUN	_	Number=Sing	7	arg2:lvc	_	SpaceAfter=No|Tokenid=otannals:001:T9
+7-8	དྲངསྟེ་	_	_	_	_	_	_	_	SpaceAfter=No
+7	དྲངས་	འདྲེན་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:001:T10
+8	ཏེ་	ཏེ་√cv	SCONJ	_	Case=Sem	0	root	_	SpaceAfter=No|Tokenid=otannals:001:T11
+9	བོད་ཡུལ་	བོད་ཡུལ་	PROPN	_	_	11	obl	_	SpaceAfter=No|Tokenid=otannals:001:T12
+10	དུ་	དུ་√case	ADP	_	Case=Ter	0	root	_	SpaceAfter=No|Tokenid=otannals:001:T13
+11-12	གཤེགསོ	_	_	_	_	_	_	_	SpaceAfter=No
+11	གཤེགས་	གཤེགས་	VERB	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:001:T14
+12	སོ	འོ་√cv	PART	_	Mood=Ind	0	root	_	SpaceAfter=No|Tokenid=otannals:001:T15
+13	།	།	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:001:T16
+14	བལ་པོ་	བལ་པོ་	NOUN	_	_	16	arg2	_	SpaceAfter=No|Tokenid=otannals:001:T17
+15	ཡུ་སྣ་ཀུག་ཏི་	ཡུ་སྣ་ཀུག་ཏི་	PROPN	_	_	0	root	_	SpaceAfter=No|Tokenid=otannals:001:T4
+16	བཀུམ	འགུམས་	VERB	_	Tense=Past	0	root	_	SpaceAfter=No|Tokenid=otannals:001:T21
+17	།	།	PUNCT	_	_	0	root	_	SpaceAfter=Yes|Tokenid=otannals:001:T22
+
