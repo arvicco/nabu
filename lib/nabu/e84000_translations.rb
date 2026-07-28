@@ -40,13 +40,19 @@ module Nabu
   # counterparts "(not in catalog)" honestly and they resolve the day the
   # owner syncs the Kangyur.
   #
-  # == Why the ref grain stops at documents (the honest limit)
+  # == Why the EDGE grain stops at documents (corrected, P48-r2)
   #
   # 84000 passages cite the Reading Room's own section.paragraph labels
   # (s.1 / i.3 / 1.5); the Derge shelves cite woodblock folio page.line.
-  # The two citation systems share no vocabulary and upstream publishes no
-  # token- or folio-level alignment, so document grain is the strongest
-  # claim the data supports — a passage-grain edge here would be invented.
+  # The edges assert "X translates Y" and stay document grain. The P48-6
+  # wording "the two citation systems share no vocabulary" was refuted on
+  # the owner's first live pairing attempt (P48-r2): the 84000 TEI embeds
+  # inline Degé folio anchors (`<ref cRef="F.3.b" type="folio"/>` + volume
+  # refs) — the very page vocabulary the Derge shelves cite. The parser
+  # captures them per chunk ("folios"/"folios_by_toh" annotations) and
+  # `show --parallel` derives the page-grain pairing at READ time over
+  # these edges (Query::FolioParallel) — derivation, not minting, so
+  # nothing here changed and no finer edge is ever written.
   #
   # == Refresh mechanics (the standing producer contract)
   #
