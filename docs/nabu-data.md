@@ -31,6 +31,21 @@ tree with local modifications has no honest sha, and refusing beats
 misdescribing (the `DerivationFingerprint` weak-identity doctrine, hardened
 from "never skip" to "never publish").
 
+**The stale-ingest guard** (owner ruling D50-a): catalog-reading builders
+derive rows from the last *ingest* of an input source, while the manifest
+records the cone's *current* sha — so if `canonical/<slug>` advanced without
+a re-ingest, the dataset would cite bytes its rows were not derived from.
+The build therefore refuses, hard, whenever a declared input's recorded
+last-ingest identity (`sources.last_ingest_identity`, written by `nabu sync`
+and both rebuild flavors alike) does not equal the cone's current identity —
+naming the source, both identities, and the remedy (`nabu sync <slug>`, or
+`nabu sync <slug> --parse-only` for a no-network re-load). The check is
+uniform across all declared inputs, whatever the builder's read path, and
+there is deliberately **no `--force`**: drifted provenance is never
+publishable. "Run sync before building" is no longer advice — it is
+enforced. On a box with no catalog nothing is guarded (there are no catalog
+rows to drift); a builder that needs the catalog still refuses on its own.
+
 ## The Feature record
 
 Features are registered explicitly in `Nabu::DataBuild::REGISTRY`

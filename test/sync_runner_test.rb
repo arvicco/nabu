@@ -478,6 +478,29 @@ class SyncRunnerTest < Minitest::Test
     assert_equal "succeeded", last_run_status
   end
 
+  # P50-r1 (owner ruling D50-a): every successful sync records the canonical
+  # cone identity its load derived from — the last-INGEST record the
+  # `nabu data build` stale-ingest guard compares against the cone's current
+  # state. A --parse-only run re-derives from the tree on disk, so the record
+  # follows the tree, not the last fetch.
+  def test_success_records_the_ingest_identity_of_the_canonical_tree
+    BreakerAdapter.reset!(urns: %w[urn:cts:test:w1])
+    workdir = File.join(@canonical, "breaker")
+    FileUtils.mkdir_p(workdir)
+    File.write(File.join(workdir, "a.txt"), "alpha\n")
+    runner = make_runner(registry(entry("breaker", BreakerAdapter, wired: true)))
+
+    runner.sync("breaker")
+    assert_equal Nabu::DerivationFingerprint.canonical_identity(workdir),
+                 source_row("breaker")[:last_ingest_identity]
+
+    File.write(File.join(workdir, "a.txt"), "alpha changed\n")
+    runner.sync("breaker", parse_only: true)
+    assert_equal Nabu::DerivationFingerprint.canonical_identity(workdir),
+                 source_row("breaker")[:last_ingest_identity],
+                 "parse-only re-ingests the on-disk tree, so the record must follow it"
+  end
+
   # --- per-repo pins in the history ledger (P6-3, moved by P7-1) ----------
 
   def test_multi_repo_sync_records_a_ledger_pin_per_repo

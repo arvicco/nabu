@@ -38,7 +38,11 @@ class DataBuildFormLemmaTest < Minitest::Test
   # -- rig -------------------------------------------------------------------
 
   # A migrated catalog with the dcs fixtures ingested through the REAL
-  # adapter + loader — the same bytes a production catalog holds.
+  # adapter + loader — the same bytes a production catalog holds. The
+  # last-ingest identity is recorded exactly as both real ingest paths record
+  # it (P50-r1): the canonical identity of the tree the load just derived
+  # from (the fixture copy under canonical/ is byte-identical to FIXTURES,
+  # so the content identity is the same).
   def load_dcs_catalog(db)
     source = Nabu::Store::Source.create(
       slug: "dcs", name: Nabu::Adapters::Dcs.manifest.name,
@@ -46,6 +50,7 @@ class DataBuildFormLemmaTest < Minitest::Test
     )
     loader = Nabu::Store::Loader.new(db: db, source: source, ledger: nil)
     loader.load_from(Nabu::Adapters::Dcs.new, workdir: FIXTURES)
+    source.update(last_ingest_identity: Nabu::DerivationFingerprint.canonical_identity(FIXTURES))
     db
   end
 
@@ -247,6 +252,22 @@ class DataBuildFormLemmaTest < Minitest::Test
       assert_match(/dcs/, error.message)
       assert_match(/sync/, error.message, "the refusal carries the sync hint")
       assert_empty Dir.children(dir)
+    end
+  end
+
+  # P50-r1 (owner ruling D50-a): the stale-ingest guard on the REAL feature —
+  # canonical/dcs moved since the catalog last ingested it, so the manifest
+  # would cite a cone sha the rows were not derived from. Hard refusal, no
+  # override; the remedy is a re-ingest.
+  def test_a_dcs_cone_that_moved_since_ingest_is_refused
+    with_build_env do |root, runner, _catalog|
+      File.write(File.join(root, "canonical", "dcs", "fresh-upstream.txt"), "new upstream bytes\n")
+      error = assert_raises(Nabu::DataBuild::Error) do
+        runner.run(feature: feature, into: File.join(root, "out"))
+      end
+      assert_match(/dcs/, error.message)
+      assert_match(/sync dcs/, error.message, "the refusal carries the re-ingest remedy")
+      refute Dir.exist?(File.join(root, "out", "san")), "a refusal must write nothing"
     end
   end
 

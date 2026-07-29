@@ -11,6 +11,8 @@ require "json"
 # (git HEAD only when the tree is clean; content identity for non-git trees;
 # refusal otherwise) and NEVER a git operation in the output clone.
 class DataBuildRunnerTest < Minitest::Test
+  include StoreTestDB
+
   def with_env
     Dir.mktmpdir("nabu-data-runner") do |root|
       canonical = File.join(root, "canonical")
@@ -160,6 +162,89 @@ class DataBuildRunnerTest < Minitest::Test
       end
       assert_match(/ghost/, error.message)
       assert_match(/not registered/, error.message)
+    end
+  end
+
+  # -- the stale-ingest guard (P50-r1, owner ruling D50-a) -------------------
+  # Catalog rows reflect the last INGEST; the manifest cites the cone's
+  # CURRENT identity. With a catalog open, every declared input's recorded
+  # last-ingest identity must equal the cone's current identity — uniformly,
+  # whatever the builder's read path — or the build refuses. No --force.
+
+  # A catalog-backed environment around one non-git "alpha" cone.
+  # +recorded+: :current (identity of the cone as the real pipeline records
+  # it), :none (row present, no identity recorded), :absent (never ingested),
+  # or a literal identity string (the mismatch rig).
+  def with_catalog_env(recorded: :current)
+    with_env do |root, config, _runner|
+      cone = File.join(root, "canonical", "alpha")
+      FileUtils.mkdir_p(cone)
+      File.write(File.join(cone, "table.tsv"), "a\tb\n")
+      catalog = store_test_db
+      unless recorded == :absent
+        identity = recorded == :current ? Nabu::DerivationFingerprint.canonical_identity(cone) : recorded
+        identity = nil if identity == :none
+        Nabu::Store::Source.create(slug: "alpha", name: "Alpha", adapter_class: "TestAdapter",
+                                   license_class: "open", last_ingest_identity: identity)
+      end
+      runner = Nabu::DataBuild::Runner.new(
+        config: config, registry: Nabu::SourceRegistry.load(File.join(root, "sources.yml")), catalog: catalog
+      )
+      yield root, runner, cone
+    end
+  end
+
+  def alpha_feature
+    DataBuildFake.feature(inputs: ["alpha"], canonical_cones: ["alpha"])
+  end
+
+  def test_a_stale_ingest_is_refused_with_the_re_ingest_remedy
+    with_catalog_env(recorded: "0" * 64) do |root, runner, cone|
+      out = File.join(root, "out")
+      error = assert_raises(Nabu::DataBuild::Error) do
+        runner.run(feature: alpha_feature, into: out)
+      end
+      assert_match(/alpha/, error.message)
+      assert_includes error.message, "000000000000", "the refusal names the recorded identity"
+      assert_includes error.message, Nabu::DerivationFingerprint.canonical_identity(cone)[0, 12],
+                      "the refusal names the current identity"
+      assert_match(/sync alpha/, error.message, "the refusal carries the re-ingest remedy")
+      refute Dir.exist?(File.join(out, "san")), "a refusal must write nothing"
+    end
+  end
+
+  def test_a_matching_ingest_identity_builds
+    with_catalog_env(recorded: :current) do |root, runner, _cone|
+      summary = runner.run(feature: alpha_feature, into: File.join(root, "nabu-data"))
+      assert File.file?(File.join(summary.out_dir, "datapackage.json"))
+    end
+  end
+
+  def test_an_unrecorded_ingest_identity_is_refused
+    with_catalog_env(recorded: :none) do |root, runner, _cone|
+      error = assert_raises(Nabu::DataBuild::Error) do
+        runner.run(feature: alpha_feature, into: File.join(root, "out"))
+      end
+      assert_match(/does not record/, error.message)
+      assert_match(/sync alpha/, error.message)
+    end
+  end
+
+  def test_a_never_ingested_input_is_refused
+    with_catalog_env(recorded: :absent) do |root, runner, _cone|
+      error = assert_raises(Nabu::DataBuild::Error) do
+        runner.run(feature: alpha_feature, into: File.join(root, "out"))
+      end
+      assert_match(/never been ingested/, error.message)
+      assert_match(/sync alpha/, error.message)
+    end
+  end
+
+  def test_an_inputs_free_feature_builds_with_a_catalog_open
+    with_catalog_env(recorded: :absent) do |root, runner, _cone|
+      summary = runner.run(feature: DataBuildFake.feature, into: File.join(root, "nabu-data"))
+      assert File.file?(File.join(summary.out_dir, "datapackage.json")),
+             "own-authorship features have no ingest to guard"
     end
   end
 
