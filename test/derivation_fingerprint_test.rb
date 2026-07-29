@@ -225,6 +225,49 @@ class DerivationFingerprintTest < Minitest::Test
     assert_equal excluded_folds.sort, consulted
   end
 
+  # -- the data_build exclusion (owner ruling D50-b) -----------------------
+
+  def test_data_build_left_the_shared_core
+    # D50-b: the nabu-data production rail is producer-only — it READS the
+    # catalog and writes CSV datasets into an external clone — so a
+    # data_build packet must not dirty every source's fingerprint. The
+    # purity scan below is what keeps this exclusion honest.
+    assert_includes Nabu::DerivationFingerprint::EXCLUDED_DIRS, "data_build"
+    assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, "data_build.rb"
+  end
+
+  # Files (relative to lib/) allowed to name DataBuild or require a
+  # data_build path. Only the INWARD direction is forbidden: data_build code
+  # may require the rest of Nabu freely (it is a consumer); nothing that
+  # shapes stored data may consume data_build.
+  DATA_BUILD_EXEMPT = [
+    /\Anabu\.rb\z/,                          # the require manifest
+    %r{\Anabu/data_build(\.rb\z|/)},         # the rail itself
+    %r{\Anabu/cli\.rb\z},                    # the CLI legitimately drives builds
+    %r{\Anabu/derivation_fingerprint\.rb\z}, # names the exclusion
+    # The offline xct fold-table generator (rake fold:xct): ops/ is already
+    # outside every digest (EXCLUDED_DIRS); it borrows DataBuild::CsvWriter's
+    # ID discipline so the published wylie-fold dataset and the generated
+    # table stay in step, and its runtime product (xct.rb) IS fingerprinted
+    # as a fold module — the reference cannot influence stored data.
+    %r{\Anabu/ops/xct_fold_builder\.rb\z}
+  ].freeze
+
+  def test_no_derivation_code_references_data_build
+    lib = File.expand_path(File.join("..", "lib"), __dir__)
+    pattern = /\bDataBuild\b|require(?:_relative)?\s+["'][^"']*data_build/
+    offenders = Dir[File.join(lib, "**", "*.rb")].select do |file|
+      rel = file.delete_prefix("#{lib}#{File::SEPARATOR}")
+      DATA_BUILD_EXEMPT.none? { |exempt| rel.match?(exempt) } &&
+        File.read(file).match?(pattern)
+    end
+    assert_empty offenders,
+                 "data_build is excluded from the derivation fingerprint (D50-b) because it " \
+                 "cannot influence stored data — this reference breaks that assumption; " \
+                 "either remove it or revert the fingerprint exclusion. Offenders:\n" \
+                 "#{offenders.join("\n")}"
+  end
+
   def test_legacy_single_sha_fold_stamp_reads_dirty_with_full_blame
     # Stamps written before P39-1 carry one whole-table sha: they must read
     # dirty (:fold) — the rebless task, not silent acceptance, migrates them.
