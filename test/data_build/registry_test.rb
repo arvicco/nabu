@@ -2,20 +2,21 @@
 
 require "test_helper"
 
-# The nabu-data feature census (P50-W1): four registered features, every field
+# The nabu-data feature census (P50-W1): six registered features, every field
 # present and well-shaped. The rail landed first with everything :planned;
 # builder packets flip their own feature as each builder lands (P50-W2:
-# san/form-lemma, P50-W4: xct/verb-lemma). The registry is EXPLICIT — no
-# discovery magic — so this test pins the ratified metadata, not just the
-# shape.
+# san/form-lemma, P50-W4: xct/verb-lemma, P52-4: the two BY-SA fold-ins).
+# The registry is EXPLICIT — no discovery magic — so this test pins the
+# ratified metadata, not just the shape.
 class DataBuildRegistryTest < Minitest::Test
-  EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation].freeze
+  EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation
+                      jpn/kyujitai-fold lzh/kanripo-gaiji].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
   end
 
-  def test_registers_exactly_the_four_features_with_unique_slugs_in_order
+  def test_registers_exactly_the_six_features_with_unique_slugs_in_order
     assert_equal EXPECTED_SLUGS, features.map(&:slug)
     assert_equal features.size, features.map(&:slug).uniq.size
   end
@@ -23,7 +24,8 @@ class DataBuildRegistryTest < Minitest::Test
   def test_the_builder_status_census
     # The rail landed with every feature :planned; each builder packet flipped
     # exactly its own feature (P50-W2 form-lemma, P50-W3 wylie-fold, P50-W4
-    # verb-lemma, P51-W5 segmentation). The full census is available.
+    # verb-lemma, P51-W5 segmentation, P52-4 kyujitai-fold + kanripo-gaiji).
+    # The full census is available.
     assert_equal EXPECTED_SLUGS, features.select(&:available?).map(&:slug)
     features.select(&:planned?).each { |feature| assert_nil feature.builder }
     features.select(&:available?).each { |feature| refute_nil feature.builder }
@@ -79,16 +81,41 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal "passage-urn", segmentation.anchoring
     assert_equal %w[derge-kangyur soas-tibetan], segmentation.inputs
     assert_equal %w[derge-kangyur soas-tibetan], segmentation.canonical_cones
+
+    kyujitai = Nabu::DataBuild.feature("jpn/kyujitai-fold")
+    assert_equal :available, kyujitai.status, "P52-4: the kyūjitai-fold builder has landed"
+    assert_equal Nabu::DataBuild::KyujitaiFoldBuilder, kyujitai.builder
+    assert_equal "gold", kyujitai.tier
+    assert_equal "none", kyujitai.anchoring
+    assert_equal %w[unihan edrdg], kyujitai.inputs
+    assert_equal %w[unihan edrdg], kyujitai.canonical_cones
+    assert_match(/rake fold:jpn|Nabu::Jpn/, kyujitai.rationale,
+                 "the one-seam-two-consumers relation is stated where the owner reads it")
+
+    gaiji = Nabu::DataBuild.feature("lzh/kanripo-gaiji")
+    assert_equal :available, gaiji.status, "P52-4: the kanripo-gaiji builder has landed"
+    assert_equal Nabu::DataBuild::KanripoGaijiBuilder, gaiji.builder
+    assert_equal "gold", gaiji.tier
+    assert_equal "none", gaiji.anchoring
+    assert_empty gaiji.inputs, "own curation pinned to the charlist commit the TSV headers record"
+    assert_empty gaiji.canonical_cones
   end
 
   def test_language_statics_match_the_glottolog_spine
     # Verified against the owner's canonical/cldf-spine glottolog cone
-    # (2026-07-28): sans1269 Sanskrit/san, clas1254 Classical Tibetan/xct.
+    # (2026-07-28): sans1269 Sanskrit/san, clas1254 Classical Tibetan/xct;
+    # (2026-07-29): nucl1643 Japanese/jpn, lite1248 Classical Chinese/lzh.
     san = Nabu::DataBuild::LANGUAGES.fetch("san")
     assert_equal %w[Sanskrit sans1269 san], [san.name, san.glottocode, san.iso639p3]
 
     xct = Nabu::DataBuild::LANGUAGES.fetch("xct")
     assert_equal ["Classical Tibetan", "clas1254", "xct"], [xct.name, xct.glottocode, xct.iso639p3]
+
+    jpn = Nabu::DataBuild::LANGUAGES.fetch("jpn")
+    assert_equal %w[Japanese nucl1643 jpn], [jpn.name, jpn.glottocode, jpn.iso639p3]
+
+    lzh = Nabu::DataBuild::LANGUAGES.fetch("lzh")
+    assert_equal ["Classical Chinese", "lite1248", "lzh"], [lzh.name, lzh.glottocode, lzh.iso639p3]
   end
 
   def test_feature_lookup_goes_through_the_features_seam
@@ -98,8 +125,7 @@ class DataBuildRegistryTest < Minitest::Test
 
   # The D51-a license carve-out (2026-07-29): the allowed set is exactly
   # CC BY / CC BY-SA; NC/ND inputs are disqualifying at intake, so no NC/ND
-  # value is ever legal. Every SHIPPED feature stays CC BY — BY-SA features
-  # arrive in later packets.
+  # value is ever legal.
   def test_license_defaults_to_cc_by_and_only_the_allowed_set_is_legal
     assert_equal %w[CC-BY-4.0 CC-BY-SA-4.0], Nabu::DataBuild::LICENSES
     assert_equal "CC-BY-4.0", valid_feature.license, "the default is the repo default, CC BY 4.0"
@@ -114,11 +140,20 @@ class DataBuildRegistryTest < Minitest::Test
     end
   end
 
-  def test_every_registered_feature_carries_the_default_cc_by_license
-    features.each do |feature|
-      assert_equal "CC-BY-4.0", feature.license,
-                   "#{feature.slug}: all four shipped features are CC BY (BY-SA features are later packets)"
-    end
+  # The per-feature license census (D51-a): the four legacy features stay the
+  # repo-default CC BY; the two P52-4 fold-ins are BY-SA — kyujitai-fold's
+  # load-bearing KANJIDIC2 lane is EDRDG share-alike, kanripo-gaiji is curated
+  # from the BY-SA KR-Gaiji charlist.
+  def test_the_per_feature_license_census
+    expected = {
+      "san/form-lemma" => "CC-BY-4.0",
+      "xct/wylie-fold" => "CC-BY-4.0",
+      "xct/verb-lemma" => "CC-BY-4.0",
+      "xct/segmentation" => "CC-BY-4.0",
+      "jpn/kyujitai-fold" => "CC-BY-SA-4.0",
+      "lzh/kanripo-gaiji" => "CC-BY-SA-4.0"
+    }
+    assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
 
   def test_feature_construction_refuses_dishonest_values

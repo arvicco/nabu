@@ -171,6 +171,8 @@ no page update is a red suite, and vice versa.
 | `xct/wylie-fold` | available | gold | CC-BY-4.0 | xct | — |
 | `xct/verb-lemma` | available | gold-derived | CC-BY-4.0 | xct | tibetan-verbs |
 | `xct/segmentation` | available | silver | CC-BY-4.0 | xct | derge-kangyur, soas-tibetan |
+| `jpn/kyujitai-fold` | available | gold | CC-BY-SA-4.0 | jpn | unihan, edrdg |
+| `lzh/kanripo-gaiji` | available | gold | CC-BY-SA-4.0 | lzh | — |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -203,6 +205,22 @@ Maps the 2,491 TVD stem tuples (present/past/future/imperative, grammarians' dis
 Tsheg-bar/word segmentation over a curated Derge slice with the segmenter's error rate measured against the SOAS gold corpus and published in-band — the calibration ground for any full-canon layer.
 
 **Maintenance**: re-derive on canonical text revisions or segmenter upgrades; each release republishes the eval number
+
+### `jpn/kyujitai-fold` — Japanese kyūjitai↔shinjitai reform-pair census (Unihan jinmeiyō + KANJIDIC2 jōyō lanes)
+
+**Status**: available · **Tier**: gold · **Anchoring**: none · **Inputs**: unihan, edrdg
+
+The two-lane old↔new kanji pair table (Unihan kJinmeiyoKanji reform pairs + KANJIDIC2 jōyō-target variant edges, reform merges admitted, refusals censused) rendered through the same resolution seam `rake fold:jpn` compiles into Nabu::Jpn — one seam, two consumers. BY-SA: the load-bearing KANJIDIC2 lane is EDRDG share-alike (CC BY-SA 4.0).
+
+**Maintenance**: re-derive after each unihan/edrdg sync (EDRDG rebuilds nightly, Unihan annually); regenerate together with `rake fold:jpn` so the shipped fold module and the dataset never drift
+
+### `lzh/kanripo-gaiji` — Kanripo gaiji display ladder — faithful/IDS/substitute resolutions for &KR…; references
+
+**Status**: available · **Tier**: gold · **Anchoring**: none · **Inputs**: —
+
+The hand-curated resolution ladder for the Kanseki Repository's not-yet-encoded character references (427 faithful codepoints, 562 labeled substitutes, the IDS lane empty by census, everything else an honest ⬚ placeholder) — the same three TSVs Nabu's `--display reading` mode loads for lzh kanripo passages. BY-SA: curated from KR-Gaiji's charlist under the kanripo org grant (CC BY-SA 4.0).
+
+**Maintenance**: re-curate by hand after a `nabu sync kr-gaiji` advances charlist.org.txt (the P38-1 procedure); the curation is pinned to the charlist commit its file headers record, deliberately never auto-derived
 
 ## What the rail never does
 
