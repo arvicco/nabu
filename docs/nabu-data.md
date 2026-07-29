@@ -21,10 +21,10 @@ nabu data build <lang>/<feature> --into PATH    # build one dataset (files only)
 ```
 
 `data list` documents every artifact the rail is able to produce — slug,
-status (available | planned), title, language, tier, anchoring kind, input
-sources, the rationale for the dataset's existence, and the recommended
-maintenance/periodicity — and, for every available feature, the **exact
-copy-paste command sequence** (input syncs chained into the build; the
+status (available | planned), title, language, tier, license, anchoring
+kind, input sources, the rationale for the dataset's existence, and the
+recommended maintenance/periodicity — and, for every available feature,
+the **exact copy-paste command sequence** (input syncs chained into the build; the
 stale-ingest guard makes the syncs mandatory anyway). Planned features are
 listed too: the census is the roadmap.
 
@@ -65,6 +65,7 @@ valid-by-construction `Feature` value:
 | `title` | the dataset's human title (the manifest `title`) |
 | `status` | `:available` (builder landed) or `:planned` (build refuses) |
 | `tier` | provenance tier: `gold`, `gold-derived`, `silver` |
+| `license` | the dataset's license: `CC-BY-4.0` (default) or `CC-BY-SA-4.0` (share-alike inputs — D51-a); see Licensing below |
 | `anchoring` | how rows anchor into corpora: `none`, `passage-urn` |
 | `inputs` | source slugs consumed (empty = own authorship) |
 | `canonical_cones` | canonical path prefixes whose shas are recorded at derivation |
@@ -143,18 +144,33 @@ raise rather than publish):
 - `Source` cells cite `sources.bib` keys, `;`-separated; the keys obey the
   same identifier regex.
 
+## Licensing
+
+nabu-data is a **mixed-license repository** (owner ruling D51-a,
+2026-07-29). The repo default is **CC BY 4.0**; each dataset's
+`datapackage.json` `licenses` entry is **authoritative** for that dataset,
+and its README states the dataset's own license explicitly. The allowed set
+is exactly two values — `CC-BY-4.0` (the default) and `CC-BY-SA-4.0`
+(datasets derived from share-alike inputs, whose READMEs add the one-line
+carve-out: the repository's default license does not apply to them). The
+set is closed by construction (`Nabu::DataBuild::LICENSES`; the `Feature`
+record refuses anything else): **NC/ND can never join it** — every dataset
+here is a derivative work built to be reused, so non-commercial or
+no-derivatives inputs are disqualifying at intake, and no NC/ND value is
+ever a legal output license.
+
 ## The features
 
 The census below is written from `Nabu::DataBuild::REGISTRY` and
 drift-guarded by `test/docs/nabu_data_page_test.rb` — a registry change with
 no page update is a red suite, and vice versa.
 
-| Feature | Status | Tier | Language | Inputs |
-| --- | --- | --- | --- | --- |
-| `san/form-lemma` | available | gold-derived | san | dcs |
-| `xct/wylie-fold` | available | gold | xct | — |
-| `xct/verb-lemma` | available | gold-derived | xct | tibetan-verbs |
-| `xct/segmentation` | available | silver | xct | derge-kangyur, soas-tibetan |
+| Feature | Status | Tier | License | Language | Inputs |
+| --- | --- | --- | --- | --- | --- |
+| `san/form-lemma` | available | gold-derived | CC-BY-4.0 | san | dcs |
+| `xct/wylie-fold` | available | gold | CC-BY-4.0 | xct | — |
+| `xct/verb-lemma` | available | gold-derived | CC-BY-4.0 | xct | tibetan-verbs |
+| `xct/segmentation` | available | silver | CC-BY-4.0 | xct | derge-kangyur, soas-tibetan |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 

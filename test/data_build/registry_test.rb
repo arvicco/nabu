@@ -96,6 +96,31 @@ class DataBuildRegistryTest < Minitest::Test
     assert_nil Nabu::DataBuild.feature("nope/nope")
   end
 
+  # The D51-a license carve-out (2026-07-29): the allowed set is exactly
+  # CC BY / CC BY-SA; NC/ND inputs are disqualifying at intake, so no NC/ND
+  # value is ever legal. Every SHIPPED feature stays CC BY — BY-SA features
+  # arrive in later packets.
+  def test_license_defaults_to_cc_by_and_only_the_allowed_set_is_legal
+    assert_equal %w[CC-BY-4.0 CC-BY-SA-4.0], Nabu::DataBuild::LICENSES
+    assert_equal "CC-BY-4.0", valid_feature.license, "the default is the repo default, CC BY 4.0"
+    assert_equal "CC-BY-SA-4.0", valid_feature(license: "CC-BY-SA-4.0").license,
+                 "share-alike-derived datasets may publish as BY-SA (owner ruling D51-a)"
+
+    ["CC-BY-NC-4.0", "CC-BY-ND-4.0", "CC0-1.0", "whatever", ""].each do |value|
+      error = assert_raises(Nabu::ValidationError, "license #{value.inspect} must be refused") do
+        valid_feature(license: value)
+      end
+      assert_match(/license/, error.message)
+    end
+  end
+
+  def test_every_registered_feature_carries_the_default_cc_by_license
+    features.each do |feature|
+      assert_equal "CC-BY-4.0", feature.license,
+                   "#{feature.slug}: all four shipped features are CC BY (BY-SA features are later packets)"
+    end
+  end
+
   def test_feature_construction_refuses_dishonest_values
     assert_raises(Nabu::ValidationError) { valid_feature(slug: "SAN/Form_Lemma") }
     assert_raises(Nabu::ValidationError) { valid_feature(slug: "san") }

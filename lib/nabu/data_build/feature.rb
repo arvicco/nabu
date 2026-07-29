@@ -18,6 +18,16 @@ module Nabu
 
     STATUSES = %i[available planned].freeze
 
+    # The allowed dataset licenses (owner ruling D51-a, 2026-07-29): the repo
+    # default is CC BY 4.0; a dataset derived from share-alike inputs
+    # publishes as CC BY-SA 4.0, and its manifest is authoritative over the
+    # repo default. This closed set is the whole legal space — NC/ND can
+    # NEVER join it: every dataset here is itself a derivative work built to
+    # be reused, so non-commercial or no-derivatives inputs are disqualifying
+    # at intake, and no NC/ND license value is ever legal on an output.
+    LICENSES = %w[CC-BY-4.0 CC-BY-SA-4.0].freeze
+    DEFAULT_LICENSE = "CC-BY-4.0"
+
     # One registered dataset feature — the full self-documentation record
     # `nabu data list` prints (owner ruling: the rail documents every
     # artifact it can produce, with rationale and recommended maintenance).
@@ -26,6 +36,8 @@ module Nabu
     # language        a Language value (code + languages.csv statics)
     # status          :available (builder landed) | :planned (refuse to build)
     # tier            provenance tier string ("gold", "gold-derived", "silver")
+    # license         the dataset's license, from LICENSES (default CC BY;
+    #                 BY-SA when share-alike inputs mandate it — D51-a)
     # anchoring       how rows anchor into corpora ("none", "passage-urn")
     # inputs          source slugs consumed (empty = own authorship)
     # canonical_cones repo-relative canonical path prefixes whose git shas are
@@ -37,10 +49,11 @@ module Nabu
     # Valid by construction: a Feature that cannot honestly describe itself
     # (available with no builder, planned with one, slug/language mismatch)
     # refuses with Nabu::ValidationError.
-    Feature = Data.define(:slug, :language, :title, :status, :tier, :anchoring,
+    Feature = Data.define(:slug, :language, :title, :status, :tier, :license, :anchoring,
                           :inputs, :canonical_cones, :rationale, :maintenance, :builder) do
       def initialize(slug:, language:, title:, status:, tier:, anchoring:,
-                     inputs:, canonical_cones:, rationale:, maintenance:, builder: nil)
+                     inputs:, canonical_cones:, rationale:, maintenance:,
+                     license: DEFAULT_LICENSE, builder: nil)
         unless slug.to_s.match?(SLUG_PATTERN)
           raise Nabu::ValidationError, "feature slug #{slug.inspect} must be <lang>/<feature> " \
                                        "(lower-case, hyphen-joined segments)"
@@ -51,6 +64,11 @@ module Nabu
         end
         raise Nabu::ValidationError, "feature status must be one of #{STATUSES.inspect}, got #{status.inspect}" unless
           STATUSES.include?(status)
+        unless LICENSES.include?(license)
+          raise Nabu::ValidationError, "feature #{slug}: license #{license.inspect} is not in the allowed " \
+                                       "set #{LICENSES.inspect} (owner ruling D51-a; NC/ND inputs are " \
+                                       "disqualifying, so no NC/ND value is ever legal)"
+        end
 
         { title: title, tier: tier, anchoring: anchoring, rationale: rationale, maintenance: maintenance }
           .each do |field, value|

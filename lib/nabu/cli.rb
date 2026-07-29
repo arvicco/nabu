@@ -20,10 +20,11 @@ module Nabu
     desc "list", "Document every dataset the rail can produce (rationale + maintenance included)"
     long_desc <<~HELP, wrap: false
       The rail's own documentation: one block per registered feature — slug,
-      status (available | planned), title, language, tier, anchoring kind,
-      input sources, the rationale for the dataset's existence, and the
-      recommended maintenance/periodicity. Planned features are listed too:
-      the census is the roadmap, and `data build` refuses them by name.
+      status (available | planned), title, language, tier, license,
+      anchoring kind, input sources, the rationale for the dataset's
+      existence, and the recommended maintenance/periodicity. Planned
+      features are listed too: the census is the roadmap, and `data build`
+      refuses them by name.
     HELP
     def list
       features = Nabu::DataBuild.features
@@ -34,7 +35,7 @@ module Nabu
         say "#{feature.slug} — #{feature.status}"
         say "  #{feature.title}"
         say "  language: #{feature.language_code} (#{feature.language.name})   tier: #{feature.tier}   " \
-            "anchoring: #{feature.anchoring}   inputs: #{inputs}"
+            "license: #{feature.license}   anchoring: #{feature.anchoring}   inputs: #{inputs}"
         say "  rationale: #{feature.rationale}"
         say "  maintenance: #{feature.maintenance}"
         # Owner ruling 2026-07-29: the maintenance prose alone gives no
