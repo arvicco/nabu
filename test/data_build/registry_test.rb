@@ -11,7 +11,7 @@ require "test_helper"
 class DataBuildRegistryTest < Minitest::Test
   EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation
                       zho/hani-fold jpn/aozora-gaiji lat/sabellic-loans grc/meter
-                      jpn/kyujitai-fold lzh/kanripo-gaiji].freeze
+                      jpn/kyujitai-fold lzh/kanripo-gaiji sux/value-signs].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -25,7 +25,8 @@ class DataBuildRegistryTest < Minitest::Test
   def test_the_builder_status_census
     # The rail landed with every feature :planned; each builder packet flipped
     # exactly its own feature (P50-W2 form-lemma, P50-W3 wylie-fold, P50-W4
-    # verb-lemma, P51-W5 segmentation, P52-2/3/4/5 the conversion wave).
+    # verb-lemma, P51-W5 segmentation, P52-2/3/4/5 the conversion wave,
+    # P53-3 value-signs — landed available, builder and feature together).
     # The full census is available.
     assert_equal EXPECTED_SLUGS, features.select(&:available?).map(&:slug)
     features.select(&:planned?).each { |feature| assert_nil feature.builder }
@@ -151,6 +152,19 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal "none", gaiji.anchoring
     assert_empty gaiji.inputs, "own curation pinned to the charlist commit the TSV headers record"
     assert_empty gaiji.canonical_cones
+
+    value_signs = Nabu::DataBuild.feature("sux/value-signs")
+    assert_equal :available, value_signs.status, "P53-3: the value-signs builder has landed"
+    assert_equal Nabu::DataBuild::ValueSignsBuilder, value_signs.builder
+    assert_equal "gold", value_signs.tier, "the OSL is the field's hand-curated sign registry"
+    assert_equal "none", value_signs.anchoring
+    assert_equal ["osl"], value_signs.inputs, "the stale-ingest guard rides the osl cone"
+    assert_equal ["osl"], value_signs.canonical_cones
+    assert_equal "sux-value-signs", value_signs.package_name
+    assert_match(/one row per \(value, sign\) pair/, value_signs.rationale)
+    assert_match(/%akk/, value_signs.rationale,
+                 "the language-scope call (sux leads, akk rides a qualifier column) is stated " \
+                 "where the owner reads it")
   end
 
   def test_language_statics_match_the_glottolog_spine
@@ -186,6 +200,12 @@ class DataBuildRegistryTest < Minitest::Test
 
     lzh = Nabu::DataBuild::LANGUAGES.fetch("lzh")
     assert_equal ["Classical Chinese", "lite1248", "lzh"], [lzh.name, lzh.glottocode, lzh.iso639p3]
+
+    # Checked 2026-07-29 (P53-3): sume1241 Sumerian/sux (glottolog/
+    # languages.csv — level: language, an isolate; the one row carrying
+    # ISO sux).
+    sux = Nabu::DataBuild::LANGUAGES.fetch("sux")
+    assert_equal %w[Sumerian sume1241 sux], [sux.name, sux.glottocode, sux.iso639p3]
   end
 
   def test_feature_lookup_goes_through_the_features_seam
@@ -221,7 +241,8 @@ class DataBuildRegistryTest < Minitest::Test
       "xct/verb-lemma" => "CC-BY-4.0", "xct/segmentation" => "CC-BY-4.0",
       "zho/hani-fold" => "CC-BY-4.0", "jpn/aozora-gaiji" => "CC-BY-4.0",
       "lat/sabellic-loans" => "CC-BY-SA-4.0", "grc/meter" => "CC-BY-4.0",
-      "jpn/kyujitai-fold" => "CC-BY-SA-4.0", "lzh/kanripo-gaiji" => "CC-BY-SA-4.0"
+      "jpn/kyujitai-fold" => "CC-BY-SA-4.0", "lzh/kanripo-gaiji" => "CC-BY-SA-4.0",
+      "sux/value-signs" => "CC-BY-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
