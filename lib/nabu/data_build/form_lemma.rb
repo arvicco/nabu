@@ -27,8 +27,9 @@ module Nabu
     # .conllu_parsed siblings are never discovered), and withdrawn rows are
     # excluded here exactly as the Indexer excludes them. The catalog is a
     # pure function of canonical/dcs, so the cone sha the Runner records
-    # honestly names the derivation input — the builder's README note tells
-    # the owner to sync before building so the two cannot drift.
+    # honestly names the derivation input — and the Runner's stale-ingest
+    # guard (P50-r1) refuses the build when canonical/dcs moved since the
+    # catalog last ingested it, so the two cannot drift.
     #
     # == The sweep
     #
@@ -260,8 +261,10 @@ module Nabu
           `datapackage.json` provenance block.
 
           Derivation note: rows are read from Nabu's catalog — the ingested, gold-gated
-          DCS chapters, a pure function of `canonical/dcs` — so run `nabu sync dcs`
-          before building; the recorded cone sha then names exactly the ingested bytes.
+          DCS chapters, a pure function of `canonical/dcs`. `nabu data build` refuses to
+          build when `canonical/dcs` has changed since the catalog last ingested it
+          (re-ingest with `nabu sync dcs`), so the recorded cone sha names exactly the
+          ingested bytes.
         NOTES
       end
     end

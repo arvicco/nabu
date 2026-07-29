@@ -16,6 +16,30 @@ module Store
       end
     end
 
+    # P50-r1 (migration 022): sources.last_ingest_identity — the last-INGEST
+    # canonical identity the `nabu data build` stale-ingest guard reads. The
+    # backfill copies each stamped source's canonical_identity: the stamp
+    # asserts the rows satisfied that identity at the last rebuild, so the
+    # copy can only cause honest refusals (canonical moved since) — never a
+    # false pass. Unstamped sources stay nil (= "cannot prove", guard refuses).
+    def test_migration_022_backfills_last_ingest_identity_from_derivation_stamps
+      db = Sequel.sqlite
+      require "sequel/extensions/migration"
+      Sequel::Migrator.run(db, Nabu::Store::MIGRATIONS_DIR, target: 21, allow_missing_migration_files: true)
+      db[:sources].insert(slug: "alpha", name: "Alpha", adapter_class: "T", license_class: "open")
+      db[:sources].insert(slug: "beta", name: "Beta", adapter_class: "T", license_class: "open")
+      db[:derivation_stamps].insert(
+        slug: "alpha", fingerprint: "f" * 64, canonical_identity: "c" * 64, parser_digest: "p",
+        fold_digest: "d", migration_level: 21, config_json: "{}", stamped_at: Time.now
+      )
+
+      Sequel::Migrator.run(db, Nabu::Store::MIGRATIONS_DIR, allow_missing_migration_files: true)
+
+      assert_equal "c" * 64, db[:sources].first(slug: "alpha")[:last_ingest_identity]
+      assert_nil db[:sources].first(slug: "beta")[:last_ingest_identity],
+                 "an unstamped source has no honest identity to backfill"
+    end
+
     # P17-2: the facet table is skinny and open-vocabulary — facet/value
     # required, raw (the upstream verbatim, `?` certainty included) optional.
     def test_document_facets_columns_and_index

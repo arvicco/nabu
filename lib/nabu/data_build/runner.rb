@@ -39,6 +39,7 @@ module Nabu
         raise Error, "#{feature.slug} is #{feature.status} — its builder has not landed yet" unless feature.available?
 
         input_shas = feature.canonical_cones.to_h { |cone| [cone, cone_sha(cone)] }
+        guard_ingested_inputs!(feature)
         sources = source_refs(feature, input_shas)
         out_dir = File.join(File.expand_path(into.to_s), feature.slug)
         FileUtils.mkdir_p(out_dir)
@@ -88,6 +89,62 @@ module Nabu
       def tree_identity(dir, cone)
         DerivationFingerprint.canonical_identity(dir) ||
           raise(Error, "canonical/#{cone} has no honest content identity (unreadable or dirty tree)")
+      end
+
+      # The stale-ingest guard (P50-r1, owner ruling D50-a). Catalog-reading
+      # builders derive rows from the last INGEST of an input source, while
+      # the manifest records the cone's CURRENT identity — if canonical
+      # advanced without a re-ingest, the dataset would cite bytes its rows
+      # were not derived from (silent provenance drift). So: with a catalog
+      # open, every declared input's recorded last-ingest identity
+      # (sources.last_ingest_identity, written by sync and rebuild alike;
+      # migration 022) must equal the cone's current identity. Uniform across
+      # read paths on purpose: even for a builder that reads canonical
+      # directly, a catalog disagreeing with canonical means the box is
+      # mid-ingest or torn, and the owner's normal flow (sync = fetch + load
+      # + record, in one command) never trips it — so uniform-and-simple
+      # costs nothing and refuses exactly the torn states. No catalog on the
+      # box = no catalog rows to drift = nothing to guard (a builder that
+      # NEEDS the catalog still refuses on its own). No --force: drifted
+      # provenance is never publishable.
+      def guard_ingested_inputs!(feature)
+        return if @catalog.nil?
+
+        feature.inputs.each do |slug|
+          recorded = ingest_identity(slug)
+          current = DerivationFingerprint.canonical_identity(File.join(@config.canonical_dir, slug))
+          next if !recorded.nil? && recorded == current
+
+          raise Error, stale_ingest_message(slug, recorded, current)
+        end
+      end
+
+      def ingest_identity(slug)
+        row = @catalog[:sources].where(slug: slug).first
+        if row.nil?
+          raise Error, "input source #{slug} has never been ingested into this catalog — " \
+                       "run `nabu sync #{slug}` before building"
+        end
+
+        row[:last_ingest_identity]
+      end
+
+      def stale_ingest_message(slug, recorded, current)
+        if recorded.nil?
+          "the catalog does not record which canonical bytes its #{slug} rows were ingested from " \
+            "(an ingest predating the record, or a tree with no honest identity) — " \
+            "re-ingest with `nabu sync #{slug}` before building"
+        else
+          "canonical/#{slug} changed since the catalog last ingested it " \
+            "(ingested #{short_identity(recorded)}, canonical now #{short_identity(current)}) — " \
+            "the rows this build reads do not derive from the bytes the manifest would cite; " \
+            "re-ingest with `nabu sync #{slug}` (no-network re-load: `nabu sync #{slug} --parse-only`), " \
+            "then build again"
+        end
+      end
+
+      def short_identity(identity)
+        identity.nil? ? "(no honest identity)" : identity[0, 12]
       end
 
       # The manifest sources[] entries: title/path/license from each input
