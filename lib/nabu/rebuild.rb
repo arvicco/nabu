@@ -261,8 +261,18 @@ module Nabu
     # exactly the derived rows the stamp vouches for.
     def stamp!(db, entry)
       languages = Store::DerivationStamp.derived_languages(db, entry.slug)
-      Store::DerivationStamp.stamp!(db, slug: entry.slug,
-                                        fingerprint: fingerprints.for_source(entry, languages: languages))
+      fingerprint = fingerprints.for_source(entry, languages: languages)
+      Store::DerivationStamp.stamp!(db, slug: entry.slug, fingerprint: fingerprint)
+      record_ingest_identity(db, entry, fingerprint)
+    end
+
+    # P50-r1 (owner ruling D50-a): mirror the replay's canonical identity
+    # onto the sources row — the last-INGEST record the `nabu data build`
+    # stale-ingest guard compares against the cone's current state (sync
+    # writes the same column; migration 022). A weak identity records nil:
+    # "cannot prove", which the guard refuses. Shared with IncrementalRebuild.
+    def record_ingest_identity(db, entry, fingerprint)
+      db[:sources].where(slug: entry.slug).update(last_ingest_identity: fingerprint.canonical_identity)
     end
 
     # Shared with IncrementalRebuild (subclass): one computer per run so the

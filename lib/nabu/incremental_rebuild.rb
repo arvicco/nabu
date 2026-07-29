@@ -108,6 +108,7 @@ module Nabu
           fold_digest: DerivationFingerprint.fold_digest(Store::DerivationStamp.derived_languages(db, entry.slug))
         )
         Store::DerivationStamp.stamp!(db, slug: entry.slug, fingerprint: fingerprint)
+        record_ingest_identity(db, entry, fingerprint)
         indexed = (indexed || 0) + refresh_index(db, fulltext, entry) unless index_inert?(entry)
       end
       replay_enrichments(db)

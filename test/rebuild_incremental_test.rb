@@ -53,6 +53,28 @@ class RebuildIncrementalTest < Minitest::Test
     end
   end
 
+  # P50-r1 (owner ruling D50-a): both rebuild flavors mirror the replay's
+  # canonical identity onto the sources row — the last-INGEST record the
+  # `nabu data build` stale-ingest guard reads (sync writes the same column).
+  def test_replays_record_the_ingest_identity_on_the_sources_row
+    full_rebuilder.run
+    with_db do |db|
+      db[:sources].order(:slug).all.each do |row|
+        stamp = db[:derivation_stamps].first(slug: row[:slug])
+        assert_equal stamp[:canonical_identity], row[:last_ingest_identity],
+                     "#{row[:slug]}: sources.last_ingest_identity must equal the stamp's canonical identity"
+      end
+    end
+
+    write_canonical("beta", "b.txt" => "Odyssey\nἄνδρα πολύτροπον\n")
+    incremental_rebuilder.run
+    with_db do |db|
+      assert_equal Nabu::DerivationFingerprint.canonical_identity(File.join(@canonical, "beta")),
+                   db[:sources].first(slug: "beta")[:last_ingest_identity],
+                   "a dirty replay must re-record the identity it just derived from"
+    end
+  end
+
   # -- the sacred invariant ------------------------------------------------
 
   def test_incremental_skips_clean_sources_and_rederives_only_the_dirty_one
