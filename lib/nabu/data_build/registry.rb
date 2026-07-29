@@ -2,6 +2,7 @@
 
 require_relative "feature"
 require_relative "form_lemma"
+require_relative "segmentation_builder"
 require_relative "verb_lemma_builder"
 require_relative "wylie_fold_builder"
 
@@ -19,9 +20,10 @@ module Nabu
     # The explicit feature census (no discovery magic — the sources.yml
     # doctrine). The rail landed first (P50-W1) with every feature :planned;
     # builder packets flip their feature to :available as each builder lands
-    # (P50-W2 san/form-lemma, P50-W3 xct/wylie-fold, P50-W4 xct/verb-lemma),
-    # and `nabu data build` refuses the still-planned politely. The doc table
-    # in docs/nabu-data.md is drift-guarded against this list.
+    # (P50-W2 san/form-lemma, P50-W3 xct/wylie-fold, P50-W4 xct/verb-lemma,
+    # P51-W5 xct/segmentation), and `nabu data build` refuses the
+    # still-planned politely. The doc table in docs/nabu-data.md is
+    # drift-guarded against this list.
     REGISTRY = [
       Feature.new(
         slug: "san/form-lemma", language: LANGUAGES.fetch("san"),
@@ -61,13 +63,14 @@ module Nabu
       Feature.new(
         slug: "xct/segmentation", language: LANGUAGES.fetch("xct"),
         title: "Segmented Classical Tibetan, curated slice (eval'd against SOAS gold)",
-        status: :planned, tier: "silver", anchoring: "passage-urn",
+        status: :available, tier: "silver", anchoring: "passage-urn",
         inputs: %w[derge-kangyur soas-tibetan], canonical_cones: %w[derge-kangyur soas-tibetan],
         rationale: "Tsheg-bar/word segmentation over a curated Derge slice with the segmenter's " \
                    "error rate measured against the SOAS gold corpus and published in-band — the " \
                    "calibration ground for any full-canon layer.",
         maintenance: "re-derive on canonical text revisions or segmenter upgrades; each release " \
-                     "republishes the eval number"
+                     "republishes the eval number",
+        builder: SegmentationBuilder
       )
     ].freeze
 

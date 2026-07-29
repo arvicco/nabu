@@ -59,6 +59,27 @@ class DataCommandTest < Minitest::Test
     assert_match(/own authorship/, out, "an inputs-free feature says so instead of printing nothing")
   end
 
+  # Owner ruling 2026-07-29: the maintenance line alone ("re-derive after
+  # each dcs sync") gives no copy-paste path — every AVAILABLE feature must
+  # print its exact command sequence: the input syncs (the D50-a guard makes
+  # them mandatory anyway) chained into the build invocation.
+  def test_data_list_prints_explicit_copy_paste_commands_per_available_feature
+    out, _err, status = run_cli(%w[data list])
+    assert_nil status
+
+    Nabu::DataBuild::REGISTRY.each do |feature|
+      if feature.available?
+        expected = "  commands: #{feature.inputs.map { |slug| "nabu sync #{slug} && " }.join}" \
+                   "nabu data build #{feature.slug} --into "
+        assert_includes out, expected,
+                        "#{feature.slug}: available features print the full copy-paste command line"
+      else
+        refute_match(/commands:.*#{Regexp.escape(feature.slug)}/, out,
+                     "#{feature.slug}: planned features print no command line — build would refuse")
+      end
+    end
+  end
+
   # A spliced planned rig rather than a registry feature: builder packets
   # flip the real features one by one, and this refusal must outlive them all.
   def test_data_build_refuses_a_planned_feature_by_name

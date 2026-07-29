@@ -195,7 +195,7 @@ The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old
 
 The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon.
 
-**Members** (6): `ud`, `gretil`, `mw`, `suttacentral`, `sarit`, `dcs`
+**Members** (7): `ud`, `gretil`, `mw`, `suttacentral`, `sarit`, `dcs`, `nabu-data`
 
 ### buddhist
 
@@ -211,7 +211,7 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 
 The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key), 84000's English translation layer, OTDO's Old Tibetan documents, and the gold-annotation lane (SOAS POS, the Annals and Chronicle); the lexicon shelves join as their packets land.
 
-**Members** (9): `e84000`, `otdo`, `soas-tibetan`, `old-tibetan`, `derge-kangyur`, `derge-tengyur`, `mvp`, `tibetan-verbs`, `wiktionary-bo`
+**Members** (10): `e84000`, `otdo`, `soas-tibetan`, `old-tibetan`, `derge-kangyur`, `derge-tengyur`, `mvp`, `tibetan-verbs`, `wiktionary-bo`, `nabu-data`
 
 ### sinitic
 
