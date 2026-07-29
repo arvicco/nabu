@@ -175,6 +175,8 @@ no page update is a red suite, and vice versa.
 | `jpn/aozora-gaiji` | available | gold | CC-BY-4.0 | jpn | — |
 | `lat/sabellic-loans` | available | gold | CC-BY-SA-4.0 | lat | — |
 | `grc/meter` | available | gold-derived | CC-BY-4.0 | grc | hypotactic, perseus-greek, first1k-greek |
+| `jpn/kyujitai-fold` | available | gold | CC-BY-SA-4.0 | jpn | unihan, edrdg |
+| `lzh/kanripo-gaiji` | available | gold | CC-BY-SA-4.0 | lzh | — |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -239,6 +241,22 @@ Flattens the hand-curated Sabellic (Oscan/Umbrian/Sabine) → Latin loan rows �
 Publishes D. Chamberlain's Hypotactic scansions (CC BY 4.0) as rows citable at urn:cts:greekLit grain: upstream has no citation scheme (work = filename, line = file order), so the URN + Passage_SHA256 anchoring Nabu derives by exact folded-text match IS the added value — with the matched/unmatched census published in-band and the row text taken from Hypotactic's own bytes, never the CC BY-SA Perseus text.
 
 **Maintenance**: re-derive after hypotactic / perseus-greek / first1k-greek syncs (the stale-ingest guard enforces freshness); each release republishes the resolution census in nabu.eval
+
+### `jpn/kyujitai-fold` — Japanese kyūjitai↔shinjitai reform-pair census (Unihan jinmeiyō + KANJIDIC2 jōyō lanes)
+
+**Status**: available · **Tier**: gold · **Anchoring**: none · **Inputs**: unihan, edrdg
+
+The two-lane old↔new kanji pair table (Unihan kJinmeiyoKanji reform pairs + KANJIDIC2 jōyō-target variant edges, reform merges admitted, refusals censused) rendered through the same resolution seam `rake fold:jpn` compiles into Nabu::Jpn — one seam, two consumers. BY-SA: the load-bearing KANJIDIC2 lane is EDRDG share-alike (CC BY-SA 4.0).
+
+**Maintenance**: re-derive after each unihan/edrdg sync (EDRDG rebuilds nightly, Unihan annually); regenerate together with `rake fold:jpn` so the shipped fold module and the dataset never drift
+
+### `lzh/kanripo-gaiji` — Kanripo gaiji display ladder — faithful/IDS/substitute resolutions for &KR…; references
+
+**Status**: available · **Tier**: gold · **Anchoring**: none · **Inputs**: —
+
+The hand-curated resolution ladder for the Kanseki Repository's not-yet-encoded character references (427 faithful codepoints, 562 labeled substitutes, the IDS lane empty by census, everything else an honest ⬚ placeholder) — the same three TSVs Nabu's `--display reading` mode loads for lzh kanripo passages. BY-SA: curated from KR-Gaiji's charlist under the kanripo org grant (CC BY-SA 4.0).
+
+**Maintenance**: re-curate by hand after a `nabu sync kr-gaiji` advances charlist.org.txt (the P38-1 procedure); the curation is pinned to the charlist commit its file headers record, deliberately never auto-derived
 
 ## What the rail never does
 

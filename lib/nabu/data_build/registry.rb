@@ -4,6 +4,8 @@ require_relative "feature"
 require_relative "aozora_gaiji_builder"
 require_relative "form_lemma"
 require_relative "hani_fold_builder"
+require_relative "kanripo_gaiji_builder"
+require_relative "kyujitai_fold_builder"
 require_relative "meter_builder"
 require_relative "segmentation_builder"
 require_relative "sabellic_loans_builder"
@@ -24,13 +26,15 @@ module Nabu
     # misstate the level), so the static is honestly nil. zho is the same
     # pan-CJK macro tag Nabu's unihan shelf files under
     # (Adapters::Unihan::LANGUAGE).
+    # lite1248 = Classical Chinese (ISO lzh), checked 2026-07-29 (P52-4).
     LANGUAGES = {
       "jpn" => Language.new(id: "jpn", name: "Japanese", glottocode: "nucl1643", iso639p3: "jpn"),
       "san" => Language.new(id: "san", name: "Sanskrit", glottocode: "sans1269", iso639p3: "san"),
       "xct" => Language.new(id: "xct", name: "Classical Tibetan", glottocode: "clas1254", iso639p3: "xct"),
       "zho" => Language.new(id: "zho", name: "Chinese", glottocode: nil, iso639p3: "zho"),
       "lat" => Language.new(id: "lat", name: "Latin", glottocode: "lati1261", iso639p3: "lat"),
-      "grc" => Language.new(id: "grc", name: "Ancient Greek", glottocode: "anci1242", iso639p3: "grc")
+      "grc" => Language.new(id: "grc", name: "Ancient Greek", glottocode: "anci1242", iso639p3: "grc"),
+      "lzh" => Language.new(id: "lzh", name: "Classical Chinese", glottocode: "lite1248", iso639p3: "lzh")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
@@ -161,6 +165,35 @@ module Nabu
                      "stale-ingest guard enforces freshness); each release republishes the " \
                      "resolution census in nabu.eval",
         builder: MeterBuilder
+      ),
+      Feature.new(
+        slug: "jpn/kyujitai-fold", language: LANGUAGES.fetch("jpn"),
+        title: "Japanese kyūjitai↔shinjitai reform-pair census (Unihan jinmeiyō + KANJIDIC2 jōyō lanes)",
+        status: :available, tier: "gold", license: "CC-BY-SA-4.0", anchoring: "none",
+        inputs: %w[unihan edrdg], canonical_cones: %w[unihan edrdg], builder: KyujitaiFoldBuilder,
+        rationale: "The two-lane old↔new kanji pair table (Unihan kJinmeiyoKanji reform pairs + " \
+                   "KANJIDIC2 jōyō-target variant edges, reform merges admitted, refusals censused) " \
+                   "rendered through the same resolution seam `rake fold:jpn` compiles into Nabu::Jpn " \
+                   "— one seam, two consumers. BY-SA: the load-bearing KANJIDIC2 lane is EDRDG " \
+                   "share-alike (CC BY-SA 4.0).",
+        maintenance: "re-derive after each unihan/edrdg sync (EDRDG rebuilds nightly, Unihan " \
+                     "annually); regenerate together with `rake fold:jpn` so the shipped fold " \
+                     "module and the dataset never drift"
+      ),
+      Feature.new(
+        slug: "lzh/kanripo-gaiji", language: LANGUAGES.fetch("lzh"),
+        title: "Kanripo gaiji display ladder — faithful/IDS/substitute resolutions for &KR…; references",
+        status: :available, tier: "gold", license: "CC-BY-SA-4.0", anchoring: "none",
+        inputs: [], canonical_cones: [], # own curation over KR-Gaiji, pinned to the charlist commit
+        rationale: "The hand-curated resolution ladder for the Kanseki Repository's not-yet-encoded " \
+                   "character references (427 faithful codepoints, 562 labeled substitutes, the IDS " \
+                   "lane empty by census, everything else an honest ⬚ placeholder) — the same three " \
+                   "TSVs Nabu's `--display reading` mode loads for lzh kanripo passages. BY-SA: " \
+                   "curated from KR-Gaiji's charlist under the kanripo org grant (CC BY-SA 4.0).",
+        maintenance: "re-curate by hand after a `nabu sync kr-gaiji` advances charlist.org.txt (the " \
+                     "P38-1 procedure); the curation is pinned to the charlist commit its file " \
+                     "headers record, deliberately never auto-derived",
+        builder: KanripoGaijiBuilder
       )
     ].freeze
 

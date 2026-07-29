@@ -139,6 +139,25 @@ module Ops
       end
     end
 
+    def test_kanjidic_edges_census_exposes_every_admitted_group_edge
+      # The per-edge lane-2 census (P52-4): every admitted old→new group edge,
+      # merge-flagged, deterministically sorted — the seam the jpn/kyujitai-fold
+      # dataset builder renders pairs.csv from (one seam, two consumers).
+      build do |b|
+        edges = b.kanjidic_edges.map { |edge| [edge.old_form, edge.new_form, edge.merge] }
+        assert_includes edges, ["醫", "医", false], "the clean kanjidic single is an edge"
+        assert_includes edges, ["罐", "缶", false]
+        assert_includes edges, ["國", "国", false], "the jinmeiyō-absorbed extra edge is censused too"
+        %w[辨 瓣 辯].each { |old| assert_includes edges, [old, "弁", true] }
+        %w[學 斈 斅].each { |old| assert_includes edges, [old, "学", true] }
+        assert_equal 9, edges.size, "the trimmed fixture admits exactly 9 group edges (hand-counted)"
+        refute(edges.any? { |old, _new, _merge| old == "碕" }, "a refused ambiguous old is never an edge")
+
+        sorted = b.kanjidic_edges.sort_by { |edge| [edge.new_form.ord, edge.old_form.ord] }
+        assert_equal sorted, b.kanjidic_edges, "edges are deterministically sorted (new, then old)"
+      end
+    end
+
     def test_render_emits_a_loadable_module_with_a_working_merge_fold
       build do |b|
         source = b.render
