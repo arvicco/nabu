@@ -54,6 +54,8 @@ class DataCommandTest < Minitest::Test
       assert_includes out, feature.anchoring
       assert_includes out, feature.rationale
       assert_includes out, feature.maintenance
+      assert_includes out, "license: #{feature.license}",
+                      "#{feature.slug}: the metadata line states the dataset's license (D51-a)"
       feature.inputs.each { |slug| assert_includes out, slug }
     end
     assert_match(/own authorship/, out, "an inputs-free feature says so instead of printing nothing")
