@@ -87,7 +87,13 @@ module Nabu
     # modes are asymmetric: forgetting to exclude a file only over-rebuilds
     # (safe); an include-list that missed one would silently under-rebuild
     # (the sin). When in doubt, a file stays IN.
-    EXCLUDED_DIRS = %w[adapters mcp query health ops].freeze
+    #
+    # data_build (the dir + its data_build.rb manifest) is out per owner
+    # ruling D50-b: producer-only code — reads the catalog, writes CSV
+    # datasets to the external nabu-data clone, influences nothing Nabu
+    # stores — guarded by the purity test (no derivation code may reference
+    # DataBuild; derivation_fingerprint_test).
+    EXCLUDED_DIRS = %w[adapters mcp query health ops data_build].freeze
     EXCLUDED_FILES = %w[
       cli.rb display.rb status_report.rb progress_reporter.rb version.rb
       backup.rb review_hook.rb verify.rb fixture_sentinel.rb
@@ -100,6 +106,7 @@ module Nabu
       sync_runner.rb source_registry.rb axis_registry.rb config.rb
       ingest.rb language_shelf.rb library_shelf.rb source_shelf.rb
       note_shelf.rb
+      data_build.rb
       normalize.rb
       hani.rb jpn.rb xct.rb
     ].freeze
