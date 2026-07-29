@@ -1,0 +1,22 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# One TRIMMED excerpt of the real 00lib/osl.asl (whole blocks copied
+# byte-verbatim, never edited inside a block — see README.md for the exact
+# block list and the taxonomy each pins). adapter_test is null: osl is a
+# feature module (kind: module) — discover yields nothing and parse is
+# unreachable, so there is no adapter round-trip to assert; the work is the
+# asl parser family (test/adapters/asl_parser_test.rb) and the
+# Nabu::SignList read seam (test/sign_list_test.rb).
+source: osl
+adapter_test:
+retrieved: 2026-07-29
+files:
+  - path: osl.asl
+    refetchable: false
+    provenance: local-trim
+    reason: whole sign/header blocks of the real 979 KB osl.asl, byte-verbatim in upstream order, selected to cover the ASL grammar taxonomy (the block list is in README.md); re-acquiring = fetch the whole file and re-cut the same blocks
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00lib/osl.asl
+    copied: 2026-07-29
+    whole: false
+    trim: header lines 1-17, 63-64, 147-151 + the |A.BARA₂| |A×AN| |A×GAN₂@t| AK |AN.SAG@g| |IGI.DIB| MIN |MIN.MIN| |NU×U@c| ŠEŠ |ŠEŠ.AB| |ŠEŠ.KI| |UD.ŠEŠ.KI| sign blocks + @compoundonly |MIN×IGI| + the @pcun 1(N01@f) block, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012

@@ -3238,6 +3238,36 @@ nabu-data:
   # owner re-syncs (ref-pin optional for a reproducible snapshot).
   sync_policy: manual
 
+osl:
+  adapter: Nabu::Adapters::Osl
+  kind: module   # P53-1: machinery-only — a cuneiform sign/value/codepoint instrument, zero document rows
+  axes: [cuneiform]
+  wired: false   # PERMANENTLY false — a sign-list instrument, not a text
+                   # source (the hypotactic/cldf-spine module invariant):
+                   # discover mints no documents, no migration, no catalog
+                   # table. The row gives the owner the sanctioned fetch
+                   # path for the Oracc Sign List repo; Nabu::SignList reads
+                   # canonical/osl/00lib/osl.asl (via the asl parser family)
+                   # as the value→sign / name→sign resolver the P53-2
+                   # `nabu signs` surface builds on (ATF transliteration →
+                   # signs with Unicode codepoints, the Edubba downstream).
+                   # OWNER QUEUE (P53-1): bin/nabu enable osl, then
+                   # bin/nabu sync osl (GitFetch clone of github.com/oracc/
+                   # osl); eyeball `00lib/osl.asl` landing (~979 KB).
+  # P53-1: OSL — the Oracc Sign List (ex-OGSL; Veldhuis & Tinney; rolling
+  # master, no tags, stable @oid ids). The ONE machine artifact is
+  # 00lib/osl.asl (line-oriented ASL grammar; census 2026-07-29: 3,241
+  # active @sign + 62 deprecated, 1,216 @form variants, 11,238 @v values,
+  # 2,033 @useq component sequences, 124 @upua private-use; ~661 signs have
+  # NO Unicode encoding — that absence is data). TRAP, do not "fix": the
+  # repo's sl.json serves a ZERO-BYTE 200 on every host (the same Oracc
+  # failure class as their metadata.json, see docs/02-sources.md) — never
+  # build on it; osl.asl is the artifact. LICENSE: CC0, stated verbatim in
+  # the osl.asl header ("CC0: osl.asl and its associated files are placed
+  # in the public domain under a CC0 licence.", quoted in the adapter
+  # manifest) → class open.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
