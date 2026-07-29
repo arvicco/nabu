@@ -2,6 +2,8 @@
 
 require_relative "feature"
 require_relative "form_lemma"
+require_relative "kanripo_gaiji_builder"
+require_relative "kyujitai_fold_builder"
 require_relative "segmentation_builder"
 require_relative "verb_lemma_builder"
 require_relative "wylie_fold_builder"
@@ -11,10 +13,14 @@ module Nabu
     # The languages.csv statics, one entry per language the registered
     # features publish. Verified against the owner's Glottolog cone
     # (canonical/cldf-spine/glottolog/languages.csv, checked 2026-07-28):
-    # sans1269 = Sanskrit (ISO san), clas1254 = Classical Tibetan (ISO xct).
+    # sans1269 = Sanskrit (ISO san), clas1254 = Classical Tibetan (ISO xct);
+    # checked 2026-07-29: nucl1643 = Japanese (ISO jpn), lite1248 =
+    # Classical Chinese (ISO lzh — Glottolog's name for Literary Chinese).
     LANGUAGES = {
       "san" => Language.new(id: "san", name: "Sanskrit", glottocode: "sans1269", iso639p3: "san"),
-      "xct" => Language.new(id: "xct", name: "Classical Tibetan", glottocode: "clas1254", iso639p3: "xct")
+      "xct" => Language.new(id: "xct", name: "Classical Tibetan", glottocode: "clas1254", iso639p3: "xct"),
+      "jpn" => Language.new(id: "jpn", name: "Japanese", glottocode: "nucl1643", iso639p3: "jpn"),
+      "lzh" => Language.new(id: "lzh", name: "Classical Chinese", glottocode: "lite1248", iso639p3: "lzh")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
@@ -71,6 +77,35 @@ module Nabu
         maintenance: "re-derive on canonical text revisions or segmenter upgrades; each release " \
                      "republishes the eval number",
         builder: SegmentationBuilder
+      ),
+      Feature.new(
+        slug: "jpn/kyujitai-fold", language: LANGUAGES.fetch("jpn"),
+        title: "Japanese kyūjitai↔shinjitai reform-pair census (Unihan jinmeiyō + KANJIDIC2 jōyō lanes)",
+        status: :available, tier: "gold", license: "CC-BY-SA-4.0", anchoring: "none",
+        inputs: %w[unihan edrdg], canonical_cones: %w[unihan edrdg], builder: KyujitaiFoldBuilder,
+        rationale: "The two-lane old↔new kanji pair table (Unihan kJinmeiyoKanji reform pairs + " \
+                   "KANJIDIC2 jōyō-target variant edges, reform merges admitted, refusals censused) " \
+                   "rendered through the same resolution seam `rake fold:jpn` compiles into Nabu::Jpn " \
+                   "— one seam, two consumers. BY-SA: the load-bearing KANJIDIC2 lane is EDRDG " \
+                   "share-alike (CC BY-SA 4.0).",
+        maintenance: "re-derive after each unihan/edrdg sync (EDRDG rebuilds nightly, Unihan " \
+                     "annually); regenerate together with `rake fold:jpn` so the shipped fold " \
+                     "module and the dataset never drift"
+      ),
+      Feature.new(
+        slug: "lzh/kanripo-gaiji", language: LANGUAGES.fetch("lzh"),
+        title: "Kanripo gaiji display ladder — faithful/IDS/substitute resolutions for &KR…; references",
+        status: :available, tier: "gold", license: "CC-BY-SA-4.0", anchoring: "none",
+        inputs: [], canonical_cones: [], # own curation over KR-Gaiji, pinned to the charlist commit
+        rationale: "The hand-curated resolution ladder for the Kanseki Repository's not-yet-encoded " \
+                   "character references (427 faithful codepoints, 562 labeled substitutes, the IDS " \
+                   "lane empty by census, everything else an honest ⬚ placeholder) — the same three " \
+                   "TSVs Nabu's `--display reading` mode loads for lzh kanripo passages. BY-SA: " \
+                   "curated from KR-Gaiji's charlist under the kanripo org grant (CC BY-SA 4.0).",
+        maintenance: "re-curate by hand after a `nabu sync kr-gaiji` advances charlist.org.txt (the " \
+                     "P38-1 procedure); the curation is pinned to the charlist commit its file " \
+                     "headers record, deliberately never auto-derived",
+        builder: KanripoGaijiBuilder
       )
     ].freeze
 
