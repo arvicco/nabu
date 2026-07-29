@@ -22,10 +22,9 @@ class DataBuildRegistryTest < Minitest::Test
 
   def test_the_builder_status_census
     # The rail landed with every feature :planned; each builder packet flipped
-    # exactly its own feature (W2 form-lemma, W3 wylie-fold, W4 verb-lemma).
-    # Only segmentation remains planned (next phase).
-    assert_equal %w[san/form-lemma xct/wylie-fold xct/verb-lemma],
-                 features.select(&:available?).map(&:slug)
+    # exactly its own feature (P50-W2 form-lemma, P50-W3 wylie-fold, P50-W4
+    # verb-lemma, P51-W5 segmentation). The full census is available.
+    assert_equal EXPECTED_SLUGS, features.select(&:available?).map(&:slug)
     features.select(&:planned?).each { |feature| assert_nil feature.builder }
     features.select(&:available?).each { |feature| refute_nil feature.builder }
   end
@@ -74,6 +73,8 @@ class DataBuildRegistryTest < Minitest::Test
                  "the anchored-layer deferral is stated where the owner reads it")
 
     segmentation = Nabu::DataBuild.feature("xct/segmentation")
+    assert_equal :available, segmentation.status, "P51-W5: the segmentation builder has landed"
+    assert_equal Nabu::DataBuild::SegmentationBuilder, segmentation.builder
     assert_equal "silver", segmentation.tier
     assert_equal "passage-urn", segmentation.anchoring
     assert_equal %w[derge-kangyur soas-tibetan], segmentation.inputs
