@@ -5,6 +5,7 @@ require_relative "aozora_gaiji_builder"
 require_relative "form_lemma"
 require_relative "hani_fold_builder"
 require_relative "segmentation_builder"
+require_relative "sabellic_loans_builder"
 require_relative "verb_lemma_builder"
 require_relative "wylie_fold_builder"
 
@@ -13,8 +14,9 @@ module Nabu
     # The languages.csv statics, one entry per language the registered
     # features publish. Verified against the owner's Glottolog cone
     # (canonical/cldf-spine/glottolog/languages.csv, checked 2026-07-28;
-    # re-checked 2026-07-29 for P52-3): sans1269 = Sanskrit (ISO san),
-    # clas1254 = Classical Tibetan (ISO xct), nucl1643 = Japanese (ISO jpn).
+    # re-checked 2026-07-29 for P52-3/P52-5): sans1269 = Sanskrit (ISO san),
+    # clas1254 = Classical Tibetan (ISO xct), nucl1643 = Japanese (ISO jpn),
+    # lati1261 = Latin (ISO lat).
     # zho is an ISO 639-3 MACROLANGUAGE: Glottolog deliberately assigns
     # macrolanguages no glottocode (the cone carries no row with ISO zho;
     # the nearest node, sini1245 Sinitic, is a family — claiming it would
@@ -25,7 +27,8 @@ module Nabu
       "jpn" => Language.new(id: "jpn", name: "Japanese", glottocode: "nucl1643", iso639p3: "jpn"),
       "san" => Language.new(id: "san", name: "Sanskrit", glottocode: "sans1269", iso639p3: "san"),
       "xct" => Language.new(id: "xct", name: "Classical Tibetan", glottocode: "clas1254", iso639p3: "xct"),
-      "zho" => Language.new(id: "zho", name: "Chinese", glottocode: nil, iso639p3: "zho")
+      "zho" => Language.new(id: "zho", name: "Chinese", glottocode: nil, iso639p3: "zho"),
+      "lat" => Language.new(id: "lat", name: "Latin", glottocode: "lati1261", iso639p3: "lat")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
@@ -118,6 +121,21 @@ module Nabu
         maintenance: "re-census on the owner's schedule as the corpus grows (the checked-in TSV " \
                      "header carries the snapshot provenance); each re-census re-fingerprints the " \
                      "dataset through the recipe's embedded sha256"
+      ),
+      Feature.new(
+        slug: "lat/sabellic-loans", language: LANGUAGES.fetch("lat"),
+        title: "Sabellic → Latin loanword table (en.wiktionary curation)",
+        status: :available, tier: "gold", license: "CC-BY-SA-4.0", anchoring: "none",
+        inputs: [], canonical_cones: [], # own curation: config/sabellic_loans.yml
+        rationale: "Flattens the hand-curated Sabellic (Oscan/Umbrian/Sabine) → Latin loan rows — " \
+                   "85 Latin lemmas with borrowed/derived relation flags and the Old Italic etyma " \
+                   "en.wiktionary cites — into one reusable table; the same curation powers Nabu's " \
+                   "sabellic-osc/xum/sbv dictionary shelves and their loan-flagged etymology edges. " \
+                   "CC BY-SA (the Wiktionary share-alike grant — owner ruling D51-a).",
+        maintenance: "on re-curation of config/sabellic_loans.yml only (a deliberate repo change, " \
+                     "not a sync); each curation change re-fingerprints the dataset via the " \
+                     "recipe's embedded file sha",
+        builder: SabellicLoansBuilder
       )
     ].freeze
 

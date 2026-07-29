@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# The nabu-data feature census (P50-W1): six registered features, every field
+# The nabu-data feature census (P50-W1): seven registered features, every field
 # present and well-shaped. The rail landed first with everything :planned;
 # builder packets flip their own feature as each builder lands (P50-W2:
 # san/form-lemma, P50-W4: xct/verb-lemma, P52-3: zho/hani-fold +
@@ -10,13 +10,14 @@ require "test_helper"
 # test pins the ratified metadata, not just the shape.
 class DataBuildRegistryTest < Minitest::Test
   EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation
-                      zho/hani-fold jpn/aozora-gaiji].freeze
+                      zho/hani-fold jpn/aozora-gaiji
+                      lat/sabellic-loans].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
   end
 
-  def test_registers_exactly_the_six_features_with_unique_slugs_in_order
+  def test_registers_exactly_the_seven_features_with_unique_slugs_in_order
     assert_equal EXPECTED_SLUGS, features.map(&:slug)
     assert_equal features.size, features.map(&:slug).uniq.size
   end
@@ -24,7 +25,8 @@ class DataBuildRegistryTest < Minitest::Test
   def test_the_builder_status_census
     # The rail landed with every feature :planned; each builder packet flipped
     # exactly its own feature (P50-W2 form-lemma, P50-W3 wylie-fold, P50-W4
-    # verb-lemma, P51-W5 segmentation). The full census is available.
+    # verb-lemma, P51-W5 segmentation, P52-5 sabellic-loans landing available
+    # with its builder in one packet). The full census is available.
     assert_equal EXPECTED_SLUGS, features.select(&:available?).map(&:slug)
     features.select(&:planned?).each { |feature| assert_nil feature.builder }
     features.select(&:available?).each { |feature| refute_nil feature.builder }
@@ -110,6 +112,16 @@ class DataBuildRegistryTest < Minitest::Test
     assert_empty gaiji.inputs, "the checked-in census TSV is the source of truth — the wylie-fold precedent"
     assert_empty gaiji.canonical_cones
     assert_equal "none", gaiji.anchoring
+
+    loans = Nabu::DataBuild.feature("lat/sabellic-loans")
+    assert_equal :available, loans.status, "P52-5: builder and feature land together"
+    assert_equal Nabu::DataBuild::SabellicLoansBuilder, loans.builder
+    assert_equal "gold", loans.tier
+    assert_empty loans.inputs, "own curation (config/sabellic_loans.yml) — no canonical inputs"
+    assert_empty loans.canonical_cones
+    assert_equal "lat-sabellic-loans", loans.package_name
+    assert_match(/85 Latin lemmas/, loans.rationale)
+    assert_match(/D51-a/, loans.rationale, "the BY-SA ruling is stated where the owner reads it")
   end
 
   def test_language_statics_match_the_glottolog_spine
@@ -131,6 +143,10 @@ class DataBuildRegistryTest < Minitest::Test
     zho = Nabu::DataBuild::LANGUAGES.fetch("zho")
     assert_equal ["Chinese", nil, "zho"], [zho.name, zho.glottocode, zho.iso639p3]
     assert_equal Nabu::Adapters::Unihan::LANGUAGE, zho.id
+
+    # Checked 2026-07-29: lati1261 Latin/lat (glottolog/languages.csv).
+    lat = Nabu::DataBuild::LANGUAGES.fetch("lat")
+    assert_equal %w[Latin lati1261 lat], [lat.name, lat.glottocode, lat.iso639p3]
   end
 
   def test_feature_lookup_goes_through_the_features_seam
@@ -140,8 +156,7 @@ class DataBuildRegistryTest < Minitest::Test
 
   # The D51-a license carve-out (2026-07-29): the allowed set is exactly
   # CC BY / CC BY-SA; NC/ND inputs are disqualifying at intake, so no NC/ND
-  # value is ever legal. Every SHIPPED feature stays CC BY — BY-SA features
-  # arrive in later packets.
+  # value is ever legal.
   def test_license_defaults_to_cc_by_and_only_the_allowed_set_is_legal
     assert_equal %w[CC-BY-4.0 CC-BY-SA-4.0], Nabu::DataBuild::LICENSES
     assert_equal "CC-BY-4.0", valid_feature.license, "the default is the repo default, CC BY 4.0"
@@ -156,11 +171,16 @@ class DataBuildRegistryTest < Minitest::Test
     end
   end
 
-  def test_every_registered_feature_carries_the_default_cc_by_license
-    features.each do |feature|
-      assert_equal "CC-BY-4.0", feature.license,
-                   "#{feature.slug}: all four shipped features are CC BY (BY-SA features are later packets)"
-    end
+  # The shipped license census, per slug: the P50/P51 features are CC BY;
+  # lat/sabellic-loans derives from Wiktionary's share-alike dual grant and
+  # publishes as BY-SA (the D51-a carve-out in action).
+  def test_the_shipped_license_census
+    expected = {
+      "san/form-lemma" => "CC-BY-4.0", "xct/wylie-fold" => "CC-BY-4.0",
+      "xct/verb-lemma" => "CC-BY-4.0", "xct/segmentation" => "CC-BY-4.0",
+      "lat/sabellic-loans" => "CC-BY-SA-4.0"
+    }
+    assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
 
   def test_feature_construction_refuses_dishonest_values
