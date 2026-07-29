@@ -3209,6 +3209,35 @@ wiktionary-bo:
   # GFDL statement → attribution.
   sync_policy: manual
 
+nabu-data:
+  adapter: Nabu::Adapters::NabuData
+  kind: module   # P51-W6: machinery-only — Nabu's own published datasets consumed back, zero document rows
+  axes: [indic, tibetan]
+  wired: false   # PERMANENTLY false — a dataset-bundle instrument, not a
+                   # text source (the lila/cldf-spine module invariant):
+                   # discover mints no documents, no migration, no catalog
+                   # table. The row gives the owner the sanctioned fetch
+                   # path for the repo Nabu itself publishes; Nabu::FormLemma
+                   # reads san/form-lemma/form-lemma.csv (form → lemma
+                   # candidates). First consumer: the `nabu define` Sanskrit
+                   # query expansion (Nabu::Query::Define, D48-a tier 2 —
+                   # the P48-r1 curated rule stays the always-on fallback).
+                   # OWNER QUEUE (P51-W6): bin/nabu enable nabu-data, then
+                   # bin/nabu sync nabu-data (GitFetch clone of the repo,
+                   # ~53 MB working tree); eyeball `nabu define tapasā`
+                   # reaching the tapas entries.
+  # P51-W6: the two-way loop closes — github.com/arvicco/nabu-data, the
+  # public repo `nabu data build` writes (docs/nabu-data.md: three datasets
+  # at v1.0.0 — san/form-lemma 428,825 rows from the held DCS gold,
+  # xct/wylie-fold, xct/verb-lemma), registered back as an ordinary source
+  # so the publication is consumed exactly like any upstream: the
+  # reproducibility loop closed in public. LICENSE: repo LICENSE is the
+  # CC BY 4.0 legalcode → attribution; each dataset's datapackage.json
+  # carries its own upstream attribution chain (san/form-lemma cites
+  # Hellwig's DCS, CC BY 4.0). A new dataset release is a new commit the
+  # owner re-syncs (ref-pin optional for a reproducible snapshot).
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

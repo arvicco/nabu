@@ -1,0 +1,169 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/datapackage.json",
+  "name": "san-form-lemma",
+  "title": "Sanskrit form→lemma table derived from DCS gold annotations",
+  "version": "1.0.0",
+  "licenses": [
+    {
+      "name": "CC-BY-4.0",
+      "path": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  ],
+  "contributors": [
+    {
+      "title": "Ar Vicco",
+      "role": "author"
+    }
+  ],
+  "sources": [
+    {
+      "title": "Digital Corpus of Sanskrit (DCS) — gold lemmatized CoNLL-U",
+      "path": "https://github.com/OliverHellwig/sanskrit",
+      "version": "04e0778d3dc971030229179e25eea043d06ff397",
+      "licenses": [
+        {
+          "name": "CC BY 4.0 (verbatim, dcs/data/conllu/readme.md: \"The data in this directory are licensed under the Creative Commons BY 4.0 (CC BY 4.0) license.\"; citation requested: Oliver Hellwig, The Digital Corpus of Sanskrit, 2010-2024)"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "name": "form-lemma",
+      "path": "form-lemma.csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "ID",
+            "type": "string"
+          },
+          {
+            "name": "Language_ID",
+            "type": "string"
+          },
+          {
+            "name": "Form",
+            "type": "string"
+          },
+          {
+            "name": "Unsandhied",
+            "type": "string"
+          },
+          {
+            "name": "Lemma",
+            "type": "string"
+          },
+          {
+            "name": "Lemma_ID",
+            "type": "string"
+          },
+          {
+            "name": "Part_Of_Speech",
+            "type": "string"
+          },
+          {
+            "name": "Count",
+            "type": "integer"
+          },
+          {
+            "name": "Source",
+            "type": "string"
+          }
+        ],
+        "primaryKey": [
+          "Form",
+          "Unsandhied",
+          "Lemma",
+          "Lemma_ID",
+          "Part_Of_Speech"
+        ]
+      }
+    },
+    {
+      "name": "lemmas",
+      "path": "lemmas.csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "ID",
+            "type": "string"
+          },
+          {
+            "name": "Language_ID",
+            "type": "string"
+          },
+          {
+            "name": "Lemma_ID",
+            "type": "string"
+          },
+          {
+            "name": "Lemma",
+            "type": "string"
+          },
+          {
+            "name": "Count",
+            "type": "integer"
+          }
+        ],
+        "primaryKey": [
+          "Lemma_ID",
+          "Lemma"
+        ]
+      }
+    },
+    {
+      "name": "languages",
+      "path": "languages.csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "ID",
+            "type": "string"
+          },
+          {
+            "name": "Name",
+            "type": "string"
+          },
+          {
+            "name": "Glottocode",
+            "type": "string"
+          },
+          {
+            "name": "ISO639P3code",
+            "type": "string"
+          }
+        ],
+        "primaryKey": [
+          "ID"
+        ]
+      }
+    },
+    {
+      "name": "sources",
+      "path": "sources.bib",
+      "format": "bibtex",
+      "mediatype": "text/x-bibtex"
+    }
+  ],
+  "nabu": {
+    "producer": "nabu data build san/form-lemma",
+    "nabu_version": "1.3.0",
+    "derivation": {
+      "inputs": {
+        "dcs": {
+          "canonical_sha": "04e0778d3dc971030229179e25eea043d06ff397",
+          "cone": "dcs"
+        }
+      },
+      "recipe": "san/form-lemma v1: sweep the stored gold token annotations of every live DCS passage in the catalog (annotations_json; the dcs adapter's chapter-info.xml gold gate admits only gold-lexicon chapters, so every token is human-verified); keep exactly the tokens bearing a lemma — lemma-less sandhi-surface lines (CoNLL-U `_`, ~15% of raw token lines upstream) mint no row; read Unsandhied and LemmaId from MISC; count gold attestations at the distinct (Form, Unsandhied, Lemma, Lemma_ID, UPOS) grain into form-lemma.csv and at the (Lemma_ID, Lemma) grain into lemmas.csv.",
+      "fingerprint": "31cb919e257960d99154ca4520f88e75c83196953d4b7fa25029ff26212bccba"
+    },
+    "anchoring": {
+      "kind": "none"
+    },
+    "tier": "gold-derived",
+    "counts": {
+      "rows": 527364
+    }
+  }
+}
