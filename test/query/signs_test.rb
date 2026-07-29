@@ -23,6 +23,24 @@ module Query
       result.lines.first.tokens.first
     end
 
+    # -- the kunga₃ incident (owner, 2026-07-29): a value living on a variant
+    # form must NAME the owning sign, or same-named candidates render as
+    # inexplicable twins. form_of is nil for top-level signs, present-only in
+    # the JSON contract (the determinative precedent).
+    def test_a_form_borne_value_names_its_owning_sign
+      token = first_token("nannax(|ŠEŠ.NA|)")
+      assert_equal "|ŠEŠ.NA|", token.sign_name
+      assert_equal "|ŠEŠ.KI|", token.form_of, "the form candidate names its parent sign"
+
+      json = Nabu::Query::Signs.json_payload(signs.run_text("nannax(|ŠEŠ.NA|)"))
+      record = json["lines"].first["tokens"].first
+      assert_equal "|ŠEŠ.KI|", record["form_of"]
+
+      plain = Nabu::Query::Signs.json_payload(signs.run_text("szesz"))
+      refute plain["lines"].first["tokens"].first.key?("form_of"),
+             "form_of is present-only — absent on top-level signs"
+    end
+
     # -- the status vocabulary, each against the fixture -----------------------
 
     def test_a_folded_value_resolves_deterministically

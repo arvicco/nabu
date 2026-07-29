@@ -5971,13 +5971,16 @@ module Nabu
         end
       end
 
-      # sign name · codepoints · glyph · (%lang) — only what the record
-      # holds; an unencoded sign says "unencoded".
+      # sign name · codepoints · glyph · (%lang) · (form of X) — only what
+      # the record holds; an unencoded sign says "unencoded". The form-of
+      # tail is the kunga₃ fix: a sign and its same-named variant form of
+      # ANOTHER sign must never render as indistinguishable twins.
       def signs_candidate_detail(token)
         parts = [token.sign_name]
         parts << (token.codepoints ? token.codepoints.join(" ") : "unencoded")
         parts << token.glyph if token.glyph
         parts << "(%#{token.language_qualifier})" if token.language_qualifier
+        parts << "(form of #{token.form_of})" if token.form_of
         parts.compact.join("  ")
       end
 

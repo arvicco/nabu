@@ -52,9 +52,12 @@ module Nabu
       # tokens; +codepoints+ nil when unresolved/unencoded; +glyph+ is the
       # OSL-rendered string (ucun) for the CLI columns — the JSON contract
       # carries codepoints only.
+      # +form_of+ is nil for top-level signs and the owning sign's name when
+      # the resolving record is a variant form (the kunga₃ incident: without
+      # it, a sign and its same-named form render as indistinguishable twins).
       Resolved = Data.define(:input_value, :status, :sign_name, :codepoints, :glyph,
-                             :candidates, :language_qualifier, :determinative)
-      Candidate = Data.define(:sign_name, :codepoints, :glyph, :status, :language_qualifier)
+                             :candidates, :language_qualifier, :determinative, :form_of)
+      Candidate = Data.define(:sign_name, :codepoints, :glyph, :status, :language_qualifier, :form_of)
       Line = Data.define(:number, :urn, :text, :tokens)
       Result = Data.define(:mode, :urn, :language, :dialect, :source_slug, :license_class,
                            :lines, :skipped_lines)
@@ -105,7 +108,9 @@ module Nabu
       # codepoints[], candidates[], language_qualifier — sign_name null when
       # no single sign resolved, codepoints [] when none, candidates [] except
       # for ambiguous tokens (each candidate the same shape minus candidates)
-      # — plus "determinative": true only on determinative tokens. Absent
+      # — plus two present-only keys: "determinative": true on determinative
+      # tokens, and "form_of": "<sign>" when the resolving record is a
+      # variant form of another sign (the kunga₃ twins fix). Absent
       # data is null/[], never a placeholder. The envelope names the input
       # (mode/urn/language/dialect/source) and counts skipped structural
       # lines. Matching the export-jsonl precedent, the contract is pinned by
@@ -128,13 +133,16 @@ module Nabu
           "input_value" => token.input_value, "status" => token.status,
           "sign_name" => token.sign_name, "codepoints" => token.codepoints || [],
           "candidates" => token.candidates.map do |candidate|
-            { "input_value" => token.input_value, "status" => candidate.status,
-              "sign_name" => candidate.sign_name, "codepoints" => candidate.codepoints || [],
-              "language_qualifier" => candidate.language_qualifier }
+            cand = { "input_value" => token.input_value, "status" => candidate.status,
+                     "sign_name" => candidate.sign_name, "codepoints" => candidate.codepoints || [],
+                     "language_qualifier" => candidate.language_qualifier }
+            cand["form_of"] = candidate.form_of if candidate.form_of
+            cand
           end,
           "language_qualifier" => token.language_qualifier
         }
         record["determinative"] = true if token.determinative
+        record["form_of"] = token.form_of if token.form_of
         record
       end
 
@@ -253,11 +261,12 @@ module Nabu
           candidates = records.map do |record|
             Candidate.new(sign_name: record.name, codepoints: record.codepoints,
                           glyph: glyph(record), status: encoded_status(record),
-                          language_qualifier: qualifier(record, value_key, language))
+                          language_qualifier: qualifier(record, value_key, language),
+                          form_of: record.parent_name)
           end
           Resolved.new(input_value: input, status: "ambiguous", sign_name: nil,
                        codepoints: [], glyph: nil, candidates: candidates,
-                       language_qualifier: nil, determinative: token.determinative)
+                       language_qualifier: nil, determinative: token.determinative, form_of: nil)
         end
       end
 
@@ -266,7 +275,7 @@ module Nabu
           input_value: input, status: status, sign_name: record&.name,
           codepoints: record&.codepoints, glyph: record ? glyph(record) : nil,
           candidates: [], language_qualifier: record ? qualifier(record, value_key, language) : nil,
-          determinative: token.determinative
+          determinative: token.determinative, form_of: record&.parent_name
         )
       end
 

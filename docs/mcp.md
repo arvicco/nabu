@@ -325,7 +325,10 @@ honestly unencoded upstream) · `broken` (x, [...]) · `unknown` (not in the
 OSL, said plainly) — and determinatives are unbraced and flagged. The payload
 IS the frozen `nabu signs --json` contract (one serializer, `Query::Signs`):
 per-token records `input_value` / `status` / `sign_name` / `codepoints[]` /
-`candidates[]` / `language_qualifier`, script-consumed downstream (the Edubba
+`candidates[]` / `language_qualifier`, plus present-only `determinative` and
+`form_of` (a value resolving through another sign's variant form names its
+parent — a sign and its same-named form never render as indistinguishable
+twins), script-consumed downstream (the Edubba
 reading panels — the boundary holds: **the sign list adds identity, not
 curriculum**). Bounded (default 40 lines, max 200, honest truncation note);
 with the sign list not on this box the tool answers a graceful state note

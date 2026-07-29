@@ -124,6 +124,7 @@ class AslParserTest < Minitest::Test
   def test_shesh_ki_form_carries_its_own_values_and_concordances
     form = sign("|ŠEŠ.KI|").forms.first
     assert_equal "|ŠEŠ.NA|", form.name
+    assert_equal "|ŠEŠ.KI|", form.parent_name, "a form record names its owning sign"
     assert_equal ["nannaₓ"], form.values.map(&:value)
     assert_equal ["BAU012"], form.list_numbers
     assert_equal %w[U+122C0 U+1223E], form.useq
