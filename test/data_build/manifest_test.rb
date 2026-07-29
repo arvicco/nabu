@@ -53,6 +53,16 @@ class DataBuildManifestTest < Minitest::Test
     assert_equal({ "rows" => 3 }, nabu["counts"], "2 forms rows + 1 languages row; the bib counts 0")
   end
 
+  def test_an_evaluation_rides_the_nabu_block_as_eval_and_is_absent_when_nil
+    evaluation = { "boundary_f1" => 0.9622, "against" => "soas-tibetan gold",
+                   "contamination" => "clean" }
+    with_eval = MANIFEST.generate(**DataBuildFake.golden_manifest_args, evaluation: evaluation)
+    assert_equal evaluation, JSON.parse(with_eval).dig("nabu", "eval")
+
+    refute JSON.parse(golden_json).fetch("nabu").key?("eval"),
+           "no evaluation → no eval key (the golden fixture stays eval-free)"
+  end
+
   def test_non_tabular_resources_are_legal_and_tabular_ones_carry_schema
     resources = JSON.parse(golden_json).fetch("resources")
 
