@@ -1,0 +1,21 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Both files come from the repo Nabu itself publishes (arvicco/nabu-data,
+# commit c50ef93 = main at retrieval). The raw URLs track `main` — a new
+# dataset release moves them, which for THIS source is the expected
+# publication cadence, not drift: the csv is a documented TRIM (whole:
+# false, liveness-only), and a datapackage.json byte-diff simply flags
+# that a newer release shipped (re-adopt via the README recipe).
+source: nabu-data
+adapter_test: test/adapters/nabu_data_test.rb
+retrieved: 2026-07-29
+files:
+  - path: san/form-lemma/form-lemma.csv
+    url: https://raw.githubusercontent.com/arvicco/nabu-data/main/san/form-lemma/form-lemma.csv
+    whole: false
+    trim: 269 of 428,825 rows — the lemma-only pin (line 2198), the kﾱp quirk (4483), the bodhisattva block (77828–77855), the tapa/tapas neighborhood (317208–317446); recipe in README.md
+  - path: san/form-lemma/datapackage.json
+    url: https://raw.githubusercontent.com/arvicco/nabu-data/main/san/form-lemma/datapackage.json
+    whole: true
+    trim: none

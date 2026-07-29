@@ -54,10 +54,12 @@ module Nabu
     # What #build returns: the resources written (manifest order), the
     # recipe string (a short honest description of the derivation — part of
     # the fingerprint, so changing the derivation MUST change it), the
-    # citations for sources.bib, and optional free-text notes the Runner
-    # appends to the dataset README.
-    BuildResult = Data.define(:resources, :recipe, :citations, :notes) do
-      def initialize(resources:, recipe:, citations: [], notes: nil)
+    # citations for sources.bib, optional free-text notes the Runner appends
+    # to the dataset README, and an optional evaluation hash — an in-band
+    # quality measurement (e.g. xct/segmentation's boundary F1 against SOAS
+    # gold) the manifest publishes under nabu.eval.
+    BuildResult = Data.define(:resources, :recipe, :citations, :notes, :evaluation) do
+      def initialize(resources:, recipe:, citations: [], notes: nil, evaluation: nil)
         raise Nabu::ValidationError, "a build result needs at least one resource" if resources.empty?
         raise Nabu::ValidationError, "a build result needs a non-empty recipe string" if recipe.to_s.strip.empty?
 

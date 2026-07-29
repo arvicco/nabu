@@ -7,7 +7,11 @@ absolute: **nabu-data is 100% passive data; ALL production code lives here**,
 in `lib/nabu/data_build/`, driven by the `nabu data` command family. The rail
 writes files into the owner's nabu-data working clone and **never runs git
 operations there** — reviewing, committing, and pushing the public repo is the
-owner's explicit act.
+owner's explicit act. Being producer-only, `lib/nabu/data_build/` is excluded
+from the shared derivation-core digest (owner ruling D50-b): it cannot change
+any stored row, so its changes never dirty source fingerprints — pinned by a
+purity guard test (no derivation code references `DataBuild`; the rail may
+consume the rest of Nabu freely).
 
 ## The commands
 
@@ -19,8 +23,10 @@ nabu data build <lang>/<feature> --into PATH    # build one dataset (files only)
 `data list` documents every artifact the rail is able to produce — slug,
 status (available | planned), title, language, tier, anchoring kind, input
 sources, the rationale for the dataset's existence, and the recommended
-maintenance/periodicity. Planned features are listed too: the census is the
-roadmap.
+maintenance/periodicity — and, for every available feature, the **exact
+copy-paste command sequence** (input syncs chained into the build; the
+stale-ingest guard makes the syncs mandatory anyway). Planned features are
+listed too: the census is the roadmap.
 
 `data build` runs the feature's builder and writes the dataset directory
 `PATH/<lang>/<feature>/`, prints an honest summary (rows written, files,
@@ -98,12 +104,18 @@ optional README notes). Builders write their own data files into `out_dir`
   },
   "anchoring": { "kind": "none" },
   "tier": "gold-derived",
-  "counts": { "rows": 12345 }
+  "counts": { "rows": 12345 },
+  "eval": { "boundary_f1": 0.9622, "...": "…" }  // only when the builder measures itself
 }
 ```
 
 The fingerprint follows the `DerivationFingerprint` token discipline: it
-changes iff an input cone's canonical bytes or the recipe change. `sources[]`
+changes iff an input cone's canonical bytes or the recipe change. A builder
+that measures its own output quality (xct/segmentation's segmenter, scored
+against the SOAS gold by leave-one-text-out cross-validation) returns an
+evaluation hash on its `BuildResult`; the Runner publishes it verbatim as
+`nabu.eval` — the honesty stat rides in-band with the data it describes,
+and the dataset README quotes the same numbers. `sources[]`
 entries carry each input's title/homepage/license (from the source's adapter
 manifest) and `version` = the cone's sha at derivation. Git-backed cones
 record their HEAD sha; non-git cones record the content identity
@@ -142,7 +154,7 @@ no page update is a red suite, and vice versa.
 | `san/form-lemma` | available | gold-derived | san | dcs |
 | `xct/wylie-fold` | available | gold | xct | — |
 | `xct/verb-lemma` | available | gold-derived | xct | tibetan-verbs |
-| `xct/segmentation` | planned | silver | xct | derge-kangyur, soas-tibetan |
+| `xct/segmentation` | available | silver | xct | derge-kangyur, soas-tibetan |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -170,7 +182,7 @@ Maps the 2,491 TVD stem tuples (present/past/future/imperative, grammarians' dis
 
 ### `xct/segmentation` — Segmented Classical Tibetan, curated slice (eval'd against SOAS gold)
 
-**Status**: planned · **Tier**: silver · **Anchoring**: passage-urn · **Inputs**: derge-kangyur, soas-tibetan
+**Status**: available · **Tier**: silver · **Anchoring**: passage-urn · **Inputs**: derge-kangyur, soas-tibetan
 
 Tsheg-bar/word segmentation over a curated Derge slice with the segmenter's error rate measured against the SOAS gold corpus and published in-band — the calibration ground for any full-canon layer.
 
@@ -184,3 +196,14 @@ Tsheg-bar/word segmentation over a curated Derge slice with the segmenter's erro
   and the catalog; a build derives outward.
 - **Publish an input it cannot name.** No sha, no dataset — a dirty or
   missing cone refuses with the reason.
+
+## The loop closes: nabu-data as a source
+
+Since P51-W6 the published repo is also a REGISTERED SOURCE (`nabu-data`
+in config/sources.yml, `kind: module` — docs/02-sources.md row 141): `nabu
+sync nabu-data` clones the publication back under `canonical/nabu-data/`
+through the sanctioned GitFetch gateway, and `Nabu::FormLemma` serves the
+`san/form-lemma` table to `nabu define`'s Sanskrit query expansion. The
+producer rail above and the consumer row never touch: the rail writes the
+owner's working clone, the source syncs the published repo — the
+reproducibility loop closes only through a public commit.
