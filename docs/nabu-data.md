@@ -174,6 +174,7 @@ no page update is a red suite, and vice versa.
 | `zho/hani-fold` | available | gold-derived | CC-BY-4.0 | zho | unihan |
 | `jpn/aozora-gaiji` | available | gold | CC-BY-4.0 | jpn | — |
 | `lat/sabellic-loans` | available | gold | CC-BY-SA-4.0 | lat | — |
+| `grc/meter` | available | gold-derived | CC-BY-4.0 | grc | hypotactic, perseus-greek, first1k-greek |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -230,6 +231,14 @@ The census of composition formulas Aozora Bunko transcribers wrote for glyphs Un
 Flattens the hand-curated Sabellic (Oscan/Umbrian/Sabine) → Latin loan rows — 85 Latin lemmas with borrowed/derived relation flags and the Old Italic etyma en.wiktionary cites — into one reusable table; the same curation powers Nabu's sabellic-osc/xum/sbv dictionary shelves and their loan-flagged etymology edges. CC BY-SA (the Wiktionary share-alike grant — owner ruling D51-a).
 
 **Maintenance**: on re-curation of config/sabellic_loans.yml only (a deliberate repo change, not a sync); each curation change re-fingerprints the dataset via the recipe's embedded file sha
+
+### `grc/meter` — Greek metrical scansions (Hypotactic) anchored to Perseus CTS passages
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: passage-urn · **Inputs**: hypotactic, perseus-greek, first1k-greek
+
+Publishes D. Chamberlain's Hypotactic scansions (CC BY 4.0) as rows citable at urn:cts:greekLit grain: upstream has no citation scheme (work = filename, line = file order), so the URN + Passage_SHA256 anchoring Nabu derives by exact folded-text match IS the added value — with the matched/unmatched census published in-band and the row text taken from Hypotactic's own bytes, never the CC BY-SA Perseus text.
+
+**Maintenance**: re-derive after hypotactic / perseus-greek / first1k-greek syncs (the stale-ingest guard enforces freshness); each release republishes the resolution census in nabu.eval
 
 ## What the rail never does
 

@@ -2,22 +2,21 @@
 
 require "test_helper"
 
-# The nabu-data feature census (P50-W1): seven registered features, every field
+# The nabu-data feature census (P50-W1): the registered features, every field
 # present and well-shaped. The rail landed first with everything :planned;
 # builder packets flip their own feature as each builder lands (P50-W2:
-# san/form-lemma, P50-W4: xct/verb-lemma, P52-3: zho/hani-fold +
-# jpn/aozora-gaiji). The registry is EXPLICIT — no discovery magic — so this
-# test pins the ratified metadata, not just the shape.
+# san/form-lemma, P50-W4: xct/verb-lemma, P52-2: grc/meter). The registry is
+# EXPLICIT — no discovery magic — so this test pins the ratified metadata,
+# not just the shape.
 class DataBuildRegistryTest < Minitest::Test
   EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation
-                      zho/hani-fold jpn/aozora-gaiji
-                      lat/sabellic-loans].freeze
+                      zho/hani-fold jpn/aozora-gaiji lat/sabellic-loans grc/meter].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
   end
 
-  def test_registers_exactly_the_seven_features_with_unique_slugs_in_order
+  def test_registers_exactly_the_expected_features_with_unique_slugs_in_order
     assert_equal EXPECTED_SLUGS, features.map(&:slug)
     assert_equal features.size, features.map(&:slug).uniq.size
   end
@@ -122,11 +121,25 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal "lat-sabellic-loans", loans.package_name
     assert_match(/85 Latin lemmas/, loans.rationale)
     assert_match(/D51-a/, loans.rationale, "the BY-SA ruling is stated where the owner reads it")
+
+    meter = Nabu::DataBuild.feature("grc/meter")
+    assert_equal :available, meter.status, "P52-2: the meter builder has landed"
+    assert_equal Nabu::DataBuild::MeterBuilder, meter.builder
+    assert_equal "gold-derived", meter.tier
+    assert_equal "passage-urn", meter.anchoring
+    assert_equal %w[hypotactic perseus-greek first1k-greek], meter.inputs,
+                 "the anchor corpora are declared inputs — the stale-ingest guard must cover them"
+    assert_equal meter.inputs, meter.canonical_cones
+    assert_match(/never the CC BY-SA Perseus text/, meter.rationale,
+                 "the provenance rule is stated where the owner reads it")
   end
 
   def test_language_statics_match_the_glottolog_spine
     # Verified against the owner's canonical/cldf-spine glottolog cone
-    # (2026-07-28): sans1269 Sanskrit/san, clas1254 Classical Tibetan/xct.
+    # (2026-07-28): sans1269 Sanskrit/san, clas1254 Classical Tibetan/xct;
+    # (2026-07-29): anci1242 is the languoid carrying ISO grc (Glottolog's
+    # own name is "Ionic-Attic Ancient Greek"; the Name column uses the ISO
+    # 639-3 reference name).
     san = Nabu::DataBuild::LANGUAGES.fetch("san")
     assert_equal %w[Sanskrit sans1269 san], [san.name, san.glottocode, san.iso639p3]
 
@@ -147,6 +160,9 @@ class DataBuildRegistryTest < Minitest::Test
     # Checked 2026-07-29: lati1261 Latin/lat (glottolog/languages.csv).
     lat = Nabu::DataBuild::LANGUAGES.fetch("lat")
     assert_equal %w[Latin lati1261 lat], [lat.name, lat.glottocode, lat.iso639p3]
+
+    grc = Nabu::DataBuild::LANGUAGES.fetch("grc")
+    assert_equal ["Ancient Greek", "anci1242", "grc"], [grc.name, grc.glottocode, grc.iso639p3]
   end
 
   def test_feature_lookup_goes_through_the_features_seam
@@ -171,14 +187,17 @@ class DataBuildRegistryTest < Minitest::Test
     end
   end
 
-  # The shipped license census, per slug: the P50/P51 features are CC BY;
-  # lat/sabellic-loans derives from Wiktionary's share-alike dual grant and
-  # publishes as BY-SA (the D51-a carve-out in action).
+  # The shipped license census, per slug. CC BY is the default; the BY-SA
+  # entries inherit share-alike from their inputs (the D51-a carve-out:
+  # sabellic-loans from Wiktionary's dual grant; kyujitai-fold from
+  # KANJIDIC2/EDRDG; kanripo-gaiji from the KR-Gaiji grant — the latter two
+  # land with P52-4's merge).
   def test_the_shipped_license_census
     expected = {
       "san/form-lemma" => "CC-BY-4.0", "xct/wylie-fold" => "CC-BY-4.0",
       "xct/verb-lemma" => "CC-BY-4.0", "xct/segmentation" => "CC-BY-4.0",
-      "lat/sabellic-loans" => "CC-BY-SA-4.0"
+      "zho/hani-fold" => "CC-BY-4.0", "jpn/aozora-gaiji" => "CC-BY-4.0",
+      "lat/sabellic-loans" => "CC-BY-SA-4.0", "grc/meter" => "CC-BY-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
