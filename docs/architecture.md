@@ -1340,3 +1340,10 @@ on `canonical/` and the catalog. The full producer-side contract (Feature
 fields, manifest anatomy, CLDF column rules, the ID discipline) is
 docs/nabu-data.md; its feature census is drift-guarded against
 `Nabu::DataBuild::REGISTRY`.
+
+Because the rail is producer-only — it reads the catalog and writes external
+files, influencing nothing Nabu stores — `lib/nabu/data_build/` is excluded
+from the shared derivation-core digest (owner ruling D50-b): a data_build
+packet must not read every source's fingerprint dirty. A purity guard test
+pins the assumption — no derivation code may reference `DataBuild`; the
+inverse direction (data_build consuming the rest of Nabu) stays free.

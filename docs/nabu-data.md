@@ -7,7 +7,11 @@ absolute: **nabu-data is 100% passive data; ALL production code lives here**,
 in `lib/nabu/data_build/`, driven by the `nabu data` command family. The rail
 writes files into the owner's nabu-data working clone and **never runs git
 operations there** — reviewing, committing, and pushing the public repo is the
-owner's explicit act.
+owner's explicit act. Being producer-only, `lib/nabu/data_build/` is excluded
+from the shared derivation-core digest (owner ruling D50-b): it cannot change
+any stored row, so its changes never dirty source fingerprints — pinned by a
+purity guard test (no derivation code references `DataBuild`; the rail may
+consume the rest of Nabu freely).
 
 ## The commands
 
