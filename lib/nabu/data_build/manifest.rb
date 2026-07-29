@@ -52,9 +52,11 @@ module Nabu
 
         # Render the manifest for +feature+. +resources+ are Resource values
         # in manifest order, +input_shas+ is { cone => sha }, +sources+ is
-        # SourceRef values (one per input source). Returns the JSON string
+        # SourceRef values (one per input source), +evaluation+ an optional
+        # in-band eval hash (published as nabu.eval). Returns the JSON string
         # (pretty, trailing newline).
-        def generate(feature:, resources:, input_shas:, recipe:, sources: [], nabu_version: Nabu::VERSION)
+        def generate(feature:, resources:, input_shas:, recipe:, sources: [], evaluation: nil,
+                     nabu_version: Nabu::VERSION)
           document = {
             "$schema" => SCHEMA_URL,
             "name" => feature.package_name,
@@ -65,7 +67,7 @@ module Nabu
             "sources" => sources.map { |source| source_entry(source) },
             "resources" => resources.map { |resource| resource_entry(resource) },
             "nabu" => nabu_block(feature: feature, resources: resources, input_shas: input_shas,
-                                 recipe: recipe, nabu_version: nabu_version)
+                                 recipe: recipe, evaluation: evaluation, nabu_version: nabu_version)
           }
           "#{JSON.pretty_generate(document)}\n"
         end
@@ -94,8 +96,8 @@ module Nabu
           entry
         end
 
-        def nabu_block(feature:, resources:, input_shas:, recipe:, nabu_version:)
-          {
+        def nabu_block(feature:, resources:, input_shas:, recipe:, nabu_version:, evaluation: nil)
+          block = {
             "producer" => "nabu data build #{feature.slug}",
             "nabu_version" => nabu_version,
             "derivation" => {
@@ -107,6 +109,8 @@ module Nabu
             "tier" => feature.tier,
             "counts" => { "rows" => resources.sum { |resource| resource.rows.to_i } }
           }
+          block["eval"] = evaluation if evaluation
+          block
         end
       end
     end

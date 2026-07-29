@@ -98,12 +98,18 @@ optional README notes). Builders write their own data files into `out_dir`
   },
   "anchoring": { "kind": "none" },
   "tier": "gold-derived",
-  "counts": { "rows": 12345 }
+  "counts": { "rows": 12345 },
+  "eval": { "boundary_f1": 0.9622, "...": "…" }  // only when the builder measures itself
 }
 ```
 
 The fingerprint follows the `DerivationFingerprint` token discipline: it
-changes iff an input cone's canonical bytes or the recipe change. `sources[]`
+changes iff an input cone's canonical bytes or the recipe change. A builder
+that measures its own output quality (xct/segmentation's segmenter, scored
+against the SOAS gold by leave-one-text-out cross-validation) returns an
+evaluation hash on its `BuildResult`; the Runner publishes it verbatim as
+`nabu.eval` — the honesty stat rides in-band with the data it describes,
+and the dataset README quotes the same numbers. `sources[]`
 entries carry each input's title/homepage/license (from the source's adapter
 manifest) and `version` = the cone's sha at derivation. Git-backed cones
 record their HEAD sha; non-git cones record the content identity
@@ -142,7 +148,7 @@ no page update is a red suite, and vice versa.
 | `san/form-lemma` | available | gold-derived | san | dcs |
 | `xct/wylie-fold` | available | gold | xct | — |
 | `xct/verb-lemma` | available | gold-derived | xct | tibetan-verbs |
-| `xct/segmentation` | planned | silver | xct | derge-kangyur, soas-tibetan |
+| `xct/segmentation` | available | silver | xct | derge-kangyur, soas-tibetan |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -170,7 +176,7 @@ Maps the 2,491 TVD stem tuples (present/past/future/imperative, grammarians' dis
 
 ### `xct/segmentation` — Segmented Classical Tibetan, curated slice (eval'd against SOAS gold)
 
-**Status**: planned · **Tier**: silver · **Anchoring**: passage-urn · **Inputs**: derge-kangyur, soas-tibetan
+**Status**: available · **Tier**: silver · **Anchoring**: passage-urn · **Inputs**: derge-kangyur, soas-tibetan
 
 Tsheg-bar/word segmentation over a curated Derge slice with the segmenter's error rate measured against the SOAS gold corpus and published in-band — the calibration ground for any full-canon layer.
 
