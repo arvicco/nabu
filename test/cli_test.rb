@@ -2324,6 +2324,24 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P52 (owner report off the live hypotactic sync: "How on earth is
+  # hypotactic NOT wired yet?"): a kind: module row is PERMANENTLY
+  # wired: false by registry invariant — the "not wired yet (this sync is
+  # the verification)" wording promises a flip that will never come. The
+  # direct sync path prints the module's nature note ONLY; the
+  # verification-pending note is for kind: source rows alone (the P46-r1
+  # axis-surface rule, applied to the last remaining surface).
+  def test_sync_module_by_slug_prints_nature_not_unwired_verification
+    with_axis_sync_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync meter --parse-only]) }
+      assert_nil status
+      assert_match(/feature module — refreshes canonical reference data/, out,
+                   "the nature note names what a module sync does")
+      refute_match(/not wired yet/i, out,
+                   "a module never wears the verification-pending wording — wired stays false by design")
+    end
+  end
+
   # -- sync <axis> / --axis (P35-2): axis expansion as pure per-source fan-out -
 
   # Bare `sync <axis>` expands to the axis's ENABLED members (registration

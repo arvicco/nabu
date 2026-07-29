@@ -6562,7 +6562,11 @@ module Nabu
         # P39-0: name a non-source row's nature up front, so an owner who fires
         # `sync kr-gaiji` / `sync local-notes` knows what it does (and does not) do.
         say kind_nature_note(entry), :yellow if entry && !entry.source?
-        if entry && !entry.wired
+        # The verification-pending note belongs to kind: source rows alone —
+        # module/shelf rows are PERMANENTLY wired: false by registry invariant
+        # (the P46-r1 rule; P52 owner report caught this last surface still
+        # promising a flip that never comes).
+        if entry && !entry.wired && entry.source?
           say "Note: #{slug} is not wired yet (this sync is the verification); syncing anyway (explicit request).",
               :yellow
         end
