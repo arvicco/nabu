@@ -188,3 +188,14 @@ Tsheg-bar/word segmentation over a curated Derge slice with the segmenter's erro
   and the catalog; a build derives outward.
 - **Publish an input it cannot name.** No sha, no dataset — a dirty or
   missing cone refuses with the reason.
+
+## The loop closes: nabu-data as a source
+
+Since P51-W6 the published repo is also a REGISTERED SOURCE (`nabu-data`
+in config/sources.yml, `kind: module` — docs/02-sources.md row 141): `nabu
+sync nabu-data` clones the publication back under `canonical/nabu-data/`
+through the sanctioned GitFetch gateway, and `Nabu::FormLemma` serves the
+`san/form-lemma` table to `nabu define`'s Sanskrit query expansion. The
+producer rail above and the consumer row never touch: the rail writes the
+owner's working clone, the source syncs the published repo — the
+reproducibility loop closes only through a public commit.

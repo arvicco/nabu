@@ -64,6 +64,10 @@ module Nabu
       # Latin-eligible query, and it folds/looks up in Latin.
       LILA_LANGUAGE = "lat"
 
+      # The nabu-data form→lemma table is Sanskrit-only (P51-W6): expansion
+      # fires only for a Sanskrit-eligible query, folded in san.
+      FORM_LEMMA_LANGUAGE = "san"
+
       # P48-r1 (D48-a): the curated Sanskrit stem-class rule — nominative ↔
       # stem candidates for a Latin/IAST-scripted query. Candidates that
       # don't exist as headwords simply match nothing; that existence check
@@ -96,11 +100,14 @@ module Nabu
       # variant-form fallback (below). It defaults to :auto — feature-detected
       # from canonical/lila at first use, so absent-tree behavior is
       # byte-identical to before — and tests inject a fixture resolver (or nil
-      # to force the direct-only path).
-      def initialize(catalog:, fulltext: nil, lila: :auto)
+      # to force the direct-only path). +form_lemma+ (P51-W6) is the nabu-data
+      # Sanskrit form→lemma table used for query expansion (below), same
+      # :auto/inject contract (feature-detected from canonical/nabu-data).
+      def initialize(catalog:, fulltext: nil, lila: :auto, form_lemma: :auto)
         @catalog = catalog
         @reflex_views = ReflexViews.new(catalog: catalog, fulltext: fulltext)
         @lila = lila
+        @form_lemma = form_lemma
       end
 
       # Look up +lemma+; +lang+ filters by dictionary language (grc/lat/…);
@@ -133,6 +140,13 @@ module Nabu
         unless recon_only
           variants = (variants + self.class.sanskrit_stem_variants(bare)
                                      .flat_map { |v| Nabu::Normalize.query_forms(v) }).uniq
+          # P51-W6 (D48-a tier 2): when the nabu-data form→lemma table is
+          # live, expansion also reaches the table's lemma candidates
+          # (tapasā → tapas — the general table knows what the curated rule
+          # cannot). The rule above stays the always-on fallback (the file
+          # may be absent on any box); the table only WIDENS which entries
+          # are found — hits are ordinary Results, labeled nothing new.
+          variants = (variants + form_lemma_variants(bare, lang: lang)).uniq
         end
 
         rows = entry_rows(variants, lang: lang, limit: limit, recon_only: recon_only)
@@ -285,6 +299,35 @@ module Nabu
         return @lila unless @lila == :auto
 
         @lila = Nabu::Lila.load_default
+      end
+
+      # -- the nabu-data form→lemma expansion (P51-W6) -----------------------------
+
+      # The folded query forms of every lemma the published table maps the
+      # queried form to. Scope mirrors the P48-r1 rule (IAST/ASCII-shaped
+      # terms only) plus the LiLa-style language gate, so a Greek/Han query
+      # or an explicit non-Sanskrit --lang never pays the table load. An
+      # absent table (any box before the owner's first `nabu sync
+      # nabu-data`) yields [] — byte-identical behavior.
+      def form_lemma_variants(term, lang:)
+        return [] unless san_eligible?(lang) && term.match?(SANSKRIT_IASTISH)
+
+        resolver = form_lemma or return []
+        resolver.lookup(term).flat_map { |candidate| Nabu::Normalize.query_forms(candidate.lemma) }
+      end
+
+      # The table is Sanskrit-only: expand when the query is unconstrained
+      # or --lang names Sanskrit (the lat_eligible? shape).
+      def san_eligible?(lang)
+        lang.nil? || Nabu::Languages.code_variants(lang.to_s).include?(FORM_LEMMA_LANGUAGE)
+      end
+
+      # Feature-detect + memoize the table (:auto → canonical/nabu-data;
+      # absent tree is nil, the lila contract).
+      def form_lemma
+        return @form_lemma unless @form_lemma == :auto
+
+        @form_lemma = Nabu::FormLemma.load_default
       end
 
       # -- resolution --------------------------------------------------------------

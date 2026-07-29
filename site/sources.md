@@ -164,7 +164,7 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | `openmgh` | [openMGH](https://www.mgh.de/en/digital-mgh/openmgh) (Monumenta Germaniae Historica + Bayerische Staatsbibliothek) | The critical-edition backbone of medieval Latin as TEI: first wave = the complete SS rerum Germanicarum series, 57 volumes / 9,594 passages — Einhard, the Frankish annals, Widukind, Adam of Bremen (synchronized 25 July 2026; 96 further volumes are a documented future step) | CC BY 4.0 (texts themselves free of copyright) |
 | `bfm` | [Base de français médiéval](https://bfm.ens-lyon.fr/) (ENS de Lyon / IHRIM, via NAKALA) | BFM2022: Old and Middle French from the 842 Serments de Strasbourg through the 15th century, TEI with lemmas (silver): 6.4M words (synchronized 25 July 2026) | Licence Ouverte / Etalab (8 files' critical apparatus, CC BY-NC-SA, is excluded at parse) |
 
-Eight further registry rows are **feature modules**, not corpora —
+Nine further registry rows are **feature modules**, not corpora —
 machinery that fetches reference data but mints no documents of its own:
 `bridging` (the OSHB↔BHSA crosswalk), `kr-gaiji` (the Kanripo gaiji
 map), `trismegistos` (the Trismegistos TexRelations concordance
@@ -173,9 +173,13 @@ corpora), `pleiades` (the ancient-world gazetteer behind `nabu place`
 and the findspot line, CC BY 3.0), `lila` (the LiLa Latin lemma bank
 behind `nabu define`'s variant-spelling fallback, CC BY-SA 4.0),
 `kitab` (KITAB text-reuse alignments over the OpenITI library,
-CC BY-NC-SA 4.0), and the two metrical-scansion lanes — `pedecerto`
+CC BY-NC-SA 4.0), the two metrical-scansion lanes — `pedecerto`
 (Latin, CC BY-NC-ND 4.0) and `hypotactic` (Greek, CC BY 4.0) — that
-annotate held verse passages with meter, pattern and caesura.
+annotate held verse passages with meter, pattern and caesura, and
+`nabu-data` (the library's own [published
+datasets](https://github.com/arvicco/nabu-data), CC BY 4.0, consumed
+back as a source — the Sanskrit form→lemma table behind `nabu define`'s
+inflected-form expansion; the reproducibility loop closed in public).
 
 ## The local shelves
 
