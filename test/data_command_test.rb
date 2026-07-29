@@ -146,4 +146,84 @@ class DataCommandTest < Minitest::Test
     assert_match(/data list/, out)
     assert_match(/data build/, out)
   end
+
+  # Owner ask 2026-07-29: `data build --all` rebuilds every AVAILABLE feature
+  # in one command. Planned features are skipped by name (never a failure);
+  # per-feature summaries print as each lands; one grand total closes.
+  def test_data_build_all_builds_every_available_and_skips_planned
+    with_build_env do |config, into|
+      second = DataBuildFake.feature(slug: "san/fake-extra")
+      planned = planned_rig
+      out, _err, status = with_config(config) do
+        with_features([DataBuildFake.feature, second, planned]) do
+          run_cli(["data", "build", "--all", "--into", into])
+        end
+      end
+      assert_nil status
+      assert File.file?(File.join(into, "san", "fake-forms", "forms.csv"))
+      assert File.file?(File.join(into, "san", "fake-extra", "forms.csv"))
+      assert_match(%r{skipped \(planned\): san/planned-rig}, out)
+      assert_match(/2 dataset\(s\) built, 1 skipped \(planned\), 0 failed/, out)
+      assert_match(/[Nn]o git/, out, "the no-git contract prints once at the end")
+    end
+  end
+
+  # A failing feature must not abort the sweep: the census-and-continue
+  # doctrine — later features still build, the failure is named with its
+  # message, and the command exits nonzero.
+  def test_data_build_all_continues_past_a_failure_and_exits_nonzero
+    failing_builder = Class.new do
+      def build(catalog:, out_dir:) # rubocop:disable Lint/UnusedMethodArgument
+        raise Nabu::DataBuild::Error, "rigged failure (test)"
+      end
+    end
+    with_build_env do |config, into|
+      failing = DataBuildFake.feature(slug: "san/fake-broken", builder: failing_builder)
+      good = DataBuildFake.feature
+      out, err, status = with_config(config) do
+        with_features([failing, good]) do
+          run_cli(["data", "build", "--all", "--into", into])
+        end
+      end
+      assert_equal 1, status
+      assert File.file?(File.join(into, "san", "fake-forms", "forms.csv")),
+             "the good feature still builds after the failure"
+      assert_match(%r{FAILED san/fake-broken: rigged failure}, out + err)
+      assert_match(/1 dataset\(s\) built, 0 skipped \(planned\), 1 failed/, out + err)
+    end
+  end
+
+  def test_data_build_all_and_slug_are_mutually_exclusive_and_one_is_required
+    out_dir = Dir.mktmpdir("nabu-data-cli")
+    _out, err, status = run_cli(["data", "build", "san/form-lemma", "--all", "--into", out_dir])
+    assert_equal 1, status
+    assert_match(/either a slug or --all/, err)
+
+    _out, err, status = run_cli(["data", "build", "--into", out_dir])
+    assert_equal 1, status
+    assert_match(/either a slug or --all/, err)
+  end
+
+  private
+
+  def planned_rig
+    Nabu::DataBuild::Feature.new(
+      slug: "san/planned-rig", language: Nabu::DataBuild::LANGUAGES.fetch("san"),
+      title: "Planned rig (no builder yet)", status: :planned, tier: "gold", anchoring: "none",
+      inputs: [], canonical_cones: [], rationale: "Exists to pin the planned skip.",
+      maintenance: "never — test rig only"
+    )
+  end
+
+  def with_build_env
+    Dir.mktmpdir("nabu-data-cli") do |root|
+      canonical = File.join(root, "canonical")
+      FileUtils.mkdir_p(canonical)
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(canonical_dir: canonical, db_dir: File.join(root, "db"),
+                                sources_path: sources, config_path: "(test)")
+      yield config, File.join(root, "nabu-data")
+    end
+  end
 end
