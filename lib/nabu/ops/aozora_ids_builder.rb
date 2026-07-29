@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "digest"
+
 module Nabu
   module Ops
     # P39-5: generator for config/gaiji/aozora-ids.tsv — the Aozora gaiji IDS
@@ -59,18 +61,32 @@ module Nabu
 
       REFUSAL_ORDER = %i[kana_component replace subtractive parenthesised multi_operator other].freeze
 
+      # The checked-in census — the default input here AND the source of
+      # truth the jpn/aozora-gaiji nabu-data dataset publishes (P52-3; one
+      # census, two consumers — the XctFoldBuilder::RULES_PATH pattern).
+      CENSUS_PATH = File.expand_path("../../../config/gaiji/aozora-descriptions.tsv", __dir__)
+
       Census = Struct.new(:descriptions, :composition_occurrences, :derived, :derived_occurrences,
                           :refused, keyword_init: true)
 
-      attr_reader :census, :lane
+      # census: aggregate counts; lane: desc → IDS; descriptions: desc →
+      # occurrence count as read; refusals: refusal class → [descs] (the
+      # per-row census the dataset publishes — census.refused counts these).
+      attr_reader :census, :lane, :descriptions, :refusals
 
       # +census_path+ is config/gaiji/aozora-descriptions.tsv.
-      def initialize(census_path:, generated_on: Time.now.strftime("%Y-%m-%d"))
+      def initialize(census_path: CENSUS_PATH, generated_on: Time.now.strftime("%Y-%m-%d"))
         @census_path = census_path
         @generated_on = generated_on
         @lane = {}
-        @refused = REFUSAL_ORDER.to_h { |cls| [cls, []] }
+        @refusals = REFUSAL_ORDER.to_h { |cls| [cls, []] }
         build
+      end
+
+      # The content identity of the census bytes — the dataset recipe embeds
+      # it so the derivation fingerprint moves with every re-census.
+      def census_sha256
+        Digest::SHA256.file(@census_path).hexdigest
       end
 
       # The config/gaiji/aozora-ids.tsv file text.
@@ -82,21 +98,21 @@ module Nabu
       private
 
       def build
-        descs = read_census
+        @descriptions = read_census
         occ = 0
         derived_occ = 0
-        descs.each do |desc, count|
+        @descriptions.each do |desc, count|
           occ += count
           if (ids = derive(desc))
             @lane[desc] = ids
             derived_occ += count
           else
-            @refused[classify(desc)] << desc
+            @refusals[classify(desc)] << desc
           end
         end
-        @census = Census.new(descriptions: descs.size, composition_occurrences: occ,
+        @census = Census.new(descriptions: @descriptions.size, composition_occurrences: occ,
                              derived: @lane.size, derived_occurrences: derived_occ,
-                             refused: @refused.transform_values(&:size))
+                             refused: @refusals.transform_values(&:size))
       end
 
       # desc → IDS, or nil (refuse). Pure, order-independent.

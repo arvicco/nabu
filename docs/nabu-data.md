@@ -171,6 +171,8 @@ no page update is a red suite, and vice versa.
 | `xct/wylie-fold` | available | gold | CC-BY-4.0 | xct | — |
 | `xct/verb-lemma` | available | gold-derived | CC-BY-4.0 | xct | tibetan-verbs |
 | `xct/segmentation` | available | silver | CC-BY-4.0 | xct | derge-kangyur, soas-tibetan |
+| `zho/hani-fold` | available | gold-derived | CC-BY-4.0 | zho | unihan |
+| `jpn/aozora-gaiji` | available | gold | CC-BY-4.0 | jpn | — |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -203,6 +205,22 @@ Maps the 2,491 TVD stem tuples (present/past/future/imperative, grammarians' dis
 Tsheg-bar/word segmentation over a curated Derge slice with the segmenter's error rate measured against the SOAS gold corpus and published in-band — the calibration ground for any full-canon layer.
 
 **Maintenance**: re-derive on canonical text revisions or segmenter upgrades; each release republishes the eval number
+
+### `zho/hani-fold` — Han traditional↔simplified↔z-variant fold table (from Unihan)
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: unihan
+
+The 6,050-pair Han fold resolved conservatively from Unihan's declared kTraditionalVariant/kSimplifiedVariant/kZVariant relations — the table that lets simplified-script queries reach the traditional-script canon (kanripo/cbeta), the same resolution `rake fold:hani` compiles into Nabu::Hani; every ambiguous fold is refused and published per-row with its reason, because the refusal census IS the curation.
+
+**Maintenance**: re-derive after each unihan sync (upstream /latest/ moves at annual Unicode releases); a changed table also re-derives Nabu's own Han fold via `rake fold:hani` — the conventions §9 rebuild caveat applies
+
+### `jpn/aozora-gaiji` — Aozora Bunko gaiji composition census with derived IDS lane
+
+**Status**: available · **Tier**: gold · **Anchoring**: none · **Inputs**: —
+
+The census of composition formulas Aozora Bunko transcribers wrote for glyphs Unicode cannot encode (582 distinct formulas, 1,129 occurrences at the 2026-07-22 snapshot), each with its occurrence count and resolution status, plus the 244-entry IDS lane a conservative structural grammar can prove — refusals classified per formula, never guessed: the gaiji display-honesty ladder, published.
+
+**Maintenance**: re-census on the owner's schedule as the corpus grows (the checked-in TSV header carries the snapshot provenance); each re-census re-fingerprints the dataset through the recipe's embedded sha256
 
 ## What the rail never does
 
