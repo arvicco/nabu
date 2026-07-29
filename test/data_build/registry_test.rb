@@ -10,7 +10,8 @@ require "test_helper"
 # not just the shape.
 class DataBuildRegistryTest < Minitest::Test
   EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation
-                      zho/hani-fold jpn/aozora-gaiji lat/sabellic-loans grc/meter].freeze
+                      zho/hani-fold jpn/aozora-gaiji lat/sabellic-loans grc/meter
+                      jpn/kyujitai-fold lzh/kanripo-gaiji].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -24,8 +25,8 @@ class DataBuildRegistryTest < Minitest::Test
   def test_the_builder_status_census
     # The rail landed with every feature :planned; each builder packet flipped
     # exactly its own feature (P50-W2 form-lemma, P50-W3 wylie-fold, P50-W4
-    # verb-lemma, P51-W5 segmentation, P52-5 sabellic-loans landing available
-    # with its builder in one packet). The full census is available.
+    # verb-lemma, P51-W5 segmentation, P52-2/3/4/5 the conversion wave).
+    # The full census is available.
     assert_equal EXPECTED_SLUGS, features.select(&:available?).map(&:slug)
     features.select(&:planned?).each { |feature| assert_nil feature.builder }
     features.select(&:available?).each { |feature| refute_nil feature.builder }
@@ -132,6 +133,24 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal meter.inputs, meter.canonical_cones
     assert_match(/never the CC BY-SA Perseus text/, meter.rationale,
                  "the provenance rule is stated where the owner reads it")
+
+    kyujitai = Nabu::DataBuild.feature("jpn/kyujitai-fold")
+    assert_equal :available, kyujitai.status, "P52-4: the kyūjitai-fold builder has landed"
+    assert_equal Nabu::DataBuild::KyujitaiFoldBuilder, kyujitai.builder
+    assert_equal "gold", kyujitai.tier
+    assert_equal "none", kyujitai.anchoring
+    assert_equal %w[unihan edrdg], kyujitai.inputs
+    assert_equal %w[unihan edrdg], kyujitai.canonical_cones
+    assert_match(/rake fold:jpn|Nabu::Jpn/, kyujitai.rationale,
+                 "the one-seam-two-consumers relation is stated where the owner reads it")
+
+    gaiji = Nabu::DataBuild.feature("lzh/kanripo-gaiji")
+    assert_equal :available, gaiji.status, "P52-4: the kanripo-gaiji builder has landed"
+    assert_equal Nabu::DataBuild::KanripoGaijiBuilder, gaiji.builder
+    assert_equal "gold", gaiji.tier
+    assert_equal "none", gaiji.anchoring
+    assert_empty gaiji.inputs, "own curation pinned to the charlist commit the TSV headers record"
+    assert_empty gaiji.canonical_cones
   end
 
   def test_language_statics_match_the_glottolog_spine
@@ -140,6 +159,7 @@ class DataBuildRegistryTest < Minitest::Test
     # (2026-07-29): anci1242 is the languoid carrying ISO grc (Glottolog's
     # own name is "Ionic-Attic Ancient Greek"; the Name column uses the ISO
     # 639-3 reference name).
+    # Also checked: lite1248 Classical Chinese/lzh (P52-4).
     san = Nabu::DataBuild::LANGUAGES.fetch("san")
     assert_equal %w[Sanskrit sans1269 san], [san.name, san.glottocode, san.iso639p3]
 
@@ -163,6 +183,9 @@ class DataBuildRegistryTest < Minitest::Test
 
     grc = Nabu::DataBuild::LANGUAGES.fetch("grc")
     assert_equal ["Ancient Greek", "anci1242", "grc"], [grc.name, grc.glottocode, grc.iso639p3]
+
+    lzh = Nabu::DataBuild::LANGUAGES.fetch("lzh")
+    assert_equal ["Classical Chinese", "lite1248", "lzh"], [lzh.name, lzh.glottocode, lzh.iso639p3]
   end
 
   def test_feature_lookup_goes_through_the_features_seam
@@ -197,7 +220,8 @@ class DataBuildRegistryTest < Minitest::Test
       "san/form-lemma" => "CC-BY-4.0", "xct/wylie-fold" => "CC-BY-4.0",
       "xct/verb-lemma" => "CC-BY-4.0", "xct/segmentation" => "CC-BY-4.0",
       "zho/hani-fold" => "CC-BY-4.0", "jpn/aozora-gaiji" => "CC-BY-4.0",
-      "lat/sabellic-loans" => "CC-BY-SA-4.0", "grc/meter" => "CC-BY-4.0"
+      "lat/sabellic-loans" => "CC-BY-SA-4.0", "grc/meter" => "CC-BY-4.0",
+      "jpn/kyujitai-fold" => "CC-BY-SA-4.0", "lzh/kanripo-gaiji" => "CC-BY-SA-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
