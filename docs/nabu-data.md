@@ -173,6 +173,7 @@ no page update is a red suite, and vice versa.
 | `xct/segmentation` | available | silver | CC-BY-4.0 | xct | derge-kangyur, soas-tibetan |
 | `zho/hani-fold` | available | gold-derived | CC-BY-4.0 | zho | unihan |
 | `jpn/aozora-gaiji` | available | gold | CC-BY-4.0 | jpn | — |
+| `lat/sabellic-loans` | available | gold | CC-BY-SA-4.0 | lat | — |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -221,6 +222,14 @@ The 6,050-pair Han fold resolved conservatively from Unihan's declared kTraditio
 The census of composition formulas Aozora Bunko transcribers wrote for glyphs Unicode cannot encode (582 distinct formulas, 1,129 occurrences at the 2026-07-22 snapshot), each with its occurrence count and resolution status, plus the 244-entry IDS lane a conservative structural grammar can prove — refusals classified per formula, never guessed: the gaiji display-honesty ladder, published.
 
 **Maintenance**: re-census on the owner's schedule as the corpus grows (the checked-in TSV header carries the snapshot provenance); each re-census re-fingerprints the dataset through the recipe's embedded sha256
+
+### `lat/sabellic-loans` — Sabellic → Latin loanword table (en.wiktionary curation)
+
+**Status**: available · **Tier**: gold · **Anchoring**: none · **Inputs**: —
+
+Flattens the hand-curated Sabellic (Oscan/Umbrian/Sabine) → Latin loan rows — 85 Latin lemmas with borrowed/derived relation flags and the Old Italic etyma en.wiktionary cites — into one reusable table; the same curation powers Nabu's sabellic-osc/xum/sbv dictionary shelves and their loan-flagged etymology edges. CC BY-SA (the Wiktionary share-alike grant — owner ruling D51-a).
+
+**Maintenance**: on re-curation of config/sabellic_loans.yml only (a deliberate repo change, not a sync); each curation change re-fingerprints the dataset via the recipe's embedded file sha
 
 ## What the rail never does
 
