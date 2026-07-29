@@ -45,6 +45,15 @@ class SignListTest < Minitest::Test
     assert_equal ["|ŠEŠ.NA|"], candidates.map(&:name),
                  "the form record itself is the candidate — it has its own encoding"
     assert_equal %w[U+122C0 U+1223E], candidates.first.codepoints
+    # The kunga₃ incident (owner, 2026-07-29): a value can live on BOTH an
+    # independent sign and a same-named form of ANOTHER sign — without the
+    # parent, the two candidates render identically and look like a bug.
+    assert_equal "|ŠEŠ.KI|", candidates.first.parent_name,
+                 "a form candidate names the sign it is a variant of"
+  end
+
+  def test_top_level_records_carry_no_parent
+    assert_nil list.sign("ŠEŠ").parent_name
   end
 
   def test_lookup_of_a_deprecated_value_still_resolves

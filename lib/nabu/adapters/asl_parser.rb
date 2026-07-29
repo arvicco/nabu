@@ -47,9 +47,13 @@ module Nabu
       # (from "@list U+xxxxx"), +useq+ the component sequence (from @useq),
       # +upua+ a private-use "U+Fxxxx" — any may be nil; a record with none
       # is honestly unencoded. +forms+ is always [] on form records.
+      # +parent_name+ is nil on top-level signs and the owning sign's name on
+      # form records — the kunga₃ incident (2026-07-29): a value can live on
+      # both an independent sign AND a same-named form of another sign, and
+      # without the parent the two candidates are indistinguishable.
       SignRecord = Data.define(:name, :oid, :deprecated, :uname, :ucun,
                                :codepoint, :useq, :upua, :values, :aka,
-                               :list_numbers, :forms) do
+                               :list_numbers, :forms, :parent_name) do
         # The effective codepoint list: single → one-element array, else the
         # @useq sequence, else nil (honestly unencoded).
         def codepoints = codepoint ? [codepoint] : useq
@@ -143,6 +147,7 @@ module Nabu
       def finish_form
         return unless @form
 
+        @form[:parent_name] = @sign[:name]
         @sign[:forms] << build_record(@form)
         @form = nil
       end
@@ -150,7 +155,7 @@ module Nabu
       def builder(name, deprecated)
         { name: name, deprecated: deprecated, oid: nil, uname: nil, ucun: nil,
           codepoint: nil, useq: nil, upua: nil, values: [], aka: [],
-          list_numbers: [], forms: [] }
+          list_numbers: [], forms: [], parent_name: nil }
       end
 
       def build_record(fields)
