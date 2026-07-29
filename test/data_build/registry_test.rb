@@ -2,20 +2,22 @@
 
 require "test_helper"
 
-# The nabu-data feature census (P50-W1): four registered features, every field
+# The nabu-data feature census (P50-W1): the registered features, every field
 # present and well-shaped. The rail landed first with everything :planned;
 # builder packets flip their own feature as each builder lands (P50-W2:
-# san/form-lemma, P50-W4: xct/verb-lemma). The registry is EXPLICIT — no
-# discovery magic — so this test pins the ratified metadata, not just the
-# shape.
+# san/form-lemma, P50-W4: xct/verb-lemma, P52-2: grc/meter). The registry is
+# EXPLICIT — no discovery magic — so this test pins the ratified metadata,
+# not just the shape.
 class DataBuildRegistryTest < Minitest::Test
-  EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation].freeze
+  EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation
+                      zho/hani-fold jpn/aozora-gaiji lat/sabellic-loans grc/meter
+                      jpn/kyujitai-fold lzh/kanripo-gaiji].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
   end
 
-  def test_registers_exactly_the_four_features_with_unique_slugs_in_order
+  def test_registers_exactly_the_expected_features_with_unique_slugs_in_order
     assert_equal EXPECTED_SLUGS, features.map(&:slug)
     assert_equal features.size, features.map(&:slug).uniq.size
   end
@@ -23,7 +25,8 @@ class DataBuildRegistryTest < Minitest::Test
   def test_the_builder_status_census
     # The rail landed with every feature :planned; each builder packet flipped
     # exactly its own feature (P50-W2 form-lemma, P50-W3 wylie-fold, P50-W4
-    # verb-lemma, P51-W5 segmentation). The full census is available.
+    # verb-lemma, P51-W5 segmentation, P52-2/3/4/5 the conversion wave).
+    # The full census is available.
     assert_equal EXPECTED_SLUGS, features.select(&:available?).map(&:slug)
     features.select(&:planned?).each { |feature| assert_nil feature.builder }
     features.select(&:available?).each { |feature| refute_nil feature.builder }
@@ -42,8 +45,19 @@ class DataBuildRegistryTest < Minitest::Test
       assert_kind_of Array, feature.inputs
       assert_kind_of Array, feature.canonical_cones
       language = feature.language
-      [language.id, language.name, language.glottocode, language.iso639p3].each do |value|
+      [language.id, language.name, language.iso639p3].each do |value|
         refute_empty value.to_s, "#{feature.slug}: languages.csv statics must be complete"
+      end
+      if language.glottocode.nil?
+        # Glottolog deliberately assigns no glottocode to ISO 639-3
+        # MACROLANGUAGES (verified against the cldf-spine cone 2026-07-29:
+        # no languages.csv row carries ISO zho; the nearest node sini1245 is
+        # a family, not this tag) — an empty static is honest there, and zho
+        # is the one registered macro tag. Any other nil is a missing static.
+        assert_equal "zho", language.id,
+                     "#{feature.slug}: only the zho macrolanguage may omit a glottocode"
+      else
+        refute_empty language.glottocode, "#{feature.slug}: languages.csv statics must be complete"
       end
     end
   end
@@ -79,21 +93,137 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal "passage-urn", segmentation.anchoring
     assert_equal %w[derge-kangyur soas-tibetan], segmentation.inputs
     assert_equal %w[derge-kangyur soas-tibetan], segmentation.canonical_cones
+
+    hani = Nabu::DataBuild.feature("zho/hani-fold")
+    assert_equal :available, hani.status, "P52-3: the hani-fold builder has landed"
+    assert_equal Nabu::DataBuild::HaniFoldBuilder, hani.builder
+    assert_equal "gold-derived", hani.tier,
+                 "mechanical resolution of Unihan's declared variants — the verb-lemma parity, " \
+                 "not wylie-fold's own-authorship gold"
+    assert_equal ["unihan"], hani.inputs, "the source of truth STAYS upstream Unihan (the fold-in audit rule)"
+    assert_equal ["unihan"], hani.canonical_cones
+    assert_equal "none", hani.anchoring
+    assert_match(/refus/, hani.rationale, "the refusal census is the curation — stated where the owner reads")
+
+    gaiji = Nabu::DataBuild.feature("jpn/aozora-gaiji")
+    assert_equal :available, gaiji.status, "P52-3: the aozora-gaiji builder has landed"
+    assert_equal Nabu::DataBuild::AozoraGaijiBuilder, gaiji.builder
+    assert_equal "gold", gaiji.tier, "hand-curated census over open-grant text"
+    assert_empty gaiji.inputs, "the checked-in census TSV is the source of truth — the wylie-fold precedent"
+    assert_empty gaiji.canonical_cones
+    assert_equal "none", gaiji.anchoring
+
+    loans = Nabu::DataBuild.feature("lat/sabellic-loans")
+    assert_equal :available, loans.status, "P52-5: builder and feature land together"
+    assert_equal Nabu::DataBuild::SabellicLoansBuilder, loans.builder
+    assert_equal "gold", loans.tier
+    assert_empty loans.inputs, "own curation (config/sabellic_loans.yml) — no canonical inputs"
+    assert_empty loans.canonical_cones
+    assert_equal "lat-sabellic-loans", loans.package_name
+    assert_match(/85 Latin lemmas/, loans.rationale)
+    assert_match(/D51-a/, loans.rationale, "the BY-SA ruling is stated where the owner reads it")
+
+    meter = Nabu::DataBuild.feature("grc/meter")
+    assert_equal :available, meter.status, "P52-2: the meter builder has landed"
+    assert_equal Nabu::DataBuild::MeterBuilder, meter.builder
+    assert_equal "gold-derived", meter.tier
+    assert_equal "passage-urn", meter.anchoring
+    assert_equal %w[hypotactic perseus-greek first1k-greek], meter.inputs,
+                 "the anchor corpora are declared inputs — the stale-ingest guard must cover them"
+    assert_equal meter.inputs, meter.canonical_cones
+    assert_match(/never the CC BY-SA Perseus text/, meter.rationale,
+                 "the provenance rule is stated where the owner reads it")
+
+    kyujitai = Nabu::DataBuild.feature("jpn/kyujitai-fold")
+    assert_equal :available, kyujitai.status, "P52-4: the kyūjitai-fold builder has landed"
+    assert_equal Nabu::DataBuild::KyujitaiFoldBuilder, kyujitai.builder
+    assert_equal "gold", kyujitai.tier
+    assert_equal "none", kyujitai.anchoring
+    assert_equal %w[unihan edrdg], kyujitai.inputs
+    assert_equal %w[unihan edrdg], kyujitai.canonical_cones
+    assert_match(/rake fold:jpn|Nabu::Jpn/, kyujitai.rationale,
+                 "the one-seam-two-consumers relation is stated where the owner reads it")
+
+    gaiji = Nabu::DataBuild.feature("lzh/kanripo-gaiji")
+    assert_equal :available, gaiji.status, "P52-4: the kanripo-gaiji builder has landed"
+    assert_equal Nabu::DataBuild::KanripoGaijiBuilder, gaiji.builder
+    assert_equal "gold", gaiji.tier
+    assert_equal "none", gaiji.anchoring
+    assert_empty gaiji.inputs, "own curation pinned to the charlist commit the TSV headers record"
+    assert_empty gaiji.canonical_cones
   end
 
   def test_language_statics_match_the_glottolog_spine
     # Verified against the owner's canonical/cldf-spine glottolog cone
-    # (2026-07-28): sans1269 Sanskrit/san, clas1254 Classical Tibetan/xct.
+    # (2026-07-28): sans1269 Sanskrit/san, clas1254 Classical Tibetan/xct;
+    # (2026-07-29): anci1242 is the languoid carrying ISO grc (Glottolog's
+    # own name is "Ionic-Attic Ancient Greek"; the Name column uses the ISO
+    # 639-3 reference name).
+    # Also checked: lite1248 Classical Chinese/lzh (P52-4).
     san = Nabu::DataBuild::LANGUAGES.fetch("san")
     assert_equal %w[Sanskrit sans1269 san], [san.name, san.glottocode, san.iso639p3]
 
     xct = Nabu::DataBuild::LANGUAGES.fetch("xct")
     assert_equal ["Classical Tibetan", "clas1254", "xct"], [xct.name, xct.glottocode, xct.iso639p3]
+
+    # P52-3 statics (cone re-checked 2026-07-29): nucl1643 Japanese/jpn; zho
+    # is the ISO 639-3 macrolanguage Glottolog assigns NO glottocode to — the
+    # honest static is empty, and it is the same pan-CJK macro tag Nabu's own
+    # unihan shelf files under (Adapters::Unihan::LANGUAGE).
+    jpn = Nabu::DataBuild::LANGUAGES.fetch("jpn")
+    assert_equal %w[Japanese nucl1643 jpn], [jpn.name, jpn.glottocode, jpn.iso639p3]
+
+    zho = Nabu::DataBuild::LANGUAGES.fetch("zho")
+    assert_equal ["Chinese", nil, "zho"], [zho.name, zho.glottocode, zho.iso639p3]
+    assert_equal Nabu::Adapters::Unihan::LANGUAGE, zho.id
+
+    # Checked 2026-07-29: lati1261 Latin/lat (glottolog/languages.csv).
+    lat = Nabu::DataBuild::LANGUAGES.fetch("lat")
+    assert_equal %w[Latin lati1261 lat], [lat.name, lat.glottocode, lat.iso639p3]
+
+    grc = Nabu::DataBuild::LANGUAGES.fetch("grc")
+    assert_equal ["Ancient Greek", "anci1242", "grc"], [grc.name, grc.glottocode, grc.iso639p3]
+
+    lzh = Nabu::DataBuild::LANGUAGES.fetch("lzh")
+    assert_equal ["Classical Chinese", "lite1248", "lzh"], [lzh.name, lzh.glottocode, lzh.iso639p3]
   end
 
   def test_feature_lookup_goes_through_the_features_seam
     assert_equal "san/form-lemma", Nabu::DataBuild.feature("san/form-lemma").slug
     assert_nil Nabu::DataBuild.feature("nope/nope")
+  end
+
+  # The D51-a license carve-out (2026-07-29): the allowed set is exactly
+  # CC BY / CC BY-SA; NC/ND inputs are disqualifying at intake, so no NC/ND
+  # value is ever legal.
+  def test_license_defaults_to_cc_by_and_only_the_allowed_set_is_legal
+    assert_equal %w[CC-BY-4.0 CC-BY-SA-4.0], Nabu::DataBuild::LICENSES
+    assert_equal "CC-BY-4.0", valid_feature.license, "the default is the repo default, CC BY 4.0"
+    assert_equal "CC-BY-SA-4.0", valid_feature(license: "CC-BY-SA-4.0").license,
+                 "share-alike-derived datasets may publish as BY-SA (owner ruling D51-a)"
+
+    ["CC-BY-NC-4.0", "CC-BY-ND-4.0", "CC0-1.0", "whatever", ""].each do |value|
+      error = assert_raises(Nabu::ValidationError, "license #{value.inspect} must be refused") do
+        valid_feature(license: value)
+      end
+      assert_match(/license/, error.message)
+    end
+  end
+
+  # The shipped license census, per slug. CC BY is the default; the BY-SA
+  # entries inherit share-alike from their inputs (the D51-a carve-out:
+  # sabellic-loans from Wiktionary's dual grant; kyujitai-fold from
+  # KANJIDIC2/EDRDG; kanripo-gaiji from the KR-Gaiji grant — the latter two
+  # land with P52-4's merge).
+  def test_the_shipped_license_census
+    expected = {
+      "san/form-lemma" => "CC-BY-4.0", "xct/wylie-fold" => "CC-BY-4.0",
+      "xct/verb-lemma" => "CC-BY-4.0", "xct/segmentation" => "CC-BY-4.0",
+      "zho/hani-fold" => "CC-BY-4.0", "jpn/aozora-gaiji" => "CC-BY-4.0",
+      "lat/sabellic-loans" => "CC-BY-SA-4.0", "grc/meter" => "CC-BY-4.0",
+      "jpn/kyujitai-fold" => "CC-BY-SA-4.0", "lzh/kanripo-gaiji" => "CC-BY-SA-4.0"
+    }
+    assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
 
   def test_feature_construction_refuses_dishonest_values

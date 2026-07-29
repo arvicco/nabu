@@ -2,6 +2,7 @@
 
 require "test_helper"
 require "tmpdir"
+require "digest"
 
 module Ops
   # Nabu::Ops::AozoraIdsBuilder (P39-5): the generator behind the aozora IDS
@@ -144,6 +145,31 @@ module Ops
       assert_equal 244, lane.size
       assert_equal "⿰口斗", lane["口＋斗"], "the formula IS the lane key"
       refute lane.key?("にんべん＋巨"), "a refused formula is absent — it stays the loud sentinel"
+    end
+
+    # -- the P52-3 dataset seam (jpn/aozora-gaiji consumes this builder) ----
+
+    def test_the_default_census_path_is_the_checked_in_census
+      assert_equal CENSUS_PATH, Nabu::Ops::AozoraIdsBuilder::CENSUS_PATH
+      assert File.file?(Nabu::Ops::AozoraIdsBuilder::CENSUS_PATH)
+    end
+
+    def test_exposes_descriptions_counts_and_classified_refusals
+      build do |b|
+        assert_equal 37, b.descriptions["口＋斗"], "occurrence counts ride with the descriptions"
+        assert_equal 9, b.descriptions.size
+        assert_includes b.refusals[:kana_component], "にんべん＋巨"
+        assert_includes b.refusals[:subtractive], "旗－其＋冉"
+        assert_equal b.census.refused, b.refusals.transform_values(&:size),
+                     "the census counts ARE the exposed refusal lists, counted"
+      end
+    end
+
+    def test_census_sha256_names_the_input_bytes
+      build do |b|
+        assert_equal Digest::SHA256.hexdigest(MINI_CENSUS), b.census_sha256,
+                     "the dataset recipe embeds this — the fingerprint must move with the census"
+      end
     end
   end
 end

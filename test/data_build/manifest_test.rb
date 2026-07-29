@@ -84,6 +84,20 @@ class DataBuildManifestTest < Minitest::Test
     assert_equal "1111222233334444555566667777888899990000", source["version"]
   end
 
+  # D51-a: the manifest license comes FROM the feature, with the matching
+  # creativecommons.org URL — CC BY stays the default (the golden fixture),
+  # BY-SA renders the by-sa path.
+  def test_the_license_comes_from_the_feature_with_the_right_cc_url
+    assert_equal [{ "name" => "CC-BY-4.0", "path" => "https://creativecommons.org/licenses/by/4.0/" }],
+                 JSON.parse(golden_json).fetch("licenses")
+
+    by_sa = MANIFEST.generate(**DataBuildFake.golden_manifest_args,
+                              feature: DataBuildFake.feature(inputs: ["dcs"], canonical_cones: ["dcs"],
+                                                             license: "CC-BY-SA-4.0"))
+    assert_equal [{ "name" => "CC-BY-SA-4.0", "path" => "https://creativecommons.org/licenses/by-sa/4.0/" }],
+                 JSON.parse(by_sa).fetch("licenses")
+  end
+
   def test_fingerprint_changes_iff_inputs_or_recipe_change
     base = MANIFEST.fingerprint(input_shas: { "dcs" => "aaa" }, recipe: "r1")
     assert_equal base, MANIFEST.fingerprint(input_shas: { "dcs" => "aaa" }, recipe: "r1")

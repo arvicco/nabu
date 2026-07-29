@@ -22,10 +22,16 @@ module Nabu
       # dataset releases is a later (release-rail) concern; 1.0.0 marks the
       # manifest shape, not a curated release history.
       DATASET_VERSION = "1.0.0"
-      LICENSES = [
-        { "name" => "CC-BY-4.0", "path" => "https://creativecommons.org/licenses/by/4.0/" }
-      ].freeze
       CONTRIBUTORS = [{ "title" => "Ar Vicco", "role" => "author" }].freeze
+
+      # The creativecommons.org URL per allowed dataset license (the closed
+      # set DataBuild::LICENSES pins — owner ruling D51-a). The manifest's
+      # licenses[] entry comes FROM the feature; each dataset's manifest is
+      # authoritative over the repo-default CC BY.
+      LICENSE_URLS = {
+        "CC-BY-4.0" => "https://creativecommons.org/licenses/by/4.0/",
+        "CC-BY-SA-4.0" => "https://creativecommons.org/licenses/by-sa/4.0/"
+      }.freeze
 
       # The DerivationFingerprint token discipline: unit-separator-joined
       # tokens, one digest, changes iff any token changes.
@@ -62,7 +68,7 @@ module Nabu
             "name" => feature.package_name,
             "title" => feature.title,
             "version" => DATASET_VERSION,
-            "licenses" => LICENSES,
+            "licenses" => [{ "name" => feature.license, "path" => LICENSE_URLS.fetch(feature.license) }],
             "contributors" => CONTRIBUTORS,
             "sources" => sources.map { |source| source_entry(source) },
             "resources" => resources.map { |resource| resource_entry(resource) },

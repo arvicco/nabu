@@ -113,7 +113,12 @@ module Nabu
                           :jinmeiyo_conflicts, :nfc_identity_dropped, :reform_pairs, :fold_entries,
                           keyword_init: true)
 
-      attr_reader :census, :reform_pairs, :fold_table, :merges
+      # One admitted lane-2 group edge (old form → jōyō new form), merge-
+      # flagged — the per-edge census the jpn/kyujitai-fold dataset builder
+      # renders (P52-4; one seam, two consumers with rake fold:jpn).
+      KanjidicEdge = Data.define(:old_form, :new_form, :merge)
+
+      attr_reader :census, :reform_pairs, :fold_table, :merges, :kanjidic_edges
 
       def initialize(mappings_path:, kanjidic_path:, generated_on: Time.now.strftime("%Y-%m-%d"))
         @mappings_path = mappings_path
@@ -318,6 +323,7 @@ module Nabu
       # --- resolution ----------------------------------------------------
 
       def resolve
+        @kanjidic_edges = []
         jinmeiyo = resolve_jinmeiyo          # [new, old] clean 1:1, canonical map
         jin_canon = jinmeiyo[:canonical]     # new => canonical skeleton
         @fold_table = jinmeiyo[:fold].dup    # from => to (lane 1)
@@ -431,6 +437,7 @@ module Nabu
 
       def record_group(new, olds, canonical, is_merge:, jin_absorbed:)
         ([new] + olds).each { |form| add_fold(form, canonical) }
+        olds.each { |old| @kanjidic_edges << KanjidicEdge.new(old_form: old, new_form: new, merge: is_merge) }
         if is_merge
           @census.merges[new] = olds
         elsif !jin_absorbed
@@ -453,6 +460,7 @@ module Nabu
       end
 
       def finalize
+        @kanjidic_edges.sort_by! { |edge| [edge.new_form.ord, edge.old_form.ord] }
         @census.jinmeiyo_conflicts.uniq!
         @census.fold_entries = @fold_table.size
         @fold_table.each do |from, to|
