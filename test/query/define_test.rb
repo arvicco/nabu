@@ -291,6 +291,77 @@ module Query
                    "non-Latin scripts generate nothing — the rule is IAST/ASCII-scoped"
     end
 
+    # -- the nabu-data form→lemma expansion (P51-W6, D48-a tier 2) --------------
+
+    # A minimal san shelf whose headwords are STEMS (the MW citation
+    # practice): tapas and tap — the entries only the published table can
+    # route an oblique form to.
+    def seed_san_stem_shelf
+      dict = @catalog[:dictionaries].insert(source_id: @source.id, slug: "san-stems",
+                                            title: "San Stems", language: "san")
+      { "tapas" => "religious austerity", "tap" => "to heat" }.each do |headword, gloss|
+        @catalog[:dictionary_entries].insert(
+          dictionary_id: dict, urn: "urn:nabu:dict:san-stems:#{headword}", entry_id: headword,
+          key_raw: headword, headword: headword,
+          headword_folded: Nabu::Normalize.search_form(headword, language: "san"),
+          gloss: gloss, body: "#{headword} body", content_sha256: "x", revision: 1, withdrawn: false
+        )
+      end
+    end
+
+    def form_lemma_table
+      @form_lemma_table ||= Nabu::FormLemma.load(Nabu::TestSupport.fixtures("nabu-data"))
+    end
+
+    def define_with_table(lemma, **)
+      Nabu::Query::Define.new(catalog: @catalog, form_lemma: form_lemma_table).run(lemma, **)
+    end
+
+    # THE tier-2 payoff: tapasā (s-stem instrumental) is invisible to the
+    # P48-r1 rule — with the published table live, the same query reaches
+    # the tapas entry; without it, behavior is byte-identical to before.
+    def test_an_oblique_form_reaches_its_stem_entry_only_through_the_table
+      seed_san_stem_shelf
+      rule_only = Nabu::Query::Define.new(catalog: @catalog, form_lemma: nil, lila: nil)
+      assert_empty rule_only.run("tapasā", lang: "san"),
+                   "the curated stem rule alone cannot map an instrumental — the honest pre-table miss"
+
+      results = define_with_table("tapasā", lang: "san")
+      assert_equal ["urn:nabu:dict:san-stems:tapas"], results.map(&:urn),
+                   "the table knows tapasā → tapas; the entry is found, not invented"
+    end
+
+    def test_table_hits_are_ordinary_results_labeled_nothing_new
+      seed_san_stem_shelf
+      hit = define_with_table("tapasā", lang: "san").first
+      assert_equal "tapas", hit.headword, "the entry's own headword — no via_ rewrite"
+      assert_nil hit.via_lila, "the table feeds lookup, not attestation — nothing is labeled"
+    end
+
+    def test_a_multi_lemma_form_widens_to_every_held_candidate
+      seed_san_stem_shelf
+      urns = define_with_table("tapa", lang: "san").map(&:urn)
+      assert_includes urns, "urn:nabu:dict:san-stems:tapas", "tapa → tapas (sandhi) candidate"
+      assert_includes urns, "urn:nabu:dict:san-stems:tap", "tapa → tap (verb) candidate"
+    end
+
+    def test_the_ascii_fold_reaches_the_table_too
+      seed_san_stem_shelf
+      assert_equal ["urn:nabu:dict:san-stems:tapas"],
+                   define_with_table("tapasa", lang: "san").map(&:urn),
+                   "an ASCII keyboard reaches the table the same way it reaches the shelf"
+    end
+
+    # The language gate is a LOAD gate (the lila lat_eligible? shape): an
+    # explicit non-Sanskrit --lang must never consult (or load) the table.
+    def test_a_non_sanskrit_lang_never_consults_the_table
+      never = Object.new
+      def never.lookup(_form) = raise "the table must not be consulted for a non-Sanskrit lang"
+      results = Nabu::Query::Define.new(catalog: @catalog, form_lemma: never)
+                                   .run("tapasā", lang: "grc")
+      assert_empty results
+    end
+
     # THE transcode payoff: ASCII "amsa" reaches both aṃśa and aṃsa — the
     # same folded shape GRETIL's IAST produces (survey §2, no fold-rule
     # change).
