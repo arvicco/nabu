@@ -37,9 +37,16 @@ module Nabu
             "anchoring: #{feature.anchoring}   inputs: #{inputs}"
         say "  rationale: #{feature.rationale}"
         say "  maintenance: #{feature.maintenance}"
+        # Owner ruling 2026-07-29: the maintenance prose alone gives no
+        # copy-paste path — print the exact sequence. Input syncs lead (the
+        # stale-ingest guard makes them mandatory), the build closes.
+        if feature.available?
+          syncs = feature.inputs.map { |slug| "nabu sync #{slug} && " }.join
+          say "  commands: #{syncs}nabu data build #{feature.slug} --into #{clone_hint}"
+        end
       end
       say ""
-      say "Build an available feature: nabu data build <lang>/<feature> --into <path to your nabu-data clone>"
+      say "Planned features refuse to build until their builder lands; the census is the roadmap."
     end
 
     desc "build SLUG", "Build one dataset into PATH/<lang>/<feature>/ (files only — never git)"
@@ -93,6 +100,12 @@ module Nabu
     end
 
     no_commands do
+      # Copy-paste honesty: name the real clone when it is where the docs
+      # say it lives; otherwise an unambiguous placeholder beats a wrong path.
+      def clone_hint
+        File.directory?(File.expand_path("~/Dev/nabu-data")) ? "~/Dev/nabu-data" : "<your-nabu-data-clone>"
+      end
+
       def available_features_hint
         available = Nabu::DataBuild.features.select(&:available?).map(&:slug)
         if available.empty?

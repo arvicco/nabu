@@ -23,8 +23,10 @@ nabu data build <lang>/<feature> --into PATH    # build one dataset (files only)
 `data list` documents every artifact the rail is able to produce — slug,
 status (available | planned), title, language, tier, anchoring kind, input
 sources, the rationale for the dataset's existence, and the recommended
-maintenance/periodicity. Planned features are listed too: the census is the
-roadmap.
+maintenance/periodicity — and, for every available feature, the **exact
+copy-paste command sequence** (input syncs chained into the build; the
+stale-ingest guard makes the syncs mandatory anyway). Planned features are
+listed too: the census is the roadmap.
 
 `data build` runs the feature's builder and writes the dataset directory
 `PATH/<lang>/<feature>/`, prints an honest summary (rows written, files,
