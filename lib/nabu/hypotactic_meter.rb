@@ -178,6 +178,41 @@ module Nabu
     # Plutarch's LIFE of Solon), theognis, tyrtaeus, tryph (Tryphiodorus).
     # They census as unmapped works until the canon grows.
 
+    # The TSV grammar and the fold key are CLASS-LEVEL SEAMS on purpose
+    # (P52-2): the grc/meter nabu-data builder (the meter_builder under the
+    # build rail — which consumes this class, never the reverse: D50-b)
+    # publishes this same layer as a public dataset and must read the SAME
+    # bytes through the SAME grammar and match through the SAME fold — one
+    # definition, two consumers, zero drift.
+    class << self
+      # The house grc fold reduced to letters only: ς→σ, downcase, accents/
+      # breathings/iota-subscript stripped, then every non-letter (space,
+      # comma, colon, elision koronis/apostrophe) removed — so only the bare
+      # letter sequence decides a match.
+      def match_key(text)
+        Normalize.search_form(text, language: MATCH_LANGUAGE).gsub(/[^[:alpha:]]/, "")
+      end
+
+      # The four TAB columns — line text · scansion · meter · caesura —
+      # verbatim (only surrounding whitespace trimmed per field). The filename
+      # carries the work; line order is the line number, but resolution is by
+      # text, not order. A row without the four columns is a malformed file →
+      # loud ParseError.
+      def parse_tsv(path)
+        File.readlines(path, encoding: "UTF-8").filter_map.with_index do |line, i|
+          stripped = line.chomp
+          next if stripped.strip.empty?
+
+          cols = stripped.split("\t", -1)
+          unless cols.size >= 4
+            raise ParseError, "#{path}:#{i + 1}: expected 4 TAB columns (text, scansion, meter, caesura), " \
+                              "got #{cols.size}"
+          end
+          { text: cols[0].strip, scansion: cols[1].strip, meter: cols[2].strip, caesura: cols[3].strip }
+        end
+      end
+    end
+
     # One refresh's census — the PedecertoScansions::Result shape, field for
     # field, so the shared sync/rebuild tail renders both meter producers
     # identically. matched/unmatched are LINE counts.
@@ -310,30 +345,11 @@ module Nabu
         .all
     end
 
-    # The house grc fold reduced to letters only: ς→σ, downcase, accents/
-    # breathings/iota-subscript stripped, then every non-letter (space, comma,
-    # colon, elision koronis/apostrophe) removed — so only the bare letter
-    # sequence decides a match.
-    def match_key(text)
-      Normalize.search_form(text, language: MATCH_LANGUAGE).gsub(/[^[:alpha:]]/, "")
-    end
+    # Delegations to the shared class-level seams (defined above the Result
+    # census) — the producer and the grc/meter dataset builder read one
+    # grammar and one fold.
+    def match_key(text) = self.class.match_key(text)
 
-    # The four TAB columns — line text · scansion · meter · caesura — verbatim
-    # (only surrounding whitespace trimmed per field). The filename carries the
-    # work; line order is the line number, but we resolve by text, not order.
-    # A row without the four columns is a malformed file → loud ParseError.
-    def parse_tsv(path)
-      File.readlines(path, encoding: "UTF-8").filter_map.with_index do |line, i|
-        stripped = line.chomp
-        next if stripped.strip.empty?
-
-        cols = stripped.split("\t", -1)
-        unless cols.size >= 4
-          raise ParseError, "#{path}:#{i + 1}: expected 4 TAB columns (text, scansion, meter, caesura), " \
-                            "got #{cols.size}"
-        end
-        { text: cols[0].strip, scansion: cols[1].strip, meter: cols[2].strip, caesura: cols[3].strip }
-      end
-    end
+    def parse_tsv(path) = self.class.parse_tsv(path)
   end
 end

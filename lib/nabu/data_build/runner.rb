@@ -166,6 +166,7 @@ module Nabu
                  "`#{feature.slug}` — #{feature.tier} tier, anchoring: #{feature.anchoring}. " \
                  "Produced by `nabu data build #{feature.slug}` (Nabu #{Nabu::VERSION}); the " \
                  "producer-side contract is docs/nabu-data.md in the Nabu repository.", "",
+                 license_line(feature), "",
                  feature.rationale, "",
                  "## Maintenance", "", feature.maintenance, "",
                  "## Provenance", ""]
@@ -176,6 +177,18 @@ module Nabu
         lines << "Derivation fingerprint: `#{fingerprint}`."
         lines.push("", result.notes) if result.notes
         "#{lines.join("\n")}\n"
+      end
+
+      # The dataset's OWN license, stated where the consumer reads it (owner
+      # ruling D51-a): nabu-data is a mixed-license repo whose default is
+      # CC BY, so a BY-SA dataset must say, in one sentence, that the default
+      # does not apply to it.
+      def license_line(feature)
+        line = "License: #{feature.license} (#{Manifest::LICENSE_URLS.fetch(feature.license)})."
+        return line unless feature.license == "CC-BY-SA-4.0"
+
+        "#{line} This dataset is CC BY-SA 4.0 (inherited share-alike from its inputs); " \
+          "the repository's default license does not apply to it."
       end
 
       def provenance_lines(input_shas)

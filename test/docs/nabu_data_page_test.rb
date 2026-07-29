@@ -8,7 +8,7 @@ require "test_helper"
 # section and pins every rendered fact to the live registry. The deterministic
 # page format the page commits to:
 #
-#   | `<slug>` | <status> | <tier> | <language> | <inputs> |   — the table
+#   | `<slug>` | <status> | <tier> | <license> | <language> | <inputs> |   — the table
 #   ### `<slug>` — <title>                                     — one H3 per feature
 #   **Status**: s · **Tier**: t · **Anchoring**: a · **Inputs**: i
 #   <rationale paragraph, VERBATIM>
@@ -30,13 +30,15 @@ class NabuDataPageTest < Minitest::Test
   end
 
   def test_the_feature_table_matches_the_registry_in_order
-    rows = features_section.scan(/^\| `([^`]+)` \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \|$/)
+    rows = features_section.scan(/^\| `([^`]+)` \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \|$/)
                            .map { |cells| cells.map(&:strip) }
     assert_equal features.map(&:slug), rows.map(&:first),
                  "the table must list exactly the registered slugs, in registry order"
-    features.zip(rows).each do |feature, (_slug, status, tier, language, inputs)|
+    features.zip(rows).each do |feature, (_slug, status, tier, license, language, inputs)|
       assert_equal feature.status.to_s, status, "#{feature.slug}: table status must match the registry"
       assert_equal feature.tier, tier, "#{feature.slug}: table tier must match the registry"
+      assert_equal feature.license, license,
+                   "#{feature.slug}: table license must match the registry (mixed-license repo, D51-a)"
       assert_equal feature.language_code, language, "#{feature.slug}: table language must match the registry"
       expected_inputs = feature.inputs.empty? ? "—" : feature.inputs.join(", ")
       assert_equal expected_inputs, inputs, "#{feature.slug}: table inputs must match the registry"

@@ -18,13 +18,19 @@ consume the rest of Nabu freely).
 ```
 nabu data list                                  # the self-documentation surface
 nabu data build <lang>/<feature> --into PATH    # build one dataset (files only)
+nabu data build --all --into PATH               # rebuild every available dataset
 ```
 
+`build --all` sweeps the registry in order: available features build,
+planned ones are skipped by name, and a failing feature is reported
+without aborting the sweep (census-and-continue) — the exit is nonzero
+iff any failed. The stale-ingest guard applies per feature as always.
+
 `data list` documents every artifact the rail is able to produce — slug,
-status (available | planned), title, language, tier, anchoring kind, input
-sources, the rationale for the dataset's existence, and the recommended
-maintenance/periodicity — and, for every available feature, the **exact
-copy-paste command sequence** (input syncs chained into the build; the
+status (available | planned), title, language, tier, license, anchoring
+kind, input sources, the rationale for the dataset's existence, and the
+recommended maintenance/periodicity — and, for every available feature,
+the **exact copy-paste command sequence** (input syncs chained into the build; the
 stale-ingest guard makes the syncs mandatory anyway). Planned features are
 listed too: the census is the roadmap.
 
@@ -65,6 +71,7 @@ valid-by-construction `Feature` value:
 | `title` | the dataset's human title (the manifest `title`) |
 | `status` | `:available` (builder landed) or `:planned` (build refuses) |
 | `tier` | provenance tier: `gold`, `gold-derived`, `silver` |
+| `license` | the dataset's license: `CC-BY-4.0` (default) or `CC-BY-SA-4.0` (share-alike inputs — D51-a); see Licensing below |
 | `anchoring` | how rows anchor into corpora: `none`, `passage-urn` |
 | `inputs` | source slugs consumed (empty = own authorship) |
 | `canonical_cones` | canonical path prefixes whose shas are recorded at derivation |
@@ -143,18 +150,39 @@ raise rather than publish):
 - `Source` cells cite `sources.bib` keys, `;`-separated; the keys obey the
   same identifier regex.
 
+## Licensing
+
+nabu-data is a **mixed-license repository** (owner ruling D51-a,
+2026-07-29). The repo default is **CC BY 4.0**; each dataset's
+`datapackage.json` `licenses` entry is **authoritative** for that dataset,
+and its README states the dataset's own license explicitly. The allowed set
+is exactly two values — `CC-BY-4.0` (the default) and `CC-BY-SA-4.0`
+(datasets derived from share-alike inputs, whose READMEs add the one-line
+carve-out: the repository's default license does not apply to them). The
+set is closed by construction (`Nabu::DataBuild::LICENSES`; the `Feature`
+record refuses anything else): **NC/ND can never join it** — every dataset
+here is a derivative work built to be reused, so non-commercial or
+no-derivatives inputs are disqualifying at intake, and no NC/ND value is
+ever a legal output license.
+
 ## The features
 
 The census below is written from `Nabu::DataBuild::REGISTRY` and
 drift-guarded by `test/docs/nabu_data_page_test.rb` — a registry change with
 no page update is a red suite, and vice versa.
 
-| Feature | Status | Tier | Language | Inputs |
-| --- | --- | --- | --- | --- |
-| `san/form-lemma` | available | gold-derived | san | dcs |
-| `xct/wylie-fold` | available | gold | xct | — |
-| `xct/verb-lemma` | available | gold-derived | xct | tibetan-verbs |
-| `xct/segmentation` | available | silver | xct | derge-kangyur, soas-tibetan |
+| Feature | Status | Tier | License | Language | Inputs |
+| --- | --- | --- | --- | --- | --- |
+| `san/form-lemma` | available | gold-derived | CC-BY-4.0 | san | dcs |
+| `xct/wylie-fold` | available | gold | CC-BY-4.0 | xct | — |
+| `xct/verb-lemma` | available | gold-derived | CC-BY-4.0 | xct | tibetan-verbs |
+| `xct/segmentation` | available | silver | CC-BY-4.0 | xct | derge-kangyur, soas-tibetan |
+| `zho/hani-fold` | available | gold-derived | CC-BY-4.0 | zho | unihan |
+| `jpn/aozora-gaiji` | available | gold | CC-BY-4.0 | jpn | — |
+| `lat/sabellic-loans` | available | gold | CC-BY-SA-4.0 | lat | — |
+| `grc/meter` | available | gold-derived | CC-BY-4.0 | grc | hypotactic, perseus-greek, first1k-greek |
+| `jpn/kyujitai-fold` | available | gold | CC-BY-SA-4.0 | jpn | unihan, edrdg |
+| `lzh/kanripo-gaiji` | available | gold | CC-BY-SA-4.0 | lzh | — |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -187,6 +215,54 @@ Maps the 2,491 TVD stem tuples (present/past/future/imperative, grammarians' dis
 Tsheg-bar/word segmentation over a curated Derge slice with the segmenter's error rate measured against the SOAS gold corpus and published in-band — the calibration ground for any full-canon layer.
 
 **Maintenance**: re-derive on canonical text revisions or segmenter upgrades; each release republishes the eval number
+
+### `zho/hani-fold` — Han traditional↔simplified↔z-variant fold table (from Unihan)
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: unihan
+
+The 6,050-pair Han fold resolved conservatively from Unihan's declared kTraditionalVariant/kSimplifiedVariant/kZVariant relations — the table that lets simplified-script queries reach the traditional-script canon (kanripo/cbeta), the same resolution `rake fold:hani` compiles into Nabu::Hani; every ambiguous fold is refused and published per-row with its reason, because the refusal census IS the curation.
+
+**Maintenance**: re-derive after each unihan sync (upstream /latest/ moves at annual Unicode releases); a changed table also re-derives Nabu's own Han fold via `rake fold:hani` — the conventions §9 rebuild caveat applies
+
+### `jpn/aozora-gaiji` — Aozora Bunko gaiji composition census with derived IDS lane
+
+**Status**: available · **Tier**: gold · **Anchoring**: none · **Inputs**: —
+
+The census of composition formulas Aozora Bunko transcribers wrote for glyphs Unicode cannot encode (582 distinct formulas, 1,129 occurrences at the 2026-07-22 snapshot), each with its occurrence count and resolution status, plus the 244-entry IDS lane a conservative structural grammar can prove — refusals classified per formula, never guessed: the gaiji display-honesty ladder, published.
+
+**Maintenance**: re-census on the owner's schedule as the corpus grows (the checked-in TSV header carries the snapshot provenance); each re-census re-fingerprints the dataset through the recipe's embedded sha256
+
+### `lat/sabellic-loans` — Sabellic → Latin loanword table (en.wiktionary curation)
+
+**Status**: available · **Tier**: gold · **Anchoring**: none · **Inputs**: —
+
+Flattens the hand-curated Sabellic (Oscan/Umbrian/Sabine) → Latin loan rows — 85 Latin lemmas with borrowed/derived relation flags and the Old Italic etyma en.wiktionary cites — into one reusable table; the same curation powers Nabu's sabellic-osc/xum/sbv dictionary shelves and their loan-flagged etymology edges. CC BY-SA (the Wiktionary share-alike grant — owner ruling D51-a).
+
+**Maintenance**: on re-curation of config/sabellic_loans.yml only (a deliberate repo change, not a sync); each curation change re-fingerprints the dataset via the recipe's embedded file sha
+
+### `grc/meter` — Greek metrical scansions (Hypotactic) anchored to Perseus CTS passages
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: passage-urn · **Inputs**: hypotactic, perseus-greek, first1k-greek
+
+Publishes D. Chamberlain's Hypotactic scansions (CC BY 4.0) as rows citable at urn:cts:greekLit grain: upstream has no citation scheme (work = filename, line = file order), so the URN + Passage_SHA256 anchoring Nabu derives by exact folded-text match IS the added value — with the matched/unmatched census published in-band and the row text taken from Hypotactic's own bytes, never the CC BY-SA Perseus text.
+
+**Maintenance**: re-derive after hypotactic / perseus-greek / first1k-greek syncs (the stale-ingest guard enforces freshness); each release republishes the resolution census in nabu.eval
+
+### `jpn/kyujitai-fold` — Japanese kyūjitai↔shinjitai reform-pair census (Unihan jinmeiyō + KANJIDIC2 jōyō lanes)
+
+**Status**: available · **Tier**: gold · **Anchoring**: none · **Inputs**: unihan, edrdg
+
+The two-lane old↔new kanji pair table (Unihan kJinmeiyoKanji reform pairs + KANJIDIC2 jōyō-target variant edges, reform merges admitted, refusals censused) rendered through the same resolution seam `rake fold:jpn` compiles into Nabu::Jpn — one seam, two consumers. BY-SA: the load-bearing KANJIDIC2 lane is EDRDG share-alike (CC BY-SA 4.0).
+
+**Maintenance**: re-derive after each unihan/edrdg sync (EDRDG rebuilds nightly, Unihan annually); regenerate together with `rake fold:jpn` so the shipped fold module and the dataset never drift
+
+### `lzh/kanripo-gaiji` — Kanripo gaiji display ladder — faithful/IDS/substitute resolutions for &KR…; references
+
+**Status**: available · **Tier**: gold · **Anchoring**: none · **Inputs**: —
+
+The hand-curated resolution ladder for the Kanseki Repository's not-yet-encoded character references (427 faithful codepoints, 562 labeled substitutes, the IDS lane empty by census, everything else an honest ⬚ placeholder) — the same three TSVs Nabu's `--display reading` mode loads for lzh kanripo passages. BY-SA: curated from KR-Gaiji's charlist under the kanripo org grant (CC BY-SA 4.0).
+
+**Maintenance**: re-curate by hand after a `nabu sync kr-gaiji` advances charlist.org.txt (the P38-1 procedure); the curation is pinned to the charlist commit its file headers record, deliberately never auto-derived
 
 ## What the rail never does
 

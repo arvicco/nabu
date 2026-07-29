@@ -38,11 +38,12 @@ module DataBuildFake
 
   # An :available feature wired to the fake builder — what tests splice into
   # the census (singleton-swap on Nabu::DataBuild.features) to drive `build`.
-  def self.feature(slug: "san/fake-forms", inputs: [], canonical_cones: [], builder: FakeFormsBuilder)
+  def self.feature(slug: "san/fake-forms", inputs: [], canonical_cones: [], builder: FakeFormsBuilder,
+                   license: Nabu::DataBuild::DEFAULT_LICENSE)
     Nabu::DataBuild::Feature.new(
       slug: slug, language: Nabu::DataBuild::LANGUAGES.fetch("san"),
       title: "Fake Sanskrit forms table (test rig)",
-      status: :available, tier: "gold-derived", anchoring: "none",
+      status: :available, tier: "gold-derived", anchoring: "none", license: license,
       inputs: inputs, canonical_cones: canonical_cones,
       rationale: "Exists only to exercise the build rail end to end in the suite.",
       maintenance: "never — test rig only",

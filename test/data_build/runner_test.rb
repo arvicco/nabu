@@ -67,6 +67,27 @@ class DataBuildRunnerTest < Minitest::Test
     end
   end
 
+  # D51-a: the README states the dataset's OWN license explicitly; a BY-SA
+  # dataset adds the one carve-out sentence (the repo default is CC BY, so
+  # share-alike inheritance must be said where the consumer reads it).
+  def test_the_readme_states_the_license_and_by_sa_adds_the_carve_out_sentence
+    with_env do |root, _config, runner|
+      carve_out = "This dataset is CC BY-SA 4.0 (inherited share-alike from its inputs); " \
+                  "the repository's default license does not apply to it."
+
+      by = runner.run(feature: DataBuildFake.feature, into: File.join(root, "by"))
+      readme = File.read(File.join(by.out_dir, "README.md"))
+      assert_includes readme, "License: CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)."
+      refute_includes readme, carve_out, "a CC BY dataset carries no share-alike sentence"
+
+      by_sa = runner.run(feature: DataBuildFake.feature(license: "CC-BY-SA-4.0"),
+                         into: File.join(root, "by-sa"))
+      readme = File.read(File.join(by_sa.out_dir, "README.md"))
+      assert_includes readme, "License: CC-BY-SA-4.0 (https://creativecommons.org/licenses/by-sa/4.0/)."
+      assert_includes readme, carve_out
+    end
+  end
+
   # An inline planned rig rather than a registry feature: builder packets
   # flip the real features one by one, and this refusal must outlive them all.
   def planned_feature
