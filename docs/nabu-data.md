@@ -18,7 +18,13 @@ consume the rest of Nabu freely).
 ```
 nabu data list                                  # the self-documentation surface
 nabu data build <lang>/<feature> --into PATH    # build one dataset (files only)
+nabu data build --all --into PATH               # rebuild every available dataset
 ```
+
+`build --all` sweeps the registry in order: available features build,
+planned ones are skipped by name, and a failing feature is reported
+without aborting the sweep (census-and-continue) — the exit is nonzero
+iff any failed. The stale-ingest guard applies per feature as always.
 
 `data list` documents every artifact the rail is able to produce — slug,
 status (available | planned), title, language, tier, license, anchoring
