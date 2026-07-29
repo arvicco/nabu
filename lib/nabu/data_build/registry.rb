@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require_relative "feature"
+require_relative "aozora_gaiji_builder"
 require_relative "form_lemma"
+require_relative "hani_fold_builder"
 require_relative "segmentation_builder"
 require_relative "verb_lemma_builder"
 require_relative "wylie_fold_builder"
@@ -10,20 +12,29 @@ module Nabu
   module DataBuild
     # The languages.csv statics, one entry per language the registered
     # features publish. Verified against the owner's Glottolog cone
-    # (canonical/cldf-spine/glottolog/languages.csv, checked 2026-07-28):
-    # sans1269 = Sanskrit (ISO san), clas1254 = Classical Tibetan (ISO xct).
+    # (canonical/cldf-spine/glottolog/languages.csv, checked 2026-07-28;
+    # re-checked 2026-07-29 for P52-3): sans1269 = Sanskrit (ISO san),
+    # clas1254 = Classical Tibetan (ISO xct), nucl1643 = Japanese (ISO jpn).
+    # zho is an ISO 639-3 MACROLANGUAGE: Glottolog deliberately assigns
+    # macrolanguages no glottocode (the cone carries no row with ISO zho;
+    # the nearest node, sini1245 Sinitic, is a family — claiming it would
+    # misstate the level), so the static is honestly nil. zho is the same
+    # pan-CJK macro tag Nabu's unihan shelf files under
+    # (Adapters::Unihan::LANGUAGE).
     LANGUAGES = {
+      "jpn" => Language.new(id: "jpn", name: "Japanese", glottocode: "nucl1643", iso639p3: "jpn"),
       "san" => Language.new(id: "san", name: "Sanskrit", glottocode: "sans1269", iso639p3: "san"),
-      "xct" => Language.new(id: "xct", name: "Classical Tibetan", glottocode: "clas1254", iso639p3: "xct")
+      "xct" => Language.new(id: "xct", name: "Classical Tibetan", glottocode: "clas1254", iso639p3: "xct"),
+      "zho" => Language.new(id: "zho", name: "Chinese", glottocode: nil, iso639p3: "zho")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
     # doctrine). The rail landed first (P50-W1) with every feature :planned;
     # builder packets flip their feature to :available as each builder lands
     # (P50-W2 san/form-lemma, P50-W3 xct/wylie-fold, P50-W4 xct/verb-lemma,
-    # P51-W5 xct/segmentation), and `nabu data build` refuses the
-    # still-planned politely. The doc table in docs/nabu-data.md is
-    # drift-guarded against this list.
+    # P51-W5 xct/segmentation, P52-3 zho/hani-fold + jpn/aozora-gaiji), and
+    # `nabu data build` refuses the still-planned politely. The doc table in
+    # docs/nabu-data.md is drift-guarded against this list.
     REGISTRY = [
       Feature.new(
         slug: "san/form-lemma", language: LANGUAGES.fetch("san"),
@@ -71,6 +82,42 @@ module Nabu
         maintenance: "re-derive on canonical text revisions or segmenter upgrades; each release " \
                      "republishes the eval number",
         builder: SegmentationBuilder
+      ),
+      Feature.new(
+        slug: "zho/hani-fold", language: LANGUAGES.fetch("zho"),
+        title: "Han traditional↔simplified↔z-variant fold table (from Unihan)",
+        # gold-DERIVED, not gold: a mechanical, deterministic resolution of
+        # upstream-declared variant relations — the xct/verb-lemma posture;
+        # "gold" stays reserved for own-authored/hand-curated tables.
+        status: :available, tier: "gold-derived", anchoring: "none",
+        inputs: ["unihan"], canonical_cones: ["unihan"], builder: HaniFoldBuilder,
+        rationale: "The 6,050-pair Han fold resolved conservatively from Unihan's declared " \
+                   "kTraditionalVariant/kSimplifiedVariant/kZVariant relations — the table that " \
+                   "lets simplified-script queries reach the traditional-script canon " \
+                   "(kanripo/cbeta), the same resolution `rake fold:hani` compiles into Nabu::Hani; " \
+                   "every ambiguous fold is refused and published per-row with its reason, " \
+                   "because the refusal census IS the curation.",
+        maintenance: "re-derive after each unihan sync (upstream /latest/ moves at annual Unicode " \
+                     "releases); a changed table also re-derives Nabu's own Han fold via " \
+                     "`rake fold:hani` — the conventions §9 rebuild caveat applies"
+      ),
+      Feature.new(
+        slug: "jpn/aozora-gaiji", language: LANGUAGES.fetch("jpn"),
+        title: "Aozora Bunko gaiji composition census with derived IDS lane",
+        # No inputs/cones: the checked-in census TSV is the source of truth
+        # (the wylie-fold precedent — the recipe embeds its sha256); the
+        # corpus linkage is provenance, not a cone. See AozoraGaijiBuilder.
+        status: :available, tier: "gold", anchoring: "none",
+        inputs: [], canonical_cones: [], builder: AozoraGaijiBuilder,
+        rationale: "The census of composition formulas Aozora Bunko transcribers wrote for glyphs " \
+                   "Unicode cannot encode (582 distinct formulas, 1,129 occurrences at the " \
+                   "2026-07-22 snapshot), each with its occurrence count and resolution status, " \
+                   "plus the 244-entry IDS lane a conservative structural grammar can prove — " \
+                   "refusals classified per formula, never guessed: the gaiji display-honesty " \
+                   "ladder, published.",
+        maintenance: "re-census on the owner's schedule as the corpus grows (the checked-in TSV " \
+                     "header carries the snapshot provenance); each re-census re-fingerprints the " \
+                     "dataset through the recipe's embedded sha256"
       )
     ].freeze
 
