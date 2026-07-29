@@ -2,6 +2,7 @@
 
 require_relative "feature"
 require_relative "form_lemma"
+require_relative "meter_builder"
 require_relative "segmentation_builder"
 require_relative "verb_lemma_builder"
 require_relative "wylie_fold_builder"
@@ -11,10 +12,14 @@ module Nabu
     # The languages.csv statics, one entry per language the registered
     # features publish. Verified against the owner's Glottolog cone
     # (canonical/cldf-spine/glottolog/languages.csv, checked 2026-07-28):
-    # sans1269 = Sanskrit (ISO san), clas1254 = Classical Tibetan (ISO xct).
+    # sans1269 = Sanskrit (ISO san), clas1254 = Classical Tibetan (ISO xct);
+    # re-checked 2026-07-29 for grc: anci1242 is the languoid carrying ISO
+    # grc (Glottolog names it "Ionic-Attic Ancient Greek"; the Name column
+    # uses the ISO 639-3 reference name "Ancient Greek").
     LANGUAGES = {
       "san" => Language.new(id: "san", name: "Sanskrit", glottocode: "sans1269", iso639p3: "san"),
-      "xct" => Language.new(id: "xct", name: "Classical Tibetan", glottocode: "clas1254", iso639p3: "xct")
+      "xct" => Language.new(id: "xct", name: "Classical Tibetan", glottocode: "clas1254", iso639p3: "xct"),
+      "grc" => Language.new(id: "grc", name: "Ancient Greek", glottocode: "anci1242", iso639p3: "grc")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
@@ -71,6 +76,29 @@ module Nabu
         maintenance: "re-derive on canonical text revisions or segmenter upgrades; each release " \
                      "republishes the eval number",
         builder: SegmentationBuilder
+      ),
+      Feature.new(
+        slug: "grc/meter", language: LANGUAGES.fetch("grc"),
+        title: "Greek metrical scansions (Hypotactic) anchored to Perseus CTS passages",
+        status: :available, tier: "gold-derived", anchoring: "passage-urn",
+        # The anchor corpora are DECLARED inputs on purpose: Passage_SHA256
+        # anchors are only honest against the perseus-greek / first1k-greek
+        # trees the catalog last ingested, so the stale-ingest guard must
+        # cover all three cones. No BY-SA text enters the dataset —
+        # Primary_Text is Hypotactic's own CC BY bytes (MeterBuilder's
+        # class note); the corpora contribute URNs and shas, which are facts.
+        inputs: %w[hypotactic perseus-greek first1k-greek],
+        canonical_cones: %w[hypotactic perseus-greek first1k-greek],
+        rationale: "Publishes D. Chamberlain's Hypotactic scansions (CC BY 4.0) as rows citable " \
+                   "at urn:cts:greekLit grain: upstream has no citation scheme (work = filename, " \
+                   "line = file order), so the URN + Passage_SHA256 anchoring Nabu derives by " \
+                   "exact folded-text match IS the added value — with the matched/unmatched " \
+                   "census published in-band and the row text taken from Hypotactic's own bytes, " \
+                   "never the CC BY-SA Perseus text.",
+        maintenance: "re-derive after hypotactic / perseus-greek / first1k-greek syncs (the " \
+                     "stale-ingest guard enforces freshness); each release republishes the " \
+                     "resolution census in nabu.eval",
+        builder: MeterBuilder
       )
     ].freeze
 

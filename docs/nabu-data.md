@@ -155,6 +155,7 @@ no page update is a red suite, and vice versa.
 | `xct/wylie-fold` | available | gold | xct | — |
 | `xct/verb-lemma` | available | gold-derived | xct | tibetan-verbs |
 | `xct/segmentation` | available | silver | xct | derge-kangyur, soas-tibetan |
+| `grc/meter` | available | gold-derived | grc | hypotactic, perseus-greek, first1k-greek |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -187,6 +188,14 @@ Maps the 2,491 TVD stem tuples (present/past/future/imperative, grammarians' dis
 Tsheg-bar/word segmentation over a curated Derge slice with the segmenter's error rate measured against the SOAS gold corpus and published in-band — the calibration ground for any full-canon layer.
 
 **Maintenance**: re-derive on canonical text revisions or segmenter upgrades; each release republishes the eval number
+
+### `grc/meter` — Greek metrical scansions (Hypotactic) anchored to Perseus CTS passages
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: passage-urn · **Inputs**: hypotactic, perseus-greek, first1k-greek
+
+Publishes D. Chamberlain's Hypotactic scansions (CC BY 4.0) as rows citable at urn:cts:greekLit grain: upstream has no citation scheme (work = filename, line = file order), so the URN + Passage_SHA256 anchoring Nabu derives by exact folded-text match IS the added value — with the matched/unmatched census published in-band and the row text taken from Hypotactic's own bytes, never the CC BY-SA Perseus text.
+
+**Maintenance**: re-derive after hypotactic / perseus-greek / first1k-greek syncs (the stale-ingest guard enforces freshness); each release republishes the resolution census in nabu.eval
 
 ## What the rail never does
 
