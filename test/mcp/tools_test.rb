@@ -34,9 +34,10 @@ module MCP
     # -- rig -------------------------------------------------------------------
 
     def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil, links: nil, registry: nil,
-              enabled_slugs: nil, pleiades: nil)
+              enabled_slugs: nil, pleiades: nil, sign_list: nil)
       Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger, links: links,
-                           registry: registry, enabled_slugs: enabled_slugs, pleiades: pleiades)
+                           registry: registry, enabled_slugs: enabled_slugs, pleiades: pleiades,
+                           sign_list: sign_list)
     end
 
     def make_document(source: @open, urn: "urn:d:1", title: "Iliad", language: "grc",
@@ -164,10 +165,10 @@ module MCP
 
     # -- definitions -----------------------------------------------------------
 
-    def test_definitions_lists_the_eleven_tools_with_json_schemas
+    def test_definitions_lists_the_twelve_tools_with_json_schemas
       defs = tools.definitions
       assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_etym
-                      nabu_parallels nabu_cognates nabu_links nabu_place nabu_status],
+                      nabu_parallels nabu_cognates nabu_links nabu_place nabu_signs nabu_status],
                    defs.map { |d| d[:name] })
       defs.each do |definition|
         refute_empty definition[:description]
@@ -782,6 +783,103 @@ module MCP
 
     def test_place_needs_a_query
       assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_place", {}) }
+    end
+
+    # -- nabu_signs (P53-2): the sign desk over Query::Signs -------------------
+
+    SIGN_LIST = Nabu::SignList.load(File.join(Nabu::TestSupport.fixtures("osl"), "osl.asl"))
+
+    def signs_tools(**)
+      tools(sign_list: SIGN_LIST, **)
+    end
+
+    def test_signs_text_mode_serves_the_frozen_contract_records
+      result = signs_tools.call("nabu_signs", { "text" => "szesz idₓ" })
+      body = payload(result)
+      assert_equal "text", body.fetch("mode")
+      tokens = body.fetch("lines").first.fetch("tokens")
+      assert_equal(
+        { "input_value" => "šeš", "status" => "deterministic", "sign_name" => "ŠEŠ",
+          "codepoints" => ["U+122C0"], "candidates" => [], "language_qualifier" => nil },
+        tokens.first, "the CLI --json contract and the MCP payload are ONE contract"
+      )
+      assert_equal "ambiguous", tokens.last.fetch("status")
+      assert_equal(["|A.BARA₂|", "|UD.ŠEŠ.KI|"],
+                   tokens.last.fetch("candidates").map { |c| c.fetch("sign_name") })
+    end
+
+    def test_signs_urn_mode_reads_the_catalog_passage
+      seed_signs_corpus
+      result = signs_tools.call("nabu_signs", { "urn" => "urn:nabu:cdli:p1:o.1" })
+      body = payload(result)
+      assert_equal "urn", body.fetch("mode")
+      assert_equal "sux", body.fetch("language")
+      assert_equal "cdli", body.fetch("source")
+      assert_equal(["šeš"],
+                   body.fetch("lines").first.fetch("tokens").map { |t| t.fetch("input_value") })
+    end
+
+    def test_signs_needs_exactly_one_of_urn_and_text
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) { signs_tools.call("nabu_signs", {}) }
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        signs_tools.call("nabu_signs", { "urn" => "urn:x", "text" => "szesz" })
+      end
+    end
+
+    def test_signs_rejects_an_unknown_dialect
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        signs_tools.call("nabu_signs", { "text" => "aj", "dialect" => "klingon" })
+      end
+    end
+
+    def test_signs_etcsl_dialect_folds_before_resolution
+      result = signs_tools.call("nabu_signs", { "text" => "aj", "dialect" => "etcsl" })
+      token = payload(result).fetch("lines").first.fetch("tokens").first
+      assert_equal "aŋ", token.fetch("input_value")
+      assert_equal "AK", token.fetch("sign_name")
+    end
+
+    def test_signs_without_the_sign_list_notes_the_sync_hint
+      result = call("nabu_signs", { "text" => "szesz" })
+      refute result[:isError]
+      assert_match(/nabu sync osl/, text_of(result), "lane off is a corpus state, never an error")
+    end
+
+    def test_signs_unknown_urn_is_informative_not_an_error
+      result = signs_tools.call("nabu_signs", { "urn" => "urn:nabu:cdli:p999" })
+      refute result[:isError]
+      assert_match(/urn not found/, text_of(result))
+    end
+
+    def test_signs_withholds_a_restricted_passage_by_default
+      seed_signs_corpus
+      result = signs_tools.call("nabu_signs", { "urn" => "urn:nabu:adhoc:atf:1" })
+      assert_match(/research_private/, text_of(result), "names the class honestly")
+      assert_match(/excludes by default/, text_of(result))
+      refute_match(/šeš/, text_of(result), "the withheld text's readings never leak")
+
+      opted = signs_tools.call("nabu_signs", { "urn" => "urn:nabu:adhoc:atf:1",
+                                               "include_restricted" => true })
+      assert_equal "urn", payload(opted).fetch("mode")
+    end
+
+    def test_signs_bounds_the_lines_with_an_honest_note
+      result = signs_tools.call("nabu_signs", { "text" => "szesz\nmin\nuri5", "max_lines" => 2 })
+      body = payload(result)
+      assert_equal 2, body.fetch("lines").size
+      assert_match(/3 line\(s\) total, showing 2/, body.fetch("note"))
+    end
+
+    def seed_signs_corpus
+      cdli = Nabu::Store::Source.create(
+        slug: "cdli", name: "CDLI", adapter_class: "TestAdapter", license_class: "attribution",
+        enabled: true
+      )
+      doc = make_document(source: cdli, urn: "urn:nabu:cdli:p1", title: "Tablet", language: "sux")
+      make_passage(doc, urn: "urn:nabu:cdli:p1:o.1", text: "szesz", sequence: 0, language: "sux")
+      secret = make_document(source: @private, urn: "urn:nabu:adhoc:atf", title: "Private ATF",
+                             language: "sux")
+      make_passage(secret, urn: "urn:nabu:adhoc:atf:1", text: "szesz", sequence: 0, language: "sux")
     end
 
     # The "reuse" links kind (KITAB, upstream-computed alignments): the
