@@ -2,20 +2,20 @@
 
 require "test_helper"
 
-# The nabu-data feature census (P50-W1): four registered features, every field
+# The nabu-data feature census (P50-W1): the registered features, every field
 # present and well-shaped. The rail landed first with everything :planned;
 # builder packets flip their own feature as each builder lands (P50-W2:
-# san/form-lemma, P50-W4: xct/verb-lemma). The registry is EXPLICIT — no
-# discovery magic — so this test pins the ratified metadata, not just the
-# shape.
+# san/form-lemma, P50-W4: xct/verb-lemma, P52-2: grc/meter). The registry is
+# EXPLICIT — no discovery magic — so this test pins the ratified metadata,
+# not just the shape.
 class DataBuildRegistryTest < Minitest::Test
-  EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation].freeze
+  EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation grc/meter].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
   end
 
-  def test_registers_exactly_the_four_features_with_unique_slugs_in_order
+  def test_registers_exactly_the_expected_features_with_unique_slugs_in_order
     assert_equal EXPECTED_SLUGS, features.map(&:slug)
     assert_equal features.size, features.map(&:slug).uniq.size
   end
@@ -79,16 +79,33 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal "passage-urn", segmentation.anchoring
     assert_equal %w[derge-kangyur soas-tibetan], segmentation.inputs
     assert_equal %w[derge-kangyur soas-tibetan], segmentation.canonical_cones
+
+    meter = Nabu::DataBuild.feature("grc/meter")
+    assert_equal :available, meter.status, "P52-2: the meter builder has landed"
+    assert_equal Nabu::DataBuild::MeterBuilder, meter.builder
+    assert_equal "gold-derived", meter.tier
+    assert_equal "passage-urn", meter.anchoring
+    assert_equal %w[hypotactic perseus-greek first1k-greek], meter.inputs,
+                 "the anchor corpora are declared inputs — the stale-ingest guard must cover them"
+    assert_equal meter.inputs, meter.canonical_cones
+    assert_match(/never the CC BY-SA Perseus text/, meter.rationale,
+                 "the provenance rule is stated where the owner reads it")
   end
 
   def test_language_statics_match_the_glottolog_spine
     # Verified against the owner's canonical/cldf-spine glottolog cone
-    # (2026-07-28): sans1269 Sanskrit/san, clas1254 Classical Tibetan/xct.
+    # (2026-07-28): sans1269 Sanskrit/san, clas1254 Classical Tibetan/xct;
+    # (2026-07-29): anci1242 is the languoid carrying ISO grc (Glottolog's
+    # own name is "Ionic-Attic Ancient Greek"; the Name column uses the ISO
+    # 639-3 reference name).
     san = Nabu::DataBuild::LANGUAGES.fetch("san")
     assert_equal %w[Sanskrit sans1269 san], [san.name, san.glottocode, san.iso639p3]
 
     xct = Nabu::DataBuild::LANGUAGES.fetch("xct")
     assert_equal ["Classical Tibetan", "clas1254", "xct"], [xct.name, xct.glottocode, xct.iso639p3]
+
+    grc = Nabu::DataBuild::LANGUAGES.fetch("grc")
+    assert_equal ["Ancient Greek", "anci1242", "grc"], [grc.name, grc.glottocode, grc.iso639p3]
   end
 
   def test_feature_lookup_goes_through_the_features_seam
