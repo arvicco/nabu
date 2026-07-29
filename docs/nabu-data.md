@@ -171,6 +171,7 @@ no page update is a red suite, and vice versa.
 | `xct/wylie-fold` | available | gold | CC-BY-4.0 | xct | — |
 | `xct/verb-lemma` | available | gold-derived | CC-BY-4.0 | xct | tibetan-verbs |
 | `xct/segmentation` | available | silver | CC-BY-4.0 | xct | derge-kangyur, soas-tibetan |
+| `lat/sabellic-loans` | available | gold | CC-BY-SA-4.0 | lat | — |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -203,6 +204,14 @@ Maps the 2,491 TVD stem tuples (present/past/future/imperative, grammarians' dis
 Tsheg-bar/word segmentation over a curated Derge slice with the segmenter's error rate measured against the SOAS gold corpus and published in-band — the calibration ground for any full-canon layer.
 
 **Maintenance**: re-derive on canonical text revisions or segmenter upgrades; each release republishes the eval number
+
+### `lat/sabellic-loans` — Sabellic → Latin loanword table (en.wiktionary curation)
+
+**Status**: available · **Tier**: gold · **Anchoring**: none · **Inputs**: —
+
+Flattens the hand-curated Sabellic (Oscan/Umbrian/Sabine) → Latin loan rows — 85 Latin lemmas with borrowed/derived relation flags and the Old Italic etyma en.wiktionary cites — into one reusable table; the same curation powers Nabu's sabellic-osc/xum/sbv dictionary shelves and their loan-flagged etymology edges. CC BY-SA (the Wiktionary share-alike grant — owner ruling D51-a).
+
+**Maintenance**: on re-curation of config/sabellic_loans.yml only (a deliberate repo change, not a sync); each curation change re-fingerprints the dataset via the recipe's embedded file sha
 
 ## What the rail never does
 
