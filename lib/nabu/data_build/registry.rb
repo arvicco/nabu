@@ -9,6 +9,7 @@ require_relative "kyujitai_fold_builder"
 require_relative "meter_builder"
 require_relative "segmentation_builder"
 require_relative "sabellic_loans_builder"
+require_relative "value_signs_builder"
 require_relative "verb_lemma_builder"
 require_relative "wylie_fold_builder"
 
@@ -27,6 +28,8 @@ module Nabu
     # pan-CJK macro tag Nabu's unihan shelf files under
     # (Adapters::Unihan::LANGUAGE).
     # lite1248 = Classical Chinese (ISO lzh), checked 2026-07-29 (P52-4).
+    # sume1241 = Sumerian (ISO sux, level: language — an isolate, no
+    # family), checked 2026-07-29 (P53-3) against the same cone.
     LANGUAGES = {
       "jpn" => Language.new(id: "jpn", name: "Japanese", glottocode: "nucl1643", iso639p3: "jpn"),
       "san" => Language.new(id: "san", name: "Sanskrit", glottocode: "sans1269", iso639p3: "san"),
@@ -34,14 +37,16 @@ module Nabu
       "zho" => Language.new(id: "zho", name: "Chinese", glottocode: nil, iso639p3: "zho"),
       "lat" => Language.new(id: "lat", name: "Latin", glottocode: "lati1261", iso639p3: "lat"),
       "grc" => Language.new(id: "grc", name: "Ancient Greek", glottocode: "anci1242", iso639p3: "grc"),
-      "lzh" => Language.new(id: "lzh", name: "Classical Chinese", glottocode: "lite1248", iso639p3: "lzh")
+      "lzh" => Language.new(id: "lzh", name: "Classical Chinese", glottocode: "lite1248", iso639p3: "lzh"),
+      "sux" => Language.new(id: "sux", name: "Sumerian", glottocode: "sume1241", iso639p3: "sux")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
     # doctrine). The rail landed first (P50-W1) with every feature :planned;
     # builder packets flip their feature to :available as each builder lands
     # (P50-W2 san/form-lemma, P50-W3 xct/wylie-fold, P50-W4 xct/verb-lemma,
-    # P51-W5 xct/segmentation, P52-3 zho/hani-fold + jpn/aozora-gaiji), and
+    # P51-W5 xct/segmentation, P52-3 zho/hani-fold + jpn/aozora-gaiji,
+    # P53-3 sux/value-signs), and
     # `nabu data build` refuses the still-planned politely. The doc table in
     # docs/nabu-data.md is drift-guarded against this list.
     REGISTRY = [
@@ -194,6 +199,26 @@ module Nabu
                      "P38-1 procedure); the curation is pinned to the charlist commit its file " \
                      "headers record, deliberately never auto-derived",
         builder: KanripoGaijiBuilder
+      ),
+      Feature.new(
+        slug: "sux/value-signs", language: LANGUAGES.fetch("sux"),
+        title: "Cuneiform value→sign table from the Oracc Sign List (readings, codepoints, concordances)",
+        # GOLD: the OSL is the field's hand-curated sign registry (Veldhuis &
+        # Tinney), and this build is a lossless flattening of its curation.
+        status: :available, tier: "gold", anchoring: "none",
+        inputs: ["osl"], canonical_cones: ["osl"], builder: ValueSignsBuilder,
+        rationale: "Flattens the Oracc Sign List (ex-OGSL, Veldhuis & Tinney, CC0 — the field's " \
+                   "hand-curated sign registry) to one row per (value, sign) pair — OSL-spelled " \
+                   "readings with stable @oid interop keys, Unicode codepoints (absence kept " \
+                   "honest), value-level deprecation flags and in-band ambiguity, plus " \
+                   "signs.csv/concordances.csv sidecars (variant forms, MZL/LAK/ABZL print-list " \
+                   "numbers) — the table that upgrades Edubba's frequency instrument from " \
+                   "value-counts to true sign-counts. The slug leads sux (Sumerian); the ~55 " \
+                   "%akk-qualified readings ride the Language_Qualifier column — the scope call " \
+                   "is stated in the dataset README.",
+        maintenance: "re-derive after each `nabu sync osl` (rolling master, no tags — a re-sync " \
+                     "is an owner call; the stale-ingest guard enforces freshness); mechanical, " \
+                     "no review needed beyond spot-checks"
       )
     ].freeze
 
