@@ -11,6 +11,7 @@ require_relative "deva"
 require_relative "cyrl"
 require_relative "hani"
 require_relative "jpn"
+require_relative "xct"
 
 module Nabu
   # Text normalization at the adapter boundary. Nabu stores text as UTF-8 NFC
@@ -214,6 +215,19 @@ module Nabu
     JPN_FOLD = ->(str) { Jpn.fold(str) }
     private_constant :JPN_FOLD
 
+    # xct/bod/otb (P50-W3): the EWTS case fold riding the Tibetan script
+    # neutralization below. The generated Nabu::Xct transcoder emits
+    # spec-EWTS capitals (oM, Ta, hU~M — case-SIGNIFICANT in EWTS), but
+    # search_form/query_forms downcase the input BEFORE the neutralizer runs,
+    # so a typed Latin query can never carry a capital: without this rule the
+    # indexed "M"/"T" skeletons would be unreachable. Folding case here —
+    # AFTER the transcode, symmetrically on both sides — merges the retroflex
+    # and Sanskrit-vowel distinctions at the query grain exactly as downcase
+    # already merges them for Wylie-romanized documents. Per-codepoint 1→1,
+    # fold_with_map-safe.
+    TIBETAN_CASE_FOLD = :downcase.to_proc
+    private_constant :TIBETAN_CASE_FOLD
+
     LANGUAGE_FOLDS = {
       "grc" => ->(str) { str.tr("ς", "σ") },
       "lzh" => HAN_FOLD,
@@ -254,7 +268,10 @@ module Nabu
       "sla" => PROTO_FOLD,
       "itc" => PROTO_FOLD,
       "iir" => PROTO_FOLD,
-      "egy" => EGYPTIAN_FOLD
+      "egy" => EGYPTIAN_FOLD,
+      "xct" => TIBETAN_CASE_FOLD,
+      "bod" => TIBETAN_CASE_FOLD,
+      "otb" => TIBETAN_CASE_FOLD
     }.freeze
 
     # == Script neutralization (P27-2; conventions §9) — the cross-script fold
@@ -280,11 +297,28 @@ module Nabu
     # Changing (or adding) a neutralization changes text_normalized for its
     # languages: the rebuild-storm caveat at the end of §9 applies — plan one
     # `nabu rebuild`, which refreshes the fulltext index.
+    # xct/bod/otb (P50-W3): Tibetan script → EWTS via the GENERATED Nabu::Xct
+    # transcoder (`rake fold:xct` compiles it from config/ewts/rules.csv, the
+    # same authored table the xct/wylie-fold nabu-data dataset publishes).
+    # The Tibetan desk spells one language family in two surfaces: the canon
+    # shelves (derge-kangyur/derge-tengyur/soas-tibetan, xct; old-tibetan,
+    # otb) store Tibetan script while mvp's bod-Latn lane and scholarly
+    # queries are Wylie — and wiktionary-bo/tibetan-verbs (bod) carry script
+    # headwords a Wylie typist could never reach. EWTS is positional (the
+    # inherent "a" seats on the syllable's root; subjoined stacks and the
+    # a-chung particles are contextual), so this is a transcode, not a §9
+    # per-codepoint fold — the Deva shape exactly, idempotent on EWTS/Latin
+    # text. All three subtags register because the script is one: Classical
+    # (xct), Old Tibetan (otb, reversed gi-gu → "-i", da-drag suffixes), and
+    # kaikki's modern bod all fold to the same EWTS skeleton.
     SCRIPT_NEUTRALIZATIONS = {
       "san" => Deva.method(:to_iast_with_map),
       "chu" => Cyrl.method(:neutralize_with_map),
       "orv" => Cyrl.method(:neutralize_with_map),
-      "bul" => Cyrl.method(:neutralize_with_map)
+      "bul" => Cyrl.method(:neutralize_with_map),
+      "xct" => Xct.method(:to_ewts_with_map),
+      "bod" => Xct.method(:to_ewts_with_map),
+      "otb" => Xct.method(:to_ewts_with_map)
     }.freeze
 
     # == The per-language NFC exemption (P26-3, owner ruling 2026-07-18)

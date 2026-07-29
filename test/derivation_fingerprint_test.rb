@@ -158,12 +158,15 @@ class DerivationFingerprintTest < Minitest::Test
     assert_equal %w[normalize.rb hani.rb jpn.rb], fold_module_names(["jpn"])
     # Union across a multi-language source; keyed by primary subtag.
     assert_equal %w[normalize.rb hani.rb], fold_module_names(%w[grc lzh-Hant])
+    # The Tibetan subtags all consult the generated transcoder (P50-W3).
+    assert_equal %w[normalize.rb xct.rb], fold_module_names(["xct"])
+    assert_equal %w[normalize.rb xct.rb], fold_module_names(%w[bod otb])
   end
 
   def test_unknowable_languages_consult_every_fold_module
     # nil = "this source's language set is not reliably knowable" — it must
     # include ALL fold modules (dirty-more, never dirty-less).
-    assert_equal %w[normalize.rb hani.rb jpn.rb], fold_module_names(nil)
+    assert_equal %w[normalize.rb hani.rb jpn.rb xct.rb], fold_module_names(nil)
   end
 
   def test_fold_wiring_change_moves_every_source
@@ -213,7 +216,7 @@ class DerivationFingerprintTest < Minitest::Test
     # ONLY because the per-source fold digest provably covers them — every
     # excluded fold module must have a digest path AND at least one consulting
     # language, or its changes would silently under-rebuild (the sin).
-    excluded_folds = %w[hani.rb jpn.rb]
+    excluded_folds = %w[hani.rb jpn.rb xct.rb]
     excluded_folds.each do |name|
       assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, name
     end

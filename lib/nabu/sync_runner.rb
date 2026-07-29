@@ -443,8 +443,19 @@ module Nabu
     # source row — display-only convenience; the AUTHORITATIVE pins live in
     # the ledger, below). A --parse-only run has no fetch_report, so both the
     # sources mirror and the ledger pins are preserved untouched.
+    #
+    # last_ingest_identity (P50-r1, owner ruling D50-a) is recorded on EVERY
+    # successful sync, parse-only included: it names the canonical tree the
+    # load just derived this source's rows from — the record the `nabu data
+    # build` stale-ingest guard compares against the cone's current state.
+    # The DERIVATION STAMP is deliberately not touched here: sync skips the
+    # rebuild-scoped corpus builders, so stamping would let `rebuild
+    # --incremental` under-rebuild them (the sin). A tree with no honest
+    # identity (dirty embedded git) records nil — "cannot prove", which the
+    # guard refuses; refusing beats misdescribing.
     def update_source_state(source, entry, fetch_report)
-      attrs = { last_sync_at: Time.now }
+      attrs = { last_sync_at: Time.now,
+                last_ingest_identity: DerivationFingerprint.canonical_identity(workdir_for(entry.slug)) }
       attrs[:last_sync_sha] = fetch_report.sha if fetch_report
       source.update(attrs)
       update_pins(entry, fetch_report) if fetch_report
