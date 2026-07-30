@@ -194,7 +194,10 @@ module Nabu
         "each carries urn, language, license_class, and source — PRESERVE the license fields " \
         "when quoting. `meter`/`meter_pattern` (text search only) restrict hits to metrically " \
         "SCANNED passages — the pedecerto (Latin) / hypotactic (Greek) meter enrichment layer; " \
-        "the note names that layer or explains an empty one. Use nabu_show with a hit's urn for " \
+        "the note names that layer or explains an empty one. `words` (text search only) is the " \
+        "Tibetan word-grain filter: keep only hits whose match aligns with word boundaries per " \
+        "the nabu-data segmentation dataset (degrades honestly for non-Tibetan queries or an " \
+        "unsynced module). Use nabu_show with a hit's urn for " \
         "the full passage, nabu_status for what the corpus covers.".freeze
 
       SHOW_DESCRIPTION =
@@ -414,6 +417,14 @@ module Nabu
                            description: "Meter facet: exact foot/scansion pattern, case-insensitive " \
                                         "(pedecerto DSDS, hypotactic '-u u -uu …'); composes with " \
                                         "meter or stands alone. Text search only." },
+          words: { type: "boolean", default: false,
+                   description: "Tibetan word-grain filter (P54-4, text search only): Tibetan is " \
+                                "indexed at syllable grain, so a multi-syllable query also matches " \
+                                "an accidental syllable run crossing a word boundary — words: true " \
+                                "keeps only hits whose matched span aligns with word boundaries per " \
+                                "the nabu-data xct/segmentation dataset (present-only word_grain " \
+                                "key when applied). Non-Tibetan queries or an unsynced module " \
+                                "degrade to plain search with a word_grain_note, never an error." },
           limit: { type: "integer", minimum: 1, maximum: SEARCH_MAX_LIMIT,
                    default: SEARCH_DEFAULT_LIMIT, description: "Maximum hits returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
@@ -689,10 +700,19 @@ module Nabu
       # returning one, or nil when the hub is unconfigured) — config-loaded by
       # the entrypoint, resolved per call like the connection slots.
       def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil,
-                     enabled_slugs: nil, pleiades: nil, sign_list: nil)
+                     enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: :auto)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
+        # The Tibetan word-grain slot (P54-4): nil (nabu-data not synced —
+        # nabu_search words: true degrades to plain search plus the honest
+        # word_grain_note, every other call byte-identical: the lane-off
+        # rule), a loaded Nabu::TibetanWords (tests), or :auto — feature-
+        # detected lazily on the first words: true search and memoized once
+        # LOADED (the CSV read is the expensive part; while absent it
+        # re-detects per call, so a mid-session `nabu sync nabu-data` is
+        # picked up without a restart — the sign-list posture).
+        @tibetan_words = tibetan_words
         # The sign-list slot (P53-2): nil (unconfigured — nabu_signs notes
         # the sync hint, every other tool byte-identical: the lane-off rule),
         # a loaded Nabu::SignList (tests), or :auto — the entrypoint's
@@ -773,19 +793,20 @@ module Nabu
 
         from, to, place = search_date(args, mode, near)
         meter, meter_pattern = search_meter(args, mode, near)
+        words = search_words?(args, mode, near)
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         fulltext = search_index(mode) or return note(mode == :lemma ? LEMMA_REBUILDING_NOTE : REBUILDING_NOTE)
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         window = clamp(args["window"], default: SEARCH_DEFAULT_WINDOW, max: SEARCH_MAX_WINDOW, min: 0)
-        results, incomplete, rank_note, meter_note =
+        results, incomplete, rank_note, meter_note, words_note, word_grain =
           run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near,
                                  window: window, lang: args["lang"], license: license,
                                  limit: limit + 1, morph: morph, from: from, to: to, place: place,
-                                 meter: meter, meter_pattern: meter_pattern)
+                                 meter: meter, meter_pattern: meter_pattern, words: words)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog, incomplete: incomplete, rank_note: rank_note,
-                               meter_note: meter_note)
+                               meter_note: meter_note, word_grain: word_grain, word_grain_note: words_note)
       rescue Query::MorphFacets::Error => e
         raise InvalidArguments, e.message
       end
@@ -1146,7 +1167,7 @@ module Nabu
       # was too common to rank (plain text mode only — the other searchers
       # never guard, so theirs is always nil).
       def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
-                     from: nil, to: nil, place: nil, meter: nil, meter_pattern: nil)
+                     from: nil, to: nil, place: nil, meter: nil, meter_pattern: nil, words: false)
         results, searcher =
           if near
             searcher = Query::Proximity.new(catalog: catalog, fulltext: fulltext)
@@ -1156,14 +1177,28 @@ module Nabu
             searcher = Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
             [searcher.run(term, lang: lang, license: license, limit: limit, morph: morph), searcher]
           else
-            searcher = Query::Search.new(catalog: catalog, fulltext: fulltext)
+            searcher = Query::Search.new(catalog: catalog, fulltext: fulltext,
+                                         tibetan_words: words ? tibetan_words_seam : nil)
             [searcher.run(term, lang: lang, license: license, limit: limit,
                                 from: from, to: to, place: place,
-                                meter: meter, meter_pattern: meter_pattern), searcher]
+                                meter: meter, meter_pattern: meter_pattern, words: words), searcher]
           end
         rank_note = searcher.respond_to?(:rank_note) ? searcher.rank_note : nil
         meter_note = searcher.respond_to?(:meter_note) ? searcher.meter_note : nil
-        [results, searcher.incomplete_hint, rank_note, meter_note]
+        words_note = searcher.respond_to?(:words_note) ? searcher.words_note : nil
+        word_grain = searcher.respond_to?(:word_grain) ? searcher.word_grain : nil
+        [results, searcher.incomplete_hint, rank_note, meter_note, words_note, word_grain]
+      end
+
+      # The word-grain seam behind nabu_search's words flag (P54-4): resolve
+      # :auto lazily and memoize only a LOADED seam (the class comment on
+      # @tibetan_words — re-detect while absent, load the CSV once).
+      def tibetan_words_seam
+        return @tibetan_words unless @tibetan_words == :auto
+
+        loaded = Nabu::TibetanWords.load_default
+        @tibetan_words = loaded if loaded
+        loaded
       end
 
       # The meter facet args (P45-5), text mode only — the lemma/proximity
@@ -1180,10 +1215,28 @@ module Nabu
         [meter, pattern]
       end
 
-      def render_search(results, limit:, catalog:, incomplete: nil, rank_note: nil, meter_note: nil)
+      # The Tibetan word-grain flag (P54-4), text mode only — refusal parity
+      # with the meter facet.
+      def search_words?(args, mode, near)
+        return false unless args["words"] == true
+
+        raise InvalidArguments, "words composes with text search only, not lemma/near" if mode == :lemma || near
+
+        true
+      end
+
+      def render_search(results, limit:, catalog:, incomplete: nil, rank_note: nil, meter_note: nil,
+                        word_grain: nil, word_grain_note: nil)
+        # P54-4, present-only keys (additive to the frozen shape): word_grain
+        # marks a page the Tibetan word-grain filter actually thinned
+        # (filtered-out hits are simply absent); word_grain_note mirrors the
+        # CLI degrade note when the flag could not filter.
+        extra = {}
+        extra[:word_grain] = true if word_grain
+        extra[:word_grain_note] = word_grain_note if word_grain_note
         if results.empty?
-          return json(matches: [], note: ["no matches", rank_note, meter_note, incomplete].compact.join(" — "),
-                      coverage: coverage_hint(catalog))
+          return json({ matches: [], note: ["no matches", rank_note, meter_note, incomplete].compact.join(" — "),
+                        coverage: coverage_hint(catalog) }.merge(extra))
         end
 
         shown = results.first(limit)
@@ -1200,7 +1253,7 @@ module Nabu
         note = "#{note} — #{rank_note}" if rank_note
         note = "#{note} — #{meter_note}" if meter_note
         note = "#{note} — #{incomplete}" if incomplete
-        json(matches: shown.map { |result| match_payload(result, sources) }, note: note)
+        json({ matches: shown.map { |result| match_payload(result, sources) }, note: note }.merge(extra))
       end
 
       def match_payload(result, sources)

@@ -1303,5 +1303,127 @@ module Query
       assert_empty searcher.run("alia", meter: "H")
       assert_equal "meter: pedecerto enrichments", searcher.meter_note
     end
+
+    # -- --words: the Tibetan word-grain post-filter (P54-4) ------------------
+    # Tibetan is indexed at SYLLABLE grain (the xct EWTS fold spaces each
+    # tsheg), so a multi-syllable query also lands on an ACCIDENTAL syllable
+    # run crossing a word boundary. words: true post-filters the page against
+    # the nabu-data xct/segmentation vocabulary (Nabu::TibetanWords): a hit
+    # survives only if SOME occurrence of the query in the stored text runs
+    # word boundary to word boundary.
+
+    def tibetan_words_seam
+      @tibetan_words_seam ||= Nabu::TibetanWords.load(Nabu::TestSupport.fixtures("nabu-data"))
+    end
+
+    # A seam that must never be consulted — pins the paths that promise not
+    # to segment anything.
+    def poison_seam
+      seam = Object.new
+      def seam.segment(_text) = raise "the word-grain seam must not be touched on this path"
+      seam
+    end
+
+    def words_searcher(seam)
+      Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, tibetan_words: seam)
+    end
+
+    # The discriminating pair, built from fixture-vocabulary tokens (the
+    # published Forms རབ་སྟོན, གསུང་རབ and སྟོན་པ): the SAME syllable sequence
+    # རབ་སྟོན stands once as a true word and once as an accidental run across
+    # the གསུང་རབ | སྟོན་པ word boundary.
+    def seed_word_grain_pair
+      doc = make_document(source: @open, urn: "urn:d:xct", title: "Buston", language: "xct")
+      make_passage(doc, urn: "urn:d:xct:word", text: "རབ་སྟོན།", sequence: 0, language: "xct")
+      make_passage(doc, urn: "urn:d:xct:run", text: "གསུང་རབ་སྟོན་པ།", sequence: 1, language: "xct")
+      rebuild!
+    end
+
+    def test_words_keeps_the_word_aligned_hit_and_drops_the_accidental_run
+      seed_word_grain_pair
+      # The construction, proven by the seam itself (self-documenting): the
+      # query IS a word in one passage and crosses a word boundary in the
+      # other.
+      assert_equal %w[རབ་སྟོན །], tibetan_words_seam.segment("རབ་སྟོན།").map(&:form)
+      assert_equal %w[གསུང་རབ་ སྟོན་པ །], tibetan_words_seam.segment("གསུང་རབ་སྟོན་པ།").map(&:form)
+
+      searcher = words_searcher(tibetan_words_seam)
+      assert_equal %w[urn:d:xct:run urn:d:xct:word], searcher.run("རབ་སྟོན").map(&:urn).sort,
+                   "precondition: both passages are plain-search hits for the syllable sequence"
+
+      hits = searcher.run("རབ་སྟོན", words: true)
+      assert_equal %w[urn:d:xct:word], hits.map(&:urn),
+                   "--words keeps the word-aligned hit and drops the accidental run"
+      assert searcher.word_grain, "the applied filter announces itself (the payload marker)"
+      assert_nil searcher.words_note, "no degrade note when the filter really ran"
+    end
+
+    # A query that omits the word's TRAILING TSHEG still aligns: the token
+    # keeps its trailing tsheg (the vocabulary key strips it, the substring
+    # form does not), so the located span ends just before it — the end check
+    # skips a tsheg run to the boundary behind it.
+    def test_words_accepts_a_match_ending_just_before_the_words_trailing_tsheg
+      doc = make_document(source: @open, urn: "urn:d:xct", language: "xct")
+      make_passage(doc, urn: "urn:d:xct:tsheg", text: "རབ་སྟོན་གསུང་རབ།", sequence: 0, language: "xct")
+      rebuild!
+      assert_equal %w[རབ་སྟོན་ གསུང་རབ །], tibetan_words_seam.segment("རབ་སྟོན་གསུང་རབ།").map(&:form),
+                   "the leading word carries its trailing tsheg — the span end sits inside the token"
+
+      hits = words_searcher(tibetan_words_seam).run("རབ་སྟོན", words: true)
+      assert_equal %w[urn:d:xct:tsheg], hits.map(&:urn),
+                   "a tsheg-final word is still a word-aligned match for the tsheg-less query"
+    end
+
+    # ANY aligned occurrence rescues the hit: this passage carries the
+    # accidental run first AND the true word later.
+    def test_words_keeps_a_hit_whose_second_occurrence_aligns
+      doc = make_document(source: @open, urn: "urn:d:xct", language: "xct")
+      make_passage(doc, urn: "urn:d:xct:both", text: "གསུང་རབ་སྟོན་པ་རབ་སྟོན།", sequence: 0, language: "xct")
+      rebuild!
+      assert_equal %w[གསུང་རབ་ སྟོན་པ་ རབ་སྟོན །],
+                   tibetan_words_seam.segment("གསུང་རབ་སྟོན་པ་རབ་སྟོན།").map(&:form)
+
+      hits = words_searcher(tibetan_words_seam).run("རབ་སྟོན", words: true)
+      assert_equal %w[urn:d:xct:both], hits.map(&:urn),
+                   "the first occurrence crosses a boundary, the second IS the word — the hit survives"
+    end
+
+    # The non-negotiable default pin: flag off is byte-identical to plain
+    # search AND never touches the seam (a poisoned seam would raise).
+    def test_words_off_is_byte_identical_and_never_touches_the_seam
+      seed_word_grain_pair
+      baseline = words_searcher(nil).run("རབ་སྟོན")
+      poisoned = words_searcher(poison_seam)
+      assert_equal baseline, poisoned.run("རབ་སྟོན"),
+                   "flag off: value-identical Results, the seam never consulted"
+      assert_nil poisoned.words_note
+      assert_nil poisoned.word_grain
+    end
+
+    def test_words_without_the_module_degrades_to_plain_search_with_the_note
+      seed_word_grain_pair
+      searcher = words_searcher(nil) # load_default nil — nabu-data not synced
+      hits = searcher.run("རབ་སྟོན", words: true)
+      assert_equal 2, hits.size, "plain results — the filter degraded, never an error"
+      assert_equal Nabu::Query::Search::WORDS_MODULE_NOTE, searcher.words_note
+      assert_equal "word-grain: nabu-data module not synced — run: nabu sync nabu-data",
+                   searcher.words_note
+      assert_nil searcher.word_grain
+
+      searcher.run("རབ་སྟོན")
+      assert_nil searcher.words_note, "the note resets per run, like every other note"
+    end
+
+    def test_words_with_a_non_tibetan_query_degrades_with_the_script_note
+      doc = make_document(source: @open, urn: "urn:d:1")
+      make_passage(doc, urn: "urn:d:1:1", text: "μῆνιν ἄειδε θεά", sequence: 0)
+      rebuild!
+      searcher = words_searcher(poison_seam) # the script check comes FIRST: nothing segments
+      hits = searcher.run("μηνιν", words: true)
+      assert_equal %w[urn:d:1:1], hits.map(&:urn), "plain results ride through"
+      assert_equal Nabu::Query::Search::WORDS_SCRIPT_NOTE, searcher.words_note
+      assert_equal "word-grain: only for Tibetan-script queries", searcher.words_note
+      assert_nil searcher.word_grain
+    end
   end
 end
