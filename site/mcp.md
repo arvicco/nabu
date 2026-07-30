@@ -2,7 +2,7 @@
 title: MCP — ask your model
 permalink: /mcp/
 description: >-
-  The Nabu library as a read-only MCP server: eleven tools that let an AI
+  The Nabu library as a read-only MCP server: twelve tools that let an AI
   assistant search, cite, align, and etymologize over the corpus — with
   desk-shaped examples run live against the library.
 ---
@@ -10,10 +10,10 @@ description: >-
 Everything the [command line](/nabu/tools/) can do for a reader, a
 connected AI assistant can do in conversation: the library ships a
 read-only [MCP server](https://github.com/arvicco/nabu/blob/main/docs/mcp.md)
-(`bin/nabu mcp`) exposing eleven tools — `nabu_search`, `nabu_show`,
+(`bin/nabu mcp`) exposing twelve tools — `nabu_search`, `nabu_show`,
 `nabu_define`, `nabu_etym`, `nabu_links`, `nabu_parallels`,
-`nabu_cognates`, `nabu_align`, `nabu_concord`, `nabu_place`, and
-`nabu_status`. Registration for Claude Code and Claude Desktop is in the
+`nabu_cognates`, `nabu_align`, `nabu_concord`, `nabu_place`,
+`nabu_signs`, and `nabu_status`. Registration for Claude Code and Claude Desktop is in the
 [server documentation](https://github.com/arvicco/nabu/blob/main/docs/mcp.md);
 restricted material is excluded by default, license classes ride every
 payload, and nothing is ever written.
@@ -49,5 +49,5 @@ typed syllabified, Old Japanese romanized) — on its axis page under
 
 ## The desks
 
-The [research axes](/nabu/axis/) index all twenty-two desks; every desk
+The [research axes](/nabu/axis/) index all twenty-three desks; every desk
 page ends with live-verified MCP examples for that tradition.
