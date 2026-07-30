@@ -1,8 +1,9 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
-# Both files come from the repo Nabu itself publishes (arvicco/nabu-data,
-# commit c50ef93 = main at retrieval). The raw URLs track `main` — a new
+# All files come from the repo Nabu itself publishes (arvicco/nabu-data;
+# san/form-lemma at commit c50ef93, xct/verb-lemma at commit 4640f73 —
+# main at each retrieval). The raw URLs track `main` — a new
 # dataset release moves them, which for THIS source is the expected
 # publication cadence, not drift: the csv is a documented TRIM (whole:
 # false, liveness-only), and a datapackage.json byte-diff simply flags
@@ -17,5 +18,13 @@ files:
     trim: 269 of 428,825 rows — the lemma-only pin (line 2198), the kﾱp quirk (4483), the bodhisattva block (77828–77855), the tapa/tapas neighborhood (317208–317446); recipe in README.md
   - path: san/form-lemma/datapackage.json
     url: https://raw.githubusercontent.com/arvicco/nabu-data/main/san/form-lemma/datapackage.json
+    whole: true
+    trim: none
+  - path: xct/verb-lemma/verb-lemma.csv
+    url: https://raw.githubusercontent.com/arvicco/nabu-data/main/xct/verb-lemma/verb-lemma.csv
+    whole: false
+    trim: 72 of 3,889 rows — the head ཀ-block (lines 2–61), the སྐྱེལ two-group cell (196–199), the འགྲོ suppletive paradigm (805–808), the འཆོར nested-bracket block (1234–1237); recipe in README.md
+  - path: xct/verb-lemma/datapackage.json
+    url: https://raw.githubusercontent.com/arvicco/nabu-data/main/xct/verb-lemma/datapackage.json
     whole: true
     trim: none
