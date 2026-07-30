@@ -1,0 +1,137 @@
+{
+  "$schema": "https://datapackage.org/profiles/2.0/datapackage.json",
+  "name": "xct-verb-lemma",
+  "title": "Tibetan verb stem → paradigm-lemma map (from the Tibetan Verb Database)",
+  "version": "1.0.0",
+  "licenses": [
+    {
+      "name": "CC-BY-4.0",
+      "path": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  ],
+  "contributors": [
+    {
+      "title": "Ar Vicco",
+      "role": "author"
+    }
+  ],
+  "sources": [
+    {
+      "title": "Tibetan Verbs Database (tibetan-nlp TVD)",
+      "path": "https://github.com/tibetan-nlp/tibetan-verbs-database",
+      "version": "ca6ba75066aa8cfd53631d0f3ad0350e026b8b4e",
+      "licenses": [
+        {
+          "name": "CC0-1.0 (in-repo LICENSE, the full CC0 legal code; verified 2026-07-28)"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "name": "verb-lemma",
+      "path": "verb-lemma.csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "ID",
+            "type": "string"
+          },
+          {
+            "name": "Language_ID",
+            "type": "string"
+          },
+          {
+            "name": "Lemma",
+            "type": "string"
+          },
+          {
+            "name": "Present",
+            "type": "string"
+          },
+          {
+            "name": "Past",
+            "type": "string"
+          },
+          {
+            "name": "Future",
+            "type": "string"
+          },
+          {
+            "name": "Imperative",
+            "type": "string"
+          },
+          {
+            "name": "Analysis_Source",
+            "type": "string"
+          },
+          {
+            "name": "Comment",
+            "type": "string"
+          },
+          {
+            "name": "Source",
+            "type": "string"
+          }
+        ],
+        "primaryKey": [
+          "ID"
+        ]
+      }
+    },
+    {
+      "name": "languages",
+      "path": "languages.csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "ID",
+            "type": "string"
+          },
+          {
+            "name": "Name",
+            "type": "string"
+          },
+          {
+            "name": "Glottocode",
+            "type": "string"
+          },
+          {
+            "name": "ISO639P3code",
+            "type": "string"
+          }
+        ],
+        "primaryKey": [
+          "ID"
+        ]
+      }
+    },
+    {
+      "name": "sources",
+      "path": "sources.bib",
+      "format": "bibtex",
+      "mediatype": "text/x-bibtex"
+    }
+  ],
+  "nabu": {
+    "producer": "nabu data build xct/verb-lemma",
+    "nabu_version": "1.3.0",
+    "derivation": {
+      "inputs": {
+        "tibetan-verbs": {
+          "canonical_sha": "ca6ba75066aa8cfd53631d0f3ad0350e026b8b4e",
+          "cone": "tibetan-verbs"
+        }
+      },
+      "recipe": "verb-lemma v1: canonical/tibetan-verbs/db.csv expanded to one row per (stem tuple × attesting source tag TDC/PH/GT/KN, read from the cell value, not the column position) — disagreements uncollapsed, empty stems stay empty, values NFC-normalized, Tibetan script only (no transliteration); Lemma = the present stem; ID = v-<sha256(stem tuple)[0,12]>-<source>, positional -<n> when upstream restates a (stems, source) row. Table half only: the anchored layer over the canon is deferred behind xct/segmentation.",
+      "fingerprint": "aa7a32e1c64fd8f8d4d73a610e6d302ea9415cf32379e8d5f5823a24a146f1ca"
+    },
+    "anchoring": {
+      "kind": "none"
+    },
+    "tier": "gold-derived",
+    "counts": {
+      "rows": 3890
+    }
+  }
+}

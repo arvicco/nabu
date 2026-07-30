@@ -68,6 +68,18 @@ module Nabu
       # fires only for a Sanskrit-eligible query, folded in san.
       FORM_LEMMA_LANGUAGE = "san"
 
+      # The nabu-data verb-lemma table is Tibetan (P54-3): expansion fires
+      # only for a Tibetan-eligible query — the primary subtags Normalize
+      # treats as Tibetan script/EWTS, folded in xct.
+      # const: the Tibetan fold family, mirroring Normalize's
+      # SCRIPT_NEUTRALIZATIONS/LANGUAGE_FOLDS registration (xct Classical,
+      # bod modern, otb Old Tibetan) — a registry mirror, not a census.
+      VERB_LEMMA_LANGUAGES = %w[xct bod otb].freeze
+      # A query the Tibetan lane can even be about: Tibetan script, or a
+      # Wylie/EWTS-shaped ASCII token (the SANSKRIT_IASTISH posture — a
+      # cheap shape gate so Greek/Han/Cyrillic queries never pay the load).
+      TIBETAN_SHAPED = /\A(?:\p{Tibetan}+|[a-z'+.~-]+)\z/i
+
       # P48-r1 (D48-a): the curated Sanskrit stem-class rule — nominative ↔
       # stem candidates for a Latin/IAST-scripted query. Candidates that
       # don't exist as headwords simply match nothing; that existence check
@@ -103,11 +115,14 @@ module Nabu
       # to force the direct-only path). +form_lemma+ (P51-W6) is the nabu-data
       # Sanskrit form→lemma table used for query expansion (below), same
       # :auto/inject contract (feature-detected from canonical/nabu-data).
-      def initialize(catalog:, fulltext: nil, lila: :auto, form_lemma: :auto)
+      # +verb_lemma+ (P54-3) is the nabu-data Tibetan verb stem→lemma table,
+      # the same contract again.
+      def initialize(catalog:, fulltext: nil, lila: :auto, form_lemma: :auto, verb_lemma: :auto)
         @catalog = catalog
         @reflex_views = ReflexViews.new(catalog: catalog, fulltext: fulltext)
         @lila = lila
         @form_lemma = form_lemma
+        @verb_lemma = verb_lemma
       end
 
       # Look up +lemma+; +lang+ filters by dictionary language (grc/lat/…);
@@ -147,6 +162,12 @@ module Nabu
           # may be absent on any box); the table only WIDENS which entries
           # are found — hits are ordinary Results, labeled nothing new.
           variants = (variants + form_lemma_variants(bare, lang: lang)).uniq
+          # P54-3: the Tibetan mirror — when the nabu-data verb-lemma table
+          # is live and the queried form is a known tense stem, expansion
+          # also reaches the paradigm Lemma headwords (ཕྱིན → འགྲོ; only
+          # the table knows the suppletive and ablauting stems). Same
+          # contract: lookup widening only, hits labeled nothing new.
+          variants = (variants + verb_lemma_variants(bare, lang: lang)).uniq
         end
 
         rows = entry_rows(variants, lang: lang, limit: limit, recon_only: recon_only)
@@ -328,6 +349,39 @@ module Nabu
         return @form_lemma unless @form_lemma == :auto
 
         @form_lemma = Nabu::FormLemma.load_default
+      end
+
+      # -- the nabu-data verb-lemma expansion (P54-3) ------------------------------
+
+      # The folded query forms of every paradigm lemma the published table
+      # maps the queried tense stem to. The lemma's own ༼…༽ notation is
+      # expanded BEFORE folding (84 published Lemma cells are bracketed —
+      # the notation must never leak into a shelf key). Scope mirrors the
+      # form_lemma lane: a shape gate plus the language gate, so a
+      # non-Tibetan query or an explicit non-Tibetan --lang never pays the
+      # table load. An absent table yields [] — byte-identical behavior.
+      def verb_lemma_variants(term, lang:)
+        return [] unless tibetan_eligible?(lang) && term.match?(TIBETAN_SHAPED)
+
+        resolver = verb_lemma or return []
+        resolver.lookup(term)
+                .flat_map { |candidate| Nabu::VerbLemma.expand(candidate.lemma) }.uniq
+                .flat_map { |lemma| Nabu::Normalize.query_forms(lemma) }
+      end
+
+      # The table is Tibetan-only: expand when the query is unconstrained
+      # or --lang names a Tibetan subtag (the san_eligible? shape, three
+      # subtags wide).
+      def tibetan_eligible?(lang)
+        lang.nil? || Nabu::Languages.code_variants(lang.to_s).intersect?(VERB_LEMMA_LANGUAGES)
+      end
+
+      # Feature-detect + memoize the table (:auto → canonical/nabu-data;
+      # absent tree is nil, the lila/form_lemma contract).
+      def verb_lemma
+        return @verb_lemma unless @verb_lemma == :auto
+
+        @verb_lemma = Nabu::VerbLemma.load_default
       end
 
       # -- resolution --------------------------------------------------------------
