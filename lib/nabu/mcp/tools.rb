@@ -19,7 +19,9 @@ require_relative "../query/define"
 require_relative "../query/etym"
 require_relative "../query/cognates"
 require_relative "../query/place"
+require_relative "../query/signs"
 require_relative "../pleiades"
+require_relative "../sign_list"
 
 module Nabu
   module MCP
@@ -134,6 +136,11 @@ module Nabu
       # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)
       COGNATES_DEFAULT_LIMIT = 10
       COGNATES_MAX_LIMIT = 50
+      # nabu_signs (P53-2): transliteration lines per response — a cdli
+      # document urn can carry hundreds; this surface stays bounded.
+      # census: 200000, 2026-07-29, tokens — model-context norms (H5/H6, above)
+      SIGNS_DEFAULT_MAX_LINES = 40
+      SIGNS_MAX_LINES_CAP = 200
 
       # SQLITE_BUSY grace: total attempts before degrading to "busy — retry".
       # const: a retry-grace choice, not a corpus claim
@@ -150,6 +157,8 @@ module Nabu
       NO_GAZETTEER_NOTE = "place NAME lookup needs the Pleiades gazetteer dump on disk — the " \
                           "owner runs `nabu sync pleiades` to add it; a numeric Pleiades id " \
                           "(or a pleiades.stoa.org/places URL) still counts holdings without it"
+      NO_SIGN_LIST_NOTE = "sign lookup needs the Oracc Sign List on disk — the owner runs " \
+                          "`nabu sync osl` (the osl feature module) to add it"
       ALIGN_REBUILDING_NOTE = "alignment index rebuilding (or the fulltext index predates the " \
                               "alignment hub) — retry shortly, or run `nabu rebuild`"
       COGNATES_REBUILDING_NOTE = "cognate root index rebuilding (or the fulltext index predates " \
@@ -564,6 +573,45 @@ module Nabu
         additionalProperties: false
       }.freeze
 
+      SIGNS_DESCRIPTION =
+        "The cuneiform sign desk (P53-2): ATF transliteration resolved token by token through " \
+        "the local Oracc Sign List into sign identities — value → sign name → Unicode " \
+        "codepoint(s). Give EXACTLY ONE of: `urn` — a passage or document urn from the ATF " \
+        "corpora (cdli/oracc/ebl/etcsl; e.g. urn:nabu:cdli:p469841 — language read from the " \
+        "row, the catalog opened read-only) — or `text` — raw ATF transliteration (`lang` " \
+        "optional). C-ATF ASCII folds apply (sz→š, s,→ṣ, t,→ṭ, u2→u₂); `dialect: \"etcsl\"` " \
+        "adds the ETCSL romanization (c→š, j→ŋ), auto-selected for etcsl urns. Every token " \
+        "carries ONE honest status: deterministic · qualified (valueₓ(SIGN), the explicit sign " \
+        "resolved) · ambiguous (ALL candidate signs listed, never one silently) · no-codepoint " \
+        "(sign resolved, honestly unencoded upstream) · broken (x, [...]) · unknown (not in " \
+        "the OSL — said plainly). Determinatives are unbraced and flagged. The sign list adds " \
+        "IDENTITY, not curriculum. Bounded (default #{SIGNS_DEFAULT_MAX_LINES} lines, max " \
+        "#{SIGNS_MAX_LINES_CAP}); the restricted-exclusion stance applies to urn mode.".freeze
+
+      SIGNS_SCHEMA = {
+        type: "object",
+        properties: {
+          urn: { type: "string",
+                 description: "A passage or document urn out of the ATF corpora " \
+                              "(urn:nabu:cdli:p469841, urn:nabu:oracc:…). Exactly one of " \
+                              "urn/text." },
+          text: { type: "string",
+                  description: "Raw ATF transliteration text (one or more lines). Exactly one " \
+                               "of urn/text." },
+          lang: { type: "string",
+                  description: "Language filter for %lang-qualified sign readings (sux, akk, " \
+                               "…); urn mode defaults to the passage's language." },
+          dialect: { type: "string", enum: ["etcsl"],
+                     description: "Transliteration dialect fold: etcsl (c→š, j→ŋ). Auto for " \
+                                  "etcsl urns; default C-ATF otherwise." },
+          max_lines: { type: "integer", minimum: 1, maximum: SIGNS_MAX_LINES_CAP,
+                       default: SIGNS_DEFAULT_MAX_LINES,
+                       description: "Maximum transliteration lines resolved per response." },
+          include_restricted: INCLUDE_RESTRICTED_SCHEMA
+        },
+        additionalProperties: false
+      }.freeze
+
       LINKS_SCHEMA = {
         type: "object",
         properties: {
@@ -607,7 +655,8 @@ module Nabu
       # nabu_parallels (the intertext engine) as the eighth; P15-3 adds
       # nabu_cognates (the hub × crosswalk join) as the ninth; P16-1 adds
       # nabu_links (the links-journal reader) as the tenth; P44-3 adds
-      # nabu_place (the place desk over Query::Place) as the eleventh —
+      # nabu_place (the place desk over Query::Place) as the eleventh; P53-2
+      # adds nabu_signs (the sign desk over Query::Signs) as the twelfth —
       # nabu_status stays last, the coverage epilogue.
       TOOLS = {
         "nabu_search" => { description: SEARCH_DESCRIPTION, input_schema: SEARCH_SCHEMA,
@@ -630,6 +679,8 @@ module Nabu
                           handler: :links },
         "nabu_place" => { description: PLACE_DESCRIPTION, input_schema: PLACE_SCHEMA,
                           handler: :place },
+        "nabu_signs" => { description: SIGNS_DESCRIPTION, input_schema: SIGNS_SCHEMA,
+                          handler: :signs },
         "nabu_status" => { description: STATUS_DESCRIPTION, input_schema: STATUS_SCHEMA,
                            handler: :status }
       }.freeze
@@ -638,10 +689,18 @@ module Nabu
       # returning one, or nil when the hub is unconfigured) — config-loaded by
       # the entrypoint, resolved per call like the connection slots.
       def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil,
-                     enabled_slugs: nil, pleiades: nil)
+                     enabled_slugs: nil, pleiades: nil, sign_list: nil)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
+        # The sign-list slot (P53-2): nil (unconfigured — nabu_signs notes
+        # the sync hint, every other tool byte-identical: the lane-off rule),
+        # a loaded Nabu::SignList (tests), or :auto — the entrypoint's
+        # setting, feature-detecting canonical/osl per call through
+        # SignList.load_default (memoized per path, so the ~1 MB parse is
+        # paid once per server process, and a mid-session `nabu sync osl`
+        # is picked up without a restart).
+        @sign_list = sign_list
         # The Pleiades gazetteer slot (P44-3): nil (gazetteer-less —
         # nabu_place id queries still count holdings, nabu_show serves no
         # findspot key, byte-identical to the pre-P44 payloads), a loaded
@@ -849,6 +908,29 @@ module Nabu
         result = Query::Place.new(catalog: catalog, pleiades: resolver).run(query)
         json(place_payload(query, result))
       rescue Query::Place::Error => e
+        tool_error(e.message)
+      end
+
+      # nabu_signs (P53-2): the sign desk — Query::Signs unchanged under the
+      # MCP shape, serving the SAME frozen JSON contract as the CLI's --json
+      # (one serializer, Query::Signs.json_payload). Degradation split: an
+      # absent sign list / absent corpus is a corpus STATE (note — the owner
+      # syncs osl, not the caller); urn-XOR-text and a bad dialect are
+      # caller-fixable (InvalidArguments, SEP-1303). Urn mode passes the
+      # restricted-exclusion gate; raw text touches no catalog.
+      def signs(args)
+        urn = string_arg(args, "urn")
+        text = string_arg(args, "text")
+        raise InvalidArguments, "nabu_signs needs exactly one of urn or text" unless urn.nil? ^ text.nil?
+
+        dialect = signs_dialect_arg(args)
+        list = resolve_sign_list or return note(NO_SIGN_LIST_NOTE)
+        bound = clamp(args["max_lines"], default: SIGNS_DEFAULT_MAX_LINES, max: SIGNS_MAX_LINES_CAP)
+        result = urn ? signs_urn_result(urn, args, list, dialect) : signs_text_result(text, args, list, dialect)
+        return result if result.is_a?(Hash) # a note/withheld response, already shaped
+
+        json(signs_payload(result, bound))
+      rescue Query::Signs::Error => e
         tool_error(e.message)
       end
 
@@ -1487,6 +1569,57 @@ module Nabu
       # (unsynced); the initializer note carries the cost rationale.
       def place_resolver(catalog)
         @pleiades == :auto ? Nabu::Pleiades.load_default(catalog: catalog) : @pleiades
+      end
+
+      # -- nabu_signs helpers ------------------------------------------------------
+
+      # Resolve the sign-list slot: :auto feature-detects canonical/osl per
+      # call (SignList.load_default memoizes the parse per path), anything
+      # else is the configured instance / nil.
+      def resolve_sign_list
+        slot = resolve(@sign_list)
+        slot == :auto ? Nabu::SignList.load_default : slot
+      end
+
+      def signs_dialect_arg(args)
+        dialect = string_arg(args, "dialect")
+        return nil if dialect.nil?
+        return dialect.to_sym if Nabu::AtfTokenizer::DIALECTS.map(&:to_s).include?(dialect)
+
+        raise InvalidArguments, "dialect must be one of: #{Nabu::AtfTokenizer::DIALECTS.join(', ')}"
+      end
+
+      def signs_text_result(text, args, list, dialect)
+        Query::Signs.new(sign_list: list)
+                    .run_text(text, language: string_arg(args, "lang"), dialect: dialect || :catf)
+      end
+
+      def signs_urn_result(urn, args, list, dialect)
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        result = Query::Signs.new(sign_list: list, catalog: catalog)
+                             .run_urn(urn, language: string_arg(args, "lang"), dialect: dialect)
+        if result.nil?
+          return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
+                      "what this corpus holds")
+        end
+        return withheld(urn, result.license_class) if withhold?(result.license_class,
+                                                                args["include_restricted"] == true)
+
+        result
+      end
+
+      # The frozen contract (Query::Signs.json_payload — ONE serializer with
+      # the CLI's --json), bounded per the MCP surface with an honest note.
+      def signs_payload(result, bound)
+        payload = Query::Signs.json_payload(result)
+        lines = payload.fetch("lines")
+        return payload if lines.size <= bound
+
+        payload.merge(
+          "lines" => lines.take(bound),
+          "note" => "#{lines.size} line(s) total, showing #{bound} — raise max_lines " \
+                    "(max #{SIGNS_MAX_LINES_CAP}), or read line by line with passage urns"
+        )
       end
 
       def place_payload(query, result)
