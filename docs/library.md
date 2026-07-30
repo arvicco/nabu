@@ -659,6 +659,80 @@ and bridges the Persian keyboard (ی/ي, ک/ك — Arabic-typed queries find
 once the timeline derives; unannotated by design — full-text and the
 timeline are the instruments.
 
+## 8y. The Romance wave (`bfm`, `croala`, `digiliblt`, `openmgh`; P45, flipped live 2026-07-25)
+
+| | |
+|---|---|
+| **Category** | The `romance` axis minted — the Latin→Romance band: the Old French text mass, late-antique Latin prose, and medieval Latin at scale (MGH critical editions, Croatian Latinity) |
+| **Languages** | Old French (`fro`), Latin (`lat`) on the classical→medieval continuum |
+| **Size** | `bfm`: **219 docs / 333,819 passages** — Base de français médiéval, corpus BFM2022 (ENS de Lyon / UMR 5317 IHRIM): 219 complete TEI P5 texts / ~6.45M words of medieval French, the Serments de Strasbourg (842) through the end of the 15th c. — all 219 dated (842–1507); the NAKALA inventory downloads sha1-verified and resumable. `croala`: **570 docs / 309,180 passages** — Croatiae auctores Latini (Jovanović, ed.): Croatian Latinity across a near-millennium (454 dated docs, 999–1984), streamed parse over a sparse blobless clone. `digiliblt`: **372 docs / 459,451 passages** — digilibLT, Biblioteca digitale di testi latini tardoantichi (Vercelli / UniUPO, via the CIRCSE CoNLL-U lane): late-antique SECULAR Latin prose, 2nd–7th c. (Ammianus, the grammarians, the agrimensores, the jurists) — the classical→medieval transition band, dual-tagged classical + romance. `openmgh`: **57 docs / 9,594 passages** — openMGH (MGH / Bayerische Staatsbibliothek, digital MGH): the first wave = all 57 SS rer. Germ. volumes (Einhard, Widukind, Liudprand, Regino, Adam of Bremen, Otto of Freising…) of the 153 TEI volumes upstream provides successively |
+| **Licenses** | bfm `attribution` (texts public domain; the TEI markup, metadata and linguistic-annotation supplements under the upstream grant); croala CC BY 4.0 → `attribution`; digiliblt CC BY-SA 4.0 → `attribution`; openmgh CC BY 4.0 → `attribution` |
+
+**Research uses:** the Latin→Romance transition readable as one band —
+late-antique prose (digilibLT) through the medieval-Latin backbone (MGH,
+CroALa) to the earliest French (the 842 Serments) and five centuries of
+Old French; diachronic Romance philology on dated documents; medieval
+historiography beside the classical Latin shelf (§3) it grew from.
+
+## 8z. Greek silver at scale & the Avesta (`glaux`, `titus-avestan`; flipped live 2026-07-25)
+
+| | |
+|---|---|
+| **Category** | Two same-day flips: corpus-scale machine annotation for Ancient Greek, and the Old Iranian liturgy anchoring the new `iranian` axis |
+| **Size** | `glaux`: **1,421 docs / 968,578 passages** (`grc`) — GLAUx, "the Greek Language Automated" (Keersmaekers, Leuven): ~20M tokens of Ancient Greek (8th c. BCE – ~4th c. CE) automatically annotated for morphology, syntax, lemmas, animacy and word senses (AGDT guidelines) — the silver analysis-side complement to the held Perseus/First1K editions (the DCS-beside-GRETIL pattern); the known page-boundary split-token artifact (ψυ\|χροῖς, per-fragment lemmas) is preserved verbatim — canonical means canonical. `titus-avestan`: **248 docs / 40,108 passages** (`ave`) — the TITUS Avestan Corpus (Gippert, Frankfurt): the Avesta in Latin transliteration — Yasna, Yašts, Videvdad, Visperad — a preliminary edition on the Geldner/Westergaard base (e-text S. Fritz, corrections Gippert et al.), rescued from 1990s frame-based HTML |
+| **Licenses** | glaux mixed `attribution`/`nc` per document (README: most CC BY-SA, some texts more restrictive); titus-avestan `nc` — a personal grant (Gippert, 2026-07-23) for non-commercial use, with TITUS and the editors credited wherever served |
+
+**Research uses:** machine-annotated Greek at full corpus scale with
+honest [silver] labels, a second analysis witness beside Diorisis (§8n);
+Avestan philology on the `iranian` desk, its forms feeding the `etym`
+comparative shelves beside Old Persian (§8r).
+
+## 8aa. The P46 wave (`betamasaheft-works`, `dillmann`, `traces`, `edr`, `ren`, `clics`, `wold`; flipped live 2026-07-26)
+
+| | |
+|---|---|
+| **Category** | Four fronts in one phase: the Ethiopic (Gǝʿǝz) axis minted, the inscriptions of Italy, the Middle Low German reference corpus, and the comparativist CLDF pack |
+| **Languages** | Gǝʿǝz (`gez`, with an Amharic scatter), Latin and Greek epigraphy, Middle Low German (`gml`), and the cross-linguistic modules (`mul` + 41 recipient languages) |
+| **Size** | `betamasaheft-works`: **3,796 docs / 66,516 passages** (gez 66,400 · amh 116) — Beta maṣāḥǝft Works (Hiob-Ludolf-Zentrum, Hamburg): the text-bearing minority of 6,548 TEI work records, carrying the Gǝʿǝz Bible — near-complete OT, all four Gospels, Acts/Epistles/Revelation (CC BY-SA 4.0, the per-document in-file grant governing 6,545 of 6,548 files → `attribution`). `dillmann`: **13,727 entries** — Dillmann's *Lexicon linguae aethiopicae* (1865) in the TraCES TEI digitization: the `gez` dictionary shelf whose entry ids ARE the ones the traces lemma links point at (CC BY-NC-SA 4.0 → `nc`; the malformed in-file license URL is recorded). `traces`: **15 docs / 75,436 passages** — the TraCES TEI-Ling corpus (ERC 338756, Hamburg): one passage per morphologically analyzed word token — Matthew, the Kebra nagast prologue + 25 chapters, the ʿAmda Ṣǝyon chronicle, Testamentum Domini, seven Aksumite royal inscriptions (RIE 187–232) — the gold lemma lane of the Geʿez shelf, Dillmann-linked (no in-repo license; the archive deposit's CC BY-NC-ND 4.0 governs → `nc`). `edr`: **115,590 docs / 596,064 passages** (lat 568,976 · grc 27,088) — the Epigraphic Database Roma (Sapienza): the inscriptions of ITALY, the geographic complement of held EDH (§8g, the provinces) — one sha256-pinned ~268 MB Zenodo GET (CC BY 4.0 → `attribution`); all 115,590 docs dated and faceted (genre/material/object_type + a 15-value region axis), and the damaged-inscription mass is the fragment desk's biggest constituency. `ren`: **235 docs / 297,504 passages** (`gml`) — ReN, Referenzkorpus Mittelniederdeutsch/Niederrheinisch 1200–1650 v1.1 (Hamburg/Münster): 161 annotated texts with gold pos+msd+lemma (~1.49M tokens) plus 74 transcribed-only, the Hanseatic rung between ReM's `gmh` (§8w) and the Norse/Old English shelves (CC BY 4.0 → `attribution`). `clics`: **1,647 entries** — CLICS³, the Database of Cross-Linguistic Colexifications (Rzymski, Tresoldi et al.), the aggregate network's edge-bearing concept nodes as a `mul` dictionary shelf — `define moon` shows the ↔ colexification lines (CC BY 4.0 → `attribution`). `wold`: **64,289 entries** — WOLD, the World Loanword Database (Haspelmath & Tadmor eds.; lexibank/wold v4.2): 41 recipient-language vocabulary shelves (eng, goh, jpn, vie, yaq…) with a curated borrowed status per lexeme, joined to the `etym` desk (CC BY 4.0 → `attribution`) |
+
+**Research uses:** Ethiopic philology with a closed desk loop — Gǝʿǝz
+text, gold-analyzed tokens, and the standard 19th-c. lexicon linked
+entry-to-lemma; Roman epigraphy completed geographically (Italy beside
+the provinces of §8g), faceted and dated end to end; the Hansa's written
+language with gold annotation between the High German (§8w) and Norse
+shelves; loanword flow and colexification as typological instruments on
+the same `define`/`etym` desk as the IE witnesses (§8h).
+
+## 8ab. Elephantine (`elephantine`; P47, flipped live 2026-07-28)
+
+| | |
+|---|---|
+| **Category** | The island's multilingual documentary record: the Berlin ERC papyri and ostraca database (Ägyptisches Museum und Papyrussammlung), documents at the artifact grain |
+| **Languages** | Imperial Aramaic (`arc`, 5,568 passages — the library's first substantial Aramaic document shelf: the Judean garrison's archives, 1,193 Hebrew-script objects), Greek (18,164), Demotic (`egy-Egyd`, 5,322), earlier Egyptian (`egy`, 3,194), Coptic (3,237), Arabic (671), Latin (211), Phoenician (38) — with English translation siblings (32,877) riding the damaskini `-en` mold: record ids are digits-only, so `show --parallel` pairs 100067 ↔ 100067-en by identical page.line suffixes |
+| **Size** | **15,539 docs / 69,350 passages**; 7,973 docs on the timeline (signed-year span −2655..2200 as stored upstream), genre/material/object_type facets on ~10K docs |
+| **License** | CC BY-SA 3.0 Unported → `attribution` — the per-document in-file grant |
+
+**Research uses:** the Judean garrison's Aramaic archives beside the
+Targums desk (§8q); the same island's Demotic, Greek and Coptic slices
+as one continuous community record; damage-riddled documentary editions
+as the fragment desk's exact constituency; papyrology continued upriver
+from the Delta corpora (§4).
+
+## 8ac. The Tibetan wave (`derge-kangyur`, `derge-tengyur`, `e84000`, `otdo`, `old-tibetan`, `soas-tibetan`, `tibetan-verbs`, `wiktionary-bo`, `mvp`; P48, flipped live 2026-07-28)
+
+| | |
+|---|---|
+| **Category** | The `tibetan` axis whole in one phase: the Derge canon complete, its English translation layer, the Old Tibetan document record, gold POS, and the dictionary rack |
+| **Languages** | Classical Tibetan (`xct`), Old Tibetan (`otb`), Old Zhangzhung (`xzh`), Tibetan headwords (`bod`), Sanskrit crosswalk headwords (`san`), English translation lanes |
+| **Size** | `derge-kangyur`: **1,200 docs / 461,304 passages** — the Digital Derge Kangyur (Esukhia/Barom Theksum Choling proofreading of the UVA-SOAS 2013 eKangyur): 103 volumes, Toh 1–1108, page.line grain, an exact representation of the LoC Derge woodblocks (spelling/carving mistakes preserved on purpose) — public domain → `open`. `derge-tengyur`: **3,362 docs / 897,142 passages** — the canon's commentarial half: 213 volumes, Toh 1109–4569, disjoint from the Kangyur by Tohoku design — public domain → `open`. `e84000`: **388 docs / 124,223 passages** — 84000, "Translating the Words of the Buddha": the published English Kangyur translations (+3 Tengyur publications; placeholder stubs skip by rule, censused) — CC BY-NC-ND 3.0 → `nc`. `otdo`: **413 docs / 13,593 passages** (otb 12,985 · xzh 608) — Old Tibetan Documents Online (ILCAA, Tokyo): critically edited Old Tibetan in Wylie transliteration — Dunhuang manuscripts, imperial-period inscriptions (Zhol, the 821/822 Treaty pillar, the Ldan-ma rocks), five Old Zhangzhung texts (CC BY 4.0 → `attribution`). `old-tibetan`: **3 docs / 2,669 passages** — the Old Tibetan Corpus (tibetan-nlp): the Annals and the Chronicle, the two foundational Old Tibetan histories, the Annals with an English sibling (`--parallel`, the Dotson pairing) — MIT → `attribution`. `soas-tibetan`: **4 docs / 991 passages** — the SOAS Classical Tibetan gold POS corpus ("Tibetan in Digital Communication", 2012–2015): four texts (Mdzangs blun, Bu ston, Mi la, Mar pa) with hand-corrected segmentation and gold POS, 318,230 form\|tag tokens (CC BY 4.0 → `attribution`). `tibetan-verbs`: **2,491 entries** — the Tibetan Verbs Database: verb tense stems (present/past/future/imperative) with per-row lexicographic attribution, the grammarians' disagreements deliberately uncollapsed (CC0 → `open`). `wiktionary-bo`: **3,651 entries** — the kaikki.org Tibetan extract, the wiktionary-cu shape exactly (CC BY-SA + GFDL → `attribution`). `mvp`: **9,379 entries** — the Mahāvyutpatti (DILA TEI edition): the 9th-century imperial Sanskrit–Tibetan(–Chinese) translation glossary, the Tibetan desk's crosswalk prize — public domain → `open` |
+
+**Research uses:** the fourth canon leg — Pali, Sanskrit, Chinese, now
+the Tibetan Kangyur+Tengyur — with the 84000 English layer for
+orientation; Old Tibetan philology from the Dunhuang documents and the
+imperial pillars; the Mahāvyutpatti as the bridge between the Sanskrit
+shelves (§5, §8m) and the Tibetan canon; verb paradigms and the crowd
+glossary closing the `define` loop for the Tibetan desk.
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored

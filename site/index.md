@@ -34,7 +34,7 @@ draws from.
 
 ## Find your desk
 
-The collection is organized as twenty-two **research desks** — scholarly hats,
+The collection is organized as twenty-three **research desks** — scholarly hats,
 each gathering the shelves, instruments and terminal setup for one tradition.
 Find yours:
 
