@@ -449,5 +449,55 @@ module Query
       load_document("1", [%w[1 μῆνιν]])
       assert_nil show("urn:d:1:1").meter, "an unscanned passage carries no meter"
     end
+
+    # -- segmented rendering (P54-2) ------------------------------------------
+    # `show --segmented` renders Tibetan rows word-broken through the
+    # Nabu::TibetanWords seam (P54-1). The rendering lives HERE — the one
+    # serializer the CLI and MCP both call — and the seam is injected
+    # (tibetan_words:) exactly like define's form_lemma/verb_lemma :auto.
+    # The expected split is the published gold of the buston opening
+    # (fixture rows 1-4): བདེ་བར་གཤེགས་པའི་ → བདེ་བ | ར་ | གཤེགས་པ | འི་.
+
+    NABU_DATA = Nabu::TestSupport.fixtures("nabu-data")
+    BUSTON_OPENING = "བདེ་བར་གཤེགས་པའི་"
+    BUSTON_SEGMENTED = "བདེ་བ ར་ གཤེགས་པ འི་"
+
+    def tibetan_show(tibetan_words: Nabu::TibetanWords.load(NABU_DATA))
+      Nabu::Query::Show.new(catalog: @catalog, tibetan_words: tibetan_words)
+    end
+
+    def test_segmented_text_joins_the_seams_tokens_with_spaces
+      assert_equal BUSTON_SEGMENTED, tibetan_show.segmented_text(BUSTON_OPENING),
+                   "tokens verbatim (trailing tsheg kept), spaces at word boundaries"
+    end
+
+    def test_segmentation_note_is_nil_for_every_tibetan_code_when_the_seam_is_loaded
+      %w[xct bod otb].each do |code|
+        assert_nil tibetan_show.segmentation_note(code),
+                   "#{code} rows segment — no note"
+      end
+    end
+
+    def test_segmentation_note_names_an_off_language_row
+      assert_equal "segmentation: only for Tibetan-language texts (this row: lat)",
+                   tibetan_show.segmentation_note("lat")
+      assert_equal "segmentation: only for Tibetan-language texts (this row: unlabeled)",
+                   tibetan_show.segmentation_note(nil),
+                   "a language-less row reads unlabeled, never a blank"
+    end
+
+    def test_segmentation_note_when_the_seam_is_absent_says_how_to_sync
+      show = tibetan_show(tibetan_words: nil)
+      assert_equal "segmentation: nabu-data module not synced — run: nabu sync nabu-data",
+                   show.segmentation_note("xct")
+      assert_equal BUSTON_OPENING, show.segmented_text(BUSTON_OPENING),
+                   "no seam → the text passes through untouched (defense in depth)"
+    end
+
+    def test_off_language_gate_wins_over_the_absent_seam
+      assert_equal "segmentation: only for Tibetan-language texts (this row: grc)",
+                   tibetan_show(tibetan_words: nil).segmentation_note("grc"),
+                   "a non-Tibetan row's honest answer is the language, not the sync hint"
+    end
   end
 end

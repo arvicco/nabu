@@ -109,6 +109,17 @@ an epigraphic document's parse-captured Pleiades id resolved through the local
 gazetteer dump (id, title, place types; absent dump, absent id, or unknown id
 all leave the payload unchanged, exactly the CLI's degradation).
 
+`segmented: true` (P54-2) adds the Tibetan word-segmentation lane — the
+consumed-back nabu-data `xct/segmentation` dataset read through
+`Nabu::TibetanWords`. On a Tibetan-language row (xct/bod/otb) every passage
+record gains a present-only `segmented` key: the passage text with a space
+inserted at each word boundary, tokens verbatim (trailing tsheg kept) — the
+exact rendering `nabu show --segmented` prints, one serializer
+(`Query::Show#segmented_text`). When the flag is not applicable — an
+off-language row, or a box that has not run `nabu sync nabu-data` — a
+present-only top-level `segmentation_note` says why, mirroring the CLI's one
+honest note line. Flag off: byte-identical payloads.
+
 ### `nabu_concord`
 
 KWIC concordance over the same search machinery (P8-3): one row per hit as
@@ -515,6 +526,7 @@ new, present-only keys.
 | Refusal parity | date/place × lemma/near refused; near × morph refused; morph without lemma refused | same refusals, as `isError` the model can self-correct | parity (pinned P13-6/P14-8/P15-2) |
 | Availability semantics after the `wired:` rename (P44-r4) | registry `wired:` drives `list`/`status` visibility | `nabu_status` — sources default to the enabled set; the frozen payload key stays **`enabled`**, mirroring `wired`; no payload byte changed | parity (pinned P44-3: `enabled` key asserted, `"wired"` asserted absent) |
 | The sign desk | `nabu signs URN\|TEXT [--lang] [--dialect etcsl] [--json]` (P53-2) | `nabu_signs` — the same `Query::Signs`, the payload IS the CLI's frozen `--json` contract (one serializer); bounded lines with an honest note; lane-off (no canonical/osl) answers the sync-hint note like the CLI's refusal | **added P53-2** — new tool, read-only; urn mode passes the restricted-exclusion gate |
+| Tibetan word-segmented rendering | `nabu show <urn> --segmented` (P54-2) | `nabu_show` `segmented: true` — present-only `segmented` key per passage record (`Query::Show#segmented_text`, one serializer); not-applicable calls carry `segmentation_note` | **added P54-2** (pinned, incl. the flag-off byte-identical case) |
 
 ---
 
