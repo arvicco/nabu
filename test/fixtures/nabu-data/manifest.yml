@@ -19,3 +19,7 @@ files:
     url: https://raw.githubusercontent.com/arvicco/nabu-data/main/san/form-lemma/datapackage.json
     whole: true
     trim: none
+  - path: xct/segmentation/segmentation.csv
+    url: https://raw.githubusercontent.com/arvicco/nabu-data/main/xct/segmentation/segmentation.csv
+    whole: false
+    trim: header + first 300 of 319,162 rows — the buston 1-4 gold segmentation feeding Nabu::TibetanWords (P54-1, retrieved 2026-07-30 at commit 4640f73); recipe in README.md
