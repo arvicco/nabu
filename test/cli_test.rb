@@ -4755,6 +4755,60 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- show --segmented (P54-2) ----------------------------------------------
+  # Tibetan rows render word-broken through the Nabu::TibetanWords seam over
+  # the synced nabu-data module: tokens verbatim (trailing tsheg kept), one
+  # space at each word boundary — the original text with spaces inserted.
+  # The expected split is the fixture's published gold of the buston opening.
+
+  BUSTON_OPENING = "བདེ་བར་གཤེགས་པའི་"
+  BUSTON_SEGMENTED = "བདེ་བ ར་ གཤེགས་པ འི་"
+
+  def test_show_segmented_renders_word_boundaries_for_a_tibetan_passage
+    with_tibetan_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:x:bu:1 --segmented]) }
+      assert_nil status
+      assert_includes out, BUSTON_SEGMENTED, "the passage text renders with word boundaries"
+      refute_match(/segmentation:/, out, "an applicable row carries no note")
+    end
+  end
+
+  def test_show_segmented_renders_document_grain_lines_too
+    with_tibetan_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:x:bu --segmented]) }
+      assert_nil status
+      assert_includes out, BUSTON_SEGMENTED, "document listings segment each passage line"
+    end
+  end
+
+  def test_show_without_the_flag_stays_byte_identical_plain_text
+    with_tibetan_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:x:bu:1]) }
+      assert_nil status
+      assert_includes out, BUSTON_OPENING
+      refute_includes out, BUSTON_SEGMENTED
+      refute_match(/segmentation:/, out)
+    end
+  end
+
+  def test_show_segmented_off_language_prints_plain_text_plus_one_honest_note
+    with_indexed_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:test_adapter:one:1 --segmented]) }
+      assert_nil status
+      assert_match(/μῆνιν/, out, "the plain output still serves")
+      assert_includes out, "segmentation: only for Tibetan-language texts (this row: grc)"
+    end
+  end
+
+  def test_show_segmented_without_the_dataset_prints_plain_text_plus_the_sync_hint
+    with_tibetan_corpus(synced: false) do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:x:bu:1 --segmented]) }
+      assert_nil status
+      assert_includes out, BUSTON_OPENING, "the plain output still serves"
+      assert_includes out, "segmentation: nabu-data module not synced — run: nabu sync nabu-data"
+    end
+  end
+
   # -- show --random (P11-9) -------------------------------------------------
 
   def test_show_random_prints_a_passage_in_the_standard_layout
@@ -6012,6 +6066,47 @@ class CLITest < Minitest::Test
       catalog.disconnect
       yield config
     end
+  end
+
+  # A one-document Classical Tibetan corpus (P54-2): an xct passage whose
+  # text is composed from the nabu-data fixture's own published vocabulary,
+  # plus — when +synced+ — the fixture dataset landed under
+  # canonical/nabu-data/, exactly where `nabu sync nabu-data` puts it.
+  def with_tibetan_corpus(synced: true)
+    Dir.mktmpdir("nabu-cli-xct") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: "(test)"
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      if synced
+        dest = File.join(config.canonical_dir, "nabu-data")
+        FileUtils.mkdir_p(dest)
+        FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-data"), "*")], dest)
+      end
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      seed_tibetan_document(catalog)
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  def seed_tibetan_document(catalog)
+    src = catalog[:sources].insert(slug: "kangyur", name: "Kangyur", adapter_class: "TestAdapter",
+                                   license_class: "open", enabled: true)
+    doc_id = catalog[:documents].insert(
+      source_id: src, urn: "urn:x:bu", title: "Buston", language: "xct",
+      content_sha256: "x", revision: 1, withdrawn: false
+    )
+    catalog[:passages].insert(
+      document_id: doc_id, urn: "urn:x:bu:1", sequence: 0, language: "xct",
+      text: BUSTON_OPENING, text_normalized: Nabu::Normalize.search_form(BUSTON_OPENING, language: "xct"),
+      content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
+    )
   end
 
   def gzip_bytes(text)
