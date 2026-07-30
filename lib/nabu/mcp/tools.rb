@@ -216,7 +216,9 @@ module Nabu
         "carries `meter` (code, foot pattern, producer); an epigraphic document whose " \
         "parse-captured Pleiades findspot id resolves through the local gazetteer dump " \
         "carries `findspot` (both keys absent otherwise — absence of the dump or of the " \
-        "enrichment, not a claimed absence of fact).".freeze
+        "enrichment, not a claimed absence of fact). `segmented: true` adds a word-segmented " \
+        "rendering of Tibetan (xct/bod/otb) passages as a present-only `segmented` key per " \
+        "passage record; a not-applicable call carries `segmentation_note` instead.".freeze
 
       CONCORD_DESCRIPTION =
         "Concordance (KWIC — keyword-in-context) over the local nabu corpus: one row per hit as " \
@@ -436,6 +438,12 @@ module Nabu
                           default: SHOW_DEFAULT_MAX_PASSAGES,
                           description: "Bound on listed passages/rows; truncation is noted " \
                                        "honestly." },
+          segmented: { type: "boolean", default: false,
+                       description: "Add a word-segmented rendering of Tibetan (xct/bod/otb) " \
+                                    "passages: each passage record gains a present-only " \
+                                    "`segmented` key (text with spaces at word boundaries, " \
+                                    "tokens verbatim); when not applicable, a top-level " \
+                                    "`segmentation_note` says why." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["urn"],
@@ -689,10 +697,17 @@ module Nabu
       # returning one, or nil when the hub is unconfigured) — config-loaded by
       # the entrypoint, resolved per call like the connection slots.
       def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil,
-                     enabled_slugs: nil, pleiades: nil, sign_list: nil)
+                     enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
+        # The Tibetan segmentation slot (P54-2): nil (unconfigured — the
+        # `segmented` flag answers with the sync-hint note, every payload
+        # otherwise byte-identical: the lane-off rule), a loaded
+        # Nabu::TibetanWords (tests), or :auto — the entrypoint's setting,
+        # resolved lazily inside Query::Show (nothing loads unless a
+        # segmented render is actually asked for).
+        @tibetan_words = tibetan_words
         # The sign-list slot (P53-2): nil (unconfigured — nabu_signs notes
         # the sync hint, every other tool byte-identical: the lane-off rule),
         # a loaded Nabu::SignList (tests), or :auto — the entrypoint's
@@ -797,7 +812,8 @@ module Nabu
         include_restricted = args["include_restricted"] == true
         return show_parallel(catalog, urn, args, bound, include_restricted) if args["parallel"] == true
 
-        result = Query::Show.new(catalog: catalog, pleiades: @pleiades).run(urn)
+        query = Query::Show.new(catalog: catalog, pleiades: @pleiades, tibetan_words: @tibetan_words)
+        result = query.run(urn)
         if result.nil?
           return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
                       "what this corpus holds")
@@ -812,6 +828,7 @@ module Nabu
                   # define payload shape (P22-2), license-withheld by the same rule.
                   when Query::Define::Result then define_payload(result)
                   end
+        payload = segmented_payload(query, result, payload) if args["segmented"] == true
         # Owner notes ride BY DEFAULT (P24-1: "your own library metadata is
         # useful context") — and only here, after the withhold gate, so a
         # note can never leak a withheld text's content frame.
@@ -1786,6 +1803,30 @@ module Nabu
       def note_payload(note)
         base = { topic: note.topic, added: note.added, note: note.note }
         note.tags.empty? ? base : base.merge(tags: note.tags)
+      end
+
+      # nabu_show `segmented` (P54-2): the CLI's --segmented under the frozen
+      # additive contract. Applicable (a Tibetan row, nabu-data synced): each
+      # passage record gains a present-only "segmented" key — the SAME
+      # space-joined rendering the CLI prints (Query::Show#segmented_text,
+      # the one-serializer rule). Not applicable: a present-only top-level
+      # "segmentation_note" mirrors the CLI's one honest note line. Existing
+      # keys never change; flag off = byte-identical payloads.
+      def segmented_payload(query, result, payload)
+        language = result.respond_to?(:language) ? result.language : nil
+        note = query.segmentation_note(language)
+        return payload.merge(segmentation_note: note) if note
+
+        case result
+        when Query::Show::PassageResult
+          payload.merge(segmented: query.segmented_text(result.text))
+        when Query::Show::DocumentResult, Query::Show::RangeResult
+          payload.merge(passages: payload.fetch(:passages).map do |line|
+            line.merge(segmented: query.segmented_text(line.fetch(:text)))
+          end)
+        else
+          payload
+        end
       end
 
       # Every listed passage carries language + license_class: both are
