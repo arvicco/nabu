@@ -1,7 +1,7 @@
 # nabu-data fixtures (P51-W6 — the two-way loop closes)
 
-Real published samples for **Nabu::FormLemma** and
-**Nabu::Adapters::NabuData** — the datasets Nabu itself PUBLISHES to
+Real published samples for **Nabu::FormLemma**, **Nabu::TibetanWords**
+and **Nabu::Adapters::NabuData** — the datasets Nabu itself PUBLISHES to
 <https://github.com/arvicco/nabu-data> (built by `nabu data build`,
 docs/nabu-data.md), registered back as a feature module (kind: module)
 and consumed like any upstream. Kept rows are **byte-verbatim** published
@@ -19,9 +19,30 @@ canonical tree (`san/form-lemma/` as in the repo).
     Digital Corpus of Sanskrit, CC BY 4.0, at DCS commit `04e0778`).
 - **License:** CC BY 4.0 (the repo LICENSE is the CC BY 4.0 legalcode;
   per-dataset upstream chains ride each datapackage.json).
-- The `lemmas.csv` sidecar and the two `xct/` datasets are NOT sampled:
-  Nabu::FormLemma reads only `form-lemma.csv` (the xct consumers are
-  future seams).
+- The `lemmas.csv` sidecar and the other `xct/` datasets are NOT
+  sampled: Nabu::FormLemma reads only `form-lemma.csv`, Nabu::TibetanWords
+  only `xct/segmentation/segmentation.csv` (below).
+
+## xct/segmentation (P54-1 — Nabu::TibetanWords)
+
+- **Retrieved:** 2026-07-30, from the local `~/Dev/nabu-data` working
+  tree, clean at commit `4640f73` ("Eleventh dataset: sux/value-signs —
+  the Oracc Sign List, flattened").
+  - `xct/segmentation/segmentation.csv` — full published file 319,162
+    rows, sha256
+    `29a17627200cbd58c1277bed75e3738fca9118409bdbc14f2b2a11ebb66c50cc`.
+- **Kept:** the header plus the FIRST 300 rows, byte-verbatim — the
+  gold segmentation of `urn:nabu:soas-tibetan:buston` passages 1–4
+  (Tier=gold throughout, 179 distinct Form spellings). The opening rows
+  are the seam test's expectations: rows 1–4 (`བདེ་བ`, `ར་`, `གཤེགས་པ`,
+  `འི་` at offsets 0/5/7/14) are exactly the split Nabu::TibetanWords
+  must reproduce from the slice's own token counts, clitic splits
+  included.
+- Refresh: from a clean checkout at the recorded commit,
+  `head -301 xct/segmentation/segmentation.csv`. A new dataset release
+  changes the full-file sha and MAY reorder rows — re-derive by content
+  (the buston opening) and update the commit, sha and counts here and
+  in `test/tibetan_words_test.rb`.
 
 ## What was kept (269 of 428,825 rows + header)
 
