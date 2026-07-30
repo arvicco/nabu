@@ -266,6 +266,67 @@ module MCP
                    "below the real threshold the note is byte-identical to before P42-2")
     end
 
+    # -- nabu_search words: the Tibetan word-grain filter (P54-4) --------------
+    # Same discriminating pair as the query-layer tests: the syllable
+    # sequence རབ་སྟོན once as a true word and once as an accidental run
+    # across the གསུང་རབ | སྟོན་པ word boundary. The payload contract is
+    # ADDITIVE: no key without the flag; a present-only word_grain marker
+    # when the filter ran; a present-only word_grain_note when it degraded.
+
+    def tibetan_seam
+      Nabu::TibetanWords.load(Nabu::TestSupport.fixtures("nabu-data"))
+    end
+
+    def seed_tibetan_pair
+      doc = make_document(urn: "urn:d:xct", title: "Buston", language: "xct")
+      make_passage(doc, urn: "urn:d:xct:word", text: "རབ་སྟོན།", sequence: 0, language: "xct")
+      make_passage(doc, urn: "urn:d:xct:run", text: "གསུང་རབ་སྟོན་པ།", sequence: 1, language: "xct")
+      rebuild!
+    end
+
+    def test_search_words_filters_and_marks_the_payload_additively
+      seed_tibetan_pair
+      rig = tools(tibetan_words: tibetan_seam)
+
+      plain = payload(rig.call("nabu_search", { "query" => "རབ་སྟོན" }))
+      assert_equal 2, plain.fetch("matches").size
+      refute plain.key?("word_grain"), "the frozen payload gains no key without the flag"
+      refute plain.key?("word_grain_note")
+
+      filtered = payload(rig.call("nabu_search", { "query" => "རབ་སྟོན", "words" => true }))
+      assert_equal(%w[urn:d:xct:word], filtered.fetch("matches").map { |hit| hit.fetch("urn") },
+                   "the accidental cross-boundary run is simply absent")
+      assert filtered.fetch("word_grain"), "present-only marker: the filter ran"
+      refute filtered.key?("word_grain_note")
+    end
+
+    def test_search_words_degrades_with_a_note_when_the_module_is_absent
+      seed_tibetan_pair
+      reply = payload(tools.call("nabu_search", { "query" => "རབ་སྟོན", "words" => true }))
+      assert_equal 2, reply.fetch("matches").size, "plain results — degraded, never an error"
+      assert_equal "word-grain: nabu-data module not synced — run: nabu sync nabu-data",
+                   reply.fetch("word_grain_note")
+      refute reply.key?("word_grain")
+    end
+
+    def test_search_words_degrades_for_a_non_tibetan_query
+      seed_corpus
+      reply = payload(tools.call("nabu_search", { "query" => "μηνιν", "words" => true }))
+      refute_empty reply.fetch("matches"), "plain results ride through"
+      assert_equal "word-grain: only for Tibetan-script queries", reply.fetch("word_grain_note")
+      refute reply.key?("word_grain")
+    end
+
+    def test_search_words_refuses_lemma_and_near_composition
+      seed_corpus
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "λέγω", "words" => true })
+      end
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "query" => "μηνιν", "near" => "θεα", "words" => true })
+      end
+    end
+
     def test_search_lemma_mode_finds_inflected_attestations
       doc = make_document(urn: "urn:d:tb", title: "Treebank")
       make_passage(doc, urn: "urn:d:tb:1", text: "σὺ δὲ εἶπας.", sequence: 0,

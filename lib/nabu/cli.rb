@@ -1140,6 +1140,12 @@ module Nabu
     option :word, type: :boolean, default: false,
                   desc: "Whole-word match: the query must land on a word boundary in the stored " \
                         "text (ἦ finds ἦ, not ἦμαρ); refuses spaceless CJK/kana"
+    option :words, type: :boolean, default: false,
+                   desc: "Tibetan word-grain match (P54-4): keep only hits whose matched span " \
+                         "aligns with word boundaries (nabu-data xct/segmentation) — Tibetan is " \
+                         "indexed at syllable grain, so a plain query also lands on accidental " \
+                         "runs across word boundaries; non-Tibetan queries or an unsynced module " \
+                         "degrade to plain search with a note"
     display_option
     def search(query = nil)
       query = query.to_s.strip
@@ -1181,6 +1187,12 @@ module Nabu
       if options[:word] && (msg = Nabu::Query::Search.word_refusal_for(query))
         raise Thor::Error, "search: #{msg}"
       end
+      if options[:words] && (query.empty? || options[:fuzzy] || options[:near] || options[:lemma] ||
+                             options[:morph] || options[:exact] || options[:word] || char_filter_options?)
+        raise Thor::Error, "search: --words is the Tibetan word-grain filter over the plain text " \
+                           "query — it needs a text query and does not combine with --exact/--word/" \
+                           "--fuzzy/--near/--lemma/--morph or the character-structure filters"
+      end
 
       if char_filter_options?
         if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
@@ -1219,11 +1231,11 @@ module Nabu
                                     facets: facets, source: options[:source], sources: axis_slugs,
                                     loans: loans, meter: options[:meter],
                                     meter_pattern: options[:meter_pattern],
-                                    exact: options[:exact], word: options[:word])
+                                    exact: options[:exact], word: options[:word], words: options[:words])
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
                                     incomplete: searcher.incomplete_hint, exact: options[:exact],
                                     word: options[:word], rank_note: searcher.rank_note,
-                                    meter_note: searcher.meter_note)
+                                    meter_note: searcher.meter_note, words_note: searcher.words_note)
       print_display_footer
     ensure
       catalog&.disconnect
@@ -4890,7 +4902,8 @@ module Nabu
       # page never masquerades as a complete answer.
       def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
                                exact: false, word: false, proximity: false, rank_note: nil,
-                               browse: false, from: nil, to: nil, place: nil, meter_note: nil)
+                               browse: false, from: nil, to: nil, place: nil, meter_note: nil,
+                               words_note: nil)
         if results.empty?
           say "no matches"
           # Empty-under-filter honesty (P35): --exact/--word suppressed the folded
@@ -4907,6 +4920,9 @@ module Nabu
           # --meter says what layer it filtered on — or that the layer is
           # empty / the code unknown — never a silent zero.
           say "note: #{meter_note}" if meter_note
+          # The word-grain degrade note (P54-4): --words could not filter
+          # (non-Tibetan query / unsynced module) — plain search served.
+          say "note: #{words_note}" if words_note
           say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
@@ -4921,6 +4937,7 @@ module Nabu
             "#{browse_window_footer(from: from, to: to, place: place) if browse}" \
             "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{meter_note}" if meter_note
+        say "note: #{words_note}" if words_note
         say "note: #{incomplete}" if incomplete
         print_search_credits(results)
       end
