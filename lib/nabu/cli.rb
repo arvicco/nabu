@@ -1674,6 +1674,13 @@ module Nabu
       nothing invented). A passage without token annotations, and a
       document/range urn, say so.
 
+      SEGMENTED (--segmented): renders Tibetan-language rows (xct/bod/otb)
+      with word boundaries — the stored text with a space inserted at each
+      boundary (tokens verbatim, trailing tsheg kept), segmented through
+      the published nabu-data xct/segmentation dataset. An off-language
+      row, or a box that has not run `nabu sync nabu-data`, prints the
+      plain text plus one honest note.
+
       Use cases: read the real edition text behind a search snippet; audit
       a document's revision/provenance history after a sync; eyeball what
       "withdrawn" or "retired upstream" actually holds; read a Greek work
@@ -1694,12 +1701,18 @@ module Nabu
                    desc: "With --random: how many passages (default 1, cap #{Nabu::Query::Random::MAX_COUNT})"
     option :tokens, type: :boolean, default: false,
                     desc: "Append the passage's stored token annotations verbatim (form + every key present)"
+    option :segmented, type: :boolean, default: false,
+                       desc: "Render Tibetan (xct/bod/otb) passages with word boundaries " \
+                             "(needs the synced nabu-data module)"
     display_option
     def show(urn = nil)
       urn = urn.to_s.strip
       display_mode
       if options[:tokens] && (options[:random] || options[:parallel])
         raise Thor::Error, "show: --tokens does not compose with --random/--parallel"
+      end
+      if options[:segmented] && (options[:random] || options[:parallel])
+        raise Thor::Error, "show: --segmented does not compose with --random/--parallel"
       end
 
       config = Nabu::Config.load
@@ -1722,10 +1735,22 @@ module Nabu
       # pleiades: :auto — the findspot line (P44-2) feature-detects the
       # gazetteer dump lazily; nothing loads unless the shown document
       # carries a captured Pleiades id.
-      result = Nabu::Query::Show.new(catalog: catalog, pleiades: :auto).run(urn)
+      show_query = Nabu::Query::Show.new(catalog: catalog, pleiades: :auto)
+      result = show_query.run(urn)
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
 
+      # --segmented (P54-2): the word-broken Tibetan rendering. The
+      # segmentation is Query::Show's (the one serializer MCP shares); here
+      # we only swap texts on a copy of the result — or keep the plain
+      # output plus the query layer's one honest note line.
+      seg_note = nil
+      if options[:segmented]
+        seg_note = show_query.segmentation_note(result.respond_to?(:language) ? result.language : nil)
+        result = segmented_show_result(show_query, result) if seg_note.nil?
+      end
+
       print_show(result)
+      say seg_note if seg_note
       print_show_tokens(result) if options[:tokens]
       print_linked_footer(config, result.urn)
       print_notes_footer(catalog, result)
@@ -2772,7 +2797,12 @@ module Nabu
         # The Oracc Sign List (P53-2): :auto = feature-detect canonical/osl
         # lazily per call (nabu_signs); an unsynced box notes the sync hint,
         # every other tool byte-identical (the lane-off rule).
-        sign_list: :auto
+        sign_list: :auto,
+        # Tibetan word segmentation (P54-2): :auto = feature-detect
+        # canonical/nabu-data lazily inside Query::Show (nothing loads
+        # unless nabu_show is asked for a segmented render); an unsynced
+        # box answers the flag with the sync-hint note.
+        tibetan_words: :auto
       )
       $stdout.sync = true
       install_mcp_signal_traps
@@ -4221,6 +4251,22 @@ module Nabu
         when Nabu::Query::Show::DocumentResult then print_show_document(result)
         when Nabu::Query::Show::RangeResult then print_show_range(result)
         when Nabu::Query::Define::Result then print_define_entry(result)
+        end
+      end
+
+      # `show --segmented` (P54-2): the result with every passage text
+      # word-broken through Query::Show#segmented_text — a copy, so every
+      # existing print path renders unchanged (tokens verbatim, spaces at
+      # word boundaries). Only reached when the segmentation note is nil
+      # (a Tibetan row with the nabu-data dataset synced).
+      def segmented_show_result(query, result)
+        case result
+        when Nabu::Query::Show::PassageResult
+          result.with(text: query.segmented_text(result.text))
+        when Nabu::Query::Show::DocumentResult, Nabu::Query::Show::RangeResult
+          result.with(passages: result.passages.map { |line| line.with(text: query.segmented_text(line.text)) })
+        else
+          result
         end
       end
 

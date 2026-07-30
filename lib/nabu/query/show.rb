@@ -110,9 +110,15 @@ module Nabu
       # catalog place index (instant reads), paying the in-memory dump load
       # (~3 s / ~3.9 GB peak RSS on the real dump) only while the index is
       # not yet derived.
-      def initialize(catalog:, pleiades: nil)
+      # +tibetan_words+ (P54-2): the Nabu::TibetanWords segmentation seam
+      # behind `show --segmented` — nil (lane off), a loaded seam (tests),
+      # or :auto (default), which feature-detects canonical/nabu-data
+      # LAZILY and memoizes (define.rb's form_lemma/verb_lemma contract).
+      # Nothing loads unless a renderer actually asks for segmented output.
+      def initialize(catalog:, pleiades: nil, tibetan_words: :auto)
         @catalog = catalog
         @pleiades = pleiades
+        @tibetan_words = tibetan_words
       end
 
       # Resolve +urn+ to a PassageResult, a DocumentResult, a RangeResult, or
@@ -146,7 +152,61 @@ module Nabu
         Define.new(catalog: @catalog).by_urn(urn)
       end
 
+      # -- segmented rendering (P54-2) ------------------------------------
+      # `show --segmented` / nabu_show `segmented: true` both render through
+      # these two methods — the ONE serializer rule. The CLI swaps passage
+      # texts on a copy of the result; MCP adds a present-only key.
+
+      # The row languages segmentation serves: Classical (xct), modern (bod)
+      # and Old (otb) Tibetan — the set define's verb lane gates on
+      # (VERB_LEMMA_LANGUAGES), but gated here on the ROW's language.
+      # const: the Tibetan fold family (xct/bod/otb), mirroring define's
+      # VERB_LEMMA_LANGUAGES and Normalize's fold registration — a registry
+      # mirror, not a census.
+      SEGMENTED_LANGUAGES = %w[xct bod otb].freeze
+
+      # Why segmented rendering is off for a row in +language+ — the one
+      # honest note line both surfaces print (CLI verbatim, MCP as
+      # "segmentation_note") — or nil when it is on (a Tibetan-language row
+      # with the nabu-data dataset synced). Language gate first: a Latin
+      # row's honest answer is its language, never a sync hint.
+      def segmentation_note(language)
+        unless segmented_language?(language)
+          label = language.to_s.strip
+          label = "unlabeled" if label.empty?
+          return "segmentation: only for Tibetan-language texts (this row: #{label})"
+        end
+        return nil if tibetan_words
+
+        "segmentation: nabu-data module not synced — run: nabu sync nabu-data"
+      end
+
+      # +text+ with a space inserted at each word boundary: the seam's
+      # tokens are exact substrings of the input (trailing tsheg kept on the
+      # token), space-joined. Without a seam the text passes through
+      # untouched — renderers gate on #segmentation_note first; this is
+      # defense in depth, never a silent half-feature.
+      def segmented_text(text)
+        words = tibetan_words
+        return text if words.nil?
+
+        words.segment(text).map(&:form).join(" ")
+      end
+
       private
+
+      def segmented_language?(language)
+        !language.nil? && Nabu::Languages.code_variants(language.to_s).intersect?(SEGMENTED_LANGUAGES)
+      end
+
+      # Feature-detect + memoize the seam (:auto → canonical/nabu-data;
+      # absent tree is nil — the lila/form_lemma posture: lane off politely,
+      # byte-identical default behavior).
+      def tibetan_words
+        return @tibetan_words unless @tibetan_words == :auto
+
+        @tibetan_words = Nabu::TibetanWords.load_default
+      end
 
       # The citation-prefix listing (P44). The prefix's document is found by
       # probing ever-shorter ":"-bounded heads of +urn+ against the documents
