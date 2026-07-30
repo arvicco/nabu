@@ -6017,6 +6017,70 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- place & findspot pins (P44-2/P44-3; un-hidden P54-r2: these sat
+  # below `private` and never ran) ----------------------------------------
+
+  def test_place_renders_the_card_and_holdings_for_an_exact_title
+    with_place_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[place sparta]) }
+      assert_nil status
+      assert_match(/Sparta, Pleiades 570685 — settlement/, out, "the resolver card headline")
+      assert_match(/37\.08, 22\.42/, out, "reprPoint as lat, lon")
+      assert_match(/holdings: 2 isicily · 1 edh/, out, "id-matched counts grouped by source")
+    end
+  end
+
+  def test_place_accepts_the_numeric_id_form
+    with_place_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[place 570685]) }
+      assert_nil status
+      assert_match(/Sparta, Pleiades 570685/, out)
+      assert_match(/holdings: 2 isicily · 1 edh/, out)
+    end
+  end
+
+  def test_place_without_the_dump_still_counts_holdings_for_an_id
+    with_place_corpus(dump: false) do |config|
+      out, _err, status = with_config(config) { run_cli(%w[place 570685]) }
+      assert_nil status
+      assert_match(/Pleiades 570685 — gazetteer dump not synced/, out)
+      assert_match(/nabu sync pleiades/, out)
+      assert_match(/holdings: 2 isicily · 1 edh/, out)
+    end
+  end
+
+  def test_place_without_the_dump_refuses_a_title_lookup_clearly
+    with_place_corpus(dump: false) do |config|
+      _out, err, status = with_config(config) { run_cli(%w[place Sparta]) }
+      assert_equal 1, status
+      assert_match(/nabu sync pleiades/, err)
+    end
+  end
+
+  def test_place_unknown_title_is_a_clean_error
+    with_place_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[place Atlantis]) }
+      assert_equal 1, status
+      assert_match(/no place titled/, err)
+    end
+  end
+
+  def test_show_renders_the_findspot_line_when_the_dump_is_on_disk
+    with_place_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:t:isicily:a]) }
+      assert_nil status
+      assert_match(/findspot: Sparta — Pleiades 570685 \(settlement/, out)
+    end
+  end
+
+  def test_show_without_the_dump_is_byte_identical_no_findspot_line
+    with_place_corpus(dump: false) do |config|
+      out, _err, status = with_config(config) { run_cli(%w[show urn:t:isicily:a]) }
+      assert_nil status
+      refute_match(/findspot/, out, "feature-detected: absent dump degrades silently (the LiLa precedent)")
+    end
+  end
+
   private
 
   def with_env(pairs)
@@ -6133,67 +6197,6 @@ class CLITest < Minitest::Test
           content_sha256: "x", revision: 1, withdrawn: false, annotations_json: "{}"
         )
       end
-    end
-  end
-
-  def test_place_renders_the_card_and_holdings_for_an_exact_title
-    with_place_corpus do |config|
-      out, _err, status = with_config(config) { run_cli(%w[place sparta]) }
-      assert_nil status
-      assert_match(/Sparta, Pleiades 570685 — settlement/, out, "the resolver card headline")
-      assert_match(/37\.08, 22\.42/, out, "reprPoint as lat, lon")
-      assert_match(/holdings: 2 isicily · 1 edh/, out, "id-matched counts grouped by source")
-    end
-  end
-
-  def test_place_accepts_the_numeric_id_form
-    with_place_corpus do |config|
-      out, _err, status = with_config(config) { run_cli(%w[place 570685]) }
-      assert_nil status
-      assert_match(/Sparta, Pleiades 570685/, out)
-      assert_match(/holdings: 2 isicily · 1 edh/, out)
-    end
-  end
-
-  def test_place_without_the_dump_still_counts_holdings_for_an_id
-    with_place_corpus(dump: false) do |config|
-      out, _err, status = with_config(config) { run_cli(%w[place 570685]) }
-      assert_nil status
-      assert_match(/Pleiades 570685 — gazetteer dump not synced/, out)
-      assert_match(/nabu sync pleiades/, out)
-      assert_match(/holdings: 2 isicily · 1 edh/, out)
-    end
-  end
-
-  def test_place_without_the_dump_refuses_a_title_lookup_clearly
-    with_place_corpus(dump: false) do |config|
-      _out, err, status = with_config(config) { run_cli(%w[place Sparta]) }
-      assert_equal 1, status
-      assert_match(/nabu sync pleiades/, err)
-    end
-  end
-
-  def test_place_unknown_title_is_a_clean_error
-    with_place_corpus do |config|
-      _out, err, status = with_config(config) { run_cli(%w[place Atlantis]) }
-      assert_equal 1, status
-      assert_match(/no place titled/, err)
-    end
-  end
-
-  def test_show_renders_the_findspot_line_when_the_dump_is_on_disk
-    with_place_corpus do |config|
-      out, _err, status = with_config(config) { run_cli(%w[show urn:t:isicily:a]) }
-      assert_nil status
-      assert_match(/findspot: Sparta — Pleiades 570685 \(settlement/, out)
-    end
-  end
-
-  def test_show_without_the_dump_is_byte_identical_no_findspot_line
-    with_place_corpus(dump: false) do |config|
-      out, _err, status = with_config(config) { run_cli(%w[show urn:t:isicily:a]) }
-      assert_nil status
-      refute_match(/findspot/, out, "feature-detected: absent dump degrades silently (the LiLa precedent)")
     end
   end
 
