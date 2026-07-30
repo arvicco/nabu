@@ -2146,6 +2146,83 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "signs URN|TEXT", "Sign-by-sign reading of ATF transliteration through the Oracc Sign List"
+    long_desc <<~HELP, wrap: false
+      The cuneiform sign desk (P53-2): ATF transliteration resolved token by
+      token through the Oracc Sign List (the osl module, `nabu sync osl`)
+      into sign identities — value → sign name → Unicode codepoint(s)/glyph.
+      The sign list adds IDENTITY, not curriculum: what each spelled value
+      is, never what to make of it.
+
+      Input is EITHER a passage/document urn out of the ATF corpora
+      (cdli/oracc/ebl/etcsl shelves — the catalog is opened read-only,
+      language taken from the row) OR raw ATF transliteration text
+      (language via --lang; no catalog needed). C-ATF ASCII folds apply
+      (sz→š, s,→ṣ, t,→ṭ, '→ʾ, u2→u₂); the ETCSL romanization (c→š, j→ŋ)
+      folds automatically for etcsl urns and under --dialect etcsl for raw
+      text.
+
+      Every token carries one honest status: deterministic · qualified
+      (valueₓ(SIGN) — the explicit sign resolved) · ambiguous (ALL candidate
+      signs listed, never one silently) · no-codepoint (sign resolved,
+      honestly unencoded upstream) · broken (x, [...]) · unknown (not in the
+      OSL — said plainly). Determinatives ({d}, {gesz}) are unbraced and
+      marked det. Absent data is ABSENT, never "—".
+
+      --json emits the frozen machine contract (one object: mode/urn/
+      language/dialect/source envelope, per-line token records with
+      input_value · status · sign_name · codepoints[] · candidates[] ·
+      language_qualifier) — the same shape the MCP nabu_signs tool serves;
+      downstream consumers (Edubba reading panels) script against it.
+
+      Examples:
+        nabu signs 'lugal-e {d}en-lil2-ra'      # raw C-ATF, folded and resolved
+        nabu signs --dialect etcsl 'cag4-ta'    # ETCSL romanization
+        nabu signs urn:nabu:cdli:p469841        # every line of the tablet
+        nabu signs --json 'szesz' | jq .        # the frozen contract
+    HELP
+    option :lang, type: :string, banner: "CODE",
+                  desc: "Language filter for %lang-qualified sign readings (urn mode " \
+                        "defaults to the passage's language)"
+    option :dialect, type: :string, banner: "NAME",
+                     desc: "Transliteration dialect: etcsl (c→š, j→ŋ; auto for etcsl urns)"
+    option :json, type: :boolean, default: false,
+                  desc: "Emit the frozen machine-readable contract instead of columns"
+    def signs(*input)
+      raw = input.join(" ").strip
+      if raw.empty?
+        raise Thor::Error, "signs: give a passage urn or raw ATF transliteration " \
+                           "(e.g. nabu signs 'lugal-e {d}en-lil2-ra')"
+      end
+
+      config = Nabu::Config.load
+      list = Nabu::SignList.load_default(config: config)
+      if list.nil?
+        raise Thor::Error, "signs: no sign list on this box yet — run `nabu sync osl` " \
+                           "(the Oracc Sign List module), then retry"
+      end
+
+      dialect = signs_dialect(options[:dialect])
+      catalog = nil
+      if raw.start_with?("urn:")
+        catalog = open_catalog(config)
+        raise Thor::Error, "signs: no corpus — run nabu sync or nabu rebuild" unless catalog
+
+        result = signs_urn_result(raw, list: list, catalog: catalog, dialect: dialect)
+      else
+        result = Nabu::Query::Signs.new(sign_list: list)
+                                   .run_text(raw, language: options[:lang], dialect: dialect || :catf)
+      end
+
+      if options[:json]
+        say JSON.generate(Nabu::Query::Signs.json_payload(result))
+      else
+        print_signs(result)
+      end
+    ensure
+      catalog&.disconnect
+    end
+
     desc "language [CODE]", "The language-code desk reference: name, family, context, holdings"
     long_desc <<~HELP, wrap: false
       Explains any language code the library surfaces — the corpus tags
@@ -2691,7 +2768,11 @@ module Nabu
         # index when a sync/rebuild has built it (P45-6, instant), else the
         # canonical dump; an unsynced box degrades exactly like the CLI,
         # never crashes.
-        pleiades: :auto
+        pleiades: :auto,
+        # The Oracc Sign List (P53-2): :auto = feature-detect canonical/osl
+        # lazily per call (nabu_signs); an unsynced box notes the sync hint,
+        # every other tool byte-identical (the lane-off rule).
+        sign_list: :auto
       )
       $stdout.sync = true
       install_mcp_signal_traps
@@ -5827,6 +5908,91 @@ module Nabu
         say result.body
         print_reflexes(result.reflexes)
         print_resolved_citations(result)
+      end
+
+      # -- nabu signs (P53-2) ----------------------------------------------------
+
+      def signs_dialect(name)
+        return nil if name.nil?
+        return name.to_sym if Nabu::AtfTokenizer::DIALECTS.map(&:to_s).include?(name)
+
+        raise Thor::Error, "signs: unknown dialect #{name.inspect} — the known dialects are " \
+                           "#{Nabu::AtfTokenizer::DIALECTS.join(', ')} (catf is the default)"
+      end
+
+      # Urn mode: language from the row (--lang overrides), the :etcsl
+      # dialect auto-selected for the etcsl shelf (--dialect overrides).
+      def signs_urn_result(urn, list:, catalog:, dialect:)
+        result = Nabu::Query::Signs.new(sign_list: list, catalog: catalog)
+                                   .run_urn(urn, language: options[:lang], dialect: dialect)
+        raise Thor::Error, "signs: urn not found: #{urn}" if result.nil?
+
+        result
+      rescue Nabu::Query::Signs::Error => e
+        raise Thor::Error, "signs: #{e.message}"
+      end
+
+      # The `nabu char` mold: readable columns, absent data ABSENT (a broken
+      # token's row is its status; an unknown one says so plainly).
+      def print_signs(result)
+        say signs_header(result)
+        result.lines.each do |line|
+          say ""
+          say "#{line.urn || "line #{line.number}"}  ·  #{line.text}"
+          line.tokens.each { |token| print_signs_token(token) }
+        end
+        say ""
+        say signs_footer(result)
+      end
+
+      def signs_header(result)
+        parts = [result.mode == :urn ? result.urn : "raw ATF"]
+        parts << result.language if result.language
+        parts << "[#{result.source_slug}]" if result.source_slug
+        parts << "dialect etcsl (c→š, j→ŋ)" if result.dialect == :etcsl
+        parts.join("  ·  ")
+      end
+
+      def print_signs_token(token)
+        columns = [token.input_value.ljust(14), (token.determinative ? "det" : "   "),
+                   token.status.ljust(13), signs_token_detail(token)]
+        say "  #{columns.join(' ')}".rstrip
+        token.candidates.each do |candidate|
+          say "  #{' ' * 19}#{candidate.status.ljust(13)} #{signs_candidate_detail(candidate)}"
+        end
+      end
+
+      def signs_token_detail(token)
+        case token.status
+        when "ambiguous" then "#{token.candidates.size} candidates:"
+        when "unknown" then "not in the sign list"
+        when "broken" then nil
+        else signs_candidate_detail(token)
+        end
+      end
+
+      # sign name · codepoints · glyph · (%lang) · (form of X) — only what
+      # the record holds; an unencoded sign says "unencoded". The form-of
+      # tail is the kunga₃ fix: a sign and its same-named variant form of
+      # ANOTHER sign must never render as indistinguishable twins.
+      def signs_candidate_detail(token)
+        parts = [token.sign_name]
+        parts << (token.codepoints ? token.codepoints.join(" ") : "unencoded")
+        parts << token.glyph if token.glyph
+        parts << "(%#{token.language_qualifier})" if token.language_qualifier
+        parts << "(form of #{token.form_of})" if token.form_of
+        parts.compact.join("  ")
+      end
+
+      def signs_footer(result)
+        tokens = result.lines.flat_map(&:tokens)
+        tally = tokens.group_by(&:status).transform_values(&:size)
+        parts = ["#{tokens.size} token(s)"]
+        %w[deterministic qualified ambiguous no-codepoint broken unknown].each do |status|
+          parts << "#{status} #{tally[status]}" if tally[status]
+        end
+        parts << "#{result.skipped_lines} structural line(s) skipped" if result.skipped_lines.positive?
+        parts.join("  ·  ")
       end
 
       # The character card (P37-4): each section printed only when a held

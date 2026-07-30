@@ -2,12 +2,12 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes eleven tools — search,
+(Claude Code, Claude Desktop) over stdio. It exposes twelve tools — search,
 read by urn, concordance, cross-source alignment, dictionary lookup, the
 reconstruction walk, intertext (quotation/echo finding), cognates-in-parallel,
-the mined links graph, the place desk, and coverage — so a model can look
-things up in your texts, quote them, and cite them, without any ability to
-change the collection.
+the mined links graph, the place desk, the cuneiform sign desk, and coverage —
+so a model can look things up in your texts, quote them, and cite them,
+without any ability to change the collection.
 
 This is also a **rehearsal for `nabu.ac`** (concept §"eventual read-only query
 endpoint" / architecture §9): the same tool contract that will one day sit
@@ -35,7 +35,7 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The eleven tools
+## 2. The twelve tools
 
 Every passage in every response carries **urn**, **language**, and
 **license_class** (search, concord, align, and parallels rows also carry the
@@ -308,6 +308,33 @@ derived at every pleiades sync/rebuild); the in-memory dump load (~3 s /
 P44-2 v1 cost) survives only as the fallback while the index is not yet
 derived.
 
+### `nabu_signs`
+
+The cuneiform sign desk (P53-2's `nabu signs`, exposed the same phase): ATF
+transliteration resolved token by token through the **local** Oracc Sign List
+(the osl feature module, `nabu sync osl`) into sign identities — value → sign
+name → Unicode codepoint(s). Give exactly one of `urn` (a passage or document
+urn out of the ATF corpora — cdli/oracc/ebl/etcsl — language read from the
+row, the catalog opened read-only) or `text` (raw ATF; `lang` optional). The
+C-ATF ASCII folds apply (sz→š, s,→ṣ, t,→ṭ, '→ʾ, u2→u₂); `dialect: "etcsl"`
+adds the ETCSL romanization (c→š, j→ŋ), auto-selected for etcsl urns. Every
+token carries one honest status — `deterministic` · `qualified` (a
+valueₓ(SIGN) form, the explicit sign resolved) · `ambiguous` (**all**
+candidate signs listed, never one silently) · `no-codepoint` (sign resolved,
+honestly unencoded upstream) · `broken` (x, [...]) · `unknown` (not in the
+OSL, said plainly) — and determinatives are unbraced and flagged. The payload
+IS the frozen `nabu signs --json` contract (one serializer, `Query::Signs`):
+per-token records `input_value` / `status` / `sign_name` / `codepoints[]` /
+`candidates[]` / `language_qualifier`, plus present-only `determinative` and
+`form_of` (a value resolving through another sign's variant form names its
+parent — a sign and its same-named form never render as indistinguishable
+twins), script-consumed downstream (the Edubba
+reading panels — the boundary holds: **the sign list adds identity, not
+curriculum**). Bounded (default 40 lines, max 200, honest truncation note);
+with the sign list not on this box the tool answers a graceful state note
+with the sync hint (every other tool byte-identical — the lane-off rule);
+urn mode passes the restricted-exclusion gate.
+
 ### `nabu_status`
 
 Coverage of the corpus, and the tool to call to interpret an empty search
@@ -487,6 +514,7 @@ new, present-only keys.
 | `list SOURCE --lang` implying the mode (P44-r1) | `nabu list` | — | documented gap (subsumed by the list gap above; the filters themselves exist on every MCP tool that lists passages) |
 | Refusal parity | date/place × lemma/near refused; near × morph refused; morph without lemma refused | same refusals, as `isError` the model can self-correct | parity (pinned P13-6/P14-8/P15-2) |
 | Availability semantics after the `wired:` rename (P44-r4) | registry `wired:` drives `list`/`status` visibility | `nabu_status` — sources default to the enabled set; the frozen payload key stays **`enabled`**, mirroring `wired`; no payload byte changed | parity (pinned P44-3: `enabled` key asserted, `"wired"` asserted absent) |
+| The sign desk | `nabu signs URN\|TEXT [--lang] [--dialect etcsl] [--json]` (P53-2) | `nabu_signs` — the same `Query::Signs`, the payload IS the CLI's frozen `--json` contract (one serializer); bounded lines with an honest note; lane-off (no canonical/osl) answers the sync-hint note like the CLI's refusal | **added P53-2** — new tool, read-only; urn mode passes the restricted-exclusion gate |
 
 ---
 

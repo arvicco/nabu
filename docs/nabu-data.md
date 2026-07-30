@@ -183,6 +183,7 @@ no page update is a red suite, and vice versa.
 | `grc/meter` | available | gold-derived | CC-BY-4.0 | grc | hypotactic, perseus-greek, first1k-greek |
 | `jpn/kyujitai-fold` | available | gold | CC-BY-SA-4.0 | jpn | unihan, edrdg |
 | `lzh/kanripo-gaiji` | available | gold | CC-BY-SA-4.0 | lzh | — |
+| `sux/value-signs` | available | gold | CC-BY-4.0 | sux | osl |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -263,6 +264,14 @@ The two-lane old↔new kanji pair table (Unihan kJinmeiyoKanji reform pairs + KA
 The hand-curated resolution ladder for the Kanseki Repository's not-yet-encoded character references (427 faithful codepoints, 562 labeled substitutes, the IDS lane empty by census, everything else an honest ⬚ placeholder) — the same three TSVs Nabu's `--display reading` mode loads for lzh kanripo passages. BY-SA: curated from KR-Gaiji's charlist under the kanripo org grant (CC BY-SA 4.0).
 
 **Maintenance**: re-curate by hand after a `nabu sync kr-gaiji` advances charlist.org.txt (the P38-1 procedure); the curation is pinned to the charlist commit its file headers record, deliberately never auto-derived
+
+### `sux/value-signs` — Cuneiform value→sign table from the Oracc Sign List (readings, codepoints, concordances)
+
+**Status**: available · **Tier**: gold · **Anchoring**: none · **Inputs**: osl
+
+Flattens the Oracc Sign List (ex-OGSL, Veldhuis & Tinney, CC0 — the field's hand-curated sign registry) to one row per (value, sign) pair — OSL-spelled readings with stable @oid interop keys, Unicode codepoints (absence kept honest), value-level deprecation flags and in-band ambiguity, plus signs.csv/concordances.csv sidecars (variant forms, MZL/LAK/ABZL print-list numbers) — the table that upgrades Edubba's frequency instrument from value-counts to true sign-counts. The slug leads sux (Sumerian); the ~55 %akk-qualified readings ride the Language_Qualifier column — the scope call is stated in the dataset README.
+
+**Maintenance**: re-derive after each `nabu sync osl` (rolling master, no tags — a re-sync is an owner call; the stale-ingest guard enforces freshness); mechanical, no review needed beyond spot-checks
 
 ## What the rail never does
 
