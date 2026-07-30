@@ -76,7 +76,20 @@ pedecerto (Latin) / hypotactic (Greek) meter enrichment layer — matching the
 meter code/name (`H`, `P`, `dactylic hexameter`) and/or the exact foot
 pattern (`DSDS`), case-insensitively. The response note names the source
 layer when the facet is active, and an empty layer or unknown code explains
-itself (known meters listed) rather than returning a silent zero. Hits are
+itself (known meters listed) rather than returning a silent zero.
+
+Optional `words` (P54-4, text search only — refused with `lemma`/`near`): the
+Tibetan word-grain filter. Tibetan is indexed at **syllable** grain (tsheg-
+delimited), so a multi-syllable query also lands on an accidental syllable run
+crossing a word boundary; `words: true` keeps only hits whose matched span
+aligns with word boundaries per the nabu-data `xct/segmentation` dataset (any
+aligned occurrence in the passage counts; filtered-out hits are simply
+absent). When the filter ran, the response carries a present-only
+`word_grain: true`; a non-Tibetan query or an unsynced nabu-data module
+degrades to plain search with a present-only `word_grain_note` mirroring the
+CLI note — never an error.
+
+Hits are
 relevance-ranked and bounded, with an honest "showing k of N"
 note; a no-match response carries a one-line coverage hint so an empty result
 is interpretable. Each hit returns urn, language, license_class, source, the
@@ -508,6 +521,7 @@ new, present-only keys.
 | Findspot line | `nabu show` findspot (P44-2) | `nabu_show` — additive `findspot` key when the captured id resolves through the dump | **added P44-3** (pinned, incl. the dump-absent byte-identical case) |
 | Meter line | `nabu show` meter (P44-6/7 enrichments) | `nabu_show` — additive `meter` key on scanned passages | **added P44-3** (pinned) |
 | Meter search facet | `search --meter CODE [--meter-pattern PATTERN]` (P45-5) | `nabu_search` `meter`/`meter_pattern` — text mode only, refusal parity with lemma/near; the honesty note (source layer named, empty layer explained) rides the free-text `note` | **added P45-5** (pinned; no frozen payload key changed) |
+| Tibetan word-grain search | `search --words` (P54-4) | `nabu_search` `words` — text mode only, refusal parity with lemma/near; present-only `word_grain` key when the filter ran, present-only `word_grain_note` when it degraded (non-Tibetan query / nabu-data not synced) | **added P54-4** (pinned; additive keys only, flag-off byte-identical) |
 | `--lang` on search/concordance | `search`/`concord` `--lang` | `nabu_search` / `nabu_concord` `lang` | parity (pinned P8) |
 | `--lang`/`langs` on intertext/cognates | `parallels --lang`, `cognates --langs` | `nabu_parallels` `lang`, `nabu_cognates` `langs` | parity (pinned P15) |
 | Shelf-language scoping | `define --lang`, `etym --lang` | `nabu_define` / `nabu_etym` `lang` (define's enum live-derived) | parity (pinned P35-6) |
