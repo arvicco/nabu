@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 1 August 2026)</span> |
 |---|---|---|---|---|
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
 | `isicily` | inscriptions | attribution | wired · manual | 6,723 docs / 17,921 passages |
@@ -28,7 +28,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
 | `tir` | inscriptions | nc | wired · manual | 389 docs / 434 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `ett` 7,874 · `sga` 6,564 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `eng` 3,290 · `grc` 3,201 · `lat` 2,662 · `ine-pro` 1,905 · `osc` 954 … and 24 more (`nabu axis italic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 1 August 2026)</span>: `ett` 7,874 · `sga` 6,564 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `eng` 3,290 · `grc` 3,201 · `lat` 2,662 · `ine-pro` 1,905 · `osc` 954 … and 24 more (`nabu axis italic` lists all).
 
 ## The desk's instruments
 
