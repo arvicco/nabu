@@ -166,10 +166,14 @@ module Nabu
                  "`#{feature.slug}` — #{feature.tier} tier, anchoring: #{feature.anchoring}. " \
                  "Produced by `nabu data build #{feature.slug}` (Nabu #{Nabu::VERSION}); the " \
                  "producer-side contract is docs/nabu-data.md in the Nabu repository.", "",
-                 license_line(feature), "",
-                 feature.rationale, "",
-                 "## Maintenance", "", feature.maintenance, "",
-                 "## Provenance", ""]
+                 license_line(feature), ""]
+        # The plain-language overview (owner ruling 2026-07-31) leads when a
+        # builder supplies one — a non-specialist reads WHY before any
+        # technical section; the rationale stays the technical summary.
+        lines.push("## Why this dataset exists — in plain terms", "", result.overview, "") if result.overview
+        lines.push(feature.rationale, "",
+                   "## Maintenance", "", feature.maintenance, "",
+                   "## Provenance", "")
         lines.concat(provenance_lines(input_shas))
         lines << ""
         lines << "Recipe: #{result.recipe}"
