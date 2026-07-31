@@ -104,3 +104,63 @@ c7f3763e08084b1f6b02522c0459f15560b85b264391ceecb8c4202cfa4ddca6  Tamid English 
 d6afe445fe101c238020a011660082d9807337de28aaf78485a67f08f165d7dd  Mishnah Tamid English Kulp
 2cde737f4e9e320ed8c80babc9cbcef19dc914a96b8073d6815bc775a7847329  Tosefta Chagigah Hebrew Lieberman
 ```
+
+## P55-3 Midrash wave-2 files (TRIMMED, retrieved 2026-07-31)
+
+Wave-2 census against the SAME pinned 2026-07-02 index: the Midrash
+top-category holds **473 entries**; wave 2 takes the two
+category-delimited classical subtrees — `Midrash/Aggadah/Midrash Rabbah`
+exactly (110 entries; the ten classical collections; the Commentary
+sub-subtrees are out) and `Midrash/Halakhah` exactly (42 entries; both
+Mekhiltas, Sifra, the three Sifrei, Midrash Tannaim; Commentary out) —
+selecting **48 named files: 30 rabbah** (he "Midrash Rabbah -- TE" ×10;
+en "The Sefaria Midrash Rabbah, 2022" ×10 + SCT ×10) **+ 18
+midrash-halakhah** (he principal editions ×6; en SCT ×6 + Silverstein ×4
++ Lauterbach + Jaffee). The FLAT `Midrash/Aggadah` bucket (133 entries:
+Pesikta DeRav Kahana, Tanchuma, Pirkei DeRabbi Eliezer … shelved beside
+Yalkut Shimoni, Otzar Midrashim, Ein Yaakov, Legends of the Jews) is not
+category-separable into classical midrash vs later anthology → out of
+wave 2 by rule. New EXCLUDED_TITLES: "Footnotes on Mekhilta DeRabbi
+Shimon Ben Yochai" (apparatus volume sharing the Hoffman versionTitle)
+and "Ruth Rabbah (Lerner)" (duplicate-edition title whose SCT would ride
+the shelf-wide SCT naming). **Sifra's only Hebrew version (Venice 1545)
+says `"license": "unknown"` in its file** (full-GET verified) →
+known-unknown versions are not named (the Yerushalmi Venice rule); Sifra
+rides English-only. License reality measured on 6 bounded GETs
+(2026-07-31): "Public Domain" ×2 (Ruth Rabbah he TE ranged-GET, Sifrei
+Zuta Leipzig), "CC-BY" ×1 (The Sefaria Midrash Rabbah 2022), "unknown"
+×3 (Esther + Bereshit he TE, Sifra Venice) — **the TE Hebrew lane is
+per-file MIXED**: the named edition stays, the per-file gate censuses
+the unknowns (the wave-1 Kaufmann Pirkei Avot pattern). All strings are
+inside the known LICENSE_CLASSES set; anything else still loud-stops.
+
+Trims follow the house rule: every metadata key byte-identical, only the
+`text` arrays sliced, `json.dumps(indent=4, ensure_ascii=False)`
+round-trip verified byte-identical on all three untouched files first.
+
+| fixture | whole? | exercises |
+|---|---|---|
+| `json/Midrash/Aggadah/Midrash Rabbah/Ruth Rabbah/English/The Sefaria Midrash Rabbah, 2022.json` | TRIM | **CC-BY** → `license_override: attribution` (`eng`); the P55-3 **default-node quirk**: `text` is a dict keyed `["Petichta", ""]` — the named node cites `petichta.1`, the empty-titled MAIN node cites bare `1.1` (mirroring upstream's own "Ruth Rabbah 1:1"); trimmed to Petichta ×2 + chapters 1–2 → 31 passages (original sha256 `38a269d4…`, 222,702 bytes) |
+| `json/Midrash/Aggadah/Midrash Rabbah/Esther Rabbah/Hebrew/Midrash Rabbah -- TE.json` | TRIM | a named-edition file the gate SKIPS: `"license": "unknown"` on the TE lane (per-file mixed licensing censused, never ingested); also the rabbah `he→hbo` ruling exemplar via relicensed derivative in tests; trimmed to Petichta ×1 + chapter 1 (original sha256 `f9aa27e3…`, 357,234 bytes) |
+| `json/Midrash/Halakhah/Sifrei Zuta/Hebrew/Leipzig, 1917.json` | TRIM | **Public Domain** tannaitic Hebrew (`hbo`, NFC-exempt, byte-verbatim); `sectionNames ["Chapter","Verse","Paragraph"]` at Numbers-chapter grain with honest leading lacunae — chapters 1–4 and 5:1 empty, first passage `5.2.1`; trimmed to chapters 1–6 → 163 passages (original sha256 `02da22eb…`, 365,843 bytes) |
+
+`books.json` gained 23 wave-2 entry blocks (byte-identical, indent=1):
+the 15 selected exemplars (one per shelf × axis × versionTitle, incl.
+the three fixture files) and 8 census negatives — Footnotes-on-Mekhilta
+(excluded title), Ruth Rabbah (Lerner) SCT (excluded title), Sifra
+Venice 1545 (not named), "eicha rabba 12" (source-sheet noise, not
+named), an Esther Rabbah merged sibling, a Rabbah Commentary entry
+(Chiddushei HaRadal), a Halakhah Commentary entry (Chafetz Chaim on
+Sifra), and Pesikta DeRav Kahana (the flat-bucket boundary witness).
+
+Source URLs (`https://storage.googleapis.com/sefaria-export/` +
+bucket-relative path, retrieved 2026-07-31):
+
+```
+json/Midrash/Aggadah/Midrash Rabbah/Ruth Rabbah/English/The Sefaria Midrash Rabbah, 2022.json
+json/Midrash/Aggadah/Midrash Rabbah/Esther Rabbah/Hebrew/Midrash Rabbah -- TE.json
+json/Midrash/Halakhah/Sifrei Zuta/Hebrew/Leipzig, 1917.json
+json/Midrash/Halakhah/Sifra/Hebrew/Venice 1545.json            (license probe only — not a fixture)
+json/Midrash/Aggadah/Midrash Rabbah/Ruth Rabbah/Hebrew/Midrash Rabbah -- TE.json      (ranged GET, license probe)
+json/Midrash/Aggadah/Midrash Rabbah/Bereshit Rabbah/Hebrew/Midrash Rabbah -- TE.json  (ranged GET, license probe)
+```

@@ -18,7 +18,7 @@ files:
   - path: books.json
     url: https://raw.githubusercontent.com/Sefaria/Sefaria-Export/master/books.json
     whole: false
-    trim: index header + first special_files entry + 40 of 19,705 book entries kept (the fixture files below, merged siblings, and the P46-1 shelf-table census cases -- positives for every wave-1 named version plus commentary-subtree/Guides/Venice/Davidson-Hebrew negatives); entry blocks byte-identical (20.2 MB -> 36 KB)
+    trim: index header + first special_files entry + 63 of 19,705 book entries kept (the fixture files below, merged siblings, the P46-1 shelf-table census cases -- positives for every wave-1 named version plus commentary-subtree/Guides/Venice/Davidson-Hebrew negatives -- and the P55-3 wave-2 census cases -- 15 midrash named-version exemplars plus Footnotes/Lerner/Venice-1545/source-sheet/merged/Commentary/flat-Aggadah negatives); entry blocks byte-identical (20.2 MB -> 57 KB)
   - path: json/Tanakh/Targum/Targum Jonathan/Prophets/Targum Jonathan on Obadiah/Hebrew/Mikraot Gedolot.json
     url: https://storage.googleapis.com/sefaria-export/json/Tanakh/Targum/Targum%20Jonathan/Prophets/Targum%20Jonathan%20on%20Obadiah/Hebrew/Mikraot%20Gedolot.json
     whole: true
@@ -87,3 +87,15 @@ files:
     url: https://storage.googleapis.com/sefaria-export/json/Tosefta/Lieberman%20Edition/Seder%20Moed/Tosefta%20Chagigah%20%28Lieberman%29/Hebrew/The%20Tosefta%20according%20to%20to%20codex%20Vienna.%20Third%20Augmented%20Edition%2C%20JTS%202001.json
     whole: true
     trim: none (complete tractate, copied whole 2026-07-26; CC-BY, upstream's own double "to" in the versionTitle verbatim; depth-3 Tosefta categories)
+  - path: json/Midrash/Aggadah/Midrash Rabbah/Ruth Rabbah/English/The Sefaria Midrash Rabbah, 2022.json
+    url: https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Midrash%20Rabbah/Ruth%20Rabbah/English/The%20Sefaria%20Midrash%20Rabbah%2C%202022.json
+    whole: false
+    trim: text dict sliced to Petichta x2 + chapters 1-2 (218 KB -> 71 KB; retrieved 2026-07-31; original sha256 in README.md; CC-BY, the default-node "" citation quirk)
+  - path: json/Midrash/Aggadah/Midrash Rabbah/Esther Rabbah/Hebrew/Midrash Rabbah -- TE.json
+    url: https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Midrash%20Rabbah/Esther%20Rabbah/Hebrew/Midrash%20Rabbah%20--%20TE.json
+    whole: false
+    trim: text dict sliced to Petichta x1 + chapter 1 (349 KB -> 47 KB; retrieved 2026-07-31; original sha256 in README.md; license "unknown" -> rule skip, the mixed TE lane)
+  - path: json/Midrash/Halakhah/Sifrei Zuta/Hebrew/Leipzig, 1917.json
+    url: https://storage.googleapis.com/sefaria-export/json/Midrash/Halakhah/Sifrei%20Zuta/Hebrew/Leipzig%2C%201917.json
+    whole: false
+    trim: text sliced to chapters 1-6 incl. the leading empty chapters (357 KB -> 156 KB; retrieved 2026-07-31; original sha256 in README.md; Public Domain, hbo)
