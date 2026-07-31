@@ -3330,6 +3330,50 @@ osl:
   # manifest) → class open.
   sync_policy: manual
 
+cantigas:   # P55-1, 02-sources row 143
+  adapter: Nabu::Adapters::Cantigas
+  kind: source
+  axes: [romance]   # the desk's first vernacular VERSE shelf (Galician-Portuguese lyric)
+  wired: false   # flip after the owner-fired first sync (CLAUDE.md checklist §6)
+  # P55-1: Cantigas Medievais Galego-Portuguesas (cantigas.fcsh.unl.pt;
+  # Projeto Littera, Instituto de Estudos Medievais, FCSH/NOVA Lisbon;
+  # coordinators Graça Videira Lopes + Manuel Pedro Ferreira): the COMPLETE
+  # secular Galician-Portuguese lyric, ~1,680 cantigas (amigo / amor /
+  # escárnio e maldizer, plus lais, tenções, sirventeses…) from the three
+  # cancioneiros (Ajuda, BN, Vaticana), Littera critical edition. Language
+  # roa-opt (Old Galician-Portuguese, D55-a — the code the catalog's
+  # dictionary_reflexes/language_names lanes already hold, so etym/cognate
+  # joins connect for free). SCOUT CENSUS (2026-07-31, 11 bounded probes):
+  # HTML scrape only, NO TEI/XML/export exists (Classic ASP on IIS); one
+  # page per cantiga at cantiga.asp?cdcant=N — cdcant SPARSE (letter A
+  # alone reaches id 1713), an INVALID id answers HTTP 500 (not 404), so
+  # enumeration comes ONLY from the 23 alphabetical incipit indexes
+  # (listacantigas.asp?letra=A..Z, no K/W/Y; Z valid-but-empty; letter A:
+  # 326 links dedupe to 244 unique ids). ENCODING (the key quirk): no
+  # charset header, meta FALSELY claims ISO-8859-1, actual bytes are
+  # WINDOWS-1252 (0x92 ’ 0x93/0x94 "" 0x96 – verified) — decoded at the
+  # cantigas-html parser boundary, canonical keeps the raw bytes. Page →
+  # one document per cantiga (urn:nabu:cantigas:<cdcant>, title = the
+  # incipit), passage per verse LINE (:<n>, ordinal cross-checked against
+  # the edition's printed every-5th numbers; stanza structure in
+  # annotations {"line", "stanza"} from the &nbsp;&nbsp; break rows);
+  # author + cdaut + normalized genre (the index prints BOTH "Escárnio e
+  # maldizer" and "…Maldizer" — one facet value) + manuscript sigla
+  # (B/V/A/C…) + rubric in metadata. FETCH (CantigasFetch, the third
+  # ElephantineFetch/OtdoFetch HTML-crawl sibling — extraction signal
+  # flagged, not smuggled in): 23 index GETs + per-id GETs with
+  # semanotacoes=true (clean verse, metadata kept; cosmetic pv dropped) at
+  # 1 req/s ≈ 29 min whole corpus, file-grain resume, 500-on-a-listed-id
+  # retried then FATAL (never censused — the sparse-id ground truth),
+  # 404 censused (P47-i1), attic + breaker; index sidecars persist in
+  # canonical (author/genre columns) but stay out of the ledger pin.
+  # LICENSE (granted 2026-07-27, №45-2, G. V. Lopes): "Our site is free
+  # for all. So, with full attribution, you can do whatever you like with
+  # the data." → class attribution; the project's own citation format rides
+  # the manifest license verbatim + the credit line. EXPECTED FIRST SYNC:
+  # ~1,680 documents, ~45-50k line passages (fixture mean ~29 lines).
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
