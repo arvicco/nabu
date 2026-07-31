@@ -122,7 +122,10 @@ class StatusReportTest < Minitest::Test
     assert_match(%r{\s1/2\s}, fake, "fused humanized holdings docs/pass")
     # Compact stamp (year dropped in the current year) + zero-suppressed delta.
     assert_match(/\d{2}-\d{2} \d{2}:\d{2} \+1\b/, fake)
-    refute_match(/~0|-0|!0/, fake, "zero delta components are suppressed")
+    # Delta tokens are space-delimited (" ~0", " -0", " !0"); a bare /-0/
+    # would false-positive on the date stamp every 1st-to-9th of a month
+    # ("08-01" — bitten 2026-08-01).
+    refute_match(/ ~0\b| -0\b| !0\b/, fake, "zero delta components are suppressed")
     refute_match(/\bok\b/, fake, "the noise-OK token is gone on a succeeded run")
 
     never = lines.grep(/never-src/).first
@@ -548,7 +551,7 @@ class StatusReportTest < Minitest::Test
     )
     mixed = Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger)
     assert_match(/\+1418 !27\b/, mixed)
-    refute_match(/~0|-0|\(\+/, mixed, "zeros suppressed, no parens")
+    refute_match(/ ~0\b| -0\b|\(\+/, mixed, "zeros suppressed, no parens")
 
     # An all-zero run prints the stamp and NOTHING for the delta.
     Nabu::Store::Run.create(
