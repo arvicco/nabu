@@ -3179,6 +3179,42 @@ derge-kangyur:
   # the adapter/family headers carry the full doctrine.
   sync_policy: manual
 
+actib:
+  adapter: Nabu::Adapters::Actib
+  kind: module   # P55-4: machinery-only — the anchored-layer cone for nabu-data, zero catalog rows, up=module
+  axes: [tibetan]
+  wired: false   # PERMANENTLY false — a corpus-layer instrument, not a text
+                   # source (the pedecerto/hypotactic precedent): discover mints
+                   # no documents; the canonical TEXT is the derge-kangyur shelf
+                   # above. The row gives the owner the sanctioned fetch path for
+                   # the ACTib v2.0 eKangyur seg+POS zip (~200 MB download,
+                   # ~830 MB unpacked at canonical/actib/{seg,pos} — ZipFetch
+                   # strips the single top dir). Consumer: the xct/actib-anchors
+                   # nabu-data builder (docs/nabu-data.md) — the FIRST
+                   # re-publication: every derge-kangyur passage anchored to its
+                   # ACTib (volume, page, line) with the match census in-band;
+                   # the 800 MB layer content itself is never republished.
+                   # OWNER QUEUE (P55-4): bin/nabu sync actib downloads
+                   # SegPOS-eKangyur_July2020.zip (Zenodo 3951503), then
+                   # `nabu data build xct/actib-anchors` measures the census
+                   # (expect ~461K anchor rows, ~2.2K divergences — the P55
+                   # measurement pass: 458,954/461,199 exact after the vol-31
+                   # correction).
+  # P55-4: ACTib v2.0 — The Annotated Corpus of Classical Tibetan (Meelen,
+  # Hill & Faggionato), Zenodo record 3951503: word-segmented (seg/) +
+  # POS-tagged (pos/) layers over the BDRC eKangyur, 103 volume files each
+  # (UT4CZ5369-I1KG<9126+n>; the Esukhia→BDRC tail permutation
+  # {100→101,101→102,102→100} is the builder's VOL_PERMUTATION), page/line
+  # markers inline (p<N>/ln<N>, <utt> utterance breaks; pos layer =
+  # form/tag pairs, seg layer = bare forms). Upstream layers are AUTOMATIC
+  # annotation (their own papers say so) — the anchors dataset stays
+  # gold-derived about the mapping only, never about the tags. LICENSE:
+  # cc-by-4.0 ON THE ZENODO RECORD (API-verified 2026-07-31) → attribution;
+  # the zip itself contains NO license files — the record, not in-zip text,
+  # is the license basis (recorded honestly). Only the eKangyur SegPOS
+  # artifact is taken; the record's other collections are not.
+  sync_policy: manual
+
 derge-tengyur:
   adapter: Nabu::Adapters::DergeTengyur
   axes: [tibetan, buddhist]  # P48-1: the canon's commentarial half — same desks

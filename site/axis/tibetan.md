@@ -30,6 +30,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `soas-tibetan` | texts | attribution | wired · manual | 4 docs / 991 passages |
 | `old-tibetan` | texts | attribution | wired · manual | 3 docs / 2,669 passages |
 | `derge-kangyur` | texts | open | wired · manual | 1,200 docs / 461,304 passages |
+| `actib` | feature module | attribution | not yet wired | not synced yet |
 | `derge-tengyur` | texts | open | wired · manual | 3,362 docs / 897,142 passages |
 | `mvp` | dictionary | open | wired · manual | 9,379 entries |
 | `tibetan-verbs` | dictionary | open | wired · manual | 2,491 entries |

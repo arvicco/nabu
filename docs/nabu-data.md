@@ -72,7 +72,7 @@ valid-by-construction `Feature` value:
 | `status` | `:available` (builder landed) or `:planned` (build refuses) |
 | `tier` | provenance tier: `gold`, `gold-derived`, `silver` |
 | `license` | the dataset's license: `CC-BY-4.0` (default) or `CC-BY-SA-4.0` (share-alike inputs — D51-a); see Licensing below |
-| `anchoring` | how rows anchor into corpora: `none`, `passage-urn` |
+| `anchoring` | how rows anchor into corpora: `none`, `passage-urn`, `urn+sha` |
 | `inputs` | source slugs consumed (empty = own authorship) |
 | `canonical_cones` | canonical path prefixes whose shas are recorded at derivation |
 | `rationale` | one paragraph: why the dataset exists |
@@ -184,6 +184,7 @@ no page update is a red suite, and vice versa.
 | `jpn/kyujitai-fold` | available | gold | CC-BY-SA-4.0 | jpn | unihan, edrdg |
 | `lzh/kanripo-gaiji` | available | gold | CC-BY-SA-4.0 | lzh | — |
 | `sux/value-signs` | available | gold | CC-BY-4.0 | sux | osl |
+| `xct/actib-anchors` | available | gold-derived | CC-BY-4.0 | xct | derge-kangyur, actib |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -273,6 +274,14 @@ Flattens the Oracc Sign List (ex-OGSL, Veldhuis & Tinney, CC0 — the field's ha
 
 **Maintenance**: re-derive after each `nabu sync osl` (rolling master, no tags — a re-sync is an owner call; the stale-ingest guard enforces freshness); mechanical, no review needed beyond spot-checks
 
+### `xct/actib-anchors` — ACTib ↔ Derge Kangyur anchor table (stable anchors for the segmented eKangyur)
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: urn+sha · **Inputs**: derge-kangyur, actib
+
+nabu-data's first re-publication: ACTib's known weakness is that its seg/POS layers carry no stable anchors into their source etexts (an upstream update orphans the whole layer — the concept doc's prior-art verdict), so this dataset publishes the anchor table that fixes it — one row per derge-kangyur passage tying URN + Passage_SHA256 to ACTib's (volume, page, line), with the measured match census as the in-band eval and the near/partial divergences republished as a proofreading table. The mapping is deterministic and measured (gold-derived); ACTib's own annotation layers stay labeled automatic upstream, and their 800 MB content is never republished — consumers join the DOI-cited Zenodo artifact on the anchor key.
+
+**Maintenance**: re-derive after a derge-kangyur or actib re-sync (the stale-ingest guard enforces freshness); every build re-measures the anchoring census into nabu.eval
+
 ## What the rail never does
 
 - **Git in the nabu-data clone.** Files are written; `git status` there is
@@ -301,10 +310,10 @@ it (P54 widened the original one):
 
 All three share the FormLemma posture: feature-detected at query time,
 absent file = lane off with byte-identical behavior, no catalog table, no
-migration. The other eight features are single-truth PROJECTIONS — their
+migration. The other nine features are single-truth PROJECTIONS — their
 internal consumers read the same upstream truth the builders flatten
-(the fold tables, the hypotactic catalog rows, canonical/osl), so
-consuming the published CSV back would be a circle; they are one-way by
-design. The producer rail above and the consumer rows never touch: the
+(the fold tables, the hypotactic catalog rows, canonical/osl, the
+canonical/actib layer cone), so consuming the published CSV back would
+be a circle; they are one-way by design. The producer rail above and the consumer rows never touch: the
 rail writes the owner's working clone, the source syncs the published
 repo — the reproducibility loop closes only through a public commit.
