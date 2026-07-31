@@ -27,6 +27,10 @@ class SefariaTest < Minitest::Test
   TOSEFTA_URN = "urn:nabu:sefaria:tosefta-chagigah-lieberman:he:the-tosefta-according-to-to-" \
                 "codex-vienna-third-augmented-edition-jts-2001"
   MISHNAH_REL = "json/Mishnah/Seder Kodashim/Mishnah Tamid/Hebrew/V.json"
+  RUTH_SMR_URN = "urn:nabu:sefaria:ruth-rabbah:en:the-sefaria-midrash-rabbah-2022"
+  SIFREI_ZUTA_URN = "urn:nabu:sefaria:sifrei-zuta:he:leipzig-1917"
+  ESTHER_TE_FIXTURE = File.join(FIXTURES, "json/Midrash/Aggadah/Midrash Rabbah/Esther Rabbah/Hebrew/" \
+                                          "Midrash Rabbah -- TE.json")
 
   def conformance_adapter
     Nabu::Adapters::Sefaria.new
@@ -56,10 +60,12 @@ class SefariaTest < Minitest::Test
     assert_equal (TARGUM_URNS + %W[
       urn:nabu:sefaria:mishnah-tamid:en:mishnah-yomit-by-dr-joshua-kulp
       #{KAUFMANN_URN}
+      #{RUTH_SMR_URN}
       urn:nabu:sefaria:tamid:en:sefaria-community-translation
       #{TAMID_WIKISOURCE_URN}
+      #{SIFREI_ZUTA_URN}
       #{TOSEFTA_URN}
-    ]).sort, urns, "13 licensed named versions; merged, unlicensed and excluded titles never mint"
+    ]).sort, urns, "15 licensed named versions; merged, unlicensed and excluded titles never mint"
   end
 
   # --- the Targum regression (P46-1: URNs FROZEN — the wave must not re-mint) -
@@ -267,7 +273,9 @@ class SefariaTest < Minitest::Test
                    "urn:nabu:sefaria:tamid:en:sefaria-community-translation" => 1,
                    KAUFMANN_URN => 34,
                    "urn:nabu:sefaria:mishnah-tamid:en:mishnah-yomit-by-dr-joshua-kulp" => 34,
-                   TOSEFTA_URN => 57
+                   TOSEFTA_URN => 57,
+                   RUTH_SMR_URN => 31,
+                   SIFREI_ZUTA_URN => 163
                  }, counts)
   end
 
@@ -315,12 +323,86 @@ class SefariaTest < Minitest::Test
                  mishnah.metadata.dig("facets", "subshelf"))
   end
 
+  # --- the P55-3 wave: the midrash shelves (Rabbah + halakhic midrash) --------
+
+  def test_midrash_language_rulings_hebrew_hbo_english_eng
+    assert_equal "hbo", ref(SIFREI_ZUTA_URN).metadata.fetch("language"),
+                 "halakhic midrash is tannaitic HEBREW — hbo like Mishnah/Tosefta, never arc"
+    assert_equal "eng", ref(RUTH_SMR_URN).metadata.fetch("language")
+    # The Rabbah Hebrew lane: the on-disk Esther TE fixture gate-skips
+    # (license "unknown"), so the shelf ruling is exercised on a relicensed
+    # derivative — upstream also ships PD TE files (Ruth Rabbah TE,
+    # ranged-GET 2026-07-31).
+    with_version({ "license" => "Public Domain" },
+                 fixture: ESTHER_TE_FIXTURE,
+                 rel: "json/Midrash/Aggadah/Midrash Rabbah/Esther Rabbah/Hebrew/V.json") do |dir|
+      te_refs = conformance_adapter.discover(dir).to_a
+      assert_equal 1, te_refs.size
+      assert_equal "hbo", te_refs.first.metadata.fetch("language"),
+                   "Rabbah midrash is rabbinic Hebrew matrix — hbo, actualLanguage-keyed (D46-e)"
+    end
+  end
+
+  def test_the_sefaria_midrash_rabbah_2022_rides_a_cc_by_attribution_override
+    document = conformance_adapter.parse(ref(RUTH_SMR_URN))
+    assert_equal "attribution", document.license_override
+    assert_equal "CC-BY", document.metadata["license"], "the verbatim upstream grant rides the metadata"
+  end
+
+  def test_a_te_file_with_unknown_license_is_censused_never_ingested
+    assert_equal "unknown", JSON.parse(File.read(ESTHER_TE_FIXTURE))["license"],
+                 "the TE lane is per-file MIXED (Ruth TE says Public Domain; Esther and Bereshit " \
+                 "say unknown) — the named edition stays, the per-file gate censuses the unknowns " \
+                 "(the wave-1 Kaufmann Pirkei Avot pattern)"
+    assert_empty(refs.select { |r| r.path == ESTHER_TE_FIXTURE })
+  end
+
+  def test_midrash_documents_cite_upstream_sectioning_with_flat_category_metadata
+    document = conformance_adapter.parse(ref(SIFREI_ZUTA_URN))
+    assert_equal %w[Midrash Halakhah], document.metadata["categories"]
+    assert_nil document.metadata["facets"], "nothing beyond the shelf prefix — no subshelf facet"
+    assert_equal "#{SIFREI_ZUTA_URN}:5.2.1", document.first.urn,
+                 "midrash cites its own upstream grain (Chapter/Verse/Paragraph) — never daf"
+    ruth = conformance_adapter.parse(ref(RUTH_SMR_URN))
+    assert_equal ["Midrash", "Aggadah", "Midrash Rabbah"], ruth.metadata["categories"]
+    assert_equal "#{RUTH_SMR_URN}:petichta.1", ruth.first.urn,
+                 "the Rabbah default-node quirk: petichta named, the main text cites bare"
+  end
+
+  def test_fetch_selects_midrash_shelves_by_named_version_only
+    select = Nabu::Adapters::Sefaria.method(:shelf_entry?)
+    rabbah = { "title" => "Esther Rabbah", "language" => "Hebrew", "versionTitle" => "Midrash Rabbah -- TE",
+               "categories" => ["Midrash", "Aggadah", "Midrash Rabbah"], "json_url" => "https://b/x.json" }
+    assert select.call(rabbah)
+    refute select.call(rabbah.merge("title" => "Bereshit Rabbah",
+                                    "versionTitle" => "Wikisource Bereshit Rabbah")),
+           "the wave is the NAMED editions only — an unlisted version never fetches"
+    refute select.call(rabbah.merge("categories" => ["Midrash", "Aggadah", "Midrash Rabbah",
+                                                     "Commentary", "Etz Yosef"])),
+           "the Rabbah Commentary subtree is out of shelf scope"
+    refute select.call(rabbah.merge("title" => "Ruth Rabbah (Lerner)", "language" => "English",
+                                    "versionTitle" => "Sefaria Community Translation")),
+           "the Lerner critical edition duplicates the Ruth Rabbah title — excluded whole"
+    refute select.call(rabbah.merge("title" => "Pesikta DeRav Kahana", "categories" => %w[Midrash Aggadah])),
+           "the flat Midrash/Aggadah bucket (Pesikta/Tanchuma beside later anthologies) is not " \
+           "category-separable — out of wave 2, reported as a title-level owner ruling"
+    halakhah = { "title" => "Sifrei Zuta", "language" => "Hebrew", "versionTitle" => "Leipzig, 1917",
+                 "categories" => %w[Midrash Halakhah], "json_url" => "https://b/x.json" }
+    assert select.call(halakhah)
+    refute select.call(halakhah.merge("title" => "Footnotes on Mekhilta DeRabbi Shimon Ben Yochai",
+                                      "versionTitle" => "Mechilta de-Rabbi Simon b. Jochai, " \
+                                                        "Dr. D. Hoffman, Frankfurt 1905")),
+           "the Footnotes apparatus title shares the named Hoffman versionTitle — excluded by title"
+    refute select.call(halakhah.merge("categories" => %w[Midrash Halakhah Commentary])),
+           "the Halakhah Commentary subtree is out"
+  end
+
   # --- discovery census (P11-7) ----------------------------------------------
 
   def test_discovery_skips_census_the_gate
     skips = conformance_adapter.discovery_skips(FIXTURES)
-    assert_equal 4, skips.skipped_by_rule,
-                 "1 merged + 1 absent-license + 1 unknown-license + 1 excluded title"
+    assert_equal 5, skips.skipped_by_rule,
+                 "1 merged + 1 absent-license + 2 unknown-license (Lenihan, Esther TE) + 1 excluded title"
     assert_predicate skips, :clean?
   end
 
@@ -371,19 +453,25 @@ class SefariaTest < Minitest::Test
            "commentary subtrees are out of shelf scope"
   end
 
-  # The census the fixture index slice pins: exactly which of its 40 entries
-  # the shelf table selects (10 Targum + 21 wave-1). The 9 out: Berkovits
-  # (no shelf), Tafsir Rasag (excluded title), 2 merged, Davidson Guides,
-  # Vilna-1883-under-Commentary-on-Minor-Tractates, Bartenura SCT (Mishnah
-  # commentary subtree), Venice (not a named version), Steinsaltz Davidson-
-  # Hebrew (Modern Commentary + unlisted version).
+  # The census the fixture index slice pins: exactly which of its 63 entries
+  # the shelf table selects (10 Targum + 21 wave-1 + 15 wave-2). The 17 out:
+  # the 9 wave-1 negatives (Berkovits, Tafsir Rasag, 2 merged, Davidson
+  # Guides, Vilna-1883-under-Commentary, Bartenura SCT, Venice Yerushalmi,
+  # Steinsaltz) + the 8 wave-2 negatives — Footnotes-on-Mekhilta (excluded
+  # title sharing the Hoffman versionTitle), Ruth Rabbah (Lerner) SCT
+  # (excluded duplicate-edition title), Sifra Venice 1545 (license-unknown
+  # upstream — not named, never fetched), "eicha rabba 12" (source-sheet
+  # noise, not named), an Esther Rabbah merged sibling, a Rabbah Commentary
+  # entry, a Halakhah Commentary entry, and Pesikta DeRav Kahana (the flat
+  # Midrash/Aggadah bucket — the reported wave-3 boundary).
   def test_fetch_selection_census_over_the_pinned_index_slice
     index = JSON.parse(File.read(File.join(FIXTURES, "books.json")))
     selected = index.fetch("books").select { |e| Nabu::Adapters::Sefaria.shelf_entry?(e) }
     grouped = selected.group_by { |e| e["categories"].first }.transform_values(&:size)
-    assert_equal({ "Tanakh" => 10, "Mishnah" => 7, "Talmud" => 12, "Tosefta" => 2 }, grouped)
+    assert_equal({ "Tanakh" => 10, "Mishnah" => 7, "Talmud" => 12, "Tosefta" => 2, "Midrash" => 15 },
+                 grouped)
     rejected = index.fetch("books").reject { |e| Nabu::Adapters::Sefaria.shelf_entry?(e) }
-    assert_equal 9, rejected.size
+    assert_equal 17, rejected.size
     assert_includes rejected.map { |e| e["versionTitle"] }, "Venice Edition",
                     "license-unknown Yerushalmi editions are not even fetched — not named"
     assert_includes rejected.map { |e| e["title"] }, "Introductions to the Babylonian Talmud",
@@ -391,6 +479,12 @@ class SefariaTest < Minitest::Test
     davidson = selected.select { |e| e["versionTitle"].start_with?("William Davidson") }
     assert_equal 4, davidson.size,
                  "the fixture slice's Davidson lane: Tamid en/arc/vocalized + Yerushalmi Shekalim en"
+    assert_includes rejected.map { |e| e["title"] }, "Pesikta DeRav Kahana",
+                    "the flat Aggadah bucket stays out — wave 2 draws its boundary at the " \
+                    "category-delimited subtrees"
+    assert_includes rejected.map { |e| e["versionTitle"] }, "Venice 1545",
+                    "Sifra's only Hebrew version says license unknown upstream — known-unknown " \
+                    "versions are not even named (the Yerushalmi Venice rule)"
   end
 
   def test_fetch_lands_index_and_shelf_through_sefaria_fetch
