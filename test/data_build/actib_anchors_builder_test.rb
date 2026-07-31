@@ -371,6 +371,22 @@ class DataBuildActibAnchorsBuilderTest < Minitest::Test
     end
   end
 
+  def test_the_readme_opens_with_a_plain_language_overview
+    with_build_env do |root, runner, _catalog|
+      _summary, out_dir = build!(root, runner)
+      readme = File.read(File.join(out_dir, "README.md"))
+      assert_includes readme, "## Why this dataset exists — in plain terms",
+                      "owner ruling 2026-07-31: the problem statement must be readable by a non-specialist"
+      assert_match(/without\s+spaces\s+between\s+words/, readme,
+                   "the overview explains WHY segmentation matters, not just that it exists")
+      assert_match(/orphaned\s+scholarship|drift\s+away\s+from\s+the\s+text/, readme,
+                   "the overview states the anchoring problem in plain terms")
+      assert_operator readme.index("## Why this dataset exists — in plain terms"), :<,
+                      readme.index("## Maintenance"),
+                      "the plain-language overview comes BEFORE the technical sections"
+    end
+  end
+
   def test_the_readme_states_the_join_contract_and_the_license_basis
     with_build_env do |root, runner, _catalog|
       _summary, out_dir = build!(root, runner)

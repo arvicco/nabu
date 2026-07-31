@@ -218,9 +218,49 @@ module Nabu
                                            columns: DIVERGENCES_COLUMNS, rows: divergences)
 
         BuildResult.new(resources: [anchors_resource(anchor_count), divergences_resource(divergence_count)],
-                        recipe: RECIPE, citations: citations,
+                        recipe: RECIPE, citations: citations, overview: OVERVIEW,
                         notes: notes(census, badref_urns), evaluation: census)
       end
+
+      # The plain-language problem statement (owner ruling 2026-07-31): a
+      # non-specialist must understand the need for this re-publication
+      # before any technical section. Rendered up front by the Runner.
+      OVERVIEW = <<~OVERVIEW.strip
+        The Kangyur is the Tibetan Buddhist canon — in its Derge edition,
+        over 460,000 lines of text. ACTib (the Annotated Corpus of Classical
+        Tibetan, by Meelen, Hill & Faggionato) is a widely used scholarly
+        resource that took a digital copy of that canon and, by computer,
+        split every line into words and tagged each word's grammar. That
+        work is genuinely valuable: Classical Tibetan is written without
+        spaces between words, so a pre-segmented, grammar-tagged canon saves
+        every researcher months of preparatory work.
+
+        But ACTib has one structural flaw: its lines carry no address back
+        into a citable edition of the text. Each annotated line knows which
+        scanned volume and page it came from — not which passage of the
+        canon it annotates, and not what the wording of that passage was at
+        the moment of annotation. The digital canon it was built from has
+        been corrected and re-released since, and each time that happens
+        there is no reliable way to tell whether an ACTib line still matches
+        the text it describes. Left alone, 460,000 lines of annotation
+        slowly drift away from the text they annotate — orphaned
+        scholarship.
+
+        This dataset is the missing address book. For every passage of the
+        Derge Kangyur, one row records: this exact passage (named by its
+        stable citation and a fingerprint of its exact wording) corresponds
+        to this exact ACTib line (volume, page, line). Because the
+        fingerprint travels with the row, anyone can verify a match rather
+        than trust it — and we did: 99.5% of passages match ACTib's text
+        letter for letter, and the roughly 2,200 lines that differ are
+        listed side by side in `divergences.csv`, which doubles as a
+        ready-made proofreading worksheet for both projects.
+
+        ACTib's own content is not copied here — it stays at its home on
+        Zenodo (see "The join contract" below). This table is only the
+        layer of bookmarks and seals that lets the two resources be used
+        together, safely, however either one changes.
+      OVERVIEW
 
       private
 
