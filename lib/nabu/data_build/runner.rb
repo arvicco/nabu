@@ -55,7 +55,7 @@ module Nabu
         File.write(File.join(out_dir, "README.md"),
                    readme(feature: feature, result: result, input_shas: input_shas, fingerprint: fingerprint))
 
-        files = result.resources.map { |resource| [resource.path, resource.rows] } +
+        files = result.resources.map { |resource| [summary_path(resource.path), resource.rows] } +
                 [[LanguagesTable::FILENAME, language_count], [SourcesBib::FILENAME, nil],
                  ["datapackage.json", nil], ["README.md", nil]]
         Summary.new(slug: feature.slug, out_dir: out_dir, files: files,
@@ -63,6 +63,15 @@ module Nabu
       end
 
       private
+
+      # A multi-path (sharded) resource summarizes as one line — the CLI
+      # should not print a hundred shard names.
+      def summary_path(path)
+        return path unless path.is_a?(Array)
+        return path.first if path.size == 1
+
+        "#{File.dirname(path.first)}/ (#{path.size} files)"
+      end
 
       # The honest identity of one canonical cone. Git-backed cones publish
       # their HEAD sha — but only when the working tree is clean (a dirty

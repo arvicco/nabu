@@ -67,7 +67,15 @@ module Nabu
       TEXT_DIRNAME = "text" # canonical/derge-kangyur/text
       SEG_DIRNAME = "seg"   # canonical/actib/seg
 
-      ANCHORS_FILENAME = "anchors.csv"
+      # D55-b (owner-ruled 2026-07-31, before the v1.0.0 path freeze): the
+      # anchor table ships SHARDED per ACTib volume — anchors/<volume>.csv,
+      # each shard a self-contained CSV with its own header. The monolith hit
+      # GitHub's 50 MB recommendation at 62 MB and a Tengyur-scale extension
+      # would cross the 100 MB hard limit; shards also keep re-derive diffs
+      # proportional to what changed. Self-contained headers are a stated
+      # deviation from strict Frictionless multipart concatenation — said in
+      # the README where tool authors read.
+      ANCHORS_DIRNAME = "anchors"
       DIVERGENCES_FILENAME = "divergences.csv"
       ANCHORS_COLUMNS = %w[ID URN Passage_SHA256 ACTib_Volume ACTib_Page ACTib_Line
                            Status Distance].freeze
@@ -116,7 +124,9 @@ module Nabu
                "guessed. The seg+POS token content is NOT republished: rows carry only the " \
                "(ACTib_Volume, ACTib_Page, ACTib_Line) join key into the DOI-cited artifact plus " \
                "the URN + Passage_SHA256 anchor into Nabu; near/partial rows republish both " \
-               "folded text forms in divergences.csv as the proofreading census."
+               "folded text forms in divergences.csv as the proofreading census. " \
+               "v1.1 layout (D55-b): anchors sharded per volume as anchors/<ACTib_Volume>.csv, " \
+               "each shard a self-contained CSV with its own header."
 
       # Folio → physical page, per volume and per document — the promoted
       # census mapping (folio_page_map generalized by recensus_vol31.rb's
@@ -212,12 +222,12 @@ module Nabu
         walk = FolioPageWalk.new(volume_paths)
 
         anchors, divergences, census = resolve(by_volume, badref_urns, seg_dir, walk)
-        anchor_count = CsvWriter.write(path: File.join(out_dir, ANCHORS_FILENAME),
-                                       columns: ANCHORS_COLUMNS, rows: anchors)
+        shard_paths, anchor_count = write_anchor_shards(out_dir, anchors)
         divergence_count = CsvWriter.write(path: File.join(out_dir, DIVERGENCES_FILENAME),
                                            columns: DIVERGENCES_COLUMNS, rows: divergences)
 
-        BuildResult.new(resources: [anchors_resource(anchor_count), divergences_resource(divergence_count)],
+        BuildResult.new(resources: [anchors_resource(shard_paths, anchor_count),
+                                    divergences_resource(divergence_count)],
                         recipe: RECIPE, citations: citations, overview: OVERVIEW,
                         notes: notes(census, badref_urns), evaluation: census)
       end
@@ -499,8 +509,24 @@ module Nabu
         columns.map { |name| { name: name, type: INTEGER_COLUMNS.include?(name) ? "integer" : "string" } }
       end
 
-      def anchors_resource(count)
-        Resource.new(name: "anchors", path: ANCHORS_FILENAME, rows: count,
+      # One self-contained CSV per ACTib volume (D55-b), shard order = the
+      # sorted volume ids; row order within a shard is the catalog walk
+      # order the monolith had. Returns [relative shard paths, total rows].
+      def write_anchor_shards(out_dir, anchors)
+        dir = File.join(out_dir, ANCHORS_DIRNAME)
+        FileUtils.mkdir_p(dir)
+        total = 0
+        paths = anchors.group_by { |row| row.fetch("ACTib_Volume") }.sort.map do |volume, rows|
+          relative = File.join(ANCHORS_DIRNAME, "#{volume}.csv")
+          total += CsvWriter.write(path: File.join(out_dir, relative),
+                                   columns: ANCHORS_COLUMNS, rows: rows)
+          relative
+        end
+        [paths, total]
+      end
+
+      def anchors_resource(paths, count)
+        Resource.new(name: "anchors", path: paths, rows: count,
                      fields: csv_fields(ANCHORS_COLUMNS), primary_key: ["ID"])
       end
 
@@ -542,7 +568,9 @@ module Nabu
         <<~NOTES.strip
           ## What a row means — the two-way anchoring contract
 
-          Each `anchors.csv` row ties one Derge Kangyur passage to one ACTib line.
+          Each anchor row (`anchors/<ACTib_Volume>.csv` — one shard per volume,
+          every shard self-contained with its own header) ties one Derge
+          Kangyur passage to one ACTib line.
           On the Nabu side, `URN` + `Passage_SHA256` name the exact catalog
           passage bytes (rows apply only where the sha matches). On the ACTib
           side, `(ACTib_Volume, ACTib_Page, ACTib_Line)` is the join key:
@@ -583,8 +611,17 @@ module Nabu
 
           ## Loading
 
+              import glob
               import pandas as pd
-              anchors = pd.read_csv("anchors.csv", keep_default_na=False)
+              anchors = pd.concat(
+                  (pd.read_csv(p, keep_default_na=False) for p in sorted(glob.glob("anchors/*.csv"))),
+                  ignore_index=True)
+
+          Note for tool authors: the datapackage declares ONE `anchors`
+          resource whose `path` is the ordered shard list; every shard
+          repeats the header (self-contained files beat strict multipart
+          concatenation for direct pandas/glob use — a deliberate, stated
+          deviation).
 
           How to cite: reference ACTib (Meelen, Hill & Faggionato — the `actib`
           key in `sources.bib`, DOI 10.5281/zenodo.3951503) alongside this

@@ -181,6 +181,16 @@ class DataBuildActibAnchorsBuilderTest < Minitest::Test
     CSV.read(File.join(dir, name), headers: true)
   end
 
+  # All anchor shards (anchors/<volume>.csv, D55-b), concatenated in path
+  # order — each shard is self-contained with its own header.
+  def read_anchors(dir)
+    rows = Dir.glob(File.join(dir, "anchors", "*.csv")).flat_map do |path|
+      CSV.read(path, headers: true).to_a[1..].map { |values| values }
+    end
+    header = ANCHORS_COLUMNS
+    CSV::Table.new(rows.map { |values| CSV::Row.new(header, values) })
+  end
+
   def read_manifest(dir)
     JSON.parse(File.read(File.join(dir, "datapackage.json")))
   end
@@ -250,10 +260,32 @@ class DataBuildActibAnchorsBuilderTest < Minitest::Test
 
   # -- the anchor rows -------------------------------------------------------
 
+  def test_anchors_are_sharded_per_volume_d55_b
+    with_build_env do |root, runner, _catalog|
+      summary, out_dir = build!(root, runner)
+      refute File.file?(File.join(out_dir, "anchors.csv")),
+             "D55-b (owner-ruled 2026-07-31): no single-file anchors.csv — GitHub's 50 MB " \
+             "recommendation and the Tengyur-scale 100 MB hard limit both bite the monolith"
+      assert File.file?(File.join(out_dir, "anchors", "I1KG9167.csv")),
+             "one self-contained shard per ACTib volume, named by the BDRC volume id"
+      shard = CSV.read(File.join(out_dir, "anchors", "I1KG9167.csv"), headers: true)
+      assert_equal ANCHORS_COLUMNS, shard.headers, "every shard carries its own header"
+
+      manifest = read_manifest(out_dir)
+      resource = manifest["resources"].find { |r| r["name"] == "anchors" }
+      assert_equal ["anchors/I1KG9167.csv"], resource["path"],
+                   "ONE anchors resource whose path is the ordered shard array"
+      assert_match(/sharded per volume/, manifest.dig("nabu", "derivation", "recipe"),
+                   "the layout is part of the derivation — the recipe (and so the fingerprint) says so")
+      assert summary.files.any? { |path, _rows| path.to_s.include?("anchors/") },
+             "the CLI summary names the shard set"
+    end
+  end
+
   def test_anchors_cover_every_parseable_passage_with_honest_statuses
     with_build_env do |root, runner, catalog|
       _summary, out_dir = build!(root, runner)
-      table = read_csv(out_dir, "anchors.csv")
+      table = read_anchors(out_dir)
 
       assert_equal ANCHORS_COLUMNS, table.headers
       assert_equal 7, table.size, "8 passages minus the 1 badref (censused, never faked as a row)"
@@ -280,7 +312,7 @@ class DataBuildActibAnchorsBuilderTest < Minitest::Test
   def test_the_x_folio_passage_anchors_at_the_shifted_page
     with_build_env do |root, runner, _catalog|
       _summary, out_dir = build!(root, runner)
-      row = read_csv(out_dir, "anchors.csv").find { |r| r["URN"] == "#{DOC56}:41.34a.1" }
+      row = read_anchors(out_dir).find { |r| r["URN"] == "#{DOC56}:41.34a.1" }
       assert_equal %w[69 1 exact], row.values_at("ACTib_Page", "ACTib_Line", "Status"),
                    "folio 34a sits at physical page 69 (33xa/33xb shift it; naive 2F-1 says 67) " \
                    "and matches the real ACTib bytes there"
@@ -290,7 +322,7 @@ class DataBuildActibAnchorsBuilderTest < Minitest::Test
   def test_distance_rides_near_rows_only_and_missing_keeps_what_it_knows
     with_build_env do |root, runner, _catalog|
       _summary, out_dir = build!(root, runner)
-      rows = read_csv(out_dir, "anchors.csv").to_h { |row| [row["URN"], row] }
+      rows = read_anchors(out_dir).to_h { |row| [row["URN"], row] }
 
       assert_equal "1", rows.fetch("#{DOC56}:41.1b.2")["Distance"], "near rows carry the edit distance"
       %W[#{DOC56}:41.1b.1 #{DOC56}:41.1b.3 #{DOC56}:41.1a.1].each do |urn|
@@ -308,8 +340,8 @@ class DataBuildActibAnchorsBuilderTest < Minitest::Test
   def test_ids_obey_the_cldf_discipline_and_the_primary_key_is_honest
     with_build_env do |root, runner, _catalog|
       _summary, out_dir = build!(root, runner)
-      %w[anchors.csv divergences.csv].each do |name|
-        table = read_csv(out_dir, name)
+      { "anchors" => read_anchors(out_dir),
+        "divergences.csv" => read_csv(out_dir, "divergences.csv") }.each do |name, table|
         ids = table.map { |row| row["ID"] }
         assert_equal ids.size, ids.uniq.size, "#{name}: IDs are unique"
         assert(ids.all? { |id| id.match?(Nabu::DataBuild::CsvWriter::ID_PATTERN) },
@@ -420,9 +452,11 @@ class DataBuildActibAnchorsBuilderTest < Minitest::Test
     with_build_env do |root, runner, _catalog|
       _summary, first_dir = build!(root, runner, into: File.join(root, "first"))
       _summary, second_dir = build!(root, runner, into: File.join(root, "second"))
-      files = Dir.children(first_dir).sort
-      assert_equal files, Dir.children(second_dir).sort
+      files = Dir.glob("**/*", base: first_dir).sort
+      assert_equal files, Dir.glob("**/*", base: second_dir).sort
       files.each do |name|
+        next if File.directory?(File.join(first_dir, name))
+
         assert_equal File.binread(File.join(first_dir, name)), File.binread(File.join(second_dir, name)),
                      "#{name} must be byte-identical across rebuilds"
       end
