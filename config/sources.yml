@@ -2099,7 +2099,7 @@ cuc:
 rsti:
   adapter: Nabu::Adapters::Rsti
   axes: [cuneiform]
-  wired: false   # checklist §6 — flip only after the owner-fired first sync
+  wired: true    # first sync owner-verified 2026-07-31 (5,075 docs / 740 edition passages)
                    # is verified. OWNER QUEUE (P55-2): bin/nabu sync rsti —
                    # stage 1 = menu + 35 season/collection sets (~36 GETs,
                    # under a minute), stage 2 = one GET per associated text
@@ -3370,7 +3370,7 @@ cantigas:   # P55-1, 02-sources row 144
   adapter: Nabu::Adapters::Cantigas
   kind: source
   axes: [romance]   # the desk's first vernacular VERSE shelf (Galician-Portuguese lyric)
-  wired: false   # flip after the owner-fired first sync (CLAUDE.md checklist §6)
+  wired: true    # first sync owner-verified 2026-07-31 (1,676 docs / 34,058 passages)
   # P55-1: Cantigas Medievais Galego-Portuguesas (cantigas.fcsh.unl.pt;
   # Projeto Littera, Instituto de Estudos Medievais, FCSH/NOVA Lisbon;
   # coordinators Graça Videira Lopes + Manuel Pedro Ferreira): the COMPLETE
