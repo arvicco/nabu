@@ -1140,6 +1140,12 @@ module Nabu
     option :word, type: :boolean, default: false,
                   desc: "Whole-word match: the query must land on a word boundary in the stored " \
                         "text (ἦ finds ἦ, not ἦμαρ); refuses spaceless CJK/kana"
+    option :words, type: :boolean, default: false,
+                   desc: "Tibetan word-grain match (P54-4): keep only hits whose matched span " \
+                         "aligns with word boundaries (nabu-data xct/segmentation) — Tibetan is " \
+                         "indexed at syllable grain, so a plain query also lands on accidental " \
+                         "runs across word boundaries; non-Tibetan queries or an unsynced module " \
+                         "degrade to plain search with a note"
     display_option
     def search(query = nil)
       query = query.to_s.strip
@@ -1181,6 +1187,12 @@ module Nabu
       if options[:word] && (msg = Nabu::Query::Search.word_refusal_for(query))
         raise Thor::Error, "search: #{msg}"
       end
+      if options[:words] && (query.empty? || options[:fuzzy] || options[:near] || options[:lemma] ||
+                             options[:morph] || options[:exact] || options[:word] || char_filter_options?)
+        raise Thor::Error, "search: --words is the Tibetan word-grain filter over the plain text " \
+                           "query — it needs a text query and does not combine with --exact/--word/" \
+                           "--fuzzy/--near/--lemma/--morph or the character-structure filters"
+      end
 
       if char_filter_options?
         if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
@@ -1219,11 +1231,11 @@ module Nabu
                                     facets: facets, source: options[:source], sources: axis_slugs,
                                     loans: loans, meter: options[:meter],
                                     meter_pattern: options[:meter_pattern],
-                                    exact: options[:exact], word: options[:word])
+                                    exact: options[:exact], word: options[:word], words: options[:words])
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
                                     incomplete: searcher.incomplete_hint, exact: options[:exact],
                                     word: options[:word], rank_note: searcher.rank_note,
-                                    meter_note: searcher.meter_note)
+                                    meter_note: searcher.meter_note, words_note: searcher.words_note)
       print_display_footer
     ensure
       catalog&.disconnect
@@ -1674,6 +1686,13 @@ module Nabu
       nothing invented). A passage without token annotations, and a
       document/range urn, say so.
 
+      SEGMENTED (--segmented): renders Tibetan-language rows (xct/bod/otb)
+      with word boundaries — the stored text with a space inserted at each
+      boundary (tokens verbatim, trailing tsheg kept), segmented through
+      the published nabu-data xct/segmentation dataset. An off-language
+      row, or a box that has not run `nabu sync nabu-data`, prints the
+      plain text plus one honest note.
+
       Use cases: read the real edition text behind a search snippet; audit
       a document's revision/provenance history after a sync; eyeball what
       "withdrawn" or "retired upstream" actually holds; read a Greek work
@@ -1694,12 +1713,18 @@ module Nabu
                    desc: "With --random: how many passages (default 1, cap #{Nabu::Query::Random::MAX_COUNT})"
     option :tokens, type: :boolean, default: false,
                     desc: "Append the passage's stored token annotations verbatim (form + every key present)"
+    option :segmented, type: :boolean, default: false,
+                       desc: "Render Tibetan (xct/bod/otb) passages with word boundaries " \
+                             "(needs the synced nabu-data module)"
     display_option
     def show(urn = nil)
       urn = urn.to_s.strip
       display_mode
       if options[:tokens] && (options[:random] || options[:parallel])
         raise Thor::Error, "show: --tokens does not compose with --random/--parallel"
+      end
+      if options[:segmented] && (options[:random] || options[:parallel])
+        raise Thor::Error, "show: --segmented does not compose with --random/--parallel"
       end
 
       config = Nabu::Config.load
@@ -1722,10 +1747,22 @@ module Nabu
       # pleiades: :auto — the findspot line (P44-2) feature-detects the
       # gazetteer dump lazily; nothing loads unless the shown document
       # carries a captured Pleiades id.
-      result = Nabu::Query::Show.new(catalog: catalog, pleiades: :auto).run(urn)
+      show_query = Nabu::Query::Show.new(catalog: catalog, pleiades: :auto)
+      result = show_query.run(urn)
       raise Thor::Error, "urn not found: #{urn}" if result.nil?
 
+      # --segmented (P54-2): the word-broken Tibetan rendering. The
+      # segmentation is Query::Show's (the one serializer MCP shares); here
+      # we only swap texts on a copy of the result — or keep the plain
+      # output plus the query layer's one honest note line.
+      seg_note = nil
+      if options[:segmented]
+        seg_note = show_query.segmentation_note(result.respond_to?(:language) ? result.language : nil)
+        result = segmented_show_result(show_query, result) if seg_note.nil?
+      end
+
       print_show(result)
+      say seg_note if seg_note
       print_show_tokens(result) if options[:tokens]
       print_linked_footer(config, result.urn)
       print_notes_footer(catalog, result)
@@ -2772,7 +2809,12 @@ module Nabu
         # The Oracc Sign List (P53-2): :auto = feature-detect canonical/osl
         # lazily per call (nabu_signs); an unsynced box notes the sync hint,
         # every other tool byte-identical (the lane-off rule).
-        sign_list: :auto
+        sign_list: :auto,
+        # Tibetan word segmentation (P54-2): :auto = feature-detect
+        # canonical/nabu-data lazily inside Query::Show (nothing loads
+        # unless nabu_show is asked for a segmented render); an unsynced
+        # box answers the flag with the sync-hint note.
+        tibetan_words: :auto
       )
       $stdout.sync = true
       install_mcp_signal_traps
@@ -4224,6 +4266,22 @@ module Nabu
         end
       end
 
+      # `show --segmented` (P54-2): the result with every passage text
+      # word-broken through Query::Show#segmented_text — a copy, so every
+      # existing print path renders unchanged (tokens verbatim, spaces at
+      # word boundaries). Only reached when the segmentation note is nil
+      # (a Tibetan row with the nabu-data dataset synced).
+      def segmented_show_result(query, result)
+        case result
+        when Nabu::Query::Show::PassageResult
+          result.with(text: query.segmented_text(result.text))
+        when Nabu::Query::Show::DocumentResult, Nabu::Query::Show::RangeResult
+          result.with(passages: result.passages.map { |line| line.with(text: query.segmented_text(line.text)) })
+        else
+          result
+        end
+      end
+
       # The source-level credit line (P43-2, the grant's "clearly indicated
       # wherever displayed" duty), shown only when the source carries one — a
       # nil/blank credit (every ordinary source) prints nothing.
@@ -4844,7 +4902,8 @@ module Nabu
       # page never masquerades as a complete answer.
       def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
                                exact: false, word: false, proximity: false, rank_note: nil,
-                               browse: false, from: nil, to: nil, place: nil, meter_note: nil)
+                               browse: false, from: nil, to: nil, place: nil, meter_note: nil,
+                               words_note: nil)
         if results.empty?
           say "no matches"
           # Empty-under-filter honesty (P35): --exact/--word suppressed the folded
@@ -4861,6 +4920,9 @@ module Nabu
           # --meter says what layer it filtered on — or that the layer is
           # empty / the code unknown — never a silent zero.
           say "note: #{meter_note}" if meter_note
+          # The word-grain degrade note (P54-4): --words could not filter
+          # (non-Tibetan query / unsynced module) — plain search served.
+          say "note: #{words_note}" if words_note
           say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
@@ -4875,6 +4937,7 @@ module Nabu
             "#{browse_window_footer(from: from, to: to, place: place) if browse}" \
             "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{meter_note}" if meter_note
+        say "note: #{words_note}" if words_note
         say "note: #{incomplete}" if incomplete
         print_search_credits(results)
       end

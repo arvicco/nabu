@@ -194,7 +194,10 @@ module Nabu
         "each carries urn, language, license_class, and source — PRESERVE the license fields " \
         "when quoting. `meter`/`meter_pattern` (text search only) restrict hits to metrically " \
         "SCANNED passages — the pedecerto (Latin) / hypotactic (Greek) meter enrichment layer; " \
-        "the note names that layer or explains an empty one. Use nabu_show with a hit's urn for " \
+        "the note names that layer or explains an empty one. `words` (text search only) is the " \
+        "Tibetan word-grain filter: keep only hits whose match aligns with word boundaries per " \
+        "the nabu-data segmentation dataset (degrades honestly for non-Tibetan queries or an " \
+        "unsynced module). Use nabu_show with a hit's urn for " \
         "the full passage, nabu_status for what the corpus covers.".freeze
 
       SHOW_DESCRIPTION =
@@ -216,7 +219,9 @@ module Nabu
         "carries `meter` (code, foot pattern, producer); an epigraphic document whose " \
         "parse-captured Pleiades findspot id resolves through the local gazetteer dump " \
         "carries `findspot` (both keys absent otherwise — absence of the dump or of the " \
-        "enrichment, not a claimed absence of fact).".freeze
+        "enrichment, not a claimed absence of fact). `segmented: true` adds a word-segmented " \
+        "rendering of Tibetan (xct/bod/otb) passages as a present-only `segmented` key per " \
+        "passage record; a not-applicable call carries `segmentation_note` instead.".freeze
 
       CONCORD_DESCRIPTION =
         "Concordance (KWIC — keyword-in-context) over the local nabu corpus: one row per hit as " \
@@ -414,6 +419,14 @@ module Nabu
                            description: "Meter facet: exact foot/scansion pattern, case-insensitive " \
                                         "(pedecerto DSDS, hypotactic '-u u -uu …'); composes with " \
                                         "meter or stands alone. Text search only." },
+          words: { type: "boolean", default: false,
+                   description: "Tibetan word-grain filter (P54-4, text search only): Tibetan is " \
+                                "indexed at syllable grain, so a multi-syllable query also matches " \
+                                "an accidental syllable run crossing a word boundary — words: true " \
+                                "keeps only hits whose matched span aligns with word boundaries per " \
+                                "the nabu-data xct/segmentation dataset (present-only word_grain " \
+                                "key when applied). Non-Tibetan queries or an unsynced module " \
+                                "degrade to plain search with a word_grain_note, never an error." },
           limit: { type: "integer", minimum: 1, maximum: SEARCH_MAX_LIMIT,
                    default: SEARCH_DEFAULT_LIMIT, description: "Maximum hits returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
@@ -436,6 +449,12 @@ module Nabu
                           default: SHOW_DEFAULT_MAX_PASSAGES,
                           description: "Bound on listed passages/rows; truncation is noted " \
                                        "honestly." },
+          segmented: { type: "boolean", default: false,
+                       description: "Add a word-segmented rendering of Tibetan (xct/bod/otb) " \
+                                    "passages: each passage record gains a present-only " \
+                                    "`segmented` key (text with spaces at word boundaries, " \
+                                    "tokens verbatim); when not applicable, a top-level " \
+                                    "`segmentation_note` says why." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["urn"],
@@ -689,10 +708,21 @@ module Nabu
       # returning one, or nil when the hub is unconfigured) — config-loaded by
       # the entrypoint, resolved per call like the connection slots.
       def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil,
-                     enabled_slugs: nil, pleiades: nil, sign_list: nil)
+                     enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
+        # The Tibetan words slot, shared by TWO consumers (P54-2 show's
+        # `segmented` flag, P54-4 search's `words` flag): nil (unconfigured —
+        # each flag answers with its honest sync-hint note, every other
+        # payload byte-identical: the lane-off rule), a loaded
+        # Nabu::TibetanWords (tests), or :auto — the entrypoint's setting.
+        # :auto resolves lazily at use: Query::Show does its own resolution
+        # for segmented renders; search goes through #tibetan_words_seam,
+        # memoized once LOADED (the CSV read is the expensive part; while
+        # absent it re-detects per call, so a mid-session `nabu sync
+        # nabu-data` is picked up without a restart — the sign-list posture).
+        @tibetan_words = tibetan_words
         # The sign-list slot (P53-2): nil (unconfigured — nabu_signs notes
         # the sync hint, every other tool byte-identical: the lane-off rule),
         # a loaded Nabu::SignList (tests), or :auto — the entrypoint's
@@ -773,19 +803,20 @@ module Nabu
 
         from, to, place = search_date(args, mode, near)
         meter, meter_pattern = search_meter(args, mode, near)
+        words = search_words?(args, mode, near)
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         fulltext = search_index(mode) or return note(mode == :lemma ? LEMMA_REBUILDING_NOTE : REBUILDING_NOTE)
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         window = clamp(args["window"], default: SEARCH_DEFAULT_WINDOW, max: SEARCH_MAX_WINDOW, min: 0)
-        results, incomplete, rank_note, meter_note =
+        results, incomplete, rank_note, meter_note, words_note, word_grain =
           run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near,
                                  window: window, lang: args["lang"], license: license,
                                  limit: limit + 1, morph: morph, from: from, to: to, place: place,
-                                 meter: meter, meter_pattern: meter_pattern)
+                                 meter: meter, meter_pattern: meter_pattern, words: words)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog, incomplete: incomplete, rank_note: rank_note,
-                               meter_note: meter_note)
+                               meter_note: meter_note, word_grain: word_grain, word_grain_note: words_note)
       rescue Query::MorphFacets::Error => e
         raise InvalidArguments, e.message
       end
@@ -797,7 +828,8 @@ module Nabu
         include_restricted = args["include_restricted"] == true
         return show_parallel(catalog, urn, args, bound, include_restricted) if args["parallel"] == true
 
-        result = Query::Show.new(catalog: catalog, pleiades: @pleiades).run(urn)
+        query = Query::Show.new(catalog: catalog, pleiades: @pleiades, tibetan_words: @tibetan_words)
+        result = query.run(urn)
         if result.nil?
           return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
                       "what this corpus holds")
@@ -812,6 +844,7 @@ module Nabu
                   # define payload shape (P22-2), license-withheld by the same rule.
                   when Query::Define::Result then define_payload(result)
                   end
+        payload = segmented_payload(query, result, payload) if args["segmented"] == true
         # Owner notes ride BY DEFAULT (P24-1: "your own library metadata is
         # useful context") — and only here, after the withhold gate, so a
         # note can never leak a withheld text's content frame.
@@ -1146,7 +1179,7 @@ module Nabu
       # was too common to rank (plain text mode only — the other searchers
       # never guard, so theirs is always nil).
       def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
-                     from: nil, to: nil, place: nil, meter: nil, meter_pattern: nil)
+                     from: nil, to: nil, place: nil, meter: nil, meter_pattern: nil, words: false)
         results, searcher =
           if near
             searcher = Query::Proximity.new(catalog: catalog, fulltext: fulltext)
@@ -1156,14 +1189,28 @@ module Nabu
             searcher = Query::LemmaSearch.new(catalog: catalog, fulltext: fulltext)
             [searcher.run(term, lang: lang, license: license, limit: limit, morph: morph), searcher]
           else
-            searcher = Query::Search.new(catalog: catalog, fulltext: fulltext)
+            searcher = Query::Search.new(catalog: catalog, fulltext: fulltext,
+                                         tibetan_words: words ? tibetan_words_seam : nil)
             [searcher.run(term, lang: lang, license: license, limit: limit,
                                 from: from, to: to, place: place,
-                                meter: meter, meter_pattern: meter_pattern), searcher]
+                                meter: meter, meter_pattern: meter_pattern, words: words), searcher]
           end
         rank_note = searcher.respond_to?(:rank_note) ? searcher.rank_note : nil
         meter_note = searcher.respond_to?(:meter_note) ? searcher.meter_note : nil
-        [results, searcher.incomplete_hint, rank_note, meter_note]
+        words_note = searcher.respond_to?(:words_note) ? searcher.words_note : nil
+        word_grain = searcher.respond_to?(:word_grain) ? searcher.word_grain : nil
+        [results, searcher.incomplete_hint, rank_note, meter_note, words_note, word_grain]
+      end
+
+      # The word-grain seam behind nabu_search's words flag (P54-4): resolve
+      # :auto lazily and memoize only a LOADED seam (the class comment on
+      # @tibetan_words — re-detect while absent, load the CSV once).
+      def tibetan_words_seam
+        return @tibetan_words unless @tibetan_words == :auto
+
+        loaded = Nabu::TibetanWords.load_default
+        @tibetan_words = loaded if loaded
+        loaded
       end
 
       # The meter facet args (P45-5), text mode only — the lemma/proximity
@@ -1180,10 +1227,28 @@ module Nabu
         [meter, pattern]
       end
 
-      def render_search(results, limit:, catalog:, incomplete: nil, rank_note: nil, meter_note: nil)
+      # The Tibetan word-grain flag (P54-4), text mode only — refusal parity
+      # with the meter facet.
+      def search_words?(args, mode, near)
+        return false unless args["words"] == true
+
+        raise InvalidArguments, "words composes with text search only, not lemma/near" if mode == :lemma || near
+
+        true
+      end
+
+      def render_search(results, limit:, catalog:, incomplete: nil, rank_note: nil, meter_note: nil,
+                        word_grain: nil, word_grain_note: nil)
+        # P54-4, present-only keys (additive to the frozen shape): word_grain
+        # marks a page the Tibetan word-grain filter actually thinned
+        # (filtered-out hits are simply absent); word_grain_note mirrors the
+        # CLI degrade note when the flag could not filter.
+        extra = {}
+        extra[:word_grain] = true if word_grain
+        extra[:word_grain_note] = word_grain_note if word_grain_note
         if results.empty?
-          return json(matches: [], note: ["no matches", rank_note, meter_note, incomplete].compact.join(" — "),
-                      coverage: coverage_hint(catalog))
+          return json({ matches: [], note: ["no matches", rank_note, meter_note, incomplete].compact.join(" — "),
+                        coverage: coverage_hint(catalog) }.merge(extra))
         end
 
         shown = results.first(limit)
@@ -1200,7 +1265,7 @@ module Nabu
         note = "#{note} — #{rank_note}" if rank_note
         note = "#{note} — #{meter_note}" if meter_note
         note = "#{note} — #{incomplete}" if incomplete
-        json(matches: shown.map { |result| match_payload(result, sources) }, note: note)
+        json({ matches: shown.map { |result| match_payload(result, sources) }, note: note }.merge(extra))
       end
 
       def match_payload(result, sources)
@@ -1786,6 +1851,30 @@ module Nabu
       def note_payload(note)
         base = { topic: note.topic, added: note.added, note: note.note }
         note.tags.empty? ? base : base.merge(tags: note.tags)
+      end
+
+      # nabu_show `segmented` (P54-2): the CLI's --segmented under the frozen
+      # additive contract. Applicable (a Tibetan row, nabu-data synced): each
+      # passage record gains a present-only "segmented" key — the SAME
+      # space-joined rendering the CLI prints (Query::Show#segmented_text,
+      # the one-serializer rule). Not applicable: a present-only top-level
+      # "segmentation_note" mirrors the CLI's one honest note line. Existing
+      # keys never change; flag off = byte-identical payloads.
+      def segmented_payload(query, result, payload)
+        language = result.respond_to?(:language) ? result.language : nil
+        note = query.segmentation_note(language)
+        return payload.merge(segmentation_note: note) if note
+
+        case result
+        when Query::Show::PassageResult
+          payload.merge(segmented: query.segmented_text(result.text))
+        when Query::Show::DocumentResult, Query::Show::RangeResult
+          payload.merge(passages: payload.fetch(:passages).map do |line|
+            line.merge(segmented: query.segmented_text(line.fetch(:text)))
+          end)
+        else
+          payload
+        end
       end
 
       # Every listed passage carries language + license_class: both are
