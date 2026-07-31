@@ -259,8 +259,15 @@ module Adapters
       tombstone = File.read(File.join(FIXTURES, "texts", "223fa8f2-a5a6-47b0-9f82-80b159c1e23c.json"))
       text_uuids.each do |uuid|
         fixture = File.join(FIXTURES, "texts", "#{uuid}.json")
-        body = File.file?(fixture) ? File.read(fixture) : tombstone
-        stub_request(:get, Nabu::OchreFetch.item_url(uuid)).to_return(status: 200, body: body)
+        # The live wire (first real sync 2026-07-31): unpublished uuids
+        # answer HTTP 404 CARRYING the {"result":[]} tombstone body — the
+        # scout had saved the bodies and misread the status as 200. A
+        # 404-tombstone is the honest "not published" and must persist.
+        if File.file?(fixture)
+          stub_request(:get, Nabu::OchreFetch.item_url(uuid)).to_return(status: 200, body: File.read(fixture))
+        else
+          stub_request(:get, Nabu::OchreFetch.item_url(uuid)).to_return(status: 404, body: tombstone)
+        end
       end
     end
 
@@ -282,6 +289,19 @@ module Adapters
                      "the API's not-published answer is PERSISTED as-is — a tombstone, never an error"
         assert_match(/6 text details fetched/, report.notes)
         assert_equal 7, Nabu::Adapters::Rsti.new.discover(dir).to_a.size
+      end
+    end
+
+    def test_a_404_with_a_non_tombstone_body_is_a_censused_miss
+      stub_crawl
+      gone = "de32293f-9b4b-435e-bf02-c4894863035b"
+      stub_request(:get, Nabu::OchreFetch.item_url(gone))
+        .to_return(status: 404, body: "<html>not found</html>")
+      Dir.mktmpdir do |dir|
+        report = Nabu::Adapters::Rsti.new(delay: 0).fetch(dir)
+        refute File.file?(File.join(dir, "texts", "#{gone}.json")),
+               "a real miss persists nothing — only the 404-tombstone body does"
+        assert_match(/5 text details fetched/, report.notes)
       end
     end
 
