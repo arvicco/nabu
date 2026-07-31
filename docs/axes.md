@@ -211,7 +211,7 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 
 The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key), 84000's English translation layer, OTDO's Old Tibetan documents, and the gold-annotation lane (SOAS POS, the Annals and Chronicle); the lexicon shelves join as their packets land.
 
-**Members** (10): `e84000`, `otdo`, `soas-tibetan`, `old-tibetan`, `derge-kangyur`, `derge-tengyur`, `mvp`, `tibetan-verbs`, `wiktionary-bo`, `nabu-data`
+**Members** (11): `e84000`, `otdo`, `soas-tibetan`, `old-tibetan`, `derge-kangyur`, `actib`, `derge-tengyur`, `mvp`, `tibetan-verbs`, `wiktionary-bo`, `nabu-data`
 
 ### sinitic
 
