@@ -172,7 +172,7 @@ module Nabu
         record = record_for(document_ref)
         label = OchreJsonParser.content_of(record.dig("identification", "label")).to_s
         urn = self.class.urn_for(label)
-        text_uuid = record["associated_uuid"]
+        text_uuid = OchreJsonParser.uuid_of(record["associated_uuid"])
         text_item, status = text_item_for(document_ref, text_uuid)
         build_document(document_ref, urn: urn, label: label, record: record,
                                      text_item: text_item, status: status, text_uuid: text_uuid)
@@ -242,11 +242,13 @@ module Nabu
       end
 
       # The text-side record behind +text_uuid+ → [item-or-nil, status]:
-      # "unfetched" (no file on disk / no uuid), "unpublished" (the
+      # "no-text" (no associated text exists upstream — the absent key or
+      # the {} self-closing form; a resync must not chase it),
+      # "unfetched" (a real uuid whose file is not on disk), "unpublished" (the
       # {"result":[]} tombstone), "shell" (resolves, no transliteration
       # lines), "edition".
       def text_item_for(document_ref, text_uuid)
-        return [nil, "unfetched"] if text_uuid.nil?
+        return [nil, "no-text"] if text_uuid.nil?
 
         workdir = File.dirname(document_ref.path, 2)
         path = File.join(workdir, Nabu::OchreFetch::TEXTS_DIRNAME, "#{text_uuid}.json")

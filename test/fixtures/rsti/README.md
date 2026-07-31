@@ -20,7 +20,13 @@ uuid-named), so `discover` walks this directory unchanged.
   full edition), **RS 1.003+** (join label; text detail is the `{"result":[]}`
   tombstone), **RS 1.004** (shell: text item resolves but `sections` is `{}`),
   **RS 1.009 [A]** (bracket variant label; no text detail on disk — the
-  "unfetched" path).
+  "unfetched" path), plus — added 2026-07-31 after the first real sync —
+  **RS 17.009** (verbatim from the live Season 17 set,
+  `063495df-dbbd-4c9e-9b71-1c22302ed75b`): `associated_uuid`,
+  `associated_desc` and `associated_alias` all arrive as `{}` (the XML
+  self-closing form — no associated text exists), the shape that crashed
+  stage-2 uuid collection live and now pins `uuid_of` + the "no-text"
+  status.
 - `sets/a7a3a86e-8cdb-4ea9-92fe-6dc31d07dcbc.json` — Ras Ibn Hani, trimmed
   from 238 records to 2: **RIH 77/01** (slash label, `description` is the
   empty-dict quirk `{}`), **RIH 84/ [31,10]** (slash + space + bracketed

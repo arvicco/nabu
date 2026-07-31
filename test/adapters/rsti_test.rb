@@ -93,7 +93,8 @@ module Adapters
                     "urn:nabu:rsti:rs-1.001",
                     "urn:nabu:rsti:rs-1.003+",
                     "urn:nabu:rsti:rs-1.004",
-                    "urn:nabu:rsti:rs-1.009-[a]"], all.map(&:id)
+                    "urn:nabu:rsti:rs-1.009-[a]",
+                    "urn:nabu:rsti:rs-17.009"], all.map(&:id)
       assert(all.all? { |r| File.dirname(r.path).end_with?("sets") })
       assert_predicate adapter.discovery_skips(FIXTURES), :clean?
     end
@@ -114,9 +115,9 @@ module Adapters
         FileUtils.cp(source, File.join(dir, "sets", "#{SEASON01}.json"))
         FileUtils.cp(source, File.join(dir, "sets", "ffffffff-aaaa-bbbb-cccc-000000000000.json"))
         fresh = Nabu::Adapters::Rsti.new
-        assert_equal 4, fresh.discover(dir).to_a.size, "each record once, first set file wins"
+        assert_equal 5, fresh.discover(dir).to_a.size, "each record once, first set file wins"
         skips = fresh.discovery_skips(dir)
-        assert_equal 4, skips.skipped_by_rule
+        assert_equal 5, skips.skipped_by_rule
         assert_predicate skips, :clean?
       end
     end
@@ -205,6 +206,15 @@ module Adapters
       assert_equal "Small fragment with ritual vocabulary", document.title
     end
 
+    def test_an_empty_dict_associated_uuid_is_a_no_text_metadata_document
+      document = parse("urn:nabu:rsti:rs-17.009")
+      assert_equal 0, document.size
+      assert_equal "no-text", document.metadata["text_status"],
+                   "associated_uuid: {} (the XML self-closing form, witnessed live on Season 17 " \
+                   "at first real sync 2026-07-31) means NO text record exists upstream — " \
+                   "distinct from an unfetched one; a resync must not chase it"
+    end
+
     def test_the_empty_description_dict_never_becomes_a_metadata_key
       document = parse("urn:nabu:rsti:rih-77/01")
       refute document.metadata.key?("description"), "RIH 77/01 ships description: {}"
@@ -271,7 +281,7 @@ module Adapters
                      File.read(File.join(dir, "texts", "b8e6a1c9-d0f5-4576-aab6-3b96905fe5ba.json")),
                      "the API's not-published answer is PERSISTED as-is — a tombstone, never an error"
         assert_match(/6 text details fetched/, report.notes)
-        assert_equal 6, Nabu::Adapters::Rsti.new.discover(dir).to_a.size
+        assert_equal 7, Nabu::Adapters::Rsti.new.discover(dir).to_a.size
       end
     end
 

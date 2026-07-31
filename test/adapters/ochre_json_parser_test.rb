@@ -13,6 +13,16 @@ module Adapters
 
     def parser = Nabu::Adapters::OchreJsonParser
 
+    def test_uuid_of_normalizes_the_witnessed_shapes
+      assert_equal "de32293f", parser.uuid_of("de32293f"), "a plain uuid string passes through"
+      assert_nil parser.uuid_of({}), "the XML self-closing form (associated_uuid: {}) is absence"
+      assert_nil parser.uuid_of(nil)
+      assert_nil parser.uuid_of(""), "an empty string is absence, never a filename"
+      assert_equal "ab12", parser.uuid_of({ "uuid" => "ab12" }),
+                   "a wrapped dict yields its uuid string (the content_of family discipline)"
+      assert_nil parser.uuid_of({ "uuid" => {} }), "a dict without a usable uuid string is absence"
+    end
+
     def season01
       @season01 ||= JSON.parse(
         File.read(File.join(FIXTURES, "sets", "2a414954-e077-496b-8b06-a9d0cd417eba.json"))
