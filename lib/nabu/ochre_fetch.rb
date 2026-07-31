@@ -180,7 +180,7 @@ module Nabu
       Dir.glob(File.join(@dir, SETS_DIRNAME, "*.json")).flat_map do |path|
         set = JSON.parse(File.read(path))
         Adapters::OchreJsonParser.wrap(set.dig("ochre", "set", "items", "spatialUnit"))
-                                 .filter_map { |record| record["associated_uuid"] }
+                                 .filter_map { |record| Adapters::OchreJsonParser.uuid_of(record["associated_uuid"]) }
       end.uniq.sort
     end
 

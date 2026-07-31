@@ -64,6 +64,18 @@ module Nabu
           contents_of(value).first
         end
 
+        # A uuid field, or nil for every witnessed absence shape: the XML
+        # self-closing form arrives as {} (Season 17's associated_uuid,
+        # first real sync 2026-07-31 — the crash the fixtures now pin), a
+        # wrapped dict carries its uuid string, an empty string is absence.
+        def uuid_of(value)
+          return (value.empty? ? nil : value) if value.is_a?(String)
+          return nil unless value.is_a?(Hash)
+
+          inner = value["uuid"]
+          inner.is_a?(String) && !inner.empty? ? inner : nil
+        end
+
         # Literal "&#x10384;"/"&#66436;" entity strings → real codepoints;
         # anything that is not an entity rides through verbatim.
         def decode_entities(string)
