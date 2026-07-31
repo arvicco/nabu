@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "feature"
+require_relative "actib_anchors_builder"
 require_relative "aozora_gaiji_builder"
 require_relative "form_lemma"
 require_relative "hani_fold_builder"
@@ -46,7 +47,7 @@ module Nabu
     # builder packets flip their feature to :available as each builder lands
     # (P50-W2 san/form-lemma, P50-W3 xct/wylie-fold, P50-W4 xct/verb-lemma,
     # P51-W5 xct/segmentation, P52-3 zho/hani-fold + jpn/aozora-gaiji,
-    # P53-3 sux/value-signs), and
+    # P53-3 sux/value-signs, P55-4 xct/actib-anchors), and
     # `nabu data build` refuses the still-planned politely. The doc table in
     # docs/nabu-data.md is drift-guarded against this list.
     REGISTRY = [
@@ -219,6 +220,29 @@ module Nabu
         maintenance: "re-derive after each `nabu sync osl` (rolling master, no tags — a re-sync " \
                      "is an owner call; the stale-ingest guard enforces freshness); mechanical, " \
                      "no review needed beyond spot-checks"
+      ),
+      Feature.new(
+        slug: "xct/actib-anchors", language: LANGUAGES.fetch("xct"),
+        title: "ACTib ↔ Derge Kangyur anchor table (stable anchors for the segmented eKangyur)",
+        # gold-DERIVED about the MAPPING only: the anchor derivation is
+        # deterministic and its quality is measured in-band (nabu.eval);
+        # ACTib's own seg/POS layers stay labeled automatic upstream.
+        status: :available, tier: "gold-derived", anchoring: "urn+sha",
+        inputs: %w[derge-kangyur actib], canonical_cones: %w[derge-kangyur actib],
+        builder: ActibAnchorsBuilder,
+        rationale: "nabu-data's first re-publication: ACTib's known weakness is that its seg/POS " \
+                   "layers carry no stable anchors into their source etexts (an upstream update " \
+                   "orphans the whole layer — the concept doc's prior-art verdict), so this " \
+                   "dataset publishes the anchor table that fixes it — one row per derge-kangyur " \
+                   "passage tying URN + Passage_SHA256 to ACTib's (volume, page, line), with the " \
+                   "measured match census as the in-band eval and the near/partial divergences " \
+                   "republished as a proofreading table. The mapping is deterministic and " \
+                   "measured (gold-derived); ACTib's own annotation layers stay labeled " \
+                   "automatic upstream, and their 800 MB content is never republished — " \
+                   "consumers join the DOI-cited Zenodo artifact on the anchor key.",
+        maintenance: "re-derive after a derge-kangyur or actib re-sync (the stale-ingest guard " \
+                     "enforces freshness); every build re-measures the anchoring census into " \
+                     "nabu.eval"
       )
     ].freeze
 
