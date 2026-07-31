@@ -96,6 +96,15 @@ module Nabu
       "#{RESOLVER_BASE}#{uuid}&format=json"
     end
 
+    # The API's "not published" body — {"result":[]} exactly. Served with
+    # HTTP 404 on the live wire (2026-07-31); the body, not the status, is
+    # the truth.
+    def self.tombstone?(body)
+      JSON.parse(body) == { "result" => [] }
+    rescue JSON::ParserError
+      false
+    end
+
     # One-shot choreography: stage 1 then stage 2, ledger pinned at the end.
     def self.sync!(menu_uuid:, dir:, http: ZipFetch.default_http, delay: DELAY, progress: nil)
       new(menu_uuid: menu_uuid, dir: dir, http: http, delay: delay, progress: progress).sync!
@@ -195,9 +204,14 @@ module Nabu
 
     # -- HTTP -------------------------------------------------------------------
 
-    # One GET with the retry/backoff loop. 200 wins; 404 returns nil when
-    # +missing_ok+ (text details) and raises when not (menu/sets); 5xx and
-    # transport failures retry MAX_ATTEMPTS× with exponential backoff.
+    # One GET with the retry/backoff loop. 200 wins; on 404 the BODY decides
+    # for text details (+missing_ok+): the live wire (first real sync
+    # 2026-07-31) answers unpublished uuids with HTTP 404 CARRYING the
+    # {"result":[]} tombstone — that is the API's honest "not published"
+    # and is returned for persisting, so a resync never re-probes it; a
+    # 404 with any other body is a real miss (nil, censused). Menu/sets
+    # 404s raise; 5xx and transport failures retry MAX_ATTEMPTS× with
+    # exponential backoff.
     def get!(url, context:, missing_ok: false)
       attempt = 0
       begin
@@ -207,7 +221,12 @@ module Nabu
         case response.status
         when 200 then response.body.to_s
         when 404
-          return nil if missing_ok
+          if missing_ok
+            body = response.body.to_s
+            return body if self.class.tombstone?(body)
+
+            return nil
+          end
 
           raise Error, "HTTP 404 for #{url} (#{context}) — the resolver no longer serves it"
         else
