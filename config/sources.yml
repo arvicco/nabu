@@ -3330,7 +3330,7 @@ osl:
   # manifest) → class open.
   sync_policy: manual
 
-cantigas:   # P55-1, 02-sources row 143
+cantigas:   # P55-1, 02-sources row 144
   adapter: Nabu::Adapters::Cantigas
   kind: source
   axes: [romance]   # the desk's first vernacular VERSE shelf (Galician-Portuguese lyric)
