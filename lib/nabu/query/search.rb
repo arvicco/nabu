@@ -3,6 +3,7 @@
 require_relative "../languages"
 require_relative "../normalize"
 require_relative "../store/indexer"
+require_relative "../tibetan_words"
 require_relative "catalog_join"
 require_relative "stored_snippet"
 require_relative "term_frequency"
@@ -164,15 +165,34 @@ module Nabu
         query.to_s.match?(SPACELESS_WORD_SCRIPTS) ? WORD_REFUSAL : nil
       end
 
+      # --words (P54-4): the Tibetan word-grain post-filter. Tibetan sits in
+      # the --word gap deliberately left at P40-w: the script IS delimited —
+      # but at SYLLABLE grain (tsheg), one level below the word, so a
+      # multi-syllable query also matches an ACCIDENTAL syllable run crossing
+      # a word boundary. words: true keeps only hits where some occurrence of
+      # the query in the stored text aligns with word boundaries per the
+      # nabu-data xct/segmentation vocabulary (Nabu::TibetanWords). Only
+      # meaningful for Tibetan-script queries; anything else DEGRADES to
+      # plain search plus one honest note — never an error (the seam may
+      # simply not be synced on this box).
+      TIBETAN_SCRIPT = /\p{Tibetan}/
+      WORDS_MODULE_NOTE = "word-grain: nabu-data module not synced — run: nabu sync nabu-data"
+      WORDS_SCRIPT_NOTE = "word-grain: only for Tibetan-script queries"
+
       # +term_frequency+ is the df probe seam (defaults to the real fts5vocab
       # reader over +fulltext+); tests inject a stub to pin the fail-open path.
       # +rng+ (P42-r3) drives the sampled guarded page — injectable for
       # deterministic tests, exactly the Random sampler's seam.
-      def initialize(catalog:, fulltext:, term_frequency: nil, rng: ::Random.new)
+      # +tibetan_words+ (P54-4) is the word-grain segmentation seam: :auto
+      # feature-detects the nabu-data dataset LAZILY on the first words: true
+      # run (the define.rb form_lemma/verb_lemma contract — absent tree,
+      # byte-identical behavior); tests inject a fixture seam or nil.
+      def initialize(catalog:, fulltext:, term_frequency: nil, rng: ::Random.new, tibetan_words: :auto)
         @catalog = catalog
         @fulltext = fulltext
         @term_frequency = term_frequency || TermFrequency.new(fulltext: fulltext)
         @rng = rng
+        @tibetan_words = tibetan_words
       end
 
       # nil, or RANK_SKIP_NOTE when the last #run served its page in corpus
@@ -194,6 +214,17 @@ module Nabu
       # with … whenever it truncates), not a corpus census
       METER_NOTE_VALUES = 12
 
+      # nil, or the word-grain degrade note (P54-4) after a words: true #run
+      # that could not filter — WORDS_SCRIPT_NOTE for a non-Tibetan query,
+      # WORDS_MODULE_NOTE when the nabu-data seam is absent. The page served
+      # alongside is plain search, honestly labelled. Reset on every run.
+      attr_reader :words_note
+
+      # true when the last #run actually APPLIED the word-grain post-filter
+      # (words: true, Tibetan query, seam present) — the surfaces' present-only
+      # marker (MCP word_grain key). nil otherwise; reset on every run.
+      attr_reader :word_grain
+
       # Search +query+ and return up to +limit+ Result values in bm25 rank order.
       # +lang+ filters on passage language — inside the MATCH when the index
       # carries the P42-3 language column, catalog-side against an older index
@@ -213,13 +244,18 @@ module Nabu
       # enrichment whose code / foot pattern matches (case-insensitive; the
       # CatalogJoin note argues the read-time cost). #meter_note carries the
       # facet's honesty line afterwards.
+      # +words+ (P54-4) post-filters the assembled page to Tibetan word-grain
+      # matches (class note at WORDS_MODULE_NOTE); filtered-out hits are simply
+      # absent, degrade cases serve the plain page plus #words_note.
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
               facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil,
-              exact: false, word: false,
+              exact: false, word: false, words: false,
               scan_ceiling: SCAN_CEILING, ubiquity_threshold: self.class.ubiquity_threshold)
         @incomplete_hint = nil
         @rank_note = nil
         @meter_note = nil
+        @words_note = nil
+        @word_grain = nil
         raise Nabu::Error, WORD_REFUSAL if word && self.class.word_refusal_for(query)
 
         variants = Nabu::Normalize.query_forms(query.to_s)
@@ -234,6 +270,7 @@ module Nabu
                else
                  folded_page(variants, filters, limit: limit, urn: urn, ubiquity_threshold: ubiquity_threshold)
                end
+        page = word_grain_page(page, query) if words
         note_meter(meter, meter_pattern, empty: page.empty?)
         page.map { |row| build_result(row, query, exact: exact, word: word) }
       end
@@ -625,6 +662,94 @@ module Nabu
           license_class: row.fetch(:license_class),
           credit: row.fetch(:credit)
         )
+      end
+
+      # -- the Tibetan word-grain post-filter (P54-4) -------------------------
+      # WHERE it hooks: the assembled page, after the folded/verified paths
+      # and the catalog join, right before Results are built — one seam for
+      # both paths, and the ONLY rows ever segmented are the page's own
+      # (≤ limit, strictly inside the packet's window bound; the corpus is
+      # never touched). A filtered page may therefore come back short of
+      # +limit+ — the contract: filtered-out hits are simply absent.
+      #
+      # HOW a span is located: the same mechanism StoredSnippet uses to
+      # bracket a match — fold the stored text with a char-index map
+      # (Normalize.fold_with_map; for xct/bod/otb that is the EWTS transcode
+      # the index itself was built from), find every occurrence of the
+      # query's own search form (search_form under the hit's language — the
+      # exact fold the FTS MATCH matched on), and map each span back onto
+      # stored glyphs. NOT a raw-substring hunt: the fold is what actually
+      # matched, and the map is exact. A hit survives when ANY occurrence
+      # aligns; a hit whose tokens only matched scattered (non-adjacent AND
+      # terms) has no contiguous span at all and is dropped — word-grain
+      # implies the query stands somewhere as a contiguous, word-aligned run.
+      def word_grain_page(page, query)
+        return degrade_words(WORDS_SCRIPT_NOTE, page) unless query.to_s.match?(TIBETAN_SCRIPT)
+
+        seam = tibetan_words
+        return degrade_words(WORDS_MODULE_NOTE, page) unless seam
+
+        @word_grain = true
+        page.select { |row| word_grain_hit?(row, query, seam) }
+      end
+
+      def degrade_words(note, page)
+        @words_note = note
+        page
+      end
+
+      # Feature-detect + memoize the seam (the define.rb :auto contract):
+      # loaded from canonical/nabu-data on first use, nil when not synced.
+      def tibetan_words
+        return @tibetan_words unless @tibetan_words == :auto
+
+        @tibetan_words = Nabu::TibetanWords.load_default
+      end
+
+      # Does the query stand word-aligned somewhere in this hit's stored
+      # text? Boundaries are segmented lazily (only when a contiguous folded
+      # occurrence exists — for a real hit it almost always does) and once
+      # per row.
+      def word_grain_hit?(row, query, seam)
+        language = row.fetch(:language)
+        display = StoredSnippet.normalized_display(row.fetch(:text),
+                                                   exempt: Nabu::Normalize.nfc_exempt?(language))
+        needle = Nabu::Normalize.search_form(query.to_s, language: language)
+        return false if needle.empty?
+
+        folded, map = Nabu::Normalize.fold_with_map(display, language: language)
+        boundaries = nil
+        from = 0
+        while (index = folded.index(needle, from))
+          boundaries ||= word_boundaries(seam, display)
+          start = map[index]
+          finish = StoredSnippet.extend_over_marks(display, map[index + needle.length - 1] + 1)
+          return true if word_grain_aligned?(display, boundaries, start, finish)
+
+          from = index + 1
+        end
+        false
+      end
+
+      # The boundary set of a text: every token start and every token end
+      # (tokens are exact substrings at their offsets, trailing tsheg kept —
+      # the TibetanWords contract).
+      def word_boundaries(seam, display)
+        seam.segment(display).each_with_object({}) do |token, set|
+          set[token.offset] = true
+          set[token.offset + token.form.length] = true
+        end
+      end
+
+      # A span aligns when its start IS a boundary and its end is a boundary
+      # — directly, or after skipping a tsheg run: tokens keep their trailing
+      # tsheg, so a query that (normally) omits the word's final tsheg ends
+      # one tsheg short of the boundary and must still count as the word.
+      def word_grain_aligned?(display, boundaries, start, finish)
+        return false unless boundaries[start]
+
+        finish += 1 while !boundaries[finish] && display[finish]&.match?(Nabu::TibetanSegmenter::TSHEG)
+        boundaries[finish] || false
       end
 
       # The query's locatable terms for a folded snippet: drop FTS phrase quotes,

@@ -7,7 +7,7 @@ require "sequel"
 require_relative "../errors"
 require_relative "builder"
 require_relative "csv_writer"
-require_relative "tibetan_segmenter"
+require_relative "../tibetan_segmenter"
 require_relative "segmentation_eval"
 
 module Nabu

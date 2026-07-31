@@ -159,4 +159,4 @@ ten languages ride an honestly labelled silver tier. Everything else
 is full-text-searchable but not yet lemma-searchable.
 
 The same languages, grouped by the scholar who reads them rather than by code,
-are the twenty-two [research desks]({{ '/axis/' | relative_url }}).
+are the twenty-three [research desks]({{ '/axis/' | relative_url }}).

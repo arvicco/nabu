@@ -2,17 +2,18 @@
 
 require "test_helper"
 
-# The pure-Ruby Tibetan tsheg-bar segmenter behind xct/segmentation (P51-W5):
-# unigram-cost Viterbi over tsheg-bar units with a closed attached-clitic
-# class. The spike behind the design (2026-07-29, full SOAS gold corpus,
-# leave-one-text-out): boundary F1 0.9622 — greedy maximal-match measured
-# worse (0.954) and external lexica measured unhelpful (wiktionary-bo/TVD
-# +0.0001 F1) or harmful (Mahāvyutpatti phrases −0.02 recall), so the
-# segmenter trains on SOAS gold token counts alone.
+# The pure-Ruby Tibetan tsheg-bar segmenter behind xct/segmentation (P51-W5,
+# promoted from DataBuild to Nabu::TibetanSegmenter in P54-1): unigram-cost
+# Viterbi over tsheg-bar units with a closed attached-clitic class. The spike
+# behind the design (2026-07-29, full SOAS gold corpus, leave-one-text-out):
+# boundary F1 0.9622 — greedy maximal-match measured worse (0.954) and
+# external lexica measured unhelpful (wiktionary-bo/TVD +0.0001 F1) or
+# harmful (Mahāvyutpatti phrases −0.02 recall), so the segmenter trains on
+# SOAS gold token counts alone.
 #
 # Every expectation below is hand-computed on tiny inputs.
-class DataBuildTibetanSegmenterTest < Minitest::Test
-  Segmenter = Nabu::DataBuild::TibetanSegmenter
+class TibetanSegmenterTest < Minitest::Test
+  Segmenter = Nabu::TibetanSegmenter
 
   # སངས་རྒྱས (sangs rgyas, "buddha") — a two-syllable word; ཆོས (chos,
   # "dharma") — one syllable; ལ (la) — one syllable.

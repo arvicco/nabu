@@ -287,8 +287,24 @@ Flattens the Oracc Sign List (ex-OGSL, Veldhuis & Tinney, CC0 — the field's ha
 Since P51-W6 the published repo is also a REGISTERED SOURCE (`nabu-data`
 in config/sources.yml, `kind: module` — docs/02-sources.md row 141): `nabu
 sync nabu-data` clones the publication back under `canonical/nabu-data/`
-through the sanctioned GitFetch gateway, and `Nabu::FormLemma` serves the
-`san/form-lemma` table to `nabu define`'s Sanskrit query expansion. The
-producer rail above and the consumer row never touch: the rail writes the
-owner's working clone, the source syncs the published repo — the
-reproducibility loop closes only through a public commit.
+through the sanctioned GitFetch gateway, where THREE read seams consume
+it (P54 widened the original one):
+
+- **`Nabu::FormLemma`** serves the `san/form-lemma` table to `nabu
+  define`'s Sanskrit query expansion (P51-W6).
+- **`Nabu::TibetanWords`** trains the shared-core `Nabu::TibetanSegmenter`
+  on the `xct/segmentation` dataset's token counts, so `show --segmented`
+  and `search --words` segment ANY Tibetan text at read time (P54-1/2/4).
+- **`Nabu::VerbLemma`** serves the `xct/verb-lemma` paradigm table to
+  define's Tibetan verb lane — a queried tense stem reaches its lemma's
+  dictionary entry, suppletion included (P54-3).
+
+All three share the FormLemma posture: feature-detected at query time,
+absent file = lane off with byte-identical behavior, no catalog table, no
+migration. The other eight features are single-truth PROJECTIONS — their
+internal consumers read the same upstream truth the builders flatten
+(the fold tables, the hypotactic catalog rows, canonical/osl), so
+consuming the published CSV back would be a circle; they are one-way by
+design. The producer rail above and the consumer rows never touch: the
+rail writes the owner's working clone, the source syncs the published
+repo — the reproducibility loop closes only through a public commit.

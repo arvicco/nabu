@@ -1347,3 +1347,19 @@ from the shared derivation-core digest (owner ruling D50-b): a data_build
 packet must not read every source's fingerprint dirty. A purity guard test
 pins the assumption — no derivation code may reference `DataBuild`; the
 inverse direction (data_build consuming the rest of Nabu) stays free.
+
+The CONSUMER side (P51-W6, widened P54): the published repo is itself a
+registered `kind: module` source — `nabu sync nabu-data` lands it under
+`canonical/nabu-data/`, and three read seams in shared core consume the
+published files back, all in the same posture (feature-detected at query
+time via `load_default`, absent file = lane off with byte-identical
+behavior, NO catalog table, NO migration — the lila shape):
+`Nabu::FormLemma` (san/form-lemma → define's Sanskrit expansion),
+`Nabu::TibetanWords` (xct/segmentation token counts train the shared-core
+`Nabu::TibetanSegmenter` — promoted out of data_build in P54-1, so it DOES
+participate in the derivation digest — serving `show --segmented` and
+`search --words`), and `Nabu::VerbLemma` (xct/verb-lemma → define's
+Tibetan verb lane). The remaining features are single-truth projections:
+their internal consumers read the same upstream truth the builders
+flatten, so they are one-way by design. Producer rail and consumer seams
+never touch — the loop closes only through a public commit.

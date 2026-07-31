@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "tibetan_segmenter"
+require_relative "../tibetan_segmenter"
 
 module Nabu
   module DataBuild

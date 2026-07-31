@@ -34,10 +34,10 @@ module MCP
     # -- rig -------------------------------------------------------------------
 
     def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil, links: nil, registry: nil,
-              enabled_slugs: nil, pleiades: nil, sign_list: nil)
+              enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil)
       Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger, links: links,
                            registry: registry, enabled_slugs: enabled_slugs, pleiades: pleiades,
-                           sign_list: sign_list)
+                           sign_list: sign_list, tibetan_words: tibetan_words)
     end
 
     def make_document(source: @open, urn: "urn:d:1", title: "Iliad", language: "grc",
@@ -264,6 +264,67 @@ module MCP
       ranked = payload(call("nabu_search", { "query" => "αειδε" }))
       refute_match(/too common to rank/, ranked.fetch("note"),
                    "below the real threshold the note is byte-identical to before P42-2")
+    end
+
+    # -- nabu_search words: the Tibetan word-grain filter (P54-4) --------------
+    # Same discriminating pair as the query-layer tests: the syllable
+    # sequence རབ་སྟོན once as a true word and once as an accidental run
+    # across the གསུང་རབ | སྟོན་པ word boundary. The payload contract is
+    # ADDITIVE: no key without the flag; a present-only word_grain marker
+    # when the filter ran; a present-only word_grain_note when it degraded.
+
+    def tibetan_seam
+      Nabu::TibetanWords.load(Nabu::TestSupport.fixtures("nabu-data"))
+    end
+
+    def seed_tibetan_pair
+      doc = make_document(urn: "urn:d:xct", title: "Buston", language: "xct")
+      make_passage(doc, urn: "urn:d:xct:word", text: "རབ་སྟོན།", sequence: 0, language: "xct")
+      make_passage(doc, urn: "urn:d:xct:run", text: "གསུང་རབ་སྟོན་པ།", sequence: 1, language: "xct")
+      rebuild!
+    end
+
+    def test_search_words_filters_and_marks_the_payload_additively
+      seed_tibetan_pair
+      rig = tools(tibetan_words: tibetan_seam)
+
+      plain = payload(rig.call("nabu_search", { "query" => "རབ་སྟོན" }))
+      assert_equal 2, plain.fetch("matches").size
+      refute plain.key?("word_grain"), "the frozen payload gains no key without the flag"
+      refute plain.key?("word_grain_note")
+
+      filtered = payload(rig.call("nabu_search", { "query" => "རབ་སྟོན", "words" => true }))
+      assert_equal(%w[urn:d:xct:word], filtered.fetch("matches").map { |hit| hit.fetch("urn") },
+                   "the accidental cross-boundary run is simply absent")
+      assert filtered.fetch("word_grain"), "present-only marker: the filter ran"
+      refute filtered.key?("word_grain_note")
+    end
+
+    def test_search_words_degrades_with_a_note_when_the_module_is_absent
+      seed_tibetan_pair
+      reply = payload(tools.call("nabu_search", { "query" => "རབ་སྟོན", "words" => true }))
+      assert_equal 2, reply.fetch("matches").size, "plain results — degraded, never an error"
+      assert_equal "word-grain: nabu-data module not synced — run: nabu sync nabu-data",
+                   reply.fetch("word_grain_note")
+      refute reply.key?("word_grain")
+    end
+
+    def test_search_words_degrades_for_a_non_tibetan_query
+      seed_corpus
+      reply = payload(tools.call("nabu_search", { "query" => "μηνιν", "words" => true }))
+      refute_empty reply.fetch("matches"), "plain results ride through"
+      assert_equal "word-grain: only for Tibetan-script queries", reply.fetch("word_grain_note")
+      refute reply.key?("word_grain")
+    end
+
+    def test_search_words_refuses_lemma_and_near_composition
+      seed_corpus
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "λέγω", "words" => true })
+      end
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "query" => "μηνιν", "near" => "θεα", "words" => true })
+      end
     end
 
     def test_search_lemma_mode_finds_inflected_attestations
@@ -1083,6 +1144,75 @@ module MCP
 
     def test_show_requires_a_urn
       assert_raises(Nabu::MCP::Tools::InvalidArguments) { call("nabu_show", {}) }
+    end
+
+    # -- nabu_show segmented (P54-2) -------------------------------------------
+    # The additive contract: `segmented: true` on a Tibetan row adds a
+    # present-only "segmented" key (the same space-joined rendering the CLI's
+    # --segmented prints — Query::Show#segmented_text, ONE serializer); a
+    # not-applicable call adds a present-only top-level "segmentation_note"
+    # mirroring the CLI note. Flag off = byte-identical payloads.
+
+    BUSTON_OPENING = "བདེ་བར་གཤེགས་པའི་"
+    BUSTON_SEGMENTED = "བདེ་བ ར་ གཤེགས་པ འི་"
+
+    def seed_tibetan_corpus
+      @xct = make_document(urn: "urn:x:bu", title: "Buston", language: "xct")
+      make_passage(@xct, urn: "urn:x:bu:1", text: BUSTON_OPENING, sequence: 0, language: "xct")
+    end
+
+    def tibetan_words
+      Nabu::TibetanWords.load(Nabu::TestSupport.fixtures("nabu-data"))
+    end
+
+    def test_show_segmented_passage_gains_the_present_only_segmented_key
+      seed_tibetan_corpus
+      result = tools(tibetan_words: tibetan_words).call(
+        "nabu_show", { "urn" => "urn:x:bu:1", "segmented" => true }
+      )
+      body = payload(result)
+      assert_equal BUSTON_SEGMENTED, body.fetch("segmented")
+      assert_equal BUSTON_OPENING, body.fetch("text"), "text stays the pristine stored bytes"
+      refute body.key?("segmentation_note"), "an applicable call carries no note"
+    end
+
+    def test_show_segmented_document_grain_segments_each_passage_record
+      seed_tibetan_corpus
+      body = payload(tools(tibetan_words: tibetan_words).call(
+                       "nabu_show", { "urn" => "urn:x:bu", "segmented" => true }
+                     ))
+      line = body.fetch("passages").fetch(0)
+      assert_equal BUSTON_SEGMENTED, line.fetch("segmented")
+      assert_equal BUSTON_OPENING, line.fetch("text")
+    end
+
+    def test_show_without_the_flag_is_byte_identical_no_segmented_keys
+      seed_tibetan_corpus
+      body = payload(tools(tibetan_words: tibetan_words).call("nabu_show", { "urn" => "urn:x:bu:1" }))
+      refute body.key?("segmented")
+      refute body.key?("segmentation_note")
+      doc = payload(tools(tibetan_words: tibetan_words).call("nabu_show", { "urn" => "urn:x:bu" }))
+      refute doc.key?("segmentation_note")
+      doc.fetch("passages").each { |line| refute line.key?("segmented") }
+    end
+
+    def test_show_segmented_off_language_row_carries_the_note_instead
+      seed_corpus
+      body = payload(tools(tibetan_words: tibetan_words).call(
+                       "nabu_show", { "urn" => "#{@grc.urn}:1.1", "segmented" => true }
+                     ))
+      assert_equal "segmentation: only for Tibetan-language texts (this row: grc)",
+                   body.fetch("segmentation_note")
+      refute body.key?("segmented")
+      assert_equal "μῆνιν ἄειδε θεά", body.fetch("text"), "the plain payload still serves"
+    end
+
+    def test_show_segmented_without_the_seam_notes_the_sync_hint
+      seed_tibetan_corpus
+      body = payload(call("nabu_show", { "urn" => "urn:x:bu:1", "segmented" => true }))
+      assert_equal "segmentation: nabu-data module not synced — run: nabu sync nabu-data",
+                   body.fetch("segmentation_note")
+      refute body.key?("segmented")
     end
 
     # -- nabu_status --------------------------------------------------------------

@@ -362,6 +362,78 @@ module Query
       assert_empty results
     end
 
+    # -- the nabu-data verb-lemma expansion (P54-3, the Tibetan lane) -----------
+
+    # A minimal bod shelf whose headwords are the LEMMA (present-stem)
+    # citation forms — the tibetan-verbs/wiktionary-bo practice: entries
+    # only the published table can route a tense stem to.
+    def seed_bod_verb_shelf
+      dict = @catalog[:dictionaries].insert(source_id: @source.id, slug: "bod-verbs",
+                                            title: "Bod Verbs", language: "bod")
+      { "འགྲོ" => "to go", "སྐྱེལ" => "to carry", "འཆོར" => "to escape" }.each do |headword, gloss|
+        @catalog[:dictionary_entries].insert(
+          dictionary_id: dict, urn: "urn:nabu:dict:bod-verbs:#{headword}", entry_id: headword,
+          key_raw: headword, headword: headword,
+          headword_folded: Nabu::Normalize.search_form(headword, language: "bod"),
+          gloss: gloss, body: "#{headword} body", content_sha256: "x", revision: 1, withdrawn: false
+        )
+      end
+    end
+
+    def verb_lemma_table
+      @verb_lemma_table ||= Nabu::VerbLemma.load(Nabu::TestSupport.fixtures("nabu-data"))
+    end
+
+    def define_with_verb_table(lemma, **)
+      Nabu::Query::Define.new(catalog: @catalog, verb_lemma: verb_lemma_table).run(lemma, **)
+    end
+
+    # THE lane payoff: ཕྱིན (the suppletive past of འགྲོ) matches no
+    # headword — with the published table live, the same query reaches the
+    # lemma's dictionary entry; injected as nil (the absent-tree state),
+    # behavior is byte-identical to before.
+    def test_a_tense_stem_reaches_its_lemma_entry_only_through_the_table
+      seed_bod_verb_shelf
+      lane_off = Nabu::Query::Define.new(catalog: @catalog, verb_lemma: nil, lila: nil)
+      assert_empty lane_off.run("ཕྱིན", lang: "bod"),
+                   "no headword is the past stem — the honest pre-table miss"
+
+      results = define_with_verb_table("ཕྱིན", lang: "bod")
+      assert_equal ["urn:nabu:dict:bod-verbs:འགྲོ"], results.map(&:urn),
+                   "the table knows ཕྱིན → འགྲོ; the entry is found, not invented"
+      assert_equal "འགྲོ", results.first.headword, "an ordinary Result — labeled nothing new"
+      assert_nil results.first.via_lila
+    end
+
+    def test_a_wylie_query_reaches_the_table_the_same_way
+      seed_bod_verb_shelf
+      assert_equal ["urn:nabu:dict:bod-verbs:འགྲོ"],
+                   define_with_verb_table("phyin", lang: "bod").map(&:urn),
+                   "Wylie and script fold to the same EWTS key (both sides)"
+    end
+
+    # A bracket-variant stem (སྐྱོལད rides GT's སྐྱོལ༼ད༽༼སྐྱོལ༽) and a
+    # BRACKETED published lemma (ཤོརད → Lemma འཆོར༼ཤོར༽) both land on
+    # real entries: expansion strips the notation before the shelf lookup.
+    def test_bracket_variants_and_bracketed_lemmas_reach_real_entries
+      seed_bod_verb_shelf
+      assert_equal ["urn:nabu:dict:bod-verbs:སྐྱེལ"],
+                   define_with_verb_table("སྐྱོལད", lang: "bod").map(&:urn)
+      assert_equal ["urn:nabu:dict:bod-verbs:འཆོར"],
+                   define_with_verb_table("ཤོརད", lang: "bod").map(&:urn),
+                   "the ༼༽ notation never leaks into the folded shelf query"
+    end
+
+    # The language gate is a LOAD gate (the form_lemma san_eligible? shape):
+    # a Sanskrit query must never consult (or load) the verb table.
+    def test_a_sanskrit_query_never_consults_the_verb_table
+      never = Object.new
+      def never.lookup(_form) = raise "the verb table must not be consulted for a Sanskrit lang"
+      results = Nabu::Query::Define.new(catalog: @catalog, verb_lemma: never)
+                                   .run("tapasā", lang: "san")
+      assert_empty results
+    end
+
     # THE transcode payoff: ASCII "amsa" reaches both aṃśa and aṃsa — the
     # same folded shape GRETIL's IAST produces (survey §2, no fold-rule
     # change).
