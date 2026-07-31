@@ -1,0 +1,40 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# All entries come from the granted OCHRE resolver (grant №23; see
+# README.md) — the one URL shape is
+# https://pi.lib.uchicago.edu/1001/org/ochre/<uuid>&format=json (literal
+# `&`, no `?`). menu.json and the two set files are documented TRIMS
+# (whole: false — a fresh fetch returns the full 35-set menu / the full
+# 106- and 238-record sets, so they are fetched for URL-liveness only);
+# the three text files are byte-verbatim wire responses (whole: true),
+# including the 13-byte {"result":[]} tombstone — the API's well-defined
+# "not published" answer, a stable expected body.
+source: rsti
+adapter_test: null
+retrieved: 2026-07-31
+files:
+  - path: menu.json
+    url: https://pi.lib.uchicago.edu/1001/org/ochre/4a7c67a2-6814-4e88-b24c-04db5ab2ad2a&format=json
+    whole: false
+    trim: items.set trimmed 35 -> 4 entries (Season 01, Season 19, Seasons 35-48, Ras Ibn Hani); container re-serialized compact
+  - path: sets/2a414954-e077-496b-8b06-a9d0cd417eba.json
+    url: https://pi.lib.uchicago.edu/1001/org/ochre/2a414954-e077-496b-8b06-a9d0cd417eba&format=json
+    whole: false
+    trim: Season 01 items.spatialUnit trimmed 106 -> 4 records (RS 1.001, RS 1.003+, RS 1.004, RS 1.009 [A]); container re-serialized compact
+  - path: sets/a7a3a86e-8cdb-4ea9-92fe-6dc31d07dcbc.json
+    url: https://pi.lib.uchicago.edu/1001/org/ochre/a7a3a86e-8cdb-4ea9-92fe-6dc31d07dcbc&format=json
+    whole: false
+    trim: Ras Ibn Hani items.spatialUnit trimmed 238 -> 2 records (RIH 77/01, RIH 84/ [31,10]); container re-serialized compact
+  - path: texts/de32293f-9b4b-435e-bf02-c4894863035b.json
+    url: https://pi.lib.uchicago.edu/1001/org/ochre/de32293f-9b4b-435e-bf02-c4894863035b&format=json
+    whole: true
+    trim: none (RS 1.001 text item, the one witnessed full edition — whole wire response)
+  - path: texts/3e80daf3-a394-4a0e-9f00-dd76392b3834.json
+    url: https://pi.lib.uchicago.edu/1001/org/ochre/3e80daf3-a394-4a0e-9f00-dd76392b3834&format=json
+    whole: true
+    trim: none (RS 1.004 text item, the shell shape — whole wire response)
+  - path: texts/223fa8f2-a5a6-47b0-9f82-80b159c1e23c.json
+    url: https://pi.lib.uchicago.edu/1001/org/ochre/223fa8f2-a5a6-47b0-9f82-80b159c1e23c&format=json
+    whole: true
+    trim: none (the 13-byte {"result":[]} tombstone — the API's stable "not published" body)

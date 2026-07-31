@@ -2096,6 +2096,42 @@ cuc:
   # re-pin is an owner decision.
   sync_policy: manual
 
+rsti:
+  adapter: Nabu::Adapters::Rsti
+  axes: [cuneiform]
+  wired: false   # checklist §6 — flip only after the owner-fired first sync
+                   # is verified. OWNER QUEUE (P55-2): bin/nabu sync rsti —
+                   # stage 1 = menu + 35 season/collection sets (~36 GETs,
+                   # under a minute), stage 2 = one GET per associated text
+                   # uuid, sequential ≥1s, RESUMABLE (a uuid on disk is never
+                   # re-fetched; {"result":[]} tombstones persist and skip) —
+                   # ~4,800-7,000 detail GETs ≈ 90-120 min ONE-TIME, prints
+                   # progress every 25. Then eyeball nabu show
+                   # urn:nabu:rsti:rs-1.001 (the one witnessed full edition —
+                   # 22 line-passages, "dqt . ṯʿ . ynt" Recto 1, graphemic
+                   # cuneiform annotations) beside 5 random inventory records
+                   # (expect text_status unpublished, zero passages — the
+                   # inventory-first verdict), then flip.
+  # P55-2: RSTI — the Ras Shamra Tablet Inventory (U. Chicago CORPUS/OCHRE;
+  # Prosser/Pardee et al.): the complete inventory of inscribed objects from
+  # Ugarit + Ras Ibn Hani, ~5,000-7,000 records across 35 season sets
+  # (sampled: S01=106, S19=446, S24=191, S35-48=89, RIH=238), each carrying
+  # museum number, French TEO findspot, script/language, size and the
+  # KTU/CTA/UT/RSO concordance (→ metadata "concordances", the interop keys
+  # Ugaritologists actually use). INVENTORY-FIRST, text exceptional: ~99% of
+  # documents are honest zero-passage metadata records ("text_layer" none —
+  # 8 of 10 scouted text probes answered the {"result":[]} tombstone, 1 the
+  # sections-{} shell); the rare full edition (RS 1.001) parses to per-
+  # surface line passages with phonemic/graphemic (decoded U+10380-block
+  # cuneiform)/translation annotations. New `ochre-json` family +
+  # Nabu::OchreFetch (resolver pi.lib.uchicago.edu/1001/org/ochre/
+  # <uuid>&format=json — literal &, no ?). LICENSE: CC BY-NC-SA 4.0 (the
+  # API's own availability.license), GRANTED №23 (M. Prosser, U. Chicago
+  # CORPUS/OCHRE, 2026-07-27: "retrieve the RSTI data and add it to your
+  # collection, with attribution") → class nc, MCP-excluded; the Bordreuil &
+  # Pardee (1989) TEO credit rides the manifest verbatim.
+  sync_policy: manual
+
 peshitta:
   adapter: Nabu::Adapters::Peshitta
   axes: [biblical, syriac]
