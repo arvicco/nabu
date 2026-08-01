@@ -24,6 +24,9 @@ class SefariaJsonParserTest < Minitest::Test
   SHENI = File.join(TARGUM,
                     "Aramaic Targum/Writings/Targum Sheni on Esther/English/Sefaria Community Translation.json")
   JERUSALEM = File.join(TARGUM, "Targum Jerusalem/Targum Jerusalem/Hebrew/Targum Jerusalem on Torah.json")
+  RUTH_SMR = File.join(FIXTURES, "json/Midrash/Aggadah/Midrash Rabbah/Ruth Rabbah/English/" \
+                                 "The Sefaria Midrash Rabbah, 2022.json")
+  SIFREI_ZUTA = File.join(FIXTURES, "json/Midrash/Halakhah/Sifrei Zuta/Hebrew/Leipzig, 1917.json")
   ONKELOS_NC = File.join(TARGUM,
                          "Onkelos/Torah/Onkelos Numbers/Hebrew/Sifsei Chachomim Chumash, Metsudah Publications, " \
                          "2009.json")
@@ -57,6 +60,35 @@ class SefariaJsonParserTest < Minitest::Test
     books = document.map { |p| p.urn.split(":").last[/\A[a-z]+/] }.uniq
     assert_equal %w[genesis exodus leviticus numbers deuteronomy], books,
                  "schema.nodes order IS document order"
+  end
+
+  # The P55-3 midrash quirk: the Rabbah files are dict texts whose MAIN
+  # content rides a DEFAULT schema node with enTitle "" (Petichta + "").
+  # Upstream cites the default node bare ("Ruth Rabbah 1:1") and the named
+  # node by name ("Ruth Rabbah, Petichta 1") — the citation fold mirrors
+  # that: an empty node slug adds NO prefix segment.
+  def test_an_empty_titled_default_node_cites_bare_numeric_paths
+    document = parse(RUTH_SMR, language: "eng")
+    assert_equal 31, document.size, "the trim: 2 petichtot + chapter 1 (5) + chapter 2 (24)"
+    assert_equal "petichta.1", document.first.urn.split(":").last,
+                 "the NAMED node keeps its slug prefix, and schema-node order is document order"
+    main = document.select { |p| p.urn.split(":").last.match?(/\A\d/) }
+    assert_equal 29, main.size
+    assert_equal "1.1", main.first.urn.split(":").last,
+                 "the default node cites bare chapter.paragraph — no empty segment, no leading dot"
+    assert(document.none? { |p| p.urn.split(":").last.start_with?(".") })
+    assert document.first.text.start_with?("“It was during the days when the judges judged"),
+           "the <b> lemma markup unwraps, the reading survives"
+  end
+
+  def test_leading_empty_chapters_stay_honest_lacunae_in_deep_midrash
+    document = parse(SIFREI_ZUTA, urn: "urn:nabu:sefaria:sifrei-zuta:he:leipzig-1917", language: "hbo")
+    assert_equal 163, document.size, "the trim: Numbers 1-6; chapters 1-4 (and 5:1) are honest empties"
+    assert_equal "urn:nabu:sefaria:sifrei-zuta:he:leipzig-1917:5.2.1", document.first.urn,
+                 "Sifrei Zuta opens at Numbers 5:2 — sectionNames Chapter/Verse/Paragraph, numeric grain"
+    assert_equal "6.27.2", document.passages.last.urn.split(":").last
+    assert_includes document.first.text, "ואל המקדש לא תבא",
+                    "the Leipzig text rides byte-verbatim (hbo is NFC-exempt), <b> lemmata unwrapped"
   end
 
   def test_sequence_is_reading_order

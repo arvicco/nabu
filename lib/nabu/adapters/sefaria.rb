@@ -4,7 +4,8 @@ require "json"
 
 module Nabu
   module Adapters
-    # Sefaria — the Targum shelf (P30-3) + the Rabbinic text core (P46-1).
+    # Sefaria — the Targum shelf (P30-3) + the Rabbinic text core (P46-1)
+    # + the midrash shelves (P55-3).
     # Sefaria-Export was RESTRUCTURED upstream: the git repo is a
     # lightweight monthly index (books.json, 19,705 version entries / 6,456
     # titles at the pinned 2026-07-02 generation) and the texts live in a
@@ -33,6 +34,29 @@ module Nabu
     # - tosefta: Tosefta/*/Seder * — he: the Lieberman codex-Vienna text
     #   (versionTitle carries upstream's own double "to", verbatim; ×33);
     #   en: SCT (×72).
+    #
+    # == The midrash shelves (P55-3 wave 2, censused 2026-07-31)
+    #
+    # - rabbah: Midrash/Aggadah/Midrash Rabbah EXACTLY (the Commentary
+    #   sub-subtrees — Etz Yosef, Matnot Kehunah, Maharzu … — are out) —
+    #   the ten classical collections: he Torat Emet ("Midrash Rabbah --
+    #   TE" ×10, per-file MIXED licensing: some files PD, some "unknown" —
+    #   the gate censuses); en The Sefaria Midrash Rabbah 2022 (×10,
+    #   CC-BY) + SCT (×10). "Ruth Rabbah (Lerner)" duplicates the Ruth
+    #   title → EXCLUDED_TITLES.
+    # - midrash-halakhah: Midrash/Halakhah EXACTLY — the tannaitic halakhic
+    #   midrashim (both Mekhiltas, Sifra, Sifrei Bamidbar/Devarim/Zuta,
+    #   Midrash Tannaim): he principal editions ×6 (Sifra's only Hebrew,
+    #   Venice 1545, says license "unknown" in its file → not named); en
+    #   SCT ×6 + Silverstein ×4 + Lauterbach + Jaffee. The "Footnotes on
+    #   Mekhilta DeRabbi Shimon Ben Yochai" apparatus title shares the
+    #   Hoffman versionTitle → EXCLUDED_TITLES.
+    # The FLAT Midrash/Aggadah bucket (Pesikta DeRav Kahana, Tanchuma,
+    # Pirkei DeRabbi Eliezer … shelved beside Yalkut Shimoni, Otzar
+    # Midrashim, Ein Yaakov, Legends of the Jews) is not category-separable
+    # into classical midrash vs later anthology — out of wave 2; including
+    # any of it is a title-level owner ruling.
+    #
     # Commentary/Rishonim/Acharonim/Guides subtrees are out of every
     # shelf's category scope by rule.
     #
@@ -80,7 +104,8 @@ module Nabu
     #
     # Sefaria's site axis is he/en; each shelf rules what its columns
     # honestly are: targum he→arc (axis-keyed, the frozen P26-3/P30-3
-    # ruling; Tafsir Rasag excluded by rule), mishnah + tosefta he→hbo,
+    # ruling; Tafsir Rasag excluded by rule), mishnah + tosefta + the two
+    # midrash shelves he→hbo (tannaitic/rabbinic Hebrew matrix),
     # bavli + bavli-minor + yerushalmi he→arc, en→eng everywhere. hbo and
     # arc are both NFC-EXEMPT (byte-verbatim — protects niqqud). The
     # post-Targum shelves key the ruling on the file's actualLanguage: the
@@ -93,8 +118,14 @@ module Nabu
 
       MERGED_VERSION = "merged"
 
-      # In the Targum category, not an Aramaic targum (see class note).
-      EXCLUDED_TITLES = ["Tafsir Rasag"].freeze
+      # Titles excluded whole even inside shelf scope: Tafsir Rasag (in the
+      # Targum category, not an Aramaic targum — see class note); the
+      # Footnotes apparatus volume that shares the Hoffman Mekhilta
+      # versionTitle; the Lerner critical edition that duplicates the Ruth
+      # Rabbah title (its SCT translation would ride the shelf-wide SCT
+      # naming otherwise).
+      EXCLUDED_TITLES = ["Tafsir Rasag", "Footnotes on Mekhilta DeRabbi Shimon Ben Yochai",
+                         "Ruth Rabbah (Lerner)"].freeze
 
       # Machine-readable license → our class enum. "unknown"/absent → nil
       # (skip by rule); any other unlisted string is a LOUD STOP.
@@ -133,8 +164,11 @@ module Nabu
 
       # THE PINNED SHELF TABLE (see the class note; census dry-run against
       # the pinned 2026-07-02 index: 118 targum + 634 open-lane + 112
-      # Davidson-nc files). Named versions are index versionTitles VERBATIM
-      # — including upstream's double "to" in the Lieberman Tosefta.
+      # Davidson-nc wave-1 files; wave 2 adds 48 midrash files — 30 rabbah
+      # + 18 midrash-halakhah, censused 2026-07-31). Named versions are
+      # index versionTitles VERBATIM — including upstream's double "to" in
+      # the Lieberman Tosefta and its filing of Lauterbach's Mekhilta
+      # translation under Mekhilta DeRabbi Shimon Ben Yochai.
       SHELVES = [
         Shelf.new(id: "targum", prefix: %w[Tanakh Targum], division_index: nil, division: nil,
                   languages: { "he" => "arc", "en" => "eng" }, ruled_by: :axis, urn_axis: false,
@@ -178,6 +212,38 @@ module Nabu
                     "Hebrew" => ["The Tosefta according to to codex Vienna. Third Augmented " \
                                  "Edition, JTS 2001"],
                     "English" => ["Sefaria Community Translation"]
+                  }),
+        # THE P55-3 MIDRASH WAVE (wave 2). Both shelves scope to their EXACT
+        # category path — /\A\z/ pins "no level past the prefix", which is
+        # what keeps the Commentary subtrees out. The flat Midrash/Aggadah
+        # bucket (Pesikta, Tanchuma, Pirkei DeRabbi Eliezer … beside Yalkut
+        # Shimoni, Otzar Midrashim, Ein Yaakov, Legends of the Jews) is NOT
+        # category-separable into classical vs later — out of wave 2 by
+        # rule; cutting it needs a title-level owner ruling.
+        Shelf.new(id: "rabbah", prefix: ["Midrash", "Aggadah", "Midrash Rabbah"], division_index: 3,
+                  division: /\A\z/,
+                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language, urn_axis: true,
+                  fetch_versions: {
+                    "Hebrew" => ["Midrash Rabbah -- TE"],
+                    "English" => ["The Sefaria Midrash Rabbah, 2022", "Sefaria Community Translation"]
+                  }),
+        Shelf.new(id: "midrash-halakhah", prefix: %w[Midrash Halakhah], division_index: 2,
+                  division: /\A\z/,
+                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language, urn_axis: true,
+                  fetch_versions: {
+                    # Sifra's only Hebrew version (Venice 1545) says license
+                    # "unknown" IN ITS FILE — known-unknown versions are not
+                    # named (the Yerushalmi Venice rule): Sifra rides
+                    # English-only until upstream licenses the Hebrew.
+                    "Hebrew" => ["Mechilta de-Rabbi Simon b. Jochai, Dr. D. Hoffman, Frankfurt 1905",
+                                 "Beeri Edition, Koren, Jerusalem, 2019", "Wikisource",
+                                 "Sifre on Deuteronomy, ed. Dr. Louis Finkelstein. JTS, 1969",
+                                 "Leipzig, 1917", "Berlin, 1908"],
+                    "English" => ["Sefaria Community Translation", "Lauterbach",
+                                  "Mechilta, translated by Rabbi Shraga Silverstein",
+                                  "Sifra by Rabbi Shraga Silverstein",
+                                  "Sifrei by Rabbi Shraga Silverstein",
+                                  "Trans. by Marty Jaffee, 2015"]
                   })
       ].freeze
 
@@ -187,7 +253,8 @@ module Nabu
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "sefaria",
-        name: "Sefaria — Targum shelf + Rabbinic core (Mishnah, Bavli, Minor Tractates, Yerushalmi, Tosefta)",
+        name: "Sefaria — Targum shelf + Rabbinic core (Mishnah, Bavli, Minor Tractates, Yerushalmi, " \
+              "Tosefta) + Midrash (Rabbah, halakhic midrashim)",
         license: "Per NAMED version, machine-readable \"license\" field in each version file (the index " \
                  "carries none): PD (both spellings)/CC0 -> open, CC-BY/CC-BY-SA -> attribution override, " \
                  "CC-BY-NC(-SA) -> nc override (the Davidson lane; MCP-excluded); \"unknown\"/absent -> " \

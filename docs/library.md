@@ -733,6 +733,43 @@ imperial pillars; the Mahāvyutpatti as the bridge between the Sanskrit
 shelves (§5, §8m) and the Tibetan canon; verb paradigms and the crowd
 glossary closing the `define` loop for the Tibetan desk.
 
+## 8ad. The granted sources (`cantigas`, `rsti`; P55, flipped live 2026-07-31)
+
+Both shelves rest on written grants obtained through the license
+correspondence (№45-2, №23) — the first wave built entirely on personal
+answers from the projects' own coordinators.
+
+### `cantigas` — Cantigas Medievais Galego-Portuguesas (Projeto Littera)
+
+| | |
+|---|---|
+| **Category** | The complete secular Galician-Portuguese lyric corpus (cantigas de amigo, de amor, de escárnio e maldizer, with the tenções, lais and minor genres), one document per cantiga with manuscript context — the western-Iberian leg of the romance desk beside BFM's Old French and CroALa |
+| **Languages** | Old Galician-Portuguese (`roa-opt`, D55-a — the etym desk's existing code, so Wiktionary reflex/cognate joins connect) |
+| **Size** | **1,676 docs / 34,058 verse passages**; line ordinals cross-checked against the edition's printed numbers, stanza structure annotated; author (with stable id), normalized genre, manuscript sigla and rubrics in metadata |
+| **License** | `attribution` — the coordinator's written grant (Graça Videira Lopes, 2026-07-27: "with full attribution, you can do whatever you like with the data"); the project's own citation format rides every serving surface |
+
+**Research uses:** the troubadour lyric's western tradition at citation
+grain (the Occitan corpus's Iberian sibling); genre and author facets
+over a complete closed corpus; manuscript-sigla work against the
+Ajuda/Vaticana/Biblioteca Nacional cancioneiros; the romance desk's
+first medieval Iberian verse shelf.
+
+### `rsti` — the Ras Shamra Tablet Inventory (U. Chicago CORPUS/OCHRE)
+
+| | |
+|---|---|
+| **Category** | The inventory spine of Ugarit: every inscribed object of Ras Shamra and Ras Ibn Hani as a metadata document — RS number, KTU/CTA/UT/RSO concordances, findspot, museum number, script/language — with line-grain passages where OCHRE publishes an edition (RS 1.001's four parallel renderings the showcase) |
+| **Languages** | Ugaritic (`uga`, 720 edition passages), Akkadian (`akk`, 20); the inventory itself spans 11 witnessed scripts/languages incl. Hurrian, Egyptian and Cypro-Minoan |
+| **Size** | **5,075 docs / 740 passages** — inventory-first by design: ~99% are zero-passage cards (the ebl precedent), and that is the value: the concordance layer Ugaritologists join against KTU numbers |
+| **License** | `nc` (CC BY-NC-SA 4.0) — the №23 grant (Miller Prosser, 2026-07-27) + the API's own availability.license; MCP-excluded like all nc shelves |
+
+**Research uses:** RS-number ↔ KTU/CTA concordance resolution (the
+interop keys of the field's citations); findspot/museum tracing for
+tablets scattered across collections; the cuneiform desk's first
+Ugaritic document shelf beside the held uga gold lemmas; published
+editions with transliteration/phonemic/graphemic renderings at line
+grain.
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored

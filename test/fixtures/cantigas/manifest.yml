@@ -1,0 +1,55 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# ALL entries are non-refetchable in the byte-identical sense: the site is
+# a live Classic ASP application (per-session ASP cookie, live-rendered
+# pages) and — the key quirk — serves WINDOWS-1252 bytes with no charset
+# header; fixtures preserve those raw bytes (0x92/0x93/0x94/0x96) as the
+# encoding regression corpus and must never be transcoded. Re-acquiring
+# means a fresh GET of the recorded URL (content expected identical).
+source: cantigas
+adapter_test: test/adapters/cantigas_test.rb
+retrieved: 2026-07-31
+files:
+  - path: cantiga-1.html
+    url: https://cantigas.fcsh.unl.pt/cantiga.asp?cdcant=1&semanotacoes=true
+    refetchable: false
+    whole: true
+    trim: none (Anónimo Lai, rubric + 43 lines / 11 stanzas; the semanotacoes variant the crawl lands — the primary parse fixture; P55-1)
+    reason: raw Windows-1252 bytes preserved as the encoding regression corpus — a transcoding re-fetch pipeline would silently launder the 0x93/0x94 quirk bytes
+  - path: cantiga-600.html
+    url: https://cantigas.fcsh.unl.pt/cantiga.asp?cdcant=600&pv=sim
+    refetchable: false
+    whole: true
+    trim: none (D. Dinis Amigo, 24 lines / 4 stanzas; fetched WITHOUT semanotacoes — the with-notes variant the parser must tolerate; P55-1)
+    reason: raw Windows-1252 bytes preserved; the with-notes probe shape is documented as-is in README.md
+  - path: cantiga-1400.html
+    url: https://cantigas.fcsh.unl.pt/cantiga.asp?cdcant=1400&pv=sim
+    refetchable: false
+    whole: true
+    trim: none (Martim Soares Escárnio e maldizer, 21 lines / 3 stanzas; rubric carries the raw 0x92 byte — the Windows-1252 regression exemplar; P55-1)
+    reason: raw Windows-1252 bytes preserved — the 0x92 rubric byte is the regression fixture
+  - path: fetch/listacantigas-A.html
+    url: https://cantigas.fcsh.unl.pt/listacantigas.asp?letra=A
+    refetchable: false
+    whole: true
+    trim: none (letter-A incipit index — 326 links / 244 unique cdcant ids, max 1713 — the enumeration + dedupe + sparse-id fixture; P55-1)
+    reason: raw Windows-1252 bytes preserved; the live index re-renders per request (ASP session), never byte-identical
+  - path: fetch/listacantigas-Z.html
+    url: https://cantigas.fcsh.unl.pt/listacantigas.asp?letra=Z
+    refetchable: false
+    whole: true
+    trim: none (the valid-but-empty letter page — zero links, the honest-empty marker; P55-1)
+    reason: raw Windows-1252 bytes preserved; the live index re-renders per request, never byte-identical
+  - path: fetch/cantiga-9999-500.html
+    url: https://cantigas.fcsh.unl.pt/cantiga.asp?cdcant=9999
+    refetchable: false
+    whole: true
+    trim: none (the IIS 500 body an invalid sparse cdcant answers — served with HTTP status 500; P55-1)
+    reason: an error body, not corpus content — kept as the FetchError-posture fixture
+  - path: fetch/cantiga-1-with-notes.html
+    url: https://cantigas.fcsh.unl.pt/cantiga.asp?cdcant=1&pv=sim
+    refetchable: false
+    whole: true
+    trim: none (cantiga 1 WITHOUT semanotacoes — full note apparatus + the 0x96/0x93/0x94 bytes; the variant-tolerance twin of cantiga-1.html; P55-1)
+    reason: raw Windows-1252 bytes preserved — carries the 0x96 en-dash regression byte in its notes

@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (5): `ud`, `croala`, `digiliblt`, `openmgh`, `bfm`
+**Members** (6): `ud`, `croala`, `digiliblt`, `openmgh`, `bfm`, `cantigas`
 
 ### epigraphy
 
@@ -171,7 +171,7 @@ The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — it
 
 The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL's fragments, the Copenhagen Ugaritic Corpus (alphabetic cuneiform), and TLHdig shared with the Hittitologist.
 
-**Members** (8): `ud`, `oracc`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`, `osl`
+**Members** (9): `ud`, `oracc`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`, `rsti`, `osl`
 
 ### egyptian
 
@@ -211,7 +211,7 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 
 The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key), 84000's English translation layer, OTDO's Old Tibetan documents, and the gold-annotation lane (SOAS POS, the Annals and Chronicle); the lexicon shelves join as their packets land.
 
-**Members** (10): `e84000`, `otdo`, `soas-tibetan`, `old-tibetan`, `derge-kangyur`, `derge-tengyur`, `mvp`, `tibetan-verbs`, `wiktionary-bo`, `nabu-data`
+**Members** (11): `e84000`, `otdo`, `soas-tibetan`, `old-tibetan`, `derge-kangyur`, `actib`, `derge-tengyur`, `mvp`, `tibetan-verbs`, `wiktionary-bo`, `nabu-data`
 
 ### sinitic
 
