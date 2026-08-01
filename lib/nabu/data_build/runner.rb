@@ -55,7 +55,7 @@ module Nabu
         File.write(File.join(out_dir, "README.md"),
                    readme(feature: feature, result: result, input_shas: input_shas, fingerprint: fingerprint))
 
-        files = result.resources.map { |resource| [resource.path, resource.rows] } +
+        files = result.resources.map { |resource| [summary_path(resource.path), resource.rows] } +
                 [[LanguagesTable::FILENAME, language_count], [SourcesBib::FILENAME, nil],
                  ["datapackage.json", nil], ["README.md", nil]]
         Summary.new(slug: feature.slug, out_dir: out_dir, files: files,
@@ -63,6 +63,15 @@ module Nabu
       end
 
       private
+
+      # A multi-path (sharded) resource summarizes as one line — the CLI
+      # should not print a hundred shard names.
+      def summary_path(path)
+        return path unless path.is_a?(Array)
+        return path.first if path.size == 1
+
+        "#{File.dirname(path.first)}/ (#{path.size} files)"
+      end
 
       # The honest identity of one canonical cone. Git-backed cones publish
       # their HEAD sha — but only when the working tree is clean (a dirty
@@ -166,10 +175,14 @@ module Nabu
                  "`#{feature.slug}` — #{feature.tier} tier, anchoring: #{feature.anchoring}. " \
                  "Produced by `nabu data build #{feature.slug}` (Nabu #{Nabu::VERSION}); the " \
                  "producer-side contract is docs/nabu-data.md in the Nabu repository.", "",
-                 license_line(feature), "",
-                 feature.rationale, "",
-                 "## Maintenance", "", feature.maintenance, "",
-                 "## Provenance", ""]
+                 license_line(feature), ""]
+        # The plain-language overview (owner ruling 2026-07-31) leads when a
+        # builder supplies one — a non-specialist reads WHY before any
+        # technical section; the rationale stays the technical summary.
+        lines.push("## Why this dataset exists — in plain terms", "", result.overview, "") if result.overview
+        lines.push(feature.rationale, "",
+                   "## Maintenance", "", feature.maintenance, "",
+                   "## Provenance", "")
         lines.concat(provenance_lines(input_shas))
         lines << ""
         lines << "Recipe: #{result.recipe}"

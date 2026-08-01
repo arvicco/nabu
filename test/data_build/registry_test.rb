@@ -11,7 +11,8 @@ require "test_helper"
 class DataBuildRegistryTest < Minitest::Test
   EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation
                       zho/hani-fold jpn/aozora-gaiji lat/sabellic-loans grc/meter
-                      jpn/kyujitai-fold lzh/kanripo-gaiji sux/value-signs].freeze
+                      jpn/kyujitai-fold lzh/kanripo-gaiji sux/value-signs
+                      xct/actib-anchors].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -26,8 +27,8 @@ class DataBuildRegistryTest < Minitest::Test
     # The rail landed with every feature :planned; each builder packet flipped
     # exactly its own feature (P50-W2 form-lemma, P50-W3 wylie-fold, P50-W4
     # verb-lemma, P51-W5 segmentation, P52-2/3/4/5 the conversion wave,
-    # P53-3 value-signs — landed available, builder and feature together).
-    # The full census is available.
+    # P53-3 value-signs, P55-4 actib-anchors — landed available, builder and
+    # feature together). The full census is available.
     assert_equal EXPECTED_SLUGS, features.select(&:available?).map(&:slug)
     features.select(&:planned?).each { |feature| assert_nil feature.builder }
     features.select(&:available?).each { |feature| refute_nil feature.builder }
@@ -165,6 +166,22 @@ class DataBuildRegistryTest < Minitest::Test
     assert_match(/%akk/, value_signs.rationale,
                  "the language-scope call (sux leads, akk rides a qualifier column) is stated " \
                  "where the owner reads it")
+
+    anchors = Nabu::DataBuild.feature("xct/actib-anchors")
+    assert_equal :available, anchors.status, "P55-4: builder and feature land together"
+    assert_equal Nabu::DataBuild::ActibAnchorsBuilder, anchors.builder
+    assert_equal "gold-derived", anchors.tier,
+                 "the anchor mapping is deterministic and measured; ACTib's own layers stay " \
+                 "labeled automatic upstream"
+    assert_equal "urn+sha", anchors.anchoring
+    assert_equal %w[derge-kangyur actib], anchors.inputs,
+                 "both cones are declared inputs — the stale-ingest guard must cover them"
+    assert_equal anchors.inputs, anchors.canonical_cones
+    assert_equal "xct-actib-anchors", anchors.package_name
+    assert_match(/first re-publication/i, anchors.rationale,
+                 "the re-publication milestone is stated where the owner reads it")
+    assert_match(/never republished/, anchors.rationale,
+                 "the no-content-republication rule is stated where the owner reads it")
   end
 
   def test_language_statics_match_the_glottolog_spine
@@ -242,7 +259,7 @@ class DataBuildRegistryTest < Minitest::Test
       "zho/hani-fold" => "CC-BY-4.0", "jpn/aozora-gaiji" => "CC-BY-4.0",
       "lat/sabellic-loans" => "CC-BY-SA-4.0", "grc/meter" => "CC-BY-4.0",
       "jpn/kyujitai-fold" => "CC-BY-SA-4.0", "lzh/kanripo-gaiji" => "CC-BY-SA-4.0",
-      "sux/value-signs" => "CC-BY-4.0"
+      "sux/value-signs" => "CC-BY-4.0", "xct/actib-anchors" => "CC-BY-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end

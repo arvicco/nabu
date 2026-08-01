@@ -22,17 +22,18 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 July 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 1 August 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
 | `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
 | `openmgh` | texts | attribution | wired · manual | 57 docs / 9,594 passages |
 | `bfm` | texts | attribution | wired · manual | 219 docs / 333,819 passages |
+| `cantigas` | texts | attribution | wired · manual | 1,676 docs / 34,058 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 July 2026)</span>: `lat` 1,010 · `fro` 222 · `grc` 9 · `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 · `frm` 3 · `got` 3 … and 8 more (`nabu axis romance` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 1 August 2026)</span>: `roa-opt` 1,676 · `lat` 1,010 · `fro` 222 · `grc` 9 · `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 · `egy` 3 · `frm` 3 … and 9 more (`nabu axis romance` lists all).
 
 ## The desk's instruments
 

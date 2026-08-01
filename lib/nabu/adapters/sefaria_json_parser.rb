@@ -24,7 +24,9 @@ module Nabu
     # The parser walks whatever nesting is actually there rather than
     # trusting a declared depth: citation = the 1-based index path joined
     # with "." ("1.2", "1.2.9"), prefixed with the node slug for dict texts
-    # ("genesis.1.2"). Passage urn = <doc-urn>:<citation>. EMPTY LEAVES are
+    # ("genesis.1.2"); a DEFAULT node (enTitle "" — the P55-3 Rabbah shape,
+    # Petichta + "") cites bare, mirroring upstream's own "Ruth Rabbah 1:1".
+    # Passage urn = <doc-urn>:<citation>. EMPTY LEAVES are
     # the corpus's honest lacunae (Targum Jerusalem attests fragments only;
     # a Bavli tractate's pre-start dafs) and never mint passages.
     #
@@ -113,7 +115,12 @@ module Nabu
         case text
         in Hash
           node_order(data, text).each do |key|
-            walk(text.fetch(key), [self.class.slug(key)], language, path, &block)
+            # The P55-3 midrash quirk: a DEFAULT schema node carries enTitle
+            # "" (the Rabbah shape — Petichta + ""). Upstream cites it bare
+            # ("Ruth Rabbah 1:1"), named siblings by name — an empty slug
+            # adds NO prefix segment.
+            prefix = self.class.slug(key)
+            walk(text.fetch(key), prefix.empty? ? [] : [prefix], language, path, &block)
           end
         in Array
           walk(text, [], language, path, daf: daf, &block)

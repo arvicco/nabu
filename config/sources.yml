@@ -1150,7 +1150,19 @@ sefaria:
                    # (unchanged, urns FROZEN) + 744 wave-1 (746 fetched − the
                    # 2 file-level "unknown"s: Kaufmann Pirkei Avot, Davidson
                    # Yerushalmi Shekalim English — censused at discovery).
-  # Sefaria — Targum shelf (P30-3) + RABBINIC WAVE 1 (P46-1). Upstream
+                   # P55-3 adds the MIDRASH wave-2 shelves to the same sync:
+                   # +48 named files (30 rabbah + 18 midrash-halakhah; the
+                   # probed files run 0.2-1.3 MB each) → expected wave-2
+                   # documents ≤46: the he TE lane is per-file MIXED (probes:
+                   # Esther + Bereshit TE "unknown", Ruth TE PD) so the gate
+                   # censuses the unknowns among the 44 unprobed files at
+                   # discovery, and any UNSEEN license string still
+                   # loud-stops the sync for an owner mapping. Eyeball
+                   # urn:nabu:sefaria:ruth-rabbah:en:the-sefaria-midrash-
+                   # rabbah-2022:petichta.1 (the default-node citation) and a
+                   # sifrei-zuta passage (5.2.1 = its real opening).
+  # Sefaria — Targum shelf (P30-3) + RABBINIC WAVE 1 (P46-1) + MIDRASH
+  # WAVE 2 (P55-3). Upstream
   # restructured: the git repo is a monthly books.json index (19,705 version
   # entries at the pinned 2026-07-02 generation), texts live in the public
   # gs://sefaria-export bucket (~26 GB, never wholesale). Fetch shape
@@ -1162,6 +1174,16 @@ sefaria:
   # SCT partials; + the Davidson nc lane en/arc/vocalized), Minor Tractates
   # (Vilna 1883 + Cohen Soncino + SCT), Yerushalmi (Guggenheimer he+en +
   # Davidson Shekalim en), Tosefta (Lieberman codex-Vienna + SCT).
+  # Wave-2 shelves (P55-3): rabbah — Midrash/Aggadah/Midrash Rabbah EXACTLY,
+  # the ten classical collections (he Torat Emet; en The Sefaria Midrash
+  # Rabbah 2022 CC-BY + SCT; "Ruth Rabbah (Lerner)" excluded as a duplicate
+  # title) — and midrash-halakhah — Midrash/Halakhah EXACTLY (both
+  # Mekhiltas, Sifra en-only: its lone Hebrew, Venice 1545, is file-level
+  # license-unknown and NOT NAMED; Sifrei Bamidbar/Devarim/Zuta, Midrash
+  # Tannaim; the "Footnotes on Mekhilta…" apparatus title excluded). The
+  # FLAT Midrash/Aggadah bucket (Pesikta, Tanchuma, PdRE … beside Yalkut
+  # Shimoni, Otzar Midrashim, Ein Yaakov) is not category-separable → out of
+  # wave 2; cutting it is a title-level owner ruling.
   # Commentary/Rishonim/Acharonim/Guides subtrees and non-named editions
   # (Venice, Mechon-Mamre…) are out by rule. THE LICENSE GATE per version
   # FILE (the index carries no license field): PD (both spellings, D46-f)/
@@ -1169,13 +1191,17 @@ sefaria:
   # override (P10-4, MCP-excluded — the Davidson lane); "unknown"/absent →
   # never ingested; merged.json never fetched or ingested (pinned in tests).
   # LANGUAGE RULINGS (D46-e, per shelf on actualLanguage): Targum he→arc
-  # (axis-keyed, frozen); Mishnah + Tosefta he→hbo; Bavli + Minor +
+  # (axis-keyed, frozen); Mishnah + Tosefta + both midrash shelves he→hbo;
+  # Bavli + Minor +
   # Yerushalmi he→arc; en→eng; hbo/arc NFC-exempt byte-verbatim; an unmapped
   # actualLanguage (he-axis ar/yi, en-axis de/fr/pt/es/ru/hu) quarantines
   # loudly at parse. URNs: targum <title>:<version> (FROZEN); later shelves
   # <title>:<he|en>:<version> (3 corpus-wide title/version collisions across
   # the axis). Bavli passages cite daf.amud (25b.1 — positional from daf 1a,
-  # frozen arithmetic). Tafsir Rasag (Judeo-Arabic) excluded by rule. The ot
+  # frozen arithmetic); midrash cites its own upstream grain (Rabbah:
+  # petichta.N + bare chapter.paragraph via the default "" schema node;
+  # halakhic midrash: chapter.verse.paragraph — never daf). Tafsir Rasag
+  # (Judeo-Arabic) excluded by rule. The ot
   # alignment hub's Aramaic leg (config/alignments.yml). Index regenerates
   # monthly; a re-sync is an owner decision → manual.
 bhsa:
@@ -2068,6 +2094,42 @@ cuc:
   # MCP-excluded. Version PINNED tf/0.2.8 (the sparse cone IS the pin);
   # upstream is work-in-progress, new versions land in new dirs →
   # re-pin is an owner decision.
+  sync_policy: manual
+
+rsti:
+  adapter: Nabu::Adapters::Rsti
+  axes: [cuneiform]
+  wired: true    # first sync owner-verified 2026-07-31 (5,075 docs / 740 edition passages)
+                   # is verified. OWNER QUEUE (P55-2): bin/nabu sync rsti —
+                   # stage 1 = menu + 35 season/collection sets (~36 GETs,
+                   # under a minute), stage 2 = one GET per associated text
+                   # uuid, sequential ≥1s, RESUMABLE (a uuid on disk is never
+                   # re-fetched; {"result":[]} tombstones persist and skip) —
+                   # ~4,800-7,000 detail GETs ≈ 90-120 min ONE-TIME, prints
+                   # progress every 25. Then eyeball nabu show
+                   # urn:nabu:rsti:rs-1.001 (the one witnessed full edition —
+                   # 22 line-passages, "dqt . ṯʿ . ynt" Recto 1, graphemic
+                   # cuneiform annotations) beside 5 random inventory records
+                   # (expect text_status unpublished, zero passages — the
+                   # inventory-first verdict), then flip.
+  # P55-2: RSTI — the Ras Shamra Tablet Inventory (U. Chicago CORPUS/OCHRE;
+  # Prosser/Pardee et al.): the complete inventory of inscribed objects from
+  # Ugarit + Ras Ibn Hani, ~5,000-7,000 records across 35 season sets
+  # (sampled: S01=106, S19=446, S24=191, S35-48=89, RIH=238), each carrying
+  # museum number, French TEO findspot, script/language, size and the
+  # KTU/CTA/UT/RSO concordance (→ metadata "concordances", the interop keys
+  # Ugaritologists actually use). INVENTORY-FIRST, text exceptional: ~99% of
+  # documents are honest zero-passage metadata records ("text_layer" none —
+  # 8 of 10 scouted text probes answered the {"result":[]} tombstone, 1 the
+  # sections-{} shell); the rare full edition (RS 1.001) parses to per-
+  # surface line passages with phonemic/graphemic (decoded U+10380-block
+  # cuneiform)/translation annotations. New `ochre-json` family +
+  # Nabu::OchreFetch (resolver pi.lib.uchicago.edu/1001/org/ochre/
+  # <uuid>&format=json — literal &, no ?). LICENSE: CC BY-NC-SA 4.0 (the
+  # API's own availability.license), GRANTED №23 (M. Prosser, U. Chicago
+  # CORPUS/OCHRE, 2026-07-27: "retrieve the RSTI data and add it to your
+  # collection, with attribution") → class nc, MCP-excluded; the Bordreuil &
+  # Pardee (1989) TEO credit rides the manifest verbatim.
   sync_policy: manual
 
 peshitta:
@@ -3117,6 +3179,42 @@ derge-kangyur:
   # the adapter/family headers carry the full doctrine.
   sync_policy: manual
 
+actib:
+  adapter: Nabu::Adapters::Actib
+  kind: module   # P55-4: machinery-only — the anchored-layer cone for nabu-data, zero catalog rows, up=module
+  axes: [tibetan]
+  wired: false   # PERMANENTLY false — a corpus-layer instrument, not a text
+                   # source (the pedecerto/hypotactic precedent): discover mints
+                   # no documents; the canonical TEXT is the derge-kangyur shelf
+                   # above. The row gives the owner the sanctioned fetch path for
+                   # the ACTib v2.0 eKangyur seg+POS zip (~200 MB download,
+                   # ~830 MB unpacked at canonical/actib/{seg,pos} — ZipFetch
+                   # strips the single top dir). Consumer: the xct/actib-anchors
+                   # nabu-data builder (docs/nabu-data.md) — the FIRST
+                   # re-publication: every derge-kangyur passage anchored to its
+                   # ACTib (volume, page, line) with the match census in-band;
+                   # the 800 MB layer content itself is never republished.
+                   # OWNER QUEUE (P55-4): bin/nabu sync actib downloads
+                   # SegPOS-eKangyur_July2020.zip (Zenodo 3951503), then
+                   # `nabu data build xct/actib-anchors` measures the census
+                   # (expect ~461K anchor rows, ~2.2K divergences — the P55
+                   # measurement pass: 458,954/461,199 exact after the vol-31
+                   # correction).
+  # P55-4: ACTib v2.0 — The Annotated Corpus of Classical Tibetan (Meelen,
+  # Hill & Faggionato), Zenodo record 3951503: word-segmented (seg/) +
+  # POS-tagged (pos/) layers over the BDRC eKangyur, 103 volume files each
+  # (UT4CZ5369-I1KG<9126+n>; the Esukhia→BDRC tail permutation
+  # {100→101,101→102,102→100} is the builder's VOL_PERMUTATION), page/line
+  # markers inline (p<N>/ln<N>, <utt> utterance breaks; pos layer =
+  # form/tag pairs, seg layer = bare forms). Upstream layers are AUTOMATIC
+  # annotation (their own papers say so) — the anchors dataset stays
+  # gold-derived about the mapping only, never about the tags. LICENSE:
+  # cc-by-4.0 ON THE ZENODO RECORD (API-verified 2026-07-31) → attribution;
+  # the zip itself contains NO license files — the record, not in-zip text,
+  # is the license basis (recorded honestly). Only the eKangyur SegPOS
+  # artifact is taken; the record's other collections are not.
+  sync_policy: manual
+
 derge-tengyur:
   adapter: Nabu::Adapters::DergeTengyur
   axes: [tibetan, buddhist]  # P48-1: the canon's commentarial half — same desks
@@ -3266,6 +3364,50 @@ osl:
   # the osl.asl header ("CC0: osl.asl and its associated files are placed
   # in the public domain under a CC0 licence.", quoted in the adapter
   # manifest) → class open.
+  sync_policy: manual
+
+cantigas:   # P55-1, 02-sources row 144
+  adapter: Nabu::Adapters::Cantigas
+  kind: source
+  axes: [romance]   # the desk's first vernacular VERSE shelf (Galician-Portuguese lyric)
+  wired: true    # first sync owner-verified 2026-07-31 (1,676 docs / 34,058 passages)
+  # P55-1: Cantigas Medievais Galego-Portuguesas (cantigas.fcsh.unl.pt;
+  # Projeto Littera, Instituto de Estudos Medievais, FCSH/NOVA Lisbon;
+  # coordinators Graça Videira Lopes + Manuel Pedro Ferreira): the COMPLETE
+  # secular Galician-Portuguese lyric, ~1,680 cantigas (amigo / amor /
+  # escárnio e maldizer, plus lais, tenções, sirventeses…) from the three
+  # cancioneiros (Ajuda, BN, Vaticana), Littera critical edition. Language
+  # roa-opt (Old Galician-Portuguese, D55-a — the code the catalog's
+  # dictionary_reflexes/language_names lanes already hold, so etym/cognate
+  # joins connect for free). SCOUT CENSUS (2026-07-31, 11 bounded probes):
+  # HTML scrape only, NO TEI/XML/export exists (Classic ASP on IIS); one
+  # page per cantiga at cantiga.asp?cdcant=N — cdcant SPARSE (letter A
+  # alone reaches id 1713), an INVALID id answers HTTP 500 (not 404), so
+  # enumeration comes ONLY from the 23 alphabetical incipit indexes
+  # (listacantigas.asp?letra=A..Z, no K/W/Y; Z valid-but-empty; letter A:
+  # 326 links dedupe to 244 unique ids). ENCODING (the key quirk): no
+  # charset header, meta FALSELY claims ISO-8859-1, actual bytes are
+  # WINDOWS-1252 (0x92 ’ 0x93/0x94 "" 0x96 – verified) — decoded at the
+  # cantigas-html parser boundary, canonical keeps the raw bytes. Page →
+  # one document per cantiga (urn:nabu:cantigas:<cdcant>, title = the
+  # incipit), passage per verse LINE (:<n>, ordinal cross-checked against
+  # the edition's printed every-5th numbers; stanza structure in
+  # annotations {"line", "stanza"} from the &nbsp;&nbsp; break rows);
+  # author + cdaut + normalized genre (the index prints BOTH "Escárnio e
+  # maldizer" and "…Maldizer" — one facet value) + manuscript sigla
+  # (B/V/A/C…) + rubric in metadata. FETCH (CantigasFetch, the third
+  # ElephantineFetch/OtdoFetch HTML-crawl sibling — extraction signal
+  # flagged, not smuggled in): 23 index GETs + per-id GETs with
+  # semanotacoes=true (clean verse, metadata kept; cosmetic pv dropped) at
+  # 1 req/s ≈ 29 min whole corpus, file-grain resume, 500-on-a-listed-id
+  # retried then FATAL (never censused — the sparse-id ground truth),
+  # 404 censused (P47-i1), attic + breaker; index sidecars persist in
+  # canonical (author/genre columns) but stay out of the ledger pin.
+  # LICENSE (granted 2026-07-27, №45-2, G. V. Lopes): "Our site is free
+  # for all. So, with full attribution, you can do whatever you like with
+  # the data." → class attribution; the project's own citation format rides
+  # the manifest license verbatim + the credit line. EXPECTED FIRST SYNC:
+  # ~1,680 documents, ~45-50k line passages (fixture mean ~29 lines).
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):

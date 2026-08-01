@@ -25,8 +25,8 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-07-28** the shelves hold **968,182 documents / 68,324,790
-passages** in 121 language codes — from proto-cuneiform tablets of the
+As of **2026-08-01** the shelves hold **974,972 documents / 68,381,456
+passages** in 125 language codes — from proto-cuneiform tablets of the
 late 4th millennium BCE to Meiji-era Japanese. The newest wave
 (2026-07-26) opened the Rabbinic library (Mishnah, both Talmuds at
 daf-grain citation, Tosefta), the Geʿez shelf (**1 Enoch and
@@ -47,7 +47,7 @@ and the CBETA Buddhist canon), the same day the **Germanic wave**
 landed (the Poetic Edda, the *Heliand*, Middle High German, ~6,800
 runic inscriptions) beside the Japanese reading desk and the Ancient
 Near East.
-Plus **1,407,280 dictionary entries** across 103 dictionary
+Plus **1,407,474 dictionary entries** across 103 dictionary
 shelves and **19.2 million gold lemma annotations in 37 languages** (a
 further 28.1 million ride an honestly labelled silver tier). (All numbers in this
 README are read from the live catalog, never estimated.)
@@ -288,8 +288,8 @@ abuts Lebanon."
 
 ## What's on the shelves
 
-A representative slice, not the whole registry (106 corpus sources as of
-2026-07-30); each row carries the date its counts were read. The full
+A representative slice, not the whole registry (108 corpus sources as of
+2026-08-01); each row carries the date its counts were read. The full
 shelf map with research uses per shelf is
 **[docs/library.md](docs/library.md)**. Rows below without a date are the
 2026-07-14 census.
@@ -314,15 +314,22 @@ shelf map with research uses per shelf is
 | Germanic wave | Menotec Old Norwegian treebanks + Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German (355k gold manuscript lines), Rundata runic inscriptions in five text lanes (2026-07-22) | 31,057 / 409,947 | nc / CC BY / CC BY-SA / odbl |
 | Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik + the Hebrew/Egyptian/Slovene desks and the Sino-Japanese lexicography (Unihan, KANJIDIC2/JMdict, HDIC, Guangyun) (`nabu define` / `etym`) | 1,310,763 entries / 56 shelves (2026-07-22) | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-The registry holds **106 sources + 4 local shelves + 11 feature modules**
-(the kind-split census, 2026-07-30 — `sources.yml` distinguishes what a
+The registry holds **108 sources + 4 local shelves + 12 feature modules**
+(the kind-split census, 2026-08-01 — `sources.yml` distinguishes what a
 row IS: a corpus that mints catalog rows, an owner-authored local memory
 shelf, or machinery like `osl` (the Oracc Sign List behind `nabu signs`),
 `nabu-data` (Nabu's own published datasets, consumed back) and
 `pedecerto`/`bridging` that fetches reference data but mints no
-documents of its own). All 106 sources are **wired**
-— adapter built and first sync verified (2026-07-26); the newest
-arrivals are the P46 wave's `edr`, `ren`, the Geʿez trio, `wold` and
+documents of its own). All 108 sources are **wired**
+— adapter built and first sync verified (2026-08-01); the newest
+arrivals are **the granted sources** (2026-07-31): `cantigas`, the
+complete secular Galician-Portuguese lyric (1,676 cantigas at verse
+grain under the coordinator's written any-use grant) and `rsti`, the
+Ras Shamra Tablet Inventory (5,075 inventory cards with KTU/CTA
+concordances, published editions at line grain, under Prosser's NC-SA
+grant) — the same day Sefaria's classical midrash (Rabbah + Midrash
+Halakhah) joined wave 2 and ACTib became nabu-data's first
+re-published source. Before them came the P46 wave's `edr`, `ren`, the Geʿez trio, `wold` and
 `clics`, after the Romance wave's `openmgh` (the MGH critical editions),
 `digiliblt` (late-antique Latin, silver-annotated) and `bfm` (Old
 French), joining `glaux` (~20M-token silver-annotated Ancient Greek)
