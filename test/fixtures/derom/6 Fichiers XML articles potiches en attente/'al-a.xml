@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="derom.css"?>
+<DERom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="file:/D:/gsouvay-data/DERom/derom.xsd">
+    <Article>
+        <Signifiant>&#x2c8;al-a</Signifiant>
+        <catgramm>s.f.</catgramm><NonRedige/>
+    </Article>
+</DERom>

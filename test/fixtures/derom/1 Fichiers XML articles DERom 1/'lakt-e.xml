@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="derom.css"?>
+<DERom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="derom.xsd">
+    <Article><Lemme>
+            <Signifiant>&#x2c8;lakt-e</Signifiant>
+            <catgramm>s.n.</catgramm>
+            <Signifie>liquide blanchâtre (opaque, légèrement sucré) sécrété par les glandes
+                mammaires</Signifie>
+        </Lemme><Materiaux>
+            <subdiv>
+                <titre>I. Substantif neutre originel</titre>
+                <etym>&#x2c8;lakt-e</etym>
+                <cognats>
+                    <premier.cognat>
+                        <idiome>dacoroum.</idiome>
+                        <signifiant>lapte</signifiant>
+                        <catgramm>s.n.</catgramm>
+                        <signifie>liquide blanchâtre (opaque, légèrement sucré) sécrété par les
+                            glandes mammaires, lait</signifie>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. 1500/1510</date>
+                                <precision>date du ms.</precision>
+                                <reference>Psalt. Hur.2 1, 190</reference>
+                                <reference>Tiktin3</reference>
+                                <reference>EWRS</reference>
+                                <reference>Candrea-Densusianu n° 943</reference>
+                                <reference>DLR</reference>
+                                <reference>Cioranescu n° 4707</reference>
+                                <reference>MDA</reference>
+                                <reference>ALR SN 303, 309, 312</reference>
+                            </unerefbibl>
+                        </refbibl>
+                        <appelnote/>
+                    </premier.cognat>
+                    <cognat>
+                        <idiome>istroroum.</idiome>
+                        <signifiant>lapte</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <reference>MaiorescuIstria 130</reference>
+                                <reference>PuşcariuIstroromâne 3, 118, 190</reference>
+                                <reference>SârbuIstroromân 222</reference>
+                                <reference>KovačecRječnik 102</reference>
+                                <precisionreference>Jug</precisionreference>
+                                <reference>ALR SN 303, 312</reference>
+                                <reference>ALIstro n° 1484</reference>
+                            </unerefbibl>
+                        </refbibl>
+                        <appelnote/>
+                    </cognat>
+                    <cognat>
+                        <idiome>méglénoroum.</idiome>
+                        <signifiant>lápti</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <reference>Candrea,GrS 3, 407</reference>
+                                <reference>CapidanDicţionar</reference>
+                                <reference>WildSprachatlas 330</reference>
+                                <reference>ALR SN 303, 309, 312</reference>
+                            </unerefbibl>
+                        </refbibl>
+                        <appelnote/>
+                    </cognat>
+                    <cognat>
+                        <idiome>aroum.</idiome>
+                        <signifiant>lápte</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. 1770</date>
+                                <precision>λάπτε</precision>
+                                <reference>KavalliotisProtopeiria n° 0850</reference>
+                                <reference>Pascu 1, 105</reference>
+                                <reference>DDA2</reference>
+                                <reference>BaraAroumain</reference>
+                                <reference>ALR SN 309</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                </cognats>
+            </subdiv>
+            <subdiv>
+                <titre>II. Changement de genre : substantif masculin</titre>
+                <etym>&#x2c8;lakt-e</etym>
+                <cognats>
+                    <premier.cognat>
+                        <idiome>sard.</idiome>
+                        <signifiant>látte</signifiant>
+                        <catgramm>s.m.</catgramm>
+                        <signifie>lait</signifie>
+                        <refbibl>
+                            <unerefbibl>
+                                <reference>DES</reference>
+                                <reference>CasuVocabolario</reference>
+                                <reference>AIS 1199</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </premier.cognat>
+                    <cognat>
+                        <idiome>dalm.</idiome>
+                        <signifiant>lu̯at</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <reference>BartoliDalmatico 43, 318, 456 § 498</reference>
+                                <reference>ElmendorfVeglia</reference>
+                                <reference>MihăescuRomanité 98</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                    <cognat>
+                        <idiome>istriot.</idiome>
+                        <signifiant>lato</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <reference>PellizzerRovigno</reference>
+                                <reference>AIS 1199</reference>
+                                <reference>ILA n° 1484</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                    <cognat>
+                        <idiome>it.</idiome>
+                        <signifiant>latte</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. 1282</date>
+                                <reference>TLIOCorpus</reference>
+                                <reference>DELI2</reference>
+                                <reference>AIS 1199</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                    <cognat>
+                        <idiome>frioul.</idiome>
+                        <signifiant>lat</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <reference>PironaN2</reference>
+                                <reference>GDBTF</reference>
+                                <reference>AIS 1199</reference>
+                                <reference>ASLEF 861b, 864, 877</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                    <cognat>
+                        <idiome>lad.</idiome>
+                        <signifiant>làt</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. 1763</date>
+                                <reference>Kramer/Thybussek in EWD</reference>
+                                <reference>AIS 1199</reference>
+                                <reference>ALD-I 396</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                    <cognat>
+                        <idiome>romanch.</idiome>
+                        <signifiant>lat</signifiant>
+                        <signifiant>latg</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. 1560</date>
+                                <reference>GartnerBifrun 490</reference>
+                                <precisionreference><hi rend="italic">lat</hi></precisionreference>
+                                <reference>Giger in DRG 10, 538-562</reference>
+                                <reference>HWR</reference>
+                                <reference>AIS 1199</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                    <cognat>
+                        <idiome>fr.</idiome>
+                        <signifiant>lait</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. 1ère m. 12e s.</date>
+                                <reference>Gdf</reference>
+                                <reference>GdfC</reference>
+                                <reference>FEW 5, 110a</reference>
+                                <reference>TL</reference>
+                                <reference>TLF</reference>
+                                <reference>DEAF</reference>
+                                <reference>AND1</reference>
+                                <reference>ALF 746</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                    <cognat>
+                        <idiome geo="occidental">frpr.</idiome>
+                        <signifiant cas="phonetiquetypise">lɑ</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. ca 1220/1230</date>
+                                <precision><hi rend="italic">lait</hi></precision>
+                                <reference>ProsalegStimm 49</reference>
+                                <reference>FEW 5, 110a</reference>
+                                <reference>ALF 746</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                    <cognat>
+                        <idiome>occit.</idiome>
+                        <signifiant>lait</signifiant>
+                        <signifiant>lach</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. 1ère m. 13e s.</date>
+                                <reference>Raynouard</reference>
+                                <reference>Levy</reference>
+                                <reference>AppelChrestomathie 186</reference>
+                                <reference>FEW 5, 110a-110b</reference>
+                                <reference>Pansier 3</reference>
+                                <reference>ALF 746</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                    <cognat>
+                        <idiome geo="occidental">ast.</idiome>
+                        <signifiant>lleche</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <reference>DGLA</reference>
+                                <reference>DELLAMs</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                    <cognat>
+                        <idiome>gal./port.</idiome>
+                        <signifiant>leite</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. 1257</date>
+                                <precision><hi rend="italic">lecte</hi></precision>
+                                <reference>DDGM</reference>
+                                <reference>DRAG1</reference>
+                                <reference>DELP3</reference>
+                                <reference>Houaiss</reference>
+                                <reference>CunhaVocabulário2</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                </cognats>
+            </subdiv>
+            <subdiv>
+                <titre>III. Changement de genre : substantif féminin</titre>
+                <etym>&#x2c8;lakt-e</etym>
+                <cognats>
+                    <premier.cognat>
+                        <idiome>vén.</idiome>
+                        <signifiant>late</signifiant>
+                        <catgramm>s.f.</catgramm>
+                        <signifie>lait</signifie>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. 1390/1404</date>
+                                <reference>IneichenSerapiom 2, 141-142</reference>
+                                <reference>RohlfsHistGramm 2, § 385</reference>
+                                <reference>AIS 1199 p 334, 345, 354, 367, 368, 378, 393</reference>
+                            </unerefbibl>
+                        </refbibl>
+                        <appelnote/>
+                    </premier.cognat>
+                    <cognat>
+                        <idiome geo="occidental">lang.</idiome>
+                        <signifiant>lait</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. 1318</date>
+                                <reference>GuilhBarraG 74</reference>
+                                <reference>Raynouard</reference>
+                                <reference>Levy</reference>
+                                <reference>FEW 5, 110b</reference>
+                                <reference>ALF 746 p 750, 752, 773, 783-786, 792, 793</reference>
+                                <precisionreference>Ariège, Aude, Haute-Garonne</precisionreference>
+                            </unerefbibl>
+                        </refbibl>
+                        <appelnote/>
+                    </cognat>
+                    <cognat>
+                        <idiome>gasc.</idiome>
+                        <signifiant>leit</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. ca 1330</date>
+                                <precision>ms. <hi rend="italic">ca</hi> 1410</precision>
+                                <reference>LespyR</reference>
+                                <reference>FEW 5, 110b</reference>
+                                <reference>CorominesAran 533</reference>
+                                <reference>ALF 746</reference>
+                                <reference>ALG 979</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                    <cognat>
+                        <idiome>cat.</idiome>
+                        <signifiant>llet</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. ca 1270</date>
+                                <reference>MollSuplement n° 1930</reference>
+                                <reference>DCVB</reference>
+                                <reference>DECat 5, 172-173</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                    <cognat>
+                        <idiome>esp.</idiome>
+                        <signifiant>leche</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. 1129</date>
+                                <reference>DCECH 3, 615-616</reference>
+                                <reference>Kasten/Nitti</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                    <cognat>
+                        <idiome geo="oriental">ast.</idiome>
+                        <signifiant>lleche</signifiant>
+                        <refbibl>
+                            <unerefbibl>
+                                <date>dp. 1253</date>
+                                <precision><hi rend="italic">leche</hi></precision>
+                                <reference>DELLAMs</reference>
+                                <reference>DGLA</reference>
+                            </unerefbibl>
+                        </refbibl>
+                    </cognat>
+                </cognats>
+            </subdiv>
+        </Materiaux>
+        <Commentaire>
+            <p>Tous les parlers romans sans exception présentent des cognats conduisant à
+                reconstruire, soit directement, soit à travers des types grammaticalement évolués,
+                protorom. <etymsignifiant>&#x2c8;lakt-e</etymsignifiant> s.n. <etymsignifie>
+                    <analytique>liquide blanchâtre (opaque, légèrement sucré) sécrété par les
+                        glandes mammaires</analytique>
+                    <glose>lait</glose>
+                </etymsignifie><appelnote/>.</p>
+            <p>Les issues romanes de protorom. <etymsignifiant>&#x2c8;lakt-e</etymsignifiant> ont
+                été subdivisées ci-dessus selon les trois genres dont elles relèvent : neutre
+                originel, conservé par tous les rameaux de la branche roumaine (ci-dessus I.) ;
+                masculin innové dans la majeure partie de la Romania (ci-dessus II.) ; féminin
+                encore plus récent et plus restreint (ci-dessus III.), selon un processus de
+                succession analysé dans <reference>Dardel,ACILR 14/2,
+                76-82</reference><appelnote/><appelnote/>. Le masculin occupe notamment une vaste
+                aire compacte de la Romania centrale : domaines dalmate, istriote, italien, sarde,
+                frioulan, ladin, romanche, français, francoprovençal et occitan, prolongés toutefois
+                à l'extrême ouest de la Romania, au-delà d'une solution de continuité correspondant
+                à l'aire du féminin, par les domaines asturien occidental, galicien et portugais. Le
+                féminin est localisé d'une part dans le domaine vénitien, d'autre part dans une aire
+                à cheval entre la <hi rend="italic">Gallia</hi> et l'<hi rend="italic"
+                >Iberia</hi>.</p>
+            <p>Les trois genres de protorom. <etymsignifiant>&#x2c8;lakt-e</etymsignifiant> trouvent
+                leur corrélation dans les données du latin écrit. Le corrélat du type I.,
+                <correlatlatin>lac</correlatlatin>, -<hi rend="italic">tis</hi> s.n. « id. », est
+                usuel durant toute l'Antiquité (dp. Ennius [* 239 – &#x2020; 169],
+                    <reference>OLD</reference>), celui du type II., masculin, est connu depuis
+                Pétrone (* <hi rend="italic">ca</hi> 12 – &#x2020; <hi rend="italic">ca</hi> 66,
+                    <reference>OLD</reference>)<appelnote/>, tandis que celui du type III., féminin,
+                n'est attesté qu'à partir de Caelus Aurelianus et de l'Oribase latin (5<hi
+                    rend="superscript">e</hi>/6<hi rend="superscript">e</hi> s., <reference>TLL 7,
+                    816</reference>).</p>
+        </Commentaire>
+        <Bibliographie>
+            <reference>MeyerLübkeGLR 1, § 223, 231, 418, 459 ; 2, § 9, 377 ; 3, § 31</reference>
+            <reference>REW3 s.v. lac/*lacte</reference>
+            <reference>von Wartburg 1948 in FEW 5, 110a-115a, lac</reference>
+            <reference>Ernout/Meillet4 s.v. lac, lactis</reference>
+            <reference>LausbergSprachwissenschaft 1, § 207 ; 2, § 308, 430-435</reference>
+            <reference>HallPhonology 121</reference>
+            <reference>SalaVocabularul 194</reference>
+            <reference>StefenelliSchicksal 27</reference>
+            <reference>MihăescuRomanité 242-243</reference>
+        </Bibliographie><Signatures>
+            <signaturesRedaction>
+                <uneSignature>
+                    <prenom>Jérémie</prenom>
+                    <nom>Delorme</nom>
+                </uneSignature>
+            </signaturesRedaction>
+            <signaturesRevision>
+                <signaturesRevisionReconstructionSynthese>
+                    <uneSignature>
+                        <prenom>Jean-Pierre</prenom>
+                        <nom>Chambon</nom>
+                    </uneSignature>
+                </signaturesRevisionReconstructionSynthese>
+                <signaturesRevisionRomaniaSudEst>
+                    <uneSignature>
+                        <prenom>Cristina</prenom>
+                        <nom>Florescu</nom>
+                    </uneSignature>
+                    <uneSignature>
+                        <prenom>Maria</prenom>
+                        <nom>Iliescu</nom>
+                    </uneSignature>
+                </signaturesRevisionRomaniaSudEst>
+                <signaturesRevisionItaloromania>
+                    <uneSignature>
+                        <prenom>Giorgio</prenom>
+                        <nom>Cadorini</nom>
+                    </uneSignature>
+                    <uneSignature>
+                        <prenom>Rosario</prenom>
+                        <nom>Coluccia</nom>
+                    </uneSignature>
+                    <uneSignature>
+                        <prenom>Carli</prenom>
+                        <nom>Tomaschett</nom>
+                    </uneSignature>
+                </signaturesRevisionItaloromania>
+                <signaturesRevisionGalloromania>
+                    <uneSignature>
+                        <prenom>Jean-Paul</prenom>
+                        <nom>Chauveau</nom>
+                    </uneSignature>
+                </signaturesRevisionGalloromania>
+                <signaturesRevisionIberoromania>
+                    <uneSignature>
+                        <prenom>Maria Reina</prenom>
+                        <nom>Bastardas i Rufat</nom>
+                    </uneSignature>
+                    <uneSignature>
+                        <prenom>Myriam</prenom>
+                        <nom>Benarroch</nom>
+                    </uneSignature>
+                    <uneSignature>
+                        <prenom>Ana</prenom>
+                        <nom>Boullón</nom>
+                    </uneSignature>
+                    <uneSignature>
+                        <prenom>Ana María</prenom>
+                        <nom>Cano González</nom>
+                    </uneSignature>
+                </signaturesRevisionIberoromania>
+            </signaturesRevision>
+            <signaturesRevisionFinale>
+                <uneSignature>
+                    <prenom>Éva</prenom>
+                    <nom>Buchi</nom>
+                </uneSignature>
+            </signaturesRevisionFinale>
+            <signaturesContributions>
+                <uneSignature>
+                    <prenom>Marta</prenom>
+                    <nom>Andronache</nom>
+                </uneSignature>
+                <uneSignature>
+                    <prenom>Pascale</prenom>
+                    <nom>Baudinot</nom>
+                </uneSignature>
+                <uneSignature>
+                    <prenom>Victor</prenom>
+                    <nom>Celac</nom>
+                </uneSignature>
+                <uneSignature>
+                    <prenom>Robert</prenom>
+                    <nom>de Dardel</nom>
+                </uneSignature>
+                <uneSignature>
+                    <prenom>Xosé Lluis</prenom>
+                    <nom>García Arias</nom>
+                </uneSignature>
+                <uneSignature>
+                    <prenom>Yan</prenom>
+                    <nom>Greub</nom>
+                </uneSignature>
+                <uneSignature>
+                    <prenom>Günter</prenom>
+                    <nom>Holtus</nom>
+                </uneSignature>
+                <uneSignature>
+                    <prenom>Fernando</prenom>
+                    <nom>Sánchez Miret</nom>
+                </uneSignature>
+                <uneSignature>
+                    <prenom>Simone</prenom>
+                    <nom>Traber</nom>
+                </uneSignature>
+            </signaturesContributions>
+        </Signatures><MiseEnLigne>
+            <Version1>01/02/2011</Version1>
+            <VersionActuelle/>
+        </MiseEnLigne><Notes>
+            <uneNote>
+                <p>L'appartenance de dacoroum. <hi rend="italic">lapte</hi> à la catégorie des
+                    neutres n'est pas décelée par <reference>LausbergSprachwissenschaft 2, §
+                        653</reference>, qui le traite comme un masculin. Cette erreur, également
+                    commise dans le cas d'autres idiomes de la branche roumaine (<hi rend="italic"
+                        >cf</hi>. n. 2 et 3 ci-dessous), mais corrigée par
+                        <reference>Tiktin3</reference>, <reference>Candrea-Densusianu n°
+                        943</reference>, <reference>DLR</reference> et <reference>MDA</reference>,
+                    est imputable à la principale valeur de quantification attachée aux
+                    continuateurs de protorom. <etymsignifiant>&#x2c8;lakt-e</etymsignifiant>,
+                    massique, qui tend à raréfier l'observation de formes de pluriel. Du reste, les
+                    rares formes de pluriel mentionnées dans la documentation représentent surtout
+                    des sens dérivés attachés à des unités fonctionnant comme <hi rend="italic"
+                        >plurale tantum</hi> (<hi rend="italic">lăpturi</hi> s.f.pl. « laitages »)
+                    ou variables en nombre, mais strictement masculines (<hi rend="italic"
+                        >lapte</hi> m.sg. [<hi rend="italic">lăpţi</hi> m.pl.] « traite » ; <hi
+                        rend="italic">lapte</hi> m.sg. [<hi rend="italic">lapţi</hi> m.pl.] « suc
+                    laiteux sécrété par une plante »).</p>
+            </uneNote>
+            <uneNote>
+                <p>Bien que <reference>SârbuIstroromân 222</reference> donne istroroum.
+                    <hi rend="italic">lapte</hi> pour masculin, la forme de pluriel
+                    <hi rend="italic">lapturi</hi>, mentionnée dans <reference>MaiorescuIstria
+                        130</reference>, répond clairement au féminin et justifie de situer ce
+                    substantif dans la catégorie des neutres. Pour ce qui est de la forme masculine
+                    relevée à Žejane par <reference>KovačecRječnik 102</reference>, comme l'auteur
+                    la donne après la forme neutre de Jug, on peut comprendre qu'il la considère
+                    comme secondaire.</p>
+            </uneNote>
+            <uneNote>
+                <p><reference>CapidanDicţionar</reference> donne méglénoroum. <hi rend="italic"
+                        >lápti</hi> pour masculin, bien qu'il cite <hi rend="italic">lǫptur</hi> et
+                        <hi rend="italic">laptur</hi> comme formes du pluriel et que ces formes, qui
+                    répondent au féminin, justifient de ranger ce substantif parmi les neutres, ce à
+                    l'encontre de <reference>DardelGenre 91</reference>, qui rattache les issues
+                    istroroumaine et méglénoroumaine de protorom.
+                    <etymsignifiant>&#x2c8;lakt-e</etymsignifiant> à la catégorie des masculins.</p>
+            </uneNote>
+            <uneNote>
+                <p>Dans la plupart des parlers vénitiens, le genre est cependant masculin.</p>
+            </uneNote>
+            <uneNote>
+                <p>On rencontre une attestation féminine dans le domaine limousin (<reference>ALF
+                        746 p 602</reference>), mais sa situation isolée la fait paraître
+                    douteuse.</p>
+            </uneNote>
+            <uneNote>
+                <p>Plusieurs langues celtiques ont emprunté
+                    <etymsignifiant>&#x2c8;lakt-e</etymsignifiant> au protoroman : le breton (<hi
+                        rend="italic">laezh</hi> s.m. « lait »), le cornique (<hi rend="italic"
+                        >lêth</hi>) et le gallois (<hi rend="italic">laeth</hi>) ; <reference
+                        avant="cf">LothBrittoniques 180</reference> ; <reference>PedersenKeltisch 1,
+                        228</reference> ; <reference>Deshayes</reference>.</p>
+            </uneNote>
+            <uneNote>
+                <p>De Dardel (<reference>DardelGenre 66-91</reference> ; <reference>Dardel,ACILR
+                        14/2, 76-82</reference>) postule toutefois une phase ultérieure caractérisée
+                    par la restauration du masculin aux dépens d'une partie des zones précédemment
+                    conquises au féminin.</p>
+            </uneNote>
+            <uneNote>
+                <p>Le cas de <etymsignifiant>&#x2c8;lakt-e</etymsignifiant> appelle la comparaison
+                    de <RenvoiInterne>&#x2c8;san&#x261;uen</RenvoiInterne> (<reference avant="cf"
+                        >FEW 9, 178b</reference>) et, plus largement, selon un rapport d'analogie
+                    structurelle souligné dans <reference>Dardel,ACILR 14/2, 76-82</reference> et
+                        <reference>DardelGenre 15-17</reference>, avec les cas de
+                    <RenvoiInterne>&#x2c8;mar-e</RenvoiInterne>,
+                    <RenvoiInterne>&#x2c8;ɸɛl-e</RenvoiInterne>,
+                    <RenvoiInterne>&#x2c8;mɛl-e</RenvoiInterne> et
+                    <RenvoiInterne>&#x2c8;sal-e</RenvoiInterne>.</p>
+            </uneNote>
+            <uneNote><p>Attestation plus ancienne, mais douteuse, chez Vitruve (<reference>TLL 7,
+                        815</reference>).</p></uneNote>
+        </Notes></Article>
+</DERom>
