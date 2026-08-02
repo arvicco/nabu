@@ -7,11 +7,13 @@ require "webmock/minitest"
 
 # Nabu::Adapters::Openmgh (P45-2): openMGH — the Monumenta Germaniae
 # Historica critical editions as per-volume TEI-XML zips
-# (data.mgh.de/openmgh/<bsbid>.zip; 153 volumes on the index at scout time,
-# 2026-07-25). Fixtures: two whole volumes (Einhard's Vita Karoli, MGH SS
-# rer. Germ. 25, Latin; Der Trierer Silvester, MGH Dt. Chron. 1,2, Middle
-# High German) plus a documented trim of the Diplomata volume MGH DD
-# Rudolf. (teiCorpus of per-charter TEI blocks).
+# (data.mgh.de/openmgh/<bsbid>.zip; 153 volumes on the index at scout time
+# 2026-07-25, re-censused unchanged 2026-08-02 for the P56-3 second wave).
+# Fixtures: three whole volumes (Einhard's Vita Karoli, MGH SS rer. Germ.
+# 25, Latin; Der Trierer Silvester, MGH Dt. Chron. 1,2, Middle High German;
+# Eugippius' Vita sancti Severini, MGH Auct. ant. 1,2 — the P56-3
+# second-wave shape check) plus a documented trim of the Diplomata volume
+# MGH DD Rudolf. (teiCorpus of per-charter TEI blocks).
 #
 # THE LICENSE (read from the live page AND every volume's own
 # <availability><licence>, 2026-07-25): CC BY 4.0 on the annotations, the
@@ -32,6 +34,7 @@ class OpenmghTest < Minitest::Test
   EINHARD = "urn:nabu:openmgh:bsb00000728"
   SILVESTER = "urn:nabu:openmgh:bsb00000776"
   RUDOLFINGER = "urn:nabu:openmgh:bsb00000361"
+  EUGIPPIUS = "urn:nabu:openmgh:bsb00000786"
 
   def conformance_adapter = Nabu::Adapters::Openmgh.new
 
@@ -47,7 +50,7 @@ class OpenmghTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_volume_sorted_by_urn
     refs = adapter.discover(workdir).to_a
-    assert_equal [RUDOLFINGER, EINHARD, SILVESTER], refs.map(&:id),
+    assert_equal [RUDOLFINGER, EINHARD, SILVESTER, EUGIPPIUS], refs.map(&:id),
                  "one document per <bsbid>/<bsbid>.xml, urn urn:nabu:openmgh:<bsbid>, sorted"
     assert(refs.all? { |ref| ref.source_id == "openmgh" })
     assert(refs.all? { |ref| ref.id == adapter.parse(ref).urn },
@@ -122,6 +125,21 @@ class OpenmghTest < Minitest::Test
     assert_includes first.text, "Nv̊ tůnt mir eine stille", "combining marks survive NFC"
   end
 
+  # -- the second wave (P56-3): an Auct. ant. volume, same Scriptores dialect -
+
+  def test_second_wave_auct_ant_volume_parses_through_the_wave_one_machinery
+    document = adapter.parse(ref_for(EUGIPPIUS))
+    assert_equal "lat", document.language
+    assert_equal "MGH Auct. ant. 1,2: Eugippii Vita sancti Severini", document.title
+    assert_equal 32, document.count, "2 works × their printed pages — no new shape, no parser change"
+    first = document.first
+    assert_equal "#{EUGIPPIUS}:w1.pXIX", first.urn
+    assert first.text.start_with?("HYMNUS SANCTI SEVERINI ABBATIS. Canticum laudis domino canentes"),
+           "the milestone-stream chunker reads Auct. ant. bytes exactly like SS rer. Germ."
+    assert_equal "Hymnus s. Severini", first.annotations["work"]
+    assert_equal "#{EUGIPPIUS}:w2.p30", document.to_a.last.urn, "the Vita runs to printed page 30"
+  end
+
   # -- the Diplomata dialect: teiCorpus, one passage per charter --------------
 
   def test_diplomata_corpus_yields_one_passage_per_charter_with_medieval_dates
@@ -159,14 +177,14 @@ class OpenmghTest < Minitest::Test
     db = store_test_db
     source = create_source(db)
     first = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
-    assert_equal 3, first.added
+    assert_equal 4, first.added
     assert_equal 0, first.errored
-    assert_equal 92, db[:passages].count, "55 Einhard + 34 Silvester + 3 charters"
+    assert_equal 124, db[:passages].count, "55 Einhard + 34 Silvester + 3 charters + 32 Eugippius"
 
     second = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 0, second.errored
-    assert_equal 3, second.skipped, "a byte-identical reload skips every document"
-    assert_equal 92, db[:passages].count
+    assert_equal 4, second.skipped, "a byte-identical reload skips every document"
+    assert_equal 124, db[:passages].count
     assert_equal [1], db[:passages].distinct.select_map(:revision)
   ensure
     db&.disconnect
@@ -198,14 +216,35 @@ class OpenmghTest < Minitest::Test
     end
   end
 
-  # -- the first wave (D45-d) and the series language table -------------------
+  # -- the two waves (D45-d + P56-3) and the series language table ------------
 
-  def test_default_volume_allowlist_is_the_ss_rer_germ_first_wave
+  def test_first_wave_stays_byte_frozen_as_the_ss_rer_germ_series
     assert_equal 57, Nabu::Adapters::Openmgh::FIRST_WAVE_VOLUMES.size,
-                 "D45-d proposal: the complete SS rer. Germ. series (in usum scholarum)"
+                 "D45-d: the complete SS rer. Germ. series (in usum scholarum) — a frozen historical record"
     assert_includes Nabu::Adapters::Openmgh::FIRST_WAVE_VOLUMES, "bsb00000728", "Einhard is in the wave"
     refute_includes Nabu::Adapters::Openmgh::FIRST_WAVE_VOLUMES, "bsb00000361",
-                    "Diplomata volumes are a later wave"
+                    "Diplomata volumes are the second wave"
+  end
+
+  def test_second_wave_completes_the_censused_index_without_touching_wave_one
+    first = Nabu::Adapters::Openmgh::FIRST_WAVE_VOLUMES
+    second = Nabu::Adapters::Openmgh::SECOND_WAVE_VOLUMES
+    assert_equal 96, second.size, "P56-3 census (2026-08-02): the 96 non-SS-rer.-Germ. index volumes"
+    assert_empty first & second, "the waves are disjoint — wave-1 urns stay byte-frozen"
+    assert_equal 153, Nabu::Adapters::Openmgh::ALL_VOLUMES.size,
+                 "the full openMGH index: 57 + 96, every id censused from the live listing"
+    assert_equal (first + second).sort, Nabu::Adapters::Openmgh::ALL_VOLUMES
+    assert_includes second, "bsb00000361", "DD Rudolf. joins in wave 2"
+    assert_includes second, "bsb00000786", "Auct. ant. 1,2 (the wave-2 fixture) is censused"
+    assert_includes second, "bsb00000858", "SS rer. Lang. — the 1-volume section the wave-1 scout note missed"
+  end
+
+  def test_fetch_and_probe_scope_default_to_the_full_censused_index
+    targets = Nabu::Adapters::Openmgh.http_probe_targets
+    assert_equal Nabu::Adapters::Openmgh::ALL_VOLUMES, targets.map(&:label),
+                 "the remote probe sweeps every censused volume, not just wave 1"
+    assert_equal "https://data.mgh.de/openmgh/bsb00000786.zip",
+                 targets.find { |t| t.label == "bsb00000786" }.zip_url
   end
 
   def test_language_table_maps_dt_chron_to_gmh_and_defaults_to_latin
@@ -214,6 +253,20 @@ class OpenmghTest < Minitest::Test
     assert_equal "lat", Nabu::Adapters::Openmgh.volume_language("bsb00000728"), "everything else is Latin"
     assert_equal "lat", Nabu::Adapters::Openmgh.volume_language("bsb00000614"),
                  "Dt. MA is a German-NAMED series of LATIN texts (Briefe Heinrichs IV.)"
+  end
+
+  # P56-3 byte census (2026-08-02): two German-language WORKS hide inside
+  # Latin series, and two German-TITLED chronicles are Latin — each call
+  # verified from the volume's own body text, never the title.
+  def test_language_exceptions_in_the_second_wave_are_byte_censused
+    assert_equal "gmh", Nabu::Adapters::Openmgh.volume_language("bsb00000691"),
+                 "Jakob Unrest, Österr. Chronik (N. S. 11): 'Als man vor in der Osterreichischen coronikn list…'"
+    assert_equal "gmh", Nabu::Adapters::Openmgh.volume_language("bsb00000655"),
+                 "Reformation Kaiser Siegmunds (Staatsschriften 6): 'Almechtiger got, schöpffer himels und ertrichs…'"
+    assert_equal "lat", Nabu::Adapters::Openmgh.volume_language("bsb00000695"),
+                 "Kölner Weltchronik (N. S. 15) is a LATIN chronicle under a German title"
+    assert_equal "lat", Nabu::Adapters::Openmgh.volume_language("bsb00000697"),
+                 "Weltchronik des Mönchs Albert (N. S. 17) likewise: 'Nicolaus tercius… fuit electus in papam'"
   end
 
   private

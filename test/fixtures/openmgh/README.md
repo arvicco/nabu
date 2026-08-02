@@ -1,16 +1,18 @@
-# openMGH fixtures — Monumenta Germaniae Historica TEI-XML (P45-2)
+# openMGH fixtures — Monumenta Germaniae Historica TEI-XML (P45-2, P56-3)
 
-Three real openMGH volumes, snapshotted **2026-07-25** from
+Four real openMGH volumes — three snapshotted **2026-07-25** (P45-2),
+one **2026-08-02** (P56-3, the second wave) — from
 `https://data.mgh.de/openmgh/<bsbid>.zip` (each zip carries exactly one
 `<bsbid>.xml`; the fixture layout `<bsbid>/<bsbid>.xml` mirrors the
 per-volume unpack the adapter's fetch produces). The volume inventory is
 the human index page
 `https://www.mgh.de/en/digital-mgh/openmgh/mgh-editions-in-openmgh`
-(153 volumes on the retrieval date; the id space is sparse — an
-unlisted bsb id 404s, so enumeration comes from the index, never a
-sweep).
+(153 volumes on both retrieval dates — the P56-3 re-census extracted a
+byte-identical id set; the id space is sparse — an unlisted bsb id
+404s, so enumeration comes from the index, never a sweep).
 
-Chosen to cover the corpus's two dialects and both languages:
+Chosen to cover the corpus's two dialects, both languages, and (P56-3)
+the second wave's series:
 
 - `bsb00000728/bsb00000728.xml` — **whole** (165 KB). Einhardi Vita
   Karoli Magni (MGH SS rer. Germ. 25), ed. Holder-Egger 1911. The
@@ -45,6 +47,22 @@ Chosen to cover the corpus's two dialects and both languages:
   no line inside a kept block was altered. Re-apply: download the
   zip, keep the prologue before the first `<TEI>`, inner `<TEI>`
   blocks 1, 2, 3 and 13, close the root.
+- `bsb00000786/bsb00000786.xml` — **whole** (174 KB), snapshotted
+  2026-08-02 (P56-3). Eugippii Vita sancti Severini (MGH Auct. ant.
+  1,2), ed. Sauppe 1877. The second wave's shape check: the SAME
+  Scriptores dialect as wave 1 (`<TEI>` root, `div type="volume"` →
+  two `div type="work"` — Hymnus s. Severini, Vita Severini — →
+  `part` divs → `<ab>` milestone streams, `<w>` hyphenation pairs).
+  32 work-page passages, roman front-matter and arabic body pages.
+  Latin. The wider P56-3 byte census (5 volumes: this one plus
+  bsb00000691/695/697 from SS rer. Germ. N. S. and bsb00000655 from
+  Staatsschriften, not kept as fixtures) found ONE novelty across the
+  new range — a transparent `div type="section"` nesting level below
+  work/part that the chunker already passes through — and pinned the
+  language exceptions: Unrest (bsb00000691) and Reformation Kaiser
+  Siegmunds (bsb00000655) are German (`gmh`) despite Latin series;
+  the German-titled Kölner Weltchronik (bsb00000695) and Weltchronik
+  des Mönchs Albert (bsb00000697) are Latin.
 
 License, verbatim from every volume's `<availability><licence>`:
 "Distributed under the Creative Commons Attribution 4.0 International

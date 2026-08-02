@@ -2785,17 +2785,22 @@ openmgh:
                    # one zip each at data.mgh.de/openmgh/<bsbid>.zip holding
                    # exactly one <bsbid>.xml (48-525 KB zipped; the id space
                    # is SPARSE — unlisted ids 404, so enumeration is the
-                   # index, never a sweep). OWNER QUEUE: `nabu sync openmgh`
-                   # fetches the D45-d first wave — the complete SS rer.
-                   # Germ. series (57 volumes, ~15 MB: Einhard, the Annales
-                   # regni Francorum/Bertiniani/Fuldenses, Widukind,
-                   # Liudprand, Nithard, Regino, Adam of Bremen, Helmold,
-                   # Otto of Freising, Hrotsvitha…) — then eyeball counts +
-                   # 5 random passages. Extend the scope with `classes:`
-                   # (a bsbid allowlist — the kanripo/kitab seam); the
-                   # remaining 96 volumes (Auct. ant., SS rer. Merov.,
-                   # Diplomata, QQ zur Geistesgesch., Dt. Chron., …) are a
-                   # documented future step the parser already handles.
+                   # index, never a sweep; machine re-census 2026-08-02
+                   # byte-identical). P56-3 (wave 2): the default allowlist
+                   # is now the FULL censused index — ALL_VOLUMES, 153 ids
+                   # (57 frozen wave-1 SS rer. Germ. + the 96 remaining:
+                   # Auct. ant. 16, SS rer. Merov. 8, SS rer. Lang. 1,
+                   # N. S. 14, Dt. Chron. 9, Ldl 3, Staatsschriften 10,
+                   # Diplomata 13, QQ zur Geistesgesch. 18, Dt. MA 4); a
+                   # 5-volume byte sample confirmed the wave-1 dialect
+                   # unchanged. OWNER QUEUE: `nabu sync openmgh` now
+                   # fetches the other 96 volumes too (~20 MB zipped;
+                   # EXPECT ~15,000-20,000 new passages, 153 docs total) —
+                   # then eyeball counts + 5 random passages, especially
+                   # the byte-censused gmh exceptions bsb00000691 (Unrest)
+                   # and bsb00000655 (Reformation Ks. Siegmunds). Narrow /
+                   # replace the scope with `classes:` (a bsbid allowlist —
+                   # the kanripo/kitab seam).
   # openMGH — Monumenta Germaniae Historica critical editions (MGH + Bayerische
   # Staatsbibliothek, "digital MGH") as per-volume TEI-XML: medieval Latin
   # chronicles, vitae, letters, charters — plus the Dt. Chron. series in Middle
