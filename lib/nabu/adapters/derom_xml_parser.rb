@@ -44,17 +44,34 @@ module Nabu
     # form.
     class DeromXmlParser
       # idiome abbreviation (upstream, French) → the catalog-side language
-      # tag the crosswalk join speaks. Verbatim lang_code always rides the
-      # reflex row; unmapped idiomes (and the joint "gal./port.") stay
-      # display-only (language nil, never a join candidate). gasc./lang.
-      # fold into oci — ISO 639-3 retired Gascon/Languedocien into Occitan.
+      # tag the crosswalk join speaks. lang_code is the RESOLVED catalog tag
+      # (P57-5 — DÉRom's own idiome abbreviation used to leak through
+      # verbatim even though this table already resolved `language`);
+      # unmapped idiomes (none known as of P57-5 — every idiome the fixture
+      # or the full-corpus census names now resolves) fall back to the
+      # verbatim idiome string, display-only (language nil, never a join
+      # candidate). gasc./lang. fold into oci — ISO 639-3 retired
+      # Gascon/Languedocien into Occitan.
+      #
+      # P57-5 completed the table (four idiomes had no target at all):
+      #   "arag." => Aragonese (arg); "végl." => Vegliote, the island
+      #   dialect of Dalmatian (dlm — same target as dalm.); "logoud." =>
+      #   Logudorese Sardinian (src); "itsept." => northern/septentrional
+      #   Italian, no dedicated ISO code — mapped to `it` (ISO 639-1)
+      #   DISTINCT from plain it.'s `ita` (ISO 639-3) so the two idiomes
+      #   stay distinguishable rather than conflated into one language.
+      # The fifth gap, the composite "gal./port." citation, is not a
+      # missing mapping — split_idiome below splits it into its two
+      # component idiomes before lookup (the smaller honest diff versus a
+      # synthetic roa-opt code; see #reflexes).
       IDIOME_LANGUAGES = {
         "dacoroum." => "ron", "istroroum." => "ruo", "méglénoroum." => "ruq",
         "aroum." => "rup", "sard." => "srd", "dalm." => "dlm", "istriot." => "ist",
         "it." => "ita", "frioul." => "fur", "lad." => "lld", "romanch." => "roh",
         "fr." => "fra", "frpr." => "frp", "occit." => "oci", "gasc." => "oci",
         "lang." => "oci", "vén." => "vec", "cat." => "cat", "esp." => "spa",
-        "ast." => "ast", "gal." => "glg", "port." => "por"
+        "ast." => "ast", "gal." => "glg", "port." => "por",
+        "arag." => "arg", "végl." => "dlm", "logoud." => "src", "itsept." => "it"
       }.freeze
 
       # The DÉRom notation → typeable-ASCII fold (class note; mirrors the
@@ -103,12 +120,24 @@ module Nabu
 
       # Depth-first over Materiaux subdivs, cognats in document order, the
       # positional idiome→signifiant walk (class note), exact duplicates
-      # deduped.
+      # deduped, THEN composite citations split (P57-5) so dedup sees the
+      # original upstream pair, not an already-split one.
       def reflexes(article)
         article.xpath("Materiaux/subdiv/cognats/*[self::premier.cognat or self::cognat]")
                .flat_map { |cognat| idiome_runs(cognat).flat_map { |idiome, words| words.map { |w| [idiome, w] } } }
                .uniq
+               .flat_map { |idiome, word| split_idiome(idiome).map { |single| [single, word] } }
                .map { |idiome, word| build_reflex(idiome, word) }
+      end
+
+      # A composite citation like "gal./port." names two idiomes sharing one
+      # signifiant (P57-5: DÉRom's own citation shorthand — "leite" serves
+      # both Galician and Portuguese — not upstream error). Split on "/"
+      # into the component idiomes (each already ends in its own "."), so
+      # each mints its own resolved reflex row instead of one display-only
+      # joint label. Idiomes without a "/" pass through unchanged.
+      def split_idiome(idiome)
+        idiome.include?("/") ? idiome.split("/") : [idiome]
       end
 
       # [[idiome, [word, …]], …] in document order — each signifiant
@@ -129,7 +158,7 @@ module Nabu
         nfc = Nabu::Normalize.nfc(word)
         folded = Nabu::Normalize.search_form(nfc, language: language)
         Nabu::DictionaryReflex.new(
-          lang_code: idiome, language: language, word: nfc,
+          lang_code: language || idiome, language: language, word: nfc,
           word_folded: folded.empty? ? nil : folded,
           borrowed: false
         )
