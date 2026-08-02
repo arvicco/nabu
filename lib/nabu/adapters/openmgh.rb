@@ -37,7 +37,7 @@ module Nabu
     # public domain." Citation duty: name the MGH and the Bayerische
     # Staatsbibliothek (BSB). → class attribution.
     #
-    # == The first wave (DECISION ITEM D45-d, owner ratifies)
+    # == The two waves (D45-d first wave; P56-3 second wave)
     #
     # FIRST_WAVE_VOLUMES is the complete SS rer. Germ. series ("Scriptores
     # rerum Germanicarum in usum scholarum separatim editi", 57 volumes) —
@@ -45,20 +45,34 @@ module Nabu
     # Annales regni Francorum/Bertiniani/Fuldenses, Widukind, Liudprand,
     # Nithard, Regino, Adam of Bremen, Helmold, Otto of Freising,
     # Hrotsvitha… All Latin, all small (48-525 KB zipped; the wave is
-    # ~15 MB). The owner extends/replaces the scope via the registry's
-    # `classes:` seam (the kanripo/kitab owner-posture passthrough). The
-    # remaining 96 volumes (Auct. ant., SS rer. Merov., SS rer. Germ.
-    # N. S., Diplomata, QQ zur Geistesgesch., Dt. Chron., Staatsschriften,
-    # Ldl, Dt. MA…) are a documented future step — the parser already
-    # handles both dialects.
+    # ~15 MB). It stays byte-frozen as the historical D45-d record.
+    #
+    # SECOND_WAVE_VOLUMES (P56-3) is everything else on the index —
+    # re-censused 2026-08-02, byte-identical to the 2026-07-25 scout: 153
+    # volumes total, so the second wave is the remaining 96 (Auct. ant. 16,
+    # SS rer. Merov. 8, SS rer. Lang. 1, SS rer. Germ. N. S. 14, Dt.
+    # Chron. 9, Ldl 3, Staatsschriften 10, Diplomata 13, QQ zur
+    # Geistesgesch. 18, Dt. MA 4). ALL_VOLUMES — the default allowlist
+    # since P56-3 — is the union; the owner still narrows/replaces via the
+    # registry's `classes:` seam (the kanripo/kitab owner-posture
+    # passthrough). A P56-3 five-volume byte sample (one per unseen risk:
+    # Auct. ant., N. S. ×3, Staatsschriften) confirmed the second wave is
+    # the SAME Scriptores dialect wave 1 pinned — the only novelty is a
+    # transparent <div type="section"> nesting level below work/part,
+    # which the chunker already passes through (only work divs count).
     #
     # == Languages (no xml:lang exists anywhere upstream)
     #
     # Per-series table from the index: the 9 Dt. Chron. volumes are Middle
     # High German (gmh — the ReM code); every other series censused is
     # Latin, INCLUDING the German-NAMED Dt. MA ("Deutsches Mittelalter":
-    # Briefe Heinrichs IV., Brunos Sachsenkrieg — Latin texts). First real
-    # sync eyeballs any volume this table has not seen.
+    # Briefe Heinrichs IV., Brunos Sachsenkrieg — Latin texts) — PLUS two
+    # per-volume exceptions the P56-3 byte census caught hiding in Latin
+    # series (see GMH_VOLUMES). Titles prove nothing either way: the
+    # German-titled Kölner Weltchronik (bsb00000695) and Weltchronik des
+    # Mönchs Albert (bsb00000697) are LATIN chronicles, verified from
+    # their body bytes. First real sync eyeballs any volume no census has
+    # seen.
     #
     # == fetch / sync policy
     #
@@ -89,14 +103,58 @@ module Nabu
         bsb00000880 bsb00000945
       ].freeze
 
+      # P56-3: the remaining 96 index volumes, machine-extracted from the
+      # live index 2026-08-02 (153 ids total, byte-identical to the wave-1
+      # scout of 2026-07-25 — upstream has not grown between waves).
+      SECOND_WAVE_VOLUMES = %w[
+        bsb00000785 bsb00000786 bsb00000788 bsb00000789 bsb00000790
+        bsb00000791 bsb00000792 bsb00000793 bsb00000794 bsb00000795
+        bsb00000796 bsb00000797 bsb00000799 bsb00000824 bsb00000826
+        bsb00000827
+        bsb00000747 bsb00000749 bsb00000750 bsb00000751 bsb00000752
+        bsb00000753 bsb00000754 bsb00050862
+        bsb00000858
+        bsb00000682 bsb00000683 bsb00000684 bsb00000686 bsb00000687
+        bsb00000689 bsb00000690 bsb00000691 bsb00000692 bsb00000693
+        bsb00000695 bsb00000696 bsb00000697 bsb00000944
+        bsb00000773 bsb00000774 bsb00000775 bsb00000776 bsb00000777
+        bsb00000778 bsb00000779 bsb00000780 bsb00000781
+        bsb00000828 bsb00000829 bsb00000830
+        bsb00000646 bsb00000647 bsb00000648 bsb00000649 bsb00000650
+        bsb00000651 bsb00000652 bsb00000653 bsb00000654 bsb00000655
+        bsb00000356 bsb00000359 bsb00000361 bsb00000435 bsb00000457
+        bsb00000458 bsb00000459 bsb00000461 bsb00000463 bsb00000464
+        bsb00002026 bsb00002027 bsb00066349
+        bsb00000618 bsb00000619 bsb00000620 bsb00000621 bsb00000622
+        bsb00000623 bsb00000624 bsb00000625 bsb00000626 bsb00000628
+        bsb00000629 bsb00000630 bsb00000631 bsb00000632 bsb00000633
+        bsb00000634 bsb00000635 bsb00050770
+        bsb00000614 bsb00000615 bsb00000616 bsb00000617
+      ].freeze
+      # ^ index order by section: Auct. ant. (16), SS rer. Merov. (8),
+      #   SS rer. Lang. (1), SS rer. Germ. N. S. (14), Dt. Chron. (9),
+      #   Ldl (3), Staatsschriften (10), Diplomata (13: DD Merov. / DD
+      #   Lo I.+II. / DD Rudolf. / DD Arn / DD dt. Könige u. Kaiser),
+      #   QQ zur Geistesgesch. (18), Dt. MA (4).
+
+      # The full censused index — the default allowlist since P56-3.
+      ALL_VOLUMES = (FIRST_WAVE_VOLUMES + SECOND_WAVE_VOLUMES).sort.freeze
+
       # The Middle High German volumes: the MGH Dt. Chron. series complete
       # (Kaiserchronik, Trierer Silvester, Sächsische Weltchronik, Jansen
       # Enikel, Limburger Chronik, Kreuzfahrt Ludwigs, Ottokars Reimchronik
-      # 1-2, Österreichische Chronik), from the index 2026-07-25. Everything
-      # else defaults to Latin.
+      # 1-2, Österreichische Chronik), from the index 2026-07-25 — plus the
+      # two German-language works the P56-3 byte census (2026-08-02) found
+      # hiding in Latin series: Jakob Unrest's Österreichische Chronik
+      # (bsb00000691, SS rer. Germ. N. S. 11 — "Als man vor in der
+      # Osterreichischen coronikn list…") and the Reformation Kaiser
+      # Siegmunds (bsb00000655, Staatsschriften 6 — "Almechtiger got,
+      # schöpffer himels und ertrichs…"; late texts, but inside ISO 639-2
+      # gmh's ca. 1050-1500 window). Everything else defaults to Latin.
       GMH_VOLUMES = %w[
         bsb00000773 bsb00000774 bsb00000775 bsb00000776 bsb00000777
         bsb00000778 bsb00000779 bsb00000780 bsb00000781
+        bsb00000655 bsb00000691
       ].freeze
 
       DEFAULT_LANGUAGE = "lat"
@@ -125,7 +183,7 @@ module Nabu
       def self.remote_probe_strategy = :http_zip
 
       def self.http_probe_targets
-        FIRST_WAVE_VOLUMES.map do |bsbid|
+        ALL_VOLUMES.map do |bsbid|
           Nabu::Adapter::HttpProbeTarget.new(
             label: bsbid, zip_url: "#{ZIP_BASE}/#{bsbid}.zip",
             metadata_url: nil, state_subdir: bsbid
@@ -141,10 +199,11 @@ module Nabu
 
       # +classes+ (the registry `classes:` seam — the kanripo/kitab
       # owner-posture passthrough): the volume allowlist the fetch sweeps.
-      # nil keeps the D45-d first wave.
+      # nil takes the full censused index (P56-3; wave 1 alone was the
+      # D45-d default).
       def initialize(classes: nil)
         super()
-        @volumes = classes || FIRST_WAVE_VOLUMES
+        @volumes = classes || ALL_VOLUMES
       end
 
       # One DocumentRef per <bsbid>/<bsbid>.xml on disk, sorted by urn —

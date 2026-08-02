@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="derom.css"?>
+<DERom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="derom.xsd">
+  <Article><Lemme>
+      <Signifiant>ka&#x2c8;βall-u</Signifiant>
+      <catgramm>s.m.</catgramm>
+      <Signifie>mammifère domestique appartenant à la famille des équidés, utilisé notamment comme
+        animal de monture et de trait</Signifie>
+    </Lemme><Materiaux>
+      <subdiv>
+        <etym>ka&#x2c8;βall-u</etym>
+        <cognats>
+          <premier.cognat>
+            <idiome>sard.</idiome>
+            <signifiant>kavá&#x1E0D;&#x1E0D;u</signifiant>
+            <catgramm>s.m.</catgramm>
+            <signifie>mammifère domestique appartenant à la famille des équidés, utilisé notamment
+              comme animal de monture et de trait, cheval</signifie>
+            <refbibl>
+              <unerefbibl>
+                <reference>DES</reference>
+                <reference>AIS 1062</reference>
+              </unerefbibl>
+            </refbibl>
+          </premier.cognat>
+          <cognat>
+            <idiome>dacoroum.</idiome>
+            <signifiant>cal</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <date>dp. 1500/1510</date>
+                <precision>date du ms.</precision>
+                <reference>Psalt. Hur.2 102</reference>
+                <reference>Tiktin3</reference>
+                <reference>EWRS</reference>
+                <reference>DA</reference>
+                <reference>Candrea-Densusianu n° 209</reference>
+                <reference>Cioranescu n° 1294</reference>
+                <reference>MDA</reference>
+                <reference>MihăescuRomanité 34, 263</reference>
+                <reference>ALR SN 275, 276, 277</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>istroroum.</idiome>
+            <signifiant>cå</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <reference>PuşcariuIstroromâne 3, 105 [<hi rend="italic">s.v. cal</hi>],
+                  182</reference>
+                <reference>ScărlătoiuIstroromânii 286</reference>
+                <reference>SârbuIstroromân 194 [<hi rend="italic">cal</hi>]</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>méglénoroum.</idiome>
+            <signifiant>cal</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <reference>Candrea,GrS 3, 195</reference>
+                <reference>CapidanDicţionar</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>aroum.</idiome>
+            <signifiant>cal</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <date>dp. 1770</date>
+                <precision>κάλου</precision>
+                <reference>KavalliotisProtopeiria n° 0371</reference>
+                <reference>Pascu 1, 55</reference>
+                <reference>BaraAroumain</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>dalm.</idiome>
+            <signifiant>kavúl</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <reference>BartoliDalmatico 238</reference>
+                <reference>ElmendorfVeglia s.v. caval</reference>
+                <reference>MihăescuRomanité 115</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>it.</idiome>
+            <signifiant>cavallo</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <date>dp. 12e s.</date>
+                <precision><hi rend="italic">caval</hi></precision>
+                <reference>Coluccia in TLIO</reference>
+                <reference>LEI 9, 99-226</reference>
+                <reference>DELI2</reference>
+                <reference>AIS 1062</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>frioul.</idiome>
+            <signifiant>ciaval</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <reference>Frau in DESF</reference>
+                <reference>GDBTF</reference>
+                <reference>AIS 1062</reference>
+                <reference>ASLEF 936 n° 4497</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>lad.</idiome>
+            <signifiant>ćiavàl </signifiant>
+            <refbibl>
+              <unerefbibl>
+                <date>dp. 1763</date>
+                <precision><hi rend="italic">ciaval</hi></precision>
+                <reference>Kramer/Schlösser in EWD</reference>
+                <reference>AIS 1062</reference>
+                <reference>ALD-I 130</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>romanch.</idiome>
+            <signifiant>chavagl</signifiant>
+            <signifiant>cavagl</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <date>dp. 1527</date>
+                <precision><hi rend="italic">chiavalg</hi></precision>
+                <reference>Schorta in DRG 3, 483</reference>
+                <reference>HWBRätoromanisch [<hi rend="italic">cavagl</hi>]</reference>
+                <reference>AIS 1062</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>fr.</idiome>
+            <signifiant>cheval</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <date>dp. ca 1100</date>
+                <reference>TLF</reference>
+                <reference>FEW 2, 8b-9a</reference>
+                <reference>TL</reference>
+                <reference>ALF 269</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>frpr.</idiome>
+            <signifiant cas="phonetique">tså'va</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <date>dp. 1ère m. 13e s.</date>
+                <precision><hi rend="italic">chaval</hi></precision>
+                <reference>SommeCode 21</reference>
+                <reference>FEW 2, 8b-9a</reference>
+                <reference>HafnerGrundzüge 82</reference>
+                <reference>Marzys in GPSR 3, 522-526</reference>
+                <reference>ALF 269</reference>
+                <reference>ALLy 311 p 58, 59, 60</reference>
+              </unerefbibl>
+            </refbibl>
+            <appelnote/>
+          </cognat>
+          <cognat>
+            <idiome>occit.</idiome>
+            <signifiant cas="typise">caval</signifiant>
+            <signifiant cas="typise">cavau</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <date>dp. av. 1126</date>
+                <precision><hi rend="italic">caval</hi></precision>
+                <reference>DAO n° 1255</reference>
+                <reference>Raynouard</reference>
+                <reference>AppelChrestomathie</reference>
+                <reference>FEW 2, 8b</reference>
+                <reference>Pansier 3</reference>
+                <reference>BrunelChartes 20</reference>
+                <reference>BrunelChartesSuppl 16</reference>
+                <reference>ALF 269</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>gasc.</idiome>
+            <signifiant>cauàt </signifiant>
+            <refbibl>
+              <unerefbibl>
+                <date>dp. ca 1150</date>
+                <precision><hi rend="italic">cauat</hi></precision>
+                <reference>DAG n° 1255</reference>
+                <reference>Palay [“vieux”, Lomagne]</reference>
+                <reference>CorominesAran 751</reference>
+              </unerefbibl>
+            </refbibl>
+            <appelnote/>
+          </cognat>
+          <cognat>
+            <idiome>cat.</idiome>
+            <signifiant>cavall</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <date>dp. 1030</date>
+                <reference>DECat 2, 647-650</reference>
+                <reference>DCVB</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>esp.</idiome>
+            <signifiant>caballo</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <date>dp. 932</date>
+                <reference>DCECH 1, 708</reference>
+                <reference>Kasten/Cody</reference>
+                <reference>DME</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>ast.</idiome>
+            <signifiant>caballu</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <date>dp. 889</date>
+                <precision><hi rend="italic">kauallos</hi> pl.</precision>
+                <reference>DELLAMs</reference>
+              </unerefbibl>
+              <unerefbibl>
+                <reference>DGLA</reference>
+              </unerefbibl>
+            </refbibl>
+          </cognat>
+          <cognat>
+            <idiome>gal.</idiome>
+            <signifiant>cabalo</signifiant>
+            <idiome>port.</idiome>
+            <signifiant>cavalo</signifiant>
+            <refbibl>
+              <unerefbibl>
+                <date>dp. 1273</date>
+                <precision><hi rend="italic">cavalo</hi></precision>
+                <reference>TMILG</reference>
+                <reference>DDGM</reference>
+                <reference>Buschmann</reference>
+                <reference>DRAG1</reference>
+                <reference>DELP3</reference>
+                <reference>Houaiss</reference>
+                <reference>CunhaVocabulário2</reference>
+              </unerefbibl>
+            </refbibl>
+            <appelnote/>
+          </cognat>
+        </cognats>
+      </subdiv>
+    </Materiaux><Commentaire>
+      <p>Toutes les branches romanes présentent des cognats conduisant à reconstruire protorom.
+        <etymsignifiant>ka&#x2c8;βall-u</etymsignifiant> s.m. <etymsignifie>
+          <analytique>mammifère domestique appartenant à la famille des équidés, utilisé notamment
+            comme animal de monture et de trait</analytique>
+          <glose>cheval</glose>
+        </etymsignifie>.</p>
+      <p>L'extension panromane de <etymsignifiant>ka&#x2c8;βall-u</etymsignifiant>, lexème
+        probablement né dans la péninsule italienne (au contact du grec, <reference avant="cf">FEW
+          2, 11b</reference>), montre qu'il avait supplanté comme générique son parasynonyme du
+        latin écrit <hi rend="italic">equus</hi>, dépourvu de corrélat en protoroman (Ø
+          <reference>REW3</reference>), lequel reflète un stade antérieur de la langue
+        parlée<appelnote/>. La généralisation de <etymsignifiant>ka&#x2c8;βall-u</etymsignifiant>
+        est également démontrée par le fait qu'il a été emprunté par des langues non romanes
+        voisines<appelnote/>. Sur le plan référentiel, la substitution précoce et générale de <hi
+          rend="italic">equus</hi> par <etymsignifiant>ka&#x2c8;βall-u</etymsignifiant> s'explique
+        par l'utilisation du cheval comme animal de trait, dans le travail quotidien à la place des
+        bœufs ou avec eux.</p>
+      <p>Le corrélat du latin écrit, <correlatlatin>caballus</correlatlatin>,
+        <hi rend="italic">-i</hi> s.m., est attesté depuis le latin préclassique dans le sens
+        originel « cheval hongre ; cheval de somme ; cheval de peu de valeur » (dp. Lucilius
+        [&#x2020; 103 av. J.-Chr.], <reference>TLL 3, 3</reference> ; <reference avant="cf"
+          >Ernout/Meillet4 s.v. caballus</reference> ; <reference>StefenelliSchicksal
+        51</reference>), puis, trois générations plus tard, dans le sens généricisé de « cheval »
+        (dp. Varron [* 116 – &#x2020; 27], <reference>TLL 3, 3</reference>).</p>
+    </Commentaire><Bibliographie>
+      <reference>MeyerLübkeGLR 1, § 221, 308, 349, 405-406, 446, 545 ; 2, § 364</reference>
+      <reference>REW3 s.v. cabăllus</reference>
+      <reference>Ernout/Meillet4 s.v. caballus</reference>
+      <reference>von Wartburg 1936 in FEW 2, 8b-12b, caballus</reference>
+      <reference>RohlfsDiferenciación 124-128</reference>
+      <reference>GardetteForez 190-194</reference>
+      <reference>LausbergLingüística 1, § 143, 175, 260, 274, 314-316, 364, 373, 496-498,
+        572</reference>
+      <reference>Tuaillon,TraLiLi 9/1, 91-176</reference>
+      <reference>HallPhonology 70</reference>
+      <reference>SalaVocabularul 539</reference>
+      <reference>StefenelliSchicksal 51</reference>
+      <reference>DOLR 5 (1995), 58-60</reference>
+      <reference>Büchi/Champy in PatRomPrésentation 8-22 s.v. caballus</reference>
+      <reference>VătăşescuAlbaneză 199</reference>
+      <reference>BonnetAlbanais 166</reference>
+      <reference>Calabrò/Pfister 2006 in LEI 9, 99-226, caballus/caballa</reference>
+    </Bibliographie><Signatures>
+      <signaturesRedaction>
+        <uneSignature>
+          <prenom>Ana María</prenom>
+          <nom>Cano González</nom>
+        </uneSignature>
+      </signaturesRedaction>
+      <signaturesRevision>
+        <signaturesRevisionReconstructionSynthese>
+          <uneSignature>
+            <prenom>Jean-Pierre</prenom>
+            <nom>Chambon</nom>
+          </uneSignature>
+        </signaturesRevisionReconstructionSynthese>
+        <signaturesRevisionRomaniaSudEst>
+          <uneSignature>
+            <prenom>Cristina</prenom>
+            <nom>Florescu</nom>
+          </uneSignature>
+        </signaturesRevisionRomaniaSudEst>
+        <signaturesRevisionItaloromania>
+          <uneSignature>
+            <prenom>Giorgio</prenom>
+            <nom>Cadorini</nom>
+          </uneSignature>
+          <uneSignature>
+            <prenom>Max</prenom>
+            <nom>Pfister</nom>
+          </uneSignature>
+        </signaturesRevisionItaloromania>
+        <signaturesRevisionGalloromania>
+          <uneSignature>
+            <prenom>Jean-Paul</prenom>
+            <nom>Chauveau</nom>
+          </uneSignature>
+        </signaturesRevisionGalloromania>
+        <signaturesRevisionIberoromania>
+          <uneSignature>
+            <prenom>Maria Reina</prenom>
+            <nom>Bastardas i Rufat</nom>
+          </uneSignature>
+          <uneSignature>
+            <prenom>Myriam</prenom>
+            <nom>Benarroch</nom>
+          </uneSignature>
+          <uneSignature>
+            <prenom>André</prenom>
+            <nom>Thibault</nom>
+          </uneSignature>
+        </signaturesRevisionIberoromania>
+      </signaturesRevision>
+      <signaturesRevisionFinale>
+        <uneSignature>
+          <prenom>Éva</prenom>
+          <nom>Buchi</nom>
+        </uneSignature>
+      </signaturesRevisionFinale>
+      <signaturesContributions>
+        <uneSignature>
+          <prenom>Pascale</prenom>
+          <nom>Baudinot</nom>
+        </uneSignature>
+        <uneSignature>
+          <prenom>Victor</prenom>
+          <nom>Celac</nom>
+        </uneSignature>
+        <uneSignature>
+          <prenom>Xosé Lluis</prenom>
+          <nom>García Arias</nom>
+        </uneSignature>
+        <uneSignature>
+          <prenom>Florin-Teodor</prenom>
+          <nom>Olariu</nom>
+        </uneSignature>
+        <uneSignature>
+          <prenom>Jan</prenom>
+          <nom>Reinhardt</nom>
+        </uneSignature>
+        <uneSignature>
+          <prenom>Fernando</prenom>
+          <nom>Sánchez Miret</nom>
+        </uneSignature>
+        <uneSignature>
+          <prenom>Carli</prenom>
+          <nom>Tomaschett</nom>
+        </uneSignature>
+        <uneSignature>
+          <prenom>Simone</prenom>
+          <nom>Traber</nom>
+        </uneSignature>
+      </signaturesContributions>
+    </Signatures><MiseEnLigne><Version1>07/09/2009</Version1><VersionActuelle/></MiseEnLigne><Notes>
+      <uneNote>
+        <p>Les formes du domaine francoprovençal de type
+          <transcription_phonetique>tsə&#x2c8;vo</transcription_phonetique>,
+          <transcription_phonetique>tsi&#x2c8;vo</transcription_phonetique> représentent des
+          pluriels dont le vocalisme initial manifeste une influence française (<hi rend="italic"
+            >cf.</hi>
+          <reference>GardetteForez 190-194</reference>).</p>
+      </uneNote>
+      <uneNote>
+        <p>Selon les données de <reference>DAG n° 1255</reference>, les formes héréditaires sont
+          largement documentées en ancien gascon jusqu'en 1490 ; à partir de 1491, l'emprunt
+          <hi rend="italic">chibau</hi> l'emporte de manière écrasante.</p>
+      </uneNote>
+      <uneNote>
+        <p>La date de 856 ? proposée par <reference>DDGM</reference> ainsi que celle de 870
+          mentionnée par <reference>DELP3</reference> correspondent à des textes rédigés en
+          latin.</p>
+      </uneNote>
+      <uneNote><p>Lat. <hi rend="italic">equus</hi> disparaît presque complètement de la langue
+          écrite à partir du 6<hi rend="superscript">e</hi> siècle (<reference>FEW 2,
+            11b</reference>).</p></uneNote>
+      <uneNote><p>Alb. <hi rend="italic">kałë</hi> s.m. « cheval » (<reference>BonnetAlbanais
+            166</reference> ; <reference>VătăşescuAlbaneză 199</reference>), mbret. <hi
+            rend="italic">cavall</hi>, gall. <hi rend="italic">cafall</hi> (<reference>LEIA
+            C-33-34</reference> ; <reference>LothBrittoniques 146</reference>).</p></uneNote>
+    </Notes></Article>
+</DERom>

@@ -1,0 +1,85 @@
+{
+  "alias": "derom",
+  "key": "429ddf19-94bc-4aec-a093-3b9ef18a0196",
+  "title": [
+    {
+      "lang": "fr",
+      "value": "Dictionnaire Étymologique Roman (DÉRom)"
+    }
+  ],
+  "snapshot": "4",
+  "tag": "v1",
+  "publicationDate": "2025-07-24",
+  "website": "https://www.atilf.fr/DERom",
+  "datasize": "17246563",
+  "license": {
+    "schema": "http://www.ortolang.fr/schema/license/01#",
+    "img": "https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png",
+    "description": [
+      {
+        "lang": "fr",
+        "value": "Cette licence permet aux autres de remixer, arranger, et adapter votre œuvre à des fins non commerciales tant qu'on vous crédite en citant votre nom et que les nouvelles œuvres sont diffusées selon les mêmes conditions."
+      },
+      {
+        "lang": "en",
+        "value": "This license lets others remix, tweak, and build upon your work non-commercially, as long as they credit you and license their new creations under the identical terms."
+      }
+    ],
+    "boost": 1,
+    "id": "license-cc-by-nc-sa-4_0",
+    "label": "Licence Creative Commons Attribution - Pas d'Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International",
+    "text": [
+      {
+        "lang": "fr",
+        "value": {
+          "url": "http://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr"
+        }
+      },
+      {
+        "lang": "en",
+        "value": {
+          "url": "http://creativecommons.org/licenses/by-nc-sa/4.0/deed.en"
+        }
+      }
+    ],
+    "type": "License",
+    "content": "%7B%0A%09%22schema%22%3A+%22http%3A%2F%2Fwww.ortolang.fr%2Fschema%2Flicense%2F01%23%22%2C%0A%09%22type%22%3A+%22License%22%2C%0A%09%22id%22%3A+%22license-cc-by-nc-sa-4_0%22%2C%0A%09%22label%22%3A+%22Licence+Creative+Commons+Attribution+-+Pas+d%27Utilisation+Commerciale+-+Partage+dans+les+M%C3%AAmes+Conditions+4.0+International%22%2C%0A%09%22status%22%3A+%22%24%7Breferential%3Afree_for_non_commercial_use%7D%22%2C%0A%09%22description%22%3A+%5B%0A%09%09%7B%0A%09%09%09%22lang%22%3A+%22fr%22%2C%0A%09%09%09%22value%22%3A+%22Cette+licence+permet+aux+autres+de+remixer%2C+arranger%2C+et+adapter+votre+%C5%93uvre+%C3%A0+des+fins+non+commerciales+tant+qu%27on+vous+cr%C3%A9dite+en+citant+votre+nom+et+que+les+nouvelles+%C5%93uvres+sont+diffus%C3%A9es+selon+les+m%C3%AAmes+conditions.%22%0A%09%09%7D%2C%0A%09%09%7B%0A%09%09%09%22lang%22%3A+%22en%22%2C%0A%09%09%09%22value%22%3A+%22This+license+lets+others+remix%2C+tweak%2C+and+build+upon+your+work+non-commercially%2C+as+long+as+they+credit+you+and+license+their+new+creations+under+the+identical+terms.%22%0A%09%09%7D%0A%09%5D%2C%0A%09%22text%22%3A+%5B%0A%09%09%7B%0A%09%09%09%22lang%22%3A+%22fr%22%2C%0A%09%09%09%22value%22%3A+%7B%0A%09%09%09%09%22url%22%3A+%22http%3A%2F%2Fcreativecommons.org%2Flicenses%2Fby-nc-sa%2F4.0%2Fdeed.fr%22%0A%09%09%09%7D%0A%09%09%7D%2C%0A%09%09%7B%0A%09%09%09%22lang%22%3A+%22en%22%2C%0A%09%09%09%22value%22%3A+%7B%0A%09%09%09%09%22url%22%3A+%22http%3A%2F%2Fcreativecommons.org%2Flicenses%2Fby-nc-sa%2F4.0%2Fdeed.en%22%0A%09%09%09%7D%0A%09%09%7D%0A%09%5D%2C%0A%09%22img%22%3A+%22https%3A%2F%2Fi.creativecommons.org%2Fl%2Fby-nc-sa%2F4.0%2F88x31.png%22%0A%7D",
+    "key": "referential:license-cc-by-nc-sa-4_0",
+    "status": {
+      "schema": "http://www.ortolang.fr/schema/term/01#",
+      "boost": 1,
+      "id": "free_for_non_commercial_use",
+      "type": "StatusOfUse",
+      "content": "%7B%0A%09%22schema%22%3A+%22http%3A%2F%2Fwww.ortolang.fr%2Fschema%2Fterm%2F01%23%22%2C%0A%09%22type%22%3A+%22StatusOfUse%22%2C%0A%09%22id%22%3A+%22free_for_non_commercial_use%22%2C%0A%09%22labels%22%3A+%5B%0A%09%09%7B%0A%09%09%09%22lang%22%3A+%22fr%22%2C%0A%09%09%09%22value%22%3A+%22Libre+sans+utilisation+commerciale%22%0A%09%09%7D%2C%0A%09%09%7B%0A%09%09%09%22lang%22%3A+%22en%22%2C%0A%09%09%09%22value%22%3A+%22Free+for+non+commercial+use%22%0A%09%09%7D%0A%09%5D%0A%7D%0A",
+      "key": "referential:free_for_non_commercial_use",
+      "labels": [
+        {
+          "lang": "fr",
+          "value": "Libre sans utilisation commerciale"
+        },
+        {
+          "lang": "en",
+          "value": "Free for non commercial use"
+        }
+      ]
+    }
+  },
+  "statusOfUse": {
+    "schema": "http://www.ortolang.fr/schema/term/01#",
+    "boost": 1,
+    "id": "free_for_non_commercial_use",
+    "type": "StatusOfUse",
+    "content": "%7B%0A%09%22schema%22%3A+%22http%3A%2F%2Fwww.ortolang.fr%2Fschema%2Fterm%2F01%23%22%2C%0A%09%22type%22%3A+%22StatusOfUse%22%2C%0A%09%22id%22%3A+%22free_for_non_commercial_use%22%2C%0A%09%22labels%22%3A+%5B%0A%09%09%7B%0A%09%09%09%22lang%22%3A+%22fr%22%2C%0A%09%09%09%22value%22%3A+%22Libre+sans+utilisation+commerciale%22%0A%09%09%7D%2C%0A%09%09%7B%0A%09%09%09%22lang%22%3A+%22en%22%2C%0A%09%09%09%22value%22%3A+%22Free+for+non+commercial+use%22%0A%09%09%7D%0A%09%5D%0A%7D%0A",
+    "key": "referential:free_for_non_commercial_use",
+    "labels": [
+      {
+        "lang": "fr",
+        "value": "Libre sans utilisation commerciale"
+      },
+      {
+        "lang": "en",
+        "value": "Free for non commercial use"
+      }
+    ]
+  }
+}

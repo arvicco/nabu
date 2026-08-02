@@ -29,6 +29,48 @@ files:
     whole: true
     trim: none (Martim Soares Escárnio e maldizer, 21 lines / 3 stanzas; rubric carries the raw 0x92 byte — the Windows-1252 regression exemplar; P55-1)
     reason: raw Windows-1252 bytes preserved — the 0x92 rubric byte is the regression fixture
+  - path: cantiga-475.html
+    url: https://cantigas.fcsh.unl.pt/cantiga.asp?cdcant=475&semanotacoes=true
+    refetchable: false
+    whole: true
+    trim: none (Afonso X Escárnio e Maldizer, Refrão — printed numbers run AHEAD, +1 per cobra; the edition-numbering gap fixture; P56-1)
+    reason: raw Windows-1252 bytes preserved, copied byte-identically from the 2026-07-31 crawl (canonical/cantigas/)
+  - path: cantiga-562.html
+    url: https://cantigas.fcsh.unl.pt/cantiga.asp?cdcant=562&semanotacoes=true
+    refetchable: false
+    whole: true
+    trim: none (D. Dinis Amor, Refrão — verse row 20 numbered "20" but textless; the empty-edition-line fixture; P56-1)
+    reason: raw Windows-1252 bytes preserved, copied byte-identically from the 2026-07-31 crawl (canonical/cantigas/)
+  - path: cantiga-959.html
+    url: https://cantigas.fcsh.unl.pt/cantiga.asp?cdcant=959&semanotacoes=true
+    refetchable: false
+    whole: true
+    trim: none (João Airas de Santiago Amor, Refrão + Finda — gaps of 1, 1, then 2 before the finda; printed "25" pins the finda at edition 23-26; P56-1)
+    reason: raw Windows-1252 bytes preserved, copied byte-identically from the 2026-07-31 crawl (canonical/cantigas/)
+  - path: cantiga-1025.html
+    url: https://cantigas.fcsh.unl.pt/cantiga.asp?cdcant=1025&semanotacoes=true
+    refetchable: false
+    whole: true
+    trim: none (João Airas de Santiago Amigo, Refrão + Finda — one gap after cobra 1 only, the later printed "15" verifies the offset held; P56-1)
+    reason: raw Windows-1252 bytes preserved, copied byte-identically from the 2026-07-31 crawl (canonical/cantigas/)
+  - path: cantiga-1241.html
+    url: https://cantigas.fcsh.unl.pt/cantiga.asp?cdcant=1241&semanotacoes=true
+    refetchable: false
+    whole: true
+    trim: none (Amigo — p.titulo-autor carries the literal "[Sem autor atribuído]" label, no autor.asp link; the unattributed fixture; P56-1)
+    reason: raw Windows-1252 bytes preserved, copied byte-identically from the 2026-07-31 crawl (canonical/cantigas/)
+  - path: cantiga-1706.html
+    url: https://cantigas.fcsh.unl.pt/cantiga.asp?cdcant=1706&semanotacoes=true
+    refetchable: false
+    whole: true
+    trim: none (Alvaro Afonso, Espúria/Fragmento with rubric — one number gap; the fragment-with-gap fixture; P56-1)
+    reason: raw Windows-1252 bytes preserved, copied byte-identically from the 2026-07-31 crawl (canonical/cantigas/)
+  - path: quirks/cantiga-1066.html
+    url: https://cantigas.fcsh.unl.pt/cantiga.asp?cdcant=1066&semanotacoes=true
+    refetchable: false
+    whole: true
+    trim: none (João Airas de Santiago — the "Texto ainda não disponível" no-text page; STAYS QUARANTINED, so it sits outside the discover path; P56-1)
+    reason: raw Windows-1252 bytes preserved, copied byte-identically from the 2026-07-31 crawl (canonical/cantigas/)
   - path: fetch/listacantigas-A.html
     url: https://cantigas.fcsh.unl.pt/listacantigas.asp?letra=A
     refetchable: false

@@ -1,16 +1,20 @@
-# openMGH fixtures — Monumenta Germaniae Historica TEI-XML (P45-2)
+# openMGH fixtures — Monumenta Germaniae Historica TEI-XML (P45-2, P56-3, P56 hotfix)
 
-Three real openMGH volumes, snapshotted **2026-07-25** from
+Five real openMGH volumes — three snapshotted **2026-07-25** (P45-2),
+one **2026-08-02** (P56-3, the second wave), one trimmed **2026-08-02**
+from the canonical copy of the owner's first wave-2 sync (P56 hotfix
+rider) — from
 `https://data.mgh.de/openmgh/<bsbid>.zip` (each zip carries exactly one
 `<bsbid>.xml`; the fixture layout `<bsbid>/<bsbid>.xml` mirrors the
 per-volume unpack the adapter's fetch produces). The volume inventory is
 the human index page
 `https://www.mgh.de/en/digital-mgh/openmgh/mgh-editions-in-openmgh`
-(153 volumes on the retrieval date; the id space is sparse — an
-unlisted bsb id 404s, so enumeration comes from the index, never a
-sweep).
+(153 volumes on both retrieval dates — the P56-3 re-census extracted a
+byte-identical id set; the id space is sparse — an unlisted bsb id
+404s, so enumeration comes from the index, never a sweep).
 
-Chosen to cover the corpus's two dialects and both languages:
+Chosen to cover the corpus's two dialects, both languages, and (P56-3)
+the second wave's series:
 
 - `bsb00000728/bsb00000728.xml` — **whole** (165 KB). Einhardi Vita
   Karoli Magni (MGH SS rer. Germ. 25), ed. Holder-Egger 1911. The
@@ -45,6 +49,46 @@ Chosen to cover the corpus's two dialects and both languages:
   no line inside a kept block was altered. Re-apply: download the
   zip, keep the prologue before the first `<TEI>`, inner `<TEI>`
   blocks 1, 2, 3 and 13, close the root.
+- `bsb00000786/bsb00000786.xml` — **whole** (174 KB), snapshotted
+  2026-08-02 (P56-3). Eugippii Vita sancti Severini (MGH Auct. ant.
+  1,2), ed. Sauppe 1877. The second wave's shape check: the SAME
+  Scriptores dialect as wave 1 (`<TEI>` root, `div type="volume"` →
+  two `div type="work"` — Hymnus s. Severini, Vita Severini — →
+  `part` divs → `<ab>` milestone streams, `<w>` hyphenation pairs).
+  32 work-page passages, roman front-matter and arabic body pages.
+  Latin. The wider P56-3 byte census (5 volumes: this one plus
+  bsb00000691/695/697 from SS rer. Germ. N. S. and bsb00000655 from
+  Staatsschriften, not kept as fixtures) found ONE novelty across the
+  new range — a transparent `div type="section"` nesting level below
+  work/part that the chunker already passes through — and pinned the
+  language exceptions: Unrest (bsb00000691) and Reformation Kaiser
+  Siegmunds (bsb00000655) are German (`gmh`) despite Latin series;
+  the German-titled Kölner Weltchronik (bsb00000695) and Weltchronik
+  des Mönchs Albert (bsb00000697) are Latin.
+
+- `bsb00002026/bsb00002026.xml` — **trimmed** (20 KB of 1.3 MB). Die
+  Urkunden Friedrichs II. 1218–1220 (MGH DD F. II. Band 3, DD 427–657;
+  Diplomata regum et imperatorum Germaniae — the volume identity comes
+  from the index census and the charter contents, because the corpus
+  teiHeader is BARE: empty `<title>`, no idnos, no editor, empty
+  `sourceDesc`). Trimmed 2026-08-02 from the CANONICAL copy of the
+  owner's first second-wave sync (`canonical/openmgh/bsb00002026/`,
+  synced 2026-08-02 from `data.mgh.de/openmgh/bsb00002026.zip`), not a
+  fresh download. Same Diplomata dialect as DD Rudolf. — but every
+  charter's `sourceDesc/bibl` carries a SELF-CLOSING `<date/>` (no
+  charter in the volume is dated), the shape that quarantined all
+  three DD F. II. volumes (bsb00066349 = DD 171–426, bsb00002026 =
+  DD 427–657, bsb00002027 = DD 658–929) on that sync: the Reader
+  emits no end event for an empty element, so the parser's header
+  capture never closed and the whole tenor drained into the date
+  buffer — "no citable passages found". Trim: the corpus prologue
+  (everything before the first inner `<TEI>`) + inner `<TEI>` blocks
+  1–3 (charters 427, 428, 429 — Frederick II for the Teutonic Order,
+  two `<pb>`s inside charter 427) spliced verbatim in file order,
+  `</teiCorpus>` appended; no line inside a kept block was altered.
+  3 charter passages (c427–c429), Latin. Re-apply: take the canonical
+  volume, keep the prologue before the first `<TEI>`, inner `<TEI>`
+  blocks 1–3, close the root.
 
 License, verbatim from every volume's `<availability><licence>`:
 "Distributed under the Creative Commons Attribution 4.0 International

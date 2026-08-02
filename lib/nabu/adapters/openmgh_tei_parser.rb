@@ -287,6 +287,7 @@ module Nabu
             @in_source_desc = false
             return
           end
+          outer_capture = @capture
           case name
           when "sourceDesc" then @in_source_desc = true unless node.empty_element?
           when "title" then capture_title
@@ -295,6 +296,14 @@ module Nabu
           when "date" then start_date(node)
           when "pubPlace" then @capture = (@volume[:printed_place] ||= +"") if volume_header? && @in_source_desc
           end
+          # A SELF-CLOSING capture field (the DD F. II. charters' <date/> —
+          # P56 hotfix rider, 2026-08-02) gets no end event from the Reader,
+          # so the capture it opened must close right here; left dangling it
+          # swallows everything after it — the entire charter tenor drained
+          # into the date buffer and three volumes quarantined with "no
+          # citable passages found". The field keeps its "" (seen but empty),
+          # which flatten/presence later drop from the annotations.
+          @capture = outer_capture if node.empty_element?
         end
 
         def end_header(name)
