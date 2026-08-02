@@ -3415,11 +3415,11 @@ cantigas:   # P55-1, 02-sources row 144
   # ~1,680 documents, ~45-50k line passages (fixture mean ~29 lines).
   sync_policy: manual
 
-derom:   # P56-4, 02-sources row 145
+derom:   # P56-4, 02-sources row 146
   adapter: Nabu::Adapters::Derom
   kind: source
   axes: [romance, etym]   # the Latin→Romance etymological bridge — the romance desk's proto shelf
-  wired: false   # awaiting the owner-fired first crawl (~520 GETs ≈ 9 min at 1 req/s;
+  wired: true    # first sync owner-verified 2026-08-02 (513 docs -> 233 entries; define lakt-e / etym cheval eyeballed)
                  # CLAUDE.md checklist §6 — eyeball `nabu define lakt-e` +
                  # `nabu etym lapte` / `nabu etym cheval`, then flip)
   # P56-4 (license thread №45-3): DÉRom — Dictionnaire Étymologique Roman
