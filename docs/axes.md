@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (6): `ud`, `croala`, `digiliblt`, `openmgh`, `bfm`, `cantigas`
+**Members** (7): `ud`, `croala`, `digiliblt`, `openmgh`, `bfm`, `cantigas`, `derom`
 
 ### epigraphy
 
@@ -115,7 +115,7 @@ The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, th
 
 The reconstruction shelves: the kaikki proto-extracts, IE-CoR cognacy, LIV, the Leiden Latin dictionary, StarLing's bases, and the curated loan edges. Non-IE lanes of the same shelves ride their own axes too — dual-tagging, never folding.
 
-**Members** (9): `wiktionary-recon`, `iecor`, `wold`, `clics`, `liv`, `edl`, `starling`, `sabellic-loans`, `cldf-spine`
+**Members** (10): `wiktionary-recon`, `iecor`, `wold`, `clics`, `liv`, `edl`, `starling`, `sabellic-loans`, `cldf-spine`, `derom`
 
 ### biblical
 

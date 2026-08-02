@@ -1,0 +1,58 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Article XMLs are WHOLE upstream files (small); the fetch/ listings are
+# documented TRIMS of the real content-API index pages (kept rows
+# byte-verbatim). All URLs are the Ortolang diffusion content API for the
+# `derom` workspace, `latest` root (snapshot 4, tag v1); retrieved
+# 2026-08-02.
+source: derom
+adapter_test: test/adapters/derom_test.rb
+retrieved: 2026-08-02
+files:
+  - path: "1 Fichiers XML articles DERom 1/'lakt-e.xml"
+    url: "https://repository.ortolang.fr/api/content/derom/latest/1%20Fichiers%20XML%20articles%20DERom%201/%27lakt-e.xml"
+    whole: true
+    trim: none (*/ˈlakt-e/ "lait" — 3 subdivs, 24 cognat signifiants / 21 idiomes, Commentaire + Notes; the primary parse fixture)
+  - path: "1 Fichiers XML articles DERom 1/ka'Ball-u.xml"
+    url: "https://repository.ortolang.fr/api/content/derom/latest/1%20Fichiers%20XML%20articles%20DERom%201/ka%27Ball-u.xml"
+    whole: true
+    trim: none (*/kaˈβall-u/ "cheval" — the β betacism headword-fold pin, transcription_phonetique elements)
+  - path: "5 Fichiers XML articles de renvoi a Mertens 2021/ara't-ur-a.xml"
+    url: "https://repository.ortolang.fr/api/content/derom/latest/5%20Fichiers%20XML%20articles%20de%20renvoi%20a%20Mertens%202021/ara%27t-ur-a.xml"
+    whole: true
+    trim: none (renvoi stub — Lemme + <Lien> PDF pointer, zero cognats)
+  - path: "6 Fichiers XML articles potiches en attente/'al-a.xml"
+    url: "https://repository.ortolang.fr/api/content/derom/latest/6%20Fichiers%20XML%20articles%20potiches%20en%20attente/%27al-a.xml"
+    whole: true
+    trim: none (potiche placeholder — bare Signifiant + <NonRedige/>; the parser-skip shape)
+  - path: ortolang-item-license.json
+    url: "https://repository.ortolang.fr/api/search/items/derom?type=corpora"
+    whole: false
+    trim: the license/statusOfUse/title/alias/snapshot/tag/publicationDate/website/datasize/key fields of the market item JSON, values verbatim — the P56-4 license-gate record (CC BY-NC-SA 4.0)
+  - path: fetch/listing-1.html
+    url: "https://repository.ortolang.fr/api/content/derom/latest/1%20Fichiers%20XML%20articles%20DERom%201"
+    whole: false
+    trim: header + parent row + the 'lakt-e.xml and ka'Ball-u.xml rows byte-verbatim (110 xml rows upstream)
+  - path: fetch/listing-2.html
+    url: "https://repository.ortolang.fr/api/content/derom/latest/2%20Fichiers%20XML%20articles%20DERom%202"
+    whole: false
+    trim: header + parent row + the first xml row ('akr-u.xml) byte-verbatim (40 xml rows upstream)
+  - path: fetch/listing-3.html
+    url: "https://repository.ortolang.fr/api/content/derom/latest/3%20Fichiers%20XML%20articles%20DERom%203"
+    whole: false
+    trim: header + parent row + the first xml row ('Bakk-a.xml) byte-verbatim (38 xml rows upstream)
+  - path: fetch/listing-5.html
+    url: "https://repository.ortolang.fr/api/content/derom/latest/5%20Fichiers%20XML%20articles%20de%20renvoi%20a%20Mertens%202021"
+    whole: false
+    trim: header + parent row + the ara't-ur-a.xml row byte-verbatim (45 xml rows upstream)
+  - path: fetch/listing-6.html
+    url: "https://repository.ortolang.fr/api/content/derom/latest/6%20Fichiers%20XML%20articles%20potiches%20en%20attente"
+    whole: false
+    trim: header + parent row + the 'al-a.xml row byte-verbatim (280 xml rows upstream)
+  - path: fetch/auth-gate.html
+    url: "https://repository.ortolang.fr/api/content/derom/latest/4%20Fichiers%20XML%20articles%20DERom%204"
+    whole: false
+    trim: first 2,500 bytes of the Keycloak login page the gated collection 303s to — the gated/reshaped-listing defense shape
+    refetchable: false
+    reason: the 303 target carries per-session state/nonce query params; the page shape (no "Index of", no .xml hrefs) is what the fixture pins
