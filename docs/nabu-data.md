@@ -185,6 +185,7 @@ no page update is a red suite, and vice versa.
 | `lzh/kanripo-gaiji` | available | gold | CC-BY-SA-4.0 | lzh | — |
 | `sux/value-signs` | available | gold | CC-BY-4.0 | sux | osl |
 | `xct/actib-anchors` | available | gold-derived | CC-BY-4.0 | xct | derge-kangyur, actib |
+| `roa-opt/cantigas` | available | gold | CC-BY-4.0 | roa-opt | cantigas |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -282,6 +283,14 @@ nabu-data's first re-publication: ACTib's known weakness is that its seg/POS lay
 
 **Maintenance**: re-derive after a derge-kangyur or actib re-sync (the stale-ingest guard enforces freshness); every build re-measures the anchoring census into nabu.eval
 
+### `roa-opt/cantigas` — Cantigas Medievais Galego-Portuguesas — the Littera edition as structured tables (verse lines, cantigas, authors, cancioneiro concordance)
+
+**Status**: available · **Tier**: gold · **Anchoring**: urn+sha · **Inputs**: cantigas
+
+The first full-corpus re-publication: the complete secular lyric of medieval Galician-Portuguese — ~1,680 cantigas, ~34K verse lines from the three great cancioneiros — projected from the Littera critical edition (cantigas.fcsh.unl.pt) into the corpus's first machine-readable form (the scholarly database is superb and browser-only: no TEI, no export), under the coordinator's written any-use grant (№45-2) with the project's own citation format riding every file — verse lines anchored urn+sha into the catalog, the cantiga/author registries, and the corpus-wide cancioneiro concordance parsed from the edition's manuscript sigla, with the citation-fidelity census (printed-number confirmations, refrain gaps, empty lines, the unattributed page) published in-band as nabu.eval.
+
+**Maintenance**: re-derive after a cantigas re-sync (Littera is a living edition that corrects pages in place; the stale-ingest guard enforces freshness); every build re-derives the citation-fidelity census into nabu.eval
+
 ## What the rail never does
 
 - **Git in the nabu-data clone.** Files are written; `git status` there is
@@ -310,10 +319,10 @@ it (P54 widened the original one):
 
 All three share the FormLemma posture: feature-detected at query time,
 absent file = lane off with byte-identical behavior, no catalog table, no
-migration. The other nine features are single-truth PROJECTIONS — their
+migration. The other ten features are single-truth PROJECTIONS — their
 internal consumers read the same upstream truth the builders flatten
-(the fold tables, the hypotactic catalog rows, canonical/osl, the
-canonical/actib layer cone), so consuming the published CSV back would
-be a circle; they are one-way by design. The producer rail above and the consumer rows never touch: the
+(the fold tables, the hypotactic and cantigas catalog rows,
+canonical/osl, the canonical/actib layer cone), so consuming the
+published CSV back would be a circle; they are one-way by design. The producer rail above and the consumer rows never touch: the
 rail writes the owner's working clone, the source syncs the published
 repo — the reproducibility loop closes only through a public commit.
