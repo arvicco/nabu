@@ -1,0 +1,180 @@
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<teiCorpus xmlns="http://www.tei-c.org/ns/1.0">
+<teiHeader>
+<fileDesc>
+<titleStmt>
+<title></title>
+</titleStmt>
+<publicationStmt>
+<publisher>Monumenta Germaniae Historica (MGH)</publisher>
+<publisher>Bavarian State Library (BSB), München</publisher>
+<availability>
+<licence>
+<p>Distributed under the Creative Commons Attribution 4.0 International (CC BY 4.0) license.This license covers the annotations added by the Monumenta Germaniae Historica and the Bavarian State Library, Munich, in the course of the project "digital MGH" <ref target="http://www.dmgh.de">http://www.dmgh.de</ref>, funded by the German Research Foundation (DFG).</p>
+<p>We do not claim any rights on the text itself which is believed to be in the public domain.</p>
+<p>If you distribute a copy or a derivative version of this file, please indicate the source of the file by mentioning the Monumenta Germaniae Historica (MGH) and the Bavarian State Library, Munich (BSB).</p>
+</licence>
+</availability>
+<date when="2016-07-05T13:24:46+01:00">2016-07-05, 13:24:46</date>
+</publicationStmt>
+<sourceDesc>
+<p></p>
+</sourceDesc>
+</fileDesc>
+</teiHeader>
+<TEI>
+<teiHeader>
+<fileDesc>
+<titleStmt>
+<title>427</title>
+</titleStmt>
+<publicationStmt>
+<distributor>digital MGH</distributor>
+</publicationStmt>
+<sourceDesc>
+<bibl>
+<idno type="charternum">427</idno>
+<date/>
+</bibl>
+</sourceDesc>
+</fileDesc>
+</teiHeader>
+<text>
+<body>
+<div type="tenor">
+<ab><pb xml:id="page_00126" n="126"/><lb xml:id="line_00126_005_001" n="11"/>In nomine sancte et individue trinitatis. Fridericus divina favente clementia <w xml:id="hy_1673" lemma="Romanorum" corresp="#hy_1673 #hy_1674">Ro-</w>
+<lb xml:id="line_00126_005_002" n="12"/><w xml:id="hy_1674" lemma="Romanorum" corresp="#hy_1673 #hy_1674">manorum</w> rex semper augustus et rex Sicilie. Regi regum omnium, de cuius munere aviti <w xml:id="hy_1675" lemma="regni" corresp="#hy_1675 #hy_1676">reg-</w>
+<lb xml:id="line_00126_005_003" n="13"/><w xml:id="hy_1676" lemma="regni" corresp="#hy_1675 #hy_1676">ni</w> diadema sceptrumque recepimus et in throno progenitorum nostrorum suscepti regiminis moderamur
+<lb xml:id="line_00126_005_004" n="14"/>habenas, iura disponimus * et tractamus, tam in gratiarum quam in laudum munere tenemur et volumus
+<lb xml:id="line_00126_005_005" n="15"/>nichilominus conditis actibus tam pietate quam spiritu devotionis assurgere, quia parum sola devotio <w xml:id="hy_1677" lemma="proficit" corresp="#hy_1677 #hy_1678">profi-</w>
+<lb xml:id="line_00126_005_006" n="16"/><w xml:id="hy_1678" lemma="proficit" corresp="#hy_1677 #hy_1678">cit,</w> ubi posse adiacet, si eam non corroborent fructus et opera caritatis. In hiis enim, que causa dei <w xml:id="hy_1679" lemma="liberalitas" corresp="#hy_1679 #hy_1680">liberali-</w>
+<lb xml:id="line_00126_005_007" n="17"/><w xml:id="hy_1680" lemma="liberalitas" corresp="#hy_1679 #hy_1680">tas</w> nostre benignitatis impendit, deo feneramur et multiplicata inde divine retributionis beneficia <w xml:id="hy_1681" lemma="prestolamur" corresp="#hy_1681 #hy_1682">prestola-</w>
+<lb xml:id="line_00126_005_008" n="18"/><w xml:id="hy_1682" lemma="prestolamur" corresp="#hy_1681 #hy_1682">mur.</w> Hac igitur ducti consideratione laudabili, diligentius attendentes religionem et ordinem atque <w xml:id="hy_1683" lemma="honestatem" corresp="#hy_1683 #hy_1684">hone-</w>
+<lb xml:id="line_00126_005_009" n="19"/><w xml:id="hy_1684" lemma="honestatem" corresp="#hy_1683 #hy_1684">statem</w> tuam, frater Hermanne magister sacre domus hospitalis Teutonicorum in partibus Ierosolimitanis,
+<lb xml:id="line_00126_005_010" n="20"/>et aliorum fratrum hospitalis eiusdem pro animabus divorum augustorum parentum nostrorum
+<lb xml:id="line_00126_005_011" n="21"/>felicis memorie et salute nostra, de gratia quoque et consueta munificentia nostra accedente <w xml:id="hy_1685" lemma="consensu" corresp="#hy_1685 #hy_1686">con-</w>
+<lb xml:id="line_00126_005_012" n="22"/><w xml:id="hy_1686" lemma="consensu" corresp="#hy_1685 #hy_1686">sensu</w> et bona voluntate karissime uxoris nostre regnique consortis Constantie ac <w xml:id="hy_1687" lemma="dilectissimi" corresp="#hy_1687 #hy_1688">dilectissi-</w>
+<lb xml:id="line_00126_005_013" n="23"/><w xml:id="hy_1688" lemma="dilectissimi" corresp="#hy_1687 #hy_1688">mi</w> filii nostri Henrici concedimus et donamus eidem sacre domui hospitalis Teutonicorum in <w xml:id="hy_1689" lemma="perpetuum" corresp="#hy_1689 #hy_1690">perpe-</w>
+<lb xml:id="line_00126_005_014" n="24"/><w xml:id="hy_1690" lemma="perpetuum" corresp="#hy_1689 #hy_1690">tuum</w> centum quinquaginta uncias auri bonorum tarenorum Sicilie ad pondus Baroli in proventibus sicle,
+<lb xml:id="line_00126_005_015" n="25"/>duane et aliorum reddituum civitatis nostre Brundusii annis singulis percipiendas in excambium <w xml:id="hy_1691" lemma="cuiusdam" corresp="#hy_1691 #hy_1692">cuius-</w>
+<lb xml:id="line_00126_005_016" n="26"/><w xml:id="hy_1692" lemma="cuiusdam" corresp="#hy_1691 #hy_1692">dam</w> tenimenti, quod ab hospitali ipso in Alemannia recepimus et, ut hospitale ipsum donatione nostra <w xml:id="hy_1693" lemma="possit" corresp="#hy_1693 #hy_1694">pos-</w>
+<lb xml:id="line_00126_005_017" n="27"/><w xml:id="hy_1694" lemma="possit" corresp="#hy_1693 #hy_1694">sit</w> plenius congaudere, statuimus et mandamus, ut de primis proventibus et redditibus eiusdem civitatis,
+<lb xml:id="line_00126_005_018" n="28"/>quos curia nostra habere debet, eidem hospitali iamdicte centum quinquaginta uncie persolvantur, omni <w xml:id="hy_1695" lemma="impedimento" corresp="#hy_1695 #hy_1696">im-</w>
+<lb xml:id="line_00126_005_019" n="29"/><w xml:id="hy_1696" lemma="impedimento" corresp="#hy_1695 #hy_1696">pedimento</w> et contrarietate remota, mandantes et firmiter precipientes, ut, quecumque persona alta vel <w xml:id="hy_1697" lemma="humilis" corresp="#hy_1697 #hy_1698">humi-</w>
+<lb xml:id="line_00126_005_020" n="30"/><w xml:id="hy_1698" lemma="humilis" corresp="#hy_1697 #hy_1698">lis,</w> ecclesiastica vel secularis, hanc nostram donationem et concessionem infringere vel violare <w xml:id="hy_1699" lemma="presumpserit" corresp="#hy_1699 #hy_1700">presumpse-</w>
+<lb xml:id="line_00126_005_021" n="31"/><w xml:id="hy_1700" lemma="presumpserit" corresp="#hy_1699 #hy_1700">rit,</w> centum quinquaginta libras auri componat, quarum medietas camere nostre, altera vero passis iniuriam
+<lb xml:id="line_00126_005_022" n="32"/>persolvatur. Ut autem hec rata et firma permaneant, presens * privilegium fieri fecimus sigillo nostre <w xml:id="hy_1701" lemma="celsitudinis" corresp="#hy_1701 #hy_1702">celsi-</w>
+<lb xml:id="line_00126_005_023" n="33"/><w xml:id="hy_1702" lemma="celsitudinis" corresp="#hy_1701 #hy_1702">tudinis</w> roboratum. Huius rei testes sunt: Sifridus Maguntinus archiepiscopus, Berardus Panormitanus <w xml:id="hy_1703" lemma="archiepiscopus" corresp="#hy_1703 #hy_1704">archi-</w>
+<lb xml:id="line_00126_005_024" n="34"/><w xml:id="hy_1704" lemma="archiepiscopus" corresp="#hy_1703 #hy_1704">episcopus,</w> Raynaldus Gentilis Capuanus archiepiscopus, Ekebertus Babenbergensis episcopus, V̊lricus
+<lb xml:id="line_00126_005_025" n="35"/>Patauiensis episcopus, Lupoldus dux Austrie et Stirie, Ludewicus dux Bauarie et palatinus comes Reni,<pb xml:id="page_00127" n="127"/><lb xml:id="line_00127_011_001" n="1"/>Octo dux Meranie, Berardus dux Carinthie, Wilhelmus marchio Montisferrati, Wilhelmus Porcus <w xml:id="hy_1713" lemma="ammiratus" corresp="#hy_1713 #hy_1714">am-</w>
+<lb xml:id="line_00127_011_002" n="2"/><w xml:id="hy_1714" lemma="ammiratus" corresp="#hy_1713 #hy_1714">miratus</w> regni, Hermannus marchio de Baden, Anselmus marscalcus de Iustingen, Walterus pincerna de
+<lb xml:id="line_00127_011_003" n="3"/>Schipha, Wͦlricus de Mincenberc, Philippus de Bonlanden, Ricardus camerarius et alii quam <w xml:id="hy_1715" lemma="plures" corresp="#hy_1715 #hy_1716">plu-</w>
+<lb xml:id="line_00127_011_004" n="4"/><w xml:id="hy_1716" lemma="plures" corresp="#hy_1715 #hy_1716">res.</w> Signum domini Friderici secundi Romanorum regis semper augusti et gloriosi regis
+<lb xml:id="line_00127_014_001" n="5"/>Sicilie. (M.)
+<lb xml:id="line_00127_015_001" n="6"/>Ego Conradus Metensis et Spirensis episcopus, imperialis aule cancellarius, vice <w xml:id="hy_1717" lemma="domini" corresp="#hy_1717 #hy_1718">do-</w>
+<lb xml:id="line_00127_016_001" n="7"/><w xml:id="hy_1718" lemma="domini" corresp="#hy_1717 #hy_1718">mini</w> Siffridi Maguntini archiepiscopi, totius Germanie archicancellarii, recognovi.
+<lb xml:id="line_00127_017_001" n="8"/>Acta sunt hec anno dominice incarnationis millesimo ducentesimo octavo <w xml:id="hy_1719" lemma="decimo" corresp="#hy_1719 #hy_1720">deci-</w>
+<lb xml:id="line_00127_017_002" n="9"/><w xml:id="hy_1720" lemma="decimo" corresp="#hy_1719 #hy_1720">mo,</w> regnante invictissimo domino nostro Friderico secundo divina favente clementia <w xml:id="hy_1721" lemma="invictissimo" corresp="#hy_1721 #hy_1722">in-</w>
+<lb xml:id="line_00127_017_003" n="10"/><w xml:id="hy_1722" lemma="invictissimo" corresp="#hy_1721 #hy_1722">victissimo</w> Romanorum rege semper augusto et glorioso rege Sicilie, anno Romani regni <w xml:id="hy_1723" lemma="ipsius" corresp="#hy_1723 #hy_1724">ip-</w>
+<lb xml:id="line_00127_017_004" n="11"/><w xml:id="hy_1724" lemma="ipsius" corresp="#hy_1723 #hy_1724">sius</w> in Germania sexto et in Sicilia nono decimo. Dat. Wimpine, III non. ianuarii <w xml:id="hy_1725" lemma="indictionis" corresp="#hy_1725 #hy_1726">in-</w>
+<lb xml:id="line_00127_017_005" n="12"/><w xml:id="hy_1726" lemma="indictionis" corresp="#hy_1725 #hy_1726">dictionis</w> sexte.</ab>
+</div>
+</body>
+</text>
+</TEI>
+<TEI>
+<teiHeader>
+<fileDesc>
+<titleStmt>
+<title>428</title>
+</titleStmt>
+<publicationStmt>
+<distributor>digital MGH</distributor>
+</publicationStmt>
+<sourceDesc>
+<bibl>
+<idno type="charternum">428</idno>
+<date/>
+</bibl>
+</sourceDesc>
+</fileDesc>
+</teiHeader>
+<text>
+<body>
+<div type="tenor">
+<ab><pb xml:id="page_00128" n="128"/><lb xml:id="line_00128_007_001" n="26"/>[In n]omine sancte et individue trinitatis. Fridericus divina favente clementia <w xml:id="hy_1757" lemma="Romanorum" corresp="#hy_1757 #hy_1758">Ro-</w>
+<lb xml:id="line_00128_007_002" n="27"/><w xml:id="hy_1758" lemma="Romanorum" corresp="#hy_1757 #hy_1758">manorum</w> rex semper augustus et rex Sicilie. Facta humana,* ma[xime rationabilia, ne <w xml:id="hy_1759" lemma="processu" corresp="#hy_1759 #hy_1760">pro-</w>
+<lb xml:id="line_00128_007_003" n="28"/><w xml:id="hy_1760" lemma="processu" corresp="#hy_1759 #hy_1760">cessu</w> temporum casu quolibet in dubium seu in ir]ritum valeant deduci, litterarum testimonio expedit <w xml:id="hy_1761" lemma="roborari" corresp="#hy_1761 #hy_1762">ro-</w>
+<lb xml:id="line_00128_007_004" n="29"/><w xml:id="hy_1762" lemma="roborari" corresp="#hy_1761 #hy_1762">borari.</w> Hac itaque subnixi ratione notum fieri volumus universis Christi fidelibus [tam futuris quam <w xml:id="hy_1763" lemma="presentibus" corresp="#hy_1763 #hy_1764">presen-</w>
+<lb xml:id="line_00128_007_005" n="30"/><w xml:id="hy_1764" lemma="presentibus" corresp="#hy_1763 #hy_1764">tibus,</w> quod profectui et promotioni hospitalis Sancte Marie e]t domus Teutonicorum in Ierusalem
+<lb xml:id="line_00128_007_006" n="31"/>summopere intendentes pro salute tam nostra quam progenitorum nostrorum de sicla et * ceteris <w xml:id="hy_1765" lemma="proventibus" corresp="#hy_1765 #hy_1766">proventi-</w>
+<lb xml:id="line_00128_007_007" n="32"/><w xml:id="hy_1766" lemma="proventibus" corresp="#hy_1765 #hy_1766">bus</w> regiis apud [Messanam primo solvendis accedente consensu et bona voluntate karissime uxo-]
+<lb xml:id="line_00128_007_008" n="33"/>ris nostre regnique consortis Constantie ac dilectissimi filii nostri Henrici prefate domui <w xml:id="hy_1767" lemma="ducentas" corresp="#hy_1767 #hy_1768">du-</w>
+<lb xml:id="line_00128_007_009" n="34"/><w xml:id="hy_1768" lemma="ducentas" corresp="#hy_1767 #hy_1768">centas</w> uncias auri bonorum tarenorum ad pondus [Baruli liberaliter donavimus singulis annis solvendas ad
+<lb xml:id="line_00128_007_010" n="35"/>usus hiemales pro m]antellis et agninis pennis militie fratribus ceterisque pauperibus transmarinis in domo
+<lb xml:id="line_00128_007_011" n="36"/>ipsa deo et sancte sue genitrici devote ac iugiter in [perpetuum servituris. Ut autem maiestatis nostre <w xml:id="hy_1769" lemma="donatio" corresp="#hy_1769 #hy_1770">dona-</w>
+<lb xml:id="line_00128_007_012" n="37"/><w xml:id="hy_1770" lemma="donatio" corresp="#hy_1769 #hy_1770">tio</w> circa sepedictam domum fi]rma et inconvulsa semper consistere debeat, hanc ei paginam indulsimus
+<lb xml:id="line_00128_007_013" n="38"/>aurea bulla regie serenitatis nostre firmatam statuentes et [sub interminatione gratie nostre districte <w xml:id="hy_1771" lemma="precipientes" corresp="#hy_1771 #hy_1772">precipi-</w>
+<lb xml:id="line_00128_007_014" n="39"/><w xml:id="hy_1772" lemma="precipientes" corresp="#hy_1771 #hy_1772">entes,</w> ut nulli hominum humili vel] magno, ecclesiastico vel seculari, liceat hanc nostre indulgentie <w xml:id="hy_1773" lemma="paginam" corresp="#hy_1773 #hy_1774">pagi-</w>
+<lb xml:id="line_00128_007_015" n="40"/><w xml:id="hy_1774" lemma="paginam" corresp="#hy_1773 #hy_1774">nam</w> pretextu quolibet infringere vel ei aliquo ausu temerario [contraire. Quod si quis attemptaverit, iram<pb xml:id="page_00129" n="129"/><lb xml:id="line_00129_012_001" n="1"/>dei omnipotentis sancteque sue genitricis Marie nec]non regie maiestatis indignationem se noverit <w xml:id="hy_1779" lemma="incurrisse" corresp="#hy_1779 #hy_1780">incur-</w>
+<lb xml:id="line_00129_012_002" n="2"/><w xml:id="hy_1780" lemma="incurrisse" corresp="#hy_1779 #hy_1780">risse.</w> In signum autem sue presumptionis in quingentis libris examina[ti auri eum condempnamus, quarum
+<lb xml:id="line_00129_012_003" n="3"/>una medietas fisco nostro et altera medietas passis iniur]iam pro pena erit solvenda. Huius rei testes sunt:
+<lb xml:id="line_00129_012_004" n="4"/>Eberhardus Salzburgensis archiepiscopus, Otto Frisingensis, Cůnradus Ratisponensis, [Siffridus <w xml:id="hy_1781" lemma="Augustensis" corresp="#hy_1781 #hy_1782">Augu-</w>
+<lb xml:id="line_00129_012_005" n="5"/><w xml:id="hy_1782" lemma="Augustensis" corresp="#hy_1781 #hy_1782">stensis</w> episcopi, Ludowicus comes palatinus Reni et dux Bauarie, Lupoldus du]x Austrie, Rapoto <w xml:id="hy_1783" lemma="comes" corresp="#hy_1783 #hy_1784">co-</w>
+<lb xml:id="line_00129_012_006" n="6"/><w xml:id="hy_1784" lemma="comes" corresp="#hy_1783 #hy_1784">mes</w> palatinus, Henricus frater eius de Ortemberc, Bertholdus de Greifembach, Egeno de Vrah <w xml:id="hy_1785" lemma="comites" corresp="#hy_1785 #hy_1786">comi-</w>
+<lb xml:id="line_00129_012_007" n="7"/><w xml:id="hy_1786" lemma="comites" corresp="#hy_1785 #hy_1786">tes,</w> Henricus [nobilis de Nife, Marquardus scriba et alii quam plures. Signum domini <w xml:id="hy_1787" lemma="Friderici" corresp="#hy_1787 #hy_1788">Frideri-</w>
+<lb xml:id="line_00129_012_008" n="8"/><w xml:id="hy_1788" lemma="Friderici" corresp="#hy_1787 #hy_1788">ci</w> secundi] Romanorum regis augusti et gloriosi regis Sicilie. (M.) Ego Cůnradus
+<lb xml:id="line_00129_012_009" n="9"/>Metensis et Spirensis episcopus, imperialis aule cancellarius, [vice domini Siffridi <w xml:id="hy_1789" lemma="Maguntini" corresp="#hy_1789 #hy_1790">Magun-</w>
+<lb xml:id="line_00129_012_010" n="10"/><w xml:id="hy_1790" lemma="Maguntini" corresp="#hy_1789 #hy_1790">tini</w> archiepiscopi, totius Germanie archicancellarii, reco]gnovi. Acta sunt hec anno <w xml:id="hy_1791" lemma="incarnationis" corresp="#hy_1791 #hy_1792">in-</w>
+<lb xml:id="line_00129_012_011" n="11"/><w xml:id="hy_1792" lemma="incarnationis" corresp="#hy_1791 #hy_1792">carnationis</w> domini nostri Iesu Christi millesimo ducentesimo octavo decimo, regnante <w xml:id="hy_1793" lemma="invictissimo" corresp="#hy_1793 #hy_1794">in-</w>
+<lb xml:id="line_00129_012_012" n="12"/><w xml:id="hy_1794" lemma="invictissimo" corresp="#hy_1793 #hy_1794">victissimo</w> domino [nostro Friderico secundo divina favente clementia Romanorum rege <w xml:id="hy_1795" lemma="augusto" corresp="#hy_1795 #hy_1796">au-</w>
+<lb xml:id="line_00129_012_013" n="13"/><w xml:id="hy_1796" lemma="augusto" corresp="#hy_1795 #hy_1796">gusto</w> et glorios]o rege Sicilie; feliciter amen, anno Romani regni eius sexto, Sicilie vero
+<lb xml:id="line_00129_012_014" n="14"/>nono decimo. Dat. Wimpine, III non. ianuarii, indictione VI.</ab>
+</div>
+</body>
+</text>
+</TEI>
+<TEI>
+<teiHeader>
+<fileDesc>
+<titleStmt>
+<title>429</title>
+</titleStmt>
+<publicationStmt>
+<distributor>digital MGH</distributor>
+</publicationStmt>
+<sourceDesc>
+<bibl>
+<idno type="charternum">429</idno>
+<date/>
+</bibl>
+</sourceDesc>
+</fileDesc>
+</teiHeader>
+<text>
+<body>
+<div type="tenor">
+<ab><pb xml:id="page_00130" n="130"/><lb xml:id="line_00130_009_001" n="23"/>In nomine sancte et individue trinitatis. Fridericus divina favente clemencia <w xml:id="hy_1829" lemma="Romanorum" corresp="#hy_1829 #hy_1830">Romano-</w>
+<lb xml:id="line_00130_009_002" n="24"/><w xml:id="hy_1830" lemma="Romanorum" corresp="#hy_1829 #hy_1830">rum</w> rex semper augustus et rex Sicilie. Inter alia pietatis opera etc. | Hac igitur ducti <w xml:id="hy_1831" lemma="consideracione" corresp="#hy_1831 #hy_1832">conside-</w>
+<lb xml:id="line_00130_009_003" n="25"/><w xml:id="hy_1832" lemma="consideracione" corresp="#hy_1831 #hy_1832">racione</w> laudabili, considerantes religionem et * honestatem tuam, frater Hermanne magister sacre
+<lb xml:id="line_00130_009_004" n="26"/>domus hospitalis Theutonicorum in partibus Iherusolimitanis, et aliorum fratrum tuorum ibidem deo
+<lb xml:id="line_00130_009_005" n="27"/>militancium pro animabus dyvorum augustorum parentum nostrorum recolende memorie et de nostre
+<lb xml:id="line_00130_009_006" n="28"/>munificencia maiestatis, accedente quoque consensu et bona voluntate karissime uxoris nostre regnique
+<lb xml:id="line_00130_009_007" n="29"/>consortis Constancie ac dilectissimi filii nostri Henrici damus, concedimus et perpetuo confirmamus
+<lb xml:id="line_00130_009_008" n="30"/>eidem sacre domui hospitalis Theutonicorum in Iherusalem domum quondam Margariti in civitate
+<lb xml:id="line_00130_009_009" n="31"/>nostra Brundusii cum balneo et omnibus aliis iusticiis et racionibus tam in mari quam in terra
+<lb xml:id="line_00130_009_010" n="32"/>eidem domui pertinentibus, sicut ipsam olim Margaritus noscitur tenuisse, mandantes et <w xml:id="hy_1833" lemma="presentis" corresp="#hy_1833 #hy_1834">pre-</w>
+<lb xml:id="line_00130_009_011" n="33"/><w xml:id="hy_1834" lemma="presentis" corresp="#hy_1833 #hy_1834">sentis</w> privilegii auctoritate firmiter statuentes, ut, quecumque persona alta vel humilis, ecclesiastica
+<lb xml:id="line_00130_009_012" n="34"/>vel secularis, hanc nostram donacionem, * concessionem et confirmacionem infringere vel violare <w xml:id="hy_1835" lemma="presumpserit" corresp="#hy_1835 #hy_1836">pre-</w>
+<lb xml:id="line_00130_009_013" n="35"/><w xml:id="hy_1836" lemma="presumpserit" corresp="#hy_1835 #hy_1836">sumpserit,</w> centum * libras auri componat, quarum medietas fisco nostro, altera vero passis iniuriam <w xml:id="hy_1837" lemma="persolvatur" corresp="#hy_1837 #hy_1838">per-</w>
+<lb xml:id="line_00130_009_014" n="36"/><w xml:id="hy_1838" lemma="persolvatur" corresp="#hy_1837 #hy_1838">solvatur.</w> Ut autem rata et firma hec permaneant, presens privilegium fieri fecimus | et bulla aurea typario
+<lb xml:id="line_00130_009_015" n="37"/>nostre maiestatis impressa iussimus communiri. Huius rei testes sunt etc. et quam plures alii. Ego
+<lb xml:id="line_00130_009_016" n="38"/>N. et ut supra recognovi. | Acta sunt hec anno dominice incarnacionis etc., regnante * domino
+<lb xml:id="line_00130_009_017" n="39"/>nostro Friderico * Romanorum rege * augusto et glorioso rege Sicilie, anno Romani regni ipsius * sexto, *
+<lb xml:id="line_00130_009_018" n="40"/>Sicilie vero nono decimo. Dat. aput Winpinam, III° non. ianuarii indiccionis VI.</ab>
+</div>
+</body>
+</text>
+</TEI>
+</teiCorpus>

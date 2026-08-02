@@ -3,12 +3,14 @@
 #
 # openMGH ships one zip per volume at data.mgh.de/openmgh/<bsbid>.zip, each
 # holding exactly one <bsbid>.xml; the fixture layout mirrors the adapter's
-# per-volume unpack (<bsbid>/<bsbid>.xml). Two volumes are UNMODIFIED upstream
-# files (the zips' single members, byte-identical to the member) — but the
-# sentinel's raw GET returns the ZIP body, never the member, so every entry
-# here is whole: false (fetch-checked for reachability, not byte-compared;
-# the member-vs-GET mismatch would otherwise ring a false drift alarm). The
-# Diplomata volume is additionally a documented TRIM (595 KB → 19 KB).
+# per-volume unpack (<bsbid>/<bsbid>.xml). Three volumes are UNMODIFIED
+# upstream files (the zips' single members, byte-identical to the member) —
+# but the sentinel's raw GET returns the ZIP body, never the member, so every
+# entry here is whole: false (fetch-checked for reachability, not
+# byte-compared; the member-vs-GET mismatch would otherwise ring a false
+# drift alarm). The two Diplomata volumes are additionally documented TRIMs
+# (DD Rudolf. 595 KB → 19 KB; DD F. II. Band 3 1.3 MB → 20 KB, cut from the
+# canonical copy of the 2026-08-02 sync).
 # adapter_test is null — the source-specific test pins ids/counts/snippets
 # directly.
 source: openmgh
@@ -47,3 +49,12 @@ files:
       bsb00000786.xml, extracted whole (the raw GET body is the zip, so no
       byte-compare). Retrieved 2026-08-02 (P56-3, the second wave).
     provenance: single member of the upstream zip, extracted whole
+  - path: bsb00002026/bsb00002026.xml
+    url: https://data.mgh.de/openmgh/bsb00002026.zip
+    whole: false
+    trim: >-
+      corpus prologue (everything before the first inner <TEI>) + inner <TEI>
+      blocks 1-3 (charters 427-429) spliced verbatim in file order,
+      </teiCorpus> appended; no kept line altered. Trimmed 2026-08-02 from the
+      CANONICAL copy of the owner's first second-wave sync (P56 hotfix rider —
+      the self-closing <date/> shape), not a fresh download. See README.md.
