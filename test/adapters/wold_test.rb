@@ -93,10 +93,12 @@ class WoldTest < Minitest::Test
     assert_includes wine.body, "loan ← Greek (w)oînos ‘wine’ (earlier)",
                     "non-immediate events carry their Source_relation"
     donors = wine.reflexes
-    assert_equal [%w[lati1261 lat], ["mode1248", nil]],
+    assert_equal [%w[lat lat], %w[ell ell]],
                  donors.map { |r| [r.lang_code, r.language] },
-                 "lang_code = the upstream glottocode verbatim; the donor map keys on the NAME " \
-                 "(WOLD's own glottocodes are unreliable — noon1243), unmapped donors stay display-only"
+                 "P57-5: lang_code is now the RESOLVED catalog tag, not the upstream glottocode " \
+                 "verbatim; Latin resolves by NAME (the donor map), bare 'Greek' (mode1248 = Modern " \
+                 "Greek) resolves through the new mechanical Glottolog join since 'Greek' alone " \
+                 "isn't a DONOR_MAP key (only 'Classical Greek' is — a real, distinct donor)"
     vinum = donors.first
     assert_equal "vīnum", vinum.word
     assert vinum.borrowed, "a donor edge is a borrowing edge"
@@ -105,12 +107,28 @@ class WoldTest < Minitest::Test
                  "the donor fold lands on the Latin gold-side §9 key — the etym join"
   end
 
+  # P57-5, the noon1243 hand-check: WOLD's OWN upstream borrowings.csv rows
+  # name this donor "Old Norse" throughout (verified by hand against
+  # canonical/wold/cldf/borrowings.csv — every noon1243 row's Source_word is
+  # a genuine Old Norse form: ský "cloud", lágr "low", hvirfla "to whirl",
+  # húsbondi "husband", systir "sister") even though Glottolog's noon1243 is
+  # actually Noone, a Cangin language of Senegal (real Old Norse is
+  # oldn1244 — pinned in test/cldf_spine_test.rb). So upstream's NAME is
+  # right and its GLOTTOCODE is wrong — the adapter must keep trusting the
+  # name over the glottocode, and GLOTTOCODE_LANGUAGES deliberately has NO
+  # noon1243 entry (a glottocode fallback must never be allowed to override
+  # a trusted name with the wrong language).
   def test_old_norse_donors_map_by_name_despite_the_upstream_glottocode
     sky = parse("English").entries.find { |e| e.entry_id == "English-1-51-1" }
     donor = sky.reflexes.first
-    assert_equal "noon1243", donor.lang_code, "upstream bytes verbatim (Glottolog says Noone!)"
+    assert_equal "non", donor.lang_code,
+                 "P57-5: lang_code is the RESOLVED tag; the NAME 'Old Norse' decides it, never the " \
+                 "upstream glottocode"
     assert_equal "non", donor.language, "the NAME 'Old Norse' decides the catalog tag"
     assert_equal "ský", donor.word
+    assert_equal "Old Norse", donor.lang_name, "the original upstream name still rides lang_name"
+    refute_includes Nabu::Adapters::Wold::GLOTTOCODE_LANGUAGES.keys, "noon1243",
+                    "the fallback table must never get a chance to mis-resolve this one"
   end
 
   def test_a_native_word_still_mints_an_entry_with_its_status
@@ -142,6 +160,105 @@ class WoldTest < Minitest::Test
                     "the curated event rides even where the status is doubtful — both are upstream truth"
     assert_equal ["lˁmān + ˁālmyān"], ulimwengu.reflexes.map(&:word), "unsplittable — one verbatim edge"
     assert_equal "ara", ulimwengu.reflexes.first.language
+  end
+
+  # --- P57-5: the glottocode→ISO fallback table -------------------------------------
+
+  # A representative slice of the 94-entry GLOTTOCODE_LANGUAGES table (the
+  # full 96-code report census minus noon1243, deliberately excluded above,
+  # and nepa1252, resolved by NAME instead — see DONOR_MAP): every value
+  # here was read directly off the vendored Glottolog CLDF dump
+  # (canonical/cldf-spine/glottolog/languages.csv, the same file
+  # Nabu::CldfSpine reads at query time — ISO639P3code, or for dialect-level
+  # rows with no ISO of their own, Closest_ISO369P3code) — a mechanical
+  # join, never a guess, per the P57-5 packet spec.
+  def test_glottocode_languages_table_resolves_the_report_census
+    table = Nabu::Adapters::Wold::GLOTTOCODE_LANGUAGES
+    # the report's own "obvious high-volume identifications"
+    assert_equal "spa", table.fetch("stan1288")
+    assert_equal "fra", table.fetch("stan1290")
+    assert_equal "eng", table.fetch("stan1293")
+    assert_equal "deu", table.fetch("stan1295")
+    assert_equal "zsm", table.fetch("stan1306")
+    assert_equal "cmn", table.fetch("mand1415")
+    assert_equal "por", table.fetch("port1283")
+    assert_equal "nld", table.fetch("dutc1256")
+    assert_equal "hun", table.fetch("hung1274")
+    assert_equal "ita", table.fetch("ital1282")
+    assert_equal "xgn", table.fetch("mong1329"), "Mongolic — the ISO 639-5 collective"
+    assert_equal "sit", table.fetch("sino1245"), "Sino-Tibetan — the ISO 639-5 collective"
+    # dialect-level Glottolog rows resolve via Closest_ISO369P3code
+    assert_equal "lat", table.fetch("late1252"), "Late Latin, a dialect node — closest ISO is lat"
+    assert_equal "hrv", table.fetch("croa1245")
+    assert_equal "srp", table.fetch("serb1264")
+    assert_equal "xno", table.fetch("angl1258")
+    # family-level nodes with a confident ISO 639-5 collective (report examples)
+    assert_equal "ine", table.fetch("indo1319")
+    assert_equal "bnt", table.fetch("bant1294")
+    assert_equal "sla", table.fetch("slav1255")
+    assert_equal "gem", table.fetch("germ1287")
+    assert_equal "trk", table.fetch("turk1311")
+    assert_equal "gmq", table.fetch("nort3160")
+    # family-level nodes with NO confident collective — honestly `und`,
+    # never guessed (upstream's own donor label noted per code)
+    %w[finn1317 mala1545 yuca1252 gbee1241 high1289 east2832].each do |code|
+      assert_equal "und", table.fetch(code), "#{code}: no ISO 639-5 collective I can confidently attach"
+    end
+    refute_includes table.keys, "noon1243", "the hand-check exclusion — never a fallback candidate"
+    refute_includes table.keys, "nepa1252", "Nepali resolves by NAME (not in this Glottolog dump at all)"
+  end
+
+  def test_nepali_and_arabic_moroccan_resolve_by_name
+    assert_equal "nep", Nabu::Adapters::Wold::DONOR_MAP.fetch("Nepali"),
+                 "nepa1252 isn't in the vendored Glottolog dump at all — Nepali is unambiguous enough " \
+                 "to resolve by name instead"
+  end
+
+  # A glottocode this packet's census could NOT confidently identify (not
+  # among the 96) still resolves honestly to `und`, not nil — every donor
+  # edge now names a real (if undetermined) catalog language, P57-5.
+  def test_an_unknown_glottocode_falls_back_to_und_not_nil
+    adapter_instance = adapter
+    reflexes = adapter_instance.send(:donor_reflexes, {
+                                       "Source_word" => "xyzzy", "Source_languoid" => "Plonkish",
+                                       "Source_languoid_glottocode" => "zzzz9999"
+                                     })
+    assert_equal 1, reflexes.size
+    assert_equal "und", reflexes.first.lang_code
+    assert_equal "und", reflexes.first.language
+    assert_equal "Plonkish", reflexes.first.lang_name, "the unidentifiable name still rides lang_name"
+  end
+
+  # --- P57-5: WOLD's own verbal donor labels (group 5) -------------------------------
+
+  # `Unidentified` (WOLD's literal "no donor word" placeholder — the exact
+  # upstream row shape, verbatim, from canonical/wold/cldf/borrowings.csv
+  # ID 1614: Source_languoid "Unidentified", Source_languoid_glottocode
+  # blank) mints `und`, not the literal string "Unidentified" as a code.
+  def test_unidentified_donor_label_maps_to_und
+    reflexes = adapter.send(:donor_reflexes, {
+                              "Source_word" => "maamay", "Source_languoid" => "Unidentified",
+                              "Source_languoid_glottocode" => ""
+                            })
+    assert_equal 1, reflexes.size
+    assert_equal "und", reflexes.first.lang_code
+    assert_equal "und", reflexes.first.language
+    assert_equal "Unidentified", reflexes.first.lang_name
+  end
+
+  # `Proto-Altaic` (wold-mandarinchinese; canonical/wold/cldf/borrowings.csv
+  # ID 20121, verbatim) is a StarLing-style reconstructed-donor label with
+  # no ISO code and a controversial construct (the Altaic hypothesis) —
+  # `und`, with the label preserved in lang_name rather than a dossier.
+  def test_proto_altaic_donor_label_maps_to_und_with_the_label_preserved
+    reflexes = adapter.send(:donor_reflexes, {
+                              "Source_word" => "*acV", "Source_languoid" => "Proto-Altaic",
+                              "Source_languoid_glottocode" => ""
+                            })
+    assert_equal 1, reflexes.size
+    assert_equal "und", reflexes.first.lang_code
+    assert_equal "und", reflexes.first.language
+    assert_equal "Proto-Altaic", reflexes.first.lang_name
   end
 
   def test_entry_ids_are_stable_across_independent_passes_and_nfc
