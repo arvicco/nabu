@@ -34,10 +34,10 @@ module MCP
     # -- rig -------------------------------------------------------------------
 
     def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil, links: nil, registry: nil,
-              enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil)
+              enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil)
       Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger, links: links,
                            registry: registry, enabled_slugs: enabled_slugs, pleiades: pleiades,
-                           sign_list: sign_list, tibetan_words: tibetan_words)
+                           sign_list: sign_list, tibetan_words: tibetan_words, lects: lects)
     end
 
     def make_document(source: @open, urn: "urn:d:1", title: "Iliad", language: "grc",
@@ -447,6 +447,55 @@ module MCP
       properties = Nabu::MCP::Tools::SEARCH_SCHEMA.fetch(:properties)
       assert properties.key?(:meter), "the meter param is schema-documented"
       assert properties.key?(:meter_pattern), "the meter_pattern param is schema-documented"
+    end
+
+    # -- nabu_search: the lect filter (P57-4) ------------------------------------
+
+    def lects
+      @lects ||= Nabu::Lects.load(Nabu::TestSupport.fixtures("nabu-lects"),
+                                  overrides_path: File.join(Nabu::Config::PROJECT_ROOT, "config",
+                                                            "lect_overrides.yml"))
+    end
+
+    def seed_lect_corpus!
+      lat = Nabu::Store::Source.create(slug: "perseus-latin", name: "Perseus Latin",
+                                       adapter_class: "TestAdapter", license_class: "open")
+      med = make_document(source: lat, urn: "urn:d:lamed", language: "la-med")
+      make_passage(med, urn: "urn:d:lamed:1", text: "libertas", sequence: 0, language: "la-med")
+      grc = make_document(urn: "urn:d:grc", language: "grc")
+      make_passage(grc, urn: "urn:d:grc:1", text: "libertas", sequence: 0, language: "grc")
+      rebuild!
+    end
+
+    def test_search_lect_filters_hits_to_the_resolved_lect
+      seed_lect_corpus!
+      body = payload(tools(lects: lects).call("nabu_search", { "query" => "libertas", "lect" => "lat" }))
+      assert_equal(%w[urn:d:lamed:1], body.fetch("matches").map { |hit| hit.fetch("urn") },
+                   "la-med resolves under the lat anchor; grc does not")
+    end
+
+    def test_search_lect_without_nabu_lects_synced_is_invalid_arguments
+      seed_lect_corpus!
+      error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "query" => "libertas", "lect" => "lat" })
+      end
+      assert_match(/nabu-lects module not synced/, error.message)
+    end
+
+    def test_search_lect_does_not_compose_with_lemma_or_near
+      seed_lect_corpus!
+      rig = tools(lects: lects)
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        rig.call("nabu_search", { "lemma" => "libertas", "lect" => "lat" })
+      end
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        rig.call("nabu_search", { "query" => "libertas", "near" => "cano", "lect" => "lat" })
+      end
+    end
+
+    def test_search_schema_documents_the_lect_param
+      properties = Nabu::MCP::Tools::SEARCH_SCHEMA.fetch(:properties)
+      assert properties.key?(:lect), "the lect param is schema-documented (additive to the frozen contract)"
     end
 
     # -- nabu_search: proximity (near/window) -----------------------------------
