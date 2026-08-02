@@ -4129,6 +4129,44 @@ class CLITest < Minitest::Test
     assert_match(/--meter/, err2)
   end
 
+  # -- P57-4: search --lect ------------------------------------------------------
+
+  def test_search_lect_filters_hits_to_the_resolved_lect
+    with_lect_search_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search arma --lect lat]) }
+      assert_nil status
+      assert_match("urn:nabu:test:lamed:1", out, "la-med resolves under the lat anchor")
+    end
+  end
+
+  def test_browse_by_lect_alone_is_legal
+    with_lect_search_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lect lat]) }
+      assert_nil status, "the lect filter narrows content — a legal term-less browse"
+      assert_match("urn:nabu:test:lamed:1", out)
+      refute_match("urn:nabu:test:grc:1", out, "grc resolves under a different anchor")
+      assert_match(/filtered browse/, out)
+    end
+  end
+
+  def test_search_lect_without_nabu_lects_synced_errors_naming_the_module
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search μηνιν --lect lat]) }
+      assert_equal 1, status
+      assert_match(/nabu-lects module not synced/, err)
+    end
+  end
+
+  def test_search_lect_refuses_lemma_near_and_fuzzy
+    _out, err, status = run_cli(%w[search --lemma arma --lect lat])
+    assert_equal 1, status
+    assert_match(/--lect/, err, "the lemma path does not carry the lect filter — refused, not ignored")
+
+    _out2, err2, status2 = run_cli(%w[search --fuzzy arma --lect lat])
+    assert_equal 1, status2
+    assert_match(/--lect/, err2)
+  end
+
   def test_term_less_browse_refuses_exact_and_word
     _out, err, status = run_cli(%w[search --century 2 --exact])
     assert_equal 1, status
@@ -7015,16 +7053,52 @@ class CLITest < Minitest::Test
     end
   end
 
-  def seed_plain_passage(catalog, source_id, doc_urn, text)
+  def seed_plain_passage(catalog, source_id, doc_urn, text, language: "lat")
     doc_id = catalog[:documents].insert(
-      source_id: source_id, urn: doc_urn, title: doc_urn, language: "lat",
+      source_id: source_id, urn: doc_urn, title: doc_urn, language: language,
       content_sha256: doc_urn, revision: 1, withdrawn: false
     )
     catalog[:passages].insert(
-      document_id: doc_id, urn: "#{doc_urn}:1", sequence: 0, language: "lat",
-      text: text, text_normalized: Nabu::Normalize.search_form(text, language: "lat"),
+      document_id: doc_id, urn: "#{doc_urn}:1", sequence: 0, language: language,
+      text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
       content_sha256: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
     )
+  end
+
+  # A tiny indexed corpus for `search --lect` (P57-4): the nabu-lects
+  # fixture registry + the REAL config/lect_overrides.yml (so the ratified
+  # derom override actually engages), one la-med passage under "texts"
+  # (resolves via the universal codemap to lat:med) and one Greek passage
+  # (an unrelated anchor — proves the filter actually excludes).
+  def with_lect_search_corpus
+    Dir.mktmpdir("nabu-cli-lect-search") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: File.join(root, "config", "nabu.yml")
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      FileUtils.mkdir_p(File.join(root, "config"))
+      FileUtils.cp(File.join(Nabu::Config::PROJECT_ROOT, "config", "lect_overrides.yml"),
+                   File.join(root, "config", "lect_overrides.yml"))
+      dest = File.join(config.canonical_dir, "nabu-lects")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-lects"), "*")], dest)
+
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      texts = catalog[:sources].insert(slug: "texts", name: "Texts", adapter_class: "TestAdapter",
+                                       license_class: "open", enabled: true)
+      seed_plain_passage(catalog, texts, "urn:nabu:test:lamed", "arma uirumque cano", language: "la-med")
+      seed_plain_passage(catalog, texts, "urn:nabu:test:grc", "μηνιν αειδε", language: "grc")
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
   end
 
   def seed_dated_passage(catalog, source_id, doc_urn, text, not_before, not_after, place)
