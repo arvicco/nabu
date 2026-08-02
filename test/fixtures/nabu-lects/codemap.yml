@@ -1,0 +1,40 @@
+# codemap.yml — universal defaults: standard code → lect.
+#
+# IDENTITY IS THE DEFAULT RULE: any code not listed here maps to itself as a
+# bare anchor (ang → ang, otb → otb, srd → srd). This file lists ONLY the
+# non-identity mappings, so every line is a decision.
+#
+# These are universal statements — true for any consumer of the code, not
+# facts about any particular collection. Consumers layer their own overrides
+# ABOVE these defaults (per-collection, per-document); identity sits below.
+# Precedence, highest first: per-document > per-collection > this file > identity.
+
+map:
+  # Greek stages that outgrew their codes
+  gkm:     grc:byz
+  grc-koi: grc:koi
+
+  # Chinese: two stages and the register ISO coded as their sibling
+  och:     zho:old
+  ltc:     zho:mid
+  lzh:     zho/lit
+
+  # The Latin stage suite (Wiktionary etymology-only codes)
+  la-vul:  lat/vul      # the ATTESTED register is the universal default reading
+  la-lat:  lat:late
+  la-med:  lat:med
+  la-ecc:  lat/ecc
+  la-ren:  lat:ren
+  la-new:  lat:new
+  itc-ola: lat:arch
+
+  # Reconstructed proto-languages: the stage is pro, the machine truth is
+  # the registry's mode field, never the code suffix
+  ine-pro:     ine:pro
+  gem-pro:     gem:pro
+  gmw-pro:     gmw:pro
+  gmq-pro:     gmq:pro
+  sla-pro:     sla:pro
+  itc-pro:     itc:pro
+  iir-pro:     iir:pro
+  ine-bsl-pro: ine-bsl:pro

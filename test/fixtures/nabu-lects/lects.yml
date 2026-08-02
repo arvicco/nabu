@@ -1,0 +1,340 @@
+# lects.yml — the lect registry.
+#
+# A lect = anchor [":" stage] ["/" variety] ["@" ortho]  (see README, docs/schema.md).
+# Anchors are ISO 639 / established Wiktionary codes. Stages are time-slices of one
+# lineage, ordered by `ord` (never by parent links). `parent:` is a descent edge:
+# this lineage continues from that one. `mode: reconstructed` is the one
+# machine-load-bearing field; everything else is documentation with provenance.
+#
+# Bands are per-anchor recorded decisions ([start, end] in years, negative = BCE,
+# null = open), each carrying a band_note naming the convention followed. Bands are
+# minted lazily and stated only where the editors are confident.
+
+anchors:
+
+  # ── The Indo-European family spine ─────────────────────────────────────────
+
+  ine:
+    name: Indo-European
+    kind: family
+    stages:
+      pro: {name: Proto-Indo-European, mode: reconstructed, ord: 5, wikt: ine-pro}
+
+  gem:
+    name: Germanic
+    kind: family
+    parent: ine
+    stages:
+      pro: {name: Proto-Germanic, mode: reconstructed, ord: 5, wikt: gem-pro}
+
+  gmw:
+    name: West Germanic
+    kind: family
+    parent: gem
+    stages:
+      pro: {name: Proto-West-Germanic, mode: reconstructed, ord: 5, wikt: gmw-pro}
+
+  gmq:
+    name: North Germanic
+    kind: family
+    parent: gem
+    stages:
+      pro: {name: Proto-Norse (reconstructed), mode: reconstructed, ord: 5, wikt: gmq-pro}
+      run: {name: Runic Proto-Norse (attested), band: [150, 800], ord: 10,
+            band_note: "the Elder Futhark epigraphic span, approximate",
+            note: "real inscriptions conventionally filed under a proto label —
+                   attested epigraphy, hence a distinct attested stage"}
+
+  ine-bsl:
+    name: Balto-Slavic
+    kind: family
+    parent: ine
+    stages:
+      pro: {name: Proto-Balto-Slavic, mode: reconstructed, ord: 5, wikt: ine-bsl-pro}
+
+  sla:
+    name: Slavic
+    kind: family
+    parent: ine-bsl
+    stages:
+      pro: {name: Proto-Slavic, mode: reconstructed, ord: 5, wikt: sla-pro}
+
+  itc:
+    name: Italic
+    kind: family
+    parent: ine
+    stages:
+      pro: {name: Proto-Italic, mode: reconstructed, ord: 5, wikt: itc-pro}
+
+  iir:
+    name: Indo-Iranian
+    kind: family
+    parent: ine
+    stages:
+      pro: {name: Proto-Indo-Iranian, mode: reconstructed, ord: 5, wikt: iir-pro}
+
+  # ── Latin and Romance ──────────────────────────────────────────────────────
+
+  lat:
+    name: Latin
+    glottocode: lati1261
+    parent: itc:pro
+    stages:
+      arch: {name: Old Latin,         band: [-700, -75],  ord: 10, wikt: itc-ola,
+             band_note: "conventional philological bands"}
+      cla:  {name: Classical Latin,   band: [-75, 200],   ord: 20,
+             band_note: "conventional philological bands"}
+      late: {name: Late Latin,        band: [200, 600],   ord: 30, wikt: la-lat,
+             band_note: "conventional philological bands"}
+      med:  {name: Medieval Latin,    band: [600, 1350],  ord: 40, wikt: la-med,
+             band_note: "conventional philological bands; boundaries vary by school"}
+      ren:  {name: Renaissance Latin, band: [1350, 1550], ord: 50, wikt: la-ren,
+             band_note: "conventional philological bands"}
+      new:  {name: New Latin,         band: [1550, null], ord: 60, wikt: la-new,
+             band_note: "conventional philological bands"}
+    varieties:
+      vul: {name: Vulgar Latin (attested substandard), kind: register, wikt: la-vul,
+            note: "the ATTESTED register (Appendix Probi, graffiti) — the
+                   reconstructed Proto-Romance of the comparative method is roa:pro,
+                   a different object under the same upstream code"}
+      ecc: {name: Ecclesiastical Latin, kind: register, wikt: la-ecc}
+
+  roa:
+    name: Romance
+    kind: family
+    glottocode: roma1334
+    parent: lat
+    stages:
+      pro: {name: Proto-Romance, mode: reconstructed, ord: 5,
+            note: "comparative-method étymons (DÉRom-style); Wiktionary files these
+                   under la-vul; the reconstructed proxy for the spoken ancestor —
+                   cf. lat:late and the lat/vul register"}
+
+  roa-opt:
+    name: Old Galician-Portuguese
+    parent: roa
+
+  por:
+    name: Portuguese
+    parent: roa-opt
+
+  glg:
+    name: Galician
+    parent: roa-opt
+
+  fro:
+    name: Old French
+    band: [842, 1400]
+    band_note: "ISO 639-2/MARC reference name (842–ca. 1400)"
+    parent: roa
+
+  frm:
+    name: Middle French
+    band: [1400, 1600]
+    band_note: "ISO 639-2/MARC reference name"
+    parent: fro
+
+  fr:
+    name: French
+    parent: frm
+
+  # ── Greek ──────────────────────────────────────────────────────────────────
+
+  grc:
+    name: Ancient Greek
+    glottocode: anci1242
+    stages:
+      hom: {name: Epic (Homeric) Greek, band: [-800, -600], ord: 10,
+            band_note: "conventional, approximate"}
+      cla: {name: Classical Greek,      band: [-600, -300], ord: 20,
+            band_note: "conventional, approximate"}
+      koi: {name: Koine Greek,          band: [-300, 330],  ord: 30, wikt: grc-koi,
+            band_note: "conventional (~300 BCE – 330 CE)"}
+      byz: {name: Byzantine Greek,      band: [330, 1453],  ord: 40, wikt: gkm,
+            band_note: "upper bound 1453 is the LoC/ISO cataloguing convention
+                        (fall of Constantinople), not a linguistic boundary"}
+
+  # ── The English ladder (ISO already staged it) ─────────────────────────────
+
+  ang:
+    name: Old English
+    glottocode: olde1238
+    band: [450, 1100]
+    band_note: "ISO 639-2/MARC reference name"
+    parent: gmw:pro
+
+  enm:
+    name: Middle English
+    band: [1100, 1500]
+    band_note: "ISO 639-2/MARC reference name"
+    parent: ang
+
+  en:
+    name: English
+    parent: enm
+
+  # ── Chinese ────────────────────────────────────────────────────────────────
+
+  zho:
+    name: Chinese
+    stages:
+      old: {name: Old Chinese,    band: [-1250, -100], ord: 10, iso: och,
+            band_note: "conventional, approximate"}
+      mid: {name: Middle Chinese, band: [400, 1000],   ord: 20, iso: ltc,
+            band_note: "conventional, approximate"}
+    varieties:
+      lit: {name: Literary Chinese (wenyan), kind: register, iso: lzh,
+            note: "a written register spanning stages, used for roughly two
+                   millennia; compose a stage per document where datable
+                   (e.g. zho:mid/lit)"}
+
+  # ── Tibetan (the accidentally clean ISO case) ──────────────────────────────
+
+  otb:
+    name: Old Tibetan
+
+  xct:
+    name: Classical Tibetan
+    glottocode: clas1254
+    parent: otb
+
+  bod:
+    name: Tibetan
+    parent: xct
+
+  # ── Aramaic and Hebrew ─────────────────────────────────────────────────────
+
+  arc:
+    name: Aramaic
+    stages:
+      imp: {name: Imperial (Official) Aramaic, band: [-700, -300], ord: 10, iso: arc,
+            band_note: "ISO 639-2 reference name: Official Aramaic (700–300 BCE)"}
+      bib: {name: Biblical (Qumran) Aramaic, ord: 20}
+      mid: {name: Middle (Jewish Literary) Aramaic, ord: 30}
+    varieties:
+      jud: {name: Jewish (Targumic), kind: sociolect}
+
+  hbo:
+    name: Biblical Hebrew
+
+  heb:
+    name: Hebrew
+    parent: hbo
+    stages:
+      rab: {name: Rabbinic Hebrew, ord: 10}
+      med: {name: Medieval Hebrew, ord: 20}
+
+  # ── Egyptian ───────────────────────────────────────────────────────────────
+
+  egy:
+    name: Egyptian
+    stages:
+      old:  {name: Old Egyptian,    band: [-2600, -2000], ord: 10,
+             band_note: "approximate Egyptological convention"}
+      mid:  {name: Middle Egyptian, band: [-2000, -1350], ord: 20,
+             band_note: "approximate Egyptological convention"}
+      late: {name: Late Egyptian,   band: [-1350, -700],  ord: 30,
+             band_note: "approximate Egyptological convention"}
+      dem:  {name: Demotic,         band: [-650, 450],    ord: 40,
+             band_note: "approximate Egyptological convention"}
+
+  cop:
+    name: Coptic
+    parent: egy
+
+  # ── Akkadian ───────────────────────────────────────────────────────────────
+
+  akk:
+    name: Akkadian
+    stages:
+      ob: {name: Old Babylonian,    band: [-2000, -1600], ord: 10,
+           band_note: "approximate Assyriological convention"}
+      mb: {name: Middle Babylonian, band: [-1600, -1000], ord: 20,
+           band_note: "approximate Assyriological convention"}
+      na: {name: Neo-Assyrian,      band: [-1000, -600],  ord: 30,
+           band_note: "approximate Assyriological convention"}
+      nb: {name: Neo-Babylonian,    band: [-1000, -600],  ord: 40,
+           band_note: "approximate Assyriological convention; overlaps na — the
+                       grid is dialect × period, not a single ladder"}
+    varieties:
+      lit: {name: Standard Babylonian, kind: register,
+            note: "the literary register of first-millennium scholarship"}
+
+  # ── Sanskrit ───────────────────────────────────────────────────────────────
+
+  san:
+    name: Sanskrit
+    parent: iir:pro
+    stages:
+      ved: {name: Vedic Sanskrit,     ord: 10, note: "IANA variant precedent: sa-vaidika"}
+      epi: {name: Epic Sanskrit,      ord: 20, note: "IANA variant precedent: sa-itihasa"}
+      cla: {name: Classical Sanskrit, ord: 30, note: "IANA variant precedent: sa-laukika"}
+
+  # ── Slavic lects ───────────────────────────────────────────────────────────
+
+  chu:
+    name: Church Slavonic
+    parent: sla:pro
+    note: "the bare anchor names the canonical Old Church Slavonic corpus"
+    stages:
+      csl: {name: Church Slavonic (post-canonical), ord: 10}
+    varieties:
+      rus: {name: Russian recension, kind: recension}
+      srp: {name: Serbian recension, kind: recension}
+
+  orv:
+    name: Old East Slavic
+    parent: sla:pro
+    stages:
+      early: {name: Early Old East Slavic, ord: 10, note: "the birchbark era"}
+      mid:   {name: Middle Russian span,   ord: 20}
+      ruth:  {name: Ruthenian (prosta mova), ord: 30}
+
+  sl:
+    name: Slovene
+    stages:
+      old:  {name: Old Slovene, ord: 10, note: "the Freising Fragments era"}
+      emod: {name: Early Modern Slovene, ord: 20}
+    orthos:
+      bohoric: {name: Bohorič alphabet, note: "IANA variant name; Latin-script-scoped"}
+
+  bul:
+    name: Bulgarian
+    stages:
+      emod: {name: Early Modern Bulgarian, ord: 10}
+    varieties:
+      dam: {name: Damaskini vernacular, kind: sociolect}
+
+  # ── Others forced by holdings ──────────────────────────────────────────────
+
+  jpn:
+    name: Japanese
+    stages:
+      mod: {name: Modern Japanese, ord: 10}
+    orthos:
+      kyu: {name: Kyūjitai (pre-reform character forms),
+            note: "Han-script-scoped; pre-1946 printings"}
+
+  non:
+    name: Old Norse
+    band: [800, 1350]
+    band_note: "conventional Norse philology, approximate"
+    parent: gmq:run
+    note: "parent is the ATTESTED runic stage, per the most-specific-ancestor
+           rule (attested lect preferred over gmq:pro)"
+
+  isl:
+    name: Icelandic
+    parent: non
+    stages:
+      old: {name: Old Icelandic,    band: [1100, 1350], ord: 10,
+            band_note: "conventional Icelandic philology, approximate"}
+      mid: {name: Middle Icelandic, band: [1350, 1550], ord: 20,
+            band_note: "conventional Icelandic philology, approximate"}
+      mod: {name: Modern Icelandic, band: [1550, null], ord: 30,
+            band_note: "conventional Icelandic philology, approximate"}
+
+  ara:
+    name: Arabic
+    stages:
+      cla: {name: Classical Arabic, ord: 10}

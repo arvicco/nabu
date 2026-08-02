@@ -203,6 +203,17 @@ class ConfigTest < Minitest::Test
     end
   end
 
+  # P57-3: the per-source lect override file lives beside sources.yml/nabu.yml
+  # (Nabu-specific knowledge, distinct from the nabu-lects module's own
+  # universal codemap.yml), derived from config_dir the gaiji_dir way — so it
+  # follows a restored/relocated tree too.
+  def test_lect_overrides_path_defaults_under_config
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "config", "lect_overrides.yml"), config.lect_overrides_path
+    end
+  end
+
   # P7-2 fresh-machine plumbing: NABU_CONFIG / NABU_ROOT drive the defaults so a
   # restored install needs no code edit. Explicit kwargs still win.
   def test_env_overrides_config_path_and_root
