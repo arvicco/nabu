@@ -299,19 +299,24 @@ class LectsTest < Minitest::Test
     end
   end
 
-  # Consumers arrive at P57-4 — for now, nothing outside this file calls
-  # Nabu::Lects. Guards against silent early wiring drifting ahead of the
-  # packet split (doc-comment mentions of the class name are fine; only an
-  # actual invocation trips this).
-  def test_no_production_callsite_calls_lects_yet
+  # P57-4 wires the first consumers (the etym recon predicate/display
+  # mapping, the language stage ladder, the search --lect filter) — this
+  # guard now pins the ALLOWLIST of production callsites rather than a zero
+  # count (the P57-3 posture it superseded). A callsite appearing outside
+  # this set is very likely accidental early wiring of some future packet —
+  # exactly the drift this test caught before; update the allowlist
+  # deliberately when it is not.
+  def test_only_the_p57_4_consumers_call_lects_in_production
     lib_root = File.expand_path("../lib", __dir__)
     this_file = File.join(lib_root, "nabu", "lects.rb")
     pattern = /Nabu::Lects\.(load_default|load|new)\b/
+    allowlist = %w[nabu/cli.rb nabu/query/etym.rb]
+                .map { |rel| File.join(lib_root, rel) }
 
     offenders = Dir[File.join(lib_root, "**", "*.rb")]
-                .reject { |path| path == this_file }
+                .reject { |path| path == this_file || allowlist.include?(path) }
                 .select { |path| File.read(path).match?(pattern) }
-    assert_empty offenders, "P57-4 wires the first consumer(s) — no lib file but lects.rb itself " \
-                            "should call Nabu::Lects yet"
+    assert_empty offenders, "a Nabu::Lects callsite appeared outside the P57-4 consumer " \
+                            "allowlist (#{allowlist.join(', ')}) — update it deliberately if intentional"
   end
 end
