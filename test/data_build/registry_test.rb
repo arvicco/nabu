@@ -12,7 +12,7 @@ class DataBuildRegistryTest < Minitest::Test
   EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation
                       zho/hani-fold jpn/aozora-gaiji lat/sabellic-loans grc/meter
                       jpn/kyujitai-fold lzh/kanripo-gaiji sux/value-signs
-                      xct/actib-anchors].freeze
+                      xct/actib-anchors roa-opt/cantigas].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -47,8 +47,18 @@ class DataBuildRegistryTest < Minitest::Test
       assert_kind_of Array, feature.inputs
       assert_kind_of Array, feature.canonical_cones
       language = feature.language
-      [language.id, language.name, language.iso639p3].each do |value|
+      [language.id, language.name].each do |value|
         refute_empty value.to_s, "#{feature.slug}: languages.csv statics must be complete"
+      end
+      if language.iso639p3.nil?
+        # ISO 639-3 assigns NO code to Old Galician-Portuguese — roa-opt is
+        # the BCP 47 collective-tag convention (roa Romance + opt) Wiktionary
+        # and Nabu's catalog already use (D55-a), so the honest ISO static
+        # is empty. Any other nil is a missing static.
+        assert_equal "roa-opt", language.id,
+                     "#{feature.slug}: only roa-opt (no ISO 639-3 code exists) may omit the ISO static"
+      else
+        refute_empty language.iso639p3, "#{feature.slug}: languages.csv statics must be complete"
       end
       if language.glottocode.nil?
         # Glottolog deliberately assigns no glottocode to ISO 639-3
@@ -182,6 +192,20 @@ class DataBuildRegistryTest < Minitest::Test
                  "the re-publication milestone is stated where the owner reads it")
     assert_match(/never republished/, anchors.rationale,
                  "the no-content-republication rule is stated where the owner reads it")
+
+    cantigas = Nabu::DataBuild.feature("roa-opt/cantigas")
+    assert_equal :available, cantigas.status, "P56-2: builder and feature land together"
+    assert_equal Nabu::DataBuild::CantigasBuilder, cantigas.builder
+    assert_equal "gold", cantigas.tier,
+                 "a faithful structured projection of the granted critical edition"
+    assert_equal "urn+sha", cantigas.anchoring
+    assert_equal ["cantigas"], cantigas.inputs
+    assert_equal ["cantigas"], cantigas.canonical_cones
+    assert_equal "roa-opt-cantigas", cantigas.package_name
+    assert_match(/first full-corpus re-publication/i, cantigas.rationale,
+                 "the milestone is stated where the owner reads it")
+    assert_match(/№45-2/, cantigas.rationale,
+                 "the written-grant basis is stated where the owner reads it")
   end
 
   def test_language_statics_match_the_glottolog_spine
@@ -223,6 +247,17 @@ class DataBuildRegistryTest < Minitest::Test
     # ISO sux).
     sux = Nabu::DataBuild::LANGUAGES.fetch("sux")
     assert_equal %w[Sumerian sume1241 sux], [sux.name, sux.glottocode, sux.iso639p3]
+
+    # Checked 2026-08-02 (P56-2): oldp1257 "Old Portuguese" is Glottolog's
+    # languoid for the medieval Galician-Portuguese stage (level: dialect
+    # under port1283 — Glottolog files historical Romance stages that way,
+    # cf. medi1250 Medieval Latin under lati1261). ISO 639-3 has NO code for
+    # it: roa-opt is the BCP 47 collective-tag convention (D55-a), so the
+    # ISO static is honestly nil.
+    roa_opt = Nabu::DataBuild::LANGUAGES.fetch("roa-opt")
+    assert_equal ["Old Galician-Portuguese", "oldp1257", nil],
+                 [roa_opt.name, roa_opt.glottocode, roa_opt.iso639p3]
+    assert_equal Nabu::Adapters::CantigasHtmlParser::LANGUAGE, roa_opt.id
   end
 
   def test_feature_lookup_goes_through_the_features_seam
@@ -259,7 +294,8 @@ class DataBuildRegistryTest < Minitest::Test
       "zho/hani-fold" => "CC-BY-4.0", "jpn/aozora-gaiji" => "CC-BY-4.0",
       "lat/sabellic-loans" => "CC-BY-SA-4.0", "grc/meter" => "CC-BY-4.0",
       "jpn/kyujitai-fold" => "CC-BY-SA-4.0", "lzh/kanripo-gaiji" => "CC-BY-SA-4.0",
-      "sux/value-signs" => "CC-BY-4.0", "xct/actib-anchors" => "CC-BY-4.0"
+      "sux/value-signs" => "CC-BY-4.0", "xct/actib-anchors" => "CC-BY-4.0",
+      "roa-opt/cantigas" => "CC-BY-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end

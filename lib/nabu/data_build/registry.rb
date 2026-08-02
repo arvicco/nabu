@@ -3,6 +3,7 @@
 require_relative "feature"
 require_relative "actib_anchors_builder"
 require_relative "aozora_gaiji_builder"
+require_relative "cantigas_builder"
 require_relative "form_lemma"
 require_relative "hani_fold_builder"
 require_relative "kanripo_gaiji_builder"
@@ -31,6 +32,13 @@ module Nabu
     # lite1248 = Classical Chinese (ISO lzh), checked 2026-07-29 (P52-4).
     # sume1241 = Sumerian (ISO sux, level: language — an isolate, no
     # family), checked 2026-07-29 (P53-3) against the same cone.
+    # oldp1257 = Old Portuguese — Glottolog's languoid for the medieval
+    # Galician-Portuguese stage (level: dialect under port1283; Glottolog
+    # files historical Romance stages that way, cf. medi1250 Medieval Latin
+    # under lati1261), checked 2026-08-02 (P56-2) against the same cone.
+    # ISO 639-3 assigns NO code to Old Galician-Portuguese: roa-opt is the
+    # BCP 47 collective-tag convention (roa Romance + opt) Wiktionary and
+    # Nabu's catalog already use (D55-a), so the ISO static is honestly nil.
     LANGUAGES = {
       "jpn" => Language.new(id: "jpn", name: "Japanese", glottocode: "nucl1643", iso639p3: "jpn"),
       "san" => Language.new(id: "san", name: "Sanskrit", glottocode: "sans1269", iso639p3: "san"),
@@ -39,7 +47,9 @@ module Nabu
       "lat" => Language.new(id: "lat", name: "Latin", glottocode: "lati1261", iso639p3: "lat"),
       "grc" => Language.new(id: "grc", name: "Ancient Greek", glottocode: "anci1242", iso639p3: "grc"),
       "lzh" => Language.new(id: "lzh", name: "Classical Chinese", glottocode: "lite1248", iso639p3: "lzh"),
-      "sux" => Language.new(id: "sux", name: "Sumerian", glottocode: "sume1241", iso639p3: "sux")
+      "sux" => Language.new(id: "sux", name: "Sumerian", glottocode: "sume1241", iso639p3: "sux"),
+      "roa-opt" => Language.new(id: "roa-opt", name: "Old Galician-Portuguese",
+                                glottocode: "oldp1257", iso639p3: nil)
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
@@ -47,7 +57,8 @@ module Nabu
     # builder packets flip their feature to :available as each builder lands
     # (P50-W2 san/form-lemma, P50-W3 xct/wylie-fold, P50-W4 xct/verb-lemma,
     # P51-W5 xct/segmentation, P52-3 zho/hani-fold + jpn/aozora-gaiji,
-    # P53-3 sux/value-signs, P55-4 xct/actib-anchors), and
+    # P53-3 sux/value-signs, P55-4 xct/actib-anchors, P56-2
+    # roa-opt/cantigas), and
     # `nabu data build` refuses the still-planned politely. The doc table in
     # docs/nabu-data.md is drift-guarded against this list.
     REGISTRY = [
@@ -243,6 +254,30 @@ module Nabu
         maintenance: "re-derive after a derge-kangyur or actib re-sync (the stale-ingest guard " \
                      "enforces freshness); every build re-measures the anchoring census into " \
                      "nabu.eval"
+      ),
+      Feature.new(
+        slug: "roa-opt/cantigas", language: LANGUAGES.fetch("roa-opt"),
+        title: "Cantigas Medievais Galego-Portuguesas — the Littera edition as structured tables " \
+               "(verse lines, cantigas, authors, cancioneiro concordance)",
+        # GOLD: a faithful structured projection of the field's critical
+        # edition, published under the coordinator's written grant — the
+        # curation is Littera's, carried losslessly.
+        status: :available, tier: "gold", anchoring: "urn+sha",
+        inputs: ["cantigas"], canonical_cones: ["cantigas"], builder: CantigasBuilder,
+        rationale: "The first full-corpus re-publication: the complete secular lyric of medieval " \
+                   "Galician-Portuguese — ~1,680 cantigas, ~34K verse lines from the three great " \
+                   "cancioneiros — projected from the Littera critical edition " \
+                   "(cantigas.fcsh.unl.pt) into the corpus's first machine-readable form (the " \
+                   "scholarly database is superb and browser-only: no TEI, no export), under the " \
+                   "coordinator's written any-use grant (№45-2) with the project's own citation " \
+                   "format riding every file — verse lines anchored urn+sha into the catalog, the " \
+                   "cantiga/author registries, and the corpus-wide cancioneiro concordance parsed " \
+                   "from the edition's manuscript sigla, with the citation-fidelity census " \
+                   "(printed-number confirmations, refrain gaps, empty lines, the unattributed " \
+                   "page) published in-band as nabu.eval.",
+        maintenance: "re-derive after a cantigas re-sync (Littera is a living edition that " \
+                     "corrects pages in place; the stale-ingest guard enforces freshness); every " \
+                     "build re-derives the citation-fidelity census into nabu.eval"
       )
     ].freeze
 
