@@ -1,0 +1,204 @@
+# frozen_string_literal: true
+
+require "yaml"
+
+module Nabu
+  # The nabu-lects consume seam (P57-3): a pure READ resolver over the
+  # nabu-lects module (github.com/arvicco/nabu-lects) — a small, curated
+  # registry of LECTS (language varieties identified by genealogical anchor x
+  # historical stage x variety x orthography) with a universal mapping from
+  # standard codes (ISO 639, Wiktionary) onto them. There is NO catalog table
+  # and NO migration: nabu-lects is a feature module (kind: module) in the
+  # cldf-spine/nabu-data posture — absent canonical tree = lane off,
+  # byte-identical behavior (#load_default -> nil, never raises).
+  #
+  # == The identifier grammar (nabu-lects README/docs/schema.md, verbatim)
+  #
+  #   lect-id = anchor [ ":" stage ] [ "/" variety ] [ "@" ortho ]
+  #
+  # anchor is the most specific genealogical node (an ISO 639 or established
+  # Wiktionary code, e.g. "lat", "roa-opt"); stage a broad historical
+  # development stage ("lat:med"); variety a register/sociolect/recension
+  # ("zho/lit"); ortho a spelling reform within one script ("jpn:mod@kyu"). A
+  # bare anchor is a legal lect (honest coarseness). Reconstruction is keyed
+  # on the registry field `mode: reconstructed`, never on tag spelling (the
+  # stage tag "pro" is a convention, not the machine truth).
+  #
+  # == Two files, two natures
+  #
+  # lects.yml's `anchors:` map is the registry itself: per-anchor
+  # {name, kind, glottocode, band/band_note, parent, note, stages:,
+  # varieties:, orthos:} — each stage/variety/ortho its own {name, ...}
+  # sub-record. codemap.yml's `map:` lists ONLY non-identity code -> lect-id
+  # defaults; any code absent from it resolves to itself as a bare anchor
+  # (the identity default rule) — a fact stated once, true for any consumer.
+  #
+  # == Three-tier resolution precedence (#resolve)
+  #
+  # Nabu-specific knowledge does NOT belong in the universal codemap (a
+  # collection's own reading of a code is not a universal fact), so it layers
+  # ABOVE it in two seams, highest first:
+  #
+  #   1. per-document overlay  — the +overlay+ this instance is constructed
+  #      with (a urn -> {code -> lect-id} hash; empty by default). The
+  #      journal-backed persistence for this is a LATER packet (P57-4+) —
+  #      this is the seam only.
+  #   2. per-source override   — config/lect_overrides.yml (Nabu-authored;
+  #      Nabu::Config#lect_overrides_path), keyed by source slug. Seeded
+  #      P57-3 with exactly two ratified overrides (derom la-vul -> roa:pro,
+  #      rundata gmq-pro -> gmq:run — see that file's comments).
+  #   3. codemap.yml            — the module's universal defaults.
+  #   4. identity               — the code itself, unchanged.
+  #
+  # == The parent walk (#parent_of)
+  #
+  # `parent:` is a DESCENT edge ("this lineage continues from that one"),
+  # kept strictly apart from stage succession (carried by each stage's `ord`,
+  # never by parent links). Walk rule (nabu-lects docs/schema.md, verbatim):
+  # a staged lect inherits its ANCHOR's parent unless the registry declares
+  # one on the lect itself (reserved for a future per-stage `parent:`, not
+  # present in the v1 data — the anchor-level edge is what exists today).
+  class Lects
+    # One resolved lect. +mode+ is :reconstructed iff the referenced stage
+    # carries `mode: reconstructed` upstream (a bare anchor, having no
+    # stage, is always :attested — reconstruction is always a property of a
+    # stage). +ord+/+band+ come from the stage when one is referenced, else
+    # from the anchor (only bare anchors without stages carry their own
+    # band in practice — see lects.yml's "non"/"ang"/"fro" rows).
+    Record = Data.define(:id, :anchor, :stage, :variety, :ortho, :name, :mode, :ord, :band)
+
+    LECTS_FILE = "lects.yml"
+    CODEMAP_FILE = "codemap.yml"
+    SLUG = "nabu-lects"
+
+    # anchor: 2-3 lowercase letters, optionally hyphen-extended (roa-opt,
+    # ine-bsl). stage/variety: 2-5 lowercase letters. ortho: 2-8 lowercase
+    # alphanumerics starting with a letter. Axes strictly ordered (":" before
+    # "/" before "@") per nabu-lects docs/schema.md.
+    ID_PATTERN = %r{\A(?<anchor>[a-z]{2,3}(?:-[a-z]{2,5})?)
+                     (?::(?<stage>[a-z]{2,5}))?
+                     (?:/(?<variety>[a-z]{2,5}))?
+                     (?:@(?<ortho>[a-z][a-z0-9]{1,7}))?\z}x
+
+    # Grammar-only parse (no registry lookup): the anchor/stage/variety/ortho
+    # capture groups, or nil for a string that does not match the identifier
+    # grammar at all.
+    def self.parse_id(id)
+      ID_PATTERN.match(id.to_s)
+    end
+
+    # Build a resolver from a canonical/nabu-lects-shaped directory (lects.yml
+    # + codemap.yml). +overrides_path+ points at the Nabu-authored per-source
+    # override file (nil -> no overrides, the bare-module posture); +overlay+
+    # is the per-document seam (P57-3: constructor-only, no storage yet).
+    def self.load(dir, overrides_path: nil, overlay: {})
+      new(
+        anchors: read_yaml(File.join(dir, LECTS_FILE)).fetch("anchors", {}),
+        codemap: read_yaml(File.join(dir, CODEMAP_FILE)).fetch("map", {}),
+        overrides: overrides_path ? read_yaml(overrides_path).fetch("sources", {}) : {},
+        overlay: overlay
+      )
+    end
+
+    # Feature-detect the resolver from the owner's canonical tree: nil when
+    # `nabu sync nabu-lects` has not landed both files, so a corpus without
+    # the module behaves byte-identically (the cldf-spine/nabu-data posture).
+    # NEVER raises on absence.
+    def self.load_default(config: Nabu::Config.load, overlay: {})
+      dir = File.join(config.canonical_dir, SLUG)
+      return nil unless File.file?(File.join(dir, LECTS_FILE)) && File.file?(File.join(dir, CODEMAP_FILE))
+
+      load(dir, overrides_path: config.lect_overrides_path, overlay: overlay)
+    end
+
+    def self.read_yaml(path)
+      File.file?(path) ? (YAML.safe_load_file(path) || {}) : {}
+    end
+    private_class_method :read_yaml
+
+    def initialize(anchors:, codemap:, overrides: {}, overlay: {})
+      @anchors = anchors
+      @codemap = codemap
+      @overrides = overrides
+      @overlay = overlay
+    end
+
+    # +id+ -> a Record, or nil when +id+ does not match the identifier
+    # grammar, OR references an anchor/stage/variety/ortho tag not defined in
+    # the registry (an undefined tag is never silently coerced).
+    def lect(id)
+      match = self.class.parse_id(id) or return nil
+      anchor = @anchors[match[:anchor]] or return nil
+
+      stage = match[:stage] && (anchor.dig("stages", match[:stage]) or return nil)
+      variety = match[:variety] && (anchor.dig("varieties", match[:variety]) or return nil)
+      ortho = match[:ortho] && (anchor.dig("orthos", match[:ortho]) or return nil)
+
+      Record.new(
+        id: id.to_s, anchor: match[:anchor], stage: match[:stage], variety: match[:variety],
+        ortho: match[:ortho], name: compose_name(anchor, stage, variety, ortho),
+        mode: stage && stage["mode"] == "reconstructed" ? :reconstructed : :attested,
+        ord: stage && stage["ord"], band: stage ? stage["band"] : anchor["band"]
+      )
+    end
+
+    # true iff +id+ parses and its stage carries `mode: reconstructed`.
+    # false for a bare anchor, an attested stage, or an unparseable/undefined
+    # id (never raises).
+    def reconstructed?(id)
+      lect(id)&.mode == :reconstructed
+    end
+
+    # +code+ -> lect id STRING, by precedence (class doc): per-document
+    # overlay (+urn+) > per-source override (+source+) > codemap > identity.
+    # Always returns a string — a code with no mapping anywhere resolves to
+    # itself (the identity default rule).
+    def resolve(code, source: nil, urn: nil)
+      code = code.to_s
+
+      per_document = urn && @overlay[urn]
+      return per_document[code] if per_document&.key?(code)
+
+      per_source = source && @overrides[source.to_s]
+      return per_source[code] if per_source&.key?(code)
+
+      @codemap.fetch(code, code)
+    end
+
+    # The descent edge for +id+ (class doc, "the parent walk"): a staged
+    # lect inherits its anchor's `parent:` unless the registry declares one
+    # on the lect itself (reserved for a future per-stage override). Returns
+    # a lect id, or nil at a root (no parent edge) or for an unparseable/
+    # undefined +id+.
+    def parent_of(id)
+      match = self.class.parse_id(id) or return nil
+      anchor = @anchors[match[:anchor]] or return nil
+
+      if match[:stage]
+        stage = anchor.dig("stages", match[:stage]) or return nil
+        return stage["parent"] if stage["parent"]
+      end
+      anchor["parent"]
+    end
+
+    # Every stage of +anchor+ as a Record (id "<anchor>:<tag>"), ord-sorted
+    # (chronological display order — the future card-ladder seam). [] for an
+    # undefined anchor or one with no stages.
+    def stages_of(anchor)
+      entry = @anchors[anchor.to_s] or return []
+      stage_tags = entry["stages"] || {}
+      stage_tags.keys.filter_map { |tag| lect("#{anchor}:#{tag}") }.sort_by { |record| record.ord || 0 }
+    end
+
+    private
+
+    # The human name: the stage's (already a full title, "Medieval Latin")
+    # or else the anchor's; a variety appends its own full title; an ortho
+    # wraps as a parenthetical modifier.
+    def compose_name(anchor, stage, variety, ortho)
+      base = stage ? stage.fetch("name") : anchor.fetch("name")
+      base = "#{base} — #{variety.fetch('name')}" if variety
+      ortho ? "#{base} (#{ortho.fetch('name')})" : base
+    end
+  end
+end

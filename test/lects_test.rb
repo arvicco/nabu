@@ -1,0 +1,317 @@
+# frozen_string_literal: true
+
+require "test_helper"
+require "tmpdir"
+require "fileutils"
+
+# Nabu::Lects (P57-3) — the nabu-lects consume seam: a pure READ resolver
+# over the lect registry (anchor x stage x variety x orthography) and its
+# universal codemap, layered with Nabu-specific per-source overrides
+# (config/lect_overrides.yml) and a per-document overlay seam. Exercised
+# against a verbatim copy of the real upstream files
+# (test/fixtures/nabu-lects/README.md).
+class LectsTest < Minitest::Test
+  FIXTURES = Nabu::TestSupport.fixtures("nabu-lects")
+  LECT_OVERRIDES_PATH = File.join(Nabu::Config::PROJECT_ROOT, "config", "lect_overrides.yml")
+
+  def lects
+    @lects ||= Nabu::Lects.load(FIXTURES, overrides_path: LECT_OVERRIDES_PATH)
+  end
+
+  # --- #lect: bare anchors -----------------------------------------------
+
+  def test_a_bare_anchor_is_the_whole_span_attested_with_no_ord_or_band
+    ine = lects.lect("ine")
+    assert_equal "ine", ine.anchor
+    assert_nil ine.stage
+    assert_nil ine.variety
+    assert_nil ine.ortho
+    assert_equal "Indo-European", ine.name
+    assert_equal :attested, ine.mode
+    assert_nil ine.ord
+    assert_nil ine.band
+  end
+
+  # A bare anchor CAN carry its own band (non/ang/fro — no stages minted).
+  def test_a_bare_anchor_with_no_stages_carries_its_own_band
+    non = lects.lect("non")
+    assert_equal [800, 1350], non.band
+    assert_nil non.ord
+  end
+
+  # --- #lect: stages -------------------------------------------------------
+
+  def test_a_reconstructed_stage_carries_mode_and_ord_from_the_registry
+    pie = lects.lect("ine:pro")
+    assert_equal "ine", pie.anchor
+    assert_equal "pro", pie.stage
+    assert_equal "Proto-Indo-European", pie.name
+    assert_equal :reconstructed, pie.mode
+    assert_equal 5, pie.ord
+  end
+
+  # gmq:run is the class-doc pin: real runic inscriptions are ATTESTED
+  # epigraphy filed under a proto-looking tag — mode reads the registry
+  # field, never the "pro"-adjacent tag spelling.
+  def test_an_attested_stage_beside_a_reconstructed_sibling_stays_attested
+    run = lects.lect("gmq:run")
+    assert_equal "Runic Proto-Norse (attested)", run.name
+    assert_equal :attested, run.mode
+    assert_equal 10, run.ord
+    assert_equal [150, 800], run.band
+  end
+
+  def test_stage_name_is_already_the_full_title_no_anchor_prefix
+    assert_equal "Medieval Latin", lects.lect("lat:med").name
+  end
+
+  # --- #lect: varieties and orthographies -----------------------------------
+
+  def test_a_bare_varietied_lect_composes_anchor_and_variety_names
+    vul = lects.lect("lat/vul")
+    assert_equal "lat", vul.anchor
+    assert_nil vul.stage
+    assert_equal "vul", vul.variety
+    assert_equal "Latin — Vulgar Latin (attested substandard)", vul.name
+    assert_equal :attested, vul.mode
+    assert_nil vul.ord
+    assert_nil vul.band, "lat carries no anchor-level band (only its stages do)"
+  end
+
+  def test_a_staged_varietied_lect_composes_all_three
+    ecc = lects.lect("lat:late/ecc")
+    assert_equal "late", ecc.stage
+    assert_equal "ecc", ecc.variety
+    assert_equal "Late Latin — Ecclesiastical Latin", ecc.name
+    assert_equal 30, ecc.ord
+    assert_equal [200, 600], ecc.band
+  end
+
+  def test_an_orthography_wraps_as_a_parenthetical_on_the_staged_name
+    kyu = lects.lect("jpn:mod@kyu")
+    assert_equal "mod", kyu.stage
+    assert_equal "kyu", kyu.ortho
+    assert_equal "Modern Japanese (Kyūjitai (pre-reform character forms))", kyu.name
+  end
+
+  # --- #lect: nil for the unparseable and the undefined ---------------------
+
+  def test_malformed_grammar_is_nil
+    assert_nil lects.lect("LAT")
+    assert_nil lects.lect("lat::med")
+    assert_nil lects.lect("l")
+    assert_nil lects.lect("")
+  end
+
+  def test_an_undefined_anchor_is_nil
+    assert_nil lects.lect("zzz")
+    assert_nil lects.lect("zzz:pro")
+  end
+
+  def test_an_undefined_stage_variety_or_ortho_is_nil
+    assert_nil lects.lect("lat:xyz"), "lat has no xyz stage"
+    assert_nil lects.lect("lat/xyz"), "lat has no xyz variety"
+    assert_nil lects.lect("jpn:mod@xyz"), "jpn has no xyz ortho"
+  end
+
+  # --- #reconstructed? -------------------------------------------------------
+
+  def test_reconstructed_predicate_reads_the_stage_mode_field
+    assert lects.reconstructed?("ine:pro")
+    refute lects.reconstructed?("gmq:run")
+    refute lects.reconstructed?("lat"), "a bare anchor (no stage) is never reconstructed"
+  end
+
+  def test_reconstructed_predicate_is_false_not_raising_on_bad_ids
+    refute lects.reconstructed?("totally not a lect id")
+    refute lects.reconstructed?(nil)
+  end
+
+  # --- #resolve: precedence ---------------------------------------------------
+
+  def test_an_unmapped_code_resolves_to_itself
+    assert_equal "srd", lects.resolve("srd")
+  end
+
+  def test_a_codemap_key_resolves_to_its_universal_default
+    assert_equal "grc:byz", lects.resolve("gkm")
+    assert_equal "lat/vul", lects.resolve("la-vul")
+  end
+
+  # The class-doc precedence chain, all four tiers on one code (the real
+  # ratified P57-3 overrides): per-document overlay > per-source override >
+  # codemap > identity.
+  def test_resolve_precedence_overlay_over_source_over_codemap_over_identity
+    overlay = { "urn:nabu:derom:test:1" => { "la-vul" => "lat:arch" } }
+    overlaid = Nabu::Lects.load(FIXTURES, overrides_path: LECT_OVERRIDES_PATH, overlay: overlay)
+
+    assert_equal "lat/vul", overlaid.resolve("la-vul"), "no source, no urn -> the universal codemap default"
+    assert_equal "roa:pro", overlaid.resolve("la-vul", source: "derom"),
+                 "the ratified derom override wins over the codemap default"
+    assert_equal "lat:arch", overlaid.resolve("la-vul", source: "derom", urn: "urn:nabu:derom:test:1"),
+                 "the per-document overlay wins over the per-source override"
+    assert_equal "roa:pro", overlaid.resolve("la-vul", source: "derom", urn: "urn:nabu:derom:test:2"),
+                 "a urn absent from the overlay falls through to the per-source override"
+  end
+
+  def test_the_second_ratified_override_rundata_gmq_pro
+    assert_equal "gmq:pro", lects.resolve("gmq-pro"), "the universal default is the reconstructed proto stage"
+    assert_equal "gmq:run", lects.resolve("gmq-pro", source: "rundata"),
+                 "rundata's urnordisk inscriptions are attested epigraphy, not the reconstruction"
+  end
+
+  def test_a_source_with_no_override_falls_through_to_the_codemap
+    assert_equal "gmq:pro", lects.resolve("gmq-pro", source: "some-other-source")
+  end
+
+  def test_resolve_without_an_overrides_path_never_applies_any_override
+    bare = Nabu::Lects.load(FIXTURES)
+    assert_equal "lat/vul", bare.resolve("la-vul", source: "derom"),
+                 "no overrides_path loaded -> the source override never fires"
+  end
+
+  # --- #parent_of: the descent walk -------------------------------------------
+
+  def test_a_root_anchor_has_no_parent
+    assert_nil lects.parent_of("ine")
+  end
+
+  def test_a_family_anchor_chains_to_its_parent_bare
+    assert_equal "ine", lects.parent_of("gem")
+    assert_equal "gem", lects.parent_of("gmw")
+  end
+
+  def test_a_staged_lect_inherits_its_anchors_parent
+    assert_equal "gem", lects.parent_of("gmw:pro"),
+                 "gmw:pro declares no parent of its own -> inherits gmw's anchor-level parent"
+  end
+
+  def test_a_lect_with_a_staged_parent_edge
+    assert_equal "itc:pro", lects.parent_of("lat")
+  end
+
+  # non's own parent is the ATTESTED runic stage (most-specific-ancestor
+  # rule); isl's stages inherit non's parent via the same walk.
+  def test_the_most_specific_ancestor_and_its_stage_inheritance
+    assert_equal "gmq:run", lects.parent_of("non")
+    assert_equal "non", lects.parent_of("isl")
+    assert_equal "non", lects.parent_of("isl:old"),
+                 "isl:old declares no parent of its own -> inherits isl's anchor-level parent"
+  end
+
+  def test_parent_of_is_nil_for_the_unparseable_and_the_undefined
+    assert_nil lects.parent_of("zzz")
+    assert_nil lects.parent_of("lat:xyz")
+    assert_nil lects.parent_of("not a lect id")
+  end
+
+  # --- #stages_of --------------------------------------------------------------
+
+  def test_stages_of_are_ord_sorted
+    assert_equal %w[lat:arch lat:cla lat:late lat:med lat:ren lat:new],
+                 lects.stages_of("lat").map(&:id)
+    assert_equal %w[gmq:pro gmq:run], lects.stages_of("gmq").map(&:id)
+  end
+
+  def test_stages_of_is_empty_for_an_anchor_with_no_stages_or_undefined
+    assert_empty lects.stages_of("ang")
+    assert_empty lects.stages_of("zzz")
+  end
+
+  # --- loading shapes ------------------------------------------------------------
+
+  def test_a_missing_module_tree_loads_empty
+    Dir.mktmpdir do |dir|
+      empty = Nabu::Lects.load(dir)
+      assert_nil empty.lect("ine")
+      assert_equal "srd", empty.resolve("srd")
+      assert_equal "la-vul", empty.resolve("la-vul"), "an empty codemap resolves every code to itself"
+    end
+  end
+
+  def test_load_default_feature_detects_the_canonical_tree
+    Dir.mktmpdir do |root|
+      # A real (if bare) config_path — so config.lect_overrides_path resolves
+      # UNDER this tmp root, never CWD (unlike the "(test)" placeholder the
+      # form_lemma/cldf_spine siblings use, which have no file at that path
+      # to begin with).
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"),
+                                db_dir: File.join(root, "db"),
+                                sources_path: File.join(root, "sources.yml"),
+                                config_path: File.join(root, "config", "nabu.yml"))
+      assert_nil Nabu::Lects.load_default(config: config),
+                 "no canonical/nabu-lects tree -> nil (the cldf-spine/nabu-data posture)"
+      dest = File.join(root, "canonical", "nabu-lects")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(Dir[File.join(FIXTURES, "*")], dest)
+
+      live = Nabu::Lects.load_default(config: config)
+      refute_nil live
+      assert_equal "Indo-European", live.lect("ine").name
+      assert_equal "lat/vul", live.resolve("la-vul", source: "derom"),
+                   "no config/lect_overrides.yml under this tmp root -> the codemap default only"
+    end
+  end
+
+  def test_load_default_reads_the_real_lect_overrides_path
+    Dir.mktmpdir do |root|
+      FileUtils.mkdir_p(File.join(root, "config"))
+      FileUtils.cp(LECT_OVERRIDES_PATH, File.join(root, "config", "lect_overrides.yml"))
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: File.join(root, "sources.yml"),
+                                config_path: File.join(root, "config", "nabu.yml"))
+      dest = File.join(root, "canonical", "nabu-lects")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(Dir[File.join(FIXTURES, "*")], dest)
+
+      live = Nabu::Lects.load_default(config: config)
+      assert_equal "roa:pro", live.resolve("la-vul", source: "derom")
+    end
+  end
+
+  # --- Nabu::Lects.parse_id: the grammar utility --------------------------------
+
+  def test_parse_id_captures_every_axis
+    match = Nabu::Lects.parse_id("lat:late/ecc@foo1")
+    assert_equal "lat", match[:anchor]
+    assert_equal "late", match[:stage]
+    assert_equal "ecc", match[:variety]
+    assert_equal "foo1", match[:ortho]
+  end
+
+  def test_parse_id_is_nil_for_ungrammatical_input
+    assert_nil Nabu::Lects.parse_id("LAT")
+    assert_nil Nabu::Lects.parse_id("lat/med:foo")
+  end
+
+  # --- feature-detection conformance (P57-3 point 6) ----------------------------
+
+  # The absence contract, stated directly: no canonical/nabu-lects tree ->
+  # nil, never raises. (test_load_default_feature_detects_the_canonical_tree
+  # above exercises the same fact as its opening assertion; this pins it as
+  # its own named contract per the packet.)
+  def test_load_default_returns_nil_without_raising_when_canonical_absent
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: File.join(root, "sources.yml"),
+                                config_path: File.join(root, "config", "nabu.yml"))
+      assert_nil Nabu::Lects.load_default(config: config)
+    end
+  end
+
+  # Consumers arrive at P57-4 — for now, nothing outside this file calls
+  # Nabu::Lects. Guards against silent early wiring drifting ahead of the
+  # packet split (doc-comment mentions of the class name are fine; only an
+  # actual invocation trips this).
+  def test_no_production_callsite_calls_lects_yet
+    lib_root = File.expand_path("../lib", __dir__)
+    this_file = File.join(lib_root, "nabu", "lects.rb")
+    pattern = /Nabu::Lects\.(load_default|load|new)\b/
+
+    offenders = Dir[File.join(lib_root, "**", "*.rb")]
+                .reject { |path| path == this_file }
+                .select { |path| File.read(path).match?(pattern) }
+    assert_empty offenders, "P57-4 wires the first consumer(s) — no lib file but lects.rb itself " \
+                            "should call Nabu::Lects yet"
+  end
+end
