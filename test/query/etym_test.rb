@@ -377,8 +377,8 @@ module Query
       assert_equal "nc", amsa.license_class
       assert_equal "ὦμος", amsa.matched_reflex.word
       cognates = amsa.cognates.map { |view| [view.lang_code, view.word] }
-      assert_includes cognates, %w[Goth. amsa]
-      assert_includes cognates, %w[Lat. humerus]
+      assert_includes cognates, %w[got amsa], "P57-5: lang_code is the resolved catalog tag, not `Goth.`"
+      assert_includes cognates, %w[lat humerus]
     end
 
     # P18-3: MW comparanda duplicated WITHIN one entry (a 19th-century
