@@ -39,3 +39,11 @@ files:
       blocks 1, 2, 3 and 13 (charters 1-3 with text, charter 13 an empty-tenor
       deperditum) spliced verbatim in file order, </teiCorpus> appended; no
       kept line altered. See README.md.
+  - path: bsb00000786/bsb00000786.xml
+    url: https://data.mgh.de/openmgh/bsb00000786.zip
+    whole: false
+    trim: >-
+      none to the XML itself — the file is the upstream zip's single member
+      bsb00000786.xml, extracted whole (the raw GET body is the zip, so no
+      byte-compare). Retrieved 2026-08-02 (P56-3, the second wave).
+    provenance: single member of the upstream zip, extracted whole
