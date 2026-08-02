@@ -212,17 +212,17 @@ class StarlingTest < Minitest::Test
 
   def test_germet_single_language_columns_mint_reflex_rows_that_join_the_gold_codes
     reflexes = parse("starling-germet").entries.to_h { |e| [e.entry_id, e] }["390"].reflexes
-    assert_equal [%w[GOT got], %w[ONORD non], %w[NORW no], %w[SWED sv], %w[DAN da],
-                  %w[OENGL ang], %w[OFRIS ofs], %w[OSAX osx], %w[MDUTCH dum], %w[DUTCH nl],
-                  %w[MLG gml], %w[OHG goh], %w[MHG gmh], %w[HG de]],
-                 reflexes.map { |r| [r.lang_code, r.language] },
-                 "lang_code = upstream column verbatim; language = catalog gold tag (got/ang) " \
-                 "or the Wiktionary code the kaikki crosswalk speaks"
+    assert_equal %w[got non no sv da ang ofs osx dum nl gml goh gmh de],
+                 reflexes.map(&:lang_code),
+                 "lang_code = the RESOLVED catalog tag (P57-5: the upstream column siglum used to " \
+                 "leak through verbatim — GOT/ONORD/… — even though the adapter already resolved " \
+                 "the proper code into `language`; now lang_code == language)"
+    assert_equal reflexes.map(&:language), reflexes.map(&:lang_code), "lang_code and language now agree"
     words = reflexes.to_h { |r| [r.lang_code, r] }
-    assert_equal "hals", words["GOT"].word
-    assert_equal "heals", words["OENGL"].word, "the leading citation form only"
-    assert_equal Nabu::Normalize.search_form("heals", language: "ang"), words["OENGL"].word_folded
-    assert_equal "Gothic", words["GOT"].lang_name, "the .inf field alias feeds the language census"
+    assert_equal "hals", words["got"].word
+    assert_equal "heals", words["ang"].word, "the leading citation form only"
+    assert_equal Nabu::Normalize.search_form("heals", language: "ang"), words["ang"].word_folded
+    assert_equal "Gothic", words["got"].lang_name, "the .inf field alias feeds the language census"
   end
 
   # The censused stop-token gate (P23-0): germet cells that LEAD with a
@@ -242,8 +242,8 @@ class StarlingTest < Minitest::Test
   def test_variety_ambiguous_columns_stay_body_only
     entry = parse("starling-germet").entries.first
     assert_includes entry.body, "Old Franconian: ONFrank ēr"
-    refute_includes entry.reflexes.map(&:lang_code), "OLFRANK"
-    got = entry.reflexes.find { |r| r.lang_code == "GOT" }
+    refute_includes entry.reflexes.map(&:lang_code), "OLFRANK", "OLFRANK never resolves — mints no row at all"
+    got = entry.reflexes.find { |r| r.lang_code == "got" }
     assert_equal "air", got.word, "the clean columns of the same record still mint"
   end
 
@@ -259,8 +259,9 @@ class StarlingTest < Minitest::Test
     assert_includes entry.body, "Comments: kraklan 'breast'"
     assert_includes entry.body, "Indo-European etymology: #562",
                     "PRNUM crosslinks into the piet shelf (both ways: piet #562 BALTNUM=1634)"
-    assert_equal [%w[LITH lt], %w[LETT lv]], entry.reflexes.map { |r| [r.lang_code, r.language] },
-                 "OLITH/OPRUS are empty here — the minting columns speak Wiktionary codes"
+    assert_equal %w[lt lv], entry.reflexes.map(&:lang_code),
+                 "OLITH/OPRUS are empty here; lang_code is now the RESOLVED code (P57-5), " \
+                 "not the upstream LITH/LETT siglum"
     assert_equal "kãklas", entry.reflexes.first.word
   end
 
@@ -305,14 +306,14 @@ class StarlingTest < Minitest::Test
 
   def test_kart_single_language_columns_mint_reflex_rows
     entry = parse("starling-kart").entries.to_h { |e| [e.entry_id, e] }["1"]
-    assert_equal [%w[GRU ka], %w[MEG xmf], %w[SVA sva], %w[LAZ lzz]],
-                 entry.reflexes.map { |r| [r.lang_code, r.language] },
-                 "lang_code = the upstream column verbatim, language = the catalog tag"
+    assert_equal %w[ka xmf sva lzz], entry.reflexes.map(&:lang_code),
+                 "lang_code = the RESOLVED catalog tag (P57-5); language carries the same value"
+    assert_equal entry.reflexes.map(&:language), entry.reflexes.map(&:lang_code)
     words = entry.reflexes.to_h { |r| [r.lang_code, r] }
-    assert_equal "abed-", words["GRU"].word
-    assert_equal "obed-", words["MEG"].word
-    assert_equal "haböd-", words["SVA"].word, "the leading citation form only — variants stay in the body"
-    assert_equal "Georgian", words["GRU"].lang_name, "the .inf field alias feeds the language census"
+    assert_equal "abed-", words["ka"].word
+    assert_equal "obed-", words["xmf"].word
+    assert_equal "haböd-", words["sva"].word, "the leading citation form only — variants stay in the body"
+    assert_equal "Georgian", words["ka"].lang_name, "the .inf field alias feeds the language census"
     assert entry.reflexes.none?(&:borrowed)
   end
 
@@ -339,25 +340,26 @@ class StarlingTest < Minitest::Test
 
   def test_single_language_attested_columns_mint_reflex_rows
     reflexes = parse("starling-piet").entries.to_h { |e| [e.entry_id, e] }["562"].reflexes
-    assert_equal [%w[IND san], %w[LAT lat], %w[ALB sq]],
-                 reflexes.map { |r| [r.lang_code, r.language] },
-                 "lang_code = the upstream column verbatim, language = the catalog tag"
+    assert_equal %w[san lat sq], reflexes.map(&:lang_code),
+                 "lang_code = the RESOLVED catalog tag (P57-5: the piet field siglum — IND/LAT/ALB — " \
+                 "used to leak through verbatim even though `language` already resolved it)"
+    assert_equal reflexes.map(&:language), reflexes.map(&:lang_code)
     words = reflexes.to_h { |r| [r.lang_code, r] }
-    assert_equal "kaṇṭhá-", words["IND"].word, "the leading citation form only — the rest is prose"
-    assert_equal Nabu::Normalize.search_form("kaṇṭha", language: "san"), words["IND"].word_folded,
+    assert_equal "kaṇṭhá-", words["san"].word, "the leading citation form only — the rest is prose"
+    assert_equal Nabu::Normalize.search_form("kaṇṭha", language: "san"), words["san"].word_folded,
                  "member fold strips the trailing stem hyphen and lands on the gold-side §9 key"
-    assert_equal "collus", words["LAT"].word
-    assert_equal "qafɛ", words["ALB"].word
-    assert_equal "Old Indian", words["IND"].lang_name, "the .inf field alias feeds the language census"
+    assert_equal "collus", words["lat"].word
+    assert_equal "qafɛ", words["sq"].word
+    assert_equal "Old Indian", words["san"].lang_name, "the .inf field alias feeds the language census"
     assert words.values.none?(&:borrowed), "piet marks no loans — false is the honest parse"
   end
 
   def test_proto_branch_and_mixed_columns_mint_no_rows_even_when_clean
     entries = parse("starling-piet").entries.to_h { |e| [e.entry_id, e] }
-    assert_equal %w[IND], entries["1501"].reflexes.map(&:lang_code),
+    assert_equal %w[san], entries["1501"].reflexes.map(&:lang_code),
                  "SLAV *sīgātī and GERM *xīg-ia- are Nikolayev-notation branch protoforms — body only"
     assert_includes entries["1501"].body, "Slavic: *sīgātī"
-    assert_equal %w[AVEST], entries["1"].reflexes.map(&:lang_code),
+    assert_equal %w[ae], entries["1"].reflexes.map(&:lang_code),
                  "the Khowar-prefixed IND cell and the transcribed GREEK column mint nothing"
     assert_equal "ayarə", entries["1"].reflexes.first.word
   end
