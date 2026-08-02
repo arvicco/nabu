@@ -24,6 +24,27 @@ custodian of the library of Ashurbanipal at Nineveh — a fitting patron for
 a project whose founding dream included holding the tablets themselves
 (the ORACC shelf now does).
 
+## Nabu publishes data — the project family
+
+The library does not only ingest: since July 2026 Nabu **publishes its
+own derived datasets** to a sister repository,
+[nabu-data](https://github.com/arvicco/nabu-data) — twelve datasets at
+v1.0.0: form-to-lemma tables, orthography and script folds, metrical
+scansions, a Tibetan segmentation layer, the cuneiform value-to-sign
+table, and the first *re-publication* (stable anchors for ACTib's
+segmented Tibetan canon). Everything is plain CSV with Frictionless
+Data Package manifests carrying full derivation provenance — the exact
+upstream corpus version, the producing code version, and a re-runnable
+recipe — with measured quality published in-band, never hidden. CC BY
+4.0 (three share-alike carve-outs, each stated where the consumer
+reads); every dataset's manifest and `sources.bib` credit the upstream
+works it derives from. And the loop runs both ways: Nabu re-ingests
+its own publication as an ordinary source, so three of the twelve
+datasets feed the library's own query surfaces from the published
+files. The second sibling is [Edubba](https://arvicco.github.io/nabu-edubba)
+— the scribal school (the **School ↗** link above): where Nabu curates
+the texts, Edubba teaches the scripts.
+
 ## Why it exists
 
 Three convictions, stated plainly:
