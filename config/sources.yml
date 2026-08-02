@@ -3415,6 +3415,48 @@ cantigas:   # P55-1, 02-sources row 144
   # ~1,680 documents, ~45-50k line passages (fixture mean ~29 lines).
   sync_policy: manual
 
+derom:   # P56-4, 02-sources row 145
+  adapter: Nabu::Adapters::Derom
+  kind: source
+  axes: [romance, etym]   # the Latin→Romance etymological bridge — the romance desk's proto shelf
+  wired: false   # awaiting the owner-fired first crawl (~520 GETs ≈ 9 min at 1 req/s;
+                 # CLAUDE.md checklist §6 — eyeball `nabu define lakt-e` +
+                 # `nabu etym lapte` / `nabu etym cheval`, then flip)
+  # P56-4 (license thread №45-3): DÉRom — Dictionnaire Étymologique Roman
+  # (dir. Éva Buchi & Wolfgang Schweickard; ATILF, CNRS/Université de
+  # Lorraine & Universität des Saarlandes), the reference comparative
+  # reconstruction of Proto-Romance, from the openly downloadable Ortolang
+  # workspace `derom` (ortolang.fr/market/corpora/derom → the
+  # repository.ortolang.fr content API, `latest` root — snapshot 4, market
+  # tag v1, published 2025-07-24). CENSUS (2026-08-02, 21 bounded probes):
+  # FIVE open collections — DÉRom 1/2/3 full articles (110+40+38), 45
+  # renvoi stubs (Mertens 2021 -ura derivatives: gloss + PDF link), 280
+  # "potiches en attente" placeholders (<NonRedige/> — parser-skipped);
+  # collections 4 (future DÉRom 4) + 7 (English articles) are AUTH-GATED
+  # (303 → Keycloak), not crawled. One dictionary (slug derom, language
+  # la-vul — Wiktionary's Vulgar-Latin code, already in the catalog's
+  # reflex code space; DÉRom's doctrine: Proto-Romance IS spoken Latin;
+  # NOT -pro, so the shelf gets the wiktionary-cu treatment: direct reflex
+  # edges, no closure ascent, no display asterisk). Entry per etymon
+  # article (headword = the phonological notation ˈlakt-e; fold drops
+  # stress marks, β→b etc. — upstream's own ASCII filename convention);
+  # cognat sets → dictionary_reflexes (idiome verbatim as lang_code, ISO
+  # mapping for the join: dacoroum.→ron … port.→por; the joint gal./port.
+  # stays display-only). FETCH (DeromFetch, the FOURTH Elephantine/Otdo/
+  # Cantigas HTML-crawl sibling — extraction signal flagged again): 5
+  # listing GETs + per-article GETs at 1 req/s, file-grain resume,
+  # auth-gate/reshape listing defense + non-XML body defense, listed-404
+  # fatal (versioned archive — never censused), attic + breaker. LICENSE
+  # (P56-4 gate, item metadata verbatim in the fixture): CC BY-NC-SA 4.0
+  # ("Licence Creative Commons Attribution - Pas d'Utilisation Commerciale
+  # - Partage dans les Mêmes Conditions 4.0 International", status "Free
+  # for non commercial use") → class nc: ingestible, MCP-EXCLUDED.
+  # EXPECTED FIRST SYNC: 513 documents → ~233 entries (188 full + 45
+  # renvoi; 280 potiches skipped), ~3.5–4.5k reflex rows (fixture mean ~22
+  # signifiants/article over DÉRom-1's densest slice). Next upstream
+  # refresh: September 2026 (É. Buchi, №45-3) — a routine manual re-sync.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
