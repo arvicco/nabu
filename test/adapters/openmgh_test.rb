@@ -12,8 +12,10 @@ require "webmock/minitest"
 # Fixtures: three whole volumes (Einhard's Vita Karoli, MGH SS rer. Germ.
 # 25, Latin; Der Trierer Silvester, MGH Dt. Chron. 1,2, Middle High German;
 # Eugippius' Vita sancti Severini, MGH Auct. ant. 1,2 — the P56-3
-# second-wave shape check) plus a documented trim of the Diplomata volume
-# MGH DD Rudolf. (teiCorpus of per-charter TEI blocks).
+# second-wave shape check) plus documented trims of two Diplomata volumes
+# (teiCorpus of per-charter TEI blocks): MGH DD Rudolf. and MGH DD F. II.
+# Band 3 (bsb00002026 — the bare-header/self-closing-<date/> shape that
+# quarantined the owner's first second-wave sync, 2026-08-02).
 #
 # THE LICENSE (read from the live page AND every volume's own
 # <availability><licence>, 2026-07-25): CC BY 4.0 on the annotations, the
@@ -35,6 +37,7 @@ class OpenmghTest < Minitest::Test
   SILVESTER = "urn:nabu:openmgh:bsb00000776"
   RUDOLFINGER = "urn:nabu:openmgh:bsb00000361"
   EUGIPPIUS = "urn:nabu:openmgh:bsb00000786"
+  FRIDERICI = "urn:nabu:openmgh:bsb00002026"
 
   def conformance_adapter = Nabu::Adapters::Openmgh.new
 
@@ -50,7 +53,7 @@ class OpenmghTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_volume_sorted_by_urn
     refs = adapter.discover(workdir).to_a
-    assert_equal [RUDOLFINGER, EINHARD, SILVESTER, EUGIPPIUS], refs.map(&:id),
+    assert_equal [RUDOLFINGER, EINHARD, SILVESTER, EUGIPPIUS, FRIDERICI], refs.map(&:id),
                  "one document per <bsbid>/<bsbid>.xml, urn urn:nabu:openmgh:<bsbid>, sorted"
     assert(refs.all? { |ref| ref.source_id == "openmgh" })
     assert(refs.all? { |ref| ref.id == adapter.parse(ref).urn },
@@ -162,6 +165,31 @@ class OpenmghTest < Minitest::Test
     assert_equal "Saint-Prex (885) August 13.", document.to_a[1].annotations["date"]
   end
 
+  # P56 hotfix rider (owner's first second-wave sync, 2026-08-02): the three
+  # DD F. II. volumes — bsb00066349 (DD 171-426), bsb00002026 (DD 427-657),
+  # bsb00002027 (DD 658-929), Die Urkunden Friedrichs II. — quarantined "no
+  # citable passages found". Their headers are BARE (empty corpus <title>, no
+  # idnos/editor) and every charter bibl carries a SELF-CLOSING <date/>: the
+  # Reader emits no end event for an empty element, so the header capture
+  # never closed and the entire tenor drained into the date buffer instead of
+  # the passage stream. DD Rudolf. never trips this — its dates are filled.
+  def test_a_self_closing_charter_date_does_not_swallow_the_tenor
+    document = adapter.parse(ref_for(FRIDERICI))
+    assert_equal "lat", document.language
+    assert_equal 3, document.count, "charters 427-429, one tenor passage each"
+    assert_equal ["#{FRIDERICI}:c427", "#{FRIDERICI}:c428", "#{FRIDERICI}:c429"],
+                 document.map(&:urn)
+    first = document.first
+    assert first.text.start_with?("In nomine sancte et individue trinitatis. " \
+                                  "Fridericus divina favente clementia Romanorum rex " \
+                                  "semper augustus et rex Sicilie."),
+           "the tenor is reading text again — including the Ro-/manorum w-pair join"
+    assert_includes first.text, "frater Hermanne magister sacre domus hospitalis Teutonicorum"
+    assert_nil first.annotations["date"], "an empty <date/> yields no date annotation"
+    assert_equal "427", first.annotations["n"]
+    assert_nil document.title, "the DD F. II. corpus header is bare — empty <title>"
+  end
+
   def test_diplomata_corpus_header_feeds_document_title_and_metadata
     document = adapter.parse(ref_for(RUDOLFINGER))
     assert_equal "MGH DD Rudolf.: Die Urkunden der burgundischen Rudolfinger", document.title
@@ -177,14 +205,15 @@ class OpenmghTest < Minitest::Test
     db = store_test_db
     source = create_source(db)
     first = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
-    assert_equal 4, first.added
+    assert_equal 5, first.added
     assert_equal 0, first.errored
-    assert_equal 124, db[:passages].count, "55 Einhard + 34 Silvester + 3 charters + 32 Eugippius"
+    assert_equal 127, db[:passages].count,
+                 "55 Einhard + 34 Silvester + 3 Rudolfinger + 32 Eugippius + 3 Friderici charters"
 
     second = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 0, second.errored
-    assert_equal 4, second.skipped, "a byte-identical reload skips every document"
-    assert_equal 124, db[:passages].count
+    assert_equal 5, second.skipped, "a byte-identical reload skips every document"
+    assert_equal 127, db[:passages].count
     assert_equal [1], db[:passages].distinct.select_map(:revision)
   ensure
     db&.disconnect
