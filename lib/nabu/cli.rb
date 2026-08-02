@@ -2097,6 +2097,7 @@ module Nabu
       fulltext = open_fulltext(config)
       ledger = open_ledger(config)
       @languages = Nabu::Languages.new(catalog: catalog, ledger: ledger)
+      @lects = Nabu::Lects.load_default(config: config)
       query = Nabu::Query::Etym.new(catalog: catalog, fulltext: fulltext)
       results = query.run(lemma, lang: options[:lang], limit: options[:limit].to_i)
       if results.empty?
@@ -2325,7 +2326,8 @@ module Nabu
         raise Thor::Error, "language: give a code (chu, gkm, zle-ort…) or --list" if term.empty?
 
         registry = Nabu::SourceRegistry.load(config.sources_path)
-        print_language_card(term, languages, info, registry: registry)
+        lects = Nabu::Lects.load_default(config: config)
+        print_language_card(term, languages, info, registry: registry, lects: lects)
       end
     ensure
       catalog&.disconnect
@@ -6282,6 +6284,10 @@ module Nabu
       # name per LINE, so the compact rule holds exactly where the owner's
       # pain was; the capped default stays code-only (ten names inline would
       # blow the line) and etym's footer points at `nabu language` instead.
+      # P57-4: when Nabu::Lects is present the label prefers the RESOLVED
+      # lect id + its composed registry name ("[grc:byz · Byzantine Greek]"
+      # for gkm — the codemap default) over the old kaikki-census reading;
+      # absent Lects, or a resolved id with no registry entry, unchanged.
       def print_reflexes_expanded(rest)
         say "other reflexes (not attested here) — all #{rest.size}, grouped by language:"
         rest.group_by(&:lang_code).each do |lang_code, group|
@@ -6290,6 +6296,11 @@ module Nabu
       end
 
       def reflex_group_label(lang_code)
+        if @lects
+          resolved = @lects.resolve(lang_code)
+          lect = @lects.lect(resolved)
+          return "[#{resolved} · #{lect.name}]" if lect
+        end
         name = @languages&.name(lang_code)
         name ? "[#{lang_code} · #{name}]" : "[#{lang_code}]"
       end
@@ -6360,9 +6371,24 @@ module Nabu
 
       def etym_entry_line(result)
         via = result.matched_reflex
-        prefix = via ? "#{via.word} [#{via.language}]#{' (loan)' if via.borrowed} → " : ""
-        "#{prefix}#{result.headword} [#{result.language}] — #{result.dictionary_title} " \
-          "[#{result.license_class}]"
+        prefix =
+          if via
+            "#{via.word} [#{lect_bracket(via.language, via.lect_id, via.lect_name)}]" \
+              "#{' (loan)' if via.borrowed} → "
+          else
+            ""
+          end
+        "#{prefix}#{result.headword} [#{lect_bracket(result.language, result.lect_id, result.lect_name)}] — " \
+          "#{result.dictionary_title} [#{result.license_class}]"
+      end
+
+      # P57-4 (etym display through the mapping): when Nabu::Lects is
+      # present AND the resolved id has a registry entry, render "id ·
+      # name" instead of the bare stored code — display-only, the raw code
+      # is never touched. Absent either condition, the bracket is exactly
+      # the raw code, unchanged.
+      def lect_bracket(code, lect_id, lect_name)
+        lect_id && lect_name ? "#{lect_id} · #{lect_name}" : code
       end
 
       # -- language (P18-4, rehomed P19-1): the code desk reference ---------------
@@ -6393,16 +6419,20 @@ module Nabu
       # The card: headline (code — name), family line, curated context (or
       # the family's, labeled; or an honest absence), accreted extra-kind
       # notes (P18-5 — "iecor: IE-CoR variety: …", one line per kind), then
-      # live relevance with zero fields suppressed. An unknown code misses
-      # honestly, with a family hint when the prefix is a known family.
-      def print_language_card(code, languages, info, registry: nil)
+      # live relevance with zero fields suppressed, then the P57-4 stage
+      # ladder (when Lects is present and the anchor has registered stages —
+      # card-worthy on its own even when nothing else about the bare code is
+      # curated: a real ladder is content, not a miss). An unknown code
+      # misses honestly, with a family hint when the prefix is a known family.
+      def print_language_card(code, languages, info, registry: nil, lects: nil)
         name = languages.name(code)
         context = languages.context(code)
         extras = languages.extra_notes(code)
         fallback = languages.family_fallback(code)
         relevance = info&.relevance(code)
         held = relevance && !relevance.empty?
-        return print_language_miss(code, fallback) unless name || context || held || extras.any?
+        stages = lects&.stages_of(code) || []
+        return print_language_miss(code, fallback) unless name || context || held || extras.any? || stages.any?
 
         say "#{code} — #{name || '(no name in the held kaikki extracts)'}"
         print_language_family(code, languages, fallback)
@@ -6411,6 +6441,42 @@ module Nabu
         print_language_witnesses(code, languages)
         print_language_relevance(code, relevance) if relevance
         print_language_axes(code, info, registry)
+        print_language_stage_ladder(code, stages, lects, info)
+      end
+
+      # P57-4: the stage ladder — every registered stage of +code+ (ord-
+      # sorted, already Nabu::Lects#stages_of's contract), each with its
+      # band and LIVE holdings: every (language, source) pair the catalog
+      # actually carries, resolved through Nabu::Lects#resolve and grouped
+      # by resolved lect. A bare-anchor resolution (no stage of its own —
+      # still filed under the anchor itself, or reached one whose stage this
+      # card does not list) groups under one honest "unstaged" line. A
+      # resolution to a DIFFERENT anchor entirely (derom's la-vul -> roa:pro)
+      # never enters this ladder — it is a different code's holdings.
+      # Reconstructed stages (registry mode: reconstructed) carry the same
+      # leading asterisk the etym/define shelves use.
+      def print_language_stage_ladder(code, stages, lects, info)
+        return if stages.empty? || !info
+
+        totals = Hash.new(0)
+        info.language_source_pairs.each do |(language, source_slug), count|
+          resolved = lects.resolve(language, source: source_slug)
+          match = Nabu::Lects.parse_id(resolved)
+          next unless match && match[:anchor] == code.to_s
+
+          key = match[:stage] ? "#{code}:#{match[:stage]}" : :unstaged
+          totals[key] += count
+        end
+        return if totals.values.sum.zero?
+
+        say "  stages:"
+        stages.each do |stage|
+          star = stage.mode == :reconstructed ? "*" : ""
+          band = stage.band ? " (#{Nabu::Timeline.format_span(stage.band[0], stage.band[1])})" : ""
+          say "    #{star}#{stage.stage}  #{stage.name}#{band} — #{plural(totals[stage.id], 'document')}"
+        end
+        unstaged = totals[:unstaged]
+        say "    unstaged  — #{plural(unstaged, 'document')}" if unstaged.positive?
       end
 
       # P48-r3: the related research desks — every axis whose member

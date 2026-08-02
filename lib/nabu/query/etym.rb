@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "../lects"
 require_relative "../normalize"
 require_relative "../store/reflex_roots_indexer"
 require_relative "reflex_views"
@@ -40,25 +41,45 @@ module Nabu
       # How the walk entered this entry: the reflex that matched the query
       # (nil for direct asterisk lookups). +borrowed+ is that edge's loan
       # flag (true/false, nil when the row predates the flag reparse).
-      MatchedVia = Data.define(:language, :word, :roman, :borrowed)
+      # +lect_id+/+lect_name+ (P57-4, display-only): the resolved nabu-lects
+      # id and its composed registry name for +language+, or nil/nil when
+      # Lects is absent OR the resolved id has no registry entry (an honest
+      # miss — e.g. a reflex language never minted as a lects.yml anchor).
+      # The raw stored +language+ is never touched.
+      MatchedVia = Data.define(:language, :word, :roman, :borrowed, :lect_id, :lect_name) do
+        def initialize(lect_id: nil, lect_name: nil, **rest) = super(**rest, lect_id: lect_id, lect_name: lect_name)
+      end
 
       # One entry on the walk. +headword+ carries the display asterisk
-      # (-pro shelves only); +cognates+ are ReflexViews::View values in
-      # stored order; +ancestors+ are Results one shelf-visited hop up,
-      # recursively (empty when no unvisited shelf names this entry).
-      # +edge_borrowed+ is the loan flag of the reflex edge CONNECTING this
-      # entry to the descendant it was reached from — nil on top-level
-      # results (no connecting edge; the direct edge's flag lives on
-      # matched_reflex).
+      # (P57-4: earned via Nabu::Lects#reconstructed? when present, the old
+      # "-pro shelf" string test as fallback — #reconstructed_language?);
+      # +cognates+ are ReflexViews::View values in stored order; +ancestors+
+      # are Results one shelf-visited hop up, recursively (empty when no
+      # unvisited shelf names this entry). +edge_borrowed+ is the loan flag
+      # of the reflex edge CONNECTING this entry to the descendant it was
+      # reached from — nil on top-level results (no connecting edge; the
+      # direct edge's flag lives on matched_reflex). +lect_id+/+lect_name+
+      # (P57-4, display-only) mirror MatchedVia's, resolved for +language+
+      # WITH its +source_slug+ (the dictionary's own source — the per-source
+      # override seam).
       Result = Data.define(:urn, :dictionary_slug, :dictionary_title, :language,
                            :headword, :gloss, :license, :license_class, :source_slug,
-                           :matched_reflex, :edge_borrowed, :cognates, :ancestors)
+                           :matched_reflex, :edge_borrowed, :cognates, :ancestors,
+                           :lect_id, :lect_name) do
+        def initialize(lect_id: nil, lect_name: nil, **rest) = super(**rest, lect_id: lect_id, lect_name: lect_name)
+      end
 
       DEFAULT_LIMIT = 5
 
-      def initialize(catalog:, fulltext: nil)
+      # +lects+ (P57-4) is the recon-predicate/display-mapping seam: :auto
+      # feature-detects Nabu::Lects.load_default LAZILY on first use (the
+      # define.rb/search.rb :auto contract — absent canonical/nabu-lects,
+      # byte-identical behavior), a loaded Nabu::Lects (tests, or a caller
+      # that already resolved one), or nil (the bare fallback, forced).
+      def initialize(catalog:, fulltext: nil, lects: :auto)
         @catalog = catalog
         @views = ReflexViews.new(catalog: catalog, fulltext: fulltext)
+        @lects = lects
       end
 
       def run(lemma, lang: nil, limit: DEFAULT_LIMIT)
@@ -138,9 +159,13 @@ module Nabu
                               *borrowed_select)
                       .all
         rows.uniq { |row| row.fetch(:entry_row_id) }.first(limit).map do |row|
+          # No source is known for a reflex row's OWN language (reflexes
+          # carry no source column — the per-source override seam cannot
+          # engage here; codemap/identity only, class doc).
+          lect = lect_display(row.fetch(:reflex_language), source: nil)
           [row, MatchedVia.new(language: row.fetch(:reflex_language),
                                word: row.fetch(:reflex_word), roman: row.fetch(:reflex_roman),
-                               borrowed: row[:reflex_borrowed])]
+                               borrowed: row[:reflex_borrowed], **lect)]
         end
       end
 
@@ -156,17 +181,23 @@ module Nabu
           end
       end
 
-      # Direct `*headword` lookup — reconstruction shelves only (they are the
-      # ones whose entries carry reflexes; the -pro language scope matches
-      # Define's asterisk convention).
+      # Direct `*headword` lookup — reconstruction shelves only. P57-4: with
+      # Lects present the SQL "-pro" scope is dropped in favor of a Ruby-side
+      # filter over #reconstructed_language? (the class-doc closure-ascent
+      # correction — a headword_folded hit is already narrow, so loading the
+      # small candidate set before filtering costs nothing measurable);
+      # absent Lects, the old SQL scope is untouched (the fallback, forced).
       def proto_rows_by_headword(headword, limit:)
-        entry_dataset
-          .where(Sequel[:dictionary_entries][:headword_folded] => headword_variants(headword))
-          .where(Sequel.like(Sequel[:dictionaries][:language], "%-pro"))
-          .order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
-          .limit(limit)
-          .select(*entry_columns)
-          .all
+        dataset = entry_dataset
+                  .where(Sequel[:dictionary_entries][:headword_folded] => headword_variants(headword))
+        dataset = dataset.where(Sequel.like(Sequel[:dictionaries][:language], "%-pro")) unless lects_seam
+        rows = dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
+                      .select(*entry_columns)
+                      .all
+        if lects_seam
+          rows = rows.select { |row| reconstructed_language?(row.fetch(:language), source: row.fetch(:source_slug)) }
+        end
+        rows.first(limit)
       end
 
       # Folded lookup variants, trailing-hyphen tolerant (P14-10): a
@@ -239,16 +270,57 @@ module Nabu
           source_slug: row.fetch(:source_slug),
           matched_reflex: matched, edge_borrowed: edge_borrowed,
           cognates: @views.for_entry(row.fetch(:entry_row_id)),
-          ancestors: row.fetch(:headword_folded) ? ancestors_of(row, visited) : []
+          ancestors: row.fetch(:headword_folded) ? ancestors_of(row, visited) : [],
+          **lect_display(row.fetch(:language), source: row.fetch(:source_slug))
         )
       end
 
-      # The display asterisk is the reconstruction convention — earned only by
-      # the -pro shelves (P16-5). An attested (wiktionary-cu) entry on the
-      # walk is attested, not reconstructed, and must not read as one.
+      # The display asterisk is the reconstruction convention, earned by
+      # #reconstructed_language? (P57-4: Lects#reconstructed? when present,
+      # the old "-pro shelf" string test as fallback). An attested
+      # (wiktionary-cu) entry on the walk is attested, not reconstructed,
+      # and must not read as one.
       def display_headword(row)
         headword = row.fetch(:headword)
-        row.fetch(:language).to_s.end_with?("-pro") ? "*#{headword}" : headword
+        reconstructed_language?(row.fetch(:language), source: row.fetch(:source_slug)) ? "*#{headword}" : headword
+      end
+
+      # -- P57-4: the Lects seam (recon predicate by mode + display mapping) -------
+
+      # Feature-detect + memoize (the tibetan_words/:auto contract, Query::Search
+      # precedent): loaded from canonical/nabu-lects on first use, nil while
+      # absent (re-detected per call, so a mid-session `nabu sync nabu-lects`
+      # is picked up without a restart).
+      def lects_seam
+        return @lects unless @lects == :auto
+
+        loaded = Nabu::Lects.load_default
+        @lects = loaded if loaded
+        loaded
+      end
+
+      # THE reconstruction predicate (class doc): resolve +language+ (with
+      # +source+ when known — the per-source override seam) and ask
+      # #reconstructed? when Lects is present; the old "-pro suffix" string
+      # test, UNCHANGED, when it is not (fallback, never removed).
+      def reconstructed_language?(language, source: nil)
+        seam = lects_seam
+        return language.to_s.end_with?("-pro") unless seam
+
+        seam.reconstructed?(seam.resolve(language, source: source))
+      end
+
+      # {lect_id:, lect_name:} for +code+ — both nil when Lects is absent OR
+      # the resolved id has no registry entry (an honest miss, never an
+      # error: e.g. a reflex language nabu-lects has not minted an anchor
+      # for). Display-only; the raw stored code is never touched.
+      def lect_display(code, source: nil)
+        seam = lects_seam
+        return { lect_id: nil, lect_name: nil } unless seam
+
+        resolved = seam.resolve(code, source: source)
+        lect = seam.lect(resolved)
+        { lect_id: lect ? resolved : nil, lect_name: lect&.name }
       end
     end
   end

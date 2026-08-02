@@ -234,5 +234,32 @@ module Query
       assert_equal results, [fallback.relevance("chu"), fallback.held],
                    "the pre-019 fallback must produce identical relevance and held lists"
     end
+
+    # -- P57-4: language_source_pairs, the stage-ladder read -----------------------
+
+    def test_language_source_pairs_groups_by_language_and_source_slug
+      make_document(source: @texts, language: "lat", urn: "urn:nabu:test:lat:1")
+      make_document(source: @texts, language: "lat", urn: "urn:nabu:test:lat:2")
+      make_document(source: @more, language: "lat", urn: "urn:nabu:test:lat:3")
+      make_document(source: @texts, language: "chu", urn: "urn:nabu:test:chu:1")
+      make_document(source: @texts, language: "lat", urn: "urn:nabu:test:lat:w", withdrawn: true)
+
+      pairs = info.language_source_pairs
+      assert_equal 2, pairs.fetch(%w[lat texts]), "two live lat/texts documents"
+      assert_equal 1, pairs.fetch(%w[lat more-texts])
+      assert_equal 1, pairs.fetch(%w[chu texts])
+    end
+
+    def test_language_source_pairs_fallback_without_stats_is_identical
+      make_document(source: @texts, language: "lat", urn: "urn:nabu:test:lat:1", passages: 2)
+      make_document(source: @more, language: "lat", urn: "urn:nabu:test:lat:2")
+
+      with_stats = info.language_source_pairs
+      @catalog.drop_table(:source_stats_languages)
+      @catalog.drop_table(:source_stats)
+      fallback = Nabu::Query::LanguageInfo.new(catalog: @catalog)
+      assert_equal with_stats, fallback.language_source_pairs,
+                   "the pre-019 fallback must produce the identical (language, source) pair counts"
+    end
   end
 end
