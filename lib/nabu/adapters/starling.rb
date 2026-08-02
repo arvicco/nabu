@@ -100,8 +100,10 @@ module Nabu
     # split: SINGLE-LANGUAGE attested columns (HITT/IND/AVEST/ARM/LAT/ALB)
     # mint ONE DictionaryReflex per cell — the leading citation form only,
     # and only when it IS a clean form token (dialect-prefixed cells like
-    # "Khow. yor" and ?-doubt cells mint nothing); lang_code = the upstream
-    # column name verbatim, language = the catalog tag, lang_name = the
+    # "Khow. yor" and ?-doubt cells mint nothing); lang_code = the RESOLVED
+    # catalog tag (P57-5 — the upstream column siglum, ALB/OHG/MEG…, used
+    # to leak through verbatim even though this table already resolves the
+    # proper code; lang_code now equals language), lang_name = the
     # .inf field alias (feeds the language-names census). GREEK is Latin
     # TRANSCRIPTION (ǟ̂ri — script-mismatched against grc gold), SLAV/BALT/
     # GERM are Nikolayev-notation branch PROTOFORMS (their honest lane is
@@ -541,7 +543,7 @@ module Nabu
 
           nfc = Nabu::Normalize.nfc(word)
           Nabu::DictionaryReflex.new(
-            lang_code: column, language: language, word: nfc,
+            lang_code: language, language: language, word: nfc,
             word_folded: reflex_fold(nfc, language),
             borrowed: false, lang_name: name
           )
