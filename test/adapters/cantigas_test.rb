@@ -39,9 +39,16 @@ class CantigasTest < Minitest::Test
     ids = adapter.discover(FIXTURES).map(&:id)
     assert_equal %w[
       urn:nabu:cantigas:1
+      urn:nabu:cantigas:475
+      urn:nabu:cantigas:562
       urn:nabu:cantigas:600
+      urn:nabu:cantigas:959
+      urn:nabu:cantigas:1025
+      urn:nabu:cantigas:1241
       urn:nabu:cantigas:1400
-    ], ids, "numeric order, not string order — cdcant ids are sparse integers"
+      urn:nabu:cantigas:1706
+    ], ids, "numeric order, not string order — cdcant ids are sparse integers (P56-1 " \
+            "added the six recovered quirk pages; quirks/cantiga-1066.html stays undiscovered)"
   end
 
   def test_discovery_skips_counts_the_letter_index_sidecars
@@ -174,6 +181,144 @@ class CantigasTest < Minitest::Test
     assert_equal clean.map(&:text), with_notes.map(&:text)
     assert_equal clean.map(&:annotations), with_notes.map(&:annotations)
     assert_equal clean.metadata, with_notes.metadata
+  end
+
+  # --- the P56-1 quirk pages (the first sync's 7 quarantines, all REAL) ------
+  #
+  # Ground truth from the pages themselves (see fixtures README): on every
+  # gap page the edition's printed every-5th numbers run AHEAD of the
+  # display ordinal, the offset grows ONLY across stanza-break rows, and the
+  # sidebar marks each of them "Refrão" — the edition's numbering counts
+  # refrain lines the page display merges/elides. The parser adopts the
+  # edition's numbering (the urn line IS the edition's number, the packet
+  # invariant kept), makes the jump visible in the line annotations, and
+  # pins the uncounted lines as "number_gap" on the first line after each
+  # gap boundary plus a document-level "number_gaps" total.
+
+  def test_cantiga_475_adopts_the_editions_numbering_across_refrain_gaps
+    document = parse(475)
+    assert_equal 15, document.size, "3 cobras of 5 displayed lines (4 body + 1 merged refrain line)"
+    assert_equal [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17],
+                 document.map { |p| p.annotations["line"] },
+                 "edition numbering adopted: one uncounted refrain line after each cobra"
+    line7 = document.passages.find { |p| p.annotations["line"] == 7 }
+    assert_equal "urn:nabu:cantigas:475:7", line7.urn, "the urn line IS the edition's number"
+    assert_equal 1, line7.annotations["number_gap"],
+                 "the first line after the gap records how many edition lines the display elides"
+    line13 = document.passages.find { |p| p.annotations["line"] == 13 }
+    assert_equal 1, line13.annotations["number_gap"]
+    assert_equal 2, document.metadata["number_gaps"], "document total: 2 uncounted edition lines"
+    assert_equal (0..14).to_a, document.map(&:sequence), "sequence stays the dense display order"
+    assert_equal [1, 2, 3], document.map { |p| p.annotations["stanza"] }.uniq
+    assert_equal "Afonso X", document.metadata["author"]
+  end
+
+  def test_cantiga_959_takes_a_two_line_gap_before_the_finda
+    document = parse(959)
+    assert_equal 22, document.size
+    assert_equal [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 23, 24, 25, 26],
+                 document.map { |p| p.annotations["line"] },
+                 "gaps of 1, 1, then 2 (the printed 25 pins the finda at edition 23-26)"
+    finda_first = document.passages.find { |p| p.annotations["line"] == 23 }
+    assert_equal 2, finda_first.annotations["number_gap"]
+    assert_equal 4, finda_first.annotations["stanza"]
+    assert_equal 4, document.metadata["number_gaps"]
+    assert_equal "urn:nabu:cantigas:959:26", document.passages.last.urn
+  end
+
+  def test_cantiga_1025_gap_opens_once_and_the_unnumbered_finda_keeps_the_offset
+    document = parse(1025)
+    assert_equal 20, document.size
+    assert_equal [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
+                 document.map { |p| p.annotations["line"] },
+                 "one uncounted line after cobra 1 only; later printed 15 verifies the offset held"
+    assert_equal 1, document.metadata["number_gaps"]
+    assert_equal 1, document.passages.find { |p| p.annotations["line"] == 8 }.annotations["number_gap"]
+    assert_equal 4, document.passages.last.annotations["stanza"], "3 cobras + finda"
+  end
+
+  def test_cantiga_1706_the_espuria_fragment_recovers_with_its_rubric
+    document = parse(1706)
+    assert_equal 10, document.size, "a fragment — the last displayed line trails off in (...)"
+    lines = document.map { |p| p.annotations["line"] }
+    assert_equal [1, 2, 3, 4, 5, 6, 7, 8, 10, 11], lines
+    assert_equal 1, document.passages.find { |p| p.annotations["line"] == 10 }.annotations["number_gap"]
+    assert_equal 1, document.metadata["number_gaps"]
+    assert_equal "Espúria", document.metadata["genre"]
+    assert_includes document.metadata["rubric"], "Pergunta que fez Álvaro Afonso"
+    assert_equal "Alvaro Afonso", document.metadata["author"]
+  end
+
+  def test_cantiga_562_skips_the_numbered_but_empty_edition_line_and_records_it
+    document = parse(562)
+    assert_equal 19, document.size, "the numbered-but-textless row 20 yields no passage"
+    assert_equal (1..19).to_a, document.map { |p| p.annotations["line"] },
+                 "numbering stayed consistent — the empty row consumed edition line 20"
+    assert_equal [20], document.metadata["empty_lines"],
+                 "the skipped edition line is recorded, never silently swallowed"
+    refute document.metadata.key?("number_gaps"), "no printed-number gap on this page"
+    assert_equal "ou de me quererdes valer.", document.passages.last.text, "the one-line finda"
+    assert_equal 4, document.passages.last.annotations["stanza"]
+  end
+
+  def test_cantiga_1241_is_honestly_unattributed
+    document = parse(1241)
+    metadata = document.metadata
+    assert metadata["unattributed"], "the page's own [Sem autor atribuído] label, recorded honestly"
+    refute metadata.key?("author"), "no author is minted for an unattributed cantiga"
+    refute metadata.key?("author_id")
+    assert_equal "Amigo", metadata["genre"]
+    assert_equal 18, document.size
+    assert_equal (1..18).to_a, document.map { |p| p.annotations["line"] }, "numbering is clean here"
+  end
+
+  def test_cantiga_1066_text_not_published_upstream_stays_quarantined
+    ref = Nabu::DocumentRef.new(source_id: "cantigas", id: "urn:nabu:cantigas:1066",
+                                path: File.join(FIXTURES, "quirks", "cantiga-1066.html"))
+    error = assert_raises(Nabu::ParseError) { adapter.parse(ref) }
+    assert_match(/Texto ainda não disponível/, error.message,
+                 "the quarantine names the page's own no-text marker — upstream publishes " \
+                 "no text for this cantiga, so it stays quarantined, loudly and specifically")
+  end
+
+  # --- the printed-number cross-check keeps catching real drift --------------
+
+  def synthetic_cantiga(cdcant, rows)
+    body = rows.map do |printed, text|
+      if text == :break
+        "<tr><td>&nbsp;&nbsp;</td></tr>"
+      else
+        "<tr><td></td><td>#{printed}</td><td></td><td class=\"left13\">#{text}</td></tr>"
+      end
+    end.join
+    "<html><body><div id=\"main\"><a href=\"javascript:cantiga1('cantiga_print.asp?" \
+      "cdcant=#{cdcant}');\">x</a><table>#{body}</table></div></body></html>"
+  end
+
+  def assert_number_drift_quarantines(rows, reason)
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, "cantiga-88.html"), synthetic_cantiga(88, rows))
+      ref = Nabu::DocumentRef.new(source_id: "cantigas", id: "urn:nabu:cantigas:88",
+                                  path: File.join(dir, "cantiga-88.html"))
+      error = assert_raises(Nabu::ParseError) { adapter.parse(ref) }
+      assert_match(/printed line number/, error.message, reason)
+    end
+  end
+
+  def test_a_printed_number_ahead_with_no_stanza_boundary_still_quarantines
+    rows = [["", "a"], ["", "b"], ["", "c"], ["", "d"], ["5", "e"],
+            ["", "f"], ["", "g"], ["", "h"], ["10", "i"]]
+    assert_number_drift_quarantines rows,
+                                    "a gap can only open at a stanza boundary; mid-stanza the " \
+                                    "printed number must BE the ordinal — real drift stays loud"
+  end
+
+  def test_a_printed_number_behind_the_ordinal_still_quarantines
+    rows = [["", "a"], ["", "b"], ["", "c"], ["", "d"], ["5", "e"], ["", :break],
+            ["", "f"], ["", "g"], ["", "h"], ["8", "i"]]
+    assert_number_drift_quarantines rows,
+                                    "the edition's numbering never runs BEHIND the display — " \
+                                    "a lower printed number is drift even across a boundary"
   end
 
   # --- identity and shape defenses -------------------------------------------
