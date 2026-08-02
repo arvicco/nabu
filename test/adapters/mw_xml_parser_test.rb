@@ -151,10 +151,39 @@ module Adapters
     def test_the_amsa_etymology_record_mints_five_language_tagged_comparanda
       reflexes = entry("88").reflexes
       triples = reflexes.map { |r| [r.lang_code, r.language, r.word] }
-      assert_equal [%w[Goth. got amsa], ["Gk.", "grc", "ὦμος"], ["Gk.", "grc", "ἄσιλλα"],
-                    %w[Lat. lat humerus], %w[Lat. lat ansa]], triples
+      assert_equal [%w[got got amsa], %w[grc grc ὦμος], %w[grc grc ἄσιλλα],
+                    %w[lat lat humerus], %w[lat lat ansa]], triples,
+                   "P57-5: lang_code is now the RESOLVED catalog tag — MW's own dotted abbreviation " \
+                   "(Goth./Gk./Lat.) used to leak through verbatim even though `language` already " \
+                   "resolved it"
       omos = reflexes.find { |r| r.word == "ὦμος" }
       assert_equal "ωμοσ", omos.word_folded, "the generic fold — final sigma stays (grc rule is query-side)"
+    end
+
+    # P57-5: the ten-entry abbreviation table (mw-survey §4 census), unit-pinned
+    # directly against MwXmlParser::COGNATE_LANGS since the fixture only exercises
+    # three of the ten labels (Goth./Gk./Lat.) end to end. Eight resolve to an
+    # unambiguous ISO code; the two family/period-ambiguous labels get an honest
+    # macro-level call, documented here rather than left display-only (nil), per
+    # the P57-5 packet spec.
+    def test_cognate_lang_abbreviation_table_resolves_all_ten_mw_front_matter_labels
+      table = Nabu::Adapters::MwXmlParser::COGNATE_LANGS
+      assert_equal({
+                     "Gk." => "grc", "Lat." => "lat", "Germ." => "de", "Lith." => "lit",
+                     "Goth." => "got", "Eng." => "en", "Zd." => "ae", "Angl.Sax." => "ang",
+                     "Russ." => "ru", "Armen." => "hy",
+                     # Family-level, per P57-5: MW's "Slav." names no single Slavic language —
+                     # map to the ISO 639-5 Slavic collective rather than guess a specific one
+                     # (mw-survey §4 flagged "usually but not reliably Church Slavonic").
+                     "Slav." => "sla",
+                     # Period-ambiguous, per P57-5: "Hib." unambiguously means Irish (the
+                     # report's own diagnosis) but MW does not fix a period. Eng./Germ./Russ./
+                     # Armen. above are all mapped to their MODERN national-language code, not
+                     # an older attested stage — Hib. follows the same pattern here (gle,
+                     # general/modern Irish) rather than sga (Old Irish), since nothing in the
+                     # fixture or front matter pins it to the older stage.
+                     "Hib." => "gle"
+                   }, table)
     end
 
     def test_register_markers_mint_no_reflexes

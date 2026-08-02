@@ -51,9 +51,10 @@ module Nabu
     #   like Ved./ep. mint NOTHING) paired with its adjacent tagged
     #   comparanda (<etym> Latin-script, <gk> polytonic Greek), one
     #   DictionaryReflex per (language, word). Coordination shares forms
-    #   ("Goth. and Germ. un" mints both); language is the catalog-side tag
-    #   for the unambiguous labels, nil (display-only) for Slav./Hib. —
-    #   MW's "Slav." is usually but not reliably Church Slavonic.
+    #   ("Goth. and Germ. un" mints both); lang_code is the RESOLVED catalog
+    #   tag (P57-5 — MW's own dotted print abbreviation, Gk./Lat./Angl.Sax.,
+    #   used to leak through verbatim even though this table already
+    #   resolves it; lang_code now equals language for every cognate row).
     class MwXmlParser
       LANGUAGE = "san"
 
@@ -64,16 +65,29 @@ module Nabu
       # apparatus, machine-readable info (decoded separately), print marks.
       SKIPPED_ELEMENTS = %w[info pb pc pcol lbinfo note mark edit pic C H P vlex sic hwtype].freeze
 
-      # MW cognate-language labels → catalog language tags (mw-survey §4).
+      # MW cognate-language labels → catalog language tags: the dictionary's
+      # own front-matter abbreviation list (mw-survey §4 census; P57-5
+      # completes it — all 10 codes now resolve, none left display-only).
       # Tags align with the kaikki crosswalk's so the two shelves' reflex
-      # rows meet on (language, word_folded). nil = display-only row, never
-      # a join candidate: "Slav." (usually OCS, not reliably) and "Hib."
-      # (Irish of no fixed period). Labels NOT in this map — the Ved./ep./
-      # Class. register markers among them — mint no reflex at all.
+      # rows meet on (language, word_folded). Labels NOT in this map — the
+      # Ved./ep./Class. register markers among them — mint no reflex at all.
+      #
+      # Two labels needed an honest call beyond the plain print abbreviation
+      # (P57-5, no fixture record of either — see the unit-level pin in
+      # test/adapters/mw_xml_parser_test.rb):
+      #   "Slav." → sla (ISO 639-5 Slavic collective). MW's "Slav." names no
+      #     single Slavic language (mw-survey §4: "usually but not reliably
+      #     Church Slavonic") — the family code is the honest target, not a
+      #     guessed chu.
+      #   "Hib." → gle (general/modern Irish). The report's own diagnosis is
+      #     that "Hib." unambiguously means Irish; only the PERIOD is open.
+      #     Eng./Germ./Russ./Armen. below are all mapped to their modern
+      #     national-language code rather than an older attested stage, so
+      #     Hib. follows the same pattern (gle) rather than sga (Old Irish).
       COGNATE_LANGS = {
-        "Gk." => "grc", "Lat." => "lat", "Goth." => "got", "Lith." => "lit",
-        "Angl.Sax." => "ang", "Zd." => "ae", "Eng." => "en", "Germ." => "de",
-        "Russ." => "ru", "Armen." => "hy", "Slav." => nil, "Hib." => nil
+        "Gk." => "grc", "Lat." => "lat", "Germ." => "de", "Lith." => "lit",
+        "Goth." => "got", "Eng." => "en", "Zd." => "ae", "Angl.Sax." => "ang",
+        "Russ." => "ru", "Armen." => "hy", "Slav." => "sla", "Hib." => "gle"
       }.freeze
 
       # Parse +lines+ (any Enumerable of record lines — a File enumerator or
@@ -318,7 +332,7 @@ module Nabu
         language = COGNATE_LANGS.fetch(label)
         folded = Nabu::Normalize.search_form(word, language: language)
         Nabu::DictionaryReflex.new(
-          lang_code: label, language: language,
+          lang_code: language, language: language,
           word: Nabu::Normalize.nfc(word), roman: nil,
           word_folded: folded.strip.empty? ? nil : folded, roman_folded: nil
         )
