@@ -541,6 +541,7 @@ new, present-only keys.
 | Availability semantics after the `wired:` rename (P44-r4) | registry `wired:` drives `list`/`status` visibility | `nabu_status` — sources default to the enabled set; the frozen payload key stays **`enabled`**, mirroring `wired`; no payload byte changed | parity (pinned P44-3: `enabled` key asserted, `"wired"` asserted absent) |
 | The sign desk | `nabu signs URN\|TEXT [--lang] [--dialect etcsl] [--json]` (P53-2) | `nabu_signs` — the same `Query::Signs`, the payload IS the CLI's frozen `--json` contract (one serializer); bounded lines with an honest note; lane-off (no canonical/osl) answers the sync-hint note like the CLI's refusal | **added P53-2** — new tool, read-only; urn mode passes the restricted-exclusion gate |
 | Tibetan word-segmented rendering | `nabu show <urn> --segmented` (P54-2) | `nabu_show` `segmented: true` — present-only `segmented` key per passage record (`Query::Show#segmented_text`, one serializer); not-applicable calls carry `segmentation_note` | **added P54-2** (pinned, incl. the flag-off byte-identical case) |
+| Lect (nabu-lects) search filter | `search --lect LECT-ID` (P57-4) | `nabu_search` `lect` — text mode only, refusal parity with lemma/near; resolution-level filter (Nabu::Lects, prefix semantics), errors naming the module when nabu-lects is not synced | **added P57-4** (pinned; no frozen payload key changed) |
 
 ---
 

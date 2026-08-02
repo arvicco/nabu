@@ -1146,6 +1146,12 @@ module Nabu
                          "indexed at syllable grain, so a plain query also lands on accidental " \
                          "runs across word boundaries; non-Tibetan queries or an unsynced module " \
                          "degrade to plain search with a note"
+    option :lect, type: :string, banner: "LECT-ID",
+                  desc: "Lect filter (P57-4, nabu-lects module): keep only hits whose (language, " \
+                        "source) resolves to this lect id or a more specific one under it " \
+                        "(--lect lat matches lat:med; --lect lat:med matches lat:med and " \
+                        "lat:med/xyz, not lat:cla). Text search or a term-less browse only, not " \
+                        "--lemma/--near; errors if the nabu-lects module is not synced"
     display_option
     def search(query = nil)
       query = query.to_s.strip
@@ -1193,6 +1199,11 @@ module Nabu
                            "query — it needs a text query and does not combine with --exact/--word/" \
                            "--fuzzy/--near/--lemma/--morph or the character-structure filters"
       end
+      if options[:lect] && (options[:near] || options[:lemma] || options[:fuzzy] || char_filter_options?)
+        raise Thor::Error, "search: --lect filters the lect-resolution layer and composes with " \
+                           "plain text search or a term-less browse only — not --lemma/--near/" \
+                           "--fuzzy or the character-structure filters"
+      end
 
       if char_filter_options?
         if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
@@ -1224,14 +1235,16 @@ module Nabu
       require_facets!(catalog) if facets
       validate_source!(catalog, options[:source])
       axis_names, axis_slugs = axis_membership(command: "search", config: config)
+      lects = require_lects!(config, options[:lect])
 
-      searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
+      searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto)
       results = searcher.run(query, lang: options[:lang], license: options[:license],
                                     limit: options[:limit].to_i, from: from, to: to, place: place,
                                     facets: facets, source: options[:source], sources: axis_slugs,
                                     loans: loans, meter: options[:meter],
                                     meter_pattern: options[:meter_pattern],
-                                    exact: options[:exact], word: options[:word], words: options[:words])
+                                    exact: options[:exact], word: options[:word], words: options[:words],
+                                    lect: options[:lect])
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
                                     incomplete: searcher.incomplete_hint, exact: options[:exact],
                                     word: options[:word], rank_note: searcher.rank_note,
@@ -2816,7 +2829,12 @@ module Nabu
         # canonical/nabu-data lazily inside Query::Show (nothing loads
         # unless nabu_show is asked for a segmented render); an unsynced
         # box answers the flag with the sync-hint note.
-        tibetan_words: :auto
+        tibetan_words: :auto,
+        # The nabu-lects module (P57-4): :auto = feature-detect
+        # canonical/nabu-lects lazily per call (nabu_search's `lect`
+        # filter); an unsynced box answers `lect` with an InvalidArguments
+        # naming the module, every other tool byte-identical.
+        lects: :auto
       )
       $stdout.sync = true
       install_mcp_signal_traps
@@ -3283,7 +3301,7 @@ module Nabu
       # are already a legal term-less path and return earlier (char_structured_search).
       def content_narrowing_filters?
         options[:from] || options[:to] || options[:century] || options[:place] ||
-          facet_filters || loans_filter || options[:meter] || options[:meter_pattern]
+          facet_filters || loans_filter || options[:meter] || options[:meter_pattern] || options[:lect]
       end
 
       # The refusal for a term-less `search` that carries no content-narrowing
@@ -3292,7 +3310,7 @@ module Nabu
       def browse_refusal_message
         "search: give a query — or a content-narrowing filter to browse the corpus " \
           "term-less: a date window (--from/--to/--century), --place, a genre facet " \
-          "(--type/--province/--material), --loans, or --meter/--meter-pattern. " \
+          "(--type/--province/--material), --loans, --meter/--meter-pattern, or --lect. " \
           "--lang/--license/--source/--axis " \
           "select whole shelves and cannot stand alone (that would dump the shelf, not browse it)."
       end
@@ -3325,13 +3343,14 @@ module Nabu
         require_facets!(catalog) if facets
         validate_source!(catalog, options[:source])
         axis_names, axis_slugs = axis_membership(command: "search", config: config)
+        lects = require_lects!(config, options[:lect])
 
-        searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
+        searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto)
         results = searcher.browse(lang: options[:lang], license: options[:license],
                                   limit: options[:limit].to_i, from: from, to: to, place: place,
                                   facets: facets, source: options[:source], sources: axis_slugs,
                                   loans: loans, meter: options[:meter],
-                                  meter_pattern: options[:meter_pattern])
+                                  meter_pattern: options[:meter_pattern], lect: options[:lect])
         print_search_results(results, facets: facets, query: "", loans: loans, axis: axis_names,
                                       browse: true, from: from, to: to, place: place,
                                       meter_note: searcher.meter_note)
@@ -3350,6 +3369,19 @@ module Nabu
 
         known = catalog[:sources].order(:slug).select_map(:slug)
         raise Thor::Error, "unknown source #{slug.inspect} — the catalog holds: #{known.join(', ')}"
+      end
+
+      # P57-4: --lect needs the nabu-lects module. nil when +lect+ was not
+      # given (no load attempted); the loaded Nabu::Lects when it was and
+      # the module is synced; a clean Thor::Error naming the module
+      # otherwise (the CLI half of Search's own Nabu::Error guard).
+      def require_lects!(config, lect)
+        return nil unless lect
+
+        lects = Nabu::Lects.load_default(config: config)
+        raise Thor::Error, "search: --lect needs the nabu-lects module — nabu-lects module not synced" unless lects
+
+        lects
       end
 
       # --axis NAME[,NAME…] (P37-8, search/export): resolve the named research

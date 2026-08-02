@@ -583,6 +583,114 @@ module Query
                    "the axis membership filter arms the exhausted-window hint"
     end
 
+    # -- P57-4: --lect, the resolution-level filter ----------------------------
+
+    def lects
+      @lects ||= Nabu::Lects.load(Nabu::TestSupport.fixtures("nabu-lects"),
+                                  overrides_path: File.join(Nabu::Config::PROJECT_ROOT, "config",
+                                                            "lect_overrides.yml"))
+    end
+
+    def search_with_lects(query, **)
+      Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, lects: lects).run(query, **)
+    end
+
+    def test_lect_filter_matches_a_bare_anchor_prefix
+      lat = Nabu::Store::Source.create(slug: "perseus-latin", name: "Perseus Latin",
+                                       adapter_class: "TestAdapter", license_class: "open")
+      med = make_document(source: lat, urn: "urn:d:lamed", language: "la-med")
+      make_passage(med, urn: "urn:d:lamed:1", text: "libertas", sequence: 0, language: "la-med")
+      grc_doc = make_document(source: @open, urn: "urn:d:grc", language: "grc")
+      make_passage(grc_doc, urn: "urn:d:grc:1", text: "libertas", sequence: 0, language: "grc")
+      rebuild!
+
+      # la-med resolves via the universal codemap to lat:med — under the
+      # lat anchor; --lect lat matches ANY stage under it (prefix semantics).
+      assert_equal %w[urn:d:lamed:1], search_with_lects("libertas", lect: "lat").map(&:urn)
+    end
+
+    def test_lect_filter_stage_prefix_is_exact_not_a_sibling_stage
+      lat = Nabu::Store::Source.create(slug: "perseus-latin", name: "Perseus Latin",
+                                       adapter_class: "TestAdapter", license_class: "open")
+      med = make_document(source: lat, urn: "urn:d:lamed", language: "la-med")
+      make_passage(med, urn: "urn:d:lamed:1", text: "libertas", sequence: 0, language: "la-med")
+      cla = make_document(source: lat, urn: "urn:d:lacla", language: "lat")
+      make_passage(cla, urn: "urn:d:lacla:1", text: "libertas", sequence: 0, language: "lat")
+      rebuild!
+
+      # --lect lat:med matches lat:med only — lat's own bare/unstaged rows
+      # (a DIFFERENT, less-specific lect) are excluded.
+      assert_equal %w[urn:d:lamed:1], search_with_lects("libertas", lect: "lat:med").map(&:urn)
+    end
+
+    def test_lect_filter_matches_a_variety_under_a_stage_prefix
+      lat = Nabu::Store::Source.create(slug: "perseus-latin", name: "Perseus Latin",
+                                       adapter_class: "TestAdapter", license_class: "open")
+      ecc = make_document(source: lat, urn: "urn:d:laecc", language: "la-ecc")
+      make_passage(ecc, urn: "urn:d:laecc:1", text: "libertas", sequence: 0, language: "la-ecc")
+      rebuild!
+
+      # la-ecc resolves via the codemap to lat/ecc (a VARIETY, no stage) —
+      # --lect lat still matches it (anything under the lat anchor);
+      # --lect lat:med does NOT (ecc is not under med).
+      assert_equal %w[urn:d:laecc:1], search_with_lects("libertas", lect: "lat").map(&:urn)
+      assert_empty search_with_lects("libertas", lect: "lat:med")
+    end
+
+    # The class-doc pin: a source-specific override changes which lect a
+    # code resolves to. derom's la-vul -> roa:pro (a DIFFERENT anchor than
+    # the universal codemap's lat/vul default).
+    def test_lect_filter_is_a_per_source_resolution_not_a_stored_code_filter
+      derom = Nabu::Store::Source.create(slug: "derom", name: "DÉRom",
+                                         adapter_class: "TestAdapter", license_class: "nc")
+      other = Nabu::Store::Source.create(slug: "some-other-source", name: "Other",
+                                         adapter_class: "TestAdapter", license_class: "open")
+      derom_doc = make_document(source: derom, urn: "urn:d:derom", language: "la-vul")
+      make_passage(derom_doc, urn: "urn:d:derom:1", text: "lactem", sequence: 0, language: "la-vul")
+      other_doc = make_document(source: other, urn: "urn:d:other", language: "la-vul")
+      make_passage(other_doc, urn: "urn:d:other:1", text: "lactem", sequence: 0, language: "la-vul")
+      rebuild!
+
+      assert_equal %w[urn:d:derom:1], search_with_lects("lactem", lect: "roa").map(&:urn),
+                   "derom's la-vul resolves to roa:pro via the ratified override"
+      assert_equal %w[urn:d:other:1], search_with_lects("lactem", lect: "lat").map(&:urn),
+                   "the SAME stored code from a different source keeps the universal default (lat/vul)"
+    end
+
+    def test_lect_filter_composes_with_other_filters
+      lat = Nabu::Store::Source.create(slug: "perseus-latin", name: "Perseus Latin",
+                                       adapter_class: "TestAdapter", license_class: "nc")
+      med = make_document(source: lat, urn: "urn:d:lamed", language: "la-med")
+      make_passage(med, urn: "urn:d:lamed:1", text: "libertas", sequence: 0, language: "la-med")
+      rebuild!
+
+      assert_equal %w[urn:d:lamed:1], search_with_lects("libertas", lect: "lat", license: "nc").map(&:urn)
+      assert_empty search_with_lects("libertas", lect: "lat", license: "open")
+    end
+
+    def test_lect_filter_composes_with_a_term_less_browse
+      lat = Nabu::Store::Source.create(slug: "perseus-latin", name: "Perseus Latin",
+                                       adapter_class: "TestAdapter", license_class: "open")
+      med = make_document(source: lat, urn: "urn:d:lamed", language: "la-med")
+      make_passage(med, urn: "urn:d:lamed:1", text: "libertas", sequence: 0, language: "la-med")
+      grc_doc = make_document(source: @open, urn: "urn:d:grc", language: "grc")
+      make_passage(grc_doc, urn: "urn:d:grc:1", text: "aurora", sequence: 0, language: "grc")
+      rebuild!
+
+      browser = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, lects: lects)
+      assert_equal %w[urn:d:lamed:1], browser.browse(lect: "lat").map(&:urn),
+                   "browse's term-less LEGALITY is a CLI-seam rule (class doc) — the library filters as given"
+    end
+
+    # lects: nil is FORCED here (not the :auto default) so the assertion
+    # never depends on whether this box happens to have canonical/nabu-lects
+    # synced — the absence case, deterministically.
+    def test_lect_filter_without_lects_raises_naming_the_module
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, lects: nil)
+      error = assert_raises(Nabu::Error) { searcher.run("libertas", lect: "lat") }
+      assert_match(/nabu-lects module not synced/, error.message)
+    end
+
     # A document on an "open" source with an "nc" override must filter as nc and
     # report license_class "nc" (P1-3 override wins over source class).
     def test_license_override_wins_over_source_class

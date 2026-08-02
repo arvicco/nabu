@@ -310,7 +310,7 @@ class LectsTest < Minitest::Test
     lib_root = File.expand_path("../lib", __dir__)
     this_file = File.join(lib_root, "nabu", "lects.rb")
     pattern = /Nabu::Lects\.(load_default|load|new)\b/
-    allowlist = %w[nabu/cli.rb nabu/query/etym.rb]
+    allowlist = %w[nabu/cli.rb nabu/query/etym.rb nabu/query/search.rb nabu/mcp/tools.rb]
                 .map { |rel| File.join(lib_root, rel) }
 
     offenders = Dir[File.join(lib_root, "**", "*.rb")]

@@ -30,7 +30,9 @@ complete: the dossiers on disk derive the catalog's `language_records`
 first programmatic writer), and the `config/languages.yml` seed is
 retired. The derived names census (`language_names`, from the held kaikki
 extracts) is **filled** — 160 name records, feeding the inline
-`[gkm · Medieval Greek]`-style rendering in `etym --long`.
+`[gkm · Medieval Greek]`-style rendering in `etym --long` (superseded,
+where nabu-lects is synced, by the resolved-lect reading — "The lect
+layer" below).
 `nabu ingest --shelf language CODE` scaffolds a new dossier;
 `nabu language --list` prints the held languages.
 
@@ -59,6 +61,73 @@ extracts) is **filled** — 160 name records, feeding the inline
    text), `akk`/`sux` determinative stripping, generic diacritic folding
    elsewhere. Where a source's language differs from a tool's expectation,
    the per-document override records reality (P10-4).
+
+## The lect layer
+
+Everything above is the code system this library has always spoken —
+ISO-639-shaped tags, one per stored passage/entry, folded and searched as
+documented in the five rules. **nabu-lects** (P57-3/4;
+github.com/arvicco/nabu-lects) is a SEPARATE, OPTIONAL module layered on
+top: a small curated registry of *lects* — language varieties identified by
+genealogical anchor × historical stage × variety × orthography
+(`lat:med` = Medieval Latin; `grc:byz` = Byzantine Greek; `ine:pro` =
+Proto-Indo-European) — plus a universal mapping from the codes above onto
+them. It answers a question the code system alone cannot: not just "what
+language is this passage tagged," but "which SPECIFIC historical stage of
+that language, and is it a reconstruction or attested."
+
+**It changes nothing about storage.** Stored codes are exactly as documented
+above, forever (rule 2's promise). `Nabu::Lects` (`lib/nabu/lects.rb`) is a
+pure READ resolver: `#resolve(code, source:, urn:)` maps a stored code onto
+a lect id, `#lect(id)` looks up its name/band/mode, `#reconstructed?(id)`
+asks whether it is a comparative-method reconstruction (a registry field,
+never a guess from the code's spelling — rule 4's `-pro` convention is a
+Wiktionary joining convention, not evidence of reconstruction; nabu-lects
+registers the real distinction, e.g. Rundata's `gmq-pro` runic inscriptions
+are ATTESTED epigraphy filed under a proto-looking tag).
+
+**Resolution precedence, highest first**: a per-document overlay (a future
+per-urn override, not yet persisted) → a per-source override
+(`config/lect_overrides.yml`, Nabu-authored — what one particular source's
+use of a code actually means in its holdings, e.g. DÉRom's `la-vul` really
+means the reconstructed `roa:pro`, not Wiktionary's attested-register
+default) → the module's own universal codemap → identity (an unmapped code
+resolves to itself as a bare anchor — always legal, honest coarseness).
+
+**Feature-detected everywhere it surfaces, never required**: `Nabu::Lects
+.load_default` returns `nil` when `canonical/nabu-lects` has not been
+synced (`nabu sync nabu-lects`), and every consumer below degrades to its
+pre-P57-4 behavior byte-for-byte in that case — the cldf-spine/nabu-data
+posture, same as every other optional module this library carries (Pleiades,
+the Oracc Sign List, Tibetan word segmentation).
+
+Consumers as of P57-4:
+
+- **`nabu language CODE`** grows a `stages:` ladder when the code is a
+  registered anchor with stages: each stage ord-sorted with its band and
+  live document counts (aggregated by resolving every held (language,
+  source) pair through the registry); reconstructed stages carry a leading
+  asterisk; codes that resolve to the bare anchor group under one honest
+  `unstaged` line.
+- **`search --lect LECT-ID`** (CLI) and **`nabu_search`'s `lect` parameter**
+  (MCP) filter hits to passages whose (language, source) resolves to the
+  given lect or a MORE SPECIFIC one under it — prefix semantics over the
+  `:`/`/`/`@` axis grammar (`--lect lat` matches `lat:med`; `--lect lat:med`
+  matches `lat:med` and `lat:med/xyz`, not `lat:cla`). A resolution-level
+  filter: stored codes are never touched. Errors, naming the module, when
+  nabu-lects is not synced.
+- **`nabu etym`**'s reconstruction predicate (the display asterisk, and the
+  reconstruction-shelf scope for a direct `*headword` lookup) resolves the
+  dictionary's (language, source) and asks `#reconstructed?` instead of
+  testing the code for a `-pro` suffix — the class of correction Rundata's
+  `gmq-pro` needed. Its cognate-language brackets also prefer the resolved
+  lect id + composed name (`[grc:byz · Byzantine Greek]` for `gkm`, the
+  codemap default) over the older kaikki-census name where nabu-lects
+  supplies one — display-only, additive.
+
+Absent the module, every one of the above reads exactly as it did before
+P57-4: no ladder section, no `--lect` flag (a clear error naming the
+module if used), the old `-pro`-suffix string test, the old bracket names.
 
 ## Corpus languages (documents / passages)
 

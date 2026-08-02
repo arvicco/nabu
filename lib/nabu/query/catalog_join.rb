@@ -56,10 +56,10 @@ module Nabu
       # document-grained facet filter ({facet name => pattern}); +source+
       # (P22-1) scopes to one source slug.
       def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
-                       sources: nil, loans: nil, meter: nil, meter_pattern: nil)
+                       sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect_pairs: nil)
         visible_passages(lang: lang, license: license, from: from, to: to, place: place,
                          facets: facets, source: source, sources: sources, loans: loans,
-                         meter: meter, meter_pattern: meter_pattern)
+                         meter: meter, meter_pattern: meter_pattern, lect_pairs: lect_pairs)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(*catalog_columns).all
       end
@@ -83,9 +83,14 @@ module Nabu
       # composes with every search path exactly as the single-slug filter does
       # (and, being catalog-side, arms the inner-window honesty hint). An empty
       # list is treated as no filter (never a silent `IN ()`); it AND-composes
-      # with +source+ when both are given.
+      # with +source+ when both are given. +lect_pairs+ (P57-4, Query::Search's
+      # `--lect` filter) is a precomputed array of [language, source slug]
+      # pairs ALREADY resolved through Nabu::Lects — this module stays
+      # DB-only and never touches the resolver itself; an empty array is a
+      # legal "matches nothing" (never a silent no-op — unlike +sources+,
+      # which treats [] as "no filter").
       def visible_passages(lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
-                           sources: nil, loans: nil, meter: nil, meter_pattern: nil)
+                           sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect_pairs: nil)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
@@ -98,6 +103,7 @@ module Nabu
         dataset = dataset.where(timeline_exists(from: from, to: to, place: place)) if from || to || place
         (facets || {}).each { |facet, pattern| dataset = dataset.where(facet_exists(facet, pattern)) }
         dataset = dataset.where(loans_exists(loans)) if loans
+        dataset = dataset.where(lect_pairs_expr(lect_pairs)) if lect_pairs
         if meter || meter_pattern
           dataset = dataset.where(Sequel[:passages][:id] => meter_enrichments(meter, meter_pattern)
                                                             .select(:passage_id))
@@ -184,6 +190,18 @@ module Nabu
                  .where(Sequel.function(:lower, loan[:key]) => code.to_s.downcase)
                  .exists
         Sequel.like(Sequel[:passages][:annotations_json], '%"loans"%') & exists
+      end
+
+      # The OR-of-(language AND source slug) filter over +pairs+ (P57-4). An
+      # empty +pairs+ is a legal, honest "matches nothing" — `id IS NULL`
+      # against the passages primary key (NOT NULL), never a raised error or
+      # a silently-dropped filter.
+      def lect_pairs_expr(pairs)
+        return { Sequel[:passages][:id] => nil } if pairs.empty?
+
+        Sequel.|(*pairs.map do |language, slug|
+          Sequel.&({ Sequel[:passages][:language] => language }, { Sequel[:sources][:slug] => slug })
+        end)
       end
 
       # Effective license class: document override wins over source class (P1-3).

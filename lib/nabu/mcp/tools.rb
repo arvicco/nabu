@@ -20,6 +20,7 @@ require_relative "../query/etym"
 require_relative "../query/cognates"
 require_relative "../query/place"
 require_relative "../query/signs"
+require_relative "../lects"
 require_relative "../pleiades"
 require_relative "../sign_list"
 
@@ -427,6 +428,13 @@ module Nabu
                                 "the nabu-data xct/segmentation dataset (present-only word_grain " \
                                 "key when applied). Non-Tibetan queries or an unsynced module " \
                                 "degrade to plain search with a word_grain_note, never an error." },
+          lect: { type: "string",
+                  description: "Lect filter (P57-4, nabu-lects module, text search only): keep only " \
+                               "hits whose (language, source) resolves to this lect id or a more " \
+                               "specific one under it — prefix semantics over the nabu-lects " \
+                               "anchor[:stage][/variety][@ortho] grammar (lect: \"lat\" matches " \
+                               "lat:med; lect: \"lat:med\" matches lat:med and lat:med/xyz, not " \
+                               "lat:cla). Errors if the nabu-lects module is not synced on this box." },
           limit: { type: "integer", minimum: 1, maximum: SEARCH_MAX_LIMIT,
                    default: SEARCH_DEFAULT_LIMIT, description: "Maximum hits returned." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
@@ -708,7 +716,7 @@ module Nabu
       # returning one, or nil when the hub is unconfigured) — config-loaded by
       # the entrypoint, resolved per call like the connection slots.
       def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil,
-                     enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil)
+                     enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
@@ -723,6 +731,13 @@ module Nabu
         # absent it re-detects per call, so a mid-session `nabu sync
         # nabu-data` is picked up without a restart — the sign-list posture).
         @tibetan_words = tibetan_words
+        # The nabu-lects slot (P57-4, nabu_search's `lect` filter): nil
+        # (unconfigured — `lect` errors naming the module, every other tool
+        # byte-identical: the lane-off rule), a loaded Nabu::Lects (tests),
+        # or :auto — the entrypoint's setting, feature-detecting
+        # canonical/nabu-lects lazily per call through #lects_seam, memoized
+        # once LOADED (the tibetan_words/sign_list posture).
+        @lects = lects
         # The sign-list slot (P53-2): nil (unconfigured — nabu_signs notes
         # the sync hint, every other tool byte-identical: the lane-off rule),
         # a loaded Nabu::SignList (tests), or :auto — the entrypoint's
@@ -804,6 +819,7 @@ module Nabu
         from, to, place = search_date(args, mode, near)
         meter, meter_pattern = search_meter(args, mode, near)
         words = search_words?(args, mode, near)
+        lect, lects = search_lect(args, mode, near)
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         fulltext = search_index(mode) or return note(mode == :lemma ? LEMMA_REBUILDING_NOTE : REBUILDING_NOTE)
 
@@ -813,7 +829,8 @@ module Nabu
           run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near,
                                  window: window, lang: args["lang"], license: license,
                                  limit: limit + 1, morph: morph, from: from, to: to, place: place,
-                                 meter: meter, meter_pattern: meter_pattern, words: words)
+                                 meter: meter, meter_pattern: meter_pattern, words: words,
+                                 lect: lect, lects: lects)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog, incomplete: incomplete, rank_note: rank_note,
                                meter_note: meter_note, word_grain: word_grain, word_grain_note: words_note)
@@ -1179,7 +1196,8 @@ module Nabu
       # was too common to rank (plain text mode only — the other searchers
       # never guard, so theirs is always nil).
       def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
-                     from: nil, to: nil, place: nil, meter: nil, meter_pattern: nil, words: false)
+                     from: nil, to: nil, place: nil, meter: nil, meter_pattern: nil, words: false,
+                     lect: nil, lects: nil)
         results, searcher =
           if near
             searcher = Query::Proximity.new(catalog: catalog, fulltext: fulltext)
@@ -1190,10 +1208,11 @@ module Nabu
             [searcher.run(term, lang: lang, license: license, limit: limit, morph: morph), searcher]
           else
             searcher = Query::Search.new(catalog: catalog, fulltext: fulltext,
-                                         tibetan_words: words ? tibetan_words_seam : nil)
+                                         tibetan_words: words ? tibetan_words_seam : nil,
+                                         lects: lects || :auto)
             [searcher.run(term, lang: lang, license: license, limit: limit,
                                 from: from, to: to, place: place,
-                                meter: meter, meter_pattern: meter_pattern, words: words), searcher]
+                                meter: meter, meter_pattern: meter_pattern, words: words, lect: lect), searcher]
           end
         rank_note = searcher.respond_to?(:rank_note) ? searcher.rank_note : nil
         meter_note = searcher.respond_to?(:meter_note) ? searcher.meter_note : nil
@@ -1210,6 +1229,15 @@ module Nabu
 
         loaded = Nabu::TibetanWords.load_default
         @tibetan_words = loaded if loaded
+        loaded
+      end
+
+      # The nabu_search `lect` seam (P57-4), same :auto/loaded/nil contract.
+      def lects_seam
+        return @lects unless @lects == :auto
+
+        loaded = Nabu::Lects.load_default
+        @lects = loaded if loaded
         loaded
       end
 
@@ -1235,6 +1263,23 @@ module Nabu
         raise InvalidArguments, "words composes with text search only, not lemma/near" if mode == :lemma || near
 
         true
+      end
+
+      # The lect filter arg (P57-4), text mode only — refusal parity with
+      # the meter facet. Resolves the module HERE (not inside Query::Search)
+      # so an absent module is a clean caller-fixable InvalidArguments,
+      # mirroring the CLI's require_lects! pre-check; returns [lect, lects]
+      # so run_search never re-resolves the seam.
+      def search_lect(args, mode, near)
+        lect = string_arg(args, "lect")
+        return [nil, nil] unless lect
+
+        raise InvalidArguments, "lect composes with text search only, not lemma/near" if mode == :lemma || near
+
+        lects = lects_seam
+        raise InvalidArguments, "lect needs the nabu-lects module — nabu-lects module not synced" unless lects
+
+        [lect, lects]
       end
 
       def render_search(results, limit:, catalog:, incomplete: nil, rank_note: nil, meter_note: nil,
