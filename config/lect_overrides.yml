@@ -1,0 +1,30 @@
+# config/lect_overrides.yml — per-source lect resolution overrides (P57-3).
+#
+# Universal code -> lect defaults live in the nabu-lects module's own
+# codemap.yml (canonical/nabu-lects/codemap.yml, mirrored at
+# test/fixtures/nabu-lects/codemap.yml): those are statements true for ANY
+# consumer of the code. THIS file holds NABU-SPECIFIC knowledge — what one
+# particular source's use of a code actually means in ITS holdings, which the
+# universal codemap cannot state (a fact about a collection, not about the
+# code). Read by Nabu::Lects (lib/nabu/lects.rb).
+#
+# Precedence in Nabu::Lects#resolve, highest first: per-document overlay >
+# THIS FILE (per-source) > codemap.yml (universal) > identity (the code
+# itself). Every entry here is a ratified owner decision — do not add a row
+# without one.
+sources:
+  derom:
+    # DÉRom (config/sources.yml `derom`) files its etymon articles under the
+    # Wiktionary Vulgar-Latin code la-vul, but DÉRom's own doctrine is that
+    # these ARE comparative-method reconstructions (the whole point of the
+    # dictionary) — the reconstructed roa:pro lect, not the universal
+    # codemap's attested-register default (lat/vul). Owner ruling, P57-3.
+    la-vul: "roa:pro"
+  rundata:
+    # Rundata (config/sources.yml `rundata`) tags urnordisk-dated
+    # inscriptions gmq-pro (the wiktionary-recon proto-language convention —
+    # no ISO code exists), but the inscriptions themselves are ATTESTED
+    # runic epigraphy (the Elder Futhark span), not the universal codemap's
+    # reconstructed default (gmq:pro) — nabu-lects registers exactly this
+    # distinction as the attested gmq:run stage. Owner ruling, P57-3.
+    gmq-pro: "gmq:run"
