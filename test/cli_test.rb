@@ -695,6 +695,75 @@ class CLITest < Minitest::Test
 
   # A code held by no axis-tagged source prints no axes line (the house
   # zero-field rule) — here the registry defines no axes at all.
+  # -- P57-4: the language card's stage ladder ---------------------------------
+
+  def test_language_card_shows_the_stage_ladder_when_nabu_lects_is_synced
+    with_lect_ladder_corpus do |config, db|
+      texts = Nabu::Store::Source.create(slug: "texts", name: "Texts",
+                                         adapter_class: "TestAdapter", license_class: "open")
+      derom = Nabu::Store::Source.create(slug: "derom", name: "DÉRom",
+                                         adapter_class: "TestAdapter", license_class: "nc")
+      # Two documents under a bare "lat" code (unstaged), one la-med
+      # document (resolves via the universal codemap to lat:med), and one
+      # derom la-vul document (resolves via the REAL ratified override,
+      # config/lect_overrides.yml, to roa:pro — a DIFFERENT anchor, so it
+      # never enters lat's own ladder).
+      2.times do |i|
+        db[:documents].insert(source_id: texts.id, urn: "urn:nabu:test:lat:#{i}", title: "T",
+                              language: "lat", content_sha256: "x", revision: 1, withdrawn: false)
+      end
+      db[:documents].insert(source_id: texts.id, urn: "urn:nabu:test:lamed:1", title: "T",
+                            language: "la-med", content_sha256: "x", revision: 1, withdrawn: false)
+      db[:documents].insert(source_id: derom.id, urn: "urn:nabu:test:lavul:1", title: "T",
+                            language: "la-vul", content_sha256: "x", revision: 1, withdrawn: false)
+      Nabu::Store::SourceStats.derive!(db, note: "test")
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[language lat]) }
+      assert_nil status
+      assert_match(/stages:/, out)
+      assert_match(/med.*Medieval Latin.*1 document/, out, "la-med resolves to lat:med, one document")
+      assert_match(/unstaged.*2 document/, out, "the two bare-lat documents group under unstaged")
+      refute_match(/roa:pro|Proto-Romance/, out,
+                   "derom's la-vul resolves to a DIFFERENT anchor (roa) via the ratified override — never lat's ladder")
+    end
+  end
+
+  def test_language_card_reconstructed_stages_carry_a_leading_asterisk
+    with_recon_shelf_and_lects do |config|
+      db = Nabu::Store.connect(config.catalog_path)
+      other = Nabu::Store::Source.create(slug: "some-other-source", name: "Other",
+                                         adapter_class: "TestAdapter", license_class: "open")
+      db[:documents].insert(source_id: other.id, urn: "urn:nabu:test:gmqpro:1", title: "T",
+                            language: "gmq-pro", content_sha256: "x", revision: 1, withdrawn: false)
+      Nabu::Store::SourceStats.derive!(db, note: "test")
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[language gmq]) }
+      assert_nil status
+      assert_match(/\*pro\s+Proto-Norse.*1 document/, out,
+                   "the universal codemap default resolves gmq-pro to gmq:pro — reconstructed, asterisked")
+      assert_match(/^ {4}run\s+Runic.*0 documents/, out, "gmq:run is attested — no asterisk, honestly zero")
+      refute_match(/\*run\s+Runic/, out, "gmq:run is attested — never asterisked")
+    end
+  end
+
+  def test_language_card_has_no_stage_ladder_without_nabu_lects_synced
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[language lat]) }
+      assert_nil status
+      refute_match(/stages:/, out, "absent the module the card is byte-identical to before")
+    end
+  end
+
+  def test_language_card_has_no_stage_ladder_for_an_anchor_with_no_registered_stages
+    with_recon_shelf_and_lects do |config|
+      out, _err, status = with_config(config) { run_cli(%w[language roa-opt]) }
+      assert_nil status
+      refute_match(/stages:/, out, "roa-opt has no stages: entry in the registry")
+    end
+  end
+
   def test_language_card_axes_line_suppressed_without_axis_tagged_holders
     with_recon_shelf do |config|
       with_config(config) do
@@ -800,6 +869,70 @@ class CLITest < Minitest::Test
       assert_match(/^ {2}←\(loan\) \*hlaibaz \[gem-pro\]/, out,
                    "the flagged gem→sla edge labels its own arrow")
       refute_match(/←\(loan\) \*pírštan/, out)
+    end
+  end
+
+  # -- P57-4: etym display through the mapping -------------------------------
+
+  def test_etym_bracket_shows_the_resolved_lect_and_name_when_nabu_lects_is_synced
+    with_recon_shelf_and_lects do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym прьстъ]) }
+      assert_nil status
+      assert_match(/\*pьrstъ \[sla:pro · Proto-Slavic\]/, out,
+                   "sla-pro resolves via the universal codemap default to sla:pro")
+      assert_match(/прьстъ \[chu · Church Slavonic\]/, out, "the matched-via bracket resolves too")
+      # The cognate LIST ("other reflexes…") is a separate render path
+      # (print_reflexes) this packet's display mapping does not touch — the
+      # entry's OWN bracket is what must resolve, not every code anywhere.
+      refute_match(/\*pьrstъ \[sla-pro\]/, out, "the entry's own bracket no longer shows the bare code")
+    end
+  end
+
+  def test_etym_bracket_stays_the_raw_code_without_nabu_lects_synced
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[etym прьстъ]) }
+      assert_nil status
+      assert_match(/\*pьrstъ \[sla-pro\]/, out, "absent the module the bracket is byte-identical to before")
+    end
+  end
+
+  # docs/languages.md's own worked example ("[gkm · Medieval Greek]", the
+  # P18-4 kaikki-census reading) — P57-4 prefers the RESOLVED lect id +
+  # registry name when nabu-lects is synced: gkm -> grc:byz (the codemap
+  # default), whose registry name is "Byzantine Greek", not the census's
+  # "Medieval Greek".
+  def test_etym_long_reflex_group_label_prefers_the_resolved_lect_when_synced
+    with_recon_shelf_and_lects do |config|
+      db = Nabu::Store.connect(config.catalog_path)
+      entry_id = db[:dictionary_entries].where(urn: "urn:nabu:dict:wiktionary-sla-pro:bogъ:noun:2").get(:id)
+      refute_nil entry_id, "fixture must hold the sla-pro *bogъ entry"
+      db[:dictionary_reflexes].insert(dictionary_entry_id: entry_id, seq: 999, lang_code: "gkm",
+                                      language: nil, word: "θεός", word_folded: "θεος")
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[etym богъ --long]) }
+      assert_nil status
+      assert_match(/\[grc:byz · Byzantine Greek\]/, out,
+                   "gkm resolves via the universal codemap default to grc:byz")
+      refute_match(/\[gkm\]/, out)
+    end
+  end
+
+  def test_etym_long_reflex_group_label_falls_back_to_the_census_without_nabu_lects_synced
+    with_recon_shelf do |config|
+      db = Nabu::Store.connect(config.catalog_path)
+      entry_id = db[:dictionary_entries].where(urn: "urn:nabu:dict:wiktionary-sla-pro:bogъ:noun:2").get(:id)
+      dictionary_id = db[:dictionary_entries].where(id: entry_id).get(:dictionary_id)
+      db[:dictionary_reflexes].insert(dictionary_entry_id: entry_id, seq: 999, lang_code: "gkm",
+                                      language: nil, word: "θεός", word_folded: "θεος")
+      db[:language_names].insert(dictionary_id: dictionary_id, lang_code: "gkm",
+                                 name: "Medieval Greek", occurrences: 1)
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[etym богъ --long]) }
+      assert_nil status
+      assert_match(/\[gkm · Medieval Greek\]/, out, "absent the module the label is byte-identical to before")
+      refute_match(/grc:byz/, out)
     end
   end
 
@@ -3996,6 +4129,44 @@ class CLITest < Minitest::Test
     assert_match(/--meter/, err2)
   end
 
+  # -- P57-4: search --lect ------------------------------------------------------
+
+  def test_search_lect_filters_hits_to_the_resolved_lect
+    with_lect_search_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search arma --lect lat]) }
+      assert_nil status
+      assert_match("urn:nabu:test:lamed:1", out, "la-med resolves under the lat anchor")
+    end
+  end
+
+  def test_browse_by_lect_alone_is_legal
+    with_lect_search_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --lect lat]) }
+      assert_nil status, "the lect filter narrows content — a legal term-less browse"
+      assert_match("urn:nabu:test:lamed:1", out)
+      refute_match("urn:nabu:test:grc:1", out, "grc resolves under a different anchor")
+      assert_match(/filtered browse/, out)
+    end
+  end
+
+  def test_search_lect_without_nabu_lects_synced_errors_naming_the_module
+    with_indexed_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[search μηνιν --lect lat]) }
+      assert_equal 1, status
+      assert_match(/nabu-lects module not synced/, err)
+    end
+  end
+
+  def test_search_lect_refuses_lemma_near_and_fuzzy
+    _out, err, status = run_cli(%w[search --lemma arma --lect lat])
+    assert_equal 1, status
+    assert_match(/--lect/, err, "the lemma path does not carry the lect filter — refused, not ignored")
+
+    _out2, err2, status2 = run_cli(%w[search --fuzzy arma --lect lat])
+    assert_equal 1, status2
+    assert_match(/--lect/, err2)
+  end
+
   def test_term_less_browse_refuses_exact_and_word
     _out, err, status = run_cli(%w[search --century 2 --exact])
     assert_equal 1, status
@@ -6882,16 +7053,52 @@ class CLITest < Minitest::Test
     end
   end
 
-  def seed_plain_passage(catalog, source_id, doc_urn, text)
+  def seed_plain_passage(catalog, source_id, doc_urn, text, language: "lat")
     doc_id = catalog[:documents].insert(
-      source_id: source_id, urn: doc_urn, title: doc_urn, language: "lat",
+      source_id: source_id, urn: doc_urn, title: doc_urn, language: language,
       content_sha256: doc_urn, revision: 1, withdrawn: false
     )
     catalog[:passages].insert(
-      document_id: doc_id, urn: "#{doc_urn}:1", sequence: 0, language: "lat",
-      text: text, text_normalized: Nabu::Normalize.search_form(text, language: "lat"),
+      document_id: doc_id, urn: "#{doc_urn}:1", sequence: 0, language: language,
+      text: text, text_normalized: Nabu::Normalize.search_form(text, language: language),
       content_sha256: "#{doc_urn}p", revision: 1, withdrawn: false, annotations_json: "{}"
     )
+  end
+
+  # A tiny indexed corpus for `search --lect` (P57-4): the nabu-lects
+  # fixture registry + the REAL config/lect_overrides.yml (so the ratified
+  # derom override actually engages), one la-med passage under "texts"
+  # (resolves via the universal codemap to lat:med) and one Greek passage
+  # (an unrelated anchor — proves the filter actually excludes).
+  def with_lect_search_corpus
+    Dir.mktmpdir("nabu-cli-lect-search") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources, config_path: File.join(root, "config", "nabu.yml")
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      FileUtils.mkdir_p(File.join(root, "config"))
+      FileUtils.cp(File.join(Nabu::Config::PROJECT_ROOT, "config", "lect_overrides.yml"),
+                   File.join(root, "config", "lect_overrides.yml"))
+      dest = File.join(config.canonical_dir, "nabu-lects")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-lects"), "*")], dest)
+
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      texts = catalog[:sources].insert(slug: "texts", name: "Texts", adapter_class: "TestAdapter",
+                                       license_class: "open", enabled: true)
+      seed_plain_passage(catalog, texts, "urn:nabu:test:lamed", "arma uirumque cano", language: "la-med")
+      seed_plain_passage(catalog, texts, "urn:nabu:test:grc", "μηνιν αειδε", language: "grc")
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil)
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
   end
 
   def seed_dated_passage(catalog, source_id, doc_urn, text, not_before, not_after, place)
@@ -7405,6 +7612,45 @@ class CLITest < Minitest::Test
       load_language_shelf(db)
       db.disconnect
       yield config
+    end
+  end
+
+  # with_recon_shelf, plus the nabu-lects fixture registry landed at
+  # canonical/nabu-lects — exactly where `nabu sync nabu-lects` puts it
+  # (P57-4's etym display mapping).
+  def with_recon_shelf_and_lects
+    with_recon_shelf do |config|
+      dest = File.join(config.canonical_dir, "nabu-lects")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-lects"), "*")], dest)
+      yield config
+    end
+  end
+
+  # A real (not "(test)"-placeholder) config_path under config.lect_overrides_path,
+  # carrying the REAL config/lect_overrides.yml — so the two ratified P57-3
+  # overrides (derom la-vul -> roa:pro, rundata gmq-pro -> gmq:run) actually
+  # engage, the way they do in the live library. Plus the nabu-lects
+  # fixture registry, an empty migrated catalog, and its open db handle
+  # (the caller seeds documents and disconnects). P57-4's stage-ladder tests.
+  def with_lect_ladder_corpus
+    Dir.mktmpdir("nabu-cli-lect-ladder") do |root|
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: File.join(root, "sources.yml"), config_path: File.join(root, "config", "nabu.yml")
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      FileUtils.mkdir_p(File.join(root, "config"))
+      FileUtils.cp(File.join(Nabu::Config::PROJECT_ROOT, "config", "lect_overrides.yml"),
+                   File.join(root, "config", "lect_overrides.yml"))
+      dest = File.join(config.canonical_dir, "nabu-lects")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-lects"), "*")], dest)
+
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      Nabu::Store.setup!(db)
+      yield config, db
     end
   end
 

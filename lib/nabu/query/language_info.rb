@@ -141,6 +141,33 @@ module Nabu
         (sources_breakdown(code).keys + shelf_source_slugs(code)).uniq
       end
 
+      # P57-4: {[language, source slug] => live document count} across the
+      # WHOLE catalog — every (language, source) pair actually held, for the
+      # language card's stage ladder to resolve through Nabu::Lects#resolve
+      # (a code's lect reading can be source-specific, class doc) and group
+      # by resolved stage. Stats-backed when the source_stats shelf exists
+      # (P42-0), the live aggregate on a pre-019 catalog — the same feature
+      # gate every other corpus-grain count in this class already reads.
+      def language_source_pairs
+        if stats?
+          @catalog[:source_stats_languages]
+            .join(:sources, id: Sequel[:source_stats_languages][:source_id])
+            .where { documents >= 1 }
+            .group(Sequel[:source_stats_languages][:language], Sequel[:sources][:slug])
+            .select(Sequel[:source_stats_languages][:language].as(:language), Sequel[:sources][:slug].as(:slug),
+                    Sequel.function(:sum, Sequel[:source_stats_languages][:documents]).as(:count))
+            .to_h { |row| [[row.fetch(:language), row.fetch(:slug)], row.fetch(:count).to_i] }
+        else
+          live_documents
+            .join(:sources, id: Sequel[:documents][:source_id])
+            .exclude(Sequel[:documents][:language] => nil)
+            .group(Sequel[:documents][:language], Sequel[:sources][:slug])
+            .select(Sequel[:documents][:language].as(:language), Sequel[:sources][:slug].as(:slug),
+                    Sequel.function(:count).*.as(:count))
+            .to_h { |row| [[row.fetch(:language), row.fetch(:slug)], row.fetch(:count)] }
+        end
+      end
+
       private
 
       def lemma_rows(code)
