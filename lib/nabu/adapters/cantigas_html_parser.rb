@@ -52,19 +52,34 @@ module Nabu
     # wrappers around verse words) reads the same — the text td's visible
     # text IS the verse either way.
     #
-    # == Passage = the verse LINE, 1-based ordinal
+    # == Passage = the verse LINE, numbered by the EDITION
     #
     #   urn = <document-urn>:<n>   (urn:nabu:cantigas:600:5)
     #
-    # The ordinal is cross-checked against the edition's own printed
-    # numbers (every 5th line) — a mismatch means the numbering scheme
-    # drifted and quarantines, so the ordinal IS the edition's line number,
-    # never a synthetic. Stanza structure rides annotations
-    # ({"line" => n, "stanza" => s}, the ASPR line-ordinal precedent plus a
-    # stanza counter over the nbsp break rows); title = the incipit (the
-    # first verse line). Language: roa-opt, Old Galician-Portuguese
-    # (D55-a — the code already lives in the catalog's dictionary/name
-    # space, so etymology and cognate joins connect for free).
+    # The line number is cross-checked against the edition's own printed
+    # numbers (every 5th line), so the number IS the edition's line
+    # number, never a synthetic. P56-1 (the first sync's 4 number
+    # quarantines, all real pages): on refrain cantigas the edition's
+    # numbering can legitimately run AHEAD of the display — it counts
+    # refrain lines the page display merges or elides (cdcant 475/959/
+    # 1025/1706; every one sidebar-marked "Refrão", every gap opening
+    # exactly at a stanza-break row). The parser adopts the edition's
+    # numbering: at a printed anchor that runs ahead, the offset is
+    # accepted ONLY when a stanza boundary was crossed since the last
+    # verified anchor, the current stanza is renumbered, and the first
+    # line after the boundary carries {"number_gap" => d} (d = uncounted
+    # edition lines) with a document-level "number_gaps" total. Mid-stanza
+    # mismatch, or a printed number BEHIND the count, is still real drift
+    # and quarantines — the cross-check is never weakened for the normal
+    # case. A numbered-but-textless verse row (cdcant 562's edition line
+    # 20) consumes its edition number but yields no passage; the skipped
+    # numbers ride document metadata "empty_lines". Stanza structure rides
+    # annotations ({"line" => n, "stanza" => s}, the ASPR line-ordinal
+    # precedent plus a stanza counter over the nbsp break rows); sequence
+    # stays the dense display order; title = the incipit (the first verse
+    # line). Language: roa-opt, Old Galician-Portuguese (D55-a — the code
+    # already lives in the catalog's dictionary/name space, so etymology
+    # and cognate joins connect for free).
     #
     # == Identity
     #
@@ -81,6 +96,19 @@ module Nabu
       VERSE_TD_CSS = "td.left11, td.left13, td.left15"
 
       RUBRIC_LABEL = "Rubrica:"
+
+      # The one censused no-author page shape (cdcant 1241): p.titulo-autor
+      # carries this literal label instead of an autor.asp link.
+      UNATTRIBUTED_LABEL = "[Sem autor atribuído]"
+
+      # The one censused no-text page shape (cdcant 1066, a doubled
+      # apógrafo transcription whose text Littera has not published): a
+      # p.discreto marker where the verse table would be.
+      NO_TEXT_MARKER = "Texto ainda não disponível"
+
+      # The verse walk's outcome: the passage-bearing lines plus the
+      # verse-derived document metadata (P56-1 gap/empty facts).
+      Verse = Data.define(:lines, :metadata)
 
       # The censused genre labels (letter-A index + sidebar, 2026-07-31),
       # keyed by Unicode downcase — the index prints BOTH "Escárnio e
@@ -109,9 +137,9 @@ module Nabu
         check_identity!(page, cdcant, path)
         main = page.at_css("div#main") or
           raise Nabu::ValidationError, "no div#main content block — the page shape drifted (#{path})"
-        lines = verse_lines(main, path)
-        document = build_document(urn, path, lines, metadata(page, main))
-        append_lines!(document, urn, lines)
+        verse = verse_lines(main, path)
+        document = build_document(urn, path, verse.lines, metadata(page, main).merge(verse.metadata))
+        append_lines!(document, urn, verse.lines)
         document
       end
 
@@ -156,31 +184,32 @@ module Nabu
 
       # -- the verse table --------------------------------------------------------
 
-      # [{text:, line:, stanza:}, …] — the verse rows of the one table that
-      # carries the left1X class family, with the stanza counter driven by
-      # the nbsp break rows and the printed every-5th numbers cross-checked
-      # against the 1-based ordinal.
+      # Walks the rows of the one table that carries the left1X class
+      # family. The stanza counter rides the nbsp break rows; line numbers
+      # are the EDITION's (cross-checked against the printed every-5th
+      # anchors, resynced across legitimate stanza-boundary gaps — class
+      # note); a numbered-but-textless row consumes its edition number and
+      # is recorded, never emitted.
       def verse_lines(main, path)
+        if main.css("p.discreto").any? { |marker| fold(marker.text) == NO_TEXT_MARKER }
+          raise Nabu::ValidationError,
+                "upstream publishes no text for this cantiga (\"#{NO_TEXT_MARKER}\") — nothing to " \
+                "ingest; stays quarantined until Littera supplies the text (#{path})"
+        end
+
         anchor = main.at_css(VERSE_TD_CSS) or
           raise Nabu::ValidationError, "no verse lines (no #{VERSE_TD_CSS} cell) — every cantiga " \
                                        "page carries verse, so the page shape drifted (#{path})"
-        lines = []
-        stanza = 1
-        break_pending = false
+        walk = VerseWalk.new(path)
         anchor.ancestors("table").first.xpath("./tr | ./tbody/tr").each do |row|
           tds = row.xpath("./td")
           if verse_row?(tds)
-            stanza += 1 if break_pending
-            break_pending = false
-            lines << verse_line(tds, lines.size + 1, stanza, path)
-          elsif stanza_break?(tds) && lines.any?
-            break_pending = true
+            walk.verse_row!(printed: fold(tds[1].text), text: fold(tds.last.text))
+          elsif stanza_break?(tds)
+            walk.break_row!
           end
         end
-        raise Nabu::ValidationError, "zero verse lines in the verse table — the page shape drifted (#{path})" if
-          lines.empty?
-
-        lines
+        walk.result
       end
 
       def verse_row?(tds)
@@ -193,28 +222,120 @@ module Nabu
           tds.first.text.match?(/\A[[:space:]]*\z/)
       end
 
-      def verse_line(tds, ordinal, stanza, path)
-        printed = fold(tds[1].text)
-        if !printed.empty? && printed != ordinal.to_s
-          raise Nabu::ValidationError,
-                "printed line number #{printed.inspect} against ordinal #{ordinal} (#{path}) — " \
-                "the edition's numbering scheme drifted; the ordinal must BE the edition's number"
-        end
-
-        text = fold(tds.last.text)
-        raise Nabu::ValidationError, "verse line #{ordinal} is empty (#{path}) — the page shape drifted" if
-          text.empty?
-
-        { text: text, line: ordinal, stanza: stanza }
-      end
-
       def append_lines!(document, urn, lines)
-        lines.each do |line|
+        lines.each_with_index do |line, index|
+          annotations = { "line" => line[:line], "stanza" => line[:stanza] }
+          annotations["number_gap"] = line[:number_gap] if line[:number_gap]
           document << Nabu::Passage.new(
             urn: "#{urn}:#{line[:line]}", language: LANGUAGE, text: line[:text],
-            annotations: { "line" => line[:line], "stanza" => line[:stanza] },
-            sequence: line[:line] - 1
+            annotations: annotations, sequence: index
           )
+        end
+      end
+
+      # The P56-1 edition-numbering walk. Every row gets the next edition
+      # number (rows consumed so far + accumulated gap + 1); a printed
+      # anchor either verifies it exactly or — ONLY when a stanza boundary
+      # was crossed since the last anchor, and only ever AHEAD — opens a
+      # gap: the edition counts refrain lines the display merges/elides
+      # (fixture ground truth: cdcant 475/959/1025/1706, all sidebar-marked
+      # "Refrão", every gap at a break row). The current stanza is
+      # renumbered to the edition's numbers and its first line carries the
+      # gap annotation, so the deviation stays visible in the data. Any
+      # other mismatch is real drift and quarantines. A textless row
+      # (cdcant 562) consumes its edition number, cross-checks like any
+      # other, and surfaces in "empty_lines" instead of a passage.
+      class VerseWalk
+        def initialize(path)
+          @path = path
+          @rows = []
+          @stanza = 1
+          @stanza_start = 0
+          @break_pending = false
+          @breaks_since_anchor = 0
+          @gap = 0
+          @gaps_total = 0
+        end
+
+        def break_row!
+          @break_pending = true if @rows.any?
+        end
+
+        def verse_row!(printed:, text:)
+          open_stanza!
+          line = @rows.size + @gap + 1
+          line += resync!(printed, line) unless printed.empty?
+          @rows << { text: text, line: line, stanza: @stanza }
+          annotate_gap!
+        end
+
+        def result
+          lines = @rows.reject { |row| row[:text].empty? }
+          raise Nabu::ValidationError, "zero verse lines in the verse table — the page shape drifted (#{@path})" if
+            lines.empty?
+
+          Verse.new(lines: lines, metadata: verse_metadata)
+        end
+
+        private
+
+        def open_stanza!
+          return unless @break_pending
+
+          @break_pending = false
+          @stanza += 1
+          @stanza_start = @rows.size
+          @breaks_since_anchor += 1
+        end
+
+        # 0 when the anchor verifies the count exactly; the gap width when
+        # a legitimate boundary gap opens (renumbering the current stanza's
+        # earlier rows); a loud quarantine otherwise.
+        def resync!(printed, expected)
+          number = begin
+            Integer(printed, 10)
+          rescue ArgumentError
+            drift!(printed, expected)
+          end
+          crossed = @breaks_since_anchor.positive?
+          @breaks_since_anchor = 0
+          return 0 if number == expected
+
+          drift!(printed, expected) if number < expected || !crossed
+          open_gap!(number - expected)
+        end
+
+        def open_gap!(gap)
+          @gap += gap
+          @gaps_total += gap
+          @rows[@stanza_start..].each { |row| row[:line] += gap }
+          @pending_gap = gap
+        end
+
+        # The gap annotation lands on the CURRENT stanza's first line —
+        # after the append, so a gap discovered on the stanza's own first
+        # row (cdcant 1706) still has its target in place.
+        def annotate_gap!
+          return unless @pending_gap
+
+          first = @rows[@stanza_start]
+          first[:number_gap] = (first[:number_gap] || 0) + @pending_gap
+          @pending_gap = nil
+        end
+
+        def drift!(printed, expected)
+          raise Nabu::ValidationError,
+                "printed line number #{printed.inspect} against expected edition line #{expected} " \
+                "(#{@path}) — the numbering drifted mid-stanza; a legitimate gap opens only at a " \
+                "stanza boundary and only ever ahead (P56-1)"
+        end
+
+        def verse_metadata
+          metadata = {}
+          metadata["number_gaps"] = @gaps_total if @gaps_total.positive?
+          empty = @rows.select { |row| row[:text].empty? }.map { |row| row[:line] }
+          metadata["empty_lines"] = empty unless empty.empty?
+          metadata
         end
       end
 
@@ -241,9 +362,21 @@ module Nabu
         metadata
       end
 
+      # P56-1: one censused page (cdcant 1241) carries the literal
+      # "[Sem autor atribuído]" label instead of an author link — recorded
+      # honestly as {"unattributed" => true}, no author minted. Anything
+      # else without a link is still page-shape drift, loud.
       def author_fields(main)
-        link = main.at_css("p.titulo-autor a[href*='autor.asp']") or
-          raise Nabu::ValidationError, "no p.titulo-autor author link — the page shape drifted"
+        paragraph = main.at_css("p.titulo-autor") or
+          raise Nabu::ValidationError, "no p.titulo-autor author paragraph — the page shape drifted"
+        link = paragraph.at_css("a[href*='autor.asp']")
+        if link.nil?
+          return { "unattributed" => true } if fold(paragraph.text) == UNATTRIBUTED_LABEL
+
+          raise Nabu::ValidationError,
+                "p.titulo-autor carries neither an autor.asp link nor the #{UNATTRIBUTED_LABEL.inspect} " \
+                "label (got #{fold(paragraph.text).inspect}) — the page shape drifted"
+        end
         cdaut = link["href"][/cdaut=(\d+)/, 1] or
           raise Nabu::ValidationError, "author link #{link['href'].inspect} carries no cdaut id"
         { "author" => fold(link.text), "author_id" => Integer(cdaut, 10) }

@@ -48,6 +48,59 @@ the cosmetic `pv` parameter (byte-diff-verified no-op).
   WITHOUT `semanotacoes`, as above
   (URL: `cantiga.asp?cdcant=1400&pv=sim`).
 
+## The P56-1 quirk pages (the first sync's 7 quarantines, all REAL)
+
+The 2026-07-31 first sync (1,683 pages) quarantined 7; every page was
+investigated against its real bytes (retrieved 2026-07-31 with the
+crawl; copied byte-identically from `canonical/cantigas/` on
+2026-08-02, raw Windows-1252 preserved). Six are edition-intended
+shapes the parser now tolerates WITH annotations; one is genuinely
+textless upstream and stays quarantined.
+
+**The printed-number gap pages** — `cantiga-475.html` (Afonso X,
+Escárnio e Maldizer), `cantiga-959.html` (João Airas de Santiago,
+Amor), `cantiga-1025.html` (João Airas de Santiago, Amigo),
+`cantiga-1706.html` (Alvaro Afonso, Espúria/Fragmento, with rubric):
+the edition's printed every-5th line numbers run AHEAD of the display
+ordinal, and the offset grows ONLY across stanza-break rows. All four
+are sidebar-marked **Refrão**: the edition's numbering counts refrain
+lines the page display merges or elides (475's single displayed
+refrain line answers two counted edition lines per cobra; 959 counts
+one extra per cobra plus two before the finda — printed "25" pins the
+finda at edition 23–26; 1025 opens one gap after cobra 1 and the later
+printed "15" proves the offset then holds; 1706 counts one extra line
+its fragment display omits). The parser adopts the edition's numbering
+(urn line = edition line, gaps visible: 475 → 1–5, 7–11, 13–17),
+annotates the first line after each gap with `"number_gap" => d`, and
+totals them in document metadata `"number_gaps"`. A printed number
+that mismatches mid-stanza, or runs BEHIND, still quarantines.
+
+- `cantiga-562.html` (D. Dinis, Amor, Refrão): the verse table's row
+  20 is **numbered "20" but textless** — the edition counts a final
+  line (after the one-line finda "ou de me quererdes valer.") whose
+  text the page does not display. The row consumes its edition number,
+  cross-checks like any other, yields no passage, and is recorded in
+  document metadata `"empty_lines" => [20]` (19 passages).
+- `cantiga-1241.html` (Amigo): `p.titulo-autor` carries the literal
+  label **"[Sem autor atribuído]"** and no `autor.asp` link — the
+  corpus's one unattributed cantiga (upstream's own shape, distinct
+  from "Anónimo" pages, which have a real author entry with a cdaut
+  id). Recorded honestly as metadata `"unattributed" => true`; no
+  author is minted. Any other linkless author paragraph still
+  quarantines.
+- `quirks/cantiga-1066.html` (João Airas de Santiago) — **stays
+  quarantined**, which is why it sits outside the discover path: the
+  page carries `<p class="discreto">Texto ainda não disponível</p>`
+  where the verse table would be. Per its Nota geral the cantiga is
+  doubly transcribed in the apógrafos italianos and Littera has not
+  published a text for this entry. Nothing to ingest; the quarantine
+  message names the marker, and the page waits on upstream.
+
+Corpus census after the heal (verified 2026-08-02 by a read-only
+reparse of all 1,683 canonical pages): **1,682 documents / 34,162
+verse passages, 1 quarantine (1066)**; the tolerance annotations fire
+on exactly the six pages above and nowhere else.
+
 ## Fetch fixtures (`fetch/`, invisible to discover)
 
 - `fetch/listacantigas-A.html` — the letter-A incipit index WHOLE: 326
