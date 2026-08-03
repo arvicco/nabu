@@ -116,6 +116,17 @@ module Nabu
       # inside a transliteration is not a separator).
       MULTIFORM_SPLIT = %r{\s*,\s*|\s+/\s+}
 
+      # FAMILY-level Glottocodes worn by individual IE-CoR varieties (P57-5
+      # follow-up): a doculect with no ISO code may carry its FAMILY's
+      # Glottocode (variety 291 "Raji: Barzoki" carries cent2264 — Glottolog
+      # "Central Iran Kermanic", level: family, verified against the vendored
+      # canonical/cldf-spine/glottolog/languages.csv). A family node is not a
+      # language code; per the Q4 family-collective policy it maps to the
+      # ISO 639-5 collective, the variety name staying in lang_name.
+      FAMILY_GLOTTOCODES = {
+        "cent2264" => "ira" # Central Iran Kermanic ⊂ Iranian
+      }.freeze
+
       # Parse the CLDF table dir into entries + language notes.
       def read(cldf_dir)
         tables = load_tables(cldf_dir)
@@ -282,10 +293,15 @@ module Nabu
       end
 
       # The upstream code verbatim: ISO 639-3 when the variety carries one,
-      # else its Glottocode, else the numeric variety id namespaced.
+      # else its Glottocode (family-level ones resolving to their ISO 639-5
+      # collective), else the numeric variety id namespaced.
       def variety_code(variety)
         return variety["ISO639P3code"] unless blank?(variety["ISO639P3code"])
-        return variety["Glottocode"] unless blank?(variety["Glottocode"])
+
+        unless blank?(variety["Glottocode"])
+          glottocode = variety["Glottocode"]
+          return FAMILY_GLOTTOCODES.fetch(glottocode, glottocode)
+        end
 
         "iecor-#{variety.fetch('ID')}"
       end
