@@ -23,6 +23,14 @@ referential-integrity gaps the drift guard exists to catch).
   documentation, and the validation tooling in this repository — is
   licensed under the Creative Commons Attribution 4.0 International
   License").
+- `lect_overrides.yml` — NOT an upstream file: a fixture mirror of
+  Nabu's own `config/lect_overrides.yml` FROZEN at the P57-3 seed
+  state (derom + rundata, the two D-ruled overrides). Tests point
+  here, never at the live config file, so live curation rows (D57-f
+  and later) cannot silently change test outcomes; likewise no test
+  may construct a query with the `:auto` lects default (the P57-4
+  hermeticity lesson — suite results must not depend on whether this
+  box has canonical/nabu-lects synced).
 
 ## What the files are
 

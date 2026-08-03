@@ -1,0 +1,11 @@
+# Fixture mirror of config/lect_overrides.yml FROZEN at the P57-3 seed state
+# (the two D-ruled overrides). Tests point here, never at the live config
+# file — live curation rows (D57-f and later) must not silently change test
+# outcomes (the P57-4 hermeticity lesson: suite results may not depend on
+# box state, whether canonical/nabu-lects is synced OR what the live config
+# says today).
+sources:
+  derom:
+    la-vul: "roa:pro"
+  rundata:
+    gmq-pro: "gmq:run"

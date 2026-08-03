@@ -263,15 +263,34 @@ class DeromTest < Minitest::Test
                     "the cognat material still reads — it rides the body"
   end
 
+  # Both lects lanes pinned EXPLICITLY (never :auto in a test — outcomes may
+  # not depend on whether this box has canonical/nabu-lects synced): absent
+  # module = the old -pro string test (la-vul unasterisked, the
+  # wiktionary-cu treatment); present module = the D57-d RULED state (the
+  # per-source override resolves derom's la-vul to roa:pro, mode
+  # reconstructed → display asterisk).
   def test_etym_walks_a_romance_reflex_to_the_proto_romance_etymon
     db, loader = loader_setup
     loader.load_from(adapter, workdir: FIXTURES)
-    results = Nabu::Query::Etym.new(catalog: db).run("lapte")
+    results = Nabu::Query::Etym.new(catalog: db, lects: nil).run("lapte")
     assert_equal ["ˈlakt-e"], results.map(&:headword)
     assert_equal "derom", results.first.dictionary_slug
     assert_equal "lapte", results.first.matched_reflex.word
-    cheval = Nabu::Query::Etym.new(catalog: db).run("cheval")
+    cheval = Nabu::Query::Etym.new(catalog: db, lects: nil).run("cheval")
     assert_equal ["kaˈβall-u"], cheval.map(&:headword)
+  end
+
+  def test_etym_asterisks_the_etymon_when_the_lects_module_is_present
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    fixture_lects = Nabu::Lects.load(
+      Nabu::TestSupport.fixtures("nabu-lects"),
+      overrides_path: File.join(Nabu::TestSupport.fixtures("nabu-lects"), "lect_overrides.yml")
+    )
+    results = Nabu::Query::Etym.new(catalog: db, lects: fixture_lects).run("lapte")
+    assert_equal ["*ˈlakt-e"], results.map(&:headword),
+                 "D57-d ruled: derom la-vul → roa:pro (reconstructed) — the asterisk is earned via mode"
+    assert_equal "roa:pro", results.first.lect_id
   end
 
   # --- fetch (WebMock only) --------------------------------------------------------
