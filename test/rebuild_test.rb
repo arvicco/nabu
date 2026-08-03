@@ -240,6 +240,52 @@ class RebuildTest < Minitest::Test
     end
   end
 
+  # -- stale WAL sidecars are dropped with the db (P57 incident) -----------
+  #
+  # 2026-08-02: `nabu rebuild` on the live box deleted catalog.sqlite3 but
+  # left the previous WAL session's -shm/-wal at the same path (a
+  # long-running process still held the old inode); the fresh connection
+  # then died with "disk I/O error" on PRAGMA journal_mode=wal. The drop
+  # step must take the sidecars with the database — for the fulltext index
+  # too, which is deleted the same way.
+  # The discriminating pin: the drop step must unlink the -wal/-shm WITH the
+  # main file (a cross-process holder can't be spawned in a unit suite; this
+  # tests the mechanism the incident proved necessary).
+  def test_drop_database_files_takes_the_wal_sidecars_with_the_db
+    FileUtils.mkdir_p(@db_dir)
+    db = File.join(@db_dir, "victim.sqlite3")
+    [db, "#{db}-wal", "#{db}-shm"].each { |f| File.write(f, "x") }
+
+    Nabu::Store.drop_database_files!(db)
+
+    [db, "#{db}-wal", "#{db}-shm"].each do |f|
+      refute File.exist?(f), "#{File.basename(f)} must be unlinked with the database"
+    end
+  end
+
+  def test_rebuild_survives_a_connection_still_holding_the_old_catalog
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+        wired: true
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD)
+    rebuilder.run # mint the first catalog
+
+    holder = Nabu::Store.connect(catalog_path) # the long-running process
+    holder[:documents].count # force a real WAL session (-shm mmapped)
+
+    result = rebuilder.run # drop + recreate while held — the incident
+
+    assert_equal %w[corpus], result.outcomes.map(&:slug),
+                 "rebuild completes while another connection holds the old catalog"
+    fresh = Nabu::Store.connect(catalog_path)
+    assert_equal 1, fresh[:documents].count
+    fresh.disconnect
+  ensure
+    holder&.disconnect
+  end
+
   # -- timeline is rebuilt from canonical (P15-2) -------------------
 
   def test_rebuild_regenerates_the_document_axes

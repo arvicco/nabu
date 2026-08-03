@@ -154,6 +154,16 @@ module Nabu
       db
     end
 
+    # Delete a SQLite database file TOGETHER WITH its WAL sidecars. Deleting
+    # only the main file while a long-running process still holds the old
+    # inode leaves its `-shm` behind at the path; the next connection then
+    # dies with "disk I/O error" on PRAGMA journal_mode=wal (the 2026-08-02
+    # rebuild incident — a nine-day `nabu mcp` held the shm across the drop).
+    # Any drop-and-recreate of a WAL database goes through here.
+    def drop_database_files!(path)
+      [path, "#{path}-wal", "#{path}-shm"].each { |file| FileUtils.rm_f(file) }
+    end
+
     # Open the fulltext index database (architecture §2: a SEPARATE SQLite file
     # from the catalog). Same scheme-less-path handling as #connect so callers
     # can pass config.fulltext_path directly. No foreign_keys pragma: the index
