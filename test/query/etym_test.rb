@@ -53,8 +53,12 @@ module Query
       Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
     end
 
+    # lects: nil, EXPLICITLY — this helper is the absent-module lane (the old
+    # -pro string test), and the default (:auto) would make every assertion
+    # below depend on whether THIS BOX has canonical/nabu-lects synced (the
+    # P57-4 hermeticity lesson). The lects-aware lane is #etym_with_lects.
     def etym(lemma, **)
-      Nabu::Query::Etym.new(catalog: @catalog, fulltext: @fulltext).run(lemma, **)
+      Nabu::Query::Etym.new(catalog: @catalog, fulltext: @fulltext, lects: nil).run(lemma, **)
     end
 
     # -- the walk: attested → proto ------------------------------------------------
@@ -421,7 +425,7 @@ module Query
     # (every test above this section pins that fallback).
     def lects
       @lects ||= Nabu::Lects.load(Nabu::TestSupport.fixtures("nabu-lects"),
-                                  overrides_path: File.join(Nabu::Config::PROJECT_ROOT, "config",
+                                  overrides_path: File.join(Nabu::TestSupport.fixtures("nabu-lects"),
                                                             "lect_overrides.yml"))
     end
 

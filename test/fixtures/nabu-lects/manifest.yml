@@ -19,3 +19,10 @@ files:
     url: https://raw.githubusercontent.com/arvicco/nabu-lects/main/codemap.yml
     whole: true
     trim: none
+  - path: lect_overrides.yml
+    # NOT upstream: a frozen mirror of Nabu's own config/lect_overrides.yml
+    # at the P57-3 seed state (derom + rundata) — tests must not read the
+    # live config file (see README, the hermeticity note).
+    url: none (Nabu-authored fixture)
+    whole: true
+    trim: none
