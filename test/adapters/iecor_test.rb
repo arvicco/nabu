@@ -64,6 +64,21 @@ class IecorTest < Minitest::Test
     assert(document.language_notes.all? { |note| note.kind == "iecor" && note.source == "iecor" })
   end
 
+  # P57-5 follow-up: variety 291 "Raji: Barzoki" wears its FAMILY's
+  # Glottocode (cent2264, "Central Iran Kermanic", level: family) — a family
+  # node must resolve to the ISO 639-5 collective, never leak as lang_code.
+  # No fixture record exists for the variety, so this pins the adapter's own
+  # table (the Q4 MW Slav./Hib. precedent); language-level Glottocodes and
+  # the namespaced fallback stay verbatim.
+  def test_family_glottocodes_resolve_to_the_iso_collective
+    parser = Nabu::Adapters::IecorCldfParser.new
+    code = ->(variety) { parser.send(:variety_code, variety) }
+    assert_equal "ira", code.call({ "ISO639P3code" => "", "Glottocode" => "cent2264", "ID" => "291" })
+    assert_equal "hitt1242", code.call({ "ISO639P3code" => "", "Glottocode" => "hitt1242", "ID" => "9" }),
+                 "language-level Glottocodes pass through untouched"
+    assert_equal "iecor-7", code.call({ "ISO639P3code" => "", "Glottocode" => "", "ID" => "7" })
+  end
+
   def test_entry_ids_are_stable_across_independent_passes
     snapshot = -> { adapter.parse(adapter.discover(FIXTURES).first).map(&:entry_id) }
     first = snapshot.call
