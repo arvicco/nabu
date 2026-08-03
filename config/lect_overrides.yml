@@ -28,3 +28,36 @@ sources:
     # reconstructed default (gmq:pro) — nabu-lects registers exactly this
     # distinction as the attested gmq:run stage. Owner ruling, P57-3.
     gmq-pro: "gmq:run"
+
+  # ── D57-f (owner ruling 2026-08-02): the first text-corpus stage
+  # assignments. Two tiers, stated per row: CERTAIN (the corpus's own
+  # definition IS the stage) and APPROXIMATION (corpus-level reading per
+  # the sanctioned survey pattern; per-document overlay refines later).
+  # Epigraphy (edr, edh, isicily, iip, ceipom) and genuinely mixed corpora
+  # (croala, first1k-greek, diorisis, glaux, ud) stay DELIBERATELY
+  # unstaged — bare-anchor honesty at source grain.
+  openmgh:
+    # MGH medieval critical editions — certain.
+    lat: "lat:med"
+  vulgate:
+    # Jerome — certain.
+    lat: "lat:late/ecc"
+  digiliblt:
+    # The corpus is defined as "testi latini tardoantichi" — certain.
+    lat: "lat:late"
+  sblgnt:
+    # The SBL Greek New Testament — certain.
+    grc: "grc:koi"
+  papyri-ddbdp:
+    # Documentary papyri, Ptolemaic through Roman — approximation.
+    grc: "grc:koi"
+  perseus-greek:
+    # Classical canon — approximation; Homer refines to grc:hom per-doc.
+    grc: "grc:cla"
+  perseus-latin:
+    # Classical canon — approximation; Plautus refines to lat:arch per-doc.
+    lat: "lat:cla"
+  elephantine:
+    # The island's Greek record is Ptolemaic — approximation. (The source's
+    # other twelve languages are untouched: overrides are per (source, code).)
+    grc: "grc:koi"
