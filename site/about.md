@@ -24,26 +24,40 @@ custodian of the library of Ashurbanipal at Nineveh — a fitting patron for
 a project whose founding dream included holding the tablets themselves
 (the ORACC shelf now does).
 
-## Nabu publishes data — the project family
+## The project family
 
-The library does not only ingest: since July 2026 Nabu **publishes its
-own derived datasets** to a sister repository,
-[nabu-data](https://github.com/arvicco/nabu-data) — twelve datasets at
-v1.0.0: form-to-lemma tables, orthography and script folds, metrical
-scansions, a Tibetan segmentation layer, the cuneiform value-to-sign
-table, and the first *re-publication* (stable anchors for ACTib's
-segmented Tibetan canon). Everything is plain CSV with Frictionless
-Data Package manifests carrying full derivation provenance — the exact
-upstream corpus version, the producing code version, and a re-runnable
-recipe — with measured quality published in-band, never hidden. CC BY
-4.0 (three share-alike carve-outs, each stated where the consumer
-reads); every dataset's manifest and `sources.bib` credit the upstream
-works it derives from. And the loop runs both ways: Nabu re-ingests
-its own publication as an ordinary source, so three of the twelve
-datasets feed the library's own query surfaces from the published
-files. The second sibling is [Edubba](https://arvicco.github.io/nabu-edubba)
-— the scribal school (the **School ↗** link above): where Nabu curates
-the texts, Edubba teaches the scripts.
+Nabu is the eldest of four siblings, each with one job; where a sibling
+produces something the library can use, Nabu consumes it back as an
+ordinary optional module — the same ingestion door every external source
+walks through.
+
+- **[Nabu](https://github.com/arvicco/nabu)** — the library itself: the
+  canonical texts, the catalog, the query tools, this site.
+- **[nabu-data](https://github.com/arvicco/nabu-data)** (the **Data ↗**
+  link above) — the publishing arm: **fourteen datasets** as of August
+  2026, from form-to-lemma tables and orthography folds to metrical
+  scansions, a Tibetan segmentation layer, the cuneiform value-to-sign
+  table, and the re-publications (stable anchors for ACTib's segmented
+  Tibetan canon; the first machine-readable edition of the complete
+  secular Galician-Portuguese lyric). Plain CSV with Frictionless Data
+  Package manifests carrying full derivation provenance and measured
+  quality in-band; CC BY 4.0 with stated share-alike carve-outs; archived
+  with a version DOI under concept
+  [10.5281/zenodo.21757475](https://doi.org/10.5281/zenodo.21757475).
+  Three of the datasets feed the library's own query surfaces back from
+  the published files.
+- **[nabu-lects](https://arvicco.github.io/nabu-lects)** (the **Lects ↗**
+  link above) — the youngest sibling (August 2026, CC BY 4.0, pre-1.0):
+  a curated registry of *lects* — language varieties as genealogical
+  anchor × historical stage × variety × orthography — with a universal
+  mapping from standard language codes onto them. Born from this
+  library's holdings, universal by construction; Nabu consumes it for
+  the stage ladders, stage-aware search, and reconstruction honesty
+  described on the [Languages]({{ '/languages/' | relative_url }}) page.
+- **[Edubba](https://arvicco.github.io/nabu-edubba)** (the **School ↗**
+  link above) — the scribal school: where Nabu curates the texts, Edubba
+  teaches the scripts, consuming the library's sign-resolution contract
+  for its reading panels.
 
 ## Why it exists
 
@@ -57,7 +71,7 @@ Three convictions, stated plainly:
 2. **Citations are the unit of scholarship.** A search result that cannot
    be cited to a verse, a folio line, or a tablet surface is a curiosity.
    Everything in Nabu resolves to a stable URN.
-3. **License terms are data.** Aggregating more than eighty sources under a dozen
+3. **License terms are data.** Aggregating more than a hundred sources under a dozen
    different licenses is workable only if every text's terms are recorded
    per document and consulted mechanically — especially once AI tools can
    quote from the collection.

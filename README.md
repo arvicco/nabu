@@ -25,8 +25,8 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-08-01** the shelves hold **974,972 documents / 68,381,456
-passages** in 125 language codes — from proto-cuneiform tablets of the
+As of **2026-08-04** the shelves hold **975,074 documents / 68,408,109
+passages** in 122 language codes — from proto-cuneiform tablets of the
 late 4th millennium BCE to Meiji-era Japanese. The newest wave
 (2026-07-26) opened the Rabbinic library (Mishnah, both Talmuds at
 daf-grain citation, Tosefta), the Geʿez shelf (**1 Enoch and
@@ -42,7 +42,7 @@ than doubled the library:
 premodern Islamicate library whole (Quran and hadith, history, fiqh,
 falsafa, the dīwāns) with its Persian shelf (Ḥāfiẓ, Ibn Sīnā) — making
 **Classical Arabic the largest language in the corpus at 33.3 million
-passages**, ahead of Literary Chinese (13.2M — the Kanseki Repository
+passages**, ahead of Literary Chinese (13.4M — the Kanseki Repository
 and the CBETA Buddhist canon), the same day the **Germanic wave**
 landed (the Poetic Edda, the *Heliand*, Middle High German, ~6,800
 runic inscriptions) beside the Japanese reading desk and the Ancient
@@ -320,10 +320,12 @@ row IS: a corpus that mints catalog rows, an owner-authored local memory
 shelf, or machinery like `osl` (the Oracc Sign List behind `nabu signs`),
 `nabu-data` (Nabu's own published datasets, consumed back) and
 `pedecerto`/`bridging` that fetches reference data but mints no
-documents of its own). All 108 sources are **wired**
-— adapter built and first sync verified (2026-08-01); the newest
-arrivals are **the granted sources** (2026-07-31): `cantigas`, the
-complete secular Galician-Portuguese lyric (1,676 cantigas at verse
+documents of its own). All 109 sources are **wired**
+— adapter built and first sync verified (2026-08-04); the newest
+arrival is `derom` — the Dictionnaire Étymologique Roman's
+Proto-Romance etymons, displayed under the honest `roa:pro` lect —
+after **the granted sources** (2026-07-31): `cantigas`, the
+complete secular Galician-Portuguese lyric (1,682 cantigas at verse
 grain under the coordinator's written any-use grant) and `rsti`, the
 Ras Shamra Tablet Inventory (5,075 inventory cards with KTU/CTA
 concordances, published editions at line grain, under Prosser's NC-SA
@@ -509,18 +511,29 @@ useful to others.
 
 ## The project family
 
-Nabu has two public siblings:
+Nabu has three public siblings:
 
 - **[nabu-data](https://github.com/arvicco/nabu-data)** — the datasets
   Nabu itself publishes: form→lemma tables, orthography and script folds,
   metrical scansions, the Tibetan segmentation layer, the cuneiform
-  value→sign table — eleven datasets as plain CSV with Frictionless Data
-  Package manifests (CC BY 4.0, three share-alike carve-outs), each
-  carrying its full derivation provenance down to the input corpus shas.
+  value→sign table, and the re-publications (the ACTib anchor layer, the
+  complete secular Galician-Portuguese lyric) — fourteen datasets as
+  plain CSV with Frictionless Data Package manifests (CC BY 4.0, stated
+  share-alike carve-outs), each carrying its full derivation provenance
+  down to the input corpus shas, archived with a version DOI under
+  concept [10.5281/zenodo.21757475](https://doi.org/10.5281/zenodo.21757475).
   The loop runs both ways: Nabu re-ingests its own publication as an
   ordinary source (`nabu sync nabu-data`), so the Sanskrit lookup lane,
   the Tibetan verb lane, and Tibetan word segmentation are all served
   from the published files.
+- **[nabu-lects](https://arvicco.github.io/nabu-lects)** — the lect
+  registry ([repository](https://github.com/arvicco/nabu-lects), CC BY
+  4.0, pre-1.0): language varieties as genealogical anchor × historical
+  stage × variety × orthography, with a universal mapping from standard
+  codes onto them. Born from this library's holdings, universal by
+  construction; Nabu consumes it (`nabu sync nabu-lects`) for the stage
+  ladders on `nabu language` cards, `search --lect`, and registry-keyed
+  reconstruction display (docs/languages.md, "The lect layer").
 - **[Edubba](https://arvicco.github.io/nabu-edubba)** — the scribal
   school: a downstream teaching project built on Nabu's library, named
   for the Sumerian é-dub-ba-a, the "tablet house". Where Nabu curates
