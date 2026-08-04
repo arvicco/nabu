@@ -122,6 +122,9 @@ module Nabu
       return :unresolvable unless match
       return :already_refined if match[:stage] || match[:variety] || match[:ortho]
       return :open_interval unless row[:not_before] && row[:not_after]
+      # A backwards interval (the 2026-08-04 iip find) satisfies containment
+      # vacuously — it is a dating defect upstream, never evidence.
+      return :reversed_interval if row[:not_before] > row[:not_after]
 
       bands = banded_stages(match[:anchor])
       return :no_banded_stages if bands.empty?

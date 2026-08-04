@@ -72,11 +72,21 @@ this page is about what the library does with it.
 **Nothing about storage changes.** Stored codes stay exactly as documented
 above; the registry is an optional module (`nabu sync nabu-lects`), and
 every surface below reads as before when it is absent. Resolution layers
-Nabu's own knowledge over the registry's universal defaults: a per-source
-override can record that one collection's use of a code means something
-specific — the medieval charter corpus resolves its `lat` to `lat:med`,
-the DÉRom dictionary's `la-vul` to the reconstructed `roa:pro` — with an
-unmapped code resolving to itself, honest coarseness.
+Nabu's own knowledge over the registry's universal defaults, at three
+grains: a **per-source override** records that one collection's use of a
+code means something specific (the medieval charter corpus resolves its
+`lat` to `lat:med`, the DÉRom dictionary's `la-vul` to the reconstructed
+`roa:pro`); **ratified rules** stage whole document groups by what the
+catalog already knows (a CDLI period label, an AES corpus slice, a DCS
+Vedic school tag names the stage of every document carrying it — and a
+document whose date interval falls inside exactly one stage's band is
+staged by date, containment, never overlap); and **per-document rulings**
+refine single texts. Every assignment lives in a journal that survives
+rebuilds, states its evidence, and is audited against the documents' own
+dates (`nabu lect check-dates`). As of 4 August 2026 the journal holds
+**408,884 assignments** — 279k from the period/corpus rules, 130k from
+date × stage-band inference — and an unmapped code still resolves to
+itself, honest coarseness.
 
 What it buys, on three surfaces:
 
@@ -85,19 +95,23 @@ historical stage (4 August 2026):
 
 ```
   stages:
-    arch  Old Latin (700–75 BCE) — 0 documents
-    cla  Classical Latin (75 BCE – 200 CE) — 353 documents
-    late  Late Latin (200–600 CE) — 445 documents
-    med  Medieval Latin (600–1350 CE) — 142 documents
-    ren  Renaissance Latin (1350–1550 CE) — 0 documents
+    arch  Old Latin (700–75 BCE) — 3023 documents
+    cla  Classical Latin (75 BCE – 200 CE) — 88342 documents
+    late  Late Latin (200–600 CE) — 22798 documents
+    med  Medieval Latin (600–1350 CE) — 377 documents
+    ren  Renaissance Latin (1350–1550 CE) — 111 documents
     new  New Latin (≥ 1550 CE) — 0 documents
-    unstaged  — 195601 documents
+    unstaged  — 81890 documents
 ```
 
-The zero rows are registered stages awaiting holdings or finer curation;
-the large `unstaged` line is deliberate honesty — nearly all of it is
-epigraphy (the EDR and EDH inscription corpora), which spans the whole
-ladder and is not stage-assignable at collection grain.
+Most of the staged Latin is epigraphy dated per inscription: an EDR or
+EDH stone whose dating interval sits inside exactly one stage's band
+carries that stage; one dated across a boundary stays honestly in
+`unstaged`, which is what most of that line is (band-spanning or undated
+inscriptions, never a guess). The same machinery gives Sumerian a
+five-stage ladder topped by Neo-Sumerian (Ur III) at 111,871 documents,
+and Akkadian the field's own six-way Assyrian/Babylonian grid
+(`nabu language sux`, `nabu language akk`).
 
 **Stage-aware search.** `nabu search "rex" --lect lat:med` keeps only hits
 whose collection resolves to Medieval Latin (prefix semantics: `--lect lat`
