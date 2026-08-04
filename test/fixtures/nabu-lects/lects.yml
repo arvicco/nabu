@@ -242,20 +242,71 @@ anchors:
     name: Coptic
     parent: egy
 
+  # ── Sumerian and the proto-cuneiform corpus ────────────────────────────────
+
+  sux:
+    name: Sumerian
+    glottocode: sume1241
+    note: "stage grid per the CDLI period vocabulary. Uruk-era proto-cuneiform
+           is deliberately NOT a sux stage — see qpc."
+    stages:
+      arch: {name: Archaic Sumerian,        band: [-2900, -2700], ord: 10,
+             band_note: "ED I-II, per the CDLI period convention — the earliest
+                         texts whose Sumerian identification is secure"}
+      ed:   {name: Early Dynastic Sumerian, band: [-2600, -2340], ord: 20,
+             band_note: "ED IIIa-b (Fara/Abu Salabikh through pre-Sargonic
+                         Lagash), per the CDLI period convention"}
+      sarg: {name: Sargonic Sumerian,       band: [-2340, -2200], ord: 30,
+             band_note: "the Old Akkadian period's Sumerian record (incl.
+                         Lagash II), per the CDLI period convention"}
+      ur3:  {name: Neo-Sumerian (Ur III),   band: [-2100, -2000], ord: 40,
+             band_note: "per the CDLI period convention; the bulk of the
+                         surviving record"}
+      post: {name: Post-Sumerian,           band: [-2000, -1600], ord: 50,
+             band_note: "the Old Babylonian literary/liturgical corpus, written
+                         after spoken Sumerian died; the band is the OB period
+                         convention, not the end of the scribal tradition"}
+
+  qpc:
+    name: Proto-cuneiform
+    band: [-3350, -2900]
+    band_note: "the Uruk V-III tablet corpus, per the CDLI period convention"
+    note: "CDLI's local-use code — these tablets' only machine-readable home.
+           Deliberately NOT mapped onto sux: whether the Uruk IV-III corpus
+           encodes Sumerian at all is an open question (Englund contra
+           Krebernik/Wilcke/Monaco), and upstream also files Susa
+           proto-Elamite tablets and purely numerical Uruk V tablets under
+           this code. A holder may claim specific ED I-II documents as
+           sux:arch at document grain; the registry itself takes no side."
+
   # ── Akkadian ───────────────────────────────────────────────────────────────
 
   akk:
     name: Akkadian
+    note: "the stage grid is dialect × period (Assyrian and Babylonian run in
+           parallel), not a single ladder — ord orders display only"
     stages:
+      old: {name: Old Akkadian,     band: [-2340, -2200], ord: 5,
+            band_note: "the Sargonic record, before the Assyrian/Babylonian
+                        split; per the CDLI period convention"}
       ob: {name: Old Babylonian,    band: [-2000, -1600], ord: 10,
            band_note: "approximate Assyriological convention"}
+      oa: {name: Old Assyrian,      band: [-1950, -1850], ord: 12,
+           band_note: "the kārum-trade archives, per the CDLI period
+                       convention; parallel to ob"}
       mb: {name: Middle Babylonian, band: [-1600, -1000], ord: 20,
            band_note: "approximate Assyriological convention"}
+      ma: {name: Middle Assyrian,   band: [-1400, -1000], ord: 22,
+           band_note: "per the CDLI period convention; parallel to mb"}
       na: {name: Neo-Assyrian,      band: [-1000, -600],  ord: 30,
            band_note: "approximate Assyriological convention"}
-      nb: {name: Neo-Babylonian,    band: [-1000, -600],  ord: 40,
-           band_note: "approximate Assyriological convention; overlaps na — the
-                       grid is dialect × period, not a single ladder"}
+      nb: {name: Neo-Babylonian,    band: [-1000, 100],   ord: 40,
+           band_note: "approximate Assyriological convention; overlaps na — see
+                       the anchor note. The upper bound folds the Late
+                       Babylonian / Achaemenid / Hellenistic record (to the
+                       latest datable tablets, ~75 CE) into nb rather than
+                       minting stages the period labels cut finer than the
+                       language does"}
     varieties:
       lit: {name: Standard Babylonian, kind: register,
             note: "the literary register of first-millennium scholarship"}
