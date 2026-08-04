@@ -53,7 +53,6 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | Hebrew &amp; Aramaic | OSHB and BHSA Masoretic text, the Dead Sea Scrolls, the Sefaria Targums | c. 1000 BCE – 10th c. CE | 1,182 / 156,416 | CC BY / NC per source |
 | Elephantine | The island's multilingual documentary record: Aramaic, Greek, Demotic, Egyptian, Coptic, with English translation siblings | 3rd mill. BCE – Islamic Egypt | 15,539 / 69,350 | CC BY-SA |
 | Arabic &amp; Persian | OpenITI: Quran and hadith, history and biography, fiqh, kalām and falsafa, the dīwāns and adab; the Persian classics | 7th c. – early modern | 9,079 / 34,631,499 | CC BY-NC-SA |
-| Avestan | The TITUS Avestan corpus: Yasna, Yašts, Videvdad, Visperad in transliteration | — | 248 / 40,108 | non-commercial (personal grant) |
 | Egyptian | The TLA sentence corpora (AES + Late Egyptian/Demotic), gold-lemmatized | late 4th mill. – 1st c. BCE | 26,015 / 236,404 | CC BY-SA |
 | Ethiopic (Gǝʿǝz) | Beta maṣāḥǝft works incl. the Gǝʿǝz Bible; the TraCES gold-analyzed corpus with the Aksumite royal inscriptions | Aksumite – the manuscript tradition | 3,811 / 141,952 | CC BY-SA / NC |
 | Pre-Roman Italy &amp; Sicily | CEIPoM, ItAnt, the Etruscan editions, TIR, Lexicon Leponticum, I.Sicily | 7th c. BCE – Roman | 20,625 / 32,633 | CC BY per source |
@@ -323,16 +322,6 @@ paragraph; the Arabic-script search fold strips tashkeel and bridges the
 Persian keyboard (ی/ي, ک/ك), so Arabic-typed queries find Ḥāfiẓ and vice
 versa. Licensed CC BY-NC-SA — non-commercial research use, never
 redistributed.
-
-## Avestan
-
-The TITUS Avestan Corpus (Gippert, Frankfurt; joined 25 July 2026): 248
-documents / 40,108 passages — the Avesta in Latin transliteration, the
-Yasna, Yašts, Videvdad, and Visperad on the Geldner/Westergaard base,
-rescued from 1990s frame-based HTML. Held under a personal grant for
-non-commercial use, with TITUS and the editors credited wherever the
-texts are served. Old Iranian's other leg — the Old Persian and Elamite
-of the Achaemenid trilinguals — lives on the cuneiform shelf above.
 
 ## Ethiopic (Gǝʿǝz)
 
