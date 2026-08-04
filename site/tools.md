@@ -41,6 +41,15 @@ draws on 256,518 facet rows recording inscription genre, province,
 material, and object type, with uncertain upstream attributions preserved
 as such.
 
+**Stage-aware search** (`search --lect LECT-ID`, August 2026, with the
+optional [nabu-lects](https://arvicco.github.io/nabu-lects) registry
+synced) filters hits by *historical stage* rather than bare code:
+`--lect lat:med` keeps only collections resolving to Medieval Latin,
+`--lect lat` matches every Latin stage — prefix semantics over the
+registry's `anchor[:stage][/variety][@ortho]` grammar, with stored
+codes never touched. See the [Languages]({{ '/languages/' | relative_url }})
+page for the lect layer.
+
 **Lemma search** (`search --lemma FORM`) queries by dictionary form rather
 than surface string, over 18.6 million gold lemma annotations in
 thirty-three languages (Urartian and Middle Low German the newest,
@@ -202,6 +211,10 @@ dictionary lookup rather than missing what `define` would find.
 library surfaces — the corpus languages and the 803 Wiktionary etymology
 codes that appear in `etym` cognate lists — on one card: name, family,
 curated historical context, and the code's live holdings in the catalog.
+Where the code is a registered anchor in the
+[nabu-lects](https://arvicco.github.io/nabu-lects) registry, the card
+ends with the **stage ladder** — live holdings per historical stage
+(Classical, Late, Medieval Latin…), reconstructed stages asterisked.
 An unknown code is reported honestly, with a family hint;
 `nabu language --list` prints the held languages.
 

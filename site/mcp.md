@@ -16,7 +16,11 @@ read-only [MCP server](https://github.com/arvicco/nabu/blob/main/docs/mcp.md)
 `nabu_signs`, and `nabu_status`. Registration for Claude Code and Claude Desktop is in the
 [server documentation](https://github.com/arvicco/nabu/blob/main/docs/mcp.md);
 restricted material is excluded by default, license classes ride every
-payload, and nothing is ever written.
+payload, and nothing is ever written. Since August 2026 `nabu_search`
+also accepts a `lect` filter — historical-stage search (`lat:med`,
+`grc:koi`) through the optional
+[nabu-lects](https://arvicco.github.io/nabu-lects) registry, mirroring
+the command line's `--lect`.
 
 ## What asking looks like
 

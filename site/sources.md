@@ -50,7 +50,7 @@ classes are the gate that decides what may pass.
 
 ## Corpus sources
 
-All 105 sources below are synced and live as of 28 July 2026. Grouped by the
+All 109 sources below are synced and live as of 4 August 2026. Grouped by the
 owner's research desks rather than alphabetically — with each desk's member
 shelves, license mix and sync status on one page — the same sources appear on
 the [research axes]({{ '/axis/' | relative_url }}).
@@ -116,6 +116,7 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | `cdli` | [CDLI](https://cdli.mpiwg-berlin.mpg.de/) (Cuneiform Digital Library Initiative) | The universal cuneiform catalog: 353,156 artifacts — 135,201 transliterations plus catalog records for the whole artifact space, proto-cuneiform to Achaemenid, with periods, proveniences and collections as browsable axes (2023 snapshot, synchronized 19 July 2026) | Bespoke open grant (attribution; images excluded) |
 | `ebl` | [electronic Babylonian Library](https://www.ebl.lmu.de/) Fragmentarium (LMU Munich) | 23,288 tablet fragments from the museum drawers — ~326k lines with inline English translations, 79.9% cross-linked to their CDLI records (2023 snapshot, synchronized 19 July 2026) | Held at CC BY-NC-SA 4.0 (the data paper's grant) pending clarification of the deposit's CC BY field |
 | `cuc` | [Copenhagen Ugaritic Corpus](https://github.com/DT-UCPH/cuc) (CACCHT) | 279 Ugaritic tablets / 27,770 words — most of the KTU corpus, independently re-encoded, with per-sign cuneiform and damage flags (synchronized 19 July 2026) | CC BY-NC 4.0 |
+| `rsti` | [Ras Shamra Tablet Inventory](https://ochre.uchicago.edu/) (University of Chicago, OCHRE/CORPUS) | 5,075 inscribed-object inventory cards from Ugarit with the RS↔KTU/CTA concordances the field cites, and published editions at line grain (synchronized under a written grant, 1 August 2026) | CC BY-NC-SA 4.0 grant |
 | `peshitta` | [ETCBC peshitta](https://github.com/ETCBC/peshitta) | The Peshitta Old Testament incl. deuterocanon — 65 books / 31,341 verses; the Syriac leg of the verse-alignment hub (synchronized 19 July 2026) | CC BY-NC 4.0 |
 | `syriac-corpus` | [Digital Syriac Corpus](https://syriaccorpus.org/) (Srophé) | 632 classical Syriac TEI documents — a millennium of literature (synchronized 19 July 2026) | CC BY 4.0 (per file) |
 | `betamasaheft-works` | [Beta maṣāḥəft](https://betamasaheft.eu/) (Hiob-Ludolf-Zentrum, Univ. Hamburg) | The Gəʿəz text shelf: 3,796 text-bearing records at verse grain — the Ethiopic Bible, 1 Enoch and Jubilees (complete only in Gəʿəz), the Kebra Nagast, royal chronicles (synchronized 26 July 2026) | CC BY-SA 4.0 (per-document in-file grants) |
@@ -124,7 +125,7 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | `etcsl` | [ETCSL](https://etcsl.orinst.ox.ac.uk/) (Oxford, via the OTA/LLDS record) | The Electronic Text Corpus of Sumerian Literature: 394 hand-lemmatized composites + 381 English prose translations (synchronized 19 July 2026) | CC BY-NC-SA 3.0 |
 | `hebrew-lexicon` | [OpenScriptures HebrewLexicon](https://github.com/openscriptures/HebrewLexicon) | Two dictionaries: 9,299 augmented-Strong entries (every OSHB lemma resolves) + the 11,845-entry BDB outline with print-page anchors (synchronized 18 July 2026) | CC BY 4.0 |
 | `sdbh` | [UBS Semantic Dictionary of Biblical Hebrew](https://github.com/ubsicap/ubs-open-license) | 7,932 entries with semantic domains and 260,813 verse-level scripture references (synchronized 18 July 2026) | CC BY-SA 4.0 |
-| `sefaria` | [Sefaria](https://www.sefaria.org/) (Sefaria-Export, named versions only) | The Targum shelf plus the P46 Rabbinic wave — Mishnah (three complete Hebrew editions incl. the Kaufmann MS), the Wikisource Bavli, Guggenheimer's Yerushalmi, Tosefta, Minor Tractates, the Davidson/Steinsaltz nc lane: 839 documents / 435K passages with daf-grain Talmud citations (synchronized 26 July 2026) | Per version (PD / CC0 / CC BY / CC BY-SA; NC versions carried as `nc`) |
+| `sefaria` | [Sefaria](https://www.sefaria.org/) (Sefaria-Export, named versions only) | The Targum shelf plus the Rabbinic library — Mishnah (three complete Hebrew editions incl. the Kaufmann MS), the Wikisource Bavli, Guggenheimer's Yerushalmi, Tosefta, Minor Tractates, the Davidson/Steinsaltz nc lane: with daf-grain Talmud citations, joined by the classical midrash (the ten Rabbah collections and the Midrash Halakhah shelf, synchronized 1 August 2026) | Per version (PD / CC0 / CC BY / CC BY-SA; NC versions carried as `nc`) |
 | `bhsa` | [ETCBC BHSA](https://github.com/ETCBC/bhsa) | The Hebrew Bible with full clause/phrase syntax, ketiv-qere and per-lexeme glosses — 426,590 words (synchronized 18 July 2026) | CC BY-NC 4.0 |
 | `dss` | [ETCBC dss](https://github.com/ETCBC/dss) (Abegg/Bowley/Cook) | The Dead Sea Scrolls: 1,001 scrolls, 500,995 words, biblical and non-biblical, with text-critical flags intact (synchronized 18 July 2026) | CC BY-NC 4.0 (Abegg's grant) |
 | `iip` | [Inscriptions of Israel/Palestine](https://github.com/Brown-University-Library/iip-texts) (Brown) | 5,499 inscriptions, Hebrew/Aramaic/Greek/Latin, ~500 BCE–640 CE (synchronized 18 July 2026) | CC BY-NC 4.0 |
@@ -161,10 +162,12 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | `croala` | [CroALa — Croatiae auctores Latini](https://croala.ffzg.unizg.hr/) (Jovanović, Zagreb) | Croatian Latin from 976 CE through the neo-Latin centuries — charters, orations, carmina: 570 documents / 309,180 passages, the classical desk's medieval-Latin edge (synchronized 24 July 2026) | CC BY 4.0 |
 
 | `digiliblt` | [digilibLT](https://digiliblt.uniupo.it/) (Vercelli/UniUPO, via CIRCSE) | 373 late-antique secular Latin prose texts, 2nd–7th c. — the classical→medieval transition band, UDPipe-lemmatized (the silver tier, labelled as such): 370 documents / 457,560 passages (synchronized 25 July 2026) | CC BY-SA 4.0 (in-repo grant) |
-| `openmgh` | [openMGH](https://www.mgh.de/en/digital-mgh/openmgh) (Monumenta Germaniae Historica + Bayerische Staatsbibliothek) | The critical-edition backbone of medieval Latin as TEI: first wave = the complete SS rerum Germanicarum series, 57 volumes / 9,594 passages — Einhard, the Frankish annals, Widukind, Adam of Bremen (synchronized 25 July 2026; 96 further volumes are a documented future step) | CC BY 4.0 (texts themselves free of copyright) |
+| `openmgh` | [openMGH](https://www.mgh.de/en/digital-mgh/openmgh) (Monumenta Germaniae Historica + Bayerische Staatsbibliothek) | The critical-edition backbone of medieval Latin as TEI: the complete openMGH offering, 153 volumes — the SS rerum Germanicarum series (Einhard, the Frankish annals, Widukind, Adam of Bremen) joined by the Auctores antiquissimi, SS rerum Merovingicarum, Diplomata and further series (second wave synchronized 3 August 2026) | CC BY 4.0 (texts themselves free of copyright) |
+| `cantigas` | [Cantigas Medievais Galego-Portuguesas](https://cantigas.fcsh.unl.pt/) (Projeto Littera, NOVA FCSH) | The complete secular Galician-Portuguese lyric — 1,682 cantigas at verse grain with authorship, genre and the corpus-wide cancioneiro concordance (synchronized 2 August 2026; republished as the `roa-opt/cantigas` dataset in nabu-data) | Written any-use grant with attribution |
+| `derom` | [DÉRom](http://www.atilf.fr/DERom) (ATILF/Ortolang — Buchi &amp; Schweickard, eds.) | The Dictionnaire Étymologique Roman: 513 open etymon articles yielding 233 Proto-Romance reference entries with per-language reflexes, feeding `etym` under the `roa:pro` lect (synchronized 2 August 2026) | CC BY-NC-SA 4.0 |
 | `bfm` | [Base de français médiéval](https://bfm.ens-lyon.fr/) (ENS de Lyon / IHRIM, via NAKALA) | BFM2022: Old and Middle French from the 842 Serments de Strasbourg through the 15th century, TEI with lemmas (silver): 6.4M words (synchronized 25 July 2026) | Licence Ouverte / Etalab (8 files' critical apparatus, CC BY-NC-SA, is excluded at parse) |
 
-Nine further registry rows are **feature modules**, not corpora —
+Thirteen further registry rows are **feature modules**, not corpora —
 machinery that fetches reference data but mints no documents of its own:
 `bridging` (the OSHB↔BHSA crosswalk), `kr-gaiji` (the Kanripo gaiji
 map), `trismegistos` (the Trismegistos TexRelations concordance
@@ -176,10 +179,18 @@ behind `nabu define`'s variant-spelling fallback, CC BY-SA 4.0),
 CC BY-NC-SA 4.0), the two metrical-scansion lanes — `pedecerto`
 (Latin, CC BY-NC-ND 4.0) and `hypotactic` (Greek, CC BY 4.0) — that
 annotate held verse passages with meter, pattern and caesura, and
-`nabu-data` (the library's own [published
-datasets](https://github.com/arvicco/nabu-data), CC BY 4.0, consumed
-back as a source — the Sanskrit form→lemma table behind `nabu define`'s
-inflected-form expansion; the reproducibility loop closed in public).
+`cldf-spine` (the shared Cross-Linguistic Data Formats
+reference tables, including the Glottolog language census), `actib`
+(the segmented-Tibetan anchor layer republished through nabu-data),
+`osl` (the Oracc Sign List behind `nabu signs`), `nabu-data` (the
+library's own [published datasets](https://github.com/arvicco/nabu-data),
+CC BY 4.0, consumed back as a source — the Sanskrit form→lemma table
+behind `nabu define`'s inflected-form expansion; the reproducibility
+loop closed in public), and `nabu-lects` (the
+[lect registry](https://arvicco.github.io/nabu-lects) sister project,
+CC BY 4.0 — the stage ladders, stage-aware search and reconstruction
+honesty described on the [Languages]({{ '/languages/' | relative_url }})
+page).
 
 ## The local shelves
 
