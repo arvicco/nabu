@@ -6843,15 +6843,12 @@ module Nabu
       def print_language_stage_ladder(code, stages, lects, info)
         return if stages.empty? || !info
 
-        totals = Hash.new(0)
-        info.language_source_pairs.each do |(language, source_slug), count|
-          resolved = lects.resolve(language, source: source_slug)
-          match = Nabu::Lects.parse_id(resolved)
-          next unless match && match[:anchor] == code.to_s
-
-          key = match[:stage] ? "#{code}:#{match[:stage]}" : :unstaged
-          totals[key] += count
-        end
+        totals = if info.lect_materialized?
+                   ladder_totals_from_facets(code,
+                                             info)
+                 else
+                   ladder_totals_from_pairs(code, lects, info)
+                 end
         return if totals.values.sum.zero?
 
         say "  stages:"
@@ -6862,6 +6859,39 @@ module Nabu
         end
         unstaged = totals[:unstaged]
         say "    unstaged  — #{plural(unstaged, 'document')}" if unstaged.positive?
+      end
+
+      # P58-6: once a materialization exists, the ladder reads the lect
+      # facet — the only source that sees per-DOCUMENT journal rulings.
+      # Values under other anchors (derom's la-vul -> roa:pro) drop here
+      # exactly as they did on the pairs path.
+      def ladder_totals_from_facets(code, info)
+        totals = Hash.new(0)
+        facet_counts, identity = info.lect_facet_totals(code)
+        facet_counts.each do |value, count|
+          match = Nabu::Lects.parse_id(value)
+          next unless match && match[:anchor] == code.to_s
+
+          key = match[:stage] ? "#{code}:#{match[:stage]}" : :unstaged
+          totals[key] += count
+        end
+        totals[:unstaged] += identity if identity.positive?
+        totals
+      end
+
+      # The P57-4 path — a never-materialized catalog resolves (language,
+      # source) pairs live, byte-identically to before.
+      def ladder_totals_from_pairs(code, lects, info)
+        totals = Hash.new(0)
+        info.language_source_pairs.each do |(language, source_slug), count|
+          resolved = lects.resolve(language, source: source_slug)
+          match = Nabu::Lects.parse_id(resolved)
+          next unless match && match[:anchor] == code.to_s
+
+          key = match[:stage] ? "#{code}:#{match[:stage]}" : :unstaged
+          totals[key] += count
+        end
+        totals
       end
 
       # P48-r3: the related research desks — every axis whose member

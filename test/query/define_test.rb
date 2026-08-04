@@ -40,8 +40,11 @@ module Query
       )
     end
 
+    # lects: nil — the hermeticity doctrine (P57-4): the suite never rides
+    # the :auto default (box-state-dependent); the seam lane passes an
+    # explicit fixture registry.
     def define(lemma, **)
-      Nabu::Query::Define.new(catalog: @catalog).run(lemma, **)
+      Nabu::Query::Define.new(catalog: @catalog, lects: nil).run(lemma, **)
     end
 
     # -- by_urn (P22-2: `show` resolves the urns `define` prints) -------------
@@ -530,6 +533,35 @@ module Query
       seed_recon_shelf
       assert_empty define("*μῆνις"), "LSJ is not a reconstruction shelf"
       assert_equal 1, define("μῆνις").size, "the plain query still is LSJ's"
+    end
+
+    # P58-6: with the Lects seam present, the recon scope is the registry's
+    # mode field — a derom la-vul shelf IS a reconstruction shelf (the
+    # ratified roa:pro override), which the "-pro" string test cannot see.
+    # Without the seam, the string test stands byte-identically (above).
+    def seed_derom_shelf
+      derom = Nabu::Store::Source.create(slug: "derom", name: "DÉRom",
+                                         adapter_class: "TestAdapter", license_class: "nc")
+      dict = @catalog[:dictionaries].insert(source_id: derom.id, slug: "derom-etyms",
+                                            title: "DÉRom", language: "la-vul")
+      @catalog[:dictionary_entries].insert(
+        dictionary_id: dict, urn: "urn:nabu:dict:derom-etyms:lacte", entry_id: "lacte", key_raw: "lacte",
+        headword: "lacte", headword_folded: Nabu::Normalize.search_form("lacte", language: "la"),
+        gloss: "milk", body: "lacte body", content_sha256: "x", revision: 1, withdrawn: false
+      )
+    end
+
+    def test_recon_scope_reads_the_lects_mode_when_the_seam_is_present
+      seed_derom_shelf
+      registry = Nabu::Lects.load(Nabu::TestSupport.fixtures("nabu-lects"),
+                                  overrides_path: File.join(Nabu::Config::PROJECT_ROOT, "config",
+                                                            "lect_overrides.yml"))
+      with_seam = Nabu::Query::Define.new(catalog: @catalog, lects: registry)
+      assert_equal ["derom-etyms"], with_seam.run("*lacte").map(&:dictionary_slug),
+                   "derom's la-vul resolves to roa:pro — mode reconstructed"
+      without = Nabu::Query::Define.new(catalog: @catalog, lects: nil)
+      assert_empty without.run("*lacte"),
+                   "no seam -> the '-pro' string test stands, and la-vul is not '-pro'"
     end
 
     def test_recon_entries_carry_reflex_views

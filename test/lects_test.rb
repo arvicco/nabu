@@ -371,10 +371,11 @@ class LectsTest < Minitest::Test
     lib_root = File.expand_path("../lib", __dir__)
     this_file = File.join(lib_root, "nabu", "lects.rb")
     pattern = /Nabu::Lects\.(load_default|load|new)\b/
-    # P58-4 adds rebuild.rb deliberately: the lect-facet pipeline stage
-    # feature-detects the registry (registry absent -> zero rows, clean skip).
+    # P58-4 adds rebuild.rb deliberately (the lect-facet pipeline stage,
+    # feature-detected); P58-6 adds query/define.rb (the "*" reconstruction
+    # scope reads the registry mode through the same :auto contract).
     allowlist = %w[nabu/cli.rb nabu/query/etym.rb nabu/query/search.rb nabu/mcp/tools.rb
-                   nabu/rebuild.rb]
+                   nabu/rebuild.rb nabu/query/define.rb]
                 .map { |rel| File.join(lib_root, rel) }
 
     offenders = Dir[File.join(lib_root, "**", "*.rb")]

@@ -729,6 +729,36 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P58-6: once the lect facet is materialized, the ladder reads IT — the
+  # only source that sees per-document journal rulings. Same corpus as
+  # above plus one bare-lat document hand-ruled into lat:cla.
+  def test_language_card_ladder_reads_the_materialized_facet_and_journal_rulings
+    with_lect_ladder_corpus do |config, db|
+      texts = Nabu::Store::Source.create(slug: "texts", name: "Texts",
+                                         adapter_class: "TestAdapter", license_class: "open")
+      2.times do |i|
+        db[:documents].insert(source_id: texts.id, urn: "urn:nabu:test:lat:#{i}", title: "T",
+                              language: "lat", content_sha256: "x", revision: 1, withdrawn: false)
+      end
+      db[:documents].insert(source_id: texts.id, urn: "urn:nabu:test:lamed:1", title: "T",
+                            language: "la-med", content_sha256: "x", revision: 1, withdrawn: false)
+      Nabu::Store::SourceStats.derive!(db, note: "test")
+
+      journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+      Nabu::Store::LectJournal.assign!(journal, urn: "urn:nabu:test:lat:0", code: "lat",
+                                                lect_id: "lat:cla", basis: "owner")
+      journal.disconnect
+      Nabu::Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: config))
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[language lat]) }
+      assert_nil status
+      assert_match(/cla\s+Classical Latin.*1 document/, out, "the journal ruling counts in its stage")
+      assert_match(/med\s+Medieval Latin.*1 document/, out)
+      assert_match(/unstaged.*1 document/, out, "only ONE bare-lat document remains unstaged")
+    end
+  end
+
   def test_language_card_reconstructed_stages_carry_a_leading_asterisk
     with_recon_shelf_and_lects do |config|
       db = Nabu::Store.connect(config.catalog_path)
@@ -6491,6 +6521,19 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/lect facet: 0 rows materialized/, out,
                    "no journal, no overrides under this root — every resolution is identity")
+    end
+  end
+
+  # P58-6: the materialized lect rides show's standard facets line — the
+  # resolution is visible wherever facets are, with no special-casing.
+  def test_show_renders_the_materialized_lect_facet
+    with_lects_cli_env(with_document: "urn:nabu:fixture:doc1") do |config|
+      with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:fixture:doc1", "grc:koi"])
+        out, _err, status = run_cli(%w[show urn:nabu:fixture:doc1])
+        assert_nil status
+        assert_match(/facets: .*lect=grc:koi/, out)
+      end
     end
   end
 

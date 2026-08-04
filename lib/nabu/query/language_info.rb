@@ -168,6 +168,35 @@ module Nabu
         end
       end
 
+      # P58-6: has a lect-facet materialization ever run on this catalog?
+      # (The same feature detect Query::Search uses — Store::LectFacets'
+      # "no rows at all" posture.)
+      def lect_materialized?
+        @catalog.table_exists?(:document_facets) &&
+          !@catalog[:document_facets].where(facet: "lect").first.nil?
+      end
+
+      # P58-6: the materialized ladder source — [{resolved lect id => live
+      # document count} over every lect facet row, bare-identity count for
+      # +code+ (documents stored under exactly this code with NO facet row,
+      # which by the LectFacets invariant resolve to themselves)]. Unlike
+      # #language_source_pairs this sees per-DOCUMENT journal rulings; the
+      # caller filters values to its anchor and groups stages.
+      def lect_facet_totals(code)
+        counts = live_documents
+                 .join(:document_facets, document_id: :id)
+                 .where(Sequel[:document_facets][:facet] => "lect")
+                 .group(Sequel[:document_facets][:value])
+                 .select(Sequel[:document_facets][:value].as(:value),
+                         Sequel.function(:count).*.as(:count))
+                 .to_h { |row| [row.fetch(:value), row.fetch(:count)] }
+        identity = live_documents
+                   .where(language: code.to_s)
+                   .exclude(id: @catalog[:document_facets].where(facet: "lect").select(:document_id))
+                   .count
+        [counts, identity]
+      end
+
       private
 
       def lemma_rows(code)
