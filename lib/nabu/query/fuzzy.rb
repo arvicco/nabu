@@ -71,14 +71,16 @@ module Nabu
       EDITORIAL_MARKS = /[\[\]]/
       # Folded-snippet context window, chars per side (DDbDP passages average
       # 34 chars — most render whole).
-      # census: 33, 2026-07-20, papyri-ddbdp mean passage length (chars) — claim holds
+      # census: 33, 2026-08-04, papyri-ddbdp mean passage length (chars) —
+      # re-measured at the P57 full rebuild (N=921,611), claim holds
       SNIPPET_CONTEXT = 40
 
       # Same candidate over-fetch as Search: catalog-side filters (language/
       # license/date) and the verify phase both drop rows; fetch enough
       # candidates to still fill the page. Exhaustion is ANNOUNCED (P35-6)
       # via incomplete_hint, as in Search.
-      # census: 24415015, 2026-07-20, live passages (settled full rebuild; 3.76M at tuning)
+      # census: 68408109, 2026-08-04, live passages (P57 full rebuild; 3.76M at tuning,
+      # re-affirmed at 24.4M and 68.4M — exhaustion stays ANNOUNCED, class note)
       INNER_LIMIT_FACTOR = 10
 
       def initialize(catalog:, fulltext:)

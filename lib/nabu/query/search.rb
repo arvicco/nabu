@@ -98,7 +98,8 @@ module Nabu
       # territory where bm25 ordering is noise. The old 1M ceiling was set
       # from the well-clustered ratio and let the Arabic 0.4–1M band stall
       # at 5–7s.
-      # census: 62789087, 2026-07-23, live passages (P42-5 calibration curve, this comment)
+      # census: 68408109, 2026-08-04, live passages (P42-5 calibration curve, this
+      # comment; +9% since the 62.8M calibration — a timing-curve claim, unmoved)
       UBIQUITY_THRESHOLD = 100_000
 
       # The honest footer clause for a guard-skipped rank (the P35 rule:
@@ -131,7 +132,8 @@ module Nabu
       # note) can drop non-matching rows and still fill the page.
       # Exhaustion is ANNOUNCED (P35-6): a full window + active filters + a
       # short page sets incomplete_hint (CatalogJoin::INCOMPLETE_PAGE_HINT).
-      # census: 24415015, 2026-07-20, live passages (settled full rebuild; 3.76M at tuning)
+      # census: 68408109, 2026-08-04, live passages (P57 full rebuild; 3.76M at tuning,
+      # re-affirmed at 24.4M and 68.4M — exhaustion stays ANNOUNCED, class note)
       INNER_LIMIT_FACTOR = 10
 
       # --exact honesty ceiling (P39-r3): the glyph-literal post-filter can
