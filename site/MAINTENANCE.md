@@ -6,6 +6,14 @@ This directory is the project's public academic face
 it is never the source of truth. **The catalog is the territory;
 README/library.md are the map; this site is the printed map.**
 
+## Previewing staged changes
+
+`rake site:preview` serves the working tree at
+`http://127.0.0.1:4747/nabu/` (watch mode — edits rebuild on refresh).
+Port 4747 by default, `PORT=n` to override: 4000 and livereload's 35729
+are deliberately avoided because this box previews sibling sites
+(nabu-edubba) on the standard ports.
+
 ## Standing gate duty
 
 At **every phase gate**, alongside the README/library.md truthfulness pass

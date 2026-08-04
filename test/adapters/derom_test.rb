@@ -89,40 +89,72 @@ class DeromTest < Minitest::Test
 
   def test_lakte_mints_the_pan_romance_reflex_set_in_document_order
     reflexes = parse_all.fetch(LAKTE).reflexes
-    assert_equal 23, reflexes.size, "24 signifiants, the ast. lleche repeat deduped"
+    assert_equal 24, reflexes.size,
+                 "24 signifiants, the ast. lleche repeat deduped, PLUS the gal./port. composite " \
+                 "citation split into two rows (P57-5) — net +1 over the pre-split 23"
     first = reflexes.first
-    assert_equal "dacoroum.", first.lang_code, "the idiome abbreviation verbatim"
+    assert_equal "ron", first.lang_code,
+                 "P57-5: lang_code is now the RESOLVED catalog tag, not the idiome abbreviation verbatim"
     assert_equal "ron", first.language
     assert_equal "lapte", first.word
     assert_equal "lapte", first.word_folded
     refute first.borrowed
 
     assert_equal %w[lapte lapte lápti lápte látte], reflexes.first(5).map(&:word)
-    assert_equal [%w[romanch. lat], %w[romanch. latg]],
-                 reflexes.select { |r| r.lang_code == "romanch." }.map { |r| [r.lang_code, r.word] },
-                 "one idiome run, two variant signifiants — two rows"
+    assert_equal [%w[roh lat], %w[roh latg]],
+                 reflexes.select { |r| r.lang_code == "roh" }.map { |r| [r.lang_code, r.word] },
+                 "one idiome run (romanch.), two variant signifiants — two rows"
     assert_equal "lapti", reflexes[2].word_folded, "the acute folds off méglénoroum. lápti"
   end
 
-  def test_idiome_mapping_speaks_iso_codes_and_leaves_joint_idioms_display_only
-    by_code = parse_all.fetch(LAKTE).reflexes.group_by(&:lang_code)
-    assert_equal ["srd"], by_code.fetch("sard.").map(&:language)
-    assert_equal ["dlm"], by_code.fetch("dalm.").map(&:language)
-    assert_equal ["ist"], by_code.fetch("istriot.").map(&:language)
-    assert_equal ["vec"], by_code.fetch("vén.").map(&:language)
-    assert_equal %w[oci oci], by_code.fetch("occit.").map(&:language)
-    assert_equal ["oci"], by_code.fetch("gasc.").map(&:language), "Gascon folded into oci (ISO 639-3)"
-    assert_equal ["fra"], by_code.fetch("fr.").map(&:language)
-    assert_equal [nil], by_code.fetch("gal./port.").map(&:language),
-                 "the joint idiome is display-only, never a join candidate"
+  # P57-5: the idiome→ISO table is now COMPLETE — every idiome in the fixture
+  # resolves to a real language code, so lang_code == language everywhere and
+  # nothing stays display-only (the former gal./port. joint label is split
+  # into two resolved rows, tested separately below).
+  def test_idiome_mapping_speaks_iso_codes_for_every_reflex
+    reflexes = parse_all.fetch(LAKTE).reflexes
+    by_code = reflexes.group_by(&:lang_code)
+    assert_equal ["srd"], by_code.fetch("srd").map(&:language)
+    assert_equal ["dlm"], by_code.fetch("dlm").map(&:language)
+    assert_equal ["ist"], by_code.fetch("ist").map(&:language)
+    assert_equal ["vec"], by_code.fetch("vec").map(&:language)
+    assert_equal %w[oci oci oci oci], by_code.fetch("oci").map(&:language),
+                 "occit. (lait, lach) + lang. (lait) + gasc. (leit) all fold into the one oci code"
+    assert_equal ["fra"], by_code.fetch("fra").map(&:language)
+    refute reflexes.any? { |r| r.language.nil? }, "P57-5: no display-only reflex rows remain"
+  end
+
+  # P57-5: DÉRom's own composite citation shorthand ("gal./port. leite" — one
+  # signifiant serving two idiomes at once) is not upstream error; splitting
+  # it into two reflex rows is the smaller honest diff versus a synthetic
+  # roa-opt code (chosen over the report's alternative — see class comment).
+  def test_the_joint_gal_port_citation_splits_into_two_resolved_reflex_rows
+    lakte = parse_all.fetch(LAKTE).reflexes.select { |r| r.word == "leite" }
+    assert_equal([%w[glg glg leite], %w[por por leite]], lakte.map { |r| [r.lang_code, r.language, r.word] })
   end
 
   def test_an_interleaved_cognat_attaches_each_signifiant_to_its_preceding_idiome
     reflexes = parse_all.fetch(KABALLU).reflexes
     assert_equal 21, reflexes.size
     tail = reflexes.last(2).map { |r| [r.lang_code, r.language, r.word] }
-    assert_equal [["gal.", "glg", "cabalo"], ["port.", "por", "cavalo"]], tail,
-                 "ONE cognat interleaves gal./port. runs — positional attachment, not first-idiome"
+    assert_equal [%w[glg glg cabalo], %w[por por cavalo]], tail,
+                 "ONE cognat interleaves gal./port. runs — positional attachment, not first-idiome " \
+                 "(these are already SEPARATE gal./port. idiome elements, not the joint citation)"
+  end
+
+  # P57-5: the report's remaining four idiomes (arag./végl./logoud./itsept.)
+  # do not occur in the trimmed fixture — pinned directly against the
+  # adapter's own table (the MW COGNATE_LANGS precedent) rather than faking
+  # upstream XML that never shipped (CLAUDE.md's real-fixtures-only rule).
+  def test_idiome_languages_table_resolves_the_p57_5_remaining_four
+    table = Nabu::Adapters::DeromXmlParser::IDIOME_LANGUAGES
+    assert_equal "arg", table.fetch("arag."), "Aragonese"
+    assert_equal "dlm", table.fetch("végl."), "Vegliote — the island dialect of Dalmatian, same ISO as dalm."
+    assert_equal "src", table.fetch("logoud."), "Logudorese Sardinian"
+    assert_equal "it", table.fetch("itsept."),
+                 "northern/septentrional Italian has no dedicated ISO code — mapped to `it` " \
+                 "(ISO 639-1) DISTINCT from the plain it. idiome's `ita` (ISO 639-3), so the two " \
+                 "stay distinguishable rather than conflated"
   end
 
   # --- body: materials + commentary ------------------------------------------------
@@ -188,10 +220,11 @@ class DeromTest < Minitest::Test
     assert_equal [1], db[:dictionary_entries].select_map(:revision).uniq
     assert_equal "urn:nabu:dict:derom:#{LAKTE}",
                  db[:dictionary_entries].where(entry_id: LAKTE).get(:urn)
-    assert_equal 44, db[:dictionary_reflexes].count, "23 (lakt-e) + 21 (kaˈβall-u)"
+    assert_equal 45, db[:dictionary_reflexes].count,
+                 "24 (lakt-e, the gal./port. split counted) + 21 (kaˈβall-u)"
     languages = db[:dictionary_reflexes].select_map(:language)
     %w[ron srd ita fra spa por glg oci].each { |code| assert_includes languages, code }
-    assert_includes languages, nil, "the joint gal./port. rows stay display-only"
+    refute_includes languages, nil, "P57-5: the idiome table is complete — nothing display-only remains"
   end
 
   # --- language-notes rider --------------------------------------------------------
@@ -230,15 +263,34 @@ class DeromTest < Minitest::Test
                     "the cognat material still reads — it rides the body"
   end
 
+  # Both lects lanes pinned EXPLICITLY (never :auto in a test — outcomes may
+  # not depend on whether this box has canonical/nabu-lects synced): absent
+  # module = the old -pro string test (la-vul unasterisked, the
+  # wiktionary-cu treatment); present module = the D57-d RULED state (the
+  # per-source override resolves derom's la-vul to roa:pro, mode
+  # reconstructed → display asterisk).
   def test_etym_walks_a_romance_reflex_to_the_proto_romance_etymon
     db, loader = loader_setup
     loader.load_from(adapter, workdir: FIXTURES)
-    results = Nabu::Query::Etym.new(catalog: db).run("lapte")
+    results = Nabu::Query::Etym.new(catalog: db, lects: nil).run("lapte")
     assert_equal ["ˈlakt-e"], results.map(&:headword)
     assert_equal "derom", results.first.dictionary_slug
     assert_equal "lapte", results.first.matched_reflex.word
-    cheval = Nabu::Query::Etym.new(catalog: db).run("cheval")
+    cheval = Nabu::Query::Etym.new(catalog: db, lects: nil).run("cheval")
     assert_equal ["kaˈβall-u"], cheval.map(&:headword)
+  end
+
+  def test_etym_asterisks_the_etymon_when_the_lects_module_is_present
+    db, loader = loader_setup
+    loader.load_from(adapter, workdir: FIXTURES)
+    fixture_lects = Nabu::Lects.load(
+      Nabu::TestSupport.fixtures("nabu-lects"),
+      overrides_path: File.join(Nabu::TestSupport.fixtures("nabu-lects"), "lect_overrides.yml")
+    )
+    results = Nabu::Query::Etym.new(catalog: db, lects: fixture_lects).run("lapte")
+    assert_equal ["*ˈlakt-e"], results.map(&:headword),
+                 "D57-d ruled: derom la-vul → roa:pro (reconstructed) — the asterisk is earned via mode"
+    assert_equal "roa:pro", results.first.lect_id
   end
 
   # --- fetch (WebMock only) --------------------------------------------------------

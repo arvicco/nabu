@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "../lects"
 require_relative "../languages"
 require_relative "../normalize"
 require_relative "../store/indexer"
@@ -179,6 +180,14 @@ module Nabu
       WORDS_MODULE_NOTE = "word-grain: nabu-data module not synced — run: nabu sync nabu-data"
       WORDS_SCRIPT_NOTE = "word-grain: only for Tibetan-script queries"
 
+      # --lect (P57-4): a resolution-level filter over Nabu::Lects — every
+      # (language, source) pair the catalog carries is resolved through
+      # #resolve and kept when the result IS the given lect id, or a more
+      # specific lect UNDER it (prefix semantics over the ":"/"/"/"@" axis
+      # grammar — see #lect_matches_target?). Absent the module, the flag
+      # is refused loudly (never a silent no-filter or a stored-code guess).
+      LECT_MODULE_MISSING = "nabu-lects module not synced"
+
       # +term_frequency+ is the df probe seam (defaults to the real fts5vocab
       # reader over +fulltext+); tests inject a stub to pin the fail-open path.
       # +rng+ (P42-r3) drives the sampled guarded page — injectable for
@@ -187,12 +196,17 @@ module Nabu
       # feature-detects the nabu-data dataset LAZILY on the first words: true
       # run (the define.rb form_lemma/verb_lemma contract — absent tree,
       # byte-identical behavior); tests inject a fixture seam or nil.
-      def initialize(catalog:, fulltext:, term_frequency: nil, rng: ::Random.new, tibetan_words: :auto)
+      # +lects+ (P57-4) is the `--lect` resolution seam, same :auto/loaded/nil
+      # contract as +tibetan_words+ — feature-detected lazily on the first
+      # lect: filter, never touched otherwise.
+      def initialize(catalog:, fulltext:, term_frequency: nil, rng: ::Random.new, tibetan_words: :auto,
+                     lects: :auto)
         @catalog = catalog
         @fulltext = fulltext
         @term_frequency = term_frequency || TermFrequency.new(fulltext: fulltext)
         @rng = rng
         @tibetan_words = tibetan_words
+        @lects = lects
       end
 
       # nil, or RANK_SKIP_NOTE when the last #run served its page in corpus
@@ -247,9 +261,12 @@ module Nabu
       # +words+ (P54-4) post-filters the assembled page to Tibetan word-grain
       # matches (class note at WORDS_MODULE_NOTE); filtered-out hits are simply
       # absent, degrade cases serve the plain page plus #words_note.
+      # +lect+ (P57-4) keeps only passages whose (language, source) resolves
+      # to this lect id or a more specific one under it (class note at
+      # LECT_MODULE_MISSING); raises Nabu::Error when Lects is unavailable.
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
               facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil,
-              exact: false, word: false, words: false,
+              exact: false, word: false, words: false, lect: nil,
               scan_ceiling: SCAN_CEILING, ubiquity_threshold: self.class.ubiquity_threshold)
         @incomplete_hint = nil
         @rank_note = nil
@@ -263,7 +280,7 @@ module Nabu
 
         filters = { lang: lang, license: license, from: from, to: to, place: place,
                     facets: facets, source: source, sources: sources, loans: loans,
-                    meter: meter, meter_pattern: meter_pattern }
+                    meter: meter, meter_pattern: meter_pattern, lect_pairs: lect ? lect_pairs_for(lect) : nil }
         page = if exact || word
                  verified_page(variants, query, filters, limit: limit, urn: urn,
                                                          scan_ceiling: scan_ceiling, exact: exact, word: word)
@@ -294,13 +311,14 @@ module Nabu
       # at the CLI seam, not here: this method lists whatever the filters select,
       # exactly as visible_passages composes them for ranked search.
       def browse(lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil,
-                 facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil)
+                 facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect: nil)
         @incomplete_hint = nil
         @rank_note = nil
         @meter_note = nil
+        lect_pairs = lect ? lect_pairs_for(lect) : nil
         rows = visible_passages(lang: lang, license: license, from: from, to: to, place: place,
                                 facets: facets, source: source, sources: sources, loans: loans,
-                                meter: meter, meter_pattern: meter_pattern)
+                                meter: meter, meter_pattern: meter_pattern, lect_pairs: lect_pairs)
                .order(Sequel[:passages][:id])
                .select(*catalog_columns)
                .limit(limit)
@@ -492,7 +510,7 @@ module Nabu
       end
 
       def filters_active?(filters)
-        %i[lang license from to place source loans meter meter_pattern].any? { |key| filters[key] } ||
+        %i[lang license from to place source loans meter meter_pattern lect_pairs].any? { |key| filters[key] } ||
           (filters[:facets] || {}).any? || Array(filters[:sources]).any?
       end
 
@@ -704,6 +722,54 @@ module Nabu
         return @tibetan_words unless @tibetan_words == :auto
 
         @tibetan_words = Nabu::TibetanWords.load_default
+      end
+
+      # -- P57-4: --lect, the resolution-level filter --------------------------
+
+      # Feature-detect + memoize (the tibetan_words :auto contract): loaded
+      # from canonical/nabu-lects on first use, nil while absent (re-detected
+      # per call, so a mid-session `nabu sync nabu-lects` is picked up
+      # without a restart).
+      def lects_seam
+        return @lects unless @lects == :auto
+
+        loaded = Nabu::Lects.load_default
+        @lects = loaded if loaded
+        loaded
+      end
+
+      # Every (language, source slug) pair the catalog carries, resolved
+      # through Nabu::Lects and kept when it matches +target+ (class doc
+      # prefix semantics). Small and query-independent (the vocabulary of
+      # held codes × sources, not the passage count), so it costs one
+      # DISTINCT scan per --lect call, never a per-passage resolve.
+      def lect_pairs_for(target)
+        seam = lects_seam
+        raise Nabu::Error, LECT_MODULE_MISSING unless seam
+
+        @catalog[:documents]
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .exclude(Sequel[:documents][:language] => nil)
+          .distinct
+          .select(Sequel[:documents][:language].as(:language), Sequel[:sources][:slug].as(:slug))
+          .all
+          .filter_map do |row|
+            language = row.fetch(:language)
+            slug = row.fetch(:slug)
+            [language, slug] if lect_matches_target?(seam.resolve(language, source: slug), target)
+          end
+      end
+
+      # +resolved+ matches +target+ when it IS target, or is a MORE SPECIFIC
+      # lect under it — target immediately followed by one of the axis
+      # separators (":"/"/"/"@", nabu-lects docs/schema.md's strict order)
+      # counts as "under"; a same-length or unrelated string does not
+      # (--lect lat:med matches lat:med and lat:med/xyz, never lat:cla).
+      def lect_matches_target?(resolved, target)
+        return true if resolved == target
+        return false unless resolved.start_with?(target)
+
+        %w[: / @].include?(resolved[target.length])
       end
 
       # Does the query stand word-aligned somewhere in this hit's stored

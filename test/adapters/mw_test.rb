@@ -188,8 +188,8 @@ class MwTest < Minitest::Test
     assert_equal 32, db[:dictionary_citations].count
     assert_equal 5, db[:dictionary_reflexes].count, "the aṃsa cognate note: Goth. + 2 Gk. + 2 Lat."
 
-    gothic = db[:dictionary_reflexes].where(lang_code: "Goth.").first
-    assert_equal "got", gothic[:language]
+    gothic = db[:dictionary_reflexes].where(lang_code: "got").first
+    assert_equal "got", gothic[:language], "P57-5: lang_code is the resolved catalog tag, not `Goth.`"
     assert_equal "amsa", gothic[:word]
     entry = db[:dictionary_entries].where(id: gothic[:dictionary_entry_id]).first
     assert_equal "urn:nabu:dict:mw:88", entry[:urn], "MW provenance — the owning entry is the mw shelf's"
