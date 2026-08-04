@@ -165,6 +165,170 @@ module Nabu
     end
   end
 
+  # The lect-assignment journal CLI (P58-1): the owner's hand on the
+  # per-document overlay tier of Nabu::Lects#resolve. Every subcommand
+  # operates on db/lects.sqlite3 (Store::LectJournal — rebuild never touches
+  # it) and validates lect ids against the LIVE registry: an undefined tag
+  # is refused loudly, never silently coerced (the registry's own rule).
+  class LectCLI < Thor
+    def self.exit_on_failure?
+      true
+    end
+
+    desc "assign [URN LECT_ID]", "Rule that URN's use of a code means LECT_ID (journaled; survives rebuild)"
+    long_desc <<~HELP, wrap: false
+      The per-document tier of lect resolution — the highest-precedence seam,
+      above per-source overrides and the universal codemap. One CURRENT
+      assignment per (URN, code); re-assigning updates in place. The code
+      being refined defaults to the document's own catalog language; pass
+      --code when the catalog is absent or the document is polyglot.
+
+      --from-file imports a ratified batch (TSV: urn, code, lect_id, then
+      optional basis and note columns — exactly `lect list --format tsv`'s
+      shape, so the flat export re-imports as a restore path). Comment (#)
+      and blank lines skip. The whole batch is validated before ANY row is
+      written: one bad line rejects the file.
+    HELP
+    option :code, banner: "CODE", desc: "the stored bare code the ruling refines"
+    option :note, banner: "TEXT", desc: "the why, kept with the ruling"
+    option :basis, default: "owner", banner: "owner|rule:<id>",
+                   desc: "authorship of the ruling (rule bases are re-run-superseded wholesale)"
+    option :from_file, banner: "FILE", desc: "bulk import a ratified TSV batch"
+    def assign(urn = nil, lect_id = nil)
+      config = Nabu::Config.load
+      registry = require_lects_module!(config)
+      check_basis!(options[:basis])
+      if options[:from_file]
+        import_batch!(config, registry, options[:from_file])
+      else
+        raise Thor::Error, "lect assign: URN and LECT_ID are required (or --from-file FILE)" unless urn && lect_id
+
+        check_lect!(registry, lect_id)
+        code = options[:code] || infer_code!(config, urn)
+        journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+        verdict = Nabu::Store::LectJournal.assign!(journal, urn: urn, code: code, lect_id: lect_id,
+                                                            basis: options[:basis], note: options[:note])
+        say "#{verdict}  #{urn}  #{code} → #{lect_id}  (#{options[:basis]})"
+      end
+    end
+
+    desc "list", "The journaled assignments (--urn/--basis filters; --format tsv is the flat backup)"
+    option :urn, banner: "URN"
+    option :basis, banner: "owner|rule:<id>"
+    option :format, banner: "tsv"
+    # census: render cap only — the full journal is always in the tsv export;
+    # truncation is announced (the house honesty vocabulary)
+    option :limit, type: :numeric, default: 50
+    def list
+      config = Nabu::Config.load
+      journal = Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+      unless journal
+        return say "no lect assignments (#{config.lects_journal_path} absent) — " \
+                   "nabu lect assign mints the first"
+      end
+
+      scope = journal[:lect_assignments].order(:urn, :code)
+      scope = scope.where(urn: options[:urn]) if options[:urn]
+      scope = scope.where(basis: options[:basis]) if options[:basis]
+      if options[:format] == "tsv"
+        scope.each { |row| say row.values_at(:urn, :code, :lect_id, :basis, :note).join("\t") }
+      else
+        render_table(journal, scope)
+      end
+    end
+
+    desc "withdraw URN", "Remove URN's assignment(s) — all codes, or just --code"
+    option :code, banner: "CODE"
+    def withdraw(urn)
+      config = Nabu::Config.load
+      journal = Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+      raise Thor::Error, "lect withdraw: no journal at #{config.lects_journal_path}" unless journal
+
+      journal.disconnect
+      writable = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+      count = Nabu::Store::LectJournal.withdraw!(writable, urn: urn, code: options[:code])
+      say "withdrew #{count} assignment#{'s' unless count == 1}  #{urn}#{" #{options[:code]}" if options[:code]}"
+    end
+
+    no_commands do
+      def require_lects_module!(config)
+        registry = Nabu::Lects.load_default(config: config, overlay: {})
+        raise Thor::Error, "lect: the nabu-lects module is not synced (canonical/nabu-lects)" unless registry
+
+        registry
+      end
+
+      def check_lect!(registry, lect_id, where: nil)
+        return if registry.lect(lect_id)
+
+        raise Thor::Error, "lect: #{lect_id.inspect}#{where} is not defined in the registry " \
+                           "(an undefined tag is never silently coerced)"
+      end
+
+      def check_basis!(basis, where: nil)
+        return if basis == "owner" || basis.match?(/\Arule:[a-z0-9][a-z0-9-]*\z/)
+
+        raise Thor::Error, "lect: basis must be owner or rule:<id>, got #{basis.inspect}#{where}"
+      end
+
+      def infer_code!(config, urn)
+        unless File.exist?(config.catalog_path)
+          raise Thor::Error, "lect assign: no catalog to read the document's language from — pass --code"
+        end
+
+        db = Nabu::Store.connect(config.catalog_path)
+        language = db[:documents].where(urn: urn).get(:language)
+        db.disconnect
+        return language unless language.to_s.strip.empty?
+
+        raise Thor::Error, "lect assign: #{urn} is not in the catalog (or carries no language) — pass --code"
+      end
+
+      # Parse + validate the WHOLE file, then write — one bad line rejects
+      # the batch before any row lands (a ratified batch is one decision).
+      def import_batch!(config, registry, path)
+        raise Thor::Error, "lect assign: no such file #{path}" unless File.file?(path)
+
+        rows = parse_batch!(registry, path)
+        journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+        verdicts = rows.map { |row| Nabu::Store::LectJournal.assign!(journal, **row) }
+        say "#{verdicts.size} assignments (#{verdicts.count(:inserted)} inserted, " \
+            "#{verdicts.count(:updated)} updated) from #{path}"
+      end
+
+      def parse_batch!(registry, path)
+        File.readlines(path).each_with_index.filter_map do |line, index|
+          text = line.chomp
+          next if text.strip.empty? || text.lstrip.start_with?("#")
+
+          urn, code, lect_id, basis, note = text.split("\t", 5)
+          where = " (#{File.basename(path)} line #{index + 1})"
+          raise Thor::Error, "lect assign: urn/code/lect_id required#{where}" if lect_id.to_s.strip.empty?
+
+          check_lect!(registry, lect_id, where: where)
+          basis = options[:basis] if basis.to_s.strip.empty?
+          check_basis!(basis, where: where)
+          { urn: urn, code: code, lect_id: lect_id, basis: basis, note: note }
+        end
+      end
+
+      def render_table(journal, scope)
+        rows = scope.limit(options[:limit] + 1).all
+        shown = rows.first(options[:limit])
+        shown.each do |row|
+          note = row[:note].to_s.empty? ? "" : "  # #{row[:note]}"
+          say format("%<urn>-42s %<code>-8s %<lect>-14s %<basis>s%<note>s",
+                     urn: row[:urn], code: row[:code], lect: row[:lect_id], basis: row[:basis], note: note)
+        end
+        total = scope.count
+        say "… #{total - shown.size} more (--limit, or --format tsv for all)" if total > shown.size
+        census = Nabu::Store::LectJournal.counts_by_basis(journal)
+                                         .map { |basis, count| "#{basis} #{count}" }.join(", ")
+        say "#{total} assignment#{'s' unless total == 1} — #{census}"
+      end
+    end
+  end
+
   # Command-line entry point. Only `version` is functional in Phase 0; the
   # ingest/query subcommands are stubs that report "not implemented" and exit 1
   # so scripts and CI can rely on the failure signal before the real work lands.
@@ -223,6 +387,9 @@ module Nabu
 
     desc "data SUBCOMMAND ...ARGS", "The nabu-data production rail: document and build publishable derived datasets"
     subcommand "data", DataCLI
+
+    desc "lect SUBCOMMAND ...ARGS", "Per-document lect rulings: the journaled overlay tier of lect resolution"
+    subcommand "lect", LectCLI
 
     desc "sync [SOURCE]", "Fetch and load a source, an axis's members, or --all live sources"
     long_desc <<~HELP, wrap: false

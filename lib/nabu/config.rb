@@ -25,6 +25,7 @@ module Nabu
     FULLTEXT_DB_FILENAME = "fulltext.sqlite3"
     HISTORY_DB_FILENAME = "history.sqlite3"
     LINKS_DB_FILENAME = "links.sqlite3"
+    LECTS_DB_FILENAME = "lects.sqlite3"
 
     attr_reader :canonical_dir, :db_dir, :sources_path, :alignments_path, :display_path,
                 :profile_path, :config_path, :backup_target
@@ -144,6 +145,14 @@ module Nabu
     # ledger it is cheap to regenerate (a re-mine), so backups may skip it.
     def links_path
       File.join(db_dir, LINKS_DB_FILENAME)
+    end
+
+    # The lect-assignment journal (P58-1): per-document code → lect rulings,
+    # the persistence for Nabu::Lects' overlay tier. Like the ledger,
+    # `nabu rebuild` never touches it; like the ledger — and UNLIKE links —
+    # losing it loses decisions, so backups should include it.
+    def lects_journal_path
+      File.join(db_dir, LECTS_DB_FILENAME)
     end
   end
 end

@@ -6252,6 +6252,147 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- nabu lect (P58-1): the assignment journal CLI --------------------------
+
+  def test_lect_assign_writes_a_journaled_ruling_with_an_explicit_code
+    with_lects_cli_env do |config|
+      out, _err, status = with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc", "--note", "papyrus"])
+      end
+      assert_nil status
+      assert_match(/inserted\s+urn:nabu:x:1\s+grc → grc:koi\s+\(owner\)/, out)
+      rows = read_lect_journal(config)
+      assert_equal 1, rows.size
+      assert_equal %w[grc grc:koi owner], rows.first.values_at(:code, :lect_id, :basis)
+      assert_equal "papyrus", rows.first[:note]
+    end
+  end
+
+  def test_lect_assign_refuses_a_lect_id_the_registry_does_not_define
+    with_lects_cli_env do |config|
+      _out, err, status = with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:zzz", "--code", "grc"])
+      end
+      assert_equal 1, status
+      assert_match(/grc:zzz.*not defined/, err)
+      assert_nil Nabu::Store::LectJournal.open_readonly(config.lects_journal_path),
+                 "a refused ruling never creates the journal file"
+    end
+  end
+
+  def test_lect_assign_infers_the_code_from_the_catalog_document
+    with_lects_cli_env(with_document: "urn:nabu:fixture:doc1") do |config|
+      out, _err, status = with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:fixture:doc1", "grc:koi"])
+      end
+      assert_nil status
+      assert_match(/grc → grc:koi/, out)
+      assert_equal "grc", read_lect_journal(config).first[:code]
+    end
+  end
+
+  def test_lect_assign_without_code_or_catalog_row_demands_the_code
+    with_lects_cli_env do |config|
+      _out, err, status = with_config(config) { run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi"]) }
+      assert_equal 1, status
+      assert_match(/--code/, err)
+    end
+  end
+
+  def test_lect_assign_from_file_bulk_imports_a_ratified_batch
+    with_lects_cli_env do |config|
+      Dir.mktmpdir do |dir|
+        tsv = File.join(dir, "batch.tsv")
+        File.write(tsv, <<~TSV)
+          # a ratified batch — comment and blank lines skip
+
+          urn:nabu:x:1\tgrc\tgrc:koi
+          urn:nabu:x:2\tgrc\tgrc:koi\trule:test-batch\tptolemaic record
+        TSV
+        out, _err, status = with_config(config) { run_cli(["lect", "assign", "--from-file", tsv]) }
+        assert_nil status
+        assert_match(/2 assignments \(2 inserted, 0 updated\)/, out)
+        rows = read_lect_journal(config)
+        assert_equal %w[owner rule:test-batch], rows.map { |row| row[:basis] },
+                     "a 4th column overrides the default basis per line"
+        assert_equal "ptolemaic record", rows.last[:note]
+      end
+    end
+  end
+
+  def test_lect_assign_from_file_names_the_offending_line
+    with_lects_cli_env do |config|
+      Dir.mktmpdir do |dir|
+        tsv = File.join(dir, "batch.tsv")
+        File.write(tsv, "urn:nabu:x:1\tgrc\tgrc:koi\nurn:nabu:x:2\tgrc\tgrc:zzz\n")
+        _out, err, status = with_config(config) { run_cli(["lect", "assign", "--from-file", tsv]) }
+        assert_equal 1, status
+        assert_match(/"grc:zzz" \(batch\.tsv line 2\)/, err)
+      end
+    end
+  end
+
+  def test_lect_list_shows_rows_and_the_basis_census
+    with_lects_cli_env do |config|
+      with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc"])
+        run_cli(["lect", "assign", "urn:nabu:x:2", "lat:med", "--code", "lat", "--basis", "rule:test"])
+        out, _err, status = run_cli(%w[lect list])
+        assert_nil status
+        assert_match(/urn:nabu:x:1\s+grc\s+grc:koi\s+owner/, out)
+        assert_match(/urn:nabu:x:2\s+lat\s+lat:med\s+rule:test/, out)
+        assert_match(/2 assignments — owner 1, rule:test 1/, out)
+
+        filtered, = run_cli(["lect", "list", "--basis", "rule:test"])
+        refute_match(/urn:nabu:x:1/, filtered)
+        assert_match(/urn:nabu:x:2/, filtered)
+      end
+    end
+  end
+
+  def test_lect_list_tsv_round_trips_through_from_file
+    with_lects_cli_env do |config|
+      with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc", "--note", "papyrus"])
+        out, _err, = run_cli(["lect", "list", "--format", "tsv"])
+        assert_equal "urn:nabu:x:1\tgrc\tgrc:koi\towner\tpapyrus", out.lines.first.chomp,
+                     "the flat export IS the --from-file import shape (the backup path)"
+      end
+    end
+  end
+
+  def test_lect_list_without_a_journal_is_a_friendly_empty
+    with_lects_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect list]) }
+      assert_nil status
+      assert_match(/no lect assignments/, out)
+    end
+  end
+
+  def test_lect_withdraw_removes_the_ruling
+    with_lects_cli_env do |config|
+      with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc"])
+        out, _err, status = run_cli(["lect", "withdraw", "urn:nabu:x:1"])
+        assert_nil status
+        assert_match(/withdrew 1 assignment/, out)
+        assert_empty read_lect_journal(config)
+      end
+    end
+  end
+
+  def test_lect_commands_require_the_module
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: File.join(root, "sources.yml"), config_path: "(test)")
+      _out, err, status = with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc"])
+      end
+      assert_equal 1, status
+      assert_match(/nabu-lects module/, err)
+    end
+  end
+
   private
 
   def with_env(pairs)
@@ -7999,6 +8140,39 @@ class CLITest < Minitest::Test
       end
       yield config
     end
+  end
+
+  # A config whose canonical tree holds the nabu-lects FIXTURE module
+  # (hermeticity doctrine: never the box's live registry). +with_document+
+  # additionally builds a one-document catalog (language grc) so the --code
+  # inference path has a row to read.
+  def with_lects_cli_env(with_document: nil)
+    Dir.mktmpdir("nabu-cli-lects") do |root|
+      dest = File.join(root, "canonical", "nabu-lects")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-lects"), "*")], dest)
+      File.write(File.join(root, "sources.yml"), "# empty registry\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: File.join(root, "sources.yml"), config_path: "(test)")
+      if with_document
+        FileUtils.mkdir_p(config.db_dir)
+        db = Nabu::Store.connect(config.catalog_path)
+        Nabu::Store.migrate!(db)
+        source_id = db[:sources].insert(slug: "fixture", name: "Fixture", adapter_class: "TestAdapter",
+                                        license_class: "open")
+        db[:documents].insert(source_id: source_id, urn: with_document, language: "grc",
+                              content_sha256: "cafe")
+        db.disconnect
+      end
+      yield config
+    end
+  end
+
+  def read_lect_journal(config)
+    db = Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+    rows = db[:lect_assignments].order(:urn, :code).all
+    db.disconnect
+    rows
   end
 
   # A quickstart env (P18-2): one source per (slug => adapter class name),

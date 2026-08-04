@@ -269,6 +269,67 @@ class LectsTest < Minitest::Test
     end
   end
 
+  # --- the journal overlay wiring (P58-1) ---------------------------------------
+
+  def journal_config(root)
+    Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                     sources_path: File.join(root, "sources.yml"),
+                     config_path: File.join(root, "config", "nabu.yml"))
+  end
+
+  def seed_module_tree(root)
+    dest = File.join(root, "canonical", "nabu-lects")
+    FileUtils.mkdir_p(dest)
+    FileUtils.cp_r(Dir[File.join(FIXTURES, "*")], dest)
+  end
+
+  def test_load_default_wires_the_journal_overlay_when_the_file_exists
+    Dir.mktmpdir do |root|
+      seed_module_tree(root)
+      config = journal_config(root)
+      db = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+      Nabu::Store::LectJournal.assign!(db, urn: "urn:nabu:x:1", code: "lat", lect_id: "lat:med",
+                                           basis: "owner")
+      db.disconnect
+
+      live = Nabu::Lects.load_default(config: config)
+      assert_equal "lat:med", live.resolve("lat", urn: "urn:nabu:x:1"),
+                   "the journal is the overlay tier — highest precedence"
+      assert_equal "lat", live.resolve("lat", urn: "urn:nabu:other"),
+                   "an unassigned urn falls through to identity"
+    end
+  end
+
+  def test_load_default_without_a_journal_file_behaves_byte_identically
+    Dir.mktmpdir do |root|
+      seed_module_tree(root)
+      live = Nabu::Lects.load_default(config: journal_config(root))
+      assert_equal "lat", live.resolve("lat", urn: "urn:nabu:x:1"),
+                   "no db/lects.sqlite3 -> no overlay, the P57-3 posture unchanged"
+    end
+  end
+
+  def test_an_explicit_overlay_argument_beats_the_journal
+    Dir.mktmpdir do |root|
+      seed_module_tree(root)
+      config = journal_config(root)
+      db = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+      Nabu::Store::LectJournal.assign!(db, urn: "urn:nabu:x:1", code: "lat", lect_id: "lat:med",
+                                           basis: "owner")
+      db.disconnect
+
+      live = Nabu::Lects.load_default(config: config, overlay: {})
+      assert_equal "lat", live.resolve("lat", urn: "urn:nabu:x:1"),
+                   "an explicit overlay: argument (tests, callers with their own seam) wins over the journal"
+    end
+  end
+
+  def test_stage_and_variety_tags_admit_trailing_digits
+    match = Nabu::Lects.parse_id("sux:ur3")
+    assert_equal "ur3", match[:stage], "P58-5 grammar: the field's own periodization names (Ur III)"
+    assert_nil Nabu::Lects.parse_id("sux:3ur"), "digits never lead a tag"
+  end
+
   # --- Nabu::Lects.parse_id: the grammar utility --------------------------------
 
   def test_parse_id_captures_every_axis
