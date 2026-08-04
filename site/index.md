@@ -16,8 +16,9 @@ CDLI catalog of cuneiform, the Ugaritic tablets, a millennium of Syriac,
 the inscriptions of pre-Roman Italy and Sicily, the New
 Testament in up to fifteen parallel witnesses, the
 complete corpus of Old English poetry, the classical Chinese library with
-the Buddhist canon, the Japanese public-domain library, and the
-runestones of Scandinavia — into a single library on the
+the Buddhist canon, the Islamicate library in Arabic and Persian, the
+Tibetan Buddhist canon, the medieval lyric of Galicia, the Japanese
+public-domain library, and the runestones of Scandinavia — into a single library on the
 scholar's own disk. Everything is stored as plain files plus SQLite: it is
 searchable by word or by dictionary lemma, citable to the exact verse or
 tablet line, explicit about every text's license, and rebuildable from its
@@ -67,22 +68,24 @@ with every desk's member shelves and recipes, is
 
 ## The holdings, in brief
 
-As of **28 July 2026**, the catalog records **968,182 documents** comprising
-**68,324,790 passages** in 121 language codes — from proto-cuneiform
-tablets of the late fourth millennium BCE to Meiji-era Japanese. The
-newest wave opened the Rabbinic library (Mishnah, both Talmuds cited
-at daf grain, Tosefta), the Geʿez shelf (1 Enoch and Jubilees —
-books that survive complete only in Geʿez), the inscriptions of
-Italy (115,590 EDR records), Urartian, and Middle Low German — days
-after the Romance wave and the Arabic phase that made **Classical
-Arabic the largest language on the shelves (33.3 million passages)**,
-ahead of Literary Chinese (13.2 million). Together with
-**1,407,280 dictionary entries** across 103 reference shelves
-and **19.2 million gold-standard lemma annotations in thirty-seven
-languages** (a further 28.1 million machine-suggested annotations are
-carried at an honestly labelled silver tier). All figures on this
-site are read from the live catalog, never estimated, and carry the
-date on which they were read.
+As of **4 August 2026**, the catalog records **975,074 documents** comprising
+**68,408,109 passages** in 122 language codes — from proto-cuneiform
+tablets of the late fourth millennium BCE to Meiji-era Japanese.
+**Classical Arabic is the largest language on the shelves (33.3 million
+passages)**, ahead of Literary Chinese (13.4 million). The newest
+additions are the granted sources — the complete secular
+Galician-Portuguese lyric under a written grant, and the Ras Shamra
+Tablet Inventory with the concordances Ugaritologists cite — beside the
+complete openMGH critical editions (153 volumes of medieval Latin),
+DÉRom's Proto-Romance etymons, and the **lect layer**: historical-stage
+ladders, stage-aware search, and honest reconstruction display through
+the [nabu-lects](https://arvicco.github.io/nabu-lects) registry.
+Together with **1,407,706 dictionary entries** across 104 reference
+shelves and **19.2 million gold-standard lemma annotations in
+thirty-seven languages** (a further 28.1 million machine-suggested
+annotations are carried at an honestly labelled silver tier). All
+figures on this site are read from the live catalog, never estimated,
+and carry the date on which they were read.
 
 A survey of the collections is given on [The Library]({{ '/library/' | relative_url }})
 page; the full attribution and licensing record is on
