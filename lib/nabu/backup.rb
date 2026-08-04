@@ -134,7 +134,10 @@ module Nabu
       list = [
         dir_section("canonical", @config.canonical_dir, File.join(@target, "canonical")),
         dir_section("config", @config.config_dir, File.join(@target, "config")),
-        file_section("ledger", @config.history_path)
+        file_section("ledger", @config.history_path),
+        # P58-1: lect rulings are decisions, not derivations — backed up like
+        # the ledger (absent file = clean skip, as for every section).
+        file_section("lects", @config.lects_journal_path)
       ]
       unless @skip_derived
         list << file_section("catalog", @config.catalog_path)

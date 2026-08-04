@@ -72,12 +72,14 @@ module Nabu
     SLUG = "nabu-lects"
 
     # anchor: 2-3 lowercase letters, optionally hyphen-extended (roa-opt,
-    # ine-bsl). stage/variety: 2-5 lowercase letters. ortho: 2-8 lowercase
+    # ine-bsl). stage/variety: 2-5 lowercase alphanumerics starting with a
+    # letter (digits admitted P58-5 for the field's own periodization names —
+    # sux:ur3 is Ur III; pure-letter tags stay the norm). ortho: 2-8 lowercase
     # alphanumerics starting with a letter. Axes strictly ordered (":" before
     # "/" before "@") per nabu-lects docs/schema.md.
     ID_PATTERN = %r{\A(?<anchor>[a-z]{2,3}(?:-[a-z]{2,5})?)
-                     (?::(?<stage>[a-z]{2,5}))?
-                     (?:/(?<variety>[a-z]{2,5}))?
+                     (?::(?<stage>[a-z][a-z0-9]{1,4}))?
+                     (?:/(?<variety>[a-z][a-z0-9]{1,4}))?
                      (?:@(?<ortho>[a-z][a-z0-9]{1,7}))?\z}x
 
     # Grammar-only parse (no registry lookup): the anchor/stage/variety/ortho
@@ -104,12 +106,28 @@ module Nabu
     # `nabu sync nabu-lects` has not landed both files, so a corpus without
     # the module behaves byte-identically (the cldf-spine/nabu-data posture).
     # NEVER raises on absence.
-    def self.load_default(config: Nabu::Config.load, overlay: {})
+    #
+    # +overlay+ :auto (the default) feature-detects the lect-assignment
+    # journal (db/lects.sqlite3, P58-1) the same way: absent file -> empty
+    # overlay, byte-identical P57-3 behavior; present -> the journal's lazy
+    # Overlay (point lookups, not an eager hash). An explicit overlay:
+    # argument — a test's fixture hash, a caller's own seam — always wins.
+    def self.load_default(config: Nabu::Config.load, overlay: :auto)
       dir = File.join(config.canonical_dir, SLUG)
       return nil unless File.file?(File.join(dir, LECTS_FILE)) && File.file?(File.join(dir, CODEMAP_FILE))
 
+      overlay = journal_overlay(config) if overlay == :auto
       load(dir, overrides_path: config.lect_overrides_path, overlay: overlay)
     end
+
+    # The journal read side, absence-safe. The require is lazy so the
+    # registry resolver itself stays loadable without the store stack.
+    def self.journal_overlay(config)
+      require_relative "store/lect_journal"
+      db = Store::LectJournal.open_readonly(config.lects_journal_path)
+      db ? Store::LectJournal::Overlay.new(db) : {}
+    end
+    private_class_method :journal_overlay
 
     def self.read_yaml(path)
       File.file?(path) ? (YAML.safe_load_file(path) || {}) : {}
