@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../normalize"
+require_relative "../lects"
 require_relative "reflex_views"
 
 module Nabu
@@ -117,12 +118,18 @@ module Nabu
       # :auto/inject contract (feature-detected from canonical/nabu-data).
       # +verb_lemma+ (P54-3) is the nabu-data Tibetan verb stem→lemma table,
       # the same contract again.
-      def initialize(catalog:, fulltext: nil, lila: :auto, form_lemma: :auto, verb_lemma: :auto)
+      # +lects+ (P58-6) is the reconstruction-scope seam, the etym/search
+      # :auto/loaded/nil contract: with the registry present, the "*" scope
+      # is the registry's mode field (per-source resolution included);
+      # absent, the "-pro" string test stands byte-identically.
+      def initialize(catalog:, fulltext: nil, lila: :auto, form_lemma: :auto, verb_lemma: :auto,
+                     lects: :auto)
         @catalog = catalog
         @reflex_views = ReflexViews.new(catalog: catalog, fulltext: fulltext)
         @lila = lila
         @form_lemma = form_lemma
         @verb_lemma = verb_lemma
+        @lects = lects
       end
 
       # Look up +lemma+; +lang+ filters by dictionary language (grc/lat/…);
@@ -219,13 +226,46 @@ module Nabu
                   .join(:sources, id: Sequel[:dictionaries][:source_id])
                   .where(Sequel[:dictionary_entries][:headword_folded] => variants,
                          Sequel[:dictionary_entries][:withdrawn] => false)
-        dataset = dataset.where(Sequel.like(Sequel[:dictionaries][:language], "%-pro")) if recon_only
+        dataset = dataset.where(recon_shelf_expr) if recon_only
         dataset = dataset.where(Sequel[:dictionaries][:language] => Nabu::Languages.code_variants(lang)) if lang
         dataset = dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
         # limit: nil = every matching shelf (P34-r2 — the CLI fetches all and
         # caps at render so truncation can announce itself honestly).
         dataset = dataset.limit(limit) if limit
         dataset.select(*entry_columns).all
+      end
+
+      # The "*" reconstruction scope (P58-6). Seam present: keep exactly the
+      # (language, source-slug) shelf pairs whose RESOLUTION carries
+      # mode: reconstructed — per-source overrides included, so derom's
+      # la-vul (roa:pro) is a reconstruction shelf while another source's
+      # la-vul (lat/vul) is not. Seam absent: the "-pro" string test,
+      # unchanged (fallback, never removed). An empty pair set matches
+      # nothing, honestly (dictionaries.id IS NULL — the lect_pairs_expr
+      # precedent).
+      def recon_shelf_expr
+        seam = lects_seam
+        return Sequel.like(Sequel[:dictionaries][:language], "%-pro") unless seam
+
+        pairs = @catalog[:dictionaries]
+                .join(:sources, id: Sequel[:dictionaries][:source_id])
+                .distinct
+                .select_map([Sequel[:dictionaries][:language], Sequel[:sources][:slug]])
+                .select { |language, slug| seam.reconstructed?(seam.resolve(language, source: slug)) }
+        return { Sequel[:dictionaries][:id] => nil } if pairs.empty?
+
+        Sequel.|(*pairs.map do |language, slug|
+          Sequel.&({ Sequel[:dictionaries][:language] => language }, { Sequel[:sources][:slug] => slug })
+        end)
+      end
+
+      # Feature-detect + memoize (the etym/search :auto contract).
+      def lects_seam
+        return @lects unless @lects == :auto
+
+        loaded = Nabu::Lects.load_default
+        @lects = loaded if loaded
+        loaded
       end
 
       def entry_columns
