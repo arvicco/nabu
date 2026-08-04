@@ -209,6 +209,7 @@ module Nabu
         verdict = Nabu::Store::LectJournal.assign!(journal, urn: urn, code: code, lect_id: lect_id,
                                                             basis: options[:basis], note: options[:note])
         say "#{verdict}  #{urn}  #{code} → #{lect_id}  (#{options[:basis]})"
+        refresh_lect_facet(config, urn)
       end
     end
 
@@ -269,7 +270,11 @@ module Nabu
       catalog = Nabu::Store.connect(config.catalog_path)
       journal = options[:dry_run] ? nil : Nabu::Store::LectJournal.open!(config.lects_journal_path)
       selected_rules(rules).each { |rule| run_rule(rules, rule, catalog, journal) }
-      say "dry run — nothing written (drop --dry-run to compile)" if options[:dry_run]
+      if options[:dry_run]
+        say "dry run — nothing written (drop --dry-run to compile)"
+      else
+        materialize_lect_facets!(config, catalog: catalog)
+      end
     end
 
     desc "infer-dates", "Infer stages from document dates × registry bands (--dry-run first)"
@@ -314,7 +319,28 @@ module Nabu
                                source: options[:source], lang: options[:lang])
         suffix = outcome.skipped.positive? ? " (#{outcome.skipped} skipped — already ruled)" : ""
         say "  assigned #{outcome.assigned}#{suffix}"
+        materialize_lect_facets!(config, catalog: catalog)
       end
+    end
+
+    desc "materialize", "Recompute the derived lect facet (document_facets 'lect') from the current resolution"
+    long_desc <<~HELP, wrap: false
+      Flattens the whole lect resolution — journal rulings, per-source
+      overrides, universal codemap — into one document_facets row per
+      document whose resolution differs from its bare code (no row means
+      identity). `nabu rebuild` runs this automatically; the journal CLI
+      refreshes single documents; this command is the manual full pass
+      (e.g. after hand-editing config/lect_overrides.yml).
+    HELP
+    def materialize
+      config = Nabu::Config.load
+      require_lects_module!(config)
+      unless File.exist?(config.catalog_path)
+        raise Thor::Error,
+              "lect materialize: no catalog at #{config.catalog_path}"
+      end
+
+      materialize_lect_facets!(config)
     end
 
     desc "check-dates", "The reverse audit: journal assignments whose document dates fall outside the stage band"
@@ -354,6 +380,7 @@ module Nabu
       writable = Nabu::Store::LectJournal.open!(config.lects_journal_path)
       count = Nabu::Store::LectJournal.withdraw!(writable, urn: urn, code: options[:code])
       say "withdrew #{count} assignment#{'s' unless count == 1}  #{urn}#{" #{options[:code]}" if options[:code]}"
+      refresh_lect_facet(config, urn)
     end
 
     no_commands do
@@ -400,6 +427,30 @@ module Nabu
         verdicts = rows.map { |row| Nabu::Store::LectJournal.assign!(journal, **row) }
         say "#{verdicts.size} assignments (#{verdicts.count(:inserted)} inserted, " \
             "#{verdicts.count(:updated)} updated) from #{path}"
+        rows.map { |row| row[:urn] }.uniq.each { |row_urn| refresh_lect_facet(config, row_urn) }
+      end
+
+      # The single-document facet refresh after a hand ruling — a fresh
+      # load_default carries the just-written journal state; no catalog or
+      # no module is a clean skip (nothing to refresh into).
+      def refresh_lect_facet(config, urn)
+        return unless File.exist?(config.catalog_path)
+
+        registry = Nabu::Lects.load_default(config: config)
+        return unless registry
+
+        catalog = Nabu::Store.connect(config.catalog_path)
+        Nabu::Store::LectFacets.refresh_document!(catalog: catalog, registry: registry, urn: urn)
+        catalog.disconnect
+      end
+
+      # The wholesale recompute after a bulk compile (apply-rules,
+      # infer-dates) or on demand (materialize).
+      def materialize_lect_facets!(config, catalog: nil)
+        registry = Nabu::Lects.load_default(config: config)
+        catalog ||= Nabu::Store.connect(config.catalog_path)
+        count = Nabu::Store::LectFacets.rebuild!(catalog: catalog, registry: registry)
+        say "lect facet: #{count} rows materialized"
       end
 
       def parse_batch!(registry, path)

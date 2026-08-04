@@ -146,7 +146,8 @@ class RebuildTest < Minitest::Test
     reporter = Nabu::ProgressReporter.new(on_stage: ->(label) { stages << label })
     rebuilder.run(progress: reporter)
 
-    assert_equal ["corpus", "timeline", "facets", "source stats", "fulltext index", "analyze"], stages
+    assert_equal ["corpus", "timeline", "facets", "lect facets", "source stats", "fulltext index", "analyze"],
+                 stages
   end
 
   def test_progress_reporter_stage_is_nil_safe

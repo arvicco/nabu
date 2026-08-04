@@ -56,10 +56,12 @@ module Nabu
       # document-grained facet filter ({facet name => pattern}); +source+
       # (P22-1) scopes to one source slug.
       def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
-                       sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect_pairs: nil)
+                       sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect_pairs: nil,
+                       lect_target: nil)
         visible_passages(lang: lang, license: license, from: from, to: to, place: place,
                          facets: facets, source: source, sources: sources, loans: loans,
-                         meter: meter, meter_pattern: meter_pattern, lect_pairs: lect_pairs)
+                         meter: meter, meter_pattern: meter_pattern, lect_pairs: lect_pairs,
+                         lect_target: lect_target)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(*catalog_columns).all
       end
@@ -89,8 +91,16 @@ module Nabu
       # DB-only and never touches the resolver itself; an empty array is a
       # legal "matches nothing" (never a silent no-op — unlike +sources+,
       # which treats [] as "no filter").
+      # +lect_target+ (P58-4) is the materialized-facet successor to
+      # +lect_pairs+: the raw --lect id, filtered as (a lect facet row under
+      # the target) OR (the bare stored code matches AND no facet row) — the
+      # LectFacets invariant "no row means identity" makes the two branches
+      # exhaustive, and per-DOCUMENT journal rulings ride branch one, which
+      # (language, source) pairs cannot express. Search picks the path:
+      # facet rows present -> lect_target, none -> the legacy pairs.
       def visible_passages(lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
-                           sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect_pairs: nil)
+                           sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect_pairs: nil,
+                           lect_target: nil)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
@@ -104,6 +114,7 @@ module Nabu
         (facets || {}).each { |facet, pattern| dataset = dataset.where(facet_exists(facet, pattern)) }
         dataset = dataset.where(loans_exists(loans)) if loans
         dataset = dataset.where(lect_pairs_expr(lect_pairs)) if lect_pairs
+        dataset = dataset.where(lect_target_expr(lect_target)) if lect_target
         if meter || meter_pattern
           dataset = dataset.where(Sequel[:passages][:id] => meter_enrichments(meter, meter_pattern)
                                                             .select(:passage_id))
@@ -202,6 +213,22 @@ module Nabu
         Sequel.|(*pairs.map do |language, slug|
           Sequel.&({ Sequel[:passages][:language] => language }, { Sequel[:sources][:slug] => slug })
         end)
+      end
+
+      # The two-branch facet filter (P58-4, class note at visible_passages).
+      # Prefix semantics ride SQL: value = target, or value beginning
+      # target + one axis separator (":"/"/"/"@"). Branch two applies the
+      # same rule to the bare stored code — but codes never contain
+      # separators, so it reduces to equality; a staged/varietied target can
+      # only ever match branch one.
+      def lect_target_expr(target)
+        facet_rows = @catalog[:document_facets]
+                     .where(document_id: Sequel[:documents][:id], facet: Store::LectFacets::FACET)
+        under = Sequel.|({ value: target },
+                         *%w[: / @].map { |sep| Sequel.like(:value, "#{target}#{sep}%") })
+        identity = { Sequel[:documents][:language] => target }
+        facet_rows.where(under).exists |
+          Sequel.&(identity, ~facet_rows.exists)
       end
 
       # Effective license class: document override wins over source class (P1-3).

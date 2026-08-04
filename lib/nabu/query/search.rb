@@ -282,7 +282,7 @@ module Nabu
 
         filters = { lang: lang, license: license, from: from, to: to, place: place,
                     facets: facets, source: source, sources: sources, loans: loans,
-                    meter: meter, meter_pattern: meter_pattern, lect_pairs: lect ? lect_pairs_for(lect) : nil }
+                    meter: meter, meter_pattern: meter_pattern }.merge(lect_filter(lect))
         page = if exact || word
                  verified_page(variants, query, filters, limit: limit, urn: urn,
                                                          scan_ceiling: scan_ceiling, exact: exact, word: word)
@@ -317,10 +317,9 @@ module Nabu
         @incomplete_hint = nil
         @rank_note = nil
         @meter_note = nil
-        lect_pairs = lect ? lect_pairs_for(lect) : nil
         rows = visible_passages(lang: lang, license: license, from: from, to: to, place: place,
                                 facets: facets, source: source, sources: sources, loans: loans,
-                                meter: meter, meter_pattern: meter_pattern, lect_pairs: lect_pairs)
+                                meter: meter, meter_pattern: meter_pattern, **lect_filter(lect))
                .order(Sequel[:passages][:id])
                .select(*catalog_columns)
                .limit(limit)
@@ -745,6 +744,21 @@ module Nabu
       # prefix semantics). Small and query-independent (the vocabulary of
       # held codes × sources, not the passage count), so it costs one
       # DISTINCT scan per --lect call, never a per-passage resolve.
+      # The --lect filter dispatch (P58-4): once a materialization exists,
+      # the lect facet is the query path — it is the only shape that can
+      # express per-document journal rulings. A catalog with no lect facet
+      # rows at all (never materialized) keeps the P57-4 (language, source)
+      # pair path byte-identically. The module requirement holds either way.
+      def lect_filter(lect)
+        return {} unless lect
+
+        seam = lects_seam
+        raise Nabu::Error, LECT_MODULE_MISSING unless seam
+        return { lect_target: lect.to_s } if Store::LectFacets.materialized?(@catalog)
+
+        { lect_pairs: lect_pairs_for(lect) }
+      end
+
       def lect_pairs_for(target)
         seam = lects_seam
         raise Nabu::Error, LECT_MODULE_MISSING unless seam
