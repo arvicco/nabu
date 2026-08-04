@@ -297,6 +297,34 @@ peaks in the second century CE.
 
 ## Stewardship
 
+**Lect rulings** (`nabu lect …`, added 4 August 2026) manage the layer beneath language
+codes: which historical stage of a language a document actually
+attests, in [nabu-lects](https://arvicco.github.io/nabu-lects)
+identifiers (`lat:med`, `akk:ob`, `grc:koi`). Assignments live in
+their own journal (`db/lects.sqlite3`) that survives `nabu rebuild`
+and rides backups, at three grains: `lect assign URN LECT` records a
+single ruling; `lect apply-rules` compiles the ratified facet rules
+(a CDLI period label, an AES corpus slice, a DCS Vedic school tag
+names the stage of every document carrying it); `lect infer-dates`
+assigns a stage when a document's date interval sits inside exactly
+one stage band — containment, never overlap, so an inscription dated
+across a stage boundary stays honestly unstaged. Both batch commands
+render a full census under `--dry-run` before anything is written,
+re-runs supersede only their own rows, and a hand ruling is never
+overwritten by a rule. `lect check-dates` audits the reverse
+direction: assignments whose document dates contradict the assigned
+stage's band. The resolved lect is materialized as an ordinary
+document facet, so `show` prints it, `search --lect` filters by it,
+and the `language` card's stage ladder counts by it.
+
+```
+$ bin/nabu lect assign urn:nabu:perseus-latin:phi0119.phi001 lat:arch --note "Plautus"
+$ bin/nabu lect apply-rules --dry-run
+$ bin/nabu lect infer-dates --source edh --dry-run
+$ bin/nabu lect check-dates
+```
+
+
 **Ingest** (`nabu ingest FILE...`) files your own material — scanned
 grammars, offprints, reading notes — into the local library shelf: the
 file is copied in (never moved), metadata candidates are derived
