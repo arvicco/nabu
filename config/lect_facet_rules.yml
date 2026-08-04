@@ -1,0 +1,98 @@
+# config/lect_facet_rules.yml — facet→lect assignment rules (P58-2).
+#
+# The DOCUMENT-GROUP grain of lect assignment: a catalog facet value (a
+# period label, a corpus slice) names the historical stage of every document
+# that carries it, per source. Rules are COMPILED, not resolved live:
+# `nabu lect apply-rules` reads this file, censuses the catalog, and writes
+# per-document rows into the lect journal (db/lects.sqlite3) with
+# basis rule:<id> — so every assignment is inspectable in one place, a rule
+# re-run supersedes exactly its own rows, and hand rulings always win
+# (an existing (urn, code) row is never overwritten by a rule).
+#
+# Matching: the facet value is normalized (parentheticals stripped —
+# "Old Babylonian (ca. 1900-1600 BC)" → "Old Babylonian"; a trailing "?"
+# cataloguer's-uncertainty marker stripped) and then matched EXACTLY against
+# the map keys. Compound values ("ED I-II (…), Old Babylonian (…)") match
+# nothing and are reported as unmatched — deliberate: an ambiguous dating
+# stays a bare anchor. Every map target must exist in the registry.
+#
+# Every rule here is a ratified owner decision — do not add one without one.
+# Ruled 2026-08-04 (P58 D58-a/b/c + the D57-f survey pattern): tier states
+# certain (the label IS the stage) vs approximation (corpus-level reading;
+# per-document overlay refines later).
+rules:
+  # ── D58-a: the Akkadian period grid (CDLI vocabulary; cdli + ebl carry
+  # the facet). Old Akkadian predates the Assyrian/Babylonian split; the
+  # ruled fold sends Late Babylonian / Achaemenid (Persian) / Hellenistic /
+  # Parthian into nb rather than minting stages the period labels cut finer
+  # than the language does. Deliberately unmatched (bare-anchor honesty):
+  # Ur III akk, ED IIIb akk, Ebla, Middle Elamite — period labels that
+  # describe OTHER chronologies or predate the stage grid's confidence.
+  - id: akk-period
+    tier: certain
+    sources: [cdli, ebl]
+    code: akk
+    facet: period
+    map:
+      "Old Akkadian": "akk:old"
+      "Old Babylonian": "akk:ob"
+      "Early Old Babylonian": "akk:ob"
+      "Old Assyrian": "akk:oa"
+      "Middle Babylonian": "akk:mb"
+      "Middle Assyrian": "akk:ma"
+      "Neo-Assyrian": "akk:na"
+      "Neo-Babylonian": "akk:nb"
+      "Early Neo-Babylonian": "akk:nb"
+      "Late Babylonian": "akk:nb"
+      "Achaemenid": "akk:nb"
+      "Persian": "akk:nb"
+      "Hellenistic": "akk:nb"
+      "Parthian": "akk:nb"
+
+  # ── D58-b: the Sumerian period grid (same vocabulary). ED I-II → arch is
+  # the sux-coded archaic corpus (the qpc-coded ED I-II documents are a
+  # separately ratifiable claim — registry qpc note). Old Akkadian-period
+  # and Lagash II Sumerian → sarg; Early OB and OB → post (the literary/
+  # liturgical corpus). First-millennium copies (Neo-Assyrian etc.) stay
+  # deliberately unmatched pending an owner call at dry-run review.
+  - id: sux-period
+    tier: certain
+    sources: [cdli, ebl]
+    code: sux
+    facet: period
+    map:
+      "ED I-II": "sux:arch"
+      "ED IIIa": "sux:ed"
+      "ED IIIb": "sux:ed"
+      "Old Akkadian": "sux:sarg"
+      "Lagash II": "sux:sarg"
+      "Ur III": "sux:ur3"
+      "Early Old Babylonian": "sux:post"
+      "Old Babylonian": "sux:post"
+
+  # ── D58-c: the AES corpus slices (facet `period` on source aes). Ruled
+  # now: ok-fip → egy:old, mk-sip → egy:mid. nk and tip-roman DEFERRED
+  # (witnesses straddle Middle/Late Egyptian) — deliberately absent here.
+  - id: egy-aes-period
+    tier: certain
+    sources: [aes]
+    code: egy
+    facet: period
+    map:
+      "ok-fip": "egy:old"
+      "mk-sip": "egy:mid"
+
+  # ── D58-d (facet half): the DCS Vedic school tags — a rv/av/sv/yv-tagged
+  # text IS Vedic Sanskrit. Untagged DCS texts stay bare san (the epi/cla
+  # split needs per-text knowledge this facet does not carry).
+  - id: san-dcs-veda
+    tier: certain
+    sources: [dcs]
+    code: san
+    facet: veda
+    map:
+      "rv": "san:ved"
+      "av": "san:ved"
+      "sv": "san:ved"
+      "black yv": "san:ved"
+      "white yv": "san:ved"

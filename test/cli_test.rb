@@ -6381,6 +6381,39 @@ class CLITest < Minitest::Test
     end
   end
 
+  def test_lect_apply_rules_dry_run_reports_the_census_and_writes_nothing
+    with_lect_rules_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect apply-rules --dry-run]) }
+      assert_nil status
+      assert_match(/rule test-akk \(certain; facet period, code akk, sources cdli\)/, out)
+      assert_match(/Old Babylonian\s+→ akk:ob\s+2/, out)
+      assert_match(/Middle Elamite\s+\(unmatched\) 1/, out)
+      assert_match(/assignable: 2/, out)
+      assert_match(/dry run — nothing written/, out)
+      assert_nil Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+    end
+  end
+
+  def test_lect_apply_rules_compiles_into_the_journal
+    with_lect_rules_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect apply-rules]) }
+      assert_nil status
+      assert_match(/assigned 2/, out)
+      rows = read_lect_journal(config)
+      assert_equal 2, rows.size
+      assert_equal ["rule:test-akk"], rows.map { |row| row[:basis] }.uniq
+      assert_equal "Old Babylonian", rows.first[:note], "the verbatim normalized value is the evidence"
+    end
+  end
+
+  def test_lect_apply_rules_refuses_an_unknown_rule_naming_the_known
+    with_lect_rules_cli_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[lect apply-rules --rule nope]) }
+      assert_equal 1, status
+      assert_match(/unknown rule "nope".*test-akk/, err)
+    end
+  end
+
   def test_lect_commands_require_the_module
     Dir.mktmpdir do |root|
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
@@ -8164,6 +8197,44 @@ class CLITest < Minitest::Test
                               content_sha256: "cafe")
         db.disconnect
       end
+      yield config
+    end
+  end
+
+  # The apply-rules rig: fixture module + a real config dir (so the rules
+  # path derives) + a catalog of three cdli akk docs — two Old Babylonian
+  # (one ?-decorated), one unmatchable Middle Elamite.
+  def with_lect_rules_cli_env
+    Dir.mktmpdir("nabu-cli-lect-rules") do |root|
+      dest = File.join(root, "canonical", "nabu-lects")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-lects"), "*")], dest)
+      FileUtils.mkdir_p(File.join(root, "config"))
+      File.write(File.join(root, "config", "lect_facet_rules.yml"), <<~YAML)
+        rules:
+          - id: test-akk
+            tier: certain
+            sources: [cdli]
+            code: akk
+            facet: period
+            map:
+              "Old Babylonian": "akk:ob"
+      YAML
+      File.write(File.join(root, "sources.yml"), "# empty registry\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: File.join(root, "sources.yml"),
+                                config_path: File.join(root, "config", "nabu.yml"))
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      cdli = db[:sources].insert(slug: "cdli", name: "CDLI", adapter_class: "X", license_class: "attribution")
+      [["urn:t:cdli:a", "Old Babylonian (ca. 1900-1600 BC)"],
+       ["urn:t:cdli:b", "Old Babylonian (ca. 1900-1600 BC) ?"],
+       ["urn:t:cdli:c", "Middle Elamite (ca. 1300-1000 BC)"]].each do |urn, period|
+        doc = db[:documents].insert(source_id: cdli, urn: urn, language: "akk", content_sha256: "x")
+        db[:document_facets].insert(document_id: doc, facet: "period", value: period)
+      end
+      db.disconnect
       yield config
     end
   end

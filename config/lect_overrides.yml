@@ -61,3 +61,10 @@ sources:
     # The island's Greek record is Ptolemaic — approximation. (The source's
     # other twelve languages are untouched: overrides are per (source, code).)
     grc: "grc:koi"
+    # The island's Aramaic record IS the Imperial Aramaic corpus — certain.
+    # Owner ruling, P58 D58-d.
+    arc: "arc:imp"
+  openiti:
+    # OpenITI is the premodern Classical Arabic written tradition —
+    # approximation (the fas rows are untouched). Owner ruling, P58 D58-d.
+    ara: "ara:cla"

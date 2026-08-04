@@ -120,6 +120,12 @@ module Nabu
       File.join(config_dir, "lect_overrides.yml")
     end
 
+    # The facet→lect assignment rules (P58-2): owner-ratified document-group
+    # rules `nabu lect apply-rules` compiles into the lect journal.
+    def lect_facet_rules_path
+      File.join(config_dir, "lect_facet_rules.yml")
+    end
+
     # The catalog SQLite file (architecture §5), derived from db_dir.
     def catalog_path
       File.join(db_dir, CATALOG_DB_FILENAME)
