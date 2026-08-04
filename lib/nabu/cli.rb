@@ -272,6 +272,77 @@ module Nabu
       say "dry run — nothing written (drop --dry-run to compile)" if options[:dry_run]
     end
 
+    desc "infer-dates", "Infer stages from document dates × registry bands (--dry-run first)"
+    long_desc <<~HELP, wrap: false
+      The document grain for dated-but-unstaged holdings (Latin epigraphy
+      above all): a document whose code resolves to a bare anchor, whose
+      date interval is closed, and whose interval sits INSIDE EXACTLY ONE
+      attested stage band, is assigned that stage (journal basis
+      rule:date-band; the note carries the dating). Containment, never
+      overlap — a date spanning two bands stays honestly bare, and every
+      skip reason is tallied in the report. Same discipline as apply-rules:
+      re-runs supersede their own basis, existing rulings always win,
+      --dry-run writes nothing.
+    HELP
+    option :source, banner: "SLUG", desc: "scope to one source"
+    option :lang, banner: "CODE", desc: "scope to one stored code"
+    option :dry_run, type: :boolean, default: false
+    def infer_dates
+      config = Nabu::Config.load
+      registry = require_lects_module!(config)
+      unless File.exist?(config.catalog_path)
+        raise Thor::Error,
+              "lect infer-dates: no catalog at #{config.catalog_path}"
+      end
+
+      catalog = Nabu::Store.connect(config.catalog_path)
+      dates = Nabu::LectDates.new(registry: registry)
+      report = dates.census(catalog: catalog, source: options[:source], lang: options[:lang])
+      report.assignable.sort_by { |_key, count| -count }.each do |(source, code, lect_id), count|
+        say format("  %<source>-16s %<code>-6s → %<lect>-10s %<count>d",
+                   source: source, code: code, lect: lect_id, count: count)
+      end
+      report.skipped.sort_by { |_reason, count| -count }.each do |reason, count|
+        say "  (#{reason.to_s.tr('_', ' ')}: #{count})"
+      end
+      say "  assignable: #{report.candidates.size}"
+      if options[:dry_run]
+        say "dry run — nothing written (drop --dry-run to compile)"
+      else
+        journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+        outcome = dates.apply!(catalog: catalog, journal: journal,
+                               source: options[:source], lang: options[:lang])
+        suffix = outcome.skipped.positive? ? " (#{outcome.skipped} skipped — already ruled)" : ""
+        say "  assigned #{outcome.assigned}#{suffix}"
+      end
+    end
+
+    desc "check-dates", "The reverse audit: journal assignments whose document dates fall outside the stage band"
+    def check_dates
+      config = Nabu::Config.load
+      registry = require_lects_module!(config)
+      journal = Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+      return say "no lect journal — nothing to audit" unless journal
+      unless File.exist?(config.catalog_path)
+        raise Thor::Error,
+              "lect check-dates: no catalog at #{config.catalog_path}"
+      end
+
+      catalog = Nabu::Store.connect(config.catalog_path)
+      findings = Nabu::LectDates.new(registry: registry).check(catalog: catalog, journal: journal)
+      if findings.empty?
+        say "check-dates clean — no assignment contradicts its document's dates"
+      else
+        findings.each do |finding|
+          say format("  %<urn>-42s %<lect>-12s dated %<nb>s..%<na>s outside band %<band>s (%<basis>s)",
+                     urn: finding.urn, lect: finding.lect_id, nb: finding.not_before,
+                     na: finding.not_after, band: finding.band.inspect, basis: finding.basis)
+        end
+        say "#{findings.size} finding#{'s' unless findings.size == 1} — a ruling or a dating is wrong; " \
+            "review before trusting either"
+      end
+    end
+
     desc "withdraw URN", "Remove URN's assignment(s) — all codes, or just --code"
     option :code, banner: "CODE"
     def withdraw(urn)

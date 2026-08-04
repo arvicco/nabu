@@ -6414,6 +6414,47 @@ class CLITest < Minitest::Test
     end
   end
 
+  def test_lect_infer_dates_dry_run_reports_and_writes_nothing
+    with_lect_dates_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect infer-dates --dry-run]) }
+      assert_nil status
+      assert_match(/edh\s+lat\s+→ lat:late\s+1/, out)
+      assert_match(/spans bands: 1/, out)
+      assert_match(/assignable: 1/, out)
+      assert_match(/dry run — nothing written/, out)
+      assert_nil Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+    end
+  end
+
+  def test_lect_infer_dates_compiles_and_check_dates_stays_clean
+    with_lect_dates_cli_env do |config|
+      with_config(config) do
+        out, _err, status = run_cli(%w[lect infer-dates])
+        assert_nil status
+        assert_match(/assigned 1/, out)
+        rows = read_lect_journal(config)
+        assert_equal([["urn:t:edh:late", "lat", "lat:late", "rule:date-band"]],
+                     rows.map { |row| row.values_at(:urn, :code, :lect_id, :basis) })
+
+        audit, _err2, audit_status = run_cli(%w[lect check-dates])
+        assert_nil audit_status
+        assert_match(/check-dates clean/, audit)
+      end
+    end
+  end
+
+  def test_lect_check_dates_flags_a_contradicted_ruling
+    with_lect_dates_cli_env do |config|
+      with_config(config) do
+        run_cli(["lect", "assign", "urn:t:edh:late", "lat:arch", "--code", "lat"])
+        out, _err, status = run_cli(%w[lect check-dates])
+        assert_nil status
+        assert_match(/urn:t:edh:late\s+lat:arch\s+dated 250\.\.450 outside band \[-700, -75\]/, out)
+        assert_match(/1 finding/, out)
+      end
+    end
+  end
+
   def test_lect_commands_require_the_module
     Dir.mktmpdir do |root|
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
@@ -8233,6 +8274,31 @@ class CLITest < Minitest::Test
        ["urn:t:cdli:c", "Middle Elamite (ca. 1300-1000 BC)"]].each do |urn, period|
         doc = db[:documents].insert(source_id: cdli, urn: urn, language: "akk", content_sha256: "x")
         db[:document_facets].insert(document_id: doc, facet: "period", value: period)
+      end
+      db.disconnect
+      yield config
+    end
+  end
+
+  # The infer-dates rig: fixture module + a catalog of two dated edh lat
+  # docs — one inside lat:late alone (250..450), one spanning cla|late
+  # (100..300).
+  def with_lect_dates_cli_env
+    Dir.mktmpdir("nabu-cli-lect-dates") do |root|
+      dest = File.join(root, "canonical", "nabu-lects")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-lects"), "*")], dest)
+      File.write(File.join(root, "sources.yml"), "# empty registry\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: File.join(root, "sources.yml"),
+                                config_path: File.join(root, "config", "nabu.yml"))
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      edh = db[:sources].insert(slug: "edh", name: "EDH", adapter_class: "X", license_class: "attribution")
+      [["urn:t:edh:late", 250, 450], ["urn:t:edh:spans", 100, 300]].each do |urn, from, to|
+        doc = db[:documents].insert(source_id: edh, urn: urn, language: "lat", content_sha256: "x")
+        db[:document_axes].insert(document_id: doc, not_before: from, not_after: to, axis_source: "test")
       end
       db.disconnect
       yield config
