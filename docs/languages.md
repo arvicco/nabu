@@ -1,19 +1,19 @@
 # Languages of the library
 
-**As of 2026-07-23** (post the P42 full rebuild — 62,789,087 live
-passages across the 89-row registry; live inventory: every code below
+**As of 2026-08-04** (post the P57 full rebuild — 68,408,109 live
+passages across the 126-row registry; live inventory: every code below
 appears in the catalog, the lemma index, or the reference shelf). This
 page explains the code system once, then lists the significant codes
-with one sentence each (the corpus now carries 110 passage languages;
-the long tail of single-inscription script variants is folded into
-grouped rows).
+with one sentence each (the corpus now carries 122 document language
+codes; the long tail of single-inscription script variants is folded
+into grouped rows).
 
 **The headline has moved again — to the Islamicate world.** With the
 OpenITI load (2026-07-22 evening), **`ara` (Classical Arabic) is the
 library's largest language — 33.3M passages**, more than the whole
-pre-Arabic corpus combined; `lzh` (Literary Chinese, 13.2M) is second,
-Sumerian (3.03M) third, Japanese (2.99M) fourth, and Ancient Greek
-(2.01M) still leads the West.
+pre-Arabic corpus combined; `lzh` (Literary Chinese, 13.4M) is second,
+Sumerian (3.04M) third, Ancient Greek (3.01M) fourth, and Japanese
+(2.98M) fifth.
 
 **The desk reference is a command (P18-4), and languages are now
 file-backed (P19-1):** `nabu language CODE` explains any code this page
