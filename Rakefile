@@ -235,6 +235,26 @@ namespace :site do
     counts = File.exist?(catalog_path) ? "live catalog #{catalog_path}" : "no catalog (holdings say so)"
     puts "site:axes wrote #{results.size} pages (#{results.size - 1} desks + index) — #{counts}"
   end
+
+  desc "Serve the site locally for staged-change review (default port 4747; PORT=n overrides — 4000 stays with siblings)"
+  task :preview do
+    port = ENV.fetch("PORT", "4747")
+    puts "site:preview → http://127.0.0.1:#{port}/nabu/  (Ctrl-C stops)"
+    # No livereload: its default port (35729) is another cross-project
+    # collision on a box that previews sibling sites (nabu-edubba).
+    site_dir = File.expand_path("site", __dir__)
+    # The site has its OWN Gemfile + vendor/bundle (no .bundle/config on
+    # disk); shed the root bundle's env or `bundle exec` resolves against
+    # the root Gemfile (no jekyll there), and point BUNDLE_PATH at the
+    # vendored gems explicitly.
+    env = {
+      "BUNDLE_GEMFILE" => File.join(site_dir, "Gemfile"),
+      "BUNDLE_PATH" => File.join(site_dir, "vendor", "bundle")
+    }
+    exec(env, "bundle", "exec", "jekyll", "serve",
+         "--port", port, "--host", "127.0.0.1",
+         chdir: site_dir)
+  end
 end
 
 # Gate rider (P35-6, dev-loop §6b rule 3): every era-bound literal in
