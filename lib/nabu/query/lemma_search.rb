@@ -57,7 +57,8 @@ module Nabu
       # filtering (language/license/withdrawn) can drop rows and still fill
       # the page (same factor as Search). Exhaustion is ANNOUNCED (P35-6)
       # via incomplete_hint, as in Search.
-      # census: 24415015, 2026-07-20, live passages (settled full rebuild; 3.76M at tuning)
+      # census: 68408109, 2026-08-04, live passages (P57 full rebuild; 3.76M at tuning,
+      # re-affirmed at 24.4M and 68.4M — exhaustion stays ANNOUNCED, class note)
       INNER_LIMIT_FACTOR = 10
 
       def initialize(catalog:, fulltext:)

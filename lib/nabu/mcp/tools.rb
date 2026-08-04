@@ -94,7 +94,8 @@ module Nabu
       SEARCH_DEFAULT_WINDOW = Query::Proximity::DEFAULT_WINDOW
       # A generous proximity ceiling: beyond this the NEAR window spans most
       # passages and stops meaning "near". Clamps the arg, honest note.
-      # census: 33, 2026-07-20, papyri-ddbdp mean passage length in chars (lit
+      # census: 33, 2026-08-04, papyri-ddbdp mean passage length in chars (re-
+      # measured at the P57 full rebuild, N=921,611; claim holds) (lit
       # passages run longer) — 50 tokens still spans most passages
       SEARCH_MAX_WINDOW = 50
       # census: 200000, 2026-07-20, tokens — model-context norms (H5/H6, above)

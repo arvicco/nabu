@@ -118,7 +118,7 @@ module Nabu
       # is a real count over the passages join, cheap for small/mid shelves,
       # seconds-scale for the giants; the doc grain (indexed counts) still
       # watches every source.
-      # census: 2000000, 2026-07-23, ~3% of the 62.8M-passage live corpus
+      # census: 2000000, 2026-08-04, ~2.9% of the 68.4M-passage live corpus
       # (the P41 scale review's census) — an indexed live-on-live join count
       # at this size stays low-seconds, health's budget for one probe
       STATS_PASSAGE_PROBE_CAP = 2_000_000
