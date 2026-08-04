@@ -45,6 +45,24 @@ class LectDatesTest < Minitest::Test
     end
   end
 
+  # The 2026-08-04 live-audit find (iip idum0080): a REVERSED interval
+  # (not_before -36, not_after -335) satisfies the containment arithmetic
+  # vacuously and slipped into arc:imp — check-dates caught it. A backwards
+  # interval is a dating defect, never an inference candidate.
+  def test_a_reversed_interval_is_skipped_not_inferred
+    with_seeded_catalog do |catalog|
+      doc = catalog[:documents].insert(
+        source_id: catalog[:sources].first(slug: "edh")[:id],
+        urn: "urn:t:edh:reversed", language: "lat", content_sha256: "x"
+      )
+      catalog[:document_axes].insert(document_id: doc, not_before: 450, not_after: 250,
+                                     axis_source: "test")
+      report = dates.census(catalog: catalog)
+      refute_includes report.candidates.map(&:urn), "urn:t:edh:reversed"
+      assert_equal 1, report.skipped.fetch(:reversed_interval)
+    end
+  end
+
   def test_source_filter_scopes_the_census
     with_seeded_catalog do |catalog|
       report = dates.census(catalog: catalog, source: "nope")
