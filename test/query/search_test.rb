@@ -668,6 +668,47 @@ module Query
       assert_empty search_with_lects("libertas", lect: "lat", license: "open")
     end
 
+    # -- P58-4: the materialized lect facet becomes the query path ----------
+
+    # Per-DOCUMENT journal rulings cannot be expressed as (language, source)
+    # pairs — once a materialization exists, --lect reads the facet: branch
+    # one (facet row under the target), branch two (bare code matches AND no
+    # facet row — the "no row means identity" invariant).
+    def test_lect_filter_reads_the_materialized_facet_at_document_grain
+      lat = Nabu::Store::Source.create(slug: "perseus-latin", name: "Perseus Latin",
+                                       adapter_class: "TestAdapter", license_class: "open")
+      plautus = make_document(source: lat, urn: "urn:d:plautus", language: "lat")
+      make_passage(plautus, urn: "urn:d:plautus:1", text: "libertas", sequence: 0, language: "lat")
+      cicero = make_document(source: lat, urn: "urn:d:cicero", language: "lat")
+      make_passage(cicero, urn: "urn:d:cicero:1", text: "libertas", sequence: 0, language: "lat")
+      rebuild!
+      overlay = { "urn:d:plautus" => { "lat" => "lat:arch" } }
+      registry = Nabu::Lects.load(Nabu::TestSupport.fixtures("nabu-lects"), overlay: overlay)
+      Nabu::Store::LectFacets.rebuild!(catalog: @catalog, registry: registry)
+
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, lects: registry)
+      assert_equal %w[urn:d:plautus:1], searcher.run("libertas", lect: "lat:arch").map(&:urn),
+                   "the per-document ruling is the filter — same code, same source, different lect"
+      assert_equal %w[urn:d:cicero:1 urn:d:plautus:1], searcher.run("libertas", lect: "lat").map(&:urn).sort,
+                   "the bare-anchor prefix matches the ruled doc (branch one) AND the identity doc (branch two)"
+    end
+
+    def test_lect_filter_facet_path_excludes_documents_materialized_out_of_the_anchor
+      derom = Nabu::Store::Source.create(slug: "derom", name: "DÉRom",
+                                         adapter_class: "TestAdapter", license_class: "nc")
+      doc = make_document(source: derom, urn: "urn:d:derom", language: "la-vul")
+      make_passage(doc, urn: "urn:d:derom:1", text: "lactem", sequence: 0, language: "la-vul")
+      rebuild!
+      Nabu::Store::LectFacets.rebuild!(catalog: @catalog, registry: lects)
+
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, lects: lects)
+      assert_equal %w[urn:d:derom:1], searcher.run("lactem", lect: "roa").map(&:urn),
+                   "the ratified derom override rides the facet row"
+      assert_empty searcher.run("lactem", lect: "lat"),
+                   "la-vul under derom is roa:pro — the facet row moves it OUT of lat, and branch two " \
+                   "cannot re-admit it (a facet row exists)"
+    end
+
     def test_lect_filter_composes_with_a_term_less_browse
       lat = Nabu::Store::Source.create(slug: "perseus-latin", name: "Perseus Latin",
                                        adapter_class: "TestAdapter", license_class: "open")

@@ -163,6 +163,14 @@ module Nabu
       facets = profile.measure(scope: RebuildProfile::CORPUS, stage: :facets) do
         Store::FacetBuilder.rebuild!(catalog: db)
       end
+      # The lect facet (P58-4) flattens the whole lect resolution — journal
+      # rulings, source overrides, codemap defaults — into one indexed axis.
+      # Feature-detected: no nabu-lects module -> zero rows, clean skip (the
+      # registry carries the journal overlay via load_default's :auto).
+      progress&.stage("lect facets")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :lect_facets) do
+        Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config))
+      end
       # P42-0: the write-time census. The loader hooks maintained it through
       # the replay; the wholesale derivation here is the rebuildability
       # invariant made explicit — stats are exactly f(loaded catalog).

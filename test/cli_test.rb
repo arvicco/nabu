@@ -6455,6 +6455,45 @@ class CLITest < Minitest::Test
     end
   end
 
+  def test_lect_assign_refreshes_the_materialized_facet_and_withdraw_clears_it
+    with_lects_cli_env(with_document: "urn:nabu:fixture:doc1") do |config|
+      with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:fixture:doc1", "grc:koi"])
+        db = Nabu::Store.connect(config.catalog_path)
+        assert_equal ["grc:koi"],
+                     db[:document_facets].where(facet: "lect").select_map(:value),
+                     "a hand ruling refreshes the document's facet row in the same command"
+        db.disconnect
+
+        run_cli(["lect", "withdraw", "urn:nabu:fixture:doc1"])
+        db = Nabu::Store.connect(config.catalog_path)
+        assert_empty db[:document_facets].where(facet: "lect").all,
+                     "withdrawing the ruling returns the document to identity — no row"
+        db.disconnect
+      end
+    end
+  end
+
+  def test_lect_apply_rules_materializes_after_compiling
+    with_lect_rules_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect apply-rules]) }
+      assert_nil status
+      assert_match(/lect facet: 2 rows materialized/, out)
+      db = Nabu::Store.connect(config.catalog_path)
+      assert_equal %w[akk:ob akk:ob], db[:document_facets].where(facet: "lect").select_map(:value).sort
+      db.disconnect
+    end
+  end
+
+  def test_lect_materialize_recomputes_on_demand
+    with_lect_rules_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect materialize]) }
+      assert_nil status
+      assert_match(/lect facet: 0 rows materialized/, out,
+                   "no journal, no overrides under this root — every resolution is identity")
+    end
+  end
+
   def test_lect_commands_require_the_module
     Dir.mktmpdir do |root|
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
