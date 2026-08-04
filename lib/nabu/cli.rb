@@ -13,6 +13,11 @@ module Nabu
   # working clone. The rail writes FILES there and never runs git operations —
   # publishing the data repo is the owner's explicit act.
   class DataCLI < Thor
+    # Thor 1.5's inherited built-ins (`tree`) render under the class
+    # auto-namespace ("data_c_l_i") without this — listed in help yet not
+    # invocable. The explicit namespace keeps banners truthful.
+    namespace "data"
+
     def self.exit_on_failure?
       true
     end
@@ -171,6 +176,9 @@ module Nabu
   # it) and validates lect ids against the LIVE registry: an undefined tag
   # is refused loudly, never silently coerced (the registry's own rule).
   class LectCLI < Thor
+    # The DataCLI namespace note applies here too (Thor 1.5 `tree`).
+    namespace "lect"
+
     def self.exit_on_failure?
       true
     end
@@ -519,6 +527,10 @@ module Nabu
   # ingest/query subcommands are stubs that report "not implemented" and exit 1
   # so scripts and CI can rely on the failure signal before the real work lands.
   class CLI < Thor
+    # The DataCLI namespace note applies at the root too: without it Thor
+    # 1.5's `tree` labels its root with the class auto-namespace ("nabu:c_l_i").
+    namespace "nabu"
+
     # The tag-semantics note the axis-grouped surfaces (`list --axis`,
     # `status --axis`, P35-1) state ONCE: axes are TAGS over the source list,
     # so a source appears under every axis it serves — never a folder owning it.

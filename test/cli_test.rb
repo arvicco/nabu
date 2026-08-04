@@ -6537,6 +6537,27 @@ class CLITest < Minitest::Test
     end
   end
 
+  # Thor 1.5 ships a built-in `tree` command that every subclass inherits;
+  # without an explicit namespace a subcommand class renders it under its
+  # auto-namespace ("nabu lect_c_l_i tree") — listed in help yet not
+  # invocable. The namespace pins keep the banner truthful AND the command
+  # runnable at every level.
+  def test_subcommand_help_carries_no_phantom_auto_namespace_entries
+    %w[lect data].each do |sub|
+      out, _err, status = run_cli(["help", sub])
+      assert_nil status
+      refute_match(/_c_l_i/, out, "#{sub}'s help must not leak the class auto-namespace")
+      assert_match(/ #{sub} tree\s/, out, "the inherited tree command lists under the real namespace")
+    end
+  end
+
+  def test_subcommand_tree_is_invocable
+    out, _err, status = run_cli(%w[lect tree])
+    assert_nil status
+    assert_match(/assign/, out)
+    assert_match(/withdraw/, out)
+  end
+
   def test_lect_commands_require_the_module
     Dir.mktmpdir do |root|
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
