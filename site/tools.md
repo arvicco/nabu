@@ -27,8 +27,8 @@ $ bin/nabu search 'στρατηγ*' --from 101 --to 300 --place oxyrhynch%
 ```
 
 finds the strategoi of the Oxyrhynchite nome in the papyri of the second
-and third centuries. The chronological axis covers 687,393 dated and
-placed documents as of 28 July 2026 — the CDLI tablets, Italy's EDR
+and third centuries. The chronological axis covers 688,562 dated and
+placed documents as of 4 August 2026 — the CDLI tablets, Italy's EDR
 (115,590), the Heidelberg inscriptions and the papyri foremost among
 them. On the faceted shelves
 (currently the inscriptions), genre facets compose with the same filters:
@@ -51,9 +51,8 @@ codes never touched. See the [Languages]({{ '/languages/' | relative_url }})
 page for the lect layer.
 
 **Lemma search** (`search --lemma FORM`) queries by dictionary form rather
-than surface string, over 18.6 million gold lemma annotations in
-thirty-three languages (Urartian and Middle Low German the newest,
-joined 26 July 2026) — inflection and suppletion included:
+than surface string, over 19.2 million gold lemma annotations in
+thirty-seven languages (26 July 2026 census) — inflection and suppletion included:
 
 ```
 $ bin/nabu search --lemma λέγω --limit 3
