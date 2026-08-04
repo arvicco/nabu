@@ -237,6 +237,41 @@ module Nabu
       end
     end
 
+    desc "apply-rules", "Compile the ratified facet→lect rules into journal assignments (--dry-run first)"
+    long_desc <<~HELP, wrap: false
+      Reads config/lect_facet_rules.yml (owner-ratified document-group rules:
+      a source's facet value names the stage of every document carrying it),
+      censuses the live catalog, and writes one journal row per matched
+      document with basis rule:<id>. A re-run supersedes exactly its own
+      rows; an existing (urn, code) assignment — a hand ruling, another
+      rule — is never overwritten (counted as skipped). --dry-run renders
+      the full value → lect census, including unmatched values, and writes
+      nothing: the owner reviews that report before any batch lands.
+    HELP
+    option :rule, banner: "ID", desc: "compile just this rule"
+    option :dry_run, type: :boolean, default: false
+    def apply_rules
+      config = Nabu::Config.load
+      registry = require_lects_module!(config)
+      rules = Nabu::LectRules.load(config.lect_facet_rules_path)
+      raise Thor::Error, "lect apply-rules: no rules file at #{config.lect_facet_rules_path}" unless rules
+
+      begin
+        rules.validate!(registry)
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      end
+      unless File.exist?(config.catalog_path)
+        raise Thor::Error,
+              "lect apply-rules: no catalog at #{config.catalog_path}"
+      end
+
+      catalog = Nabu::Store.connect(config.catalog_path)
+      journal = options[:dry_run] ? nil : Nabu::Store::LectJournal.open!(config.lects_journal_path)
+      selected_rules(rules).each { |rule| run_rule(rules, rule, catalog, journal) }
+      say "dry run — nothing written (drop --dry-run to compile)" if options[:dry_run]
+    end
+
     desc "withdraw URN", "Remove URN's assignment(s) — all codes, or just --code"
     option :code, banner: "CODE"
     def withdraw(urn)
@@ -310,6 +345,35 @@ module Nabu
           check_basis!(basis, where: where)
           { urn: urn, code: code, lect_id: lect_id, basis: basis, note: note }
         end
+      end
+
+      def selected_rules(rules)
+        return rules.rules unless options[:rule]
+
+        rule = rules.find(options[:rule])
+        unless rule
+          raise Thor::Error, "lect apply-rules: unknown rule #{options[:rule].inspect} — " \
+                             "the file defines: #{rules.rules.map(&:id).join(', ')}"
+        end
+        [rule]
+      end
+
+      def run_rule(rules, rule, catalog, journal)
+        report = rules.census(rule, catalog: catalog)
+        say "rule #{rule.id} (#{rule.tier}; facet #{rule.facet}, code #{rule.code}, " \
+            "sources #{rule.sources.join(' ')})"
+        report.matched.sort_by { |_pair, count| -count }.each do |(value, lect_id), count|
+          say format("  %<value>-28s → %<lect>-10s %<count>d", value: value, lect: lect_id, count: count)
+        end
+        report.unmatched.sort_by { |_value, count| -count }.each do |value, count|
+          say format("  %<value>-28s   (unmatched) %<count>d", value: value, count: count)
+        end
+        say "  assignable: #{report.assignable}"
+        return unless journal
+
+        outcome = rules.apply!(rule, catalog: catalog, journal: journal)
+        suffix = outcome.skipped.positive? ? " (#{outcome.skipped} skipped — already ruled)" : ""
+        say "  assigned #{outcome.assigned}#{suffix}"
       end
 
       def render_table(journal, scope)
