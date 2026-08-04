@@ -236,7 +236,7 @@ namespace :site do
     puts "site:axes wrote #{results.size} pages (#{results.size - 1} desks + index) — #{counts}"
   end
 
-  desc "Serve the site locally for staged-change review (default port 4747; PORT=n overrides — 4000 stays with siblings)"
+  desc "Serve the site for staged-change review (port 4747; PORT=n overrides — 4000 stays with siblings)"
   task :preview do
     port = ENV.fetch("PORT", "4747")
     puts "site:preview → http://127.0.0.1:#{port}/nabu/  (Ctrl-C stops)"
