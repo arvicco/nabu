@@ -137,7 +137,7 @@ every enabled live-policy source in one pass. The full menu is
 | `bin/nabu sync perseus-latin` | the Latin classics | 224 MB |
 | `bin/nabu sync gretil` | 780 Sanskrit editions | 303 MB |
 | `bin/nabu sync papyri-ddbdp` | 61k documentary papyri | 4.8 GB |
-| `bin/nabu sync oracc` | 105k cuneiform documents, translations and the P46 CC0 project pack (Urartian among them) included | 16 GB |
+| `bin/nabu sync oracc` | 105k cuneiform documents, translations and the Oracc CC0 project pack (Urartian among them) included | 16 GB |
 
 What each shelf is good for is surveyed on [The Library]({{ '/library/' | relative_url }});
 every text keeps its upstream license, recorded per document — the classes

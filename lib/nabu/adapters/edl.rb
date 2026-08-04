@@ -220,17 +220,23 @@ module Nabu
       end
 
       # A staged target (another etymon) mints a proto-to-proto edge with
-      # its upstream stage marker as lang_code and the asterisk kept; a
-      # Brill LexicalEntry target mints a Latin edge (lang_code "la" — the
-      # upstream entry ids are la####). Label-less targets mint nothing.
-      # All censused links are "inheritance"; the /borrow/i guard mirrors
-      # the kaikki loan-marker rule should upstream ever add loan links.
+      # the asterisk kept; a Brill LexicalEntry target mints a Latin edge
+      # (lang_code "la" — the upstream entry ids are la####). Label-less
+      # targets mint nothing. All censused links are "inheritance"; the
+      # /borrow/i guard mirrors the kaikki loan-marker rule should upstream
+      # ever add loan links.
+      #
+      # lang_code is the RESOLVED catalog tag (P57-5 — upstream's raw stage
+      # marker, "PIt", used to leak through verbatim even though
+      # STAGE_LANGUAGES already resolves it to itc-pro); the un-staged
+      # direct-Latin-edge case is untouched ("la", not "lat" — the existing,
+      # pre-P57-5 convention, out of this packet's scope).
       def build_reflex(graph, target, kind)
         word = graph.first(target, LABEL) or return nil
 
         stage = graph.first(target, LIME_LANGUAGE)
-        lang_code = stage || "la"
         language = stage ? STAGE_LANGUAGES[stage] : "lat"
+        lang_code = stage ? (language || stage) : "la"
         nfc = Nabu::Normalize.nfc(word)
         Nabu::DictionaryReflex.new(
           lang_code: lang_code, language: language, word: nfc,

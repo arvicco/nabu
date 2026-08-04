@@ -77,7 +77,9 @@ class EdlTest < Minitest::Test
     pit_edge = entries["pie1043"].reflexes
     assert_equal 1, pit_edge.size
     reflex = pit_edge.first
-    assert_equal "PIt", reflex.lang_code, "upstream lime:language verbatim"
+    assert_equal "itc-pro", reflex.lang_code,
+                 "P57-5: lang_code is the RESOLVED catalog tag — upstream's `PIt` siglum used to " \
+                 "leak through verbatim even though `language` already said itc-pro"
     assert_equal "itc-pro", reflex.language
     assert_equal "*(w)rōde/o‑", reflex.word, "proto-to-proto reflexes keep the asterisk (kaikki precedent)"
     assert_equal "(w)rode/o-", reflex.word_folded

@@ -1,29 +1,24 @@
 # The Library — content review
 
-**As of 2026-07-26** (post the P46 wave — the Rabbinic library, the
-Geʿez shelf, EDR, ReN, the Oracc CC0 pack, the comparativist CLDF
-pack). Live totals: **947,273 documents / 66,755,518 passages and
-1,391,759 dictionary entries** across the **109 registry rows** — 96 corpus
-sources + 4 local shelves + 9 feature modules, every corpus source wired (OpenITI's
-registry flip rides the P42 gate). The rebuild reconciled the
-incrementally-grown catalog against clean derivation at −74 documents /
-−18,896 passages (0.03%): re-parse quarantines under current parser
-strictness (papyri +9 flagged by the drift monitor) and four rundata
-URN collisions; per-source counts are byte-identical across the two
-most recent full rebuilds. **Classical Arabic (`ara`, §8x) is now the largest language at 33.3M
-passages** — the OpenITI load of 2026-07-22 evening — ahead of Literary
-Chinese (13.2M); Persian (`fas`, 1.3M), Japanese (`jpn`, §8v) and
-Middle High German (`gmh`, §8w) landed the same 48 hours. The reference shelf spans **56 dictionary
-shelves** (§8c, §8h, §8j, §8k, §8m, §8o, §8q, §8s, §8t). The lemma
-layer, censused fresh this date: **16,240,531 gold rows in 28
-languages** — the Germanic wave added `gmh` (2.10M rows, instantly the
-third-largest gold pool), `non`, `osx`, and, with the owner's same-day
-`sync ud`, `is` (IcePaHC, 812K rows, straight in at #4) and `lzh`'s
-first gold lane — plus **8,244,309 silver
-rows in 8** (the CDLI/TLHdig/Diorisis honest tier — machine-suggested or
-upstream-undisambiguated, always labelled). The four canonical-memory shelves (§8i) hold the owner's private
-curation and acquisitions — their counts and contents stay out of public
-documentation by rule. The code-per-language map lives in [languages.md](languages.md).
+**As of 2026-08-04** (post the full rebuild of 2026-08-03, which
+folded in the granted sources, the complete openMGH offering, DÉRom,
+the Tibetan wave, and the lect layer). Live totals: **975,074
+documents / 68,408,109 passages and 1,407,706 dictionary entries**
+across the **126 registry rows** — 109 corpus sources + 4 local
+shelves + 13 feature modules, every corpus source wired. **Classical
+Arabic (`ara`, §8x) is the largest language at 33.3M passages**, ahead
+of Literary Chinese (13.4M), Sumerian and Ancient Greek (3.0M each),
+and Japanese (2.98M); the catalog spans **122 language codes**. The
+reference shelf spans the dictionary shelves of §8c, §8h, §8j, §8k,
+§8m, §8o, §8q, §8s, §8t and §8ae. The gold-lemma layer stands at
+**19.2M gold rows in 37 languages** (26 July census) plus the honest
+silver tier (machine-suggested or upstream-undisambiguated, always
+labelled). Since August 2026 stored codes also resolve through the
+**lect layer** (languages.md, "The lect layer"): historical-stage
+ladders on language cards, `search --lect`, and registry-keyed
+reconstruction display. The four canonical-memory shelves (§8i) hold
+the owner's private curation and acquisitions — their counts and
+contents stay out of public documentation by rule. The code-per-language map lives in [languages.md](languages.md).
 
 This is a living document. Numbers are read from the live catalog, not
 estimated — via a `readonly: true` Sequel/sqlite3 session (the WAL-safe
@@ -769,6 +764,21 @@ tablets scattered across collections; the cuneiform desk's first
 Ugaritic document shelf beside the held uga gold lemmas; published
 editions with transliteration/phonemic/graphemic renderings at line
 grain.
+
+## 8ae. DÉRom — the Proto-Romance bridge (`derom`; P56, flipped live 2026-08-02)
+
+| | |
+|---|---|
+| **Category** | The Dictionnaire Étymologique Roman (dir. Buchi & Schweickard; ATILF): the reference comparative-method reconstruction of Proto-Romance, one etymon article per reconstructed lexeme with per-language reflex sections across the whole Romance family |
+| **Source** | The open Ortolang workspace (`derom`, market tag v1): 513 open article XMLs (the future-DÉRom-4 and English-article collections are auth-gated upstream and censused, not crawled) |
+| **Size** | **233 dictionary entries / ~3.3K reflex rows** on the reconstruction shelf — headwords folded to searchable skeletons (ˈ dropped, β→b), reflex idiomes mapped to ISO codes |
+| **License** | `nc` (CC BY-NC-SA 4.0, verbatim from the Ortolang market metadata); MCP-excluded like all nc shelves |
+
+**Research uses:** `etym cheval` → \*kaˈβall-u, `etym lapte` →
+\*ˈlakt-e — the Latin→Romance bridge beside the Wiktionary witnesses,
+under the honest `roa:pro` lect (a marked comparative-method
+reconstruction, distinct from attested Vulgar Latin); `define lakt-e`
+serves the article body with the cognat apparatus.
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 

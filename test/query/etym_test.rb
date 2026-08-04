@@ -53,8 +53,12 @@ module Query
       Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
     end
 
+    # lects: nil, EXPLICITLY — this helper is the absent-module lane (the old
+    # -pro string test), and the default (:auto) would make every assertion
+    # below depend on whether THIS BOX has canonical/nabu-lects synced (the
+    # P57-4 hermeticity lesson). The lects-aware lane is #etym_with_lects.
     def etym(lemma, **)
-      Nabu::Query::Etym.new(catalog: @catalog, fulltext: @fulltext).run(lemma, **)
+      Nabu::Query::Etym.new(catalog: @catalog, fulltext: @fulltext, lects: nil).run(lemma, **)
     end
 
     # -- the walk: attested → proto ------------------------------------------------
@@ -377,8 +381,8 @@ module Query
       assert_equal "nc", amsa.license_class
       assert_equal "ὦμος", amsa.matched_reflex.word
       cognates = amsa.cognates.map { |view| [view.lang_code, view.word] }
-      assert_includes cognates, %w[Goth. amsa]
-      assert_includes cognates, %w[Lat. humerus]
+      assert_includes cognates, %w[got amsa], "P57-5: lang_code is the resolved catalog tag, not `Goth.`"
+      assert_includes cognates, %w[lat humerus]
     end
 
     # P18-3: MW comparanda duplicated WITHIN one entry (a 19th-century
@@ -408,6 +412,129 @@ module Query
       assert_equal 1, results.size, "the doubled matched comparandum resolves to ONE entry"
       views = results.first.cognates.select { |view| view.word == "ὦμος" }
       assert_equal 1, views.size, "duplicated comparanda render as one view"
+    end
+
+    # -- P57-4: the recon predicate by mode + the etym display mapping ------------
+    #
+    # When Nabu::Lects is present, the "-pro suffix" string test that decides
+    # both the display asterisk and the reconstruction-shelf scope for direct
+    # `*headword` lookups is replaced by resolving the dictionary's (language,
+    # source) through the registry and asking #reconstructed? — the class doc's
+    # "the derom la-vul / rundata gmq-pro" pin, now exercised through Etym
+    # itself. Absent Lects, the old string test stays exactly as it was
+    # (every test above this section pins that fallback).
+    def lects
+      @lects ||= Nabu::Lects.load(Nabu::TestSupport.fixtures("nabu-lects"),
+                                  overrides_path: File.join(Nabu::TestSupport.fixtures("nabu-lects"),
+                                                            "lect_overrides.yml"))
+    end
+
+    def etym_with_lects(lemma, **)
+      Nabu::Query::Etym.new(catalog: @catalog, fulltext: @fulltext, lects: lects).run(lemma, **)
+    end
+
+    # A dictionary entry filed under one dictionary language + one source —
+    # the shape the recon predicate resolves (dictionaries.language,
+    # sources.slug), independent of the reflex crosswalk machinery.
+    def make_dictionary_entry(source_slug:, language:, headword:)
+      source = Nabu::Store::Source.find(slug: source_slug) ||
+               Nabu::Store::Source.create(slug: source_slug, name: source_slug, adapter_class: "X",
+                                          license_class: "attribution")
+      dict_id = @catalog[:dictionaries].insert(source_id: source.id, slug: source_slug,
+                                               title: source_slug, language: language)
+      folded = Nabu::Normalize.query_forms(headword).first
+      @catalog[:dictionary_entries].insert(
+        dictionary_id: dict_id, urn: "urn:nabu:dict:#{source_slug}:#{headword}", entry_id: headword,
+        key_raw: headword, headword: headword, headword_folded: folded, body: "b",
+        content_sha256: "x", revision: 1, withdrawn: false
+      )
+    end
+
+    # DÉRom's la-vul resolves via the seeded override (config/lect_overrides.yml)
+    # to roa:pro — a genuinely RECONSTRUCTED lect (lects.yml: roa stage pro,
+    # mode: reconstructed) — so, with Lects present, a bare `*headword` lookup
+    # now REACHES it (the old SQL "%-pro" scope never would: la-vul carries no
+    # -pro suffix) and it earns the display asterisk.
+    def test_derom_la_vul_resolves_to_roa_pro_reconstructed_asterisked_and_closure_eligible
+      make_dictionary_entry(source_slug: "derom", language: "la-vul", headword: "lakteu")
+      rebuild!
+      results = etym_with_lects("*lakteu")
+      assert_equal 1, results.size, "derom la-vul -> roa:pro is now in the reconstruction-shelf scope"
+      assert_equal "*lakteu", results.first.headword, "roa:pro is mode: reconstructed -> the display asterisk"
+    end
+
+    # Rundata's gmq-pro resolves via the seeded override to gmq:run — an
+    # ATTESTED stage (real runic epigraphy filed under a proto-looking tag,
+    # lects.yml's own pin) — so, with Lects present, it drops OUT of the
+    # reconstruction-shelf scope even though the code carries the -pro
+    # suffix the old string test would have keyed on.
+    def test_rundata_gmq_pro_resolves_to_gmq_run_attested_not_asterisked_or_closure_eligible
+      make_dictionary_entry(source_slug: "rundata", language: "gmq-pro", headword: "kaupaz")
+      rebuild!
+      assert_empty etym_with_lects("*kaupaz"),
+                   "rundata gmq-pro -> gmq:run is ATTESTED — no longer a reconstruction-shelf headword lookup"
+    end
+
+    # A plain -pro code with NO per-source override (the wiktionary-recon
+    # shelves the whole file already exercises) resolves through the
+    # UNIVERSAL codemap default to its own :pro stage — still reconstructed,
+    # still asterisked: the new path reproduces the old behavior for the
+    # common case, it only corrects the two ratified exceptions above.
+    def test_plain_pro_codes_stay_reconstructed_through_the_lects_path
+      make_gold_passages(language: "chu", lemma: "богъ", form: "ба")
+      rebuild!
+      bog = etym_with_lects("богъ", lang: "chu").first
+      assert_equal "*bogъ", bog.headword, "sla-pro (no override) resolves via codemap to sla:pro — reconstructed"
+    end
+
+    # Without Lects (the default, and every catalog until the module syncs),
+    # behavior is BYTE-IDENTICAL to before this packet — the old string test,
+    # unchanged, is what every other test in this file already exercises;
+    # this pins the fact explicitly against the SAME two dictionary shapes
+    # the lects-aware tests above use, so the fallback is proven on the same
+    # fixtures, not just asserted by omission.
+    def test_without_lects_the_old_suffix_test_stays_the_fallback
+      make_dictionary_entry(source_slug: "derom", language: "la-vul", headword: "lakteu")
+      make_dictionary_entry(source_slug: "rundata", language: "gmq-pro", headword: "kaupaz")
+      rebuild!
+      assert_empty etym("*lakteu"), "la-vul carries no -pro suffix — the old string test never scopes it in"
+      assert_equal ["*kaupaz"], etym("*kaupaz").map(&:headword),
+                   "gmq-pro carries the -pro suffix — the old string test asterisks it regardless of mode"
+    end
+
+    # -- P57-4: etym display through the mapping -----------------------------------
+    #
+    # Display-only: when Lects is present, a Result/MatchedVia carries the
+    # resolved lect id + composed registry name alongside the raw stored
+    # code, for renderers to prefer; absent Lects, both ride nil and a
+    # renderer falls back to the bare code — unchanged.
+    def test_result_carries_the_resolved_lect_id_and_name_when_lects_is_present
+      make_gold_passages(language: "chu", lemma: "богъ", form: "ба")
+      rebuild!
+      bog = etym_with_lects("богъ", lang: "chu").first
+      assert_equal "sla:pro", bog.lect_id
+      assert_equal "Proto-Slavic", bog.lect_name
+      assert_equal "chu", bog.matched_reflex.language, "the raw stored code is untouched"
+    end
+
+    def test_result_lect_fields_are_nil_without_lects
+      make_gold_passages(language: "chu", lemma: "богъ", form: "ба")
+      rebuild!
+      bog = etym("богъ", lang: "chu").first
+      assert_nil bog.lect_id
+      assert_nil bog.lect_name
+    end
+
+    # A resolved code with no corresponding registry entry (an honest miss —
+    # e.g. an attested reflex language never minted as a lects.yml anchor)
+    # rides nil, exactly like the absent-Lects case — never a raised error,
+    # never a half-composed name.
+    def test_result_lect_fields_are_nil_when_the_resolved_code_has_no_registry_entry
+      make_gold_passages(language: "got", lemma: "guþ", form: "guþ")
+      rebuild!
+      gud = etym_with_lects("guþ", lang: "got").first
+      assert_nil gud.matched_reflex.lect_id, "got is not a minted lects.yml anchor — an honest miss"
+      assert_nil gud.matched_reflex.lect_name
     end
   end
 end

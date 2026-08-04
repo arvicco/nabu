@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 1 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 August 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `oracc` | tablets | open | wired · manual | 118,366 docs / 1,800,130 passages |
@@ -27,7 +27,7 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `rsti` | texts | nc | wired · manual | 5,075 docs / 740 passages |
 | `osl` | feature module | open | not yet wired | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 1 August 2026)</span>: `sux` 242,887 · `akk` 129,597 · `und` 75,034 · `hit` 35,899 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 · `uga` 3,270 · `elx` 2,723 · `xhu` 832 … and 31 more (`nabu axis cuneiform` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 August 2026)</span>: `sux` 242,887 · `akk` 129,597 · `und` 75,034 · `hit` 35,899 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 · `uga` 3,270 · `elx` 2,723 · `xhu` 832 … and 31 more (`nabu axis cuneiform` lists all).
 
 ## The desk's instruments
 

@@ -3341,6 +3341,44 @@ nabu-data:
   # owner re-syncs (ref-pin optional for a reproducible snapshot).
   sync_policy: manual
 
+nabu-lects:
+  adapter: Nabu::Adapters::NabuLects
+  kind: module   # P57-3: machinery-only — the lect (anchor x stage x variety x ortho) resolver seam, zero document rows
+  axes: [etym]
+  wired: false   # PERMANENTLY false — a lect resolver instrument, not a
+                   # text source (the cldf-spine/nabu-data module invariant):
+                   # discover mints no documents, no migration, no catalog
+                   # table. The row gives the owner the sanctioned fetch path
+                   # for github.com/arvicco/nabu-lects (a small, curated
+                   # anchor x stage x variety x orthography registry with a
+                   # universal code -> lect-id codemap), resolved by
+                   # Nabu::Lects: lect(id), reconstructed?(id), resolve(code,
+                   # source:, urn:) (per-document overlay > per-source
+                   # config/lect_overrides.yml override > codemap > identity),
+                   # parent_of(id), stages_of(anchor). First consumers arrive
+                   # at P57-4. OWNER QUEUE (P57-3): bin/nabu enable
+                   # nabu-lects, then bin/nabu sync nabu-lects (GitFetch clone
+                   # of the small repo, whole tree — no sparse cone, the
+                   # nabu-data posture).
+  # P57-3: nabu-lects — a sister repo to nabu (github.com/arvicco/nabu-lects),
+  # born from nabu's own holdings but universal by construction: gives
+  # under-described standard codes (lat spans Plautus to charters, grc spans
+  # Homer to 1453, lzh codes a written register as a stage, la-vul names both
+  # an attested register and a reconstruction) a stable identifier without
+  # replacing the standard codes. Two files: lects.yml (the anchor registry)
+  # + codemap.yml (universal code -> lect-id defaults; identity is the
+  # default rule — any code absent maps to itself as a bare anchor).
+  # Nabu-specific per-source knowledge (never a universal codemap fact)
+  # lives in config/lect_overrides.yml, seeded with the two ratified
+  # overrides: derom la-vul -> roa:pro (DÉRom's articles ARE the
+  # comparative-method reconstruction, not the universal attested-register
+  # default) and rundata gmq-pro -> gmq:run (Rundata's urnordisk inscriptions
+  # are ATTESTED runic epigraphy, not the universal reconstructed default).
+  # LICENSE: repo LICENSE verbatim CC BY 4.0 → attribution. Pre-1.0
+  # instability window upstream (identifiers may still be renamed) — the
+  # owner may pin `ref:` once a tagged release exists.
+  sync_policy: manual
+
 osl:
   adapter: Nabu::Adapters::Osl
   kind: module   # P53-1: machinery-only — a cuneiform sign/value/codepoint instrument, zero document rows

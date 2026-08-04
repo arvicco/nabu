@@ -110,6 +110,15 @@ module Nabu
       File.join(File.dirname(display_path), "gaiji")
     end
 
+    # The per-source lect resolution overrides (P57-3): config/lect_overrides.yml,
+    # NABU-SPECIFIC knowledge about how one particular source uses a code
+    # (universal defaults live in the nabu-lects module's own codemap.yml).
+    # Derived from config_dir so it follows a relocated/restored tree (the
+    # gaiji_dir pattern).
+    def lect_overrides_path
+      File.join(config_dir, "lect_overrides.yml")
+    end
+
     # The catalog SQLite file (architecture §5), derived from db_dir.
     def catalog_path
       File.join(db_dir, CATALOG_DB_FILENAME)

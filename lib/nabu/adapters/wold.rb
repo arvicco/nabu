@@ -40,10 +40,26 @@ module Nabu
     # WOLD's donor glottocodes are demonstrably unreliable — its "Old
     # Norse" carries noon1243, which Glottolog resolves to Noone
     # (Atlantic-Congo, Cameroon); real Old Norse is oldn1244 (P46-6
-    # scouting find, pinned in test/cldf_spine_test.rb). The glottocode
-    # still rides lang_code verbatim (canonical means canonical); unmapped
-    # donors (e.g. bare "Greek", which WOLD tags mode1248 even for
-    # (w)oînos) stay display-only, the iecor rule.
+    # scouting find, pinned in test/cldf_spine_test.rb). P57-5's hand-check
+    # confirmed which side is wrong: every noon1243 row's Source_word is a
+    # genuine Old Norse form (ský "cloud", lágr "low", hvirfla "to whirl",
+    # húsbondi "husband", systir "sister") — upstream's NAME is right, its
+    # GLOTTOCODE is wrong, so name-based resolution stays authoritative and
+    # ALWAYS wins over the glottocode (see GLOTTOCODE_LANGUAGES below,
+    # which deliberately excludes noon1243).
+    #
+    # P57-5: lang_code is now the RESOLVED catalog tag (it used to leak the
+    # raw upstream glottocode, or the bare donor name for the ~72 rows with
+    # no glottocode at all, straight into lang_code — 96 glottocodes + 2
+    # verbal labels censused). Resolution order: DONOR_MAP by name, then
+    # GLOTTOCODE_LANGUAGES by glottocode (a mechanical join against the
+    # vendored Glottolog CLDF dump, canonical/cldf-spine/glottolog/
+    # languages.csv — the same file Nabu::CldfSpine reads at query time;
+    # not wired to CldfSpine itself here, since #parse has no config/spine
+    # dependency and this table only needs 96 specific rows, not the whole
+    # 27k-row spine), then `und` — never nil. The original upstream name or
+    # (failing that) glottocode always still rides lang_name, so nothing
+    # identifying is lost even when the language itself is `und`.
     #
     # Comma-multiform donor words ("asinus, asellus") split into one edge
     # per variant ONLY when every part is word-shaped; "elephas, -ntos"
@@ -104,16 +120,79 @@ module Nabu
         "SeliceRomani" => "rmy"
       }.freeze
 
-      # Donor languoid NAME → catalog tag (see the class note for why never
-      # the glottocode). Censused v4.2, held-relevant donors only; everything
-      # else stays display-only (language nil — the iecor rule).
+      # Donor languoid NAME → catalog tag (see the class note for why this
+      # always wins over the glottocode). Censused v4.2, held-relevant
+      # donors plus a couple P57-5 additions where the NAME alone is
+      # unambiguous enough not to need the glottocode table at all
+      # ("Nepali" — its glottocode, nepa1252, isn't even in the vendored
+      # Glottolog dump). Everything else falls through to
+      # GLOTTOCODE_LANGUAGES, then `und` (P57-5 — never nil, see #parse).
       DONOR_MAP = {
         "Latin" => "lat", "Late Latin" => "lat", "Neo-Latin" => "lat",
         "Sanskrit" => "san", "Old Norse" => "non", "Old French" => "fro",
         "French (Anglo-Norman)" => "xno", "Old Chinese" => "och",
         "Classical Greek" => "grc", "Arabic" => "ara", "Classical Arabic" => "ara",
         "Standard Arabic" => "ara", "Russian" => "rus", "Persian" => "fas",
-        "Middle Low German" => "gml", "Middle High German" => "gmh"
+        "Middle Low German" => "gml", "Middle High German" => "gmh",
+        "Nepali" => "nep"
+      }.freeze
+
+      # Donor languoid GLOTTOCODE → catalog tag (P57-5, fallback only —
+      # #resolved_donor_language always tries DONOR_MAP by name first).
+      # Every value here is read directly off the vendored Glottolog CLDF
+      # dump (canonical/cldf-spine/glottolog/languages.csv — the ISO
+      # 639-3 ISO639P3code column, or for dialect-level rows with none of
+      # their own, Closest_ISO369P3code: e.g. late1252 "Late Latin" → lat).
+      # A mechanical join, never a guess. Family-level glottocodes map to
+      # an ISO 639-5 collective ONLY when confident (ine, sla, gem, trk,
+      # gmq, xgn, bnt, sit, aav, que); the rest — WOLD's own donor labels
+      # in comments — map honestly to `und` rather than invent a code:
+      #   finn1317 "Fennic" (narrower than any ISO 639-5 collective I know)
+      #   mala1545 "Proto-Malayo-Polynesian" (a reconstruction stage, not
+      #     just a family — no ISO 639-5 code fits)
+      #   yuca1252 "Yucatecan" (a Mayan sub-branch narrower than myn)
+      #   gbee1241 "Gbe" (no dedicated ISO 639-5 collective)
+      #   high1289 "Early New High German" (a historical stage between
+      #     gmh and deu with no ISO code of its own)
+      #   east2832 "East Middle German" (a dialect grouping, same story)
+      #
+      # noon1243 is deliberately ABSENT (the P57-5 hand-check, class note):
+      # WOLD's own name "Old Norse" is right and its glottocode is wrong,
+      # so this fallback must never get a chance to mis-resolve it to
+      # Glottolog's noon1243 = Noone.
+      GLOTTOCODE_LANGUAGES = {
+        "stan1288" => "spa", "mand1415" => "cmn", "stan1318" => "ara",
+        "stan1290" => "fra", "stan1293" => "eng", "lati1261" => "lat",
+        "hung1274" => "hun", "russ1263" => "rus", "moro1292" => "ary",
+        "sans1269" => "san", "arab1395" => "ara", "stan1306" => "zsm",
+        "port1283" => "por", "mong1329" => "xgn", "avar1256" => "ava",
+        "dutc1256" => "nld", "stan1295" => "deu", "oldc1244" => "och",
+        "slav1255" => "sla", "tokp1240" => "tpi", "mode1248" => "ell",
+        "sran1240" => "srn", "west2369" => "pes", "djam1255" => "djd",
+        "java1254" => "jav", "midd1344" => "ltc", "swah1253" => "swh",
+        "bulg1262" => "bul", "angl1258" => "xno", "serb1264" => "srp",
+        "miri1266" => "mep", "urdu1245" => "urd", "sund1252" => "sun",
+        "amha1245" => "amh", "haus1257" => "hau", "kons1243" => "kxc",
+        "ital1282" => "ita", "ward1246" => "wrr", "chol1282" => "ctu",
+        "jaru1254" => "ddj", "slov1269" => "slk", "nucl1302" => "kat",
+        "cent2050" => "knc", "laoo1244" => "lao", "nort3160" => "gmq",
+        "finn1317" => "und", "cent1989" => "khm", "oldf1239" => "fro",
+        "aust1305" => "aav", "late1252" => "lat",
+        "croa1245" => "hrv", "czec1258" => "ces", "tuca1252" => "tuo",
+        "quec1387" => "que", "bali1278" => "ban", "pali1273" => "pli",
+        "mala1545" => "und", "uppe1395" => "hsb", "indo1319" => "ine",
+        "turk1311" => "trk", "kare1335" => "krl", "nucl1301" => "tur",
+        "germ1287" => "gem", "yuca1252" => "und", "daur1238" => "dta",
+        "tosk1239" => "als", "ngal1294" => "djd", "halh1238" => "khk",
+        "vili1238" => "vif", "midd1318" => "gml", "plat1254" => "plt",
+        "guia1246" => "gcr", "barg1252" => "mlp", "gbee1241" => "und",
+        "high1289" => "und", "mace1250" => "mkd", "bant1294" => "bnt",
+        "sino1245" => "sit", "slov1268" => "slv", "azte1234" => "nah",
+        "midd1343" => "gmh", "nucl1736" => "orm", "tama1365" => "taq",
+        "even1259" => "evn", "lakk1252" => "lbe", "tami1289" => "tam",
+        "mudb1240" => "dmw", "minn1241" => "nan", "nort2697" => "azj",
+        "djin1251" => "jig", "east2832" => "und", "kawi1241" => "kaw",
+        "kumy1244" => "kum", "oldh1241" => "goh"
       }.freeze
 
       # Labeled body lanes, curated (upstream column => label), rendered in
@@ -338,16 +417,29 @@ module Nabu
       def donor_reflexes(event)
         word = presence(event["Source_word"]) or return []
         name = presence(event["Source_languoid"])
-        code = presence(event["Source_languoid_glottocode"]) || name || "unidentified"
-        language = name && DONOR_MAP[name]
+        glottocode = presence(event["Source_languoid_glottocode"])
+        language = resolved_donor_language(name, glottocode)
+        display = name || glottocode
         split_donor(word).map do |part|
           nfc = Nabu::Normalize.nfc(part)
           Nabu::DictionaryReflex.new(
-            lang_code: code, language: language, word: nfc,
-            word_folded: language && reflex_fold(nfc, language),
-            borrowed: true, lang_name: name && Nabu::Normalize.nfc(name)
+            lang_code: language, language: language, word: nfc,
+            word_folded: reflex_fold(nfc, language),
+            borrowed: true, lang_name: display && Nabu::Normalize.nfc(display)
           )
         end
+      end
+
+      # P57-5 donor-language resolution, in priority order — the curated
+      # NAME always wins (the noon1243 hand-check, class note): WOLD's
+      # glottocodes are demonstrably unreliable even where the name is
+      # completely unambiguous, so a glottocode match must never override
+      # a trusted name. Falls through to the mechanical Glottolog join,
+      # then to `und` — every donor edge now names a real (if
+      # undetermined) catalog language; the original name/glottocode is
+      # never lost, since it still rides lang_name (see #donor_reflexes).
+      def resolved_donor_language(name, glottocode)
+        (name && DONOR_MAP[name]) || (glottocode && GLOTTOCODE_LANGUAGES[glottocode]) || "und"
       end
 
       # Comma-variant split with the word-shape guard (class note): every
