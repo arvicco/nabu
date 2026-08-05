@@ -88,5 +88,45 @@ module Store
       Nabu::Store::LectFacets.rebuild!(catalog: @catalog, registry: registry)
       assert Nabu::Store::LectFacets.materialized?(@catalog)
     end
+
+    # -- the precompiled census (lect_stats, owner ruling: never aggregate
+    # -- the facet at read time) ----------------------------------------------
+
+    def stats_rows
+      @catalog[:lect_stats].order(:kind, :key).all.map { |row| row.values_at(:kind, :key, :documents) }
+    end
+
+    def test_rebuild_derives_the_census_in_the_same_breath
+      Nabu::Store::LectFacets.rebuild!(catalog: @catalog, registry: registry)
+      assert_equal [["bare", "grc", 1], ["bare", "lat", 1],
+                    ["lect", "lat:med", 1], ["lect", "roa:pro", 1]], stats_rows,
+                   "lect kinds count facet rows; bare kinds count identity documents per code"
+    end
+
+    def test_refresh_recounts_exactly_the_affected_keys
+      Nabu::Store::LectFacets.rebuild!(catalog: @catalog, registry: registry)
+      overlay = { "urn:m:journal" => { "grc" => "grc:koi" } }
+      Nabu::Store::LectFacets.refresh_document!(catalog: @catalog, registry: registry(overlay: overlay),
+                                                urn: "urn:m:journal")
+      assert_includes stats_rows, ["lect", "grc:koi", 1]
+      refute_includes stats_rows.map { |kind, key, _| [kind, key] }, %w[bare grc],
+                      "the last bare grc document moved into a lect — its zero row is dropped, never kept"
+
+      Nabu::Store::LectFacets.refresh_document!(catalog: @catalog, registry: registry,
+                                                urn: "urn:m:journal")
+      assert_includes stats_rows, ["bare", "grc", 1], "withdrawing the ruling restores the bare count"
+      refute_includes stats_rows.map { |kind, key, _| [kind, key] }, %w[lect grc:koi]
+    end
+
+    def test_stats_match_a_live_aggregation_after_any_sequence
+      Nabu::Store::LectFacets.rebuild!(catalog: @catalog, registry: registry)
+      live = @catalog[:document_facets]
+             .join(:documents, id: :document_id)
+             .where(Sequel[:document_facets][:facet] => "lect", Sequel[:documents][:withdrawn] => false)
+             .group_and_count(Sequel[:document_facets][:value])
+             .to_h { |row| [row[:value], row[:count]] }
+      stored = @catalog[:lect_stats].where(kind: "lect").select_hash(:key, :documents)
+      assert_equal live, stored
+    end
   end
 end
