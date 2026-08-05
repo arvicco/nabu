@@ -19,11 +19,18 @@ are deliberately avoided because this box previews sibling sites
 At **every phase gate**, alongside the README/library.md truthfulness pass
 (library.md §10 duty 1), the site is re-synced:
 
-1. **Headline numbers** (index.md, library.md, tools.md, languages.md):
-   documents/passages totals, dictionary entries, gold-lemma rows and
-   language count, dated-document coverage — copied from the freshly
-   refreshed docs/library.md header, **never re-derived**. Update every
-   "as of" date to the gate date. quickstart.md carries measured on-disk
+1. **Headline numbers** (index.md, library.md, tools.md, languages.md).
+   **index.md is data-driven** (P58): its desk list and every headline
+   number render from `site/_data/desks.yml` + `census.yml`, GENERATED
+   by `bundle exec rake site:data` (or `site:refresh`, which also runs
+   site:axes) — regenerate at every gate and the home page is done; the
+   suite's drift guard (`test/site/site_data_test.rb`) goes red if a new
+   desk lands without a regeneration, and no hand desk list may return
+   to index.md (also pinned). The remaining hand-prose pages
+   (library.md, tools.md, languages.md) still copy their numbers from
+   the freshly refreshed docs/library.md header, **never re-derived**,
+   with every "as of" date updated to the gate date — migrate more of
+   them onto `site:data` fields as occasions arise. quickstart.md carries measured on-disk
    sizes (the starter shelf and the growth table) — re-measure (`du -sh`
    of the live canonical dirs) when a listed shelf changes materially,
    and keep it consistent with what `bin/nabu quickstart` prints.
