@@ -58,8 +58,12 @@ nabu/
 │   ├── fulltext.sqlite3         # DERIVED: FTS5 + passage_lemmas + trigram index (all keyed by passage id)
 │   ├── vectors.sqlite3          # DERIVED: sqlite-vec embeddings, per model-version table
 │   ├── history.sqlite3          # LEDGER (P7-1): runs, pins, revisions — never derived, never dropped
+│   ├── links.sqlite3            # JOURNAL (P16-1, §15): batch-mined edges — rebuild-proof, re-minable
+│   ├── lects.sqlite3            # JOURNAL (P58-1, §15a): per-document lect rulings — rebuild-proof, PRECIOUS
 │   ├── migrate/                 # catalog migration track (forward-only)
-│   └── ledger_migrate/          # ledger migration track (own schema_info per file)
+│   ├── ledger_migrate/          # ledger migration track (own schema_info per file)
+│   ├── links_migrate/           # links journal migration track
+│   └── lects_migrate/           # lect journal migration track
 ├── test/
 │   ├── fixtures/<source>/       # small real upstream samples, checked in
 │   └── ...
@@ -274,7 +278,7 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
 - Parse errors quarantine the document (recorded, skipped), never abort the batch — and never withdraw (P37-r2): a quarantined ref's document is still present in canonical, so its urn shields the held row (prior revision, still served) from the full-load withdrawal sweep. Recognition getting stricter can therefore never unserve held content; the row revives via the normal restore/revise path when the parse succeeds again.
 - **Postcondition invariants (P18-7).** Beside the trend rules, `nabu health` holds STATE against PROMISES (`Health::Invariants`, findings-only — a green library prints nothing new): a source whose most recent ledger run FAILED is loud with the error detail (and, when provenance shows rows written during that run, a named "partial load"); a source whose latest run succeeded yet which holds zero rows in its grain (docs/entries/language records) is the half-loaded-catalog / synced-to-nothing signature — `enabled` deliberately not consulted (P23-3); flag-vs-artifact pairs (`fuzzy_index` vs the trigram index + scope table, timeline extractor families vs `document_axes` rows, `Adapter.reflex_bearing?` vs `dictionary_reflexes` rows, reflexes vs the `language_names` census); pending catalog/ledger migrations (soft). The sync/rebuild quarantine WARNING is DELTA-aware against the ledger's `quarantine_baselines` (ledger migration 005): `baseline` auto-advances at every ok run, so each change announces exactly once and a standing audited count is silent; `anchor` is the low-water mark (advances downward only), so health's creep check catches the slow bleed the advancing baseline absorbs — the withdrawal-creep precedent. The optional `sync SLUG --review CMD` hook pipes a JSON brief to a subprocess and reports its exit honestly without ever failing the sync (ops.md §11) — no cloud dependency enters the core.
 - `nabu verify` re-hashes canonical files (attic included) against the catalog — bitrot/tamper check, cronnable.
-- Backups: canonical/ is git (bare mirror on nero/nexo via Tailscale); the derived dbs (catalog/fulltext/vectors) are disposable but nightly-snapshotted anyway (cheap). db/history.sqlite3 is NOT disposable — it is the only copy of run history, pins, baselines, and durable revisions, and belongs in every backup alongside canonical/ (P7-2 makes this operational).
+- Backups: canonical/ is git (bare mirror on nero/nexo via Tailscale); the derived dbs (catalog/fulltext/vectors) are disposable but nightly-snapshotted anyway (cheap). db/history.sqlite3 is NOT disposable — it is the only copy of run history, pins, baselines, and durable revisions, and belongs in every backup alongside canonical/ (P7-2 makes this operational). db/lects.sqlite3 (P58-1, §15a) joins it in the backup set: per-document lect rulings are decisions, not derivations.
 
 ## 9. The MCP read-only surface
 
@@ -1103,6 +1107,24 @@ edges exist (zero-signal silence, absent kinds suppressed). MCP adds
 `nabu_links`, the tenth read-only tool — same bounded/license-labeled
 contract as the rest; it reads persisted edges only (the `detail` field rides
 the payload) and never mines (batch runs are owner-fired).
+
+## 15a. The lect journal — per-document rulings that outlive rebuilds (P58-1)
+
+`db/lects.sqlite3` persists the per-document tier of lect resolution
+(`Nabu::Lects#resolve`'s highest-precedence overlay, a constructor-only seam
+since P57-3): `lect_assignments(urn, code, lect_id, basis, note,
+created_at)`, one CURRENT row per (urn, code), grammar-checked at write.
+`basis` separates authorship — `owner` for hand rulings (`nabu lect
+assign/withdraw/list`), `rule:<id>` for compiled batches (the P58-2/3
+facet-rule and date×band compilers), and a rule re-run supersedes exactly
+its own basis, never a hand ruling. LinksJournal mechanics throughout: own
+migration track (`db/lects_migrate/`), urn keying because rebuilds re-mint
+row ids, absent file = empty overlay (byte-identical no-module behavior).
+Unlike links, the content is *decisions*, not re-minable derivations —
+the journal belongs in the backup set beside the ledger (`nabu lect list
+--format tsv` is its flat export/restore shape). The read side is lazy:
+`Lects.load_default` feature-detects the journal and hands `resolve` a
+point-lookup overlay, never an eager hash of the full journal.
 
 ## 16. Canonical memory — local shelves (P19-1)
 

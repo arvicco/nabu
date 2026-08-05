@@ -88,14 +88,15 @@ module Nabu
       # back index-ordered), so results stay stable — and the clip is
       # ANNOUNCED (P35-6): reaching the cap sets incomplete_hint so a clipped
       # expansion never poses as the whole paradigm.
-      # census: 24415015, 2026-07-20, live fulltext (settled full rebuild):
-      # λέγω→354 distinct folded forms (was 140 at the 3.76M tuning). CAUTION —
-      # the heaviest paradigms now CROWD the cap: ποιέω→400 (clips), εἰμί→396,
-      # ἔχω→337. 400 still holds λέγω but no longer clears the corpus by a wide
-      # margin as it once did; a further rebuild growth may push a common verb
-      # past it (the incomplete_hint announces any clip, so recall degrades
-      # visibly, never silently). Flagged for the gate — verdict stands, watch it.
-      MAX_LEMMA_FORMS = 400
+      # census: 68408109, 2026-08-04, live fulltext (P57 full rebuild). The
+      # P42-era CAUTION came true: at the old cap of 400, five of the seven
+      # heaviest Greek paradigms clipped — λέγω→605, γίγνομαι→588, ποιέω→563,
+      # εἰμί→476, ἔχω→408 (φέρω→389, τίθημι→378 under). Raised to 1000 (P58-0
+      # recalibration): clears today's heaviest by ~65% headroom, matching the
+      # growth ratio observed 24.4M→68.4M (λέγω 354→605, ×1.7). The clip
+      # remains ANNOUNCED via incomplete_hint, so the next crossing degrades
+      # visibly, never silently.
+      MAX_LEMMA_FORMS = 1000
 
       def initialize(catalog:, fulltext:)
         @catalog = catalog
