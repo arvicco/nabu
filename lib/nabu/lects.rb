@@ -208,6 +208,15 @@ module Nabu
       stage_tags.keys.filter_map { |tag| lect("#{anchor}:#{tag}") }.sort_by { |record| record.ord || 0 }
     end
 
+    # Every registered variety of +anchor+ as a Record (id
+    # "<anchor>/<tag>"), in registry order (P58: the card ladder lists
+    # registers beside stages — zho/lit is wenyan, not "unstaged"). [] for
+    # an undefined anchor or one with no varieties.
+    def varieties_of(anchor)
+      entry = @anchors[anchor.to_s] or return []
+      (entry["varieties"] || {}).keys.filter_map { |tag| lect("#{anchor}/#{tag}") }
+    end
+
     private
 
     # The human name: the stage's (already a full title, "Medieval Latin")

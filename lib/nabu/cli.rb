@@ -453,10 +453,14 @@ module Nabu
       end
 
       # The wholesale recompute after a bulk compile (apply-rules,
-      # infer-dates) or on demand (materialize).
+      # infer-dates) or on demand (materialize). Pending migrations run
+      # first (idempotent — the open_or_create_catalog stance) so the
+      # lect_stats census table exists on a catalog last touched by an
+      # older binary.
       def materialize_lect_facets!(config, catalog: nil)
         registry = Nabu::Lects.load_default(config: config)
         catalog ||= Nabu::Store.connect(config.catalog_path)
+        Nabu::Store.migrate!(catalog)
         count = Nabu::Store::LectFacets.rebuild!(catalog: catalog, registry: registry)
         say "lect facet: #{count} rows materialized"
       end
@@ -6853,7 +6857,8 @@ module Nabu
       # Reconstructed stages (registry mode: reconstructed) carry the same
       # leading asterisk the etym/define shelves use.
       def print_language_stage_ladder(code, stages, lects, info)
-        return if stages.empty? || !info
+        varieties = lects&.varieties_of(code) || []
+        return if (stages.empty? && varieties.empty?) || !info
 
         totals = if info.lect_materialized?
                    ladder_totals_from_facets(code,
@@ -6863,11 +6868,24 @@ module Nabu
                  end
         return if totals.values.sum.zero?
 
-        say "  stages:"
-        stages.each do |stage|
-          star = stage.mode == :reconstructed ? "*" : ""
-          band = stage.band ? " (#{Nabu::Timeline.format_span(stage.band[0], stage.band[1])})" : ""
-          say "    #{star}#{stage.stage}  #{stage.name}#{band} — #{plural(totals[stage.id], 'document')}"
+        if stages.any?
+          say "  stages:"
+          stages.each do |stage|
+            star = stage.mode == :reconstructed ? "*" : ""
+            band = stage.band ? " (#{Nabu::Timeline.format_span(stage.band[0], stage.band[1])})" : ""
+            say "    #{star}#{stage.stage}  #{stage.name}#{band} — #{plural(totals[stage.id], 'document')}"
+          end
+        end
+        # P58 rider (the owner's zho probe): registered REGISTERS are ladder
+        # content — zho/lit is wenyan, not "unstaged". Stage-less variety
+        # resolutions count here; staged-and-varietied ones (lat:late/ecc)
+        # stay under their stage above.
+        if varieties.any?
+          say "  registers:"
+          varieties.each do |variety|
+            title = variety.name.split(" — ", 2).last
+            say "    /#{variety.variety}  #{title} — #{plural(totals[variety.id], 'document')}"
+          end
         end
         unstaged = totals[:unstaged]
         say "    unstaged  — #{plural(unstaged, 'document')}" if unstaged.positive?
@@ -6884,11 +6902,20 @@ module Nabu
           match = Nabu::Lects.parse_id(value)
           next unless match && match[:anchor] == code.to_s
 
-          key = match[:stage] ? "#{code}:#{match[:stage]}" : :unstaged
-          totals[key] += count
+          totals[ladder_key(code, match)] += count
         end
         totals[:unstaged] += identity if identity.positive?
         totals
+      end
+
+      # Stage wins (lat:late/ecc groups under lat:late); a stage-less
+      # variety is a register line (zho/lit); everything else is honest
+      # unstaged.
+      def ladder_key(code, match)
+        return "#{code}:#{match[:stage]}" if match[:stage]
+        return "#{code}/#{match[:variety]}" if match[:variety]
+
+        :unstaged
       end
 
       # The P57-4 path — a never-materialized catalog resolves (language,
@@ -6900,8 +6927,7 @@ module Nabu
           match = Nabu::Lects.parse_id(resolved)
           next unless match && match[:anchor] == code.to_s
 
-          key = match[:stage] ? "#{code}:#{match[:stage]}" : :unstaged
-          totals[key] += count
+          totals[ladder_key(code, match)] += count
         end
         totals
       end

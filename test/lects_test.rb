@@ -207,6 +207,19 @@ class LectsTest < Minitest::Test
 
   # --- #stages_of --------------------------------------------------------------
 
+  # P58 rider (the owner's zho probe): registered varieties are ladder
+  # content too — zho/lit is the wenyan register, not "unstaged".
+  def test_varieties_of_returns_records_in_registry_order
+    varieties = lects.varieties_of("zho")
+    assert_equal ["zho/lit"], varieties.map(&:id)
+    assert_equal "lit", varieties.first.variety
+  end
+
+  def test_varieties_of_is_empty_for_an_anchor_without_varieties_or_undefined
+    assert_empty lects.varieties_of("grc")
+    assert_empty lects.varieties_of("zzz")
+  end
+
   def test_stages_of_are_ord_sorted
     assert_equal %w[lat:arch lat:cla lat:late lat:med lat:ren lat:new],
                  lects.stages_of("lat").map(&:id)

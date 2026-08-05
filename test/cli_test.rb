@@ -759,6 +759,30 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P58 rider (the owner's zho probe): a stage-less VARIETY resolution is a
+  # register line, never "unstaged" — lzh resolves via the universal
+  # codemap to zho/lit, the wenyan register.
+  def test_language_card_ladder_shows_registers_beside_stages
+    with_lect_ladder_corpus do |config, db|
+      kanripo = Nabu::Store::Source.create(slug: "kanripo", name: "Kanripo",
+                                           adapter_class: "TestAdapter", license_class: "open")
+      2.times do |i|
+        db[:documents].insert(source_id: kanripo.id, urn: "urn:nabu:test:lzh:#{i}", title: "T",
+                              language: "lzh", content_sha256: "x", revision: 1, withdrawn: false)
+      end
+      Nabu::Store::SourceStats.derive!(db, note: "test")
+      Nabu::Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: config))
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[language zho]) }
+      assert_nil status
+      assert_match(/registers:/, out)
+      assert_match(%r{/lit\s+Literary Chinese.*2 documents}, out,
+                   "lzh resolves to zho/lit — the wenyan register, named, counted")
+      refute_match(/unstaged/, out, "nothing is left unstaged once the register is named")
+    end
+  end
+
   def test_language_card_reconstructed_stages_carry_a_leading_asterisk
     with_recon_shelf_and_lects do |config|
       db = Nabu::Store.connect(config.catalog_path)
