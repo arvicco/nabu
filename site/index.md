@@ -35,32 +35,13 @@ draws from.
 
 ## Find your desk
 
-The collection is organized as twenty-three **research desks** — scholarly hats,
-each gathering the shelves, instruments and terminal setup for one tradition.
-Find yours:
+The collection is organized as {{ site.data.desks | size }} **research
+desks** — scholarly hats, each gathering the shelves, instruments and
+terminal setup for one tradition. Find yours:
+{% for desk in site.data.desks %}
+- **[{{ desk.persona }}]({{ '/axis/' | append: desk.slug | append: '/' | relative_url }})** — {{ desk.blurb }}.
+{%- endfor %}
 
-- **[The Classicist]({{ '/axis/classical/' | relative_url }})** — Greek and Latin letters read whole, Homer to the late grammarians.
-- **[The Romanist]({{ '/axis/romance/' | relative_url }})** — the Latin-to-vernacular continuum, charter Latin to Roland to the troubadours.
-- **[The Papyrologist-Epigraphist]({{ '/axis/epigraphy/' | relative_url }})** — reads what survives on stone, sherd, papyrus and tablet, lacunae and all.
-- **[The Slavicist]({{ '/axis/slavic/' | relative_url }})** — Cyril and Methodius to the damaskini, canon to vernacular.
-- **[The Germanicist]({{ '/axis/germanic/' | relative_url }})** — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches.
-- **[The Celticist]({{ '/axis/celtic/' | relative_url }})** — from Lepontic stones to the Old Irish glossators.
-- **[The Italicist]({{ '/axis/italic/' | relative_url }})** — the languages of pre-Roman Italy, Oscan to Etruscan to Raetic.
-- **[The Comparative Indo-Europeanist]({{ '/axis/etym/' | relative_url }})** — laryngeals, reflex chains, the long descent of words.
-- **[The Biblical scholar]({{ '/axis/biblical/' | relative_url }})** — one text across Hebrew, Greek, Latin, Syriac, Coptic and English witnesses.
-- **[The Hebraist]({{ '/axis/hebrew/' | relative_url }})** — Masoretic vowels, Qumran consonants, the Aramaic of the Targums.
-- **[The Syriacist]({{ '/axis/syriac/' | relative_url }})** — the Peshitta and the estrangela bookshelf.
-- **[The Ethiopicist]({{ '/axis/ethiopic/' | relative_url }})** — Aksum to the scriptoria: Enoch, Jubilees, and the Geʿez Bible.
-- **[The Arabist]({{ '/axis/arabic/' | relative_url }})** — the Islamicate library whole, Quran and hadith to falsafa and adab.
-- **[The Hittitologist]({{ '/axis/hittite/' | relative_url }})** — Anatolia in cuneiform, KBo and KUB by tablet and line.
-- **[The Assyriologist]({{ '/axis/cuneiform/' | relative_url }})** — Sumerian, Akkadian, Ugaritic, Hittite: the tablet world entire.
-- **[The Egyptologist]({{ '/axis/egyptian/' | relative_url }})** — hieroglyphs to Coptic, one language across four millennia of script.
-- **[The Iranologist]({{ '/axis/iranian/' | relative_url }})** — the Avesta to the Achaemenid inscriptions, Old Iranian liturgy toward Middle Persian.
-- **[The Indologist]({{ '/axis/indic/' | relative_url }})** — Veda to sastra, the Sanskrit library and its instruments.
-- **[The Buddhologist]({{ '/axis/buddhist/' | relative_url }})** — the dharma across the Pali, Sanskrit and Chinese canons.
-- **[The Sinologist]({{ '/axis/sinitic/' | relative_url }})** — the classical Chinese written world and its phonological deep past.
-- **[The Japanologist]({{ '/axis/japonic/' | relative_url }})** — Old Japanese song to the Sino-Japanese dictionary tradition.
-- **[The Librarian]({{ '/axis/local/' | relative_url }})** — the owner's own shelves: dossiers, library, notes, and the sources' own records.
 
 Each desk is a reader's-eye view of the same collection; the full directory,
 with every desk's member shelves and recipes, is
@@ -68,11 +49,17 @@ with every desk's member shelves and recipes, is
 
 ## The holdings, in brief
 
-As of **4 August 2026**, the catalog records **975,074 documents** comprising
-**68,408,109 passages** in 122 language codes — from proto-cuneiform
+{% assign census = site.data.census %}
+{%- assign top1 = census.top_languages[0] %}
+{%- assign top2 = census.top_languages[1] %}
+As of **{{ census.as_of }}**, the catalog records
+**{{ census.documents_display }} documents** comprising
+**{{ census.passages_display }} passages** in
+{{ census.language_codes }} language codes — from proto-cuneiform
 tablets of the late fourth millennium BCE to Meiji-era Japanese.
-**Classical Arabic is the largest language on the shelves (33.3 million
-passages)**, ahead of Literary Chinese (13.4 million). The newest
+**Classical Arabic is the largest language on the shelves
+({{ top1.millions }} million passages)**, ahead of Literary Chinese
+({{ top2.millions }} million). The newest
 additions are the granted sources — the complete secular
 Galician-Portuguese lyric under a written grant, and the Ras Shamra
 Tablet Inventory with the concordances Ugaritologists cite — beside the
@@ -80,10 +67,12 @@ complete openMGH critical editions (153 volumes of medieval Latin),
 DÉRom's Proto-Romance etymons, and the **lect layer**: historical-stage
 ladders, stage-aware search, and honest reconstruction display through
 the [nabu-lects](https://arvicco.github.io/nabu-lects) registry.
-Together with **1,407,706 dictionary entries** across 104 reference
-shelves and **19.2 million gold-standard lemma annotations in
-thirty-seven languages** (a further 28.1 million machine-suggested
-annotations are carried at an honestly labelled silver tier). All
+Together with **{{ census.dictionary_entries_display }} dictionary
+entries** across {{ census.dictionary_shelves }} reference shelves and
+**{{ census.gold_lemmas_m }} million gold-standard lemma annotations in
+{{ census.gold_languages }} languages** (a further
+{{ census.silver_lemmas_m }} million machine-suggested annotations are
+carried at an honestly labelled silver tier). All
 figures on this site are read from the live catalog, never estimated,
 and carry the date on which they were read.
 
