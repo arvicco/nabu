@@ -13,6 +13,11 @@ module Nabu
   # working clone. The rail writes FILES there and never runs git operations —
   # publishing the data repo is the owner's explicit act.
   class DataCLI < Thor
+    # Thor 1.5's inherited built-ins (`tree`) render under the class
+    # auto-namespace ("data_c_l_i") without this — listed in help yet not
+    # invocable. The explicit namespace keeps banners truthful.
+    namespace "data"
+
     def self.exit_on_failure?
       true
     end
@@ -165,10 +170,371 @@ module Nabu
     end
   end
 
+  # The lect-assignment journal CLI (P58-1): the owner's hand on the
+  # per-document overlay tier of Nabu::Lects#resolve. Every subcommand
+  # operates on db/lects.sqlite3 (Store::LectJournal — rebuild never touches
+  # it) and validates lect ids against the LIVE registry: an undefined tag
+  # is refused loudly, never silently coerced (the registry's own rule).
+  class LectCLI < Thor
+    # The DataCLI namespace note applies here too (Thor 1.5 `tree`).
+    namespace "lect"
+
+    def self.exit_on_failure?
+      true
+    end
+
+    desc "assign [URN LECT_ID]", "Rule that URN's use of a code means LECT_ID (journaled; survives rebuild)"
+    long_desc <<~HELP, wrap: false
+      The per-document tier of lect resolution — the highest-precedence seam,
+      above per-source overrides and the universal codemap. One CURRENT
+      assignment per (URN, code); re-assigning updates in place. The code
+      being refined defaults to the document's own catalog language; pass
+      --code when the catalog is absent or the document is polyglot.
+
+      --from-file imports a ratified batch (TSV: urn, code, lect_id, then
+      optional basis and note columns — exactly `lect list --format tsv`'s
+      shape, so the flat export re-imports as a restore path). Comment (#)
+      and blank lines skip. The whole batch is validated before ANY row is
+      written: one bad line rejects the file.
+    HELP
+    option :code, banner: "CODE", desc: "the stored bare code the ruling refines"
+    option :note, banner: "TEXT", desc: "the why, kept with the ruling"
+    option :basis, default: "owner", banner: "owner|rule:<id>",
+                   desc: "authorship of the ruling (rule bases are re-run-superseded wholesale)"
+    option :from_file, banner: "FILE", desc: "bulk import a ratified TSV batch"
+    def assign(urn = nil, lect_id = nil)
+      config = Nabu::Config.load
+      registry = require_lects_module!(config)
+      check_basis!(options[:basis])
+      if options[:from_file]
+        import_batch!(config, registry, options[:from_file])
+      else
+        raise Thor::Error, "lect assign: URN and LECT_ID are required (or --from-file FILE)" unless urn && lect_id
+
+        check_lect!(registry, lect_id)
+        code = options[:code] || infer_code!(config, urn)
+        journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+        verdict = Nabu::Store::LectJournal.assign!(journal, urn: urn, code: code, lect_id: lect_id,
+                                                            basis: options[:basis], note: options[:note])
+        say "#{verdict}  #{urn}  #{code} → #{lect_id}  (#{options[:basis]})"
+        refresh_lect_facet(config, urn)
+      end
+    end
+
+    desc "list", "The journaled assignments (--urn/--basis filters; --format tsv is the flat backup)"
+    option :urn, banner: "URN"
+    option :basis, banner: "owner|rule:<id>"
+    option :format, banner: "tsv"
+    # census: render cap only — the full journal is always in the tsv export;
+    # truncation is announced (the house honesty vocabulary)
+    option :limit, type: :numeric, default: 50
+    def list
+      config = Nabu::Config.load
+      journal = Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+      unless journal
+        return say "no lect assignments (#{config.lects_journal_path} absent) — " \
+                   "nabu lect assign mints the first"
+      end
+
+      scope = journal[:lect_assignments].order(:urn, :code)
+      scope = scope.where(urn: options[:urn]) if options[:urn]
+      scope = scope.where(basis: options[:basis]) if options[:basis]
+      if options[:format] == "tsv"
+        scope.each { |row| say row.values_at(:urn, :code, :lect_id, :basis, :note).join("\t") }
+      else
+        render_table(journal, scope)
+      end
+    end
+
+    desc "apply-rules", "Compile the ratified facet→lect rules into journal assignments (--dry-run first)"
+    long_desc <<~HELP, wrap: false
+      Reads config/lect_facet_rules.yml (owner-ratified document-group rules:
+      a source's facet value names the stage of every document carrying it),
+      censuses the live catalog, and writes one journal row per matched
+      document with basis rule:<id>. A re-run supersedes exactly its own
+      rows; an existing (urn, code) assignment — a hand ruling, another
+      rule — is never overwritten (counted as skipped). --dry-run renders
+      the full value → lect census, including unmatched values, and writes
+      nothing: the owner reviews that report before any batch lands.
+    HELP
+    option :rule, banner: "ID", desc: "compile just this rule"
+    option :dry_run, type: :boolean, default: false
+    def apply_rules
+      config = Nabu::Config.load
+      registry = require_lects_module!(config)
+      rules = Nabu::LectRules.load(config.lect_facet_rules_path)
+      raise Thor::Error, "lect apply-rules: no rules file at #{config.lect_facet_rules_path}" unless rules
+
+      begin
+        rules.validate!(registry)
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      end
+      unless File.exist?(config.catalog_path)
+        raise Thor::Error,
+              "lect apply-rules: no catalog at #{config.catalog_path}"
+      end
+
+      catalog = Nabu::Store.connect(config.catalog_path)
+      journal = options[:dry_run] ? nil : Nabu::Store::LectJournal.open!(config.lects_journal_path)
+      selected_rules(rules).each { |rule| run_rule(rules, rule, catalog, journal) }
+      if options[:dry_run]
+        say "dry run — nothing written (drop --dry-run to compile)"
+      else
+        materialize_lect_facets!(config, catalog: catalog)
+      end
+    end
+
+    desc "infer-dates", "Infer stages from document dates × registry bands (--dry-run first)"
+    long_desc <<~HELP, wrap: false
+      The document grain for dated-but-unstaged holdings (Latin epigraphy
+      above all): a document whose code resolves to a bare anchor, whose
+      date interval is closed, and whose interval sits INSIDE EXACTLY ONE
+      attested stage band, is assigned that stage (journal basis
+      rule:date-band; the note carries the dating). Containment, never
+      overlap — a date spanning two bands stays honestly bare, and every
+      skip reason is tallied in the report. Same discipline as apply-rules:
+      re-runs supersede their own basis, existing rulings always win,
+      --dry-run writes nothing.
+    HELP
+    option :source, banner: "SLUG", desc: "scope to one source"
+    option :lang, banner: "CODE", desc: "scope to one stored code"
+    option :dry_run, type: :boolean, default: false
+    def infer_dates
+      config = Nabu::Config.load
+      registry = require_lects_module!(config)
+      unless File.exist?(config.catalog_path)
+        raise Thor::Error,
+              "lect infer-dates: no catalog at #{config.catalog_path}"
+      end
+
+      catalog = Nabu::Store.connect(config.catalog_path)
+      dates = Nabu::LectDates.new(registry: registry)
+      report = dates.census(catalog: catalog, source: options[:source], lang: options[:lang])
+      report.assignable.sort_by { |_key, count| -count }.each do |(source, code, lect_id), count|
+        say format("  %<source>-16s %<code>-6s → %<lect>-10s %<count>d",
+                   source: source, code: code, lect: lect_id, count: count)
+      end
+      report.skipped.sort_by { |_reason, count| -count }.each do |reason, count|
+        say "  (#{reason.to_s.tr('_', ' ')}: #{count})"
+      end
+      say "  assignable: #{report.candidates.size}"
+      if options[:dry_run]
+        say "dry run — nothing written (drop --dry-run to compile)"
+      else
+        journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+        outcome = dates.apply!(catalog: catalog, journal: journal,
+                               source: options[:source], lang: options[:lang])
+        suffix = outcome.skipped.positive? ? " (#{outcome.skipped} skipped — already ruled)" : ""
+        say "  assigned #{outcome.assigned}#{suffix}"
+        materialize_lect_facets!(config, catalog: catalog)
+      end
+    end
+
+    desc "materialize", "Recompute the derived lect facet (document_facets 'lect') from the current resolution"
+    long_desc <<~HELP, wrap: false
+      Flattens the whole lect resolution — journal rulings, per-source
+      overrides, universal codemap — into one document_facets row per
+      document whose resolution differs from its bare code (no row means
+      identity). `nabu rebuild` runs this automatically; the journal CLI
+      refreshes single documents; this command is the manual full pass
+      (e.g. after hand-editing config/lect_overrides.yml).
+    HELP
+    def materialize
+      config = Nabu::Config.load
+      require_lects_module!(config)
+      unless File.exist?(config.catalog_path)
+        raise Thor::Error,
+              "lect materialize: no catalog at #{config.catalog_path}"
+      end
+
+      materialize_lect_facets!(config)
+    end
+
+    desc "check-dates", "The reverse audit: journal assignments whose document dates fall outside the stage band"
+    def check_dates
+      config = Nabu::Config.load
+      registry = require_lects_module!(config)
+      journal = Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+      return say "no lect journal — nothing to audit" unless journal
+      unless File.exist?(config.catalog_path)
+        raise Thor::Error,
+              "lect check-dates: no catalog at #{config.catalog_path}"
+      end
+
+      catalog = Nabu::Store.connect(config.catalog_path)
+      findings = Nabu::LectDates.new(registry: registry).check(catalog: catalog, journal: journal)
+      if findings.empty?
+        say "check-dates clean — no assignment contradicts its document's dates"
+      else
+        findings.each do |finding|
+          say format("  %<urn>-42s %<lect>-12s dated %<nb>s..%<na>s outside band %<band>s (%<basis>s)",
+                     urn: finding.urn, lect: finding.lect_id, nb: finding.not_before,
+                     na: finding.not_after, band: finding.band.inspect, basis: finding.basis)
+        end
+        say "#{findings.size} finding#{'s' unless findings.size == 1} — a ruling or a dating is wrong; " \
+            "review before trusting either"
+      end
+    end
+
+    desc "withdraw URN", "Remove URN's assignment(s) — all codes, or just --code"
+    option :code, banner: "CODE"
+    def withdraw(urn)
+      config = Nabu::Config.load
+      journal = Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+      raise Thor::Error, "lect withdraw: no journal at #{config.lects_journal_path}" unless journal
+
+      journal.disconnect
+      writable = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+      count = Nabu::Store::LectJournal.withdraw!(writable, urn: urn, code: options[:code])
+      say "withdrew #{count} assignment#{'s' unless count == 1}  #{urn}#{" #{options[:code]}" if options[:code]}"
+      refresh_lect_facet(config, urn)
+    end
+
+    no_commands do
+      def require_lects_module!(config)
+        registry = Nabu::Lects.load_default(config: config, overlay: {})
+        raise Thor::Error, "lect: the nabu-lects module is not synced (canonical/nabu-lects)" unless registry
+
+        registry
+      end
+
+      def check_lect!(registry, lect_id, where: nil)
+        return if registry.lect(lect_id)
+
+        raise Thor::Error, "lect: #{lect_id.inspect}#{where} is not defined in the registry " \
+                           "(an undefined tag is never silently coerced)"
+      end
+
+      def check_basis!(basis, where: nil)
+        return if basis == "owner" || basis.match?(/\Arule:[a-z0-9][a-z0-9-]*\z/)
+
+        raise Thor::Error, "lect: basis must be owner or rule:<id>, got #{basis.inspect}#{where}"
+      end
+
+      def infer_code!(config, urn)
+        unless File.exist?(config.catalog_path)
+          raise Thor::Error, "lect assign: no catalog to read the document's language from — pass --code"
+        end
+
+        db = Nabu::Store.connect(config.catalog_path)
+        language = db[:documents].where(urn: urn).get(:language)
+        db.disconnect
+        return language unless language.to_s.strip.empty?
+
+        raise Thor::Error, "lect assign: #{urn} is not in the catalog (or carries no language) — pass --code"
+      end
+
+      # Parse + validate the WHOLE file, then write — one bad line rejects
+      # the batch before any row lands (a ratified batch is one decision).
+      def import_batch!(config, registry, path)
+        raise Thor::Error, "lect assign: no such file #{path}" unless File.file?(path)
+
+        rows = parse_batch!(registry, path)
+        journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+        verdicts = rows.map { |row| Nabu::Store::LectJournal.assign!(journal, **row) }
+        say "#{verdicts.size} assignments (#{verdicts.count(:inserted)} inserted, " \
+            "#{verdicts.count(:updated)} updated) from #{path}"
+        rows.map { |row| row[:urn] }.uniq.each { |row_urn| refresh_lect_facet(config, row_urn) }
+      end
+
+      # The single-document facet refresh after a hand ruling — a fresh
+      # load_default carries the just-written journal state; no catalog or
+      # no module is a clean skip (nothing to refresh into).
+      def refresh_lect_facet(config, urn)
+        return unless File.exist?(config.catalog_path)
+
+        registry = Nabu::Lects.load_default(config: config)
+        return unless registry
+
+        catalog = Nabu::Store.connect(config.catalog_path)
+        Nabu::Store::LectFacets.refresh_document!(catalog: catalog, registry: registry, urn: urn)
+        catalog.disconnect
+      end
+
+      # The wholesale recompute after a bulk compile (apply-rules,
+      # infer-dates) or on demand (materialize). Pending migrations run
+      # first (idempotent — the open_or_create_catalog stance) so the
+      # lect_stats census table exists on a catalog last touched by an
+      # older binary.
+      def materialize_lect_facets!(config, catalog: nil)
+        registry = Nabu::Lects.load_default(config: config)
+        catalog ||= Nabu::Store.connect(config.catalog_path)
+        Nabu::Store.migrate!(catalog)
+        count = Nabu::Store::LectFacets.rebuild!(catalog: catalog, registry: registry)
+        say "lect facet: #{count} rows materialized"
+      end
+
+      def parse_batch!(registry, path)
+        File.readlines(path).each_with_index.filter_map do |line, index|
+          text = line.chomp
+          next if text.strip.empty? || text.lstrip.start_with?("#")
+
+          urn, code, lect_id, basis, note = text.split("\t", 5)
+          where = " (#{File.basename(path)} line #{index + 1})"
+          raise Thor::Error, "lect assign: urn/code/lect_id required#{where}" if lect_id.to_s.strip.empty?
+
+          check_lect!(registry, lect_id, where: where)
+          basis = options[:basis] if basis.to_s.strip.empty?
+          check_basis!(basis, where: where)
+          { urn: urn, code: code, lect_id: lect_id, basis: basis, note: note }
+        end
+      end
+
+      def selected_rules(rules)
+        return rules.rules unless options[:rule]
+
+        rule = rules.find(options[:rule])
+        unless rule
+          raise Thor::Error, "lect apply-rules: unknown rule #{options[:rule].inspect} — " \
+                             "the file defines: #{rules.rules.map(&:id).join(', ')}"
+        end
+        [rule]
+      end
+
+      def run_rule(rules, rule, catalog, journal)
+        report = rules.census(rule, catalog: catalog)
+        say "rule #{rule.id} (#{rule.tier}; facet #{rule.facet}, code #{rule.code}, " \
+            "sources #{rule.sources.join(' ')})"
+        report.matched.sort_by { |_pair, count| -count }.each do |(value, lect_id), count|
+          say format("  %<value>-28s → %<lect>-10s %<count>d", value: value, lect: lect_id, count: count)
+        end
+        report.unmatched.sort_by { |_value, count| -count }.each do |value, count|
+          say format("  %<value>-28s   (unmatched) %<count>d", value: value, count: count)
+        end
+        say "  assignable: #{report.assignable}"
+        return unless journal
+
+        outcome = rules.apply!(rule, catalog: catalog, journal: journal)
+        suffix = outcome.skipped.positive? ? " (#{outcome.skipped} skipped — already ruled)" : ""
+        say "  assigned #{outcome.assigned}#{suffix}"
+      end
+
+      def render_table(journal, scope)
+        rows = scope.limit(options[:limit] + 1).all
+        shown = rows.first(options[:limit])
+        shown.each do |row|
+          note = row[:note].to_s.empty? ? "" : "  # #{row[:note]}"
+          say format("%<urn>-42s %<code>-8s %<lect>-14s %<basis>s%<note>s",
+                     urn: row[:urn], code: row[:code], lect: row[:lect_id], basis: row[:basis], note: note)
+        end
+        total = scope.count
+        say "… #{total - shown.size} more (--limit, or --format tsv for all)" if total > shown.size
+        census = Nabu::Store::LectJournal.counts_by_basis(journal)
+                                         .map { |basis, count| "#{basis} #{count}" }.join(", ")
+        say "#{total} assignment#{'s' unless total == 1} — #{census}"
+      end
+    end
+  end
+
   # Command-line entry point. Only `version` is functional in Phase 0; the
   # ingest/query subcommands are stubs that report "not implemented" and exit 1
   # so scripts and CI can rely on the failure signal before the real work lands.
   class CLI < Thor
+    # The DataCLI namespace note applies at the root too: without it Thor
+    # 1.5's `tree` labels its root with the class auto-namespace ("nabu:c_l_i").
+    namespace "nabu"
+
     # The tag-semantics note the axis-grouped surfaces (`list --axis`,
     # `status --axis`, P35-1) state ONCE: axes are TAGS over the source list,
     # so a source appears under every axis it serves — never a folder owning it.
@@ -223,6 +589,9 @@ module Nabu
 
     desc "data SUBCOMMAND ...ARGS", "The nabu-data production rail: document and build publishable derived datasets"
     subcommand "data", DataCLI
+
+    desc "lect SUBCOMMAND ...ARGS", "Per-document lect rulings: the journaled overlay tier of lect resolution"
+    subcommand "lect", LectCLI
 
     desc "sync [SOURCE]", "Fetch and load a source, an axis's members, or --all live sources"
     long_desc <<~HELP, wrap: false
@@ -6488,27 +6857,79 @@ module Nabu
       # Reconstructed stages (registry mode: reconstructed) carry the same
       # leading asterisk the etym/define shelves use.
       def print_language_stage_ladder(code, stages, lects, info)
-        return if stages.empty? || !info
+        varieties = lects&.varieties_of(code) || []
+        return if (stages.empty? && varieties.empty?) || !info
 
+        totals = if info.lect_materialized?
+                   ladder_totals_from_facets(code,
+                                             info)
+                 else
+                   ladder_totals_from_pairs(code, lects, info)
+                 end
+        return if totals.values.sum.zero?
+
+        if stages.any?
+          say "  stages:"
+          stages.each do |stage|
+            star = stage.mode == :reconstructed ? "*" : ""
+            band = stage.band ? " (#{Nabu::Timeline.format_span(stage.band[0], stage.band[1])})" : ""
+            say "    #{star}#{stage.stage}  #{stage.name}#{band} — #{plural(totals[stage.id], 'document')}"
+          end
+        end
+        # P58 rider (the owner's zho probe): registered REGISTERS are ladder
+        # content — zho/lit is wenyan, not "unstaged". Stage-less variety
+        # resolutions count here; staged-and-varietied ones (lat:late/ecc)
+        # stay under their stage above.
+        if varieties.any?
+          say "  registers:"
+          varieties.each do |variety|
+            title = variety.name.split(" — ", 2).last
+            say "    /#{variety.variety}  #{title} — #{plural(totals[variety.id], 'document')}"
+          end
+        end
+        unstaged = totals[:unstaged]
+        say "    unstaged  — #{plural(unstaged, 'document')}" if unstaged.positive?
+      end
+
+      # P58-6: once a materialization exists, the ladder reads the lect
+      # facet — the only source that sees per-DOCUMENT journal rulings.
+      # Values under other anchors (derom's la-vul -> roa:pro) drop here
+      # exactly as they did on the pairs path.
+      def ladder_totals_from_facets(code, info)
+        totals = Hash.new(0)
+        facet_counts, identity = info.lect_facet_totals(code)
+        facet_counts.each do |value, count|
+          match = Nabu::Lects.parse_id(value)
+          next unless match && match[:anchor] == code.to_s
+
+          totals[ladder_key(code, match)] += count
+        end
+        totals[:unstaged] += identity if identity.positive?
+        totals
+      end
+
+      # Stage wins (lat:late/ecc groups under lat:late); a stage-less
+      # variety is a register line (zho/lit); everything else is honest
+      # unstaged.
+      def ladder_key(code, match)
+        return "#{code}:#{match[:stage]}" if match[:stage]
+        return "#{code}/#{match[:variety]}" if match[:variety]
+
+        :unstaged
+      end
+
+      # The P57-4 path — a never-materialized catalog resolves (language,
+      # source) pairs live, byte-identically to before.
+      def ladder_totals_from_pairs(code, lects, info)
         totals = Hash.new(0)
         info.language_source_pairs.each do |(language, source_slug), count|
           resolved = lects.resolve(language, source: source_slug)
           match = Nabu::Lects.parse_id(resolved)
           next unless match && match[:anchor] == code.to_s
 
-          key = match[:stage] ? "#{code}:#{match[:stage]}" : :unstaged
-          totals[key] += count
+          totals[ladder_key(code, match)] += count
         end
-        return if totals.values.sum.zero?
-
-        say "  stages:"
-        stages.each do |stage|
-          star = stage.mode == :reconstructed ? "*" : ""
-          band = stage.band ? " (#{Nabu::Timeline.format_span(stage.band[0], stage.band[1])})" : ""
-          say "    #{star}#{stage.stage}  #{stage.name}#{band} — #{plural(totals[stage.id], 'document')}"
-        end
-        unstaged = totals[:unstaged]
-        say "    unstaged  — #{plural(unstaged, 'document')}" if unstaged.positive?
+        totals
       end
 
       # P48-r3: the related research desks — every axis whose member

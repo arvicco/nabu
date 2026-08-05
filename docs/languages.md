@@ -86,8 +86,14 @@ Wiktionary joining convention, not evidence of reconstruction; nabu-lects
 registers the real distinction, e.g. Rundata's `gmq-pro` runic inscriptions
 are ATTESTED epigraphy filed under a proto-looking tag).
 
-**Resolution precedence, highest first**: a per-document overlay (a future
-per-urn override, not yet persisted) → a per-source override
+**Resolution precedence, highest first**: a per-document ruling (the lect
+journal, `db/lects.sqlite3` — P58-1: urn-keyed assignments that survive
+`nabu rebuild` and ride backups, written by `nabu lect assign` at hand
+grain and by the ratified compilers at batch grain: `lect apply-rules`
+turns period/corpus facet values into stages, `lect infer-dates` stages a
+document whose date interval sits inside exactly one stage band; every
+row states its basis and `lect check-dates` audits the lot against the
+documents' own dates) → a per-source override
 (`config/lect_overrides.yml`, Nabu-authored — what one particular source's
 use of a code actually means in its holdings, e.g. DÉRom's `la-vul` really
 means the reconstructed `roa:pro`, not Wiktionary's attested-register
@@ -101,7 +107,15 @@ pre-P57-4 behavior byte-for-byte in that case — the cldf-spine/nabu-data
 posture, same as every other optional module this library carries (Pleiades,
 the Oracc Sign List, Tibetan word segmentation).
 
-Consumers as of P57-4:
+Since P58-4 the resolved lect is also MATERIALIZED as an ordinary
+document facet (`document_facets`, facet `lect`, rows only where the
+resolution differs from the bare code — "no row means identity"), so the
+stage is a first-class query axis: `show` prints it on the facets line,
+`search --lect` filters by it at every grain including per-document
+rulings, and the `language` ladder counts from it. As of 4 August 2026
+the journal holds 408,884 assignments and the facet 491,648 rows.
+
+Consumers as of P57-4 (ladder counts facet-backed since P58-6):
 
 - **`nabu language CODE`** grows a `stages:` ladder when the code is a
   registered anchor with stages: each stage ord-sorted with its band and

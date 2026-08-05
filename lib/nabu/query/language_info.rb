@@ -168,6 +168,57 @@ module Nabu
         end
       end
 
+      # P58-6: has a lect-facet materialization ever run on this catalog?
+      # (The same feature detect Query::Search uses — Store::LectFacets'
+      # "no rows at all" posture.)
+      def lect_materialized?
+        @catalog.table_exists?(:document_facets) &&
+          !@catalog[:document_facets].where(facet: "lect").first.nil?
+      end
+
+      # P58-6: the materialized ladder source — [{resolved lect id => live
+      # document count} over every lect facet row, bare-identity count for
+      # +code+ (documents stored under exactly this code with NO facet row,
+      # which by the LectFacets invariant resolve to themselves)]. Unlike
+      # #language_source_pairs this sees per-DOCUMENT journal rulings; the
+      # caller filters values to its anchor and groups stages.
+      #
+      # Owner ruling (P58 rider): PRECOMPILED — reads the lect_stats census
+      # (migration 023, derived by Store::LectFacets in the same breath as
+      # every facet write), never the half-million-row aggregate. The live
+      # aggregation survives only as the fallback for a catalog whose facet
+      # was materialized by a pre-023 binary (stats table empty).
+      def lect_facet_totals(code)
+        if lect_stats?
+          counts = @catalog[:lect_stats].where(kind: "lect").select_hash(:key, :documents)
+          identity = @catalog[:lect_stats].where(kind: "bare", key: code.to_s).get(:documents).to_i
+          [counts, identity]
+        else
+          [live_lect_counts, live_identity_count(code)]
+        end
+      end
+
+      def lect_stats?
+        @catalog.table_exists?(:lect_stats) && !@catalog[:lect_stats].first.nil?
+      end
+
+      def live_lect_counts
+        live_documents
+          .join(:document_facets, document_id: :id)
+          .where(Sequel[:document_facets][:facet] => "lect")
+          .group(Sequel[:document_facets][:value])
+          .select(Sequel[:document_facets][:value].as(:value),
+                  Sequel.function(:count).*.as(:count))
+          .to_h { |row| [row.fetch(:value), row.fetch(:count)] }
+      end
+
+      def live_identity_count(code)
+        live_documents
+          .where(language: code.to_s)
+          .exclude(id: @catalog[:document_facets].where(facet: "lect").select(:document_id))
+          .count
+      end
+
       private
 
       def lemma_rows(code)

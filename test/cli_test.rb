@@ -729,6 +729,60 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P58-6: once the lect facet is materialized, the ladder reads IT — the
+  # only source that sees per-document journal rulings. Same corpus as
+  # above plus one bare-lat document hand-ruled into lat:cla.
+  def test_language_card_ladder_reads_the_materialized_facet_and_journal_rulings
+    with_lect_ladder_corpus do |config, db|
+      texts = Nabu::Store::Source.create(slug: "texts", name: "Texts",
+                                         adapter_class: "TestAdapter", license_class: "open")
+      2.times do |i|
+        db[:documents].insert(source_id: texts.id, urn: "urn:nabu:test:lat:#{i}", title: "T",
+                              language: "lat", content_sha256: "x", revision: 1, withdrawn: false)
+      end
+      db[:documents].insert(source_id: texts.id, urn: "urn:nabu:test:lamed:1", title: "T",
+                            language: "la-med", content_sha256: "x", revision: 1, withdrawn: false)
+      Nabu::Store::SourceStats.derive!(db, note: "test")
+
+      journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+      Nabu::Store::LectJournal.assign!(journal, urn: "urn:nabu:test:lat:0", code: "lat",
+                                                lect_id: "lat:cla", basis: "owner")
+      journal.disconnect
+      Nabu::Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: config))
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[language lat]) }
+      assert_nil status
+      assert_match(/cla\s+Classical Latin.*1 document/, out, "the journal ruling counts in its stage")
+      assert_match(/med\s+Medieval Latin.*1 document/, out)
+      assert_match(/unstaged.*1 document/, out, "only ONE bare-lat document remains unstaged")
+    end
+  end
+
+  # P58 rider (the owner's zho probe): a stage-less VARIETY resolution is a
+  # register line, never "unstaged" — lzh resolves via the universal
+  # codemap to zho/lit, the wenyan register.
+  def test_language_card_ladder_shows_registers_beside_stages
+    with_lect_ladder_corpus do |config, db|
+      kanripo = Nabu::Store::Source.create(slug: "kanripo", name: "Kanripo",
+                                           adapter_class: "TestAdapter", license_class: "open")
+      2.times do |i|
+        db[:documents].insert(source_id: kanripo.id, urn: "urn:nabu:test:lzh:#{i}", title: "T",
+                              language: "lzh", content_sha256: "x", revision: 1, withdrawn: false)
+      end
+      Nabu::Store::SourceStats.derive!(db, note: "test")
+      Nabu::Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: config))
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[language zho]) }
+      assert_nil status
+      assert_match(/registers:/, out)
+      assert_match(%r{/lit\s+Literary Chinese.*2 documents}, out,
+                   "lzh resolves to zho/lit — the wenyan register, named, counted")
+      refute_match(/unstaged/, out, "nothing is left unstaged once the register is named")
+    end
+  end
+
   def test_language_card_reconstructed_stages_carry_a_leading_asterisk
     with_recon_shelf_and_lects do |config|
       db = Nabu::Store.connect(config.catalog_path)
@@ -6252,6 +6306,294 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- nabu lect (P58-1): the assignment journal CLI --------------------------
+
+  def test_lect_assign_writes_a_journaled_ruling_with_an_explicit_code
+    with_lects_cli_env do |config|
+      out, _err, status = with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc", "--note", "papyrus"])
+      end
+      assert_nil status
+      assert_match(/inserted\s+urn:nabu:x:1\s+grc → grc:koi\s+\(owner\)/, out)
+      rows = read_lect_journal(config)
+      assert_equal 1, rows.size
+      assert_equal %w[grc grc:koi owner], rows.first.values_at(:code, :lect_id, :basis)
+      assert_equal "papyrus", rows.first[:note]
+    end
+  end
+
+  def test_lect_assign_refuses_a_lect_id_the_registry_does_not_define
+    with_lects_cli_env do |config|
+      _out, err, status = with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:zzz", "--code", "grc"])
+      end
+      assert_equal 1, status
+      assert_match(/grc:zzz.*not defined/, err)
+      assert_nil Nabu::Store::LectJournal.open_readonly(config.lects_journal_path),
+                 "a refused ruling never creates the journal file"
+    end
+  end
+
+  def test_lect_assign_infers_the_code_from_the_catalog_document
+    with_lects_cli_env(with_document: "urn:nabu:fixture:doc1") do |config|
+      out, _err, status = with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:fixture:doc1", "grc:koi"])
+      end
+      assert_nil status
+      assert_match(/grc → grc:koi/, out)
+      assert_equal "grc", read_lect_journal(config).first[:code]
+    end
+  end
+
+  def test_lect_assign_without_code_or_catalog_row_demands_the_code
+    with_lects_cli_env do |config|
+      _out, err, status = with_config(config) { run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi"]) }
+      assert_equal 1, status
+      assert_match(/--code/, err)
+    end
+  end
+
+  def test_lect_assign_from_file_bulk_imports_a_ratified_batch
+    with_lects_cli_env do |config|
+      Dir.mktmpdir do |dir|
+        tsv = File.join(dir, "batch.tsv")
+        File.write(tsv, <<~TSV)
+          # a ratified batch — comment and blank lines skip
+
+          urn:nabu:x:1\tgrc\tgrc:koi
+          urn:nabu:x:2\tgrc\tgrc:koi\trule:test-batch\tptolemaic record
+        TSV
+        out, _err, status = with_config(config) { run_cli(["lect", "assign", "--from-file", tsv]) }
+        assert_nil status
+        assert_match(/2 assignments \(2 inserted, 0 updated\)/, out)
+        rows = read_lect_journal(config)
+        assert_equal %w[owner rule:test-batch], rows.map { |row| row[:basis] },
+                     "a 4th column overrides the default basis per line"
+        assert_equal "ptolemaic record", rows.last[:note]
+      end
+    end
+  end
+
+  def test_lect_assign_from_file_names_the_offending_line
+    with_lects_cli_env do |config|
+      Dir.mktmpdir do |dir|
+        tsv = File.join(dir, "batch.tsv")
+        File.write(tsv, "urn:nabu:x:1\tgrc\tgrc:koi\nurn:nabu:x:2\tgrc\tgrc:zzz\n")
+        _out, err, status = with_config(config) { run_cli(["lect", "assign", "--from-file", tsv]) }
+        assert_equal 1, status
+        assert_match(/"grc:zzz" \(batch\.tsv line 2\)/, err)
+      end
+    end
+  end
+
+  def test_lect_list_shows_rows_and_the_basis_census
+    with_lects_cli_env do |config|
+      with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc"])
+        run_cli(["lect", "assign", "urn:nabu:x:2", "lat:med", "--code", "lat", "--basis", "rule:test"])
+        out, _err, status = run_cli(%w[lect list])
+        assert_nil status
+        assert_match(/urn:nabu:x:1\s+grc\s+grc:koi\s+owner/, out)
+        assert_match(/urn:nabu:x:2\s+lat\s+lat:med\s+rule:test/, out)
+        assert_match(/2 assignments — owner 1, rule:test 1/, out)
+
+        filtered, = run_cli(["lect", "list", "--basis", "rule:test"])
+        refute_match(/urn:nabu:x:1/, filtered)
+        assert_match(/urn:nabu:x:2/, filtered)
+      end
+    end
+  end
+
+  def test_lect_list_tsv_round_trips_through_from_file
+    with_lects_cli_env do |config|
+      with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc", "--note", "papyrus"])
+        out, _err, = run_cli(["lect", "list", "--format", "tsv"])
+        assert_equal "urn:nabu:x:1\tgrc\tgrc:koi\towner\tpapyrus", out.lines.first.chomp,
+                     "the flat export IS the --from-file import shape (the backup path)"
+      end
+    end
+  end
+
+  def test_lect_list_without_a_journal_is_a_friendly_empty
+    with_lects_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect list]) }
+      assert_nil status
+      assert_match(/no lect assignments/, out)
+    end
+  end
+
+  def test_lect_withdraw_removes_the_ruling
+    with_lects_cli_env do |config|
+      with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc"])
+        out, _err, status = run_cli(["lect", "withdraw", "urn:nabu:x:1"])
+        assert_nil status
+        assert_match(/withdrew 1 assignment/, out)
+        assert_empty read_lect_journal(config)
+      end
+    end
+  end
+
+  def test_lect_apply_rules_dry_run_reports_the_census_and_writes_nothing
+    with_lect_rules_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect apply-rules --dry-run]) }
+      assert_nil status
+      assert_match(/rule test-akk \(certain; facet period, code akk, sources cdli\)/, out)
+      assert_match(/Old Babylonian\s+→ akk:ob\s+2/, out)
+      assert_match(/Middle Elamite\s+\(unmatched\) 1/, out)
+      assert_match(/assignable: 2/, out)
+      assert_match(/dry run — nothing written/, out)
+      assert_nil Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+    end
+  end
+
+  def test_lect_apply_rules_compiles_into_the_journal
+    with_lect_rules_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect apply-rules]) }
+      assert_nil status
+      assert_match(/assigned 2/, out)
+      rows = read_lect_journal(config)
+      assert_equal 2, rows.size
+      assert_equal ["rule:test-akk"], rows.map { |row| row[:basis] }.uniq
+      assert_equal "Old Babylonian", rows.first[:note], "the verbatim normalized value is the evidence"
+    end
+  end
+
+  def test_lect_apply_rules_refuses_an_unknown_rule_naming_the_known
+    with_lect_rules_cli_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[lect apply-rules --rule nope]) }
+      assert_equal 1, status
+      assert_match(/unknown rule "nope".*test-akk/, err)
+    end
+  end
+
+  def test_lect_infer_dates_dry_run_reports_and_writes_nothing
+    with_lect_dates_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect infer-dates --dry-run]) }
+      assert_nil status
+      assert_match(/edh\s+lat\s+→ lat:late\s+1/, out)
+      assert_match(/spans bands: 1/, out)
+      assert_match(/assignable: 1/, out)
+      assert_match(/dry run — nothing written/, out)
+      assert_nil Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+    end
+  end
+
+  def test_lect_infer_dates_compiles_and_check_dates_stays_clean
+    with_lect_dates_cli_env do |config|
+      with_config(config) do
+        out, _err, status = run_cli(%w[lect infer-dates])
+        assert_nil status
+        assert_match(/assigned 1/, out)
+        rows = read_lect_journal(config)
+        assert_equal([["urn:t:edh:late", "lat", "lat:late", "rule:date-band"]],
+                     rows.map { |row| row.values_at(:urn, :code, :lect_id, :basis) })
+
+        audit, _err2, audit_status = run_cli(%w[lect check-dates])
+        assert_nil audit_status
+        assert_match(/check-dates clean/, audit)
+      end
+    end
+  end
+
+  def test_lect_check_dates_flags_a_contradicted_ruling
+    with_lect_dates_cli_env do |config|
+      with_config(config) do
+        run_cli(["lect", "assign", "urn:t:edh:late", "lat:arch", "--code", "lat"])
+        out, _err, status = run_cli(%w[lect check-dates])
+        assert_nil status
+        assert_match(/urn:t:edh:late\s+lat:arch\s+dated 250\.\.450 outside band \[-700, -75\]/, out)
+        assert_match(/1 finding/, out)
+      end
+    end
+  end
+
+  def test_lect_assign_refreshes_the_materialized_facet_and_withdraw_clears_it
+    with_lects_cli_env(with_document: "urn:nabu:fixture:doc1") do |config|
+      with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:fixture:doc1", "grc:koi"])
+        db = Nabu::Store.connect(config.catalog_path)
+        assert_equal ["grc:koi"],
+                     db[:document_facets].where(facet: "lect").select_map(:value),
+                     "a hand ruling refreshes the document's facet row in the same command"
+        db.disconnect
+
+        run_cli(["lect", "withdraw", "urn:nabu:fixture:doc1"])
+        db = Nabu::Store.connect(config.catalog_path)
+        assert_empty db[:document_facets].where(facet: "lect").all,
+                     "withdrawing the ruling returns the document to identity — no row"
+        db.disconnect
+      end
+    end
+  end
+
+  def test_lect_apply_rules_materializes_after_compiling
+    with_lect_rules_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect apply-rules]) }
+      assert_nil status
+      assert_match(/lect facet: 2 rows materialized/, out)
+      db = Nabu::Store.connect(config.catalog_path)
+      assert_equal %w[akk:ob akk:ob], db[:document_facets].where(facet: "lect").select_map(:value).sort
+      db.disconnect
+    end
+  end
+
+  def test_lect_materialize_recomputes_on_demand
+    with_lect_rules_cli_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect materialize]) }
+      assert_nil status
+      assert_match(/lect facet: 0 rows materialized/, out,
+                   "no journal, no overrides under this root — every resolution is identity")
+    end
+  end
+
+  # P58-6: the materialized lect rides show's standard facets line — the
+  # resolution is visible wherever facets are, with no special-casing.
+  def test_show_renders_the_materialized_lect_facet
+    with_lects_cli_env(with_document: "urn:nabu:fixture:doc1") do |config|
+      with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:fixture:doc1", "grc:koi"])
+        out, _err, status = run_cli(%w[show urn:nabu:fixture:doc1])
+        assert_nil status
+        assert_match(/facets: .*lect=grc:koi/, out)
+      end
+    end
+  end
+
+  # Thor 1.5 ships a built-in `tree` command that every subclass inherits;
+  # without an explicit namespace a subcommand class renders it under its
+  # auto-namespace ("nabu lect_c_l_i tree") — listed in help yet not
+  # invocable. The namespace pins keep the banner truthful AND the command
+  # runnable at every level.
+  def test_subcommand_help_carries_no_phantom_auto_namespace_entries
+    %w[lect data].each do |sub|
+      out, _err, status = run_cli(["help", sub])
+      assert_nil status
+      refute_match(/_c_l_i/, out, "#{sub}'s help must not leak the class auto-namespace")
+      assert_match(/ #{sub} tree\s/, out, "the inherited tree command lists under the real namespace")
+    end
+  end
+
+  def test_subcommand_tree_is_invocable
+    out, _err, status = run_cli(%w[lect tree])
+    assert_nil status
+    assert_match(/assign/, out)
+    assert_match(/withdraw/, out)
+  end
+
+  def test_lect_commands_require_the_module
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: File.join(root, "sources.yml"), config_path: "(test)")
+      _out, err, status = with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc"])
+      end
+      assert_equal 1, status
+      assert_match(/nabu-lects module/, err)
+    end
+  end
+
   private
 
   def with_env(pairs)
@@ -7999,6 +8341,102 @@ class CLITest < Minitest::Test
       end
       yield config
     end
+  end
+
+  # A config whose canonical tree holds the nabu-lects FIXTURE module
+  # (hermeticity doctrine: never the box's live registry). +with_document+
+  # additionally builds a one-document catalog (language grc) so the --code
+  # inference path has a row to read.
+  def with_lects_cli_env(with_document: nil)
+    Dir.mktmpdir("nabu-cli-lects") do |root|
+      dest = File.join(root, "canonical", "nabu-lects")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-lects"), "*")], dest)
+      File.write(File.join(root, "sources.yml"), "# empty registry\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: File.join(root, "sources.yml"), config_path: "(test)")
+      if with_document
+        FileUtils.mkdir_p(config.db_dir)
+        db = Nabu::Store.connect(config.catalog_path)
+        Nabu::Store.migrate!(db)
+        source_id = db[:sources].insert(slug: "fixture", name: "Fixture", adapter_class: "TestAdapter",
+                                        license_class: "open")
+        db[:documents].insert(source_id: source_id, urn: with_document, language: "grc",
+                              content_sha256: "cafe")
+        db.disconnect
+      end
+      yield config
+    end
+  end
+
+  # The apply-rules rig: fixture module + a real config dir (so the rules
+  # path derives) + a catalog of three cdli akk docs — two Old Babylonian
+  # (one ?-decorated), one unmatchable Middle Elamite.
+  def with_lect_rules_cli_env
+    Dir.mktmpdir("nabu-cli-lect-rules") do |root|
+      dest = File.join(root, "canonical", "nabu-lects")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-lects"), "*")], dest)
+      FileUtils.mkdir_p(File.join(root, "config"))
+      File.write(File.join(root, "config", "lect_facet_rules.yml"), <<~YAML)
+        rules:
+          - id: test-akk
+            tier: certain
+            sources: [cdli]
+            code: akk
+            facet: period
+            map:
+              "Old Babylonian": "akk:ob"
+      YAML
+      File.write(File.join(root, "sources.yml"), "# empty registry\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: File.join(root, "sources.yml"),
+                                config_path: File.join(root, "config", "nabu.yml"))
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      cdli = db[:sources].insert(slug: "cdli", name: "CDLI", adapter_class: "X", license_class: "attribution")
+      [["urn:t:cdli:a", "Old Babylonian (ca. 1900-1600 BC)"],
+       ["urn:t:cdli:b", "Old Babylonian (ca. 1900-1600 BC) ?"],
+       ["urn:t:cdli:c", "Middle Elamite (ca. 1300-1000 BC)"]].each do |urn, period|
+        doc = db[:documents].insert(source_id: cdli, urn: urn, language: "akk", content_sha256: "x")
+        db[:document_facets].insert(document_id: doc, facet: "period", value: period)
+      end
+      db.disconnect
+      yield config
+    end
+  end
+
+  # The infer-dates rig: fixture module + a catalog of two dated edh lat
+  # docs — one inside lat:late alone (250..450), one spanning cla|late
+  # (100..300).
+  def with_lect_dates_cli_env
+    Dir.mktmpdir("nabu-cli-lect-dates") do |root|
+      dest = File.join(root, "canonical", "nabu-lects")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-lects"), "*")], dest)
+      File.write(File.join(root, "sources.yml"), "# empty registry\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: File.join(root, "sources.yml"),
+                                config_path: File.join(root, "config", "nabu.yml"))
+      FileUtils.mkdir_p(config.db_dir)
+      db = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(db)
+      edh = db[:sources].insert(slug: "edh", name: "EDH", adapter_class: "X", license_class: "attribution")
+      [["urn:t:edh:late", 250, 450], ["urn:t:edh:spans", 100, 300]].each do |urn, from, to|
+        doc = db[:documents].insert(source_id: edh, urn: urn, language: "lat", content_sha256: "x")
+        db[:document_axes].insert(document_id: doc, not_before: from, not_after: to, axis_source: "test")
+      end
+      db.disconnect
+      yield config
+    end
+  end
+
+  def read_lect_journal(config)
+    db = Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+    rows = db[:lect_assignments].order(:urn, :code).all
+    db.disconnect
+    rows
   end
 
   # A quickstart env (P18-2): one source per (slug => adapter class name),

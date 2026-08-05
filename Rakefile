@@ -320,3 +320,32 @@ def adapter_test_label(adapter_test)
 end
 
 task default: :test
+
+# The single-source-of-truth site data projection (P58 rider): registry +
+# live-census facts into site/_data/*.yml, read by the pages through Liquid —
+# a new desk or a fresh census lands everywhere by regeneration, never by
+# prose-chasing. The drift guard (test/site/site_data_test.rb) fails the
+# suite when the committed desks.yml goes stale against the registry.
+namespace :site do
+  desc "Regenerate site/_data (desks + census) from the registries and the live catalog"
+  task :data do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+
+    config = Nabu::Config.load
+    catalog_path = ENV.fetch("NABU_AXES_CATALOG", config.catalog_path)
+    fulltext_path = ENV.fetch("NABU_SITE_FULLTEXT", config.fulltext_path)
+    abort "site:data needs the live catalog (#{catalog_path})" unless File.exist?(catalog_path)
+    abort "site:data needs the fulltext index (#{fulltext_path})" unless File.exist?(fulltext_path)
+
+    written = Nabu::Ops::SiteData.new(
+      registry: Nabu::SourceRegistry.load(config.sources_path),
+      data_dir: File.expand_path("site/_data", __dir__),
+      catalog_path: catalog_path, fulltext_path: fulltext_path
+    ).generate!
+    puts "site:data wrote #{written.join(', ')}"
+  end
+
+  desc "The one gate refresh: site:data + site:axes"
+  task refresh: %i[data axes]
+end
