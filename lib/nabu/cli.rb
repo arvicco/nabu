@@ -355,6 +355,37 @@ module Nabu
       materialize_lect_facets!(config)
     end
 
+    desc "suggest SLUG", "The front-door census: what could refine this source's lect posture (report-only)"
+    long_desc <<~HELP, wrap: false
+      Inspects ONE source's held metadata against the lect registry and
+      reports what could refine it (P59-4): each language code with its
+      current resolution and whether the anchor carries stages at all; the
+      source's facet vocabulary (a small label set over a staged anchor is
+      a rule candidate — a scaffold stanza is sketched for the best one);
+      and the date-band inference census. REPORT-ONLY by design — adapters
+      never write the journal; the owner (or a ruled rule in
+      config/lect_facet_rules.yml) applies. The new-adapter checklist runs
+      this at adapter-add time; the outcome lands as a rule, an override,
+      or a config/lect_posture.yml declaration (identity is an honest
+      answer).
+    HELP
+    def suggest(slug = nil)
+      slug = slug.to_s.strip
+      raise Thor::Error, "lect suggest: give a source slug" if slug.empty?
+
+      config = Nabu::Config.load
+      registry = require_lects_module!(config)
+      raise Thor::Error, "lect suggest: no catalog at #{config.catalog_path}" unless File.exist?(config.catalog_path)
+
+      catalog = Nabu::Store.connect(config.catalog_path)
+      report = Nabu::LectSuggest.new(catalog: catalog, registry: registry).run(slug)
+      raise Thor::Error, "lect suggest: unknown source or no live documents: #{slug}" if report.nil?
+
+      render_suggest_report(report)
+    ensure
+      catalog&.disconnect
+    end
+
     desc "check-dates", "The reverse audit: journal assignments whose document dates fall outside the stage band"
     def check_dates
       config = Nabu::Config.load
@@ -454,6 +485,67 @@ module Nabu
         catalog = Nabu::Store.connect(config.catalog_path)
         Nabu::Store::LectFacets.refresh_document!(catalog: catalog, registry: registry, urn: urn)
         catalog.disconnect
+      end
+
+      # The suggest render (P59-4): codes → facets → dating, each with the
+      # honest posture verdict inline; a scaffold stanza for the best rule
+      # candidate (small vocabulary over a staged anchor), values capped at
+      # LectSuggest::TOP_VALUES with the cap announced.
+      def render_suggest_report(report)
+        say "lect suggest #{report.slug} — report only; apply via rules/overrides/posture"
+        say "  codes:"
+        report.codes.each do |row|
+          verdict = if row.resolution != row.code then "resolved — machine posture exists"
+                    elsif row.stages.any? then "IDENTITY, but the anchor has stages: #{row.stages.join(' ')}"
+                    else
+                      "identity — no minted stages (declare posture: identity)"
+                    end
+          say format("    %<code>-12s %<docs>6d docs → %<res>-14s %<verdict>s",
+                     code: row.code, docs: row.docs, res: row.resolution, verdict: verdict)
+        end
+        say "  facets:"
+        say "    (none — no rule material)" if report.facets.empty?
+        report.facets.each do |row|
+          candidate = row.distinct <= Nabu::LectSuggest::RULE_CANDIDATE_DISTINCT ? " ← rule candidate" : ""
+          say "    #{row.facet}: #{row.distinct} distinct over #{row.docs} rows#{candidate}"
+          row.top.each { |value, count| say format("      %<value>-40s %<count>d", value: value, count: count) }
+          if row.distinct > row.top.size
+            say "      … #{row.distinct - row.top.size} more values (census caps at " \
+                "#{Nabu::LectSuggest::TOP_VALUES})"
+          end
+        end
+        render_suggest_dating(report.dating)
+        render_suggest_scaffold(report)
+      end
+
+      def render_suggest_dating(dating)
+        say "  dating:"
+        if dating.is_a?(String)
+          say "    #{dating}"
+        elsif dating.assignable.empty?
+          say "    no date-band material (undated, band-less anchors, or spans)"
+        else
+          dating.assignable.sort_by { |_k, v| -v }.first(8).each do |(_src, code, lect_id), count|
+            say format("    %<code>-8s → %<lect>-14s %<count>d docs assignable by date-band inference",
+                       code: code, lect: lect_id, count: count)
+          end
+        end
+      end
+
+      def render_suggest_scaffold(report)
+        staged = report.codes.select { |row| row.stages.any? && row.resolution == row.code }
+        facet = report.facets.find { |row| row.distinct <= Nabu::LectSuggest::RULE_CANDIDATE_DISTINCT }
+        return if staged.empty? || facet.nil?
+
+        code = staged.first
+        say "  scaffold (config/lect_facet_rules.yml — every target needs an owner ruling):"
+        say "    - id: #{report.slug}-#{code.code}-#{facet.facet}"
+        say "      tier: TODO(certain|approximation)"
+        say "      sources: [#{report.slug}]"
+        say "      code: #{code.code}"
+        say "      facet: #{facet.facet}"
+        say "      map:"
+        facet.top.map(&:first).each { |value| say "        #{value.inspect}: \"#{code.code}:TODO\"" }
       end
 
       # The wholesale recompute after a bulk compile (apply-rules,
