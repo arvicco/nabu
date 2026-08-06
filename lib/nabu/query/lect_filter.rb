@@ -74,14 +74,15 @@ module Nabu
 
       # +resolved+ matches +target+ when it IS target, or is a MORE SPECIFIC
       # lect under it — target immediately followed by one of the axis
-      # separators (":"/"/"/"@", nabu-lects docs/schema.md's strict order)
-      # counts as "under"; a same-length or unrelated string does not
-      # (lect lat:med matches lat:med and lat:med/xyz, never lat:cla).
+      # separators (":"/"/"/"~"/"@", nabu-lects docs/schema.md's strict
+      # order; "~" is the P60-0 script axis) counts as "under"; a
+      # same-length or unrelated string does not (lect lat:med matches
+      # lat:med and lat:med/xyz, never lat:cla).
       def lect_matches_target?(resolved, target)
         return true if resolved == target
         return false unless resolved.start_with?(target)
 
-        %w[: / @].include?(resolved[target.length])
+        %w[: / ~ @].include?(resolved[target.length])
       end
     end
   end

@@ -8,14 +8,15 @@ full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
 - **Retrieved:** 2026-08-06 (lects.yml + codemap.yml re-adopted at the
-  P59 ISO-parentage wave — 84 anchors incl. the Germanic/Celtic/Persian/
-  Armenian chains, the cel family, syc), from the owner's live checkout
-  (`~/Dev/nabu-lects`, clean at commit
-  `455a61b07793d207d30facaf8fca0b9ce6c21776`, the repo's `main`).
+  P60-0 script axis — the `~script` grammar segment, the global
+  `scripts:` table with 20 ISO 15924 rows, ortho `script:` scopes; on
+  top of the P59 ISO-parentage wave's 84 anchors), from the owner's
+  live checkout (`~/Dev/nabu-lects`, clean at commit
+  `aa8a501b9ffeb438a669ada28112e64f42f21c88`, the repo's `main`).
   - `lects.yml` — the lect registry (anchors, stages, varieties,
-    orthographies, parent edges, Glottocode crosswalks). Full file,
-    20,398 B, sha256
-    `5ec5b4e3045694e9ffb9c54a89df96cae320b131d1cd6aa3631dd800fdabd349`.
+    orthographies, the global scripts table, parent edges, Glottocode
+    crosswalks). Full file, 22,694 B, sha256
+    `3c18ff64636face4b442a04d8e0b5cf1da32786596b995f4822a1342d04a052c`.
   - `codemap.yml` — universal code → lect defaults (identity is the
     default rule; only non-identity mappings are listed). Full file,
     1,398 B, sha256
@@ -41,7 +42,10 @@ established Wiktionary code) to `{name, kind (family|absent),
 glottocode, band, band_note, parent, note, stages:, varieties:,
 orthos:}`; each stage/variety/ortho carries its own `name` plus
 type-specific fields (`ord`, `mode: reconstructed`, `band`, `wikt`,
-`iso`, `note`). `codemap.yml`'s `map:` lists ONLY non-identity code →
+`iso`, `note`; orthos a `script:` scope). A top-level `scripts:` map
+(P60-0) is the GLOBAL script table for the `~` axis — lowercased ISO
+15924 keys, rows `{name, iso15924}`; the axis claims the script of
+the text AS HELD, never the artifact's. `codemap.yml`'s `map:` lists ONLY non-identity code →
 lect-id defaults — any code absent from the map resolves to itself as
 a bare anchor (the identity default rule).
 

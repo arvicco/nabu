@@ -623,6 +623,28 @@ module Query
       assert_equal %w[urn:d:lamed:1], search_with_lects("libertas", lect: "lat:med").map(&:urn)
     end
 
+    # P60-0: the ~script axis rides prefix semantics like every other axis —
+    # --lect san matches san~latn (more specific, under the anchor);
+    # --lect san~latn is exact; a sibling stage never matches through it.
+    def test_lect_filter_script_axis_prefix_semantics
+      registry = YAML.safe_load_file(File.join(Nabu::TestSupport.fixtures("nabu-lects"), "lects.yml"))
+      scripted = Nabu::Lects.new(anchors: registry.fetch("anchors"), scripts: registry.fetch("scripts"),
+                                 codemap: { "san-tst" => "san~latn" })
+      src = Nabu::Store::Source.create(slug: "gretil-tst", name: "Gretil test",
+                                       adapter_class: "TestAdapter", license_class: "open")
+      doc = make_document(source: src, urn: "urn:d:sanlatn", language: "san-tst")
+      make_passage(doc, urn: "urn:d:sanlatn:1", text: "libertas", sequence: 0, language: "san-tst")
+      rebuild!
+
+      run = lambda { |target|
+        Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext, lects: scripted)
+                           .run("libertas", lect: target).map(&:urn)
+      }
+      assert_equal %w[urn:d:sanlatn:1], run.call("san"), "the anchor prefix matches through ~"
+      assert_equal %w[urn:d:sanlatn:1], run.call("san~latn"), "the exact script-qualified lect"
+      assert_empty run.call("san:ved"), "a stage the resolution does not carry never matches"
+    end
+
     def test_lect_filter_matches_a_variety_under_a_stage_prefix
       lat = Nabu::Store::Source.create(slug: "perseus-latin", name: "Perseus Latin",
                                        adapter_class: "TestAdapter", license_class: "open")

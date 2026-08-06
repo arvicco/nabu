@@ -1,6 +1,7 @@
 # lects.yml — the lect registry.
 #
-# A lect = anchor [":" stage] ["/" variety] ["@" ortho]  (see README, docs/schema.md).
+# A lect = anchor [":" stage] ["/" variety] ["~" script] ["@" ortho]
+# (see README, docs/schema.md).
 # Anchors are ISO 639 / established Wiktionary codes. Stages are time-slices of one
 # lineage, ordered by `ord` (never by parent links). `parent:` is a descent edge:
 # this lineage continues from that one. `mode: reconstructed` is the one
@@ -562,7 +563,7 @@ anchors:
       old:  {name: Old Slovene, ord: 10, note: "the Freising Fragments era"}
       emod: {name: Early Modern Slovene, ord: 20}
     orthos:
-      bohoric: {name: Bohorič alphabet, note: "IANA variant name; Latin-script-scoped"}
+      bohoric: {name: Bohorič alphabet, script: latn, note: "IANA variant name"}
 
   bul:
     name: Bulgarian
@@ -578,8 +579,8 @@ anchors:
     stages:
       mod: {name: Modern Japanese, ord: 10}
     orthos:
-      kyu: {name: Kyūjitai (pre-reform character forms),
-            note: "Han-script-scoped; pre-1946 printings"}
+      kyu: {name: Kyūjitai (pre-reform character forms), script: jpan,
+            note: "pre-1946 printings"}
 
   non:
     name: Old Norse
@@ -604,3 +605,38 @@ anchors:
     name: Arabic
     stages:
       cla: {name: Classical Arabic, ord: 10}
+
+# ── Scripts (the ~ axis) ─────────────────────────────────────────────────────
+#
+# A GLOBAL table, deliberately not per-anchor: digraphia is open-ended, and
+# which scripts a language is attested in is a fact about collections, not
+# about the registry. Keys are ISO 15924 codes lowercased; every row is an
+# ISO 15924 fact (`iso15924` carries the canonical spelling). The ~ axis
+# claims the script of the TEXT AS HELD — the surface a reader of the
+# document meets — never the artifact's original writing system (a consumer
+# records that separately when it differs; a Latin-transliterated cuneiform
+# tablet is `~latn` with the tablet's Xsux in the consumer's artifact
+# field). Seeded from the first consuming collection's measured need,
+# surface and artifact both; the set is open.
+
+scripts:
+  latn: {name: Latin,                                iso15924: Latn}
+  grek: {name: Greek,                                iso15924: Grek}
+  ogam: {name: Ogham,                                iso15924: Ogam}
+  deva: {name: Devanagari (Nagari),                  iso15924: Deva}
+  ital: {name: "Old Italic (Etruscan, Oscan, etc.)", iso15924: Ital}
+  egyd: {name: Egyptian demotic,                     iso15924: Egyd}
+  egyp: {name: Egyptian hieroglyphs,                 iso15924: Egyp}
+  xsux: {name: "Cuneiform, Sumero-Akkadian",         iso15924: Xsux}
+  hebr: {name: Hebrew,                               iso15924: Hebr}
+  arab: {name: Arabic,                               iso15924: Arab}
+  syrc: {name: Syriac,                               iso15924: Syrc}
+  copt: {name: Coptic,                               iso15924: Copt}
+  cyrl: {name: Cyrillic,                             iso15924: Cyrl}
+  glag: {name: Glagolitic,                           iso15924: Glag}
+  armn: {name: Armenian,                             iso15924: Armn}
+  hant: {name: Han (Traditional variant),            iso15924: Hant}
+  jpan: {name: Japanese (Han + Hiragana + Katakana), iso15924: Jpan}
+  phnx: {name: Phoenician,                           iso15924: Phnx}
+  runr: {name: Runic,                                iso15924: Runr}
+  goth: {name: Gothic,                               iso15924: Goth}

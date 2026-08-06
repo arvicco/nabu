@@ -94,6 +94,47 @@ class LectsTest < Minitest::Test
     assert_equal "Modern Japanese (Kyūjitai (pre-reform character forms))", kyu.name
   end
 
+  # --- #lect: the script axis (P60-0, owner-ruled D60-a/b) -------------------
+  #
+  # ~script claims the script of the text AS HELD (the canonical surface,
+  # machine-checkable from the bytes) — never the artifact's original
+  # writing system, which is a separate catalog-side field. Tags resolve
+  # against the registry's GLOBAL scripts table (not per-anchor: digraphia
+  # is open-ended; attestation is a collection fact).
+
+  def test_a_script_qualified_lect_resolves_against_the_global_table
+    san = lects.lect("san~latn")
+    assert_equal "san", san.anchor
+    assert_equal "latn", san.script
+    assert_nil san.stage
+    assert_equal "Sanskrit in Latin script", san.name
+    assert_equal :attested, san.mode
+  end
+
+  def test_script_composes_with_every_other_axis_in_strict_order
+    full = lects.lect("lat:late/ecc~latn")
+    assert_equal "late", full.stage
+    assert_equal "ecc", full.variety
+    assert_equal "latn", full.script
+    assert_equal "Late Latin — Ecclesiastical Latin in Latin script", full.name
+    assert_equal [200, 600], full.band, "stage facts ride through the script qualifier"
+    assert_nil lects.lect("lat~latn:late"), "axis order is strict — ~ after : and /"
+    assert_nil lects.lect("jpn:mod@kyu~jpan"), "~ comes BEFORE @, never after"
+  end
+
+  def test_an_unregistered_or_malformed_script_tag_is_nil
+    assert_nil lects.lect("san~qqqq"), "qqqq is not in the scripts table"
+    assert_nil lects.lect("san~Latn"), "ids are lowercase — the canonical spelling lives in the row"
+    assert_nil lects.lect("san~lat"), "script tags are exactly 4 letters (ISO 15924 shape)"
+  end
+
+  def test_parse_id_captures_the_script_axis
+    match = Nabu::Lects.parse_id("sga~ogam")
+    assert_equal "sga", match[:anchor]
+    assert_equal "ogam", match[:script]
+    assert_nil match[:stage]
+  end
+
   # --- #lect: nil for the unparseable and the undefined ---------------------
 
   def test_malformed_grammar_is_nil
