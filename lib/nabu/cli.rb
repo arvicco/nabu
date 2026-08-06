@@ -687,6 +687,27 @@ module Nabu
     def suggest(slug = nil)
       LectCLI.new.suggest(slug)
     end
+
+    desc "artifacts", "Re-derive the artifact-script lane from config/artifact_scripts.yml (idempotent)"
+    long_desc <<~HELP, wrap: false
+      Compiles the owner-ruled artifact-script rows (source → code → the
+      ARTIFACT's script where it differs from the held surface, D60-b) into
+      document_axes under the "artifact-script" lane — wholesale supersede,
+      a pure function of stored codes + config, also re-derived by rebuild.
+    HELP
+    def artifacts
+      config = Nabu::Config.load
+      raise Thor::Error, "layer artifacts: no catalog at #{config.catalog_path}" unless File.exist?(config.catalog_path)
+
+      catalog = Nabu::Store.connect(config.catalog_path)
+      report = Nabu::Store::ArtifactScripts.derive!(
+        catalog, config_path: config.artifact_scripts_path,
+                 registry: Nabu::Lects.load_default(config: config)
+      )
+      say "artifact-script lane: #{report.minted} rows (#{report.sources.join(', ')})"
+    ensure
+      catalog&.disconnect
+    end
   end
 
   # Command-line entry point. Only `version` is functional in Phase 0; the
@@ -4956,6 +4977,17 @@ module Nabu
         say "  findspot: #{spot.title} — Pleiades #{spot.id}#{types}"
       end
 
+      # P61-3 (D60-b): the artifact-script line — only where the original
+      # artifact's script DIFFERS from the held surface (the lane is minted
+      # on difference by construction). Tag + config note, honest and short.
+      def print_artifact(result)
+        artifact = result.artifact
+        return if artifact.nil?
+
+        note = artifact.note ? " — #{artifact.note}" : ""
+        say "  artifact script: #{artifact.script}#{note} (held surface differs; see the lect ~axis)"
+      end
+
       def print_show_passage(passage)
         say "#{passage.urn}#{" [#{passage.language}]" if passage.language}#{withdrawn_tag(passage.withdrawn)}"
         say "  #{display_text(painted_passage_text(passage), passage.language,
@@ -5028,6 +5060,7 @@ module Nabu
         print_credit(document)
         print_timeline(document.timeline)
         print_findspot(document)
+        print_artifact(document)
         print_facets(document.facets)
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|

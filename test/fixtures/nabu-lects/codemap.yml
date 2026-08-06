@@ -39,3 +39,39 @@ map:
   iir-pro:     iir:pro
   ine-bsl-pro: ine-bsl:pro
   cel-pro:     cel:pro
+
+  # The script-suffix suite (P61): BCP-47-style tags whose script subtag
+  # is used per the standard's own semantics -- it describes the CONTENT.
+  # Every row was byte-verified surface-honest in the first consuming
+  # collection's census (2026-08-06: Unicode-script classification over
+  # every carrier's held passages) before earning its line. Deviant uses
+  # (egy-Egyd artifact claims, -Ital-x- transliteration tags) are
+  # per-collection knowledge and stay OUT of this file by the standing
+  # rule.
+  san-Latn: "san~latn"
+  san-Deva: "san~deva"
+  ta-Latn:  "ta~latn"
+  bra-Deva: "bra~deva"
+  awa-Deva: "awa~deva"
+  xct-Latn: "xct~latn"
+  grc-Latn: "grc~latn"
+  lat-Latn: "lat~latn"
+  lat-Ogam: "lat~ogam"
+  cel-Latn: "cel~latn"
+  pgl-Ogam: "pgl~ogam"
+  pgl-Latn: "pgl~latn"
+  sga-Ogam: "sga~ogam"
+  mga-Ogam: "mga~ogam"
+  non-Ogam: "non~ogam"
+  xpi-Ogam: "xpi~ogam"
+  xpi-Latn: "xpi~latn"
+  xtg-Grek: "xtg~grek"
+  xtg-Latn: "xtg~latn"
+  xcg-Latn: "xcg~latn"
+  xly-Grek: "xly~grek"
+  xly-Latn: "xly~latn"
+  scx-Grek: "scx~grek"
+  scx-Latn: "scx~latn"
+  xpu-Grek: "xpu~grek"
+  xpu-Latn: "xpu~latn"
+  osc-Grek: "osc~grek"

@@ -33,6 +33,10 @@ files:
     url: https://riig.huma-num.fr/documents/data/documents/RIIG/VAU-13-01.xml
     whole: true
     trim: none (Segomaros dedication — three readings + French translation divs, whole)
+  - path: documents/IND-01-01.xml
+    url: https://riig.huma-num.fr/documents/data/documents/RIIG/IND-01-01.xml
+    whole: true
+    trim: none (retrieved 2026-08-07; the xtg-Lat regression exemplar -- the file's own textLang says mainLang="xtg-Latn" while two seg readings carry xml:lang="xtg-Lat", upstream's truncated script subtag; the P61-3 repair normalizes the subtag)
   - path: map/corpus.html
     url: https://riig.huma-num.fr/corpus.html?collection=RIIG
     whole: false

@@ -67,6 +67,7 @@ class RiigTest < Minitest::Test
       urn:nabu:riig:ahp-01-01 urn:nabu:riig:ais-01-01
       urn:nabu:riig:all-01-01 urn:nabu:riig:all-01-01-fr
       urn:nabu:riig:gar-10-03 urn:nabu:riig:gar-10-03-fr
+      urn:nabu:riig:ind-01-01 urn:nabu:riig:ind-01-01-fr
       urn:nabu:riig:vau-13-01 urn:nabu:riig:vau-13-01-fr
     ], refs.map(&:id), "-fr siblings exactly where the parser's own extraction finds prose " \
                        "(AHP-01-01's translation div is empty; AIS-01-01's is self-closed; " \
@@ -75,7 +76,7 @@ class RiigTest < Minitest::Test
 
   def test_discover_without_translations_is_originals_only
     refs = Nabu::Adapters::Riig.new.discover(FIXTURES).to_a
-    assert_equal 5, refs.size
+    assert_equal 6, refs.size
     refute(refs.any? { |ref| ref.id.end_with?("-fr") })
   end
 
@@ -125,6 +126,23 @@ class RiigTest < Minitest::Test
     assert_equal %w[urn:nabu:riig:vau-13-01-fr:MLE-a urn:nabu:riig:vau-13-01-fr:PLT-a],
                  document.map(&:urn)
     assert_match(/citoyen de Nîmes/, document.first.text)
+  end
+
+  # P61-3: upstream IND-01-01 declares mainLang="xtg-Latn" while two of
+  # its seg readings carry xml:lang="xtg-Lat" — a truncated script subtag
+  # (8 live passages measured). The repair keys on the EVIDENCE (the
+  # known-truncation subtag, normalized to its BCP-47 form), never on a
+  # blanket rewrite; the document language was already correct.
+  def test_truncated_script_subtags_normalize_to_their_bcp47_form
+    adapter = Nabu::Adapters::Riig.new
+    ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:riig:ind-01-01" }
+    document = adapter.parse(ref)
+    assert_equal "xtg-Latn", document.language
+    plt = document.passages.select { |p| p.urn.include?(":PLT-a:") }
+    refute_empty plt
+    assert plt.all? { |p| p.language == "xtg-Latn" },
+           "the seg's xtg-Lat normalizes — no passage keeps the truncated subtag"
+    assert(document.passages.none? { |p| p.language == "xtg-Lat" })
   end
 
   # --- fetch (WebMock; the two-stage crawl) -----------------------------------

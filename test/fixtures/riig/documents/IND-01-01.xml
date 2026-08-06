@@ -1,0 +1,367 @@
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="R444">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>Pilier d'Argentomagus</title>
+				<title type="corpus">RIIG</title>
+			</titleStmt>
+			<editionStmt>
+				<edition>RIIG</edition>
+				<respStmt>
+					<resp>First editor</resp>
+					<persName key="MLE">Pierre-Yves Lambert</persName>
+				</respStmt>
+				<respStmt>
+					<resp>Project coordinator and contributor</resp>
+					<persName key="CRD">Coline Ruiz Darasse</persName>
+				</respStmt>
+				<respStmt>
+					<resp>Contributor</resp>
+					<persName key="HBT">Hugo Blanchet</persName>
+				</respStmt>
+				<respStmt>
+					<resp>Contributor</resp>
+					<persName key="MBS">Michel Bats</persName>
+				</respStmt>
+				<respStmt>
+					<resp>Contributor</resp>
+					<persName key="MEN">María José Estarán Tolosa</persName>
+				</respStmt>
+				<respStmt>
+					<resp>Contributor</resp>
+					<persName key="DWO">Dagmar Wodtko</persName>
+				</respStmt>
+				<respStmt>
+					<resp>Contributor</resp>
+					<persName key="CaJN">Carlos Jordán Cólera</persName>
+				</respStmt>
+				<respStmt>
+					<resp>Contributor</resp>
+					<persName key="DSR">David Stifter</persName>
+				</respStmt>
+				<respStmt>
+					<resp>Metadata</resp>
+					<resp>TEI encoding</resp>
+					<persName key="NCR">Nolwenn Chevalier</persName>
+				</respStmt>
+			</editionStmt>
+			<publicationStmt>
+				<authority>UMR 5607 - Ausonius</authority>
+				<idno type="filename">IND-01-01</idno>
+				<idno type="corpus-number">0</idno>
+				<date when="2022">2022</date>
+				<availability>
+					<licence target="http://creativecommons.org/licenses/by/4.0/">Cette œuvre est mise à disposition selon les termes de la <ref target="http://creativecommons.org/licenses/by/4.0/">Licence Creative Commons Attribution 4.0 International</ref>. </licence>
+				</availability>
+			</publicationStmt>
+			<notesStmt>
+				<note/>
+			</notesStmt>
+			<sourceDesc>
+				<msDesc>
+					<msIdentifier>
+						<country>
+                            <placeName ref="https://sws.geonames.org/3017382/" type="modern">France</placeName>
+                        </country>
+						<region>
+                            <placeName ref="https://sws.geonames.org/3027939/" type="modern">Centre-Val de Loire</placeName>
+                        </region>
+						<settlement>
+                            <placeName ref="https://www.geonames.org/2978590/" type="modern">Saint-Marcel</placeName>
+                        </settlement>
+						<repository>in situ ; Musée et site archéologiques d’Argentomagus</repository>
+						<collection/>
+						<idno type="invNo"/>
+						<idno type="TM">219214</idno>
+						<altIdentifier>
+							<idno type="localID">L137a</idno>
+						</altIdentifier>
+						<altIdentifier>
+							<idno type="localID">L-137a</idno>
+						</altIdentifier>
+					</msIdentifier>
+					<msContents>
+						<summary resp="#RIIG" corresp="https://ausohnum.huma-num.fr/concept/c26683">Indéterminé</summary>
+						<textLang mainLang="xtg-Latn"/>
+					</msContents>
+					<physDesc>
+						<objectDesc>
+							<supportDesc>
+								<support>
+									<desc resp="#RIIG">Bloc d'un <objectType ref="https://ark.frantiq.fr/ark:/26678/pcrtUR3VSyzS1r">pilier</objectType> en <material ref="https://opentheso.huma-num.fr/api/ark:/76609/genepic18m2m26h2lknpnp88sn-g">calcaire</material>. Le bloc dièdre portant l’inscription correspond à l’assise supérieure d’un des quatre piliers d’angle d’un bassin constitué par un dallage calcaire en grand appareil. Un bloc similaire est conservé sur un autre des angles du bassin, portant également des inscriptions (<bibl corresp="http://zotero.org/groups/2657791/items/6LMTRPDE"><!--RIG II.2--></bibl>, L-137b et L-137c ; voir <bibl corresp="http://zotero.org/groups/2657791/items/F6THII2W"><!--AE-->
+                                            <citedRange unit="issue">2002</citedRange>
+                                            <citedRange unit="entry">980</citedRange>
+                                        </bibl> et sur <bibl corresp="https://edh.ub.uni-heidelberg.de/edh/inschrift/HD046143">EDH</bibl>). 
+									</desc>
+								</support>
+								<condition>Inscription <rs corresp="https://www.eagle-network.eu/voc/statepreserv/lod/4" type="statPreserv">complète</rs> ; monument <rs corresp="https://www.eagle-network.eu/voc/statepreserv/lod/4" type="statPreserv">endommagé</rs>. </condition>
+							</supportDesc>
+							<layoutDesc>
+								<layout>
+									<desc resp="#MBS">L'inscription est <rs corresp="https://www.eagle-network.eu/voc/writing/lod/3" type="writing">gravée</rs>. Concernant les diverses inscriptions découvertes sur les blocs des piliers : les coupures des mots sont maladroitement liées à la dimension des blocs, indépendants les uns des autres, et l’un d’eux (<bibl corresp="http://zotero.org/groups/2657791/items/6LMTRPDE"><!--RIG II.2--></bibl>, L-137b et L-137c = <bibl corresp="https://riig.huma-num.fr/exist/apps/riig/documents/IND-01-02">IND-01-02</bibl>) porte même une inscription sur deux faces : Face 1: DOMII/TIANV / S ; Face 2 : TAVRIIIRE. 
+										</desc>
+								</layout>
+							</layoutDesc>
+						</objectDesc>
+						<handDesc>
+							<handNote>
+								<desc resp="#MBS">Cette inscription est en alphabet <rs type="execution" key="cursive">cursif</rs> (et non en <rs key="capital" type="execution">lettres capitales</rs> strictes) : II pour E ; A à barrette verticale pour A.</desc>
+							</handNote>
+						</handDesc>
+						<scriptDesc>
+							<scriptNote/>
+						</scriptDesc>
+					</physDesc>
+					<history>
+						<origin>
+							<origDate notBefore="0051" notAfter="0200" corresp="http://n2t.net/ark:/99152/p09hq4np73d http://n2t.net/ark:/99152/p09hq4n7t47" cert="medium" evidence="context" resp="#RIIG">troisième quart du I<hi rend="superscript">er</hi> siècle/II<hi rend="superscript">e</hi> siècle</origDate>
+							<origPlace type="found">
+								<country ref="https://www.trismegistos.org/place/693">France</country>
+								<region>Centre-Val de Loire</region>
+								<district>Indre</district>
+								<settlement corresp="https://www.trismegistos.org/place/22999" ref="https://riig.huma-num.fr/places/275">
+                                    <placeName type="modern" xml:lang="fr">Saint-Marcel</placeName>
+                                </settlement>
+								<placeName ref="https://www.trismegistos.org/place/3924" type="provinceItalicRegion">Aquitania</placeName>
+								<placeName corresp="https://www.zotero.org/groups/2657791/riig/collections/XIDY4H2V" type="ethnic">Bituriges Cubi</placeName>
+								<placeName ref="https://riig.huma-num.fr/places/276">Plateau des Mersans</placeName>
+								<location cert="medium" resp="#RIIG">
+									<geo decls="#WGS84">46,60193 1,51324</geo>
+								</location>
+							</origPlace>
+						</origin>
+						<provenance resp="#HBT" type="found">
+							<rs type="circumstances">Le bloc portant l’inscription fait partie d’un des deux piliers conservés (sur quatre) d’une fontaine monumentale découverte sur le site d’<placeName>Argentomagus</placeName> (<placeName>Saint-Marcel</placeName>) en <date when="1967">1967</date>, en suivant une galerie souterraine révélée fortuitement lors de travaux agricoles. Les fouilles archéologiques qui ont fait suite ont permis de dater l’ensemble monumental vers le <date notBefore="0051" notAfter="0076">troisième quart du premier siècle de notre ère</date>. D’autres blocs portent des inscriptions, dont un sur plusieurs faces : <note>
+                                    <bibl corresp="http://zotero.org/groups/2657791/items/6LMTRPDE"><!--RIG II.2--></bibl>, L-137b <bibl corresp="https://riig.huma-num.fr/exist/apps/riig/documents/IND-01-02">IND-01-02</bibl> d'interprétation délicate, et L-137c (en latin)</note>. Une dédicace latine mutilée a également été découverte dans le bassin de la fontaine et se lit : <mentioned xml:lang="la">[Numi]nib(us) Augg(ustorum) et Minervae</mentioned>. Ce bloc n'étant pas en place, il est difficile de dire s'il appartient au même ensemble <note>
+                                    <bibl corresp="http://zotero.org/groups/2657791/items/6CV55CM2"><!--CAG 36-->
+                                        <citedRange resp="page">76</citedRange>
+                                    </bibl>
+                                </note>. </rs>
+							<rs type="context">La commune de <placeName>Saint-Marcel</placeName> est le site d’un oppidum du peuple gaulois des <placeName type="ethnic">Bituriges Cubes</placeName>, qui se développe en importante agglomération à l’époque gallo-romaine, occupant un espace de près de 1500 m sur 500 à partir du <placeName type="ancientFindspot">plateau des Mersans</placeName>. Elle est alors la seconde du territoire des Bituriges Cubes après <placeName>Bourges</placeName>. Le nom antique de l’agglomération, <mentioned xml:lang="la">Argentomagus</mentioned> « Marché de l’Argent » ? <note>signalée dans la <bibl corresp="http://zotero.org/groups/2657791/items/QWQ9VLP8"><!--Notitia Dignitatum--></bibl> comme le lieu d’une manufacture d’armes</note>, a donné celui de la ville moderne voisine d’<placeName>Argenton-sur-Creuse</placeName>. L’agglomération se développe rapidement à partir du I<hi rend="superscript">er</hi> siècle de notre ère, à partir d’un substrat indigène, manifesté par les restes d’un <emph>murus gallicus</emph> et diverses traces d’occupation caractéristiques de la Tène finale. Elle se structure autour d’un centre monumental (avec forum et basilique) et se dote de vastes édifices publics (théâtre, amphithéâtre, thermes, fontaine, temples…). Cinq nécropoles sont répertoriées. La ville atteint son apogée vers le II<hi rend="superscript">e</hi> siècle, et est abandonnée à la fin du IV<hi rend="superscript">e</hi> siècle. Au Moyen Âge, le site est utilisé comme carrière de pierres, notamment pour bâtir les églises d’Argenton, dont les parois portent de fait de sporadiques inscriptions latines, par exemple épitaphe avec noms celtiques, <note>voir <bibl corresp="http://zotero.org/groups/2657791/items/F6THII2W"><!--AE-->
+                                        <citedRange unit="issue">2000</citedRange>
+                                        <citedRange unit="entry">930</citedRange>
+                                    </bibl>
+                                </note>. <placeName>Argentomagus</placeName> est également le lieu de découverte, parmi près de 80 inscriptions latines, de quelques inscriptions gallo-latines, notamment la célèbre inscription dite du vergobret <note>
+                                    <mentioned xml:lang="xtg">uercobretos readdas</mentioned>, <bibl corresp="http://zotero.org/groups/2657791/items/6LMTRPDE"><!--RIG II.2--></bibl>, L-78</note>, provenant d’une fosse datable des années 40 de notre ère.
+							</rs>
+							<rs type="micro-context"/>
+							<rs type="datation">Troisième quart du I<hi rend="superscript">er</hi> siècle/II<hi rend="superscript">e</hi> siècle, mais les données monétaires indiquent que la fontaine a été en activité au moins jusqu'au III<hi rend="superscript">e</hi> s.. </rs>
+						</provenance>
+						<provenance resp="#RIIG" subtype="autopsied" type="reported">
+							<p>L'ensemble des blocs est signalé dans <bibl corresp="http://zotero.org/groups/2657791/items/NUYEB4N3"><!--Charles-Picard 1972-->
+                                    <citedRange unit="page">323</citedRange>
+                                </bibl>.</p>
+						</provenance>
+						<provenance resp="#RIIG" type="transferred">
+							<p>L’inscription est visible <emph>in situ</emph> sur un des piliers de la fontaine monumentale du site d’<placeName>Argentomagus</placeName>.</p>
+						</provenance>
+						<provenance resp="#RIIG" subtype="autopsied" type="observed">
+							<p>Observé pour le projet RIIG par <persName key="HBT">Hugo Blanchet</persName> en 2023. </p>
+						</provenance>
+					</history>
+				</msDesc>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<editorialDecl>
+				<p/>
+			</editorialDecl>
+			<classDecl>
+				<taxonomy>
+					<category/>
+				</taxonomy>
+			</classDecl>
+		</encodingDesc>
+		<profileDesc>
+			<langUsage>
+				<language ident="xtg-Latn">gaulois écrit en alphabet latin</language>
+				<language ident="fr">français</language>
+			</langUsage>
+			<textClass>
+				<keywords>
+					<list>
+						<item>Histoire -- Protohistoire -- Antiquité</item>
+					</list>
+				</keywords>
+			</textClass>
+			<particDesc>
+				<listPerson type="editorial">
+					<person corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?coline.ruiz-darasse" xml:id="CRD">
+						<persName>
+							<forename>Coline</forename>
+							<surname>Ruiz Darasse</surname> (Chargée de recherches au CNRS) </persName>
+					</person>
+					<person corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?nathalie.prevot" xml:id="NPT">
+						<persName>
+							<forename>Nathalie</forename>
+							<surname>Prévôt</surname> (Ingénieur CNRS en Humanités Numériques et responsable AusoHNum) </persName>
+					</person>
+					<person corresp="http://ausonius.u-bordeaux-montaigne.fr/annuaire?nolwenn.chevalier" xml:id="NCR">
+						<persName>
+							<forename>Nolwenn</forename>
+							<surname>Chevalier</surname> (AI ANR RIIG) </persName>
+					</person>
+				</listPerson>
+			</particDesc>
+		</profileDesc>
+		<revisionDesc status="high">
+			<listChange>
+				<change when="2023-06-29" who="#CRD">Creation of the record</change>
+			</listChange>
+		</revisionDesc>
+	</teiHeader>
+	<facsimile>
+		
+		
+		<graphic url="https://www.argentomagus.fr/images/content/fontaine1.jpg">
+			<desc type="view">Aperçu de la fontaine d'Argentomagus</desc>
+			<desc type="copyright">argentomagus.fr</desc>
+			<desc type="mention"/>
+			<desc type="author"/>
+		</graphic>
+
+		<graphic url="ZZZ">
+			<desc type="view">Pilier inscrit d'Argentomagus</desc>
+			<desc type="copyright">RIIG (ANR 19-CE27-0003) </desc>
+			<desc type="author">Théo Blanchet</desc>
+			<desc type="licence">
+				<ref target="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</ref>
+			</desc>
+		</graphic>
+	</facsimile>
+	<text>
+		<body>
+			<div type="edition">
+				<div type="textpart">
+					<ab>
+						<seg cert="medium" resp="#PLT" xml:id="PLT-a" xml:lang="xtg-Lat">
+							<lb n="1"/>
+							<w pos="NOM" msd="m sg 2" type="idionym" xml:lang="la">
+								<choice>
+									<orig>VIINIIRIAN<lb break="no" n="2"/>VS</orig>
+									<reg>uenerian<lb break="no" n="2"/>us</reg>
+								</choice>
+							</w>
+							<lb n="3"/>
+							<w pos="NOM" msd="m sg 2" type="idionym">
+								<choice>
+									<orig>SIINOS</orig>
+									<reg>senos</reg>
+								</choice>
+							</w>
+							<w pos="NOM" msd="m sg 2" type="patronym">
+								<choice>
+									<orig>CLISOC<lb break="no" n="4"/>NO</orig>
+									<reg>clisoc<lb break="no" n="4"/>no</reg>
+								</choice>
+							</w>
+						</seg>
+						<seg cert="low" resp="#GCP" xml:id="GCP-a" xml:lang="xtg-Lat">
+							<lb n="1"/>
+							<w pos="NOM" msd="m sg 2" type="idionym" xml:lang="la">
+								<choice>
+									<orig>VIINIIRIAN<lb break="no" n="2"/>VS</orig>
+									<reg>uenerian<lb break="no" n="2"/>us</reg>
+								</choice>
+							</w>
+							<lb n="3"/>
+							<w pos="NOM" msd="m sg 2" type="patronym">
+								<choice>
+									<orig>SIINOSCLISOC<lb break="no" n="4"/>NO</orig>
+									<reg>senosclisoc<lb break="no" n="4"/>no</reg>
+								</choice>
+							</w>
+						</seg>
+					</ab>
+				</div>
+			</div>
+			<!-- Commentaire : -->
+			<div corresp="#PLT-a" resp="#PLT" type="apparatus">
+				<p>À côté des noms latins (et fléchis à la latine) <mentioned ana="idionym" xml:lang="la">VIINIIRIANVS</mentioned>, Venerianus et <mentioned ana="idionym" xml:lang="la">DOMIITIANVS</mentioned>, Dometianus (pour Domitianus, sur un autre bloc de la fontaine), on trouve des noms d'aspect celtique : <mentioned ana="idionym" xml:lang="xtg">Senos</mentioned> est un thème onomastique bien attesté : seno- « vieux », v.irl. <mentioned xml:lang="sga">sen</mentioned>, bret. gall. <mentioned xml:lang="br">hen</mentioned> (<bibl corresp="http://zotero.org/groups/2657791/items/9LE83Y7L"><!--Holder II-->
+                        <biblScope unit="volume">II</biblScope>
+                        <citedRange unit="entry">500</citedRange>
+                    </bibl>). <mentioned ana="idionym" xml:lang="xtg">Clisocnos</mentioned> présente un suffixe parallèle au suffixe patronymique -<mentioned ana="suffix" xml:lang="xtg">icno</mentioned>- ; <mentioned ana="stem" xml:lang="xtg">Cliso-</mentioned> est connu par des toponymes : <mentioned ana="toponym" xml:lang="la">Clisius lacus</mentioned>, nom du lac de Lugano (<bibl corresp="http://zotero.org/groups/2657791/items/9LE83Y7L"><!--Holder I-->
+                        <biblScope unit="volume">I</biblScope>
+                        <citedRange unit="entry">1044</citedRange>
+                    </bibl>). On connaissait déjà des formes en <emph>-cno-</emph> sur thème en <emph>-u-</emph> (<mentioned ana="theonym" xml:lang="la">Taranucno</mentioned> <bibl><!--CIL-->
+                        <ptr target="http://zotero.org/groups/2657791/items/34W5PCBI"/>
+                        <citedRange unit="volume">XIII</citedRange>
+                        <citedRange unit="entry">6478</citedRange>
+                    </bibl>), en <emph>-ā</emph> (<mentioned ana="idionym" xml:lang="la">Mainacnos</mentioned>, <bibl corresp="http://zotero.org/groups/2657791/items/3ADRTIG9"><!--CAG 89-1-->
+                        <citedRange resp="page">200</citedRange>
+                    </bibl>), en <emph>-e-</emph>, sans doute issu de <emph>-i-</emph> bref (<mentioned ana="idionym" xml:lang="la">allecnos</mentioned> <bibl><!--CIL-->
+                        <ptr target="http://zotero.org/groups/2657791/items/34W5PCBI"/>
+                        <citedRange unit="volume">V</citedRange>
+                        <citedRange unit="entry">5171</citedRange>
+                    </bibl>/<mentioned ana="idionym" xml:lang="la">ollecnos</mentioned>). Pour un autre exemple de <emph>-ocno-</emph>, cf. <bibl corresp="http://zotero.org/groups/2657791/items/6LMTRPDE"><!--RIG II.2--></bibl> L-81d (Roanne). </p>
+			</div>
+			<div corresp="#GCP-a" resp="#PLT" type="apparatus">
+			<p>G.-Ch. Picard suppose un patronyme formé sur un thème composé, <mentioned>senoscliso-</mentioned>, si bien que toute l'inscription désignerait un seul personnage, avec prénom latin (avec désinence latine) et patronyme celtique (avec désinence gauloise). Mais nous pensons que les deux types de désinences invitent au contraire à distinguer deux dénominations différentes, celle d'un Romain avec nom latin (Venerianus) et celle d'un Gaulois avec nom celtique (Senos Clisocnos).</p>
+			</div>
+			<div type="translation" resp="#RIIG" corresp="#PLT-a">
+				<p>Venerianus, Senos fils de Clisos. </p>
+			</div>
+			<div type="translation" resp="#RIIG" corresp="#GCP-a">
+				<p>Venerianus fils de Senosclisos. </p>
+			</div>
+			<div subtype="general" type="commentary" resp="#MBS" corresp="#PLT-a">
+				<p>Venerianus est un <emph>cognomen </emph> (17 attestations rien qu'au nominatif dans EDCS), présent en Aquitaine, mais aussi en Italie (dont Rome et Ostie), en Dalmatie, Achaïe et Macédoine.</p>
+			</div>
+			<div subtype="general" type="commentary" resp="#CaJN" corresp="#GCP-a">
+				<p>Opter pour un anthroponyme Senosclisos (d'où le patronyme Senosclisocnos) revient à penser un composé sine+scliso- qui n'est pas attesté par ailleurs. </p>
+			</div>
+			<div subtype="general" type="commentary" resp="#DSR" corresp="#GCP-a">
+				<p> <label>SIINOSCLISOCNO</label> If these are two words, i.e. a binomial name formula with individual name + patronymic adjective <emph>Senos Clisocno(s)</emph>, then the presence and absence of final <emph>-s</emph> follows the rought distribution that I have described in my contribution to the Chartres defixio (<bibl corresp="http://zotero.org/groups/2657791/items/8A6UMKNV"><!--Stifter 2013-->
+                        <citedRange resp="page">171</citedRange>
+                    </bibl> = Extrait p. 55), i.e. the first item in the phrase retains <emph>-s</emph>, but it is lost in pausa at the end of the phrase.</p>
+			</div>
+			<div corresp="#PLT-a #GCP-a" resp="#RIIG" subtype="sociolinguistic" type="commentary">
+				<p>La question de la nature exacte de l'inscription se pose : s'agit-il d'une inscription véritablement monumentale (et donc officielle) ou d'un simple graffite ? Selon <rs key="#MEN">Maria-José Estarán</rs>, si cette inscription était placée sur une paroi continue (comme c'est le cas pour les graffites), les noms ne seraient pas coupés "Venerian-us" (ou "Dome-tianu-s") mais auraient été inscrits sur une ligne seulement : il s'agirait donc d'une inscription monumentale. À l'inverse, <rs key="#MBS">Michel Bats</rs>, en regard de la médiocrité de la gravure, suggère qu'il s'agit plutôt d'inscriptions « sauvages », non officielles, et donc des graffites. 
+					Le caractère monumental peut être préféré si l'on considère que l'inscription représente une formule onomastique, constituée de <emph>tria nomina</emph> à la romaine, avec des éléments d'onomastique indigène. On serait alors dans une manifestation d'évergétisme de la part d'un notable local, comme on en connait d'autres exemples à Argentomagus même, en latin (<bibl corresp="http://zotero.org/groups/2657791/items/F6THII2W"><!--AE-->
+                        <citedRange unit="issue">1973</citedRange>
+                        <citedRange unit="entry">341</citedRange>
+                    </bibl>), et ailleurs en Gaule. 
+				En revanche, si l'on considère qu'il s'agit de deux individus distincts, l'un écrivant en latin et l'autre en gaulois, l'interprétation comme graffite semble préférable. </p>
+			</div>
+			
+			<!-- Description détaillée du document : -->
+			<div subtype="physDesc" type="commentary">
+				<div subtype="support" type="commentary" resp="#CRD">
+					<p>Dans le <bibl corresp="http://zotero.org/groups/2657791/items/6LMTRPDE"><!--RIG II.2--></bibl>, cette inscription est classée avec les graffites muraux. Pourtant, il est bien indiqué qu'il s'agit d'un bloc appartenant à la fontaine probablement sacrée d'Argentomagus. </p>
+				</div>
+				<div subtype="layout" type="commentary"/>
+				<div subtype="handNote" type="commentary" resp="#HBT">
+					<p>Le bloc présente également plusieurs dessins : l’un visiblement solidaire de notre texte, peut-être de la même main, et symbole de prospérité (?) ; l’autre situé en-dessous figurant un petit personnage. </p>
+				</div>
+			</div>
+			<!-- Description détaillée de l'origine document : -->
+			<div subtype="history" type="commentary">
+				<div resp="#MLE" subtype="context" type="commentary"/>
+				<div resp="#MLE" subtype="micro-context" type="commentary"/>
+			</div>
+			<!-- Bibliographie : -->
+			<div subtype="principalEdition" type="bibliography">
+				<listBibl>
+					<bibl>
+                        <ptr target="http://zotero.org/groups/2657791/items/6LMTRPDE"/>
+                        <citedRange unit="page">362-363</citedRange>
+                    </bibl>
+					<bibl>
+                        <ptr target="http://zotero.org/groups/2657791/items/M2YBCVMS"/>
+                        <citedRange unit="page">626</citedRange>
+                    </bibl>
+				</listBibl>
+			</div>
+			<div subtype="otherEditions" type="bibliography"/>
+			<div type="bibliography">
+				<listBibl corresp="https://www.zotero.org/groups/2657791/riig/collections/HDYLG7K7" type="RIG">
+					<bibl/>
+				</listBibl>
+				<listBibl corresp="https://www.zotero.org/groups/2657791/riig/collections/VBFU9GBU" type="RIIG">
+					<bibl/>
+				</listBibl>
+			</div>
+		</body>
+	</text>
+</TEI>
