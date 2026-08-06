@@ -26,6 +26,10 @@ class SefariaJsonParserTest < Minitest::Test
   JERUSALEM = File.join(TARGUM, "Targum Jerusalem/Targum Jerusalem/Hebrew/Targum Jerusalem on Torah.json")
   RUTH_SMR = File.join(FIXTURES, "json/Midrash/Aggadah/Midrash Rabbah/Ruth Rabbah/English/" \
                                  "The Sefaria Midrash Rabbah, 2022.json")
+  TDEZ_SCT = File.join(FIXTURES, "json/Midrash/Aggadah/Tanna DeBei Eliyahu Zuta/English/" \
+                                 "Sefaria Community Translation.json")
+  SIFRA_SILVERSTEIN = File.join(FIXTURES, "json/Midrash/Halakhah/Sifra/English/" \
+                                          "Sifra by Rabbi Shraga Silverstein.json")
   SIFREI_ZUTA = File.join(FIXTURES, "json/Midrash/Halakhah/Sifrei Zuta/Hebrew/Leipzig, 1917.json")
   ONKELOS_NC = File.join(TARGUM,
                          "Onkelos/Torah/Onkelos Numbers/Hebrew/Sifsei Chachomim Chumash, Metsudah Publications, " \
@@ -89,6 +93,58 @@ class SefariaJsonParserTest < Minitest::Test
     assert_equal "6.27.2", document.passages.last.urn.split(":").last
     assert_includes document.first.text, "ואל המקדש לא תבא",
                     "the Leipzig text rides byte-verbatim (hbo is NFC-exempt), <b> lemmata unwrapped"
+  end
+
+  # The P60-rider shape (held Sifra ×2 + Tanna DeBei Eliyahu Zuta ×2 in
+  # quarantine since waves 2/3): a schema NODE's value may itself be a
+  # node dict — TDEZ's text is {"" (the main work), "Additions to Seder
+  # Eliyahu Zuta" -> {Hakdamah, Mavo, ...}}. The walk descends nested
+  # dicts in THEIR OWN key order (upstream's writing order — Sifra
+  # interleaves "Chapter n"/"Section n", so sorting or schema lookup
+  # would misorder); each named level adds its slug segment, empty
+  # sub-nodes mint nothing.
+  def test_nested_schema_node_dicts_descend_with_slug_prefixed_citations
+    document = parse(TDEZ_SCT, urn: "urn:nabu:sefaria:tanna-debei-eliyahu-zuta:en:sct", language: "eng")
+    assert_equal 5, document.size,
+                 "the whole fixture: 1 default-node leaf + 4 nested (Hakdamah/PdRE/HaYeridot are empty)"
+    assert_equal ["2.1",
+                  "additions-to-seder-eliyahu-zuta.mavo.22",
+                  "additions-to-seder-eliyahu-zuta.mavo.23",
+                  "additions-to-seder-eliyahu-zuta.pirkei-derech-eretz.2",
+                  "additions-to-seder-eliyahu-zuta.pirkei-derech-eretz.3"],
+                 document.map { |p| p.urn.split(":").last },
+                 "default node cites bare; nested nodes stack slug segments; reading order holds"
+    assert_equal (0..4).to_a, document.map(&:sequence)
+  end
+
+  # Silverstein's Sifra holds sibling node keys "Chapter 2" AND
+  # "Chapter 2*" (real distinct content — Vayikra 13:3 vs 13:5; the
+  # asterisk marks upstream's variant chapter) which the FROZEN slug
+  # fold collapses to one token. The DSS twin-scroll precedent applies:
+  # the second same-slugged sibling, in walk order, mints a "-2" suffix
+  # — deterministic, and safe because a colliding document could never
+  # have synced before this rule (duplicate passage urns are a
+  # ParseError, the pre-rule quarantine this fixture pins the escape
+  # from). NB walk order ≠ adjacency: "Section 2" sits between the two.
+  def test_colliding_sibling_node_slugs_disambiguate_in_walk_order
+    document = parse(SIFRA_SILVERSTEIN, urn: "urn:nabu:sefaria:sifra:en:silverstein", language: "eng")
+    citations = document.map { |p| p.urn.split(":").last }
+    assert_equal ["baraita-derabbi-yishmael.1", "baraita-derabbi-yishmael.2",
+                  "tazria-parashat-negaim.section-1.1", "tazria-parashat-negaim.chapter-2.1",
+                  "tazria-parashat-negaim.section-2.1", "tazria-parashat-negaim.chapter-2-2.1"],
+                 citations,
+                 "the trim: Baraita ×2, then the interleaved Tazria nodes — Chapter 2* mints chapter-2-2"
+    assert document.passages.last.text.include?("on the seventh day"),
+           "chapter-2-2 carries Chapter 2*'s own text (Vayikra 13:5), not a duplicate of Chapter 2"
+  end
+
+  def test_a_hash_inside_a_jagged_array_stays_a_parse_error
+    with_file('{"title": "T", "versionTitle": "V", "text": [[{"X": ["y"]}]]}') do |path|
+      error = assert_raises(Nabu::ParseError) { parse(path) }
+      assert_match(/must be a String or Array/, error.message,
+                   "node dicts nest as NODE VALUES only — a dict inside section content is unattested " \
+                   "upstream and stays loud, never silently invented")
+    end
   end
 
   def test_sequence_is_reading_order

@@ -61,11 +61,13 @@ class SefariaTest < Minitest::Test
       urn:nabu:sefaria:mishnah-tamid:en:mishnah-yomit-by-dr-joshua-kulp
       #{KAUFMANN_URN}
       #{RUTH_SMR_URN}
+      urn:nabu:sefaria:sifra:en:sifra-by-rabbi-shraga-silverstein
       urn:nabu:sefaria:tamid:en:sefaria-community-translation
       #{TAMID_WIKISOURCE_URN}
+      urn:nabu:sefaria:tanna-debei-eliyahu-zuta:en:sefaria-community-translation
       #{SIFREI_ZUTA_URN}
       #{TOSEFTA_URN}
-    ]).sort, urns, "15 licensed named versions; merged, unlicensed and excluded titles never mint"
+    ]).sort, urns, "17 licensed named versions; merged, unlicensed and excluded titles never mint"
   end
 
   # --- the Targum regression (P46-1: URNs FROZEN — the wave must not re-mint) -
@@ -275,7 +277,9 @@ class SefariaTest < Minitest::Test
                    "urn:nabu:sefaria:mishnah-tamid:en:mishnah-yomit-by-dr-joshua-kulp" => 34,
                    TOSEFTA_URN => 57,
                    RUTH_SMR_URN => 31,
-                   SIFREI_ZUTA_URN => 163
+                   SIFREI_ZUTA_URN => 163,
+                   "urn:nabu:sefaria:tanna-debei-eliyahu-zuta:en:sefaria-community-translation" => 5,
+                   "urn:nabu:sefaria:sifra:en:sifra-by-rabbi-shraga-silverstein" => 6
                  }, counts)
   end
 

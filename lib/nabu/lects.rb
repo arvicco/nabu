@@ -14,15 +14,19 @@ module Nabu
   #
   # == The identifier grammar (nabu-lects README/docs/schema.md, verbatim)
   #
-  #   lect-id = anchor [ ":" stage ] [ "/" variety ] [ "@" ortho ]
+  #   lect-id = anchor [ ":" stage ] [ "/" variety ] [ "~" script ] [ "@" ortho ]
   #
   # anchor is the most specific genealogical node (an ISO 639 or established
   # Wiktionary code, e.g. "lat", "roa-opt"); stage a broad historical
   # development stage ("lat:med"); variety a register/sociolect/recension
-  # ("zho/lit"); ortho a spelling reform within one script ("jpn:mod@kyu"). A
-  # bare anchor is a legal lect (honest coarseness). Reconstruction is keyed
-  # on the registry field `mode: reconstructed`, never on tag spelling (the
-  # stage tag "pro" is a convention, not the machine truth).
+  # ("zho/lit"); script the writing system of the text AS HELD ("san~latn" —
+  # the canonical surface, P60-0/D60-b: never the artifact's original
+  # script, which is a separate catalog-side field), resolved against the
+  # registry's GLOBAL scripts table; ortho a spelling reform within one
+  # script ("jpn:mod@kyu"). A bare anchor is a legal lect (honest
+  # coarseness). Reconstruction is keyed on the registry field
+  # `mode: reconstructed`, never on tag spelling (the stage tag "pro" is a
+  # convention, not the machine truth).
   #
   # == Two files, two natures
   #
@@ -64,8 +68,10 @@ module Nabu
     # stage, is always :attested — reconstruction is always a property of a
     # stage). +ord+/+band+ come from the stage when one is referenced, else
     # from the anchor (only bare anchors without stages carry their own
-    # band in practice — see lects.yml's "non"/"ang"/"fro" rows).
-    Record = Data.define(:id, :anchor, :stage, :variety, :ortho, :name, :mode, :ord, :band)
+    # band in practice — see lects.yml's "non"/"ang"/"fro" rows). +script+
+    # (P60-0) is the held text's surface script tag, resolved against the
+    # global scripts table.
+    Record = Data.define(:id, :anchor, :stage, :variety, :script, :ortho, :name, :mode, :ord, :band)
 
     LECTS_FILE = "lects.yml"
     CODEMAP_FILE = "codemap.yml"
@@ -74,12 +80,14 @@ module Nabu
     # anchor: 2-3 lowercase letters, optionally hyphen-extended (roa-opt,
     # ine-bsl). stage/variety: 2-5 lowercase alphanumerics starting with a
     # letter (digits admitted P58-5 for the field's own periodization names —
-    # sux:ur3 is Ur III; pure-letter tags stay the norm). ortho: 2-8 lowercase
-    # alphanumerics starting with a letter. Axes strictly ordered (":" before
-    # "/" before "@") per nabu-lects docs/schema.md.
+    # sux:ur3 is Ur III; pure-letter tags stay the norm). script: exactly 4
+    # lowercase letters — a lowercased ISO 15924 code (P60-0). ortho: 2-8
+    # lowercase alphanumerics starting with a letter. Axes strictly ordered
+    # (":" before "/" before "~" before "@") per nabu-lects docs/schema.md.
     ID_PATTERN = %r{\A(?<anchor>[a-z]{2,3}(?:-[a-z]{2,5})?)
                      (?::(?<stage>[a-z][a-z0-9]{1,4}))?
                      (?:/(?<variety>[a-z][a-z0-9]{1,4}))?
+                     (?:~(?<script>[a-z]{4}))?
                      (?:@(?<ortho>[a-z][a-z0-9]{1,7}))?\z}x
 
     # Grammar-only parse (no registry lookup): the anchor/stage/variety/ortho
@@ -94,8 +102,10 @@ module Nabu
     # override file (nil -> no overrides, the bare-module posture); +overlay+
     # is the per-document seam (P57-3: constructor-only, no storage yet).
     def self.load(dir, overrides_path: nil, overlay: {})
+      registry = read_yaml(File.join(dir, LECTS_FILE))
       new(
-        anchors: read_yaml(File.join(dir, LECTS_FILE)).fetch("anchors", {}),
+        anchors: registry.fetch("anchors", {}),
+        scripts: registry.fetch("scripts", {}),
         codemap: read_yaml(File.join(dir, CODEMAP_FILE)).fetch("map", {}),
         overrides: overrides_path ? read_yaml(overrides_path).fetch("sources", {}) : {},
         overlay: overlay
@@ -134,8 +144,9 @@ module Nabu
     end
     private_class_method :read_yaml
 
-    def initialize(anchors:, codemap:, overrides: {}, overlay: {})
+    def initialize(anchors:, codemap:, overrides: {}, overlay: {}, scripts: {})
       @anchors = anchors
+      @scripts = scripts
       @codemap = codemap
       @overrides = overrides
       @overlay = overlay
@@ -150,11 +161,13 @@ module Nabu
 
       stage = match[:stage] && (anchor.dig("stages", match[:stage]) or return nil)
       variety = match[:variety] && (anchor.dig("varieties", match[:variety]) or return nil)
+      script = match[:script] && (@scripts[match[:script]] or return nil)
       ortho = match[:ortho] && (anchor.dig("orthos", match[:ortho]) or return nil)
 
       Record.new(
         id: id.to_s, anchor: match[:anchor], stage: match[:stage], variety: match[:variety],
-        ortho: match[:ortho], name: compose_name(anchor, stage, variety, ortho),
+        script: match[:script], ortho: match[:ortho],
+        name: compose_name(anchor, stage, variety, script, ortho),
         mode: stage && stage["mode"] == "reconstructed" ? :reconstructed : :attested,
         ord: stage && stage["ord"], band: stage ? stage["band"] : anchor["band"]
       )
@@ -199,6 +212,13 @@ module Nabu
       anchor["parent"]
     end
 
+    # Every registered anchor code, registry order (P60 rider: the dossier
+    # stage-section writer enumerates the registry; no other caller should
+    # need the raw anchor map).
+    def anchor_codes
+      @anchors.keys
+    end
+
     # Every stage of +anchor+ as a Record (id "<anchor>:<tag>"), ord-sorted
     # (chronological display order — the future card-ladder seam). [] for an
     # undefined anchor or one with no stages.
@@ -220,11 +240,13 @@ module Nabu
     private
 
     # The human name: the stage's (already a full title, "Medieval Latin")
-    # or else the anchor's; a variety appends its own full title; an ortho
-    # wraps as a parenthetical modifier.
-    def compose_name(anchor, stage, variety, ortho)
+    # or else the anchor's; a variety appends its own full title; a script
+    # reads as the held surface ("… in Latin script"); an ortho wraps as a
+    # parenthetical modifier.
+    def compose_name(anchor, stage, variety, script, ortho)
       base = stage ? stage.fetch("name") : anchor.fetch("name")
       base = "#{base} — #{variety.fetch('name')}" if variety
+      base = "#{base} in #{script.fetch('name')} script" if script
       ortho ? "#{base} (#{ortho.fetch('name')})" : base
     end
   end

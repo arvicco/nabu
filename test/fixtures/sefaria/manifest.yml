@@ -99,3 +99,11 @@ files:
     url: https://storage.googleapis.com/sefaria-export/json/Midrash/Halakhah/Sifrei%20Zuta/Hebrew/Leipzig%2C%201917.json
     whole: false
     trim: text sliced to chapters 1-6 incl. the leading empty chapters (357 KB -> 156 KB; retrieved 2026-07-31; original sha256 in README.md; Public Domain, hbo)
+  - path: json/Midrash/Aggadah/Tanna DeBei Eliyahu Zuta/English/Sefaria Community Translation.json
+    url: https://storage.googleapis.com/sefaria-export/json/Midrash/Aggadah/Tanna%20DeBei%20Eliyahu%20Zuta/English/Sefaria%20Community%20Translation.json
+    whole: true
+    trim: none (complete file, copied whole 2026-08-06; CC0 English, the P60-rider NESTED schema-node shape -- "Additions to Seder Eliyahu Zuta" is a node whose value is itself a node dict, beside a default "" main node; empty sub-nodes are honest lacunae)
+  - path: json/Midrash/Halakhah/Sifra/English/Sifra by Rabbi Shraga Silverstein.json
+    url: https://storage.googleapis.com/sefaria-export/json/Midrash/Halakhah/Sifra/English/Sifra%20by%20Rabbi%20Shraga%20Silverstein.json
+    whole: false
+    trim: text dict sliced to Baraita DeRabbi Yishmael x2 + the Tazria Parashat Negaim collision quartet (1.7 MB -> 49 KB; retrieved 2026-08-06; original sha256 in README.md; CC-BY, sibling keys "Chapter 2"/"Chapter 2*" collapse under the frozen slug fold -- the "-2" walk-order disambiguation exemplar)

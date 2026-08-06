@@ -18,9 +18,14 @@ module Nabu
     #   declares (["Chapter","Verse"] across the Tanakh shelf;
     #   ["Chapter","Verse","Paragraph"] on Targum Sheni; ["Daf","Line"] on
     #   the Bavli shelves; ["Chapter","Halakhah","Segment"] on Yerushalmi), or
-    # - a DICT of jagged arrays keyed by schema-node enTitle (complex titles:
-    #   Targum Jerusalem spans the five Torah books under one title, no
-    #   sectionNames, a `schema.nodes` list carrying the node order).
+    # - a DICT keyed by schema-node enTitle (complex titles: Targum
+    #   Jerusalem spans the five Torah books under one title, no
+    #   sectionNames, a `schema.nodes` list carrying the node order), whose
+    #   values are jagged arrays OR nested node dicts (Sifra's per-parashah
+    #   chapters, TDEZ's Additions — P60 rider); nested levels walk in the
+    #   dict's own key order, stacking slug segments, and sibling keys the
+    #   frozen slug fold collapses disambiguate "-2" in walk order (see
+    #   #walk_nodes).
     # The parser walks whatever nesting is actually there rather than
     # trusting a declared depth: citation = the 1-based index path joined
     # with "." ("1.2", "1.2.9"), prefixed with the node slug for dict texts
@@ -109,21 +114,14 @@ module Nabu
       # Yield [citation, cleaned text, footnotes] for every non-empty leaf,
       # in reading order. Dict texts iterate in schema-node order (falling
       # back to the dict's own key order when a node is not listed).
-      def each_leaf(data, path, language, &block)
+      def each_leaf(data, path, language, &)
         text = data["text"]
         daf = daf_mode?(data)
         case text
         in Hash
-          node_order(data, text).each do |key|
-            # The P55-3 midrash quirk: a DEFAULT schema node carries enTitle
-            # "" (the Rabbah shape — Petichta + ""). Upstream cites it bare
-            # ("Ruth Rabbah 1:1"), named siblings by name — an empty slug
-            # adds NO prefix segment.
-            prefix = self.class.slug(key)
-            walk(text.fetch(key), prefix.empty? ? [] : [prefix], language, path, &block)
-          end
+          walk_nodes(text, node_order(data, text), [], language, path, &)
         in Array
-          walk(text, [], language, path, daf: daf, &block)
+          walk(text, [], language, path, daf: daf, &)
         else
           raise ParseError, "#{path}: text must be a jagged array or a schema-node dict, " \
                             "got #{text.class}"
@@ -152,13 +150,45 @@ module Nabu
           yield(indices.join("."), text, footnotes) unless text.empty?
         in Array
           value.each_with_index do |element, i|
+            # Node dicts nest only as NODE VALUES (Sifra's per-parashah
+            # chapters, TDEZ's Additions) — a dict INSIDE section content is
+            # unattested upstream and stays loud, never silently invented.
+            reject_leaf(element, indices + [i + 1], path) if element.is_a?(Hash)
             token = daf && indices.empty? ? self.class.daf_citation(i + 1) : i + 1
             walk(element, indices + [token], language, path, &block)
           end
+        in Hash
+          # A nested schema-node dict (Sifra's per-parashah chapters, TDEZ's
+          # Additions), in ITS OWN key order — upstream's writing order
+          # (Sifra interleaves "Chapter n"/"Section n"; schema lookup or
+          # sorting would misorder).
+          walk_nodes(value, value.keys, indices, language, path, &block)
         else
-          raise ParseError, "#{path}: text leaf at #{indices.join('.')} must be a String or Array, " \
-                            "got #{value.class}"
+          reject_leaf(value, indices, path)
         end
+      end
+
+      # One schema-node dict level, top or nested. The P55-3 default-node
+      # rule holds at every depth: enTitle "" (the Rabbah shape — Petichta
+      # + "") cites bare, an empty slug adds NO prefix segment. Sibling
+      # keys the FROZEN slug fold collapses ("Chapter 2" beside Silverstein
+      # Sifra's variant "Chapter 2*") disambiguate by walk order — the
+      # second same-slugged sibling mints "-2" (the DSS twin-scroll
+      # precedent); safe to add because a colliding document could never
+      # have synced before this rule (duplicate urns are a ParseError).
+      def walk_nodes(dict, keys, indices, language, path, &block)
+        minted = Hash.new(0)
+        keys.each do |key|
+          prefix = self.class.slug(key)
+          minted[prefix] += 1 unless prefix.empty?
+          prefix = "#{prefix}-#{minted[prefix]}" if minted[prefix] > 1
+          walk(dict.fetch(key), prefix.empty? ? indices : indices + [prefix], language, path, &block)
+        end
+      end
+
+      def reject_leaf(value, indices, path)
+        raise ParseError, "#{path}: text leaf at #{indices.join('.')} must be a String or Array, " \
+                          "got #{value.class}"
       end
 
       # [running text, footnote bodies]. The HTML path runs only when markup

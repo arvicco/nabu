@@ -46,7 +46,7 @@ optional [nabu-lects](https://arvicco.github.io/nabu-lects) registry
 synced) filters hits by *historical stage* rather than bare code:
 `--lect lat:med` keeps only collections resolving to Medieval Latin,
 `--lect lat` matches every Latin stage — prefix semantics over the
-registry's `anchor[:stage][/variety][@ortho]` grammar, with stored
+registry's `anchor[:stage][/variety][~script][@ortho]` grammar, with stored
 codes never touched. See the [Languages]({{ '/languages/' | relative_url }})
 page for the lect layer.
 
