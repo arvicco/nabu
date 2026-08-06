@@ -212,6 +212,13 @@ module Nabu
       anchor["parent"]
     end
 
+    # Every registered anchor code, registry order (P60 rider: the dossier
+    # stage-section writer enumerates the registry; no other caller should
+    # need the raw anchor map).
+    def anchor_codes
+      @anchors.keys
+    end
+
     # Every stage of +anchor+ as a Record (id "<anchor>:<tag>"), ord-sorted
     # (chronological display order — the future card-ladder seam). [] for an
     # undefined anchor or one with no stages.
