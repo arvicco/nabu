@@ -66,6 +66,10 @@ boilerplate; the files are checked in WHOLE (28–37 KB each) so the
   "257-317 AH/ 871 - 930 CE" whose custom bounds carry a mis-converted
   971 for 871 — hijri-dated records drop their machine bounds
   honestly, raw preserved (P59-0; the ebl Seleucid-era precedent).
+- `elephantine_erc_db_315706.tei.xml` — Arabic papyrus with a COHERENT
+  hijri conversion ("255 AH/ 868 CE" → `notBefore-custom="868"`): pins
+  that the reversed-hijri bounds-drop never wipes upstream's ~820 good
+  AH→CE conversions (P59-0).
 - `elephantine_erc_db_places.tei.xml` — one of the four authority files
   the sync fetches beside the records (places, modern_persons,
   literature, ancient_persons — same /xml/ dir); kept whole (58 KB) as
