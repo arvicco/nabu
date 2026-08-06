@@ -59,12 +59,15 @@ August 2026 the library resolves its codes through
 a small curated registry of *lects*, language varieties identified as
 
 ```
-anchor [ ":" stage ] [ "/" variety ] [ "@" ortho ]
+anchor [ ":" stage ] [ "/" variety ] [ "~" script ] [ "@" ortho ]
 ```
 
 — `lat:med` is Medieval Latin, `grc:koi` Koine Greek, `zho/lit` Literary
 Chinese as the written register it is, `roa:pro` Proto-Romance with
-`mode: reconstructed` as a data field. The registry's case for existing,
+`mode: reconstructed` as a data field, `san~latn` Sanskrit held as a
+romanized edition (the `~` axis, August 2026, claims the script of the
+text *as held* — never the artifact's original writing system, which
+stays a separate catalog fact). The registry's case for existing,
 with a review of every prior system, is its own
 [prior-art page](https://arvicco.github.io/nabu-lects/prior-art.html);
 this page is about what the library does with it.
