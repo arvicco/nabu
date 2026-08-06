@@ -73,6 +73,13 @@ anchors:
     stages:
       pro: {name: Proto-Indo-Iranian, mode: reconstructed, ord: 5, wikt: iir-pro}
 
+  cel:
+    name: Celtic
+    kind: family
+    parent: ine
+    stages:
+      pro: {name: Proto-Celtic, mode: reconstructed, ord: 5, wikt: cel-pro}
+
   # ── Latin and Romance ──────────────────────────────────────────────────────
 
   lat:
@@ -138,6 +145,26 @@ anchors:
     name: French
     parent: frm
 
+  pro:
+    name: Old Occitan
+    band: [null, 1500]
+    band_note: "ISO 639-2/MARC reference name (Provençal, Old — to 1500)"
+    parent: roa
+    note: "the ISO code is literally 'pro' — no relation to the ':pro'
+           proto-stage convention; an anchor id, never a stage suffix"
+
+  oc:
+    name: Occitan
+    parent: pro
+
+  osp:
+    name: Old Spanish
+    parent: roa
+
+  es:
+    name: Spanish
+    parent: osp
+
   # ── Greek ──────────────────────────────────────────────────────────────────
 
   grc:
@@ -153,6 +180,17 @@ anchors:
       byz: {name: Byzantine Greek,      band: [330, 1453],  ord: 40, wikt: gkm,
             band_note: "upper bound 1453 is the LoC/ISO cataloguing convention
                         (fall of Constantinople), not a linguistic boundary"}
+
+  gmy:
+    name: Mycenaean Greek
+    parent: ine
+    note: "the earliest attested Greek (Linear B); conventionally the elder
+           sibling of the alphabetic tradition rather than its direct
+           ancestor — hence a sibling anchor, not grc's parent"
+
+  el:
+    name: Modern Greek
+    parent: grc
 
   # ── The English ladder (ISO already staged it) ─────────────────────────────
 
@@ -172,6 +210,124 @@ anchors:
   en:
     name: English
     parent: enm
+
+  # ── The other Germanic ladders (the P59 ISO-parentage wave: ISO already
+  # staged these — anchors mirror its Historical-type chains within the
+  # collection's focus axes; every chain touches holdings or reflexes) ─────
+
+  got:
+    name: Gothic
+    parent: gem:pro
+
+  goh:
+    name: Old High German
+    band: [750, 1050]
+    band_note: "ISO 639-2/MARC reference name (ca. 750–1050)"
+    parent: gmw:pro
+
+  gmh:
+    name: Middle High German
+    band: [1050, 1500]
+    band_note: "ISO 639-2/MARC reference name (ca. 1050–1500)"
+    parent: goh
+
+  de:
+    name: German
+    parent: gmh
+
+  osx:
+    name: Old Saxon
+    parent: gmw:pro
+
+  gml:
+    name: Middle Low German
+    parent: osx
+
+  nds:
+    name: Low German
+    parent: gml
+
+  odt:
+    name: Old Dutch
+    parent: gmw:pro
+
+  dum:
+    name: Middle Dutch
+    band: [1050, 1350]
+    band_note: "ISO 639-2/MARC reference name (ca. 1050–1350)"
+    parent: odt
+
+  nl:
+    name: Dutch
+    parent: dum
+
+  ofs:
+    name: Old Frisian
+    parent: gmw:pro
+
+  fy:
+    name: Western Frisian
+    parent: ofs
+
+  # ── The Celtic ladders (ISO staged all four; pgl–sga–mga–ga is the ogham
+  # shelf's own descent) ───────────────────────────────────────────────────
+
+  pgl:
+    name: Primitive Irish
+    parent: cel:pro
+    note: "the Ogam epigraphic language"
+
+  sga:
+    name: Old Irish
+    band: [null, 900]
+    band_note: "ISO 639-2/MARC reference name (to 900)"
+    parent: pgl
+
+  mga:
+    name: Middle Irish
+    band: [900, 1200]
+    band_note: "ISO 639-2/MARC reference name (900–1200)"
+    parent: sga
+
+  ga:
+    name: Irish
+    parent: mga
+
+  owl:
+    name: Old Welsh
+    parent: cel:pro
+
+  wlm:
+    name: Middle Welsh
+    parent: owl
+
+  cy:
+    name: Welsh
+    parent: wlm
+
+  obt:
+    name: Old Breton
+    parent: cel:pro
+
+  xbm:
+    name: Middle Breton
+    parent: obt
+
+  br:
+    name: Breton
+    parent: xbm
+
+  oco:
+    name: Old Cornish
+    parent: cel:pro
+
+  cnx:
+    name: Middle Cornish
+    parent: oco
+
+  kw:
+    name: Cornish
+    parent: cnx
 
   # ── Chinese ────────────────────────────────────────────────────────────────
 
@@ -213,6 +369,13 @@ anchors:
       mid: {name: Middle (Jewish Literary) Aramaic, ord: 30}
     varieties:
       jud: {name: Jewish (Targumic), kind: sociolect}
+
+  syc:
+    name: Classical Syriac
+    parent: arc
+    note: "the Edessan literary Aramaic. The wider Aramaic dialect fan
+           (jpa, tmr, sam, myz) is DELIBERATELY unminted — those codes
+           overlap the arc stage/variety model and need their own ruling"
 
   hbo:
     name: Biblical Hebrew
@@ -329,6 +492,38 @@ anchors:
       epi: {name: Epic Sanskrit,      ord: 20, note: "IANA variant precedent: sa-itihasa"}
       cla: {name: Classical Sanskrit, ord: 30, note: "IANA variant precedent: sa-laukika"}
 
+  # ── Iranian and Armenian (the ISO-parentage wave) ──────────────────────────
+
+  ave:
+    name: Avestan
+    parent: iir:pro
+
+  peo:
+    name: Old Persian
+    band: [-600, -400]
+    band_note: "ISO 639-2/MARC reference name (ca. 600–400 BCE)"
+    parent: iir:pro
+
+  pal:
+    name: Middle Persian (Pahlavi)
+    parent: peo
+
+  fa:
+    name: Persian
+    parent: pal
+
+  xcl:
+    name: Classical Armenian
+    parent: ine
+
+  axm:
+    name: Middle Armenian
+    parent: xcl
+
+  hy:
+    name: Armenian
+    parent: axm
+
   # ── Slavic lects ───────────────────────────────────────────────────────────
 
   chu:
@@ -348,6 +543,18 @@ anchors:
       early: {name: Early Old East Slavic, ord: 10, note: "the birchbark era"}
       mid:   {name: Middle Russian span,   ord: 20}
       ruth:  {name: Ruthenian (prosta mova), ord: 30}
+
+  ru:
+    name: Russian
+    parent: orv
+
+  uk:
+    name: Ukrainian
+    parent: orv
+
+  be:
+    name: Belarusian
+    parent: orv
 
   sl:
     name: Slovene
