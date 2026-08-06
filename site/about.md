@@ -49,7 +49,8 @@ walks through.
 - **[nabu-lects](https://arvicco.github.io/nabu-lects)** (the **Lects ↗**
   link above) — the youngest sibling (August 2026, CC BY 4.0, pre-1.0):
   a curated registry of *lects* — language varieties as genealogical
-  anchor × historical stage × variety × orthography — with a universal
+  anchor × historical stage × variety × script × orthography — with a
+  universal
   mapping from standard language codes onto them. Born from this
   library's holdings, universal by construction; Nabu consumes it for
   the stage ladders, stage-aware search, and reconstruction honesty

@@ -386,6 +386,33 @@ module Nabu
       catalog&.disconnect
     end
 
+    desc "dossiers", "Accrete the registry stage ladder into existing language dossiers (idempotent)"
+    long_desc <<~HELP, wrap: false
+      The dossier stage section (P60 rider, the P58-6 deferral): every
+      registry anchor with stages or registered varieties whose language
+      dossier EXISTS (canonical/local-language/<code>.md) gains one
+      structured "## stages (nabu-lects, DATE)" section through the
+      sanctioned LanguageShelf gateway — registry facts only (tags, names,
+      bands, the reconstructed asterisk), never live counts (the live card
+      computes those fresh). Idempotent: unchanged ladders never re-write,
+      so the section date moves only when the registry did. Anchors without
+      a dossier are skipped, never skeletonized. After a write, run
+      `bin/nabu sync local-language` to refresh the derived catalog records.
+    HELP
+    method_option :"dry-run", type: :boolean, default: false, desc: "Report without writing"
+    def dossiers
+      config = Nabu::Config.load
+      registry = require_lects_module!(config)
+      shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(config.canonical_dir))
+      report = Nabu::LectDossiers.new(lects: registry, shelf: shelf).run!(dry_run: options[:"dry-run"])
+      verb = options[:"dry-run"] ? "would write" : "wrote"
+      say "stage sections: #{verb} #{report.written.size} " \
+          "(#{report.unchanged.size} unchanged, #{report.skipped.size} anchors without a dossier)"
+      say "  #{verb}: #{report.written.join(', ')}" if report.written.any?
+      say "next: bin/nabu sync local-language (derives the catalog records)" \
+        unless options[:"dry-run"] || report.written.empty?
+    end
+
     desc "check-dates", "The reverse audit: journal assignments whose document dates fall outside the stage band"
     def check_dates
       config = Nabu::Config.load
@@ -6952,7 +6979,11 @@ module Nabu
         say "#{code} — #{name || '(no name in the held kaikki extracts)'}"
         print_language_family(code, languages, fallback)
         print_language_context(context, fallback)
-        extras.each { |kind, body| say_wrapped("#{kind}: #{body}", indent: 2) }
+        # The accreted dossier "stages" section (Nabu::LectDossiers) never
+        # renders here — the card owns the LIVE ladder below (same registry
+        # facts plus per-stage holdings); printing both would double the
+        # surface. Every other accreted kind renders as before.
+        extras.except(Nabu::LectDossiers::KIND).each { |kind, body| say_wrapped("#{kind}: #{body}", indent: 2) }
         print_language_witnesses(code, languages)
         print_language_relevance(code, relevance) if relevance
         print_language_axes(code, info, registry)

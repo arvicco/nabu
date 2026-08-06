@@ -729,6 +729,32 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P60 rider: the accreted dossier "stages" section (Nabu::LectDossiers →
+  # language_records kind "stages") must NOT double-render on the card as a
+  # wrapped extras line — the card owns the richer LIVE ladder (same facts
+  # plus per-stage holdings). Other extra kinds keep rendering.
+  def test_language_card_suppresses_the_accreted_stages_section_in_favor_of_the_live_ladder
+    with_lect_ladder_corpus do |config, db|
+      texts = Nabu::Store::Source.create(slug: "texts", name: "Texts",
+                                         adapter_class: "TestAdapter", license_class: "open")
+      db[:documents].insert(source_id: texts.id, urn: "urn:nabu:test:lamed:1", title: "T",
+                            language: "la-med", content_sha256: "x", revision: 1, withdrawn: false)
+      db[:language_records].insert(lang_code: "lat", kind: "stages",
+                                   body: "- arch — Old Latin (700–75 BCE)", source: "nabu-lects")
+      db[:language_records].insert(lang_code: "lat", kind: "period",
+                                   body: "classical antiquity", source: "test")
+      Nabu::Store::SourceStats.derive!(db, note: "test")
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[language lat]) }
+      assert_nil status
+      assert_equal 1, out.scan(/^\s*stages:/).size,
+                   "exactly ONE stages surface — the live ladder, never the accreted section beside it"
+      assert_match(/med.*Medieval Latin/, out, "the live ladder is the one that renders")
+      assert_match(/period: classical antiquity/, out, "other extra kinds keep rendering")
+    end
+  end
+
   # P58-6: once the lect facet is materialized, the ladder reads IT — the
   # only source that sees per-document journal rulings. Same corpus as
   # above plus one bare-lat document hand-ruled into lat:cla.
