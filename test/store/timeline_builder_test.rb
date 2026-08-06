@@ -89,6 +89,45 @@ module Store
                  "a translation sibling never mints its own timeline row"
     end
 
+    # P59-0: the projection repairs reversed upstream bounds for the
+    # order-defect sources (EDR's "later - earlier" ranges, BFM's swapped
+    # ISO attrs) — values verbatim from the 2026-08-04 reversed-interval
+    # audit. Elephantine is deliberately NOT repaired here: its defects
+    # need BCE-default negation plus a nested-TEI fallback, which only the
+    # parser can see — its repair lands at parse (and re-parse regenerates).
+    def test_metadata_dates_order_normalize_reversed_edr_and_bfm_bounds
+      seed_metadata_doc("edr", "urn:nabu:edr:aedr016567",
+                        { "date" => { "not_before" => 71, "not_after" => 70,
+                                      "raw" => "71 AD - 70 AD" } })
+      seed_metadata_doc("edr", "urn:nabu:edr:aedr071646",
+                        { "date" => { "not_before" => -200, "not_after" => -230,
+                                      "raw" => "-200 BC - -230 BC" } })
+      seed_metadata_doc("bfm", "urn:nabu:bfm:ChastCygH",
+                        { "date" => "entre 1170 et 1267 et même après 1190 et av. 1204",
+                          "date_not_before" => "1204-01-01",
+                          "date_not_after" => "1197-12-31" })
+      build!
+      first = timeline_for("urn:nabu:edr:aedr016567")
+      assert_equal [70, 71], [first[:not_before], first[:not_after]]
+      second = timeline_for("urn:nabu:edr:aedr071646")
+      assert_equal [-230, -200], [second[:not_before], second[:not_after]]
+      bfm = timeline_for("urn:nabu:bfm:ChastCygH")
+      assert_equal [1197, 1204], [bfm[:not_before], bfm[:not_after]]
+      assert_equal "entre 1170 et 1267 et même après 1190 et av. 1204", bfm[:date_raw],
+                   "the raw rides verbatim — repair moves seats, never digits"
+    end
+
+    def test_metadata_dates_leave_elephantine_repair_to_the_parser
+      seed_metadata_doc("elephantine", "urn:nabu:elephantine:311616",
+                        { "date" => { "not_before" => 550, "not_after" => 399,
+                                      "raw" => "scholarly deduction" } })
+      build!
+      row = timeline_for("urn:nabu:elephantine:311616")
+      assert_equal [550, 399], [row[:not_before], row[:not_after]],
+                   "a blind projection swap would mint 399-550 CE for a BCE corpus — " \
+                   "the parser's negation ladder owns this repair"
+    end
+
     # P47-r3 (the generalized audit): the three shape handlers, values
     # verbatim from the live catalog inspection.
     def test_metadata_dates_shapes_for_itant_bfm_and_croala

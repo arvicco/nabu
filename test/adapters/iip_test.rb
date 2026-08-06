@@ -17,7 +17,8 @@ class IipTest < Minitest::Test
 
   ALL_URNS = %w[
     urn:nabu:iip:abur0001 urn:nabu:iip:caes0022 urn:nabu:iip:caes0371
-    urn:nabu:iip:dabb0001 urn:nabu:iip:hkur0001 urn:nabu:iip:jeru0490
+    urn:nabu:iip:dabb0001 urn:nabu:iip:hkur0001 urn:nabu:iip:idum0080
+    urn:nabu:iip:jeru0490 urn:nabu:iip:masa0797 urn:nabu:iip:zoor0395
   ].freeze
 
   def conformance_adapter

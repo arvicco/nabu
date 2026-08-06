@@ -29,7 +29,7 @@ class IsicilyTest < Minitest::Test
     urn:nabu:isicily:isic000001 urn:nabu:isicily:isic000006
     urn:nabu:isicily:isic000030 urn:nabu:isicily:isic000419
     urn:nabu:isicily:isic000451 urn:nabu:isicily:isic000756
-    urn:nabu:isicily:isic000764
+    urn:nabu:isicily:isic000764 urn:nabu:isicily:isic001206
     urn:nabu:isicily:isic001510 urn:nabu:isicily:isic001620
     urn:nabu:isicily:isic001895 urn:nabu:isicily:isic002954
     urn:nabu:isicily:isic003360 urn:nabu:isicily:isic003360-translit
@@ -43,7 +43,8 @@ class IsicilyTest < Minitest::Test
   TRANSLATION_URNS = %w[
     urn:nabu:isicily:isic000001-en urn:nabu:isicily:isic000006-en
     urn:nabu:isicily:isic000006-it urn:nabu:isicily:isic000030-en
-    urn:nabu:isicily:isic000451-en urn:nabu:isicily:isic001620-en
+    urn:nabu:isicily:isic000451-en urn:nabu:isicily:isic001206-en
+    urn:nabu:isicily:isic001620-en
     urn:nabu:isicily:isic001895-en urn:nabu:isicily:isic003475-en
   ].freeze
 

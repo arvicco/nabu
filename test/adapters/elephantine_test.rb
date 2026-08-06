@@ -35,9 +35,12 @@ class ElephantineTest < Minitest::Test
   FIXTURES = Nabu::TestSupport.fixtures("elephantine")
 
   ORIGINAL_URNS = %w[
-    urn:nabu:elephantine:002881 urn:nabu:elephantine:100007
-    urn:nabu:elephantine:100009 urn:nabu:elephantine:100117
-    urn:nabu:elephantine:100141 urn:nabu:elephantine:307762
+    urn:nabu:elephantine:002858 urn:nabu:elephantine:002881
+    urn:nabu:elephantine:100007 urn:nabu:elephantine:100009
+    urn:nabu:elephantine:100117 urn:nabu:elephantine:100141
+    urn:nabu:elephantine:100467 urn:nabu:elephantine:100774
+    urn:nabu:elephantine:307762 urn:nabu:elephantine:311616
+    urn:nabu:elephantine:312164
   ].freeze
 
   def conformance_adapter
@@ -230,6 +233,59 @@ class ElephantineTest < Minitest::Test
     assert_equal({ "not_before" => -31, "not_after" => 395 }, metadata["date"])
   end
 
+  # --- the P59-0 reversed-bounds repair ladder (real offending records) -------
+  # 44 of the audit's 82 reversed document_axes rows were Elephantine's; the
+  # corpus's origDate attrs drop BCE signs, truncate digits, and swap seats.
+  # The ladder: era-suffix-aware parse → nested-range fallback (guarded
+  # against the excavation-date trap) → BCE-default negation → order-
+  # normalization → the hijri bounds-drop. Bounds move sign or seat, digits
+  # never change; the raw always rides.
+
+  def test_unsigned_bce_custom_bounds_negate_under_the_corpus_prior
+    # 311616: notBefore-custom="550" notAfter-custom="399", raw "scholarly
+    # deduction" — no era signal, but this corpus's prior is BCE. The
+    # NESTED origin range (1906/1907) is the EXCAVATION date and must
+    # never be mistaken for a fallback dating.
+    metadata = parse("urn:nabu:elephantine:311616").metadata
+    assert_equal({ "not_before" => -550, "not_after" => -399,
+                   "raw" => "scholarly deduction" }, metadata["date"].slice("not_before", "not_after", "raw"))
+  end
+
+  def test_half_signed_nested_bounds_negate_the_unsigned_seat
+    # 100467: nested notBefore="664" notAfter="-332" — the Late Period
+    # (664-332 BCE) with one sign dropped upstream.
+    metadata = parse("urn:nabu:elephantine:100467").metadata
+    assert_equal(-664, metadata["date"]["not_before"])
+    assert_equal(-332, metadata["date"]["not_after"])
+  end
+
+  def test_signed_but_reversed_nested_bounds_order_normalize
+    # 100774: nested notBefore="-500" notAfter="-520" — signed, misordered.
+    metadata = parse("urn:nabu:elephantine:100774").metadata
+    assert_equal(-520, metadata["date"]["not_before"])
+    assert_equal(-500, metadata["date"]["not_after"])
+  end
+
+  def test_truncated_custom_bounds_fall_back_to_the_coherent_nested_range
+    # 002858: notBefore-custom="193" notAfter-custom="22" (a truncated 222)
+    # while the nested range reads 193/222 — coherent and ancient, so the
+    # nested claim wins over negating the custom pair into "-193..-22".
+    metadata = parse("urn:nabu:elephantine:002858").metadata
+    assert_equal(193, metadata["date"]["not_before"])
+    assert_equal(222, metadata["date"]["not_after"])
+  end
+
+  def test_hijri_dated_records_drop_machine_bounds_and_keep_the_raw
+    # 312164: "257-317 AH/ 871 - 930 CE" with custom bounds 971/930 — the
+    # upstream AH→CE conversion is demonstrably botched (971 for 871), so
+    # AH-dated records carry no machine bounds (the ebl Seleucid-era
+    # precedent: era conversion is upstream's project, not a guess of ours).
+    metadata = parse("urn:nabu:elephantine:312164").metadata
+    refute metadata["date"].key?("not_before"), "no machine bounds off a botched AH conversion"
+    refute metadata["date"].key?("not_after")
+    assert_match(/AH/, metadata["date"]["raw"], "the raw dating rides verbatim")
+  end
+
   # --- the Demotic exemplars (damage idiom, empty lb @n, gap markers) ---------
 
   def test_demotic_name_list_lines_and_lacunae
@@ -391,17 +447,17 @@ class ElephantineTest < Minitest::Test
     adapter = -> { Nabu::Adapters::Elephantine.new(translations: true) }
     first = Nabu::Store::Loader.new(db: db, source: source)
                                .load_from(adapter.call, workdir: FIXTURES)
-    assert_equal 10, first.added, "6 originals + 4 readable translation siblings"
+    assert_equal 18, first.added, "11 originals + 7 readable translation siblings"
     assert_equal 0, first.errored
-    assert_equal 88, db[:passages].count,
-                 "editions 12+8+0+8+0+17 = 45; translations 12+6+8+17 = 43 " \
+    assert_equal 111, db[:passages].count,
+                 "editions 7+12+8+0+8+0+0+0+17+3+0 = 55; translations 7+12+6+8+4+17+2 = 56 " \
                  "(100007-en's x+1 and x+7ff. lines are [///]/⸢..?..⸣ notation — not citable)"
 
     second = Nabu::Store::Loader.new(db: db, source: source)
                                 .load_from(adapter.call, workdir: FIXTURES)
     assert_equal 0, second.errored
-    assert_equal 10, second.skipped, "a byte-identical reload skips every document"
-    assert_equal 88, db[:passages].count
+    assert_equal 18, second.skipped, "a byte-identical reload skips every document"
+    assert_equal 111, db[:passages].count
     assert_equal [1], db[:passages].distinct.select_map(:revision)
   end
 

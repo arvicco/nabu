@@ -46,6 +46,35 @@ module Nabu
       year
     end
 
+    # Era words in a display date. BCE_SIGNAL deliberately excludes the bare
+    # French "av." (avant a year, not avant J.-C. — the bfm shape).
+    BCE_SIGNAL = /\b(?:BCE?|B\.C\.E?\.?|v\.\s*Chr)(?![a-z])/i
+    CE_SIGNAL = /\b(?:AD|CE|C\.E\.|A\.D\.?|n\.\s*Chr)(?![a-z])/i
+
+    # The reversed-bounds repair ladder (P59-0 — the 82-row cluster audit).
+    # A coherent or partial interval passes through untouched. A REVERSED one
+    # (not_before > not_after) is repaired within upstream's own claim:
+    # 1. unsigned-BCE negation — the commonest defect is a BCE year with the
+    #    sign dropped ("0027".."0026" for "27-26 BCE"): when the raw signals
+    #    BCE, or the caller declares a BCE corpus prior (+bce_default+, e.g.
+    #    Elephantine) and the raw does not signal CE, positive bounds negate;
+    # 2. order-normalization — signed-but-misordered bounds swap.
+    # An explicitly signed bound is NEVER re-negated, and the result is never
+    # reversed. Repair stays mechanical: bounds move sign or seat, digits
+    # never change (upstream typos surface in the raw, which always rides).
+    def normalize_interval(not_before, not_after, raw: nil, bce_default: false)
+      return [not_before, not_after] if not_before.nil? || not_after.nil? || not_before <= not_after
+
+      text = raw.to_s
+      bce_meant = text.match?(BCE_SIGNAL) || (bce_default && !text.match?(CE_SIGNAL))
+      if bce_meant && (not_before.positive? || not_after.positive?)
+        not_before = -not_before if not_before.positive?
+        not_after = -not_after if not_after.positive?
+        return [not_before, not_after] if not_before <= not_after
+      end
+      [not_after, not_before]
+    end
+
     # The signed century INDEX of a year: 1st c. CE = 1, 2nd c. CE = 2, 1st c.
     # BCE = -1, 2nd c. BCE = -2 (idx 0 is unreachable, like year 0). Ascending
     # index is chronological order (-2 < -1 < 1 < 2 = 2c BCE, 1c BCE, 1c CE,

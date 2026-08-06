@@ -39,6 +39,11 @@ files:
     blob_sha: a094ad17e607624139dad8a5a62f21ed56d87298
     whole: true
     trim: none (EDH 015282 concordance exemplar — one of 8 corpus-wide; full TM/EDR/EDCS set)
+  - path: inscriptions/ISic001206.xml
+    url: https://raw.githubusercontent.com/ISicily/ISicily/f4b24de68af336ddf122a4e116db5f18588b1239/inscriptions/ISic001206.xml
+    blob_sha: 600903695a2c998c14258de4db7f086df5a12b24
+    whole: true
+    trim: none (P59-0 — unsigned-descending BCE custom bounds 0301/0200 for "3rd century BCE?"; the corpus's one reversed row at the 2026-08-04 audit)
   - path: inscriptions/ISic001510.xml
     url: https://raw.githubusercontent.com/ISicily/ISicily/db1a4959f4bb2fc42468e7f1ac0d017b2cafe928/inscriptions/ISic001510.xml
     blob_sha: 94cf3049d83d0ff4effe5c5bd9f6c711c85850bb
