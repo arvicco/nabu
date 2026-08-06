@@ -277,7 +277,11 @@ module Nabu
 
       catalog = Nabu::Store.connect(config.catalog_path)
       journal = options[:dry_run] ? nil : Nabu::Store::LectJournal.open!(config.lects_journal_path)
-      selected_rules(rules).each { |rule| run_rule(rules, rule, catalog, journal) }
+      # A compose rule's census reads the CURRENT journal even on --dry-run
+      # (it buckets candidates by their existing stage rows); absent file →
+      # nil → the census reports every candidate as rowless, honestly.
+      census_journal = journal || Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+      selected_rules(rules).each { |rule| run_rule(rules, rule, catalog, journal, census_journal) }
       if options[:dry_run]
         say "dry run — nothing written (drop --dry-run to compile)"
       else
@@ -492,8 +496,8 @@ module Nabu
         [rule]
       end
 
-      def run_rule(rules, rule, catalog, journal)
-        report = rules.census(rule, catalog: catalog)
+      def run_rule(rules, rule, catalog, journal, census_journal = journal)
+        report = rules.census(rule, catalog: catalog, journal: census_journal)
         say "rule #{rule.id} (#{rule.tier}; facet #{rule.facet}, code #{rule.code}, " \
             "sources #{rule.sources.join(' ')})"
         report.matched.sort_by { |_pair, count| -count }.each do |(value, lect_id), count|
@@ -6860,13 +6864,13 @@ module Nabu
         varieties = lects&.varieties_of(code) || []
         return if (stages.empty? && varieties.empty?) || !info
 
-        totals = if info.lect_materialized?
-                   ladder_totals_from_facets(code,
-                                             info)
-                 else
-                   ladder_totals_from_pairs(code, lects, info)
-                 end
-        return if totals.values.sum.zero?
+        totals, variety_totals =
+          if info.lect_materialized?
+            ladder_totals_from_facets(code, info)
+          else
+            ladder_totals_from_pairs(code, lects, info)
+          end
+        return if totals.values.sum.zero? && variety_totals.values.sum.zero?
 
         if stages.any?
           say "  stages:"
@@ -6877,14 +6881,17 @@ module Nabu
           end
         end
         # P58 rider (the owner's zho probe): registered REGISTERS are ladder
-        # content — zho/lit is wenyan, not "unstaged". Stage-less variety
-        # resolutions count here; staged-and-varietied ones (lat:late/ecc)
-        # stay under their stage above.
+        # content — zho/lit is wenyan, not "unstaged". P59-2 (the compose
+        # rules): the register line counts EVERY document carrying the
+        # variety — stage-less resolutions AND staged-and-varietied ones
+        # (akk:na/lit); the latter still fold under their stage above, so
+        # the stage column sums to the corpus while the register column
+        # reads as an overlay.
         if varieties.any?
           say "  registers:"
           varieties.each do |variety|
             title = variety.name.split(" — ", 2).last
-            say "    /#{variety.variety}  #{title} — #{plural(totals[variety.id], 'document')}"
+            say "    /#{variety.variety}  #{title} — #{plural(variety_totals[variety.variety], 'document')}"
           end
         end
         unstaged = totals[:unstaged]
@@ -6895,17 +6902,23 @@ module Nabu
       # facet — the only source that sees per-DOCUMENT journal rulings.
       # Values under other anchors (derom's la-vul -> roa:pro) drop here
       # exactly as they did on the pairs path.
+      # Returns [totals, variety_totals]: totals keys stage/register ladder
+      # lines (staged-and-varietied folds under its stage); variety_totals
+      # counts every carrier of a variety, staged or not — the register
+      # line's overlay count (P59-2).
       def ladder_totals_from_facets(code, info)
         totals = Hash.new(0)
+        variety_totals = Hash.new(0)
         facet_counts, identity = info.lect_facet_totals(code)
         facet_counts.each do |value, count|
           match = Nabu::Lects.parse_id(value)
           next unless match && match[:anchor] == code.to_s
 
           totals[ladder_key(code, match)] += count
+          variety_totals[match[:variety]] += count if match[:variety]
         end
         totals[:unstaged] += identity if identity.positive?
-        totals
+        [totals, variety_totals]
       end
 
       # Stage wins (lat:late/ecc groups under lat:late); a stage-less
@@ -6922,14 +6935,16 @@ module Nabu
       # source) pairs live, byte-identically to before.
       def ladder_totals_from_pairs(code, lects, info)
         totals = Hash.new(0)
+        variety_totals = Hash.new(0)
         info.language_source_pairs.each do |(language, source_slug), count|
           resolved = lects.resolve(language, source: source_slug)
           match = Nabu::Lects.parse_id(resolved)
           next unless match && match[:anchor] == code.to_s
 
           totals[ladder_key(code, match)] += count
+          variety_totals[match[:variety]] += count if match[:variety]
         end
-        totals
+        [totals, variety_totals]
       end
 
       # P48-r3: the related research desks — every axis whose member
