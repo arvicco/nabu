@@ -366,7 +366,7 @@ module Nabu
       never write the journal; the owner (or a ruled rule in
       config/lect_facet_rules.yml) applies. The new-adapter checklist runs
       this at adapter-add time; the outcome lands as a rule, an override,
-      or a config/lect_posture.yml declaration (identity is an honest
+      or a config/postures.yml lect declaration (identity is an honest
       answer).
     HELP
     def suggest(slug = nil)
