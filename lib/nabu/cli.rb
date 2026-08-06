@@ -543,6 +543,32 @@ module Nabu
         end
         render_suggest_dating(report.dating)
         render_suggest_scaffold(report)
+        render_suggest_layers(report)
+      end
+
+      # P61-2: the dating/places/script layer sections — the posture
+      # sweep's evidence, one block per layer, sniff caps announced.
+      def render_suggest_layers(report)
+        dating = report.dating_layer
+        say "  dating layer: #{dating.dated}/#{dating.total} docs carry bounds"
+        if dating.candidates.any?
+          keys = dating.candidates.first(6).map { |key, count| "#{key} (#{count})" }.join(", ")
+          say "    pending sniff — date-shaped metadata keys on undated docs: #{keys} " \
+              "(sampled ≤#{Nabu::LectSuggest::SNIFF_SAMPLE})"
+        end
+        places = report.places_layer
+        say "  places layer: #{places.linked} ref-linked · #{places.named} named · " \
+            "#{places.total} docs#{" · #{places.latent} LATENT refs in raw metadata" if places.latent.positive?}"
+        if report.script_layer.any?
+          say "  script layer (suffixed codes, byte-checked surface):"
+          report.script_layer.each do |row|
+            surface = row.surface ? "#{row.surface} #{(row.share * 100).round}%" : "no script-bearing bytes"
+            say format("    %<code>-22s %<docs>6d docs → surface %<surface>s",
+                       code: row.code, docs: row.docs, surface: surface)
+          end
+        else
+          say "  script layer: no suffixed codes — script-implied (declare posture: implied)"
+        end
       end
 
       def render_suggest_dating(dating)
@@ -650,6 +676,19 @@ module Nabu
     end
   end
 
+  # `nabu layer` (P61-2): the core-layers front door. One command today —
+  # the generalized suggest census (lect + dating + places + script
+  # sections, all rendered by LectCLI#suggest, which `nabu lect suggest`
+  # keeps aliasing). New layer-wide commands land here, not on LectCLI.
+  class LayerCLI < Thor
+    namespace "layer"
+
+    desc "suggest SLUG", "The core-layers census: lect, dating, places and script postures in one report"
+    def suggest(slug = nil)
+      LectCLI.new.suggest(slug)
+    end
+  end
+
   # Command-line entry point. Only `version` is functional in Phase 0; the
   # ingest/query subcommands are stubs that report "not implemented" and exit 1
   # so scripts and CI can rely on the failure signal before the real work lands.
@@ -715,6 +754,13 @@ module Nabu
 
     desc "lect SUBCOMMAND ...ARGS", "Per-document lect rulings: the journaled overlay tier of lect resolution"
     subcommand "lect", LectCLI
+
+    # P61-2: `nabu layer` is the core-layers front door — today one
+    # command, `suggest`, the generalized census (lect + dating + places +
+    # script sections). `nabu lect suggest` stays as the historical alias;
+    # both run the same report.
+    desc "layer SUBCOMMAND ...ARGS", "Core-layer postures: the generalized suggest front door"
+    subcommand "layer", LayerCLI
 
     desc "sync [SOURCE]", "Fetch and load a source, an axis's members, or --all live sources"
     long_desc <<~HELP, wrap: false
