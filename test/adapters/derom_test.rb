@@ -157,6 +157,52 @@ class DeromTest < Minitest::Test
                  "stay distinguishable rather than conflated"
   end
 
+  # P59-1: the live census surfaced 61 FINER sub-idiome labels (198 reflex
+  # rows) riding the designed verbatim fallback — DÉRom cites dialect
+  # geography below the language grain. All but four now resolve, following
+  # the table's own folding precedent (gasc. → oci): a sub-idiome folds into
+  # its ISO language. Pinned against the table (the P57-5 stance), one
+  # exemplar per family plus every non-obvious identification.
+  def test_idiome_languages_table_resolves_the_p59_1_sub_idiomes
+    table = Nabu::Adapters::DeromXmlParser::IDIOME_LANGUAGES
+    { "lomb." => %w[lmo Lombard], "piém." => %w[pms Piedmontese],
+      "lig." => %w[lij Ligurian], "sic." => %w[scn Sicilian],
+      "cors." => %w[cos Corsican], "campid." => ["sro", "Campidanese Sardinian"],
+      "salent." => ["scn", "Salentino - the Extreme-South group"],
+      "camp." => ["nap", "Campanian - Continental South, DISTINCT from campid."],
+      "itmérid." => ["nap", "southern Italian collectively"],
+      "tosc." => ["ita", "Tuscan - the base of Standard Italian"],
+      "itcentr." => ["ita", "central Italian dialects"],
+      "surs." => ["roh", "Sursilvan Romansh"], "bas-engad." => %w[roh Vallader],
+      "haut-engad." => %w[roh Puter],
+      "fasc." => ["lld", "Fascian Ladin"], "gherd." => %w[lld Gardenese],
+      "bad." => %w[lld Badiot], "mar." => ["lld", "Mareo/Marebbano"],
+      "carn." => ["fur", "Carnic Friulian"],
+      "prov." => %w[oci Provencal], "béarn." => ["oci", "Bearnese Gascon"],
+      "rouss." => ["cat", "Roussillonnais IS Northern Catalan, not Occitan"],
+      "sav." => ["frp", "Savoyard francoprovencal"], "lyonn." => %w[frp Lyonnais],
+      "aost." => %w[frp Aostan], "SRfrpr." => ["frp", "Suisse-romande frpr."],
+      "pic." => %w[pcd Picard], "norm." => %w[nrf Norman], "wall." => %w[wln Walloon],
+      "agn." => ["xno", "Anglo-Norman, its own ISO code"],
+      "lorr." => ["fra", "codeless oil dialects fold into fra"],
+      "oïl." => ["fra", "the langue d'oil group"],
+      "mold." => ["ron", "ISO retired mol into ron"], "ban." => ["ron", "Banat dialect"],
+      "baléar." => %w[cat Balearic], "cat. centr." => ["cat", "Central Catalan"] }
+      .each do |idiome, (code, why)|
+      assert_equal code, table.fetch(idiome), "#{idiome} — #{why}"
+    end
+  end
+
+  def test_genuinely_ambiguous_sub_idiomes_stay_on_the_verbatim_fallback
+    table = Nabu::Adapters::DeromXmlParser::IDIOME_LANGUAGES
+    ["cal.", "itcentr.-mérid.", "trent.", "émil.-romagn."].each do |idiome|
+      refute table.key?(idiome),
+             "#{idiome} spans ISO boundaries (N/S Calabria, central-southern Italian, " \
+             "Lombard-Venetian transition, the retired eml split) — the designed verbatim " \
+             "fallback IS the honest resolution"
+    end
+  end
+
   # --- body: materials + commentary ------------------------------------------------
 
   def test_body_renders_subdivs_cognat_lines_and_the_commentaire
