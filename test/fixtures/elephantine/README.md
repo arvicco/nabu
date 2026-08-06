@@ -46,6 +46,26 @@ boilerplate; the files are checked in WHOLE (28–37 KB each) so the
 - `elephantine_erc_db_100009.tei.xml` — Pap. Berlin P. 23610: the
   CATALOG-ONLY exemplar — self-closed `<div type="edition"/>` and
   `<div type="translation"/>`, no text flag in the listing.
+- `elephantine_erc_db_311616.tei.xml` — Aramaic ostracon (O. Cairo JE
+  49624): the P59-0 unsigned-BCE exemplar — `notBefore-custom="550"
+  notAfter-custom="399"` ("scholarly deduction", signs dropped
+  upstream) while the NESTED origin range holds the 1906/07
+  EXCAVATION date; the negation ladder + the modern-year guard on the
+  nested fallback both exercise here.
+- `elephantine_erc_db_100467.tei.xml` — Demotic record: half-signed
+  nested bounds `notBefore="664" notAfter="-332"` — the Late Period
+  (664–332 BCE) with one sign dropped upstream (P59-0).
+- `elephantine_erc_db_100774.tei.xml` — Aramaic record: signed-but-
+  reversed nested bounds `notBefore="-500" notAfter="-520"` — the pure
+  order-normalization case (P59-0).
+- `elephantine_erc_db_002858.tei.xml` — Greek record: custom bounds
+  `193/22` with the second TRUNCATED upstream (the nested range says
+  `193/222`, coherent and ancient) — the nested-fallback exemplar
+  (P59-0).
+- `elephantine_erc_db_312164.tei.xml` — Arabic papyrus: raw dating
+  "257-317 AH/ 871 - 930 CE" whose custom bounds carry a mis-converted
+  971 for 871 — hijri-dated records drop their machine bounds
+  honestly, raw preserved (P59-0; the ebl Seleucid-era precedent).
 - `elephantine_erc_db_places.tei.xml` — one of the four authority files
   the sync fetches beside the records (places, modern_persons,
   literature, ancient_persons — same /xml/ dir); kept whole (58 KB) as

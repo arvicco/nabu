@@ -90,8 +90,14 @@ module Nabu
         # a usable place. Precision is upstream's own vocabulary when given,
         # else "range" (the bounds are honest envelopes, never midpoints).
         def extract(meta)
-          not_before = Timeline.parse_year(meta["origDate_notBefore"])
-          not_after = Timeline.parse_year(meta["origDate_notAfter"])
+          # P59-0: nine upstream headers carry the bounds in each other's
+          # seats (shenoute.considering & co.) — a medieval CE corpus, so
+          # the repair is a pure order-normalization, never a negation.
+          not_before, not_after = Timeline.normalize_interval(
+            Timeline.parse_year(meta["origDate_notBefore"]),
+            Timeline.parse_year(meta["origDate_notAfter"]),
+            raw: meta["origDate"]
+          )
           place = place_of(meta)
           return nil if not_before.nil? && not_after.nil? && place.nil?
 

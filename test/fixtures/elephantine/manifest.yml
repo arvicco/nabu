@@ -34,6 +34,26 @@ files:
     url: https://elephantine.smb.museum/xml/elephantine_erc_db_100009.tei.xml
     whole: true
     trim: none (catalog-only record — self-closed edition/translation divs; P47-1)
+  - path: elephantine_erc_db_311616.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_311616.tei.xml
+    whole: true
+    trim: none (Aramaic ostracon — unsigned-BCE custom bounds 550/399 over the 1906/07 excavation date in the nested range; the P59-0 negation + modern-year-guard exemplar)
+  - path: elephantine_erc_db_100467.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_100467.tei.xml
+    whole: true
+    trim: none (Demotic record — half-signed nested bounds 664/-332, the Late Period with one sign dropped; P59-0)
+  - path: elephantine_erc_db_100774.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_100774.tei.xml
+    whole: true
+    trim: none (Aramaic record — signed-but-reversed nested bounds -500/-520; the P59-0 order-normalization exemplar)
+  - path: elephantine_erc_db_002858.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_002858.tei.xml
+    whole: true
+    trim: none (Greek record — custom bounds 193/22 truncated upstream, coherent nested range 193/222; the P59-0 nested-fallback exemplar)
+  - path: elephantine_erc_db_312164.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_312164.tei.xml
+    whole: true
+    trim: none (Arabic papyrus — AH/CE dating "257-317 AH/ 871 - 930 CE" with a mis-converted custom bound (971 for 871); the P59-0 hijri bounds-drop exemplar)
   - path: elephantine_erc_db_places.tei.xml
     url: https://elephantine.smb.museum/xml/elephantine_erc_db_places.tei.xml
     whole: true

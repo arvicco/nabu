@@ -23,6 +23,21 @@ files:
     blob_sha: 2b9133fc5eb963abf07b38fc16291661b18607f1
     whole: true
     trim: none (arc NFC-exempt byte-verbatim + otherLangs + foreign grc spans + heb-tagged div on an arc record)
+  - path: epidoc-files/masa0797.xml
+    url: https://raw.githubusercontent.com/Brown-University-Library/iip-texts/0b7dc8358ccdfd0c9391f049da4839fbd91c26e5/epidoc-files/masa0797.xml
+    blob_sha: 8bb26af1d98a94d42856d6b1246c8e842299467c
+    whole: true
+    trim: none (P59-0 — unsigned BCE bounds 0027/0026 for "27-26 BCE", the sign dropped upstream; the negation-repair exemplar)
+  - path: epidoc-files/zoor0395.xml
+    url: https://raw.githubusercontent.com/Brown-University-Library/iip-texts/0b7dc8358ccdfd0c9391f049da4839fbd91c26e5/epidoc-files/zoor0395.xml
+    blob_sha: beb2c8bd636f2ac4aefca6328f2f81245c401b11
+    whole: true
+    trim: none (P59-0 — swapped CE seats 0355/0354 for "354/355 CE"; the order-normalization exemplar)
+  - path: epidoc-files/idum0080.xml
+    url: https://raw.githubusercontent.com/Brown-University-Library/iip-texts/0b7dc8358ccdfd0c9391f049da4839fbd91c26e5/epidoc-files/idum0080.xml
+    blob_sha: 0fcc7e1ca22f438734831ee6922b796a89b00e95
+    whole: true
+    trim: none (P59-0 — signed-but-reversed bounds -0036/-0335 for "Approximately 336-335 BCE", the upstream digit typo + seat swap; the P58 check-dates incident record)
   - path: epidoc-files/jeru0490.xml
     url: https://raw.githubusercontent.com/Brown-University-Library/iip-texts/0b7dc8358ccdfd0c9391f049da4839fbd91c26e5/epidoc-files/jeru0490.xml
     blob_sha: 446491bbcfd35c61f7b2f1ce9026d66b9c9dc53c

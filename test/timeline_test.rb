@@ -33,6 +33,84 @@ class TimelineTest < Minitest::Test
     assert_raises(Nabu::Timeline::InvalidYear) { Nabu::Timeline.parse_year("-0000") }
   end
 
+  # -- normalize_interval: the reversed-bounds repair ladder (P59-0) --------
+  # Every case below is a REAL censused row from the 2026-08-04 reversed-
+  # interval audit (82 document_axes rows across six sources). The ladder:
+  # a coherent interval passes through; a reversed one is repaired by
+  # era-signal-guarded negation (unsigned BCE bounds are the commonest
+  # upstream defect) or, failing that, by order-normalization (swap) —
+  # never returned reversed, never guessed beyond upstream's own claim.
+
+  def norm(before, after, raw: nil, bce_default: false)
+    Nabu::Timeline.normalize_interval(before, after, raw: raw, bce_default: bce_default)
+  end
+
+  def test_normalize_interval_passes_coherent_and_partial_bounds_through
+    assert_equal [-500, -475], norm(-500, -475)
+    assert_equal [300, 700], norm(300, 700, raw: "300 CE - 700 CE")
+    assert_equal [nil, 450], norm(nil, 450)
+    assert_equal [-27, nil], norm(-27, nil)
+    assert_equal [nil, nil], norm(nil, nil)
+    assert_equal [-27, -27], norm(-27, -27), "a point date is coherent"
+  end
+
+  def test_normalize_interval_negates_unsigned_bce_bounds_on_a_bce_signal
+    # iip masa0797 "27-26 BCE" (notBefore="0027" notAfter="0026")
+    assert_equal [-27, -26], norm(27, 26, raw: "27-26 BCE")
+    # iip mare0095 "Fifth century BCE to second century BCE" ("0400"/"0100")
+    assert_equal [-400, -100], norm(400, 100, raw: "Fifth century BCE to second century BCE")
+    # isicily ISic001206 "3rd century BCE?" (custom "0301"/"0200")
+    assert_equal [-301, -200], norm(301, 200, raw: "3rd century BCE?")
+    # elephantine 307713 "499-475 v. Chr."
+    assert_equal [-499, -475], norm(499, 475, raw: "499-475 v. Chr.")
+  end
+
+  def test_normalize_interval_negates_only_the_unsigned_bound_when_half_signed
+    # elephantine 100467: nested notBefore="664" notAfter="-332" — the Late
+    # Period (664-332 BCE) with the sign dropped on one bound upstream.
+    assert_equal [-664, -332], norm(664, -332, raw: nil, bce_default: true)
+    # elephantine 307271: "227"/"-227" — a point year, half-signed.
+    assert_equal [-227, -227], norm(227, -227, raw: nil, bce_default: true)
+  end
+
+  def test_normalize_interval_bce_default_covers_signal_less_raws
+    # elephantine 311616-311630 (custom "550"/"399", raw "scholarly
+    # deduction") and 100772-ff (nested "525"/"475", empty raw): the corpus
+    # prior says unsigned-descending reads BCE.
+    assert_equal [-550, -399], norm(550, 399, raw: "scholarly deduction", bce_default: true)
+    assert_equal [-525, -475], norm(525, 475, raw: nil, bce_default: true)
+  end
+
+  def test_normalize_interval_bce_default_yields_to_an_explicit_ce_signal
+    # A CE-signalled raw must never be negated even under the BCE prior.
+    assert_equal [901, 1100], norm(1100, 901, raw: "between 901 and 1100 C.E.", bce_default: true)
+  end
+
+  def test_normalize_interval_swaps_signed_but_reversed_bounds
+    # edr aEDR074026 "-79 BC - -81 BC"; edr "70 AD - -31 AD"
+    assert_equal [-81, -79], norm(-79, -81, raw: "-79 BC - -81 BC")
+    assert_equal [-31, 70], norm(70, -31, raw: "70 AD - -31 AD")
+    # iip idum0488 "August 1, 357 BCE" (-0357/-0358): both signed — the BCE
+    # signal never re-negates a signed bound; order-normalize only.
+    assert_equal [-358, -357], norm(-357, -358, raw: "August 1, 357 BCE")
+    # iip odob0033 "Early Roman" (-0063/-0132)
+    assert_equal [-132, -63], norm(-63, -132, raw: "Early Roman")
+  end
+
+  def test_normalize_interval_swaps_unsigned_ce_reversals
+    # iip zoor0395 "354/355 CE" ("0355"/"0354")
+    assert_equal [354, 355], norm(355, 354, raw: "354/355 CE")
+    # coptic-scriptorium "between 951 and 1050" (no era signal, no BCE prior)
+    assert_equal [951, 1050], norm(1050, 951, raw: "between 951 and 1050")
+    # bfm "entre 1170 et 1267 et même après 1190 et av. 1204" — the bare
+    # French "av." is NOT a BCE signal (that would be "av. J.-C.").
+    assert_equal [1197, 1204], norm(1204, 1197, raw: "entre 1170 et 1267 et même après 1190 et av. 1204")
+  end
+
+  def test_normalize_interval_orders_after_negation_if_still_reversed
+    assert_equal [-200, -100], norm(100, -200, raw: nil, bce_default: true)
+  end
+
   # -- century_index: the reviewed boundary table ---------------------------
 
   def test_century_index_boundary_table

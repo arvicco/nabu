@@ -66,6 +66,24 @@ module Store
       assert_equal "White Monastery", row[:place_name]
     end
 
+    # -- the P59-0 reversed-bounds repair (real offending header) -----------
+
+    def test_swapped_upstream_seats_order_normalize
+      # shenoute.considering.BV283-284: origDate_notBefore="1100"
+      # origDate_notAfter="0901" for "between 901 and 1100 C.E." — the
+      # bounds sit in each other's seats upstream (9 such headers at the
+      # 2026-08-04 audit; a medieval CE corpus, so repair is a pure swap,
+      # never a negation).
+      doc = seed("urn:nabu:coptic-scriptorium:shenoute.considering.amelineau:1-2")
+      build!
+      row = @db[:document_axes].where(document_id: doc.id).first
+      assert_equal 901, row[:not_before]
+      assert_equal 1100, row[:not_after]
+      assert_equal "between 901 and 1100 C.E.", row[:date_raw]
+      assert_operator row[:not_before], :<=, row[:not_after],
+                      "no reversed interval ever reaches the axes"
+    end
+
     def test_documents_we_do_not_hold_contribute_nothing
       outcome = build!
       assert_equal 0, outcome[:documents]

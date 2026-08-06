@@ -109,8 +109,11 @@ module Nabu
             ranged ||= not_before != not_after
             raw ||= TimelineBuilder.normalize(node.text)
           end
+          # P59-0: repair reversed upstream bounds (unsigned-BCE / seat-swap
+          # defects — masa0797, zoor0395, idum0080) before the row exists.
+          not_before, not_after = Timeline.normalize_interval(lowers.min, uppers.max, raw: raw)
           {
-            not_before: lowers.min, not_after: uppers.max,
+            not_before: not_before, not_after: not_after,
             precision: ranged ? "range" : "exact", date_raw: raw
           }
         end

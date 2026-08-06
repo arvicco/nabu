@@ -2,6 +2,8 @@
 
 require "json"
 
+require_relative "../../timeline"
+
 module Nabu
   module Store
     module TimelineBuilder
@@ -40,6 +42,15 @@ module Nabu
 
         SLUGS = SHAPES.keys.freeze
 
+        # P59-0: sources whose reversed upstream bounds order-normalize at
+        # projection (EDR's "later - earlier" ranges, BFM's swapped ISO
+        # attrs — signs are upstream-explicit, so a swap is always safe).
+        # Elephantine is deliberately absent: its repair (BCE-default
+        # negation + a nested-TEI fallback) needs the origDate nodes and
+        # lives in ElephantineTeiParser — a blind swap here would mint
+        # "399-550 CE" out of an unsigned BCE pair.
+        REORDER = %w[edr bfm itant croala].freeze
+
         BATCH = 2_000
 
         module_function
@@ -71,7 +82,7 @@ module Nabu
             .select(:id, :metadata_json)
             .order(:id)
             .paged_each do |doc|
-              row = axis_row(doc, shape)
+              row = axis_row(doc, shape, reorder: REORDER.include?(slug))
               next if row.nil?
 
               buffer << row.merge(axis_source: slug)
@@ -87,9 +98,10 @@ module Nabu
 
         # One document's axis row, or nil when it carries neither a date
         # bound nor an ancient place name.
-        def axis_row(doc, shape)
+        def axis_row(doc, shape, reorder: false)
           meta = JSON.parse(doc[:metadata_json].to_s)
           not_before, not_after, raw = send(shape, meta)
+          not_before, not_after = Timeline.normalize_interval(not_before, not_after, raw: raw) if reorder
           # "place" is a Hash ({"ancient" => …}, EDR/Elephantine) or a bare
           # string (croala — the P44-i4 shape); the string IS the name.
           place = meta["place"]
