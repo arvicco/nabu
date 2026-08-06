@@ -54,6 +54,10 @@ files:
     url: https://elephantine.smb.museum/xml/elephantine_erc_db_312164.tei.xml
     whole: true
     trim: none (Arabic papyrus — AH/CE dating "257-317 AH/ 871 - 930 CE" with a mis-converted custom bound (971 for 871); the P59-0 hijri bounds-drop exemplar)
+  - path: elephantine_erc_db_315706.tei.xml
+    url: https://elephantine.smb.museum/xml/elephantine_erc_db_315706.tei.xml
+    whole: true
+    trim: none (Arabic papyrus — COHERENT hijri conversion "255 AH/ 868 CE" → notBefore-custom="868"; the P59-0 pin that the reversed-hijri drop never wipes good conversions)
   - path: elephantine_erc_db_places.tei.xml
     url: https://elephantine.smb.museum/xml/elephantine_erc_db_places.tei.xml
     whole: true

@@ -133,11 +133,13 @@ module Nabu
       # very records whose custom bounds are defective), never a dating.
       MODERN_NESTED_CUTOFF = 1500
 
-      # Hijri-dated records (P59-0): upstream's own AH→CE conversion is
-      # demonstrably botched (312164 converts 257-317 AH to attrs 971/930
-      # against its own raw "871 - 930 CE"), so AH raws carry no machine
-      # bounds — era conversion is upstream's project, not a guess of ours
-      # (the ebl Seleucid-era precedent).
+      # Hijri raws (P59-0): a REVERSED bound pair on an AH-dated record is
+      # evidence of a botched upstream AH→CE conversion (312164 converts
+      # 257-317 AH to attrs 971/930 against its own raw "871 - 930 CE") —
+      # such bounds drop, since no mechanical repair of a bad era
+      # conversion is trustworthy. COHERENT AH conversions (the ~820-record
+      # Arabic shelf: "255 AH/ 868 CE" → 868) are upstream's own claim and
+      # stay, like every other dating we ingest.
       HIJRI_RAW = /\bAH\b/
 
       # One extracted line: citation suffix, folded text, per-ab language,
@@ -395,8 +397,6 @@ module Nabu
         raw = presence(node.text)
         result = {}
         result["raw"] = raw if raw
-        return result if raw&.match?(HIJRI_RAW)
-
         begin
           not_before, not_after = repaired_bounds(custom, nested, raw)
           result["not_before"] = not_before if not_before
@@ -417,6 +417,12 @@ module Nabu
           else
             [Timeline.parse_year(nested["notBefore"]), Timeline.parse_year(nested["notAfter"])]
           end
+        # A REVERSED hijri pair is evidence of a botched upstream AH→CE
+        # conversion (HIJRI_RAW note) — no repair of it is trustworthy, so
+        # the bounds drop. A COHERENT hijri conversion is upstream's own
+        # claim and stays, like every other dating we ingest.
+        return [nil, nil] if reversed?(bounds) && raw&.match?(HIJRI_RAW)
+
         Timeline.normalize_interval(bounds[0], bounds[1], raw: raw, bce_default: true)
       end
 

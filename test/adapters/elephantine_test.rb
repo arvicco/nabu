@@ -40,7 +40,7 @@ class ElephantineTest < Minitest::Test
     urn:nabu:elephantine:100117 urn:nabu:elephantine:100141
     urn:nabu:elephantine:100467 urn:nabu:elephantine:100774
     urn:nabu:elephantine:307762 urn:nabu:elephantine:311616
-    urn:nabu:elephantine:312164
+    urn:nabu:elephantine:312164 urn:nabu:elephantine:315706
   ].freeze
 
   def conformance_adapter
@@ -275,15 +275,25 @@ class ElephantineTest < Minitest::Test
     assert_equal(222, metadata["date"]["not_after"])
   end
 
-  def test_hijri_dated_records_drop_machine_bounds_and_keep_the_raw
+  def test_a_reversed_hijri_pair_drops_its_machine_bounds_and_keeps_the_raw
     # 312164: "257-317 AH/ 871 - 930 CE" with custom bounds 971/930 — the
-    # upstream AH→CE conversion is demonstrably botched (971 for 871), so
-    # AH-dated records carry no machine bounds (the ebl Seleucid-era
-    # precedent: era conversion is upstream's project, not a guess of ours).
+    # reversal is evidence the upstream AH→CE conversion is botched (971
+    # for 871), and no mechanical repair of a bad era conversion is
+    # trustworthy: the bounds drop, the raw rides.
     metadata = parse("urn:nabu:elephantine:312164").metadata
     refute metadata["date"].key?("not_before"), "no machine bounds off a botched AH conversion"
     refute metadata["date"].key?("not_after")
     assert_match(/AH/, metadata["date"]["raw"], "the raw dating rides verbatim")
+  end
+
+  def test_a_coherent_hijri_conversion_keeps_its_bounds
+    # 315706: "255 AH/ 868 CE", notBefore-custom="868" — upstream's own
+    # correct conversion, ~820 such Arabic records; the reversed-pair rule
+    # must never wipe them (the first live re-parse did exactly that — 819
+    # good datings dropped — before this pin).
+    metadata = parse("urn:nabu:elephantine:315706").metadata
+    assert_equal 868, metadata["date"]["not_before"]
+    assert_equal "255 AH/ 868 CEDate in the text.", metadata["date"]["raw"]
   end
 
   # --- the Demotic exemplars (damage idiom, empty lb @n, gap markers) ---------
@@ -447,16 +457,16 @@ class ElephantineTest < Minitest::Test
     adapter = -> { Nabu::Adapters::Elephantine.new(translations: true) }
     first = Nabu::Store::Loader.new(db: db, source: source)
                                .load_from(adapter.call, workdir: FIXTURES)
-    assert_equal 18, first.added, "11 originals + 7 readable translation siblings"
+    assert_equal 19, first.added, "12 originals + 7 readable translation siblings"
     assert_equal 0, first.errored
     assert_equal 111, db[:passages].count,
-                 "editions 7+12+8+0+8+0+0+0+17+3+0 = 55; translations 7+12+6+8+4+17+2 = 56 " \
+                 "editions 7+12+8+0+8+0+0+0+17+3+0+0 = 55; translations 7+12+6+8+4+17+2 = 56 " \
                  "(100007-en's x+1 and x+7ff. lines are [///]/⸢..?..⸣ notation — not citable)"
 
     second = Nabu::Store::Loader.new(db: db, source: source)
                                 .load_from(adapter.call, workdir: FIXTURES)
     assert_equal 0, second.errored
-    assert_equal 18, second.skipped, "a byte-identical reload skips every document"
+    assert_equal 19, second.skipped, "a byte-identical reload skips every document"
     assert_equal 111, db[:passages].count
     assert_equal [1], db[:passages].distinct.select_map(:revision)
   end
