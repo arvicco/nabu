@@ -15,12 +15,12 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these two answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 6 August 2026)</span> |
 |---|---|---|---|---|
 | `peshitta` | texts | nc | wired · manual | 65 docs / 31,341 passages |
 | `syriac-corpus` | texts | attribution | wired · manual | 632 docs / 134,726 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 August 2026)</span>: `syc` 697.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 August 2026)</span>: `syc` 697.
 
 ## The desk's instruments
 
