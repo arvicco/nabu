@@ -54,9 +54,15 @@ module Nabu
       # the codes that differ among languages the catalog holds gold lemmas
       # for (Wiktionary uses ISO 639-1 where one exists). Everything else
       # passes through as itself when it is a shape-valid tag, else nil
-      # (the lone "ML." Medieval-Latin code in the wild): display-only,
-      # never a crosswalk join candidate.
-      LANG_CODE_MAP = { "cu" => "chu", "la" => "lat", "sa" => "san", "bo" => "bod" }.freeze
+      # (display-only, never a crosswalk join candidate). P59-1: the three
+      # dotted Latin-stage sigla ("ML."/"VL."/"LL.", ten rows corpus-wide)
+      # now resolve to the etymology-stage tags their SIBLINGS already
+      # speak — the same extracts mint la-med (611 rows), la-vul (206) and
+      # la-lat (101) from Wiktionary's own etymology-only codes, so the
+      # sigla were stragglers of the identical claim. lang_code itself
+      # stays upstream-verbatim, per this parser's design.
+      LANG_CODE_MAP = { "cu" => "chu", "la" => "lat", "sa" => "san", "bo" => "bod",
+                        "ML." => "la-med", "VL." => "la-vul", "LL." => "la-lat" }.freeze
 
       # The historical-phonology sound tags (P32-3, opt-in below): the
       # kaikki Chinese extract carries per-entry `sounds` rows tagged
