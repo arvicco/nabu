@@ -606,6 +606,61 @@ anchors:
     stages:
       cla: {name: Classical Arabic, ord: 10}
 
+  # ── Bare anchors forced by the script axis (P61) ─────────────────────────
+  #
+  # Each is a held language in the first consuming collection whose
+  # BCP-47-style script-suffixed codes earn universal codemap rows
+  # (san-Latn-shaped surface facts) -- a ~script codemap target needs its
+  # anchor defined. Bare ISO facts only: no stages, no mode judgments;
+  # parent edges only where textbook-settled and the family node exists
+  # (the Aramaic-fan discipline for everything else).
+
+  xtg:
+    name: Transalpine Gaulish
+    parent: cel
+    note: "the RIIG corpus language; Greek- and Latin-script inscriptions"
+
+  xcg:
+    name: Cisalpine Gaulish
+    parent: cel
+
+  osc:
+    name: Oscan
+    parent: itc
+    note: "Osco-Umbrian; held in Latin-script transliteration of Old Italic
+           originals (the consumer's artifact field carries Ital)"
+
+  xpi:
+    name: Pictish
+    note: "classification debated (commonly Brittonic); no parent edge
+           minted -- the ogham corpus attests it"
+
+  xly:
+    name: Elymian
+    note: "fragmentary; classification uncertain -- no parent edge"
+
+  scx:
+    name: Sicel
+    note: "fragmentary; classification uncertain -- no parent edge"
+
+  xpu:
+    name: Punic
+    note: "descendant of Phoenician; the Semitic fan (phn) is deliberately
+           unminted, so no parent edge yet"
+
+  ta:
+    name: Tamil
+    note: "ISO 639-1; Dravidian -- no family node minted"
+
+  bra:
+    name: Braj
+    note: "Indo-Aryan -- no family node minted"
+
+  awa:
+    name: Awadhi
+    note: "Indo-Aryan -- no family node minted"
+
+
 # ── Scripts (the ~ axis) ─────────────────────────────────────────────────────
 #
 # A GLOBAL table, deliberately not per-anchor: digraphia is open-ended, and

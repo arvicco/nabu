@@ -7,20 +7,21 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
-- **Retrieved:** 2026-08-06 (lects.yml + codemap.yml re-adopted at the
-  P60-0 script axis — the `~script` grammar segment, the global
-  `scripts:` table with 20 ISO 15924 rows, ortho `script:` scopes; on
-  top of the P59 ISO-parentage wave's 84 anchors), from the owner's
-  live checkout (`~/Dev/nabu-lects`, clean at commit
-  `aa8a501b9ffeb438a669ada28112e64f42f21c88`, the repo's `main`).
+- **Retrieved:** 2026-08-07 (re-adopted at the P61-3 script-suffix
+  suite — 27 universal surface-verified codemap rows + 10 bare anchors
+  (94 total) carrying their targets; on top of the P60-0 script axis:
+  the `~script` grammar segment, the global `scripts:` table with 20
+  ISO 15924 rows, ortho `script:` scopes), from the owner's live
+  checkout (`~/Dev/nabu-lects`, clean at commit
+  `12aea619029e5266bea18b384eb5f6cb15577143`, the repo's `main`).
   - `lects.yml` — the lect registry (anchors, stages, varieties,
     orthographies, the global scripts table, parent edges, Glottocode
-    crosswalks). Full file, 22,694 B, sha256
-    `3c18ff64636face4b442a04d8e0b5cf1da32786596b995f4822a1342d04a052c`.
+    crosswalks). Full file, 24,303 B, sha256
+    `2ab500cb351e88d4f2f458e39a5b2b01fc10f1537710c963618bc1e64ff301b3`.
   - `codemap.yml` — universal code → lect defaults (identity is the
     default rule; only non-identity mappings are listed). Full file,
-    1,398 B, sha256
-    `ad1f885391100506130dbd0920a6343d89a219ebb76c5a65212651240e164798`.
+    2,528 B, sha256
+    `a1bf227ef346bbc362065047957f2830948c9b5fa33698acce841b7380ddf9d1`.
 - **License:** CC BY 4.0 (repo `LICENSE`, verbatim: "This work — the
   lect registry (lects.yml), the code mapping (codemap.yml), the
   documentation, and the validation tooling in this repository — is
