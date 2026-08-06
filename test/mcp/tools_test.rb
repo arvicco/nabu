@@ -482,6 +482,34 @@ module MCP
       assert_match(/nabu-lects module not synced/, error.message)
     end
 
+    # P59-3: nabu_parallels gains the same lect candidate filter, through
+    # the shared Query::LectFilter dispatch (here the pairs path — no
+    # materialization in this corpus).
+    def test_parallels_lect_scopes_candidates
+      lat = Nabu::Store::Source.create(slug: "perseus-latin", name: "Perseus Latin",
+                                       adapter_class: "TestAdapter", license_class: "open")
+      anchor = make_document(source: lat, urn: "urn:d:anchor", language: "la-med")
+      make_passage(anchor, urn: "urn:d:anchor:1", text: "arma virumque cano troiae qui primus ab oris",
+                           sequence: 0, language: "la-med")
+      quoter = make_document(source: lat, urn: "urn:d:quoter", language: "la-med")
+      make_passage(quoter, urn: "urn:d:quoter:1", text: "dicit arma virumque cano troiae qui primus",
+                           sequence: 0, language: "la-med")
+      off = make_document(urn: "urn:d:offgrc", language: "grc")
+      make_passage(off, urn: "urn:d:offgrc:1", text: "arma virumque cano troiae qui primus ab",
+                        sequence: 0, language: "grc")
+      rebuild!
+
+      body = payload(tools(lects: lects).call("nabu_parallels", { "urn" => "urn:d:anchor:1",
+                                                                  "lect" => "lat:med" }))
+      assert_equal %w[urn:d:quoter:1], body.fetch("hits").map { |hit| hit.fetch("urn") },
+                   "only the la-med candidate resolves under lat:med"
+
+      error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_parallels", { "urn" => "urn:d:anchor:1", "lect" => "lat:med" })
+      end
+      assert_match(/nabu-lects module not synced/, error.message)
+    end
+
     def test_search_lect_does_not_compose_with_lemma_or_near
       seed_lect_corpus!
       rig = tools(lects: lects)
@@ -790,6 +818,22 @@ module MCP
 
       plain = payload(call("nabu_show", { "urn" => "#{@grc.urn}:1.2" }))
       refute plain.key?("meter"), "an unscanned passage must not emit a meter key"
+    end
+
+    # P59-3: the resolved lect rides the passage envelope — merged only
+    # when the document carries a materialized lect facet row ("no row
+    # means identity"), so every bare-code payload stays byte-identical.
+    def test_show_passage_carries_the_materialized_lect
+      seed_corpus
+      grc_id = @catalog[:documents].where(urn: @grc.urn).get(:id)
+      @catalog[:document_facets].insert(document_id: grc_id, facet: "lect", value: "grc:koi")
+
+      shown = payload(call("nabu_show", { "urn" => "#{@grc.urn}:1.1" }))
+      assert_equal "grc:koi", shown.fetch("lect"),
+                   "the materialized per-document resolution — journal rulings included"
+
+      plain = payload(call("nabu_show", { "urn" => "#{@eng.urn}:1.1" }))
+      refute plain.key?("lect"), "no facet row means identity — the key never appears bare"
     end
 
     def lilybaeum_resolver
@@ -1550,6 +1594,24 @@ module MCP
                                    .load_from(Nabu::Adapters::Lexica.new,
                                               workdir: Nabu::TestSupport.fixtures("lexica"))
       lexica
+    end
+
+    # P59-3: nabu_define's shelf-grain lect scope. lsj's grc resolves to
+    # identity grc — under "grc", never under "lat"; the module absent is a
+    # clean InvalidArguments.
+    def test_define_lect_scopes_shelves_and_requires_the_module
+      seed_shelf
+      rig = tools(lects: lects)
+      hits = payload(rig.call("nabu_define", { "lemma" => "μῆνις", "lect" => "grc" })).fetch("entries")
+      assert_equal ["lsj"], hits.map { |e| e.fetch("dictionary") }.uniq
+
+      miss = payload(rig.call("nabu_define", { "lemma" => "μῆνις", "lect" => "lat" }))
+      assert_empty miss.fetch("entries", []), "a grc shelf never scopes under lat"
+
+      error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_define", { "lemma" => "μῆνις", "lect" => "grc" })
+      end
+      assert_match(/nabu-lects module not synced/, error.message)
     end
 
     def test_define_returns_entries_with_license_labels_and_resolved_citations

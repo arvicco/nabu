@@ -564,6 +564,29 @@ module Query
                    "no seam -> the '-pro' string test stands, and la-vul is not '-pro'"
     end
 
+    # P59-3: `lect:` scopes shelves at DICTIONARY grain — the (language,
+    # source) resolution under the search filter's prefix semantics,
+    # per-source overrides included (derom's la-vul sits under roa, never
+    # lat). Module absent: loud error, never a silent no-filter.
+    def test_lect_scopes_shelves_at_dictionary_grain
+      seed_derom_shelf
+      registry = Nabu::Lects.load(Nabu::TestSupport.fixtures("nabu-lects"),
+                                  overrides_path: File.join(Nabu::Config::PROJECT_ROOT, "config",
+                                                            "lect_overrides.yml"))
+      scoped = Nabu::Query::Define.new(catalog: @catalog, lects: registry)
+      assert_equal ["derom-etyms"], scoped.run("lacte", lect: "roa").map(&:dictionary_slug),
+                   "derom's la-vul resolves to roa:pro — under the roa anchor"
+      assert_empty scoped.run("lacte", lect: "lat"),
+                   "the override moves the shelf OUT from under lat — no silent bare-code match"
+      assert_equal ["lsj"], scoped.run("μῆνις", lect: "grc").map(&:dictionary_slug).uniq,
+                   "an identity-resolving shelf scopes under its own anchor"
+
+      error = assert_raises(Nabu::Error) do
+        Nabu::Query::Define.new(catalog: @catalog, lects: nil).run("lacte", lect: "roa")
+      end
+      assert_match(/nabu-lects module not synced/, error.message)
+    end
+
     def test_recon_entries_carry_reflex_views
       seed_recon_shelf
       bog = define("*bogъ").find { |r| r.urn.end_with?("bogъ:noun:2") }

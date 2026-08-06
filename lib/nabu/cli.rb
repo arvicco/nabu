@@ -1795,11 +1795,18 @@ module Nabu
                               "(default #{Nabu::BatchParallels::DEFAULT_PER_ANCHOR})"
     option :db, type: :string, banner: "PATH",
                 desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
+    option :lect, type: :string, banner: "LECT-ID",
+                  desc: "Restrict candidates to a lect (P59-3, nabu-lects module): keep only hits " \
+                        "whose resolution is this lect id or a more specific one under it — the " \
+                        "same prefix semantics as search --lect; errors if the module is not synced"
     display_option
     def parallels(urn = nil)
       urn = urn.to_s.strip
       display_mode
       validate_license!(options[:license])
+      if options[:batch] && options[:lect]
+        raise Thor::Error, "parallels: --lect does not apply with --batch (the miner is corpus-wide)"
+      end
       return batch_parallels(urn) if options[:batch]
 
       %i[min_score per_anchor db].each do |flag|
@@ -1817,7 +1824,8 @@ module Nabu
 
       result = Nabu::Query::Parallels.new(catalog: catalog, fulltext: fulltext)
                                      .run(urn, limit: options[:limit].to_i,
-                                               lang: options[:lang], license: options[:license])
+                                               lang: options[:lang], license: options[:license],
+                                               lect: options[:lect])
       print_parallels(result, urn: urn, long: options[:long])
       print_display_footer
     ensure
@@ -2377,6 +2385,10 @@ module Nabu
     option :long, type: :boolean, default: false,
                   desc: "Expand every truncated reflex list in full, grouped by language " \
                         "(compact is the default; MCP nabu_define stays bounded)"
+    option :lect, type: :string, banner: "LECT-ID",
+                  desc: "Restrict to shelves whose (language, source) RESOLUTION is this lect id " \
+                        "or under it (P59-3; per-source overrides included — derom's la-vul " \
+                        "scopes under roa, never lat); errors if the nabu-lects module is not synced"
     def define(*lemma_parts)
       lemma = lemma_parts.join(" ").strip
       raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty?
@@ -2404,7 +2416,7 @@ module Nabu
       # fetch-time cap hid the tail silently (the gate found `define 棄`
       # missing tls-words). --long lifts the cap; compact announces it.
       results = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext)
-                                   .run(lemma, lang: options[:lang], limit: nil)
+                                   .run(lemma, lang: options[:lang], limit: nil, lect: options[:lect])
       shown = options[:long] ? results : results.first(options[:limit].to_i)
       print_define_results(lemma, shown, catalog: catalog)
       if (hidden = results.size - shown.size).positive?
@@ -3018,6 +3030,11 @@ module Nabu
                    desc: "Map the whole WORK once and persist kind=cognate edges to the links journal"
     option :db, type: :string, banner: "PATH",
                 desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
+    option :lect, type: :string, banner: "LECT-ID",
+                  desc: "Scope witnesses OF THIS LECT'S ANCHOR LANGUAGE to the lect (P59-3: " \
+                        "--lect grc:koi keeps cognate sets whose Greek witness is Koine; " \
+                        "other-language witnesses pass untouched); errors if the nabu-lects " \
+                        "module is not synced"
     display_option
     def cognates(*target_parts)
       target = target_parts.join(" ").strip
@@ -3038,7 +3055,8 @@ module Nabu
       registry = Nabu::AlignmentRegistry.load(config.alignments_path)
       result = Nabu::Query::Cognates.new(catalog: catalog, fulltext: fulltext, registry: registry)
                                     .run(target, work: options[:work], langs: parse_langs(options[:langs]),
-                                                 all: options[:all], long: options[:long])
+                                                 all: options[:all], long: options[:long],
+                                                 lect: options[:lect])
       print_cognates(result)
       print_display_footer
     rescue Nabu::Query::Cognates::Error, Nabu::ValidationError => e
