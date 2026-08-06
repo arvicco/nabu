@@ -105,7 +105,9 @@ module Nabu
           stats_drift,
           facet_lane_drift,
           timeline_lane_drift,
-          reversed_axis_bounds
+          reversed_axis_bounds,
+          script_surface_mismatch,
+          unresolvable_place_refs
         ].compact
       end
 
@@ -123,6 +125,11 @@ module Nabu
       # (the P41 scale review's census) — an indexed live-on-live join count
       # at this size stays low-seconds, health's budget for one probe
       STATS_PASSAGE_PROBE_CAP = 2_000_000
+
+      # Passages byte-checked per ~script facet claim (P61-4; health
+      # budget: the P60-1 census sampled 40/claim, 12 keeps the standing
+      # check subsecond).
+      SCRIPT_CHECK_SAMPLE = 12
 
       private
 
@@ -463,6 +470,72 @@ module Nabu
           message: "reversed dating bounds (not_before > not_after) in document_axes — " \
                    "#{report}; the named extractor mints defective intervals " \
                    "(repair at the extractor, then rebuild its lane; P59-0)"
+        )
+      end
+
+      # P61-4 (D60-b's machine half, standing): the ~script axis claims the
+      # HELD text's writing system, which makes every claim checkable — a
+      # slice whose sampled bytes classify to a DIFFERENT dominant script is
+      # a defective projection (a bad codemap/override row, or upstream
+      # changed under it). The P60-1 census, made permanent.
+      def script_surface_mismatch
+        return nil unless table?(@catalog, :document_facets)
+
+        mismatched = script_claims.filter_map do |value|
+          claimed = value[/~([a-z]{4})/, 1]
+          measured, share = Nabu::ScriptCheck.dominant(sampled_claim_texts(value))
+          next if measured.nil? || measured == claimed
+
+          "#{value}: bytes measure #{measured} #{(share * 100).round}%"
+        end
+        return nil if mismatched.empty?
+
+        Finding.new(
+          kind: :script_surface_mismatch, severity: :loud,
+          message: "~script claims contradicted by their own bytes — #{mismatched.join('; ')} " \
+                   "(the held-surface rule, D60-b: repair the projection row, then re-materialize)"
+        )
+      end
+
+      def script_claims
+        @catalog[:document_facets]
+          .where(facet: "lect")
+          .where(Sequel.like(:value, "%~%"))
+          .distinct.select_map(:value)
+      end
+
+      def sampled_claim_texts(value)
+        doc_ids = @catalog[:document_facets].where(facet: "lect", value: value).select(:document_id)
+        @catalog[:passages]
+          .where(document_id: doc_ids, withdrawn: false)
+          .limit(SCRIPT_CHECK_SAMPLE)
+          .select_map(:text)
+      end
+
+      # P61-4: the places analogue of reversed bounds — a pleiades-bearing
+      # place_ref the local gazetteer no longer resolves (dump superseded a
+      # place, or the ref was minted defective). Non-pleiades refs
+      # (trismegistos, geonames) are outside the local index's scope by
+      # design; an EMPTY index is the feature-off posture, never a flood.
+      def unresolvable_place_refs
+        return nil unless table?(@catalog, :document_axes) && table?(@catalog, :place_index)
+        return nil if @catalog[:place_index].empty?
+
+        known = @catalog[:place_index].select_map(:pleiades_id).to_set
+        refs = @catalog[:document_axes]
+               .exclude(place_ref: nil)
+               .where(Sequel.like(:place_ref, "%pleiades.stoa.org/places/%"))
+               .distinct.select_map(:place_ref)
+        dangling = refs.reject do |ref|
+          ref.scan(%r{pleiades\.stoa\.org/places/(\d+)}).flatten.any? { |id| known.include?(id) }
+        end
+        return nil if dangling.empty?
+
+        Finding.new(
+          kind: :unresolvable_place_refs, severity: :loud,
+          message: "#{dangling.size} unresolvable pleiades ref#{'s' unless dangling.size == 1} in " \
+                   "document_axes (ids absent from the gazetteer index) — e.g. " \
+                   "#{dangling.first(3).join(' · ')}; re-derive the place index or repair the lane"
         )
       end
 

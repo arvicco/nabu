@@ -443,6 +443,49 @@ class InvariantsTest < Minitest::Test
     assert_nil global_finding(:reversed_axis_bounds), "a repaired lane clears the finding"
   end
 
+  # P61-4: the ~script claim is byte-checkable BY DESIGN (D60-b — the axis
+  # claims the held surface) — this invariant is the P60-1 census made
+  # permanent: sample the claimed slice's passages, classify by Unicode
+  # script property, shout when the bytes contradict the claim.
+  def test_script_surface_mismatch_fires_on_contradicting_bytes_and_clears
+    doc_id = seed_lane_doc("newsource", "urn:nabu:newsource:sc1", "{}")
+    @db[:document_facets].insert(document_id: doc_id, facet: "lect", value: "grc~latn")
+    @db[:passages].insert(document_id: doc_id, urn: "urn:nabu:newsource:sc1:1", sequence: 0,
+                          text: "μῆνιν ἄειδε θεά", text_normalized: "x", content_sha256: "x")
+    finding = global_finding(:script_surface_mismatch)
+    refute_nil finding, "Greek bytes under a ~latn claim contradict the held-surface semantics"
+    assert_equal :loud, finding.severity
+    assert_match(/grc~latn.*grek/, finding.message, "the report names the claim and the measured script")
+
+    @db[:passages].where(document_id: doc_id).update(text: "arma virumque cano")
+    assert_nil global_finding(:script_surface_mismatch), "matching bytes clear the finding"
+  end
+
+  # P61-4: the places analogue of reversed bounds — a pleiades-bearing
+  # place_ref whose id the local gazetteer no longer resolves. Non-pleiades
+  # refs (trismegistos, geonames) are out of the local index's scope by
+  # design and never flagged; an empty index is the feature-off posture.
+  def test_unresolvable_place_refs_fire_for_missing_gazetteer_ids_and_respect_scope
+    doc_a = seed_lane_doc("newsource", "urn:nabu:newsource:pl1", "{}")
+    doc_b = seed_lane_doc("newsource", "urn:nabu:newsource:pl2", "{}")
+    doc_c = seed_lane_doc("newsource", "urn:nabu:newsource:pl3", "{}")
+    @db[:document_axes].insert(document_id: doc_a, axis_source: "t",
+                               place_ref: "https://pleiades.stoa.org/places/111 " \
+                                          "https://www.trismegistos.org/place/9")
+    @db[:document_axes].insert(document_id: doc_b, axis_source: "t",
+                               place_ref: "https://pleiades.stoa.org/places/999")
+    @db[:document_axes].insert(document_id: doc_c, axis_source: "t",
+                               place_ref: "https://www.trismegistos.org/place/1628")
+    assert_nil global_finding(:unresolvable_place_refs),
+               "an EMPTY place_index is the feature-off posture — no dump, no findings"
+
+    @db[:place_index].insert(pleiades_id: "111", title: "Resolved", position: 0)
+    finding = global_finding(:unresolvable_place_refs)
+    refute_nil finding, "pleiades id 999 is not in the gazetteer"
+    assert_match(/1 unresolvable/, finding.message,
+                 "doc_a resolves, doc_c is out of pleiades scope — exactly one defect")
+  end
+
   private
 
   # -- local shelves (P19-1): dossier files vs records; pins vs the tree ------
