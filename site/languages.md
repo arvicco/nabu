@@ -83,8 +83,8 @@ document whose date interval falls inside exactly one stage's band is
 staged by date, containment, never overlap); and **per-document rulings**
 refine single texts. Every assignment lives in a journal that survives
 rebuilds, states its evidence, and is audited against the documents' own
-dates (`nabu lect check-dates`). As of 4 August 2026 the journal holds
-**408,884 assignments** — 279k from the period/corpus rules, 130k from
+dates (`nabu lect check-dates`). As of 6 August 2026 the journal holds
+**410,602 assignments** — 279k from the period/corpus rules, 130k from
 date × stage-band inference — and an unmapped code still resolves to
 itself, honest coarseness.
 

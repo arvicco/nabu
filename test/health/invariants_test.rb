@@ -425,6 +425,24 @@ class InvariantsTest < Minitest::Test
     assert_nil global_finding(:timeline_lane_drift)
   end
 
+  # P59-0: the standing reversed-bounds report. The 82-row extractor defect
+  # cluster satisfied lect date-band containment vacuously (the P58
+  # check-dates incident); after the per-extractor repairs, any reversed
+  # interval reaching document_axes is a NEW defect and must be loud.
+  def test_reversed_axis_bounds_fire_per_extractor_and_clear_when_repaired
+    doc_id = seed_lane_doc("newsource", "urn:nabu:newsource:x2",
+                           '{"date":{"not_before":27}}')
+    @db[:document_axes].insert(document_id: doc_id, not_before: 27, not_after: 26,
+                               date_raw: "27-26 BCE", axis_source: "newsource")
+    finding = global_finding(:reversed_axis_bounds)
+    refute_nil finding, "not_before > not_after is always a defect — no interval runs backwards"
+    assert_equal :loud, finding.severity
+    assert_match(/newsource: 1/, finding.message, "the report names the extractor and its row count")
+
+    @db[:document_axes].where(document_id: doc_id).update(not_before: -27, not_after: -26)
+    assert_nil global_finding(:reversed_axis_bounds), "a repaired lane clears the finding"
+  end
+
   private
 
   # -- local shelves (P19-1): dossier files vs records; pins vs the tree ------

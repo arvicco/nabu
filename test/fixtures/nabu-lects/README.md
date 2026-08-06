@@ -7,18 +7,19 @@ already small (340 + 40 lines) and the module's read seam
 full codemap to be exercised honestly (a trimmed slice would hide
 referential-integrity gaps the drift guard exists to catch).
 
-- **Retrieved:** 2026-08-04 (lects.yml re-adopted at the P58 minting
-  wave; codemap.yml unchanged since 2026-08-02), from the owner's live
-  checkout (`~/Dev/nabu-lects`, clean at commit
-  `8f3912f0333a191bd98e9bf246d941b7c973b165`, the repo's `main`).
+- **Retrieved:** 2026-08-06 (lects.yml + codemap.yml re-adopted at the
+  P59 ISO-parentage wave — 84 anchors incl. the Germanic/Celtic/Persian/
+  Armenian chains, the cel family, syc), from the owner's live checkout
+  (`~/Dev/nabu-lects`, clean at commit
+  `455a61b07793d207d30facaf8fca0b9ce6c21776`, the repo's `main`).
   - `lects.yml` — the lect registry (anchors, stages, varieties,
     orthographies, parent edges, Glottocode crosswalks). Full file,
-    15,839 B, sha256
-    `fb720f68d046be792f496992b4075acb601ede8ae8be4ea0b343ab738556f1da`.
+    20,398 B, sha256
+    `5ec5b4e3045694e9ffb9c54a89df96cae320b131d1cd6aa3631dd800fdabd349`.
   - `codemap.yml` — universal code → lect defaults (identity is the
     default rule; only non-identity mappings are listed). Full file,
-    1,375 B, sha256
-    `ff7051f45a713e19ee7823aa433fe83dcf150f851e8161cf11cd8e520b810e85`.
+    1,398 B, sha256
+    `ad1f885391100506130dbd0920a6343d89a219ebb76c5a65212651240e164798`.
 - **License:** CC BY 4.0 (repo `LICENSE`, verbatim: "This work — the
   lect registry (lects.yml), the code mapping (codemap.yml), the
   documentation, and the validation tooling in this repository — is

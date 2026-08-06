@@ -199,6 +199,37 @@ module Query
                    "no Latin candidate exists — the language filter empties the result"
     end
 
+    # P59-3: `lect:` filters candidates through the shared LectFilter
+    # dispatch — here the materialized-facet path (facet rows present):
+    # a koine quoter survives `lect: "grc:koi"`, a classical one and a
+    # facet-less (bare-code) one fall out; the module absent errors loudly.
+    def test_lect_filter_scopes_candidates_on_the_materialized_facet
+      homer = make_document(urn: "urn:h:od", title: "Odyssey")
+      make_passage(homer, urn: "urn:h:od:1.1", text: ODYSSEY_1_1, sequence: 0)
+      koine = make_document(urn: "urn:q:koi", title: "Koine quoter")
+      make_passage(koine, urn: "urn:q:koi:1", text: "φησιν #{ODYSSEY_1_1}", sequence: 0)
+      classical = make_document(urn: "urn:q:cla", title: "Classical quoter")
+      make_passage(classical, urn: "urn:q:cla:1", text: "λέγει #{ODYSSEY_1_1}", sequence: 0)
+      bare = make_document(urn: "urn:q:bare", title: "Bare quoter")
+      make_passage(bare, urn: "urn:q:bare:1", text: "γράφει #{ODYSSEY_1_1}", sequence: 0)
+      @catalog[:document_facets].insert(document_id: koine.id, facet: "lect", value: "grc:koi")
+      @catalog[:document_facets].insert(document_id: classical.id, facet: "lect", value: "grc:cla")
+      rebuild!
+
+      lects = Nabu::Lects.load(Nabu::TestSupport.fixtures("nabu-lects"))
+      scoped = Nabu::Query::Parallels.new(catalog: @catalog, fulltext: @fulltext, lects: lects)
+                                     .run("urn:h:od:1.1", lect: "grc:koi")
+      assert_equal ["urn:q:koi:1"], scoped.hits.map(&:urn),
+                   "only the koine-faceted candidate survives — bare-code docs are not under grc:koi"
+
+      unscoped = parallels("urn:h:od:1.1").hits.map(&:urn)
+      assert_equal 3, unscoped.size, "no lect: — behavior byte-identical"
+
+      bare_engine = Nabu::Query::Parallels.new(catalog: @catalog, fulltext: @fulltext, lects: nil)
+      error = assert_raises(Nabu::Error) { bare_engine.run("urn:h:od:1.1", lect: "grc:koi") }
+      assert_match(/nabu-lects module not synced/, error.message)
+    end
+
     def test_limit_caps_the_hit_list
       homer = make_document(urn: "urn:h:od", title: "Odyssey")
       make_passage(homer, urn: "urn:h:od:1.1", text: ODYSSEY_1_1, sequence: 0)

@@ -47,7 +47,14 @@ class LectRulesTest < Minitest::Test
       assert_match(/\A[a-z0-9][a-z0-9-]*\z/, rule.id, "rule ids are journal basis slugs")
       assert_includes %w[certain approximation], rule.tier
       refute_empty rule.sources
-      refute_empty rule.map
+      case rule.kind
+      when "compose"
+        refute_empty rule.match_prefix
+        refute_empty rule.variety
+        refute_empty rule.onto
+      else
+        refute_empty rule.map
+      end
     end
   end
 
@@ -113,10 +120,114 @@ class LectRulesTest < Minitest::Test
     end
   end
 
+  # -- the compose kind (P59-2: eBL akk/lit — a register onto a stage) --------
+
+  def test_a_compose_rule_refines_onto_stage_rows_in_place
+    with_compose_setup do |catalog, journal|
+      outcome = compose_rules.apply!(compose_rule, catalog: catalog, journal: journal)
+      assert_equal 2, outcome.assigned, "the na and nb rows compose"
+      na = journal[:lect_assignments].first(urn: "urn:t:ebl:na1")
+      assert_equal "akk:na/lit", na[:lect_id]
+      assert_equal "rule:akk-period", na[:basis],
+                   "composition refines the base rule's own row IN PLACE — its basis (and thus " \
+                   "its supersede lifecycle) stays the base rule's; re-running the base rule " \
+                   "un-composes, re-running compose re-refines"
+      assert_match(/\+lit .rule:ebl-akk-lit./, na[:note], "the note carries the composition evidence")
+      assert_equal "akk:nb/lit", journal[:lect_assignments].first(urn: "urn:t:ebl:nb1")[:lect_id]
+    end
+  end
+
+  def test_a_compose_rule_never_touches_owner_rows_off_stage_rows_or_rowless_docs
+    with_compose_setup do |catalog, journal|
+      outcome = compose_rules.apply!(compose_rule, catalog: catalog, journal: journal)
+      assert_equal "akk:nb", journal[:lect_assignments].first(urn: "urn:t:ebl:own1")[:lect_id],
+                   "an owner row is a hand ruling — composition never rewrites it"
+      assert_equal "akk:ob", journal[:lect_assignments].first(urn: "urn:t:ebl:ob1")[:lect_id],
+                   "OB is not in the rule's onto list — the OB literary tail stays uncomposed"
+      assert_nil journal[:lect_assignments].first(urn: "urn:t:ebl:bare1"),
+                 "a stage-less CANONICAL doc gains nothing — there is no stage to refine"
+      assert_equal 3, outcome.skipped, "owner + off-stage + rowless, all reported"
+    end
+  end
+
+  def test_a_compose_rerun_is_idempotent
+    with_compose_setup do |catalog, journal|
+      compose_rules.apply!(compose_rule, catalog: catalog, journal: journal)
+      rerun = compose_rules.apply!(compose_rule, catalog: catalog, journal: journal)
+      assert_equal 0, rerun.assigned, "already-composed rows never re-compose"
+      na = journal[:lect_assignments].first(urn: "urn:t:ebl:na1")
+      assert_equal "akk:na/lit", na[:lect_id]
+      assert_equal 1, na[:note].scan("+lit").size, "the note never accretes duplicates"
+    end
+  end
+
+  def test_compose_census_buckets_by_current_journal_state
+    with_compose_setup do |catalog, journal|
+      report = compose_rules.census(compose_rule, catalog: catalog, journal: journal)
+      assert_equal 2, report.assignable
+      assert_equal 1, report.matched.fetch(["CANONICAL/Divination", "akk:na/lit"])
+      assert_equal 1, report.matched.fetch(["CANONICAL", "akk:nb/lit"])
+      assert_equal 3, report.unmatched.values.sum, "owner/off-stage/rowless report as unmatched"
+    end
+  end
+
+  def test_compose_rule_targets_validate_against_the_registry
+    bad = Nabu::LectRules.new(rules: [Nabu::LectRules::Rule.new(
+      id: "bad-compose", sources: ["ebl"], code: "akk", facet: "genre",
+      kind: "compose", match_prefix: "CANONICAL", variety: "zzz", onto: ["akk:na"], tier: "certain"
+    )])
+    error = assert_raises(Nabu::Error) { bad.validate!(registry) }
+    assert_match(/bad-compose/, error.message)
+    assert_match(%r{akk/zzz|akk:na/zzz}, error.message)
+  end
+
   private
 
   def akk_rules
     @akk_rules ||= Nabu::LectRules.load(RULES_PATH)
+  end
+
+  def compose_rule
+    compose_rules.find("ebl-akk-lit") || flunk("the shipped rules file must carry ebl-akk-lit")
+  end
+
+  def compose_rules
+    @compose_rules ||= Nabu::LectRules.load(RULES_PATH)
+  end
+
+  # ebl docs: one NA-staged CANONICAL (composes), one NB-staged CANONICAL
+  # (composes), one OB-staged (onto excludes it), one owner-ruled NB (hand
+  # rulings untouchable), one stage-less CANONICAL, one ARCHIVAL red
+  # herring (prefix never matches).
+  def with_compose_setup
+    catalog = Nabu::Store.connect("sqlite::memory:")
+    Nabu::Store.migrate!(catalog)
+    ebl = catalog[:sources].insert(slug: "ebl", name: "eBL", adapter_class: "X", license_class: "open")
+    seed = lambda do |urn, value|
+      doc = catalog[:documents].insert(source_id: ebl, urn: urn, language: "akk", content_sha256: "x")
+      catalog[:document_facets].insert(document_id: doc, facet: "genre", value: value)
+    end
+    seed.call("urn:t:ebl:na1", "CANONICAL/Divination")
+    seed.call("urn:t:ebl:nb1", "CANONICAL")
+    seed.call("urn:t:ebl:ob1", "CANONICAL/Literature")
+    seed.call("urn:t:ebl:own1", "CANONICAL/Magic")
+    seed.call("urn:t:ebl:bare1", "CANONICAL")
+    seed.call("urn:t:ebl:arch1", "ARCHIVAL/Letter")
+
+    journal = Nabu::Store::LectJournal.connect("sqlite::memory:")
+    Nabu::Store::LectJournal.migrate!(journal)
+    assign = lambda do |urn, lect_id, basis|
+      Nabu::Store::LectJournal.assign!(journal, urn: urn, code: "akk", lect_id: lect_id,
+                                                basis: basis, note: "seed")
+    end
+    assign.call("urn:t:ebl:na1", "akk:na", "rule:akk-period")
+    assign.call("urn:t:ebl:nb1", "akk:nb", "rule:date-band")
+    assign.call("urn:t:ebl:ob1", "akk:ob", "rule:akk-period")
+    assign.call("urn:t:ebl:own1", "akk:nb", "owner")
+    yield catalog, journal
+  ensure
+    journal&.disconnect
+    catalog&.disconnect
   end
 
   def bad_rule

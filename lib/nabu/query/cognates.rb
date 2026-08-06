@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "catalog_join"
+require_relative "lect_filter"
 
 module Nabu
   module Query
@@ -110,11 +111,15 @@ module Nabu
       URN_BATCH = 500
 
       include CatalogJoin
+      include LectFilter
 
-      def initialize(catalog:, fulltext:, registry:)
+      # +lects+ (P59-3) is the `lect:` resolution seam — the same
+      # :auto/loaded/nil contract as Search's (LectFilter).
+      def initialize(catalog:, fulltext:, registry:, lects: :auto)
         @catalog = catalog
         @fulltext = fulltext
         @registry = registry
+        @lects = lects
       end
 
       # +target+ is a registered work id ("nt" — batch the whole work), a
@@ -123,11 +128,12 @@ module Nabu
       # (≥2). +all+ lifts common-word suppression; +long+ lifts the group
       # ceiling. +exclude_license+ drops witness documents of those effective
       # license classes before joining (the MCP restricted contract).
-      def run(target, work: nil, langs: nil, all: false, long: false, exclude_license: [])
+      def run(target, work: nil, langs: nil, all: false, long: false, exclude_license: [], lect: nil)
         ensure_ready!
         langs = validate_langs(langs)
         target_work, query, hits = resolve_target(target.to_s.strip, work)
         documents = witness_documents(hits, exclude_license)
+        documents = lect_scope_witnesses(documents, lect) if lect
         hits = hits.select { |hit| documents.key?(hit.fetch(:document_urn)) }
         groups, suppressed = build_groups(hits, documents, langs: langs, all: all)
         total = groups.size
@@ -244,6 +250,39 @@ module Nabu
                                    license_class: row.fetch(:license_class),
                                    source_slug: row.fetch(:source_slug) }
         end
+      end
+
+      # The anchor-scoped lect filter (P59-3): only witnesses OF THE LECT'S
+      # ANCHOR LANGUAGE are subject to it — a blanket filter would kill
+      # every cross-language group, since only one language can sit under
+      # one lect ("cognate sets where the Greek witness is specifically
+      # Koine"). Resolution per document: the materialized lect facet row
+      # when one exists (journal rulings ride it), else the (language,
+      # source) resolution. Other-anchor witnesses pass untouched; the
+      # ≥2-languages group rule re-judges downstream. Module absent: loud.
+      def lect_scope_witnesses(documents, target)
+        seam = lects_seam
+        raise Nabu::Error, LectFilter::LECT_MODULE_MISSING unless seam
+
+        anchor = target.to_s[/\A[a-z0-9-]+/]
+        facet_values = witness_lect_facets(documents.keys)
+        documents.select do |urn, doc|
+          resolved = facet_values[urn] || seam.resolve(doc.fetch(:language), source: doc.fetch(:source_slug))
+          own = Nabu::Lects.parse_id(resolved)
+          next true unless own && own[:anchor] == anchor
+
+          lect_matches_target?(resolved, target.to_s)
+        end
+      end
+
+      # {document urn => materialized lect facet value} for the witness set.
+      def witness_lect_facets(urns)
+        return {} if urns.empty? || !@catalog.table_exists?(:document_facets)
+
+        @catalog[:document_facets]
+          .join(:documents, id: Sequel[:document_facets][:document_id])
+          .where(Sequel[:documents][:urn] => urns, Sequel[:document_facets][:facet] => "lect")
+          .select_hash(Sequel[:documents][:urn], Sequel[:document_facets][:value])
       end
 
       # [sorted groups, suppressed count].

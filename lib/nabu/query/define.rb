@@ -2,6 +2,7 @@
 
 require_relative "../normalize"
 require_relative "../lects"
+require_relative "lect_filter"
 require_relative "reflex_views"
 
 module Nabu
@@ -40,6 +41,8 @@ module Nabu
     # Degradation: a catalog predating migration 006 (or none at all) simply
     # has no shelf — run returns [], the MCP layer words the state.
     class Define
+      include LectFilter
+
       # One dictionary entry hit. +citations+ are CitationView values in
       # entry order; +license_class+/+license+ come from the owning source;
       # +reflexes+ (P14-1) are ReflexViews::View values, [] off the
@@ -142,7 +145,7 @@ module Nabu
       # canonical form is looked up instead, and its hits carry a via_lila
       # note. A miss that LiLa cannot map, or a canonical form still absent
       # from the shelf, stays an honest miss.
-      def run(lemma, lang: nil, limit: DEFAULT_LIMIT)
+      def run(lemma, lang: nil, limit: DEFAULT_LIMIT, lect: nil)
         return [] unless shelf?
 
         term = lemma.to_s.strip
@@ -177,11 +180,11 @@ module Nabu
           variants = (variants + verb_lemma_variants(bare, lang: lang)).uniq
         end
 
-        rows = entry_rows(variants, lang: lang, limit: limit, recon_only: recon_only)
+        rows = entry_rows(variants, lang: lang, limit: limit, recon_only: recon_only, lect: lect)
         return rows.map { |row| build_result(row) } unless rows.empty?
         return [] if recon_only # the reconstruction shelves are not LiLa's domain
 
-        lila_fallback(term, lang: lang, limit: limit)
+        lila_fallback(term, lang: lang, limit: limit, lect: lect)
       end
 
       # Batch short-gloss lookup for lemma-search integration (P11-4):
@@ -220,13 +223,14 @@ module Nabu
         @catalog.table_exists?(:dictionary_entries)
       end
 
-      def entry_rows(variants, lang:, limit:, recon_only: false)
+      def entry_rows(variants, lang:, limit:, recon_only: false, lect: nil)
         dataset = @catalog[:dictionary_entries]
                   .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
                   .join(:sources, id: Sequel[:dictionaries][:source_id])
                   .where(Sequel[:dictionary_entries][:headword_folded] => variants,
                          Sequel[:dictionary_entries][:withdrawn] => false)
         dataset = dataset.where(recon_shelf_expr) if recon_only
+        dataset = dataset.where(lect_shelf_expr(lect)) if lect
         dataset = dataset.where(Sequel[:dictionaries][:language] => Nabu::Languages.code_variants(lang)) if lang
         dataset = dataset.order(Sequel[:dictionaries][:slug], Sequel[:dictionary_entries][:entry_id])
         # limit: nil = every matching shelf (P34-r2 — the CLI fetches all and
@@ -259,13 +263,28 @@ module Nabu
         end)
       end
 
-      # Feature-detect + memoize (the etym/search :auto contract).
-      def lects_seam
-        return @lects unless @lects == :auto
+      # The dictionary-grain lect scope (P59-3): keep shelves whose
+      # (language, source) RESOLUTION is +target+ or more specific under it
+      # — the passage filter's prefix semantics at SHELF grain (dictionary
+      # entries have no per-document journal rows, so the source override /
+      # codemap / identity ladder is the whole resolution; derom's la-vul
+      # scopes under roa, never lat). Module absent: loud error — the
+      # search stance, never a silent no-filter. An empty pair set matches
+      # nothing, honestly (the recon_shelf_expr precedent).
+      def lect_shelf_expr(target)
+        seam = lects_seam
+        raise Nabu::Error, LectFilter::LECT_MODULE_MISSING unless seam
 
-        loaded = Nabu::Lects.load_default
-        @lects = loaded if loaded
-        loaded
+        pairs = @catalog[:dictionaries]
+                .join(:sources, id: Sequel[:dictionaries][:source_id])
+                .distinct
+                .select_map([Sequel[:dictionaries][:language], Sequel[:sources][:slug]])
+                .select { |language, slug| lect_matches_target?(seam.resolve(language, source: slug), target) }
+        return { Sequel[:dictionaries][:id] => nil } if pairs.empty?
+
+        Sequel.|(*pairs.map do |language, slug|
+          Sequel.&({ Sequel[:dictionaries][:language] => language }, { Sequel[:sources][:slug] => slug })
+        end)
       end
 
       def entry_columns
@@ -323,7 +342,7 @@ module Nabu
       # <canonical>". No LiLa tree, a non-Latin --lang, an unmapped form, or a
       # canonical form still absent from the shelf all yield [] — an honest
       # miss, byte-identical to before when LiLa is absent.
-      def lila_fallback(term, lang:, limit:)
+      def lila_fallback(term, lang:, limit:, lect: nil)
         return [] unless lat_eligible?(lang)
 
         resolver = lila or return []
@@ -342,7 +361,7 @@ module Nabu
 
         results = seen.values.flat_map do |canonical|
           rows = entry_rows(Nabu::Normalize.query_forms(canonical),
-                            lang: LILA_LANGUAGE, limit: limit, recon_only: false)
+                            lang: LILA_LANGUAGE, limit: limit, recon_only: false, lect: lect)
           rows.map { |row| build_result(row, via_lila: "#{term} → #{canonical}") }
         end
         limit ? results.first(limit) : results

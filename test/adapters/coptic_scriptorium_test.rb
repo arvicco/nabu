@@ -31,6 +31,7 @@ class CopticScriptoriumTest < Minitest::Test
     urn:nabu:coptic-scriptorium:papyri_info.tm82127.cpr_2_237
     urn:nabu:coptic-scriptorium:pistissophia.1.petermann:1-13
     urn:nabu:coptic-scriptorium:shenoute.abraham.monbya:21-27
+    urn:nabu:coptic-scriptorium:shenoute.considering.amelineau:1-2
     urn:nabu:coptic-scriptorium:theodosiusalex.michael.budge_al_ed:9-30
     urn:nabu:coptic-scriptorium:urn:cts:copticMag:kyprianos.ocrum_st_18.kypt344
   ].freeze

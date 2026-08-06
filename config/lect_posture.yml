@@ -1,0 +1,111 @@
+# config/lect_posture.yml — per-source lect POSTURE declarations (P59-4, D59-e).
+#
+# The owner's ruling: lects are an integral part of Nabu — "there shouldn't
+# be a situation of 'adapter without lects'". This file is the JUDGMENT
+# record that makes that enforceable: every passage-serving source must
+# have a posture, and the suite (test/lect_posture_test.rb) fails when one
+# has none. Machine-knowable postures are NEVER declared here — a source
+# named by a lect_facet_rules.yml rule or a lect_overrides.yml row is
+# postured by those files themselves (single source of truth; the P58
+# site-data lesson). This file holds only what pure judgment can state:
+#
+#   identity — ruled: the bare code IS the claim; no refinement is
+#              available or needed (an honest, recorded answer).
+#   pending  — a real refinement candidate exists but is not yet ruled;
+#              every pending row is a standing work item, not a silence.
+#   dates    — per-document refinements ride `nabu lect infer-dates`
+#              (dating × stage bands); the source grain stays bare by
+#              design.
+#   codemap  — the universal codemap already refines the source's code(s)
+#              for every consumer (kanripo's lzh → zho/lit).
+#
+# New-adapter duty (the front-door checklist): run `nabu lect suggest
+# <slug>`, then either wire a rule/override or add a row here. A missing
+# row fails the suite.
+sources:
+  # ── dates: the dating-inferred epigraphic/documentary corpora ──────────
+  ceipom: {posture: dates}
+  corph: {posture: dates}
+  croala:
+    posture: dates
+    note: ruled DELIBERATELY unstaged at source grain (D57-f — genuinely
+      mixed Renaissance-to-modern Latin); per-document date-band rows ride.
+  edh: {posture: dates}
+  edr: {posture: dates}
+  iip: {posture: dates}
+  isicily: {posture: dates}
+  lexlep: {posture: dates}
+  oracc: {posture: dates}
+
+  # ── codemap: refined universally, no Nabu-specific knowledge needed ────
+  kanripo: {posture: codemap, note: lzh → zho/lit (Literary Chinese)}
+  cbeta: {posture: codemap, note: lzh → zho/lit}
+  suttacentral: {posture: codemap, note: the lzh slice → zho/lit; pli is identity}
+  ud:
+    posture: codemap
+    note: the lzh treebanks → zho/lit; the rest ruled DELIBERATELY
+      unstaged (D57-f — a mixed-treebank collection is not one stage).
+
+  # ── identity: the bare code IS the claim ───────────────────────────────
+  # Stage-specific ISO codes (the code already names the historical stage):
+  oncoj: {posture: identity, note: ojp IS Old Japanese}
+  rem: {posture: identity, note: gmh IS Middle High German}
+  ren: {posture: identity, note: gml IS Middle Low German}
+  bfm: {posture: identity, note: fro IS Old French}
+  helipad: {posture: identity, note: osx IS Old Saxon}
+  menotec: {posture: identity, note: non IS Old Norse}
+  aspr: {posture: identity, note: ang IS Old English}
+  iswoc: {posture: identity, note: ang/fro — both stage-coded}
+  cantigas: {posture: identity, note: roa-opt IS medieval Galician-Portuguese}
+  otdo: {posture: identity, note: otb IS Old Tibetan}
+  old-tibetan: {posture: identity, note: otb}
+  soas-tibetan: {posture: identity, note: xct IS Classical Tibetan}
+  derge-kangyur: {posture: identity, note: xct}
+  derge-tengyur: {posture: identity, note: xct}
+  # Variety-less languages as held (no registry stages to refine into):
+  tlhdig: {posture: identity, note: the cuneiform micro-shelves (hit/xhu/xlu…) — no minted stages}
+  rsti: {posture: identity, note: catalog records across nine codes; uga has no stages}
+  cuc: {posture: identity, note: uga}
+  betamasaheft-works: {posture: identity, note: gez/amh — no minted stages}
+  traces: {posture: identity, note: gez}
+  syriac-corpus: {posture: identity, note: syc IS Classical Syriac}
+  peshitta: {posture: identity, note: syc}
+  oshb: {posture: identity, note: hbo carries no stages; the arc slice is Biblical Aramaic within Tanakh}
+  bhsa: {posture: identity, note: hbo/arc, as oshb}
+  open-etruscan: {posture: identity, note: ett — no minted stages}
+  tir: {posture: identity, note: xrr Raetic}
+  itant: {posture: identity, note: osc/xcg — the Sabellian codes are already
+      the finest grain; no minted stages}
+  riig: {posture: identity, note: xtg Gaulish}
+  ogham: {posture: identity, note: pgl/sga/mga — the Irish ladder is already stage-coded}
+  eng-web: {posture: identity, note: a modern English translation shelf}
+  e84000: {posture: identity, note: English translations of the Kangyur}
+  aozora: {posture: identity, note: modern Japanese literature}
+  sarit: {posture: identity, note: classical Sanskrit editions; no school tags like DCS's}
+  damaskini: {posture: identity, note: early-modern Bulgarian damaskini + chu apparatus}
+  # Ruled deliberately unstaged (D57-f): mixed corpora, bare-anchor honesty.
+  first1k-greek: {posture: identity, note: ruled deliberately unstaged (D57-f)}
+  diorisis: {posture: identity, note: ruled deliberately unstaged (D57-f)}
+  glaux: {posture: identity, note: ruled deliberately unstaged (D57-f)}
+  proiel: {posture: identity, note: mixed treebank collection — the ud/D57-f stance}
+  local-library: {posture: identity, note: the owner's own shelf — codes as curated}
+
+  # ── pending: a real refinement candidate, not yet ruled ────────────────
+  etcsl: {posture: pending, note: mostly OB literary Sumerian — a sux:post
+      source override is one ruling away}
+  coptic-scriptorium: {posture: pending, note: Sahidic/Bohairic are variety
+      candidates the registry does not mint yet}
+  titus-avestan: {posture: pending, note: Old vs Young Avestan stages are
+      mintable; the corpus distinguishes them}
+  torot: {posture: pending, note: chu recension varieties exist in the
+      registry; the mss are attributable}
+  ccmh: {posture: pending, note: Croatian Church Slavonic — a chu recension
+      variety candidate}
+  imp: {posture: pending, note: 19th-c Slovene — a slv stage question}
+  goo300k: {posture: pending, note: historical Slovene, as imp}
+  freising: {posture: pending, note: the Freising fragments — Old Slovene,
+      a stage-minting candidate}
+  gretil: {posture: pending, note: san corpus slices may support rules like
+      DCS's veda tags; unexamined}
+  tla-hf: {posture: pending, note: hieratic fragments — egy stages reachable
+      once dating metadata is examined}

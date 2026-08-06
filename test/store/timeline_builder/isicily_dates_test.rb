@@ -92,5 +92,21 @@ module Store
       assert_equal 0, counts[:invalid]
       assert_equal 0, counts[:undated]
     end
+
+    # -- the P59-0 reversed-bounds repair (real offending record) -----------
+
+    def test_unsigned_bce_custom_bounds_negate_on_the_raw_era_signal
+      # ISic001206: notBefore-custom="0301" notAfter-custom="0200" for
+      # "3rd century BCE?" — unsigned-descending BCE, the sign dropped
+      # upstream; the raw's BCE signal (the cataloguer's "?" included)
+      # repairs it. The one reversed I.Sicily row at the 2026-08-04 audit.
+      make_document("urn:nabu:isicily:isic001206")
+      build!
+      row = timeline_for("urn:nabu:isicily:isic001206")
+      assert_equal(-301, row.fetch(:not_before))
+      assert_equal(-200, row.fetch(:not_after))
+      assert_operator row.fetch(:not_before), :<=, row.fetch(:not_after),
+                      "no reversed interval ever reaches the axes"
+    end
   end
 end

@@ -266,14 +266,21 @@ class WiktionaryJsonlParserTest < Minitest::Test
     assert_equal "guþ", got.roman_folded
   end
 
-  def test_the_malformed_ml_code_stores_verbatim_with_nil_language
+  def test_the_dotted_latin_sigla_resolve_to_their_etymology_stage_tags
+    # P59-1 (supersedes the P14-1 display-only stance): the same extracts
+    # mint la-med/la-vul/la-lat from Wiktionary's own etymology codes, so
+    # "ML."/"VL."/"LL." were stragglers of the identical claim. lang_code
+    # stays upstream-verbatim; language joins the siblings.
     gem = recon_entries("kaikki.org-dictionary-ProtoGermanic.jsonl", "gem-pro")
     hrunk = gem.find { |e| e.entry_id == "hrunkwǭ:noun" } || flunk("hrunkwǭ not parsed")
     ml = hrunk.reflexes.find { |r| r.lang_code == "ML." } ||
-         flunk("the lone malformed lang_code record is the fixture's point")
-    assert_nil ml.language, "no valid tag — display-only, never a join candidate"
+         flunk("the fixture's Medieval-Latin siglum record is the point")
+    assert_equal "la-med", ml.language
     assert_equal "fruncāre", ml.word
     assert_equal "fruncare", ml.word_folded, "generic fold still applies"
+    map = Nabu::Adapters::WiktionaryJsonlParser::LANG_CODE_MAP
+    assert_equal "la-vul", map.fetch("VL."), "Vulgar Latin (206 la-vul sibling rows)"
+    assert_equal "la-lat", map.fetch("LL."), "Late Latin (101 la-lat sibling rows)"
   end
 
   def test_grouping_only_descendants_yield_zero_reflexes

@@ -70,9 +70,15 @@ rules:
       "Early Old Babylonian": "sux:post"
       "Old Babylonian": "sux:post"
 
-  # ── D58-c: the AES corpus slices (facet `period` on source aes). Ruled
-  # now: ok-fip → egy:old, mk-sip → egy:mid. nk and tip-roman DEFERRED
-  # (witnesses straddle Middle/Late Egyptian) — deliberately absent here.
+  # ── D58-c + D59-a: the AES corpus slices (facet `period` on source aes).
+  # Ruled D58-c: ok-fip → egy:old, mk-sip → egy:mid. Ruled D59-a
+  # (2026-08-06): nk → egy:nk — the whole New Kingdom slice onto the stage
+  # minted for exactly this straddle (band [-1550,-1070] overlaps mid and
+  # late deliberately; the owner's no-excessive-complexity call — no
+  # per-subcorpus splitting). tip-roman stays DELIBERATELY absent: the
+  # material is égyptien de tradition (Middle Egyptian register in late
+  # copies) and a dating-grain stage would be linguistically wrong; the
+  # register decision is queued (plan doc, carried queue).
   - id: egy-aes-period
     tier: certain
     sources: [aes]
@@ -81,6 +87,7 @@ rules:
     map:
       "ok-fip": "egy:old"
       "mk-sip": "egy:mid"
+      "nk": "egy:nk"
 
   # ── D58-d (facet half): the DCS Vedic school tags — a rv/av/sv/yv-tagged
   # text IS Vedic Sanskrit. Untagged DCS texts stay bare san (the epi/cla
@@ -96,3 +103,47 @@ rules:
       "sv": "san:ved"
       "black yv": "san:ved"
       "white yv": "san:ved"
+
+  # ── D59-b (2026-08-06): the Sefaria Aramaic split by subshelf. The 215
+  # arc docs divide cleanly: the Talmud side (six sedarim + the minor
+  # tractates, 162 docs) is Jewish Literary/Babylonian Aramaic → arc:mid;
+  # the Targum side (53 docs) composes the ratified jud Targumic sociolect
+  # → arc:mid/jud. Tier approximation: a few Hebrew-mixed tractates ride
+  # arc wholesale.
+  - id: sefaria-arc-subshelf
+    tier: approximation
+    sources: [sefaria]
+    code: arc
+    facet: subshelf
+    map:
+      "seder-zeraim": "arc:mid"
+      "seder-moed": "arc:mid"
+      "seder-nashim": "arc:mid"
+      "seder-nezikin": "arc:mid"
+      "seder-kodashim": "arc:mid"
+      "seder-tahorot": "arc:mid"
+      "minor-tractates": "arc:mid"
+      "onkelos": "arc:mid/jud"
+      "targum-jonathan": "arc:mid/jud"
+      "targum-jerusalem": "arc:mid/jud"
+      "aramaic-targum": "arc:mid/jud"
+
+  # ── D59-b (2026-08-06): the eBL Standard Babylonian register — the
+  # registry's own note ("the literary register of first-millennium
+  # scholarship") made a rule. kind: compose refines EXISTING stage rows
+  # in place (basis and supersede lifecycle stay the base rule's;
+  # re-running the base rule un-composes, re-running this re-refines —
+  # so this rule stays LAST in the file, after every stage-writing rule).
+  # The genre facet is hierarchical (CANONICAL/Divination/Celestial…),
+  # hence prefix matching; onto na/nb only — the OB/MB literary tail and
+  # no-period docs stay uncomposed (98% of CANONICAL akk is
+  # first-millennium; census 2026-08-06: NA 4,864 · NB 2,237 · LB 100).
+  - id: ebl-akk-lit
+    tier: certain
+    kind: compose
+    sources: [ebl]
+    code: akk
+    facet: genre
+    match_prefix: "CANONICAL"
+    variety: lit
+    onto: ["akk:na", "akk:nb"]

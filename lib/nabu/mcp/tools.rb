@@ -510,6 +510,12 @@ module Nabu
                                "shelves." },
           limit: { type: "integer", minimum: 1, maximum: DEFINE_MAX_LIMIT,
                    default: DEFINE_DEFAULT_LIMIT, description: "Maximum entries returned." },
+          lect: { type: "string",
+                  description: "Restrict to shelves whose (language, source) RESOLUTION is this " \
+                               "lect id or a more specific one under it (P59-3, nabu-lects " \
+                               "module; dictionary grain — per-source overrides included, so " \
+                               "derom's la-vul scopes under roa, never lat). Errors if the " \
+                               "module is not synced on this box." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["lemma"],
@@ -569,6 +575,12 @@ module Nabu
           limit: { type: "integer", minimum: 1, maximum: PARALLELS_MAX_LIMIT,
                    default: PARALLELS_DEFAULT_LIMIT,
                    description: "Maximum hits per signal (surface parallels and lemma echoes)." },
+          lect: { type: "string",
+                  description: "Lect filter on the candidates (P59-3, nabu-lects module): keep " \
+                               "only hits whose resolution is this lect id or a more specific " \
+                               "one under it — the same prefix semantics as nabu_search's lect " \
+                               "(lect: \"grc:koi\" keeps Koine candidates, drops Classical and " \
+                               "bare-grc ones). Errors if the module is not synced on this box." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["urn"],
@@ -672,6 +684,11 @@ module Nabu
           limit: { type: "integer", minimum: 1, maximum: COGNATES_MAX_LIMIT,
                    default: COGNATES_DEFAULT_LIMIT,
                    description: "Maximum (verse, root) groups returned." },
+          lect: { type: "string",
+                  description: "Scope witnesses OF THIS LECT'S ANCHOR LANGUAGE to the lect " \
+                               "(P59-3: lect: \"grc:koi\" keeps cognate sets whose Greek " \
+                               "witness is Koine; other-language witnesses pass untouched). " \
+                               "Errors if the nabu-lects module is not synced on this box." },
           include_restricted: INCLUDE_RESTRICTED_SCHEMA
         },
         required: ["target"],
@@ -911,8 +928,17 @@ module Nabu
         fulltext = search_index(:text) or return note(REBUILDING_NOTE)
 
         limit = clamp(args["limit"], default: PARALLELS_DEFAULT_LIMIT, max: PARALLELS_MAX_LIMIT)
-        result = Query::Parallels.new(catalog: catalog, fulltext: fulltext)
-                                 .run(urn, limit: limit + 1, lang: args["lang"], license: license)
+        # P59-3: the lect candidate filter, module pre-checked HERE (the
+        # search_lect stance) so an absent module is a clean InvalidArguments.
+        lect = string_arg(args, "lect")
+        lects = nil
+        if lect
+          lects = lects_seam
+          raise InvalidArguments, "lect needs the nabu-lects module — nabu-lects module not synced" unless lects
+        end
+        result = Query::Parallels.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto)
+                                 .run(urn, limit: limit + 1, lang: args["lang"], license: license,
+                                           lect: lect)
         if result.nil?
           return note("urn not found: #{urn} — nabu_search finds passages, nabu_status shows " \
                       "what this corpus holds")
@@ -1036,8 +1062,16 @@ module Nabu
 
         limit = clamp(args["limit"], default: DEFINE_DEFAULT_LIMIT, max: DEFINE_MAX_LIMIT)
         include_restricted = args["include_restricted"] == true
-        results = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext))
-                               .run(lemma, lang: lang, limit: limit + 1)
+        # P59-3: the shelf-grain lect scope, module pre-checked HERE (the
+        # search_lect stance) so an absent module is a clean InvalidArguments.
+        lect = string_arg(args, "lect")
+        lects = nil
+        if lect
+          lects = lects_seam
+          raise InvalidArguments, "lect needs the nabu-lects module — nabu-lects module not synced" unless lects
+        end
+        results = Query::Define.new(catalog: catalog, fulltext: resolve(@fulltext), lects: lects || :auto)
+                               .run(lemma, lang: lang, limit: limit + 1, lect: lect)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_define(results, lemma: lemma, limit: limit, catalog: catalog)
       end
@@ -1083,9 +1117,18 @@ module Nabu
 
         limit = clamp(args["limit"], default: COGNATES_DEFAULT_LIMIT, max: COGNATES_MAX_LIMIT)
         exclude = args["include_restricted"] == true ? [] : EXCLUDED_LICENSE_CLASSES
-        result = Query::Cognates.new(catalog: catalog, fulltext: fulltext, registry: registry)
+        # P59-3: the anchor-scoped lect filter, module pre-checked HERE.
+        lect = string_arg(args, "lect")
+        lects = nil
+        if lect
+          lects = lects_seam
+          raise InvalidArguments, "lect needs the nabu-lects module — nabu-lects module not synced" unless lects
+        end
+        result = Query::Cognates.new(catalog: catalog, fulltext: fulltext, registry: registry,
+                                     lects: lects || :auto)
                                 .run(target, work: string_arg(args, "work"), langs: args["langs"],
-                                             all: args["all"] == true, long: true, exclude_license: exclude)
+                                             all: args["all"] == true, long: true, exclude_license: exclude,
+                                             lect: lect)
         render_cognates(result, limit: limit)
       rescue Query::Cognates::Error => e
         tool_error(e.message)
@@ -1807,6 +1850,18 @@ module Nabu
           withdrawn: result.withdrawn,
           provenance: result.provenance.map { |e| { event: e.event, tool: e.tool, at: e.at.to_s } }
         }.merge(credit_field(result)).merge(meter_field(result)).merge(findspot_field(result))
+          .merge(lect_field(result))
+      end
+
+      # The resolved lect (P59-3): merged only when the document carries a
+      # materialized lect facet row — the one surface that sees per-document
+      # journal rulings. "No row means identity" (P58-4), so a bare-code
+      # document's payload stays byte-identical and the key never appears
+      # carrying a mere echo of `language`.
+      def lect_field(result)
+        return {} unless result.respond_to?(:lect) && result.lect
+
+        { lect: result.lect }
       end
 
       # The meter enrichment (P44-3, mirroring the CLI's P44-7 meter line):

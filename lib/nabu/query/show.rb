@@ -51,9 +51,12 @@ module Nabu
       PassageResult = Data.define(
         :urn, :language, :sequence, :revision, :withdrawn, :text,
         :document_urn, :document_title, :source_slug, :license_class, :provenance, :timeline,
-        :annotations, :credit, :meter, :findspot
+        :annotations, :credit, :meter, :findspot, :lect
       ) do
-        def initialize(timeline: nil, annotations: {}, credit: nil, meter: nil, findspot: nil, **) = super
+        def initialize(timeline: nil, annotations: {}, credit: nil, meter: nil, findspot: nil,
+                       lect: nil, **)
+          super
+        end
       end
 
       # The findspot line's facts (P44-2): the captured Pleiades id resolved
@@ -337,7 +340,8 @@ module Nabu
           annotations: parse_annotations(row),
           credit: row.fetch(:credit),
           meter: meter_for(row.fetch(:passage_id)),
-          findspot: findspot_for(row)
+          findspot: findspot_for(row),
+          lect: lect_for(row.fetch(:document_id))
         )
       end
 
@@ -423,6 +427,15 @@ module Nabu
           .order(:facet, :id)
           .select(:facet, :value, :raw)
           .map { |r| Facet.new(facet: r.fetch(:facet), value: r.fetch(:value), raw: r[:raw]) }
+      end
+
+      # The document's materialized lect (P59-3): the facet='lect' row's
+      # value, nil when none — "no row means identity" (P58-4), and the
+      # consumer keeps its payload byte-identical for bare-code documents.
+      def lect_for(document_id)
+        return nil unless @catalog.table_exists?(:document_facets)
+
+        @catalog[:document_facets].where(document_id: document_id, facet: "lect").get(:value)
       end
 
       # The document's timeline (P15-2), or nil when undated. A document

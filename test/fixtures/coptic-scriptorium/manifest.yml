@@ -58,6 +58,10 @@ files:
     url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/life-aphou/life.aphou_TT/life.aphou.01.tt
     whole: false
     trim: "cut to meta line + the verses through the first quote_ref (upstream lines 1-5081 byte-identical, </meta> re-added; 525,537 B -> 149,544 B); PATHS persName/placeName/roleName/date subtype + gazetteer-ref spans, quote_ref/quote_type, p_source"
+  - path: shenoute-considering/shenoute.considering_TT/shenoute.considering.BV283-284.tt
+    url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/shenoute-considering/shenoute.considering_TT/shenoute.considering.BV283-284.tt
+    whole: false
+    trim: "cut to meta line + verse 1 (upstream lines 1-21 byte-identical, </ed_page></pb_xml_id></chapter_n></meta> re-added; 121,915 B -> 2,595 B); the P59-0 swapped-seat header exemplar (origDate_notBefore=\"1100\" origDate_notAfter=\"0901\" for \"between 901 and 1100 C.E.\")"
   - path: sahidica.1corinthians/sahidica.1corinthians_TT/1Cor_14.tt
     url: https://raw.githubusercontent.com/CopticScriptorium/corpora/v6.2.0/sahidica.1corinthians/sahidica.1corinthians_TT/1Cor_14.tt
     whole: false

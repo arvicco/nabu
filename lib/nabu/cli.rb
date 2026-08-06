@@ -277,7 +277,11 @@ module Nabu
 
       catalog = Nabu::Store.connect(config.catalog_path)
       journal = options[:dry_run] ? nil : Nabu::Store::LectJournal.open!(config.lects_journal_path)
-      selected_rules(rules).each { |rule| run_rule(rules, rule, catalog, journal) }
+      # A compose rule's census reads the CURRENT journal even on --dry-run
+      # (it buckets candidates by their existing stage rows); absent file →
+      # nil → the census reports every candidate as rowless, honestly.
+      census_journal = journal || Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
+      selected_rules(rules).each { |rule| run_rule(rules, rule, catalog, journal, census_journal) }
       if options[:dry_run]
         say "dry run — nothing written (drop --dry-run to compile)"
       else
@@ -349,6 +353,37 @@ module Nabu
       end
 
       materialize_lect_facets!(config)
+    end
+
+    desc "suggest SLUG", "The front-door census: what could refine this source's lect posture (report-only)"
+    long_desc <<~HELP, wrap: false
+      Inspects ONE source's held metadata against the lect registry and
+      reports what could refine it (P59-4): each language code with its
+      current resolution and whether the anchor carries stages at all; the
+      source's facet vocabulary (a small label set over a staged anchor is
+      a rule candidate — a scaffold stanza is sketched for the best one);
+      and the date-band inference census. REPORT-ONLY by design — adapters
+      never write the journal; the owner (or a ruled rule in
+      config/lect_facet_rules.yml) applies. The new-adapter checklist runs
+      this at adapter-add time; the outcome lands as a rule, an override,
+      or a config/lect_posture.yml declaration (identity is an honest
+      answer).
+    HELP
+    def suggest(slug = nil)
+      slug = slug.to_s.strip
+      raise Thor::Error, "lect suggest: give a source slug" if slug.empty?
+
+      config = Nabu::Config.load
+      registry = require_lects_module!(config)
+      raise Thor::Error, "lect suggest: no catalog at #{config.catalog_path}" unless File.exist?(config.catalog_path)
+
+      catalog = Nabu::Store.connect(config.catalog_path)
+      report = Nabu::LectSuggest.new(catalog: catalog, registry: registry).run(slug)
+      raise Thor::Error, "lect suggest: unknown source or no live documents: #{slug}" if report.nil?
+
+      render_suggest_report(report)
+    ensure
+      catalog&.disconnect
     end
 
     desc "check-dates", "The reverse audit: journal assignments whose document dates fall outside the stage band"
@@ -452,6 +487,67 @@ module Nabu
         catalog.disconnect
       end
 
+      # The suggest render (P59-4): codes → facets → dating, each with the
+      # honest posture verdict inline; a scaffold stanza for the best rule
+      # candidate (small vocabulary over a staged anchor), values capped at
+      # LectSuggest::TOP_VALUES with the cap announced.
+      def render_suggest_report(report)
+        say "lect suggest #{report.slug} — report only; apply via rules/overrides/posture"
+        say "  codes:"
+        report.codes.each do |row|
+          verdict = if row.resolution != row.code then "resolved — machine posture exists"
+                    elsif row.stages.any? then "IDENTITY, but the anchor has stages: #{row.stages.join(' ')}"
+                    else
+                      "identity — no minted stages (declare posture: identity)"
+                    end
+          say format("    %<code>-12s %<docs>6d docs → %<res>-14s %<verdict>s",
+                     code: row.code, docs: row.docs, res: row.resolution, verdict: verdict)
+        end
+        say "  facets:"
+        say "    (none — no rule material)" if report.facets.empty?
+        report.facets.each do |row|
+          candidate = row.distinct <= Nabu::LectSuggest::RULE_CANDIDATE_DISTINCT ? " ← rule candidate" : ""
+          say "    #{row.facet}: #{row.distinct} distinct over #{row.docs} rows#{candidate}"
+          row.top.each { |value, count| say format("      %<value>-40s %<count>d", value: value, count: count) }
+          if row.distinct > row.top.size
+            say "      … #{row.distinct - row.top.size} more values (census caps at " \
+                "#{Nabu::LectSuggest::TOP_VALUES})"
+          end
+        end
+        render_suggest_dating(report.dating)
+        render_suggest_scaffold(report)
+      end
+
+      def render_suggest_dating(dating)
+        say "  dating:"
+        if dating.is_a?(String)
+          say "    #{dating}"
+        elsif dating.assignable.empty?
+          say "    no date-band material (undated, band-less anchors, or spans)"
+        else
+          dating.assignable.sort_by { |_k, v| -v }.first(8).each do |(_src, code, lect_id), count|
+            say format("    %<code>-8s → %<lect>-14s %<count>d docs assignable by date-band inference",
+                       code: code, lect: lect_id, count: count)
+          end
+        end
+      end
+
+      def render_suggest_scaffold(report)
+        staged = report.codes.select { |row| row.stages.any? && row.resolution == row.code }
+        facet = report.facets.find { |row| row.distinct <= Nabu::LectSuggest::RULE_CANDIDATE_DISTINCT }
+        return if staged.empty? || facet.nil?
+
+        code = staged.first
+        say "  scaffold (config/lect_facet_rules.yml — every target needs an owner ruling):"
+        say "    - id: #{report.slug}-#{code.code}-#{facet.facet}"
+        say "      tier: TODO(certain|approximation)"
+        say "      sources: [#{report.slug}]"
+        say "      code: #{code.code}"
+        say "      facet: #{facet.facet}"
+        say "      map:"
+        facet.top.map(&:first).each { |value| say "        #{value.inspect}: \"#{code.code}:TODO\"" }
+      end
+
       # The wholesale recompute after a bulk compile (apply-rules,
       # infer-dates) or on demand (materialize). Pending migrations run
       # first (idempotent — the open_or_create_catalog stance) so the
@@ -492,8 +588,8 @@ module Nabu
         [rule]
       end
 
-      def run_rule(rules, rule, catalog, journal)
-        report = rules.census(rule, catalog: catalog)
+      def run_rule(rules, rule, catalog, journal, census_journal = journal)
+        report = rules.census(rule, catalog: catalog, journal: census_journal)
         say "rule #{rule.id} (#{rule.tier}; facet #{rule.facet}, code #{rule.code}, " \
             "sources #{rule.sources.join(' ')})"
         report.matched.sort_by { |_pair, count| -count }.each do |(value, lect_id), count|
@@ -1791,11 +1887,18 @@ module Nabu
                               "(default #{Nabu::BatchParallels::DEFAULT_PER_ANCHOR})"
     option :db, type: :string, banner: "PATH",
                 desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
+    option :lect, type: :string, banner: "LECT-ID",
+                  desc: "Restrict candidates to a lect (P59-3, nabu-lects module): keep only hits " \
+                        "whose resolution is this lect id or a more specific one under it — the " \
+                        "same prefix semantics as search --lect; errors if the module is not synced"
     display_option
     def parallels(urn = nil)
       urn = urn.to_s.strip
       display_mode
       validate_license!(options[:license])
+      if options[:batch] && options[:lect]
+        raise Thor::Error, "parallels: --lect does not apply with --batch (the miner is corpus-wide)"
+      end
       return batch_parallels(urn) if options[:batch]
 
       %i[min_score per_anchor db].each do |flag|
@@ -1813,7 +1916,8 @@ module Nabu
 
       result = Nabu::Query::Parallels.new(catalog: catalog, fulltext: fulltext)
                                      .run(urn, limit: options[:limit].to_i,
-                                               lang: options[:lang], license: options[:license])
+                                               lang: options[:lang], license: options[:license],
+                                               lect: options[:lect])
       print_parallels(result, urn: urn, long: options[:long])
       print_display_footer
     ensure
@@ -2373,6 +2477,10 @@ module Nabu
     option :long, type: :boolean, default: false,
                   desc: "Expand every truncated reflex list in full, grouped by language " \
                         "(compact is the default; MCP nabu_define stays bounded)"
+    option :lect, type: :string, banner: "LECT-ID",
+                  desc: "Restrict to shelves whose (language, source) RESOLUTION is this lect id " \
+                        "or under it (P59-3; per-source overrides included — derom's la-vul " \
+                        "scopes under roa, never lat); errors if the nabu-lects module is not synced"
     def define(*lemma_parts)
       lemma = lemma_parts.join(" ").strip
       raise Thor::Error, "define: give a lemma (e.g. λόγος, virtus)" if lemma.empty?
@@ -2400,7 +2508,7 @@ module Nabu
       # fetch-time cap hid the tail silently (the gate found `define 棄`
       # missing tls-words). --long lifts the cap; compact announces it.
       results = Nabu::Query::Define.new(catalog: catalog, fulltext: fulltext)
-                                   .run(lemma, lang: options[:lang], limit: nil)
+                                   .run(lemma, lang: options[:lang], limit: nil, lect: options[:lect])
       shown = options[:long] ? results : results.first(options[:limit].to_i)
       print_define_results(lemma, shown, catalog: catalog)
       if (hidden = results.size - shown.size).positive?
@@ -3014,6 +3122,11 @@ module Nabu
                    desc: "Map the whole WORK once and persist kind=cognate edges to the links journal"
     option :db, type: :string, banner: "PATH",
                 desc: "With --batch: write the links journal at PATH instead of db/links.sqlite3"
+    option :lect, type: :string, banner: "LECT-ID",
+                  desc: "Scope witnesses OF THIS LECT'S ANCHOR LANGUAGE to the lect (P59-3: " \
+                        "--lect grc:koi keeps cognate sets whose Greek witness is Koine; " \
+                        "other-language witnesses pass untouched); errors if the nabu-lects " \
+                        "module is not synced"
     display_option
     def cognates(*target_parts)
       target = target_parts.join(" ").strip
@@ -3034,7 +3147,8 @@ module Nabu
       registry = Nabu::AlignmentRegistry.load(config.alignments_path)
       result = Nabu::Query::Cognates.new(catalog: catalog, fulltext: fulltext, registry: registry)
                                     .run(target, work: options[:work], langs: parse_langs(options[:langs]),
-                                                 all: options[:all], long: options[:long])
+                                                 all: options[:all], long: options[:long],
+                                                 lect: options[:lect])
       print_cognates(result)
       print_display_footer
     rescue Nabu::Query::Cognates::Error, Nabu::ValidationError => e
@@ -6860,13 +6974,13 @@ module Nabu
         varieties = lects&.varieties_of(code) || []
         return if (stages.empty? && varieties.empty?) || !info
 
-        totals = if info.lect_materialized?
-                   ladder_totals_from_facets(code,
-                                             info)
-                 else
-                   ladder_totals_from_pairs(code, lects, info)
-                 end
-        return if totals.values.sum.zero?
+        totals, variety_totals =
+          if info.lect_materialized?
+            ladder_totals_from_facets(code, info)
+          else
+            ladder_totals_from_pairs(code, lects, info)
+          end
+        return if totals.values.sum.zero? && variety_totals.values.sum.zero?
 
         if stages.any?
           say "  stages:"
@@ -6877,14 +6991,17 @@ module Nabu
           end
         end
         # P58 rider (the owner's zho probe): registered REGISTERS are ladder
-        # content — zho/lit is wenyan, not "unstaged". Stage-less variety
-        # resolutions count here; staged-and-varietied ones (lat:late/ecc)
-        # stay under their stage above.
+        # content — zho/lit is wenyan, not "unstaged". P59-2 (the compose
+        # rules): the register line counts EVERY document carrying the
+        # variety — stage-less resolutions AND staged-and-varietied ones
+        # (akk:na/lit); the latter still fold under their stage above, so
+        # the stage column sums to the corpus while the register column
+        # reads as an overlay.
         if varieties.any?
           say "  registers:"
           varieties.each do |variety|
             title = variety.name.split(" — ", 2).last
-            say "    /#{variety.variety}  #{title} — #{plural(totals[variety.id], 'document')}"
+            say "    /#{variety.variety}  #{title} — #{plural(variety_totals[variety.variety], 'document')}"
           end
         end
         unstaged = totals[:unstaged]
@@ -6895,17 +7012,23 @@ module Nabu
       # facet — the only source that sees per-DOCUMENT journal rulings.
       # Values under other anchors (derom's la-vul -> roa:pro) drop here
       # exactly as they did on the pairs path.
+      # Returns [totals, variety_totals]: totals keys stage/register ladder
+      # lines (staged-and-varietied folds under its stage); variety_totals
+      # counts every carrier of a variety, staged or not — the register
+      # line's overlay count (P59-2).
       def ladder_totals_from_facets(code, info)
         totals = Hash.new(0)
+        variety_totals = Hash.new(0)
         facet_counts, identity = info.lect_facet_totals(code)
         facet_counts.each do |value, count|
           match = Nabu::Lects.parse_id(value)
           next unless match && match[:anchor] == code.to_s
 
           totals[ladder_key(code, match)] += count
+          variety_totals[match[:variety]] += count if match[:variety]
         end
         totals[:unstaged] += identity if identity.positive?
-        totals
+        [totals, variety_totals]
       end
 
       # Stage wins (lat:late/ecc groups under lat:late); a stage-less
@@ -6922,14 +7045,16 @@ module Nabu
       # source) pairs live, byte-identically to before.
       def ladder_totals_from_pairs(code, lects, info)
         totals = Hash.new(0)
+        variety_totals = Hash.new(0)
         info.language_source_pairs.each do |(language, source_slug), count|
           resolved = lects.resolve(language, source: source_slug)
           match = Nabu::Lects.parse_id(resolved)
           next unless match && match[:anchor] == code.to_s
 
           totals[ladder_key(code, match)] += count
+          variety_totals[match[:variety]] += count if match[:variety]
         end
-        totals
+        [totals, variety_totals]
       end
 
       # P48-r3: the related research desks — every axis whose member

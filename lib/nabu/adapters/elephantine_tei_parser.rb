@@ -128,6 +128,20 @@ module Nabu
 
       TRANSLATION_LANGUAGE = "eng"
 
+      # A nested origin range whose upper bound reaches past this is the
+      # EXCAVATION date (Rubensohn 1906/07 rides the nested slot on the
+      # very records whose custom bounds are defective), never a dating.
+      MODERN_NESTED_CUTOFF = 1500
+
+      # Hijri raws (P59-0): a REVERSED bound pair on an AH-dated record is
+      # evidence of a botched upstream AH→CE conversion (312164 converts
+      # 257-317 AH to attrs 971/930 against its own raw "871 - 930 CE") —
+      # such bounds drop, since no mechanical repair of a bad era
+      # conversion is trustworthy. COHERENT AH conversions (the ~820-record
+      # Arabic shelf: "255 AH/ 868 CE" → 868) are upstream's own claim and
+      # stay, like every other dating we ingest.
+      HIJRI_RAW = /\bAH\b/
+
       # One extracted line: citation suffix, folded text, per-ab language,
       # page, leiden counters.
       Line = Data.define(:suffix_base, :text, :language, :page,
@@ -364,29 +378,67 @@ module Nabu
       # editorial claim, raw text alongside), else the history origin
       # origDate's nested date range. A literal year 0 drops the bounds
       # and keeps raw (the Timeline tripwire, EDR mold).
+      #
+      # P59-0 (the reversed-bounds audit: 44 of the cluster's 82 rows were
+      # this corpus's): the attrs drop BCE signs ("550"/"399" for 550-399
+      # BCE), truncate digits ("22" for 222), and swap seats ("-500"/
+      # "-520"). The repair ladder, mechanical and upstream-faithful:
+      # a REVERSED custom pair falls back to the nested range when that is
+      # coherent and ancient (the modern-year guard keeps excavation dates
+      # out); whatever pair survives goes through
+      # Timeline.normalize_interval with the corpus's BCE prior (an
+      # unsigned descending pair here reads BCE unless the raw says CE).
       def extract_date(doc)
         custom = doc.at_xpath("//origDate[@notBefore-custom or @notAfter-custom]")
-        node, before, after =
-          if custom
-            [custom, custom["notBefore-custom"], custom["notAfter-custom"]]
-          else
-            range = doc.at_xpath("//history/origin/origDate/date[@notBefore or @notAfter]")
-            [range, range&.[]("notBefore"), range&.[]("notAfter")]
-          end
+        nested = doc.at_xpath("//history/origin/origDate/date[@notBefore or @notAfter]")
+        node = custom || nested
         return {} if node.nil?
 
+        raw = presence(node.text)
         result = {}
+        result["raw"] = raw if raw
         begin
-          not_before = Timeline.parse_year(before)
-          not_after = Timeline.parse_year(after)
+          not_before, not_after = repaired_bounds(custom, nested, raw)
           result["not_before"] = not_before if not_before
           result["not_after"] = not_after if not_after
         rescue Timeline::InvalidYear
-          result = {}
+          result.delete("not_before")
+          result.delete("not_after")
         end
-        raw = presence(node.text)
-        result["raw"] = raw if raw
         result
+      end
+
+      def repaired_bounds(custom, nested, raw)
+        bounds =
+          if custom
+            pair = [Timeline.parse_year(custom["notBefore-custom"]),
+                    Timeline.parse_year(custom["notAfter-custom"])]
+            (reversed?(pair) && ancient_nested_range(nested)) || pair
+          else
+            [Timeline.parse_year(nested["notBefore"]), Timeline.parse_year(nested["notAfter"])]
+          end
+        # A REVERSED hijri pair is evidence of a botched upstream AH→CE
+        # conversion (HIJRI_RAW note) — no repair of it is trustworthy, so
+        # the bounds drop. A COHERENT hijri conversion is upstream's own
+        # claim and stays, like every other dating we ingest.
+        return [nil, nil] if reversed?(bounds) && raw&.match?(HIJRI_RAW)
+
+        Timeline.normalize_interval(bounds[0], bounds[1], raw: raw, bce_default: true)
+      end
+
+      def reversed?(pair)
+        pair[0] && pair[1] && pair[0] > pair[1]
+      end
+
+      # The nested origin range as a fallback dating: only when coherent
+      # and pre-modern (see MODERN_NESTED_CUTOFF), else nil.
+      def ancient_nested_range(nested)
+        return nil if nested.nil?
+
+        pair = [Timeline.parse_year(nested["notBefore"]), Timeline.parse_year(nested["notAfter"])]
+        return nil if pair.any?(&:nil?) || reversed?(pair) || pair[1] >= MODERN_NESTED_CUTOFF
+
+        pair
       end
 
       # The Trismegistos id from additional/listBibl ref[@type="url"]
