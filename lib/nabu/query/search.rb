@@ -6,6 +6,7 @@ require_relative "../normalize"
 require_relative "../store/indexer"
 require_relative "../tibetan_words"
 require_relative "catalog_join"
+require_relative "lect_filter"
 require_relative "stored_snippet"
 require_relative "term_frequency"
 
@@ -58,6 +59,7 @@ module Nabu
     # documented on CatalogJoin, which owns that half.
     class Search
       include CatalogJoin
+      include LectFilter
 
       # One search hit. `text` is the pristine passage text (for display);
       # `snippet` (P39-r3) is a window of that STORED text with the match in
@@ -186,9 +188,11 @@ module Nabu
       # (language, source) pair the catalog carries is resolved through
       # #resolve and kept when the result IS the given lect id, or a more
       # specific lect UNDER it (prefix semantics over the ":"/"/"/"@" axis
-      # grammar — see #lect_matches_target?). Absent the module, the flag
-      # is refused loudly (never a silent no-filter or a stored-code guess).
-      LECT_MODULE_MISSING = "nabu-lects module not synced"
+      # grammar — LectFilter#lect_matches_target?). Absent the module, the
+      # flag is refused loudly (never a silent no-filter or a stored-code
+      # guess). The machinery lives in Query::LectFilter since P59-3
+      # (parallels shares it); the constant stays addressable here.
+      LECT_MODULE_MISSING = LectFilter::LECT_MODULE_MISSING
 
       # +term_frequency+ is the df probe seam (defaults to the real fts5vocab
       # reader over +fulltext+); tests inject a stub to pin the fail-open path.
@@ -726,67 +730,6 @@ module Nabu
       end
 
       # -- P57-4: --lect, the resolution-level filter --------------------------
-
-      # Feature-detect + memoize (the tibetan_words :auto contract): loaded
-      # from canonical/nabu-lects on first use, nil while absent (re-detected
-      # per call, so a mid-session `nabu sync nabu-lects` is picked up
-      # without a restart).
-      def lects_seam
-        return @lects unless @lects == :auto
-
-        loaded = Nabu::Lects.load_default
-        @lects = loaded if loaded
-        loaded
-      end
-
-      # Every (language, source slug) pair the catalog carries, resolved
-      # through Nabu::Lects and kept when it matches +target+ (class doc
-      # prefix semantics). Small and query-independent (the vocabulary of
-      # held codes × sources, not the passage count), so it costs one
-      # DISTINCT scan per --lect call, never a per-passage resolve.
-      # The --lect filter dispatch (P58-4): once a materialization exists,
-      # the lect facet is the query path — it is the only shape that can
-      # express per-document journal rulings. A catalog with no lect facet
-      # rows at all (never materialized) keeps the P57-4 (language, source)
-      # pair path byte-identically. The module requirement holds either way.
-      def lect_filter(lect)
-        return {} unless lect
-
-        seam = lects_seam
-        raise Nabu::Error, LECT_MODULE_MISSING unless seam
-        return { lect_target: lect.to_s } if Store::LectFacets.materialized?(@catalog)
-
-        { lect_pairs: lect_pairs_for(lect) }
-      end
-
-      def lect_pairs_for(target)
-        seam = lects_seam
-        raise Nabu::Error, LECT_MODULE_MISSING unless seam
-
-        @catalog[:documents]
-          .join(:sources, id: Sequel[:documents][:source_id])
-          .exclude(Sequel[:documents][:language] => nil)
-          .distinct
-          .select(Sequel[:documents][:language].as(:language), Sequel[:sources][:slug].as(:slug))
-          .all
-          .filter_map do |row|
-            language = row.fetch(:language)
-            slug = row.fetch(:slug)
-            [language, slug] if lect_matches_target?(seam.resolve(language, source: slug), target)
-          end
-      end
-
-      # +resolved+ matches +target+ when it IS target, or is a MORE SPECIFIC
-      # lect under it — target immediately followed by one of the axis
-      # separators (":"/"/"/"@", nabu-lects docs/schema.md's strict order)
-      # counts as "under"; a same-length or unrelated string does not
-      # (--lect lat:med matches lat:med and lat:med/xyz, never lat:cla).
-      def lect_matches_target?(resolved, target)
-        return true if resolved == target
-        return false unless resolved.start_with?(target)
-
-        %w[: / @].include?(resolved[target.length])
-      end
 
       # Does the query stand word-aligned somewhere in this hit's stored
       # text? Boundaries are segmented lazily (only when a contiguous folded

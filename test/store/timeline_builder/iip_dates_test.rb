@@ -91,5 +91,44 @@ module Store
       assert_equal 0, counts[:invalid], "zero year-0 bounds exist in the corpus"
       assert_equal 1, counts[:undated], "caes0371 is the dateless-but-placed one"
     end
+
+    # -- the P59-0 reversed-bounds repairs (real offending records) ---------
+
+    def test_unsigned_bce_bounds_negate_on_the_raw_era_signal
+      # masa0797: notBefore="0027" notAfter="0026" for "27-26 BCE" — the
+      # sign dropped upstream; the raw's BCE signal repairs it.
+      make_document("urn:nabu:iip:masa0797")
+      build!
+      row = timeline_for("urn:nabu:iip:masa0797")
+      assert_equal(-27, row.fetch(:not_before))
+      assert_equal(-26, row.fetch(:not_after))
+      assert_equal "27-26 BCE", row.fetch(:date_raw), "the raw rides verbatim"
+    end
+
+    def test_reversed_ce_bounds_order_normalize
+      # zoor0395: notBefore="0355" notAfter="0354" for "354/355 CE" — the
+      # slash-order claim, seats swapped upstream.
+      make_document("urn:nabu:iip:zoor0395")
+      build!
+      row = timeline_for("urn:nabu:iip:zoor0395")
+      assert_equal 354, row.fetch(:not_before)
+      assert_equal 355, row.fetch(:not_after)
+    end
+
+    def test_signed_reversed_bounds_swap_and_are_never_re_negated
+      # idum0080: notBefore="-0036" notAfter="-0335" for "Approximately
+      # 336-335 BCE" — an upstream digit typo (-36 for -336) plus reversal.
+      # Repair is mechanical: order-normalize upstream's own claim; the
+      # typo'd digit stays upstream's to fix (the raw carries the truth).
+      # This was THE row that slipped a bogus arc:imp assignment past
+      # containment in P58 (reversed intervals satisfy it vacuously).
+      make_document("urn:nabu:iip:idum0080")
+      build!
+      row = timeline_for("urn:nabu:iip:idum0080")
+      assert_equal(-335, row.fetch(:not_before))
+      assert_equal(-36, row.fetch(:not_after))
+      assert_operator row.fetch(:not_before), :<=, row.fetch(:not_after),
+                      "no reversed interval ever reaches the axes"
+    end
   end
 end

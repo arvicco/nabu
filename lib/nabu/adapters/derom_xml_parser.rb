@@ -47,11 +47,11 @@ module Nabu
       # tag the crosswalk join speaks. lang_code is the RESOLVED catalog tag
       # (P57-5 — DÉRom's own idiome abbreviation used to leak through
       # verbatim even though this table already resolved `language`);
-      # unmapped idiomes (none known as of P57-5 — every idiome the fixture
-      # or the full-corpus census names now resolves) fall back to the
-      # verbatim idiome string, display-only (language nil, never a join
-      # candidate). gasc./lang. fold into oci — ISO 639-3 retired
-      # Gascon/Languedocien into Occitan.
+      # unmapped idiomes fall back to the verbatim idiome string,
+      # display-only (language nil, never a join candidate) — as of P59-1
+      # that fallback is the DELIBERATE home of exactly four ambiguous
+      # dialect-geography labels (extension note below). gasc./lang. fold
+      # into oci — ISO 639-3 retired Gascon/Languedocien into Occitan.
       #
       # P57-5 completed the table (four idiomes had no target at all):
       #   "arag." => Aragonese (arg); "végl." => Vegliote, the island
@@ -64,6 +64,16 @@ module Nabu
       # missing mapping — split_idiome below splits it into its two
       # component idiomes before lookup (the smaller honest diff versus a
       # synthetic roa-opt code; see #reflexes).
+      # P59-1 extended the table again: the live census surfaced ~60 FINER
+      # sub-idiome labels (198 reflex rows) riding the verbatim fallback —
+      # DÉRom cites dialect geography below the language grain. They fold
+      # into their ISO languages per the gasc.→oci precedent; the Italian
+      # dialect-geography labels follow the Ethnologue groupings (Continental
+      # South = nap, Extreme South = scn, central dialects = ita). Four stay
+      # deliberately unmapped — "cal." (spans the nap/scn split),
+      # "itcentr.-mérid." (spans ita/nap), "trent." (Lombard-Venetian
+      # transition), "émil.-romagn." (ISO retired eml into egl+rgn) — the
+      # verbatim fallback IS their honest resolution.
       IDIOME_LANGUAGES = {
         "dacoroum." => "ron", "istroroum." => "ruo", "méglénoroum." => "ruq",
         "aroum." => "rup", "sard." => "srd", "dalm." => "dlm", "istriot." => "ist",
@@ -71,7 +81,40 @@ module Nabu
         "fr." => "fra", "frpr." => "frp", "occit." => "oci", "gasc." => "oci",
         "lang." => "oci", "vén." => "vec", "cat." => "cat", "esp." => "spa",
         "ast." => "ast", "gal." => "glg", "port." => "por",
-        "arag." => "arg", "végl." => "dlm", "logoud." => "src", "itsept." => "it"
+        "arag." => "arg", "végl." => "dlm", "logoud." => "src", "itsept." => "it",
+        # Gallo-Italic / Venetan-adjacent
+        "lomb." => "lmo", "piém." => "pms", "lig." => "lij",
+        # Extreme South (the Sicilian group)
+        "sic." => "scn", "salent." => "scn", "cal. centr.-mérid." => "scn",
+        # Continental South (the Neapolitan group)
+        "camp." => "nap", "cal. sept." => "nap", "luc." => "nap",
+        "luc.-cal." => "nap", "apul." => "nap", "abr." => "nap",
+        "itmérid." => "nap", "laz. mérid." => "nap",
+        # Central Italian (Standard Italian's own dialect ground)
+        "tosc." => "ita", "flor." => "ita", "ombr." => "ita", "laz." => "ita",
+        "laz. centr.-sept." => "ita", "itcentr." => "ita", "march." => "ita",
+        "march. sept." => "ita", "march. centr." => "ita",
+        # Islands
+        "cors." => "cos", "campid." => "sro",
+        # Romansh varieties (Sursilvan / Vallader / Puter)
+        "surs." => "roh", "bas-engad." => "roh", "haut-engad." => "roh",
+        # Ladin valleys (Fascia / Gherdëina / Badia / Mareo)
+        "fasc." => "lld", "gherd." => "lld", "bad." => "lld", "mar." => "lld",
+        # Friulian
+        "carn." => "fur",
+        # Occitan dialects
+        "prov." => "oci", "rouerg." => "oci", "auv." => "oci",
+        "viv.-alp." => "oci", "béarn." => "oci", "périg." => "oci",
+        # Catalan (Roussillonnais IS Northern Catalan)
+        "rouss." => "cat", "baléar." => "cat", "cat. centr." => "cat",
+        # Francoprovençal
+        "sav." => "frp", "lyonn." => "frp", "aost." => "frp", "SRfrpr." => "frp",
+        # Oïl: own-code varieties, then the codeless ones folding into fra
+        "pic." => "pcd", "norm." => "nrf", "wall." => "wln", "agn." => "xno",
+        "lorr." => "fra", "bourg." => "fra", "frcomt." => "fra",
+        "saint." => "fra", "bourb." => "fra", "oïl." => "fra",
+        # Romanian dialect geography
+        "mold." => "ron", "ban." => "ron"
       }.freeze
 
       # The DÉRom notation → typeable-ASCII fold (class note; mirrors the

@@ -386,9 +386,12 @@ class LectsTest < Minitest::Test
     pattern = /Nabu::Lects\.(load_default|load|new)\b/
     # P58-4 adds rebuild.rb deliberately (the lect-facet pipeline stage,
     # feature-detected); P58-6 adds query/define.rb (the "*" reconstruction
-    # scope reads the registry mode through the same :auto contract).
+    # scope reads the registry mode through the same :auto contract);
+    # P59-3 adds query/lect_filter.rb — the ONE shared dispatch module the
+    # passage-serving queries (search/parallels, and define/cognates via
+    # their own grains) now include instead of each opening the registry.
     allowlist = %w[nabu/cli.rb nabu/query/etym.rb nabu/query/search.rb nabu/mcp/tools.rb
-                   nabu/rebuild.rb nabu/query/define.rb]
+                   nabu/rebuild.rb nabu/query/define.rb nabu/query/lect_filter.rb]
                 .map { |rel| File.join(lib_root, rel) }
 
     offenders = Dir[File.join(lib_root, "**", "*.rb")]

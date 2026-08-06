@@ -2,7 +2,7 @@
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
 #
 # Both files are VERBATIM WHOLE copies of the two data files nabu-lects
-# ships (arvicco/nabu-lects at commit 8f3912f, main at retrieval) — the
+# ships (arvicco/nabu-lects at commit 455a61b, main at retrieval) — the
 # module is small by design and the drift guard needs the full graph. The
 # raw URLs track `main`; upstream is in its pre-1.0 instability window, so
 # a byte-diff flags a new registry release to re-adopt via the README

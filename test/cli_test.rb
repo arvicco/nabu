@@ -783,6 +783,38 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P59-2 (the eBL akk/lit composition): a register composed ONTO a stage
+  # counts on the register line too — the stage line keeps the document
+  # (akk:na/lit folds under na, unchanged), and /lit reports EVERY document
+  # carrying the register, staged or not. Before this, a composed register
+  # showed "— 0 documents" while thousands carried it.
+  def test_language_card_ladder_counts_composed_registers
+    with_lect_ladder_corpus do |config, db|
+      ebl = Nabu::Store::Source.create(slug: "ebl", name: "eBL",
+                                       adapter_class: "TestAdapter", license_class: "open")
+      2.times do |i|
+        db[:documents].insert(source_id: ebl.id, urn: "urn:nabu:test:akk:#{i}", title: "T",
+                              language: "akk", content_sha256: "x", revision: 1, withdrawn: false)
+      end
+      Nabu::Store::SourceStats.derive!(db, note: "test")
+      journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+      Nabu::Store::LectJournal.assign!(journal, urn: "urn:nabu:test:akk:0", code: "akk",
+                                                lect_id: "akk:na", basis: "rule:akk-period")
+      Nabu::Store::LectJournal.assign!(journal, urn: "urn:nabu:test:akk:1", code: "akk",
+                                                lect_id: "akk:na/lit", basis: "rule:akk-period")
+      journal.disconnect
+      Nabu::Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: config))
+      db.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[language akk]) }
+      assert_nil status
+      assert_match(/na\s+Neo-Assyrian.*2 documents/, out,
+                   "the composed document still folds under its stage")
+      assert_match(%r{/lit\s+Standard Babylonian.*1 document}, out,
+                   "the register line counts composed (staged) carriers too")
+    end
+  end
+
   def test_language_card_reconstructed_stages_carry_a_leading_asterisk
     with_recon_shelf_and_lects do |config|
       db = Nabu::Store.connect(config.catalog_path)

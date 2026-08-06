@@ -68,3 +68,11 @@ sources:
     # OpenITI is the premodern Classical Arabic written tradition —
     # approximation (the fas rows are untouched). Owner ruling, P58 D58-d.
     ara: "ara:cla"
+  dss:
+    # The Scrolls' Aramaic IS the corpus the registry stage is named for
+    # ("Biblical (Qumran) Aramaic") — certain. The source carries zero
+    # facets and zero dating axes (censused 2026-08-06), so source grain
+    # is the only machine grain available; the hbo majority (857 docs)
+    # stays deliberately bare — the registry mints no Qumran-Hebrew stage.
+    # Owner ruling, P59 D59-b.
+    arc: "arc:bib"

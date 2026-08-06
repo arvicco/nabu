@@ -112,8 +112,11 @@ document facet (`document_facets`, facet `lect`, rows only where the
 resolution differs from the bare code — "no row means identity"), so the
 stage is a first-class query axis: `show` prints it on the facets line,
 `search --lect` filters by it at every grain including per-document
-rulings, and the `language` ladder counts from it. As of 4 August 2026
-the journal holds 408,884 assignments and the facet 491,648 rows.
+rulings, and the `language` ladder counts from it. As of 6 August 2026
+the journal holds 410,602 assignments and the facet 493,510 rows
+(P59-0 repaired the reversed-interval extractor cluster — 82 defective
+dating rows across six sources — and the date-band re-run recovered the
+affected documents' assignments with zero refusals).
 
 Consumers as of P57-4 (ladder counts facet-backed since P58-6):
 

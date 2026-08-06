@@ -383,9 +383,10 @@ class SefariaTest < Minitest::Test
     refute select.call(rabbah.merge("title" => "Ruth Rabbah (Lerner)", "language" => "English",
                                     "versionTitle" => "Sefaria Community Translation")),
            "the Lerner critical edition duplicates the Ruth Rabbah title — excluded whole"
-    refute select.call(rabbah.merge("title" => "Pesikta DeRav Kahana", "categories" => %w[Midrash Aggadah])),
-           "the flat Midrash/Aggadah bucket (Pesikta/Tanchuma beside later anthologies) is not " \
-           "category-separable — out of wave 2, reported as a title-level owner ruling"
+    assert select.call(rabbah.merge("title" => "Pesikta DeRav Kahana", "categories" => %w[Midrash Aggadah],
+                                    "versionTitle" => "Any Named Edition")),
+           "wave 3 (P59-5): the flat-bucket classical core is TITLE-allowlisted in — every named " \
+           "version, the per-file license gate sifts (the targum stance)"
     halakhah = { "title" => "Sifrei Zuta", "language" => "Hebrew", "versionTitle" => "Leipzig, 1917",
                  "categories" => %w[Midrash Halakhah], "json_url" => "https://b/x.json" }
     assert select.call(halakhah)
@@ -395,6 +396,34 @@ class SefariaTest < Minitest::Test
            "the Footnotes apparatus title shares the named Hoffman versionTitle — excluded by title"
     refute select.call(halakhah.merge("categories" => %w[Midrash Halakhah Commentary])),
            "the Halakhah Commentary subtree is out"
+  end
+
+  # --- the P59-5 wave: the flat-Aggadah classical core (queue Q1, ruled) ------
+
+  def test_wave_three_is_title_allowlisted_with_the_seder_olam_subtree
+    select = Nabu::Adapters::Sefaria.method(:shelf_entry?)
+    flat = { "language" => "Hebrew", "versionTitle" => "Warsaw, 1878",
+             "categories" => %w[Midrash Aggadah], "json_url" => "https://b/x.json" }
+    ["Midrash Tanchuma", "Pirkei DeRabbi Eliezer", "Tanna DeBei Eliyahu Zuta",
+     "Seder Olam Zutta"].each do |title|
+      assert select.call(flat.merge("title" => title)), "#{title} is on the ruled allowlist"
+    end
+    ["Yalkut Shimoni on Torah", "Ein Yaakov", "Otzar Midrashim", "Legends of the Jews",
+     "Midrash Sekhel Tov", "Buber footnotes on Midrash Mishlei"].each do |title|
+      refute select.call(flat.merge("title" => title)),
+             "#{title}: anthology tier / modern authorship / apparatus — deliberately out"
+    end
+    subtree = flat.merge("title" => "Vilna Gaon on Seder Olam Rabbah",
+                         "categories" => ["Midrash", "Aggadah", "Seder Olam Rabbah"])
+    assert select.call(subtree),
+           "the Seder Olam Rabbah subtree is category-scoped whole — commentaries ride (4 titles)"
+    assert_equal "aggadah",
+                 Nabu::Adapters::Sefaria.shelf_for(%w[Midrash Aggadah], title: "Midrash Tehillim").id
+    assert_equal "seder-olam",
+                 Nabu::Adapters::Sefaria.shelf_for(["Midrash", "Aggadah", "Seder Olam Rabbah"],
+                                                   title: "Seder Olam Rabbah").id
+    assert_nil Nabu::Adapters::Sefaria.shelf_for(%w[Midrash Aggadah], title: "Yalkut Shimoni on Nach"),
+               "an off-allowlist flat title has NO shelf — never a fetch, never a parse"
   end
 
   # --- discovery census (P11-7) ----------------------------------------------
@@ -462,16 +491,16 @@ class SefariaTest < Minitest::Test
   # (excluded duplicate-edition title), Sifra Venice 1545 (license-unknown
   # upstream — not named, never fetched), "eicha rabba 12" (source-sheet
   # noise, not named), an Esther Rabbah merged sibling, a Rabbah Commentary
-  # entry, a Halakhah Commentary entry, and Pesikta DeRav Kahana (the flat
-  # Midrash/Aggadah bucket — the reported wave-3 boundary).
+  # entry, and a Halakhah Commentary entry. (Pesikta DeRav Kahana, a
+  # wave-2 negative here until P59-5, now SELECTS — the wave-3 allowlist.)
   def test_fetch_selection_census_over_the_pinned_index_slice
     index = JSON.parse(File.read(File.join(FIXTURES, "books.json")))
     selected = index.fetch("books").select { |e| Nabu::Adapters::Sefaria.shelf_entry?(e) }
     grouped = selected.group_by { |e| e["categories"].first }.transform_values(&:size)
-    assert_equal({ "Tanakh" => 10, "Mishnah" => 7, "Talmud" => 12, "Tosefta" => 2, "Midrash" => 15 },
+    assert_equal({ "Tanakh" => 10, "Mishnah" => 7, "Talmud" => 12, "Tosefta" => 2, "Midrash" => 16 },
                  grouped)
     rejected = index.fetch("books").reject { |e| Nabu::Adapters::Sefaria.shelf_entry?(e) }
-    assert_equal 17, rejected.size
+    assert_equal 16, rejected.size
     assert_includes rejected.map { |e| e["versionTitle"] }, "Venice Edition",
                     "license-unknown Yerushalmi editions are not even fetched — not named"
     assert_includes rejected.map { |e| e["title"] }, "Introductions to the Babylonian Talmud",
@@ -479,9 +508,9 @@ class SefariaTest < Minitest::Test
     davidson = selected.select { |e| e["versionTitle"].start_with?("William Davidson") }
     assert_equal 4, davidson.size,
                  "the fixture slice's Davidson lane: Tamid en/arc/vocalized + Yerushalmi Shekalim en"
-    assert_includes rejected.map { |e| e["title"] }, "Pesikta DeRav Kahana",
-                    "the flat Aggadah bucket stays out — wave 2 draws its boundary at the " \
-                    "category-delimited subtrees"
+    assert_includes selected.map { |e| e["title"] }, "Pesikta DeRav Kahana",
+                    "P59-5 flips the wave-2 boundary: the flat-bucket classical core is " \
+                    "title-allowlisted in (wave 3)"
     assert_includes rejected.map { |e| e["versionTitle"] }, "Venice 1545",
                     "Sifra's only Hebrew version says license unknown upstream — known-unknown " \
                     "versions are not even named (the Yerushalmi Venice rule)"

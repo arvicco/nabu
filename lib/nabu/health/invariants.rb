@@ -104,7 +104,8 @@ module Nabu
           pending_migrations(@ledger, Store::Ledger::MIGRATIONS_DIR, "ledger", "any write path (sync) applies them"),
           stats_drift,
           facet_lane_drift,
-          timeline_lane_drift
+          timeline_lane_drift,
+          reversed_axis_bounds
         ].compact
       end
 
@@ -438,6 +439,30 @@ module Nabu
           message: "timeline lane dark for #{dark.join(', ')}: documents carry date bounds but " \
                    "document_axes holds no rows — register the source in MetadataDates::SHAPES " \
                    "(or its own extractor), then re-sync or rebuild"
+        )
+      end
+
+      # P59-0: no dating interval runs backwards. The 82-row reversed-bounds
+      # cluster (elephantine/edr/coptic-scriptorium/iip/isicily/bfm) slipped
+      # a bogus lect assignment past date-band containment before the
+      # per-extractor repairs; any reversed row after them is a NEW defect
+      # in whichever extractor the axis_source names.
+      def reversed_axis_bounds
+        return nil unless table?(@catalog, :document_axes)
+
+        counts = @catalog[:document_axes]
+                 .exclude(not_before: nil).exclude(not_after: nil)
+                 .where { not_before > not_after }
+                 .group_and_count(:axis_source)
+                 .to_hash(:axis_source, :count)
+        return nil if counts.empty?
+
+        report = counts.sort.map { |source, count| "#{source}: #{count}" }.join(", ")
+        Finding.new(
+          kind: :reversed_axis_bounds, severity: :loud,
+          message: "reversed dating bounds (not_before > not_after) in document_axes — " \
+                   "#{report}; the named extractor mints defective intervals " \
+                   "(repair at the extractor, then rebuild its lane; P59-0)"
         )
       end
 

@@ -57,6 +57,16 @@ module Nabu
     # into classical midrash vs later anthology — out of wave 2; including
     # any of it is a title-level owner ruling.
     #
+    # == The Aggadah wave (P59-5 wave 3; queue Q1, ruled 2026-08-02)
+    #
+    # That title-level ruling happened: the `aggadah` shelf allowlists the
+    # classical/late-antique core of the flat bucket by EXACT index title
+    # (13 titles, verified verbatim; 75 index files), and `seder-olam`
+    # takes the one category-scoped subtree whole (the chronicle + its
+    # three commentaries). The anthology tier stays out (shelf-table note);
+    # both shelves fetch every named version and let the per-file license
+    # gate sift — the flat bucket's index rows carry no license field.
+    #
     # Commentary/Rishonim/Acharonim/Guides subtrees are out of every
     # shelf's category scope by rule.
     #
@@ -150,7 +160,9 @@ module Nabu
       # the named-version fetch selection per index axis (nil = every
       # named version — targum only).
       Shelf = Data.define(:id, :prefix, :division_index, :division, :languages,
-                          :ruled_by, :urn_axis, :fetch_versions) do
+                          :ruled_by, :urn_axis, :fetch_versions, :titles) do
+        def initialize(titles: nil, **) = super
+
         def categories?(categories)
           return false unless categories.is_a?(Array) && categories[0, prefix.size] == prefix
 
@@ -244,7 +256,39 @@ module Nabu
                                   "Sifra by Rabbi Shraga Silverstein",
                                   "Sifrei by Rabbi Shraga Silverstein",
                                   "Trans. by Marty Jaffee, 2015"]
-                  })
+                  }),
+        # THE P59-5 AGGADAH WAVE (wave 3; queue Q1, owner-ruled 2026-08-02).
+        # The flat Midrash/Aggadah bucket is NOT category-separable (wave-2
+        # note above), so this wave is TITLE-scoped: the classical/
+        # late-antique core by explicit allowlist — 13 flat titles verified
+        # VERBATIM against the pinned index (75 files) — plus the one
+        # category-scoped subtree below. The anthology tier (Yalkut
+        # Shimoni, Ein Yaakov, Otzar Midrashim, Lekach Tov, Sekhel Tov,
+        # Bereshit Rabbati, Midrash Aggadah, Yelamdenu, Sefer HaYashar,
+        # Sifrei Aggadah on Esther) stays DELIBERATELY out — re-compilations
+        # of material already held or being ingested (the CLTK
+        # don't-republish-repackagings instinct; counter-argument on file:
+        # Yalkut as a witness to lost midrashim). Legends of the Jews
+        # (Ginzberg 1909 — modern English authorship) and the two apparatus
+        # titles are excluded outright. fetch_versions nil = every named
+        # version (the targum stance): the flat bucket's index rows carry
+        # no license field, so the per-FILE license gate does the sifting
+        # (TE "unknown" skips expected at sync).
+        Shelf.new(id: "aggadah", prefix: %w[Midrash Aggadah], division_index: 2,
+                  division: /\A\z/,
+                  titles: ["Pesikta DeRav Kahana", "Pesikta Rabbati", "Midrash Tanchuma",
+                           "Midrash Tanchuma Buber", "Pirkei DeRabbi Eliezer", "Midrash Tehillim",
+                           "Midrash Mishlei", "Midrash Shmuel", "Tanna DeBei Eliyahu Rabbah",
+                           "Tanna DeBei Eliyahu Zuta", "Aggadat Bereshit", "Mishnat Rabbi Eliezer",
+                           "Seder Olam Zutta"].freeze,
+                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  urn_axis: true, fetch_versions: nil),
+        # The Seder Olam Rabbah SUBTREE — the ruling's one category-scoped
+        # Aggadah cut (4 titles: the chronicle + its three commentaries).
+        Shelf.new(id: "seder-olam", prefix: ["Midrash", "Aggadah", "Seder Olam Rabbah"],
+                  division_index: nil, division: nil,
+                  languages: { "he" => "hbo", "en" => "eng" }, ruled_by: :actual_language,
+                  urn_axis: true, fetch_versions: nil)
       ].freeze
 
       # One discovery walk's yield: refs for licensed named versions, the
@@ -270,9 +314,14 @@ module Nabu
 
       # The shelf whose scope covers these categories (nil = off-shelf).
       # bavli/bavli-minor share a prefix and split on the division pattern,
-      # so first-match is unambiguous.
-      def self.shelf_for(categories)
-        SHELVES.find { |shelf| shelf.categories?(categories) }
+      # so first-match is unambiguous. +title+ (P59-5): a TITLE-scoped
+      # shelf (wave 3's aggadah allowlist — the flat bucket has no
+      # category cut, which is WHY it is title-level) also requires the
+      # index title verbatim; category shelves ignore it.
+      def self.shelf_for(categories, title: nil)
+        SHELVES.find do |shelf|
+          shelf.categories?(categories) && (shelf.titles.nil? || shelf.titles.include?(title))
+        end
       end
 
       # The fetch selector: NAMED versions of the shelf table only. Kept a
@@ -281,7 +330,7 @@ module Nabu
         return false unless entry["json_url"].is_a?(String)
         return false if entry["versionTitle"] == MERGED_VERSION || EXCLUDED_TITLES.include?(entry["title"])
 
-        shelf = shelf_for(entry["categories"])
+        shelf = shelf_for(entry["categories"], title: entry["title"])
         !shelf.nil? && shelf.fetch_version?(entry)
       end
 
@@ -355,7 +404,7 @@ module Nabu
         notes = []
         Dir.glob(File.join(workdir, "json", "**", "*.json")).each do |path|
           data = read_version(path)
-          shelf = data && self.class.shelf_for(data["categories"])
+          shelf = data && self.class.shelf_for(data["categories"], title: data["title"])
           if data.nil?
             notes << "#{relative(workdir, path)}: not a JSON version object (fetch defect?)"
           elsif skip_by_rule?(data, shelf)
@@ -450,7 +499,7 @@ module Nabu
       # [<seder>]; tosefta: [<edition>, <seder>]).
       def document_metadata(metadata)
         categories = metadata["categories"] || []
-        base = self.class.shelf_for(categories)&.prefix&.size || 2
+        base = self.class.shelf_for(categories, title: metadata["title"])&.prefix&.size || 2
         facets = { "subshelf" => facet(categories[base]), "division" => facet(categories[base + 1]) }.compact
         {
           "title" => metadata["title"],
