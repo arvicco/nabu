@@ -133,6 +133,40 @@ module Query
                    "the attesting passage urns ride the witness word (BatchCognates' edge anchor)"
     end
 
+    # P59-3: `lect:` is ANCHOR-SCOPED on this cross-language tool — a
+    # blanket witness filter would kill every cross-language group (only
+    # one language can be under one lect). Instead only witnesses OF THE
+    # LECT'S ANCHOR LANGUAGE are subject to it ("cognate sets where the
+    # Greek witness is specifically Koine"): a grc document must resolve
+    # under grc:koi (facet row first, else (language, source) resolution);
+    # chu/got witnesses pass untouched. A group whose anchor-language
+    # witness falls out re-judges under the standing ≥2-languages rule.
+    # Module absent: loud error.
+    def test_lect_scopes_witnesses_of_the_anchor_language_only
+      seed_gospel_verses
+      rebuild!
+      grc_id = @docs["grc-nt"].id
+      @catalog[:document_facets].insert(document_id: grc_id, facet: "lect", value: "grc:koi")
+      lects = Nabu::Lects.load(Nabu::TestSupport.fixtures("nabu-lects"))
+      scoped = Nabu::Query::Cognates.new(catalog: @catalog, fulltext: @fulltext,
+                                         registry: registry, lects: lects)
+
+      result = scoped.run("MARK 1.1", lect: "grc:koi")
+      assert_equal 1, result.groups.size, "the koine-faceted grc witness stays; chu is untouched"
+      assert_equal %w[chu grc], result.groups.first.witnesses.map(&:language).sort
+
+      cla = scoped.run("MARK 1.1", lect: "grc:cla")
+      assert_empty cla.groups,
+                   "the facet row says koi, so the grc witness falls out — and chu alone " \
+                   "dissolves under the ≥2-languages rule"
+
+      error = assert_raises(Nabu::Error) do
+        Nabu::Query::Cognates.new(catalog: @catalog, fulltext: @fulltext,
+                                  registry: registry, lects: nil).run("MARK 1.1", lect: "grc")
+      end
+      assert_match(/nabu-lects module not synced/, error.message)
+    end
+
     # P18-3: the join is hash-keyed at every level — (ref, root) → language
     # → lemma_folded — so even raw duplicate closure rows (impossible from
     # the indexer's build, forced here directly) render ONE group with ONE

@@ -2,6 +2,7 @@
 
 require_relative "../normalize"
 require_relative "catalog_join"
+require_relative "lect_filter"
 require_relative "grams"
 require_relative "search"
 
@@ -74,6 +75,7 @@ module Nabu
     # section so the two signals never masquerade as one.
     class Parallels
       include CatalogJoin
+      include LectFilter
       include Grams
 
       # The gram size the design measured (4-grams: Odyssey 8 tokens → 5 grams,
@@ -149,31 +151,39 @@ module Nabu
       # second signal (empty unless the anchor is gold-lemmatized).
       Result = Data.define(:anchor_urn, :anchor_title, :gram_count, :hits, :lemma_echoes)
 
-      def initialize(catalog:, fulltext:)
+      # +lects+ (P59-3) is the `lect:` resolution seam — the same
+      # :auto/loaded/nil contract as Search's (LectFilter): feature-detected
+      # lazily on the first lect: call, never touched otherwise.
+      def initialize(catalog:, fulltext:, lects: :auto)
         @catalog = catalog
         @fulltext = fulltext
+        @lects = lects
       end
 
       # Parallels for the passage at +urn+. Returns a Result, or nil when the urn
       # resolves to no live passage (the caller distinguishes "unknown urn" from
       # "no parallels found"). +lang+/+license+ filter candidates catalog-side
-      # exactly as Search does. +limit+ caps each signal's hit list.
+      # exactly as Search does; +lect+ (P59-3) filters them through the shared
+      # LectFilter dispatch (materialized facet when present, else the
+      # (language, source) pairs; loud error when the module is absent).
+      # +limit+ caps each signal's hit list.
       # +echoes: false+ skips the lemma-echo second signal — the batch producer
       # (P16-1) persists only kind=parallel surface-gram edges, and the
       # per-lemma df probes are the engine's one per-anchor cost worth shedding
       # over a gold-lemmatized slice.
-      def run(urn, limit: 15, lang: nil, license: nil, echoes: true)
+      def run(urn, limit: 15, lang: nil, license: nil, echoes: true, lect: nil)
         anchor = load_anchor(urn)
         return nil if anchor.nil?
 
+        scope = lect_filter(lect)
         snapshot_cutoffs
         tokens = gram_tokens(anchor.fetch(:text_normalized))
         grams = shingle(tokens, GRAM_SIZE)
         scores, matched = probe_grams(grams, anchor_passage_id: anchor.fetch(:passage_id))
         hits = assemble(scores, matched,
                         tokens: tokens, anchor_document_id: anchor.fetch(:document_id),
-                        lang: lang, license: license, limit: limit)
-        echo_hits = echoes ? lemma_echoes(anchor, lang: lang, license: license, limit: limit) : []
+                        lang: lang, license: license, limit: limit, scope: scope)
+        echo_hits = echoes ? lemma_echoes(anchor, lang: lang, license: license, limit: limit, scope: scope) : []
         Result.new(anchor_urn: anchor.fetch(:urn), anchor_title: anchor.fetch(:title),
                    gram_count: grams.size, hits: hits, lemma_echoes: echo_hits)
       end
@@ -276,12 +286,12 @@ module Nabu
 
       # Group scored candidates to document grain, exclude the anchor's own
       # document, rank by score, and reconstruct evidence spans for the page.
-      def assemble(scores, matched, tokens:, anchor_document_id:, lang:, license:, limit:)
+      def assemble(scores, matched, tokens:, anchor_document_id:, lang:, license:, limit:, scope: {})
         return [] if scores.empty?
 
         cap = [limit * CANDIDATE_FACTOR, MIN_CANDIDATES].max
         top_ids = scores.keys.sort_by { |id| -scores[id] }.first(cap)
-        rows = candidate_rows(top_ids, lang: lang, license: license)
+        rows = candidate_rows(top_ids, lang: lang, license: license, scope: scope)
                .reject { |row| row.fetch(:document_id) == anchor_document_id }
 
         rows.group_by { |row| row.fetch(:document_id) }
@@ -313,8 +323,8 @@ module Nabu
 
       # Candidate passages with the document id/title/license needed for grouping
       # and display, through the shared visibility+filter join (CatalogJoin).
-      def candidate_rows(passage_ids, lang:, license:)
-        visible_passages(lang: lang, license: license)
+      def candidate_rows(passage_ids, lang:, license:, scope: {})
+        visible_passages(lang: lang, license: license, **scope)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(
             Sequel[:passages][:id].as(:passage_id),
@@ -339,7 +349,7 @@ module Nabu
       # editions do). Silver rows also IMPROVE the rarity estimate: a lemma
       # gold-rare but corpus-common is genuinely undiagnostic, and the df
       # now sees it (test-pinned).
-      def lemma_echoes(anchor, lang:, license:, limit:)
+      def lemma_echoes(anchor, lang:, license:, limit:, scope: {})
         rare = rare_anchor_lemmas(anchor.fetch(:urn))
         return [] if rare.size < 2
 
@@ -349,7 +359,8 @@ module Nabu
                .exclude(urn: anchor.fetch(:urn))
                .select(:passage_id, :lemma_folded, :lemma_raw)
                .all
-        assemble_echoes(rows, weights, anchor: anchor, lang: lang, license: license, limit: limit)
+        assemble_echoes(rows, weights, anchor: anchor, lang: lang, license: license, limit: limit,
+                                       scope: scope)
       end
 
       # The anchor's folded lemmas mapped to their global df, keeping only the
@@ -363,7 +374,7 @@ module Nabu
         end
       end
 
-      def assemble_echoes(rows, weights, anchor:, lang:, license:, limit:)
+      def assemble_echoes(rows, weights, anchor:, lang:, license:, limit:, scope: {})
         shared = Hash.new { |hash, key| hash[key] = {} }
         rows.each do |row|
           shared[row.fetch(:passage_id)][row.fetch(:lemma_folded)] = row.fetch(:lemma_raw)
@@ -371,11 +382,11 @@ module Nabu
         candidates = shared.select { |_pid, lemmas| lemmas.size >= 2 }
         return [] if candidates.empty?
 
-        rank_echoes(candidates, weights, anchor: anchor, lang: lang, license: license, limit: limit)
+        rank_echoes(candidates, weights, anchor: anchor, lang: lang, license: license, limit: limit, scope: scope)
       end
 
-      def rank_echoes(candidates, weights, anchor:, lang:, license:, limit:)
-        rows = candidate_rows(candidates.keys, lang: lang, license: license)
+      def rank_echoes(candidates, weights, anchor:, lang:, license:, limit:, scope: {})
+        rows = candidate_rows(candidates.keys, lang: lang, license: license, scope: scope)
                .reject { |row| row.fetch(:document_id) == anchor.fetch(:document_id) }
         rows.group_by { |row| row.fetch(:document_id) }
             .map { |_doc, doc_rows| echo_hit(doc_rows, candidates, weights) }
