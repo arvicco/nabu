@@ -233,6 +233,14 @@ anchors:
              band_note: "approximate Egyptological convention"}
       mid:  {name: Middle Egyptian, band: [-2000, -1350], ord: 20,
              band_note: "approximate Egyptological convention"}
+      nk:   {name: New Kingdom Egyptian, band: [-1550, -1070], ord: 25,
+             band_note: "the New Kingdom span, deliberately overlapping mid and
+                         late: corpora dated at period grain straddle the
+                         Middle-to-Late transition — the period's texts range
+                         from Middle Egyptian literary register to Late
+                         Egyptian vernacular. Where a document can be assigned
+                         mid or late confidently, prefer those; this stage is
+                         the honest coarser claim"}
       late: {name: Late Egyptian,   band: [-1350, -700],  ord: 30,
              band_note: "approximate Egyptological convention"}
       dem:  {name: Demotic,         band: [-650, 450],    ord: 40,
