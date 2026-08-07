@@ -1,0 +1,51 @@
+{
+ "type": "catalogue",
+ "project": "epsd2/admin/ur3",
+ "source": "http://oracc.org/epsd2/admin/ur3",
+ "members": {
+  "P100001": {
+   "langs": "0x02000000",
+   "project": "epsd2/admin/ur3",
+   "id_text": "P100001",
+   "bdtns_id": "015742",
+   "designation": "AAS 013 = AO 20062 + AO 20061",
+   "period": "Ur III",
+   "genre": "Administrative",
+   "supergenre": "ELA",
+   "provenience": "Umma",
+   "primary_publication": "AAS 013",
+   "publication_history": "Gr\u00e9goire, J.-P. (1970) AAS 013",
+   "museum_no": "AO 20062 + AO 20061",
+   "date_of_origin": "XXXX - 00 - 00",
+   "language": "Sumerian",
+   "object_type": "Tablet",
+   "status": "D",
+   "xproject": "CDLI",
+   "uri": "http://cdli.ucla.edu/P100001",
+   "public": "no",
+   "images": []
+  },
+  "P100002": {
+   "langs": "0x02000000",
+   "project": "epsd2/admin/ur3",
+   "id_text": "P100002",
+   "bdtns_id": "015743",
+   "designation": "AAS 014 = AO 19735",
+   "period": "Ur III",
+   "genre": "Administrative",
+   "supergenre": "ELA",
+   "provenience": "Umma",
+   "primary_publication": "AAS 014",
+   "publication_history": "Gr\u00e9goire, J.-P. (1970) AAS 014",
+   "museum_no": "AO 19735",
+   "date_of_origin": "SH44 - 00 - 00",
+   "language": "Sumerian",
+   "object_type": "Tablet",
+   "status": "D",
+   "xproject": "CDLI",
+   "uri": "http://cdli.ucla.edu/P100002",
+   "public": "no",
+   "images": []
+  }
+ }
+}

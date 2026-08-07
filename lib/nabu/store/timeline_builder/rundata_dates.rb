@@ -18,12 +18,19 @@ module Nabu
       # The urn mint rides Adapters::Rundata.urn_for (FROZEN — the
       # Django-slugify agreement the adapter test pins against upstream's
       # own canonical_slug), so extractor and adapter can never drift.
-      # Only the bare inscription urn joins; lane siblings (-fvn/-rsv/
-      # -eng/-swe) carry no timeline row of their own. Inscriptions with
+      # Lane siblings (-fvn/-rsv/-eng/-swe) INHERIT the base inscription's
+      # row (P62-3, reversing P40-6's exclusion — the oracc "-en"
+      # precedent: a normalization or translation is a rendering of the
+      # same dated stone, so the date/place are the artifact's; 23,623
+      # live sibling docs recovered at the reversal). Inscriptions with
       # neither a year bound nor a place are counted undated, never
       # guessed.
       module RundataDates
         SLUG = "rundata"
+
+        # The sibling-lane urn suffixes (Adapters::Rundata's five-lane
+        # mold, minus the primary).
+        LANE_SUFFIXES = %w[-fvn -rsv -eng -swe].freeze
 
         module_function
 
@@ -41,15 +48,19 @@ module Nabu
           undated = 0
           parser = Adapters::RundataSqliteParser.new(artifact)
           parser.each_inscription do |inscription|
-            document_id = ids[Adapters::Rundata.urn_for(inscription.signum)] or next
+            base_urn = Adapters::Rundata.urn_for(inscription.signum)
+            document_ids = ([base_urn] + LANE_SUFFIXES.map { |sfx| "#{base_urn}#{sfx}" })
+                           .filter_map { |urn| ids[urn] }
+            next if document_ids.empty?
+
             timeline = extract(parser.record(inscription.signature_id).meta)
             if timeline.nil?
-              undated += 1
+              undated += document_ids.size
               next
             end
 
-            insert(catalog, document_id, timeline)
-            rows += 1
+            document_ids.each { |document_id| insert(catalog, document_id, timeline) }
+            rows += document_ids.size
           end
           { documents: rows, undated: undated }
         end
