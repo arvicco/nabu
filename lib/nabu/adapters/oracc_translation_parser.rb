@@ -73,11 +73,11 @@ module Nabu
 
       # +source+ is the fragment's path; +corpusjson_path+ the sibling tablet
       # file (ref → label). Signature family of the sibling parsers.
-      def parse(source, urn:, corpusjson_path:, title: nil, canonical_path: nil)
+      def parse(source, urn:, corpusjson_path:, title: nil, canonical_path: nil, metadata: {})
         path = canonical_path || source
         labels = line_labels(corpusjson_path, urn: urn)
         units = extract_units(File.read(source), path: path, labels: labels)
-        build_document(units, urn: urn, title: title, path: path)
+        build_document(units, urn: urn, title: title, path: path, metadata: metadata)
       end
 
       private
@@ -198,10 +198,10 @@ module Nabu
         forward || row_ids[0...position].reverse_each.filter_map { |row_id| labels[row_id] }.first
       end
 
-      def build_document(units, urn:, title:, path:)
+      def build_document(units, urn:, title:, path:, metadata: {})
         document = Document.new(
           urn: urn, language: LANGUAGE, title: title, canonical_path: path,
-          license_override: LICENSE_OVERRIDE
+          license_override: LICENSE_OVERRIDE, metadata: metadata
         )
         joined = units.each_with_object({}) do |unit, acc|
           acc[unit.label] = acc.key?(unit.label) ? "#{acc[unit.label]} #{unit.text}" : unit.text

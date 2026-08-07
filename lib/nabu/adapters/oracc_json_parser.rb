@@ -97,13 +97,13 @@ module Nabu
 
       # Same signature family as the sibling parsers, minus language: (see
       # class note — the language is derived from the data).
-      def parse(source, urn:, title: nil, canonical_path: nil)
+      def parse(source, urn:, title: nil, canonical_path: nil, metadata: {})
         path = resolve_canonical_path(source, canonical_path)
         data = read_json(source, path: path)
         check_identity!(data, path: path, urn: urn)
 
         lines = Extraction.new.call(data["cdl"])
-        build_document(lines, urn: urn, title: title, path: path)
+        build_document(lines, urn: urn, title: title, path: path, metadata: metadata)
       end
 
       private
@@ -139,7 +139,7 @@ module Nabu
                           "project/textid mint #{minted.inspect}"
       end
 
-      def build_document(lines, urn:, title:, path:)
+      def build_document(lines, urn:, title:, path:, metadata: {})
         lines = lines.reject { |line| line.forms.empty? }
         # No transcribed lines: an object/surface skeleton catalogued but never
         # lemmatized (dcclt ships ~112 such files) — the catalog-only cousin of
@@ -151,7 +151,7 @@ module Nabu
         end
 
         language = primary_language(lines)
-        document = Document.new(urn: urn, language: language, title: title, canonical_path: path)
+        document = Document.new(urn: urn, language: language, title: title, canonical_path: path, metadata: metadata)
         suffixes = disambiguate_suffixes(lines)
         lines.each_with_index do |line, sequence|
           document << Passage.new(
