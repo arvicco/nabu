@@ -103,6 +103,23 @@ module Adapters
       assert_equal "rimanum", refs["urn:nabu:oracc:rimanum:P405432"].metadata["project"]
     end
 
+    # P62-2: the catalogue period rides discovery as an adapter-emitted
+    # facet ({"facets" => {"period" => {"value" => …}}} — the ebl shape
+    # FacetBuilder already reads), and parse threads it into the document's
+    # metadata — so the akk/sux period rules can finally reach oracc's own
+    # period labels (the 123k-entry census). A member without a period
+    # emits no facet key; the -en sibling carries its tablet's (the same
+    # artifact).
+    def test_discover_and_parse_thread_the_catalogue_period_as_a_facet
+      refs = conformance_adapter.discover(FIXTURES).to_h { |ref| [ref.id, ref] }
+      ref = refs["urn:nabu:oracc:rimanum:P405134"]
+      assert_equal({ "period" => { "value" => "Old Babylonian" } }, ref.metadata["facets"])
+
+      document = conformance_adapter.parse(ref)
+      assert_equal({ "period" => { "value" => "Old Babylonian" } }, document.metadata["facets"],
+                   "the parser passes the facet through to the persisted document metadata")
+    end
+
     # -- P11-7 fix 1: subproject NESTED-ROOT discovery ------------------------
 
     # The saao/saa01 (and rinap/rinap1) zips unpack with a nested root —

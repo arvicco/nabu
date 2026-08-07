@@ -157,6 +157,22 @@ module Store
 
     # -- the translation witness ------------------------------------------------
 
+    # P62-1: the 80k-doc gap was ONE glob depth — epsd2/admin/ur3 unpacks
+    # its catalogue at <project>/<sub>/<sub>/catalogue.json (the P31-0
+    # multi-segment root, hitting the EXTRACTOR this time). The fixture is
+    # the real epsd2 catalogue trimmed to two Ur III members; "XXXX" and
+    # regnal "SH44" date_of_origin shapes fall through to the period band.
+    def test_triply_nested_catalogues_are_walked_and_ur_iii_bands
+      make_document("urn:nabu:oracc:epsd2-admin-ur3:P100001", language: "sux")
+      build!
+      row = timeline_for("urn:nabu:oracc:epsd2-admin-ur3:P100001")
+      refute_nil row, "the depth-3 catalogue must be discovered"
+      assert_equal(-2100, row[:not_before])
+      assert_equal(-2000, row[:not_after])
+      assert_equal "period", row[:precision]
+      assert_equal "Umma", row[:place_name]
+    end
+
     def test_translation_document_carries_its_tablets_timeline
       make_document("urn:nabu:oracc:saao-saa01:P224395")
       make_document("urn:nabu:oracc:saao-saa01:P224395-en", language: "eng")

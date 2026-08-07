@@ -125,10 +125,10 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 60, lect.size,
-                 "the P59-4 declarations survive the move (61 at migration; itant's identity row " \
-                 "retired same-phase when its P61-3 override made it machine-postured — the " \
-                 "shadowing rule, working)"
-    assert_equal({ "identity" => 37, "pending" => 10, "dates" => 9, "codemap" => 4 }, by_posture)
+    assert_equal 59, lect.size,
+                 "the P59-4 declarations survive the move (61 at migration; itant retired P61-3, " \
+                 "oracc retired P62-2 — each when a machine grain took over: the shadowing rule, " \
+                 "working)"
+    assert_equal({ "identity" => 37, "pending" => 10, "dates" => 8, "codemap" => 4 }, by_posture)
   end
 end
