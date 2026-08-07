@@ -66,6 +66,19 @@ class PosturesTest < Minitest::Test
                  "(identity is an honest answer) in config/postures.yml"
   end
 
+  # --- the P61-1 sweep: every layer, every source — ARMED ----------------
+
+  def test_every_passage_serving_source_declares_dating_places_and_script
+    %w[dating places script].each do |layer|
+      coverage = postures.layer_coverage(layer)
+      missing = passage_slugs.reject { |slug| coverage.key?(slug) }
+      assert_empty missing,
+                   "sources with NO #{layer} posture: #{missing.join(', ')} — run " \
+                   "`nabu layer suggest <slug>`, then declare (undatable/unplaced/implied " \
+                   "are honest answers) in config/postures.yml"
+    end
+  end
+
   def test_lect_declarations_never_shadow_machine_postures
     assert_empty postures.shadowing(rules: rules, overrides: overrides),
                  "a declared lect row duplicates a rules/overrides posture — delete the " \
