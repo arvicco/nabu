@@ -219,6 +219,13 @@ module Nabu
       @anchors.keys
     end
 
+    # True iff +tag+ is in the registry's GLOBAL scripts table (P61-3: the
+    # artifact-script config validates against the same vocabulary the ~
+    # axis resolves against — one table, two consumers).
+    def script?(tag)
+      @scripts.key?(tag.to_s)
+    end
+
     # Every stage of +anchor+ as a Record (id "<anchor>:<tag>"), ord-sorted
     # (chronological display order — the future card-ladder seam). [] for an
     # undefined anchor or one with no stages.

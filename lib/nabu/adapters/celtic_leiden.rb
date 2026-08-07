@@ -44,6 +44,13 @@ module Nabu
       # sga, mga, xpi, non, und, cel) pass through.
       LANGUAGE_MAP = { "la" => "lat", "ga" => "gle", "gd" => "gla", "en" => "eng", "fr" => "fra" }.freeze
 
+      # P61-3: known-truncation script subtags, normalized to their BCP-47
+      # form. Keyed on EVIDENCE (RIIG's IND-01-01 carries seg
+      # xml:lang="xtg-Lat" beside its own mainLang="xtg-Latn"; 8 live
+      # passages measured) — a repair for a measured upstream defect, never
+      # a blanket rewrite.
+      SUBTAG_REPAIRS = { "Lat" => "Latn" }.freeze
+
       module_function
 
       # Map an upstream xml:lang tag to Nabu's ISO 639-3 form. nil-safe,
@@ -53,6 +60,7 @@ module Nabu
 
         primary, rest = tag.split("-", 2)
         mapped = LANGUAGE_MAP.fetch(primary, primary)
+        rest = SUBTAG_REPAIRS.fetch(rest, rest) if rest
         rest ? "#{mapped}-#{rest}" : mapped
       end
 

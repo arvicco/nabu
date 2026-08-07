@@ -1,0 +1,419 @@
+# config/postures.yml — per-source CORE-LAYER posture declarations
+# (P61-0 consolidation of the P59-4 config/lect_posture.yml; the D59-f
+# wave-1 frame, .docs/core-layers-architecture.md).
+#
+# One row per source, one key per layer (lect / dating / places /
+# script), each holding what pure JUDGMENT can state — machine-knowable
+# postures are NEVER declared here (a source named by a
+# lect_facet_rules.yml rule or a lect_overrides.yml row is lect-postured
+# by those files; an artifact_scripts.yml row states its own machine
+# fact). The suite (test/postures_test.rb) fails when a passage-serving
+# source lacks a required layer's posture; pending rows must name their
+# candidate. Vocabularies (ratified):
+#
+#   lect    identity / pending / dates / codemap   (P59-4, verbatim)
+#   dating  dated / partial / undatable / pending
+#   places  linked / named / unplaced / pending
+#   script  implied / qualified / mixed
+#
+# New-adapter duty (the front-door checklist): run `nabu layer suggest
+# <slug>`, then wire the machine files or declare the rows. A missing
+# row fails the suite.
+sources:
+  # ── dates: the dating-inferred epigraphic/documentary corpora ──────────
+  ceipom:
+    lect: {posture: dates}
+    dating: {posture: dated}
+    places: {posture: linked, note: "refs on 27% — names reach 100%"}
+    script: {posture: implied}
+  corph:
+    lect: {posture: dates}
+    dating: {posture: partial}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  croala:
+    lect:
+      posture: dates
+      note: ruled DELIBERATELY unstaged at source grain (D57-f — genuinely
+        mixed Renaissance-to-modern Latin); per-document date-band rows ride.
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: implied}
+  edh:
+    lect: {posture: dates}
+    dating: {posture: partial}
+    places: {posture: linked}
+    script: {posture: implied}
+  edr:
+    lect: {posture: dates}
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: implied}
+  iip:
+    lect: {posture: dates}
+    dating: {posture: dated}
+    places: {posture: named}
+    script: {posture: implied}
+  isicily:
+    lect: {posture: dates}
+    dating: {posture: partial}
+    places: {posture: linked}
+    script: {posture: qualified}
+  lexlep:
+    lect: {posture: dates}
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: implied}
+  oracc:
+    lect: {posture: dates}
+    dating: {posture: partial, note: "pending-sized candidate: period labels on ~82k undated docs (wave 2)"}
+    places: {posture: linked, note: "refs on 20% — names reach 29%"}
+    script: {posture: implied}
+
+  # ── codemap: refined universally, no Nabu-specific knowledge needed ────
+  kanripo:
+    lect: {posture: codemap, note: lzh → zho/lit (Literary Chinese)}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: mixed, note: "gaiji variant characters ride annotations"}
+  cbeta:
+    lect: {posture: codemap, note: lzh → zho/lit}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  suttacentral:
+    lect: {posture: codemap, note: the lzh slice → zho/lit; pli is identity}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  ud:
+    lect:
+      posture: codemap
+      note: the lzh treebanks → zho/lit; the rest ruled DELIBERATELY
+        unstaged (D57-f — a mixed-treebank collection is not one stage).
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+
+  # ── identity: the bare code IS the claim ───────────────────────────────
+  # Stage-specific ISO codes (the code already names the historical stage):
+  oncoj:
+    lect: {posture: identity, note: ojp IS Old Japanese}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  rem:
+    lect: {posture: identity, note: gmh IS Middle High German}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  ren:
+    lect: {posture: identity, note: gml IS Middle Low German}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  bfm:
+    lect: {posture: identity, note: fro IS Old French}
+    dating: {posture: dated}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  helipad:
+    lect: {posture: identity, note: osx IS Old Saxon}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  menotec:
+    lect: {posture: identity, note: non IS Old Norse}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  aspr:
+    lect: {posture: identity, note: ang IS Old English}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  iswoc:
+    lect: {posture: identity, note: ang/fro — both stage-coded}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  cantigas:
+    lect: {posture: identity, note: roa-opt IS medieval Galician-Portuguese}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  otdo:
+    lect: {posture: identity, note: otb IS Old Tibetan}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  old-tibetan:
+    lect: {posture: identity, note: otb}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  soas-tibetan:
+    lect: {posture: identity, note: xct IS Classical Tibetan}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  derge-kangyur:
+    lect: {posture: identity, note: xct}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  derge-tengyur:
+    lect: {posture: identity, note: xct}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  # Variety-less languages as held (no registry stages to refine into):
+  tlhdig:
+    lect: {posture: identity, note: the cuneiform micro-shelves (hit/xhu/xlu…) — no minted stages}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  rsti:
+    lect: {posture: identity, note: catalog records across nine codes; uga has no stages}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  cuc:
+    lect: {posture: identity, note: uga}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  betamasaheft-works:
+    lect: {posture: identity, note: gez/amh — no minted stages}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  traces:
+    lect: {posture: identity, note: gez}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  syriac-corpus:
+    lect: {posture: identity, note: syc IS Classical Syriac}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  peshitta:
+    lect: {posture: identity, note: syc}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  oshb:
+    lect: {posture: identity, note: hbo carries no stages; the arc slice is Biblical Aramaic within Tanakh}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  bhsa:
+    lect: {posture: identity, note: hbo/arc, as oshb}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  open-etruscan:
+    lect: {posture: identity, note: ett — no minted stages}
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: implied}
+  tir:
+    lect: {posture: identity, note: xrr Raetic}
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: implied}
+  riig:
+    lect: {posture: identity, note: xtg Gaulish}
+    dating: {posture: partial}
+    places: {posture: linked}
+    script: {posture: qualified}
+  ogham:
+    lect: {posture: identity, note: pgl/sga/mga — the Irish ladder is already stage-coded}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: qualified}
+  eng-web:
+    lect: {posture: identity, note: a modern English translation shelf}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  e84000:
+    lect: {posture: identity, note: English translations of the Kangyur}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  aozora:
+    lect: {posture: identity, note: modern Japanese literature}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  sarit:
+    lect: {posture: identity, note: classical Sanskrit editions; no school tags like DCS's}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: qualified}
+  damaskini:
+    lect: {posture: identity, note: early-modern Bulgarian damaskini + chu apparatus}
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: implied}
+  # Ruled deliberately unstaged (D57-f): mixed corpora, bare-anchor honesty.
+  first1k-greek:
+    lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  diorisis:
+    lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  glaux:
+    lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  proiel:
+    lect: {posture: identity, note: mixed treebank collection — the ud/D57-f stance}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  local-library:
+    lect: {posture: identity, note: the owner's own shelf — codes as curated}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+
+  # ── pending: a real refinement candidate, not yet ruled ────────────────
+  etcsl:
+    lect: {posture: pending, note: mostly OB literary Sumerian — a sux:post
+        source override is one ruling away}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  coptic-scriptorium:
+    lect: {posture: pending, note: Sahidic/Bohairic are variety
+        candidates the registry does not mint yet}
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: mixed, note: "Greek loans inside Coptic text"}
+  titus-avestan:
+    lect: {posture: pending, note: Old vs Young Avestan stages are
+        mintable; the corpus distinguishes them}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  torot:
+    lect: {posture: pending, note: chu recension varieties exist in the
+        registry; the mss are attributable}
+    dating: {posture: partial}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  ccmh:
+    lect: {posture: pending, note: Croatian Church Slavonic — a chu recension
+        variety candidate}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  imp:
+    lect: {posture: pending, note: 19th-c Slovene — a slv stage question}
+    dating: {posture: dated}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  goo300k:
+    lect: {posture: pending, note: historical Slovene, as imp}
+    dating: {posture: dated}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  freising:
+    lect: {posture: pending, note: the Freising fragments — Old Slovene,
+        a stage-minting candidate}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  gretil:
+    lect: {posture: pending, note: san corpus slices may support rules like
+        DCS's veda tags; unexamined}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: qualified}
+  tla-hf:
+    lect: {posture: pending, note: hieratic fragments — egy stages reachable
+        once dating metadata is examined}
+    dating: {posture: partial}
+    places: {posture: unplaced}
+    script: {posture: implied}
+
+  # ── P61-1: sources whose lect posture is MACHINE grain (rules/
+  # overrides files) — no lect key here by the single-source-of-truth
+  # rule; the three new layers still declare (coverage-derived, the
+  # sweep of 2026-08-07). ────────────────────────────────────────────
+  aes:
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: implied}
+  cdli:
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: implied}
+  dcs:
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  digiliblt:
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  dss:
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  ebl:
+    dating: {posture: pending, note: "Seleucid-era day/month objects, deliberately excluded (MetadataDates) — an era-conversion project (wave 2)"}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  elephantine:
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: qualified}
+  itant:
+    dating: {posture: partial}
+    places: {posture: named}
+    script: {posture: qualified}
+  openiti:
+    dating: {posture: dated}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  openmgh:
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  papyri-ddbdp:
+    dating: {posture: dated}
+    places: {posture: linked}
+    script: {posture: qualified}
+  perseus-greek:
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  perseus-latin:
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  rundata:
+    dating: {posture: partial, note: "pending-sized candidate: Imer periods beyond the parsed 6.8k (wave 2)"}
+    places: {posture: named}
+    script: {posture: implied}
+  sblgnt:
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  sefaria:
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  vulgate:
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}

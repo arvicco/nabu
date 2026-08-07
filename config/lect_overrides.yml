@@ -51,6 +51,9 @@ sources:
   papyri-ddbdp:
     # Documentary papyri, Ptolemaic through Roman — approximation.
     grc: "grc:koi"
+    # P61-3 (D60-b): Demotic papyri held as Latin transliteration — the
+    # surface claim; the artifact's Egyd rides config/artifact_scripts.yml.
+    egy-Egyd: "egy~latn"
   perseus-greek:
     # Classical canon — approximation; Homer refines to grc:hom per-doc.
     grc: "grc:cla"
@@ -64,6 +67,10 @@ sources:
     # The island's Aramaic record IS the Imperial Aramaic corpus — certain.
     # Owner ruling, P58 D58-d.
     arc: "arc:imp"
+    # P61-3 (D60-b): the Demotic papyri are HELD as Latin transliteration
+    # (byte-census P60-1) — surface claim ~latn; the artifact's Egyd rides
+    # config/artifact_scripts.yml.
+    egy-Egyd: "egy~latn"
   openiti:
     # OpenITI is the premodern Classical Arabic written tradition —
     # approximation (the fas rows are untouched). Owner ruling, P58 D58-d.
@@ -76,3 +83,18 @@ sources:
     # stays deliberately bare — the registry mints no Qumran-Hebrew stage.
     # Owner ruling, P59 D59-b.
     arc: "arc:bib"
+  # P61-3 (D60-b applied; the wave-1 architecture the owner ratified
+  # 2026-08-07): the ARTIFACT-claiming script suffixes — the byte-census
+  # (P60-1) measured these codes' held text 100% Latin transliteration,
+  # so the suffix names the artifact's script, not the surface. The
+  # surface claim lands here (~latn, the D60-b primary fact); the
+  # artifact's script rides config/artifact_scripts.yml into
+  # document_axes.artifact_script. Universal codemap rows are deliberately
+  # NOT minted for these codes: their wild usage is not surface-honest.
+  # (papyri-ddbdp's egy-Egyd row lives in its section ABOVE — YAML takes
+  # the LAST duplicate key, so a second section would silently SHADOW the
+  # first; the P61-3 incident that cost grc:koi 57,911 rows for one
+  # materialize run.)
+  itant:
+    osc-Ital-x-oscetr: "osc~latn"
+    xcg-Ital-x-xcglep: "xcg~latn"
