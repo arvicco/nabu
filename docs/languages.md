@@ -113,12 +113,14 @@ resolution differs from the bare code — "no row means identity"), so the
 stage is a first-class query axis: `show` prints it on the facets line,
 `search --lect` filters by it at every grain including per-document
 rulings, and the `language` ladder counts from it. As of 7 August 2026
-the journal holds 410,602 assignments and the facet 496,934 rows
+the journal holds 500,985 assignments and the facet 587,317 rows
 (P59-0 repaired the reversed-interval extractor cluster — 82 defective
 dating rows across six sources — and the date-band re-run recovered the
 affected documents' assignments with zero refusals; P61-3 added 3,424
 `~script` surface claims via the byte-verified codemap suite and the
-artifact-claiming overrides).
+artifact-claiming overrides; P62 extended the akk/sux period rules to
+ORACC's own catalogue labels — +90,383 stage assignments in one apply,
+and corpus dating coverage rose 64.4% → 77.4%).
 
 Consumers as of P57-4 (ladder counts facet-backed since P58-6):
 

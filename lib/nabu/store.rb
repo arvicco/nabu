@@ -154,6 +154,42 @@ module Nabu
       db
     end
 
+    # How long the write-availability PROBE waits (P62 rider) — deliberately
+    # a fraction of BUSY_TIMEOUT_MS: the probe exists to answer "is another
+    # process mid-write?" in a quarter second, not to queue behind it.
+    PROBE_TIMEOUT_MS = 250
+
+    # The write-lock pre-flight (P62 rider — the owner's sync-vs-apply
+    # collision): BEGIN IMMEDIATE on a throwaway short-timeout connection,
+    # released at once. A concurrent writer (another sync, a rebuild, an
+    # apply chain) raises Nabu::CatalogBusyError — one clean sentence the
+    # CLI's Nabu::Error rescue turns into exit 1, BEFORE any work happens.
+    # An absent file passes silently (open_or_create owns absence); nil on
+    # success. This narrows the window, it cannot close it — a writer can
+    # still arrive mid-run, which is why write commands ALSO rescue the
+    # busy shape into the same clean message.
+    def assert_writable!(path)
+      return nil unless File.file?(path.to_s)
+
+      db = Sequel.connect(sqlite_url(path), timeout: PROBE_TIMEOUT_MS)
+      begin
+        db.run("BEGIN IMMEDIATE")
+        db.run("ROLLBACK")
+        nil
+      rescue Sequel::DatabaseError => e
+        raise Nabu::CatalogBusyError, path if busy_error?(e)
+
+        raise
+      ensure
+        db.disconnect
+      end
+    end
+
+    # The SQLite busy shape, wherever Sequel wrapped it.
+    def busy_error?(error)
+      error.message.match?(/database is locked|BusyException/i)
+    end
+
     # Delete a SQLite database file TOGETHER WITH its WAL sidecars. Deleting
     # only the main file while a long-running process still holds the old
     # inode leaves its `-shm` behind at the path; the next connection then

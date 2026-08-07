@@ -1990,6 +1990,35 @@ class CLITest < Minitest::Test
 
   # -- sync governance (P44-r3b) ---------------------------------------------
 
+  # P62 rider (the owner's sync-vs-apply collision): a catalog another
+  # process is writing fails the sync in a quarter second with ONE clean
+  # sentence — never a BusyException stack minutes into a load.
+  def test_sync_on_a_write_locked_catalog_fails_fast_with_one_clean_sentence
+    Dir.mktmpdir("nabu-cli-busy") do |root|
+      dir = File.join(root, "canonical", "a")
+      FileUtils.mkdir_p(dir)
+      File.write(File.join(dir, "a.txt"), "Iliad\nμῆνιν\n")
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "a:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: auto\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources, config_path: "(test)")
+      FileUtils.mkdir_p(config.db_dir)
+      holder = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(holder)
+      holder.run("BEGIN IMMEDIATE")
+      begin
+        _o, err, status = with_config(config) { run_cli(%w[sync a --parse-only]) }
+        assert_equal 1, status
+        assert_match(/locked by another process/, err)
+        assert_match(/wait for it/i, err)
+        refute_match(/BusyException|\.rb:\d+:in/, err, "no stack vomit — the whole point")
+      ensure
+        holder.run("ROLLBACK")
+        holder.disconnect
+      end
+    end
+  end
+
   def test_sync_refuses_a_non_enabled_source_but_parse_only_is_the_repair_exception
     Dir.mktmpdir("nabu-cli-gate") do |root|
       %w[a b].each do |slug|

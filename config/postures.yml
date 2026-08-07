@@ -67,7 +67,8 @@ sources:
   oracc:
     # lect declaration retired P62-2: the extended akk/sux period rules
     # machine-posture oracc now (the shadowing rule).
-    dating: {posture: partial, note: "pending-sized candidate: period labels on ~82k undated docs (wave 2)"}
+    dating: {posture: dated, note: "P62-1/2: 116,708/118,366 via catalogue date_of_origin + the ruled
+        period table (the recursive-glob fix reached the triply-nested epsd2 catalogue)"}
     places: {posture: linked, note: "refs on 20% — names reach 29%"}
     script: {posture: implied}
 
@@ -371,7 +372,8 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   ebl:
-    dating: {posture: pending, note: "Seleucid-era day/month objects, deliberately excluded (MetadataDates) — an era-conversion project (wave 2)"}
+    dating: {posture: dated, note: "P62-0: 22,807/23,288 banded via the ruled period table; the 40
+        Seleucid day/month objects band coarsely — exact era conversion deliberately out"}
     places: {posture: unplaced}
     script: {posture: implied}
   elephantine:
@@ -403,7 +405,8 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   rundata:
-    dating: {posture: partial, note: "pending-sized candidate: Imer periods beyond the parsed 6.8k (wave 2)"}
+    dating: {posture: dated, note: "P62-3: lane siblings inherit their stone's band via signum —
+        30,647 rows, 0 undated (the P40-6 exclusion reversed)"}
     places: {posture: named}
     script: {posture: implied}
   sblgnt:

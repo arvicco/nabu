@@ -261,6 +261,7 @@ module Nabu
     option :dry_run, type: :boolean, default: false
     def apply_rules
       config = Nabu::Config.load
+      guard_catalog_free!(config) unless options[:"dry-run"]
       registry = require_lects_module!(config)
       rules = Nabu::LectRules.load(config.lect_facet_rules_path)
       raise Thor::Error, "lect apply-rules: no rules file at #{config.lect_facet_rules_path}" unless rules
@@ -306,6 +307,7 @@ module Nabu
     option :dry_run, type: :boolean, default: false
     def infer_dates
       config = Nabu::Config.load
+      guard_catalog_free!(config) unless options[:"dry-run"]
       registry = require_lects_module!(config)
       unless File.exist?(config.catalog_path)
         raise Thor::Error,
@@ -346,6 +348,7 @@ module Nabu
     HELP
     def materialize
       config = Nabu::Config.load
+      guard_catalog_free!(config)
       require_lects_module!(config)
       unless File.exist?(config.catalog_path)
         raise Thor::Error,
@@ -454,6 +457,14 @@ module Nabu
     end
 
     no_commands do
+      # P62 rider: the quarter-second write-lock pre-flight for journal/facet
+      # writers — one clean sentence instead of a BusyException stack.
+      def guard_catalog_free!(config)
+        Nabu::Store.assert_writable!(config.catalog_path)
+      rescue Nabu::CatalogBusyError => e
+        raise Thor::Error, e.message
+      end
+
       def require_lects_module!(config)
         registry = Nabu::Lects.load_default(config: config, overlay: {})
         raise Thor::Error, "lect: the nabu-lects module is not synced (canonical/nabu-lects)" unless registry
@@ -699,6 +710,12 @@ module Nabu
       config = Nabu::Config.load
       raise Thor::Error, "layer artifacts: no catalog at #{config.catalog_path}" unless File.exist?(config.catalog_path)
 
+      begin
+        Nabu::Store.assert_writable!(config.catalog_path)
+      rescue Nabu::CatalogBusyError => e
+        raise Thor::Error, e.message
+      end
+
       catalog = Nabu::Store.connect(config.catalog_path)
       report = Nabu::Store::ArtifactScripts.derive!(
         catalog, config_path: config.artifact_scripts_path,
@@ -835,6 +852,10 @@ module Nabu
         raise Thor::Error, "sync: --redownload is per-source — name one slug" if options[:all] || options[:axis]
       end
       config = Nabu::Config.load
+      # P62 rider: the quarter-second write-lock pre-flight — a concurrent
+      # sync/rebuild/apply fails HERE with one sentence, not minutes into a
+      # load with a BusyException stack.
+      Nabu::Store.assert_writable!(config.catalog_path)
       registry = Nabu::SourceRegistry.load(config.sources_path)
       # Ledger FIRST: open_or_create_ledger lifts a pre-P7-1 catalog's history
       # before open_or_create_catalog migrates the moved tables away.
@@ -846,6 +867,15 @@ module Nabu
       # Unknown slug (ValidationError), fetch failure (FetchError), ... all
       # surface as a clean stderr message and exit 1.
       raise Thor::Error, e.message
+    rescue Sequel::DatabaseError => e
+      # The probe narrows the collision window but cannot close it — a
+      # writer arriving MID-RUN still lands here. The busy shape gets the
+      # same clean sentence (the sync is resumable; re-run when free);
+      # anything else stays a loud unknown.
+      raise unless Nabu::Store.busy_error?(e)
+
+      raise Thor::Error,
+            "#{Nabu::CatalogBusyError.new(config.catalog_path).message} (the interrupted sync is resumable)"
     ensure
       db&.disconnect
       ledger&.disconnect
@@ -1381,6 +1411,10 @@ module Nabu
                                "(full rebuild remains the reference)"
     def rebuild
       config = Nabu::Config.load
+      # P62 rider: rebuild DROPS the catalog — doing that under a live
+      # writer corrupts nothing (derived data) but wastes both runs; the
+      # pre-flight fails in a quarter second instead. Dry runs read only.
+      Nabu::Store.assert_writable!(config.catalog_path) unless options[:dry_run]
       registry = Nabu::SourceRegistry.load(config.sources_path)
       # db/ is derived data by design (architecture §1); dropping it is the whole
       # point, so a real run needs no confirmation. An empty registry has nothing
@@ -1398,6 +1432,13 @@ module Nabu
         print_result(result)
         print_profile(result.profile) if options[:profile]
       end
+    rescue Nabu::CatalogBusyError => e
+      raise Thor::Error, e.message
+    rescue Sequel::DatabaseError => e
+      raise unless Nabu::Store.busy_error?(e)
+
+      raise Thor::Error, "#{Nabu::CatalogBusyError.new(config.catalog_path).message} " \
+                         "(a writer arrived mid-rebuild; rebuilds are simply re-run)"
     end
 
     desc "verify", "Re-hash canonical files against the catalog (bitrot/tamper check; cronnable)"
