@@ -914,7 +914,14 @@ dates + TOROT chronicle annals, P16-3).
 documents.** A document may carry zero, one, or (Part 2's chronicle annals)
 several timeline rows, and most of the corpus is *undated* — an absence, never a
 row. Columns: `(document_id, not_before, not_after, precision, date_raw,
-place_name, place_ref, axis_source, passage_seq_from, passage_seq_to)`. The
+place_name, place_ref, axis_source, passage_seq_from, passage_seq_to,
+artifact_script, artifact_script_note)` — the last pair is the P61-3
+artifact-script lane (migration 024, D60-b): the ORIGINAL artifact's
+writing system where it differs from the held surface, minted wholesale
+from `config/artifact_scripts.yml` by `Store::ArtifactScripts.derive!`
+under its own `axis_source` "artifact-script" (a lane carrying only
+those columns; date/place readers filter on their own columns and never
+meet it). The
 date model is signed historical years with no year 0 (conventions §11); the
 nullable `passage_seq_*` pair rides for Part 2's passage-grain, document-grain
 rows leaving them NULL.

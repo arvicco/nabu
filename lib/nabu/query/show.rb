@@ -87,11 +87,18 @@ module Nabu
       # retired_upstream (P5-2): upstream scrapped the canonical file, the
       # attic kept it — the document is live, labeled honestly. +facets+
       # (P17-2): the document's facet rows, [] when unfaceted.
+      # +artifact+ (P61-3, D60-b): the ORIGINAL artifact's script where it
+      # differs from the held surface (the Demotic papyrus held as Latin
+      # transliteration) — the Store::ArtifactScripts lane, nil for the
+      # common no-difference case.
+      Artifact = Data.define(:script, :note)
+
       DocumentResult = Data.define(
         :urn, :title, :language, :source_slug, :license_class,
-        :revision, :withdrawn, :retired_upstream, :passages, :timeline, :facets, :credit, :findspot
+        :revision, :withdrawn, :retired_upstream, :passages, :timeline, :facets, :credit, :findspot,
+        :artifact
       ) do
-        def initialize(timeline: nil, facets: [], credit: nil, findspot: nil, **) = super
+        def initialize(timeline: nil, facets: [], credit: nil, findspot: nil, artifact: nil, **) = super
       end
 
       # A range (P7-6): the document header, the inclusive slice of passages,
@@ -375,8 +382,19 @@ module Nabu
           passages: document_passages(row.fetch(:document_id)),
           timeline: timeline_for(row.fetch(:document_id)),
           facets: facets_for(row.fetch(:document_id)), credit: row.fetch(:credit),
-          findspot: findspot_for(row)
+          findspot: findspot_for(row),
+          artifact: artifact_for(row.fetch(:document_id))
         )
+      end
+
+      # The artifact-script lane row (P61-3), or nil — absent lane, or a
+      # catalog predating migration 024 (the facets_for/timeline_for
+      # degrade-never-crash stance).
+      def artifact_for(document_id)
+        row = Store::ArtifactScripts.for_document(@catalog, document_id)
+        row && Artifact.new(script: row[:artifact_script], note: row[:artifact_script_note])
+      rescue Sequel::DatabaseError
+        nil
       end
 
       # The findspot facts (P44-2), or nil — no captured id, no resolver

@@ -120,6 +120,13 @@ module Nabu
       File.join(config_dir, "lect_overrides.yml")
     end
 
+    # The artifact-script rows (P61-3, D60-b): source → code → the
+    # ARTIFACT's script where it differs from the held surface, compiled
+    # into document_axes by Store::ArtifactScripts.derive!.
+    def artifact_scripts_path
+      File.join(config_dir, "artifact_scripts.yml")
+    end
+
     # The facet→lect assignment rules (P58-2): owner-ratified document-group
     # rules `nabu lect apply-rules` compiles into the lect journal.
     def lect_facet_rules_path

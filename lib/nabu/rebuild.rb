@@ -171,6 +171,13 @@ module Nabu
       profile.measure(scope: RebuildProfile::CORPUS, stage: :lect_facets) do
         Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config))
       end
+      # P61-3: the artifact-script lane — pure function of stored codes +
+      # config/artifact_scripts.yml, re-derived wholesale like the stats.
+      progress&.stage("artifact scripts")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :artifact_scripts) do
+        Store::ArtifactScripts.derive!(db, config_path: @config.artifact_scripts_path,
+                                           registry: Nabu::Lects.load_default(config: @config))
+      end
       # P42-0: the write-time census. The loader hooks maintained it through
       # the replay; the wholesale derivation here is the rebuildability
       # invariant made explicit — stats are exactly f(loaded catalog).

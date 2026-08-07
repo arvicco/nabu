@@ -1,0 +1,27 @@
+# config/artifact_scripts.yml — the artifact-script rows (P61-3, D60-b).
+#
+# The ~script lect axis claims the script of the text AS HELD; THIS file
+# records the ARTIFACT's original writing system for exactly the codes
+# where the two differ (the ruling: "where the artifact script differs
+# from the source document it should be marked as a separate field").
+# Machine grain: source → stored language code → registry script tag
+# (lects.yml's global scripts table) + an optional note carrying upstream
+# refinements the axis deliberately does not model. Compiled into
+# document_axes.artifact_script by Store::ArtifactScripts.derive!
+# (rebuild-safe, re-derived wholesale). Every row is an owner-ruled
+# reading of the P60-1 byte-census: the held bytes measured 100% Latin
+# while the suffix names the artifact.
+sources:
+  elephantine:
+    egy-Egyd:
+      script: egyd
+  papyri-ddbdp:
+    egy-Egyd:
+      script: egyd
+  itant:
+    osc-Ital-x-oscetr:
+      script: ital
+      note: Etruscan alphabet (upstream's -x-oscetr private-use subtag)
+    xcg-Ital-x-xcglep:
+      script: ital
+      note: Lepontic alphabet (upstream's -x-xcglep private-use subtag)

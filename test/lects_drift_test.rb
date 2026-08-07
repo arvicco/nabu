@@ -44,6 +44,20 @@ class LectsDriftTest < Minitest::Test
     @lects ||= Nabu::Lects.load(FIXTURES, overrides_path: LECT_OVERRIDES_PATH)
   end
 
+  # The P61-3 incident, pinned: YAML silently keeps the LAST duplicate
+  # mapping key, so a second `papyri-ddbdp:` section appended at the file
+  # tail SHADOWED the first — grc:koi vanished for 57,911 docs in one
+  # materialize run. Overrides are hand-edited; this guard makes the trap
+  # a red test instead of a silent census drop.
+  def test_the_overrides_file_has_no_duplicate_source_keys
+    keys = File.readlines(LECT_OVERRIDES_PATH)
+               .filter_map { |line| line[/\A  ([a-z0-9-]+):\s*\z/, 1] }
+    dupes = keys.tally.select { |_, count| count > 1 }.keys
+    assert_empty dupes,
+                 "duplicate source keys in config/lect_overrides.yml (YAML last-wins would " \
+                 "silently shadow the earlier section): #{dupes.join(', ')}"
+  end
+
   def test_seeded_document_codes_resolve_cleanly
     store_test_db
     seed_documents
