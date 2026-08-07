@@ -1,0 +1,73 @@
+# config/period_bands.yml — the ruled period→band table (P62-0, core
+# layers wave 2).
+#
+# One row per NORMALIZED period label (LectRules.normalize_value strips
+# the parenthetical year gloss and a trailing cataloguer's "?" — so
+# CDLI's "Ur III (ca. 2100-2000 BC)" and oracc's bare "Ur III" share a
+# row): band = [not_before, not_after] in signed historical years
+# (negative = BCE, no year 0 — conventions §11). Every band cites its
+# convention: `cdli` = CDLI's own parenthetical gloss, verbatim (the
+# field's reference, embedded in the labels this table serves);
+# `assyriological` = standard handbook convention where CDLI states no
+# gloss (middle chronology throughout, after J. A. Brinkman's chronology
+# appendix in A. L. Oppenheim, Ancient Mesopotamia, rev. ed. 1977 — the
+# citation the P16-3 extractor carried; this table supersedes its inline
+# copy). Labels deliberately WITHOUT a row (an absence is an answer):
+# Uncertain/Unknown/unclear/fake/modern (no claim), Standard Babylonian
+# (a REGISTER label misfiled as a period upstream — the lect layer
+# handles it; a date claim from it would be invented).
+#
+# Consumers: MetadataDates' ebl shape and the oracc catalogue extractor
+# (both P62). The table is data, not code — extending it is a ruled
+# edit here, never a parser change.
+periods:
+  "Ur III":                {band: [-2100, -2000], basis: cdli}
+  "Neo-Assyrian":          {band: [-911, -612],   basis: cdli}
+  "Neo Assyrian":          {band: [-911, -612],   basis: cdli, note: upstream spelling variant}
+  "Old Babylonian":        {band: [-1900, -1600], basis: cdli}
+  "Early Old Babylonian":  {band: [-2000, -1900], basis: cdli}
+  "Old Assyrian":          {band: [-1950, -1850], basis: cdli}
+  "Old Akkadian":          {band: [-2340, -2200], basis: cdli}
+  "Sargonic":              {band: [-2340, -2200], basis: cdli, note: ebl's label for Old Akkadian}
+  "Middle Babylonian":     {band: [-1400, -1100], basis: cdli}
+  "Middle Assyrian":       {band: [-1400, -1000], basis: cdli}
+  "Neo-Babylonian":        {band: [-626, -539],   basis: cdli}
+  "Late Babylonian":       {band: [-539, 75],     basis: assyriological,
+                            note: Achaemenid conquest through the latest dated cuneiform text (an
+                              astronomical almanac of 75 CE) — the P16-3 ruling, kept}
+  "Neo/Late Babylonian":   {band: [-626, 75],     basis: assyriological, note: the two spans joined}
+  "Hellenistic":           {band: [-323, -63],    basis: cdli}
+  "Seleucid":              {band: [-312, -63],    basis: assyriological,
+                            note: Seleucid era epoch 312/311 BCE; the ebl day/month objects band
+                              coarsely here — exact era conversion is deliberately out (P62-0)}
+  "Achaemenid":            {band: [-547, -331],   basis: cdli}
+  "Persian":               {band: [-547, -331],   basis: cdli, note: ebl's label for Achaemenid}
+  "Parthian":              {band: [-247, 224],    basis: cdli}
+  "Archaic":               {band: [-3350, -3000], basis: assyriological,
+                            note: proto-cuneiform Uruk IV–III horizon (the P16-3 ruling, kept)}
+  "Uruk V":                {band: [-3500, -3350], basis: cdli}
+  "Uruk IV":               {band: [-3350, -3200], basis: cdli}
+  "Uruk III":              {band: [-3200, -3000], basis: cdli}
+  "ED I-II":               {band: [-2900, -2700], basis: cdli}
+  "Early Dynastic I-II":   {band: [-2900, -2700], basis: cdli, note: spelled-out variant}
+  "ED IIIa":               {band: [-2600, -2500], basis: cdli}
+  "Early Dynastic IIIa":   {band: [-2600, -2500], basis: cdli, note: spelled-out variant}
+  "ED IIIb":               {band: [-2500, -2340], basis: cdli}
+  "Early Dynastic IIIb":   {band: [-2500, -2340], basis: cdli, note: spelled-out variant}
+  "Early Dynastic":        {band: [-2900, -2340], basis: assyriological,
+                            note: the whole ED span — honest coarseness for unsubperiodized entries}
+  "Ebla":                  {band: [-2350, -2250], basis: cdli}
+  "Lagash II":             {band: [-2200, -2100], basis: cdli}
+  "Lagaš II":              {band: [-2200, -2100], basis: cdli, note: diacritic variant}
+  "Mitanni":               {band: [-1500, -1300], basis: assyriological}
+  "Middle Elamite":        {band: [-1300, -1000], basis: cdli}
+  "Urartian":              {band: [-860, -590],   basis: assyriological,
+                            note: the kingdom of Urartu's conventional span, approximate}
+  "First Millennium":      {band: [-1000, -1],    basis: assyriological, note: honest coarseness}
+  "9th century":           {band: [-900, -800],   basis: assyriological}
+  "8th century":           {band: [-800, -700],   basis: assyriological}
+  "7th century":           {band: [-700, -600],   basis: assyriological}
+  "9th/8th century":       {band: [-900, -700],   basis: assyriological}
+  "8th/7th century":       {band: [-800, -600],   basis: assyriological}
+  "Late Middle Assyrian or early Neo-Assyrian":
+                           {band: [-1100, -900],  basis: assyriological, note: the bridge span, coarse}

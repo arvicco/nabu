@@ -356,18 +356,21 @@ module Nabu
       # derived from the data); -en refs (metadata "kind" => "translation")
       # go to the OraccTranslationParser with their sibling corpusjson.
       def parse(document_ref)
+        metadata = document_ref.metadata.slice("facets")
         if document_ref.metadata["kind"] == "translation"
           OraccTranslationParser.new.parse(
             document_ref.path,
             urn: document_ref.id,
             corpusjson_path: document_ref.metadata["corpusjson"],
-            title: document_ref.metadata["title"]
+            title: document_ref.metadata["title"],
+            metadata: metadata
           )
         else
           OraccJsonParser.new.parse(
             document_ref.path,
             urn: document_ref.id,
-            title: document_ref.metadata["title"]
+            title: document_ref.metadata["title"],
+            metadata: metadata
           )
         end
       end
@@ -574,24 +577,27 @@ module Nabu
         return [] unless Dir.exist?(dir)
 
         check_license!(dir, project)
-        titles = catalogue_titles(dir)
+        members = catalogue_members(dir)
         tablets = Dir.glob(File.join(dir, "corpusjson", "*.json")).reject { |path| File.empty?(path) }.map do |path|
           id = File.basename(path, ".json")
+          metadata = { "project" => slug(project), "title" => members.dig(id, :title) || id }
+          facets = member_facets(members[id])
+          metadata["facets"] = facets if facets
           Nabu::DocumentRef.new(
             source_id: MANIFEST.id,
             id: "urn:nabu:oracc:#{slug(project)}:#{id}",
             path: File.expand_path(path),
-            metadata: { "project" => slug(project), "title" => titles[id] || id }
+            metadata: metadata
           )
         end
-        tablets + translation_refs(workdir, project, dir, titles)
+        tablets + translation_refs(workdir, project, dir, members)
       end
 
       # One -en ref per crawled fragment whose tablet corpusjson is live
       # (file-driven — see the class Translations note); nothing when the
       # adapter was built without translations. The ref carries the sibling
       # corpusjson path (ref→label alignment) and the catalogue-derived title.
-      def translation_refs(workdir, project, dir, titles)
+      def translation_refs(workdir, project, dir, members)
         return [] unless @translations
 
         Dir.glob(File.join(workdir, TRANSLATIONS_DIRNAME, slug(project), "*.html")).filter_map do |path|
@@ -599,13 +605,16 @@ module Nabu
           corpusjson = File.join(dir, "corpusjson", "#{id}.json")
           next nil if !File.file?(corpusjson) || File.empty?(corpusjson)
 
+          metadata = { "project" => slug(project), "kind" => "translation",
+                       "corpusjson" => File.expand_path(corpusjson),
+                       "title" => "#{members.dig(id, :title) || id} (English translation)" }
+          facets = member_facets(members[id])
+          metadata["facets"] = facets if facets
           Nabu::DocumentRef.new(
             source_id: MANIFEST.id,
             id: "urn:nabu:oracc:#{slug(project)}:#{id}-en",
             path: File.expand_path(path),
-            metadata: { "project" => slug(project), "kind" => "translation",
-                        "corpusjson" => File.expand_path(corpusjson),
-                        "title" => "#{titles[id] || id} (English translation)" }
+            metadata: metadata
           )
         end
       end
@@ -657,18 +666,32 @@ module Nabu
         raise Nabu::FetchError, "oracc project #{project}: malformed metadata.json: #{e.message}"
       end
 
-      # id → designation from the project catalogue; missing/malformed
-      # catalogues only cost titles (the id stands in), never discovery.
-      def catalogue_titles(dir)
+      # id → {title, period} from the project catalogue; missing/malformed
+      # catalogues only cost titles (the id stands in) and periods, never
+      # discovery. +period+ (P62-2) becomes an adapter-emitted facet so
+      # the lect period rules and FacetBuilder can reach oracc's own
+      # 123k-entry period census.
+      def catalogue_members(dir)
         path = File.join(dir, "catalogue.json")
         return {} unless File.file?(path)
 
         members = JSON.parse(File.read(path))["members"]
         return {} unless members.is_a?(Hash)
 
-        members.transform_values { |member| member.is_a?(Hash) ? member["designation"] : nil }.compact
+        members.filter_map do |id, member|
+          next unless member.is_a?(Hash)
+
+          [id, { title: member["designation"], period: member["period"] }]
+        end.to_h
       rescue JSON::ParserError
         {}
+      end
+
+      # The facets hash for one catalogue member (the ebl metadata shape
+      # FacetBuilder reads), or nil when the member carries no period.
+      def member_facets(member)
+        period = member&.dig(:period).to_s.strip
+        period.empty? ? nil : { "period" => { "value" => period } }
       end
     end
   end

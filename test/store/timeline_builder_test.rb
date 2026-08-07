@@ -68,6 +68,28 @@ module Store
       assert_equal 1, timeline_for("urn:nabu:edr:edr000001")[:not_after]
     end
 
+    # P62-0: the ebl shape — the top-level `period` label banded through
+    # the ruled config/period_bands.yml table (the P61-1 sweep's pending,
+    # served: ~23k ebl docs carry these labels). An unruled label
+    # (Standard Babylonian, Uncertain) mints nothing, honestly; the 40
+    # Seleucid day/month objects band coarsely under "Seleucid".
+    def test_metadata_dates_ebl_period_labels_band_via_the_ruled_table
+      seed_metadata_doc("ebl", "urn:nabu:ebl:k1", { "period" => "Neo-Assyrian" })
+      seed_metadata_doc("ebl", "urn:nabu:ebl:k2", { "period" => "Sargonic" })
+      seed_metadata_doc("ebl", "urn:nabu:ebl:k3", { "period" => "Standard Babylonian" })
+      summary = build!
+      assert_equal 2, summary.metadata_dates.fetch("ebl")
+
+      row = timeline_for("urn:nabu:ebl:k1")
+      assert_equal(-911, row[:not_before])
+      assert_equal(-612, row[:not_after])
+      assert_equal "Neo-Assyrian", row[:date_raw]
+      assert_equal "ebl", row[:axis_source]
+      assert_equal(-2340, timeline_for("urn:nabu:ebl:k2")[:not_before], "ebl's Sargonic = Old Akkadian")
+      assert_nil timeline_for("urn:nabu:ebl:k3"),
+                 "a REGISTER label misfiled as a period mints no date claim"
+    end
+
     def test_metadata_dates_place_only_document_gets_a_place_row
       seed_metadata_doc("elephantine", "urn:nabu:elephantine:100001",
                         { "place" => { "ancient" => "Syene" } })

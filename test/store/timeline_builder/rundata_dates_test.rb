@@ -53,7 +53,13 @@ module Store
       assert_equal 1, counts[:documents]
     end
 
-    def test_only_the_bare_inscription_urn_joins_never_the_lane_siblings
+    # P62-3 REVERSES the P40-6 sibling exclusion (a ruled wave-2 change,
+    # the oracc "-en" precedent: the sibling is a rendering of the same
+    # artifact, so the date/place are the ARTIFACT's — the English witness
+    # inherits the time filter). 23,623 live sibling docs recover their
+    # base inscription's band through this join; a lane we don't hold
+    # simply doesn't row.
+    def test_lane_siblings_inherit_the_base_inscriptions_timeline
       make_document("urn:nabu:rundata:n-kj101")
       make_document("urn:nabu:rundata:n-kj101-eng")
       counts = build!
@@ -61,9 +67,11 @@ module Store
       assert_equal 650, row.fetch(:not_before)
       assert_equal 700, row.fetch(:not_after)
       assert_equal "U 650-700 (Grønvik)", row.fetch(:date_raw)
-      assert_nil timeline_for("urn:nabu:rundata:n-kj101-eng"),
-                 "sibling documents carry no timeline row of their own"
-      assert_equal 1, counts[:documents]
+      sibling = timeline_for("urn:nabu:rundata:n-kj101-eng")
+      refute_nil sibling, "the translation lane is a rendering of the SAME dated stone"
+      assert_equal 650, sibling.fetch(:not_before)
+      assert_equal "U 650-700 (Grønvik)", sibling.fetch(:date_raw)
+      assert_equal 2, counts[:documents], "base + the one held sibling; absent lanes never row"
     end
 
     def test_documents_we_do_not_hold_contribute_nothing

@@ -56,4 +56,17 @@ module Nabu
       )
     end
   end
+
+  # P62 rider (the owner's sync-vs-apply collision): another PROCESS holds
+  # the catalog write lock. Raised by Store.assert_writable!'s quarter-second
+  # pre-flight so write commands fail with one clean sentence before doing
+  # any work — never a BusyException stack minutes into a load.
+  class CatalogBusyError < Error
+    def initialize(path)
+      super(
+        "#{File.basename(path)} is locked by another process (a sync, rebuild, " \
+        "or lect apply in progress) — wait for it to finish and re-run"
+      )
+    end
+  end
 end

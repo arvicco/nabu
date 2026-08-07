@@ -2,6 +2,7 @@
 
 require "json"
 
+require_relative "../../period_bands"
 require_relative "../../timeline"
 require_relative "../../normalize"
 
@@ -27,7 +28,8 @@ module Nabu
       #      century phrase "9th-8th century" / "late 16th or early 15th
       #      century" (precision "century"). All BCE — a range must DESCEND
       #      (first bound ≥ second) or it is unparseable.
-      # 2. else `period` via PERIODS (precision "period"); a compound
+      # 2. else `period` via the ruled config/period_bands.yml table
+      #    (precision "period"); a compound
       #    "X or Y" period envelopes its mapped parts.
       # 3. else the document is counted undated — skipped, never guessed
       #    ("Uncertain"/"uncertain"/"Unknown" are deliberately unmapped).
@@ -43,43 +45,13 @@ module Nabu
         URN_PREFIX = "urn:nabu:oracc:"
         PLEIADES = "https://pleiades.stoa.org/places/"
 
-        # Mesopotamian period → signed historical year range, MIDDLE CHRONOLOGY.
-        # Names are the ORACC/CDLI periodisation used verbatim in the
-        # catalogues (census 2026-07-13: 30 distinct values); absolute bounds
-        # follow CDLI's conventional middle-chronology dates (cdli.mpiwg-berlin.
-        # mpg.de period list, after J. A. Brinkman's chronology appendix in
-        # A. L. Oppenheim, Ancient Mesopotamia, rev. ed. 1977). All bounds are
-        # honest "ca." ranges — periodisation is convention, not measurement.
-        PERIODS = {
-          "Archaic" => [-3350, -3000], # proto-cuneiform Uruk IV–III horizon
-          "Uruk IV" => [-3350, -3200],
-          "Uruk III" => [-3200, -3000],
-          "Early Dynastic" => [-2900, -2340], # ED I-II .. ED IIIb envelope
-          "ED I-II" => [-2900, -2700],
-          "ED IIIa" => [-2600, -2500],
-          "Early Dynastic IIIa" => [-2600, -2500],
-          "ED IIIb" => [-2500, -2340],
-          "Early Dynastic IIIb" => [-2500, -2340],
-          "Ebla" => [-2350, -2250],
-          "Old Akkadian" => [-2340, -2200],
-          "Lagaš II" => [-2200, -2100],
-          "Ur III" => [-2100, -2000],
-          "Early Old Babylonian" => [-2000, -1900],
-          "Old Assyrian" => [-1950, -1850],
-          "Old Babylonian" => [-1900, -1600],
-          "Middle Babylonian" => [-1400, -1100],
-          "Middle Assyrian" => [-1400, -1000],
-          "Neo-Assyrian" => [-911, -612],
-          "Neo-Babylonian" => [-626, -539],
-          # Fall of Babylon (539) through the latest dated cuneiform text
-          # (an astronomical almanac of 75 CE) — honest-wide, the catalogues
-          # use "Late Babylonian" for anything post-NB.
-          "Late Babylonian" => [-539, 75],
-          "Achaemenid" => [-547, -331],
-          "Hellenistic" => [-323, -63],
-          "Seleucid" => [-312, -63], # Seleucid era epoch 312/311
-          "First Millennium" => [-1000, -1] # verbatim honesty: the whole millennium
-        }.freeze
+        # The period→band table moved to config/period_bands.yml (P62-0 —
+        # one ruled table, two consumers: this extractor and MetadataDates'
+        # ebl shape). The middle-chronology citation and every band this
+        # module carried ride there verbatim; lookup_period below reads it
+        # through Nabu::PeriodBands (the same normalize fold the lect
+        # period rules use, so CDLI's glossed labels and the catalogues'
+        # bare ones share rows).
 
         # Neo-Assyrian kings as the SAA/RIAO catalogues spell them → reign
         # (signed historical years, BCE). The standard Neo-Assyrian chronology,
@@ -153,10 +125,14 @@ module Nabu
           { documents: documents, undated: undated }
         end
 
-        # The two layouts on disk: <project>/catalogue.json and the
-        # sub-project nesting <project>/<sub>/catalogue.json (saao-saa01/saa01).
+        # ANY nesting depth (P62-1 — the 80k-doc lesson): the zips root at
+        # their full ORACC project path, so epsd2/admin/ur3 unpacks its
+        # catalogue THREE levels down (<project>/<sub>/<sub>/catalogue.json,
+        # the P31-0 multi-segment root hitting the extractor). The recursive
+        # walk covers every layout; the member join stays urn-keyed, so an
+        # unexpected extra catalogue can only ever ADD correctly-joined rows.
         def catalogue_paths(root)
-          Dir.glob([File.join(root, "*", "catalogue.json"), File.join(root, "*", "*", "catalogue.json")])
+          Dir.glob(File.join(root, "**", "catalogue.json"))
         end
 
         # The catalog documents one member produced: the tablet document and —
@@ -247,7 +223,10 @@ module Nabu
         end
 
         def lookup_period(name)
-          PERIODS[name] || PERIODS[name.sub(QUALIFIER, "")]
+          table = Nabu::PeriodBands.default
+          return nil unless table
+
+          table.lookup(name) || table.lookup(name.sub(QUALIFIER, ""))
         end
 
         def extract_place(member)

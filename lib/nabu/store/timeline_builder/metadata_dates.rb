@@ -2,6 +2,7 @@
 
 require "json"
 
+require_relative "../../period_bands"
 require_relative "../../timeline"
 
 module Nabu
@@ -25,8 +26,12 @@ module Nabu
       #   :year_range — "date" => "1565-1650" | "1565" strings (CroALa
       #     P44): both bounds from a clean YYYY[-YYYY] parse; anything
       #     else (ca., floruit prose) is skipped honestly.
-      # Audited and deliberately ABSENT: ebl (Seleucid-era day/month
-      # objects — an era-conversion project, 40 docs), ogham ("date" =>
+      #   :period_label — top-level "period" Assyriological labels banded
+      #     through the ruled config/period_bands.yml table (ebl, P62-0 —
+      #     the P61-1 sweep's pending served; unruled labels mint nothing;
+      #     the 40 Seleucid day/month objects band coarsely, exact era
+      #     conversion deliberately out).
+      # Audited and deliberately ABSENT: ogham ("date" =>
       # {"text" => "Fifth century…"} free prose, 133 docs).
       module MetadataDates
         # slug => shape (the audit roster; a new metadata-dating source
@@ -37,7 +42,8 @@ module Nabu
           "elephantine" => :structured,
           "itant" => :structured,
           "bfm" => :iso_keys,
-          "croala" => :year_range
+          "croala" => :year_range,
+          "ebl" => :period_label
         }.freeze
 
         SLUGS = SHAPES.keys.freeze
@@ -112,6 +118,11 @@ module Nabu
             date_raw: raw, place_name: place }
         rescue JSON::ParserError
           nil
+        end
+
+        def period_label(meta)
+          band = Nabu::PeriodBands.default&.lookup(meta["period"])
+          band ? [band[0], band[1], meta["period"]] : [nil, nil, nil]
         end
 
         def structured(meta)

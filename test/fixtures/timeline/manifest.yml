@@ -60,6 +60,14 @@ files:
   # Same local-trim provenance, copied 2026-07-13: catalogue.json files kept
   # to a handful of verbatim members (summaries dropped — display HTML the
   # extractor never reads); lav.xml kept to four divs × ≤2 sentences each.
+  - path: oracc/epsd2-admin-ur3/admin/ur3/catalogue.json
+    refetchable: false
+    provenance: local-trim
+    reason: trimmed from local canonical snapshot (two whole Ur III members); the P62-1 triply-nested-catalogue exemplar
+    canonical: canonical/oracc/epsd2-admin-ur3/admin/ur3/catalogue.json
+    upstream: https://oracc.museum.upenn.edu/epsd2/admin/ur3/
+    copied: 2026-08-07
+    whole: false
   - path: oracc/saao-saa01/saa01/catalogue.json
     refetchable: false
     provenance: local-trim
