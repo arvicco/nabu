@@ -155,7 +155,10 @@ module Store
     def test_metadata_dates_shapes_for_itant_bfm_and_croala
       seed_metadata_doc("itant", "urn:nabu:itant:oscan-9",
                         { "date" => { "not_before" => -425, "not_after" => -375, "cert" => "low",
-                                      "raw" => "end of the 5th - beginning of the 4th century BC" } })
+                                      "raw" => "end of the 5th - beginning of the 4th century BC" },
+                          "place" => { "ancient" => "Bovianum, Samnium", "pleiades" => "432725",
+                                       "geonames" => "https://sws.geonames.org/3180985",
+                                       "modern" => "Boiano (CB)" } })
       seed_metadata_doc("bfm", "urn:nabu:bfm:AlexisRaM",
                         { "date" => "ca. 1050", "date_not_before" => "1025-01-01",
                           "date_not_after" => "1075-01-01" })
@@ -168,6 +171,11 @@ module Store
       summary = build!
       itant = timeline_for("urn:nabu:itant:oscan-9")
       assert_equal([-425, -375], [itant[:not_before], itant[:not_after]])
+      # P63-4: the metadata place hash's bare pleiades id lifts into a
+      # NAMESPACED ref (Dp-b) — itant's 497 measured ids stop being
+      # metadata-only; the ancient name still rides place_name.
+      assert_equal "Bovianum, Samnium", itant[:place_name]
+      assert_equal "pleiades:432725", itant[:place_ref]
       bfm = timeline_for("urn:nabu:bfm:AlexisRaM")
       assert_equal([1025, 1075, "ca. 1050"], [bfm[:not_before], bfm[:not_after], bfm[:date_raw]])
       croala = timeline_for("urn:nabu:croala:grauisius")

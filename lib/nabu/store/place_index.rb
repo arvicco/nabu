@@ -45,6 +45,11 @@ module Nabu
       # multi_insert batch — bounds statement size on the 42k-place dump.
       INSERT_SLICE = 2_000
 
+      # P63-3 (Dp-b): rows are keyed (gazetteer, place_id); pleiades is one
+      # namespace among several, and the historical default every pre-63
+      # surface keeps reading.
+      DEFAULT_GAZETTEER = "pleiades"
+
       module_function
 
       # Feature detection: a live catalog predating migration 021 has no
@@ -57,43 +62,49 @@ module Nabu
       # A derived index answers reads; an empty one must NOT (no backfill in
       # the migration, so empty means "not yet derived", never "the
       # gazetteer holds no places" — the dump fallback covers the gap).
-      def populated?(db)
-        available?(db) && !db[TABLE].empty?
+      # Populated is per-gazetteer: a derived tm slice must not make the
+      # pleiades fallback stop firing.
+      def populated?(db, gazetteer: DEFAULT_GAZETTEER)
+        available?(db) && !db[TABLE].where(gazetteer: gazetteer).empty?
       end
 
-      # The read-side Resolver over a populated index, or nil (absent /
-      # underived — callers fall back to the dump path).
-      def resolver(db)
-        populated?(db) ? Resolver.new(db) : nil
+      # The read-side Resolver over a populated gazetteer slice, or nil
+      # (absent / underived — pleiades callers fall back to the dump path).
+      def resolver(db, gazetteer: DEFAULT_GAZETTEER)
+        populated?(db, gazetteer: gazetteer) ? Resolver.new(db, gazetteer: gazetteer) : nil
       end
 
-      # Re-derive the whole index from +places+ (an enumerable of
-      # Nabu::Pleiades::Place, dump order — Nabu::Pleiades#each_place).
-      # Wholesale delete + insert in one transaction; returns the place
-      # count. No-op (nil) on a catalog predating the tables.
-      def derive!(db, places:)
+      # Re-derive ONE gazetteer's slice from +places+ (an enumerable of
+      # Nabu::Pleiades::Place in upstream order). Wholesale per-gazetteer
+      # delete + insert in one transaction — deriving tm never touches
+      # pleiades rows and vice versa. +names_for+ maps a place to its
+      # exact-match keys (default: the pinned title semantics); returns the
+      # place count, or nil on a catalog predating the tables.
+      def derive!(db, places:, gazetteer: DEFAULT_GAZETTEER,
+                  names_for: ->(place) { Nabu::Pleiades.title_keys(place.title) })
         return nil unless available?(db)
 
-        rows, name_rows = build_rows(places)
+        rows, name_rows = build_rows(places, gazetteer: gazetteer, names_for: names_for)
         db.transaction do
-          db[NAMES_TABLE].delete
-          db[TABLE].delete
+          db[NAMES_TABLE].where(gazetteer: gazetteer).delete
+          db[TABLE].where(gazetteer: gazetteer).delete
           rows.each_slice(INSERT_SLICE) { |slice| db[TABLE].multi_insert(slice) }
           name_rows.each_slice(INSERT_SLICE) { |slice| db[NAMES_TABLE].multi_insert(slice) }
         end
         rows.size
       end
 
-      def build_rows(places)
+      def build_rows(places, gazetteer:, names_for:)
         rows = []
         name_rows = []
         places.each_with_index do |place, position|
-          rows << { pleiades_id: place.id, title: place.title, lat: place.lat, lon: place.lon,
+          rows << { gazetteer: gazetteer, place_id: place.id, title: place.title,
+                    lat: place.lat, lon: place.lon,
                     place_types_json: JSON.generate(place.place_types),
                     time_periods_json: JSON.generate(place.time_periods),
                     position: position }
-          Nabu::Pleiades.title_keys(place.title).each do |key|
-            name_rows << { pleiades_id: place.id, name_key: key }
+          names_for.call(place).uniq.each do |key|
+            name_rows << { gazetteer: gazetteer, place_id: place.id, name_key: key }
           end
         end
         [rows, name_rows]
@@ -103,39 +114,41 @@ module Nabu
       # (module note). Every hit rebuilds the same Nabu::Pleiades::Place
       # value the dump path would have returned.
       class Resolver
-        def initialize(db)
+        def initialize(db, gazetteer: DEFAULT_GAZETTEER)
           @db = db
+          @gazetteer = gazetteer
         end
 
-        # The Place for +id+ (string or integer), or nil when the index
-        # holds no such place.
+        # The Place for +id+ (string or integer, bare — the namespace is the
+        # resolver's scope), or nil when this gazetteer holds no such place.
         def place(id)
-          row = @db[TABLE].first(pleiades_id: id.to_s)
+          row = @db[TABLE].first(gazetteer: @gazetteer, place_id: id.to_s)
           row && build_place(row)
         end
 
         # Every place matching +name+ exactly (whole title or a "/"-variant
         # segment, Unicode-case-folded — the pinned P44-2/P44-3 semantics),
-        # dump order. Never fuzzy: the lookup is key equality, no LIKE.
+        # upstream order. Never fuzzy: the lookup is key equality, no LIKE.
         def titled(name)
           @db[TABLE]
-            .join(NAMES_TABLE, pleiades_id: :pleiades_id)
-            .where(Sequel[NAMES_TABLE][:name_key] => Nabu::Pleiades.name_key(name))
+            .join(NAMES_TABLE, gazetteer: :gazetteer, place_id: :place_id)
+            .where(Sequel[TABLE][:gazetteer] => @gazetteer,
+                   Sequel[NAMES_TABLE][:name_key] => Nabu::Pleiades.name_key(name))
             .order(Sequel[TABLE][:position])
             .select_all(TABLE)
             .map { |row| build_place(row) }
         end
 
-        # How many places the derivation carried.
+        # How many places this gazetteer's derivation carried.
         def size
-          @db[TABLE].count
+          @db[TABLE].where(gazetteer: @gazetteer).count
         end
 
         private
 
         def build_place(row)
           Nabu::Pleiades::Place.new(
-            id: row[:pleiades_id], title: row[:title], lat: row[:lat], lon: row[:lon],
+            id: row[:place_id], title: row[:title], lat: row[:lat], lon: row[:lon],
             place_types: JSON.parse(row[:place_types_json]),
             time_periods: JSON.parse(row[:time_periods_json])
           )

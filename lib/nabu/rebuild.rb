@@ -157,6 +157,12 @@ module Nabu
       axes = profile.measure(scope: RebuildProfile::CORPUS, stage: :timeline) do
         Store::TimelineBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
       end
+      # P63-7: the nabu-places registry projection re-runs AFTER the lanes
+      # rebuilt document_axes (NULL-only, adapter-asserted wins) — db/ stays
+      # a pure function of canonical/ incl. the registry under it. A missing
+      # registry is the honest no-op.
+      progress&.stage("place apply")
+      Nabu::PlaceApply.run(catalog: db, canonical_dir: @config.canonical_dir)
       # The facet table (P17-2) projects from the documents just replayed
       # (their metadata_json is f(canonical)), so it regenerates here too.
       progress&.stage("facets")

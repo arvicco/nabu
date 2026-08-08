@@ -1,0 +1,48 @@
+# TRIMMED REAL copy of nabu-places names.yml (the P63-6 seed wave),
+# pinned 2026-08-08 for the drift guard + seam tests.
+cdli:
+  Girsu (mod. Tello):
+    refs:
+    - cigs:GIR
+    - pleiades:912855
+    status: matched
+  Girsu (mod. Tello) ?:
+    alias_of: Girsu (mod. Tello)
+  Umma (mod. Tell Jokha):
+    refs:
+    - cigs:JOK
+    - pleiades:44626252
+    status: matched
+  Adab (mod. Bismaya):
+    refs:
+    - cigs:ADB
+    - pleiades:787747618
+    status: matched
+  Nereb (mod. Neirab) ?:
+    refs:
+    - cigs:NER
+    - pleiades:633912597
+    status: matched
+    certainty: low
+    note: upstream ?-qualified; base name "Nereb (mod. Neirab)" per CIGS NER
+oracc:
+  Umma:
+    refs:
+    - cigs:JOK
+    - pleiades:44626252
+    status: matched
+  Girsu:
+    refs:
+    - cigs:GIR
+    - pleiades:912855
+    status: matched
+  Nineveh:
+    refs:
+    - cigs:NNV
+    - pleiades:874621
+    status: matched
+  Assur:
+    refs:
+    - cigs:ASS
+    - pleiades:893945
+    status: matched

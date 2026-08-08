@@ -11,7 +11,7 @@
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
-  members: 18
+  members: 20
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
@@ -60,7 +60,7 @@
 - slug: cuneiform
   persona: The Assyriologist
   blurb: 'Sumerian, Akkadian, Ugaritic, Hittite: the tablet world entire'
-  members: 9
+  members: 10
 - slug: egyptian
   persona: The Egyptologist
   blurb: hieroglyphs to Coptic, one language across four millennia of script

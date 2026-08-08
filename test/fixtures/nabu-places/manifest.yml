@@ -1,0 +1,15 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: nabu-places
+adapter_test: test/places_test.rb
+retrieved: 2026-08-08
+files:
+  - path: names.yml
+    url: https://github.com/arvicco/nabu-places
+    whole: false
+    trim: cdli 5 + oracc 4 real decision rows of the 264-row seed (incl. alias +
+      low-certainty shapes)
+  - path: namespaces.yml
+    url: https://github.com/arvicco/nabu-places
+    whole: true
+    trim: none (the whole namespaces table)

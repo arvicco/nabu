@@ -1316,6 +1316,47 @@ pleiades:
   # dump is large + version-pinned; the Zenodo URL-pin stays optional).
   sync_policy: manual
 
+trismegistos-geo:
+  adapter: Nabu::Adapters::TrismegistosGeo
+  kind: module   # P63-1: machinery-only — a gazetteer instrument, zero document rows, up=module
+  axes: [epigraphy]
+  wired: false   # PERMANENTLY false — a gazetteer instrument, not a text
+                   # source (the pleiades precedent): discover mints no
+                   # documents. The canonical asset is the TM Geo table dump
+                   # (64,857 places), which derives `tm:` rows into the
+                   # namespaced place index (P63-3).
+  # P63-1: the FIRST Manual Adapter source (ruling Dp-a) — TM's dump service
+  # fails the automation bar (captcha interstitial + POST form, measured
+  # 2026-08-08), so `nabu sync trismegistos-geo` prints the acquisition
+  # instruction card until the owner drops the browser-downloaded dump into
+  # incoming/trismegistos-geo/ (TM_geo.csv required, TM_geo.json optional),
+  # then validates, attics, ingests into canonical/trismegistos-geo/ and
+  # stamps .manual-fetch.json provenance. NOTE: the dump carries NO
+  # Pleiades/GeoNames ids (the form's crosswalk checkboxes are commented out
+  # upstream — verified 2026-08-08); crosswalks come from CIGS + the Wikidata
+  # harvest. LICENSE: dataservices page verbatim "We offer you open access to
+  # our data on a CC BY-SA 4.0 license" → attribution (the house BY-SA class,
+  # the trismegistos-links precedent).
+  sync_policy: manual
+
+cigs:
+  adapter: Nabu::Adapters::Cigs
+  kind: module   # P63-5: machinery-only — a gazetteer instrument, zero document rows, up=module
+  axes: [cuneiform]
+  wired: false   # PERMANENTLY false — a gazetteer instrument (the pleiades
+                   # precedent): discover mints no documents. Each sync
+                   # derives the `cigs:` place-index slice + the cigs
+                   # crosswalk slice (its own pleiades/geonames/
+                   # cdli-provenience columns).
+  # P63-5: CIGS — the Cuneiform Inscriptions Geographical Site Index
+  # (Uppsala "Geomapping Landscapes of Writing"; CDLJ 2021-1 — CDLI's place
+  # authority in practice). 597 sites / 158 kB, one Zenodo-version-pinned
+  # CSV (v1.7 2024-12-31; a new release is a new URL the owner re-pins).
+  # legacy_name is EXACTLY the CDLI house composite ("Girsu (mod. Tello)")
+  # — the nabu-places cdli seed key. LICENSE: Zenodo record verbatim
+  # "Creative Commons Attribution 4.0 International" → attribution.
+  sync_policy: manual
+
 lila:
   adapter: Nabu::Adapters::Lila
   kind: module   # P44-8: machinery-only — a Latin lemma-spine read seam, zero catalog rows, up=module
@@ -3377,6 +3418,30 @@ nabu-lects:
   # LICENSE: repo LICENSE verbatim CC BY 4.0 → attribution. Pre-1.0
   # instability window upstream (identifiers may still be renamed) — the
   # owner may pin `ref:` once a tagged release exists.
+  sync_policy: manual
+
+nabu-places:
+  adapter: Nabu::Adapters::NabuPlaces
+  kind: module   # P63-7: machinery-only — the place-matching decisions registry seam, zero document rows
+  axes: [epigraphy]
+  wired: false   # PERMANENTLY false — a decisions-registry instrument (the
+                   # nabu-lects sibling invariant): discover mints no
+                   # documents. The row gives the owner the sanctioned fetch
+                   # path for github.com/arvicco/nabu-places, resolved by
+                   # Nabu::Places (decision(source, verbatim-name) with alias
+                   # hops; identity-default — an unlisted name is honestly
+                   # unmatched) and projected into document_axes.place_ref by
+                   # `nabu place apply` (adapter-asserted refs ALWAYS win).
+  # P63-6/7: nabu-places — the third sister repo (nabu-lects pattern applied
+  # to places): names.yml (source → verbatim place-name string → decision
+  # row: matched refs [cigs:GIR, pleiades:912855] · unlocatable · region ·
+  # ghost · rejected · alias_of) + namespaces.yml (pleiades/tm/cigs/geonames
+  # + id shapes) + bin/validate (dup-key refusal — the P61-3 shadowing
+  # class). Seed wave: cdli 133 rows (250,484 docs) + oracc 131 (87,706),
+  # generated from CIGS v1.7's own keys. LICENSE: repo LICENSE verbatim
+  # CC BY 4.0 → attribution. OWNER QUEUE (P63 gate): gh repo create
+  # arvicco/nabu-places + push ~/Dev/nabu-places, then bin/nabu enable
+  # nabu-places + bin/nabu sync nabu-places + bin/nabu place apply.
   sync_policy: manual
 
 osl:

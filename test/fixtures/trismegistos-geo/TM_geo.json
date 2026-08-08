@@ -1,0 +1,132 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "title": "A[..]....",
+            "uri": "https://www.trismegistos.org/place/1",
+            "id": "1",
+            "names": {
+                "greek": {
+                    "name": "Ἀ[..]....",
+                    "language": "200"
+                }
+            },
+            "properties": {
+                "country": "ghost name",
+                "provincia": "N/A",
+                "region": "N/A",
+                "full_name": "ghost name, A[..]...."
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    31.1982456667,
+                    29.9079146667
+                ]
+            },
+            "title": "Alexandria",
+            "uri": "https://www.trismegistos.org/place/100",
+            "id": "100",
+            "names": {
+                "greek": {
+                    "name": "Ἀλεξάνδρεια",
+                    "language": "200"
+                },
+                "coptic": {
+                    "name": "ⲣⲁⲕⲟⲧⲉ - ⲣⲁⲕⲟϯ",
+                    "language": "204"
+                },
+                "egyptian": {
+                    "name": "Rʿ-qd (Rʿ-qt) - Pȝ-ʿ.wy-n-ȝlgsȝntrs - Pȝ-sbt-n-Ỉrgsndrs",
+                    "language": "070"
+                },
+                "latin": {
+                    "name": "Alexandria - Alexandrea",
+                    "language": "215"
+                }
+            },
+            "properties": {
+                "status": "city: polis, metropolis, megalopolis (megale polis), civitas, urbs, oppidum",
+                "country": "Egypt",
+                "provincia": "Aegyptus",
+                "region": "L",
+                "nomos_code": "L00",
+                "full_name": "Egypt, L00 - Alexandria",
+                "ethnicon": "Alexandreus (Alexandris - Alexandritis) - Alexandrinos (Alexandrine) - Alexandrinus - Alexandreios (Alexandreia) - Alexandrianos (Alexandriane) - Alexandreotikos - Alexandreiopolites - Philalexandreus"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    24.025031,
+                    32.884252
+                ]
+            },
+            "title": "Philai",
+            "uri": "https://www.trismegistos.org/place/1767",
+            "id": "1767",
+            "names": {
+                "greek": {
+                    "name": "Φιλαι - Φιλη",
+                    "language": "200"
+                },
+                "coptic": {
+                    "name": "ⲡⲓⲗⲁⲕ - ⲡⲓⲗⲁⲕϩ - ⲡⲉⲓⲗⲁⲕ",
+                    "language": "204"
+                },
+                "egyptian": {
+                    "name": "Pȝ-lq (Pylq - Pr-rq - Pȝ-ỉy-lq - Pr-ỉy-lq - Pr-ỉy-rq - Pr-ỉw-rq - Pȝ-ỉw-rk - Pȝ-ỉȝ.t-rq) - Ỉw-ȝḫ-mnw",
+                    "language": "070"
+                },
+                "latin": {
+                    "name": "Philae - Filae",
+                    "language": "215"
+                }
+            },
+            "properties": {
+                "status": "island (on the Nile): nesos; city: polis",
+                "country": "Egypt",
+                "provincia": "Aegyptus",
+                "region": "U",
+                "nomos_code": "U01",
+                "full_name": "Egypt, U01 - Philai",
+                "ethnicon": "Philates - Philitanos - Philitianos"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    40.74941,
+                    14.485429
+                ]
+            },
+            "title": "Pompeii",
+            "uri": "https://www.trismegistos.org/place/2788",
+            "id": "2788",
+            "names": {
+                "latin": {
+                    "name": "Pompeii - Pompei",
+                    "language": "215"
+                }
+            },
+            "properties": {
+                "status": "city: colonia",
+                "country": "Italy",
+                "provincia": "Latium et Campania (Regio I)",
+                "region": "Campania",
+                "nomos_code": "Campania",
+                "full_name": "Italy, Campania - Pompeii",
+                "ethnicon": "Pompeianus - Pompeanus",
+                "location": "in the provincia di Napoli"
+            }
+        }
+    ]
+}
