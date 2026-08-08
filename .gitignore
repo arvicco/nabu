@@ -11,6 +11,9 @@
 /tmp/
 /log/
 
+# Manual Adapter drop box (P63-1): owner-acquired downloads awaiting ingest
+/incoming/
+
 # Ruby
 /.bundle/
 /vendor/bundle/
