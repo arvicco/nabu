@@ -49,12 +49,22 @@ module Store
       assert_equal "ceipom", row[:axis_source]
     end
 
-    def test_geo_id_rides_verbatim_as_place_ref_when_present
+    # P63-4 (survey §6.3, CONFIRMED): ceipom's GeoIDs ARE Trismegistos Geo
+    # ids through a spreadsheet float conversion (owner page-views 2788 =
+    # Pompeii, 3311 = Capua; all 164 distinct ids join the held dump). The
+    # axis mints the namespaced ref; the float string stays in canonical.
+    def test_geo_id_mints_the_namespaced_tm_ref
       seed(954, language: "osc")
       build!
       row = @db[:document_axes].first
       assert_equal "Capua (Santa Maria Capua Vetere)", row[:place_name]
-      assert_equal "3311.0", row[:place_ref], "the bare upstream GeoID, verbatim — never resolved"
+      assert_equal "tm:3311", row[:place_ref], "the float-mangled TM GeoID, restored to its namespace"
+    end
+
+    def test_a_non_numeric_geo_id_rides_verbatim_never_guessed
+      assert_equal "tm:2788", Nabu::Store::TimelineBuilder::CeipomDates.tm_ref("2788.0")
+      assert_equal "tm:2788", Nabu::Store::TimelineBuilder::CeipomDates.tm_ref("2788")
+      assert_equal "weird-id", Nabu::Store::TimelineBuilder::CeipomDates.tm_ref("weird-id")
     end
 
     def test_fully_degenerate_text_mints_no_row_and_counts_both_residues
