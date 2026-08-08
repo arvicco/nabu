@@ -1339,6 +1339,24 @@ trismegistos-geo:
   # the trismegistos-links precedent).
   sync_policy: manual
 
+cigs:
+  adapter: Nabu::Adapters::Cigs
+  kind: module   # P63-5: machinery-only — a gazetteer instrument, zero document rows, up=module
+  axes: [cuneiform]
+  wired: false   # PERMANENTLY false — a gazetteer instrument (the pleiades
+                   # precedent): discover mints no documents. Each sync
+                   # derives the `cigs:` place-index slice + the cigs
+                   # crosswalk slice (its own pleiades/geonames/
+                   # cdli-provenience columns).
+  # P63-5: CIGS — the Cuneiform Inscriptions Geographical Site Index
+  # (Uppsala "Geomapping Landscapes of Writing"; CDLJ 2021-1 — CDLI's place
+  # authority in practice). 597 sites / 158 kB, one Zenodo-version-pinned
+  # CSV (v1.7 2024-12-31; a new release is a new URL the owner re-pins).
+  # legacy_name is EXACTLY the CDLI house composite ("Girsu (mod. Tello)")
+  # — the nabu-places cdli seed key. LICENSE: Zenodo record verbatim
+  # "Creative Commons Attribution 4.0 International" → attribution.
+  sync_policy: manual
+
 lila:
   adapter: Nabu::Adapters::Lila
   kind: module   # P44-8: machinery-only — a Latin lemma-spine read seam, zero catalog rows, up=module
