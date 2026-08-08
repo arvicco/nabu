@@ -107,7 +107,8 @@ module Nabu
           timeline_lane_drift,
           reversed_axis_bounds,
           script_surface_mismatch,
-          unresolvable_place_refs
+          unresolvable_place_refs,
+          registry_orphan_names
         ].compact
       end
 
@@ -541,6 +542,38 @@ module Nabu
           message: "#{dangling.size} unresolvable pleiades ref#{'s' unless dangling.size == 1} in " \
                    "document_axes (ids absent from the gazetteer index) — e.g. " \
                    "#{dangling.first(3).join(' · ')}; re-derive the place index or repair the lane"
+        )
+      end
+
+      # P63-7: the era-bound-census discipline applied to nabu-places — a
+      # registry row whose verbatim string no longer occurs in that source's
+      # axes is stale knowledge (an upstream re-parse renamed the string, or
+      # the row was seeded against a name that left the catalog). Soft: the
+      # rows still validate; they just decide nothing anymore. No registry
+      # synced = lane off, silent.
+      def registry_orphan_names
+        return nil unless @canonical_dir && table?(@catalog, :document_axes)
+
+        registry = Nabu::Places.load_default(canonical_dir: @canonical_dir)
+        return nil if registry.nil?
+
+        orphans = []
+        registry.sources.each do |slug|
+          source_id = @catalog[:sources].where(slug: slug).get(:id) or next
+          live = @catalog[:document_axes]
+                 .where(document_id: @catalog[:documents].where(source_id: source_id).select(:id))
+                 .exclude(place_name: nil).distinct.select_map(:place_name).to_set
+          registry.decisions_for(slug).each_key do |name|
+            orphans << "#{slug}: #{name}" unless live.include?(name)
+          end
+        end
+        return nil if orphans.empty?
+
+        Finding.new(
+          kind: :registry_orphan_names, severity: :soft,
+          message: "#{orphans.size} nabu-places row#{'s' unless orphans.size == 1} whose verbatim " \
+                   "string no longer occurs (e.g. #{orphans.first(3).join(' · ')}) — re-census the " \
+                   "registry against the live names"
         )
       end
 

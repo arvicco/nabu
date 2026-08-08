@@ -3420,6 +3420,30 @@ nabu-lects:
   # owner may pin `ref:` once a tagged release exists.
   sync_policy: manual
 
+nabu-places:
+  adapter: Nabu::Adapters::NabuPlaces
+  kind: module   # P63-7: machinery-only — the place-matching decisions registry seam, zero document rows
+  axes: [epigraphy]
+  wired: false   # PERMANENTLY false — a decisions-registry instrument (the
+                   # nabu-lects sibling invariant): discover mints no
+                   # documents. The row gives the owner the sanctioned fetch
+                   # path for github.com/arvicco/nabu-places, resolved by
+                   # Nabu::Places (decision(source, verbatim-name) with alias
+                   # hops; identity-default — an unlisted name is honestly
+                   # unmatched) and projected into document_axes.place_ref by
+                   # `nabu place apply` (adapter-asserted refs ALWAYS win).
+  # P63-6/7: nabu-places — the third sister repo (nabu-lects pattern applied
+  # to places): names.yml (source → verbatim place-name string → decision
+  # row: matched refs [cigs:GIR, pleiades:912855] · unlocatable · region ·
+  # ghost · rejected · alias_of) + namespaces.yml (pleiades/tm/cigs/geonames
+  # + id shapes) + bin/validate (dup-key refusal — the P61-3 shadowing
+  # class). Seed wave: cdli 133 rows (250,484 docs) + oracc 131 (87,706),
+  # generated from CIGS v1.7's own keys. LICENSE: repo LICENSE verbatim
+  # CC BY 4.0 → attribution. OWNER QUEUE (P63 gate): gh repo create
+  # arvicco/nabu-places + push ~/Dev/nabu-places, then bin/nabu enable
+  # nabu-places + bin/nabu sync nabu-places + bin/nabu place apply.
+  sync_policy: manual
+
 osl:
   adapter: Nabu::Adapters::Osl
   kind: module   # P53-1: machinery-only — a cuneiform sign/value/codepoint instrument, zero document rows

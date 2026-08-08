@@ -21,6 +21,8 @@ class PlaceRefsTest < Minitest::Test
   def test_namespaced_mints_parse_as_their_own_tokens
     assert_equal [%w[tm 2788]], Nabu::PlaceRefs.ids("tm:2788")
     assert_equal [%w[pleiades 433078]], Nabu::PlaceRefs.ids("pleiades:433078")
+    assert_equal [%w[cigs GIR], %w[pleiades 912855]], Nabu::PlaceRefs.ids("cigs:GIR pleiades:912855"),
+                 "cigs mints parse despite having no URL spelling"
   end
 
   def test_an_unknown_mint_namespace_yields_nothing_never_guessed

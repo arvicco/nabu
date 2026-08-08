@@ -13,7 +13,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these nineteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these twenty answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 8 August 2026)</span> |
 |---|---|---|---|---|
@@ -36,6 +36,7 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
 | `edr` | inscriptions | attribution | wired · manual | 115,590 docs / 596,064 passages |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
+| `nabu-places` | feature module | attribution | not yet wired | not synced yet |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 8 August 2026)</span>: `lat` 195,002 · `grc` 74,274 · `hit` 21,209 · `non` 19,617 · `eng` 14,963 · `ett` 6,259 · `swe` 3,393 · `egy` 3,047 · `arc` 2,970 · `cop` 2,515 … and 56 more (`nabu axis epigraphy` lists all).
 
