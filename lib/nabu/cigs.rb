@@ -35,10 +35,16 @@ module Nabu
       File.file?(path) ? path : nil
     end
 
+    # Line endings are normalized before parse: the real v1.7 file is CRLF
+    # throughout EXCEPT row KRB (line 293), which ends with a bare LF —
+    # Ruby's CSV auto-detects "\r\n" and then refuses the bare "\n" as an
+    # in-field newline (measured 2026-08-08; the KRB fixture row is the
+    # regression bytes).
     def each_row(path)
       return enum_for(:each_row, path) unless block_given?
 
-      CSV.foreach(path, headers: true, encoding: "UTF-8") do |record|
+      data = File.read(path, encoding: "UTF-8").gsub(/\r\n?/, "\n")
+      CSV.parse(data, headers: true) do |record|
         yield build_row(record)
       end
     end

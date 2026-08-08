@@ -9,7 +9,10 @@ URL `https://zenodo.org/records/14568765/files/cigs_v1_7_20241215.csv?download=1
 
 - License (Zenodo record verbatim): "Creative Commons Attribution 4.0
   International".
-- `cigs.csv`: header + 8 real rows — GIR (Girsu), JOK (Umma), KNS
+- `cigs.csv`: header + 9 real rows — including **KRB verbatim with its
+  bare-LF line ending** (the ONE non-CRLF line in the otherwise-CRLF
+  upstream file, measured 2026-08-08 — Ruby CSV crashes on it without the
+  reader's normalization; these are the regression bytes) — plus 8 rows — GIR (Girsu), JOK (Umma), KNS
   (Kanesh), MAR (Mari — carrying Pleiades 286681704, which resolves the
   survey's "Mari absent from Pleiades?" question: it is a post-4.1-dump
   addition), NIP (Nippur), UGA (Ugarit), ADA (an "uncertain" site), HAY
