@@ -1,0 +1,11 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: cigs
+adapter_test: test/cigs_test.rb
+retrieved: 2026-08-08
+files:
+  - path: cigs.csv
+    url: https://zenodo.org/records/14568765/files/cigs_v1_7_20241215.csv?download=1
+    whole: false
+    trim: header + 8 real rows (GIR, JOK, KNS, MAR, NIP, UGA, ADA, HAY) of 597 sites;
+      columns verbatim incl. legacy_name and the crosswalk URL fields

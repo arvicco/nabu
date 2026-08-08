@@ -25,7 +25,7 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | `itant` | inscriptions | nc | wired · manual | 1,160 docs / 1,283 passages |
 | `trismegistos` | feature module | attribution | not yet wired | nothing held yet |
 | `pleiades` | feature module | attribution | not yet wired | nothing held yet |
-| `trismegistos-geo` | feature module | attribution | not yet wired | not synced yet |
+| `trismegistos-geo` | feature module | attribution | not yet wired | nothing held yet |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 | `ceipom` | inscriptions | attribution | wired · frozen | 3,871 docs / 5,303 passages |
 | `open-etruscan` | inscriptions | attribution | wired · frozen | 8,047 docs / 8,047 passages |
