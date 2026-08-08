@@ -75,10 +75,20 @@ class CigsTest < Minitest::Test
 
   # --- the derive -------------------------------------------------------------
 
+  # The real v1.7 file is CRLF except row KRB's bare-LF ending (upstream
+  # defect, measured 2026-08-08) — the fixture carries those bytes verbatim
+  # and the reader's normalization must parse ALL rows, not crash at 293.
+  def test_the_bare_lf_krb_row_parses_with_everything_after_it
+    assert_equal 9, rows.size
+    krb = row("KRB")
+    assert_equal "Tall Jirbāsī", krb.title
+    assert_in_delta 30.7492, krb.lat, 0.001
+  end
+
   def test_producer_derives_the_cigs_slice_and_the_crosswalk
     db = store_test_db
     census = Nabu::CigsIndex::Producer.new(catalog: db).run("cigs", workdir: FIXTURES)
-    assert_equal 8, census.places
+    assert_equal 9, census.places
     resolver = Nabu::Store::PlaceIndex.resolver(db, gazetteer: "cigs")
     assert_equal "Girsu", resolver.place("GIR").title
     assert_equal ["Umma"], resolver.titled("Umma (mod. Tell Jokha)").map(&:title),
