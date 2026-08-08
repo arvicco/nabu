@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../manual_drop"
+require_relative "../tm_geo"
 
 module Nabu
   module Adapters
@@ -46,6 +47,15 @@ module Nabu
 
       def self.manifest
         MANIFEST
+      end
+
+      # P63-3: each sync/rebuild derives the "tm" slice of the namespaced
+      # place index from the held CSV (the pleiades producer seam shape —
+      # per-gazetteer wholesale, never touching other namespaces' rows).
+      def self.place_index_producer? = true
+
+      def self.place_index_producer(catalog:)
+        Nabu::TmGeo::Producer.new(catalog: catalog)
       end
 
       # The acquisition contract the instruction card renders. The steps are

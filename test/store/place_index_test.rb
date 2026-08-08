@@ -179,7 +179,7 @@ module Store
     # surrogate-key-free so two derivations of the same dump are literally
     # row-identical.
     def index_rows
-      [@db[:place_index].order(:position).all, @db[:place_index_names].order(:pleiades_id, :name_key).all]
+      [@db[:place_index].order(:position).all, @db[:place_index_names].order(:place_id, :name_key).all]
     end
 
     def gzip(text)
