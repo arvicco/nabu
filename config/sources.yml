@@ -1316,6 +1316,29 @@ pleiades:
   # dump is large + version-pinned; the Zenodo URL-pin stays optional).
   sync_policy: manual
 
+trismegistos-geo:
+  adapter: Nabu::Adapters::TrismegistosGeo
+  kind: module   # P63-1: machinery-only — a gazetteer instrument, zero document rows, up=module
+  axes: [epigraphy]
+  wired: false   # PERMANENTLY false — a gazetteer instrument, not a text
+                   # source (the pleiades precedent): discover mints no
+                   # documents. The canonical asset is the TM Geo table dump
+                   # (64,857 places), which derives `tm:` rows into the
+                   # namespaced place index (P63-3).
+  # P63-1: the FIRST Manual Adapter source (ruling Dp-a) — TM's dump service
+  # fails the automation bar (captcha interstitial + POST form, measured
+  # 2026-08-08), so `nabu sync trismegistos-geo` prints the acquisition
+  # instruction card until the owner drops the browser-downloaded dump into
+  # incoming/trismegistos-geo/ (TM_geo.csv required, TM_geo.json optional),
+  # then validates, attics, ingests into canonical/trismegistos-geo/ and
+  # stamps .manual-fetch.json provenance. NOTE: the dump carries NO
+  # Pleiades/GeoNames ids (the form's crosswalk checkboxes are commented out
+  # upstream — verified 2026-08-08); crosswalks come from CIGS + the Wikidata
+  # harvest. LICENSE: dataservices page verbatim "We offer you open access to
+  # our data on a CC BY-SA 4.0 license" → attribution (the house BY-SA class,
+  # the trismegistos-links precedent).
+  sync_policy: manual
+
 lila:
   adapter: Nabu::Adapters::Lila
   kind: module   # P44-8: machinery-only — a Latin lemma-spine read seam, zero catalog rows, up=module

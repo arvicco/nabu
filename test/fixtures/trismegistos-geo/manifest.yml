@@ -1,0 +1,22 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Trimmed from the REAL TM Geo table dump the owner acquired manually on
+# 2026-08-08 (browser session — the dump service is captcha+POST-form gated,
+# which is why this source runs the Manual Adapter pattern, P63-1). The dump
+# endpoint is NOT unattended-refetchable by design; re-trim from a fresh
+# owner-acquired dump instead. adapter_test pins fixture-exact rows.
+source: trismegistos-geo
+adapter_test: test/adapters/trismegistos_geo_test.rb
+retrieved: 2026-08-08
+files:
+  - path: TM_geo.csv
+    url: https://www.trismegistos.org/dataservices/dump.php?serve=geo
+    whole: false
+    trim: header + 10 real rows (ids 1, 4, 5, 10, 100, 604, 1767, 2355, 2788, 3311) of 64,857;
+      the `";` line endings and ghost-name/coordinate quirks intact
+  - path: TM_geo.json
+    url: https://www.trismegistos.org/dataservices/dump.php?serve=geo
+    whole: false
+    trim: FeatureCollection trimmed to 4 real features (ids 1, 100, 1767, 2788), nested
+      names + per-place uri intact
