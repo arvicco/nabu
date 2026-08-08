@@ -20,6 +20,10 @@ module Nabu
     # The namespaced mint spelling: `namespace:id` as its OWN whole token.
     MINT_PATTERN = /\A([a-z][a-z0-9-]*):([A-Za-z0-9_.-]+)\z/
 
+    # Namespaces a mint may cite — the URL-bearing three plus cigs, whose
+    # ids have no per-place URL spelling (site mnemonics, `cigs:GIR`).
+    MINT_NAMESPACES = (URL_PATTERNS.keys + %w[cigs]).freeze
+
     module_function
 
     # Every (namespace, id) claim in +ref+, in appearance order, deduped.
@@ -30,7 +34,7 @@ module Nabu
 
       pairs = []
       ref.to_s.split(/\s+/).each do |token|
-        if (m = token.match(MINT_PATTERN)) && URL_PATTERNS.key?(m[1])
+        if (m = token.match(MINT_PATTERN)) && MINT_NAMESPACES.include?(m[1])
           pairs << [m[1], m[2]]
           next
         end

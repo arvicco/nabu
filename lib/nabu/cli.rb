@@ -2997,6 +2997,8 @@ module Nabu
         nabu place https://pleiades.stoa.org/places/462281   # same
     HELP
     def place(*query_parts)
+      return run_place_apply if query_parts == ["apply"]
+
       query = query_parts.join(" ").strip
       raise Thor::Error, "place: give a Pleiades numeric id or an exact place title" if query.empty?
 
@@ -3011,6 +3013,33 @@ module Nabu
       raise Thor::Error, e.message
     ensure
       catalog&.disconnect
+    end
+
+    no_commands do
+      # `nabu place apply` (P63-7): project the nabu-places registry into
+      # document_axes.place_ref — NULL rows only (adapter-asserted refs
+      # always win), idempotent, censused per source. Write-guarded by the
+      # P62 probe; a missing registry is a polite posture, not a stack.
+      def run_place_apply
+        config = Nabu::Config.load
+        Nabu::Store.assert_writable!(config.catalog_path)
+        catalog = Nabu::Store.connect(config.catalog_path)
+        Nabu::Store.migrate!(catalog)
+        census = Nabu::PlaceApply.run(catalog: catalog, canonical_dir: config.canonical_dir)
+        if census.nil?
+          say "place apply: no nabu-places registry under canonical/ — " \
+              "run `nabu sync nabu-places` first (owner queue, P63)"
+          return
+        end
+        census.except(:total).each do |slug, c|
+          say "  #{slug}: #{c[:rows_updated]} rows gained refs across #{c[:names_applied]} names"
+        end
+        say "place apply: #{census[:total]} axis rows updated"
+      rescue Nabu::CatalogBusyError => e
+        raise Thor::Error, e.message
+      ensure
+        catalog&.disconnect
+      end
     end
 
     desc "axis [NAME]", "The research-axis desk card: persona, members, holdings, gold coverage (config/axes.yml)"
