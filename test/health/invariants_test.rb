@@ -479,7 +479,7 @@ class InvariantsTest < Minitest::Test
     assert_nil global_finding(:unresolvable_place_refs),
                "an EMPTY place_index is the feature-off posture — no dump, no findings"
 
-    @db[:place_index].insert(pleiades_id: "111", title: "Resolved", position: 0)
+    @db[:place_index].insert(gazetteer: "pleiades", place_id: "111", title: "Resolved", position: 0)
     finding = global_finding(:unresolvable_place_refs)
     refute_nil finding, "pleiades id 999 is not in the gazetteer"
     assert_match(/1 unresolvable/, finding.message,

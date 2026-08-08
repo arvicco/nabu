@@ -519,9 +519,11 @@ module Nabu
       # design; an EMPTY index is the feature-off posture, never a flood.
       def unresolvable_place_refs
         return nil unless table?(@catalog, :document_axes) && table?(@catalog, :place_index)
-        return nil if @catalog[:place_index].empty?
 
-        known = @catalog[:place_index].select_map(:pleiades_id).to_set
+        pleiades_rows = @catalog[:place_index].where(gazetteer: "pleiades")
+        return nil if pleiades_rows.empty?
+
+        known = pleiades_rows.select_map(:place_id).to_set
         refs = @catalog[:document_axes]
                .exclude(place_ref: nil)
                .where(Sequel.like(:place_ref, "%pleiades.stoa.org/places/%"))
