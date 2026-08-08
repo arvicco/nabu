@@ -137,7 +137,17 @@ module Nabu
           return [nil, nil] if name.empty? || DEGENERATE_PROVENANCE.include?(name)
 
           ref = row["GeoID"].to_s.strip
-          [Nabu::Normalize.nfc(name), ref.empty? ? nil : ref]
+          [Nabu::Normalize.nfc(name), ref.empty? ? nil : tm_ref(ref)]
+        end
+
+        # P63-4 (survey §6.3, owner-confirmed): the GeoID column IS a
+        # Trismegistos Geo id run through a spreadsheet float conversion
+        # ("2788.0" = TM Pompeii) — restored to its namespace at the axis
+        # layer (a derivation; canonical keeps the float string verbatim).
+        # Anything not shaped like one rides unchanged, never guessed.
+        def tm_ref(raw)
+          m = raw.match(/\A(\d+)(?:\.0)?\z/)
+          m ? "tm:#{m[1]}" : raw
         end
       end
     end

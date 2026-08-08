@@ -486,6 +486,20 @@ class InvariantsTest < Minitest::Test
                  "doc_a resolves, doc_c is out of pleiades scope — exactly one defect")
   end
 
+  # P63-4 (Dp-b): the namespaced mint spelling (`pleiades:<id>`, the itant
+  # metadata lift) is verified exactly like the verbatim URL spelling.
+  def test_unresolvable_place_refs_verify_namespaced_pleiades_mints_too
+    doc_ok = seed_lane_doc("newsource", "urn:nabu:newsource:ns1", "{}")
+    doc_bad = seed_lane_doc("newsource", "urn:nabu:newsource:ns2", "{}")
+    @db[:document_axes].insert(document_id: doc_ok, axis_source: "t", place_ref: "pleiades:111")
+    @db[:document_axes].insert(document_id: doc_bad, axis_source: "t", place_ref: "pleiades:999")
+    @db[:place_index].insert(gazetteer: "pleiades", place_id: "111", title: "Resolved", position: 0)
+    finding = global_finding(:unresolvable_place_refs)
+    refute_nil finding
+    assert_includes finding.message, "pleiades:999"
+    refute_includes finding.message, "pleiades:111"
+  end
+
   private
 
   # -- local shelves (P19-1): dossier files vs records; pins vs the tree ------

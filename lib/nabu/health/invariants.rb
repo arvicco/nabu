@@ -524,12 +524,15 @@ module Nabu
         return nil if pleiades_rows.empty?
 
         known = pleiades_rows.select_map(:place_id).to_set
+        # Both spellings of a pleiades claim — verbatim upstream URLs and
+        # the P63-4 namespaced mints — through the ONE PlaceRefs reader.
         refs = @catalog[:document_axes]
                .exclude(place_ref: nil)
-               .where(Sequel.like(:place_ref, "%pleiades.stoa.org/places/%"))
+               .where(Sequel.like(:place_ref, "%pleiades.stoa.org/places/%") |
+                      Sequel.like(:place_ref, "pleiades:%"))
                .distinct.select_map(:place_ref)
         dangling = refs.reject do |ref|
-          ref.scan(%r{pleiades\.stoa\.org/places/(\d+)}).flatten.any? { |id| known.include?(id) }
+          Nabu::PlaceRefs.ids_in(ref, "pleiades").any? { |id| known.include?(id) }
         end
         return nil if dangling.empty?
 
