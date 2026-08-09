@@ -20,3 +20,11 @@ files:
     copied: 2026-07-29
     whole: false
     trim: header lines 1-17, 63-64, 147-151 + the |A.BARA₂| |A×AN| |A×GAN₂@t| AK |AN.SAG@g| |IGI.DIB| MIN |MIN.MIN| |NU×U@c| ŠEŠ |ŠEŠ.AB| |ŠEŠ.KI| |UD.ŠEŠ.KI| sign blocks + @compoundonly |MIN×IGI| + the @pcun 1(N01@f) block, at upstream commit 7749a4bd8589491b987ab3da31660ef4abca5012
+  - path: 00etc/cdli_sign_readings.tsv
+    refetchable: false
+    provenance: local-trim
+    reason: header + the complete E2/|NUN.ME|/SZESZ row sets copied byte-verbatim from the held canonical/osl/00etc/cdli_sign_readings.tsv (1,861 rows, CC0 with the repo) — covers ASCII sign-name folding (SZESZ→ŠEŠ), compound names, the 'a3 apostrophe, glossed and gloss-less rows; re-acquiring = re-sync osl and re-cut the same sign_name rows
+    upstream: https://raw.githubusercontent.com/oracc/osl/master/00etc/cdli_sign_readings.tsv
+    copied: 2026-08-09
+    whole: false
+    trim: rows with sign_name in {E2, |NUN.ME|, SZESZ} (P65-1, the CdliSignReadings seam)

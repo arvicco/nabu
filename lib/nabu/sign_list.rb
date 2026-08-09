@@ -87,6 +87,14 @@ module Nabu
       @by_name[key] || @by_aka[key] || @by_form_name[key]
     end
 
+    # Rendered glyph string → record (P65-1, the `nabu char 𒋀` lane): the
+    # sign whose ucun (or codepoint-derived rendering) IS the input,
+    # compounds included (𒋀𒀊 → |ŠEŠ.AB|). Top-level signs win over forms;
+    # first in file order wins ties. nil for an unindexed glyph.
+    def sign_for_glyph(glyph)
+      @by_glyph[glyph.to_s]
+    end
+
     # Top-level signs only (forms are reachable via their parent records
     # and the name/value indexes).
     def sign_count = @result.signs.size
@@ -94,15 +102,35 @@ module Nabu
     private
 
     def index(signs)
+      @by_glyph = {}
+      forms = []
       signs.each do |record|
         @by_name[record.name] ||= record
         record.aka.each { |alias_name| @by_aka[alias_name] ||= record }
+        index_glyph(record)
         index_values(record)
         record.forms.each do |form|
           @by_form_name[form.name] ||= form
           index_values(form)
+          forms << form
         end
       end
+      forms.each { |form| index_glyph(form) }
+    end
+
+    # Glyph index in two passes: every top-level sign before ANY form, so a
+    # form sharing a rendering never shadows a later sign.
+    def index_glyph(record)
+      glyph = rendered_glyph(record)
+      @by_glyph[glyph] ||= record if glyph
+    end
+
+    def rendered_glyph(record)
+      return record.ucun if record.ucun
+
+      codepoints = record.codepoints or return nil
+      chars = codepoints.filter_map { |code| code[/\AU\+(\h+)\z/, 1]&.to_i(16)&.chr(Encoding::UTF_8) }
+      chars.empty? ? nil : chars.join
     end
 
     def index_values(record)

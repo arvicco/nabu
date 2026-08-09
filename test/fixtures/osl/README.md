@@ -60,3 +60,11 @@ taxonomy:
 
 Re-fetch the raw URL above and re-cut the same blocks (grep the sign names);
 update the commit sha and date here.
+
+## 00etc/cdli_sign_readings.tsv (P65-1)
+
+Header + the complete E2 / |NUN.ME| / SZESZ row sets, copied byte-verbatim
+2026-08-09 from the held canonical/osl/00etc/cdli_sign_readings.tsv (CC0
+with the repo). Covers: ASCII sign-name folding (SZESZ→ŠEŠ), a compound
+name, the 'a3 apostrophe fold, glossed ("n. brother", "n. sage") and
+gloss-less rows. Refresh = re-sync osl, re-cut the same sign_name rows.
