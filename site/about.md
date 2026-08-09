@@ -55,6 +55,15 @@ walks through.
   library's holdings, universal by construction; Nabu consumes it for
   the stage ladders, stage-aware search, and reconstruction honesty
   described on the [Languages]({{ '/languages/' | relative_url }}) page.
+- **[nabu-places](https://arvicco.github.io/nabu-places)** (the
+  **Places ↗** link above) — the third registry sibling (August 2026,
+  CC BY 4.0): a curated registry of *place-matching decisions* — which
+  gazetteer identity (Pleiades, Trismegistos Geo, CIGS, GeoNames) each
+  source's verbatim place-name string denotes, with *unlocatable* and
+  *region* as first-class answers — plus a native lane for minting
+  evidence-backed place records where scholarship establishes a place no
+  gazetteer registers. Nabu consumes it to turn hundreds of thousands of
+  named-but-unlinked documents into place-queryable ones.
 - **[Edubba](https://arvicco.github.io/nabu-edubba)** (the **School ↗**
   link above) — the scribal school: where Nabu curates the texts, Edubba
   teaches the scripts, consuming the library's sign-resolution contract

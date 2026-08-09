@@ -174,14 +174,23 @@ module Nabu
     # a configuration error caught at load. Absent on every ordinary source.
     Entry = Data.define(:slug, :adapter_class_name, :wired, :sync_policy, :kind, :translations,
                         :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings, :axes,
-                        :grant_required, :grant, :availability, :quickstart, :multilingual) do
+                        :grant_required, :grant, :availability, :quickstart, :multilingual,
+                        :group) do
       def initialize(slug:, adapter_class_name:, wired:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false,
                      lemma_tier: DEFAULT_LEMMA_TIER, classes: nil, siblings: nil, axes: [],
                      grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
-                     quickstart: DEFAULT_QUICKSTART, multilingual: DEFAULT_MULTILINGUAL)
+                     quickstart: DEFAULT_QUICKSTART, multilingual: DEFAULT_MULTILINGUAL,
+                     group: nil)
         super
       end
+
+      # The CORE group (P63 rider, owner ruling 2026-08-09): registry-sibling
+      # instruments the library itself depends on (nabu-lects, nabu-places,
+      # cigs). Pre-enabled by nature (modules never gate on enablement) and
+      # swept together by `nabu sync core` — which quickstart runs
+      # automatically.
+      def core? = group == "core"
 
       # kind predicates (P39-0). shelf? drives the local fetch strategy (no
       # network, up=local) at the probe, status, and health-integrity seams;
@@ -331,10 +340,25 @@ module Nabu
         grant_required: grant_required, grant: grant,
         availability: availability!(slug, config),
         quickstart: boolean!(slug, config, "quickstart"),
-        multilingual: boolean!(slug, config, "multilingual")
+        multilingual: boolean!(slug, config, "multilingual"),
+        group: group!(slug, config)
       )
     end
     private_class_method :build_entry
+
+    # Source groups (P63 rider): closed vocabulary — today only "core", the
+    # registry-sibling instruments swept by `nabu sync core`.
+    GROUPS = %w[core].freeze
+
+    def self.group!(slug, config)
+      value = config["group"]
+      return value if value.nil? || GROUPS.include?(value)
+
+      raise ValidationError,
+            "source #{slug.inspect}: group must be one of #{GROUPS.join(', ')} (or absent), " \
+            "got #{value.inspect}"
+    end
+    private_class_method :group!
 
     # The public-availability posture (P44-r3a). Absent = public (the default);
     # `blocked` marks grant-gated private research material the public surfaces
@@ -539,6 +563,13 @@ module Nabu
     # Unknown names return [] (the caller decides how loud to be).
     def axis_members(axis_name)
       @entries.each_value.select { |entry| entry.axes.include?(axis_name) }.map(&:slug)
+    end
+
+    # The CORE group's members, registration order — the `sync core` sweep
+    # set (P63 rider): pre-enabled registry instruments (modules by nature),
+    # also run automatically by quickstart.
+    def core_members
+      @entries.each_value.select(&:core?).map(&:slug)
     end
 
     # Axis members MINUS the blocked (grant-gated private) ones (P44-r3a) — the

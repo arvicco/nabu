@@ -42,7 +42,11 @@ commands to try:
 bin/nabu quickstart
 ```
 
-The set (sizes measured from the live canonical tree, 2026-07-13): the SBL
+The CORE group syncs first, automatically — the registry instruments the
+library depends on (nabu-lects, nabu-places, cigs; a few hundred KB,
+pre-enabled by nature; `bin/nabu sync core` re-runs just that sweep).
+Then the starter set (sizes measured from the live canonical tree,
+2026-07-13): the SBL
 Greek New Testament (`sblgnt`, 11 MB, CC BY), the PROIEL treebank
 (`proiel`, 173 MB — the NT in Greek, Latin, Gothic, Armenian, and Old
 Church Slavonic, with gold lemmas; nc), the ISWOC Old English treebank
