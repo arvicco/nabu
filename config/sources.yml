@@ -1341,6 +1341,7 @@ trismegistos-geo:
 
 cigs:
   adapter: Nabu::Adapters::Cigs
+  group: core   # P63 rider: pre-enabled registry instrument, swept by `nabu sync core`
   kind: module   # P63-5: machinery-only — a gazetteer instrument, zero document rows, up=module
   axes: [cuneiform]
   wired: false   # PERMANENTLY false — a gazetteer instrument (the pleiades
@@ -3384,6 +3385,7 @@ nabu-data:
 
 nabu-lects:
   adapter: Nabu::Adapters::NabuLects
+  group: core   # P63 rider: pre-enabled registry instrument, swept by `nabu sync core`
   kind: module   # P57-3: machinery-only — the lect (anchor x stage x variety x ortho) resolver seam, zero document rows
   axes: [etym]
   wired: false   # PERMANENTLY false — a lect resolver instrument, not a
@@ -3422,6 +3424,7 @@ nabu-lects:
 
 nabu-places:
   adapter: Nabu::Adapters::NabuPlaces
+  group: core   # P63 rider: pre-enabled registry instrument, swept by `nabu sync core`
   kind: module   # P63-7: machinery-only — the place-matching decisions registry seam, zero document rows
   axes: [epigraphy]
   wired: false   # PERMANENTLY false — a decisions-registry instrument (the

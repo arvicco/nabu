@@ -46,9 +46,15 @@ faraday, plus test tooling). Configuration is optional: every key in
 bin/nabu quickstart
 ```
 
-This syncs four curated sources — each through its normal fetch → load →
-index path — and ends by printing the first three commands to try. The
-set, with sizes measured from the live canonical tree on 2026-07-13:
+This first syncs the **core group** automatically — the registry
+instruments the library itself depends on
+([nabu-lects](https://arvicco.github.io/nabu-lects),
+[nabu-places](https://arvicco.github.io/nabu-places), CIGS: a few
+hundred KB total, pre-enabled by nature; `bin/nabu sync core` re-runs
+just that sweep any time) — then the four curated starter sources, each
+through its normal fetch → load → index path, and ends by printing the
+first three commands to try. The starter set, with sizes measured from
+the live canonical tree on 2026-07-13:
 
 | Source | What it is | On disk |
 |---|---|---|
