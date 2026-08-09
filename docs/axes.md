@@ -75,7 +75,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (18): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `trismegistos`, `pleiades`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`, `edr`, `elephantine`
+**Members** (20): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `trismegistos`, `pleiades`, `trismegistos-geo`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`, `edr`, `elephantine`, `nabu-places`
 
 ### slavic
 
@@ -171,7 +171,7 @@ The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — it
 
 The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL's fragments, the Copenhagen Ugaritic Corpus (alphabetic cuneiform), and TLHdig shared with the Hittitologist.
 
-**Members** (9): `ud`, `oracc`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`, `rsti`, `osl`
+**Members** (10): `ud`, `oracc`, `cigs`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`, `rsti`, `osl`
 
 ### egyptian
 

@@ -656,6 +656,46 @@ class SourceRegistryTest < Minitest::Test
 
   # The registry-level lookup the attribution surfaces read (the blocked?
   # mold): unknown slugs are not multilingual.
+  # -- the CORE group (P63 rider, owner ruling 2026-08-09) -------------------
+
+  def test_core_group_parses_and_lists_members_in_order
+    registry = load_registry(<<~YAML)
+      nabu-lects:
+        adapter: Some::Adapter
+        group: core
+        kind: module
+      ordinary:
+        adapter: Some::Adapter
+      cigs:
+        adapter: Some::Adapter
+        group: core
+        kind: module
+    YAML
+    assert_equal %w[nabu-lects cigs], registry.core_members
+    assert_predicate registry["nabu-lects"], :core?
+    refute_predicate registry["ordinary"], :core?, "absent group = no group"
+  end
+
+  def test_an_unknown_group_is_refused_loudly
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        x:
+          adapter: Some::Adapter
+          group: kore
+      YAML
+    end
+    assert_match(/group must be one of core/, error.message)
+  end
+
+  def test_the_live_registry_core_group_is_the_three_instruments
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    assert_equal %w[cigs nabu-lects nabu-places], registry.core_members.sort
+    registry.core_members.each do |slug|
+      assert_predicate registry[slug], :feature_module?,
+                       "#{slug}: core members are modules — pre-enabled by nature, no enable dance"
+    end
+  end
+
   def test_registry_multilingual_lookup_by_slug
     registry = load_registry(<<~YAML)
       pack:

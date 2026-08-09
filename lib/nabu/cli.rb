@@ -934,6 +934,11 @@ module Nabu
       εἰπεῖν all found), and `define λόγος` / `define virtus` (the full
       dictionary entries, citations resolved into your own catalog).
 
+      Before the shelf, the CORE group syncs automatically — the registry
+      instruments the library itself depends on (nabu-lects, nabu-places,
+      cigs: a few hundred KB total), pre-enabled by nature. `nabu sync
+      core` re-runs just that sweep any time.
+
       Each source syncs through its NORMAL path (fetch → load → index), so
       the command is idempotent — a re-run is an ordinary re-sync — and one
       source's failure never stops the rest: failures are reported at the
@@ -964,7 +969,14 @@ module Nabu
       # entries), so the sync gate passes deterministically and a fresh
       # box's profile is written explicitly rather than by migration grace.
       enable_starter_set(config)
-      failures = run_starter_syncs(runner)
+      # P63 rider (owner ruling 2026-08-09): the CORE group (nabu-lects,
+      # nabu-places, cigs — the registry instruments) syncs automatically
+      # first: tiny fetches that light the lect/place layers before the
+      # corpus shelf arrives. Pre-enabled by nature (modules), failures
+      # contained like starter failures.
+      say "core group first: #{registry.core_members.join(' · ')}"
+      failures = run_core_syncs(runner, registry)
+      failures += run_starter_syncs(runner)
       print_quickstart_epilogue(failures)
       unless failures.empty?
         raise Thor::Error, "quickstart: #{failures.size} of #{self.class.starter_sources.size} starter " \
@@ -2997,6 +3009,8 @@ module Nabu
         nabu place https://pleiades.stoa.org/places/462281   # same
     HELP
     def place(*query_parts)
+      return run_place_apply if query_parts == ["apply"]
+
       query = query_parts.join(" ").strip
       raise Thor::Error, "place: give a Pleiades numeric id or an exact place title" if query.empty?
 
@@ -3011,6 +3025,33 @@ module Nabu
       raise Thor::Error, e.message
     ensure
       catalog&.disconnect
+    end
+
+    no_commands do
+      # `nabu place apply` (P63-7): project the nabu-places registry into
+      # document_axes.place_ref — NULL rows only (adapter-asserted refs
+      # always win), idempotent, censused per source. Write-guarded by the
+      # P62 probe; a missing registry is a polite posture, not a stack.
+      def run_place_apply
+        config = Nabu::Config.load
+        Nabu::Store.assert_writable!(config.catalog_path)
+        catalog = Nabu::Store.connect(config.catalog_path)
+        Nabu::Store.migrate!(catalog)
+        census = Nabu::PlaceApply.run(catalog: catalog, canonical_dir: config.canonical_dir)
+        if census.nil?
+          say "place apply: no nabu-places registry under canonical/ — " \
+              "run `nabu sync nabu-places` first (owner queue, P63)"
+          return
+        end
+        census.except(:total).each do |slug, c|
+          say "  #{slug}: #{c[:rows_updated]} rows gained refs across #{c[:names_applied]} names"
+        end
+        say "place apply: #{census[:total]} axis rows updated"
+      rescue Nabu::CatalogBusyError => e
+        raise Thor::Error, e.message
+      ensure
+        catalog&.disconnect
+      end
     end
 
     desc "axis [NAME]", "The research-axis desk card: persona, members, holdings, gold coverage (config/axes.yml)"
@@ -7515,6 +7556,12 @@ module Nabu
         return sync_all(runner, enabled: enabled) if options[:all]
         return sync_axes(runner, registry, options[:axis].split(","), db, ledger) if options[:axis]
 
+        # P63 rider (owner ruling 2026-08-09): `sync core` sweeps the CORE
+        # group — the registry-sibling instruments (nabu-lects, nabu-places,
+        # cigs). Modules by nature, so no enablement dance; failures are
+        # reported per member and never stop the rest.
+        return sync_core(runner, registry, db, ledger) if slug == "core"
+
         if slug.nil? || registry[slug]
           # P44-r3b: the enablement acquisition gate is on the EXPLICIT
           # single-source path only. Axis fan-out keeps its registry-enabled
@@ -7525,6 +7572,29 @@ module Nabu
         return sync_axes(runner, registry, [slug], db, ledger) if registry.axes[slug]
 
         raise Thor::Error, unknown_sync_target_message(registry, slug)
+      end
+
+      # The core-group sweep: each member through the ORDINARY sync_one path
+      # (byte-identical per-source reports), one member's failure contained
+      # and reported at the end. A Manual Adapter member in the awaiting
+      # state counts as awaiting, not failed.
+      def sync_core(runner, registry, db, ledger)
+        members = registry.core_members
+        raise Thor::Error, "sync core: no core-group sources registered" if members.empty?
+
+        say "core group: #{members.join(' · ')}"
+        failures = []
+        members.each do |member|
+          sync_one(runner, registry, member, db, ledger)
+        rescue Nabu::ManualDrop::AwaitingAcquisition => e
+          say e.message
+        rescue Nabu::Error => e
+          failures << member
+          warn "#{member}: #{e.message}"
+        end
+        return if failures.empty?
+
+        raise Thor::Error, "sync core: #{failures.size} of #{members.size} failed — #{failures.join(', ')}"
       end
 
       # The enabled-slug set governing sync acquisition (P44-r3b), or nil when
@@ -7841,6 +7911,30 @@ module Nabu
       # collect as [slug, message] pairs and report after the batch. An
       # unregistered starter slug fails the same way (ValidationError is a
       # Nabu::Error), never aborting the run.
+      # The quickstart core sweep (P63 rider): same containment contract as
+      # the starter loop — a failed member is reported and counted, an
+      # awaiting Manual Adapter member prints its card and counts as neither.
+      def run_core_syncs(runner, registry)
+        failures = []
+        registry.core_members.each do |member|
+          outcome = runner.sync(member, progress: progress_reporter)
+          finish_progress
+          if outcome.aborted?
+            failures << [member, outcome.breaker.message]
+          else
+            say format_sync_outcome(outcome)
+          end
+        rescue Nabu::ManualDrop::AwaitingAcquisition => e
+          finish_progress
+          say e.message
+        rescue Nabu::Error => e
+          finish_progress
+          failures << [member, e.message]
+          warn "#{member}: #{e.message}"
+        end
+        failures
+      end
+
       def run_starter_syncs(runner)
         failures = []
         self.class.starter_sources.each do |starter|

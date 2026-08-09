@@ -15,14 +15,14 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 6 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 8 August 2026)</span> |
 |---|---|---|---|---|
 | `local-language` | language dossiers | open | wired · manual | 618 dossiers |
 | `local-library` | texts | research_private | wired · manual | 20 docs / 8,725 passages |
 | `local-notes` | owner notes | open | wired · manual | nothing held yet |
 | `local-source` | source records | open | wired · manual | 126 dossiers |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 6 August 2026)</span>: `sga` 5 · `cel` 3 · `chu` 2 · `grc` 2 · `ang` 1 · `cor` 1 · `cym` 1 · `got` 1 · `ine` 1 · `san` 1 … and 2 more (`nabu axis local` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 8 August 2026)</span>: `sga` 5 · `cel` 3 · `chu` 2 · `grc` 2 · `ang` 1 · `cor` 1 · `cym` 1 · `got` 1 · `ine` 1 · `san` 1 … and 2 more (`nabu axis local` lists all).
 
 ## The desk's instruments
 

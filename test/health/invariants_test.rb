@@ -479,11 +479,47 @@ class InvariantsTest < Minitest::Test
     assert_nil global_finding(:unresolvable_place_refs),
                "an EMPTY place_index is the feature-off posture — no dump, no findings"
 
-    @db[:place_index].insert(pleiades_id: "111", title: "Resolved", position: 0)
+    @db[:place_index].insert(gazetteer: "pleiades", place_id: "111", title: "Resolved", position: 0)
     finding = global_finding(:unresolvable_place_refs)
     refute_nil finding, "pleiades id 999 is not in the gazetteer"
     assert_match(/1 unresolvable/, finding.message,
                  "doc_a resolves, doc_c is out of pleiades scope — exactly one defect")
+  end
+
+  # P63-7: a registry row whose verbatim string vanished from its source's
+  # axes is stale knowledge — announced softly; a live string is silent.
+  def test_registry_orphan_names_fire_only_for_vanished_strings
+    src = Nabu::Store::Source.create(slug: "cdli", name: "CDLI", adapter_class: "T",
+                                     license_class: "open")
+    doc = Nabu::Store::Document.create(source_id: src.id, urn: "urn:nabu:cdli:x", title: "x",
+                                       language: "sux", content_sha256: "x", revision: 1,
+                                       withdrawn: false)
+    @db[:document_axes].insert(document_id: doc.id, axis_source: "t",
+                               place_name: "Girsu (mod. Tello)")
+    Dir.mktmpdir do |root|
+      FileUtils.mkdir_p(File.join(root, "nabu-places"))
+      FileUtils.cp(File.join(Nabu::TestSupport.fixtures("nabu-places"), "names.yml"),
+                   File.join(root, "nabu-places"))
+      finding = local_invariants(root).global.find { |f| f.kind == :registry_orphan_names }
+      refute_nil finding, "the fixture's other cdli rows have no live axes strings here"
+      assert_equal :soft, finding.severity
+      refute_includes finding.message, "Girsu (mod. Tello)?", "the live string never fires"
+      assert_includes finding.message, "cdli:"
+    end
+  end
+
+  # P63-4 (Dp-b): the namespaced mint spelling (`pleiades:<id>`, the itant
+  # metadata lift) is verified exactly like the verbatim URL spelling.
+  def test_unresolvable_place_refs_verify_namespaced_pleiades_mints_too
+    doc_ok = seed_lane_doc("newsource", "urn:nabu:newsource:ns1", "{}")
+    doc_bad = seed_lane_doc("newsource", "urn:nabu:newsource:ns2", "{}")
+    @db[:document_axes].insert(document_id: doc_ok, axis_source: "t", place_ref: "pleiades:111")
+    @db[:document_axes].insert(document_id: doc_bad, axis_source: "t", place_ref: "pleiades:999")
+    @db[:place_index].insert(gazetteer: "pleiades", place_id: "111", title: "Resolved", position: 0)
+    finding = global_finding(:unresolvable_place_refs)
+    refute_nil finding
+    assert_includes finding.message, "pleiades:999"
+    refute_includes finding.message, "pleiades:111"
   end
 
   private
