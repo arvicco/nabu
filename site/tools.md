@@ -230,10 +230,16 @@ their headers (never fuzzy-matched). Input is a Pleiades numeric id or an
 exact title; id-less documents whose findspot text mentions the name are
 listed as a separate, honestly labelled tail. When a shown inscription
 carries such an id and the dump is on disk, `nabu show` adds a one-line
-findspot resolution too.
+findspot resolution too. Since the places program (August 2026) the
+holdings side reads a **multi-gazetteer index** (Pleiades, Trismegistos
+Geo, CIGS) and `nabu place apply` projects the
+[nabu-places](https://arvicco.github.io/nabu-places/) registry's matching
+decisions into the catalog — see [Places]({{ '/places/' | relative_url }})
+for the system and the coverage census.
 
 ```
 $ bin/nabu place Segesta
+$ bin/nabu place apply
 ```
 
 **Cognates in parallel** (`nabu cognates TARGET`) crosses the etymological

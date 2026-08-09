@@ -40,7 +40,11 @@ module Nabu
       # One resolver card: +place+ is the Nabu::Pleiades::Place (nil when
       # the dump is absent or lacks the id — the CLI renders the honest
       # degradation), +holdings+ [[source_slug, count], …] descending.
-      Card = Data.define(:pleiades_id, :place, :holdings)
+      Card = Data.define(:pleiades_id, :place, :holdings, :dossiers) do
+        def initialize(pleiades_id:, place:, holdings:, dossiers: [])
+          super
+        end
+      end
 
       # The query's answer: every card (homonym titles yield several),
       # whether a dump was loaded at all, and the labelled unlinked tail —
@@ -54,9 +58,10 @@ module Nabu
       ID_PATH = "$.place.pleiades"
       TEXT_PATHS = ["$.place.ancient", "$.place.modern", "$.place.settlement", "$.findspot"].freeze
 
-      def initialize(catalog:, pleiades: nil)
+      def initialize(catalog:, pleiades: nil, canonical_dir: nil)
         @catalog = catalog
         @pleiades = pleiades
+        @canonical_dir = canonical_dir
       end
 
       # Resolve +query+ (id, place URL, or exact title) to a Result, or
@@ -75,7 +80,8 @@ module Nabu
         place = @pleiades&.place(id)
         tail_term = place&.title
         Result.new(
-          cards: [Card.new(pleiades_id: id, place: place, holdings: holdings(id))],
+          cards: [Card.new(pleiades_id: id, place: place, holdings: holdings(id),
+                           dossiers: dossiers_for(id))],
           dump_loaded: !@pleiades.nil?,
           unlinked_term: tail_term, unlinked: tail_term ? unlinked(tail_term) : []
         )
@@ -90,9 +96,20 @@ module Nabu
         raise Error, "no place titled #{name.inspect} in the gazetteer (exact title match)" if matches.empty?
 
         Result.new(
-          cards: matches.map { |place| Card.new(pleiades_id: place.id, place: place, holdings: holdings(place.id)) },
+          cards: matches.map do |place|
+            Card.new(pleiades_id: place.id, place: place, holdings: holdings(place.id),
+                     dossiers: dossiers_for(place.id))
+          end,
           dump_loaded: true, unlinked_term: name, unlinked: unlinked(name)
         )
+      end
+
+      # The owner's authored place dossiers whose refs cover this id
+      # (P64-4; empty without a canonical dir or matching files).
+      def dossiers_for(id)
+        return [] if @canonical_dir.nil?
+
+        Nabu::PlaceDossiers.for_ids(@canonical_dir, [["pleiades", id.to_s]])
       end
 
       # Per-source counts of live documents whose captured id equals +id+,

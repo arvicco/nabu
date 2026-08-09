@@ -24,14 +24,14 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these two answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 8 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 9 August 2026)</span> |
 |---|---|---|---|---|
 | `oracc` | tablets | open | wired · manual | 118,367 docs / 1,800,218 passages |
 | `cdli` | tablet catalog | attribution | wired · manual | 353,156 docs / 2,186,961 passages |
 
 Private research materials under personal grants are not listed.
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 8 August 2026)</span>: `sux` 238,796 · `akk` 106,793 · `und` 74,258 · `eng` 15,417 · `hit` 14,678 · `qpc` 8,931 · `xeb` 6,844 · `elx` 2,723 · `uga` 1,108 · `xur` 703 … and 15 more (`nabu axis iranian` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 9 August 2026)</span>: `sux` 238,796 · `akk` 106,793 · `und` 74,258 · `eng` 15,417 · `hit` 14,678 · `qpc` 8,931 · `xeb` 6,844 · `elx` 2,723 · `uga` 1,108 · `xur` 703 … and 15 more (`nabu axis iranian` lists all).
 
 ## The desk's instruments
 

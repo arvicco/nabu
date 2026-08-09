@@ -125,10 +125,13 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 59, lect.size,
+    assert_equal 55, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3, " \
-                 "oracc retired P62-2 — each when a machine grain took over: the shadowing rule, " \
-                 "working)"
-    assert_equal({ "identity" => 37, "pending" => 10, "dates" => 8, "codemap" => 4 }, by_posture)
+                 "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6 — " \
+                 "each when a machine grain took over: the shadowing rule, working)"
+    # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
+    # tla-hf/gretil/torot → identity, imp/goo300k → dates; titus-avestan
+    # stays the one honest pending (stages minted, awaiting a siglum facet).
+    assert_equal({ "identity" => 40, "pending" => 1, "dates" => 10, "codemap" => 4 }, by_posture)
   end
 end

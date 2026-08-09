@@ -51,10 +51,33 @@ module Nabu
           )
           return nil if count.nil?
 
+          derive_crosswalks!(workdir)
           Nabu::Store::PlaceIndex::Producer::Census.new(
             places: count,
             seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
           )
+        end
+
+        private
+
+        # P64-2: the registry's crosswalks.csv (asserted equivalences with
+        # harvest provenance) derives per-source wholesale — each harvest
+        # source owns its slice, the cigs contract.
+        def derive_crosswalks!(workdir)
+          return unless @catalog.table_exists?(:place_crosswalk)
+
+          rows = Nabu::Places.crosswalks(workdir)
+          by_source = rows.group_by(&:source)
+          @catalog.transaction do
+            by_source.each do |source, group|
+              @catalog[:place_crosswalk].where(source: source).delete
+              inserts = group.map do |x|
+                { source: source, gazetteer_a: x.gazetteer_a, id_a: x.id_a,
+                  gazetteer_b: x.gazetteer_b, id_b: x.id_b }
+              end
+              inserts.uniq.each_slice(1_000) { |s| @catalog[:place_crosswalk].multi_insert(s) }
+            end
+          end
         end
       end
 

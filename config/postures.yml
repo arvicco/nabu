@@ -47,12 +47,14 @@ sources:
   edr:
     lect: {posture: dates}
     dating: {posture: partial}
-    places: {posture: named}
+    places: {posture: linked, note: "P64-1 apply: refs on 99,249/115,590 axis rows (86%) — registry
+        pleiades:/tm: mints incl. 28 homonym rulings"}
     script: {posture: implied}
   iip:
     lect: {posture: dates}
     dating: {posture: dated}
-    places: {posture: named}
+    places: {posture: linked, note: "P64-1 apply: refs on 1,828/5,499 axis rows (33%) — English-exonym
+        tail stays named"}
     script: {posture: implied}
   isicily:
     lect: {posture: dates}
@@ -289,60 +291,66 @@ sources:
 
   # ── pending: a real refinement candidate, not yet ruled ────────────────
   etcsl:
-    lect: {posture: pending, note: mostly OB literary Sumerian — a sux:post
-        source override is one ruling away}
+    # lect declaration retired P64-6 (№1 ruled): the etcsl sux→sux:post
+    # override machine-postures it now (the shadowing rule).
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   coptic-scriptorium:
-    lect: {posture: pending, note: Sahidic/Bohairic are variety
-        candidates the registry does not mint yet}
+    # lect declaration retired P64-6 (№2 ruled): cop/sah+boh minted and the
+    # cop-dialect rule machine-postures it now (the shadowing rule).
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: mixed, note: "Greek loans inside Coptic text"}
   titus-avestan:
-    lect: {posture: pending, note: Old vs Young Avestan stages are
-        mintable; the corpus distinguishes them}
+    lect: {posture: pending, note: "№3 ruled 2026-08-09 and ave:old/yng ARE
+        minted — but the corpus carries NO machine facet (titles hold the
+        sigla), so the ruled rule cannot attach; candidate: a siglum-facet
+        emission packet (work queue), then one rule"}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   torot:
-    lect: {posture: pending, note: chu recension varieties exist in the
-        registry; the mss are attributable}
+    lect: {posture: identity, note: "№4 ruled 2026-08-09: all six chu mss
+        (Kiev Missal, Psalterium Sinaiticum, Suprasliensis, both Vitae,
+        Zographensis) ARE the canonical corpus the registry's bare anchor
+        names — identity, no journal rows needed"}
     dating: {posture: partial}
     places: {posture: unplaced}
     script: {posture: implied}
   ccmh:
-    lect: {posture: pending, note: Croatian Church Slavonic — a chu recension
-        variety candidate}
+    # lect declaration retired P64-6 (№4 ruled): the ccmh chu→chu/cro
+    # override machine-postures it now (the shadowing rule).
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   imp:
-    lect: {posture: pending, note: 19th-c Slovene — a slv stage question}
+    lect: {posture: dates, note: "№5 ruled 2026-08-09: sl stage bands minted
+        (old/emod/mod) — infer-dates stages the 100%-dated corpus"}
     dating: {posture: dated}
     places: {posture: unplaced}
     script: {posture: implied}
   goo300k:
-    lect: {posture: pending, note: historical Slovene, as imp}
+    lect: {posture: dates, note: "№5 ruled 2026-08-09: as imp — the sl bands
+        stage the dated corpus"}
     dating: {posture: dated}
     places: {posture: unplaced}
     script: {posture: implied}
   freising:
-    lect: {posture: pending, note: the Freising fragments — Old Slovene,
-        a stage-minting candidate}
+    # lect declaration retired P64-6 (№5 ruled): the freising sl→sl:old
+    # override machine-postures it now (the shadowing rule).
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   gretil:
-    lect: {posture: pending, note: san corpus slices may support rules like
-        DCS's veda tags; unexamined}
+    lect: {posture: identity, note: "№6 ruled 2026-08-09: the census found NO
+        content facets (nothing DCS-veda-like) — bare san~latn stands"}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: qualified}
   tla-hf:
-    lect: {posture: pending, note: hieratic fragments — egy stages reachable
-        once dating metadata is examined}
+    lect: {posture: identity, note: "№7 ruled 2026-08-09: 4 docs total — the
+        pending cost more than the corpus; bare egy/deu are the honest claim"}
     dating: {posture: partial}
     places: {posture: unplaced}
     script: {posture: implied}
@@ -378,7 +386,8 @@ sources:
     script: {posture: implied}
   elephantine:
     dating: {posture: partial}
-    places: {posture: named}
+    places: {posture: linked, note: "P64-1 apply: refs on 3,690/7,973 axis rows (46%); composite-name
+        tail stays named"}
     script: {posture: qualified}
   itant:
     dating: {posture: partial}
