@@ -110,12 +110,21 @@ module Nabu
           not_before, not_after = Timeline.normalize_interval(not_before, not_after, raw: raw) if reorder
           # "place" is a Hash ({"ancient" => …}, EDR/Elephantine) or a bare
           # string (croala — the P44-i4 shape); the string IS the name.
+          # P63-4: a hash carrying a bare "pleiades" id (itant — 497 docs
+          # measured 2026-08-08, ALL joining the held index) lifts it into
+          # place_ref, namespaced per Dp-b (a derivation mint, never a
+          # verbatim upstream URL). Non-numeric values never mint.
           place = meta["place"]
-          place = place["ancient"] if place.is_a?(Hash)
+          place_ref = nil
+          if place.is_a?(Hash)
+            pleiades = place["pleiades"].to_s.strip
+            place_ref = "pleiades:#{pleiades}" if pleiades.match?(/\A\d+\z/)
+            place = place["ancient"]
+          end
           return nil if not_before.nil? && not_after.nil? && (place.nil? || place.to_s.strip.empty?)
 
           { document_id: doc[:id], not_before: not_before, not_after: not_after,
-            date_raw: raw, place_name: place }
+            date_raw: raw, place_name: place, place_ref: place_ref }
         rescue JSON::ParserError
           nil
         end

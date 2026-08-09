@@ -1,0 +1,24 @@
+# The gazetteer namespaces a ref may cite: `namespace:id`. Each declares the
+# id shape (validator-enforced) and the canonical URI template. Namespaces
+# are PARALLEL claims; equivalences between them are crosswalk DATA asserted
+# by a gazetteer or harvest, never inferred here.
+pleiades:
+  name: Pleiades — ancient-world gazetteer
+  id_shape: '\d+'
+  uri: https://pleiades.stoa.org/places/{id}
+tm:
+  name: Trismegistos Geo
+  id_shape: '\d+'
+  uri: https://www.trismegistos.org/place/{id}
+cigs:
+  name: CIGS — Cuneiform Inscriptions Geographical Site Index
+  id_shape: '[A-Z][A-Z0-9_]{1,15}'
+  uri: https://zenodo.org/records/14568765
+geonames:
+  name: GeoNames
+  id_shape: '\d+'
+  uri: https://www.geonames.org/{id}
+np:
+  name: nabu-places native records (places.yml — minted by scholarship, evidence required)
+  id_shape: '[A-Z][A-Z0-9_]{1,23}'
+  uri: https://github.com/arvicco/nabu-places/blob/main/places.yml
