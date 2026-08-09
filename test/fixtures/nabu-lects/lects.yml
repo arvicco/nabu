@@ -374,9 +374,25 @@ anchors:
   syc:
     name: Classical Syriac
     parent: arc
-    note: "the Edessan literary Aramaic. The wider Aramaic dialect fan
-           (jpa, tmr, sam, myz) is DELIBERATELY unminted — those codes
-           overlap the arc stage/variety model and need their own ruling"
+    note: "the Edessan literary Aramaic"
+
+  # The Aramaic dialect fan (ruled 2026-08-09, closing the standing item):
+  # BARE anchors with parent arc — plain ISO facts on the descent graph, the
+  # chains doctrine. No re-parenting of arc's own stages: sefaria's
+  # arc:mid/jud rows model the literary-register axis and stand unchanged.
+  jpa:
+    name: Jewish Palestinian Aramaic
+    parent: arc
+  tmr:
+    name: Jewish Babylonian Aramaic
+    parent: arc
+    note: "the Talmudic Aramaic ISO code"
+  sam:
+    name: Samaritan Aramaic
+    parent: arc
+  myz:
+    name: Classical Mandaic
+    parent: arc
 
   hbo:
     name: Biblical Hebrew
@@ -409,10 +425,21 @@ anchors:
              band_note: "approximate Egyptological convention"}
       dem:  {name: Demotic,         band: [-650, 450],    ord: 40,
              band_note: "approximate Egyptological convention"}
+    varieties:
+      trad: {name: Égyptien de tradition, kind: register,
+             note: "the Middle Egyptian REGISTER maintained in later copies
+                    (Third Intermediate Period through Roman temple texts) — a
+                    register claim, deliberately not a dating stage: the copies
+                    are late, the language they maintain is not"}
 
   cop:
     name: Coptic
     parent: egy
+    varieties:
+      sah: {name: Sahidic, kind: dialect,
+            note: "the classical literary dialect of Upper Egypt"}
+      boh: {name: Bohairic, kind: dialect,
+            note: "the Delta dialect, later the liturgical standard"}
 
   # ── Sumerian and the proto-cuneiform corpus ────────────────────────────────
 
@@ -434,10 +461,14 @@ anchors:
       ur3:  {name: Neo-Sumerian (Ur III),   band: [-2100, -2000], ord: 40,
              band_note: "per the CDLI period convention; the bulk of the
                          surviving record"}
-      post: {name: Post-Sumerian,           band: [-2000, -1600], ord: 50,
-             band_note: "the Old Babylonian literary/liturgical corpus, written
-                         after spoken Sumerian died; the band is the OB period
-                         convention, not the end of the scribal tradition"}
+      post: {name: Post-Sumerian,           band: [-2000, 100], ord: 50,
+             band_note: "post-vernacular literary/liturgical Sumerian, from
+                         the Old Babylonian corpus through the first-millennium
+                         library copies to the end of the cuneiform scribal
+                         tradition (last dated text 75 CE). Widened from the
+                         OB-convention band [-2000,-1600] when the 2026-08-09
+                         ruling assigned MB/MA/NA/NB-period copies to this
+                         stage — the LANGUAGE claim spans the whole tradition"}
 
   qpc:
     name: Proto-cuneiform
@@ -498,6 +529,15 @@ anchors:
   ave:
     name: Avestan
     parent: iir:pro
+    stages:
+      old: {name: Old Avestan, band: [-1500, -900], ord: 10,
+            band_note: "the Gathic corpus (the Gāthās + Yasna Haptaŋhāiti);
+                        absolute Avestan chronology is contested — the band is
+                        an approximate convention, the textual identification
+                        is not"}
+      yng: {name: Young Avestan, band: [-900, -300], ord: 20,
+            band_note: "approximate convention, the same contested-chronology
+                        caveat"}
 
   peo:
     name: Old Persian
@@ -536,6 +576,8 @@ anchors:
     varieties:
       rus: {name: Russian recension, kind: recension}
       srp: {name: Serbian recension, kind: recension}
+      cro: {name: Croatian recension, kind: recension,
+            note: "the glagolitic Croatian Church Slavonic tradition"}
 
   orv:
     name: Old East Slavic
@@ -560,8 +602,17 @@ anchors:
   sl:
     name: Slovene
     stages:
-      old:  {name: Old Slovene, ord: 10, note: "the Freising Fragments era"}
-      emod: {name: Early Modern Slovene, ord: 20}
+      old:  {name: Old Slovene, band: [950, 1550], ord: 10,
+             note: "the Freising Fragments era",
+             band_note: "Freising (~972-1039) through the late-medieval
+                         manuscripts; approximate periodization convention"}
+      emod: {name: Early Modern Slovene, band: [1550, 1850], ord: 20,
+             band_note: "Trubar's 1550 print through the pre-standard era;
+                         approximate convention"}
+      mod:  {name: Modern Slovene, band: [1850, 2100], ord: 30,
+             band_note: "the unified standard (novoslovenščina) onward —
+                         minted so date-banded staging covers the 19th-20th
+                         century corpora"}
     orthos:
       bohoric: {name: Bohorič alphabet, script: latn, note: "IANA variant name"}
 

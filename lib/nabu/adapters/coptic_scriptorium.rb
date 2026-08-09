@@ -349,7 +349,13 @@ module Nabu
         end
         # literary headers say language=, the NT chapter headers languages=
         dialect = meta["language"] || meta["languages"]
-        meta["dialect"] = dialect if dialect
+        if dialect
+          meta["dialect"] = dialect
+          # P64-6 (№2): the dialect rides as a FACET so the cop-dialect lect
+          # rule (Sahidic → cop/sah, Bohairic → cop/boh) can read it — rules
+          # are facet-grained by design.
+          meta["facets"] = (meta["facets"] || {}).merge("dialect" => { "value" => dialect })
+        end
         Nabu::Document.new(
           urn: document_ref.id, language: LANGUAGE, title: document_ref.metadata["title"],
           canonical_path: document_ref.path, metadata: meta,
