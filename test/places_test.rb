@@ -51,6 +51,39 @@ class PlacesTest < Minitest::Test
     end
   end
 
+  # -- the native minting lane (owner ruling 2026-08-09: not only glue) -----
+
+  def test_minted_places_read_with_evidence_backed_shape
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, "places.yml"), <<~YAML)
+        KARKAR_SU:
+          name: Karkar (the Umma waterway station)
+          lat: 31.9
+          lon: 45.7
+          evidence: joined barge itineraries; see the argument note
+      YAML
+      rows = Nabu::Places.minted(dir)
+      assert_equal 1, rows.size
+      row = rows.first
+      assert_equal "KARKAR_SU", row.id
+      assert_in_delta 31.9, row.lat
+      assert_equal ["minted"], row.place_types
+      assert_includes row.name_keys, Nabu::Pleiades.name_key("Karkar (the Umma waterway station)")
+    end
+  end
+
+  def test_an_empty_or_absent_minted_file_is_an_empty_lane
+    Dir.mktmpdir do |dir|
+      assert_empty Nabu::Places.minted(dir)
+      File.write(File.join(dir, "places.yml"), "{}\n")
+      assert_empty Nabu::Places.minted(dir)
+    end
+  end
+
+  def test_np_mints_parse_through_the_one_ref_reader
+    assert_equal [%w[np KARKAR_SU]], Nabu::PlaceRefs.ids("np:KARKAR_SU")
+  end
+
   # -- the drift guard (the nabu-lects pattern): fixture rows stay valid ----
 
   def test_every_fixture_ref_has_a_declared_namespace_and_shape

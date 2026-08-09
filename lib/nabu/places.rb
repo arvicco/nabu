@@ -2,6 +2,8 @@
 
 require "yaml"
 
+require_relative "pleiades"
+
 module Nabu
   # The nabu-places read seam (P63-7): the sibling registry's matching
   # DECISIONS (source → verbatim place-name string → row), consumed
@@ -60,6 +62,26 @@ module Nabu
         d = decision(source, name)
         [name, d] if d
       end.to_h
+    end
+
+    # The registry's OWN minted place records (places.yml, namespace np: —
+    # the native lane: not only glue between gazetteers; owner ruling
+    # 2026-08-09). Rows duck-type the place-index derive shape. An absent
+    # or empty file is an empty lane, honestly.
+    MintedPlace = Data.define(:id, :title, :lat, :lon, :place_types, :time_periods, :name_keys)
+
+    def self.minted(dir)
+      path = File.join(dir, "places.yml")
+      return [] unless File.file?(path)
+
+      (YAML.safe_load_file(path) || {}).map do |id, rec|
+        MintedPlace.new(
+          id: id, title: rec.fetch("name"),
+          lat: rec["lat"], lon: rec["lon"],
+          place_types: ["minted"], time_periods: [],
+          name_keys: [Nabu::Pleiades.name_key(rec.fetch("name"))]
+        )
+      end
     end
   end
 end

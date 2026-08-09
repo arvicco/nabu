@@ -18,3 +18,7 @@ geonames:
   name: GeoNames
   id_shape: '\d+'
   uri: https://www.geonames.org/{id}
+np:
+  name: nabu-places native records (places.yml — minted by scholarship, evidence required)
+  id_shape: '[A-Z][A-Z0-9_]{1,23}'
+  uri: https://github.com/arvicco/nabu-places/blob/main/places.yml

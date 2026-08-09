@@ -28,6 +28,36 @@ module Nabu
         MANIFEST
       end
 
+      # P63 native lane (owner ruling 2026-08-09): the registry's OWN minted
+      # records (places.yml) derive into the place index as the "np" slice —
+      # minted places resolve on the desk like any gazetteer's. Empty lane =
+      # zero rows, honestly.
+      def self.place_index_producer? = true
+
+      def self.place_index_producer(catalog:)
+        MintedProducer.new(catalog: catalog)
+      end
+
+      class MintedProducer
+        def initialize(catalog:)
+          @catalog = catalog
+        end
+
+        def run(_slug, workdir:)
+          rows = Nabu::Places.minted(workdir)
+          started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+          count = Nabu::Store::PlaceIndex.derive!(
+            @catalog, gazetteer: "np", places: rows, names_for: :name_keys.to_proc
+          )
+          return nil if count.nil?
+
+          Nabu::Store::PlaceIndex::Producer::Census.new(
+            places: count,
+            seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+          )
+        end
+      end
+
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
