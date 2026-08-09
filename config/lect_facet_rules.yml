@@ -56,8 +56,10 @@ rules:
   # the sux-coded archaic corpus (the qpc-coded ED I-II documents are a
   # separately ratifiable claim — registry qpc note). Old Akkadian-period
   # and Lagash II Sumerian → sarg; Early OB and OB → post (the literary/
-  # liturgical corpus). First-millennium copies (Neo-Assyrian etc.) stay
-  # deliberately unmatched pending an owner call at dry-run review.
+  # liturgical corpus). №10 (owner ruling 2026-08-09): the first-millennium
+  # copies join post — MB/MA/NA/NB-period Sumerian is the same
+  # post-vernacular literary/liturgical corpus in later library copies
+  # (the №1 etcsl claim at period grain; 4,400 docs measured at ruling).
   - id: sux-period
     tier: certain
     # oracc joined P62-2 (Ur III alone ≈ 80k sux docs once re-parsed).
@@ -73,16 +75,21 @@ rules:
       "Ur III": "sux:ur3"
       "Early Old Babylonian": "sux:post"
       "Old Babylonian": "sux:post"
+      "Middle Babylonian": "sux:post"
+      "Middle Assyrian": "sux:post"
+      "Neo-Assyrian": "sux:post"
+      "Neo-Babylonian": "sux:post"
 
   # ── D58-c + D59-a: the AES corpus slices (facet `period` on source aes).
   # Ruled D58-c: ok-fip → egy:old, mk-sip → egy:mid. Ruled D59-a
   # (2026-08-06): nk → egy:nk — the whole New Kingdom slice onto the stage
   # minted for exactly this straddle (band [-1550,-1070] overlaps mid and
   # late deliberately; the owner's no-excessive-complexity call — no
-  # per-subcorpus splitting). tip-roman stays DELIBERATELY absent: the
-  # material is égyptien de tradition (Middle Egyptian register in late
-  # copies) and a dating-grain stage would be linguistically wrong; the
-  # register decision is queued (plan doc, carried queue).
+  # per-subcorpus splitting). №9 (owner ruling 2026-08-09): tip-roman →
+  # egy/trad — the registry's égyptien-de-tradition REGISTER variety,
+  # minted for exactly this material (Middle Egyptian register in late
+  # copies; a dating-grain stage would be linguistically wrong, which is
+  # why P59 left it bare).
   - id: egy-aes-period
     tier: certain
     sources: [aes]
@@ -92,6 +99,21 @@ rules:
       "ok-fip": "egy:old"
       "mk-sip": "egy:mid"
       "nk": "egy:nk"
+      "tip-roman": "egy/trad"
+
+  # ── №2 (owner ruling 2026-08-09): the Coptic Scriptorium corpus tags its
+  # dialect per document ("Sahidic Coptic" 417 · "Bohairic Coptic" 62,
+  # censused at ruling); the adapter surfaces it as the `dialect` facet.
+  # Lycopolitan (1 doc) and the two mixed-feature values stay honestly
+  # unmatched — no registry variety claims them.
+  - id: cop-dialect
+    tier: certain
+    sources: [coptic-scriptorium]
+    code: cop
+    facet: dialect
+    map:
+      "Sahidic Coptic": "cop/sah"
+      "Bohairic Coptic": "cop/boh"
 
   # ── D58-d (facet half): the DCS Vedic school tags — a rv/av/sv/yv-tagged
   # text IS Vedic Sanskrit. Untagged DCS texts stay bare san (the epi/cla

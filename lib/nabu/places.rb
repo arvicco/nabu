@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "csv"
 require "yaml"
 
 require_relative "pleiades"
@@ -69,6 +70,22 @@ module Nabu
     # 2026-08-09). Rows duck-type the place-index derive shape. An absent
     # or empty file is an empty lane, honestly.
     MintedPlace = Data.define(:id, :title, :lat, :lon, :place_types, :time_periods, :name_keys)
+
+    # The registry's crosswalks.csv (P64-2): asserted cross-namespace
+    # equivalences with provenance (harvest source + retrieval date per
+    # row — the Wikidata TM⇄Pleiades harvest first). Absent file = none.
+    Crosswalk = Data.define(:gazetteer_a, :id_a, :gazetteer_b, :id_b, :source)
+
+    def self.crosswalks(dir)
+      path = File.join(dir, "crosswalks.csv")
+      return [] unless File.file?(path)
+
+      CSV.foreach(path, headers: true).map do |row|
+        Crosswalk.new(gazetteer_a: row.fetch("gazetteer_a"), id_a: row.fetch("id_a"),
+                      gazetteer_b: row.fetch("gazetteer_b"), id_b: row.fetch("id_b"),
+                      source: row.fetch("source"))
+      end
+    end
 
     def self.minted(dir)
       path = File.join(dir, "places.yml")
