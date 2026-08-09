@@ -69,7 +69,8 @@ sources:
     # machine-posture oracc now (the shadowing rule).
     dating: {posture: dated, note: "P62-1/2: 116,708/118,366 via catalogue date_of_origin + the ruled
         period table (the recursive-glob fix reached the triply-nested epsd2 catalogue)"}
-    places: {posture: linked, note: "refs on 20% — names reach 29%"}
+    places: {posture: linked, note: "P63-7 apply: refs on 101,983/117,419 axis rows (87%) — registry
+        cigs:/pleiades: mints atop the upstream-asserted 20%"}
     script: {posture: implied}
 
   # ── codemap: refined universally, no Nabu-specific knowledge needed ────
@@ -357,7 +358,8 @@ sources:
     script: {posture: implied}
   cdli:
     dating: {posture: partial}
-    places: {posture: named}
+    places: {posture: linked, note: "P63-7 apply: refs on 250,484/337,572 axis rows (74%) — registry
+        cigs:/pleiades: mints; the 267-name census had NO machine refs before"}
     script: {posture: implied}
   dcs:
     dating: {posture: undatable}
