@@ -101,6 +101,20 @@ class SignListTest < Minitest::Test
     assert_nil list.sign("NOSUCHSIGN")
   end
 
+  # --- sign_for_glyph: rendered glyph → record (P65-1, the char-card lane) --
+
+  def test_sign_for_glyph_resolves_a_single_sign
+    assert_equal "ŠEŠ", list.sign_for_glyph("𒋀").name
+  end
+
+  def test_sign_for_glyph_resolves_a_compound_by_its_rendered_sequence
+    assert_equal "|ŠEŠ.AB|", list.sign_for_glyph("𒋀𒀊").name
+  end
+
+  def test_sign_for_glyph_of_an_unknown_glyph_is_nil
+    assert_nil list.sign_for_glyph("𒀸")
+  end
+
   # --- honesty: unencoded signs ---------------------------------------------
 
   def test_a_codepoint_less_sign_reports_nil_codepoints
