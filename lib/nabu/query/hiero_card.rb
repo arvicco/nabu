@@ -22,6 +22,13 @@ module Nabu
       # Gardiner-style code shape (kEH_JSesh: A1, G43, Aa27D, P8h, O29v…).
       CODE = /\A[A-Z][A-Za-z]?\d{1,3}[A-Za-z]{0,2}\z/
 
+      # census: aes, 2026-08-09 — the one held source whose token
+      # annotations carry Gardiner codes (hiero_inventar); a new
+      # hiero-annotated shelf joins this list. The scan is scoped to these
+      # sources' documents so a desk card never walks the whole passages
+      # table (8M+ rows; the unscoped LIKE scan measured in MINUTES).
+      HIERO_SOURCES = %w[aes].freeze
+
       def initialize(hieroglyphs:, catalog: nil)
         @signs = hieroglyphs
         @catalog = catalog
@@ -55,9 +62,9 @@ module Nabu
       end
 
       # Passage + token counts of the sign's Gardiner code over held
-      # hiero_inventar annotations (aes). SQL LIKE prefilters the scan;
-      # the count is semicolon-bounded in Ruby — N35 must never count
-      # N35A. No catalog / no passages table / no code → {}.
+      # hiero_inventar annotations (aes). SQL LIKE prefilters the scoped
+      # scan; the count is semicolon-bounded in Ruby — N35 must never
+      # count N35A. No catalog / no passages table / no code → {}.
       def corpus_panel(sign)
         code = sign.jsesh
         return {} unless code && @catalog&.table_exists?(:passages)
@@ -65,8 +72,10 @@ module Nabu
         passages = 0
         tokens = 0
         escaped = code.gsub(/[%_\\]/) { |c| "\\#{c}" }
+        source_ids = @catalog[:sources].where(slug: HIERO_SOURCES).select(:id)
+        document_ids = @catalog[:documents].where(source_id: source_ids).select(:id)
         @catalog[:passages]
-          .where(withdrawn: false)
+          .where(withdrawn: false, document_id: document_ids)
           .where(Sequel.like(:annotations_json, "%hiero_inventar%", escape: "\\"))
           .where(Sequel.like(:annotations_json, "%#{escaped}%", escape: "\\"))
           .select_map(:annotations_json).each do |json|
