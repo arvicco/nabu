@@ -84,6 +84,22 @@ class PlacesTest < Minitest::Test
     assert_equal [%w[np KARKAR_SU]], Nabu::PlaceRefs.ids("np:KARKAR_SU")
   end
 
+  # -- crosswalks.csv (P64-2: the Wikidata harvest lane) --------------------
+
+  def test_crosswalks_read_with_provenance_and_absent_file_is_empty
+    Dir.mktmpdir do |dir|
+      assert_empty Nabu::Places.crosswalks(dir)
+      File.write(File.join(dir, "crosswalks.csv"), <<~CSV)
+        gazetteer_a,id_a,gazetteer_b,id_b,source,retrieved
+        tm,2181,pleiades,570685,wikidata,2026-08-09
+      CSV
+      rows = Nabu::Places.crosswalks(dir)
+      assert_equal 1, rows.size
+      assert_equal %w[tm 2181 pleiades 570685 wikidata],
+                   [rows[0].gazetteer_a, rows[0].id_a, rows[0].gazetteer_b, rows[0].id_b, rows[0].source]
+    end
+  end
+
   # -- the drift guard (the nabu-lects pattern): fixture rows stay valid ----
 
   def test_every_fixture_ref_has_a_declared_namespace_and_shape

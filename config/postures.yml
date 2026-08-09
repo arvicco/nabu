@@ -47,12 +47,14 @@ sources:
   edr:
     lect: {posture: dates}
     dating: {posture: partial}
-    places: {posture: named}
+    places: {posture: linked, note: "P64-1 apply: refs on 99,249/115,590 axis rows (86%) — registry
+        pleiades:/tm: mints incl. 28 homonym rulings"}
     script: {posture: implied}
   iip:
     lect: {posture: dates}
     dating: {posture: dated}
-    places: {posture: named}
+    places: {posture: linked, note: "P64-1 apply: refs on 1,828/5,499 axis rows (33%) — English-exonym
+        tail stays named"}
     script: {posture: implied}
   isicily:
     lect: {posture: dates}
@@ -378,7 +380,8 @@ sources:
     script: {posture: implied}
   elephantine:
     dating: {posture: partial}
-    places: {posture: named}
+    places: {posture: linked, note: "P64-1 apply: refs on 3,690/7,973 axis rows (46%); composite-name
+        tail stays named"}
     script: {posture: qualified}
   itant:
     dating: {posture: partial}
