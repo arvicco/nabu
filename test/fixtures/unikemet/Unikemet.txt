@@ -1,0 +1,76 @@
+# Unikemet-17.0.0.txt
+# Date: 2025-07-21
+# © 2025 Unicode®, Inc.
+# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+# For terms of use and license, see https://www.unicode.org/terms_of_use.html
+#
+# This file is a normative contributory data file in the
+# Unicode Character Database.
+#
+# Unikemet Data references file for Egyptian Hieroglyphs
+#
+#	Format information:
+#	Each line of this file consists of three tab-separated fields.
+#	The first is the UCS code point value as U+xxxxx
+#	The second is a tag indicating the type of information in the third field
+#	The third is the line's value (in UTF-8)
+#
+#	This file contains the following information:
+#
+#	Catalog value: kEH_Cat
+#	Core value: kEH_Core (C for core, L for legacy, default is N)
+#	Description: kEH_Desc
+#	Function: kEH_Func
+#	Function: kEH_FVal
+#	Original catalog value: kEH_UniK
+#	JSesh source: kEH_JSesh
+#	Hieroglyphica source: kEH_HG
+#	IFAO source: kEH_IFAO
+#	Alternate sequence: kEH_AltSeq
+#	No Mirror: kEH_NoMirror
+#	No Rotate: kEH_NoRotate
+#
+U+13000	kEH_Cat	A-01-001
+U+13000	kEH_Core	C
+U+13000	kEH_Desc	Man, seated, right knee raised, right arm raised, left arm in front of body.
+U+13000	kEH_Func	Classifier human being
+U+13000	kEH_UniK	A001
+U+13000	kEH_JSesh	A1
+U+13000	kEH_HG	A1
+U+13000	kEH_IFAO	1,1
+U+1305D	kEH_Cat	C-09-018
+U+1305D	kEH_Core	L
+U+1305D	kEH_UniK	C002B
+U+1305D	kEH_IFAO	62,10
+U+1305D	kEH_AltSeq	1305C 13440
+U+13143	kEH_Cat	G-12-002
+U+13143	kEH_Core	C
+U+13143	kEH_Desc	A falcon.
+U+13143	kEH_Func	Logogram (Horus)
+U+13143	kEH_FVal	ḥr
+U+13143	kEH_UniK	G005
+U+13143	kEH_JSesh	G5
+U+13143	kEH_HG	G5
+U+13143	kEH_IFAO	184,14
+U+13171	kEH_Cat	G-03-001
+U+13171	kEH_Core	C
+U+13171	kEH_Desc	A quail chick (Coturnix coturnix).
+U+13171	kEH_Func	Phonemogram
+U+13171	kEH_FVal	w
+U+13171	kEH_UniK	G043
+U+13171	kEH_JSesh	G43
+U+13171	kEH_HG	G43
+U+13171	kEH_IFAO	171,9
+U+13216	kEH_Cat	N-19-001
+U+13216	kEH_Core	C
+U+13216	kEH_Desc	A ripple of water.
+U+13216	kEH_Func	Phonemogram
+U+13216	kEH_FVal	n
+U+13216	kEH_UniK	N035
+U+13216	kEH_JSesh	N35
+U+13216	kEH_HG	N35
+U+13216	kEH_IFAO	277,2
+U+13460	kEH_Cat	A-01-002
+U+13460	kEH_Desc	Man, seated, right knee raised, right arm raised, left arm behind body.
+U+13460	kEH_Func	Classifier human being
+U+13460	kEH_UniK	A001F
