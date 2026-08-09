@@ -20,9 +20,10 @@ module Nabu
     # The namespaced mint spelling: `namespace:id` as its OWN whole token.
     MINT_PATTERN = /\A([a-z][a-z0-9-]*):([A-Za-z0-9_.-]+)\z/
 
-    # Namespaces a mint may cite — the URL-bearing three plus cigs, whose
-    # ids have no per-place URL spelling (site mnemonics, `cigs:GIR`).
-    MINT_NAMESPACES = (URL_PATTERNS.keys + %w[cigs]).freeze
+    # Namespaces a mint may cite — the URL-bearing three plus cigs (site
+    # mnemonics, no per-place URL) and np (nabu-places' OWN minted records,
+    # places.yml — the P63 native lane: not only glue).
+    MINT_NAMESPACES = (URL_PATTERNS.keys + %w[cigs np]).freeze
 
     module_function
 
