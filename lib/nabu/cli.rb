@@ -3019,7 +3019,8 @@ module Nabu
       raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
 
       resolver = Nabu::Pleiades.load_default(config: config, catalog: catalog)
-      result = Nabu::Query::Place.new(catalog: catalog, pleiades: resolver).run(query)
+      result = Nabu::Query::Place.new(catalog: catalog, pleiades: resolver,
+                                      canonical_dir: config.canonical_dir).run(query)
       print_place(result)
     rescue Nabu::Query::Place::Error => e
       raise Thor::Error, e.message
@@ -5022,6 +5023,10 @@ module Nabu
               "(`nabu sync pleiades` adds the card)"
         end
         say "  holdings: #{card.holdings.empty? ? 'none' : format_source_counts(card.holdings)}"
+        card.dossiers.each do |dossier|
+          say "  ── dossier: #{dossier.title} ──"
+          dossier.body.each_line { |line| say "  #{line.chomp}" }
+        end
       end
 
       # " — types · first…last period · lat, lon", each section only when

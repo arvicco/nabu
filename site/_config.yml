@@ -39,6 +39,8 @@ nav:
     url: /examples/
   - title: Languages
     url: /languages/
+  - title: Places
+    url: /places/
   - title: Sources & Licensing
     url: /sources/
   # Tail order is fixed as: Sources & Licensing, FAQ, News, About —
