@@ -98,3 +98,19 @@ sources:
   itant:
     osc-Ital-x-oscetr: "osc~latn"
     xcg-Ital-x-xcglep: "xcg~latn"
+  # №1 (owner ruling 2026-08-09): ETCSL is the canonical Sumerian literary
+  # corpus — Old Babylonian-era copies from after Sumerian died as a
+  # vernacular, exactly the registry's sux:post claim. Source-grain tier
+  # approximation (394 sux docs at ruling; the eng siblings stay bare).
+  etcsl:
+    sux: "sux:post"
+  # №4 (owner ruling 2026-08-09): the CCMH corpus IS Croatian Church
+  # Slavonic — the chu/cro recension minted upstream for exactly this
+  # (19 chu docs at ruling). torot's six canonical mss stay BARE chu:
+  # the registry's bare anchor names the canonical corpus itself.
+  ccmh:
+    chu: "chu/cro"
+  # №5 (owner ruling 2026-08-09): the Freising Fragments are literally the
+  # exemplar the registry's sl:old note names (12 sl docs at ruling).
+  freising:
+    sl: "sl:old"
