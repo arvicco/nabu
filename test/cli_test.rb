@@ -1811,7 +1811,7 @@ class CLITest < Minitest::Test
       sources = File.join(root, "sources.yml")
       File.write(sources, "corpus:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: auto\n")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-                                sources_path: sources, config_path: "(test)")
+                                sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
       _out, err, status = with_config(config) { run_cli(%w[status]) }
       assert_nil status
       assert_match(/no sources enabled — nabu enable/, err)
@@ -1895,7 +1895,7 @@ class CLITest < Minitest::Test
       sources = File.join(root, "sources.yml")
       File.write(sources, blocked_grant_yaml("secret"))
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-                                sources_path: sources, config_path: "(test)")
+                                sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
       out, _err, status = with_config(config) do
         with_stdin("granted\n", tty: true) { run_cli(%w[enable secret]) }
       end
@@ -1919,7 +1919,7 @@ class CLITest < Minitest::Test
       sources = File.join(root, "sources.yml")
       File.write(sources, blocked_grant_yaml("secret"))
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-                                sources_path: sources, config_path: "(test)")
+                                sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
       _o, err, status = with_config(config) do
         with_stdin("no\n", tty: true) { run_cli(%w[enable secret]) }
       end
@@ -1937,7 +1937,7 @@ class CLITest < Minitest::Test
       File.write(sources, "peo:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n  " \
                           "axes: [iranian]\n#{blocked_grant_yaml('secret', axes: 'iranian')}")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-                                sources_path: sources, config_path: "(test)")
+                                sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
       out, _err, status = with_config(config) { run_cli(%w[enable iranian]) }
       assert_nil status
       assert_match(/secret is grant-gated — enable it explicitly: nabu enable secret/, out)
@@ -2006,7 +2006,7 @@ class CLITest < Minitest::Test
       File.write(sources, "peo:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n  " \
                           "axes: [iranian]\n#{blocked_grant_yaml('secret', axes: 'iranian')}")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-                                sources_path: sources, config_path: "(test)")
+                                sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
       Nabu::Profile.new(%w[peo]).save(config.profile_path) # peo enabled; secret (blocked) is not
       _out, err, status = with_config(config) { run_cli(%w[status --axis iranian]) }
       assert_nil status
@@ -2029,7 +2029,7 @@ class CLITest < Minitest::Test
       sources = File.join(root, "sources.yml")
       File.write(sources, "a:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: auto\n")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-                                sources_path: sources, config_path: "(test)")
+                                sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
       FileUtils.mkdir_p(config.db_dir)
       holder = Nabu::Store.connect(config.catalog_path)
       Nabu::Store.migrate!(holder)
@@ -2058,7 +2058,7 @@ class CLITest < Minitest::Test
       File.write(sources, "a:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: auto\n" \
                           "b:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: auto\n")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-                                sources_path: sources, config_path: "(test)")
+                                sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
       Nabu::Profile.new(%w[a]).save(config.profile_path) # only a enabled
 
       _o, err, status = with_config(config) { run_cli(%w[sync b]) }
@@ -2082,7 +2082,7 @@ class CLITest < Minitest::Test
       File.write(sources, "a:\n  adapter: QuickstartFetchAdapter\n  wired: true\n  sync_policy: auto\n" \
                           "b:\n  adapter: QuickstartFetchAdapter\n  wired: true\n  sync_policy: auto\n")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-                                sources_path: sources, config_path: "(test)")
+                                sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
       Nabu::Profile.new(%w[a]).save(config.profile_path) # only a enabled
       out, _err, status = with_config(config) { run_cli(%w[sync --all]) }
       assert_nil status
@@ -2098,7 +2098,7 @@ class CLITest < Minitest::Test
       File.write(sources, "pub:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n" \
                           "#{blocked_grant_yaml('secret')}")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-                                sources_path: sources, config_path: "(test)")
+                                sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
       out, _err, status = with_config(config) { run_cli(%w[status --all]) }
       assert_nil status
       assert_match(/^secret\s+blocked/, out, "the blocked source is marked in the status column")
@@ -2115,7 +2115,7 @@ class CLITest < Minitest::Test
       sources = File.join(root, "sources.yml")
       File.write(sources, blocked_grant_yaml("secret"))
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-                                sources_path: sources, config_path: "(test)")
+                                sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
       with_config(config) do
         with_stdin("granted\n", tty: true) { run_cli(%w[enable secret]) }
       end
@@ -2585,7 +2585,7 @@ class CLITest < Minitest::Test
       YAML
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       with_config(config) do
         out, _err, status = run_cli(%w[sync local-language])
@@ -3081,7 +3081,7 @@ class CLITest < Minitest::Test
       FileUtils.mkdir_p(File.join(root, "canonical"))
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: path, config_path: "(test)"
+        sources_path: path, config_path: File.join(File.dirname(path), "config", "nabu.yml")
       )
       yield config, root
     end
@@ -3317,7 +3317,7 @@ class CLITest < Minitest::Test
       FileUtils.mkdir_p(File.join(canonical, "corpus"))
       File.write(File.join(canonical, "corpus", "one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
       config = Nabu::Config.new(canonical_dir: canonical, db_dir: File.join(root, "db"),
-                                sources_path: path, config_path: "(test)")
+                                sources_path: path, config_path: File.join(File.dirname(path), "config", "nabu.yml"))
       capture_io { Nabu::Rebuild.new(config: config, registry: Nabu::SourceRegistry.load(path)).run }
       yield config, root
     end
@@ -3721,7 +3721,7 @@ class CLITest < Minitest::Test
       File.write(sources, "corpus:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
 
       out, _err, status = with_config(config) { run_cli(%w[health --backfill-pins]) }
@@ -6700,7 +6700,7 @@ class CLITest < Minitest::Test
   def test_lect_commands_require_the_module
     Dir.mktmpdir do |root|
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-                                sources_path: File.join(root, "sources.yml"), config_path: "(test)")
+                                sources_path: File.join(root, "sources.yml"), config_path: File.join(File.dirname(File.join(root, "sources.yml")), "config", "nabu.yml"))
       _out, err, status = with_config(config) do
         run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc"])
       end
@@ -6742,7 +6742,7 @@ class CLITest < Minitest::Test
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       if dump
@@ -6770,7 +6770,7 @@ class CLITest < Minitest::Test
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       if synced
@@ -6841,7 +6841,7 @@ class CLITest < Minitest::Test
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -6868,7 +6868,7 @@ class CLITest < Minitest::Test
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -6902,7 +6902,7 @@ class CLITest < Minitest::Test
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -6950,7 +6950,7 @@ class CLITest < Minitest::Test
       YAML
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -6990,7 +6990,7 @@ class CLITest < Minitest::Test
       YAML
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -7067,7 +7067,7 @@ class CLITest < Minitest::Test
       YAML
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -7108,7 +7108,7 @@ class CLITest < Minitest::Test
       YAML
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -7166,7 +7166,7 @@ class CLITest < Minitest::Test
       YAML
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -7290,7 +7290,7 @@ class CLITest < Minitest::Test
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -7352,7 +7352,7 @@ class CLITest < Minitest::Test
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -7389,7 +7389,7 @@ class CLITest < Minitest::Test
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -7440,7 +7440,7 @@ class CLITest < Minitest::Test
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -7487,7 +7487,7 @@ class CLITest < Minitest::Test
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -7603,7 +7603,7 @@ class CLITest < Minitest::Test
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, alignments_path: alignments, config_path: "(test)"
+        sources_path: sources, alignments_path: alignments, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -7651,7 +7651,7 @@ class CLITest < Minitest::Test
     File.write(sources, "# none\n")
     Nabu::Config.new(
       canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-      sources_path: sources, alignments_path: alignments, config_path: "(test)"
+      sources_path: sources, alignments_path: alignments, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
     )
   end
 
@@ -7790,7 +7790,7 @@ class CLITest < Minitest::Test
       File.write(sources, "corpus:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: auto\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       with_config(config) { capture_io { Nabu::CLI.start(%w[sync corpus --parse-only]) } }
       yield config
@@ -7812,7 +7812,7 @@ class CLITest < Minitest::Test
                           "wired: true\n  sync_policy: auto\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       with_config(config) do
         capture_io { Nabu::CLI.start(%w[sync ud --parse-only]) }
@@ -7880,7 +7880,7 @@ class CLITest < Minitest::Test
     Dir.mktmpdir("nabu-cli-parallel") do |root|
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+        sources_path: File.join(root, "sources.yml"), config_path: File.join(File.dirname(File.join(root, "sources.yml")), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       db = Nabu::Store.connect(config.catalog_path)
@@ -7915,7 +7915,7 @@ class CLITest < Minitest::Test
     Dir.mktmpdir("nabu-cli-buddhist") do |root|
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+        sources_path: File.join(root, "sources.yml"), config_path: File.join(File.dirname(File.join(root, "sources.yml")), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       db = Nabu::Store.connect(config.catalog_path)
@@ -7989,7 +7989,7 @@ class CLITest < Minitest::Test
     Dir.mktmpdir("nabu-cli-parallel") do |root|
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+        sources_path: File.join(root, "sources.yml"), config_path: File.join(File.dirname(File.join(root, "sources.yml")), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       db = Nabu::Store.connect(config.catalog_path)
@@ -8017,7 +8017,7 @@ class CLITest < Minitest::Test
     Dir.mktmpdir("nabu-cli-tls") do |root|
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+        sources_path: File.join(root, "sources.yml"), config_path: File.join(File.dirname(File.join(root, "sources.yml")), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       db = Nabu::Store.connect(config.catalog_path)
@@ -8053,7 +8053,7 @@ class CLITest < Minitest::Test
     Dir.mktmpdir("nabu-cli-recon") do |root|
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+        sources_path: File.join(root, "sources.yml"), config_path: File.join(File.dirname(File.join(root, "sources.yml")), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       db = Nabu::Store.connect(config.catalog_path)
@@ -8239,7 +8239,7 @@ class CLITest < Minitest::Test
     Dir.mktmpdir("nabu-cli-starling") do |root|
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+        sources_path: File.join(root, "sources.yml"), config_path: File.join(File.dirname(File.join(root, "sources.yml")), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       db = Nabu::Store.connect(config.catalog_path)
@@ -8278,7 +8278,7 @@ class CLITest < Minitest::Test
     Dir.mktmpdir("nabu-cli-iecor") do |root|
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: File.join(root, "sources.yml"), config_path: "(test)"
+        sources_path: File.join(root, "sources.yml"), config_path: File.join(File.dirname(File.join(root, "sources.yml")), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       db = Nabu::Store.connect(config.catalog_path)
@@ -8311,7 +8311,7 @@ class CLITest < Minitest::Test
       File.write(sources, "corpus:\n  adapter: TestAdapter\n  wired: #{wired}\n  sync_policy: auto\n")
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
     end
   end
@@ -8331,7 +8331,7 @@ class CLITest < Minitest::Test
       File.write(sources, grant_source_yaml("starling", policy: policy))
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
     end
   end
@@ -8351,7 +8351,7 @@ class CLITest < Minitest::Test
                           "plain:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n  axes: [etym]\n")
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
     end
   end
@@ -8439,7 +8439,7 @@ class CLITest < Minitest::Test
       File.write(path, sources)
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: path, config_path: "(test)"
+        sources_path: path, config_path: File.join(File.dirname(path), "config", "nabu.yml")
       )
     end
   end
@@ -8576,7 +8576,7 @@ class CLITest < Minitest::Test
       File.write(path, sources)
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: path, config_path: "(test)"
+        sources_path: path, config_path: File.join(File.dirname(path), "config", "nabu.yml")
       )
     end
   end
@@ -8638,7 +8638,7 @@ class CLITest < Minitest::Test
       File.write(sources, "# none\n")
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, alignments_path: alignments, config_path: "(test)"
+        sources_path: sources, alignments_path: alignments, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -8691,7 +8691,7 @@ class CLITest < Minitest::Test
       File.write(sources, "# no sources registered\n")
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
     end
   end
@@ -8745,7 +8745,7 @@ class CLITest < Minitest::Test
       FileUtils.cp(File.expand_path("../config/display.yml", __dir__), File.join(root, "display.yml"))
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, alignments_path: alignments, config_path: "(test)"
+        sources_path: sources, alignments_path: alignments, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -8798,7 +8798,7 @@ class CLITest < Minitest::Test
       FileUtils.cp(File.expand_path("../config/display.yml", __dir__), File.join(root, "display.yml"))
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -8824,7 +8824,7 @@ class CLITest < Minitest::Test
       FileUtils.cp_r(File.expand_path("../config/gaiji", __dir__), File.join(root, "gaiji"))
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
       FileUtils.mkdir_p(config.db_dir)
       catalog = Nabu::Store.connect(config.catalog_path)
@@ -8891,7 +8891,7 @@ class CLITest < Minitest::Test
       File.write(sources, "corpus:\n  adapter: TestAdapter\n  wired: true\n")
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-        sources_path: sources, config_path: "(test)"
+        sources_path: sources, config_path: File.join(File.dirname(sources), "config", "nabu.yml")
       )
     end
   end

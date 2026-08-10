@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "yaml"
+require "fileutils"
+
 module Nabu
   # The fetch-grant gate (P42-r1, owner-approved design 2026-07-23). Some
   # sources carry a right to fetch that a PUBLIC clone of nabu does NOT convey:
@@ -25,20 +28,31 @@ module Nabu
     # unambiguous act). Compared case-insensitively after stripping.
     TYPED_WORD = "granted"
 
-    # +ledger+ is the history ledger (Store::Ledger db handle) where
-    # acknowledgments are recorded — nil is tolerated as "no ledger yet"
-    # (a fresh machine reads as un-acknowledged).
-    def initialize(ledger:)
+    # +ledger+ is the history ledger (Store::Ledger db handle) — nil is
+    # tolerated as "no ledger yet". +grants_path+ (P70, the derivability
+    # contract) is config/grants.yml — the SOURCE OF TRUTH: record! writes
+    # it first (the ledger row is a historical mirror), acknowledged?
+    # reads it first (ledger fallback covers pre-P70 boxes), and a restore
+    # from canonical+config alone keeps every grant.
+    def initialize(ledger:, grants_path: nil)
       @ledger = ledger
+      @grants_path = grants_path
     end
 
-    # Has this source's grant already been acknowledged? Guards on the table's
-    # existence so a pre-P42 ledger (no grant_acknowledgments table) reads as
-    # un-acknowledged rather than raising.
+    # Has this source's grant already been acknowledged? Config file first
+    # (the P70 truth), then the ledger (pre-P70 fallback; guards on the
+    # table's existence so a pre-P42 ledger reads as un-acknowledged).
     def acknowledged?(slug)
+      return true if config_grants.any? { |g| g["source"] == slug }
       return false unless @ledger.respond_to?(:table_exists?) && @ledger.table_exists?(:grant_acknowledgments)
 
       @ledger[:grant_acknowledgments].where(source_slug: slug).any?
+    end
+
+    def config_grants
+      return [] unless @grants_path && File.file?(@grants_path)
+
+      (YAML.safe_load_file(@grants_path) || {}).fetch("grants", nil) || []
     end
 
     # A grant-required source with no recorded acknowledgment — the condition
@@ -54,6 +68,17 @@ module Nabu
     def record!(slug:, terms:, how:)
       return if acknowledged?(slug)
 
+      # P70: the config file is written FIRST — the durable record; the
+      # ledger row is the historical mirror.
+      if @grants_path
+        grants = config_grants + [{ "source" => slug, "how" => how,
+                                    "at" => Time.now.strftime("%Y-%m-%d"), "terms" => terms }]
+        FileUtils.mkdir_p(File.dirname(@grants_path))
+        File.write(@grants_path,
+                   "# config/grants.yml — the owner's recorded grant agreements (P70:\n" \
+                   "# the source of truth; the ledger row is a historical mirror).\n" +
+                   YAML.dump("grants" => grants))
+      end
       @ledger[:grant_acknowledgments].insert(
         source_slug: slug, terms: terms, how: how, created_at: Time.now
       )
