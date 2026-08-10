@@ -246,6 +246,27 @@ module Query
       assert_equal "nc", result.documents.fetch("urn:nabu:test:marianus").fetch(:license_class)
     end
 
+    # -- the anchor-distinctness rule (P69-4, the P58-6 deferral) ---------------
+
+    def test_distinctness_is_judged_by_lect_anchor_not_raw_code
+      query = Nabu::Query::Cognates.new(
+        catalog: @catalog, fulltext: @fulltext, registry: registry,
+        lects: Nabu::Lects.load(Nabu::TestSupport.fixtures("nabu-lects"))
+      )
+      assert_equal 1, query.distinct_anchor_count(%w[grc gkm]),
+                   "gkm IS Byzantine Greek (codemap gkm → grc:byz) — transmission, not comparison"
+      assert_equal 2, query.distinct_anchor_count(%w[grc chu])
+      assert_equal 1, query.distinct_anchor_count(%w[lzh och]),
+                   "Old Chinese and Literary Chinese are stages/registers of one zho lineage"
+    end
+
+    def test_without_the_registry_distinctness_stays_raw_codes
+      query = Nabu::Query::Cognates.new(catalog: @catalog, fulltext: @fulltext,
+                                        registry: registry, lects: nil)
+      assert_equal 2, query.distinct_anchor_count(%w[grc gkm]),
+                   "module off → the pre-P69 raw-code behavior, byte-identical"
+    end
+
     # -- common-word suppression ------------------------------------------------
 
     def test_common_lemmas_are_suppressed_by_default_and_shown_with_all

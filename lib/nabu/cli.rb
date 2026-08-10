@@ -5138,6 +5138,13 @@ module Nabu
         spot = result.findspot
         return if spot.nil?
 
+        if spot.id.nil?
+          # P69-1: the coordinates findspot — the source's own WGS84 pair,
+          # no gazetteer (rundata's SRDB columns).
+          pair = format("%<lat>.5f, %<lon>.5f", lat: spot.lat, lon: spot.lon)
+          say "  findspot: #{[spot.title, pair].compact.join(' — ')}"
+          return
+        end
         types = spot.place_types.empty? ? "" : " (#{spot.place_types.join(' · ')})"
         say "  findspot: #{spot.title} — Pleiades #{spot.id}#{types}"
       end

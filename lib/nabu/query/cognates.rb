@@ -385,13 +385,34 @@ module Nabu
         @tier_column = @fulltext[Store::Indexer::LEMMA_TABLE].columns.include?(:tier)
       end
 
-      # Apply suppression + the ≥2-distinct-languages rule, resolve roots,
-      # sort by citation then headword. Returns [groups, suppressed count].
+      # The ≥2-distinct-languages rule goes lect-aware (P69-4, the P58-6
+      # deferral): distinctness is judged by LECT ANCHOR, not raw code —
+      # gkm beside grc is Byzantine Greek beside Greek, transmission not
+      # comparison (the same honesty the raw rule applies to two codices
+      # of one code). Registry absent → raw-code distinctness, the
+      # module-off lane rule. Public: the semantic is pinned directly.
+      public
+
+      def distinct_anchor_count(codes)
+        seam = lects_seam
+        return codes.uniq.size unless seam
+
+        codes.map do |code|
+          resolved = seam.resolve(code)
+          (Nabu::Lects.parse_id(resolved) || {})[:anchor] || code.to_s
+        end.uniq.size
+      end
+
+      private
+
+      # Apply suppression + the ≥2-distinct-languages rule (anchor-judged,
+      # see #distinct_anchor_count), resolve roots, sort by citation then
+      # headword. Returns [groups, suppressed count].
       def finish_groups(raw, common, documents)
         suppressed = 0
         kept = raw.filter_map do |(ref, root_urn), by_language|
           survivors = prune_common(by_language, common)
-          if survivors.size < 2
+          if survivors.size < 2 || distinct_anchor_count(survivors.keys) < 2
             suppressed += 1 if by_language.size >= 2
             next
           end
