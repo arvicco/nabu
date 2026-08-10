@@ -588,9 +588,11 @@ module Nabu
       }.freeze
 
       PLACE_DESCRIPTION =
-        "The place desk (P44-2): one ancient place — resolved through the LOCAL Pleiades " \
-        "gazetteer dump — plus the library's holdings AT that place, per source. `query` is a " \
-        "Pleiades numeric id, a pleiades.stoa.org/places URL, or an EXACT place title " \
+        "The place desk (P44-2; v2 P66-2): one ancient place — resolved through the LOCAL " \
+        "Pleiades gazetteer dump or the derived multi-gazetteer place index — plus the " \
+        "library's holdings AT that place, per source. `query` is a Pleiades numeric id, a " \
+        "pleiades.stoa.org/places URL, a NAMESPACED ref (tm:2810, cigs:GIR — the tm/cigs " \
+        "gazetteers), or an EXACT place title " \
         "(case-insensitive; \"Segesta\" works, \"Seges\" does not — no fuzzy matching anywhere, " \
         "by design; homonym titles return one card each). Holdings count live documents whose " \
         "parsers captured that upstream-asserted Pleiades id (the epigraphic sources: isicily, " \
@@ -980,7 +982,10 @@ module Nabu
           raise InvalidArguments, "nabu_place needs a query (a Pleiades id or an exact place title)"
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         resolver = place_resolver(catalog)
-        return note(NO_GAZETTEER_NOTE) if resolver.nil? && Nabu::Pleiades.ref_id(query).nil?
+        # P66-2: namespaced refs (tm:2810, cigs:GIR) resolve through the
+        # derived place index, not the pleiades dump — never gated on it.
+        namespaced = query.match?(Nabu::PlaceRefs::MINT_PATTERN)
+        return note(NO_GAZETTEER_NOTE) if resolver.nil? && !namespaced && Nabu::Pleiades.ref_id(query).nil?
 
         result = Query::Place.new(catalog: catalog, pleiades: resolver).run(query)
         json(place_payload(query, result))
@@ -1783,9 +1788,11 @@ module Nabu
           unlinked_term: result.unlinked_term,
           unlinked: source_count_rows(result.unlinked),
           note: "holdings count live documents whose parsers captured this upstream-asserted " \
-                "Pleiades id (no fuzzy matching anywhere); unlinked counts id-less documents " \
-                "whose captured findspot text mentions the name — never merged into holdings; " \
-                "counts are aggregate only, nabu_search/nabu_show read the texts"
+                "Pleiades id (no fuzzy matching anywhere); axis_holdings is the SEPARATE " \
+                "place_ref lane (adapter-asserted + nabu-places registry decisions, both " \
+                "spellings, doc-deduped); unlinked counts id-less documents whose captured " \
+                "findspot text mentions the name — never merged into holdings; counts are " \
+                "aggregate only, nabu_search/nabu_show read the texts"
         }
       end
 
@@ -1793,7 +1800,9 @@ module Nabu
       # the id; a fact-less card says why honestly (dump unsynced vs id not
       # in the dump) — the CLI's print_place_card degradation, shaped.
       def place_card_payload(card, dump_loaded)
-        base = { pleiades_id: card.pleiades_id, holdings: source_count_rows(card.holdings) }
+        base = { pleiades_id: card.pleiades_id, ref: card.ref,
+                 holdings: source_count_rows(card.holdings),
+                 axis_holdings: source_count_rows(card.axis_holdings) }
         place = card.place
         if place
           base.merge(title: place.title, place_types: place.place_types,

@@ -3011,13 +3011,19 @@ module Nabu
       count: no fuzzy geo-matching anywhere in the pipeline.
 
       Input is a Pleiades NUMERIC id (or a pleiades.stoa.org/places URL),
-      or an EXACT place title, matched case-insensitively against the dump
-      — "Segesta" works, "Seges" does not (exact only, by design). Homonym
-      titles print one card each.
+      a NAMESPACED ref (P66-2: tm:2810 · cigs:GIR · pleiades:462281 —
+      tm/cigs resolve through their own derived index slices), or an EXACT
+      place title, matched case-insensitively against the dump — "Segesta"
+      works, "Seges" does not (exact only, by design). Homonym titles
+      print one card each.
 
       The card: title, Pleiades id, place types, the attested time-period
       span, and the representative point (lat, lon — display only; no maps,
-      no coordinate math). Then the holdings line, per source, descending.
+      no coordinate math). Then the holdings line, per source, descending —
+      and (P66-2) the AXIS holdings line: documents whose place_ref axis
+      cites the place (adapter-asserted refs + the nabu-places registry's
+      applied decisions, both spellings, one count per document) — labeled
+      apart because the provenance differs.
 
       An honest labelled tail follows when id-less documents mention the
       name in their captured findspot TEXT (exact substring, case-
@@ -3036,6 +3042,8 @@ module Nabu
         nabu place Segesta          # exact title → card + holdings
         nabu place 462281           # Lilybaeum by Pleiades id
         nabu place https://pleiades.stoa.org/places/462281   # same
+        nabu place tm:2788          # Pompeii through the TM gazetteer slice
+        nabu place cigs:GIR         # Girsu through the CIGS slice
     HELP
     def place(*query_parts)
       return run_place_apply if query_parts == ["apply"]
@@ -5043,7 +5051,15 @@ module Nabu
 
       def print_place_card(card, dump_loaded:)
         place = card.place
-        if place
+        if card.pleiades_id.nil?
+          # P66-2: a namespaced ref card (tm:2810, cigs:GIR) — the title
+          # resolves through that gazetteer's own index slice where derived.
+          if place
+            say "#{place.title}, #{card.ref}#{place_card_tail(place)}"
+          else
+            say "#{card.ref} — not in the derived place index"
+          end
+        elsif place
           say "#{place.title}, Pleiades #{place.id}#{place_card_tail(place)}"
         elsif dump_loaded
           say "Pleiades #{card.pleiades_id} — not in the local gazetteer dump"
@@ -5051,7 +5067,13 @@ module Nabu
           say "Pleiades #{card.pleiades_id} — gazetteer dump not synced " \
               "(`nabu sync pleiades` adds the card)"
         end
-        say "  holdings: #{card.holdings.empty? ? 'none' : format_source_counts(card.holdings)}"
+        unless card.pleiades_id.nil? && card.holdings.empty?
+          say "  holdings: #{card.holdings.empty? ? 'none' : format_source_counts(card.holdings)}"
+        end
+        unless card.axis_holdings.empty?
+          say "  axis holdings (place_ref — adapter-asserted + registry decisions): " \
+              "#{format_source_counts(card.axis_holdings)}"
+        end
         card.dossiers.each do |dossier|
           say "  ── dossier: #{dossier.title} ──"
           dossier.body.each_line { |line| say "  #{line.chomp}" }
