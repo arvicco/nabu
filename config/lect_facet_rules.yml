@@ -115,6 +115,21 @@ rules:
       "Sahidic Coptic": "cop/sah"
       "Bohairic Coptic": "cop/boh"
 
+  # ── №3 (ruled 2026-08-09) + P66-1: the Avestan stage split. The adapter
+  # derives avestan-stage per page from its verse anchors (the Gathic
+  # chapter set Y 28-41, 43-51, 53 = the Gathas + Yasna Haptaŋhāiti — the
+  # standard scholarly division; every other book is Young Avestan; a page
+  # mixing both emits no facet and stays a bare ave anchor). Tier certain:
+  # the chapter set IS the corpus division.
+  - id: ave-stage
+    tier: certain
+    sources: [titus-avestan]
+    code: ave
+    facet: avestan-stage
+    map:
+      "old-avestan": "ave:old"
+      "young-avestan": "ave:yng"
+
   # ── D58-d (facet half): the DCS Vedic school tags — a rv/av/sv/yv-tagged
   # text IS Vedic Sanskrit. Untagged DCS texts stay bare san (the epi/cla
   # split needs per-text knowledge this facet does not carry).

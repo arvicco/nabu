@@ -36,6 +36,14 @@ module Nabu
     # (unchanged — the idempotency contract).
     Report = Data.define(:written, :stubs, :unchanged, :stub_slugs)
 
+    # The seeded description a prose-less source gets (P66-4/Q3): an
+    # explicit marker + writing instructions — site:check flags it until
+    # the owner replaces it. Never invented content.
+    PLACEHOLDER_DESCRIPTION =
+      "#{SourceDossier::PLACEHOLDER}describe what these texts ARE (the openmgh model: what " \
+      "they are, who wrote them, series/languages, the license) — never sync history or " \
+      "loop vocabulary.".freeze
+
     SENTENCE_CAP = 3
 
     def initialize(registry:, dir:, library_md: nil, sources_yml: nil, now: Time.now)
@@ -67,20 +75,23 @@ module Nabu
 
     def dossier_for(slug, description, origin)
       provenance = { "exported" => @now.strftime("%Y-%m-%d"),
-                     "seeded_from" => origin || "none — honest stub; no existing prose found, write the description" }
-      SourceDossier.new(slug: slug, description: description, provenance: provenance)
+                     "seeded_from" => origin || "none — placeholder seeded; write the description" }
+      SourceDossier.new(slug: slug, description: description || PLACEHOLDER_DESCRIPTION,
+                        provenance: provenance)
     end
 
     # [description, origin] from the census precedence, or [nil, nil].
+    # P66-4 (Q3, the openmgh complaint): the sources.yml-comment lane is
+    # RETIRED — registry comments are loop-speak (sync notes, wave logs),
+    # not content, and seeding them produced exactly the dossiers the
+    # owner flagged. Only curated docs/library.md prose seeds; everything
+    # else gets the placeholder.
     def best_prose(slug)
       bullet = library_bullets[slug]
       return [bullet, "docs/library.md (source bullet)"] if bullet
 
       section = library_sections[slug]
       return [section, "docs/library.md (shelf section)"] if section
-
-      comment = yml_comments[slug]
-      return [comment, "config/sources.yml (shelf comments)"] if comment
 
       [nil, nil]
     end

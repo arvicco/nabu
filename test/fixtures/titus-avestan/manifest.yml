@@ -28,4 +28,11 @@ files:
     whole: false
     trim: >-
       header-less continuation start (no "Book:" header) — Chapter 1 Paragraph 1
+  - path: avest029.htm
+    url: https://titus.uni-frankfurt.de/texte/etcs/iran/airan/avesta/avest029.htm
+    whole: false
+    trim: >-
+      the WHOLE live page, copied 2026-08-10 from the owner's held
+      canonical/titus-avestan (grant №41-3) — Yasna 28, the first Gatha:
+      the P66-1 old-avestan facet exemplar (Gathic chapter set)
       verses a-k + footer; ~81 KB -> ~6 KB, structurally intact
