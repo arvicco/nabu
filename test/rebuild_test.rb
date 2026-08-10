@@ -716,7 +716,8 @@ class RebuildTest < Minitest::Test
   def config
     Nabu::Config.new(
       canonical_dir: @canonical, db_dir: @db_dir,
-      sources_path: @sources_path, config_path: "(test)"
+      sources_path: @sources_path,
+      config_path: File.join(@root, "config", "nabu.yml")
     )
   end
 
