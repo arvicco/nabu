@@ -74,6 +74,16 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  def test_an_unindexed_box_says_the_corpus_panel_needs_the_index
+    with_char_catalog do |config|
+      FileUtils.rm_f(config.fulltext_path)
+      out, = with_config(config) { run_cli(%w[char 棄]) }
+      assert_match(/corpus attestation: not indexed yet/, out,
+                   "no char-postings index → an honest hint, NEVER a 180-second scan")
+      refute_match(/corpus attestation: lzh/, out)
+    end
+  end
+
   def test_bare_char_errors_helpfully
     with_char_catalog do |config|
       _out, err, status = with_config(config) { run_cli(%w[char]) }
@@ -304,6 +314,12 @@ class CharCommandTest < Minitest::Test
         document_id: jpn_doc.id, urn: "urn:nabu:aozora:000001:1", sequence: 0,
         language: "jpn", text: "國語と国語。", text_normalized: "國語と國語。", content_sha256: "y", revision: 1
       )
+      # P65: the corpus panel reads the precompiled char-postings index (the
+      # desk never scans passages) — build the derived index like the live
+      # box does.
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: db, fulltext: fulltext)
+      fulltext.disconnect
       db.disconnect
       yield config
     end

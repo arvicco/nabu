@@ -2,6 +2,7 @@
 
 require_relative "../normalize"
 require_relative "../romaji"
+require_relative "../store/indexer"
 require_relative "../jpn"
 require_relative "../kangxi_radicals"
 require_relative "../adapters/ids_txt_parser"
@@ -68,6 +69,7 @@ module Nabu
 
       def initialize(catalog:, fulltext: nil)
         @catalog = catalog
+        @fulltext = fulltext
         @define = Define.new(catalog: catalog, fulltext: fulltext)
       end
 
@@ -344,18 +346,22 @@ module Nabu
         end
       end
 
-      # Corpus attestation: passages carrying the glyph, per passage language.
-      # A containment scan (Han text is not word-tokenized) restricted to live
-      # passages — the honest count at research scale (a char-posting index is
-      # future work). Absent when the catalog holds no passages table.
+      # Corpus attestation: passages carrying the glyph, per passage
+      # language — read from the PRECOMPILED char-postings index in the
+      # fulltext file (Store::Indexer, P65). The pre-P65 desk-time LIKE scan
+      # took 180 s at the 68M-row census (2026-08-10) — the owner's ruling
+      # is that the card touches only precompiled data, so an absent index
+      # answers nil (the renderer prints the honest not-indexed hint) and
+      # NEVER falls back to scanning.
       def corpus_attestation(glyph)
-        return {} unless @catalog.table_exists?(:passages)
+        table = Nabu::Store::Indexer::CHAR_POSTINGS_TABLE
+        return nil unless @fulltext&.table_exists?(table)
 
-        @catalog[:passages]
-          .where(withdrawn: false)
-          .where(Sequel.like(:text, "%#{glyph.gsub(/[%_\\]/) { |c| "\\#{c}" }}%", escape: "\\"))
-          .group_and_count(:language)
-          .to_h { |row| [row.fetch(:language), row.fetch(:count)] }
+        @fulltext[table]
+          .where(char: glyph)
+          .group(:language)
+          .select_map([:language, Sequel.function(:sum, :docs).as(:docs)])
+          .to_h
       end
 
       # -- body helpers -----------------------------------------------------------
