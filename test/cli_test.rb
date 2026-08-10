@@ -6429,7 +6429,7 @@ class CLITest < Minitest::Test
         run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc", "--note", "papyrus"])
       end
       assert_nil status
-      assert_match(/inserted\s+urn:nabu:x:1\s+grc → grc:koi\s+\(owner\)/, out)
+      assert_match(%r{inserted\s+urn:nabu:x:1\s+grc → grc:koi\s+\(owner · config/lect_rulings\.yml\)}, out)
       rows = read_lect_journal(config)
       assert_equal 1, rows.size
       assert_equal %w[grc grc:koi owner], rows.first.values_at(:code, :lect_id, :basis)

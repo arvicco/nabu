@@ -146,8 +146,8 @@ class RebuildTest < Minitest::Test
     reporter = Nabu::ProgressReporter.new(on_stage: ->(label) { stages << label })
     rebuilder.run(progress: reporter)
 
-    assert_equal ["corpus", "timeline", "place apply", "facets", "lect facets", "artifact scripts",
-                  "source stats", "fulltext index", "analyze"],
+    assert_equal ["corpus", "timeline", "place apply", "facets", "lect journal", "lect facets",
+                  "artifact scripts", "source stats", "fulltext index", "analyze"],
                  stages
   end
 
@@ -615,31 +615,40 @@ class RebuildTest < Minitest::Test
     journal.disconnect
   end
 
-  # -- the lect journal survives rebuild (P58-1) -----------------------------
+  # -- the lect journal is DERIVED (P70, inverting the P58-1 contract) -------
+  #
+  # The P58-1 test pinned "rebuild never touches the journal" — under the
+  # derivability contract the guarantee INVERTS: rebuild RE-DERIVES the
+  # whole journal from config/lect_rulings.yml (+ rules + infer-dates), so
+  # an owner ruling survives rebuild THROUGH its config source of truth,
+  # and a journal row with no config backing is honestly wiped (it was
+  # non-derived data hiding in db/).
 
-  def test_rebuild_never_touches_the_lect_journal
+  def test_rebuild_rederives_the_journal_from_config_rulings
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
         wired: true
     YAML
     write_canonical("corpus", "one.txt" => ILIAD)
+    Nabu::LectRulings.append!(config.lect_rulings_path, urn: "urn:nabu:test_adapter:one:1",
+                                                        code: "grc", lect_id: "grc:koi",
+                                                        note: "ruling")
+    # A stray journal-only row (the pre-P70 shape): no config backing.
+    journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+    Nabu::Store::LectJournal.assign!(journal, urn: "urn:nabu:test_adapter:one:1", code: "lat",
+                                              lect_id: "lat:med", basis: "owner", note: "stray")
+    journal.disconnect
+
     rebuilder.run
 
-    journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
-    Nabu::Store::LectJournal.assign!(journal, urn: "urn:nabu:test_adapter:one:1", code: "grc",
-                                              lect_id: "grc:koi", basis: "owner", note: "ruling")
-    journal.disconnect
-    bytes_before = File.binread(config.lects_journal_path)
-
-    rebuilder.run # catalog dropped and re-minted; assignments are RULINGS — they must not move
-
-    assert_equal bytes_before, File.binread(config.lects_journal_path),
-                 "rebuild leaves the lect journal byte-identical"
     journal = Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
     assert_equal({ "grc" => "grc:koi" },
                  Nabu::Store::LectJournal.overlay_for(journal, "urn:nabu:test_adapter:one:1"),
-                 "the urn-keyed ruling still reads against the re-minted catalog")
+                 "the config-backed ruling survives rebuild via re-derivation")
+    stray = journal[:lect_assignments].where(code: "lat").count
+    assert_equal 0, stray,
+                 "a journal row with no config source of truth is wiped — " + "db/ holds only derived data"
     journal.disconnect
   end
 
