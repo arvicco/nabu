@@ -357,8 +357,13 @@ module Nabu
         table = Nabu::Store::Indexer::CHAR_POSTINGS_TABLE
         return nil unless @fulltext&.table_exists?(table)
 
+        # Fold-both-sides (P6-4): the postings are over text_normalized,
+        # where the per-language Han folds ran (lzh 纹→紋, jpn 国→國) — so
+        # the card queries the SAME union of folded forms search does. A
+        # passage posts each distinct folded char once, so summing across
+        # the forms never double-counts.
         @fulltext[table]
-          .where(char: glyph)
+          .where(char: Nabu::Normalize.query_forms(glyph))
           .group(:language)
           .select_map([:language, Sequel.function(:sum, :docs).as(:docs)])
           .to_h
