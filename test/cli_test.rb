@@ -594,6 +594,34 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P67-2 (№11): the descent line — the registry's parent arc rendered on
+  # the card, code → root, each ancestor named. chu's parent is the STAGED
+  # sla:pro (the walk crosses stage → anchor-parent correctly).
+  def test_language_card_descent_line_walks_the_registry_parent_arc
+    with_recon_shelf_and_lects do |config|
+      with_config(config) do
+        out, _err, status = run_cli(%w[language chu])
+        assert_nil status
+        assert_match(
+          /descent \(nabu-lects\): chu ← sla:pro \(Proto-Slavic\) ← ine-bsl \(Balto-Slavic\) ← ine \(Indo-European\)/,
+          out
+        )
+      end
+    end
+  end
+
+  def test_language_card_renders_for_an_unheld_registry_anchor
+    with_recon_shelf_and_lects do |config|
+      with_config(config) do
+        out, _err, status = run_cli(%w[language jpa])
+        assert_nil status, "a registered anchor is never an unknown code"
+        assert_match(/^jpa — Jewish Palestinian Aramaic$/, out, "the registry names it")
+        assert_match(/descent \(nabu-lects\): jpa ← arc \(Aramaic\)/, out,
+                     "the №8 Aramaic-fan parent arc is exactly what this line displays")
+      end
+    end
+  end
+
   def test_language_card_long_shows_the_upstream_code_split
     with_recon_shelf do |config|
       with_config(config) do
