@@ -233,8 +233,10 @@ number (`nabu char 𒊬`, `nabu char SAR`, `nabu char szesz`,
 `nabu char MZL535`, bare `nabu char 852` matched across every held
 list) — gets the Oracc Sign List card: sign name, the MZL/LAK/ABZL/HZL/ŠL print-list
 concordances, every reading by language, the CDLI meaning glosses,
-variant forms, and how often each spelled value actually occurs across
-the held tablet corpora. An **Egyptian hieroglyph** (`nabu char 𓅃`, or
+Wiktionary's sense glosses (𒊬: "orchard", "to write (on), inscribe" —
+the kaikki Sumerian shelf), variant forms, and how often each spelled
+value actually occurs across the held tablet corpora. An **Egyptian
+hieroglyph** (`nabu char 𓅃`, or
 by Gardiner-style code `nabu char G5`) gets the Unicode 17 Unikemet
 card: catalog code, description, function, phonetic value, the
 JSesh/Hieroglyphica/IFAO concordances, and the sign's attestation across

@@ -159,6 +159,13 @@ module Nabu
       NO_GAZETTEER_NOTE = "place NAME lookup needs the Pleiades gazetteer dump on disk — the " \
                           "owner runs `nabu sync pleiades` to add it; a numeric Pleiades id " \
                           "(or a pleiades.stoa.org/places URL) still counts holdings without it"
+      HAN_CHAR_NOTE = "the Han character card has no machine contract yet — nabu_define serves " \
+                      "Han dictionary entries meanwhile; cuneiform and hieroglyph input answer " \
+                      "here with the frozen sign-card contracts"
+
+      NO_UNIKEMET_NOTE = "the Egyptian sign card needs the Unikemet spine on disk — the owner " \
+                         "runs `nabu sync unikemet` to add it"
+
       NO_SIGN_LIST_NOTE = "sign lookup needs the Oracc Sign List on disk — the owner runs " \
                           "`nabu sync osl` (the osl feature module) to add it"
       ALIGN_REBUILDING_NOTE = "alignment index rebuilding (or the fulltext index predates the " \
@@ -615,6 +622,31 @@ module Nabu
         additionalProperties: false
       }.freeze
 
+      CHAR_DESCRIPTION =
+        "The sign/character desk card (P65/P68): ONE glyph or sign identity in, the full held " \
+        "identity out — the same frozen contracts as `nabu char --json`. Dispatch by input: a " \
+        "CUNEIFORM glyph (𒊬, compounds included) or sign name/value/list number (SAR · szesz " \
+        "· idx — trailing x reads as ₓ · MZL535 · bare 852 across every held list) serves the " \
+        "Oracc Sign List card: name, @aka, MZL/LAK/ABZL/HZL/ŠL concordances, values by " \
+        "language, CDLI meaning glosses, Wiktionary senses, variant forms, corpus counts; an " \
+        "ambiguous value lists ALL candidate signs, never one silently. An EGYPTIAN HIEROGLYPH " \
+        "(𓅃) or Gardiner-style code (G5, N35) serves the Unikemet card: catalog code, " \
+        "description, function, phonetic value, JSesh/Hieroglyphica/IFAO concordances, aes " \
+        "attestation. A Han character has no machine contract yet — answered with a note " \
+        "(nabu_define serves Han dictionary entries meanwhile). Absent data is null/[], " \
+        "never a placeholder."
+
+      CHAR_SCHEMA = {
+        type: "object",
+        properties: {
+          query: { type: "string",
+                   description: "A glyph (𒊬 · 𓅃), a sign name or spelled value (SAR · " \
+                                "szesz · idx), a sign-list number (MZL535 · 852), or a " \
+                                "Gardiner-style code (G5)." }
+        },
+        required: ["query"]
+      }.freeze
+
       SIGNS_DESCRIPTION =
         "The cuneiform sign desk (P53-2): ATF transliteration resolved token by token through " \
         "the local Oracc Sign List into sign identities — value → sign name → Unicode " \
@@ -724,6 +756,8 @@ module Nabu
                              handler: :cognates },
         "nabu_links" => { description: LINKS_DESCRIPTION, input_schema: LINKS_SCHEMA,
                           handler: :links },
+        "nabu_char" => { description: CHAR_DESCRIPTION, input_schema: CHAR_SCHEMA,
+                         handler: :char_card },
         "nabu_place" => { description: PLACE_DESCRIPTION, input_schema: PLACE_SCHEMA,
                           handler: :place },
         "nabu_signs" => { description: SIGNS_DESCRIPTION, input_schema: SIGNS_SCHEMA,
@@ -736,7 +770,8 @@ module Nabu
       # returning one, or nil when the hub is unconfigured) — config-loaded by
       # the entrypoint, resolved per call like the connection slots.
       def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil,
-                     enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil)
+                     enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil,
+                     readings: nil, hieroglyphs: nil)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
@@ -766,6 +801,12 @@ module Nabu
         # paid once per server process, and a mid-session `nabu sync osl`
         # is picked up without a restart).
         @sign_list = sign_list
+        # The P68-3 nabu_char seams, same posture as @sign_list: nil
+        # (unconfigured — the affected section is simply absent), a loaded
+        # instance (tests), or :auto — lazy feature-detect per call through
+        # each seam's memoized load_default.
+        @readings = readings
+        @hieroglyphs = hieroglyphs
         # The Pleiades gazetteer slot (P44-3): nil (gazetteer-less —
         # nabu_place id queries still count holdings, nabu_show serves no
         # findspot key, byte-identical to the pre-P44 payloads), a loaded
@@ -1000,6 +1041,25 @@ module Nabu
       # syncs osl, not the caller); urn-XOR-text and a bad dialect are
       # caller-fixable (InvalidArguments, SEP-1303). Urn mode passes the
       # restricted-exclusion gate; raw text touches no catalog.
+      # The sign/character card (P68-3): the P65 CLI `--json` contracts
+      # served verbatim — SignCard for cuneiform lanes, HieroCard for
+      # hieroglyph lanes, dispatch by CharDispatch, the CLI's name-lane
+      # order (OSL first, then Gardiner code). A Han glyph notes the
+      # missing contract (matching `char --json`); an unmatched name
+      # answers the honest empty SignCard payload.
+      def char_card(args)
+        query = string_arg(args, "query") or
+          raise InvalidArguments, "nabu_char needs a query (a glyph, sign name/value, " \
+                                  "list number, or Gardiner-style code)"
+        input = Nabu::Normalize.nfc(query.strip)
+        case Nabu::CharDispatch.lane(input)
+        when :cuneiform then cuneiform_char_payload(input)
+        when :hieroglyphic then hieroglyphic_char_payload(input)
+        when :name then name_char_payload(input)
+        else note(HAN_CHAR_NOTE)
+        end
+      end
+
       def signs(args)
         urn = string_arg(args, "urn")
         text = string_arg(args, "text")
@@ -1738,6 +1798,50 @@ module Nabu
       def resolve_sign_list
         slot = resolve(@sign_list)
         slot == :auto ? Nabu::SignList.load_default : slot
+      end
+
+      # -- the nabu_char lanes (P68-3) --------------------------------------
+
+      def resolve_readings
+        slot = resolve(@readings)
+        slot == :auto ? Nabu::CdliSignReadings.load_default : slot
+      end
+
+      def resolve_hieroglyphs
+        slot = resolve(@hieroglyphs)
+        slot == :auto ? Nabu::Hieroglyphs.load_default : slot
+      end
+
+      def cuneiform_char_payload(input)
+        list = resolve_sign_list or return note(NO_SIGN_LIST_NOTE)
+        json(Query::SignCard.json_payload(sign_card_query(list).run(input)))
+      end
+
+      def hieroglyphic_char_payload(input)
+        signs = resolve_hieroglyphs or return note(NO_UNIKEMET_NOTE)
+        result = Query::HieroCard.new(hieroglyphs: signs, catalog: resolve(@catalog)).run(input)
+        json(Query::HieroCard.json_payload(result))
+      end
+
+      def name_char_payload(input)
+        if (list = resolve_sign_list)
+          result = sign_card_query(list).run(input)
+          return json(Query::SignCard.json_payload(result)) if result.card || result.candidates.any?
+        end
+        if (signs = resolve_hieroglyphs) && input.match?(Query::HieroCard::CODE)
+          hiero = Query::HieroCard.new(hieroglyphs: signs, catalog: resolve(@catalog)).run(input)
+          return json(Query::HieroCard.json_payload(hiero)) if hiero.card
+        end
+        return note(NO_SIGN_LIST_NOTE) if resolve_sign_list.nil? && resolve_hieroglyphs.nil?
+
+        json(Query::SignCard.json_payload(
+               Query::SignCard::Result.new(input: input, card: nil, candidates: [])
+             ))
+      end
+
+      def sign_card_query(list)
+        Query::SignCard.new(sign_list: list, readings: resolve_readings,
+                            fulltext: resolve(@fulltext), catalog: resolve(@catalog))
       end
 
       def signs_dialect_arg(args)

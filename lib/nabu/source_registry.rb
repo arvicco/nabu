@@ -346,9 +346,13 @@ module Nabu
     end
     private_class_method :build_entry
 
-    # Source groups (P63 rider): closed vocabulary — today only "core", the
-    # registry-sibling instruments swept by `nabu sync core`.
-    GROUPS = %w[core].freeze
+    # Source groups (P63 rider; P68-4): closed vocabulary — "core" (the
+    # registry-sibling instruments, swept by `nabu sync core` and by
+    # quickstart) and "signs" (every shelf the sign/char capability reads:
+    # the two identity-spine modules + the Han card's shelves + the
+    # Wiktionary sense lane — `nabu enable signs && nabu sync signs`
+    # restores the whole capability on a fresh box).
+    GROUPS = %w[core signs].freeze
 
     def self.group!(slug, config)
       value = config["group"]
@@ -569,7 +573,13 @@ module Nabu
     # set (P63 rider): pre-enabled registry instruments (modules by nature),
     # also run automatically by quickstart.
     def core_members
-      @entries.each_value.select(&:core?).map(&:slug)
+      group_members("core")
+    end
+
+    # Any group's members, registration order (P68-4): the sweep set behind
+    # `nabu sync <group>` and the expansion behind `nabu enable <group>`.
+    def group_members(name)
+      @entries.each_value.select { |entry| entry.group == name }.map(&:slug)
     end
 
     # Axis members MINUS the blocked (grant-gated private) ones (P44-r3a) — the

@@ -332,6 +332,28 @@ derived at every pleiades sync/rebuild); the in-memory dump load (~3 s /
 P44-2 v1 cost) survives only as the fallback while the index is not yet
 derived.
 
+### `nabu_char`
+
+The sign/character desk card (P65's `nabu char`, exposed P68-3): ONE glyph
+or sign identity in, the full held identity out — the payloads ARE the
+frozen `nabu char --json` contracts (one serializer each,
+`Query::SignCard.json_payload` / `Query::HieroCard.json_payload`). Dispatch
+by input, the CLI's lanes verbatim: a **cuneiform** glyph (𒊬, compound
+renderings included) or sign name / spelled value / list number (SAR ·
+szesz · idx — a trailing x reads as ₓ · MZL535 · bare 852 matched across
+every held list) serves the Oracc Sign List card — name, @aka, print-list
+concordances grouped by list, values by %lang with deprecation, CDLI
+meaning glosses, Wiktionary senses (the wiktionary-sux shelf, P68),
+variant forms, form-of parent, fulltext corpus counts; an ambiguous value
+lists **all** candidate signs (each naming the matching list token via the
+present-only `via` key), never one silently. An **Egyptian hieroglyph**
+(𓅃) or Gardiner-style code (G5, N35) serves the Unikemet card — catalog
+code, description, function, phonetic value, JSesh/Hieroglyphica/IFAO
+concordances, aes `hiero_inventar` attestation. A Han character answers a
+state note (no machine contract yet — `nabu_define` serves Han dictionary
+entries meanwhile); a missing module answers the sync-hint note (the
+lane-off rule). Absent data is null/[], never a placeholder.
+
 ### `nabu_signs`
 
 The cuneiform sign desk (P53-2's `nabu signs`, exposed the same phase): ATF

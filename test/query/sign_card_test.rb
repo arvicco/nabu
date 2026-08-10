@@ -13,6 +13,8 @@ module Query
   # yields an absent section, never "—". Ambiguous value input lists ALL
   # candidates, never one silently (the `nabu signs` contract).
   class SignCardTest < Minitest::Test
+    include StoreTestDB
+
     SIGN_LIST = Nabu::SignList.load(File.join(Nabu::TestSupport.fixtures("osl"), "osl.asl"))
     READINGS = Nabu::CdliSignReadings.load(
       File.join(Nabu::TestSupport.fixtures("osl"), "00etc", "cdli_sign_readings.tsv")
@@ -130,6 +132,42 @@ module Query
       result = card_for("no-such-sign")
       assert_nil result.card
       assert_empty result.candidates
+    end
+
+    # -- the Wiktionary sense join (P68-2: the Q8 enrichment lands) ----------
+    #
+    # A catalog holding the wiktionary-sux shelf lends the card a senses
+    # section: dictionary entries whose HEADWORD IS the sign's rendered
+    # glyph (the 1,315-cuneiform-headword lane). No catalog / no shelf →
+    # absent section, never "—".
+
+    def test_the_card_joins_wiktionary_senses_by_glyph
+      db = store_test_db
+      source = Nabu::Store::Source.create(
+        slug: "wiktionary-sux", name: "wsux", adapter_class: "Nabu::Adapters::WiktionarySux",
+        license_class: "attribution"
+      )
+      adapter = Nabu::Adapters::WiktionarySux.new
+      Nabu::Store::DictionaryLoader.new(db: db, source: source)
+                                   .load_from(adapter, workdir: Nabu::TestSupport.fixtures("wiktionary-sux"))
+
+      card = Nabu::Query::SignCard.new(sign_list: SIGN_LIST, readings: READINGS, catalog: db)
+                                  .run("𒋀").card
+      glosses = card.senses.map(&:gloss)
+      assert_includes glosses, "brother"
+      assert_includes card.senses.map(&:pos), "verb", "the multi-pos glyph carries every entry"
+
+      payload = Nabu::Query::SignCard.json_payload(
+        Nabu::Query::SignCard.new(sign_list: SIGN_LIST, readings: READINGS, catalog: db).run("𒋀")
+      )
+      sense = payload["card"]["senses"].find { |s| s["gloss"] == "brother" }
+      assert_equal "noun", sense["pos"]
+    ensure
+      db&.disconnect
+    end
+
+    def test_no_catalog_means_an_absent_senses_section
+      assert_empty card_for("ŠEŠ").card.senses
     end
 
     # -- the frozen JSON contract (Edubba consumes) --------------------------
