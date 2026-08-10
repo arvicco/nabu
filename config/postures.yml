@@ -303,10 +303,11 @@ sources:
     places: {posture: named}
     script: {posture: mixed, note: "Greek loans inside Coptic text"}
   titus-avestan:
-    lect: {posture: pending, note: "№3 ruled 2026-08-09 and ave:old/yng ARE
-        minted — but the corpus carries NO machine facet (titles hold the
-        sigla), so the ruled rule cannot attach; candidate: a siglum-facet
-        emission packet (work queue), then one rule"}
+    # lect row RETIRED P66-1 (the machine grain arrived): the adapter now
+    # derives the avestan-stage facet from the verse anchors (Gathic
+    # chapter set) and the ave-stage rule covers all 248 docs (old 24 —
+    # exactly the Gathic chapters — young 224, mixed 0). The LAST lect
+    # pending closes.
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
