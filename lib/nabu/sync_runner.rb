@@ -120,7 +120,7 @@ module Nabu
       @registry = registry
       @db = db
       @ledger = ledger
-      @grant_gate = GrantGate.new(ledger: ledger)
+      @grant_gate = GrantGate.new(ledger: ledger, grants_path: config&.grants_path)
     end
 
     # Sync exactly the named source, disabled or not (explicit request). An

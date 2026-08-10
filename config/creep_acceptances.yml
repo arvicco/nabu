@@ -1,0 +1,22 @@
+# config/creep_acceptances.yml — the owner's --accept-creep rulings
+# (P70: the source of truth; the ledger row is a historical mirror).
+---
+acceptances:
+- source: isicily
+  baseline: 16
+  note: 'D42-c census: residual 16 = 5 idno-drift + mixed ISic001698 (+siblings) +
+    ISic000469 doubled translation — genuine upstream defects, owner-ruled addressal
+    2026-07-23'
+  at: '2026-07-23'
+- source: papyri-ddbdp
+  baseline: 9321
+  note: 'D42-c census: 9,318 metadata-only DDbDP stubs, one reason class, correctly
+    refused — owner-ruled addressal 2026-07-23'
+  at: '2026-07-23'
+- source: kanripo
+  baseline: 39
+  note: 'D42-c census + P43-r2 recovery: +94 recovered (two-fascicle disambiguation
+    + front matter); residual 39 = ~20 unrecognized witness anchors + ~10 missing
+    juan files + ~7 witness-scheme duplicates kept loud without evidence — owner-ruled
+    addressal 2026-07-23'
+  at: '2026-07-24'

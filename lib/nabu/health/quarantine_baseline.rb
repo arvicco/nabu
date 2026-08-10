@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "yaml"
+require "fileutils"
 require_relative "trend_rules"
 
 module Nabu
@@ -68,12 +70,12 @@ module Nabu
       # receives the effective anchor. When the acceptance is actively
       # quieting a would-be anomaly, an info-grade note says so: quiet is
       # never silent.
-      def creep_finding(ledger, slug)
+      def creep_finding(ledger, slug, path: nil)
         row = read(ledger, slug)
         return nil if row.nil?
 
         plain = TrendRules.quarantine_creep(baseline: row[:baseline], anchor: row[:anchor])
-        acceptance = latest_acceptance(ledger, slug)
+        acceptance = latest_acceptance(ledger, slug, path: path)
         return plain if acceptance.nil? || acceptance[:accepted_baseline] > row[:baseline]
 
         effective = TrendRules.quarantine_creep(
@@ -90,19 +92,45 @@ module Nabu
       # or nil when there is no recorded baseline to accept (the caller names
       # that error) or the ledger predates migration 008 (honest decline,
       # the record! convention).
-      def accept!(ledger, slug, note: nil, now: Time.now)
+      def accept!(ledger, slug, note: nil, now: Time.now, path: nil)
         row = read(ledger, slug)
         return nil if row.nil? || !acceptances_table?(ledger)
 
+        # P70 (the derivability contract): the config file is the durable
+        # record — written FIRST; the ledger row is the historical mirror.
+        if path
+          acceptances = config_acceptances(path) + [{ "source" => slug,
+                                                      "baseline" => row[:baseline],
+                                                      "note" => note,
+                                                      "at" => now.strftime("%Y-%m-%d") }.compact]
+          FileUtils.mkdir_p(File.dirname(path))
+          File.write(path,
+                     "# config/creep_acceptances.yml — the owner's --accept-creep rulings\n" \
+                     "# (P70: the source of truth; the ledger row is a historical mirror).\n" +
+                     YAML.dump("acceptances" => acceptances))
+        end
         ledger[ACCEPTANCES_TABLE].insert(
           source_slug: slug, accepted_baseline: row[:baseline], note: note, recorded_at: now
         )
         row[:baseline]
       end
 
+      def config_acceptances(path)
+        return [] unless path && File.file?(path)
+
+        (YAML.safe_load_file(path) || {}).fetch("acceptances", nil) || []
+      end
+
       # The governing (latest) acceptance for +slug+, or nil — including on a
       # nil or pre-008 ledger ("no acceptances", the module convention).
-      def latest_acceptance(ledger, slug)
+      def latest_acceptance(ledger, slug, path: nil)
+        # P70: the config file governs when present (the restore truth);
+        # the ledger covers pre-P70 rows.
+        config_row = config_acceptances(path).select { |a| a["source"] == slug }.last
+        if config_row
+          return { accepted_baseline: config_row["baseline"], note: config_row["note"],
+                   recorded_at: config_row["at"] }
+        end
         return nil unless acceptances_table?(ledger)
 
         ledger[ACCEPTANCES_TABLE].where(source_slug: slug)
