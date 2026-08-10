@@ -5963,6 +5963,13 @@ module Nabu
                                      .run(scope, lang: options[:lang], license: options[:license],
                                                  progress: batch_progress,
                                                  **batch_thresholds)
+        # P70-3b: the batch scope is config-durable — rebuild replays it.
+        unless options[:db]
+          params = { "lang" => options[:lang], "license" => options[:license] }
+                   .merge(batch_thresholds.transform_keys(&:to_s)).compact
+          Nabu::LinkScopes.record!(config.link_scopes_path, producer: "parallels",
+                                                            scope: scope, params: params)
+        end
         print_batch_parallels(result)
       ensure
         catalog&.disconnect
@@ -6011,6 +6018,13 @@ module Nabu
                                     .run(scope, gram_size: options[:gram_size].to_i,
                                                 min_count: options[:min_count].to_i,
                                                 lang: options[:lang], **max_formulas_option)
+        unless options[:db]
+          Nabu::LinkScopes.record!(config.link_scopes_path, producer: "formulas", scope: scope,
+                                                            params: { "gram_size" => options[:gram_size].to_i,
+                                                                      "min_count" => options[:min_count].to_i,
+                                                                      "lang" => options[:lang] }
+                                           .merge(max_formulas_option.transform_keys(&:to_s)).compact)
+        end
         print_batch_formulas(result)
       rescue ArgumentError => e
         raise Thor::Error, "formulas: #{e.message}"
@@ -6051,6 +6065,11 @@ module Nabu
         result = Nabu::BatchCognates.new(catalog: catalog, fulltext: fulltext,
                                          registry: registry, journal: journal)
                                     .run(work_id, langs: parse_langs(options[:langs]), all: options[:all])
+        unless options[:db]
+          Nabu::LinkScopes.record!(config.link_scopes_path, producer: "cognates", scope: work_id,
+                                                            params: { "langs" => parse_langs(options[:langs]),
+                                                                      "all" => options[:all] }.compact)
+        end
         print_batch_cognates(result)
       ensure
         catalog&.disconnect

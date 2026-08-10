@@ -147,6 +147,12 @@ module Nabu
       File.join(config_dir, "creep_acceptances.yml")
     end
 
+    # Batch-mined link scopes (P70-3b): the durable record of the
+    # parameterized miners' scopes; rebuild's links stage replays them.
+    def link_scopes_path
+      File.join(config_dir, "link_scopes.yml")
+    end
+
     # Per-document owner lect rulings (P70, the derivability contract):
     # the SOURCE OF TRUTH for hand rulings — `lect assign` writes here
     # first; the journal row is the derived representation; rebuild

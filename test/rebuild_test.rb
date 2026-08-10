@@ -147,7 +147,7 @@ class RebuildTest < Minitest::Test
     rebuilder.run(progress: reporter)
 
     assert_equal ["corpus", "timeline", "place apply", "facets", "lect journal", "lect facets",
-                  "artifact scripts", "source stats", "fulltext index", "analyze"],
+                  "artifact scripts", "source stats", "fulltext index", "links", "analyze"],
                  stages
   end
 
@@ -578,7 +578,14 @@ class RebuildTest < Minitest::Test
 
   # -- the links journal survives rebuild (P16-1) ----------------------------
 
-  def test_rebuild_never_touches_the_links_journal_and_edges_still_resolve
+  # -- the links journal is DERIVED (P70-3b, inverting the P43 contract) ---
+  #
+  # Rebuild re-mines the links wholesale: slug-scoped reference producers
+  # replay from the registry, batch scopes replay from
+  # config/link_scopes.yml. A journal row with NO durable scope behind it
+  # (the pre-P70 shape below) is honestly wiped — it was non-derived data
+  # hiding in db/.
+  def test_rebuild_rederives_the_links_journal
     write_sources(<<~YAML)
       corpus:
         adapter: TestAdapter
@@ -597,21 +604,12 @@ class RebuildTest < Minitest::Test
                kind: "parallel", score: 1.5, run_id: run_id
     )
     journal.disconnect
-    bytes_before = File.binread(config.links_path)
 
-    rebuilder.run # the catalog is dropped and re-minted; the journal must not move
+    rebuilder.run # the links stage wipes and re-mines
 
-    assert_equal bytes_before, File.binread(config.links_path),
-                 "rebuild leaves the links journal byte-identical"
-    # And the urn-keyed edge still resolves against the REBUILT catalog (fresh
-    # row ids, same urns) — the reason links are urn-keyed, not id-keyed.
     journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
-    with_db do |db|
-      result = Nabu::Query::Links.new(catalog: db, journal: journal).run("urn:nabu:test_adapter:one:1")
-      edge = result.groups.fetch("parallel").first
-      assert_equal "urn:nabu:test_adapter:one:2", edge.urn
-      assert_predicate edge, :resolved?, "the counterpart resolves through the re-minted catalog"
-    end
+    assert_equal 0, journal[:links].count,
+                 "a journal-only edge with no durable scope is wiped — db/ holds only derived data"
     journal.disconnect
   end
 
