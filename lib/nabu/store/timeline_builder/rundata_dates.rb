@@ -72,14 +72,15 @@ module Nabu
           not_before = meta["year_from"]
           not_after = meta["year_to"]
           place = place_of(meta)
-          return nil if not_before.nil? && not_after.nil? && place.nil?
+          lat, lon = coordinates_of(meta)
+          return nil if not_before.nil? && not_after.nil? && place.nil? && lat.nil?
 
           dated = !(not_before.nil? && not_after.nil?)
           {
             not_before: not_before, not_after: not_after,
             precision: dated ? precision_of(not_before, not_after) : nil,
             date_raw: dated ? presence(meta["dating"]) : nil,
-            place_name: place
+            place_name: place, place_lat: lat, place_lon: lon
           }
         end
 
@@ -89,6 +90,20 @@ module Nabu
 
         def place_of(meta)
           presence(meta["found_location"]) || presence(meta["parish"])
+        end
+
+        # The FIND-location WGS84 pair (P69-1, survey P-g) — the SRDB
+        # latitude/longitude columns, both-or-nothing (a lone coordinate is
+        # not a point). present_latitude/present_longitude (where the stone
+        # stands today) deliberately do NOT ride: the axis is about origin.
+        def coordinates_of(meta)
+          lat = presence(meta["latitude"])
+          lon = presence(meta["longitude"])
+          return [nil, nil] if lat.nil? || lon.nil?
+
+          [Float(lat), Float(lon)]
+        rescue ArgumentError
+          [nil, nil]
         end
 
         def presence(value)
@@ -101,7 +116,8 @@ module Nabu
             document_id: document_id,
             not_before: timeline[:not_before], not_after: timeline[:not_after],
             precision: timeline[:precision], date_raw: timeline[:date_raw],
-            place_name: timeline[:place_name], axis_source: SLUG
+            place_name: timeline[:place_name], axis_source: SLUG,
+            place_lat: timeline[:place_lat], place_lon: timeline[:place_lon]
           )
         end
       end

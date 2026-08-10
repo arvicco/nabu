@@ -147,6 +147,30 @@ module Query
       assert_equal "Sparta", passage.findspot.title, "passage grain resolves through its document"
     end
 
+    # P69-1: the coordinates findspot — a document whose metadata carries a
+    # WGS84 pair (rundata's SRDB columns) gets a findspot line with NO
+    # gazetteer at all: verbatim find-location name + the pair. The
+    # pleiades path is untouched and wins when a captured id resolves.
+    def test_findspot_from_metadata_coordinates_needs_no_gazetteer
+      document = Nabu::Document.new(
+        urn: "urn:d:r1", language: "non", title: "U 344",
+        canonical_path: "/canonical/rundata/u-344",
+        metadata: { "found_location" => "Yttergärde",
+                    "coordinates" => { "latitude" => 59.604644, "longitude" => 18.109098 } }
+      )
+      document << Nabu::Passage.new(
+        urn: "urn:d:r1:1", language: "non", text: "runar", text_normalized: "runar", sequence: 0
+      )
+      @loader.load([document], full: false)
+
+      spot = Nabu::Query::Show.new(catalog: @catalog).run("urn:d:r1").findspot
+      refute_nil spot, "coordinates need no dump — the LiLa degrade rule cuts the other way here"
+      assert_nil spot.id
+      assert_equal "Yttergärde", spot.title
+      assert_in_delta 59.604644, spot.lat
+      assert_in_delta 18.109098, spot.lon
+    end
+
     def test_findspot_is_nil_without_a_resolver_the_degrade_silently_contract
       load_placed_document("p1", "570685")
       result = Nabu::Query::Show.new(catalog: @catalog).run("urn:d:p1")

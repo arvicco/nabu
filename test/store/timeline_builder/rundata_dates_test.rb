@@ -50,6 +50,10 @@ module Store
       assert_equal "Yttergärde", row.fetch(:place_name)
       assert_nil row.fetch(:place_ref), "verbatim find-spots carry no gazetteer ref"
       assert_equal "rundata", row.fetch(:axis_source)
+      # P69-1 (survey P-g): the find-location WGS84 pair rides the axis row
+      # — a COORDINATES lane, no gazetteer, straight from the SRDB columns.
+      assert_in_delta 59.604644, row.fetch(:place_lat)
+      assert_in_delta 18.109098, row.fetch(:place_lon)
       assert_equal 1, counts[:documents]
     end
 
@@ -87,8 +91,12 @@ module Store
         FileUtils.cp(File.join(FIXTURES_ROOT, "rundata", "runes-trim.sqlite3"),
                      File.join(workdir, "runes-trim.sqlite3"))
         db = SQLite3::Database.new(File.join(workdir, "runes-trim.sqlite3"))
+        # P69-1: the coordinate columns null too — with them present the
+        # inscription would still be PLACED (the coordinates lane), which
+        # is the next test's case, not this one's.
         db.execute("UPDATE meta_information SET year_from = NULL, year_to = NULL, " \
-                   "dating = '', found_location = '', parish = '' WHERE signature_id = 1997")
+                   "dating = '', found_location = '', parish = '', " \
+                   "latitude = '', longitude = '' WHERE signature_id = 1997")
         db.close
         make_document("urn:nabu:rundata:u-344")
         make_document("urn:nabu:rundata:og-136")
@@ -97,6 +105,27 @@ module Store
         refute_nil timeline_for("urn:nabu:rundata:og-136")
         assert_equal 1, counts[:documents]
         assert_equal 1, counts[:undated]
+      end
+    end
+
+    # P69-1: coordinates ALONE keep the row — a WGS84 pair is a place
+    # assertion even when the name fields are blank.
+    def test_a_coordinates_only_inscription_keeps_its_row
+      Dir.mktmpdir do |dir|
+        workdir = File.join(dir, "rundata")
+        FileUtils.mkdir_p(workdir)
+        FileUtils.cp(File.join(FIXTURES_ROOT, "rundata", "runes-trim.sqlite3"),
+                     File.join(workdir, "runes-trim.sqlite3"))
+        db = SQLite3::Database.new(File.join(workdir, "runes-trim.sqlite3"))
+        db.execute("UPDATE meta_information SET year_from = NULL, year_to = NULL, " \
+                   "dating = '', found_location = '', parish = '' WHERE signature_id = 1997")
+        db.close
+        make_document("urn:nabu:rundata:u-344")
+        build!(canonical_dir: dir)
+        row = timeline_for("urn:nabu:rundata:u-344")
+        refute_nil row
+        assert_nil row.fetch(:place_name)
+        assert_in_delta 59.604644, row.fetch(:place_lat)
       end
     end
 
