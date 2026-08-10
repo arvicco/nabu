@@ -22,7 +22,7 @@ class BackupTest < Minitest::Test
 
   # -- the full backup set --------------------------------------------------
 
-  def test_backs_up_canonical_attic_ledger_config_and_derived
+  def test_backs_up_the_two_folders_first_then_the_derived_conveniences
     result = backup(allow_unmounted: true).run
 
     assert_predicate result, :ok?
@@ -37,11 +37,12 @@ class BackupTest < Minitest::Test
     assert_path_exists File.join(@target, "db", "fulltext.sqlite3")
 
     names = result.sections.map(&:name)
-    assert_equal %w[canonical config ledger lects catalog fulltext], names
+    assert_equal %w[canonical config catalog fulltext lects ledger], names
   end
 
-  # P58-1: the lect journal holds RULINGS (decisions, not derivations) — it
-  # rides in the backup set beside the ledger whenever it exists, and its
+  # P70 REVERSAL of the P58-1 note: the lect journal is DERIVED (rebuild
+  # re-mints it from config/lect_rulings.yml + rules + infer-dates) — it
+  # rides only in the CONVENIENCE tier now, and its
   # absence is a clean skip, never an error.
   def test_lect_journal_rides_in_the_backup_set_when_present
     journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
@@ -54,11 +55,15 @@ class BackupTest < Minitest::Test
     assert_path_exists File.join(@target, "db", "lects.sqlite3")
   end
 
-  def test_skip_derived_omits_the_derived_dbs
+  def test_skip_derived_is_the_pure_two_folder_contract
+    # P70: canonical/ + config/ are the WHOLE required backup — with
+    # --skip-derived NOTHING under db/ ships (the ledger is a LOG, the
+    # lect journal is derived; grants/rulings live in config/).
     result = backup(allow_unmounted: true, skip_derived: true).run
 
     assert_predicate result, :ok?
-    assert_path_exists File.join(@target, "db", "history.sqlite3")
+    refute_path_exists File.join(@target, "db", "history.sqlite3")
+    refute_path_exists File.join(@target, "db", "lects.sqlite3")
     refute_path_exists File.join(@target, "db", "catalog.sqlite3")
     refute_path_exists File.join(@target, "db", "fulltext.sqlite3")
     refute_includes result.sections.map(&:name), "catalog"

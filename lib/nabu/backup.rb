@@ -131,17 +131,24 @@ module Nabu
     end
 
     def sections
+      # P70 — THE TWO-FOLDER CONTRACT (owner ruling 2026-08-10): canonical/
+      # + config/ are the ONLY non-derived data. The lect journal is
+      # derived (rebuild's "lect journal" stage re-mints it from
+      # config/lect_rulings.yml + rules + infer-dates); grants and creep
+      # acceptances live in config/ (the ledger rows are historical
+      # mirrors); the ledger itself is reclassified LOG — its runs/
+      # revisions/probes history is lost on restore BY DESIGN (№R-21).
+      # The optional derived sections remain a convenience (restoring a
+      # 75 GB catalog beats hours of rebuild) — never a necessity.
       list = [
         dir_section("canonical", @config.canonical_dir, File.join(@target, "canonical")),
-        dir_section("config", @config.config_dir, File.join(@target, "config")),
-        file_section("ledger", @config.history_path),
-        # P58-1: lect rulings are decisions, not derivations — backed up like
-        # the ledger (absent file = clean skip, as for every section).
-        file_section("lects", @config.lects_journal_path)
+        dir_section("config", @config.config_dir, File.join(@target, "config"))
       ]
       unless @skip_derived
         list << file_section("catalog", @config.catalog_path)
         list << file_section("fulltext", @config.fulltext_path)
+        list << file_section("lects", @config.lects_journal_path)
+        list << file_section("ledger", @config.history_path)
       end
       list
     end
