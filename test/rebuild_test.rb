@@ -648,7 +648,7 @@ class RebuildTest < Minitest::Test
                  "the config-backed ruling survives rebuild via re-derivation")
     stray = journal[:lect_assignments].where(code: "lat").count
     assert_equal 0, stray,
-                 "a journal row with no config source of truth is wiped — " + "db/ holds only derived data"
+                 "a journal row with no config source of truth is wiped — db/ holds only derived data"
     journal.disconnect
   end
 
