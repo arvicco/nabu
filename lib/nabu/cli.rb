@@ -3522,6 +3522,10 @@ module Nabu
         # lazily per call (nabu_signs); an unsynced box notes the sync hint,
         # every other tool byte-identical (the lane-off rule).
         sign_list: :auto,
+        # The sign-card seams (P68-3, nabu_char): same lazy feature-detect
+        # posture — CDLI readings ride canonical/osl/00etc, the Egyptian
+        # spine canonical/unikemet.
+        readings: :auto, hieroglyphs: :auto,
         # Tibetan word segmentation (P54-2): :auto = feature-detect
         # canonical/nabu-data lazily inside Query::Show (nothing loads
         # unless nabu_show is asked for a segmented render); an unsynced
@@ -6929,13 +6933,15 @@ module Nabu
         end
 
         fulltext = open_fulltext(config)
+        catalog = open_catalog(config)
         begin
           Nabu::Query::SignCard.new(
             sign_list: list, readings: Nabu::CdliSignReadings.load_default(config: config),
-            fulltext: fulltext
+            fulltext: fulltext, catalog: catalog
           ).run(input)
         ensure
           fulltext&.disconnect
+          catalog&.disconnect
         end
       end
 
@@ -6984,8 +6990,17 @@ module Nabu
         print_sign_card_lists(card)
         print_sign_card_values(card)
         print_sign_card_glosses(card)
+        print_sign_card_senses(card)
         print_sign_card_forms(card)
         print_sign_card_corpus(card)
+      end
+
+      def print_sign_card_senses(card)
+        return if card.senses.empty?
+
+        say ""
+        say "senses (Wiktionary, kaikki extract):"
+        card.senses.each { |sense| say "  #{sense.gloss}#{" (#{sense.pos})" if sense.pos}" }
       end
 
       def print_sign_card_miss(result)
