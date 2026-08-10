@@ -322,8 +322,13 @@ photographs of manuscripts. Hence:
 - Two editions of the same public-domain work can carry different licenses
   (Perseus CC BY-SA; a Brepols database, all-rights-reserved).
 - **License is data, recorded per document** (`license_class`: open /
-  attribution / nc / research_private / restricted), so queries and exports
-  can answer "only material I may republish" mechanically.
+  attribution / nc / odbl / research_private / restricted), so queries and
+  exports can answer "only material I may republish" mechanically.
+  **`open` covers the public domain** (№R-20, owner-ruled 2026-08-10):
+  no distinct `public_domain` class — PD and CC0-equivalent dedications
+  both class `open`; the legal distinction carries no reuse consequence,
+  and the source manifest's verbatim license line preserves the exact
+  wording for anyone who needs it.
 - The "unlock by reconstruction" strategy (docs/03): when a restricted
   database and an out-of-copyright print edition contain the same text, HTR
   on the PD scan yields a legally clean copy — same words, your labor.
