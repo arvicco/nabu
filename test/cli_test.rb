@@ -8468,8 +8468,12 @@ class CLITest < Minitest::Test
       FileUtils.mkdir_p(dest)
       FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-lects"), "*")], dest)
       File.write(File.join(root, "sources.yml"), "# empty registry\n")
+      # P70: config_path must be a REAL tmp path — lect assign writes
+      # config/lect_rulings.yml relative to it (the "(test)" sentinel
+      # resolved to the repo root and leaked a stray file).
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
-                                sources_path: File.join(root, "sources.yml"), config_path: "(test)")
+                                sources_path: File.join(root, "sources.yml"),
+                                config_path: File.join(root, "config", "nabu.yml"))
       if with_document
         FileUtils.mkdir_p(config.db_dir)
         db = Nabu::Store.connect(config.catalog_path)
