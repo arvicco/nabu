@@ -81,6 +81,29 @@ module Nabu
       # (LinksJournal#supersede!): a rule's next apply states the CURRENT
       # compilation of that rule, and hand rulings ("owner") are untouchable
       # by construction. Returns the count removed.
+      # P70 (the derivability contract): re-mint the WHOLE journal from
+      # the two-folder truth — config/lect_rulings.yml (owner rows), the
+      # compiled rules (config/lect_facet_rules.yml over the catalog), and
+      # infer-dates (catalog dates × the registry's stage bands). The
+      # journal is thereby formally DERIVED: `nabu rebuild` calls this
+      # before facet materialization, and losing db/lects.sqlite3 loses
+      # nothing the backup cannot restore. Returns {owner:, rules:,
+      # dates:} counts.
+      def rederive!(db, catalog:, config:)
+        db[:lect_assignments].delete
+        owner = Nabu::LectRulings.apply!(config.lect_rulings_path, journal: db)
+        rules_applied = 0
+        if (rules = Nabu::LectRules.load(config.lect_facet_rules_path))
+          rules.rules.each do |rule|
+            outcome = rules.apply!(rule, catalog: catalog, journal: db)
+            rules_applied += outcome.assigned
+          end
+        end
+        registry = Nabu::Lects.load_default(config: config)
+        dates = registry ? Nabu::LectDates.new(registry: registry).apply!(catalog: catalog, journal: db).assigned : 0
+        { owner: owner, rules: rules_applied, dates: dates }
+      end
+
       def supersede_basis!(db, basis:)
         db[:lect_assignments].where(basis: basis).delete
       end

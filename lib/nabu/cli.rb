@@ -213,10 +213,19 @@ module Nabu
 
         check_lect!(registry, lect_id)
         code = options[:code] || infer_code!(config, urn)
+        # P70 (the derivability contract): an OWNER ruling's source of
+        # truth is config/lect_rulings.yml — written FIRST; the journal
+        # row is its derived mirror (rebuild re-derives it). Rule-basis
+        # rows are compiled derivations and stay journal-only.
+        if options[:basis] == "owner"
+          Nabu::LectRulings.append!(config.lect_rulings_path, urn: urn, code: code,
+                                                              lect_id: lect_id, note: options[:note])
+        end
         journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
         verdict = Nabu::Store::LectJournal.assign!(journal, urn: urn, code: code, lect_id: lect_id,
                                                             basis: options[:basis], note: options[:note])
-        say "#{verdict}  #{urn}  #{code} → #{lect_id}  (#{options[:basis]})"
+        say "#{verdict}  #{urn}  #{code} → #{lect_id}  (#{options[:basis]}" \
+            "#{' · config/lect_rulings.yml' if options[:basis] == 'owner'})"
         refresh_lect_facet(config, urn)
       end
     end
@@ -452,6 +461,8 @@ module Nabu
       journal.disconnect
       writable = Nabu::Store::LectJournal.open!(config.lects_journal_path)
       count = Nabu::Store::LectJournal.withdraw!(writable, urn: urn, code: options[:code])
+      # P70: mirror the withdrawal into the config source of truth.
+      Nabu::LectRulings.remove!(config.lect_rulings_path, urn: urn, code: options[:code])
       say "withdrew #{count} assignment#{'s' unless count == 1}  #{urn}#{" #{options[:code]}" if options[:code]}"
       refresh_lect_facet(config, urn)
     end
@@ -505,6 +516,14 @@ module Nabu
 
         rows = parse_batch!(registry, path)
         journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+        # P70: owner-basis batch rows write through config/lect_rulings.yml
+        # first (the source of truth) — the journal rows are derived.
+        rows.each do |row|
+          next unless row.fetch(:basis, "owner") == "owner"
+
+          Nabu::LectRulings.append!(config.lect_rulings_path, urn: row[:urn], code: row[:code],
+                                                              lect_id: row[:lect_id], note: row[:note])
+        end
         verdicts = rows.map { |row| Nabu::Store::LectJournal.assign!(journal, **row) }
         say "#{verdicts.size} assignments (#{verdicts.count(:inserted)} inserted, " \
             "#{verdicts.count(:updated)} updated) from #{path}"
