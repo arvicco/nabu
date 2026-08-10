@@ -92,8 +92,8 @@ class SourceDossierExportTest < Minitest::Test
     with_rig do |dir, library, yml|
       report = export(dir, library: library, yml: yml)
       assert_equal 4, report.written
-      assert_equal 1, report.stubs
-      assert_equal %w[bare], report.stub_slugs
+      assert_equal 2, report.stubs
+      assert_equal %w[bare sl-lexica], report.stub_slugs
       shelf = Nabu::SourceShelf.new(dir: File.join(dir, "shelf"))
 
       edh = shelf.load("edh")
@@ -105,14 +105,18 @@ class SourceDossierExportTest < Minitest::Test
       assert_match(/cognacy matrix/, iecor.description, "a slug-specific bullet wins")
       refute_match(/inline flag comment/, iecor.description.to_s, "inline comments are never prose")
 
+      # P66-4 (Q3, the openmgh complaint 2026-08-02): sources.yml comments
+      # are LOOP-SPEAK, not content — the lane is retired; the scaffolder
+      # seeds an explicit placeholder instead of recycling them.
       sl = shelf.load("sl-lexica")
-      assert_match(/\AThe Slovenian historical dictionary shelf/, sl.description,
-                   "sources.yml standalone comments fill the library.md gap")
-      refute_match(/license_watch/, sl.description)
+      assert_match(/\APLACEHOLDER — /, sl.description,
+                   "registry comments never seed prose anymore")
+      refute_match(/Slovenian historical dictionary/, sl.description)
 
       bare = shelf.load("bare")
-      assert_nil bare.description, "no prose exists — the stub never invents"
-      assert_match(/honest stub/, bare.provenance.fetch("seeded_from"))
+      assert_match(/\APLACEHOLDER — /, bare.description,
+                   "no prose exists — an explicit marker, never invented content")
+      assert_match(/placeholder seeded/, bare.provenance.fetch("seeded_from"))
     end
   end
 

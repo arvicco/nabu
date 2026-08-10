@@ -78,6 +78,17 @@ module Ops
       end
     end
 
+    def test_flags_a_placeholder_description_loudly
+      registry = { "edh" => Entry.new(true), "lexica" => Entry.new(true) }
+      dossiers = { "edh" => "#{Nabu::SourceDossier::PLACEHOLDER}describe the content.",
+                   "lexica" => "The reference shelf." }
+      with_rig(registry: registry, dossiers: dossiers) do |check|
+        findings = check.findings
+        assert(findings.any? { |f| f.slug == "edh" && f.message.include?("placeholder") },
+               "a scaffolded placeholder is an unwritten dossier — site:check says so (P66-4/Q3)")
+      end
+    end
+
     def test_flags_a_malformed_dossier
       registry = { "edh" => Entry.new(true) }
       with_rig(registry: registry) do |check|
