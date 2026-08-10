@@ -179,7 +179,7 @@ The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL'
 
 The Egyptian-Coptic continuum: the TLA corpora and word list (tla-hf, aes, aed), the Coptic lexicon with its egy-cop crosswalk, and Coptic Scriptorium.
 
-**Members** (7): `ud`, `ccl`, `coptic-scriptorium`, `tla-hf`, `aes`, `aed`, `elephantine`
+**Members** (8): `ud`, `ccl`, `coptic-scriptorium`, `tla-hf`, `aes`, `aed`, `elephantine`, `unikemet`
 
 ### iranian
 

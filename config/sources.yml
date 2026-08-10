@@ -3477,6 +3477,28 @@ osl:
   # manifest) → class open.
   sync_policy: manual
 
+unikemet:
+  adapter: Nabu::Adapters::Unikemet
+  kind: module   # P65-2: machinery-only — an Egyptian sign-spine instrument, zero document rows
+  axes: [egyptian]
+  wired: false   # PERMANENTLY false — a sign-list instrument, not a text
+                   # source (the osl invariant): discover mints no documents,
+                   # no migration, no catalog table. Nabu::Hieroglyphs reads
+                   # canonical/unikemet/Unikemet.txt as the glyph/Gardiner-
+                   # code → sign resolver behind the P65-2 `nabu char`
+                   # Egyptian card (the Unihan role, Egyptian leg).
+  # P65-2: Unikemet — Unicode's normative Egyptian Hieroglyph data file
+  # (UCD; 5,067 signs at 17.0: kEH_Cat Gardiner-plus catalog codes,
+  # kEH_Desc descriptions 4,380, kEH_Func functions 4,378, kEH_FVal
+  # phonetic values 4,212, kEH_JSesh/kEH_HG/kEH_IFAO concordances,
+  # kEH_Core core-vs-legacy). Fetch = ONE flat file on the VERSIONED
+  # release URL (unicode.org/Public/17.0.0/ucd/Unikemet.txt — immutable,
+  # the cigs pin posture, deliberately NOT /latest/); a new Unicode release
+  # is a new pin, owner call. LICENSE: UNICODE LICENSE V3
+  # (unicode.org/license.txt, MIT-style, quoted in the adapter manifest)
+  # → class open, the Unihan class.
+  sync_policy: manual
+
 cantigas:   # P55-1, 02-sources row 144
   adapter: Nabu::Adapters::Cantigas
   kind: source

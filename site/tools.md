@@ -221,6 +221,37 @@ An unknown code is reported honestly, with a family hint;
 $ bin/nabu language gkm
 ```
 
+**Sign cards** (`nabu char CHAR`) put one glyph on the desk, dispatched
+by script. A Han character gets the dictionary-shelf card (structure,
+readings, and a diachronic column from Old Chinese through the Heian
+dictionaries) — and the door works in reverse: a pinyin reading
+(`nabu char wen`, tones optional) or a Japanese on/kun reading — kana
+(`nabu char ひと`) or plain romaji on the dictionary-caps convention,
+CAPS for on'yomi (`nabu char TAI`), lowercase for kun'yomi
+(`nabu char kuni`) — lists every character that carries it. A **cuneiform** sign — glyph, sign name, spelled value, or sign-list
+number (`nabu char 𒊬`, `nabu char SAR`, `nabu char szesz`,
+`nabu char MZL535`, bare `nabu char 852` matched across every held
+list) — gets the Oracc Sign List card: sign name, the MZL/LAK/ABZL/HZL/ŠL print-list
+concordances, every reading by language, the CDLI meaning glosses,
+variant forms, and how often each spelled value actually occurs across
+the held tablet corpora. An **Egyptian hieroglyph** (`nabu char 𓅃`, or
+by Gardiner-style code `nabu char G5`) gets the Unicode 17 Unikemet
+card: catalog code, description, function, phonetic value, the
+JSesh/Hieroglyphica/IFAO concordances, and the sign's attestation across
+the held AES corpus's sign annotations. An ambiguous value lists every
+candidate sign, never one silently; `--json` on the sign cards emits a
+frozen machine contract. The token-by-token sibling is `nabu signs`,
+which reads whole transliterated lines through the same sign list.
+
+```
+$ bin/nabu char 𒊬
+𒊬  SAR  ·  U+122AC
+sign lists: LAK 215 · ABZL 385 · HZL 353 · MZL 541 · …
+values (OSL): kiri₆ · mu₂ · nisi · sar · šar · …
+meanings (CDLI): sar → v. to write; n. vegetable · kiri₆ → n. garden
+in the corpus: sar 100333 · nisi 27997 · kiri₆ 8737 · …
+```
+
 **Place cards** (`nabu place NAME|ID`) are the library's third dimension,
 after language and time: one ancient place resolved through the local
 Pleiades gazetteer dump — title, id, place types, attested period span,

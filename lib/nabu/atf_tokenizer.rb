@@ -113,6 +113,14 @@ module Nabu
       s
     end
 
+    # Fold a whole sign-name-or-value spelling: the ASCII fold plus the
+    # ×-operator fold inside |compound| names (SZESZ → ŠEŠ, |ABxASZ2| →
+    # |AB×AŠ₂|). The P65-1 lane for CDLI-spelled names arriving outside a
+    # tokenized line (card input, the cdli_sign_readings concordance).
+    def fold_name(str)
+      fold_compound(fold(str))
+    end
+
     private
 
     def word_tokens(word)
