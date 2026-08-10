@@ -133,6 +133,20 @@ module Nabu
       File.join(config_dir, "lect_facet_rules.yml")
     end
 
+    # Grant acknowledgments (P70, the derivability contract): the SOURCE
+    # OF TRUTH for the owner's recorded grant agreements (frozen terms +
+    # how) — the ledger row is a historical mirror; restore needs only
+    # this file.
+    def grants_path
+      File.join(config_dir, "grants.yml")
+    end
+
+    # Quarantine-creep acceptances (P70): the owner's --accept-creep
+    # rulings, config-durable; the ledger table is historical.
+    def creep_acceptances_path
+      File.join(config_dir, "creep_acceptances.yml")
+    end
+
     # Per-document owner lect rulings (P70, the derivability contract):
     # the SOURCE OF TRUTH for hand rulings — `lect assign` writes here
     # first; the journal row is the derived representation; rebuild

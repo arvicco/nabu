@@ -4495,7 +4495,7 @@ module Nabu
       # non-interactively; otherwise show the terms and demand the typed word
       # (no TTY / refusal aborts with the request scaffold, adding nothing).
       def enable_grant!(entry, ledger)
-        gate = Nabu::GrantGate.new(ledger: ledger)
+        gate = Nabu::GrantGate.new(ledger: ledger, grants_path: Nabu::Config.load.grants_path)
         return say("#{entry.slug}: grant already acknowledged — enabling.", :yellow) if gate.acknowledged?(entry.slug)
 
         if options[:grant_acknowledged]
@@ -8089,7 +8089,7 @@ module Nabu
         # P42-r1: an axis expansion is a batch, not an explicit per-source
         # request, so a grant-blocked member is SKIPPED with the honest line —
         # never prompted mid-group (the prompt is reserved for `sync <slug>`).
-        gate = Nabu::GrantGate.new(ledger: ledger)
+        gate = Nabu::GrantGate.new(ledger: ledger, grants_path: Nabu::Config.load.grants_path)
         grant_blocked, runnable = wired.partition { |member| gate.blocked?(registry[member]) }
         say axis_header(registry.axes[name])
         (runnable - synced).each do |member|
@@ -8168,7 +8168,7 @@ module Nabu
       def enforce_grant!(entry, ledger)
         return unless entry&.grant_required?
 
-        gate = Nabu::GrantGate.new(ledger: ledger)
+        gate = Nabu::GrantGate.new(ledger: ledger, grants_path: Nabu::Config.load.grants_path)
         return if gate.acknowledged?(entry.slug)
 
         if options[:grant_acknowledged]
@@ -8950,8 +8950,9 @@ module Nabu
         end
 
         ledger = open_or_create_ledger(config)
-        active = Nabu::Health::QuarantineBaseline.creep_finding(ledger, slug)
-        accepted = Nabu::Health::QuarantineBaseline.accept!(ledger, slug, note: options[:note])
+        active = Nabu::Health::QuarantineBaseline.creep_finding(ledger, slug, path: config.creep_acceptances_path)
+        accepted = Nabu::Health::QuarantineBaseline.accept!(ledger, slug, note: options[:note],
+                                                                          path: config.creep_acceptances_path)
         if accepted.nil?
           raise Thor::Error, "accept-creep: no quarantine baseline recorded for '#{slug}' — nothing to accept " \
                              "(a baseline is recorded at the source's first ok sync or rebuild)"
@@ -8986,7 +8987,8 @@ module Nabu
         report = Nabu::Health::LocalCheck.new(
           registry: view.registry, catalog: catalog, fulltext: fulltext, ledger: ledger,
           golden_queries: Nabu::Health::LocalCheck.golden_queries,
-          canonical_dir: config.canonical_dir
+          canonical_dir: config.canonical_dir,
+          creep_acceptances_path: config.creep_acceptances_path
         ).run
         print_local_health(report)
         print_focus_note(view, view.registry_hidden_slugs)

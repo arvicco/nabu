@@ -87,7 +87,8 @@ module Nabu
       # +canonical_dir+ (P19-1) reaches the invariants' local-shelf checks
       # (dossier files vs derived records, pinned files vs the tree); nil
       # skips them honestly.
-      def initialize(registry:, catalog:, fulltext:, ledger:, golden_queries:, now: Time.now, canonical_dir: nil)
+      def initialize(registry:, catalog:, fulltext:, ledger:, golden_queries:, now: Time.now,
+                     canonical_dir: nil, creep_acceptances_path: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
@@ -98,7 +99,8 @@ module Nabu
         # fold into each SourceCheck (plus the Report's global slot), so a green
         # library prints exactly what it printed before — nothing new.
         @invariants = Invariants.new(registry: registry, catalog: catalog, fulltext: fulltext,
-                                     ledger: ledger, canonical_dir: canonical_dir, now: now)
+                                     ledger: ledger, canonical_dir: canonical_dir, now: now,
+                                     creep_acceptances_path: creep_acceptances_path)
       end
 
       def run
