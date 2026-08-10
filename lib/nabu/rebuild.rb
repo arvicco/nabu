@@ -169,6 +169,16 @@ module Nabu
       facets = profile.measure(scope: RebuildProfile::CORPUS, stage: :facets) do
         Store::FacetBuilder.rebuild!(catalog: db)
       end
+      # P70 (the derivability contract): the lect JOURNAL is derived — re-mint
+      # it wholesale from the two-folder truth (config/lect_rulings.yml owner
+      # rows + the compiled rules + infer-dates) BEFORE the facet reads it.
+      # db/lects.sqlite3 thereby needs no backup: losing it loses nothing
+      # this stage cannot restore.
+      progress&.stage("lect journal")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :lect_journal) do
+        journal = Store::LectJournal.open!(@config.lects_journal_path)
+        Store::LectJournal.rederive!(journal, catalog: db, config: @config)
+      end
       # The lect facet (P58-4) flattens the whole lect resolution — journal
       # rulings, source overrides, codemap defaults — into one indexed axis.
       # Feature-detected: no nabu-lects module -> zero rows, clean skip (the

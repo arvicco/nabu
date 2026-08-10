@@ -133,6 +133,14 @@ module Nabu
       File.join(config_dir, "lect_facet_rules.yml")
     end
 
+    # Per-document owner lect rulings (P70, the derivability contract):
+    # the SOURCE OF TRUTH for hand rulings — `lect assign` writes here
+    # first; the journal row is the derived representation; rebuild
+    # re-derives the whole journal from this file + rules + infer-dates.
+    def lect_rulings_path
+      File.join(config_dir, "lect_rulings.yml")
+    end
+
     # The catalog SQLite file (architecture §5), derived from db_dir.
     def catalog_path
       File.join(db_dir, CATALOG_DB_FILENAME)
