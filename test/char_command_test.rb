@@ -60,6 +60,10 @@ class CharCommandTest < Minitest::Test
       # and the reverse: 国 names its kyūjitai 國 (the hani-fold display precedent).
       back, = with_config(config) { run_cli(%w[char 国]) }
       assert_match(/kyūjitai \(Japanese old form\): 國 \(U\+570B\)/, back)
+      # The corpus panel folds both sides (P65: postings live over
+      # text_normalized, where 国→國 ran) — the simplified card still
+      # attests through its folded form.
+      assert_match(/corpus attestation:.*jpn 1/, back)
     end
   end
 
