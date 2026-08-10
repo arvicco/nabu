@@ -555,6 +555,7 @@ wiktionary-cu:
 
 wiktionary-sux:
   adapter: Nabu::Adapters::WiktionarySux
+  group: signs  # P68-4: the sign-restore sweep — the cuneiform card's sense lane
   axes: [cuneiform]
   wired: true    # P68-1: first sync 2026-08-10 — 2,499 entries (1,315
                    # cuneiform headwords), 247 reflexes (43 sux→akk);
@@ -2254,6 +2255,7 @@ syriac-corpus:
 
 baxter-sagart:
   adapter: Nabu::Adapters::BaxterSagart
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
   axes: [sinitic]
   wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                   # sha-pinned; CLAUDE.md checklist §6: bin/nabu sync
@@ -2274,6 +2276,7 @@ baxter-sagart:
 
 tshet-uinh:
   adapter: Nabu::Adapters::TshetUinh
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
   axes: [sinitic]
   wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                   # GitFetch clone of nk2028/tshet-uinh-data; CLAUDE.md
@@ -2299,6 +2302,7 @@ tshet-uinh:
 
 unihan:
   adapter: Nabu::Adapters::Unihan
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
   axes: [sinitic, japonic]
   wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # bin/nabu sync unihan — 8.5 MB zip GET, ~65k entries —
@@ -2314,6 +2318,7 @@ unihan:
 
 edrdg:
   adapter: Nabu::Adapters::Edrdg
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
   axes: [japonic]
   wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # bin/nabu sync edrdg — 1.5 MB + 10.5 MB gz GETs,
@@ -2332,6 +2337,7 @@ edrdg:
 
 hdic:
   adapter: Nabu::Adapters::Hdic
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
   axes: [sinitic, japonic]
   wired: true    # flipped 2026-07-20 (D36-d owner ruling: license GO;
                    # first sync owner-fired as usual)
@@ -2352,6 +2358,7 @@ hdic:
 
 babelstone-ids:
   adapter: Nabu::Adapters::BabelstoneIds
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
   axes: [sinitic]
   wired: true    # P38: owner-flipped 2026-07-21 with aozora
                    # (checklist §6: bin/nabu sync babelstone-ids — one 3.1 MB
@@ -2370,6 +2377,7 @@ babelstone-ids:
 
 kradfile:
   adapter: Nabu::Adapters::Kradfile
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
   axes: [japonic]
   wired: true    # P38: owner-flipped 2026-07-21 with aozora
                    # (checklist §6: bin/nabu sync kradfile — one ~46 KB gz
@@ -2557,6 +2565,7 @@ kr-gaiji:
 
 tls:
   adapter: Nabu::Adapters::Tls
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
   axes: [sinitic]
   wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # GitFetch of tls-kr/tls-data; the P34-4 cone is
@@ -3462,6 +3471,7 @@ nabu-places:
 
 osl:
   adapter: Nabu::Adapters::Osl
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
   kind: module   # P53-1: machinery-only — a cuneiform sign/value/codepoint instrument, zero document rows
   axes: [cuneiform]
   wired: false   # PERMANENTLY false — a sign-list instrument, not a text
@@ -3492,6 +3502,7 @@ osl:
 
 unikemet:
   adapter: Nabu::Adapters::Unikemet
+  group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
   kind: module   # P65-2: machinery-only — an Egyptian sign-spine instrument, zero document rows
   axes: [egyptian]
   wired: false   # PERMANENTLY false — a sign-list instrument, not a text

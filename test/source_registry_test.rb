@@ -696,6 +696,38 @@ class SourceRegistryTest < Minitest::Test
     end
   end
 
+  # -- the signs group (P69: `nabu enable signs && nabu sync signs` restores
+  # the whole sign/char capability) --------------------------------------------
+
+  def test_group_members_answers_any_registered_group
+    registry = load_registry(<<~YAML)
+      a:
+        adapter: Some::Adapter
+        group: signs
+      b:
+        adapter: Some::Adapter
+      c:
+        adapter: Some::Adapter
+        group: signs
+        kind: module
+    YAML
+    assert_equal %w[a c], registry.group_members("signs")
+    assert_empty registry.group_members("core")
+  end
+
+  def test_the_live_signs_group_is_the_full_sign_shelf_census
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    # The census pin IS the restore guarantee: a new sign/char shelf must
+    # join the group or this pin fires. Modules (osl, unikemet) carry the
+    # identity spines; the sources carry the Han card's shelves, the
+    # reading lanes, and the Wiktionary sense lane.
+    assert_equal %w[babelstone-ids baxter-sagart edrdg hdic kradfile osl tls tshet-uinh
+                    unihan unikemet wiktionary-sux],
+                 registry.group_members("signs").sort
+    modules = registry.group_members("signs").select { |s| registry[s].feature_module? }
+    assert_equal %w[osl unikemet], modules.sort, "exactly the two identity spines are modules"
+  end
+
   def test_registry_multilingual_lookup_by_slug
     registry = load_registry(<<~YAML)
       pack:
