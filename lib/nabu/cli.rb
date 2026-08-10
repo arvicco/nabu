@@ -7182,6 +7182,12 @@ module Nabu
       end
 
       def print_char_corpus(card)
+        if card.corpus.nil?
+          say ""
+          say "corpus attestation: not indexed yet — nabu rebuild (or the next sync) builds " \
+              "the char-postings index"
+          return
+        end
         return if card.corpus.empty?
 
         say ""

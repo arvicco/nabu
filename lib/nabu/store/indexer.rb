@@ -110,6 +110,19 @@ module Nabu
       LEMMA_TABLE = :passage_lemmas
       TRIGRAM_TABLE = :passages_trigram
       TRIGRAM_SCOPE_TABLE = :passages_trigram_scope
+      # P65: per-(source, char, language) counts of live passages containing
+      # each Han character — the `nabu char` corpus panel's precompiled
+      # answer. Minted here because the desk-time alternative is a LIKE scan
+      # of the whole passages table (180 s at the 68M-row census,
+      # 2026-08-10 — the owner-caught hang); the ruling is that the card
+      # touches only precompiled data. Same lifecycle as everything else in
+      # this file: derived, disposable, never migrated.
+      CHAR_POSTINGS_TABLE = :char_postings
+
+      # The postings' character class: Unicode Han (CJK unified + extensions
+      # + compatibility). Kana/hangul/other scripts are not posted — the Han
+      # card is the one consumer.
+      HAN = /\p{Han}/
 
       # The default lemma tier (P26-0): a source absent from the lemma_tiers
       # map is gold — verified annotation, the only kind that existed before
@@ -239,14 +252,17 @@ module Nabu
       def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, lemma_tiers: nil, profile: nil)
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
+        fulltext.drop_table?(CHAR_POSTINGS_TABLE)
         fulltext.run(CREATE_TABLE)
         create_lemma_table(fulltext)
+        create_char_postings_table(fulltext)
         tiers = source_tiers(catalog, lemma_tiers || {})
 
         count = 0
         timed(profile, :fts_lemma) do
           fulltext.transaction do
-            count, = insert_passage_batches(fulltext, live_passages(catalog), tiers)
+            count, _lemmas, chars = insert_passage_batches(fulltext, live_passages(catalog), tiers)
+            write_char_postings(fulltext, chars)
           end
           # P36-2: the lemma table was created BARE (create_lemma_table); build
           # its three B-tree indexes now, in one sorted pass over the populated
@@ -337,14 +353,22 @@ module Nabu
           before = LemmaFrequencies.snapshot(fulltext, urns)
           deleted = delete_source_lemma_rows(fulltext, urns)
           delete_fts_rows(fulltext, TABLE, ids)
-          count, inserted = insert_passage_batches(
+          count, inserted, chars = insert_passage_batches(
             fulltext, live_passages(catalog).where(Sequel[:documents][:source_id] => source_id),
             source_tiers(catalog, lemma_tiers || {})
           )
           lemmas_changed = deleted.positive? || inserted.positive?
           LemmaFrequencies.apply_delta(fulltext, before: before, after: LemmaFrequencies.snapshot(fulltext, urns))
           refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
+          # P65: swap this source's char-postings slice; a pre-P65 fulltext
+          # file (no table) gets the whole postings build below instead —
+          # NEVER a full FTS rebuild for a missing derived sub-table.
+          if fulltext.table_exists?(CHAR_POSTINGS_TABLE)
+            fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
+            write_char_postings(fulltext, chars)
+          end
         end
+        rebuild_char_postings!(catalog: catalog, fulltext: fulltext) unless fulltext.table_exists?(CHAR_POSTINGS_TABLE)
         refresh_alignment(catalog, fulltext, alignments, source_id)
         ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext) if lemmas_changed || reflexes_changed
         count
@@ -413,14 +437,65 @@ module Nabu
         with_language = fts_language_column?(fulltext)
         count = 0
         lemma_count = 0
+        chars = Hash.new(0)
         dataset.each_slice(BATCH_SIZE) do |batch|
           fulltext[TABLE].multi_insert(batch.map { |row| fts_row(row, language: with_language) })
           rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers) }
           fulltext[LEMMA_TABLE].multi_insert(rows)
+          batch.each { |row| accumulate_char_postings(chars, row) }
           count += batch.size
           lemma_count += rows.size
         end
-        [count, lemma_count]
+        [count, lemma_count, chars]
+      end
+
+      # One passage's contribution to the char postings: each DISTINCT Han
+      # character counts one doc under (source, char, language). Han-less
+      # passages (most of the corpus) cost one fast regex check.
+      def accumulate_char_postings(chars, row)
+        text = row.fetch(:text_normalized).to_s
+        return unless text.match?(HAN)
+
+        text.scan(HAN).uniq.each do |char|
+          chars[[row.fetch(:source_id), char, row[:language]]] += 1
+        end
+      end
+
+      def create_char_postings_table(fulltext)
+        fulltext.create_table(CHAR_POSTINGS_TABLE) do
+          Integer :source_id, null: false
+          String :char, null: false
+          String :language
+          Integer :docs, null: false
+          index :char
+          index :source_id
+        end
+      end
+
+      def write_char_postings(fulltext, chars)
+        chars.each_slice(BATCH_SIZE) do |batch|
+          fulltext[CHAR_POSTINGS_TABLE].multi_insert(
+            batch.map do |(source_id, char, language), docs|
+              { source_id: source_id, char: char, language: language, docs: docs }
+            end
+          )
+        end
+      end
+
+      # The standalone postings (re)build — ONE lean streaming pass (three
+      # columns, no annotations_json) over the live passages. Used to
+      # bootstrap a pre-P65 fulltext file without paying a full FTS rebuild,
+      # and by refresh_source! when the table is absent.
+      def rebuild_char_postings!(catalog:, fulltext:)
+        fulltext.drop_table?(CHAR_POSTINGS_TABLE)
+        create_char_postings_table(fulltext)
+        chars = Hash.new(0)
+        live_passages(catalog)
+          .select(Sequel[:passages][:text_normalized], Sequel[:passages][:language],
+                  Sequel[:documents][:source_id].as(:source_id))
+          .each { |row| accumulate_char_postings(chars, row) }
+        fulltext.transaction { write_char_postings(fulltext, chars) }
+        chars.size
       end
 
       # ALL of the source's passage ids and urns — withdrawn included: rows

@@ -52,6 +52,8 @@ module Store
 
     def rebuild! = Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
 
+    def postings = @fulltext[Nabu::Store::Indexer::CHAR_POSTINGS_TABLE]
+
     def fts = @fulltext[:passages_fts]
 
     def lemmas = @fulltext[Nabu::Store::Indexer::LEMMA_TABLE]
@@ -809,6 +811,68 @@ module Store
       assert_equal 1, refresh!(reflexes_changed: true)
       assert_equal 0, reflex_stats.where(language: "zz-sentinel").count,
                    "reflexes_changed forces the closure rebuild"
+    end
+
+    # -- the char-postings index (P65 gate: `nabu char 纹` must be instant) --
+    #
+    # The Han corpus panel used to LIKE-scan the passages table at desk time
+    # — 180 s at the 68M-row census (2026-08-10, the hang the owner caught).
+    # The postings ride the SAME streaming pass as the fts/lemma tables:
+    # per (source, char, language), the count of live passages containing
+    # each Han character. Desk time is one B-tree lookup.
+
+    def test_char_postings_count_han_chars_per_language_docwise
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "棄而棄之", sequence: 0, language: "lzh")
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "棄の国", sequence: 1, language: "jpn")
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "no han here", sequence: 2, language: "eng")
+      rebuild!
+
+      assert_equal 1, postings.where(char: "棄", language: "lzh").get(:docs),
+                   "a char twice in ONE passage counts one doc"
+      assert_equal 1, postings.where(char: "棄", language: "jpn").get(:docs)
+      assert_equal 1, postings.where(char: "国").get(:docs)
+      assert_empty postings.where(language: "eng").all, "han-less passages contribute nothing"
+      assert_empty postings.where(char: "の").all, "kana is not a Han posting"
+    end
+
+    def test_char_postings_exclude_withdrawn_and_are_idempotent
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "棄", sequence: 0, language: "lzh")
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "棄", sequence: 1, language: "lzh",
+                        withdrawn: true)
+      rebuild!
+      rebuild!
+      assert_equal 1, postings.where(char: "棄").get(:docs)
+    end
+
+    def test_refresh_swaps_only_that_sources_postings_slice
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "棄", sequence: 0, language: "lzh")
+      other = Nabu::Store::Source.create(
+        slug: "t", name: "T", adapter_class: "TestAdapter", license_class: "open"
+      )
+      other_doc = make_document(urn: "urn:d:t", source: other)
+      make_passage(other_doc, urn: "urn:d:t:1", text_normalized: "棄国", sequence: 0, language: "lzh")
+      rebuild!
+      assert_equal 2, postings.where(char: "棄").sum(:docs)
+
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "纹", sequence: 1, language: "lzh")
+      refresh!
+      assert_equal 1, postings.where(char: "纹").get(:docs), "the new passage's chars land"
+      assert_equal 2, postings.where(char: "棄").sum(:docs)
+      assert_equal 1, postings.where(char: "国").get(:docs), "the other source's slice is untouched"
+    end
+
+    def test_refresh_builds_the_postings_table_when_a_pre_p65_index_lacks_it
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "棄", sequence: 0, language: "lzh")
+      rebuild!
+      @fulltext.drop_table(Nabu::Store::Indexer::CHAR_POSTINGS_TABLE)
+
+      refresh!
+      assert_equal 1, postings.where(char: "棄").get(:docs),
+                   "a pre-P65 fulltext file gains the postings on its next sync"
     end
   end
 end
