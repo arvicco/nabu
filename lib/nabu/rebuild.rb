@@ -57,7 +57,7 @@ module Nabu
     # What a rebuild did. +indexed+ is the passage count in the freshly rebuilt
     # fulltext index (architecture §2): a fresh index is part of "loaded".
     Result = Data.define(:db_path, :db_existed, :outcomes, :skips, :indexed, :axes, :facets, :profile,
-                         :analyzed) do
+                         :analyzed, :link_failures) do
       # +axes+ (P15-2) is the TimelineBuilder::Summary of the timeline
       # regenerated from canonical after replay; +facets+ (P17-2) the
       # FacetBuilder::Summary of the genre-facet table projected from the
@@ -69,8 +69,11 @@ module Nabu
       # planner-stats refresh — a full rebuild re-derives the whole catalog and
       # index, so it ALWAYS analyzes both (the freshly-loaded db had no
       # sqlite_stat1 at all). nil only for the pre-P42-4 construction paths.
+      # +link_failures+ (P70-3b) — the links stage's contained per-producer
+      # failures ("slug: message" strings): the summary must name the gaps a
+      # partial links re-mine left, never claim a clean rebuild over them.
       def initialize(db_path:, db_existed:, outcomes:, skips:, indexed:, axes: nil, facets: nil,
-                     profile: nil, analyzed: nil)
+                     profile: nil, analyzed: nil, link_failures: [])
         super
       end
 
@@ -112,6 +115,10 @@ module Nabu
     # Nabu::ProgressReporter or nil) is threaded into each source's loader for
     # live per-document ticks; the runner stays print-free.
     def run(progress: nil)
+      # P70 fail-fast: a malformed hand edit to config/lect_rulings.yml must
+      # refuse HERE — before the db drop and the hours of replay the late
+      # lect-journal stage would otherwise waste.
+      LectRulings.validate!(@config.lect_rulings_path)
       db_existed = File.exist?(db_path)
       # P36-0: the always-on stage profiler. Cheap (a monotonic sample per stage
       # boundary; per document for parse/insert), so it runs on every rebuild —
@@ -177,7 +184,11 @@ module Nabu
       progress&.stage("lect journal")
       profile.measure(scope: RebuildProfile::CORPUS, stage: :lect_journal) do
         journal = Store::LectJournal.open!(@config.lects_journal_path)
-        Store::LectJournal.rederive!(journal, catalog: db, config: @config)
+        begin
+          Store::LectJournal.rederive!(journal, catalog: db, config: @config)
+        ensure
+          journal.disconnect
+        end
       end
       # The lect facet (P58-4) flattens the whole lect resolution — journal
       # rulings, source overrides, codemap defaults — into one indexed axis.
@@ -219,7 +230,7 @@ module Nabu
       # fulltext index, hence after it). db/links.sqlite3 thereby needs no
       # backup.
       progress&.stage("links")
-      profile.measure(scope: RebuildProfile::CORPUS, stage: :links) do
+      link_failures = profile.measure(scope: RebuildProfile::CORPUS, stage: :links) do
         rederive_links!(db, fulltext)
       end
       # P42-4: the fresh catalog+index have no planner statistics yet — ANALYZE
@@ -232,7 +243,7 @@ module Nabu
       end
       Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes,
                  skips: skips, indexed: indexed, axes: axes, facets: facets, profile: profile,
-                 analyzed: analyzed)
+                 analyzed: analyzed, link_failures: link_failures)
     ensure
       db&.disconnect
       fulltext&.disconnect
@@ -386,8 +397,10 @@ module Nabu
 
     # The links re-mine (P70-3b): wipe the journal, replay every
     # slug-scoped reference producer, then every recorded batch scope.
-    # One producer's failure is contained and reported — a partial links
-    # rebuild names its gaps, never dies silently.
+    # A producer's Nabu::Error-class failure is contained and returned (the
+    # Result carries it into the summary — a partial links re-mine names
+    # its gaps); infrastructure errors (I/O, Sequel) abort the rebuild
+    # loudly, by design. Returns the failure strings.
     def rederive_links!(db, fulltext)
       journal = Store::LinksJournal.open!(@config.links_path)
       journal[:links].delete
@@ -407,6 +420,7 @@ module Nabu
         failures << "#{scope['producer']} #{scope['scope']}: #{e.message}"
       end
       warn "links rederive: #{failures.size} producer(s) failed — #{failures.join(' · ')}" unless failures.empty?
+      failures
     ensure
       journal&.disconnect
     end

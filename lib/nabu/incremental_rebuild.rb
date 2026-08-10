@@ -29,8 +29,14 @@ module Nabu
   #
   # Corpus-wide (non-source-scoped) builders re-run whole whenever ANY source
   # was dirty: the timeline (document_axes) and facet projections join across
-  # re-minted rows and have no per-source seam. When nothing is dirty they do
-  # not run at all. The enrichment replay hook mirrors Rebuild (no-op today).
+  # re-minted rows and have no per-source seam — and since P70 the two
+  # derived sibling dbs likewise: the lect journal re-derives (config
+  # rulings + rules + infer-dates read the re-minted facets) and the links
+  # instrument re-mines (producers read the changed canonical). When
+  # nothing is dirty they do not run at all — the write-through CLIs keep
+  # both journals live, so only a hand-edited config file awaits the next
+  # full rebuild or dirty incremental. The enrichment replay hook mirrors
+  # Rebuild (no-op today).
   class IncrementalRebuild < Rebuild
     # A source skipped because its fingerprint matched its stamp.
     Clean = Data.define(:slug, :stamp_short)
@@ -55,8 +61,10 @@ module Nabu
     # +analyzed+ (P42-4) is the Store::AnalyzeReport of the post-run planner-
     # stats refresh — present when any source re-derived (the dirty replays
     # shifted the catalog/index distribution), nil when everything was clean.
-    Result = Data.define(:db_path, :outcomes, :cleans, :skips, :indexed, :axes, :facets, :analyzed) do
-      def initialize(db_path:, outcomes:, cleans:, skips:, indexed:, axes:, facets:, analyzed: nil)
+    Result = Data.define(:db_path, :outcomes, :cleans, :skips, :indexed, :axes, :facets, :analyzed,
+                         :link_failures) do
+      def initialize(db_path:, outcomes:, cleans:, skips:, indexed:, axes:, facets:, analyzed: nil,
+                     link_failures: [])
         super
       end
 
@@ -79,6 +87,10 @@ module Nabu
     def run(progress: nil)
       refusal = refusal_reason
       raise Nabu::Error, refusal if refusal
+
+      # P70 fail-fast, mirroring the full rebuild: a malformed hand edit to
+      # config/lect_rulings.yml refuses before any replay work.
+      LectRulings.validate!(@config.lect_rulings_path)
 
       db = Store.connect(db_path)
       Store.setup!(db)
@@ -128,6 +140,28 @@ module Nabu
         Store::SourceStats.derive!(db, note: "derived (incremental rebuild)")
       end
       axes, facets = corpus_builders(db, progress) if outcomes.any?
+      # P70 (the derivability contract): dirty replays make the two derived
+      # sibling dbs stale — the lect rules read the re-minted facets, the
+      # reference producers read the changed canonical. Re-derive both
+      # exactly as the full rebuild does (the sacred invariant covers them
+      # too). A clean sweep skips this: the write-through CLIs keep both
+      # journals live, so only a HAND edit to config/lect_rulings.yml or
+      # link_scopes.yml diverges — and that propagates at the next full
+      # rebuild or dirty incremental (class doc).
+      link_failures = []
+      if outcomes.any?
+        progress&.stage("lect journal")
+        journal = Store::LectJournal.open!(@config.lects_journal_path)
+        begin
+          Store::LectJournal.rederive!(journal, catalog: db, config: @config)
+        ensure
+          journal.disconnect
+        end
+        progress&.stage("lect facets")
+        Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config))
+        progress&.stage("links")
+        link_failures = rederive_links!(db, fulltext)
+      end
       indexed = heal_index(db, fulltext, progress) if outcomes.empty? && !Store::Indexer.incremental_ready?(fulltext)
       # P42-4: refresh the planner stats when dirty sources re-derived — their
       # replays revised the catalog and (per source) the index, so the
@@ -135,7 +169,8 @@ module Nabu
       # touched no rows, so the existing stats still describe them.
       analyzed = analyze_after_incremental(db, fulltext) if outcomes.any?
       Result.new(db_path: db_path, outcomes: outcomes, cleans: cleans, skips: skips,
-                 indexed: indexed, axes: axes, facets: facets, analyzed: analyzed)
+                 indexed: indexed, axes: axes, facets: facets, analyzed: analyzed,
+                 link_failures: link_failures)
     ensure
       db&.disconnect
       fulltext&.disconnect

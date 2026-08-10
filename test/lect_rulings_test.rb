@@ -44,6 +44,33 @@ class LectRulingsTest < Minitest::Test
     with_path { |path| assert_empty Nabu::LectRulings.load(path) }
   end
 
+  # The file is OWNER-EDITABLE: an unquoted `at: 2026-08-10` parses as a
+  # YAML Date — the load must tolerate it (a crashing load would kill
+  # assign/withdraw AND the rebuild's lect-journal stage).
+  def test_load_tolerates_a_hand_written_unquoted_date
+    with_path do |path|
+      File.write(path, "rulings:\n- urn: urn:d:1\n  code: sux\n  lect: sux:post\n  at: 2026-08-10\n")
+      assert_equal "urn:d:1", Nabu::LectRulings.load(path).first["urn"]
+      assert_equal 1, Nabu::LectRulings.validate!(path)
+    end
+  end
+
+  # validate! is the rebuild's fail-fast: malformed hand edits refuse
+  # BEFORE the hours-long replay, as Nabu::Error with the entry named.
+  def test_validate_refuses_malformed_entries_and_unparseable_yaml
+    with_path do |path|
+      File.write(path, "rulings:\n- urn: urn:d:1\n  code: sux\n")
+      error = assert_raises(Nabu::Error) { Nabu::LectRulings.validate!(path) }
+      assert_match(/`lect:`/, error.message)
+
+      File.write(path, "rulings: [unclosed")
+      assert_raises(Nabu::Error) { Nabu::LectRulings.validate!(path) }
+
+      File.write(path, Nabu::LectRulings::HEADER)
+      assert_equal 0, Nabu::LectRulings.validate!(path), "the shipped empty file validates"
+    end
+  end
+
   def test_apply_replays_config_rulings_into_the_journal_as_owner_rows
     with_path do |path|
       Nabu::LectRulings.append!(path, urn: "urn:d:1", code: "sux", lect_id: "sux:post", note: "n")

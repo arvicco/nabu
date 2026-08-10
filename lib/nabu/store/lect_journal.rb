@@ -13,10 +13,11 @@ module Nabu
     #
     # LinksJournal mechanics throughout (see that module's host argument):
     # own forward-only migration track (db/lects_migrate), urn keying
-    # because rebuilds re-mint catalog ids, absent file = empty state,
-    # `nabu rebuild` never touches it. Unlike links, losing this file loses
-    # RULINGS, not re-minable derivations — backups should include it
-    # (`nabu lect list --format tsv` is the flat export).
+    # because rebuilds re-mint catalog ids, absent file = empty state.
+    # DERIVED since P70: owner rulings live in config/lect_rulings.yml
+    # (write-through from `lect assign`) and `nabu rebuild` re-derives the
+    # whole journal via +rederive!+ below — losing this file loses nothing
+    # the two-folder backup (canonical/ + config/) cannot restore.
     #
     # The read side is the lazy Overlay: Lects#resolve only ever asks
     # +@overlay[urn]+, so a DB-backed object with `[]` (point lookup on the

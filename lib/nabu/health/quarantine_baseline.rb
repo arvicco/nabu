@@ -115,10 +115,12 @@ module Nabu
         row[:baseline]
       end
 
+      # Owner-editable file: tolerate an unquoted `at: 2026-07-23` (YAML
+      # parses it as a Date, which safe_load rejects by default).
       def config_acceptances(path)
         return [] unless path && File.file?(path)
 
-        (YAML.safe_load_file(path) || {}).fetch("acceptances", nil) || []
+        (YAML.safe_load_file(path, permitted_classes: [Date]) || {}).fetch("acceptances", nil) || []
       end
 
       # The governing (latest) acceptance for +slug+, or nil — including on a
