@@ -162,6 +162,68 @@ module Query
       assert_equal [["edh", 1]], result.unlinked
     end
 
+    # -- axis holdings (P66-2: the P64-4 booked gap closes) --------------------
+    #
+    # document_axes.place_ref carries adapter-asserted AND registry-projected
+    # refs (both mint and URL spellings — Nabu::PlaceRefs is the one reader).
+    # The desk counts them as a SEPARATE labeled lane, doc-deduped, bounded
+    # (an id must parse out, never substring-match).
+
+    def axis_row(source:, slug:, place_ref:)
+      doc_id = @catalog[:documents].where(urn: "urn:t:#{source}:#{slug}").get(:id)
+      @catalog[:document_axes].insert(document_id: doc_id, place_ref: place_ref,
+                                      axis_source: "test")
+    end
+
+    def test_axis_holdings_count_place_ref_rows_in_both_spellings
+      load_document(source: "isicily", slug: "a", place: { "pleiades" => "570685" })
+      load_document(source: "cdli", slug: "b")
+      load_document(source: "cdli", slug: "c")
+      axis_row(source: "cdli", slug: "b", place_ref: "pleiades:570685 tm:2810")
+      axis_row(source: "cdli", slug: "c", place_ref: "https://pleiades.stoa.org/places/570685")
+
+      card = place_query.run("570685").cards.first
+      assert_equal [["isicily", 1]], card.holdings, "the metadata lane is unchanged"
+      assert_equal [["cdli", 2]], card.axis_holdings, "mint AND url spellings both count"
+    end
+
+    def test_axis_holdings_are_bounded_and_doc_deduped
+      load_document(source: "cdli", slug: "b")
+      axis_row(source: "cdli", slug: "b", place_ref: "pleiades:5706850")
+      axis_row(source: "cdli", slug: "b", place_ref: "pleiades:570685")
+      axis_row(source: "cdli", slug: "b", place_ref: "pleiades:570685")
+
+      card = place_query.run("570685").cards.first
+      assert_equal [["cdli", 1]], card.axis_holdings,
+                   "5706850 never counts for 570685; two rows on one doc count once"
+    end
+
+    # -- namespaced-id input (P66-2: the desk's third dimension goes multi-gazetteer)
+
+    def test_a_namespaced_ref_queries_its_own_axis_lane
+      load_document(source: "ceipom", slug: "b")
+      axis_row(source: "ceipom", slug: "b", place_ref: "tm:2810 pleiades:570685")
+
+      result = place_query.run("tm:2810")
+      card = result.cards.first
+      assert_equal "tm:2810", card.ref
+      assert_nil card.pleiades_id
+      assert_equal [["ceipom", 1]], card.axis_holdings
+      assert_empty card.holdings, "the metadata lane is pleiades-only — honest empty"
+    end
+
+    def test_a_pleiades_mint_ref_routes_to_the_full_pleiades_card
+      load_document(source: "isicily", slug: "a", place: { "pleiades" => "570685" })
+      card = place_query.run("pleiades:570685").cards.first
+      assert_equal "570685", card.pleiades_id
+      assert_equal "Sparta", card.place.title
+      assert_equal "pleiades:570685", card.ref
+    end
+
+    def test_an_unknown_namespace_stays_a_title_lookup
+      assert_raises(Nabu::Query::Place::Error) { place_query.run("zz:1") }
+    end
+
     # -- input edges -----------------------------------------------------------
 
     def test_blank_input_is_an_error

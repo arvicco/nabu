@@ -48,6 +48,13 @@ module Nabu
     # = wins verbatim). No write path — seed/scaffold/ingest never set it;
     # the owner hand-edits the dossier.
     CURATED_KEYS = %w[description themes key_works group].freeze
+
+    # The scaffolder's unwritten-description marker (P66-4/Q3): a dossier
+    # whose description starts with this is honestly UNWRITTEN — the export
+    # seeds it instead of recycling registry comments (the openmgh
+    # loop-speak complaint, 2026-08-02), and site:check flags it loudly
+    # until the owner writes the content-first prose.
+    PLACEHOLDER = "PLACEHOLDER — "
     LIST_KEYS = %w[themes key_works].freeze
     STRUCTURAL_KEYS = %w[slug provenance].freeze
 
