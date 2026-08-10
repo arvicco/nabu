@@ -34,10 +34,12 @@ module MCP
     # -- rig -------------------------------------------------------------------
 
     def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil, links: nil, registry: nil,
-              enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil)
+              enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil,
+              readings: nil, hieroglyphs: nil)
       Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger, links: links,
                            registry: registry, enabled_slugs: enabled_slugs, pleiades: pleiades,
-                           sign_list: sign_list, tibetan_words: tibetan_words, lects: lects)
+                           sign_list: sign_list, tibetan_words: tibetan_words, lects: lects,
+                           readings: readings, hieroglyphs: hieroglyphs)
     end
 
     def make_document(source: @open, urn: "urn:d:1", title: "Iliad", language: "grc",
@@ -165,10 +167,11 @@ module MCP
 
     # -- definitions -----------------------------------------------------------
 
-    def test_definitions_lists_the_twelve_tools_with_json_schemas
+    def test_definitions_lists_the_thirteen_tools_with_json_schemas
       defs = tools.definitions
       assert_equal(%w[nabu_search nabu_show nabu_concord nabu_align nabu_define nabu_etym
-                      nabu_parallels nabu_cognates nabu_links nabu_place nabu_signs nabu_status],
+                      nabu_parallels nabu_cognates nabu_links nabu_char nabu_place nabu_signs
+                      nabu_status],
                    defs.map { |d| d[:name] })
       defs.each do |definition|
         refute_empty definition[:description]
@@ -997,6 +1000,55 @@ module MCP
       result = call("nabu_signs", { "text" => "szesz" })
       refute result[:isError]
       assert_match(/nabu sync osl/, text_of(result), "lane off is a corpus state, never an error")
+    end
+
+    # -- nabu_char (P68-3): the P65 --json contracts over MCP ----------------
+
+    HIEROGLYPHS = Nabu::Hieroglyphs.load(
+      File.join(Nabu::TestSupport.fixtures("unikemet"), "Unikemet.txt")
+    )
+
+    def char_tools(**)
+      tools(sign_list: SIGN_LIST, hieroglyphs: HIEROGLYPHS, **)
+    end
+
+    def test_char_serves_the_cuneiform_sign_card_contract
+      body = payload(char_tools.call("nabu_char", { "query" => "SZESZ" }))
+      assert_equal "ŠEŠ", body.dig("card", "name")
+      assert_equal ["U+122C0"], body.dig("card", "codepoints")
+      assert_equal ["535"], body.dig("card", "lists", "MZL"),
+                   "the CLI --json contract and the MCP payload are ONE contract"
+    end
+
+    def test_char_ambiguous_value_lists_all_candidates
+      body = payload(char_tools.call("nabu_char", { "query" => "idₓ" }))
+      assert_nil body["card"]
+      assert_equal(["|A.BARA₂|", "|UD.ŠEŠ.KI|"], body["candidates"].map { |c| c["name"] })
+    end
+
+    def test_char_serves_the_hieroglyph_card_by_gardiner_code_and_glyph
+      body = payload(char_tools.call("nabu_char", { "query" => "G5" }))
+      assert_equal "U+13143", body.dig("card", "codepoint")
+      glyph = payload(char_tools.call("nabu_char", { "query" => "𓅃" }))
+      assert_equal "G-12-002", glyph.dig("card", "cat")
+    end
+
+    def test_char_han_input_notes_the_missing_contract
+      result = char_tools.call("nabu_char", { "query" => "棄" })
+      refute result[:isError]
+      assert_match(/no machine contract yet/, text_of(result))
+    end
+
+    def test_char_without_any_sign_module_notes_the_sync_hint
+      result = call("nabu_char", { "query" => "SAR" })
+      refute result[:isError]
+      assert_match(/nabu sync osl/, text_of(result))
+    end
+
+    def test_char_unknown_name_answers_the_honest_empty_contract
+      body = payload(char_tools.call("nabu_char", { "query" => "NOSUCH" }))
+      assert_nil body["card"]
+      assert_empty body["candidates"]
     end
 
     def test_signs_unknown_urn_is_informative_not_an_error

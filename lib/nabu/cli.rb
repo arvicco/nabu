@@ -802,9 +802,13 @@ module Nabu
 
     desc "sync [SOURCE]", "Fetch and load a source, an axis's members, or --all live sources"
     long_desc <<~HELP, wrap: false
-      Fetch and load into the store. The positional NAME resolves EXACT SLUG
-      FIRST, then axis: a source slug syncs that one source (the explicit
-      request — a disabled source syncs anyway, with a note); a name that is
+      Fetch and load into the store. The positional NAME resolves GROUP
+      FIRST (the registry's closed group vocabulary — `core`: the registry
+      instruments, also swept by quickstart; `signs`: every shelf the
+      sign/char capability reads, so `nabu enable signs && nabu sync signs`
+      restores the whole capability on a fresh box), then EXACT SLUG, then
+      axis: a source slug syncs that one source (the explicit request — a
+      disabled source syncs anyway, with a note); a name that is
       not a slug but IS a research axis (config/axes.yml) expands to the
       axis's members. Axis names can never equal source slugs (a load-time
       guarantee), so the resolution is unambiguous.
@@ -3162,6 +3166,11 @@ module Nabu
       the MCP nabu_status sources array. `nabu search` / `show` / `export` stay
       library-wide (enablement scopes acquisition + visibility, never reading).
 
+      A GROUP name (core · signs) expands to the group's SOURCE members —
+      its modules are machinery, pre-enabled by nature, and never enter the
+      profile. `nabu enable signs && nabu sync signs` restores the whole
+      sign/char capability on a fresh box.
+
       enable is ADDITIVE: it APPENDS (never trims). An AXIS is recorded by name
       (it expands to the axis's PUBLIC members); a SOURCE by slug. Enabling an
       axis never implicitly enables its grant-gated (blocked) members — each is
@@ -3182,7 +3191,21 @@ module Nabu
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
       names = names.map(&:strip).reject(&:empty?)
-      raise Thor::Error, "enable: name at least one axis or source to enable" if names.empty?
+      raise Thor::Error, "enable: name at least one axis, source, or group to enable" if names.empty?
+
+      # P68-4: a GROUP name expands to its source members (modules are
+      # machinery — pre-enabled by nature, never profile entries), so
+      # `nabu enable signs && nabu sync signs` is the whole restore dance.
+      names = names.flat_map do |name|
+        next name unless Nabu::SourceRegistry::GROUPS.include?(name)
+
+        members = registry.group_members(name)
+        sources = members.reject { |slug| registry[slug].feature_module? }
+        modules = members - sources
+        say "#{name} group → enabling #{sources.join(', ')}"
+        say "  (#{modules.join(', ')}: modules — pre-enabled by nature)" unless modules.empty?
+        sources
+      end
 
       Nabu::Focus.validate_names!(names, registry)
       ledger = open_or_create_ledger(config)
@@ -3522,6 +3545,10 @@ module Nabu
         # lazily per call (nabu_signs); an unsynced box notes the sync hint,
         # every other tool byte-identical (the lane-off rule).
         sign_list: :auto,
+        # The sign-card seams (P68-3, nabu_char): same lazy feature-detect
+        # posture — CDLI readings ride canonical/osl/00etc, the Egyptian
+        # spine canonical/unikemet.
+        readings: :auto, hieroglyphs: :auto,
         # Tibetan word segmentation (P54-2): :auto = feature-detect
         # canonical/nabu-data lazily inside Query::Show (nothing loads
         # unless nabu_show is asked for a segmented render); an unsynced
@@ -6929,13 +6956,15 @@ module Nabu
         end
 
         fulltext = open_fulltext(config)
+        catalog = open_catalog(config)
         begin
           Nabu::Query::SignCard.new(
             sign_list: list, readings: Nabu::CdliSignReadings.load_default(config: config),
-            fulltext: fulltext
+            fulltext: fulltext, catalog: catalog
           ).run(input)
         ensure
           fulltext&.disconnect
+          catalog&.disconnect
         end
       end
 
@@ -6984,8 +7013,17 @@ module Nabu
         print_sign_card_lists(card)
         print_sign_card_values(card)
         print_sign_card_glosses(card)
+        print_sign_card_senses(card)
         print_sign_card_forms(card)
         print_sign_card_corpus(card)
+      end
+
+      def print_sign_card_senses(card)
+        return if card.senses.empty?
+
+        say ""
+        say "senses (Wiktionary, kaikki extract):"
+        card.senses.each { |sense| say "  #{sense.gloss}#{" (#{sense.pos})" if sense.pos}" }
       end
 
       def print_sign_card_miss(result)
@@ -7914,11 +7952,13 @@ module Nabu
         return sync_all(runner, enabled: enabled) if options[:all]
         return sync_axes(runner, registry, options[:axis].split(","), db, ledger) if options[:axis]
 
-        # P63 rider (owner ruling 2026-08-09): `sync core` sweeps the CORE
-        # group — the registry-sibling instruments (nabu-lects, nabu-places,
-        # cigs). Modules by nature, so no enablement dance; failures are
-        # reported per member and never stop the rest.
-        return sync_core(runner, registry, db, ledger) if slug == "core"
+        # P63 rider + P68-4: `sync <group>` sweeps a registered group —
+        # "core" (the registry instruments; modules, no enablement dance)
+        # and "signs" (the sign/char restore set: `nabu enable signs &&
+        # nabu sync signs` makes the capability whole on a fresh box).
+        # Failures are reported per member and never stop the rest.
+        return sync_group(slug, runner, registry, db, ledger, enabled) if
+          Nabu::SourceRegistry::GROUPS.include?(slug)
 
         if slug.nil? || registry[slug]
           # P44-r3b: the enablement acquisition gate is on the EXPLICIT
@@ -7932,27 +7972,32 @@ module Nabu
         raise Thor::Error, unknown_sync_target_message(registry, slug)
       end
 
-      # The core-group sweep: each member through the ORDINARY sync_one path
-      # (byte-identical per-source reports), one member's failure contained
-      # and reported at the end. A Manual Adapter member in the awaiting
-      # state counts as awaiting, not failed.
-      def sync_core(runner, registry, db, ledger)
-        members = registry.core_members
-        raise Thor::Error, "sync core: no core-group sources registered" if members.empty?
+      # The group sweep (core P63; generalized P68-4): each member through
+      # the ORDINARY sync_one path (byte-identical per-source reports), one
+      # member's failure contained and reported at the end. A Manual
+      # Adapter member in the awaiting state counts as awaiting, not
+      # failed. The enablement gate applies per SOURCE member (modules are
+      # machinery — exempt inside the gate itself); a not-yet-enabled
+      # member is a contained failure carrying the enable hint, so
+      # `sync signs` before `enable signs` explains itself member by member.
+      def sync_group(name, runner, registry, db, ledger, enabled)
+        members = registry.group_members(name)
+        raise Thor::Error, "sync #{name}: no #{name}-group sources registered" if members.empty?
 
-        say "core group: #{members.join(' · ')}"
+        say "#{name} group: #{members.join(' · ')}"
         failures = []
         members.each do |member|
+          enforce_enablement!(registry[member], enabled)
           sync_one(runner, registry, member, db, ledger)
         rescue Nabu::ManualDrop::AwaitingAcquisition => e
           say e.message
-        rescue Nabu::Error => e
+        rescue Nabu::Error, Thor::Error => e
           failures << member
           warn "#{member}: #{e.message}"
         end
         return if failures.empty?
 
-        raise Thor::Error, "sync core: #{failures.size} of #{members.size} failed — #{failures.join(', ')}"
+        raise Thor::Error, "sync #{name}: #{failures.size} of #{members.size} failed — #{failures.join(', ')}"
       end
 
       # The enabled-slug set governing sync acquisition (P44-r3b), or nil when

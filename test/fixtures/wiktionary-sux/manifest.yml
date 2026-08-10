@@ -1,0 +1,13 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: wiktionary-sux
+adapter_test: test/adapters/wiktionary_sux_test.rb
+retrieved: 2026-08-10
+files:
+  - path: kaikki.org-dictionary-Sumerian.jsonl
+    url: https://kaikki.org/dictionary/Sumerian/kaikki.org-dictionary-Sumerian.jsonl
+    whole: false
+    trim: >-
+      the 16 complete JSONL lines with word in {𒊬, 𒀭, 𒀊, 𒋀, ab}, byte-verbatim
+      in upstream order, of 2,499 lines — cuneiform headwords with glosses,
+      sux→akk descendant chains, multi-pos glyphs, one romanization pointer

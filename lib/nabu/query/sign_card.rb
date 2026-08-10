@@ -33,6 +33,9 @@ module Nabu
       # deprecated values stay listed (texts using them exist), marked.
       Value = Data.define(:value, :language, :deprecated)
       Gloss = Data.define(:reading, :preferred, :meaning)
+      # One Wiktionary sense (P68-2): the wiktionary-sux shelf's entries
+      # whose headword IS the sign's rendered glyph.
+      Sense = Data.define(:pos, :gloss)
       FormRef = Data.define(:name, :codepoints, :glyph)
       # +via+ is the matched @list token on list-number candidates ("70" →
       # AK via ASY070) and nil on value-lane candidates.
@@ -46,7 +49,9 @@ module Nabu
       # a variant form. corpus maps spelled value → fulltext document
       # frequency ({} when no fulltext handle or nothing attested).
       Card = Data.define(:name, :uname, :oid, :deprecated, :codepoints, :glyph,
-                         :aka, :lists, :values, :glosses, :forms, :parent, :corpus)
+                         :aka, :lists, :values, :glosses, :forms, :parent, :corpus, :senses) do
+        def initialize(senses: [], **) = super
+      end
 
       # card XOR candidates (both empty = unknown input, said plainly).
       Result = Data.define(:input, :card, :candidates)
@@ -54,10 +59,15 @@ module Nabu
       # The Cuneiform blocks: base, Numbers & Punctuation, Early Dynastic.
       CUNEIFORM = /\A[\u{12000}-\u{1254F}]+\z/
 
-      def initialize(sign_list:, readings: nil, fulltext: nil)
+      # The sense-join shelf (P68-2): the kaikki Sumerian extraction's
+      # dictionary slug.
+      WIKTIONARY_SLUG = "wiktionary-sux"
+
+      def initialize(sign_list:, readings: nil, fulltext: nil, catalog: nil)
         @list = sign_list
         @readings = readings
         @fulltext = fulltext
+        @catalog = catalog
         @tokenizer = Nabu::AtfTokenizer.new(dialect: :catf)
       end
 
@@ -108,6 +118,7 @@ module Nabu
           "forms" => card.forms.map do |form|
             { "name" => form.name, "codepoints" => form.codepoints || [], "glyph" => form.glyph }
           end,
+          "senses" => card.senses.map { |sense| { "pos" => sense.pos, "gloss" => sense.gloss } },
           "parent" => card.parent, "corpus" => card.corpus
         }
       end
@@ -162,8 +173,28 @@ module Nabu
           glyph: glyph(record), aka: record.aka, lists: lists(record),
           values: record.values.map { |v| Value.new(value: v.value, language: v.language, deprecated: v.deprecated) },
           glosses: glosses(record), forms: forms(record),
-          parent: record.parent_name, corpus: corpus_panel(record)
+          parent: record.parent_name, corpus: corpus_panel(record),
+          senses: senses(record)
         )
+      end
+
+      # The Wiktionary sense join (P68-2): wiktionary-sux entries whose
+      # headword IS this sign's rendered glyph — sense gloss + the pos
+      # riding the entry id ("𒋀:noun:1"). No catalog / no shelf → [].
+      def senses(record)
+        glyph = glyph(record)
+        return [] unless glyph && @catalog&.table_exists?(:dictionary_entries)
+
+        @catalog[:dictionary_entries]
+          .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
+          .where(Sequel[:dictionaries][:slug] => WIKTIONARY_SLUG,
+                 Sequel[:dictionary_entries][:headword] => glyph,
+                 Sequel[:dictionary_entries][:withdrawn] => false)
+          .order(Sequel[:dictionary_entries][:entry_id])
+          .select_map([Sequel[:dictionary_entries][:entry_id], Sequel[:dictionary_entries][:gloss]])
+          .filter_map do |entry_id, gloss|
+            Sense.new(pos: entry_id.to_s.split(":")[1], gloss: gloss) if gloss
+          end
       end
 
       # "@list MZL535" → {"MZL" => ["535"]}; the "@list U+122C0" codepoint

@@ -22,9 +22,9 @@ top_languages:
 - code: jpn
   passages: 2983332
   millions: '3.0'
-dictionary_entries: 1407706
-dictionary_entries_display: '1,407,706'
-dictionary_shelves: 104
+dictionary_entries: 1410205
+dictionary_entries_display: '1,410,205'
+dictionary_shelves: 105
 gold_lemmas_m: '19.2'
 silver_lemmas_m: '28.1'
 gold_languages: 37
