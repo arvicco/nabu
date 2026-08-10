@@ -60,6 +60,10 @@ class CharCommandTest < Minitest::Test
       # and the reverse: 国 names its kyūjitai 國 (the hani-fold display precedent).
       back, = with_config(config) { run_cli(%w[char 国]) }
       assert_match(/kyūjitai \(Japanese old form\): 國 \(U\+570B\)/, back)
+      # The corpus panel folds both sides (P65: postings live over
+      # text_normalized, where 国→國 ran) — the simplified card still
+      # attests through its folded form.
+      assert_match(/corpus attestation:.*jpn 1/, back)
     end
   end
 
@@ -71,6 +75,16 @@ class CharCommandTest < Minitest::Test
       # never an empty/placeholder jpn entry.
       assert_match(/corpus attestation: lzh 1/, out)
       refute_match(/jpn/, out)
+    end
+  end
+
+  def test_an_unindexed_box_says_the_corpus_panel_needs_the_index
+    with_char_catalog do |config|
+      FileUtils.rm_f(config.fulltext_path)
+      out, = with_config(config) { run_cli(%w[char 棄]) }
+      assert_match(/corpus attestation: not indexed yet/, out,
+                   "no char-postings index → an honest hint, NEVER a 180-second scan")
+      refute_match(/corpus attestation: lzh/, out)
     end
   end
 
@@ -88,6 +102,53 @@ class CharCommandTest < Minitest::Test
       assert_equal 1, status
       assert_match(/single character/, err)
       assert_match(/--char-component 棄/, err, "points at the containment search instead")
+    end
+  end
+
+  # --- the reading→character lane (P65 gate feedback: `nabu char wen`) ---
+
+  def test_pinyin_input_toneless_or_toned_lists_the_characters
+    with_char_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char qi]) }
+      assert_nil status
+      assert_match(/棄 qì/, out, "toneless pinyin folds against kMandarin")
+      ya, = with_config(config) { run_cli(%w[char ya]) }
+      %w[亚 亜 亞].each { |glyph| assert_match(/#{glyph} yà/, ya, "ya reaches every yà character") }
+      toned, = with_config(config) { run_cli(%w[char qì]) }
+      assert_match(/棄 qì/, toned, "toned input matches exactly")
+    end
+  end
+
+  def test_kana_input_resolves_on_and_kun_readings
+    with_char_catalog do |config|
+      on, = with_config(config) { run_cli(%w[char タイ]) }
+      assert_match(/体 タイ/, on)
+      assert_match(/體 タイ/, on)
+      hira, = with_config(config) { run_cli(%w[char あ]) }
+      assert_match(/亜 ア/, hira, "hiragana input matches katakana on readings")
+      kun, = with_config(config) { run_cli(%w[char ひと]) }
+      assert_match(/人 ひと/, kun, "the exact kun reading")
+      assert_match(/一 ひと/, kun, "the ひと.つ stem and the ひと- notation both answer")
+    end
+  end
+
+  def test_romaji_readings_caps_are_on_and_lowercase_is_kun
+    with_char_catalog do |config|
+      on, = with_config(config) { run_cli(%w[char TAI]) }
+      assert_match(/体 タイ \(on\)/, on, "CAPS romaji = on'yomi (the dictionary convention)")
+      assert_match(/體 タイ \(on\)/, on)
+      refute_match(/たい\.らか/, on, "CAPS never answers kun")
+      kun, = with_config(config) { run_cli(%w[char hito]) }
+      assert_match(/人 ひと \(kun\)/, kun, "lowercase romaji reaches kun readings")
+      assert_match(/一 ひと\.つ \(kun\)/, kun)
+    end
+  end
+
+  def test_an_unmatched_reading_says_so_plainly
+    with_char_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char zzz]) }
+      assert_nil status
+      assert_match(/resolved neither/, out)
     end
   end
 
@@ -226,6 +287,10 @@ class CharCommandTest < Minitest::Test
                       Nabu::Adapters::BabelstoneIds.new, "babelstone-ids")
       load_dictionary(db, "kradfile", "Nabu::Adapters::Kradfile", Nabu::Adapters::Kradfile.new, "kradfile")
       load_dictionary(db, "tls", "Nabu::Adapters::Tls", Nabu::Adapters::Tls.new, "tls")
+      # kanjidic2 (via the edrdg fixture) — the P65 reading lane's on/kun
+      # side; its sample carries none of 棄/國/国, so every absence
+      # assertion above still holds.
+      load_dictionary(db, "edrdg", "Nabu::Adapters::Edrdg", Nabu::Adapters::Edrdg.new, "edrdg")
 
       kanripo = Nabu::Store::Source.create(
         slug: "kanripo", name: "Kanseki Repository", adapter_class: "Nabu::Adapters::Kanripo",
@@ -253,6 +318,12 @@ class CharCommandTest < Minitest::Test
         document_id: jpn_doc.id, urn: "urn:nabu:aozora:000001:1", sequence: 0,
         language: "jpn", text: "國語と国語。", text_normalized: "國語と國語。", content_sha256: "y", revision: 1
       )
+      # P65: the corpus panel reads the precompiled char-postings index (the
+      # desk never scans passages) — build the derived index like the live
+      # box does.
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: db, fulltext: fulltext)
+      fulltext.disconnect
       db.disconnect
       yield config
     end

@@ -87,6 +87,31 @@ module Nabu
       @by_name[key] || @by_aka[key] || @by_form_name[key]
     end
 
+    # Rendered glyph string → record (P65-1, the `nabu char 𒋀` lane): the
+    # sign whose ucun (or codepoint-derived rendering) IS the input,
+    # compounds included (𒋀𒀊 → |ŠEŠ.AB|). Top-level signs win over forms;
+    # first in file order wins ties. nil for an unindexed glyph.
+    def sign_for_glyph(glyph)
+      @by_glyph[glyph.to_s]
+    end
+
+    # @list concordance number → [record, matched token] pairs, in file
+    # order (P65 gate feedback: the card PRINTS "MZL 535" — the reverse
+    # lookup must answer). Input is a qualified token ("MZL535", "mzl 535")
+    # or a bare number ("535", "021b") matched across EVERY held list.
+    # Leading zeros and the ^ variant mark are upstream notation, not
+    # identity (ABZL021b answers to 21b; RSP039^b to 39b). [] for no match.
+    def signs_for_list_number(input)
+      cleaned = input.to_s.delete(" ")
+      if (match = cleaned.match(/\A([A-Za-z]+)(\d+)([A-Za-z'"^]*)\z/))
+        @by_list_token.fetch(list_key(match[1], match[2], match[3]), [])
+      elsif (match = cleaned.match(/\A(\d+)([A-Za-z'"^]*)\z/))
+        @by_list_bare.fetch(number_key(match[1], match[2]), [])
+      else
+        []
+      end
+    end
+
     # Top-level signs only (forms are reachable via their parent records
     # and the name/value indexes).
     def sign_count = @result.signs.size
@@ -94,15 +119,58 @@ module Nabu
     private
 
     def index(signs)
+      @by_glyph = {}
+      @by_list_token = Hash.new { |hash, key| hash[key] = [] }
+      @by_list_bare = Hash.new { |hash, key| hash[key] = [] }
+      forms = []
       signs.each do |record|
         @by_name[record.name] ||= record
         record.aka.each { |alias_name| @by_aka[alias_name] ||= record }
+        index_glyph(record)
         index_values(record)
+        index_list_numbers(record)
         record.forms.each do |form|
           @by_form_name[form.name] ||= form
           index_values(form)
+          index_list_numbers(form)
+          forms << form
         end
       end
+      forms.each { |form| index_glyph(form) }
+    end
+
+    # "@list MZL535" → keys "MZL:535" and bare "535" (the U+ codepoint
+    # lines are identity, not concordance — skipped).
+    def index_list_numbers(record)
+      record.list_numbers.each do |token|
+        match = token.match(/\A([A-Z]+)(\d+)(.*)\z/) or next
+        pair = [record, token]
+        @by_list_token[list_key(match[1], match[2], match[3])] << pair
+        @by_list_bare[number_key(match[2], match[3])] << pair
+      end
+    end
+
+    def list_key(list, number, suffix)
+      "#{list.upcase}:#{number_key(number, suffix)}"
+    end
+
+    def number_key(number, suffix)
+      "#{number.sub(/\A0+(?=\d)/, '')}#{suffix.delete('^').downcase}"
+    end
+
+    # Glyph index in two passes: every top-level sign before ANY form, so a
+    # form sharing a rendering never shadows a later sign.
+    def index_glyph(record)
+      glyph = rendered_glyph(record)
+      @by_glyph[glyph] ||= record if glyph
+    end
+
+    def rendered_glyph(record)
+      return record.ucun if record.ucun
+
+      codepoints = record.codepoints or return nil
+      chars = codepoints.filter_map { |code| code[/\AU\+(\h+)\z/, 1]&.to_i(16)&.chr(Encoding::UTF_8) }
+      chars.empty? ? nil : chars.join
     end
 
     def index_values(record)
