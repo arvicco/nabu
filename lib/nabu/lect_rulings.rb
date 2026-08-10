@@ -27,16 +27,19 @@ module Nabu
       #     code: sux                 # the stored bare code refined
       #     lect: sux:post            # the ruling
       #     note: "why"               # optional
-      #     at:   2026-08-10          # ruling date
+      #     at:   "2026-08-10"        # ruling date
       rulings: []
     YAML
 
     module_function
 
+    # Owner-editable file: tolerate an unquoted `at: 2026-08-10` (YAML
+    # parses it as a Date, which safe_load rejects by default — and a
+    # crashing load would kill assign/withdraw AND the rebuild stage).
     def load(path)
       return [] unless File.file?(path)
 
-      (YAML.safe_load_file(path) || {}).fetch("rulings", nil) || []
+      (YAML.safe_load_file(path, permitted_classes: [Date]) || {}).fetch("rulings", nil) || []
     end
 
     # Append (or replace the same (urn, code)) ruling — the write-through
@@ -58,6 +61,22 @@ module Nabu
       kept = rulings.reject { |r| r["urn"] == urn && (code.nil? || r["code"] == code) }
       write!(path, kept) if kept.size != rulings.size
       rulings.size - kept.size
+    end
+
+    # Fail-fast parse + shape check. `nabu rebuild` calls this BEFORE the
+    # hours-long corpus replay: a typo'd hand edit must abort at second
+    # zero, not at the late lect-journal stage. Raises Nabu::Error naming
+    # the offending entry. Returns the ruling count.
+    def validate!(path)
+      load(path).each do |r|
+        %w[urn code lect].each do |key|
+          next if r[key].is_a?(String) && !r[key].strip.empty?
+
+          raise Nabu::Error, "config/lect_rulings.yml: entry #{r.inspect} is missing/blank `#{key}:`"
+        end
+      end.size
+    rescue Psych::Exception => e
+      raise Nabu::Error, "config/lect_rulings.yml does not parse: #{e.message}"
     end
 
     # Replay every config ruling into +journal+ (basis "owner") — the

@@ -182,7 +182,7 @@ class RetentionTest < Minitest::Test
 
   def config
     Nabu::Config.new(canonical_dir: @canonical, db_dir: File.join(@root, "db"),
-                     sources_path: "(n/a)", config_path: "(test)")
+                     sources_path: "(n/a)", config_path: File.join(@root, "config", "nabu.yml"))
   end
 
   def registry

@@ -7,20 +7,22 @@ module Nabu
   # P7-2): a file-level rsync snapshot of everything that is NOT re-derivable,
   # to a config-driven external-volume target.
   #
-  # == The backup set (everything canonical/ + the ledger + config)
+  # == The backup set (the P70 two-folder contract)
   #
+  # REQUIRED — the only non-derived data:
   # - canonical/  — the permanent asset, INCLUDING every `.attic/` (files
   #   upstream scrapped that survive nowhere else). File-level rsync copies the
   #   attic for free; a per-slug git mirror would MISS it (the attic is a plain
   #   dir inside the working tree, not a branch), which is exactly why the
   #   promise is "restorable from an rsync backup", not "from the git remotes".
-  # - db/history.sqlite3 — the ledger (P7-1): run history, sync pins, license
-  #   baselines, durable revisions. The ONLY copy; disposable it is not.
-  # - config/ — nabu.yml + sources.yml (the registry that says what the corpus
-  #   even is).
-  # - the derived dbs (catalog + fulltext) — included by DEFAULT (a cheap file
-  #   copy beats an hour of `nabu rebuild` on restore); `--skip-derived` omits
-  #   them (canonical/ + a rebuild reconstitutes them exactly).
+  # - config/ — every decision: the registries, rules/overrides/postures,
+  #   lect rulings, grants, creep acceptances, the box profile.
+  #
+  # CONVENIENCE (default-on, `--skip-derived` omits): the derived dbs
+  # (catalog + fulltext + lects) — a cheap file copy beats hours of
+  # `nabu rebuild` on restore — and the ledger (db/history.sqlite3),
+  # operational LOG whose loss costs history and guard baselines, never
+  # library data (№R-21; restore.md names the consequences).
   #
   # == The mount-point guard (owner-mandated 2026-07-07)
   #

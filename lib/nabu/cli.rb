@@ -460,9 +460,12 @@ module Nabu
 
       journal.disconnect
       writable = Nabu::Store::LectJournal.open!(config.lects_journal_path)
-      count = Nabu::Store::LectJournal.withdraw!(writable, urn: urn, code: options[:code])
-      # P70: mirror the withdrawal into the config source of truth.
+      # P70: the config source of truth FIRST — a failure between the two
+      # writes must leave the ruling gone from config (rebuild then heals
+      # the journal forward), never lingering there to resurrect a
+      # journal-withdrawn ruling at the next rebuild.
       Nabu::LectRulings.remove!(config.lect_rulings_path, urn: urn, code: options[:code])
+      count = Nabu::Store::LectJournal.withdraw!(writable, urn: urn, code: options[:code])
       say "withdrew #{count} assignment#{'s' unless count == 1}  #{urn}#{" #{options[:code]}" if options[:code]}"
       refresh_lect_facet(config, urn)
     end
@@ -8776,6 +8779,9 @@ module Nabu
         say "  re-derived #{result.outcomes.size}, clean #{result.cleans.size}, " \
             "skipped #{result.skips.size}"
         say "  indexed #{result.indexed} passages" if result.indexed
+        result.link_failures.each do |failure|
+          say "  WARNING: links re-mine failed for #{failure} — the links db has this gap", :yellow
+        end
         print_analyzed(result.analyzed)
       end
 
@@ -8813,6 +8819,9 @@ module Nabu
               "lexlep #{result.axes.lexlep}, tir #{result.axes.tir}, " \
               "iip #{result.axes.iip}, cdli #{result.axes.cdli}, " \
               "rundata #{result.axes.rundata}, openiti #{result.axes.openiti})"
+        end
+        result.link_failures.each do |failure|
+          say "  WARNING: links re-mine failed for #{failure} — the links db has this gap", :yellow
         end
         print_analyzed(result.analyzed)
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)

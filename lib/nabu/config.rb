@@ -173,25 +173,28 @@ module Nabu
       File.join(db_dir, FULLTEXT_DB_FILENAME)
     end
 
-    # The history ledger (architecture §5, P7-1): runs, pins, license
-    # baselines, durable revisions. NOT derived from canonical/ — the one db
-    # under db/ that `nabu rebuild` never touches and backups must include.
+    # The history ledger (architecture §5, P7-1; reclassified LOG by P70):
+    # runs, pins, license baselines, durable revisions. NOT derived and
+    # never touched by `nabu rebuild` — but operational HISTORY, not owner
+    # decisions (those live in config/ since P70), so the two-folder backup
+    # contract may lose it (№R-21; restore.md names the consequences).
     def history_path
       File.join(db_dir, HISTORY_DB_FILENAME)
     end
 
     # The links journal (architecture §15, P16-1): batch-mined cross-reference
-    # edges. A function of (canonical, params, code version) — NOT of canonical
-    # alone — so, like the ledger, `nabu rebuild` never touches it; unlike the
-    # ledger it is cheap to regenerate (a re-mine), so backups may skip it.
+    # edges. DERIVED since P70: `nabu rebuild`'s links stage wipes and
+    # re-mines it (slug-scoped producers from the registry, batch scopes
+    # replayed from config/link_scopes.yml), so backups may skip it.
     def links_path
       File.join(db_dir, LINKS_DB_FILENAME)
     end
 
     # The lect-assignment journal (P58-1): per-document code → lect rulings,
-    # the persistence for Nabu::Lects' overlay tier. Like the ledger,
-    # `nabu rebuild` never touches it; like the ledger — and UNLIKE links —
-    # losing it loses decisions, so backups should include it.
+    # the persistence for Nabu::Lects' overlay tier. DERIVED since P70:
+    # `nabu rebuild`'s lect-journal stage re-derives it from
+    # config/lect_rulings.yml + the compiled rules + infer-dates, so backups
+    # may skip it (the two-folder contract keeps every ruling in config/).
     def lects_journal_path
       File.join(db_dir, LECTS_DB_FILENAME)
     end

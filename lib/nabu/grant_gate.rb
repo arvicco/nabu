@@ -49,10 +49,12 @@ module Nabu
       @ledger[:grant_acknowledgments].where(source_slug: slug).any?
     end
 
+    # Owner-editable file: tolerate an unquoted `at: 2026-07-23` (YAML
+    # parses it as a Date, which safe_load rejects by default).
     def config_grants
       return [] unless @grants_path && File.file?(@grants_path)
 
-      (YAML.safe_load_file(@grants_path) || {}).fetch("grants", nil) || []
+      (YAML.safe_load_file(@grants_path, permitted_classes: [Date]) || {}).fetch("grants", nil) || []
     end
 
     # A grant-required source with no recorded acknowledgment — the condition
@@ -79,6 +81,10 @@ module Nabu
                    "# the source of truth; the ledger row is a historical mirror).\n" +
                    YAML.dump("grants" => grants))
       end
+      # The ledger mirror — skipped honestly when no ledger (or a pre-P42
+      # one) is around: config is the source of truth either way.
+      return unless @ledger.respond_to?(:table_exists?) && @ledger.table_exists?(:grant_acknowledgments)
+
       @ledger[:grant_acknowledgments].insert(
         source_slug: slug, terms: terms, how: how, created_at: Time.now
       )

@@ -432,10 +432,12 @@ class LectsTest < Minitest::Test
     # passage-serving queries (search/parallels, and define/cognates via
     # their own grains) now include instead of each opening the registry.
     # P70 adds store/lect_journal.rb — rederive! re-mints the journal from
-    # config + rules + infer-dates, and infer-dates needs the registry.
+    # config + rules + infer-dates, and infer-dates needs the registry —
+    # and incremental_rebuild.rb: a dirty incremental re-derives the
+    # journal + lect facets exactly as the full rebuild does.
     allowlist = %w[nabu/cli.rb nabu/query/etym.rb nabu/query/search.rb nabu/mcp/tools.rb
                    nabu/rebuild.rb nabu/query/define.rb nabu/query/lect_filter.rb
-                   nabu/store/lect_journal.rb]
+                   nabu/store/lect_journal.rb nabu/incremental_rebuild.rb]
                 .map { |rel| File.join(lib_root, rel) }
 
     offenders = Dir[File.join(lib_root, "**", "*.rb")]
