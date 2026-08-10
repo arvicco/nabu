@@ -310,20 +310,27 @@ stance applies to counterparts.
 
 ### `nabu_place`
 
-The place desk (P44-2's `nabu place`, exposed P44-3): one ancient place —
-resolved through the **local** Pleiades gazetteer dump — plus the library's
-holdings at that place, per source. `query` is a Pleiades numeric id, a
-`pleiades.stoa.org/places` URL, or an **exact** case-insensitive place title
-("Segesta" works, "Seges" does not — no fuzzy matching anywhere in the
-pipeline, by design; homonym titles return one card per bearer). Each card
-carries the gazetteer facts (title, place types, attested time-period
-vocabulary, representative point — display only, no maps, no coordinate math)
-and `holdings`: per-source counts of live documents whose parsers captured
-that upstream-asserted id from their headers (isicily, edh, iip, itant).
-Counts are **aggregate only** — reading the texts is `nabu_search`/`nabu_show`'s
-job. An honest labelled `unlinked` tail counts id-less documents whose captured
-findspot **text** mentions the name (exact substring), never merged into the
-id-matched holdings. Degradation is the CLI's exactly: with the dump absent on
+The place desk (P44-2's `nabu place`, exposed P44-3; **v2 P66-2**): one
+ancient place — resolved through the **local** Pleiades gazetteer dump or
+the derived multi-gazetteer place index — plus the library's holdings at
+that place, per source. `query` is a Pleiades numeric id, a
+`pleiades.stoa.org/places` URL, a **namespaced ref** (`tm:2788` ·
+`cigs:GIR` · `pleiades:462281` — the tm/cigs gazetteers resolve through
+their own derived index slices), or an **exact** case-insensitive place
+title ("Segesta" works, "Seges" does not — no fuzzy matching anywhere in
+the pipeline, by design; homonym titles return one card per bearer). Each
+card carries the gazetteer facts (title, place types, attested time-period
+vocabulary, representative point — display only, no maps, no coordinate
+math), a `ref` (the namespaced identity), `holdings`: per-source counts of
+live documents whose parsers captured that upstream-asserted id from their
+headers (isicily, edh, iip, itant) — and `axis_holdings` (P66-2): the
+SEPARATE `place_ref` lane — adapter-asserted refs plus the nabu-places
+registry's applied decisions, both spellings read through the one
+PlaceRefs reader, one count per document, labeled apart because the
+provenance differs. Counts are **aggregate only** — reading the texts is
+`nabu_search`/`nabu_show`'s job. An honest labelled `unlinked` tail counts
+id-less documents whose captured findspot **text** mentions the name
+(exact substring), never merged into the id-matched holdings. Degradation is the CLI's exactly: with the dump absent on
 this box, a numeric id still counts holdings (fact-less card, honest note),
 and a name lookup returns a graceful state note with the sync hint — never an
 error. Since P45-6 lookups read the derived catalog place index (instant;
