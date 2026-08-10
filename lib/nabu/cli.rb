@@ -7458,10 +7458,17 @@ module Nabu
         relevance = info&.relevance(code)
         held = relevance && !relevance.empty?
         stages = lects&.stages_of(code) || []
-        return print_language_miss(code, fallback) unless name || context || held || extras.any? || stages.any?
+        # P67-2 (№11): a registered lect anchor is never an unknown code —
+        # the registry names it and its descent line renders even with zero
+        # holdings (the Aramaic-fan anchors are exactly this case).
+        registry_record = lects&.lect(code)
+        unless name || context || held || extras.any? || stages.any? || registry_record
+          return print_language_miss(code, fallback)
+        end
 
-        say "#{code} — #{name || '(no name in the held kaikki extracts)'}"
+        say "#{code} — #{name || registry_record&.name || '(no name in the held kaikki extracts)'}"
         print_language_family(code, languages, fallback)
+        print_language_descent(code, lects)
         print_language_context(context, fallback)
         # The accreted dossier "stages" section (Nabu::LectDossiers) never
         # renders here — the card owns the LIVE ladder below (same registry
@@ -7472,6 +7479,34 @@ module Nabu
         print_language_relevance(code, relevance) if relevance
         print_language_axes(code, info, registry)
         print_language_stage_ladder(code, stages, lects, info)
+      end
+
+      # P67-2 (№11): the descent line — the registry's parent arc, code →
+      # root (jpa ← arc ← …), each ancestor named through the same
+      # stage-aware walk `parent_of` defines (chu ← sla:pro ← ine-bsl ←
+      # ine). Absent registry or a rootless code: no line. A cycle guard
+      # rides belt-and-braces (the registry validator already refuses
+      # cycles upstream).
+      def print_language_descent(code, lects)
+        return unless lects
+
+        chain = []
+        seen = { code.to_s => true }
+        cursor = code.to_s
+        while (parent = lects.parent_of(cursor))
+          break if seen[parent]
+
+          seen[parent] = true
+          chain << parent
+          cursor = parent
+        end
+        return if chain.empty?
+
+        rendered = chain.map do |id|
+          record = lects.lect(id)
+          record ? "#{id} (#{record.name})" : id
+        end
+        say "  descent (nabu-lects): #{code} ← #{rendered.join(' ← ')}"
       end
 
       # P57-4: the stage ladder — every registered stage of +code+ (ord-
