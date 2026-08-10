@@ -65,7 +65,12 @@ module Nabu
       # document's parse-captured metadata carries $.place.pleiades AND the
       # dump is on disk AND it holds the id; nil otherwise, so a corpus
       # without the dump renders byte-identically (the LiLa precedent).
-      Findspot = Data.define(:id, :title, :place_types)
+      # P69-1 (survey P-g): +lat+/+lon+ carry a source-asserted WGS84 pair —
+      # the COORDINATES findspot (rundata's SRDB columns): id nil, title the
+      # verbatim find-location, no gazetteer involved at all.
+      Findspot = Data.define(:id, :title, :place_types, :lat, :lon) do
+        def initialize(lat: nil, lon: nil, **) = super
+      end
 
       # A meter enrichment attached to a passage (P44-7): the metrical code
       # ("H" hexameter, "P" pentameter, …), the dactyl/spondee foot +pattern+,
@@ -402,10 +407,32 @@ module Nabu
       # facets_for/timeline_for stance; class Findspot note).
       def findspot_for(row)
         id = captured_place_id(row[:document_metadata_json])
-        return nil if id.nil?
+        if id
+          place = pleiades&.place(id)
+          return place && Findspot.new(id: place.id, title: place.title,
+                                       place_types: place.place_types)
+        end
+        coordinates_findspot(row[:document_metadata_json])
+      end
 
-        place = pleiades&.place(id)
-        place && Findspot.new(id: place.id, title: place.title, place_types: place.place_types)
+      # P69-1: the coordinates findspot — a metadata-asserted WGS84 pair
+      # (rundata's "coordinates" hash) with the verbatim find-location name.
+      # No gazetteer, so no dump-presence condition: the source's own claim.
+      def coordinates_findspot(json)
+        return nil if json.nil? || json.empty?
+
+        meta = JSON.parse(json)
+        return nil unless meta.is_a?(Hash)
+
+        pair = meta["coordinates"]
+        return nil unless pair.is_a?(Hash) && pair["latitude"].is_a?(Numeric) &&
+                          pair["longitude"].is_a?(Numeric)
+
+        title = [meta["found_location"], meta["parish"]].find { |v| !v.to_s.strip.empty? }
+        Findspot.new(id: nil, title: title, place_types: [],
+                     lat: pair["latitude"], lon: pair["longitude"])
+      rescue JSON::ParserError
+        nil
       end
 
       # The parse-captured $.place.pleiades id out of documents.metadata_json
