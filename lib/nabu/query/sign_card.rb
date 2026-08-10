@@ -22,14 +22,23 @@ module Nabu
     #   glyph   every char in the Cuneiform blocks → SignList#sign_for_glyph
     #   name    C-ATF fold, then name/@aka/form lookup (SZESZ → ŠEŠ)
     #   value   C-ATF fold, then value lookup — 1 candidate = the card,
-    #           N = candidates listed, 0 = an honestly empty result
+    #           N = candidates listed, 0 = an honestly empty result; a
+    #           trailing ASCII x retries as the ₓ subscript (idx → idₓ —
+    #           nobody types subscripts, P65 gate feedback)
+    #   list    a @list concordance number, qualified (MZL535) or bare
+    #           (535, matched across every held list) — candidates name
+    #           the matching token (via)
     class SignCard
       # One sign value on the card. language = the %lang qualifier or nil;
       # deprecated values stay listed (texts using them exist), marked.
       Value = Data.define(:value, :language, :deprecated)
       Gloss = Data.define(:reading, :preferred, :meaning)
       FormRef = Data.define(:name, :codepoints, :glyph)
-      Candidate = Data.define(:name, :codepoints, :glyph, :form_of)
+      # +via+ is the matched @list token on list-number candidates ("70" →
+      # AK via ASY070) and nil on value-lane candidates.
+      Candidate = Data.define(:name, :codepoints, :glyph, :form_of, :via) do
+        def initialize(via: nil, **) = super
+      end
 
       # The card. lists groups @list concordance numbers by list name
       # ({"MZL" => ["535"], …} — the U+ codepoint lines are identity, not
@@ -74,8 +83,10 @@ module Nabu
           "input" => result.input,
           "card" => result.card && card_record(result.card),
           "candidates" => result.candidates.map do |candidate|
-            { "name" => candidate.name, "codepoints" => candidate.codepoints || [],
-              "glyph" => candidate.glyph, "form_of" => candidate.form_of }
+            record = { "name" => candidate.name, "codepoints" => candidate.codepoints || [],
+                       "glyph" => candidate.glyph, "form_of" => candidate.form_of }
+            record["via"] = candidate.via if candidate.via
+            record
           end
         }
       end
@@ -110,6 +121,12 @@ module Nabu
 
       def from_value(input, folded)
         records = @list.lookup(folded)
+        records = @list.lookup(folded.sub(/x\z/, "ₓ")) if records.empty? && folded.end_with?("x")
+        if records.empty?
+          pairs = @list.signs_for_list_number(input)
+          return from_list_pairs(input, pairs) unless pairs.empty?
+        end
+
         case records.size
         when 0 then Result.new(input: input, card: nil, candidates: [])
         when 1 then Result.new(input: input, card: card(records.first), candidates: [])
@@ -120,6 +137,20 @@ module Nabu
           end
           Result.new(input: input, card: nil, candidates: candidates)
         end
+      end
+
+      # List-number matches, grouped by sign: one distinct sign = its full
+      # card (LAK032 and KWU032 are both ŠEŠ); several = candidates, each
+      # naming the token that matched (via).
+      def from_list_pairs(input, pairs)
+        grouped = pairs.group_by(&:first)
+        return Result.new(input: input, card: card(grouped.keys.first), candidates: []) if grouped.size == 1
+
+        candidates = grouped.map do |record, matches|
+          Candidate.new(name: record.name, codepoints: record.codepoints, glyph: glyph(record),
+                        form_of: record.parent_name, via: matches.map(&:last).join(", "))
+        end
+        Result.new(input: input, card: nil, candidates: candidates)
       end
 
       def card(record)

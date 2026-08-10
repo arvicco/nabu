@@ -31,4 +31,10 @@ class CharDispatchTest < Minitest::Test
     assert_equal :name, Nabu::CharDispatch.lane("szesz")
     assert_equal :name, Nabu::CharDispatch.lane("|ŠEŠ.AB|")
   end
+
+  def test_kana_input_is_the_name_lane_even_single_char
+    assert_equal :name, Nabu::CharDispatch.lane("ア"), "a one-kana on reading is a reading query"
+    assert_equal :name, Nabu::CharDispatch.lane("ひと")
+    assert_equal :name, Nabu::CharDispatch.lane("タイ")
+  end
 end

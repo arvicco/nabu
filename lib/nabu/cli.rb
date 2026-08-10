@@ -2768,9 +2768,19 @@ module Nabu
       function · phonetic value · JSesh/Hieroglyphica/IFAO concordances ·
       aes corpus attestation). Multi-character input is the sign-NAME lane,
       never a text lane: an OSL sign name or value spelling (SAR, szesz,
-      |ŠEŠ.AB| — C-ATF ASCII folds apply) first, then a Gardiner-style code
-      (G5, N35). The sign cards need their modules synced: nabu sync osl /
-      nabu sync unikemet.
+      |ŠEŠ.AB| — C-ATF ASCII folds apply, and a trailing x reads as the ₓ
+      subscript: idx → idₓ), then a sign-list concordance number — MZL535
+      qualified, or bare 535/852 matched across every held list (MZL, LAK,
+      ABZL, HZL, ŠL, …), each hit naming the token that matched — then a
+      Gardiner-style code (G5, N35). The sign cards need their modules
+      synced: nabu sync osl / nabu sync unikemet. A Han READING also
+      resolves: pinyin (wen · wén — toneless input folds tones) via Unihan
+      kMandarin, and Japanese via KANJIDIC2 on/kun — as kana (ひと · タイ,
+      hiragana/katakana fold together, okurigana dots are notation) or as
+      ROMAJI on the dictionary-caps convention, no kana keyboard needed:
+      ALL-CAPS is an on'yomi (TAI · KOKU), lowercase a kun'yomi (hito ·
+      kuni; lowercase also answers as pinyin, each hit labeled). Every
+      lane lists every character that carries the reading.
 
       --json (sign cards only) emits the frozen machine contract the Edubba
       downstream consumes; an ambiguous value input lists ALL candidate
@@ -2817,6 +2827,10 @@ module Nabu
         nabu char idₓ      # an ambiguous value — every candidate listed
         nabu char 𓅃       # the falcon — Unikemet card
         nabu char G5       # the same sign by Gardiner-style code
+        nabu char wen      # every Han character read wén/wěn/wèn…
+        nabu char ひと     # every kanji with the kun reading ひと
+        nabu char TAI      # CAPS romaji = on'yomi タイ
+        nabu char kuni     # lowercase romaji = kun'yomi くに
     HELP
     option :json, type: :boolean, default: false,
                   desc: "Sign cards only: emit the frozen machine-readable contract"
@@ -6822,35 +6836,67 @@ module Nabu
       # absent = name the modules. Non-name-shaped input (multi-char text
       # in another script) keeps the classic one-glyph grain error.
       def name_char_card(config, input)
-        unless input.match?(Nabu::CharDispatch::NAME_SHAPE)
+        kana = input.match?(Nabu::Query::Char::KANA_INPUT)
+        name_shaped = input.match?(Nabu::CharDispatch::NAME_SHAPE)
+        reading_shaped = input.match?(Nabu::Query::Char::PINYIN_INPUT)
+        unless kana || name_shaped || reading_shaped
           raise Thor::Error, "char: the card's grain is a single character — give one glyph " \
                              "(#{input}); search --char-component #{input.each_char.first} finds " \
                              "characters that contain one"
         end
 
-        osl_held = Nabu::SignList.load_default(config: config)
-        unikemet_held = Nabu::Hieroglyphs.load_default(config: config)
-        unless osl_held || unikemet_held
-          raise Thor::Error, "char: #{input} is a sign-name input, and no sign module is held — " \
-                             "run nabu sync osl (cuneiform) or nabu sync unikemet (Egyptian)"
+        if name_shaped
+          if Nabu::SignList.load_default(config: config)
+            result = run_sign_card(config, input)
+            return emit_sign_card(result) if result.card || result.candidates.any?
+          end
+          if Nabu::Hieroglyphs.load_default(config: config) && input.match?(Nabu::Query::HieroCard::CODE)
+            hiero = run_hiero_card(config, input)
+            return emit_hiero_card(hiero) if hiero.card
+          end
         end
-
-        if osl_held
-          result = run_sign_card(config, input)
-          return emit_sign_card(result) if result.card || result.candidates.any?
-        end
-        if unikemet_held && input.match?(Nabu::Query::HieroCard::CODE)
-          hiero = run_hiero_card(config, input)
-          return emit_hiero_card(hiero) if hiero.card
-        end
+        return if (kana || reading_shaped) && reading_char_card(config, input)
 
         if options[:json]
           empty = Nabu::Query::SignCard::Result.new(input: input, card: nil, candidates: [])
           say JSON.pretty_generate(Nabu::Query::SignCard.json_payload(empty))
         else
-          say "#{input}: resolved neither as an OSL sign name/value nor as a Unikemet " \
-              "Gardiner-style code — said plainly"
+          say "#{input}: resolved neither as an OSL sign name/value/list number, a Unikemet " \
+              "Gardiner-style code, nor a held Han reading — said plainly (input shapes: " \
+              "SAR · szesz · idx · MZL535 · 852 · G5 · wen · ひと)"
         end
+      end
+
+      # The reading→character lane (P65 gate feedback): pinyin against
+      # unihan kMandarin, kana against kanjidic2 on/kun. Prints the match
+      # list and answers true; false (silently) when no dictionary shelf or
+      # no match, so the caller's honest miss line runs. No frozen contract
+      # yet — --json says so rather than inventing one.
+      def reading_char_card(config, input)
+        catalog = open_catalog(config)
+        return false unless catalog&.table_exists?(:dictionary_entries)
+
+        matches = Nabu::Query::Char.new(catalog: catalog).characters_for_reading(input)
+        return false if matches.empty?
+
+        if options[:json]
+          raise Thor::Error, "char --json: the reading lane has no frozen contract yet — " \
+                             "the sign cards (cuneiform/hieroglyphic) do"
+        end
+        print_reading_matches(input, matches)
+        true
+      ensure
+        catalog&.disconnect
+      end
+
+      def print_reading_matches(input, matches)
+        say "#{input}: #{matches.size} Han character(s) carry this reading — " \
+            "nabu char <glyph> for a card:"
+        labels = matches.map do |match|
+          kind = match.kind == "pinyin" ? "" : " (#{match.kind})"
+          "#{match.glyph} #{match.reading}#{kind}"
+        end
+        labels.each_slice(6) { |slice| say "  #{slice.join('   ')}" }
       end
 
       def run_sign_card(config, input)
@@ -6925,7 +6971,9 @@ module Nabu
           say "#{result.input}: ambiguous — #{result.candidates.size} candidate signs " \
               "(all listed, never one silently):"
           result.candidates.each do |candidate|
-            tail = candidate.form_of ? "  (form of #{candidate.form_of})" : ""
+            tail = +""
+            tail << "  (form of #{candidate.form_of})" if candidate.form_of
+            tail << "  (via #{candidate.via})" if candidate.via
             say "  #{candidate.glyph || 'unencoded'}  #{candidate.name}#{tail}  " \
                 "—  nabu char '#{candidate.name}'"
           end

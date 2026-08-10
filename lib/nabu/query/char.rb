@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../normalize"
+require_relative "../romaji"
 require_relative "../jpn"
 require_relative "../kangxi_radicals"
 require_relative "../adapters/ids_txt_parser"
@@ -72,6 +73,44 @@ module Nabu
 
       def shelf? = @catalog.table_exists?(:dictionary_entries)
 
+      # -- the reading→character reverse lane (P65 gate: `nabu char wen`) ----
+
+      # One reading hit: the character, the reading AS THE SHELF SPELLS IT
+      # (tone marks, okurigana dots), and which layer answered
+      # ("pinyin" | "on" | "kun").
+      ReadingMatch = Data.define(:glyph, :reading, :kind)
+
+      # Latin input (toned or toneless pinyin, optional tone digit) and kana
+      # input — the two reading shapes the lane accepts.
+      PINYIN_INPUT = /\A\p{Latin}+[1-5]?\z/
+      KANA_INPUT = /\A[\p{Hiragana}\p{Katakana}ー]+\z/
+
+      # A reading → every Han character carrying it: pinyin against unihan
+      # kMandarin (toned input matches exactly; toneless/tone-digit input
+      # matches with tones folded), kana against kanjidic2 on/kun (katakana
+      # and hiragana fold together; kun okurigana dots and the -affix marks
+      # are notation — ひと reaches both 人 ひと and 一 ひと.つ). Romaji
+      # works without a kana keyboard, on the dictionary-caps convention
+      # (P65 gate): ALL-CAPS input is an on'yomi (TAI → タイ), lowercase
+      # romaji answers as kun'yomi AND pinyin together (each hit labeled).
+      # Sorted by codepoint; [] when no shelf or no match.
+      def characters_for_reading(input)
+        return [] unless shelf?
+
+        input = Nabu::Normalize.nfc(input.to_s.strip)
+        return kana_matches(input, on: true, kun: true) if input.match?(KANA_INPUT)
+        return [] unless input.match?(PINYIN_INPUT)
+
+        if input.match?(/[A-Z]/) && input == input.upcase
+          kana = Nabu::Romaji.to_hiragana(input)
+          kana ? kana_matches(kana, on: true, kun: false) : []
+        else
+          kana = input == input.downcase ? Nabu::Romaji.to_hiragana(input) : nil
+          kun = kana ? kana_matches(kana, on: false, kun: true) : []
+          (pinyin_matches(input) + kun).sort_by { |match| match.glyph.each_char.first.ord }
+        end
+      end
+
       # Build the Card for one single Han character, or nil when the shelf is
       # absent. The caller has already validated single-character grain.
       def run(glyph)
@@ -102,6 +141,75 @@ module Nabu
       end
 
       private
+
+      # unihan kMandarin values ("wén", space-separated when several) vs the
+      # input: toned input (any non-ASCII Latin) matches exactly; toneless
+      # or tone-digit input matches with the tones folded away.
+      def pinyin_matches(input)
+        toned = input.match?(/[^\x00-\x7F]/)
+        target = fold_pinyin(input)
+        matches = dictionary_rows("unihan", "%kMandarin: %").flat_map do |headword, body|
+          line = body[/^kMandarin: (.+)$/, 1] or next []
+          line.split(/\s+/).filter_map do |value|
+            hit = toned ? value == input : fold_pinyin(value) == target
+            ReadingMatch.new(glyph: headword, reading: value, kind: "pinyin") if hit
+          end
+        end
+        matches.uniq.sort_by { |match| match.glyph.each_char.first.ord }
+      end
+
+      def fold_pinyin(value)
+        value.unicode_normalize(:nfd).gsub(/\p{Mn}/, "").downcase.sub(/[1-5]\z/, "")
+      end
+
+      # kanjidic2 on (katakana) / kun (hiragana, okurigana dots and -affix
+      # marks as notation; the pre-dot stem answers too) vs kana input,
+      # katakana and hiragana folded together. The on/kun flags carry the
+      # romaji caps convention (CAPS asks on only, lowercase kun only).
+      def kana_matches(input, on:, kun:)
+        target = to_hiragana(input)
+        matches = dictionary_rows("kanjidic2", nil).flat_map do |headword, body|
+          on_hits = if on
+                      body_list(body, "on").filter_map do |reading|
+                        ReadingMatch.new(glyph: headword, reading: reading, kind: "on") if
+                          to_hiragana(reading) == target
+                      end
+                    else
+                      []
+                    end
+          kun_hits = if kun
+                       body_list(body, "kun").filter_map do |reading|
+                         base = reading.delete("-")
+                         ReadingMatch.new(glyph: headword, reading: reading, kind: "kun") if
+                           [base.delete("."), base.split(".").first].map do |form|
+                             to_hiragana(form)
+                           end.include?(target)
+                       end
+                     else
+                       []
+                     end
+          on_hits + kun_hits
+        end
+        matches.uniq.sort_by { |match| match.glyph.each_char.first.ord }
+      end
+
+      def to_hiragana(text) = text.tr("ァ-ヶ", "ぁ-ゖ")
+
+      def body_list(body, label)
+        line = body.lines.map(&:chomp).find { |l| l.start_with?("#{label}: ") }
+        line ? line.delete_prefix("#{label}: ").split("、") : []
+      end
+
+      # [headword, body] rows of one dictionary shelf (an optional SQL LIKE
+      # prefilter narrows the scan).
+      def dictionary_rows(slug, like)
+        rows = @catalog[:dictionary_entries]
+               .join(:dictionaries, id: Sequel[:dictionary_entries][:dictionary_id])
+               .where(Sequel[:dictionaries][:slug] => slug)
+               .where(Sequel[:dictionary_entries][:withdrawn] => false)
+        rows = rows.where(Sequel.like(Sequel[:dictionary_entries][:body], like)) if like
+        rows.select_map([Sequel[:dictionary_entries][:headword], Sequel[:dictionary_entries][:body]])
+      end
 
       def codepoint(glyph) = format("U+%04X", glyph.each_char.first.ord)
 
