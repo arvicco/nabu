@@ -125,13 +125,17 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 55, lect.size,
+    assert_equal 54, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3, " \
-                 "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6 — " \
-                 "each when a machine grain took over: the shadowing rule, working)"
+                 "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
+                 "titus-avestan retired P66-1 — each when a machine grain took over: the " \
+                 "shadowing rule, working)"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
-    # tla-hf/gretil/torot → identity, imp/goo300k → dates; titus-avestan
-    # stays the one honest pending (stages minted, awaiting a siglum facet).
-    assert_equal({ "identity" => 40, "pending" => 1, "dates" => 10, "codemap" => 4 }, by_posture)
+    # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
+    # pending (titus-avestan) retired — the adapter derives the
+    # avestan-stage facet from the verse anchors and the ave-stage rule
+    # covers all 248 docs. ZERO pendings: every lect claim is now identity,
+    # dates, codemap, or a ruled rule/override.
+    assert_equal({ "identity" => 40, "dates" => 10, "codemap" => 4 }, by_posture)
   end
 end

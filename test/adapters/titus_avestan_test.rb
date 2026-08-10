@@ -78,7 +78,7 @@ class TitusAvestanTest < Minitest::Test
 
   def test_discover_yields_one_document_per_text_page_not_the_frameset
     pages = @adapter.discover(FIXTURES).map { |ref| ref.metadata.fetch("page") }
-    assert_equal %w[avest001 avest002], pages.sort
+    assert_equal %w[avest001 avest002 avest029], pages.sort
   end
 
   def test_discover_ref_id_is_the_page_document_urn
@@ -201,5 +201,37 @@ class TitusAvestanTest < Minitest::Test
       ref = @adapter.discover(dir).first
       assert_raises(Nabu::ParseError) { @adapter.parse(ref) }
     end
+  end
+
+  # --- the avestan-stage facet (P66-1: the last lect pending closes) --------
+  #
+  # Sigla live in the anchors, not in any corpus metadata field — the
+  # adapter derives the ONE fact the №3 rule needs: whether a page's verses
+  # sit in the Gathic chapter set (Y 28-41, 43-51, 53 — the Gathas + the
+  # Yasna Haptaŋhāiti) or outside it. A page mixing both emits NO facet
+  # (honest absence → the document stays a bare ave anchor).
+
+  def test_a_gathic_page_carries_the_old_avestan_facet
+    facets = documents_by_page.fetch("avest029").metadata["facets"]
+    assert_equal "old-avestan", facets["avestan-stage"]["value"], "Yasna 28 — the first Gatha"
+  end
+
+  def test_a_young_avestan_page_carries_the_young_facet
+    facets = documents_by_page.fetch("avest002").metadata["facets"]
+    assert_equal "young-avestan", facets["avestan-stage"]["value"], "Yasna 1 — liturgical YAv"
+  end
+
+  def test_a_mixed_page_emits_no_stage_facet
+    sections = [
+      Nabu::Adapters::TitusAvestanParser::Section.new(components: %w[Y 27 13 1], text: "x"),
+      Nabu::Adapters::TitusAvestanParser::Section.new(components: %w[Y 28 1 1], text: "y")
+    ]
+    assert_nil Nabu::Adapters::TitusAvestan.avestan_stage(sections),
+               "Y 27 (young) beside Y 28 (Gathic) → no claim"
+  end
+
+  def test_a_non_yasna_book_is_young_avestan
+    sections = [Nabu::Adapters::TitusAvestanParser::Section.new(components: %w[Yt 5 1 1], text: "x")]
+    assert_equal "young-avestan", Nabu::Adapters::TitusAvestan.avestan_stage(sections)
   end
 end

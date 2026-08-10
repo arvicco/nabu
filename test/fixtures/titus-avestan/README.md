@@ -27,6 +27,13 @@ ritual rubrics, and — on page 2 — the fact that a continuation page carries 
 `Book:` header, so book context is recoverable only from the
 `<A NAME="Avest._Y_1_1_a">` anchors.
 
+## avest029.htm (P66-1)
+
+The WHOLE live Yasna 28 page (the first Gatha), copied 2026-08-10 from
+the owner's held canonical/titus-avestan tree (same grant) — the
+old-avestan exemplar for the avestan-stage facet (Gathic chapters
+Y 28–41, 43–51, 53; every other page/book is Young Avestan).
+
 ## Provenance / grant
 
 This corpus is served under the owner's **personal grant №41-3** (Prof. Jost
