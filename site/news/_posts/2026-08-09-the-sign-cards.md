@@ -38,9 +38,12 @@ occurs across the 4.8 million held cuneiform passages. A sign list says
 what a sign *can* read; the corpus says what it *does* read.
 
 Input is anything a reader might have in hand: the glyph itself, the
-sign name (`SAR`, ASCII `SZESZ` folds too), or a spelled value
-(`szesz`). A value that belongs to several signs — `idₓ` lives on six —
-lists every candidate, never one silently.
+sign name (`SAR`, ASCII `SZESZ` folds too), a spelled value (`szesz`;
+a trailing `x` reads as the ₓ subscript, so `idx` works), or a
+sign-list number — `MZL535` qualified, or bare `852` matched across
+every held concordance, each hit naming the list it came from. A value
+that belongs to several signs — `idₓ` lives on six — lists every
+candidate, never one silently.
 
 **The Egyptian card needed one new source, and it is a single file.**
 Unicode 17's Unikemet data file is the quiet find of this program: the
@@ -69,6 +72,14 @@ Both sign cards speak JSON under `--json` — a frozen contract, because
 the first consumer besides the owner is
 [Nabu Edubba](https://arvicco.github.io/nabu-edubba/), the sister
 school, whose reading panels are built on exactly this kind of answer.
+
+And the Han desk learned a reverse gear in the same wave: a pinyin
+reading (`nabu char wen`, tones optional) or a Japanese on/kun reading
+lists every character that carries it — one `nabu char 文` away from
+the full card. Japanese readings work as kana (`nabu char ひと`,
+okurigana dots understood) or as plain romaji on the old dictionary
+convention — CAPS for on'yomi (`nabu char TAI`), lowercase for
+kun'yomi (`nabu char kuni`) — so no kana keyboard is needed.
 
 The honesty rules that govern every desk card govern these: a field the
 held data cannot back is absent, never dashed; an unencoded sign says

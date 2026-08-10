@@ -82,6 +82,42 @@ module Query
       assert_equal "|ŠEŠ.KI|", form_result.card.parent, "a form card names its owning sign"
     end
 
+    # -- the list-number lane (P65 gate feedback №1) -------------------------
+
+    def test_a_qualified_list_number_is_a_deterministic_card
+      assert_equal "ŠEŠ", card_for("MZL535").card.name
+      assert_equal "AK", card_for("MZL127").card.name
+    end
+
+    def test_a_bare_list_number_unique_across_lists_is_still_one_card
+      assert_equal "ŠEŠ", card_for("32").card.name,
+                   "32 matches ŠEŠ twice (LAK032, KWU032) — one sign, one card"
+    end
+
+    def test_a_bare_list_number_shared_by_signs_lists_candidates_with_via
+      result = card_for("70")
+      assert_nil result.card
+      assert_equal [%w[AK ASY070], ["|IGI.DIB|", "RSP070"]],
+                   result.candidates.map { |c| [c.name, c.via] },
+                   "each candidate names WHICH list token matched"
+    end
+
+    def test_the_json_candidates_carry_via_present_only
+      payload = Nabu::Query::SignCard.json_payload(card_for("70"))
+      assert_equal "ASY070", payload["candidates"].first["via"]
+      ambiguous = Nabu::Query::SignCard.json_payload(card_for("idₓ"))
+      refute ambiguous["candidates"].first.key?("via"), "via is present-only — value lanes have none"
+    end
+
+    # -- the ASCII-x subscript fold (P65 gate feedback №2) -------------------
+
+    def test_a_trailing_ascii_x_folds_to_the_subscript_on_miss
+      result = card_for("idx")
+      assert_equal ["|A.BARA₂|", "|UD.ŠEŠ.KI|"], result.candidates.map(&:name),
+                   "idx reaches idₓ's candidates (two in the fixture, six upstream)"
+      assert_equal "ŠEŠ", card_for("zax").card.name, "zax → zaₓ"
+    end
+
     # -- ambiguity + unknown -------------------------------------------------
 
     def test_an_ambiguous_value_lists_all_candidates_never_one_silently

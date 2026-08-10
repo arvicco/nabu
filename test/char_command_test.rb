@@ -91,6 +91,53 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  # --- the reading→character lane (P65 gate feedback: `nabu char wen`) ---
+
+  def test_pinyin_input_toneless_or_toned_lists_the_characters
+    with_char_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char qi]) }
+      assert_nil status
+      assert_match(/棄 qì/, out, "toneless pinyin folds against kMandarin")
+      ya, = with_config(config) { run_cli(%w[char ya]) }
+      %w[亚 亜 亞].each { |glyph| assert_match(/#{glyph} yà/, ya, "ya reaches every yà character") }
+      toned, = with_config(config) { run_cli(%w[char qì]) }
+      assert_match(/棄 qì/, toned, "toned input matches exactly")
+    end
+  end
+
+  def test_kana_input_resolves_on_and_kun_readings
+    with_char_catalog do |config|
+      on, = with_config(config) { run_cli(%w[char タイ]) }
+      assert_match(/体 タイ/, on)
+      assert_match(/體 タイ/, on)
+      hira, = with_config(config) { run_cli(%w[char あ]) }
+      assert_match(/亜 ア/, hira, "hiragana input matches katakana on readings")
+      kun, = with_config(config) { run_cli(%w[char ひと]) }
+      assert_match(/人 ひと/, kun, "the exact kun reading")
+      assert_match(/一 ひと/, kun, "the ひと.つ stem and the ひと- notation both answer")
+    end
+  end
+
+  def test_romaji_readings_caps_are_on_and_lowercase_is_kun
+    with_char_catalog do |config|
+      on, = with_config(config) { run_cli(%w[char TAI]) }
+      assert_match(/体 タイ \(on\)/, on, "CAPS romaji = on'yomi (the dictionary convention)")
+      assert_match(/體 タイ \(on\)/, on)
+      refute_match(/たい\.らか/, on, "CAPS never answers kun")
+      kun, = with_config(config) { run_cli(%w[char hito]) }
+      assert_match(/人 ひと \(kun\)/, kun, "lowercase romaji reaches kun readings")
+      assert_match(/一 ひと\.つ \(kun\)/, kun)
+    end
+  end
+
+  def test_an_unmatched_reading_says_so_plainly
+    with_char_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char zzz]) }
+      assert_nil status
+      assert_match(/resolved neither/, out)
+    end
+  end
+
   # --- the structure-search modes (search --radical/--strokes/--char-component) ---
 
   def test_radical_filter_finds_passages_carrying_a_radical_75_character
@@ -226,6 +273,10 @@ class CharCommandTest < Minitest::Test
                       Nabu::Adapters::BabelstoneIds.new, "babelstone-ids")
       load_dictionary(db, "kradfile", "Nabu::Adapters::Kradfile", Nabu::Adapters::Kradfile.new, "kradfile")
       load_dictionary(db, "tls", "Nabu::Adapters::Tls", Nabu::Adapters::Tls.new, "tls")
+      # kanjidic2 (via the edrdg fixture) — the P65 reading lane's on/kun
+      # side; its sample carries none of 棄/國/国, so every absence
+      # assertion above still holds.
+      load_dictionary(db, "edrdg", "Nabu::Adapters::Edrdg", Nabu::Adapters::Edrdg.new, "edrdg")
 
       kanripo = Nabu::Store::Source.create(
         slug: "kanripo", name: "Kanseki Repository", adapter_class: "Nabu::Adapters::Kanripo",

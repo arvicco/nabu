@@ -115,6 +115,35 @@ class SignListTest < Minitest::Test
     assert_nil list.sign_for_glyph("𒀸")
   end
 
+  # --- signs_for_list_number: the @list concordance lane (P65 gate) ---------
+
+  def test_a_qualified_list_token_resolves_to_its_sign
+    pairs = list.signs_for_list_number("MZL535")
+    assert_equal([%w[ŠEŠ MZL535]], pairs.map { |record, token| [record.name, token] })
+    assert_equal ["AK"], list.signs_for_list_number("mzl 127").map { |r, _| r.name },
+                 "case and spaces are input noise"
+  end
+
+  def test_a_bare_number_matches_across_every_held_list
+    assert_equal(["ŠEŠ"], list.signs_for_list_number("535").map { |r, _| r.name })
+    names = list.signs_for_list_number("70").map { |r, _| r.name }
+    assert_equal ["AK", "|IGI.DIB|"], names,
+                 "70 lives on two DIFFERENT signs (AK ASY070, |IGI.DIB| RSP070) — both returned"
+  end
+
+  def test_leading_zeros_and_suffix_marks_are_upstream_notation_not_identity
+    assert_equal(["ŠEŠ"], list.signs_for_list_number("021b").map { |r, _| r.name })
+    assert_equal ["ŠEŠ"], list.signs_for_list_number("21b").map { |r, _| r.name },
+                 "ABZL021b answers with and without its leading zero"
+    assert_equal ["MIN"], list.signs_for_list_number("39b").map { |r, _| r.name },
+                 "RSP039^b: the ^ variant mark is notation"
+  end
+
+  def test_an_unknown_list_number_is_empty
+    assert_empty list.signs_for_list_number("999999")
+    assert_empty list.signs_for_list_number("not-a-number")
+  end
+
   # --- honesty: unencoded signs ---------------------------------------------
 
   def test_a_codepoint_less_sign_reports_nil_codepoints

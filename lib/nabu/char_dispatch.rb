@@ -24,10 +24,15 @@ module Nabu
     # name — the CLI keeps the classic one-glyph grain error for it.
     NAME_SHAPE = /\A[\x20-\x7EšṣṭŠṢṬŋŊʾ×₀-₉ₓ]+\z/
 
+    # Kana input — ANY length, a one-kana on reading included — is a
+    # reading query for the :name lane, never a Han glyph card.
+    KANA = /\A[\p{Hiragana}\p{Katakana}ー]+\z/
+
     def self.lane(input)
       ords = input.each_char.map(&:ord)
       return :cuneiform if ords.all? { |ord| CUNEIFORM.any? { |range| range.cover?(ord) } }
       return :hieroglyphic if ords.all? { |ord| HIEROGLYPHIC.any? { |range| range.cover?(ord) } }
+      return :name if input.match?(KANA)
 
       ords.size == 1 ? :han : :name
     end

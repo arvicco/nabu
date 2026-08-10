@@ -224,9 +224,14 @@ $ bin/nabu language gkm
 **Sign cards** (`nabu char CHAR`) put one glyph on the desk, dispatched
 by script. A Han character gets the dictionary-shelf card (structure,
 readings, and a diachronic column from Old Chinese through the Heian
-dictionaries). A **cuneiform** sign — glyph, sign name, or spelled value
-(`nabu char 𒊬`, `nabu char SAR`, `nabu char szesz`) — gets the Oracc
-Sign List card: sign name, the MZL/LAK/ABZL/HZL/ŠL print-list
+dictionaries) — and the door works in reverse: a pinyin reading
+(`nabu char wen`, tones optional) or a Japanese on/kun reading — kana
+(`nabu char ひと`) or plain romaji on the dictionary-caps convention,
+CAPS for on'yomi (`nabu char TAI`), lowercase for kun'yomi
+(`nabu char kuni`) — lists every character that carries it. A **cuneiform** sign — glyph, sign name, spelled value, or sign-list
+number (`nabu char 𒊬`, `nabu char SAR`, `nabu char szesz`,
+`nabu char MZL535`, bare `nabu char 852` matched across every held
+list) — gets the Oracc Sign List card: sign name, the MZL/LAK/ABZL/HZL/ŠL print-list
 concordances, every reading by language, the CDLI meaning glosses,
 variant forms, and how often each spelled value actually occurs across
 the held tablet corpora. An **Egyptian hieroglyph** (`nabu char 𓅃`, or
