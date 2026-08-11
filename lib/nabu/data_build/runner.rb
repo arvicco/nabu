@@ -80,7 +80,7 @@ module Nabu
       # "never skip" to "never publish"). Non-git cones get the content
       # identity DerivationFingerprint computes.
       def cone_sha(cone)
-        dir = File.join(@config.canonical_dir, cone)
+        dir = @config.source_workdir(cone)
         unless Dir.exist?(dir)
           raise Error, "canonical input #{cone.inspect} is missing (#{dir}) — sync it before building"
         end
@@ -121,7 +121,7 @@ module Nabu
 
         feature.inputs.each do |slug|
           recorded = ingest_identity(slug)
-          current = DerivationFingerprint.canonical_identity(File.join(@config.canonical_dir, slug))
+          current = DerivationFingerprint.canonical_identity(@config.source_workdir(slug))
           next if !recorded.nil? && recorded == current
 
           raise Error, stale_ingest_message(slug, recorded, current)

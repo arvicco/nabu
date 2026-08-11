@@ -44,8 +44,11 @@ module Nabu
     TOPIC_NAME = /\A[a-z0-9][a-z0-9_-]*\z/
     RESERVED_TOPICS = %w[manifest].freeze
 
-    def self.dir(canonical_dir)
-      File.join(canonical_dir, SLUG)
+    # P71-2 (the local/ elevation): the shelf's home is resolved by the
+    # config's workdir seam — local/shelves/<slug>, with the loud legacy
+    # canonical/<slug> fallback until `nabu migrate-local`.
+    def self.dir(config)
+      config.source_workdir(SLUG)
     end
 
     # The standard resolver: Query::Show's urn resolution over +catalog+ —

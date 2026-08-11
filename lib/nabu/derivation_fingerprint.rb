@@ -174,7 +174,7 @@ module Nabu
     # fold module (dirty-more, never dirty-less).
     def for_source(entry, languages: nil)
       Fingerprint.new(
-        canonical_identity: self.class.canonical_identity(File.join(@config.canonical_dir, entry.slug)),
+        canonical_identity: self.class.canonical_identity(@config.source_workdir(entry.slug)),
         parser_digest: parser_digest(entry),
         fold_digest: self.class.fold_digest(languages),
         migration_level: self.class.migration_level,

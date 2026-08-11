@@ -320,6 +320,26 @@ class ConfigTest < Minitest::Test
     end
   end
 
+  # P71-2: the shelf sources live under local/shelves/; every other
+  # source stays under canonical/; the pre-P71 legacy location is
+  # honored loudly until migrate-local.
+  def test_source_workdir_routes_shelves_to_local_and_sources_to_canonical
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "canonical", "perseus"), config.source_workdir("perseus")
+      assert_equal File.join(root, "local", "shelves", "local-notes"), config.source_workdir("local-notes")
+
+      FileUtils.mkdir_p(File.join(root, "canonical", "local-notes"))
+      _, err = capture_io do
+        assert_equal File.join(root, "canonical", "local-notes"), config.source_workdir("local-notes")
+      end
+      assert_match(/migrate-local/, err)
+
+      FileUtils.mkdir_p(File.join(root, "local", "shelves", "local-notes"))
+      assert_equal File.join(root, "local", "shelves", "local-notes"), config.source_workdir("local-notes")
+    end
+  end
+
   private
 
   def with_env(vars)

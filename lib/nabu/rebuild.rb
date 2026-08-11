@@ -293,7 +293,8 @@ module Nabu
       case adapter.class.content_kind
       when :dictionary
         Store::DictionaryLoader.new(db: db, source: source, ledger: ledger,
-                                    canonical_dir: @config.canonical_dir, profile: profile)
+                                    language_shelf_dir: @config.source_workdir(Nabu::LanguageShelf::SLUG),
+                                    profile: profile)
       when :language
         Store::LanguageDossierLoader.new(db: db, source: source, ledger: ledger)
       when :notes
@@ -393,7 +394,7 @@ module Nabu
       db
     end
 
-    def workdir_for(slug) = File.join(@config.canonical_dir, slug)
+    def workdir_for(slug) = @config.source_workdir(slug)
 
     # The links re-mine (P70-3b): wipe the journal, replay every
     # slug-scoped reference producer, then every recorded batch scope.

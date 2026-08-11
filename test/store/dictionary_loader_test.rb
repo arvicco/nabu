@@ -223,14 +223,18 @@ class DictionaryLoaderTest < Minitest::Test
     document
   end
 
+  # P71-2: the loader takes the RESOLVED shelf dir (the caller asks
+  # Config#source_workdir); the rig resolves it once here.
+  def shelf_dir(root) = File.join(root, Nabu::LanguageShelf::SLUG)
+
   def rooted_loader(root)
     Nabu::Store::DictionaryLoader.new(db: @db, source: @source, ledger: @ledger,
-                                      canonical_dir: root)
+                                      language_shelf_dir: shelf_dir(root))
   end
 
   def test_language_notes_accrete_as_dossier_sections_idempotently
     Dir.mktmpdir do |root|
-      shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(root))
+      shelf = Nabu::LanguageShelf.new(dir: shelf_dir(root))
       rooted_loader(root).load([noted_document], full: false)
       section = shelf.load("xx").section("iecor")
       assert_equal "iecor", section.source
@@ -252,7 +256,7 @@ class DictionaryLoaderTest < Minitest::Test
     end
   end
 
-  def test_language_notes_accretion_degrades_without_a_canonical_dir
+  def test_language_notes_accretion_degrades_without_a_shelf_dir
     loader = Nabu::Store::DictionaryLoader.new(db: @db, source: @source, ledger: @ledger)
     report = loader.load([noted_document], full: false)
     assert_equal 1, report.added, "no corpus root: entries load, notes silently accrete nowhere"

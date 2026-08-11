@@ -671,7 +671,7 @@ class CLITest < Minitest::Test
                                      source: "seed:config/languages.yml", created_at: Time.now)
       ledger.disconnect
       with_config(config) do
-        shelf_dir = Nabu::LanguageShelf.dir(config.canonical_dir)
+        shelf_dir = Nabu::LanguageShelf.dir(config)
         out, _err, status = run_cli(%w[language --export-dossiers --dry-run])
         assert_nil status
         assert_match(/dossiers: would write 1/, out)
@@ -1269,7 +1269,7 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/scaffolded 3, 0 existing untouched/, out)
       assert_match(/honest stub/, out, "scratch sources carry no library.md prose — stubs, said so")
-      shelf_dir = Nabu::SourceShelf.dir(config.canonical_dir)
+      shelf_dir = Nabu::SourceShelf.dir(config)
       assert File.file?(File.join(shelf_dir, "shelf.md"))
       assert File.file?(File.join(shelf_dir, "lex.md"))
       assert File.file?(File.join(shelf_dir, "library.md"))
@@ -3122,7 +3122,7 @@ class CLITest < Minitest::Test
       assert_match(%r{bin/nabu links urn:nabu:local-library:notes:reading-notes}, out,
                    "related urns just became reference edges — point at them")
       assert_path_exists source, "ingest copies, never moves"
-      copied = File.join(config.canonical_dir, "local-library", "notes", "reading-notes.txt")
+      copied = File.join(config.source_workdir("local-library"), "notes", "reading-notes.txt")
       assert_equal File.read(source), File.read(copied)
       manifest = Nabu::LibraryManifest.load(File.join(File.dirname(copied), "manifest.yml"))
       assert_equal ["reading-notes.txt"], manifest.entries.map(&:file)
@@ -3155,7 +3155,7 @@ class CLITest < Minitest::Test
       assert_match(/FAILED\s+ghost\.pdf/, out)
       assert_match(/aborted\s+reading-notes\.txt — not ingested — batch aborted, canonical untouched/, out)
       refute_match(/minted:/, out, "nothing lands, nothing syncs")
-      refute Dir.exist?(File.join(config.canonical_dir, "local-library")), "canonical untouched"
+      refute Dir.exist?(File.join(config.source_workdir("local-library"))), "canonical untouched"
       assert_match(/1 of 2 file\(s\) failed/, err)
     end
   end
@@ -3173,7 +3173,7 @@ class CLITest < Minitest::Test
       assert_match(/FAILED\s+reading-notes\.txt — .*"chu \(body ger\)" is not a language tag/, out)
       refute_match(/minted:/, out)
       assert_match(/1 of 1 file\(s\) failed/, err)
-      refute Dir.exist?(File.join(config.canonical_dir, "local-library")),
+      refute Dir.exist?(File.join(config.source_workdir("local-library"))),
              "atomic: a failed ingest leaves canonical byte-identical — no stray copy, no manifest"
     end
   end
@@ -3187,7 +3187,7 @@ class CLITest < Minitest::Test
       assert_equal 1, status
       assert_match(/FAILED\s+nabu — nabu is executable \(mode \+x\) — refusing; shelf material never runs/,
                    out)
-      refute Dir.exist?(File.join(config.canonical_dir, "local-library"))
+      refute Dir.exist?(File.join(config.source_workdir("local-library")))
     end
   end
 
@@ -3201,7 +3201,7 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(%r{added\s+handbuch-notes\.txt → inbox/handbuch-notes\.txt}, out)
       assert_match(/minted:\n  urn:nabu:local-library:inbox:handbuch-notes/, out)
-      copied = File.join(config.canonical_dir, "local-library", "inbox", "handbuch-notes.txt")
+      copied = File.join(config.source_workdir("local-library"), "inbox", "handbuch-notes.txt")
       assert_equal "Altbulgarische Marginalien.\n\nZweiter Absatz.\n", File.read(copied),
                    "the mirror body landed through the ordinary intake"
       entry = Nabu::LibraryManifest.load(File.join(File.dirname(copied), "manifest.yml")).entries.first
@@ -3254,7 +3254,7 @@ class CLITest < Minitest::Test
       _out, err, status = with_config(config) { run_cli(["ingest", source]) }
       assert_equal 1, status
       assert_match(/needs a TTY — pass --yes/, err)
-      refute_path_exists File.join(config.canonical_dir, "local-library", "inbox", "reading-notes.txt"),
+      refute_path_exists File.join(config.source_workdir("local-library"), "inbox", "reading-notes.txt"),
                          "nothing is copied before the mode question is settled"
     end
   end
@@ -3271,7 +3271,7 @@ class CLITest < Minitest::Test
       # not files — three lanes scaffolded → +3 added.
       assert_match(/local-language\s+\S+\s+\+3 added/, out)
       assert_match(%r{try: bin/nabu language zle-ort}, out)
-      dossier = File.join(config.canonical_dir, "local-language", "zle-ort.md")
+      dossier = File.join(config.source_workdir("local-language"), "zle-ort.md")
       assert_path_exists dossier
       assert_match(/name: Old Ruthenian/, File.read(dossier))
       assert_match(/family: zle/, File.read(dossier), "the family candidate derives from the code prefix")
@@ -3280,8 +3280,8 @@ class CLITest < Minitest::Test
 
   def test_ingest_shelf_language_is_a_no_op_on_an_existing_dossier
     with_ingest_env do |config, _root|
-      FileUtils.mkdir_p(File.join(config.canonical_dir, "local-language"))
-      File.write(File.join(config.canonical_dir, "local-language", "chu.md"),
+      FileUtils.mkdir_p(File.join(config.source_workdir("local-language")))
+      File.write(File.join(config.source_workdir("local-language"), "chu.md"),
                  "---\ncode: chu\nname: Old Church Slavonic\n---\n")
       out, _err, status = with_config(config) { run_cli(%w[ingest --shelf language chu --yes]) }
       assert_nil status
@@ -3351,7 +3351,7 @@ class CLITest < Minitest::Test
       refute_match(/loading…|indexed \d+ passages|discovery:/, out,
                    "a note append must never run the sync pipeline")
       assert_match(%r{try: bin/nabu show #{Regexp.escape(ILIAD_DOC)}}, out)
-      notes = Nabu::NoteFile.load(File.join(config.canonical_dir, "local-notes", "notes.yml"))
+      notes = Nabu::NoteFile.load(File.join(config.source_workdir("local-notes"), "notes.yml"))
       assert_equal [ILIAD_DOC], notes.records.map(&:urn)
       assert_equal %w[collation ocs], notes.records.first.tags
 
@@ -3378,7 +3378,7 @@ class CLITest < Minitest::Test
       assert_equal 1, status
       assert_match(/urn:nabu:test_adapter:eno does not resolve/, err)
       assert_match(/--force/, err, "the planned-material escape hatch is taught")
-      refute Dir.exist?(File.join(config.canonical_dir, "local-notes")), "a refusal writes nothing"
+      refute Dir.exist?(File.join(config.source_workdir("local-notes"))), "a refusal writes nothing"
     end
   end
 
@@ -3405,7 +3405,7 @@ class CLITest < Minitest::Test
       assert_match(/notes on #{Regexp.escape(ILIAD_DOC)} \(1\):/, out)
       assert_match(/\(notes, \d{4}-\d{2}-\d{2}\) First thought\./, out)
       assert_match(/add another/, out)
-      assert_equal 1, Nabu::NoteFile.load(File.join(config.canonical_dir, "local-notes", "notes.yml"))
+      assert_equal 1, Nabu::NoteFile.load(File.join(config.source_workdir("local-notes"), "notes.yml"))
                                     .records.size, "showing is a read — nothing appended"
     end
   end
@@ -3416,7 +3416,7 @@ class CLITest < Minitest::Test
       assert_equal 1, status
       assert_match(/no TTY to prompt/, err)
       assert_match(/nothing was written/, err)
-      refute Dir.exist?(File.join(config.canonical_dir, "local-notes"))
+      refute Dir.exist?(File.join(config.source_workdir("local-notes")))
     end
   end
 
@@ -3428,7 +3428,7 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/note for #{Regexp.escape(ILIAD_DOC)}/, out, "the ingest prompt furniture")
       assert_match(/noted\s+#{Regexp.escape(ILIAD_DOC)}/, out)
-      notes = Nabu::NoteFile.load(File.join(config.canonical_dir, "local-notes", "notes.yml"))
+      notes = Nabu::NoteFile.load(File.join(config.source_workdir("local-notes"), "notes.yml"))
       assert_equal ["Prompted marginal note."], notes.records.map(&:note)
     end
   end
@@ -3458,7 +3458,7 @@ class CLITest < Minitest::Test
       listing, = with_config(config) { run_cli(%w[note --list]) }
       assert_includes listing, "Keep me."
       refute_includes listing, "Remove me."
-      notes = Nabu::NoteFile.load(File.join(config.canonical_dir, "local-notes", "notes.yml"))
+      notes = Nabu::NoteFile.load(File.join(config.source_workdir("local-notes"), "notes.yml"))
       assert_equal ["Keep me."], notes.records.map(&:note)
     end
   end
@@ -3470,7 +3470,7 @@ class CLITest < Minitest::Test
       id = out[/\[([0-9a-f]{8})\]/, 1]
       _rm, _err, status = with_config(config) { run_cli(["note", "--rm", id, "--topic", "solo"]) }
       assert_nil status
-      refute_path_exists File.join(config.canonical_dir, "local-notes", "solo.yml"),
+      refute_path_exists File.join(config.source_workdir("local-notes"), "solo.yml"),
                          "an empty notes file is furniture, not content"
       listing, = with_config(config) { run_cli(%w[note --list --topic solo]) }
       assert_match(/no notes yet/, listing)
@@ -8332,7 +8332,7 @@ class CLITest < Minitest::Test
         license: "CC BY 4.0", license_class: "attribution"
       )
       Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger,
-                                        canonical_dir: config.canonical_dir)
+                                        language_shelf_dir: Nabu::LanguageShelf.dir(config))
                                    .load_from(Nabu::Adapters::Iecor.new,
                                               workdir: Nabu::TestSupport.fixtures("iecor"))
       db.disconnect

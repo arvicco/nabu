@@ -198,6 +198,33 @@ module Nabu
       @profile_path || instance_path("profile.yml")
     end
 
+    # The owner shelves' parent (P71-2): local/shelves/<slug> — the five
+    # local-* shelf sources elevated out of canonical/ (slug identity and
+    # URNs untouched; only the parent dir moved).
+    def shelves_dir
+      File.join(local_dir, "shelves")
+    end
+
+    # THE workdir resolver (P71-2, the local/ elevation): a local-* shelf
+    # source lives under local/shelves/, every other source under
+    # canonical/. Loud legacy fallback per shelf while a pre-P71 copy
+    # still sits under canonical/ (split-brain beats silent divergence —
+    # `nabu migrate-local` moves it).
+    def source_workdir(slug)
+      return File.join(canonical_dir, slug) unless slug.to_s.start_with?("local-")
+
+      home = File.join(shelves_dir, slug)
+      legacy = File.join(canonical_dir, slug)
+      return home if Dir.exist?(home) || !Dir.exist?(legacy)
+
+      unless @fallback_warned[slug]
+        @fallback_warned[slug] = true
+        warn "nabu: the #{slug} shelf still lives under canonical/ (pre-P71 layout) — " \
+             "run `nabu migrate-local` to move it under local/shelves/"
+      end
+      legacy
+    end
+
     # The instance config directory (P71-0, the local/ elevation —
     # owner-ruled 2026-08-11): local/config/ holds everything that makes
     # THIS instance this instance — the owner's rulings, grants, creep
