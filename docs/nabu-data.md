@@ -194,6 +194,7 @@ no page update is a red suite, and vice versa.
 | `mul/place-refs` | available | gold-derived | CC-BY-SA-4.0 | mul | nabu-places |
 | `mul/places-lpf` | available | gold-derived | CC-BY-SA-4.0 | mul | pleiades, trismegistos, cigs |
 | `mul/document-dates` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `mul/char-postings` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -330,6 +331,14 @@ Publishes every place the catalog's documents reference as an LPF v1.3 FeatureCo
 Publishes the dating layer behind Nabu's timeline — ~700K dated documents as normalized signed year spans (negative = BCE) with the VERBATIM upstream dating string riding every row, so each normalization is checkable against its source. License classes open+attribution only — the nc slices AND the rundata ODbL lane (a copyleft class of its own) are excluded row-by-row, censused in nabu.eval; CC BY-SA 4.0 — the №R-24 carve-out carrying the share-alike lanes (edh, tla-hf, aes, ...).
 
 **Maintenance**: re-derive after dating-moving events (sync waves, infer-dates rule changes — the №R-28 regnal upgrade lands here on its next build); the published-slice digest makes an unchanged projection a fingerprint no-op
+
+### `mul/char-postings` — Han character × corpus doc-frequency census (the graded-reading substrate)
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: —
+
+Publishes the char_postings census behind Nabu's Han cards and graded-reading lane — one row per (character, corpus) with the attesting document count, spanning lzh/jpn/otb/ojp collections (hence mul/ — the naming the survey left TBD, settled here). The Edubba P-1 rider's character half: frequency data any school can consume, derived from Nabu's ingested corpora only (Edubba's own TSVs are NEVER an input — the circularity guard). nc slices (cbeta, ud, e84000, openiti) excluded row-by-row, censused; CC BY-SA 4.0 — the kanripo lane's share-alike grant (№R-24).
+
+**Maintenance**: re-derive after CJK-lane syncs (the census rebuilds with the fulltext index); the published-slice digest makes an unchanged census a fingerprint no-op
 
 ## What the rail never does
 

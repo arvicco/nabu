@@ -4,6 +4,7 @@ require_relative "feature"
 require_relative "actib_anchors_builder"
 require_relative "aozora_gaiji_builder"
 require_relative "cantigas_builder"
+require_relative "char_postings_builder"
 require_relative "document_dates_builder"
 require_relative "form_lemma"
 require_relative "hani_fold_builder"
@@ -392,6 +393,29 @@ module Nabu
         maintenance: "re-derive after dating-moving events (sync waves, infer-dates rule " \
                      "changes — the №R-28 regnal upgrade lands here on its next build); the " \
                      "published-slice digest makes an unchanged projection a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/char-postings", language: LANGUAGES.fetch("mul"),
+        title: "Han character × corpus doc-frequency census (the graded-reading substrate)",
+        # gold-DERIVED: a mechanical census over ingested corpora — no
+        # interpretation, no sampling.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "none",
+        # The fulltext census is the source of truth (derived from the
+        # whole ingested corpus set — no single cone sha is load-bearing);
+        # the recipe embeds the published-slice sha256.
+        inputs: [], canonical_cones: [], builder: CharPostingsBuilder,
+        rationale: "Publishes the char_postings census behind Nabu's Han cards and graded-" \
+                   "reading lane — one row per (character, corpus) with the attesting document " \
+                   "count, spanning lzh/jpn/otb/ojp collections (hence mul/ — the naming the " \
+                   "survey left TBD, settled here). The Edubba P-1 rider's character half: " \
+                   "frequency data any school can consume, derived from Nabu's ingested " \
+                   "corpora only (Edubba's own TSVs are NEVER an input — the circularity " \
+                   "guard). nc slices (cbeta, ud, e84000, openiti) excluded row-by-row, " \
+                   "censused; CC BY-SA 4.0 — the kanripo lane's share-alike grant (№R-24).",
+        maintenance: "re-derive after CJK-lane syncs (the census rebuilds with the fulltext " \
+                     "index); the published-slice digest makes an unchanged census a " \
+                     "fingerprint no-op"
       )
     ].freeze
 
