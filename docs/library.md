@@ -1002,7 +1002,8 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   gate, and the local-library shelf (§8i) defaults behind it too.
 - **Protection stack**: upstream deletions are attic'd, never propagated
   (`retired_upstream` documents stay searchable); content-hash ledger
-  (`db/history.sqlite3`) survives rebuilds; rsync backup to mounted volume +
+  (`local/history.sqlite3`) survives rebuilds AND restores (local/ is in the
+  backup's permanent set); rsync backup to mounted volume +
   restore drill (`rake ops:drill`) proves the collection is reconstructable.
 - **Health**: trend rules (spike/collapse/creep/stale), golden-query replay
   (13 goldens), remote drift + license-baseline probes — with honest drift
