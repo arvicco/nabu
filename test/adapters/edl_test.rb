@@ -148,7 +148,9 @@ class EdlTest < Minitest::Test
       license: "CC BY-NC-SA 4.0", license_class: "nc",
       upstream_url: RAW_URL, enabled: false
     )
-    [db, Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger, canonical_dir: canonical_dir)]
+    [db,
+     Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger,
+                                       language_shelf_dir: canonical_dir && File.join(canonical_dir, Nabu::LanguageShelf::SLUG))]
   end
 
   def test_loading_twice_is_idempotent_across_both_shelves
@@ -170,7 +172,7 @@ class EdlTest < Minitest::Test
     Dir.mktmpdir do |root|
       _db, loader = loader_setup(canonical_dir: root)
       loader.load_from(adapter, workdir: FIXTURES)
-      shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(root))
+      shelf = Nabu::LanguageShelf.new(dir: File.join(root, Nabu::LanguageShelf::SLUG))
       itc = shelf.load("itc-pro").section("witness:edl")
       lat = shelf.load("lat").section("witness:edl")
       assert_equal %w[edl edl], [itc.source, lat.source]

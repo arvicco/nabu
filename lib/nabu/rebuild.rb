@@ -118,7 +118,7 @@ module Nabu
       # P70 fail-fast: a malformed hand edit to config/lect_rulings.yml must
       # refuse HERE — before the db drop and the hours of replay the late
       # lect-journal stage would otherwise waste.
-      LectRulings.validate!(@config.lect_rulings_path)
+      LectRulings.validate!(@config.lect_rulings_paths)
       db_existed = File.exist?(db_path)
       # P36-0: the always-on stage profiler. Cheap (a monotonic sample per stage
       # boundary; per document for parse/insert), so it runs on every rebuild —
@@ -293,7 +293,8 @@ module Nabu
       case adapter.class.content_kind
       when :dictionary
         Store::DictionaryLoader.new(db: db, source: source, ledger: ledger,
-                                    canonical_dir: @config.canonical_dir, profile: profile)
+                                    language_shelf_dir: @config.source_workdir(Nabu::LanguageShelf::SLUG),
+                                    profile: profile)
       when :language
         Store::LanguageDossierLoader.new(db: db, source: source, ledger: ledger)
       when :notes
@@ -393,7 +394,7 @@ module Nabu
       db
     end
 
-    def workdir_for(slug) = File.join(@config.canonical_dir, slug)
+    def workdir_for(slug) = @config.source_workdir(slug)
 
     # The links re-mine (P70-3b): wipe the journal, replay every
     # slug-scoped reference producer, then every recorded batch scope.

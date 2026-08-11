@@ -114,7 +114,7 @@ module Nabu
 
       # Same rule as Rebuild#replayable?: local canonical data exists.
       def replayable?(entry)
-        dir = File.join(@config.canonical_dir, entry.slug)
+        dir = @config.source_workdir(entry.slug)
         Dir.exist?(dir) && !Dir.empty?(dir)
       end
     end

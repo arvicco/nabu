@@ -12,7 +12,7 @@ module Nabu
     #      target is same-disk on purpose),
     #   2. "restore" onto a fresh tmp machine (rsync the target back into an
     #      empty root — the clone-the-repo-and-rsync-your-data step),
-    #   3. rebuild the derived db from the restored canonical/ alone,
+    #   3. rebuild the derived db from the restored permanent folders,
     #   4. verify (re-hash canonical against the rebuilt catalog),
     #   5. replay the golden queries against the restored corpus,
     #   6. report — and cross-check the restored corpus's document/passage
@@ -24,13 +24,20 @@ module Nabu
     # (the same Backup / Rebuild / Verify / Health code the CLI drives), so it is
     # fast and unit-testable; the restored root gets its OWN Config, honest to
     # the fresh-machine layout.
+    # +pure: true+ (P71-8, THE LAW'S PROOF) restores ONLY the three
+    # permanent folders — canonical/, config/, local/ — never db/: the
+    # rebuild must re-mint every derived store from scratch, the lect
+    # journal and links counts must match the live instruments (the
+    # derivation oracles), and the grant/creep gates must answer from
+    # local/config alone (no ledger row ever consulted for a decision).
     class Drill
       Counts = Data.define(:documents, :passages)
 
       Report = Data.define(
         :target, :machine_root, :backup, :rebuild_quarantined,
         :verify_clean, :golden_found, :golden_lost, :golden_skipped,
-        :source_counts, :restored_counts
+        :source_counts, :restored_counts,
+        :pure, :lects_match, :links_match, :grants_quiet, :creep_quiet
       ) do
         # Verify must be clean, no golden query may be lost, and — when the
         # live catalog was available to compare — the restored counts must
@@ -44,14 +51,18 @@ module Nabu
 
         def ok?
           backup.ok? && verify_clean && golden_lost.zero? && counts_match? &&
-            (source_counts ? true : rebuild_quarantined.zero?)
+            (source_counts ? true : rebuild_quarantined.zero?) && pure_ok?
         end
+
+        # The pure-mode law assertions (vacuously true otherwise).
+        def pure_ok? = !pure || (lects_match && links_match && grants_quiet && creep_quiet)
       end
 
-      def initialize(config:, workspace:, now: Time.now)
+      def initialize(config:, workspace:, now: Time.now, pure: false)
         @config = config
         @workspace = workspace
         @now = now
+        @pure = pure
       end
 
       def run
@@ -75,7 +86,14 @@ module Nabu
           golden_lost: golden.count(&:lost?),
           golden_skipped: golden.count { |g| g.status == :skipped },
           source_counts: source_counts,
-          restored_counts: read_counts(restored.catalog_path)
+          restored_counts: read_counts(restored.catalog_path),
+          pure: @pure,
+          lects_match: !@pure || store_count(@config.lects_journal_path, :lect_assignments) ==
+                                 store_count(restored.lects_journal_path, :lect_assignments),
+          links_match: !@pure || store_count(@config.links_path, :links) ==
+                                store_count(restored.links_path, :links),
+          grants_quiet: !@pure || grants_quiet?(restored),
+          creep_quiet: !@pure || creep_quiet?(restored)
         )
       end
 
@@ -87,9 +105,11 @@ module Nabu
 
       # The restore side of the drill: rsync each backed-up section back into a
       # fresh machine root — exactly what an operator does on new hardware after
-      # cloning the repo. Mirrors the backup layout (canonical/, config/, db/).
+      # cloning the repo. Mirrors the backup layout; pure mode restores ONLY
+      # the three permanent folders (db/ must re-derive, the law's claim).
       def restore(target, machine)
-        %w[canonical config db].each do |sub|
+        subs = @pure ? %w[canonical config local] : %w[canonical config local db]
+        subs.each do |sub|
           src = File.join(target, sub)
           next unless Dir.exist?(src)
 
@@ -106,9 +126,39 @@ module Nabu
         Config.new(
           canonical_dir: File.join(machine, "canonical"),
           db_dir: File.join(machine, "db"),
+          local_dir: File.join(machine, "local"),
           sources_path: File.join(machine, "config", "sources.yml"),
           config_path: File.join(machine, "config", "nabu.yml")
         )
+      end
+
+      # Every grant recorded in the restored local/config answers
+      # acknowledged? with NO ledger handle at all — config is the truth.
+      def grants_quiet?(restored)
+        gate = GrantGate.new(ledger: nil, grants_path: restored.grants_path)
+        gate.config_grants.all? { |g| gate.acknowledged?(g["source"]) }
+      end
+
+      # Every creep acceptance reads back config-first on a nil ledger.
+      def creep_quiet?(restored)
+        Health::QuarantineBaseline
+          .send(:config_acceptances, restored.creep_acceptances_path)
+          .all? do |row|
+            Health::QuarantineBaseline.latest_acceptance(
+              nil, row["source"], path: restored.creep_acceptances_path
+            )&.fetch(:accepted_baseline, nil) == row["baseline"]
+          end
+      end
+
+      # Row count of one table in a store file (nil-safe: absent file or
+      # table counts 0 — both sides of each oracle use the same rule).
+      def store_count(path, table)
+        return 0 unless File.exist?(path)
+
+        db = Store.connect(path, readonly: true)
+        db.table_exists?(table) ? db[table].count : 0
+      ensure
+        db&.disconnect
       end
 
       def rebuild_restored(restored)

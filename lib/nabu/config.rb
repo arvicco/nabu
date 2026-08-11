@@ -17,6 +17,7 @@ module Nabu
 
     DEFAULT_CANONICAL_DIR = "canonical"
     DEFAULT_DB_DIR = "db"
+    DEFAULT_LOCAL_DIR = "local"
     DEFAULT_SOURCES_PATH = File.join("config", "sources.yml")
     DEFAULT_ALIGNMENTS_PATH = File.join("config", "alignments.yml")
     DEFAULT_DISPLAY_PATH = File.join("config", "display.yml")
@@ -27,8 +28,8 @@ module Nabu
     LINKS_DB_FILENAME = "links.sqlite3"
     LECTS_DB_FILENAME = "lects.sqlite3"
 
-    attr_reader :canonical_dir, :db_dir, :sources_path, :alignments_path, :display_path,
-                :profile_path, :config_path, :backup_target
+    attr_reader :canonical_dir, :db_dir, :local_dir, :sources_path, :alignments_path,
+                :display_path, :config_path, :backup_target
 
     # Build a Config from a YAML file. Relative paths in the file resolve
     # against +root+; absolute paths are used verbatim.
@@ -41,19 +42,43 @@ module Nabu
     # suite, the drill) always win over the environment.
     def self.load(path: env_config_path, root: env_root)
       data = File.exist?(path) ? (YAML.safe_load_file(path) || {}) : {}
+      # P71-0: local/config/settings.yml is the INSTANCE overlay over the
+      # committed nabu.yml — box-specific values (backup.target, absolute
+      # path overrides) live there, never in the repo. local_dir itself
+      # resolves from the BASE file only (no circularity).
+      local_dir = resolve((data.fetch("paths", nil) || {})["local"], default: DEFAULT_LOCAL_DIR, root: root)
+      data = overlay_settings(data, local_dir)
       paths = data.fetch("paths", nil) || {}
       backup = data.fetch("backup", nil) || {}
       new(
         canonical_dir: resolve(paths["canonical"], default: DEFAULT_CANONICAL_DIR, root: root),
         db_dir: resolve(paths["db"], default: DEFAULT_DB_DIR, root: root),
+        local_dir: local_dir,
         sources_path: resolve(paths["sources"], default: DEFAULT_SOURCES_PATH, root: root),
         alignments_path: resolve(paths["alignments"], default: DEFAULT_ALIGNMENTS_PATH, root: root),
         display_path: resolve(paths["display"], default: DEFAULT_DISPLAY_PATH, root: root),
-        profile_path: resolve(paths["profile"], default: DEFAULT_PROFILE_PATH, root: root),
+        profile_path: resolve_optional(paths["profile"], root: root),
         config_path: path,
         backup_target: resolve_optional(backup["target"], root: root)
       )
     end
+
+    # Deep-merge local/config/settings.yml over the nabu.yml data (the
+    # overlay wins; hashes merge recursively, scalars replace).
+    def self.overlay_settings(data, local_dir)
+      settings_path = File.join(local_dir, "config", "settings.yml")
+      return data unless File.exist?(settings_path)
+
+      deep_merge(data, YAML.safe_load_file(settings_path) || {})
+    end
+    private_class_method :overlay_settings
+
+    def self.deep_merge(base, overlay)
+      base.merge(overlay) do |_key, old, new|
+        old.is_a?(Hash) && new.is_a?(Hash) ? deep_merge(old, new) : new
+      end
+    end
+    private_class_method :deep_merge
 
     def self.env_config_path
       value = ENV.fetch("NABU_CONFIG", nil)
@@ -83,18 +108,24 @@ module Nabu
     private_class_method :resolve_optional
 
     def initialize(canonical_dir:, db_dir:, sources_path:, config_path:,
+                   local_dir: nil,
                    alignments_path: File.join(File.dirname(sources_path), "alignments.yml"),
                    display_path: File.join(File.dirname(sources_path), "display.yml"),
-                   profile_path: File.join(File.dirname(sources_path), "profile.yml"),
+                   profile_path: nil,
                    backup_target: nil)
       @canonical_dir = canonical_dir
       @db_dir = db_dir
+      # P71-0: local/ sits beside config/ at the tree root by default —
+      # derived from the config file's own location so it follows a
+      # relocated/restored tree (the config_dir pattern).
+      @local_dir = local_dir || File.expand_path(File.join("..", DEFAULT_LOCAL_DIR), File.dirname(config_path))
       @sources_path = sources_path
       @alignments_path = alignments_path
       @display_path = display_path
       @profile_path = profile_path
       @config_path = config_path
       @backup_target = backup_target
+      @fallback_warned = {}
     end
 
     # The directory holding the config files (nabu.yml + sources.yml) — the
@@ -133,32 +164,102 @@ module Nabu
       File.join(config_dir, "lect_facet_rules.yml")
     end
 
-    # Grant acknowledgments (P70, the derivability contract): the SOURCE
-    # OF TRUTH for the owner's recorded grant agreements (frozen terms +
-    # how) — the ledger row is a historical mirror; restore needs only
-    # this file.
+    # -- P71-0: the overlay-merge pairs (owner-ruled 2026-08-11) ----------
+    # Per-source curation stays PROJECT config (git-shared), and a
+    # same-named file under local/config/ merges over it functionally —
+    # same-key local wins, keyed lists concat with local precedence.
+    # Loaders take these pairs in order (later wins); missing files skip.
+
+    def lect_overrides_paths
+      overlay_pair("lect_overrides.yml")
+    end
+
+    def lect_facet_rules_paths
+      overlay_pair("lect_facet_rules.yml")
+    end
+
+    def postures_paths
+      overlay_pair("postures.yml")
+    end
+
+    # The mirror direction (same ruling): lect rulings' HOME is the
+    # instance file, and a config/ copy may exist if a per-document
+    # ruling is ever publicized — both merge, the instance winning.
+    def lect_rulings_paths
+      home = lect_rulings_path
+      public_copy = File.join(config_dir, "lect_rulings.yml")
+      home == public_copy ? [home] : [public_copy, home]
+    end
+
+    # The box profile (`nabu enable` state; local/config/ since P71 — it
+    # was ALWAYS instance data, gitignored even when it sat in config/).
+    # An explicit profile_path (tests, paths.profile) wins verbatim.
+    def profile_path
+      @profile_path || instance_path("profile.yml")
+    end
+
+    # The owner shelves' parent (P71-2): local/shelves/<slug> — the five
+    # local-* shelf sources elevated out of canonical/ (slug identity and
+    # URNs untouched; only the parent dir moved).
+    def shelves_dir
+      File.join(local_dir, "shelves")
+    end
+
+    # THE workdir resolver (P71-2, the local/ elevation): a local-* shelf
+    # source lives under local/shelves/, every other source under
+    # canonical/. Loud legacy fallback per shelf while a pre-P71 copy
+    # still sits under canonical/ (split-brain beats silent divergence —
+    # `nabu migrate-local` moves it).
+    def source_workdir(slug)
+      return File.join(canonical_dir, slug) unless slug.to_s.start_with?("local-")
+
+      home = File.join(shelves_dir, slug)
+      legacy = File.join(canonical_dir, slug)
+      return home if Dir.exist?(home) || !Dir.exist?(legacy)
+
+      unless @fallback_warned[slug]
+        @fallback_warned[slug] = true
+        warn "nabu: the #{slug} shelf still lives under canonical/ (pre-P71 layout) — " \
+             "run `nabu migrate-local` to move it under local/shelves/"
+      end
+      legacy
+    end
+
+    # The instance config directory (P71-0, the local/ elevation —
+    # owner-ruled 2026-08-11): local/config/ holds everything that makes
+    # THIS instance this instance — the owner's rulings, grants, creep
+    # acceptances, link scopes, the settings overlay. Never in the public
+    # repo; part of the backup's permanent set.
+    def local_config_dir
+      File.join(local_dir, "config")
+    end
+
+    # Grant acknowledgments (P70; local since P71): the SOURCE OF TRUTH
+    # for the owner's recorded grant agreements (frozen terms + how) —
+    # the ledger row is a historical mirror; restore needs only this file.
     def grants_path
-      File.join(config_dir, "grants.yml")
+      instance_path("grants.yml")
     end
 
-    # Quarantine-creep acceptances (P70): the owner's --accept-creep
-    # rulings, config-durable; the ledger table is historical.
+    # Quarantine-creep acceptances (P70; local since P71): the owner's
+    # --accept-creep rulings; the ledger table is historical.
     def creep_acceptances_path
-      File.join(config_dir, "creep_acceptances.yml")
+      instance_path("creep_acceptances.yml")
     end
 
-    # Batch-mined link scopes (P70-3b): the durable record of the
-    # parameterized miners' scopes; rebuild's links stage replays them.
+    # Batch-mined link scopes (P70-3b; local since P71): the durable
+    # record of the parameterized miners' scopes; rebuild's links stage
+    # replays them.
     def link_scopes_path
-      File.join(config_dir, "link_scopes.yml")
+      instance_path("link_scopes.yml")
     end
 
-    # Per-document owner lect rulings (P70, the derivability contract):
-    # the SOURCE OF TRUTH for hand rulings — `lect assign` writes here
-    # first; the journal row is the derived representation; rebuild
-    # re-derives the whole journal from this file + rules + infer-dates.
+    # Per-document owner lect rulings (P70; local since P71): the SOURCE
+    # OF TRUTH for hand rulings — `lect assign` writes here first; the
+    # journal row is the derived representation; rebuild re-derives the
+    # whole journal from this file + rules + infer-dates.
     def lect_rulings_path
-      File.join(config_dir, "lect_rulings.yml")
+      instance_path("lect_rulings.yml")
     end
 
     # The catalog SQLite file (architecture §5), derived from db_dir.
@@ -173,13 +274,23 @@ module Nabu
       File.join(db_dir, FULLTEXT_DB_FILENAME)
     end
 
-    # The history ledger (architecture §5, P7-1; reclassified LOG by P70):
-    # runs, pins, license baselines, durable revisions. NOT derived and
-    # never touched by `nabu rebuild` — but operational HISTORY, not owner
-    # decisions (those live in config/ since P70), so the two-folder backup
-    # contract may lose it (№R-21; restore.md names the consequences).
+    # The history ledger (architecture §5, P7-1). LOCAL-INSTANCE since
+    # P71-1 (the local/ elevation): its runs/revisions/pins are the
+    # instance's operational history — preserved by the backup's
+    # permanent set, not blessed to die — and its move OUT of db/ makes
+    # db/ 100% derived by construction. Loud legacy fallback while a
+    # pre-P71 copy sits at db/history.sqlite3.
     def history_path
-      File.join(db_dir, HISTORY_DB_FILENAME)
+      home = File.join(local_dir, HISTORY_DB_FILENAME)
+      legacy = File.join(db_dir, HISTORY_DB_FILENAME)
+      return home if File.exist?(home) || !File.exist?(legacy)
+
+      unless @fallback_warned[HISTORY_DB_FILENAME]
+        @fallback_warned[HISTORY_DB_FILENAME] = true
+        warn "nabu: the ledger still lives at db/#{HISTORY_DB_FILENAME} (pre-P71 layout) — " \
+             "run `nabu migrate-local` to move it under local/"
+      end
+      legacy
     end
 
     # The links journal (architecture §15, P16-1): batch-mined cross-reference
@@ -197,6 +308,31 @@ module Nabu
     # may skip it (the two-folder contract keeps every ruling in config/).
     def lects_journal_path
       File.join(db_dir, LECTS_DB_FILENAME)
+    end
+
+    private
+
+    def overlay_pair(name)
+      [File.join(config_dir, name), File.join(local_config_dir, name)]
+    end
+
+    # The instance-file resolution (P71-0): home is local/config/<name>.
+    # A pre-P71 box whose file still sits at config/<name> keeps reading
+    # AND writing the legacy copy — split-brain (old rulings in config/,
+    # new appends in local/) would be strictly worse than the old layout —
+    # and the fallback says so out loud, once per file per process,
+    # naming the migration command.
+    def instance_path(name)
+      home = File.join(local_config_dir, name)
+      legacy = File.join(config_dir, name)
+      return home if File.exist?(home) || !File.exist?(legacy)
+
+      unless @fallback_warned[name]
+        @fallback_warned[name] = true
+        warn "nabu: #{name} still lives at config/ (pre-P71 layout) — run `nabu migrate-local` " \
+             "to move the instance files under local/config/"
+      end
+      legacy
     end
   end
 end

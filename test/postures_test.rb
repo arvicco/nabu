@@ -23,6 +23,34 @@ class PosturesTest < Minitest::Test
     @postures ||= Nabu::Postures.load(POSTURES_PATH)
   end
 
+  # P71-0 (owner-ruled overlay-merge): a local/config/postures.yml merges
+  # over the project file — per (slug, layer), the local declaration wins.
+  def test_load_merges_an_overlay_pair_per_slug_and_layer
+    Dir.mktmpdir do |dir|
+      project = File.join(dir, "project.yml")
+      local = File.join(dir, "local.yml")
+      File.write(project, <<~YAML)
+        sources:
+          alpha:
+            lect: {posture: identity}
+            dating: {posture: undatable}
+      YAML
+      File.write(local, <<~YAML)
+        sources:
+          alpha:
+            dating: {posture: dated, note: "local instrument dates it"}
+          beta:
+            lect: {posture: identity}
+      YAML
+      merged = Nabu::Postures.load([project, local])
+      assert_equal "identity", merged.declared("alpha", layer: "lect").posture,
+                   "project-only layers survive the merge"
+      assert_equal "dated", merged.declared("alpha", layer: "dating").posture,
+                   "the local declaration wins its (slug, layer)"
+      assert_equal "identity", merged.declared("beta", layer: "lect").posture
+    end
+  end
+
   def rules
     @rules ||= Nabu::LectRules.load(RULES_PATH)
   end

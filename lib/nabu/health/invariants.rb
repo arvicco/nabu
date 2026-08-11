@@ -72,13 +72,19 @@ module Nabu
       # vs derived records; pinned files vs the tree); nil (callers that
       # cannot name the corpus root) skips them honestly. +now+ picks the
       # D42-a rotation slot (injected so the probe is testable).
+      # +workdir_resolver+ (P71-2, the local/ elevation): a callable
+      # slug -> workdir; callers holding a Config pass
+      # config.method(:source_workdir) so the local-* shelves resolve to
+      # their local/shelves/ home. Defaults to the plain canonical join.
       def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil, now: Time.now,
-                     creep_acceptances_path: nil)
+                     creep_acceptances_path: nil, workdir_resolver: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
         @ledger = ledger
         @canonical_dir = canonical_dir
+        @workdir_resolver = workdir_resolver ||
+                            ->(slug) { @canonical_dir && File.join(@canonical_dir, slug) }
         @now = now
         # P70: config/creep_acceptances.yml governs accepted creep (the
         # ledger covers pre-P70 rows).
@@ -345,7 +351,7 @@ module Nabu
         unless vanished.empty?
           findings << Finding.new(
             kind: :dossiers_vanished, severity: :loud,
-            message: "#{vanished.size} pinned file(s) missing from canonical/#{entry.slug} " \
+            message: "#{vanished.size} pinned file(s) missing from the #{entry.slug} shelf " \
                      "(no attic copy): #{vanished.join(', ')} — restore from backup, " \
                      "or move to .attic/ to retire"
           )
@@ -363,7 +369,7 @@ module Nabu
       def partition_local_pins(slug)
         vanished = []
         changed = []
-        workdir = File.join(@canonical_dir, slug)
+        workdir = @workdir_resolver.call(slug)
         local_pins(slug).each do |rel, sha|
           live = File.join(workdir, rel)
           if File.file?(live)
@@ -708,7 +714,7 @@ module Nabu
       end
 
       def dossier_files(slug)
-        Dir.glob(File.join(@canonical_dir, slug, "*.md")).size
+        Dir.glob(File.join(@workdir_resolver.call(slug), "*.md")).size
       end
 
       def table?(db, name)

@@ -70,6 +70,20 @@ namespace :ops do
       abort "ops:drill FAILED — the backup is not restorable as-is (see above)" unless report.ok?
     end
   end
+
+  desc "THE LAW'S PROOF (P71-8): restore canonical/+config/+local/ ONLY, rebuild, assert derivation"
+  task :drill_pure do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    require "tmpdir"
+
+    config = Nabu::Config.load
+    Dir.mktmpdir("nabu-drill") do |workspace|
+      report = Nabu::Ops::Drill.new(config: config, workspace: workspace, pure: true).run
+      print_drill_report(report)
+      abort "ops:drill_pure FAILED — db/ does NOT fully derive from the three folders" unless report.ok?
+    end
+  end
 end
 
 # The Han variant-fold table (P37-2). Regenerates lib/nabu/hani.rb from the
@@ -199,7 +213,7 @@ namespace :site do
 
     config = Nabu::Config.load
     check = Nabu::Ops::DossierDrift.new(
-      shelf_dir: Nabu::SourceShelf.dir(config.canonical_dir),
+      shelf_dir: Nabu::SourceShelf.dir(config),
       registry: Nabu::SourceRegistry.load(config.sources_path),
       library_md: File.expand_path("docs/library.md", __dir__),
       site_library_md: File.expand_path("site/library.md", __dir__)
@@ -292,6 +306,12 @@ def print_drill_report(report)
   puts "  counts     source=#{count_str(report.source_counts)}  " \
        "restored=#{count_str(report.restored_counts)}  " \
        "#{report.counts_match? ? 'MATCH' : 'MISMATCH'}"
+  if report.pure
+    puts "  law        lects #{report.lects_match ? 'MATCH' : 'MISMATCH'} · " \
+         "links #{report.links_match ? 'MATCH' : 'MISMATCH'} · " \
+         "grants #{report.grants_quiet ? 'quiet' : 'RE-BLOCKED'} · " \
+         "creep #{report.creep_quiet ? 'quiet' : 'RE-ALARMED'}  (pure three-folder restore)"
+  end
   puts "  => #{report.ok? ? 'RESTORABLE' : 'NOT RESTORABLE'}"
 end
 

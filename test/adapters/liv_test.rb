@@ -148,7 +148,9 @@ class LivTest < Minitest::Test
       license: "CC BY-SA 4.0", license_class: "attribution",
       upstream_url: RAW_URL, enabled: false
     )
-    [db, Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger, canonical_dir: canonical_dir)]
+    [db,
+     Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger,
+                                       language_shelf_dir: canonical_dir && File.join(canonical_dir, Nabu::LanguageShelf::SLUG))]
   end
 
   def test_loading_twice_is_idempotent_with_stable_urns_and_reflex_rows
@@ -172,7 +174,7 @@ class LivTest < Minitest::Test
     Dir.mktmpdir do |root|
       db, loader = loader_setup(canonical_dir: root)
       loader.load_from(adapter, workdir: FIXTURES)
-      shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(root))
+      shelf = Nabu::LanguageShelf.new(dir: File.join(root, Nabu::LanguageShelf::SLUG))
       section = shelf.load("ine-pro").section("witness:liv")
       assert_equal "liv", section.source, "per-record provenance, the P18-5 contract"
       assert_match(/305 .*verbal roots/, section.body)

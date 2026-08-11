@@ -400,7 +400,7 @@ by default because the library's own metadata is useful context for
 deciding where to search. Takes no arguments.
 
 The `sources` array defaults to this box's **enabled set** — the sources
-active in `config/profile.yml` (the local enablement config, P44-r3b) — plus
+active in `local/config/profile.yml` (the instance enablement config, P44-r3b/P71) — plus
 the owner's own shelves, matching what `nabu list` / `nabu status` show on the
 CLI. Grant-gated private-research sources (`availability: blocked`) that were
 never enabled do not appear. This is a visibility default, not a data gate:

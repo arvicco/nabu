@@ -247,7 +247,7 @@ filter** (`search`/`export --axis`), which scopes a query to a desk's shelves;
 and the **desk card** (`nabu axis`), the reference page for one desk.
 
 - **`nabu enable <axis>`** (and `enable <source>`) — the first-time step:
-  adds the desk's members (or one source) to `config/profile.yml`, this
+  adds the desk's members (or one source) to `local/config/profile.yml`, this
   box's enablement config (P44-r3b). Enablement governs what `sync` /
   `sync --all` acquires and the default row set of `list`/`status`/
   `health`; `search`/`show`/`export` always see everything held. A desk is

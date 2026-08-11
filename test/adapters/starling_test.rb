@@ -500,7 +500,9 @@ class StarlingTest < Minitest::Test
       license: Nabu::Adapters::Starling::MANIFEST.license, license_class: "attribution",
       upstream_url: ZIP_URL, enabled: false
     )
-    [db, Nabu::Store::DictionaryLoader.new(db: db, source: source, canonical_dir: canonical_dir)]
+    [db,
+     Nabu::Store::DictionaryLoader.new(db: db, source: source,
+                                       language_shelf_dir: canonical_dir && File.join(canonical_dir, Nabu::LanguageShelf::SLUG))]
   end
 
   def test_loading_twice_is_idempotent_with_stable_urns_reflex_rows_and_name_census
@@ -571,7 +573,7 @@ class StarlingTest < Minitest::Test
     Dir.mktmpdir do |root|
       _db, loader = loader_setup(canonical_dir: root)
       loader.load_from(adapter, workdir: FIXTURES)
-      shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(root))
+      shelf = Nabu::LanguageShelf.new(dir: File.join(root, Nabu::LanguageShelf::SLUG))
       section = shelf.load("ine-pro").section("witness:starling")
       assert_equal "starling", section.source
       assert_match(/Pokorny/, section.body)

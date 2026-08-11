@@ -36,6 +36,51 @@ class LectRulesTest < Minitest::Test
 
   def test_load_is_nil_for_an_absent_file
     assert_nil Nabu::LectRules.load("/nonexistent/lect_facet_rules.yml")
+    assert_nil Nabu::LectRules.load(["/nonexistent/a.yml", "/nonexistent/b.yml"])
+  end
+
+  # P71-0 (owner-ruled overlay-merge): a local/config/ rules file merges
+  # over the project one — same-id replaces IN PLACE, local-only appends.
+  def test_load_merges_an_overlay_pair_with_local_precedence
+    Dir.mktmpdir do |dir|
+      project = File.join(dir, "project.yml")
+      local = File.join(dir, "local.yml")
+      File.write(project, <<~YAML)
+        rules:
+        - id: alpha
+          sources: [src-a]
+          code: sux
+          facet: period
+          tier: certain
+          map: {"Ur III": "sux:ur3"}
+        - id: beta
+          sources: [src-b]
+          code: akk
+          facet: period
+          tier: certain
+          map: {"OB": "akk:ob"}
+      YAML
+      File.write(local, <<~YAML)
+        rules:
+        - id: beta
+          sources: [src-b]
+          code: akk
+          facet: period
+          tier: approximation
+          map: {"OB": "akk:mb"}
+        - id: gamma
+          sources: [src-c]
+          code: grc
+          facet: genre
+          tier: certain
+          map: {"epic": "grc:ionic"}
+      YAML
+      rules = Nabu::LectRules.load([project, local])
+      assert_equal %w[alpha beta gamma], rules.rules.map(&:id),
+                   "same-id replaces in place; local-only appends"
+      assert_equal "approximation", rules.rules.find { |r| r.id == "beta" }.tier,
+                   "the local rule wins its id"
+    end
   end
 
   def test_the_shipped_rules_file_loads_and_every_target_is_defined

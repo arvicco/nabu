@@ -54,10 +54,12 @@ module Nabu
     #      a differing hash is :changed; a match is :unchanged. Non-github, no
     #      license file, an unreachable upstream, or a fetch error → :unchecked
     #      (never an error — this is best-effort). Baselines and pins live in
-    #      the history ledger (db/history.sqlite3), NOT the catalog, so they
-    #      survive `nabu rebuild` — the drift blindspot the pre-P7-1 layout
-    #      had (rebuild wiped the baseline; the next probe silently re-recorded
-    #      whatever upstream had become) is closed.
+    #      the history ledger (local/history.sqlite3 since P71), NOT the
+    #      catalog, so they survive `nabu rebuild` — and since the ledger is
+    #      part of the backup's permanent set, they survive a restore too.
+    #      The residual honesty: on a box restored WITHOUT its local/ folder
+    #      the first probe silently re-baselines (:baseline_recorded) —
+    #      drift across that gap is invisible.
     #
     # == Multi-repo sources (the UD decision, per-repo pinning — P6-3)
     #
