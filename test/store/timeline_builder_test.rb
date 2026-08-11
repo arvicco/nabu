@@ -174,8 +174,12 @@ module Store
       # P63-4: the metadata place hash's bare pleiades id lifts into a
       # NAMESPACED ref (Dp-b) — itant's 497 measured ids stop being
       # metadata-only; the ancient name still rides place_name.
+      # P73-2: the modern-findspot ref (place["geonames"], a verbatim URL)
+      # lifts through the ONE ref reader alongside it — space-separated
+      # namespaced tokens, the multi-claim convention consumers already
+      # split on.
       assert_equal "Bovianum, Samnium", itant[:place_name]
-      assert_equal "pleiades:432725", itant[:place_ref]
+      assert_equal "pleiades:432725 geonames:3180985", itant[:place_ref]
       bfm = timeline_for("urn:nabu:bfm:AlexisRaM")
       assert_equal([1025, 1075, "ca. 1050"], [bfm[:not_before], bfm[:not_after], bfm[:date_raw]])
       croala = timeline_for("urn:nabu:croala:grauisius")
@@ -186,6 +190,46 @@ module Store
       assert_equal ["Split", 1490], [split[:place_name], split[:not_before]],
                    "croala's STRING place (the P44-i4 shape) IS the place name"
       assert_equal 2, summary.metadata_dates.fetch("croala")
+    end
+
+    # P73-2 (the itant TM lift, ex-Q20): the geonames-labeled findspot lane
+    # measured 2026-08-10 — 508 real GeoNames URLs, 1 mislabeled
+    # Trismegistos URL, 13 doubled-URL strays. Everything the ONE ref
+    # reader honestly parses mints namespaced; malformed remainders mint
+    # nothing, never a guess.
+    def test_metadata_dates_lift_the_geonames_lane_through_the_one_ref_reader
+      seed_metadata_doc("itant", "urn:nabu:itant:mislabeled-tm",
+                        { "date" => { "not_before" => -300, "not_after" => -200 },
+                          "place" => { "ancient" => "Teate",
+                                       "geonames" => "https://www.trismegistos.org/place/2711" } })
+      seed_metadata_doc("itant", "urn:nabu:itant:doubled-url",
+                        { "date" => { "not_before" => -300, "not_after" => -200 },
+                          "place" => { "ancient" => "Larinum",
+                                       "geonames" =>
+                                         "https://sws.geonames.org/https://sws.geonames.org/6543607" } })
+      seed_metadata_doc("itant", "urn:nabu:itant:unparseable-ref",
+                        { "date" => { "not_before" => -300, "not_after" => -200 },
+                          "place" => { "ancient" => "Nola", "geonames" => "not-a-url" } })
+      build!
+      assert_equal "tm:2711", timeline_for("urn:nabu:itant:mislabeled-tm")[:place_ref],
+                   "a Trismegistos URL riding the geonames label mints in its TRUE namespace"
+      assert_equal "geonames:6543607", timeline_for("urn:nabu:itant:doubled-url")[:place_ref],
+                   "the doubled-URL stray recovers its one honest id"
+      assert_nil timeline_for("urn:nabu:itant:unparseable-ref")[:place_ref],
+                 "an unparseable ref mints nothing — the row keeps its date and name"
+    end
+
+    # P73-2: a ref IS placement — a doc carrying only a parseable place ref
+    # (no date, no ancient name — 8 measured live) still rows, the HGV
+    # place-only precedent extended to refs.
+    def test_metadata_dates_keep_a_ref_only_row
+      seed_metadata_doc("itant", "urn:nabu:itant:ref-only",
+                        { "place" => { "geonames" => "https://sws.geonames.org/3172394" } })
+      build!
+      row = timeline_for("urn:nabu:itant:ref-only")
+      assert_equal "geonames:3172394", row[:place_ref]
+      assert_nil row[:not_before]
+      assert_nil row[:place_name]
     end
 
     # P47-r3: the per-source refresh seam SyncRunner calls post-load — the

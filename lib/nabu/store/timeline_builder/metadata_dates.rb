@@ -3,6 +3,7 @@
 require "json"
 
 require_relative "../../period_bands"
+require_relative "../../place_refs"
 require_relative "../../timeline"
 
 module Nabu
@@ -114,14 +115,26 @@ module Nabu
           # measured 2026-08-08, ALL joining the held index) lifts it into
           # place_ref, namespaced per Dp-b (a derivation mint, never a
           # verbatim upstream URL). Non-numeric values never mint.
+          # P73-2 (ex-Q20): the "geonames" findspot ref (a verbatim URL —
+          # 508 real GeoNames, 1 mislabeled Trismegistos URL, 13 doubled-URL
+          # strays, measured 2026-08-10) lifts through the ONE ref reader:
+          # whatever PlaceRefs honestly parses mints in its true namespace,
+          # space-separated per the multi-claim convention; malformed
+          # remainders mint nothing.
           place = meta["place"]
           place_ref = nil
           if place.is_a?(Hash)
+            refs = []
             pleiades = place["pleiades"].to_s.strip
-            place_ref = "pleiades:#{pleiades}" if pleiades.match?(/\A\d+\z/)
+            refs << "pleiades:#{pleiades}" if pleiades.match?(/\A\d+\z/)
+            refs += Nabu::PlaceRefs.ids(place["geonames"]).map { |ns, id| "#{ns}:#{id}" }
+            place_ref = refs.uniq.join(" ") unless refs.empty?
             place = place["ancient"]
           end
-          return nil if not_before.nil? && not_after.nil? && (place.nil? || place.to_s.strip.empty?)
+          # A ref IS placement (P73-2): a doc carrying only a parseable
+          # place ref rows too — the HGV place-only precedent extended.
+          return nil if not_before.nil? && not_after.nil? && place_ref.nil? &&
+                        (place.nil? || place.to_s.strip.empty?)
 
           { document_id: doc[:id], not_before: not_before, not_after: not_after,
             date_raw: raw, place_name: place, place_ref: place_ref }
