@@ -788,7 +788,7 @@ or acquired, not downloaded** — local shelves with `sync_policy: local`
 through their sanctioned gateways. Phases 20–24 grew the family to four:
 
 - **`local-language`** — the language-dossier shelf, **live**: one
-  Markdown file per code under `canonical/local-language/` (YAML front
+  Markdown file per code under `local/shelves/local-language/` (YAML front
   matter for name/family/extras, free prose as curated context,
   provenance-headed accretion sections per witness). The owner-fired
   migration is complete — one dossier per curated code deriving the
@@ -812,7 +812,7 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   AI-assisted (`--assist`), or scripted (`--yes`).
 - **`local-source`** — the shelf-dossier shelf (P24-0), **live**: one
   Markdown + YAML dossier per registered source under
-  `canonical/local-source/` — the curated 1–3-sentence content
+  `local/shelves/local-source/` — the curated 1–3-sentence content
   description served on `nabu list` cards and MCP `nabu_status`, plus
   themes, key-work urns, and accretion sections. One dossier per
   registered source, seeded
@@ -928,7 +928,7 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   cognate lists expose (`gkm`, `zle-ort`, `zlw-opl`…). One card: name,
   family, curated context, live holdings (zero fields suppressed);
   unknown codes miss honestly with a family hint; ~0.2 s. The card's
-  authored layer now lives in the **`canonical/local-language/` dossier
+  authored layer now lives in the **`local/shelves/local-language/` dossier
   shelf** (one dossier per curated code, §8i; the ledger seed is
   retired), the derived names census is **filled** (160 name records from
   the owner's wiktionary resyncs — the inline `[code · Name]` rendering

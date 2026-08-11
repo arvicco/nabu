@@ -199,7 +199,7 @@ namespace :site do
 
     config = Nabu::Config.load
     check = Nabu::Ops::DossierDrift.new(
-      shelf_dir: Nabu::SourceShelf.dir(config.canonical_dir),
+      shelf_dir: Nabu::SourceShelf.dir(config),
       registry: Nabu::SourceRegistry.load(config.sources_path),
       library_md: File.expand_path("docs/library.md", __dir__),
       site_library_md: File.expand_path("site/library.md", __dir__)
