@@ -12,7 +12,7 @@ class DataBuildRegistryTest < Minitest::Test
   EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation
                       zho/hani-fold jpn/aozora-gaiji lat/sabellic-loans grc/meter
                       jpn/kyujitai-fold lzh/kanripo-gaiji sux/value-signs
-                      xct/actib-anchors roa-opt/cantigas].freeze
+                      xct/actib-anchors roa-opt/cantigas mul/lect-assignments].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -209,6 +209,23 @@ class DataBuildRegistryTest < Minitest::Test
                  "the milestone is stated where the owner reads it")
     assert_match(/№45-2/, cantigas.rationale,
                  "the written-grant basis is stated where the owner reads it")
+
+    assignments = Nabu::DataBuild.feature("mul/lect-assignments")
+    assert_equal :available, assignments.status, "P73-3: builder and feature land together"
+    assert_equal Nabu::DataBuild::LectAssignmentsBuilder, assignments.builder
+    assert_equal "gold-derived", assignments.tier,
+                 "the per-row basis column carries the finer honesty (rule vs date-band)"
+    assert_equal "document-urn", assignments.anchoring,
+                 "assignments are document-grain — URN, no content hash"
+    assert_empty assignments.inputs,
+                 "the journal is the source of truth (the aozora posture); the recipe embeds " \
+                 "the published-slice digest instead of cone shas"
+    assert_empty assignments.canonical_cones
+    assert_equal "mul-lect-assignments", assignments.package_name
+    assert_match(/nabu-lects/, assignments.rationale,
+                 "the public id grammar is cited where the owner reads it")
+    assert_match(/censused/, assignments.rationale,
+                 "the row-by-row license exclusion is stated where the owner reads it")
   end
 
   def test_language_statics_match_the_glottolog_spine
@@ -315,7 +332,10 @@ class DataBuildRegistryTest < Minitest::Test
       "lat/sabellic-loans" => "CC-BY-SA-4.0", "grc/meter" => "CC-BY-4.0",
       "jpn/kyujitai-fold" => "CC-BY-SA-4.0", "lzh/kanripo-gaiji" => "CC-BY-SA-4.0",
       "sux/value-signs" => "CC-BY-4.0", "xct/actib-anchors" => "CC-BY-4.0",
-      "roa-opt/cantigas" => "CC-BY-4.0"
+      "roa-opt/cantigas" => "CC-BY-4.0",
+      # P73-3: the №R-24 one-carve-out ruling — the journal's share-alike
+      # lanes (edh, aes, ...) ride inside one BY-SA dataset.
+      "mul/lect-assignments" => "CC-BY-SA-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end

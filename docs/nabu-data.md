@@ -190,6 +190,7 @@ no page update is a red suite, and vice versa.
 | `sux/value-signs` | available | gold | CC-BY-4.0 | sux | osl |
 | `xct/actib-anchors` | available | gold-derived | CC-BY-4.0 | xct | derge-kangyur, actib |
 | `roa-opt/cantigas` | available | gold | CC-BY-4.0 | roa-opt | cantigas |
+| `mul/lect-assignments` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -294,6 +295,14 @@ nabu-data's first re-publication: ACTib's known weakness is that its seg/POS lay
 The first full-corpus re-publication: the complete secular lyric of medieval Galician-Portuguese — ~1,680 cantigas, ~34K verse lines from the three great cancioneiros — projected from the Littera critical edition (cantigas.fcsh.unl.pt) into the corpus's first machine-readable form (the scholarly database is superb and browser-only: no TEI, no export), under the coordinator's written any-use grant (№45-2) with the project's own citation format riding every file — verse lines anchored urn+sha into the catalog, the cantiga/author registries, and the corpus-wide cancioneiro concordance parsed from the edition's manuscript sigla, with the citation-fidelity census (printed-number confirmations, refrain gaps, empty lines, the unattributed page) published in-band as nabu.eval.
 
 **Maintenance**: re-derive after a cantigas re-sync (Littera is a living edition that corrects pages in place; the stale-ingest guard enforces freshness); every build re-derives the citation-fidelity census into nabu.eval
+
+### `mul/lect-assignments` — Per-document historical-stage (lect) assignments across the multilingual catalog
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: document-urn · **Inputs**: —
+
+Publishes the per-document journal behind Nabu's lect facet — ~482K (URN, language-code) → historical-stage assignments (Old vs Neo-Babylonian, Ur III vs OB Sumerian, Vedic vs Classical Sanskrit, ...) with the basis and note in-band per row — the corpus-scale stage stratification no other project publishes; the id grammar and registry are public in nabu-lects (cited). License classes open+attribution only (nc/odbl/research_private slices excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out dataset carrying the share-alike lanes (edh, aes, ...).
+
+**Maintenance**: re-derive after journal-moving events (a sync wave re-running lect rules, new owner rulings, a rebuild) — the published-slice digest makes an unchanged journal a fingerprint no-op
 
 ## What the rail never does
 
