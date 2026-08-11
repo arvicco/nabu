@@ -1,0 +1,41 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# adapter_test is test/adapters/edubba_overlay_test.rb — a feature module
+# (kind: module): discover yields nothing and parse is unreachable; the
+# work is the Nabu::EdubbaOverlay read seam (test/edubba_overlay_test.rb)
+# and the P65-2 HieroCard didactic section (test/query/hiero_card_test.rb).
+source: edubba-overlay
+adapter_test: test/adapters/edubba_overlay_test.rb
+retrieved: 2026-08-11
+files:
+  - path: assets-src/data/hiero-101.yml
+    refetchable: true
+    provenance: local-trim
+    reason: header comment block + the G1/Z4/G43/Z7 rows (confusable pairs) + the AA1 certainty-unclear row, verbatim from the 79-line pool — covers keyword/label/sound/taught_in/certainty/confusable_with, the contract's H101 field set
+    url: https://raw.githubusercontent.com/arvicco/nabu-edubba/main/assets-src/data/hiero-101.yml
+    copied: 2026-08-11
+    whole: false
+    trim: 5 of 24 sign rows (P72-6, the extraction contract)
+  - path: assets-src/data/hiero-102.yml
+    refetchable: true
+    provenance: local-trim
+    reason: header comment block + the first 3 sign rows — covers the contract's HONEST H102 divergence (sense for sound, chapter for taught_in)
+    url: https://raw.githubusercontent.com/arvicco/nabu-edubba/main/assets-src/data/hiero-102.yml
+    copied: 2026-08-11
+    whole: false
+    trim: 3 of 53 sign rows
+  - path: site/hieroglyphs/addenda/signs/a24.md
+    refetchable: true
+    provenance: local-copy
+    reason: one codex sign page WITHOUT a pool row (front-matter-only entry path) — sign/title/description/permalink extraction
+    url: https://raw.githubusercontent.com/arvicco/nabu-edubba/main/site/hieroglyphs/addenda/signs/a24.md
+    copied: 2026-08-11
+    whole: true
+  - path: site/hieroglyphs/addenda/signs/g43.md
+    refetchable: true
+    provenance: local-copy
+    reason: one codex page WITH a pool row (the front-matter merge + deep-link path)
+    url: https://raw.githubusercontent.com/arvicco/nabu-edubba/main/site/hieroglyphs/addenda/signs/g43.md
+    copied: 2026-08-11
+    whole: true
