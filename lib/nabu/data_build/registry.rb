@@ -10,6 +10,7 @@ require_relative "kanripo_gaiji_builder"
 require_relative "kyujitai_fold_builder"
 require_relative "lect_assignments_builder"
 require_relative "meter_builder"
+require_relative "place_refs_builder"
 require_relative "segmentation_builder"
 require_relative "sabellic_loans_builder"
 require_relative "value_signs_builder"
@@ -312,6 +313,33 @@ module Nabu
         maintenance: "re-derive after journal-moving events (a sync wave re-running lect rules, " \
                      "new owner rulings, a rebuild) — the published-slice digest makes an " \
                      "unchanged journal a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/place-refs", language: LANGUAGES.fetch("mul"),
+        title: "Per-document place references across the multilingual catalog, gazetteer-ready",
+        # gold-DERIVED: the claims are upstream assertions and registry
+        # decisions carried mechanically; the per-row Basis column says
+        # which is which (the survey §2.1 posture).
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "document-urn",
+        # nabu-places is the ONE declared input: the Basis column cites its
+        # decisions, so its cone sha rides the manifest and the stale-ingest
+        # guard covers it. The doc→name pairs come from the catalog at URN
+        # grain (the lect-assignments posture) — the recipe embeds the
+        # published-slice sha256.
+        inputs: ["nabu-places"], canonical_cones: ["nabu-places"], builder: PlaceRefsBuilder,
+        rationale: "Publishes the compiled doc→place projection behind Nabu's places desk — " \
+                   "~586K (URN, claim) rows, every historical ref spelling (verbatim upstream " \
+                   "URLs, multi-URL fields, namespaced mints) folded to clean namespace:id form " \
+                   "(pleiades:, tm:, geonames:, cigs:, np:) ready to join gazetteer geometry, " \
+                   "with the verbatim upstream name and the Basis (upstream-asserted vs " \
+                   "nabu-places-applied) in-band per row. License classes open+attribution only " \
+                   "(the iip nc slice excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 " \
+                   "— the №R-24 carve-out (edh/aes/elephantine/ceipom share-alike lanes and the " \
+                   "conservative tm:-index inheritance ride inside it).",
+        maintenance: "re-derive after place-moving events (a sync wave, a nabu-places registry " \
+                     "sync + apply, a rebuild) — the published-slice digest makes an unchanged " \
+                     "projection a fingerprint no-op"
       )
     ].freeze
 

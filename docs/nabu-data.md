@@ -191,6 +191,7 @@ no page update is a red suite, and vice versa.
 | `xct/actib-anchors` | available | gold-derived | CC-BY-4.0 | xct | derge-kangyur, actib |
 | `roa-opt/cantigas` | available | gold | CC-BY-4.0 | roa-opt | cantigas |
 | `mul/lect-assignments` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `mul/place-refs` | available | gold-derived | CC-BY-SA-4.0 | mul | nabu-places |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -303,6 +304,14 @@ The first full-corpus re-publication: the complete secular lyric of medieval Gal
 Publishes the per-document journal behind Nabu's lect facet — ~482K (URN, language-code) → historical-stage assignments (Old vs Neo-Babylonian, Ur III vs OB Sumerian, Vedic vs Classical Sanskrit, ...) with the basis and note in-band per row — the corpus-scale stage stratification no other project publishes; the id grammar and registry are public in nabu-lects (cited). License classes open+attribution only (nc/odbl/research_private slices excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out dataset carrying the share-alike lanes (edh, aes, ...).
 
 **Maintenance**: re-derive after journal-moving events (a sync wave re-running lect rules, new owner rulings, a rebuild) — the published-slice digest makes an unchanged journal a fingerprint no-op
+
+### `mul/place-refs` — Per-document place references across the multilingual catalog, gazetteer-ready
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: document-urn · **Inputs**: nabu-places
+
+Publishes the compiled doc→place projection behind Nabu's places desk — ~586K (URN, claim) rows, every historical ref spelling (verbatim upstream URLs, multi-URL fields, namespaced mints) folded to clean namespace:id form (pleiades:, tm:, geonames:, cigs:, np:) ready to join gazetteer geometry, with the verbatim upstream name and the Basis (upstream-asserted vs nabu-places-applied) in-band per row. License classes open+attribution only (the iip nc slice excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out (edh/aes/elephantine/ceipom share-alike lanes and the conservative tm:-index inheritance ride inside it).
+
+**Maintenance**: re-derive after place-moving events (a sync wave, a nabu-places registry sync + apply, a rebuild) — the published-slice digest makes an unchanged projection a fingerprint no-op
 
 ## What the rail never does
 
