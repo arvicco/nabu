@@ -13,7 +13,7 @@ class DataBuildRegistryTest < Minitest::Test
                       zho/hani-fold jpn/aozora-gaiji lat/sabellic-loans grc/meter
                       jpn/kyujitai-fold lzh/kanripo-gaiji sux/value-signs
                       xct/actib-anchors roa-opt/cantigas mul/lect-assignments
-                      mul/place-refs].freeze
+                      mul/place-refs mul/places-lpf].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -240,6 +240,19 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal "mul-place-refs", place_refs.package_name
     assert_match(/Basis/, place_refs.rationale,
                  "the upstream-vs-registry honesty is stated where the owner reads it")
+
+    lpf = Nabu::DataBuild.feature("mul/places-lpf")
+    assert_equal :available, lpf.status, "P73-5: builder and feature land together"
+    assert_equal Nabu::DataBuild::PlacesLpfBuilder, lpf.builder
+    assert_equal "gold-derived", lpf.tier
+    assert_equal %w[pleiades trismegistos cigs], lpf.inputs,
+                 "titles/coords republish from the index — all three gazetteer cones are " \
+                 "load-bearing declared inputs"
+    assert_equal lpf.inputs, lpf.canonical_cones
+    assert_match(/P69-2/, lpf.rationale,
+                 "the GeoNames-rider disposition is recorded where the owner reads it")
+    assert_match(/closeMatch/, lpf.rationale,
+                 "the no-entity-resolution posture is stated where the owner reads it")
   end
 
   def test_language_statics_match_the_glottolog_spine
@@ -350,7 +363,9 @@ class DataBuildRegistryTest < Minitest::Test
       # P73-3/P73-4: the №R-24 one-carve-out ruling — the share-alike
       # lanes (edh, aes, ...) ride inside one BY-SA dataset each.
       "mul/lect-assignments" => "CC-BY-SA-4.0",
-      "mul/place-refs" => "CC-BY-SA-4.0"
+      "mul/place-refs" => "CC-BY-SA-4.0",
+      # P73-5: the TM lane's share-alike inheritance.
+      "mul/places-lpf" => "CC-BY-SA-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end

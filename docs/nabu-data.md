@@ -192,6 +192,7 @@ no page update is a red suite, and vice versa.
 | `roa-opt/cantigas` | available | gold | CC-BY-4.0 | roa-opt | cantigas |
 | `mul/lect-assignments` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `mul/place-refs` | available | gold-derived | CC-BY-SA-4.0 | mul | nabu-places |
+| `mul/places-lpf` | available | gold-derived | CC-BY-SA-4.0 | mul | pleiades, trismegistos, cigs |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -312,6 +313,14 @@ Publishes the per-document journal behind Nabu's lect facet — ~482K (URN, lang
 Publishes the compiled doc→place projection behind Nabu's places desk — ~586K (URN, claim) rows, every historical ref spelling (verbatim upstream URLs, multi-URL fields, namespaced mints) folded to clean namespace:id form (pleiades:, tm:, geonames:, cigs:, np:) ready to join gazetteer geometry, with the verbatim upstream name and the Basis (upstream-asserted vs nabu-places-applied) in-band per row. License classes open+attribution only (the iip nc slice excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out (edh/aes/elephantine/ceipom share-alike lanes and the conservative tm:-index inheritance ride inside it).
 
 **Maintenance**: re-derive after place-moving events (a sync wave, a nabu-places registry sync + apply, a rebuild) — the published-slice digest makes an unchanged projection a fingerprint no-op
+
+### `mul/places-lpf` — Referenced places as Linked Places Format v1.3 + LP-TSV (the gazetteer-exchange shape)
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: pleiades, trismegistos, cigs
+
+Publishes every place the catalog's documents reference as an LPF v1.3 FeatureCollection plus the LP-TSV v0.5 upload table (the World Historical Gazetteer's intake shapes): one Feature per claim (merging identities is entity resolution — the crosswalk rides as closeMatch links instead), attested spellings cited to their corpora, titles/coordinates from place_index (never invented), when-spans aggregated from document dates. The P69-2 GeoNames rider resolved NOT WANTED (recorded in the builder): geonames claims publish at document grain in mul/place-refs. CC BY-SA 4.0 — the TM lane's share-alike inheritance (№R-24).
+
+**Maintenance**: re-derive after gazetteer syncs (pleiades/trismegistos/cigs — the stale-ingest guard enforces freshness) or place-moving catalog events; the collection digest in the recipe makes an unchanged projection a fingerprint no-op
 
 ## What the rail never does
 
