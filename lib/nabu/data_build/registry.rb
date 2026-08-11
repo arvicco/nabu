@@ -4,6 +4,7 @@ require_relative "feature"
 require_relative "actib_anchors_builder"
 require_relative "aozora_gaiji_builder"
 require_relative "cantigas_builder"
+require_relative "document_dates_builder"
 require_relative "form_lemma"
 require_relative "hani_fold_builder"
 require_relative "kanripo_gaiji_builder"
@@ -368,6 +369,29 @@ module Nabu
                      "stale-ingest guard enforces freshness) or place-moving catalog events; " \
                      "the collection digest in the recipe makes an unchanged projection a " \
                      "fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/document-dates", language: LANGUAGES.fetch("mul"),
+        title: "Normalized document datings across the multilingual catalog, verbatim raw in-band",
+        # gold-DERIVED: upstream-structured bounds carried mechanically
+        # alongside band-inferred ones; Precision and Date_Raw are the
+        # per-row honesty (the survey §2.4 posture).
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "document-urn",
+        # The catalog dating projection is the source of truth at URN grain
+        # (the lect-assignments posture); the recipe embeds the
+        # published-slice sha256. №R-28 (regnal precision) re-derives in.
+        inputs: [], canonical_cones: [], builder: DocumentDatesBuilder,
+        rationale: "Publishes the dating layer behind Nabu's timeline — ~700K dated documents " \
+                   "as normalized signed year spans (negative = BCE) with the VERBATIM upstream " \
+                   "dating string riding every row, so each normalization is checkable against " \
+                   "its source. License classes open+attribution only — the nc slices AND the " \
+                   "rundata ODbL lane (a copyleft class of its own) are excluded row-by-row, " \
+                   "censused in nabu.eval; CC BY-SA 4.0 — the №R-24 carve-out carrying the " \
+                   "share-alike lanes (edh, tla-hf, aes, ...).",
+        maintenance: "re-derive after dating-moving events (sync waves, infer-dates rule " \
+                     "changes — the №R-28 regnal upgrade lands here on its next build); the " \
+                     "published-slice digest makes an unchanged projection a fingerprint no-op"
       )
     ].freeze
 
