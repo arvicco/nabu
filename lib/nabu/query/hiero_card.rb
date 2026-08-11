@@ -16,7 +16,7 @@ module Nabu
       # The card is the seam's Sign record plus the corpus panel
       # ({"passages" => n, "signs" => m}, {} when unprobed/empty).
       Card = Data.define(:glyph, :codepoint, :cat, :unik, :core, :desc, :func,
-                         :fval, :jsesh, :hg, :ifao, :alt_seq, :corpus)
+                         :fval, :jsesh, :hg, :ifao, :alt_seq, :corpus, :didactic)
       Result = Data.define(:input, :card)
 
       # Gardiner-style code shape (kEH_JSesh: A1, G43, Aa27D, P8h, O29v…).
@@ -29,9 +29,12 @@ module Nabu
       # table (8M+ rows; the unscoped LIKE scan measured in MINUTES).
       HIERO_SOURCES = %w[aes].freeze
 
-      def initialize(hieroglyphs:, catalog: nil)
+      # +overlay+ (P72-6): the Nabu::EdubbaOverlay read seam, or nil when
+      # the module is unsynced — the card degrades to no didactic section.
+      def initialize(hieroglyphs:, catalog: nil, overlay: nil)
         @signs = hieroglyphs
         @catalog = catalog
+        @overlay = overlay
       end
 
       def run(input)
@@ -57,8 +60,23 @@ module Nabu
           glyph: sign.glyph, codepoint: sign.codepoint, cat: sign.cat,
           unik: sign.unik, core: sign.core, desc: sign.desc, func: sign.func,
           fval: sign.fval, jsesh: sign.jsesh, hg: sign.hg, ifao: sign.ifao,
-          alt_seq: sign.alt_seq, corpus: corpus_panel(sign)
+          alt_seq: sign.alt_seq, corpus: corpus_panel(sign),
+          didactic: didactic_panel(sign)
         )
+      end
+
+      # The Edubba overlay for the sign's Gardiner code (P72-6): the
+      # contract's stable fields as a plain hash (rides the JSON contract
+      # additively). JOIN KEY correction (relayed to Edubba): their
+      # `gardiner` matches our card's JSESH field (G43) — our `cat` is
+      # the Gardiner-PLUS kEH_Cat shape (G-12-002). hg is the fallback.
+      # nil = no overlay module or no entry — an absent section, never a
+      # placeholder.
+      def didactic_panel(sign)
+        return nil unless @overlay
+
+        entry = (sign.jsesh && @overlay[sign.jsesh]) || (sign.hg && @overlay[sign.hg])
+        entry && Nabu::Query::Char.serialize(entry).merge("attribution" => Nabu::EdubbaOverlay::ATTRIBUTION)
       end
 
       # Passage + token counts of the sign's Gardiner code over held

@@ -1,0 +1,17 @@
+# Curated sign pool — Hieroglyphs 102 · Middle Egyptian (M8-2).
+# Top aes-frequency Gardiner codes NOT taught in 101 (53 signs),
+# identities per Gardiner's Sign List; certainty: classic =
+# textbook-standard picture, unclear = origin debated, taught as
+# use, not story. chapter: the E102 chapter that teaches the sign
+# (null = pool candidate, unpinned; pins land after the reading
+# sweep — taught-means-used, a seat needs an attested line).
+#
+# Codepoints resolved and VERIFIED by bin/hiero_registry.rb against
+# Unicode names; freq rank merged from hiero-freq-aes.tsv.
+# translit: Leiden display (D4-b); mdc: ASCII corpus form.
+# Classifiers are silent (rulebook §3): translit "—".
+
+signs:
+  - { gardiner: D4,   translit: "jr",  mdc: "ir",   label: "eye",                        sense: "eye (jrt); the verb jrj, to do, to make",            chapter: 3, certainty: classic, keyword: "eye" }
+  - { gardiner: D37,  translit: "dj",  mdc: "di",   label: "arm handing a loaf",         sense: "the verb rdj/dj, to give",                           chapter: 3, certainty: classic, keyword: "giving arm", confusable_with: ["D36", "D40"] }
+  - { gardiner: E34,  translit: "wn",  mdc: "wn",   label: "desert hare",                sense: "wn; the verb wnn, to be, to exist",                  chapter: 3, certainty: classic, keyword: "hare" }
