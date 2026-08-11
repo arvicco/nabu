@@ -66,16 +66,16 @@ class PlaceRefsBuilderTest < Minitest::Test
     ]
   end
 
-  def build!(out_dir)
+  def build!(out_dir, shard_size: nil)
     Nabu::DataBuild::PlaceRefsBuilder
-      .new(registry: registry_rig, places: places_rig)
+      .new(registry: registry_rig, places: places_rig, **(shard_size ? { shard_size: shard_size } : {}))
       .build(catalog: @catalog, out_dir: out_dir)
   end
 
   def test_publishes_one_row_per_claim_with_basis_in_band
     Dir.mktmpdir do |dir|
       result = build!(dir)
-      table = CSV.read(File.join(dir, "place-refs.csv"), headers: true)
+      table = CSV.read(File.join(dir, "place-refs", "part-001.csv"), headers: true)
       assert_equal %w[ID URN Place_Ref Place_Name Basis Source], table.headers
       rows = table.map { |row| [row["URN"], row["Place_Ref"], row["Basis"]] }
       assert_equal [
@@ -85,6 +85,29 @@ class PlaceRefsBuilderTest < Minitest::Test
       ], rows, "one row per namespaced claim, URL spellings folded, basis decided per axis row"
       assert_equal "Pompeii", table[1]["Place_Name"], "the verbatim upstream name rides every claim"
       assert_equal 3, result.resources.first.rows
+      assert_equal ["place-refs/part-001.csv"], result.resources.first.path,
+                   "one multi-path resource — the №R-29 shard lane"
+    end
+  end
+
+  # №R-29 (ruled 2026-08-11, sharding): the export splits into fixed-size
+  # shards so no single file can cross GitHub's 100 MB hard limit — one
+  # multi-path Frictionless resource, every shard with its own header,
+  # claim order continuous across the boundary.
+  def test_shards_split_at_the_size_boundary
+    Dir.mktmpdir do |dir|
+      result = build!(dir, shard_size: 2)
+      resource = result.resources.first
+      assert_equal ["place-refs/part-001.csv", "place-refs/part-002.csv"], resource.path
+      assert_equal 3, resource.rows
+      first = CSV.read(File.join(dir, "place-refs", "part-001.csv"), headers: true)
+      second = CSV.read(File.join(dir, "place-refs", "part-002.csv"), headers: true)
+      assert_equal 2, first.size
+      assert_equal 1, second.size
+      assert_equal first.headers, second.headers, "every shard carries the header"
+      assert_equal %w[pleiades:432725 pleiades:433032 tm:2788],
+                   (first.map { |row| row["Place_Ref"] } + second.map { |row| row["Place_Ref"] }),
+                   "claim order runs continuously across the shard boundary"
     end
   end
 
