@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "digest"
+require "fileutils"
 
 require_relative "../errors"
 require_relative "../config"
@@ -39,7 +40,12 @@ module Nabu
     # registry cone — the decisions the basis column cites derive from it,
     # so its sha rides the manifest and the stale-ingest guard covers it.
     class PlaceRefsBuilder
-      FILENAME = "place-refs.csv"
+      # №R-29 (ruled 2026-08-11, sharding): the export splits into
+      # fixed-size shards under place-refs/ — one multi-path Frictionless
+      # resource — so no single file can cross GitHub's 100 MB hard limit
+      # (the unsharded CSV measured 105 MB). 250K rows ≈ 27 MB/shard.
+      SHARD_DIR = "place-refs"
+      SHARD_SIZE = 250_000
       COLUMNS = %w[ID URN Place_Ref Place_Name Basis Source].freeze
 
       PUBLISHABLE_LICENSE_CLASSES = %w[open attribution].freeze
@@ -57,18 +63,19 @@ module Nabu
         "from the nabu-places curation registry. Mapping and GIS pipelines can join texts to " \
         "gazetteer geometry without re-solving each corpus's ref spelling."
 
-      def initialize(registry: nil, places: nil)
+      def initialize(registry: nil, places: nil, shard_size: SHARD_SIZE)
         @registry = registry
         @places = places
+        @shard_size = shard_size
       end
 
       def build(catalog:, out_dir:)
         raise Error, "mul/place-refs needs the catalog open — the projection lives there" if catalog.nil?
 
         rows, census, published_slugs, digest = published_rows(catalog)
-        count = CsvWriter.write(path: File.join(out_dir, FILENAME), columns: COLUMNS, rows: rows)
+        shard_paths, count = write_shards(out_dir, rows)
         BuildResult.new(
-          resources: [resource(count)],
+          resources: [resource(shard_paths, count)],
           recipe: recipe(digest),
           citations: citations(published_slugs),
           evaluation: census,
@@ -158,9 +165,23 @@ module Nabu
         }
       end
 
-      def resource(count)
+      # Fixed-size shards, claim order continuous across boundaries, every
+      # shard with its own header. Returns [relative shard paths, total].
+      def write_shards(out_dir, rows)
+        FileUtils.mkdir_p(File.join(out_dir, SHARD_DIR))
+        paths = []
+        total = 0
+        rows.each_slice(@shard_size).with_index(1) do |slice, index|
+          relative = File.join(SHARD_DIR, format("part-%03d.csv", index))
+          paths << relative
+          total += CsvWriter.write(path: File.join(out_dir, relative), columns: COLUMNS, rows: slice)
+        end
+        [paths, total]
+      end
+
+      def resource(shard_paths, count)
         Resource.new(
-          name: "place_refs", path: FILENAME, rows: count,
+          name: "place_refs", path: shard_paths, rows: count,
           fields: COLUMNS.map { |name| { name: name, type: "string" } },
           primary_key: ["ID"]
         )
@@ -169,7 +190,8 @@ module Nabu
       def recipe(digest)
         "place-refs v1: project document_axes.place_ref through Nabu::PlaceRefs at (document, " \
           "claim) grain, license classes #{PUBLISHABLE_LICENSE_CLASSES.join('+')} only, ordered " \
-          "(urn, axis row); published-slice sha256=#{digest}"
+          "(urn, axis row), sharded ≤#{@shard_size} rows/file (№R-29); " \
+          "published-slice sha256=#{digest}"
       end
 
       def citations(published_slugs)
