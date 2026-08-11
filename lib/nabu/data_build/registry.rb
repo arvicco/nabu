@@ -11,6 +11,7 @@ require_relative "kyujitai_fold_builder"
 require_relative "lect_assignments_builder"
 require_relative "meter_builder"
 require_relative "place_refs_builder"
+require_relative "places_lpf_builder"
 require_relative "segmentation_builder"
 require_relative "sabellic_loans_builder"
 require_relative "value_signs_builder"
@@ -340,6 +341,33 @@ module Nabu
         maintenance: "re-derive after place-moving events (a sync wave, a nabu-places registry " \
                      "sync + apply, a rebuild) — the published-slice digest makes an unchanged " \
                      "projection a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/places-lpf", language: LANGUAGES.fetch("mul"),
+        title: "Referenced places as Linked Places Format v1.3 + LP-TSV (the gazetteer-exchange shape)",
+        # gold-DERIVED: a mechanical projection of held index/crosswalk/axis
+        # data into the LPF shape; the fclass keyword mapping is the one
+        # interpretive move and its unmapped remainder is censused in-band.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "none",
+        # The gazetteer cones ARE load-bearing here (titles and coordinates
+        # republish from place_index), so all three ride the manifest under
+        # the stale-ingest guard.
+        inputs: %w[pleiades trismegistos cigs],
+        canonical_cones: %w[pleiades trismegistos cigs], builder: PlacesLpfBuilder,
+        rationale: "Publishes every place the catalog's documents reference as an LPF v1.3 " \
+                   "FeatureCollection plus the LP-TSV v0.5 upload table (the World Historical " \
+                   "Gazetteer's intake shapes): one Feature per claim (merging identities is " \
+                   "entity resolution — the crosswalk rides as closeMatch links instead), " \
+                   "attested spellings cited to their corpora, titles/coordinates from " \
+                   "place_index (never invented), when-spans aggregated from document dates. " \
+                   "The P69-2 GeoNames rider resolved NOT WANTED (recorded in the builder): " \
+                   "geonames claims publish at document grain in mul/place-refs. CC BY-SA 4.0 " \
+                   "— the TM lane's share-alike inheritance (№R-24).",
+        maintenance: "re-derive after gazetteer syncs (pleiades/trismegistos/cigs — the " \
+                     "stale-ingest guard enforces freshness) or place-moving catalog events; " \
+                     "the collection digest in the recipe makes an unchanged projection a " \
+                     "fingerprint no-op"
       )
     ].freeze
 
