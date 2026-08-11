@@ -13,7 +13,8 @@ class DataBuildRegistryTest < Minitest::Test
                       zho/hani-fold jpn/aozora-gaiji lat/sabellic-loans grc/meter
                       jpn/kyujitai-fold lzh/kanripo-gaiji sux/value-signs
                       xct/actib-anchors roa-opt/cantigas mul/lect-assignments
-                      mul/place-refs mul/places-lpf mul/document-dates].freeze
+                      mul/place-refs mul/places-lpf mul/document-dates
+                      mul/char-postings].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -264,6 +265,14 @@ class DataBuildRegistryTest < Minitest::Test
                  "the raw-string honesty is stated where the owner reads it")
     assert_match(/ODbL/, dates.rationale,
                  "the rundata exclusion is stated where the owner reads it")
+
+    postings = Nabu::DataBuild.feature("mul/char-postings")
+    assert_equal :available, postings.status, "P73-8: builder and feature land together"
+    assert_equal Nabu::DataBuild::CharPostingsBuilder, postings.builder
+    assert_equal "gold-derived", postings.tier
+    assert_equal "none", postings.anchoring
+    assert_match(/circularity/, postings.rationale,
+                 "the Edubba never-re-import guard is stated where the owner reads it")
   end
 
   def test_language_statics_match_the_glottolog_spine
@@ -378,7 +387,9 @@ class DataBuildRegistryTest < Minitest::Test
       # P73-5: the TM lane's share-alike inheritance.
       "mul/places-lpf" => "CC-BY-SA-4.0",
       # P73-7: the dating layer's share-alike lanes (edh, tla-hf, aes, ...).
-      "mul/document-dates" => "CC-BY-SA-4.0"
+      "mul/document-dates" => "CC-BY-SA-4.0",
+      # P73-8: the kanripo lane's share-alike grant.
+      "mul/char-postings" => "CC-BY-SA-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
