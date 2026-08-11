@@ -72,6 +72,14 @@ class GradedTest < Minitest::Test
     assert_empty outcome.results
   end
 
+  # The Edubba paper cut (2026-08-11): floor the cleanest-first order
+  # above one-char fragments.
+  def test_min_chars_floors_the_fragments
+    outcome = @graded.run(charset: "子曰學而天地", min_chars: 3)
+    assert_equal %w[urn:d:1], outcome.results.map(&:urn),
+                 "the two-char 子曰 and 天地 fall below the floor; the 4-char reading stays"
+  end
+
   def test_composes_with_a_text_query
     outcome = @graded.run("子曰", charset: "子曰學而說乎不亦")
     urns = outcome.results.map(&:urn)

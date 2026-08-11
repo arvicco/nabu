@@ -15,8 +15,32 @@ module Query
 
     SIGNS = Nabu::Hieroglyphs.load(File.join(Nabu::TestSupport.fixtures("unikemet"), "Unikemet.txt"))
 
-    def card_for(input, catalog: nil)
-      Nabu::Query::HieroCard.new(hieroglyphs: SIGNS, catalog: catalog).run(input)
+    OVERLAY = Nabu::EdubbaOverlay.new(Nabu::TestSupport.fixtures("edubba-overlay"))
+
+    def card_for(input, catalog: nil, overlay: nil)
+      Nabu::Query::HieroCard.new(hieroglyphs: SIGNS, catalog: catalog, overlay: overlay).run(input)
+    end
+
+    # P72-6: the Edubba didactic overlay joins on the JSESH Gardiner code
+    # (their contract said `cat`, but our cat is the Gardiner-PLUS
+    # G-12-002 shape — the correction is relayed); the section carries
+    # the attribution line and rides the JSON contract additively.
+    def test_didactic_overlay_joins_on_the_jsesh_code_with_attribution
+      result = card_for("G43", overlay: OVERLAY)
+      didactic = result.card.didactic
+      assert_equal "chick", didactic["keyword"]
+      assert_equal "sound", didactic["voice_kind"]
+      assert_equal ["Z7"], didactic["confusables"]
+      assert_equal Nabu::EdubbaOverlay::ATTRIBUTION, didactic["attribution"]
+      assert_match(%r{edubba\.ac/hieroglyphs/addenda/signs/g43/}, didactic["link"])
+
+      payload = Nabu::Query::HieroCard.json_payload(result)
+      assert_equal "chick", payload.dig("card", "didactic", "keyword"),
+                   "the overlay rides the frozen JSON contract as an additive key"
+    end
+
+    def test_no_overlay_module_means_no_didactic_section_never_an_error
+      assert_nil card_for("G43").card.didactic
     end
 
     def test_a_glyph_resolves_to_its_card
