@@ -21,21 +21,21 @@ module Nabu
 
     module_function
 
-    # Every dossier under canonical/local-place, file order. Absent dir =
-    # no dossiers, honestly. A malformed file raises loudly (owner-authored
-    # files deserve loud feedback, not silent skips).
-    def all(canonical_dir)
-      dir = File.join(canonical_dir, DIRNAME)
-      return [] unless Dir.exist?(dir)
+    # Every dossier in the local-place shelf (+dir+ IS the shelf dir —
+    # resolved by Config#source_workdir since P71-2), file order. Absent
+    # dir = no dossiers, honestly. A malformed file raises loudly
+    # (owner-authored files deserve loud feedback, not silent skips).
+    def all(dir)
+      return [] unless dir && Dir.exist?(dir)
 
       Dir.glob(File.join(dir, "*.md")).map { |path| parse(path) }
     end
 
     # Dossiers whose refs intersect +ids+ ([[namespace, id], …] pairs from
     # the card being rendered).
-    def for_ids(canonical_dir, ids)
+    def for_ids(dir, ids)
       wanted = ids.map { |ns, id| "#{ns}:#{id}" }
-      all(canonical_dir).select { |d| d.refs.intersect?(wanted) }
+      all(dir).select { |d| d.refs.intersect?(wanted) }
     end
 
     def parse(path)

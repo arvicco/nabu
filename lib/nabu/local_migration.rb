@@ -15,6 +15,12 @@ module Nabu
       grants.yml creep_acceptances.yml link_scopes.yml lect_rulings.yml profile.yml
     ].freeze
 
+    # The owner shelves (P71-2): elevated canonical/<slug> ->
+    # local/shelves/<slug> (slug identity and URNs untouched).
+    SHELF_SLUGS = %w[
+      local-language local-library local-notes local-place local-source
+    ].freeze
+
     Result = Data.define(:moved, :conflicts)
 
     module_function
@@ -37,7 +43,27 @@ module Nabu
         moved << name
       end
       migrate_ledger(config, moved, conflicts)
+      migrate_shelves(config, moved, conflicts)
       Result.new(moved: moved, conflicts: conflicts)
+    end
+
+    # P71-2: the owner shelves move canonical/ -> local/shelves/ whole
+    # (same-filesystem rename); a home shelf is never clobbered.
+    def migrate_shelves(config, moved, conflicts)
+      SHELF_SLUGS.each do |slug|
+        legacy = File.join(config.canonical_dir, slug)
+        home = File.join(config.shelves_dir, slug)
+        next unless Dir.exist?(legacy)
+
+        if Dir.exist?(home)
+          conflicts << slug
+          next
+        end
+
+        FileUtils.mkdir_p(File.dirname(home))
+        FileUtils.mv(legacy, home)
+        moved << slug
+      end
     end
 
     # P71-1: the ledger (db/history.sqlite3) moves to local/ WITH its live

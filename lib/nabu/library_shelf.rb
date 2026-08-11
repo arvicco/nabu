@@ -31,8 +31,11 @@ module Nabu
     # one honest directory name (no separators, no dot-prefix).
     COLLECTION_NAME = /\A[a-zA-Z0-9][a-zA-Z0-9._-]*\z/
 
-    def self.dir(canonical_dir)
-      File.join(canonical_dir, SLUG)
+    # P71-2 (the local/ elevation): the shelf's home is resolved by the
+    # config's workdir seam — local/shelves/<slug>, with the loud legacy
+    # canonical/<slug> fallback until `nabu migrate-local`.
+    def self.dir(config)
+      config.source_workdir(SLUG)
     end
 
     def self.sha256(path)

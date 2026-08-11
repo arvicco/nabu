@@ -18,11 +18,14 @@ class PlaceDossiersTest < Minitest::Test
     The sacred city of Ningirsu.
   MD
 
+  # P71-2: all/for_ids take the SHELF dir itself (Config#source_workdir
+  # resolves it — local/shelves/local-place).
   def with_shelf
     Dir.mktmpdir do |dir|
-      FileUtils.mkdir_p(File.join(dir, "local-place"))
-      File.write(File.join(dir, "local-place", "girsu.md"), BODY)
-      yield dir
+      shelf = File.join(dir, "local-place")
+      FileUtils.mkdir_p(shelf)
+      File.write(File.join(shelf, "girsu.md"), BODY)
+      yield shelf
     end
   end
 
@@ -45,19 +48,21 @@ class PlaceDossiersTest < Minitest::Test
 
   def test_absent_shelf_is_empty_and_malformed_files_raise_loudly
     Dir.mktmpdir do |dir|
-      assert_empty Nabu::PlaceDossiers.all(dir)
-      FileUtils.mkdir_p(File.join(dir, "local-place"))
-      File.write(File.join(dir, "local-place", "bad.md"), "no front matter\n")
-      error = assert_raises(Nabu::Error) { Nabu::PlaceDossiers.all(dir) }
+      shelf = File.join(dir, "local-place")
+      assert_empty Nabu::PlaceDossiers.all(shelf)
+      FileUtils.mkdir_p(shelf)
+      File.write(File.join(shelf, "bad.md"), "no front matter\n")
+      error = assert_raises(Nabu::Error) { Nabu::PlaceDossiers.all(shelf) }
       assert_match(/front-matter/, error.message)
     end
   end
 
   def test_refless_front_matter_is_refused
     Dir.mktmpdir do |dir|
-      FileUtils.mkdir_p(File.join(dir, "local-place"))
-      File.write(File.join(dir, "local-place", "x.md"), "---\nkey: x\n---\nbody\n")
-      assert_raises(Nabu::Error) { Nabu::PlaceDossiers.all(dir) }
+      shelf = File.join(dir, "local-place")
+      FileUtils.mkdir_p(shelf)
+      File.write(File.join(shelf, "x.md"), "---\nkey: x\n---\nbody\n")
+      assert_raises(Nabu::Error) { Nabu::PlaceDossiers.all(shelf) }
     end
   end
 
@@ -65,7 +70,7 @@ class PlaceDossiersTest < Minitest::Test
     db = Nabu::Store.connect("sqlite::memory:")
     Nabu::Store.migrate!(db)
     with_shelf do |dir|
-      result = Nabu::Query::Place.new(catalog: db, pleiades: nil, canonical_dir: dir)
+      result = Nabu::Query::Place.new(catalog: db, pleiades: nil, place_shelf_dir: dir)
                                  .run("912855")
       assert_equal ["Girsu"], result.cards.first.dossiers.map(&:title)
     end

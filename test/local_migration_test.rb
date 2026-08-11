@@ -72,6 +72,20 @@ class LocalMigrationTest < Minitest::Test
     end
   end
 
+  # P71-2: the owner shelves move canonical/ -> local/shelves/ whole.
+  def test_moves_the_shelves_under_local_shelves
+    with_tree do |root, config|
+      FileUtils.mkdir_p(File.join(root, "canonical", "local-notes"))
+      File.write(File.join(root, "canonical", "local-notes", "topic.yml"), "t: 1\n")
+      FileUtils.mkdir_p(File.join(root, "canonical", "perseus"))
+      result = Nabu::LocalMigration.run(config: config)
+      assert_includes result.moved, "local-notes"
+      assert_equal "t: 1\n", File.read(File.join(root, "local", "shelves", "local-notes", "topic.yml"))
+      refute Dir.exist?(File.join(root, "canonical", "local-notes"))
+      assert Dir.exist?(File.join(root, "canonical", "perseus")), "regular sources never move"
+    end
+  end
+
   def test_never_clobbers_a_ledger_already_at_home
     with_tree do |root, config|
       FileUtils.mkdir_p(File.join(root, "db"))

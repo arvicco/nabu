@@ -249,7 +249,9 @@ class SlLexicaTest < Minitest::Test
       license: Nabu::Adapters::SlLexica::MANIFEST.license, license_class: "attribution",
       upstream_url: Nabu::Adapters::SlLexica::MANIFEST.upstream_url, enabled: false
     )
-    [db, Nabu::Store::DictionaryLoader.new(db: db, source: source, canonical_dir: canonical_dir)]
+    [db,
+     Nabu::Store::DictionaryLoader.new(db: db, source: source,
+                                       language_shelf_dir: canonical_dir && File.join(canonical_dir, Nabu::LanguageShelf::SLUG))]
   end
 
   def test_loading_twice_is_idempotent_with_stable_urns_and_citation_rows
@@ -275,7 +277,7 @@ class SlLexicaTest < Minitest::Test
     Dir.mktmpdir do |root|
       _db, loader = loader_setup(canonical_dir: root)
       loader.load_from(adapter, workdir: FIXTURES)
-      shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(root))
+      shelf = Nabu::LanguageShelf.new(dir: File.join(root, Nabu::LanguageShelf::SLUG))
       section = shelf.load("sl").section("witness:sl-lexica")
       assert_equal "sl-lexica", section.source
       assert_match(/Pleteršnik/, section.body)

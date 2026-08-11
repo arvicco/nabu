@@ -88,7 +88,7 @@ module Nabu
       # (dossier files vs derived records, pinned files vs the tree); nil
       # skips them honestly.
       def initialize(registry:, catalog:, fulltext:, ledger:, golden_queries:, now: Time.now,
-                     canonical_dir: nil, creep_acceptances_path: nil)
+                     canonical_dir: nil, creep_acceptances_path: nil, workdir_resolver: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
@@ -100,7 +100,8 @@ module Nabu
         # library prints exactly what it printed before — nothing new.
         @invariants = Invariants.new(registry: registry, catalog: catalog, fulltext: fulltext,
                                      ledger: ledger, canonical_dir: canonical_dir, now: now,
-                                     creep_acceptances_path: creep_acceptances_path)
+                                     creep_acceptances_path: creep_acceptances_path,
+                                     workdir_resolver: workdir_resolver)
       end
 
       def run

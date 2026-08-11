@@ -415,7 +415,7 @@ module Nabu
     def dossiers
       config = Nabu::Config.load
       registry = require_lects_module!(config)
-      shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(config.canonical_dir))
+      shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(config))
       report = Nabu::LectDossiers.new(lects: registry, shelf: shelf).run!(dry_run: options[:"dry-run"])
       verb = options[:"dry-run"] ? "would write" : "wrote"
       say "stage sections: #{verb} #{report.written.size} " \
@@ -1444,7 +1444,13 @@ module Nabu
       config = Nabu::Config.load
       result = Nabu::LocalMigration.run(config: config)
       result.moved.each do |name|
-        from, to = name == Nabu::Config::HISTORY_DB_FILENAME ? ["db/", "local/"] : ["config/", "local/config/"]
+        from, to = if name == Nabu::Config::HISTORY_DB_FILENAME
+                     ["db/", "local/"]
+                   elsif Nabu::LocalMigration::SHELF_SLUGS.include?(name)
+                     ["canonical/", "local/shelves/"]
+                   else
+                     ["config/", "local/config/"]
+                   end
         say "moved   #{from}#{name} -> #{to}#{name}"
       end
       result.conflicts.each do |name|
@@ -3098,7 +3104,8 @@ module Nabu
 
       resolver = Nabu::Pleiades.load_default(config: config, catalog: catalog)
       result = Nabu::Query::Place.new(catalog: catalog, pleiades: resolver,
-                                      canonical_dir: config.canonical_dir).run(query)
+                                      place_shelf_dir: config.source_workdir(Nabu::PlaceDossiers::DIRNAME))
+                                 .run(query)
       print_place(result)
     rescue Nabu::Query::Place::Error => e
       raise Thor::Error, e.message
@@ -6244,7 +6251,7 @@ module Nabu
         raise Thor::Error, "note: --rm takes no urn argument (--topic scopes the id search)" \
           unless urn_arg.to_s.strip.empty?
 
-        shelf = Nabu::NoteShelf.new(dir: Nabu::NoteShelf.dir(config.canonical_dir), resolver: nil)
+        shelf = Nabu::NoteShelf.new(dir: Nabu::NoteShelf.dir(config), resolver: nil)
         removal = shelf.remove_note!(id: options[:rm], topic: options[:topic])
         say "  removed  [#{options[:rm].strip.downcase}] #{removal.record.urn} — " \
             "#{removal.record.note[0, 60]}#{'…' if removal.record.note.length > 60}"
@@ -6347,7 +6354,7 @@ module Nabu
         begin
           resolver = catalog && Nabu::NoteShelf.catalog_resolver(catalog)
           resolved = resolver ? resolver.call(urn) : false if options[:force]
-          shelf = Nabu::NoteShelf.new(dir: Nabu::NoteShelf.dir(config.canonical_dir), resolver: resolver)
+          shelf = Nabu::NoteShelf.new(dir: Nabu::NoteShelf.dir(config), resolver: resolver)
           path = shelf.append_note!(urn: urn, note: text,
                                     topic: options[:topic] || Nabu::NoteShelf::DEFAULT_TOPIC,
                                     tags: (options[:tags] || "").split(","), force: options[:force])
@@ -7531,7 +7538,7 @@ module Nabu
       # catalog records the card reads.
       def export_language_dossiers(config)
         ledger = open_ledger(config)
-        dir = Nabu::LanguageShelf.dir(config.canonical_dir)
+        dir = Nabu::LanguageShelf.dir(config)
         seed = File.join(config.config_dir, "languages.yml")
         report = Nabu::LanguageDossierExport.new(ledger: ledger, dir: dir,
                                                  seed_path: File.file?(seed) ? seed : nil)
@@ -8242,7 +8249,7 @@ module Nabu
       # all. Refused with --parse-only (contradictory) and --all (wipe is
       # a per-source, explicit decision).
       def redownload_wipe!(config, slug)
-        dir = File.join(config.canonical_dir, slug)
+        dir = config.source_workdir(slug)
         return unless Dir.exist?(dir)
 
         kept_attic = false
@@ -8472,7 +8479,7 @@ module Nabu
           raise Thor::Error, "ingest: --#{flag.tr('_', '-')} is a source-shelf field — " \
                              "with --shelf language use --name/--family/--context"
         end
-        shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(config.canonical_dir))
+        shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(config))
         engine = Nabu::Ingest.new(resolver: ingest_resolver, assist_command: options[:assist],
                                   overrides: ingest_overrides(%w[name family context]),
                                   notify: ingest_notify)
@@ -8506,7 +8513,7 @@ module Nabu
           raise Thor::Error, "ingest --shelf source: #{slug.inspect} is not a registered source " \
                              "(config/sources.yml) — dossiers describe held shelves"
         end
-        shelf = Nabu::SourceShelf.new(dir: Nabu::SourceShelf.dir(config.canonical_dir))
+        shelf = Nabu::SourceShelf.new(dir: Nabu::SourceShelf.dir(config))
         engine = Nabu::Ingest.new(resolver: ingest_resolver, assist_command: options[:assist],
                                   overrides: ingest_overrides(Nabu::Ingest::SOURCE_FIELDS),
                                   notify: ingest_notify)
@@ -8530,7 +8537,7 @@ module Nabu
       # local-source derives the catalog records the card/census read.
       def export_source_dossiers(config)
         registry = Nabu::SourceRegistry.load(config.sources_path)
-        dir = Nabu::SourceShelf.dir(config.canonical_dir)
+        dir = Nabu::SourceShelf.dir(config)
         report = Nabu::SourceDossierExport.new(
           registry: registry, dir: dir,
           library_md: File.expand_path("../../docs/library.md", __dir__),
@@ -8546,7 +8553,7 @@ module Nabu
       end
 
       def build_ingest_engine(config)
-        shelf = Nabu::LibraryShelf.new(dir: Nabu::LibraryShelf.dir(config.canonical_dir))
+        shelf = Nabu::LibraryShelf.new(dir: Nabu::LibraryShelf.dir(config))
         Nabu::Ingest.new(
           shelf: shelf, resolver: ingest_resolver, assist_command: options[:assist],
           overrides: ingest_overrides(Nabu::Ingest::LIBRARY_FIELDS), notify: ingest_notify
@@ -9033,7 +9040,8 @@ module Nabu
           registry: view.registry, catalog: catalog, fulltext: fulltext, ledger: ledger,
           golden_queries: Nabu::Health::LocalCheck.golden_queries,
           canonical_dir: config.canonical_dir,
-          creep_acceptances_path: config.creep_acceptances_path
+          creep_acceptances_path: config.creep_acceptances_path,
+          workdir_resolver: config.method(:source_workdir)
         ).run
         print_local_health(report)
         print_focus_note(view, view.registry_hidden_slugs)

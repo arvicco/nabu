@@ -408,7 +408,7 @@ module Nabu
       case adapter.class.content_kind
       when :dictionary
         Store::DictionaryLoader.new(db: @db, source: source, ledger: @ledger,
-                                    canonical_dir: @config.canonical_dir)
+                                    language_shelf_dir: @config.source_workdir(Nabu::LanguageShelf::SLUG))
       when :language
         Store::LanguageDossierLoader.new(db: @db, source: source, ledger: @ledger)
       when :notes
@@ -491,6 +491,6 @@ module Nabu
       url ? { url => fetch_report.sha } : {}
     end
 
-    def workdir_for(slug) = File.join(@config.canonical_dir, slug)
+    def workdir_for(slug) = @config.source_workdir(slug)
   end
 end

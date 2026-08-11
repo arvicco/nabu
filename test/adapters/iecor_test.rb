@@ -97,8 +97,10 @@ class IecorTest < Minitest::Test
         license: "CC BY 4.0", license_class: "attribution",
         upstream_url: "https://zenodo.org", enabled: false
       )
-      loader = Nabu::Store::DictionaryLoader.new(db: db, source: source, ledger: ledger,
-                                                 canonical_dir: canonical_root)
+      loader = Nabu::Store::DictionaryLoader.new(
+        db: db, source: source, ledger: ledger,
+        language_shelf_dir: File.join(canonical_root, Nabu::LanguageShelf::SLUG)
+      )
       report = loader.load_from(adapter, workdir: FIXTURES)
       assert_equal 5, report.added
       assert_equal 0, report.errored
@@ -113,7 +115,7 @@ class IecorTest < Minitest::Test
                    db[:dictionary_reflexes].where(dictionary_entry_id: skin[:id]).select_map(:borrowed).uniq
       # the rider landed as dossier sections with iecor provenance (P19-1
       # redirect), and the derived records refreshed at accretion time
-      shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(canonical_root))
+      shelf = Nabu::LanguageShelf.new(dir: File.join(canonical_root, Nabu::LanguageShelf::SLUG))
       chu = shelf.load("chu").section("iecor")
       assert_equal "iecor", chu.source
       assert_includes chu.body, "Old Church Slavonic"
