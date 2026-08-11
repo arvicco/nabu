@@ -195,6 +195,8 @@ no page update is a red suite, and vice versa.
 | `mul/places-lpf` | available | gold-derived | CC-BY-SA-4.0 | mul | pleiades, trismegistos, cigs |
 | `mul/document-dates` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `mul/char-postings` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `sux/sign-table` | available | gold-derived | CC-BY-4.0 | sux | osl |
+| `egy/unikemet-signs` | available | gold-derived | CC-BY-4.0 | egy | unikemet |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -339,6 +341,23 @@ Publishes the dating layer behind Nabu's timeline — ~700K dated documents as n
 Publishes the char_postings census behind Nabu's Han cards and graded-reading lane — one row per (character, corpus) with the attesting document count, spanning lzh/jpn/otb/ojp collections (hence mul/ — the naming the survey left TBD, settled here). The Edubba P-1 rider's character half: frequency data any school can consume, derived from Nabu's ingested corpora only (Edubba's own TSVs are NEVER an input — the circularity guard). nc slices (cbeta, ud, e84000, openiti) excluded row-by-row, censused; CC BY-SA 4.0 — the kanripo lane's share-alike grant (№R-24).
 
 **Maintenance**: re-derive after CJK-lane syncs (the census rebuilds with the fulltext index); the published-slice digest makes an unchanged census a fingerprint no-op
+
+### `sux/sign-table` — Compiled cuneiform sign cards — OSL identity, concordances, attestation counts
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: osl
+
+The per-sign reference card compiled from what sux/value-signs flattens value-wise: one row per top-level OSL sign with codepoints, every print-list number, the CDLI reading concordance, AND per-source attestation doc-counts over the open cuneiform corpora (cdli/oracc/tlhdig — the Edubba P-1 rider's sign half, true sign-counts at last). Counting scope stated and censused (value/logogram tokens; compounds out); nc lanes (etcsl, ebl) have NO count columns, so no nc contribution can hide in an integer — the lemma_frequencies lesson. Core CC BY 4.0; the Wiktionary/aes BY-SA sense lanes are deliberately deferred to a later sidecar dataset so the core stays BY (survey §2.6).
+
+**Maintenance**: re-derive after `nabu sync osl` or cuneiform-lane syncs (counts move with the catalog); the counts digest in the recipe makes an unchanged state a fingerprint no-op
+
+
+### `egy/unikemet-signs` — The Egyptian sign spine — Unikemet codepoints with Gardiner codes and tool concordances
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: unikemet
+
+Flattens Unikemet.txt to one row per encoded Egyptian hieroglyph — the Gardiner-style kEH_Cat code, the original Hieroglyphica-era kEH_UniK code, core/legacy status, description, functions, sound values, and the JSesh/Hieroglyphica/IFAO concordances every Egyptological tool joins on (the same spine Nabu's hiero card and the Edubba overlay key against). Every cell verbatim; absent tags stay empty. Permissive input (Unicode License V3) → clean CC BY 4.0.
+
+**Maintenance**: re-derive after `nabu sync unikemet` (upstream moves at annual Unicode releases); mechanical, no review needed beyond spot-checks
 
 ## What the rail never does
 
