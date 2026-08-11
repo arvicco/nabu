@@ -205,7 +205,7 @@ module Nabu
     def assign(urn = nil, lect_id = nil)
       config = Nabu::Config.load
       registry = require_lects_module!(config)
-      check_basis!(options[:basis])
+      check_basis!(options[:basis], config: config)
       if options[:from_file]
         import_batch!(config, registry, options[:from_file])
       else
@@ -493,10 +493,24 @@ module Nabu
                            "(an undefined tag is never silently coerced)"
       end
 
-      def check_basis!(basis, where: nil)
-        return if basis == "owner" || basis.match?(/\Arule:[a-z0-9][a-z0-9-]*\z/)
+      def check_basis!(basis, where: nil, config: nil)
+        return if basis == "owner"
 
-        raise Thor::Error, "lect: basis must be owner or rule:<id>, got #{basis.inspect}#{where}"
+        unless basis.match?(/\Arule:[a-z0-9][a-z0-9-]*\z/)
+          raise Thor::Error, "lect: basis must be owner or rule:<id>, got #{basis.inspect}#{where}"
+        end
+        # P71-6 (the derivability law): a rule: row is re-minted at rebuild
+        # ONLY if its rule exists in the compiled rules files — a row with
+        # an unknown rule id would silently VANISH at the next rederive.
+        return if config.nil?
+
+        rules = Nabu::LectRules.load(config.lect_facet_rules_paths)
+        id = basis.delete_prefix("rule:")
+        return if rules&.rules&.any? { |rule| rule.id == id }
+
+        raise Thor::Error, "lect: basis #{basis.inspect}#{where} names no rule in the compiled rules " \
+                           "files — the row would silently vanish at the next rebuild's re-derivation " \
+                           "(add the rule to config/lect_facet_rules.yml or its local/config/ overlay first)"
       end
 
       def infer_code!(config, urn)
@@ -517,7 +531,7 @@ module Nabu
       def import_batch!(config, registry, path)
         raise Thor::Error, "lect assign: no such file #{path}" unless File.file?(path)
 
-        rows = parse_batch!(registry, path)
+        rows = parse_batch!(registry, path, config: config)
         journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
         # P70: owner-basis batch rows write through config/lect_rulings.yml
         # first (the source of truth) — the journal rows are derived.
@@ -647,7 +661,7 @@ module Nabu
         say "lect facet: #{count} rows materialized"
       end
 
-      def parse_batch!(registry, path)
+      def parse_batch!(registry, path, config: nil)
         File.readlines(path).each_with_index.filter_map do |line, index|
           text = line.chomp
           next if text.strip.empty? || text.lstrip.start_with?("#")
@@ -658,7 +672,7 @@ module Nabu
 
           check_lect!(registry, lect_id, where: where)
           basis = options[:basis] if basis.to_s.strip.empty?
-          check_basis!(basis, where: where)
+          check_basis!(basis, where: where, config: config)
           { urn: urn, code: code, lect_id: lect_id, basis: basis, note: note }
         end
       end

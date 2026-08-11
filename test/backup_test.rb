@@ -37,9 +37,10 @@ class BackupTest < Minitest::Test
     assert_path_exists File.join(@target, "db", "fulltext.sqlite3")
 
     names = result.sections.map(&:name)
-    # P71: local/ joins the required tier; this rig's ledger is a LEGACY
-    # (db/) one, so the pre-P71 ledger file section still rides.
-    assert_equal %w[canonical config local catalog fulltext lects ledger], names
+    # P71: local/ + the №R-22 .docs section join the permanent tier (docs
+    # skips cleanly when absent); links rides the convenience tier; this
+    # rig's ledger is a LEGACY (db/) one, so its file section still rides.
+    assert_equal %w[canonical config local docs catalog fulltext lects links ledger], names
   end
 
   # P71-1: a migrated box's ledger lives at local/history.sqlite3 — the

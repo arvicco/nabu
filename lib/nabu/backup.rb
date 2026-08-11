@@ -146,15 +146,26 @@ module Nabu
       list = [
         dir_section("canonical", @config.canonical_dir, File.join(@target, "canonical")),
         dir_section("config", @config.config_dir, File.join(@target, "config")),
-        dir_section("local", @config.local_dir, File.join(@target, "local"))
+        dir_section("local", @config.local_dir, File.join(@target, "local")),
+        # №R-22 (owner-ruled 2026-08-11): .docs/ — the steering record
+        # (decision register, plan docs, surveys) — is owner input with no
+        # other copy anywhere. Non-contract (db/ derives from the three
+        # folders alone) but backed up by default; absent dir = clean skip.
+        dir_section("docs", docs_dir, File.join(@target, ".docs"))
       ]
       unless @skip_derived
         list << file_section("catalog", @config.catalog_path)
         list << file_section("fulltext", @config.fulltext_path)
         list << file_section("lects", @config.lects_journal_path)
+        list << file_section("links", @config.links_path)
         list << file_section("ledger", @config.history_path) unless ledger_home?
       end
       list
+    end
+
+    # The gitignored owner-steering directory at the tree root.
+    def docs_dir
+      File.expand_path("../.docs", @config.config_dir)
     end
 
     # Has the ledger moved to its local/ home? (Then the local dir section

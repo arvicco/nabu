@@ -258,6 +258,24 @@ class RebuildIncrementalTest < Minitest::Test
     links.disconnect
   end
 
+  # P71-6: the lect journal re-derives on EVERY incremental run — a
+  # hand-edited ruling propagates on a CLEAN sweep too (the journal
+  # stage is seconds-scale; only links stays dirty-gated).
+  def test_clean_incremental_still_rederives_a_hand_edited_ruling
+    full_rebuilder.run
+    Nabu::LectRulings.append!(config.lect_rulings_path,
+                              urn: "urn:nabu:alpha:a", code: "grc", lect_id: "grc:koine")
+
+    result = incremental_rebuilder.run
+
+    assert_empty result.outcomes, "nothing was dirty — a clean sweep"
+    lects = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+    rows = lects[:lect_assignments].select_hash(:urn, :lect_id)
+    lects.disconnect
+    assert_equal "grc:koine", rows["urn:nabu:alpha:a"],
+                 "the hand-edited ruling lands without a dirty source"
+  end
+
   def test_incremental_refuses_a_malformed_rulings_file_before_any_replay
     full_rebuilder.run
     FileUtils.mkdir_p(File.dirname(config.lect_rulings_path))

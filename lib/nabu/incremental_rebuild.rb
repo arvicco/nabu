@@ -140,25 +140,32 @@ module Nabu
         Store::SourceStats.derive!(db, note: "derived (incremental rebuild)")
       end
       axes, facets = corpus_builders(db, progress) if outcomes.any?
-      # P70 (the derivability contract): dirty replays make the two derived
-      # sibling dbs stale — the lect rules read the re-minted facets, the
-      # reference producers read the changed canonical. Re-derive both
-      # exactly as the full rebuild does (the sacred invariant covers them
-      # too). A clean sweep skips this: the write-through CLIs keep both
-      # journals live, so only a HAND edit to config/lect_rulings.yml or
-      # link_scopes.yml diverges — and that propagates at the next full
-      # rebuild or dirty incremental (class doc).
+      # P70/P71-6 (the derivability law): the lect journal re-derives on
+      # EVERY incremental run — it is seconds-scale, and always-running
+      # closes the hand-edit gap (an edited rulings file, facet rule, or
+      # local/config overlay propagates immediately, dirty or clean).
+      # Facet re-materialization rides only when something could have
+      # changed (dirty replay or a journal delta). The links re-mine
+      # stays DIRTY-ONLY: it is minutes-scale against the cheap-clean-run
+      # design goal, and its config lane (link_scopes.yml) is written by
+      # the batch CLIs live — only a hand edit diverges, and that waits
+      # for the next full rebuild or dirty incremental (stated in §1 and
+      # restore.md).
+      progress&.stage("lect journal")
+      journal = Store::LectJournal.open!(@config.lects_journal_path)
+      begin
+        before = journal_digest(journal)
+        Store::LectJournal.rederive!(journal, catalog: db, config: @config)
+        journal_changed = journal_digest(journal) != before
+      ensure
+        journal.disconnect
+      end
       link_failures = []
-      if outcomes.any?
-        progress&.stage("lect journal")
-        journal = Store::LectJournal.open!(@config.lects_journal_path)
-        begin
-          Store::LectJournal.rederive!(journal, catalog: db, config: @config)
-        ensure
-          journal.disconnect
-        end
+      if outcomes.any? || journal_changed
         progress&.stage("lect facets")
         Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config))
+      end
+      if outcomes.any?
         progress&.stage("links")
         link_failures = rederive_links!(db, fulltext)
       end
@@ -178,6 +185,13 @@ module Nabu
     end
 
     private
+
+    # A content digest of the journal's resolution-relevant columns —
+    # the facet re-materialization trigger (order-independent via sum of
+    # per-row hashes; a full scan, ~seconds on a 500k-row journal).
+    def journal_digest(journal)
+      journal[:lect_assignments].select_map(%i[urn code lect_id basis]).sum(&:hash)
+    end
 
     # nil when incremental may proceed; otherwise the loud reason it may not.
     def refusal_reason

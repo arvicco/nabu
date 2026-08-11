@@ -6483,6 +6483,20 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P71-6 (the derivability law): a rule: basis naming no compiled rule
+  # would silently VANISH at the next rebuild's re-derivation — refused
+  # at assign time, naming the fix.
+  def test_lect_assign_refuses_a_rule_basis_with_no_compiled_rule
+    with_lects_cli_env do |config|
+      _out, err, status = with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc", "--basis", "rule:no-such"])
+      end
+      assert_equal 1, status
+      assert_match(/names no rule/, err)
+      assert_match(/vanish/, err)
+    end
+  end
+
   def test_lect_assign_from_file_bulk_imports_a_ratified_batch
     with_lects_cli_env do |config|
       Dir.mktmpdir do |dir|
@@ -8515,8 +8529,25 @@ class CLITest < Minitest::Test
       FileUtils.cp_r(Dir[File.join(Nabu::TestSupport.fixtures("nabu-lects"), "*")], dest)
       File.write(File.join(root, "sources.yml"), "# empty registry\n")
       # P70: config_path must be a REAL tmp path — lect assign writes
-      # config/lect_rulings.yml relative to it (the "(test)" sentinel
-      # resolved to the repo root and leaked a stray file).
+      # the rulings file relative to it (the "(test)" sentinel resolved
+      # to the repo root and leaked a stray file). P71-6: the rigs' rule:
+      # bases must name a COMPILED rule (unknown ids refuse at assign).
+      FileUtils.mkdir_p(File.join(root, "config"))
+      File.write(File.join(root, "config", "lect_facet_rules.yml"), <<~YAML)
+        rules:
+        - id: test-batch
+          sources: [fixture]
+          code: grc
+          facet: period
+          tier: certain
+          map: {"Ptolemaic": "grc:koi"}
+        - id: test
+          sources: [fixture]
+          code: lat
+          facet: period
+          tier: certain
+          map: {"Medieval": "lat:med"}
+      YAML
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
                                 sources_path: File.join(root, "sources.yml"),
                                 config_path: File.join(root, "config", "nabu.yml"))
