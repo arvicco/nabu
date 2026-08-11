@@ -54,15 +54,34 @@ module Nabu
         fingerprint = Manifest.fingerprint(input_shas: input_shas, recipe: result.recipe)
         File.write(File.join(out_dir, "README.md"),
                    readme(feature: feature, result: result, input_shas: input_shas, fingerprint: fingerprint))
+        license_file = write_license_file(feature: feature, out_dir: out_dir)
 
         files = result.resources.map { |resource| [summary_path(resource.path), resource.rows] } +
                 [[LanguagesTable::FILENAME, language_count], [SourcesBib::FILENAME, nil],
                  ["datapackage.json", nil], ["README.md", nil]]
+        files << [license_file, nil] if license_file
         Summary.new(slug: feature.slug, out_dir: out_dir, files: files,
                     rows: resources.sum { |resource| resource.rows.to_i }, fingerprint: fingerprint)
       end
 
+      # The canonical license plaintexts the runner can emit per dataset.
+      LICENSE_TEXTS_DIR = File.expand_path("licenses", __dir__)
+
       private
+
+      # №R-24 (2026-08-11): a dataset whose license differs from the repo
+      # default ships its own LICENSE file (the canonical CC plaintext) — the
+      # top-level LICENSE is CC BY, so the share-alike carve-out must be
+      # visible in the dataset directory itself, not only in manifest/README
+      # prose. Default-license datasets ship none: the repository LICENSE
+      # already covers them. Returns the written filename, nil when none.
+      def write_license_file(feature:, out_dir:)
+        return nil if feature.license == DEFAULT_LICENSE
+
+        File.write(File.join(out_dir, "LICENSE"),
+                   File.read(File.join(LICENSE_TEXTS_DIR, "#{feature.license}.txt")))
+        "LICENSE"
+      end
 
       # A multi-path (sharded) resource summarizes as one line — the CLI
       # should not print a hundred shard names.

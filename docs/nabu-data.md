@@ -66,7 +66,7 @@ valid-by-construction `Feature` value:
 
 | field | meaning |
 | --- | --- |
-| `slug` | `<lang>/<feature>`, lower-case hyphen-joined segments; also the dataset directory path |
+| `slug` | `<lang>/<feature>`, lower-case hyphen-joined segments; also the dataset directory path. Single-language datasets lead with the language code; datasets spanning the whole catalog file under `mul/` — ISO 639-3's special code "Multiple languages" (№R-25, P73-0) |
 | `language` | a `Language` value: Nabu's code + the `languages.csv` statics (Name, Glottocode, ISO 639-3) |
 | `title` | the dataset's human title (the manifest `title`) |
 | `status` | `:available` (builder landed) or `:planned` (build refuses) |
@@ -158,8 +158,12 @@ nabu-data is a **mixed-license repository** (owner ruling D51-a,
 and its README states the dataset's own license explicitly. The allowed set
 is exactly two values — `CC-BY-4.0` (the default) and `CC-BY-SA-4.0`
 (datasets derived from share-alike inputs, whose READMEs add the one-line
-carve-out: the repository's default license does not apply to them). The
-set is closed by construction (`Nabu::DataBuild::LICENSES`; the `Feature`
+carve-out: the repository's default license does not apply to them). A
+BY-SA dataset additionally ships its **own `LICENSE` file** (the canonical
+CC BY-SA 4.0 plaintext, emitted by the runner — №R-24, P73-0), so the
+carve-out is visible in the dataset directory itself; default-license
+datasets ship none, because the repository-level LICENSE already covers
+them. The set is closed by construction (`Nabu::DataBuild::LICENSES`; the `Feature`
 record refuses anything else): **NC/ND can never join it** — every dataset
 here is a derivative work built to be reused, so non-commercial or
 no-derivatives inputs are disqualifying at intake, and no NC/ND value is
