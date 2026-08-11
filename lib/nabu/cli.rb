@@ -3524,10 +3524,20 @@ module Nabu
     option :to, type: :numeric, banner: "YEAR", desc: "With --by-century: latest year"
     option :century, type: :numeric, banner: "N", desc: "With --by-century: one century's window (6, -2)"
     option :place, type: :string, banner: "PATTERN", desc: "With --by-century: provenance place LIKE filter"
+    option :chars, type: :boolean, default: false,
+                   desc: "Character-grain profile (P72-4): per-document Han character frequencies " \
+                         "— the sinograph instrument for unlemmatized documents (kanripo/cbeta/aozora)"
+    option :coverage, type: :string, banner: "CHARS",
+                      desc: "With --chars: coverage of the document against this character set " \
+                            "(fold-aware) — occurrence %, distinct split, and the top strangers"
+    option :json, type: :boolean, default: false,
+                  desc: "With --chars: emit the frozen machine contract instead of the card"
     def vocab(urn = nil)
       urn = urn.to_s.strip
       return vocab_by_century(urn) if options[:by_century]
       raise Thor::Error, "vocab: give a document, range, or passage urn" if urn.empty?
+      return char_vocab(urn) if options[:chars]
+      raise Thor::Error, "vocab: --coverage/--json ride the --chars profile" if options[:coverage] || options[:json]
 
       config = Nabu::Config.load
       catalog = open_catalog(config)
@@ -6799,6 +6809,53 @@ module Nabu
       # `vocab --by-century` (P15-2): the diachronic histogram of the dated
       # corpus, optionally filtered by a text query (plot a word across
       # centuries) and by --lang/--license/date/--place.
+      # P72-4: the character-grain profile + coverage instrument.
+      def char_vocab(urn)
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
+
+        profile = Nabu::Query::CharVocab.new(catalog: catalog)
+                                        .run(urn, limit: options[:limit].to_i,
+                                                  coverage: options[:coverage])
+        if options[:json]
+          say JSON.pretty_generate(Nabu::Query::CharVocab.json_payload(urn, profile))
+          return
+        end
+        raise Thor::Error, "vocab: no document #{urn}" unless profile
+
+        print_char_vocab(profile)
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      ensure
+        catalog&.disconnect
+      end
+
+      def print_char_vocab(profile)
+        say "#{profile.urn}  #{profile.title}  [#{profile.language}]"
+        if profile.total.zero?
+          say "  no Han characters in this document — the char-grain profile is for sinograph texts"
+          return
+        end
+        say "  #{profile.total} Han character occurrences · #{profile.distinct} distinct · " \
+            "#{profile.passages} passages · #{profile.hapax_count} hapax"
+        say ""
+        say "  top characters:"
+        profile.top.each { |row| say format("    %<char>s  %<count>6d", char: row.char, count: row.count) }
+        say ""
+        say "  hapax (once only): #{profile.hapax.join(' ')}#{' …' if profile.hapax_count > profile.hapax.size}"
+        return unless profile.coverage
+
+        c = profile.coverage
+        say ""
+        say "  coverage vs #{c.charset_size}-character set: #{c.occurrence_pct}% of occurrences · " \
+            "#{c.distinct_covered}/#{c.distinct_total} distinct characters inside"
+        return if c.strangers.empty?
+
+        strangers = c.strangers.map { |row| "#{row.char} #{row.count}" }.join("  ·  ")
+        say "  top strangers (teach next): #{strangers}"
+      end
+
       def vocab_by_century(query)
         validate_license!(options[:license])
         from, to = date_window
