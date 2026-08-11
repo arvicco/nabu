@@ -1,5 +1,5 @@
 ---
-title: Sources & Licensing
+title: Sources
 permalink: /sources/
 description: >-
   Every corpus and dictionary in the Nabu library, with upstream attribution
@@ -163,13 +163,15 @@ appear on the [research axes]({{ '/axis/' | relative_url }}).
 
 ## Feature modules
 
-Thirteen further registry rows are **feature modules**, not corpora:
+Eighteen further registry rows are **feature modules**, not corpora:
 machinery that fetches reference data but mints no documents of its own.
 
 | Module | What it provides | License |
 |---|---|---|
 | `actib` | The segmented-Tibetan anchor layer, republished through nabu-data | CC BY 4.0 |
 | `bridging` | The OSHB ↔ BHSA verse crosswalk | MIT |
+| `cigs` | The [Cuneiform Inscriptions Geographical Sites](https://zenodo.org/records/14568765) index — site mnemonics behind hundreds of thousands of cuneiform findspot links | CC BY 4.0 |
+| `edubba-overlay` | The didactic overlay from [Edubba](https://arvicco.github.io/nabu-edubba), the scribal-school sibling — course keywords and chapters riding the hieroglyph cards | CC BY-SA 4.0 |
 | `cldf-spine` | The shared Cross-Linguistic Data Formats reference tables ([Concepticon](https://concepticon.clld.org/) + [Glottolog](https://glottolog.org/)) that WOLD/CLICS rows resolve through | CC BY 4.0 |
 | `hypotactic` | Greek metrical scansion — meter, pattern and caesura annotated onto held verse | CC BY 4.0 |
 | `kitab` | [KITAB](https://kitab-project.org/) text-reuse alignments over the OpenITI library | CC BY-NC-SA 4.0 |
@@ -177,10 +179,13 @@ machinery that fetches reference data but mints no documents of its own.
 | `lila` | The [LiLa](https://lila-erc.eu/) Latin lemma bank behind `nabu define`'s variant-spelling fallback | CC BY-SA 4.0 |
 | `nabu-data` | The library's own [published datasets](https://github.com/arvicco/nabu-data), consumed back as a source — e.g. the Sanskrit form→lemma table behind `nabu define`'s inflected-form expansion; the reproducibility loop closed in public | CC BY 4.0 |
 | `nabu-lects` | The [lect registry](https://arvicco.github.io/nabu-lects) sister project — the stage ladders, stage-aware search and reconstruction honesty on the [Languages]({{ '/languages/' | relative_url }}) page | CC BY 4.0 |
+| `nabu-places` | The [place-decisions registry](https://arvicco.github.io/nabu-places) sister project — which gazetteer identity each source's verbatim place name denotes; see [Places]({{ '/places/' | relative_url }}) | CC BY 4.0 |
 | `osl` | The Oracc Sign List behind `nabu signs` | CC0 |
 | `pedecerto` | Latin metrical scansion ([Pedecerto](https://www.pedecerto.eu/), digital metrical analyses) | CC BY-NC-ND 4.0 |
 | `pleiades` | The [Pleiades](https://pleiades.stoa.org/) ancient-world gazetteer behind `nabu place` and the findspot line | CC BY 3.0 |
 | `trismegistos` | The [Trismegistos](https://www.trismegistos.org/) TexRelations concordance crosswalk resolving `tm:` reference edges across epigraphic corpora | CC BY-SA 4.0 |
+| `trismegistos-geo` | The Trismegistos Geo gazetteer — 64,857 ancient-world places behind the `tm:` lane of the place desk | CC BY-SA 4.0 |
+| `unikemet` | Unicode's Unikemet data file — the 5,067-hieroglyph Egyptian sign spine behind `nabu char` for Egyptian | Unicode License V3 |
 
 ## The local shelves
 

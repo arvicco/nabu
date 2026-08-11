@@ -39,17 +39,21 @@ module Store
       Nabu::Store::TimelineBuilder::CdliDates.build(catalog: @db, canonical_dir: root)
     end
 
-    def test_period_parenthetical_becomes_the_year_envelope
-      make_document("urn:nabu:cdli:p104749") # Ur III (ca. 2100-2000 BC), Umma
+    # №R-28 upgraded this very fixture row: the tablet is regnally dated
+    # Amar-Suen.01.04.00, so the ruled table's year (2046 BC) replaces the
+    # Ur III period band — finer wins, on real upstream data.
+    def test_a_regnally_dated_fixture_row_converts_finer_than_its_period_band
+      make_document("urn:nabu:cdli:p104749") # Amar-Suen.01.04.00 · Ur III (ca. 2100-2000 BC), Umma
       counts = build!
       row = timeline_for("urn:nabu:cdli:p104749")
-      assert_equal(-2100, row.fetch(:not_before))
-      assert_equal(-2000, row.fetch(:not_after))
-      assert_equal "period", row.fetch(:precision)
-      assert_equal "Ur III (ca. 2100-2000 BC)", row.fetch(:date_raw)
+      assert_equal(-2046, row.fetch(:not_before))
+      assert_equal(-2046, row.fetch(:not_after))
+      assert_equal "regnal-year", row.fetch(:precision)
+      assert_equal "Amar-Suen.01.04.00", row.fetch(:date_raw)
       assert_equal "Umma (mod. Tell Jokha)", row.fetch(:place_name)
       assert_nil row.fetch(:place_ref)
       assert_equal 1, counts[:documents]
+      assert_equal 1, counts[:regnal]
     end
 
     def test_undated_fake_modern_row_keeps_its_place_and_counts_undated
@@ -121,7 +125,50 @@ module Store
         File.write(File.join(dir, "cdli", "cdli_cat.csv"),
                    "version https://git-lfs.github.com/spec/v1\noid sha256:#{'ab' * 32}\nsize 9\n")
         counts = build!(dir)
-        assert_equal({ documents: 0, undated: 0, invalid: 0 }, counts)
+        assert_equal({ documents: 0, undated: 0, invalid: 0,
+                       regnal: 0, regnal_unruled: 0, regnal_out_of_range: 0 }, counts)
+      end
+    end
+
+    # №R-28 (2026-08-11, the P73-6 scout ratified): a ruled ruler's regnal
+    # year converts to its one conventional absolute year — FINER WINS over
+    # the period band; unruled rulers and out-of-range years fall back to
+    # the period band, censused.
+    def test_regnal_years_convert_where_ruled_and_fall_back_where_not
+      rows = {
+        "urn:nabu:cdli:p910001" => ["Šulgi.44.02.06", "Ur III (ca. 2100-2000 BC)",
+                                    [-2051, -2051, "regnal-year", "Šulgi.44.02.06"]],
+        "urn:nabu:cdli:p910002" => ["Šulgi.47.06.00 (us2 year)", "Ur III (ca. 2100-2000 BC)",
+                                    [-2047, -2047, "regnal-year", "Šulgi.47.06.00 (us2 year)"]],
+        "urn:nabu:cdli:p910003" => ["Amar-Suen.00.00.00", "Ur III (ca. 2100-2000 BC)",
+                                    [-2046, -2038, "regnal-reign", "Amar-Suen.00.00.00"]],
+        "urn:nabu:cdli:p910004" => ["Lugalanda.04.00.00", "ED IIIb (ca. 2500-2340 BC)",
+                                    [-2500, -2340, "period", "ED IIIb (ca. 2500-2340 BC)"]],
+        "urn:nabu:cdli:p910005" => ["00.00.00.00", "Ur III (ca. 2100-2000 BC)",
+                                    [-2100, -2000, "period", "Ur III (ca. 2100-2000 BC)"]],
+        "urn:nabu:cdli:p910006" => ["Amar-Suen.12.01.01", "Ur III (ca. 2100-2000 BC)",
+                                    [-2100, -2000, "period", "Ur III (ca. 2100-2000 BC)"]]
+      }
+      Dir.mktmpdir do |dir|
+        FileUtils.mkdir_p(File.join(dir, "cdli"))
+        CSV.open(File.join(dir, "cdli", "cdli_cat.csv"), "w") do |csv|
+          csv << %w[id_text dates_referenced period provenience]
+          rows.each do |urn, (regnal, period, _expected)|
+            csv << [urn[/p(\d+)\z/, 1].to_i, regnal, period, ""]
+          end
+        end
+        rows.each_key { |urn| make_document(urn) }
+        counts = build!(dir)
+        assert_equal 3, counts[:regnal]
+        assert_equal 1, counts[:regnal_unruled], "Lugalanda is deliberately unruled"
+        assert_equal 1, counts[:regnal_out_of_range], "Amar-Suen has no year 12"
+        rows.each do |urn, (_regnal, _period, expected)|
+          row = timeline_for(urn)
+          assert_equal expected[0], row.fetch(:not_before), urn
+          assert_equal expected[1], row.fetch(:not_after), urn
+          assert_equal expected[2], row.fetch(:precision), urn
+          assert_equal expected[3], row.fetch(:date_raw), urn
+        end
       end
     end
   end

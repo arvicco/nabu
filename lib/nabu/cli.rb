@@ -2729,8 +2729,7 @@ module Nabu
       end
 
       fulltext = open_fulltext(config)
-      ledger = open_ledger(config)
-      @languages = Nabu::Languages.new(catalog: catalog, ledger: ledger)
+      @languages = Nabu::Languages.new(catalog: catalog)
       # Fetch every matching shelf, cap at render (P34-r2): with the CJK
       # shelves live a Han headword matches 6+ dictionaries, and the old
       # fetch-time cap hid the tail silently (the gate found `define 棄`
@@ -2746,7 +2745,6 @@ module Nabu
     ensure
       catalog&.disconnect
       fulltext&.disconnect
-      ledger&.disconnect
     end
 
     desc "etym LEMMA", "Walk an attested lemma to its reconstructions and cognates (architecture §12)"
@@ -2813,8 +2811,7 @@ module Nabu
       end
 
       fulltext = open_fulltext(config)
-      ledger = open_ledger(config)
-      @languages = Nabu::Languages.new(catalog: catalog, ledger: ledger)
+      @languages = Nabu::Languages.new(catalog: catalog)
       @lects = Nabu::Lects.load_default(config: config)
       query = Nabu::Query::Etym.new(catalog: catalog, fulltext: fulltext)
       results = query.run(lemma, lang: options[:lang], limit: options[:limit].to_i)
@@ -2834,7 +2831,6 @@ module Nabu
     ensure
       catalog&.disconnect
       fulltext&.disconnect
-      ledger&.disconnect
     end
 
     desc "char CHAR", "The character/sign desk card: Han, Cuneiform, or Egyptian Hieroglyphs"
@@ -3064,8 +3060,7 @@ module Nabu
 
       catalog = open_catalog(config)
       fulltext = open_fulltext(config)
-      ledger = open_ledger(config)
-      languages = Nabu::Languages.new(catalog: catalog, ledger: ledger)
+      languages = Nabu::Languages.new(catalog: catalog)
       info = catalog && Nabu::Query::LanguageInfo.new(catalog: catalog, fulltext: fulltext)
       if options[:list]
         print_language_list(languages, info)
@@ -3080,7 +3075,6 @@ module Nabu
     ensure
       catalog&.disconnect
       fulltext&.disconnect
-      ledger&.disconnect
     end
 
     desc "place NAME|ID", "The place desk card: Pleiades gazetteer facts + the library's holdings there"

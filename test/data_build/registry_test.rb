@@ -12,7 +12,9 @@ class DataBuildRegistryTest < Minitest::Test
   EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation
                       zho/hani-fold jpn/aozora-gaiji lat/sabellic-loans grc/meter
                       jpn/kyujitai-fold lzh/kanripo-gaiji sux/value-signs
-                      xct/actib-anchors roa-opt/cantigas].freeze
+                      xct/actib-anchors roa-opt/cantigas mul/lect-assignments
+                      mul/place-refs mul/places-lpf mul/document-dates
+                      mul/char-postings sux/sign-table egy/unikemet-signs].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -64,10 +66,13 @@ class DataBuildRegistryTest < Minitest::Test
         # Glottolog deliberately assigns no glottocode to ISO 639-3
         # MACROLANGUAGES (verified against the cldf-spine cone 2026-07-29:
         # no languages.csv row carries ISO zho; the nearest node sini1245 is
-        # a family, not this tag) — an empty static is honest there, and zho
-        # is the one registered macro tag. Any other nil is a missing static.
-        assert_equal "zho", language.id,
-                     "#{feature.slug}: only the zho macrolanguage may omit a glottocode"
+        # a family, not this tag) or SPECIAL codes (2026-08-11: no row
+        # carries ISO mul either — "Multiple languages" names content, not a
+        # languoid) — an empty static is honest for exactly those two
+        # registered tags. Any other nil is a missing static.
+        assert_includes %w[zho mul], language.id,
+                        "#{feature.slug}: only the zho macrolanguage and the mul special code " \
+                        "may omit a glottocode"
       else
         refute_empty language.glottocode, "#{feature.slug}: languages.csv statics must be complete"
       end
@@ -206,6 +211,88 @@ class DataBuildRegistryTest < Minitest::Test
                  "the milestone is stated where the owner reads it")
     assert_match(/№45-2/, cantigas.rationale,
                  "the written-grant basis is stated where the owner reads it")
+
+    assignments = Nabu::DataBuild.feature("mul/lect-assignments")
+    assert_equal :available, assignments.status, "P73-3: builder and feature land together"
+    assert_equal Nabu::DataBuild::LectAssignmentsBuilder, assignments.builder
+    assert_equal "gold-derived", assignments.tier,
+                 "the per-row basis column carries the finer honesty (rule vs date-band)"
+    assert_equal "document-urn", assignments.anchoring,
+                 "assignments are document-grain — URN, no content hash"
+    assert_empty assignments.inputs,
+                 "the journal is the source of truth (the aozora posture); the recipe embeds " \
+                 "the published-slice digest instead of cone shas"
+    assert_empty assignments.canonical_cones
+    assert_equal "mul-lect-assignments", assignments.package_name
+    assert_match(/nabu-lects/, assignments.rationale,
+                 "the public id grammar is cited where the owner reads it")
+    assert_match(/censused/, assignments.rationale,
+                 "the row-by-row license exclusion is stated where the owner reads it")
+
+    place_refs = Nabu::DataBuild.feature("mul/place-refs")
+    assert_equal :available, place_refs.status, "P73-4: builder and feature land together"
+    assert_equal Nabu::DataBuild::PlaceRefsBuilder, place_refs.builder
+    assert_equal "gold-derived", place_refs.tier
+    assert_equal "document-urn", place_refs.anchoring
+    assert_equal ["nabu-places"], place_refs.inputs,
+                 "the decisions registry is the one declared input — the stale-ingest guard " \
+                 "covers its cone"
+    assert_equal ["nabu-places"], place_refs.canonical_cones
+    assert_equal "mul-place-refs", place_refs.package_name
+    assert_match(/Basis/, place_refs.rationale,
+                 "the upstream-vs-registry honesty is stated where the owner reads it")
+
+    lpf = Nabu::DataBuild.feature("mul/places-lpf")
+    assert_equal :available, lpf.status, "P73-5: builder and feature land together"
+    assert_equal Nabu::DataBuild::PlacesLpfBuilder, lpf.builder
+    assert_equal "gold-derived", lpf.tier
+    assert_equal %w[pleiades trismegistos cigs], lpf.inputs,
+                 "titles/coords republish from the index — all three gazetteer cones are " \
+                 "load-bearing declared inputs"
+    assert_equal lpf.inputs, lpf.canonical_cones
+    assert_match(/P69-2/, lpf.rationale,
+                 "the GeoNames-rider disposition is recorded where the owner reads it")
+    assert_match(/closeMatch/, lpf.rationale,
+                 "the no-entity-resolution posture is stated where the owner reads it")
+
+    dates = Nabu::DataBuild.feature("mul/document-dates")
+    assert_equal :available, dates.status, "P73-7: builder and feature land together"
+    assert_equal Nabu::DataBuild::DocumentDatesBuilder, dates.builder
+    assert_equal "gold-derived", dates.tier
+    assert_equal "document-urn", dates.anchoring
+    assert_empty dates.inputs, "the catalog projection is the source of truth (URN grain)"
+    assert_match(/VERBATIM/, dates.rationale,
+                 "the raw-string honesty is stated where the owner reads it")
+    assert_match(/ODbL/, dates.rationale,
+                 "the rundata exclusion is stated where the owner reads it")
+
+    postings = Nabu::DataBuild.feature("mul/char-postings")
+    assert_equal :available, postings.status, "P73-8: builder and feature land together"
+    assert_equal Nabu::DataBuild::CharPostingsBuilder, postings.builder
+    assert_equal "gold-derived", postings.tier
+    assert_equal "none", postings.anchoring
+    assert_match(/circularity/, postings.rationale,
+                 "the Edubba never-re-import guard is stated where the owner reads it")
+
+    sign_table = Nabu::DataBuild.feature("sux/sign-table")
+    assert_equal :available, sign_table.status, "P73-9: builder and feature land together"
+    assert_equal Nabu::DataBuild::SignTableBuilder, sign_table.builder
+    assert_equal ["osl"], sign_table.inputs, "the stale-ingest guard rides the osl cone"
+    assert_match(/lemma_frequencies/, sign_table.rationale,
+                 "the no-nc-in-an-integer lesson is stated where the owner reads it")
+    assert_match(/deferred/, sign_table.rationale,
+                 "the BY-SA sidecar deferral is stated where the owner reads it")
+
+    unikemet = Nabu::DataBuild.feature("egy/unikemet-signs")
+    assert_equal :available, unikemet.status, "P73-9 rider: builder and feature land together"
+    assert_equal Nabu::DataBuild::UnikemetSignsBuilder, unikemet.builder
+    assert_equal ["unikemet"], unikemet.inputs
+    assert_equal "egy", unikemet.language_code
+
+    # Checked 2026-08-11 (P73-9): egyp1246 is the languoid carrying ISO egy
+    # (level: language) in the cldf-spine cone.
+    egy = Nabu::DataBuild::LANGUAGES.fetch("egy")
+    assert_equal ["Egyptian (Ancient)", "egyp1246", "egy"], [egy.name, egy.glottocode, egy.iso639p3]
   end
 
   def test_language_statics_match_the_glottolog_spine
@@ -258,6 +345,23 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal ["Old Galician-Portuguese", "oldp1257", nil],
                  [roa_opt.name, roa_opt.glottocode, roa_opt.iso639p3]
     assert_equal Nabu::Adapters::CantigasHtmlParser::LANGUAGE, roa_opt.id
+
+    # Checked 2026-08-11 (P73-0, №R-25): mul is ISO 639-3's SPECIAL code
+    # "Multiple languages" (scope S) — it names content, not a languoid, so
+    # Glottolog carries no row for it (verified: no languages.csv row in the
+    # cldf-spine cone has ISO639P3code mul) and the glottocode is honestly
+    # nil. The cross-language corpus-layer datasets (lect-assignments,
+    # place-refs, document-dates, places-lpf) file under it.
+    mul = Nabu::DataBuild::LANGUAGES.fetch("mul")
+    assert_equal ["Multiple languages", nil, "mul"], [mul.name, mul.glottocode, mul.iso639p3]
+  end
+
+  # №R-25: the mul/ namespace is real plumbing — a mul-led slug must
+  # construct through the same Feature validation every language uses.
+  def test_a_mul_slugged_feature_validates
+    feature = valid_feature(slug: "mul/test-refs", language: Nabu::DataBuild::LANGUAGES.fetch("mul"))
+    assert_equal "mul/test-refs", feature.slug
+    assert_equal "mul-test-refs", feature.package_name
   end
 
   def test_feature_lookup_goes_through_the_features_seam
@@ -295,7 +399,21 @@ class DataBuildRegistryTest < Minitest::Test
       "lat/sabellic-loans" => "CC-BY-SA-4.0", "grc/meter" => "CC-BY-4.0",
       "jpn/kyujitai-fold" => "CC-BY-SA-4.0", "lzh/kanripo-gaiji" => "CC-BY-SA-4.0",
       "sux/value-signs" => "CC-BY-4.0", "xct/actib-anchors" => "CC-BY-4.0",
-      "roa-opt/cantigas" => "CC-BY-4.0"
+      "roa-opt/cantigas" => "CC-BY-4.0",
+      # P73-3/P73-4: the №R-24 one-carve-out ruling — the share-alike
+      # lanes (edh, aes, ...) ride inside one BY-SA dataset each.
+      "mul/lect-assignments" => "CC-BY-SA-4.0",
+      "mul/place-refs" => "CC-BY-SA-4.0",
+      # P73-5: the TM lane's share-alike inheritance.
+      "mul/places-lpf" => "CC-BY-SA-4.0",
+      # P73-7: the dating layer's share-alike lanes (edh, tla-hf, aes, ...).
+      "mul/document-dates" => "CC-BY-SA-4.0",
+      # P73-8: the kanripo lane's share-alike grant.
+      "mul/char-postings" => "CC-BY-SA-4.0",
+      # P73-9: CC0/permissive inputs — both stay clean BY (the BY-SA sense
+      # lanes are deferred to a later sidecar so the core stays BY).
+      "sux/sign-table" => "CC-BY-4.0",
+      "egy/unikemet-signs" => "CC-BY-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
