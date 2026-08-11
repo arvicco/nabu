@@ -193,6 +193,7 @@ no page update is a red suite, and vice versa.
 | `mul/lect-assignments` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `mul/place-refs` | available | gold-derived | CC-BY-SA-4.0 | mul | nabu-places |
 | `mul/places-lpf` | available | gold-derived | CC-BY-SA-4.0 | mul | pleiades, trismegistos, cigs |
+| `mul/document-dates` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -321,6 +322,14 @@ Publishes the compiled doc→place projection behind Nabu's places desk — ~586
 Publishes every place the catalog's documents reference as an LPF v1.3 FeatureCollection plus the LP-TSV v0.5 upload table (the World Historical Gazetteer's intake shapes): one Feature per claim (merging identities is entity resolution — the crosswalk rides as closeMatch links instead), attested spellings cited to their corpora, titles/coordinates from place_index (never invented), when-spans aggregated from document dates. The P69-2 GeoNames rider resolved NOT WANTED (recorded in the builder): geonames claims publish at document grain in mul/place-refs. CC BY-SA 4.0 — the TM lane's share-alike inheritance (№R-24).
 
 **Maintenance**: re-derive after gazetteer syncs (pleiades/trismegistos/cigs — the stale-ingest guard enforces freshness) or place-moving catalog events; the collection digest in the recipe makes an unchanged projection a fingerprint no-op
+
+### `mul/document-dates` — Normalized document datings across the multilingual catalog, verbatim raw in-band
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: document-urn · **Inputs**: —
+
+Publishes the dating layer behind Nabu's timeline — ~700K dated documents as normalized signed year spans (negative = BCE) with the VERBATIM upstream dating string riding every row, so each normalization is checkable against its source. License classes open+attribution only — the nc slices AND the rundata ODbL lane (a copyleft class of its own) are excluded row-by-row, censused in nabu.eval; CC BY-SA 4.0 — the №R-24 carve-out carrying the share-alike lanes (edh, tla-hf, aes, ...).
+
+**Maintenance**: re-derive after dating-moving events (sync waves, infer-dates rule changes — the №R-28 regnal upgrade lands here on its next build); the published-slice digest makes an unchanged projection a fingerprint no-op
 
 ## What the rail never does
 
