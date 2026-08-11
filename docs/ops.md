@@ -990,7 +990,7 @@ acquisitions — scanned grammars, offprints, notes — onto the
 `local-library` shelf (architecture §16), and the shelf's ONE sanctioned
 write path. What it does, in order: sha-accounts the file (identical bytes
 already catalogued anywhere in the shelf = honest no-op), COPIES it into
-`canonical/local-library/<collection>/` (never moves — your original stays
+`local/shelves/local-library/<collection>/` (never moves — your original stays
 put), derives metadata candidates mechanically (PDF Info metadata and a
 first-page text sample via mutool where installed, filename heuristics
 otherwise), has you confirm them, appends one entry to the collection's
@@ -1035,7 +1035,7 @@ Operational notes:
 - **`--shelf language CODE`** scaffolds a language dossier skeleton
   (name/family/context, same three modes) through `Nabu::LanguageShelf`
   and syncs the dossier shelf — a scaffold, not an editor; edit
-  `canonical/local-language/<code>.md` directly afterwards and re-sync.
+  `local/shelves/local-language/<code>.md` directly afterwards and re-sync.
 
 ## 14. Annotating the corpus (P24-1)
 
@@ -1043,7 +1043,7 @@ Operational notes:
 own, keyed by ANY urn the corpus knows (a document, a passage, a range, a
 dictionary entry), and the local-notes shelf's ONE sanctioned write path
 (`Nabu::NoteShelf`, architecture §16). Notes are canonical memory: they
-live as YAML files under `canonical/local-notes/<topic>.yml`; the catalog
+live as YAML files under `local/shelves/local-notes/<topic>.yml`; the catalog
 only indexes them (`urn_notes`, rebuilt at every sync/rebuild). Once noted,
 the urn's renders carry the note: `show` prints an
 `owner note (topic, date): …` footer (a document also counts its
@@ -1076,7 +1076,7 @@ Operational notes:
 
 ## 15. Source dossiers — the local-source shelf (P24-0)
 
-One Markdown dossier per REGISTERED SOURCE under `canonical/local-source/`
+One Markdown dossier per REGISTERED SOURCE under `local/shelves/local-source/`
 (architecture §16, shelf three): the shelf's `description` (1–3 sentences,
 the load-bearing lane), `themes`, `key_works` urns, your prose, and
 provenance-headed accretion sections. Served on `nabu list SLUG` cards,
