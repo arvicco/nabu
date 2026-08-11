@@ -78,7 +78,7 @@ and carry the date on which they were read.
 
 A survey of the collections is given on [The Library]({{ '/library/' | relative_url }})
 page; the full attribution and licensing record is on
-[Sources &amp; Licensing]({{ '/sources/' | relative_url }}).
+[Sources]({{ '/sources/' | relative_url }}).
 
 ## A single verse, many witnesses
 
@@ -133,7 +133,7 @@ surface carries its license class.
   recorded per document and displayed on every surface. Roughly 99% of
   documents are public-domain or attribution-class; non-commercial and
   no-derivatives materials are handled under correspondingly stricter rules.
-  See [Sources &amp; Licensing]({{ '/sources/' | relative_url }}).
+  See [Sources]({{ '/sources/' | relative_url }}).
 - **Longevity over convenience.** Upstream projects restructure, lose
   funding, and disappear. The canonical layer is plain files under git; all
   databases are derived and rebuildable; texts an upstream deletes are

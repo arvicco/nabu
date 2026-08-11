@@ -34,15 +34,19 @@ walks through.
 - **[Nabu](https://github.com/arvicco/nabu)** — the library itself: the
   canonical texts, the catalog, the query tools, this site.
 - **[nabu-data](https://github.com/arvicco/nabu-data)** (the **Data ↗**
-  link above) — the publishing arm: **fourteen datasets** as of August
+  link above) — the publishing arm: **twenty-one datasets** as of August
   2026, from form-to-lemma tables and orthography folds to metrical
   scansions, a Tibetan segmentation layer, the cuneiform value-to-sign
-  table, and the re-publications (stable anchors for ACTib's segmented
+  table, the re-publications (stable anchors for ACTib's segmented
   Tibetan canon; the first machine-readable edition of the complete
-  secular Galician-Portuguese lyric). Plain CSV with Frictionless Data
-  Package manifests carrying full derivation provenance and measured
-  quality in-band; CC BY 4.0 with stated share-alike carve-outs; archived
-  with a version DOI under concept
+  secular Galician-Portuguese lyric), and the whole-catalog corpus
+  layers: per-document historical-stage assignments, normalized datings,
+  gazetteer-ready place references with a Linked Places Format export,
+  the Han character frequency census, compiled cuneiform sign cards with
+  real attestation counts, and the Egyptian hieroglyph spine. Plain CSV
+  with Frictionless Data Package manifests carrying full derivation
+  provenance and measured quality in-band; CC BY 4.0 with stated
+  share-alike carve-outs; archived with a version DOI under concept
   [10.5281/zenodo.21757475](https://doi.org/10.5281/zenodo.21757475).
   Three of the datasets feed the library's own query surfaces back from
   the published files.
@@ -135,7 +139,7 @@ is
 
 - **Code:** [MIT](https://github.com/arvicco/nabu/blob/main/LICENSE).
 - **Data:** every ingested text keeps its upstream license, recorded per
-  document; the site's [Sources &amp; Licensing]({{ '/sources/' | relative_url }})
+  document; the site's [Sources]({{ '/sources/' | relative_url }})
   page carries the full inventory. The data licenses belong to the upstream
   projects, not to Nabu.
 
