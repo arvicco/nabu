@@ -3500,6 +3500,23 @@ osl:
   # manifest) → class open.
   sync_policy: manual
 
+edubba-overlay:
+  adapter: Nabu::Adapters::EdubbaOverlay
+  group: signs   # the sign-restore sweep: enable signs && sync signs makes the hiero card whole
+  kind: module   # P72-6: machinery-only — the sister school's didactic overlay, zero document rows
+  axes: [egyptian]
+  wired: false   # PERMANENTLY false — the osl/unikemet module invariant.
+                   # Nabu::EdubbaOverlay reads assets-src/data/hiero-10*.yml +
+                   # site/hieroglyphs/addenda/signs/*.md from the synced repo
+                   # snapshot; the P65-2 hiero card renders the overlay with
+                   # Edubba's attribution + the certainty grade (unclear =
+                   # never presented as fact — their rule, our renderer).
+                   # Extraction contract: their inbox note 2026-08-11 —
+                   # stable field names, additive-only, renames announced in
+                   # our inbox BEFORE landing. Frequency TSVs in the same
+                   # repo derive FROM Nabu and are NEVER re-imported.
+  sync_policy: manual   # course releases, not a nightly feed
+
 unikemet:
   adapter: Nabu::Adapters::Unikemet
   group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)

@@ -47,7 +47,7 @@ module Nabu
         @fulltext = fulltext
       end
 
-      def run(query = nil, charset:, max_foreign: 0, lang: nil, license: nil,
+      def run(query = nil, charset:, max_foreign: 0, min_chars: 0, lang: nil, license: nil,
               source: nil, limit: 20)
         if max_foreign.negative? || max_foreign > MAX_FOREIGN_CEILING
           raise Nabu::Error, "search: --max-foreign must be 0..#{MAX_FOREIGN_CEILING} " \
@@ -58,7 +58,7 @@ module Nabu
         raise Nabu::Error, "search: --charset carries no Han characters" if set.empty?
         return Outcome.new(results: [], charset_size: set.size, indexed: false, capped: false) unless indexed?
 
-        rows, capped = candidate_rows(set, max_foreign, lang: lang, source: source)
+        rows, capped = candidate_rows(set, max_foreign, min_chars: min_chars, lang: lang, source: source)
         rows = query_narrowed(rows, query) unless query.to_s.strip.empty?
         Outcome.new(results: hydrate(rows, lang: lang, license: license, source: source, limit: limit),
                     charset_size: set.size, indexed: true, capped: capped)
@@ -84,8 +84,12 @@ module Nabu
       # The index path: union of r1..r(N+1) IN charset slices, deduped by
       # rowid, exact-verified. Source/lang narrow in SQL (the index carries
       # both); license needs the catalog join and rides in hydrate.
-      def candidate_rows(set, max_foreign, lang:, source:)
+      # +min_chars+ (the Edubba paper cut, 2026-08-11): a distinct-char
+      # floor so the first screen is sentence-shaped, not the dozens of
+      # one-char 曰 fragments the cleanest-first order surfaces.
+      def candidate_rows(set, max_foreign, min_chars:, lang:, source:)
         scope = table
+        scope = scope.where { nchars >= min_chars } if min_chars.positive?
         scope = scope.where(language: lang) if lang
         scope = scope.where(source_id: source_ids(source)) if source
         members = set.to_a

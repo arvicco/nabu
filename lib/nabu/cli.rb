@@ -1806,6 +1806,9 @@ module Nabu
     option :max_foreign, type: :numeric, default: 0, banner: "N",
                          desc: "With --charset: allow up to N characters outside the set per " \
                                "passage (0-3); each hit names its strangers"
+    option :min_chars, type: :numeric, default: 0, banner: "N",
+                       desc: "With --charset: only passages with at least N distinct Han " \
+                             "characters — floors the cleanest-first order above one-char fragments"
     option :fuzzy, type: :boolean, default: false,
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
     option :long, type: :boolean, default: false,
@@ -6499,6 +6502,7 @@ module Nabu
         outcome = Nabu::Query::Graded.new(catalog: catalog, fulltext: fulltext)
                                      .run(query, charset: options[:charset],
                                                  max_foreign: options[:max_foreign].to_i,
+                                                 min_chars: options[:min_chars].to_i,
                                                  lang: options[:lang], license: options[:license],
                                                  source: options[:source], limit: options[:limit].to_i)
         print_graded_results(outcome, query: query)
@@ -7184,7 +7188,8 @@ module Nabu
 
         catalog = open_catalog(config)
         begin
-          Nabu::Query::HieroCard.new(hieroglyphs: signs, catalog: catalog).run(input)
+          Nabu::Query::HieroCard.new(hieroglyphs: signs, catalog: catalog,
+                                     overlay: Nabu::EdubbaOverlay.load_default(config: config)).run(input)
         ensure
           catalog&.disconnect
         end
@@ -7321,11 +7326,35 @@ module Nabu
         concordances << "IFAO #{card.ifao}" if card.ifao
         say "concordances: #{concordances.join('  ·  ')}" if concordances.any?
         say "alternate sequence: #{card.alt_seq}" if card.alt_seq
+        print_hiero_didactic(card.didactic)
         return if card.corpus.empty?
 
         say ""
         say "in the wild (aes hiero_inventar): #{card.corpus['signs']} sign(s) across " \
             "#{card.corpus['passages']} passage(s)"
+      end
+
+      # The Edubba overlay section (P72-6). The certainty grade is
+      # LOAD-BEARING: "unclear" is Edubba's never-present-as-fact rule,
+      # so it prints IN FRONT of the gloss, not as a footnote.
+      def print_hiero_didactic(overlay)
+        return if overlay.nil?
+
+        say ""
+        head = ["keyword \"#{overlay['keyword']}\"", overlay["label"]].compact.join("  ·  ")
+        say "didactic (#{[overlay['course'],
+                          overlay['chapter'] && "ch. #{overlay['chapter']}"].compact.join(' ')}): #{head}"
+        if overlay["voice"]
+          grade = overlay["certainty"] == "unclear" ? "UNCLEAR (origin debated — not fact): " : ""
+          say "  #{overlay['voice_kind']}: #{grade}#{overlay['voice']}"
+        end
+        unless Array(overlay["confusables"]).empty?
+          follow = overlay["confusables"].map { |code| "#{code} (nabu char #{code})" }.join("  ·  ")
+          say "  confusable with: #{follow}"
+        end
+        say "  #{overlay['description']}" if overlay["description"]
+        say "  codex: #{overlay['link']}" if overlay["link"]
+        say "  #{overlay['attribution']}"
       end
 
       # The character card (P37-4): each section printed only when a held
