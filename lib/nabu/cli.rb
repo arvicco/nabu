@@ -1799,6 +1799,13 @@ module Nabu
     option :char_component, type: :string, banner: "C",
                             desc: "Character filter: characters CONTAINING C anywhere in their " \
                                   "structure (KRADFILE ∪ BabelStone IDS transitive containment)"
+    option :charset, type: :string, banner: "CHARS",
+                     desc: "Graded-reading filter (P72-1): only passages whose distinct Han " \
+                           "characters fall INSIDE this set (fold-aware; spaces ignored); " \
+                           "composes with a text query and --lang/--license/--source"
+    option :max_foreign, type: :numeric, default: 0, banner: "N",
+                         desc: "With --charset: allow up to N characters outside the set per " \
+                               "passage (0-3); each hit names its strangers"
     option :fuzzy, type: :boolean, default: false,
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
     option :long, type: :boolean, default: false,
@@ -1877,6 +1884,16 @@ module Nabu
                            "plain text search or a term-less browse only — not --lemma/--near/" \
                            "--fuzzy or the character-structure filters"
       end
+
+      if options[:charset]
+        if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph] ||
+           options[:exact] || options[:word] || options[:words] || char_filter_options?
+          raise Thor::Error, "search: --charset is the coverage filter over whole passages — it " \
+                             "composes with a plain text query and --lang/--license/--source only"
+        end
+        return graded_search(query)
+      end
+      raise Thor::Error, "search: --max-foreign only accompanies --charset" if options[:max_foreign].to_i.positive?
 
       if char_filter_options?
         if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
@@ -6454,6 +6471,55 @@ module Nabu
         else
           raise Thor::Error, "search: --strokes takes N or A-B (e.g. --strokes 8 or --strokes 8-12)"
         end
+      end
+
+      # The graded-reading search (P72-1, Edubba FR-1): --charset coverage
+      # over the P72 passage_chars index — quasi-instant by construction
+      # (indexed rarest-char candidates + exact verify), honest hint when
+      # the index predates P72.
+      def graded_search(query)
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        validate_source!(catalog, options[:source])
+        outcome = Nabu::Query::Graded.new(catalog: catalog, fulltext: fulltext)
+                                     .run(query, charset: options[:charset],
+                                                 max_foreign: options[:max_foreign].to_i,
+                                                 lang: options[:lang], license: options[:license],
+                                                 source: options[:source], limit: options[:limit].to_i)
+        print_graded_results(outcome, query: query)
+        print_display_footer
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      def print_graded_results(outcome, query:)
+        unless outcome.indexed
+          return say("coverage not indexed yet — the passage_chars index arrives with the next " \
+                     "`nabu rebuild` (or any sync's index refresh); no scan attempted")
+        end
+        if outcome.results.empty?
+          tail = query.empty? ? "" : " that also match #{query.inspect}"
+          return say("no passages read inside this #{outcome.charset_size}-character set" \
+                     "#{" (±#{options[:max_foreign].to_i})" if options[:max_foreign].to_i.positive?}#{tail}")
+        end
+
+        outcome.results.each do |result|
+          strangers = result.foreign.empty? ? "" : "  +{#{result.foreign.join(' ')}}"
+          say "#{result.urn}  [#{result.language}]  #{result.nchars} chars#{strangers}"
+          say "  #{result.text}"
+        end
+        say ""
+        say "coverage: #{outcome.charset_size}-character set" \
+            "#{" ± #{options[:max_foreign].to_i} strangers" if options[:max_foreign].to_i.positive?}" \
+            "#{"; text query #{query.inspect}" unless query.empty?}" \
+            "#{' — candidate window filled; narrow with --source/--lang for the rest' if outcome.capped}"
       end
 
       # The explicit character-structure search (P37-4): --radical/--strokes/

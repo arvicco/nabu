@@ -817,6 +817,58 @@ module Store
     #
     # The Han corpus panel used to LIKE-scan the passages table at desk time
     # — 180 s at the 68M-row census (2026-08-10, the hang the owner caught).
+    # -- passage_chars (P72-1, the coverage index) -------------------------
+    # Per LIVE Han-bearing passage: its sorted distinct chars, count, and
+    # the four RAREST by global docs-rank (r1..r4, each indexed) — the
+    # graded-reading lane's candidate columns: a passage with ≤N foreign
+    # chars must carry one of its N+1 rarest inside the charset.
+
+    def passage_chars = @fulltext[Nabu::Store::Indexer::PASSAGE_CHARS_TABLE]
+
+    def test_passage_chars_store_sorted_distinct_han_with_rarest_ranking
+      doc = make_document(urn: "urn:d:s")
+      # 木 appears in 3 passages (commonest), 林 in 2, 森 in 1 (rarest).
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "木木林", sequence: 0, language: "lzh")
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "木林森", sequence: 1, language: "lzh")
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "木 alone", sequence: 2, language: "lzh")
+      make_passage(doc, urn: "urn:d:s:4", text_normalized: "no han", sequence: 3, language: "eng")
+      rebuild!
+
+      row = passage_chars.first(rowid: passage_id("urn:d:s:2"))
+      assert_equal 3, row[:nchars]
+      assert_equal %w[木 林 森].sort.join, row[:chars], "distinct chars, sorted, deduped"
+      assert_equal "森", row[:r1], "the globally rarest char leads"
+      assert_equal "林", row[:r2]
+      assert_equal "木", row[:r3]
+      assert_nil row[:r4], "fewer chars than slots -> NULL"
+      assert_equal "木", passage_chars.first(rowid: passage_id("urn:d:s:1"))[:r2],
+                   "duplicates collapse before ranking"
+      assert_nil passage_chars.first(rowid: passage_id("urn:d:s:4")),
+                 "han-less passages have no row"
+    end
+
+    def test_passage_chars_exclude_withdrawn_and_refresh_swaps_one_source
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "棄", sequence: 0, language: "lzh")
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "棄", sequence: 1, language: "lzh",
+                        withdrawn: true)
+      rebuild!
+      assert_equal 1, passage_chars.count
+
+      other = Nabu::Store::Source.create(
+        slug: "t2", name: "T2", adapter_class: "TestAdapter", license_class: "open"
+      )
+      other_doc = make_document(urn: "urn:d:t2", source: other)
+      make_passage(other_doc, urn: "urn:d:t2:1", text_normalized: "国", sequence: 0, language: "lzh")
+      Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: @fulltext, slug: "t2")
+      assert_equal 1, passage_chars.where(source_id: other.id).count,
+                   "refresh fills the new source's slice"
+      assert_equal 1, passage_chars.where(source_id: @source.id).count,
+                   "the untouched source's slice survives"
+    end
+
+    def passage_id(urn) = @catalog[:passages].where(urn: urn).get(:id)
+
     # The postings ride the SAME streaming pass as the fts/lemma tables:
     # per (source, char, language), the count of live passages containing
     # each Han character. Desk time is one B-tree lookup.
