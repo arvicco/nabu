@@ -1,0 +1,23 @@
+# Curated sign pool — Hieroglyphs 101 (M4-2).
+# The uniliteral (one-consonant) signs, the field's standard didactic
+# start: every Middle Egyptian grammar opens with this set (Allen,
+# *Middle Egyptian*, §2.5; Gardiner, *Egyptian Grammar*, §17 + Sign
+# List). Iconic identifications follow Gardiner's Sign List;
+# certainty: classic = textbook-standard, unclear = origin debated,
+# do not teach as fact.
+#
+# codepoints are NOT stored here — bin/hiero_registry.rb resolves and
+# VERIFIES each Gardiner code against the Unicode character database
+# (EGYPTIAN HIEROGLYPH <code> names) and emits the registry with
+# glyphs; freq_aes rank merged from assets-src/data/hiero-freq-aes.tsv
+# (Gardiner-code counts over the aes corpus hiero annotations).
+#
+# translit: Leiden/Egyptological display form (D4-b); mdc: the ASCII
+# corpus form. taught_in: the 101 chapter that teaches the sign.
+
+signs:
+  - { gardiner: G1,  translit: "ꜣ", mdc: "A", label: "Egyptian vulture",         sound: "glottal stop; conventionally read as 'a'", taught_in: 4, certainty: classic, keyword: "vulture" }
+  - { gardiner: Z4,  translit: "y", mdc: "y", label: "two strokes",              sound: "y (usually word-final)",                    taught_in: 4, certainty: classic, keyword: "pair", confusable_with: ["Z1", "Z2"] }
+  - { gardiner: G43, translit: "w", mdc: "w", label: "quail chick",              sound: "w / u",                                     taught_in: 4, certainty: classic, keyword: "chick", confusable_with: ["Z7"] }
+  - { gardiner: Z7,  translit: "w", mdc: "W", label: "coil (cursive quail chick)", sound: "w / u",                                   taught_in: 4, certainty: classic, keyword: "coil", confusable_with: ["G43"] }
+  - { gardiner: AA1, translit: "ḫ", mdc: "x", label: "sieve? placenta?",         sound: "ch as in Scottish 'loch'",                  taught_in: 4, certainty: unclear, keyword: "sieve" }

@@ -721,11 +721,12 @@ class SourceRegistryTest < Minitest::Test
     # join the group or this pin fires. Modules (osl, unikemet) carry the
     # identity spines; the sources carry the Han card's shelves, the
     # reading lanes, and the Wiktionary sense lane.
-    assert_equal %w[babelstone-ids baxter-sagart edrdg hdic kradfile osl tls tshet-uinh
-                    unihan unikemet wiktionary-sux],
+    assert_equal %w[babelstone-ids baxter-sagart edrdg edubba-overlay hdic kradfile osl tls
+                    tshet-uinh unihan unikemet wiktionary-sux],
                  registry.group_members("signs").sort
     modules = registry.group_members("signs").select { |s| registry[s].feature_module? }
-    assert_equal %w[osl unikemet], modules.sort, "exactly the two identity spines are modules"
+    assert_equal %w[edubba-overlay osl unikemet], modules.sort,
+                 "the two identity spines + the didactic overlay are the modules"
   end
 
   def test_registry_multilingual_lookup_by_slug
