@@ -22,7 +22,7 @@ class BackupTest < Minitest::Test
 
   # -- the full backup set --------------------------------------------------
 
-  def test_backs_up_the_two_folders_first_then_the_derived_conveniences
+  def test_backs_up_the_three_folders_first_then_the_derived_conveniences
     result = backup(allow_unmounted: true).run
 
     assert_predicate result, :ok?
@@ -37,7 +37,24 @@ class BackupTest < Minitest::Test
     assert_path_exists File.join(@target, "db", "fulltext.sqlite3")
 
     names = result.sections.map(&:name)
-    assert_equal %w[canonical config catalog fulltext lects ledger], names
+    # P71: local/ joins the required tier; this rig's ledger is a LEGACY
+    # (db/) one, so the pre-P71 ledger file section still rides.
+    assert_equal %w[canonical config local catalog fulltext lects ledger], names
+  end
+
+  # P71-1: a migrated box's ledger lives at local/history.sqlite3 — the
+  # required local section carries it (sidecars included via the dir
+  # copy), and the db/-style ledger file section disappears.
+  def test_a_home_ledger_ships_inside_the_local_section
+    FileUtils.mkdir_p(File.join(@root, "local"))
+    FileUtils.mv(File.join(@root, "db", "history.sqlite3"), File.join(@root, "local", "history.sqlite3"))
+
+    result = backup(allow_unmounted: true).run
+
+    assert_predicate result, :ok?
+    assert_path_exists File.join(@target, "local", "history.sqlite3")
+    refute_path_exists File.join(@target, "db", "history.sqlite3")
+    refute_includes result.sections.map(&:name), "ledger"
   end
 
   # P70 REVERSAL of the P58-1 note: the lect journal is DERIVED (rebuild
@@ -55,10 +72,10 @@ class BackupTest < Minitest::Test
     assert_path_exists File.join(@target, "db", "lects.sqlite3")
   end
 
-  def test_skip_derived_is_the_pure_two_folder_contract
-    # P70: canonical/ + config/ are the WHOLE required backup — with
-    # --skip-derived NOTHING under db/ ships (the ledger is a LOG, the
-    # lect journal is derived; grants/rulings live in config/).
+  def test_skip_derived_is_the_pure_three_folder_contract
+    # P71: canonical/ + config/ + local/ are the WHOLE required backup —
+    # with --skip-derived NOTHING under db/ ships (everything there is
+    # derived; the instance's rulings/grants/ledger live under local/).
     result = backup(allow_unmounted: true, skip_derived: true).run
 
     assert_predicate result, :ok?

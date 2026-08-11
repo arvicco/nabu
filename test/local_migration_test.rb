@@ -53,4 +53,35 @@ class LocalMigrationTest < Minitest::Test
       assert_empty result.conflicts
     end
   end
+
+  # P71-1: the ledger moves db/ -> local/ WITH its live WAL sidecars —
+  # the main file alone would be a stale (or torn) snapshot.
+  def test_moves_the_ledger_with_its_wal_sidecars
+    with_tree do |root, config|
+      FileUtils.mkdir_p(File.join(root, "db"))
+      File.write(File.join(root, "db", "history.sqlite3"), "main")
+      File.write(File.join(root, "db", "history.sqlite3-wal"), "wal")
+      File.write(File.join(root, "db", "history.sqlite3-shm"), "shm")
+      result = Nabu::LocalMigration.run(config: config)
+      assert_includes result.moved, "history.sqlite3"
+      assert_equal "main", File.read(File.join(root, "local", "history.sqlite3"))
+      assert_equal "wal", File.read(File.join(root, "local", "history.sqlite3-wal"))
+      refute File.exist?(File.join(root, "db", "history.sqlite3"))
+      refute File.exist?(File.join(root, "db", "history.sqlite3-wal"))
+      refute File.exist?(File.join(root, "db", "history.sqlite3-shm"))
+    end
+  end
+
+  def test_never_clobbers_a_ledger_already_at_home
+    with_tree do |root, config|
+      FileUtils.mkdir_p(File.join(root, "db"))
+      FileUtils.mkdir_p(File.join(root, "local"))
+      File.write(File.join(root, "db", "history.sqlite3"), "legacy")
+      File.write(File.join(root, "local", "history.sqlite3"), "home")
+      result = Nabu::LocalMigration.run(config: config)
+      assert_includes result.conflicts, "history.sqlite3"
+      assert_equal "home", File.read(File.join(root, "local", "history.sqlite3"))
+      assert File.exist?(File.join(root, "db", "history.sqlite3"))
+    end
+  end
 end

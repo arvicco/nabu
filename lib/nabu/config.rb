@@ -247,13 +247,23 @@ module Nabu
       File.join(db_dir, FULLTEXT_DB_FILENAME)
     end
 
-    # The history ledger (architecture §5, P7-1; reclassified LOG by P70):
-    # runs, pins, license baselines, durable revisions. NOT derived and
-    # never touched by `nabu rebuild` — but operational HISTORY, not owner
-    # decisions (those live in config/ since P70), so the two-folder backup
-    # contract may lose it (№R-21; restore.md names the consequences).
+    # The history ledger (architecture §5, P7-1). LOCAL-INSTANCE since
+    # P71-1 (the local/ elevation): its runs/revisions/pins are the
+    # instance's operational history — preserved by the backup's
+    # permanent set, not blessed to die — and its move OUT of db/ makes
+    # db/ 100% derived by construction. Loud legacy fallback while a
+    # pre-P71 copy sits at db/history.sqlite3.
     def history_path
-      File.join(db_dir, HISTORY_DB_FILENAME)
+      home = File.join(local_dir, HISTORY_DB_FILENAME)
+      legacy = File.join(db_dir, HISTORY_DB_FILENAME)
+      return home if File.exist?(home) || !File.exist?(legacy)
+
+      unless @fallback_warned[HISTORY_DB_FILENAME]
+        @fallback_warned[HISTORY_DB_FILENAME] = true
+        warn "nabu: the ledger still lives at db/#{HISTORY_DB_FILENAME} (pre-P71 layout) — " \
+             "run `nabu migrate-local` to move it under local/"
+      end
+      legacy
     end
 
     # The links journal (architecture §15, P16-1): batch-mined cross-reference

@@ -1443,10 +1443,13 @@ module Nabu
     def migrate_local
       config = Nabu::Config.load
       result = Nabu::LocalMigration.run(config: config)
-      result.moved.each { |name| say "moved   config/#{name} -> local/config/#{name}" }
+      result.moved.each do |name|
+        from, to = name == Nabu::Config::HISTORY_DB_FILENAME ? ["db/", "local/"] : ["config/", "local/config/"]
+        say "moved   #{from}#{name} -> #{to}#{name}"
+      end
       result.conflicts.each do |name|
-        say "CONFLICT: #{name} exists at BOTH config/ and local/config/ — the home copy governs; " \
-            "reconcile and delete the config/ straggler by hand", :yellow
+        say "CONFLICT: #{name} exists at BOTH its legacy home and local/ — the local copy governs; " \
+            "reconcile and delete the straggler by hand", :yellow
       end
       say "nothing to move — the local/ layout is current" if result.moved.empty? && result.conflicts.empty?
     end
@@ -3659,24 +3662,26 @@ module Nabu
       catalog&.disconnect
     end
 
-    desc "backup", "Snapshot canonical/, the history ledger, config/, and the derived dbs to an external volume"
+    desc "backup", "Snapshot the three permanent folders (canonical/, config/, local/) + the derived dbs"
     long_desc <<~HELP, wrap: false
-      File-level rsync backup (architecture §8, P7-2) — the concept's promise:
-      restorable from a plain rsync copy with zero services running. Backs up
-      everything that is NOT re-derivable:
+      File-level rsync backup (architecture §8, P7-2; the P71 three-folder
+      contract) — the concept's promise: restorable from a plain rsync copy
+      with zero services running. The REQUIRED set is everything permanent:
 
-        canonical/   the permanent asset, INCLUDING every .attic/ (upstream-
-                     scrapped files that exist nowhere else — a per-slug git
-                     mirror would miss them; file-level or nothing)
-        db/history.sqlite3   the ledger: run history, sync pins, license
-                     baselines, durable revisions (the only copy)
-        config/      nabu.yml + sources.yml
-        db/catalog + db/fulltext   the derived dbs — included by DEFAULT
-                     (a file copy beats an hour of rebuild); --skip-derived omits
-                     them (canonical/ + `nabu rebuild` reconstitutes them)
+        canonical/   the asset, INCLUDING every .attic/ (upstream-scrapped
+                     files that exist nowhere else — a per-slug git mirror
+                     would miss them; file-level or nothing)
+        config/      the project definition (registries, rules, postures)
+        local/       THE INSTANCE: owner rulings, grants, profile, the
+                     history ledger, acquisitions — never in the repo
 
-      Target: config/nabu.yml `backup: target:` (a path under a mounted external
-      volume), overridable with --to PATH.
+      Everything under db/ is derived (`nabu rebuild` regenerates it from
+      the three folders) and rides only as a CONVENIENCE — included by
+      default because a file copy beats hours of rebuild; --skip-derived
+      omits it for the pure three-folder set.
+
+      Target: local/config/settings.yml `backup: target:` (a path under a
+      mounted external volume), overridable with --to PATH.
 
       THE MOUNT-POINT GUARD: the target must live on a REAL mounted volume. If
       the volume is not mounted, the path is a bare directory on the boot disk,

@@ -36,7 +36,32 @@ module Nabu
         FileUtils.mv(legacy, home)
         moved << name
       end
+      migrate_ledger(config, moved, conflicts)
       Result.new(moved: moved, conflicts: conflicts)
+    end
+
+    # P71-1: the ledger (db/history.sqlite3) moves to local/ WITH its live
+    # WAL sidecars — the main file alone would be a stale (or, mid-write,
+    # torn) snapshot; a home copy is never clobbered. Run this with no
+    # nabu process holding the ledger open (the CLI command is standalone).
+    def migrate_ledger(config, moved, conflicts)
+      name = Config::HISTORY_DB_FILENAME
+      legacy = File.join(config.db_dir, name)
+      home = File.join(config.local_dir, name)
+      return unless File.exist?(legacy)
+
+      if File.exist?(home)
+        conflicts << name
+        return
+      end
+
+      FileUtils.mkdir_p(File.dirname(home))
+      ["", "-wal", "-shm"].each do |suffix|
+        next unless File.exist?("#{legacy}#{suffix}")
+
+        FileUtils.mv("#{legacy}#{suffix}", "#{home}#{suffix}")
+      end
+      moved << name
     end
   end
 end

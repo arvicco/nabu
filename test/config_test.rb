@@ -156,13 +156,8 @@ class ConfigTest < Minitest::Test
     end
   end
 
-  # P7-1: the history ledger rides in the same (config-driven) db dir.
-  def test_history_path_is_under_db_dir
-    Dir.mktmpdir do |root|
-      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
-      assert_equal File.join(root, "db", "history.sqlite3"), config.history_path
-    end
-  end
+  # P7-1, INVERTED by P71-1: the ledger left db/ for local/ — the
+  # dedicated test below pins the new home + legacy fallback.
 
   # P16-1: the links journal rides in the same (config-driven) db dir.
   def test_links_path_is_under_db_dir
@@ -296,6 +291,30 @@ class ConfigTest < Minitest::Test
       File.write(File.join(root, "local", "config", "grants.yml"), "grants: []\n")
       _, err = capture_io do
         assert_equal File.join(root, "local", "config", "grants.yml"), config.grants_path
+      end
+      assert_empty err
+    end
+  end
+
+  # P71-1: the ledger is LOCAL-INSTANCE data (its logs/revisions/pins
+  # are preserved, not blessed to die) — home local/history.sqlite3,
+  # loud legacy fallback while a pre-P71 copy sits under db/.
+  def test_history_path_lives_under_local_with_legacy_fallback
+    Dir.mktmpdir do |root|
+      config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
+      assert_equal File.join(root, "local", "history.sqlite3"), config.history_path
+
+      FileUtils.mkdir_p(File.join(root, "db"))
+      File.write(File.join(root, "db", "history.sqlite3"), "")
+      _, err = capture_io do
+        assert_equal File.join(root, "db", "history.sqlite3"), config.history_path
+      end
+      assert_match(/migrate-local/, err)
+
+      FileUtils.mkdir_p(File.join(root, "local"))
+      File.write(File.join(root, "local", "history.sqlite3"), "")
+      _, err = capture_io do
+        assert_equal File.join(root, "local", "history.sqlite3"), config.history_path
       end
       assert_empty err
     end
