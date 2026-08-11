@@ -8,6 +8,7 @@ require_relative "form_lemma"
 require_relative "hani_fold_builder"
 require_relative "kanripo_gaiji_builder"
 require_relative "kyujitai_fold_builder"
+require_relative "lect_assignments_builder"
 require_relative "meter_builder"
 require_relative "segmentation_builder"
 require_relative "sabellic_loans_builder"
@@ -284,6 +285,33 @@ module Nabu
         maintenance: "re-derive after a cantigas re-sync (Littera is a living edition that " \
                      "corrects pages in place; the stale-ingest guard enforces freshness); every " \
                      "build re-derives the citation-fidelity census into nabu.eval"
+      ),
+      Feature.new(
+        slug: "mul/lect-assignments", language: LANGUAGES.fetch("mul"),
+        title: "Per-document historical-stage (lect) assignments across the multilingual catalog",
+        # gold-DERIVED about the projection; the per-row basis column IS the
+        # tier honesty — rule: rows read upstream period metadata, date-band
+        # rows are inference over dates, and the consumer sees which is
+        # which (the survey §2.3 posture).
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "document-urn",
+        # No inputs/cones: the lect journal is the source of truth (the
+        # aozora posture) — rows cite documents at URN grain, stable across
+        # syncs by the conformance contract, so no cone sha is load-bearing;
+        # the recipe embeds the published-slice sha256 instead. Contributing
+        # corpora are cited in sources.bib per build.
+        inputs: [], canonical_cones: [], builder: LectAssignmentsBuilder,
+        rationale: "Publishes the per-document journal behind Nabu's lect facet — ~482K (URN, " \
+                   "language-code) → historical-stage assignments (Old vs Neo-Babylonian, Ur III " \
+                   "vs OB Sumerian, Vedic vs Classical Sanskrit, ...) with the basis and note " \
+                   "in-band per row — the corpus-scale stage stratification no other project " \
+                   "publishes; the id grammar and registry are public in nabu-lects (cited). " \
+                   "License classes open+attribution only (nc/odbl/research_private slices " \
+                   "excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 " \
+                   "carve-out dataset carrying the share-alike lanes (edh, aes, ...).",
+        maintenance: "re-derive after journal-moving events (a sync wave re-running lect rules, " \
+                     "new owner rulings, a rebuild) — the published-slice digest makes an " \
+                     "unchanged journal a fingerprint no-op"
       )
     ].freeze
 
