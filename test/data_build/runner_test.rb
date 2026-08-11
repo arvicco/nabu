@@ -88,6 +88,26 @@ class DataBuildRunnerTest < Minitest::Test
     end
   end
 
+  # №R-24 (P73-0): a BY-SA dataset ships its own LICENSE file — the repo's
+  # top-level LICENSE is CC BY, so the carve-out must be visible in the
+  # dataset directory itself, not only in manifest/README prose. CC BY
+  # datasets ship none: the repository default already covers them.
+  def test_a_by_sa_dataset_ships_its_own_license_file_and_a_cc_by_one_does_not
+    with_env do |root, _config, runner|
+      by = runner.run(feature: DataBuildFake.feature, into: File.join(root, "by"))
+      refute File.exist?(File.join(by.out_dir, "LICENSE")),
+             "a CC BY dataset rides the repository default — no per-dataset LICENSE"
+      refute_includes by.files.map(&:first), "LICENSE"
+
+      by_sa = runner.run(feature: DataBuildFake.feature(license: "CC-BY-SA-4.0"),
+                         into: File.join(root, "by-sa"))
+      license = File.read(File.join(by_sa.out_dir, "LICENSE"))
+      assert license.start_with?("Attribution-ShareAlike 4.0 International"),
+             "the LICENSE file carries the canonical CC BY-SA 4.0 plaintext"
+      assert_includes by_sa.files.map(&:first), "LICENSE"
+    end
+  end
+
   # An inline planned rig rather than a registry feature: builder packets
   # flip the real features one by one, and this refusal must outlive them all.
   def planned_feature

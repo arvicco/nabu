@@ -10,7 +10,8 @@ description: >-
 
 Live counts as of **4 August 2026**: **975,074 documents / 68,408,109
 passages** across 109 registered, synced sources (the full registry counts
-126 rows: 109 corpus sources, 4 local shelves, and 13 feature modules),
+131 rows as of 11 August 2026: 109 corpus sources, 4 local shelves, and
+18 feature modules),
 plus **1,407,706 dictionary entries** on the reference shelf and **19.2
 million gold lemma annotations in thirty-seven languages** (censused 26
 July 2026; a further 28,054,494 lemma rows in ten languages ride an

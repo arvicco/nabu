@@ -36,9 +36,10 @@ class DerivabilityWritersTest < Minitest::Test
   # arms and adapters write canonical/ inside #fetch; the four shelves +
   # ingest write local/shelves/; the write-through modules write
   # local/config/; ops/ and data_build/ write generated repo/site or
-  # caller-named output; fixture_sentinel writes test fixtures;
-  # local_migration executes the P71 layout move. ANY new file here is
-  # a deliberate allowlist decision, not a drive-by.
+  # caller-named output (places_lpf_builder writes its GeoJSON/TSV into
+  # the runner's caller-named dataset dir — P73-5); fixture_sentinel
+  # writes test fixtures; local_migration executes the P71 layout move.
+  # ANY new file here is a deliberate allowlist decision, not a drive-by.
   WRITER_ALLOWLIST = %w[
     nabu/adapters/bfm.rb nabu/adapters/kitab.rb nabu/adapters/oracc.rb
     nabu/adapters/riig.rb nabu/adapters/rundata.rb
@@ -55,6 +56,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/health/quarantine_baseline.rb nabu/profile.rb
     nabu/ops/axis_pages.rb nabu/ops/site_data.rb
     nabu/data_build/runner.rb nabu/data_build/sources_bib.rb
+    nabu/data_build/places_lpf_builder.rb
     nabu/fixture_sentinel.rb nabu/local_migration.rb
   ].freeze
 

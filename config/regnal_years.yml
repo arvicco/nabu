@@ -1,0 +1,146 @@
+# The ruled regnal-year table (owner ruling №R-28, 2026-08-11 — the
+# P73-6 scout ratified as recommended). Converts cdli dates_referenced
+# regnal datings ("Šulgi.44.02.06") to absolute year spans.
+#
+# CHRONOLOGY COMMITMENT (stated in-band wherever derived years surface):
+# - Ur III / Isin / Larsa / Babylon I: the MIDDLE CHRONOLOGY (the field's
+#   citation convention; the low chronology would move these dates 64
+#   years — a consumer needing another chronology shifts uniformly).
+# - Lagash II (Gudea): the conventional middle-chronology placement —
+#   the dynasty floats harder than Ur III; the OFFSET is conventional,
+#   the intra-reign year arithmetic is exact.
+# - Neo-Assyrian / Neo-Babylonian / Achaemenid: astronomically anchored
+#   (Parker & Dubberstein's tables; eponym-list-fixed for Assyria).
+#
+# Keys are cdli's dates_referenced ruler spellings VERBATIM. accession =
+# the ruler's YEAR 1 as a signed year (negative = BCE, the catalog
+# convention: 2094 BC → -2094). reign = the count of numbered regnal
+# years. Year YY maps to accession + (YY - 1); "(us2 year)" shifts +1;
+# YY = 00 (year unknown) maps to the whole-reign span.
+#
+# DELIBERATELY EXCLUDED (censused as unruled, never guessed):
+# - ED III Lagash (Lugalanda, Urukagina_l): absolute anchoring is ±many
+#   decades — a per-year conversion would claim false precision.
+# - Old Akkadian (Naramsin): year-NAME system + identity ambiguity with
+#   later homonyms; the period band stays the honest answer.
+# - Sin-kashid (Uruk) and other floating OB local dynasts.
+# - Unnumbered homonyms ("Nebuchadnezzar" bare) and placeholder shapes
+#   (HE, EH, xx, --).
+rulers:
+  # -- Lagash II (conventional placement) ------------------------------
+  Gudea:
+    accession: -2144
+    reign: 20
+    dynasty: Lagash II
+    basis: conventional middle-chronology placement (dynasty floats)
+  # -- Ur III (middle chronology) --------------------------------------
+  Ur-Namma:
+    accession: -2112
+    reign: 18
+    dynasty: Ur III
+    basis: middle chronology
+  Šulgi:
+    accession: -2094
+    reign: 48
+    dynasty: Ur III
+    basis: middle chronology
+  Amar-Suen:
+    accession: -2046
+    reign: 9
+    dynasty: Ur III
+    basis: middle chronology
+  Šū-Suen:
+    accession: -2037
+    reign: 9
+    dynasty: Ur III
+    basis: middle chronology
+  Ibbi-Suen:
+    accession: -2028
+    reign: 25
+    dynasty: Ur III
+    basis: middle chronology
+  # -- Isin (middle chronology) ----------------------------------------
+  Ishbi-Erra:
+    accession: -2017
+    reign: 33
+    dynasty: Isin I
+    basis: middle chronology
+  # -- Larsa (middle chronology) ---------------------------------------
+  Warad-Sin:
+    accession: -1834
+    reign: 12
+    dynasty: Larsa
+    basis: middle chronology
+  Rim-Sin:
+    accession: -1822
+    reign: 60
+    dynasty: Larsa
+    basis: middle chronology (Rim-Sin I)
+  # -- Babylon I (middle chronology) -----------------------------------
+  Hammurapi:
+    accession: -1792
+    reign: 43
+    dynasty: Babylon I
+    basis: middle chronology
+  Samsu-iluna:
+    accession: -1749
+    reign: 38
+    dynasty: Babylon I
+    basis: middle chronology
+  Ammi-ditana:
+    accession: -1683
+    reign: 37
+    dynasty: Babylon I
+    basis: middle chronology
+  Ammi-saduqa:
+    accession: -1646
+    reign: 21
+    dynasty: Babylon I
+    basis: middle chronology
+  # -- Neo-Assyrian (eponym-anchored) ----------------------------------
+  Assurnasirpal2:
+    accession: -883
+    reign: 25
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored
+  Shalmaneser3:
+    accession: -858
+    reign: 35
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored
+  Sargon2:
+    accession: -721
+    reign: 17
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored
+  Sennacherib:
+    accession: -704
+    reign: 24
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored
+  Esarhaddon:
+    accession: -680
+    reign: 12
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored
+  Assurbanipal:
+    accession: -668
+    reign: 38
+    dynasty: Neo-Assyrian
+    basis: eponym-list-anchored
+  # -- Neo-Babylonian / Achaemenid (Parker & Dubberstein) --------------
+  Nebuchadnezzar2:
+    accession: -604
+    reign: 43
+    dynasty: Neo-Babylonian
+    basis: Parker & Dubberstein
+  Nabonidus:
+    accession: -555
+    reign: 17
+    dynasty: Neo-Babylonian
+    basis: Parker & Dubberstein
+  Darius1:
+    accession: -521
+    reign: 36
+    dynasty: Achaemenid
+    basis: Parker & Dubberstein

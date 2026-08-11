@@ -4,8 +4,10 @@
 folded in the granted sources, the complete openMGH offering, DÉRom,
 the Tibetan wave, and the lect layer). Live totals: **975,074
 documents / 68,408,109 passages and 1,407,706 dictionary entries**
-across the **126 registry rows** — 109 corpus sources + 4 local
-shelves + 13 feature modules, every corpus source wired. **Classical
+across the **131 registry rows** — 109 corpus sources + 4 local
+shelves + 18 feature modules (module count as of 2026-08-11; the
+P63–P72 additions are cigs, trismegistos-geo, nabu-places, unikemet
+and edubba-overlay), every corpus source wired. **Classical
 Arabic (`ara`, §8x) is the largest language at 33.3M passages**, ahead
 of Literary Chinese (13.4M), Sumerian and Ancient Greek (3.0M each),
 and Japanese (2.98M); the catalog spans **122 language codes**. The

@@ -31,7 +31,7 @@ Sources not readily ingestible today, with concrete unlock paths. Ordered by exp
 
 **What's locked:** full-view PD books download page-by-page without an account; bulk access requires membership or the dataset request process.
 
-**Unlock path:** individual researchers can request **datasets of public-domain volumes** through HathiTrust's research center, and page-level OCR text of full-view items is accessible via API with a free account. For 19th-century critical editions (Miklosich, Jagić, Leskien, the entire early Slavistics canon), this plus IA covers essentially everything. IA needs no unlock at all — clean APIs, bulk download tools.
+**Unlock path:** page-level OCR text of full-view items is accessible via API with a free account. (The dataset-request path through HathiTrust's research center predates the HTRC wind-down and is no longer current — recheck 2026-08-10.) For 19th-century critical editions (Miklosich, Jagić, Leskien, the entire early Slavistics canon), this plus IA covers essentially everything. IA needs no unlock at all — clean APIs, bulk download tools.
 
 ## 5. Brepols (Library of Latin Texts), Loeb, TLL
 
@@ -47,7 +47,7 @@ Sources not readily ingestible today, with concrete unlock paths. Ordered by exp
 
 **What's locked:** terms prohibit systematic downloading; no bulk offer.
 
-**Unlock paths:** for Latin literature, Corpus Corporum + Perseus + DigilibLT (open, late-antique Latin — add to main list) substantially overlap PHI's canon. For epigraphy, the **EDH (Epigraphic Database Heidelberg)** offers open data dumps (CC) and **EDCS** is request-based — both effectively unlock the inscription space PHI covers. PHI itself: use interactively, don't ingest.
+**Unlock paths:** for Latin literature, Corpus Corporum + Perseus + DigilibLT (open, late-antique Latin — add to main list) substantially overlap PHI's canon. For epigraphy, the **EDH (Epigraphic Database Heidelberg)** offers open data dumps (CC — ingested; upstream no longer actively maintained per PI correspondence 2026-08-11, dumps remain) and **EDCS** has relaunched at UZH with a search API + CSV export but no license grant (recheck 2026-08-10: interactive use only) — EDH plus EDR/I.Sicily/IIP effectively unlock the inscription space PHI covers. PHI itself: use interactively, don't ingest.
 
 ## 8. Slovenian/South Slavic archival material
 

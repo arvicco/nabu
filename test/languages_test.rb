@@ -2,22 +2,23 @@
 
 require "test_helper"
 
-# Nabu::Languages (P18-4, rehomed by P19-1): the merged read over the derived
-# dossier records (catalog, migration 014), the derived name census (catalog,
-# migration 011), and the TRANSITIONAL ledger notes (ledger migration 004 —
-# the per-(code, kind) fallback until the owner-fired dossier export lands).
-# Every handle is optional and every table guarded — the degradation cases
-# are tested, not assumed.
+# Nabu::Languages (P18-4, rehomed by P19-1; ledger fallback RETIRED P73-10):
+# the merged read over the derived dossier records (catalog, migration 014)
+# and the derived name census (catalog, migration 011). The transitional
+# ledger-notes fallback is gone — parity was verified live 2026-08-11 (329
+# of 330 note lanes identical in records; the one divergence a stale
+# pre-correction keying), and the fallback read was exactly what made a
+# restored box answer differently from a live one (the L-7 class). Every
+# handle is optional and every table guarded.
 class LanguagesTest < Minitest::Test
   include StoreTestDB
 
   def setup
     @catalog = store_test_db
-    @ledger = ledger_test_db
   end
 
   def languages
-    Nabu::Languages.new(catalog: @catalog, ledger: @ledger)
+    Nabu::Languages.new(catalog: @catalog)
   end
 
   def dictionary(slug: "d1")
@@ -31,11 +32,6 @@ class LanguagesTest < Minitest::Test
       @catalog[:language_names].insert(dictionary_id: dictionary_id, lang_code: code,
                                        name: name, occurrences: occurrences)
     end
-  end
-
-  def note!(code, kind, body, source: "test")
-    @ledger[:language_notes].insert(lang_code: code, kind: kind, body: body,
-                                    source: source, created_at: Time.now)
   end
 
   def record!(code, kind, body, source: "dossier")
@@ -125,37 +121,32 @@ class LanguagesTest < Minitest::Test
 
   # -- records (P19-1): the dossier index is the first read layer --------------------
 
-  def test_dossier_record_beats_census_and_transitional_note
+  def test_dossier_record_beats_census
     d = dictionary
     census!(d.id, [["rue", "Carpathian Rusyn", 100]])
-    note!("rue", "name", "Rusyn (ledger, pre-migration)")
     record!("rue", "name", "Rusyn")
     assert_equal "Rusyn", languages.name("rue"), "the dossier record wins"
-    assert_equal "Rusyn (ledger, pre-migration)",
-                 Nabu::Languages.new(catalog: old_catalog, ledger: @ledger).name("rue"),
-                 "a catalog predating migration 014 still reads the transitional note"
   end
 
-  def test_context_and_family_read_records_with_note_fallback_per_kind
+  def test_context_family_and_curated_read_the_records_layer
     record!("gkm", "context", "Byzantine Greek, ca. 600–1453.")
-    note!("gkm", "family", "Hellenic < Indo-European")
+    record!("gkm", "family", "Hellenic < Indo-European")
     assert_equal "Byzantine Greek, ca. 600–1453.", languages.context("gkm")
-    assert_equal "Hellenic < Indo-European", languages.family("gkm"),
-                 "a kind with no record falls back to the ledger note — per (code, kind), not per code"
+    assert_equal "Hellenic < Indo-European", languages.family("gkm")
     assert languages.curated?("gkm")
     refute languages.curated?("zzz")
   end
 
-  def test_transitional_notes_answer_alone_and_latest_wins
-    note!("rue", "name", "Rusyn (first)")
-    note!("rue", "name", "Rusyn")
-    assert_equal "Rusyn", languages.name("rue"), "the appended supersession wins in the fallback"
-    assert languages.curated?("rue")
+  # P73-10 (L-7): the transitional ledger-notes fallback is RETIRED — the
+  # constructor no longer even accepts a ledger handle, so no future reader
+  # can quietly resurrect the restored-box divergence.
+  def test_the_ledger_fallback_is_retired
+    assert_raises(ArgumentError) { Nabu::Languages.new(catalog: @catalog, ledger: Sequel.sqlite) }
   end
 
   def test_family_fallback_reads_the_prefix_code_lanes
     record!("zle", "name", "East Slavic")
-    note!("zle", "context", "The Rus' branch and its historical stages.")
+    record!("zle", "context", "The Rus' branch and its historical stages.")
     fallback = languages.family_fallback("zle-xyz")
     assert_equal "zle", fallback.code
     assert_equal "East Slavic", fallback.name
@@ -167,11 +158,10 @@ class LanguagesTest < Minitest::Test
   # P18-5: kinds beyond name/family/context (programmatic accretions and
   # dossier front-matter extras) surface as extra notes, records winning per
   # kind, shipped kinds excluded (they have their own readers).
-  def test_extra_notes_merge_records_over_notes_per_kind
-    note!("chu", "iecor", "IE-CoR variety: OCS (ledger, pre-migration)", source: "iecor")
+  def test_extra_notes_read_records_per_kind
     record!("chu", "iecor", "IE-CoR variety: OCS (dossier)", source: "iecor")
     record!("chu", "period", "9th–11th c.")
-    note!("chu", "context", "Curated context stays out of the extras.")
+    record!("chu", "context", "Curated context stays out of the extras.")
     assert_equal({ "iecor" => "IE-CoR variety: OCS (dossier)", "period" => "9th–11th c." },
                  languages.extra_notes("chu"))
     assert_equal({}, languages.extra_notes("zzz"))
@@ -181,11 +171,11 @@ class LanguagesTest < Minitest::Test
   def test_witnesses_merge_per_source_lane_and_never_shadow_context
     record!("itc-pro", "context", "Curated Proto-Italic prose.")
     record!("itc-pro", "witness:edl", "Leiden-school PIt stage (dossier).", source: "edl")
-    note!("itc-pro", "witness:iecor", "Another source's lane (ledger).", source: "iecor")
+    record!("itc-pro", "witness:iecor", "Another source's lane (dossier).", source: "iecor")
     view = languages
     assert_equal "Curated Proto-Italic prose.", view.context("itc-pro")
     assert_equal({ "edl" => "Leiden-school PIt stage (dossier).",
-                   "iecor" => "Another source's lane (ledger)." },
+                   "iecor" => "Another source's lane (dossier)." },
                  view.witnesses("itc-pro"))
     assert_empty view.witnesses("lat")
   end
@@ -198,9 +188,6 @@ class LanguagesTest < Minitest::Test
     assert_nil bare.context("chu")
     assert_nil bare.family_fallback("zle-ort")
     refute bare.curated?("chu")
-    # a ledger predating ledger migration 004 (language_notes absent)
-    old_ledger = Sequel.sqlite
-    assert_nil Nabu::Languages.new(ledger: old_ledger).context("chu")
     # a catalog predating migration 014 (language_records absent)
     assert_nil Nabu::Languages.new(catalog: old_catalog).context("chu")
   end

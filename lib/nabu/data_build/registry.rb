@@ -4,13 +4,20 @@ require_relative "feature"
 require_relative "actib_anchors_builder"
 require_relative "aozora_gaiji_builder"
 require_relative "cantigas_builder"
+require_relative "char_postings_builder"
+require_relative "document_dates_builder"
 require_relative "form_lemma"
 require_relative "hani_fold_builder"
 require_relative "kanripo_gaiji_builder"
 require_relative "kyujitai_fold_builder"
+require_relative "lect_assignments_builder"
 require_relative "meter_builder"
+require_relative "place_refs_builder"
+require_relative "places_lpf_builder"
 require_relative "segmentation_builder"
 require_relative "sabellic_loans_builder"
+require_relative "sign_table_builder"
+require_relative "unikemet_signs_builder"
 require_relative "value_signs_builder"
 require_relative "verb_lemma_builder"
 require_relative "wylie_fold_builder"
@@ -39,6 +46,11 @@ module Nabu
     # ISO 639-3 assigns NO code to Old Galician-Portuguese: roa-opt is the
     # BCP 47 collective-tag convention (roa Romance + opt) Wiktionary and
     # Nabu's catalog already use (D55-a), so the ISO static is honestly nil.
+    # mul is ISO 639-3's SPECIAL code "Multiple languages" (scope S) — it
+    # names content, not a languoid, so Glottolog carries no row for it
+    # (checked 2026-08-11 against the same cone: no languages.csv row has
+    # ISO639P3code mul) and the glottocode is honestly nil. The
+    # cross-language corpus-layer datasets file under mul/ (№R-25, P73-0).
     LANGUAGES = {
       "jpn" => Language.new(id: "jpn", name: "Japanese", glottocode: "nucl1643", iso639p3: "jpn"),
       "san" => Language.new(id: "san", name: "Sanskrit", glottocode: "sans1269", iso639p3: "san"),
@@ -49,7 +61,12 @@ module Nabu
       "lzh" => Language.new(id: "lzh", name: "Classical Chinese", glottocode: "lite1248", iso639p3: "lzh"),
       "sux" => Language.new(id: "sux", name: "Sumerian", glottocode: "sume1241", iso639p3: "sux"),
       "roa-opt" => Language.new(id: "roa-opt", name: "Old Galician-Portuguese",
-                                glottocode: "oldp1257", iso639p3: nil)
+                                glottocode: "oldp1257", iso639p3: nil),
+      "mul" => Language.new(id: "mul", name: "Multiple languages", glottocode: nil, iso639p3: "mul"),
+      # egyp1246 = Egyptian (Ancient), ISO egy, level: language — checked
+      # 2026-08-11 (P73-9) against the same cone.
+      "egy" => Language.new(id: "egy", name: "Egyptian (Ancient)", glottocode: "egyp1246",
+                            iso639p3: "egy")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
@@ -278,6 +295,171 @@ module Nabu
         maintenance: "re-derive after a cantigas re-sync (Littera is a living edition that " \
                      "corrects pages in place; the stale-ingest guard enforces freshness); every " \
                      "build re-derives the citation-fidelity census into nabu.eval"
+      ),
+      Feature.new(
+        slug: "mul/lect-assignments", language: LANGUAGES.fetch("mul"),
+        title: "Per-document historical-stage (lect) assignments across the multilingual catalog",
+        # gold-DERIVED about the projection; the per-row basis column IS the
+        # tier honesty — rule: rows read upstream period metadata, date-band
+        # rows are inference over dates, and the consumer sees which is
+        # which (the survey §2.3 posture).
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "document-urn",
+        # No inputs/cones: the lect journal is the source of truth (the
+        # aozora posture) — rows cite documents at URN grain, stable across
+        # syncs by the conformance contract, so no cone sha is load-bearing;
+        # the recipe embeds the published-slice sha256 instead. Contributing
+        # corpora are cited in sources.bib per build.
+        inputs: [], canonical_cones: [], builder: LectAssignmentsBuilder,
+        rationale: "Publishes the per-document journal behind Nabu's lect facet — ~482K (URN, " \
+                   "language-code) → historical-stage assignments (Old vs Neo-Babylonian, Ur III " \
+                   "vs OB Sumerian, Vedic vs Classical Sanskrit, ...) with the basis and note " \
+                   "in-band per row — the corpus-scale stage stratification no other project " \
+                   "publishes; the id grammar and registry are public in nabu-lects (cited). " \
+                   "License classes open+attribution only (nc/odbl/research_private slices " \
+                   "excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 " \
+                   "carve-out dataset carrying the share-alike lanes (edh, aes, ...).",
+        maintenance: "re-derive after journal-moving events (a sync wave re-running lect rules, " \
+                     "new owner rulings, a rebuild) — the published-slice digest makes an " \
+                     "unchanged journal a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/place-refs", language: LANGUAGES.fetch("mul"),
+        title: "Per-document place references across the multilingual catalog, gazetteer-ready",
+        # gold-DERIVED: the claims are upstream assertions and registry
+        # decisions carried mechanically; the per-row Basis column says
+        # which is which (the survey §2.1 posture).
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "document-urn",
+        # nabu-places is the ONE declared input: the Basis column cites its
+        # decisions, so its cone sha rides the manifest and the stale-ingest
+        # guard covers it. The doc→name pairs come from the catalog at URN
+        # grain (the lect-assignments posture) — the recipe embeds the
+        # published-slice sha256.
+        inputs: ["nabu-places"], canonical_cones: ["nabu-places"], builder: PlaceRefsBuilder,
+        rationale: "Publishes the compiled doc→place projection behind Nabu's places desk — " \
+                   "~586K (URN, claim) rows, every historical ref spelling (verbatim upstream " \
+                   "URLs, multi-URL fields, namespaced mints) folded to clean namespace:id form " \
+                   "(pleiades:, tm:, geonames:, cigs:, np:) ready to join gazetteer geometry, " \
+                   "with the verbatim upstream name and the Basis (upstream-asserted vs " \
+                   "nabu-places-applied) in-band per row. License classes open+attribution only " \
+                   "(the iip nc slice excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 " \
+                   "— the №R-24 carve-out (edh/aes/elephantine/ceipom share-alike lanes and the " \
+                   "conservative tm:-index inheritance ride inside it).",
+        maintenance: "re-derive after place-moving events (a sync wave, a nabu-places registry " \
+                     "sync + apply, a rebuild) — the published-slice digest makes an unchanged " \
+                     "projection a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/places-lpf", language: LANGUAGES.fetch("mul"),
+        title: "Referenced places as Linked Places Format v1.3 + LP-TSV (the gazetteer-exchange shape)",
+        # gold-DERIVED: a mechanical projection of held index/crosswalk/axis
+        # data into the LPF shape; the fclass keyword mapping is the one
+        # interpretive move and its unmapped remainder is censused in-band.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "none",
+        # The gazetteer cones ARE load-bearing here (titles and coordinates
+        # republish from place_index), so all three ride the manifest under
+        # the stale-ingest guard.
+        inputs: %w[pleiades trismegistos cigs],
+        canonical_cones: %w[pleiades trismegistos cigs], builder: PlacesLpfBuilder,
+        rationale: "Publishes every place the catalog's documents reference as an LPF v1.3 " \
+                   "FeatureCollection plus the LP-TSV v0.5 upload table (the World Historical " \
+                   "Gazetteer's intake shapes): one Feature per claim (merging identities is " \
+                   "entity resolution — the crosswalk rides as closeMatch links instead), " \
+                   "attested spellings cited to their corpora, titles/coordinates from " \
+                   "place_index (never invented), when-spans aggregated from document dates. " \
+                   "The P69-2 GeoNames rider resolved NOT WANTED (recorded in the builder): " \
+                   "geonames claims publish at document grain in mul/place-refs. CC BY-SA 4.0 " \
+                   "— the TM lane's share-alike inheritance (№R-24).",
+        maintenance: "re-derive after gazetteer syncs (pleiades/trismegistos/cigs — the " \
+                     "stale-ingest guard enforces freshness) or place-moving catalog events; " \
+                     "the collection digest in the recipe makes an unchanged projection a " \
+                     "fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/document-dates", language: LANGUAGES.fetch("mul"),
+        title: "Normalized document datings across the multilingual catalog, verbatim raw in-band",
+        # gold-DERIVED: upstream-structured bounds carried mechanically
+        # alongside band-inferred ones; Precision and Date_Raw are the
+        # per-row honesty (the survey §2.4 posture).
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "document-urn",
+        # The catalog dating projection is the source of truth at URN grain
+        # (the lect-assignments posture); the recipe embeds the
+        # published-slice sha256. №R-28 (regnal precision) re-derives in.
+        inputs: [], canonical_cones: [], builder: DocumentDatesBuilder,
+        rationale: "Publishes the dating layer behind Nabu's timeline — ~700K dated documents " \
+                   "as normalized signed year spans (negative = BCE) with the VERBATIM upstream " \
+                   "dating string riding every row, so each normalization is checkable against " \
+                   "its source. License classes open+attribution only — the nc slices AND the " \
+                   "rundata ODbL lane (a copyleft class of its own) are excluded row-by-row, " \
+                   "censused in nabu.eval; CC BY-SA 4.0 — the №R-24 carve-out carrying the " \
+                   "share-alike lanes (edh, tla-hf, aes, ...).",
+        maintenance: "re-derive after dating-moving events (sync waves, infer-dates rule " \
+                     "changes — the №R-28 regnal upgrade lands here on its next build); the " \
+                     "published-slice digest makes an unchanged projection a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/char-postings", language: LANGUAGES.fetch("mul"),
+        title: "Han character × corpus doc-frequency census (the graded-reading substrate)",
+        # gold-DERIVED: a mechanical census over ingested corpora — no
+        # interpretation, no sampling.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "none",
+        # The fulltext census is the source of truth (derived from the
+        # whole ingested corpus set — no single cone sha is load-bearing);
+        # the recipe embeds the published-slice sha256.
+        inputs: [], canonical_cones: [], builder: CharPostingsBuilder,
+        rationale: "Publishes the char_postings census behind Nabu's Han cards and graded-" \
+                   "reading lane — one row per (character, corpus) with the attesting document " \
+                   "count, spanning lzh/jpn/otb/ojp collections (hence mul/ — the naming the " \
+                   "survey left TBD, settled here). The Edubba P-1 rider's character half: " \
+                   "frequency data any school can consume, derived from Nabu's ingested " \
+                   "corpora only (Edubba's own TSVs are NEVER an input — the circularity " \
+                   "guard). nc slices (cbeta, ud, e84000, openiti) excluded row-by-row, " \
+                   "censused; CC BY-SA 4.0 — the kanripo lane's share-alike grant (№R-24).",
+        maintenance: "re-derive after CJK-lane syncs (the census rebuilds with the fulltext " \
+                     "index); the published-slice digest makes an unchanged census a " \
+                     "fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "sux/sign-table", language: LANGUAGES.fetch("sux"),
+        title: "Compiled cuneiform sign cards — OSL identity, concordances, attestation counts",
+        # gold-DERIVED: a mechanical join of CC0 curation plus a measured
+        # counting pass whose scope is stated and censused in-band.
+        status: :available, tier: "gold-derived", anchoring: "none",
+        inputs: ["osl"], canonical_cones: ["osl"], builder: SignTableBuilder,
+        rationale: "The per-sign reference card compiled from what sux/value-signs flattens " \
+                   "value-wise: one row per top-level OSL sign with codepoints, every print-" \
+                   "list number, the CDLI reading concordance, AND per-source attestation doc-" \
+                   "counts over the open cuneiform corpora (cdli/oracc/tlhdig — the Edubba P-1 " \
+                   "rider's sign half, true sign-counts at last). Counting scope stated and " \
+                   "censused (value/logogram tokens; compounds out); nc lanes (etcsl, ebl) " \
+                   "have NO count columns, so no nc contribution can hide in an integer — the " \
+                   "lemma_frequencies lesson. Core CC BY 4.0; the Wiktionary/aes BY-SA sense " \
+                   "lanes are deliberately deferred to a later sidecar dataset so the core " \
+                   "stays BY (survey §2.6).",
+        maintenance: "re-derive after `nabu sync osl` or cuneiform-lane syncs (counts move " \
+                     "with the catalog); the counts digest in the recipe makes an unchanged " \
+                     "state a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "egy/unikemet-signs", language: LANGUAGES.fetch("egy"),
+        title: "The Egyptian sign spine — Unikemet codepoints with Gardiner codes and tool concordances",
+        # gold-DERIVED: a lossless verbatim flattening of the Unicode
+        # consortium's curated data file.
+        status: :available, tier: "gold-derived", anchoring: "none",
+        inputs: ["unikemet"], canonical_cones: ["unikemet"], builder: UnikemetSignsBuilder,
+        rationale: "Flattens Unikemet.txt to one row per encoded Egyptian hieroglyph — the " \
+                   "Gardiner-style kEH_Cat code, the original Hieroglyphica-era kEH_UniK code, " \
+                   "core/legacy status, description, functions, sound values, and the JSesh/" \
+                   "Hieroglyphica/IFAO concordances every Egyptological tool joins on (the " \
+                   "same spine Nabu's hiero card and the Edubba overlay key against). Every " \
+                   "cell verbatim; absent tags stay empty. Permissive input (Unicode License " \
+                   "V3) → clean CC BY 4.0.",
+        maintenance: "re-derive after `nabu sync unikemet` (upstream moves at annual Unicode " \
+                     "releases); mechanical, no review needed beyond spot-checks"
       )
     ].freeze
 

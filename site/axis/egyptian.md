@@ -24,7 +24,7 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `aes` | texts | attribution | wired · manual | 26,011 docs / 202,426 passages |
 | `aed` | dictionary | attribution | wired · manual | 35,052 entries |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
-| `edubba-overlay` | feature module | attribution | not yet wired | not synced yet |
+| `edubba-overlay` | feature module | attribution | not yet wired | nothing held yet |
 | `unikemet` | feature module | open | not yet wired | nothing held yet |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 August 2026)</span>: `egy` 51,130 · `ger` 12,985 · `cop` 12,222 · `eng` 4,861 · `grc` 3,311 · `egy-Egyd` 1,424 · `arc` 1,189 · `ara` 962 · `und` 168 · `phn` 94 … and 19 more (`nabu axis egyptian` lists all).

@@ -3,6 +3,7 @@
 require "csv"
 
 require_relative "../../normalize"
+require_relative "../../regnal_years"
 
 module Nabu
   module Store
@@ -24,9 +25,15 @@ module Nabu
       # "1200-700 BC". A "?"-suffixed period stays parseable — the doubt
       # rides date_raw verbatim.
       #
-      # dates_referenced regnal values ("Šulgi.32.09.03") resolve to NO
-      # years — that would take an invented reign table; they stay
-      # document metadata + the ruler facet.
+      # dates_referenced regnal values ("Šulgi.32.09.03") resolve through
+      # the RULED reign table (config/regnal_years.yml — №R-28, 2026-08-11,
+      # the P73-6 scout ratified; NOT invented: middle chronology / Parker
+      # & Dubberstein, stated per entry). FINER WINS: a ruled ruler's
+      # numbered year replaces the period band with its one conventional
+      # year (precision "regnal-year"; YY=00 gives the whole-reign span,
+      # "regnal-reign"; "(us2 year)" shifts +1); unruled rulers (ED III,
+      # OAkk, floating dynasts — the table header names them) and
+      # out-of-range years fall back to the period band, censused.
       #
       # Place: provenience verbatim (NFC), except the no-place shapes
       # ("uncertain (mod. uncertain)", "unknown", …). No gazetteer here —
@@ -48,6 +55,12 @@ module Nabu
         # Proveniences that are explicit don't-knows, not places.
         NO_PLACE = /\A(?:uncertain|unknown|unclear)\b/i
 
+        # A regnal dating's leading "Ruler.YY." — the ruler segment must
+        # carry a letter (placeholder shapes like "00." and "--." never
+        # reach the table).
+        REGNAL = /\A([^.]*\p{L}[^.]*)\.(\d{1,2})\./
+        US2_SUFFIX = /\(us2 year\)/
+
         module_function
 
         # Stream the canonical catalog CSV, join id_text → urn → document,
@@ -57,7 +70,8 @@ module Nabu
         # still insert), +invalid+ the malformed-range tripwire (ascending
         # BC, zero years).
         def build(catalog:, canonical_dir:)
-          counts = { documents: 0, undated: 0, invalid: 0 }
+          counts = { documents: 0, undated: 0, invalid: 0,
+                     regnal: 0, regnal_unruled: 0, regnal_out_of_range: 0 }
           path = File.join(canonical_dir, CATALOG_RELPATH)
           return counts unless File.file?(path) && !LfsFetch.pointer?(path)
 
@@ -79,7 +93,8 @@ module Nabu
         end
 
         def insert_row(catalog, document_id, row, counts)
-          date = extract_period(row["period"].to_s.strip, counts)
+          date = extract_regnal(row["dates_referenced"].to_s.strip, counts) ||
+                 extract_period(row["period"].to_s.strip, counts)
           counts[:undated] += 1 if date.nil?
           place = extract_place(row["provenience"].to_s)
           return if date.nil? && place.nil?
@@ -89,6 +104,27 @@ module Nabu
           TimelineBuilder.insert_timeline(
             catalog, document_id, timeline.merge(place_name: place, place_ref: nil), CDLI_SLUG
           )
+        end
+
+        # The RULED regnal conversion (№R-28), or nil for anything the
+        # table does not answer — the period band is always the fallback.
+        def extract_regnal(value, counts)
+          return nil if value.empty?
+          return nil if (m = REGNAL.match(value)).nil?
+          return nil if (table = Nabu::RegnalYears.default).nil?
+
+          year_number = m[2].to_i
+          span = table.span(m[1], year_number, us2: value.match?(US2_SUFFIX))
+          case span
+          when :unruled then counts[:regnal_unruled] += 1
+          when :out_of_range then counts[:regnal_out_of_range] += 1
+          else
+            counts[:regnal] += 1
+            return { not_before: span[0], not_after: span[1],
+                     precision: year_number.zero? ? "regnal-reign" : "regnal-year",
+                     date_raw: value }
+          end
+          nil
         end
 
         # The period string's own year envelope (module note), or nil.

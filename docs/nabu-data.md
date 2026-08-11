@@ -66,7 +66,7 @@ valid-by-construction `Feature` value:
 
 | field | meaning |
 | --- | --- |
-| `slug` | `<lang>/<feature>`, lower-case hyphen-joined segments; also the dataset directory path |
+| `slug` | `<lang>/<feature>`, lower-case hyphen-joined segments; also the dataset directory path. Single-language datasets lead with the language code; datasets spanning the whole catalog file under `mul/` — ISO 639-3's special code "Multiple languages" (№R-25, P73-0) |
 | `language` | a `Language` value: Nabu's code + the `languages.csv` statics (Name, Glottocode, ISO 639-3) |
 | `title` | the dataset's human title (the manifest `title`) |
 | `status` | `:available` (builder landed) or `:planned` (build refuses) |
@@ -158,8 +158,12 @@ nabu-data is a **mixed-license repository** (owner ruling D51-a,
 and its README states the dataset's own license explicitly. The allowed set
 is exactly two values — `CC-BY-4.0` (the default) and `CC-BY-SA-4.0`
 (datasets derived from share-alike inputs, whose READMEs add the one-line
-carve-out: the repository's default license does not apply to them). The
-set is closed by construction (`Nabu::DataBuild::LICENSES`; the `Feature`
+carve-out: the repository's default license does not apply to them). A
+BY-SA dataset additionally ships its **own `LICENSE` file** (the canonical
+CC BY-SA 4.0 plaintext, emitted by the runner — №R-24, P73-0), so the
+carve-out is visible in the dataset directory itself; default-license
+datasets ship none, because the repository-level LICENSE already covers
+them. The set is closed by construction (`Nabu::DataBuild::LICENSES`; the `Feature`
 record refuses anything else): **NC/ND can never join it** — every dataset
 here is a derivative work built to be reused, so non-commercial or
 no-derivatives inputs are disqualifying at intake, and no NC/ND value is
@@ -186,6 +190,13 @@ no page update is a red suite, and vice versa.
 | `sux/value-signs` | available | gold | CC-BY-4.0 | sux | osl |
 | `xct/actib-anchors` | available | gold-derived | CC-BY-4.0 | xct | derge-kangyur, actib |
 | `roa-opt/cantigas` | available | gold | CC-BY-4.0 | roa-opt | cantigas |
+| `mul/lect-assignments` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `mul/place-refs` | available | gold-derived | CC-BY-SA-4.0 | mul | nabu-places |
+| `mul/places-lpf` | available | gold-derived | CC-BY-SA-4.0 | mul | pleiades, trismegistos, cigs |
+| `mul/document-dates` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `mul/char-postings` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `sux/sign-table` | available | gold-derived | CC-BY-4.0 | sux | osl |
+| `egy/unikemet-signs` | available | gold-derived | CC-BY-4.0 | egy | unikemet |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -290,6 +301,63 @@ nabu-data's first re-publication: ACTib's known weakness is that its seg/POS lay
 The first full-corpus re-publication: the complete secular lyric of medieval Galician-Portuguese — ~1,680 cantigas, ~34K verse lines from the three great cancioneiros — projected from the Littera critical edition (cantigas.fcsh.unl.pt) into the corpus's first machine-readable form (the scholarly database is superb and browser-only: no TEI, no export), under the coordinator's written any-use grant (№45-2) with the project's own citation format riding every file — verse lines anchored urn+sha into the catalog, the cantiga/author registries, and the corpus-wide cancioneiro concordance parsed from the edition's manuscript sigla, with the citation-fidelity census (printed-number confirmations, refrain gaps, empty lines, the unattributed page) published in-band as nabu.eval.
 
 **Maintenance**: re-derive after a cantigas re-sync (Littera is a living edition that corrects pages in place; the stale-ingest guard enforces freshness); every build re-derives the citation-fidelity census into nabu.eval
+
+### `mul/lect-assignments` — Per-document historical-stage (lect) assignments across the multilingual catalog
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: document-urn · **Inputs**: —
+
+Publishes the per-document journal behind Nabu's lect facet — ~482K (URN, language-code) → historical-stage assignments (Old vs Neo-Babylonian, Ur III vs OB Sumerian, Vedic vs Classical Sanskrit, ...) with the basis and note in-band per row — the corpus-scale stage stratification no other project publishes; the id grammar and registry are public in nabu-lects (cited). License classes open+attribution only (nc/odbl/research_private slices excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out dataset carrying the share-alike lanes (edh, aes, ...).
+
+**Maintenance**: re-derive after journal-moving events (a sync wave re-running lect rules, new owner rulings, a rebuild) — the published-slice digest makes an unchanged journal a fingerprint no-op
+
+### `mul/place-refs` — Per-document place references across the multilingual catalog, gazetteer-ready
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: document-urn · **Inputs**: nabu-places
+
+Publishes the compiled doc→place projection behind Nabu's places desk — ~586K (URN, claim) rows, every historical ref spelling (verbatim upstream URLs, multi-URL fields, namespaced mints) folded to clean namespace:id form (pleiades:, tm:, geonames:, cigs:, np:) ready to join gazetteer geometry, with the verbatim upstream name and the Basis (upstream-asserted vs nabu-places-applied) in-band per row. License classes open+attribution only (the iip nc slice excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out (edh/aes/elephantine/ceipom share-alike lanes and the conservative tm:-index inheritance ride inside it).
+
+**Maintenance**: re-derive after place-moving events (a sync wave, a nabu-places registry sync + apply, a rebuild) — the published-slice digest makes an unchanged projection a fingerprint no-op
+
+### `mul/places-lpf` — Referenced places as Linked Places Format v1.3 + LP-TSV (the gazetteer-exchange shape)
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: pleiades, trismegistos, cigs
+
+Publishes every place the catalog's documents reference as an LPF v1.3 FeatureCollection plus the LP-TSV v0.5 upload table (the World Historical Gazetteer's intake shapes): one Feature per claim (merging identities is entity resolution — the crosswalk rides as closeMatch links instead), attested spellings cited to their corpora, titles/coordinates from place_index (never invented), when-spans aggregated from document dates. The P69-2 GeoNames rider resolved NOT WANTED (recorded in the builder): geonames claims publish at document grain in mul/place-refs. CC BY-SA 4.0 — the TM lane's share-alike inheritance (№R-24).
+
+**Maintenance**: re-derive after gazetteer syncs (pleiades/trismegistos/cigs — the stale-ingest guard enforces freshness) or place-moving catalog events; the collection digest in the recipe makes an unchanged projection a fingerprint no-op
+
+### `mul/document-dates` — Normalized document datings across the multilingual catalog, verbatim raw in-band
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: document-urn · **Inputs**: —
+
+Publishes the dating layer behind Nabu's timeline — ~700K dated documents as normalized signed year spans (negative = BCE) with the VERBATIM upstream dating string riding every row, so each normalization is checkable against its source. License classes open+attribution only — the nc slices AND the rundata ODbL lane (a copyleft class of its own) are excluded row-by-row, censused in nabu.eval; CC BY-SA 4.0 — the №R-24 carve-out carrying the share-alike lanes (edh, tla-hf, aes, ...).
+
+**Maintenance**: re-derive after dating-moving events (sync waves, infer-dates rule changes — the №R-28 regnal upgrade lands here on its next build); the published-slice digest makes an unchanged projection a fingerprint no-op
+
+### `mul/char-postings` — Han character × corpus doc-frequency census (the graded-reading substrate)
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: —
+
+Publishes the char_postings census behind Nabu's Han cards and graded-reading lane — one row per (character, corpus) with the attesting document count, spanning lzh/jpn/otb/ojp collections (hence mul/ — the naming the survey left TBD, settled here). The Edubba P-1 rider's character half: frequency data any school can consume, derived from Nabu's ingested corpora only (Edubba's own TSVs are NEVER an input — the circularity guard). nc slices (cbeta, ud, e84000, openiti) excluded row-by-row, censused; CC BY-SA 4.0 — the kanripo lane's share-alike grant (№R-24).
+
+**Maintenance**: re-derive after CJK-lane syncs (the census rebuilds with the fulltext index); the published-slice digest makes an unchanged census a fingerprint no-op
+
+### `sux/sign-table` — Compiled cuneiform sign cards — OSL identity, concordances, attestation counts
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: osl
+
+The per-sign reference card compiled from what sux/value-signs flattens value-wise: one row per top-level OSL sign with codepoints, every print-list number, the CDLI reading concordance, AND per-source attestation doc-counts over the open cuneiform corpora (cdli/oracc/tlhdig — the Edubba P-1 rider's sign half, true sign-counts at last). Counting scope stated and censused (value/logogram tokens; compounds out); nc lanes (etcsl, ebl) have NO count columns, so no nc contribution can hide in an integer — the lemma_frequencies lesson. Core CC BY 4.0; the Wiktionary/aes BY-SA sense lanes are deliberately deferred to a later sidecar dataset so the core stays BY (survey §2.6).
+
+**Maintenance**: re-derive after `nabu sync osl` or cuneiform-lane syncs (counts move with the catalog); the counts digest in the recipe makes an unchanged state a fingerprint no-op
+
+
+### `egy/unikemet-signs` — The Egyptian sign spine — Unikemet codepoints with Gardiner codes and tool concordances
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: unikemet
+
+Flattens Unikemet.txt to one row per encoded Egyptian hieroglyph — the Gardiner-style kEH_Cat code, the original Hieroglyphica-era kEH_UniK code, core/legacy status, description, functions, sound values, and the JSesh/Hieroglyphica/IFAO concordances every Egyptological tool joins on (the same spine Nabu's hiero card and the Edubba overlay key against). Every cell verbatim; absent tags stay empty. Permissive input (Unicode License V3) → clean CC BY 4.0.
+
+**Maintenance**: re-derive after `nabu sync unikemet` (upstream moves at annual Unicode releases); mechanical, no review needed beyond spot-checks
 
 ## What the rail never does
 
