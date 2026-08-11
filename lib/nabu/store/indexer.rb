@@ -119,6 +119,18 @@ module Nabu
       # this file: derived, disposable, never migrated.
       CHAR_POSTINGS_TABLE = :char_postings
 
+      # P72-1 (the Edubba graded-reading lane): per LIVE Han-bearing passage,
+      # its distinct sorted (already-folded) chars, their count, and the four
+      # RAREST by global docs-rank — r1..r4, each indexed. The coverage
+      # search's candidate columns: a passage with ≤N foreign chars must
+      # carry one of its N+1 rarest INSIDE the charset, so candidates come
+      # from indexed r_i IN (charset) lookups whose selectivity tracks the
+      # answer size — never a scan. Ranks are performance-only (the exact
+      # subset check re-verifies), so refresh may rank against current
+      # postings. Same lifecycle as the postings: derived, disposable.
+      PASSAGE_CHARS_TABLE = :passage_chars
+      RAREST_SLOTS = 4
+
       # The postings' character class: Unicode Han (CJK unified + extensions
       # + compatibility). Kana/hangul/other scripts are not posted — the Han
       # card is the one consumer.
@@ -278,6 +290,11 @@ module Nabu
         timed(profile, :trigram) do
           rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
         end
+        # P72-1: the coverage index — its own streaming pass (the trigram
+        # precedent), AFTER the postings exist (the rarity ranks read them).
+        timed(profile, :passage_chars) do
+          rebuild_passage_chars!(catalog: catalog, fulltext: fulltext)
+        end
         timed(profile, :alignment) do
           AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
         end
@@ -367,8 +384,15 @@ module Nabu
             fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
             write_char_postings(fulltext, chars)
           end
+          # P72-1: swap this source's coverage-index slice too (ranks from
+          # current postings — performance-only, the exact check verifies).
+          if fulltext.table_exists?(PASSAGE_CHARS_TABLE)
+            fulltext[PASSAGE_CHARS_TABLE].where(source_id: source_id).delete
+            write_passage_chars(fulltext, passage_chars_rows(catalog, fulltext, source_id: source_id))
+          end
         end
         rebuild_char_postings!(catalog: catalog, fulltext: fulltext) unless fulltext.table_exists?(CHAR_POSTINGS_TABLE)
+        rebuild_passage_chars!(catalog: catalog, fulltext: fulltext) unless fulltext.table_exists?(PASSAGE_CHARS_TABLE)
         refresh_alignment(catalog, fulltext, alignments, source_id)
         ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext) if lemmas_changed || reflexes_changed
         count
@@ -496,6 +520,70 @@ module Nabu
           .each { |row| accumulate_char_postings(chars, row) }
         fulltext.transaction { write_char_postings(fulltext, chars) }
         chars.size
+      end
+
+      # P72-1: drop and rebuild the whole coverage index — one streaming
+      # pass over the live passages (needs the postings for rarity ranks).
+      def rebuild_passage_chars!(catalog:, fulltext:)
+        fulltext.drop_table?(PASSAGE_CHARS_TABLE)
+        fulltext.create_table(PASSAGE_CHARS_TABLE) do
+          Integer :rowid, primary_key: true # = passages.id, the FTS rowid convention
+          Integer :source_id, null: false
+          String :language
+          Integer :nchars, null: false
+          String :chars, null: false
+          String :r1
+          String :r2
+          String :r3
+          String :r4
+        end
+        write_passage_chars(fulltext, passage_chars_rows(catalog, fulltext))
+        fulltext.alter_table(PASSAGE_CHARS_TABLE) do
+          add_index :r1
+          add_index :r2
+          add_index :r3
+          add_index :r4
+          add_index :source_id
+        end
+      end
+
+      # The row stream for the coverage index (whole corpus, or one source's
+      # slice). Rarity rank = ascending global docs total from the postings;
+      # a char the postings have not seen ranks rarest of all.
+      def passage_chars_rows(catalog, fulltext, source_id: nil)
+        ranks = char_rarity_ranks(fulltext)
+        scope = live_passages(catalog)
+        scope = scope.where(Sequel[:documents][:source_id] => source_id) if source_id
+        scope = scope.select(Sequel[:passages][:id].as(:passage_id),
+                             Sequel[:passages][:text_normalized], Sequel[:passages][:language],
+                             Sequel[:documents][:source_id].as(:source_id))
+        Enumerator.new do |y|
+          scope.each do |row|
+            text = row.fetch(:text_normalized).to_s
+            next unless text.match?(HAN)
+
+            distinct = text.scan(HAN).uniq.sort
+            rarest = distinct.min_by(RAREST_SLOTS) { |c| [ranks.fetch(c, -1), c] }
+            y << { rowid: row.fetch(:passage_id), source_id: row.fetch(:source_id),
+                   language: row[:language], nchars: distinct.size, chars: distinct.join,
+                   r1: rarest[0], r2: rarest[1], r3: rarest[2], r4: rarest[3] }
+          end
+        end
+      end
+
+      def write_passage_chars(fulltext, rows)
+        fulltext.transaction do
+          rows.each_slice(BATCH_SIZE) { |batch| fulltext[PASSAGE_CHARS_TABLE].multi_insert(batch) }
+        end
+      end
+
+      # char -> ascending global docs total (smaller = rarer), read from the
+      # postings written moments earlier in the same pass.
+      def char_rarity_ranks(fulltext)
+        return {} unless fulltext.table_exists?(CHAR_POSTINGS_TABLE)
+
+        fulltext[CHAR_POSTINGS_TABLE].group(:char).select(:char) { sum(:docs).as(:total) }
+                                                  .to_h { |row| [row[:char], row[:total]] }
       end
 
       # ALL of the source's passage ids and urns — withdrawn included: rows

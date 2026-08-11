@@ -9,6 +9,35 @@ require "tmpdir"
 # the CJK fixtures (Unihan + BabelStone IDS + KRADFILE + TLS + a seeded
 # corpus passage) and asserts the rendered sections.
 class CharCommandTest < Minitest::Test
+  # P72-2 (Edubba FR-2): the Han card's frozen --json contract — the
+  # payload mirrors the Card shape one-to-one, so the fields Edubba
+  # consumes (strokes, radical, IDS+parts, variants, readings, OC/MC,
+  # TLS, desk refs, per-corpus attestation) ride as data, not prose.
+  def test_char_json_emits_the_frozen_han_contract
+    with_char_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char 棄 --json]) }
+      assert_nil status
+      payload = JSON.parse(out)
+      assert_equal "棄", payload["glyph"]
+      card = payload.fetch("card")
+      assert_equal 12, card["total_strokes"]
+      assert_equal 75, card.dig("radical", "number")
+      assert_equal "木", card.dig("radical", "glyph")
+      assert_equal "⿳亠厶⿻廿木", card.fetch("ids").first.fetch("sequence"),
+                   "IDS decompositions ride as a per-source list"
+      assert_includes card["components"], "木"
+      assert(card["variants"].any? { |v| v["relation"] == "simplified" && v["glyph"] == "弃" })
+      assert_includes card["readings_sinoxenic"], %w[Mandarin qì],
+                      "sinoxenic readings are [stratum, reading] pairs"
+      assert card.key?("old_chinese")
+      assert card.key?("tls")
+      assert_equal 1, card.dig("corpus", "lzh"),
+                   "per-language corpus attestation rides as data"
+      assert_equal [["kanripo", "lzh", 1]], card["corpus_by_source"],
+                   "the P72-5 per-source split rides beside it"
+    end
+  end
+
   def test_char_of_the_acceptance_glyph_renders_the_whole_card
     with_char_catalog do |config|
       out, _err, status = with_config(config) { run_cli(%w[char 棄]) }
