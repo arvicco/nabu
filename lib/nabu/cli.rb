@@ -2860,8 +2860,9 @@ module Nabu
       kuni; lowercase also answers as pinyin, each hit labeled). Every
       lane lists every character that carries the reading.
 
-      --json (sign cards only) emits the frozen machine contract the Edubba
-      downstream consumes; an ambiguous value input lists ALL candidate
+      --json emits the frozen machine contract the Edubba downstream
+      consumes — the cuneiform/hieroglyph sign cards (P65) and the Han
+      card (P72-2) alike; an ambiguous value input lists ALL candidate
       signs, never one silently.
 
       The Han card composes every shelf the library holds — the join no
@@ -7000,13 +7001,9 @@ module Nabu
 
       # -- the P65 `nabu char` dispatch lanes --------------------------------
 
-      # The original P37-4 Han path, verbatim. --json has no Han contract
-      # yet — said plainly (the sign cards carry one).
+      # The original P37-4 Han path; --json emits the P72-2 frozen contract
+      # (the sign cards' P65 pattern extended to the Han card).
       def han_char_card(config, input)
-        if options[:json]
-          raise Thor::Error, "char --json: the Han card has no JSON contract yet — the " \
-                             "cuneiform/hieroglyph sign cards do (P65)"
-        end
         catalog = open_catalog(config)
         raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
         unless catalog.table_exists?(:dictionary_entries)
@@ -7016,7 +7013,11 @@ module Nabu
 
         fulltext = open_fulltext(config)
         card = Nabu::Query::Char.new(catalog: catalog, fulltext: fulltext).run(input)
-        print_char_card(card)
+        if options[:json]
+          say JSON.pretty_generate(Nabu::Query::Char.json_payload(input, card))
+        else
+          print_char_card(card)
+        end
       ensure
         catalog&.disconnect
         fulltext&.disconnect
@@ -7406,6 +7407,12 @@ module Nabu
         totals = card.corpus.sort_by { |_, count| -count }
                             .map { |lang, count| "#{lang} #{count}" }.join("  ·  ")
         say "corpus attestation: #{totals}"
+        # P72-5: the per-source provenance split, when more than one source
+        # attests (a single-source panel would just repeat the line above).
+        split = card.corpus_by_source || []
+        return unless split.map(&:first).uniq.size > 1
+
+        say "  by source: #{split.map { |slug, lang, docs| "#{slug} #{lang} #{docs}" }.join('  ·  ')}"
       end
 
       def print_char_search_affordances(card)
