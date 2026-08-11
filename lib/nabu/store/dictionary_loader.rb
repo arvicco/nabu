@@ -36,16 +36,17 @@ module Nabu
     class DictionaryLoader
       TOOL = "nabu-dictionary-loader"
 
-      # +canonical_dir+ (P19-1) roots the language-notes accretion redirect:
+      # +language_shelf_dir+ (P19-1; P71-2 resolved by the caller) roots the
+      # language-notes accretion redirect:
       # notes a batch or adapter carries land as dossier SECTIONS under
-      # canonical/<canonical_dir>/local-language via Nabu::LanguageShelf (the
+      # the local-language shelf via Nabu::LanguageShelf (the
       # local shelf's sanctioned write gateway). nil (callers that cannot
       # name the corpus root — bare loader tests) accretes nothing, honestly.
-      def initialize(db:, source:, ledger: nil, canonical_dir: nil, profile: nil)
+      def initialize(db:, source:, ledger: nil, language_shelf_dir: nil, profile: nil)
         @db = db
         @source = source
         @ledger = ledger
-        @canonical_dir = canonical_dir
+        @language_shelf_dir = language_shelf_dir
         @profile = profile # Nabu::RebuildProfile or nil (P36-0; nil on sync)
       end
 
@@ -142,11 +143,11 @@ module Nabu
       # and per-record provenance rides the section header ("iecor"). The
       # changed dossiers refresh their derived catalog rows immediately, so
       # `nabu language` sees the accretion without waiting for the next
-      # local-language re-scan. Guarded: no canonical_dir accretes nothing,
+      # local-language re-scan. Guarded: no shelf dir accretes nothing,
       # silently and honestly.
       def accrete_document_language_notes(document)
         notes = document.language_notes
-        return if notes.empty? || @canonical_dir.nil?
+        return if notes.empty? || @language_shelf_dir.nil?
 
         source = notes.first.source
         accrete_dossier_sections(notes: notes, source: source)
@@ -157,13 +158,13 @@ module Nabu
       # stage witnesses) accretes them with its own manifest id as the
       # per-record provenance.
       def accrete_adapter_language_notes(adapter)
-        return if @canonical_dir.nil? || !adapter.class.respond_to?(:language_notes)
+        return if @language_shelf_dir.nil? || !adapter.class.respond_to?(:language_notes)
 
         accrete_dossier_sections(notes: adapter.class.language_notes, source: adapter.manifest.id)
       end
 
       def accrete_dossier_sections(notes:, source:)
-        shelf = Nabu::LanguageShelf.new(dir: Nabu::LanguageShelf.dir(@canonical_dir))
+        shelf = Nabu::LanguageShelf.new(dir: @language_shelf_dir)
         shelf.accrete!(notes: notes, source: source).each_value do |dossier|
           LanguageDossierLoader.replace_for_code!(@db, dossier)
         end

@@ -51,7 +51,7 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
    library.md §10 duty 4.
 5. **Dossier drift check** (P24-0): `bundle exec rake site:check` — the
    mechanical rider for duties 1–2 at the source grain: it flags
-   presence/mention drift between the canonical/local-source dossier
+   presence/mention drift between the local/shelves/local-source dossier
    descriptions and docs/library.md (this site's library page is covered
    transitively, as the printed map). Exit 1 lists the findings; fix by
    re-running the idempotent seed (`bin/nabu list

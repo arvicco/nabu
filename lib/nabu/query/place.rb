@@ -62,10 +62,10 @@ module Nabu
       ID_PATH = "$.place.pleiades"
       TEXT_PATHS = ["$.place.ancient", "$.place.modern", "$.place.settlement", "$.findspot"].freeze
 
-      def initialize(catalog:, pleiades: nil, canonical_dir: nil)
+      def initialize(catalog:, pleiades: nil, place_shelf_dir: nil)
         @catalog = catalog
         @pleiades = pleiades
-        @canonical_dir = canonical_dir
+        @place_shelf_dir = place_shelf_dir
       end
 
       # Resolve +query+ (id, place URL, namespaced ref, or exact title) to
@@ -170,9 +170,9 @@ module Nabu
       # The owner's authored place dossiers whose refs cover this id
       # (P64-4; empty without a canonical dir or matching files).
       def dossiers_for(namespace, id)
-        return [] if @canonical_dir.nil?
+        return [] if @place_shelf_dir.nil?
 
-        Nabu::PlaceDossiers.for_ids(@canonical_dir, [[namespace, id.to_s]])
+        Nabu::PlaceDossiers.for_ids(@place_shelf_dir, [[namespace, id.to_s]])
       end
 
       # Per-source counts of live documents whose captured id equals +id+,

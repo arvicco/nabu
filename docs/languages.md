@@ -22,7 +22,7 @@ cognate lists surface (`gkm`, `zle-ort`, `zlw-opl`…) — name, family,
 curated context, live holdings, and (since 2026-07-28) the related
 research axes: an `axes:` line naming the desks whose shelves hold the
 code, in ~0.2 s. **The curation's home is
-the `canonical/local-language/` dossier shelf (architecture §16)** — one
+the `local/shelves/local-language/` dossier shelf (architecture §16)** — one
 Markdown file per code, edit it in any editor, then `nabu sync
 local-language` re-derives the card. The owner-fired migration is
 complete: the dossiers on disk derive the catalog's `language_records`
@@ -248,5 +248,5 @@ full-text-searchable but not lemma-searchable (yet — see improvements
 *Maintenance: this page is refreshed at phase gates alongside library.md
 (§10 duty). The authoritative per-source assignments live in each
 adapter's manifest; the curated per-language prose lives in the
-`canonical/local-language/` dossiers (edit there, not here); folding
+`local/shelves/local-language/` dossiers (edit there, not here); folding
 rules in conventions §9; the proto-code rationale in conventions §4.*

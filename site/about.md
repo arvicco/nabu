@@ -93,15 +93,20 @@ on macOS, with a deliberately small dependency set and no cloud
 requirements at runtime. Storage is plain files, git, and SQLite — nothing
 that cannot be restored from a file copy.
 
-The central engineering guarantee is **rebuild-from-canonical**: upstream
-texts live as plain files in a git-tracked canonical layer, which is the
-permanent asset; every database is derived from it, and `nabu rebuild`
-regenerates the entire catalog from canonical data — proven byte-identical
-by test. Around that guarantee sit the retention mechanisms: files an
-upstream deletes are preserved and remain searchable, honestly labelled; a
-run-history ledger survives every rebuild; backups are exercised by an
-actual restore drill, not assumed; and a standing verification command
-re-parses every canonical file against the catalog's content hashes.
+The central engineering guarantee is **the derivability law**: everything
+permanent lives in three plain-file folders — the canonical texts (the
+universal asset), the project configuration, and the local instance
+(the owner's rulings, annotations, and operational ledger) — and every
+database is derived from them: `nabu rebuild` regenerates the entire
+catalog offline, proven byte-identical by test, and a dedicated drill
+proves the stronger claim by restoring ONLY those three folders and
+re-deriving the rest from scratch. Around that guarantee sit the
+retention mechanisms: files an upstream deletes are preserved and remain
+searchable, honestly labelled; the run-history ledger rides in the
+permanent set and survives rebuild and restore alike; backups are
+exercised by the actual restore drill, not assumed; and a standing
+verification command re-parses every canonical file against the
+catalog's content hashes.
 
 Development proceeds by a documented agent loop — work packets executed by
 Claude language models under test-driven ground rules, with owner-reviewed

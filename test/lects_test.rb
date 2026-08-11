@@ -211,6 +211,25 @@ class LectsTest < Minitest::Test
                  "no overrides_path loaded -> the source override never fires"
   end
 
+  # P71-0 (owner-ruled overlay-merge): overrides_path may be the
+  # [project, local] pair — per-source maps merge, the local row winning
+  # its slug while project-only slugs stay.
+  def test_overrides_path_pair_merges_with_local_precedence
+    Dir.mktmpdir do |dir|
+      local = File.join(dir, "lect_overrides.yml")
+      File.write(local, <<~YAML)
+        sources:
+          rundata:
+            gmq-pro: gmq:pro
+      YAML
+      merged = Nabu::Lects.load(FIXTURES, overrides_path: [LECT_OVERRIDES_PATH, local])
+      assert_equal "gmq:pro", merged.resolve("gmq-pro", source: "rundata"),
+                   "the local overlay wins its slug"
+      assert_equal "roa:pro", merged.resolve("la-vul", source: "derom"),
+                   "project-only slugs keep their project override"
+    end
+  end
+
   # --- #parent_of: the descent walk -------------------------------------------
 
   def test_a_root_anchor_has_no_parent

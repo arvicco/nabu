@@ -133,26 +133,45 @@ module Nabu
     end
 
     def sections
-      # P70 — THE TWO-FOLDER CONTRACT (owner ruling 2026-08-10): canonical/
-      # + config/ are the ONLY non-derived data. The lect journal is
-      # derived (rebuild's "lect journal" stage re-mints it from
-      # config/lect_rulings.yml + rules + infer-dates); grants and creep
-      # acceptances live in config/ (the ledger rows are historical
-      # mirrors); the ledger itself is reclassified LOG — its runs/
-      # revisions/probes history is lost on restore BY DESIGN (№R-21).
-      # The optional derived sections remain a convenience (restoring a
-      # 75 GB catalog beats hours of rebuild) — never a necessity.
+      # P71 — THE THREE-FOLDER CONTRACT (owner rulings 2026-08-10/11):
+      # canonical/ (the asset) + config/ (the project definition) +
+      # local/ (the instance: owner rulings, grants, profile, the ledger,
+      # acquisitions) are the WHOLE permanent set. Everything under db/
+      # is derived (the lect journal and links re-mint at rebuild). The
+      # optional derived sections remain a convenience (restoring a 75 GB
+      # catalog beats hours of rebuild) — never a necessity. The ledger
+      # rides INSIDE local/ (the dir copy carries its WAL sidecars and
+      # prunes stale ones via --delete); the file section survives only
+      # for a pre-P71 box whose ledger still sits under db/.
       list = [
         dir_section("canonical", @config.canonical_dir, File.join(@target, "canonical")),
-        dir_section("config", @config.config_dir, File.join(@target, "config"))
+        dir_section("config", @config.config_dir, File.join(@target, "config")),
+        dir_section("local", @config.local_dir, File.join(@target, "local")),
+        # №R-22 (owner-ruled 2026-08-11): .docs/ — the steering record
+        # (decision register, plan docs, surveys) — is owner input with no
+        # other copy anywhere. Non-contract (db/ derives from the three
+        # folders alone) but backed up by default; absent dir = clean skip.
+        dir_section("docs", docs_dir, File.join(@target, ".docs"))
       ]
       unless @skip_derived
         list << file_section("catalog", @config.catalog_path)
         list << file_section("fulltext", @config.fulltext_path)
         list << file_section("lects", @config.lects_journal_path)
-        list << file_section("ledger", @config.history_path)
+        list << file_section("links", @config.links_path)
+        list << file_section("ledger", @config.history_path) unless ledger_home?
       end
       list
+    end
+
+    # The gitignored owner-steering directory at the tree root.
+    def docs_dir
+      File.expand_path("../.docs", @config.config_dir)
+    end
+
+    # Has the ledger moved to its local/ home? (Then the local dir section
+    # carries it and a db/-style file section would be a stale duplicate.)
+    def ledger_home?
+      File.dirname(@config.history_path) == @config.local_dir
     end
 
     def dir_section(name, source, dest)

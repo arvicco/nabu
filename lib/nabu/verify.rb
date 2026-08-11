@@ -365,6 +365,6 @@ module Nabu
         .all
     end
 
-    def workdir_for(slug) = File.join(@config.canonical_dir, slug)
+    def workdir_for(slug) = @config.source_workdir(slug)
   end
 end

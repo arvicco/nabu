@@ -22,7 +22,7 @@ Ruby CLI application, modular adapter core, file-based canonical layer, SQLite d
 
 **Invariant:** data flows one way. Adapters/HTR produce canonical files; the loader derives SQLite from canonical files; enrichers write only to derived tables. catalog + fulltext + vectors = f(canonical): `nabu rebuild` proves it by regenerating them from `canonical/` byte-for-byte-equivalently (modulo enrichment, which replays from its own journal). **history.sqlite3 is an operational LOG** (P7-1, reclassified P70): an append-only ledger (run history, per-repo sync pins, license baselines, durable revision events) that is *never* derived and *never* dropped by rebuild. Every owner DECISION it once held now lives in config/ (grants.yml, creep_acceptances.yml; lect rulings in lect_rulings.yml with the journal re-derived at rebuild). It is keyed by durable identity (source slug, repo url, passage/document urn), never by catalog row ids, which every rebuild re-mints.
 
-**The derivability law (owner-ruled 2026-08-11; the `local/` elevation lands as its own phase).** Every byte of project state is one of five kinds: **asset** (`canonical/`, attic included — the universal library matter), **project definition** (`config/`, git-shared), **local instance** (`local/` — owner shelves and rulings, grants, the operational ledger, acquisitions: everything that makes this instance THIS instance, never in the public repo), **derived** (`db/` — all of it), or **staging** (`incoming/`, locks, sidecars). The backup contract is exactly the three permanent folders, and `nabu rebuild` regenerates every derived store from them, offline. *Derived* is an economic claim — a store counts as derived only if code alone re-creates it for free; anything non-derivable (paid model enrichment, HTR, any output costing money, network, or human review) is an **acquisition** and lands in a local shelf through a sanctioned gateway before it may influence db/. No db is ever backup-required. The repo itself is backed by its git remote — the contract's silent fourth leg. A new db table or top-level directory declares its kind at birth; a derived store without a rebuild stage is a bug, not a posture. *Interim state until the elevation phase lands:* owner rulings sit in config/, the owner shelves under canonical/local-*, and the ledger under db/history.sqlite3 (courtesy-copied by the default backup, so its history survives in practice; a `--skip-derived` restore loses it until the move).
+**The derivability law (owner-ruled 2026-08-11; the `local/` elevation lands as its own phase).** Every byte of project state is one of five kinds: **asset** (`canonical/`, attic included — the universal library matter), **project definition** (`config/`, git-shared), **local instance** (`local/` — owner shelves and rulings, grants, the operational ledger, acquisitions: everything that makes this instance THIS instance, never in the public repo), **derived** (`db/` — all of it), or **staging** (`incoming/`, locks, sidecars). The backup contract is exactly the three permanent folders, and `nabu rebuild` regenerates every derived store from them, offline. *Derived* is an economic claim — a store counts as derived only if code alone re-creates it for free; anything non-derivable (paid model enrichment, HTR, any output costing money, network, or human review) is an **acquisition** and lands in a local shelf through a sanctioned gateway before it may influence db/. No db is ever backup-required. The repo itself is backed by its git remote — the contract's silent fourth leg. A new db table or top-level directory declares its kind at birth; a derived store without a rebuild stage is a bug, not a posture. Landed by P71: owner rulings and grants live under `local/config/`, the owner shelves under `local/shelves/`, the ledger at `local/history.sqlite3` (a pre-P71 box's legacy locations are honored loudly until `nabu migrate-local`).
 
 `nabu rebuild --incremental` (P36-1) is an optimization OVER this invariant, never a relaxation of it: the full rebuild remains the reference semantics, and an incremental run must land content-equivalent to a fresh full rebuild of the same canonical tree (test-pinned: counts + content shas). Each replay stamps the source with its derivation fingerprint (`derivation_stamps`, in the catalog — dropped and re-stamped by every full rebuild, correct by construction); `--incremental` keeps the catalog, skips fingerprint-clean sources, and re-derives dirty ones through the same replay seam + per-source index refresh. A dirty incremental also re-derives the two P70 sibling dbs (the lect journal and the links instrument) exactly as the full rebuild does; a clean sweep skips them — the write-through CLIs keep both live, so only a hand-edited `lect_rulings.yml`/`link_scopes.yml` waits for the next full rebuild or dirty incremental. See §5 (derivation stamps bullet) for the fingerprint inputs and refusal rules.
 
@@ -60,7 +60,7 @@ nabu/
 │   ├── fulltext.sqlite3         # DERIVED: FTS5 + passage_lemmas + trigram index (all keyed by passage id)
 │   ├── vectors.sqlite3          # DERIVED: sqlite-vec embeddings, per model-version table
 │   ├── history.sqlite3          # LEDGER (P7-1): runs, pins, revisions — never derived, never dropped
-│   ├── links.sqlite3            # JOURNAL (P16-1, §15): batch-mined edges — rebuild-proof, re-minable
+│   ├── links.sqlite3            # DERIVED (P16-1/P70-3b, §15): batch-mined edges — rebuild's links stage re-mints it
 │   ├── lects.sqlite3            # JOURNAL (P58-1, §15a): per-document lect rulings — rebuild-proof, PRECIOUS
 │   ├── migrate/                 # catalog migration track (forward-only)
 │   ├── ledger_migrate/          # ledger migration track (own schema_info per file)
@@ -146,7 +146,7 @@ language_names(id, dictionary_id, lang_code, name, occurrences)
    -- (written wholesale by DictionaryLoader; the read side filters wrapper/
    -- placeholder names and takes the mode). Feeds `nabu language`.
 language_records(id, lang_code, kind, body, source)
-   -- P19-1: the derived index of the canonical/local-language dossier shelf
+   -- P19-1: the derived index of the local/shelves/local-language dossier shelf
    -- (§16) — one row per (code, kind) lane as the dossier currently states
    -- it (curated name/family/context + front-matter extras + accretion
    -- sections), `source` the per-record provenance ("dossier", "iecor",
@@ -217,7 +217,7 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
                created_at)
    -- P18-4, TRANSITIONAL since P19-1: the accumulated per-language layer's
    -- retiring first home. The canonical-memory migration (§16) rehomes
-   -- authored language knowledge into canonical/local-language/ dossier
+   -- authored language knowledge into local/shelves/local-language/ dossier
    -- FILES; this table is read only as the per-(code, kind) FALLBACK where
    -- no derived language_record exists (a library whose owner has not yet
    -- fired `nabu language --export-dossiers` serves exactly what it served
@@ -232,7 +232,7 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
 - Why the split: everything in the ledger is runtime HISTORY, not a function of canonical/ — pre-P7-1 it lived in the catalog and every rebuild amnesia'd health trends, license-drift baselines, and repo pins. Keying is by slug/url/urn because rebuilds re-mint all catalog ids.
 - Provenance is deliberately NOT durable (decision, P7-1): it journals per-load noise ("loaded" × 60k docs per rebuild replay, "quarantined", "superseded") that describes the *derivation*, so it honestly resets with the derivation. The compact `revisions` ledger carries the part with lasting value — which passages changed when, old/new shas. The loader writes both: catalog provenance for everything, one ledger row per content transition of an *existing* row (inserts — including every rebuild replay — write nothing durable, so rebuilds leave the ledger byte-identical).
 - Runs carry `kind`: rebuild replays are honest history but re-add the whole corpus, so trend queries (health, sync deviation warnings) read `kind=sync` only; `status` shows the latest run of any kind.
-- Phase 8 (enrichments — paid API output that must survive rebuilds): the enrichment journal lives in the ledger, urn-keyed like `revisions` (passage urn + kind + model identity), and `nabu enrich --replay` re-applies it into the catalog after a rebuild. The identity scheme above is the contract; the tables land with Phase 8.
+- Phase 8 (enrichments — paid API output that must survive rebuilds): under the derivability law (№R-23) paid model output is an ACQUISITION, not a derivation — the enrichment journal lives in a `local/enrichments/` shelf (urn-keyed files + model identity, entering through a sanctioned gateway), and a rebuild stage replays it into the catalog. Never in the ledger (an operational log), never bare in db/ (derived only). The identity scheme above is the contract; the shelf lands with Phase 8.
 - Migration tracks are per-db and forward-only: `db/migrate/` for the catalog, `db/ledger_migrate/` for the ledger — each SQLite file keeps its own `schema_info`, so the counters cannot collide. One-shot lift-and-shift: every write path opens the ledger via `Ledger.open_with_lift!`, which copies a pre-P7-1 catalog's runs/pins/baselines into the ledger (re-keyed by slug/url) and only then migrates the catalog forward (005 drops the moved tables). A fresh machine with no ledger bootstraps clean: read paths treat the absent file as empty history ("no run history", never an error); the first sync creates it.
 - FTS5 external-content table over `text_normalized` + trigram tokenizer option for scripts where word segmentation is unreliable.
 - `passage_lemmas` (P7-5, alongside the FTS table in fulltext.sqlite3, same drop-and-rebuild lifecycle): the lemma index — one row per (passage, folded lemma) extracted from the catalog's stored `annotations_json` (never by re-parsing canonical), with the distinct surface forms aggregated for display. Lemmas fold per language exactly like `text_normalized` (conventions §9); `search --lemma` matches the query-forms union. The pattern for future annotation-derived indexes (Phase 8 enrichment output). Each row carries a `tier` (P26-0; declared per source via `lemma_tier:` in sources.yml, validated against `SourceRegistry::LEMMA_TIERS`): **gold** — verified annotation, the default, the only tier that ever counts as attestation (`attested_count` everywhere means gold); **silver** — upstream-automatic lemmatization (Diorisis/TLHdig/CDLI/eBL), labeled at every render, `--gold-only` excludes; **equivalence** (P34-3, owner-decided as DISTINCT from silver) — scholar-curated cross-language equivalence: CEIPoM's `Classical_Latin_equivalent` values mint LATIN keys (folded and labeled `lat`, read from the `latin_equivalent` token key, never from `lemma`) on the non-Latin passages, so `search --lemma precor` reaches the Iguvine Tables' `pesnimu`. Curated but never attestation in the key's language and never automatic — a different honesty, so its own label at every tier-rendering surface: per-hit `[equivalence]` tags + footer totals in `search --lemma`/`concord` (CLI and MCP), an `equivalence_count` beside — never inside — `attested_count` in ReflexViews/define/etym, and the gold-scoped consumers (cognate closure, language cards, vocab reference corpus) exclude it via their existing gold filters. All tier rows re-derive from stored annotations at every rebuild/refresh.
@@ -281,7 +281,7 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
 - Parse errors quarantine the document (recorded, skipped), never abort the batch — and never withdraw (P37-r2): a quarantined ref's document is still present in canonical, so its urn shields the held row (prior revision, still served) from the full-load withdrawal sweep. Recognition getting stricter can therefore never unserve held content; the row revives via the normal restore/revise path when the parse succeeds again.
 - **Postcondition invariants (P18-7).** Beside the trend rules, `nabu health` holds STATE against PROMISES (`Health::Invariants`, findings-only — a green library prints nothing new): a source whose most recent ledger run FAILED is loud with the error detail (and, when provenance shows rows written during that run, a named "partial load"); a source whose latest run succeeded yet which holds zero rows in its grain (docs/entries/language records) is the half-loaded-catalog / synced-to-nothing signature — `enabled` deliberately not consulted (P23-3); flag-vs-artifact pairs (`fuzzy_index` vs the trigram index + scope table, timeline extractor families vs `document_axes` rows, `Adapter.reflex_bearing?` vs `dictionary_reflexes` rows, reflexes vs the `language_names` census); pending catalog/ledger migrations (soft). The sync/rebuild quarantine WARNING is DELTA-aware against the ledger's `quarantine_baselines` (ledger migration 005): `baseline` auto-advances at every ok run, so each change announces exactly once and a standing audited count is silent; `anchor` is the low-water mark (advances downward only), so health's creep check catches the slow bleed the advancing baseline absorbs — the withdrawal-creep precedent. The optional `sync SLUG --review CMD` hook pipes a JSON brief to a subprocess and reports its exit honestly without ever failing the sync (ops.md §11) — no cloud dependency enters the core.
 - `nabu verify` re-hashes canonical files (attic included) against the catalog — bitrot/tamper check, cronnable.
-- Backups: canonical/ is git (bare mirror on nero/nexo via Tailscale); the derived dbs (catalog/fulltext/vectors) are disposable but nightly-snapshotted anyway (cheap). db/history.sqlite3 is NOT disposable — it is the only copy of run history, pins, baselines, and durable revisions, and belongs in every backup alongside canonical/ (P7-2 makes this operational). db/lects.sqlite3 (P58-1, §15a) joins it in the backup set: per-document lect rulings are decisions, not derivations.
+- Backups: the three permanent folders — canonical/ + config/ + local/ (P71; `nabu backup`, P7-2, makes it operational). The ledger (local/history.sqlite3) rides inside local/: the only copy of run history, pins, baselines, and durable revisions. The derived dbs (catalog/fulltext/lects/links/vectors) are disposable — `nabu rebuild` re-mints them all — but the backup copies them by default anyway (a file copy beats hours of rebuild).
 
 ## 9. The MCP read-only surface
 
@@ -1030,8 +1030,10 @@ id) — but a rerun of the same scope legitimately REPLACES its edges, which
 an append-only ledger must never do. So the journal is a third SQLite file
 with the ledger's *mechanics* (its own forward-only migration track in
 `db/links_migrate/`, its own `schema_info`, absent-file = empty state,
-urn keying) and its own lifecycle: `nabu rebuild` never touches it, and
-losing it costs only a re-mine, so backups may include it but need not.
+urn keying). DERIVED since P70-3b: `nabu rebuild`'s links stage wipes
+and re-mints it (slug-scoped producers from the registry + the batch
+scopes recorded in local/config/link_scopes.yml), so losing it costs nothing
+a rebuild cannot restore — backups may skip it.
 
 **Write discipline.** Edges are minted ONLY by batch producers. Producer #1
 is `nabu parallels --batch SCOPE` (`Nabu::BatchParallels`): the interactive
@@ -1130,20 +1132,24 @@ facet-rule and date×band compilers), and a rule re-run supersedes exactly
 its own basis, never a hand ruling. LinksJournal mechanics throughout: own
 migration track (`db/lects_migrate/`), urn keying because rebuilds re-mint
 row ids, absent file = empty overlay (byte-identical no-module behavior).
-Unlike links, the content is *decisions*, not re-minable derivations —
-the journal belongs in the backup set beside the ledger (`nabu lect list
---format tsv` is its flat export/restore shape). The read side is lazy:
+DERIVED since P70-2: the owner rows live in local/config/lect_rulings.yml
+(write-through from `lect assign`; withdraw removes config-first) and
+`nabu rebuild`'s lect-journal stage re-derives the WHOLE journal —
+rulings, then rules, then infer-dates, deterministic precedence — so the
+file needs no backup. The read side is lazy:
 `Lects.load_default` feature-detects the journal and hands `resolve` a
 point-lookup overlay, never an eager hash of the full journal.
 
-## 16. Canonical memory — local shelves (P19-1)
+## 16. Local memory — the owner shelves (P19-1; elevated to local/ by P71-2)
 
-**The principle.** canonical/ holds the permanent asset; db/ is a derived
-index, rebuildable from scratch. P18-4's language notes broke that rule by
-making the ledger the home of authored knowledge; the canonical-memory
-design (owner-approved 2026-07-14) generalizes the rule instead of patching
-the case: **everything nabu KNOWS — fetched corpora, owner-authored
-dossiers, locally acquired documents — lives as files under canonical/, in
+**The principle.** The permanent folders hold everything nabu KNOWS; db/
+is a derived index, rebuildable from scratch. P18-4's language notes broke
+that rule by making the ledger the home of authored knowledge; the
+canonical-memory design (owner-approved 2026-07-14) generalized the rule,
+and the P71 derivability law sharpened it: fetched corpora live under
+canonical/ (the universal asset), while **everything owner-authored —
+dossiers, the acquired library, notes — lives as files under
+local/shelves/ (the instance)**, in
 a `local-<kind>/` shelf when we author or acquire it ourselves. The db only
 ever indexes it. The ledger records what HAPPENED (runs, pins, probes),
 never what is KNOWN.**
@@ -1182,7 +1188,7 @@ local-source shelf `Nabu::SourceShelf` (P24-0) — all driven by `nabu
 ingest`; for the local-notes shelf it is `Nabu::NoteShelf` (P24-1),
 driven by `nabu note`. Everything else stays read-only on the shelves.
 
-**Shelf one: `canonical/local-language/`** — one Markdown + YAML
+**Shelf one: `local/shelves/local-language/`** — one Markdown + YAML
 front-matter dossier per language code (`Nabu::LanguageDossier`): curated
 `code/name/family` front matter (any other scalar key — `period`,
 `scripts` — is an extra card lane), free prose as the curated context, and
@@ -1211,7 +1217,7 @@ auto-migrate the ledger on open, which would drop the notes before the
 export ever ran). `config/languages.yml` is retired immediately — the
 ledger already accumulated everything it seeded, and one home beats three.
 
-**Shelf two: `canonical/local-library/` (P19-4)** — PDFs, scans and
+**Shelf two: `local/shelves/local-library/` (P19-4)** — PDFs, scans and
 scholarly articles the owner acquires: one `<collection>/` dir per drop,
 each with a `manifest.yml` that is the SOURCE OF RECORD — a YAML list of
 entries (`file`, `title`, `creator`, `year`, `languages`, `provenance`,
@@ -1266,10 +1272,10 @@ shelf: a THIN scaffold (front matter + context, same three modes) through
 manual sync stays legitimate — the census flags whatever ingest has not
 catalogued.
 
-**Shelf three: `canonical/local-source/` (P24-0)** — the canonical-memory
+**Shelf three: `local/shelves/local-source/` (P24-0)** — the canonical-memory
 doctrine extended to the SOURCE grain: one Markdown + YAML front-matter
 dossier per REGISTERED SOURCE (`Nabu::SourceDossier`,
-`canonical/local-source/<slug>.md`) — what each shelf holds, in the
+`local/shelves/local-source/<slug>.md`) — what each shelf holds, in the
 owner's words. Curated lanes: `description` (THE load-bearing field, a 1–3
 sentence content description served on `nabu list` cards, the `--long`
 census, and the MCP status payload by default — the owner's own library
@@ -1311,7 +1317,7 @@ metadata only: P19-1 minted no dossier urns, and an edge to an invented
 urn would sit permanently unresolved — codes upgrade to edges if dossier
 documents ever exist.
 
-**Shelf three: `canonical/local-notes/` (P24-1)** — the owner's annotation
+**Shelf three: `local/shelves/local-notes/` (P24-1)** — the owner's annotation
 lane, scholia of one's own: curatorial notes keyed by ANY urn the corpus
 knows — a document, a passage, a range, a dictionary entry (P22-2's minted
 urns included). One YAML file per TOPIC (`<topic>.yml`, default `notes` —

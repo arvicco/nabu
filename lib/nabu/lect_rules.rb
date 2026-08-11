@@ -46,11 +46,19 @@ module Nabu
 
     # nil when the rules file is absent (the feature-module posture: no
     # file, no rules, no behavior change).
+    # +path+ may be one file or an overlay pair (P71-0, owner-ruled
+    # 2026-08-11): rules concat in path order with SAME-ID replacement,
+    # so a local/config/ rule overrides its project namesake in place
+    # and local-only rules append. nil when no file exists.
     def self.load(path)
-      return nil unless File.file?(path)
+      paths = Array(path).select { |p| File.file?(p) }
+      return nil if paths.empty?
 
-      raw = YAML.safe_load_file(path) || {}
-      rules = (raw["rules"] || []).map do |entry|
+      merged = paths.each_with_object({}) do |file, by_id|
+        raw = YAML.safe_load_file(file) || {}
+        (raw["rules"] || []).each { |entry| by_id[entry.fetch("id")] = entry }
+      end
+      rules = merged.values.map do |entry|
         Rule.new(id: entry.fetch("id"), sources: Array(entry["sources"]).map(&:to_s),
                  code: entry.fetch("code"), facet: entry.fetch("facet"),
                  map: entry["map"], tier: entry["tier"], note: entry["note"],

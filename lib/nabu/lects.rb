@@ -103,11 +103,16 @@ module Nabu
     # is the per-document seam (P57-3: constructor-only, no storage yet).
     def self.load(dir, overrides_path: nil, overlay: {})
       registry = read_yaml(File.join(dir, LECTS_FILE))
+      # +overrides_path+: one file or an overlay pair (P71-0) — per-source
+      # maps merge in path order, a local/config/ row winning its slug.
+      overrides = Array(overrides_path).each_with_object({}) do |path, merged|
+        merged.merge!(read_yaml(path).fetch("sources", nil) || {})
+      end
       new(
         anchors: registry.fetch("anchors", {}),
         scripts: registry.fetch("scripts", {}),
         codemap: read_yaml(File.join(dir, CODEMAP_FILE)).fetch("map", {}),
-        overrides: overrides_path ? read_yaml(overrides_path).fetch("sources", {}) : {},
+        overrides: overrides,
         overlay: overlay
       )
     end
@@ -127,7 +132,7 @@ module Nabu
       return nil unless File.file?(File.join(dir, LECTS_FILE)) && File.file?(File.join(dir, CODEMAP_FILE))
 
       overlay = journal_overlay(config) if overlay == :auto
-      load(dir, overrides_path: config.lect_overrides_path, overlay: overlay)
+      load(dir, overrides_path: config.lect_overrides_paths, overlay: overlay)
     end
 
     # The journal read side, absence-safe. The require is lazy so the
