@@ -185,6 +185,5 @@ module Nabu
     def census?
       !@catalog.nil? && @catalog.table_exists?(:language_names)
     end
-
   end
 end
