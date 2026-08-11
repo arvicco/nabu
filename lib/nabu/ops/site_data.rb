@@ -53,8 +53,8 @@ module Nabu
       # run points env overrides at the main checkout, the site:axes
       # pattern).
       def census
-        catalog = Store.connect(@catalog_path)
-        fulltext = Sequel.sqlite(@fulltext_path)
+        catalog = Store.connect(@catalog_path, readonly: true)
+        fulltext = Store.connect(@fulltext_path, readonly: true)
         live_docs = catalog[:documents].where(Sequel[:documents][:withdrawn] => false)
         languages = live_docs.exclude(Sequel[:documents][:language] => nil).distinct.select(:language).count
         top = live_docs.exclude(Sequel[:documents][:language] => nil)
