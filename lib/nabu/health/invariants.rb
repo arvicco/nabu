@@ -72,13 +72,17 @@ module Nabu
       # vs derived records; pinned files vs the tree); nil (callers that
       # cannot name the corpus root) skips them honestly. +now+ picks the
       # D42-a rotation slot (injected so the probe is testable).
-      def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil, now: Time.now)
+      def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil, now: Time.now,
+                     creep_acceptances_path: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
         @ledger = ledger
         @canonical_dir = canonical_dir
         @now = now
+        # P70: config/creep_acceptances.yml governs accepted creep (the
+        # ledger covers pre-P70 rows).
+        @creep_acceptances_path = creep_acceptances_path
       end
 
       # All invariant findings for one registry entry, in a stable order.
@@ -93,7 +97,7 @@ module Nabu
           language_names_vs_reflexes(entry),
           dossiers_vs_records(entry),
           *local_shelf_integrity(entry),
-          QuarantineBaseline.creep_finding(@ledger, entry.slug)
+          QuarantineBaseline.creep_finding(@ledger, entry.slug, path: @creep_acceptances_path)
         ].compact
       end
 

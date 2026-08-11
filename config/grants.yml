@@ -1,0 +1,12 @@
+# config/grants.yml — the owner's recorded grant agreements (P70:
+# the source of truth; the ledger row is a historical mirror).
+---
+grants:
+- source: starling
+  how: flag
+  at: '2026-07-23'
+  terms: any use, per-base attribution required (credit each base's compilers)
+- source: titus-avestan
+  how: typed
+  at: '2026-07-24'
+  terms: non-commercial use; TITUS and the editors clearly indicated wherever displayed

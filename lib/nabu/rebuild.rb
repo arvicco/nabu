@@ -57,7 +57,7 @@ module Nabu
     # What a rebuild did. +indexed+ is the passage count in the freshly rebuilt
     # fulltext index (architecture §2): a fresh index is part of "loaded".
     Result = Data.define(:db_path, :db_existed, :outcomes, :skips, :indexed, :axes, :facets, :profile,
-                         :analyzed) do
+                         :analyzed, :link_failures) do
       # +axes+ (P15-2) is the TimelineBuilder::Summary of the timeline
       # regenerated from canonical after replay; +facets+ (P17-2) the
       # FacetBuilder::Summary of the genre-facet table projected from the
@@ -69,8 +69,11 @@ module Nabu
       # planner-stats refresh — a full rebuild re-derives the whole catalog and
       # index, so it ALWAYS analyzes both (the freshly-loaded db had no
       # sqlite_stat1 at all). nil only for the pre-P42-4 construction paths.
+      # +link_failures+ (P70-3b) — the links stage's contained per-producer
+      # failures ("slug: message" strings): the summary must name the gaps a
+      # partial links re-mine left, never claim a clean rebuild over them.
       def initialize(db_path:, db_existed:, outcomes:, skips:, indexed:, axes: nil, facets: nil,
-                     profile: nil, analyzed: nil)
+                     profile: nil, analyzed: nil, link_failures: [])
         super
       end
 
@@ -112,6 +115,10 @@ module Nabu
     # Nabu::ProgressReporter or nil) is threaded into each source's loader for
     # live per-document ticks; the runner stays print-free.
     def run(progress: nil)
+      # P70 fail-fast: a malformed hand edit to config/lect_rulings.yml must
+      # refuse HERE — before the db drop and the hours of replay the late
+      # lect-journal stage would otherwise waste.
+      LectRulings.validate!(@config.lect_rulings_path)
       db_existed = File.exist?(db_path)
       # P36-0: the always-on stage profiler. Cheap (a monotonic sample per stage
       # boundary; per document for parse/insert), so it runs on every rebuild —
@@ -169,6 +176,20 @@ module Nabu
       facets = profile.measure(scope: RebuildProfile::CORPUS, stage: :facets) do
         Store::FacetBuilder.rebuild!(catalog: db)
       end
+      # P70 (the derivability contract): the lect JOURNAL is derived — re-mint
+      # it wholesale from the two-folder truth (config/lect_rulings.yml owner
+      # rows + the compiled rules + infer-dates) BEFORE the facet reads it.
+      # db/lects.sqlite3 thereby needs no backup: losing it loses nothing
+      # this stage cannot restore.
+      progress&.stage("lect journal")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :lect_journal) do
+        journal = Store::LectJournal.open!(@config.lects_journal_path)
+        begin
+          Store::LectJournal.rederive!(journal, catalog: db, config: @config)
+        ensure
+          journal.disconnect
+        end
+      end
       # The lect facet (P58-4) flattens the whole lect resolution — journal
       # rulings, source overrides, codemap defaults — into one indexed axis.
       # Feature-detected: no nabu-lects module -> zero rows, clean skip (the
@@ -202,6 +223,16 @@ module Nabu
                                         fuzzy_slugs: @registry.fuzzy_slugs,
                                         lemma_tiers: @registry.lemma_tiers,
                                         profile: profile)
+      # P70-3b (the derivability contract): the links instrument is DERIVED —
+      # drop and re-mine it wholesale: every slug-scoped reference producer
+      # (the sync-time lane replayed over the re-minted catalog) plus every
+      # batch scope recorded in config/link_scopes.yml (parallels needs the
+      # fulltext index, hence after it). db/links.sqlite3 thereby needs no
+      # backup.
+      progress&.stage("links")
+      link_failures = profile.measure(scope: RebuildProfile::CORPUS, stage: :links) do
+        rederive_links!(db, fulltext)
+      end
       # P42-4: the fresh catalog+index have no planner statistics yet — ANALYZE
       # both so the very first query off a rebuilt db plans against real row
       # distributions (ops §10). A corpus stage in the always-on profile.
@@ -212,7 +243,7 @@ module Nabu
       end
       Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes,
                  skips: skips, indexed: indexed, axes: axes, facets: facets, profile: profile,
-                 analyzed: analyzed)
+                 analyzed: analyzed, link_failures: link_failures)
     ensure
       db&.disconnect
       fulltext&.disconnect
@@ -363,6 +394,58 @@ module Nabu
     end
 
     def workdir_for(slug) = File.join(@config.canonical_dir, slug)
+
+    # The links re-mine (P70-3b): wipe the journal, replay every
+    # slug-scoped reference producer, then every recorded batch scope.
+    # A producer's Nabu::Error-class failure is contained and returned (the
+    # Result carries it into the summary — a partial links re-mine names
+    # its gaps); infrastructure errors (I/O, Sequel) abort the rebuild
+    # loudly, by design. Returns the failure strings.
+    def rederive_links!(db, fulltext)
+      journal = Store::LinksJournal.open!(@config.links_path)
+      journal[:links].delete
+      journal[:link_runs].delete
+      failures = []
+      @registry.each_source do |entry|
+        next unless entry.adapter_class.reference_edges?
+
+        entry.adapter_class.reference_producer(catalog: db, journal: journal)
+             .run(entry.slug, workdir: workdir_for(entry.slug))
+      rescue Nabu::Error => e
+        failures << "#{entry.slug}: #{e.message}"
+      end
+      LinkScopes.load(@config.link_scopes_path).each do |scope|
+        replay_batch_scope(scope, db, fulltext, journal)
+      rescue Nabu::Error, ArgumentError => e
+        failures << "#{scope['producer']} #{scope['scope']}: #{e.message}"
+      end
+      warn "links rederive: #{failures.size} producer(s) failed — #{failures.join(' · ')}" unless failures.empty?
+      failures
+    ensure
+      journal&.disconnect
+    end
+
+    def replay_batch_scope(scope, db, fulltext, journal)
+      params = scope["params"] || {}
+      case scope["producer"]
+      when "parallels"
+        BatchParallels.new(catalog: db, fulltext: fulltext, journal: journal)
+                      .run(scope["scope"],
+                           **{ lang: params["lang"], license: params["license"],
+                               min_score: params["min_score"], per_anchor: params["per_anchor"] }.compact)
+      when "cognates"
+        BatchCognates.new(catalog: db, fulltext: fulltext, journal: journal,
+                          registry: AlignmentRegistry.load(@config.alignments_path))
+                     .run(scope["scope"], langs: params["langs"], all: params.fetch("all", false))
+      when "formulas"
+        BatchFormulas.new(catalog: db, journal: journal)
+                     .run(scope["scope"],
+                          **{ gram_size: params["gram_size"], min_count: params["min_count"],
+                              lang: params["lang"], max_formulas: params["max_formulas"] }.compact)
+      else
+        raise Nabu::Error, "unknown batch producer #{scope['producer'].inspect} in link_scopes.yml"
+      end
+    end
 
     def db_path = @config.catalog_path
 

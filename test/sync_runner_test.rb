@@ -892,7 +892,8 @@ class SyncRunnerTest < Minitest::Test
   end
 
   def config
-    Nabu::Config.new(canonical_dir: @canonical, db_dir: @root, sources_path: "(n/a)", config_path: "(test)")
+    Nabu::Config.new(canonical_dir: @canonical, db_dir: @root, sources_path: "(n/a)",
+                     config_path: File.join(@root, "config", "nabu.yml"))
   end
 
   def registry(*entries)
