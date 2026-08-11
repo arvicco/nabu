@@ -147,7 +147,7 @@ every enabled live-policy source in one pass. The full menu is
 
 What each shelf is good for is surveyed on [The Library]({{ '/library/' | relative_url }});
 every text keeps its upstream license, recorded per document — the classes
-and per-source terms are on [Sources &amp; Licensing]({{ '/sources/' | relative_url }}).
+and per-source terms are on [Sources]({{ '/sources/' | relative_url }}).
 The non-commercial shelves are for research use and are never
 redistributed by the tooling.
 

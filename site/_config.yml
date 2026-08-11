@@ -41,10 +41,12 @@ nav:
     url: /languages/
   - title: Places
     url: /places/
-  - title: Sources & Licensing
+  - title: Sources
     url: /sources/
-  # Tail order is fixed as: Sources & Licensing, FAQ, News, About —
-  # alphabetical among the informational tabs, About always last.
+  # Tail order is fixed as: Sources, FAQ, News, About — alphabetical
+  # among the informational tabs, About always last. (Owner 2026-08-11:
+  # the tab reads "Sources", not "Sources & Licensing" — the long title
+  # unbalanced the top bar; licensing stays in the page prose.)
   - title: FAQ
     url: /faq/
   - title: News

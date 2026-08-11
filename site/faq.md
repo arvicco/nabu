@@ -149,7 +149,7 @@ deliberately, and frozen upstream releases are never expected to change.
 `nabu health` checks the collection's invariants, and its remote probes
 watch upstream reachability and license drift between syncs. The
 posture and license of every source are on
-[Sources &amp; Licensing]({{ '/sources/' | relative_url }}); operations are
+[Sources]({{ '/sources/' | relative_url }}); operations are
 documented in
 [docs/ops.md](https://github.com/arvicco/nabu/blob/main/docs/ops.md).
 
@@ -183,7 +183,7 @@ non-commercial research use and never redistributed by the tooling;
 `research_private` covers terms stricter than all of these (CC BY-ND,
 scholarly-use grants without a redistribution clause) — held for
 personal research only. The full model is on
-[Sources &amp; Licensing]({{ '/sources/' | relative_url }}).
+[Sources]({{ '/sources/' | relative_url }}).
 
 ### Can I redistribute texts I got through Nabu?
 
@@ -193,7 +193,7 @@ hit, alignment row, and export precisely so this is never guesswork.
 upstream edition per its terms (share-alike where the license says so);
 `nc` and `research_private` texts: no — they are for your own research,
 and the tooling itself never redistributes anything. Per-source terms
-are on [Sources &amp; Licensing]({{ '/sources/' | relative_url }}) and in
+are on [Sources]({{ '/sources/' | relative_url }}) and in
 [docs/02-sources.md](https://github.com/arvicco/nabu/blob/main/docs/02-sources.md).
 
 ### Is this a commercial product?
@@ -239,7 +239,7 @@ should not surface casually in a conversation. A caller who understands
 and will honor the terms can opt in per call. The stance is specified in
 [docs/mcp.md](https://github.com/arvicco/nabu/blob/main/docs/mcp.md);
 the classes themselves are explained on
-[Sources &amp; Licensing]({{ '/sources/' | relative_url }}).
+[Sources]({{ '/sources/' | relative_url }}).
 
 ### Was Nabu built with AI assistance?
 
@@ -279,7 +279,7 @@ version tag or commit hash where precision matters. Each release carries a DOI �
 v1.0.0: [10.5281/zenodo.21361957](https://doi.org/10.5281/zenodo.21361957). Texts you quote *from* the library should be
 cited to their upstream editions, which every passage's URN and license
 label identify — see
-[Sources &amp; Licensing]({{ '/sources/' | relative_url }}).
+[Sources]({{ '/sources/' | relative_url }}).
 
 ### Who maintains it?
 
