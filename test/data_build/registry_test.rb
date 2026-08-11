@@ -64,10 +64,13 @@ class DataBuildRegistryTest < Minitest::Test
         # Glottolog deliberately assigns no glottocode to ISO 639-3
         # MACROLANGUAGES (verified against the cldf-spine cone 2026-07-29:
         # no languages.csv row carries ISO zho; the nearest node sini1245 is
-        # a family, not this tag) — an empty static is honest there, and zho
-        # is the one registered macro tag. Any other nil is a missing static.
-        assert_equal "zho", language.id,
-                     "#{feature.slug}: only the zho macrolanguage may omit a glottocode"
+        # a family, not this tag) or SPECIAL codes (2026-08-11: no row
+        # carries ISO mul either — "Multiple languages" names content, not a
+        # languoid) — an empty static is honest for exactly those two
+        # registered tags. Any other nil is a missing static.
+        assert_includes %w[zho mul], language.id,
+                        "#{feature.slug}: only the zho macrolanguage and the mul special code " \
+                        "may omit a glottocode"
       else
         refute_empty language.glottocode, "#{feature.slug}: languages.csv statics must be complete"
       end
@@ -258,6 +261,23 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal ["Old Galician-Portuguese", "oldp1257", nil],
                  [roa_opt.name, roa_opt.glottocode, roa_opt.iso639p3]
     assert_equal Nabu::Adapters::CantigasHtmlParser::LANGUAGE, roa_opt.id
+
+    # Checked 2026-08-11 (P73-0, №R-25): mul is ISO 639-3's SPECIAL code
+    # "Multiple languages" (scope S) — it names content, not a languoid, so
+    # Glottolog carries no row for it (verified: no languages.csv row in the
+    # cldf-spine cone has ISO639P3code mul) and the glottocode is honestly
+    # nil. The cross-language corpus-layer datasets (lect-assignments,
+    # place-refs, document-dates, places-lpf) file under it.
+    mul = Nabu::DataBuild::LANGUAGES.fetch("mul")
+    assert_equal ["Multiple languages", nil, "mul"], [mul.name, mul.glottocode, mul.iso639p3]
+  end
+
+  # №R-25: the mul/ namespace is real plumbing — a mul-led slug must
+  # construct through the same Feature validation every language uses.
+  def test_a_mul_slugged_feature_validates
+    feature = valid_feature(slug: "mul/test-refs", language: Nabu::DataBuild::LANGUAGES.fetch("mul"))
+    assert_equal "mul/test-refs", feature.slug
+    assert_equal "mul-test-refs", feature.package_name
   end
 
   def test_feature_lookup_goes_through_the_features_seam

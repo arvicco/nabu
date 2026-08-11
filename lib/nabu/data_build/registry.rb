@@ -39,6 +39,11 @@ module Nabu
     # ISO 639-3 assigns NO code to Old Galician-Portuguese: roa-opt is the
     # BCP 47 collective-tag convention (roa Romance + opt) Wiktionary and
     # Nabu's catalog already use (D55-a), so the ISO static is honestly nil.
+    # mul is ISO 639-3's SPECIAL code "Multiple languages" (scope S) — it
+    # names content, not a languoid, so Glottolog carries no row for it
+    # (checked 2026-08-11 against the same cone: no languages.csv row has
+    # ISO639P3code mul) and the glottocode is honestly nil. The
+    # cross-language corpus-layer datasets file under mul/ (№R-25, P73-0).
     LANGUAGES = {
       "jpn" => Language.new(id: "jpn", name: "Japanese", glottocode: "nucl1643", iso639p3: "jpn"),
       "san" => Language.new(id: "san", name: "Sanskrit", glottocode: "sans1269", iso639p3: "san"),
@@ -49,7 +54,8 @@ module Nabu
       "lzh" => Language.new(id: "lzh", name: "Classical Chinese", glottocode: "lite1248", iso639p3: "lzh"),
       "sux" => Language.new(id: "sux", name: "Sumerian", glottocode: "sume1241", iso639p3: "sux"),
       "roa-opt" => Language.new(id: "roa-opt", name: "Old Galician-Portuguese",
-                                glottocode: "oldp1257", iso639p3: nil)
+                                glottocode: "oldp1257", iso639p3: nil),
+      "mul" => Language.new(id: "mul", name: "Multiple languages", glottocode: nil, iso639p3: "mul")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
