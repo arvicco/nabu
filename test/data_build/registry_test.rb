@@ -14,7 +14,7 @@ class DataBuildRegistryTest < Minitest::Test
                       jpn/kyujitai-fold lzh/kanripo-gaiji sux/value-signs
                       xct/actib-anchors roa-opt/cantigas mul/lect-assignments
                       mul/place-refs mul/places-lpf mul/document-dates
-                      mul/char-postings].freeze
+                      mul/char-postings sux/sign-table egy/unikemet-signs].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -273,6 +273,26 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal "none", postings.anchoring
     assert_match(/circularity/, postings.rationale,
                  "the Edubba never-re-import guard is stated where the owner reads it")
+
+    sign_table = Nabu::DataBuild.feature("sux/sign-table")
+    assert_equal :available, sign_table.status, "P73-9: builder and feature land together"
+    assert_equal Nabu::DataBuild::SignTableBuilder, sign_table.builder
+    assert_equal ["osl"], sign_table.inputs, "the stale-ingest guard rides the osl cone"
+    assert_match(/lemma_frequencies/, sign_table.rationale,
+                 "the no-nc-in-an-integer lesson is stated where the owner reads it")
+    assert_match(/deferred/, sign_table.rationale,
+                 "the BY-SA sidecar deferral is stated where the owner reads it")
+
+    unikemet = Nabu::DataBuild.feature("egy/unikemet-signs")
+    assert_equal :available, unikemet.status, "P73-9 rider: builder and feature land together"
+    assert_equal Nabu::DataBuild::UnikemetSignsBuilder, unikemet.builder
+    assert_equal ["unikemet"], unikemet.inputs
+    assert_equal "egy", unikemet.language_code
+
+    # Checked 2026-08-11 (P73-9): egyp1246 is the languoid carrying ISO egy
+    # (level: language) in the cldf-spine cone.
+    egy = Nabu::DataBuild::LANGUAGES.fetch("egy")
+    assert_equal ["Egyptian (Ancient)", "egyp1246", "egy"], [egy.name, egy.glottocode, egy.iso639p3]
   end
 
   def test_language_statics_match_the_glottolog_spine
@@ -389,7 +409,11 @@ class DataBuildRegistryTest < Minitest::Test
       # P73-7: the dating layer's share-alike lanes (edh, tla-hf, aes, ...).
       "mul/document-dates" => "CC-BY-SA-4.0",
       # P73-8: the kanripo lane's share-alike grant.
-      "mul/char-postings" => "CC-BY-SA-4.0"
+      "mul/char-postings" => "CC-BY-SA-4.0",
+      # P73-9: CC0/permissive inputs — both stay clean BY (the BY-SA sense
+      # lanes are deferred to a later sidecar so the core stays BY).
+      "sux/sign-table" => "CC-BY-4.0",
+      "egy/unikemet-signs" => "CC-BY-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end

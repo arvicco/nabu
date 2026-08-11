@@ -16,16 +16,17 @@ module Nabu
   #   kaikki's descendants nodes call each lang_code, counted raw per
   #   dictionary by DictionaryLoader. Reduced at read time: plausibility
   #   filter, then the mode over the summed counts.
-  # - NOTES (ledger, ledger migration 004 — TRANSITIONAL): the retiring
-  #   P18-4 accumulated layer. Read as the per-(code, kind) FALLBACK wherever
-  #   no catalog record exists, so a library whose owner has not yet fired
-  #   the dossier export (`nabu language --export-dossiers` + `nabu sync
-  #   local-language`) serves exactly what it served before. A later packet
-  #   drops the table once parity is verified; this fallback goes with it.
+  # The transitional ledger-notes fallback (P18-4's accumulated layer) was
+  # RETIRED at P73-10: parity was verified live 2026-08-11 — 329 of 330 note
+  # lanes carried identically in language_records, the one divergence a
+  # stale pre-correction keying (cent2264 vs the corrected ira) — and the
+  # fallback read was exactly what made a restored box answer differently
+  # from a live one (the L-7 derivability class). The ledger table stays as
+  # inert history; nothing reads it.
   #
-  # Every handle is optional and every table guarded (a catalog before 011 or
-  # 014, a ledger before 004, or no db at all reads as "no data" — the honest
-  # degradation every read surface here practices).
+  # Every handle is optional and every table guarded (a catalog before 011
+  # or 014, or no db at all, reads as "no data" — the honest degradation
+  # every read surface here practices).
   class Languages
     NOTE_KINDS = %w[name family context].freeze
 
@@ -74,9 +75,8 @@ module Nabu
 
     Family = Data.define(:code, :name, :context)
 
-    def initialize(catalog: nil, ledger: nil)
+    def initialize(catalog: nil)
       @catalog = catalog
-      @ledger = ledger
     end
 
     # Curated name > census mode > nil.
@@ -105,8 +105,7 @@ module Nabu
     end
 
     def curated?(code)
-      (records? && !@catalog[:language_records].where(lang_code: code.to_s).empty?) ||
-        (notes? && !@ledger[:language_notes].where(lang_code: code.to_s).empty?)
+      records? && !@catalog[:language_records].where(lang_code: code.to_s).empty?
     end
 
     # The family fallback for a hyphenated etymology code: "zle-ort" looks
@@ -156,22 +155,15 @@ module Nabu
 
     private
 
-    # One (code, kind) lane: the catalog record wins; the transitional
-    # ledger note answers only where no record exists.
+    # One (code, kind) lane — the derived dossier record.
     def lane(code, kind)
-      record(code, kind) || note(code, kind)
+      record(code, kind)
     end
 
-    # A kind → body map for +code+ over both layers, records winning per
-    # kind. +scope+ narrows both datasets identically (witness lanes,
-    # extra kinds).
+    # A kind → body map for +code+ over the records layer; the yielded
+    # block narrows the dataset (witness lanes, extra kinds).
     def lanes(code)
       merged = {}
-      if notes?
-        yield(@ledger[:language_notes].where(lang_code: code.to_s))
-          .order(:kind, :id)
-          .each { |row| merged[row[:kind]] = row[:body] } # duplicate kinds: the latest id wins
-      end
       if records?
         yield(@catalog[:language_records].where(lang_code: code.to_s))
           .order(:kind)
@@ -186,15 +178,6 @@ module Nabu
       @catalog[:language_records].where(lang_code: code.to_s, kind: kind).get(:body)
     end
 
-    def note(code, kind)
-      return nil unless notes?
-
-      @ledger[:language_notes]
-        .where(lang_code: code.to_s, kind: kind)
-        .order(Sequel.desc(:id))
-        .get(:body)
-    end
-
     def records?
       !@catalog.nil? && @catalog.table_exists?(:language_records)
     end
@@ -203,8 +186,5 @@ module Nabu
       !@catalog.nil? && @catalog.table_exists?(:language_names)
     end
 
-    def notes?
-      !@ledger.nil? && @ledger.table_exists?(:language_notes)
-    end
   end
 end

@@ -16,6 +16,8 @@ require_relative "place_refs_builder"
 require_relative "places_lpf_builder"
 require_relative "segmentation_builder"
 require_relative "sabellic_loans_builder"
+require_relative "sign_table_builder"
+require_relative "unikemet_signs_builder"
 require_relative "value_signs_builder"
 require_relative "verb_lemma_builder"
 require_relative "wylie_fold_builder"
@@ -60,7 +62,11 @@ module Nabu
       "sux" => Language.new(id: "sux", name: "Sumerian", glottocode: "sume1241", iso639p3: "sux"),
       "roa-opt" => Language.new(id: "roa-opt", name: "Old Galician-Portuguese",
                                 glottocode: "oldp1257", iso639p3: nil),
-      "mul" => Language.new(id: "mul", name: "Multiple languages", glottocode: nil, iso639p3: "mul")
+      "mul" => Language.new(id: "mul", name: "Multiple languages", glottocode: nil, iso639p3: "mul"),
+      # egyp1246 = Egyptian (Ancient), ISO egy, level: language — checked
+      # 2026-08-11 (P73-9) against the same cone.
+      "egy" => Language.new(id: "egy", name: "Egyptian (Ancient)", glottocode: "egyp1246",
+                            iso639p3: "egy")
     }.freeze
 
     # The explicit feature census (no discovery magic — the sources.yml
@@ -416,6 +422,44 @@ module Nabu
         maintenance: "re-derive after CJK-lane syncs (the census rebuilds with the fulltext " \
                      "index); the published-slice digest makes an unchanged census a " \
                      "fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "sux/sign-table", language: LANGUAGES.fetch("sux"),
+        title: "Compiled cuneiform sign cards — OSL identity, concordances, attestation counts",
+        # gold-DERIVED: a mechanical join of CC0 curation plus a measured
+        # counting pass whose scope is stated and censused in-band.
+        status: :available, tier: "gold-derived", anchoring: "none",
+        inputs: ["osl"], canonical_cones: ["osl"], builder: SignTableBuilder,
+        rationale: "The per-sign reference card compiled from what sux/value-signs flattens " \
+                   "value-wise: one row per top-level OSL sign with codepoints, every print-" \
+                   "list number, the CDLI reading concordance, AND per-source attestation doc-" \
+                   "counts over the open cuneiform corpora (cdli/oracc/tlhdig — the Edubba P-1 " \
+                   "rider's sign half, true sign-counts at last). Counting scope stated and " \
+                   "censused (value/logogram tokens; compounds out); nc lanes (etcsl, ebl) " \
+                   "have NO count columns, so no nc contribution can hide in an integer — the " \
+                   "lemma_frequencies lesson. Core CC BY 4.0; the Wiktionary/aes BY-SA sense " \
+                   "lanes are deliberately deferred to a later sidecar dataset so the core " \
+                   "stays BY (survey §2.6).",
+        maintenance: "re-derive after `nabu sync osl` or cuneiform-lane syncs (counts move " \
+                     "with the catalog); the counts digest in the recipe makes an unchanged " \
+                     "state a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "egy/unikemet-signs", language: LANGUAGES.fetch("egy"),
+        title: "The Egyptian sign spine — Unikemet codepoints with Gardiner codes and tool concordances",
+        # gold-DERIVED: a lossless verbatim flattening of the Unicode
+        # consortium's curated data file.
+        status: :available, tier: "gold-derived", anchoring: "none",
+        inputs: ["unikemet"], canonical_cones: ["unikemet"], builder: UnikemetSignsBuilder,
+        rationale: "Flattens Unikemet.txt to one row per encoded Egyptian hieroglyph — the " \
+                   "Gardiner-style kEH_Cat code, the original Hieroglyphica-era kEH_UniK code, " \
+                   "core/legacy status, description, functions, sound values, and the JSesh/" \
+                   "Hieroglyphica/IFAO concordances every Egyptological tool joins on (the " \
+                   "same spine Nabu's hiero card and the Edubba overlay key against). Every " \
+                   "cell verbatim; absent tags stay empty. Permissive input (Unicode License " \
+                   "V3) → clean CC BY 4.0.",
+        maintenance: "re-derive after `nabu sync unikemet` (upstream moves at annual Unicode " \
+                     "releases); mechanical, no review needed beyond spot-checks"
       )
     ].freeze
 
