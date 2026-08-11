@@ -118,7 +118,7 @@ module Nabu
       # P70 fail-fast: a malformed hand edit to config/lect_rulings.yml must
       # refuse HERE — before the db drop and the hours of replay the late
       # lect-journal stage would otherwise waste.
-      LectRulings.validate!(@config.lect_rulings_path)
+      LectRulings.validate!(@config.lect_rulings_paths)
       db_existed = File.exist?(db_path)
       # P36-0: the always-on stage profiler. Cheap (a monotonic sample per stage
       # boundary; per document for parse/insert), so it runs on every rebuild —

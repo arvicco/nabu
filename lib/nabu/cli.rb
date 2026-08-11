@@ -272,7 +272,7 @@ module Nabu
       config = Nabu::Config.load
       guard_catalog_free!(config) unless options[:"dry-run"]
       registry = require_lects_module!(config)
-      rules = Nabu::LectRules.load(config.lect_facet_rules_path)
+      rules = Nabu::LectRules.load(config.lect_facet_rules_paths)
       raise Thor::Error, "lect apply-rules: no rules file at #{config.lect_facet_rules_path}" unless rules
 
       begin
@@ -1437,6 +1437,18 @@ module Nabu
       raise Thor::Error, e.message
     ensure
       catalog&.disconnect
+    end
+
+    desc "migrate-local", "Move the instance files (rulings, grants, profile…) from config/ to local/config/ (P71)"
+    def migrate_local
+      config = Nabu::Config.load
+      result = Nabu::LocalMigration.run(config: config)
+      result.moved.each { |name| say "moved   config/#{name} -> local/config/#{name}" }
+      result.conflicts.each do |name|
+        say "CONFLICT: #{name} exists at BOTH config/ and local/config/ — the home copy governs; " \
+            "reconcile and delete the config/ straggler by hand", :yellow
+      end
+      say "nothing to move — the local/ layout is current" if result.moved.empty? && result.conflicts.empty?
     end
 
     desc "rebuild", "Rebuild the derived db/ from canonical/ (parse-only; no fetch)"

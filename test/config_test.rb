@@ -13,14 +13,22 @@ class ConfigTest < Minitest::Test
     end
   end
 
-  # P40-f: the focus profile path defaults to config/profile.yml and lives
-  # INSIDE config_dir, so `nabu backup` (which snapshots the whole config/
-  # tree) covers this owner-authored, non-derivable file for free.
-  def test_profile_path_defaults_under_config_and_is_backup_covered
+  # P40-f, INVERTED by P71-0 (the local/ elevation): the box profile is
+  # INSTANCE data — its home is local/config/profile.yml (backup-covered
+  # because local/ is a permanent backup section), with the loud legacy
+  # fallback while a pre-P71 copy still sits under config/.
+  def test_profile_path_lives_under_local_config_with_legacy_fallback
     Dir.mktmpdir do |root|
       config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)
-      assert_equal File.join(root, "config", "profile.yml"), config.profile_path
-      assert_equal config.config_dir, File.dirname(config.profile_path)
+      assert_equal File.join(root, "local", "config", "profile.yml"), config.profile_path
+      assert_equal config.local_config_dir, File.dirname(config.profile_path)
+
+      FileUtils.mkdir_p(File.join(root, "config"))
+      File.write(File.join(root, "config", "profile.yml"), "enabled: []\n")
+      _, err = capture_io do
+        assert_equal File.join(root, "config", "profile.yml"), config.profile_path
+      end
+      assert_match(/migrate-local/, err)
     end
   end
 
@@ -235,6 +243,61 @@ class ConfigTest < Minitest::Test
         assert_equal other, config.config_path
         assert_equal File.join(root, "canonical"), config.canonical_dir
       end
+    end
+  end
+
+  # -- P71-0: the local/ instance folder ------------------------------------
+
+  def test_local_dir_defaults_beside_config_and_honors_paths_local
+    Dir.mktmpdir do |root|
+      path = write_config(root, "")
+      config = Nabu::Config.load(path: path, root: root)
+      assert_equal File.join(root, "local"), config.local_dir
+      assert_equal File.join(root, "local", "config"), config.local_config_dir
+
+      path = write_config(root, "paths:\n  local: instance\n")
+      config = Nabu::Config.load(path: path, root: root)
+      assert_equal File.join(root, "instance"), config.local_dir
+    end
+  end
+
+  def test_settings_overlay_overrides_nabu_yml
+    Dir.mktmpdir do |root|
+      path = write_config(root, "backup:\n  target: /repo/default\n")
+      FileUtils.mkdir_p(File.join(root, "local", "config"))
+      File.write(File.join(root, "local", "config", "settings.yml"),
+                 "backup:\n  target: /volumes/mine\n")
+      config = Nabu::Config.load(path: path, root: root)
+      assert_equal "/volumes/mine", config.backup_target,
+                   "local/config/settings.yml is the instance overlay — it wins over nabu.yml"
+    end
+  end
+
+  def test_instance_files_live_under_local_config_with_loud_legacy_fallback
+    Dir.mktmpdir do |root|
+      path = write_config(root, "")
+      config = Nabu::Config.load(path: path, root: root)
+      # Fresh box: the local/config home, no fallback.
+      assert_equal File.join(root, "local", "config", "grants.yml"), config.grants_path
+      assert_equal File.join(root, "local", "config", "lect_rulings.yml"), config.lect_rulings_path
+      assert_equal File.join(root, "local", "config", "creep_acceptances.yml"),
+                   config.creep_acceptances_path
+      assert_equal File.join(root, "local", "config", "link_scopes.yml"), config.link_scopes_path
+
+      # Legacy-only box (pre-P71): reads/writes stay on the config/ copy —
+      # split-brain is worse than the old path — and the fallback is loud.
+      legacy = File.join(root, "config", "grants.yml")
+      File.write(legacy, "grants: []\n")
+      _, err = capture_io { assert_equal legacy, config.grants_path }
+      assert_match(/migrate-local/, err, "the legacy fallback must name the migration command")
+
+      # Migrated (both exist): local wins, silently.
+      FileUtils.mkdir_p(File.join(root, "local", "config"))
+      File.write(File.join(root, "local", "config", "grants.yml"), "grants: []\n")
+      _, err = capture_io do
+        assert_equal File.join(root, "local", "config", "grants.yml"), config.grants_path
+      end
+      assert_empty err
     end
   end
 

@@ -90,7 +90,7 @@ module Nabu
 
       # P70 fail-fast, mirroring the full rebuild: a malformed hand edit to
       # config/lect_rulings.yml refuses before any replay work.
-      LectRulings.validate!(@config.lect_rulings_path)
+      LectRulings.validate!(@config.lect_rulings_paths)
 
       db = Store.connect(db_path)
       Store.setup!(db)

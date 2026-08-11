@@ -30,8 +30,9 @@ paths:
 #     -volname NabuBackup ~/NabuBackup.sparsebundle
 #   hdiutil attach ~/NabuBackup.sparsebundle          # mounts /Volumes/NabuBackup
 #
-# Wired 2026-07-07 (owner decision): the NabuBackup sparsebundle volume
-# simulates the external disk; swapping in real hardware = change nothing
-# (mount the real disk under the same volume name) or edit this path.
-backup:
-  target: /Volumes/NabuBackup/nabu
+# P71 (the derivability law): the target is BOX-SPECIFIC, so it lives in
+# the instance overlay — local/config/settings.yml — which deep-merges
+# over this file at load (the overlay wins). Keys here stay the shipped
+# defaults; nothing box-specific belongs in the repo. Example overlay:
+#   backup:
+#     target: /Volumes/NabuBackup/nabu

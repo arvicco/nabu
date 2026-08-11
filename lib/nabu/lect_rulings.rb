@@ -36,10 +36,15 @@ module Nabu
     # Owner-editable file: tolerate an unquoted `at: 2026-08-10` (YAML
     # parses it as a Date, which safe_load rejects by default — and a
     # crashing load would kill assign/withdraw AND the rebuild stage).
+    # +path+ may be one file or the overlay pair (P71-0, owner-ruled
+    # 2026-08-11): a public config/ copy merges UNDER the instance home
+    # — same (urn, code) resolves to the later path's entry.
     def load(path)
-      return [] unless File.file?(path)
-
-      (YAML.safe_load_file(path, permitted_classes: [Date]) || {}).fetch("rulings", nil) || []
+      merged = Array(path).select { |p| File.file?(p) }.each_with_object({}) do |file, by_key|
+        rulings = (YAML.safe_load_file(file, permitted_classes: [Date]) || {}).fetch("rulings", nil) || []
+        rulings.each { |r| by_key[[r["urn"], r["code"]]] = r }
+      end
+      merged.values
     end
 
     # Append (or replace the same (urn, code)) ruling — the write-through
