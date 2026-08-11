@@ -213,10 +213,19 @@ module Nabu
 
         check_lect!(registry, lect_id)
         code = options[:code] || infer_code!(config, urn)
+        # P70 (the derivability contract): an OWNER ruling's source of
+        # truth is config/lect_rulings.yml — written FIRST; the journal
+        # row is its derived mirror (rebuild re-derives it). Rule-basis
+        # rows are compiled derivations and stay journal-only.
+        if options[:basis] == "owner"
+          Nabu::LectRulings.append!(config.lect_rulings_path, urn: urn, code: code,
+                                                              lect_id: lect_id, note: options[:note])
+        end
         journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
         verdict = Nabu::Store::LectJournal.assign!(journal, urn: urn, code: code, lect_id: lect_id,
                                                             basis: options[:basis], note: options[:note])
-        say "#{verdict}  #{urn}  #{code} → #{lect_id}  (#{options[:basis]})"
+        say "#{verdict}  #{urn}  #{code} → #{lect_id}  (#{options[:basis]}" \
+            "#{' · config/lect_rulings.yml' if options[:basis] == 'owner'})"
         refresh_lect_facet(config, urn)
       end
     end
@@ -451,6 +460,11 @@ module Nabu
 
       journal.disconnect
       writable = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+      # P70: the config source of truth FIRST — a failure between the two
+      # writes must leave the ruling gone from config (rebuild then heals
+      # the journal forward), never lingering there to resurrect a
+      # journal-withdrawn ruling at the next rebuild.
+      Nabu::LectRulings.remove!(config.lect_rulings_path, urn: urn, code: options[:code])
       count = Nabu::Store::LectJournal.withdraw!(writable, urn: urn, code: options[:code])
       say "withdrew #{count} assignment#{'s' unless count == 1}  #{urn}#{" #{options[:code]}" if options[:code]}"
       refresh_lect_facet(config, urn)
@@ -505,6 +519,14 @@ module Nabu
 
         rows = parse_batch!(registry, path)
         journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+        # P70: owner-basis batch rows write through config/lect_rulings.yml
+        # first (the source of truth) — the journal rows are derived.
+        rows.each do |row|
+          next unless row.fetch(:basis, "owner") == "owner"
+
+          Nabu::LectRulings.append!(config.lect_rulings_path, urn: row[:urn], code: row[:code],
+                                                              lect_id: row[:lect_id], note: row[:note])
+        end
         verdicts = rows.map { |row| Nabu::Store::LectJournal.assign!(journal, **row) }
         say "#{verdicts.size} assignments (#{verdicts.count(:inserted)} inserted, " \
             "#{verdicts.count(:updated)} updated) from #{path}"
@@ -4476,7 +4498,7 @@ module Nabu
       # non-interactively; otherwise show the terms and demand the typed word
       # (no TTY / refusal aborts with the request scaffold, adding nothing).
       def enable_grant!(entry, ledger)
-        gate = Nabu::GrantGate.new(ledger: ledger)
+        gate = Nabu::GrantGate.new(ledger: ledger, grants_path: Nabu::Config.load.grants_path)
         return say("#{entry.slug}: grant already acknowledged — enabling.", :yellow) if gate.acknowledged?(entry.slug)
 
         if options[:grant_acknowledged]
@@ -5944,6 +5966,13 @@ module Nabu
                                      .run(scope, lang: options[:lang], license: options[:license],
                                                  progress: batch_progress,
                                                  **batch_thresholds)
+        # P70-3b: the batch scope is config-durable — rebuild replays it.
+        unless options[:db]
+          params = { "lang" => options[:lang], "license" => options[:license] }
+                   .merge(batch_thresholds.transform_keys(&:to_s)).compact
+          Nabu::LinkScopes.record!(config.link_scopes_path, producer: "parallels",
+                                                            scope: scope, params: params)
+        end
         print_batch_parallels(result)
       ensure
         catalog&.disconnect
@@ -5992,6 +6021,13 @@ module Nabu
                                     .run(scope, gram_size: options[:gram_size].to_i,
                                                 min_count: options[:min_count].to_i,
                                                 lang: options[:lang], **max_formulas_option)
+        unless options[:db]
+          Nabu::LinkScopes.record!(config.link_scopes_path, producer: "formulas", scope: scope,
+                                                            params: { "gram_size" => options[:gram_size].to_i,
+                                                                      "min_count" => options[:min_count].to_i,
+                                                                      "lang" => options[:lang] }
+                                           .merge(max_formulas_option.transform_keys(&:to_s)).compact)
+        end
         print_batch_formulas(result)
       rescue ArgumentError => e
         raise Thor::Error, "formulas: #{e.message}"
@@ -6032,6 +6068,11 @@ module Nabu
         result = Nabu::BatchCognates.new(catalog: catalog, fulltext: fulltext,
                                          registry: registry, journal: journal)
                                     .run(work_id, langs: parse_langs(options[:langs]), all: options[:all])
+        unless options[:db]
+          Nabu::LinkScopes.record!(config.link_scopes_path, producer: "cognates", scope: work_id,
+                                                            params: { "langs" => parse_langs(options[:langs]),
+                                                                      "all" => options[:all] }.compact)
+        end
         print_batch_cognates(result)
       ensure
         catalog&.disconnect
@@ -8070,7 +8111,7 @@ module Nabu
         # P42-r1: an axis expansion is a batch, not an explicit per-source
         # request, so a grant-blocked member is SKIPPED with the honest line —
         # never prompted mid-group (the prompt is reserved for `sync <slug>`).
-        gate = Nabu::GrantGate.new(ledger: ledger)
+        gate = Nabu::GrantGate.new(ledger: ledger, grants_path: Nabu::Config.load.grants_path)
         grant_blocked, runnable = wired.partition { |member| gate.blocked?(registry[member]) }
         say axis_header(registry.axes[name])
         (runnable - synced).each do |member|
@@ -8149,7 +8190,7 @@ module Nabu
       def enforce_grant!(entry, ledger)
         return unless entry&.grant_required?
 
-        gate = Nabu::GrantGate.new(ledger: ledger)
+        gate = Nabu::GrantGate.new(ledger: ledger, grants_path: Nabu::Config.load.grants_path)
         return if gate.acknowledged?(entry.slug)
 
         if options[:grant_acknowledged]
@@ -8738,6 +8779,9 @@ module Nabu
         say "  re-derived #{result.outcomes.size}, clean #{result.cleans.size}, " \
             "skipped #{result.skips.size}"
         say "  indexed #{result.indexed} passages" if result.indexed
+        result.link_failures.each do |failure|
+          say "  WARNING: links re-mine failed for #{failure} — the links db has this gap", :yellow
+        end
         print_analyzed(result.analyzed)
       end
 
@@ -8775,6 +8819,9 @@ module Nabu
               "lexlep #{result.axes.lexlep}, tir #{result.axes.tir}, " \
               "iip #{result.axes.iip}, cdli #{result.axes.cdli}, " \
               "rundata #{result.axes.rundata}, openiti #{result.axes.openiti})"
+        end
+        result.link_failures.each do |failure|
+          say "  WARNING: links re-mine failed for #{failure} — the links db has this gap", :yellow
         end
         print_analyzed(result.analyzed)
         return unless result.facets&.rows&.positive? # zero-signal silence (compact rule)
@@ -8931,8 +8978,9 @@ module Nabu
         end
 
         ledger = open_or_create_ledger(config)
-        active = Nabu::Health::QuarantineBaseline.creep_finding(ledger, slug)
-        accepted = Nabu::Health::QuarantineBaseline.accept!(ledger, slug, note: options[:note])
+        active = Nabu::Health::QuarantineBaseline.creep_finding(ledger, slug, path: config.creep_acceptances_path)
+        accepted = Nabu::Health::QuarantineBaseline.accept!(ledger, slug, note: options[:note],
+                                                                          path: config.creep_acceptances_path)
         if accepted.nil?
           raise Thor::Error, "accept-creep: no quarantine baseline recorded for '#{slug}' — nothing to accept " \
                              "(a baseline is recorded at the source's first ok sync or rebuild)"
@@ -8967,7 +9015,8 @@ module Nabu
         report = Nabu::Health::LocalCheck.new(
           registry: view.registry, catalog: catalog, fulltext: fulltext, ledger: ledger,
           golden_queries: Nabu::Health::LocalCheck.golden_queries,
-          canonical_dir: config.canonical_dir
+          canonical_dir: config.canonical_dir,
+          creep_acceptances_path: config.creep_acceptances_path
         ).run
         print_local_health(report)
         print_focus_note(view, view.registry_hidden_slugs)

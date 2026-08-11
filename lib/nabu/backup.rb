@@ -7,20 +7,22 @@ module Nabu
   # P7-2): a file-level rsync snapshot of everything that is NOT re-derivable,
   # to a config-driven external-volume target.
   #
-  # == The backup set (everything canonical/ + the ledger + config)
+  # == The backup set (the P70 two-folder contract)
   #
+  # REQUIRED — the only non-derived data:
   # - canonical/  — the permanent asset, INCLUDING every `.attic/` (files
   #   upstream scrapped that survive nowhere else). File-level rsync copies the
   #   attic for free; a per-slug git mirror would MISS it (the attic is a plain
   #   dir inside the working tree, not a branch), which is exactly why the
   #   promise is "restorable from an rsync backup", not "from the git remotes".
-  # - db/history.sqlite3 — the ledger (P7-1): run history, sync pins, license
-  #   baselines, durable revisions. The ONLY copy; disposable it is not.
-  # - config/ — nabu.yml + sources.yml (the registry that says what the corpus
-  #   even is).
-  # - the derived dbs (catalog + fulltext) — included by DEFAULT (a cheap file
-  #   copy beats an hour of `nabu rebuild` on restore); `--skip-derived` omits
-  #   them (canonical/ + a rebuild reconstitutes them exactly).
+  # - config/ — every decision: the registries, rules/overrides/postures,
+  #   lect rulings, grants, creep acceptances, the box profile.
+  #
+  # CONVENIENCE (default-on, `--skip-derived` omits): the derived dbs
+  # (catalog + fulltext + lects) — a cheap file copy beats hours of
+  # `nabu rebuild` on restore — and the ledger (db/history.sqlite3),
+  # operational LOG whose loss costs history and guard baselines, never
+  # library data (№R-21; restore.md names the consequences).
   #
   # == The mount-point guard (owner-mandated 2026-07-07)
   #
@@ -131,17 +133,24 @@ module Nabu
     end
 
     def sections
+      # P70 — THE TWO-FOLDER CONTRACT (owner ruling 2026-08-10): canonical/
+      # + config/ are the ONLY non-derived data. The lect journal is
+      # derived (rebuild's "lect journal" stage re-mints it from
+      # config/lect_rulings.yml + rules + infer-dates); grants and creep
+      # acceptances live in config/ (the ledger rows are historical
+      # mirrors); the ledger itself is reclassified LOG — its runs/
+      # revisions/probes history is lost on restore BY DESIGN (№R-21).
+      # The optional derived sections remain a convenience (restoring a
+      # 75 GB catalog beats hours of rebuild) — never a necessity.
       list = [
         dir_section("canonical", @config.canonical_dir, File.join(@target, "canonical")),
-        dir_section("config", @config.config_dir, File.join(@target, "config")),
-        file_section("ledger", @config.history_path),
-        # P58-1: lect rulings are decisions, not derivations — backed up like
-        # the ledger (absent file = clean skip, as for every section).
-        file_section("lects", @config.lects_journal_path)
+        dir_section("config", @config.config_dir, File.join(@target, "config"))
       ]
       unless @skip_derived
         list << file_section("catalog", @config.catalog_path)
         list << file_section("fulltext", @config.fulltext_path)
+        list << file_section("lects", @config.lects_journal_path)
+        list << file_section("ledger", @config.history_path)
       end
       list
     end

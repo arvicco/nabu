@@ -224,6 +224,52 @@ class RebuildIncrementalTest < Minitest::Test
     assert_match(/full rebuild/, plan.refusal)
   end
 
+  # -- P70: dirty runs re-derive the sibling dbs like the full rebuild -----
+
+  def test_dirty_incremental_rederives_lect_journal_and_links
+    full_rebuilder.run
+    # A config ruling awaiting derivation + stray journal-only rows that a
+    # re-derivation must kill (they are backed by neither config nor mine).
+    Nabu::LectRulings.append!(config.lect_rulings_path,
+                              urn: "urn:nabu:alpha:a", code: "grc", lect_id: "grc:koine")
+    lects = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+    lects[:lect_assignments].insert(urn: "urn:stray", code: "grc", lect_id: "grc:doric",
+                                    basis: "owner", created_at: Time.now)
+    lects.disconnect
+    links = Nabu::Store::LinksJournal.open!(config.links_path)
+    run_id = links[:link_runs].insert(producer: "manual", scope: "manual", params_json: "{}",
+                                      code_version: "0", created_at: Time.now)
+    links[:links].insert(from_urn: "urn:stray", to_urn: "urn:stray2", kind: "reference",
+                         run_id: run_id, created_at: Time.now)
+    links.disconnect
+
+    write_canonical("beta", "b.txt" => "Odyssey\nἄνδρα πολύτροπον\n")
+    result = incremental_rebuilder.run
+
+    assert_empty result.link_failures
+    lects = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+    rows = lects[:lect_assignments].select_hash(:urn, :lect_id)
+    lects.disconnect
+    assert_equal "grc:koine", rows["urn:nabu:alpha:a"], "the config ruling must land in the journal"
+    refute rows.key?("urn:stray"), "a journal-only row is backed by nothing — the re-derivation kills it"
+    links = Nabu::Store::LinksJournal.open!(config.links_path)
+    assert_equal 0, links[:links].where(from_urn: "urn:stray").count,
+                 "a journal-only link is backed by nothing — the re-mine kills it"
+    links.disconnect
+  end
+
+  def test_incremental_refuses_a_malformed_rulings_file_before_any_replay
+    full_rebuilder.run
+    FileUtils.mkdir_p(File.dirname(config.lect_rulings_path))
+    File.write(config.lect_rulings_path, "rulings:\n- urn: urn:d:1\n")
+    write_canonical("beta", "b.txt" => "Odyssey\nchanged\n")
+    before = File.binread(catalog_path)
+
+    assert_raises(Nabu::Error) { incremental_rebuilder.run }
+
+    assert_equal before, File.binread(catalog_path), "the refusal must precede any replay work"
+  end
+
   # -- helpers -------------------------------------------------------------
 
   private
@@ -231,7 +277,7 @@ class RebuildIncrementalTest < Minitest::Test
   def config(db_dir: @db_dir)
     Nabu::Config.new(
       canonical_dir: @canonical, db_dir: db_dir,
-      sources_path: @sources_path, config_path: "(test)"
+      sources_path: @sources_path, config_path: File.join(@root, "config", "nabu.yml")
     )
   end
 

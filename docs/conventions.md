@@ -220,13 +220,15 @@ the old policy erased, and provably never for a document that already
 loaded (a loaded document has at least one passage, so the retry never
 runs and its frozen urns/text stay byte-identical).
 
-**Recorded future-work question (owner decision):** should `<del>`
-*always* render in `⟦…⟧`, partial cancellations included? Papyrologically
-that is the more faithful reading — Leiden treats `⟦⟧` as reading text,
-not apparatus. But adopting it rewrites every already-loaded passage that
-contains a partial del: a corpus-wide, journaled revision (bumped
-revisions, provenance entries), to be scheduled deliberately — not
-smuggled in through a parser patch.
+**RULED 2026-08-10 (№R-17, decision delegated to and made by the loop):**
+`<del>` ALWAYS renders in `⟦…⟧`, partial cancellations included — the
+faithful Leiden reading (⟦⟧ is reading text, not apparatus), recovering
+text the blanket drop silently lost, and retiring DDbDP's outlier status
+(the EDH/I.Sicily/ogham/IIP/RIIG parsers already render del→⟦…⟧). The
+corpus-wide migration — measured 2026-08-10 at 9,696 affected DDbDP
+documents — is a journaled re-parse (bumped revisions, provenance
+entries) scheduled as its OWN packet, never smuggled through a parser
+patch.
 
 **Per-source adoption (P17-2, EDH).** The always-`⟦…⟧` reading IS adopted
 for the EDH inscriptions (`EdhEpidocParser`): their
@@ -320,8 +322,13 @@ photographs of manuscripts. Hence:
 - Two editions of the same public-domain work can carry different licenses
   (Perseus CC BY-SA; a Brepols database, all-rights-reserved).
 - **License is data, recorded per document** (`license_class`: open /
-  attribution / nc / research_private / restricted), so queries and exports
-  can answer "only material I may republish" mechanically.
+  attribution / nc / odbl / research_private / restricted), so queries and
+  exports can answer "only material I may republish" mechanically.
+  **`open` covers the public domain** (№R-20, owner-ruled 2026-08-10):
+  no distinct `public_domain` class — PD and CC0-equivalent dedications
+  both class `open`; the legal distinction carries no reuse consequence,
+  and the source manifest's verbatim license line preserves the exact
+  wording for anyone who needs it.
 - The "unlock by reconstruction" strategy (docs/03): when a restricted
   database and an out-of-copyright print edition contain the same text, HTR
   on the PD scan yields a legally clean copy — same words, your labor.
