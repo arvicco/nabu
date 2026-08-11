@@ -30,7 +30,7 @@ What each command does and its exit contract:
   against the catalog. Read-only, no network. **Exit 0** clean; **exit 1** on any
   mismatch / missing / unparseable document, with the offending URNs listed.
 - **`nabu enable <axis|source…>` / `nabu disable <…>`** — the local enablement
-  config (`config/profile.yml`, P44-r3b). `enable` adds axes/sources to the set
+  config (`local/config/profile.yml`, P44-r3b/P71). `enable` adds axes/sources to the set
   active on this box; that set governs BOTH what `sync` acquires AND the default
   row set of `list` / `status` / `health` and the MCP `nabu_status` sources
   array. Enabling a grant-gated (`availability: blocked`) source by slug runs
@@ -563,14 +563,15 @@ concept always promised: **"restorable from an rsync backup with zero
 services."** File-level, no database dump, no daemon — just files on another
 disk that a bare `rsync` (or Finder drag) could restore.
 
-### What gets backed up (the non-derivable set)
+### What gets backed up (the P71 three-folder contract)
 
 | Section | Source | Why it is in the set |
 |---|---|---|
-| `canonical/` | the corpus tree | The permanent asset — **including every `.attic/`** |
-| `db/history.sqlite3` | the ledger (P7-1) | Run history, sync pins, license baselines, durable revisions — the **only** copy |
-| `config/` | nabu.yml + sources.yml | The registry that defines what the corpus *is* |
-| `db/catalog.sqlite3`, `db/fulltext.sqlite3` | the derived dbs | **Default-on** — a file copy beats an hour of rebuild; `--skip-derived` omits them |
+| `canonical/` | the universal asset | The fetched corpus — **including every `.attic/`** |
+| `config/` | the project definition | Registries, rules, postures — what the corpus *is* |
+| `local/` | THE INSTANCE | Owner shelves (`local/shelves/`), instance config (`local/config/` — rulings, grants, profile, settings), the ledger (`local/history.sqlite3` — the **only** copy of runs/pins/baselines/revisions) |
+| `.docs/` | the steering record | Owner working material with no other copy (№R-22) — non-contract, backed up by default |
+| `db/*.sqlite3` | the derived dbs | **Default-on convenience** — a file copy beats hours of rebuild; `--skip-derived` omits them (`nabu rebuild` re-mints every one from the three folders) |
 
 **Why file-level, not git mirrors.** The obvious "back up canonical/ by pushing
 each slug's git to a bare mirror" silently drops the `.attic/` — it is a plain
@@ -599,7 +600,8 @@ nightly timing or re-run after the write finishes.
 ### The target: a mounted external volume
 
 The destination is a path **under a mounted external volume**, wired in
-`config/nabu.yml`:
+the instance overlay `local/config/settings.yml` (box-specific values
+never live in the repo — P71):
 
 ```yaml
 backup:
@@ -624,9 +626,10 @@ hdiutil attach "$HOME/NabuBackup.sparsebundle"
 hdiutil detach /Volumes/NabuBackup
 ```
 
-With the volume attached, `backup: target: /Volumes/NabuBackup/nabu` and a plain
-`nabu backup` works. When real hardware arrives, `hdiutil detach`, plug in the
-disk (it mounts under `/Volumes/<name>`), and change the one config line.
+With the volume attached, `backup: target: /Volumes/NabuBackup/nabu` (in
+`local/config/settings.yml`) and a plain `nabu backup` works. When real
+hardware arrives, `hdiutil detach`, plug in the disk (it mounts under
+`/Volumes/<name>`), and change the one overlay line.
 
 ### The mount-point guard (why an unmounted target is refused)
 
@@ -666,7 +669,7 @@ bypassed the blast radius is contained.
 nabu backup                       # to the configured volume (guarded)
 nabu backup --to /Volumes/X/nabu  # explicit target
 nabu backup --dry-run             # print the rsync plan, change nothing
-nabu backup --skip-derived        # canonical + ledger + config only
+nabu backup --skip-derived        # the pure three-folder set (canonical + config + local)
 ```
 
 Each run prints one line per section (files, size, duration) and a summary; any
@@ -724,7 +727,7 @@ bundle exec rake ops:drill
 
 It backs up the live tree to a tmp target (`--allow-unmounted`, because the tmp
 target is same-disk on purpose), **restores** into a fresh tmp "machine",
-**rebuilds** the derived db from the restored canonical/ alone, **verifies**,
+**rebuilds** the derived db from the restored permanent folders, **verifies**,
 **replays** the golden queries, and cross-checks the restored document/passage
 counts against the source of truth (the live catalog). It only **reads** the
 live corpus — backup is read-only on its sources — and writes exclusively under
@@ -744,6 +747,16 @@ Restore drill
 A non-zero exit (`NOT RESTORABLE`) means the backup would not restore cleanly —
 investigate before trusting it. Run the drill after any change to the backup set,
 the loader, or the rebuild path.
+
+**The pure drill — the derivability law's proof (P71-8).** `rake
+ops:drill_pure` restores ONLY the three permanent folders (canonical/ +
+config/ + local/ — never db/), rebuilds, and additionally asserts: the
+re-derived lect journal and re-mined links match the live instruments,
+and the grant/creep gates answer from `local/config/` with no ledger
+consulted. Its report adds a `law` line with the four verdicts. Run it
+as the acceptance proof after any change to what the law covers —
+note it rebuilds the WHOLE corpus from scratch (hours on the live
+library), so schedule it deliberately.
 
 ### The nightly backup job
 

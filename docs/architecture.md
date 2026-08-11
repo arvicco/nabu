@@ -1032,7 +1032,7 @@ with the ledger's *mechanics* (its own forward-only migration track in
 `db/links_migrate/`, its own `schema_info`, absent-file = empty state,
 urn keying). DERIVED since P70-3b: `nabu rebuild`'s links stage wipes
 and re-mints it (slug-scoped producers from the registry + the batch
-scopes recorded in config/link_scopes.yml), so losing it costs nothing
+scopes recorded in local/config/link_scopes.yml), so losing it costs nothing
 a rebuild cannot restore — backups may skip it.
 
 **Write discipline.** Edges are minted ONLY by batch producers. Producer #1
