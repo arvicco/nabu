@@ -27,3 +27,7 @@
 .vscode/
 .claude/worktrees/
 .docs/
+
+# P71: the local instance folder — owner rulings, grants, profile, settings;
+# part of the BACKUP set, never of the repo (the derivability law).
+local/

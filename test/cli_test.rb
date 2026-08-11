@@ -1779,6 +1779,7 @@ class CLITest < Minitest::Test
   # deliberately empty (disable-everything never re-migrates).
   def test_legacy_empty_profile_migrates_but_new_format_empty_governs
     with_axis_corpus do |config|
+      FileUtils.mkdir_p(File.dirname(config.profile_path))
       File.write(config.profile_path, "# nabu focus profile — your personal research interest\nfocus: []\n")
       out, err, status = with_config(config) { run_cli(%w[status]) }
       assert_nil status

@@ -92,9 +92,9 @@ module Nabu
       # dates:} counts.
       def rederive!(db, catalog:, config:)
         db[:lect_assignments].delete
-        owner = Nabu::LectRulings.apply!(config.lect_rulings_path, journal: db)
+        owner = Nabu::LectRulings.apply!(config.lect_rulings_paths, journal: db)
         rules_applied = 0
-        if (rules = Nabu::LectRules.load(config.lect_facet_rules_path))
+        if (rules = Nabu::LectRules.load(config.lect_facet_rules_paths))
           rules.rules.each do |rule|
             outcome = rules.apply!(rule, catalog: catalog, journal: db)
             rules_applied += outcome.assigned

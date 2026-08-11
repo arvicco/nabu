@@ -44,6 +44,24 @@ class LectRulingsTest < Minitest::Test
     with_path { |path| assert_empty Nabu::LectRulings.load(path) }
   end
 
+  # P71-0 (owner-ruled overlay-merge, mirror direction): the instance
+  # home may be paired with a PUBLIC config/ copy (a publicized ruling);
+  # both merge, the later path — the instance — winning its (urn, code).
+  def test_load_merges_the_public_copy_under_the_instance_home
+    Dir.mktmpdir do |dir|
+      public_copy = File.join(dir, "public.yml")
+      home = File.join(dir, "home.yml")
+      Nabu::LectRulings.append!(public_copy, urn: "urn:d:1", code: "sux", lect_id: "sux:post")
+      Nabu::LectRulings.append!(public_copy, urn: "urn:d:2", code: "sux", lect_id: "sux:arch")
+      Nabu::LectRulings.append!(home, urn: "urn:d:2", code: "sux", lect_id: "sux:ur3")
+      merged = Nabu::LectRulings.load([public_copy, home])
+      assert_equal 2, merged.size
+      assert_equal "sux:post", merged.find { |r| r["urn"] == "urn:d:1" }["lect"]
+      assert_equal "sux:ur3", merged.find { |r| r["urn"] == "urn:d:2" }["lect"],
+                   "the instance home wins its (urn, code)"
+    end
+  end
+
   # The file is OWNER-EDITABLE: an unquoted `at: 2026-08-10` parses as a
   # YAML Date — the load must tolerate it (a crashing load would kill
   # assign/withdraw AND the rebuild's lect-journal stage).

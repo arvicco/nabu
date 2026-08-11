@@ -34,21 +34,27 @@ module Nabu
     # nil when the file is absent (feature-module posture) — the suite
     # check then reports every non-machine source as unpostured. An
     # unknown layer key raises: a typo must never read as "no posture".
+    # +path+ may be one file or an overlay pair (P71-0, owner-ruled
+    # 2026-08-11): declarations merge per (slug, layer), later path wins.
     def self.load(path)
-      return nil unless File.file?(path)
+      paths = Array(path).select { |p| File.file?(p) }
+      return nil if paths.empty?
 
-      raw = YAML.safe_load_file(path) || {}
-      declarations = (raw["sources"] || {}).flat_map do |slug, layers|
-        (layers || {}).map do |layer, entry|
-          unless LAYERS.key?(layer)
-            raise Nabu::Error, "postures.yml: #{slug}: unknown layer #{layer.inspect} " \
-                               "(ruled layers: #{LAYERS.keys.join('/')})"
+      merged = paths.each_with_object({}) do |file, by_key|
+        raw = YAML.safe_load_file(file) || {}
+        (raw["sources"] || {}).each do |slug, layers|
+          (layers || {}).each do |layer, entry|
+            unless LAYERS.key?(layer)
+              raise Nabu::Error, "postures.yml: #{slug}: unknown layer #{layer.inspect} " \
+                                 "(ruled layers: #{LAYERS.keys.join('/')})"
+            end
+
+            by_key[[slug, layer]] =
+              Declaration.new(slug: slug, layer: layer, posture: entry.fetch("posture"), note: entry["note"])
           end
-
-          Declaration.new(slug: slug, layer: layer, posture: entry.fetch("posture"), note: entry["note"])
         end
       end
-      new(declarations: declarations)
+      new(declarations: merged.values)
     end
 
     def initialize(declarations:)
