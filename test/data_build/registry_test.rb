@@ -12,7 +12,8 @@ class DataBuildRegistryTest < Minitest::Test
   EXPECTED_SLUGS = %w[san/form-lemma xct/wylie-fold xct/verb-lemma xct/segmentation
                       zho/hani-fold jpn/aozora-gaiji lat/sabellic-loans grc/meter
                       jpn/kyujitai-fold lzh/kanripo-gaiji sux/value-signs
-                      xct/actib-anchors roa-opt/cantigas mul/lect-assignments].freeze
+                      xct/actib-anchors roa-opt/cantigas mul/lect-assignments
+                      mul/place-refs].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -226,6 +227,19 @@ class DataBuildRegistryTest < Minitest::Test
                  "the public id grammar is cited where the owner reads it")
     assert_match(/censused/, assignments.rationale,
                  "the row-by-row license exclusion is stated where the owner reads it")
+
+    place_refs = Nabu::DataBuild.feature("mul/place-refs")
+    assert_equal :available, place_refs.status, "P73-4: builder and feature land together"
+    assert_equal Nabu::DataBuild::PlaceRefsBuilder, place_refs.builder
+    assert_equal "gold-derived", place_refs.tier
+    assert_equal "document-urn", place_refs.anchoring
+    assert_equal ["nabu-places"], place_refs.inputs,
+                 "the decisions registry is the one declared input — the stale-ingest guard " \
+                 "covers its cone"
+    assert_equal ["nabu-places"], place_refs.canonical_cones
+    assert_equal "mul-place-refs", place_refs.package_name
+    assert_match(/Basis/, place_refs.rationale,
+                 "the upstream-vs-registry honesty is stated where the owner reads it")
   end
 
   def test_language_statics_match_the_glottolog_spine
@@ -333,9 +347,10 @@ class DataBuildRegistryTest < Minitest::Test
       "jpn/kyujitai-fold" => "CC-BY-SA-4.0", "lzh/kanripo-gaiji" => "CC-BY-SA-4.0",
       "sux/value-signs" => "CC-BY-4.0", "xct/actib-anchors" => "CC-BY-4.0",
       "roa-opt/cantigas" => "CC-BY-4.0",
-      # P73-3: the №R-24 one-carve-out ruling — the journal's share-alike
-      # lanes (edh, aes, ...) ride inside one BY-SA dataset.
-      "mul/lect-assignments" => "CC-BY-SA-4.0"
+      # P73-3/P73-4: the №R-24 one-carve-out ruling — the share-alike
+      # lanes (edh, aes, ...) ride inside one BY-SA dataset each.
+      "mul/lect-assignments" => "CC-BY-SA-4.0",
+      "mul/place-refs" => "CC-BY-SA-4.0"
     }
     assert_equal(expected, features.to_h { |feature| [feature.slug, feature.license] })
   end
