@@ -54,6 +54,28 @@ module Query
 
     # == mining + ranking =====================================================
 
+    # P72-3 (Edubba FR-3): spaceless CJK mines at CHARACTER grain — the
+    # word tokenizer saw a whole lzh clause as one token (the Analects =
+    # "4,625 tokens", the survey's finding), so 子曰 was invisible. An
+    # all-Han gram keys and reads AS the run (子曰, never "子 曰").
+    def test_cjk_mines_at_char_grain_and_joins_han_grams_spaceless
+      kanripo = Nabu::Store::Source.create(
+        slug: "kanripo", name: "KR", adapter_class: "TestAdapter", license_class: "attribution"
+      )
+      doc = make_document(urn: "urn:nabu:kanripo:lunyu", source: kanripo, language: "lzh")
+      %w[子曰學而時習之 子曰溫故而知新 子曰見賢思齊焉].each_with_index do |line, i|
+        make_passage(doc, urn: "#{doc.urn}:#{i}", sequence: i, text: line, language: "lzh")
+      end
+
+      result = formulas("kanripo", gram_size: 2, min_count: 3)
+      top = result.formulas.first
+      assert top, "the shared opening must surface"
+      assert_equal "子曰", top.gram, "an all-Han gram joins spaceless"
+      assert_equal 3, top.count
+      assert_operator result.token_count, :>, 10,
+                      "char grain: each character is a token, not each clause"
+    end
+
     def test_mines_the_recurring_formula
       seed_riddles
       result = formulas("aspr")
