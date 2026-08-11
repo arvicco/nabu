@@ -154,7 +154,7 @@ module Nabu
           passage_count += 1
           token_count += tokens.size
           shingle(tokens, gram_size).each do |gram_tokens_arr|
-            gram = gram_tokens_arr.join(" ")
+            gram = Grams.join(gram_tokens_arr)
             counts[gram] += 1
             store = examples[gram]
             store << row[:urn] if store.size < EXAMPLE_LOCI && store.last != row[:urn]
@@ -186,7 +186,7 @@ module Nabu
         dataset.each do |row|
           seen = Set.new
           shingle(gram_tokens(row[:text_normalized]), gram_size).each do |gram_tokens_arr|
-            gram = gram_tokens_arr.join(" ")
+            gram = Grams.join(gram_tokens_arr)
             loci[gram] << row[:urn] if wanted.include?(gram) && seen.add?(gram)
           end
         end

@@ -1799,6 +1799,13 @@ module Nabu
     option :char_component, type: :string, banner: "C",
                             desc: "Character filter: characters CONTAINING C anywhere in their " \
                                   "structure (KRADFILE ∪ BabelStone IDS transitive containment)"
+    option :charset, type: :string, banner: "CHARS",
+                     desc: "Graded-reading filter (P72-1): only passages whose distinct Han " \
+                           "characters fall INSIDE this set (fold-aware; spaces ignored); " \
+                           "composes with a text query and --lang/--license/--source"
+    option :max_foreign, type: :numeric, default: 0, banner: "N",
+                         desc: "With --charset: allow up to N characters outside the set per " \
+                               "passage (0-3); each hit names its strangers"
     option :fuzzy, type: :boolean, default: false,
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
     option :long, type: :boolean, default: false,
@@ -1877,6 +1884,16 @@ module Nabu
                            "plain text search or a term-less browse only — not --lemma/--near/" \
                            "--fuzzy or the character-structure filters"
       end
+
+      if options[:charset]
+        if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph] ||
+           options[:exact] || options[:word] || options[:words] || char_filter_options?
+          raise Thor::Error, "search: --charset is the coverage filter over whole passages — it " \
+                             "composes with a plain text query and --lang/--license/--source only"
+        end
+        return graded_search(query)
+      end
+      raise Thor::Error, "search: --max-foreign only accompanies --charset" if options[:max_foreign].to_i.positive?
 
       if char_filter_options?
         if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
@@ -2843,8 +2860,9 @@ module Nabu
       kuni; lowercase also answers as pinyin, each hit labeled). Every
       lane lists every character that carries the reading.
 
-      --json (sign cards only) emits the frozen machine contract the Edubba
-      downstream consumes; an ambiguous value input lists ALL candidate
+      --json emits the frozen machine contract the Edubba downstream
+      consumes — the cuneiform/hieroglyph sign cards (P65) and the Han
+      card (P72-2) alike; an ambiguous value input lists ALL candidate
       signs, never one silently.
 
       The Han card composes every shelf the library holds — the join no
@@ -3506,10 +3524,20 @@ module Nabu
     option :to, type: :numeric, banner: "YEAR", desc: "With --by-century: latest year"
     option :century, type: :numeric, banner: "N", desc: "With --by-century: one century's window (6, -2)"
     option :place, type: :string, banner: "PATTERN", desc: "With --by-century: provenance place LIKE filter"
+    option :chars, type: :boolean, default: false,
+                   desc: "Character-grain profile (P72-4): per-document Han character frequencies " \
+                         "— the sinograph instrument for unlemmatized documents (kanripo/cbeta/aozora)"
+    option :coverage, type: :string, banner: "CHARS",
+                      desc: "With --chars: coverage of the document against this character set " \
+                            "(fold-aware) — occurrence %, distinct split, and the top strangers"
+    option :json, type: :boolean, default: false,
+                  desc: "With --chars: emit the frozen machine contract instead of the card"
     def vocab(urn = nil)
       urn = urn.to_s.strip
       return vocab_by_century(urn) if options[:by_century]
       raise Thor::Error, "vocab: give a document, range, or passage urn" if urn.empty?
+      return char_vocab(urn) if options[:chars]
+      raise Thor::Error, "vocab: --coverage/--json ride the --chars profile" if options[:coverage] || options[:json]
 
       config = Nabu::Config.load
       catalog = open_catalog(config)
@@ -6456,6 +6484,55 @@ module Nabu
         end
       end
 
+      # The graded-reading search (P72-1, Edubba FR-1): --charset coverage
+      # over the P72 passage_chars index — quasi-instant by construction
+      # (indexed rarest-char candidates + exact verify), honest hint when
+      # the index predates P72.
+      def graded_search(query)
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        validate_source!(catalog, options[:source])
+        outcome = Nabu::Query::Graded.new(catalog: catalog, fulltext: fulltext)
+                                     .run(query, charset: options[:charset],
+                                                 max_foreign: options[:max_foreign].to_i,
+                                                 lang: options[:lang], license: options[:license],
+                                                 source: options[:source], limit: options[:limit].to_i)
+        print_graded_results(outcome, query: query)
+        print_display_footer
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      def print_graded_results(outcome, query:)
+        unless outcome.indexed
+          return say("coverage not indexed yet — the passage_chars index arrives with the next " \
+                     "`nabu rebuild` (or any sync's index refresh); no scan attempted")
+        end
+        if outcome.results.empty?
+          tail = query.empty? ? "" : " that also match #{query.inspect}"
+          return say("no passages read inside this #{outcome.charset_size}-character set" \
+                     "#{" (±#{options[:max_foreign].to_i})" if options[:max_foreign].to_i.positive?}#{tail}")
+        end
+
+        outcome.results.each do |result|
+          strangers = result.foreign.empty? ? "" : "  +{#{result.foreign.join(' ')}}"
+          say "#{result.urn}  [#{result.language}]  #{result.nchars} chars#{strangers}"
+          say "  #{result.text}"
+        end
+        say ""
+        say "coverage: #{outcome.charset_size}-character set" \
+            "#{" ± #{options[:max_foreign].to_i} strangers" if options[:max_foreign].to_i.positive?}" \
+            "#{"; text query #{query.inspect}" unless query.empty?}" \
+            "#{' — candidate window filled; narrow with --source/--lang for the rest' if outcome.capped}"
+      end
+
       # The explicit character-structure search (P37-4): --radical/--strokes/
       # --char-component resolve to a glyph set (CharFilter), which filters
       # Han-language passages by containment, composing with a plain text
@@ -6732,6 +6809,53 @@ module Nabu
       # `vocab --by-century` (P15-2): the diachronic histogram of the dated
       # corpus, optionally filtered by a text query (plot a word across
       # centuries) and by --lang/--license/date/--place.
+      # P72-4: the character-grain profile + coverage instrument.
+      def char_vocab(urn)
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
+
+        profile = Nabu::Query::CharVocab.new(catalog: catalog)
+                                        .run(urn, limit: options[:limit].to_i,
+                                                  coverage: options[:coverage])
+        if options[:json]
+          say JSON.pretty_generate(Nabu::Query::CharVocab.json_payload(urn, profile))
+          return
+        end
+        raise Thor::Error, "vocab: no document #{urn}" unless profile
+
+        print_char_vocab(profile)
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      ensure
+        catalog&.disconnect
+      end
+
+      def print_char_vocab(profile)
+        say "#{profile.urn}  #{profile.title}  [#{profile.language}]"
+        if profile.total.zero?
+          say "  no Han characters in this document — the char-grain profile is for sinograph texts"
+          return
+        end
+        say "  #{profile.total} Han character occurrences · #{profile.distinct} distinct · " \
+            "#{profile.passages} passages · #{profile.hapax_count} hapax"
+        say ""
+        say "  top characters:"
+        profile.top.each { |row| say format("    %<char>s  %<count>6d", char: row.char, count: row.count) }
+        say ""
+        say "  hapax (once only): #{profile.hapax.join(' ')}#{' …' if profile.hapax_count > profile.hapax.size}"
+        return unless profile.coverage
+
+        c = profile.coverage
+        say ""
+        say "  coverage vs #{c.charset_size}-character set: #{c.occurrence_pct}% of occurrences · " \
+            "#{c.distinct_covered}/#{c.distinct_total} distinct characters inside"
+        return if c.strangers.empty?
+
+        strangers = c.strangers.map { |row| "#{row.char} #{row.count}" }.join("  ·  ")
+        say "  top strangers (teach next): #{strangers}"
+      end
+
       def vocab_by_century(query)
         validate_license!(options[:license])
         from, to = date_window
@@ -6934,13 +7058,9 @@ module Nabu
 
       # -- the P65 `nabu char` dispatch lanes --------------------------------
 
-      # The original P37-4 Han path, verbatim. --json has no Han contract
-      # yet — said plainly (the sign cards carry one).
+      # The original P37-4 Han path; --json emits the P72-2 frozen contract
+      # (the sign cards' P65 pattern extended to the Han card).
       def han_char_card(config, input)
-        if options[:json]
-          raise Thor::Error, "char --json: the Han card has no JSON contract yet — the " \
-                             "cuneiform/hieroglyph sign cards do (P65)"
-        end
         catalog = open_catalog(config)
         raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
         unless catalog.table_exists?(:dictionary_entries)
@@ -6950,7 +7070,11 @@ module Nabu
 
         fulltext = open_fulltext(config)
         card = Nabu::Query::Char.new(catalog: catalog, fulltext: fulltext).run(input)
-        print_char_card(card)
+        if options[:json]
+          say JSON.pretty_generate(Nabu::Query::Char.json_payload(input, card))
+        else
+          print_char_card(card)
+        end
       ensure
         catalog&.disconnect
         fulltext&.disconnect
@@ -7340,6 +7464,12 @@ module Nabu
         totals = card.corpus.sort_by { |_, count| -count }
                             .map { |lang, count| "#{lang} #{count}" }.join("  ·  ")
         say "corpus attestation: #{totals}"
+        # P72-5: the per-source provenance split, when more than one source
+        # attests (a single-source panel would just repeat the line above).
+        split = card.corpus_by_source || []
+        return unless split.map(&:first).uniq.size > 1
+
+        say "  by source: #{split.map { |slug, lang, docs| "#{slug} #{lang} #{docs}" }.join('  ·  ')}"
       end
 
       def print_char_search_affordances(card)

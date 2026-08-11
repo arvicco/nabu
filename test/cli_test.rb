@@ -4361,6 +4361,18 @@ class CLITest < Minitest::Test
     assert_match(/cannot run a term-less browse/, err2)
   end
 
+  # -- search --charset (P72-1, the graded-reading lane) ---------------------
+
+  def test_charset_refuses_word_grain_combos_and_lone_max_foreign
+    _out, err, status = run_cli(%w[search --charset 子曰 --lemma dico])
+    assert_equal 1, status
+    assert_match(/coverage filter/, err)
+
+    _out2, err2, status2 = run_cli(%w[search q --max-foreign 2])
+    assert_equal 1, status2
+    assert_match(/only accompanies --charset/, err2)
+  end
+
   # -- search --fuzzy (P16-4) ------------------------------------------------
 
   # The papyrologist's fragment, brackets and all: an infix hit on the

@@ -45,7 +45,8 @@ module Nabu
         :glyph, :codepoint, :radical, :total_strokes,
         :ids, :components, :variants,
         :readings_ja, :readings_sinoxenic, :pedagogy, :desk_reference,
-        :old_chinese, :middle_chinese, :early_japan, :tls, :corpus, :held_shelves
+        :old_chinese, :middle_chinese, :early_japan, :tls, :corpus,
+        :corpus_by_source, :held_shelves
       )
 
       # const: the five HDIC databases as their own diachronic buckets — a
@@ -66,6 +67,24 @@ module Nabu
         "kSemanticVariant" => "semantic", "kSpecializedSemanticVariant" => "specialized-semantic",
         "kZVariant" => "z-variant", "kSpoofingVariant" => "spoofing"
       }.freeze
+
+      # The FROZEN machine contract for the Han card (P72-2, Edubba FR-2 —
+      # the sign cards' P65 pattern extended). The payload mirrors the Card
+      # shape one-to-one via a deep Data serialization: freezing this
+      # contract = freezing the Card's own fields, so the two can never
+      # drift. nil card (no shelf) serializes honestly as {"glyph", "card": null}.
+      def self.json_payload(glyph, card)
+        { "glyph" => glyph, "card" => card && serialize(card) }
+      end
+
+      def self.serialize(value)
+        case value
+        when Data then value.to_h.to_h { |key, inner| [key.to_s, serialize(inner)] }
+        when Hash then value.to_h { |key, inner| [key.to_s, serialize(inner)] }
+        when Array then value.map { |inner| serialize(inner) }
+        else value
+        end
+      end
 
       def initialize(catalog:, fulltext: nil)
         @catalog = catalog
@@ -138,6 +157,7 @@ module Nabu
           early_japan: shelf_entries(by_slug, HDIC_SLUGS),
           tls: shelf_entries(by_slug, %w[tls-words tls-concepts]),
           corpus: corpus_attestation(glyph),
+          corpus_by_source: corpus_attestation_by_source(glyph),
           held_shelves: by_slug.keys.sort
         )
       end
@@ -367,6 +387,23 @@ module Nabu
           .group(:language)
           .select_map([:language, Sequel.function(:sum, :docs).as(:docs)])
           .to_h
+      end
+
+      # P72-5 (Edubba FR-5): the per-source split of the same postings —
+      # [slug, language, docs] rows, largest first, so the card's corpus
+      # panel matches the provenance discipline of Edubba's committed
+      # frequency tables (kanripo vs the Japanese corpora, named apart).
+      def corpus_attestation_by_source(glyph)
+        table = Nabu::Store::Indexer::CHAR_POSTINGS_TABLE
+        return nil unless @fulltext&.table_exists?(table)
+
+        slugs = @catalog[:sources].select_hash(:id, :slug)
+        @fulltext[table]
+          .where(char: Nabu::Normalize.query_forms(glyph))
+          .group(:source_id, :language)
+          .select_map([:source_id, :language, Sequel.function(:sum, :docs).as(:docs)])
+          .map { |source_id, language, docs| [slugs.fetch(source_id, source_id.to_s), language, docs] }
+          .sort_by { |row| -row[2] }
       end
 
       # -- body helpers -----------------------------------------------------------
