@@ -71,6 +71,38 @@ class DrillTest < Minitest::Test
     assert_equal before, source_snapshot, "the drill must read, never mutate, its source"
   end
 
+  # P71-8, THE LAW'S PROOF: pure mode restores ONLY canonical/ + config/
+  # + local/ (no db/) — the rebuild re-mints every derived store, the
+  # lect journal matches the live instrument (the rulings replay), and
+  # the grant/creep gates answer from local/config with NO ledger.
+  def test_pure_drill_restores_the_three_folders_and_rederives_everything
+    # Instance state that must survive through local/ alone:
+    Nabu::LectRulings.append!(live_config.lect_rulings_path,
+                              urn: "urn:nabu:corpus:one", code: "grc", lect_id: "grc:koine")
+    gate = Nabu::GrantGate.new(ledger: nil, grants_path: live_config.grants_path)
+    gate.record!(slug: "corpus", terms: "any use", how: "typed")
+    FileUtils.mkdir_p(File.dirname(live_config.creep_acceptances_path))
+    File.write(live_config.creep_acceptances_path,
+               "acceptances:\n- source: corpus\n  baseline: 3\n  note: drill\n  at: \"2026-08-11\"\n")
+    # Live journal state = what a rederive should reproduce:
+    journal = Nabu::Store::LectJournal.open!(live_config.lects_journal_path)
+    Nabu::Store::LectJournal.rederive!(journal, catalog: nil, config: live_config)
+    journal.disconnect
+
+    Dir.mktmpdir("nabu-drill-work") do |workspace|
+      report = Nabu::Ops::Drill.new(config: live_config, workspace: workspace, pure: true).run
+
+      refute_path_exists File.join(report.machine_root, "db", "history.sqlite3"),
+                         "pure mode restores NO db/ files"
+      assert report.lects_match, "the restored lect journal must equal the live derivation"
+      assert report.links_match
+      assert report.grants_quiet, "grants answer from local/config with no ledger"
+      assert report.creep_quiet
+      assert_equal report.source_counts, report.restored_counts
+      assert_predicate report, :ok?
+    end
+  end
+
   private
 
   def registry
