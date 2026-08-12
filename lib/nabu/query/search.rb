@@ -290,9 +290,13 @@ module Nabu
       # +script+ (P75 C-2) keeps only documents whose resolved lect id
       # claims the held-surface script (~code) or whose artifact-script
       # axis claims the artifact's system (CatalogJoin#script_exists).
+      # +within+ (P75 C-9, №R-5): [lat, lon, km] — only documents whose
+      # coordinates-lane find-location falls in the radius
+      # (CatalogJoin#within_exists; coordinate-less documents fall out,
+      # like undated ones under a date filter).
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
               facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil,
-              exact: false, word: false, words: false, lect: nil, script: nil,
+              exact: false, word: false, words: false, lect: nil, script: nil, within: nil,
               scan_ceiling: SCAN_CEILING, ubiquity_threshold: self.class.ubiquity_threshold)
         @incomplete_hint = nil
         @rank_note = nil
@@ -308,7 +312,7 @@ module Nabu
         filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),
                     facets: facets, source: source, sources: sources, loans: loans,
                     meter: meter, meter_pattern: meter_pattern,
-                    script: script_code(script) }.merge(lect_filter(lect))
+                    script: script_code(script), within: within_spec(within) }.merge(lect_filter(lect))
         page = if exact || word
                  verified_page(variants, query, filters, limit: limit, urn: urn,
                                                          scan_ceiling: scan_ceiling, exact: exact, word: word)
@@ -340,7 +344,7 @@ module Nabu
       # exactly as visible_passages composes them for ranked search.
       def browse(lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil,
                  facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil,
-                 lect: nil, script: nil)
+                 lect: nil, script: nil, within: nil)
         @incomplete_hint = nil
         @rank_note = nil
         @meter_note = nil
@@ -349,7 +353,8 @@ module Nabu
                                 place: place_resolution(place),
                                 facets: facets, source: source, sources: sources, loans: loans,
                                 meter: meter, meter_pattern: meter_pattern,
-                                script: script_code(script), **lect_filter(lect))
+                                script: script_code(script), within: within_spec(within),
+                                **lect_filter(lect))
                .order(Sequel[:passages][:id])
                .select(*catalog_columns)
                .limit(limit)
@@ -415,6 +420,21 @@ module Nabu
         resolution = PlaceFilter.resolve(place, catalog: @catalog, places: @places)
         @place_note = place_note_for(resolution)
         resolution
+      end
+
+      # Validate a --within spec (P75 C-9): [lat, lon, km], WGS84 ranges,
+      # positive radius — one enforcement point for every surface.
+      def within_spec(within)
+        return nil if within.nil?
+
+        lat, lon, km = within
+        unless within.size == 3 && [lat, lon, km].all?(Numeric) &&
+               lat.abs <= 90 && lon.abs <= 180 && km.positive?
+          raise Nabu::Error,
+                "within: give LAT,LON,KM — latitude −90..90, longitude −180..180, a positive " \
+                "radius in km (got #{within.inspect})"
+        end
+        [lat.to_f, lon.to_f, km.to_f]
       end
 
       # Fold and validate a --script tag (P75 C-2): the registry spelling
@@ -619,7 +639,7 @@ module Nabu
 
       def filters_active?(filters)
         %i[lang license from to place source loans meter meter_pattern lect_pairs
-           script].any? { |key| filters[key] } ||
+           script within].any? { |key| filters[key] } ||
           (filters[:facets] || {}).any? || Array(filters[:sources]).any?
       end
 

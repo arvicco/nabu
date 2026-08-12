@@ -59,11 +59,11 @@ module Nabu
       # (P22-1) scopes to one source slug.
       def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
                        sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect_pairs: nil,
-                       lect_target: nil, script: nil)
+                       lect_target: nil, script: nil, within: nil)
         visible_passages(lang: lang, license: license, from: from, to: to, place: place,
                          facets: facets, source: source, sources: sources, loans: loans,
                          meter: meter, meter_pattern: meter_pattern, lect_pairs: lect_pairs,
-                         lect_target: lect_target, script: script)
+                         lect_target: lect_target, script: script, within: within)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(*catalog_columns).all
       end
@@ -102,7 +102,7 @@ module Nabu
       # facet rows present -> lect_target, none -> the legacy pairs.
       def visible_passages(lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
                            sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect_pairs: nil,
-                           lect_target: nil, script: nil)
+                           lect_target: nil, script: nil, within: nil)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
@@ -114,6 +114,7 @@ module Nabu
         dataset = dataset.where(license_expr => license) if license
         dataset = dataset.where(timeline_exists(from: from, to: to, place: place)) if from || to || place
         dataset = dataset.where(script_exists(script)) if script
+        dataset = dataset.where(within_exists(*within)) if within
         (facets || {}).each { |facet, pattern| dataset = dataset.where(facet_exists(facet, pattern)) }
         dataset = dataset.where(loans_exists(loans)) if loans
         dataset = dataset.where(lect_pairs_expr(lect_pairs)) if lect_pairs
@@ -190,6 +191,28 @@ module Nabu
             Sequel.expr(Sequel.function(:glob, glob, padded) => 1)
           end
         end)
+      end
+
+      # The geo-radius filter (P75 C-9, №R-5): a correlated EXISTS over the
+      # COORDINATES lane (document_axes.place_lat/lon — source-asserted
+      # find-locations, P69-1). Distance is equirectangular in pure SQL
+      # arithmetic — per-degree km scales with the longitude scale computed
+      # ONCE in Ruby at the query's own latitude — so no SQLite math
+      # functions are needed; the approximation error is <1% at the
+      # provenance radii this serves (≤ a few hundred km). A gazetteer-wide
+      # radius (place_ref → place_index coords) would need a write-time
+      # doc-coordinates projection — deliberately out of C-9 (plan note).
+      def within_exists(lat, lon, radius_km)
+        axes = Sequel[:document_axes]
+        lat_scale = 110.574
+        lon_scale = 111.320 * Math.cos(lat * Math::PI / 180)
+        dlat = (axes[:place_lat] - lat) * lat_scale
+        dlon = (axes[:place_lon] - lon) * lon_scale
+        @catalog[:document_axes]
+          .where(axes[:document_id] => Sequel[:documents][:id])
+          .exclude(axes[:place_lat] => nil).exclude(axes[:place_lon] => nil)
+          .where(((dlat * dlat) + (dlon * dlon)) <= radius_km * radius_km)
+          .exists
       end
 
       # The script filter (P75 C-2): a document matches +code+ when its

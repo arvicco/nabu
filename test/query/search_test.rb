@@ -965,6 +965,36 @@ module Query
       assert_raises(Nabu::Error) { search("aurora", script: "la%n") }
     end
 
+    # -- the --within geo-radius filter (P75 C-9, №R-5) ----------------------
+
+    def located(urn, text, lat, lon)
+      doc = make_document(source: @open, urn: urn)
+      make_passage(doc, urn: "#{urn}:1", text: text, sequence: 1, language: "grc")
+      @catalog[:document_axes].insert(document_id: doc.id, place_lat: lat, place_lon: lon,
+                                      axis_source: "rundata")
+    end
+
+    def test_within_filters_by_radius_over_the_coordinates_lane
+      located("urn:sigtuna", "στρατηγος", 59.62, 17.72)  # ~27 km from Uppsala
+      located("urn:oslo", "στρατηγος", 59.91, 10.75)     # ~385 km
+      make_passage(make_document(source: @open, urn: "urn:nowhere"),
+                   urn: "urn:nowhere:1", text: "στρατηγος", sequence: 1, language: "grc")
+      rebuild!
+      uppsala = [59.86, 17.64]
+      assert_equal %w[urn:sigtuna:1],
+                   search("στρατηγος", within: [*uppsala, 50]).map(&:urn),
+                   "inside the radius answers; outside and coordinate-less fall out"
+      assert_equal %w[urn:oslo:1 urn:sigtuna:1],
+                   search("στρατηγος", within: [*uppsala, 400]).map(&:urn).sort
+    end
+
+    def test_within_refuses_a_malformed_spec
+      assert_raises(Nabu::Error) { search("στρατηγος", within: [91.0, 0.0, 10]) }
+      assert_raises(Nabu::Error) { search("στρατηγος", within: [0.0, 181.0, 10]) }
+      assert_raises(Nabu::Error) { search("στρατηγος", within: [0.0, 0.0, -5]) }
+      assert_raises(Nabu::Error) { search("στρατηγος", within: [0.0, 0.0]) }
+    end
+
     # -- search-by-sign (P75 C-4): the inverse of nabu signs -----------------
 
     def sux_doc(urn, text)

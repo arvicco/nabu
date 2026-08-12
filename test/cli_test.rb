@@ -4052,6 +4052,31 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P75 C-9 (№R-5): --within LAT,LON,KM cuts by the coordinates lane and
+  # legalizes a term-less browse; a malformed spec is refused with the shape.
+  def test_search_within_filters_by_radius
+    with_dated_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      doc = catalog[:documents].first(urn: "urn:nabu:ddbdp:a")
+      catalog[:document_axes].where(document_id: doc[:id])
+                             .update(place_lat: 59.62, place_lon: 17.72)
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --within 59.86,17.64,50]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out, "coordinate-less documents fall out")
+
+      out, _err, status = with_config(config) { run_cli(%w[search --within 59.86,17.64,50]) }
+      assert_nil status, "--within is content-narrowing — a term-less browse is legal"
+      assert_match("within: 59.86,17.64,50", out, "the footer names the filter")
+
+      _out, err, status = with_config(config) { run_cli(%w[search στρατηγος --within oslo]) }
+      assert_equal 1, status
+      assert_match(/LAT,LON,KM/, err)
+    end
+  end
+
   # P75 C-4: search --sign expands a cuneiform sign's OSL reading values
   # into an FTS OR — the inverse of `nabu signs` — and the sign card
   # advertises the follow-up.
