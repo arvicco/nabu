@@ -965,6 +965,49 @@ module Query
       assert_raises(Nabu::Error) { search("aurora", script: "la%n") }
     end
 
+    # -- search-by-sign (P75 C-4): the inverse of nabu signs -----------------
+
+    def sux_doc(urn, text)
+      doc = make_document(source: @open, urn: urn, language: "sux")
+      make_passage(doc, urn: "#{urn}:1", text: text, sequence: 1, language: "sux")
+    end
+
+    def test_run_sign_matches_any_of_the_values_as_an_fts_or
+      sux_doc("urn:sux:a", "lugal ag dumu")
+      sux_doc("urn:sux:b", "e₂ aka gal")
+      sux_doc("urn:sux:c", "nu banda")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      assert_equal %w[urn:sux:a:1 urn:sux:b:1],
+                   searcher.run_sign(%w[ag aka aq]).map(&:urn).sort,
+                   "any value matches; a text with none falls out"
+    end
+
+    def test_run_sign_folds_values_like_any_query
+      sux_doc("urn:sux:a", "šar₂ gal")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      assert_equal %w[urn:sux:a:1], searcher.run_sign(["šar₂"]).map(&:urn),
+                   "OSL-spelled values ride the standard query fold"
+    end
+
+    def test_run_sign_composes_the_standard_filters
+      sux_doc("urn:sux:a", "lugal ag dumu")
+      doc = make_document(source: @nc, urn: "urn:sux:nc", language: "sux")
+      make_passage(doc, urn: "urn:sux:nc:1", text: "ag gal", sequence: 1, language: "sux")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      assert_equal %w[urn:sux:a:1], searcher.run_sign(%w[ag], license: "open").map(&:urn)
+    end
+
+    def test_run_sign_brackets_the_matched_value_in_the_snippet
+      sux_doc("urn:sux:a", "lugal ag dumu")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      snippet = searcher.run_sign(%w[ag aka]).first.snippet
+      assert_includes snippet, "[ag]", "the value that actually matched is bracketed"
+    end
+
     # -- the facet filter (P17-2, document_facets) -----------------------------
 
     def faceted(urn, text, facets, not_before: nil, not_after: nil)

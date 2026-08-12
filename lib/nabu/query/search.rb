@@ -358,6 +358,36 @@ module Nabu
         rows.map { |row| build_result(row, "", exact: false, word: false) }
       end
 
+      # Search-by-sign (P75 C-4, the inverse of `nabu signs`): the page
+      # matches ANY of +values+ — a sign's OSL reading values, each folded
+      # through the standard query variants and ORed in the MATCH (exactly
+      # the fold-union machinery multi-variant queries already ride).
+      # Document-grain filters compose as in #run; the exact/word/words
+      # modifiers and the meter facet do not (value-token grain — the CLI
+      # refuses the composition). The snippet brackets the value that
+      # actually matched each hit. The ubiquity guard applies unchanged: a
+      # sign with a function-word-frequency value (𒀀's "a") serves the
+      # honest corpus-order sample, rank_note armed.
+      def run_sign(values, lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil,
+                   facets: nil, source: nil, sources: nil, loans: nil, lect: nil, script: nil,
+                   ubiquity_threshold: self.class.ubiquity_threshold)
+        @incomplete_hint = nil
+        @rank_note = nil
+        @meter_note = nil
+        @words_note = nil
+        @word_grain = nil
+        @place_note = nil
+        variants = values.flat_map { |value| Nabu::Normalize.query_forms(value.to_s) }
+                         .reject { |form| form.strip.empty? }.uniq
+        return [] if variants.empty?
+
+        filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),
+                    facets: facets, source: source, sources: sources, loans: loans,
+                    script: script_code(script) }.merge(lect_filter(lect))
+        page = folded_page(variants, filters, limit: limit, urn: nil, ubiquity_threshold: ubiquity_threshold)
+        page.map { |row| build_result(row, matched_value(row, values), exact: false, word: false) }
+      end
+
       # --exact verification: every whitespace token of the NFC-normalized
       # query must appear as a glyph-literal substring in the NFC-normalized
       # stored text. Glyph-exact, NOT display-exact — the query is NFC-folded
@@ -746,6 +776,18 @@ module Nabu
       # folded index form. The query's tokens locate the match — its whitespace
       # tokens for --exact (matching exact_glyph_match?), else the FTS terms with
       # phrase quotes dropped and a trailing prefix-* stripped.
+      # The value whose folded form the row's text actually carries (first
+      # in OSL order) — the honest snippet bracket for #run_sign; falls
+      # back to the first value when the match crossed a fold variant no
+      # substring probe reproduces.
+      def matched_value(row, values)
+        language = row.fetch(:language)
+        text = Nabu::Normalize.search_form(row.fetch(:text), language: language)
+        values.find do |value|
+          text.include?(Nabu::Normalize.search_form(value.to_s, language: language))
+        end || values.first
+      end
+
       def build_result(row, query, exact:, word:)
         terms = word_terms(query, exact: exact)
         Result.new(
