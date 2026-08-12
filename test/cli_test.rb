@@ -4028,6 +4028,102 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P75 C-2: --script cuts by the ~script lect axis / artifact-script axis;
+  # it also legalizes a term-less browse (a content-narrowing filter).
+  def test_search_script_filters_and_browses
+    with_dated_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      doc = catalog[:documents].first(urn: "urn:nabu:ddbdp:a")
+      catalog[:document_facets].insert(document_id: doc[:id], facet: "lect", value: "grc~latn")
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --script latn]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out)
+
+      out, _err, status = with_config(config) { run_cli(%w[search --script latn]) }
+      assert_nil status, "--script is content-narrowing — a term-less browse is legal"
+      assert_match("urn:nabu:ddbdp:a:1", out)
+
+      _out, err, status = with_config(config) { run_cli(%w[search στρατηγος --script latin]) }
+      assert_equal 1, status
+      assert_match(/ISO 15924/, err, "a malformed tag is refused with the expected shape")
+    end
+  end
+
+  # P75 C-9 (№R-5): --within LAT,LON,KM cuts by the coordinates lane and
+  # legalizes a term-less browse; a malformed spec is refused with the shape.
+  def test_search_within_filters_by_radius
+    with_dated_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      doc = catalog[:documents].first(urn: "urn:nabu:ddbdp:a")
+      catalog[:document_axes].where(document_id: doc[:id])
+                             .update(place_lat: 59.62, place_lon: 17.72)
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --within 59.86,17.64,50]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out, "coordinate-less documents fall out")
+
+      out, _err, status = with_config(config) { run_cli(%w[search --within 59.86,17.64,50]) }
+      assert_nil status, "--within is content-narrowing — a term-less browse is legal"
+      assert_match("within: 59.86,17.64,50", out, "the footer names the filter")
+
+      _out, err, status = with_config(config) { run_cli(%w[search στρατηγος --within oslo]) }
+      assert_equal 1, status
+      assert_match(/LAT,LON,KM/, err)
+    end
+  end
+
+  # P75 C-4: search --sign expands a cuneiform sign's OSL reading values
+  # into an FTS OR — the inverse of `nabu signs` — and the sign card
+  # advertises the follow-up.
+  def test_search_by_sign_expands_reading_values
+    with_sign_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --sign AK]) }
+      assert_nil status
+      assert_match(/sign: 𒀝  AK — \d+ reading values: a₅ ag/, out, "the header names the expansion")
+      assert_match("urn:c:a:1", out, "an `ag` text answers for the sign")
+      refute_match("urn:c:b:1", out)
+
+      out, _err, status = with_config(config) { run_cli(%w[search --sign 𒀝]) }
+      assert_nil status, "the glyph form resolves too"
+      assert_match("urn:c:a:1", out)
+
+      _out, err, status = with_config(config) { run_cli(%w[search lugal --sign AK]) }
+      assert_equal 1, status
+      assert_match(/--sign is itself the query/, err)
+
+      _out, err, status = with_config(config) { run_cli(%w[search --sign nosuchsign]) }
+      assert_equal 1, status
+      assert_match(/no OSL sign resolves/, err)
+
+      out, _err, status = with_config(config) { run_cli(%w[char AK]) }
+      assert_nil status
+      assert_match("search: nabu search --sign '𒀝'", out, "the card advertises the inverse")
+    end
+  end
+
+  # P75 C-1: a namespaced --place is the identity lane — the ref matches in
+  # any spelling, and the note names the lane on the page.
+  def test_search_place_mint_filters_by_identity_and_notes_the_lane
+    with_dated_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      doc = catalog[:documents].first(urn: "urn:nabu:ddbdp:a")
+      catalog[:document_axes].where(document_id: doc[:id])
+                             .update(place_ref: "https://www.trismegistos.org/place/2810")
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --place tm:2810]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out)
+      assert_match("note: place: tm:2810 (identity refs)", out)
+    end
+  end
+
   def test_search_year_zero_is_rejected
     _out, err, status = run_cli(%w[search foo --from 0])
     assert_equal 1, status
@@ -6406,6 +6502,21 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P75 C-3: the crosswalk line — derived equivalences render as "= ns:id"
+  # under the card headline; absent rows, absent line.
+  def test_place_card_renders_the_crosswalk_line
+    with_place_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      catalog[:place_crosswalk].insert(source: "t", gazetteer_a: "pleiades", id_a: "570685",
+                                       gazetteer_b: "tm", id_b: "2810")
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[place 570685]) }
+      assert_nil status
+      assert_match(/^  = tm:2810$/, out)
+    end
+  end
+
   def test_place_without_the_dump_still_counts_holdings_for_an_id
     with_place_corpus(dump: false) do |config|
       out, _err, status = with_config(config) { run_cli(%w[place 570685]) }
@@ -7427,6 +7538,45 @@ class CLITest < Minitest::Test
       # fuzzy_slugs (P16-4): the dated corpus doubles as the fuzzy+date
       # composition fixture — the "p" shelf is documentary by construction.
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil, fuzzy_slugs: ["p"])
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  # A tiny Sumerian corpus + the OSL fixture landed under canonical/osl/,
+  # exactly where `nabu sync osl` puts the real one (P75 C-4): doc a reads
+  # `ag` (a value of AK 𒀝), doc b reads none of AK's values.
+  def with_sign_corpus
+    Dir.mktmpdir("nabu-cli-sign") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources,
+        config_path: File.join(File.dirname(sources), "config", "nabu.yml")
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      osl_dir = File.join(config.canonical_dir, "osl", "00lib")
+      FileUtils.mkdir_p(osl_dir)
+      FileUtils.cp(File.join(Nabu::TestSupport.fixtures("osl"), "osl.asl"),
+                   File.join(osl_dir, "osl.asl"))
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "cdli", name: "CDLI", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      { "urn:c:a" => "lugal ag dumu", "urn:c:b" => "nu banda" }.each do |urn, text|
+        doc_id = catalog[:documents].insert(source_id: src, urn: urn, title: urn, language: "sux",
+                                            content_sha256: "x", revision: 1, withdrawn: false)
+        catalog[:passages].insert(
+          document_id: doc_id, urn: "#{urn}:1", sequence: 0, language: "sux", text: text,
+          text_normalized: Nabu::Normalize.search_form(text, language: "sux"),
+          content_sha256: "x", revision: 1, withdrawn: false
+        )
+      end
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
       fulltext.disconnect
       catalog.disconnect
       yield config

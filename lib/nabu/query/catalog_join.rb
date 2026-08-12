@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "place_filter"
+
 module Nabu
   module Query
     # The catalog half every index-backed query shares (P4-2's Search, P7-5's
@@ -57,11 +59,11 @@ module Nabu
       # (P22-1) scopes to one source slug.
       def catalog_rows(passage_ids, lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
                        sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect_pairs: nil,
-                       lect_target: nil)
+                       lect_target: nil, script: nil, within: nil)
         visible_passages(lang: lang, license: license, from: from, to: to, place: place,
                          facets: facets, source: source, sources: sources, loans: loans,
                          meter: meter, meter_pattern: meter_pattern, lect_pairs: lect_pairs,
-                         lect_target: lect_target)
+                         lect_target: lect_target, script: script, within: within)
           .where(Sequel[:passages][:id] => passage_ids)
           .select(*catalog_columns).all
       end
@@ -100,7 +102,7 @@ module Nabu
       # facet rows present -> lect_target, none -> the legacy pairs.
       def visible_passages(lang:, license:, from: nil, to: nil, place: nil, facets: nil, source: nil,
                            sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect_pairs: nil,
-                           lect_target: nil)
+                           lect_target: nil, script: nil, within: nil)
         dataset = @catalog[:passages]
                   .join(:documents, id: Sequel[:passages][:document_id])
                   .join(:sources, id: Sequel[:documents][:source_id])
@@ -111,6 +113,8 @@ module Nabu
         dataset = dataset.where(Sequel[:passages][:language] => Nabu::Languages.code_variants(lang)) if lang
         dataset = dataset.where(license_expr => license) if license
         dataset = dataset.where(timeline_exists(from: from, to: to, place: place)) if from || to || place
+        dataset = dataset.where(script_exists(script)) if script
+        dataset = dataset.where(within_exists(*within)) if within
         (facets || {}).each { |facet, pattern| dataset = dataset.where(facet_exists(facet, pattern)) }
         dataset = dataset.where(loans_exists(loans)) if loans
         dataset = dataset.where(lect_pairs_expr(lect_pairs)) if lect_pairs
@@ -157,13 +161,82 @@ module Nabu
       # `(not_after IS NULL OR not_after >= from)`, and likewise the lower bound.
       # A closed-interval overlap `nb <= to AND na >= from` (NOT naive
       # containment, which would drop every precision="low" century-range doc).
+      # +place+ is a PlaceFilter::Resolution (a raw string coerces to the
+      # name-LIKE lane, byte-identical pre-P75 behavior): the conjunct is
+      # name-ILIKE OR identity-claims — a resolved name keeps its name
+      # recall, a mint is identity-only (PlaceFilter class note).
       def timeline_exists(from:, to:, place:)
         axes = Sequel[:document_axes]
         sub = @catalog[:document_axes].where(axes[:document_id] => Sequel[:documents][:id])
         sub = sub.where(Sequel.expr(axes[:not_after] => nil) | (axes[:not_after] >= from)) if from
         sub = sub.where(Sequel.expr(axes[:not_before] => nil) | (axes[:not_before] <= to)) if to
-        sub = sub.where(Sequel.ilike(axes[:place_name], place)) if place
+        if (resolution = PlaceFilter.coerce(place))
+          clauses = []
+          clauses << Sequel.ilike(axes[:place_name], resolution.pattern) if resolution.pattern
+          clauses << place_ref_claims(axes, resolution.identities) if resolution.identity?
+          sub = sub.where(Sequel.|(*clauses))
+        end
         sub.exists
+      end
+
+      # TRUE when the row's place_ref claims ANY of +identities+ in any
+      # spelling — Nabu::PlaceRefs.ref_globs owns the spellings; the field
+      # is space-padded per that contract. Same correlated, per-candidate
+      # cost class as the name-ILIKE lane (no place_ref index by design —
+      # the axes row fetch rides the document_id index either way).
+      def place_ref_claims(axes, identities)
+        padded = Sequel.join([" ", axes[:place_ref], " "])
+        Sequel.|(*identities.flat_map do |namespace, id|
+          Nabu::PlaceRefs.ref_globs(namespace, id).map do |glob|
+            Sequel.expr(Sequel.function(:glob, glob, padded) => 1)
+          end
+        end)
+      end
+
+      # The geo-radius filter (P75 C-9, №R-5): a correlated EXISTS over the
+      # COORDINATES lane (document_axes.place_lat/lon — source-asserted
+      # find-locations, P69-1). Distance is equirectangular in pure SQL
+      # arithmetic — per-degree km scales with the longitude scale computed
+      # ONCE in Ruby at the query's own latitude — so no SQLite math
+      # functions are needed; the approximation error is <1% at the
+      # provenance radii this serves (≤ a few hundred km). A gazetteer-wide
+      # radius (place_ref → place_index coords) would need a write-time
+      # doc-coordinates projection — deliberately out of C-9 (plan note).
+      def within_exists(lat, lon, radius_km)
+        axes = Sequel[:document_axes]
+        lat_scale = 110.574
+        lon_scale = 111.320 * Math.cos(lat * Math::PI / 180)
+        dlat = (axes[:place_lat] - lat) * lat_scale
+        dlon = (axes[:place_lon] - lon) * lon_scale
+        @catalog[:document_axes]
+          .where(axes[:document_id] => Sequel[:documents][:id])
+          .exclude(axes[:place_lat] => nil).exclude(axes[:place_lon] => nil)
+          .where(((dlat * dlat) + (dlon * dlon)) <= radius_km * radius_km)
+          .exists
+      end
+
+      # The script filter (P75 C-2): a document matches +code+ when its
+      # resolved lect id claims the held surface's script — a ~code segment,
+      # last-but-@ in the canonical order, so it ends the value or an @ortho
+      # follows — OR its artifact-script axis row claims the artifact's
+      # original system (the D60-b differs-only lane). Either lane answers
+      # "Latin-script Gaulish"; absence from both is honest absence. +code+
+      # is validated upstream (Search#script_code): bare [a-z]{4}, so the
+      # LIKE interpolation carries no metacharacters.
+      def script_exists(code)
+        facets = Sequel[:document_facets]
+        held = @catalog[:document_facets]
+               .where(facets[:document_id] => Sequel[:documents][:id],
+                      facets[:facet] => Store::LectFacets::FACET)
+               .where(Sequel.like(facets[:value], "%~#{code}") |
+                      Sequel.like(facets[:value], "%~#{code}@%"))
+               .exists
+        axes = Sequel[:document_axes]
+        artifact = @catalog[:document_axes]
+                   .where(axes[:document_id] => Sequel[:documents][:id],
+                          axes[:artifact_script] => code)
+                   .exists
+        Sequel.|(held, artifact)
       end
 
       # A correlated EXISTS over document_facets for the current document

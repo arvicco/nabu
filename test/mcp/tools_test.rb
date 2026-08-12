@@ -602,6 +602,40 @@ module MCP
       end
     end
 
+    # -- nabu_search script + place lanes (P75 C-1/C-2 parity) ----------
+
+    def test_search_script_filters_by_the_held_script_axis
+      a = make_document(urn: "urn:s:a")
+      make_passage(a, urn: "urn:s:a:1", text: "στρατηγος", sequence: 0)
+      b = make_document(urn: "urn:s:b")
+      make_passage(b, urn: "urn:s:b:1", text: "στρατηγος", sequence: 0)
+      @catalog[:document_facets].insert(document_id: a.id, facet: "lect", value: "grc~latn")
+      rebuild!
+
+      urns = payload(call("nabu_search", { "query" => "στρατηγος", "script" => "latn" }))
+             .fetch("matches").map { |h| h.fetch("urn") }
+      assert_equal %w[urn:s:a:1], urns
+    end
+
+    def test_search_script_does_not_compose_with_lemma
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "λέγω", "script" => "latn" })
+      end
+    end
+
+    def test_search_place_identity_note_rides_the_payload
+      a = make_document(urn: "urn:s:a")
+      make_passage(a, urn: "urn:s:a:1", text: "στρατηγος", sequence: 0)
+      @catalog[:document_axes].insert(document_id: a.id, place_ref: "tm:2810", axis_source: "hgv")
+      rebuild!
+
+      body = payload(call("nabu_search", { "query" => "στρατηγος", "place" => "tm:2810" }))
+      urns = body.fetch("matches").map { |h| h.fetch("urn") }
+      assert_equal %w[urn:s:a:1], urns
+      assert_match(/place: tm:2810 \(identity refs\)/, body.fetch("note"),
+                   "the lane note rides the free-text note, additive")
+    end
+
     def test_search_year_zero_is_invalid
       error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
         call("nabu_search", { "query" => "x", "from" => 0 })
@@ -906,6 +940,20 @@ module MCP
       assert_equal [{ "source" => "isicily", "documents" => 1 }], body.fetch("unlinked"),
                    "the id-less findspot-text mention is a labelled tail, never merged"
       assert_match(/never merged/, body.fetch("note"))
+    end
+
+    # P75 C-3: crosswalk equivalences ride the card present-only — no
+    # rows, no key (the empty-hash idiom; pre-P75 payloads byte-identical).
+    def test_place_card_carries_crosswalk_equivalences_present_only
+      seed_epigraphy
+      rig = tools(pleiades: lilybaeum_resolver)
+      card = payload(rig.call("nabu_place", { "query" => "462281" })).fetch("cards").fetch(0)
+      refute card.key?("equivalences"), "no crosswalk rows → no key, never an empty one"
+
+      @catalog[:place_crosswalk].insert(source: "t", gazetteer_a: "pleiades", id_a: "462281",
+                                        gazetteer_b: "tm", id_b: "33")
+      card = payload(rig.call("nabu_place", { "query" => "462281" })).fetch("cards").fetch(0)
+      assert_equal ["tm:33"], card.fetch("equivalences")
     end
 
     def test_place_by_exact_title_and_unknown_title

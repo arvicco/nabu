@@ -205,14 +205,18 @@ module Nabu
       # +lects+ (P57-4) is the `--lect` resolution seam, same :auto/loaded/nil
       # contract as +tibetan_words+ — feature-detected lazily on the first
       # lect: filter, never touched otherwise.
+      # +places+ (P75 C-1) is the nabu-places registry read seam
+      # (Nabu::Places or nil) feeding --place name resolution; the place
+      # index and crosswalk lanes read the catalog and need no seam.
       def initialize(catalog:, fulltext:, term_frequency: nil, rng: ::Random.new, tibetan_words: :auto,
-                     lects: :auto)
+                     lects: :auto, places: nil)
         @catalog = catalog
         @fulltext = fulltext
         @term_frequency = term_frequency || TermFrequency.new(fulltext: fulltext)
         @rng = rng
         @tibetan_words = tibetan_words
         @lects = lects
+        @places = places
       end
 
       # nil, or RANK_SKIP_NOTE when the last #run served its page in corpus
@@ -239,6 +243,19 @@ module Nabu
       # WORDS_MODULE_NOTE when the nabu-data seam is absent. The page served
       # alongside is plain search, honestly labelled. Reset on every run.
       attr_reader :words_note
+
+      # nil, or the --place lane note (P75 C-1) after a run/browse with an
+      # active place filter: the identity refs a mint or resolved name
+      # matched on (crosswalk-expanded), or the honest name-LIKE fallback
+      # for a name with no registered identity. A LIKE pattern (%/_) is the
+      # user asking for the historical lane by name — silent. Reset every
+      # run, like meter_note.
+      attr_reader :place_note
+
+      # const: a render cap on the place note's identity list (truncation
+      # announced, never silent); a cap on the LABEL only, the filter
+      # itself always matches every identity — not a corpus census
+      PLACE_NOTE_IDS = 6
 
       # true when the last #run actually APPLIED the word-grain post-filter
       # (words: true, Tibetan query, seam present) — the surfaces' present-only
@@ -270,23 +287,32 @@ module Nabu
       # +lect+ (P57-4) keeps only passages whose (language, source) resolves
       # to this lect id or a more specific one under it (class note at
       # LECT_MODULE_MISSING); raises Nabu::Error when Lects is unavailable.
+      # +script+ (P75 C-2) keeps only documents whose resolved lect id
+      # claims the held-surface script (~code) or whose artifact-script
+      # axis claims the artifact's system (CatalogJoin#script_exists).
+      # +within+ (P75 C-9, №R-5): [lat, lon, km] — only documents whose
+      # coordinates-lane find-location falls in the radius
+      # (CatalogJoin#within_exists; coordinate-less documents fall out,
+      # like undated ones under a date filter).
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
               facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil,
-              exact: false, word: false, words: false, lect: nil,
+              exact: false, word: false, words: false, lect: nil, script: nil, within: nil,
               scan_ceiling: SCAN_CEILING, ubiquity_threshold: self.class.ubiquity_threshold)
         @incomplete_hint = nil
         @rank_note = nil
         @meter_note = nil
         @words_note = nil
         @word_grain = nil
+        @place_note = nil
         raise Nabu::Error, WORD_REFUSAL if word && self.class.word_refusal_for(query)
 
         variants = Nabu::Normalize.query_forms(query.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
-        filters = { lang: lang, license: license, from: from, to: to, place: place,
+        filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),
                     facets: facets, source: source, sources: sources, loans: loans,
-                    meter: meter, meter_pattern: meter_pattern }.merge(lect_filter(lect))
+                    meter: meter, meter_pattern: meter_pattern,
+                    script: script_code(script), within: within_spec(within) }.merge(lect_filter(lect))
         page = if exact || word
                  verified_page(variants, query, filters, limit: limit, urn: urn,
                                                          scan_ceiling: scan_ceiling, exact: exact, word: word)
@@ -317,19 +343,54 @@ module Nabu
       # at the CLI seam, not here: this method lists whatever the filters select,
       # exactly as visible_passages composes them for ranked search.
       def browse(lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil,
-                 facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect: nil)
+                 facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil,
+                 lect: nil, script: nil, within: nil)
         @incomplete_hint = nil
         @rank_note = nil
         @meter_note = nil
-        rows = visible_passages(lang: lang, license: license, from: from, to: to, place: place,
+        @place_note = nil
+        rows = visible_passages(lang: lang, license: license, from: from, to: to,
+                                place: place_resolution(place),
                                 facets: facets, source: source, sources: sources, loans: loans,
-                                meter: meter, meter_pattern: meter_pattern, **lect_filter(lect))
+                                meter: meter, meter_pattern: meter_pattern,
+                                script: script_code(script), within: within_spec(within),
+                                **lect_filter(lect))
                .order(Sequel[:passages][:id])
                .select(*catalog_columns)
                .limit(limit)
                .all
         note_meter(meter, meter_pattern, empty: rows.empty?)
         rows.map { |row| build_result(row, "", exact: false, word: false) }
+      end
+
+      # Search-by-sign (P75 C-4, the inverse of `nabu signs`): the page
+      # matches ANY of +values+ — a sign's OSL reading values, each folded
+      # through the standard query variants and ORed in the MATCH (exactly
+      # the fold-union machinery multi-variant queries already ride).
+      # Document-grain filters compose as in #run; the exact/word/words
+      # modifiers and the meter facet do not (value-token grain — the CLI
+      # refuses the composition). The snippet brackets the value that
+      # actually matched each hit. The ubiquity guard applies unchanged: a
+      # sign with a function-word-frequency value (𒀀's "a") serves the
+      # honest corpus-order sample, rank_note armed.
+      def run_sign(values, lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil,
+                   facets: nil, source: nil, sources: nil, loans: nil, lect: nil, script: nil,
+                   ubiquity_threshold: self.class.ubiquity_threshold)
+        @incomplete_hint = nil
+        @rank_note = nil
+        @meter_note = nil
+        @words_note = nil
+        @word_grain = nil
+        @place_note = nil
+        variants = values.flat_map { |value| Nabu::Normalize.query_forms(value.to_s) }
+                         .reject { |form| form.strip.empty? }.uniq
+        return [] if variants.empty?
+
+        filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),
+                    facets: facets, source: source, sources: sources, loans: loans,
+                    script: script_code(script) }.merge(lect_filter(lect))
+        page = folded_page(variants, filters, limit: limit, urn: nil, ubiquity_threshold: ubiquity_threshold)
+        page.map { |row| build_result(row, matched_value(row, values), exact: false, word: false) }
       end
 
       # --exact verification: every whitespace token of the NFC-normalized
@@ -348,6 +409,68 @@ module Nabu
       def exact_glyph_match?(text, query)
         haystack = Nabu::Normalize.nfc(text.to_s)
         Nabu::Normalize.nfc(query.to_s).split.all? { |token| haystack.include?(token) }
+      end
+
+      # Resolve a raw --place term once per run (P75 C-1) — identity claims
+      # + name pattern per the PlaceFilter lanes; nil passes through. Every
+      # surface over this class (CLI, MCP) inherits identity-awareness here.
+      def place_resolution(place)
+        return place unless place.is_a?(String)
+
+        resolution = PlaceFilter.resolve(place, catalog: @catalog, places: @places)
+        @place_note = place_note_for(resolution)
+        resolution
+      end
+
+      # Validate a --within spec (P75 C-9): [lat, lon, km], WGS84 ranges,
+      # positive radius — one enforcement point for every surface.
+      def within_spec(within)
+        return nil if within.nil?
+
+        lat, lon, km = within
+        unless within.size == 3 && [lat, lon, km].all?(Numeric) &&
+               lat.abs <= 90 && lon.abs <= 180 && km.positive?
+          raise Nabu::Error,
+                "within: give LAT,LON,KM — latitude −90..90, longitude −180..180, a positive " \
+                "radius in km (got #{within.inspect})"
+        end
+        [lat.to_f, lon.to_f, km.to_f]
+      end
+
+      # Fold and validate a --script tag (P75 C-2): the registry spelling
+      # is a lowercase 4-letter ISO 15924-style tag (latn, xsux, egyd) —
+      # anything else is refused with the expected shape, one enforcement
+      # point for every surface (CLI and MCP both arrive here).
+      def script_code(script)
+        return nil if script.nil?
+
+        code = script.to_s.strip.downcase
+        unless code.match?(/\A[a-z]{4}\z/)
+          raise Nabu::Error,
+                "script: give a 4-letter ISO 15924-style tag as the registry spells it " \
+                "(latn, xsux, egyd) — got #{script.inspect}"
+        end
+        code
+      end
+
+      # The lane note for +resolution+ (attr note above): nil for an
+      # explicit LIKE pattern, the identity list (capped, truncation
+      # announced) when identities matched, the honest fallback line
+      # otherwise.
+      def place_note_for(resolution)
+        return nil if resolution.pattern&.match?(/[%_]/)
+
+        return "place: \"#{resolution.term}\" has no registered identity — name-LIKE lane" unless resolution.identity?
+
+        shown = resolution.identities.first(PLACE_NOTE_IDS).map { |ns, id| "#{ns}:#{id}" }
+        extra = resolution.identities.size - shown.size
+        ids = shown.join(" = ")
+        ids += " … and #{extra} more" if extra.positive?
+        if resolution.pattern
+          "place: \"#{resolution.term}\" → #{ids} (identity refs + name match)"
+        else
+          "place: #{ids} (identity refs)"
+        end
       end
 
       private
@@ -515,7 +638,8 @@ module Nabu
       end
 
       def filters_active?(filters)
-        %i[lang license from to place source loans meter meter_pattern lect_pairs].any? { |key| filters[key] } ||
+        %i[lang license from to place source loans meter meter_pattern lect_pairs
+           script within].any? { |key| filters[key] } ||
           (filters[:facets] || {}).any? || Array(filters[:sources]).any?
       end
 
@@ -672,6 +796,18 @@ module Nabu
       # folded index form. The query's tokens locate the match — its whitespace
       # tokens for --exact (matching exact_glyph_match?), else the FTS terms with
       # phrase quotes dropped and a trailing prefix-* stripped.
+      # The value whose folded form the row's text actually carries (first
+      # in OSL order) — the honest snippet bracket for #run_sign; falls
+      # back to the first value when the match crossed a fold variant no
+      # substring probe reproduces.
+      def matched_value(row, values)
+        language = row.fetch(:language)
+        text = Nabu::Normalize.search_form(row.fetch(:text), language: language)
+        values.find do |value|
+          text.include?(Nabu::Normalize.search_form(value.to_s, language: language))
+        end || values.first
+      end
+
       def build_result(row, query, exact:, word:)
         terms = word_terms(query, exact: exact)
         Result.new(

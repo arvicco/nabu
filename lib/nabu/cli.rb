@@ -1773,8 +1773,19 @@ module Nabu
                 desc: "Latest date: signed historical year (14 = 14 CE); composes with --from"
     option :century, type: :numeric, banner: "N",
                      desc: "Shorthand for one century's --from/--to (6 = 6th c. CE, -2 = 2nd c. BCE)"
-    option :place, type: :string, banner: "PATTERN",
-                   desc: "Provenance place LIKE filter (Oxyrhynchus, oxyrhynch%) — dated papyri"
+    option :place, type: :string, banner: "NAME|ns:id",
+                   desc: "Provenance filter: a namespaced ref (tm:2810, cigs:GIR), a name resolved " \
+                         "to its identities + name match, or a LIKE pattern (oxyrhynch%)"
+    option :script, type: :string, banner: "TAG",
+                    desc: "Script filter, ISO 15924-style registry tag (latn, xsux): the held text's " \
+                          "~script lect axis OR the artifact-script axis (\"Latin-script Gaulish\")"
+    option :sign, type: :string, banner: "GLYPH|NAME",
+                  desc: "Search by cuneiform sign (the inverse of nabu signs): 𒀝 or AK expands to " \
+                        "an OR over the sign's OSL reading values; IS the query — give no term"
+    option :within, type: :string, banner: "LAT,LON,KM",
+                    desc: "Geo-radius filter over the coordinates lane (source-asserted " \
+                          "find-locations, e.g. rundata): 59.86,17.64,50 keeps documents found " \
+                          "within 50 km; coordinate-less documents fall out"
     option :type, type: :string, banner: "PATTERN",
                   desc: "Inscription-type facet filter (epitaph, votive%, or the raw titsep code)"
     option :province, type: :string, banner: "PATTERN",
@@ -1906,6 +1917,7 @@ module Nabu
         end
         return char_structured_search(query)
       end
+      return sign_search(query) if options[:sign]
       return fuzzy_search(query) if options[:fuzzy]
       return proximity_search(query) if options[:near]
       return lemma_search(query) if options[:lemma]
@@ -1930,19 +1942,26 @@ module Nabu
       axis_names, axis_slugs = axis_membership(command: "search", config: config)
       lects = require_lects!(config, options[:lect])
 
-      searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto)
+      searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto,
+                                         places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
       results = searcher.run(query, lang: options[:lang], license: options[:license],
                                     limit: options[:limit].to_i, from: from, to: to, place: place,
                                     facets: facets, source: options[:source], sources: axis_slugs,
                                     loans: loans, meter: options[:meter],
                                     meter_pattern: options[:meter_pattern],
                                     exact: options[:exact], word: options[:word], words: options[:words],
-                                    lect: options[:lect])
+                                    lect: options[:lect], script: options[:script],
+                                    within: within_filter)
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
                                     incomplete: searcher.incomplete_hint, exact: options[:exact],
                                     word: options[:word], rank_note: searcher.rank_note,
-                                    meter_note: searcher.meter_note, words_note: searcher.words_note)
+                                    meter_note: searcher.meter_note, words_note: searcher.words_note,
+                                    place_note: searcher.place_note)
       print_display_footer
+    rescue Nabu::Error => e
+      # A malformed filter arg (--script shape) or a query-layer refusal —
+      # a clean stderr message and exit 1, never a backtrace.
+      raise Thor::Error, e.message
     ensure
       catalog&.disconnect
       fulltext&.disconnect
@@ -3774,6 +3793,14 @@ module Nabu
     # before the "… and N more" tail (P48-r3; --long lists all — the same
     # house render-cap rule).
     AXIS_LANGUAGES_ITEMS = 10
+    # Crosswalk equivalences shown on the place card's "=" line before the
+    # "… and N more" tail (P75 C-3, the same house render-cap rule).
+    # const: a render cap, not a corpus census
+    PLACE_EQUIVALENCES_SHOWN = 8
+    # Reading values shown on the `search --sign` header line before the
+    # "… and N more" tail (P75 C-4, the same house render-cap rule).
+    # const: a render cap, not a corpus census
+    SIGN_SEARCH_VALUES_SHOWN = 12
     # RTL snippet highlight = SGR reverse video (P42-r4, strike 4 — the
     # matrix ruling on the owner's iTerm2). Every CHARACTER-based highlight
     # is at the mercy of the renderer's bidi treatment, and four attempts
@@ -4110,7 +4137,24 @@ module Nabu
       # are already a legal term-less path and return earlier (char_structured_search).
       def content_narrowing_filters?
         options[:from] || options[:to] || options[:century] || options[:place] ||
-          facet_filters || loans_filter || options[:meter] || options[:meter_pattern] || options[:lect]
+          facet_filters || loans_filter || options[:meter] || options[:meter_pattern] ||
+          options[:lect] || options[:script] || options[:within]
+      end
+
+      # Parse --within LAT,LON,KM into three floats (P75 C-9); range
+      # validation lives in Search#within_spec, the shared enforcement
+      # point.
+      def within_filter
+        spec = options[:within]
+        return nil if spec.nil?
+
+        parts = spec.split(",").map(&:strip)
+        values = parts.map { |part| Float(part, exception: false) }
+        if parts.size != 3 || values.any?(&:nil?)
+          raise Thor::Error, "search: --within takes LAT,LON,KM (59.86,17.64,50) — got #{spec.inspect}"
+        end
+
+        values
       end
 
       # The refusal for a term-less `search` that carries no content-narrowing
@@ -4119,7 +4163,8 @@ module Nabu
       def browse_refusal_message
         "search: give a query — or a content-narrowing filter to browse the corpus " \
           "term-less: a date window (--from/--to/--century), --place, a genre facet " \
-          "(--type/--province/--material), --loans, --meter/--meter-pattern, or --lect. " \
+          "(--type/--province/--material), --loans, --meter/--meter-pattern, --lect, --script, " \
+          "or --within. " \
           "--lang/--license/--source/--axis " \
           "select whole shelves and cannot stand alone (that would dump the shelf, not browse it)."
       end
@@ -4154,19 +4199,110 @@ module Nabu
         axis_names, axis_slugs = axis_membership(command: "search", config: config)
         lects = require_lects!(config, options[:lect])
 
-        searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto)
+        searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto,
+                                           places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
         results = searcher.browse(lang: options[:lang], license: options[:license],
                                   limit: options[:limit].to_i, from: from, to: to, place: place,
                                   facets: facets, source: options[:source], sources: axis_slugs,
                                   loans: loans, meter: options[:meter],
-                                  meter_pattern: options[:meter_pattern], lect: options[:lect])
+                                  meter_pattern: options[:meter_pattern], lect: options[:lect],
+                                  script: options[:script], within: within_filter)
         print_search_results(results, facets: facets, query: "", loans: loans, axis: axis_names,
                                       browse: true, from: from, to: to, place: place,
-                                      meter_note: searcher.meter_note)
+                                      within: options[:within],
+                                      meter_note: searcher.meter_note, place_note: searcher.place_note)
         print_display_footer
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
       ensure
         catalog&.disconnect
         fulltext&.disconnect
+      end
+
+      # search --sign (P75 C-4, the inverse of `nabu signs`): resolve one
+      # cuneiform sign — glyph, OSL name/alias, or an UNAMBIGUOUS reading
+      # value — and serve the standard filtered page over an FTS OR of the
+      # sign's reading values (Query::Search#run_sign). --sign IS the
+      # query: a term alongside it, or a text-mode modifier, is refused.
+      def sign_search(query)
+        term = options[:sign]
+        unless query.to_s.strip.empty?
+          raise Thor::Error, "search: --sign is itself the query — drop the term (#{query.inspect})"
+        end
+
+        %i[fuzzy near lemma exact word words meter meter_pattern].each do |flag|
+          next unless options[flag]
+
+          raise Thor::Error, "search: --sign does not compose with --#{flag.to_s.tr('_', '-')} " \
+                             "(the page is an OR over the sign's reading values)"
+        end
+
+        validate_license!(options[:license])
+        from, to = date_window
+        facets = facet_filters
+        loans = loans_filter
+        config = Nabu::Config.load
+        list = Nabu::SignList.load_default(config: config)
+        raise Thor::Error, "search: --sign needs the Oracc Sign List — run `nabu sync osl`" if list.nil?
+
+        record = resolve_search_sign(list, term)
+        values = record.values.map(&:value).uniq
+        raise Thor::Error, "search: sign #{record.name} carries no reading values" if values.empty?
+
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        require_timeline!(catalog) if from || to || options[:place]
+        require_facets!(catalog) if facets
+        validate_source!(catalog, options[:source])
+        axis_names, axis_slugs = axis_membership(command: "search", config: config)
+        lects = require_lects!(config, options[:lect])
+
+        searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto,
+                                           places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
+        results = searcher.run_sign(values, lang: options[:lang], license: options[:license],
+                                            limit: options[:limit].to_i, from: from, to: to,
+                                            place: options[:place], facets: facets,
+                                            source: options[:source], sources: axis_slugs,
+                                            loans: loans, lect: options[:lect], script: options[:script])
+        print_sign_search_header(record, values)
+        print_search_results(results, facets: facets, query: values.first, loans: loans, axis: axis_names,
+                                      incomplete: searcher.incomplete_hint, rank_note: searcher.rank_note,
+                                      place_note: searcher.place_note)
+        print_display_footer
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      # Glyph first, then OSL name/alias/form, then a reading VALUE when it
+      # names exactly one sign (ambiguity lists the candidates, never picks
+      # one silently — the sign-card rule).
+      def resolve_search_sign(list, term)
+        record = list.sign_for_glyph(term) || list.sign(term)
+        return record if record
+
+        candidates = list.lookup(term)
+        return candidates.first if candidates.size == 1
+
+        if candidates.size > 1
+          raise Thor::Error, "search: value #{term.inspect} is ambiguous across " \
+                             "#{candidates.map(&:name).join(' · ')} — give the sign name or glyph"
+        end
+        raise Thor::Error, "search: no OSL sign resolves #{term.inspect} " \
+                           "(give a glyph 𒀝, a name AK / |ŠEŠ.AB|, or a reading value)"
+      end
+
+      def print_sign_search_header(record, values)
+        shown = values.first(SIGN_SEARCH_VALUES_SHOWN)
+        extra = values.size - shown.size
+        list = shown.join(" ")
+        list += " … and #{extra} more" if extra.positive?
+        say "sign: #{[record.ucun, record.name].compact.join('  ')} — " \
+            "#{values.size} reading #{values.size == 1 ? 'value' : 'values'}: #{list}"
       end
 
       # --source SLUG (P22-1, search/export): reject an unknown slug up front,
@@ -5179,6 +5315,15 @@ module Nabu
           say "Pleiades #{card.pleiades_id} — gazetteer dump not synced " \
               "(`nabu sync pleiades` adds the card)"
         end
+        # P75 C-3: the crosswalk line — the derived equivalences this
+        # identity is asserted equal to, capped with the cut announced.
+        unless card.equivalences.empty?
+          shown = card.equivalences.first(PLACE_EQUIVALENCES_SHOWN)
+          extra = card.equivalences.size - shown.size
+          line = shown.map { |namespace, id| "#{namespace}:#{id}" }.join(" = ")
+          line += " … and #{extra} more" if extra.positive?
+          say "  = #{line}"
+        end
         unless card.pleiades_id.nil? && card.holdings.empty?
           say "  holdings: #{card.holdings.empty? ? 'none' : format_source_counts(card.holdings)}"
         end
@@ -5782,8 +5927,8 @@ module Nabu
       # page never masquerades as a complete answer.
       def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
                                exact: false, word: false, proximity: false, rank_note: nil,
-                               browse: false, from: nil, to: nil, place: nil, meter_note: nil,
-                               words_note: nil)
+                               browse: false, from: nil, to: nil, place: nil, within: nil,
+                               meter_note: nil, words_note: nil, place_note: nil)
         if results.empty?
           say "no matches"
           # Empty-under-filter honesty (P35): --exact/--word suppressed the folded
@@ -5803,6 +5948,9 @@ module Nabu
           # The word-grain degrade note (P54-4): --words could not filter
           # (non-Tibetan query / unsynced module) — plain search served.
           say "note: #{words_note}" if words_note
+          # The --place lane note (P75 C-1): which lane an empty page
+          # filtered on — identity refs or the name-LIKE fallback.
+          say "note: #{place_note}" if place_note
           say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
@@ -5814,10 +5962,11 @@ module Nabu
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
             "(#{search_snippet_label(exact: exact, word: word, proximity: proximity,
                                      rank_note: rank_note, browse: browse)})" \
-            "#{browse_window_footer(from: from, to: to, place: place) if browse}" \
+            "#{browse_window_footer(from: from, to: to, place: place, within: within) if browse}" \
             "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{meter_note}" if meter_note
         say "note: #{words_note}" if words_note
+        say "note: #{place_note}" if place_note
         say "note: #{incomplete}" if incomplete
         print_search_credits(results)
       end
@@ -5835,10 +5984,11 @@ module Nabu
       # The date/place clause of a term-less browse footer (P42-6), naming the
       # content filters that made the browse legal (facets/loans/axis are named
       # by facet_footer); empty when neither is active (compact-footer rule).
-      def browse_window_footer(from:, to:, place:)
+      def browse_window_footer(from:, to:, place:, within: nil)
         parts = []
         parts << "dates: #{browse_year_window(from, to)}" if from || to
         parts << "place: #{place}" if place
+        parts << "within: #{within}" if within
         parts.empty? ? "" : " · #{parts.join(' · ')}"
       end
 
@@ -7225,6 +7375,15 @@ module Nabu
         print_sign_card_senses(card)
         print_sign_card_forms(card)
         print_sign_card_corpus(card)
+        print_sign_card_search(card)
+      end
+
+      # P75 C-4: the follow-up affordance — a sign with reading values can
+      # be searched as an OR over them (the inverse of this card).
+      def print_sign_card_search(card)
+        return if card.values.empty?
+
+        say "search: nabu search --sign '#{card.glyph || card.name}'  (any reading value)"
       end
 
       def print_sign_card_senses(card)

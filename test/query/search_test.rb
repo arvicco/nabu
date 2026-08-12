@@ -821,12 +821,12 @@ module Query
 
     # -- the timeline filter (P15-2) ----------------------------------
 
-    def dated(urn, text, not_before, not_after, place: nil)
+    def dated(urn, text, not_before, not_after, place: nil, ref: nil)
       doc = make_document(source: @open, urn: urn)
       make_passage(doc, urn: "#{urn}:1", text: text, sequence: 1, language: "grc")
       @catalog[:document_axes].insert(
         document_id: doc.id, not_before: not_before, not_after: not_after,
-        precision: "x", place_name: place, axis_source: "hgv"
+        precision: "x", place_name: place, place_ref: ref, axis_source: "hgv"
       )
     end
 
@@ -859,6 +859,57 @@ module Query
       assert_equal %w[urn:a:1], search("στρατηγος", place: "Oxyrhynchus").map(&:urn)
     end
 
+    # -- identity-aware --place (P75 C-1) ------------------------------------
+
+    def test_place_mint_filter_matches_the_identity_in_any_spelling
+      dated("urn:a", "στρατηγος", -113, -113, ref: "https://www.trismegistos.org/place/2810")
+      dated("urn:b", "στρατηγος", -30, 14, ref: "tm:2810 pleiades:912855")
+      dated("urn:c", "στρατηγος", -30, 14, ref: "https://www.trismegistos.org/place/28100")
+      rebuild!
+      assert_equal %w[urn:a:1 urn:b:1], search("στρατηγος", place: "tm:2810").map(&:urn).sort,
+                   "URL and mint spellings both match; 28100 never substring-matches 2810"
+    end
+
+    def test_place_name_resolution_composes_ref_and_name_recall
+      girsu = Nabu::Pleiades::Place.new(id: "GIR", title: "Girsu", lat: 31.56, lon: 46.18,
+                                        place_types: [], time_periods: [])
+      Nabu::Store::PlaceIndex.derive!(@catalog, places: [girsu], gazetteer: "cigs")
+      dated("urn:ref", "στρατηγος", -2100, -2000, ref: "cigs:GIR")
+      dated("urn:name", "στρατηγος", -2100, -2000, place: "Girsu")
+      dated("urn:other", "στρατηγος", -2100, -2000, place: "Umma", ref: "cigs:UMM")
+      rebuild!
+      assert_equal %w[urn:name:1 urn:ref:1], search("στρατηγος", place: "girsu").map(&:urn).sort,
+                   "a resolved name matches BOTH the identity refs and the name-LIKE lane"
+    end
+
+    def test_place_note_names_the_lane_that_answered
+      dated("urn:a", "στρατηγος", -113, -113, ref: "tm:2810")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      searcher.run("στρατηγος", place: "tm:2810")
+      assert_equal "place: tm:2810 (identity refs)", searcher.place_note
+
+      searcher.run("στρατηγος", place: "Atlantis")
+      assert_equal "place: \"Atlantis\" has no registered identity — name-LIKE lane",
+                   searcher.place_note
+
+      searcher.run("στρατηγος", place: "oxyrhynch%")
+      assert_nil searcher.place_note, "an explicit LIKE pattern asked for the historical lane — silent"
+
+      searcher.run("στρατηγος")
+      assert_nil searcher.place_note, "reset between runs"
+    end
+
+    def test_place_filter_expands_through_the_crosswalk
+      @catalog[:place_crosswalk].insert(source: "t", gazetteer_a: "cigs", id_a: "GIR",
+                                        gazetteer_b: "tm", id_b: "2810")
+      dated("urn:tm", "στρατηγος", -2100, -2000, ref: "https://www.trismegistos.org/place/2810")
+      rebuild!
+      assert_equal %w[urn:tm:1], search("στρατηγος", place: "cigs:GIR").map(&:urn),
+                   "an equivalence-linked ref answers for the queried identity"
+    end
+
     def test_undated_documents_fall_out_under_a_date_filter
       make_passage(make_document(source: @open, urn: "urn:undated"),
                    urn: "urn:undated:1", text: "στρατηγος", sequence: 1, language: "grc")
@@ -867,6 +918,124 @@ module Query
       assert_equal %w[urn:a:1], search("στρατηγος", from: -400, to: 100).map(&:urn),
                    "no timeline row → absent under an active date filter"
       assert_equal 2, search("στρατηγος").map(&:urn).size, "both visible without a date filter"
+    end
+
+    # -- the --script filter (P75 C-2) ---------------------------------------
+
+    def scripted(urn, text, lect: nil, artifact: nil)
+      doc = make_document(source: @open, urn: urn)
+      make_passage(doc, urn: "#{urn}:1", text: text, sequence: 1, language: "grc")
+      @catalog[:document_facets].insert(document_id: doc.id, facet: "lect", value: lect) if lect
+      return unless artifact
+
+      @catalog[:document_axes].insert(document_id: doc.id, axis_source: "artifact-script",
+                                      artifact_script: artifact)
+    end
+
+    def test_script_filter_matches_the_held_script_axis
+      scripted("urn:a", "aurora prima", lect: "san~latn")
+      scripted("urn:b", "aurora secunda", lect: "san:ved")
+      rebuild!
+      assert_equal %w[urn:a:1], search("aurora", script: "latn").map(&:urn),
+                   "the ~script lect segment answers; a script-less lect id falls out"
+    end
+
+    def test_script_filter_matches_the_artifact_lane_too
+      scripted("urn:a", "aurora prima", artifact: "ital")
+      scripted("urn:b", "aurora secunda", lect: "xcg~latn")
+      rebuild!
+      assert_equal %w[urn:a:1], search("aurora", script: "ital").map(&:urn),
+                   "the artifact-script axis answers where the held surface differs"
+      assert_equal %w[urn:b:1], search("aurora", script: "latn").map(&:urn)
+    end
+
+    def test_script_filter_matches_a_script_segment_carrying_an_ortho_tail
+      scripted("urn:a", "aurora prima", lect: "sux:post~xsux@etcsl")
+      scripted("urn:b", "aurora secunda", lect: "sux:post")
+      rebuild!
+      assert_equal %w[urn:a:1], search("aurora", script: "xsux").map(&:urn)
+    end
+
+    def test_script_filter_folds_case_and_refuses_a_malformed_tag
+      scripted("urn:a", "aurora prima", lect: "san~latn")
+      rebuild!
+      assert_equal %w[urn:a:1], search("aurora", script: "Latn").map(&:urn),
+                   "input folds to the lowercase registry spelling"
+      assert_raises(Nabu::Error) { search("aurora", script: "latin") }
+      assert_raises(Nabu::Error) { search("aurora", script: "la%n") }
+    end
+
+    # -- the --within geo-radius filter (P75 C-9, №R-5) ----------------------
+
+    def located(urn, text, lat, lon)
+      doc = make_document(source: @open, urn: urn)
+      make_passage(doc, urn: "#{urn}:1", text: text, sequence: 1, language: "grc")
+      @catalog[:document_axes].insert(document_id: doc.id, place_lat: lat, place_lon: lon,
+                                      axis_source: "rundata")
+    end
+
+    def test_within_filters_by_radius_over_the_coordinates_lane
+      located("urn:sigtuna", "στρατηγος", 59.62, 17.72)  # ~27 km from Uppsala
+      located("urn:oslo", "στρατηγος", 59.91, 10.75)     # ~385 km
+      make_passage(make_document(source: @open, urn: "urn:nowhere"),
+                   urn: "urn:nowhere:1", text: "στρατηγος", sequence: 1, language: "grc")
+      rebuild!
+      uppsala = [59.86, 17.64]
+      assert_equal %w[urn:sigtuna:1],
+                   search("στρατηγος", within: [*uppsala, 50]).map(&:urn),
+                   "inside the radius answers; outside and coordinate-less fall out"
+      assert_equal %w[urn:oslo:1 urn:sigtuna:1],
+                   search("στρατηγος", within: [*uppsala, 400]).map(&:urn).sort
+    end
+
+    def test_within_refuses_a_malformed_spec
+      assert_raises(Nabu::Error) { search("στρατηγος", within: [91.0, 0.0, 10]) }
+      assert_raises(Nabu::Error) { search("στρατηγος", within: [0.0, 181.0, 10]) }
+      assert_raises(Nabu::Error) { search("στρατηγος", within: [0.0, 0.0, -5]) }
+      assert_raises(Nabu::Error) { search("στρατηγος", within: [0.0, 0.0]) }
+    end
+
+    # -- search-by-sign (P75 C-4): the inverse of nabu signs -----------------
+
+    def sux_doc(urn, text)
+      doc = make_document(source: @open, urn: urn, language: "sux")
+      make_passage(doc, urn: "#{urn}:1", text: text, sequence: 1, language: "sux")
+    end
+
+    def test_run_sign_matches_any_of_the_values_as_an_fts_or
+      sux_doc("urn:sux:a", "lugal ag dumu")
+      sux_doc("urn:sux:b", "e₂ aka gal")
+      sux_doc("urn:sux:c", "nu banda")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      assert_equal %w[urn:sux:a:1 urn:sux:b:1],
+                   searcher.run_sign(%w[ag aka aq]).map(&:urn).sort,
+                   "any value matches; a text with none falls out"
+    end
+
+    def test_run_sign_folds_values_like_any_query
+      sux_doc("urn:sux:a", "šar₂ gal")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      assert_equal %w[urn:sux:a:1], searcher.run_sign(["šar₂"]).map(&:urn),
+                   "OSL-spelled values ride the standard query fold"
+    end
+
+    def test_run_sign_composes_the_standard_filters
+      sux_doc("urn:sux:a", "lugal ag dumu")
+      doc = make_document(source: @nc, urn: "urn:sux:nc", language: "sux")
+      make_passage(doc, urn: "urn:sux:nc:1", text: "ag gal", sequence: 1, language: "sux")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      assert_equal %w[urn:sux:a:1], searcher.run_sign(%w[ag], license: "open").map(&:urn)
+    end
+
+    def test_run_sign_brackets_the_matched_value_in_the_snippet
+      sux_doc("urn:sux:a", "lugal ag dumu")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      snippet = searcher.run_sign(%w[ag aka]).first.snippet
+      assert_includes snippet, "[ag]", "the value that actually matched is bracketed"
     end
 
     # -- the facet filter (P17-2, document_facets) -----------------------------

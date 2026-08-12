@@ -55,4 +55,38 @@ class PlaceRefsTest < Minitest::Test
     assert_equal %w[2983 1281], Nabu::PlaceRefs.ids_in(ref, "tm")
     assert_equal %w[991398], Nabu::PlaceRefs.ids_in(ref, "pleiades")
   end
+
+  # -- ref_globs (P75 C-1): the SQL-side spelling lane ---------------------
+  # The globs are matched by SQLite against the SPACE-PADDED ref
+  # (' ' || place_ref || ' '); pin the boundary semantics against the real
+  # glob() engine, never a Ruby approximation.
+
+  def glob_match?(ref, namespace, id)
+    db = Sequel.sqlite
+    Nabu::PlaceRefs.ref_globs(namespace, id).any? do |pattern|
+      db.get(Sequel.function(:glob, pattern, " #{ref} ")) == 1
+    end
+  ensure
+    db&.disconnect
+  end
+
+  def test_ref_globs_match_every_url_spelling_ids_accepts
+    assert glob_match?("https://pleiades.stoa.org/places/462281", "pleiades", "462281")
+    assert glob_match?("http://pleiades.stoa.org/places/462281/", "pleiades", "462281")
+    assert glob_match?("https://www.trismegistos.org/place/2711", "tm", "2711")
+    assert glob_match?("https://www.trismegistos.org/geo/detail/2711", "tm", "2711")
+    assert glob_match?("https://sws.geonames.org/3180985", "geonames", "3180985")
+  end
+
+  def test_ref_globs_match_the_mint_spelling_as_its_own_token
+    assert glob_match?("cigs:GIR pleiades:912855", "cigs", "GIR")
+    assert glob_match?("tm:2788", "tm", "2788")
+  end
+
+  def test_ref_globs_never_substring_match_a_longer_id
+    refute glob_match?("https://www.trismegistos.org/place/28100", "tm", "2810"),
+           "a URL id must end at a non-digit boundary"
+    refute glob_match?("tm:28100", "tm", "2810"), "a mint is its own whole token"
+    refute glob_match?("cigs:GIRSU", "cigs", "GIR")
+  end
 end
