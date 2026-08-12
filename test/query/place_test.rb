@@ -224,6 +224,32 @@ module Query
       assert_raises(Nabu::Query::Place::Error) { place_query.run("zz:1") }
     end
 
+    # -- the namespaced-card unlinked tail (P75 C-5, the P66-2 asymmetry) ------
+
+    def test_a_ref_card_with_a_resolved_title_counts_the_unlinked_tail
+      # A tm slice carrying the queried id: the card resolves its title, so
+      # the findspot-text tail must ride exactly as it does for pleiades.
+      Nabu::Store::PlaceIndex.derive!(
+        @catalog,
+        places: [Nabu::Pleiades::Place.new(id: "2810", title: "Girsu", lat: nil, lon: nil,
+                                           place_types: [], time_periods: [])],
+        gazetteer: "tm"
+      )
+      load_document(source: "ceipom", slug: "idless", place: { "ancient" => "near Girsu" })
+
+      result = place_query.run("tm:2810")
+      assert_equal "Girsu", result.unlinked_term
+      assert_equal [["ceipom", 1]], result.unlinked,
+                   "id-less findspot mentions count for a resolved ref card"
+    end
+
+    def test_a_ref_card_without_a_title_keeps_the_honest_empty_tail
+      load_document(source: "ceipom", slug: "idless", place: { "ancient" => "near Girsu" })
+      result = place_query.run("tm:2810")
+      assert_nil result.unlinked_term, "no derived slice → no title → no text to count"
+      assert_empty result.unlinked
+    end
+
     # -- crosswalk equivalences (P75 C-3) --------------------------------------
 
     def test_the_card_carries_its_crosswalk_equivalences_both_directions
