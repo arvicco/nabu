@@ -562,3 +562,43 @@ Consequences that hold everywhere dates are handled:
   it raises on a literal year 0 (the malformed-source / astronomical-source
   tripwire). A ranged document buckets in its *earliest* century, and the CLI
   says so ("bucketed by earliest year; N span multiple centuries").
+- **Precision is width; doubt is a tier.** The stored precision word
+  (`exact`/`range`/`year`/`period`) describes the interval's width and
+  carries no doubt; a genuine doubt word (HGV `low`) maps to the house
+  uncertainty tier and renders as a gloss — see §12.
+
+## 12. Uncertainty — three tiers, rendered, never stored (P76, №R-6)
+
+Upstream corpora say doubt in a dozen vocabularies — HGV's precision
+`low`, the cataloguer's trailing `?`, nabu-places `certainty: low`,
+lect-rule `approximation`, kaikki's `uncertain` tag, CIGS accuracy
+grades. The house speaks **three tiers**: `certain · probable ·
+uncertain`, mapped 1:1 onto the Pleiades/LPF lineage
+(certain / less-certain / uncertain). `Nabu::Certainty` owns the whole
+mapping (`lib/nabu/certainty.rb` — the §4.2 survey table as code); no
+surface invents its own.
+
+The axioms:
+
+- **Absence is not a tier.** An undated, unplaced, or unstaged document
+  is honestly absent, never "uncertain".
+- **Precision is not certainty.** `exact`/`range`/`year`/`period` are
+  *width* words — the `[not_before, not_after]` interval already carries
+  the width, and no tier attaches. Only genuine doubt words (`low`, the
+  `?` family, "approximation") map.
+- **Certain is silent; deviation is labeled; the upstream word rides
+  verbatim.** Cards render one parenthetical after the affected value —
+  `date: 100–199 CE (uncertain — hgv "low")`, `lect: akk:ob (probable —
+  rule akk-period, approximation)` — and a certain value gets no ink.
+  MCP payloads merge a `certainty` object only below certain
+  (`{"tier": …, "upstream": …, "carrier": …}` — the empty-hash idiom,
+  so existing payloads stay byte-identical). The tier is a render-time
+  gloss, never a storage substitution: what the source said is always
+  recoverable beside what the house concluded.
+- **Leiden is its own answer.** In-text brackets and underdots ARE the
+  reading-grain rendering (EpiDoc practice); they take no tier.
+
+Storage changes under this doctrine are exceptional and named: the CIGS
+accuracy column and the kaikki `uncertain` tag (both P76, both
+rebuild-derived). Everything else joins at render through the one
+module.

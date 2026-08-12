@@ -41,6 +41,12 @@ maintained original, in the docs/languages.md mold.
    records it under the `np:` namespace with a REQUIRED evidence trail;
    minted records derive into the index like any gazetteer's rows.
 
+A sixth rule joined with the uncertainty doctrine (P76): a decision's
+`certainty: low` and the cataloguer's trailing `?` are **rendered, never
+dropped** — the three-tier vocabulary and the render axiom live in
+[conventions §12](conventions.md#12-uncertainty--three-tiers-rendered-never-stored-p76-r-6),
+`Nabu::Certainty` owns the mapping.
+
 ## The namespaces held
 
 | Namespace | Rows | Asset |
