@@ -1782,6 +1782,10 @@ module Nabu
     option :sign, type: :string, banner: "GLYPH|NAME",
                   desc: "Search by cuneiform sign (the inverse of nabu signs): 𒀝 or AK expands to " \
                         "an OR over the sign's OSL reading values; IS the query — give no term"
+    option :within, type: :string, banner: "LAT,LON,KM",
+                    desc: "Geo-radius filter over the coordinates lane (source-asserted " \
+                          "find-locations, e.g. rundata): 59.86,17.64,50 keeps documents found " \
+                          "within 50 km; coordinate-less documents fall out"
     option :type, type: :string, banner: "PATTERN",
                   desc: "Inscription-type facet filter (epitaph, votive%, or the raw titsep code)"
     option :province, type: :string, banner: "PATTERN",
@@ -1946,7 +1950,8 @@ module Nabu
                                     loans: loans, meter: options[:meter],
                                     meter_pattern: options[:meter_pattern],
                                     exact: options[:exact], word: options[:word], words: options[:words],
-                                    lect: options[:lect], script: options[:script])
+                                    lect: options[:lect], script: options[:script],
+                                    within: within_filter)
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
                                     incomplete: searcher.incomplete_hint, exact: options[:exact],
                                     word: options[:word], rank_note: searcher.rank_note,
@@ -4133,7 +4138,23 @@ module Nabu
       def content_narrowing_filters?
         options[:from] || options[:to] || options[:century] || options[:place] ||
           facet_filters || loans_filter || options[:meter] || options[:meter_pattern] ||
-          options[:lect] || options[:script]
+          options[:lect] || options[:script] || options[:within]
+      end
+
+      # Parse --within LAT,LON,KM into three floats (P75 C-9); range
+      # validation lives in Search#within_spec, the shared enforcement
+      # point.
+      def within_filter
+        spec = options[:within]
+        return nil if spec.nil?
+
+        parts = spec.split(",").map(&:strip)
+        values = parts.map { |part| Float(part, exception: false) }
+        if parts.size != 3 || values.any?(&:nil?)
+          raise Thor::Error, "search: --within takes LAT,LON,KM (59.86,17.64,50) — got #{spec.inspect}"
+        end
+
+        values
       end
 
       # The refusal for a term-less `search` that carries no content-narrowing
@@ -4142,7 +4163,8 @@ module Nabu
       def browse_refusal_message
         "search: give a query — or a content-narrowing filter to browse the corpus " \
           "term-less: a date window (--from/--to/--century), --place, a genre facet " \
-          "(--type/--province/--material), --loans, --meter/--meter-pattern, --lect, or --script. " \
+          "(--type/--province/--material), --loans, --meter/--meter-pattern, --lect, --script, " \
+          "or --within. " \
           "--lang/--license/--source/--axis " \
           "select whole shelves and cannot stand alone (that would dump the shelf, not browse it)."
       end
@@ -4184,9 +4206,10 @@ module Nabu
                                   facets: facets, source: options[:source], sources: axis_slugs,
                                   loans: loans, meter: options[:meter],
                                   meter_pattern: options[:meter_pattern], lect: options[:lect],
-                                  script: options[:script])
+                                  script: options[:script], within: within_filter)
         print_search_results(results, facets: facets, query: "", loans: loans, axis: axis_names,
                                       browse: true, from: from, to: to, place: place,
+                                      within: options[:within],
                                       meter_note: searcher.meter_note, place_note: searcher.place_note)
         print_display_footer
       rescue Nabu::Error => e
@@ -5904,8 +5927,8 @@ module Nabu
       # page never masquerades as a complete answer.
       def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
                                exact: false, word: false, proximity: false, rank_note: nil,
-                               browse: false, from: nil, to: nil, place: nil, meter_note: nil,
-                               words_note: nil, place_note: nil)
+                               browse: false, from: nil, to: nil, place: nil, within: nil,
+                               meter_note: nil, words_note: nil, place_note: nil)
         if results.empty?
           say "no matches"
           # Empty-under-filter honesty (P35): --exact/--word suppressed the folded
@@ -5939,7 +5962,7 @@ module Nabu
         say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} " \
             "(#{search_snippet_label(exact: exact, word: word, proximity: proximity,
                                      rank_note: rank_note, browse: browse)})" \
-            "#{browse_window_footer(from: from, to: to, place: place) if browse}" \
+            "#{browse_window_footer(from: from, to: to, place: place, within: within) if browse}" \
             "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{meter_note}" if meter_note
         say "note: #{words_note}" if words_note
@@ -5961,10 +5984,11 @@ module Nabu
       # The date/place clause of a term-less browse footer (P42-6), naming the
       # content filters that made the browse legal (facets/loans/axis are named
       # by facet_footer); empty when neither is active (compact-footer rule).
-      def browse_window_footer(from:, to:, place:)
+      def browse_window_footer(from:, to:, place:, within: nil)
         parts = []
         parts << "dates: #{browse_year_window(from, to)}" if from || to
         parts << "place: #{place}" if place
+        parts << "within: #{within}" if within
         parts.empty? ? "" : " · #{parts.join(' · ')}"
       end
 
