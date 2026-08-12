@@ -89,6 +89,18 @@ absent). When the filter ran, the response carries a present-only
 degrades to plain search with a present-only `word_grain_note` mirroring the
 CLI note — never an error.
 
+Optional document-grain filters (text search only, refused with
+`lemma`/`near`): `from`/`to`/`century` — signed historical years over the
+document timeline; `place` — since P75 **identity-aware**: a namespaced ref
+(`tm:2810`, `cigs:GIR`) matches the document's `place_ref` identity claims
+in any spelling, a place NAME resolves through the derived place index and
+the registry's decisions (name-LIKE recall kept, one crosswalk hop), a LIKE
+pattern stays the name lane, and the response note names the lane that
+answered; `script` (P75) — an ISO 15924-style registry tag (`latn`,
+`xsux`) over the held text's `~script` lect axis or the artifact-script
+axis; `lect` (P57-4) — a nabu-lects id with prefix semantics (errors when
+the module is not synced).
+
 Hits are
 relevance-ranked and bounded, with an honest "showing k of N"
 note; a no-match response carries a one-line coverage hint so an empty result
