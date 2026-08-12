@@ -965,6 +965,45 @@ module Query
       assert_raises(Nabu::Error) { search("aurora", script: "la%n") }
     end
 
+    # -- the --scan mode (P75 C-10): the filter-first search -----------------
+    # Owner-ruled 2026-08-12 (the Girsu report): guard-sampled search and
+    # filter-first search are TWO DIFFERENT MODES — --scan walks the term's
+    # postings in corpus order intersected with the filters, deterministic,
+    # never sampled.
+
+    def test_run_scan_is_deterministic_and_filter_first
+      dated("urn:a", "στρατηγος κοινος", -113, -113, place: "Oxyrhynchus")
+      dated("urn:b", "στρατηγος κοινος", -30, 14, place: "Arsinoites")
+      dated("urn:c", "αλλος λογος", -30, 14, place: "Arsinoites")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      first = searcher.run_scan("στρατηγος", place: "Arsinoites").map(&:urn)
+      assert_equal %w[urn:b:1], first, "only the filtered match answers; c has no term"
+      assert_equal first, searcher.run_scan("στρατηγος", place: "Arsinoites").map(&:urn),
+                   "two runs, one page — deterministic by contract"
+      assert_match(/corpus-order scan/, searcher.rank_note, "the mode names itself on the page")
+    end
+
+    def test_run_scan_announces_a_ceiling_truncation
+      dated("urn:a", "στρατηγος", -113, -113, place: "Oxyrhynchus")
+      dated("urn:b", "στρατηγος", -30, 14, place: "Arsinoites")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      hits = searcher.run_scan("στρατηγος", place: "Arsinoites", scan_page: 1, scan_ceiling: 1)
+      assert_empty hits, "the ceiling fell before the filtered match"
+      assert_match(/corpus order/, searcher.incomplete_hint, "truncation is announced, never silent")
+    end
+
+    def test_guard_starved_filtered_page_hints_the_scan_mode
+      dated("urn:a", "στρατηγος", -113, -113, place: "Oxyrhynchus")
+      dated("urn:b", "στρατηγος", -30, 14, place: "Arsinoites")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+      searcher.run("στρατηγος", place: "Arsinoites", ubiquity_threshold: 1)
+      assert_match(/--scan/, searcher.rank_note,
+                   "a guarded page thinned below limit by filters teaches the mode")
+    end
+
     # -- the --within geo-radius filter (P75 C-9, №R-5) ----------------------
 
     def located(urn, text, lat, lon)

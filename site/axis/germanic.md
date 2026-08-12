@@ -28,7 +28,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 11 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 12 August 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
@@ -41,7 +41,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 | `ren` | texts | attribution | wired · manual | 235 docs / 297,504 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 August 2026)</span>: `ang` 63,169 · `non` 19,623 · `eng` 6,812 · `swe` 3,393 · `gmq-pro` 822 · `gmh` 406 · `gml` 235 · `lat` 17 · `grc` 12 · `orv` 9 … and 17 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 August 2026)</span>: `ang` 63,169 · `non` 19,623 · `eng` 6,812 · `swe` 3,393 · `gmq-pro` 822 · `gmh` 406 · `gml` 235 · `lat` 17 · `grc` 12 · `orv` 9 … and 17 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 

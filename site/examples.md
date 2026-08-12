@@ -269,6 +269,57 @@ Temple corpora. Rabbinic literature proper — Mishnah, Talmud, midrash —
 is a planned campaign of its own; the Targum shelf and the Jastrow
 dictionary scans are its first bridgeheads.
 
+## Composing the layers
+
+*Added August 2026, live runs of 12 August — the place, script, sign, and
+dating layers answering one question together.*
+
+The library's layers — places as identities, writing systems, sign
+readings, dates — long had desks of their own; since August 2026 they
+compose in search. Ask for a common word at one findspot, by identity
+rather than spelling, and get the same page every time (`--scan` walks
+the filtered documents in corpus order — deterministic, never sampled):
+
+```
+$ bin/nabu search lugal --place Girsu --scan --limit 5
+urn:nabu:oracc:dcclt:P217451:f.1 [sux]
+  {d}nisaba [lugal]-ušumgal dub-sar ensi₂ lagaš{ki}
+urn:nabu:oracc:epsd2-admin-ur3:P100144:o.1 [sux]
+  3(aš) 4(barig) še gur [lugal]
+…
+5 hits (… corpus-order scan of the filtered set (--scan))
+note: place: "Girsu" → cigs:GIR = pleiades:912855 = cdli-provenience:88 = geonames:93976 (identity refs + name match)
+```
+
+The note is the point: "Girsu" resolved to the place's *identities*
+across four gazetteers (the crosswalk the [Places]({{ '/places/' |
+relative_url }}) page describes), so tablets citing any of those refs —
+in any spelling — answer, alongside plain name matches. The place card
+shows the same equivalences:
+
+```
+$ bin/nabu place cigs:GIR
+Girsu, cigs:GIR — 31.56, 46.18
+  = cdli-provenience:88 = geonames:93976 = pleiades:912855
+  axis holdings (place_ref — adapter-asserted + registry decisions): 19226 oracc
+```
+
+A cuneiform sign searches as itself — its reading values expand into one
+query, and each hit brackets the value it matched:
+
+```
+$ bin/nabu search --sign 𒊬 --lang sux --limit 3
+sign: 𒊬  SAR — 26 reading values: e₁₄ kiri₆ ma₄ mu₂ mud₆ … and 14 more
+urn:nabu:etcsl:0.2.06:31 [sux]
+  cubur-e cu [mu2]
+```
+
+Writing systems are a search cut (`--script ogam` for the Ogham stones,
+`--script grek` for Greek-alphabet Gaulish), and so is geography —
+`--within 59.86,17.64,30` walks the runestones raised within 30 km of
+Uppsala. Every one of these composes with the date window, genre facets,
+license classes, and lect filters above.
+
 ## If your field is not here
 
 These walk-throughs sample the disciplines the library serves; they are not

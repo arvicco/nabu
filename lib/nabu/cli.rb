@@ -1786,6 +1786,10 @@ module Nabu
                     desc: "Geo-radius filter over the coordinates lane (source-asserted " \
                           "find-locations, e.g. rundata): 59.86,17.64,50 keeps documents found " \
                           "within 50 km; coordinate-less documents fall out"
+    option :scan, type: :boolean, default: false,
+                  desc: "Filter-first mode: walk the term's matches in corpus order intersected " \
+                        "with the active filters — deterministic, never sampled (the mode for " \
+                        "a common term + a selective filter); needs a term AND a filter"
     option :type, type: :string, banner: "PATTERN",
                   desc: "Inscription-type facet filter (epitaph, votive%, or the raw titsep code)"
     option :province, type: :string, banner: "PATTERN",
@@ -1918,6 +1922,7 @@ module Nabu
         return char_structured_search(query)
       end
       return sign_search(query) if options[:sign]
+      return scan_search(query) if options[:scan]
       return fuzzy_search(query) if options[:fuzzy]
       return proximity_search(query) if options[:near]
       return lemma_search(query) if options[:lemma]
@@ -4230,7 +4235,7 @@ module Nabu
           raise Thor::Error, "search: --sign is itself the query — drop the term (#{query.inspect})"
         end
 
-        %i[fuzzy near lemma exact word words meter meter_pattern].each do |flag|
+        %i[fuzzy near lemma exact word words meter meter_pattern scan].each do |flag|
           next unless options[flag]
 
           raise Thor::Error, "search: --sign does not compose with --#{flag.to_s.tr('_', '-')} " \
@@ -4269,6 +4274,64 @@ module Nabu
         print_sign_search_header(record, values)
         print_search_results(results, facets: facets, query: values.first, loans: loans, axis: axis_names,
                                       incomplete: searcher.incomplete_hint, rank_note: searcher.rank_note,
+                                      place_note: searcher.place_note)
+        print_display_footer
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      # search --scan (P75 C-10, owner-ruled): the filter-first MODE —
+      # distinct from plain search by contract, not a fallback it silently
+      # becomes. Needs a term (else browse already serves corpus order) AND
+      # at least one filter (else plain search already serves the page).
+      def scan_search(query)
+        %i[fuzzy near lemma exact word words].each do |flag|
+          next unless options[flag]
+
+          raise Thor::Error, "search: --scan does not compose with --#{flag} (one mode at a time)"
+        end
+        if query.to_s.strip.empty?
+          raise Thor::Error, "search: --scan needs a query term (a term-less filtered walk is " \
+                             "plain browse — drop --scan)"
+        end
+        unless content_narrowing_filters? || options[:lang] || options[:source] || options[:axis]
+          raise Thor::Error, "search: --scan is the filter-first mode — give a filter " \
+                             "(--place/--from/--lect/--script/--lang/--source/…); an unfiltered " \
+                             "term is plain search's job"
+        end
+
+        validate_license!(options[:license])
+        from, to = date_window
+        facets = facet_filters
+        loans = loans_filter
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        require_timeline!(catalog) if from || to || options[:place]
+        require_facets!(catalog) if facets
+        validate_source!(catalog, options[:source])
+        axis_names, axis_slugs = axis_membership(command: "search", config: config)
+        lects = require_lects!(config, options[:lect])
+
+        searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto,
+                                           places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
+        results = searcher.run_scan(query, lang: options[:lang], license: options[:license],
+                                           limit: options[:limit].to_i, from: from, to: to,
+                                           place: options[:place], facets: facets,
+                                           source: options[:source], sources: axis_slugs,
+                                           loans: loans, meter: options[:meter],
+                                           meter_pattern: options[:meter_pattern],
+                                           lect: options[:lect], script: options[:script],
+                                           within: within_filter)
+        print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
+                                      incomplete: searcher.incomplete_hint,
+                                      rank_note: searcher.rank_note,
+                                      meter_note: searcher.meter_note,
                                       place_note: searcher.place_note)
         print_display_footer
       rescue Nabu::Error => e

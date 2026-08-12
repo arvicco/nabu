@@ -4052,6 +4052,36 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P75 C-10 (owner-ruled from the live Girsu report): --scan is the
+  # filter-first MODE — deterministic corpus-order walk of the filtered
+  # set; needs a term and a filter; never composes with another mode.
+  def test_search_scan_is_the_filter_first_mode
+    with_dated_corpus do |config|
+      out, _err, status = with_config(config) do
+        run_cli(%w[search στρατηγος --place Arsinoites --scan])
+      end
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:b:1", out)
+      refute_match("urn:nabu:ddbdp:a:1", out)
+      assert_match(/corpus-order scan of the filtered set/, out, "the mode labels its page")
+
+      again, = with_config(config) { run_cli(%w[search στρατηγος --place Arsinoites --scan]) }
+      assert_equal out, again, "deterministic: two runs, one page"
+
+      _out, err, status = with_config(config) { run_cli(%w[search --place Arsinoites --scan]) }
+      assert_equal 1, status
+      assert_match(/needs a query term/, err)
+
+      _out, err, status = with_config(config) { run_cli(%w[search στρατηγος --scan]) }
+      assert_equal 1, status
+      assert_match(/give a filter/, err)
+
+      _out, err, status = with_config(config) { run_cli(%w[search στρατηγος --scan --fuzzy]) }
+      assert_equal 1, status
+      assert_match(/does not compose/, err)
+    end
+  end
+
   # P75 C-9 (№R-5): --within LAT,LON,KM cuts by the coordinates lane and
   # legalizes a term-less browse; a malformed spec is refused with the shape.
   def test_search_within_filters_by_radius
