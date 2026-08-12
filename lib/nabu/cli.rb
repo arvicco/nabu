@@ -1779,6 +1779,9 @@ module Nabu
     option :script, type: :string, banner: "TAG",
                     desc: "Script filter, ISO 15924-style registry tag (latn, xsux): the held text's " \
                           "~script lect axis OR the artifact-script axis (\"Latin-script Gaulish\")"
+    option :sign, type: :string, banner: "GLYPH|NAME",
+                  desc: "Search by cuneiform sign (the inverse of nabu signs): 𒀝 or AK expands to " \
+                        "an OR over the sign's OSL reading values; IS the query — give no term"
     option :type, type: :string, banner: "PATTERN",
                   desc: "Inscription-type facet filter (epitaph, votive%, or the raw titsep code)"
     option :province, type: :string, banner: "PATTERN",
@@ -1910,6 +1913,7 @@ module Nabu
         end
         return char_structured_search(query)
       end
+      return sign_search(query) if options[:sign]
       return fuzzy_search(query) if options[:fuzzy]
       return proximity_search(query) if options[:near]
       return lemma_search(query) if options[:lemma]
@@ -3788,6 +3792,10 @@ module Nabu
     # "… and N more" tail (P75 C-3, the same house render-cap rule).
     # const: a render cap, not a corpus census
     PLACE_EQUIVALENCES_SHOWN = 8
+    # Reading values shown on the `search --sign` header line before the
+    # "… and N more" tail (P75 C-4, the same house render-cap rule).
+    # const: a render cap, not a corpus census
+    SIGN_SEARCH_VALUES_SHOWN = 12
     # RTL snippet highlight = SGR reverse video (P42-r4, strike 4 — the
     # matrix ruling on the owner's iTerm2). Every CHARACTER-based highlight
     # is at the mercy of the renderer's bidi treatment, and four attempts
@@ -4186,6 +4194,92 @@ module Nabu
       ensure
         catalog&.disconnect
         fulltext&.disconnect
+      end
+
+      # search --sign (P75 C-4, the inverse of `nabu signs`): resolve one
+      # cuneiform sign — glyph, OSL name/alias, or an UNAMBIGUOUS reading
+      # value — and serve the standard filtered page over an FTS OR of the
+      # sign's reading values (Query::Search#run_sign). --sign IS the
+      # query: a term alongside it, or a text-mode modifier, is refused.
+      def sign_search(query)
+        term = options[:sign]
+        unless query.to_s.strip.empty?
+          raise Thor::Error, "search: --sign is itself the query — drop the term (#{query.inspect})"
+        end
+
+        %i[fuzzy near lemma exact word words meter meter_pattern].each do |flag|
+          next unless options[flag]
+
+          raise Thor::Error, "search: --sign does not compose with --#{flag.to_s.tr('_', '-')} " \
+                             "(the page is an OR over the sign's reading values)"
+        end
+
+        validate_license!(options[:license])
+        from, to = date_window
+        facets = facet_filters
+        loans = loans_filter
+        config = Nabu::Config.load
+        list = Nabu::SignList.load_default(config: config)
+        raise Thor::Error, "search: --sign needs the Oracc Sign List — run `nabu sync osl`" if list.nil?
+
+        record = resolve_search_sign(list, term)
+        values = record.values.map(&:value).uniq
+        raise Thor::Error, "search: sign #{record.name} carries no reading values" if values.empty?
+
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        require_timeline!(catalog) if from || to || options[:place]
+        require_facets!(catalog) if facets
+        validate_source!(catalog, options[:source])
+        axis_names, axis_slugs = axis_membership(command: "search", config: config)
+        lects = require_lects!(config, options[:lect])
+
+        searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto,
+                                           places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
+        results = searcher.run_sign(values, lang: options[:lang], license: options[:license],
+                                            limit: options[:limit].to_i, from: from, to: to,
+                                            place: options[:place], facets: facets,
+                                            source: options[:source], sources: axis_slugs,
+                                            loans: loans, lect: options[:lect], script: options[:script])
+        print_sign_search_header(record, values)
+        print_search_results(results, facets: facets, query: values.first, loans: loans, axis: axis_names,
+                                      incomplete: searcher.incomplete_hint, rank_note: searcher.rank_note,
+                                      place_note: searcher.place_note)
+        print_display_footer
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      # Glyph first, then OSL name/alias/form, then a reading VALUE when it
+      # names exactly one sign (ambiguity lists the candidates, never picks
+      # one silently — the sign-card rule).
+      def resolve_search_sign(list, term)
+        record = list.sign_for_glyph(term) || list.sign(term)
+        return record if record
+
+        candidates = list.lookup(term)
+        return candidates.first if candidates.size == 1
+
+        if candidates.size > 1
+          raise Thor::Error, "search: value #{term.inspect} is ambiguous across " \
+                             "#{candidates.map(&:name).join(' · ')} — give the sign name or glyph"
+        end
+        raise Thor::Error, "search: no OSL sign resolves #{term.inspect} " \
+                           "(give a glyph 𒀝, a name AK / |ŠEŠ.AB|, or a reading value)"
+      end
+
+      def print_sign_search_header(record, values)
+        shown = values.first(SIGN_SEARCH_VALUES_SHOWN)
+        extra = values.size - shown.size
+        list = shown.join(" ")
+        list += " … and #{extra} more" if extra.positive?
+        say "sign: #{[record.ucun, record.name].compact.join('  ')} — " \
+            "#{values.size} reading #{values.size == 1 ? 'value' : 'values'}: #{list}"
       end
 
       # --source SLUG (P22-1, search/export): reject an unknown slug up front,
@@ -7257,6 +7351,15 @@ module Nabu
         print_sign_card_senses(card)
         print_sign_card_forms(card)
         print_sign_card_corpus(card)
+        print_sign_card_search(card)
+      end
+
+      # P75 C-4: the follow-up affordance — a sign with reading values can
+      # be searched as an OR over them (the inverse of this card).
+      def print_sign_card_search(card)
+        return if card.values.empty?
+
+        say "search: nabu search --sign '#{card.glyph || card.name}'  (any reading value)"
       end
 
       def print_sign_card_senses(card)

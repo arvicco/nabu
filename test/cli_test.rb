@@ -4052,6 +4052,35 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P75 C-4: search --sign expands a cuneiform sign's OSL reading values
+  # into an FTS OR — the inverse of `nabu signs` — and the sign card
+  # advertises the follow-up.
+  def test_search_by_sign_expands_reading_values
+    with_sign_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[search --sign AK]) }
+      assert_nil status
+      assert_match(/sign: 𒀝  AK — \d+ reading values: a₅ ag/, out, "the header names the expansion")
+      assert_match("urn:c:a:1", out, "an `ag` text answers for the sign")
+      refute_match("urn:c:b:1", out)
+
+      out, _err, status = with_config(config) { run_cli(%w[search --sign 𒀝]) }
+      assert_nil status, "the glyph form resolves too"
+      assert_match("urn:c:a:1", out)
+
+      _out, err, status = with_config(config) { run_cli(%w[search lugal --sign AK]) }
+      assert_equal 1, status
+      assert_match(/--sign is itself the query/, err)
+
+      _out, err, status = with_config(config) { run_cli(%w[search --sign nosuchsign]) }
+      assert_equal 1, status
+      assert_match(/no OSL sign resolves/, err)
+
+      out, _err, status = with_config(config) { run_cli(%w[char AK]) }
+      assert_nil status
+      assert_match("search: nabu search --sign '𒀝'", out, "the card advertises the inverse")
+    end
+  end
+
   # P75 C-1: a namespaced --place is the identity lane — the ref matches in
   # any spelling, and the note names the lane on the page.
   def test_search_place_mint_filters_by_identity_and_notes_the_lane
@@ -7484,6 +7513,45 @@ class CLITest < Minitest::Test
       # fuzzy_slugs (P16-4): the dated corpus doubles as the fuzzy+date
       # composition fixture — the "p" shelf is documentary by construction.
       Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext, alignments: nil, fuzzy_slugs: ["p"])
+      fulltext.disconnect
+      catalog.disconnect
+      yield config
+    end
+  end
+
+  # A tiny Sumerian corpus + the OSL fixture landed under canonical/osl/,
+  # exactly where `nabu sync osl` puts the real one (P75 C-4): doc a reads
+  # `ag` (a value of AK 𒀝), doc b reads none of AK's values.
+  def with_sign_corpus
+    Dir.mktmpdir("nabu-cli-sign") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources,
+        config_path: File.join(File.dirname(sources), "config", "nabu.yml")
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      osl_dir = File.join(config.canonical_dir, "osl", "00lib")
+      FileUtils.mkdir_p(osl_dir)
+      FileUtils.cp(File.join(Nabu::TestSupport.fixtures("osl"), "osl.asl"),
+                   File.join(osl_dir, "osl.asl"))
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "cdli", name: "CDLI", adapter_class: "TestAdapter",
+                                     license_class: "open", enabled: true)
+      { "urn:c:a" => "lugal ag dumu", "urn:c:b" => "nu banda" }.each do |urn, text|
+        doc_id = catalog[:documents].insert(source_id: src, urn: urn, title: urn, language: "sux",
+                                            content_sha256: "x", revision: 1, withdrawn: false)
+        catalog[:passages].insert(
+          document_id: doc_id, urn: "#{urn}:1", sequence: 0, language: "sux", text: text,
+          text_normalized: Nabu::Normalize.search_form(text, language: "sux"),
+          content_sha256: "x", revision: 1, withdrawn: false
+        )
+      end
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+      Nabu::Store::Indexer.rebuild!(catalog: catalog, fulltext: fulltext)
       fulltext.disconnect
       catalog.disconnect
       yield config
