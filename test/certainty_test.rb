@@ -22,12 +22,18 @@ class CertaintyTest < Minitest::Test
     assert_equal "probable", Nabu::Certainty.tier(:cataloguer_query, "?")
   end
 
-  def test_precision_width_words_carry_no_tier_but_low_is_uncertain
-    %w[exact range year period].each do |width|
+  def test_precision_width_words_carry_no_tier_but_graded_words_map
+    %w[exact range year period regnal-year reign century].each do |width|
       assert_nil Nabu::Certainty.tier(:hgv_precision, width),
                  "#{width} is a width word — precision is not certainty"
     end
     assert_equal "uncertain", Nabu::Certainty.tier(:hgv_precision, "low")
+    assert_equal "probable", Nabu::Certainty.tier(:hgv_precision, "medium")
+    assert_equal "probable", Nabu::Certainty.tier(:hgv_precision, "circa")
+    assert_equal "certain", Nabu::Certainty.tier(:hgv_precision, "high"),
+                 "hgv 'high' is CONFIDENCE, silent — never mapped to doubt"
+    assert_nil Nabu::Certainty.tier(:hgv_precision, "am"),
+               "an era marker (anno mundi) is not a grade — honest nil"
   end
 
   def test_band_notes_with_approximation_language_are_probable

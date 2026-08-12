@@ -1993,7 +1993,7 @@ module Nabu
           withdrawn: result.withdrawn,
           provenance: result.provenance.map { |e| { event: e.event, tool: e.tool, at: e.at.to_s } }
         }.merge(credit_field(result)).merge(meter_field(result)).merge(findspot_field(result))
-          .merge(lect_field(result))
+          .merge(lect_field(result)).merge(timeline_field(result))
       end
 
       # The resolved lect (P59-3): merged only when the document carries a
@@ -2029,6 +2029,28 @@ module Nabu
 
         spot = result.findspot
         { findspot: { pleiades_id: spot.id, title: spot.title, place_types: spot.place_types } }
+      end
+
+      # The timeline block (P76 U-2 — the uncertainty survey's biggest
+      # measured gap): merged only when the document carries an axis row —
+      # undated documents' payloads stay byte-identical (the empty-hash
+      # idiom). Structured, never prose: signed years, the precision word
+      # verbatim, place fields as stored. `certainty` (the precision
+      # carrier) and `place_certainty` (the cataloguer's trailing "?")
+      # merge only below certain (conventions §12).
+      def timeline_field(result)
+        return {} unless result.respond_to?(:timeline) && result.timeline
+
+        line = result.timeline
+        block = { not_before: line.not_before, not_after: line.not_after,
+                  precision: line.precision, place: line.place_name,
+                  place_ref: line.place_ref, date_raw: line.date_raw,
+                  axis_source: line.axis_source }.compact
+        block.merge!(Nabu::Certainty.payload(:hgv_precision, line.precision)) if line.precision
+        if line.place_name.to_s.strip.end_with?("?")
+          block[:place_certainty] = Nabu::Certainty.payload(:cataloguer_query, "?").fetch(:certainty)
+        end
+        { timeline: block }
       end
 
       # The source-level credit (P43-2): merged into a text-serving payload only
@@ -2071,7 +2093,7 @@ module Nabu
           license_class: result.license_class, source: result.source_slug,
           revision: result.revision, withdrawn: result.withdrawn,
           retired_upstream: result.retired_upstream
-        }.merge(credit_field(result)).merge(findspot_field(result))
+        }.merge(credit_field(result)).merge(findspot_field(result)).merge(timeline_field(result))
       end
 
       # Owner notes (P24-1), served BY DEFAULT on show/define payloads:

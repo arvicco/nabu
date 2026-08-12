@@ -23,8 +23,19 @@ module Nabu
     TIERS = %w[certain probable uncertain].freeze
 
     # Width vocabulary of the timeline precision column — the not_before/
-    # not_after interval already expresses width; these words carry no doubt.
-    PRECISION_WIDTH_WORDS = %w[exact range year period regnal-year regnal-reign].freeze
+    # not_after interval already expresses width; these words carry no
+    # doubt (live census 2026-08-12: period/range/regnal-year/exact/
+    # regnal-reign/year/reign/century all width).
+    PRECISION_WIDTH_WORDS = %w[exact range year period regnal-year regnal-reign reign century].freeze
+
+    # The genuinely graded precision words (same census): HGV's high/low,
+    # the medium between them, and circa (the approximation family — the
+    # band_note "ca." lineage). Anything else — width words above, era
+    # markers like "am" (anno mundi), tomorrow's unknowns — maps to nil,
+    # honestly ungraded, never guessed.
+    PRECISION_GRADES = {
+      "high" => "certain", "medium" => "probable", "circa" => "probable", "low" => "uncertain"
+    }.freeze
 
     # The survey §4.2 mapping, one lambda per carrier: upstream word →
     # house tier, nil = no tier (width, or an unmapped word — honest).
@@ -33,7 +44,7 @@ module Nabu
     CARRIERS = {
       places_certainty: ->(word) { { "high" => "certain", "low" => "probable" }[word] },
       cataloguer_query: ->(word) { "probable" if word == "?" },
-      hgv_precision: ->(word) { "uncertain" unless PRECISION_WIDTH_WORDS.include?(word) },
+      hgv_precision: ->(word) { PRECISION_GRADES[word] },
       band_note: ->(word) { "probable" if word.to_s.match?(/approximate|conventional/i) },
       lect_tier: ->(word) { { "certain" => "certain", "approximation" => "probable" }[word] },
       lect_fold: ->(_word) { "probable" },

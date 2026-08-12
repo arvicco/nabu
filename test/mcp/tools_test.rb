@@ -924,6 +924,44 @@ module MCP
       refute docp.key?("findspot")
     end
 
+    # -- the timeline block (P76 U-2 — the survey's biggest measured gap) -------
+
+    def test_show_carries_the_timeline_block_with_certainty
+      doc = make_document(urn: "urn:t:dated")
+      make_passage(doc, urn: "urn:t:dated:1", text: "στρατηγος", sequence: 0)
+      @catalog[:document_axes].insert(document_id: doc.id, not_before: -113, not_after: -113,
+                                      precision: "low", place_name: "Alexandrou Nesos ?",
+                                      axis_source: "hgv")
+      rebuild!
+
+      block = payload(call("nabu_show", { "urn" => "urn:t:dated:1" })).fetch("timeline")
+      assert_equal(-113, block.fetch("not_before"))
+      assert_equal "low", block.fetch("precision")
+      assert_equal({ "tier" => "uncertain", "upstream" => "low", "carrier" => "hgv-precision" },
+                   block.fetch("certainty"))
+      assert_equal "probable", block.fetch("place_certainty").fetch("tier"),
+                   "the cataloguer's trailing ? glosses structurally"
+      docp = payload(call("nabu_show", { "urn" => "urn:t:dated" }))
+      assert docp.key?("timeline"), "the document header carries the block too"
+    end
+
+    def test_show_timeline_absent_on_undated_documents_and_silent_at_certain
+      doc = make_document(urn: "urn:t:undated")
+      make_passage(doc, urn: "urn:t:undated:1", text: "στρατηγος", sequence: 0)
+      dated = make_document(urn: "urn:t:plain")
+      make_passage(dated, urn: "urn:t:plain:1", text: "στρατηγος", sequence: 0)
+      @catalog[:document_axes].insert(document_id: dated.id, not_before: 100, not_after: 199,
+                                      precision: "range", place_name: "Oxyrhynchus",
+                                      axis_source: "hgv")
+      rebuild!
+
+      undated = payload(call("nabu_show", { "urn" => "urn:t:undated:1" }))
+      refute undated.key?("timeline"), "undated → no key, byte-identical payload"
+      block = payload(call("nabu_show", { "urn" => "urn:t:plain:1" })).fetch("timeline")
+      refute block.key?("certainty"), "a width word merges no certainty object"
+      refute block.key?("place_certainty"), "an unqueried place merges nothing"
+    end
+
     # -- nabu_place (P44-3: the place desk, added for CLI parity) ---------------
 
     def test_place_by_id_returns_the_card_holdings_and_unlinked_tail
