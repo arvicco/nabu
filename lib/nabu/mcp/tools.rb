@@ -416,7 +416,17 @@ module Nabu
                      description: "Shorthand for one century's from/to (6 = 6th c. CE, -2 = 2nd c. " \
                                   "BCE); mutually exclusive with from/to." },
           place: { type: "string",
-                   description: "Provenance place LIKE filter (Oxyrhynchus, oxyrhynch%) — dated papyri." },
+                   description: "Provenance filter (P75 C-1): a namespaced place ref (tm:2810, " \
+                                "cigs:GIR) matches identity claims on the document's place_ref " \
+                                "axis; a place NAME resolves through the derived place index and " \
+                                "registry decisions (name recall kept); a LIKE pattern " \
+                                "(oxyrhynch%) stays the name lane. The note names the lane that " \
+                                "answered. Localized documents only." },
+          script: { type: "string",
+                    description: "Script filter (P75 C-2), ISO 15924-style registry tag (latn, " \
+                                 "xsux, egyd): keeps documents whose held text carries the " \
+                                 "~script lect axis OR whose artifact-script axis claims the tag " \
+                                 "(\"Latin-script Gaulish\"). Text search only." },
           meter: { type: "string",
                    description: "Meter facet (P45-5): only passages carrying a meter enrichment " \
                                 "(the pedecerto/hypotactic scansion layer) whose meter code/name " \
@@ -881,20 +891,22 @@ module Nabu
         meter, meter_pattern = search_meter(args, mode, near)
         words = search_words?(args, mode, near)
         lect, lects = search_lect(args, mode, near)
+        script = search_script(args, mode, near)
         catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
         fulltext = search_index(mode) or return note(mode == :lemma ? LEMMA_REBUILDING_NOTE : REBUILDING_NOTE)
 
         limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
         window = clamp(args["window"], default: SEARCH_DEFAULT_WINDOW, max: SEARCH_MAX_WINDOW, min: 0)
-        results, incomplete, rank_note, meter_note, words_note, word_grain =
+        results, incomplete, rank_note, meter_note, words_note, word_grain, place_note =
           run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near,
                                  window: window, lang: args["lang"], license: license,
                                  limit: limit + 1, morph: morph, from: from, to: to, place: place,
                                  meter: meter, meter_pattern: meter_pattern, words: words,
-                                 lect: lect, lects: lects)
+                                 lect: lect, lects: lects, script: script)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog, incomplete: incomplete, rank_note: rank_note,
-                               meter_note: meter_note, word_grain: word_grain, word_grain_note: words_note)
+                               meter_note: meter_note, word_grain: word_grain, word_grain_note: words_note,
+                               place_note: place_note)
       rescue Query::MorphFacets::Error => e
         raise InvalidArguments, e.message
       end
@@ -1299,6 +1311,16 @@ module Nabu
         [from, to, place]
       end
 
+      # The script filter arg (P75 C-2) — text search only, like the
+      # timeline; tag shape/fold is enforced once in Search#script_code.
+      def search_script(args, mode, near)
+        script = string_arg(args, "script")
+        return nil if script.nil?
+        raise InvalidArguments, "script composes with text search only, not lemma/near" if mode == :lemma || near
+
+        script
+      end
+
       # Returns [results, incomplete_hint, rank_note] — the hint is the query
       # layer's exhausted-inner-window announcement (P35-6), nil on an honest
       # page; rank_note (P42-2) is Search's skipped-rank clause when the term
@@ -1306,7 +1328,7 @@ module Nabu
       # never guard, so theirs is always nil).
       def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
                      from: nil, to: nil, place: nil, meter: nil, meter_pattern: nil, words: false,
-                     lect: nil, lects: nil)
+                     lect: nil, lects: nil, script: nil)
         results, searcher =
           if near
             searcher = Query::Proximity.new(catalog: catalog, fulltext: fulltext)
@@ -1320,14 +1342,15 @@ module Nabu
                                          tibetan_words: words ? tibetan_words_seam : nil,
                                          lects: lects || :auto)
             [searcher.run(term, lang: lang, license: license, limit: limit,
-                                from: from, to: to, place: place,
+                                from: from, to: to, place: place, script: script,
                                 meter: meter, meter_pattern: meter_pattern, words: words, lect: lect), searcher]
           end
         rank_note = searcher.respond_to?(:rank_note) ? searcher.rank_note : nil
         meter_note = searcher.respond_to?(:meter_note) ? searcher.meter_note : nil
         words_note = searcher.respond_to?(:words_note) ? searcher.words_note : nil
         word_grain = searcher.respond_to?(:word_grain) ? searcher.word_grain : nil
-        [results, searcher.incomplete_hint, rank_note, meter_note, words_note, word_grain]
+        place_note = searcher.respond_to?(:place_note) ? searcher.place_note : nil
+        [results, searcher.incomplete_hint, rank_note, meter_note, words_note, word_grain, place_note]
       end
 
       # The word-grain seam behind nabu_search's words flag (P54-4): resolve
@@ -1392,7 +1415,7 @@ module Nabu
       end
 
       def render_search(results, limit:, catalog:, incomplete: nil, rank_note: nil, meter_note: nil,
-                        word_grain: nil, word_grain_note: nil)
+                        word_grain: nil, word_grain_note: nil, place_note: nil)
         # P54-4, present-only keys (additive to the frozen shape): word_grain
         # marks a page the Tibetan word-grain filter actually thinned
         # (filtered-out hits are simply absent); word_grain_note mirrors the
@@ -1401,7 +1424,8 @@ module Nabu
         extra[:word_grain] = true if word_grain
         extra[:word_grain_note] = word_grain_note if word_grain_note
         if results.empty?
-          return json({ matches: [], note: ["no matches", rank_note, meter_note, incomplete].compact.join(" — "),
+          return json({ matches: [],
+                        note: ["no matches", rank_note, meter_note, place_note, incomplete].compact.join(" — "),
                         coverage: coverage_hint(catalog) }.merge(extra))
         end
 
@@ -1418,6 +1442,7 @@ module Nabu
         # source line (P45-5) rides the same way.
         note = "#{note} — #{rank_note}" if rank_note
         note = "#{note} — #{meter_note}" if meter_note
+        note = "#{note} — #{place_note}" if place_note
         note = "#{note} — #{incomplete}" if incomplete
         json({ matches: shown.map { |result| match_payload(result, sources) }, note: note }.merge(extra))
       end
@@ -1907,6 +1932,11 @@ module Nabu
         base = { pleiades_id: card.pleiades_id, ref: card.ref,
                  holdings: source_count_rows(card.holdings),
                  axis_holdings: source_count_rows(card.axis_holdings) }
+        # P75 C-3: crosswalk equivalences, present-only (no rows → no key —
+        # pre-P75 payloads stay byte-identical).
+        unless card.equivalences.empty?
+          base[:equivalences] = card.equivalences.map { |namespace, id| "#{namespace}:#{id}" }
+        end
         place = card.place
         if place
           base.merge(title: place.title, place_types: place.place_types,

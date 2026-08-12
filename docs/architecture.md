@@ -1000,6 +1000,23 @@ bucketed by century, or — with a text query — a word plotted across the
 centuries. `nabu_search` gains the same `from`/`to`/`century`/`place` args
 (honestly scoped to text search — the dated corpus is not lemmatized).
 
+**The composition pass (P75).** `--place` is identity-aware
+(`Query::PlaceFilter`): a namespaced mint (`cigs:GIR`, `pleiades:912855`)
+filters on `place_ref` identity claims — GLOB spellings owned by
+`Nabu::PlaceRefs.ref_globs`, matched inside the same correlated EXISTS; a
+place NAME resolves through the derived place index and the nabu-places
+registry's matched decisions (one `place_crosswalk` hop, both directions)
+while KEEPING its name-LIKE recall; unresolved input stays the honest LIKE
+fallback. `Search#place_note` names the lane that answered, on the CLI page
+and the MCP note alike. `--script TAG` cuts by the resolved lect id's
+`~script` segment OR the artifact-script axis; `--within LAT,LON,KM` is an
+equirectangular radius over the coordinates lane (pure SQL arithmetic, no
+math functions); `search --sign 𒀝` expands an OSL sign's reading values
+into the existing fold-union OR (`Search#run_sign`) — the inverse of `nabu
+signs`, advertised on the sign card. The place card renders its crosswalk
+equivalences ("= tm:2810") from the same `PlaceFilter.expand` derivation
+the search filter reads.
+
 ## 15. The links journal — batch-mined edges that outlive rebuilds (P16-1)
 
 `db/links.sqlite3` holds the corpus's mined cross-reference graph:

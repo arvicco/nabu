@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "place_filter"
+
 module Nabu
   module Query
     # `nabu place NAME|ID` (P44-2): the place desk — a Pleiades resolver card
@@ -44,8 +46,13 @@ module Nabu
       # "tm:2810"); +axis_holdings+ the SEPARATE labeled lane over
       # document_axes.place_ref (adapter-asserted + registry-projected refs
       # in both spellings — Nabu::PlaceRefs is the one reader), doc-deduped.
-      Card = Data.define(:pleiades_id, :place, :holdings, :dossiers, :ref, :axis_holdings) do
-        def initialize(pleiades_id:, place:, holdings:, dossiers: [], ref: nil, axis_holdings: [])
+      # P75 C-3: +equivalences+ [[namespace, id], …] — the derived
+      # place_crosswalk's asserted identities for this card's own ref, one
+      # hop, both directions (the "= cigs:GIR = tm:2810" line).
+      Card = Data.define(:pleiades_id, :place, :holdings, :dossiers, :ref, :axis_holdings,
+                         :equivalences) do
+        def initialize(pleiades_id:, place:, holdings:, dossiers: [], ref: nil, axis_holdings: [],
+                       equivalences: [])
           super
         end
       end
@@ -94,7 +101,8 @@ module Nabu
         Result.new(
           cards: [Card.new(pleiades_id: id, place: place, holdings: holdings(id),
                            dossiers: dossiers_for("pleiades", id), ref: "pleiades:#{id}",
-                           axis_holdings: axis_holdings("pleiades", id))],
+                           axis_holdings: axis_holdings("pleiades", id),
+                           equivalences: equivalences_for("pleiades", id))],
           dump_loaded: !@pleiades.nil?,
           unlinked_term: tail_term, unlinked: tail_term ? unlinked(tail_term) : []
         )
@@ -104,14 +112,19 @@ module Nabu
       # through that gazetteer's OWN place-index slice where one is derived
       # (tm/cigs; np has no gazetteer — place nil, honestly), and its
       # holdings are the axis lane only — the metadata lane is
-      # pleiades-keyed by design.
+      # pleiades-keyed by design. P75 C-5: with a resolved title the
+      # unlinked findspot-text tail rides exactly as on the pleiades card;
+      # without one there is no text to count — the honest empty.
       def by_ref(namespace, id)
         place = gazetteer_resolver(namespace)&.place(id)
+        tail_term = place&.title
         Result.new(
           cards: [Card.new(pleiades_id: nil, place: place, holdings: [],
                            dossiers: dossiers_for(namespace, id), ref: "#{namespace}:#{id}",
-                           axis_holdings: axis_holdings(namespace, id))],
-          dump_loaded: !place.nil?, unlinked_term: nil, unlinked: []
+                           axis_holdings: axis_holdings(namespace, id),
+                           equivalences: equivalences_for(namespace, id))],
+          dump_loaded: !place.nil?,
+          unlinked_term: tail_term, unlinked: tail_term ? unlinked(tail_term) : []
         )
       end
 
@@ -161,10 +174,19 @@ module Nabu
           cards: matches.map do |place|
             Card.new(pleiades_id: place.id, place: place, holdings: holdings(place.id),
                      dossiers: dossiers_for("pleiades", place.id), ref: "pleiades:#{place.id}",
-                     axis_holdings: axis_holdings("pleiades", place.id))
+                     axis_holdings: axis_holdings("pleiades", place.id),
+                     equivalences: equivalences_for("pleiades", place.id))
           end,
           dump_loaded: true, unlinked_term: name, unlinked: unlinked(name)
         )
+      end
+
+      # The crosswalk's asserted equivalences for (+namespace+, +id+) —
+      # PlaceFilter.expand's one-hop walk minus the identity itself (P75
+      # C-3; the search filter and the card read the same derivation).
+      def equivalences_for(namespace, id)
+        identity = [namespace, id.to_s]
+        PlaceFilter.expand([identity], @catalog) - [identity]
       end
 
       # The owner's authored place dossiers whose refs cover this id

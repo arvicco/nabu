@@ -50,5 +50,26 @@ module Nabu
     def ids_in(ref, namespace)
       ids(ref).filter_map { |ns, id| id if ns == namespace }
     end
+
+    # The SQL-side spelling lane (P75 C-1): GLOB patterns that decide, inside
+    # a correlated EXISTS, whether a place_ref field claims (+namespace+,
+    # +id+) — the same spellings #ids accepts, so the two lanes never
+    # diverge (URL_GLOBS mirrors URL_PATTERNS; consistency is test-pinned
+    # against the real glob() engine). CONTRACT: every pattern is matched
+    # against the SPACE-PADDED field (' ' || place_ref || ' '), which turns
+    # both boundary cases — id at end-of-field, mint at either edge — into
+    # the one in-string shape each pattern states. Ids stay glob-safe by
+    # construction: MINT_PATTERN's charset carries no glob metacharacters.
+    URL_GLOBS = {
+      "pleiades" => ["*pleiades.stoa.org/places/%s[^0-9]*"],
+      "tm" => ["*trismegistos.org/place/%s[^0-9]*",
+               "*trismegistos.org/geo/detail/%s[^0-9]*"],
+      "geonames" => ["*geonames.org/%s[^0-9]*"]
+    }.freeze
+
+    def ref_globs(namespace, id)
+      URL_GLOBS.fetch(namespace, []).map { |glob| format(glob, id) } <<
+        "* #{namespace}:#{id} *"
+    end
   end
 end
