@@ -50,6 +50,57 @@ registry's `anchor[:stage][/variety][~script][@ortho]` grammar, with stored
 codes never touched. See the [Languages]({{ '/languages/' | relative_url }})
 page for the lect layer.
 
+**Place-identity search** (`search --place NAME|ns:id`, August 2026): the
+provenance filter understands place *identities*, not just spellings. A
+namespaced ref (`--place cigs:GIR`, `--place pleiades:912855`) matches
+every document whose place claim cites that identity in any spelling —
+upstream URL or namespaced mint alike — and a plain name resolves through
+the held gazetteers and the [nabu-places](https://arvicco.github.io/nabu-places)
+registry's decisions, crosswalk equivalences included, while still
+matching verbatim name fields. The page names the lane that answered:
+
+```
+$ bin/nabu search lugal --place Girsu --scan --limit 5
+…
+note: place: "Girsu" → cigs:GIR = pleiades:912855 = cdli-provenience:88 = geonames:93976 (identity refs + name match)
+```
+
+`--scan` there is the **filter-first mode** (August 2026): where plain
+search asks "where does this term rank corpus-wide?" — and answers with a
+corpus-wide sample when the term is too common to rank — `--scan` asks
+"which of *these* documents carry the term?", walking the matches in
+corpus order intersected with the active filters: deterministic, never
+sampled, built for a common word under a selective filter.
+
+**Script search** (`search --script TAG`, August 2026) cuts by writing
+system: the held text's script axis or the artifact's original system
+where the two differ. `--script ogam` walks the Ogham stones, `--script
+grek` finds Greek-alphabet Gaulish:
+
+```
+$ bin/nabu search --script grek --limit 3
+urn:nabu:riig:ahp-01-01:HRD-a:1 [xtg-Grek]
+  καρε[…]μ
+```
+
+**Sign search** (`search --sign GLYPH|NAME`, August 2026) is the inverse
+of the [sign desk]({{ '/tools/' | relative_url }}): one cuneiform sign
+expands into an OR over its OSL reading values, each hit bracketing the
+value that matched:
+
+```
+$ bin/nabu search --sign 𒊬 --lang sux --limit 3
+sign: 𒊬  SAR — 26 reading values: e₁₄ kiri₆ ma₄ mu₂ mud₆ … and 14 more
+urn:nabu:etcsl:0.2.06:31 [sux]
+  cubur-e cu [mu2]
+```
+
+**Geo-radius search** (`search --within LAT,LON,KM`, August 2026) keeps
+documents whose recorded find-location falls inside a radius —
+`--within 59.86,17.64,30` walks the runestones raised within 30 km of
+Uppsala. All of these compose with each other and with the date, genre,
+license, and lect filters.
+
 **Lemma search** (`search --lemma FORM`) queries by dictionary form rather
 than surface string, over 19.2 million gold lemma annotations in
 thirty-seven languages (26 July 2026 census) — inflection and suppletion included:

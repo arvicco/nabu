@@ -84,8 +84,15 @@ their wave lands.
 nabu place Girsu                  # the card + holdings at the place
 nabu place 462281                 # by Pleiades id
 nabu place apply                  # project new registry decisions
+nabu search lugal --place cigs:GIR --scan   # search by place IDENTITY (August 2026)
+nabu search --within 59.86,17.64,30         # find-locations inside a radius
 ```
 
 The MCP surface serves the same card as `nabu_place` for conversational
 use. Place data composes with the timeline: the epigraphy desks read
-findspot and date off the same axis row.
+findspot and date off the same axis row. Since August 2026 the layer has
+its search consumer: `--place` accepts a namespaced identity or a name
+resolved through the registry's decisions (crosswalk equivalences
+included, verbatim-name recall kept), the place card renders its
+equivalences as an `=` line, and `--within` cuts by recorded
+find-coordinates.

@@ -24,7 +24,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these seven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 11 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 12 August 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
 | `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
@@ -34,7 +34,7 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 | `cantigas` | texts | attribution | wired · manual | 1,682 docs / 34,162 passages |
 | `derom` | dictionary | nc | wired · manual | 233 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 August 2026)</span>: `roa-opt` 1,682 · `lat` 1,095 · `la-vul` 233 · `fro` 222 · `gmh` 11 · `grc` 9 · `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 … and 11 more (`nabu axis romance` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 August 2026)</span>: `roa-opt` 1,682 · `lat` 1,095 · `la-vul` 233 · `fro` 222 · `gmh` 11 · `grc` 9 · `orv` 9 · `ota` 5 · `lzh` 4 · `cop` 3 … and 11 more (`nabu axis romance` lists all).
 
 ## The desk's instruments
 
