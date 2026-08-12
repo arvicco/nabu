@@ -224,6 +224,29 @@ module Query
       assert_raises(Nabu::Query::Place::Error) { place_query.run("zz:1") }
     end
 
+    # -- crosswalk equivalences (P75 C-3) --------------------------------------
+
+    def test_the_card_carries_its_crosswalk_equivalences_both_directions
+      @catalog[:place_crosswalk].insert(source: "t", gazetteer_a: "pleiades", id_a: "570685",
+                                        gazetteer_b: "tm", id_b: "2810")
+      @catalog[:place_crosswalk].insert(source: "t", gazetteer_a: "cigs", id_a: "SPA",
+                                        gazetteer_b: "pleiades", id_b: "570685")
+      card = place_query.run("570685").cards.first
+      assert_equal [%w[cigs SPA], %w[tm 2810]], card.equivalences.sort
+    end
+
+    def test_a_ref_card_carries_equivalences_too
+      @catalog[:place_crosswalk].insert(source: "t", gazetteer_a: "cigs", id_a: "GIR",
+                                        gazetteer_b: "tm", id_b: "2810")
+      card = place_query.run("cigs:GIR").cards.first
+      assert_equal [%w[tm 2810]], card.equivalences
+    end
+
+    def test_no_crosswalk_rows_is_an_honest_empty_list
+      card = place_query.run("570685").cards.first
+      assert_empty card.equivalences
+    end
+
     # -- input edges -----------------------------------------------------------
 
     def test_blank_input_is_an_error

@@ -1907,6 +1907,11 @@ module Nabu
         base = { pleiades_id: card.pleiades_id, ref: card.ref,
                  holdings: source_count_rows(card.holdings),
                  axis_holdings: source_count_rows(card.axis_holdings) }
+        # P75 C-3: crosswalk equivalences, present-only (no rows → no key —
+        # pre-P75 payloads stay byte-identical).
+        unless card.equivalences.empty?
+          base[:equivalences] = card.equivalences.map { |namespace, id| "#{namespace}:#{id}" }
+        end
         place = card.place
         if place
           base.merge(title: place.title, place_types: place.place_types,
