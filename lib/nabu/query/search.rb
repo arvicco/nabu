@@ -122,6 +122,17 @@ module Nabu
       # const: bounded-retry budget per sampled hit (engine knob, not a corpus census)
       SAMPLE_ATTEMPTS = 4
 
+      # The --scan mode's page label (P75 C-10) — rides the rank_note slot:
+      # the page IS unranked, and the label must say which order replaced it.
+      SCAN_MODE_NOTE = "corpus-order scan of the filtered set (--scan)"
+
+      # const: postings pulled per keyset seek in --scan (engine knob)
+      SCAN_MODE_PAGE = 10_000
+      # const: postings walked before --scan gives up and announces the
+      # truncation (engine knob — each page is one cheap rowid-seek MATCH
+      # plus one bounded catalog probe, so the worst case stays interactive)
+      SCAN_MODE_CEILING = 200_000
+
       # The guard threshold, as a stubbable seam for surface-level tests
       # (crossing 1M postings in a fixture corpus is not reasonable).
       def self.ubiquity_threshold
@@ -320,6 +331,16 @@ module Nabu
                  folded_page(variants, filters, limit: limit, urn: urn, ubiquity_threshold: ubiquity_threshold)
                end
         page = word_grain_page(page, query) if words
+        # P75 C-10: a guard-sampled page thinned below its limit by active
+        # CATALOG-SIDE filters is the starvation genus — the note teaches
+        # the mode built for that question instead of serving degenerate
+        # pages silently. A lang that rode IN the MATCH (P42-3) filtered
+        # the draw itself, so it never thins and never fires this.
+        catalog_side = index_language_match(filters[:lang]) ? filters.merge(lang: nil) : filters
+        if @rank_note && page.size < limit && filters_active?(catalog_side)
+          @rank_note = "#{@rank_note} — filters thinned the sampled page; " \
+                       "--scan walks the filtered set deterministically"
+        end
         note_meter(meter, meter_pattern, empty: page.empty?)
         page.map { |row| build_result(row, query, exact: exact, word: word) }
       end
@@ -361,6 +382,44 @@ module Nabu
                .all
         note_meter(meter, meter_pattern, empty: rows.empty?)
         rows.map { |row| build_result(row, "", exact: false, word: false) }
+      end
+
+      # The filter-first mode (P75 C-10, owner-ruled: guard-sampled search
+      # and filter-first search are TWO DIFFERENT MODES). #run answers
+      # "where does this term rank corpus-wide?" — and under the ubiquity
+      # guard its page is a corpus-wide SAMPLE that selective filters can
+      # thin to nothing. #run_scan answers "which of THESE documents carry
+      # the term?": it streams the term's postings in CORPUS ORDER (keyset
+      # rowid seeks — the sampled_hits lesson: FTS5 honors rowid range
+      # constraints without materializing the posting list) and intersects
+      # each posting page with the catalog filters until the page fills.
+      # Deterministic by contract — no rank, no sample, same MATCH
+      # semantics as #run. Bounded by +scan_ceiling+ postings walked; the
+      # truncation is announced via #incomplete_hint, never silent.
+      def run_scan(query, lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil,
+                   facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil,
+                   lect: nil, script: nil, within: nil,
+                   scan_page: SCAN_MODE_PAGE, scan_ceiling: SCAN_MODE_CEILING)
+        @incomplete_hint = nil
+        @meter_note = nil
+        @words_note = nil
+        @word_grain = nil
+        @place_note = nil
+        @rank_note = SCAN_MODE_NOTE
+        variants = Nabu::Normalize.query_forms(query.to_s)
+        return [] if variants.first.strip.empty?
+
+        filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),
+                    facets: facets, source: source, sources: sources, loans: loans,
+                    meter: meter, meter_pattern: meter_pattern, script: script_code(script),
+                    within: within_spec(within) }.merge(lect_filter(lect))
+        lang_match = index_language_match(filters[:lang])
+        filters = filters.merge(lang: nil) if lang_match
+
+        page = scan_walk(variants, filters, limit: limit, scan_page: scan_page,
+                                            scan_ceiling: scan_ceiling, lang_match: lang_match)
+        note_meter(meter, meter_pattern, empty: page.empty?)
+        page.map { |row| build_result(row, query, exact: false, word: false) }
       end
 
       # Search-by-sign (P75 C-4, the inverse of `nabu signs`): the page
@@ -703,6 +762,67 @@ module Nabu
         literal = variants.map { |variant| literal_expression(variant) }
         fts_hits(match_expression(literal), inner_limit: inner_limit, offset: offset, urn: urn,
                                             ranked: ranked, lang_match: lang_match)
+      end
+
+      # The --scan posting walk (P75 C-10): pages of (passage_id, rowid) in
+      # rowid = corpus order, each intersected with the catalog filters;
+      # keyset-paged on the last rowid so no posting is ever re-walked.
+      def scan_walk(variants, filters, limit:, scan_page:, scan_ceiling:, lang_match:)
+        page = []
+        after = 0
+        walked = 0
+        loop do
+          hits = scan_posting_page(variants, after_rowid: after, page_size: scan_page,
+                                             lang_match: lang_match)
+          break if hits.empty?
+
+          collect_scan_survivors(hits, filters, into: page, limit: limit)
+          walked += hits.size
+          after = hits.last.fetch(:scan_rowid)
+          break if page.size >= limit || hits.size < scan_page
+
+          next unless walked >= scan_ceiling
+
+          @incomplete_hint = "--scan walked the first #{walked} matches in corpus order — " \
+                             "deeper matches were not checked (narrow the filters or the term)"
+          break
+        end
+        page.first(limit)
+      end
+
+      # Which of one posting page's passages survive the catalog filters,
+      # appended in corpus order (the collect_verified shape, with the
+      # filters themselves as the verification).
+      def collect_scan_survivors(hits, filters, into:, limit:)
+        ordered_ids = hits.map { |row| row.fetch(:passage_id) }
+        rows = catalog_rows(ordered_ids, **filters).to_h { |row| [row.fetch(:passage_id), row] }
+        ordered_ids.each do |id|
+          row = rows[id] or next
+          into << row
+          break if into.size >= limit
+        end
+      end
+
+      def scan_posting_page(variants, after_rowid:, page_size:, lang_match:)
+        scan_hits(match_expression(variants), after_rowid: after_rowid, page_size: page_size,
+                                              lang_match: lang_match)
+      rescue Sequel::DatabaseError => e
+        raise unless e.message.match?(/fts5|unterminated string|no such column/)
+
+        literal = variants.map { |variant| literal_expression(variant) }
+        scan_hits(match_expression(literal), after_rowid: after_rowid, page_size: page_size,
+                                             lang_match: lang_match)
+      end
+
+      def scan_hits(match, after_rowid:, page_size:, lang_match:)
+        match = "(#{match}) AND #{lang_match}" if lang_match
+        @fulltext[Store::Indexer::TABLE]
+          .where(Sequel.lit("passages_fts MATCH ?", match))
+          .where(Sequel.lit("rowid > ?", after_rowid))
+          .select(:passage_id, Sequel.lit("rowid").as(:scan_rowid))
+          .order(Sequel.lit("rowid"))
+          .limit(page_size)
+          .all
       end
 
       # The sampled guarded window (P42-r3), with the same literal-fallback
