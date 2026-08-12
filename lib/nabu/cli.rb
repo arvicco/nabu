@@ -1773,8 +1773,9 @@ module Nabu
                 desc: "Latest date: signed historical year (14 = 14 CE); composes with --from"
     option :century, type: :numeric, banner: "N",
                      desc: "Shorthand for one century's --from/--to (6 = 6th c. CE, -2 = 2nd c. BCE)"
-    option :place, type: :string, banner: "PATTERN",
-                   desc: "Provenance place LIKE filter (Oxyrhynchus, oxyrhynch%) — dated papyri"
+    option :place, type: :string, banner: "NAME|ns:id",
+                   desc: "Provenance filter: a namespaced ref (tm:2810, cigs:GIR), a name resolved " \
+                         "to its identities + name match, or a LIKE pattern (oxyrhynch%)"
     option :type, type: :string, banner: "PATTERN",
                   desc: "Inscription-type facet filter (epitaph, votive%, or the raw titsep code)"
     option :province, type: :string, banner: "PATTERN",
@@ -1930,7 +1931,8 @@ module Nabu
       axis_names, axis_slugs = axis_membership(command: "search", config: config)
       lects = require_lects!(config, options[:lect])
 
-      searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto)
+      searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto,
+                                         places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
       results = searcher.run(query, lang: options[:lang], license: options[:license],
                                     limit: options[:limit].to_i, from: from, to: to, place: place,
                                     facets: facets, source: options[:source], sources: axis_slugs,
@@ -1941,7 +1943,8 @@ module Nabu
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
                                     incomplete: searcher.incomplete_hint, exact: options[:exact],
                                     word: options[:word], rank_note: searcher.rank_note,
-                                    meter_note: searcher.meter_note, words_note: searcher.words_note)
+                                    meter_note: searcher.meter_note, words_note: searcher.words_note,
+                                    place_note: searcher.place_note)
       print_display_footer
     ensure
       catalog&.disconnect
@@ -4154,7 +4157,8 @@ module Nabu
         axis_names, axis_slugs = axis_membership(command: "search", config: config)
         lects = require_lects!(config, options[:lect])
 
-        searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto)
+        searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext, lects: lects || :auto,
+                                           places: Nabu::Places.load_default(canonical_dir: config.canonical_dir))
         results = searcher.browse(lang: options[:lang], license: options[:license],
                                   limit: options[:limit].to_i, from: from, to: to, place: place,
                                   facets: facets, source: options[:source], sources: axis_slugs,
@@ -4162,7 +4166,7 @@ module Nabu
                                   meter_pattern: options[:meter_pattern], lect: options[:lect])
         print_search_results(results, facets: facets, query: "", loans: loans, axis: axis_names,
                                       browse: true, from: from, to: to, place: place,
-                                      meter_note: searcher.meter_note)
+                                      meter_note: searcher.meter_note, place_note: searcher.place_note)
         print_display_footer
       ensure
         catalog&.disconnect
@@ -5783,7 +5787,7 @@ module Nabu
       def print_search_results(results, facets: nil, query: nil, loans: nil, axis: nil, incomplete: nil,
                                exact: false, word: false, proximity: false, rank_note: nil,
                                browse: false, from: nil, to: nil, place: nil, meter_note: nil,
-                               words_note: nil)
+                               words_note: nil, place_note: nil)
         if results.empty?
           say "no matches"
           # Empty-under-filter honesty (P35): --exact/--word suppressed the folded
@@ -5803,6 +5807,9 @@ module Nabu
           # The word-grain degrade note (P54-4): --words could not filter
           # (non-Tibetan query / unsynced module) — plain search served.
           say "note: #{words_note}" if words_note
+          # The --place lane note (P75 C-1): which lane an empty page
+          # filtered on — identity refs or the name-LIKE fallback.
+          say "note: #{place_note}" if place_note
           say "note: #{incomplete}" if incomplete
           return print_script_miss_hints(query)
         end
@@ -5818,6 +5825,7 @@ module Nabu
             "#{facet_footer(facets, loans: loans, axis: axis)}"
         say "note: #{meter_note}" if meter_note
         say "note: #{words_note}" if words_note
+        say "note: #{place_note}" if place_note
         say "note: #{incomplete}" if incomplete
         print_search_credits(results)
       end
