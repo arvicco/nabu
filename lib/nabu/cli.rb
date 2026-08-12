@@ -1776,6 +1776,9 @@ module Nabu
     option :place, type: :string, banner: "NAME|ns:id",
                    desc: "Provenance filter: a namespaced ref (tm:2810, cigs:GIR), a name resolved " \
                          "to its identities + name match, or a LIKE pattern (oxyrhynch%)"
+    option :script, type: :string, banner: "TAG",
+                    desc: "Script filter, ISO 15924-style registry tag (latn, xsux): the held text's " \
+                          "~script lect axis OR the artifact-script axis (\"Latin-script Gaulish\")"
     option :type, type: :string, banner: "PATTERN",
                   desc: "Inscription-type facet filter (epitaph, votive%, or the raw titsep code)"
     option :province, type: :string, banner: "PATTERN",
@@ -1939,13 +1942,17 @@ module Nabu
                                     loans: loans, meter: options[:meter],
                                     meter_pattern: options[:meter_pattern],
                                     exact: options[:exact], word: options[:word], words: options[:words],
-                                    lect: options[:lect])
+                                    lect: options[:lect], script: options[:script])
       print_search_results(results, facets: facets, query: query, loans: loans, axis: axis_names,
                                     incomplete: searcher.incomplete_hint, exact: options[:exact],
                                     word: options[:word], rank_note: searcher.rank_note,
                                     meter_note: searcher.meter_note, words_note: searcher.words_note,
                                     place_note: searcher.place_note)
       print_display_footer
+    rescue Nabu::Error => e
+      # A malformed filter arg (--script shape) or a query-layer refusal —
+      # a clean stderr message and exit 1, never a backtrace.
+      raise Thor::Error, e.message
     ensure
       catalog&.disconnect
       fulltext&.disconnect
@@ -4117,7 +4124,8 @@ module Nabu
       # are already a legal term-less path and return earlier (char_structured_search).
       def content_narrowing_filters?
         options[:from] || options[:to] || options[:century] || options[:place] ||
-          facet_filters || loans_filter || options[:meter] || options[:meter_pattern] || options[:lect]
+          facet_filters || loans_filter || options[:meter] || options[:meter_pattern] ||
+          options[:lect] || options[:script]
       end
 
       # The refusal for a term-less `search` that carries no content-narrowing
@@ -4126,7 +4134,7 @@ module Nabu
       def browse_refusal_message
         "search: give a query — or a content-narrowing filter to browse the corpus " \
           "term-less: a date window (--from/--to/--century), --place, a genre facet " \
-          "(--type/--province/--material), --loans, --meter/--meter-pattern, or --lect. " \
+          "(--type/--province/--material), --loans, --meter/--meter-pattern, --lect, or --script. " \
           "--lang/--license/--source/--axis " \
           "select whole shelves and cannot stand alone (that would dump the shelf, not browse it)."
       end
@@ -4167,11 +4175,14 @@ module Nabu
                                   limit: options[:limit].to_i, from: from, to: to, place: place,
                                   facets: facets, source: options[:source], sources: axis_slugs,
                                   loans: loans, meter: options[:meter],
-                                  meter_pattern: options[:meter_pattern], lect: options[:lect])
+                                  meter_pattern: options[:meter_pattern], lect: options[:lect],
+                                  script: options[:script])
         print_search_results(results, facets: facets, query: "", loans: loans, axis: axis_names,
                                       browse: true, from: from, to: to, place: place,
                                       meter_note: searcher.meter_note, place_note: searcher.place_note)
         print_display_footer
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
       ensure
         catalog&.disconnect
         fulltext&.disconnect

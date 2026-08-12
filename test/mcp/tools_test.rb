@@ -602,6 +602,40 @@ module MCP
       end
     end
 
+    # -- nabu_search script + place lanes (P75 C-1/C-2 parity) ----------
+
+    def test_search_script_filters_by_the_held_script_axis
+      a = make_document(urn: "urn:s:a")
+      make_passage(a, urn: "urn:s:a:1", text: "στρατηγος", sequence: 0)
+      b = make_document(urn: "urn:s:b")
+      make_passage(b, urn: "urn:s:b:1", text: "στρατηγος", sequence: 0)
+      @catalog[:document_facets].insert(document_id: a.id, facet: "lect", value: "grc~latn")
+      rebuild!
+
+      urns = payload(call("nabu_search", { "query" => "στρατηγος", "script" => "latn" }))
+             .fetch("matches").map { |h| h.fetch("urn") }
+      assert_equal %w[urn:s:a:1], urns
+    end
+
+    def test_search_script_does_not_compose_with_lemma
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "λέγω", "script" => "latn" })
+      end
+    end
+
+    def test_search_place_identity_note_rides_the_payload
+      a = make_document(urn: "urn:s:a")
+      make_passage(a, urn: "urn:s:a:1", text: "στρατηγος", sequence: 0)
+      @catalog[:document_axes].insert(document_id: a.id, place_ref: "tm:2810", axis_source: "hgv")
+      rebuild!
+
+      body = payload(call("nabu_search", { "query" => "στρατηγος", "place" => "tm:2810" }))
+      urns = body.fetch("matches").map { |h| h.fetch("urn") }
+      assert_equal %w[urn:s:a:1], urns
+      assert_match(/place: tm:2810 \(identity refs\)/, body.fetch("note"),
+                   "the lane note rides the free-text note, additive")
+    end
+
     def test_search_year_zero_is_invalid
       error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
         call("nabu_search", { "query" => "x", "from" => 0 })
