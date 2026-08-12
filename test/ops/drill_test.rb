@@ -103,7 +103,77 @@ class DrillTest < Minitest::Test
     end
   end
 
+  # Q21 (P74, minted from the first live drill_pure failure 2026-08-12):
+  # a failing drill must hand over evidence. Rig: tamper the LIVE catalog
+  # after its rebuild (inject a stray passage) — the drill's fresh rebuild
+  # then diverges from the "source of truth", and the report must NAME
+  # the differing source with both counts, not just say MISMATCH.
+  def test_a_count_mismatch_names_its_source_with_both_counts
+    live = Nabu::Store.connect(live_config.catalog_path)
+    doc_id = live[:documents].min(:id)
+    live[:passages].insert(document_id: doc_id, urn: "urn:nabu:corpus:stray:9", sequence: 9,
+                           language: "grc", text: "stray", text_normalized: "stray",
+                           content_sha256: "stray", revision: 1)
+    live.disconnect
+
+    Dir.mktmpdir("nabu-drill-work") do |workspace|
+      report = Nabu::Ops::Drill.new(config: live_config, workspace: workspace).run
+      refute_predicate report, :counts_match?
+      assert_equal 1, report.source_deltas.size
+      slug, live_counts, restored_counts = report.source_deltas.first
+      assert_equal "corpus", slug
+      assert_equal Nabu::Ops::Drill::Counts.new(documents: 2, passages: 4), live_counts
+      assert_equal Nabu::Ops::Drill::Counts.new(documents: 2, passages: 3), restored_counts
+
+      rendered = report.render
+      assert_includes rendered, "corpus", "the delta section names the source"
+      assert_includes rendered, "live 2 docs / 4 passages", "both sides render"
+      assert_includes rendered, "restored 2 docs / 3 passages"
+    end
+  end
+
+  def test_a_clean_drill_carries_no_forensics
+    Dir.mktmpdir("nabu-drill-work") do |workspace|
+      report = Nabu::Ops::Drill.new(config: live_config, workspace: workspace).run
+      assert_predicate report, :ok?
+      assert_empty report.verify_issues
+      assert_empty report.source_deltas
+      refute_includes report.render, "verify failures", "a clean report prints no forensic sections"
+    end
+  end
+
+  # The rendering caps at 10 named entries per forensic section and
+  # ANNOUNCES the truncation — never a silent cut (house doctrine).
+  def test_forensic_rendering_names_issues_and_announces_truncation
+    issues = (1..12).map do |i|
+      Nabu::Verify::DocumentIssue.new(urn: "urn:nabu:corpus:doc#{i}", canonical_path: nil,
+                                      kind: :mismatch, detail: "sha diverged")
+    end
+    report = forensic_report(verify_issues: issues,
+                             source_deltas: [["corpus",
+                                              Nabu::Ops::Drill::Counts.new(documents: 2, passages: 2),
+                                              Nabu::Ops::Drill::Counts.new(documents: 2, passages: 3)]])
+    rendered = report.render
+    assert_includes rendered, "urn:nabu:corpus:doc1 (mismatch: sha diverged)"
+    assert_includes rendered, "urn:nabu:corpus:doc10"
+    refute_includes rendered, "urn:nabu:corpus:doc11", "capped at 10 named issues"
+    assert_includes rendered, "… and 2 more", "the truncation is announced, never silent"
+  end
+
   private
+
+  def forensic_report(verify_issues:, source_deltas:)
+    Nabu::Ops::Drill::Report.new(
+      target: "/t", machine_root: "/m",
+      backup: Nabu::Backup::Result.new(target: "/t", dry_run: false, sections: [], duration: 0),
+      rebuild_quarantined: 0, verify_clean: verify_issues.empty?,
+      golden_found: 0, golden_lost: 0, golden_skipped: 0,
+      source_counts: nil, restored_counts: nil,
+      pure: false, lects_match: true, links_match: true,
+      grants_quiet: true, creep_quiet: true,
+      verify_issues: verify_issues, source_deltas: source_deltas
+    )
+  end
 
   def registry
     Nabu::SourceRegistry.load(File.join(@root, "config", "sources.yml"))
