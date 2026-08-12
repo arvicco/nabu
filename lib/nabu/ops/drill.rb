@@ -33,11 +33,16 @@ module Nabu
     class Drill
       Counts = Data.define(:documents, :passages)
 
+      # Named forensic entries per section beyond this cap render as an
+      # announced "… and N more" — never a silent cut.
+      RENDER_CAP = 10
+
       Report = Data.define(
         :target, :machine_root, :backup, :rebuild_quarantined,
         :verify_clean, :golden_found, :golden_lost, :golden_skipped,
         :source_counts, :restored_counts,
-        :pure, :lects_match, :links_match, :grants_quiet, :creep_quiet
+        :pure, :lects_match, :links_match, :grants_quiet, :creep_quiet,
+        :verify_issues, :source_deltas
       ) do
         # Verify must be clean, no golden query may be lost, and — when the
         # live catalog was available to compare — the restored counts must
@@ -56,6 +61,64 @@ module Nabu
 
         # The pure-mode law assertions (vacuously true otherwise).
         def pure_ok? = !pure || (lects_match && links_match && grants_quiet && creep_quiet)
+
+        # The printable report (Q21/P74: rendering lives ON the report so
+        # the forensic sections are testable; the Rakefile just prints).
+        def render
+          lines = ["Restore drill"]
+          lines << "  backup     → #{backup.target}  " \
+                   "(#{backup.sections.count(&:ran?)}/#{backup.sections.size} sections, " \
+                   "#{backup.files} files, #{backup.ok? ? 'OK' : 'FAILED'})"
+          lines << "  restore    → #{machine_root}"
+          lines << "  rebuild    quarantined #{rebuild_quarantined} document(s)"
+          lines << "  verify     #{verify_clean ? 'clean' : 'FAILED'}"
+          lines.concat(verify_issue_lines)
+          lines << "  golden     #{golden_found} found, #{golden_lost} lost, #{golden_skipped} skipped"
+          lines << "  counts     source=#{self.class.count_str(source_counts)}  " \
+                   "restored=#{self.class.count_str(restored_counts)}  " \
+                   "#{counts_match? ? 'MATCH' : 'MISMATCH'}"
+          lines.concat(source_delta_lines)
+          if pure
+            lines << "  law        lects #{lects_match ? 'MATCH' : 'MISMATCH'} · " \
+                     "links #{links_match ? 'MATCH' : 'MISMATCH'} · " \
+                     "grants #{grants_quiet ? 'quiet' : 'RE-BLOCKED'} · " \
+                     "creep #{creep_quiet ? 'quiet' : 'RE-ALARMED'}  (pure three-folder restore)"
+          end
+          lines << "  => #{ok? ? 'RESTORABLE' : 'NOT RESTORABLE'}"
+          lines.join("\n")
+        end
+
+        def self.count_str(counts)
+          counts.nil? ? "n/a" : "#{counts.documents} docs / #{counts.passages} passages"
+        end
+
+        private
+
+        # The Q21 evidence sections: each failing document named with its
+        # kind and detail; each differing source named with both counts.
+        def verify_issue_lines
+          return [] if verify_issues.empty?
+
+          capped(["  verify failures (#{verify_issues.size}):"] +
+                 verify_issues.first(RENDER_CAP).map do |issue|
+                   "    #{issue.urn} (#{issue.kind}: #{issue.detail})"
+                 end, verify_issues.size)
+        end
+
+        def source_delta_lines
+          return [] if source_deltas.empty?
+
+          capped(["  count deltas (#{source_deltas.size} source#{'s' unless source_deltas.size == 1}):"] +
+                 source_deltas.first(RENDER_CAP).map do |slug, live, restored|
+                   "    #{slug}: live #{self.class.count_str(live)} → " \
+                     "restored #{self.class.count_str(restored)}"
+                 end, source_deltas.size)
+        end
+
+        def capped(lines, total)
+          lines << "    … and #{total - RENDER_CAP} more" if total > RENDER_CAP
+          lines
+        end
       end
 
       def initialize(config:, workspace:, now: Time.now, pure: false)
@@ -77,6 +140,7 @@ module Nabu
         rebuild = rebuild_restored(restored)
         verify = verify_restored(restored)
         golden = replay_golden(restored)
+        restored_counts = read_counts(restored.catalog_path)
 
         Report.new(
           target: target, machine_root: machine, backup: backup,
@@ -86,14 +150,17 @@ module Nabu
           golden_lost: golden.count(&:lost?),
           golden_skipped: golden.count { |g| g.status == :skipped },
           source_counts: source_counts,
-          restored_counts: read_counts(restored.catalog_path),
+          restored_counts: restored_counts,
           pure: @pure,
           lects_match: !@pure || store_count(@config.lects_journal_path, :lect_assignments) ==
                                  store_count(restored.lects_journal_path, :lect_assignments),
           links_match: !@pure || store_count(@config.links_path, :links) ==
                                 store_count(restored.links_path, :links),
           grants_quiet: !@pure || grants_quiet?(restored),
-          creep_quiet: !@pure || creep_quiet?(restored)
+          creep_quiet: !@pure || creep_quiet?(restored),
+          # Q21 (P74) — the evidence a failing drill hands over:
+          verify_issues: verify.issues,
+          source_deltas: source_deltas(source_counts, restored_counts, restored)
         )
       end
 
@@ -148,6 +215,39 @@ module Nabu
               nil, row["source"], path: restored.creep_acceptances_path
             )&.fetch(:accepted_baseline, nil) == row["baseline"]
           end
+      end
+
+      # Q21: when the counts oracle mismatches, name the differing
+      # source(s) — [slug, live Counts, restored Counts] per divergence,
+      # union of both catalogs' slugs (a source absent on one side counts
+      # 0/0 there, so a wholly lost source is named too).
+      def source_deltas(source_counts, restored_counts, restored)
+        return [] if source_counts.nil? || source_counts == restored_counts
+
+        live = per_source_counts(@config.catalog_path)
+        rest = per_source_counts(restored.catalog_path)
+        (live.keys | rest.keys).sort.filter_map do |slug|
+          zero = Counts.new(documents: 0, passages: 0)
+          a = live.fetch(slug, zero)
+          b = rest.fetch(slug, zero)
+          [slug, a, b] unless a == b
+        end
+      end
+
+      # {slug => Counts} for one catalog file.
+      def per_source_counts(path)
+        db = Store.connect(path, readonly: true)
+        slugs = db[:sources].select_hash(:id, :slug)
+        docs = db[:documents].group_and_count(:source_id).as_hash(:source_id, :count)
+        passages = db[:passages].join(:documents, id: :document_id)
+                                .group_and_count(Sequel[:documents][:source_id])
+                                .as_hash(:source_id, :count)
+        slugs.to_h do |source_id, slug|
+          [slug, Counts.new(documents: docs.fetch(source_id, 0),
+                            passages: passages.fetch(source_id, 0))]
+        end
+      ensure
+        db&.disconnect
       end
 
       # Row count of one table in a store file (nil-safe: absent file or

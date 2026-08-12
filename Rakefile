@@ -61,12 +61,11 @@ namespace :ops do
   task :drill do
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
-    require "tmpdir"
 
     config = Nabu::Config.load
-    Dir.mktmpdir("nabu-drill") do |workspace|
+    with_drill_workspace do |workspace|
       report = Nabu::Ops::Drill.new(config: config, workspace: workspace).run
-      print_drill_report(report)
+      puts report.render
       abort "ops:drill FAILED — the backup is not restorable as-is (see above)" unless report.ok?
     end
   end
@@ -75,14 +74,29 @@ namespace :ops do
   task :drill_pure do
     $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
     require "nabu"
-    require "tmpdir"
 
     config = Nabu::Config.load
-    Dir.mktmpdir("nabu-drill") do |workspace|
+    with_drill_workspace do |workspace|
       report = Nabu::Ops::Drill.new(config: config, workspace: workspace, pure: true).run
-      print_drill_report(report)
+      puts report.render
       abort "ops:drill_pure FAILED — db/ does NOT fully derive from the three folders" unless report.ok?
     end
+  end
+end
+
+# Q21 (P74): KEEP_WORKSPACE=1 skips the mktmpdir cleanup so a failed
+# drill's restored db can be autopsied — the kept path is printed either
+# way the run ends. Without the flag, the block form cleans up as before.
+def with_drill_workspace(&)
+  require "tmpdir"
+  return Dir.mktmpdir("nabu-drill", &) if ENV["KEEP_WORKSPACE"].to_s.empty?
+
+  workspace = Dir.mktmpdir("nabu-drill")
+  puts "KEEP_WORKSPACE: drill workspace kept at #{workspace}"
+  begin
+    yield workspace
+  ensure
+    puts "KEEP_WORKSPACE: drill workspace kept at #{workspace}"
   end
 end
 
@@ -291,34 +305,6 @@ namespace :census do
       abort "census:check found #{findings.size} unstamped era-bound literal(s)"
     end
   end
-end
-
-# Print the drill report to stdout.
-def print_drill_report(report)
-  puts "Restore drill"
-  puts "  backup     → #{report.backup.target}  " \
-       "(#{report.backup.sections.count(&:ran?)}/#{report.backup.sections.size} sections, " \
-       "#{report.backup.files} files, #{report.backup.ok? ? 'OK' : 'FAILED'})"
-  puts "  restore    → #{report.machine_root}"
-  puts "  rebuild    quarantined #{report.rebuild_quarantined} document(s)"
-  puts "  verify     #{report.verify_clean ? 'clean' : 'FAILED'}"
-  puts "  golden     #{report.golden_found} found, #{report.golden_lost} lost, #{report.golden_skipped} skipped"
-  puts "  counts     source=#{count_str(report.source_counts)}  " \
-       "restored=#{count_str(report.restored_counts)}  " \
-       "#{report.counts_match? ? 'MATCH' : 'MISMATCH'}"
-  if report.pure
-    puts "  law        lects #{report.lects_match ? 'MATCH' : 'MISMATCH'} · " \
-         "links #{report.links_match ? 'MATCH' : 'MISMATCH'} · " \
-         "grants #{report.grants_quiet ? 'quiet' : 'RE-BLOCKED'} · " \
-         "creep #{report.creep_quiet ? 'quiet' : 'RE-ALARMED'}  (pure three-folder restore)"
-  end
-  puts "  => #{report.ok? ? 'RESTORABLE' : 'NOT RESTORABLE'}"
-end
-
-def count_str(counts)
-  return "n/a" if counts.nil?
-
-  "#{counts.documents} docs / #{counts.passages} passages"
 end
 
 # Print one check result to stdout.
