@@ -3777,6 +3777,10 @@ module Nabu
     # before the "… and N more" tail (P48-r3; --long lists all — the same
     # house render-cap rule).
     AXIS_LANGUAGES_ITEMS = 10
+    # Crosswalk equivalences shown on the place card's "=" line before the
+    # "… and N more" tail (P75 C-3, the same house render-cap rule).
+    # const: a render cap, not a corpus census
+    PLACE_EQUIVALENCES_SHOWN = 8
     # RTL snippet highlight = SGR reverse video (P42-r4, strike 4 — the
     # matrix ruling on the owner's iTerm2). Every CHARACTER-based highlight
     # is at the mercy of the renderer's bidi treatment, and four attempts
@@ -5182,6 +5186,15 @@ module Nabu
         else
           say "Pleiades #{card.pleiades_id} — gazetteer dump not synced " \
               "(`nabu sync pleiades` adds the card)"
+        end
+        # P75 C-3: the crosswalk line — the derived equivalences this
+        # identity is asserted equal to, capped with the cut announced.
+        unless card.equivalences.empty?
+          shown = card.equivalences.first(PLACE_EQUIVALENCES_SHOWN)
+          extra = card.equivalences.size - shown.size
+          line = shown.map { |namespace, id| "#{namespace}:#{id}" }.join(" = ")
+          line += " … and #{extra} more" if extra.positive?
+          say "  = #{line}"
         end
         unless card.pleiades_id.nil? && card.holdings.empty?
           say "  holdings: #{card.holdings.empty? ? 'none' : format_source_counts(card.holdings)}"

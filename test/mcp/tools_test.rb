@@ -908,6 +908,20 @@ module MCP
       assert_match(/never merged/, body.fetch("note"))
     end
 
+    # P75 C-3: crosswalk equivalences ride the card present-only — no
+    # rows, no key (the empty-hash idiom; pre-P75 payloads byte-identical).
+    def test_place_card_carries_crosswalk_equivalences_present_only
+      seed_epigraphy
+      rig = tools(pleiades: lilybaeum_resolver)
+      card = payload(rig.call("nabu_place", { "query" => "462281" })).fetch("cards").fetch(0)
+      refute card.key?("equivalences"), "no crosswalk rows → no key, never an empty one"
+
+      @catalog[:place_crosswalk].insert(source: "t", gazetteer_a: "pleiades", id_a: "462281",
+                                        gazetteer_b: "tm", id_b: "33")
+      card = payload(rig.call("nabu_place", { "query" => "462281" })).fetch("cards").fetch(0)
+      assert_equal ["tm:33"], card.fetch("equivalences")
+    end
+
     def test_place_by_exact_title_and_unknown_title
       seed_epigraphy
       rig = tools(pleiades: lilybaeum_resolver)

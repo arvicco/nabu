@@ -6424,6 +6424,21 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P75 C-3: the crosswalk line — derived equivalences render as "= ns:id"
+  # under the card headline; absent rows, absent line.
+  def test_place_card_renders_the_crosswalk_line
+    with_place_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      catalog[:place_crosswalk].insert(source: "t", gazetteer_a: "pleiades", id_a: "570685",
+                                       gazetteer_b: "tm", id_b: "2810")
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[place 570685]) }
+      assert_nil status
+      assert_match(/^  = tm:2810$/, out)
+    end
+  end
+
   def test_place_without_the_dump_still_counts_holdings_for_an_id
     with_place_corpus(dump: false) do |config|
       out, _err, status = with_config(config) { run_cli(%w[place 570685]) }
