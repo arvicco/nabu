@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "place_filter"
+
 module Nabu
   module Query
     # The catalog half every index-backed query shares (P4-2's Search, P7-5's
@@ -157,13 +159,36 @@ module Nabu
       # `(not_after IS NULL OR not_after >= from)`, and likewise the lower bound.
       # A closed-interval overlap `nb <= to AND na >= from` (NOT naive
       # containment, which would drop every precision="low" century-range doc).
+      # +place+ is a PlaceFilter::Resolution (a raw string coerces to the
+      # name-LIKE lane, byte-identical pre-P75 behavior): the conjunct is
+      # name-ILIKE OR identity-claims — a resolved name keeps its name
+      # recall, a mint is identity-only (PlaceFilter class note).
       def timeline_exists(from:, to:, place:)
         axes = Sequel[:document_axes]
         sub = @catalog[:document_axes].where(axes[:document_id] => Sequel[:documents][:id])
         sub = sub.where(Sequel.expr(axes[:not_after] => nil) | (axes[:not_after] >= from)) if from
         sub = sub.where(Sequel.expr(axes[:not_before] => nil) | (axes[:not_before] <= to)) if to
-        sub = sub.where(Sequel.ilike(axes[:place_name], place)) if place
+        if (resolution = PlaceFilter.coerce(place))
+          clauses = []
+          clauses << Sequel.ilike(axes[:place_name], resolution.pattern) if resolution.pattern
+          clauses << place_ref_claims(axes, resolution.identities) if resolution.identity?
+          sub = sub.where(Sequel.|(*clauses))
+        end
         sub.exists
+      end
+
+      # TRUE when the row's place_ref claims ANY of +identities+ in any
+      # spelling — Nabu::PlaceRefs.ref_globs owns the spellings; the field
+      # is space-padded per that contract. Same correlated, per-candidate
+      # cost class as the name-ILIKE lane (no place_ref index by design —
+      # the axes row fetch rides the document_id index either way).
+      def place_ref_claims(axes, identities)
+        padded = Sequel.join([" ", axes[:place_ref], " "])
+        Sequel.|(*identities.flat_map do |namespace, id|
+          Nabu::PlaceRefs.ref_globs(namespace, id).map do |glob|
+            Sequel.expr(Sequel.function(:glob, glob, padded) => 1)
+          end
+        end)
       end
 
       # A correlated EXISTS over document_facets for the current document

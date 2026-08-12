@@ -4028,6 +4028,24 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P75 C-1: a namespaced --place is the identity lane — the ref matches in
+  # any spelling, and the note names the lane on the page.
+  def test_search_place_mint_filters_by_identity_and_notes_the_lane
+    with_dated_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      doc = catalog[:documents].first(urn: "urn:nabu:ddbdp:a")
+      catalog[:document_axes].where(document_id: doc[:id])
+                             .update(place_ref: "https://www.trismegistos.org/place/2810")
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --place tm:2810]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out)
+      assert_match("note: place: tm:2810 (identity refs)", out)
+    end
+  end
+
   def test_search_year_zero_is_rejected
     _out, err, status = run_cli(%w[search foo --from 0])
     assert_equal 1, status

@@ -205,14 +205,18 @@ module Nabu
       # +lects+ (P57-4) is the `--lect` resolution seam, same :auto/loaded/nil
       # contract as +tibetan_words+ — feature-detected lazily on the first
       # lect: filter, never touched otherwise.
+      # +places+ (P75 C-1) is the nabu-places registry read seam
+      # (Nabu::Places or nil) feeding --place name resolution; the place
+      # index and crosswalk lanes read the catalog and need no seam.
       def initialize(catalog:, fulltext:, term_frequency: nil, rng: ::Random.new, tibetan_words: :auto,
-                     lects: :auto)
+                     lects: :auto, places: nil)
         @catalog = catalog
         @fulltext = fulltext
         @term_frequency = term_frequency || TermFrequency.new(fulltext: fulltext)
         @rng = rng
         @tibetan_words = tibetan_words
         @lects = lects
+        @places = places
       end
 
       # nil, or RANK_SKIP_NOTE when the last #run served its page in corpus
@@ -239,6 +243,19 @@ module Nabu
       # WORDS_MODULE_NOTE when the nabu-data seam is absent. The page served
       # alongside is plain search, honestly labelled. Reset on every run.
       attr_reader :words_note
+
+      # nil, or the --place lane note (P75 C-1) after a run/browse with an
+      # active place filter: the identity refs a mint or resolved name
+      # matched on (crosswalk-expanded), or the honest name-LIKE fallback
+      # for a name with no registered identity. A LIKE pattern (%/_) is the
+      # user asking for the historical lane by name — silent. Reset every
+      # run, like meter_note.
+      attr_reader :place_note
+
+      # const: a render cap on the place note's identity list (truncation
+      # announced, never silent); a cap on the LABEL only, the filter
+      # itself always matches every identity — not a corpus census
+      PLACE_NOTE_IDS = 6
 
       # true when the last #run actually APPLIED the word-grain post-filter
       # (words: true, Tibetan query, seam present) — the surfaces' present-only
@@ -279,12 +296,13 @@ module Nabu
         @meter_note = nil
         @words_note = nil
         @word_grain = nil
+        @place_note = nil
         raise Nabu::Error, WORD_REFUSAL if word && self.class.word_refusal_for(query)
 
         variants = Nabu::Normalize.query_forms(query.to_s)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
-        filters = { lang: lang, license: license, from: from, to: to, place: place,
+        filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),
                     facets: facets, source: source, sources: sources, loans: loans,
                     meter: meter, meter_pattern: meter_pattern }.merge(lect_filter(lect))
         page = if exact || word
@@ -321,7 +339,9 @@ module Nabu
         @incomplete_hint = nil
         @rank_note = nil
         @meter_note = nil
-        rows = visible_passages(lang: lang, license: license, from: from, to: to, place: place,
+        @place_note = nil
+        rows = visible_passages(lang: lang, license: license, from: from, to: to,
+                                place: place_resolution(place),
                                 facets: facets, source: source, sources: sources, loans: loans,
                                 meter: meter, meter_pattern: meter_pattern, **lect_filter(lect))
                .order(Sequel[:passages][:id])
@@ -348,6 +368,37 @@ module Nabu
       def exact_glyph_match?(text, query)
         haystack = Nabu::Normalize.nfc(text.to_s)
         Nabu::Normalize.nfc(query.to_s).split.all? { |token| haystack.include?(token) }
+      end
+
+      # Resolve a raw --place term once per run (P75 C-1) — identity claims
+      # + name pattern per the PlaceFilter lanes; nil passes through. Every
+      # surface over this class (CLI, MCP) inherits identity-awareness here.
+      def place_resolution(place)
+        return place unless place.is_a?(String)
+
+        resolution = PlaceFilter.resolve(place, catalog: @catalog, places: @places)
+        @place_note = place_note_for(resolution)
+        resolution
+      end
+
+      # The lane note for +resolution+ (attr note above): nil for an
+      # explicit LIKE pattern, the identity list (capped, truncation
+      # announced) when identities matched, the honest fallback line
+      # otherwise.
+      def place_note_for(resolution)
+        return nil if resolution.pattern&.match?(/[%_]/)
+
+        return "place: \"#{resolution.term}\" has no registered identity — name-LIKE lane" unless resolution.identity?
+
+        shown = resolution.identities.first(PLACE_NOTE_IDS).map { |ns, id| "#{ns}:#{id}" }
+        extra = resolution.identities.size - shown.size
+        ids = shown.join(" = ")
+        ids += " … and #{extra} more" if extra.positive?
+        if resolution.pattern
+          "place: \"#{resolution.term}\" → #{ids} (identity refs + name match)"
+        else
+          "place: #{ids} (identity refs)"
+        end
       end
 
       private
