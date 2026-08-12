@@ -1017,6 +1017,17 @@ signs`, advertised on the sign card. The place card renders its crosswalk
 equivalences ("= tm:2810") from the same `PlaceFilter.expand` derivation
 the search filter reads.
 
+Filter-first search is its OWN MODE (owner-ruled at the P75 gate): plain
+search answers "where does this term rank corpus-wide?", and under the
+P42-2 ubiquity guard its page is a corpus-wide sample that a selective
+filter can thin to nothing — different every run, honestly noted.
+`search TERM --place … --scan` answers the other question — "which of
+THESE documents carry the term?" — by streaming the term's postings in
+corpus order (keyset rowid seeks, the P42-r3 sampler's own trick) and
+intersecting each posting page with the catalog filters: deterministic,
+never sampled, ceiling-bounded with the truncation announced. A guarded
+page starved by filters teaches the mode in its note.
+
 ## 15. The links journal — batch-mined edges that outlive rebuilds (P16-1)
 
 `db/links.sqlite3` holds the corpus's mined cross-reference graph:
