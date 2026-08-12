@@ -113,6 +113,20 @@ module Query
       assert_equal true, chu_views.first.borrowed, "loan flag merges true > false > nil"
     end
 
+    # P76 U-6: the kaikki doubt flag reaches both render carriers — the
+    # matched-via edge and the cognate view (the WOLD " (uncertain)" idiom
+    # renders from these).
+    def test_uncertain_flag_rides_the_matched_edge_and_the_cognate_view
+      make_gold_passages(language: "chu", lemma: "богъ", form: "ба", count: 2)
+      rebuild!
+      @catalog[:dictionary_reflexes].where(language: "chu", word: "богъ").update(uncertain: true)
+
+      bog = etym("богъ", lang: "chu").first
+      assert_equal true, bog.matched_reflex.uncertain, "the entering edge carries the flag"
+      chu = bog.cognates.find { |c| c.language == "chu" && c.word == "богъ" }
+      assert_equal true, chu.uncertain, "the cognate view carries it too"
+    end
+
     def test_gothic_walks_via_the_roman_fold_the_script_bridge
       make_gold_passages(language: "got", lemma: "guþ", form: "guþ")
       rebuild!

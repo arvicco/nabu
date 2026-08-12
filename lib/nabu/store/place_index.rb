@@ -102,6 +102,7 @@ module Nabu
                     lat: place.lat, lon: place.lon,
                     place_types_json: JSON.generate(place.place_types),
                     time_periods_json: JSON.generate(place.time_periods),
+                    accuracy: place.respond_to?(:accuracy) ? place.accuracy : nil,
                     position: position }
           names_for.call(place).uniq.each do |key|
             name_rows << { gazetteer: gazetteer, place_id: place.id, name_key: key }
@@ -150,7 +151,8 @@ module Nabu
           Nabu::Pleiades::Place.new(
             id: row[:place_id], title: row[:title], lat: row[:lat], lon: row[:lon],
             place_types: JSON.parse(row[:place_types_json]),
-            time_periods: JSON.parse(row[:time_periods_json])
+            time_periods: JSON.parse(row[:time_periods_json]),
+            accuracy: row[:accuracy]
           )
         end
       end

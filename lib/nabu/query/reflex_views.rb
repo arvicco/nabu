@@ -39,9 +39,12 @@ module Nabu
     # (parsed unflagged), or nil (the row predates the migration-010
     # flag-aware reparse — unknown, never a claimed false).
     class ReflexViews
+      # +uncertain+ (P76 U-6) mirrors +borrowed+: the kaikki doubt tag,
+      # true/false from the flag-aware parser, nil pre-migration-029 —
+      # renderers append " (uncertain)", the WOLD idiom.
       View = Data.define(:lang_code, :language, :word, :roman, :attested_count, :borrowed,
-                         :silver_count, :equivalence_count) do
-        def initialize(silver_count: nil, equivalence_count: nil, **rest) = super
+                         :uncertain, :silver_count, :equivalence_count) do
+        def initialize(silver_count: nil, equivalence_count: nil, uncertain: nil, **rest) = super
       end
 
       def initialize(catalog:, fulltext: nil)
@@ -62,6 +65,7 @@ module Nabu
 
         columns = %i[lang_code language word roman word_folded roman_folded]
         columns << :borrowed if borrowed_column?
+        columns << :uncertain if uncertain_column?
         rows = @catalog[:dictionary_reflexes]
                .where(dictionary_entry_id: entry_row_id)
                .order(:seq)
@@ -77,7 +81,7 @@ module Nabu
             attested_count: tiers[Store::Indexer::GOLD_TIER],
             silver_count: tiers["silver"],
             equivalence_count: tiers[Store::Indexer::EQUIVALENCE_TIER],
-            borrowed: row[:borrowed]
+            borrowed: row[:borrowed], uncertain: row[:uncertain]
           )
         end
       end
@@ -92,7 +96,10 @@ module Nabu
             .values
             .map do |group|
               merged = group.first.dup
-              merged[:borrowed] = group.map { |r| r[:borrowed] }.compact.max_by { |f| f ? 1 : 0 } unless group.size == 1
+              unless group.size == 1
+                merged[:borrowed] = group.map { |r| r[:borrowed] }.compact.max_by { |f| f ? 1 : 0 }
+                merged[:uncertain] = group.map { |r| r[:uncertain] }.compact.max_by { |f| f ? 1 : 0 }
+              end
               merged
             end
       end
@@ -101,6 +108,12 @@ module Nabu
         return @borrowed_column unless @borrowed_column.nil?
 
         @borrowed_column = available? && @catalog[:dictionary_reflexes].columns.include?(:borrowed)
+      end
+
+      def uncertain_column?
+        return @uncertain_column unless @uncertain_column.nil?
+
+        @uncertain_column = available? && @catalog[:dictionary_reflexes].columns.include?(:uncertain)
       end
 
       private

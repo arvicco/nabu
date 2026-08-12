@@ -6532,6 +6532,22 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P76 U-4: the CIGS coordinate-accuracy grade renders verbatim on the
+  # ref-card tail — a precision fact, never a certainty tier.
+  def test_place_card_tail_renders_the_cigs_accuracy_grade
+    with_place_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      girsu = Nabu::Pleiades::Place.new(id: "GIR", title: "Girsu", lat: 31.56, lon: 46.18,
+                                        place_types: [], time_periods: [], accuracy: 3)
+      Nabu::Store::PlaceIndex.derive!(catalog, places: [girsu], gazetteer: "cigs")
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[place cigs:GIR]) }
+      assert_nil status
+      assert_match("coordinate accuracy 3/3 (CIGS grade)", out)
+    end
+  end
+
   # P75 C-3: the crosswalk line — derived equivalences render as "= ns:id"
   # under the card headline; absent rows, absent line.
   def test_place_card_renders_the_crosswalk_line

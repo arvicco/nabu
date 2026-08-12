@@ -24,9 +24,12 @@ module Nabu
     CDLI_PROVENIENCE = %r{cdli\.mpiwg-berlin\.mpg\.de/proveniences/(\d+)}
 
     # One site: the place-index fields plus name keys and the crosswalk
-    # claims ([gazetteer, id] pairs) the row itself asserts.
+    # claims ([gazetteer, id] pairs) the row itself asserts. +accuracy+
+    # (P76 U-4): the 0–3 coordinate-accuracy grade, CONFIRMED against the
+    # full v1.7 CSV (2026-08-12): higher = more accurate, 0 = unlocated
+    # (no coordinates) — a precision fact, no certainty tier.
     Row = Data.define(:id, :title, :lat, :lon, :place_types, :time_periods,
-                      :name_keys, :crosswalks)
+                      :name_keys, :crosswalks, :accuracy)
 
     module_function
 
@@ -58,7 +61,8 @@ module Nabu
         lat: float_or_nil(record["lat_wgs1984"]), lon: float_or_nil(record["lon_wgs1984"]),
         place_types: [], time_periods: [],
         name_keys: names.map { |n| Nabu::Pleiades.name_key(n) }.uniq,
-        crosswalks: crosswalks(record)
+        crosswalks: crosswalks(record),
+        accuracy: Integer(record["accuracy"].to_s.strip, exception: false)
       )
     end
 

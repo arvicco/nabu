@@ -5403,11 +5403,15 @@ module Nabu
       # " — types · first…last period · lat, lon", each section only when
       # the dump carries it. Periods render as the attested span endpoints
       # (dump attestation order, not re-sorted — honest to upstream).
+      # P76 U-4: the CIGS coordinate-accuracy grade rides the tail verbatim
+      # (0–3, higher = more accurate; 0 = unlocated) — a precision fact,
+      # never a certainty tier (conventions §12).
       def place_card_tail(place)
         sections = [
           place.place_types.join(" · "),
           period_span(place.time_periods),
-          place.lat && place.lon ? format("%<lat>.2f, %<lon>.2f", lat: place.lat, lon: place.lon) : nil
+          place.lat && place.lon ? format("%<lat>.2f, %<lon>.2f", lat: place.lat, lon: place.lon) : nil,
+          place.accuracy ? "coordinate accuracy #{place.accuracy}/3 (CIGS grade)" : nil
         ].compact.reject(&:empty?)
         sections.empty? ? "" : " — #{sections.join(' · ')}"
       end
@@ -7832,9 +7836,13 @@ module Nabu
 
       # P17-3: the per-edge loan label — a borrowed-flagged reflex reads
       # "(loan)"; unflagged and not-yet-reparsed (NULL) edges stay bare.
+      # P76 U-6: the kaikki doubt tag appends " (uncertain)" — the WOLD
+      # idiom, upstream word verbatim (conventions §12).
       def reflex_form(reflex)
         base = reflex.roman && reflex.roman != reflex.word ? "#{reflex.word} (#{reflex.roman})" : reflex.word
-        reflex.borrowed ? "#{base} (loan)" : base
+        base = "#{base} (loan)" if reflex.borrowed
+        base = "#{base} (uncertain)" if reflex.respond_to?(:uncertain) && reflex.uncertain
+        base
       end
 
       # etym (P14-1; multi-hop P17-3): one block per entry — where the walk
@@ -7899,7 +7907,7 @@ module Nabu
         prefix =
           if via
             "#{via.word} [#{lect_bracket(via.language, via.lect_id, via.lect_name)}]" \
-              "#{' (loan)' if via.borrowed} → "
+              "#{' (loan)' if via.borrowed}#{' (uncertain)' if via.uncertain} → "
           else
             ""
           end
