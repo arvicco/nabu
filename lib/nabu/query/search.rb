@@ -287,9 +287,12 @@ module Nabu
       # +lect+ (P57-4) keeps only passages whose (language, source) resolves
       # to this lect id or a more specific one under it (class note at
       # LECT_MODULE_MISSING); raises Nabu::Error when Lects is unavailable.
+      # +script+ (P75 C-2) keeps only documents whose resolved lect id
+      # claims the held-surface script (~code) or whose artifact-script
+      # axis claims the artifact's system (CatalogJoin#script_exists).
       def run(query, lang: nil, license: nil, limit: 20, urn: nil, from: nil, to: nil, place: nil,
               facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil,
-              exact: false, word: false, words: false, lect: nil,
+              exact: false, word: false, words: false, lect: nil, script: nil,
               scan_ceiling: SCAN_CEILING, ubiquity_threshold: self.class.ubiquity_threshold)
         @incomplete_hint = nil
         @rank_note = nil
@@ -304,7 +307,8 @@ module Nabu
 
         filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),
                     facets: facets, source: source, sources: sources, loans: loans,
-                    meter: meter, meter_pattern: meter_pattern }.merge(lect_filter(lect))
+                    meter: meter, meter_pattern: meter_pattern,
+                    script: script_code(script) }.merge(lect_filter(lect))
         page = if exact || word
                  verified_page(variants, query, filters, limit: limit, urn: urn,
                                                          scan_ceiling: scan_ceiling, exact: exact, word: word)
@@ -335,7 +339,8 @@ module Nabu
       # at the CLI seam, not here: this method lists whatever the filters select,
       # exactly as visible_passages composes them for ranked search.
       def browse(lang: nil, license: nil, limit: 20, from: nil, to: nil, place: nil,
-                 facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil, lect: nil)
+                 facets: nil, source: nil, sources: nil, loans: nil, meter: nil, meter_pattern: nil,
+                 lect: nil, script: nil)
         @incomplete_hint = nil
         @rank_note = nil
         @meter_note = nil
@@ -343,7 +348,8 @@ module Nabu
         rows = visible_passages(lang: lang, license: license, from: from, to: to,
                                 place: place_resolution(place),
                                 facets: facets, source: source, sources: sources, loans: loans,
-                                meter: meter, meter_pattern: meter_pattern, **lect_filter(lect))
+                                meter: meter, meter_pattern: meter_pattern,
+                                script: script_code(script), **lect_filter(lect))
                .order(Sequel[:passages][:id])
                .select(*catalog_columns)
                .limit(limit)
@@ -379,6 +385,22 @@ module Nabu
         resolution = PlaceFilter.resolve(place, catalog: @catalog, places: @places)
         @place_note = place_note_for(resolution)
         resolution
+      end
+
+      # Fold and validate a --script tag (P75 C-2): the registry spelling
+      # is a lowercase 4-letter ISO 15924-style tag (latn, xsux, egyd) —
+      # anything else is refused with the expected shape, one enforcement
+      # point for every surface (CLI and MCP both arrive here).
+      def script_code(script)
+        return nil if script.nil?
+
+        code = script.to_s.strip.downcase
+        unless code.match?(/\A[a-z]{4}\z/)
+          raise Nabu::Error,
+                "script: give a 4-letter ISO 15924-style tag as the registry spells it " \
+                "(latn, xsux, egyd) — got #{script.inspect}"
+        end
+        code
       end
 
       # The lane note for +resolution+ (attr note above): nil for an
@@ -566,7 +588,8 @@ module Nabu
       end
 
       def filters_active?(filters)
-        %i[lang license from to place source loans meter meter_pattern lect_pairs].any? { |key| filters[key] } ||
+        %i[lang license from to place source loans meter meter_pattern lect_pairs
+           script].any? { |key| filters[key] } ||
           (filters[:facets] || {}).any? || Array(filters[:sources]).any?
       end
 

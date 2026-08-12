@@ -920,6 +920,51 @@ module Query
       assert_equal 2, search("στρατηγος").map(&:urn).size, "both visible without a date filter"
     end
 
+    # -- the --script filter (P75 C-2) ---------------------------------------
+
+    def scripted(urn, text, lect: nil, artifact: nil)
+      doc = make_document(source: @open, urn: urn)
+      make_passage(doc, urn: "#{urn}:1", text: text, sequence: 1, language: "grc")
+      @catalog[:document_facets].insert(document_id: doc.id, facet: "lect", value: lect) if lect
+      return unless artifact
+
+      @catalog[:document_axes].insert(document_id: doc.id, axis_source: "artifact-script",
+                                      artifact_script: artifact)
+    end
+
+    def test_script_filter_matches_the_held_script_axis
+      scripted("urn:a", "aurora prima", lect: "san~latn")
+      scripted("urn:b", "aurora secunda", lect: "san:ved")
+      rebuild!
+      assert_equal %w[urn:a:1], search("aurora", script: "latn").map(&:urn),
+                   "the ~script lect segment answers; a script-less lect id falls out"
+    end
+
+    def test_script_filter_matches_the_artifact_lane_too
+      scripted("urn:a", "aurora prima", artifact: "ital")
+      scripted("urn:b", "aurora secunda", lect: "xcg~latn")
+      rebuild!
+      assert_equal %w[urn:a:1], search("aurora", script: "ital").map(&:urn),
+                   "the artifact-script axis answers where the held surface differs"
+      assert_equal %w[urn:b:1], search("aurora", script: "latn").map(&:urn)
+    end
+
+    def test_script_filter_matches_a_script_segment_carrying_an_ortho_tail
+      scripted("urn:a", "aurora prima", lect: "sux:post~xsux@etcsl")
+      scripted("urn:b", "aurora secunda", lect: "sux:post")
+      rebuild!
+      assert_equal %w[urn:a:1], search("aurora", script: "xsux").map(&:urn)
+    end
+
+    def test_script_filter_folds_case_and_refuses_a_malformed_tag
+      scripted("urn:a", "aurora prima", lect: "san~latn")
+      rebuild!
+      assert_equal %w[urn:a:1], search("aurora", script: "Latn").map(&:urn),
+                   "input folds to the lowercase registry spelling"
+      assert_raises(Nabu::Error) { search("aurora", script: "latin") }
+      assert_raises(Nabu::Error) { search("aurora", script: "la%n") }
+    end
+
     # -- the facet filter (P17-2, document_facets) -----------------------------
 
     def faceted(urn, text, facets, not_before: nil, not_after: nil)

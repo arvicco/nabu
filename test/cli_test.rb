@@ -4028,6 +4028,30 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P75 C-2: --script cuts by the ~script lect axis / artifact-script axis;
+  # it also legalizes a term-less browse (a content-narrowing filter).
+  def test_search_script_filters_and_browses
+    with_dated_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      doc = catalog[:documents].first(urn: "urn:nabu:ddbdp:a")
+      catalog[:document_facets].insert(document_id: doc[:id], facet: "lect", value: "grc~latn")
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[search στρατηγος --script latn]) }
+      assert_nil status
+      assert_match("urn:nabu:ddbdp:a:1", out)
+      refute_match("urn:nabu:ddbdp:b:1", out)
+
+      out, _err, status = with_config(config) { run_cli(%w[search --script latn]) }
+      assert_nil status, "--script is content-narrowing — a term-less browse is legal"
+      assert_match("urn:nabu:ddbdp:a:1", out)
+
+      _out, err, status = with_config(config) { run_cli(%w[search στρατηγος --script latin]) }
+      assert_equal 1, status
+      assert_match(/ISO 15924/, err, "a malformed tag is refused with the expected shape")
+    end
+  end
+
   # P75 C-1: a namespaced --place is the identity lane — the ref matches in
   # any spelling, and the note names the lane on the page.
   def test_search_place_mint_filters_by_identity_and_notes_the_lane
