@@ -112,15 +112,19 @@ module Nabu
       # through that gazetteer's OWN place-index slice where one is derived
       # (tm/cigs; np has no gazetteer — place nil, honestly), and its
       # holdings are the axis lane only — the metadata lane is
-      # pleiades-keyed by design.
+      # pleiades-keyed by design. P75 C-5: with a resolved title the
+      # unlinked findspot-text tail rides exactly as on the pleiades card;
+      # without one there is no text to count — the honest empty.
       def by_ref(namespace, id)
         place = gazetteer_resolver(namespace)&.place(id)
+        tail_term = place&.title
         Result.new(
           cards: [Card.new(pleiades_id: nil, place: place, holdings: [],
                            dossiers: dossiers_for(namespace, id), ref: "#{namespace}:#{id}",
                            axis_holdings: axis_holdings(namespace, id),
                            equivalences: equivalences_for(namespace, id))],
-          dump_loaded: !place.nil?, unlinked_term: nil, unlinked: []
+          dump_loaded: !place.nil?,
+          unlinked_term: tail_term, unlinked: tail_term ? unlinked(tail_term) : []
         )
       end
 
