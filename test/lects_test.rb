@@ -39,6 +39,17 @@ class LectsTest < Minitest::Test
     assert_nil non.ord
   end
 
+  # P76 U-7: the band's convention note rides the record verbatim — the
+  # "ca." carrier (an approximate note tiers probable via Nabu::Certainty).
+  def test_the_band_note_rides_the_record_verbatim
+    runic = lects.lect("gmq:run")
+    assert_equal "the Elder Futhark epigraphic span, approximate", runic.band_note
+    assert_equal "probable", Nabu::Certainty.tier(:band_note, runic.band_note)
+    assert_equal "conventional Norse philology, approximate", lects.lect("non").band_note,
+                 "a bare anchor carries its own band's note"
+    assert_nil lects.lect("ine:pro").band_note, "a note-less record stays nil"
+  end
+
   # --- #lect: stages -------------------------------------------------------
 
   def test_a_reconstructed_stage_carries_mode_and_ord_from_the_registry

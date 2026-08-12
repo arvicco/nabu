@@ -70,8 +70,13 @@ module Nabu
     # from the anchor (only bare anchors without stages carry their own
     # band in practice — see lects.yml's "non"/"ang"/"fro" rows). +script+
     # (P60-0) is the held text's surface script tag, resolved against the
-    # global scripts table.
-    Record = Data.define(:id, :anchor, :stage, :variety, :script, :ortho, :name, :mode, :ord, :band)
+    # global scripts table. +band_note+ (P76 U-7): the registry's
+    # convention note on the band ("…approximate", "conventional
+    # philological bands") — the "ca." carrier (conventions §12), verbatim.
+    Record = Data.define(:id, :anchor, :stage, :variety, :script, :ortho, :name, :mode, :ord, :band,
+                         :band_note) do
+      def initialize(band_note: nil, **) = super
+    end
 
     LECTS_FILE = "lects.yml"
     CODEMAP_FILE = "codemap.yml"
@@ -174,7 +179,8 @@ module Nabu
         script: match[:script], ortho: match[:ortho],
         name: compose_name(anchor, stage, variety, script, ortho),
         mode: stage && stage["mode"] == "reconstructed" ? :reconstructed : :attested,
-        ord: stage && stage["ord"], band: stage ? stage["band"] : anchor["band"]
+        ord: stage && stage["ord"], band: stage ? stage["band"] : anchor["band"],
+        band_note: stage ? stage["band_note"] : anchor["band_note"]
       )
     end
 
