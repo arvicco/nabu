@@ -248,6 +248,20 @@ class WiktionaryJsonlParserTest < Minitest::Test
     refute reshaped.borrowed, "'reshaped by analogy…' is not a loan marker"
   end
 
+  # P76 U-6: the uncertain predicate — the BARE `uncertain` tag only,
+  # never a substring hunt (free-text hedges stay false). gem-pro
+  # *harjaz's Proto-Finnic *karja node carries BOTH markers in the real
+  # fixture bytes (tags ["borrowed", "uncertain"]).
+  def test_uncertain_parses_from_the_bare_tag_and_mints_false_elsewhere
+    gem = recon_entries("kaikki.org-dictionary-ProtoGermanic.jsonl", "gem-pro")
+    harjaz = gem.find { |e| e.entry_id == "harjaz:noun" } || flunk("harjaz not parsed")
+    karja = harjaz.reflexes.find { |r| r.lang_code == "urj-fin-pro" } || flunk("*karja reflex missing")
+    assert karja.borrowed, "the loan marker still parses beside the doubt marker"
+    assert karja.uncertain, "tags [\"borrowed\", \"uncertain\"] mint both flags"
+    plain = harjaz.reflexes.find { |r| !r.uncertain } || flunk("an untagged reflex expected")
+    refute plain.uncertain, "plain nodes parse false, never NULL"
+  end
+
   def test_la_maps_to_lat_and_folds_by_the_catalog_language
     pie = recon_entries("kaikki.org-dictionary-ProtoIndoEuropean.jsonl", "ine-pro")
     nu = pie.find { |e| e.entry_id == "nu:adv" } || flunk("nu:adv not parsed")

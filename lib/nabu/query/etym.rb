@@ -46,8 +46,12 @@ module Nabu
       # Lects is absent OR the resolved id has no registry entry (an honest
       # miss — e.g. a reflex language never minted as a lects.yml anchor).
       # The raw stored +language+ is never touched.
-      MatchedVia = Data.define(:language, :word, :roman, :borrowed, :lect_id, :lect_name) do
-        def initialize(lect_id: nil, lect_name: nil, **rest) = super(**rest, lect_id: lect_id, lect_name: lect_name)
+      # +uncertain+ (P76 U-6) mirrors +borrowed+: the kaikki doubt tag on
+      # the matched edge, nil pre-migration-029 or pre-reparse.
+      MatchedVia = Data.define(:language, :word, :roman, :borrowed, :uncertain, :lect_id, :lect_name) do
+        def initialize(lect_id: nil, lect_name: nil, uncertain: nil, **rest)
+          super(**rest, lect_id: lect_id, lect_name: lect_name, uncertain: uncertain)
+        end
       end
 
       # One entry on the walk. +headword+ carries the display asterisk
@@ -156,7 +160,7 @@ module Nabu
                               Sequel[:dictionary_reflexes][:language].as(:reflex_language),
                               Sequel[:dictionary_reflexes][:word].as(:reflex_word),
                               Sequel[:dictionary_reflexes][:roman].as(:reflex_roman),
-                              *borrowed_select)
+                              *borrowed_select, *uncertain_select)
                       .all
         rows.uniq { |row| row.fetch(:entry_row_id) }.first(limit).map do |row|
           # No source is known for a reflex row's OWN language (reflexes
@@ -165,7 +169,8 @@ module Nabu
           lect = lect_display(row.fetch(:reflex_language), source: nil)
           [row, MatchedVia.new(language: row.fetch(:reflex_language),
                                word: row.fetch(:reflex_word), roman: row.fetch(:reflex_roman),
-                               borrowed: row[:reflex_borrowed], **lect)]
+                               borrowed: row[:reflex_borrowed],
+                               uncertain: row[:reflex_uncertain], **lect)]
         end
       end
 
@@ -176,6 +181,16 @@ module Nabu
         @borrowed_select ||=
           if @catalog[:dictionary_reflexes].columns.include?(:borrowed)
             [Sequel[:dictionary_reflexes][:borrowed].as(:reflex_borrowed)]
+          else
+            []
+          end
+      end
+
+      # Migration-029 guard, the same pre-006 precedent as borrowed_select.
+      def uncertain_select
+        @uncertain_select ||=
+          if @catalog[:dictionary_reflexes].columns.include?(:uncertain)
+            [Sequel[:dictionary_reflexes][:uncertain].as(:reflex_uncertain)]
           else
             []
           end
