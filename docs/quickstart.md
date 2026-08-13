@@ -45,6 +45,10 @@ bin/nabu quickstart
 The CORE group syncs first, automatically — the registry instruments the
 library depends on (nabu-lects, nabu-places, cigs; a few hundred KB,
 pre-enabled by nature; `bin/nabu sync core` re-runs just that sweep).
+Quickstart is not the only door: on a fresh install the FIRST real
+`bin/nabu sync <anything>` also sweeps any never-synced core member
+first, so the core layers are always in place before the first corpus
+arrives.
 Then the starter set (sizes measured from the live canonical tree,
 2026-07-13): the SBL
 Greek New Testament (`sblgnt`, 11 MB, CC BY), the PROIEL treebank

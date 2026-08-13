@@ -582,6 +582,44 @@ module Nabu
       @entries.each_value.select { |entry| entry.group == name }.map(&:slug)
     end
 
+    # Functional sets (P77 rider, owner ruling 2026-08-13): an axis is a
+    # TAG over the source list, and the registry's non-desk sets are the
+    # same kind of tag — so every `--axis` surface accepts them beside
+    # the research desks. The closed vocabulary: the GROUPS ("core" —
+    # the auto-enabled minimum of registry instruments; "signs" — the
+    # sign/char capability restore set) plus "quickstart" (the starter
+    # shelf: core + the quickstart-flagged starter sources — what a
+    # fresh box holds after `nabu quickstart`).
+    FUNCTIONAL_SETS = (GROUPS + %w[quickstart]).freeze
+
+    def functional_set?(name)
+      FUNCTIONAL_SETS.include?(name)
+    end
+
+    # A functional set's member slugs, registration order. Unknown names
+    # raise — the callers gate on #functional_set? first, so reaching
+    # here with a stranger is a wiring bug, not user input.
+    def functional_set_members(name)
+      return group_members(name) if GROUPS.include?(name)
+      raise ValidationError, "unknown functional set #{name.inspect}" unless name == "quickstart"
+
+      (core_members + quickstart_flagged).uniq
+    end
+
+    # The quickstart-flagged starter sources (P44-r3c), registration order.
+    def quickstart_flagged
+      @entries.each_value.select(&:quickstart).map(&:slug)
+    end
+
+    # THE membership predicate every --axis surface reads (P77 rider):
+    # +name+ may be a research-desk tag or a functional set; a renderer
+    # never needs to know which.
+    def axis_or_set_member?(name, slug)
+      return functional_set_members(name).include?(slug) if functional_set?(name)
+
+      self[slug]&.axes&.include?(name) || false
+    end
+
     # Axis members MINUS the blocked (grant-gated private) ones (P44-r3a) — the
     # membership seam the PUBLIC surfaces read (the generated site axis pages
     # and docs/axes.md). #axis_members stays the full list for the CLI/sync

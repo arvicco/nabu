@@ -33,10 +33,16 @@ module Adapters
       "osta"
     end
 
-    # The documented hsms search-form derivation (conventions §9): a pure
-    # function of the stored text, so the minted-form pin holds.
+    # The documented hsms search-form derivations (conventions §9), per
+    # lane: the verticalized lane derives from its stored "tokens"
+    # annotation (the ccmh-txt contract), the transcription lane from
+    # the stored text alone — both recomputable from the row.
     def conformance_search_source(passage)
-      Nabu::Adapters::HsmsParser.search_source(passage.text)
+      if passage.annotations.key?("tokens")
+        Nabu::Adapters::HsmsVrtParser.search_source(passage.text, passage.annotations)
+      else
+        Nabu::Adapters::HsmsParser.search_source(passage.text)
+      end
     end
 
     # -- registry / manifest --------------------------------------------------
@@ -62,12 +68,13 @@ module Adapters
 
     # -- discover -------------------------------------------------------------
 
-    def test_discover_yields_one_ref_per_transcription_in_siglum_order
+    def test_discover_yields_transcriptions_then_verticalized_in_siglum_order
       refs = conformance_adapter.discover(FIXTURES).to_a
-      assert_equal %w[urn:nabu:osta:dac urn:nabu:osta:rhj], refs.map(&:id),
-                   "the filename siglum IS the identity, lowercased"
+      assert_equal %w[urn:nabu:osta:dac urn:nabu:osta:rhj urn:nabu:osta:ac2-vrt], refs.map(&:id),
+                   "the filename siglum IS the identity, lowercased; the verticalized lane " \
+                   "appends with the -vrt sibling tail (transcription positions stay fixed)"
       files = refs.map { |ref| ref.metadata["file"] }
-      assert_equal %w[TEXT.DAC.txt TEXT.RHJ.txt], files
+      assert_equal %w[TEXT.DAC.txt TEXT.RHJ.txt TEXT.AC2.vrt.html], files
     end
 
     def test_discover_yields_nothing_from_a_workdir_without_the_tree
@@ -111,6 +118,19 @@ module Adapters
                       "the search form resolves the expansions — recall over readable words"
     end
 
+    def test_verticalized_documents_carry_the_silver_lemma_lane
+      document = parse_urn("urn:nabu:osta:ac2-vrt")
+      assert_equal "osp", document.language
+      section = document.first
+      tokens = section.annotations["tokens"]
+      refute_nil tokens, "the tokens annotation is the Indexer's lemma contract"
+      assert_includes tokens, { "form" => "fizo", "lemma" => "hacer", "pos" => "VMIS3S0" }
+      registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
+      assert_equal "silver", registry.lemma_tiers["osta"],
+                   "FreeLing + HSMS-app lemmatization (Gago Jover & Pueyo Mena, Scriptum " \
+                   "Digital 7) is automatic — silver, the GLAUx precedent"
+    end
+
     # -- idempotency ----------------------------------------------------------
 
     def test_double_load_is_idempotent
@@ -118,7 +138,7 @@ module Adapters
       source = osta_source
       first = Nabu::Store::Loader.new(db: catalog, source: source)
                                  .load_from(conformance_adapter, workdir: FIXTURES, full: true)
-      assert_equal 2, first.added
+      assert_equal 3, first.added
       assert_equal 0, first.errored
 
       counts = [catalog[:documents].count, catalog[:passages].count]

@@ -696,6 +696,56 @@ class SourceRegistryTest < Minitest::Test
     end
   end
 
+  # -- functional sets (P77 rider, owner ruling 2026-08-13): core/signs/
+  # quickstart resolvable wherever --axis takes a name ------------------------
+
+  def functional_sets_registry
+    axes = <<~YAML
+      classical:
+        persona: "The Classicist."
+        desc: "test desk"
+    YAML
+    load_registry_with_axes(axes, <<~YAML)
+      nabu-lects:
+        adapter: Some::Adapter
+        group: core
+        kind: module
+        axes: [classical]
+      starter:
+        adapter: Some::Adapter
+        quickstart: true
+        axes: [classical]
+      ordinary:
+        adapter: Some::Adapter
+        axes: [classical]
+    YAML
+  end
+
+  def test_functional_sets_are_the_closed_group_vocabulary_plus_quickstart
+    assert_equal %w[core signs quickstart], Nabu::SourceRegistry::FUNCTIONAL_SETS
+    registry = functional_sets_registry
+    assert registry.functional_set?("core")
+    assert registry.functional_set?("quickstart")
+    refute registry.functional_set?("classical"), "desk axes are not functional sets"
+  end
+
+  def test_set_members_resolves_groups_and_the_quickstart_starter_shelf
+    registry = functional_sets_registry
+    assert_equal %w[nabu-lects], registry.functional_set_members("core")
+    assert_equal %w[nabu-lects starter], registry.functional_set_members("quickstart"),
+                 "quickstart = core + the quickstart-flagged starters, deduped"
+    assert_empty registry.functional_set_members("signs")
+  end
+
+  def test_axis_or_set_member_is_the_one_membership_predicate
+    registry = functional_sets_registry
+    assert registry.axis_or_set_member?("core", "nabu-lects")
+    refute registry.axis_or_set_member?("core", "ordinary")
+    assert registry.axis_or_set_member?("quickstart", "starter")
+    assert registry.axis_or_set_member?("classical", "ordinary"), "desk tags keep working"
+    refute registry.axis_or_set_member?("classical", "unknown-slug")
+  end
+
   # -- the signs group (P69: `nabu enable signs && nabu sync signs` restores
   # the whole sign/char capability) --------------------------------------------
 

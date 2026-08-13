@@ -77,7 +77,7 @@ module Nabu
       axes.each do |axis|
         lines << ""
         lines << "#{axis.name} — #{axis.persona}"
-        members = registry.each_source.select { |entry| entry.axes.include?(axis.name) }
+        members = registry.each_source.select { |entry| registry.axis_or_set_member?(axis.name, entry.slug) }
         if members.empty?
           lines << "  (no sources on this axis)"
         else

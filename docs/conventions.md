@@ -518,9 +518,14 @@ ALONE (simpler than ccmh-txt's: no annotation needed): deletions drop,
 expansions resolve innermost-out, bracket marks strip to their reading,
 lacunae drop, `¶`/`/` become spaces, whitespace squeezes; a line deriving
 to nothing keeps its raw text. The adapter conformance hook pins the
-mint. Scope: a property of the HSMS transcription convention, so the
-rule lives in the hsms family, not in `LANGUAGE_FOLDS`; the derivation
-is deterministic, so two parses and rebuilds agree.
+mint. The verticalized lane (P77-2) has its own derivation under the
+same contract: a `-vrt` passage's search form is its clean token
+stream — `HsmsVrtParser.search_source(text, annotations)` joins the
+stored `tokens` annotation's form fields (upstream's own clean words:
+`per-done` heals to `perdone`), the ccmh-txt annotation-derivation
+shape. Scope: properties of the HSMS transcription convention, so both
+rules live in the hsms family, not in `LANGUAGE_FOLDS`; each
+derivation is deterministic, so two parses and rebuilds agree.
 
 Changing any rule here changes every `text_normalized` and therefore every
 passage `content_sha256`: plan a full `nabu rebuild` (drop + re-derive), not

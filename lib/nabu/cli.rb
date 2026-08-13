@@ -858,6 +858,12 @@ module Nabu
       syncs. `--axis a,b` selects several axes and prints one group each, in
       order. `--all` is a flat batch (enabled + live sources), never grouped.
 
+      CORE rides first (P77 rider, owner ruling 2026-08-13): core is the
+      minimum set a new install carries — on the box's first real sync
+      request, any never-synced core member (the registry instruments)
+      syncs automatically before the requested work. --parse-only never
+      triggers it; `nabu sync core` re-runs the sweep explicitly.
+
       Examples:
         nabu sync sblgnt          # one source (explicit; disabled syncs anyway)
         nabu sync celtic          # the celtic axis's enabled members
@@ -1230,7 +1236,7 @@ module Nabu
         # enable hint for the axes' not-yet-enabled members — never the
         # whole-library `enabled:` footer. Bare status keeps that footer.
         if options[:axis]
-          print_axis_enable_hint(view, registry, selected_axes(registry.axes))
+          print_axis_enable_hint(view, registry, selected_axes(registry.axes, registry))
         else
           print_focus_note(view, view.registry_hidden_slugs)
         end
@@ -1284,8 +1290,12 @@ module Nabu
       line, then the same census rows, indented. Axes are TAGS, not folders
       — a source appears under every axis it serves (stated once). Bare
       --axis shows every axis in the ratified order; `--axis slavic` one
-      axis; `--axis a,b` those axes only. An unknown axis names the known
-      set. The bare (ungrouped) census is unchanged.
+      axis; `--axis a,b` those axes only. The FUNCTIONAL SETS resolve here
+      too (P77 rider — an axis is a tag, and the registry's non-desk sets
+      are the same kind of tag): `--axis core` (the auto-enabled minimum of
+      registry instruments), `--axis signs`, `--axis quickstart` (core +
+      the starter shelf). An unknown name names the known axes and sets.
+      The bare (ungrouped) census is unchanged.
 
       A bare `nabu list SOURCE --lang CODE` (no enumeration flag) IMPLIES the
       natural mode by the shelf's content kind — a dictionary shelf lists its
@@ -1403,7 +1413,7 @@ module Nabu
         view = focus_view(config, registry, catalog: catalog)
         warn_focus_drift(view)
         rows = scoped_census(query.census, view)
-        axes = selected_axes(registry.axes)
+        axes = selected_axes(registry.axes, registry)
         print_census_by_axis(rows, axes, registry)
         # A SCOPED request (P44-r1 addendum): no whole-library `enabled:`
         # footer — just an enable hint for THIS axis's not-yet-enabled members.
@@ -4409,10 +4419,17 @@ module Nabu
 
         names = spec.split(",").map(&:strip).reject(&:empty?).uniq
         names.each do |name|
+          next if registry.functional_set?(name)
+
           axes[name] ||
-            raise(Thor::Error, "#{command}: unknown axis #{name.inspect} — known axes: #{axes.names.join(', ')}")
+            raise(Thor::Error, "#{command}: unknown axis #{name.inspect} — known axes: " \
+                               "#{axes.names.join(', ')} · functional sets: " \
+                               "#{Nabu::SourceRegistry::FUNCTIONAL_SETS.join(', ')}")
         end
-        [names, names.flat_map { |name| registry.axis_members(name) }.uniq]
+        slugs = names.flat_map do |name|
+          registry.functional_set?(name) ? registry.functional_set_members(name) : registry.axis_members(name)
+        end
+        [names, slugs.uniq]
       end
 
       # -- list (P22-1) renderers -------------------------------------------
@@ -4561,7 +4578,8 @@ module Nabu
         end
         if options[:axis]
           return Nabu::StatusReport.render_grouped(registry: registry, db: db, ledger: ledger,
-                                                   axes: selected_axes(registry.axes), tag_note: AXIS_TAG_NOTE)
+                                                   axes: selected_axes(registry.axes, registry),
+                                                   tag_note: AXIS_TAG_NOTE)
         end
 
         Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: options[:long])
@@ -4672,7 +4690,11 @@ module Nabu
       # their grant marker — never folded into `enable <axis>`, which skips them
       # (the r3b rule). Meta line → STDERR, like every enablement note.
       def print_axis_enable_hint(view, registry, axes)
-        requested = axes.flat_map { |axis| registry.axis_members(axis.name) }.uniq
+        requested = axes.flat_map do |axis|
+          next registry.functional_set_members(axis.name) if registry.functional_set?(axis.name)
+
+          registry.axis_members(axis.name)
+        end.uniq
         print_scoped_enable_hint(view, registry, requested, enable_axes: axes.map(&:name))
       end
 
@@ -4811,7 +4833,7 @@ module Nabu
         say "resolved: #{pluralize(shown, 'source')} enabled (nabu status shows them; --all shows everything)"
       end
 
-      def selected_axes(axis_registry)
+      def selected_axes(axis_registry, registry)
         if axis_registry.empty?
           raise Thor::Error, "list: no research axes are defined (config/axes.yml) — --axis needs the registry"
         end
@@ -4820,9 +4842,30 @@ module Nabu
         return axis_registry.each_axis.to_a if spec.empty?
 
         spec.split(",").map(&:strip).reject(&:empty?).uniq.map do |name|
-          axis_registry[name] ||
-            raise(Thor::Error, "list: unknown axis #{name.inspect} — known axes: #{axis_registry.names.join(', ')}")
+          axis_registry[name] || functional_set_axis(registry, name) ||
+            raise(Thor::Error, "list: unknown axis #{name.inspect} — known axes: " \
+                               "#{axis_registry.names.join(', ')} · functional sets: " \
+                               "#{Nabu::SourceRegistry::FUNCTIONAL_SETS.join(', ')}")
         end
+      end
+
+      # A functional set rendered as a pseudo-axis (P77 rider): same Axis
+      # duck the grouped census walks, persona = what the set IS. Desk
+      # order stays ratified; sets sort after (order 900+).
+      def functional_set_persona(name)
+        { "core" => "The auto-enabled minimum — the registry instruments every install carries",
+          "signs" => "The sign/char capability restore set",
+          "quickstart" => "The starter shelf — core plus the smallest real sources" }.fetch(name)
+      end
+
+      def functional_set_axis(registry, name)
+        return nil unless registry.functional_set?(name)
+
+        persona = functional_set_persona(name)
+        Nabu::AxisRegistry::Axis.new(
+          name: name, persona: persona, desc: persona,
+          order: 900 + Nabu::SourceRegistry::FUNCTIONAL_SETS.index(name)
+        )
       end
 
       # `list --axis` (P35-1): the census grouped under the research axes
@@ -4840,7 +4883,7 @@ module Nabu
         axes.each do |axis|
           say ""
           say "#{axis.name} — #{axis.persona}"
-          members = rows.select { |row| registry[row.slug]&.axes&.include?(axis.name) }
+          members = rows.select { |row| registry.axis_or_set_member?(axis.name, row.slug) }
           if members.empty?
             say "  (nothing held on this axis yet)"
           else
@@ -8454,7 +8497,10 @@ module Nabu
       # neither is the unknown-target error (naming BOTH namespaces). A nil
       # name falls to sync_one's own "slug or --all" guard, unchanged.
       def run_sync(runner, registry, slug, db, ledger, enabled:)
-        return sync_all(runner, enabled: enabled) if options[:all]
+        if options[:all]
+          auto_sync_core!(runner, registry, slug, db)
+          return sync_all(runner, enabled: enabled)
+        end
         return sync_axes(runner, registry, options[:axis].split(","), db, ledger) if options[:axis]
 
         # P63 rider + P68-4: `sync <group>` sweeps a registered group —
@@ -8462,14 +8508,17 @@ module Nabu
         # and "signs" (the sign/char restore set: `nabu enable signs &&
         # nabu sync signs` makes the capability whole on a fresh box).
         # Failures are reported per member and never stop the rest.
-        return sync_group(slug, runner, registry, db, ledger, enabled) if
-          Nabu::SourceRegistry::GROUPS.include?(slug)
+        if Nabu::SourceRegistry::GROUPS.include?(slug)
+          auto_sync_core!(runner, registry, slug, db)
+          return sync_group(slug, runner, registry, db, ledger, enabled)
+        end
 
         if slug.nil? || registry[slug]
           # P44-r3b: the enablement acquisition gate is on the EXPLICIT
           # single-source path only. Axis fan-out keeps its registry-enabled
           # membership rule (below); --all applies the enabled-set filter itself.
           enforce_enablement!(registry[slug], enabled) unless slug.nil?
+          auto_sync_core!(runner, registry, slug, db)
           return sync_one(runner, registry, slug, db, ledger)
         end
         return sync_axes(runner, registry, [slug], db, ledger) if registry.axes[slug]
@@ -8550,9 +8599,17 @@ module Nabu
 
         unknown = names.reject { |name| registry.axes[name] }
         unless unknown.empty?
-          raise Thor::Error, "sync --axis: unknown axis #{unknown.first.inspect} — known axes: #{axis_menu(registry)}"
+          name = unknown.first
+          if registry.functional_set?(name)
+            hint = Nabu::SourceRegistry::GROUPS.include?(name) ? name : "core"
+            raise Thor::Error, "sync --axis: #{name.inspect} is a functional set, not a desk axis — " \
+                               "run `nabu sync #{hint}` (the group sweep)"
+          end
+
+          raise Thor::Error, "sync --axis: unknown axis #{name.inspect} — known axes: #{axis_menu(registry)}"
         end
 
+        auto_sync_core!(runner, registry, nil, db)
         synced = []
         names.each { |name| sync_axis_group(runner, registry, name, db, ledger, synced) }
       end
@@ -8822,9 +8879,41 @@ module Nabu
       # The quickstart core sweep (P63 rider): same containment contract as
       # the starter loop — a failed member is reported and counted, an
       # awaiting Manual Adapter member prints its card and counts as neither.
-      def run_core_syncs(runner, registry)
+      # P77 rider (owner ruling 2026-08-13): core is the MINIMUM SET a new
+      # install carries — auto-enabled by nature (modules are exempt from
+      # the enablement gate) and AUTO-SYNCED on the box's first real sync
+      # request: any core member without a sources row yet syncs first,
+      # riding the requested sync. --parse-only never acquires; an explicit
+      # `sync core` (or a core member by name) IS the sweep already; a
+      # member that once synced never re-rides (its row exists — `nabu
+      # sync core` is the explicit re-run). Failures are contained so the
+      # requested sync still runs.
+      def auto_sync_core!(runner, registry, slug, db)
+        return if options[:parse_only]
+
+        members = registry.core_members
+        return if members.empty? || slug == "core" || members.include?(slug)
+
+        missing = members - synced_core_slugs(db, members)
+        return if missing.empty?
+
+        say "core set first (new install; owner ruling 2026-08-13): #{missing.join(' · ')}"
+        failures = run_core_syncs(runner, registry, members: missing)
+        return if failures.empty?
+
+        warn "core auto-sync: #{failures.map(&:first).join(', ')} failed — " \
+             "`nabu sync core` re-runs the sweep; continuing with the requested sync"
+      end
+
+      def synced_core_slugs(db, members)
+        return [] unless db&.table_exists?(:sources)
+
+        db[:sources].where(slug: members).select_map(:slug)
+      end
+
+      def run_core_syncs(runner, registry, members: registry.core_members)
         failures = []
-        registry.core_members.each do |member|
+        members.each do |member|
           outcome = runner.sync(member, progress: progress_reporter)
           finish_progress
           if outcome.aborted?
