@@ -2,6 +2,7 @@
 
 require_relative "hsms_parser"
 require_relative "hsms_vrt_parser"
+require_relative "osta_tables"
 
 module Nabu
   module Adapters
@@ -19,7 +20,9 @@ module Nabu
     # `lemma_tier: silver` — ruled on upstream evidence: Gago Jover &
     # Pueyo Mena (Scriptum Digital 7) document the lemmatization as
     # FreeLing + HSMS-app, i.e. AUTOMATIC (the GLAUx precedent).
-    # The tables/ works metadata (languages, dating) is №R-30.
+    # The tables/ works metadata lane (P77-r6, №R-30 ruled 2026-08-13)
+    # joins per-siglum: works rows + codex row + the lengua facet — see
+    # OstaTables.
     #
     # == Identity (FROZEN minting)
     #
@@ -34,11 +37,13 @@ module Nabu
     #
     # == Language
     #
-    # `osp` (Old Spanish) for every document — the v1 default under the
-    # pending №R-30 ruling: the archive's Asturian/Leonese/
-    # Navarro-Aragonese layers ride under osp until the works-table
-    # language column is wired (an honest one-tag practice, recorded in
-    # the postures row).
+    # Per document from the works table (P77-r6, №R-30): the majority
+    # OstaTables::LENGUA_CODES mapping over the codex's works — osp for
+    # the castellano bulk, ast/roa-opt/arg/lat for the Leonese/Galician/
+    # Navarro-Aragonese/Latin layers; `osp` stays the honest fallback
+    # for an acquisition without the tables. Raw lengua values ride the
+    # works metadata verbatim; the majority raw value is the "lengua"
+    # facet (the future lect hook).
     #
     # == License (№45-1, recorded 2026-08-13)
     #
@@ -125,19 +130,25 @@ module Nabu
       end
 
       # Dispatch by extension: .vrt.html is the verticalized lane, .txt
-      # the transcription lane (the ccmh two-parser shape).
+      # the transcription lane (the ccmh two-parser shape). Both lanes
+      # join the works tables by siglum (P77-r6) — the -vrt sibling is
+      # the same work, so it carries the same rows and language.
       def parse(document_ref)
         file = document_ref.metadata.fetch("file")
+        siglum = document_ref.metadata.fetch("siglum")
+        tables = tables_for(document_ref.path)
         extra = { "citation" => "#{file}, in: #{ZENODO_CITATION}" }
+        merge_tables!(extra, tables, siglum)
+        language = tables&.language_for(siglum) || LANGUAGE
         if file.end_with?(".vrt.html")
           HsmsVrtParser.new.parse(
-            document_ref.path, urn: document_ref.id, language: LANGUAGE,
-                               siglum: document_ref.metadata.fetch("siglum"), extra_metadata: extra
+            document_ref.path, urn: document_ref.id, language: language,
+                               siglum: siglum, extra_metadata: extra
           )
         else
           HsmsParser.new.parse(
-            document_ref.path, urn: document_ref.id, language: LANGUAGE,
-                               fallback_title: document_ref.metadata.fetch("siglum"), extra_metadata: extra
+            document_ref.path, urn: document_ref.id, language: language,
+                               fallback_title: siglum, extra_metadata: extra
           )
         end
       end
@@ -152,6 +163,27 @@ module Nabu
       # Seam for tests (the house local-git pattern).
       def repo_url
         REPO_URL
+      end
+
+      # tables/ sits beside the lane dirs; single-slot memo so 663
+      # parses read the xlsx once per acquisition tree.
+      def tables_for(path)
+        dir = File.join(File.dirname(path, 2), "tables")
+        return @tables if @tables_dir == dir
+
+        @tables_dir = dir
+        @tables = OstaTables.load(dir)
+      end
+
+      def merge_tables!(extra, tables, siglum)
+        return unless tables
+
+        works = tables.works(siglum)
+        extra["works"] = works if works
+        codex = tables.codex(siglum)
+        extra["codex"] = codex if codex
+        lengua = tables.primary_lengua(siglum)
+        extra["facets"] = { "lengua" => lengua } if lengua
       end
 
       def transcription_refs(workdir)

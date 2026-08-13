@@ -75,6 +75,9 @@ module Adapters
       assert_equal "sv", document.language
       assert_equal "Äldre Västgötalagen", document.title
       assert_equal "fsv-aldrelagar", document.metadata["part"]
+      assert_equal({ "part" => "fsv-aldrelagar" }, document.metadata["facets"],
+                   "the part rides as a facet — the №R-32 sv:old rule's hook (rule lands with " \
+                   "the nabu-lects sv mint)")
       assert_equal "1280–1290", document.metadata["date"], "upstream's own band, verbatim"
       assert_equal "12800101", document.metadata["datefrom"]
       assert_equal "12901231", document.metadata["dateto"]

@@ -16,6 +16,22 @@ files:
     url: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/transcriptions/TEXT.DAC.txt
     whole: true
     reason: second complete tiny real file — header/markup variance witness
+  - path: tables/tabla-obras.xlsx
+    refetchable: false
+    provenance: local-trim
+    upstream: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/tables/tabla-obras.xlsx
+    copied: 2026-08-13
+    whole: false
+    trim: sheet "tabla obras" cut to the 27 rows of sigla RHJ/DAC/AC2/FNG/FJZ/PN2 (row XML verbatim; sharedStrings and every other part byte-identical; the two non-data sheets keep header rows only); re-zipped with Info-ZIP
+    reason: the works-table lane (P77-r6, №R-30) — per-work lengua/author/title/OPDT/BETA columns; FNG pins the mixed-language tie, FJZ the leonés minority, PN2 the 17-work cancionero shape
+  - path: tables/tabla-codices.xlsx
+    refetchable: false
+    provenance: local-trim
+    upstream: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/tables/tabla-codices.xlsx
+    copied: 2026-08-13
+    whole: false
+    trim: same cut, keyed on "Abreviatura HSMS" — DAC/FJZ/FNG/PN2 codex rows (RHJ and AC2 have NO codex row upstream, kept as the absent-codex witnesses)
+    reason: the codex half of the lane — library/shelfmark/SPDT copy dating/PhiloBiblon link
   - path: verticalized/TEXT.AC2.vrt.html
     refetchable: false
     provenance: local-trim

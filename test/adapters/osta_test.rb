@@ -131,6 +131,78 @@ module Adapters
                    "Digital 7) is automatic — silver, the GLAUx precedent"
     end
 
+    # -- the works-table lane (P77-r6, №R-30) ----------------------------------
+
+    def test_documents_carry_their_works_table_rows_verbatim
+      document = parse_urn("urn:nabu:osta:rhj")
+      works = document.metadata["works"]
+      assert_equal 1, works.size
+      work = works.first
+      assert_equal "HSMS-0198-0001", work["obra_id"]
+      assert_equal "4776", work["beta_manid"]
+      assert_equal "5590", work["beta_cnum"]
+      assert_equal "desconocido", work["autor"]
+      assert_includes work["titulo"], "Rey que no hace justicia"
+      assert_equal "1510 ca. ad quem", work["opdt_fin"], "dates ride as upstream text, never parsed"
+      assert_equal ["castellano"], work["lenguas"]
+      assert_equal %w[narrativa romancero glosa], work["materias"]
+      assert_nil document.metadata["codex"],
+                 "RHJ has no tabla-codices row — an absent codex stays honestly absent"
+      assert_equal({ "lengua" => "castellano" }, document.metadata["facets"],
+                   "the raw lengua rides as a facet — the Coptic-dialect precedent, the future lect hook")
+    end
+
+    def test_documents_with_a_codex_row_carry_it
+      document = parse_urn("urn:nabu:osta:dac")
+      codex = document.metadata["codex"]
+      refute_nil codex
+      assert_includes codex["biblioteca"], "Archivo Histórico Nacional"
+      assert_equal "1201 a quo", codex["spdt_inicio"], "the copy dating, upstream text verbatim"
+      assert_equal "manuscrito", codex["formato"]
+    end
+
+    def test_the_vrt_sibling_carries_the_same_works_lane
+      document = parse_urn("urn:nabu:osta:ac2-vrt")
+      assert_equal "osp", document.language
+      works = document.metadata["works"]
+      refute_nil works, "the -vrt sibling is the same work — same table join"
+      assert_equal "Leyes del estilo", works.first["titulo"]
+    end
+
+    def test_language_resolves_from_the_works_table_majority
+      tables = Nabu::Adapters::OstaTables.load(File.join(FIXTURES, "tables"))
+      refute_nil tables
+      assert_equal "osp", tables.language_for("RHJ")
+      assert_equal "osp", tables.language_for("FJZ"), "leonés minority: castellano 2 of 3 wins"
+      assert_equal "osp", tables.language_for("FNG"),
+                   "osp 2 vs arg 2 — a tie falls to the codex's earliest work in table order"
+      assert_nil tables.language_for("ZZZ")
+    end
+
+    def test_lengua_codes_map_the_censused_vocabulary
+      codes = Nabu::Adapters::OstaTables::LENGUA_CODES
+      assert_equal "osp", codes["castellano"]
+      assert_equal "ast", codes["leonés"]
+      assert_equal "roa-opt", codes["gallego"]
+      assert_equal "arg", codes["aragonés"]
+      assert_equal "arg", codes["navarro-aragonés"]
+      assert_equal "arg", codes["navarro"]
+      assert_equal "lat", codes["latín"]
+    end
+
+    def test_a_workdir_without_tables_keeps_the_v1_osp_claim
+      Dir.mktmpdir do |dir|
+        FileUtils.mkdir_p(File.join(dir, "transcriptions"))
+        FileUtils.cp(File.join(FIXTURES, "transcriptions", "TEXT.RHJ.txt"),
+                     File.join(dir, "transcriptions"))
+        adapter = conformance_adapter
+        document = adapter.parse(adapter.discover(dir).first)
+        assert_equal "osp", document.language, "no tables → the honest v1 whole-source claim"
+        assert_nil document.metadata["works"]
+        assert_nil document.metadata["facets"]
+      end
+    end
+
     # -- idempotency ----------------------------------------------------------
 
     def test_double_load_is_idempotent
