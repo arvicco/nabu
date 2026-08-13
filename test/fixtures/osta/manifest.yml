@@ -2,10 +2,10 @@
 # test/fixtures/perseus/manifest.yml.
 #
 # OSTA (Old Spanish Textual Archive, HSMS) samples staged at the P77
-# mint — the adapter itself is packet 77-1/77-2 work; adapter_test is
-# null until it lands (the staged-ahead posture).
+# mint; the transcriptions adapter landed with 77-1 (the verticalized
+# sample serves packet 77-2).
 source: osta
-adapter_test:
+adapter_test: test/adapters/osta_test.rb
 retrieved: 2026-08-13
 files:
   - path: transcriptions/TEXT.RHJ.txt
