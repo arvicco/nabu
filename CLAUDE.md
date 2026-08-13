@@ -52,7 +52,8 @@ rake fixtures:refresh[source]           # re-snapshot upstream sample (network, 
 5. Register in `config/sources.yml` (`wired: false` until first real sync is verified).
 6. `bin/nabu enable <source>` (the box-local profile step — sync refuses un-enabled sources), then run a real `bin/nabu sync <source>` manually; eyeball `nabu status` counts and 5 random passages (`nabu show`); then flip `wired: true`.
 7. **Core-layer postures (P59-4/P61-0 — no adapter without them):** run `bin/nabu layer suggest <source>` after the first sync, then record the postures — for lects a rule in `config/lect_facet_rules.yml` or an override row in `config/lect_overrides.yml` (both need an owner ruling), or a `lect:` declaration in `config/postures.yml` (`identity` — the bare code is the claim — is an honest answer; `pending` must name its candidate); dating/places/script declarations likewise (`undatable`/`unplaced`/`implied` are honest answers). The suite fails on a posture-less source.
-8. Update `docs/02-sources.md` status column.
+8. **Lect mints ride as PRs into nabu-lects (owner rule 2026-08-13):** if the source's lect/language claims need registry nodes that don't exist (a new anchor, stage, or codemap row — check `canonical/nabu-lects` AND `~/Dev/nabu-lects`), formulate a small lect package immediately: a branch + PR on `arvicco/nabu-lects` (lects.yml/codemap.yml + CHANGELOG entry, `bin/validate` green) whose body explains the USE CASE — which source, which claim, what the census shows, what stays deliberately coarse. Nabu-side rules/codemap targets stay queued (work-queue entry naming the PR) until the mint merges and reaches `canonical/nabu-lects`; the posture records the blocked state honestly. Precedents: nabu-lects PRs #1 (sv:old, fornsvenska), #2 (it:old, UD Italian-Old), #3 (ast/an, OSTA).
+9. Update `docs/02-sources.md` status column.
 
 ## Claude Code working agreements
 

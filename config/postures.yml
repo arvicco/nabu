@@ -358,9 +358,9 @@ sources:
   fornsvenska:
     lect: {posture: pending, note: "№R-32 RULED 2026-08-13 (option a, the
         whole-source sv:old rule) — blocked on the nabu-lects sv mint (no sv
-        anchor in the registry yet; request in the sibling's inbox
-        2026-08-13). The adapter already emits the part facet the rule will
-        match; bare sv until the mint + rule land (queue: fsv-old-rule)"}
+        anchor in the registry yet; formulated as nabu-lects PR #1). The
+        adapter already emits the part facet the rule will match; bare sv
+        until the mint + rule land (queue: Q26 fsv-old-rule)"}
     dating: {posture: pending, note: "candidate: upstream's own per-text
         date/datefrom/dateto attrs, riding document metadata verbatim — the
         extractor is a small future packet over real synced data"}
