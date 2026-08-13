@@ -3713,6 +3713,31 @@ osta:
   # repo, one Zenodo deposit (v1.0.0) → sync_policy manual.
   sync_policy: manual
 
+# P77-4
+disco:
+  adapter: Nabu::Adapters::Disco
+  axes: [romance]
+  wired: false   # CLAUDE.md checklist §6: owner-fired first sync
+                   # (bin/nabu enable disco && bin/nabu sync disco —
+                   # sparse clone), eyeball counts (expect 1,216
+                   # documents / 4,530 sonnet passages) + 5 random
+                   # passages, then flip.
+  # P77-4: DISCO — Diachronic Spanish Sonnet Corpus (github.com/pruizf/
+  # disco v5.0; Ruiz Fabo, Bermúdez Sabel, Calvo Tello, Martínez
+  # Cantón): 4,530 sonnets / 1,216 authors, 15th-20th c., the Romance
+  # verse rung beside cantigas. Document = one all-periods-per-author
+  # TEI file (the corpus's own complete aggregation; per-period and
+  # per-sonnet dirs are the same texts re-cut, never ingested); passage
+  # = one sonnet at the corpus's own ordinal. Language spa (the
+  # derom/wold reflex code — etym joins connect); the period band +
+  # prosopography centuries ride metadata (extractor = future packet).
+  # met/rhyme/enjamb are AUTOMATIC (ADSO/RhymeTagger/ANJA, the
+  # encodingDesc's own words) — annotations, labeled, never gold.
+  # LICENSE: README verbatim "The corpus is available under: CC-BY
+  # license." + LICENSE file CC-BY-4.0 -> attribution. Releases in
+  # waves (v5.0 Feb 2023) -> sync_policy manual.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
