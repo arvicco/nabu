@@ -4606,11 +4606,44 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P76 U-2: the doubt word routes through Certainty — the house tier plus
+  # the upstream word verbatim (was the bare "(low)" before the doctrine).
   def test_show_prints_the_timeline_line
     with_dated_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:a]) }
       assert_nil status
-      assert_match(/date: 113 BCE \(low\) · Oxyrhynchus/, out)
+      assert_match(/date: 113 BCE \(uncertain — hgv "low"\) · Oxyrhynchus/, out)
+    end
+  end
+
+  # P76 U-7: the upstream script_uncertain metadata flag glosses on the
+  # show card — flag-only documents get their own honest line.
+  def test_show_glosses_the_script_uncertain_flag
+    with_dated_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      catalog[:documents].where(urn: "urn:nabu:ddbdp:a")
+                         .update(metadata_json: JSON.generate({ "script_uncertain" => true }))
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:a]) }
+      assert_nil status
+      assert_match("script: (script uncertain — upstream flag)", out)
+    end
+  end
+
+  # P76 U-2: width words keep their plain informative note (no doubt), and
+  # the cataloguer's trailing "?" on a place glosses as probable.
+  def test_show_timeline_width_words_stay_plain_and_the_query_glosses
+    with_dated_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      doc = catalog[:documents].first(urn: "urn:nabu:ddbdp:b")
+      catalog[:document_axes].where(document_id: doc[:id])
+                             .update(precision: "period", place_name: "Alexandrou Nesos ?")
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:b]) }
+      assert_nil status
+      assert_match(/date: 591–602 CE \(period\) · Alexandrou Nesos \? \(probable — cataloguer's "\?"\)/, out)
     end
   end
 
@@ -6529,6 +6562,22 @@ class CLITest < Minitest::Test
       assert_nil status
       assert_match(/Sparta, Pleiades 570685/, out)
       assert_match(/holdings: 2 isicily · 1 edh/, out)
+    end
+  end
+
+  # P76 U-4: the CIGS coordinate-accuracy grade renders verbatim on the
+  # ref-card tail — a precision fact, never a certainty tier.
+  def test_place_card_tail_renders_the_cigs_accuracy_grade
+    with_place_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      girsu = Nabu::Pleiades::Place.new(id: "GIR", title: "Girsu", lat: 31.56, lon: 46.18,
+                                        place_types: [], time_periods: [], accuracy: 3)
+      Nabu::Store::PlaceIndex.derive!(catalog, places: [girsu], gazetteer: "cigs")
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[place cigs:GIR]) }
+      assert_nil status
+      assert_match("coordinate accuracy 3/3 (CIGS grade)", out)
     end
   end
 

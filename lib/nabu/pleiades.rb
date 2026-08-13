@@ -47,7 +47,12 @@ module Nabu
     # split out explicitly (the dump stores [lon, lat]; this avoids every
     # caller having to remember the GeoJSON order). +time_periods+ is the
     # distinct attestation time-period vocabulary, first-seen order.
-    Place = Data.define(:id, :title, :lat, :lon, :place_types, :time_periods)
+    # +accuracy+ (P76 U-4): the CIGS 0–3 coordinate-accuracy grade, nil on
+    # every other gazetteer (and on pre-U-4 derivations) — a precision
+    # fact, never a certainty tier (conventions §12).
+    Place = Data.define(:id, :title, :lat, :lon, :place_types, :time_periods, :accuracy) do
+      def initialize(accuracy: nil, **) = super
+    end
 
     # Container keys a JSON-object dump might wrap its place list under. Only
     # "@graph" (JSON-LD) — NOT "features": a Pleiades place object itself

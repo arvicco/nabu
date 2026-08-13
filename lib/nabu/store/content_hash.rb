@@ -64,6 +64,7 @@ module Nabu
       # the sha of every reflex-carrying entry, so the next owner-fired
       # `sync <shelf> --parse-only` re-mints those revisions and backfills
       # migration 010's column — the P16-5 recovery pattern, on purpose.
+      # `uncertain` (P76 U-6) rides the same rationale for migration 029.
       def reflex_fields(entry)
         return [] if entry.reflexes.empty?
 
@@ -71,7 +72,7 @@ module Nabu
           { "lang_code" => reflex.lang_code, "language" => reflex.language,
             "word" => reflex.word, "roman" => reflex.roman,
             "word_folded" => reflex.word_folded, "roman_folded" => reflex.roman_folded,
-            "borrowed" => reflex.borrowed }
+            "borrowed" => reflex.borrowed, "uncertain" => reflex.uncertain }
         end
         [canonical_json(reflexes)]
       end

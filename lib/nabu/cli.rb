@@ -5403,11 +5403,15 @@ module Nabu
       # " — types · first…last period · lat, lon", each section only when
       # the dump carries it. Periods render as the attested span endpoints
       # (dump attestation order, not re-sorted — honest to upstream).
+      # P76 U-4: the CIGS coordinate-accuracy grade rides the tail verbatim
+      # (0–3, higher = more accurate; 0 = unlocated) — a precision fact,
+      # never a certainty tier (conventions §12).
       def place_card_tail(place)
         sections = [
           place.place_types.join(" · "),
           period_span(place.time_periods),
-          place.lat && place.lon ? format("%<lat>.2f, %<lon>.2f", lat: place.lat, lon: place.lon) : nil
+          place.lat && place.lon ? format("%<lat>.2f, %<lon>.2f", lat: place.lat, lon: place.lon) : nil,
+          place.accuracy ? "coordinate accuracy #{place.accuracy}/3 (CIGS grade)" : nil
         ].compact.reject(&:empty?)
         sections.empty? ? "" : " — #{sections.join(' · ')}"
       end
@@ -5445,12 +5449,21 @@ module Nabu
       # P61-3 (D60-b): the artifact-script line — only where the original
       # artifact's script DIFFERS from the held surface (the lane is minted
       # on difference by construction). Tag + config note, honest and short.
+      # P76 U-7: the upstream script_uncertain flag glosses "(script
+      # uncertain)" — on the artifact line when one exists, else on its own
+      # honest line (the flag can ride documents outside the differs-only
+      # lane).
       def print_artifact(result)
         artifact = result.artifact
         return if artifact.nil?
 
-        note = artifact.note ? " — #{artifact.note}" : ""
-        say "  artifact script: #{artifact.script}#{note} (held surface differs; see the lect ~axis)"
+        if artifact.script
+          note = artifact.note ? " — #{artifact.note}" : ""
+          flag = artifact.uncertain ? " (script uncertain)" : ""
+          say "  artifact script: #{artifact.script}#{note}#{flag} (held surface differs; see the lect ~axis)"
+        elsif artifact.uncertain
+          say "  script: (script uncertain — upstream flag)"
+        end
       end
 
       def print_show_passage(passage)
@@ -5565,13 +5578,36 @@ module Nabu
         return if timeline.nil?
 
         span = Nabu::Timeline.format_span(timeline.not_before, timeline.not_after)
-        place = timeline.place_name ? " · #{timeline.place_name}" : ""
+        place = timeline.place_name ? " · #{timeline.place_name}#{place_query_gloss(timeline.place_name)}" : ""
         if span
-          note = %w[exact range year].include?(timeline.precision) ? "" : " (#{timeline.precision})"
-          say "  date: #{span}#{note}#{place}"
+          say "  date: #{span}#{precision_note(timeline.precision)}#{place}"
         elsif timeline.place_name
-          say "  place: #{timeline.place_name}"
+          say "  place: #{timeline.place_name}#{place_query_gloss(timeline.place_name)}"
         end
+      end
+
+      # P76 U-2 (conventions §12): a genuinely graded precision word routes
+      # through Certainty — house tier plus the upstream word verbatim
+      # ('(uncertain — hgv "low")'); "high" is certain and SILENT; width
+      # words beyond the always-silent exact/range/year keep their plain
+      # informative note ("(period)") — width, not doubt.
+      def precision_note(precision)
+        return "" if %w[exact range year].include?(precision)
+
+        gloss = Nabu::Certainty.gloss(:hgv_precision, precision)
+        return " (#{gloss})" if gloss
+        return "" if Nabu::Certainty.tier(:hgv_precision, precision) == "certain"
+
+        " (#{precision})"
+      end
+
+      # The cataloguer's trailing "?" on a place name (P76 U-2): the
+      # Barrington-lineage doubt mark glosses as probable, upstream mark
+      # kept verbatim in the name itself.
+      def place_query_gloss(name)
+        return "" unless name.to_s.strip.end_with?("?")
+
+        " (#{Nabu::Certainty.gloss(:cataloguer_query, '?')})"
       end
 
       # The facets line (P17-2), one compact line and only when faceted:
@@ -7832,9 +7868,13 @@ module Nabu
 
       # P17-3: the per-edge loan label — a borrowed-flagged reflex reads
       # "(loan)"; unflagged and not-yet-reparsed (NULL) edges stay bare.
+      # P76 U-6: the kaikki doubt tag appends " (uncertain)" — the WOLD
+      # idiom, upstream word verbatim (conventions §12).
       def reflex_form(reflex)
         base = reflex.roman && reflex.roman != reflex.word ? "#{reflex.word} (#{reflex.roman})" : reflex.word
-        reflex.borrowed ? "#{base} (loan)" : base
+        base = "#{base} (loan)" if reflex.borrowed
+        base = "#{base} (uncertain)" if reflex.respond_to?(:uncertain) && reflex.uncertain
+        base
       end
 
       # etym (P14-1; multi-hop P17-3): one block per entry — where the walk
@@ -7899,7 +7939,7 @@ module Nabu
         prefix =
           if via
             "#{via.word} [#{lect_bracket(via.language, via.lect_id, via.lect_name)}]" \
-              "#{' (loan)' if via.borrowed} → "
+              "#{' (loan)' if via.borrowed}#{' (uncertain)' if via.uncertain} → "
           else
             ""
           end
@@ -8035,7 +8075,11 @@ module Nabu
           say "  stages:"
           stages.each do |stage|
             star = stage.mode == :reconstructed ? "*" : ""
-            band = stage.band ? " (#{Nabu::Timeline.format_span(stage.band[0], stage.band[1])})" : ""
+            # P76 U-7: an approximate/conventional band_note renders as
+            # "ca." on the span — the doctrine's probable tier, the note's
+            # own word staying in the registry (conventions §12).
+            circa = Nabu::Certainty.tier(:band_note, stage.band_note) == "probable" ? "ca. " : ""
+            band = stage.band ? " (#{circa}#{Nabu::Timeline.format_span(stage.band[0], stage.band[1])})" : ""
             say "    #{star}#{stage.stage}  #{stage.name}#{band} — #{plural(totals[stage.id], 'document')}"
           end
         end

@@ -95,8 +95,13 @@ module Nabu
       # +artifact+ (P61-3, D60-b): the ORIGINAL artifact's script where it
       # differs from the held surface (the Demotic papyrus held as Latin
       # transliteration) — the Store::ArtifactScripts lane, nil for the
-      # common no-difference case.
-      Artifact = Data.define(:script, :note)
+      # common no-difference case. +uncertain+ (P76 U-7): the upstream
+      # script_uncertain metadata flag (ebl's own doubt about the script
+      # identification) — the value may exist with a nil script when only
+      # the flag is present.
+      Artifact = Data.define(:script, :note, :uncertain) do
+        def initialize(uncertain: false, **) = super
+      end
 
       DocumentResult = Data.define(
         :urn, :title, :language, :source_slug, :license_class,
@@ -388,18 +393,32 @@ module Nabu
           timeline: timeline_for(row.fetch(:document_id)),
           facets: facets_for(row.fetch(:document_id)), credit: row.fetch(:credit),
           findspot: findspot_for(row),
-          artifact: artifact_for(row.fetch(:document_id))
+          artifact: artifact_for(row.fetch(:document_id), row[:document_metadata_json])
         )
       end
 
       # The artifact-script lane row (P61-3), or nil — absent lane, or a
       # catalog predating migration 024 (the facets_for/timeline_for
-      # degrade-never-crash stance).
-      def artifact_for(document_id)
+      # degrade-never-crash stance). P76 U-7: the metadata script_uncertain
+      # flag (ebl) rides the same value — flag-only documents get a
+      # script-less Artifact so the card can gloss the doubt.
+      def artifact_for(document_id, metadata_json = nil)
+        uncertain = script_uncertain?(metadata_json)
         row = Store::ArtifactScripts.for_document(@catalog, document_id)
-        row && Artifact.new(script: row[:artifact_script], note: row[:artifact_script_note])
+        return Artifact.new(script: nil, note: nil, uncertain: true) if row.nil? && uncertain
+
+        row && Artifact.new(script: row[:artifact_script], note: row[:artifact_script_note],
+                            uncertain: uncertain)
       rescue Sequel::DatabaseError
         nil
+      end
+
+      def script_uncertain?(metadata_json)
+        return false if metadata_json.to_s.strip.empty?
+
+        JSON.parse(metadata_json)["script_uncertain"] == true
+      rescue JSON::ParserError
+        false
       end
 
       # The findspot facts (P44-2), or nil — no captured id, no resolver

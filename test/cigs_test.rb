@@ -73,6 +73,25 @@ class CigsTest < Minitest::Test
     assert_operator nippur.lat, :<, nippur.lon, "Mesopotamia: lat ~32 < lon ~45 — a swap would invert"
   end
 
+  # P76 U-4: the accuracy column reaches disk. CONFIRMED semantics
+  # (full-CSV census 2026-08-12, overturning the survey's [claimed]
+  # 1–2/3–4 split): the scale is 0–3, HIGHER = more accurate — 3
+  # site-exact (Girsu/Adab), 2–1 approximate, 0 unlocated (the 8
+  # coordinate-less rows). A COORDINATE-precision grade, not a doubt
+  # word — under "precision is not certainty" it carries NO house tier
+  # and renders verbatim.
+  def test_accuracy_parses_as_an_integer_grade
+    assert_equal 3, row("GIR").accuracy
+    assert_equal 2, row("ADA").accuracy
+  end
+
+  def test_the_derived_cigs_slice_carries_accuracy_through_the_resolver
+    db = store_test_db
+    Nabu::CigsIndex::Producer.new(catalog: db).run("cigs", workdir: FIXTURES)
+    resolver = Nabu::Store::PlaceIndex.resolver(db, gazetteer: "cigs")
+    assert_equal 3, resolver.place("GIR").accuracy
+  end
+
   # --- the derive -------------------------------------------------------------
 
   # The real v1.7 file is CRLF except row KRB's bare-LF ending (upstream
