@@ -1418,12 +1418,15 @@ module Nabu
         registry = Nabu::SourceRegistry.load(config.sources_path)
         view = focus_view(config, registry, catalog: catalog)
         warn_focus_drift(view)
-        rows = scoped_census(query.census, view)
+        census = query.census
+        rows = scoped_census(census, view)
         axes = selected_axes(registry.axes, registry)
         print_census_by_axis(rows, axes, registry)
         # A SCOPED request (P44-r1 addendum): no whole-library `enabled:`
-        # footer — just an enable hint for THIS axis's not-yet-enabled members.
-        print_axis_enable_hint(view, registry, axes)
+        # footer — just an enable hint for THIS axis's not-yet-enabled members,
+        # plus (P77-r5) a sync hint for the enabled ones the catalog has no
+        # rows for yet: enabled-but-unsynced is a state, never an absence.
+        print_axis_enable_hint(view, registry, axes, catalog_slugs: census.map(&:slug))
       elsif options[:sources]
         print_source_map(query.source_groups, Nabu::SourceRegistry.load(config.sources_path))
       elsif slug.empty?
@@ -1463,8 +1466,10 @@ module Nabu
         print_source_enable_hint(focus_view(config, registry, catalog: catalog), registry, slug)
       end
     rescue Nabu::Query::List::Error => e
-      # Unknown source slug: a clean stderr line naming the valid slugs.
-      raise Thor::Error, e.message
+      # Unknown source slug: a clean stderr line naming the valid slugs —
+      # unless the registry KNOWS the slug (P77-r5): registered-but-unsynced
+      # is not "unknown", it teaches its own on-ramp instead.
+      raise Thor::Error, registered_not_held_message(config, catalog, slug) || e.message
     ensure
       catalog&.disconnect
     end
@@ -4695,20 +4700,21 @@ module Nabu
       # rule). Blocked (grant-gated private) members are named INDIVIDUALLY with
       # their grant marker — never folded into `enable <axis>`, which skips them
       # (the r3b rule). Meta line → STDERR, like every enablement note.
-      def print_axis_enable_hint(view, registry, axes)
+      def print_axis_enable_hint(view, registry, axes, catalog_slugs: nil)
         requested = axes.flat_map do |axis|
           next registry.functional_set_members(axis.name) if registry.functional_set?(axis.name)
 
           registry.axis_members(axis.name)
         end.uniq
-        print_scoped_enable_hint(view, registry, requested, enable_axes: axes.map(&:name))
+        print_scoped_enable_hint(view, registry, requested, enable_axes: axes.map(&:name),
+                                                            catalog_slugs: catalog_slugs)
       end
 
       def print_source_enable_hint(view, registry, slug)
         print_scoped_enable_hint(view, registry, [slug], enable_axes: [])
       end
 
-      def print_scoped_enable_hint(view, registry, requested_slugs, enable_axes:)
+      def print_scoped_enable_hint(view, registry, requested_slugs, enable_axes:, catalog_slugs: nil)
         return unless view.active? # --all is the full reveal — silent
 
         enabled = view.resolution.slugs
@@ -4718,6 +4724,7 @@ module Nabu
           # `enable` target, so neither counts as an un-enabled gap.
           entry.nil? || entry.shelf? || entry.feature_module? || enabled.include?(slug)
         end
+        print_unsynced_hint(registry, requested_slugs, enabled, catalog_slugs)
         return if gap.empty?
 
         blocked_gap, public_gap = gap.partition { |slug| registry.blocked?(slug) }
@@ -4734,6 +4741,51 @@ module Nabu
 
         count = gap.size
         warn "#{count} member#{'s' unless count == 1} not enabled — #{clauses.join('; ')}"
+      end
+
+      # P77-r5 (the osta eyeball): an ENABLED member with no catalog rows yet
+      # (post-enable, pre-first-sync) is neither a census row nor an enable
+      # gap — without this line it silently vanishes from the scoped view.
+      # Shelves are excluded (`nabu ingest`, not sync, fills them); modules
+      # stay (they are honest sync targets). Only list passes catalog_slugs —
+      # status renders never-synced rows itself, so it opts out with nil.
+      def print_unsynced_hint(registry, requested_slugs, enabled, catalog_slugs)
+        return if catalog_slugs.nil?
+
+        unsynced = requested_slugs.uniq.select do |slug|
+          entry = registry[slug]
+          entry && !entry.shelf? && enabled.include?(slug) && !catalog_slugs.include?(slug)
+        end
+        return if unsynced.empty?
+
+        count = unsynced.size
+        warn "#{count} member#{'s' unless count == 1} enabled, not yet synced — " \
+             "#{unsynced.map { |slug| "nabu sync #{slug}" }.join('; ')}"
+      end
+
+      # P77-r5, the other half of the same eyeball: `list <slug>` on a source
+      # the REGISTRY knows but the catalog does not must not claim "unknown
+      # source" — the slug is registered and simply has no rows yet. Returns
+      # the teaching message, or nil when the catalog-holds error is the
+      # honest one (a truly unknown slug, or a different failure).
+      def registered_not_held_message(config, catalog, slug)
+        return nil if slug.nil? || slug.empty? || catalog.nil?
+        return nil if catalog[:sources].where(slug: slug).any?
+
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        entry = registry[slug]
+        return nil unless entry
+        return "#{slug} is a registered shelf with nothing on it yet — nabu ingest fills it" if entry.shelf?
+
+        # Enablement read with all:false — the --all flag reveals rows, it
+        # does not enable anything, so it must not flip this wording.
+        view = Nabu::Focus.view(profile: effective_profile(config, registry, catalog: catalog),
+                                registry: registry, all: false, disabled: false)
+        if view.resolution.slugs.include?(slug)
+          "#{slug} is registered and enabled but not yet synced — run nabu sync #{slug}"
+        else
+          "#{slug} is registered but not enabled — run nabu enable #{slug}, then nabu sync #{slug}"
+        end
       end
 
       # Warn once about names the file carries that the registry no longer
