@@ -1,0 +1,22 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+source: fornsvenska
+adapter_test: test/adapters/fornsvenska_test.rb
+retrieved: 2026-08-13
+files:
+  - path: fsv-aldrelagar/fsv-aldrelagar.xml.bz2
+    refetchable: false
+    provenance: local-trim
+    upstream: https://spraakbanken.gu.se/resurser/meningsmangder/fsv-aldrelagar.xml.bz2
+    copied: 2026-08-13
+    whole: false
+    trim: the corpus tag + the first TWO texts (Äldre Västgötalagen, Bjärköarätten) cut at their second </paragraph> each + closing tags, re-bzipped; content lines verbatim upstream. Covers the Sparv grammar — text/@title/@date/@datefrom/@dateto, paragraph/sentence nesting, sentence/@id, <w> tokens with the automatic posset/lemma/variants candidate sets
+    reason: the laws part — multi-text discovery, per-text dating attrs, the sentence-grain citation walk; re-acquiring = fetch the whole part and re-cut the same head
+  - path: fsv-verser/fsv-verser.xml.bz2
+    refetchable: false
+    provenance: local-trim
+    upstream: https://spraakbanken.gu.se/resurser/meningsmangder/fsv-verser.xml.bz2
+    copied: 2026-08-13
+    whole: false
+    trim: same two-texts/two-paragraphs cut (Erikskrönikan, Karlskrönikan)
+    reason: second part — verse genre, cross-part discovery order, slug variance (a long comma-ed title slugifies)

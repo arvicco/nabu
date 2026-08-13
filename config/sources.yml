@@ -3738,6 +3738,31 @@ disco:
   # waves (v5.0 Feb 2023) -> sync_policy manual.
   sync_policy: manual
 
+# P77-6
+fornsvenska:
+  adapter: Nabu::Adapters::Fornsvenska
+  axes: [germanic]
+  wired: false   # CLAUDE.md checklist §6: owner-fired first sync
+                   # (bin/nabu enable fornsvenska && bin/nabu sync
+                   # fornsvenska — seven ~1-4 MB bz2 files), eyeball
+                   # counts + 5 random passages, then flip.
+  # P77-6: Fornsvenska textbanken (Språkbanken Text, Gothenburg) — Old
+  # Swedish laws (Äldre Västgötalagen...), religious/profane prose and
+  # the rhymed chronicles/Eufemiavisorna, over the NEW sparv family.
+  # SCOPE: the seven fornsvenska parts ONLY — the five fsv-nysvensk*
+  # siblings are Early Modern Swedish (1526+), a different stage that
+  # must not ride an Old Swedish claim. Document = one <text> (title
+  # slugified); passage = one sentence at <paragraph>.<sentence>;
+  # upstream's per-text date/datefrom/dateto ride metadata verbatim
+  # (the dating-posture candidate). Language sv (no ISO code for Old
+  # Swedish — the IcePaHC-under-is precedent; the sv:old stage rule is
+  # №R-32, register). The automatic fsvm lemma candidate sets (pipe-
+  # bounded multi-value lookups) are deliberately NOT ingested — a
+  # candidate set is not attestation. LICENSE: CC-BY-4.0 per part on
+  # the resource pages, DOIs each. Upstream frozen since 2013-10-08 →
+  # sync_policy manual.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:

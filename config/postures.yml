@@ -355,6 +355,15 @@ sources:
     dating: {posture: partial}
     places: {posture: unplaced}
     script: {posture: implied}
+  fornsvenska:
+    lect: {posture: pending, note: "candidate: a fornsvenska -> sv:old stage
+        rule in config/lect_facet_rules.yml — №R-32 (register); bare sv until
+        the ruling lands (Old Swedish has no ISO code, the IcePaHC precedent)"}
+    dating: {posture: pending, note: "candidate: upstream's own per-text
+        date/datefrom/dateto attrs, riding document metadata verbatim — the
+        extractor is a small future packet over real synced data"}
+    places: {posture: unplaced}
+    script: {posture: implied}
   disco:
     lect: {posture: identity, note: "P77-4: bare spa is the honest one-tag claim
         across the 15th-20th c. span — the period band rides document metadata;
