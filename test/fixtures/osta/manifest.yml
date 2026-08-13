@@ -16,6 +16,30 @@ files:
     url: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/transcriptions/TEXT.DAC.txt
     whole: true
     reason: second complete tiny real file — header/markup variance witness
+  - path: transcriptions/TEXT.ACE.txt
+    refetchable: false
+    provenance: local-trim
+    upstream: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/transcriptions/TEXT.ACE.txt
+    copied: 2026-08-13
+    whole: false
+    trim: lines 1-35 verbatim (header + first two column containers, brace-balanced)
+    reason: the =-tag family witness (P77-r7) — {MIN=.} inside a {CB1. container, the first-sync quarantine wave's shape (100 files)
+  - path: transcriptions/TEXT.ALC.txt
+    refetchable: false
+    provenance: local-trim
+    upstream: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/transcriptions/TEXT.ALC.txt
+    copied: 2026-08-13
+    whole: false
+    trim: lines 1-11 + 8232-8242 verbatim (deliberately brace-UNBALANCED)
+    reason: the stray-brace witness (P77-r7) — a batched `}}` folio close with one container open, plus an EOF-open {CB1.; both ride the brace_defects census, never a quarantine
+  - path: verticalized/TEXT.BQ1.vrt.html
+    refetchable: false
+    provenance: local-trim
+    upstream: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/verticalized/TEXT.BQ1.vrt.html
+    copied: 2026-08-13
+    whole: false
+    trim: lines 1-94 + 1060-1090 + the file's own closing tags
+    reason: the unescaped-markup witness (P77-r7) — <w data1='<GRK•UNK2•UNK2'> tokens whose display text HTML4 soup-parses into phantom elements (the live-sync crash), plus a real <GRK> Greek-script block
   - path: tables/tabla-obras.xlsx
     refetchable: false
     provenance: local-trim

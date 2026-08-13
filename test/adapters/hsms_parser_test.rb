@@ -192,18 +192,25 @@ class HsmsParserTest < Minitest::Test
                  "the unknown group's inner text still flows — no silent drops"
   end
 
-  def test_an_unmatched_close_brace_is_a_parse_error
-    error = assert_raises(Nabu::ParseError) do
-      parse_string("{RMK: HSMS-9.}\ntext line\n}\n")
-    end
-    assert_match(/unmatched/, error.message)
+  # SPEC OVERTURNED at the first real sync (P77-r7): the two-fixture
+  # census read balanced braces as the convention, but the live 663
+  # files mix sibling-style and batched column closes — counts
+  # genuinely unbalance in ~2% of the corpus. A stray brace is now a
+  # CENSUSED defect ("brace_defects"), never a quarantine: the text
+  # must never pay for a transcriber's brace.
+  def test_an_unmatched_close_brace_is_a_censused_defect_not_an_error
+    document = parse_string("{RMK: HSMS-9.}\n{RMK: HSMS-9-1: T.} text line\n}\n}\n")
+    assert_equal ["line 3: unmatched close brace ignored",
+                  "line 4: unmatched close brace ignored"],
+                 document.metadata["brace_defects"]
+    assert_includes document.first.text, "text line", "the text flows regardless"
   end
 
-  def test_an_unclosed_container_at_eof_is_a_parse_error
-    error = assert_raises(Nabu::ParseError) do
-      parse_string("{RMK: HSMS-9.}\n{CB1.\n{RMK: HSMS-9-1: T.} words\n")
-    end
-    assert_match(/unclosed/, error.message)
+  def test_an_unclosed_container_at_eof_is_a_censused_defect_not_an_error
+    document = parse_string("{RMK: HSMS-9.}\n{CB1.\n{RMK: HSMS-9-1: T.} words\n")
+    assert_equal ["end of file: unclosed {CB1. implicitly closed"],
+                 document.metadata["brace_defects"]
+    assert_includes document.first.text, "words"
   end
 
   def test_a_file_with_no_text_is_a_parse_error

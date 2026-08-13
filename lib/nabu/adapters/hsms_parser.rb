@@ -32,9 +32,12 @@ module Nabu
     # annotations ("folios"/"columns", tags verbatim, never interpreted);
     # heading lines are additionally listed in "headings". Unknown brace
     # tags are censused loud in document metadata ("unrecognized_tags")
-    # while their inner text still flows — no silent drops, ParseError
-    # only for structural breakage (unbalanced braces, zero passages) —
-    # the aozora posture, for a 663-file corpus censused from two.
+    # while their inner text still flows, and stray/unclosed braces are
+    # censused likewise ("brace_defects" — the first-sync finding:
+    # transcribers mix sibling and batched column closes, so counts
+    # genuinely unbalance in ~2% of files) — no silent drops, ParseError
+    # only for zero passages — the aozora posture, for a 663-file
+    # corpus censused from two.
     #
     # == The search-form derivation (conventions §9; the ccmh-txt mold)
     #
@@ -51,11 +54,15 @@ module Nabu
       # Scanner tokens in priority order: an inline RMK group (content
       # never carries a brace), a folio milestone, a container opening
       # ({TAG. or {TAG:), a bare closing brace. Split with the capture
-      # group keeps the tokens; everything between them is text.
-      TOKEN = /(\{RMK:[^}\n]*\}|\[fol\.[^\]\n]*\]|\{[A-Za-z0-9]+[.:]|\})/
+      # group keeps the tokens; everything between them is text. Tags
+      # admit `=` — the first-sync census over the real 663 files found
+      # the whole =-family ({MIN=.} ×1707, {=DIAG.} ×974, {=DIAG=.}
+      # ×688, {DIAG=.}, {=MIN=:}…); a rejected tag is not neutral, its
+      # closing brace steals the enclosing column container's pop.
+      TOKEN = /(\{RMK:[^}\n]*\}|\[fol\.[^\]\n]*\]|\{[A-Za-z0-9=]+[.:]|\})/
       RMK = /\A\{RMK:([^}]*)\}\z/
       FOLIO = /\A\[fol\.\s*([^\]]*?)\s*\]\z/
-      OPEN = /\A\{([A-Za-z0-9]+)[.:]\z/
+      OPEN = /\A\{([A-Za-z0-9=]+)[.:]\z/
       SECTION = /\A(HSMS-\d+-\d+):?\s*(.*)\z/m
       HSMS_ID = /\AHSMS-\d+\.?\z/
       COLUMN_TAG = /\ACB\d+\z/
@@ -90,8 +97,7 @@ module Nabu
       def parse(path, urn:, language:, fallback_title:, extra_metadata: {})
         reset(path, urn, language)
         File.foreach(path).with_index(1) { |raw, lineno| process_line(raw.chomp, lineno) }
-        raise ParseError, "#{path}: unclosed {#{@stack.last}. container at end of file" unless @stack.empty?
-
+        @brace_defects << "end of file: unclosed {#{@stack.join('. {')}. implicitly closed" unless @stack.empty?
         close_passage
         build_document(fallback_title, extra_metadata)
       rescue Nabu::ValidationError => e
@@ -108,6 +114,7 @@ module Nabu
         @header_open = true
         @stack = []
         @unrecognized = Hash.new(0)
+        @brace_defects = []
         @folio = nil
         @pending_columns = []
         @pending_notes = []
@@ -164,8 +171,17 @@ module Nabu
         end
       end
 
+      # The first-sync census over the real 663 files: transcribers mix
+      # sibling-style column closes (`}` before each new {CBn.) and
+      # batched folio-end closes (`}}`), sometimes within ONE file, so
+      # brace counts genuinely do not balance in ~2% of the corpus. A
+      # stray close is therefore a CENSUSED defect (loud in metadata),
+      # never a quarantine — the text must never pay for a brace.
       def close_container(lineno)
-        raise ParseError, "#{@path}:#{lineno}: unmatched close brace" if @stack.empty?
+        if @stack.empty?
+          @brace_defects << "line #{lineno}: unmatched close brace ignored"
+          return
+        end
 
         @stack.pop
       end
@@ -247,6 +263,7 @@ module Nabu
         metadata = header_metadata
         metadata["sections"] = @passages.count { |passage| passage.annotations.key?("hsms") }
         metadata["unrecognized_tags"] = @unrecognized.sort.to_h unless @unrecognized.empty?
+        metadata["brace_defects"] = @brace_defects unless @brace_defects.empty?
         metadata["empty_sections"] = @empty_sections unless @empty_sections.empty?
         metadata.merge!(extra_metadata)
         document = Nabu::Document.new(

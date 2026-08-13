@@ -129,8 +129,10 @@ module Nabu
       class Handler < Nokogiri::XML::SAX::Document
         PSEUDO_TAGS = %w[RMK PUNCT].freeze
 
+        # grk joined at the BQ1 live-sync census: the HSMS Greek-script
+        # passage marker — its inner tokens carry •GRK•LANG tags verbatim.
         STRUCTURE_TAGS = %w[html head meta title link body div p fol cb lnc br
-                            abb sup editadd].freeze
+                            abb sup editadd grk].freeze
 
         attr_reader :header, :passages, :empty_sections, :unrecognized, :defect
 
@@ -158,7 +160,14 @@ module Nabu
 
           case name.downcase
           when "rmk" then @rmk = []
-          when "w" then @token = { data1: attrs.to_h["data1"], text: +"" }
+          when "w"
+            # Upstream tokenizes its own unescaped markup ("<GRK" as a
+            # token's display text — the BQ1 shape), so HTML4 tag-soup
+            # recovery can open the next <w> while one is still open:
+            # the interrupted token is finished with what it accumulated,
+            # never lost, never crashed on.
+            finish_token if @token
+            @token = { data1: attrs.to_h["data1"], text: +"" }
           when "folio" then @folio_text = +""
           when "ln" then flush_line
           when /\Acb\d+\z/ then @pending_columns << name.upcase
@@ -207,6 +216,11 @@ module Nabu
         def finish_token
           token = @token
           @token = nil
+          # The soup's other half: a </w> whose opener was consumed by a
+          # phantom element (the same BQ1 unescaped-markup shape) closes
+          # nothing — ignored, the token was already finished.
+          return unless token
+
           display = token[:text].strip
           fields = split_data1(token[:data1], display) or return
           entry = { display: display, form: fields[0], lemma: fields[1], pos: fields[2] }

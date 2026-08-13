@@ -70,11 +70,13 @@ module Adapters
 
     def test_discover_yields_transcriptions_then_verticalized_in_siglum_order
       refs = conformance_adapter.discover(FIXTURES).to_a
-      assert_equal %w[urn:nabu:osta:dac urn:nabu:osta:rhj urn:nabu:osta:ac2-vrt], refs.map(&:id),
+      assert_equal %w[urn:nabu:osta:ace urn:nabu:osta:alc urn:nabu:osta:dac urn:nabu:osta:rhj
+                      urn:nabu:osta:ac2-vrt urn:nabu:osta:bq1-vrt], refs.map(&:id),
                    "the filename siglum IS the identity, lowercased; the verticalized lane " \
                    "appends with the -vrt sibling tail (transcription positions stay fixed)"
       files = refs.map { |ref| ref.metadata["file"] }
-      assert_equal %w[TEXT.DAC.txt TEXT.RHJ.txt TEXT.AC2.vrt.html], files
+      assert_equal %w[TEXT.ACE.txt TEXT.ALC.txt TEXT.DAC.txt TEXT.RHJ.txt TEXT.AC2.vrt.html
+                      TEXT.BQ1.vrt.html], files
     end
 
     def test_discover_yields_nothing_from_a_workdir_without_the_tree
@@ -203,6 +205,51 @@ module Adapters
       end
     end
 
+    # -- the =-tag family (the ACE live-sync quarantine wave) ------------------
+
+    def test_equals_carrying_tags_are_containers_not_stray_text
+      document = parse_urn("urn:nabu:osta:ace")
+      assert_equal "Libros de ajedrez, dados y tablas", document.title,
+                   "the {MIN=.} group no longer steals the {CB1. container close"
+      section = document.to_a.last
+      assert_includes section.text, "POr que toda mane-ra de alegria".split.first,
+                      "the column text flows"
+      assert_includes section.annotations["columns"].to_a, "CB1"
+      assert_includes section.annotations["columns"].to_a, "CB2"
+      census = document.metadata["unrecognized_tags"].to_s
+      assert_includes census, "MIN=",
+                      "an =-tag is a censused unknown container — loud, never a crash"
+    end
+
+    def test_stray_braces_are_censused_defects_never_quarantines
+      document = parse_urn("urn:nabu:osta:alc")
+      assert_equal "Fuero de Alcaraz", document.title
+      defects = document.metadata["brace_defects"]
+      refute_nil defects, "the first-sync census: transcribers mix sibling-style and batched " \
+                          "column closes, so braces genuinely do not balance in ~2% of files"
+      assert(defects.any? { |note| note.include?("unmatched close brace") })
+      assert(defects.any? { |note| note.include?("unclosed") }, "the EOF-open container is censused too")
+      text = document.map(&:text).join(" ")
+      assert_includes text, "seer tenida", "the text NEVER pays for a stray brace"
+      assert_includes text, "ganados tengan el esculca", "text after the EOF-open container flows"
+    end
+
+    # -- the GRK tag-soup recovery (the BQ1 live-sync crash) -------------------
+
+    def test_unescaped_grk_markup_in_the_token_stream_parses_without_crashing
+      document = parse_urn("urn:nabu:osta:bq1-vrt")
+      assert_equal "Crónica de 1344 segunda redacción", document.title
+      section = document.to_a.last
+      assert_includes section.text, "elleos",
+                      "the Greek tokens inside a real <GRK> block ride like any others"
+      forms = section.annotations["tokens"].map { |token| token["form"] }
+      assert_includes forms, "<GRK",
+                      "upstream tokenizes its own unescaped markup — the token rides verbatim " \
+                      "even though HTML4 soup-parses its display text into phantom elements"
+      refute_includes document.metadata["unrecognized_tags"].to_s, "GRK",
+                      "GRK is a KNOWN structure tag (the HSMS Greek-script marker), not census noise"
+    end
+
     # -- idempotency ----------------------------------------------------------
 
     def test_double_load_is_idempotent
@@ -210,7 +257,7 @@ module Adapters
       source = osta_source
       first = Nabu::Store::Loader.new(db: catalog, source: source)
                                  .load_from(conformance_adapter, workdir: FIXTURES, full: true)
-      assert_equal 3, first.added
+      assert_equal 6, first.added
       assert_equal 0, first.errored
 
       counts = [catalog[:documents].count, catalog[:passages].count]
