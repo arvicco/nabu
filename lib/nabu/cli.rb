@@ -1026,7 +1026,7 @@ module Nabu
       # first: tiny fetches that light the lect/place layers before the
       # corpus shelf arrives. Pre-enabled by nature (modules), failures
       # contained like starter failures.
-      say "core group first: #{registry.core_members.join(' · ')}"
+      say "core group first (requires-closed): #{registry.requires_closure(registry.core_members).join(' · ')}"
       failures = run_core_syncs(runner, registry)
       failures += run_starter_syncs(runner)
       print_quickstart_epilogue(failures)
@@ -4814,6 +4814,20 @@ module Nabu
         removed = profile.entries & names
         Nabu::Profile.new(profile.entries - names).save(config.profile_path)
         announce_enablement(config, registry, verb: "disabled", changed: removed, catalog: catalog)
+        warn_still_required(config, registry, names, catalog: catalog)
+      end
+
+      # P77-r4 (the survey's disable finding): a disabled name the closure
+      # re-adds must SAY so — "disabled" while it stays enabled is a lie.
+      def warn_still_required(config, registry, names, catalog:)
+        resolution = Nabu::Focus.resolve(effective_profile(config, registry, catalog: catalog), registry)
+        names.select { |name| resolution.slugs.include?(name) }.each do |name|
+          dependents = registry.required_by(name) & resolution.slugs
+          next if dependents.empty?
+
+          warn "#{name} stays enabled — required by #{dependents.join(', ')} " \
+               "(disable the dependent to drop it)"
+        end
       end
 
       # Confirm a write: what changed, then the current enabled set.
@@ -8611,7 +8625,9 @@ module Nabu
       # member is a contained failure carrying the enable hint, so
       # `sync signs` before `enable signs` explains itself member by member.
       def sync_group(name, runner, registry, db, ledger, enabled)
-        members = registry.group_members(name)
+        # The sweep closes over requires (P77-r4): `sync core` honors the
+        # members' own chains — the seeded nabu-places gazetteers ride.
+        members = registry.requires_closure(registry.group_members(name))
         raise Thor::Error, "sync #{name}: no #{name}-group sources registered" if members.empty?
 
         say "#{name} group: #{members.join(' · ')}"
@@ -8685,7 +8701,8 @@ module Nabu
           raise Thor::Error, "sync --axis: unknown axis #{name.inspect} — known axes: #{axis_menu(registry)}"
         end
 
-        auto_sync_core!(runner, registry, nil, db)
+        auto_sync_core!(runner, registry, nil, db,
+                        extra: names.flat_map { |name| registry.axis_members(name) }.uniq)
         synced = []
         names.each { |name| sync_axis_group(runner, registry, name, db, ledger, synced) }
       end
@@ -8967,22 +8984,40 @@ module Nabu
       # never re-rides (its row exists — `nabu sync core` is the explicit
       # re-run). Failures (and ManualDrop acquisition cards) are contained
       # so the requested sync still runs.
-      def auto_sync_core!(runner, registry, slug, db)
+      def auto_sync_core!(runner, registry, slug, db, extra: [])
         return if options[:parse_only]
 
         members = registry.core_members
-        chain = slug && registry[slug] ? registry.requires_closure([slug]) - [slug] : []
         # A request that IS the core sweep (the group, or a member by name)
-        # never re-triggers it — but the member's own chain still rides.
+        # never re-triggers it — but chains still ride. The sweep set
+        # closes over requires: the CORE MEMBERS' own chains too (the P77
+        # survey's coverage finding), plus the requested slug's and any
+        # +extra+ base an axis fan-out passes; the extras themselves sync
+        # on their own path, only their chains ride here.
         core_wanted = slug == "core" || members.include?(slug) ? [] : members
-        needed = (core_wanted + chain).uniq - [slug]
+        base = core_wanted + extra
+        base += [slug] if slug && registry[slug]
+        needed = registry.requires_closure(base.uniq) - [slug] - extra
         missing = needed - synced_slugs(db, needed)
+        # A grant-gated or blocked requirement never rides an implicit
+        # sweep — acknowledging terms is an explicit act (the sync --all
+        # GrantRequired posture).
+        gated = missing.select { |m| registry[m]&.grant_required? || registry.blocked?(m) }
+        unless gated.empty?
+          say "prerequisites skipped (grant-gated — sync each by name to acknowledge): #{gated.join(' · ')}"
+          missing -= gated
+        end
         return if missing.empty?
 
         core_missing = missing & core_wanted
         chain_missing = missing - core_wanted
         say "core set first (owner ruling 2026-08-13): #{core_missing.join(' · ')}" unless core_missing.empty?
-        say "required by #{slug} (the dependency chain): #{chain_missing.join(' · ')}" unless chain_missing.empty?
+        unless chain_missing.empty?
+          labeled = chain_missing.map do |member|
+            "#{member} (for #{(registry.required_by(member) & (base + needed)).uniq.join(', ')})"
+          end
+          say "dependency chain first: #{labeled.join(' · ')}"
+        end
         failures = run_core_syncs(runner, registry, members: missing)
         return if failures.empty?
 
@@ -8990,13 +9025,18 @@ module Nabu
              "continuing with the requested sync (`nabu sync core` / the member by name re-runs it)"
       end
 
+      # "Synced" = at least one SUCCESSFUL sync (last_sync_at is written
+      # only after a completed load) — a row minted by a failed or
+      # awaiting-acquisition attempt must NOT count, or the sweep would
+      # never retry a requirement whose first attempt printed the
+      # ManualDrop card (the P77 survey's sentinel finding).
       def synced_slugs(db, members)
         return [] unless db&.table_exists?(:sources)
 
-        db[:sources].where(slug: members).select_map(:slug)
+        db[:sources].where(slug: members).exclude(last_sync_at: nil).select_map(:slug)
       end
 
-      def run_core_syncs(runner, registry, members: registry.core_members)
+      def run_core_syncs(runner, registry, members: registry.requires_closure(registry.core_members))
         failures = []
         members.each do |member|
           outcome = runner.sync(member, progress: progress_reporter)

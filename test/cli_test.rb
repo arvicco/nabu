@@ -1699,8 +1699,10 @@ class CLITest < Minitest::Test
       out, _err, st = with_config(config) { run_cli(%w[sync corpus]) }
       assert_nil st
       assert_match(/core set first .*core-mod/, out)
-      assert_match(/required by corpus \(the dependency chain\): gaz-mod/, out,
+      assert_match(/dependency chain first: .*gaz-mod \(for corpus\)/, out,
                    "the requested source's never-synced requirements sweep first — P77-r3")
+      assert_match(/core-dep-mod \(for core-mod\)/, out,
+                   "the CORE MEMBERS' own chains close too — the P77 survey's coverage fix")
       assert_match(/core-mod\s/, out, "the missing core member synced before the request")
 
       out, _err, st = with_config(config) { run_cli(%w[sync corpus]) }
@@ -1711,9 +1713,49 @@ class CLITest < Minitest::Test
     end
   end
 
+  # The sentinel finding (P77 survey): a FAILED requirement attempt mints
+  # a sources row but never last_sync_at — the sweep must RETRY it on the
+  # next sync, not count it synced forever.
+  def test_a_failed_requirement_retries_on_the_next_sync
+    Dir.mktmpdir("nabu-cli-retry") do |root|
+      %w[corpus flaky-mod].each do |slug|
+        dir = File.join(root, "canonical", slug)
+        FileUtils.mkdir_p(dir)
+        File.write(File.join(dir, "#{slug}.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+      end
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "corpus:\n  adapter: QuickstartFetchAdapter\n  wired: true\n  sync_policy: manual\n  " \
+                          "requires: [flaky-mod]\n" \
+                          "flaky-mod:\n  adapter: QuickstartFailingAdapter\n  wired: false\n  " \
+                          "sync_policy: manual\n  kind: module\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources,
+                                config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
+      out, err, st = with_config(config) { run_cli(%w[sync corpus]) }
+      assert_nil st, "a failed requirement is contained — the requested sync still runs"
+      assert_match(/dependency chain first: .*flaky-mod/, out)
+      assert_match(/prerequisite auto-sync: flaky-mod failed/, err)
+
+      out, _err, _st = with_config(config) { run_cli(%w[sync corpus]) }
+      assert_match(/dependency chain first: .*flaky-mod/, out,
+                   "a row without last_sync_at is NOT synced — the sweep retries")
+    end
+  end
+
+  # The disable finding (P77 survey): disabling a still-required source is
+  # overridden by the closure — the printout must say so, never pretend.
+  def test_disabling_a_still_required_source_says_it_stays_enabled
+    with_provenance_corpus do |config|
+      with_config(config) { run_cli(%w[enable lex]) }
+      _out, err, _st = with_config(config) { run_cli(%w[disable dep-mod]) }
+      assert_match(/dep-mod stays enabled — required by lex/, err,
+                   "the closure re-adds it; silence would be a lie")
+    end
+  end
+
   def with_auto_core_corpus
     Dir.mktmpdir("nabu-cli-autocore") do |root|
-      %w[corpus core-mod gaz-mod].each do |slug|
+      %w[corpus core-mod core-dep-mod gaz-mod].each do |slug|
         dir = File.join(root, "canonical", slug)
         FileUtils.mkdir_p(dir)
         File.write(File.join(dir, "#{slug}.txt"), "Iliad\nμῆνιν\nἄειδε\n")
@@ -1722,7 +1764,10 @@ class CLITest < Minitest::Test
       File.write(sources, "corpus:\n  adapter: QuickstartFetchAdapter\n  wired: true\n  sync_policy: manual\n  " \
                           "requires: [gaz-mod]\n" \
                           "core-mod:\n  adapter: QuickstartFetchAdapter\n  wired: false\n  sync_policy: manual\n  " \
-                          "group: core\n  kind: module\n" \
+                          "group: core\n  kind: module\n  requires: [core-dep-mod]\n" \
+                          "core-dep-mod:\n  adapter: QuickstartFetchAdapter\n  wired: false\n  " \
+                          "sync_policy: manual\n  " \
+                          "kind: module\n" \
                           "gaz-mod:\n  adapter: QuickstartFetchAdapter\n  wired: false\n  sync_policy: manual\n  " \
                           "kind: module\n")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
