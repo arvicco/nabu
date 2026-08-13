@@ -355,6 +355,16 @@ sources:
     dating: {posture: partial}
     places: {posture: unplaced}
     script: {posture: implied}
+  disco:
+    lect: {posture: identity, note: "P77-4: bare spa is the honest one-tag claim
+        across the 15th-20th c. span — the period band rides document metadata;
+        a stage split (Golden Age Spanish) would need a ruled rule"}
+    dating: {posture: pending, note: "candidate: the period suffix band (g/e/n/t
+        -> upstream's period dirs, in metadata) + the prosopography birth/death
+        centuries — extractor from real synced data, the isicily discipline"}
+    places: {posture: unplaced, note: "birthplace is author biography, not
+        composition place — rides metadata verbatim"}
+    script: {posture: implied}
   osta:
     lect: {posture: identity, note: "P77-1: bare osp is the honest v1 claim — the
         archive's Asturian/Leonese/Navarro-Aragonese layers ride under it until
