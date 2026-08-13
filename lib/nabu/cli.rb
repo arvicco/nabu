@@ -7509,7 +7509,8 @@ module Nabu
         begin
           Nabu::Query::SignCard.new(
             sign_list: list, readings: Nabu::CdliSignReadings.load_default(config: config),
-            fulltext: fulltext, catalog: catalog
+            fulltext: fulltext, catalog: catalog,
+            overlay: Nabu::EdubbaOverlay.load_default(config: config)
           ).run(input)
         ensure
           fulltext&.disconnect
@@ -7566,7 +7567,33 @@ module Nabu
         print_sign_card_senses(card)
         print_sign_card_forms(card)
         print_sign_card_corpus(card)
+        print_sign_didactic(card.didactic)
         print_sign_card_search(card)
+      end
+
+      # The Edubba cuneiform overlay section (P77-8, the hiero mold): the
+      # certainty grade is LOAD-BEARING — "unclear" prints IN FRONT of
+      # the meaning, never as a footnote.
+      def print_sign_didactic(overlay)
+        return if overlay.nil?
+
+        say ""
+        head = ["keyword \"#{overlay['keyword']}\"", overlay["value"] && "value #{overlay['value']}"]
+               .compact.join("  ·  ")
+        say "didactic (#{[overlay['course'],
+                          overlay['chapter'] && "ch. #{overlay['chapter']}"].compact.join(' ')}): #{head}"
+        if overlay["meaning"]
+          grade = overlay["certainty"] == "unclear" ? "UNCLEAR (origin debated — not fact): " : ""
+          say "  meaning: #{grade}#{overlay['meaning']}"
+        end
+        say "  origin: #{overlay['iconicity']}" if overlay["iconicity"]
+        unless Array(overlay["confusables"]).empty?
+          follow = overlay["confusables"].map { |name| "#{name} (nabu char #{name})" }.join("  ·  ")
+          say "  confusable with: #{follow}"
+        end
+        say "  #{overlay['description']}" if overlay["description"]
+        say "  codex: #{overlay['link']}" if overlay["link"]
+        say "  #{overlay['attribution']}"
       end
 
       # P75 C-4: the follow-up affordance — a sign with reading values can

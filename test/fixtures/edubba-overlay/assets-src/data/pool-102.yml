@@ -1,0 +1,15 @@
+# Candidate sign pool for Cuneiform 102's opening stretch (M3-2).
+# Curated by hand; codepoints verified against Unicode character
+# names; wedge counts from the Noto reference glyphs (~ approximate);
+# meanings kept conservative with certainty grades as in
+# sign_teaching.yml. Values in CDLI ATF spelling; etcsl_value given
+# where ETCSL's convention differs (c=š, j=ŋ). All opening-stretch
+# batches are PINNED to their published chapters (chapter:) — the
+# published course is a contract; IM left this pool for Cuneiform
+# 101 ch. 01 (owner ruling 2026-07-31) and AK moved to ch. 02, the
+# chapter whose genitive -ak it writes.
+signs:
+  - { glyph: "𒂊", codepoint: "1208A", name: "E",    value: "e",    meaning: "[e]; as a word, levee/ditch",              wedges: 7, freq_etcsl: 3,   freq_cdli: 37,  certainty: stated, chapter: 1, keyword: "levee", confusable_with: ["É"] }
+  - { glyph: "𒂵", codepoint: "120B5", name: "GA",   value: "ga",   meaning: "milk; [ga]",                                        wedges: 8, freq_etcsl: 12,  freq_cdli: 16,  certainty: classic, chapter: 2, keyword: "milk" }
+  - { glyph: "𒎏", codepoint: "1238F", name: "NIN",  value: "nin",  osl_name: "|SAL.TUG2|", meaning: "lady, queen, mistress",             wedges: 7, freq_etcsl: 44,  freq_cdli: 40,  certainty: classic, chapter: 5, keyword: "lady" }
+  - { glyph: "𒂠", codepoint: "120A0", name: "EŠ2",  value: "sze3", etcsl_value: "ce3", meaning: "rope; the terminative -še3", wedges: 4, freq_etcsl: 24,  freq_cdli: 35,  certainty: stated, chapter: 1, keyword: "rope" }

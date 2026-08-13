@@ -49,8 +49,9 @@ module Nabu
       # a variant form. corpus maps spelled value → fulltext document
       # frequency ({} when no fulltext handle or nothing attested).
       Card = Data.define(:name, :uname, :oid, :deprecated, :codepoints, :glyph,
-                         :aka, :lists, :values, :glosses, :forms, :parent, :corpus, :senses) do
-        def initialize(senses: [], **) = super
+                         :aka, :lists, :values, :glosses, :forms, :parent, :corpus, :senses,
+                         :didactic) do
+        def initialize(senses: [], didactic: nil, **) = super
       end
 
       # card XOR candidates (both empty = unknown input, said plainly).
@@ -63,11 +64,15 @@ module Nabu
       # dictionary slug.
       WIKTIONARY_SLUG = "wiktionary-sux"
 
-      def initialize(sign_list:, readings: nil, fulltext: nil, catalog: nil)
+      # +overlay+ (P77-8): the Nabu::EdubbaOverlay read seam, or nil when
+      # the module is unsynced — the card degrades to no didactic section
+      # (the hiero-card mold).
+      def initialize(sign_list:, readings: nil, fulltext: nil, catalog: nil, overlay: nil)
         @list = sign_list
         @readings = readings
         @fulltext = fulltext
         @catalog = catalog
+        @overlay = overlay
         @tokenizer = Nabu::AtfTokenizer.new(dialect: :catf)
       end
 
@@ -174,7 +179,18 @@ module Nabu
           values: record.values.map { |v| Value.new(value: v.value, language: v.language, deprecated: v.deprecated) },
           glosses: glosses(record), forms: forms(record),
           parent: record.parent_name, corpus: corpus_panel(record),
-          senses: senses(record)
+          senses: senses(record), didactic: didactic_panel(record)
+        )
+      end
+
+      # The Edubba cuneiform overlay for this sign (P77-8): the pools key
+      # by display name AND osl_name, so the card's OSL name always
+      # reaches the entry. nil = no overlay module or no entry — an
+      # absent section, never a placeholder (the hiero-card mold).
+      def didactic_panel(record)
+        entry = @overlay&.cuneiform(record.name)
+        entry && Nabu::Query::Char.serialize(entry).merge(
+          "attribution" => Nabu::EdubbaOverlay::ATTRIBUTION
         )
       end
 

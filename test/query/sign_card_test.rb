@@ -191,5 +191,28 @@ module Query
       names = payload["candidates"].map { |c| c["name"] }
       assert_equal ["|A.BARA₂|", "|UD.ŠEŠ.KI|"], names
     end
+
+    # -- the Edubba didactic panel (P77-8, Q25 — the hiero-card mold) --------
+
+    OVERLAY = Nabu::EdubbaOverlay.new(Nabu::TestSupport.fixtures("edubba-overlay"))
+
+    def test_the_didactic_panel_joins_the_overlay_by_osl_name
+      result = Nabu::Query::SignCard.new(sign_list: SIGN_LIST, readings: READINGS,
+                                         overlay: OVERLAY).run("|IGI.DIB|")
+      didactic = result.card.didactic
+      refute_nil didactic, "|IGI.DIB| is U3's osl_name — the overlay must join the card's OSL name"
+      assert_equal "U3", didactic["name"]
+      assert_equal "and", didactic["keyword"]
+      assert_equal "C103", didactic["course"]
+      assert_equal "unclear", didactic["certainty"], "the never-present-as-fact grade rides the panel"
+      assert_includes didactic["attribution"], "Edubba"
+    end
+
+    def test_no_overlay_or_no_entry_is_an_absent_panel_never_a_placeholder
+      assert_nil card_for("ŠEŠ").card.didactic, "no overlay wired → absent section"
+      with_overlay = Nabu::Query::SignCard.new(sign_list: SIGN_LIST, readings: READINGS,
+                                               overlay: OVERLAY).run("ŠEŠ")
+      assert_nil with_overlay.card.didactic, "overlay wired but no entry for this sign → absent"
+    end
   end
 end

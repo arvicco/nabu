@@ -1,0 +1,23 @@
+# Candidate sign pool for Cuneiform 103 (Akkadian), stretch 1
+# (M12-3, rulebook cuneiform.md §9). Curated by hand around the
+# anchor text (Codex Hammurapi, urn:nabu:cdli:p464358): every batch
+# is PINNED — the stretch is built to arrive at real prologue lines
+# and law 1, so thematic placement rules throughout (owner rule:
+# a sign is taught in the chapter whose theme it serves).
+#
+# Identities value -> sign -> codepoint resolved via `nabu signs
+# --lang=akk` (all deterministic, 2026-08-05); freq_akkob is the
+# rank in value-freq-akkob.tsv — the SEPARATE Akkadian base (§9),
+# never mixed with sux ranks. Values in CDLI ATF spelling.
+#
+# veteran: true rows are signs already taught in C101/C102 gaining a
+# genuinely NEW Akkadian value (§9 veteran law); their keyword is
+# the cross-language invariant and MUST equal the sux codex page's.
+# Veterans whose sux value doubles unchanged as an OB syllable
+# (a, na, ma, šu …) need no row — they simply read.
+#
+# LI is the pool-102 unpinned candidate (never taught in sux);
+# Akkadian claims it first — same sign, same keyword (invariance).
+signs:
+  - { glyph: "𒊭", codepoint: "122AD", name: "ŠA",  value: "sza",  meaning: "the particle ša — \"which, of\"; the school's hinge-word", freq_akkob: 5,   certainty: unclear, chapter: 0, keyword: "which" }
+  - { glyph: "𒅇", codepoint: "12147", name: "U3",  value: "u3",   osl_name: "|IGI.DIB|", meaning: "the conjunction u — \"and\"",                                  freq_akkob: 14,  certainty: unclear, chapter: 0, keyword: "and" }
