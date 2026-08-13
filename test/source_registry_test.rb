@@ -834,6 +834,11 @@ class SourceRegistryTest < Minitest::Test
                  "the place-decisions registry resolves refs through all three gazetteer slices"
     assert_equal %w[unikemet], registry["edubba-overlay"].requires,
                  "the didactic overlay joins onto Unikemet sign entries"
+    assert_equal %w[perseus-greek first1k-greek], registry["hypotactic"].requires,
+                 "№R-31 ruled 2026-08-13: conjunctive over any_of machinery"
+    assert_equal %w[perseus-latin], registry["pedecerto"].requires
+    assert_equal %w[bridging], registry["bhsa"].requires,
+                 "the one parse-time cross-source canonical read (P77-r4)"
   end
 
   # -- the signs group (P69: `nabu enable signs && nabu sync signs` restores
