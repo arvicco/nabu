@@ -1479,6 +1479,13 @@ kitab:
 hypotactic:
   adapter: Nabu::Adapters::Hypotactic
   kind: module   # P44-6: machinery-only — a METER enrichment instrument, zero catalog rows, up=module
+  requires: [perseus-greek, first1k-greek]   # №R-31 RULED 2026-08-13 (option a,
+                   # as recommended): the instrument joins urn:cts:greekLit:*
+                   # documents both sources hold; the true relation is "any
+                   # greekLit holder" but requires: is conjunctive — declaring
+                   # both over-pulls harmlessly (core classical holdings a
+                   # fresh box wants anyway). An `any_of:` syntax waits for a
+                   # second any-of edge.
   axes: [classical]
   wired: false   # PERMANENTLY false — a meter instrument, not a text source
                    # (the trismegistos/kitab precedent): discover mints no
