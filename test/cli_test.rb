@@ -1607,12 +1607,74 @@ class CLITest < Minitest::Test
 
   # An unknown axis is a clean error naming the known set — the resolution
   # guarantee (never a silent empty group).
+  # P77 rider (owner ruling 2026-08-13): the functional sets — core, signs,
+  # quickstart — resolve wherever --axis takes a name (an axis is a tag over
+  # the source list; the sets are the same kind of tag, minus the persona).
+  def test_list_axis_resolves_the_core_functional_set
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list --axis core]) }
+      assert_nil status
+      assert_match(/^core — The auto-enabled minimum/, out)
+      refute_match(/^classical — /, out, "a set request shows only that set")
+    end
+  end
+
+  def test_sync_axis_refuses_a_functional_set_naming_the_group_door
+    with_axis_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[sync --axis core]) }
+      assert_equal 1, status
+      assert_match(/"core" is a functional set, not a desk axis/, err)
+      assert_match(/nabu sync core/, err, "the refusal teaches the group sweep")
+    end
+  end
+
+  # The auto-sync half of the ruling: core is the minimum set a new install
+  # carries — the box's FIRST real sync request sweeps any never-synced core
+  # member first; --parse-only never acquires; once synced, never re-rides.
+  def test_first_real_sync_sweeps_the_missing_core_set_first_and_only_once
+    with_auto_core_corpus do |config|
+      out, _err, st = with_config(config) { run_cli(%w[sync corpus --parse-only]) }
+      assert_nil st
+      refute_match(/core set first/, out, "--parse-only never acquires — no auto sweep")
+
+      out, _err, st = with_config(config) { run_cli(%w[sync corpus]) }
+      assert_nil st
+      assert_match(/core set first \(new install.*core-mod/, out)
+      assert_match(/core-mod\s/, out, "the missing core member synced before the request")
+
+      out, _err, st = with_config(config) { run_cli(%w[sync corpus]) }
+      assert_nil st
+      refute_match(/core set first/, out, "a synced core member never re-rides — " \
+                                          "`nabu sync core` is the explicit re-run")
+    end
+  end
+
+  def with_auto_core_corpus
+    Dir.mktmpdir("nabu-cli-autocore") do |root|
+      %w[corpus core-mod].each do |slug|
+        dir = File.join(root, "canonical", slug)
+        FileUtils.mkdir_p(dir)
+        File.write(File.join(dir, "#{slug}.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+      end
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "corpus:\n  adapter: QuickstartFetchAdapter\n  wired: true\n  sync_policy: manual\n" \
+                          "core-mod:\n  adapter: QuickstartFetchAdapter\n  wired: false\n  sync_policy: manual\n  " \
+                          "group: core\n  kind: module\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources,
+                                config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
+      yield config
+    end
+  end
+
   def test_list_axis_unknown_names_the_known_set
     with_axis_corpus do |config|
       _out, err, status = with_config(config) { run_cli(%w[list --axis nope]) }
       assert_equal 1, status
       assert_match(/unknown axis "nope"/, err)
       assert_match(/classical.*slavic.*reference/, err, "the miss names the known axes")
+      assert_match(/functional sets: core, signs, quickstart/, err,
+                   "the miss teaches the sets beside the desks (P77 rider)")
     end
   end
 

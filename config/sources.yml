@@ -3636,10 +3636,22 @@ derom:   # P56-4, 02-sources row 146
   # refresh: September 2026 (É. Buchi, №45-3) — a routine manual re-sync.
   sync_policy: manual
 
-# P77-1
+# P77-1 + P77-2
 osta:
   adapter: Nabu::Adapters::Osta
   axes: [romance]
+  siblings: ["-vrt"]   # P77-2: the verticalized lemma lane rides as -vrt
+                         # sibling documents of the same works (two
+                         # editions are two versions, never a dedupe)
+  lemma_tier: silver   # P77-2 RULING ON EVIDENCE: the archive's own
+                         # methodology paper (Gago Jover & Pueyo Mena,
+                         # "El Old Spanish Textual Archive ...:
+                         # lematización y etiquetado gramatical",
+                         # Scriptum Digital 7) documents FreeLing +
+                         # HSMS-app — AUTOMATIC lemmatization/tagging
+                         # with expanded lexical resources → silver,
+                         # the GLAUx precedent. Only the -vrt documents
+                         # carry tokens, so only they mint lemma rows.
   wired: false   # CLAUDE.md checklist §6: owner-fired first sync
                    # (bin/nabu enable osta && bin/nabu sync osta —
                    # sparse clone, ~234 MB transcriptions), eyeball
@@ -3659,9 +3671,14 @@ osta:
   # diplomatic markup verbatim, search form via the documented
   # derivation (conventions §9). Language osp for all documents (the
   # v1 one-tag practice under pending №R-30 — the works-table language
-  # column later refines). The verticalized/ lemma lane is packet
-  # 77-2; the tables/ xlsx metadata is №R-30. Young repo, one Zenodo
-  # deposit (v1.0.0) → sync_policy manual.
+  # column later refines). P77-2: the 78 verticalized/ .vrt.html
+  # lemmatized token streams ride as -vrt sibling documents whose
+  # "tokens" annotations feed the lemma index (silver — see lemma_tier
+  # above); LICENSE CAVEAT recorded: verticalized/ lives only in the
+  # GitHub repo, not the Zenodo deposit — the №45-1 reply's "our
+  # Github and Zenodo repositories" is the grant basis, same rights
+  # holder, same nc class. The tables/ xlsx metadata is №R-30. Young
+  # repo, one Zenodo deposit (v1.0.0) → sync_policy manual.
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
