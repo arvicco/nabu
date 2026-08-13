@@ -22,7 +22,9 @@ module Adapters
       assert entry.feature_module?, "a didactic instrument is a kind: module row"
       refute entry.wired, "a feature module serves no documents — wired stays false permanently"
       assert_equal "manual", entry.sync_policy, "course releases, owner-fired"
-      assert_equal %w[egyptian], entry.axes
+      assert_equal %w[egyptian cuneiform], entry.axes,
+                   "P77-8: the cuneiform lanes shipped — axes follow capability"
+      assert_equal %w[unikemet], entry.requires, "P77-r3: the Unikemet join target is a hard dep"
       assert_equal "signs", entry.group, "enable signs && sync signs restores the whole hiero card"
     end
 

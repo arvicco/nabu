@@ -1,0 +1,56 @@
+# Sign teaching-order data — Cuneiform 101 candidate set (M2-3).
+# Lives in site/_data so chapter 10 (Reference) is GENERATED from it.
+# taught_in: the 101 chapter that formally teaches the sign (null =
+# not yet taught in 101; reserved for a later course).
+#
+# Owner ruling 2026-07-29 (docs/concept.md §3.1): teaching order weighs
+# corpus FREQUENCY and graphic SIMPLICITY together; frequency alone
+# never dictates order.
+#
+# Sources & method:
+# - freq_*: rank of the sign's cited value in value-freq-etcsl.tsv /
+#   value-freq-cdli.tsv (computed by bin/sign_seq.rb from Nabu exports;
+#   corpus spellings differ — ETCSL c=š j=ŋ, CDLI ATF sz).
+# - wedges: counted by eye from the Noto Sans Cuneiform reference
+#   glyph (Neo-Assyrian standard forms) rendered at 110px; "~" marks
+#   dense signs where exact segmentation is debatable.
+# - iconicity: the commonly cited pictographic origin, per the
+#   standard accounts (Labat, Manuel d'épigraphie akkadienne; Borger,
+#   MZL; popular synthesis in Finkel & Taylor, Cuneiform, British
+#   Museum Press 2015). certainty: classic = textbook-standard;
+#   stated = commonly given but less diagnostic; unclear = origin
+#   debated, do not teach as fact.
+#
+# tier: proposed teaching wave inside ch. 04 (1 = first strokes,
+# 2 = iconic pictograph descendants, 3 = composite/complex signs
+# taught late in the course, not in ch. 04's core set).
+
+signs:
+  - glyph: "𒀸"
+    codepoint: "12038"
+    name: "AŠ"
+    keyword: "one"
+    confusable_with: ["DIŠ", "U"]
+    taught_in: 5
+    value: "aš (ash/asz)"
+    meaning: "one; single"
+    freq_etcsl: null
+    freq_cdli: 8
+    wedges: 1
+    iconicity: "the atomic horizontal wedge itself — nothing to depict"
+    certainty: classic
+    tier: 1
+  - glyph: "𒁹"
+    codepoint: "12079"
+    name: "DIŠ"
+    keyword: "tally"
+    confusable_with: ["AŠ", "U"]
+    taught_in: 5
+    value: "diš (disz)"
+    meaning: "one (counting); item marker"
+    freq_etcsl: null
+    freq_cdli: 1
+    wedges: 1
+    iconicity: "the atomic vertical wedge; the counting stroke"
+    certainty: classic
+    tier: 1

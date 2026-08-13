@@ -39,3 +39,55 @@ files:
     url: https://raw.githubusercontent.com/arvicco/nabu-edubba/main/site/hieroglyphs/addenda/signs/g43.md
     copied: 2026-08-11
     whole: true
+  - path: assets-src/data/pool-102.yml
+    refetchable: true
+    provenance: local-trim
+    reason: header + the E/GA/NIN/EŠ2 rows — covers the C102 field set incl. confusable_with, osl_name (NIN → |SAL.TUG2|) and the etcsl_value variant (P77-8)
+    url: https://raw.githubusercontent.com/arvicco/nabu-edubba/main/assets-src/data/pool-102.yml
+    copied: 2026-08-13
+    whole: false
+    trim: 4 of 54 sign rows
+  - path: assets-src/data/pool-103.yml
+    refetchable: true
+    provenance: local-trim
+    reason: header + the ŠA/U3 rows — the Akkadian course (freq_akkob, certainty unclear, U3's osl_name |IGI.DIB| = the OSL fixture join)
+    url: https://raw.githubusercontent.com/arvicco/nabu-edubba/main/assets-src/data/pool-103.yml
+    copied: 2026-08-13
+    whole: false
+    trim: 2 of 67 sign rows
+  - path: site/_data/sign_teaching.yml
+    refetchable: true
+    provenance: local-trim
+    reason: header + the AŠ/DIŠ entries — the C101 record (richest — iconicity, tier, taught_in, multi-line row shape)
+    url: https://raw.githubusercontent.com/arvicco/nabu-edubba/main/site/_data/sign_teaching.yml
+    copied: 2026-08-13
+    whole: false
+    trim: 2 of 26 sign entries
+  - path: site/cuneiform/addenda/signs/a.md
+    refetchable: true
+    provenance: local-copy
+    reason: Sumerian codex page WITHOUT a pool row in the trim (front-matter-only entry path)
+    url: https://raw.githubusercontent.com/arvicco/nabu-edubba/main/site/cuneiform/addenda/signs/a.md
+    copied: 2026-08-13
+    whole: true
+  - path: site/cuneiform/addenda/signs/nin.md
+    refetchable: true
+    provenance: local-copy
+    reason: Sumerian codex page WITH a pool row (front-matter merge + deep link)
+    url: https://raw.githubusercontent.com/arvicco/nabu-edubba/main/site/cuneiform/addenda/signs/nin.md
+    copied: 2026-08-13
+    whole: true
+  - path: site/cuneiform/addenda-akk/signs/ab.md
+    refetchable: true
+    provenance: local-copy
+    reason: Akkadian addenda codex page WITHOUT a pool row (the second dir, front-matter-only)
+    url: https://raw.githubusercontent.com/arvicco/nabu-edubba/main/site/cuneiform/addenda-akk/signs/ab.md
+    copied: 2026-08-13
+    whole: true
+  - path: site/cuneiform/addenda-akk/signs/sza.md
+    refetchable: true
+    provenance: local-copy
+    reason: Akkadian addenda codex page WITH a pool row (ŠA merge across the second dir)
+    url: https://raw.githubusercontent.com/arvicco/nabu-edubba/main/site/cuneiform/addenda-akk/signs/sza.md
+    copied: 2026-08-13
+    whole: true

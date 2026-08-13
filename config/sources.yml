@@ -3524,8 +3524,14 @@ edubba-overlay:
   kind: module   # P72-6: machinery-only — the sister school's didactic overlay, zero document rows
   requires: [unikemet]   # P77-r3: the overlay joins onto Unikemet sign entries
                    # (their gardiner = our kEH_JSesh) — without the sign spine
-                   # there is no card to overlay.
-  axes: [egyptian]
+                   # there is no card to overlay. The CUNEIFORM lanes (P77-8)
+                   # join the OSL sign card by name/osl_name instead — OSL is
+                   # a signs-group sibling, not a requires edge (the card
+                   # exists without the overlay and vice versa at load).
+  axes: [egyptian, cuneiform]   # P77-8 (Q25): the cuneiform didactic lanes
+                   # (sign_teaching.yml + pool-102/103 + both addenda codex
+                   # dirs) now extract and render on the OSL sign card —
+                   # axes follow capability.
   wired: false   # PERMANENTLY false — the osl/unikemet module invariant.
                    # Nabu::EdubbaOverlay reads assets-src/data/hiero-10*.yml +
                    # site/hieroglyphs/addenda/signs/*.md from the synced repo
