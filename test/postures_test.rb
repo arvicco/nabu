@@ -153,18 +153,19 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 57, lect.size,
+    assert_equal 55, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3, " \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
-                 "titus-avestan retired P66-1 — each when a machine grain took over: the " \
-                 "shadowing rule, working; osta ADDED P77-1, disco P77-4, fornsvenska P77-6)"
+                 "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8 — each when a " \
+                 "machine grain took over: the shadowing rule, working; disco ADDED P77-4)"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
-    # pending (titus-avestan) retired. The pending class RETURNS with
-    # fornsvenska (P77-6): a NAMED stage rule (fornsvenska → sv:old)
-    # awaiting its owner ruling №R-32 — a real refinement in flight, not
-    # a parked silence; osta/disco joined as identity (the one-tag
-    # practice).
-    assert_equal({ "identity" => 42, "dates" => 10, "codemap" => 4, "pending" => 1 }, by_posture)
+    # pending (titus-avestan) retired. P77-6 briefly returned the pending
+    # class (fornsvenska → sv:old awaiting №R-32); P77-r8 retired it the
+    # same phase — the ruling landed, nabu-lects PR #4 minted sv:old, and
+    # the fsv-old rule (plus osta's lengua pair over the PR #3 ast/an
+    # mints) machine-postures both sources. Zero pendings again; disco
+    # joined as identity (the one-tag practice).
+    assert_equal({ "identity" => 41, "dates" => 10, "codemap" => 4 }, by_posture)
   end
 end
