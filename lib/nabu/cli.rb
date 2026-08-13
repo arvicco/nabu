@@ -858,11 +858,17 @@ module Nabu
       syncs. `--axis a,b` selects several axes and prints one group each, in
       order. `--all` is a flat batch (enabled + live sources), never grouped.
 
-      CORE rides first (P77 rider, owner ruling 2026-08-13): core is the
-      minimum set a new install carries — on the box's first real sync
-      request, any never-synced core member (the registry instruments)
-      syncs automatically before the requested work. --parse-only never
-      triggers it; `nabu sync core` re-runs the sweep explicitly.
+      PREREQUISITES ride first (P77 riders, owner rulings 2026-08-13):
+      core is the minimum set a new install carries — on the box's first
+      real sync request, any never-synced core member (the registry
+      instruments) syncs automatically before the requested work. The
+      same sweep covers the requested source's `requires:` chain (the
+      package-manager rule: sources.yml declares hard functional
+      dependencies — nabu-places needs its three gazetteers — and
+      syncing a dependent syncs its never-synced requirements first;
+      `nabu status <slug>` shows requires/needed-by). --parse-only never
+      triggers either; `nabu sync core` (or the member by name) re-runs
+      a sweep explicitly.
 
       Examples:
         nabu sync sblgnt          # one source (explicit; disabled syncs anyway)
@@ -4854,6 +4860,17 @@ module Nabu
         end
         individual = (resolution.sources - shown).sort
         groups << ["sources", individual] unless individual.empty?
+        shown += individual
+        # The chain-pulled remainder (P77-r3): slugs in the resolution only
+        # because something above requires them, each named with its
+        # dependents — the package-manager provenance.
+        required = (resolution.slugs - shown).reject { |slug| registry[slug]&.shelf? }.sort
+        unless required.empty?
+          labeled = required.map do |slug|
+            "#{slug} (by #{(registry.required_by(slug) & resolution.slugs).join(', ')})"
+          end
+          groups << ["required", labeled]
+        end
         groups
       end
 
@@ -8915,29 +8932,38 @@ module Nabu
       # install carries — auto-enabled by nature (modules are exempt from
       # the enablement gate) and AUTO-SYNCED on the box's first real sync
       # request: any core member without a sources row yet syncs first,
-      # riding the requested sync. --parse-only never acquires; an explicit
-      # `sync core` (or a core member by name) IS the sweep already; a
-      # member that once synced never re-rides (its row exists — `nabu
-      # sync core` is the explicit re-run). Failures are contained so the
-      # requested sync still runs.
+      # riding the requested sync. P77-r3 extends the same sweep to the
+      # requested source's `requires:` chain (the package-manager rule:
+      # syncing a dependent syncs its never-synced requirements first).
+      # --parse-only never acquires; an explicit `sync core` (or a core
+      # member by name) IS the sweep already; a member that once synced
+      # never re-rides (its row exists — `nabu sync core` is the explicit
+      # re-run). Failures (and ManualDrop acquisition cards) are contained
+      # so the requested sync still runs.
       def auto_sync_core!(runner, registry, slug, db)
         return if options[:parse_only]
 
         members = registry.core_members
-        return if members.empty? || slug == "core" || members.include?(slug)
-
-        missing = members - synced_core_slugs(db, members)
+        chain = slug && registry[slug] ? registry.requires_closure([slug]) - [slug] : []
+        # A request that IS the core sweep (the group, or a member by name)
+        # never re-triggers it — but the member's own chain still rides.
+        core_wanted = slug == "core" || members.include?(slug) ? [] : members
+        needed = (core_wanted + chain).uniq - [slug]
+        missing = needed - synced_slugs(db, needed)
         return if missing.empty?
 
-        say "core set first (new install; owner ruling 2026-08-13): #{missing.join(' · ')}"
+        core_missing = missing & core_wanted
+        chain_missing = missing - core_wanted
+        say "core set first (owner ruling 2026-08-13): #{core_missing.join(' · ')}" unless core_missing.empty?
+        say "required by #{slug} (the dependency chain): #{chain_missing.join(' · ')}" unless chain_missing.empty?
         failures = run_core_syncs(runner, registry, members: missing)
         return if failures.empty?
 
-        warn "core auto-sync: #{failures.map(&:first).join(', ')} failed — " \
-             "`nabu sync core` re-runs the sweep; continuing with the requested sync"
+        warn "prerequisite auto-sync: #{failures.map(&:first).join(', ')} failed — " \
+             "continuing with the requested sync (`nabu sync core` / the member by name re-runs it)"
       end
 
-      def synced_core_slugs(db, members)
+      def synced_slugs(db, members)
         return [] unless db&.table_exists?(:sources)
 
         db[:sources].where(slug: members).select_map(:slug)

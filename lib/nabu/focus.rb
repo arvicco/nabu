@@ -90,6 +90,11 @@ module Nabu
       # so no footer/hint ever claims a shelf is "not enabled".
       shelf_slugs = registry.each_source.select(&:shelf?).map(&:slug)
       slugs = (axes.flat_map { |name| registry.public_axis_members(name) } + sources + shelf_slugs).uniq
+      # The dependency chain (P77-r3): the enabled set CLOSES over
+      # `requires:` — enabling a source enables everything it functionally
+      # depends on, transitively (the package-manager rule). Disabling the
+      # dependent drops the chain with it unless something else covers it.
+      slugs = registry.requires_closure(slugs)
       Resolution.new(axes: axes, sources: sources, unknown: unknown, slugs: slugs)
     end
 

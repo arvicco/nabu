@@ -1627,12 +1627,15 @@ class CLITest < Minitest::Test
     with_provenance_corpus do |config|
       out, = with_config(config) { run_cli(%w[enable lex]) }
       assert_match(/^enabled: lex/, out)
-      assert_match(/^enabled \(3 entries → 3 distinct sources\):/, out)
+      assert_match(/^enabled \(3 entries → 4 distinct sources\):/, out,
+                   "the union counts the chain-pulled requirement too")
       assert_match(/^  core \(enabled by default\): core-mod/, out,
                    "core shows under its own heading even with no profile entry")
       assert_match(/^  slavic \(axis\): lex/, out, "an axis entry lists the members it enables")
       assert_match(/^  sources: solo/, out, "the individual remainder — already-covered members excluded")
       refute_match(/^  sources: .*lex/, out, "lex appears once, under its covering axis")
+      assert_match(/^  required: dep-mod \(by lex\)/, out,
+                   "a chain-pulled requirement names its dependents — the package-manager provenance")
     end
   end
 
@@ -1650,7 +1653,9 @@ class CLITest < Minitest::Test
       File.write(sources, "core-mod:\n  adapter: TestAdapter\n  wired: false\n  sync_policy: manual\n  " \
                           "group: core\n  kind: module\n  axes: [classical]\n" \
                           "lex:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n  " \
-                          "axes: [slavic]\n" \
+                          "axes: [slavic]\n  requires: [dep-mod]\n" \
+                          "dep-mod:\n  adapter: TestAdapter\n  wired: false\n  sync_policy: manual\n  " \
+                          "kind: module\n  axes: [classical]\n" \
                           "solo:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n  " \
                           "axes: [classical]\n")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
@@ -1693,27 +1698,33 @@ class CLITest < Minitest::Test
 
       out, _err, st = with_config(config) { run_cli(%w[sync corpus]) }
       assert_nil st
-      assert_match(/core set first \(new install.*core-mod/, out)
+      assert_match(/core set first .*core-mod/, out)
+      assert_match(/required by corpus \(the dependency chain\): gaz-mod/, out,
+                   "the requested source's never-synced requirements sweep first — P77-r3")
       assert_match(/core-mod\s/, out, "the missing core member synced before the request")
 
       out, _err, st = with_config(config) { run_cli(%w[sync corpus]) }
       assert_nil st
       refute_match(/core set first/, out, "a synced core member never re-rides — " \
                                           "`nabu sync core` is the explicit re-run")
+      refute_match(/dependency chain/, out, "a synced requirement never re-rides either")
     end
   end
 
   def with_auto_core_corpus
     Dir.mktmpdir("nabu-cli-autocore") do |root|
-      %w[corpus core-mod].each do |slug|
+      %w[corpus core-mod gaz-mod].each do |slug|
         dir = File.join(root, "canonical", slug)
         FileUtils.mkdir_p(dir)
         File.write(File.join(dir, "#{slug}.txt"), "Iliad\nμῆνιν\nἄειδε\n")
       end
       sources = File.join(root, "sources.yml")
-      File.write(sources, "corpus:\n  adapter: QuickstartFetchAdapter\n  wired: true\n  sync_policy: manual\n" \
+      File.write(sources, "corpus:\n  adapter: QuickstartFetchAdapter\n  wired: true\n  sync_policy: manual\n  " \
+                          "requires: [gaz-mod]\n" \
                           "core-mod:\n  adapter: QuickstartFetchAdapter\n  wired: false\n  sync_policy: manual\n  " \
-                          "group: core\n  kind: module\n")
+                          "group: core\n  kind: module\n" \
+                          "gaz-mod:\n  adapter: QuickstartFetchAdapter\n  wired: false\n  sync_policy: manual\n  " \
+                          "kind: module\n")
       config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
                                 sources_path: sources,
                                 config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
