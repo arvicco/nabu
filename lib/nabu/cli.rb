@@ -4816,21 +4816,45 @@ module Nabu
         show_enablement(effective_profile(config, registry, catalog: catalog), registry)
       end
 
-      # The current enabled set: axes vs sources distinguished, drift flagged,
-      # and the resolved source count — or the honest empty-state.
+      # The current enabled set, grouped by PROVENANCE (P77-r2, owner report
+      # 2026-08-13): core first (the auto-enabled default — shown even when
+      # no profile entry names it), then each profile axis entry with the
+      # members it pulls in, then the individually enabled remainder. Every
+      # source is listed ONCE, under the first provenance that covers it,
+      # and the headline count is the DEDUPED UNION of all of them — never
+      # the raw entry count alone (a single axis entry covers many sources).
       def show_enablement(profile, registry)
         resolution = Nabu::Focus.resolve(profile, registry)
         return say(Nabu::Focus.empty_state_line) if resolution.slugs.empty?
 
-        count = profile.entries.size
-        say "enabled (#{count} #{count == 1 ? 'entry' : 'entries'}):"
-        say "  axes:    #{resolution.axes.join(', ')}" unless resolution.axes.empty?
-        say "  sources: #{resolution.sources.join(', ')}" unless resolution.sources.empty?
+        groups = enablement_groups(registry, resolution)
+        entries = profile.entries.size
+        total = groups.sum { |_label, members| members.size }
+        say "enabled (#{entries} #{entries == 1 ? 'entry' : 'entries'} → #{total} distinct sources):"
+        groups.each { |label, members| say "  #{label}: #{members.join(', ')}" }
         unless resolution.unknown.empty?
           say "  unknown: #{resolution.unknown.join(', ')} (not a known axis or source — ignored)"
         end
         shown = resolution.slugs.count { |slug| !registry[slug]&.feature_module? }
         say "resolved: #{pluralize(shown, 'source')} enabled (nabu status shows them; --all shows everything)"
+      end
+
+      def enablement_groups(registry, resolution)
+        groups = []
+        shown = []
+        core = registry.core_members
+        unless core.empty?
+          groups << ["core (enabled by default)", core.sort]
+          shown += core
+        end
+        resolution.axes.each do |axis|
+          members = (registry.axis_members(axis) - shown).sort
+          groups << ["#{axis} (axis)", members] unless members.empty?
+          shown += members
+        end
+        individual = (resolution.sources - shown).sort
+        groups << ["sources", individual] unless individual.empty?
+        groups
       end
 
       def selected_axes(axis_registry, registry)
@@ -4880,6 +4904,7 @@ module Nabu
 
         width = rows.map { |row| row.slug.length }.max
         say AXIS_TAG_NOTE
+        shown = {}
         axes.each do |axis|
           say ""
           say "#{axis.name} — #{axis.persona}"
@@ -4887,11 +4912,18 @@ module Nabu
           if members.empty?
             say "  (nothing held on this axis yet)"
           else
-            members.each { |row| say "  #{row.slug.ljust(width)}  #{census_fragments(row).join('  ')}" }
+            members.each do |row|
+              say "  #{row.slug.ljust(width)}  #{census_fragments(row).join('  ')}"
+              shown[row.slug] = row
+            end
           end
         end
         say ""
-        say census_summary(rows)
+        # The summary is the DEDUPED UNION of the sources actually shown
+        # under the selected axes/sets (P77-r2, owner report 2026-08-13) —
+        # never the whole-library aggregate a scoped view didn't display.
+        # A source on two selected desks counts once (tags, not folders).
+        say census_summary(shown.values)
       end
 
       # Compact census fragments, zero fields suppressed (conventions §10).
