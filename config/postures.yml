@@ -356,11 +356,9 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   fornsvenska:
-    lect: {posture: pending, note: "№R-32 RULED 2026-08-13 (option a, the
-        whole-source sv:old rule) — blocked on the nabu-lects sv mint (no sv
-        anchor in the registry yet; formulated as nabu-lects PR #4). The
-        adapter already emits the part facet the rule will match; bare sv
-        until the mint + rule land (queue: Q26 fsv-old-rule)"}
+    # lect declaration retired P77-r8: the fsv-old rule (№R-32, the sv:old
+    # whole-source claim) machine-postures fornsvenska now (the shadowing
+    # rule; nabu-lects PR #4 minted the target).
     dating: {posture: pending, note: "candidate: upstream's own per-text
         date/datefrom/dateto attrs, riding document metadata verbatim — the
         extractor is a small future packet over real synced data"}
@@ -377,11 +375,11 @@ sources:
         composition place — rides metadata verbatim"}
     script: {posture: implied}
   osta:
-    lect: {posture: identity, note: "P77-r6 (№R-30 ruled 2026-08-13): per-document
-        codes from the works table — osp/ast/roa-opt/arg/lat via
-        OstaTables::LENGUA_CODES (majority over the codex's works; raw lengua
-        values ride works metadata + the 'lengua' facet). Each code is an
-        identity claim; a finer stage rule would hang off the facet"}
+    # lect declaration retired P77-r8: the osta-leones/osta-aragones lengua
+    # rules machine-posture osta now (the shadowing rule; nabu-lects PR #3
+    # minted ast:old/an:old). The castellano/gallego/latín majority rides
+    # bare-anchor identity codes (osp/roa-opt/lat) from the works table
+    # (P77-r6, №R-30 — OstaTables::LENGUA_CODES, majority per codex).
     dating: {posture: pending, note: "candidate: the works-table OPDT (per work)
         and codex SPDT (per copy) date texts, riding metadata verbatim since
         P77-r6 ('1252 a quo', '1510 ca. ad quem' — upstream text); the
