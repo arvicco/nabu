@@ -152,3 +152,7 @@ files:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Romanian-Nonstandard/master/ro_nonstandard-ud-test.conllu
     whole: false
     trim: first 50 complete sentence blocks of ro_nonstandard-ud-test.conllu (1,052 blocks upstream — Alba Iulia New Testament 1648; a bare no-`=` comment line `# ro_nonstandard-ud-test` opens the file and `# citation-part=…` comments ride the blocks, both ignored by the parser; no MWT/empty-node lines in the head; Old Romanian under UD's one `ro` tag, P45-1)
+  - path: italian-old/it_old-ud-test-head50.conllu
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Italian-Old/master/it_old-ud-test.conllu
+    whole: false
+    trim: first 50 complete sentence blocks of it_old-ud-test.conllu (the Commedia, Petrocchi 1994 via DanteSearch; opens mid-Inferno at sent OldItalian_Dante_Inferno-1110; MISC carries Canto=/Verso=/UniqueTokenId per token; no MWT/empty-node lines in the head; Old Italian under UD's one `it` tag, P77-3)

@@ -32,6 +32,7 @@ class UniversalDependenciesTest < Minitest::Test
     "urn:nabu:ud:hebrew-ptnk:hbo_ptnk-ud-test-head50",
     "urn:nabu:ud:hittite-hittb:hit_hittb-ud-test-head50",
     "urn:nabu:ud:icelandic-icepahc:is_icepahc-ud-dev-head50",
+    "urn:nabu:ud:italian-old:it_old-ud-test-head50",
     "urn:nabu:ud:latin-ittb:la_ittb-ud-test-head50+mwt",
     "urn:nabu:ud:latin-llct:la_llct-ud-test-head50",
     "urn:nabu:ud:latin-perseus:la_perseus-ud-test-head50",
@@ -362,6 +363,28 @@ class UniversalDependenciesTest < Minitest::Test
     assert_equal "nc", Nabu::Adapters::UniversalDependencies.manifest.license_class
   end
 
+  # P77-3: Old Italian — the Commedia treebank (romance2 survey; license
+  # verified 2026-08-13, BY-SA both grants, no fork). UD's one-tag
+  # practice files it under `it` (recorded on the entry).
+  def test_p77_italian_old_registers_and_round_trips
+    entry = Nabu::Adapters::UniversalDependencies::TREEBANKS.fetch("italian-old")
+    assert_equal "https://github.com/UniversalDependencies/UD_Italian-Old", entry[:repo]
+    assert_equal "it", entry[:language]
+    assert_equal "attribution", entry[:license_class]
+    assert_equal "CC BY-SA 4.0", entry[:license]
+
+    adapter = Nabu::Adapters::UniversalDependencies.new
+    ref = adapter.discover(FIXTURES).find { |r| r.metadata["treebank"] == "italian-old" }
+    refute_nil ref, "the italian-old fixture must be discovered"
+    document = adapter.parse(ref)
+    assert_equal 50, document.size, "50 sentence blocks"
+    assert_equal "it", document.language
+    assert_equal "attribution", document.license_override
+    opening = document.passages.first
+    assert_equal "#{document.urn}:OldItalian_Dante_Inferno-1110", opening.urn
+    assert_includes opening.text, "Tizio"
+  end
+
   # The Romance pack flows through the same unchanged annotation→index
   # plumbing: the two Latin treebanks contribute rows to the ALREADY
   # lemma-indexed lat lane (filtered by urn — latin-ittb/latin-perseus also
@@ -487,7 +510,7 @@ class UniversalDependenciesTest < Minitest::Test
 
   # --- discover -----------------------------------------------------------
 
-  def test_discover_finds_exactly_thirty_files_sorted_by_urn
+  def test_discover_finds_exactly_thirty_one_files_sorted_by_urn
     refs = Nabu::Adapters::UniversalDependencies.new.discover(FIXTURES).to_a
     assert_equal EXPECTED_URNS, refs.map(&:id)
   end
@@ -857,17 +880,14 @@ class UniversalDependenciesTest < Minitest::Test
       adapter = ud_pointing_at(upstreams)
       adapter.fetch(workdir)
 
-      # First repo gains a file; the LAST SIX repos each lose their only
-      # treebank file (6 of #{slugs.size} ingestible files = 20.7% > 20% →
-      # trip; 6 is STILL the minimum tripping count at twenty-nine treebanks
-      # — five deletions are 5/#{slugs.size} = 17.2%, BELOW the breaker
-      # (the guard trips on strictly greater, `doomed > 0.2 × ingestible`),
-      # so 5 does NOT trip now that the P45-1 Romance pack grew the set to
-      # twenty-nine. Re-derived, not weakened: 6 > 0.2 × 29 = 5.8 holds —
-      # just barely; a THIRTIETH treebank pushes the minimum to 7 —
-      # 5 > 5.8 does not).
+      # First repo gains a file; the LAST SEVEN repos each lose their only
+      # treebank file. Re-derived at THIRTY treebanks (P77-3 italian-old,
+      # exactly as the previous derivation predicted — "a THIRTIETH
+      # treebank pushes the minimum to 7"): the guard trips on strictly
+      # greater, `doomed > 0.2 × ingestible`, so 7 > 0.2 × 30 = 6 trips
+      # while 6 does not — 7 is the new minimum tripping count.
       first = slugs.first
-      doomed = slugs.last(6)
+      doomed = slugs.last(7)
       File.write(File.join(upstreams[first], "new.txt"), "new\n")
       git(upstreams[first], "add", ".")
       git(upstreams[first], "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "grow")
@@ -885,7 +905,7 @@ class UniversalDependenciesTest < Minitest::Test
       refute Dir.exist?(File.join(workdir, ".attic"))
 
       report = adapter.fetch(workdir, force: true)
-      assert_includes report.notes, "atticked 6"
+      assert_includes report.notes, "atticked 7"
       doomed.each do |slug|
         assert File.file?(File.join(workdir, ".attic", slug, "#{slug}.conllu")),
                "the attic preserves the <treebank>/<file> shape discover expects"

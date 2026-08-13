@@ -247,6 +247,16 @@ ud:
   # axes are validated against config/axes.yml at load (SourceRegistry
   # raises on an unknown name), so the axis mint packet must add `romance`
   # to axes.yml AND to this row's axes list in the same change.
+  # P77-3 (2026-08-13): TREEBANKS grew to THIRTY — italian-old
+  # (UD_Italian-Old): the full Commedia (Petrocchi 1994 via DanteSearch,
+  # CIRCSE conversion), 3,419 sentences / 122,038 words, all three
+  # splits; LICENSE.txt verbatim BY-SA 4.0 + README agrees (verified
+  # 2026-08-13, no fork) → per-document `attribution` override; language
+  # `it` (UD's one-tag practice — no ISO Old Italian code; the lect
+  # posture claims it:old). Old Italian enters while OVI/TLIO stays
+  # walled (romance2 survey). EXPECTED SYNC DELTA at the next owner-fired
+  # `bin/nabu sync ud`: +1 repo clone / +3 docs / +3,419 passages; `it`
+  # enters the lemma-indexed languages (~122k token rows), first occupant.
 
 proiel:
   adapter: Nabu::Adapters::Proiel
