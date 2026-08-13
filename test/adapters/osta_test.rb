@@ -150,8 +150,10 @@ module Adapters
       assert_equal %w[narrativa romancero glosa], work["materias"]
       assert_nil document.metadata["codex"],
                  "RHJ has no tabla-codices row — an absent codex stays honestly absent"
-      assert_equal({ "lengua" => "castellano" }, document.metadata["facets"],
-                   "the raw lengua rides as a facet — the Coptic-dialect precedent, the future lect hook")
+      assert_equal({ "lengua" => { "value" => "castellano" } }, document.metadata["facets"],
+                   "the raw lengua rides as a facet in the FacetBuilder value shape — the " \
+                   "Coptic-dialect precedent; a bare string is silently skipped by insert_facets " \
+                   "(the live-sync lesson)")
     end
 
     def test_documents_with_a_codex_row_carry_it
