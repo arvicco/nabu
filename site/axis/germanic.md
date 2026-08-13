@@ -26,7 +26,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 August 2026)</span> |
 |---|---|---|---|---|
@@ -40,6 +40,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `rundata` | inscriptions | odbl | wired · manual | 30,643 docs / 30,641 passages |
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 | `ren` | texts | attribution | wired · manual | 235 docs / 297,504 passages |
+| `fornsvenska` | texts | attribution | not yet wired | not synced yet |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 August 2026)</span>: `ang` 63,169 · `non` 19,623 · `eng` 6,812 · `swe` 3,393 · `gmq-pro` 822 · `gmh` 406 · `gml` 235 · `lat` 17 · `grc` 12 · `orv` 9 … and 17 more (`nabu axis germanic` lists all).
 
