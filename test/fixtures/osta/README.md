@@ -29,3 +29,10 @@ data — the license anchor: CC BY-NC-SA 4.0, per the record and the
   witnesses.
 
 Per-text citation identifiers follow the №45-1 ruling: TEXT.xxx.txt.
+
+P77-r7 (the first-sync hardening, 2026-08-13) added three real-cut
+witnesses from the live corpus: `TEXT.ACE.txt` (the `{MIN=.}` =-tag
+family — 100 files quarantined on it), `TEXT.ALC.txt` (deliberately
+brace-unbalanced: the batched `}}` folio close + an EOF-open `{CB1.`
+— the brace_defects census), `TEXT.BQ1.vrt.html` (upstream tokenizes
+its own unescaped `<GRK` markup — the HTML4 tag-soup crash).
