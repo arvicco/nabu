@@ -183,7 +183,7 @@ module Nabu
         codex = tables.codex(siglum)
         extra["codex"] = codex if codex
         lengua = tables.primary_lengua(siglum)
-        extra["facets"] = { "lengua" => lengua } if lengua
+        extra["facets"] = { "lengua" => { "value" => lengua } } if lengua
       end
 
       def transcription_refs(workdir)
