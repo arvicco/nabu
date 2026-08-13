@@ -356,9 +356,11 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   fornsvenska:
-    lect: {posture: pending, note: "candidate: a fornsvenska -> sv:old stage
-        rule in config/lect_facet_rules.yml — №R-32 (register); bare sv until
-        the ruling lands (Old Swedish has no ISO code, the IcePaHC precedent)"}
+    lect: {posture: pending, note: "№R-32 RULED 2026-08-13 (option a, the
+        whole-source sv:old rule) — blocked on the nabu-lects sv mint (no sv
+        anchor in the registry yet; request in the sibling's inbox
+        2026-08-13). The adapter already emits the part facet the rule will
+        match; bare sv until the mint + rule land (queue: fsv-old-rule)"}
     dating: {posture: pending, note: "candidate: upstream's own per-text
         date/datefrom/dateto attrs, riding document metadata verbatim — the
         extractor is a small future packet over real synced data"}
@@ -375,14 +377,15 @@ sources:
         composition place — rides metadata verbatim"}
     script: {posture: implied}
   osta:
-    lect: {posture: identity, note: "P77-1: bare osp is the honest v1 claim — the
-        archive's Asturian/Leonese/Navarro-Aragonese layers ride under it until
-        the №R-30 works-table language lane lands (a machine grain then takes
-        over and this row retires)"}
-    dating: {posture: pending, note: "candidate: the header RMK date/edition slot
-        (empty '.' in both fixtures — census the 663 at first sync) + the
-        tables/ works metadata (№R-30); no extractor on an uninspected format,
-        the isicily discipline"}
+    lect: {posture: identity, note: "P77-r6 (№R-30 ruled 2026-08-13): per-document
+        codes from the works table — osp/ast/roa-opt/arg/lat via
+        OstaTables::LENGUA_CODES (majority over the codex's works; raw lengua
+        values ride works metadata + the 'lengua' facet). Each code is an
+        identity claim; a finer stage rule would hang off the facet"}
+    dating: {posture: pending, note: "candidate: the works-table OPDT (per work)
+        and codex SPDT (per copy) date texts, riding metadata verbatim since
+        P77-r6 ('1252 a quo', '1510 ca. ad quem' — upstream text); the
+        timeline extractor over that vocabulary is the future packet"}
     places: {posture: unplaced, note: "the header repository line (City | Library |
         Shelfmark) is a holding-library fact, not a composition place — it rides
         document metadata verbatim"}

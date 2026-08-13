@@ -19,4 +19,13 @@ data — the license anchor: CC BY-NC-SA 4.0, per the record and the
   `<CB2>`/`<LN id>` structure, `<ABB>`/`<SUP>` display marks,
   contraction composites (`del•de·el•SPS00·DA0MS0`).
 
+- `tables/tabla-obras.xlsx` + `tables/tabla-codices.xlsx` (P77-r6,
+  №R-30) — the real works/codices tables TRIMMED to six sigla
+  (RHJ, DAC, AC2, FNG, FJZ, PN2): kept row XML verbatim, sharedStrings
+  and all structure byte-identical, non-data sheets cut to their header
+  rows, re-zipped with Info-ZIP. FNG carries the castellano/aragonés/
+  navarro mixed-language tie, FJZ the leonés minority, PN2 the 17-work
+  cancionero; RHJ and AC2 have no codex row upstream — the absent-codex
+  witnesses.
+
 Per-text citation identifiers follow the №45-1 ruling: TEXT.xxx.txt.

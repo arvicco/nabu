@@ -153,7 +153,10 @@ module Nabu
       end
 
       def metadata(document_ref, text)
-        meta = { "part" => document_ref.metadata.fetch("part") }
+        part = document_ref.metadata.fetch("part")
+        # The part rides as a facet too — the №R-32 whole-source sv:old
+        # rule matches on it once nabu-lects mints the sv anchor.
+        meta = { "part" => part, "facets" => { "part" => part } }
         meta["date"] = text.date if text.date
         meta["datefrom"] = text.datefrom if text.datefrom
         meta["dateto"] = text.dateto if text.dateto
