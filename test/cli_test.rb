@@ -1607,6 +1607,60 @@ class CLITest < Minitest::Test
 
   # An unknown axis is a clean error naming the known set — the resolution
   # guarantee (never a silent empty group).
+  # P77-r2 (owner report 2026-08-13): a scoped axis view's summary is the
+  # DEDUPED UNION of the sources it displayed — never the whole-library
+  # aggregate. `--axis slavic` shows 2 of the rig's 3 held sources, so the
+  # footer says 2.
+  def test_list_axis_footer_counts_only_the_union_of_shown_sources
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list --axis slavic]) }
+      assert_nil status
+      assert_match(/^2 sources · /, out, "the footer aggregates the scoped view, not the library")
+    end
+  end
+
+  # P77-r2: the enablement printout groups by PROVENANCE — core (enabled by
+  # default, even with no profile entry) first, then each axis entry with
+  # the members it pulls in, then the individually enabled remainder; every
+  # source once, and the headline count is the deduped union.
+  def test_enablement_printout_groups_by_provenance_with_a_union_count
+    with_provenance_corpus do |config|
+      out, = with_config(config) { run_cli(%w[enable lex]) }
+      assert_match(/^enabled: lex/, out)
+      assert_match(/^enabled \(3 entries → 3 distinct sources\):/, out)
+      assert_match(/^  core \(enabled by default\): core-mod/, out,
+                   "core shows under its own heading even with no profile entry")
+      assert_match(/^  slavic \(axis\): lex/, out, "an axis entry lists the members it enables")
+      assert_match(/^  sources: solo/, out, "the individual remainder — already-covered members excluded")
+      refute_match(/^  sources: .*lex/, out, "lex appears once, under its covering axis")
+    end
+  end
+
+  def with_provenance_corpus
+    Dir.mktmpdir("nabu-cli-provenance") do |root|
+      File.write(File.join(root, "axes.yml"), <<~YAML)
+        classical:
+          persona: "The Classicist."
+          desc: "test desk"
+        slavic:
+          persona: "The Slavicist."
+          desc: "test desk"
+      YAML
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "core-mod:\n  adapter: TestAdapter\n  wired: false\n  sync_policy: manual\n  " \
+                          "group: core\n  kind: module\n  axes: [classical]\n" \
+                          "lex:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n  " \
+                          "axes: [slavic]\n" \
+                          "solo:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n  " \
+                          "axes: [classical]\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources,
+                                config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
+      Nabu::Profile.new(%w[slavic solo]).save(config.profile_path)
+      yield config
+    end
+  end
+
   # P77 rider (owner ruling 2026-08-13): the functional sets — core, signs,
   # quickstart — resolve wherever --axis takes a name (an axis is a tag over
   # the source list; the sets are the same kind of tag, minus the persona).
@@ -1704,7 +1758,8 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[focus]) }
       assert_nil status
       assert_match(%r{focus is now enable/disable}, out)
-      assert_match(/enabled \(3 entries\)/, out)
+      assert_match(/enabled \(3 entries → 3 distinct sources\)/, out,
+                   "P77-r2: the headline carries the deduped union count")
       assert_match(/sources:.*lex.*library.*shelf/, out)
     end
   end
