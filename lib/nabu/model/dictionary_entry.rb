@@ -61,11 +61,14 @@ module Nabu
   #   content identity): the loader aggregates it into the language_names
   #   census, which is what `nabu language` reads.
   DictionaryReflex = Data.define(:lang_code, :language, :word, :roman,
-                                 :word_folded, :roman_folded, :borrowed, :lang_name) do
+                                 :word_folded, :roman_folded, :borrowed, :uncertain, :lang_name) do
     def initialize(lang_code:, word:, language: nil, roman: nil, word_folded: nil,
-                   roman_folded: nil, borrowed: false, lang_name: nil)
+                   roman_folded: nil, borrowed: false, uncertain: false, lang_name: nil)
       unless [true, false].include?(borrowed)
         raise ValidationError, "borrowed must be true or false (parser-minted reflexes are never NULL)"
+      end
+      unless [true, false].include?(uncertain)
+        raise ValidationError, "uncertain must be true or false (parser-minted reflexes are never NULL)"
       end
 
       super(
@@ -76,6 +79,7 @@ module Nabu
         word_folded: word_folded.nil? ? nil : Model::Validation.nfc_text!(word_folded, field: "word_folded"),
         roman_folded: roman_folded.nil? ? nil : Model::Validation.nfc_text!(roman_folded, field: "roman_folded"),
         borrowed: borrowed,
+        uncertain: uncertain,
         lang_name: lang_name.nil? ? nil : Model::Validation.nfc_text!(lang_name, field: "lang_name")
       )
     end

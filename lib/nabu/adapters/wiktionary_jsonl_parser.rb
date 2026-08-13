@@ -226,6 +226,7 @@ module Nabu
           word_folded: reflex_fold(word, language),
           roman_folded: roman && reflex_fold(roman, language),
           borrowed: borrowed?(node),
+          uncertain: uncertain?(node),
           # P18-4: the node's human language name, verbatim (the census raw
           # material — "Cyrillic script" wrapper noise included; the read
           # side filters). Feeds the language_names census, never the hash.
@@ -244,6 +245,17 @@ module Nabu
       def borrowed?(node)
         (Array(node["tags"]) + Array(node["raw_tags"])).any? do |tag|
           tag.to_s.match?(/borrow/i)
+        end
+      end
+
+      # The doubt marker (P76 U-6, survey E1): the bare `uncertain` tag in
+      # tags/raw_tags — exact word, not a substring hunt (free-text hedges
+      # like "possibly …" stay false; the doctrine maps only genuine doubt
+      # words). true/false only, like borrowed?; NULL in the stored column
+      # means "predates this parser" (migration 029).
+      def uncertain?(node)
+        (Array(node["tags"]) + Array(node["raw_tags"])).any? do |tag|
+          tag.to_s.strip.casecmp?("uncertain")
         end
       end
 
