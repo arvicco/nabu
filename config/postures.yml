@@ -355,6 +355,19 @@ sources:
     dating: {posture: partial}
     places: {posture: unplaced}
     script: {posture: implied}
+  osta:
+    lect: {posture: identity, note: "P77-1: bare osp is the honest v1 claim — the
+        archive's Asturian/Leonese/Navarro-Aragonese layers ride under it until
+        the №R-30 works-table language lane lands (a machine grain then takes
+        over and this row retires)"}
+    dating: {posture: pending, note: "candidate: the header RMK date/edition slot
+        (empty '.' in both fixtures — census the 663 at first sync) + the
+        tables/ works metadata (№R-30); no extractor on an uninspected format,
+        the isicily discipline"}
+    places: {posture: unplaced, note: "the header repository line (City | Library |
+        Shelfmark) is a holding-library fact, not a composition place — it rides
+        document metadata verbatim"}
+    script: {posture: implied}
 
   # ── P61-1: sources whose lect posture is MACHINE grain (rules/
   # overrides files) — no lect key here by the single-source-of-truth
