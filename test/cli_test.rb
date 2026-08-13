@@ -2177,6 +2177,40 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- P77-r5: enabled-but-unsynced members must not vanish ------------------
+
+  def test_list_axis_lists_an_enabled_but_unsynced_member_as_unsynced
+    with_axis_corpus(unsynced: true) do |config|
+      write_profile(config, "classical") # enables shelf AND newbie; newbie never synced
+      out, err, status = with_config(config) { run_cli(%w[list --axis classical]) }
+      assert_nil status
+      assert_match(/^  shelf\s+docs=2/, out, "the synced member still renders its census row")
+      assert_match(/1 member enabled, not yet synced — nabu sync newbie/, err,
+                   "enabled-but-unsynced is a state, not an absence — it gets its own clause")
+      refute_match(/not enabled/, err, "newbie is enabled — the enable hint stays silent")
+    end
+  end
+
+  def test_list_named_enabled_but_unsynced_source_teaches_the_sync_on_ramp
+    with_axis_corpus(unsynced: true) do |config|
+      write_profile(config, "classical")
+      _out, err, status = with_config(config) { run_cli(%w[list newbie]) }
+      assert_equal 1, status
+      assert_match(/newbie is registered and enabled but not yet synced — run nabu sync newbie/, err)
+      refute_match(/unknown source/, err, "a registered source is never 'unknown'")
+    end
+  end
+
+  def test_list_named_registered_but_unenabled_source_teaches_the_enable_on_ramp
+    with_axis_corpus(unsynced: true) do |config|
+      write_profile(config, "shelf") # newbie registered, NOT enabled, no catalog rows
+      _out, err, status = with_config(config) { run_cli(%w[list newbie]) }
+      assert_equal 1, status
+      assert_match(/newbie is registered but not enabled — run nabu enable newbie, then nabu sync newbie/, err)
+      refute_match(/unknown source/, err)
+    end
+  end
+
   def test_scoped_axis_hint_names_a_blocked_member_individually_with_its_grant_marker
     Dir.mktmpdir("nabu-cli-axis-hint-blocked") do |root|
       File.write(File.join(root, "axes.yml"), "iranian:\n  persona: \"The Iranist.\"\n  desc: \"Iranian.\"\n")
@@ -7446,7 +7480,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  def with_axis_corpus
+  def with_axis_corpus(unsynced: false)
     Dir.mktmpdir("nabu-cli-axis") do |root|
       File.write(File.join(root, "axes.yml"), <<~YAML)
         classical:
@@ -7477,6 +7511,13 @@ class CLITest < Minitest::Test
           kind: shelf
           axes: [slavic]
       YAML
+      # P77-r5: a REGISTERED member with no catalog rows yet (the state
+      # between `nabu enable` and the first `nabu sync`) — opt-in so the
+      # base-rig tests keep their all-synced world.
+      if unsynced
+        File.write(sources, "#{File.read(sources)}newbie:\n  adapter: TestAdapter\n  " \
+                            "wired: false\n  sync_policy: manual\n  axes: [classical]\n")
+      end
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources,
