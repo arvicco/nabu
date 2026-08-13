@@ -1230,6 +1230,11 @@ sefaria:
   # monthly; a re-sync is an owner decision → manual.
 bhsa:
   adapter: Nabu::Adapters::Bhsa
+  requires: [bridging]   # P77-r4 (survey-confirmed): the ONE parse-time
+                   # cross-source canonical read in the tree — load_bridging
+                   # reads canonical/bridging/.../osm.tf; a late-arriving
+                   # bridging leaves the osm lane silently dark until a
+                   # manual re-parse, exactly what the chain sweep prevents.
   axes: [biblical, hebrew]
   wired: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # checklist §6: bin/nabu sync bhsa — sparse GitFetch cone
@@ -2790,6 +2795,9 @@ titus-avestan:
 pedecerto:
   adapter: Nabu::Adapters::Pedecerto
   kind: module   # P44-7: machinery-only — a meter-enrichment instrument, zero catalog rows, up=module
+  requires: [perseus-latin]   # P77-r4 (survey-confirmed): PedecertoScansions
+                   # joins perseus-latin's loaded catalog rows and produces
+                   # nothing without them (lib/nabu/pedecerto_scansions.rb).
   axes: [classical]
   wired: false   # PERMANENTLY false — an enrichment instrument, not a text
                    # source (the trismegistos/kitab precedent): discover mints
