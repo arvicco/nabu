@@ -3458,6 +3458,14 @@ nabu-places:
   adapter: Nabu::Adapters::NabuPlaces
   group: core   # P63 rider: pre-enabled registry instrument, swept by `nabu sync core`
   kind: module   # P63-7: machinery-only — the place-matching decisions registry seam, zero document rows
+  requires: [cigs, pleiades, trismegistos-geo]   # P77-r3 (owner 2026-08-13): the
+                   # decision rows mint cigs:/pleiades:/tm: refs — resolving them
+                   # (names, coordinates, crosswalk, --place/--within) reads the
+                   # gazetteer slices those three produce; without them the
+                   # registry's refs are bare strings. Enabling/syncing
+                   # nabu-places pulls the chain (pleiades ~129 MB dump;
+                   # trismegistos-geo is a ManualDrop — the sweep prints its
+                   # acquisition card honestly).
   axes: [epigraphy]
   wired: false   # PERMANENTLY false — a decisions-registry instrument (the
                    # nabu-lects sibling invariant): discover mints no
@@ -3514,6 +3522,9 @@ edubba-overlay:
   adapter: Nabu::Adapters::EdubbaOverlay
   group: signs   # the sign-restore sweep: enable signs && sync signs makes the hiero card whole
   kind: module   # P72-6: machinery-only — the sister school's didactic overlay, zero document rows
+  requires: [unikemet]   # P77-r3: the overlay joins onto Unikemet sign entries
+                   # (their gardiner = our kEH_JSesh) — without the sign spine
+                   # there is no card to overlay.
   axes: [egyptian]
   wired: false   # PERMANENTLY false — the osl/unikemet module invariant.
                    # Nabu::EdubbaOverlay reads assets-src/data/hiero-10*.yml +

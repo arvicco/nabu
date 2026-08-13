@@ -746,6 +746,96 @@ class SourceRegistryTest < Minitest::Test
     refute registry.axis_or_set_member?("classical", "unknown-slug")
   end
 
+  # -- requires: the dependency chain (P77-r3, owner commission 2026-08-13:
+  # "a system where these dependencies are tracked and enabling a source/
+  # module that has dependencies enables all chain dependencies") ------------
+
+  def requires_registry
+    load_registry(<<~YAML)
+      gaz:
+        adapter: Some::Adapter
+        kind: module
+        wired: false
+      places:
+        adapter: Some::Adapter
+        kind: module
+        wired: false
+        requires: [gaz]
+      corpus:
+        adapter: Some::Adapter
+        requires: [places]
+      loner:
+        adapter: Some::Adapter
+    YAML
+  end
+
+  def test_requires_parses_and_defaults_empty
+    registry = requires_registry
+    assert_equal %w[gaz], registry["places"].requires
+    assert_equal %w[places], registry["corpus"].requires
+    assert_empty registry["loner"].requires
+  end
+
+  def test_requires_closure_is_transitive_and_deduped
+    registry = requires_registry
+    assert_equal %w[corpus places gaz], registry.requires_closure(%w[corpus]),
+                 "enabling corpus pulls the whole chain — the package-manager rule"
+    assert_equal %w[loner], registry.requires_closure(%w[loner])
+    assert_equal %w[corpus places loner gaz], registry.requires_closure(%w[corpus places loner]),
+                 "breadth-first discovery order — named slugs first, then the chain"
+  end
+
+  def test_required_by_lists_direct_dependents
+    registry = requires_registry
+    assert_equal %w[places], registry.required_by("gaz")
+    assert_equal %w[corpus], registry.required_by("places")
+    assert_empty registry.required_by("corpus")
+  end
+
+  def test_requires_must_name_registered_slugs
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        a:
+          adapter: Some::Adapter
+          requires: [ghost]
+      YAML
+    end
+    assert_match(/"a".*requires unknown source "ghost"/, error.message)
+  end
+
+  def test_requires_refuses_cycles_loudly
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        a:
+          adapter: Some::Adapter
+          requires: [b]
+        b:
+          adapter: Some::Adapter
+          requires: [a]
+      YAML
+    end
+    assert_match(/requires cycle/, error.message)
+  end
+
+  def test_requires_refuses_self_reference
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        a:
+          adapter: Some::Adapter
+          requires: [a]
+      YAML
+    end
+    assert_match(/itself/, error.message)
+  end
+
+  def test_the_live_registry_seeds_the_place_layer_chain
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    assert_equal %w[cigs pleiades trismegistos-geo], registry["nabu-places"].requires.sort,
+                 "the place-decisions registry resolves refs through all three gazetteer slices"
+    assert_equal %w[unikemet], registry["edubba-overlay"].requires,
+                 "the didactic overlay joins onto Unikemet sign entries"
+  end
+
   # -- the signs group (P69: `nabu enable signs && nabu sync signs` restores
   # the whole sign/char capability) --------------------------------------------
 
