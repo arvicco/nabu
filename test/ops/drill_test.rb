@@ -184,6 +184,9 @@ class DrillTest < Minitest::Test
       report = Nabu::Ops::Drill.new(config: live_config, workspace: workspace).run
 
       refute_predicate report, :ok?, "a duplicate-urn mint is not restorable-as-is"
+      assert_equal 1, report.rebuild_collided,
+                   "the loader's collision counter surfaces in the drill report (P77-r11)"
+      assert_includes report.render, "URN COLLISION"
       assert_equal [:duplicate_urn], report.verify_issues.map(&:kind).uniq
       report_txt = File.join(workspace, "report.txt")
       issues_tsv = File.join(workspace, "verify-issues.tsv")
@@ -223,6 +226,7 @@ class DrillTest < Minitest::Test
       backup: Nabu::Backup::Result.new(target: "/t", dry_run: false, sections: [], duration: 0),
       rebuild_quarantined: rebuild_quarantined,
       quarantine_by_source: quarantine_by_source,
+      rebuild_collided: 0,
       verify_clean: verify_issues.empty?,
       golden_found: 0, golden_lost: 0, golden_skipped: 0,
       source_counts: nil, restored_counts: nil,

@@ -182,13 +182,20 @@ module AdapterConformance
     assert_empty duplicates(passage_urns), "duplicate passage urns across the discover set"
   end
 
-  # Urn stability is what the loader's upsert-on-urn (P1-4) rests on: two
-  # independent discover+parse passes must mint identical urns.
+  # Urn stability is what the loader's upsert-on-urn (P1-4) rests on, and
+  # CONTENT stability is what rebuild determinism rests on (P77-r11 — the
+  # drill_pure lesson): two independent discover+parse passes must mint
+  # identical urns AND identical content hashes, or the loader's stored
+  # rows become artifacts of which pass ran. Fixture-bound like every
+  # conformance check — the live layers (the loader's collision counter,
+  # verify's :duplicate_urn, the drill) close what fixtures cannot see.
   def test_conformance_urns_are_stable_across_independent_parses
     first = urn_snapshot(conformance_adapter)
     second = urn_snapshot(conformance_adapter)
     assert_equal first, second,
-                 "document and passage urns must be identical across two independent discover+parse passes"
+                 "document/passage urns and content hashes must be identical across two " \
+                 "independent discover+parse passes — a parse that depends on encounter order " \
+                 "or shared state makes rebuilds nondeterministic"
   end
 
   private
@@ -208,8 +215,17 @@ module AdapterConformance
   def urn_snapshot(adapter)
     adapter.discover(conformance_workdir).filter_map do |ref|
       document = parse_or_skip(adapter, ref) or next
-      [document.urn, document.map(&:urn)]
+      [document.urn, document.map(&:urn), conformance_content_hash(document)]
     end
+  end
+
+  # The loader's own content hash where the model supports it (passage
+  # documents); nil-but-compared otherwise — stability still holds.
+  def conformance_content_hash(document)
+    return nil unless document.respond_to?(:passages)
+
+    hashes = document.passages.map { |passage| Nabu::Store::ContentHash.passage(passage) }
+    Nabu::Store::ContentHash.document(document, hashes)
   end
 
   # A discovered ref the adapter declines by rule (Nabu::DocumentSkipped, P11-7 —

@@ -195,7 +195,7 @@ module Nabu
       # dirs are excluded here too: their presence is a refusal (#discover
       # raises), never a benign skip census line.
       def out_of_scope_files(workdir)
-        out_of_scope = Dir.children(workdir).select do |entry|
+        out_of_scope = Dir.children(workdir).sort.select do |entry|
           Dir.exist?(File.join(workdir, entry)) && !CANONS.include?(entry) &&
             !CATEGORY_B.key?(entry) && entry != Nabu::Adapter::ATTIC_DIRNAME && entry != "schema"
         end

@@ -39,7 +39,7 @@ module Nabu
 
       Report = Data.define(
         :target, :machine_root, :backup, :rebuild_quarantined,
-        :quarantine_by_source,
+        :quarantine_by_source, :rebuild_collided,
         :verify_clean, :golden_found, :golden_lost, :golden_skipped,
         :source_counts, :restored_counts,
         :pure, :lects_match, :links_match, :grants_quiet, :creep_quiet,
@@ -55,8 +55,13 @@ module Nabu
         # conservative zero-quarantine requirement.
         def counts_match? = source_counts.nil? || source_counts == restored_counts
 
+        # rebuild_collided gates unconditionally (P77-r11): a collision in
+        # the drill's own fresh rebuild is a minting defect — two canonical
+        # inputs claiming one urn — and the restored content is an
+        # encounter-order artifact even when every count matches.
         def ok?
           backup.ok? && verify_clean && golden_lost.zero? && counts_match? &&
+            rebuild_collided.zero? &&
             (source_counts ? true : rebuild_quarantined.zero?) && pure_ok?
         end
 
@@ -74,7 +79,8 @@ module Nabu
                    "(#{backup.sections.count(&:ran?)}/#{backup.sections.size} sections, " \
                    "#{backup.files} files, #{backup.ok? ? 'OK' : 'FAILED'})"
           lines << "  restore    → #{machine_root}"
-          lines << "  rebuild    quarantined #{rebuild_quarantined} document(s)"
+          lines << "  rebuild    quarantined #{rebuild_quarantined} document(s)" \
+                   "#{" · #{rebuild_collided} URN COLLISION(S) — minting defect" if rebuild_collided.positive?}"
           lines.concat(quarantine_lines(capped))
           lines << "  verify     #{verify_clean ? 'clean' : 'FAILED'}"
           lines.concat(verify_issue_lines(capped))
@@ -168,6 +174,7 @@ module Nabu
         report = Report.new(
           target: target, machine_root: machine, backup: backup,
           rebuild_quarantined: rebuild.outcomes.sum { |o| o.report.errored },
+          rebuild_collided: rebuild.outcomes.sum { |o| o.report.collided },
           quarantine_by_source: rebuild.outcomes
                                        .filter_map { |o| [o.slug, o.report.errored] if o.report.errored.positive? }
                                        .sort_by { |_, count| -count },
