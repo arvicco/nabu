@@ -8888,7 +8888,7 @@ module Nabu
         return unless Dir.exist?(dir)
 
         kept_attic = false
-        Dir.children(dir).each do |child|
+        Dir.children(dir).sort.each do |child|
           if child == ".attic"
             kept_attic = true
             next

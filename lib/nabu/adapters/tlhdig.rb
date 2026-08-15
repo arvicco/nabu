@@ -251,6 +251,7 @@ module Nabu
         return workdir unless Dir.glob(File.join(workdir, "CTH *")).empty?
 
         Dir.children(workdir)
+           .sort
            .grep(CORPUS_DIR_PATTERN)
            .map { |name| File.join(workdir, name) }
            .find { |path| File.directory?(path) }
