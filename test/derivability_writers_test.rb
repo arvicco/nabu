@@ -38,8 +38,11 @@ class DerivabilityWritersTest < Minitest::Test
   # local/config/; ops/ and data_build/ write generated repo/site or
   # caller-named output (places_lpf_builder writes its GeoJSON/TSV into
   # the runner's caller-named dataset dir — P73-5); fixture_sentinel
-  # writes test fixtures; local_migration executes the P71 layout move.
-  # ANY new file here is a deliberate allowlist decision, not a drive-by.
+  # writes test fixtures; local_migration executes the P71 layout move;
+  # ops/drill writes its evidence files (report.txt, verify-issues.tsv)
+  # into its OWN tmp workspace only — disposable ops evidence, never a
+  # permanent folder (P77-r10). ANY new file here is a deliberate
+  # allowlist decision, not a drive-by.
   WRITER_ALLOWLIST = %w[
     nabu/adapters/bfm.rb nabu/adapters/kitab.rb nabu/adapters/oracc.rb
     nabu/adapters/riig.rb nabu/adapters/rundata.rb
@@ -55,6 +58,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/lect_rulings.rb nabu/link_scopes.rb nabu/grant_gate.rb
     nabu/health/quarantine_baseline.rb nabu/profile.rb
     nabu/ops/axis_pages.rb nabu/ops/site_data.rb
+    nabu/ops/drill.rb
     nabu/data_build/runner.rb nabu/data_build/sources_bib.rb
     nabu/data_build/places_lpf_builder.rb
     nabu/fixture_sentinel.rb nabu/local_migration.rb

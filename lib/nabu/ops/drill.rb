@@ -39,6 +39,7 @@ module Nabu
 
       Report = Data.define(
         :target, :machine_root, :backup, :rebuild_quarantined,
+        :quarantine_by_source,
         :verify_clean, :golden_found, :golden_lost, :golden_skipped,
         :source_counts, :restored_counts,
         :pure, :lects_match, :links_match, :grants_quiet, :creep_quiet,
@@ -64,20 +65,28 @@ module Nabu
 
         # The printable report (Q21/P74: rendering lives ON the report so
         # the forensic sections are testable; the Rakefile just prints).
-        def render
+        # +capped: false+ is the persisted report.txt form (P77-r10): the
+        # terminal stays capped-and-announced, the evidence file names
+        # EVERYTHING — a failing drill must retain what an autopsy needs.
+        def render(capped: true)
           lines = ["Restore drill"]
           lines << "  backup     → #{backup.target}  " \
                    "(#{backup.sections.count(&:ran?)}/#{backup.sections.size} sections, " \
                    "#{backup.files} files, #{backup.ok? ? 'OK' : 'FAILED'})"
           lines << "  restore    → #{machine_root}"
           lines << "  rebuild    quarantined #{rebuild_quarantined} document(s)"
+          lines.concat(quarantine_lines(capped))
           lines << "  verify     #{verify_clean ? 'clean' : 'FAILED'}"
-          lines.concat(verify_issue_lines)
+          lines.concat(verify_issue_lines(capped))
           lines << "  golden     #{golden_found} found, #{golden_lost} lost, #{golden_skipped} skipped"
           lines << "  counts     source=#{self.class.count_str(source_counts)}  " \
                    "restored=#{self.class.count_str(restored_counts)}  " \
                    "#{counts_match? ? 'MATCH' : 'MISMATCH'}"
-          lines.concat(source_delta_lines)
+          lines.concat(source_delta_lines(capped))
+          unless verify_clean && source_deltas.empty?
+            lines << "  evidence   → #{File.dirname(target)}/report.txt · verify-issues.tsv " \
+                     "(uncapped; workspace kept on failure)"
+          end
           if pure
             lines << "  law        lects #{lects_match ? 'MATCH' : 'MISMATCH'} · " \
                      "links #{links_match ? 'MATCH' : 'MISMATCH'} · " \
@@ -96,27 +105,41 @@ module Nabu
 
         # The Q21 evidence sections: each failing document named with its
         # kind and detail; each differing source named with both counts.
-        def verify_issue_lines
+        def verify_issue_lines(capped)
           return [] if verify_issues.empty?
 
-          capped(["  verify failures (#{verify_issues.size}):"] +
-                 verify_issues.first(RENDER_CAP).map do |issue|
-                   "    #{issue.urn} (#{issue.kind}: #{issue.detail})"
-                 end, verify_issues.size)
+          cap(["  verify failures (#{verify_issues.size}):"] +
+              shown(verify_issues, capped).map do |issue|
+                "    #{issue.urn} (#{issue.kind}: #{issue.detail})"
+              end, verify_issues.size, capped)
         end
 
-        def source_delta_lines
+        # The per-source quarantine breakdown (P77-r10): a bare total told
+        # the last drill's reader NOTHING about where 10,570 quarantines
+        # lived — the breakdown makes the number legible at a glance.
+        def quarantine_lines(capped)
+          return [] if quarantine_by_source.empty?
+
+          entries = shown(quarantine_by_source, capped).map { |slug, count| "#{slug} #{count}" }
+          cap(["  quarantine by source: #{entries.join(' · ')}"], quarantine_by_source.size, capped)
+        end
+
+        def source_delta_lines(capped)
           return [] if source_deltas.empty?
 
-          capped(["  count deltas (#{source_deltas.size} source#{'s' unless source_deltas.size == 1}):"] +
-                 source_deltas.first(RENDER_CAP).map do |slug, live, restored|
-                   "    #{slug}: live #{self.class.count_str(live)} → " \
-                     "restored #{self.class.count_str(restored)}"
-                 end, source_deltas.size)
+          cap(["  count deltas (#{source_deltas.size} source#{'s' unless source_deltas.size == 1}):"] +
+              shown(source_deltas, capped).map do |slug, live, restored|
+                "    #{slug}: live #{self.class.count_str(live)} → " \
+                  "restored #{self.class.count_str(restored)}"
+              end, source_deltas.size, capped)
         end
 
-        def capped(lines, total)
-          lines << "    … and #{total - RENDER_CAP} more" if total > RENDER_CAP
+        def shown(list, capped)
+          capped ? list.first(RENDER_CAP) : list
+        end
+
+        def cap(lines, total, capped)
+          lines << "    … and #{total - RENDER_CAP} more" if capped && total > RENDER_CAP
           lines
         end
       end
@@ -142,9 +165,12 @@ module Nabu
         golden = replay_golden(restored)
         restored_counts = read_counts(restored.catalog_path)
 
-        Report.new(
+        report = Report.new(
           target: target, machine_root: machine, backup: backup,
           rebuild_quarantined: rebuild.outcomes.sum { |o| o.report.errored },
+          quarantine_by_source: rebuild.outcomes
+                                       .filter_map { |o| [o.slug, o.report.errored] if o.report.errored.positive? }
+                                       .sort_by { |_, count| -count },
           verify_clean: verify.clean?,
           golden_found: golden.count { |g| g.status == :found },
           golden_lost: golden.count(&:lost?),
@@ -162,9 +188,25 @@ module Nabu
           verify_issues: verify.issues,
           source_deltas: source_deltas(source_counts, restored_counts, restored)
         )
+        persist_evidence!(report)
+        report
       end
 
       private
+
+      # P77-r10 ("retain useful info instead of dropping it"): the report
+      # used to exist only as terminal scrollback and the workspace died
+      # with the tmpdir — the 2026-08-14 failing drill left NOTHING to
+      # autopsy. Every run now writes the uncapped report + a
+      # machine-readable issue list into the workspace; the rake task
+      # keeps the workspace whenever the drill fails.
+      def persist_evidence!(report)
+        File.write(File.join(@workspace, "report.txt"), "#{report.render(capped: false)}\n")
+        rows = ["urn\tkind\tdetail"] + report.verify_issues.map do |issue|
+          "#{issue.urn}\t#{issue.kind}\t#{issue.detail.to_s.gsub(/\s+/, ' ')}"
+        end
+        File.write(File.join(@workspace, "verify-issues.tsv"), "#{rows.join("\n")}\n")
+      end
 
       def back_up(target)
         Backup.new(config: @config, target: target, allow_unmounted: true).run

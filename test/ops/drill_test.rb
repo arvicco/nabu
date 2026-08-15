@@ -9,6 +9,20 @@ require "fileutils"
 # back up → restore into a fresh root → rebuild from restored canonical →
 # verify → golden replay → counts match the source of truth — without touching
 # the live setup or the network.
+# P77-r10: the drill_pure defect class in miniature — one urn claimed by
+# two canonical files, so restored content is an artifact of encounter
+# order. The drill must FAIL on it and hand over evidence, not shrug.
+class CollidingDrillAdapter < TestAdapter
+  def discover(workdir, &block)
+    return enum_for(:discover, workdir) unless block
+
+    refs = []
+    super { |ref| refs << ref }
+    refs.each(&block)
+    yield Nabu::DocumentRef.new(source_id: SOURCE_ID, id: refs.first.id, path: refs.last.path)
+  end
+end
+
 class DrillTest < Minitest::Test
   ILIAD = "Iliad\nμῆνιν\nἄειδε\n"
   ODYSSEY = "Odyssey\nἄνδρα\n"
@@ -160,13 +174,56 @@ class DrillTest < Minitest::Test
     assert_includes rendered, "… and 2 more", "the truncation is announced, never silent"
   end
 
+  # -- P77-r10: a failing drill RETAINS its evidence ------------------------
+
+  def test_a_failing_drill_persists_uncapped_evidence_into_the_workspace
+    File.write(File.join(@root, "config", "sources.yml"),
+               "corpus:\n  adapter: CollidingDrillAdapter\n  wired: true\n")
+    Nabu::Rebuild.new(config: live_config, registry: registry).run
+    Dir.mktmpdir("nabu-drill-work") do |workspace|
+      report = Nabu::Ops::Drill.new(config: live_config, workspace: workspace).run
+
+      refute_predicate report, :ok?, "a duplicate-urn mint is not restorable-as-is"
+      assert_equal [:duplicate_urn], report.verify_issues.map(&:kind).uniq
+      report_txt = File.join(workspace, "report.txt")
+      issues_tsv = File.join(workspace, "verify-issues.tsv")
+      assert File.exist?(report_txt), "the full report survives the run"
+      assert File.exist?(issues_tsv), "every verify issue survives, machine-readable"
+      assert_includes File.read(issues_tsv), "duplicate_urn"
+      assert_includes report.render, "evidence", "the render points at the retained evidence"
+    end
+  end
+
+  def test_the_persisted_report_is_uncapped_where_the_terminal_render_caps
+    issues = (1..12).map do |i|
+      Nabu::Verify::DocumentIssue.new(urn: "urn:nabu:corpus:doc#{i}", canonical_path: nil,
+                                      kind: :mismatch, detail: "sha diverged")
+    end
+    report = forensic_report(verify_issues: issues, source_deltas: [])
+    refute_includes report.render, "urn:nabu:corpus:doc11", "terminal render stays capped"
+    assert_includes report.render(capped: false), "urn:nabu:corpus:doc12",
+                    "the persisted render names EVERY issue"
+  end
+
+  def test_quarantines_render_their_per_source_breakdown
+    report = forensic_report(verify_issues: [], source_deltas: [],
+                             rebuild_quarantined: 7,
+                             quarantine_by_source: [["corpus", 5], ["other", 2]])
+    rendered = report.render
+    assert_includes rendered, "quarantined 7"
+    assert_includes rendered, "corpus 5"
+    assert_includes rendered, "other 2"
+  end
+
   private
 
-  def forensic_report(verify_issues:, source_deltas:)
+  def forensic_report(verify_issues:, source_deltas:, rebuild_quarantined: 0, quarantine_by_source: [])
     Nabu::Ops::Drill::Report.new(
       target: "/t", machine_root: "/m",
       backup: Nabu::Backup::Result.new(target: "/t", dry_run: false, sections: [], duration: 0),
-      rebuild_quarantined: 0, verify_clean: verify_issues.empty?,
+      rebuild_quarantined: rebuild_quarantined,
+      quarantine_by_source: quarantine_by_source,
+      verify_clean: verify_issues.empty?,
       golden_found: 0, golden_lost: 0, golden_skipped: 0,
       source_counts: nil, restored_counts: nil,
       pure: false, lects_match: true, links_match: true,

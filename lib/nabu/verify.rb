@@ -31,6 +31,10 @@ module Nabu
   # - :ok         recomputed hash == stored hash.
   # - :mismatch   both present, hashes differ (bitrot/tamper). detail carries
   #               {stored:, recomputed:}.
+  # - :duplicate_urn  two+ canonical parses claim the urn (P77-r10) — a
+  #               MINTING defect: content becomes an artifact of encounter
+  #               order. First-wins is compared (mirroring the loader's
+  #               P39-4 seam); the duplication itself is the issue.
   # - :missing    the canonical file at canonical_path is gone.
   # - :unparseable the file no longer parses (Nabu::ParseError), or is present
   #               but discover no longer yields it — itself a corruption signal.
@@ -99,9 +103,9 @@ module Nabu
       return verify_notes_source(entry, adapter, workdir) if adapter.class.content_kind == :notes
       return verify_source_shelf(entry, adapter, workdir) if adapter.class.content_kind == :source
 
-      recomputed, unparseable = reparse(adapter, workdir)
+      recomputed, unparseable, duplicates = reparse(adapter, workdir)
       documents = documents_for(entry.slug)
-      issues = documents.filter_map { |doc| classify(doc, recomputed, unparseable) }
+      issues = documents.filter_map { |doc| classify(doc, recomputed, unparseable, duplicates) }
       SourceOutcome.new(slug: entry.slug, verified: documents.size, issues: issues)
     end
 
@@ -253,6 +257,7 @@ module Nabu
     def reparse(adapter, workdir)
       recomputed = {}
       unparseable = {}
+      duplicates = Hash.new(0)
       adapter.discover_with_attic(workdir).each do |ref|
         document =
           begin
@@ -266,9 +271,17 @@ module Nabu
             unparseable[ref.id] = e.message
             next
           end
-        recomputed[document.urn] = document_hash(document)
+        # FIRST-WINS, mirroring the loader's P39-4 collision seam (P77-r10:
+        # the last-wins map here turned every duplicate-urn claim into an
+        # opaque sha mismatch against the loader's stored first claimant).
+        # The duplicate itself is censused and reported as its own kind.
+        if recomputed.key?(document.urn)
+          duplicates[document.urn] += 1
+        else
+          recomputed[document.urn] = document_hash(document)
+        end
       end
-      [recomputed, unparseable]
+      [recomputed, unparseable, duplicates]
     end
 
     # discover→parse a dictionary adapter, mapping each freshly parsed entry's
@@ -310,10 +323,17 @@ module Nabu
 
     # Decide one catalog document's fate against the fresh parse. Returns a
     # DocumentIssue or nil (verified clean).
-    def classify(doc, recomputed, unparseable)
+    def classify(doc, recomputed, unparseable, duplicates = {})
       urn = doc.fetch(:urn)
       path = doc.fetch(:canonical_path)
-      if recomputed.key?(urn)
+      if duplicates.key?(urn)
+        # A minting defect, not bitrot: two canonical parses claim this urn,
+        # so which content "the" document holds is an artifact of encounter
+        # order — named as its own kind (P77-r10, the drill_pure finding).
+        DocumentIssue.new(urn: urn, canonical_path: path, kind: :duplicate_urn,
+                          detail: "#{duplicates[urn] + 1} canonical parses claim this urn " \
+                                  "(first-wins compared; the mint needs a belt or an exclusion)")
+      elsif recomputed.key?(urn)
         return if recomputed[urn] == doc.fetch(:content_sha256)
 
         DocumentIssue.new(urn: urn, canonical_path: path, kind: :mismatch,

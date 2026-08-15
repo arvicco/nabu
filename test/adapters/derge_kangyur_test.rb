@@ -84,7 +84,25 @@ module Adapters
     def test_discovery_skips_is_clean_on_the_fixture_corpus
       skips = conformance_adapter.discovery_skips(FIXTURES)
       assert_equal 0, skips.skipped_by_rule, "the kangyur preamble lines are marker-only — no text skipped"
-      assert_predicate skips, :clean?
+      assert(skips.notes.any? { |note| note.include?("index volume") },
+             "the excluded dkar chag is censused loud, never silently dropped")
+    end
+
+    # P77-r10 (the drill_pure finding): volume 103 is the DKAR CHAG — the
+    # catalog volume. Its {D538}…{D539h} markers are INLINE CITATIONS in
+    # the listing prose (upstream tags each dharani title it mentions),
+    # not text starts. Scanning them minted phantom documents from
+    # catalog prose (toh539g/h existed ONLY there), collided 8 urns with
+    # the real tantras of vol 088, and bled the dkar chag's pre-marker
+    # pages into the preceding text's span. The volume is an INDEX
+    # volume: excluded from marker scanning, censused loud. (The
+    # dkar chag as a first-class document of its own is a future
+    # identity decision, not a scan artifact.)
+    def test_the_dkar_chag_index_volume_mints_nothing
+      refs = conformance_adapter.discover(FIXTURES).to_a
+      assert_equal refs.map(&:id), refs.map(&:id).uniq, "discover must never mint a urn twice"
+      assert_empty refs.map(&:id).grep(/toh53[89]/),
+                   "the dkar chag's citation markers mint no documents"
     end
 
     # -- parse: the container -------------------------------------------------

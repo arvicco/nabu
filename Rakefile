@@ -59,45 +59,34 @@ end
 namespace :ops do
   desc "Fresh-machine restore drill: back up locally, restore into a tmp root, rebuild+verify+golden replay"
   task :drill do
-    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
-    require "nabu"
-
-    config = Nabu::Config.load
-    with_drill_workspace do |workspace|
-      report = Nabu::Ops::Drill.new(config: config, workspace: workspace).run
-      puts report.render
-      abort "ops:drill FAILED — the backup is not restorable as-is (see above)" unless report.ok?
-    end
+    run_drill(pure: false, failure: "ops:drill FAILED — the backup is not restorable as-is (see above)")
   end
 
   desc "THE LAW'S PROOF (P71-8): restore canonical/+config/+local/ ONLY, rebuild, assert derivation"
   task :drill_pure do
-    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
-    require "nabu"
-
-    config = Nabu::Config.load
-    with_drill_workspace do |workspace|
-      report = Nabu::Ops::Drill.new(config: config, workspace: workspace, pure: true).run
-      puts report.render
-      abort "ops:drill_pure FAILED — db/ does NOT fully derive from the three folders" unless report.ok?
-    end
+    run_drill(pure: true, failure: "ops:drill_pure FAILED — db/ does NOT fully derive from the three folders")
   end
 end
 
-# Q21 (P74): KEEP_WORKSPACE=1 skips the mktmpdir cleanup so a failed
-# drill's restored db can be autopsied — the kept path is printed either
-# way the run ends. Without the flag, the block form cleans up as before.
-def with_drill_workspace(&)
+# Q21 (P74) + P77-r10: a FAILING drill always keeps its workspace — the
+# restored db, report.txt and verify-issues.tsv are the autopsy (the
+# 2026-08-14 failure left nothing behind). KEEP_WORKSPACE=1 additionally
+# keeps it on success; a clean unflagged run removes it as before.
+def run_drill(pure:, failure:)
+  $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+  require "nabu"
   require "tmpdir"
-  return Dir.mktmpdir("nabu-drill", &) if ENV["KEEP_WORKSPACE"].to_s.empty?
 
+  config = Nabu::Config.load
   workspace = Dir.mktmpdir("nabu-drill")
-  puts "KEEP_WORKSPACE: drill workspace kept at #{workspace}"
-  begin
-    yield workspace
-  ensure
-    puts "KEEP_WORKSPACE: drill workspace kept at #{workspace}"
+  report = Nabu::Ops::Drill.new(config: config, workspace: workspace, pure: pure).run
+  puts report.render
+  if report.ok? && ENV["KEEP_WORKSPACE"].to_s.empty?
+    FileUtils.remove_entry(workspace)
+  else
+    puts "drill workspace kept at #{workspace} (report.txt · verify-issues.tsv · the restored machine/)"
   end
+  abort failure unless report.ok?
 end
 
 # The Han variant-fold table (P37-2). Regenerates lib/nabu/hani.rb from the
