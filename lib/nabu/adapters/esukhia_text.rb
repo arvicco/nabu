@@ -98,6 +98,17 @@ module Nabu
         end
       end
 
+      # Volumes whose {D} markers are INLINE CITATIONS, not text starts —
+      # the Kangyur's dkar chag (vol 103) tags each dharani title its
+      # listing prose mentions (P77-r10: scanning it minted phantom
+      # documents from catalog prose, collided the gzungs urns with the
+      # real tantras, and bled its pre-marker pages into the preceding
+      # text's span). Subclasses override; excluded volumes are censused
+      # loud in discovery_skips, never silently dropped.
+      def self.index_volume_numbers
+        []
+      end
+
       # The census (P11-7): preamble text lines (before the corpus's first
       # marker — no Toh text owns them) are benign, counted skips; a file
       # under text/ that is not a volume file is unrecognized — loud.
@@ -108,10 +119,15 @@ module Nabu
         strays = Dir.glob(File.join(workdir, TEXT_DIRNAME, "*"))
                     .select { |path| File.file?(path) && parser.volume_number(path).nil? }
                     .sort
+        index_volumes = index_volume_paths(workdir)
         Nabu::Adapter::DiscoverySkips.new(
           skipped_by_rule: parser.scan(paths).preamble_text_lines,
           unrecognized: strays.size,
-          notes: strays.map { |path| "non-volume file under #{TEXT_DIRNAME}/: #{path}" }
+          notes: strays.map { |path| "non-volume file under #{TEXT_DIRNAME}/: #{path}" } +
+                 index_volumes.map do |path|
+                   "index volume (its {D} markers are catalog citations, not text starts) " \
+                     "excluded from scanning: #{File.basename(path)}"
+                 end
         )
       end
 
@@ -137,7 +153,14 @@ module Nabu
       def volume_paths(workdir)
         Dir.glob(File.join(workdir, TEXT_DIRNAME, "*.txt"))
            .select { |path| parser.volume_number(path) }
+           .reject { |path| self.class.index_volume_numbers.include?(parser.volume_number(path)) }
            .sort_by { |path| File.basename(path) }
+      end
+
+      def index_volume_paths(workdir)
+        Dir.glob(File.join(workdir, TEXT_DIRNAME, "*.txt"))
+           .select { |path| self.class.index_volume_numbers.include?(parser.volume_number(path)) }
+           .sort
       end
 
       def document_ref(paths, marker, next_marker, markers)

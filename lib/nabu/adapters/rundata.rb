@@ -245,10 +245,12 @@ module Nabu
         return if path.nil?
 
         parser = parser_for(path)
-        parser.each_inscription
-              .flat_map { |inscription| inscription_refs(inscription, path) }
-              .sort_by(&:id)
-              .each(&block)
+        inscriptions = parser.each_inscription.to_a
+        bases = belted_bases(inscriptions)
+        inscriptions
+          .flat_map { |inscription| inscription_refs(inscription, path, bases.fetch(inscription.signature_id)) }
+          .sort_by(&:id)
+          .each(&block)
       end
 
       # The discovery census (P11-7): nothing is skipped by rule — a blank
@@ -295,8 +297,29 @@ module Nabu
 
       # -- discovery ------------------------------------------------------------
 
-      def inscription_refs(inscription, path)
-        base = self.class.urn_for(inscription.signum)
+      # Distinct signa may slugify identically — "DR IK51,2" vs "DR IK512"
+      # is the live corpus's one pair (the comma is stripped) — and before
+      # P77-r10 both minted the same urns: the loader's first-wins collision
+      # seam then made document content an artifact of encounter order
+      # (sort_by ties are unstable run to run — the drill_pure verify
+      # mismatches). The belt is deterministic: the LOSSLESSLY-slugified
+      # signum (nothing stripped — rundata.info's own page slug) keeps the
+      # bare slug; the rest take the house -b2 counter in signum order.
+      def belted_bases(inscriptions)
+        inscriptions.group_by { |i| self.class.urn_for(i.signum) }
+                    .each_with_object({}) do |(urn, group), bases|
+          ordered = group.sort_by { |i| [lossless_signum?(i.signum) ? 0 : 1, i.signum] }
+          ordered.each_with_index do |inscription, index|
+            bases[inscription.signature_id] = index.zero? ? urn : "#{urn}-b#{index + 1}"
+          end
+        end
+      end
+
+      def lossless_signum?(signum)
+        signum == signum.gsub(/[^\w\s-]/, "")
+      end
+
+      def inscription_refs(inscription, path, base)
         refs = inscription.lanes.filter_map do |lane|
           next if %w[eng swe].include?(lane) && !@translations
 
