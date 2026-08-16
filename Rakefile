@@ -56,37 +56,75 @@ end
 # proving "restorable from an rsync backup with zero services" without touching
 # the live setup (backup is read-only on its sources; all writes go under tmp).
 # The orchestrator runs this against the LIVE corpus at acceptance.
+# ONE MODE since P77-r12: the backup carries no db/ (owner ruling 2026-08-16),
+# so every drill is the pure three-folder restore + full re-derivation — THE
+# LAW'S PROOF (P71-8). ops:drill_pure remains as the habitual alias.
 namespace :ops do
-  desc "Fresh-machine restore drill: back up locally, restore into a tmp root, rebuild+verify+golden replay"
+  desc "THE LAW'S PROOF: back up the three folders, restore into a tmp root, rebuild, verify, assert derivation"
   task :drill do
-    run_drill(pure: false, failure: "ops:drill FAILED — the backup is not restorable as-is (see above)")
+    run_drill
   end
 
-  desc "THE LAW'S PROOF (P71-8): restore canonical/+config/+local/ ONLY, rebuild, assert derivation"
-  task :drill_pure do
-    run_drill(pure: true, failure: "ops:drill_pure FAILED — db/ does NOT fully derive from the three folders")
-  end
+  desc "Alias of ops:drill (every drill is the pure drill since P77-r12)"
+  task drill_pure: :drill
 end
 
-# Q21 (P74) + P77-r10: a FAILING drill always keeps its workspace — the
-# restored db, report.txt and verify-issues.tsv are the autopsy (the
-# 2026-08-14 failure left nothing behind). KEEP_WORKSPACE=1 additionally
-# keeps it on success; a clean unflagged run removes it as before.
-def run_drill(pure:, failure:)
+# The drill's harness discipline (P77-r12, after the 2026-08-15 night the
+# owner reconstructed from a 724-byte log and 521 GB of leaked tmp):
+# - every run logs to its OWN timestamped file under ~/Library/Logs/nabu/
+#   (no shell redirect needed — two same-day runs can never clobber each
+#   other's evidence again), and both paths print FIRST, before any work;
+# - a CRASH (exception, ^C, kill) prints the real error into the log and
+#   REMOVES the workspace — aborted runs prove nothing and keep nothing
+#   (owner ruling 2026-08-16); the log is the evidence;
+# - a COMPLETED failing drill keeps its workspace (report.txt,
+#   verify-issues.tsv, the restored machine/ — the Q21/P77-r10 autopsy);
+#   KEEP_WORKSPACE=1 additionally keeps it on success.
+def run_drill
   $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
   require "nabu"
   require "tmpdir"
 
-  config = Nabu::Config.load
-  workspace = Dir.mktmpdir("nabu-drill")
-  report = Nabu::Ops::Drill.new(config: config, workspace: workspace, pure: pure).run
-  puts report.render
-  if report.ok? && ENV["KEEP_WORKSPACE"].to_s.empty?
-    FileUtils.remove_entry(workspace)
-  else
-    puts "drill workspace kept at #{workspace} (report.txt · verify-issues.tsv · the restored machine/)"
+  log_path = drill_log_path
+  File.open(log_path, "w") do |log_file|
+    log_file.sync = true
+    say = lambda do |message|
+      puts message
+      log_file.puts message
+    end
+
+    config = Nabu::Config.load
+    workspace = Dir.mktmpdir("nabu-drill")
+    say.call "drill log       → #{log_path}"
+    say.call "drill workspace → #{workspace}"
+    begin
+      report = Nabu::Ops::Drill.new(config: config, workspace: workspace).run
+    rescue StandardError, SignalException => e
+      # Log-and-abort, never swallowed: the crash, its cause (Shell errors
+      # carry stderr in the message now), and the cleanup are all on record.
+      say.call "DRILL CRASHED: #{e.class}: #{e.message}"
+      say.call e.backtrace.first(15).join("\n") if e.backtrace
+      FileUtils.remove_entry(workspace)
+      say.call "workspace removed — an aborted run proves nothing and keeps nothing " \
+               "(owner ruling 2026-08-16); this log is the evidence"
+      abort "ops:drill CRASHED — see #{log_path}"
+    end
+    say.call report.render
+    if report.ok? && ENV["KEEP_WORKSPACE"].to_s.empty?
+      FileUtils.remove_entry(workspace)
+    else
+      say.call "drill workspace kept at #{workspace} (report.txt · verify-issues.tsv · the restored machine/)"
+    end
+    abort "ops:drill FAILED — db/ does NOT fully derive from the three folders (see #{log_path})" unless report.ok?
   end
-  abort failure unless report.ok?
+end
+
+# One log file per run, timestamped to the second — never `>` over the
+# previous run's evidence.
+def drill_log_path
+  dir = File.expand_path("~/Library/Logs/nabu")
+  FileUtils.mkdir_p(dir)
+  File.join(dir, "drill-#{Time.now.strftime('%Y-%m-%d_%H%M%S')}.log")
 end
 
 # The Han variant-fold table (P37-2). Regenerates lib/nabu/hani.rb from the

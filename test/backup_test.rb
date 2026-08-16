@@ -22,25 +22,28 @@ class BackupTest < Minitest::Test
 
   # -- the full backup set --------------------------------------------------
 
-  def test_backs_up_the_three_folders_first_then_the_derived_conveniences
+  def test_the_backup_set_is_the_permanent_folders_and_nothing_derived
     result = backup(allow_unmounted: true).run
 
     assert_predicate result, :ok?
     # canonical/, including the .attic file that exists nowhere else.
     assert_path_exists File.join(@target, "canonical", "corpus", "one.txt")
     assert_path_exists File.join(@target, "canonical", "corpus", ".attic", "gone.txt")
-    # the ledger (the only copy) + config/ (registry).
+    # the legacy ledger (this rig's only copy) + config/ (registry).
     assert_path_exists File.join(@target, "db", "history.sqlite3")
     assert_path_exists File.join(@target, "config", "sources.yml")
-    # derived dbs on by default.
-    assert_path_exists File.join(@target, "db", "catalog.sqlite3")
-    assert_path_exists File.join(@target, "db", "fulltext.sqlite3")
+    # NOTHING derived ships (owner ruling 2026-08-16, closing the №R-21
+    # convenience tier): db/ re-derives via `nabu rebuild` on restore. The
+    # tier hauled 118 GB of derived db into every drill workspace — the
+    # 2026-08-15 boot-disk drain.
+    refute_path_exists File.join(@target, "db", "catalog.sqlite3")
+    refute_path_exists File.join(@target, "db", "fulltext.sqlite3")
 
     names = result.sections.map(&:name)
-    # P71: local/ + the №R-22 .docs section join the permanent tier (docs
-    # skips cleanly when absent); links rides the convenience tier; this
-    # rig's ledger is a LEGACY (db/) one, so its file section still rides.
-    assert_equal %w[canonical config local docs catalog fulltext lects links ledger], names
+    # P71: local/ + the №R-22 .docs section join the permanent tier (both
+    # skip cleanly when absent); this rig's ledger is a LEGACY (db/) one,
+    # so its file section still rides — the one db/ file with no other copy.
+    assert_equal %w[canonical config local docs ledger], names
   end
 
   # P71-1: a migrated box's ledger lives at local/history.sqlite3 — the
@@ -58,11 +61,10 @@ class BackupTest < Minitest::Test
     refute_includes result.sections.map(&:name), "ledger"
   end
 
-  # P70 REVERSAL of the P58-1 note: the lect journal is DERIVED (rebuild
-  # re-mints it from config/lect_rulings.yml + rules + infer-dates) — it
-  # rides only in the CONVENIENCE tier now, and its
-  # absence is a clean skip, never an error.
-  def test_lect_journal_rides_in_the_backup_set_when_present
+  # P70 REVERSAL of the P58-1 note, completed 2026-08-16: the lect journal
+  # is DERIVED (rebuild re-mints it from config/lect_rulings.yml + rules +
+  # infer-dates) — it never rides in a backup at all, present or not.
+  def test_derived_stores_never_ride_even_when_present
     journal = Nabu::Store::LectJournal.open!(config.lects_journal_path)
     Nabu::Store::LectJournal.assign!(journal, urn: "urn:x", code: "lat", lect_id: "lat",
                                               basis: "owner")
@@ -70,65 +72,50 @@ class BackupTest < Minitest::Test
 
     result = backup(allow_unmounted: true).run
     assert_predicate result, :ok?
-    assert_path_exists File.join(@target, "db", "lects.sqlite3")
-  end
-
-  def test_skip_derived_is_the_pure_three_folder_contract
-    # P71: canonical/ + config/ + local/ are the WHOLE required backup —
-    # with --skip-derived NOTHING under db/ ships (everything there is
-    # derived; the instance's rulings/grants/ledger live under local/).
-    result = backup(allow_unmounted: true, skip_derived: true).run
-
-    assert_predicate result, :ok?
-    refute_path_exists File.join(@target, "db", "history.sqlite3")
     refute_path_exists File.join(@target, "db", "lects.sqlite3")
-    refute_path_exists File.join(@target, "db", "catalog.sqlite3")
-    refute_path_exists File.join(@target, "db", "fulltext.sqlite3")
-    refute_includes result.sections.map(&:name), "catalog"
+    refute_includes result.sections.map(&:name), "lects"
   end
 
-  # -- WAL sidecars (P17-7) ---------------------------------------------------
+  # -- WAL sidecars (P17-7; the legacy ledger is the one file section left) --
 
-  def test_live_wal_sidecars_ride_along_with_their_db
-    write_db_file("catalog.sqlite3-wal", "wal frames")
-    write_db_file("catalog.sqlite3-shm", "shm index")
+  def test_live_wal_sidecars_ride_along_with_the_legacy_ledger
+    write_db_file("history.sqlite3-wal", "wal frames")
+    write_db_file("history.sqlite3-shm", "shm index")
 
     result = backup(allow_unmounted: true).run
 
     assert_predicate result, :ok?
-    assert_path_exists File.join(@target, "db", "catalog.sqlite3-wal")
-    assert_path_exists File.join(@target, "db", "catalog.sqlite3-shm")
-    catalog = result.sections.find { |s| s.name == "catalog" }
-    assert_equal 3, catalog.files, "the db + both sidecars are the section's snapshot"
-    # a db without sidecars stays a single-file copy
-    assert_equal 1, result.sections.find { |s| s.name == "ledger" }.files
+    assert_path_exists File.join(@target, "db", "history.sqlite3-wal")
+    assert_path_exists File.join(@target, "db", "history.sqlite3-shm")
+    ledger = result.sections.find { |s| s.name == "ledger" }
+    assert_equal 3, ledger.files, "the db + both sidecars are the section's snapshot"
   end
 
   def test_stale_sidecars_at_the_target_are_pruned
     # First backup copies a live -wal; the source then checkpoints (sidecars
     # vanish); the second backup must remove the target's stale copy — a
     # restore would otherwise replay OLD wal frames over a NEWER main file.
-    write_db_file("catalog.sqlite3-wal", "old frames")
+    write_db_file("history.sqlite3-wal", "old frames")
     backup(allow_unmounted: true).run
-    assert_path_exists File.join(@target, "db", "catalog.sqlite3-wal")
+    assert_path_exists File.join(@target, "db", "history.sqlite3-wal")
 
-    FileUtils.rm(File.join(@root, "db", "catalog.sqlite3-wal"))
+    FileUtils.rm(File.join(@root, "db", "history.sqlite3-wal"))
     result = backup(allow_unmounted: true).run
 
     assert_predicate result, :ok?
-    refute_path_exists File.join(@target, "db", "catalog.sqlite3-wal"),
+    refute_path_exists File.join(@target, "db", "history.sqlite3-wal"),
                        "a stale -wal at the target corrupts the restore"
-    assert_path_exists File.join(@target, "db", "catalog.sqlite3")
+    assert_path_exists File.join(@target, "db", "history.sqlite3")
   end
 
   def test_dry_run_neither_copies_nor_prunes_sidecars
-    write_db_file("catalog.sqlite3-wal", "old frames")
+    write_db_file("history.sqlite3-wal", "old frames")
     backup(allow_unmounted: true).run
-    FileUtils.rm(File.join(@root, "db", "catalog.sqlite3-wal"))
+    FileUtils.rm(File.join(@root, "db", "history.sqlite3-wal"))
 
     backup(allow_unmounted: true, dry_run: true).run
 
-    assert_path_exists File.join(@target, "db", "catalog.sqlite3-wal"),
+    assert_path_exists File.join(@target, "db", "history.sqlite3-wal"),
                        "dry-run must not prune the target"
   end
 

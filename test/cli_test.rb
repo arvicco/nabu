@@ -2712,7 +2712,9 @@ class CLITest < Minitest::Test
     out, _err, _status = run_cli(%w[help backup])
     assert_match(/mount-point guard/i, out)
     assert_match(/\.attic/, out, "must explain why the attic rides along")
-    assert_match(/--skip-derived/, out)
+    refute_match(/skip-derived/, out,
+                 "the derived convenience tier is gone (owner ruling 2026-08-16) — db/ is never backed up")
+    assert_match(/NEVER backed up/i, out, "the help states the db/ exclusion plainly")
     assert_match(/Examples:/, out)
   end
 

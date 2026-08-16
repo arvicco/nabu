@@ -18,11 +18,16 @@ module Nabu
   # - config/ — every decision: the registries, rules/overrides/postures,
   #   lect rulings, grants, creep acceptances, the box profile.
   #
-  # CONVENIENCE (default-on, `--skip-derived` omits): the derived dbs
-  # (catalog + fulltext + lects) — a cheap file copy beats hours of
-  # `nabu rebuild` on restore — and the ledger (db/history.sqlite3),
-  # operational LOG whose loss costs history and guard baselines, never
-  # library data (№R-21; restore.md names the consequences).
+  # NOTHING DERIVED SHIPS (owner ruling 2026-08-16, closing №R-21's
+  # convenience tier): everything under db/ regenerates via `nabu rebuild`
+  # from the permanent folders — restore is clone-the-repo, rsync the
+  # folders back, rebuild. The tier existed as a restore-time shortcut
+  # ("a file copy beats hours of rebuild") and hauled 118 GB of derived
+  # db into every backup and every drill workspace; two crashed drills
+  # drained the boot disk to 100% before the tier's cost was ever stated.
+  # The one db/-path file still eligible is the LEGACY ledger of a
+  # pre-P71 box (db/history.sqlite3 — non-derivable operational history
+  # with no other copy); a migrated box carries it inside local/.
   #
   # == The mount-point guard (owner-mandated 2026-07-07)
   #
@@ -89,11 +94,10 @@ module Nabu
       def bytes = sections.sum(&:bytes)
     end
 
-    def initialize(config:, target: nil, skip_derived: false, dry_run: false,
+    def initialize(config:, target: nil, dry_run: false,
                    allow_unmounted: false, shell: Nabu::Shell, stat: File.method(:stat))
       @config = config
       @target = (target && !target.to_s.strip.empty? ? File.expand_path(target.to_s) : config.backup_target)
-      @skip_derived = skip_derived
       @dry_run = dry_run
       @allow_unmounted = allow_unmounted
       @shell = shell
@@ -137,9 +141,8 @@ module Nabu
       # canonical/ (the asset) + config/ (the project definition) +
       # local/ (the instance: owner rulings, grants, profile, the ledger,
       # acquisitions) are the WHOLE permanent set. Everything under db/
-      # is derived (the lect journal and links re-mint at rebuild). The
-      # optional derived sections remain a convenience (restoring a 75 GB
-      # catalog beats hours of rebuild) — never a necessity. The ledger
+      # is derived and NEVER ships (owner ruling 2026-08-16 — class doc);
+      # `nabu rebuild` is the restore path for all of it. The ledger
       # rides INSIDE local/ (the dir copy carries its WAL sidecars and
       # prunes stale ones via --delete); the file section survives only
       # for a pre-P71 box whose ledger still sits under db/.
@@ -153,13 +156,7 @@ module Nabu
         # folders alone) but backed up by default; absent dir = clean skip.
         dir_section("docs", docs_dir, File.join(@target, ".docs"))
       ]
-      unless @skip_derived
-        list << file_section("catalog", @config.catalog_path)
-        list << file_section("fulltext", @config.fulltext_path)
-        list << file_section("lects", @config.lects_journal_path)
-        list << file_section("links", @config.links_path)
-        list << file_section("ledger", @config.history_path) unless ledger_home?
-      end
+      list << file_section("ledger", @config.history_path) unless ledger_home?
       list
     end
 
