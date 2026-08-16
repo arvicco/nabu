@@ -3769,8 +3769,8 @@ module Nabu
       Everything under db/ is derived (`nabu rebuild` regenerates it from
       the three folders) and is NEVER backed up (owner ruling 2026-08-16):
       restore = clone the repo, rsync the folders back, `nabu rebuild`.
-      (Sole exception: a pre-P71 box whose ledger still sits at
-      db/history.sqlite3 — non-derivable history with no other copy.)
+      A pre-P71 box whose ledger still sits at db/history.sqlite3 is
+      refused up front — run `nabu migrate-local` first, then back up.
 
       Target: local/config/settings.yml `backup: target:` (a path under a
       mounted external volume), overridable with --to PATH.

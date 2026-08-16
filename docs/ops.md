@@ -576,9 +576,11 @@ disk that a bare `rsync` (or Finder drag) could restore.
 №R-21 "convenience tier"): every derived store re-mints via `nabu rebuild` from
 the three folders. The tier existed as a restore-time shortcut and hauled
 ~120 GB of derived db into every backup and every drill workspace — the cost
-that drained the boot disk on 2026-08-15. Sole exception: a pre-P71 box whose
-ledger still sits at `db/history.sqlite3` (non-derivable history, no other
-copy) gets that one file copied until `nabu migrate-local` moves it home.
+that drained the boot disk on 2026-08-15. A pre-P71 box whose ledger still sits
+at `db/history.sqlite3` (non-derivable history, no other copy) is **refused up
+front** — silently omitting the only copy would be the disaster — and told to
+`nabu migrate-local` first: the ledger is a local artifact and rides inside the
+`local/` section.
 
 **Why file-level, not git mirrors.** The obvious "back up canonical/ by pushing
 each slug's git to a bare mirror" silently drops the `.attic/` — it is a plain
@@ -587,15 +589,13 @@ the documents that exist **nowhere else** (upstream scrapped them; the clone is
 `--depth 1`). File-level rsync copies the attic for free. So: file-level, or the
 backup is a lie.
 
-**WAL sidecars (P17-7).** The dbs run `journal_mode=WAL` (architecture §5), so
-while any connection is open a `<db>-wal` file next to each db holds recently
-committed transactions the main file does not yet contain (plus a `<db>-shm`
-index). A db file section (today: only the legacy ledger) copies its live
-sidecars along with the db — the main file alone would be a stale or torn
-snapshot — and **prunes** a sidecar at the target whose source counterpart has
-been checkpointed away (restoring an outdated `-wal` next to a newer main file
-would replay old frames over newer data). The ledger inside `local/` gets the
-same protection for free from the directory copy's `--delete`.
+**WAL sidecars (P17-7).** The ledger runs `journal_mode=WAL` (architecture §5),
+so while a connection is open a `history.sqlite3-wal` beside it holds recently
+committed transactions the main file does not yet contain (plus a `-shm`
+index). The `local/` **directory copy** carries live sidecars for free, and its
+`--delete` prunes a sidecar at the target whose source counterpart has been
+checkpointed away (restoring an outdated `-wal` next to a newer main file would
+replay old frames over newer data).
 
 ### The target: a mounted external volume
 

@@ -29,36 +29,33 @@ class BackupTest < Minitest::Test
     # canonical/, including the .attic file that exists nowhere else.
     assert_path_exists File.join(@target, "canonical", "corpus", "one.txt")
     assert_path_exists File.join(@target, "canonical", "corpus", ".attic", "gone.txt")
-    # the legacy ledger (this rig's only copy) + config/ (registry).
-    assert_path_exists File.join(@target, "db", "history.sqlite3")
+    # the ledger inside local/ (P71 home) + config/ (registry).
+    assert_path_exists File.join(@target, "local", "history.sqlite3")
     assert_path_exists File.join(@target, "config", "sources.yml")
-    # NOTHING derived ships (owner ruling 2026-08-16, closing the №R-21
-    # convenience tier): db/ re-derives via `nabu rebuild` on restore. The
-    # tier hauled 118 GB of derived db into every drill workspace — the
-    # 2026-08-15 boot-disk drain.
-    refute_path_exists File.join(@target, "db", "catalog.sqlite3")
-    refute_path_exists File.join(@target, "db", "fulltext.sqlite3")
+    # NOTHING under db/ ships, ever (owner ruling 2026-08-16, closing the
+    # №R-21 convenience tier): db/ re-derives via `nabu rebuild` on
+    # restore. The tier hauled 118 GB of derived db into every drill
+    # workspace — the 2026-08-15 boot-disk drain.
+    refute_path_exists File.join(@target, "db")
 
-    names = result.sections.map(&:name)
-    # P71: local/ + the №R-22 .docs section join the permanent tier (both
-    # skip cleanly when absent); this rig's ledger is a LEGACY (db/) one,
-    # so its file section still rides — the one db/ file with no other copy.
-    assert_equal %w[canonical config local docs ledger], names
+    # P71: local/ + the №R-22 .docs section complete the permanent tier
+    # (both skip cleanly when absent). Four directory sections, no file
+    # sections — the backup set IS the folder set.
+    assert_equal %w[canonical config local docs], result.sections.map(&:name)
   end
 
-  # P71-1: a migrated box's ledger lives at local/history.sqlite3 — the
-  # required local section carries it (sidecars included via the dir
-  # copy), and the db/-style ledger file section disappears.
-  def test_a_home_ledger_ships_inside_the_local_section
-    FileUtils.mkdir_p(File.join(@root, "local"))
-    FileUtils.mv(File.join(@root, "db", "history.sqlite3"), File.join(@root, "local", "history.sqlite3"))
+  # A pre-P71 box's ledger (db/history.sqlite3) is non-derivable history
+  # with no other copy — and the backup ships NOTHING under db/. Silently
+  # excluding the only copy would be the disaster; the backup REFUSES
+  # loudly instead (owner ruling 2026-08-16: convert it into a local
+  # artifact — `nabu migrate-local` — then back up).
+  def test_a_legacy_ledger_refuses_the_backup_until_migrated
+    FileUtils.rm(File.join(@root, "local", "history.sqlite3"))
+    write_db_file("history.sqlite3", "SQLite format 3\0legacy")
 
-    result = backup(allow_unmounted: true).run
-
-    assert_predicate result, :ok?
-    assert_path_exists File.join(@target, "local", "history.sqlite3")
-    refute_path_exists File.join(@target, "db", "history.sqlite3")
-    refute_includes result.sections.map(&:name), "ledger"
+    error = assert_raises(Nabu::Backup::Error) { backup(allow_unmounted: true).run }
+    assert_match(/migrate-local/, error.message, "the refusal names the fix")
+    refute_path_exists File.join(@target, "canonical"), "the refusal is up front, before any rsync"
   end
 
   # P70 REVERSAL of the P58-1 note, completed 2026-08-16: the lect journal
@@ -76,46 +73,45 @@ class BackupTest < Minitest::Test
     refute_includes result.sections.map(&:name), "lects"
   end
 
-  # -- WAL sidecars (P17-7; the legacy ledger is the one file section left) --
+  # -- WAL sidecars (P17-7; carried by the local/ directory copy) ------------
 
-  def test_live_wal_sidecars_ride_along_with_the_legacy_ledger
-    write_db_file("history.sqlite3-wal", "wal frames")
-    write_db_file("history.sqlite3-shm", "shm index")
+  def test_live_wal_sidecars_ride_inside_the_local_section
+    write_local_file("history.sqlite3-wal", "wal frames")
+    write_local_file("history.sqlite3-shm", "shm index")
 
     result = backup(allow_unmounted: true).run
 
     assert_predicate result, :ok?
-    assert_path_exists File.join(@target, "db", "history.sqlite3-wal")
-    assert_path_exists File.join(@target, "db", "history.sqlite3-shm")
-    ledger = result.sections.find { |s| s.name == "ledger" }
-    assert_equal 3, ledger.files, "the db + both sidecars are the section's snapshot"
+    assert_path_exists File.join(@target, "local", "history.sqlite3-wal")
+    assert_path_exists File.join(@target, "local", "history.sqlite3-shm")
   end
 
-  def test_stale_sidecars_at_the_target_are_pruned
+  def test_stale_sidecars_at_the_target_are_pruned_by_the_dir_copy
     # First backup copies a live -wal; the source then checkpoints (sidecars
-    # vanish); the second backup must remove the target's stale copy — a
-    # restore would otherwise replay OLD wal frames over a NEWER main file.
-    write_db_file("history.sqlite3-wal", "old frames")
+    # vanish); the second backup's --delete must remove the target's stale
+    # copy — a restore would otherwise replay OLD wal frames over a NEWER
+    # main file.
+    write_local_file("history.sqlite3-wal", "old frames")
     backup(allow_unmounted: true).run
-    assert_path_exists File.join(@target, "db", "history.sqlite3-wal")
+    assert_path_exists File.join(@target, "local", "history.sqlite3-wal")
 
-    FileUtils.rm(File.join(@root, "db", "history.sqlite3-wal"))
+    FileUtils.rm(File.join(@root, "local", "history.sqlite3-wal"))
     result = backup(allow_unmounted: true).run
 
     assert_predicate result, :ok?
-    refute_path_exists File.join(@target, "db", "history.sqlite3-wal"),
+    refute_path_exists File.join(@target, "local", "history.sqlite3-wal"),
                        "a stale -wal at the target corrupts the restore"
-    assert_path_exists File.join(@target, "db", "history.sqlite3")
+    assert_path_exists File.join(@target, "local", "history.sqlite3")
   end
 
   def test_dry_run_neither_copies_nor_prunes_sidecars
-    write_db_file("history.sqlite3-wal", "old frames")
+    write_local_file("history.sqlite3-wal", "old frames")
     backup(allow_unmounted: true).run
-    FileUtils.rm(File.join(@root, "db", "history.sqlite3-wal"))
+    FileUtils.rm(File.join(@root, "local", "history.sqlite3-wal"))
 
     backup(allow_unmounted: true, dry_run: true).run
 
-    assert_path_exists File.join(@target, "db", "history.sqlite3-wal"),
+    assert_path_exists File.join(@target, "local", "history.sqlite3-wal"),
                        "dry-run must not prune the target"
   end
 
@@ -254,6 +250,10 @@ class BackupTest < Minitest::Test
     File.write(File.join(@root, "db", name), content)
   end
 
+  def write_local_file(name, content)
+    File.write(File.join(@root, "local", name), content)
+  end
+
   def build_source_tree
     corpus = File.join(@root, "canonical", "corpus")
     FileUtils.mkdir_p(File.join(corpus, ".attic"))
@@ -261,11 +261,15 @@ class BackupTest < Minitest::Test
     File.write(File.join(corpus, "two.txt"), "Odyssey\nἄνδρα\n")
     File.write(File.join(corpus, ".attic", "gone.txt"), "Scrapped\nτις\n")
 
+    # Derived stores under db/ — present so the tests can prove they
+    # never ship; the ledger lives at its P71 home inside local/.
     db = File.join(@root, "db")
     FileUtils.mkdir_p(db)
-    %w[history.sqlite3 catalog.sqlite3 fulltext.sqlite3].each do |name|
+    %w[catalog.sqlite3 fulltext.sqlite3].each do |name|
       File.write(File.join(db, name), "SQLite format 3\0#{name}")
     end
+    FileUtils.mkdir_p(File.join(@root, "local"))
+    write_local_file("history.sqlite3", "SQLite format 3\0history.sqlite3")
 
     cfg = File.join(@root, "config")
     FileUtils.mkdir_p(cfg)
