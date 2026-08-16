@@ -53,6 +53,9 @@ class DrillTest < Minitest::Test
       assert_equal report.source_counts, report.restored_counts
       assert_predicate report, :counts_match?
       assert_predicate report, :ok?
+      # P77-r12: EVERY drill is the law's drill now — the render always
+      # speaks the derivation oracles.
+      assert_includes report.render, "law"
     end
   end
 
@@ -81,15 +84,19 @@ class DrillTest < Minitest::Test
       # The backup landed under the workspace, not beside the source.
       assert_path_exists File.join(workspace, "target", "canonical", "corpus", "one.txt")
       assert_path_exists File.join(workspace, "machine", "db", "catalog.sqlite3")
+      # P77-r12: the backup hauls NO derived db — the machine's catalog
+      # above came from the rebuild, never from the target.
+      refute_path_exists File.join(workspace, "target", "db", "catalog.sqlite3")
     end
     assert_equal before, source_snapshot, "the drill must read, never mutate, its source"
   end
 
-  # P71-8, THE LAW'S PROOF: pure mode restores ONLY canonical/ + config/
-  # + local/ (no db/) — the rebuild re-mints every derived store, the
-  # lect journal matches the live instrument (the rulings replay), and
-  # the grant/creep gates answer from local/config with NO ledger.
-  def test_pure_drill_restores_the_three_folders_and_rederives_everything
+  # P71-8, THE LAW'S PROOF — since P77-r12 the ONLY mode: the backup
+  # carries canonical/ + config/ + local/ and nothing derived, so every
+  # restore re-mints every derived store, the lect journal matches the
+  # live instrument (the rulings replay), and the grant/creep gates
+  # answer from local/config with NO ledger.
+  def test_the_drill_restores_the_three_folders_and_rederives_everything
     # Instance state that must survive through local/ alone:
     Nabu::LectRulings.append!(live_config.lect_rulings_path,
                               urn: "urn:nabu:corpus:one", code: "grc", lect_id: "grc:koine")
@@ -104,10 +111,10 @@ class DrillTest < Minitest::Test
     journal.disconnect
 
     Dir.mktmpdir("nabu-drill-work") do |workspace|
-      report = Nabu::Ops::Drill.new(config: live_config, workspace: workspace, pure: true).run
+      report = Nabu::Ops::Drill.new(config: live_config, workspace: workspace).run
 
       refute_path_exists File.join(report.machine_root, "db", "history.sqlite3"),
-                         "pure mode restores NO db/ files"
+                         "the restore carries NO db/ files"
       assert report.lects_match, "the restored lect journal must equal the live derivation"
       assert report.links_match
       assert report.grants_quiet, "grants answer from local/config with no ledger"
@@ -218,7 +225,71 @@ class DrillTest < Minitest::Test
     assert_includes rendered, "other 2"
   end
 
+  # -- P77-r12: refuse up front, crash never ---------------------------------
+
+  # The 2026-08-15 lesson: two drills rsync'd the boot disk to 100% and
+  # died mid-copy with 521 GB of half-written workspaces. The guard must
+  # measure the footprint (2× the permanent folders + a rebuilt db/) against
+  # the workspace volume and refuse — with the numbers — before ANY write.
+  def test_the_space_guard_refuses_with_the_numbers_before_writing_anything
+    disk = FakeDisk.new(tree: 10 * (1024**3), free: 1 * (1024**3))
+    Dir.mktmpdir("nabu-drill-work") do |workspace|
+      error = assert_raises(Nabu::Ops::Drill::Error) do
+        Nabu::Ops::Drill.new(config: live_config, workspace: workspace, disk: disk).run
+      end
+      assert_match(/needs ~/, error.message, "the refusal states the required footprint")
+      assert_match(/GB free/, error.message, "the refusal states what the volume has")
+      assert_empty Dir.children(workspace), "the refusal precedes any write"
+    end
+  end
+
+  # A failed backup section used to be discovered only by ok? at the END —
+  # after an hours-long doomed restore+rebuild+verify. It aborts BEFORE
+  # restore now, naming the section and rsync's own words.
+  def test_a_failed_backup_section_aborts_before_the_restore
+    shell = SectionFailingShell.new(match: "canonical")
+    Dir.mktmpdir("nabu-drill-work") do |workspace|
+      error = assert_raises(Nabu::Ops::Drill::Error) do
+        Nabu::Ops::Drill.new(config: live_config, workspace: workspace, shell: shell).run
+      end
+      assert_match(/backup failed/i, error.message)
+      assert_match(/canonical/, error.message, "the failed section is named")
+      assert_match(/no space left/i, error.message, "rsync's stderr rides in the message")
+      refute_path_exists File.join(workspace, "machine"), "no doomed restore after a failed backup"
+    end
+  end
+
   private
+
+  # A Shell stand-in: rsync invocations whose argv mentions +match+ fail
+  # with an ENOSPC-shaped stderr; everything else runs for real.
+  class SectionFailingShell
+    def initialize(match:)
+      @match = match
+    end
+
+    def run(*argv)
+      if argv.first == "rsync" && argv.any? { |a| a.include?(@match) }
+        raise Nabu::Shell::Error.new("command failed (exit 1): rsync — rsync: write failed: " \
+                                     "No space left on device (28)",
+                                     status: 1, stderr: "rsync: write failed: No space left on device (28)")
+      end
+
+      Nabu::Shell.run(*argv)
+    end
+  end
+
+  # A Disk stand-in with fixed measurements — the guard's math, not the
+  # box's actual du/df, is what the test pins.
+  class FakeDisk
+    def initialize(tree:, free:)
+      @tree = tree
+      @free = free
+    end
+
+    def tree_bytes(_path) = @tree
+    def free_bytes(_path) = @free
+  end
 
   def forensic_report(verify_issues:, source_deltas:, rebuild_quarantined: 0, quarantine_by_source: [])
     Nabu::Ops::Drill::Report.new(
@@ -230,7 +301,7 @@ class DrillTest < Minitest::Test
       verify_clean: verify_issues.empty?,
       golden_found: 0, golden_lost: 0, golden_skipped: 0,
       source_counts: nil, restored_counts: nil,
-      pure: false, lects_match: true, links_match: true,
+      lects_match: true, links_match: true,
       grants_quiet: true, creep_quiet: true,
       verify_issues: verify_issues, source_deltas: source_deltas
     )

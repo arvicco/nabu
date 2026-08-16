@@ -3767,9 +3767,10 @@ module Nabu
                      history ledger, acquisitions — never in the repo
 
       Everything under db/ is derived (`nabu rebuild` regenerates it from
-      the three folders) and rides only as a CONVENIENCE — included by
-      default because a file copy beats hours of rebuild; --skip-derived
-      omits it for the pure three-folder set.
+      the three folders) and is NEVER backed up (owner ruling 2026-08-16):
+      restore = clone the repo, rsync the folders back, `nabu rebuild`.
+      (Sole exception: a pre-P71 box whose ledger still sits at
+      db/history.sqlite3 — non-derivable history with no other copy.)
 
       Target: local/config/settings.yml `backup: target:` (a path under a
       mounted external volume), overridable with --to PATH.
@@ -3786,18 +3787,15 @@ module Nabu
         nabu backup                                   # to the configured volume
         nabu backup --to /Volumes/NabuBackup/nabu     # explicit target
         nabu backup --dry-run                          # show the plan
-        nabu backup --skip-derived                     # canonical + ledger + config only
     HELP
     option :to, type: :string, desc: "Target path override (default: config/nabu.yml backup.target)"
-    option :skip_derived, type: :boolean, default: false,
-                          desc: "Omit the derived dbs (catalog + fulltext); restore rebuilds them"
     option :dry_run, type: :boolean, default: false, desc: "Print the rsync plan and change nothing"
     option :allow_unmounted, type: :boolean, default: false,
                              desc: "Skip the mount-point guard (for a deliberately-local target)"
     def backup
       config = Nabu::Config.load
       result = Nabu::Backup.new(
-        config: config, target: options[:to], skip_derived: options[:skip_derived],
+        config: config, target: options[:to],
         dry_run: options[:dry_run], allow_unmounted: options[:allow_unmounted]
       ).run
       print_backup(result)

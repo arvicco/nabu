@@ -8,8 +8,13 @@ module Nabu
     # proves the concept's own criterion — "restorable from an rsync backup with
     # zero services" — WITHOUT touching the live setup:
     #
+    #   0. THE SPACE GUARD (P77-r12): measure the footprint — twice the
+    #      permanent folders plus a rebuilt db/ — against the workspace
+    #      volume and refuse with the numbers before a byte lands (two
+    #      2026-08-15 drills rsync'd the boot disk to 100% instead),
     #   1. back up the live tree to a tmp target (--allow-unmounted: the tmp
-    #      target is same-disk on purpose),
+    #      target is same-disk on purpose) — ABORT if any section fails,
+    #      never march into an hours-long doomed restore,
     #   2. "restore" onto a fresh tmp machine (rsync the target back into an
     #      empty root — the clone-the-repo-and-rsync-your-data step),
     #   3. rebuild the derived db from the restored permanent folders,
@@ -24,13 +29,20 @@ module Nabu
     # (the same Backup / Rebuild / Verify / Health code the CLI drives), so it is
     # fast and unit-testable; the restored root gets its OWN Config, honest to
     # the fresh-machine layout.
-    # +pure: true+ (P71-8, THE LAW'S PROOF) restores ONLY the three
-    # permanent folders — canonical/, config/, local/ — never db/: the
+    #
+    # EVERY drill is THE LAW'S PROOF (P71-8, sole mode since P77-r12 —
+    # the backup carries no db/ to restore): the restore is exactly the
+    # three permanent folders — canonical/, config/, local/ — so the
     # rebuild must re-mint every derived store from scratch, the lect
     # journal and links counts must match the live instruments (the
     # derivation oracles), and the grant/creep gates must answer from
     # local/config alone (no ledger row ever consulted for a decision).
     class Drill
+      # An up-front refusal (space guard) or mid-drill abort (failed
+      # backup section) — loud, with the numbers/sections, never a bare
+      # rsync exit code discovered next morning.
+      class Error < Nabu::Error; end
+
       Counts = Data.define(:documents, :passages)
 
       # Named forensic entries per section beyond this cap render as an
@@ -42,7 +54,7 @@ module Nabu
         :quarantine_by_source, :rebuild_collided,
         :verify_clean, :golden_found, :golden_lost, :golden_skipped,
         :source_counts, :restored_counts,
-        :pure, :lects_match, :links_match, :grants_quiet, :creep_quiet,
+        :lects_match, :links_match, :grants_quiet, :creep_quiet,
         :verify_issues, :source_deltas
       ) do
         # Verify must be clean, no golden query may be lost, and — when the
@@ -62,11 +74,11 @@ module Nabu
         def ok?
           backup.ok? && verify_clean && golden_lost.zero? && counts_match? &&
             rebuild_collided.zero? &&
-            (source_counts ? true : rebuild_quarantined.zero?) && pure_ok?
+            (source_counts ? true : rebuild_quarantined.zero?) && law_ok?
         end
 
-        # The pure-mode law assertions (vacuously true otherwise).
-        def pure_ok? = !pure || (lects_match && links_match && grants_quiet && creep_quiet)
+        # The law oracles (P71-8) — asserted on EVERY drill since P77-r12.
+        def law_ok? = lects_match && links_match && grants_quiet && creep_quiet
 
         # The printable report (Q21/P74: rendering lives ON the report so
         # the forensic sections are testable; the Rakefile just prints).
@@ -93,12 +105,10 @@ module Nabu
             lines << "  evidence   → #{File.dirname(target)}/report.txt · verify-issues.tsv " \
                      "(uncapped; workspace kept on failure)"
           end
-          if pure
-            lines << "  law        lects #{lects_match ? 'MATCH' : 'MISMATCH'} · " \
-                     "links #{links_match ? 'MATCH' : 'MISMATCH'} · " \
-                     "grants #{grants_quiet ? 'quiet' : 'RE-BLOCKED'} · " \
-                     "creep #{creep_quiet ? 'quiet' : 'RE-ALARMED'}  (pure three-folder restore)"
-          end
+          lines << "  law        lects #{lects_match ? 'MATCH' : 'MISMATCH'} · " \
+                   "links #{links_match ? 'MATCH' : 'MISMATCH'} · " \
+                   "grants #{grants_quiet ? 'quiet' : 'RE-BLOCKED'} · " \
+                   "creep #{creep_quiet ? 'quiet' : 'RE-ALARMED'}  (three-folder restore)"
           lines << "  => #{ok? ? 'RESTORABLE' : 'NOT RESTORABLE'}"
           lines.join("\n")
         end
@@ -150,19 +160,40 @@ module Nabu
         end
       end
 
-      def initialize(config:, workspace:, now: Time.now, pure: false)
+      # Real measurements for the space guard, via the sanctioned Shell
+      # (`du`/`df` — the operator's own tools; Ruby's stdlib has no
+      # statvfs). Injectable so the guard is unit-testable without a
+      # 200 GB corpus on a full disk.
+      module Disk
+        module_function
+
+        def tree_bytes(path)
+          return 0 unless File.exist?(path)
+
+          Nabu::Shell.run("du", "-sk", path).split(/\s+/).first.to_i * 1024
+        end
+
+        def free_bytes(path)
+          Nabu::Shell.run("df", "-Pk", path).lines.last.split(/\s+/)[3].to_i * 1024
+        end
+      end
+
+      def initialize(config:, workspace:, now: Time.now, disk: Disk, shell: Nabu::Shell)
         @config = config
         @workspace = workspace
         @now = now
-        @pure = pure
+        @disk = disk
+        @shell = shell
       end
 
       def run
+        ensure_space!
         target = File.join(@workspace, "target")
         machine = File.join(@workspace, "machine")
         source_counts = read_counts(@config.catalog_path)
 
         backup = back_up(target)
+        ensure_backup_ok!(backup)
         restore(target, machine)
         restored = restored_config(machine)
 
@@ -184,13 +215,12 @@ module Nabu
           golden_skipped: golden.count { |g| g.status == :skipped },
           source_counts: source_counts,
           restored_counts: restored_counts,
-          pure: @pure,
-          lects_match: !@pure || store_count(@config.lects_journal_path, :lect_assignments) ==
-                                 store_count(restored.lects_journal_path, :lect_assignments),
-          links_match: !@pure || store_count(@config.links_path, :links) ==
-                                store_count(restored.links_path, :links),
-          grants_quiet: !@pure || grants_quiet?(restored),
-          creep_quiet: !@pure || creep_quiet?(restored),
+          lects_match: store_count(@config.lects_journal_path, :lect_assignments) ==
+                       store_count(restored.lects_journal_path, :lect_assignments),
+          links_match: store_count(@config.links_path, :links) ==
+                       store_count(restored.links_path, :links),
+          grants_quiet: grants_quiet?(restored),
+          creep_quiet: creep_quiet?(restored),
           # Q21 (P74) — the evidence a failing drill hands over:
           verify_issues: verify.issues,
           source_deltas: source_deltas(source_counts, restored_counts, restored)
@@ -215,23 +245,61 @@ module Nabu
         File.write(File.join(@workspace, "verify-issues.tsv"), "#{rows.join("\n")}\n")
       end
 
+      # -- the space guard (P77-r12) ------------------------------------------
+
+      # The drill's footprint is TWICE the permanent folders (backup target
+      # + restored machine) plus a freshly rebuilt db/ — ~2×85 GB + ~120 GB
+      # on the 2026-08 corpus, a number nobody had restated since the
+      # design-era corpus was a fraction of that. The two 2026-08-15 drills
+      # crashed mid-rsync with the boot disk at 100% and left 521 GB of
+      # half-copied workspaces; the guard refuses UP FRONT, with the
+      # numbers, before a byte lands. The live db/ stands in as the
+      # rebuilt-size estimate (same corpus, same schema).
+      def ensure_space!
+        permanent = [@config.canonical_dir, @config.config_dir, @config.local_dir]
+                    .sum { |dir| @disk.tree_bytes(dir) }
+        rebuilt = @disk.tree_bytes(@config.db_dir)
+        required = (permanent * 2) + rebuilt
+        required += required / 10 # rsync + SQLite working slack
+        free = @disk.free_bytes(@workspace)
+        return if free >= required
+
+        raise Error,
+              "drill needs ~#{gb(required)} GB under #{@workspace} " \
+              "(#{gb(permanent)} GB backed up + #{gb(permanent)} GB restored + " \
+              "~#{gb(rebuilt)} GB rebuilt db + slack) but the volume has only " \
+              "#{gb(free)} GB free — free space or point TMPDIR at a larger volume"
+      end
+
+      def gb(bytes) = (bytes / (1024.0**3)).round(1)
+
       def back_up(target)
-        Backup.new(config: @config, target: target, allow_unmounted: true).run
+        Backup.new(config: @config, target: target, allow_unmounted: true, shell: @shell).run
+      end
+
+      # A failed backup section aborts the drill HERE (P77-r12) — before
+      # the hours-long restore+rebuild+verify that cannot possibly pass.
+      # (ok? would catch it at the end; the 23:20 2026-08-15 run marched
+      # a section-less backup straight into an ENOSPC restore instead.)
+      def ensure_backup_ok!(backup)
+        return if backup.ok?
+
+        failed = backup.failed.map { |s| "#{s.name}: #{s.detail}" }.join("; ")
+        raise Error, "backup failed before restore — #{failed}"
       end
 
       # The restore side of the drill: rsync each backed-up section back into a
       # fresh machine root — exactly what an operator does on new hardware after
-      # cloning the repo. Mirrors the backup layout; pure mode restores ONLY
-      # the three permanent folders (db/ must re-derive, the law's claim).
+      # cloning the repo. The three permanent folders, nothing else (db/ must
+      # re-derive — the law's claim, and the backup carries nothing more).
       def restore(target, machine)
-        subs = @pure ? %w[canonical config local] : %w[canonical config local db]
-        subs.each do |sub|
+        %w[canonical config local].each do |sub|
           src = File.join(target, sub)
           next unless Dir.exist?(src)
 
           dest = File.join(machine, sub)
           FileUtils.mkdir_p(dest)
-          Shell.run("rsync", "-a", File.join(src, ""), dest)
+          @shell.run("rsync", "-a", File.join(src, ""), dest)
         end
       end
 

@@ -34,11 +34,7 @@ module Nabu
       stdout, stderr, status = Open3.capture3(*argv)
       return stdout if status.success?
 
-      raise Error.new(
-        "command failed (exit #{status.exitstatus}): #{argv.first}",
-        status: status.exitstatus,
-        stderr: stderr
-      )
+      raise failure(argv, status.exitstatus, stderr)
     rescue Errno::ENOENT => e
       raise Error.new("command not found: #{argv.first} (#{e.message})", status: nil, stderr: "")
     end
@@ -64,14 +60,24 @@ module Nabu
       end
       return if status.success?
 
-      raise Error.new(
-        "command failed (exit #{status.exitstatus}): #{argv.first}",
-        status: status.exitstatus,
-        stderr: captured
-      )
+      raise failure(argv, status.exitstatus, captured)
     rescue Errno::ENOENT => e
       raise Error.new("command not found: #{argv.first} (#{e.message})", status: nil, stderr: "")
     end
+
+    # The message names the command AND (bounded, one line) what it said —
+    # P77-r12: a bare "command failed (exit 1): rsync" hid an out-of-disk
+    # condition; the stderr was captured, carried, and shown nowhere. The
+    # full untruncated stderr still rides on the error object.
+    DETAIL_CHARS = 300
+
+    def self.failure(argv, exitstatus, stderr)
+      message = "command failed (exit #{exitstatus}): #{argv.first}"
+      detail = stderr.to_s.strip.gsub(/\s+/, " ")
+      message << " — #{detail[0, DETAIL_CHARS]}" unless detail.empty?
+      Error.new(message, status: exitstatus, stderr: stderr)
+    end
+    private_class_method :failure
 
     # Drain +io+ to EOF, appending every byte to +captured+ and (if a block was
     # given) yielding each \n- or \r-terminated line as it arrives, plus any
