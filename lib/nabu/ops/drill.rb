@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "fileutils"
+require "tmpdir"
 
 module Nabu
   module Ops
@@ -160,6 +161,38 @@ module Nabu
         end
       end
 
+      # The small per-run evidence files (persisted into the workspace on
+      # every run; salvaged out of it when the workspace is swept).
+      EVIDENCE_FILES = %w[report.txt verify-issues.tsv].freeze
+
+      # P77-r14 (owner ruling 2026-08-17: "it's your mess to clean"):
+      # the drill owns its workspace lifecycle END TO END. A kept
+      # failing-drill workspace is evidence only until the next run
+      # supersedes it — and at ~290 GB it otherwise blocks that run's
+      # space guard. The rake harness calls this BEFORE creating the new
+      # workspace: every prior nabu-drill* dir under +tmp_root+ has its
+      # small evidence files salvaged into +salvage_root+ (the drill-log
+      # home — the bulky target/ and machine/ die), then is removed.
+      # Returns [{workspace:, salvaged:}] for the harness to announce.
+      def self.sweep_prior_workspaces!(salvage_root:, tmp_root: Dir.tmpdir)
+        Dir.glob(File.join(tmp_root, "nabu-drill*")).map do |prior|
+          salvaged = salvage_evidence(prior, salvage_root)
+          FileUtils.remove_entry(prior)
+          { workspace: prior, salvaged: salvaged }
+        end
+      end
+
+      def self.salvage_evidence(prior, salvage_root)
+        files = EVIDENCE_FILES.select { |name| File.exist?(File.join(prior, name)) }
+        return nil if files.empty?
+
+        dir = File.join(salvage_root, "salvage-#{File.basename(prior)}")
+        FileUtils.mkdir_p(dir)
+        files.each { |name| FileUtils.cp(File.join(prior, name), dir) }
+        dir
+      end
+      private_class_method :salvage_evidence
+
       # Real measurements for the space guard, via the sanctioned Shell
       # (`du`/`df` — the operator's own tools; Ruby's stdlib has no
       # statvfs). Injectable so the guard is unit-testable without a
@@ -268,7 +301,21 @@ module Nabu
               "drill needs ~#{gb(required)} GB under #{@workspace} " \
               "(#{gb(permanent)} GB backed up + #{gb(permanent)} GB restored + " \
               "~#{gb(rebuilt)} GB rebuilt db + slack) but the volume has only " \
-              "#{gb(free)} GB free — free space or point TMPDIR at a larger volume"
+              "#{gb(free)} GB free — free space or point TMPDIR at a larger volume" \
+              "#{leftover_note}"
+      end
+
+      # P77-r14: when the guard refuses, the hog is often our OWN prior
+      # kept workspace sitting unnamed in the same tmp root (the
+      # 2026-08-17 13:11 refusal) — name it, with its size.
+      def leftover_note
+        siblings = Dir.glob(File.join(File.dirname(@workspace), "nabu-drill*"))
+                      .reject { |path| path == @workspace }.sort
+        return "" if siblings.empty?
+
+        list = siblings.map { |path| "#{path} (#{gb(@disk.tree_bytes(path))} GB)" }.join(" · ")
+        ". NOTE: prior drill workspace(s) hold space here: #{list} — " \
+          "the rake harness sweeps these at run start; remove by hand if invoking Drill directly"
       end
 
       def gb(bytes) = (bytes / (1024.0**3)).round(1)

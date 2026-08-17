@@ -755,17 +755,22 @@ A non-zero exit (`NOT RESTORABLE`) means the backup would not restore cleanly �
 investigate before trusting it. Run the drill after any change to the backup set,
 the loader, or the rebuild path.
 
-**Harness discipline (P77-r12, after the 2026-08-15 boot-disk drain).** The
+**Harness discipline (P77-r12/r14, after the 2026-08-15 boot-disk drain).** The
 drill's footprint is ~2× the permanent folders plus a rebuilt `db/` — a space
 guard measures that against the workspace volume and refuses up front, with the
-numbers, before a byte lands. A failed backup section aborts before the restore
-(never an hours-long doomed run). Every run logs to its own timestamped file
-under `~/Library/Logs/nabu/` (no shell redirect needed; two same-day runs can
-never clobber each other's evidence), and prints both the log and workspace
-paths first. A **crash** removes the workspace — an aborted run proves nothing
-and keeps nothing; the log is the evidence. A **completed failing** drill keeps
-its workspace (`report.txt`, `verify-issues.tsv`, the restored `machine/`);
-`KEEP_WORKSPACE=1` additionally keeps it on success.
+numbers (naming any leftover drill workspaces it finds), before a byte lands. A
+failed backup section aborts before the restore (never an hours-long doomed
+run); a designed refusal prints its message plainly, never a crash banner.
+Every run logs to its own timestamped file under `~/Library/Logs/nabu/` (no
+shell redirect needed; two same-day runs can never clobber each other's
+evidence), and prints both the log and workspace paths first. **The drill
+cleans its own mess (P77-r14):** at run start it sweeps every prior
+`nabu-drill*` workspace — the small evidence files are salvaged to
+`~/Library/Logs/nabu/salvage-<workspace>/`, the ~290 GB bulk dies. A **crash**
+removes the workspace — an aborted run proves nothing and keeps nothing; the
+log is the evidence. A **completed failing** drill keeps its workspace
+(`report.txt`, `verify-issues.tsv`, the restored `machine/`) until the next run
+supersedes it; `KEEP_WORKSPACE=1` additionally keeps it on success.
 
 ### The nightly backup job
 
