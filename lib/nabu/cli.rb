@@ -1839,9 +1839,13 @@ module Nabu
                      desc: "Graded-reading filter (P72-1): only passages whose distinct Han " \
                            "characters fall INSIDE this set (fold-aware; spaces ignored); " \
                            "composes with a text query and --lang/--license/--source"
+    option :signset, type: :string, banner: "SIGNS",
+                     desc: "Sign-coverage filter for the ATF corpora (P77-r16, sign-learning P-3): " \
+                           "only passages whose resolved OSL sign inventory falls inside this " \
+                           "comma-separated set of sign names/values; composes with --max-foreign"
     option :max_foreign, type: :numeric, default: 0, banner: "N",
-                         desc: "With --charset: allow up to N characters outside the set per " \
-                               "passage (0-3); each hit names its strangers"
+                         desc: "With --charset/--signset: allow up to N characters/signs outside " \
+                               "the set per passage (0-3); each hit names its strangers"
     option :min_chars, type: :numeric, default: 0, banner: "N",
                        desc: "With --charset: only passages with at least N distinct Han " \
                              "characters — floors the cleanest-first order above one-char fragments"
@@ -1926,13 +1930,24 @@ module Nabu
 
       if options[:charset]
         if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph] ||
-           options[:exact] || options[:word] || options[:words] || char_filter_options?
+           options[:exact] || options[:word] || options[:words] || char_filter_options? ||
+           options[:signset]
           raise Thor::Error, "search: --charset is the coverage filter over whole passages — it " \
                              "composes with a plain text query and --lang/--license/--source only"
         end
         return graded_search(query)
       end
-      raise Thor::Error, "search: --max-foreign only accompanies --charset" if options[:max_foreign].to_i.positive?
+      if options[:signset]
+        if query || options[:fuzzy] || options[:near] || options[:lemma] || options[:morph] ||
+           options[:exact] || options[:word] || options[:words] || char_filter_options?
+          raise Thor::Error, "search: --signset is the sign-coverage filter over whole ATF passages " \
+                             "— it composes with --max-foreign and --lang/--license/--source only"
+        end
+        return sign_graded_search
+      end
+      if options[:max_foreign].to_i.positive?
+        raise Thor::Error, "search: --max-foreign only accompanies --charset or --signset"
+      end
 
       if char_filter_options?
         if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
@@ -6933,6 +6948,57 @@ module Nabu
         say "coverage: #{outcome.charset_size}-character set" \
             "#{" ± #{options[:max_foreign].to_i} strangers" if options[:max_foreign].to_i.positive?}" \
             "#{"; text query #{query.inspect}" unless query.empty?}" \
+            "#{' — candidate window filled; narrow with --source/--lang for the rest' if outcome.capped}"
+      end
+
+      # The sign-coverage graded lane (P77-r16, sign-learning P-3): the
+      # --charset architecture keyed on OSL sign names over the ATF
+      # corpora. Needs the sign list (nabu sync osl) AND the passage_signs
+      # index (a rebuild/refresh with the list present).
+      def sign_graded_search
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        list = Nabu::SignList.load_default(config: config)
+        raise Thor::Error, "search: --signset needs the OSL sign list — run `nabu sync osl` first" unless list
+
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        validate_source!(catalog, options[:source])
+        outcome = Nabu::Query::SignGraded.new(catalog: catalog, fulltext: fulltext, sign_list: list)
+                                         .run(signset: options[:signset],
+                                              max_foreign: options[:max_foreign].to_i,
+                                              lang: options[:lang], license: options[:license],
+                                              source: options[:source], limit: options[:limit].to_i)
+        print_sign_graded_results(outcome)
+        print_display_footer
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      def print_sign_graded_results(outcome)
+        unless outcome.indexed
+          return say("sign coverage not indexed yet — the passage_signs index arrives with the " \
+                     "next `nabu rebuild` (or a sign-source sync's refresh) once osl is synced; " \
+                     "no scan attempted")
+        end
+        if outcome.results.empty?
+          return say("no passages read inside this #{outcome.signset_size}-sign set" \
+                     "#{" (±#{options[:max_foreign].to_i})" if options[:max_foreign].to_i.positive?}")
+        end
+
+        outcome.results.each do |result|
+          strangers = result.foreign.empty? ? "" : "  +{#{result.foreign.join(' ')}}"
+          say "#{result.urn}  [#{result.language}]  #{result.nsigns} signs#{strangers}"
+          say "  #{result.text}"
+        end
+        say ""
+        say "sign coverage: #{outcome.signset_size}-sign set" \
+            "#{" ± #{options[:max_foreign].to_i} strangers" if options[:max_foreign].to_i.positive?}" \
             "#{' — candidate window filled; narrow with --source/--lang for the rest' if outcome.capped}"
       end
 
