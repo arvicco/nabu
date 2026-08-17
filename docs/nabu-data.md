@@ -197,6 +197,7 @@ no page update is a red suite, and vice versa.
 | `mul/char-postings` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `sux/sign-table` | available | gold-derived | CC-BY-4.0 | sux | osl |
 | `egy/unikemet-signs` | available | gold-derived | CC-BY-4.0 | egy | unikemet |
+| `egy/hiero-frequency` | available | gold-derived | CC-BY-SA-4.0 | egy | aes |
 
 ### `san/form-lemma` — Sanskrit form→lemma table derived from DCS gold annotations
 
@@ -358,6 +359,14 @@ The per-sign reference card compiled from what sux/value-signs flattens value-wi
 Flattens Unikemet.txt to one row per encoded Egyptian hieroglyph — the Gardiner-style kEH_Cat code, the original Hieroglyphica-era kEH_UniK code, core/legacy status, description, functions, sound values, and the JSesh/Hieroglyphica/IFAO concordances every Egyptological tool joins on (the same spine Nabu's hiero card and the Edubba overlay key against). Every cell verbatim; absent tags stay empty. Permissive input (Unicode License V3) → clean CC BY 4.0.
 
 **Maintenance**: re-derive after `nabu sync unikemet` (upstream moves at annual Unicode releases); mechanical, no review needed beyond spot-checks
+
+### `egy/hiero-frequency` — Egyptian hieroglyph frequencies — Gardiner codes censused from AES, per subcorpus
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: none · **Inputs**: aes
+
+The sign-learning survey's P-1 Egyptian half (P77-r17): Gardiner-code token and document frequencies censused from AES's per-word hiero_inventar annotations, overall and per subcorpus (frequency is genre-dependent — Pyramid Texts vs Amarna letters vs medical papyri). To the survey's knowledge the first public hieroglyph frequency list anywhere. Joins egy/unikemet-signs on the Gardiner column. CC BY-SA 4.0 — derived from AES's share-alike grant, the №R-24/D51-a carve-out (the char-postings precedent).
+
+**Maintenance**: re-derive after `nabu sync aes`; the doc-attestation digest in the recipe makes an unchanged census a fingerprint no-op
 
 ## What the rail never does
 
