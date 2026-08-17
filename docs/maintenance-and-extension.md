@@ -44,6 +44,20 @@ The operative schedule, commands, and launchd templates live in
 
 The >20% withdrawal circuit-breaker (architecture §8) is the main guard against silent upstream restructures gutting data during unattended syncs.
 
+**Standing duties (as occasions arise, not scheduled):**
+
+- **Hand-prose site pages migrate onto data fields.** Where a site page
+  (library/tools/languages) carries hand-written prose that the catalog
+  or registries now hold as data, move it onto the data field when the
+  page is next touched — hand prose drifts, data fields don't. (P58
+  site-template rider's duty, recorded here at P77-r15 after the
+  gap-review found it homeless.)
+- **Known render edge, unfixed by choice:** Leiden editorial brackets
+  nesting inside stored right-to-left text (Hebrew/Arabic) can display
+  with bidi-mangled bracket order. Cosmetic, display-only, stored text
+  unaffected; revisit if a reader workflow actually trips on it
+  (P42-era deferral, recorded here at P77-r15).
+
 ## 2. Keeping upstream sync sane
 
 - **Vendored snapshots, not submodules.** Git-based sources are cloned into a cache and *copied* into `canonical/<source>/` at a recorded upstream SHA. Submodules couple your repo's health to upstream force-pushes and renames; snapshots make every sync an explicit, diffable, revertible commit in the canonical repo.

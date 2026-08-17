@@ -7532,8 +7532,8 @@ module Nabu
       # The reading→character lane (P65 gate feedback): pinyin against
       # unihan kMandarin, kana against kanjidic2 on/kun. Prints the match
       # list and answers true; false (silently) when no dictionary shelf or
-      # no match, so the caller's honest miss line runs. No frozen contract
-      # yet — --json says so rather than inventing one.
+      # no match, so the caller's honest miss line runs. --json emits the
+      # frozen reading contract (P77-r15 — the last char lane to freeze).
       def reading_char_card(config, input)
         catalog = open_catalog(config)
         return false unless catalog&.table_exists?(:dictionary_entries)
@@ -7542,10 +7542,10 @@ module Nabu
         return false if matches.empty?
 
         if options[:json]
-          raise Thor::Error, "char --json: the reading lane has no frozen contract yet — " \
-                             "the sign cards (cuneiform/hieroglyphic) do"
+          say JSON.pretty_generate(Nabu::Query::Char.reading_json_payload(input, matches))
+        else
+          print_reading_matches(input, matches)
         end
-        print_reading_matches(input, matches)
         true
       ensure
         catalog&.disconnect
