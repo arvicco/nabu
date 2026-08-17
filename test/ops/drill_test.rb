@@ -225,6 +225,36 @@ class DrillTest < Minitest::Test
     assert_includes rendered, "other 2"
   end
 
+  # P77-r13 (found live 2026-08-17, by the owner's post-fix drill): the
+  # doctrine never hard-deletes, so a long-lived catalog keeps withdrawn
+  # document/passage rows forever — pure HISTORY that a fresh derivation
+  # legitimately never re-mints. The counts oracle must count the LIVING
+  # corpus only, or every legitimate withdrawal reads NOT RESTORABLE
+  # forever (live: two withdrawn derge phantoms + 3,616 passage
+  # withdrawals made a fully CONVERGED catalog fail the drill).
+  def test_withdrawn_history_rows_do_not_fail_the_counts_oracle
+    # Upstream drops two.txt entirely (document withdrawal) and one.txt
+    # loses its last line (passage withdrawal within a revision); the
+    # incremental full-load sweep records both — rows kept, flagged.
+    FileUtils.rm(File.join(@root, "canonical", "corpus", "two.txt"))
+    File.write(File.join(@root, "canonical", "corpus", "one.txt"), "Iliad\nμῆνιν\n")
+    live = Nabu::Store.connect(live_config.catalog_path)
+    Nabu::Store.setup!(live)
+    source = Nabu::Store::Source.first(slug: "corpus")
+    report = Nabu::Store::Loader.new(db: live, source: source)
+                                .load_from(TestAdapter.new, workdir: File.join(@root, "canonical", "corpus"))
+    live.disconnect
+    assert_equal 1, report.withdrawn, "the rig's premise: one document withdrawn, rows kept"
+
+    Dir.mktmpdir("nabu-drill-work") do |workspace|
+      drill = Nabu::Ops::Drill.new(config: live_config, workspace: workspace).run
+      assert_predicate drill, :counts_match?,
+                       "withdrawn history is not loss — the LIVING corpora match"
+      assert_empty drill.source_deltas
+      assert_predicate drill, :ok?
+    end
+  end
+
   # -- P77-r12: refuse up front, crash never ---------------------------------
 
   # The 2026-08-15 lesson: two drills rsync'd the boot disk to 100% and

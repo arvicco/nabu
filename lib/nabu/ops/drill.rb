@@ -351,14 +351,16 @@ module Nabu
         end
       end
 
-      # {slug => Counts} for one catalog file.
+      # {slug => Counts} for one catalog file — living rows only, the
+      # same rule read_counts applies (P77-r13).
       def per_source_counts(path)
         db = Store.connect(path, readonly: true)
         slugs = db[:sources].select_hash(:id, :slug)
-        docs = db[:documents].group_and_count(:source_id).as_hash(:source_id, :count)
-        passages = db[:passages].join(:documents, id: :document_id)
-                                .group_and_count(Sequel[:documents][:source_id])
-                                .as_hash(:source_id, :count)
+        docs = db[:documents].where(withdrawn: false)
+                             .group_and_count(:source_id).as_hash(:source_id, :count)
+        passages = living_passages(db)
+                   .group_and_count(Sequel[:documents][:source_id])
+                   .as_hash(:source_id, :count)
         slugs.to_h do |source_id, slug|
           [slug, Counts.new(documents: docs.fetch(source_id, 0),
                             passages: passages.fetch(source_id, 0))]
@@ -407,15 +409,31 @@ module Nabu
       # Document/passage counts from a catalog file, or nil when it is absent
       # (the live drill may run with derived dbs never built — the drill then
       # self-validates through verify + golden rather than a count match).
+      #
+      # Counts the LIVING corpus only (P77-r13, found live 2026-08-17):
+      # the doctrine never hard-deletes, so a long-lived catalog keeps
+      # withdrawn document/passage rows forever — HISTORY that a fresh
+      # derivation legitimately never re-mints. Counting those rows read
+      # a fully converged catalog as NOT RESTORABLE (the two withdrawn
+      # derge phantoms + their 3,616 passage withdrawals).
       def read_counts(path)
         return nil unless File.exist?(path)
 
         db = Store.connect(path)
         return nil unless db.table_exists?(:documents)
 
-        Counts.new(documents: db[:documents].count, passages: db[:passages].count)
+        Counts.new(documents: db[:documents].where(withdrawn: false).count,
+                   passages: living_passages(db).count)
       ensure
         db&.disconnect
+      end
+
+      # Passages of the living corpus: neither the passage nor its
+      # document withdrawn.
+      def living_passages(db)
+        db[:passages].join(:documents, id: :document_id)
+                     .where(Sequel[:passages][:withdrawn] => false,
+                            Sequel[:documents][:withdrawn] => false)
       end
 
       def open_catalog(path)
