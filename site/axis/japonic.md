@@ -22,7 +22,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 17 August 2026)</span> |
 |---|---|---|---|---|
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
 | `unihan` | dictionary | open | wired · manual | 102,998 entries |
@@ -33,7 +33,7 @@ A source wears every desk it serves — these eight answer this desk. Holdings a
 | `oncoj-lexicon` | dictionary | attribution | wired · frozen | 5,869 entries |
 | `aozora` | texts | open | wired · manual | 17,121 docs / 2,983,332 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 August 2026)</span>: `jpn` 287,405 · `zho` 102,998 · `lzh` 63,807 · `ojp` 11,392 · `sga` 6,564 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `ine-pro` 1,905 · `iir-pro` 799 … and 6 more (`nabu axis japonic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 17 August 2026)</span>: `jpn` 287,405 · `zho` 102,998 · `lzh` 63,807 · `ojp` 11,392 · `sga` 6,564 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `ine-pro` 1,905 · `iir-pro` 799 … and 6 more (`nabu axis japonic` lists all).
 
 ## The desk's instruments
 

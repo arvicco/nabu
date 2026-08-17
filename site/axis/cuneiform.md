@@ -13,11 +13,11 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 17 August 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
+| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `oracc` | tablets | open | wired · manual | 118,367 docs / 1,800,218 passages |
 | `wiktionary-sux` | dictionary | attribution | wired · manual | 2,499 entries |
 | `cigs` | feature module | attribution | not yet wired | nothing held yet |
@@ -29,8 +29,9 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `rsti` | texts | nc | wired · manual | 5,075 docs / 740 passages |
 | `osl` | feature module | open | not yet wired | nothing held yet |
 | `edubba-overlay` | feature module | attribution | not yet wired | nothing held yet |
+| `achemenet` | texts | attribution | not yet wired | not synced yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 August 2026)</span>: `sux` 245,387 · `akk` 129,597 · `und` 75,034 · `hit` 35,899 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 · `uga` 3,270 · `elx` 2,723 · `xhu` 832 … and 31 more (`nabu axis cuneiform` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 17 August 2026)</span>: `sux` 245,387 · `akk` 129,597 · `und` 75,034 · `hit` 35,899 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 · `uga` 3,270 · `elx` 2,723 · `xhu` 832 … and 32 more (`nabu axis cuneiform` lists all).
 
 ## The desk's instruments
 

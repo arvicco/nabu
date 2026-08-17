@@ -3769,3 +3769,59 @@ fornsvenska:
 #   adapter: Nabu::Adapters::SomeAdapter
 #   wired: false
 #   sync_policy: manual   # auto | manual | frozen (omit on kind: shelf rows)
+
+achemenet:
+  adapter: Nabu::Adapters::Achemenet
+  axes: [cuneiform]
+  wired: false   # CLAUDE.md checklist §6: owner-fired first sync
+                   # (bin/nabu enable achemenet && bin/nabu sync
+                   # achemenet — one 1.9 MB Zenodo zip), eyeball
+                   # counts + 5 random passages, then flip.
+  # P77-r18 (№R-33 PKG-1): Helsinki's "Linguistically Annotated
+  # Achemenet Babylonian Texts" (Alstola/Sahala/Valk/Ong; Zenodo
+  # 19067652 v1.1.1) — 2,830 Achaemenid-period (550-330 BCE)
+  # legal/administrative texts and letters in five publication groups
+  # (CT55, Jursa_Bel-remanni, Murashu, Strassmaier, YOS7 — the
+  # "archive" facet), the Dec-2020 Achemenet snapshot converted to
+  # Oracc ATF and lemmatized with BabyLemmatizer. NEW baby-conllu
+  # family (17-column global.columns CoNLL-U-Plus; docs delimited by
+  # `# <id> = <designation>` lines only). Document per text, urn
+  # urn:nabu:achemenet:p######/x###### (lowercased — the cdli urn
+  # convention, so the shared P-number space is a future crosswalk
+  # join; X-ids are Helsinki-local placeholders). Passage = the whole
+  # text (no line/sentence grain upstream); tokens (form, lemma, POS,
+  # eng gloss, confidence score) ride annotations. KNOWN upstream
+  # defects (the Readme's own census): "@column N" markers converted
+  # as bare numerals; <<>>-bracketed superfluous signs lemmatized;
+  # PN/LN confusion uncorrected — recorded, not "fixed" (canonical
+  # means canonical).
+  # LICENSE: CC BY 4.0 per the Zenodo deposit field (read 2026-08-17;
+  # the in-zip Readme carries NO license line — deposit page is the
+  # authority).
+  license_watch: https://zenodo.org/records/19067652
+  # SILVER lemmas (the GLAUx rule): BabyLemmatizer semi-automatic with
+  # partial manual correction, upstream's own account.
+  lemma_tier: silver
+  sync_policy: manual
+
+burman-concordance:
+  adapter: Nabu::Adapters::BurmanConcordance
+  kind: module   # P77-r19: a links instrument (the trismegistos shape) — zero catalog rows, up=module
+  axes: [italic]
+  wired: false   # CLAUDE.md checklist §6: owner-fired first sync (one
+                   # 1.1 MB Zenodo CSV), then the producer edges land at
+                   # that same sync's reference pass.
+  # P77-r19 (№R-33 PKG-1): Annie Burman's Digital Concordance of
+  # Etruscan, Faliscan and Early Latin Inscriptions from Etruria
+  # (Uppsala; Zenodo 7801485 v1.0.0, PUBLIC DOMAIN/CC0) — 14,986 rows
+  # crosswalking TM, CIE, Rix ET1, Meiser ET2, TLE, Bakkum, CIL and
+  # CII ids, one row per inscription. A LINKS INSTRUMENT (the
+  # trismegistos shape): zero documents; Nabu::BurmanCrosswalk mints
+  # kind=reference edges urn:nabu:open-etruscan:cie-<n> → tm:<id>
+  # (verified live 2026-08-17: open-etruscan CIE ids are unpadded,
+  # 1,838 CIE-keyed docs; Burman's zero-padding stripped at the join),
+  # the full concordance line riding each edge's detail. Rows without
+  # the CIE+TM pair are unmapped-counted (ET-only rows wait for an
+  # ET-keyed held corpus), never guessed.
+  license_watch: https://zenodo.org/records/7801485
+  sync_policy: manual

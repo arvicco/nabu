@@ -56,6 +56,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
     nabu/wiki_fetch.rb nabu/zip_fetch.rb
+    nabu/adapters/burman_concordance.rb
     nabu/language_shelf.rb nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb
     nabu/lect_rulings.rb nabu/link_scopes.rb nabu/grant_gate.rb

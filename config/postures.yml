@@ -393,6 +393,22 @@ sources:
   # overrides files) — no lect key here by the single-source-of-truth
   # rule; the three new layers still declare (coverage-derived, the
   # sweep of 2026-08-07). ────────────────────────────────────────────
+  achemenet:
+    lect:
+      posture: pending
+      note: "candidate: a blanket akk:nb rule — the whole corpus is
+        Achaemenid-period Babylonian and the registry's nb band
+        deliberately folds the Achaemenid record (№R-34, register)"
+    dating:
+      posture: pending
+      note: "candidate: the corpus band 550–330 BCE + the reign-dated
+        designations (Camb/Cyr/Dar) via the №R-28 regnal table —
+        extractor over real synced data"
+    places:
+      posture: pending
+      note: "candidate: archive-grain findspots (CT55/Bel-remanni=Sippar,
+        Murashu=Nippur, YOS7=Uruk) from the archive facet"
+    script: {posture: implied}
   aes:
     dating: {posture: partial}
     places: {posture: named}
