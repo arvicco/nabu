@@ -15,18 +15,18 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 17 August 2026)</span> |
 |---|---|---|---|---|
 | `gretil` | texts | nc | wired · manual | 780 docs / 703,068 passages |
 | `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
 | `sarit` | texts | attribution | wired · manual | 78 docs / 345,601 passages |
 | `cbeta` | texts | nc | wired · manual | 3,679 docs / 8,749,319 passages |
 | `e84000` | texts | nc | wired · manual | 388 docs / 124,223 passages |
-| `derge-kangyur` | texts | open | wired · manual | 1,200 docs / 461,304 passages |
+| `derge-kangyur` | texts | open | wired · manual | 1,198 docs / 458,972 passages |
 | `derge-tengyur` | texts | open | wired · manual | 3,362 docs / 897,142 passages |
 | `mvp` | dictionary | open | wired · manual | 9,379 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 August 2026)</span>: `san` 9,379 · `pli` 7,288 · `eng` 4,766 · `xct` 4,563 · `lzh` 3,951 · `san-Latn` 817 · `en` 389 · `san-Deva` 32 · `pra` 22 · `bra-Deva` 3 … and 3 more (`nabu axis buddhist` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 17 August 2026)</span>: `san` 9,379 · `pli` 7,288 · `eng` 4,766 · `xct` 4,561 · `lzh` 3,951 · `san-Latn` 817 · `en` 389 · `san-Deva` 32 · `pra` 22 · `bra-Deva` 3 … and 3 more (`nabu axis buddhist` lists all).
 
 ## The desk's instruments
 

@@ -1,0 +1,20 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# Achemenet Babylonian (P77-r18): real trimmed slices of the Zenodo
+# 19067652 v1.1.1 Achemenet.zip (owner-dropped .docs/inbox intake) —
+# the upstream is one zip, so per-file URLs do not exist; both files
+# are hand-trimmed from the zip's own members.
+source: achemenet
+adapter_test: test/adapters/achemenet_test.rb
+retrieved: 2026-08-17
+files:
+  - path: Murashu.conllu
+    url: https://zenodo.org/records/19067652/files/Achemenet.zip
+    whole: false
+    reason: the two global.* headers + four complete real Murašû texts (P261571/P261572/P261494 —
+      non-monotonic id order kept verbatim — and X000428, the Helsinki-local id shape)
+  - path: YOS7.conllu
+    url: https://zenodo.org/records/19067652/files/Achemenet.zip
+    whole: false
+    reason: headers + P307862 (YOS 7 1), one complete Eanna temple text from the second corpus file

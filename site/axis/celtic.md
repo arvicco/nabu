@@ -15,9 +15,9 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these seven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 17 August 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
+| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
 | `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
 | `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |
@@ -25,7 +25,7 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 | `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
 | `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 August 2026)</span>: `sga` 6,672 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `ine-pro` 1,905 · `iir-pro` 799 · `mga` 770 · `wlm` 766 · `itc-pro` 745 · `xlp` 633 … and 43 more (`nabu axis celtic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 17 August 2026)</span>: `sga` 6,672 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `ine-pro` 1,905 · `iir-pro` 799 · `mga` 770 · `wlm` 766 · `itc-pro` 745 · `xlp` 633 … and 44 more (`nabu axis celtic` lists all).
 
 ## The desk's instruments
 

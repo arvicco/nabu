@@ -1,0 +1,14 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# Burman concordance (P77-r19): real head slice of the Zenodo 7801485
+# v1.0.0 concordance CSV (owner-dropped .docs/inbox intake).
+source: burman-concordance
+adapter_test: test/burman_crosswalk_test.rb
+retrieved: 2026-08-17
+files:
+  - path: burman-concordance.csv
+    url: https://zenodo.org/records/7801485/files/A%20Digital%20Concordance%20of%20Etruscan,%20Faliscan%20and%20Etrurian%20Latin%201.0.0.csv
+    whole: false
+    reason: header + the first seven data rows verbatim (all CIE+TM mapped) + the first two
+      CIE-less rows in file order (the unmapped-counted class)
