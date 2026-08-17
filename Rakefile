@@ -94,11 +94,24 @@ def run_drill
     end
 
     config = Nabu::Config.load
-    workspace = Dir.mktmpdir("nabu-drill")
     say.call "drill log       → #{log_path}"
+    # P77-r14: the drill cleans its own mess — prior workspaces (kept
+    # evidence included) are superseded by this run; small evidence
+    # files are salvaged beside the logs, the ~290 GB bulk dies.
+    Nabu::Ops::Drill.sweep_prior_workspaces!(salvage_root: File.dirname(log_path)).each do |swept|
+      say.call "swept prior drill workspace #{swept[:workspace]}" \
+               "#{" (evidence → #{swept[:salvaged]})" if swept[:salvaged]}"
+    end
+    workspace = Dir.mktmpdir("nabu-drill")
     say.call "drill workspace → #{workspace}"
     begin
       report = Nabu::Ops::Drill.new(config: config, workspace: workspace).run
+    rescue Nabu::Ops::Drill::Error => e
+      # A DESIGNED refusal (space guard, failed backup section): the
+      # message is the whole diagnosis — no backtrace, no crash banner.
+      say.call "DRILL REFUSED: #{e.message}"
+      FileUtils.remove_entry(workspace)
+      abort "ops:drill REFUSED — nothing was written; see above"
     rescue StandardError, SignalException => e
       # Log-and-abort, never swallowed: the crash, its cause (Shell errors
       # carry stderr in the message now), and the cleanup are all on record.

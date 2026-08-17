@@ -273,6 +273,58 @@ class DrillTest < Minitest::Test
     end
   end
 
+  # P77-r14 (the 2026-08-17 13:11 refusal): the guard said "free space"
+  # while the actual hog was our OWN kept workspace from the previous
+  # failing drill, sitting unnamed in the same tmp root. The refusal
+  # must point at leftover drill workspaces so the operator sees the
+  # cleanup target without a manual hunt.
+  def test_the_space_guard_names_leftover_drill_workspaces
+    disk = FakeDisk.new(tree: 10 * (1024**3), free: 1 * (1024**3))
+    Dir.mktmpdir("nabu-drill-rig") do |tmp_root|
+      leftover = File.join(tmp_root, "nabu-drill20260816-99999-kept")
+      FileUtils.mkdir_p(leftover)
+      workspace = Dir.mktmpdir("nabu-drill", tmp_root)
+      error = assert_raises(Nabu::Ops::Drill::Error) do
+        Nabu::Ops::Drill.new(config: live_config, workspace: workspace, disk: disk).run
+      end
+      note = error.message[/NOTE: .*/]
+      refute_nil note, "the refusal carries the leftover note"
+      assert_includes note, leftover, "the refusal names the leftover workspace"
+      assert_match(/10\.0 GB/, note, "with its size")
+      refute_includes note, File.basename(workspace),
+                      "the CURRENT (empty, about-to-die) workspace is not a leftover"
+    end
+  end
+
+  # P77-r14 (owner ruling 2026-08-17: "it's your mess to clean"): the
+  # drill sweeps ITS OWN prior workspaces before a new run — a kept
+  # failing-drill workspace is evidence only until the next run
+  # supersedes it, and at ~290 GB it otherwise blocks that run's space
+  # guard. The small evidence files survive (salvaged beside the drill
+  # logs); the bulk dies.
+  def test_the_sweep_removes_prior_workspaces_and_salvages_their_evidence
+    Dir.mktmpdir("nabu-drill-rig") do |rig|
+      tmp_root = File.join(rig, "tmp")
+      salvage_root = File.join(rig, "logs")
+      kept = File.join(tmp_root, "nabu-drill20260816-84905-kept")
+      FileUtils.mkdir_p(File.join(kept, "machine"))
+      File.write(File.join(kept, "report.txt"), "the uncapped report")
+      File.write(File.join(kept, "verify-issues.tsv"), "urn\tkind\tdetail")
+      crashed = File.join(tmp_root, "nabu-drill20260815-11111-crashed")
+      FileUtils.mkdir_p(crashed)
+
+      swept = Nabu::Ops::Drill.sweep_prior_workspaces!(tmp_root: tmp_root, salvage_root: salvage_root)
+
+      refute_path_exists kept, "the bulk dies"
+      refute_path_exists crashed
+      assert_equal([crashed, kept], swept.map { |s| s[:workspace] })
+      salvage = swept.last[:salvaged]
+      assert_equal "the uncapped report", File.read(File.join(salvage, "report.txt"))
+      assert_path_exists File.join(salvage, "verify-issues.tsv")
+      assert_nil swept.first[:salvaged], "an evidence-less workspace salvages nothing"
+    end
+  end
+
   # A failed backup section used to be discovered only by ok? at the END —
   # after an hours-long doomed restore+rebuild+verify. It aborts BEFORE
   # restore now, naming the section and rsync's own words.

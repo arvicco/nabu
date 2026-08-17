@@ -40,9 +40,12 @@ class DerivabilityWritersTest < Minitest::Test
   # the runner's caller-named dataset dir — P73-5); fixture_sentinel
   # writes test fixtures; local_migration executes the P71 layout move;
   # ops/drill writes its evidence files (report.txt, verify-issues.tsv)
-  # into its OWN tmp workspace only — disposable ops evidence, never a
-  # permanent folder (P77-r10). ANY new file here is a deliberate
-  # allowlist decision, not a drive-by.
+  # into its OWN tmp workspace, and its workspace sweep (P77-r14)
+  # salvages those same small files into the caller-named drill-log
+  # home (~/Library/Logs/nabu via the rake harness) before removing a
+  # superseded workspace — disposable ops evidence, never a permanent
+  # folder (P77-r10/r14). ANY new file here is a deliberate allowlist
+  # decision, not a drive-by.
   WRITER_ALLOWLIST = %w[
     nabu/adapters/bfm.rb nabu/adapters/kitab.rb nabu/adapters/oracc.rb
     nabu/adapters/riig.rb nabu/adapters/rundata.rb
