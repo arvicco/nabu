@@ -270,7 +270,8 @@ module Nabu
         catalog: db, fulltext: fulltext, slug: entry.slug,
         alignments: alignments, fuzzy_slugs: @registry.fuzzy_slugs,
         lemma_tiers: @registry.lemma_tiers,
-        reflexes_changed: entry.adapter_class.content_kind == :dictionary
+        reflexes_changed: entry.adapter_class.content_kind == :dictionary,
+        sign_list: Nabu::SignList.load_default(config: @config)
       )
     end
 
@@ -289,7 +290,8 @@ module Nabu
     def heal_index(db, fulltext, progress)
       progress&.stage("fulltext index")
       Store::Indexer.rebuild!(catalog: db, fulltext: fulltext, alignments: alignments,
-                              fuzzy_slugs: @registry.fuzzy_slugs, lemma_tiers: @registry.lemma_tiers)
+                              fuzzy_slugs: @registry.fuzzy_slugs, lemma_tiers: @registry.lemma_tiers,
+                              sign_list: Nabu::SignList.load_default(config: @config))
     end
 
     def alignments
