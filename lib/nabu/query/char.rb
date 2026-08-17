@@ -77,6 +77,13 @@ module Nabu
         { "glyph" => glyph, "card" => card && serialize(card) }
       end
 
+      # The reading lane's frozen contract (P77-r15 — the last char lane
+      # to freeze): the queried reading echoed, each match a flat
+      # {glyph, reading, kind} map (kind: pinyin | on | kun).
+      def self.reading_json_payload(input, matches)
+        { "input" => input, "matches" => matches.map { |match| serialize(match) } }
+      end
+
       def self.serialize(value)
         case value
         when Data then value.to_h.to_h { |key, inner| [key.to_s, serialize(inner)] }

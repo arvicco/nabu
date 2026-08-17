@@ -136,6 +136,22 @@ class CharCommandTest < Minitest::Test
 
   # --- the reading→character lane (P65 gate feedback: `nabu char wen`) ---
 
+  # P77-r15 (№R-33 PKG-1): the reading lane joins the frozen --json
+  # family — it was the LAST char lane that refused JSON. Contract:
+  # input echoed, matches as flat {glyph, reading, kind} maps.
+  def test_reading_lane_json_emits_the_frozen_contract
+    with_char_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char qi --json]) }
+      assert_nil status
+      payload = JSON.parse(out)
+      assert_equal "qi", payload["input"]
+      match = payload.fetch("matches").find { |m| m["glyph"] == "棄" }
+      refute_nil match, "the qì character rides the matches list"
+      assert_equal "qì", match["reading"]
+      assert_equal "pinyin", match["kind"]
+    end
+  end
+
   def test_pinyin_input_toneless_or_toned_lists_the_characters
     with_char_catalog do |config|
       out, _err, status = with_config(config) { run_cli(%w[char qi]) }
