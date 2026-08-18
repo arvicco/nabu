@@ -219,7 +219,7 @@ The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kan
 
 The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg.
 
-**Members** (6): `sillok`, `sjw`, `goryeosa`, `goryeosa-jeoryo`, `bibyeonsa`, `ko-wikisource-mk`
+**Members** (7): `sillok`, `sjw`, `ko-wikisource-mk`, `goryeosa`, `goryeosa-jeoryo`, `bibyeonsa`, `itkc`
 
 ### sinitic
 

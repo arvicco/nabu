@@ -3697,3 +3697,16 @@ bibyeonsa:
   # nikh-xml family, DTD ver 1.4.
   license_watch: https://www.data.go.kr/data/15053636/fileData.do
   sync_policy: manual
+
+itkc:
+  adapter: Nabu::Adapters::Itkc
+  axes: [korean]
+  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  # 한국고전번역원 classical originals (P78-7): the OPEN-LICENSED slice —
+  # 17 complete works, one data.go.kr dataset each (제한 없음 → D47-a
+  # attribution; the itkc.or.kr site is ARR, ONLY the portal carries the
+  # grant). HONEST COVERAGE: ~17 of the GO family's 257 works; the rest
+  # ride the owner letter path (공공데이터 제공신청 — see the P78-7 scout
+  # report in .docs/p78-plan.md). The munjip stays parked per D47-c.
+  license_watch: https://www.data.go.kr/data/15022432/fileData.do
+  sync_policy: manual

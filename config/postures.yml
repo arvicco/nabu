@@ -126,6 +126,11 @@ sources:
         dates riding annotations raw — a future extractor revisit, not a claim"}
     places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
     script: {posture: implied}
+  itkc:
+    lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent; upstream's 언어 "coc" is ITKC-internal, P78-7)}
+    dating: {posture: dated, note: "per-work 원문간행년 original print year via MetadataDates :structured"}
+    places: {posture: unplaced}
+    script: {posture: implied}
   kanripo:
     lect: {posture: codemap, note: lzh → zho/lit (Literary Chinese)}
     dating: {posture: undatable}
