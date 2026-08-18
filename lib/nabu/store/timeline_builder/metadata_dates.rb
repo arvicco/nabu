@@ -43,6 +43,7 @@ module Nabu
           "elephantine" => :structured,
           "itant" => :structured,
           "sillok" => :structured, # P78-1: the volume's 서기 year, one-year envelope
+          "sjw" => :structured,    # P78-2: same shape, per reign-year member
           "bfm" => :iso_keys,
           "croala" => :year_range,
           "ebl" => :period_label

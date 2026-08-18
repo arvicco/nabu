@@ -3625,3 +3625,16 @@ sillok:
   # §Acquisition), then normal ZipFetch per dataset subdir.
   license_watch: https://www.data.go.kr/data/15053647/fileData.do
   sync_policy: manual
+
+sjw:
+  adapter: Nabu::Adapters::Sjw
+  axes: [korean]
+  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  # 승정원일기 (NIKH via data.go.kr 15064218; 제한 없음 → D47-a attribution).
+  # SCALE WARNING (the Kyoto precedent, said LOUD): the library's largest
+  # single source by characters — one ~418 MB zip unpacking to 2.44 GB /
+  # 298 members / members up to 19 MB; the first sync is a multi-hour
+  # parse+load and should run attended once, with the P78-r2 ETAs
+  # narrating. The nikh-xml family streams (P78-2a), so memory stays flat.
+  license_watch: https://www.data.go.kr/data/15064218/fileData.do
+  sync_policy: manual
