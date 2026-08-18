@@ -51,12 +51,31 @@ module Nabu
         MANIFEST
       end
 
+      # +zip_fetch_factory+ exists for the tests (a rigged fetch — no
+      # network in the suite, ever); no-arg construction stays the
+      # registry contract.
+      def initialize(zip_fetch_factory: Nabu::ZipFetch.method(:new))
+        super()
+        @zip_fetch_factory = zip_fetch_factory
+      end
+
+      # The clics ZipFetch choreography WHOLE (the 2026-08-18 live-crash
+      # lesson: the first sync loaded 2,830 docs then died on the return
+      # value — complete! answers a count, the SyncRunner contract wants
+      # a FetchReport).
       def fetch(workdir, progress: nil, force: false)
-        fetch = Nabu::ZipFetch.new(url: ARTIFACT_URL, dir: workdir,
-                                   attic_dir: File.join(workdir, ATTIC_DIRNAME), progress: progress)
-        fetch.prepare!
-        guard_mass_deletion!(workdir, fetch.doomed_paths, force: force)
-        fetch.complete!
+        fetch = @zip_fetch_factory.call(url: ARTIFACT_URL, dir: workdir,
+                                        attic_dir: File.join(workdir, ATTIC_DIRNAME), progress: progress)
+        begin
+          fetch.prepare!
+          guard_mass_deletion!(workdir, fetch.doomed_paths, force: force)
+          fetch.complete!
+        ensure
+          fetch.cleanup!
+        end
+        Nabu::FetchReport.new(sha: fetch.sha, fetched_at: Time.now, notes: ["Achemenet.zip"])
+      rescue ZipFetch::Error, Nabu::Shell::Error => e
+        raise Nabu::FetchError, "achemenet fetch failed into #{workdir}: #{e.message}"
       end
 
       def discover(workdir, &block)
