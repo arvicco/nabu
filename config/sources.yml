@@ -3637,4 +3637,16 @@ sjw:
   # parse+load and should run attended once, with the P78-r2 ETAs
   # narrating. The nikh-xml family streams (P78-2a), so memory stays flat.
   license_watch: https://www.data.go.kr/data/15064218/fileData.do
+ko-wikisource-mk:
+  adapter: Nabu::Adapters::KoWikisourceMk
+  axes: [korean]   # P78-4: the korean axis's vernacular leg — the first hangul print
+  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  # 용비어천가 (1447) from Korean Wikisource — curated title list, ONE page
+  # carries all 125 cantos (census 2026-08-18). PD text + CC BY-SA 4.0
+  # transcription layer → attribution, credit the contributors. Middle
+  # Korean (okm) passages per canto + the hanmun ruby verse (lzh); the
+  # modern rendering rides as annotation, never as passage text.
+  # 월인천강지곡/석보상절 stay OUT until a completeness census passes
+  # (scan transclusions / fragmentary — the P78-4 audit).
+  license_watch: https://ko.wikisource.org/wiki/%EC%9A%A9%EB%B9%84%EC%96%B4%EC%B2%9C%EA%B0%80
   sync_policy: manual
