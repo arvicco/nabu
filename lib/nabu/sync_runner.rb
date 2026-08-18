@@ -376,7 +376,8 @@ module Nabu
                                      lemma_tiers: @registry.lemma_tiers,
                                      reflexes_changed: adapter.class.content_kind == :dictionary,
                                      sign_list: Nabu::SignList.load_default(config: @config),
-                                     progress: progress)
+                                     progress: progress,
+                                     ledger: @ledger)
     ensure
       fulltext&.disconnect
     end
@@ -389,8 +390,13 @@ module Nabu
     # incident). AlreadyHeld propagates like any other fetch failure — the run
     # is recorded failed for `sync <slug>`, captured per-source by `sync --all`.
     def fetch(adapter, workdir, slug:, force:, progress:)
-      FetchLock.hold(canonical_dir: @config.canonical_dir, slug: slug) do
-        adapter.fetch(workdir, progress: progress&.method(:fetch_line), force: force)
+      # P78-r3: the fetch announces with the last sync's fetch estimate and
+      # records its own wall time — the downloads themselves narrate via
+      # fetch_line, but the estimate says how long the whole phase ran last.
+      timed_stage(slug, "fetch", "fetch: #{slug}", progress) do
+        FetchLock.hold(canonical_dir: @config.canonical_dir, slug: slug) do
+          adapter.fetch(workdir, progress: progress&.method(:fetch_line), force: force)
+        end
       end
     end
 
@@ -403,7 +409,31 @@ module Nabu
     # LoadReport.
     def load(source, adapter, workdir, progress)
       loader = build_loader(adapter, source)
-      loader.load_from(adapter, workdir: workdir, full: true, on_document: progress&.method(:load_tick))
+      # P78-r3: the parse+load phase announces with its estimate (the tick
+      # counter then carries the label AND — once the recorded document
+      # total is known — the CLI's in-stage "~Nm left" extrapolation), and
+      # records its wall time WITH the document count: the honest drift
+      # denominator the next sync's estimate scales by.
+      progress&.stage("parse+load: #{source.slug}",
+                      eta: Nabu::Eta.for(@ledger, kind: "sync", scope: source.slug, stage: "load"))
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      report = loader.load_from(adapter, workdir: workdir, full: true,
+                                         on_document: progress&.method(:load_tick))
+      Store::StageTimings.record!(@ledger, kind: "sync", scope: source.slug, stage: "load",
+                                           seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started,
+                                           rows: report.added + report.updated + report.skipped)
+      report
+    end
+
+    # P78-r3 mechanics: announce with the ledger's last estimate for this
+    # (sync, scope, stage), run, record the wall time.
+    def timed_stage(scope, stage, label, progress, &)
+      progress&.stage(label, eta: Nabu::Eta.for(@ledger, kind: "sync", scope: scope, stage: stage))
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      result = yield
+      Store::StageTimings.record!(@ledger, kind: "sync", scope: scope, stage: stage,
+                                           seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
+      result
     end
 
     def build_loader(adapter, source)

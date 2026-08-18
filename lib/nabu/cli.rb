@@ -8652,7 +8652,11 @@ module Nabu
           suffix = eta ? "#{eta.render} " : ""
           if tty
             $stderr.print("\r\e[K  #{label}… #{suffix}")
-          elsif eta
+          elsif eta&.real?
+            # Non-tty prints the open line only when there is a REAL
+            # estimate to speak (P78-r3: "first run — no estimate" on
+            # every tiny shelf sync is noise in a log; the close line
+            # with counts + elapsed is the record either way).
             warn("  #{label}… #{suffix}")
           end
         end

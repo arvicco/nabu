@@ -21,6 +21,7 @@ module Nabu
       end
 
       def none? = false
+      def real? = true
 
       def render
         basis = "last run #{Eta.format_seconds(basis_seconds)}"
@@ -34,6 +35,7 @@ module Nabu
     # distinguish "no history" from "history" at the print site.
     NONE = Object.new.tap do |none|
       def none.none? = true
+      def none.real? = false
       def none.render = "first run — no estimate"
       def none.seconds = nil
     end.freeze
