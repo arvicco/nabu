@@ -213,6 +213,26 @@ rules:
       "navarro-aragonés": "an:old"
       "navarro": "an:old"
 
+  # ── №R-34 (2026-08-18, ruled as recommended): the achemenet blanket —
+  # the whole corpus is Achaemenid-period Babylonian (550–330 BCE), and
+  # the registry's akk:nb band DELIBERATELY folds the Late Babylonian/
+  # Achaemenid record ("rather than minting stages the period labels cut
+  # finer than the language does"). The archive facet is total (every
+  # document carries its publication group), so the five-value map IS
+  # the blanket. Tier certain: the registry's own band note names this
+  # exact record.
+  - id: achemenet-nb
+    tier: certain
+    sources: [achemenet]
+    code: akk
+    facet: archive
+    map:
+      "CT55": "akk:nb"
+      "Jursa_Bel-remanni": "akk:nb"
+      "Murashu": "akk:nb"
+      "Strassmaier": "akk:nb"
+      "YOS7": "akk:nb"
+
   # ── D59-b (2026-08-06): the eBL Standard Babylonian register — the
   # registry's own note ("the literary register of first-millennium
   # scholarship") made a rule. kind: compose refines EXISTING stage rows
