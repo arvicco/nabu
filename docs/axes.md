@@ -225,9 +225,9 @@ The Korean desk opens on the dynastic record itself: the Veritable Records of Jo
 
 > The Sinologist — the classical Chinese written world and its phonological deep past.
 
-Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, and the kaikki zh extract riding wiktionary-recon.
+Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — and, since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea).
 
-**Members** (12): `ud`, `wiktionary-recon`, `suttacentral`, `baxter-sagart`, `tshet-uinh`, `unihan`, `hdic`, `babelstone-ids`, `cbeta`, `kanripo`, `kr-gaiji`, `tls`
+**Members** (13): `ud`, `wiktionary-recon`, `suttacentral`, `baxter-sagart`, `tshet-uinh`, `unihan`, `hdic`, `babelstone-ids`, `cbeta`, `kanripo`, `kr-gaiji`, `tls`, `viet-wikisource`
 
 ### japonic
 
