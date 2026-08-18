@@ -858,6 +858,18 @@ module Nabu
       syncs. `--axis a,b` selects several axes and prints one group each, in
       order. `--all` is a flat batch (enabled + live sources), never grouped.
 
+      PREREQUISITES ride first (P77 riders, owner rulings 2026-08-13):
+      core is the minimum set a new install carries — on the box's first
+      real sync request, any never-synced core member (the registry
+      instruments) syncs automatically before the requested work. The
+      same sweep covers the requested source's `requires:` chain (the
+      package-manager rule: sources.yml declares hard functional
+      dependencies — nabu-places needs its three gazetteers — and
+      syncing a dependent syncs its never-synced requirements first;
+      `nabu status <slug>` shows requires/needed-by). --parse-only never
+      triggers either; `nabu sync core` (or the member by name) re-runs
+      a sweep explicitly.
+
       Examples:
         nabu sync sblgnt          # one source (explicit; disabled syncs anyway)
         nabu sync celtic          # the celtic axis's enabled members
@@ -1014,7 +1026,7 @@ module Nabu
       # first: tiny fetches that light the lect/place layers before the
       # corpus shelf arrives. Pre-enabled by nature (modules), failures
       # contained like starter failures.
-      say "core group first: #{registry.core_members.join(' · ')}"
+      say "core group first (requires-closed): #{registry.requires_closure(registry.core_members).join(' · ')}"
       failures = run_core_syncs(runner, registry)
       failures += run_starter_syncs(runner)
       print_quickstart_epilogue(failures)
@@ -1230,7 +1242,7 @@ module Nabu
         # enable hint for the axes' not-yet-enabled members — never the
         # whole-library `enabled:` footer. Bare status keeps that footer.
         if options[:axis]
-          print_axis_enable_hint(view, registry, selected_axes(registry.axes))
+          print_axis_enable_hint(view, registry, selected_axes(registry.axes, registry))
         else
           print_focus_note(view, view.registry_hidden_slugs)
         end
@@ -1284,8 +1296,12 @@ module Nabu
       line, then the same census rows, indented. Axes are TAGS, not folders
       — a source appears under every axis it serves (stated once). Bare
       --axis shows every axis in the ratified order; `--axis slavic` one
-      axis; `--axis a,b` those axes only. An unknown axis names the known
-      set. The bare (ungrouped) census is unchanged.
+      axis; `--axis a,b` those axes only. The FUNCTIONAL SETS resolve here
+      too (P77 rider — an axis is a tag, and the registry's non-desk sets
+      are the same kind of tag): `--axis core` (the auto-enabled minimum of
+      registry instruments), `--axis signs`, `--axis quickstart` (core +
+      the starter shelf). An unknown name names the known axes and sets.
+      The bare (ungrouped) census is unchanged.
 
       A bare `nabu list SOURCE --lang CODE` (no enumeration flag) IMPLIES the
       natural mode by the shelf's content kind — a dictionary shelf lists its
@@ -1402,12 +1418,15 @@ module Nabu
         registry = Nabu::SourceRegistry.load(config.sources_path)
         view = focus_view(config, registry, catalog: catalog)
         warn_focus_drift(view)
-        rows = scoped_census(query.census, view)
-        axes = selected_axes(registry.axes)
+        census = query.census
+        rows = scoped_census(census, view)
+        axes = selected_axes(registry.axes, registry)
         print_census_by_axis(rows, axes, registry)
         # A SCOPED request (P44-r1 addendum): no whole-library `enabled:`
-        # footer — just an enable hint for THIS axis's not-yet-enabled members.
-        print_axis_enable_hint(view, registry, axes)
+        # footer — just an enable hint for THIS axis's not-yet-enabled members,
+        # plus (P77-r5) a sync hint for the enabled ones the catalog has no
+        # rows for yet: enabled-but-unsynced is a state, never an absence.
+        print_axis_enable_hint(view, registry, axes, catalog_slugs: census.map(&:slug))
       elsif options[:sources]
         print_source_map(query.source_groups, Nabu::SourceRegistry.load(config.sources_path))
       elsif slug.empty?
@@ -1447,8 +1466,10 @@ module Nabu
         print_source_enable_hint(focus_view(config, registry, catalog: catalog), registry, slug)
       end
     rescue Nabu::Query::List::Error => e
-      # Unknown source slug: a clean stderr line naming the valid slugs.
-      raise Thor::Error, e.message
+      # Unknown source slug: a clean stderr line naming the valid slugs —
+      # unless the registry KNOWS the slug (P77-r5): registered-but-unsynced
+      # is not "unknown", it teaches its own on-ramp instead.
+      raise Thor::Error, registered_not_held_message(config, catalog, slug) || e.message
     ensure
       catalog&.disconnect
     end
@@ -1818,9 +1839,13 @@ module Nabu
                      desc: "Graded-reading filter (P72-1): only passages whose distinct Han " \
                            "characters fall INSIDE this set (fold-aware; spaces ignored); " \
                            "composes with a text query and --lang/--license/--source"
+    option :signset, type: :string, banner: "SIGNS",
+                     desc: "Sign-coverage filter for the ATF corpora (P77-r16, sign-learning P-3): " \
+                           "only passages whose resolved OSL sign inventory falls inside this " \
+                           "comma-separated set of sign names/values; composes with --max-foreign"
     option :max_foreign, type: :numeric, default: 0, banner: "N",
-                         desc: "With --charset: allow up to N characters outside the set per " \
-                               "passage (0-3); each hit names its strangers"
+                         desc: "With --charset/--signset: allow up to N characters/signs outside " \
+                               "the set per passage (0-3); each hit names its strangers"
     option :min_chars, type: :numeric, default: 0, banner: "N",
                        desc: "With --charset: only passages with at least N distinct Han " \
                              "characters — floors the cleanest-first order above one-char fragments"
@@ -1905,13 +1930,24 @@ module Nabu
 
       if options[:charset]
         if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph] ||
-           options[:exact] || options[:word] || options[:words] || char_filter_options?
+           options[:exact] || options[:word] || options[:words] || char_filter_options? ||
+           options[:signset]
           raise Thor::Error, "search: --charset is the coverage filter over whole passages — it " \
                              "composes with a plain text query and --lang/--license/--source only"
         end
         return graded_search(query)
       end
-      raise Thor::Error, "search: --max-foreign only accompanies --charset" if options[:max_foreign].to_i.positive?
+      if options[:signset]
+        if query || options[:fuzzy] || options[:near] || options[:lemma] || options[:morph] ||
+           options[:exact] || options[:word] || options[:words] || char_filter_options?
+          raise Thor::Error, "search: --signset is the sign-coverage filter over whole ATF passages " \
+                             "— it composes with --max-foreign and --lang/--license/--source only"
+        end
+        return sign_graded_search
+      end
+      if options[:max_foreign].to_i.positive?
+        raise Thor::Error, "search: --max-foreign only accompanies --charset or --signset"
+      end
 
       if char_filter_options?
         if options[:fuzzy] || options[:near] || options[:lemma] || options[:morph]
@@ -3746,9 +3782,10 @@ module Nabu
                      history ledger, acquisitions — never in the repo
 
       Everything under db/ is derived (`nabu rebuild` regenerates it from
-      the three folders) and rides only as a CONVENIENCE — included by
-      default because a file copy beats hours of rebuild; --skip-derived
-      omits it for the pure three-folder set.
+      the three folders) and is NEVER backed up (owner ruling 2026-08-16):
+      restore = clone the repo, rsync the folders back, `nabu rebuild`.
+      A pre-P71 box whose ledger still sits at db/history.sqlite3 is
+      refused up front — run `nabu migrate-local` first, then back up.
 
       Target: local/config/settings.yml `backup: target:` (a path under a
       mounted external volume), overridable with --to PATH.
@@ -3765,18 +3802,15 @@ module Nabu
         nabu backup                                   # to the configured volume
         nabu backup --to /Volumes/NabuBackup/nabu     # explicit target
         nabu backup --dry-run                          # show the plan
-        nabu backup --skip-derived                     # canonical + ledger + config only
     HELP
     option :to, type: :string, desc: "Target path override (default: config/nabu.yml backup.target)"
-    option :skip_derived, type: :boolean, default: false,
-                          desc: "Omit the derived dbs (catalog + fulltext); restore rebuilds them"
     option :dry_run, type: :boolean, default: false, desc: "Print the rsync plan and change nothing"
     option :allow_unmounted, type: :boolean, default: false,
                              desc: "Skip the mount-point guard (for a deliberately-local target)"
     def backup
       config = Nabu::Config.load
       result = Nabu::Backup.new(
-        config: config, target: options[:to], skip_derived: options[:skip_derived],
+        config: config, target: options[:to],
         dry_run: options[:dry_run], allow_unmounted: options[:allow_unmounted]
       ).run
       print_backup(result)
@@ -4409,10 +4443,17 @@ module Nabu
 
         names = spec.split(",").map(&:strip).reject(&:empty?).uniq
         names.each do |name|
+          next if registry.functional_set?(name)
+
           axes[name] ||
-            raise(Thor::Error, "#{command}: unknown axis #{name.inspect} — known axes: #{axes.names.join(', ')}")
+            raise(Thor::Error, "#{command}: unknown axis #{name.inspect} — known axes: " \
+                               "#{axes.names.join(', ')} · functional sets: " \
+                               "#{Nabu::SourceRegistry::FUNCTIONAL_SETS.join(', ')}")
         end
-        [names, names.flat_map { |name| registry.axis_members(name) }.uniq]
+        slugs = names.flat_map do |name|
+          registry.functional_set?(name) ? registry.functional_set_members(name) : registry.axis_members(name)
+        end
+        [names, slugs.uniq]
       end
 
       # -- list (P22-1) renderers -------------------------------------------
@@ -4561,7 +4602,8 @@ module Nabu
         end
         if options[:axis]
           return Nabu::StatusReport.render_grouped(registry: registry, db: db, ledger: ledger,
-                                                   axes: selected_axes(registry.axes), tag_note: AXIS_TAG_NOTE)
+                                                   axes: selected_axes(registry.axes, registry),
+                                                   tag_note: AXIS_TAG_NOTE)
         end
 
         Nabu::StatusReport.render(registry: registry, db: db, ledger: ledger, long: options[:long])
@@ -4671,16 +4713,21 @@ module Nabu
       # rule). Blocked (grant-gated private) members are named INDIVIDUALLY with
       # their grant marker — never folded into `enable <axis>`, which skips them
       # (the r3b rule). Meta line → STDERR, like every enablement note.
-      def print_axis_enable_hint(view, registry, axes)
-        requested = axes.flat_map { |axis| registry.axis_members(axis.name) }.uniq
-        print_scoped_enable_hint(view, registry, requested, enable_axes: axes.map(&:name))
+      def print_axis_enable_hint(view, registry, axes, catalog_slugs: nil)
+        requested = axes.flat_map do |axis|
+          next registry.functional_set_members(axis.name) if registry.functional_set?(axis.name)
+
+          registry.axis_members(axis.name)
+        end.uniq
+        print_scoped_enable_hint(view, registry, requested, enable_axes: axes.map(&:name),
+                                                            catalog_slugs: catalog_slugs)
       end
 
       def print_source_enable_hint(view, registry, slug)
         print_scoped_enable_hint(view, registry, [slug], enable_axes: [])
       end
 
-      def print_scoped_enable_hint(view, registry, requested_slugs, enable_axes:)
+      def print_scoped_enable_hint(view, registry, requested_slugs, enable_axes:, catalog_slugs: nil)
         return unless view.active? # --all is the full reveal — silent
 
         enabled = view.resolution.slugs
@@ -4690,6 +4737,7 @@ module Nabu
           # `enable` target, so neither counts as an un-enabled gap.
           entry.nil? || entry.shelf? || entry.feature_module? || enabled.include?(slug)
         end
+        print_unsynced_hint(registry, requested_slugs, enabled, catalog_slugs)
         return if gap.empty?
 
         blocked_gap, public_gap = gap.partition { |slug| registry.blocked?(slug) }
@@ -4706,6 +4754,51 @@ module Nabu
 
         count = gap.size
         warn "#{count} member#{'s' unless count == 1} not enabled — #{clauses.join('; ')}"
+      end
+
+      # P77-r5 (the osta eyeball): an ENABLED member with no catalog rows yet
+      # (post-enable, pre-first-sync) is neither a census row nor an enable
+      # gap — without this line it silently vanishes from the scoped view.
+      # Shelves are excluded (`nabu ingest`, not sync, fills them); modules
+      # stay (they are honest sync targets). Only list passes catalog_slugs —
+      # status renders never-synced rows itself, so it opts out with nil.
+      def print_unsynced_hint(registry, requested_slugs, enabled, catalog_slugs)
+        return if catalog_slugs.nil?
+
+        unsynced = requested_slugs.uniq.select do |slug|
+          entry = registry[slug]
+          entry && !entry.shelf? && enabled.include?(slug) && !catalog_slugs.include?(slug)
+        end
+        return if unsynced.empty?
+
+        count = unsynced.size
+        warn "#{count} member#{'s' unless count == 1} enabled, not yet synced — " \
+             "#{unsynced.map { |slug| "nabu sync #{slug}" }.join('; ')}"
+      end
+
+      # P77-r5, the other half of the same eyeball: `list <slug>` on a source
+      # the REGISTRY knows but the catalog does not must not claim "unknown
+      # source" — the slug is registered and simply has no rows yet. Returns
+      # the teaching message, or nil when the catalog-holds error is the
+      # honest one (a truly unknown slug, or a different failure).
+      def registered_not_held_message(config, catalog, slug)
+        return nil if slug.nil? || slug.empty? || catalog.nil?
+        return nil if catalog[:sources].where(slug: slug).any?
+
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        entry = registry[slug]
+        return nil unless entry
+        return "#{slug} is a registered shelf with nothing on it yet — nabu ingest fills it" if entry.shelf?
+
+        # Enablement read with all:false — the --all flag reveals rows, it
+        # does not enable anything, so it must not flip this wording.
+        view = Nabu::Focus.view(profile: effective_profile(config, registry, catalog: catalog),
+                                registry: registry, all: false, disabled: false)
+        if view.resolution.slugs.include?(slug)
+          "#{slug} is registered and enabled but not yet synced — run nabu sync #{slug}"
+        else
+          "#{slug} is registered but not enabled — run nabu enable #{slug}, then nabu sync #{slug}"
+        end
       end
 
       # Warn once about names the file carries that the registry no longer
@@ -4786,6 +4879,20 @@ module Nabu
         removed = profile.entries & names
         Nabu::Profile.new(profile.entries - names).save(config.profile_path)
         announce_enablement(config, registry, verb: "disabled", changed: removed, catalog: catalog)
+        warn_still_required(config, registry, names, catalog: catalog)
+      end
+
+      # P77-r4 (the survey's disable finding): a disabled name the closure
+      # re-adds must SAY so — "disabled" while it stays enabled is a lie.
+      def warn_still_required(config, registry, names, catalog:)
+        resolution = Nabu::Focus.resolve(effective_profile(config, registry, catalog: catalog), registry)
+        names.select { |name| resolution.slugs.include?(name) }.each do |name|
+          dependents = registry.required_by(name) & resolution.slugs
+          next if dependents.empty?
+
+          warn "#{name} stays enabled — required by #{dependents.join(', ')} " \
+               "(disable the dependent to drop it)"
+        end
       end
 
       # Confirm a write: what changed, then the current enabled set.
@@ -4794,16 +4901,22 @@ module Nabu
         show_enablement(effective_profile(config, registry, catalog: catalog), registry)
       end
 
-      # The current enabled set: axes vs sources distinguished, drift flagged,
-      # and the resolved source count — or the honest empty-state.
+      # The current enabled set, grouped by PROVENANCE (P77-r2, owner report
+      # 2026-08-13): core first (the auto-enabled default — shown even when
+      # no profile entry names it), then each profile axis entry with the
+      # members it pulls in, then the individually enabled remainder. Every
+      # source is listed ONCE, under the first provenance that covers it,
+      # and the headline count is the DEDUPED UNION of all of them — never
+      # the raw entry count alone (a single axis entry covers many sources).
       def show_enablement(profile, registry)
         resolution = Nabu::Focus.resolve(profile, registry)
         return say(Nabu::Focus.empty_state_line) if resolution.slugs.empty?
 
-        count = profile.entries.size
-        say "enabled (#{count} #{count == 1 ? 'entry' : 'entries'}):"
-        say "  axes:    #{resolution.axes.join(', ')}" unless resolution.axes.empty?
-        say "  sources: #{resolution.sources.join(', ')}" unless resolution.sources.empty?
+        groups = enablement_groups(registry, resolution)
+        entries = profile.entries.size
+        total = groups.sum { |_label, members| members.size }
+        say "enabled (#{entries} #{entries == 1 ? 'entry' : 'entries'} → #{total} distinct sources):"
+        groups.each { |label, members| say "  #{label}: #{members.join(', ')}" }
         unless resolution.unknown.empty?
           say "  unknown: #{resolution.unknown.join(', ')} (not a known axis or source — ignored)"
         end
@@ -4811,7 +4924,36 @@ module Nabu
         say "resolved: #{pluralize(shown, 'source')} enabled (nabu status shows them; --all shows everything)"
       end
 
-      def selected_axes(axis_registry)
+      def enablement_groups(registry, resolution)
+        groups = []
+        shown = []
+        core = registry.core_members
+        unless core.empty?
+          groups << ["core (enabled by default)", core.sort]
+          shown += core
+        end
+        resolution.axes.each do |axis|
+          members = (registry.axis_members(axis) - shown).sort
+          groups << ["#{axis} (axis)", members] unless members.empty?
+          shown += members
+        end
+        individual = (resolution.sources - shown).sort
+        groups << ["sources", individual] unless individual.empty?
+        shown += individual
+        # The chain-pulled remainder (P77-r3): slugs in the resolution only
+        # because something above requires them, each named with its
+        # dependents — the package-manager provenance.
+        required = (resolution.slugs - shown).reject { |slug| registry[slug]&.shelf? }.sort
+        unless required.empty?
+          labeled = required.map do |slug|
+            "#{slug} (by #{(registry.required_by(slug) & resolution.slugs).join(', ')})"
+          end
+          groups << ["required", labeled]
+        end
+        groups
+      end
+
+      def selected_axes(axis_registry, registry)
         if axis_registry.empty?
           raise Thor::Error, "list: no research axes are defined (config/axes.yml) — --axis needs the registry"
         end
@@ -4820,9 +4962,30 @@ module Nabu
         return axis_registry.each_axis.to_a if spec.empty?
 
         spec.split(",").map(&:strip).reject(&:empty?).uniq.map do |name|
-          axis_registry[name] ||
-            raise(Thor::Error, "list: unknown axis #{name.inspect} — known axes: #{axis_registry.names.join(', ')}")
+          axis_registry[name] || functional_set_axis(registry, name) ||
+            raise(Thor::Error, "list: unknown axis #{name.inspect} — known axes: " \
+                               "#{axis_registry.names.join(', ')} · functional sets: " \
+                               "#{Nabu::SourceRegistry::FUNCTIONAL_SETS.join(', ')}")
         end
+      end
+
+      # A functional set rendered as a pseudo-axis (P77 rider): same Axis
+      # duck the grouped census walks, persona = what the set IS. Desk
+      # order stays ratified; sets sort after (order 900+).
+      def functional_set_persona(name)
+        { "core" => "The auto-enabled minimum — the registry instruments every install carries",
+          "signs" => "The sign/char capability restore set",
+          "quickstart" => "The starter shelf — core plus the smallest real sources" }.fetch(name)
+      end
+
+      def functional_set_axis(registry, name)
+        return nil unless registry.functional_set?(name)
+
+        persona = functional_set_persona(name)
+        Nabu::AxisRegistry::Axis.new(
+          name: name, persona: persona, desc: persona,
+          order: 900 + Nabu::SourceRegistry::FUNCTIONAL_SETS.index(name)
+        )
       end
 
       # `list --axis` (P35-1): the census grouped under the research axes
@@ -4837,18 +5000,26 @@ module Nabu
 
         width = rows.map { |row| row.slug.length }.max
         say AXIS_TAG_NOTE
+        shown = {}
         axes.each do |axis|
           say ""
           say "#{axis.name} — #{axis.persona}"
-          members = rows.select { |row| registry[row.slug]&.axes&.include?(axis.name) }
+          members = rows.select { |row| registry.axis_or_set_member?(axis.name, row.slug) }
           if members.empty?
             say "  (nothing held on this axis yet)"
           else
-            members.each { |row| say "  #{row.slug.ljust(width)}  #{census_fragments(row).join('  ')}" }
+            members.each do |row|
+              say "  #{row.slug.ljust(width)}  #{census_fragments(row).join('  ')}"
+              shown[row.slug] = row
+            end
           end
         end
         say ""
-        say census_summary(rows)
+        # The summary is the DEDUPED UNION of the sources actually shown
+        # under the selected axes/sets (P77-r2, owner report 2026-08-13) —
+        # never the whole-library aggregate a scoped view didn't display.
+        # A source on two selected desks counts once (tags, not folders).
+        say census_summary(shown.values)
       end
 
       # Compact census fragments, zero fields suppressed (conventions §10).
@@ -6780,6 +6951,57 @@ module Nabu
             "#{' — candidate window filled; narrow with --source/--lang for the rest' if outcome.capped}"
       end
 
+      # The sign-coverage graded lane (P77-r16, sign-learning P-3): the
+      # --charset architecture keyed on OSL sign names over the ATF
+      # corpora. Needs the sign list (nabu sync osl) AND the passage_signs
+      # index (a rebuild/refresh with the list present).
+      def sign_graded_search
+        validate_license!(options[:license])
+        config = Nabu::Config.load
+        list = Nabu::SignList.load_default(config: config)
+        raise Thor::Error, "search: --signset needs the OSL sign list — run `nabu sync osl` first" unless list
+
+        catalog = open_catalog(config)
+        fulltext = open_fulltext(config)
+        raise Thor::Error, "no index — run nabu sync or nabu rebuild" unless catalog && fulltext
+
+        validate_source!(catalog, options[:source])
+        outcome = Nabu::Query::SignGraded.new(catalog: catalog, fulltext: fulltext, sign_list: list)
+                                         .run(signset: options[:signset],
+                                              max_foreign: options[:max_foreign].to_i,
+                                              lang: options[:lang], license: options[:license],
+                                              source: options[:source], limit: options[:limit].to_i)
+        print_sign_graded_results(outcome)
+        print_display_footer
+      rescue Nabu::Error => e
+        raise Thor::Error, e.message
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
+      end
+
+      def print_sign_graded_results(outcome)
+        unless outcome.indexed
+          return say("sign coverage not indexed yet — the passage_signs index arrives with the " \
+                     "next `nabu rebuild` (or a sign-source sync's refresh) once osl is synced; " \
+                     "no scan attempted")
+        end
+        if outcome.results.empty?
+          return say("no passages read inside this #{outcome.signset_size}-sign set" \
+                     "#{" (±#{options[:max_foreign].to_i})" if options[:max_foreign].to_i.positive?}")
+        end
+
+        outcome.results.each do |result|
+          strangers = result.foreign.empty? ? "" : "  +{#{result.foreign.join(' ')}}"
+          say "#{result.urn}  [#{result.language}]  #{result.nsigns} signs#{strangers}"
+          say "  #{result.text}"
+        end
+        say ""
+        say "sign coverage: #{outcome.signset_size}-sign set" \
+            "#{" ± #{options[:max_foreign].to_i} strangers" if options[:max_foreign].to_i.positive?}" \
+            "#{' — candidate window filled; narrow with --source/--lang for the rest' if outcome.capped}"
+      end
+
       # The explicit character-structure search (P37-4): --radical/--strokes/
       # --char-component resolve to a glyph set (CharFilter), which filters
       # Han-language passages by containment, composing with a plain text
@@ -7376,8 +7598,8 @@ module Nabu
       # The reading→character lane (P65 gate feedback): pinyin against
       # unihan kMandarin, kana against kanjidic2 on/kun. Prints the match
       # list and answers true; false (silently) when no dictionary shelf or
-      # no match, so the caller's honest miss line runs. No frozen contract
-      # yet — --json says so rather than inventing one.
+      # no match, so the caller's honest miss line runs. --json emits the
+      # frozen reading contract (P77-r15 — the last char lane to freeze).
       def reading_char_card(config, input)
         catalog = open_catalog(config)
         return false unless catalog&.table_exists?(:dictionary_entries)
@@ -7386,10 +7608,10 @@ module Nabu
         return false if matches.empty?
 
         if options[:json]
-          raise Thor::Error, "char --json: the reading lane has no frozen contract yet — " \
-                             "the sign cards (cuneiform/hieroglyphic) do"
+          say JSON.pretty_generate(Nabu::Query::Char.reading_json_payload(input, matches))
+        else
+          print_reading_matches(input, matches)
         end
-        print_reading_matches(input, matches)
         true
       ensure
         catalog&.disconnect
@@ -7417,7 +7639,8 @@ module Nabu
         begin
           Nabu::Query::SignCard.new(
             sign_list: list, readings: Nabu::CdliSignReadings.load_default(config: config),
-            fulltext: fulltext, catalog: catalog
+            fulltext: fulltext, catalog: catalog,
+            overlay: Nabu::EdubbaOverlay.load_default(config: config)
           ).run(input)
         ensure
           fulltext&.disconnect
@@ -7474,7 +7697,33 @@ module Nabu
         print_sign_card_senses(card)
         print_sign_card_forms(card)
         print_sign_card_corpus(card)
+        print_sign_didactic(card.didactic)
         print_sign_card_search(card)
+      end
+
+      # The Edubba cuneiform overlay section (P77-8, the hiero mold): the
+      # certainty grade is LOAD-BEARING — "unclear" prints IN FRONT of
+      # the meaning, never as a footnote.
+      def print_sign_didactic(overlay)
+        return if overlay.nil?
+
+        say ""
+        head = ["keyword \"#{overlay['keyword']}\"", overlay["value"] && "value #{overlay['value']}"]
+               .compact.join("  ·  ")
+        say "didactic (#{[overlay['course'],
+                          overlay['chapter'] && "ch. #{overlay['chapter']}"].compact.join(' ')}): #{head}"
+        if overlay["meaning"]
+          grade = overlay["certainty"] == "unclear" ? "UNCLEAR (origin debated — not fact): " : ""
+          say "  meaning: #{grade}#{overlay['meaning']}"
+        end
+        say "  origin: #{overlay['iconicity']}" if overlay["iconicity"]
+        unless Array(overlay["confusables"]).empty?
+          follow = overlay["confusables"].map { |name| "#{name} (nabu char #{name})" }.join("  ·  ")
+          say "  confusable with: #{follow}"
+        end
+        say "  #{overlay['description']}" if overlay["description"]
+        say "  codex: #{overlay['link']}" if overlay["link"]
+        say "  #{overlay['attribution']}"
       end
 
       # P75 C-4: the follow-up affordance — a sign with reading values can
@@ -8454,7 +8703,10 @@ module Nabu
       # neither is the unknown-target error (naming BOTH namespaces). A nil
       # name falls to sync_one's own "slug or --all" guard, unchanged.
       def run_sync(runner, registry, slug, db, ledger, enabled:)
-        return sync_all(runner, enabled: enabled) if options[:all]
+        if options[:all]
+          auto_sync_core!(runner, registry, slug, db)
+          return sync_all(runner, enabled: enabled)
+        end
         return sync_axes(runner, registry, options[:axis].split(","), db, ledger) if options[:axis]
 
         # P63 rider + P68-4: `sync <group>` sweeps a registered group —
@@ -8462,14 +8714,17 @@ module Nabu
         # and "signs" (the sign/char restore set: `nabu enable signs &&
         # nabu sync signs` makes the capability whole on a fresh box).
         # Failures are reported per member and never stop the rest.
-        return sync_group(slug, runner, registry, db, ledger, enabled) if
-          Nabu::SourceRegistry::GROUPS.include?(slug)
+        if Nabu::SourceRegistry::GROUPS.include?(slug)
+          auto_sync_core!(runner, registry, slug, db)
+          return sync_group(slug, runner, registry, db, ledger, enabled)
+        end
 
         if slug.nil? || registry[slug]
           # P44-r3b: the enablement acquisition gate is on the EXPLICIT
           # single-source path only. Axis fan-out keeps its registry-enabled
           # membership rule (below); --all applies the enabled-set filter itself.
           enforce_enablement!(registry[slug], enabled) unless slug.nil?
+          auto_sync_core!(runner, registry, slug, db)
           return sync_one(runner, registry, slug, db, ledger)
         end
         return sync_axes(runner, registry, [slug], db, ledger) if registry.axes[slug]
@@ -8486,7 +8741,9 @@ module Nabu
       # member is a contained failure carrying the enable hint, so
       # `sync signs` before `enable signs` explains itself member by member.
       def sync_group(name, runner, registry, db, ledger, enabled)
-        members = registry.group_members(name)
+        # The sweep closes over requires (P77-r4): `sync core` honors the
+        # members' own chains — the seeded nabu-places gazetteers ride.
+        members = registry.requires_closure(registry.group_members(name))
         raise Thor::Error, "sync #{name}: no #{name}-group sources registered" if members.empty?
 
         say "#{name} group: #{members.join(' · ')}"
@@ -8550,9 +8807,18 @@ module Nabu
 
         unknown = names.reject { |name| registry.axes[name] }
         unless unknown.empty?
-          raise Thor::Error, "sync --axis: unknown axis #{unknown.first.inspect} — known axes: #{axis_menu(registry)}"
+          name = unknown.first
+          if registry.functional_set?(name)
+            hint = Nabu::SourceRegistry::GROUPS.include?(name) ? name : "core"
+            raise Thor::Error, "sync --axis: #{name.inspect} is a functional set, not a desk axis — " \
+                               "run `nabu sync #{hint}` (the group sweep)"
+          end
+
+          raise Thor::Error, "sync --axis: unknown axis #{name.inspect} — known axes: #{axis_menu(registry)}"
         end
 
+        auto_sync_core!(runner, registry, nil, db,
+                        extra: names.flat_map { |name| registry.axis_members(name) }.uniq)
         synced = []
         names.each { |name| sync_axis_group(runner, registry, name, db, ledger, synced) }
       end
@@ -8686,7 +8952,7 @@ module Nabu
         return unless Dir.exist?(dir)
 
         kept_attic = false
-        Dir.children(dir).each do |child|
+        Dir.children(dir).sort.each do |child|
           if child == ".attic"
             kept_attic = true
             next
@@ -8822,9 +9088,73 @@ module Nabu
       # The quickstart core sweep (P63 rider): same containment contract as
       # the starter loop — a failed member is reported and counted, an
       # awaiting Manual Adapter member prints its card and counts as neither.
-      def run_core_syncs(runner, registry)
+      # P77 rider (owner ruling 2026-08-13): core is the MINIMUM SET a new
+      # install carries — auto-enabled by nature (modules are exempt from
+      # the enablement gate) and AUTO-SYNCED on the box's first real sync
+      # request: any core member without a sources row yet syncs first,
+      # riding the requested sync. P77-r3 extends the same sweep to the
+      # requested source's `requires:` chain (the package-manager rule:
+      # syncing a dependent syncs its never-synced requirements first).
+      # --parse-only never acquires; an explicit `sync core` (or a core
+      # member by name) IS the sweep already; a member that once synced
+      # never re-rides (its row exists — `nabu sync core` is the explicit
+      # re-run). Failures (and ManualDrop acquisition cards) are contained
+      # so the requested sync still runs.
+      def auto_sync_core!(runner, registry, slug, db, extra: [])
+        return if options[:parse_only]
+
+        members = registry.core_members
+        # A request that IS the core sweep (the group, or a member by name)
+        # never re-triggers it — but chains still ride. The sweep set
+        # closes over requires: the CORE MEMBERS' own chains too (the P77
+        # survey's coverage finding), plus the requested slug's and any
+        # +extra+ base an axis fan-out passes; the extras themselves sync
+        # on their own path, only their chains ride here.
+        core_wanted = slug == "core" || members.include?(slug) ? [] : members
+        base = core_wanted + extra
+        base += [slug] if slug && registry[slug]
+        needed = registry.requires_closure(base.uniq) - [slug] - extra
+        missing = needed - synced_slugs(db, needed)
+        # A grant-gated or blocked requirement never rides an implicit
+        # sweep — acknowledging terms is an explicit act (the sync --all
+        # GrantRequired posture).
+        gated = missing.select { |m| registry[m]&.grant_required? || registry.blocked?(m) }
+        unless gated.empty?
+          say "prerequisites skipped (grant-gated — sync each by name to acknowledge): #{gated.join(' · ')}"
+          missing -= gated
+        end
+        return if missing.empty?
+
+        core_missing = missing & core_wanted
+        chain_missing = missing - core_wanted
+        say "core set first (owner ruling 2026-08-13): #{core_missing.join(' · ')}" unless core_missing.empty?
+        unless chain_missing.empty?
+          labeled = chain_missing.map do |member|
+            "#{member} (for #{(registry.required_by(member) & (base + needed)).uniq.join(', ')})"
+          end
+          say "dependency chain first: #{labeled.join(' · ')}"
+        end
+        failures = run_core_syncs(runner, registry, members: missing)
+        return if failures.empty?
+
+        warn "prerequisite auto-sync: #{failures.map(&:first).join(', ')} failed — " \
+             "continuing with the requested sync (`nabu sync core` / the member by name re-runs it)"
+      end
+
+      # "Synced" = at least one SUCCESSFUL sync (last_sync_at is written
+      # only after a completed load) — a row minted by a failed or
+      # awaiting-acquisition attempt must NOT count, or the sweep would
+      # never retry a requirement whose first attempt printed the
+      # ManualDrop card (the P77 survey's sentinel finding).
+      def synced_slugs(db, members)
+        return [] unless db&.table_exists?(:sources)
+
+        db[:sources].where(slug: members).exclude(last_sync_at: nil).select_map(:slug)
+      end
+
+      def run_core_syncs(runner, registry, members: registry.requires_closure(registry.core_members))
         failures = []
-        registry.core_members.each do |member|
+        members.each do |member|
           outcome = runner.sync(member, progress: progress_reporter)
           finish_progress
           if outcome.aborted?

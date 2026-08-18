@@ -30,11 +30,13 @@ files:
   - path: runes-trim.sqlite3
     refetchable: false
     provenance: local-trim
-    reason: schema-preserving 4-inscription trim (U 344, DR 42, N KJ101, Og 136) of the
-      real 45 MB runes.234feed5f77e.sqlite3 web artifact (fetched 2026-07-22, D40-d) —
-      full DDL incl. views copied, rows filtered by signature/meta relations, small
-      reference tables whole; the all_data view returns the 4 records on the trim
+    reason: schema-preserving 6-inscription trim (U 344, DR 42, N KJ101, Og 136 +
+      the P77-r10 colliding pair DR IK51,2 / DR IK512, whose signa both slugify to
+      dr-ik512 — the deterministic-belt witnesses) of the real 45 MB
+      runes.234feed5f77e.sqlite3 web artifact (fetched 2026-07-22, D40-d; pair rows
+      copied 2026-08-15) — full DDL incl. views copied, rows filtered by
+      signature/meta relations, small reference tables whole
     upstream: https://rundata.info/static/runes/runes.234feed5f77e.sqlite3
     copied: 2026-07-22
     whole: false
-    trim: 45 MB -> 248 KB, 4 inscriptions, schema+views intact
+    trim: 45 MB -> 6 inscriptions, schema+views intact

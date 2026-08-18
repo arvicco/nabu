@@ -1,0 +1,18 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+source: disco
+adapter_test: test/adapters/disco_test.rb
+retrieved: 2026-08-13
+files:
+  - path: tei/all-periods-per-author/disco001g.xml
+    url: https://raw.githubusercontent.com/pruizf/disco/main/tei/all-periods-per-author/disco001g.xml
+    whole: true
+    reason: one-sonnet Golden Age author (Joseph Aragonés) — the full teiHeader grammar (RDFa titleStmt, extent, prosopography with birth/death centuries + birthplace, metDecl declaring ADSO/RhymeTagger AUTOMATIC annotation), front div, one lg[type=sonnet] with cuarteto/terceto stanzas, met/rhyme/enjamb line attrs, inline <w type="rhyme"> marks
+  - path: tei/all-periods-per-author/disco002g.xml
+    url: https://raw.githubusercontent.com/pruizf/disco/main/tei/all-periods-per-author/disco002g.xml
+    whole: true
+    reason: multi-sonnet author (Arias Montano, 2 sonnets) whose ids start at _0002 — the corpus's own sonnet-ordinal space is not per-file-1-based, so citations mint from the id verbatim
+  - path: tei/all-periods-per-author/disco002n.xml
+    url: https://raw.githubusercontent.com/pruizf/disco/main/tei/all-periods-per-author/disco002n.xml
+    whole: true
+    reason: 19th-century author (period suffix n; a woman poet — sex attr variance) — the period-letter → period mapping witness

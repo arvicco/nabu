@@ -69,6 +69,13 @@ module Nabu
       index(result.signs)
     end
 
+    # Every top-level sign record, in file order (P77-r16: the sign
+    # inventory/coverage lane builds its parent-folded reading maps from
+    # these — the SignTableBuilder rule).
+    def signs
+      @result.signs
+    end
+
     # OSL-spelled value → every candidate record, in file order. With a
     # +language:+ filter, a candidate matched only through %lang-qualified
     # values must match the filter; unqualified values pass any filter.

@@ -183,6 +183,46 @@ reads.
 
 ---
 
+### The registry vocabulary — kinds and flags (who syncs, when, and why)
+
+Every row in `config/sources.yml` is one of three **kinds**, and four
+orthogonal switches govern what happens to it. These answer different
+questions and never substitute for each other (owner semantics ruling
+2026-08-18, reaffirming the 2026-07-24 nomenclature ruling).
+
+| Kind | What it is | Catalog rows | Examples |
+|---|---|---|---|
+| `source` (default) | a text corpus — an adapter that fetches, parses, and mints documents/passages | yes | perseus-greek, cdli, osta, achemenet |
+| `shelf` | an owner-memory shelf — local fetch (`LocalFetch`), no network, no `sync_policy` (kind implies it) | yes (local grains) | local-library, local-notes |
+| `module` | an instrument — canonical data that feeds derived features (links crosswalks, gazetteers, sign spines, fold tables), minting **zero** catalog rows | no | trismegistos, pleiades, osl, unikemet, burman-concordance |
+
+| Flag | Question it answers | Who sets it |
+|---|---|---|
+| `wired` | **Is the sync link tested and declared working?** A verification FACT about the channel, for every kind — flipped `true` once, after the owner-verified first sync (adapter checklist §6). It says nothing about cadence or desirability. | the loop, at first-sync verification |
+| enabled (`nabu enable`, `config/profile.yml` + local overlay) | **Does THIS box work with this source?** The instance profile — `sync <slug>` refuses an un-enabled source; modules are pre-enabled by nature (they never gate on enablement). | the owner, per box |
+| `sync_policy` | **What cadence?** `auto` = swept by `sync --all` (living upstreams) · `manual` = owner-fired by name (size/pacing) · `frozen` = dead upstream, synced once. Shelves have none (kind implies local). | the registry, at adoption |
+| `grant_required` / `availability` | **May we, publicly?** Permission-bound sources are skipped by `--all` until the grant is acknowledged; `availability: blocked` rows never advertise on public surfaces. | owner rulings |
+
+**The `sync --all` sweep predicate, verbatim:** `kind: source` AND
+`wired` AND `sync_policy: auto` AND enabled-on-this-box AND
+grant-acknowledged. Note what is NOT in that list doing double duty:
+a module is excluded **by kind** (it mints no catalog rows and its
+derived features re-run at rebuild), never by keeping `wired` false —
+the retired "PERMANENTLY false for modules" convention conflated
+channel verification with cadence and is gone (P77-r20). A module
+whose first fetch landed is `wired: true` like any other verified
+channel; you sync it by name only when its upstream versions (rare —
+most instrument upstreams are frozen deposits), and its derived edges
+and features re-derive at every `nabu rebuild` regardless.
+
+Supporting per-row markers, briefly: `axes` (desk membership — every
+source names its desks), `siblings` (co-minted document lanes, e.g.
+osta's `-vrt`), `lemma_tier` (`silver` marks automatic lemmatization —
+the GLAUx rule), `fuzzy_index` (opt-in to the documentary trigram
+index), `requires` (module dependency chains, package-manager
+semantics), `group: core` (registry-sibling instruments quickstart
+sweeps via `nabu sync core`).
+
 ## 2. Why launchd needs help finding Ruby
 
 This is the one genuinely fiddly part; get it right and the rest is mechanical.
@@ -571,7 +611,16 @@ disk that a bare `rsync` (or Finder drag) could restore.
 | `config/` | the project definition | Registries, rules, postures — what the corpus *is* |
 | `local/` | THE INSTANCE | Owner shelves (`local/shelves/`), instance config (`local/config/` — rulings, grants, profile, settings), the ledger (`local/history.sqlite3` — the **only** copy of runs/pins/baselines/revisions) |
 | `.docs/` | the steering record | Owner working material with no other copy (№R-22) — non-contract, backed up by default |
-| `db/*.sqlite3` | the derived dbs | **Default-on convenience** — a file copy beats hours of rebuild; `--skip-derived` omits them (`nabu rebuild` re-mints every one from the three folders) |
+
+**Nothing under `db/` is ever backed up** (owner ruling 2026-08-16, closing the
+№R-21 "convenience tier"): every derived store re-mints via `nabu rebuild` from
+the three folders. The tier existed as a restore-time shortcut and hauled
+~120 GB of derived db into every backup and every drill workspace — the cost
+that drained the boot disk on 2026-08-15. A pre-P71 box whose ledger still sits
+at `db/history.sqlite3` (non-derivable history, no other copy) is **refused up
+front** — silently omitting the only copy would be the disaster — and told to
+`nabu migrate-local` first: the ledger is a local artifact and rides inside the
+`local/` section.
 
 **Why file-level, not git mirrors.** The obvious "back up canonical/ by pushing
 each slug's git to a bare mirror" silently drops the `.attic/` — it is a plain
@@ -580,22 +629,13 @@ the documents that exist **nowhere else** (upstream scrapped them; the clone is
 `--depth 1`). File-level rsync copies the attic for free. So: file-level, or the
 backup is a lie.
 
-The derived dbs are cheap insurance. Restoring them means the corpus is queryable
-the instant the rsync finishes; omit them with `--skip-derived` and a single
-`nabu rebuild` reconstitutes them from canonical/ byte-for-byte.
-
-**WAL sidecars (P17-7).** The dbs run `journal_mode=WAL` (architecture §5), so
-while any connection is open a `<db>-wal` file next to each db holds recently
-committed transactions the main file does not yet contain (plus a `<db>-shm`
-index). Each db section copies its live sidecars along with the db — the main
-file alone would be a stale or torn snapshot — and **prunes** a sidecar at the
-target whose source counterpart has been checkpointed away (restoring an
-outdated `-wal` next to a newer main file would replay old frames over newer
-data). Normally the nightly backup finds no sidecars at all: the last closing
-connection checkpoints the WAL and removes them. A backup that overlaps a
-running sync/rebuild can still capture a mid-write snapshot — same as before
-WAL — which is exactly what `rake ops:drill` exists to catch; prefer the
-nightly timing or re-run after the write finishes.
+**WAL sidecars (P17-7).** The ledger runs `journal_mode=WAL` (architecture §5),
+so while a connection is open a `history.sqlite3-wal` beside it holds recently
+committed transactions the main file does not yet contain (plus a `-shm`
+index). The `local/` **directory copy** carries live sidecars for free, and its
+`--delete` prunes a sidecar at the target whose source counterpart has been
+checkpointed away (restoring an outdated `-wal` next to a newer main file would
+replay old frames over newer data).
 
 ### The target: a mounted external volume
 
@@ -669,7 +709,6 @@ bypassed the blast radius is contained.
 nabu backup                       # to the configured volume (guarded)
 nabu backup --to /Volumes/X/nabu  # explicit target
 nabu backup --dry-run             # print the rsync plan, change nothing
-nabu backup --skip-derived        # the pure three-folder set (canonical + config + local)
 ```
 
 Each run prints one line per section (files, size, duration) and a summary; any
@@ -690,23 +729,20 @@ The promise is a machine with *nothing* but a clone and the backup disk:
 3. **rsync the data back** from the backup into the checkout:
    ```sh
    rsync -a /Volumes/NabuBackup/nabu/canonical/  ./canonical/
-   rsync -a /Volumes/NabuBackup/nabu/db/         ./db/
    rsync -a /Volumes/NabuBackup/nabu/config/     ./config/
+   rsync -a /Volumes/NabuBackup/nabu/local/      ./local/
    ```
    (Restoring *into a different root*? Point nabu at it without editing code:
    `export NABU_ROOT=/restored NABU_CONFIG=/restored/config/nabu.yml` and run
    the commands below from anywhere — `Config.load` honours both.)
-4. **Bring up the derived layer.** Two honest options:
-   - **Trust the restored derived dbs** (fastest — they came along by default):
-     do nothing; `nabu status` / `nabu search` work immediately.
-   - **Rebuild from canonical** (the belt-and-suspenders proof, and mandatory if
-     you restored with `--skip-derived`):
-     ```sh
-     bundle exec bin/nabu rebuild
-     ```
-     Rebuild drops and re-derives catalog + fulltext from canonical/ alone; the
-     ledger (history.sqlite3) is *never* touched, so run history/pins/baselines
-     survive.
+4. **Rebuild the derived layer** — the backup carries no `db/` (owner ruling
+   2026-08-16); one command re-derives all of it from the three folders:
+   ```sh
+   bundle exec bin/nabu rebuild
+   ```
+   Rebuild drops and re-derives catalog + fulltext + every derived lane; the
+   ledger (`local/history.sqlite3`) rode inside `local/`, so run
+   history/pins/baselines survive.
 5. **Verify integrity:**
    ```sh
    bundle exec bin/nabu verify     # re-hash canonical against the catalog → exit 0 clean
@@ -731,7 +767,17 @@ target is same-disk on purpose), **restores** into a fresh tmp "machine",
 **replays** the golden queries, and cross-checks the restored document/passage
 counts against the source of truth (the live catalog). It only **reads** the
 live corpus — backup is read-only on its sources — and writes exclusively under
-a tmp workspace, so it is safe to run against the live install any time. Output:
+a tmp workspace, so it is safe to run against the live install any time.
+
+**Every drill is the derivability law's proof (P71-8; sole mode since
+P77-r12 — the backup carries no `db/` to restore).** The restore is exactly the
+three permanent folders; the rebuild re-mints every derived store from scratch;
+and the report asserts the law oracles: the re-derived lect journal and
+re-mined links match the live instruments, and the grant/creep gates answer
+from `local/config/` with no ledger consulted (the `law` line). Run it as the
+acceptance proof after any change to what the law covers — it rebuilds the
+WHOLE corpus from scratch (hours on the live library), so schedule it
+deliberately. `rake ops:drill_pure` remains as an alias. Output:
 
 ```
 Restore drill
@@ -741,6 +787,7 @@ Restore drill
   verify     clean
   golden     6 found, 0 lost, 0 skipped
   counts     source=61347 docs / 920766 passages  restored=61347 docs / 920766 passages  MATCH
+  law        lects MATCH · links MATCH · grants quiet · creep quiet  (three-folder restore)
   => RESTORABLE
 ```
 
@@ -748,15 +795,22 @@ A non-zero exit (`NOT RESTORABLE`) means the backup would not restore cleanly �
 investigate before trusting it. Run the drill after any change to the backup set,
 the loader, or the rebuild path.
 
-**The pure drill — the derivability law's proof (P71-8).** `rake
-ops:drill_pure` restores ONLY the three permanent folders (canonical/ +
-config/ + local/ — never db/), rebuilds, and additionally asserts: the
-re-derived lect journal and re-mined links match the live instruments,
-and the grant/creep gates answer from `local/config/` with no ledger
-consulted. Its report adds a `law` line with the four verdicts. Run it
-as the acceptance proof after any change to what the law covers —
-note it rebuilds the WHOLE corpus from scratch (hours on the live
-library), so schedule it deliberately.
+**Harness discipline (P77-r12/r14, after the 2026-08-15 boot-disk drain).** The
+drill's footprint is ~2× the permanent folders plus a rebuilt `db/` — a space
+guard measures that against the workspace volume and refuses up front, with the
+numbers (naming any leftover drill workspaces it finds), before a byte lands. A
+failed backup section aborts before the restore (never an hours-long doomed
+run); a designed refusal prints its message plainly, never a crash banner.
+Every run logs to its own timestamped file under `~/Library/Logs/nabu/` (no
+shell redirect needed; two same-day runs can never clobber each other's
+evidence), and prints both the log and workspace paths first. **The drill
+cleans its own mess (P77-r14):** at run start it sweeps every prior
+`nabu-drill*` workspace — the small evidence files are salvaged to
+`~/Library/Logs/nabu/salvage-<workspace>/`, the ~290 GB bulk dies. A **crash**
+removes the workspace — an aborted run proves nothing and keeps nothing; the
+log is the evidence. A **completed failing** drill keeps its workspace
+(`report.txt`, `verify-issues.tsv`, the restored `machine/`) until the next run
+supersedes it; `KEEP_WORKSPACE=1` additionally keeps it on success.
 
 ### The nightly backup job
 

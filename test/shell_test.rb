@@ -25,6 +25,34 @@ class ShellTest < Minitest::Test
     assert_equal "kaboom", error.stderr
   end
 
+  # P77-r12: a bare "command failed (exit 1): rsync" hid an out-of-disk
+  # condition for a whole night — the stderr was captured, carried on the
+  # error object, and shown nowhere. The MESSAGE now speaks it too.
+  def test_the_error_message_carries_the_stderr_detail
+    error = assert_raises(Nabu::Shell::Error) do
+      Nabu::Shell.run("/bin/sh", "-c", "printf 'rsync: No space left on device (28)' >&2; exit 1")
+    end
+    assert_includes error.message, "command failed (exit 1)"
+    assert_includes error.message, "No space left on device"
+  end
+
+  def test_the_stream_error_message_carries_the_captured_detail
+    error = assert_raises(Nabu::Shell::Error) do
+      Nabu::Shell.stream("/bin/sh", "-c", "printf 'fatal: repository vanished\\n'; exit 128")
+    end
+    assert_includes error.message, "repository vanished"
+  end
+
+  def test_multiline_stderr_flattens_to_one_bounded_message_line
+    script = "i=0; while [ $i -lt 99 ]; do printf 'line %s of noise\\n' $i >&2; i=$((i+1)); done; exit 2"
+    error = assert_raises(Nabu::Shell::Error) do
+      Nabu::Shell.run("/bin/sh", "-c", script)
+    end
+    refute_includes error.message, "\n", "the message stays a single line"
+    assert_operator error.message.length, :<=, 400, "the detail is bounded, never a dump"
+    assert_equal 99, error.stderr.lines.size, "the FULL stderr still rides on the error object"
+  end
+
   def test_arguments_are_passed_literally_not_shell_expanded
     # A shell would expand $HOME and split on the space; argv semantics must not.
     literal = "a b $HOME"

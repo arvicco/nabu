@@ -175,13 +175,13 @@ module Nabu
     Entry = Data.define(:slug, :adapter_class_name, :wired, :sync_policy, :kind, :translations,
                         :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings, :axes,
                         :grant_required, :grant, :availability, :quickstart, :multilingual,
-                        :group) do
+                        :group, :requires) do
       def initialize(slug:, adapter_class_name:, wired:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false,
                      lemma_tier: DEFAULT_LEMMA_TIER, classes: nil, siblings: nil, axes: [],
                      grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
                      quickstart: DEFAULT_QUICKSTART, multilingual: DEFAULT_MULTILINGUAL,
-                     group: nil)
+                     group: nil, requires: [])
         super
       end
 
@@ -305,9 +305,38 @@ module Nabu
         raise ValidationError, "axis name #{collisions.first.inspect} collides with a source slug — " \
                                "axis names must never equal slugs (the resolution guarantee)"
       end
+      validate_requires!(entries)
 
       new(entries, axes: axes)
     end
+
+    # The dependency chain's load-time invariants (P77-r3): every declared
+    # requirement names a REGISTERED slug, and the graph is acyclic — a
+    # cycle would make enable/sync expansion spin, so it is refused at
+    # load with the cycle spelled out, never discovered at runtime.
+    def self.validate_requires!(entries)
+      by_slug = entries.to_h { |entry| [entry.slug, entry] }
+      entries.each do |entry|
+        entry.requires.each do |dep|
+          next if by_slug.key?(dep)
+
+          raise ValidationError, "source #{entry.slug.inspect}: requires unknown source #{dep.inspect}"
+        end
+      end
+      state = {}
+      entries.each { |entry| walk_requires!(entry.slug, by_slug, state, []) }
+    end
+    private_class_method :validate_requires!
+
+    def self.walk_requires!(slug, by_slug, state, trail)
+      return if state[slug] == :done
+      raise ValidationError, "requires cycle: #{(trail + [slug]).join(' -> ')}" if state[slug] == :visiting
+
+      state[slug] = :visiting
+      by_slug[slug].requires.each { |dep| walk_requires!(dep, by_slug, state, trail + [slug]) }
+      state[slug] = :done
+    end
+    private_class_method :walk_requires!
 
     def self.build_entry(slug, config, axis_registry: AxisRegistry.new([]))
       unless slug.is_a?(String) && slug.match?(Model::Validation::SLUG_SHAPE)
@@ -341,7 +370,8 @@ module Nabu
         availability: availability!(slug, config),
         quickstart: boolean!(slug, config, "quickstart"),
         multilingual: boolean!(slug, config, "multilingual"),
-        group: group!(slug, config)
+        group: group!(slug, config),
+        requires: requires!(slug, config)
       )
     end
     private_class_method :build_entry
@@ -363,6 +393,27 @@ module Nabu
             "got #{value.inspect}"
     end
     private_class_method :group!
+
+    # The `requires:` key (P77-r3, owner commission 2026-08-13): the slugs
+    # this row FUNCTIONALLY depends on — the package-manager rule. Enabling
+    # a source enables its whole chain (Focus closes over it); syncing it
+    # sweeps never-synced requirements first. Declared for HARD functional
+    # dependencies only (the dependent is blind or broken without the
+    # requirement — nabu-places resolving refs through the gazetteer
+    # slices); soft render-compose edges (a card that merely enriches when
+    # a sibling shelf is present) stay undeclared. Existence and
+    # acyclicity are load-time invariants (validate_requires!).
+    def self.requires!(slug, config)
+      value = config.fetch("requires", [])
+      unless value.is_a?(Array) && value.all? { |v| v.is_a?(String) && !v.strip.empty? }
+        raise ValidationError,
+              "source #{slug.inspect}: requires must be a list of source slugs, got #{value.inspect}"
+      end
+      raise ValidationError, "source #{slug.inspect}: requires itself" if value.include?(slug)
+
+      value.uniq.freeze
+    end
+    private_class_method :requires!
 
     # The public-availability posture (P44-r3a). Absent = public (the default);
     # `blocked` marks grant-gated private research material the public surfaces
@@ -541,15 +592,18 @@ module Nabu
     # local fetch strategy is implied by kind), and a module mints no catalog
     # rows so there is nothing to wire on.
     def self.kind_invariants!(slug, config, kind:, wired:)
-      if kind == "shelf" && config.key?("sync_policy")
-        raise ValidationError,
-              "source #{slug.inspect}: a kind: shelf row uses the local fetch strategy — " \
-              "drop sync_policy (kind implies it)"
-      end
-      return unless kind == "module" && wired
+      _ = wired # kept in the signature: call sites predate the 2026-08-18 ruling below
+      return unless kind == "shelf" && config.key?("sync_policy")
 
+      # The former second invariant — "a kind: module row must be
+      # wired: false" — was RETIRED by the owner's wired-semantics ruling
+      # (2026-08-18): wired means THE SYNC LINK IS TESTED AND DECLARED
+      # WORKING, for every kind; `--all` participation is governed by
+      # kind + sync_policy, never by wired. A module with a landed first
+      # fetch is wired like any other verified channel.
       raise ValidationError,
-            "source #{slug.inspect}: a kind: module row mints no catalog rows — must be wired: false"
+            "source #{slug.inspect}: a kind: shelf row uses the local fetch strategy — " \
+            "drop sync_policy (kind implies it)"
     end
     private_class_method :kind_invariants!
 
@@ -580,6 +634,67 @@ module Nabu
     # `nabu sync <group>` and the expansion behind `nabu enable <group>`.
     def group_members(name)
       @entries.each_value.select { |entry| entry.group == name }.map(&:slug)
+    end
+
+    # Functional sets (P77 rider, owner ruling 2026-08-13): an axis is a
+    # TAG over the source list, and the registry's non-desk sets are the
+    # same kind of tag — so every `--axis` surface accepts them beside
+    # the research desks. The closed vocabulary: the GROUPS ("core" —
+    # the auto-enabled minimum of registry instruments; "signs" — the
+    # sign/char capability restore set) plus "quickstart" (the starter
+    # shelf: core + the quickstart-flagged starter sources — what a
+    # fresh box holds after `nabu quickstart`).
+    FUNCTIONAL_SETS = (GROUPS + %w[quickstart]).freeze
+
+    def functional_set?(name)
+      FUNCTIONAL_SETS.include?(name)
+    end
+
+    # A functional set's member slugs, registration order. Unknown names
+    # raise — the callers gate on #functional_set? first, so reaching
+    # here with a stranger is a wiring bug, not user input.
+    def functional_set_members(name)
+      return group_members(name) if GROUPS.include?(name)
+      raise ValidationError, "unknown functional set #{name.inspect}" unless name == "quickstart"
+
+      (core_members + quickstart_flagged).uniq
+    end
+
+    # The quickstart-flagged starter sources (P44-r3c), registration order.
+    def quickstart_flagged
+      @entries.each_value.select(&:quickstart).map(&:slug)
+    end
+
+    # THE membership predicate every --axis surface reads (P77 rider):
+    # +name+ may be a research-desk tag or a functional set; a renderer
+    # never needs to know which.
+    def axis_or_set_member?(name, slug)
+      return functional_set_members(name).include?(slug) if functional_set?(name)
+
+      self[slug]&.axes&.include?(name) || false
+    end
+
+    # The transitive closure of +slugs+ over `requires:` (P77-r3) — the
+    # package-manager expansion: the named slugs plus every requirement
+    # down the chain, deduped, discovery order. Unknown slugs pass
+    # through untouched (the caller's drift handling owns them).
+    def requires_closure(slugs)
+      seen = []
+      queue = slugs.dup
+      until queue.empty?
+        slug = queue.shift
+        next if seen.include?(slug)
+
+        seen << slug
+        queue.concat(self[slug]&.requires || [])
+      end
+      seen
+    end
+
+    # The DIRECT dependents of +slug+, registration order — the "required
+    # by" half of the picture (`nabu status <slug>` renders it).
+    def required_by(slug)
+      @entries.each_value.select { |entry| entry.requires.include?(slug) }.map(&:slug)
     end
 
     # Axis members MINUS the blocked (grant-gated private) ones (P44-r3a) — the

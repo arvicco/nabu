@@ -166,6 +166,32 @@ anchors:
     name: Spanish
     parent: osp
 
+  ast:
+    name: Asturleonese
+    parent: roa
+    note: "ISO 639-2 reference name is Asturian; the code conventionally
+           covers the whole Asturian-Leonese continuum — no separate
+           Leonese code exists"
+    stages:
+      old: {name: Old Leonese, band: [1150, 1500], ord: 10,
+            band_note: "conventional, approximate — the medieval
+                        Asturleonese of the charters, fueros and the
+                        Fuero juzgo translations"}
+
+  an:
+    name: Aragonese
+    parent: roa
+    stages:
+      old: {name: Navarro-Aragonese, band: [1100, 1500], ord: 10,
+            band_note: "conventional, approximate — the medieval complex
+                        (aragonés, navarro; riojano is the contested
+                        transitional case, filed under Castilian by the
+                        first consumer)",
+            note: "one stage for the whole medieval complex; a /nav
+                   (Navarrese) variety split waits on a source that
+                   needs the distinction — the consumer's raw facet
+                   preserves it meanwhile"}
+
   # ── Greek ──────────────────────────────────────────────────────────────────
 
   grc:
@@ -651,6 +677,20 @@ anchors:
             band_note: "conventional Icelandic philology, approximate"}
       mod: {name: Modern Icelandic, band: [1550, null], ord: 30,
             band_note: "conventional Icelandic philology, approximate"}
+
+  sv:
+    name: Swedish
+    parent: non
+    note: "parent is the undivided Old Norse anchor (the isl precedent);
+           Swedish descends from the East Norse side, which the registry
+           does not split — a gmq:run-descended east/west fork is a
+           future mint if a source ever needs the distinction"
+    stages:
+      old: {name: Old Swedish, band: [1225, 1526], ord: 10, wikt: gmq-osw,
+            band_note: "conventional Swedish philology, approximate —
+                        fornsvenska, Äldre Västgötalagen's era to the
+                        Gustav Vasa Bible; covers the klassisk/yngre
+                        internal split"}
 
   ara:
     name: Arabic

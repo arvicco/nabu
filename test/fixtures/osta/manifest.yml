@@ -1,0 +1,66 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# OSTA (Old Spanish Textual Archive, HSMS) samples staged at the P77
+# mint; the transcriptions adapter landed with 77-1 (the verticalized
+# sample serves packet 77-2).
+source: osta
+adapter_test: test/adapters/osta_test.rb
+retrieved: 2026-08-13
+files:
+  - path: transcriptions/TEXT.RHJ.txt
+    url: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/transcriptions/TEXT.RHJ.txt
+    whole: true
+    reason: the corpus's smallest COMPLETE transcription (1.7 kB) — the HSMS curly-brace markup in miniature ({RMK:} header, [fol.], {HD.}, {CB2.}, abbreviation expansions)
+  - path: transcriptions/TEXT.DAC.txt
+    url: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/transcriptions/TEXT.DAC.txt
+    whole: true
+    reason: second complete tiny real file — header/markup variance witness
+  - path: transcriptions/TEXT.ACE.txt
+    refetchable: false
+    provenance: local-trim
+    upstream: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/transcriptions/TEXT.ACE.txt
+    copied: 2026-08-13
+    whole: false
+    trim: lines 1-35 verbatim (header + first two column containers, brace-balanced)
+    reason: the =-tag family witness (P77-r7) — {MIN=.} inside a {CB1. container, the first-sync quarantine wave's shape (100 files)
+  - path: transcriptions/TEXT.ALC.txt
+    refetchable: false
+    provenance: local-trim
+    upstream: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/transcriptions/TEXT.ALC.txt
+    copied: 2026-08-13
+    whole: false
+    trim: lines 1-11 + 8232-8242 verbatim (deliberately brace-UNBALANCED)
+    reason: the stray-brace witness (P77-r7) — a batched `}}` folio close with one container open, plus an EOF-open {CB1.; both ride the brace_defects census, never a quarantine
+  - path: verticalized/TEXT.BQ1.vrt.html
+    refetchable: false
+    provenance: local-trim
+    upstream: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/verticalized/TEXT.BQ1.vrt.html
+    copied: 2026-08-13
+    whole: false
+    trim: lines 1-94 + 1060-1090 + the file's own closing tags
+    reason: the unescaped-markup witness (P77-r7) — <w data1='<GRK•UNK2•UNK2'> tokens whose display text HTML4 soup-parses into phantom elements (the live-sync crash), plus a real <GRK> Greek-script block
+  - path: tables/tabla-obras.xlsx
+    refetchable: false
+    provenance: local-trim
+    upstream: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/tables/tabla-obras.xlsx
+    copied: 2026-08-13
+    whole: false
+    trim: sheet "tabla obras" cut to the 27 rows of sigla RHJ/DAC/AC2/FNG/FJZ/PN2 (row XML verbatim; sharedStrings and every other part byte-identical; the two non-data sheets keep header rows only); re-zipped with Info-ZIP
+    reason: the works-table lane (P77-r6, №R-30) — per-work lengua/author/title/OPDT/BETA columns; FNG pins the mixed-language tie, FJZ the leonés minority, PN2 the 17-work cancionero shape
+  - path: tables/tabla-codices.xlsx
+    refetchable: false
+    provenance: local-trim
+    upstream: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/tables/tabla-codices.xlsx
+    copied: 2026-08-13
+    whole: false
+    trim: same cut, keyed on "Abreviatura HSMS" — DAC/FJZ/FNG/PN2 codex rows (RHJ and AC2 have NO codex row upstream, kept as the absent-codex witnesses)
+    reason: the codex half of the lane — library/shelfmark/SPDT copy dating/PhiloBiblon link
+  - path: verticalized/TEXT.AC2.vrt.html
+    refetchable: false
+    provenance: local-trim
+    upstream: https://raw.githubusercontent.com/hispanicseminary/OSTA/main/verticalized/TEXT.AC2.vrt.html
+    copied: 2026-08-13
+    whole: false
+    trim: first 220 lines of the real 1.9 MB file + the file's own closing tags; covers the <w data1='norm•lemma•EAGLES'> token shape, <RMK> headers, <FOL>/<CB2>/<LN> structure, <ABB>/<SUP> marks, contraction composites
+    reason: the verticalized (lemma+POS) lane's token grammar, structurally intact; re-acquiring = fetch the whole file and re-cut the same head

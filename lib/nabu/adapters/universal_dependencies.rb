@@ -383,6 +383,19 @@ module Nabu
         "romanian-nonstandard" => {
           repo: "https://github.com/UniversalDependencies/UD_Romanian-Nonstandard",
           language: "ro", license: "CC BY-SA 4.0", license_class: "attribution"
+        },
+        # P77-3: Old Italian — the full Commedia (Petrocchi 1994 text via
+        # Pisa's DanteSearch, CIRCSE conversion), 3,419 sentences / 122,038
+        # words, all three splits. This is how Old Italian enters the
+        # library while OVI/TLIO stays walled (romance2 survey). LICENSE
+        # verified 2026-08-13: LICENSE.txt verbatim BY-SA 4.0, README
+        # metadata agrees — attribution, no fork. ISO 639-3 has no Old
+        # Italian code; UD files it under `it` (the IcePaHC-under-`is`
+        # practice, carried verbatim) — the nabu-lects it:old stage claim
+        # is the postures step's business.
+        "italian-old" => {
+          repo: "https://github.com/UniversalDependencies/UD_Italian-Old",
+          language: "it", license: "CC BY-SA 4.0", license_class: "attribution"
         }
       }.freeze
 

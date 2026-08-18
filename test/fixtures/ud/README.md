@@ -515,3 +515,14 @@ declares the most-restrictive class present — `nc` (PROIEL/ITTB/DipSGG/Perseus
   them per P3-3 (the Latin-ITTB fixture exercises this; `essetque` is the case).
 - Empty-node ids (`n.1`) may appear in some treebanks; none are relied on here.
 - `lemma`/`upos`/`feats` → passage annotations (JSON) per P3-3.
+
+## italian-old (P77-3, retrieved 2026-08-13)
+
+`italian-old/it_old-ud-test-head50.conllu` — first 50 sentence blocks of
+`it_old-ud-test.conllu` from
+github.com/UniversalDependencies/UD_Italian-Old (master; the full
+Commedia, Petrocchi 1994 text via Pisa's DanteSearch, CIRCSE
+conversion). Opens mid-Inferno (sent_id OldItalian_Dante_Inferno-1110,
+"Non ci fare ire a Tizio né a Tifo…"); MISC carries Canto=/Verso= and
+per-token UniqueTokenId. License: CC BY-SA 4.0 (LICENSE.txt + README
+metadata agree, read 2026-08-13).

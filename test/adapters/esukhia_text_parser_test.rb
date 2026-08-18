@@ -27,7 +27,7 @@ module Adapters
     # -- volume files ---------------------------------------------------------
 
     def test_volume_number_comes_from_the_filename_prefix
-      assert_equal([1, 2, 100], kangyur_paths.map { |p| parser.volume_number(p) })
+      assert_equal([1, 2, 100, 103], kangyur_paths.map { |p| parser.volume_number(p) })
       assert_equal([1, 212], tengyur_paths.map { |p| parser.volume_number(p) })
     end
 
@@ -39,7 +39,11 @@ module Adapters
 
     def test_scan_finds_every_toh_marker_in_corpus_order
       scan = parser.scan(kangyur_paths)
-      assert_equal %w[D1 D1-1 D1-2 D1-6 D846 D846a D847 D848 D852],
+      # The parser scans what it is given — the D538…D539h run is the dkar
+      # chag trim's CITATION markers (vol 103); the ADAPTER excludes that
+      # index volume before scanning (P77-r10), the parser stays neutral.
+      assert_equal %w[D1 D1-1 D1-2 D1-6 D846 D846a D847 D848 D852
+                      D538 D539 D539a D539b D539c D539d D539e D539f D539g D539h],
                    scan.markers.map(&:marker)
     end
 

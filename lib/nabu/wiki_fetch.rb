@@ -191,8 +191,8 @@ module Nabu
         pages_dir = File.join(@dir, PAGES_DIRNAME, category)
         next [] unless Dir.exist?(pages_dir)
 
-        Dir.children(pages_dir).select { |name| name.end_with?(".json") && !expected.include?(name) }
-                               .map do |name|
+        Dir.children(pages_dir).sort.select { |name| name.end_with?(".json") && !expected.include?(name) }
+                                    .map do |name|
           File.join(PAGES_DIRNAME, category,
                     name)
         end
