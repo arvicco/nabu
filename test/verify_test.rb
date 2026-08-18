@@ -27,6 +27,20 @@ class SkippingVerifyAdapter < TestAdapter
   end
 end
 
+# P77-r10: an adapter that mints the SAME urn from two files with
+# different content — the drill_pure defect class (rundata's colliding
+# signum slugs, the kangyur dkar chag's citation markers).
+class CollidingVerifyAdapter < TestAdapter
+  def discover(workdir, &block)
+    return enum_for(:discover, workdir) unless block
+
+    refs = []
+    super { |ref| refs << ref }
+    refs.each(&block)
+    yield Nabu::DocumentRef.new(source_id: SOURCE_ID, id: refs.first.id, path: refs.last.path)
+  end
+end
+
 class VerifyTest < Minitest::Test
   ILIAD = "Iliad\nμῆνιν\nἄειδε\n"
   ODYSSEY = "Odyssey\nἄνδρα\n"
@@ -63,6 +77,31 @@ class VerifyTest < Minitest::Test
     assert_equal "corpus", outcome.slug
     assert_equal 2, outcome.verified
     assert_predicate outcome, :ok?
+  end
+
+  # -- duplicate urn claims are named, and first-wins mirrors the loader ----
+
+  # P77-r10 (the drill_pure root cause): when discover mints one urn
+  # twice, the LOADER keeps the first claimant (the P39-4 seam) but
+  # verify's reparse map kept the LAST — so every collision surfaced as
+  # an opaque sha mismatch. Verify now mirrors first-wins (the stored
+  # content compares clean) and names the real defect with its own
+  # issue kind instead.
+  def test_duplicate_urn_claims_are_reported_as_their_own_issue_kind
+    write_sources(<<~YAML)
+      corpus:
+        adapter: CollidingVerifyAdapter
+        wired: true
+    YAML
+    result = verify
+
+    refute_predicate result, :clean?
+    issues = result.issues
+    assert_equal [:duplicate_urn], issues.map(&:kind).uniq,
+                 "first-wins keeps the hash comparison clean — the DUPLICATE is the defect"
+    issue = issues.fetch(0)
+    assert_equal ILIAD_URN, issue.urn
+    assert_match(/2 canonical parses claim this urn/, issue.detail)
   end
 
   # -- a changed word is a mismatch on exactly that document ----------------

@@ -121,7 +121,7 @@ module Nabu
         )
         Store::DerivationStamp.stamp!(db, slug: entry.slug, fingerprint: fingerprint)
         record_ingest_identity(db, entry, fingerprint)
-        indexed = (indexed || 0) + refresh_index(db, fulltext, entry) unless index_inert?(entry)
+        indexed = (indexed || 0) + refresh_index(db, fulltext, entry, progress) unless index_inert?(entry)
       end
       replay_enrichments(db)
       # P45-6: re-derive the place index only when its source was dirty (the
@@ -265,12 +265,14 @@ module Nabu
     # The per-source FTS/lemma/trigram delete+reinsert (P26-5). Falls back to
     # the full Indexer.rebuild! internally if the index file predates the
     # incremental tables (self-healing, still ≡ full).
-    def refresh_index(db, fulltext, entry)
+    def refresh_index(db, fulltext, entry, progress = nil)
       Store::Indexer.refresh_source!(
         catalog: db, fulltext: fulltext, slug: entry.slug,
         alignments: alignments, fuzzy_slugs: @registry.fuzzy_slugs,
         lemma_tiers: @registry.lemma_tiers,
-        reflexes_changed: entry.adapter_class.content_kind == :dictionary
+        reflexes_changed: entry.adapter_class.content_kind == :dictionary,
+        sign_list: Nabu::SignList.load_default(config: @config),
+        progress: progress
       )
     end
 
@@ -289,7 +291,9 @@ module Nabu
     def heal_index(db, fulltext, progress)
       progress&.stage("fulltext index")
       Store::Indexer.rebuild!(catalog: db, fulltext: fulltext, alignments: alignments,
-                              fuzzy_slugs: @registry.fuzzy_slugs, lemma_tiers: @registry.lemma_tiers)
+                              fuzzy_slugs: @registry.fuzzy_slugs, lemma_tiers: @registry.lemma_tiers,
+                              sign_list: Nabu::SignList.load_default(config: @config),
+                              progress: progress)
     end
 
     def alignments

@@ -207,7 +207,7 @@ module Nabu
       # only ITS slice via Indexer.refresh_source!, and +indexed+ is the
       # SOURCE's live passage count — never the corpus total. `nabu rebuild`
       # keeps the full Indexer.rebuild! as the from-scratch guarantee.
-      indexed = index_inert?(adapter) ? nil : reindex!(entry, adapter)
+      indexed = index_inert?(adapter) ? nil : reindex!(entry, adapter, progress)
       refresh_catalog_lanes(entry, load_report)
       Outcome.new(slug: entry.slug, fetch_report: fetch_report, load_report: load_report,
                   breaker: nil, indexed: indexed,
@@ -366,7 +366,7 @@ module Nabu
     # for a dictionary sync — the crosswalk changed). Opens its own
     # short-lived connection to config.fulltext_path so callers need not
     # thread a handle through. Returns the source's live passage count.
-    def reindex!(entry, adapter)
+    def reindex!(entry, adapter, progress = nil)
       require "fileutils"
       FileUtils.mkdir_p(File.dirname(@config.fulltext_path))
       fulltext = Store.connect_fulltext(@config.fulltext_path)
@@ -374,7 +374,9 @@ module Nabu
                                      alignments: AlignmentRegistry.load(@config.alignments_path),
                                      fuzzy_slugs: @registry.fuzzy_slugs,
                                      lemma_tiers: @registry.lemma_tiers,
-                                     reflexes_changed: adapter.class.content_kind == :dictionary)
+                                     reflexes_changed: adapter.class.content_kind == :dictionary,
+                                     sign_list: Nabu::SignList.load_default(config: @config),
+                                     progress: progress)
     ensure
       fulltext&.disconnect
     end

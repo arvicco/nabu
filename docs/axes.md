@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (7): `ud`, `croala`, `digiliblt`, `openmgh`, `bfm`, `cantigas`, `derom`
+**Members** (9): `ud`, `croala`, `digiliblt`, `openmgh`, `bfm`, `cantigas`, `derom`, `osta`, `disco`
 
 ### epigraphy
 
@@ -91,7 +91,7 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
-**Members** (10): `ud`, `proiel`, `iswoc`, `menotec`, `aspr`, `bosworth-toller`, `rem`, `rundata`, `helipad`, `ren`
+**Members** (11): `ud`, `proiel`, `iswoc`, `menotec`, `aspr`, `bosworth-toller`, `rem`, `rundata`, `helipad`, `ren`, `fornsvenska`
 
 ### celtic
 
@@ -107,7 +107,7 @@ Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogha
 
 The Sabellic, Etruscan, Venetic and Raetic epigraphic shelves (CEIPoM, ItAnt, the Etruscan editions, TIR), Lepontic at the Celtic border, I.Sicily's island mix, and the Sabellic-to-Latin loan lane.
 
-**Members** (10): `wiktionary-recon`, `isicily`, `itant`, `sabellic-loans`, `ceipom`, `open-etruscan`, `larth-etp`, `lexlep`, `lexlep-words`, `tir`
+**Members** (11): `wiktionary-recon`, `isicily`, `itant`, `sabellic-loans`, `ceipom`, `open-etruscan`, `larth-etp`, `lexlep`, `lexlep-words`, `tir`, `burman-concordance`
 
 ### etym
 
@@ -171,7 +171,7 @@ The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — it
 
 The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL's fragments, the Copenhagen Ugaritic Corpus (alphabetic cuneiform), and TLHdig shared with the Hittitologist.
 
-**Members** (11): `ud`, `oracc`, `wiktionary-sux`, `cigs`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`, `rsti`, `osl`
+**Members** (13): `ud`, `oracc`, `wiktionary-sux`, `cigs`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`, `rsti`, `osl`, `edubba-overlay`, `achemenet`
 
 ### egyptian
 

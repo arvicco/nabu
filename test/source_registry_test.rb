@@ -124,19 +124,21 @@ class SourceRegistryTest < Minitest::Test
     refute_predicate entry, :source?
   end
 
-  # P39-0: a kind: module mints no catalog rows, so it MUST be wired: false.
-  def test_kind_module_must_be_disabled
-    error = assert_raises(Nabu::ValidationError) do
-      load_registry(<<~YAML)
-        kr-gaiji:
-          adapter: Nabu::Adapters::KrGaiji
-          kind: module
-          wired: true
-          sync_policy: manual
-      YAML
-    end
-    assert_match(/kr-gaiji/, error.message)
-    assert_match(/module.*wired: false|mints no catalog rows/, error.message)
+  # The P39-0 "module must be wired: false" invariant was RETIRED by the
+  # owner's wired-semantics ruling (2026-08-18): wired = the sync link is
+  # tested and declared working, for EVERY kind; --all participation is
+  # kind + sync_policy's job. A verified module row loads wired: true.
+  def test_kind_module_may_be_wired_once_its_channel_is_verified
+    registry = load_registry(<<~YAML)
+      kr-gaiji:
+        adapter: Nabu::Adapters::KrGaiji
+        kind: module
+        wired: true
+        sync_policy: manual
+    YAML
+    entry = registry["kr-gaiji"]
+    assert entry.wired
+    assert_predicate entry, :feature_module?
   end
 
   def test_kind_module_parses_when_disabled
@@ -694,6 +696,151 @@ class SourceRegistryTest < Minitest::Test
       assert_predicate registry[slug], :feature_module?,
                        "#{slug}: core members are modules — pre-enabled by nature, no enable dance"
     end
+  end
+
+  # -- functional sets (P77 rider, owner ruling 2026-08-13): core/signs/
+  # quickstart resolvable wherever --axis takes a name ------------------------
+
+  def functional_sets_registry
+    axes = <<~YAML
+      classical:
+        persona: "The Classicist."
+        desc: "test desk"
+    YAML
+    load_registry_with_axes(axes, <<~YAML)
+      nabu-lects:
+        adapter: Some::Adapter
+        group: core
+        kind: module
+        axes: [classical]
+      starter:
+        adapter: Some::Adapter
+        quickstart: true
+        axes: [classical]
+      ordinary:
+        adapter: Some::Adapter
+        axes: [classical]
+    YAML
+  end
+
+  def test_functional_sets_are_the_closed_group_vocabulary_plus_quickstart
+    assert_equal %w[core signs quickstart], Nabu::SourceRegistry::FUNCTIONAL_SETS
+    registry = functional_sets_registry
+    assert registry.functional_set?("core")
+    assert registry.functional_set?("quickstart")
+    refute registry.functional_set?("classical"), "desk axes are not functional sets"
+  end
+
+  def test_set_members_resolves_groups_and_the_quickstart_starter_shelf
+    registry = functional_sets_registry
+    assert_equal %w[nabu-lects], registry.functional_set_members("core")
+    assert_equal %w[nabu-lects starter], registry.functional_set_members("quickstart"),
+                 "quickstart = core + the quickstart-flagged starters, deduped"
+    assert_empty registry.functional_set_members("signs")
+  end
+
+  def test_axis_or_set_member_is_the_one_membership_predicate
+    registry = functional_sets_registry
+    assert registry.axis_or_set_member?("core", "nabu-lects")
+    refute registry.axis_or_set_member?("core", "ordinary")
+    assert registry.axis_or_set_member?("quickstart", "starter")
+    assert registry.axis_or_set_member?("classical", "ordinary"), "desk tags keep working"
+    refute registry.axis_or_set_member?("classical", "unknown-slug")
+  end
+
+  # -- requires: the dependency chain (P77-r3, owner commission 2026-08-13:
+  # "a system where these dependencies are tracked and enabling a source/
+  # module that has dependencies enables all chain dependencies") ------------
+
+  def requires_registry
+    load_registry(<<~YAML)
+      gaz:
+        adapter: Some::Adapter
+        kind: module
+        wired: false
+      places:
+        adapter: Some::Adapter
+        kind: module
+        wired: false
+        requires: [gaz]
+      corpus:
+        adapter: Some::Adapter
+        requires: [places]
+      loner:
+        adapter: Some::Adapter
+    YAML
+  end
+
+  def test_requires_parses_and_defaults_empty
+    registry = requires_registry
+    assert_equal %w[gaz], registry["places"].requires
+    assert_equal %w[places], registry["corpus"].requires
+    assert_empty registry["loner"].requires
+  end
+
+  def test_requires_closure_is_transitive_and_deduped
+    registry = requires_registry
+    assert_equal %w[corpus places gaz], registry.requires_closure(%w[corpus]),
+                 "enabling corpus pulls the whole chain — the package-manager rule"
+    assert_equal %w[loner], registry.requires_closure(%w[loner])
+    assert_equal %w[corpus places loner gaz], registry.requires_closure(%w[corpus places loner]),
+                 "breadth-first discovery order — named slugs first, then the chain"
+  end
+
+  def test_required_by_lists_direct_dependents
+    registry = requires_registry
+    assert_equal %w[places], registry.required_by("gaz")
+    assert_equal %w[corpus], registry.required_by("places")
+    assert_empty registry.required_by("corpus")
+  end
+
+  def test_requires_must_name_registered_slugs
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        a:
+          adapter: Some::Adapter
+          requires: [ghost]
+      YAML
+    end
+    assert_match(/"a".*requires unknown source "ghost"/, error.message)
+  end
+
+  def test_requires_refuses_cycles_loudly
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        a:
+          adapter: Some::Adapter
+          requires: [b]
+        b:
+          adapter: Some::Adapter
+          requires: [a]
+      YAML
+    end
+    assert_match(/requires cycle/, error.message)
+  end
+
+  def test_requires_refuses_self_reference
+    error = assert_raises(Nabu::ValidationError) do
+      load_registry(<<~YAML)
+        a:
+          adapter: Some::Adapter
+          requires: [a]
+      YAML
+    end
+    assert_match(/itself/, error.message)
+  end
+
+  def test_the_live_registry_seeds_the_place_layer_chain
+    registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
+    assert_equal %w[cigs pleiades trismegistos-geo], registry["nabu-places"].requires.sort,
+                 "the place-decisions registry resolves refs through all three gazetteer slices"
+    assert_equal %w[unikemet], registry["edubba-overlay"].requires,
+                 "the didactic overlay joins onto Unikemet sign entries"
+    assert_equal %w[perseus-greek first1k-greek], registry["hypotactic"].requires,
+                 "№R-31 ruled 2026-08-13: conjunctive over any_of machinery"
+    assert_equal %w[perseus-latin], registry["pedecerto"].requires
+    assert_equal %w[bridging], registry["bhsa"].requires,
+                 "the one parse-time cross-source canonical read (P77-r4)"
   end
 
   # -- the signs group (P69: `nabu enable signs && nabu sync signs` restores

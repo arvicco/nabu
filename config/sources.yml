@@ -247,6 +247,16 @@ ud:
   # axes are validated against config/axes.yml at load (SourceRegistry
   # raises on an unknown name), so the axis mint packet must add `romance`
   # to axes.yml AND to this row's axes list in the same change.
+  # P77-3 (2026-08-13): TREEBANKS grew to THIRTY — italian-old
+  # (UD_Italian-Old): the full Commedia (Petrocchi 1994 via DanteSearch,
+  # CIRCSE conversion), 3,419 sentences / 122,038 words, all three
+  # splits; LICENSE.txt verbatim BY-SA 4.0 + README agrees (verified
+  # 2026-08-13, no fork) → per-document `attribution` override; language
+  # `it` (UD's one-tag practice — no ISO Old Italian code; the lect
+  # posture claims it:old). Old Italian enters while OVI/TLIO stays
+  # walled (romance2 survey). EXPECTED SYNC DELTA at the next owner-fired
+  # `bin/nabu sync ud`: +1 repo clone / +3 docs / +3,419 passages; `it`
+  # enters the lemma-indexed languages (~122k token rows), first occupant.
 
 proiel:
   adapter: Nabu::Adapters::Proiel
@@ -1220,6 +1230,11 @@ sefaria:
   # monthly; a re-sync is an owner decision → manual.
 bhsa:
   adapter: Nabu::Adapters::Bhsa
+  requires: [bridging]   # P77-r4 (survey-confirmed): the ONE parse-time
+                   # cross-source canonical read in the tree — load_bridging
+                   # reads canonical/bridging/.../osm.tf; a late-arriving
+                   # bridging leaves the osm lane silently dark until a
+                   # manual re-parse, exactly what the chain sweep prevents.
   axes: [biblical, hebrew]
   wired: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # checklist §6: bin/nabu sync bhsa — sparse GitFetch cone
@@ -1251,14 +1266,10 @@ bridging:
   kind: module   # P39-0: machinery-only — sanctioned fetch, zero catalog rows, up=module
   # P35-0: the feature module rides its host bhsa's desks (D35 spec: hebrew+biblical)
   axes: [biblical, hebrew]
-  wired: false   # PERMANENTLY false — a feature module, not a text source:
-                   # discover mints no documents, so there is nothing to
-                   # serve or flip. The row exists to give the owner the
-                   # sanctioned GitFetch path. OWNER QUEUE (P34-1):
-                   # bin/nabu sync bridging (sparse cone ≈ 3 MB), then
-                   # bin/nabu sync bhsa --parse-only to light the token
-                   # lane, eyeball nabu show urn:nabu:bhsa:gen:1.1 tokens
-                   # (osm HR/HNcfsa/HVqp3ms...) — no wired flip involved.
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P34-1: ETCBC/bridging — the OSHB↔BHSA word-level crosswalk (the sibling
   # journaled at P30-4, now wired). Two Text-Fabric node features over the
   # BHSA tf/2021 slot space: osm = the OSHB morph tag of the first OSM
@@ -1281,19 +1292,10 @@ trismegistos:
   adapter: Nabu::Adapters::Trismegistos
   kind: module   # P43-3: machinery-only — a links instrument, zero catalog rows, up=module
   axes: [epigraphy]
-  wired: false   # PERMANENTLY false — a links instrument, not a text source
-                   # (the bridging/kr-gaiji precedent): discover mints no
-                   # documents. The row gives the owner the sanctioned fetch
-                   # path; its data is links-journal edges, refreshed by the
-                   # TrismegistosCrosswalk producer (#8) after every sync.
-                   # OWNER QUEUE (P43-3): bin/nabu sync trismegistos — sweeps
-                   # ONLY the ~6,816 distinct tm:<id> targets already in the
-                   # links graph (a live read of links.sqlite3), sequential
-                   # with a ≥1s pause, resumable (skips ids already on disk),
-                   # landing one JSON per id under canonical/trismegistos/
-                   # texrelations/. The API fair-use terms are UNREAD (do not
-                   # render to the fetcher) — eyeball the endpoint's rate
-                   # policy before the first real sweep.
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P43-3: Trismegistos TexRelations — the cross-project concordance
   # crosswalk (trismegistos.org/dataservices/texrelations/<id>). Makes the
   # library's dangling tm:<id> reference edges resolvable: each response's
@@ -1311,17 +1313,10 @@ pleiades:
   adapter: Nabu::Adapters::Pleiades
   kind: module   # P43-3: machinery-only — a place resolver seam, zero document rows, up=module
   axes: [epigraphy]
-  wired: false   # PERMANENTLY false — a resolver instrument, not a text
-                   # source (the bridging/kr-gaiji precedent): discover mints
-                   # no documents, zero holdings. The row gives the owner the
-                   # sanctioned fetch path for the gazetteer dump, resolved by
-                   # Nabu::Pleiades (place id → title/point/place-types/
-                   # time-periods) for the P44-2 place desk + findspot line.
-                   # Since P45-6 each sync ALSO derives the catalog place
-                   # index from the dump (place_index/place_index_names,
-                   # migration 021, Store::PlaceIndex — a derived lookup
-                   # table with the source_stats rebuild contract, still no
-                   # document rows), so those surfaces read instantly.
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P43-3: Pleiades — the ancient-world gazetteer over the numbered
   # quarterly archival release (Zenodo 4.1, 2025-05-28), the openiti Zenodo
   # posture; first-synced 2026-07-24 (container confirmed @graph, 42,242
@@ -1334,11 +1329,10 @@ trismegistos-geo:
   adapter: Nabu::Adapters::TrismegistosGeo
   kind: module   # P63-1: machinery-only — a gazetteer instrument, zero document rows, up=module
   axes: [epigraphy]
-  wired: false   # PERMANENTLY false — a gazetteer instrument, not a text
-                   # source (the pleiades precedent): discover mints no
-                   # documents. The canonical asset is the TM Geo table dump
-                   # (64,857 places), which derives `tm:` rows into the
-                   # namespaced place index (P63-3).
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P63-1: the FIRST Manual Adapter source (ruling Dp-a) — TM's dump service
   # fails the automation bar (captcha interstitial + POST form, measured
   # 2026-08-08), so `nabu sync trismegistos-geo` prints the acquisition
@@ -1358,11 +1352,10 @@ cigs:
   group: core   # P63 rider: pre-enabled registry instrument, swept by `nabu sync core`
   kind: module   # P63-5: machinery-only — a gazetteer instrument, zero document rows, up=module
   axes: [cuneiform]
-  wired: false   # PERMANENTLY false — a gazetteer instrument (the pleiades
-                   # precedent): discover mints no documents. Each sync
-                   # derives the `cigs:` place-index slice + the cigs
-                   # crosswalk slice (its own pleiades/geonames/
-                   # cdli-provenience columns).
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P63-5: CIGS — the Cuneiform Inscriptions Geographical Site Index
   # (Uppsala "Geomapping Landscapes of Writing"; CDLJ 2021-1 — CDLI's place
   # authority in practice). 597 sites / 158 kB, one Zenodo-version-pinned
@@ -1376,18 +1369,10 @@ lila:
   adapter: Nabu::Adapters::Lila
   kind: module   # P44-8: machinery-only — a Latin lemma-spine read seam, zero catalog rows, up=module
   axes: [classical]
-  wired: false   # PERMANENTLY false — a lemma-spine instrument, not a text
-                   # source (the bridging/pleiades precedent): discover mints
-                   # no documents, there is no migration and no catalog table.
-                   # The row gives the owner the sanctioned fetch path for the
-                   # Lemma Bank dump, resolved by Nabu::Lila (Latin lemma →
-                   # {IRI, canonical form, POS, variant forms}). First
-                   # consumer: the `nabu define` variant-form fallback
-                   # (Nabu::Query::Define). OWNER QUEUE (P44-8): bin/nabu sync
-                   # lila git-sparse-clones rdf/lemmaBank.ttl + LICENSE +
-                   # README under canonical/lila/ (commit-pinned; pin ref: to
-                   # a specific commit at first sync for a reproducible
-                   # snapshot — see lib/nabu/adapters/lila.rb).
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P44-8: LiLa Lemma Bank (CIRCSE, "LiLa: Linking Latin") — 215,102 Latin
   # canonical forms, the Latin analogue of the CJK character-desk crosswalks.
   # v1 is a pure read seam over the repo's rdf/lemmaBank.ttl (84 MB D2RQ
@@ -1401,20 +1386,10 @@ cldf-spine:
   adapter: Nabu::Adapters::CldfSpine
   kind: module   # P46-6: machinery-only — a concept/languoid resolver seam, zero document rows
   axes: [etym]
-  wired: false   # PERMANENTLY false — a reference resolver instrument, not a
-                   # text source (the pleiades/lila precedent): discover mints
-                   # no documents, no migration, no catalog table. The row
-                   # gives the owner the sanctioned fetch path for TWO thin
-                   # tag-pinned reference files, resolved by Nabu::CldfSpine:
-                   # Concepticon id → {gloss, semantic field, definition,
-                   # replacement pointer} and glottocode → {name, ISO, level,
-                   # one-hop family}. Consumers: the WOLD/CLICS shelves'
-                   # Concepticon-id body lines and donor glottocodes (and
-                   # IE-CoR's Concepticon-linked meanings). OWNER QUEUE
-                   # (P46-6): bin/nabu sync cldf-spine GETs concepticon.tsv
-                   # (concepticon-data v3.4.0, 453 KB, sha256 f96a72b8dc18…)
-                   # + languages.csv (glottolog-cldf v5.3, 2.4 MB, sha256
-                   # 1a50a393bc81…) into per-subdir FileFetch states.
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P46-6: the CLDF reference spine — Concepticon (4,033 concepts) +
   # Glottolog (27,177 languoids), THIN by design: the id-and-name spine plus
   # what WOLD/CLICS rows need to resolve, never the full datasets. LICENSE:
@@ -1435,18 +1410,10 @@ kitab:
                                    # kanripo precedent): one folder = one HELD openiti book's
                                    # complete pairwise fan. Seeded with the P43-4 exemplar; the
                                    # owner appends more held books' version ids here as wanted.
-  wired: false   # PERMANENTLY false — a links instrument, not a text source
-                   # (the trismegistos/pleiades precedent): discover mints no
-                   # documents. The row gives the owner the sanctioned fetch
-                   # path; its data is links-journal kind="reuse" edges,
-                   # refreshed by the KitabTextReuse producer (#9) after every
-                   # sync. OWNER QUEUE (P43-4): bin/nabu sync kitab — lists each
-                   # pilot folder on the mirror and GETs its ~10 TSV leaves
-                   # sequentially (≥1s pause, resumable), landing them under
-                   # canonical/kitab/pairwise/<folder>/. First sync of the seed
-                   # folder (ALCorpus00001-ara2) is ~10 files, seconds. The
-                   # mirror's exact raw branch/path + any fair-use terms are
-                   # UNREAD (do not render to the fetcher) — eyeball them first.
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P43-4: KITAB Text Reuse Data — passim pairwise text-reuse alignments over
   # OpenITI. Each alignment row becomes ONE kind="reuse" edge (upstream-computed,
   # distinct from nabu's own kind=parallel intertext detection) from book1's
@@ -1464,23 +1431,18 @@ kitab:
 hypotactic:
   adapter: Nabu::Adapters::Hypotactic
   kind: module   # P44-6: machinery-only — a METER enrichment instrument, zero catalog rows, up=module
+  requires: [perseus-greek, first1k-greek]   # №R-31 RULED 2026-08-13 (option a,
+                   # as recommended): the instrument joins urn:cts:greekLit:*
+                   # documents both sources hold; the true relation is "any
+                   # greekLit holder" but requires: is conjunctive — declaring
+                   # both over-pulls harmlessly (core classical holdings a
+                   # fresh box wants anyway). An `any_of:` syntax waits for a
+                   # second any-of edge.
   axes: [classical]
-  wired: false   # PERMANENTLY false — a meter instrument, not a text source
-                   # (the trismegistos/kitab precedent): discover mints no
-                   # documents. Its data is per-passage enrichments rows
-                   # (kind="meter", model="hypotactic" — the P44-7 seam, beside
-                   # pedecerto's Latin rows) on held Perseus lines, refreshed
-                   # by the HypotacticMeter producer after every sync and
-                   # re-derived by rebuild. OWNER QUEUE (P44-6): bin/nabu
-                   # sync hypotactic — sparse GitFetch cone tsv/ + README +
-                   # LICENSE from github.com/Urdatorn/hypotactic, then the
-                   # producer matches each TSV line by folded grc text against
-                   # held Perseus passages of the mapped work (HHAphrodite →
-                   # tlg0013.tlg005). EXPECT the honest meter census on first
-                   # sync: "meter N lines matched, M unmatched (K works of L)".
-                   # Only HHAphrodite is mapped in v1; every other TSV is
-                   # censused as an unmapped work (never guessed). Depends on
-                   # held Perseus greek editions for anything to match.
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P44-6: Hypotactic — David Chamberlain's metrical scansions of GREEK verse
   # (hypotactic.com). The meter enrichment layer's Greek lane (the P44-7
   # pedecerto seam): each matched line writes ONE enrichments row, payload
@@ -2538,17 +2500,10 @@ kr-gaiji:
   adapter: Nabu::Adapters::KrGaiji
   kind: module   # P39-0: machinery-only — sanctioned fetch, zero catalog rows, up=module
   axes: [sinitic]
-  wired: false   # PERMANENTLY false — a feature module, not a text source
-                   # (the P34-1 bridging precedent): discover mints no
-                   # documents, so there is nothing to serve or flip. The row
-                   # exists to give the owner the sanctioned GitFetch path for
-                   # the gaiji resolution map. OWNER QUEUE (P37-3): optional —
-                   # bin/nabu sync kr-gaiji (sparse cone ≈ a few hundred KB,
-                   # charlist.org.txt + README only) lands canonical/kr-gaiji
-                   # so config/gaiji/kanripo.tsv can be regenerated when KR-Gaiji
-                   # advances. The map already ships curated, so the fetch is a
-                   # refresh path, not a prerequisite — placeholder + the 972
-                   # faithful resolutions work today with no sync.
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P37-3: KR-Gaiji — the Kanseki Repository's not-yet-encoded characters
   # (github.com/kanripo/KR-Gaiji). charlist.org.txt lists 5,254 `&KR\d+;`
   # gaiji refs; census (commit 662fd61d) found only 972 (36.4% of the
@@ -2780,19 +2735,14 @@ titus-avestan:
 pedecerto:
   adapter: Nabu::Adapters::Pedecerto
   kind: module   # P44-7: machinery-only — a meter-enrichment instrument, zero catalog rows, up=module
+  requires: [perseus-latin]   # P77-r4 (survey-confirmed): PedecertoScansions
+                   # joins perseus-latin's loaded catalog rows and produces
+                   # nothing without them (lib/nabu/pedecerto_scansions.rb).
   axes: [classical]
-  wired: false   # PERMANENTLY false — an enrichment instrument, not a text
-                   # source (the trismegistos/kitab precedent): discover mints
-                   # no documents. The row gives the owner the sanctioned fetch
-                   # path; its data is enrichments-table meter rows (kind=meter),
-                   # re-derived by the PedecertoScansions producer after every
-                   # sync AND by rebuild. OWNER QUEUE (P44-7): bin/nabu sync
-                   # pedecerto downloads + unpacks allpedecertoscans.zip (~12 MB,
-                   # 469 <AUTHOR>-<work>.xml) under canonical/pedecerto/, then
-                   # the producer resolves each scanned line to a held
-                   # Perseus-Latin passage (WORK_CROSSWALK seed) and attaches its
-                   # scansion. The sync tail prints the honest matched/unmatched
-                   # line census; extend WORK_CROSSWALK for more held works.
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P44-7: Pedecerto (Udine / Ca' Foscari) — Digital Latin Metre. XML metrical
   # scansions of the Latin verse corpus (227,791 hexameter lines + pentameter/
   # other verse), one file per author-work. NOT a text source: the passages
@@ -3252,23 +3202,10 @@ actib:
   adapter: Nabu::Adapters::Actib
   kind: module   # P55-4: machinery-only — the anchored-layer cone for nabu-data, zero catalog rows, up=module
   axes: [tibetan]
-  wired: false   # PERMANENTLY false — a corpus-layer instrument, not a text
-                   # source (the pedecerto/hypotactic precedent): discover mints
-                   # no documents; the canonical TEXT is the derge-kangyur shelf
-                   # above. The row gives the owner the sanctioned fetch path for
-                   # the ACTib v2.0 eKangyur seg+POS zip (~200 MB download,
-                   # ~830 MB unpacked at canonical/actib/{seg,pos} — ZipFetch
-                   # strips the single top dir). Consumer: the xct/actib-anchors
-                   # nabu-data builder (docs/nabu-data.md) — the FIRST
-                   # re-publication: every derge-kangyur passage anchored to its
-                   # ACTib (volume, page, line) with the match census in-band;
-                   # the 800 MB layer content itself is never republished.
-                   # OWNER QUEUE (P55-4): bin/nabu sync actib downloads
-                   # SegPOS-eKangyur_July2020.zip (Zenodo 3951503), then
-                   # `nabu data build xct/actib-anchors` measures the census
-                   # (expect ~461K anchor rows, ~2.2K divergences — the P55
-                   # measurement pass: 458,954/461,199 exact after the vol-31
-                   # correction).
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P55-4: ACTib v2.0 — The Annotated Corpus of Classical Tibetan (Meelen,
   # Hill & Faggionato), Zenodo record 3951503: word-segmented (seg/) +
   # POS-tagged (pos/) layers over the BDRC eKangyur, 103 volume files each
@@ -3380,19 +3317,10 @@ nabu-data:
   adapter: Nabu::Adapters::NabuData
   kind: module   # P51-W6: machinery-only — Nabu's own published datasets consumed back, zero document rows
   axes: [indic, tibetan]
-  wired: false   # PERMANENTLY false — a dataset-bundle instrument, not a
-                   # text source (the lila/cldf-spine module invariant):
-                   # discover mints no documents, no migration, no catalog
-                   # table. The row gives the owner the sanctioned fetch
-                   # path for the repo Nabu itself publishes; Nabu::FormLemma
-                   # reads san/form-lemma/form-lemma.csv (form → lemma
-                   # candidates). First consumer: the `nabu define` Sanskrit
-                   # query expansion (Nabu::Query::Define, D48-a tier 2 —
-                   # the P48-r1 curated rule stays the always-on fallback).
-                   # OWNER QUEUE (P51-W6): bin/nabu enable nabu-data, then
-                   # bin/nabu sync nabu-data (GitFetch clone of the repo,
-                   # ~53 MB working tree); eyeball `nabu define tapasā`
-                   # reaching the tapas entries.
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P51-W6: the two-way loop closes — github.com/arvicco/nabu-data, the
   # public repo `nabu data build` writes (docs/nabu-data.md: three datasets
   # at v1.0.0 — san/form-lemma 428,825 rows from the held DCS gold,
@@ -3410,21 +3338,10 @@ nabu-lects:
   group: core   # P63 rider: pre-enabled registry instrument, swept by `nabu sync core`
   kind: module   # P57-3: machinery-only — the lect (anchor x stage x variety x ortho) resolver seam, zero document rows
   axes: [etym]
-  wired: false   # PERMANENTLY false — a lect resolver instrument, not a
-                   # text source (the cldf-spine/nabu-data module invariant):
-                   # discover mints no documents, no migration, no catalog
-                   # table. The row gives the owner the sanctioned fetch path
-                   # for github.com/arvicco/nabu-lects (a small, curated
-                   # anchor x stage x variety x orthography registry with a
-                   # universal code -> lect-id codemap), resolved by
-                   # Nabu::Lects: lect(id), reconstructed?(id), resolve(code,
-                   # source:, urn:) (per-document overlay > per-source
-                   # config/lect_overrides.yml override > codemap > identity),
-                   # parent_of(id), stages_of(anchor). First consumers arrive
-                   # at P57-4. OWNER QUEUE (P57-3): bin/nabu enable
-                   # nabu-lects, then bin/nabu sync nabu-lects (GitFetch clone
-                   # of the small repo, whole tree — no sparse cone, the
-                   # nabu-data posture).
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P57-3: nabu-lects — a sister repo to nabu (github.com/arvicco/nabu-lects),
   # born from nabu's own holdings but universal by construction: gives
   # under-described standard codes (lat spans Plautus to charters, grc spans
@@ -3448,15 +3365,19 @@ nabu-places:
   adapter: Nabu::Adapters::NabuPlaces
   group: core   # P63 rider: pre-enabled registry instrument, swept by `nabu sync core`
   kind: module   # P63-7: machinery-only — the place-matching decisions registry seam, zero document rows
+  requires: [cigs, pleiades, trismegistos-geo]   # P77-r3 (owner 2026-08-13): the
+                   # decision rows mint cigs:/pleiades:/tm: refs — resolving them
+                   # (names, coordinates, crosswalk, --place/--within) reads the
+                   # gazetteer slices those three produce; without them the
+                   # registry's refs are bare strings. Enabling/syncing
+                   # nabu-places pulls the chain (pleiades ~129 MB dump;
+                   # trismegistos-geo is a ManualDrop — the sweep prints its
+                   # acquisition card honestly).
   axes: [epigraphy]
-  wired: false   # PERMANENTLY false — a decisions-registry instrument (the
-                   # nabu-lects sibling invariant): discover mints no
-                   # documents. The row gives the owner the sanctioned fetch
-                   # path for github.com/arvicco/nabu-places, resolved by
-                   # Nabu::Places (decision(source, verbatim-name) with alias
-                   # hops; identity-default — an unlisted name is honestly
-                   # unmatched) and projected into document_axes.place_ref by
-                   # `nabu place apply` (adapter-asserted refs ALWAYS win).
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P63-6/7: nabu-places — the third sister repo (nabu-lects pattern applied
   # to places): names.yml (source → verbatim place-name string → decision
   # row: matched refs [cigs:GIR, pleiades:912855] · unlocatable · region ·
@@ -3474,18 +3395,10 @@ osl:
   group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
   kind: module   # P53-1: machinery-only — a cuneiform sign/value/codepoint instrument, zero document rows
   axes: [cuneiform]
-  wired: false   # PERMANENTLY false — a sign-list instrument, not a text
-                   # source (the hypotactic/cldf-spine module invariant):
-                   # discover mints no documents, no migration, no catalog
-                   # table. The row gives the owner the sanctioned fetch
-                   # path for the Oracc Sign List repo; Nabu::SignList reads
-                   # canonical/osl/00lib/osl.asl (via the asl parser family)
-                   # as the value→sign / name→sign resolver the P53-2
-                   # `nabu signs` surface builds on (ATF transliteration →
-                   # signs with Unicode codepoints, the Edubba downstream).
-                   # OWNER QUEUE (P53-1): bin/nabu enable osl, then
-                   # bin/nabu sync osl (GitFetch clone of github.com/oracc/
-                   # osl); eyeball `00lib/osl.asl` landing (~979 KB).
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P53-1: OSL — the Oracc Sign List (ex-OGSL; Veldhuis & Tinney; rolling
   # master, no tags, stable @oid ids). The ONE machine artifact is
   # 00lib/osl.asl (line-oriented ASL grammar; census 2026-07-29: 3,241
@@ -3504,17 +3417,20 @@ edubba-overlay:
   adapter: Nabu::Adapters::EdubbaOverlay
   group: signs   # the sign-restore sweep: enable signs && sync signs makes the hiero card whole
   kind: module   # P72-6: machinery-only — the sister school's didactic overlay, zero document rows
-  axes: [egyptian]
-  wired: false   # PERMANENTLY false — the osl/unikemet module invariant.
-                   # Nabu::EdubbaOverlay reads assets-src/data/hiero-10*.yml +
-                   # site/hieroglyphs/addenda/signs/*.md from the synced repo
-                   # snapshot; the P65-2 hiero card renders the overlay with
-                   # Edubba's attribution + the certainty grade (unclear =
-                   # never presented as fact — their rule, our renderer).
-                   # Extraction contract: their inbox note 2026-08-11 —
-                   # stable field names, additive-only, renames announced in
-                   # our inbox BEFORE landing. Frequency TSVs in the same
-                   # repo derive FROM Nabu and are NEVER re-imported.
+  requires: [unikemet]   # P77-r3: the overlay joins onto Unikemet sign entries
+                   # (their gardiner = our kEH_JSesh) — without the sign spine
+                   # there is no card to overlay. The CUNEIFORM lanes (P77-8)
+                   # join the OSL sign card by name/osl_name instead — OSL is
+                   # a signs-group sibling, not a requires edge (the card
+                   # exists without the overlay and vice versa at load).
+  axes: [egyptian, cuneiform]   # P77-8 (Q25): the cuneiform didactic lanes
+                   # (sign_teaching.yml + pool-102/103 + both addenda codex
+                   # dirs) now extract and render on the OSL sign card —
+                   # axes follow capability.
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   sync_policy: manual   # course releases, not a nightly feed
 
 unikemet:
@@ -3522,12 +3438,10 @@ unikemet:
   group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
   kind: module   # P65-2: machinery-only — an Egyptian sign-spine instrument, zero document rows
   axes: [egyptian]
-  wired: false   # PERMANENTLY false — a sign-list instrument, not a text
-                   # source (the osl invariant): discover mints no documents,
-                   # no migration, no catalog table. Nabu::Hieroglyphs reads
-                   # canonical/unikemet/Unikemet.txt as the glyph/Gardiner-
-                   # code → sign resolver behind the P65-2 `nabu char`
-                   # Egyptian card (the Unihan role, Egyptian leg).
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
   # P65-2: Unikemet — Unicode's normative Egyptian Hieroglyph data file
   # (UCD; 5,067 signs at 17.0: kEH_Cat Gardiner-plus catalog codes,
   # kEH_Desc descriptions 4,380, kEH_Func functions 4,378, kEH_FVal
@@ -3626,9 +3540,75 @@ derom:   # P56-4, 02-sources row 146
   # refresh: September 2026 (É. Buchi, №45-3) — a routine manual re-sync.
   sync_policy: manual
 
+# P77-1 + P77-2
+osta:
+  adapter: Nabu::Adapters::Osta
+  axes: [romance]
+  siblings: ["-vrt"]   # P77-2: the verticalized lemma lane rides as -vrt
+                         # sibling documents of the same works (two
+                         # editions are two versions, never a dedupe)
+  lemma_tier: silver   # P77-2 RULING ON EVIDENCE: the archive's own
+                         # methodology paper (Gago Jover & Pueyo Mena,
+                         # "El Old Spanish Textual Archive ...:
+                         # lematización y etiquetado gramatical",
+                         # Scriptum Digital 7) documents FreeLing +
+                         # HSMS-app — AUTOMATIC lemmatization/tagging
+                         # with expanded lexical resources → silver,
+                         # the GLAUx precedent. Only the -vrt documents
+                         # carry tokens, so only they mint lemma rows.
+  wired: true    # P77 first sync owner-verified (740 docs / 5,177 passages), flipped 2026-08-18 (owner: "wire on all recent sources")
+  sync_policy: manual
+
+# P77-4
+disco:
+  adapter: Nabu::Adapters::Disco
+  axes: [romance]
+  wired: true    # P77 first sync owner-verified (1,215 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
+  sync_policy: manual
+
+# P77-6
+fornsvenska:
+  adapter: Nabu::Adapters::Fornsvenska
+  axes: [germanic]
+  wired: true    # P77 first sync owner-verified (155 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
 #   adapter: Nabu::Adapters::SomeAdapter
 #   wired: false
 #   sync_policy: manual   # auto | manual | frozen (omit on kind: shelf rows)
+
+achemenet:
+  adapter: Nabu::Adapters::Achemenet
+  axes: [cuneiform]
+  wired: true    # P77-r18 first sync owner-verified (2,774 docs + 56 zero-word rule-skips), flipped 2026-08-18 (owner: "wire on all recent sources")
+  license_watch: https://zenodo.org/records/19067652
+  # SILVER lemmas (the GLAUx rule): BabyLemmatizer semi-automatic with
+  # partial manual correction, upstream's own account.
+  lemma_tier: silver
+  sync_policy: manual
+
+burman-concordance:
+  adapter: Nabu::Adapters::BurmanConcordance
+  kind: module   # P77-r19: a links instrument (the trismegistos shape) — zero catalog rows, up=module
+  axes: [italic]
+  wired: true    # channel verified (first fetch landed; canonical present). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by wired
+                   # (owner semantics ruling 2026-08-18, reaffirming 2026-07-24:
+                   # wired = the sync link is tested and declared working).
+  # P77-r19 (№R-33 PKG-1): Annie Burman's Digital Concordance of
+  # Etruscan, Faliscan and Early Latin Inscriptions from Etruria
+  # (Uppsala; Zenodo 7801485 v1.0.0, PUBLIC DOMAIN/CC0) — 14,986 rows
+  # crosswalking TM, CIE, Rix ET1, Meiser ET2, TLE, Bakkum, CIL and
+  # CII ids, one row per inscription. A LINKS INSTRUMENT (the
+  # trismegistos shape): zero documents; Nabu::BurmanCrosswalk mints
+  # kind=reference edges urn:nabu:open-etruscan:cie-<n> → tm:<id>
+  # (verified live 2026-08-17: open-etruscan CIE ids are unpadded,
+  # 1,838 CIE-keyed docs; Burman's zero-padding stripped at the join),
+  # the full concordance line riding each edge's detail. Rows without
+  # the CIE+TM pair are unmapped-counted (ET-only rows wait for an
+  # ET-keyed held corpus), never guessed.
+  license_watch: https://zenodo.org/records/7801485
+  sync_policy: manual

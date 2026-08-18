@@ -338,7 +338,7 @@ module Nabu
     # The staged tree root: the single top-level directory when the zip
     # carries one (the ORACC shape), else the unpack root itself.
     def tree_root(unpacked)
-      entries = Dir.children(unpacked)
+      entries = Dir.children(unpacked).sort
       only = entries.size == 1 && File.join(unpacked, entries.first)
       only && File.directory?(only) ? only : unpacked
     end

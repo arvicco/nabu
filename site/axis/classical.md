@@ -15,25 +15,25 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 12 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 August 2026)</span> |
 |---|---|---|---|---|
 | `perseus-greek` | texts | attribution | wired · auto | 1,418 docs / 394,706 passages |
 | `perseus-latin` | texts | attribution | wired · auto | 541 docs / 393,921 passages |
 | `first1k-greek` | texts | attribution | wired · auto | 1,129 docs / 256,480 passages |
-| `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
+| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
 | `lexica` | dictionary | attribution | wired · manual | 168,133 entries |
 | `vulgate` | texts | open | wired · manual | 73 docs / 35,809 passages |
-| `lila` | feature module | attribution | not yet wired | nothing held yet |
-| `hypotactic` | feature module | attribution | not yet wired | nothing held yet |
+| `lila` | feature module | attribution | wired · manual | nothing held yet |
+| `hypotactic` | feature module | attribution | wired · manual | nothing held yet |
 | `diorisis` | texts | attribution | wired · manual | 767 docs / 516,505 passages |
 | `glaux` | texts | attribution | wired · manual | 1,421 docs / 968,578 passages |
 | `croala` | texts | attribution | wired · manual | 570 docs / 309,180 passages |
-| `pedecerto` | feature module | nc | not yet wired | nothing held yet |
+| `pedecerto` | feature module | nc | wired · manual | nothing held yet |
 | `digiliblt` | texts | attribution | wired · manual | 372 docs / 459,451 passages |
 | `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 August 2026)</span>: `grc` 120,553 · `lat` 53,170 · `eng` 872 · `gmh` 11 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 … and 11 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 August 2026)</span>: `grc` 120,553 · `lat` 53,170 · `eng` 872 · `gmh` 11 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 … and 12 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 

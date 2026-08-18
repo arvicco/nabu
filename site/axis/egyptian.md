@@ -15,19 +15,19 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 12 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 August 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
+| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `ccl` | dictionary | attribution | wired · manual | 11,284 entries |
 | `coptic-scriptorium` | texts | nc | wired · manual | 482 docs / 74,169 passages |
 | `tla-hf` | texts | attribution | wired · manual | 4 docs / 33,978 passages |
 | `aes` | texts | attribution | wired · manual | 26,011 docs / 202,426 passages |
 | `aed` | dictionary | attribution | wired · manual | 35,052 entries |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
-| `edubba-overlay` | feature module | attribution | not yet wired | nothing held yet |
-| `unikemet` | feature module | open | not yet wired | nothing held yet |
+| `edubba-overlay` | feature module | attribution | wired · manual | nothing held yet |
+| `unikemet` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 August 2026)</span>: `egy` 51,130 · `ger` 12,985 · `cop` 12,222 · `eng` 4,861 · `grc` 3,311 · `egy-Egyd` 1,424 · `arc` 1,189 · `ara` 962 · `und` 168 · `phn` 94 … and 19 more (`nabu axis egyptian` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 August 2026)</span>: `egy` 51,130 · `ger` 12,985 · `cop` 12,222 · `eng` 4,861 · `grc` 3,311 · `egy-Egyd` 1,424 · `arc` 1,189 · `ara` 962 · `und` 168 · `phn` 94 … and 20 more (`nabu axis egyptian` lists all).
 
 ## The desk's instruments
 

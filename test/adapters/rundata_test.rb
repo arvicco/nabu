@@ -25,6 +25,14 @@ class RundataTest < Minitest::Test
     urn:nabu:rundata:dr-42-eng
     urn:nabu:rundata:dr-42-fvn
     urn:nabu:rundata:dr-42-rsv
+    urn:nabu:rundata:dr-ik512
+    urn:nabu:rundata:dr-ik512-b2
+    urn:nabu:rundata:dr-ik512-b2-eng
+    urn:nabu:rundata:dr-ik512-b2-fvn
+    urn:nabu:rundata:dr-ik512-b2-rsv
+    urn:nabu:rundata:dr-ik512-eng
+    urn:nabu:rundata:dr-ik512-fvn
+    urn:nabu:rundata:dr-ik512-rsv
     urn:nabu:rundata:n-kj101
     urn:nabu:rundata:n-kj101-eng
     urn:nabu:rundata:n-kj101-fvn
@@ -115,7 +123,27 @@ class RundataTest < Minitest::Test
 
   def test_discover_mints_one_ref_per_inscription_lane_sorted
     refs = conformance_adapter.discover(FIXTURES).to_a
-    assert_equal ALL_URNS, refs.map(&:id), "census pinned: 4 inscriptions, 18 lane documents"
+    assert_equal ALL_URNS, refs.map(&:id), "census pinned: 6 inscriptions, 26 lane documents"
+  end
+
+  # P77-r10 (the drill_pure finding): "DR IK51,2" and "DR IK512" both
+  # Django-slugify to dr-ik512 — the ONE colliding pair in the live
+  # corpus. Before the belt, both claimed the same urns and the loader's
+  # first-wins seam made document content an artifact of encounter order
+  # (sort_by ties are unstable) — the drill's verify mismatches. The
+  # belt is DETERMINISTIC: the losslessly-slugified signum (DR IK512 —
+  # rundata.info's own page slug) keeps the bare slug; the mangled one
+  # takes -b2, its lane siblings inheriting the belted base.
+  def test_colliding_signum_slugs_take_a_deterministic_belt
+    refs = conformance_adapter.discover(FIXTURES).to_a
+    assert_equal refs.map(&:id), refs.map(&:id).uniq, "discover must never mint a urn twice"
+    bare = refs.find { |r| r.id == "urn:nabu:rundata:dr-ik512" }
+    belted = refs.find { |r| r.id == "urn:nabu:rundata:dr-ik512-b2" }
+    assert_equal "DR IK512", bare.metadata["signum"], "the lossless signum owns the bare slug"
+    assert_equal "DR IK51,2", belted.metadata["signum"]
+    assert_equal %w[urn:nabu:rundata:dr-ik512-b2-eng urn:nabu:rundata:dr-ik512-b2-fvn
+                    urn:nabu:rundata:dr-ik512-b2-rsv],
+                 refs.map(&:id).grep(/-b2-/), "lane siblings inherit the belted base"
   end
 
   def test_discover_without_translations_flag_mints_original_lanes_only
@@ -267,7 +295,7 @@ class RundataTest < Minitest::Test
       assert File.file?(target)
       assert_equal Digest::SHA256.file(TRIM).hexdigest, report.sha
       assert_match(/runes\.abc123def456\.sqlite3/, report.notes)
-      assert_match(/4 inscriptions/, report.notes, "the honest per-artifact census")
+      assert_match(/6 inscriptions/, report.notes, "the honest per-artifact census")
       state = JSON.parse(File.read(File.join(dir, ".rundata-fetch.json")))
       assert_equal "runes.abc123def456.sqlite3", state.fetch("current")
       assert_equal report.sha, state.fetch("sha256")

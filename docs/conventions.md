@@ -505,6 +505,28 @@ transliteration) would be mis-joined — the pristine text is untouched
 either way. Content hashes cover `text_normalized` + annotations, and the
 derivation is deterministic, so two parses and rebuilds agree.
 
+**HSMS markup reading (P77-1 — PARSER-SCOPED, the second registrant of
+the derivation contract).** OSTA's transcriptions are semi-paleographic:
+the pristine passage text keeps the HSMS markup VERBATIM (`q<ue>`
+abbreviation expansions, `[*x]` reconstructions, `[^x]` interlinear
+additions, `[ ]` editorial word division, `[??]` lacunae, `(^x)`/`(x)`
+deletions, `¶`) — canonical means canonical — but un-derived the index
+would carry `q<ue>brantarame`, unfindable by any typed query.
+`text_normalized` is minted through the one boundary over
+`HsmsParser.search_source(text)` — a pure function of the STORED TEXT
+ALONE (simpler than ccmh-txt's: no annotation needed): deletions drop,
+expansions resolve innermost-out, bracket marks strip to their reading,
+lacunae drop, `¶`/`/` become spaces, whitespace squeezes; a line deriving
+to nothing keeps its raw text. The adapter conformance hook pins the
+mint. The verticalized lane (P77-2) has its own derivation under the
+same contract: a `-vrt` passage's search form is its clean token
+stream — `HsmsVrtParser.search_source(text, annotations)` joins the
+stored `tokens` annotation's form fields (upstream's own clean words:
+`per-done` heals to `perdone`), the ccmh-txt annotation-derivation
+shape. Scope: properties of the HSMS transcription convention, so both
+rules live in the hsms family, not in `LANGUAGE_FOLDS`; each
+derivation is deterministic, so two parses and rebuilds agree.
+
 Changing any rule here changes every `text_normalized` and therefore every
 passage `content_sha256`: plan a full `nabu rebuild` (drop + re-derive), not
 a parse-only sync, or the loader will read the change as a corpus-wide

@@ -8,6 +8,7 @@ require_relative "char_postings_builder"
 require_relative "document_dates_builder"
 require_relative "form_lemma"
 require_relative "hani_fold_builder"
+require_relative "hiero_frequency_builder"
 require_relative "kanripo_gaiji_builder"
 require_relative "kyujitai_fold_builder"
 require_relative "lect_assignments_builder"
@@ -460,6 +461,26 @@ module Nabu
                    "V3) → clean CC BY 4.0.",
         maintenance: "re-derive after `nabu sync unikemet` (upstream moves at annual Unicode " \
                      "releases); mechanical, no review needed beyond spot-checks"
+      ),
+      Feature.new(
+        slug: "egy/hiero-frequency", language: LANGUAGES.fetch("egy"),
+        title: "Egyptian hieroglyph frequencies — Gardiner codes censused from AES, per subcorpus",
+        # gold-DERIVED: a mechanical census over TLA gold annotation — no
+        # interpretation, no sampling.
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "none",
+        inputs: ["aes"], canonical_cones: [],
+        builder: HieroFrequencyBuilder,
+        rationale: "The sign-learning survey's P-1 Egyptian half (P77-r17): Gardiner-code " \
+                   "token and document frequencies censused from AES's per-word hiero_inventar " \
+                   "annotations, overall and per subcorpus (frequency is genre-dependent — " \
+                   "Pyramid Texts vs Amarna letters vs medical papyri). To the survey's " \
+                   "knowledge the first public hieroglyph frequency list anywhere. Joins " \
+                   "egy/unikemet-signs on the Gardiner column. CC BY-SA 4.0 — derived from " \
+                   "AES's share-alike grant, the №R-24/D51-a carve-out (the char-postings " \
+                   "precedent).",
+        maintenance: "re-derive after `nabu sync aes`; the doc-attestation digest in the " \
+                     "recipe makes an unchanged census a fingerprint no-op"
       )
     ].freeze
 

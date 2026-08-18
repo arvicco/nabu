@@ -12,7 +12,7 @@ check pins the agreement. The map:
 | Aspect | Source of truth | Derived surfaces | Kept honest by |
 |---|---|---|---|
 | Holdings & census (documents, passages, entries, lemma rows) | The live catalog (`db/catalog.sqlite3` + `db/fulltext.sqlite3`), read via `nabu status` / `list` / `axis` / `language` | Every number in README, docs, and the site is a **dated snapshot** read from the catalog | Gate-time refresh (library.md §10); site numbers are *copied* from README/library.md with their as-of dates, never re-derived (`site/MAINTENANCE.md`) |
-| Source registry (what exists, kind, axes, license class, sync policy, enablement) | `config/sources.yml` | `nabu list`/`status` rows; docs/library.md sections; site pages | Enablement flips only after an owner-verified first sync; conformance suite per adapter |
+| Source registry (what exists, kind, axes, license class, sync policy, wired) | `config/sources.yml` | `nabu list`/`status` rows; docs/library.md sections; site pages | `wired` flips only after an owner-verified first sync (a channel-verification fact — ops.md §1's vocabulary table; box enablement lives in the profile, `nabu enable`); conformance suite per adapter |
 | Per-source scouting & license record | [docs/02-sources.md](02-sources.md) (one row per source: access path, scores, license verbatim, status) | Site *Sources & Licensing* page | Status column updated when a source's lifecycle moves (built → synced → flipped) |
 | Curated per-source prose (dossiers) | `local/shelves/local-source/` (one Markdown dossier per source, `nabu ingest --shelf source`) | `nabu list SOURCE` card; catalog `source_records` | `rake site:check` cross-checks dossier descriptions against docs/library.md (drift = exit 1) |
 | Research axes (desks, personas, ratified order) | `config/axes.yml` + the list-valued `axes:` tags in `config/sources.yml` | [docs/axes.md](axes.md) membership listing; `nabu axis`; `site/axis/*` pages | `test/docs/axes_page_test.rb` fails the build if docs/axes.md and the registry disagree; `rake site:axes` *generates* the site pages from registry + `site/axis/_fragments.yml` + live counts |
@@ -44,10 +44,25 @@ The operative schedule, commands, and launchd templates live in
 
 The >20% withdrawal circuit-breaker (architecture §8) is the main guard against silent upstream restructures gutting data during unattended syncs.
 
+**Standing duties (as occasions arise, not scheduled):**
+
+- **Hand-prose site pages migrate onto data fields.** Where a site page
+  (library/tools/languages) carries hand-written prose that the catalog
+  or registries now hold as data, move it onto the data field when the
+  page is next touched — hand prose drifts, data fields don't. (P58
+  site-template rider's duty, recorded here at P77-r15 after the
+  gap-review found it homeless.)
+- **Known render edge, unfixed by choice:** Leiden editorial brackets
+  nesting inside stored right-to-left text (Hebrew/Arabic) can display
+  with bidi-mangled bracket order. Cosmetic, display-only, stored text
+  unaffected; revisit if a reader workflow actually trips on it
+  (P42-era deferral, recorded here at P77-r15).
+
 ## 2. Keeping upstream sync sane
 
 - **Vendored snapshots, not submodules.** Git-based sources are cloned into a cache and *copied* into `canonical/<source>/` at a recorded upstream SHA. Submodules couple your repo's health to upstream force-pushes and renames; snapshots make every sync an explicit, diffable, revertible commit in the canonical repo.
 - **Scraped sources get frozen-by-default.** ETCSL-style dead projects sync once and set `sync_policy: frozen` in `sources.yml`. TITUS-style fragile sources set `sync_policy: manual` — never in `--all`.
+- **The registry vocabulary is ops.md §1's table** (kinds source/shelf/module; flags wired/enabled/sync_policy/grants). The short form: `wired` = the sync link is tested and declared working (a verification fact, every kind); enablement = this box's profile; cadence = `sync_policy`; a module is excluded from `--all` by KIND, never by mislabeling it unwired (the 2026-08-18 semantics ruling).
 - **Upstream drift detection is cheap:** every sync records per-source `(added, updated, withdrawn)` counts in the run ledger, and `nabu status` carries the `up=` drift column; a source that's been `0,0,0` for a year is a candidate for `frozen` (stop hitting it); a source suddenly showing mass updates gets manual eyeballing (the >20% mass-deletion breaker aborts the destructive case automatically; a staging/accept flow remains a design idea, not a shipped flag).
 
 ## 3. Extension axes, in expected order

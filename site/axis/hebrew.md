@@ -15,20 +15,20 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 12 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 August 2026)</span> |
 |---|---|---|---|---|
-| `ud` | treebank | nc | wired · manual | 73 docs / 322,114 passages |
+| `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `oshb` | texts | open | wired · manual | 39 docs / 23,213 passages |
 | `sdbh` | dictionary | attribution | wired · manual | 7,932 entries |
 | `sefaria` | texts | open | wired · manual | 921 docs / 474,643 passages |
 | `bhsa` | texts | nc | wired · manual | 39 docs / 23,213 passages |
-| `bridging` | crosswalk module | attribution | not yet wired | nothing held yet |
+| `bridging` | crosswalk module | attribution | wired · manual | nothing held yet |
 | `dss` | texts | nc | wired · manual | 1,001 docs / 52,895 passages |
 | `iip` | inscriptions | nc | wired · manual | 5,499 docs / 17,823 passages |
 | `hebrew-lexicon` | dictionary | attribution | wired · manual | 21,144 entries |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 12 August 2026)</span>: `hbo` 30,259 · `grc` 6,297 · `eng` 5,320 · `arc` 3,331 · `egy` 3,050 · `egy-Egyd` 1,424 · `ara` 962 · `cop` 456 · `heb` 408 · `lat` 317 … and 20 more (`nabu axis hebrew` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 August 2026)</span>: `hbo` 30,259 · `grc` 6,297 · `eng` 5,320 · `arc` 3,331 · `egy` 3,050 · `egy-Egyd` 1,424 · `ara` 962 · `cop` 456 · `heb` 408 · `lat` 317 … and 21 more (`nabu axis hebrew` lists all).
 
 ## The desk's instruments
 

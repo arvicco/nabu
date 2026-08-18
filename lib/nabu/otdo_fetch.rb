@@ -352,7 +352,7 @@ module Nabu
       return [] unless Dir.exist?(@dir)
 
       keep = @slugs.to_set { |slug| self.class.record_filename(slug) }
-      Dir.children(@dir).select { |name| self.class.record?(name) && !keep.include?(name) }
+      Dir.children(@dir).sort.select { |name| self.class.record?(name) && !keep.include?(name) }
     end
 
     # First copy wins; the manifest records the pin each file vanished at,

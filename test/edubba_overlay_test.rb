@@ -50,6 +50,61 @@ class EdubbaOverlayTest < Minitest::Test
     assert_nil overlay["Z99"]
   end
 
+  # -- the cuneiform lanes (P77-8, Q25): the school's FIRST subject joins --
+
+  def test_c101_sign_teaching_entries_carry_the_richest_record
+    entry = overlay.cuneiform("AŠ")
+    assert_equal "𒀸", entry.glyph
+    assert_equal "12038", entry.codepoint
+    assert_equal "one", entry.keyword
+    assert_equal "aš (ash/asz)", entry.value
+    assert_equal "one; single", entry.meaning
+    assert_match(/atomic horizontal wedge/, entry.iconicity)
+    assert_equal "classic", entry.certainty
+    assert_equal %w[DIŠ U], entry.confusables
+    assert_equal "C101", entry.course
+    assert_equal 5, entry.chapter, "taught_in is C101's chapter key"
+  end
+
+  def test_c102_and_c103_pools_load_with_their_own_chapter_key
+    e_sign = overlay.cuneiform("E")
+    assert_equal "levee", e_sign.keyword
+    assert_equal "C102", e_sign.course
+    assert_equal 1, e_sign.chapter
+    assert_equal ["É"], e_sign.confusables
+    sza = overlay.cuneiform("ŠA")
+    assert_equal "C103", sza.course
+    assert_equal "which", sza.keyword
+    assert_equal "unclear", sza.certainty, "the never-present-as-fact grade survives"
+    assert_nil sza.iconicity, "iconicity is a C101-only lane"
+  end
+
+  def test_cuneiform_osl_name_indexes_the_card_join
+    nin = overlay.cuneiform("|SAL.TUG2|")
+    refute_nil nin, "the card holds the OSL name — the osl_name field must index"
+    assert_equal "NIN", nin.name
+    assert_equal nin, overlay.cuneiform("NIN"), "both keys reach the same entry"
+    assert_equal overlay.cuneiform("|IGI.DIB|"), overlay.cuneiform("U3")
+  end
+
+  def test_cuneiform_codex_pages_merge_from_both_addenda_dirs
+    nin = overlay.cuneiform("NIN")
+    assert_match(/NIN/, nin.title)
+    assert_equal "https://edubba.ac/cuneiform/addenda/signs/nin/", nin.link
+    sza = overlay.cuneiform("ŠA")
+    assert_match(%r{/addenda-akk/signs/sza/\z}, sza.link, "the Akkadian addenda dir merges too")
+    a_sign = overlay.cuneiform("A")
+    refute_nil a_sign, "a codex-only sign (no pool row in the trim) still gets an entry"
+    assert_match(/water/, a_sign.title)
+    assert_nil a_sign.keyword
+  end
+
+  def test_cuneiform_lookup_is_case_insensitive_and_separate_from_hiero
+    assert_equal overlay.cuneiform("NIN"), overlay.cuneiform("nin")
+    assert_nil overlay.cuneiform("ZZZ")
+    assert_nil overlay["NIN"], "the hiero lookup never answers for a cuneiform name"
+  end
+
   def test_load_default_feature_detects
     Dir.mktmpdir do |root|
       config = Nabu::Config.load(path: File.join(root, "config", "nabu.yml"), root: root)

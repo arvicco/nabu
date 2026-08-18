@@ -355,11 +355,59 @@ sources:
     dating: {posture: partial}
     places: {posture: unplaced}
     script: {posture: implied}
+  fornsvenska:
+    # lect declaration retired P77-r8: the fsv-old rule (№R-32, the sv:old
+    # whole-source claim) machine-postures fornsvenska now (the shadowing
+    # rule; nabu-lects PR #4 minted the target).
+    dating: {posture: pending, note: "candidate: upstream's own per-text
+        date/datefrom/dateto attrs, riding document metadata verbatim — the
+        extractor is a small future packet over real synced data"}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  disco:
+    lect: {posture: identity, note: "P77-4: bare spa is the honest one-tag claim
+        across the 15th-20th c. span — the period band rides document metadata;
+        a stage split (Golden Age Spanish) would need a ruled rule"}
+    dating: {posture: pending, note: "candidate: the period suffix band (g/e/n/t
+        -> upstream's period dirs, in metadata) + the prosopography birth/death
+        centuries — extractor from real synced data, the isicily discipline"}
+    places: {posture: unplaced, note: "birthplace is author biography, not
+        composition place — rides metadata verbatim"}
+    script: {posture: implied}
+  osta:
+    # lect declaration retired P77-r8: the osta-leones/osta-aragones lengua
+    # rules machine-posture osta now (the shadowing rule; nabu-lects PR #3
+    # minted ast:old/an:old). The castellano/gallego/latín majority rides
+    # bare-anchor identity codes (osp/roa-opt/lat) from the works table
+    # (P77-r6, №R-30 — OstaTables::LENGUA_CODES, majority per codex).
+    dating: {posture: pending, note: "candidate: the works-table OPDT (per work)
+        and codex SPDT (per copy) date texts, riding metadata verbatim since
+        P77-r6 ('1252 a quo', '1510 ca. ad quem' — upstream text); the
+        timeline extractor over that vocabulary is the future packet"}
+    places: {posture: unplaced, note: "the header repository line (City | Library |
+        Shelfmark) is a holding-library fact, not a composition place — it rides
+        document metadata verbatim"}
+    script: {posture: implied}
 
   # ── P61-1: sources whose lect posture is MACHINE grain (rules/
   # overrides files) — no lect key here by the single-source-of-truth
   # rule; the three new layers still declare (coverage-derived, the
   # sweep of 2026-08-07). ────────────────────────────────────────────
+  achemenet:
+    # lect row RETIRED 2026-08-18: №R-34 ruled the blanket akk:nb rule
+    # (achemenet-nb, the archive-facet total map) — the machine grain
+    # machine-postures achemenet now (the shadowing rule; same-phase
+    # add-then-retire, the osta/fornsvenska shape).
+    dating:
+      posture: pending
+      note: "candidate: the corpus band 550–330 BCE + the reign-dated
+        designations (Camb/Cyr/Dar) via the №R-28 regnal table —
+        extractor over real synced data"
+    places:
+      posture: pending
+      note: "candidate: archive-grain findspots (CT55/Bel-remanni=Sippar,
+        Murashu=Nippur, YOS7=Uruk) from the archive facet"
+    script: {posture: implied}
   aes:
     dating: {posture: partial}
     places: {posture: named}

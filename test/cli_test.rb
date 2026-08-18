@@ -1607,12 +1607,184 @@ class CLITest < Minitest::Test
 
   # An unknown axis is a clean error naming the known set — the resolution
   # guarantee (never a silent empty group).
+  # P77-r2 (owner report 2026-08-13): a scoped axis view's summary is the
+  # DEDUPED UNION of the sources it displayed — never the whole-library
+  # aggregate. `--axis slavic` shows 2 of the rig's 3 held sources, so the
+  # footer says 2.
+  def test_list_axis_footer_counts_only_the_union_of_shown_sources
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list --axis slavic]) }
+      assert_nil status
+      assert_match(/^2 sources · /, out, "the footer aggregates the scoped view, not the library")
+    end
+  end
+
+  # P77-r2: the enablement printout groups by PROVENANCE — core (enabled by
+  # default, even with no profile entry) first, then each axis entry with
+  # the members it pulls in, then the individually enabled remainder; every
+  # source once, and the headline count is the deduped union.
+  def test_enablement_printout_groups_by_provenance_with_a_union_count
+    with_provenance_corpus do |config|
+      out, = with_config(config) { run_cli(%w[enable lex]) }
+      assert_match(/^enabled: lex/, out)
+      assert_match(/^enabled \(3 entries → 4 distinct sources\):/, out,
+                   "the union counts the chain-pulled requirement too")
+      assert_match(/^  core \(enabled by default\): core-mod/, out,
+                   "core shows under its own heading even with no profile entry")
+      assert_match(/^  slavic \(axis\): lex/, out, "an axis entry lists the members it enables")
+      assert_match(/^  sources: solo/, out, "the individual remainder — already-covered members excluded")
+      refute_match(/^  sources: .*lex/, out, "lex appears once, under its covering axis")
+      assert_match(/^  required: dep-mod \(by lex\)/, out,
+                   "a chain-pulled requirement names its dependents — the package-manager provenance")
+    end
+  end
+
+  def with_provenance_corpus
+    Dir.mktmpdir("nabu-cli-provenance") do |root|
+      File.write(File.join(root, "axes.yml"), <<~YAML)
+        classical:
+          persona: "The Classicist."
+          desc: "test desk"
+        slavic:
+          persona: "The Slavicist."
+          desc: "test desk"
+      YAML
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "core-mod:\n  adapter: TestAdapter\n  wired: false\n  sync_policy: manual\n  " \
+                          "group: core\n  kind: module\n  axes: [classical]\n" \
+                          "lex:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n  " \
+                          "axes: [slavic]\n  requires: [dep-mod]\n" \
+                          "dep-mod:\n  adapter: TestAdapter\n  wired: false\n  sync_policy: manual\n  " \
+                          "kind: module\n  axes: [classical]\n" \
+                          "solo:\n  adapter: TestAdapter\n  wired: true\n  sync_policy: manual\n  " \
+                          "axes: [classical]\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources,
+                                config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
+      Nabu::Profile.new(%w[slavic solo]).save(config.profile_path)
+      yield config
+    end
+  end
+
+  # P77 rider (owner ruling 2026-08-13): the functional sets — core, signs,
+  # quickstart — resolve wherever --axis takes a name (an axis is a tag over
+  # the source list; the sets are the same kind of tag, minus the persona).
+  def test_list_axis_resolves_the_core_functional_set
+    with_axis_corpus do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list --axis core]) }
+      assert_nil status
+      assert_match(/^core — The auto-enabled minimum/, out)
+      refute_match(/^classical — /, out, "a set request shows only that set")
+    end
+  end
+
+  def test_sync_axis_refuses_a_functional_set_naming_the_group_door
+    with_axis_corpus do |config|
+      _out, err, status = with_config(config) { run_cli(%w[sync --axis core]) }
+      assert_equal 1, status
+      assert_match(/"core" is a functional set, not a desk axis/, err)
+      assert_match(/nabu sync core/, err, "the refusal teaches the group sweep")
+    end
+  end
+
+  # The auto-sync half of the ruling: core is the minimum set a new install
+  # carries — the box's FIRST real sync request sweeps any never-synced core
+  # member first; --parse-only never acquires; once synced, never re-rides.
+  def test_first_real_sync_sweeps_the_missing_core_set_first_and_only_once
+    with_auto_core_corpus do |config|
+      out, _err, st = with_config(config) { run_cli(%w[sync corpus --parse-only]) }
+      assert_nil st
+      refute_match(/core set first/, out, "--parse-only never acquires — no auto sweep")
+
+      out, _err, st = with_config(config) { run_cli(%w[sync corpus]) }
+      assert_nil st
+      assert_match(/core set first .*core-mod/, out)
+      assert_match(/dependency chain first: .*gaz-mod \(for corpus\)/, out,
+                   "the requested source's never-synced requirements sweep first — P77-r3")
+      assert_match(/core-dep-mod \(for core-mod\)/, out,
+                   "the CORE MEMBERS' own chains close too — the P77 survey's coverage fix")
+      assert_match(/core-mod\s/, out, "the missing core member synced before the request")
+
+      out, _err, st = with_config(config) { run_cli(%w[sync corpus]) }
+      assert_nil st
+      refute_match(/core set first/, out, "a synced core member never re-rides — " \
+                                          "`nabu sync core` is the explicit re-run")
+      refute_match(/dependency chain/, out, "a synced requirement never re-rides either")
+    end
+  end
+
+  # The sentinel finding (P77 survey): a FAILED requirement attempt mints
+  # a sources row but never last_sync_at — the sweep must RETRY it on the
+  # next sync, not count it synced forever.
+  def test_a_failed_requirement_retries_on_the_next_sync
+    Dir.mktmpdir("nabu-cli-retry") do |root|
+      %w[corpus flaky-mod].each do |slug|
+        dir = File.join(root, "canonical", slug)
+        FileUtils.mkdir_p(dir)
+        File.write(File.join(dir, "#{slug}.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+      end
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "corpus:\n  adapter: QuickstartFetchAdapter\n  wired: true\n  sync_policy: manual\n  " \
+                          "requires: [flaky-mod]\n" \
+                          "flaky-mod:\n  adapter: QuickstartFailingAdapter\n  wired: false\n  " \
+                          "sync_policy: manual\n  kind: module\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources,
+                                config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
+      out, err, st = with_config(config) { run_cli(%w[sync corpus]) }
+      assert_nil st, "a failed requirement is contained — the requested sync still runs"
+      assert_match(/dependency chain first: .*flaky-mod/, out)
+      assert_match(/prerequisite auto-sync: flaky-mod failed/, err)
+
+      out, _err, _st = with_config(config) { run_cli(%w[sync corpus]) }
+      assert_match(/dependency chain first: .*flaky-mod/, out,
+                   "a row without last_sync_at is NOT synced — the sweep retries")
+    end
+  end
+
+  # The disable finding (P77 survey): disabling a still-required source is
+  # overridden by the closure — the printout must say so, never pretend.
+  def test_disabling_a_still_required_source_says_it_stays_enabled
+    with_provenance_corpus do |config|
+      with_config(config) { run_cli(%w[enable lex]) }
+      _out, err, _st = with_config(config) { run_cli(%w[disable dep-mod]) }
+      assert_match(/dep-mod stays enabled — required by lex/, err,
+                   "the closure re-adds it; silence would be a lie")
+    end
+  end
+
+  def with_auto_core_corpus
+    Dir.mktmpdir("nabu-cli-autocore") do |root|
+      %w[corpus core-mod core-dep-mod gaz-mod].each do |slug|
+        dir = File.join(root, "canonical", slug)
+        FileUtils.mkdir_p(dir)
+        File.write(File.join(dir, "#{slug}.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+      end
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "corpus:\n  adapter: QuickstartFetchAdapter\n  wired: true\n  sync_policy: manual\n  " \
+                          "requires: [gaz-mod]\n" \
+                          "core-mod:\n  adapter: QuickstartFetchAdapter\n  wired: false\n  sync_policy: manual\n  " \
+                          "group: core\n  kind: module\n  requires: [core-dep-mod]\n" \
+                          "core-dep-mod:\n  adapter: QuickstartFetchAdapter\n  wired: false\n  " \
+                          "sync_policy: manual\n  " \
+                          "kind: module\n" \
+                          "gaz-mod:\n  adapter: QuickstartFetchAdapter\n  wired: false\n  sync_policy: manual\n  " \
+                          "kind: module\n")
+      config = Nabu::Config.new(canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+                                sources_path: sources,
+                                config_path: File.join(File.dirname(sources), "config", "nabu.yml"))
+      yield config
+    end
+  end
+
   def test_list_axis_unknown_names_the_known_set
     with_axis_corpus do |config|
       _out, err, status = with_config(config) { run_cli(%w[list --axis nope]) }
       assert_equal 1, status
       assert_match(/unknown axis "nope"/, err)
       assert_match(/classical.*slavic.*reference/, err, "the miss names the known axes")
+      assert_match(/functional sets: core, signs, quickstart/, err,
+                   "the miss teaches the sets beside the desks (P77 rider)")
     end
   end
 
@@ -1642,7 +1814,8 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[focus]) }
       assert_nil status
       assert_match(%r{focus is now enable/disable}, out)
-      assert_match(/enabled \(3 entries\)/, out)
+      assert_match(/enabled \(3 entries → 3 distinct sources\)/, out,
+                   "P77-r2: the headline carries the deduped union count")
       assert_match(/sources:.*lex.*library.*shelf/, out)
     end
   end
@@ -2004,6 +2177,40 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- P77-r5: enabled-but-unsynced members must not vanish ------------------
+
+  def test_list_axis_lists_an_enabled_but_unsynced_member_as_unsynced
+    with_axis_corpus(unsynced: true) do |config|
+      write_profile(config, "classical") # enables shelf AND newbie; newbie never synced
+      out, err, status = with_config(config) { run_cli(%w[list --axis classical]) }
+      assert_nil status
+      assert_match(/^  shelf\s+docs=2/, out, "the synced member still renders its census row")
+      assert_match(/1 member enabled, not yet synced — nabu sync newbie/, err,
+                   "enabled-but-unsynced is a state, not an absence — it gets its own clause")
+      refute_match(/not enabled/, err, "newbie is enabled — the enable hint stays silent")
+    end
+  end
+
+  def test_list_named_enabled_but_unsynced_source_teaches_the_sync_on_ramp
+    with_axis_corpus(unsynced: true) do |config|
+      write_profile(config, "classical")
+      _out, err, status = with_config(config) { run_cli(%w[list newbie]) }
+      assert_equal 1, status
+      assert_match(/newbie is registered and enabled but not yet synced — run nabu sync newbie/, err)
+      refute_match(/unknown source/, err, "a registered source is never 'unknown'")
+    end
+  end
+
+  def test_list_named_registered_but_unenabled_source_teaches_the_enable_on_ramp
+    with_axis_corpus(unsynced: true) do |config|
+      write_profile(config, "shelf") # newbie registered, NOT enabled, no catalog rows
+      _out, err, status = with_config(config) { run_cli(%w[list newbie]) }
+      assert_equal 1, status
+      assert_match(/newbie is registered but not enabled — run nabu enable newbie, then nabu sync newbie/, err)
+      refute_match(/unknown source/, err)
+    end
+  end
+
   def test_scoped_axis_hint_names_a_blocked_member_individually_with_its_grant_marker
     Dir.mktmpdir("nabu-cli-axis-hint-blocked") do |root|
       File.write(File.join(root, "axes.yml"), "iranian:\n  persona: \"The Iranist.\"\n  desc: \"Iranian.\"\n")
@@ -2239,9 +2446,9 @@ class CLITest < Minitest::Test
       assert_match(/green\s+wired\s+docs=/, out)
       assert_match(/blue\s+unwired\s+nothing held yet/, out, "a disabled, unheld member says so")
       # P46-r1 (owner report off the live hebrew card: "why is bridging
-      # suddenly 'unwired'?"): a kind: module row is PERMANENTLY wired: false
-      # by registry invariant — nothing to flip, so the axis card must name
-      # its nature, never imply an adapter awaiting first-sync verification.
+      # suddenly 'unwired'?") + the 2026-08-18 semantics ruling: a module
+      # wears its KIND on the card, never a wired/unwired label — wired is
+      # the channel-verification fact and says nothing about module nature.
       assert_match(/meter\s+module\s+nothing held yet/, out,
                    "a feature module wears its kind, not the unwired label")
       refute_match(/meter\s+unwired/, out)
@@ -2505,7 +2712,9 @@ class CLITest < Minitest::Test
     out, _err, _status = run_cli(%w[help backup])
     assert_match(/mount-point guard/i, out)
     assert_match(/\.attic/, out, "must explain why the attic rides along")
-    assert_match(/--skip-derived/, out)
+    refute_match(/skip-derived/, out,
+                 "the derived convenience tier is gone (owner ruling 2026-08-16) — db/ is never backed up")
+    assert_match(/NEVER backed up/i, out, "the help states the db/ exclusion plainly")
     assert_match(/Examples:/, out)
   end
 
@@ -2639,12 +2848,10 @@ class CLITest < Minitest::Test
   end
 
   # P52 (owner report off the live hypotactic sync: "How on earth is
-  # hypotactic NOT wired yet?"): a kind: module row is PERMANENTLY
-  # wired: false by registry invariant — the "not wired yet (this sync is
-  # the verification)" wording promises a flip that will never come. The
-  # direct sync path prints the module's nature note ONLY; the
-  # verification-pending note is for kind: source rows alone (the P46-r1
-  # axis-surface rule, applied to the last remaining surface).
+  # hypotactic NOT wired yet?"): a module wears its kind on every
+  # surface — wired is the channel-verification fact (2026-08-18
+  # semantics ruling), and module rows are wired once their first
+  # fetch lands, like any other channel.
   def test_sync_module_by_slug_prints_nature_not_unwired_verification
     with_axis_sync_env do |config|
       out, _err, status = with_config(config) { run_cli(%w[sync meter --parse-only]) }
@@ -7273,7 +7480,7 @@ class CLITest < Minitest::Test
     end
   end
 
-  def with_axis_corpus
+  def with_axis_corpus(unsynced: false)
     Dir.mktmpdir("nabu-cli-axis") do |root|
       File.write(File.join(root, "axes.yml"), <<~YAML)
         classical:
@@ -7304,6 +7511,13 @@ class CLITest < Minitest::Test
           kind: shelf
           axes: [slavic]
       YAML
+      # P77-r5: a REGISTERED member with no catalog rows yet (the state
+      # between `nabu enable` and the first `nabu sync`) — opt-in so the
+      # base-rig tests keep their all-synced world.
+      if unsynced
+        File.write(sources, "#{File.read(sources)}newbie:\n  adapter: TestAdapter\n  " \
+                            "wired: false\n  sync_policy: manual\n  axes: [classical]\n")
+      end
       config = Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources,

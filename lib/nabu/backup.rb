@@ -18,11 +18,18 @@ module Nabu
   # - config/ — every decision: the registries, rules/overrides/postures,
   #   lect rulings, grants, creep acceptances, the box profile.
   #
-  # CONVENIENCE (default-on, `--skip-derived` omits): the derived dbs
-  # (catalog + fulltext + lects) — a cheap file copy beats hours of
-  # `nabu rebuild` on restore — and the ledger (db/history.sqlite3),
-  # operational LOG whose loss costs history and guard baselines, never
-  # library data (№R-21; restore.md names the consequences).
+  # NOTHING UNDER db/ SHIPS, EVER (owner ruling 2026-08-16, closing
+  # №R-21's convenience tier): everything under db/ regenerates via
+  # `nabu rebuild` from the permanent folders — restore is
+  # clone-the-repo, rsync the folders back, rebuild. The tier existed as
+  # a restore-time shortcut ("a file copy beats hours of rebuild") and
+  # hauled 118 GB of derived db into every backup and every drill
+  # workspace; two crashed drills drained the boot disk to 100% before
+  # the tier's cost was ever stated. A pre-P71 box whose ledger still
+  # sits at db/history.sqlite3 (non-derivable history, no other copy) is
+  # REFUSED up front — silently excluding the only copy would be the
+  # disaster — and told to `nabu migrate-local` first: the ledger is a
+  # local artifact and rides inside the local/ section.
   #
   # == The mount-point guard (owner-mandated 2026-07-07)
   #
@@ -39,40 +46,31 @@ module Nabu
   # == rsync mechanics
   #
   # Each section rsyncs into its OWN subdirectory of the target (canonical/,
-  # config/, db/) — `-a --delete` is scoped to those subdirs, NEVER to the
+  # config/, local/) — `-a --delete` is scoped to those subdirs, NEVER to the
   # volume root, so a stray file beside the target is never touched and the
-  # boot-disk footgun stays contained even if the guard is bypassed. Directory
-  # sections use `--delete` (an upstream deletion propagates); the db files copy
-  # without `--delete` (a single-file rsync must not sweep its sibling dbs).
+  # boot-disk footgun stays contained even if the guard is bypassed.
   # `--dry-run` prints the plan and changes nothing.
   #
   # == WAL sidecars (P17-7)
   #
-  # The dbs run journal_mode=WAL (Store, architecture §5), so while any
-  # connection is open a `<db>-wal` holds recently committed transactions the
-  # main file does not yet contain (plus a `<db>-shm` index). A db file
-  # section therefore copies its LIVE sidecars along with the db — the main
-  # file alone would be a stale (or, mid-write, torn) snapshot — and prunes
-  # sidecars at the target whose source counterpart is gone (checkpointed
-  # away): restoring an OUTDATED -wal next to a NEWER main file would make
-  # SQLite replay old frames over newer data. Usually (idle corpus, nightly
-  # timing) the -wal is checkpointed away and this is a no-op; a backup taken
-  # while a writer is mid-transaction can still tear ACROSS files, exactly as
-  # it could pre-WAL — the drill (`rake ops:drill`) is the proof either way.
+  # The ledger runs journal_mode=WAL (Store, architecture §5), so while a
+  # connection is open a `history.sqlite3-wal` beside it holds recently
+  # committed transactions the main file does not yet contain (plus a
+  # `-shm` index). The local/ DIRECTORY copy carries live sidecars for
+  # free and its `--delete` prunes stale ones at the target (restoring an
+  # OUTDATED -wal next to a NEWER main file would make SQLite replay old
+  # frames over newer data). A backup taken while a writer is
+  # mid-transaction can still tear ACROSS files, exactly as it could
+  # pre-WAL — the drill (`rake ops:drill`) is the proof either way.
   class Backup
     # Raised when the backup cannot safely proceed (no target configured, or the
     # mount-point guard tripped). Loud on purpose — a refused backup is a
     # feature, a silent one is a disaster.
     class Error < Nabu::Error; end
 
-    # One member of the backup set. +delete+ scopes `rsync --delete` to this
-    # subdir; +directory+ distinguishes a contents-copy (canonical/, config/)
-    # from a single-file copy (a db).
-    Section = Data.define(:name, :source, :dest, :delete, :directory)
-
-    # A WAL db's sidecar suffixes (class doc above): copied while live,
-    # pruned at the target once the source checkpoints them away.
-    SIDECAR_SUFFIXES = ["-wal", "-shm"].freeze
+    # One member of the backup set — always a directory whose CONTENTS
+    # rsync (with --delete, scoped to its own target subdir).
+    Section = Data.define(:name, :source, :dest)
 
     # What one section's rsync did (or would do, under --dry-run).
     # status: :ok | :skipped (source absent) | :failed (rsync nonzero).
@@ -89,11 +87,10 @@ module Nabu
       def bytes = sections.sum(&:bytes)
     end
 
-    def initialize(config:, target: nil, skip_derived: false, dry_run: false,
+    def initialize(config:, target: nil, dry_run: false,
                    allow_unmounted: false, shell: Nabu::Shell, stat: File.method(:stat))
       @config = config
       @target = (target && !target.to_s.strip.empty? ? File.expand_path(target.to_s) : config.backup_target)
-      @skip_derived = skip_derived
       @dry_run = dry_run
       @allow_unmounted = allow_unmounted
       @shell = shell
@@ -110,6 +107,7 @@ module Nabu
       raise Error, "backup: no target — set backup.target in config/nabu.yml or pass --to PATH" if @target.nil?
 
       guard_mount!
+      guard_ledger_home!
       started = clock
       results = sections.map { |section| run_section(section) }
       Result.new(target: @target, dry_run: @dry_run, sections: results, duration: clock - started)
@@ -132,35 +130,40 @@ module Nabu
             "or pass --allow-unmounted for a deliberately-local target."
     end
 
+    # A pre-P71 box's ledger sits at db/history.sqlite3 — non-derivable
+    # history with no other copy — and NOTHING under db/ ships. Refusing
+    # is the only honest move (owner ruling 2026-08-16): a backup that
+    # silently omitted the only copy would be the disaster this class
+    # exists to prevent.
+    def guard_ledger_home!
+      return if File.dirname(@config.history_path) == @config.local_dir
+
+      raise Error,
+            "backup: the ledger still lives at #{@config.history_path} (pre-P71 layout) and the " \
+            "backup ships nothing under db/ — run `nabu migrate-local` to move it into local/, " \
+            "then back up."
+    end
+
     def sections
       # P71 — THE THREE-FOLDER CONTRACT (owner rulings 2026-08-10/11):
       # canonical/ (the asset) + config/ (the project definition) +
       # local/ (the instance: owner rulings, grants, profile, the ledger,
       # acquisitions) are the WHOLE permanent set. Everything under db/
-      # is derived (the lect journal and links re-mint at rebuild). The
-      # optional derived sections remain a convenience (restoring a 75 GB
-      # catalog beats hours of rebuild) — never a necessity. The ledger
+      # is derived and NEVER ships (owner ruling 2026-08-16 — class doc);
+      # `nabu rebuild` is the restore path for all of it. The ledger
       # rides INSIDE local/ (the dir copy carries its WAL sidecars and
-      # prunes stale ones via --delete); the file section survives only
-      # for a pre-P71 box whose ledger still sits under db/.
-      list = [
-        dir_section("canonical", @config.canonical_dir, File.join(@target, "canonical")),
-        dir_section("config", @config.config_dir, File.join(@target, "config")),
-        dir_section("local", @config.local_dir, File.join(@target, "local")),
+      # prunes stale ones via --delete; guard_ledger_home! refuses a
+      # pre-P71 box until it migrates).
+      [
+        Section.new(name: "canonical", source: @config.canonical_dir, dest: File.join(@target, "canonical")),
+        Section.new(name: "config", source: @config.config_dir, dest: File.join(@target, "config")),
+        Section.new(name: "local", source: @config.local_dir, dest: File.join(@target, "local")),
         # №R-22 (owner-ruled 2026-08-11): .docs/ — the steering record
         # (decision register, plan docs, surveys) — is owner input with no
         # other copy anywhere. Non-contract (db/ derives from the three
         # folders alone) but backed up by default; absent dir = clean skip.
-        dir_section("docs", docs_dir, File.join(@target, ".docs"))
+        Section.new(name: "docs", source: docs_dir, dest: File.join(@target, ".docs"))
       ]
-      unless @skip_derived
-        list << file_section("catalog", @config.catalog_path)
-        list << file_section("fulltext", @config.fulltext_path)
-        list << file_section("lects", @config.lects_journal_path)
-        list << file_section("links", @config.links_path)
-        list << file_section("ledger", @config.history_path) unless ledger_home?
-      end
-      list
     end
 
     # The gitignored owner-steering directory at the tree root.
@@ -168,28 +171,12 @@ module Nabu
       File.expand_path("../.docs", @config.config_dir)
     end
 
-    # Has the ledger moved to its local/ home? (Then the local dir section
-    # carries it and a db/-style file section would be a stale duplicate.)
-    def ledger_home?
-      File.dirname(@config.history_path) == @config.local_dir
-    end
-
-    def dir_section(name, source, dest)
-      Section.new(name: name, source: source, dest: dest, delete: true, directory: true)
-    end
-
-    # db files all land in <target>/db/; single-file copies, no --delete.
-    def file_section(name, source)
-      Section.new(name: name, source: source, dest: File.join(@target, "db"), delete: false, directory: false)
-    end
-
     def run_section(section)
       started = clock
       return skipped(section, started) unless File.exist?(section.source)
 
-      mkdir_dest(section) unless @dry_run
+      FileUtils.mkdir_p(section.dest) unless @dry_run
       @shell.run(*rsync_argv(section))
-      prune_stale_sidecars(section) unless @dry_run
       done(section, :ok, started)
     rescue Nabu::Shell::Error => e
       SectionResult.new(name: section.name, source: section.source, dest: section.dest,
@@ -197,44 +184,13 @@ module Nabu
                         detail: e.stderr.to_s.strip.empty? ? e.message : e.stderr.strip)
     end
 
+    # The section directory's CONTENTS (trailing slash), --delete scoped
+    # to its own target subdir.
     def rsync_argv(section)
-      argv = ["rsync", "-a"]
-      argv << "--delete" if section.delete
+      argv = ["rsync", "-a", "--delete"]
       argv << "--dry-run" if @dry_run
-      argv.concat(rsync_sources(section)) << section.dest
+      argv << File.join(section.source, "") << section.dest
       argv
-    end
-
-    # A directory section copies its CONTENTS (trailing slash); a file section
-    # copies the file itself into the db dir, plus any live WAL sidecars
-    # (class doc: the -wal holds commits the main file lacks).
-    def rsync_sources(section)
-      return [File.join(section.source, "")] if section.directory
-
-      [section.source, *sidecars(section.source)]
-    end
-
-    # The WAL sidecars of +path+ that exist right now.
-    def sidecars(path)
-      SIDECAR_SUFFIXES.map { |suffix| "#{path}#{suffix}" }.select { |sidecar| File.exist?(sidecar) }
-    end
-
-    # File sections copy without --delete (must not sweep sibling dbs), so a
-    # sidecar an EARLIER backup copied lingers at the target after the source
-    # checkpoints it away — and a stale -wal would be replayed over the newer
-    # main file on restore. Prune exactly those two names, nothing else.
-    def prune_stale_sidecars(section)
-      return if section.directory
-
-      SIDECAR_SUFFIXES.each do |suffix|
-        next if File.exist?("#{section.source}#{suffix}")
-
-        FileUtils.rm_f(File.join(section.dest, "#{File.basename(section.source)}#{suffix}"))
-      end
-    end
-
-    def mkdir_dest(section)
-      FileUtils.mkdir_p(section.dest)
     end
 
     def skipped(section, started)
@@ -247,16 +203,9 @@ module Nabu
     # we never parse rsync's output, which differs between openrsync on macOS
     # and GNU rsync). files/bytes describe the snapshot's contents.
     def done(section, status, started)
-      files, bytes = measure(section)
+      files, bytes = measure_tree(section.source)
       SectionResult.new(name: section.name, source: section.source, dest: section.dest,
                         status: status, files: files, bytes: bytes, duration: clock - started, detail: nil)
-    end
-
-    def measure(section)
-      return measure_tree(section.source) if section.directory
-
-      files = [section.source, *sidecars(section.source)]
-      [files.size, files.sum { |path| safe_size(path) }]
     end
 
     def measure_tree(root)

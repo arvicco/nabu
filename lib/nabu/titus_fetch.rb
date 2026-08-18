@@ -173,6 +173,7 @@ module Nabu
       return [] unless Dir.exist?(@dir)
 
       Dir.children(@dir)
+         .sort
          .select { |name| name.match?(Nabu::Adapters::TitusAvestan::PAGE_RE) && !@pages.key?(name) }
     end
 

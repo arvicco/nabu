@@ -77,7 +77,7 @@ module Nabu
       axes.each do |axis|
         lines << ""
         lines << "#{axis.name} — #{axis.persona}"
-        members = registry.each_source.select { |entry| entry.axes.include?(axis.name) }
+        members = registry.each_source.select { |entry| registry.axis_or_set_member?(axis.name, entry.slug) }
         if members.empty?
           lines << "  (no sources on this axis)"
         else
@@ -103,6 +103,11 @@ module Nabu
       # axes (only possible while no axis definitions exist) renders no
       # line — honest absence over a blank.
       lines << detail_line("axes", entry.axes.join(", ")) unless entry.axes.empty?
+      # The dependency picture (P77-r3): what this row functionally needs,
+      # and what needs it — both absent when the chain doesn't touch it.
+      lines << detail_line("requires", entry.requires.join(", ")) unless entry.requires.empty?
+      dependents = registry.required_by(slug)
+      lines << detail_line("needed by", dependents.join(", ")) unless dependents.empty?
       lines << detail_line("wired", wired_word(entry))
       lines << detail_line("cadence", cadence_word(entry))
       lines << detail_line("liveness", liveness_detail(entry, db, ledger))

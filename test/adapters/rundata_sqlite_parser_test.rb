@@ -22,8 +22,8 @@ class RundataSqliteParserTest < Minitest::Test
 
   def test_census_yields_every_inscription_with_meta_ordered_by_signum
     census = parser.each_inscription.to_a
-    assert_equal ["DR 42", "N KJ101", "U 344", "Ög 136"], census.map(&:signum)
-    assert_equal [3824, 6473, 1997, 327], census.map(&:signature_id)
+    assert_equal ["DR 42", "DR IK51,2", "DR IK512", "N KJ101", "U 344", "Ög 136"], census.map(&:signum)
+    assert_equal [3824, 4239, 4441, 6473, 1997, 327], census.map(&:signature_id)
   end
 
   def test_census_reports_the_present_lanes_honestly

@@ -22,7 +22,7 @@ module Adapters
       entry = registry["osl"]
       refute_nil entry, "osl must be registered in config/sources.yml"
       assert entry.feature_module?, "a sign-list instrument is a kind: module row"
-      refute entry.wired, "a feature module serves no documents — wired stays false permanently"
+      assert entry.wired, "channel verified (the 2026-08-18 wired-semantics ruling)"
       assert_equal "manual", entry.sync_policy, "the sync is owner-fired"
       assert_equal %w[cuneiform], entry.axes
     end

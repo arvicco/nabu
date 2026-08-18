@@ -169,6 +169,70 @@ rules:
       "targum-jerusalem": "arc:mid/jud"
       "aramaic-targum": "arc:mid/jud"
 
+  # ── №R-32 (owner-ruled 2026-08-13, option a): the whole-source Old
+  # Swedish claim — every fornsvenska part IS fornsvenska (the adapter's
+  # scope cut is exact: the Early Modern fsv-nysvensk* siblings are
+  # deliberately not ingested). Tier certain: the corpus's own division.
+  # Target minted by nabu-lects PR #4 (the sv ladder).
+  - id: fsv-old
+    tier: certain
+    sources: [fornsvenska]
+    code: sv
+    facet: part
+    map:
+      "fsv-aldrelagar": "sv:old"
+      "fsv-yngrelagar": "sv:old"
+      "fsv-aldrereligiosprosa": "sv:old"
+      "fsv-yngrereligiosprosa": "sv:old"
+      "fsv-profanprosa": "sv:old"
+      "fsv-verser": "sv:old"
+      "fsv-yngretankebocker": "sv:old"
+
+  # ── The OSTA lengua rules (owner 2026-08-13, "lects synced — use in
+  # osta"): the works-table lengua facet (P77-r6) stages the minority
+  # flanks; targets minted by nabu-lects PR #3 (the Ibero-Romance
+  # flank). The castellano/gallego/latín docs stay bare-anchor identity
+  # (osp/roa-opt/lat — the code IS the claim; a lat:med refinement
+  # would be its own ruling). Tier certain: the archive's own language
+  # column.
+  - id: osta-leones
+    tier: certain
+    sources: [osta]
+    code: ast
+    facet: lengua
+    map:
+      "leonés": "ast:old"
+
+  - id: osta-aragones
+    tier: certain
+    sources: [osta]
+    code: arg
+    facet: lengua
+    map:
+      "aragonés": "an:old"
+      "navarro-aragonés": "an:old"
+      "navarro": "an:old"
+
+  # ── №R-34 (2026-08-18, ruled as recommended): the achemenet blanket —
+  # the whole corpus is Achaemenid-period Babylonian (550–330 BCE), and
+  # the registry's akk:nb band DELIBERATELY folds the Late Babylonian/
+  # Achaemenid record ("rather than minting stages the period labels cut
+  # finer than the language does"). The archive facet is total (every
+  # document carries its publication group), so the five-value map IS
+  # the blanket. Tier certain: the registry's own band note names this
+  # exact record.
+  - id: achemenet-nb
+    tier: certain
+    sources: [achemenet]
+    code: akk
+    facet: archive
+    map:
+      "CT55": "akk:nb"
+      "Jursa_Bel-remanni": "akk:nb"
+      "Murashu": "akk:nb"
+      "Strassmaier": "akk:nb"
+      "YOS7": "akk:nb"
+
   # ── D59-b (2026-08-06): the eBL Standard Babylonian register — the
   # registry's own note ("the literary register of first-millennium
   # scholarship") made a rule. kind: compose refines EXISTING stage rows

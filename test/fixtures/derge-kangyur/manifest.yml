@@ -21,3 +21,8 @@ files:
     url: https://raw.githubusercontent.com/Esukhia/derge-kangyur/a582cf471b7c85a101035071078032f106a8e536/text/100_%E0%BD%82%E0%BD%9F%E0%BD%B4%E0%BD%84%E0%BD%A6%E0%BC%8B%E0%BD%A0%E0%BD%91%E0%BD%B4%E0%BD%A6%E0%BC%8D_%E0%BD%A8%E0%BD%BA.txt
     whole: false
     trim: lines 1-60, 855-860, 990-998 of the 4,479-line original (see README.md)
+  - path: text/103_དཀར་ཆག.txt
+    url: https://raw.githubusercontent.com/Esukhia/derge-kangyur/a582cf471b7c85a101035071078032f106a8e536/text/103_%E0%BD%91%E0%BD%80%E0%BD%A2%E0%BC%8B%E0%BD%86%E0%BD%82.txt
+    whole: false
+    trim: lines 1-3 + 2008-2011 of the 2,342-line original — the head plus the {D538}…{D539h} citation-marker run in the listing prose
+    reason: the INDEX-VOLUME witness (P77-r10, the drill_pure finding) — the dkar chag's inline Toh citations must mint nothing
