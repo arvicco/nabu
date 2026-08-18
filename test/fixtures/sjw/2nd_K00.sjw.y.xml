@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE level2 SYSTEM "history.dtd">
+<level2 id="SJW-K00" type="연">
+  <front>
+    <biblioData>
+      <title>
+        <mainTitle>승정원일기 고종00년</mainTitle>
+      </title>
+      <date>
+        <dateOccured type="간지">계해</dateOccured>
+        <dateOccured type="재위연도">고종 00</dateOccured>
+        <dateOccured type="중국연호">同治(淸/穆宗) 02</dateOccured>
+        <dateOccured date="1863" type="서기"/>
+        <dateOccured type="단기">4196</dateOccured>
+        <dateOccured type="일본연호">文久(日/孝明) 03</dateOccured>
+      </date>
+    </biblioData>
+  </front>
+  <level3 id="SJW-K00120" type="월">
+    <front>
+      <biblioData>
+        <title>
+          <mainTitle>승정원일기 고종00년 12월 </mainTitle>
+        </title>
+      </biblioData>
+    </front>
+    <level4 id="SJW-K00120130" type="일">
+      <front>
+        <biblioData>
+          <title>
+            <mainTitle>승정원일기 고종00년 12월 13일 </mainTitle>
+          </title>
+          <date>
+            <dateOccured type="간지">정유</dateOccured>
+            <dateOccured type="재위연도">고종 00-12-13L0</dateOccured>
+            <dateOccured type="중국연호">同治(淸/穆宗) 02-12-13L0</dateOccured>
+            <dateOccured date="1863-12-13L0" type="서기"/>
+          </date>
+          <source>
+            <mainTitle type="원본">2671</mainTitle>
+          </source>
+          <source>
+            <mainTitle type="탈초본">126</mainTitle>
+          </source>
+        </biblioData>
+        <description>
+          <weather>晴</weather>
+        </description>
+      </front>
+      <text>
+        <content/>
+      </text>
+      <level5 id="SJW-K00120130-00000" type="좌목">
+        <front>
+          <biblioData>
+            <title>
+              <mainTitle>座目</mainTitle>
+            </title>
+          </biblioData>
+        </front>
+        <text>
+          <content>
+            <paragraph align="center">行都承旨 <index name="閔致庠" type="이름">閔致庠</index>
+              <explanation type="근무현황">金吾待命</explanation>。 左承旨 <index name="徐承輔" type="이름">徐承輔</index>
+              <explanation type="근무현황">坐</explanation>。 右承旨 <index name="尹致聖" type="이름">尹致聖</index>
+              <explanation type="근무현황">坐</explanation>。 左副承旨 <index name="尹滋承" type="이름">尹滋承</index>
+              <explanation type="근무현황">坐</explanation>。 右副承旨 <index name="沈宜元" type="이름">沈宜元</index>
+              <explanation type="근무현황">坐直</explanation>。 同副承旨 <index name="柳光睦" type="이름">柳光睦</index>
+              <explanation type="근무현황">坐直</explanation>。 注書 <index name="朴昌壽" type="이름">朴昌壽</index>
+              <index name="朴海哲" type="이름">朴海哲</index>。 假注書。 事變假注書。</paragraph>
+          </content>
+        </text>
+      </level5>
+      <level5 id="SJW-K00120130-00100" type="기사">
+        <front>
+          <biblioData>
+            <title>
+              <mainTitle>제목없음</mainTitle>
+            </title>
+            <source>
+              <mainTitle type="원본"/>
+              <page begin="0929f"/>
+            </source>
+            <source>
+              <mainTitle type="탈초본"/>
+              <page begin="0934f"/>
+            </source>
+          </biblioData>
+        </front>
+        <text>
+          <content>
+            <paragraph align="center">○ 上在<index type="지명">昌德宮廬次</index>。</paragraph>
+          </content>
+        </text>
+      </level5>
+      <level5 id="SJW-K00120130-00200" type="기사">
+        <front>
+          <biblioData>
+            <title>
+              <mainTitle>제목없음</mainTitle>
+            </title>
+            <source>
+              <mainTitle type="원본"/>
+              <page begin="0929f"/>
+            </source>
+            <source>
+              <mainTitle type="탈초본"/>
+              <page begin="0934f"/>
+            </source>
+          </biblioData>
+        </front>
+        <text>
+          <content>
+            <paragraph align="center">○ 朝哭後, 大王大妃殿·王大妃殿·中宮殿, 藥房·內閣·政院·玉堂口傳問安。 答曰, 罔極。 朝廷二品以上·六曹堂上·兩司長官單子問安。 答曰, 罔極。</paragraph>
+          </content>
+        </text>
+      </level5>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </level4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </level3>
+</level2>

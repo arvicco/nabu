@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE level2 SYSTEM "history.dtd">
+<level2 id="SJW-L04" type="연">
+  <front>
+    <biblioData>
+      <title>
+        <mainTitle>승정원일기 순종04년</mainTitle>
+      </title>
+      <date>
+        <dateOccured type="간지">경술</dateOccured>
+        <dateOccured type="재위연도">순종 04</dateOccured>
+        <dateOccured type="중국연호">先統(淸/溥儀) 02</dateOccured>
+        <dateOccured date="1910" type="서기"/>
+        <dateOccured type="단기">4243</dateOccured>
+        <dateOccured type="일본연호">明治(日/明治) 43</dateOccured>
+      </date>
+    </biblioData>
+  </front>
+  <level3 id="SJW-L04010" type="월">
+    <front>
+      <biblioData>
+        <title>
+          <mainTitle>승정원일기 순종04년 01월 </mainTitle>
+        </title>
+      </biblioData>
+    </front>
+    <level4 id="SJW-L04010010" type="일">
+      <front>
+        <biblioData>
+          <title>
+            <mainTitle>승정원일기 순종04년 01월 01일 </mainTitle>
+          </title>
+          <date>
+            <dateOccured type="간지">병오</dateOccured>
+            <dateOccured type="재위연도">순종 04-01-01L0</dateOccured>
+            <dateOccured type="중국연호">先統(淸/溥儀) 02-01-01L0</dateOccured>
+            <dateOccured date="1910-01-01L0" type="서기"/>
+          </date>
+          <source>
+            <mainTitle type="원본">3241</mainTitle>
+          </source>
+          <source>
+            <mainTitle type="탈초본">141</mainTitle>
+          </source>
+        </biblioData>
+        <description>
+          <weather>晴</weather>
+        </description>
+      </front>
+      <text>
+        <content/>
+      </text>
+      <level5 id="SJW-L04010010-00000" type="좌목">
+        <front>
+          <biblioData>
+            <title>
+              <mainTitle>座目</mainTitle>
+            </title>
+          </biblioData>
+        </front>
+        <text>
+          <content>
+            <paragraph align="center">卿 <index name="趙同熙" type="이름">趙同熙</index>
+              <explanation type="근무현황">進</explanation>。 記注官 <index name="金天洙" type="이름">金天洙</index>
+              <explanation type="근무현황">進</explanation>
+              <index name="李龍九" type="이름">李龍九</index>
+              <explanation type="근무현황">進</explanation>。 典製官 <index name="金裕成" type="이름">金裕成</index>
+              <explanation type="근무현황">進</explanation>
+              <index name="尹喜求" type="이름">尹喜求</index>
+              <explanation type="근무현황">進</explanation>。 主事 <index name="趙秉億" type="이름">趙秉億</index>
+              <explanation type="근무현황">進</explanation>
+              <index name="趙性翕" type="이름">趙性翕</index>
+              <explanation type="근무현황">進</explanation>
+              <index name="鄭樂鵬" type="이름">鄭樂鵬</index>
+              <explanation type="근무현황">進</explanation>
+              <index name="張錫駿" type="이름">張錫駿</index>
+              <explanation type="근무현황">進</explanation>。 </paragraph>
+          </content>
+        </text>
+      </level5>
+      <level5 id="SJW-L04010010-00100" type="기사">
+        <front>
+          <biblioData>
+            <title>
+              <mainTitle>제목없음</mainTitle>
+            </title>
+            <source>
+              <mainTitle type="원본"/>
+              <page begin="013bg"/>
+            </source>
+            <source>
+              <mainTitle type="탈초본"/>
+              <page begin="1290h"/>
+            </source>
+          </biblioData>
+        </front>
+        <text>
+          <content>
+            <paragraph align="center">○ 上在<index type="지명">昌德宮</index>。 </paragraph>
+          </content>
+        </text>
+      </level5>
+      <level5 id="SJW-L04010010-00200" type="기사">
+        <front>
+          <biblioData>
+            <title>
+              <mainTitle>제목없음</mainTitle>
+            </title>
+            <source>
+              <mainTitle type="원본"/>
+              <page begin="013bg"/>
+            </source>
+            <source>
+              <mainTitle type="탈초본"/>
+              <page begin="1290h"/>
+            </source>
+          </biblioData>
+        </front>
+        <text>
+          <content>
+            <paragraph align="center">○ 典製官<index name="金裕成" type="이름">金裕成</index>進詣<index type="지명">靜觀軒</index>, 今朔奉審, 無頉。 </paragraph>
+          </content>
+        </text>
+      </level5>
+    </level4>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </level3>
+  
+  
+  
+  
+  
+  
+</level2>

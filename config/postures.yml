@@ -84,6 +84,11 @@ sources:
     dating: {posture: dated, note: "per-volume 서기 year via MetadataDates :structured; per-day dates ride annotations raw"}
     places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
     script: {posture: implied}
+  sjw:
+    lect: {posture: codemap, note: lzh → zho/lit (the sillok/kanripo precedent, P78-2)}
+    dating: {posture: dated, note: "per-member 서기 year via MetadataDates :structured; per-day dates + weather ride annotations"}
+    places: {posture: unplaced}
+    script: {posture: implied}
   kanripo:
     lect: {posture: codemap, note: lzh → zho/lit (Literary Chinese)}
     dating: {posture: undatable}
