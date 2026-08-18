@@ -128,6 +128,22 @@ class SignGradedTest < Minitest::Test
     fulltext&.disconnect
   end
 
+  # P77-r16d: the sync reindex path SPEAKS — every minutes-scale
+  # sub-step announces itself through the progress seam (the owner
+  # Ctrl-C'd two real runs that read as hangs).
+  def test_refresh_source_announces_its_stages
+    stages = []
+    reporter = Nabu::ProgressReporter.new(on_stage: ->(label) { stages << label })
+    fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+    Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext)
+    Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: fulltext,
+                                         slug: "cdli", progress: reporter)
+    assert_includes stages, "index slice: cdli (fts + lemma rows)"
+    assert(stages.any? { |label| label.include?("postings/coverage swaps") })
+  ensure
+    fulltext&.disconnect
+  end
+
   def test_rebuild_without_a_sign_list_builds_no_sign_tables
     fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
     Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext)
