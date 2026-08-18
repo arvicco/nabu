@@ -1,6 +1,6 @@
 ---
 title: "Doubt made visible, and the vernaculars arrive"
-date: 2026-08-18 14:00:00 +0000
+date: 2026-08-18 12:00:00 +0000
 description: >-
   Two waves: the uncertainty doctrine starts rendering — certain is
   silent, deviation is labeled, the upstream word rides verbatim — and
