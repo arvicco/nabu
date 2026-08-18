@@ -883,6 +883,51 @@ class SyncRunnerTest < Minitest::Test
     assert_nil runner.sync("breaker").references
   end
 
+  # --- P78-r3: sync stages persist timings and speak estimates -------------
+
+  # The sillok first-sync lesson (owner, 2026-08-18: "doesn't look like ETA
+  # printouts are working"): r2 gave sync only the whole-run banner; the
+  # slow per-stage lane — fetch, parse+load, the index slices — announced
+  # bare and persisted nothing. Now each records (kind "sync") and the NEXT
+  # sync announces with the estimate it earned.
+  def test_sync_stages_record_timings_and_the_second_sync_speaks_estimates
+    CountingSource.reset!
+    runner = make_runner(registry(entry("live-enabled", LiveEnabled, wired: true)))
+    first_stages = []
+    reporter = Nabu::ProgressReporter.new(on_stage: ->(label, eta) { first_stages << [label, eta] })
+    runner.sync("live-enabled", progress: reporter)
+
+    load_stage = first_stages.assoc("parse+load: live-enabled")
+    refute_nil load_stage, "the parse+load phase announces itself"
+    assert_predicate load_stage.fetch(1), :none?, "first sync — no estimate, honestly"
+    row = Nabu::Store::StageTimings.last(@ledger, kind: "sync", scope: "live-enabled", stage: "load")
+    refute_nil row, "the load wall time lands in the ledger under kind=sync"
+    assert_equal 1, row[:rows], "the document count rides as the drift denominator"
+    refute_nil Nabu::Store::StageTimings.last(@ledger, kind: "sync", scope: "live-enabled",
+                                                       stage: "fetch")
+
+    second_stages = []
+    reporter = Nabu::ProgressReporter.new(on_stage: ->(label, eta) { second_stages << [label, eta] })
+    runner.sync("live-enabled", progress: reporter)
+    eta = second_stages.assoc("parse+load: live-enabled").fetch(1)
+    refute_predicate eta, :none?, "the second sync speaks the estimate the first one earned"
+    assert_equal 1, eta.basis_rows
+    # The FIRST sync built the whole index from scratch (no incremental
+    # tables yet); the per-source slice lane starts at the second sync —
+    # so it records now and speaks its estimate from the third on.
+    refute_nil Nabu::Store::StageTimings.last(@ledger, kind: "sync", scope: "live-enabled",
+                                                       stage: "index_slice"),
+               "the index sub-stages record too — the P77 'hang' lane"
+    slice_eta = second_stages.assoc("index slice: live-enabled (fts + lemma rows)").fetch(1)
+    assert_predicate slice_eta, :none?, "the slice's own first pass — honest no-estimate"
+
+    third_stages = []
+    reporter = Nabu::ProgressReporter.new(on_stage: ->(label, eta) { third_stages << [label, eta] })
+    runner.sync("live-enabled", progress: reporter)
+    refute_predicate third_stages.assoc("index slice: live-enabled (fts + lemma rows)").fetch(1),
+                     :none?, "the third sync speaks the slice estimate the second one earned"
+  end
+
   # --- helpers ------------------------------------------------------------
 
   private
