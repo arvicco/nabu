@@ -93,10 +93,12 @@ class DerivabilityManifestTest < Minitest::Test
   # progress-reporter names rebuild.rb declares.)
   def test_every_derived_store_names_a_live_rebuild_stage
     rebuild_src = File.read(File.expand_path("../lib/nabu/rebuild.rb", __dir__))
-    assert_includes rebuild_src, 'progress&.stage("links")'
-    assert_includes rebuild_src, 'progress&.stage("lect journal")'
+    # Label-only matches: the announcements grew an eta argument (P78-r2),
+    # and this pin cares that the stage EXISTS, not how it is called.
+    assert_includes rebuild_src, 'progress&.stage("links"'
+    assert_includes rebuild_src, 'progress&.stage("lect journal"'
     # The catalog's "stage" is the replay itself + its derived lanes.
-    assert_includes rebuild_src, "progress&.stage(entry.slug)"
+    assert_includes rebuild_src, "progress&.stage(entry.slug"
   end
 
   private

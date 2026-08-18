@@ -8637,13 +8637,24 @@ module Nabu
       # is on and how long each stage took. A stage closes when the next one
       # opens (or at finish_progress), its line ending in final counts +
       # elapsed; sync paths never call stage, so they keep the bare counter.
+      # +eta+ (P78-r2, Q34): when the runner consulted the stage_timings
+      # history, the open line SPEAKS the estimate — including the honest
+      # "first run — no estimate" — and non-tty (the caffeinate/drill logs,
+      # where every owner-perceived "hang" of P77 was read) gets the open
+      # line too, so the log names what is running BEFORE it finishes.
       def stage_tick(tty, state)
-        lambda do |label|
+        lambda do |label, eta = nil|
           close_stage(state)
           state[:stage] = label
+          state[:eta] = eta
           state[:started] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
           state[:processed] = state[:errored] = state[:last] = 0
-          $stderr.print("\r\e[K  #{label}… ") if tty
+          suffix = eta ? "#{eta.render} " : ""
+          if tty
+            $stderr.print("\r\e[K  #{label}… #{suffix}")
+          elsif eta
+            warn("  #{label}… #{suffix}")
+          end
         end
       end
 
@@ -8673,13 +8684,29 @@ module Nabu
           state[:processed] = processed
           state[:errored] = errored
           label = state[:stage] || "loading"
+          left = time_left_suffix(state, processed)
           if tty
-            $stderr.print("\r\e[K  #{label}… #{processed} docs#{quarantine_suffix(errored)}  ")
+            $stderr.print("\r\e[K  #{label}… #{processed} docs#{quarantine_suffix(errored)}#{left}  ")
           elsif processed - state[:last] >= (state[:stage] ? 1000 : 100)
             state[:last] = processed
-            warn("  #{label}… #{processed} docs#{quarantine_suffix(errored)}")
+            warn("  #{label}… #{processed} docs#{quarantine_suffix(errored)}#{left}")
           end
         end
+      end
+
+      # P78-r2: the in-stage extrapolation — once ticks flow and the last
+      # run recorded a row count, the observed rate projects the remainder
+      # (" ~3m left"). Guarded: enough ticks and elapsed time to trust the
+      # rate, and only while the recorded total still lies ahead (past it,
+      # the estimate would be a lie — drift means more rows this run).
+      def time_left_suffix(state, processed)
+        basis = state[:eta].respond_to?(:basis_rows) ? state[:eta].basis_rows : nil
+        return "" unless basis&.positive? && processed >= 100 && processed < basis
+
+        elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - state[:started]
+        return "" if elapsed < 5
+
+        " ~#{Nabu::Eta.format_seconds(elapsed / processed * (basis - processed))} left"
       end
 
       def quarantine_suffix(errored)
@@ -8890,6 +8917,12 @@ module Nabu
         # the explicit path; the batch paths pre-skip blocked sources).
         enforce_grant!(entry, ledger)
         redownload_wipe!(config_for_runner(runner), slug) if options[:redownload]
+        # P78-r2 (Q34): the runs history already answers "how long does this
+        # usually take" — say it up front, before the wait begins. Coarse on
+        # purpose (fetch variance, parse-only runs); silent for a first sync.
+        if (eta = Nabu::Eta.last_sync(ledger, slug: slug))
+          say "#{slug}: last sync took #{Nabu::Eta.format_seconds(eta.seconds)}"
+        end
         outcome = runner.sync(slug, parse_only: options[:parse_only], force: options[:force],
                                     progress: progress_reporter)
         finish_progress

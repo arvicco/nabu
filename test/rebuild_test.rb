@@ -143,7 +143,7 @@ class RebuildTest < Minitest::Test
     write_canonical("corpus", "one.txt" => ILIAD)
 
     stages = []
-    reporter = Nabu::ProgressReporter.new(on_stage: ->(label) { stages << label })
+    reporter = Nabu::ProgressReporter.new(on_stage: ->(label, _eta) { stages << label })
     rebuilder.run(progress: reporter)
 
     assert_equal ["corpus", "timeline", "place apply", "facets", "lect journal", "lect facets",
@@ -446,6 +446,34 @@ class RebuildTest < Minitest::Test
       refute_nil Nabu::Store::StageTimings.last(ledger, kind: "rebuild", scope: "corpus",
                                                         stage: "analyze")
     end
+  end
+
+  # P78-r2: the announcements SPEAK the history — first run honestly empty,
+  # second run estimating from the first's persisted timings.
+  def test_a_second_rebuild_announces_stages_with_estimates_from_history
+    write_sources(<<~YAML)
+      hexameter:
+        adapter: TestAdapter
+    YAML
+    write_canonical("hexameter", "one.txt" => ILIAD)
+    capture = ->(into) { Nabu::ProgressReporter.new(on_stage: ->(label, eta) { into << [label, eta] }) }
+
+    first = []
+    rebuilder.run(progress: capture.call(first))
+    eta = first.assoc("timeline").fetch(1)
+    refute_nil eta, "the runner consults the history for every profiled stage"
+    assert_predicate eta, :none?, "first run — no estimate, honestly"
+
+    second = []
+    rebuilder.run(progress: capture.call(second))
+    timeline = second.assoc("timeline").fetch(1)
+    refute_predicate timeline, :none?
+    assert_match(/\A~.+\(last run /, timeline.render)
+    refute_predicate second.assoc("hexameter").fetch(1), :none?, "per-source load estimates too"
+    refute_predicate second.assoc("fulltext index").fetch(1), :none?,
+                     "the umbrella stage sums the six recorded index sub-stages"
+    assert_nil second.assoc("place apply").fetch(1),
+               "an unprofiled stage carries no eta — the CLI stays quiet, never guesses"
   end
 
   def test_a_second_rebuild_appends_timing_history_rather_than_overwriting
