@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE level2 SYSTEM "history.dtd">
+<level2 id="wzc_121">
+  <front>
+    <biblioData type="L">
+      <title>
+        <mainTitle>純宗[附錄] 二十一年</mainTitle>
+      </title>
+      <date>
+        <dateOccured date="1928" type="서기"/>
+        <dateOccured type="간지">戊辰</dateOccured>
+        <dateOccured type="재위연도">순종 부록 21</dateOccured>
+        <dateOccured type="개국연호"/>
+        <dateOccured type="중국연호">청 선통(宣統) 18</dateOccured>
+        <dateOccured type="단기">4261</dateOccured>
+        <dateOccured type="일본연호">소화(昭和) 3</dateOccured>
+        <dateOccured type="display">일 소화(昭和) 3</dateOccured>
+      </date>
+    </biblioData>
+  </front>
+  <text>
+    <content>
+      <paragraph align="center">
+        <index num="2065245_0" type="서명">《純宗實錄》</index>[附錄] 二十一年 / <index num="2065246_0" sort="J" type="지명">日本</index>
+        <index num="2065247_0" type="연호">昭和</index>三年</paragraph>
+    </content>
+  </text>
+  <level3 id="wzc_121050">
+    <front>
+      <biblioData type="L">
+        <title>
+          <mainTitle>純宗實錄[附錄] 純宗[附錄]二十一年 五月</mainTitle>
+        </title>
+      </biblioData>
+    </front>
+    <text>
+      <content>
+        <paragraph align="center"> 純宗[附錄]二十一年 五月</paragraph>
+      </content>
+    </text>
+    <level4 id="wzc_12105003">
+      <front>
+        <biblioData type="L">
+          <title>
+            <mainTitle> 21年 5月 3日</mainTitle>
+          </title>
+          <date>
+            <dateOccured date="1928-05-03L0" type="서기"/>
+            <dateOccured type="간지">陽曆</dateOccured>
+            <dateOccured type="재위연도">순종 부록 21년 5월 3일</dateOccured>
+            <dateOccured type="개국연호"> 년 5월 3일</dateOccured>
+            <dateOccured type="중국연호">청 선통(宣統) 18년 5월 3일</dateOccured>
+            <dateOccured type="단기">4261년 5월 3일</dateOccured>
+            <dateOccured type="일본연호">소화(昭和)3년 5월 3일</dateOccured>
+            <dateOccured type="display">일 소화(昭和)3년 5월 3일</dateOccured>
+          </date>
+        </biblioData>
+      </front>
+      <level5 id="wzc_12105003_001">
+        <front>
+          <biblioData type="T">
+            <title>
+              <mainTitle>순명 황후의 휘호를 경현성휘로 정하다</mainTitle>
+            </title>
+            <docNo level="n" name="titleno">001</docNo>
+            <date>
+              <dateOccured date="1928-05-03L0" type="서기"/>
+            </date>
+            <source>
+              <mainTitle type="원본">純宗實錄[附錄] 8책 17권</mainTitle>
+              <page begin="18장 A면"/>
+            </source>
+            <source>
+              <mainTitle type="국편영인본">純宗實錄[附錄] 3책</mainTitle>
+              <page begin="642면"/>
+            </source>
+            <subjectClass>왕실-종사(宗社)</subjectClass>
+            <subjectClass>왕실-비빈(妃嬪)</subjectClass>
+          </biblioData>
+        </front>
+        <text>
+          <content>
+            <paragraph align="center">三日。<annotation type="원주">
+                <noteContent>【陰曆戊辰三月十四日】</noteContent>
+              </annotation>
+              <index num="2065248_0" ref="M_0006771" sort="K" type="이름">純明皇后</index>徽號望, 以‘敬顯成徽’議定。</paragraph>
+          </content>
+        </text>
+      </level5>
+    </level4>
+  </level3>
+  <level3 id="wzc_121070">
+    <front>
+      <biblioData type="L">
+        <title>
+          <mainTitle>純宗實錄[附錄] 純宗[附錄]二十一年 七月</mainTitle>
+        </title>
+      </biblioData>
+    </front>
+    <text>
+      <content>
+        <paragraph align="center"> 純宗[附錄]二十一年 七月</paragraph>
+      </content>
+    </text>
+    <level4 id="wzc_12107006">
+      <front>
+        <biblioData type="L">
+          <title>
+            <mainTitle> 21年 7月 6日</mainTitle>
+          </title>
+          <date>
+            <dateOccured date="1928-07-06L0" type="서기"/>
+            <dateOccured type="간지">陽曆</dateOccured>
+            <dateOccured type="재위연도">순종 부록 21년 7월 6일</dateOccured>
+            <dateOccured type="개국연호"> 년 7월 6일</dateOccured>
+            <dateOccured type="중국연호">청 선통(宣統) 18년 7월 6일</dateOccured>
+            <dateOccured type="단기">4261년 7월 6일</dateOccured>
+            <dateOccured type="일본연호">소화(昭和)3년 7월 6일</dateOccured>
+            <dateOccured type="display">일 소화(昭和)3년 7월 6일</dateOccured>
+          </date>
+        </biblioData>
+      </front>
+      <level5 id="wzc_12107006_001">
+        <front>
+          <biblioData type="T">
+            <title>
+              <mainTitle>태묘에 순종과 순명 황후의 신주를 함께 모시다</mainTitle>
+            </title>
+            <docNo level="n" name="titleno">001</docNo>
+            <date>
+              <dateOccured date="1928-07-06L0" type="서기"/>
+            </date>
+            <source>
+              <mainTitle type="원본">純宗實錄[附錄] 8책 17권</mainTitle>
+              <page begin="18장 A면"/>
+            </source>
+            <source>
+              <mainTitle type="국편영인본">純宗實錄[附錄] 3책</mainTitle>
+              <page begin="642면"/>
+            </source>
+            <subjectClass>왕실-의식(儀式)</subjectClass>
+            <subjectClass>왕실-종사(宗社)</subjectClass>
+            <subjectClass>왕실-비빈(妃嬪)</subjectClass>
+          </biblioData>
+        </front>
+        <text>
+          <content>
+            <paragraph align="center">六日。<annotation type="원주">
+                <noteContent>【陰曆戊辰五月十九日】</noteContent>
+              </annotation> 祔<index num="2065249_0" ref="M_0062680" sort="K" type="이름">純宗</index>于<index num="2065250_0" sort="K" type="지명">太廟</index>。 <index num="2065251_0" ref="M_0006771" sort="K" type="이름">純明孝皇后</index>同祔。 御眞奉安于<index num="2065252_0" sort="K" type="지명">璿源殿</index>。<annotation type="원주">
+                <noteContent>【純宗皇帝實錄附錄卷之十七終】</noteContent>
+              </annotation>
+            </paragraph>
+          </content>
+        </text>
+      </level5>
+    </level4>
+  </level3>
+</level2>

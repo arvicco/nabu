@@ -213,6 +213,14 @@ The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kan
 
 **Members** (11): `e84000`, `otdo`, `soas-tibetan`, `old-tibetan`, `derge-kangyur`, `actib`, `derge-tengyur`, `mvp`, `tibetan-verbs`, `wiktionary-bo`, `nabu-data`
 
+### korean
+
+> The Koreanist — the hanmun state record and the first hangul vernacular.
+
+The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, with the Seungjeongwon ilgi, the Goryeosa family and the ITKC classics to follow on the same DTD, and the Middle Korean Wikisource shelf as the vernacular leg.
+
+**Members** (1): `sillok`
+
 ### sinitic
 
 > The Sinologist — the classical Chinese written world and its phonological deep past.

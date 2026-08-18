@@ -42,6 +42,7 @@ module Nabu
           "edr" => :structured,
           "elephantine" => :structured,
           "itant" => :structured,
+          "sillok" => :structured, # P78-1: the volume's 서기 year, one-year envelope
           "bfm" => :iso_keys,
           "croala" => :year_range,
           "ebl" => :period_label

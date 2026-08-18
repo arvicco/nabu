@@ -3612,3 +3612,16 @@ burman-concordance:
   # ET-keyed held corpus), never guessed.
   license_watch: https://zenodo.org/records/7801485
   sync_policy: manual
+
+sillok:
+  adapter: Nabu::Adapters::Sillok
+  axes: [korean]   # P78-1: MINTS the korean axis — the hanmun state record's anchor
+  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  # 조선왕조실록 원문 (NIKH via data.go.kr 15053647 Taejo–Cheoljong +
+  # 15053646 Gojong/Sunjong; 제한 없음 → D47-a attribution). Hanmun only —
+  # the modern Korean translation layer is NOT in the dumps, never fetched.
+  # Fetch resolves the CURRENT atchFileId per dataset (DataGoKrFetch —
+  # the id bumps on upstream file replacement; .docs/p78-plan.md
+  # §Acquisition), then normal ZipFetch per dataset subdir.
+  license_watch: https://www.data.go.kr/data/15053647/fileData.do
+  sync_policy: manual

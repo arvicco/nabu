@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE level2 SYSTEM "history.dtd">
+<level2 id="waa_200">
+  <front>
+    <biblioData type="L">
+      <title>
+        <mainTitle>附錄</mainTitle>
+      </title>
+    </biblioData>
+  </front>
+  <text>
+    <content>
+      <paragraph align="center"> 太祖實錄 附錄</paragraph>
+    </content>
+  </text>
+  <level3 id="waa_200001">
+    <front>
+      <biblioData type="T">
+        <title>
+          <mainTitle> 편수관 명단 </mainTitle>
+        </title>
+        <source>
+          <mainTitle type="태백산사고본">太祖實錄 3책 15권</mainTitle>
+          <page begin="14장 A면"/>
+        </source>
+        <source>
+          <mainTitle type="국편영인본">太祖實錄 1책</mainTitle>
+          <page begin="142면"/>
+        </source>
+        <subjectClass>역사-편사(編史)</subjectClass>
+      </biblioData>
+    </front>
+    <text>
+      <content>
+        <paragraph align="center">○<index num="0012429_0" type="연호">永樂</index>十一年癸巳三月日, 奮忠仗義同德定社佐命功臣大匡輔國崇祿大夫議政府左政丞修文殿大提學領經筵書雲觀春秋館事世子師<index num="0012430_0" ref="M_0059127" sort="K" type="이름">晋山府院君</index> 臣<index num="0012431_0" ref="M_0059127" sort="K" type="이름">河崙</index>等, 奉敎撰進。</paragraph>
+      </content>
+    </text>
+  </level3>
+  <level3 id="waa_200002">
+    <front>
+      <biblioData type="T">
+        <title>
+          <mainTitle> 증보 편수관 명단 </mainTitle>
+        </title>
+        <source>
+          <mainTitle type="태백산사고본">太祖實錄 3책 15권</mainTitle>
+          <page begin="14장 A면"/>
+        </source>
+        <source>
+          <mainTitle type="국편영인본">太祖實錄 1책</mainTitle>
+          <page begin="142면"/>
+        </source>
+        <subjectClass>역사-편사(編史)</subjectClass>
+      </biblioData>
+    </front>
+    <text>
+      <content>
+        <paragraph align="center">○<index num="0012432_0" type="연호">正統</index>十三年戊辰六月日, 正憲大夫吏曹判書集賢殿大提學知春秋館事世子右賓客兼成均大司成 臣<index id="p17_000013_00" num="0012433_0" ref="M_0005882" sort="K" type="이름">鄭麟趾</index>等, 奉敎增修。</paragraph>
+        <paragraph align="center">計十五卷。</paragraph>
+      </content>
+    </text>
+  </level3>
+</level2>
