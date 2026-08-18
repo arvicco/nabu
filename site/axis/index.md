@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The twenty-three research desks of the Nabu library — tags over the
+  The twenty-four research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The twenty-three desks
+## The twenty-four desks
 
 ### classical
 
@@ -189,6 +189,14 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key), 84000's English translation layer, OTDO's Old Tibetan documents, and the gold-annotation lane (SOAS POS, the Annals and Chronicle); the lexicon shelves join as their packets land.
 
 [Open the tibetan desk]({{ '/axis/tibetan/' | relative_url }})
+
+### korean
+
+> The Koreanist — the hanmun state record and the first hangul vernacular.
+
+The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, with the Seungjeongwon ilgi, the Goryeosa family and the ITKC classics to follow on the same DTD, and the Middle Korean Wikisource shelf as the vernacular leg.
+
+[Open the korean desk]({{ '/axis/korean/' | relative_url }})
 
 ### sinitic
 
