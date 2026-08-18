@@ -153,13 +153,13 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 59, lect.size,
+    assert_equal 62, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3, " \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
                  "added-then-retired P77-r18→№R-34 — each when a machine grain took over: " \
                  "the shadowing rule, working; disco ADDED P77-4, sillok+sjw ADDED P78-1/P78-2 — " \
-                 "codemap, the kanripo lzh precedent; ko-wikisource-mk ADDED P78-4 — identity okm; viet-wikisource ADDED P78-5 — codemap lzh)"
+                 "codemap, the kanripo lzh precedent; ko-wikisource-mk ADDED P78-4 — identity okm; viet-wikisource ADDED P78-5 — codemap lzh; the goryeosa family ADDED P78-3 — 3 codemap rows)"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -170,6 +170,6 @@ class PosturesTest < Minitest::Test
     # joined as identity (the one-tag practice).
     # №R-34 (2026-08-18) retired achemenet's pending row into the
     # achemenet-nb machine rule — the pending class is back to zero.
-    assert_equal({ "identity" => 42, "dates" => 10, "codemap" => 7 }, by_posture)
+    assert_equal({ "identity" => 42, "dates" => 10, "codemap" => 10 }, by_posture)
   end
 end

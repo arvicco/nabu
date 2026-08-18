@@ -1,0 +1,35 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# Goryeosa (P78-3): two trimmed + one whole real member + the DTD out of
+# the data.go.kr dump zip (dataset 15053637). The upstream is one zip
+# behind the DataGoKrFetch three-step resolution, so per-file URLs do
+# not exist — refresh re-downloads the zip and re-extracts; the
+# dataset-page URL below is the stable anchor.
+source: goryeosa
+adapter_test: test/adapters/goryeosa_test.rb
+retrieved: 2026-08-18
+files:
+  - path: kr_000.xml
+    url: https://www.data.go.kr/data/15053637/fileData.do
+    whole: false
+    reason: byte-verbatim — the zip's ONE <item>-rooted front-matter member (four sibling
+      level1 sections with $-carrying ids, 13 leaves, no dates)
+  - path: kr_069.xml
+    url: https://www.data.go.kr/data/15053637/fileData.do
+    whole: false
+    reason: trimmed by whole-line cuts (interior level5 siblings + the second level4
+      removed, kept bytes verbatim) — 志 卷第二十三, the level5-grain witness with the
+      음/양 lunar-solar date pair (1048) and undated ritual leaves
+  - path: kr_118.xml
+    url: https://www.data.go.kr/data/15053637/fileData.do
+    whole: false
+    reason: trimmed by whole-line cuts (level4 siblings 0030-0070 removed, kept bytes
+      verbatim) — 列傳 卷第三十一 (조준), level4 leaves with NO dates anywhere (the
+      honest-absence case)
+  - path: history.dtd
+    url: https://www.data.go.kr/data/15053637/fileData.do
+    whole: true
+    reason: the Korean History Database unified DTD ver 1.4 (2020-07-30 — one step past
+      sillok's shipped 1.3), verbatim from the zip — the family's spec travels with the
+      fixture

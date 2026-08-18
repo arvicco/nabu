@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE item SYSTEM "history.dtd">
+<item id="bb" name="비변사등록" org="국사편찬위원회">
+    <front>
+        <biblioData>
+            <title>
+                <mainTitle>비변사등록</mainTitle>
+            </title>
+        </biblioData>
+    </front>
+    <level1 id="bb_001">
+        <front>
+            <biblioData type="한문">
+                <title>
+                    <mainTitle volume="1">비변사등록 1책</mainTitle>
+                    <seriesTitle volume="1">탈초영인 비변사등록 1집</seriesTitle>
+                </title>
+                <publication>
+                    <publisher>국사편찬위원회</publisher>
+                    <dateIssued date="1959-04-05"/>
+                </publication>
+                <holdings>
+                    <serialNumber callNo="911.05 국51비 v.1"/>
+                </holdings>
+            </biblioData>
+            <description>
+                <introduction id="bb_020_su" name="서문">
+                    <content>
+                        <paragraph align="center"> 본회에서는 조선왕조실록(朝鮮王朝實錄) 영인의 뒤를 이어 금년도부터 2개년 계속 사업으로 비변사등록(備邊司謄錄)을 출판하게 되었다.</paragraph>
+                        <paragraph align="center"> 비변사는 중종(中宗) 12년(서기1517)에 창설한 것으로서 비국(備局) 또는 주사(籌司)라고도 한다. 처음에는 의정부(議政府)의 삼의정(三議政)을 도제조(徒提調)에 임명하고 변방 사정을 잘 아는 무신(武神)을 제조(提調)에 임명하여 변방의 군사 사무를 처리하게 하였으나, 임진왜란 이후 육조 판서(六曹判書)와 양사 장관(兩司長官=司憲府大司憲, 司諫院大司諫) 등 정부의 각 기관장이 제조가 되어 회의에 참여하였기 때문에 변방의 군사 사무 뿐만 아니라, 정치 경제 문화 외교 기타 중요한 정책을 결정하는 국가의 최고 회의 기관으로 화하였다. 이 까닭에 의정부와 육조가 그 기능을 상실하게 되었으므로 일찍부터 비변사 폐지론이 발생하였으나 실행되지 못하고 고종 갑오경장(甲午更張)때까지 존속하였다.</paragraph>
+                        <paragraph align="center"> 비변사등록은 비변사에서 처결한 사항을 기록한 일기로서, 비변사 창설 이래의 등록 전체가 남아 있지 아니하고, 광해군(光海君) 9년(서기1617)부터 고종(高宗) 29년(서기1892)까지 276년간의 등록 273책이 서울 대학교 도서관에 보관되어 있다. 광해군 이후의 등록도 약간의 결본이 있으나, 본 등록은 승정원일기(承政院日記) 일성록(日省錄) 기타 각사등록(各司謄錄)과 함께 실록 편찬의 자료가 되었던 것으로 조선 왕조 후반기의 제1차적 기본 사료일뿐만 아니라, 원본 한 벌 밖에 남아 있지 아니하므로, 국가로서 영구히 보존할 방법을 강구하여야 하며, 또 원본 전체가 초서로 기록되어 있으므로 해서(楷書)로 정사하지 아니하면 해독할 수 없는 것이다. 그러므로 금번 본회에서 이를 정사하여 영인하기로 결정하고, 그동안 출판준비를 추진하여 오던 중 이제 제1책을 세상에 내어 보내게 된 것이다.</paragraph>
+                        <paragraph align="center"> 본회에서는 금후 2년간 본 등록의 출판을 완료하고, 다음으로 본 등록과 같은 가치를 가지고 있는 우리의 국보 승정원일기와 일성록 등도 차례로 출판하여 우리의 문화를 세계에 소개하려고 한다.</paragraph>
+                        <paragraph align="center">단기4292년 4월 일</paragraph>
+                        <paragraph align="center">국사편찬위원회 위원장</paragraph>
+                        <paragraph align="center">문교부장관 최재유</paragraph>
+                    </content>
+                </introduction>
+                <remarks id="bb_020_rk" name="凡 例">
+                    <content>
+                        <paragraph align="center"> 1. 備邊司는 中宗12년(西紀1517)에 創設한 것으로서 처음에는 外敵을 防備하는 邊方의 軍事 事務를 管掌하였으나, 壬辰倭亂 以後, 邊方의 軍事問題 뿐만 아니라 政治 經濟 文化 外交 其他 모든 政策을 決定하던 國家의 最高 決議 機關이 되었다.</paragraph>
+                        <paragraph align="center"> 2. 備邊司謄錄은 備邊司에서 處決한 事項을 記錄한 日記로서 備邊司 創設 以來의 謄錄 全體가 남아 있지 아니하고 光海君9年(西紀1617)부터 高宗29年(西紀1892)까지 276年間의 謄錄 273冊이 서울大學校 圖書館에 保管되어 있다. 그러나 光海君·仁祖 兩代間의 謄錄은 缺本이 많고 그 爾後의 것도 若干 缺本이 있다.</paragraph>
+                        <paragraph align="center"> 3. 備邊司謄錄은 承政院日記 日省錄 其他 各司謄錄과 함께 實錄 編纂의 資料가 되었던 것으로서 朝鮮王朝 後半期의 第一次的 根本 使料이며 國寶的 記錄이다.</paragraph>
+                        <paragraph align="center"> 4. 本謄錄의 原本은 大小와 分量이 一定하지 아니하나, 大槪 크기는 窓戶紙 半張을 접어서 裝幀한 것으로서 縱이 45, 5cm 橫이 32, 2cm로 된 것이 普通이며, 分量은 1年分의 記事를 1冊에 收錄하는 것을 原則으로 하였으나, 記事가 많을 때에는 2冊 乃至 3冊으로 나누어 記錄하였다.</paragraph>
+                        <paragraph align="center"> 5. 本書는 原本이 亂草로 記錄되어 있으므로 本會에서 毛筆로 精書하며 嚴密한 校正을 加한 후에 影印하였다.</paragraph>
+                        <paragraph align="center"> 6. 本書 影印本은 謄寫本 2張을 菊版 上下段에 製版하여 1冊 平均 1000面 內外로 한다. 總 冊數는 原本 各冊의 分量이 一定하지 아니하므로 全體를 謄寫하기 前에는 正確한 數字를 알 수 없으나 大槪 25卷 內外로 出版할 豫定이다.</paragraph>
+                        <paragraph align="center"> 7. 本書 原本은 冊數의 表示가 없고 表紙에 干支로써 「○○年謄錄」이라 記錄하였으므로 全體의 冊數를 알 수 없는 同時에 缺本의 數도 알 수 없으나, 今番 이를 影印함에 있어서 缺本을 無視하고 現存本의 時代順에 依하여 그 序數를 定하고 이를 目錄과 版心에 表示하였다.</paragraph>
+                        <paragraph align="center"> 8. 本書 影印本 第1卷(原本 第1冊부터 第12冊까지)과 第2卷(原本 第13冊부터 第27冊까지)는 原本의 冊數를 區別하지 아니하고 連續 製版하였으나, 第3卷 以下는 原本의 冊數가 갈릴 때마다 面을 갈아서 製版하였다.</paragraph>
+                        <paragraph align="center"> 9. 本書 影印本 第1卷부터 第3卷 前半까지 使用한 謄寫本(原本 第1冊부터 第34冊까지)는 朝鮮史編修會 時代에 謄寫한 것으로서 1張에 1行 19字 24行을 收錄하였으나, 第3卷 後半 以下(原本 第35冊以下)는 1行 20字 20行의 原稿紙에 謄寫한 것을 使用하였다.</paragraph>
+                        <paragraph align="center"> 10. 本書 原本中 磨滅된 部分이 若干 있으므로 그 部分은 字數를 確認할 수 있는 것은 □□로 表示하고, 確認할 수 없는 것은 □로 表示하였다.</paragraph>
+                        <paragraph align="center"> 11. 原本中 逆臣의 이름은 大槪 먹으로 塗抹하였고 其他 또한 塗抹한 部分이 많이 있으므로 그 部分은 原本대로 精書하고 그 右側에 ° 符號를 表示하였다.</paragraph>
+                        <paragraph align="center"> 12. 原本中 誤字와 脫字도 原本대로 精書하고 그 右側에 傍注를 加하여 바른 字 또는 近似한 字를 表示하였다. 近似한 字일 때에는 ? 符號를 부쳤다.</paragraph>
+                        <paragraph align="center"> 13. 讀者의 便宜를 爲하여 謄寫本에 句讀을 찍어서 影印하였다.</paragraph>
+                        <paragraph align="center">檀紀4292年4月 日</paragraph>
+                        <paragraph align="center">國史編纂委員會</paragraph>
+                        <paragraph align="center">申奭鎬</paragraph>
+                    </content>
+                </remarks>
+                <coveragePeriod>光海君9年(1617)</coveragePeriod>
+            </description>
+        </front>
+        <level2 id="bb_001_001" type="년" value="1617" 간지="정사" 왕명="광해군" 재위년도="9">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>광해군 9년</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <level3 id="bb_001_001_01" type="월" value="01">
+                <front>
+                    <biblioData>
+                        <title>
+                            <mainTitle>광해군 9년 1월</mainTitle>
+                        </title>
+                    </biblioData>
+                </front>
+                <level4 id="bb_001_001_01_0010" type="좌목">
+                    <front>
+                        <biblioData>
+                            <title>
+                                <mainTitle>座目</mainTitle>
+                            </title>
+                            <date>
+                                <dateOccured date="1617-01-00L0"/>
+                            </date>
+                        </biblioData>
+                    </front>
+                    <text>
+                        <link type="original">001a-002b</link>
+                        <content>
+                            <paragraph align="center">
+                                <tableGroup>
+                                    <table>
+                                        <tr halign="center" valign="middle">
+                                            <td colspan="2" halign="left" valign="middle">丁巳正月朔座目</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">領中樞府事</td>
+                                            <td halign="left" valign="middle">李恒福<annotation type="원주">
+                                                    <noteContent>在外</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">領議政</td>
+                                            <td halign="left" valign="middle">奇自獻<annotation type="원주">
+                                                    <noteContent>二十一日出 江原道</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">左議政</td>
+                                            <td halign="left" valign="middle">
+                                                <annotation type="도말">
+                                                    <noteContent>鄭仁弘</noteContent>
+                                                </annotation>
+                                                <annotation type="원주">
+                                                    <noteContent>在外</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">領敦寧府事</td>
+                                            <td halign="left" valign="middle">鄭昌衍<annotation type="원주">
+                                                    <noteContent>病未肅拜</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">右議政</td>
+                                            <td halign="left" valign="middle">
+                                                <annotation type="도말">
+                                                    <noteContent>韓孝純</noteContent>
+                                                </annotation>
+                                                <annotation type="원주">
+                                                    <noteContent>呈辭</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td colspan="2" halign="left" valign="middle">堂上</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">晉原府院君</td>
+                                            <td halign="left" valign="middle">柳根</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">行知中樞府事</td>
+                                            <td halign="left" valign="middle">朴弘耉</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">兼兵曹判書</td>
+                                            <td halign="left" valign="middle">朴承宗</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">文昌府院君</td>
+                                            <td halign="left" valign="middle">柳希奮</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">兼工曹判書</td>
+                                            <td halign="left" valign="middle">
+                                                <annotation type="도말">
+                                                    <noteContent>李爾瞻</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">兼禮曹判書</td>
+                                            <td halign="left" valign="middle">李爾瞻</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">驪川府院君</td>
+                                            <td halign="left" valign="middle">閔馨男</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">行護軍</td>
+                                            <td halign="left" valign="middle">李廷龜<annotation type="원주">
+                                                    <noteContent>奏請使赴京</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">判中樞府事</td>
+                                            <td halign="left" valign="middle">李慶全</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">行司直</td>
+                                            <td halign="left" valign="middle">李守一</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">知中樞府事</td>
+                                            <td halign="left" valign="middle">成佑吉</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">戶曹判書</td>
+                                            <td halign="left" valign="middle">李沖</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">禮曹參判</td>
+                                            <td halign="left" valign="middle">沈惇<annotation type="원주">
+                                                    <noteContent>江華句管</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">兵曹參判</td>
+                                            <td halign="left" valign="middle">李覮<annotation type="원주">
+                                                    <noteContent>北道徙民推刷句管</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">大司憲</td>
+                                            <td halign="left" valign="middle">南瑾<annotation type="원주">
+                                                    <noteContent>逆律奴婢句管水原句管</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">戶曹參判</td>
+                                            <td halign="left" valign="middle">崔瓘<annotation type="원주">
+                                                    <noteContent>有司 北道軍餉句管</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">行護軍</td>
+                                            <td halign="left" valign="middle">柳澗<annotation type="원주">
+                                                    <noteContent>奏請副使赴京</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td colspan="2" halign="left" valign="middle">郞廳</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">右通禮</td>
+                                            <td halign="left" valign="middle">梁克選</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">司正</td>
+                                            <td halign="left" valign="middle">韓謙</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">軍資正</td>
+                                            <td halign="left" valign="middle">李涵一</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">司果</td>
+                                            <td halign="left" valign="middle">李馨遠<annotation type="원주">
+                                                    <noteContent>初二日昌洲軍器失火及碧潼郡守越邊畋獵事形止擲奸出歸</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">兵曹正郞</td>
+                                            <td halign="left" valign="middle">李用晉<annotation type="원주">
+                                                    <noteContent>武備司例兼</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">副司正</td>
+                                            <td halign="left" valign="middle">吳䎘</td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">司勇</td>
+                                            <td halign="left" valign="middle">卞有憲<annotation type="원주">
+                                                    <noteContent>平安道 北道軍餉次知</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">司勇</td>
+                                            <td halign="left" valign="middle">邊潝<annotation type="원주">
+                                                    <noteContent>黃海道 徙民推刷次知</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">司勇</td>
+                                            <td halign="left" valign="middle">申景樞<annotation type="원주">
+                                                    <noteContent>慶尙道</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">訓鍊主簿</td>
+                                            <td halign="left" valign="middle">朴瑛<annotation type="원주">
+                                                    <noteContent>全羅道 逆律奴婢次知</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">司勇</td>
+                                            <td halign="left" valign="middle">宣世綱<annotation type="원주">
+                                                    <noteContent>咸鏡江原道</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                        <tr halign="center" valign="middle">
+                                            <td halign="left" valign="middle">副司勇</td>
+                                            <td halign="left" valign="middle">韓璟<annotation type="원주">
+                                                    <noteContent>京畿公洪道</noteContent>
+                                                </annotation>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </tableGroup>
+                            </paragraph>
+                        </content>
+                    </text>
+                </level4>
+            </level3>
+        </level2>
+        <level2 id="bb_001_002" type="년" value="1616" 간지="병진" 왕명="광해군" 재위년도="8">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>광해군 8년</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <level3 id="bb_001_002_01" type="월" value="12">
+                <front>
+                    <biblioData>
+                        <title>
+                            <mainTitle>광해군 8년 12월</mainTitle>
+                        </title>
+                    </biblioData>
+                </front>
+                <level4 id="bb_001_002_01_0010">
+                    <front>
+                        <biblioData>
+                            <title>
+                                <mainTitle>囚禁한 胡人들을 絶島에 圍籬安置시키는 세부사항에 대한 刑房承旨의 啓</mainTitle>
+                            </title>
+                            <date>
+                                <dateOccured date="1616-12-30L0">丙辰十二月三十日</dateOccured>
+                            </date>
+                        </biblioData>
+                    </front>
+                    <text>
+                        <link type="original">003a-003a</link>
+                        <link type="copy">0002a-0002a</link>
+                        <link type="korean">0002-0002</link>
+                        <content>
+                            <paragraph align="center">秘密</paragraph>
+                            <paragraph align="center">刑房承旨啓曰, 前日傳敎, 囚胡馬甫大·朴吉上·億禮·朴汝赤·賊胡朴守希·妻巨蒭里等, 不可全釋, 絶島圍籬安置, 而今日以竝依傳敎, 絶島安置下敎無圍籬二字, 何以爲之, 且巨蒭里胡女也, 竝圍籬安置乎, 敢稟, 傳曰, 賊胡等, 竝圍籬安置, 巨蒭里事, 令備邊司議處。</paragraph>
+                        </content>
+                    </text>
+                </level4>
+            </level3>
+        </level2>
+    </level1>
+</item>
