@@ -42,8 +42,10 @@ module Nabu
     #     local-* rows): no network, the local fetch strategy, up=local. kind
     #     IMPLIES the local fetch, so a shelf row declares NO sync_policy.
     #   module — MACHINERY only (kr-gaiji, bridging): a sanctioned fetch that
-    #     mints ZERO catalog rows, so there is nothing to serve
-    #     (wired: false is required) and nothing for `sync --all` to sweep.
+    #     mints ZERO catalog rows, so there is nothing to serve and nothing
+    #     for `sync --all` to sweep (kind + sync_policy govern that; wired
+    #     means the same thing here as everywhere — channel verified, the
+    #     2026-08-18 ruling).
     KINDS = %w[source shelf module].freeze
     DEFAULT_KIND = "source"
 

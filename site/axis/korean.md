@@ -15,17 +15,17 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these seven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 19 August 2026)</span> |
 |---|---|---|---|---|
 | `sillok` | texts | attribution | not yet wired | 743 docs / 414,321 passages |
-| `sjw` | texts | attribution | not yet wired | not synced yet |
-| `ko-wikisource-mk` | texts | attribution | not yet wired | not synced yet |
-| `goryeosa` | texts | attribution | not yet wired | not synced yet |
-| `goryeosa-jeoryo` | texts | attribution | not yet wired | not synced yet |
-| `bibyeonsa` | texts | attribution | not yet wired | not synced yet |
-| `itkc` | texts | attribution | not yet wired | not synced yet |
+| `sjw` | texts | attribution | not yet wired | 297 docs / 1,896,858 passages |
+| `ko-wikisource-mk` | texts | attribution | not yet wired | 1 docs / 159 passages |
+| `goryeosa` | texts | attribution | not yet wired | 138 docs / 31,207 passages |
+| `goryeosa-jeoryo` | texts | attribution | not yet wired | 36 docs / 11,226 passages |
+| `bibyeonsa` | texts | attribution | not yet wired | 273 docs / 93,528 passages |
+| `itkc` | texts | attribution | not yet wired | 473 docs / 13,185 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 August 2026)</span>: `lzh` 743.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 19 August 2026)</span>: `lzh` 1,960 · `okm` 1.
 
 ## The desk's instruments
 

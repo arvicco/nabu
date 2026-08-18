@@ -1,6 +1,6 @@
 # Dev Loop Plan — driving Nabu's implementation with Claude models
 
-*How Nabu gets built with maximum unattended automation, minimum Fable-tier spend, and explicit human approval gates. This document is the proposal; nothing below runs until the owner approves the "Next steps" section.*
+*How Nabu gets built with maximum unattended automation, minimum Fable-tier spend, and explicit human approval gates. Ratified 2026-07-03 (§9); this is the operating process, amended in place since — the "proposal" voice below is the original document's, kept for the record.*
 
 ## 1. Why this project fits an unattended loop
 
@@ -28,7 +28,12 @@ The loop's job is therefore mostly *dispatch and verify*, not *judge* — which 
 
 ## 3. Work packets and the backlog
 
-The backlog lives at `docs/backlog.md` — a flat, human-editable list of packets:
+The backlog lives at `docs/backlog.md` — a flat, human-editable list of packets
+(HISTORICAL through ~P52: since then the live coordination state moved to the
+gitignored `.docs/` — the per-phase plan doc `.docs/p<N>-plan.md`, the work
+queue `.docs/work-queue.md`, and the decision register
+`.docs/decision-register.md`; docs/backlog.md and docs/worklog.md stand as
+the early record):
 
 ```markdown
 ## P1-04 · Loader: upsert, content hashing, revisions  [tier: fable] [status: ready] [deps: P1-03]
@@ -218,7 +223,7 @@ is the division of labor.
 1. **Plan approved** with amendments incorporated (§2 only Fable/Opus write code; §6 sandbox-freedom guardrails; §8 plan-gated automated fixture acquisition).
 2. **Push policy:** the loop pushes `phase-N` branches and opens PRs on `arvicco/nabu`; `main` stays owner-merged.
 3. **Stage A attendance:** Phase 0 runs interactively (Fable orchestrating, Opus implementing); `/loop` from Phase 1 onward.
-4. In effect: `docs/backlog.md` carries the elaborated packets, `.claude/settings.json` carries the permission profile, work proceeds on `phase-N` branches.
+4. In effect: the phase plan doc (`.docs/p<N>-plan.md`) carries the elaborated packets (docs/backlog.md carried them through ~P52), `.claude/settings.json` carries the permission profile, work proceeds on `phase-N` branches — and independent packets dispatch as parallel agents in worktrees off the phase branch (routine practice since P78), with the loop integrating the merges.
 
 ### §4 addendum — gate waits don't block the loop (owner, 2026-07-11)
 

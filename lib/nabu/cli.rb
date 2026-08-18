@@ -3768,7 +3768,7 @@ module Nabu
       catalog&.disconnect
     end
 
-    desc "backup", "Snapshot the three permanent folders (canonical/, config/, local/) + the derived dbs"
+    desc "backup", "Snapshot the permanent set (canonical/, config/, local/, .docs/) — never the derived dbs"
     long_desc <<~HELP, wrap: false
       File-level rsync backup (architecture §8, P7-2; the P71 three-folder
       contract) — the concept's promise: restorable from a plain rsync copy
@@ -3803,7 +3803,8 @@ module Nabu
         nabu backup --to /Volumes/NabuBackup/nabu     # explicit target
         nabu backup --dry-run                          # show the plan
     HELP
-    option :to, type: :string, desc: "Target path override (default: config/nabu.yml backup.target)"
+    option :to, type: :string,
+                desc: "Target path override (default: backup.target in the local/config/settings.yml overlay)"
     option :dry_run, type: :boolean, default: false, desc: "Print the rsync plan and change nothing"
     option :allow_unmounted, type: :boolean, default: false,
                              desc: "Skip the mount-point guard (for a deliberately-local target)"
@@ -8909,9 +8910,9 @@ module Nabu
         # `sync kr-gaiji` / `sync local-notes` knows what it does (and does not) do.
         say kind_nature_note(entry), :yellow if entry && !entry.source?
         # The verification-pending note belongs to kind: source rows alone —
-        # module/shelf rows are PERMANENTLY wired: false by registry invariant
-        # (the P46-r1 rule; P52 owner report caught this last surface still
-        # promising a flip that never comes).
+        # module/shelf rows verify their channel once and stay wired (the
+        # 2026-08-18 wired-semantics ruling: wired = channel verified, for
+        # every kind; --all participation is governed by kind + sync_policy).
         if entry && !entry.wired && entry.source?
           say "Note: #{slug} is not wired yet (this sync is the verification); syncing anyway (explicit request).",
               :yellow
