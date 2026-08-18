@@ -12,7 +12,11 @@ module Nabu
     # preface members) or level2 (the per-reign-year members) and nests
     # level3 (month) → level4 (day) → level5 (the individual 기사
     # article / 좌목 roster with its own editorial title, docNo, archive
-    # sources and subjectClass rows).
+    # sources and subjectClass rows). The goryeosa family (P78-3, DTD
+    # ver 1.4 in those zips) adds one more root shape: an <item> element
+    # wrapping SIBLING level1 sections (exactly one such member per
+    # zip — kr_000/kj_000/bb_001); the item wrapper is transparent here,
+    # the first level1 anchors the volume front, all siblings leaf.
     #
     # The LEAVES of the level tree are the citation units: level5
     # articles where present, else the deepest level node carrying text
@@ -66,6 +70,10 @@ module Nabu
       # One streaming pass. Each open level element is a stack frame;
       # its front and text subtrees are captured as they stream past.
       # A frame that closes without ever seeing a level child is a LEAF.
+      # The FIRST root-level element anchors the volume front: the
+      # goryeosa-family front-matter members (P78-3) wrap SIBLING level1
+      # sections in an <item> root, and every sibling contributes its
+      # leaves while the first one speaks for the volume.
       def walk(path)
         reader = Nokogiri::XML::Reader(File.open(path, encoding: Encoding::UTF_8))
         stack = []
@@ -74,7 +82,8 @@ module Nabu
         while reader.read
           case reader.node_type
           when Nokogiri::XML::Reader::TYPE_ELEMENT
-            root_frame = open_element(reader, stack, leaves) || root_frame
+            opened = open_element(reader, stack, leaves)
+            root_frame ||= opened
           when Nokogiri::XML::Reader::TYPE_END_ELEMENT
             close_element(reader, stack, leaves)
           end
@@ -161,11 +170,22 @@ module Nabu
         title = front.at_xpath(".//mainTitle")&.text&.strip
         {
           title: (title unless title.nil? || title.empty?),
-          date_raw: front.at_xpath(".//dateOccured[@type='서기'][@date]")&.attr("date"),
+          date_raw: front_date(front),
           subject_classes: front.xpath(".//subjectClass").map { |sc| sc.text.strip },
           sources: front_sources(front),
           weather: front.at_xpath(".//description/weather")&.text&.strip
         }
+      end
+
+      # The machine-readable calendar line. Sillok fronts carry it on
+      # the 서기 (CE) entry; the goryeosa-family zips (P78-3) carry NO
+      # 서기 type at all — goryeosa/jeoryo lead with the lunar 음 entry
+      # (the solar 양 follows it), bibyeonsa's single machine date is
+      # UNTYPED — so the fallback is the first @date-bearing entry in
+      # document order, upstream's own primary calendar for the member.
+      def front_date(front)
+        front.at_xpath(".//dateOccured[@type='서기'][@date]")&.attr("date") ||
+          front.at_xpath(".//dateOccured[@date]")&.attr("date")
       end
 
       def front_sources(front)

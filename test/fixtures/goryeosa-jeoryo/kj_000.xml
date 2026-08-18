@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE item SYSTEM "history.dtd">
+<item id="kj" name="高麗史節要" org="국사편찬위원회">
+    <front>
+        <biblioData>
+            <title>
+                <mainTitle>高麗史節要</mainTitle>
+            </title>
+            <fileDesc>사업명 : 2015년 한국사데이터베이스 구축사업;2019년 | 사업자 : 서울시스템주식회사;스템위드(주) | 구축내용 : 기사제목, 색인어 구축;규장각원문링크수정</fileDesc>
+        </biblioData>
+    </front>
+    <level1 id="kj_$s01" type="進高麗史節要箋">
+        <front>
+            <biblioData type="원문">
+                <title>
+                    <mainTitle>進高麗史節要箋</mainTitle>
+                </title>
+            </biblioData>
+        </front>
+        <text>
+            <content>
+                <paragraph align="center" indent="1">大匡輔國崇祿大夫議政府右議政領集賢殿 經筵事監春秋館事 世子傅 臣金宗瑞等謹將新撰高麗史節要, 繕寫投進. 臣宗瑞等誠惶誠恐, 稽首稽首,</paragraph>
+                <paragraph align="center">上言. 竊謂, 編年本於左氏, 紀傳創於遷史, 自班固以後, 爲史者皆祖述遷史而莫之違者, 以其規模宏博, 而著述得以該備也. 然不免冗長難究之患, 此史家之互有長短, 而不可以偏廢也. 粤惟高麗起於唐季, 以雄武而剗群兇, 以寬大而得衆心, 遂建大業, 以裕後昆. 迨夫立郊社, 定章程, 興學校, 設科擧, 置中書總機務, 而體統有所繫, 遣廉使察州縣, 而貪汚不敢肆. 府衛之制得寓兵於農之法, 田柴之科有仕者世祿之意, 刑政擧而品式備, 中外寧謐, 民物殷阜, 大平之治可謂盛矣. 中葉以降, 不克負荷, 內爲嬖幸之所惑, 外爲權姦之所制, 强敵交侵, 干戈爛熳. 陵夷至於假姓竊位, 而王氏之祀已不血食矣. 恭讓返正, 竟以昏懦, 自底於亡, 蓋天生</paragraph>
+                <paragraph align="center">眞主, 以靖夷我民, 固非人力之所爲也.</paragraph>
+                <paragraph align="center">太祖康獻大王首</paragraph>
+                <paragraph align="center" indent="1">命輔臣, 纂修麗史,</paragraph>
+                <paragraph align="center">太宗恭定大王又</paragraph>
+                <paragraph align="center" indent="1">命讎正謬誤, 而竟未就緖.</paragraph>
+                <paragraph align="center">世宗莊憲大王以</paragraph>
+                <paragraph align="center" indent="1">神聖之資,</paragraph>
+                <paragraph align="center" indent="1">闡文明之化,</paragraph>
+                <paragraph align="center" indent="1">命臣等選辟寮屬, 開局編摩,</paragraph>
+                <paragraph align="center" indent="1">謂先修全史, 而次及於編年. 臣等祗慄奉</paragraph>
+                <paragraph align="center" indent="2">承, 不敢小懈. 不幸書未進</paragraph>
+                <paragraph align="center" indent="1">御, 而</paragraph>
+                <paragraph align="center" indent="1">奄棄群臣,</paragraph>
+                <paragraph align="center">主上殿下</paragraph>
+                <paragraph align="center" indent="1">恭承</paragraph>
+                <paragraph align="center">先志, 令臣等竣事. 顧嘗受</paragraph>
+                <paragraph align="center" indent="1">命於</paragraph>
+                <paragraph align="center">先王, 不敢以荒陋固辭, 越辛未秋, 書乃克成. 於是, 又裒集事跡之關於世敎者制度之可爲矜式者, 删煩就簡, 表年敍事, 以便考閱. 然後, 四百七十五年三十二王之事包括無遺, 詳略畢擧, 而史家之體始若粗備. 雖文辭鄙俚, 紀次不精, 而於善惡勸懲, 小有補乎治道.</paragraph>
+                <paragraph align="center" indent="1">淸讌之暇, 時</paragraph>
+                <paragraph align="center" indent="1">賜省覽, 懋稽古之</paragraph>
+                <paragraph align="center" indent="1">盛德, 恢經世之大猷, 使斯民咸受其</paragraph>
+                <paragraph align="center" indent="1">賜, 不勝幸甚. 所撰高麗史節要三十五卷, 謹隨箋以</paragraph>
+                <paragraph align="center">聞, 無任激切屛營之至. 臣宗瑞等誠惶誠恐, 稽首稽首, 謹言.</paragraph>
+                <paragraph align="center" indent="2">景泰三年二月日, 大匡輔國崇祿大夫議政府右議政領集賢殿 經筵事監春秋館事 世子傅臣金宗瑞等謹上箋.</paragraph>
+                <paragraph align="center">
+                    <reference>
+                        <link uri="coi" value="hm_093_0020">사료로 보는 한국사＞역사·지리책의 편찬＞고려사절요를 올리는 글</link>
+                    </reference>
+                </paragraph>
+            </content>
+        </text>
+    </level1>
+    <level1 id="kj_$s02" type="高麗史節要凡例">
+        <front>
+            <biblioData type="원문">
+                <title>
+                    <mainTitle>高麗史節要凡例</mainTitle>
+                </title>
+            </biblioData>
+        </front>
+        <text>
+            <content>
+                <paragraph align="center">一. 今編次, 務取綱要, 事有關於治亂興亡可監戒者, 悉參錄之, 餘則旣正史在, 略之.</paragraph>
+                <paragraph align="center">一. 稱宗稱陛下太子之類雖涉僭踰, 仍舊直書, 以存其實. 朝會祭祀常事, 而有故則書, 親祭則書. 遊幸寺院及受菩薩戒設道場時君常事, 書不勝煩, 每王書初見, 有事則書. 飯僧數至千百, 虛費鉅萬者, 必書. 上國之使往來雖頻, 必書, 尊中夏也. 災異之驗於事者, 雖小必書, 謹天譴也. 遊田宴樂, 雖數必書, 戒逸豫也. 大臣封拜罷免, 賢士出處始終, 悉書之, 章疎之行於時切於事者, 亦悉書之, 以備考焉.</paragraph>
+                <paragraph align="center">一. 辛禑, 依王莽例, 不紀年, 止書甲子, 以正僭竊之罪.</paragraph>
+                <paragraph align="center">一. 資治通鑑紀年以後來者爲定. 今, 據此, 恭讓元年十月以前, 雖辛昌在位, 便以恭讓元年爲紀.</paragraph>
+            </content>
+        </text>
+    </level1>
+    <level1 id="kj_$s03" type="修史官">
+        <front>
+            <biblioData type="원문">
+                <title>
+                    <mainTitle>修史官</mainTitle>
+                </title>
+            </biblioData>
+        </front>
+        <text>
+            <content>
+                <paragraph align="center">大匡輔國崇祿大夫議政府右議政領集賢殿經筵事監春秋館事世子傅臣金宗瑞</paragraph>
+                <paragraph align="center">正憲大夫工曹判書集賢殿大提學知經筵春秋館事兼成均大司成臣鄭麟趾</paragraph>
+                <paragraph align="center">資憲大夫議政府右參贊集賢殿提學知春秋館事世子右賓客臣許翊</paragraph>
+                <paragraph align="center">嘉善大夫藝文館提學同知春秋館事世子左副賓客臣李先齊</paragraph>
+                <paragraph align="center">嘉善大夫吏曹參判修文殿提學同知經筵春秋館事臣李季甸</paragraph>
+                <paragraph align="center">通政大夫集賢殿副提學知製敎世子左輔德兼春秋館編修官臣辛碩祖</paragraph>
+                <paragraph align="center">中直大夫集賢殿直提學知製敎世子右輔德兼春秋館記注官知承文院事臣申叔舟</paragraph>
+                <paragraph align="center">中訓大夫集賢殿直提學知製敎經筵侍讀官兼春秋館記注官臣朴彭年</paragraph>
+                <paragraph align="center">奉正大夫直集賢殿知製敎世子左弼善兼左中護春秋館記注官臣金禮蒙</paragraph>
+                <paragraph align="center">奉列大夫守藝文館直提學兼春秋館記注官臣金孟獻</paragraph>
+                <paragraph align="center">朝奉大夫集賢殿應敎知製敎世子左文學兼春秋館記注官臣梁誠之</paragraph>
+                <paragraph align="center">通德郞集賢殿校理知製敎經筵副檢討官兼春秋館記注官臣李芮</paragraph>
+                <paragraph align="center">通善郞吏曹正郞兼春秋館記注官臣金之慶</paragraph>
+                <paragraph align="center">通善郞成均直講兼春秋館記注官臣金閏福</paragraph>
+                <paragraph align="center">奉直郞守成均直講兼東部儒學敎授官春秋館記注官臣金漢啓</paragraph>
+                <paragraph align="center">奉直郞集賢殿副校理知製敎世子右文學兼春秋館記事官臣柳誠源</paragraph>
+                <paragraph align="center">奉訓郞集賢殿副校理知製敎世子左司經兼春秋館記事官臣李克堪</paragraph>
+                <paragraph align="center">奉訓郞承文院校理知製敎兼春秋館記事官臣尹起畎</paragraph>
+                <paragraph align="center">奉訓郞行工曹佐郞兼春秋館記事官臣朴元貞</paragraph>
+                <paragraph align="center">承議郞成均注簿兼春秋館記事官臣金礩</paragraph>
+                <paragraph align="center">承訓郞成均注簿兼中部儒學敎授官春秋館記事官臣洪若治</paragraph>
+                <paragraph align="center">承訓郞行司贍注簿兼春秋館記事官臣李孝長</paragraph>
+                <paragraph align="center">承訓郞行司醞注簿兼春秋館記事官臣李翊</paragraph>
+                <paragraph align="center">宣務郞行藝文奉敎兼春秋館記事官臣全孝宇</paragraph>
+                <paragraph align="center">務功郞藝文奉敎兼春秋館記事官臣李尹仁</paragraph>
+                <paragraph align="center">啓功郞行藝文待敎兼春秋館記事官臣金勇</paragraph>
+                <paragraph align="center">啓功郞行藝文檢閱兼春秋館記事官臣韓瑞鳳</paragraph>
+                <paragraph align="center">通仕郞行藝文檢閱兼春秋館記事官臣尹子榮</paragraph>
+            </content>
+        </text>
+    </level1>
+    <level1 id="kj_$s04" type="高麗史節要目錄">
+        <front>
+            <biblioData type="원문">
+                <title>
+                    <mainTitle>高麗史節要目錄</mainTitle>
+                </title>
+            </biblioData>
+        </front>
+        <text>
+            <content>
+                <paragraph align="center">第一</paragraph>
+                <paragraph align="center" indent="1">太祖元年戊寅至二十六年癸卯</paragraph>
+                <paragraph align="center">第二</paragraph>
+                <paragraph align="center" indent="1">惠宗元年甲辰至二年乙巳</paragraph>
+                <paragraph align="center" indent="1">定宗元年丙午至四年己酉</paragraph>
+                <paragraph align="center" indent="1">光宗元年庚戌至二十六年乙亥</paragraph>
+                <paragraph align="center" indent="1">景宗元年丙子至六年辛巳</paragraph>
+                <paragraph align="center" indent="1">成宗元年壬午至十六年丁酉</paragraph>
+                <paragraph align="center" indent="1">穆宗元年戊戌至十二年己酉</paragraph>
+                <paragraph align="center">第三</paragraph>
+                <paragraph align="center" indent="1">顯宗元年庚戌至二十二年辛未</paragraph>
+                <paragraph align="center">第四</paragraph>
+                <paragraph align="center" indent="1">德宗元年壬辰至三年甲戌</paragraph>
+                <paragraph align="center" indent="1">靖宗元年乙亥至十二年丙戌</paragraph>
+                <paragraph align="center" indent="1">文宗元年丁亥至十年丙申</paragraph>
+                <paragraph align="center">第五</paragraph>
+                <paragraph align="center" indent="1">文宗十一年丁酉至三十七年癸亥</paragraph>
+                <paragraph align="center" indent="1">順宗附</paragraph>
+                <paragraph align="center">第六</paragraph>
+                <paragraph align="center" indent="1">宣宗元年甲子至十一年甲戌</paragraph>
+                <paragraph align="center" indent="1">獻宗元年乙亥</paragraph>
+                <paragraph align="center" indent="1">肅宗元年丙子至七年壬午</paragraph>
+                <paragraph align="center">第七</paragraph>
+                <paragraph align="center" indent="1">肅宗八年癸未至十年乙酉</paragraph>
+                <paragraph align="center" indent="1">睿宗元年丙戌至七年壬辰</paragraph>
+                <paragraph align="center">第八</paragraph>
+                <paragraph align="center" indent="1">睿宗八年癸巳至十七年壬寅</paragraph>
+                <paragraph align="center">第九</paragraph>
+                <paragraph align="center" indent="1">仁宗元年癸卯至九年辛亥</paragraph>
+                <paragraph align="center">第十</paragraph>
+                <paragraph align="center" indent="1">仁宗十年壬子至二十四年丙寅</paragraph>
+                <paragraph align="center">第十一</paragraph>
+                <paragraph align="center" indent="1">毅宗元年丁卯至二十四年庚寅</paragraph>
+                <paragraph align="center">第十二</paragraph>
+                <paragraph align="center" indent="1">明宗元年辛卯至十三年癸卯</paragraph>
+                <paragraph align="center">第十三</paragraph>
+                <paragraph align="center" indent="1">明宗十四年甲辰至二十七年丁巳</paragraph>
+                <paragraph align="center">第十四</paragraph>
+                <paragraph align="center" indent="1">神宗元年戊午至七年甲子</paragraph>
+                <paragraph align="center" indent="1">熙宗元年乙丑至七年辛未</paragraph>
+                <paragraph align="center" indent="1">康宗元年壬申至二年癸酉</paragraph>
+                <paragraph align="center" indent="1">高宗元年甲戌至三年丙子</paragraph>
+                <paragraph align="center">第十五</paragraph>
+                <paragraph align="center" indent="1">高宗四年丁丑至十六年己丑</paragraph>
+                <paragraph align="center">第十六</paragraph>
+                <paragraph align="center" indent="1">高宗十七年庚寅至三十七年庚戌</paragraph>
+                <paragraph align="center">第十七</paragraph>
+                <paragraph align="center" indent="1">高宗三十八年辛亥至四十六年己未</paragraph>
+                <paragraph align="center">第十八</paragraph>
+                <paragraph align="center" indent="1">元宗元年庚申至十一年庚午</paragraph>
+                <paragraph align="center">第十九</paragraph>
+                <paragraph align="center" indent="1">元宗十二年辛未至十五年甲戌</paragraph>
+                <paragraph align="center" indent="1">忠烈王元年乙亥至三年丁丑</paragraph>
+                <paragraph align="center">第二十</paragraph>
+                <paragraph align="center" indent="1">忠烈王四年戊寅至十一年乙酉</paragraph>
+                <paragraph align="center">第二十一</paragraph>
+                <paragraph align="center" indent="1">忠烈王十二年丙戌至二十三年丁酉</paragraph>
+                <paragraph align="center">第二十二</paragraph>
+                <paragraph align="center" indent="1">忠烈王二十四年戊戌至三十年甲辰</paragraph>
+                <paragraph align="center">第二十三</paragraph>
+                <paragraph align="center" indent="1">忠烈王三十一年乙巳至三十四年戊申</paragraph>
+                <paragraph align="center" indent="1">忠宣王元年己酉至五年癸丑</paragraph>
+                <paragraph align="center">第二十四</paragraph>
+                <paragraph align="center" indent="1">忠肅王元年甲寅至十七年庚午</paragraph>
+                <paragraph align="center">第二十五</paragraph>
+                <paragraph align="center" indent="1">忠惠王元年辛未</paragraph>
+                <paragraph align="center" indent="1">忠肅王復位元年壬申至八年己卯</paragraph>
+                <paragraph align="center" indent="1">忠惠王復位元年庚辰至五年甲申</paragraph>
+                <paragraph align="center" indent="1">忠穆王元年乙酉至四年戊子</paragraph>
+                <paragraph align="center">第二十六</paragraph>
+                <paragraph align="center" indent="1">忠定王元年己丑至三年辛卯</paragraph>
+                <paragraph align="center" indent="1">恭愍王元年壬辰至六年丁酉</paragraph>
+                <paragraph align="center">第二十七</paragraph>
+                <paragraph align="center" indent="1">恭愍王七年戊戌至十二年癸卯</paragraph>
+                <paragraph align="center">第二十八</paragraph>
+                <paragraph align="center" indent="1">恭愍王十三年甲辰至十八年己酉</paragraph>
+                <paragraph align="center">第二十九</paragraph>
+                <paragraph align="center" indent="1">恭愍王十九年庚戌至二十三年甲寅</paragraph>
+                <paragraph align="center">第三十</paragraph>
+                <paragraph align="center" indent="1">辛禑元年乙卯至四年戊午</paragraph>
+                <paragraph align="center">第三十一</paragraph>
+                <paragraph align="center" indent="1">辛禑五年己未至八年壬戌</paragraph>
+                <paragraph align="center">第三十二</paragraph>
+                <paragraph align="center" indent="1">辛禑九年癸亥至十三年丁卯</paragraph>
+                <paragraph align="center">第三十三</paragraph>
+                <paragraph align="center" indent="1">辛禑十四年戊辰</paragraph>
+                <paragraph align="center">第三十四</paragraph>
+                <paragraph align="center" indent="1">恭讓王元年己巳至二年庚午</paragraph>
+                <paragraph align="center">第三十五</paragraph>
+                <paragraph align="center" indent="1">恭讓王三年辛未至四年壬申</paragraph>
+            </content>
+        </text>
+    </level1>
+</item>
