@@ -592,15 +592,18 @@ module Nabu
     # local fetch strategy is implied by kind), and a module mints no catalog
     # rows so there is nothing to wire on.
     def self.kind_invariants!(slug, config, kind:, wired:)
-      if kind == "shelf" && config.key?("sync_policy")
-        raise ValidationError,
-              "source #{slug.inspect}: a kind: shelf row uses the local fetch strategy — " \
-              "drop sync_policy (kind implies it)"
-      end
-      return unless kind == "module" && wired
+      _ = wired # kept in the signature: call sites predate the 2026-08-18 ruling below
+      return unless kind == "shelf" && config.key?("sync_policy")
 
+      # The former second invariant — "a kind: module row must be
+      # wired: false" — was RETIRED by the owner's wired-semantics ruling
+      # (2026-08-18): wired means THE SYNC LINK IS TESTED AND DECLARED
+      # WORKING, for every kind; `--all` participation is governed by
+      # kind + sync_policy, never by wired. A module with a landed first
+      # fetch is wired like any other verified channel.
       raise ValidationError,
-            "source #{slug.inspect}: a kind: module row mints no catalog rows — must be wired: false"
+            "source #{slug.inspect}: a kind: shelf row uses the local fetch strategy — " \
+            "drop sync_policy (kind implies it)"
     end
     private_class_method :kind_invariants!
 

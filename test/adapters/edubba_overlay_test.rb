@@ -20,7 +20,7 @@ module Adapters
       entry = registry["edubba-overlay"]
       refute_nil entry, "edubba-overlay must be registered in config/sources.yml"
       assert entry.feature_module?, "a didactic instrument is a kind: module row"
-      refute entry.wired, "a feature module serves no documents — wired stays false permanently"
+      assert entry.wired, "channel verified (the 2026-08-18 wired-semantics ruling)"
       assert_equal "manual", entry.sync_policy, "course releases, owner-fired"
       assert_equal %w[egyptian cuneiform], entry.axes,
                    "P77-8: the cuneiform lanes shipped — axes follow capability"

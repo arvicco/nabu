@@ -124,19 +124,21 @@ class SourceRegistryTest < Minitest::Test
     refute_predicate entry, :source?
   end
 
-  # P39-0: a kind: module mints no catalog rows, so it MUST be wired: false.
-  def test_kind_module_must_be_disabled
-    error = assert_raises(Nabu::ValidationError) do
-      load_registry(<<~YAML)
-        kr-gaiji:
-          adapter: Nabu::Adapters::KrGaiji
-          kind: module
-          wired: true
-          sync_policy: manual
-      YAML
-    end
-    assert_match(/kr-gaiji/, error.message)
-    assert_match(/module.*wired: false|mints no catalog rows/, error.message)
+  # The P39-0 "module must be wired: false" invariant was RETIRED by the
+  # owner's wired-semantics ruling (2026-08-18): wired = the sync link is
+  # tested and declared working, for EVERY kind; --all participation is
+  # kind + sync_policy's job. A verified module row loads wired: true.
+  def test_kind_module_may_be_wired_once_its_channel_is_verified
+    registry = load_registry(<<~YAML)
+      kr-gaiji:
+        adapter: Nabu::Adapters::KrGaiji
+        kind: module
+        wired: true
+        sync_policy: manual
+    YAML
+    entry = registry["kr-gaiji"]
+    assert entry.wired
+    assert_predicate entry, :feature_module?
   end
 
   def test_kind_module_parses_when_disabled

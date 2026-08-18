@@ -2446,9 +2446,9 @@ class CLITest < Minitest::Test
       assert_match(/green\s+wired\s+docs=/, out)
       assert_match(/blue\s+unwired\s+nothing held yet/, out, "a disabled, unheld member says so")
       # P46-r1 (owner report off the live hebrew card: "why is bridging
-      # suddenly 'unwired'?"): a kind: module row is PERMANENTLY wired: false
-      # by registry invariant — nothing to flip, so the axis card must name
-      # its nature, never imply an adapter awaiting first-sync verification.
+      # suddenly 'unwired'?") + the 2026-08-18 semantics ruling: a module
+      # wears its KIND on the card, never a wired/unwired label — wired is
+      # the channel-verification fact and says nothing about module nature.
       assert_match(/meter\s+module\s+nothing held yet/, out,
                    "a feature module wears its kind, not the unwired label")
       refute_match(/meter\s+unwired/, out)
@@ -2848,12 +2848,10 @@ class CLITest < Minitest::Test
   end
 
   # P52 (owner report off the live hypotactic sync: "How on earth is
-  # hypotactic NOT wired yet?"): a kind: module row is PERMANENTLY
-  # wired: false by registry invariant — the "not wired yet (this sync is
-  # the verification)" wording promises a flip that will never come. The
-  # direct sync path prints the module's nature note ONLY; the
-  # verification-pending note is for kind: source rows alone (the P46-r1
-  # axis-surface rule, applied to the last remaining surface).
+  # hypotactic NOT wired yet?"): a module wears its kind on every
+  # surface — wired is the channel-verification fact (2026-08-18
+  # semantics ruling), and module rows are wired once their first
+  # fetch lands, like any other channel.
   def test_sync_module_by_slug_prints_nature_not_unwired_verification
     with_axis_sync_env do |config|
       out, _err, status = with_config(config) { run_cli(%w[sync meter --parse-only]) }

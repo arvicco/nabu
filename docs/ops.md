@@ -183,6 +183,46 @@ reads.
 
 ---
 
+### The registry vocabulary — kinds and flags (who syncs, when, and why)
+
+Every row in `config/sources.yml` is one of three **kinds**, and four
+orthogonal switches govern what happens to it. These answer different
+questions and never substitute for each other (owner semantics ruling
+2026-08-18, reaffirming the 2026-07-24 nomenclature ruling).
+
+| Kind | What it is | Catalog rows | Examples |
+|---|---|---|---|
+| `source` (default) | a text corpus — an adapter that fetches, parses, and mints documents/passages | yes | perseus-greek, cdli, osta, achemenet |
+| `shelf` | an owner-memory shelf — local fetch (`LocalFetch`), no network, no `sync_policy` (kind implies it) | yes (local grains) | local-library, local-notes |
+| `module` | an instrument — canonical data that feeds derived features (links crosswalks, gazetteers, sign spines, fold tables), minting **zero** catalog rows | no | trismegistos, pleiades, osl, unikemet, burman-concordance |
+
+| Flag | Question it answers | Who sets it |
+|---|---|---|
+| `wired` | **Is the sync link tested and declared working?** A verification FACT about the channel, for every kind — flipped `true` once, after the owner-verified first sync (adapter checklist §6). It says nothing about cadence or desirability. | the loop, at first-sync verification |
+| enabled (`nabu enable`, `config/profile.yml` + local overlay) | **Does THIS box work with this source?** The instance profile — `sync <slug>` refuses an un-enabled source; modules are pre-enabled by nature (they never gate on enablement). | the owner, per box |
+| `sync_policy` | **What cadence?** `auto` = swept by `sync --all` (living upstreams) · `manual` = owner-fired by name (size/pacing) · `frozen` = dead upstream, synced once. Shelves have none (kind implies local). | the registry, at adoption |
+| `grant_required` / `availability` | **May we, publicly?** Permission-bound sources are skipped by `--all` until the grant is acknowledged; `availability: blocked` rows never advertise on public surfaces. | owner rulings |
+
+**The `sync --all` sweep predicate, verbatim:** `kind: source` AND
+`wired` AND `sync_policy: auto` AND enabled-on-this-box AND
+grant-acknowledged. Note what is NOT in that list doing double duty:
+a module is excluded **by kind** (it mints no catalog rows and its
+derived features re-run at rebuild), never by keeping `wired` false —
+the retired "PERMANENTLY false for modules" convention conflated
+channel verification with cadence and is gone (P77-r20). A module
+whose first fetch landed is `wired: true` like any other verified
+channel; you sync it by name only when its upstream versions (rare —
+most instrument upstreams are frozen deposits), and its derived edges
+and features re-derive at every `nabu rebuild` regardless.
+
+Supporting per-row markers, briefly: `axes` (desk membership — every
+source names its desks), `siblings` (co-minted document lanes, e.g.
+osta's `-vrt`), `lemma_tier` (`silver` marks automatic lemmatization —
+the GLAUx rule), `fuzzy_index` (opt-in to the documentary trigram
+index), `requires` (module dependency chains, package-manager
+semantics), `group: core` (registry-sibling instruments quickstart
+sweeps via `nabu sync core`).
+
 ## 2. Why launchd needs help finding Ruby
 
 This is the one genuinely fiddly part; get it right and the rest is mechanical.

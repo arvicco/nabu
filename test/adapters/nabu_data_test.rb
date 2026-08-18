@@ -17,7 +17,7 @@ module Adapters
       entry = registry["nabu-data"]
       refute_nil entry, "nabu-data must be registered in config/sources.yml"
       assert entry.feature_module?, "a dataset-bundle instrument is a kind: module row"
-      refute entry.wired, "a feature module serves no documents — enabled stays false permanently"
+      assert entry.wired, "channel verified (the 2026-08-18 wired-semantics ruling)"
       assert_equal "manual", entry.sync_policy
       assert_equal %w[indic tibetan], entry.axes.sort,
                    "the bundle rides its datasets' desks (san + xct)"
