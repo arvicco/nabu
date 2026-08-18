@@ -394,11 +394,10 @@ sources:
   # rule; the three new layers still declare (coverage-derived, the
   # sweep of 2026-08-07). ────────────────────────────────────────────
   achemenet:
-    lect:
-      posture: pending
-      note: "candidate: a blanket akk:nb rule — the whole corpus is
-        Achaemenid-period Babylonian and the registry's nb band
-        deliberately folds the Achaemenid record (№R-34, register)"
+    # lect row RETIRED 2026-08-18: №R-34 ruled the blanket akk:nb rule
+    # (achemenet-nb, the archive-facet total map) — the machine grain
+    # machine-postures achemenet now (the shadowing rule; same-phase
+    # add-then-retire, the osta/fornsvenska shape).
     dating:
       posture: pending
       note: "candidate: the corpus band 550–330 BCE + the reign-dated
