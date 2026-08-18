@@ -89,6 +89,16 @@ sources:
     dating: {posture: dated, note: "per-member 서기 year via MetadataDates :structured; per-day dates + weather ride annotations"}
     places: {posture: unplaced}
     script: {posture: implied}
+  viet-wikisource:
+    lect:
+      posture: codemap
+      note: lzh → zho/lit (the kanripo/sillok precedent — Literary Chinese as
+        written in Đại Việt; a vi-tradition lect claim stays DELIBERATELY
+        coarse until a use case needs it, P78-5)
+    dating: {posture: partial, note: "header year params only — the hịch carries 1284; the DVSKTT quyển
+        pages carry no machine year (compilation strata 1479/1665/1697 ride the docs, not claims)"}
+    places: {posture: unplaced}
+    script: {posture: implied, note: "Han script implied by lzh; Ext-B/rare-Han codepoints ride as-is"}
   kanripo:
     lect: {posture: codemap, note: lzh → zho/lit (Literary Chinese)}
     dating: {posture: undatable}

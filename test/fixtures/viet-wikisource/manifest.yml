@@ -1,0 +1,44 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# API-ENVELOPE PROVENANCE (the lexlep precedent). Retrieved 2026-08-18
+# from zh/vi.wikisource.org api.php in the fetcher's own batch shape
+# (action=query&prop=revisions&rvprop=content|ids|timestamp&rvslots=main);
+# each page file is the adapter's per-page envelope with the API's
+# wikitext byte-verbatim inside, filed by CURATED id (the PAGES table is
+# the naming authority). A raw re-GET returns upstream's CURRENT revid —
+# living wikis — so every entry is refetchable: false; drift is caught by
+# the revid-pinned fetch at any real re-sync.
+source: viet-wikisource
+adapter_test: test/adapters/viet_wikisource_test.rb
+retrieved: 2026-08-18
+files:
+  - path: pages/dvsktt-ngoai-ky-1.json
+    refetchable: false
+    provenance: api-envelope
+    reason: fetcher envelope around the api.php revisions response (大越史記全書/外紀卷之一,
+      revid 2770143); upstream serves current revids, not this snapshot
+    upstream: https://zh.wikisource.org/w/api.php
+    copied: 2026-08-18
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main
+  - path: pages/hich-tuong-si.json
+    refetchable: false
+    provenance: api-envelope
+    reason: fetcher envelope around the api.php revisions response (諭諸裨將檄文, revid
+      2345859 — the original-script hịch lives on zh.wikisource; vi's bản-gốc link is
+      a redlink); upstream serves current revids, not this snapshot
+    upstream: https://zh.wikisource.org/w/api.php
+    copied: 2026-08-18
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main
+  - path: pages/binh-ngo-dai-cao.json
+    refetchable: false
+    provenance: api-envelope
+    reason: fetcher envelope around the api.php revisions response (Bình Ngô đại cáo,
+      revid 205842 — chữ Hán + phiên âm parallel poems); upstream serves current revids,
+      not this snapshot
+    upstream: https://vi.wikisource.org/w/api.php
+    copied: 2026-08-18
+    whole: false
+    trim: envelope our shape; wikitext byte-verbatim from slots.main
