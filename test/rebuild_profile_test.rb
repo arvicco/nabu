@@ -116,4 +116,22 @@ class RebuildProfileTest < Minitest::Test
     assert_in_delta 0.0, profile.grand_total, 1e-9
     assert_empty profile.rows
   end
+
+  # P78-r1 regression: six corpus stages added P58–P77 (lect_journal,
+  # lect_facets, artifact_scripts, links, passage_chars, passage_signs)
+  # were measured but never entered CORPUS_STAGE_LABELS — their seconds
+  # silently vanished from corpus_stages, grand_total, and the report.
+  # This census scans the two files that measure corpus stages and pins
+  # every measured stage to a label, so the next stage can't drift out.
+  def test_every_measured_corpus_stage_has_a_label
+    lib = File.expand_path("../lib/nabu", __dir__)
+    source = File.read(File.join(lib, "rebuild.rb")) +
+             File.read(File.join(lib, "store", "indexer.rb"))
+    measured = source.scan(/(?:CORPUS, stage: :|timed\(profile, :)(\w+)/).flatten.map(&:to_sym).uniq
+    refute_empty measured
+    unlabelled = measured - Nabu::RebuildProfile::CORPUS_STAGE_LABELS.keys
+    assert_empty unlabelled,
+                 "corpus stages measured but missing from CORPUS_STAGE_LABELS " \
+                 "(their time vanishes from the report AND the P78-r1 ETA record): #{unlabelled}"
+  end
 end
