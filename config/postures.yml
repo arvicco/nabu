@@ -180,6 +180,13 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  ko-wikisource-mk:
+    lect: {posture: identity, note: okm IS Middle Korean (the MK layer; the hanmun
+        ruby passages ride lzh, sillok's codemap precedent, no separate claim)}
+    dating: {posture: dated, note: "P78-4: 머리말 연도 = 1447 (the print year, upstream's
+        machine date) via MetadataDates :structured — one envelope per work page"}
+    places: {posture: unplaced}
+    script: {posture: implied}
   # Variety-less languages as held (no registry stages to refine into):
   tlhdig:
     lect: {posture: identity, note: the cuneiform micro-shelves (hit/xhu/xlu…) — no minted stages}
