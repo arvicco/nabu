@@ -38,6 +38,20 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  # P78-6 (the korean-desk census revisit): the hangul-script Korean
+  # stratum rides beside the romanized kKorean layer on the card. 棄
+  # carries no kHangul upstream, so the whole-card test above stays an
+  # honest-absence witness; 一 carries both.
+  def test_char_carries_the_hangul_stratum_after_the_census_revisit
+    with_char_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char 一 --json]) }
+      assert_nil status
+      readings = JSON.parse(out).dig("card", "readings_sinoxenic")
+      assert_includes readings, %w[Korean IL]
+      assert_includes readings, ["Korean (hangul)", "일:0E"]
+    end
+  end
+
   def test_char_of_the_acceptance_glyph_renders_the_whole_card
     with_char_catalog do |config|
       out, _err, status = with_config(config) { run_cli(%w[char 棄]) }

@@ -14,6 +14,9 @@
 # Readings/Variants siblings (real UCD values), plus one non-carried field
 # (kIRG_GSource) per codepoint so the parser's censor is exercised. The
 # real member carries the whole IRG source-reference set.
+# P78-6 (the korean-desk census revisit): the six real kIRG_VSource lines
+# for this slice's codepoints appended verbatim from the 17.0 member —
+# the TCVN source mappings now censused IN.
 #
 U+4E00	kIRG_GSource	G0-523B
 U+4E00	kRSUnicode	1.0
@@ -30,3 +33,9 @@ U+611B	kTotalStrokes	13
 U+68C4	kIRG_GSource	G0-4674
 U+68C4	kRSUnicode	75.8
 U+68C4	kTotalStrokes	12
+U+4E00	kIRG_VSource	V1-4A21
+U+4E9E	kIRG_VSource	V2-8A2C
+U+4EBA	kIRG_VSource	V1-4A62
+U+4F53	kIRG_VSource	V1-4B2F
+U+5929	kIRG_VSource	V1-5147
+U+9AD4	kIRG_VSource	V1-6C55
