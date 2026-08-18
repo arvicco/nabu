@@ -8,9 +8,13 @@ require "test_helper"
 # volume file = one level1- or level2-rooted tree of nested level2..5
 # nodes; the LEAVES of that tree (the day articles, prefaces, appendix
 # sections) are the citation units. Fixtures are three real sillok
-# members (see test/fixtures/sillok/README.md).
+# members (see test/fixtures/sillok/README.md) plus, for the P78-3
+# family variance (the <item>-wrapped front-matter members and the
+# 서기-less date apparatus), goryeosa/bibyeonsa members.
 class NikhXmlParserTest < Minitest::Test
   FIXTURES = Nabu::TestSupport.fixtures("sillok")
+  GORYEOSA_FIXTURES = Nabu::TestSupport.fixtures("goryeosa")
+  BIBYEONSA_FIXTURES = Nabu::TestSupport.fixtures("bibyeonsa")
 
   def parser = Nabu::Adapters::NikhXmlParser.new
 
@@ -69,6 +73,32 @@ class NikhXmlParserTest < Minitest::Test
     assert_equal "孝宗實錄", vol.title
     assert_equal %w[wqa_000], vol.leaves.map(&:id)
     assert_includes vol.leaves.first.text, "在位十年, 壽四十一。"
+  end
+
+  # -- the P78-3 variance: <item>-wrapped members, 서기-less dates ---------
+
+  def test_an_item_wrapped_member_anchors_its_volume_front_on_the_first_level1
+    vol = parser.parse_file(File.join(GORYEOSA_FIXTURES, "kr_000.xml"))
+    # The goryeosa-family front-matter members wrap SIBLING level1
+    # sections in an <item> root (DOCTYPE item — one such member per
+    # zip, P78-3 census). The FIRST level1 anchors the volume front;
+    # every sibling subtree contributes its leaves.
+    assert_equal "kr_000", vol.id
+    assert_equal "kr_$s01", vol.root_id
+    assert_equal "『고려사』를 찬진하는 전", vol.title
+    assert_equal 13, vol.leaves.size, "all four level1 siblings leaf"
+    assert_equal %w[kr_$s01 kr_$s02_0010], vol.leaves.first(2).map(&:id)
+  end
+
+  def test_the_date_fallback_picks_the_first_machine_dated_calendar_entry
+    # The P78-3 zips carry NO 서기 calendar line at all: goryeosa/jeoryo
+    # lead with the lunar 음 entry (the solar 양 follows), bibyeonsa's
+    # single machine date is UNTYPED. The first @date-bearing entry in
+    # document order is upstream's own primary calendar.
+    vol = parser.parse_file(File.join(GORYEOSA_FIXTURES, "kr_069.xml"))
+    assert_equal "1048-02-16L0", vol.leaves.last.date_raw, "음 leads 양 in document order"
+    bb = parser.parse_file(File.join(BIBYEONSA_FIXTURES, "bb_054.xml"))
+    assert_equal "1704-01-00L0", bb.leaves.first.date_raw, "bibyeonsa's untyped machine date"
   end
 
   def test_malformed_xml_raises_parse_error

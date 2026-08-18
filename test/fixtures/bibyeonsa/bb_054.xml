@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE level1 SYSTEM "history.dtd">
+<level1 id="bb_054">
+    <front>
+        <biblioData type="한문">
+            <title>
+                <mainTitle volume="54">비변사등록 54책</mainTitle>
+                <seriesTitle volume="5">탈초영인 비변사등록 5집</seriesTitle>
+            </title>
+            <publication>
+                <publisher>국사편찬위원회</publisher>
+                <dateIssued date="1959-06-30"/>
+            </publication>
+            <holdings>
+                <serialNumber callNo="911.05 국51비 v.5"/>
+            </holdings>
+        </biblioData>
+        <description>
+            <coveragePeriod>肅宗30年(1704) 1月 ~ 5月</coveragePeriod>
+        </description>
+    </front>
+    <level2 id="bb_054_001" type="년" value="1704" 간지="갑신" 왕명="숙종" 재위년도="30">
+        <front>
+            <biblioData>
+                <title>
+                    <mainTitle>숙종 30년</mainTitle>
+                </title>
+            </biblioData>
+        </front>
+        <level3 id="bb_054_001_01" type="월" value="01">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>숙종 30년 1월</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <level4 id="bb_054_001_01_0010" type="좌목">
+                <front>
+                    <biblioData>
+                        <title>
+                            <mainTitle>肅宗 30년(1704) 1월 좌목</mainTitle>
+                        </title>
+                        <date>
+                            <dateOccured date="1704-01-00L0"/>
+                        </date>
+                    </biblioData>
+                </front>
+                <text>
+                    <link type="original">001a-001b</link>
+                    <content>
+                        <paragraph align="center">
+                            <tableGroup>
+                                <table>
+                                    <tr halign="center" valign="middle">
+                                        <td colspan="2" halign="left" valign="middle">甲申正月朔座目</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">領中樞府事</td>
+                                        <td halign="left" valign="middle">尹趾完</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">行判中樞府事</td>
+                                        <td halign="left" valign="middle">尹趾善</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">行判中樞府事</td>
+                                        <td halign="left" valign="middle">徐文重</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">行判中樞府事</td>
+                                        <td halign="left" valign="middle">崔錫鼎</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">領議政</td>
+                                        <td halign="left" valign="middle">申琓</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">左議政</td>
+                                        <td halign="left" valign="middle">李畬</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">右議政</td>
+                                        <td halign="left" valign="middle">金構</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td colspan="2" halign="left" valign="middle">堂上</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">行吏曹判書</td>
+                                        <td halign="left" valign="middle">李濡</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">行議政府左參贊</td>
+                                        <td halign="left" valign="middle">金鎭龜</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">行工曹判書</td>
+                                        <td halign="left" valign="middle">洪受瀗</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">知中樞府事</td>
+                                        <td halign="left" valign="middle">徐宗泰</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">禮曹判書</td>
+                                        <td halign="left" valign="middle">趙相愚</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">漢城府判尹</td>
+                                        <td halign="left" valign="middle">閔鎭厚</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">行司憲府大司憲</td>
+                                        <td halign="left" valign="middle">李寅燁</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">戶曹判書</td>
+                                        <td halign="left" valign="middle">趙泰采</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">兵曹判書</td>
+                                        <td halign="left" valign="middle">尹世紀</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">刑曹判書</td>
+                                        <td halign="left" valign="middle">李益壽</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">韓城君</td>
+                                        <td halign="left" valign="middle">李基夏</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">漢城府左尹</td>
+                                        <td halign="left" valign="middle">
+                                            <annotation type="도말">
+                                                <noteContent>尹就商</noteContent>
+                                            </annotation>
+                                        </td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">行成均館大司成</td>
+                                        <td halign="left" valign="middle">兪得一</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td colspan="2" halign="left" valign="middle">廊廳</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">侍講院輔德</td>
+                                        <td halign="left" valign="middle">李彦經</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">兵曹正郞</td>
+                                        <td halign="left" valign="middle">韓以原</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">副司果</td>
+                                        <td halign="left" valign="middle">李東彦</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">副司果</td>
+                                        <td halign="left" valign="middle">宋正明</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">副司果</td>
+                                        <td halign="left" valign="middle">林再茂</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">副司果</td>
+                                        <td halign="left" valign="middle">鄭恪</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">訓鍊院副正</td>
+                                        <td halign="left" valign="middle">閔遠重</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">副司果</td>
+                                        <td halign="left" valign="middle">楊世徵</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">都摠府都事</td>
+                                        <td halign="left" valign="middle">申憲周</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">副司果</td>
+                                        <td halign="left" valign="middle">裵泰期</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">都摠府經歷</td>
+                                        <td halign="left" valign="middle">洪以徵</td>
+                                    </tr>
+                                    <tr halign="center" valign="middle">
+                                        <td halign="left" valign="middle">副司果</td>
+                                        <td halign="left" valign="middle">孫命大</td>
+                                    </tr>
+                                </table>
+                            </tableGroup>
+                        </paragraph>
+                    </content>
+                </text>
+            </level4>
+            <level4 id="bb_054_001_01_0020">
+                <front>
+                    <biblioData>
+                        <title>
+                            <mainTitle>賑恤을 주관하는 관리는 荒政을 강구하여 부지런히 보살피고 勸農에 힘쓰라는 비망기</mainTitle>
+                        </title>
+                        <date>
+                            <dateOccured date="1704-01-04L0">甲申正月初四日</dateOccured>
+                        </date>
+                    </biblioData>
+                </front>
+                <text>
+                    <link type="original">002a-002b</link>
+                    <link type="copy">0249b-0249b</link>
+                    <link type="korean">0290-0291</link>
+                    <content>
+                        <paragraph align="center">備忘記, 國家不幸, 一自乙丙大殺, 戊己毒癘之後, 若經兵燹, 民未蘇息, 而加以三歲懷襄, 災害非常, 八路荐飢, 西北尤甚, 哀我民斯, 大命近止, 如傷之念, 非不切於九重, 而奈此積儲之蕩然, 何中夜焦慮, 不知所以爲計也, 然誠之所存, 無事不成, 今日君臣上下, 苟能以誠心, 着意賑事, 則亦豈無濟活之道乎, 內以主賑之臣, 外以御史曁方伯, 體予惻怛之意, 講究荒政, 孜孜不怠, 而畢竟以捐瘠有無, 明示勸懲之典, 宜各勉旃, 仍念客歲孟春, 以良役變通事, 特下備忘, 意非偶然, 而一年已盡, 了當無期, 赤子倒懸之急, 何時可解耶, 予實慨然也, 咨爾釐正諸臣, 亦自惕慮, 無如前日之悠泛, 俾有及民之實惠, 至若勸農, 在常年, 猶爲急先之務, 況歲惡民飢之日乎, 另加申明事目, 令民力穡, 無使田野不闢。</paragraph>
+                    </content>
+                </text>
+            </level4>
+        </level3>
+    </level2>
+</level1>

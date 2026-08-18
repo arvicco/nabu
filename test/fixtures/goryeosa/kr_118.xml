@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE level1 SYSTEM "history.dtd">
+<level1 id="kr_118" type="列傳">
+    <front>
+        <biblioData type="원문">
+            <title>
+                <mainTitle volume="031">列傳 卷第三十一</mainTitle>
+                <seriesTitle volume="118">卷一百十八</seriesTitle>
+            </title>
+            <creator>
+                <author>
+                    <name align="center">정인지(鄭麟趾)</name>
+                </author>
+                <editor>
+                    <name align="center">국사편찬위원회</name>
+                </editor>
+            </creator>
+            <fileDesc>사업명 : 2021년 한국사데이터베이스 구축사업 | 사업자 : 스템위드 주식회사  | 구축내용 : 이미지 보정, 연계</fileDesc>
+        </biblioData>
+        <description>
+            <coveragePeriod>諸臣</coveragePeriod>
+        </description>
+        <illustGroup>
+            <illustration begin="kr_118_0001" end="kr_118_0070">
+                <caption>국사편찬위원회 소장본(KO21658)</caption>
+            </illustration>
+            <illustration begin="kr_118_0071" end="kr_118_0140">
+                <caption>국사편찬위원회 소장본(KO21644)</caption>
+            </illustration>
+        </illustGroup>
+    </front>
+    <level2 id="kr_118_0010" type="列傳">
+        <front>
+            <biblioData type="諸臣">
+                <title>
+                    <mainTitle>諸臣</mainTitle>
+                </title>
+            </biblioData>
+            <illustGroup>
+                <illustration begin="kr_118_0001" end="kr_118_0070">
+                    <caption>국사편찬위원회 소장본(KO21658)</caption>
+                </illustration>
+                <illustration begin="kr_118_0073" end="kr_118_0140">
+                    <caption>국사편찬위원회 소장본(KO21644)</caption>
+                </illustration>
+            </illustGroup>
+        </front>
+        <level3 id="kr_118_0010_0010" type="列傳">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>조준</mainTitle>
+                    </title>
+                </biblioData>
+                <illustGroup>
+                    <illustration begin="kr_118_0001" end="kr_118_0068">
+                        <caption>국사편찬위원회 소장본(KO21658)</caption>
+                    </illustration>
+                    <illustration begin="kr_118_0073" end="kr_118_0139">
+                        <caption>국사편찬위원회 소장본(KO21644)</caption>
+                    </illustration>
+                </illustGroup>
+            </front>
+            <level4 id="kr_118_0010_0010_0010" type="列傳">
+                <front>
+                    <biblioData>
+                        <title>
+                            <mainTitle>조준의 관력과 성향</mainTitle>
+                        </title>
+                    </biblioData>
+                    <illustGroup>
+                        <illustration begin="kr_118_0001" end="kr_118_0005">
+                            <caption>국사편찬위원회 소장본(KO21658)</caption>
+                        </illustration>
+                        <illustration begin="kr_118_0073" end="kr_118_0077">
+                            <caption>국사편찬위원회 소장본(KO21644)</caption>
+                        </illustration>
+                    </illustGroup>
+                </front>
+                <text>
+                    <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0073&amp;page_no=5"/>
+                    <content>
+                        <paragraph align="center">列傳卷第三十一 高麗史一百十八</paragraph>
+                        <paragraph align="center">正憲大夫工曹判書集賢殿大提學知經筵春秋館事兼成均大司成【臣】鄭麟趾奉敎修.</paragraph>
+                        <paragraph align="center">趙浚</paragraph>
+                        <paragraph align="center">
+                            <index ref="p094190" type="이름">趙浚</index>, 字<index ref="p094190" type="이름">明仲</index>, <index ref="o005170" type="관직">侍中</index>
+                            <index ref="p093960" type="이름">仁規</index>之曾孫. 自幼, 倜儻有大志. <index ref="p006060" type="이름">恭愍王</index>在壽德宮, 望見<index ref="p094190" type="이름">浚</index>挾書過宮前, 召見奇之, 問其家世, 卽命屬<index ref="o015520" type="관직">寶馬陪指諭</index>. 王使<index ref="p112730" type="이름">洪倫</index>輩, 强辱諸妃, <index ref="p094190" type="이름">浚</index>嘆曰, “人道滅矣, 復奚言哉? 且王以威福與奪, 常與群小謀, 而不及君子, 今日之勢, 岌岌乎殆哉!” 母<index ref="p055700" type="이름">吳氏</index>嘗見新及第綴行呵喝, 嘆曰, “吾子雖多, 未有登第者, 何用哉?” <index ref="p094190" type="이름">浚</index>聞之, 跪泣指天誓曰, “予所不第者, 有如天.” 自是勤學, 遂登第. <index ref="p062080" type="이름">辛禑</index>初, 以<index ref="o000070" type="관직">通禮門副使</index>, 出按江原道, 威惠並行. 至<index ref="t022420" type="지명">旌善郡</index>, 有詩云, “滌蕩東溟當有日, 居民洗眼待澄淸.” 識者知其有大志. 召拜<index ref="o009460" type="관직">司憲掌令</index>, 轉<index ref="o003650" type="관직">監門衛大護軍</index>
+                            <index ref="o015600" type="관직">知製敎</index>, 撰祈禳䟽云, “踈正直忠信之人, 狎謟佞讒邪之徒.” <index ref="o015130" type="관직">知申事</index>
+                            <index ref="p012000" type="이름">金濤</index>. <index ref="o009310" type="관직">代言</index>
+                            <index ref="p032730" type="이름">朴晉祿</index>·<index ref="p018070" type="이름">金湊</index>曰, “王若問, ‘正直忠信而踈者何人, 謟佞讒邪而狎者何人?’ 則何以對?” 令<index ref="p094190" type="이름">浚</index>改撰, 遂白<index ref="p062080" type="이름">禑</index>, “誥院所撰, 宜令書題, 宰臣監申, 然後判可.” <index ref="p062080" type="이름">禑</index>從之. 累遷<index ref="o019190" type="관직">典法判書</index>, 時倭奴充斥, <index ref="t001330" type="지명">慶尙道</index>陷爲賊藪, 州郡騷然, 民皆奔竄山谷. 國無紀綱, 將帥玩寇, 環視不戰, 賊勢日盛. <index ref="o004320" type="관직">都統使</index>
+                            <index ref="p102380" type="이름">崔瑩</index>擧<index ref="p094190" type="이름">浚</index>爲<index ref="o016610" type="관직">體覆使</index>, <index ref="p094190" type="이름">浚</index>至召<index ref="o004190" type="관직">都巡問使</index>
+                            <index ref="p070310" type="이름">李居仁</index>, 數其逗遛之罪, 斬<index ref="o005630" type="관직">兵馬使</index>
+                            <index ref="p066370" type="이름">兪益桓</index>. <index ref="p070310" type="이름">居仁</index>及諸將股慄曰, “寧死敵, 莫犯<index ref="p094190" type="이름">趙公</index>威.” 咸力戰告捷, 一道賴安. <index ref="p094190" type="이름">浚</index>又上書都堂, 旌表孝子烈女之死賊者. 擢<index ref="o015140" type="관직">密直提學</index>
+                            <index ref="o007720,o019420" type="관직">商議會議都監事</index>, <index ref="p062080" type="이름">禑</index>召<index ref="p094190" type="이름">浚</index>曰, “<index ref="t015420" type="지명">楊廣</index>·<index ref="t001330" type="지명">慶尙道</index>, 倭賊大熾, <index ref="o011360" type="관직">元帥</index>·<index ref="o004190" type="관직">都巡問使</index>, 慄怯不戰, 卿其往察軍機.” <index ref="p094190" type="이름">浚</index>曰, “臣母年踰八十, 又罹沉痾, 乞遣他人.” <index ref="p062080" type="이름">禑</index>曰, “卿正直無私, 且有威望, 無以易卿.” <index ref="p094190" type="이름">浚</index>曰, “殿下若命臣全制兩道, 其將帥逗遛敗績者, 聽臣區處, 則臣謹奉命. 不然, <index ref="o011360" type="관직">元帥</index>·<index ref="o004190" type="관직">都巡問使</index>位在臣上, 豈畏臣就死地乎?” 將帥族黨忌之, 白<index ref="p062080" type="이름">禑</index>止之. 倭寇<index ref="t000660" type="지명">江陵交州道</index>, 以<index ref="p094190" type="이름">浚</index>爲<index ref="o003840" type="관직">都檢察使</index>, 賜宣威佐命功臣號.</paragraph>
+                        <paragraph align="center">
+                            <index ref="p062080" type="이름">禑</index>荒淫無度, 權姦當國, 忌<index ref="p094190" type="이름">浚</index>亢直不阿, <index ref="p094190" type="이름">浚</index>社門不出, 以經史自娛者四年. <index ref="p102380" type="이름">瑩</index>誅<index ref="p081970" type="이름">林</index>·<index ref="p054180" type="이름">廉</index>, <index ref="p094190" type="이름">浚</index>方居母憂, 起爲<index ref="o016470" type="관직">簽書密直司事</index>, <index ref="p094190" type="이름">浚</index>辭不起. <index ref="p094190" type="이름">浚</index>嘗憤王氏絶嗣, 與<index ref="p068500" type="이름">尹紹宗</index>·<index ref="p110440" type="이름">許錦</index>·<index ref="p093980" type="이름">趙仁沃</index>·柳爰廷·<index ref="p090890" type="이름">鄭地</index>·<index ref="p034770" type="이름">白君寧</index>, 結爲友, 密誓有興復之志. 我<index ref="p074040" type="이름">太祖</index>見<index ref="p094190" type="이름">浚</index>器宇不凡, 與論事大悅, 待之如舊識. 及回軍, 擧爲<index ref="o015650" type="관직">知密直司事</index>兼<index ref="o010100" type="관직">大司憲</index>, 事無大小, 悉咨之. <index ref="p094190" type="이름">浚</index>亦以經濟爲己任, 知無不言.</paragraph>
+                    </content>
+                </text>
+            </level4>
+            <level4 id="kr_118_0010_0010_0020" type="列傳">
+                <front>
+                    <biblioData>
+                        <title>
+                            <mainTitle>조준이 사전 혁파를 주장하다</mainTitle>
+                        </title>
+                    </biblioData>
+                    <illustGroup>
+                        <illustration begin="kr_118_0006" end="kr_118_0007">
+                            <caption>국사편찬위원회 소장본(KO21658)</caption>
+                        </illustration>
+                        <illustration begin="kr_118_0078" end="kr_118_0079">
+                            <caption>국사편찬위원회 소장본(KO21644)</caption>
+                        </illustration>
+                    </illustGroup>
+                </front>
+                <text>
+                    <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0073&amp;page_no=10"/>
+                    <content>
+                        <paragraph align="center">先是, 田制大壞, 兼幷之家, 奪占土田, 毒痡日深, 民皆怨咨. 我<index ref="p074040" type="이름">太祖</index>與<index ref="p094190" type="이름">浚</index>·<index ref="p088300" type="이름">鄭道傳</index>, 議革私田, <index ref="p094190" type="이름">浚</index>與同列, 上䟽<index ref="p098670" type="이름">辛昌</index>極論之, 語在食貨志. 舊家世族, 交相謗毁, 執之愈固. 都堂議利害, <index ref="o005170" type="관직">侍中</index>
+                            <index ref="p073730" type="이름">李穡</index>以爲不可輕改舊法, 持其議不從. <index ref="p072460" type="이름">李琳</index>·<index ref="p062440" type="이름">禹玄寶</index>·<index ref="p035970" type="이름">邊安烈</index>及<index ref="p008540" type="이름">權近</index>·<index ref="p065120" type="이름">柳伯濡</index>附<index ref="p073730" type="이름">穡</index>議, <index ref="p088300" type="이름">道傳</index>·<index ref="p068500" type="이름">紹宗</index>附<index ref="p094190" type="이름">浚</index>議, <index ref="p088490" type="이름">鄭夢周</index>依違兩閒. 又令百官議, 議者五十三人, 欲革者十八九, 其不欲者皆巨室子弟也. <index ref="p074040" type="이름">太祖</index>卒用<index ref="p094190" type="이름">浚</index>議革之, 未幾世臣巨室動浮言, 欲復之. <index ref="p094190" type="이름">浚</index>又上䟽論之, 諫官<index ref="p055390" type="이름">吳思忠</index>·<index ref="p073760" type="이름">李舒</index>·<index ref="p079010" type="이름">李竴</index>等亦以爲不可, 復上書固爭, 從之.</paragraph>
+                    </content>
+                </text>
+            </level4>
+        </level3>
+    </level2>
+</level1>
