@@ -55,10 +55,13 @@ module Nabu
 
       # The sinoxenic reading strata Unihan carries (Jisho shows Mandarin +
       # kun'yomi; nabu adds Korean/Vietnamese and the historical kJapanese
-      # unified layer). Only present strata appear.
+      # unified layer). Only present strata appear. kHangul (P78-6, the
+      # korean-desk census revisit) is the same Korean stratum in its own
+      # script, riding right beside the romanized layer.
       SINOXENIC = {
         "kMandarin" => "Mandarin", "kCantonese" => "Cantonese",
-        "kKorean" => "Korean", "kVietnamese" => "Vietnamese",
+        "kKorean" => "Korean", "kHangul" => "Korean (hangul)",
+        "kVietnamese" => "Vietnamese",
         "kJapanese" => "Japanese (Unihan)"
       }.freeze
 

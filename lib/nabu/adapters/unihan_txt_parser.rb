@@ -12,8 +12,12 @@ module Nabu
     # Japanese layers — kJapanese (51,583 codepoints, added in Unicode 15.1,
     # DENSER than the legacy kJapaneseOn 13,177 / kJapaneseKun 11,296 it
     # supersedes, so all three ride) — and the Korean/Vietnamese Sinoxenic
-    # readings; plus every Variants field. Censused out (density/scope,
-    # counts at 17.0): kCantonese 29,936, kHangul 8,525, kXHC1983 11,072,
+    # readings; plus every Variants field. P78-6 (the korean-desk census
+    # revisit, survey P47-s4 C-1): kHangul (8,526) carried back IN — the
+    # P32-4 verdict predated any desk that reads hangul-script readings;
+    # the Koreanist does — and kIRG_VSource censused in from the
+    # IRGSources member (below). Still censused out (density/scope,
+    # counts at 17.0): kCantonese 29,936, kXHC1983 11,072,
     # kSMSZD2003Readings 8,110, kTGHZ2013 8,105, kHanyuPinlu 3,799,
     # kZhuang 2,472 — modern-lect/auxiliary layers the ancient-text shelf
     # does not promise. A codepoint with NO carried field mints nothing.
@@ -21,10 +25,12 @@ module Nabu
       # Readings-file fields carried, body order (verified dense at 17.0:
       # kDefinition 23,285 · kMandarin 44,348 · kHanyuPinyin 34,130 ·
       # kFanqie 20,222 · kTang 3,811 · kJapanese 51,583 · kJapaneseOn
-      # 13,177 · kJapaneseKun 11,296 · kKorean 9,050 · kVietnamese 8,306).
+      # 13,177 · kJapaneseKun 11,296 · kKorean 9,050 · kHangul 8,526 ·
+      # kVietnamese 8,306). kHangul rides beside the romanized kKorean:
+      # same stratum, native script (P78-6).
       READING_FIELDS = %w[
         kDefinition kMandarin kHanyuPinyin kFanqie kTang
-        kJapanese kJapaneseOn kJapaneseKun kKorean kVietnamese
+        kJapanese kJapaneseOn kJapaneseKun kKorean kHangul kVietnamese
       ].freeze
 
       # Variants-file fields — ALL six (kSimplifiedVariant 6,929 ·
@@ -46,7 +52,16 @@ module Nabu
       # absent field simply mints nothing, the honest "absent, not —" posture.
       RADICAL_STROKE_FIELDS = %w[kRSUnicode kRSKangXi kTotalStrokes].freeze
 
-      FIELD_ORDER = (READING_FIELDS + VARIANT_FIELDS + RADICAL_STROKE_FIELDS).freeze
+      # P78-6 (survey P47-s4 V-B): the Vietnamese source mappings —
+      # kIRG_VSource (14,277 at 17.0; V0–V4/V6 = the TCVN standards) from
+      # the same IRGSources member the radical-stroke fields ride. The
+      # Nôm-relevant character census the license-dead VNPF corpus can't
+      # give us. The OTHER national source fields (G/T/J/K…) stay censused
+      # out — they answer "which standard encodes this", not a reading.
+      IRG_SOURCE_FIELDS = %w[kIRG_VSource].freeze
+
+      FIELD_ORDER = (READING_FIELDS + VARIANT_FIELDS +
+                     RADICAL_STROKE_FIELDS + IRG_SOURCE_FIELDS).freeze
 
       # One DictionaryEntry per codepoint that carries at least one carried
       # field, sorted by numeric codepoint (the upstream files sort by the
@@ -57,7 +72,7 @@ module Nabu
         collect(readings_path, READING_FIELDS, fields)
         collect(variants_path, VARIANT_FIELDS, fields) if variants_path && File.file?(variants_path)
         radical_stroke_paths.each do |path|
-          collect(path, RADICAL_STROKE_FIELDS, fields) if path && File.file?(path)
+          collect(path, RADICAL_STROKE_FIELDS + IRG_SOURCE_FIELDS, fields) if path && File.file?(path)
         end
         fields.keys.sort_by { |code| codepoint(code) }
                    .map { |code| entry(code, fields[code], language) }
