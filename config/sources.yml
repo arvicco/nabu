@@ -3649,4 +3649,17 @@ ko-wikisource-mk:
   # 월인천강지곡/석보상절 stay OUT until a completeness census passes
   # (scan transclusions / fragmentary — the P78-4 audit).
   license_watch: https://ko.wikisource.org/wiki/%EC%9A%A9%EB%B9%84%EC%96%B4%EC%B2%9C%EA%B0%80
+viet-wikisource:
+  adapter: Nabu::Adapters::VietWikisource
+  axes: [sinitic]  # P78-5: the Vietnamese classical shelf — deliberately NO
+                   # vietnamese axis (P47-s4 survey ruling: a shelf, not a desk)
+  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  # 大越史記全書 COMPLETE from zh.wikisource (卷首 + 29 quyển subpages;
+  # the index's own {{Textquality|50%}} proofreading status) + the two
+  # chữ-Hán showpieces: 平吳大誥 from vi.wikisource (parallel phiên âm
+  # rides as annotation), 諭諸裨將檄文 from ZH.wikisource (vi's bản-gốc
+  # link is a redlink — censused 2026-08-18). Curated title-list fetch
+  # (PAGES is the naming authority), 2 batched api.php requests; PD texts
+  # + CC BY-SA 4.0 transcription → attribution. All lzh.
+  license_watch: https://zh.wikisource.org/wiki/Wikisource:%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF
   sync_policy: manual
