@@ -223,7 +223,8 @@ module Nabu
                                         fuzzy_slugs: @registry.fuzzy_slugs,
                                         lemma_tiers: @registry.lemma_tiers,
                                         profile: profile,
-                                        sign_list: Nabu::SignList.load_default(config: @config))
+                                        sign_list: Nabu::SignList.load_default(config: @config),
+                                        progress: progress)
       # P70-3b (the derivability contract): the links instrument is DERIVED —
       # drop and re-mine it wholesale: every slug-scoped reference producer
       # (the sync-time lane replayed over the re-minted catalog) plus every

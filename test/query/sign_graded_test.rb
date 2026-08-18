@@ -101,6 +101,33 @@ class SignGradedTest < Minitest::Test
     assert_empty outcome.results
   end
 
+  # P77-r16b (the 2026-08-18 live "hang" — a burman-concordance sync
+  # silently began tokenizing the whole ATF corpus): the heavy sign
+  # bootstrap fires ONLY on a sign corpus's own refresh, never on an
+  # unrelated source's sync.
+  def test_the_sign_bootstrap_never_fires_on_a_non_sign_source_refresh
+    fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+    Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext)
+    Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: fulltext,
+                                         slug: "kanripo", sign_list: @sign_list)
+    refute fulltext.table_exists?(Nabu::Store::Indexer::PASSAGE_SIGNS_TABLE),
+           "an unrelated sync must never be ambushed by hours of sign indexing"
+  ensure
+    fulltext&.disconnect
+  end
+
+  def test_the_sign_bootstrap_fires_on_a_sign_sources_own_refresh
+    fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
+    Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext)
+    Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: fulltext,
+                                         slug: "cdli", sign_list: @sign_list)
+    assert fulltext.table_exists?(Nabu::Store::Indexer::PASSAGE_SIGNS_TABLE),
+           "the sign corpora pay their own indexing cost"
+    assert_operator fulltext[Nabu::Store::Indexer::PASSAGE_SIGNS_TABLE].count, :>, 0
+  ensure
+    fulltext&.disconnect
+  end
+
   def test_rebuild_without_a_sign_list_builds_no_sign_tables
     fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
     Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext)

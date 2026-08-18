@@ -282,7 +282,7 @@ module Nabu
       # single streaming row scan, so separating them would need a per-passage
       # timer. nil keeps the sync-time incremental path unmeasured.
       def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, lemma_tiers: nil, profile: nil,
-                   sign_list: nil)
+                   sign_list: nil, progress: nil)
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
         fulltext.drop_table?(CHAR_POSTINGS_TABLE)
@@ -319,7 +319,8 @@ module Nabu
         # P77-r16: the sign twins — two bounded passes over SIGN_SOURCES
         # only; a nil sign_list (no osl) builds nothing, honestly.
         timed(profile, :passage_signs) do
-          rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list)
+          rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
+                                 progress: progress)
         end
         timed(profile, :alignment) do
           AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
@@ -375,10 +376,11 @@ module Nabu
       # lemma table predates the tier column falls back to the full rebuild!.
       # Returns the SOURCE's live passage count — never the corpus total.
       def refresh_source!(catalog:, fulltext:, slug:, alignments: nil, fuzzy_slugs: nil,
-                          lemma_tiers: nil, reflexes_changed: false, sign_list: nil)
+                          lemma_tiers: nil, reflexes_changed: false, sign_list: nil, progress: nil)
         unless incremental_ready?(fulltext)
           rebuild!(catalog: catalog, fulltext: fulltext, alignments: alignments,
-                   fuzzy_slugs: fuzzy_slugs, lemma_tiers: lemma_tiers, sign_list: sign_list)
+                   fuzzy_slugs: fuzzy_slugs, lemma_tiers: lemma_tiers, sign_list: sign_list,
+                   progress: progress)
           return source_live_count(catalog, slug)
         end
 
@@ -422,15 +424,24 @@ module Nabu
           if fulltext.table_exists?(PASSAGE_SIGNS_TABLE) && SIGN_SOURCES.include?(slug)
             fulltext[PASSAGE_SIGNS_TABLE].where(source_id: source_id).delete
             if sign_list
+              progress&.stage("sign coverage: re-tokenizing the #{slug} slice")
               write_passage_signs(fulltext,
-                                  passage_signs_rows(catalog, fulltext, sign_list, source_id: source_id))
+                                  passage_signs_rows(catalog, fulltext, sign_list, source_id: source_id,
+                                                                                   progress: progress))
             end
           end
         end
         rebuild_char_postings!(catalog: catalog, fulltext: fulltext) unless fulltext.table_exists?(CHAR_POSTINGS_TABLE)
         rebuild_passage_chars!(catalog: catalog, fulltext: fulltext) unless fulltext.table_exists?(PASSAGE_CHARS_TABLE)
-        unless fulltext.table_exists?(PASSAGE_SIGNS_TABLE)
-          rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list)
+        # P77-r16b (the 2026-08-18 "hang"): the sign-coverage bootstrap is
+        # HEAVY (two tokenize+resolve passes over the whole ATF corpora —
+        # hours, not the char bootstrap's cheap regex sweep), so it fires
+        # ONLY when the synced source is itself a sign corpus — the sign
+        # corpora pay their own indexing cost, an unrelated source's sync
+        # is never ambushed. Elsewhere it arrives at the next full rebuild.
+        if SIGN_SOURCES.include?(slug) && !fulltext.table_exists?(PASSAGE_SIGNS_TABLE)
+          rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
+                                 progress: progress)
         end
         refresh_alignment(catalog, fulltext, alignments, source_id)
         ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext) if lemmas_changed || reflexes_changed
@@ -629,18 +640,25 @@ module Nabu
 
       # Drop and rebuild both sign tables: pass 1 tallies the postings
       # (rarity source + corpus census), pass 2 writes the coverage rows.
-      # Two bounded streaming passes over SIGN_SOURCES only; nil sign_list
-      # (no osl synced) leaves both tables absent — the honest non-answer.
-      def rebuild_sign_coverage!(catalog:, fulltext:, sign_list:)
+      # Two streaming passes over SIGN_SOURCES only; nil sign_list (no
+      # osl synced) leaves both tables absent — the honest non-answer.
+      # BOTH passes announce themselves and tick (owner ruling 2026-08-18:
+      # "all parsing passes should INDICATE what the hell it's doing" —
+      # this is hours-scale work on the live ATF corpora, and it sat
+      # silent on its first live firing).
+      def rebuild_sign_coverage!(catalog:, fulltext:, sign_list:, progress: nil)
         fulltext.drop_table?(PASSAGE_SIGNS_TABLE)
         fulltext.drop_table?(SIGN_POSTINGS_TABLE)
         return 0 if sign_list.nil?
 
         inventory = Nabu::SignInventory.new(sign_list)
         create_sign_postings_table(fulltext)
+        progress&.stage("sign coverage 1/2: postings census (tokenizing #{SIGN_SOURCES.join('/')})")
         posts = Hash.new(0)
+        seen = 0
         each_sign_passage(catalog, inventory: inventory) do |row, line|
           line.signs.each { |name| posts[[row.fetch(:source_id), name, row[:language]]] += 1 }
+          progress&.load_tick(seen, 0) if ((seen += 1) % TICK_EVERY).zero?
         end
         fulltext.transaction do
           posts.each_slice(BATCH_SIZE) do |batch|
@@ -651,12 +669,19 @@ module Nabu
             )
           end
         end
+        progress&.stage("sign coverage 2/2: passage index (re-tokenizing)")
         create_passage_signs_table(fulltext)
         count = write_passage_signs(fulltext, passage_signs_rows(catalog, fulltext, sign_list,
-                                                                 inventory: inventory))
+                                                                 inventory: inventory,
+                                                                 progress: progress))
         index_passage_signs(fulltext)
         count
       end
+
+      # One progress tick per this many sign passages — frequent enough
+      # that the terminal counter visibly moves, cheap against the
+      # tokenize cost per row.
+      TICK_EVERY = 2_000
 
       def create_sign_postings_table(fulltext)
         fulltext.create_table(SIGN_POSTINGS_TABLE) do
@@ -698,11 +723,13 @@ module Nabu
       # slice). Rarity = ascending global passage total from the postings;
       # an unseen sign ranks rarest. Sign-less rows (all numbers, or all
       # strays) are not indexed — they can never be candidates.
-      def passage_signs_rows(catalog, fulltext, sign_list, source_id: nil, inventory: nil)
+      def passage_signs_rows(catalog, fulltext, sign_list, source_id: nil, inventory: nil, progress: nil)
         inventory ||= Nabu::SignInventory.new(sign_list)
         ranks = sign_rarity_ranks(fulltext)
+        seen = 0
         Enumerator.new do |y|
           each_sign_passage(catalog, source_id: source_id, inventory: inventory) do |row, line|
+            progress&.load_tick(seen, 0) if ((seen += 1) % TICK_EVERY).zero?
             next if line.signs.empty?
 
             sorted = line.signs.sort
