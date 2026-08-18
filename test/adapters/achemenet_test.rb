@@ -88,6 +88,23 @@ module Adapters
       assert passage.text.include?(tokens.first["form"]), "the passage text is the joined forms"
     end
 
+    # The 2026-08-18 live-crash regression: SyncRunner reads
+    # fetch_report.sha after every fetch — the adapter must return a
+    # FetchReport, never ZipFetch#complete!'s bare count.
+    def test_fetch_returns_a_fetch_report_with_the_zip_sha
+      rig = Class.new do
+        def prepare! = nil
+        def doomed_paths = []
+        def complete! = 7
+        def cleanup! = nil
+        def sha = "abc123"
+      end.new
+      adapter = Nabu::Adapters::Achemenet.new(zip_fetch_factory: ->(**) { rig })
+      report = Dir.mktmpdir { |dir| adapter.fetch(dir) }
+      assert_instance_of Nabu::FetchReport, report
+      assert_equal "abc123", report.sha
+    end
+
     def test_an_x_id_document_has_no_cdli_hook
       adapter = Nabu::Adapters::Achemenet.new
       ref = adapter.discover(FIXTURES).find { |r| r.id == "urn:nabu:achemenet:x000428" }
