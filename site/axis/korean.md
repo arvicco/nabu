@@ -7,13 +7,13 @@ description: >-
 
 > The Koreanist — the hanmun state record and the first hangul vernacular.
 
-The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, with the Seungjeongwon ilgi, the Goryeosa family and the ITKC classics to follow on the same DTD, and the Middle Korean Wikisource shelf as the vernacular leg.
+The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these six answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these seven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 August 2026)</span> |
 |---|---|---|---|---|
@@ -23,6 +23,7 @@ A source wears every desk it serves — these six answer this desk. Holdings are
 | `goryeosa` | texts | attribution | not yet wired | not synced yet |
 | `goryeosa-jeoryo` | texts | attribution | not yet wired | not synced yet |
 | `bibyeonsa` | texts | attribution | not yet wired | not synced yet |
+| `itkc` | texts | attribution | not yet wired | not synced yet |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 August 2026)</span>: `lzh` 743.
 

@@ -44,8 +44,11 @@ class DerivabilityWritersTest < Minitest::Test
   # salvages those same small files into the caller-named drill-log
   # home (~/Library/Logs/nabu via the rake harness) before removing a
   # superseded workspace — disposable ops evidence, never a permanent
-  # folder (P77-r10/r14). ANY new file here is a deliberate allowlist
-  # decision, not a drive-by.
+  # folder (P77-r10/r14). The two P78 wikisource adapters
+  # (ko_wikisource_mk, viet_wikisource) write their fetched page
+  # envelopes into canonical/ inside Adapter#fetch — the sanctioned
+  # canonical gateway, the burman/wiki_fetch law kind. ANY new file
+  # here is a deliberate allowlist decision, not a drive-by.
   WRITER_ALLOWLIST = %w[
     nabu/adapters/bfm.rb nabu/adapters/kitab.rb nabu/adapters/oracc.rb
     nabu/adapters/riig.rb nabu/adapters/rundata.rb
@@ -57,6 +60,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
     nabu/wiki_fetch.rb nabu/zip_fetch.rb
     nabu/adapters/burman_concordance.rb
+    nabu/adapters/ko_wikisource_mk.rb nabu/adapters/viet_wikisource.rb
     nabu/language_shelf.rb nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb
     nabu/lect_rulings.rb nabu/link_scopes.rb nabu/grant_gate.rb
