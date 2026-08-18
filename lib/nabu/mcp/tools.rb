@@ -159,7 +159,8 @@ module Nabu
       NO_GAZETTEER_NOTE = "place NAME lookup needs the Pleiades gazetteer dump on disk — the " \
                           "owner runs `nabu sync pleiades` to add it; a numeric Pleiades id " \
                           "(or a pleiades.stoa.org/places URL) still counts holdings without it"
-      HAN_CHAR_NOTE = "the Han character card has no machine contract yet — nabu_define serves " \
+      HAN_CHAR_NOTE = "the Han character card is CLI-only for now (nabu char --json, contract " \
+                      "frozen P72-2; MCP exposure pending) — nabu_define serves " \
                       "Han dictionary entries meanwhile; cuneiform and hieroglyph input answer " \
                       "here with the frozen sign-card contracts"
 
@@ -642,7 +643,7 @@ module Nabu
         "ambiguous value lists ALL candidate signs, never one silently. An EGYPTIAN HIEROGLYPH " \
         "(𓅃) or Gardiner-style code (G5, N35) serves the Unikemet card: catalog code, " \
         "description, function, phonetic value, JSesh/Hieroglyphica/IFAO concordances, aes " \
-        "attestation. A Han character has no machine contract yet — answered with a note " \
+        "attestation. The Han character card is CLI-only for now — answered with a note " \
         "(nabu_define serves Han dictionary entries meanwhile). Absent data is null/[], " \
         "never a placeholder."
 

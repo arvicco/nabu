@@ -9,10 +9,10 @@ reader puts on to work one tradition, and the sources that serve it.
 An axis is not a folder. It is a **tag** over the source list, and a source
 wears every tag it serves — the Vulgate sits at the Classicist's desk for
 its Latin and at the Biblical scholar's for its scripture; the UD treebanks
-answer to nine desks at once. Multi-membership is the point, not an
+answer to a dozen desks at once. Multi-membership is the point, not an
 accident to be tidied away.
 
-Everything below documents **shipped behaviour** — the twenty-three desks
+Everything below documents **shipped behaviour** — the twenty-four desks
 defined in `config/axes.yml`, their memberships declared per source in
 `config/sources.yml`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
@@ -47,7 +47,7 @@ build if the page and the registry ever disagree.
 
 ## The desks
 
-Twenty-three desks, in the ratified order of `config/axes.yml` (which is also
+Twenty-four desks, in the ratified order of `config/axes.yml` (which is also
 the order the command surfaces render). Each leads with its **persona** —
 the hat's one-line self-description, printed verbatim by `nabu list --axis`
 and `nabu sync` — then the membership rationale, then the member slugs the

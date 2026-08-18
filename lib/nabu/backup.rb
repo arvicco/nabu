@@ -104,7 +104,10 @@ module Nabu
     # failure is captured in the Result (status :failed) so the report is
     # honest and the CLI can still exit nonzero.
     def run
-      raise Error, "backup: no target — set backup.target in config/nabu.yml or pass --to PATH" if @target.nil?
+      if @target.nil?
+        raise Error,
+              "backup: no target — set backup.target in local/config/settings.yml (the box overlay) or pass --to PATH"
+      end
 
       guard_mount!
       guard_ledger_home!

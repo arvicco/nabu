@@ -53,5 +53,5 @@ typed syllabified, Old Japanese romanized) — on its axis page under
 
 ## The desks
 
-The [research axes](/nabu/axis/) index all twenty-three desks; every desk
+The [research axes](/nabu/axis/) index all twenty-four desks; every desk
 page ends with live-verified MCP examples for that tradition.

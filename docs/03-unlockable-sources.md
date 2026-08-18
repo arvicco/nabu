@@ -17,7 +17,9 @@ Sources not readily ingestible today, with concrete unlock paths. Ordered by exp
 
 **What's locked:** parts of TITUS require registration/permission per agreement with original editors; the public HTML is scrapeable but encoding-hostile.
 
-**Unlock path:** email the maintainers (Frankfurt, Gippert's successors) describing non-commercial comparative-IE research and requesting the underlying text files for specific corpora (Avestan, Tocharian, Hittite). Academic courtesy access has historically been granted to serious individuals. A personal research letter mentioning specific texts and intended private use is the entire cost. Worst case, the public HTML remains available for careful per-text scraping.
+**Unlocked — the precedent (2026-07-23):** the Avestan corpus is in. `titus-avestan` is wired and synced under a personal research grant from Prof. Jost Gippert (thread №41-3): non-commercial use, TITUS and the editors credited wherever the text is displayed. The letter described the specific texts and the private comparative-IE use; writing it was the entire cost — exactly as this page predicted. The grant is personal, so the source is grant-gated: every box records its own acknowledgment of the terms before its first fetch.
+
+**Remaining ask:** Tocharian and the long tail (Hittite is meanwhile served by the tlhdig shelf). Same scoped-letter route, now with a working precedent to cite. Worst case, the public HTML remains available for careful per-text scraping.
 
 ## 3. IIIF manuscript universe (Vatican, BnF, British Library, Bodleian, Munich…)
 
@@ -31,7 +33,7 @@ Sources not readily ingestible today, with concrete unlock paths. Ordered by exp
 
 **What's locked:** full-view PD books download page-by-page without an account; bulk access requires membership or the dataset request process.
 
-**Unlock path:** page-level OCR text of full-view items is accessible via API with a free account. (The dataset-request path through HathiTrust's research center predates the HTRC wind-down and is no longer current — recheck 2026-08-10.) For 19th-century critical editions (Miklosich, Jagić, Leskien, the entire early Slavistics canon), this plus IA covers essentially everything. IA needs no unlock at all — clean APIs, bulk download tools.
+**Unlock path:** page-level OCR text of full-view items is accessible via API with a free account. (The dataset-request path through HathiTrust's research center predates the HTRC wind-down and is no longer current — recheck due 2026-11.) For 19th-century critical editions (Miklosich, Jagić, Leskien, the entire early Slavistics canon), this plus IA covers essentially everything. IA needs no unlock at all — clean APIs, bulk download tools.
 
 ## 5. Brepols (Library of Latin Texts), Loeb, TLL
 
@@ -47,13 +49,13 @@ Sources not readily ingestible today, with concrete unlock paths. Ordered by exp
 
 **What's locked:** terms prohibit systematic downloading; no bulk offer.
 
-**Unlock paths:** for Latin literature, Corpus Corporum + Perseus + DigilibLT (open, late-antique Latin — add to main list) substantially overlap PHI's canon. For epigraphy, the **EDH (Epigraphic Database Heidelberg)** offers open data dumps (CC — ingested; upstream no longer actively maintained per PI correspondence 2026-08-11, dumps remain) and **EDCS** has relaunched at UZH with a search API + CSV export but no license grant (recheck 2026-08-10: interactive use only) — EDH plus EDR/I.Sicily/IIP effectively unlock the inscription space PHI covers. PHI itself: use interactively, don't ingest.
+**Unlock paths:** for Latin literature, Corpus Corporum + Perseus + DigilibLT (open, late-antique Latin — registered and ingested since P45-3) substantially overlap PHI's canon. For epigraphy, the **EDH (Epigraphic Database Heidelberg)** offers open data dumps (CC — ingested; upstream no longer actively maintained per PI correspondence 2026-08-11, dumps remain) and **EDCS** has relaunched at UZH with a search API + CSV export but no license grant (last checked 2026-08: interactive use only; recheck due 2026-11) — EDH plus EDR/I.Sicily/IIP effectively unlock the inscription space PHI covers. PHI itself: use interactively, don't ingest.
 
 ## 8. Slovenian/South Slavic archival material
 
 **What's locked:** much South Slavic manuscript heritage is digitized but scattered: NUK (dLib.si — largely open PD downloads, add a thin adapter), Matica srpska, HAZU, monastery collections (Hilandar's HMML digitizations — registration grants reading-room access online).
 
-**Unlock paths:** dLib.si is genuinely open (adapter-worthy). HMML (Hill Museum & Manuscript Library) grants free registered access to tens of thousands of digitized Slavic and Near Eastern manuscripts — registration is the entire unlock. Manuscriptorium aggregates Czech and Slavic manuscripts with IIIF-ish access for registered users. All three are realistic wins for the OCS/Slavic axis.
+**Unlock paths:** dLib.si is genuinely open (adapter-worthy). HMML (Hill Museum & Manuscript Library) grants free registered access to tens of thousands of digitized Slavic and Near Eastern manuscripts — registration is the entire unlock. Manuscriptorium aggregates Czech and Slavic manuscripts with IIIF-ish access for registered users. All three are realistic wins for the OCS/Slavic axis. One caveat: registration-based unlocks (HMML, Manuscriptorium, HathiTrust) unlock *manual-drop* ingestion, not adapters — account-gated downloads fail the automation bar, so what they feed is `incoming/<slug>/` and the ingest shelf, never an unattended sync.
 
 ## 9. Institutional affiliation as a master key
 
@@ -63,6 +65,6 @@ A standing option worth naming: many "locked" resources (TLG, Brepols, ProQuest 
 
 1. **Build the IIIF adapter** (unlocks #3 and feeds #8) — pure engineering, no permission needed.
 2. **Register:** HathiTrust, HMML, Manuscriptorium — free, immediate.
-3. **Email TITUS** with a scoped request — one letter, potentially the whole IE long tail.
-4. **Verify Corpus Corporum, DigilibLT, EDH dump availability** and promote them into the main source list (they were "unlockables" that turned out to be open).
+3. **Email TITUS** — done: the Avestan grant landed 2026-07-23 (§2); the Tocharian follow-up rides the same precedent.
+4. **Promote the open "unlockables"** — DigilibLT and EDH are already registered and ingested; Corpus Corporum is the one genuinely outstanding (verify current dump availability, then promote).
 5. **Decide on TLG individual subscription** only when a concrete research need hits the gap.

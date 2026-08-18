@@ -308,7 +308,7 @@ inscription URNs need a minting decision (EDH ids are stable — good
 candidates).
 **Effort.** scout + opus adapter (family reuse).
 
-### 2.4 OpenITI — early Arabic  [candidate — big, needs an owner axis]
+### 2.4 OpenITI — early Arabic  [SHIPPED — Phase 41: `openiti` + `kitab` wired, the `arabic` axis minted; `ara` is now the library's largest language]
 
 **What.** The Open Islamic Texts Initiative: thousands of premodern Arabic
 works, open, plain-text-with-markdown-ish markup (mARkdown format).
@@ -321,9 +321,12 @@ downstream; and honestly: no stated owner research axis in Arabic yet.
 Park until the axis exists; the corpus can absorb it whenever.
 **Effort.** scout + fable family, when wanted.
 
-### 2.5 TITUS, Manuscript (manuscripts.ru), Sreznevsky  [gated — see .docs/surveys/slavic-survey.md]
+### 2.5 TITUS, Manuscript (manuscripts.ru), Sreznevsky  [gated — see .docs/surveys/slavic-survey.md; TITUS partially UNBLOCKED]
 
-Surveyed and honestly BLOCKED (license/no-export/scans-only). The unblock
+Surveyed and honestly BLOCKED (license/no-export/scans-only) — except that
+the TITUS grant path WORKED for the Avesta: `titus-avestan` shipped P45 on a
+personal research grant (Prof. Jost Gippert, 2026-07-23, thread №41-3 —
+`research_private`, credit + nc terms). The Slavic-side TITUS blocks stand. The unblock
 paths are noted in the survey: writing for data grants (`research_private`
 ingestion — the license class exists for exactly this), or HTR for the
 scan-only dictionaries once the cluster lands (§3.4). Owner-initiated

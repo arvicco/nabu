@@ -396,7 +396,7 @@ it (P54 widened the original one):
 
 All three share the FormLemma posture: feature-detected at query time,
 absent file = lane off with byte-identical behavior, no catalog table, no
-migration. The other ten features are single-truth PROJECTIONS — their
+migration. The remaining features are single-truth PROJECTIONS — their
 internal consumers read the same upstream truth the builders flatten
 (the fold tables, the hypotactic and cantigas catalog rows,
 canonical/osl, the canonical/actib layer cone), so consuming the

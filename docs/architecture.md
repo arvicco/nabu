@@ -20,7 +20,9 @@ Ruby CLI application, modular adapter core, file-based canonical layer, SQLite d
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Invariant:** data flows one way. Adapters/HTR produce canonical files; the loader derives SQLite from canonical files; enrichers write only to derived tables. catalog + fulltext + vectors = f(canonical): `nabu rebuild` proves it by regenerating them from `canonical/` byte-for-byte-equivalently (modulo enrichment, which replays from its own journal). **history.sqlite3 is an operational LOG** (P7-1, reclassified P70): an append-only ledger (run history, per-repo sync pins, license baselines, durable revision events) that is *never* derived and *never* dropped by rebuild. Every owner DECISION it once held now lives in config/ (grants.yml, creep_acceptances.yml; lect rulings in lect_rulings.yml with the journal re-derived at rebuild). It is keyed by durable identity (source slug, repo url, passage/document urn), never by catalog row ids, which every rebuild re-mints.
+(Diagram partly aspirational: `nabu adhoc`/`nabu enrich`, AdhocPipeline/EnrichmentRunner, and the enricher column are design-stage — not yet built; §4 and §6 mark what shipped instead.)
+
+**Invariant:** data flows one way. Adapters produce canonical files; the loader derives SQLite from canonical files; enrichment producers write only to derived tables. db/ = f(canonical, config, local) — the three permanent folders: `nabu rebuild` proves it by regenerating every derived store from them byte-for-byte-equivalently. **local/history.sqlite3 is an operational LOG** (P7-1, reclassified P70): an append-only ledger (run history, per-repo sync pins, license baselines, durable revision events) that is *never* derived and *never* dropped by rebuild. Every owner DECISION it once held now lives in local/config/ (grants.yml, creep_acceptances.yml; lect rulings in lect_rulings.yml with the journal re-derived at rebuild). It is keyed by durable identity (source slug, repo url, passage/document urn), never by catalog row ids, which every rebuild re-mints.
 
 **The derivability law (owner-ruled 2026-08-11; the `local/` elevation lands as its own phase).** Every byte of project state is one of five kinds: **asset** (`canonical/`, attic included — the universal library matter), **project definition** (`config/`, git-shared), **local instance** (`local/` — owner shelves and rulings, grants, the operational ledger, acquisitions: everything that makes this instance THIS instance, never in the public repo), **derived** (`db/` — all of it), or **staging** (`incoming/`, locks, sidecars). The backup contract is exactly the three permanent folders, and `nabu rebuild` regenerates every derived store from them, offline. *Derived* is an economic claim — a store counts as derived only if code alone re-creates it for free; anything non-derivable (paid model enrichment, HTR, any output costing money, network, or human review) is an **acquisition** and lands in a local shelf through a sanctioned gateway before it may influence db/. No db is ever backup-required. The repo itself is backed by its git remote — the contract's silent fourth leg. A new db table or top-level directory declares its kind at birth; a derived store without a rebuild stage is a bug, not a posture. Landed by P71: owner rulings and grants live under `local/config/`, the owner shelves under `local/shelves/`, the ledger at `local/history.sqlite3` (a pre-P71 box's legacy locations are honored loudly until `nabu migrate-local`).
 
@@ -38,30 +40,34 @@ nabu/
 │   ├── adapters/                # one file per source
 │   │   ├── perseus.rb
 │   │   ├── proiel.rb
-│   │   ├── conllu.rb            # parser families are mixins/components,
+│   │   ├── conllu_parser.rb     # parser families are mixins/components,
 │   │   ├── epidoc_parser.rb     #   adapters compose them
 │   │   └── ...
 │   ├── model/                   # Passage, Document, Source, Provenance
-│   ├── normalize/               # Unicode, citation, language tagging
-│   ├── store/                   # Sequel models, loader, schema migrations
-│   ├── enrich/                  # lemmatizer bridge, embedder, glosser
-│   ├── adhoc/                   # intake, HTR drivers, review, commit
-│   ├── query/                   # FTS, vector, concordance
-│   └── mcp/                     # MCP read-only surface: protocol core + tool table (P8-1)
+│   ├── store/                   # Sequel models, loader, indexer, schema migrations
+│   ├── query/                   # FTS, concordance, alignment, etym, links
+│   ├── mcp/                     # MCP read-only surface: protocol core + tool table (P8-1)
+│   ├── health/                  # invariants, trend rules, remote probes
+│   ├── ops/                     # backup, drill, site-data projection
+│   ├── data_build/              # the nabu-data production rail (§17)
+│   └── *.rb                     # normalization, fetch arms, gateways, runners (flat files)
 ├── config/
-│   ├── sources.yml              # registry: adapter class, upstream, license, enabled, translations opt-in
+│   ├── sources.yml              # registry: adapter class, upstream, license, wired, translations opt-in
 │   └── nabu.yml               # paths, models, API settings
-├── canonical/                   # git repo (possibly separate) — the asset
-│   ├── perseus-greek/           # vendored upstream snapshot or submodule
-│   ├── adhoc/<slug>/            #   pages/ (images) + transcription/ + manifest.yml
+├── canonical/                   # the asset — a plain directory, NOT itself a git repo:
+│   ├── perseus-greek/           #   one clone/tree per source (git clones carry their own .git)
 │   └── ...
-├── db/
-│   ├── catalog.sqlite3          # DERIVED: sources, documents, passages, provenance, licenses
-│   ├── fulltext.sqlite3         # DERIVED: FTS5 + passage_lemmas + trigram index (all keyed by passage id)
-│   ├── vectors.sqlite3          # DERIVED: sqlite-vec embeddings, per model-version table
-│   ├── history.sqlite3          # LEDGER (P7-1): runs, pins, revisions — never derived, never dropped
-│   ├── links.sqlite3            # DERIVED (P16-1/P70-3b, §15): batch-mined edges — rebuild's links stage re-mints it
-│   ├── lects.sqlite3            # JOURNAL (P58-1, §15a): per-document lect rulings — rebuild-proof, PRECIOUS
+├── local/                       # the instance — never in the public repo (P71)
+│   ├── config/                  # settings.yml, profile.yml, grants.yml, creep_acceptances.yml,
+│   │                            #   link_scopes.yml, lect_rulings.yml (see lib/nabu/config.rb)
+│   ├── shelves/<slug>/          # the owner shelves (§16)
+│   └── history.sqlite3          # LEDGER (P7-1): runs, pins, revisions — never derived, never dropped
+├── db/                          # DERIVED — all of it; `nabu rebuild` re-mints every file
+│   ├── catalog.sqlite3          # sources, documents, passages, provenance, licenses
+│   ├── fulltext.sqlite3         # FTS5 + passage_lemmas + trigram index (all keyed by passage id)
+│   ├── links.sqlite3            # (P16-1/P70-3b, §15): batch-mined edges — rebuild's links stage re-mints it
+│   ├── lects.sqlite3            # (P58-1, §15a): per-document lect rulings — DERIVED since P70-2,
+│   │                            #   re-derived wholesale from local/config/lect_rulings.yml + rules; needs no backup
 │   ├── migrate/                 # catalog migration track (forward-only)
 │   ├── ledger_migrate/          # ledger migration track (own schema_info per file)
 │   ├── links_migrate/           # links journal migration track
@@ -72,7 +78,7 @@ nabu/
 └── Rakefile
 ```
 
-Canonical layer on the big disk; the derived dbs rebuildable anywhere; the history ledger small, precious, and backed up alongside canonical/. One SQLite file per concern; cross-db reads thread separate connections (the established catalog/fulltext pattern — status and health take catalog + ledger handles the same way; ATTACH remains available if a real cross-db join ever appears).
+Canonical layer on the big disk; the derived dbs rebuildable anywhere; the history ledger (local/history.sqlite3) small, precious, and backed up inside local/. One SQLite file per concern; cross-db reads thread separate connections (the established catalog/fulltext pattern — status and health take catalog + ledger handles the same way; ATTACH remains available if a real cross-db join ever appears).
 
 ## 3. The adapter contract
 
@@ -106,9 +112,11 @@ Key decisions:
 - **Idempotency via content hashing.** Loader upserts on `urn`; a passage row stores `content_sha256`. Unchanged content is skipped; changed content bumps `revision` and journals the old hash. Deletions upstream mark rows `withdrawn`, never hard-delete. **The within-pass collision seam (P39-4):** "changed content bumps revision" means a legitimate update *across runs*; two files claiming one `urn` *within a single load pass* would instead make revision inflation glob-order-dependent (the last file parsed silently wins — the diorisis rebuild's `~3 updated` on a clean db, from an adapter minting the same urn thrice). So a urn re-encountered in the same pass is **kept-first**: identical content is an idempotent skip, different content is a `collision` — journaled loudly, counted (`LoadReport#collided`, surfaced as `!N collision`), the first file's content preserved deterministically. The discriminator is purely "already persisted this pass"; a urn seen for the first time this pass revises exactly as before. Adapters should mint unique urns so the seam never fires (diorisis disambiguates upstream's reused `tlgAuthor:tlgId` by a title slug); the seam is the loader-side invariant that no future adapter bug can silently last-writer-wins.
 - **Upstream deletions never destroy local data.** Git-based fetch attics the deleted file (§8); the adapter base rediscovers attic documents generically (`Adapter#discover_with_attic` — subclasses implement only `discover`, a urn found both live and in the attic resolves live-wins) and the loader marks them `retired_upstream` — live, searchable, exportable. `withdrawn` keeps meaning "absent from canonical entirely".
 - **Fetch is separated from parse** so tests never need network and `nabu sync --parse-only` can re-run after parser fixes without re-downloading.
-- **Parallel translations are a per-source opt-in (P7-4).** `translations: true` in `sources.yml` reaches the adapter through `SourceRegistry::Entry#build_adapter` — the one construction seam sync/rebuild/verify share; no-arg `.new` stays every adapter's contract and the default. A translations-on Perseus additionally ingests the highest `perseus-eng<n>` edition per work as an ordinary document (language `eng`, its own edition urn, same license); the shared CTS citation scheme makes passage alignment a pure query (`Query::Parallel`, `nabu show <urn> --parallel [lang]` — suffix-equality pairing, unmatched suffixes shown one-sided). ORACC is the second sibling family (P13-4): a translations-on Oracc crawls the official per-text HTML fragments (project-scoped: `Oracc::TRANSLATION_PROJECTS` — SAA-first staging; stage 2 = the full project list since P14-4, the tr-en metadata gate keeping translation-less projects inert) and mints `-en` sibling documents whose passage suffixes are the tablet's own line labels; `Query::Parallel`'s work notion covers both shapes (CTS work prefix + edition slug; ORACC tablet urn + `-<variant>`), and the translation prose carries `license_override: "attribution"` (CC BY-SA project content) while the source stays CC0/open. **The work notion is a registry declaration, not a code chain (P34-0):** what counts as a sibling is the source row's `siblings:` key — `cts` (the dotted-version form) or a list of `"-"`-leading variant-tail patterns (`["-en"]`, `["-(eng|ita|dipl)"]`, the ORACC `["-[a-z]+"]` open run) — compiled by `Query::SiblingFamilies` into the ONE generic matcher `Query::Parallel` consults. The ten per-source frozen regex constants that used to live in `Parallel` (CTS, ORACC, Freising, Damaskini, SuttaCentral, TLA-HF, AES, RIIG, OpenEtruscan+ItAnt, ETCSL — each new sibling shape an owner repro + a code rider through P29/P30/P32) retired into declarations; a declared tail is a **census claim** (no upstream id ends in it — exactly what each constant's comment used to freeze). I.Sicily is the eleventh family: `["-en", "-it", "-translit"]` — the `-translit` layer sibling (the Latin-script rendering of a Greek-script carving, suffix-equal to the primary, reachable by explicit `--parallel <lang>`, the ItAnt `-dipl` stance) plus the `-en`/`-it` prose translations (whole-text coarse blocks anchored at the primary's first line via a synthesized `corresp`, the ETCSL loose-alignment mechanism). The sibling grammar is a **global installation fact** (`SiblingFamilies.default` reads the installation's own `sources.yml`, not a redirected-catalog config).
+- **Parallel translations are a per-source opt-in (P7-4).** `translations: true` in `sources.yml` reaches the adapter through `SourceRegistry::Entry#build_adapter` — the one construction seam sync/rebuild/verify share; no-arg `.new` stays every adapter's contract and the default. A translations-on Perseus additionally ingests the highest `perseus-eng<n>` edition per work as an ordinary document (language `eng`, its own edition urn, same license); the shared CTS citation scheme makes passage alignment a pure query (`Query::Parallel`, `nabu show <urn> --parallel [lang]` — suffix-equality pairing, unmatched suffixes shown one-sided). ORACC is the second sibling family (P13-4): a translations-on Oracc crawls the official per-text HTML fragments (project-scoped: `Oracc::TRANSLATION_PROJECTS` — SAA-first staging; stage 2 = the full project list since P14-4, the tr-en metadata gate keeping translation-less projects inert) and mints `-en` sibling documents whose passage suffixes are the tablet's own line labels; `Query::Parallel`'s work notion covers both shapes (CTS work prefix + edition slug; ORACC tablet urn + `-<variant>`), and the translation prose carries `license_override: "attribution"` (CC BY-SA project content) while the source stays CC0/open. **The work notion is a registry declaration, not a code chain (P34-0):** what counts as a sibling is the source row's `siblings:` key — `cts` (the dotted-version form) or a list of `"-"`-leading variant-tail patterns (`["-en"]`, `["-(eng|ita|dipl)"]`, the ORACC `["-[a-z]+"]` open run) — compiled by `Query::SiblingFamilies` into the ONE generic matcher `Query::Parallel` consults. The ten per-source frozen regex constants that used to live in `Parallel` (CTS, ORACC, Freising, Damaskini, SuttaCentral, TLA-HF, AES, RIIG, OpenEtruscan+ItAnt, ETCSL — each new sibling shape an owner repro + a code rider through P29/P30/P32) retired into declarations; a declared tail is a **census claim** (no upstream id ends in it — exactly what each constant's comment used to freeze). The live registry holds 18 sibling declarations (as of P78); I.Sicily shows the shape: `["-en", "-it", "-translit"]` — the `-translit` layer sibling (the Latin-script rendering of a Greek-script carving, suffix-equal to the primary, reachable by explicit `--parallel <lang>`, the ItAnt `-dipl` stance) plus the `-en`/`-it` prose translations (whole-text coarse blocks anchored at the primary's first line via a synthesized `corresp`, the ETCSL loose-alignment mechanism). The sibling grammar is a **global installation fact** (`SiblingFamilies.default` reads the installation's own `sources.yml`, not a redirected-catalog config).
 
-## 4. Ad-hoc pipeline
+## 4. Ad-hoc pipeline (design-stage — not yet built)
+
+None of this section exists in code yet — no `nabu adhoc`, no `AdhocPipeline`, no HTR drivers; the shipped intake front door for owner material is `nabu ingest` onto the local shelves (§16). The design stands for the HTR era:
 
 State machine per intake item, manifest-driven (`manifest.yml` tracks state, provenance, model versions):
 
@@ -129,17 +137,27 @@ The DERIVED catalog (catalog.sqlite3 — dropped and regenerated by `nabu rebuil
 
 ```
 sources(id, name, adapter_class, license, license_class, upstream_url,
-        enabled, last_sync_at, last_sync_sha)   -- enabled + last_sync_* are display mirrors;
-                                                -- sources.yml owns enabled (read surfaces
-                                                -- render registry truth, P23-3), the ledger
-                                                -- owns the authoritative pins
+        enabled, credit, last_ingest_identity,
+        last_sync_at, last_sync_sha)   -- enabled is a frozen mirror of the registry's
+                                       -- `wired:` flag (the P44-r3b rename; channel-
+                                       -- verification semantics per the 2026-08-18
+                                       -- ruling — ops.md §1 is the ratified vocabulary
+                                       -- table; box enablement lives in
+                                       -- local/config/profile.yml via `nabu enable`).
+                                       -- last_sync_* are display mirrors — the ledger
+                                       -- owns the authoritative pins. credit (020) is
+                                       -- the per-source attribution line a grant may
+                                       -- require; last_ingest_identity (022) the
+                                       -- canonical-cone identity the rows were last
+                                       -- ingested from (the nabu-data stale-ingest guard)
 documents(id, source_id, urn, title, language, edition, license_override,
           canonical_path, content_sha256, revision, withdrawn, retired_upstream)
 passages(id, document_id, urn, sequence, language, text, text_normalized,
          annotations_json, content_sha256, revision)
 provenance(id, passage_id, event, tool, tool_version, model, params_json, at)
 enrichments(id, passage_id, kind, model, model_version, payload_json, at)
-   -- lemmas, glosses; embeddings live in vectors.sqlite3 keyed by passage id
+   -- meter scansions today (P44-7, §6); embeddings would live in
+   -- vectors.sqlite3 keyed by passage id (design-stage)
 language_names(id, dictionary_id, lang_code, name, occurrences)
    -- P18-4: the derived language-name census — what kaikki's descendants
    -- nodes call each lang_code, counted RAW per reflex-bearing dictionary
@@ -165,24 +183,45 @@ source_stats_languages(id, source_id, language, documents, passages)
    -- global row: the roll-up is SUM over per-source rows. Readers
    -- feature-detect the table (pre-019 catalogs fall back to live
    -- aggregates unchanged).
-place_index(pleiades_id PK, title, lat, lon, place_types_json,
-            time_periods_json, position)
-place_index_names(pleiades_id, name_key)
-   -- P45-6: the derived Pleiades place index (migration 021,
-   -- Store::PlaceIndex) — the gazetteer dump projected wholesale at
-   -- sync/rebuild time (the adapter-declared place_index_producer seam,
-   -- the P44-7 enrichment-producer shape) so `nabu place` / the show
-   -- findspot line / MCP nabu_place stop re-parsing the 129 MB dump per
-   -- invocation (measured: 4.7 s + 3.7 GB RSS → 4 ms). name_key rows are
-   -- the exact-match keys (whole title + "/"-variant segments,
-   -- Unicode-case-folded IN RUBY at derive time — SQLite lower() is
-   -- ASCII-only; Nabu::Pleiades.title_keys is the one shared relation, so
-   -- the index and the in-memory dump path cannot diverge). Deliberately
-   -- surrogate-key-free: re-deriving the same dump is row-identical
-   -- (test-pinned). Readers feature-detect a POPULATED index
-   -- (Pleiades.load_default(catalog:)) and fall back to the direct dump
-   -- load while it is underived — an empty table never reads as an empty
-   -- gazetteer.
+place_index(gazetteer, place_id PK, title, lat, lon, place_types_json,
+            time_periods_json, position, accuracy)
+place_index_names(gazetteer, place_id, name_key)
+   -- P45-6: the derived place index (migration 021, Store::PlaceIndex) —
+   -- a gazetteer dump projected wholesale at sync/rebuild time (the
+   -- adapter-declared place_index_producer seam, the P44-7
+   -- enrichment-producer shape) so `nabu place` / the show findspot line
+   -- / MCP nabu_place stop re-parsing the 129 MB Pleiades dump per
+   -- invocation (measured: 4.7 s + 3.7 GB RSS → 4 ms). MULTI-GAZETTEER
+   -- since P63-3 (migration 025): keyed (gazetteer, place_id) —
+   -- `pleiades:912855`, `tm:2788`, `cigs:…` — and each gazetteer's
+   -- derive supersedes ONLY its own rows. accuracy (028, P76 U-4) is the
+   -- CIGS 0–3 coordinate-accuracy grade, nullable, cigs-slice only.
+   -- name_key rows are the exact-match keys (whole title + "/"-variant
+   -- segments, Unicode-case-folded IN RUBY at derive time — SQLite
+   -- lower() is ASCII-only; Nabu::Pleiades.title_keys is the one shared
+   -- relation, so the index and the in-memory dump path cannot diverge).
+   -- Deliberately surrogate-key-free: re-deriving the same dump is
+   -- row-identical (test-pinned). Readers feature-detect a POPULATED
+   -- index (Pleiades.load_default(catalog:)) and fall back to the direct
+   -- dump load while it is underived — an empty table never reads as an
+   -- empty gazetteer.
+place_crosswalk(source, gazetteer_a, id_a, gazetteer_b, id_b, ...)
+   -- P63-5 (migration 026): asserted equivalences BETWEEN gazetteer
+   -- namespaces, as DATA with provenance — never inferred; each
+   -- asserting shelf's derive owns its slice wholesale (the place_index
+   -- per-gazetteer contract). Read by `--place` identity expansion and
+   -- the place card's "= tm:…" lines (§14).
+document_facets(document_id, facet, value, ...)
+   -- P17-2 (migration 009): categorical document facts — genre,
+   -- province, material, object type — an OPEN facet vocabulary (a new
+   -- facet is new rows, never a migration), behind
+   -- `search --type/--province/--material`.
+lect_stats(kind, key, documents, ...)
+   -- P58 rider (migration 023): the precomputed lect census behind the
+   -- language card's stage ladder — derived by Store::LectFacets in the
+   -- same breath that writes the lect facet rows (the P42-0
+   -- write-time-census stance), so the numbers can never drift from the
+   -- facet they summarize.
 ```
 
 **The write-time doctrine (P42-0):** anything O(corpus) runs at write time;
@@ -202,7 +241,7 @@ log-odds denominator (17.9s → ms) and `etym`'s per-reflex attestation counts
 catalog tables at sync/rebuild time, retiring the P44-2 per-invocation dump
 load (4.7 s / 3.7 GB RSS → 4 ms per place lookup).
 
-The HISTORY LEDGER (history.sqlite3 — append-only, never derived, never dropped; P7-1):
+The HISTORY LEDGER (local/history.sqlite3 — append-only, never derived, never dropped; P7-1):
 
 ```
 runs(id, source_slug, kind[sync|rebuild], started_at, finished_at,
@@ -213,6 +252,25 @@ pins(id, source_slug, repo_url, last_sync_sha, license_baseline_sha256)
 revisions(id, urn, event[revised|withdrawn|restored|retired|unretired],
           old_sha, new_sha, at)
    -- the durable revision history: content transitions of existing rows only
+source_probes(source_slug, checked_at, drift, license, detail)
+   -- P14-12 (ledger 002; verdicts widened by 003/006): the upstream-probe
+   -- CACHE — one row per source, upserted every `health --remote` run, so
+   -- `status` renders the up= column with no live network call
+quarantine_baselines(source_slug, baseline, anchor, recorded_at)
+   -- P18-7 (ledger 005): the delta-aware quarantine warning's memory —
+   -- baseline auto-advances at every ok run, anchor is the low-water mark
+grant_acknowledgments(source_slug, terms, how, created_at)
+creep_acceptances(source_slug, accepted_baseline, note, recorded_at)
+   -- ledger 007/008: historical MIRRORS — the source of truth for grants
+   -- and creep acceptances is local/config/ (grants.yml,
+   -- creep_acceptances.yml, written FIRST by their gateways); the ledger
+   -- rows record when each decision happened
+stage_timings(kind[sync|rebuild|drill], scope, stage, seconds, rows,
+              finished_at)
+   -- P78-r1 (ledger 009): durable per-stage wall times, keyed
+   -- (kind, scope, stage) — append-only, the LATEST row governs the ETA
+   -- estimate, and the rows column is the drift denominator that lets an
+   -- estimate scale by work size instead of silently aging
 language_notes(id, lang_code, kind[name|family|context|…], body, source,
                created_at)
    -- P18-4, TRANSITIONAL since P19-1: the accumulated per-language layer's
@@ -239,21 +297,25 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
 - The loans facet (P34-2, honoring P17-1's "a future `--loans` facet reads them without reparse"): `search --loans CODE` / `list SOURCE --loans [CODE]` read the per-passage loan-token counts a language-contact source stores in its OWN `annotations_json` (`"loans": {code => token count}`, tallied from per-token `lang` — Coptic Scriptorium today). Deliberately NOT an index or a projection table: a correlated `json_each` EXISTS in the shared catalog join (`CatalogJoin#loans_exists`), passage-grained, code matched case-insensitively as a bound value. Because it is one more `visible_passages` conjunct it composes with every search path (text, `--fuzzy`, `--lemma`/`--morph`, `--near`, and all catalog filters), and because the loader's `annotations_json` IS the facet store, `nabu rebuild` has nothing extra to maintain — the complement of the `passage_lemmas` pattern: extract-into-an-index when the query needs its own access path, read-in-place when one JSON probe per candidate row suffices.
 - The `spans` annotations contract (P30-4, beside the P7-5 `tokens` contract): a syntax-bearing source stores constituent extents in the SAME per-passage `annotations_json` that carries its tokens — an ordered `"spans"` array beside `"tokens"`, one hash per constituent intersecting the passage: `{"type": "clause"|"phrase"|…, "node": <upstream stable id>, "ranges": [[from, to], …]}` where ranges are 0-based inclusive INDEX PAIRS INTO THAT PASSAGE'S OWN tokens array (passage-relative — no global token table needed to consume them; a discontinuous constituent is a list of ranges, never flattened), plus `"partial": true` on every passage-clipped piece of a constituent that crosses passage boundaries (the shared upstream `node` id joins the pieces), plus the constituent's own features verbatim (BHSA: clause `kind`, phrase `function`). No new table: spans survive storage, rebuild, display and MCP exactly as tokens do, and any future span-derived index follows the passage_lemmas pattern (extracted from stored annotations, never by re-parsing canonical). First registrant bhsa. dss (P30-5) reuses the shape under the key `"clusters"` for upstream's text-critical cluster nodes (cor/cor2/cor3, rem/rem2, rec, alt, unc2, vac — degrees verbatim; a vacat covers no token and rides with empty `ranges` as a positioned gap), and deliberately does NOT emit its ML-derived clause/phrase boundaries (silver — 125/315 nodes, all in 1Qisaa; the goo300k/imp discipline, journaled in 02-sources row 88).
 - The feature-MODULE lane (P34-1): a Text-Fabric sibling repo that ships extra node features over a registrant's frozen slot space (ETCBC/bridging over BHSA tf/2021) gets its own registry row for the sanctioned GitFetch path into `canonical/<module>` — but mints NO documents (discover empty by design, `wired: false` permanently, conformance suite inapplicable) and surfaces exclusively as extra token keys on the core adapter's passages: the bhsa Corpus reads `canonical/bridging/tf/2021` when present and rides `"osm"`/`"osm_sf"` (OSHB's OSM morph tag of each word's first/second aligned morpheme, verbatim incl. upstream's `*` problem marker) beside lex/gloss/qere; absent module = lane off, byte-identical output. A module whose nodes exceed the core dataset's slot space is a ParseError (version misalignment — module data off its own slot numbering is noise). NOT a links-journal producer: word slots have no urns, and verse-grain OSHB↔BHSA edges would only duplicate the ot alignment hub (§10) — the hub joins the verses, the lane joins the words.
-- **Research axes (P35-0, D35 rulings 2026-07-20)**: the grown source list grouped by the owner's research desks — 18 owner-ratified axes, each an explicit definition in `config/axes.yml` (`Nabu::AxisRegistry`: name, persona one-liner, desc; file order = render order; the persona is FIRST-CLASS RENDER DATA — the hat in the house voice, printed verbatim by the axis surfaces) plus a REQUIRED list-valued `axes:` key on every source row in sources.yml. Axes are TAGS, not a partition — multi-membership deliberate (tlhdig = cuneiform+hittite by ruling D35-d; the hebrew/syriac language desks coexist with the cross-language biblical hat by design) and membership is whole-source (no per-document axes in v1 — where only part of a shelf fits, the honest note rides the axis desc, never a fake partition). Three load-time invariants in `SourceRegistry`: every source declares ≥ 1 axis once definitions exist; every declared axis is defined; an axis name never equals a source slug — the RESOLUTION GUARANTEE that lets the future `nabu sync <axis>` / `list --axis` surfaces (P35-1/2) resolve one bare token unambiguously. Placement decision: definitions live BESIDE, not inside, sources.yml — the sources file keeps its pure slug ⇒ entry mapping contract (a reserved top-level block would need a magic-key carve-out in the loader and would make a source slug named "axes" silently impossible instead of loudly colliding), while membership stays on the source row like `enabled`/`translations`/`siblings` (the P34-0 owner-posture precedent; a missing axes.yml is bootstrap/test mode — no axes required, a redirected registry brings its own axes file or none). Consumption seam: `SourceRegistry#axes` (the definitions) + `#axis_members(name)` (slugs in registration order). NB "axis" unqualified always means research axis; the §14 date/place mechanism renames to "timeline" (P35-4).
+- **Research axes (P35-0, D35 rulings 2026-07-20)**: the grown source list grouped by the owner's research desks — 24 owner-ratified axes as of P78 (korean minted P78-1), each an explicit definition in `config/axes.yml` (`Nabu::AxisRegistry`: name, persona one-liner, desc; file order = render order; the persona is FIRST-CLASS RENDER DATA — the hat in the house voice, printed verbatim by the axis surfaces) plus a REQUIRED list-valued `axes:` key on every source row in sources.yml. Axes are TAGS, not a partition — multi-membership deliberate (tlhdig = cuneiform+hittite by ruling D35-d; the hebrew/syriac language desks coexist with the cross-language biblical hat by design) and membership is whole-source (no per-document axes in v1 — where only part of a shelf fits, the honest note rides the axis desc, never a fake partition). Three load-time invariants in `SourceRegistry`: every source declares ≥ 1 axis once definitions exist; every declared axis is defined; an axis name never equals a source slug — the RESOLUTION GUARANTEE that lets the `nabu sync <axis>` / `list --axis` surfaces (P35-1/2, shipped) resolve one bare token unambiguously. Placement decision: definitions live BESIDE, not inside, sources.yml — the sources file keeps its pure slug ⇒ entry mapping contract (a reserved top-level block would need a magic-key carve-out in the loader and would make a source slug named "axes" silently impossible instead of loudly colliding), while membership stays on the source row like `enabled`/`translations`/`siblings` (the P34-0 owner-posture precedent; a missing axes.yml is bootstrap/test mode — no axes required, a redirected registry brings its own axes file or none). Consumption seam: `SourceRegistry#axes` (the definitions) + `#axis_members(name)` (slugs in registration order). NB "axis" unqualified always means research axis; the §14 date/place mechanism renames to "timeline" (P35-4).
 - `passages_trigram` + `passages_trigram_scope` (P16-4, intertext design §4, same file and lifecycle): the fragment-search index behind `search --fuzzy` — a second FTS5 table over the SAME folded `text_normalized`, tokenized into character trigrams for infix/mid-word matching (`]μηνιν αει[` on a damaged papyrus). DOCUMENTARY SCOPE ONLY: sources flagged `fuzzy_index: true` in config/sources.yml (papyri-ddbdp + oracc; an owner posture like `enabled`/`translations` — the whole corpus would cost 3.6–4.1 GB, the documentary shelves 257 MB measured at 6.43 B/char, 8.6 s build). The scope table records the slugs each build actually indexed, so the query surface reports real coverage instead of trusting config. Query semantics are two-phase: trigram candidates (implicit-AND MATCH of the fragment's trigrams — co-occurrence, not contiguity), then substring verification against the stored folded text (Query::Fuzzy). Sub-ms to ~10 ms measured live.
 - Index lifecycle (P26-5): `nabu rebuild` keeps the pure-function guarantee — `Indexer.rebuild!` drops every fulltext-side table and regenerates the lot from the catalog, and it is the ONLY full-reindex surface (owner decision: no separate `nabu index` command). Syncs now maintain the index INCREMENTALLY: `Indexer.refresh_source!` deletes the synced source's rows from the FTS/lemma/trigram tables (the FTS tables are regular contentful FTS5, so per-row DELETE is real deletion; one streaming rowid scan stands in for the missing passage_id index) and re-inserts them from the current catalog, rebuilds `alignment_refs` only when the source holds a registry witness document, and rebuilds the reflex closure only when the source's lemma rows or reflex edges changed. The contract is ROW IDENTITY — after a refresh, the fulltext state equals what a from-scratch `rebuild!` would produce (test-pinned) — and the sync line's "indexed N passages (slug)" is the SOURCE's count, never the corpus total. Index-inert grains (`:notes`, `:language`, `:source` — no passages, no dictionary entries) skip index work entirely. A fulltext file that is missing tables (first sync) or predates the tier column falls back to the full rebuild.
 - Derivation stamps + `rebuild --incremental` (P36-1): `derivation_stamps` (catalog, migration 017) records, per replayed source, the fingerprint its derivation satisfied — `Nabu::DerivationFingerprint`'s four-input rule plus registry posture: (1) canonical bytes (git-backed trees: HEAD sha per embedded repo + the git-excluded `.attic/` content hashed explicitly; everything else: sha256 over every file's bytes; a git tree with non-attic local modifications — e.g. LFS-materialized clones — has a WEAK identity: no stamp, never skipped); (2) parser/pipeline code (a constant-reference closure of the adapter's files within `lib/nabu/adapters/` — per-family granularity, catching bare composition like Perseus→EpidocParser that the require graph misses — plus a shared derivation-core digest of loaders/indexers/models/script helpers, exclusion-listed so a mistake over-rebuilds, never under); (3) fold rules — LANGUAGE-SCOPED since P39-1: `name:sha` tokens over `normalize.rb` (the wiring, deliberately global — its rare edits dirty everything) plus the generated fold-table modules (`hani.rb`/`jpn.rb`) the source's derived rows consult, per the declared consultation map (`FOLD_LANGUAGES`: lzh/och → hani.rb; jpn → jpn.rb + hani.rb, because the generated jpn table composes THROUGH `Hani.fold` at `rake fold:jpn` time). The source's language set is the catalog's own derived-row census (`Store::DerivationStamp.derived_languages` — documents/passages/dictionaries/reflexes; there is no static registry/manifest language declaration to read), taken post-replay at stamping so it describes exactly the rows the stamp vouches for; an unanswerable census consults ALL fold modules (dirty-more, never dirty-less). A fold-dirty verdict names the changed file (`fold(jpn.rb)`); (4) the migration level; (5) the entry's derivation-shaping flags (`translations`/`classes`/`lemma_tier`/`fuzzy_index`, stored as plain JSON). Full rebuild stamps as it replays; `--incremental` skips clean sources (row-identity untouched), re-derives dirty ones via the shared replay seam (loader upsert/withdraw, the `sync --parse-only` machinery) + `Indexer.refresh_source!`, and re-runs the corpus-wide timeline/facet builders only when something was dirty. An absent stamp = dirty. REFUSALS are loud (full rebuild required): no catalog, catalog schema level ≠ code's, or catalog rows/stamps for a source with no replayable canonical tree. Honest divergences from a fresh full rebuild, by design: row ids, revision counters (incremental REVISES and journals changes — more history, not less), `sources.last_sync_*` mirrors on clean sources, and withdrawn tombstones where full rebuild has no row (never-hard-delete). Syncs do not stamp: a synced source's stale stamp reads dirty and re-derives once (over-rebuild-safe). Not fingerprinted (documented limit): gem/Ruby toolchain upgrades — full rebuild after those. A fingerprint FORMULA change (new digest scheme, same derivation semantics) reads every stamp dirty; the owner-only `rake "stamps:rebless[i-verified-current-full-rebuild]"` escape hatch rewrites stamps against current code without re-deriving — valid ONLY immediately after a verified full rebuild on unchanged canonical (misuse = silent under-derivation; see ops runbook).
-- `vectors.sqlite3`: one table per `(embedding_model, version)` — model upgrades create a new table, old one dropped only after re-embed completes.
+- `vectors.sqlite3` (design-stage — not yet built; no such file exists): one table per `(embedding_model, version)` — model upgrades create a new table, old one dropped only after re-embed completes.
 - `license_class` enum (`open`, `attribution`, `nc`, `odbl`, `research_private`, `restricted`) drives query/export filters. `odbl` (P40-6, D40-c): ODbL 1.0 + DbCL 1.0 open data — attribution/share-alike obligations attaching to the *database* (name it + link it; share-alike on derived databases), a distinct compliance posture from the per-work CC `attribution` class; first occupant Rundata (SRDB). Not MCP-excluded (open data); the required attribution statement rides the manifest license string (the credit line).
 - The honesty invariants of the query/render surfaces (P35-6, dev-loop §6b): every literal in query/render/fetch code is a census claim about the corpus at authoring time, so (a) **era-bound literals carry their justification in place** — a `# census: <number>, <YYYY-MM-DD>[, basis]` comment recording what was measured against the live corpus and when, or `# const: <reason>` for values no corpus growth can falsify; `rake census:check` (also enforced inside the suite) fails on any unstamped literal in `lib/nabu/{query,mcp}/` + `*_fetch.rb`, and each phase gate re-diffs the recorded numbers against the live catalog. (b) **Every truncating surface announces what it hid and every empty result under active filters explains itself** — the shared exhausted-inner-window hint (`CatalogJoin::INCOMPLETE_PAGE_HINT`: a full `limit × INNER_LIMIT_FACTOR` index window + active catalog-side filters + a short page means matches may exist beyond the window, said at all four search surfaces, CLI and MCP), proximity's announced lemma-expansion clip, the render-cap tails (define/list/links/etym), and the fuzzy scope line — all pinned data-driven in `test/render_conformance_test.rb`, where a new surface joins by adding a row. (c) **A corrupt annotation lane never poses as an unannotated passage**: `Query::Show#parse_annotations` marks unparseable `annotations_json` (`ANNOTATIONS_UNREADABLE`) and show/`--tokens`/export announce the skip (export JSONL carries `annotations_error` on the affected line); concord's hyphen-tail lookup alone stays a silent nil (adjudicated: a highlight-span micro-feature whose no-highlight fallback is itself the documented degrade).
 - Lock tolerance (P17-7): every SQLite file runs `journal_mode=WAL`, set idempotently on each read-write connect (the pragma persists in the file, so existing dbs self-heal on first open — no migration; readonly connects inherit what the file says). WAL is the fit for the real usage pattern — N readers (MCP, agents, CLI) + 1 writer (sync/rebuild/batch producers) without mutual blocking; pre-WAL, a reader's shared lock crashed a running rebuild's commit (`SQLite3::BusyException`, owner defect 2026-07-13). Every connect, readonly included, also carries `busy_timeout` = 10 s (`Store::BUSY_TIMEOUT_MS`: longest legitimate lock holder is seconds-scale — batch links readbacks, loader/indexer commits — plus margin), which covers writer-vs-writer overlap and not-yet-flipped rollback-mode files. Cost: `-wal`/`-shm` sidecars sit next to each db while connections are open — the ledger's ride inside the backup's local/ directory copy, which carries live sidecars and prunes stale ones; the derived dbs are not backed up at all, and a pre-P71 box is refused until `nabu migrate-local` moves its ledger home (ops §9/§10).
 
 ## 6. Enrichment
 
+**The shipped lane: sync-driven enrichment producers (P44-7).** An adapter may declare `Adapter.enrichment_producer?`; after every load (and every rebuild replay) of such a source, SyncRunner/Rebuild run its declared producer to re-derive enrichment rows from the just-loaded catalog — today the pedecerto and hypotactic meter scansions filling the `enrichments` table, served by `search --meter`. Fully derived, zero cost to regenerate, so the derivability law holds with no journal: the producer replays at rebuild like any other derivation stage. (The same producer shape drives the place index, §5.)
+
+**The rest of this section is design-stage — not yet built** (no `nabu enrich`, no `EnrichmentRunner`; model-driven output, when it lands, is an ACQUISITION under the derivability law — a local shelf through a sanctioned gateway, §5's Phase-8 note):
+
 - **Lemmatization:** CLTK/Stanza are Python; bridge via a small persistent Python sidecar exposing HTTP on localhost (started by `nabu enrich`), not per-call subprocess spawning. Ruby stays the orchestrator.
 - **Embeddings:** pluggable `Embedder` interface — Anthropic-adjacent APIs, or local model on the Sparks. Embed `text` and, when available, the English gloss; store both vectors.
 - **Glossing:** Claude API, batched, always stored as `enrichments(kind: 'machine_gloss')`, never presented as translation without the flag.
-- All enrichment is journaled (provenance rows) and replayable: `nabu rebuild` restores derived text tables, then `nabu enrich --replay` re-applies from journal or re-computes.
+- All paid enrichment is journaled and replayable: `nabu rebuild` restores derived text tables, then a replay stage re-applies from the acquisition shelf.
 
 ## 7. Technology choices
 
@@ -278,11 +340,12 @@ language_notes(id, lang_code, kind[name|family|context|…], body, source,
 - **The Manual Adapter arm (`Nabu::ManualDrop`, P63-1) covers upstreams only a HUMAN can fetch** — captcha interstitials, POST-form dumps, account walls (the automation-bar parkings made ingestible; Trismegistos Geo is the first implementation, odt the named next candidate). The adapter declares a `ManualDrop::Spec` (upstream URL, acquisition steps, expected files each with a one-sentence sniff, refresh hint); `nabu sync <slug>` then behaves in one of three honest ways: nothing held and nothing dropped → the sync aborts with the **instruction card as the message** (`AwaitingAcquisition < FetchError` — where to click, what to tick, the exact `incoming/<slug>/` drop path; a clean state, never a stack); a drop present under `incoming/<slug>/` (top-level, gitignored — the owner's browser downloads land there, never in canonical/ directly) → each file sniff-validated (a saved captcha page is refused in one plain sentence, the drop never consumed), the previous holding atticked (`.attic/manual-<stamp>/`), files MOVED into `canonical/<slug>/`, and `.manual-fetch.json` stamped (per-file sha256, acquisition mtime, ingest time, upstream URL — the `.zip-fetch.json` analogue); a held ingest with an empty or byte-identical drop → a no-op repeating the stored pin, canonical untouched, identical drop copies left in incoming/ (the owner's file is never deleted). Provenance and idempotency thereby match fetched sources exactly; health reports the held dump's AGE against the spec's refresh hint rather than probing a remote that would only serve a captcha.
 - **The mass-deletion breaker runs BEFORE the merge.** The fetch layer predicts from the deletion diff: the fraction of the source's currently ingestible files (what `discover` yields from the untouched tree) among the doomed paths. Above 20%, `Nabu::SyncAborted` — with the canonical tree byte-unchanged (no merge, no attic writes). `--force` proceeds: files are atticked, documents retired, nothing is lost. A second, load-side guard in SyncRunner (same threshold, urns in the catalog vs `discover_with_attic` ids) still covers `--parse-only` runs and non-git adapters; attic documents count as present there, never as pending withdrawals.
 - Every sync (and every rebuild replay, kind-tagged) writes a `FetchReport` + `LoadReport` (counts: added/updated/withdrawn/errored) to the ledger's `runs` table, slug-keyed; `nabu status` and `nabu health` read it — continuously across rebuilds, because the ledger survives them (P7-1). The remote probe's license baselines and per-repo pins live on the ledger's `pins` rows for the same reason: a rebuild must not open a license-drift blindspot.
+- **Every long stage says how long it expects to run (P78-r1/r2/r3).** SyncRunner times fetch and load (plus the Indexer's refresh sub-stages) into the ledger's `stage_timings` and announces `Nabu::Eta` estimates at stage start; Rebuild persists its profiler's stages at run end. An estimate renders "~6m (last run 5m48s over N rows)" — the latest recorded row governs, scaled by row-count drift when a cheap current denominator exists — and the no-history answer is the honest "first run — no estimate", never a guess.
 - Parse errors quarantine the document (recorded, skipped), never abort the batch — and never withdraw (P37-r2): a quarantined ref's document is still present in canonical, so its urn shields the held row (prior revision, still served) from the full-load withdrawal sweep. Recognition getting stricter can therefore never unserve held content; the row revives via the normal restore/revise path when the parse succeeds again.
 - **Postcondition invariants (P18-7).** Beside the trend rules, `nabu health` holds STATE against PROMISES (`Health::Invariants`, findings-only — a green library prints nothing new): a source whose most recent ledger run FAILED is loud with the error detail (and, when provenance shows rows written during that run, a named "partial load"); a source whose latest run succeeded yet which holds zero rows in its grain (docs/entries/language records) is the half-loaded-catalog / synced-to-nothing signature — `enabled` deliberately not consulted (P23-3); flag-vs-artifact pairs (`fuzzy_index` vs the trigram index + scope table, timeline extractor families vs `document_axes` rows, `Adapter.reflex_bearing?` vs `dictionary_reflexes` rows, reflexes vs the `language_names` census); pending catalog/ledger migrations (soft). The sync/rebuild quarantine WARNING is DELTA-aware against the ledger's `quarantine_baselines` (ledger migration 005): `baseline` auto-advances at every ok run, so each change announces exactly once and a standing audited count is silent; `anchor` is the low-water mark (advances downward only), so health's creep check catches the slow bleed the advancing baseline absorbs — the withdrawal-creep precedent. The optional `sync SLUG --review CMD` hook pipes a JSON brief to a subprocess and reports its exit honestly without ever failing the sync (ops.md §11) — no cloud dependency enters the core.
 - `nabu verify` re-hashes canonical files (attic included) against the catalog — bitrot/tamper check, cronnable. Verify's reparse map is **first-wins per urn, mirroring the loader's collision seam** — and a urn claimed by more than one canonical parse is reported as its own issue kind (`:duplicate_urn`), never as opaque sha noise (P77-r10).
 - **The determinism contract (P77-r11 — the drill_pure lesson made law).** `db/` is a pure function of the three permanent folders ONLY if two adapter properties hold: **discover mints unique, stable ids** (no two canonical inputs may claim one urn — collisions make stored content an artifact of encounter order) and **parse is pure** (same ref, same content hash, every run). Enforcement is layered, because no single layer sees everything: (1) the **conformance suite** asserts uniqueness AND urn+content stability across two independent passes — every adapter, every `rake test`, but fixture-bound; (2) the **loader** counts within-pass collisions first-class (`LoadReport#collided`, journaled as provenance `collision` events, rendered in every sync/rebuild line) — live data, but only per run; (3) **verify** reports `:duplicate_urn` on its full reparse — cronnable over the whole library; (4) the **drill** gates on `rebuild_collided.zero?` and fails NOT RESTORABLE on any verify issue — the end-to-end proof, with evidence retained in its workspace; (5) the **determinism census** (`test/determinism_census_test.rb`) denies the code the constructs that make order or chance an input at all: `Dir.children`/`Dir.entries` must sort within their own statement, `Dir.glob sort: false` is banned, and randomness in lib/ is allowlisted-with-reason or absent. New allowlist entries are deliberate decisions, never drive-bys.
-- Backups: the three permanent folders — canonical/ + config/ + local/ (P71; `nabu backup`, P7-2, makes it operational) — and NOTHING derived (owner ruling 2026-08-16, closing the №R-21 convenience tier: the tier hauled ~120 GB of disposable db into every backup and drill workspace). The ledger (local/history.sqlite3) rides inside local/: the only copy of run history, pins, baselines, and durable revisions. The derived dbs (catalog/fulltext/lects/links/vectors) are disposable — `nabu rebuild` re-mints them all, and rebuild IS the restore path for db/.
+- Backups: the three permanent folders — canonical/ + config/ + local/ (P71; `nabu backup`, P7-2, makes it operational) — and NOTHING derived (owner ruling 2026-08-16, closing the №R-21 convenience tier: the tier hauled ~120 GB of disposable db into every backup and drill workspace). The ledger (local/history.sqlite3) rides inside local/: the only copy of run history, pins, baselines, and durable revisions. The derived dbs (catalog/fulltext/lects/links) are disposable — `nabu rebuild` re-mints them all, and rebuild IS the restore path for db/. `nabu backup` also ships a FOURTH default section, `.docs/` (№R-22, owner-ruled 2026-08-11): the steering record — decision register, plan docs, surveys — owner input with no other home; non-contract (an absent dir is a clean skip). The restore drill is single-mode since P77-r12: `rake ops:drill` proves db/ fully derives from the permanent folders (`ops:drill_pure` remains as an alias).
 
 ## 9. The MCP read-only surface
 
@@ -306,12 +369,16 @@ decision: the field moves fast, we keep control; the conformant core is
   injected IO/lines; the real stdin/stdout wiring (and stderr logging) is the
   `bin/nabu mcp` entrypoint's job (P8-2). stdout carries protocol messages
   ONLY.
-- **Tools** (`mcp/tools.rb`): `nabu_search` (full-text XOR lemma, lang/
-  license/limit), `nabu_show` (passage/document/range urn, `parallel`),
-  `nabu_status` (coverage: sources, counts, languages, license classes,
-  last-sync recency — what makes "no results" interpretable). Translation
-  only: all query logic stays in `lib/nabu/query/`. The tool table is a hash;
-  P8-3 adds `nabu_concord` as one entry + handler.
+- **Tools** (`mcp/tools.rb`): thirteen read-only tools as of P78 — the
+  founding trio `nabu_search` (full-text XOR lemma, lang/license/limit),
+  `nabu_show` (passage/document/range urn, `parallel`), `nabu_status`
+  (coverage: sources, counts, languages, license classes, last-sync
+  recency — what makes "no results" interpretable), then `nabu_concord`
+  (P8-3), `nabu_define` (§11), `nabu_etym` and `nabu_cognates` (§12),
+  `nabu_parallels` (§13), `nabu_links` (§15), `nabu_align` (§10), and the
+  place/character/sign cards `nabu_place`, `nabu_char`, `nabu_signs`.
+  Translation only: all query logic stays in `lib/nabu/query/`. The tool
+  table is a hash; a new surface is one entry + handler.
 - **The contract**: every returned passage carries urn + language +
   license_class + source; outputs are bounded with honest "N total, showing
   k" notes; no-match searches carry a one-line coverage hint;
@@ -942,6 +1009,18 @@ and never re-parses canonical. Live coverage (2026-07-12 sanctioned build):
 goo300k + 658 IMP = 61,670 dated/placed documents in 46.6 s; `document_axes`
 is 10.7 MB.
 
+**The lane census (as of P78).** The builder grew into a family: a
+per-source extractor per dating shape under `timeline_builder/`
+(OraccDates, ChronicleAnnals, EdhDates, CdliDates, …) plus the shared
+`MetadataDates` lane, which reads date shapes off stored document metadata
+rather than walking canonical — its shapes now include the Korean trio
+sillok/sjw/itkc (P78). The coordinates lane (migration 027, P69-1) added
+`place_lat`/`place_lon` to `document_axes`, feeding `search --within`.
+Since P47-r3 a sync refreshes the synced source's facet and
+metadata-timeline slices post-load (`FacetBuilder.refresh_source!` +
+`MetadataDates.refresh_source!`, mirroring the Indexer's per-source
+refresh) — only the canonical-walking extractors stay rebuild-scoped.
+
 **Part 2a — ORACC catalogue dates (`TimelineBuilder::OraccDates`, P16-3).** Every
 ORACC project ships a `catalogue.json`; the 2026-07-13 census (33 catalogues,
 25,502 members) found `period` on 25,330 members and `date_of_origin` on
@@ -1185,8 +1264,10 @@ never what is KNOWN.**
 
 **Local shelves are ordinary sources.** Registry entry, adapter, discovery
 accounting, quarantines, rebuild — the whole pipeline applies unchanged,
-under the fourth `sync_policy` vocabulary word, **`local`**: no upstream, no
-network, ever. Sync = re-scan the tree (`Nabu::LocalFetch`): validates it
+as **`kind: shelf`** rows: the kind itself implies the local fetch — no
+upstream, no network, ever — so a shelf row declares NO `sync_policy` (the
+vocabulary stays auto/manual/frozen; P39-0 retired the transitional
+`sync_policy: local` rider). Sync = re-scan the tree (`Nabu::LocalFetch`): validates it
 exists, sha256-pins every file into the ledger via the existing pin
 machinery (one `pins` row per file, keyed `local:<relative path>`), and
 reports disappearances. The remote probe short-circuits to the frozen-style
@@ -1257,7 +1338,7 @@ manifested but missing is the vanished/attic story above. Unlike the
 dossier shelf this one mints DOCUMENTS + PASSAGES (the full conformance
 suite applies): `content_kind` stays `:passages` — "article" is document
 metadata (`kind: article`, plus creator/year/tags/related, the EDH-persons
-pattern), not a fourth loader routing. A PDF with a text layer extracts
+pattern), not a loader routing of its own. A PDF with a text layer extracts
 via mutool (`Nabu::PdfText`, through `Nabu::Shell`) into PAGE-GRAIN
 passages (`…:p12` — the page is the only citation unit a PDF keeps stable,
 and the one scholarship cites); a scan that reads clean but blank is a
@@ -1312,8 +1393,9 @@ metadata is useful context), `themes` (list), `key_works` (urn list), any
 other scalar as an extra lane, free prose as the curated NOTE lane, and
 provenance-headed accretion sections under the language shelf's
 append-only latest-per-(slug, kind) contract verbatim. The `local-source`
-adapter (`content_kind :source`, the fourth loader routing) parses
-dossiers into the derived `source_records` (migration 015 —
+adapter (`content_kind :source`, the fourth of the five loader routings —
+passages, dictionary, language, source, notes) parses
+dossiers into the derived `source_records` (migration 016 —
 slug/kind/body/provenance, temperature 1, replaced per slug); `nabu
 verify` re-parses and diffs; the P18-7 invariants' populated/files-vs-
 records checks cover both dossier grains. Populated by the owner-fired
@@ -1346,7 +1428,7 @@ metadata only: P19-1 minted no dossier urns, and an edge to an invented
 urn would sit permanently unresolved — codes upgrade to edges if dossier
 documents ever exist.
 
-**Shelf three: `local/shelves/local-notes/` (P24-1)** — the owner's annotation
+**Shelf four: `local/shelves/local-notes/` (P24-1)** — the owner's annotation
 lane, scholia of one's own: curatorial notes keyed by ANY urn the corpus
 knows — a document, a passage, a range, a dictionary entry (P22-2's minted
 urns included). One YAML file per TOPIC (`<topic>.yml`, default `notes` —
@@ -1363,7 +1445,7 @@ records a note on a not-yet-held urn deliberately (planned material) and
 such notes read "(dangling)" at render until the urn arrives. The append is
 atomic with the LibraryShelf discipline: reparse-validate through the real
 parser, rollback to the prior bytes on rejection. The `local-notes` adapter
-(`content_kind :notes`, the fourth loader routing → `Store::NoteLoader`)
+(`content_kind :notes`, the fifth loader routing → `Store::NoteLoader`)
 indexes topics into the derived `urn_notes` (migration 015) — temperature
 1, replaced per topic wholesale, swept on full loads, rebuilt by `nabu
 rebuild`; `nabu verify` re-parses the topic files and diffs the derived

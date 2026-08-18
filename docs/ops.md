@@ -56,7 +56,8 @@ What each command does and its exit contract:
 - **`nabu health --remote`** — no-clone upstream probe. The strategy is keyed
   per source off the adapter: **git** sources use `git ls-remote` (liveness,
   HEAD-vs-`last_sync_sha` drift, best-effort license-drift via
-  raw.githubusercontent); **HTTP-zip** sources (ORACC) HEAD each project zip
+  raw.githubusercontent); **HTTP-zip** sources (~40 adapters — ORACC the
+  archetype) HEAD each project zip
   (200 = reachable; `Last-Modified` vs the stored `.zip-fetch.json` pin =
   drift) and GET each project `metadata.json` for license-drift — through the
   same vendored-cert path ZipFetch fetches on. A never-synced project reads
@@ -106,11 +107,16 @@ What each command does and its exit contract:
   - `up=BEHIND(2d)` — upstream moved past our sync pin (**loud** — a sync is due);
   - `up=stale(30d)` — the last probe is older than two weeks, so even its "ok" is
     too old to trust; re-probe before deciding;
-  - `up=?(never)` — never probed here (run `nabu status --remote`);
+  - `up=?(unprobed)` — never probed here (run `nabu status --remote`);
+  - `up=?(re-probe)` — the last probe errored; probe again before trusting it;
   - `up=?(3d)` — probed, but drift is indeterminate (unpinned / never synced /
     upstream unreachable / multi-repo with no pins yet); an *unpinned* source
-    clears once `nabu health --backfill-pins` or the next sync records its pin;
-  - `up=frozen` — a frozen-policy dead-project snapshot; no probe is expected.
+    clears once `nabu health --backfill-pins` or the next sync records its pin
+    (`nabu health --accept-creep SLUG [--note …]` records an owner acceptance
+    of a standing quarantine level; `--all` sweeps);
+  - `up=frozen` — a frozen-policy dead-project snapshot; no probe is expected;
+  - `up=module` / `up=local` — feature modules and the local shelves: no
+    upstream drift question exists for them.
 - **`nabu status --remote`** — the **one-command informed-update flow**: run the
   live upstream probe inline (the same code path as `health --remote`, so it also
   persists the cache), then render the freshly refreshed `up=` column. Use this
@@ -119,15 +125,27 @@ What each command does and its exit contract:
   (an `upstream` object) but **never probes live** — it is a bounded status read.
 - **`rake fixtures:check`** — re-fetches the small fixture samples, diffs them,
   re-runs the affected adapter tests. Never overwrites. Nonzero on drift.
-- **`nabu backup`** — file-level rsync of canonical/ (attic included), the
-  history ledger, config/, and (default-on) the derived dbs to a mounted
-  external volume. Read-only on canonical/. **Exit 1** if the target volume is
-  not mounted (the mount-point guard, §9) or any rsync section fails. Full
+- **`nabu backup`** — file-level rsync of the permanent set — canonical/
+  (attic included), config/, local/ (shelves, instance config, the history
+  ledger), and `.docs/` (№R-22) — to a mounted external volume. **Nothing
+  under db/ ever ships**: `nabu rebuild` re-derives it (the P77-r12
+  contract, §9). Read-only on canonical/. **Exit 1** if the target volume is
+  not mounted (the mount-point guard, §9), any rsync section fails, or the
+  ledger still sits at the pre-P71 db/ home (run `nabu migrate-local`). Full
   detail — the external-volume workflow, the guard, restore, the drill — is §9.
 
 ### What `nabu sync <source>` actually does
 
-One sync is four steps, in order, each honest about what it touched:
+One sync is four steps, in order, each honest about what it touched —
+and since P78-r1/r2/r3 every long stage NARRATES: the run opens with
+`<slug>: last sync took 5m48s` (from the ledger's runs history), each
+multi-second stage announces with the estimate its last run earned
+(`~6m (last run 5m48s over 1,234,567 rows)`, scaled when the row count
+drifted), a stage with no history says `first run — no estimate`
+honestly, and once ticks flow the counter projects `~3m left`. The
+per-stage wall times persist in the ledger's `stage_timings` table
+(append-only; the latest row governs), so estimates appear from each
+source's **second** sync — the price of never guessing:
 
 1. **Fetch canonical.** The adapter brings the upstream snapshot into
    `canonical/<slug>/` non-destructively: git fetches go through the
@@ -168,6 +186,20 @@ byte-identical, 1 vanished (withdrawn, not deleted), none quarantined;
 the index now carries corph's 17,942 live passages — the count is the
 source's own, not the corpus total, because nothing else was reindexed.
 An index-inert shelf prints no `indexed` fragment at all.
+
+
+Flags worth knowing beyond `--parse-only`: `--redownload` wipes the
+source's canonical tree first (a deliberate refetch-from-zero),
+`--grant-acknowledged` records a grant acknowledgment non-interactively
+(scripted syncs of grant-gated sources), and `--force` overrides the
+mass-deletion breaker — after you have READ what it would withdraw.
+
+Since P78-r4 a zip source survives hostile member names: when `unzip`
+dies on a member whose filename bytes the filesystem cannot hold (a
+live case: a CP949-named stray in an upstream dump), the fetch falls
+back to the in-process zip reader, lands every extractable member
+CRC-verified, and reports the skipped names loudly — a junk-named
+member is a note, not a failed sync.
 
 ### What is NOT automated (on purpose)
 
@@ -220,7 +252,7 @@ source names its desks), `siblings` (co-minted document lanes, e.g.
 osta's `-vrt`), `lemma_tier` (`silver` marks automatic lemmatization —
 the GLAUx rule), `fuzzy_index` (opt-in to the documentary trigram
 index), `requires` (module dependency chains, package-manager
-semantics), `group: core` (registry-sibling instruments quickstart
+semantics), `group: core` (and `group: signs` — `nabu sync signs` sweeps the sign-spine modules the same way) (registry-sibling instruments quickstart
 sweeps via `nabu sync core`).
 
 ## 2. Why launchd needs help finding Ruby
@@ -462,7 +494,7 @@ Read the report — it names the source and the signal.
 
 ### `nabu status` shows `up=BEHIND` (or you want to check before syncing)
 `up=BEHIND(Nd)` means the last probe found upstream had moved past our sync pin —
-a sync is due, and now it's an *informed* one. If the column reads `up=?(never)`
+a sync is due, and now it's an *informed* one. If the column reads `up=?(unprobed)`
 or `up=stale(Nd)`, the cache can't answer "did it change?"; run `nabu status
 --remote` to probe inline and refresh the column in one command, then decide.
 This is the whole point of the column: an update is a choice you can see the
@@ -587,7 +619,11 @@ On this box run them as `bundle exec rake …` (§2).
 | `rake fold:hani[variants_path]` | Regenerate the lzh/och trad↔simp↔variant fold module from held Unihan. | Fold change dirties the CJK shelves' stamps — re-derive owner-scheduled. |
 | `rake fold:jpn[mappings,kanjidic]` | Regenerate the jpn kyūjitai↔shinjitai fold (jinmeiyō + KANJIDIC2-jōyō lanes). | Same stamp caveat, jpn scope. |
 | `rake gaiji:aozora_ids[census]` | Regenerate the Aozora IDS display lane from the checked-in description census. | Pure function of the census tsv; drift-pinned by test. |
-| `rake site:axes` | Regenerate the 18 per-axis site pages + index from registry, fragments, and LIVE catalog counts. | Run only where the catalog exists (main checkout) — a catalog-less run degrades holdings. |
+| `rake fold:xct[verbs]` | Regenerate the Classical Tibetan verb-stem fold module. | Same stamp caveat, xct scope. |
+| `rake site:data` | Regenerate `site/_data/` (desks + census) from the registries and the live catalog. | Run where the catalog exists. |
+| `rake site:refresh` | The one gate refresh: `site:data` + `site:axes`. | The standard pre-release step (§12). |
+| `rake site:preview` | Serve the site locally for staged-change review (port 4747). | Read-only. |
+| `rake site:axes` | Regenerate the per-axis site pages (one per registry axis — 24 as of P78) + index from registry, fragments, and LIVE catalog counts. | Run only where the catalog exists (main checkout) — a catalog-less run degrades holdings. |
 | `rake site:check` | Drift check: source-dossier descriptions vs docs/library.md. | Exit 1 on drift; never generates. |
 | `rake ops:drill` | Fresh-machine restore drill against a throwaway copy (§9). | Long; owner-fired. |
 | `rake "bless[<attestation>]"` (alias: `stamps:rebless`) | Rewrite EVERY source's derivation stamp to assert current code — WITHOUT re-deriving. Escape hatch for fingerprint-formula or output-identical code changes, so a multi-hour rebuild isn't triggered by bookkeeping. | **Owner-only, dangerous.** Valid ONLY when the catalog's derived rows already match what current code would produce: right after a verified full rebuild, or after individually re-syncing every source whose output actually changed. Misuse = stamps that lie = silent under-derivation. The attestation argument (`i-verified-current-full-rebuild`) is the claim you must be able to make truthfully; the task refuses anything else. |
@@ -609,7 +645,7 @@ disk that a bare `rsync` (or Finder drag) could restore.
 |---|---|---|
 | `canonical/` | the universal asset | The fetched corpus — **including every `.attic/`** |
 | `config/` | the project definition | Registries, rules, postures — what the corpus *is* |
-| `local/` | THE INSTANCE | Owner shelves (`local/shelves/`), instance config (`local/config/` — rulings, grants, profile, settings), the ledger (`local/history.sqlite3` — the **only** copy of runs/pins/baselines/revisions) |
+| `local/` | THE INSTANCE | Owner shelves (`local/shelves/`), instance config (`local/config/` — rulings, grants, profile, settings), the ledger (`local/history.sqlite3` — the **only** copy of runs/pins/baselines/revisions/probes, the grant/creep historical mirrors, and the `stage_timings` ETA history, P78-r1) |
 | `.docs/` | the steering record | Owner working material with no other copy (№R-22) — non-contract, backed up by default |
 
 **Nothing under `db/` is ever backed up** (owner ruling 2026-08-16, closing the
@@ -699,7 +735,7 @@ job — a failed nightly backup because the disk is detached is a *feature*: it
 shows up red in the log instead of quietly corrupting your only copy.
 
 `rsync -a --delete` is scoped to each section's **subdirectory** of the target
-(`…/nabu/canonical`, `…/nabu/config`, `…/nabu/db`), never to the volume root —
+(`…/nabu/canonical`, `…/nabu/config`, `…/nabu/local`, `…/nabu/.docs`), never to the volume root —
 so a file sitting beside the target is never swept, and even with the guard
 bypassed the blast radius is contained.
 
@@ -781,7 +817,7 @@ deliberately. `rake ops:drill_pure` remains as an alias. Output:
 
 ```
 Restore drill
-  backup     → /…/target  (5/5 sections, 61347 files, OK)
+  backup     → /…/target  (4/4 sections, 61347 files, OK)
   restore    → /…/machine
   rebuild    quarantined 0 document(s)
   verify     clean
@@ -1043,9 +1079,10 @@ the subset the owner promotes to a version number.
 
 The site carries GENERATED pages that must be reprojected as part of the
 gate site refresh (MAINTENANCE.md), so the committed, deployed site is
-current: run `bundle exec rake site:axes` to regenerate the per-axis desk
-pages (`site/axis/<name>.md` + the `/axis/` index) from the live registry
-and the read-only catalog counts, and commit the result before the release
+current: run `bundle exec rake site:refresh` (site:data + site:axes — the
+one-step gate refresh) to regenerate `site/_data/*.yml` and the per-axis
+desk pages (`site/axis/<name>.md` + the `/axis/` index) from the live
+registry and the read-only catalog counts, and commit the result before the release
 push. The suite (`test/site/axis_pages_test.rb`) fails if the pages have
 drifted from the registry, so this is a green-gate precondition, not a
 discretionary step.
