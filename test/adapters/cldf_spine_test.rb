@@ -19,7 +19,7 @@ module Adapters
       entry = registry["cldf-spine"]
       refute_nil entry, "cldf-spine must be registered in config/sources.yml"
       assert entry.feature_module?, "a reference resolver instrument is a kind: module row"
-      refute entry.wired, "a feature module serves no documents — wired stays false permanently"
+      assert entry.wired, "channel verified (the 2026-08-18 wired-semantics ruling)"
       assert_equal "manual", entry.sync_policy
       assert_includes entry.axes, "etym"
     end

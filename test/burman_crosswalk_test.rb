@@ -64,7 +64,7 @@ class BurmanCrosswalkTest < Minitest::Test
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
     entry = registry["burman-concordance"]
     refute_nil entry
-    refute entry.wired, "PERMANENTLY unwired — a links instrument syncs by explicit name only"
+    assert entry.wired, "channel verified (the 2026-08-18 wired-semantics ruling)"
     assert_includes entry.axes, "italic"
   end
 
