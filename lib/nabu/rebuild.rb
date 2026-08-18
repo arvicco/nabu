@@ -121,8 +121,9 @@ module Nabu
       LectRulings.validate!(@config.lect_rulings_paths)
       db_existed = File.exist?(db_path)
       # P36-0: the always-on stage profiler. Cheap (a monotonic sample per stage
-      # boundary; per document for parse/insert), so it runs on every rebuild —
-      # observability only, never persisted, so rebuild-safe by construction.
+      # boundary; per document for parse/insert), so it runs on every rebuild.
+      # Since P78-r1 its facts persist to the LEDGER at run end (stage_timings
+      # — №R-21 territory, so still rebuild-safe: db/ stays f(canonical)).
       profile = RebuildProfile.new
       ledger = Store::Ledger.open_with_lift!(history_path: history_path, catalog_path: db_path)
       # Sidecars go WITH each db (Store.drop_database_files! — the 2026-08-02
@@ -243,6 +244,12 @@ module Nabu
         Store::AnalyzeReport.new(scope: "catalog + index",
                                  seconds: Store.analyze!(db) + Store.analyze!(fulltext))
       end
+      # P78-r1 (Q34): the profiler's facts now OUTLIVE the run — appended to
+      # the ledger's stage_timings so the next rebuild can render ETAs. The
+      # ledger is №R-21 territory (operational history, never dropped here),
+      # so the derivability law holds: db/ stays f(canonical) and the
+      # timings survive it by construction.
+      persist_stage_timings!(ledger, profile, outcomes, indexed)
       Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes,
                  skips: skips, indexed: indexed, axes: axes, facets: facets, profile: profile,
                  analyzed: analyzed, link_failures: link_failures)
@@ -278,6 +285,28 @@ module Nabu
       finding = Health::QuarantineBaseline.delta_finding(ledger, entry.slug, errored: report.errored)
       Health::QuarantineBaseline.record!(ledger, entry.slug, errored: report.errored)
       Outcome.new(slug: entry.slug, report: report, quarantine: finding)
+    end
+
+    # P78-r1 (Q34): append the profiler's facts to the ledger's stage_timings
+    # (append-only; the latest row governs the next run's ETA). +rows+ is the
+    # honest work-size denominator so the estimate can scale by drift: the
+    # replayed document count for a source's :load, the indexed passage count
+    # for corpus stages (they all scan the corpus). One timestamp for the
+    # whole batch — the rows describe one run, not fourteen moments.
+    def persist_stage_timings!(ledger, profile, outcomes, indexed)
+      return if profile.nil? || profile.empty?
+
+      at = Time.now
+      docs = outcomes.to_h { |outcome| [outcome.slug, outcome.report.added + outcome.report.updated] }
+      profile.source_scopes.each do |slug|
+        Store::StageTimings.record!(ledger, kind: "rebuild", scope: slug, stage: "load",
+                                            seconds: profile.seconds(scope: slug, stage: :load),
+                                            rows: docs[slug], at: at)
+      end
+      profile.corpus_stages.each do |stage|
+        Store::StageTimings.record!(ledger, kind: "rebuild", scope: "corpus", stage: stage.to_s,
+                                            seconds: profile.corpus_total(stage), rows: indexed, at: at)
+      end
     end
 
     # Same content-kind routing as SyncRunner (P11-4/P19-1/P24-1,

@@ -196,8 +196,10 @@ module Store
 
       Nabu::Store::Ledger.migrate!(db)
 
-      # 005 baselines + 006 drift widen + 007 grant acks (P42-r1) + 008 creep acceptances (P43-0)
-      assert_equal 8, db[:schema_info].get(:version)
+      # 005 baselines + 006 drift widen + 007 grant acks (P42-r1) + 008 creep
+      # acceptances (P43-0) + 009 stage timings (P78-r1)
+      assert_equal 9, db[:schema_info].get(:version)
+      assert db.table_exists?(:stage_timings)
       assert db.table_exists?(:quarantine_baselines)
       assert_equal 0, db[:quarantine_baselines].count
       assert db.table_exists?(:creep_acceptances)

@@ -3,9 +3,11 @@
 module Nabu
   # Per-source / per-stage wall-time capture for `nabu rebuild` (P36-0, the
   # profiler that must precede any optimization — dev-loop §6b, "numbers before
-  # optimization"). Observability, NOT derived data: it holds monotonic-clock
-  # deltas in memory for the length of one rebuild and is never persisted (so it
-  # is rebuild-safe by construction — there is nothing under db/ to regenerate).
+  # optimization"). It holds monotonic-clock deltas in memory for the length of
+  # one rebuild; NOT derived data — since P78-r1 the run-end facts are appended
+  # to the history ledger's stage_timings (Store::StageTimings, the ETA record),
+  # which is №R-21 territory, so rebuild-safety still holds by construction
+  # (nothing under db/ to regenerate).
   #
   # == The two levels
   #
@@ -46,14 +48,25 @@ module Nabu
     COMPONENT_STAGES = %i[parse insert].freeze
 
     # Human-facing order + labels for the corpus stages in the table.
+    # EVERY corpus stage measured anywhere (rebuild.rb + indexer.rb) must
+    # have an entry — a stage missing here silently vanishes from
+    # corpus_stages, grand_total, and the P78-r1 durable timings (which is
+    # exactly what happened to six stages between P58 and P77; the census
+    # test in rebuild_profile_test pins the two lists together now).
     CORPUS_STAGE_LABELS = {
       timeline: "timeline",
       facets: "facets",
+      lect_journal: "lect journal",       # P70: the re-minted lect journal
+      lect_facets: "lect facets",         # P58-4: the flattened lect axis
+      artifact_scripts: "artifact scripts", # P61-3: the artifact-script lane
       stats: "source stats",
       fts_lemma: "fts+lemma reindex",
       trigram: "trigram",
+      passage_chars: "char coverage",     # P72-1: the char coverage index
+      passage_signs: "sign index",        # P77-r16: the OSL sign postings
       alignment: "alignment refs",
       reflex: "reflex roots",
+      links: "links re-mine",             # P70-3b: the re-derived links instrument
       analyze: "analyze" # P42-4: the bounded post-rebuild ANALYZE (catalog + index)
     }.freeze
 

@@ -43,6 +43,7 @@ class DerivabilityManifestTest < Minitest::Test
       tables: %w[
         runs pins revisions language_notes quarantine_baselines
         source_probes grant_acknowledgments creep_acceptances
+        stage_timings
       ]
     }
   }.freeze
