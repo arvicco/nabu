@@ -3662,4 +3662,38 @@ viet-wikisource:
   # (PAGES is the naming authority), 2 batched api.php requests; PD texts
   # + CC BY-SA 4.0 transcription → attribution. All lzh.
   license_watch: https://zh.wikisource.org/wiki/Wikisource:%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF
+goryeosa:
+  adapter: Nabu::Adapters::Goryeosa
+  axes: [korean]   # P78-3: the goryeosa family — the pre-Joseon dynastic history
+  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  # 고려사 원문 (NIKH via data.go.kr 15053637; 제한 없음 → D47-a
+  # attribution). Hanmun only — no modern Korean translation layer in the
+  # dump. Fetch resolves the CURRENT atchFileId (DataGoKrFetch), then one
+  # ZipFetch into the flat workdir. 138 members kr_000..kr_137 (~50 MB
+  # unpacked), nikh-xml family, DTD ver 1.4.
+  license_watch: https://www.data.go.kr/data/15053637/fileData.do
+  sync_policy: manual
+
+goryeosa-jeoryo:
+  adapter: Nabu::Adapters::GoryeosaJeoryo
+  axes: [korean]   # P78-3: the goryeosa family — the chronological digest sibling
+  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  # 고려사절요 원문 (NIKH via data.go.kr 15115521; 제한 없음 → D47-a
+  # attribution). Hanmun only. Fetch resolves the CURRENT atchFileId
+  # (DataGoKrFetch), then one ZipFetch into the flat workdir. 36 members
+  # kj_000..kj_035 (~22 MB unpacked) + one stray mojibake .jpg the census
+  # counts loudly; nikh-xml family.
+  license_watch: https://www.data.go.kr/data/15115521/fileData.do
+  sync_policy: manual
+
+bibyeonsa:
+  adapter: Nabu::Adapters::Bibyeonsa
+  axes: [korean]   # P78-3: the goryeosa family — the state council's daily register
+  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  # 비변사등록 원문 (NIKH via data.go.kr 15053636; 제한 없음 → D47-a
+  # attribution). Hanmun only. Fetch resolves the CURRENT atchFileId
+  # (DataGoKrFetch), then one ZipFetch into the flat workdir. 273 members
+  # bb_001..bb_273 (~180 MB unpacked — the family's bulk sibling);
+  # nikh-xml family, DTD ver 1.4.
+  license_watch: https://www.data.go.kr/data/15053636/fileData.do
   sync_policy: manual

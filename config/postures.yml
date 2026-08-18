@@ -99,6 +99,33 @@ sources:
         pages carry no machine year (compilation strata 1479/1665/1697 ride the docs, not claims)"}
     places: {posture: unplaced}
     script: {posture: implied, note: "Han script implied by lzh; Ext-B/rare-Han codepoints ride as-is"}
+  goryeosa:
+    lect:
+      posture: codemap
+      note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
+    dating: {posture: undatable, note: "P78-3 census: volume fronts carry no dateOccured (no 서기 line
+        exists in the zip); the leaf-grain 음/양 machine dates ride annotations raw — a future
+        extractor revisit, not a claim"}
+    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    script: {posture: implied}
+  goryeosa-jeoryo:
+    lect:
+      posture: codemap
+      note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
+    dating: {posture: undatable, note: "P78-3 census: root fronts carry coveragePeriod prose, never a
+        dateOccured (the bare machine year sits on the level3 year front, two levels down); the
+        per-article 음 dates ride annotations raw — a future extractor revisit, not a claim"}
+    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    script: {posture: implied}
+  bibyeonsa:
+    lect:
+      posture: codemap
+      note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
+    dating: {posture: undatable, note: "P78-3 census: book fronts carry only the 1959 print-edition
+        publication data; content years live on level2 value attrs and the untyped per-entry machine
+        dates riding annotations raw — a future extractor revisit, not a claim"}
+    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    script: {posture: implied}
   kanripo:
     lect: {posture: codemap, note: lzh → zho/lit (Literary Chinese)}
     dating: {posture: undatable}

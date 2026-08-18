@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE level1 SYSTEM "history.dtd">
+<level1 id="kj_033">
+    <front>
+        <biblioData type="원문">
+            <title>
+                <mainTitle volume="33">高麗史節要 卷33</mainTitle>
+            </title>
+            <fileDesc>사업명 : 2015년 한국사데이터베이스 구축사업;2019년 | 사업자 : 서울시스템주식회사;스템위드(주) | 구축내용 : 기사제목, 색인어 구축;규장각원문링크수정</fileDesc>
+        </biblioData>
+        <description>
+            <coveragePeriod>辛禑 14年</coveragePeriod>
+        </description>
+    </front>
+    <level2 id="kj_033_0010" type="卷33">
+        <front>
+            <biblioData type="원문">
+                <title>
+                    <mainTitle>辛禑四</mainTitle>
+                </title>
+            </biblioData>
+        </front>
+        <level3 id="kj_033_0010_0010" type="卷33" value="우왕(禑王) 14년">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>禑王 十四年</mainTitle>
+                    </title>
+                    <date>
+                        <dateOccured date="1388">무진</dateOccured>
+                    </date>
+                </biblioData>
+            </front>
+            <level4 id="kj_033_0010_0010_0010" type="卷33" value="우왕(禑王) 14년(1388) 1월">
+                <front>
+                    <biblioData>
+                        <title>
+                            <mainTitle>1월</mainTitle>
+                        </title>
+                    </biblioData>
+                </front>
+                <level5 id="kj_033_0010_0010_0010_0010" type="卷33" value="우왕(禑王) 14년(1388) 1월">
+                    <front>
+                        <biblioData type="원문">
+                            <title>
+                                <mainTitle>염흥방이 조반의 추국을 주도하다가 순군에 갇히다</mainTitle>
+                            </title>
+                            <date>
+                                <dateOccured date="1388-01-01L0" type="음">1388년 1월 1일</dateOccured>
+                                <dateOccured date="1388-02-08" type="양">1388년 2월 8일</dateOccured>
+                                <dateOccured type="일간지">병자(丙子)</dateOccured>
+                                <dateOccured type="원문">戊辰【辛禑十四年. ○大明洪武二十一年.】</dateOccured>
+                            </date>
+                        </biblioData>
+                    </front>
+                    <text>
+                        <link src="筆寫本〈奎15658〉" type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=GJB&amp;book_cd=GK15658_00&amp;vol_no=0021&amp;page_no=2a"/>
+                        <link src="甲寅字本〈奎貴3566〉" type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=GJB&amp;book_cd=GR32423_00&amp;vol_no=0011&amp;page_no=1a"/>
+                        <content>
+                            <paragraph align="center">高麗史節要卷之三十三</paragraph>
+                            <paragraph align="center">辛禑四</paragraph>
+                            <paragraph align="center">戊辰<annotation type="소자쌍행">
+                                    <noteTitle>辛禑十四年. ○大明洪武二十一年.</noteTitle>
+                                    <noteContent/>
+                                </annotation>
+                            </paragraph>
+                            <paragraph align="center">春正月丙子朔. <index ref="p054180" type="이름">廉興邦</index>勸<index type="이름">禑</index>下令購捕<index ref="p092580" type="이름">趙胖</index>甚急, <index ref="p090450" type="이름">鄭子喬</index>獲<index type="이름">胖</index>, 繫巡軍. 時, <index ref="p054180" type="이름">興邦</index>爲<index ref="o009090" type="관직">巡軍上萬戶</index>, <index ref="p054180" type="이름">興邦</index>及<index ref="o003980" type="관직">都萬戶</index>
+                                <index ref="p058330" type="이름">王福海</index>
+                                <index ref="o006110" type="관직">副萬戶</index>
+                                <index ref="p024380" type="이름">都吉敷</index>
+                                <index ref="p070910" type="이름">李光甫</index>
+                                <index ref="o011410" type="관직">委官</index>
+                                <index ref="p069250" type="이름">尹珍</index>
+                                <index ref="p002090" type="이름">姜淮伯</index>與臺諫典法雜訊. <index type="이름">胖</index>曰, “六七貪婪宰相縱奴四方, 奪人田民, 戕虐百姓, 是大賊也. 今斬<index ref="p070850" type="이름">李光</index>者, 唯以輔國家除民賊耳. 何云謀叛.” 栲掠竟日, 不服. <index ref="p054180" type="이름">興邦</index>必欲<index type="이름">胖</index>誣服, 治極慘酷. <index type="이름">胖</index>罵辱, 不小屈曰, “我欲斬汝國賊. 汝與我相訟者也, 何鞫我爲.” <index ref="p054180" type="이름">興邦</index>怒益盛, 使人亂擊其口, <index ref="p033330" type="이름">福海</index>假睡不聞, 餘亦無敢如何, 獨<index ref="o000140" type="관직">左司議</index>
+                                <index ref="p014810" type="이름">金若采</index>以爲不可而止之. 庚辰. <index type="이름">禑</index>如<index ref="p102380" type="이름">崔瑩</index>第, 辟左右, 與語良久, 蓋議<index type="이름">胖</index>獄也. 是日, <index ref="p054180" type="이름">興邦</index>復欲鞫<index type="이름">胖</index>, 赴巡軍, 請獄官及臺諫, 皆不至. 壬午. <index type="이름">禑</index>命釋<index type="이름">胖</index>及其母妻, 又賜醫藥與裘, 下令曰, “宰相旣富, 可停頒祿, 其先頒隊伍之無食者.” 遂下<index ref="p054180" type="이름">興邦</index>于巡軍, 國人皆喜曰, “吾君明矣.”</paragraph>
+                        </content>
+                    </text>
+                </level5>
+                <level5 id="kj_033_0010_0010_0010_0020" type="卷33" value="우왕(禑王) 14년(1388) 1월">
+                    <front>
+                        <biblioData type="원문">
+                            <title>
+                                <mainTitle>최영과 이성계가 임견미 일파를 숙청하다</mainTitle>
+                            </title>
+                            <date>
+                                <dateOccured date="1388-01-08L0" type="음">1388년 1월 8일</dateOccured>
+                                <dateOccured date="1388-02-15" type="양">1388년 2월 15일</dateOccured>
+                                <dateOccured type="일간지">계미(癸未)</dateOccured>
+                                <dateOccured type="원문">戊辰【辛禑十四年. ○大明洪武二十一年.】</dateOccured>
+                            </date>
+                        </biblioData>
+                    </front>
+                    <text>
+                        <link src="筆寫本〈奎15658〉" type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=GJB&amp;book_cd=GK15658_00&amp;vol_no=0021&amp;page_no=2b"/>
+                        <link src="甲寅字本〈奎貴3566〉" type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=GJB&amp;book_cd=GR32423_00&amp;vol_no=0011&amp;page_no=1b"/>
+                        <content>
+                            <paragraph align="center">○癸未. <index type="이름">禑</index>命<index ref="p102380" type="이름">崔瑩</index>及我<br/>
+                                <index type="이름">太祖</index>陳兵宿衛, 下<index ref="o010470" type="관직">領三司事</index>
+                                <index ref="p081970" type="이름">林堅味</index>
+                                <index ref="o018460" type="관직">贊成事</index>
+                                <index ref="p024380" type="이름">都吉敷</index>于獄. 使者至<index ref="p081970" type="이름">堅味</index>第, <index ref="p081970" type="이름">堅味</index>拒命, 厲聲謂使者曰, “七日頒祿古制也. 今, 無故而廢之, 豈爲君之道乎. 自古, 人主之非, 臣下有正之者.” 遂欲爲亂, 使人奔告其黨, 甲騎已遮路, 不得出, 歸告<index ref="p081970" type="이름">堅味</index>. <index ref="p081970" type="이름">堅味</index>家在<index ref="t004340" type="지명">男山</index>北, 旣而, 仰見<index ref="t004340" type="지명">男山</index>, 騎已成列. <index ref="p081970" type="이름">堅味</index>膽落就擒, 嘆曰, “<index type="이름">廣平君</index>誤我矣.” 先是, <index ref="p081970" type="이름">堅味</index>
+                                <index ref="p054180" type="이름">興邦</index>忌<index type="이름">瑩</index>淸直且握重兵, 常欲加害, <index ref="p077600" type="이름">李仁任</index>固止之, 故云. 巡軍不窮治<index ref="p054180" type="이름">興邦</index>等罪, <index type="이름">禑</index>大怒, 以前<index ref="o016210" type="관직">評理</index>
+                                <index ref="p059050" type="이름">王安德</index>爲<index ref="o003980" type="관직">都萬戶</index>, <index ref="o015300" type="관직">知門下</index>
+                                <index ref="p070310" type="이름">李居仁</index>爲<index ref="o007470" type="관직">上萬戶</index>, 我<br/>
+                                <index ref="p072910" type="이름">恭靖王</index>爲<index ref="o006110" type="관직">副萬戶</index>, 命更鞫之. <index ref="o015110" type="관직">密直副使</index>
+                                <index ref="p083700" type="이름">林㮹</index>, 勒歸私家, <index ref="o018460" type="관직">贊成事</index>
+                                <index ref="p058330" type="이름">王福海</index>, 賜姓爲子, 故不以爲疑, 使領兵, 與<index ref="p102380" type="이름">崔瑩</index>等宿衛. 是夜, <index ref="p033330" type="이름">福海</index>有異志, 以突騎數十詐稱徼巡宮城, 馳入<index type="이름">瑩</index>軍, <index type="이름">瑩</index>方被甲踞胡床, 指揮偏裨, 目不交睫, <index ref="p033330" type="이름">福海</index>不得爲害. 乙酉. 下<index ref="o005170" type="관직">右侍中</index>
+                                <index ref="p074070" type="이름">李成林</index>
+                                <index ref="o010100" type="관직">大司憲</index>
+                                <index ref="p054010" type="이름">廉廷秀</index>
+                                <index ref="o015650" type="관직">知密直</index>
+                                <index ref="p015480" type="이름">金永珍</index>及<index ref="p033330" type="이름">福海</index>
+                                <index type="이름">㮹</index>于巡軍. 丙戌. <index ref="p054180" type="이름">興邦</index>
+                                <index ref="p081970" type="이름">堅味</index>
+                                <index ref="p024380" type="이름">吉敷</index>
+                                <index ref="p083430" type="이름">成林</index>
+                                <index type="이름">廷秀</index>
+                                <index ref="p033330" type="이름">福海</index>
+                                <index ref="p015480" type="이름">永珍</index>
+                                <index type="이름">㮹</index>伏誅, 又斬其族黨<index ref="o018460" type="관직">贊成事</index>
+                                <index ref="p015790" type="이름">金用輝</index>
+                                <index ref="o007380" type="관직">三司右使</index>
+                                <index ref="p078770" type="이름">李存性</index>
+                                <index ref="o017740" type="관직">判開城</index>
+                                <index ref="p083460" type="이름">林齊味</index>
+                                <index ref="o005210" type="관직">密直</index>
+                                <index ref="p113870" type="이름">洪徵</index>
+                                <index ref="p083770" type="이름">任獻</index>
+                                <index ref="p032140" type="이름">朴仁貴</index>
+                                <index ref="p033320" type="이름">潘德海</index>
+                                <index ref="p081300" type="이름">李希蕃</index>
+                                <index ref="o011510" type="관직">開城尹</index>
+                                <index type="이름">鄭愨</index>
+                                <index ref="o019190" type="관직">典法判書</index>
+                                <index ref="p074330" type="이름">李竦</index>
+                                <index ref="o005170" type="관직">右侍中</index>
+                                <index ref="p033390" type="이름">潘益淳</index>
+                                <index ref="o000140" type="관직">右司議</index>
+                                <index ref="p045370" type="이름">辛權</index>
+                                <index ref="o003650" type="관직">大護軍</index>
+                                <index ref="p045690" type="이름">辛鳳生</index>
+                                <index ref="o010120" type="관직">執義</index>
+                                <index ref="p072830" type="이름">李美生</index>
+                                <index ref="o014200" type="관직">佐郞</index>
+                                <index ref="p113040" type="이름">洪尙淵</index>
+                                <index ref="o017820" type="관직">判內府寺事</index>
+                                <index ref="p012420" type="이름">金萬興</index>等, 遂籍<index ref="p081970" type="이름">堅味</index>等家. 於是, 分遣諸道<index type="관직">察訪</index>, 推刷所奪田民, 還其主. <index ref="p078770" type="이름">存性</index>
+                                <index ref="p077600" type="이름">仁任</index>從孫, 初, 效<index ref="p077600" type="이름">仁任</index>所爲, 後, 頗悔悟, 其<index type="관직">尹西京</index>, 治爲第一, 民追慕之. <index type="이름">獻</index>家無擔石之儲, 獄官欲免之, <index type="이름">瑩</index>以<index type="이름">獻</index>藉<index ref="p054180" type="이름">興邦</index>勢爲<index ref="o010100" type="관직">大司憲</index>未嘗發一直言, 遂斬之, 時人悲之. <index type="이름">萬興</index>
+                                <index ref="p081970" type="이름">堅味</index>家臣, 貪暴姦黠, 專摠田民之簿. 初, <index ref="p077600" type="이름">仁任</index>謀竊國柄, 援立<index ref="p062080" type="이름">辛禑</index>, 一國威福在其掌握, 支黨根據, 而<index ref="p081970" type="이름">堅味</index>爲其腹心. 疾惡文臣, 放黜甚衆, <index ref="p054180" type="이름">興邦</index>亦在其中. 後, <index ref="p081970" type="이름">堅味</index>以<index ref="p054180" type="이름">興邦</index>世家大族, 請與爲婚. <index ref="p054180" type="이름">興邦</index>亦懲前日流貶, 謀欲全身, 惟<index type="이름">仁任</index>
+                                <index ref="p081970" type="이름">堅味</index>之言是從. 於是, 以<index ref="p054180" type="이름">興邦</index>同母兄<index ref="p074070" type="이름">李成林</index>爲<index ref="o005170" type="관직">侍中</index>, 權姦親黨布列兩府, 中外要職無非私人, 秉權自恣, 賣官鬻爵, 奪人土田, 籠山絡野, 奪人奴婢, 千百爲群, 州縣津驛陵寢宮庫之田, 皆被攘取. 背主之隷逃賦之民歸之如市, <index ref="o010320" type="관직">廉使</index>守令莫敢徵發, 民散寇熾, 公私匱竭, <index type="이름">瑩</index>及我<br/>
+                                <index type="이름">太祖</index>憤其所爲, 同心協力, 導禑除之, 國人大悅, 道路歌舞.</paragraph>
+                        </content>
+                    </text>
+                </level5>
+                <level5 id="kj_033_0010_0010_0010_0030" type="卷33" value="우왕(禑王) 14년(1388) 1월">
+                    <front>
+                        <biblioData type="원문">
+                            <title>
+                                <mainTitle>최영 등을 임명하다</mainTitle>
+                            </title>
+                            <date>
+                                <dateOccured date="1388-01-99L0" type="음">1388년 1월 미상</dateOccured>
+                                <dateOccured type="원문">戊辰【辛禑十四年. ○大明洪武二十一年.】</dateOccured>
+                            </date>
+                        </biblioData>
+                    </front>
+                    <text>
+                        <link src="筆寫本〈奎15658〉" type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=GJB&amp;book_cd=GK15658_00&amp;vol_no=0021&amp;page_no=4b"/>
+                        <link src="甲寅字本〈奎貴3566〉" type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=GJB&amp;book_cd=GR32423_00&amp;vol_no=0011&amp;page_no=4a"/>
+                        <content>
+                            <paragraph align="center">○以<index ref="p102380" type="이름">崔瑩</index>爲<index type="관직">門下侍中</index>, 我<br/>
+                                <index type="이름">太祖</index>
+                                <index type="관직">守門下侍中</index>, <index ref="p073730" type="이름">李穡</index>
+                                <index ref="o017980" type="관직">判三司事</index>, <index ref="p062440" type="이름">禹玄寶</index>
+                                <index ref="p069250" type="이름">尹珍</index>
+                                <index ref="p049600" type="이름">安宗源</index>爲<index ref="o018460" type="관직">門下贊成事</index>, <index ref="p027740" type="이름">文達漢</index>
+                                <index ref="p042950" type="이름">宋光美</index>
+                                <index ref="p049040" type="이름">安沼</index>爲<index ref="o016210" type="관직">門下評理</index>, <index ref="p040700" type="이름">成石璘</index>爲<index ref="o013330" type="관직">政堂文學</index>, <index ref="p061020" type="이름">王興</index>
+                                <index ref="o015300" type="관직">知門下事</index>, <index ref="p081620" type="이름">印原寶</index>
+                                <index ref="o018280" type="관직">判密直司事</index>.</paragraph>
+                        </content>
+                    </text>
+                </level5>
+                <level5 id="kj_033_0010_0010_0010_0040" type="卷33" value="우왕(禑王) 14년(1388) 1월">
+                    <front>
+                        <biblioData type="원문">
+                            <title>
+                                <mainTitle>명에 보낸 사신이 입조하지 못하고 돌아오다</mainTitle>
+                            </title>
+                            <date>
+                                <dateOccured date="1388-01-99L0" type="음">1388년 1월 미상</dateOccured>
+                                <dateOccured type="원문">戊辰【辛禑十四年. ○大明洪武二十一年.】</dateOccured>
+                            </date>
+                        </biblioData>
+                    </front>
+                    <text>
+                        <link src="筆寫本〈奎15658〉" type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=GJB&amp;book_cd=GK15658_00&amp;vol_no=0021&amp;page_no=5a"/>
+                        <link src="甲寅字本〈奎貴3566〉" type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=GJB&amp;book_cd=GR32423_00&amp;vol_no=0011&amp;page_no=4a"/>
+                        <content>
+                            <paragraph align="center">○遣<index ref="o015120" type="관직">密直司使</index>
+                                <index ref="p094040" type="이름">趙琳</index>如<index ref="t001290" type="지명">京師</index>, 請通朝覲, <index type="이름">琳</index>至<index ref="t017940" type="지명">遼東</index>, 不得入而還.</paragraph>
+                        </content>
+                    </text>
+                </level5>
+            </level4>
+        </level3>
+    </level2>
+</level1>

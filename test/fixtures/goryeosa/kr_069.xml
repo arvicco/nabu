@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE level1 SYSTEM "history.dtd">
+<level1 id="kr_069" type="志">
+    <front>
+        <biblioData type="원문">
+            <title>
+                <mainTitle volume="023">志 卷第二十三</mainTitle>
+                <seriesTitle volume="069">卷六十九</seriesTitle>
+            </title>
+            <creator>
+                <author>
+                    <name align="center">정인지(鄭麟趾)</name>
+                </author>
+                <editor>
+                    <name align="center">국사편찬위원회</name>
+                </editor>
+            </creator>
+        </biblioData>
+        <description>
+            <coveragePeriod>禮 十一</coveragePeriod>
+        </description>
+    </front>
+    <level2 id="kr_069_0010" type="志">
+        <front>
+            <biblioData type="禮">
+                <title>
+                    <mainTitle>禮 十一</mainTitle>
+                </title>
+            </biblioData>
+        </front>
+        <level3 id="kr_069_0010_0010" type="志">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>가례잡의</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <level4 id="kr_069_0010_0010_0010" type="志">
+                <front>
+                    <biblioData>
+                        <title>
+                            <mainTitle>상원 연등회 의식</mainTitle>
+                        </title>
+                    </biblioData>
+                </front>
+                <level5 id="kr_069_0010_0010_0010_0010" type="志">
+                    <front>
+                        <biblioData>
+                            <title>
+                                <mainTitle>소회일에 국왕이 좌전하는 의례</mainTitle>
+                            </title>
+                        </biblioData>
+                    </front>
+                    <text>
+                        <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0041&amp;page_no=82"/>
+                        <content>
+                            <paragraph align="center">志卷第二十三 高麗史六十九</paragraph>
+                            <paragraph align="center">正憲大夫工曹判書集賢殿大提學知經筵春秋館事兼成均大司成【臣】鄭麟趾奉敎修.</paragraph>
+                            <paragraph align="center">禮十一</paragraph>
+                            <paragraph align="center">嘉禮雜儀</paragraph>
+                            <paragraph align="center">上元燃燈會儀</paragraph>
+                            <paragraph align="center">小會日坐殿. 前期, 都校署設浮階於康安殿階前. 尙舍局率其屬, 設王幄於殿上, 設便次於王幄東, 設二獸爐於前楹外. 尙衣局設花案於王座左右楹前. 殿中省列燈籠於浮階之上下左右, 設彩山於殿庭. <index ref="o002530" type="관직">內庫使</index>列尊罍於殿庭左右. 其日, 王服梔黃衣, 出御便次, 牽龍官·中禁·都知·殿門內外衛仗, 奏山呼, 再拜. 訖, <index ref="o009360" type="관직">承制</index>員·近侍官, 俱服便服, 以次, 升詣陛上拜位. 行頭自喝, 再拜訖, 退立於階上西邊, 東向北上. 次閤門員入殿庭, 橫行, 北向東上, 行頭自喝, 再拜訖, 俱就庭東, 西向北上立. 次<index ref="o007770" type="관직">上將軍</index>以下宿衛, 入殿庭, 橫行, 北向東上, 行頭自喝, 再拜訖, 分立於東西. 次殿中省·六尙局·諸後殿官, 入殿庭就位, 再拜訖, 就庭西東向, 北上立. 次百戱雜伎, 以次入殿庭, 連作訖, 出退. 次敎坊奏樂, 及舞隊進退, 具如常儀.</paragraph>
+                        </content>
+                    </text>
+                </level5>
+                <level5 id="kr_069_0010_0010_0010_0020" type="志">
+                    <front>
+                        <biblioData>
+                            <title>
+                                <mainTitle>조종의 진전을 참배하는 의례</mainTitle>
+                            </title>
+                        </biblioData>
+                    </front>
+                    <text>
+                        <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0041&amp;page_no=84"/>
+                        <content>
+                            <paragraph align="center">謁祖眞儀. 便殿禮畢, 禮司奏初嚴, 鹵簿儀仗, 陳列於毬庭, 繖扇衛仗, 自康安殿庭, 左右陳列, 至泰定門. 尙舍局設輦褥於殿庭中心, 近北東向, 設太子·公侯伯·宰臣拜位於輦褥南近南, 俱北向東上. <index ref="o012090" type="관직">引駕官</index>引軺&#x28373;輦, 入置褥位訖, 禮司奏中嚴, 樞密以下侍臣入殿庭, 分列左右. 左右<index ref="o009360" type="관직">承制</index>, <index ref="o007770" type="관직">千牛上</index>·<index ref="o003650" type="관직">大將軍</index>, 就殿東西階下, <index ref="o012480" type="관직">備身將軍</index>, <index ref="o014670" type="관직">中禁</index>·<index ref="o015520" type="관직">都知指諭</index>, 各分左右, 升立於浮階上, 以俟. 王服赭黃袍, 出坐殿, 鳴鞭, 禁衛奏山呼再拜. 太史局奏時刻板, 左右<index ref="o009360" type="관직">承制</index>, <index ref="o007770" type="관직">千牛上</index>·<index ref="o003650" type="관직">大將軍</index>, 自東西階, 升立於斧扆左右, <index ref="o007130" type="관직">舍人</index>喝, 樞密以下侍臣, 再拜. 次閤門, 各引太子·公侯伯·宰臣, 入就位, <index ref="o007130" type="관직">舍人</index>喝, 太子以下, 再拜訖.</paragraph>
+                            <paragraph align="center">閤門引太子·公侯伯·宰臣, 卷班西出. 次<index ref="o005170" type="관직">攝侍中</index>就殿庭中心, 俛伏跪, 奏外辦, 俛伏興, 退復位. 王降殿, 御軺&#x28373;輦, <index ref="o007740" type="관직">尙衣奉御</index>, 進手衣, <index ref="o007620" type="관직">尙乘奉御</index>, 進案. 訖, <index ref="o019380" type="관직">黃門侍郞</index>進當輦前, 俛伏跪, 奏請動駕, 俛伏興, 退復位. 仗動鳴鞭, 樞密·左右侍臣, 前導出殿門, 敎坊樂, 鼓吹振作. 禮司奏三嚴, 駕至泰定門, <index ref="o019380" type="관직">黃門侍郞</index>奏請駐輦, <index ref="o007130" type="관직">舍人</index>喝, 文武群官再拜. 次<index ref="o019380" type="관직">黃門侍郞</index>請勑群官上馬, <index ref="o005170" type="관직">攝侍中</index>, 傳宣曰可, <index ref="o019380" type="관직">黃門侍郞</index>, 傳侍臣將相·文武兩班, 宣許上馬. <index ref="o007130" type="관직">舍人</index>喝, 樞密以下侍臣, 及兩班<index ref="o009360" type="관직">承制</index>員以下, 近侍官應騎者, 及六尙局, 諸後殿官, 俱再拜.</paragraph>
+                            <paragraph align="center">次<index ref="o019380" type="관직">黃門侍郞</index>, 奏請動駕, 侍臣引駕, 至昇平門外, 導從群官, 皆上馬. 駕至<index ref="m001090" type="단체">奉恩寺</index>三門外, 群官皆下馬. 侍臣引駕, 入三門內, 王下輦入幄次. 閤門引太子以下, 先詣眞殿門外, 布立以俟. 王行至眞殿門內, 北向立, 閤門引太子·公侯伯·宰臣, 各就階下褥位, 北向西上立, 侍臣於宰臣後, 合班北向, 西上立定. 文武群官, 於侍臣後, 兩班相對爲首, 北向立定訖, 樞密贊拜, 王拜, <index ref="o007130" type="관직">舍人</index>喝, 太子以下群官, 皆再拜. 每王拜後, <index ref="o007130" type="관직">舍人</index>喝, 太子以下俱拜, 下皆倣此. 王入殿庭, 閤門引太子·公侯伯·宰臣, 升階上褥位立定. 王至殿戶外, 樞密贊拜, 王拜, 太子以下群官再拜. 王入戶內, 再拜酌獻訖, 又再拜, 太子以下群官, 再拜. 樞密進福酒, 王再拜飮訖, 又再拜. 飮福前後, 臣下無拜, 出殿戶再拜, 太子以下群官再拜. 閤門引太子·公侯伯·宰臣, 下階就拜位, 王出詣門內位, 北向立, 樞密贊拜, 王拜, 太子以下群官再拜. 訖, 宰密引王, 還幄次, 閤門引太子·公侯伯·宰臣, 俱出就幕, 侍臣兩班, 出三門外, 陳列如常儀. <index ref="o012090" type="관직">引駕官</index>引平兜輦, 入置於輦褥訖. 禮司奏嚴, 王服赭黃袍, 出御平兜輦. 鳴鞭, <index ref="o019380" type="관직">黃門侍郞</index>奏請動駕, 仗動. 駕出三門外, <index ref="o019380" type="관직">黃門侍郞</index>奏請駐輦, <index ref="o019380" type="관직">黃門侍郞</index>, 請勑群官上馬, <index ref="o005170" type="관직">攝侍中</index>傳宣曰, “可.” <index ref="o019380" type="관직">黃門侍郞</index>, 傳侍臣員將文武兩班, 宣許上馬, <index ref="o007130" type="관직">舍人</index>喝, 樞密以下, 侍臣兩班應騎者, 俱再拜, 如來儀. 次<index ref="o019380" type="관직">黃門侍郞</index>奏請動駕, 群官, 皆上馬. 駕行, 入泰定門, 至康安殿庭, 降輦升殿, 閤門贊, 侍臣等, 各<index ref="o000090" type="관직">祗候</index>, 樞密以下, 左右侍臣, 揖退.</paragraph>
+                        </content>
+                    </text>
+                </level5>
+                <level5 id="kr_069_0010_0010_0010_0060" type="志" value="문종(文宗) 2년(1048) 2월">
+                    <front>
+                        <biblioData>
+                            <title>
+                                <mainTitle>문종이 한식인 관계로 날짜를 변경하여 연등회를 열다</mainTitle>
+                            </title>
+                            <date>
+                                <dateOccured date="1048-02-16L0" type="음">1048년 2월 16일</dateOccured>
+                                <dateOccured date="1048-04-01" type="양">1048년 4월 1일</dateOccured>
+                                <dateOccured type="일간지">갑신(甲申)</dateOccured>
+                            </date>
+                        </biblioData>
+                    </front>
+                    <text>
+                        <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0041&amp;page_no=103"/>
+                        <content>
+                            <paragraph align="center">
+                                <index ref="p028370" type="이름">文宗</index>二年二月甲申 燃燈, 以望日癸未寒食, 至是日, 行之.</paragraph>
+                            <paragraph align="center">
+                                <reference>
+                                    <link uri="coi" value="hm_067_0020">사료로 보는 한국사＞불교 사상과 신앙＞연등회와 팔관회</link>
+                                </reference>
+                            </paragraph>
+                        </content>
+                    </text>
+                </level5>
+            </level4>
+        </level3>
+    </level2>
+</level1>
