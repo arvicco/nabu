@@ -51,7 +51,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["osta"]
       refute_nil entry, "osta must be registered in config/sources.yml"
-      refute entry.wired, "wired flips only after the owner-fired first sync is verified"
+      assert entry.wired, "first sync owner-verified; flipped 2026-08-18"
       assert_equal "manual", entry.sync_policy
       assert_equal "osta", entry.adapter_class.manifest.id
     end

@@ -390,6 +390,13 @@ module Nabu
         ids, urns = source_passage_keys(catalog, source_id)
         count = 0
         lemmas_changed = false
+        # P77-r16d (owner ruling 2026-08-18, applied to the WHOLE sync
+        # reindex path): every sub-step that can run minutes announces
+        # itself — a lemma-bearing source rewrites its fts+lemma slice
+        # (hundreds of thousands of rows) and then triggers the
+        # corpus-wide reflex closure; both sat silent behind the load
+        # counter and read as hangs.
+        progress&.stage("index slice: #{slug} (fts + lemma rows)")
         fulltext.transaction do
           # P42-1: snapshot this source's lemma-frequency contribution BEFORE
           # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
@@ -431,6 +438,7 @@ module Nabu
             end
           end
         end
+        progress&.stage("index slice: #{slug} — postings/coverage swaps")
         rebuild_char_postings!(catalog: catalog, fulltext: fulltext) unless fulltext.table_exists?(CHAR_POSTINGS_TABLE)
         rebuild_passage_chars!(catalog: catalog, fulltext: fulltext) unless fulltext.table_exists?(PASSAGE_CHARS_TABLE)
         # P77-r16b (the 2026-08-18 "hang"): the sign-coverage bootstrap is
@@ -444,7 +452,10 @@ module Nabu
                                  progress: progress)
         end
         refresh_alignment(catalog, fulltext, alignments, source_id)
-        ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext) if lemmas_changed || reflexes_changed
+        if lemmas_changed || reflexes_changed
+          progress&.stage("reflex root closure (corpus-wide — lemma rows changed)")
+          ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
+        end
         count
       end
 

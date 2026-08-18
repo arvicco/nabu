@@ -44,6 +44,11 @@ module Nabu
         MANIFEST
       end
 
+      # The capability flag SyncRunner keys the reference pass on — without
+      # it the producer below is never invoked (the 2026-08-18 first sync:
+      # a clean fetch, zero edges, silently).
+      def self.reference_edges? = true
+
       def self.reference_producer(catalog:, journal:)
         Nabu::BurmanCrosswalk.new(catalog: catalog, journal: journal)
       end

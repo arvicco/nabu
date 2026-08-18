@@ -37,7 +37,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["disco"]
       refute_nil entry, "disco must be registered in config/sources.yml"
-      refute entry.wired
+      assert entry.wired, "first sync owner-verified; flipped 2026-08-18"
       assert_equal "manual", entry.sync_policy
       assert_includes entry.axes, "romance"
     end

@@ -3684,83 +3684,21 @@ osta:
                          # with expanded lexical resources → silver,
                          # the GLAUx precedent. Only the -vrt documents
                          # carry tokens, so only they mint lemma rows.
-  wired: false   # CLAUDE.md checklist §6: owner-fired first sync
-                   # (bin/nabu enable osta && bin/nabu sync osta —
-                   # sparse clone, ~234 MB transcriptions), eyeball
-                   # nabu status counts (expect 663 documents) + 5
-                   # random passages, then flip.
-  # P77-1: OSTA — Old Spanish Textual Archive
-  # (github.com/hispanicseminary/OSTA; Hispanic Seminary of Medieval
-  # Studies, Gago Jover & Pueyo Mena): 663 semi-paleographic HSMS
-  # transcriptions of medieval Spanish MSS and incunabula — the
-  # foundational machine-readable record of Old Spanish, unblocked by
-  # the №45-1 grant (CC BY-NC-SA 4.0 via zenodo.org/records/18931376,
-  # the deposit's sole declared license → class nc, MCP-excluded; the
-  # emailed "MIT" stays uncorroborated; credit duty = the Zenodo record
-  # citation + per-text TEXT.xxx.txt id, riding every document's
-  # "citation" metadata). NEW hsms parser family: passage = the HSMS
-  # numbered section (+ the honest `head` for pre-section text);
-  # diplomatic markup verbatim, search form via the documented
-  # derivation (conventions §9). Language osp for all documents (the
-  # v1 one-tag practice under pending №R-30 — the works-table language
-  # column later refines). P77-2: the 78 verticalized/ .vrt.html
-  # lemmatized token streams ride as -vrt sibling documents whose
-  # "tokens" annotations feed the lemma index (silver — see lemma_tier
-  # above); LICENSE CAVEAT recorded: verticalized/ lives only in the
-  # GitHub repo, not the Zenodo deposit — the №45-1 reply's "our
-  # Github and Zenodo repositories" is the grant basis, same rights
-  # holder, same nc class. The tables/ xlsx metadata is №R-30. Young
-  # repo, one Zenodo deposit (v1.0.0) → sync_policy manual.
+  wired: true    # P77 first sync owner-verified (740 docs / 5,177 passages), flipped 2026-08-18 (owner: "wire on all recent sources")
   sync_policy: manual
 
 # P77-4
 disco:
   adapter: Nabu::Adapters::Disco
   axes: [romance]
-  wired: false   # CLAUDE.md checklist §6: owner-fired first sync
-                   # (bin/nabu enable disco && bin/nabu sync disco —
-                   # sparse clone), eyeball counts (expect 1,216
-                   # documents / 4,530 sonnet passages) + 5 random
-                   # passages, then flip.
-  # P77-4: DISCO — Diachronic Spanish Sonnet Corpus (github.com/pruizf/
-  # disco v5.0; Ruiz Fabo, Bermúdez Sabel, Calvo Tello, Martínez
-  # Cantón): 4,530 sonnets / 1,216 authors, 15th-20th c., the Romance
-  # verse rung beside cantigas. Document = one all-periods-per-author
-  # TEI file (the corpus's own complete aggregation; per-period and
-  # per-sonnet dirs are the same texts re-cut, never ingested); passage
-  # = one sonnet at the corpus's own ordinal. Language spa (the
-  # derom/wold reflex code — etym joins connect); the period band +
-  # prosopography centuries ride metadata (extractor = future packet).
-  # met/rhyme/enjamb are AUTOMATIC (ADSO/RhymeTagger/ANJA, the
-  # encodingDesc's own words) — annotations, labeled, never gold.
-  # LICENSE: README verbatim "The corpus is available under: CC-BY
-  # license." + LICENSE file CC-BY-4.0 -> attribution. Releases in
-  # waves (v5.0 Feb 2023) -> sync_policy manual.
+  wired: true    # P77 first sync owner-verified (1,215 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
   sync_policy: manual
 
 # P77-6
 fornsvenska:
   adapter: Nabu::Adapters::Fornsvenska
   axes: [germanic]
-  wired: false   # CLAUDE.md checklist §6: owner-fired first sync
-                   # (bin/nabu enable fornsvenska && bin/nabu sync
-                   # fornsvenska — seven ~1-4 MB bz2 files), eyeball
-                   # counts + 5 random passages, then flip.
-  # P77-6: Fornsvenska textbanken (Språkbanken Text, Gothenburg) — Old
-  # Swedish laws (Äldre Västgötalagen...), religious/profane prose and
-  # the rhymed chronicles/Eufemiavisorna, over the NEW sparv family.
-  # SCOPE: the seven fornsvenska parts ONLY — the five fsv-nysvensk*
-  # siblings are Early Modern Swedish (1526+), a different stage that
-  # must not ride an Old Swedish claim. Document = one <text> (title
-  # slugified); passage = one sentence at <paragraph>.<sentence>;
-  # upstream's per-text date/datefrom/dateto ride metadata verbatim
-  # (the dating-posture candidate). Language sv (no ISO code for Old
-  # Swedish — the IcePaHC-under-is precedent; the sv:old stage rule is
-  # №R-32, register). The automatic fsvm lemma candidate sets (pipe-
-  # bounded multi-value lookups) are deliberately NOT ingested — a
-  # candidate set is not attestation. LICENSE: CC-BY-4.0 per part on
-  # the resource pages, DOIs each. Upstream frozen since 2013-10-08 →
-  # sync_policy manual.
+  wired: true    # P77 first sync owner-verified (155 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
   sync_policy: manual
 
 # Template for the next source (leave commented until its adapter exists):
@@ -3773,31 +3711,7 @@ fornsvenska:
 achemenet:
   adapter: Nabu::Adapters::Achemenet
   axes: [cuneiform]
-  wired: false   # CLAUDE.md checklist §6: owner-fired first sync
-                   # (bin/nabu enable achemenet && bin/nabu sync
-                   # achemenet — one 1.9 MB Zenodo zip), eyeball
-                   # counts + 5 random passages, then flip.
-  # P77-r18 (№R-33 PKG-1): Helsinki's "Linguistically Annotated
-  # Achemenet Babylonian Texts" (Alstola/Sahala/Valk/Ong; Zenodo
-  # 19067652 v1.1.1) — 2,830 Achaemenid-period (550-330 BCE)
-  # legal/administrative texts and letters in five publication groups
-  # (CT55, Jursa_Bel-remanni, Murashu, Strassmaier, YOS7 — the
-  # "archive" facet), the Dec-2020 Achemenet snapshot converted to
-  # Oracc ATF and lemmatized with BabyLemmatizer. NEW baby-conllu
-  # family (17-column global.columns CoNLL-U-Plus; docs delimited by
-  # `# <id> = <designation>` lines only). Document per text, urn
-  # urn:nabu:achemenet:p######/x###### (lowercased — the cdli urn
-  # convention, so the shared P-number space is a future crosswalk
-  # join; X-ids are Helsinki-local placeholders). Passage = the whole
-  # text (no line/sentence grain upstream); tokens (form, lemma, POS,
-  # eng gloss, confidence score) ride annotations. KNOWN upstream
-  # defects (the Readme's own census): "@column N" markers converted
-  # as bare numerals; <<>>-bracketed superfluous signs lemmatized;
-  # PN/LN confusion uncorrected — recorded, not "fixed" (canonical
-  # means canonical).
-  # LICENSE: CC BY 4.0 per the Zenodo deposit field (read 2026-08-17;
-  # the in-zip Readme carries NO license line — deposit page is the
-  # authority).
+  wired: true    # P77-r18 first sync owner-verified (2,774 docs + 56 zero-word rule-skips), flipped 2026-08-18 (owner: "wire on all recent sources")
   license_watch: https://zenodo.org/records/19067652
   # SILVER lemmas (the GLAUx rule): BabyLemmatizer semi-automatic with
   # partial manual correction, upstream's own account.
@@ -3808,9 +3722,9 @@ burman-concordance:
   adapter: Nabu::Adapters::BurmanConcordance
   kind: module   # P77-r19: a links instrument (the trismegistos shape) — zero catalog rows, up=module
   axes: [italic]
-  wired: false   # CLAUDE.md checklist §6: owner-fired first sync (one
-                   # 1.1 MB Zenodo CSV), then the producer edges land at
-                   # that same sync's reference pass.
+  wired: false   # PERMANENTLY false — a links instrument, not a text
+                   # source (the trismegistos convention); syncs by
+                   # explicit name only. First sync verified 2026-08-18.
   # P77-r19 (№R-33 PKG-1): Annie Burman's Digital Concordance of
   # Etruscan, Faliscan and Early Latin Inscriptions from Etruria
   # (Uppsala; Zenodo 7801485 v1.0.0, PUBLIC DOMAIN/CC0) — 14,986 rows
