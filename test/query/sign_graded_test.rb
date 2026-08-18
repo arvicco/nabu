@@ -133,7 +133,7 @@ class SignGradedTest < Minitest::Test
   # Ctrl-C'd two real runs that read as hangs).
   def test_refresh_source_announces_its_stages
     stages = []
-    reporter = Nabu::ProgressReporter.new(on_stage: ->(label) { stages << label })
+    reporter = Nabu::ProgressReporter.new(on_stage: ->(label, _eta) { stages << label })
     fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
     Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fulltext)
     Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: fulltext,
