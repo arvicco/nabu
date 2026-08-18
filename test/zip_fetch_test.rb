@@ -49,8 +49,58 @@ class ZipFetchTest < Minitest::Test
     end
   end
 
+  # P78-r4: a zip carrying a member whose NAME is invalid UTF-8 (the live
+  # goryeosa-jeoryo dump's CP949-mojibake .jpg — APFS cannot even hold the
+  # filename, unzip dies exit 50). Hand-assembled stored-method zip: the
+  # `zip` CLI cannot build one because the junk-named file cannot exist on
+  # disk to be zipped.
+  def junk_named_zip_body(valid_name, valid_content, junk_name_bytes, junk_content)
+    require "zlib"
+    members = [[valid_name.b, valid_content.b], [junk_name_bytes.b, junk_content.b]]
+    locals = +""
+    centrals = +""
+    members.each do |name, content|
+      offset = locals.bytesize
+      crc = Zlib.crc32(content)
+      locals << "PK\x03\x04".b << [20, 0, 0, 0, 0, crc, content.bytesize, content.bytesize,
+                                   name.bytesize, 0].pack("vvvvvVVVvv") << name << content
+      centrals << "PK\x01\x02".b << [20, 20, 0, 0, 0, 0, crc, content.bytesize, content.bytesize,
+                                     name.bytesize, 0, 0, 0, 0, 0, offset].pack("vvvvvvVVVvvvvvVV") << name
+    end
+    eocd = "PK\x05\x06".b + [0, 0, members.size, members.size, centrals.bytesize,
+                             locals.bytesize, 0].pack("vvvvVVv")
+    locals + centrals + eocd
+  end
+
   def sync!(guard: nil)
     Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, guard: guard)
+  end
+
+  # P78-r4 (the goryeosa-jeoryo live crash): unzip exit-50s on a member
+  # whose name APFS cannot hold; the fetch falls back to the in-process
+  # ZipReader, extracts every extractable member, SKIPS the impossible
+  # one loudly through the progress line, and completes the sync.
+  def test_a_junk_named_member_is_skipped_by_the_salvage_reader_not_fatal
+    body = junk_named_zip_body("proj/a.xml", "alpha", "proj/\xB0\xED\xB7\xC1.jpg".b, "junk")
+    stub_request(:get, URL).to_return(
+      status: 200, body: body,
+      headers: { "Content-Type" => "application/zip", "Last-Modified" => LAST_MODIFIED }
+    )
+    lines = []
+    Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, progress: ->(line) { lines << line })
+    assert_equal "alpha", File.read(File.join(@dir, "a.xml")), "the valid member lands"
+    assert_equal %w[a.xml], Dir.children(@dir).grep_v(/\A\./).sort, "the junk member never lands"
+    assert(lines.any? { |line| line.include?("salvage") && line.include?("skipped") },
+           "the skip is SPOKEN, never silent: #{lines.inspect}")
+  end
+
+  def test_a_zip_where_salvage_extracts_nothing_still_raises
+    body = junk_named_zip_body("proj/\xB0\xED.jpg".b, "junk", "proj/\xB7\xC1.jpg".b, "junk2")
+    stub_request(:get, URL).to_return(
+      status: 200, body: body,
+      headers: { "Content-Type" => "application/zip", "Last-Modified" => LAST_MODIFIED }
+    )
+    assert_raises(Nabu::ZipFetch::Error) { sync! }
   end
 
   def test_fresh_fetch_unpacks_the_tree_and_pins_the_zip_sha256

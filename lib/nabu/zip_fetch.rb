@@ -7,6 +7,7 @@ require "tmpdir"
 require "faraday"
 
 require_relative "redirect_follow"
+require_relative "zip_reader"
 
 module Nabu
   # Non-destructive HTTP-zip download-and-unpack — the first NON-git fetch
@@ -331,8 +332,43 @@ module Nabu
 
     def unpack!
       unpacked = File.join(staging, "unpacked")
-      Shell.run("unzip", "-q", download_path, "-d", unpacked)
+      begin
+        Shell.run("unzip", "-q", download_path, "-d", unpacked)
+      rescue Shell::Error => e
+        # P78-r4 (the goryeosa-jeoryo live crash): unzip exit-50s when a
+        # member's NAME is bytes APFS cannot hold (the dump's CP949-
+        # mojibake .jpg). Fall back to the in-process ZipReader — names
+        # stay binary there — extract every extractable member, and skip
+        # the impossible ones LOUDLY. A salvage that extracts nothing
+        # re-raises: that zip really is unusable.
+        salvage_unpack!(unpacked, e)
+      end
       @tree = tree_root(unpacked)
+    end
+
+    def salvage_unpack!(unpacked, unzip_error)
+      reader = Nabu::ZipReader.new(File.binread(download_path))
+      skipped = []
+      extracted = 0
+      reader.entries.each do |entry|
+        name = entry.name.dup.force_encoding(Encoding::UTF_8)
+        next skipped << entry.name.inspect unless name.valid_encoding?
+        next if name.end_with?("/")
+        raise Error, "zip member escapes the unpack root: #{name.inspect}" if
+          name.start_with?("/") || name.split("/").include?("..")
+
+        dest = File.join(unpacked, name)
+        FileUtils.mkdir_p(File.dirname(dest))
+        File.binwrite(dest, reader.extract(entry))
+        extracted += 1
+      end
+      raise Error, "unzip failed (#{unzip_error.message}) and the salvage reader extracted nothing" if extracted.zero?
+
+      @progress&.call("unzip failed (#{unzip_error.message}); in-process salvage extracted " \
+                      "#{extracted} member(s), skipped #{skipped.size} junk-named: " \
+                      "#{skipped.join(', ')}\n")
+    rescue Nabu::ZipReader::Error => e
+      raise Error, "unzip failed (#{unzip_error.message}); salvage reader also failed: #{e.message}"
     end
 
     # The staged tree root: the single top-level directory when the zip
