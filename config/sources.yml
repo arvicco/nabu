@@ -3616,7 +3616,7 @@ burman-concordance:
 sillok:
   adapter: Nabu::Adapters::Sillok
   axes: [korean]   # P78-1: MINTS the korean axis — the hanmun state record's anchor
-  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  wired: true     # P78-1 first sync owner-verified (743 docs / 414,321 passages, both datasets); flipped 2026-08-19 (owner: 'wire everything on')
   # 조선왕조실록 원문 (NIKH via data.go.kr 15053647 Taejo–Cheoljong +
   # 15053646 Gojong/Sunjong; 제한 없음 → D47-a attribution). Hanmun only —
   # the modern Korean translation layer is NOT in the dumps, never fetched.
@@ -3629,7 +3629,7 @@ sillok:
 sjw:
   adapter: Nabu::Adapters::Sjw
   axes: [korean]
-  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  wired: true     # P78-2 first sync owner-verified (297 docs / 1,896,858 passages; re-synced 2026-08-19 with the ETA lane narrating); flipped 2026-08-19 (owner: 'wire everything on')
   # 승정원일기 (NIKH via data.go.kr 15064218; 제한 없음 → D47-a attribution).
   # SCALE WARNING (the Kyoto precedent, said LOUD): the library's largest
   # single source by characters — one ~418 MB zip unpacking to 2.44 GB /
@@ -3640,7 +3640,7 @@ sjw:
 ko-wikisource-mk:
   adapter: Nabu::Adapters::KoWikisourceMk
   axes: [korean]   # P78-4: the korean axis's vernacular leg — the first hangul print
-  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  wired: true     # P78-4 first sync owner-verified (1 work doc / 159 passages, okm 125); flipped 2026-08-19 (owner: 'wire everything on')
   # 용비어천가 (1447) from Korean Wikisource — curated title list, ONE page
   # carries all 125 cantos (census 2026-08-18). PD text + CC BY-SA 4.0
   # transcription layer → attribution, credit the contributors. Middle
@@ -3653,7 +3653,7 @@ viet-wikisource:
   adapter: Nabu::Adapters::VietWikisource
   axes: [sinitic]  # P78-5: the Vietnamese classical shelf — deliberately NO
                    # vietnamese axis (P47-s4 survey ruling: a shelf, not a desk)
-  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  wired: true     # P78-5 first sync verified (32 docs / 7,674 passages); flipped 2026-08-19 (owner: 'wire everything on')
   # 大越史記全書 COMPLETE from zh.wikisource (卷首 + 29 quyển subpages;
   # the index's own {{Textquality|50%}} proofreading status) + the two
   # chữ-Hán showpieces: 平吳大誥 from vi.wikisource (parallel phiên âm
@@ -3665,7 +3665,7 @@ viet-wikisource:
 goryeosa:
   adapter: Nabu::Adapters::Goryeosa
   axes: [korean]   # P78-3: the goryeosa family — the pre-Joseon dynastic history
-  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  wired: true     # P78-3 first sync owner-verified (138 docs / 31,207 passages); flipped 2026-08-19 (owner: 'wire everything on')
   # 고려사 원문 (NIKH via data.go.kr 15053637; 제한 없음 → D47-a
   # attribution). Hanmun only — no modern Korean translation layer in the
   # dump. Fetch resolves the CURRENT atchFileId (DataGoKrFetch), then one
@@ -3677,7 +3677,7 @@ goryeosa:
 goryeosa-jeoryo:
   adapter: Nabu::Adapters::GoryeosaJeoryo
   axes: [korean]   # P78-3: the goryeosa family — the chronological digest sibling
-  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  wired: true     # P78-3 first sync owner-verified (36 docs / 11,226 passages; the junk-named .jpg salvage-skipped, P78-r4); flipped 2026-08-19 (owner: 'wire everything on')
   # 고려사절요 원문 (NIKH via data.go.kr 15115521; 제한 없음 → D47-a
   # attribution). Hanmun only. Fetch resolves the CURRENT atchFileId
   # (DataGoKrFetch), then one ZipFetch into the flat workdir. 36 members
@@ -3689,7 +3689,7 @@ goryeosa-jeoryo:
 bibyeonsa:
   adapter: Nabu::Adapters::Bibyeonsa
   axes: [korean]   # P78-3: the goryeosa family — the state council's daily register
-  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  wired: true     # P78-3 first sync owner-verified (273 docs / 93,528 passages); flipped 2026-08-19 (owner: 'wire everything on')
   # 비변사등록 원문 (NIKH via data.go.kr 15053636; 제한 없음 → D47-a
   # attribution). Hanmun only. Fetch resolves the CURRENT atchFileId
   # (DataGoKrFetch), then one ZipFetch into the flat workdir. 273 members
@@ -3701,7 +3701,7 @@ bibyeonsa:
 itkc:
   adapter: Nabu::Adapters::Itkc
   axes: [korean]
-  wired: false     # flips after the owner-verified first sync (r20 semantics)
+  wired: true     # P78-7 first sync owner-verified (473 docs / 13,185 passages); flipped 2026-08-19 (owner: 'wire everything on')
   # 한국고전번역원 classical originals (P78-7): the OPEN-LICENSED slice —
   # 17 complete works, one data.go.kr dataset each (제한 없음 → D47-a
   # attribution; the itkc.or.kr site is ARR, ONLY the portal carries the
