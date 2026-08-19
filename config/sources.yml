@@ -3698,6 +3698,19 @@ bibyeonsa:
   license_watch: https://www.data.go.kr/data/15053636/fileData.do
   sync_policy: manual
 
+bdcamoes:
+  adapter: Nabu::Adapters::BdCamoes
+  axes: [romance]
+  wired: false   # P80-7: flip after the first real sync is owner-verified
+  # BDCamões Part I (PORTULAN CLARIN): 127 Portuguese literary works,
+  # ~3.1 M words, 15th–20th c. — CC-BY per the record page; the download
+  # click-through is accepted by LicenseAgreeFetch on owner ruling №R-37
+  # (2026-08-19), and the fetch REFUSES if the form's licence field
+  # drifts from CC-BY. Part II is a different grant (MS NC-NoReD-ND
+  # 2.0) and is deliberately NOT ingested.
+  license_watch: https://portulanclarin.net/repository/browse/bdcamoes-corpus-collection-of-portuguese-literary-documents-from-the-digital-library-of-camoes-ip-part-i/52f2b16412c411ea8a1302420a000005407eb504ccc045a4a0582ab53dfd43fd/
+  sync_policy: manual
+
 itkc:
   adapter: Nabu::Adapters::Itkc
   axes: [korean]

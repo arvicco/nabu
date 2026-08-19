@@ -197,6 +197,17 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  bdcamoes:
+    lect:
+      posture: identity
+      note: "por IS Portuguese — 15th–20th c. literary texts spanning old
+        orthographic conventions; historical staging stays deliberately
+        coarse (roa-opt is medieval Galician-Portuguese, NOT this; the
+        registry has no finer pt stages and none is claimed, P80-7)"
+    dating: {posture: dated, note: "per-work YY: publication year via MetadataDates :structured;
+      unresolved '18??' marks stay raw-only — no bounds invented"}
+    places: {posture: unplaced}
+    script: {posture: implied}
   cantigas:
     lect: {posture: identity, note: roa-opt IS medieval Galician-Portuguese}
     dating: {posture: undatable}
