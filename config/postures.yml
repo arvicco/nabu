@@ -553,3 +553,9 @@ sources:
     dating: {posture: undatable, note: modern news sentences, no per-item dates upstream}
     places: {posture: unplaced}
     script: {posture: implied}
+  cv-sardinian:
+    lect: {posture: identity, note: bare srd — the registry's own identity example;
+        modern Sardinian sentence text}
+    dating: {posture: undatable, note: crowd-collected modern sentences, no per-item dates}
+    places: {posture: unplaced}
+    script: {posture: implied}

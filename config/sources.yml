@@ -3732,3 +3732,22 @@ lo-congres:
   # Zenodo-version-pinned URLs (the cigs posture: a new release is a new
   # record URL the owner re-pins).
   sync_policy: manual
+
+cv-sardinian:
+  adapter: Nabu::Adapters::CvSardinian
+  axes: [romance]
+  wired: false   # flip after the owner-verified first real sync (one FileFetch GET,
+                   # ~260 kB; then eyeball urn:nabu:cv-sardinian:sentence-collector:1
+                   # and 5 random passages)
+  # Common Voice Sardinian sentence text (P80-6): server/data/sc/
+  # sentence-collector.txt in Mozilla's common-voice repo — 5,237
+  # sentences censused 2026-08-19, one per line, `sc` = ISO 639-3 `srd`.
+  # THE TEXT SIDE ONLY — no audio, ever (the audio datasets are
+  # account-gated and fail the automation bar; the sentence text rides a
+  # stable public raw.githubusercontent URL). Passage identity = 1-based
+  # line number (the sentence-lines family); the artifact's censused
+  # no-trailing-newline tail is a pinned fixture quirk. LICENSE:
+  # server/data/LICENSE is the full CC0 1.0 Universal text (Common Voice
+  # accepts sentences only under CC0) → open. Living collection on the
+  # main branch — drift rides the FileFetch state.
+  sync_policy: manual
