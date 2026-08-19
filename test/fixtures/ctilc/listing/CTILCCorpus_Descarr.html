@@ -1,0 +1,95 @@
+
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" >
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../estilsCTILC.css">
+<title>Corpus textual informatitzat de la llengua catalana</title>
+<SCRIPT LANGUAGE="JavaScript">
+function obredoc(fitxer) {
+	var d=window.open("CTILCCorpus_DescarrF.asp?fitxer=" + fitxer, "", "");
+	d.focus();
+}
+</SCRIPT>
+</head>
+
+<body>
+<script src="float-panel.js"></script>    <!-- per a la fletxa de link a TOP -->
+<script src="jquery-3.3.1.min.js"></script>
+<script src="indexscript.js"></script>
+<div id="menuini" style="position: relative">
+	<div id="csscap">
+		<table border="0" width="100%" cellpadding="5" cellspacing="0">
+	<tr>
+		<td width="33%" align="left"><a href="http://www.iec.cat" target="_blank"><img id="logoiec" src="../img/logoIEC.gif" width="138" height="55" border="0"></a></td>
+		<td width="34%" style="text-align: center;">
+			<span style="color: #FF0000;">C</span>orpus <span style="color: #FF0000;">t</span>extual <span style="color: #FF0000;">i</span>nformatitzat de la <span style="color: #FF0000;">l</span>lengua <span style="color: #FF0000;">c</span>atalana<br>
+		</td>
+		<td width="33%">&nbsp;</td>
+	</tr>
+</table><br>
+
+	</div>
+
+	<div id="cssmenu" class="noimprimir">
+	<ul>
+		<li class="active has-sub"><a href="index.asp">Inici</a>
+			<ul>
+				<li class="is-sub"><a href="IniPresentacio.asp" onClick="tancamenu()">Presentació</a></li>
+				<li class="is-sub"><a href="IniCredits.asp" onClick="tancamenu()">Crèdits</a></li>
+			</ul>
+		</li>
+		<li class="active has-sub"><a href="#">Concordances</a>
+			<ul>
+				<li class="is-sub"><a href="CTILCQConc_Lemes1.asp" onClick="tancamenu()">Lema</a></li>
+				<li class="is-sub"><a href="CTILCQConc_Formes1.asp" onClick="tancamenu()">Forma</a></li>
+				<li class="is-sub"><a href="CTILCQConc_FormesLema1.asp" onClick="tancamenu()">Lema (amb formes)</a></li>
+				<li class="is-sub"><a href="CTILCQConc_Coocur0.asp" onClick="tancamenu()">Coocurrències</a></li>
+				<li class="is-sub"><a href="CTILCQConc_NomsPropis1.asp" onClick="tancamenu()">Noms propis</a></li>
+			</ul>
+		</li>
+		<li><a href="CTILCQCol_LemesAgrup1.asp">Col·locacions</a></li>
+		<li><a href="CTILCQDadesNum.asp">Dades numèriques</a></li>
+
+		<li class="has-sub"><a href="#">Autors/obres<div style="line-height: 8pt; font-size: 6pt; margin-bottom: 0px; text-align: center">(fins 2021)</div></a>
+			<ul>
+				<li class="is-sub"><a href="CTILCCorpus_Aut1.asp" onClick="tancamenu()">Consulta per autor</a></li>
+				<li class="is-sub"><a href="CTILCCorpus_Obr1.asp" onClick="tancamenu()">Consulta per títol</a></li>
+				<li class="is-sub"><a href="CTILCCorpus_ObrParam.asp" onClick="tancamenu()">Consulta per paràmetres</a></li>
+			</ul>
+		</li>
+		<li><a href="CTILCCorpus_Descarr.asp">Descàrregues</a></li>
+		<li style="float: right;"><a href="mailto:dcc@iec.cat?subject=Pàgina web CTILC" onClick="tancamenu()">Contacte</a></li>
+	</ul>
+	</div>
+	<hr style="display: block; margin-top: 0.5em; margin-bottom: 0.5em; margin-left: 25px; margin-right: 25px; border-style: solid; border-width: 1px; border-color: #FA5858; clear: both;">
+</div>
+<BR>
+<div id="backtop">&#9650;</div>
+
+<div CLASS="titol">OBRES DESCARREGABLES</div>
+<BR><BR>
+<div style="margin-left: 50px; margin-right: 30px;"><table style="font-family: Verdana; font-style: italic; font-size: 8pt; line-height: 1.5em; background-color: #f2f2f2; text-align: justify;" border="0" width="100%" cellpadding="15" cellspacing="0">
+<tr><td>D'acord amb el que estipula la Llei 21/2014, del 4 de novembre, per la qual es modifica el text refós de la Llei de propietat intel·lectual, aprovat pel Reial decret legislatiu 1/1996, del 12 d'abril, algunes de les obres incorporades al Corpus Textual Informatitzat de la Llengua Catalana (CTILC) han passat a ser de <b>domini públic</b> i poden ser descarregades lliurement per a ús privat o de recerca amb llicència Creative Commons.<br>
+Els fitxers descarregables contenen exclusivament el text de l'obra i les metadades (autor, títol, any de publicació, etc.), sense les indicacions tipogràfiques ni l'etiquetatge morfosintàctic propis del CTILC. En cas que algun usuari vulgui obtenir aquestes dades pot demanar-les a <a href="mailto:dcc@iec.cat" class="lnkU">dcc@iec.cat</a>.<br>
+L'usuari que faci ús de qualsevol d'aquests textos ha de citar-ne l'origen de la següent manera: "Aquest text ha estat digitalitzat i processat per l'Institut d'Estudis Catalans, com a part del projecte Corpus Textual Informatitzat de la Llengua Catalana".</td>
+<td width="151px"><img id="logoCC" src="../img/logoCC.jpg" width="151px" height="53px" border="0"></td></tr>
+</table></div>
+<BR><BR>
+	<div style="margin-left: 50px; margin-right: 30px;">
+	<b>LITERARI</b><br>
+	<b>Resultat</b>: 348 obres<br><br>
+<div style="margin-left:+20px; text-indent:-20px;"><a href="javascript:void(0)" onClick="obredoc('000041_Poemes_biblics.out.txt'); return false"><span style="font-variant: small-caps;">Alcover</span>, Joan: <I>Poemes bíblics</I>. Barcelona: "La Revista", 1918.</a></div><div style="margin-left:+20px; text-indent:-20px;"><a href="javascript:void(0)" onClick="obredoc('003392_Els_salms_de_David.out.txt'); return false"><span style="font-variant: small-caps;">Febrer i Cardona</span>, Antoni [T]: Els sálms de David [Inèdit], 1840, p. 1-31.</a></div>
+	</div>
+
+	<br><br><br>
+	<div style="margin-left: 50px; margin-right: 30px;">
+	<b>NO LITERARI</b><br>
+	<b>Resultat</b>: 619 obres<br><br>
+<div style="margin-left:+20px; text-indent:-20px;"><a href="javascript:void(0)" onClick="obredoc('001607_La_llibertat_en_la_lley_civil.out.txt'); return false"><span style="font-variant: small-caps;">Abadal i Calderó</span>, Ramon d': <I>La llibertat en la lley civil</I>. Barcelona: Fills de Jaume Jepús, impressors, 1905.</a></div>
+	</div>
+<BR><BR><BR>
+</body>
+</html>

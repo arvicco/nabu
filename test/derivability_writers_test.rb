@@ -47,10 +47,14 @@ class DerivabilityWritersTest < Minitest::Test
   # folder (P77-r10/r14). The two P78 wikisource adapters
   # (ko_wikisource_mk, viet_wikisource) write their fetched page
   # envelopes into canonical/ inside Adapter#fetch — the sanctioned
-  # canonical gateway, the burman/wiki_fetch law kind. ANY new file
+  # canonical gateway, the burman/wiki_fetch law kind. The P80-8 ctilc
+  # adapter writes its crawled works (tmp+rename) and their replacement
+  # attic copies into canonical/ inside Adapter#fetch — the riig crawl
+  # law kind. ANY new file
   # here is a deliberate allowlist decision, not a drive-by.
   WRITER_ALLOWLIST = %w[
-    nabu/adapters/bfm.rb nabu/adapters/kitab.rb nabu/adapters/oracc.rb
+    nabu/adapters/bfm.rb nabu/adapters/ctilc.rb
+    nabu/adapters/kitab.rb nabu/adapters/oracc.rb
     nabu/adapters/riig.rb nabu/adapters/rundata.rb
     nabu/adapters/sabellic_loans.rb nabu/adapters/trismegistos.rb
     nabu/cantigas_fetch.rb nabu/derom_fetch.rb nabu/elephantine_fetch.rb
