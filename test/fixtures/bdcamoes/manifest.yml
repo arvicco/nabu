@@ -1,0 +1,41 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# BDCamões Part I (P80-7): real trimmed slices of the PORTULAN CLARIN
+# Part I archive (sha256 c0511fbf5ece31eb7f03e012edc30e13f02df60dc3207
+# 24a3036f9061806b9f7, retrieved 2026-08-19). The upstream is ONE zip
+# behind a licence-agree click-through (owner ruling №R-37) — per-file
+# URLs do not exist; all three works are hand-trimmed from the zip's
+# own members, byte-verbatim up to the cut.
+source: bdcamoes
+adapter_test: test/adapters/bdcamoes_test.rb
+retrieved: 2026-08-19
+files:
+  - path: resource/VicenteAutoBarcadoInferno.xml
+    url: https://portulanclarin.net/repository/download/52f2b16412c411ea8a1302420a000005407eb504ccc045a4a0582ab53dfd43fd/
+    whole: false
+    reason: header verbatim + the first 14 blank-line blocks of the Auto da Barca do
+      Inferno (Gil Vicente, 1517, Drama) — tab-indented speaker/verse layout, multi-tab
+      continuation lines, the "À barca" snippet
+  - path: resource/QueirósUmPoetaLírico.xml
+    url: https://portulanclarin.net/repository/download/52f2b16412c411ea8a1302420a000005407eb504ccc045a4a0582ab53dfd43fd/
+    whole: false
+    reason: header verbatim + the first 6 paragraphs of Um Poeta Lírico (Eça de Queirós,
+      1900, Tale) — the no-blank-lines newline+single-tab paragraph convention, the
+      non-ASCII upstream filename, the edition-citation footer
+  - path: resource/CastilhoPoesias.xml
+    url: https://portulanclarin.net/repository/download/52f2b16412c411ea8a1302420a000005407eb504ccc045a4a0582ab53dfd43fd/
+    whole: false
+    reason: header verbatim + title line + 6 stanzas of Castilho's Poesias — blank-line
+      stanza breaks with unindented verse lines, and the unresolved "18??" YY mark
+  - path: license.pdf
+    url: https://portulanclarin.net/repository/download/52f2b16412c411ea8a1302420a000005407eb504ccc045a4a0582ab53dfd43fd/
+    whole: true
+    reason: the in-zip license file, whole — the one recognized non-corpus member the
+      discovery census must not count as a stray
+  - path: fetch/licence-agree-page.html
+    url: https://portulanclarin.net/repository/download/52f2b16412c411ea8a1302420a000005407eb504ccc045a4a0582ab53dfd43fd/
+    whole: true
+    reason: the live Django licence-agree page a plain GET receives (CSRF token +
+      licence=CC-BY hidden field + licence_agree checkbox) — the recorded shape behind
+      Nabu::LicenseAgreeFetch
