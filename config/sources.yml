@@ -3751,3 +3751,46 @@ cv-sardinian:
   # accepts sentences only under CC0) → open. Living collection on the
   # main branch — drift rides the FileFetch state.
   sync_policy: manual
+
+salom:
+  adapter: Nabu::Adapters::Salom
+  axes: [romance]
+  wired: false   # flip after the owner-verified first real sync (one FileFetch GET,
+                   # ~1 MB; then eyeball urn:nabu:salom:articles-2022:1 and 5 random
+                   # passages)
+  # Şalom Ladino articles text corpus (P80-6): Hugging Face
+  # collectivat/salom-ladino-articles — 10,685 Ladino (lad, Judeo-Spanish)
+  # sentences from 397 articles of Şalom newspaper's Judeo-Espanyol
+  # section (Col·lectivaT + Sephardic Center of Istanbul; the EURALI 2022
+  # corpus), censused 2026-08-19. Upstream ships the sentences SEGMENTED
+  # AND SHUFFLED — article structure unrecoverable, so ONE document at
+  # sentence grain is the honest shape; passage identity = 1-based line
+  # number (upstream's `\n\n` tail mints nothing — a pinned fixture
+  # quirk). Latin-script Turkish-style orthography. LICENSE: card
+  # frontmatter verbatim `license: cc-by-4.0`, citation requested →
+  # attribution. A revised corpus is a new filename — an owner re-pin.
+  sync_policy: manual
+
+aranese:
+  adapter: Nabu::Adapters::Aranese
+  axes: [romance]
+  siblings: ["-es"]  # P34-0: literal tail — the one base id is "corpus", it does not end in -es
+  translations: true # the Spanish side is the point of a parallel corpus — -es rides
+  wired: false   # flip after the owner-verified first real sync (two FileFetch GETs,
+                   # ~103 MB total → 2 docs / ~840k passages, the pack's largest load;
+                   # then eyeball urn:nabu:aranese:corpus:1 --parallel --lang spa)
+  # ES-OC (Spanish–Aranese) Parallel Corpus (P80-6): Hugging Face
+  # projecte-aina/ES-OC_Parallel_Corpus (BSC LangTech, WMT24 low-resource
+  # shared task) — 419,908 line-aligned pairs censused 2026-08-19, the
+  # largest openly licensed Aranese text mass there is. PROVENANCE
+  # HONESTY (the card's own words): "mainly synthetic" —
+  # Apertium-generated (synthetic Spanish from the authentic Aranese
+  # PILAR set, synthetic Aranese from OPUS Spanish), rows unmarked
+  # upstream, possible misalignments — the caveat rides the manifest
+  # license field AND every parsed document's metadata, never presented
+  # as an attested corpus. Aranese side bare `oci` (a Gascon variety —
+  # the lo-congres coarseness stance); Spanish rides as spa -es siblings,
+  # line-aligned (equal counts ARE the format; a mismatch is ParseError).
+  # LICENSE: card verbatim "Attribution-Share Alike 4.0 International"
+  # (frontmatter cc-by-sa-4.0) → attribution (the house BY-SA class).
+  sync_policy: manual
