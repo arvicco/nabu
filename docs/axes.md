@@ -59,7 +59,7 @@ registry currently tags to it.
 
 The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LSJ and Lewis & Short, the grc/lat treebanks, and the Vulgate wearing its Latin-literature hat beside its scripture one.
 
-**Members** (15): `perseus-greek`, `perseus-latin`, `first1k-greek`, `ud`, `proiel`, `lexica`, `vulgate`, `lila`, `hypotactic`, `diorisis`, `glaux`, `croala`, `pedecerto`, `digiliblt`, `openmgh`
+**Members** (16): `perseus-greek`, `perseus-latin`, `first1k-greek`, `ud`, `proiel`, `lexica`, `vulgate`, `lila`, `hypotactic`, `diorisis`, `glaux`, `croala`, `pedecerto`, `digiliblt`, `openmgh`, `corpus-corporum`
 
 ### romance
 
@@ -67,7 +67,7 @@ The Greco-Roman literary lane: the Perseus canons and First1KGreek, Diorisis, LS
 
 The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the desk; late-antique prose, the MGH critical editions, and the Old French treebanks and texts join as their shelves land.
 
-**Members** (9): `ud`, `croala`, `digiliblt`, `openmgh`, `bfm`, `cantigas`, `derom`, `osta`, `disco`
+**Members** (10): `ud`, `croala`, `digiliblt`, `openmgh`, `bfm`, `cantigas`, `derom`, `osta`, `disco`, `corpus-corporum`
 
 ### epigraphy
 

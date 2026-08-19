@@ -3710,3 +3710,30 @@ itkc:
   # report in .docs/p78-plan.md). The munjip stays parked per D47-c.
   license_watch: https://www.data.go.kr/data/15022432/fileData.do
   sync_policy: manual
+
+corpus-corporum:
+  adapter: Nabu::Adapters::CorpusCorporum
+  axes: [classical, romance]  # the croala/digiliblt precedent: the continuum's Latin side
+  wired: false   # adapter built P80-1/80-2, UNSYNCED — the first real sync is
+                 # owner-fired (a multi-hour polite crawl: ~6,700 catalog GETs
+                 # + 5,277 downloads at 1 req/s; two-grain resumable). Flip
+                 # after eyeballing status counts + 5 random passages.
+  # Corpus Córporum (mlat.uzh.ch, Univ. of Zurich, dir. Philipp Roelli): the
+  # Latin (meta-)repository — 30 corpora / ~10k texts / 226M words. V1 SCOPE =
+  # corpus idno 38, Patrologia Latina (Migne 1844–1864): 5,277 texts / 85.5M
+  # words, authors 105–1847 CE (census 2026-08-19, navigate.php root listing).
+  # De-facto XML API: navigate.php catalog walk (corpus→author→work→text
+  # idnos) + download.php per-text TEI P5; refusal bodies are recorded skips.
+  # NEW `corpus-corporum-tei` streaming family (COMPOSE REFUTED from bytes:
+  # PL wraps the ENTIRE reading text in <body><note><div1> — the blanket
+  # drop-<note> rule of epidoc/croala-tei/openmgh-tei parses every PL text to
+  # ZERO passages; here structural notes are transparent, inline notes drop,
+  # Migne column <pb n> rides a "column" annotation).
+  # LICENSE (80-1, the ETCSL class-3 mold): source nc — homepage verbatim
+  # "reused freely (but non-commercially) as long as the source is indicated",
+  # download offered "for non-commercial use"; per-text teiHeaders are
+  # license-SILENT (censused) → sefaria-mold override only when a header ever
+  # carries an explicit grant. Upstream warns some files don't validate as
+  # TEI → tolerant parse, ParseError→quarantine.
+  license_watch: https://mlat.uzh.ch/home
+  sync_policy: manual

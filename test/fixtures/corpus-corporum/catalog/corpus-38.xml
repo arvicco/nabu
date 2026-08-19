@@ -1,0 +1,79 @@
+<navigation xmlns="http://mlat.uzh.ch/2.0" address="home/38" group_by="" a="0">
+    <path_steps>
+      <path_step idno="" id="" type="" full_path="/" text_section="">home</path_step>
+      <path_step idno="38" id="" type="corpus" full_path="/38" text_section="">Patrologia Latina</path_step>
+    </path_steps>
+    <last_step accessible="1">
+      <item cc_idno="38" type="corpus">
+        <cc_id>cps_2</cc_id>
+        <cc_idno>38</cc_idno>
+        <name_data>
+      <name>Patrologia Latina</name>
+    </name_data>
+        <nr>2</nr>
+        <description/>
+        <description/>
+        <source>cf. Open Greek and Latin</source>
+        <source_web_page>http://opengreekandlatin.github.io/patrologia_latina-dev/</source_web_page>
+        <cover_page_url>
+          <div>
+<p>Patrologiae cursus completus. Series Latina / accurante J.-P. Migne. Parisiis.</p>
+
+<p>Tomus 1 (1844) - tomus 221 (1864), reprinted in the 1880s.</p>
+
+<p>It is possible to either navigate through authors and works to a text, or to jump directly to a volume and column by means of the box below.</p>
+<added_module_anchor/>
+<p>There are OCR mistakes. In some cases there are significant differences between the original print and the reprints. In case of doubt, usere should consult the original books or image scans thereof (e.g. <a href="http://www.documentacatholicaomnia.eu/25_10_40-_Imagines.html" target="_blank">here</a>). Please inform us of mistakes (turicense /at/ gmail.com)</p>
+
+<p>The editions in this collection are from the 16th to the 18th century and not critical. Many of them have been replaced by better ones over the past century, especially in the collections <em>Corpus Christianorum</em> (Brepols Publishers) and <em>Corpus Scriptorum Ecclesiasticorum Latinorum</em> (Österreichische Akademie der Wissenschaften). Those in the public domain of the latter collections can also be found here (<a href="https://mlat.uzh.ch/browser?path=cps19" target="_blank">corpus 19</a>). Others are either not freely available or have not yet been digitised. Therefore for scholarly publications, users should check if there are better editions of a text they have found here. Also note that the author names are not always correct, we use them as Migne printed them which was according to then available knowledge. </p>
+</div>
+        </cover_page_url>
+        <xslt_file>display_text_transform_cps_2.xsl</xslt_file>
+        <module_to_add>
+      <file>cc_modules/submodules/pl_searcher.js</file>
+      <class_name>cls_smod_pl_searcher</class_name>
+    </module_to_add>
+        <cc_metadata>
+      <created>2020-07-08T00:13:59.287</created>
+      <last_modification>2022-10-22T23:16:27.345</last_modification>
+    </cc_metadata>
+      </item>
+    </last_step>
+    <summary>
+      <texts>5277</texts>
+      <availible_texts>0</availible_texts>
+      <corpora>0</corpora>
+      <works>5204</works>
+      <authors>1528</authors>
+      <words>85539587</words>
+    </summary>
+    <contents>
+      <author type="author">
+        <name>Abbaudus abbas</name>
+        <idno>2173</idno>
+        <works_count>1</works_count>
+        <texts_count>1</texts_count>
+        <accessible_texts_count>1</accessible_texts_count>
+        <words_count>0</words_count>
+        <year>1199</year>
+      </author>
+      <author type="author">
+        <name>Petrus Bibliothecarius</name>
+        <idno>2028</idno>
+        <works_count>1</works_count>
+        <texts_count>1</texts_count>
+        <accessible_texts_count>1</accessible_texts_count>
+        <words_count>0</words_count>
+        <year>850</year>
+      </author>
+      <author type="author">
+        <name>Wido monachus</name>
+        <idno>2034</idno>
+        <works_count>1</works_count>
+        <texts_count>1</texts_count>
+        <accessible_texts_count>1</accessible_texts_count>
+        <words_count>0</words_count>
+        <year>1050</year>
+      </author>
+      </contents>
+  </navigation>

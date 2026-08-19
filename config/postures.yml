@@ -341,6 +341,21 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  corpus-corporum:
+    lect:
+      posture: identity
+      note: genuinely mixed Latin at source grain (PL authors 105-1847,
+        Tertullian-era through Migne-era prefaces) — the D57-f
+        deliberately-unstaged class (the first1k-greek/croala precedent);
+        refinement candidate rides the dating note.
+    dating:
+      posture: pending
+      note: "candidate: the navigate.php catalog's per-work work_composition
+        + per-author born/died years (walked and checkpointed by the fetch)
+        and the teiHeader author floruit strings (\"fl. 892\") — none wired
+        yet; wiring them would also unlock a lat stage-band refinement."
+    places: {posture: unplaced}
+    script: {posture: implied}
   proiel:
     lect: {posture: identity, note: mixed treebank collection — the ud/D57-f stance}
     dating: {posture: undatable}
