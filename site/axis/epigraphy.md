@@ -17,7 +17,7 @@ A source wears every desk it serves — these twenty answer this desk. Holdings 
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 19 August 2026)</span> |
 |---|---|---|---|---|
-| `papyri-ddbdp` | papyri | attribution | wired · manual | 61,414 docs / 921,611 passages |
+| `papyri-ddbdp` | papyri | attribution | wired · manual | 61,414 docs / 925,496 passages |
 | `edh` | inscriptions | attribution | wired · frozen | 81,881 docs / 406,306 passages |
 | `riig` | inscriptions | attribution | wired · manual | 495 docs / 1,357 passages |
 | `ogham` | inscriptions | nc | wired · manual | 873 docs / 1,053 passages |

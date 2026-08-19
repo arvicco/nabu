@@ -1,0 +1,421 @@
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+        schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+     <fileDesc>
+         <titleStmt>
+              <title>De fractione corporis Christi</title>
+              <author ref="http://viaf.org/viaf/7775646">Abbaudus abbas<date>fl. 1130</date> </author>
+         </titleStmt>
+         <editionStmt>
+              <edition>early modern edition, no apparatus</edition>
+              <editor>Jacques-Paul Migne</editor>
+         </editionStmt>
+         <publicationStmt>
+                 <publisher>J. P. Migne</publisher>
+                 <pubPlace>Parisiis</pubPlace>
+                 <date>1854</date>
+              </publicationStmt>
+          <seriesStmt>
+           <title>Patrologia Latina, vol. 166</title>
+           <idno>AbbAbb.DeFrCoC</idno>
+          </seriesStmt>
+          <notesStmt>
+  			<note/>
+ 		  </notesStmt>
+  		<sourceDesc>
+    		<p>Patrologia Latina</p>
+  		</sourceDesc>
+ 	</fileDesc>
+      <encodingDesc>
+         <projectDesc>
+        <p>this file was encoded in TEI xml for the University of Zurich's <emph>Corpus Corporum</emph> project (www.mlat.uzh.ch) by Ph. Roelli in 2019</p>
+      </projectDesc>
+          <editorialDecl>
+             <normalization>
+          <p>Classical Latin orthography</p>
+        </normalization>
+          </editorialDecl>
+      </encodingDesc>
+ 	  <profileDesc>
+		<creation>
+ 		<date/>
+  		</creation>
+  	  <langUsage>
+  		<language ident="lat">latin</language>
+  	  </langUsage>
+  	  <textClass>
+  		<keywords>
+ 		 <list>
+ 		  <item/>
+		  <item/>
+	  	 </list>
+  		</keywords>
+  		<keywords scheme="genre">
+  		 <list>
+   			<item/>
+  		</list>
+  		</keywords>
+  		<keywords scheme="period">
+ 		 <list>
+   			<item/>
+  		 </list>
+  		</keywords>
+ 	   </textClass>
+ 	</profileDesc>
+ </teiHeader>
+<text>
+ <body>	
+
+<note>
+        <div1>
+          <head>MONITUM.</head>
+<p>Damnata Berengarii haeresi, ex formula confessionis, ei per Ecclesiam in concilio Romano proposita, de
+Eucharistiae sacramento variae exortae sunt quaestiones et controversiae, etiam inter Catholicos, de sensu
+verborum quibus ista formula proposita est. Una ex his quaestionibus erat circa fractionem corporis
+Christi. Nonnulli fractionem illam tantum in signo seu symbolo, non in ipso Christi corpore fieri sentiebant,
+alii contra in ipso corpore fieri contendebant, propter illa verba primae confessionis Berengarianae,
+anathematizantis tanquam haeresim, corpus Christi <hi>non posse sensualiter, nisi in solo sacramento, manibus
+sacerdotum tractari, vel frangi, vel dentibus fidelium alleri.</hi> Prioris sententiae auctores in Eucharistia post
+substantiae conversionem panis species seu accidentia, in quibus fractio fieret, superesse asserebant: alii
+negabant, rati (quod hoc loco dicit Abbaudus) <hi>albedinem seu rotunditatem ab ipso corpore, quod vel album
+vel rotundum est, separari non posse.</hi> </p>
+<p>Inter primos non ultimus erat Petrus Abaetardus, quem hoc nomine, tanquam haereticum, adortus est
+Walterius abbas Victorinus apud Parisios; cujus auctoris libri quatuor exstant in ms. codice Victorino
+contra <hi>quatuor labyrinthos</hi> (sic ipse vocat) <hi>Franciae, id est Abaelardum, Petrum Lombardum, Petrum Pictaviensem,
+et Gislebertum Porretanum.</hi> Sic vero habet in lib. III, cap. 11, in Abaelardum agens: <hi>Demum venit
+ad Berengarium. Hic enim haereticus asserebat in figura et in sacramento totum fieri, nihil in veritate. Postea
+vero convictus coram Nicolao papa et pluribus episcopis confessus est, etiam et juravit, panem scilicet et
+vinum post consecrationem, non solum sacramentum, sed etiam verum corpus et sanguinem Christi esse; et
+sensualiter non solum sacramento, sed etiam veritate manibus sacerdotum tractari, et frangi, et fidelium
+dentibus atteri. Ecce catholica fides. Iste autem scholasticus sic exponit:  « Vere quidem, ait, est, sed in
+sacramento</hi> [ <hi>id est</hi> fractio, <hi>infra</hi> ] <hi>tantum. »  Item ait:  « Sane dici potest fractio illa et partitio, non in substantia
+corporis, sed in ipsa forma panis sacramentali fieri, ut vera fractio et partitio sit sibi, quae fit non in substantia,
+sed in sacramento, id est in specie. »  Item:  « Est ibi vera partio</hi> [ <hi>fractio?</hi> ] <hi>et partitio quae fit in pane, id
+est in forma panis. »  Item:  « Fractio et partes illae, quae ibi videntur fieri, in sacramento fiunt, id est in specie
+visibili. Ideoque illa Berengarii verba ita distinguenda sunt, ut sensualiter, non modo sacramento, sed in veritate
+dicatur corpus Christi tractari manibus sacerdotum, frangi quoque et atteri dentibus. Vere quidem,
+sed in sacramento tantum. Vera est igitur ibi attritio et partitio. »  Ecce, dum catholicam fidem, nulla prorsus
+distinctione indigentem, solitis sibi argumentationibus distinguit, alterum se probat Berengarium. Nam, sicut
+ille asserebat,  « Omnia fiunt sed in sacramento tantum, »  sic, et hic. Ille vero correctus addidit sacramento
+et fractioni, attritioni etiam dentium, veritatem quam negabat: iste econtra in omnibus veritatem subtrahit,
+dum asserit omnia fieri, non in substantia, sed in specie visibili et forma panis et sacramento tantum.</hi> At
+sincera non est hoc in loco Walterii objectio in Abaelardum, qui verum Christi corpus in Eucharistia admittebat,
+sed fractionem atque attritionem non in corpore ipso, sed in specie panis fieri asserebat.</p>
+<p>Walterii sententiae de vera corporis Christi fractione consentit Abbaudus abbas in hoc tractatu, quem
+ex ms. codice, Christiani abbatis sermones continente, excepimus. Christianus mihi fuisse videtur abbas
+monasterii S. Petri Carnutensis; at cujus loci abbas fuerit Abbaudus, necdum mihi compertum est, tametsi
+is, eodem quo Abaelardus saeculo, id est undecimo, vixit.</p>
+<p>
+            <pb n="1341A"/>Dominus Jesus Christus <hi>qua nocte tradebatur,
+accepit panem, benedixit, fregit, dedit discipulis suis,
+dicens: Accipite et comedite. Hoc est corpus meum
+quod pro vobis tradetur.</hi> Credo itaque quod panem
+quem accepit, benedicendo corpus suum fecit.
+Ideoque corpus suum fregit et de eodem corpore suo
+jam benedicto et fracto discipulis dixit: <hi>Hoc est
+corpus meum.</hi> Nec minus firmiter credo <hi>fregit,</hi> quam <hi>benedixit,</hi> 
+ quam <hi>dedit discipulis,</hi> quam denique <hi>hoc
+est corpus.</hi> Sed fortasse quis dicit tunc vere potuisse
+frangi corpus Domini, quia adhuc mortale
+<pb n="1342A"/>
+erat: nunc non posse, quia jam est immortale.
+Quid est ergo quod Paulus apostolus ait: <hi>Panis
+quem frangimus, nonne communicatio corporis Domini
+est?</hi> Sed movet forte quem, quod non dixit,
+Corpus quod frangimus, sed <hi>panis quem frangimus.</hi> 
+Attende quid in alio loco dicit: <hi>Probet autem seipsum
+homo, et sic de pane illo edat, et de calice
+bibat;</hi> ubi itaque nemo Christianus dubitat eum
+de corpore et sanguine dicere Christi. Lucas enim
+in Actibus apostolorum, <hi>Erant,</hi> inquit, <hi>perseverantes
+in doctrina apostolorum et communicatione panis fractionis.</hi> 
+<pb n="1343A"/>
+Intende, obsecro. Certe idem panis benedicitur,
+sumitur, distribuitur. Et tamen Apostolus
+maluit dicere, <hi>Panis quem frangimus,</hi> quam, panis
+quem benedicimus, sive quem sumimus, sive quem
+distribuimus. Deinde cum idem panis quotidie Deo
+in salutem totius mundi offeratur, cur non saltem
+panem quem offerimus, potius quam panem quem
+frangimus dixit, cum utique convenientissime dici
+potuerit? Et evangelista aeque cur non potius panem
+benedictionis, sive panem communicationis, seu
+panem distributionis, aut certe panem oblationis,
+quam panem fractionis posuit? Nempe ubi id potius
+apostolicus sermo atque evangelicus sua auctoritate
+roboraret, unde citius dubitari posse constaret:
+demum fortasse quod et magis congruebat mysterio
+<pb n="1343B"/>
+hujusmodi pronuntiatio.</p>
+<p>Namque ipsa Dei sapientia, quae hoc corpus, unde
+agimus, auimatum sibi in unitate personae assumpsit,
+cum in seipsa integerrima maneat, nobis tamen
+frangitur, eum exponitur: nosque illi spiritualiter
+communicando, veraciter vivimus Deo. Quo
+contra de defectu doctorum per Jeremiam plangitur: <hi>Parvuli petierunt panem, et non erat qui frangeret
+eis.</hi> 
+ Sed aliud est, cum de veritate cujuslibet
+rei secundum proprietatem facti quaeritur; aliud,
+cum facti ejusdem mystica ratio allegorice discutitur.
+Verbi gratia legitur in Evangelio, quod Dominus
+post resurrectionem clausis januis ad discipulos ingressus
+sit. Primo secundum proprietatem facti
+<pb n="1343C"/>
+quaeritur, quomodo verum corpus fuit, quod ad discipulos
+clausis foribus introduxit: deinde mystica
+ratio ejusdem facti subsequitur, scilicet nisi quod
+conclusus fuerit hortus, frustra sponsa sponsum exorabit: <hi>Veniat dilectus in hortum suum.</hi> 
+ Et, ut apertius
+atque compendiosius dicatur; nisi contra mundi
+cupiditates fores cordis tui clausae fuerint, spiritualis
+gratia te illustrare non poterit. Verum in hoc
+loco ubi de proprietate agimus, spiritualem rationem
+intermisecuimus: quia sapientiam Dei, quae disponit
+omnia suaviter, congrue corporalia facta
+secundum spiritualium rationem ordinare accipimus,
+Psalmista quoque attestante: <hi>Omnia in sapientia
+fecisti.</hi> Igitur, secundum fidem Evangelii, quod dixit, <hi>benedixit et fregit;</hi> 
+ Apostoli quoque qui dicit, <hi>Panis
+<pb n="1343D"/>
+quem frangimus;</hi> Lucae etiam evangelistae qui dicit, <hi>Panis fractionis:</hi> 
+ contestante nihilominus spirituali
+ratione fultus, corde credo, ore confiteor ad salutem,
+quia veraciter corpus Christi manibus frangitur
+sacerdotis.</p>
+<p>Hic mihi forte insultatur ab illis qui noverunt
+Christum a dextris Patris sedere non utique dimidium
+aut debilem, sed totum integrum. Quasi vero
+Apostolus cum diceret, <hi>panem quem frangimus, communicatio
+corporis Domini est,</hi> oblitus fuerit de quo
+toties memoraverit, quod sedet ad dexteram Patris;
+oblitus fuerit de quo cum tanta constantia
+dixit, quod <hi>resurgens a mortuis jam non moritur,
+mors illi ultra non dominabitur.</hi> Quomodo ergo de
+uno eodemque corpore quaeritur, quod integrum maneat
+<pb n="1344A"/>
+in coelo, et frangatur in terra? Hic maxime apparet
+quod superius dixi, ideo Apostolum et evangelistam
+verbum fractionis praecipue posuisse, ut hoc
+sua auctoritate firmaretur, unde facilius cor humanum
+dubitaret. Valde enim sibi ipsi adversa videtur
+assertio, cum de uno eodemque corpore praedicatur,
+quod integrum maneat et frangatur. Sed has angustias
+non patitur humana inopia: divinae autem
+potentiae metas praefigere non valet humana infirmitas,
+etsi conetur temeritas. Quae enim impossibilia
+sunt apud homines, possibilia sunt apud Deum.
+Alioquin nunquid hoc solum de Christi corpore
+asseritur humanae rationi contrarium, et juxta legem
+humanorum corporum impossibile? Nonne de
+eodem corpore asseritur, quod per nativitatis suae
+<pb n="1344B"/>
+mysterium ad humanos oculos clauso utero Virginis
+exivit, et ad discipulos ejus per resurrectionem clausis
+januis introivit; seque ipsum et palpabile et tamen
+incorruptibile demonstravit? Ecce tria, ut hoc
+jam non sit solum, sed quartum eorum quae ratio
+non comprehendit; fides tamen divinae potentiae
+concedit. At alii quidem unusquisque quid sentiat,
+videatur: mihi autem pium et bonum est sentire,
+quia illud corpus, quod magna illa et nimis incomprehensibilis
+sublimitas Deitatis suum proprium
+esse voluit, meffabili quadam ac singulari atque
+divina potentia non solum mortalia, sed etiam immortalia
+ac coelestia corpora longissime exceliat.
+Caeterum de illo corpore secundum legem aliorum
+<pb n="1344C"/>
+corporum rationari velle, viventem cum mortuis
+quaerere est. Desinat ergo homo, qui proprii corporis
+infirmitates investigare atque enumerare non
+sufficit, de Dei corpore alta sapere; discat humilibus
+consentire. Meminerit quod quidam sapiens
+cum de eo loqueretur, dixit: Et in pluribus operibus
+ejus non fueris curiosus.</p>
+<p>Verumtamen ponamus aliquem concessisse, quod
+vere non frangatur corpus Christi ut videamus qui
+fructus inde nascatur. Dic ergo mihi, obsecro te,
+unde potero scire quod verum loquatur evangelista,
+cum dicit: <hi>Hoc est corpus meum,</hi> si fefellit quando
+dixit, <hi>fregit?</hi> Identidem si mentitur Apostolus dicens, <hi>Panis quem frangimus,</hi> 
+ unde credam ei quod verum
+dicat, quando sequitur, <hi>communicatio corporis
+<pb n="1344D"/>
+Christi est?</hi> Itaque qui vere frangi corpus Christi
+non concedit, totam fidem tanti sacramenti, quantum
+in se est, fregit. Sed absit, ut evangelica atque
+apostolica falsa credantur! absit ut impossibile
+credatur apud Deum omne verbum!</p>
+<p>Dicat aliquis non omnia divinae potentiae ascribenda;
+rationis acie multa investiganda. Ego cum
+Apostolo nunc cognosco ex parte, exspectans, ut
+cum in Galilaeam venero, ibi eum videam facie ad
+faciem. Si quis tamen humile pusilli consilium non
+aspernatur, hoc divini corporis mysterium nullatenus
+ratione discutiat, sed evangelicae auctoritati sine
+dubitatione credat. Abscondit haec a sapientibus
+Dominus et prudentibus, et revelavit ea parvulis. <hi>Averte,</hi> 
+ inquit, <hi>oculos tuos a me; ipsi me avolare
+<pb n="1345A"/>
+fecerunt.</hi> Putaveram et ego quondam parvulus, nullo
+unquam intellectu ex quantulacunque parte attingi
+posse, qualiter panis terrenus in corpus Christi
+verteretur: tantum autem ex divina potentia firmissime
+credendum, et nullatenus rimandum decreveram.
+Postea vero Deus meus illuminavit tenebras
+meas ut viderem, licet per speculum et in aenigmate,
+quod, antequam vidissem, firmissime credideram.
+Ait enim propheta: <hi>Nisi credideritis, non intelligetis.</hi> 
+Ita et de hoc quod modo habemus in manibus, non
+video quomodo unum idemque corpus et frangatur,
+et integrum maneat: sed tamen certissime credo.
+Potens est enim Deus facere omnia superabundantius
+quam petimus aut intelligimus: ut quod non video,
+et credo, quandoque videam et gaudeam. Beati
+<pb n="1345B"/>
+enim qui non viderunt et crediderunt. Verumtamen,
+ne cui ad incredulitatem proficiat tam molesta et
+violenta contrarietatum dissensio, cum unum idemque
+corpus frangi et integrum manere astruatur,
+putetque nil tale in Scriptoris posse reperiri: attendat
+quid in Evangelio Lucae scriptum sit. <hi>Non est,</hi> 
+inquit Jesus, <hi>mortua puella, sed dormit.</hi> Et mox
+evangelista: <hi>Et deridebant,</hi> inquit, <hi>eum, scientes
+quia mortua est.</hi> Ecce qualis contrarietas. Si enim
+secundum Jesum mortua non erat, quomodo eam
+mortuam esse sciebant? Nam si mortuam, cum non
+esset, putabant, aliud est profecto putare, aliud
+scire. Quod si pro certo tenebant mortuam esse
+quae vivebat, errare hoc erat, non scire: ac per hoc
+aut mortua erat, et contraria Veritati. Veritas locuta
+<pb n="1345C"/>
+est, dicens: <hi>Non est mortua:</hi> aut Veritas verum
+dixit, et evangelista falsum, <hi>scientes,</hi> inquiens, <hi>quia mortua est.</hi> 
+ Sed neuter horum recipitur. Et
+certe majorem contrarietatem habet, aliquem mortuum
+esse et non esse, quam frangi quid et integrum
+manere. Multo enim facilius est fractum
+reintegrare, quam mortuum suscitare. Hoc enim
+hominis aliquoties, illud vero semper solius Dei
+est.</p>
+<p>Recurritur ergo ad alium Evangelii locum, ubi
+Dominus de mortuis loquens. <hi>Non est,</hi> inquit, <hi>Deus
+mortuorum, sed vinorum. Omnes enim vivunt ei.</hi> 
+Nota quod non dixit absolute <hi>vivunt,</hi> sed <hi>vivunt ei,</hi> 
+scilicet non negans hominibus esse eos mortuos, sed
+<pb n="1345D"/>
+Deo. Aeternitas enim cui, quae futura sunt, facta
+sunt; cui etiam omnium rerum consummatio jam
+nota est, cum sibi libet, non secundum eam instabilitatem
+de rebus loquitur, quam nunc de naturali
+sua mutabilitate patiuntur: sed, secundum eum statum,
+quem de immutabilitate Creatoris sui in aeternum
+mutuabuntur. Bene ergo de mortuis, si tamen
+post resurrectionem in aeternum cum Deo victuris
+dicitur: <hi>Omnes vivunt ei,</hi> quia ille immortalitatis
+status incommutabiliter eos manet: mors vero, quae
+eos nunc temporaliter tenet, aliquando non esse
+habet. Et puellam, quam non morti dimittere, sed
+vitae reddere disponebat, non immerito mortuam
+negat qui semel et simul omnia fecit, quae nec semel
+nec simul fieri temporis ratione permittuntur.
+<pb n="1346A"/>
+Vide ergo ne forte similiter dici possit, quod nobis
+frangitur, Deo integrum manere. Qui enim de corporibus
+servorum suorum locutus est, dicens: <hi>Capilli
+capitis vestri omnes numerati sunt; et capillus
+de capite vestro non peribit;</hi> cum secundum nos
+pene omnes capilli perierint, mirum sit apud eum
+aliqua proprii corporis particula quamlibet minuta
+possit perire: cum tamen idem corpus in multas
+partes frangendo dividatur, et a multis comedatur.
+Ei ergo corpus suum semper integrum est, cujus
+providentia nulla ejus particula perire potest. Et
+apud nos quidem localis divisio fractionis comprobatio
+est, quia membrum quod a se invicem disjunctum
+et localiter divisum videmus, fractum esse
+tenemus. Porro apud Deum, sicut veraciter dictum
+<pb n="1346B"/>
+est, secundum tempus mille anni sicut dies unus, et
+unus dies sicut mille anni: ita aeque veraciter dici
+potest, secundum locum mille, sive quot vis aut
+certe omnia loca, apud Deum, quasi unus locus. Ei
+quippe, qui semper ubique totus praesens est, localis
+absentia nil absentare, localis longinquitas nil longinquare,
+localis divisio nil potest dividere. Quod
+ergo apud nos fractum est, quia localiter divisum
+est, apud Deum integrum manet, cui omnia loca
+unus locus est. Quod cum etiam de aliis rebus corporalibus
+dici possit, quanto magis de illo corpore,
+quod personaliter illi substantiae conjunctum est,
+quae semper ubique tota praesens est? quod ob id
+solum, et cum frangitur integrum manere non usquequaque
+improbabiliter possit asseri, quia miro et
+<pb n="1346C"/>
+ineffabili modo unum cum illa substantia factum est,
+et unum cum illa etiam in ipso tempore fractionis
+suae manet, quae nullam ullo modo fractionem recipiens,
+semper integerrima manet; qui est ipsa semper
+infracta et indivisa deitas.</p>
+<p>Potest et ob aliud. Apud nos quippe membrum
+quod fractum et a corpore suo divisum est, mortuum
+esse constat. Illius vero corporis etiam fracti
+quaelibet particula non modo viva, sed etiam vita
+est, si quis fideliter accipit. Quod ergo vim et plusquam
+vim integri obtinet, etiam cum frangitur, integrum
+jure dici potest. Haec tamen non ita dixerim,
+ut per me tantum mysterium revelatum, tanta quaestio
+soluta videatur: hoc tantum effecerim, ne ipsa
+<pb n="1346D"/>
+fractionis et integritatis assertio omnino absurda
+judicetur. Dicatur hinc melius a melioribus, et doctius
+a doctioribus. Utinam audirem ab aliquo certissimam
+tanti mysterii declarationem!</p>
+<p>Superius sane fractionem Dominici corporis evangelica
+atque apostolica auctoritate defendimus; testimonium
+oculorum nostrorum interim omisimus.
+Revera enim certius est testimonium evangelica
+veritas quam visio oculorum nostrorum. Facilius
+quippe concedimus ut oculi nostri fallantur, quam
+ut Evangelium mentiatur. Verumtamen ipse Dominus
+noster Jesus Christus, quando beatus Thomas
+de ejus resurrectione dubitavit, non tam propheticis
+testimoniis quam propriorum oculorum ei satisfecit.
+Non igitur penitus mihi videtur contemnendum
+<pb n="1347A"/>
+oculorum nostrorum testimonium. Urgendus est
+igitur qui negat corpus Domini frangi, utrum illud,
+quod in altari sacramus et frangimus, credat esse
+corpus Christi. Si concesserit, fractioni corporis
+Christi non contradicit. Si negaverit, judicet quisque
+fidelis, si ille fidelis judicandus sit: videat ipse
+cui credere velit, qui nec auctoritati evangelicae,
+nec propriis oculis credit. Nos vero cum discipulis
+cognoscamus Dominum in fractione panis</p>
+<p>Cogitaveram et illis aliqua respondere, qui dicunt
+ipsum corpus non frangi, sed in albedine ejus et rotunditate
+aliquid factitari; sed recogitans ineptum
+esse in Evangelio Christi de albedine et rotunditate
+disputare, amaturis talia auribus dimovens, dialecticis
+<pb n="1348A"/>
+aut certe pueris talia permisi, praesertim cum
+quivis facile videat albedinem seu rotunditatem ab
+ipso corpore, quod vel album vel rotundum est,
+separari non posse, ita ut ab ipso non fracto haec
+per se singulariter non frangantur. Et revera quid
+opus cuique fideli in fide sua hac circuitione verborum?
+Pure et simpliciter profiteatur, quisque quidem
+credat, utrum vere corpus Christi manibus
+sacerdotum frangatur necne. Rogo sane ne quis me
+praesumptionis judicet, quod de tanta re tantillus
+scribere praesumpserim; qui, cum non recte credere
+creditus sum, non potui fidem meam qualicunque
+sermunculo non defendere.
+
+</p>
+        </div1>
+      </note>
+</body>
+  </text>
+</TEI>

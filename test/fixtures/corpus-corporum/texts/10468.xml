@@ -1,0 +1,192 @@
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+        schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+     <fileDesc>
+         <titleStmt>
+              <title>Epistola ad Heribertum</title>
+              <author>Wido monachus<date>fl. 1000</date> </author>
+         </titleStmt>
+         <editionStmt>
+              <edition>early modern edition, no apparatus</edition>
+              <editor>Jacques-Paul Migne</editor>
+         </editionStmt>
+         <publicationStmt>
+                 <publisher>J. P. Migne</publisher>
+                 <pubPlace>Parisiis</pubPlace>
+                 <date>1853</date>
+              </publicationStmt>
+          <seriesStmt>
+           <title>Patrologia Latina, vol. 151</title>
+           <idno>WidMon.EpAdHe6</idno>
+          </seriesStmt>
+          <notesStmt>
+  			<note/>
+ 		  </notesStmt>
+  		<sourceDesc>
+    		<p>Patrologia Latina</p>
+  		</sourceDesc>
+ 	</fileDesc>
+      <encodingDesc>
+         <projectDesc>
+        <p>this file was encoded in TEI xml for the University of Zurich's <emph>Corpus Corporum</emph> project (www.mlat.uzh.ch) by Ph. Roelli in 2019</p>
+      </projectDesc>
+          <editorialDecl>
+             <normalization>
+          <p>Classical Latin orthography</p>
+        </normalization>
+          </editorialDecl>
+      </encodingDesc>
+ 	  <profileDesc>
+		<creation>
+ 		<date/>
+  		</creation>
+  	  <langUsage>
+  		<language ident="lat">latin</language>
+  	  </langUsage>
+  	  <textClass>
+  		<keywords>
+ 		 <list>
+ 		  <item/>
+		  <item/>
+	  	 </list>
+  		</keywords>
+  		<keywords scheme="genre">
+  		 <list>
+   			<item/>
+  		</list>
+  		</keywords>
+  		<keywords scheme="period">
+ 		 <list>
+   			<item/>
+  		 </list>
+  		</keywords>
+ 	   </textClass>
+ 	</profileDesc>
+ </teiHeader>
+<text>
+ <body>	
+
+<note>
+        <div1>
+          <head>NOTA.</head>
+<p>Tria antiqua epistolae sequentis, quae ab Ivone quoque in parte secunda Decreti, cap. 84, edita est,
+exemplaria habuimus, unum ex bibliotheca Regia, reliqua ex Colbertina. In uno istorum ea nullum titulum
+habet, in alio vero hunc: <hi>Epistola sancti Paschasii papae ad Mediolanensem archiepiscopum Simoniaca
+haeresi laborantem.</hi> Constat sane aevo Paschalis secundi, qui Paschasius quoque dictus est a nonnullis, Petrum
+Grosulanum Mediolanensem archiepiscopum accusatum fuisse quod archiepiscopalem dignitatem
+pretio mercatus fuisset. Verum cum de istiusmodi Simonia non agatur in hac epistola, eaque scripta videatur
+ab homine qui minoris esset dignitatis quam is ad quem scribebatur, facile adducor ut credam veriorem
+esse inscriptionem quam praefert codex regius, in quo sic legitur: <hi>Epistola Widi monachi ad Heribertum
+archiepiscopum,</hi> Coloniensem nimirum, quem variis calumniis impetitum fuisse docet in Vita ejus
+Rupertus abbas Tuitiensis. Ob eam vero causam in primis nos illam hic repraesentare voluimus, ut eam
+auctori suo integram restitueremus.</p>
+<p>
+            <pb n="0637A"/>Fraternae mortis crimen incurrit quisquis, cum
+potest, fratrem a morte minime defendit. Nos quoque,
+qui excellentiae vestrae summum discrimen
+audivimus, summi reatus poenam incurrimus si taceamus,
+Domino per prophetam terribiliter attestante
+ quod profecto sanguinem fundit qui impiorum
+iniquitatem tacendo dissimulat. Audivimus
+enim, quod valde miramur, quod sacri apud vos ordines
+pecuniis distrahuntur, dum quicunque tale
+aliquid attentaverint, omnino haeretici comprobentur,
+sancto Spiritu per Gregorium intonante quia
+quisquis per pecunias ordinatur, ad hoc ut fiat haereticus
+promovetur. Et ut hujus nostrae paginulae
+non praesumptionem sed timoris causam fuisse
+monstremus, beatus idem prosequitur <hi>(S. GREGOR.,
+<pb n="0637C"/>
+lib. IV, epist. 51, 55, 56, et lib. VII, ind. II, epist.
+810; I. q. 1, c. 5, Quisquis)</hi>: <hi>Quisquis contra Simoniacam
+et neophytorum haeresim pro officii sui loco
+vehementer non arserit, cum eo se non dubitet habiturum
+portionem qui prius commisit hoc piaculare
+flagitium.</hi> Quibus in verbis cum haeretica et Simoniaca
+<pb n="0638A"/>
+et neophytorum haeresis exprimatur, quod
+aeterna morte dignissimum crimen sit apertissime
+declaratur, protestante per Augustinum divino oraculo
+ac dicente <note>(FULGENT. De fide ad Petr. c. 391)</note>: <hi>Firmissime tene et nullatenus dubites omnem haereticum
+vel schismaticum, quamvis multas eleemosynas
+faciat, vel etiam pro Christo sanguinem fundat, cum
+diabolo et angelis ejus aeterni ignis incendio mancipandum,
+nisi ante finem hujus vitae catholicae fuerit
+incorporatus et redintegratus Ecclesiae.</hi> 
+ Hinc est
+quod Dominus vendentes et ementes de templo
+ejecit, Dathan et Abiron ambientes terra glutivit,
+Simonemque tentantem Petrus damnavit, omnesque
+in eo Simoniacos ecclesiasticis jaculis Petrus
+perpetuo anathemate condemnavit. Et turpe nimium
+<pb n="0638C"/>
+est ut in plenissimo jam vigore confirmata
+Ecclesia tam ferali inimico succumbat, de quo in
+primordio suae infantiae tanta virtute triumphat. Si
+quis <note>(1, q. 3, c. 7, Si quis objecerit)</note> autem objecerit
+non consecrationes sed res ipsas quae ex consecratione
+proveniunt vendi, videtur quidem aliquid
+<pb n="0639A"/>
+dicere, nihil autem penitus sapere. Nam cum corporalis
+Ecclesia aut episcopus aut abbas aut tale
+aliquid sine rebus corporalibus et exterioribus in
+nullo proficiat, sicut nec anima sine corpore temporaliter
+vivit, quisquis horum alterum vendit sine quo
+alterum habere non provenit, neutrum venditum
+derelinquit. Quam tamen objectionem sacer penitus
+canon exterminat <note>(concil. Chalcedon., c. 2)</note>,
+cum procuratorem vel defensorem Ecclesiae vel regulae
+subjectum adeo per pecunias ordinari prohibeat
+ut interventores quoque tanti sceleris anathematis
+mucrone succidat. Quid plura? Si anathematizati
+et excommunicati et ut vere haeretici Simoniaci
+et neophyti a numero sunt fidelium Ecclesiae
+separati, quis non videat quia hujusmodi sacerdotum
+<pb n="0639B"/>
+vel clericorum missae et orationes Deum ad
+iracundiam super populum provocent, quem placari
+talibus credebamus? Scriptum est enim: <hi>Omne quod
+non est ex fide peccatum est <note>(Rom. XIV)</note>
+            </hi>. Et item: <hi>Veri sacrificii locus extra catholicam Ecclesiam non
+est</hi> 
+ <note>(I, q. 1, c. 71, Extra)</note>. Unde et dicitur: <hi>Haereticum
+hominem post primam et secundam correptionem
+devita <note>(Tit. III)</note>
+            </hi>. Quomodo ergo tales episcopos
+vel abbates vel reliquos clericos devitamus si eorum
+<pb n="0640A"/>
+missas audimus, cum quibus si vel semel oramus,
+excommunicationem subimus? Quos quidem sacerdotes
+esse saltem credere omnino errare est cum Petrus
+Simoni dicat: <hi>Pecunia tua tecum sit in perditionem,
+quia aestimasti donum Dei pecuniis possideri <note>(Act. VIII)</note>
+            </hi>.
+Ubi cum <hi>aestimasti</hi> dicitur, patet quia non
+pro eo quod fecerit, sed quia facere se posse crediderit
+condemnatur, cum tamen minus sit aestimare
+quam credere. Cum itaque haereticum qualemcunque
+esse sit certa et indubitata damnatio, quid
+valet Arianos, Sabellianos, Photinianos impiosque
+Manichaeos orbe pepulisse, si Simoniaca et neophytorum
+haeresis, quae, ut beatus Gregorius dicit,
+ante omnes in Ecclesia diabolica fraude subrepserit,
+quasi primam et maximam Ecclesiae castitatem
+<pb n="0640B"/>
+faeda nimium pollutione contaminet? Igitur id
+propter Deum, vestram excellentiam et omnes fideles
+Christi rogamus et obtestamur, si habere partem
+in Christo cupitis, summopere instate ut tam
+saeva pestis, quae innumeros populos jam usquequaque
+saeviendo aeterna morte mulctavit, vestra auctoritate
+et exemplo penitus destruatur, ne ulterius,
+quod absit, in Spiritu sancto peccare, neque hic
+neque in futuro saeculo remittatur.
+
+</p>
+        </div1>
+      </note>
+</body>
+  </text>
+</TEI>

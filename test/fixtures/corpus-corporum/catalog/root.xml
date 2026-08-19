@@ -1,0 +1,507 @@
+<navigation xmlns="http://mlat.uzh.ch/2.0">
+    <path_steps>
+      <path_step type="home">home</path_step>
+    </path_steps>
+    <contents>
+      <corpus type="corpus">
+        <idno>17098</idno>
+        <name>Libri sacri</name>
+        <nr>1</nr>
+        <texts_count>7</texts_count>
+        <accessible_texts_count>7</accessible_texts_count>
+        <works_count>7</works_count>
+        <authors_count>2</authors_count>
+        <subcorpora_count>2</subcorpora_count>
+        <words_count>2451449</words_count>
+        <source>var.</source>
+        <date_range>
+          <first_author_year>1564</first_author_year>
+          <last_author_year>1564</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>38</idno>
+        <name>Patrologia Latina</name>
+        <nr>2</nr>
+        <texts_count>5277</texts_count>
+        <accessible_texts_count>5277</accessible_texts_count>
+        <works_count>5204</works_count>
+        <authors_count>1528</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>85539587</words_count>
+        <source>cf. Open Greek and Latin</source>
+        <source_web_page>http://opengreekandlatin.github.io/patrologia_latina-dev/</source_web_page>
+        <date_range>
+          <first_author_year>105</first_author_year>
+          <last_author_year>1847</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>11975</idno>
+        <name>Thomas Aquinas</name>
+        <nr>3</nr>
+        <texts_count>77</texts_count>
+        <accessible_texts_count>0</accessible_texts_count>
+        <works_count>76</works_count>
+        <authors_count>1</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>8095449</words_count>
+        <source>Corpus Thomisticum</source>
+        <source_web_page>http://www.corpusthomisticum.org/</source_web_page>
+        <date_range>
+          <first_author_year>1274</first_author_year>
+          <last_author_year>1274</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>12130</idno>
+        <name>Auctores scientiarum varii</name>
+        <nr>4</nr>
+        <texts_count>93</texts_count>
+        <accessible_texts_count>86</accessible_texts_count>
+        <works_count>93</works_count>
+        <authors_count>71</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>7274700</words_count>
+        <source>var.</source>
+        <date_range>
+          <first_author_year>-148</first_author_year>
+          <last_author_year>1992</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>35</idno>
+        <name>Latinitas antiqua</name>
+        <nr>5</nr>
+        <texts_count>197</texts_count>
+        <accessible_texts_count>197</accessible_texts_count>
+        <works_count>197</works_count>
+        <authors_count>47</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>5258738</words_count>
+        <source>Perseus (Tufts University)</source>
+        <source_web_page>http://www.perseus.tufts.edu/hopper/</source_web_page>
+        <date_range>
+          <first_author_year>-183</first_author_year>
+          <last_author_year>735</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>12780</idno>
+        <name>Rinascimento</name>
+        <nr>6</nr>
+        <texts_count>148</texts_count>
+        <accessible_texts_count>148</accessible_texts_count>
+        <works_count>148</works_count>
+        <authors_count>49</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>4476214</words_count>
+        <source>Biblioteca Italiana (Università Sapienza Roma)</source>
+        <source_web_page>http://www.bibliotecaitaliana.it/</source_web_page>
+        <date_range>
+          <first_author_year>1110</first_author_year>
+          <last_author_year>1837</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>13139</idno>
+        <name>Richard Rufus Project</name>
+        <nr>7</nr>
+        <texts_count>11</texts_count>
+        <accessible_texts_count>11</accessible_texts_count>
+        <works_count>11</works_count>
+        <authors_count>6</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>321833</words_count>
+        <source>Richard Rufus Project (Indiana University)</source>
+        <source_web_page>http://rrp.stanford.edu/index.shtml</source_web_page>
+        <date_range>
+          <first_author_year>-321</first_author_year>
+          <last_author_year>1292</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>13150</idno>
+        <name>Croatiae auctores Latini</name>
+        <nr>8</nr>
+        <texts_count>331</texts_count>
+        <accessible_texts_count>331</accessible_texts_count>
+        <works_count>331</works_count>
+        <authors_count>113</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>4528649</words_count>
+        <source>Croatiae auctores Latini (Universitas Studiorum Zagrabiensis)</source>
+        <source_web_page>http://www.ffzg.unizg.hr/klafil/croala/</source_web_page>
+        <date_range>
+          <first_author_year>1149</first_author_year>
+          <last_author_year>2004</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>14001</idno>
+        <name>Neolatinitas</name>
+        <nr>9</nr>
+        <texts_count>30</texts_count>
+        <accessible_texts_count>30</accessible_texts_count>
+        <works_count>30</works_count>
+        <authors_count>16</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>7745320</words_count>
+        <source>CAMENA (Universität Mannheim)</source>
+        <source_web_page>http://www.uni-mannheim.de/mateo/camenahtdocs/camena_e.html</source_web_page>
+        <date_range>
+          <first_author_year>1508</first_author_year>
+          <last_author_year>1706</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>11857</idno>
+        <name>Philosophica</name>
+        <nr>10</nr>
+        <texts_count>48</texts_count>
+        <accessible_texts_count>48</accessible_texts_count>
+        <works_count>48</works_count>
+        <authors_count>11</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>1928239</words_count>
+        <source>University Toronto</source>
+        <source_web_page>http://individual.utoronto.ca/pking/resources.html</source_web_page>
+        <date_range>
+          <first_author_year>254</first_author_year>
+          <last_author_year>1650</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>11974</idno>
+        <name>Hagiographica</name>
+        <nr>11</nr>
+        <texts_count>10</texts_count>
+        <accessible_texts_count>10</accessible_texts_count>
+        <works_count>10</works_count>
+        <authors_count>4</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>276081</words_count>
+        <source>mostly from José Carlos Martín Iglesias</source>
+        <date_range>
+          <first_author_year>621</first_author_year>
+          <last_author_year>1471</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>34</idno>
+        <name>Itinera</name>
+        <nr>12</nr>
+        <texts_count>11</texts_count>
+        <accessible_texts_count>11</accessible_texts_count>
+        <works_count>11</works_count>
+        <authors_count>11</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>231520</words_count>
+        <source>mostly our own OCR</source>
+        <date_range>
+          <first_author_year>1236</first_author_year>
+          <last_author_year>1754</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>14161</idno>
+        <name>Grammatici Latini</name>
+        <nr>13</nr>
+        <texts_count>103</texts_count>
+        <accessible_texts_count>103</accessible_texts_count>
+        <works_count>102</works_count>
+        <authors_count>52</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>1071297</words_count>
+        <source>CGL (Université de la Sorbonne)</source>
+        <source_web_page>http://kaali.linguist.jussieu.fr/CGL/index.jsp</source_web_page>
+        <date_range>
+          <first_author_year>79</first_author_year>
+          <last_author_year>1050</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>14002</idno>
+        <name>Theologica</name>
+        <nr>14</nr>
+        <texts_count>12</texts_count>
+        <accessible_texts_count>12</accessible_texts_count>
+        <works_count>12</works_count>
+        <authors_count>5</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>214022</words_count>
+        <source>Andrew Dunning</source>
+        <date_range>
+          <first_author_year>400</first_author_year>
+          <last_author_year>1564</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>14003</idno>
+        <name>Poetica</name>
+        <nr>15</nr>
+        <texts_count>681</texts_count>
+        <accessible_texts_count>681</accessible_texts_count>
+        <works_count>627</works_count>
+        <authors_count>293</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>2824249</words_count>
+        <source>var.</source>
+        <date_range>
+          <first_author_year>641</first_author_year>
+          <last_author_year>2000</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>14004</idno>
+        <name>Antiquitas Posterior</name>
+        <nr>16</nr>
+        <texts_count>189</texts_count>
+        <accessible_texts_count>189</accessible_texts_count>
+        <works_count>189</works_count>
+        <authors_count>101</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>2979900</words_count>
+        <source>digilibLT (Università Piemonte Orientale)</source>
+        <source_web_page>http://digiliblt.lett.unipmn.it/index.php</source_web_page>
+        <date_range>
+          <first_author_year>-150</first_author_year>
+          <last_author_year>1547</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>14005</idno>
+        <name>Historica</name>
+        <nr>17</nr>
+        <texts_count>3</texts_count>
+        <accessible_texts_count>3</accessible_texts_count>
+        <works_count>3</works_count>
+        <authors_count>3</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>89561</words_count>
+        <source>var. </source>
+        <date_range>
+          <first_author_year>1352</first_author_year>
+          <last_author_year>1647</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>14006</idno>
+        <name>Versiones latinae</name>
+        <nr>18</nr>
+        <texts_count>14</texts_count>
+        <accessible_texts_count>13</accessible_texts_count>
+        <works_count>14</works_count>
+        <authors_count>13</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>279792</words_count>
+        <source>mostly our own OCR</source>
+        <date_range>
+          <first_author_year>1147</first_author_year>
+          <last_author_year>1867</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>14007</idno>
+        <name>Scriptores Ecclesiastici</name>
+        <nr>19</nr>
+        <texts_count>272</texts_count>
+        <accessible_texts_count>272</accessible_texts_count>
+        <works_count>270</works_count>
+        <authors_count>61</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>5845390</words_count>
+        <source>cf. Open Greek and Latin</source>
+        <source_web_page>http://opengreekandlatin.github.io/patrologia_latina-dev</source_web_page>
+        <date_range>
+          <first_author_year>220</first_author_year>
+          <last_author_year>1159</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>14008</idno>
+        <name>Encyclopediae</name>
+        <nr>20</nr>
+        <texts_count>1</texts_count>
+        <accessible_texts_count>1</accessible_texts_count>
+        <works_count>1</works_count>
+        <authors_count>1</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>784247</words_count>
+        <source>SourceEncyMe (IRHT Paris)</source>
+        <source_web_page>http://sourcencyme.irht.cnrs.fr/</source_web_page>
+        <date_range>
+          <first_author_year>1264</first_author_year>
+          <last_author_year>1264</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>14009</idno>
+        <name>Latinità Italiana del Medioevo</name>
+        <nr>21</nr>
+        <texts_count>348</texts_count>
+        <accessible_texts_count>347</accessible_texts_count>
+        <works_count>346</works_count>
+        <authors_count>195</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>4371143</words_count>
+        <source>ALIM</source>
+        <source_web_page>http://en.alim.unisi.it/</source_web_page>
+        <date_range>
+          <first_author_year>547</first_author_year>
+          <last_author_year>1661</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>14010</idno>
+        <name>Monumenta Germaniae Historica</name>
+        <nr>22</nr>
+        <texts_count>406</texts_count>
+        <accessible_texts_count>406</accessible_texts_count>
+        <works_count>405</works_count>
+        <authors_count>138</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>6643810</words_count>
+        <source>dMGH</source>
+        <source_web_page>https://www.dmgh.de/</source_web_page>
+        <date_range>
+          <first_author_year>395</first_author_year>
+          <last_author_year>1550</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>14011</idno>
+        <name>Mathematica</name>
+        <nr>23</nr>
+        <texts_count>17</texts_count>
+        <accessible_texts_count>11</accessible_texts_count>
+        <works_count>17</works_count>
+        <authors_count>14</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>510864</words_count>
+        <source>mostly Università Pisa</source>
+        <date_range>
+          <first_author_year>1175</first_author_year>
+          <last_author_year>1855</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>14012</idno>
+        <name>Mirabile Digital Library</name>
+        <nr>24</nr>
+        <texts_count>407</texts_count>
+        <accessible_texts_count>407</accessible_texts_count>
+        <works_count>399</works_count>
+        <authors_count>174</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>6308125</words_count>
+        <source>Mirabile Digital Library</source>
+        <source_web_page>http://www.mirabileweb.it/</source_web_page>
+        <date_range>
+          <first_author_year>400</first_author_year>
+          <last_author_year>1540</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>23570</idno>
+        <name>Corpus epistolarum Bullingeri</name>
+        <nr>25</nr>
+        <texts_count>475</texts_count>
+        <accessible_texts_count>475</accessible_texts_count>
+        <works_count>475</works_count>
+        <authors_count>369</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>1816807</words_count>
+        <source>Bullinger Digital</source>
+        <source_web_page>https://www.bullinger-digital.ch/</source_web_page>
+        <date_range>
+          <first_author_year>1560</first_author_year>
+          <last_author_year>1586</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>21320</idno>
+        <name>Dissertationes</name>
+        <nr>26</nr>
+        <texts_count>4</texts_count>
+        <accessible_texts_count>4</accessible_texts_count>
+        <works_count>4</works_count>
+        <authors_count>4</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>36422</words_count>
+        <source>mostly our own OCR</source>
+        <date_range>
+          <first_author_year>1865</first_author_year>
+          <last_author_year>1897</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>11838</idno>
+        <name>noscemus</name>
+        <nr>27</nr>
+        <texts_count>3</texts_count>
+        <accessible_texts_count>3</accessible_texts_count>
+        <works_count>3</works_count>
+        <authors_count>3</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>76044</words_count>
+        <source>noscemus (Universität Innsbruck)</source>
+        <source_web_page>https://www.uibk.ac.at/projects/noscemus/</source_web_page>
+        <date_range>
+          <first_author_year>316</first_author_year>
+          <last_author_year>1652</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>21967</idno>
+        <name>Acta Sanctorum</name>
+        <nr>28</nr>
+        <texts_count>66</texts_count>
+        <accessible_texts_count>66</accessible_texts_count>
+        <works_count>66</works_count>
+        <authors_count>1</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>52680193</words_count>
+        <source>Cf. heiligenlexikon.de</source>
+        <source_web_page>https://heiligenlexikon.de</source_web_page>
+        <date_range>
+          <first_author_year>1665</first_author_year>
+          <last_author_year>1665</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>21643</idno>
+        <name>Ptolemaeus Latinus</name>
+        <nr>29</nr>
+        <texts_count>30</texts_count>
+        <accessible_texts_count>30</accessible_texts_count>
+        <works_count>30</works_count>
+        <authors_count>10</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>808972</words_count>
+        <source>Ptolemaeus Arabus et Latinus (PAL)</source>
+        <source_web_page>https://ptolemaeus.badw.de</source_web_page>
+        <date_range>
+          <first_author_year>170</first_author_year>
+          <last_author_year>1577</last_author_year>
+        </date_range>
+      </corpus>
+      <corpus type="corpus">
+        <idno>21155</idno>
+        <name>Graeca miscellanea</name>
+        <nr>99</nr>
+        <texts_count>775</texts_count>
+        <accessible_texts_count>775</accessible_texts_count>
+        <works_count>773</works_count>
+        <authors_count>93</authors_count>
+        <subcorpora_count>0</subcorpora_count>
+        <words_count>10842709</words_count>
+        <source>Perseus (Tufts University)</source>
+        <source_web_page>http://www.perseus.tufts.edu/hopper/</source_web_page>
+        <date_range>
+          <first_author_year>-700</first_author_year>
+          <last_author_year>1260</last_author_year>
+        </date_range>
+      </corpus>
+    </contents>
+  </navigation>
