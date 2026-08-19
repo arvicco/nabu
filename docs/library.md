@@ -4,11 +4,9 @@
 the overnight P78 Korean first syncs). Live totals: **981,976
 documents / 71,073,017 passages and 1,410,205 dictionary entries**
 across the **145 registry rows** — 122 corpus sources + 4 local
-shelves + 19 feature modules. Not every corpus source is wired: the
-eight P78 Korean/Vietnamese-wave sources (§8ag) still ride `wired:
-false` — seven landed their owner-fired first syncs overnight
-2026-08-18/19 and await the verification flips, `viet-wikisource` its
-first sync. **Classical Arabic (`ara`, §8x) is the largest language
+shelves + 19 feature modules, every corpus source wired (the P78
+Korean/Vietnamese wave, §8ag, verified its first syncs and flipped
+2026-08-19). **Classical Arabic (`ara`, §8x) is the largest language
 at 33.3M passages**, ahead of Literary Chinese (15.9M — the Korean
 historiographical wave now aboard), Sumerian and Ancient Greek (3.0M
 each), and Japanese (2.98M); the catalog spans **128 document
@@ -802,7 +800,7 @@ Achaemenid archives searchable by lemma beside the ORACC and CDLI
 shelves (§8, §8r); an Etruscan inscription's identity trail resolved
 across fourteen citation systems.
 
-## 8ag. The Korean–Vietnamese wave (`sillok`, `sjw`, `goryeosa`, `goryeosa-jeoryo`, `bibyeonsa`, `ko-wikisource-mk`, `itkc`, `viet-wikisource`; P78 — first syncs landed 2026-08-18/19, wired flips pending)
+## 8ag. The Korean–Vietnamese wave (`sillok`, `sjw`, `goryeosa`, `goryeosa-jeoryo`, `bibyeonsa`, `ko-wikisource-mk`, `itkc`, `viet-wikisource`; P78 — first syncs verified, all eight wired 2026-08-19)
 
 The `korean` axis minted whole: the Joseon historiographical canon in
 the original literary Chinese (hanmun), the founding hangul epic, the
@@ -810,13 +808,13 @@ open slice of the Korean classics database, and Vietnam's classical
 shelf on the sinitic axis. The eight registry rows still ride `wired:
 false` — seven landed their owner-fired first syncs overnight
 2026-08-18/19 and await the owner's verification flips; the counts
-below are those first syncs. `viet-wikisource` awaits its first sync.
+below are those first syncs; all eight are wired (2026-08-19, owner-verified).
 
 | | |
 |---|---|
 | **Category** | The dynastic records of Korea day by day, the compiled Goryeo histories, the first hangul book, and Đại Việt's annals |
 | **Languages** | Literary Chinese (`lzh` — hanmun, the kanripo precedent; lect codemap lzh → zho/lit) and Middle Korean (`okm`) |
-| **Size** | `sillok`: **743 docs / 414,321 passages** — 조선왕조실록, the Veritable Records of the Joseon Dynasty (NIKH): the complete annals of the 25 reigns (1392–1863) + the colonial-era Gojong/Sunjong supplements, per-day articles under seven parallel calendar systems, interlinear notes and archive citations riding annotations. `sjw`: **297 docs / 1,896,858 passages** — 승정원일기, the Daily Records of the Royal Secretariat (1623–1910): the library's largest single source by characters (242M+ on the web DB); every day opens with the weather record — one of the longest daily weather series anywhere. `goryeosa`: **138 docs / 31,207 passages** — 고려사, the History of Goryeo (1451, Jeong Inji et al.): annals, treatises, tables and biographies of the dynasty of 918–1392. `goryeosa-jeoryo`: **36 docs / 11,226 passages** — 고려사절요 (1452): the chronological digest, compiled one year after the full history. `bibyeonsa`: **273 docs / 93,528 passages** — 비변사등록, the Border Defense Command's daily register (1617–1892), memoranda with attendance rosters. `ko-wikisource-mk`: **1 doc / 159 passages** — 용비어천가 (1447), all 125 cantos of the founding hangul epic: the Middle Korean verse in archaic orthography (`okm`, 125 passages) beside the print's parallel hanmun verse, the modern rendering riding as annotation. `itkc`: **473 docs / 13,185 passages** — the open-licensed slice of the 한국고전종합DB (Institute for the Translation of Korean Classics): 17 complete hanmun works — 고운당필기, 국조보감, 임하필기, the geographic compendia (신증동국여지승람, 대동지지) and more. `viet-wikisource`: **awaiting its first sync** — the Đại Việt classical shelf: the 大越史記全書 (Đại Việt sử ký toàn thư, 1697 Chính Hòa edition) complete from zh.wikisource, plus Bình Ngô đại cáo and Hịch tướng sĩ — `lzh`, on the sinitic axis by design |
+| **Size** | `sillok`: **743 docs / 414,321 passages** — 조선왕조실록, the Veritable Records of the Joseon Dynasty (NIKH): the complete annals of the 25 reigns (1392–1863) + the colonial-era Gojong/Sunjong supplements, per-day articles under seven parallel calendar systems, interlinear notes and archive citations riding annotations. `sjw`: **297 docs / 1,896,858 passages** — 승정원일기, the Daily Records of the Royal Secretariat (1623–1910): the library's largest single source by characters (242M+ on the web DB); every day opens with the weather record — one of the longest daily weather series anywhere. `goryeosa`: **138 docs / 31,207 passages** — 고려사, the History of Goryeo (1451, Jeong Inji et al.): annals, treatises, tables and biographies of the dynasty of 918–1392. `goryeosa-jeoryo`: **36 docs / 11,226 passages** — 고려사절요 (1452): the chronological digest, compiled one year after the full history. `bibyeonsa`: **273 docs / 93,528 passages** — 비변사등록, the Border Defense Command's daily register (1617–1892), memoranda with attendance rosters. `ko-wikisource-mk`: **1 doc / 159 passages** — 용비어천가 (1447), all 125 cantos of the founding hangul epic: the Middle Korean verse in archaic orthography (`okm`, 125 passages) beside the print's parallel hanmun verse, the modern rendering riding as annotation. `itkc`: **473 docs / 13,185 passages** — the open-licensed slice of the 한국고전종합DB (Institute for the Translation of Korean Classics): 17 complete hanmun works — 고운당필기, 국조보감, 임하필기, the geographic compendia (신증동국여지승람, 대동지지) and more. `viet-wikisource`: **32 docs / 7,674 passages** — the Đại Việt classical shelf: the 大越史記全書 (Đại Việt sử ký toàn thư, 1697 Chính Hòa edition) complete from zh.wikisource, plus Bình Ngô đại cáo and Hịch tướng sĩ — `lzh`, on the sinitic axis by design |
 | **Licenses** | the six NIKH/data.go.kr sets 제한 없음 → `attribution` (ruling D47-a — credit the institute); the two Wikisource shelves: texts PD, transcription CC BY-SA 4.0 → `attribution` (credit the contributors) |
 
 **Research uses:** five centuries of a state's own day-grain record —

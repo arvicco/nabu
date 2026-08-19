@@ -148,7 +148,7 @@ class SillokTest < Minitest::Test
     entry = registry["sillok"]
     refute_nil entry, "config/sources.yml must register sillok"
     assert_equal Nabu::Adapters::Sillok, entry.adapter_class
-    refute entry.wired, "wired flips only after the owner-verified first sync (r20 semantics)"
+    assert entry.wired, "first sync owner-verified; flipped 2026-08-19 (r20 semantics)"
     assert_equal "manual", entry.sync_policy
     assert_includes entry.axes, "korean", "sillok mints the korean axis"
   end
