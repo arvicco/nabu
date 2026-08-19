@@ -454,13 +454,9 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   ref:
-    lect: {posture: pending, note: "candidate: de:early (a Frühneuhochdeutsch/
-        Early New High German stage mint in nabu-lects, band 1350–1650 —
-        ENHG has NO ISO code: gmh stops at ~1500, bare de is anachronistic;
-        the sv:old/it:old PR #4 precedent). Upstream's own tag is fnhd
-        (censused 190/190, parse-verified per file); documents ride the de
-        anchor until the mint merges and a ruled whole-source rule
-        machine-postures this row away (the fornsvenska shape)"}
+    # lect: machine-postured by the ref-enhg rule (Q39, nabu-lects PR #5
+    # merged 2026-08-19) — the pending row retired, the fornsvenska
+    # add-then-retire shape.
     dating: {posture: pending, note: "candidate: the header date/time lanes
         riding metadata verbatim ('1487/88'; time '15,2' = 15th c., 2nd
         half — upstream's own century-half grid) — extractor over real

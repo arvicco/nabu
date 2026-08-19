@@ -192,6 +192,16 @@ anchors:
                    needs the distinction — the consumer's raw facet
                    preserves it meanwhile"}
 
+  it:
+    name: Italian
+    parent: roa
+    stages:
+      old: {name: Old Italian, band: [960, 1400], ord: 10, wikt: roa-oit,
+            band_note: "conventional, approximate — the Placiti cassinesi
+                        to the Trecento (Dante, Petrarca, Boccaccio); the
+                        1525 Bembo cut is the other school, recorded not
+                        followed"}
+
   # ── Greek ──────────────────────────────────────────────────────────────────
 
   grc:
@@ -261,6 +271,12 @@ anchors:
   de:
     name: German
     parent: gmh
+    stages:
+      early: {name: Early New High German, band: [1350, 1650], ord: 10,
+              band_note: "conventional Germanistik (Frühneuhochdeutsch) —
+                          gmh's ISO band stops ~1500, so ENHG texts ride
+                          the de anchor; band per the Bochum reference
+                          corpus (ReF) it was minted for"}
 
   osx:
     name: Old Saxon

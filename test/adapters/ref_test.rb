@@ -113,6 +113,8 @@ class RefTest < Minitest::Test
     md = doc.metadata
     assert_equal "F011", md["sigle"]
     assert_equal "ref-mlu", md["subcorpus"], "the deposit directory is the subcorpus"
+    assert_equal({ "subcorpus" => { "value" => "ref-mlu" } }, md["facets"],
+                 "the subcorpus rides as a facet — the ref-enhg lect rule's key (Q39)")
     assert_equal "ReF.MLU", md["corpus"], "the header's own corpus line, verbatim"
     assert_equal "1487/88", md["date"]
     assert_equal "Regensburg", md["place"]
