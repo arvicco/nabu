@@ -542,3 +542,14 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+
+  # ── P80-6: the small-languages pack (modern-text corpora) ──────────────
+  lo-congres:
+    lect:
+      posture: identity
+      note: bare oci, DELIBERATELY COARSE — the registry does not distinguish
+        Occitan dialects; upstream's variety code rides as the dialect facet.
+        (oci→oc codemap alias is a reported mint candidate, the №11 suite.)
+    dating: {posture: undatable, note: modern news sentences, no per-item dates upstream}
+    places: {posture: unplaced}
+    script: {posture: implied}

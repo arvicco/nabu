@@ -3710,3 +3710,25 @@ itkc:
   # report in .docs/p78-plan.md). The munjip stays parked per D47-c.
   license_watch: https://www.data.go.kr/data/15022432/fileData.do
   sync_policy: manual
+
+lo-congres:
+  adapter: Nabu::Adapters::LoCongres
+  axes: [romance]
+  siblings: ["-fr"]  # P34-0: literal tail — dialect slugs are hyphen-free, none ends in -fr
+  translations: true # French coverage is 100% (censused) — -fr siblings ride the same parse
+  wired: false   # flip after the owner-verified first real sync (six FileFetch GETs,
+                   # ~1.3 MB total; then eyeball urn:nabu:lo-congres:gascon:1 --parallel
+                   # --lang fra and 5 random passages)
+  # Lo Congrès Occitan news corpus (P80-6): Zenodo record 8411197 v1.0 —
+  # sentences from the bilingual locongres.org news site, six dialect CSVs
+  # (auvern 17, gascon 2,194, lemosin 90, lengadoc 2,658, provenc 157,
+  # vivaraup 36 — 5,152 French-aligned pairs censused 2026-08-19).
+  # `§`-quadruple lines, no header; passage identity = 1-based line number
+  # (the tla-hf precedent). Passages bare `oci` — the registry does not
+  # distinguish Occitan dialects, so the claim stays DELIBERATELY COARSE
+  # and upstream's own variety code rides as the `dialect` document facet.
+  # LICENSE: record README verbatim "distributed under the Creative
+  # Commons Attribution 4.0 License" (record API cc-by-4.0) → attribution.
+  # Zenodo-version-pinned URLs (the cigs posture: a new release is a new
+  # record URL the owner re-pins).
+  sync_policy: manual
