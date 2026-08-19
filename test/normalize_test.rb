@@ -352,9 +352,12 @@ class NormalizeTest < Minitest::Test
   end
 
   # THE union invariant that makes every per-language document form findable:
-  # for any query and any language rule L, search_form(query, L) is among
-  # query_forms(query) — so a query spelled the way the source spells it
-  # always folds (on some variant) to exactly the indexed form.
+  # for any query and any language rule L whose declared script scope covers
+  # the query's script (P79-1 — a query spelled the way L's documents spell
+  # it IS written in L's script), search_form(query, L) is among
+  # query_forms(query) — so such a query always folds (on some variant) to
+  # exactly the indexed form. Every sample×language pair below is
+  # script-compatible, so the pre-P79-1 grid holds unchanged.
   def test_query_forms_covers_every_language_rule
     samples = ["ἀοιδῆς", "Arma Virumque", "jah", "дх҃омь", "kṛṣṇa", "Café", "du-un-nu-um{ki}", "ZI₃", "æðele",
                "فى", "می‌دانی"]
@@ -366,6 +369,93 @@ class NormalizeTest < Minitest::Test
                         "query_forms(#{sample.inspect}) must cover the #{language} document form"
       end
     end
+  end
+
+  # -- query-side script scoping (P79-1) -------------------------------------
+
+  # OWNER REPRO (2026-08-19): `search "ἀγάπη"` top-ranked three fragment
+  # hits reading γπη (iip/glaux/ddbdp Greek-numeral passages) above every
+  # real match. The gml delete list carries LITERAL α/β — ReN edition
+  # markers, correct at INDEX time for gml documents — and the unscoped
+  # query union applied it to a GREEK query, folding αγαπη → γπη: a tiny
+  # exact form that wins bm25. A rule may now touch a query only when the
+  # query's dominant script is in the rule's declared scope.
+  def test_query_forms_never_delete_greek_letters_from_a_greek_query
+    refute_includes Nabu::Normalize.query_forms("αγαπη"), "γπη"
+    refute_includes Nabu::Normalize.query_forms("ἀγάπη"), "γπη"
+    assert_equal ["αγαπη"], Nabu::Normalize.query_forms("ἀγάπη"),
+                 "a Greek query gets Greek-scoped extras only (grc is a no-op without ς)"
+  end
+
+  def test_query_forms_still_apply_the_gml_fold_to_latin_queries
+    assert_includes Nabu::Normalize.query_forms("went(e)"), "wente",
+                    "optional-letter brackets still drop for a Latin-script query"
+    assert_includes Nabu::Normalize.query_forms("achte¹ᵃ"), "achte",
+                    "ReN homograph superscript + variant tail still fold for a Latin-script query"
+  end
+
+  def test_every_language_fold_declares_a_query_script_scope
+    assert_equal Nabu::Normalize::LANGUAGE_FOLDS.keys.sort,
+                 Nabu::Normalize::QUERY_FOLD_SCRIPTS.keys.sort,
+                 "every LANGUAGE_FOLDS rule must declare which query scripts it may touch"
+  end
+
+  def test_query_script_detects_the_dominant_script
+    { "αγαπη" => :greek, "iustitia" => :latin, "въста" => :cyrillic,
+      "בראשית" => :hebrew, "كتاب" => :arabic, "धर्मन्" => :devanagari,
+      "བྱང་ཆུབ" => :tibetan, "不亦說乎" => :han, "ⲛⲟⲩⲧⲉ" => :coptic,
+      "bʰewgʰ" => :latin, "ꜣwt-ꜥ" => :latin, "ſin" => :latin }.each do |query, script|
+      assert_equal script, Nabu::Normalize.query_script(query), query.inspect
+    end
+    assert_equal :latin, Nabu::Normalize.query_script("sîn²α"),
+                 "majority rules a mixed query (three Latin letters vs one Greek edition marker)"
+    assert_equal :unknown, Nabu::Normalize.query_script("123 .-"),
+                 "no script letters at all: unknown, which no fold scope covers"
+    assert_equal :unknown, Nabu::Normalize.query_script("ab αβ"),
+                 "a tie is genuinely mixed — conservative, no per-language extras"
+  end
+
+  # Per-script probes for the doctrine sweep. Each reads as ONE dominant
+  # script; the hyphens make the cuneiform rule's cross-application
+  # detectable (non-vacuous) beyond the gml×greek letter deletion.
+  SCRIPT_PROBES = {
+    latin: "iustitia a-na went(e) bʰewgʰ",
+    greek: "ἀγάπη βασιλεία-μῆνις",
+    coptic: "ⲛⲟⲩⲧⲉ ⲙⲏⲣ⳿",
+    cyrillic: "въста дх҃омь-та",
+    hebrew: "בראשית ב-א",
+    arabic: "كتاب في",
+    han: "不亦說乎",
+    tibetan: "བྱང་ཆུབ་སེམས",
+    devanagari: "धर्मन् नमस्कृत्य"
+  }.freeze
+
+  # The doctrine sweep: NO rule may delete or alter a foreign-script query at
+  # query time. For every LANGUAGE_FOLDS rule and every probe script outside
+  # its declared scope, the cross-applied form (what the pre-P79-1 union
+  # carried) must be absent from the union whenever it differs from the
+  # generic fold.
+  def test_no_fold_touches_a_query_in_a_script_outside_its_declared_scope
+    checked = 0
+    SCRIPT_PROBES.each do |script, probe|
+      assert_equal script, Nabu::Normalize.query_script(probe),
+                   "probe #{probe.inspect} must read as #{script}"
+      union = Nabu::Normalize.query_forms(probe)
+      generic = Nabu::Normalize.fold_diacritics(Nabu::Normalize.nfc(probe).downcase)
+      Nabu::Normalize::LANGUAGE_FOLDS.each do |language, fold|
+        next if Nabu::Normalize::QUERY_FOLD_SCRIPTS.fetch(language).include?(script)
+
+        cross = fold.call(generic)
+        next if cross == generic
+
+        checked += 1
+        refute_includes union, cross,
+                        "the #{language} rule must not touch a #{script} query " \
+                        "(#{probe.inspect} → #{cross.inspect})"
+      end
+    end
+    assert_operator checked, :>=, 1,
+                    "the sweep must exercise at least one real cross-script mutation (gml × greek)"
   end
 
   # -- fold_with_map: char-aligned fold for KWIC (P8-3) ----------------------

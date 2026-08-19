@@ -28,10 +28,14 @@ module Nabu
     # + each language rule applied to the generic form) and we OR them in the
     # MATCH. This cannot miss: a passage in language L is indexed as
     # extra_L(generic(text)), and the variant set always contains
-    # extra_L(generic(query)) — the query folds, on that variant, exactly the
-    # way the document was folded. And it cannot over-fold: variants are
-    # ORed, so the generic variant still matches languages with no extra rule
-    # (a Gothic "jah" stays findable even though the lat variant reads "iah").
+    # extra_L(generic(query)) for a query in L's script — the query folds,
+    # on that variant, exactly the way the document was folded. And it
+    # cannot over-fold: variants are ORed, so the generic variant still
+    # matches languages with no extra rule (a Gothic "jah" stays findable
+    # even though the lat variant reads "iah") — and, since P79-1, a rule
+    # only touches queries whose dominant script it declares
+    # (Normalize::QUERY_FOLD_SCRIPTS: the gml α/β delete no longer folds a
+    # Greek αγαπη to γπη; conventions.md §9).
     #
     # == --lang rides IN the MATCH when the index carries it (P42-3)
     #
