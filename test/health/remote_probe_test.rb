@@ -87,6 +87,53 @@ class ProbeHttpFileAdapter < Nabu::Adapter
   end
 end
 
+# The resolver shape (P79-2, the data.go.kr family): the CURRENT download
+# URL exists only at probe time (the portal re-mints atchFileId on every
+# artifact replacement), so the target carries a resolver instead of a
+# static zip_url. Drift is URL-identity: the portal serves no
+# Last-Modified header; a re-minted URL IS the "artifact replaced" signal.
+class ProbeResolvedZipAdapter < Nabu::Adapter
+  MANIFEST = Nabu::SourceManifest.new(
+    id: "probe-resolved", name: "Probe Resolved", license: "KOGL", license_class: "attribution",
+    upstream_url: "https://portal.example/data/1/fileData.do", parser_family: "nikh-xml"
+  )
+  def self.manifest = MANIFEST
+  def self.remote_probe_strategy = :http_zip
+
+  class << self
+    # Injected per test: a callable returning the current URL, or raising
+    # Nabu::FetchError (the portal-shape-drift signal).
+    attr_accessor :resolver
+  end
+
+  def self.http_probe_targets
+    [Nabu::Adapter::HttpProbeTarget.new(
+      label: "dataset 1", zip_url: nil, metadata_url: nil,
+      state_subdir: "", resolver: -> { resolver.call }
+    )]
+  end
+end
+
+# The liveness-only shape (P79-2, the crawl-style fetchers with no state
+# file — kitab, burman-concordance): HEAD answers "is upstream there", and
+# drift honestly reads :unknown instead of a false pre-ledger hint.
+class ProbeLivenessOnlyAdapter < Nabu::Adapter
+  ENTRY = "https://mirror.example/contents/data"
+  MANIFEST = Nabu::SourceManifest.new(
+    id: "probe-liveness", name: "Probe Liveness", license: "CC0", license_class: "open",
+    upstream_url: ENTRY, parser_family: "plaintext"
+  )
+  def self.manifest = MANIFEST
+  def self.remote_probe_strategy = :http_zip
+
+  def self.http_probe_targets
+    [Nabu::Adapter::HttpProbeTarget.new(
+      label: "contents", zip_url: ENTRY, metadata_url: nil,
+      state_subdir: "", liveness_only: true
+    )]
+  end
+end
+
 class RemoteProbeTest < Minitest::Test
   include StoreTestDB
 
@@ -168,12 +215,12 @@ class RemoteProbeTest < Minitest::Test
 
   # Write a project's .zip-fetch.json Last-Modified pin the way ZipFetch does,
   # under <canonical>/<source-slug>/<project>/.
-  def write_zip_state(canonical_dir, slug, subdir, last_modified)
+  def write_zip_state(canonical_dir, slug, subdir, last_modified, url: "u")
     dir = File.join(canonical_dir, slug, subdir)
     FileUtils.mkdir_p(dir)
     File.write(
       File.join(dir, Nabu::ZipFetch::STATE_FILE),
-      JSON.generate("last_modified" => last_modified, "sha256" => "z", "url" => "u")
+      JSON.generate("last_modified" => last_modified, "sha256" => "z", "url" => url)
     )
   end
 
@@ -685,6 +732,119 @@ class RemoteProbeTest < Minitest::Test
     assert_equal :unchecked, row.license.status
   end
 
+  # -- URL-identity drift (P79-2) ------------------------------------------
+  #
+  # data.go.kr serves NO Last-Modified (verified live 2026-08-19), and
+  # Zenodo state files carry last_modified null too — the stored fetch URL
+  # is the honest drift signal: a replaced artifact gets a new URL.
+
+  def test_http_zip_url_identity_current_when_no_last_modified_anywhere
+    Dir.mktmpdir do |root|
+      write_zip_state(root, "orx", "alpha", nil, url: ALPHA_ZIP)
+      write_zip_state(root, "orx", "beta", nil, url: BETA_ZIP)
+      stub_zip_head(ALPHA_ZIP, last_modified: nil)
+      stub_zip_head(BETA_ZIP, last_modified: nil)
+      row = probe(http_registry, NO_SHELL, canonical_dir: root).rows.first
+
+      assert_equal :alive, row.liveness.status
+      assert_equal :current, row.drift
+    end
+  end
+
+  def test_http_zip_url_identity_behind_when_stored_url_differs
+    Dir.mktmpdir do |root|
+      write_zip_state(root, "orx", "alpha", nil, url: "https://oracc.example/json/alpha-OLD.zip")
+      write_zip_state(root, "orx", "beta", nil, url: BETA_ZIP)
+      stub_zip_head(ALPHA_ZIP, last_modified: nil)
+      stub_zip_head(BETA_ZIP, last_modified: nil)
+      row = probe(http_registry, NO_SHELL, canonical_dir: root).rows.first
+
+      assert_equal :behind, row.drift
+      assert_match(/alpha/, row.drift_detail)
+    end
+  end
+
+  def test_http_zip_last_modified_compare_still_wins_over_url_identity
+    # An in-place update (same URL, newer Last-Modified) must stay :behind —
+    # the URL fallback never masks the ORACC-style signal.
+    Dir.mktmpdir do |root|
+      write_zip_state(root, "orx", "alpha", LM_OLD, url: ALPHA_ZIP)
+      write_zip_state(root, "orx", "beta", LM_OLD, url: BETA_ZIP)
+      stub_zip_head(ALPHA_ZIP, last_modified: LM_NEW)
+      stub_zip_head(BETA_ZIP, last_modified: LM_OLD)
+      row = probe(http_registry, NO_SHELL, canonical_dir: root).rows.first
+
+      assert_equal :behind, row.drift
+      assert_match(/alpha/, row.drift_detail)
+    end
+  end
+
+  # -- resolver targets (P79-2, the data.go.kr family) ----------------------
+
+  RESOLVED_URL = "https://portal.example/cmm/fileDownload.do?atchFileId=FILE_NEW&fileDetailSn=1"
+
+  def resolved_registry = registry_of(["rsx", "ProbeResolvedZipAdapter", true])
+
+  def test_resolver_target_resolves_then_heads_and_compares_urls
+    Dir.mktmpdir do |root|
+      write_zip_state(root, "rsx", "", nil, url: RESOLVED_URL)
+      ProbeResolvedZipAdapter.resolver = -> { RESOLVED_URL }
+      stub_zip_head(RESOLVED_URL, last_modified: nil)
+      row = probe(resolved_registry, NO_SHELL, canonical_dir: root).rows.first
+
+      assert_equal :alive, row.liveness.status
+      assert_equal :current, row.drift
+    end
+  end
+
+  def test_resolver_target_reads_behind_when_the_portal_reminted_the_url
+    Dir.mktmpdir do |root|
+      write_zip_state(root, "rsx", "", nil,
+                      url: "https://portal.example/cmm/fileDownload.do?atchFileId=FILE_OLD&fileDetailSn=1")
+      ProbeResolvedZipAdapter.resolver = -> { RESOLVED_URL }
+      stub_zip_head(RESOLVED_URL, last_modified: nil)
+      row = probe(resolved_registry, NO_SHELL, canonical_dir: root).rows.first
+
+      assert_equal :behind, row.drift
+      assert_match(/replaced/, row.drift_detail)
+    end
+  end
+
+  def test_resolver_failure_reads_gone_with_the_resolution_detail
+    # No HEAD stub: a HEAD attempt would fail the test under WebMock — the
+    # probe must stop at the failed resolution.
+    ProbeResolvedZipAdapter.resolver = lambda {
+      raise Nabu::FetchError, "data.go.kr page shape changed for 15053646"
+    }
+    report = probe(resolved_registry, NO_SHELL)
+    row = report.rows.first
+
+    assert_equal :gone, row.liveness.status
+    assert_match(/resolve/, row.liveness.detail)
+    assert_match(/shape changed/, row.liveness.detail)
+    assert report.any_gone?
+  end
+
+  # -- liveness-only targets (P79-2, crawl fetchers with no state file) -----
+
+  def test_liveness_only_target_answers_liveness_and_nothing_else
+    stub_request(:head, ProbeLivenessOnlyAdapter::ENTRY).to_return(status: 200)
+    row = probe(registry_of(["lvx", "ProbeLivenessOnlyAdapter", true]), NO_SHELL).rows.first
+
+    assert_equal :alive, row.liveness.status
+    assert_equal :unknown, row.drift, "no state to compare — never a false unpinned hint"
+    assert_nil row.drift_detail
+    assert_equal :unchecked, row.license.status
+  end
+
+  def test_liveness_only_target_still_reads_gone_on_http_error
+    stub_request(:head, ProbeLivenessOnlyAdapter::ENTRY).to_return(status: 404)
+    report = probe(registry_of(["lvx", "ProbeLivenessOnlyAdapter", true]), NO_SHELL)
+
+    assert_equal :gone, report.rows.first.liveness.status
+    assert report.any_gone?
+  end
+
   # -- HTTP single-file probe (P12-2; ASPR shape) --------------------------
 
   FILE_URL = "https://ota.example/bitstream/3009.xml"
@@ -717,6 +877,17 @@ class RemoteProbeTest < Minitest::Test
 
     assert_equal :alive, row.liveness.status
     assert_equal :unchecked, row.license.status
+  end
+
+  # P79-2: with NO metadata endpoint the honest detail is "no license
+  # metadata" whether or not a pin exists — an unpinned unit must not
+  # misreport the missing endpoint as "never synced".
+  def test_http_file_license_detail_names_the_missing_endpoint_not_the_missing_pin
+    stub_zip_head(FILE_URL, last_modified: LM_OLD)
+    row = probe(file_registry, NO_SHELL).rows.first
+
+    assert_equal :unchecked, row.license.status
+    assert_match(/no license metadata/, row.license.detail)
   end
 
   # The whole point: the REAL Oracc adapter, registered as a source, is probed

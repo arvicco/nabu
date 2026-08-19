@@ -59,6 +59,17 @@ module Nabu
 
       # +resolver+/+zip_fetch_factory+ exist for the tests (no network in
       # the suite, ever); no-arg construction stays the registry contract.
+      # P79-2: the data.go.kr resolver posture (see Sillok) — resolve the
+      # CURRENT url at probe time, drift on URL identity.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "data.go.kr #{DATA_PK}", zip_url: nil, metadata_url: nil,
+          state_subdir: "", resolver: -> { Nabu::DataGoKrFetch.resolve(DATA_PK) }
+        )]
+      end
+
       def initialize(resolver: Nabu::DataGoKrFetch.method(:resolve),
                      zip_fetch_factory: Nabu::ZipFetch.method(:new))
         super()

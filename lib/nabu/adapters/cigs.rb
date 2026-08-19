@@ -39,6 +39,18 @@ module Nabu
         MANIFEST
       end
 
+      # P79-2: one Zenodo-pinned CSV via FileFetch; the deposit is
+      # versioned, so a replaced artifact means a NEW file URL — drift
+      # rides URL identity against the .file-fetch.json state.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "cigs csv", zip_url: DUMP_URL, metadata_url: nil,
+          state_subdir: "", state_file: Nabu::FileFetch::STATE_FILE
+        )]
+      end
+
       def self.place_index_producer? = true
 
       def self.place_index_producer(catalog:)

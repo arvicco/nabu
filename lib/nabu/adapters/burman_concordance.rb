@@ -44,6 +44,17 @@ module Nabu
         MANIFEST
       end
 
+      # P79-2: UrlDownload keeps no state file — the probe HEADs the
+      # Zenodo CSV for liveness only; drift honestly reads unknown.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "concordance csv", zip_url: CSV_URL, metadata_url: nil,
+          state_subdir: "", liveness_only: true
+        )]
+      end
+
       # The capability flag SyncRunner keys the reference pass on — without
       # it the producer below is never invoked (the 2026-08-18 first sync:
       # a clean fetch, zero edges, silently).
