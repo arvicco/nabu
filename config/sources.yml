@@ -2557,6 +2557,34 @@ aozora:
   wired: true    # P38: first sync verified 2026-07-21 (16,004 works / 2.98M passages), owner-flipped
   sync_policy: manual
 
+# P80-5: Referenzkorpus Frühneuhochdeutsch (1350-1650) v1.0.2, 190 texts /
+# ~3.1M tokens of diplomatically transcribed ENHG — the first cora-xml
+# registrant (the RAW CorA export; the deposit ships NO TEI, so the
+# family the ReM/ReN siblings ride does not apply). Ingests the two
+# CorA-XML subcorpora (ref-mlu + ref-rub = all 190 texts); the ref-up
+# TigerXML syntax overlay (26 excerpt duplicates) is a documented
+# follow-up. One immutable Zenodo artifact (record 5793616,
+# ReF-v1.0.2.tar.gz, hard sha256 pin — the rem/iecor mold, tar.gz
+# flavor) → manual. CC BY-SA 4.0 (rub.de statement + in-deposit
+# README/LICENSE; the Zenodo record FIELD says cc-by-4.0 — recorded
+# discrepancy, the deposit's own grant governs, the tls precedent).
+ref:
+  adapter: Nabu::Adapters::Ref
+  axes: [germanic]
+  wired: false   # P80-5: adapter + fixtures landed 2026-08-19; first sync is
+                 # owner-fired. Checklist §6: bin/nabu sync ref — expect 190
+                 # documents (~447K physical lines / ~3.42M anno records
+                 # censused across the deposit), eyeball nabu show
+                 # urn:nabu:ref:f011:001r.01 ("AUs der geometrey ettliche
+                 # nuczpere ſtucklē…", manual lemma/pos/morph tokens) + 5
+                 # random passages, then flip.
+  license_watch: https://www.linguistics.rub.de/ref/access/index.en.html
+  # SILVER lemmas (the achemenet rule): CorA auto-annotation carries the
+  # corpus (censused 2,874,451 auto vs 544,520 manual anno units); the
+  # manual minority rides anno_type on each token record.
+  lemma_tier: silver
+  sync_policy: manual
+
 # P40-5: Referenzkorpus Mittelhochdeutsch (1050-1350) v2.1, ~400 texts /
 # ~2M word forms of manually annotated MHG — the first cora-tei registrant
 # (ReA/ReN ride the family when their license replies land, backlog

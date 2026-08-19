@@ -442,6 +442,22 @@ sources:
         extractor is a small future packet over real synced data"}
     places: {posture: unplaced}
     script: {posture: implied}
+  ref:
+    lect: {posture: pending, note: "candidate: de:early (a Frühneuhochdeutsch/
+        Early New High German stage mint in nabu-lects, band 1350–1650 —
+        ENHG has NO ISO code: gmh stops at ~1500, bare de is anachronistic;
+        the sv:old/it:old PR #4 precedent). Upstream's own tag is fnhd
+        (censused 190/190, parse-verified per file); documents ride the de
+        anchor until the mint merges and a ruled whole-source rule
+        machine-postures this row away (the fornsvenska shape)"}
+    dating: {posture: pending, note: "candidate: the header date/time lanes
+        riding metadata verbatim ('1487/88'; time '15,2' = 15th c., 2nd
+        half — upstream's own century-half grid) — extractor over real
+        synced data, the isicily discipline"}
+    places: {posture: pending, note: "candidate: the header place lane riding
+        metadata verbatim ('Regensburg', 'Bamberg' — print/scriptorium
+        place, a genuine origin claim, not a holding library)"}
+    script: {posture: implied}
   disco:
     lect: {posture: identity, note: "P77-4: bare spa is the honest one-tag claim
         across the 15th-20th c. span — the period band rides document metadata;
