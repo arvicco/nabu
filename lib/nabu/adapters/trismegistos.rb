@@ -68,6 +68,20 @@ module Nabu
         MANIFEST
       end
 
+      # P79-2: a per-id API crawl with no state file — HEAD the
+      # dataservices page for liveness only. NB the host currently serves
+      # an incomplete TLS chain (openssl verify 20, checked 2026-08-19):
+      # the verified client refuses it exactly as the next sync would, so
+      # a :gone here is the fetch path's own truth.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "dataservices", zip_url: MANIFEST.upstream_url, metadata_url: nil,
+          state_subdir: "", liveness_only: true
+        )]
+      end
+
       # This module's data rides the links journal via TrismegistosCrosswalk
       # (producer #8), refreshed by SyncRunner after every sync.
       def self.reference_edges? = true

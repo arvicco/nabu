@@ -51,6 +51,17 @@ module Nabu
         MANIFEST
       end
 
+      # P79-2: one static Zenodo artifact; the record serves no usable
+      # Last-Modified (state records null), so drift rides URL identity —
+      # a new deposit version mints a new artifact URL.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "Achemenet.zip", zip_url: ARTIFACT_URL, metadata_url: nil, state_subdir: ""
+        )]
+      end
+
       # +zip_fetch_factory+ exists for the tests (a rigged fetch — no
       # network in the suite, ever); no-arg construction stays the
       # registry contract.

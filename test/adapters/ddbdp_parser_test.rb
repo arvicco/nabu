@@ -9,7 +9,8 @@ require "digest"
 # and c.epist.lat.10 (Latin, recto/verso textpart divs, expan/ex, middots).
 # Every expected string below is derived from the fixture bytes under the
 # Leiden text-extraction policy documented in the parser header (keep
-# lem/reg/add/supplied/unclear/expan+ex/num, drop rdg/orig/del/note/figure,
+# lem/reg/add/supplied/unclear/expan+ex/num, drop rdg/orig/note/figure,
+# render del in Leiden double brackets ⟦…⟧ — №R-17, conventions.md §5 —
 # gap → "[…]" marker, line = passage).
 class DdbdpParserTest < Minitest::Test
   FIXTURES = File.expand_path("../fixtures/ddbdp/DDB_EpiDoc_XML", __dir__)
@@ -35,8 +36,9 @@ class DdbdpParserTest < Minitest::Test
 
   # P6-2 fixture (copied whole 2026-07-04, same provenance as the others):
   # the cancelled-but-legible exemplar — every line of the edition sits
-  # inside <del rend="erasure">, so the blanket drop-<del> policy extracts
-  # zero citable lines and the document quarantined.
+  # inside <del rend="erasure">. Under the original blanket drop-<del>
+  # policy it quarantined; P6-2 recovered it via a document-scoped
+  # fallback; №R-17 (2026-08-10) made the ⟦…⟧ rendering unconditional.
   OC457 = File.join(PAPYRI_FIXTURES, "o.claud", "o.claud.3", "o.claud.3.457.xml")
   OC457_URN = "urn:nabu:ddbdp:o.claud:3:457"
 
@@ -158,21 +160,28 @@ class DdbdpParserTest < Minitest::Test
     assert_equal (1..12).map { |n| "#{BGU100_URN}:#{n}" }, document.map(&:urn)
   end
 
-  def test_subst_keeps_add_and_drops_del_across_the_line_boundary
+  def test_subst_renders_del_in_brackets_and_suppresses_its_duplicate_lb_copy
     # Lines 2-3 carry the scribe's correction:
     #   <subst><add place="inline"><choice><reg>πε<lb n="3" break="no"/>πρακέναι</reg>
     #     <orig>πε<lb n="3" break="no"/>πρακέν<add place="above">ε</add></orig></choice></add>
     #   <del rend="corrected">πε<lb n="3" break="no"/>πρακεν<del rend="erasure">αι</del></del></subst>
-    # Policy: the <add> (final intent) is kept and its <reg> read; the <del>
-    # (with its NESTED del) drops wholesale. Only the KEPT branch's
-    # <lb n="3" break="no"/> is a line boundary — the copies inside <orig>
-    # and <del> are dropped with their subtrees, or line 3 would be minted
-    # three times. break="no" splits the word πεπρακέναι across the citable
-    # lines exactly as a print edition's line numbers do.
+    # №R-17 (conventions.md §5): the <add> (final intent) is kept and its
+    # <reg> read; the <del> now renders too, in Leiden double brackets —
+    # its NESTED del nests its own pair (the two-stage correction: first
+    # ⟦αι⟧ erased, then the whole word corrected). Upstream duplicates the
+    # <lb> into BOTH subst branches so either branch reads alone
+    # (bgu.1.100's revision history); with both branches kept, only the
+    # <add> copy is a line boundary — the del branch's copy is the SAME
+    # physical line break and must not fire (a second firing would collide
+    # and re-mint frozen urns via the implicit-block machinery). The
+    # <orig> branch still drops with its copy. break="no" splits the word
+    # πεπρακέναι across the citable lines exactly as a print edition's
+    # line numbers do.
     document = parse100.to_a
     assert_equal "Πεκύσι Ὥρου χαίρειν. ὁμολογῶ πε", document[1].text
-    assert_equal "πρακέναι σοι κάμηλον θήλειαν δ", document[2].text
+    assert_equal "πρακέναι⟦πεπρακεν⟦αι⟧⟧ σοι κάμηλον θήλειαν δ", document[2].text
     assert_equal({}, document[1].annotations)
+    assert_equal({ "leiden" => { "cancelled" => true } }, document[2].annotations)
   end
 
   def test_empty_num_element_contributes_nothing
@@ -212,13 +221,30 @@ class DdbdpParserTest < Minitest::Test
     assert_equal({ "leiden" => { "supplied_chars" => 1, "unclear_chars" => 2 } }, line.annotations)
   end
 
-  def test_standalone_del_drops_with_its_gap
+  def test_standalone_del_renders_in_brackets_with_its_gap_marking
     # Recto line 9: <del rend="erasure">fidem … <gap reason="illegible" …/>
-    # ista …</del> — erased text is not reading text; the gap INSIDE the del
-    # neither marks the text nor lands in annotations.
+    # ista …</del> — №R-17 (conventions.md §5): erased-but-legible text IS
+    # reading text, printed inside Leiden double brackets ⟦…⟧; the gap
+    # INSIDE the kept del marks the text ("[…]ista", fused where the lost
+    # letter sat) and lands in annotations like any other gap.
     line = parse_cel10.to_a[8]
-    assert_equal "divom atque hominum", line.text
-    assert_equal({}, line.annotations)
+    assert_equal "divom atque hominum ⟦fidem si tu […]ista non cuibis⟧", line.text
+    assert_equal(
+      { "leiden" => {
+        "gaps" => [{ "reason" => "illegible", "quantity" => 1, "unit" => "character" }],
+        "cancelled" => true
+      } }, line.annotations
+    )
+  end
+
+  def test_partial_del_renders_in_place_at_line_end
+    # Recto line 3 ends "… loquor quam <del rend="erasure">no</del>" — the
+    # partial cancellation (the scribe started "no(n)…", crossed it out and
+    # restarted on line 4 "ne patiaris…") renders in place, and the line
+    # carries the cancelled annotation.
+    line = parse_cel10.to_a[2]
+    assert_equal "de improbitate Epaphraes itaque nihil ultra loquor quam ⟦no⟧", line.text
+    assert_equal({ "leiden" => { "cancelled" => true } }, line.annotations)
   end
 
   def test_verso_line
@@ -279,20 +305,21 @@ class DdbdpParserTest < Minitest::Test
                  "c.epist.lat.10 (textpart divs) urns must be unchanged by restart-aware minting"
   end
 
-  # --- cancelled-document fallback (P6-2): whole-document <del> in ⟦⟧ --------
+  # --- cancelled documents (P6-2 → №R-17): whole-document <del> in ⟦⟧ --------
 
   def parse_oc457
     parser.parse(OC457, urn: OC457_URN, language: "grc", title: "o.claud.3.457")
   end
 
-  def test_cancelled_document_recovers_with_leiden_double_brackets
+  def test_cancelled_document_reads_in_leiden_double_brackets
     # o.claud.3.457: both lines sit inside per-line <del rend="erasure"> —
-    # under the standard drop-<del> policy the document extracts ZERO citable
-    # lines. The P6-2 fallback re-reads exactly that class with <del> kept,
-    # wrapped in Leiden double brackets ⟦…⟧ (ancient cancellation, fully
-    # legible — print editions read it). The standard keep/drop policy still
-    # applies INSIDE the kept del: line 2's <app> keeps its <lem> ("παρ",
-    # with an <unclear>ρ</unclear>) and drops its <rdg>.
+    # the whole document is an ancient cancellation, fully legible, and
+    # print editions read it inside Leiden double brackets ⟦…⟧. Under №R-17
+    # every <del> renders that way in the single standard pass (the P6-2
+    # document-scoped fallback is retired; its output for this class is
+    # UNCHANGED — same urns, same text, same annotations). The keep/drop
+    # policy still applies INSIDE the kept del: line 2's <app> keeps its
+    # <lem> ("παρ", with an <unclear>ρ</unclear>) and drops its <rdg>.
     document = parse_oc457
     assert_equal ["#{OC457_URN}:1", "#{OC457_URN}:2"], document.map(&:urn)
     assert_equal "⟦Κύνων Ζήνωνος Εἰσίω-⟧", document.first.text
@@ -313,9 +340,9 @@ class DdbdpParserTest < Minitest::Test
     assert_equal first.map(&:text), second.map(&:text)
   end
 
-  def test_cancelled_document_fallback_rewinds_and_works_from_an_open_io
-    # The fallback is a second Reader pass over the same source; when the
-    # source is an IO (not a path) it must rewind before re-reading.
+  def test_cancelled_document_parses_from_an_open_io
+    # Single standard pass under №R-17 — no rewind, no retry — so an open
+    # IO source works exactly as for any other document.
     document = File.open(OC457, "r") do |io|
       parser.parse(io, urn: OC457_URN, language: "grc", canonical_path: OC457)
     end
@@ -323,40 +350,30 @@ class DdbdpParserTest < Minitest::Test
     assert_equal "⟦Κύνων Ζήνωνος Εἰσίω-⟧", document.first.text
   end
 
-  def test_partial_dels_in_documents_with_citable_lines_never_gain_brackets
-    # The fallback is DOCUMENT-scoped: it engages only when the standard
-    # policy leaves zero citable lines. c.epist.lat.10 has partial dels
-    # (recto line 9's erasure) AND citable text, so its dels keep dropping —
-    # no ⟦⟧ may appear anywhere in it, byte-frozen behavior.
-    document = parse_cel10
-    document.each do |passage|
-      refute_match(/[⟦⟧]/, passage.text, "#{passage.urn} must not gain cancellation brackets")
-    end
-    assert_equal "divom atque hominum", document.to_a[8].text
-  end
-
-  # --- golden text regression (P6-2 frozen-text safety) ----------------------
+  # --- golden text regression (recaptured at №R-17, P79-3a) ------------------
   #
-  # The cancelled-document fallback must leave every document that extracts
-  # at least one citable line byte-identical — the fallback pass runs ONLY
-  # when the standard pass yields zero lines, which by definition never
-  # happens for a loaded document. These sha256s (over the parsed passage
-  # texts joined with "\n") were captured from the pre-P6-2 parser.
+  # These sha256s (over the parsed passage texts joined with "\n") pin the
+  # fixture output against accidental drift. bgu.1.100 and c.epist.lat.10
+  # were deliberately re-captured for the №R-17 del→⟦…⟧ migration (their
+  # dels now render — THE ruled corpus revision, conventions.md §5);
+  # bgu.1.102 and aegyptus.89.240 contain no <del> and remain byte-identical
+  # to the pre-P6-2 capture, proving the migration touches only del-bearing
+  # documents.
   GOLDEN_TEXT_SHA256 = {
     "bgu.1.102" => "64d39af962444877f338011edd6c5e4ce714706f17125fbc8b23735cd84ba793",
-    "bgu.1.100" => "edff3565f13448c65e35220334c7b2a5ea5c8f9327e69ab9b4083ec1f4d5040f",
-    "c.epist.lat.10" => "b40ef5143bcdd47a1fb22146d2d81e1a358ea70511cccc68ea70a9682cbd610b",
+    "bgu.1.100" => "d6d22e9c6a3bd6c77b42d8eaf1c3710aa94889800309ec69b5f3e30ec3e2848d",
+    "c.epist.lat.10" => "e8e50782f86a7fadbc6940001ea0ba23a4b8dc4da23e0465cc128dacd0a6fbf5",
     "aegyptus.89.240" => "ea17abe89429a38f6be6970de969ab4aa80393bf654635e755292a079a32f201"
   }.freeze
 
-  def test_golden_text_sha256_of_pre_existing_fixtures_are_byte_identical
+  def test_golden_text_sha256_of_fixtures_are_byte_identical
     {
       "bgu.1.102" => parse102, "bgu.1.100" => parse100,
       "c.epist.lat.10" => parse_cel10, "aegyptus.89.240" => parse_aeg240
     }.each do |name, document|
       sha = Digest::SHA256.hexdigest(document.map(&:text).join("\n"))
       assert_equal GOLDEN_TEXT_SHA256.fetch(name), sha,
-                   "#{name}: passage text must be byte-identical to the pre-P6-2 parse"
+                   "#{name}: passage text must be byte-identical to the recorded capture"
     end
   end
 
@@ -387,8 +404,21 @@ class DdbdpParserTest < Minitest::Test
 
   # --- lines that extract empty are skipped ----------------------------------
 
-  def test_lines_left_empty_after_extraction_are_skipped
+  def test_del_only_lines_are_citable_under_always_render
+    # Before №R-17 a line whose only content sat in a <del> extracted empty
+    # and was skipped; now the del renders, the line is citable — this is
+    # the resurrection class the migration recovers (79-3b must expect NEW
+    # passage urns, not just revised text, and sequence shifts after them).
     xml = File.read(BGU100).sub("</ab>", %(<lb n="13"/><del rend="erasure">νν</del></ab>))
+    document = parser.parse(StringIO.new(xml), urn: BGU100_URN, language: "grc",
+                                               canonical_path: "surgery.xml")
+    assert_equal 13, document.size
+    assert_equal "⟦νν⟧", document.to_a.last.text
+    assert_equal "#{BGU100_URN}:13", document.to_a.last.urn
+  end
+
+  def test_lines_left_empty_after_extraction_are_skipped
+    xml = File.read(BGU100).sub("</ab>", %(<lb n="13"/><note>editorial noise</note></ab>))
     document = parser.parse(StringIO.new(xml), urn: BGU100_URN, language: "grc",
                                                canonical_path: "surgery.xml")
     assert_equal 12, document.size

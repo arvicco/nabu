@@ -189,8 +189,10 @@ The parser policy question these pose — is restored text "text"? — was
 fixed when the Papyri.info adapter landed (P3-6), and it mirrors print
 practice: a passage's `text` is what a print edition's main text would
 read. Keep `<lem>`, `<reg>`, `<add>`, `<supplied>`, `<unclear>` and
-`<expan>` (including its `<ex>` expansions); drop `<rdg>`, `<orig>` and
-`<del>` (apparatus, not reading text); every `<gap>` becomes the single
+`<expan>` (including its `<ex>` expansions); drop `<rdg>` and `<orig>`
+(apparatus, not reading text); render `<del>` inside `⟦…⟧` (reading text
+in Leiden — №R-17, ruled below; originally dropped, migrated at P79-3);
+every `<gap>` becomes the single
 marker `[…]` so a search hit can never match across a lacuna as if the
 text were contiguous. Certainty data (gap extents, supplied/unclear letter
 counts, hand shifts) lives in per-passage `"leiden"` annotations. The
@@ -422,10 +424,33 @@ misses are real misses.
 language rule's variant when it differs — and `Query::Search` ORs them in
 the FTS MATCH. A passage in language L is indexed as
 `extra_L(generic(text))`, and the union always contains
-`extra_L(generic(query))`, so per-language documents are always findable;
-and because the variants are ORed, the generic variant still matches
-languages with no extra rule — Gothic "jah" stays findable even though the
-lat variant of that query reads "iah".
+`extra_L(generic(query))` for any query written in L's script, so
+per-language documents are always findable; and because the variants are
+ORed, the generic variant still matches languages with no extra rule —
+Gothic "jah" stays findable even though the lat variant of that query
+reads "iah".
+
+**The union is script-scoped (P79-1).** A rule that is correct for its own
+language's *text* can be destructive on a foreign *script*: the gml delete
+list carries literal α/β (ReN edition markers inside gml text), and the
+pre-P79-1 union applied every rule to every query — so the Greek query
+`αγαπη` grew a `γπη` variant, and Greek-numeral passages containing ΓΠΗ
+won bm25 as tiny exact hits above every real ἀγάπη match (owner repro
+2026-08-19). Each `LANGUAGE_FOLDS` rule now declares the query script(s)
+it may touch (`Normalize::QUERY_FOLD_SCRIPTS`, keyed like the rule table:
+gml/lat/akk/… → Latin; grc → Greek; ara/fas → Arabic; lzh/och/jpn → Han;
+cop → Coptic; xct/bod/otb → Tibetan + Latin), and `query_forms` applies a
+rule only when the query's *dominant* script (`Normalize.query_script` —
+strict majority of script-classified characters; none or a tie reads
+`:unknown`) is in scope. The cannot-miss argument above survives because a
+query spelled the way L's documents spell it is written in L's script; an
+unknown/mixed-script query conservatively gets the generic fold and the
+script neutralizations only (neutralizers stay unscoped — they are
+their-own-script transcoders, no-ops elsewhere by construction). The INDEX
+side is untouched: `search_form` still applies exactly the document's own
+language rules in full, so no `text_normalized` byte changes and no
+rebuild. A doctrine sweep test pins the invariant: no rule may delete or
+alter foreign-script letters at query time.
 
 **Lemmas fold by the same table (P7-5):** a lemma is a dictionary form in
 its passage's language, so the lemma index stores

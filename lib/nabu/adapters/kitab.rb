@@ -82,6 +82,18 @@ module Nabu
         MANIFEST
       end
 
+      # P79-2: the pairwise crawl keeps no state file (leaves accumulate
+      # in place) — the probe HEADs the mirror's contents API for
+      # liveness only; drift honestly reads unknown.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "pairwise-light contents", zip_url: CONTENTS_API, metadata_url: nil,
+          state_subdir: "", liveness_only: true
+        )]
+      end
+
       # This module's data rides the links journal via KitabTextReuse
       # (producer #9), refreshed by SyncRunner after every sync.
       def self.reference_edges? = true
