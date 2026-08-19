@@ -87,6 +87,12 @@ module Nabu
 
     STATE_FILE = ".zip-fetch.json"
 
+    # Archive kinds unpack! understands. :zip is the historical default;
+    # :tar_gz (P80-5, the ReF Zenodo deposit) unpacks via the system `tar`
+    # — no salvage path (the P78-r4 junk-name failure is a zip/APFS
+    # phenomenon; a tar that `tar` cannot read is honestly broken).
+    ARCHIVE_KINDS = %i[zip tar_gz].freeze
+
     # The shared primary-host memo for a multi-project run (see class note).
     # Once ANY sharing fetch marks the primary down, the rest of the run
     # skips it and goes straight to the fallback.
@@ -136,9 +142,9 @@ module Nabu
     # the absolute live-tree paths the fresh unpack would delete — BEFORE any
     # tree mutation — and may raise (Nabu::SyncAborted) to abort.
     def self.sync!(url:, dir:, attic_dir:, http: default_http, progress: nil, guard: nil,
-                   fallback_url: nil, failover: nil, keep: [])
+                   fallback_url: nil, failover: nil, keep: [], archive: :zip)
       fetch = new(url: url, dir: dir, attic_dir: attic_dir, http: http, progress: progress,
-                  fallback_url: fallback_url, failover: failover, keep: keep)
+                  fallback_url: fallback_url, failover: failover, keep: keep, archive: archive)
       begin
         fetch.prepare!
         guard&.call(fetch.doomed_paths)
@@ -156,7 +162,12 @@ module Nabu
     # deletions (a sibling fetch arm's files inside the same workdir — the
     # OpenITI metadata TSV — must survive the zip tree swap).
     def initialize(url:, dir:, attic_dir:, http: self.class.default_http, progress: nil,
-                   stream: false, keep: [], fallback_url: nil, failover: nil)
+                   stream: false, keep: [], fallback_url: nil, failover: nil, archive: :zip)
+      unless ARCHIVE_KINDS.include?(archive)
+        raise ArgumentError, "unknown archive kind #{archive.inspect} (known: #{ARCHIVE_KINDS.join(', ')})"
+      end
+
+      @archive = archive
       @url = url
       @dir = dir
       @attic_dir = attic_dir
@@ -332,6 +343,16 @@ module Nabu
 
     def unpack!
       unpacked = File.join(staging, "unpacked")
+      if @archive == :tar_gz
+        FileUtils.mkdir_p(unpacked)
+        begin
+          Shell.run("tar", "-xzf", download_path, "-C", unpacked)
+        rescue Shell::Error => e
+          raise Error, "tar unpack failed: #{e.message}"
+        end
+        @tree = tree_root(unpacked)
+        return
+      end
       begin
         Shell.run("unzip", "-q", download_path, "-d", unpacked)
       rescue Shell::Error => e
