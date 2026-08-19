@@ -231,19 +231,30 @@ runs and its frozen urns/text stay byte-identical).
 `<del>` ALWAYS renders in `⟦…⟧`, partial cancellations included — the
 faithful Leiden reading (⟦⟧ is reading text, not apparatus), recovering
 text the blanket drop silently lost, and retiring DDbDP's outlier status
-(the EDH/I.Sicily/ogham/IIP/RIIG parsers already render del→⟦…⟧). The
-corpus-wide migration — measured 2026-08-10 at 9,696 affected DDbDP
-documents — is a journaled re-parse (bumped revisions, provenance
-entries) scheduled as its OWN packet, never smuggled through a parser
-patch.
+(the EDH/I.Sicily/ogham/IIP/RIIG parsers already render del→⟦…⟧).
+
+**EXECUTED 2026-08-19 (P79-3, its own packet as required):** the
+journaled corpus-wide re-parse revised 8,645 DDbDP documents,
+resurrected 4,748 del-only lines as citable passages, and left 8,691
+documents carrying `⟦…⟧` (canonical del-census 9,049 files; the 363
+without brackets have their dels inside non-kept `<choice>` branches —
+correct; the 2026-08-10 estimate of 9,696 was era-bound). Quarantine
+floor unchanged. **Substitutions ruled 2026-08-19 (owner: "A"):** a
+`<del>` inside `<subst>` — the scribe crossed out AND wrote a
+replacement — also renders inline, replacement first, erased attempt
+in `⟦…⟧` after it (`διʼ Ὡρίωνος ⟦δι…ς⟧`; nested `⟦…⟦…⟧⟧` where the
+erased text itself contains an erasure), never demoted to apparatus
+as print "corr. ex" practice would; the upstream line-break duplicated
+into both subst branches is suppressed nearest-scope so URNs never
+collide.
 
 **Per-source adoption (P17-2, EDH).** The always-`⟦…⟧` reading IS adopted
 for the EDH inscriptions (`EdhEpidocParser`): their
 `<del rend="erasure">` is the damnatio-memoriae case — legible, edited
 text EDH's own edition prints inside `[[…]]` — and the source lands with
-no frozen urns, so the faithful rule costs no revision storm. The DDbDP
-corpus-wide question above remains open and owner-gated; per-source policy
-where history permits, journaled revision where it does not.
+no frozen urns, so the faithful rule cost no revision storm there. The
+DDbDP corpus-wide migration has since run (P79-3 above): per-source
+policy where history permits, journaled revision where it does not.
 
 ## 6. Lemmas and morphology — why treebanks are precious
 
