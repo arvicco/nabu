@@ -37,7 +37,11 @@ data; only the codepoint SET was trimmed.
   kTang 3,811 · kHanyuPinlu 3,799 · kZhuang 2,472; variants:
   kSimplifiedVariant 6,929 · kTraditionalVariant 6,475 · kSemanticVariant
   3,538 · kSpecializedSemanticVariant 525 · kSpoofingVariant 349 ·
-  kZVariant 149. 65,092 of 102,999 codepoints carry ≥1 carried field.
+  kZVariant 149. 102,998 codepoints carry ≥1 carried field (the P37-4
+  radical-stroke fields brought near-total coverage). P78-6 (the
+  korean-desk census revisit) carried kHangul (8,526) back in and
+  censused in kIRG_VSource (14,277) — both ride existing entries,
+  minting none (verified against the 17.0 members).
 - `kJapanese` (added in Unicode 15.1) is DENSER than the legacy
   kJapaneseOn/kJapaneseKun pair it supersedes — all three are carried.
 
@@ -47,8 +51,11 @@ data; only the codepoint SET was trimmed.
 `Unihan_IRGSources.txt` carrying the radical-stroke fields
 (kRSUnicode/kTotalStrokes, + one ignored kIRG_GSource per codepoint to
 exercise the census) for 5 of them — U+4E00 (1.0/1), U+4EBA (9.0/2),
-U+5929 (37.1/4), U+611B (61.9/13), U+68C4 棄 (75.8/12). Full comment
-headers kept verbatim. The set:
+U+5929 (37.1/4), U+611B (61.9/13), U+68C4 棄 (75.8/12) — and (P78-6)
+the six real kIRG_VSource lines for this slice's codepoints (U+4E00
+V1-4A21, U+4E9E V2-8A2C, U+4EBA, U+4F53, U+5929, U+9AD4), appended
+verbatim from the 17.0 member. Full comment headers kept verbatim.
+The set:
 
 | Codepoints | Why |
 |---|---|

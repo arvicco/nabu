@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE item SYSTEM "history.dtd">
+<item id="kr" name="高麗史" org="국사편찬위원회">
+    <front>
+        <biblioData>
+            <title>
+                <mainTitle>高麗史</mainTitle>
+            </title>
+            <creator>
+                <author>
+                    <name align="center">정인지(鄭麟趾)</name>
+                </author>
+                <editor>
+                    <name align="center">국사편찬위원회</name>
+                </editor>
+            </creator>
+        </biblioData>
+    </front>
+    <level1 id="kr_$s01" type="『고려사』를 찬진하는 전">
+        <front>
+            <biblioData type="序文">
+                <title>
+                    <mainTitle>『고려사』를 찬진하는 전</mainTitle>
+                </title>
+            </biblioData>
+        </front>
+        <text>
+            <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0002&amp;page_no=6"/>
+            <content>
+                <paragraph align="center">進高麗史箋</paragraph>
+                <paragraph align="center">正憲大夫<index ref="o001050" type="관직">工曹判書</index>
+                    <index ref="o003680" type="관직">集賢殿大提學</index>
+                    <index ref="o008590" type="관직">知經筵春秋館事</index>兼<index ref="o003470" type="관직">成均大司成</index>臣<index ref="p090390" type="이름">鄭麟趾</index>等, 誠惶誠恐, 稽首稽首, 上言. 竊聞, 新柯視舊柯以爲則, 後車鑑前車而是懲. 盖已往之興亡, 實將來之勸戒, 玆紬編簡, 敢瀆冕旒. 惟<index ref="p106320" type="이름">王氏</index>之肇興, 自泰封以崛起, 降羅滅濟, 合三韓而爲一家, 舍遼事唐, 尊中國而保東土. 爰革煩苛之政, 式恢宏遠之規, <index ref="p007570" type="이름">光廟</index>臨軒策士, 而儒風稍興, <index ref="p040850" type="이름">成宗</index>建祧立社, 而治具悉備. 宣讓失御, 運祚幾傾, <index ref="p111540" type="이름">顯濟</index>中興之功, 宗祏再定, <index ref="p028370" type="이름">文闡</index>大平之治, 民物咸熙. 迨後嗣之昏迷, 有權臣之顓恣, 擁兵而窺神器, 一啓於<index ref="p081700" type="이름">仁廟</index>之時, 犯順而倒大阿, 馴致於<index ref="p070080" type="이름">毅宗</index>之日. 由是, 巨姦迭煽, 而置君如碁奕, 强敵交侵, 而刈民若草菅, <index ref="p063200" type="이름">順孝</index>定大亂於危疑, 僅保祖宗之業. <index ref="p105330" type="이름">忠烈</index>昵群嬖於遊宴, 卒構父子之嫌, 且自<index ref="p105420" type="이름">忠肅</index>以來, 至于<index ref="p006060" type="이름">恭愍</index>之世, 變故屢作, 衰微益深, 根本更蹙於僞朝, 歷數竟歸於眞主. 我<index ref="p074040" type="이름">太祖康獻大王</index>, 勇智天錫, 德業日新, 布聖武而亨屯艱, 克綏黎庶, 握貞符而乘乾御, 肇造邦家, 顧麗社雖已丘墟, 其史策不可蕪沒, 命史氏而秉筆, 倣<index ref="b002930" type="서명">通鑑</index>之編年. 及<index ref="p072990" type="이름">太宗</index>之繼承, 委輔臣以讎校, 作者非一, 書竟未成.</paragraph>
+                <paragraph align="center">
+                    <index ref="p041010" type="이름">世宗莊憲大王</index>, 遹追先猷, 載宣文化, 謂修史, 要須該備, 復開局, 再令編摩. 尙紀次之非精, 且脫漏者亦夥, 况編年有異於紀傳表志, 而敍事未悉其本末始終, 更命庸愚, 俾任纂述. 凡例皆法於<index ref="p037430" type="이름">遷</index>
+                    <index ref="b000210" type="서명">史</index>, 大義悉稟於聖裁. 避本紀爲世家, 所以示名分之重, 降僞<index ref="p062080" type="이름">辛</index>於列傳, 所以嚴僭竊之誅. 忠佞邪正之彙分, 制度文爲之類聚, 統紀不紊, 年代可稽. 事跡務盡其詳明, 闕謬期就於補正. 嗟玉署鈆槧之未訖, 而鼎湖弓劒之忽遺, 臣<index ref="p090390" type="이름">麟趾</index>等, 誠惶誠恐, 稽首稽首. 恭惟主上殿下, 誕紹宏圖, 增光洪烈, 惟精惟一, 聖學極於高明, 丕顯丕承, 至孝彰于繼述. 念前史之未就, 令微臣以責成, 臣<index ref="p090390" type="이름">麟趾</index>等, 俱以譾才, 叨承隆寄, 採稗官之雜錄, 發秘府之故藏, 祗竭三載之勞, 勒成一代之史. 稽遺跡於前代, 僅能存筆削之公, 揭明鑑於後人, 期不沒善惡之實. 所撰<index ref="b000210" type="서명">高麗史</index>, 世家四十六卷, 志三十九卷, 表二卷, 傳五十卷, 目錄二卷, 通計一百三十九卷. 謹具草成帙, 隨箋以聞. 無任激切屛營之至, 臣<index ref="p090390" type="이름">麟趾</index>等, 誠惶誠恐, 稽首稽首, 謹言.</paragraph>
+                <paragraph align="center">景泰二年八月二十五日, 正憲大夫<index ref="o001050" type="관직">工曹判書</index>
+                    <index ref="o003680" type="관직">集賢殿大提學</index>
+                    <index ref="o008590" type="관직">知經筵春秋館事</index>兼<index ref="o003470" type="관직">成均大司成</index>臣<index ref="p090390" type="이름">鄭麟趾</index>等, 上箋.</paragraph>
+                <paragraph align="center">
+                    <reference>
+                        <link uri="coi" value="hm_093_0010">사료로 보는 한국사＞역사·지리책의 편찬＞고려사를 바치는 글</link>
+                    </reference>
+                </paragraph>
+            </content>
+        </text>
+    </level1>
+    <level1 id="kr_$s02" type="고려세계">
+        <front>
+            <biblioData type="序文">
+                <title>
+                    <mainTitle>고려세계</mainTitle>
+                </title>
+            </biblioData>
+        </front>
+        <level2 id="kr_$s02_0010" type="고려세계">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>『태조실록』의 기록</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <text>
+                <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0001&amp;page_no=91"/>
+                <content>
+                    <paragraph align="center">高麗世系</paragraph>
+                    <paragraph align="center">正憲大夫工曹判書集賢殿大提學知經筵春秋館事兼成均大司成【臣】鄭麟趾奉敎修.</paragraph>
+                    <paragraph align="center">高麗之先, 史闕未詳. <index ref="b002040" type="서명">太祖實錄</index>, “卽位二年, 追王三代祖考, 冊上始祖尊謚曰<index ref="p036330" type="이름">元德大王</index>, 妣爲<index ref="p097870" type="이름">貞和王后</index>, <index ref="p084180" type="이름">懿祖</index>爲<index ref="p084180" type="이름">景康大王</index>, 妣爲<index ref="p061500" type="이름">元昌王后</index>, <index ref="p061480" type="이름">世祖</index>爲<index ref="p061480" type="이름">威武大王</index>, 妣爲<index ref="p027240" type="이름">威肅王后</index>.”</paragraph>
+                </content>
+            </text>
+        </level2>
+        <level2 id="kr_$s02_0020" type="고려세계">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>하늘이 호경을 살리고 호경은 산신이 되다</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <text>
+                <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0001&amp;page_no=91"/>
+                <content>
+                    <paragraph align="center">
+                        <index ref="p010850" type="이름">金寬毅</index>
+                        <index ref="b003720" type="서명">編年通錄</index>云, “有名<index ref="p111910" type="이름">虎景</index>者, 自號聖骨將軍. 自<index ref="t008690" type="지명">白頭山</index>遊歷, 至<index ref="t009730" type="지명">扶蘇山</index>左谷, 娶妻家焉, 富而無子. 善射以獵爲事, 一日與同里九人, 捕鷹<index ref="t026730" type="지명">平那山</index>. 會日暮, 就宿巖竇, 有虎當竇口大吼.十人相謂曰, ‘虎欲啗我輩, 試投冠, 攬者當之.’ 遂皆投之, 虎攬<index ref="p111910" type="이름">虎景</index>冠. <index ref="p111910" type="이름">虎景</index>出, 欲與虎鬪, 虎忽不見, 而竇崩, 九人皆不得出. <index ref="p111910" type="이름">虎景</index>還告<index ref="t026720" type="지명">平那郡</index>, 來葬九人, 先祀山神, 其神見曰, ‘予以寡婦主此山. 幸遇聖骨將軍, 欲與爲夫婦, 共理神政, 請封爲此山大王.’ 言訖, 與<index ref="p111910" type="이름">虎景</index>俱隱不見. 郡人因封<index ref="p111910" type="이름">虎景</index>爲大王, 立祠祭之, 以九人同亡, 改山名曰<index ref="t005630" type="지명">九龍</index>.</paragraph>
+                </content>
+            </text>
+        </level2>
+        <level2 id="kr_$s02_0030" type="고려세계">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>호경이 강충을 낳고 강충의 아들 보육이 신이한 꿈을 꾸다</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <text>
+                <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0001&amp;page_no=93"/>
+                <content>
+                    <paragraph align="center">
+                        <index ref="p111910" type="이름">虎景</index>不忘舊妻, 夜常如夢來合, 生子曰<index ref="p001920" type="이름">康忠</index>. <index ref="p001920" type="이름">康忠</index>體貌端嚴, 多才藝, 娶<index ref="t011470" type="지명">西江永安村</index>富人女名<index ref="p008080" type="이름">具置義</index>, 居<index ref="t017310" type="지명">五冠山摩訶岬</index>. 時新羅<index ref="o000160" type="관직">監干</index>
+                        <index ref="p106810" type="이름">八元</index>, 善風水, 到<index ref="t009720" type="지명">扶蘇郡</index>, 郡在<index ref="t009730" type="지명">扶蘇山</index>北, 見山形勝而童, 告<index ref="p001920" type="이름">康忠</index>曰, ‘若移郡山南, 植松使不露巖石, 則統合三韓者出矣.’ 於是, <index ref="p001920" type="이름">康忠</index>與郡人, 徙居山南, 栽松遍嶽, 因改名<index ref="t017850" type="지명">松嶽郡</index>. 遂爲郡<index ref="o007540" type="관직">上沙粲</index>, 且以<index ref="t017310" type="지명">摩訶岬</index>第, 爲永業之地, 往來焉. 家累千金, 生二子, 季曰<index ref="p036330" type="이름">損乎述</index>, 改名<index ref="p036330" type="이름">寶育</index>. <index ref="p036330" type="이름">寶育</index>性慈惠, 出家, 入<index ref="t023660" type="지명">智異山</index>修道, 還居<index ref="t026740" type="지명">平那山北岬</index>, 又徙<index ref="t017310" type="지명">摩訶岬</index>. 嘗夢登<index ref="t001930" type="지명">鵠嶺</index>, 向南便旋, 溺溢三韓山川, 變成銀海. 明日, 以語其兄<index ref="p078660" type="이름">伊帝建</index>, <index ref="p078660" type="이름">伊帝建</index>曰, ‘汝必生支天之柱.’ 以其女<index ref="p024290" type="이름">德周</index>妻之. 遂爲居士, 仍於<index ref="t017310" type="지명">摩訶岬</index>, 構木菴.</paragraph>
+                </content>
+            </text>
+        </level2>
+        <level2 id="kr_$s02_0040" type="고려세계">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>보육의 딸 진의가 태몽을 사다</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <text>
+                <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0001&amp;page_no=94"/>
+                <content>
+                    <paragraph align="center">有新羅術士見之曰, ‘居此, 必大唐天子來作壻矣.’ 後生二女, 季曰<index ref="p097870" type="이름">辰義</index>, 美而多才智. 年甫笄, 其姊夢登<index ref="t017300" type="지명">五冠山</index>頂而旋, 流溢天下. 覺與<index ref="p097870" type="이름">辰義</index>說, <index ref="p097870" type="이름">辰義</index>曰, ‘請以綾裙買之.’ 姊許之. <index ref="p097870" type="이름">辰義</index>令更說夢, 攬而懷之者三, 旣而身動若有得, 心頗自負.</paragraph>
+                </content>
+            </text>
+        </level2>
+        <level2 id="kr_$s02_0050" type="고려세계">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>작제건의 탄생</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <text>
+                <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0001&amp;page_no=95"/>
+                <content>
+                    <paragraph align="center">
+                        <index ref="p044640" type="이름">唐肅宗</index>皇帝潛邸時, 欲遍遊山川, 以明皇天寶十二載癸巳春, 涉海到<index ref="t026600" type="지명">浿江西浦</index>. 方潮退, 江渚泥淖, 從官取舟中錢, 布之, 乃登岸. 後名其浦爲<index ref="t022240" type="지명">錢浦</index>.【<index ref="p029290" type="이름">閔漬</index>
+                        <index ref="b003710" type="서명">編年綱目</index>, 引<index ref="b001120" type="서명">碧巖</index>等禪錄云, “<index ref="p040030" type="이름">宣宗</index>年十三, 當<index ref="p027160" type="이름">穆宗</index>朝, 戱登御床, 作揖群臣勢, <index ref="p027160" type="이름">穆宗</index>子<index ref="p027500" type="이름">武宗</index>心忌. 及<index ref="p027500" type="이름">武宗</index>卽位, <index ref="p040030" type="이름">宣宗</index>遇害於宮中, 絶而後蘇, 潛出遠遁, 周遊天下, 備嘗險阻. <index ref="t016460" type="지명">塩官</index>
+                        <index ref="p049010" type="이름">安禪師</index>黙識龍顔, 待遇特厚, 留<index ref="t016460" type="지명">塩官</index>最久. 又<index ref="p040030" type="이름">宣宗</index>嘗爲<index ref="p007570" type="이름">光王</index>, <index ref="t028010" type="지명">光</index>卽<index ref="t015700" type="지명">楊州</index>屬郡, <index ref="t016460" type="지명">塩官</index>
+                        <index ref="t027870" type="지명">杭州</index>屬縣, 皆接東海, 爲商船往來之地方. 當懼禍, 猶恐藏之不深, 故以遊覽山水爲名, 隨商船渡海. 時<index ref="b000670" type="서명">唐史</index>未撰, 於唐室之事, 無由得詳. 但聞<index ref="p044640" type="이름">肅宗宣皇帝</index>時, 有<index ref="p048660" type="이름">祿山</index>之亂, 未聞<index ref="p040030" type="이름">宣宗</index>遭亂出奔之事, 誤以<index ref="p040030" type="이름">宣宗</index>皇帝, 爲<index ref="p044640" type="이름">肅宗宣皇帝</index>云.” 又世傳, “<index ref="p105380" type="이름">忠宣王</index>在元, 有<index ref="o018720" type="관직">翰林學士</index>從王遊者. 謂王曰, ‘嘗聞王之先出於<index ref="p044640" type="이름">唐肅宗</index>, 何所據耶? <index ref="p044640" type="이름">肅宗</index>自幼未嘗出閤, <index ref="p048660" type="이름">祿山</index>之亂, 卽位<index ref="t016650" type="지명">靈武</index>, 何時東遊, 至有子乎?’ 王大慚不能對, <index ref="p029290" type="이름">閔漬</index>從旁對曰, ‘此我國史誤書耳. 非<index ref="p044640" type="이름">肅宗</index>, 乃<index ref="p040030" type="이름">宣宗</index>也.’ 學士曰, ‘若<index ref="p040030" type="이름">宣宗</index>, 久勞于外, 庶或然也.’"】</paragraph>
+                    <paragraph align="center">遂至<index ref="t017850" type="지명">松嶽郡</index>, 登<index ref="t001930" type="지명">鵠嶺</index>南望曰, ‘此地必成都邑.’ 從者曰, ‘此八眞仙住處也.’ 抵<index ref="t007210" type="지명">摩訶岬養子洞</index>, 寄宿<index ref="p036330" type="이름">寶育</index>第, 見兩女悅之, 請縫衣綻. <index ref="p036330" type="이름">寶育</index>認是中華貴人, 心謂, '果符術士言.' 卽令長女應命. 纔踰閾, 鼻衄而出, 代以<index ref="p097870" type="이름">辰義</index>, 遂薦枕. 留期月【<index ref="p029290" type="이름">閔漬</index>
+                        <index ref="b003710" type="서명">編年</index>, 或云一年.】 覺有娠, 臨別云, ‘我是大唐貴姓.’ 與弓矢曰, ‘生男則與之.’ 果生男曰<index ref="p084180" type="이름">作帝建</index>. 後追尊<index ref="p036330" type="이름">寶育</index>爲<index ref="p036330" type="이름">國祖元德大王</index>, 其女<index ref="p097870" type="이름">辰義</index>爲<index ref="p097870" type="이름">貞和王后</index>.</paragraph>
+                </content>
+            </text>
+        </level2>
+        <level2 id="kr_$s02_0060" type="고려세계">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>작제건이 부친을 찾아가다가 서해용왕을 구해주다</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <text>
+                <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0001&amp;page_no=97"/>
+                <content>
+                    <paragraph align="center">
+                        <index ref="p084180" type="이름">作帝建</index>幼而聰睿神勇. 年五六, 問母曰, ‘我父誰?’ 曰 ‘唐父.’ 盖未知其名故耳. 及長, 才兼六藝, 書射尤絶妙. 年十六, 母與以父所遺弓矢, <index ref="p084180" type="이름">作帝建</index>大悅, 射之百發百中, 世謂神弓. 於是, 欲覲父, 寄商船, 行至海中, 雲霧晦暝, 舟不行三日. 舟中人卜曰, ‘宜去高麗人.’【<index ref="p029290" type="이름">閔漬</index>
+                        <index ref="b003710" type="서명">編年</index>或云, ‘新羅<index ref="p014970" type="이름">金良貞</index>, 奉使入唐, 因寄其船, 良貞夢, 白頭翁曰, 「留高麗人, 可得順風.」’】 <index ref="p084180" type="이름">作帝建</index>執弓矢, 自投海. 下有巖石, 立其上, 霧開風利, 船去如飛.</paragraph>
+                    <paragraph align="center">俄有一老翁拜曰, ‘我是西海龍王. 每日晡, 有老狐作熾盛光如來像, 從空而下, 羅列日月星辰於雲霧閒, 吹螺擊鼓, 奏樂而來, 坐此巖, 讀<index ref="b002400" type="서명">臃腫經</index>, 則我頭痛甚. 聞郞君善射, 願除吾害.’ <index ref="p084180" type="이름">作帝建</index>許諾.【<index ref="p029290" type="이름">閔漬</index>
+                        <index ref="b003710" type="서명">編年</index>, 或云 ‘<index ref="p084180" type="이름">作帝建</index>於巖邊, 見有一徑, 從其徑, 行一里許, 又有一巖, 巖上復有一殿. 門戶洞開, 中有金字寫經處, 就視之, 筆點猶濕. 四顧無人, <index ref="p084180" type="이름">作帝建</index>就其坐, 操筆寫經, 有女忽來前立. <index ref="p084180" type="이름">作帝建</index>謂是觀音現身, 驚起下坐, 方將拜禮, 忽不見. 還就坐, 寫經良久, 其女復見而言, 「我是<index ref="p061500" type="이름">龍女</index>, 累載寫經, 今猶未就. 幸郞君善寫, 又能善射, 欲留君, 助吾功德, 又欲除吾家難. 其難則待七日, 可知.」’】</paragraph>
+                    <paragraph align="center">及期, 聞空中樂聲, 果有從西北來者. <index ref="p084180" type="이름">作帝建</index>疑是眞佛, 不敢射, 翁復來曰, ‘正是老狐, 願勿復疑.’ <index ref="p084180" type="이름">作帝建</index>撫弓撚箭, 候而射之, 應弦而墜, 果老狐也.</paragraph>
+                </content>
+            </text>
+        </level2>
+        <level2 id="kr_$s02_0070" type="고려세계">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>작제건이 용왕의 딸에게 장가들고 송악에 집을 지어 살다</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <text>
+                <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0001&amp;page_no=100"/>
+                <content>
+                    <paragraph align="center">翁大喜, 迎入宮, 謝曰, ‘賴郞君, 吾患已除, 欲報大德. 將西入唐, 覲天子父乎? 富有七寶, 東還奉母乎?’ 曰, ‘吾所欲者, 王東土也.’ 翁曰, ‘王東土, 待君之子孫三建必矣. 其他惟命.’ <index ref="p084180" type="이름">作帝建</index>聞其言, 知時命未至, 猶豫未及答, 坐後有一老嫗戱曰, ‘何不娶其女而去?’ <index ref="p084180" type="이름">作帝建</index>乃悟請之, 翁以長女<index ref="p086380" type="이름">翥旻義</index>妻之,</paragraph>
+                    <paragraph align="center">
+                        <index ref="p084180" type="이름">作帝建</index>賫七寶將還, <index ref="p061500" type="이름">龍女</index>曰, ‘父有楊杖與豚勝七寶, 盍請之?’ <index ref="p084180" type="이름">作帝建</index>請還七寶, 願得楊杖與豚, 翁曰, ‘此二物, 吾之神通, 然君有請, 敢不從?’ 乃加與豚. 於是, 乘漆船, 載七寶與豚, 泛海焂到岸, 卽<index ref="t024330" type="지명">昌陵窟</index>前江岸也. <index ref="o013630" type="관직">白州正朝</index>
+                        <index ref="p065320" type="이름">劉相晞</index>等聞曰, ‘<index ref="p084180" type="이름">作帝建</index>娶<index ref="p061500" type="이름">西海龍女</index>來, 實大慶也.’ 率<index ref="t017850" type="지명">開</index>·<index ref="t022540" type="지명">貞</index>·<index ref="t016500" type="지명">塩</index>·<index ref="t008660" type="지명">白</index>四州, <index ref="t000800" type="지명">江華</index>·<index ref="t002680" type="지명">喬桐</index>·<index ref="t027340" type="지명">河陰</index>三縣人, 爲築<index ref="t016780" type="지명">永安城</index>, 營宮室.</paragraph>
+                    <paragraph align="center">
+                        <index ref="p061500" type="이름">龍女</index>初來, 卽往<index ref="t017850" type="지명">開州</index>東北山麓, 以銀盂掘地, 取水用之, 今<index ref="t000900" type="지명">開城大井</index>是也. 居一年, 豚不入牢, 乃語豚曰, ‘若此地不可居, 吾將隨汝所之.’ 詰朝, 豚至<index ref="t017850" type="지명">松嶽</index>南麓而臥, 遂營新第, 卽<index ref="p001920" type="이름">康忠</index>舊居也. 往來<index ref="t016780" type="지명">永安城</index>, 而居者三十餘年.</paragraph>
+                </content>
+            </text>
+        </level2>
+        <level2 id="kr_$s02_0080" type="고려세계">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>작제건이 약속을 어기자 용왕의 딸이 사라져버리다</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <text>
+                <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0001&amp;page_no=102"/>
+                <content>
+                    <paragraph align="center">
+                        <index ref="p061500" type="이름">龍女</index>嘗於<index ref="t017850" type="지명">松嶽</index>新第寢室窓外鑿井, 從井中, 往還西海龍宮, 卽<index ref="m000250" type="단체">廣明寺</index>東上房北井也. 常與<index ref="p084180" type="이름">作帝建</index>約曰, ‘吾返龍宮時, 愼勿見. 否則不復來.’ 一日, <index ref="p084180" type="이름">作帝建</index>密伺之, <index ref="p061500" type="이름">龍女</index>與少女入井, 俱化爲黃龍, 興五色雲. 異之, 不敢言. <index ref="p061500" type="이름">龍女</index>還怒曰, ‘夫婦之道, 守信爲貴, 今旣背約, 我不能居此.’ 遂與少女, 復化龍入井, 不復還. <index ref="p084180" type="이름">作帝建</index>晩居<index ref="t012610" type="지명">俗離山</index>
+                        <index ref="m001990" type="단체">長岬寺</index>, 常讀釋典而卒. 後追尊爲<index ref="p084180" type="이름">懿祖景康大王</index>, <index ref="p061500" type="이름">龍女</index>爲<index ref="p061500" type="이름">元昌王后</index>.</paragraph>
+                </content>
+            </text>
+        </level2>
+        <level2 id="kr_$s02_0090" type="고려세계">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>용건이 태조를 낳다</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <text>
+                <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0001&amp;page_no=103"/>
+                <content>
+                    <paragraph align="center">
+                        <index ref="p061500" type="이름">元昌</index>生四男, 長曰<index ref="p061480" type="이름">龍建</index>, 後改<index ref="p061480" type="이름">隆</index>, 字<index ref="p061480" type="이름">文明</index>, 是爲<index ref="p061480" type="이름">世祖</index>. 貌魁偉美鬚髥, 器度宏大, 有幷呑三韓之志. 嘗夢見一美人, 約爲室家. 後自<index ref="t017850" type="지명">松嶽</index>, 往<index ref="t016780" type="지명">永安城</index>, 道遇一女惟肖, 遂與爲婚. 不知所從來, 故世號<index ref="p027240" type="이름">夢夫人</index>. 或云, ‘以其爲三韓之母, 遂姓<index ref="p027240" type="이름">韓氏</index>.’ 是爲<index ref="p027240" type="이름">威肅王后</index>. <index ref="p061480" type="이름">世祖</index>居<index ref="t017850" type="지명">松嶽</index>舊第, 有年又欲創新第於其南, 卽<index ref="t016150" type="지명">延慶宮奉元殿基</index>也.</paragraph>
+                    <paragraph align="center">時<index ref="p024540" type="이름">桐裏山祖師道詵</index>入唐, 得<index ref="p081850" type="이름">一行</index>地理法而還. 登<index ref="t008690" type="지명">白頭山</index>, 至<index ref="t001930" type="지명">鵠嶺</index>, 見<index ref="p061480" type="이름">世祖</index>新構第曰, ‘種穄之地, 何種麻耶?’ 言訖而去. 夫人聞而以告, <index ref="p061480" type="이름">世祖</index>倒屣追之, 及見, 如舊識. 遂與登<index ref="t001930" type="지명">鵠嶺</index>, 究山水之脉, 上觀天文, 下察時數曰, ‘此地脉, 自壬方<index ref="t008690" type="지명">白頭山</index>水母木幹來, 落<index ref="t017850" type="지명">馬頭明堂</index>. 君又水命, 宜從水之大數, 作宇六六, 爲三十六區, 則符應天地之大數, 明年必生聖子, 宜名曰<index ref="p106320" type="이름">王建</index>.’ 因作實封, 題其外云, ‘謹奉書, 百拜獻書于未來統合三韓之主大原君子足下.’</paragraph>
+                    <paragraph align="center">時<index ref="p116510" type="이름">唐僖宗</index>乾符三年四月也. <index ref="p061480" type="이름">世祖</index>從其言, 築室以居, 是月, <index ref="p027240" type="이름">威肅</index>有娠, 生<index ref="p106320" type="이름">太祖</index>.【<index ref="p028860" type="이름">閔潰</index>
+                        <index ref="b003710" type="서명">編年</index>, ‘<index ref="p106320" type="이름">太祖</index>年十七, <index ref="p024540" type="이름">道詵</index>復至請見曰, 「足下應百六之運, 生於天府名墟, 三季蒼生, 待君弘濟.」 因告以出師置陣, 地利天時之法, 望秩山川, 感通保佑之理. 乾寧四年五月, <index ref="p061480" type="이름">世祖</index>薨于<index ref="t003450" type="지명">金城郡</index>, 葬<index ref="t016780" type="지명">永安城</index>江邊石窟, 號曰<index ref="p061480" type="이름">昌陵</index>, 以<index ref="p027240" type="이름">威肅王后</index>合葬.’ <index ref="b002040" type="서명">實錄</index>, ‘<index ref="p111540" type="이름">顯宗</index>十八年, 加上<index ref="p061480" type="이름">世祖</index>謚曰<index ref="p061480" type="이름">元烈</index>, 后曰<index ref="p027240" type="이름">惠思</index>, <index ref="p005450" type="이름">高宗</index>四十年, 加<index ref="p061480" type="이름">世祖</index>曰<index ref="p061480" type="이름">敏惠</index>, 后曰<index ref="p027240" type="이름">仁平</index>.’】”</paragraph>
+                </content>
+            </text>
+        </level2>
+        <level2 id="kr_$s02_0100" type="고려세계">
+            <front>
+                <biblioData>
+                    <title>
+                        <mainTitle>이제현의 찬</mainTitle>
+                    </title>
+                </biblioData>
+            </front>
+            <text>
+                <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0001&amp;page_no=106"/>
+                <content>
+                    <paragraph align="center">
+                        <index ref="p078690" type="이름">李齊賢</index>曰, “<index ref="p010850" type="이름">金寬毅</index>云, ‘<index ref="p111910" type="이름">聖骨將軍虎景</index>, 生<index ref="o009610" type="관직">阿干</index>
+                        <index ref="p001920" type="이름">康忠</index>, <index ref="p001920" type="이름">康忠</index>生居士<index ref="p036330" type="이름">寶育</index>, 是爲<index ref="p036330" type="이름">國祖元德大王</index>. <index ref="p036330" type="이름">寶育</index>生女, 配唐貴姓而生<index ref="p084180" type="이름">懿祖</index>, <index ref="p084180" type="이름">懿祖</index>生<index ref="p061480" type="이름">世祖</index>, <index ref="p061480" type="이름">世祖</index>生<index ref="p106320" type="이름">太祖</index>.’ 如其所言, 唐貴姓者, 於<index ref="p084180" type="이름">懿祖</index>爲皇考, 而<index ref="p036330" type="이름">寶育</index>皇考之舅也. 而稱爲國祖, 何也?”</paragraph>
+                    <paragraph align="center">又言, “<index ref="p106320" type="이름">太祖</index>追尊三代祖考及其后妃, 考爲<index ref="p061480" type="이름">世祖威武大王</index>, 母爲<index ref="p027240" type="이름">威肅王后</index>, 祖爲<index ref="p084180" type="이름">懿祖景康大王</index>, 祖母爲<index ref="p061500" type="이름">元昌王后</index>, 曾祖母爲<index ref="p097870" type="이름">貞和王后</index>, 曾祖母之父<index ref="p036330" type="이름">寶育</index>, 爲<index ref="p036330" type="이름">國祖元德大王</index>云. 略曾祖而書曾祖母之父, 謂之三代祖考, 何也? 按<index ref="b002420" type="서명">王代宗族記</index>云, ‘國祖, <index ref="p106320" type="이름">太祖</index>之曾祖也, <index ref="p097870" type="이름">貞和</index>, 國祖之妃也.’ <index ref="b001610" type="서명">聖源錄</index>云, ‘<index ref="p036330" type="이름">寶育</index>聖人者, <index ref="p036330" type="이름">元德大王</index>之外祖也.’ 以此觀之, <index ref="p036330" type="이름">元德大王</index>是唐貴姓者之子, 而於<index ref="p084180" type="이름">懿祖</index>爲考也, <index ref="p097870" type="이름">貞和王后</index>是<index ref="p036330" type="이름">寶育</index>之外孫婦, 而於<index ref="p084180" type="이름">懿祖</index>爲妣也. 其以<index ref="p036330" type="이름">寶育</index>爲<index ref="p036330" type="이름">國祖元德大王</index>者, 誤矣.”</paragraph>
+                    <paragraph align="center">又曰, “<index ref="p010850" type="이름">金寬毅</index>云, ‘<index ref="p084180" type="이름">懿祖</index>得唐父所留弓矢, 涉海而遠覲.’ 然則其志深切矣, 龍王問其所欲, 卽求東歸. 恐<index ref="p084180" type="이름">懿祖</index>不如是也. <index ref="b001610" type="서명">聖源錄</index>云, ‘<index ref="p084180" type="이름">昕康大王</index>【卽<index ref="p084180" type="이름">懿祖</index>】之妻<index ref="p061500" type="이름">龍女</index>者, <index ref="t026890" type="지명">平州</index>人<index ref="o000040" type="관직">豆恩坫角干</index>之女子也.’ 則與<index ref="p010850" type="이름">寬毅</index>所記者, 異矣.</paragraph>
+                    <paragraph align="center">又曰, “<index ref="p010850" type="이름">金寬毅</index>云, ‘<index ref="p024540" type="이름">道詵</index>見<index ref="p061480" type="이름">世祖</index>
+                        <index ref="t017850" type="지명">松嶽</index>南第曰, 「種穄之田而種麻也.」 穄之與王, 方言相類. 故<index ref="p106320" type="이름">太祖</index>因姓<index ref="p106320" type="이름">王氏</index>.’ 父在而子改其姓, 天下豈有是理乎? 嗚呼! 其謂我<index ref="p106320" type="이름">太祖</index>爲之乎? 且<index ref="p106320" type="이름">太祖</index>逮<index ref="p061480" type="이름">世祖</index>, 仕<index ref="p008360" type="이름">弓裔</index>. <index ref="p008360" type="이름">裔</index>之多疑忌, <index ref="p106320" type="이름">太祖</index>無故, 獨以王爲姓, 豈非取禍之道乎? 謹按<index ref="b002420" type="서명">王氏宗族記</index>, 國祖姓<index ref="p106320" type="이름">王氏</index>. 然則非至<index ref="p106320" type="이름">太祖</index>, 始姓王也, 種穄之說, 不亦誣哉? 又云, ‘<index ref="p084180" type="이름">懿祖</index>·<index ref="p061480" type="이름">世祖</index>諱下字, 與<index ref="p106320" type="이름">太祖</index>諱並同.’ <index ref="p010850" type="이름">金寬毅</index>以開國之前, 俗尙淳朴, 意其或然, 故書之. 王代曆, <index ref="p084180" type="이름">懿祖</index>通六藝, 書與射, 妙絶一時, <index ref="p061480" type="이름">世祖</index>少蘊器局, 有雄據三韓之志. 豈不知祖考之名爲不可犯, 而自以爲名, 且以名其子乎? 况<index ref="p106320" type="이름">太祖</index>創業垂統, 動法先王, 寧有不得已, 而恬於非禮之名乎? 竊謂新羅之時, 其君稱麻立干, 其臣稱<index ref="o009610" type="관직">阿干</index>·<index ref="o003550" type="관직">大阿干</index>, 至於鄕里之民, 例以干, 連其名而呼之, 盖相尊之辭也. 阿干或作<index ref="o009670" type="관직">阿粲</index>
+                        <index ref="o009890" type="관직">閼餐</index>, 以干粲餐三字, 其聲相近也. <index ref="p084180" type="이름">懿祖</index>·<index ref="p061480" type="이름">世祖</index>諱下字, 亦與干粲餐之聲爲相近, 乃所謂相尊之辭, 連其名而呼之者之轉也, 非其名也. <index ref="p106320" type="이름">太祖</index>適以此字爲名, 好事者遂附會, 而爲之說曰, ‘三世一名, 必王三韓.’ 盖不足信也.”</paragraph>
+                    <paragraph align="center">論曰, “載稽舊籍, <index ref="o004690" type="관직">同知樞密</index>
+                        <index ref="o005670" type="관직">兵部尙書</index>
+                        <index ref="p015380" type="이름">金永夫</index>, <index ref="o016110" type="관직">徵仕郞</index>
+                        <index ref="o001790" type="관직">檢校軍器監</index>
+                        <index ref="p010850" type="이름">金寬毅</index>, 皆<index ref="p070080" type="이름">毅宗</index>朝臣也. <index ref="p010850" type="이름">寬毅</index>作<index ref="b003720" type="서명">編年通錄</index>, <index ref="p015380" type="이름">永夫</index>採而進之, 其剳子亦曰, ‘<index ref="p010850" type="이름">寬毅</index>訪集諸家私蓄文書.’ 其後, <index ref="p029290" type="이름">閔漬</index>撰<index ref="b003710" type="서명">編年綱目</index>, 亦因<index ref="p010850" type="이름">寬毅</index>之說. 獨<index ref="p078690" type="이름">李齊賢</index>援據<index ref="b002420" type="서명">宗族記</index>·<index ref="b001610" type="서명">聖源錄</index>, 斥其傳訛之謬, <index ref="p078690" type="이름">齊賢</index>一代名儒, 豈無所見, 而輕有議於時君世系乎? 其云<index ref="p044630" type="이름">肅宗</index>·<index ref="p040030" type="이름">宣宗</index>者, 以<index ref="b000680" type="서명">唐書</index>考之, 則<index ref="p044630" type="이름">肅宗</index>自幼, 未嘗出閤, 果如元學士之言矣. <index ref="p040030" type="이름">宣宗</index>雖封<index ref="p007570" type="이름">光王</index>, <index ref="b000670" type="서명">唐史</index>無藩王就封之制. 而其遭亂避禍之說, 亦是禪錄.雜記二說皆無所據, 不足信也. 况<index ref="p061500" type="이름">龍女</index>之事, 何其荒恠, 若是之甚邪? <index ref="b002040" type="서명">太祖實錄</index>, 乃<index ref="o013330" type="관직">政堂文學</index>
+                        <index ref="o008590" type="관직">修國史</index>
+                        <index ref="p115300" type="이름">黃周亮</index>所撰也. <index ref="p115300" type="이름">周亮</index>仕<index ref="p106320" type="이름">太祖</index>孫<index ref="p111540" type="이름">顯宗</index>之朝, <index ref="p106320" type="이름">太祖</index>時事, 耳目所及, 其於追贈, 據實書之. 以<index ref="p097870" type="이름">貞和</index>爲國祖之配, 以爲三代, 而略無一語及於世傳之說. <index ref="p010850" type="이름">寬毅</index>乃<index ref="p070080" type="이름">毅宗</index>時微官, 且去<index ref="p106320" type="이름">太祖</index>二百六十餘年, 豈可舍當時<index ref="b002040" type="서명">實錄</index>, 而信後代無稽雜出之書耶? 竊觀<index ref="b001180" type="서명">北史</index>, <index ref="p105800" type="이름">拓拔氏</index>以爲<index ref="p111190" type="이름">軒轅</index>之後, 而<index ref="p046060" type="이름">神元皇帝</index>天女所生, 則其荒誕甚矣. 且言, <index ref="p026950" type="이름">慕容氏</index>爲慕二儀之德, 繼三光之容, <index ref="p061830" type="이름">宇文氏</index>爲出自<index ref="p054020" type="이름">炎帝</index>, 得皇帝玉璽, 而其俗謂天子曰宇文, 故因以爲氏. 先儒議之曰, ‘其臣子從而爲之辭, 以緣飾耳.’ 嗚呼! 自古論人君世系者, 類多恠異, 而其間或有附會之說, 則後之人, 不能不致疑焉. 今以實錄所載追贈三代爲正, 而<index ref="p010850" type="이름">寬毅</index>等說, 亦世傳之久, 故幷附云.”</paragraph>
+                    <paragraph align="center">高麗世系終</paragraph>
+                </content>
+            </text>
+        </level2>
+    </level1>
+    <level1 id="kr_$s03" type="고려세계">
+        <front>
+            <biblioData type="序文">
+                <title>
+                    <mainTitle>수사관</mainTitle>
+                </title>
+            </biblioData>
+        </front>
+        <text>
+            <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0085&amp;page_no=161"/>
+            <content>
+                <paragraph align="center">修史官</paragraph>
+                <paragraph align="center">正憲大夫<index ref="o001050" type="관직">工曹判書</index>
+                    <index ref="o003680" type="관직">集賢殿大提學</index>
+                    <index ref="o008590" type="관직">知經筵春秋館事</index>兼<index ref="o003470" type="관직">成均大司成</index>臣<index ref="p090390" type="이름">鄭麟趾</index>
+                </paragraph>
+                <paragraph align="center">嘉善大夫<index ref="o015110" type="관직">中樞院副使</index>
+                    <index ref="o004580" type="관직">同知春秋館事</index>臣<index ref="p015620" type="이름">金銚</index>
+                </paragraph>
+                <paragraph align="center">嘉善大夫<index ref="o018730" type="관직">藝文館提學</index>
+                    <index ref="o004580" type="관직">同知春秋館事</index>
+                    <index ref="o006640" type="관직">世子左副賓客</index>臣<index ref="p073970" type="이름">李先齊</index>
+                </paragraph>
+                <paragraph align="center">通政大夫<index ref="o013930" type="관직">集賢殿副提學</index>
+                    <index ref="o015600" type="관직">知製敎</index>
+                    <index ref="o009390" type="관직">經筵侍講官</index>兼<index ref="o018430" type="관직">春秋館編修官</index>臣<index ref="p091130" type="이름">鄭昌孫</index>
+                </paragraph>
+                <paragraph align="center">通政大夫<index ref="o013930" type="관직">集賢殿副提學</index>
+                    <index ref="o015600" type="관직">知製敎</index>
+                    <index ref="o017410" type="관직">世子左輔德</index>兼<index ref="o018430" type="관직">春秋館編修官</index>臣<index ref="p045770" type="이름">辛碩祖</index>
+                </paragraph>
+                <paragraph align="center">通政大夫<index ref="o000140" type="관직">司諫院左司諫大夫</index>
+                    <index ref="o015600" type="관직">知製敎</index>兼<index ref="o018430" type="관직">春秋館編修官</index>臣<index ref="p104700" type="이름">崔恒</index>
+                </paragraph>
+                <paragraph align="center">果毅將軍<index ref="o007770" type="관직">虎賁侍衛司上護軍</index>兼<index ref="o015330" type="관직">知兵曹事</index>
+                    <index ref="o018430" type="관직">春秋館編修官</index>臣<index ref="p021640" type="이름">盧叔仝</index>
+                </paragraph>
+                <paragraph align="center">中訓大夫<index ref="o013930" type="관직">集賢殿直提學</index>
+                    <index ref="o015600" type="관직">知製敎</index>
+                    <index ref="o017440" type="관직">世子左弼善</index>兼<index ref="o016790" type="관직">春秋館記注官</index>臣<index ref="p073930" type="이름">李石亨</index>
+                </paragraph>
+                <paragraph align="center">中訓大夫<index ref="o013930" type="관직">集賢殿直提學</index>
+                    <index ref="o015600" type="관직">知製敎</index>
+                    <index ref="o017410" type="관직">世子右輔德</index>兼<index ref="o016790" type="관직">春秋館記注官</index>
+                    <index ref="o015440" type="관직">知承文院事</index>臣<index ref="p045860" type="이름">申叔舟</index>
+                </paragraph>
+                <paragraph align="center">中訓大夫<index ref="o018720" type="관직">藝文館直提學</index>兼<index ref="o016790" type="관직">春秋館記注官</index>臣<index ref="p100560" type="이름">崔德之</index>
+                </paragraph>
+                <paragraph align="center">奉正大夫<index ref="o015820" type="관직">直集賢殿知製敎</index>
+                    <index ref="o017440" type="관직">世子右弼善</index>兼<index ref="o016790" type="관직">春秋館記注官</index>臣<index ref="p052910" type="이름">魚孝瞻</index>
+                </paragraph>
+                <paragraph align="center">奉列大夫<index ref="o015820" type="관직">直集賢殿知製敎</index>
+                    <index ref="o017440" type="관직">世子右弼善</index>兼<index ref="o018460" type="관직">左中護</index>
+                    <index ref="o016790" type="관직">春秋館記注官</index>臣<index ref="p015530" type="이름">金禮蒙</index>
+                </paragraph>
+                <paragraph align="center">奉列大夫<index ref="o001690" type="관직">成均司藝</index>
+                    <index ref="o015600" type="관직">知製敎</index>兼<index ref="o016790" type="관직">春秋館記注官</index>臣<index ref="p014150" type="이름">金淳</index>
+                </paragraph>
+                <paragraph align="center">通德郞<index ref="o016080" type="관직">集賢殿校理</index>
+                    <index ref="o015600" type="관직">知製敎</index>
+                    <index ref="o005180" type="관직">世子右文學</index>兼<index ref="o016790" type="관직">春秋館記注官</index>臣<index ref="p051830" type="이름">梁誠之</index>
+                </paragraph>
+                <paragraph align="center">通善郞<index ref="o016080" type="관직">集賢殿校理</index>
+                    <index ref="o015600" type="관직">知製敎</index>
+                    <index ref="o000630" type="관직">經筵副檢討官</index>兼<index ref="o016790" type="관직">春秋館記注官</index>臣<index ref="p076000" type="이름">李芮</index>
+                </paragraph>
+                <paragraph align="center">奉直郞<index ref="o011950" type="관직">守吏曹正郞</index>兼<index ref="o016790" type="관직">春秋館記注官</index>臣<index ref="p018440" type="이름">金之慶</index>
+                </paragraph>
+                <paragraph align="center">奉直郞<index ref="o001740" type="관직">守成均直講</index>兼<index ref="o016790" type="관직">春秋館記注官</index>臣<index ref="p016380" type="이름">金閏福</index>
+                </paragraph>
+                <paragraph align="center">承議郞<index ref="o008810" type="관직">守集賢殿副校理</index>
+                    <index ref="o015600" type="관직">知製敎</index>
+                    <index ref="o016440" type="관직">世子右司經</index>兼<index ref="o016780" type="관직">春秋館記事官</index>臣<index ref="p077220" type="이름">李克堪</index>
+                </paragraph>
+                <paragraph align="center">承議郞<index ref="o008820" type="관직">集賢殿修撰</index>
+                    <index ref="o015600" type="관직">知製敎</index>
+                    <index ref="o006690" type="관직">經筵司經</index>兼<index ref="o016780" type="관직">春秋館記事官</index>臣<index ref="p068010" type="이름">尹起畎</index>
+                </paragraph>
+                <paragraph align="center">承議郞<index ref="o014490" type="관직">成均注簿</index>兼<index ref="o016780" type="관직">春秋館記事官</index>臣<index ref="p012520" type="이름">金命中</index>
+                </paragraph>
+                <paragraph align="center">進勇校尉<index ref="o019030" type="관직">行右軍攝副司直</index>兼<index ref="o009260" type="관직">承文院副校理</index>
+                    <index ref="o016780" type="관직">春秋館記事官</index>臣<index ref="p092170" type="이름">趙瑾</index>
+                </paragraph>
+                <paragraph align="center">宣敎郞<index ref="o014490" type="관직">守成均注簿</index>兼<index ref="o011550" type="관직">中部儒學敎授官</index>
+                    <index ref="o002380" type="관직">春秋館記官</index>臣<index ref="p113400" type="이름">洪禹治</index>
+                </paragraph>
+                <paragraph align="center">宣敎郞<index ref="o009260" type="관직">守承文院副校理</index>兼<index ref="o016780" type="관직">春秋館記事官</index>臣<index ref="p054730" type="이름">芮承錫</index>
+                </paragraph>
+                <paragraph align="center">宣敎郞<index ref="o016090" type="관직">集賢殿副修撰</index>
+                    <index ref="o015600" type="관직">知製敎</index>
+                    <index ref="o006690" type="관직">經筵司經</index>兼<index ref="o016780" type="관직">春秋館記事官</index>臣<index ref="p069030" type="이름">尹子雲</index>
+                </paragraph>
+                <paragraph align="center">宣敎郞<index ref="o014490" type="관직">司贍注簿</index>兼<index ref="o016780" type="관직">春秋館記事官</index>臣<index ref="p081080" type="이름">李孝長</index>
+                </paragraph>
+                <paragraph align="center">宣務郞<index ref="o014490" type="관직">守成均注簿</index>兼<index ref="o011550" type="관직">西部儒學敎授官</index>
+                    <index ref="o016780" type="관직">春秋館記事官</index>臣<index ref="p077610" type="이름">李仁全</index>
+                </paragraph>
+                <paragraph align="center">宣務郞<index ref="o010650" type="관직">行藝文奉敎</index>兼<index ref="o016780" type="관직">春秋館記事官</index>臣<index ref="p066560" type="이름">柳子文</index>
+                </paragraph>
+                <paragraph align="center">務功郞<index ref="o010650" type="관직">藝文奉敎</index>兼<index ref="o016780" type="관직">春秋館記事官</index>臣<index ref="p020180" type="이름">全孝宇</index>
+                </paragraph>
+                <paragraph align="center">通仕郞<index ref="o010640" type="관직">藝文待敎</index>兼<index ref="o016780" type="관직">春秋館記事官</index>臣<index ref="p015630" type="이름">金勇</index>
+                </paragraph>
+                <paragraph align="center">通仕郞<index ref="o010630" type="관직">行藝文檢閱</index>兼<index ref="o016780" type="관직">春秋館記事官</index>臣<index ref="p108600" type="이름">韓瑞鳳</index>
+                </paragraph>
+                <paragraph align="center">通仕郞<index ref="o010630" type="관직">行藝文檢閱</index>兼<index ref="o016780" type="관직">春秋館記事官</index>臣<index ref="p055260" type="이름">吳伯昌</index>
+                </paragraph>
+            </content>
+        </text>
+    </level1>
+    <level1 id="kr_$s04" type="고려세계">
+        <front>
+            <biblioData type="序文">
+                <title>
+                    <mainTitle>『고려사』편찬 범례</mainTitle>
+                </title>
+            </biblioData>
+        </front>
+        <text>
+            <link type="original" uri="url" value="http://kyudb.snu.ac.kr/pf01/rendererImg.do?item_cd=ETC&amp;book_cd=GK03539_00&amp;vol_no=0001&amp;page_no=116"/>
+            <content>
+                <paragraph align="center">纂修高麗史凡例</paragraph>
+                <paragraph align="center">一, 世家, 按<index ref="b001230" type="서명">史記</index>, 天子曰紀, 諸侯曰世家, 今纂<index ref="b000210" type="서명">高麗史</index>, 王紀爲世家, 以正名分. 其書法, 準<index ref="b002180" type="서명">兩漢書</index>及<index ref="b002540" type="서명">元史</index>, 事實與言辭, 皆書之. 凡稱宗, 稱陛下太后太子節日制詔之類, 雖涉僭踰, 今從當時所稱, 書之, 以存其實. 如圓丘籍田燃燈八關等常事, 書初見, 以着其例, 若親行則必書. 高麗世系, 出於雜記, 率皆荒誕, 今以<index ref="p115300" type="이름">黃周亮</index>所撰<index ref="b002040" type="서명">實錄</index>, 追贈三代爲正, 附以雜記所傳, 別作世系.</paragraph>
+                <paragraph align="center">一, 志, 按歷代史志, 代各不同. 至於<index ref="b000680" type="서명">唐志</index>, 以事實, 組織成篇, 難於攷覈, 今纂<index ref="b000210" type="서명">高麗史</index>志, 準<index ref="b002540" type="서명">元史</index>, 條分類聚, 使覽者易攷焉. 高麗制度條格, 史多闕略, 今取<index ref="b001480" type="서명">古今詳定禮</index>, <index ref="b001920" type="서명">式目編修錄</index>, 及諸家雜錄, 作諸志.</paragraph>
+                <paragraph align="center">一, 表, 按歷代史表, 詳略有異, 今纂<index ref="b000210" type="서명">高麗史</index>表, 準<index ref="p012980" type="이름">金富軾</index>
+                    <index ref="b001360" type="서명">三國史</index>, 只作年表.</paragraph>
+                <paragraph align="center">一, 列傳, 首以后妃, 次宗室, 次諸臣, 終之以叛逆, 其有事功卓異者, 雖父子別傳, 餘各以類附. 辛禑父子, 以逆旽之蘗, 竊位十六年, 今準<index ref="b003810" type="서명">漢書</index>
+                    <index ref="p058130" type="이름">王莽</index>傳, 降爲列傳, 以嚴討賊之義.</paragraph>
+                <paragraph align="center">一, 歷代史, 紀·傅·表·志之末, 皆有論贊, 今纂<index ref="b000210" type="서명">高麗史</index>, 準<index ref="b002540" type="서명">元史</index>, 不作論贊, 惟世家, 舊有<index ref="p078690" type="이름">李齊賢</index>等贊, 今仍之. 凡詔敎及諸臣書䟽所載, 條件可分者, 各以類摘取, 分入諸志, 餘則書世家及傳. 諸儒文集及雜錄, 事蹟可攷者, 亦採增入, 且如制詔, 表冊之類, 節其繁文以書.</paragraph>
+            </content>
+        </text>
+    </level1>
+</item>

@@ -1,0 +1,31 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# ITKC (P78-7): members of the two witnessed works out of the
+# data.go.kr per-work zips (15022432 고운당필기 GP + 15141442 국조보감
+# GO). The upstream is zips behind the DataGoKrFetch resolution —
+# per-file URLs do not exist. Trim recipes per file below; every kept
+# byte upstream-verbatim.
+source: itkc
+adapter_test: test/adapters/itkc_test.rb
+retrieved: 2026-08-18
+files:
+  - path: ITKC_GP_1550A.xml
+    url: https://www.data.go.kr/data/15022432/fileData.do
+    whole: false
+    reason: the 고운당필기 서지 sidecar, 해설정보 commentary removed — titles, author
+      with 생년/몰년, 원문간행년 1780
+  - path: ITKC_GP_1550A_0010.xml
+    url: https://www.data.go.kr/data/15022432/fileData.do
+    whole: false
+    reason: 卷一 trimmed to its first two 레벨3 최종정보 articles (圖書集成 — full
+      apparatus incl. 문체분류 and the 번역문 연계 pointer)
+  - path: ITKC_GO_1295A.xml
+    url: https://www.data.go.kr/data/15141442/fileData.do
+    whole: true
+    reason: the 국조보감 서지 sidecar whole — 원문간행년 1895, the GO-family witness
+  - path: ITKC_GO_1295A_0010.xml
+    url: https://www.data.go.kr/data/15141442/fileData.do
+    whole: false
+    reason: 首卷 trimmed to its first two 레벨3 genre sections — the GO nesting
+      (레벨4-deep 최종정보) witness

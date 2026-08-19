@@ -1,21 +1,22 @@
 # The Library — content review
 
-**As of 2026-08-04** (post the full rebuild of 2026-08-03, which
-folded in the granted sources, the complete openMGH offering, DÉRom,
-the Tibetan wave, and the lect layer). Live totals: **975,074
-documents / 68,408,109 passages and 1,407,706 dictionary entries**
-across the **131 registry rows** — 109 corpus sources + 4 local
-shelves + 18 feature modules (module count as of 2026-08-11; the
-P63–P72 additions are cigs, trismegistos-geo, nabu-places, unikemet
-and edubba-overlay), every corpus source wired. **Classical
-Arabic (`ara`, §8x) is the largest language at 33.3M passages**, ahead
-of Literary Chinese (13.4M), Sumerian and Ancient Greek (3.0M each),
-and Japanese (2.98M); the catalog spans **122 language codes**. The
-reference shelf spans the dictionary shelves of §8c, §8h, §8j, §8k,
-§8m, §8o, §8q, §8s, §8t and §8ae. The gold-lemma layer stands at
-**19.2M gold rows in 37 languages** (26 July census) plus the honest
-silver tier (machine-suggested or upstream-undisambiguated, always
-labelled). Since August 2026 stored codes also resolve through the
+**As of 2026-08-19** (post the P77 Iberian–Norse–Babylonian wave and
+the overnight P78 Korean first syncs). Live totals: **981,976
+documents / 71,073,017 passages and 1,410,205 dictionary entries**
+across the **145 registry rows** — 122 corpus sources + 4 local
+shelves + 19 feature modules, every corpus source wired (the P78
+Korean/Vietnamese wave, §8ag, verified its first syncs and flipped
+2026-08-19). **Classical Arabic (`ara`, §8x) is the largest language
+at 33.3M passages**, ahead of Literary Chinese (15.9M — the Korean
+historiographical wave now aboard), Sumerian and Ancient Greek (3.0M
+each), and Japanese (2.98M); the catalog spans **128 document
+language codes**. The reference shelf spans the dictionary shelves of
+§8c, §8h, §8j, §8k, §8m, §8o, §8q, §8s, §8t and §8ae — **105
+dictionary shelves / 1,410,205 entries** (2026-08-19 census). The
+gold-lemma layer stands at **19,319,627 gold rows in 38 languages**
+(2026-08-19 census) plus the honest silver tier (machine-suggested or
+upstream-undisambiguated, always labelled — 28,451,399 rows, chiefly
+GLAUx and Diorisis Greek, §8n/§8z). Since August 2026 stored codes also resolve through the
 **lect layer** (languages.md, "The lect layer"): historical-stage
 ladders on language cards, `search --lect`, and registry-keyed
 reconstruction display. The four canonical-memory shelves (§8i) hold
@@ -152,7 +153,7 @@ texts that mostly exist as scanned books elsewhere.
 | **Period** | 5th c. BCE (Herodotus) through 17th c. CE (Avvakum) |
 | **Size** | 75 docs / 175,742 passages across three sources: `proiel` (12 docs / 51,321), `torot` (40 / 33,085), `ud` (23 / 91,336) — plus `iswoc` (5 / 2,536, §8d) in the same family |
 | **Sources** | PROIEL (frozen release), TOROT (Tromsø OCS/OES), ISWOC (Old English — §8d), Universal Dependencies (nine treebanks incl. Old East Slavic birchbark letters, Middle Russian RNC, Ruthenian, and — since the 2026-07-17 sync — the two Old Irish glosses treebanks DipSGG/DipWBG; birchbark/RNC/Ruthenian/DipWBG CC BY-SA/`attribution` via per-document override); PROIEL/TOROT/ISWOC/legacy-UD license: `nc` |
-| **Metadata** | The gold lemma layer: `passage_lemmas` totals **12,597,062 rows in 23 languages** (post the settled full rebuild). The pools, by size: san 5.54M and sux 2.97M lead (DCS + ORACC/ETCSL), then egy 799k (§8o), lat 621k, grc 563k, orv 455k, akk 363k, hbo 277k (§8q), cop 233k (§8f), sl 214k (§8e), chu 130k, ojp 123k (§8s, ONCOJ), sga 113k (§8l, CorPH), got 99k, bul 42k, ang 25k, xcl 18k, with peo/arc/hit/uga/elx/xhu the small gold tails. Searchable via `search --lemma` with per-language folding and suppletive-form support (affero → attulimus) |
+| **Metadata** | The gold lemma layer: `passage_lemmas` totals **19,319,627 gold rows in 38 languages** (2026-08-19 census). The pools, by size: san 5.54M and sux 2.98M lead (DCS + ORACC/ETCSL), then gmh 2.10M (§8w, ReM), gml 1.23M (§8aa, ReN), lat 851k, egy 826k (§8o), akk 826k, is 812k (§8w, IcePaHC), grc 591k, orv 455k, lzh 427k, hbo 378k (§8q), non 258k, cop 256k (§8f), sl 214k (§8e), fro 131k, chu 130k, ojp 123k (§8s, ONCOJ), sga 113k (§8l, CorPH), got 99k, xcl 98k, gez 86k, osx 47k, bul 42k, ang 25k, with ro/it/frm/ota/xur/peo/arc/hit/xhu/elx/uga/qur/hlu the smaller gold tails. Searchable via `search --lemma` with per-language folding and suppletive-form support (affero → attulimus) |
 
 Three families: PROIEL's parallel New Testament (Greek original + Latin
 Vulgate + Gothic Wulfila + Classical Armenian + OCS Codex Marianus — five
@@ -249,7 +250,7 @@ the densest multi-language alignment laboratory in the library.
 | | |
 |---|---|
 | **Category** | Scholarly lexica and reconstruction dictionaries — entries, not passages (own tables, own `nabu define` / `nabu etym` surfaces) |
-| **Size** | **635,636 entries** across twenty-eight dictionary shelves: `lexica` — LSJ (Greek, 116,497) + Lewis & Short (Latin, 51,636) — plus **`bosworth-toller`** (Old English, 62,815, CC BY 4.0) + **`mw`** Monier-Williams (Sanskrit, 193,890, `nc`) + Wiktionary OCS (`wiktionary-cu`, 4,615) + Wiktionary Sumerian (`wiktionary-sux`, 2,499 — the sign card's sense lane, P68) + the `wiktionary-recon` shelves (28,736: the seven reconstruction shelves — Proto-Germanic 5,717, Proto-West Germanic 5,551, Proto-Slavic 5,431, PIE 1,905, Proto-Indo-Iranian 799, Proto-Italic 745, Proto-Balto-Slavic 491 — plus the three attested-Celtic extracts sga/mga/wlm, §8l) + the etymological witnesses synced 2026-07-14 (**IE-CoR** 4,981 cognate sets, **LIV** 305 verbal etymons, **de Vaan EDL** 2,860 etymons across two shelves — §8h) + the five **StarLing** bases (`starling`, 27,397 — §8j) + the three Slovenian historical dictionaries (`sl-lexica`, 139,405 — §8k) |
+| **Size** | **1,410,205 entries across 105 dictionary shelves library-wide** (2026-08-19 census; §8h–§8t and §8ae grew the rack past this section's founding set). The founding shelves: `lexica` — LSJ (Greek, 116,497) + Lewis & Short (Latin, 51,636) — plus **`bosworth-toller`** (Old English, 62,815, CC BY 4.0) + **`mw`** Monier-Williams (Sanskrit, 193,890, `nc`) + Wiktionary OCS (`wiktionary-cu`, 4,615) + Wiktionary Sumerian (`wiktionary-sux`, 2,499 — the sign card's sense lane, P68) + the `wiktionary-recon` shelves (28,736: the seven reconstruction shelves — Proto-Germanic 5,717, Proto-West Germanic 5,551, Proto-Slavic 5,431, PIE 1,905, Proto-Indo-Iranian 799, Proto-Italic 745, Proto-Balto-Slavic 491 — plus the three attested-Celtic extracts sga/mga/wlm, §8l) + the etymological witnesses synced 2026-07-14 (**IE-CoR** 4,981 cognate sets, **LIV** 305 verbal etymons, **de Vaan EDL** 2,860 etymons across two shelves — §8h) + the five **StarLing** bases (`starling`, 27,397 — §8j) + the three Slovenian historical dictionaries (`sl-lexica`, 139,405 — §8k) |
 | **Metadata** | Folded-headword keying (diacritic-insensitive lookup, incl. æ/þ/ð→ae/th for Old English); betacode decoded; entry citations parsed and **resolved to in-catalog passages** where the cited work exists (μῆνις → Il. 1.1 as a live urn); glosses surface in `search --lemma` output; the reconstruction entries carry machine-readable **descendant trees** joined to attested gold lemmas (`dictionary_reflexes`) |
 
 `nabu define λόγος` / `define virtus` / `define aethele --lang ang`, and
@@ -573,7 +574,7 @@ its go-on/kan-on Japanese readings — the axis the bridge shelves exist
 to serve. Kanripo (the 9,355-text Chinese library) and CBETA (the
 Taishō canon) are the planned P33 continuations.
 
-## 8t. The Chinese libraries (`kanripo`, `cbeta`, `tls`; flipped live in the full rebuild 2026-07-20 — `lzh` is now the library's largest language at 13.0M passages)
+## 8t. The Chinese libraries (`kanripo`, `cbeta`, `tls`; flipped live in the full rebuild 2026-07-20, which made `lzh` the then-largest language — 15.9M passages today, second behind `ara`)
 
 | | |
 |---|---|
@@ -782,6 +783,106 @@ under the honest `roa:pro` lect (a marked comparative-method
 reconstruction, distinct from attested Vulgar Latin); `define lakt-e`
 serves the article body with the cognat apparatus.
 
+## 8af. The P77 wave — Old Spanish, the sonnet corpus, Old Swedish, Achaemenid Babylonia (`osta`, `disco`, `fornsvenska`, `achemenet`, `burman-concordance`; flipped live 2026-08-18)
+
+| | |
+|---|---|
+| **Category** | Medieval Iberia at manuscript grain, the Spanish sonnet tradition, the Old Swedish text bank, the Achaemenid Babylonian archives — and an Etrurian concordance instrument |
+| **Languages** | Old Spanish (`osp`, with Leonese `ast`, Navarro-Aragonese `arg` and Latin layers), Spanish (`spa`), Old Swedish (`sv` — the `sv:old` lect via nabu-lects), Late Babylonian Akkadian (`akk`) |
+| **Size** | `osta`: **740 docs / 5,177 passages** — the Old Spanish Textual Archive (Hispanic Seminary of Medieval Studies; Gago Jover & Pueyo Mena): 663 semi-paleographic transcriptions of medieval Spanish manuscripts and incunabula in the HSMS curly-brace convention (folio/column milestones kept, markup verbatim, a documented search-text derivation beside it), plus 77 lemmatized token-stream sibling editions feeding the silver lemma lane (osp 249k silver rows); the Seminary's own works/codices tables ride every document — author, datings, lenguas, the PhiloBiblon crosswalk. `disco`: **1,215 docs / 4,527 passages** — the Diachronic Spanish Sonnet Corpus (Ruiz Fabo et al.): 4,530 sonnets by 1,216 authors, 15th–20th c., one per-author TEI file, with automatic per-line meter/rhyme/enjambment annotation carried labelled and author prosopography in metadata. `fornsvenska`: **155 docs / 170,872 sentence passages** — Fornsvenska textbanken (Språkbanken Text, Gothenburg): the medieval law codes from Äldre Västgötalagen on, religious and profane prose, the rhymed chronicles and Eufemiavisorna, tänkeböcker — per-text datings verbatim. `achemenet`: **2,774 docs** — Achaemenid-period (550–330 BCE) Babylonian legal/administrative texts and letters (the Murašû archive, Eanna/Uruk, the Sippar groups, Strassmaier's Cyrus/Cambyses/Darius editions), BabyLemmatizer-annotated: silver lemma/POS/gloss on every token, whole-text passages, P-number urns for the future CDLI crosswalk. `burman-concordance`: a **links instrument, zero documents** — Burman's Digital Concordance of Etruscan, Faliscan and Early Latin Inscriptions from Etruria: 14,986 inscription rows crosswalking fourteen citation systems (Trismegistos, CIE, Rix ET, TLE, CIL…), minting `reference` edges from held open-etruscan CIE ids into the `tm:` identity hub |
+| **Licenses** | osta CC BY-NC-SA 4.0 → `nc` (MCP-excluded; the Zenodo citation rides every document); disco CC BY → `attribution`; fornsvenska CC BY 4.0 → `attribution`; achemenet CC BY 4.0 → `attribution`; burman-concordance CC0 → `open` |
+
+**Research uses:** Old Spanish philology on the semi-paleographic record
+itself, beside the cantigas' Galician-Portuguese (§8ad) on the romance
+desk; the sonnet tradition as a five-century dated verse laboratory; the
+Old Swedish laws and chronicles joining the Germanic desk (§8w); the
+Achaemenid archives searchable by lemma beside the ORACC and CDLI
+shelves (§8, §8r); an Etruscan inscription's identity trail resolved
+across fourteen citation systems.
+
+## 8ag. The Korean–Vietnamese wave (`sillok`, `sjw`, `goryeosa`, `goryeosa-jeoryo`, `bibyeonsa`, `ko-wikisource-mk`, `itkc`, `viet-wikisource`; P78 — first syncs verified, all eight wired 2026-08-19)
+
+The `korean` axis minted whole: the Joseon historiographical canon in
+the original literary Chinese (hanmun), the founding hangul epic, the
+open slice of the Korean classics database, and Vietnam's classical
+shelf on the sinitic axis. The eight registry rows still ride `wired:
+false` — seven landed their owner-fired first syncs overnight
+2026-08-18/19 and await the owner's verification flips; the counts
+below are those first syncs; all eight are wired (2026-08-19, owner-verified).
+
+| | |
+|---|---|
+| **Category** | The dynastic records of Korea day by day, the compiled Goryeo histories, the first hangul book, and Đại Việt's annals |
+| **Languages** | Literary Chinese (`lzh` — hanmun, the kanripo precedent; lect codemap lzh → zho/lit) and Middle Korean (`okm`) |
+| **Size** | `sillok`: **743 docs / 414,321 passages** — 조선왕조실록, the Veritable Records of the Joseon Dynasty (NIKH): the complete annals of the 25 reigns (1392–1863) + the colonial-era Gojong/Sunjong supplements, per-day articles under seven parallel calendar systems, interlinear notes and archive citations riding annotations. `sjw`: **297 docs / 1,896,858 passages** — 승정원일기, the Daily Records of the Royal Secretariat (1623–1910): the library's largest single source by characters (242M+ on the web DB); every day opens with the weather record — one of the longest daily weather series anywhere. `goryeosa`: **138 docs / 31,207 passages** — 고려사, the History of Goryeo (1451, Jeong Inji et al.): annals, treatises, tables and biographies of the dynasty of 918–1392. `goryeosa-jeoryo`: **36 docs / 11,226 passages** — 고려사절요 (1452): the chronological digest, compiled one year after the full history. `bibyeonsa`: **273 docs / 93,528 passages** — 비변사등록, the Border Defense Command's daily register (1617–1892), memoranda with attendance rosters. `ko-wikisource-mk`: **1 doc / 159 passages** — 용비어천가 (1447), all 125 cantos of the founding hangul epic: the Middle Korean verse in archaic orthography (`okm`, 125 passages) beside the print's parallel hanmun verse, the modern rendering riding as annotation. `itkc`: **473 docs / 13,185 passages** — the open-licensed slice of the 한국고전종합DB (Institute for the Translation of Korean Classics): 17 complete hanmun works — 고운당필기, 국조보감, 임하필기, the geographic compendia (신증동국여지승람, 대동지지) and more. `viet-wikisource`: **32 docs / 7,674 passages** — the Đại Việt classical shelf: the 大越史記全書 (Đại Việt sử ký toàn thư, 1697 Chính Hòa edition) complete from zh.wikisource, plus Bình Ngô đại cáo and Hịch tướng sĩ — `lzh`, on the sinitic axis by design |
+| **Licenses** | the six NIKH/data.go.kr sets 제한 없음 → `attribution` (ruling D47-a — credit the institute); the two Wikisource shelves: texts PD, transcription CC BY-SA 4.0 → `attribution` (credit the contributors) |
+
+**Research uses:** five centuries of a state's own day-grain record —
+weather, audiences, memorials — searchable beside the Chinese
+historiography it grew from (§8t); the hanmun/vernacular boundary at its
+founding moment (the 1447 cantos in both layers); Goryeo read through
+its two Joseon compilations side by side; Vietnam's chronicle tradition
+on the same sinitic desk as the canon it cites.
+
+## 8ah. Instruments and registries — the module rack
+
+Nineteen registry rows are `kind: module`: machinery, not documents —
+each syncs its own canonical asset and derives an index, a crosswalk, or
+a display layer, minting zero catalog rows. The character-desk trio
+(`babelstone-ids`, `kradfile`, `kr-gaiji`) is §8u's; the rest of the
+rack, grouped:
+
+- **Place instruments.** `pleiades` — the community gazetteer of the
+  ancient world (~42,000 places, CC BY): the place index behind `nabu
+  place`, findspot lines and MCP `nabu_place`. `trismegistos-geo` — the
+  Trismegistos places database (64,857 places, the field's finest
+  Egyptian grain: nomes, villages, topoi; browser-acquired dump with
+  full provenance, CC BY-SA). `cigs` — the Cuneiform Inscriptions
+  Geographical Site Index (Uppsala): 597 cuneiform-world sites with
+  coordinates and Pleiades/GeoNames/OSM/CDLI ids (CC BY). `nabu-places`
+  — the library's own place-matching decisions registry (sister repo):
+  which gazetteer identity each source's verbatim place-name denotes,
+  with unlocatable/region/ghost as first-class answers; matched
+  decisions project into the catalog's place axis (CC BY).
+- **Identity and concordance instruments.** `trismegistos` — the
+  TexRelations crosswalk: each TM text number resolved to its ids in
+  80+ partner databases (EDH, EDR, DDbDP, I.Sicily…), the `tm:`
+  identity hub the epigraphic shelves join through (CC BY-SA).
+  `bridging` — ETCBC's word-level concordance between the two digital
+  Hebrew Bibles (BHSA ↔ OpenScriptures, 420,108 of 426,590 words
+  aligned; MIT).
+- **Sign registries.** `osl` — the Oracc Sign List: 3,241 cuneiform
+  signs with readings by language and print-list concordances (CC0).
+  `unikemet` — Unicode's normative Egyptian hieroglyph data: 5,067
+  signs with functions, phonetic values and catalog concordances — the
+  sign spine of the Egyptian character card (Unicode License).
+  `edubba-overlay` — the sister school's curated hieroglyph pedagogy
+  (keywords, taught glosses, confusables), read back into the sign card
+  (CC BY-SA).
+- **Metrical instruments.** `hypotactic` — Chamberlain's complete
+  line-by-line scansions of the major Greek verse corpus (CC BY).
+  `pedecerto` — Digital Latin Metre (Udine/Ca' Foscari): 227,791
+  hexameter lines plus other meters, per-word syllable positions
+  (CC BY-NC-ND).
+- **Annotation and reuse layers.** `actib` — the Annotated Corpus of
+  Classical Tibetan: a word-segmented, POS-tagged edition of the
+  eKangyur (automatic, labelled as such; CC BY). `kitab` — the KITAB
+  project's text-reuse pairs over OpenITI: aligned passages with exact
+  offsets, a map of quotation across the Islamicate tradition
+  (CC BY-NC-SA).
+- **Lexical and registry spines.** `lila` — the LiLa Lemma Bank:
+  215,102 canonical Latin forms with orthographic variants, the
+  linked-data spine of Latin lexical resources (CC BY-SA).
+  `cldf-spine` — Concepticon's 4,033 concept sets + Glottolog's 27,177
+  languoids, the identifier systems the comparativist modules (WOLD,
+  CLICS³, IE-CoR) name meanings and languages by (CC BY). `nabu-lects`
+  — the lect registry (sister repo): language varieties as anchor ×
+  stage × orthography, resolving stored codes into historical stages
+  (languages.md, "The lect layer"; CC BY). `nabu-data` — the datasets
+  this library publishes back to the world: the DCS-derived Sanskrit
+  form-to-lemma table (428,825 rows) and the Tibetan folding tables,
+  each with its full attribution chain (CC BY).
+
 ## 8i. The local shelves — canonical memory (architecture §16)
 
 Phase 19 gave the canonical layer a doctrine for data that is **authored
@@ -838,8 +939,10 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
   `bin/nabu search`, FTS5 under the hood.
 - **Lemma search** (`search --lemma`) over the treebank shelf (§6), the
   ORACC gold layer (§8), goo300k (§8e), damaskini (§8e), Coptic
-  Scriptorium (§8f), and CorPH (§8l) — **17 languages** since the
-  2026-07-17 syncs (Old Irish and Bulgarian the newcomers);
+  Scriptorium (§8f), CorPH (§8l), and every gold shelf since — **38
+  gold languages / 19,319,627 rows** (2026-08-19 census; §6 lists the
+  pools), plus the always-labelled silver tier (28,451,399 rows in 14
+  codes, `--gold-only` to exclude);
   ranking-independent `urn:` filtering; hits carry dictionary glosses where
   the reference shelf (§8c) knows the lemma. **Morphology facets**
   (`--morph case=dat,number=pl`, P13-6) filter by gold morphology — one UD
@@ -992,9 +1095,10 @@ through their sanctioned gateways. Phases 20–24 grew the family to four:
 - **Concordance** (`concord`): KWIC lines with fold-aware matching that maps
   hits back to pristine (accented) text.
 - **Parallel display** (`show --parallel`): §7.
-- **MCP server** (**10 read-only tools**: `nabu_search`, `nabu_show`,
+- **MCP server** (**thirteen read-only tools**: `nabu_search`, `nabu_show`,
   `nabu_concord`, `nabu_align`, `nabu_define`, `nabu_etym`,
-  `nabu_parallels`, `nabu_cognates`, `nabu_links`, `nabu_status` — see
+  `nabu_parallels`, `nabu_cognates`, `nabu_links`, `nabu_status`,
+  `nabu_place`, `nabu_char`, `nabu_signs` — see
   `docs/mcp.md`): exposes the library to Claude and other MCP
   clients. Every passage carries `license_class` + `source` so quoting
   decisions are informed. All licensed shelves including `nc` are served;

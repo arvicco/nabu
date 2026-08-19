@@ -376,7 +376,8 @@ module Nabu
       # lemma table predates the tier column falls back to the full rebuild!.
       # Returns the SOURCE's live passage count — never the corpus total.
       def refresh_source!(catalog:, fulltext:, slug:, alignments: nil, fuzzy_slugs: nil,
-                          lemma_tiers: nil, reflexes_changed: false, sign_list: nil, progress: nil)
+                          lemma_tiers: nil, reflexes_changed: false, sign_list: nil, progress: nil,
+                          ledger: nil)
         unless incremental_ready?(fulltext)
           rebuild!(catalog: catalog, fulltext: fulltext, alignments: alignments,
                    fuzzy_slugs: fuzzy_slugs, lemma_tiers: lemma_tiers, sign_list: sign_list,
@@ -396,67 +397,99 @@ module Nabu
         # (hundreds of thousands of rows) and then triggers the
         # corpus-wide reflex closure; both sat silent behind the load
         # counter and read as hangs.
-        progress&.stage("index slice: #{slug} (fts + lemma rows)")
-        fulltext.transaction do
-          # P42-1: snapshot this source's lemma-frequency contribution BEFORE
-          # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
-          # freq table (same transaction). incremental_ready? guarantees the
-          # table exists here; both snapshots are urn-scoped and B-tree bounded.
-          before = LemmaFrequencies.snapshot(fulltext, urns)
-          deleted = delete_source_lemma_rows(fulltext, urns)
-          delete_fts_rows(fulltext, TABLE, ids)
-          count, inserted, chars = insert_passage_batches(
-            fulltext, live_passages(catalog).where(Sequel[:documents][:source_id] => source_id),
-            source_tiers(catalog, lemma_tiers || {})
-          )
-          lemmas_changed = deleted.positive? || inserted.positive?
-          LemmaFrequencies.apply_delta(fulltext, before: before, after: LemmaFrequencies.snapshot(fulltext, urns))
-          refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
-          # P65: swap this source's char-postings slice; a pre-P65 fulltext
-          # file (no table) gets the whole postings build below instead —
-          # NEVER a full FTS rebuild for a missing derived sub-table.
-          if fulltext.table_exists?(CHAR_POSTINGS_TABLE)
-            fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
-            write_char_postings(fulltext, chars)
-          end
-          # P72-1: swap this source's coverage-index slice too (ranks from
-          # current postings — performance-only, the exact check verifies).
-          if fulltext.table_exists?(PASSAGE_CHARS_TABLE)
-            fulltext[PASSAGE_CHARS_TABLE].where(source_id: source_id).delete
-            write_passage_chars(fulltext, passage_chars_rows(catalog, fulltext, source_id: source_id))
-          end
-          # P77-r16: swap this source's SIGN-coverage slice (SIGN_SOURCES
-          # only; ranks from the standing sign_postings — performance-only;
-          # a nil sign_list leaves the slice deleted, honest to the load).
-          if fulltext.table_exists?(PASSAGE_SIGNS_TABLE) && SIGN_SOURCES.include?(slug)
-            fulltext[PASSAGE_SIGNS_TABLE].where(source_id: source_id).delete
-            if sign_list
-              progress&.stage("sign coverage: re-tokenizing the #{slug} slice")
-              write_passage_signs(fulltext,
-                                  passage_signs_rows(catalog, fulltext, sign_list, source_id: source_id,
-                                                                                   progress: progress))
+        # P78-r3 (the sillok first-sync lesson: r2 gave sync only the
+        # whole-run banner — the SLOW stages, these, still announced bare):
+        # each multi-second sub-step records its wall time to the ledger's
+        # stage_timings under kind "sync" and announces with the estimate
+        # the LAST sync of this source earned.
+        timed_sync_stage(ledger, slug, "index_slice",
+                         "index slice: #{slug} (fts + lemma rows)", progress) do
+          fulltext.transaction do
+            # P42-1: snapshot this source's lemma-frequency contribution BEFORE
+            # the rewrite, re-snapshot AFTER, and apply the delta to the corpus
+            # freq table (same transaction). incremental_ready? guarantees the
+            # table exists here; both snapshots are urn-scoped and B-tree bounded.
+            before = LemmaFrequencies.snapshot(fulltext, urns)
+            deleted = delete_source_lemma_rows(fulltext, urns)
+            delete_fts_rows(fulltext, TABLE, ids)
+            count, inserted, chars = insert_passage_batches(
+              fulltext, live_passages(catalog).where(Sequel[:documents][:source_id] => source_id),
+              source_tiers(catalog, lemma_tiers || {})
+            )
+            lemmas_changed = deleted.positive? || inserted.positive?
+            LemmaFrequencies.apply_delta(fulltext, before: before, after: LemmaFrequencies.snapshot(fulltext, urns))
+            refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
+            # P65: swap this source's char-postings slice; a pre-P65 fulltext
+            # file (no table) gets the whole postings build below instead —
+            # NEVER a full FTS rebuild for a missing derived sub-table.
+            if fulltext.table_exists?(CHAR_POSTINGS_TABLE)
+              fulltext[CHAR_POSTINGS_TABLE].where(source_id: source_id).delete
+              write_char_postings(fulltext, chars)
+            end
+            # P72-1: swap this source's coverage-index slice too (ranks from
+            # current postings — performance-only, the exact check verifies).
+            if fulltext.table_exists?(PASSAGE_CHARS_TABLE)
+              fulltext[PASSAGE_CHARS_TABLE].where(source_id: source_id).delete
+              write_passage_chars(fulltext, passage_chars_rows(catalog, fulltext, source_id: source_id))
+            end
+            # P77-r16: swap this source's SIGN-coverage slice (SIGN_SOURCES
+            # only; ranks from the standing sign_postings — performance-only;
+            # a nil sign_list leaves the slice deleted, honest to the load).
+            if fulltext.table_exists?(PASSAGE_SIGNS_TABLE) && SIGN_SOURCES.include?(slug)
+              fulltext[PASSAGE_SIGNS_TABLE].where(source_id: source_id).delete
+              if sign_list
+                progress&.stage("sign coverage: re-tokenizing the #{slug} slice")
+                write_passage_signs(fulltext,
+                                    passage_signs_rows(catalog, fulltext, sign_list, source_id: source_id,
+                                                                                     progress: progress))
+              end
             end
           end
         end
-        progress&.stage("index slice: #{slug} — postings/coverage swaps")
-        rebuild_char_postings!(catalog: catalog, fulltext: fulltext) unless fulltext.table_exists?(CHAR_POSTINGS_TABLE)
-        rebuild_passage_chars!(catalog: catalog, fulltext: fulltext) unless fulltext.table_exists?(PASSAGE_CHARS_TABLE)
-        # P77-r16b (the 2026-08-18 "hang"): the sign-coverage bootstrap is
-        # HEAVY (two tokenize+resolve passes over the whole ATF corpora —
-        # hours, not the char bootstrap's cheap regex sweep), so it fires
-        # ONLY when the synced source is itself a sign corpus — the sign
-        # corpora pay their own indexing cost, an unrelated source's sync
-        # is never ambushed. Elsewhere it arrives at the next full rebuild.
-        if SIGN_SOURCES.include?(slug) && !fulltext.table_exists?(PASSAGE_SIGNS_TABLE)
-          rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
-                                 progress: progress)
+        timed_sync_stage(ledger, slug, "postings_swaps",
+                         "index slice: #{slug} — postings/coverage swaps", progress) do
+          unless fulltext.table_exists?(CHAR_POSTINGS_TABLE)
+            rebuild_char_postings!(catalog: catalog,
+                                   fulltext: fulltext)
+          end
+          unless fulltext.table_exists?(PASSAGE_CHARS_TABLE)
+            rebuild_passage_chars!(catalog: catalog,
+                                   fulltext: fulltext)
+          end
+          # P77-r16b (the 2026-08-18 "hang"): the sign-coverage bootstrap is
+          # HEAVY (two tokenize+resolve passes over the whole ATF corpora —
+          # hours, not the char bootstrap's cheap regex sweep), so it fires
+          # ONLY when the synced source is itself a sign corpus — the sign
+          # corpora pay their own indexing cost, an unrelated source's sync
+          # is never ambushed. Elsewhere it arrives at the next full rebuild.
+          if SIGN_SOURCES.include?(slug) && !fulltext.table_exists?(PASSAGE_SIGNS_TABLE)
+            rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
+                                   progress: progress)
+          end
+          refresh_alignment(catalog, fulltext, alignments, source_id)
         end
-        refresh_alignment(catalog, fulltext, alignments, source_id)
         if lemmas_changed || reflexes_changed
-          progress&.stage("reflex root closure (corpus-wide — lemma rows changed)")
-          ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
+          timed_sync_stage(ledger, "corpus", "reflex_closure",
+                           "reflex root closure (corpus-wide — lemma rows changed)", progress) do
+            ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
+          end
         end
         count
+      end
+
+      # P78-r3: announce with the last sync's estimate, run, record the
+      # wall time (kind "sync"). A nil ledger announces bare and records
+      # nothing — the rebuild path keeps its own profiler lane.
+      def timed_sync_stage(ledger, scope, stage, label, progress, &)
+        eta = ledger && Nabu::Eta.for(ledger, kind: "sync", scope: scope, stage: stage)
+        progress&.stage(label, eta: eta)
+        started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        result = yield
+        if ledger
+          StageTimings.record!(ledger, kind: "sync", scope: scope, stage: stage,
+                                       seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
+        end
+        result
       end
 
       # Drop and rebuild the trigram fragment index (class note) over the live

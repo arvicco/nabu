@@ -9,10 +9,10 @@ reader puts on to work one tradition, and the sources that serve it.
 An axis is not a folder. It is a **tag** over the source list, and a source
 wears every tag it serves — the Vulgate sits at the Classicist's desk for
 its Latin and at the Biblical scholar's for its scripture; the UD treebanks
-answer to nine desks at once. Multi-membership is the point, not an
+answer to a dozen desks at once. Multi-membership is the point, not an
 accident to be tidied away.
 
-Everything below documents **shipped behaviour** — the twenty-three desks
+Everything below documents **shipped behaviour** — the twenty-four desks
 defined in `config/axes.yml`, their memberships declared per source in
 `config/sources.yml`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
@@ -47,7 +47,7 @@ build if the page and the registry ever disagree.
 
 ## The desks
 
-Twenty-three desks, in the ratified order of `config/axes.yml` (which is also
+Twenty-four desks, in the ratified order of `config/axes.yml` (which is also
 the order the command surfaces render). Each leads with its **persona** —
 the hat's one-line self-description, printed verbatim by `nabu list --axis`
 and `nabu sync` — then the membership rationale, then the member slugs the
@@ -213,13 +213,21 @@ The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kan
 
 **Members** (11): `e84000`, `otdo`, `soas-tibetan`, `old-tibetan`, `derge-kangyur`, `actib`, `derge-tengyur`, `mvp`, `tibetan-verbs`, `wiktionary-bo`, `nabu-data`
 
+### korean
+
+> The Koreanist — the hanmun state record and the first hangul vernacular.
+
+The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg.
+
+**Members** (7): `sillok`, `sjw`, `ko-wikisource-mk`, `goryeosa`, `goryeosa-jeoryo`, `bibyeonsa`, `itkc`
+
 ### sinitic
 
 > The Sinologist — the classical Chinese written world and its phonological deep past.
 
-Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, and the kaikki zh extract riding wiktionary-recon.
+Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — and, since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea).
 
-**Members** (12): `ud`, `wiktionary-recon`, `suttacentral`, `baxter-sagart`, `tshet-uinh`, `unihan`, `hdic`, `babelstone-ids`, `cbeta`, `kanripo`, `kr-gaiji`, `tls`
+**Members** (13): `ud`, `wiktionary-recon`, `suttacentral`, `baxter-sagart`, `tshet-uinh`, `unihan`, `hdic`, `babelstone-ids`, `cbeta`, `kanripo`, `kr-gaiji`, `tls`, `viet-wikisource`
 
 ### japonic
 

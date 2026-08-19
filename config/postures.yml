@@ -75,6 +75,62 @@ sources:
     script: {posture: implied}
 
   # ── codemap: refined universally, no Nabu-specific knowledge needed ────
+  sillok:
+    lect:
+      posture: codemap
+      note: lzh → zho/lit (the kanripo precedent — Literary Chinese as read
+        in Korea; a ko-tradition lect claim stays DELIBERATELY coarse until
+        a use case needs it, P78-1)
+    dating: {posture: dated, note: "per-volume 서기 year via MetadataDates :structured; per-day dates ride annotations raw"}
+    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    script: {posture: implied}
+  sjw:
+    lect: {posture: codemap, note: lzh → zho/lit (the sillok/kanripo precedent, P78-2)}
+    dating: {posture: dated, note: "per-member 서기 year via MetadataDates :structured; per-day dates + weather ride annotations"}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  viet-wikisource:
+    lect:
+      posture: codemap
+      note: lzh → zho/lit (the kanripo/sillok precedent — Literary Chinese as
+        written in Đại Việt; a vi-tradition lect claim stays DELIBERATELY
+        coarse until a use case needs it, P78-5)
+    dating: {posture: partial, note: "header year params only — the hịch carries 1284; the DVSKTT quyển
+        pages carry no machine year (compilation strata 1479/1665/1697 ride the docs, not claims)"}
+    places: {posture: unplaced}
+    script: {posture: implied, note: "Han script implied by lzh; Ext-B/rare-Han codepoints ride as-is"}
+  goryeosa:
+    lect:
+      posture: codemap
+      note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
+    dating: {posture: undatable, note: "P78-3 census: volume fronts carry no dateOccured (no 서기 line
+        exists in the zip); the leaf-grain 음/양 machine dates ride annotations raw — a future
+        extractor revisit, not a claim"}
+    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    script: {posture: implied}
+  goryeosa-jeoryo:
+    lect:
+      posture: codemap
+      note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
+    dating: {posture: undatable, note: "P78-3 census: root fronts carry coveragePeriod prose, never a
+        dateOccured (the bare machine year sits on the level3 year front, two levels down); the
+        per-article 음 dates ride annotations raw — a future extractor revisit, not a claim"}
+    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    script: {posture: implied}
+  bibyeonsa:
+    lect:
+      posture: codemap
+      note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
+    dating: {posture: undatable, note: "P78-3 census: book fronts carry only the 1959 print-edition
+        publication data; content years live on level2 value attrs and the untyped per-entry machine
+        dates riding annotations raw — a future extractor revisit, not a claim"}
+    places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
+    script: {posture: implied}
+  itkc:
+    lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent; upstream's 언어 "coc" is ITKC-internal, P78-7)}
+    dating: {posture: dated, note: "per-work 원문간행년 original print year via MetadataDates :structured"}
+    places: {posture: unplaced}
+    script: {posture: implied}
   kanripo:
     lect: {posture: codemap, note: lzh → zho/lit (Literary Chinese)}
     dating: {posture: undatable}
@@ -169,6 +225,13 @@ sources:
   derge-tengyur:
     lect: {posture: identity, note: xct}
     dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  ko-wikisource-mk:
+    lect: {posture: identity, note: okm IS Middle Korean (the MK layer; the hanmun
+        ruby passages ride lzh, sillok's codemap precedent, no separate claim)}
+    dating: {posture: dated, note: "P78-4: 머리말 연도 = 1447 (the print year, upstream's
+        machine date) via MetadataDates :structured — one envelope per work page"}
     places: {posture: unplaced}
     script: {posture: implied}
   # Variety-less languages as held (no registry stages to refine into):

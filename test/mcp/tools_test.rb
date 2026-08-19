@@ -1122,7 +1122,7 @@ module MCP
     def test_char_han_input_notes_the_missing_contract
       result = char_tools.call("nabu_char", { "query" => "棄" })
       refute result[:isError]
-      assert_match(/no machine contract yet/, text_of(result))
+      assert_match(/CLI-only for now/, text_of(result))
     end
 
     def test_char_without_any_sign_module_notes_the_sync_hint

@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The twenty-three research desks of the Nabu library — tags over the
+  The twenty-four research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The twenty-three desks
+## The twenty-four desks
 
 ### classical
 
@@ -190,11 +190,19 @@ The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kan
 
 [Open the tibetan desk]({{ '/axis/tibetan/' | relative_url }})
 
+### korean
+
+> The Koreanist — the hanmun state record and the first hangul vernacular.
+
+The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg.
+
+[Open the korean desk]({{ '/axis/korean/' | relative_url }})
+
 ### sinitic
 
 > The Sinologist — the classical Chinese written world and its phonological deep past.
 
-Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, and the kaikki zh extract riding wiktionary-recon.
+Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — and, since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea).
 
 [Open the sinitic desk]({{ '/axis/sinitic/' | relative_url }})
 

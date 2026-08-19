@@ -43,6 +43,24 @@ class ShellTest < Minitest::Test
     assert_includes error.message, "repository vanished"
   end
 
+  # P78-r4 (the goryeosa-jeoryo live crash): unzip's stderr carried a
+  # CP949-mojibake member name — raw bytes invalid in UTF-8 — and the
+  # message builder's String#strip raised Encoding::CompatibilityError,
+  # MASKING the real failure. The detail lane scrubs; the stderr attr
+  # keeps the raw bytes.
+  def test_invalid_utf8_stderr_never_crashes_the_message_builder
+    # Emit REAL invalid bytes via ruby — /bin/sh printf does not interpret
+    # \xHH escapes on every platform (dash doesn't; the CI Linux lesson).
+    error = assert_raises(Nabu::Shell::Error) do
+      Nabu::Shell.run(RbConfig.ruby, "-e",
+                      'STDERR.write("bad name: \xB0\xED\xB7\xC1.jpg".b); exit 50')
+    end
+    assert_includes error.message, "command failed (exit 50)"
+    assert_includes error.message, "bad name:", "the readable part of the detail survives"
+    assert error.message.valid_encoding?, "the MESSAGE is always valid UTF-8"
+    refute error.stderr.valid_encoding?, "the raw stderr bytes still ride the error object untouched"
+  end
+
   def test_multiline_stderr_flattens_to_one_bounded_message_line
     script = "i=0; while [ $i -lt 99 ]; do printf 'line %s of noise\\n' $i >&2; i=$((i+1)); done; exit 2"
     error = assert_raises(Nabu::Shell::Error) do

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE level1 SYSTEM "history.dtd">
+<level1 id="wqa">
+  <front>
+    <biblioData type="L">
+      <title>
+        <mainTitle>孝宗實錄</mainTitle>
+        <alternative> 孝宗大王實錄</alternative>
+      </title>
+    </biblioData>
+  </front>
+  <level2 id="wqa_000">
+    <front>
+      <biblioData type="T">
+        <title>
+          <mainTitle>總序</mainTitle>
+        </title>
+        <source>
+          <mainTitle type="태백산사고본">孝宗實錄 1책 1권</mainTitle>
+          <page begin="1장 A면"/>
+        </source>
+        <source>
+          <mainTitle type="국편영인본">孝宗實錄 35책</mainTitle>
+          <page begin="365면"/>
+        </source>
+        <subjectClass>왕실-국왕(國王)</subjectClass>
+      </biblioData>
+    </front>
+    <text>
+      <content>
+        <paragraph align="center">○<index num="1277709_0" ref="M_0062086" sort="K" type="이름">孝宗宣文章武神聖顯仁大王</index>, 在位十年, 壽四十一。</paragraph>
+      </content>
+    </text>
+  </level2>
+</level1>

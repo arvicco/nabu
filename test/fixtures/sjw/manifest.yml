@@ -1,0 +1,27 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# SJW (P78-2): hand-trimmed slices of two real members from the
+# data.go.kr 15064218 dump zip (smallest whole members are 0.5–19 MB).
+# Trim recipe: keep the level2 front verbatim + the first level3, its
+# first level4, and that day's first three level5 articles; every kept
+# byte upstream-verbatim. The upstream is one zip behind the
+# DataGoKrFetch resolution — per-file URLs do not exist.
+source: sjw
+adapter_test: test/adapters/sjw_test.rb
+retrieved: 2026-08-18
+files:
+  - path: 2nd_K00.sjw.y.xml
+    url: https://www.data.go.kr/data/15064218/fileData.do
+    whole: false
+    reason: Gojong accession year (1863) — the 座目 duty roster with inline 근무현황
+      glosses, two 기사 articles, the weather record on the day front
+  - path: 2nd_L04.sjw.y.xml
+    url: https://www.data.go.kr/data/15064218/fileData.do
+    whole: false
+    reason: Sunjong year 4 (1910) — the far end of the run, 일본연호 明治 in the year
+      front, same article shape
+  - path: history.dtd
+    url: https://www.data.go.kr/data/15064218/fileData.do
+    whole: true
+    reason: the shared family DTD as this zip ships it

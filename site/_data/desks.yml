@@ -82,10 +82,14 @@
   persona: The Tibetologist
   blurb: the Land of Snows from Dunhuang documents to the complete Derge canon
   members: 11
+- slug: korean
+  persona: The Koreanist
+  blurb: the hanmun state record and the first hangul vernacular
+  members: 7
 - slug: sinitic
   persona: The Sinologist
   blurb: the classical Chinese written world and its phonological deep past
-  members: 12
+  members: 13
 - slug: japonic
   persona: The Japanologist
   blurb: Old Japanese song to the Sino-Japanese dictionary tradition

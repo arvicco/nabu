@@ -38,6 +38,10 @@ module Nabu
     # temp_store=MEMORY — caused the measured ×1.6–3.4 load regression.
     LOAD_TX_BATCH = 1_000
 
+    # P78-r2: the indexer's six timed sub-stages — what the "fulltext index"
+    # umbrella estimate sums over (see index_eta).
+    INDEX_ETA_STAGES = %w[fts_lemma trigram passage_chars passage_signs alignment reflex].freeze
+
     # A source that was replayed, carrying its LoadReport. +quarantine+
     # (P18-7) is the DELTA-aware quarantine finding for this replay — nil when
     # the errored count matches the recorded ledger baseline, so a standing
@@ -121,8 +125,9 @@ module Nabu
       LectRulings.validate!(@config.lect_rulings_paths)
       db_existed = File.exist?(db_path)
       # P36-0: the always-on stage profiler. Cheap (a monotonic sample per stage
-      # boundary; per document for parse/insert), so it runs on every rebuild —
-      # observability only, never persisted, so rebuild-safe by construction.
+      # boundary; per document for parse/insert), so it runs on every rebuild.
+      # Since P78-r1 its facts persist to the LEDGER at run end (stage_timings
+      # — №R-21 territory, so still rebuild-safe: db/ stays f(canonical)).
       profile = RebuildProfile.new
       ledger = Store::Ledger.open_with_lift!(history_path: history_path, catalog_path: db_path)
       # Sidecars go WITH each db (Store.drop_database_files! — the 2026-08-02
@@ -139,7 +144,7 @@ module Nabu
       skips = []
       @registry.each_source do |entry|
         if replayable?(entry)
-          progress&.stage(entry.slug)
+          progress&.stage(entry.slug, eta: load_eta(ledger, entry.slug))
           # The :load roll-up is the authoritative per-source number (parse +
           # insert + adapter build + run-recorder); parse/insert split rides
           # inside it via the loader's component timers.
@@ -160,7 +165,7 @@ module Nabu
       # The timeline (P15-2) is f(canonical): rebuild it from canonical
       # into the fresh catalog AFTER every source is back (it joins by urn), so
       # `nabu rebuild` regenerates document_axes and the invariant holds.
-      progress&.stage("timeline")
+      progress&.stage("timeline", eta: corpus_eta(ledger, "timeline"))
       axes = profile.measure(scope: RebuildProfile::CORPUS, stage: :timeline) do
         Store::TimelineBuilder.rebuild!(catalog: db, canonical_dir: @config.canonical_dir)
       end
@@ -172,7 +177,7 @@ module Nabu
       Nabu::PlaceApply.run(catalog: db, canonical_dir: @config.canonical_dir)
       # The facet table (P17-2) projects from the documents just replayed
       # (their metadata_json is f(canonical)), so it regenerates here too.
-      progress&.stage("facets")
+      progress&.stage("facets", eta: corpus_eta(ledger, "facets"))
       facets = profile.measure(scope: RebuildProfile::CORPUS, stage: :facets) do
         Store::FacetBuilder.rebuild!(catalog: db)
       end
@@ -181,7 +186,7 @@ module Nabu
       # rows + the compiled rules + infer-dates) BEFORE the facet reads it.
       # db/lects.sqlite3 thereby needs no backup: losing it loses nothing
       # this stage cannot restore.
-      progress&.stage("lect journal")
+      progress&.stage("lect journal", eta: corpus_eta(ledger, "lect_journal"))
       profile.measure(scope: RebuildProfile::CORPUS, stage: :lect_journal) do
         journal = Store::LectJournal.open!(@config.lects_journal_path)
         begin
@@ -194,13 +199,13 @@ module Nabu
       # rulings, source overrides, codemap defaults — into one indexed axis.
       # Feature-detected: no nabu-lects module -> zero rows, clean skip (the
       # registry carries the journal overlay via load_default's :auto).
-      progress&.stage("lect facets")
+      progress&.stage("lect facets", eta: corpus_eta(ledger, "lect_facets"))
       profile.measure(scope: RebuildProfile::CORPUS, stage: :lect_facets) do
         Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config))
       end
       # P61-3: the artifact-script lane — pure function of stored codes +
       # config/artifact_scripts.yml, re-derived wholesale like the stats.
-      progress&.stage("artifact scripts")
+      progress&.stage("artifact scripts", eta: corpus_eta(ledger, "artifact_scripts"))
       profile.measure(scope: RebuildProfile::CORPUS, stage: :artifact_scripts) do
         Store::ArtifactScripts.derive!(db, config_path: @config.artifact_scripts_path,
                                            registry: Nabu::Lects.load_default(config: @config))
@@ -208,12 +213,12 @@ module Nabu
       # P42-0: the write-time census. The loader hooks maintained it through
       # the replay; the wholesale derivation here is the rebuildability
       # invariant made explicit — stats are exactly f(loaded catalog).
-      progress&.stage("source stats")
+      progress&.stage("source stats", eta: corpus_eta(ledger, "stats"))
       profile.measure(scope: RebuildProfile::CORPUS, stage: :stats) do
         Store::SourceStats.derive!(db, note: "derived (rebuild)")
       end
       # Reindex ONCE after all sources are back — the index is corpus-wide.
-      progress&.stage("fulltext index")
+      progress&.stage("fulltext index", eta: index_eta(ledger))
       # The alignment registry (config, not derived) rides in so alignment_refs
       # regenerates with the re-minted passage ids (architecture §10). The
       # profile threads in so the index's own sub-stages (fts+lemma / trigram /
@@ -231,18 +236,24 @@ module Nabu
       # batch scope recorded in config/link_scopes.yml (parallels needs the
       # fulltext index, hence after it). db/links.sqlite3 thereby needs no
       # backup.
-      progress&.stage("links")
+      progress&.stage("links", eta: corpus_eta(ledger, "links"))
       link_failures = profile.measure(scope: RebuildProfile::CORPUS, stage: :links) do
         rederive_links!(db, fulltext)
       end
       # P42-4: the fresh catalog+index have no planner statistics yet — ANALYZE
       # both so the very first query off a rebuilt db plans against real row
       # distributions (ops §10). A corpus stage in the always-on profile.
-      progress&.stage("analyze")
+      progress&.stage("analyze", eta: corpus_eta(ledger, "analyze"))
       analyzed = profile.measure(scope: RebuildProfile::CORPUS, stage: :analyze) do
         Store::AnalyzeReport.new(scope: "catalog + index",
                                  seconds: Store.analyze!(db) + Store.analyze!(fulltext))
       end
+      # P78-r1 (Q34): the profiler's facts now OUTLIVE the run — appended to
+      # the ledger's stage_timings so the next rebuild can render ETAs. The
+      # ledger is №R-21 territory (operational history, never dropped here),
+      # so the derivability law holds: db/ stays f(canonical) and the
+      # timings survive it by construction.
+      persist_stage_timings!(ledger, profile, outcomes, indexed)
       Result.new(db_path: db_path, db_existed: db_existed, outcomes: outcomes,
                  skips: skips, indexed: indexed, axes: axes, facets: facets, profile: profile,
                  analyzed: analyzed, link_failures: link_failures)
@@ -278,6 +289,47 @@ module Nabu
       finding = Health::QuarantineBaseline.delta_finding(ledger, entry.slug, errored: report.errored)
       Health::QuarantineBaseline.record!(ledger, entry.slug, errored: report.errored)
       Outcome.new(slug: entry.slug, report: report, quarantine: finding)
+    end
+
+    # P78-r2 (Q34): the estimates the stage announcements carry, read from
+    # the P78-r1 history. "fulltext index" is an umbrella over the indexer's
+    # six timed sub-stages, so its estimate sums them. No current-rows
+    # denominator here — a rebuild doesn't know its document counts until it
+    # parses, so the estimate is the last run verbatim (the CLI's in-stage
+    # extrapolation takes over once ticks flow). "place apply" has no
+    # profiler stage and stays bare.
+    def load_eta(ledger, slug)
+      Nabu::Eta.for(ledger, kind: "rebuild", scope: slug, stage: "load")
+    end
+
+    def corpus_eta(ledger, stage)
+      Nabu::Eta.for(ledger, kind: "rebuild", scope: "corpus", stage: stage)
+    end
+
+    def index_eta(ledger)
+      Nabu::Eta.for_stages(ledger, kind: "rebuild", scope: "corpus", stages: INDEX_ETA_STAGES)
+    end
+
+    # P78-r1 (Q34): append the profiler's facts to the ledger's stage_timings
+    # (append-only; the latest row governs the next run's ETA). +rows+ is the
+    # honest work-size denominator so the estimate can scale by drift: the
+    # replayed document count for a source's :load, the indexed passage count
+    # for corpus stages (they all scan the corpus). One timestamp for the
+    # whole batch — the rows describe one run, not fourteen moments.
+    def persist_stage_timings!(ledger, profile, outcomes, indexed)
+      return if profile.nil? || profile.empty?
+
+      at = Time.now
+      docs = outcomes.to_h { |outcome| [outcome.slug, outcome.report.added + outcome.report.updated] }
+      profile.source_scopes.each do |slug|
+        Store::StageTimings.record!(ledger, kind: "rebuild", scope: slug, stage: "load",
+                                            seconds: profile.seconds(scope: slug, stage: :load),
+                                            rows: docs[slug], at: at)
+      end
+      profile.corpus_stages.each do |stage|
+        Store::StageTimings.record!(ledger, kind: "rebuild", scope: "corpus", stage: stage.to_s,
+                                            seconds: profile.corpus_total(stage), rows: indexed, at: at)
+      end
     end
 
     # Same content-kind routing as SyncRunner (P11-4/P19-1/P24-1,

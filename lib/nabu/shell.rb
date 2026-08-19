@@ -73,7 +73,10 @@ module Nabu
 
     def self.failure(argv, exitstatus, stderr)
       message = "command failed (exit #{exitstatus}): #{argv.first}"
-      detail = stderr.to_s.strip.gsub(/\s+/, " ")
+      # P78-r4: stderr is UNTRUSTED BYTES (unzip echoes junk-named zip
+      # members raw — the goryeosa-jeoryo CP949 crash); scrub before any
+      # string surgery or the message builder masks the real failure.
+      detail = stderr.to_s.scrub("�").strip.gsub(/\s+/, " ")
       message << " — #{detail[0, DETAIL_CHARS]}" unless detail.empty?
       Error.new(message, status: exitstatus, stderr: stderr)
     end
