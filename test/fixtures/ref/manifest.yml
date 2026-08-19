@@ -1,0 +1,27 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All four fixtures are STRUCTURAL TRIMS of members of ReF-v1.0.2.tar.gz
+# (143,463,482 B; a raw GET of the url returns the tarball, not the member),
+# so whole: false — fetched for URL-liveness only, never byte-compared.
+# Re-extract from the tarball after any refresh (trim windows in README.md).
+source: ref
+adapter_test: test/adapters/ref_test.rb
+retrieved: 2026-08-19
+files:
+  - path: ref-mlu/F011.xml
+    url: https://zenodo.org/api/records/5793616/files/ReF-v1.0.2.tar.gz/content
+    whole: false
+    trim: structural trim of tarball member ReF-v1.0.2/ref-mlu/F011.xml (Die Geometria. Deutsch, Regensburg print 1487/88; header byte-for-byte, layout window lines l1-l13 = page 001r, 125 tokens, window ends on a token boundary); P80-5
+  - path: ref-mlu/F240.xml
+    url: https://zenodo.org/api/records/5793616/files/ReF-v1.0.2.tar.gz/content
+    whole: false
+    trim: structural trim of tarball member ReF-v1.0.2/ref-mlu/F240.xml (Thüringer Spiele — the duplicate-line-label exemplar; header byte-for-byte, layout window lines l55-l70 = page 090 including the adjacent duplicate label 08 pair, 175 tokens); P80-5
+  - path: ref-mlu/F313.xml
+    url: https://zenodo.org/api/records/5793616/files/ReF-v1.0.2.tar.gz/content
+    whole: false
+    trim: structural trim of tarball member ReF-v1.0.2/ref-mlu/F313.xml (Heiltum Bamberg — the named-column exemplar; header byte-for-byte, layout window lines l70-l84 spanning 003r into named column 003va, 60 tokens, wholly auto-annotated); P80-5
+  - path: ref-rub/F166.xml
+    url: https://zenodo.org/api/records/5793616/files/ReF-v1.0.2.tar.gz/content
+    whole: false
+    trim: structural trim of tarball member ReF-v1.0.2/ref-rub/F166.xml (Farbrezepte für Garne — the ReF.RUB exemplar; header byte-for-byte, layout window lines l1-l15 = page 1r, 77 tokens, title shifttag kept); P80-5

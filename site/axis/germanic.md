@@ -36,6 +36,7 @@ A source wears every desk it serves — these eleven answer this desk. Holdings 
 | `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
+| `ref` | texts | attribution | not yet wired | nothing held yet |
 | `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |

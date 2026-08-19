@@ -153,7 +153,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 64, lect.size,
+    assert_equal 65, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3, " \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -161,7 +161,9 @@ class PosturesTest < Minitest::Test
                  "the shadowing rule, working; disco ADDED P77-4; P78 ADDED SEVEN — sillok+sjw+" \
                  "the goryeosa family three+viet-wikisource all codemap on the kanripo lzh " \
                  "precedent, ko-wikisource-mk identity okm; itkc ADDED P78-7 — codemap; " \
-                 "corpus-corporum ADDED P80-1/2 — identity, the D57-f mixed-Latin class)"
+                 "corpus-corporum ADDED P80-1/2 — identity, the D57-f mixed-Latin class; ref " \
+                 "ADDED P80-5 — pending on the de:early nabu-lects mint, the fornsvenska " \
+                 "add-then-retire shape)"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -171,7 +173,11 @@ class PosturesTest < Minitest::Test
     # mints) machine-postures both sources. Zero pendings again; disco
     # joined as identity (the one-tag practice).
     # №R-34 (2026-08-18) retired achemenet's pending row into the
-    # achemenet-nb machine rule — the pending class is back to zero.
-    assert_equal({ "identity" => 43, "dates" => 10, "codemap" => 11 }, by_posture)
+    # achemenet-nb machine rule — the pending class was back to zero.
+    # P80-5 reopened it honestly: ref pends on the de:early nabu-lects
+    # mint (ENHG has no ISO code; the mint aggregates into the next
+    # lect-package PR, then a ruled whole-source rule retires the row —
+    # the fornsvenska add-then-retire shape).
+    assert_equal({ "identity" => 43, "dates" => 10, "codemap" => 11, "pending" => 1 }, by_posture)
   end
 end

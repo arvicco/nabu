@@ -445,6 +445,66 @@ class ZipFetchTest < Minitest::Test
     assert_equal "alpha v2", File.read(File.join(@dir, "a.json"))
     refute Dir.exist?(@attic), "nothing was atticked"
   end
+
+  # --- tar.gz archives (P80-5: the ReF Zenodo deposit ships .tar.gz) --------
+
+  # Build a tar.gz whose single top-level dir is proj/ containing +files+
+  # and stub +url+ with it (the zip_body mirror, via the system `tar`).
+  def stub_tar_gz(files, last_modified: LAST_MODIFIED, url: URL)
+    body = Dir.mktmpdir("tar-fetch-upstream") do |staging|
+      files.each do |rel, content|
+        path = File.join(staging, "proj", rel)
+        FileUtils.mkdir_p(File.dirname(path))
+        File.write(path, content)
+      end
+      tarball = File.join(staging, "proj.tar.gz")
+      Nabu::Shell.run("tar", "-czf", tarball, "proj", chdir: staging)
+      File.binread(tarball)
+    end
+    headers = { "Content-Type" => "application/gzip" }
+    headers["Last-Modified"] = last_modified if last_modified
+    stub_request(:get, url).to_return(status: 200, body: body, headers: headers)
+  end
+
+  def test_tar_gz_archive_unpacks_with_the_single_top_dir_stripped
+    stub_tar_gz({ "a.xml" => "<text/>", "sub/b.xml" => "<text2/>" })
+    result = Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :tar_gz)
+    assert_equal "<text/>", File.read(File.join(@dir, "a.xml"))
+    assert_equal "<text2/>", File.read(File.join(@dir, "sub", "b.xml"))
+    refute result.not_modified
+    assert_equal 64, result.sha.length, "the tarball body sha256 is the pin"
+  end
+
+  def test_tar_gz_archive_honors_retention_and_304_replay
+    stub_tar_gz({ "a.xml" => "v1", "doomed.xml" => "old" })
+    Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :tar_gz)
+    stub_tar_gz({ "a.xml" => "v2" }, last_modified: "Sun, 02 Mar 2026 10:00:00 GMT")
+    result = Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :tar_gz)
+    assert_equal "v2", File.read(File.join(@dir, "a.xml"))
+    refute File.exist?(File.join(@dir, "doomed.xml")), "upstream deletion applies after retention"
+    assert_equal "old", File.read(File.join(@attic, "doomed.xml")), "the dropped file is atticked"
+    assert_equal ["doomed.xml"], result.atticked
+    stub_request(:get, URL).to_return(status: 304)
+    replay = Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :tar_gz)
+    assert replay.not_modified
+    assert_equal result.sha, replay.sha, "a 304 replays the stored pin"
+  end
+
+  def test_a_corrupt_tar_gz_raises_without_salvage
+    stub_request(:get, URL).to_return(status: 200, body: "not a tarball",
+                                      headers: { "Content-Type" => "application/gzip" })
+    error = assert_raises(Nabu::ZipFetch::Error, Nabu::Shell::Error) do
+      Nabu::ZipFetch.sync!(url: URL, dir: @dir, attic_dir: @attic, archive: :tar_gz)
+    end
+    refute_empty error.message
+    refute File.exist?(@dir), "a failed unpack never touches the live tree"
+  end
+
+  def test_unknown_archive_kind_is_rejected_loudly
+    assert_raises(ArgumentError) do
+      Nabu::ZipFetch.new(url: URL, dir: @dir, attic_dir: @attic, archive: :seven_zip)
+    end
+  end
 end
 
 # Vendored-intermediate contract: the default store must verify every PEM in
