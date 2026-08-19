@@ -49,8 +49,11 @@ class ShellTest < Minitest::Test
   # MASKING the real failure. The detail lane scrubs; the stderr attr
   # keeps the raw bytes.
   def test_invalid_utf8_stderr_never_crashes_the_message_builder
+    # Emit REAL invalid bytes via ruby — /bin/sh printf does not interpret
+    # \xHH escapes on every platform (dash doesn't; the CI Linux lesson).
     error = assert_raises(Nabu::Shell::Error) do
-      Nabu::Shell.run("/bin/sh", "-c", "printf 'bad name: \\xB0\\xED\\xB7\\xC1.jpg' >&2; exit 50")
+      Nabu::Shell.run(RbConfig.ruby, "-e",
+                      'STDERR.write("bad name: \xB0\xED\xB7\xC1.jpg".b); exit 50')
     end
     assert_includes error.message, "command failed (exit 50)"
     assert_includes error.message, "bad name:", "the readable part of the detail survives"
