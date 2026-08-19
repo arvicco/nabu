@@ -47,6 +47,7 @@ module Nabu
           "itkc" => :structured,   # P78-7: the 원문간행년 original print year, per work
           "bdcamoes" => :structured, # P80-7: the header's YY: publication year, per work;
           #                            unresolved "18??" marks carry raw only and mint nothing
+          "ctilc" => :structured,  # P80-8: the ANY publication year, one-year envelope
           "bfm" => :iso_keys,
           "croala" => :year_range,
           "ebl" => :period_label

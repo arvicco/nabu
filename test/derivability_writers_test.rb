@@ -50,10 +50,14 @@ class DerivabilityWritersTest < Minitest::Test
   # canonical gateway, the burman/wiki_fetch law kind.
   # corpus_corporum_fetch (P80-2) writes canonical/<slug>/texts/ +
   # attic + its state checkpoint inside Adapter#fetch — the
-  # elephantine_fetch law kind. ANY new file
+  # elephantine_fetch law kind. The P80-8 ctilc
+  # adapter writes its crawled works (tmp+rename) and their replacement
+  # attic copies into canonical/ inside Adapter#fetch — the riig crawl
+  # law kind. ANY new file
   # here is a deliberate allowlist decision, not a drive-by.
   WRITER_ALLOWLIST = %w[
-    nabu/adapters/bfm.rb nabu/adapters/kitab.rb nabu/adapters/oracc.rb
+    nabu/adapters/bfm.rb nabu/adapters/ctilc.rb
+    nabu/adapters/kitab.rb nabu/adapters/oracc.rb
     nabu/adapters/riig.rb nabu/adapters/rundata.rb
     nabu/adapters/sabellic_loans.rb nabu/adapters/trismegistos.rb
     nabu/cantigas_fetch.rb nabu/corpus_corporum_fetch.rb

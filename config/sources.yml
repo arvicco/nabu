@@ -3601,6 +3601,15 @@ fornsvenska:
   wired: true    # P77 first sync owner-verified (155 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
   sync_policy: manual
 
+# P80-8
+ctilc:
+  adapter: Nabu::Adapters::Ctilc
+  axes: [romance]
+  wired: false
+  # New works enter the public domain each January (Llei 21/2014 rolling
+  # horizon) — a yearly owner-fired re-sync re-diffs the listing.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
