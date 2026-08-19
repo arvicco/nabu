@@ -274,6 +274,71 @@ module Nabu
       "otb" => TIBETAN_CASE_FOLD
     }.freeze
 
+    # == Query-side fold scopes (P79-1) — which QUERY scripts a rule may see
+    #
+    # Index-side folding is language-scoped: search_form applies exactly ONE
+    # language's extras, the document's own. The query union has no language,
+    # and before P79-1 it applied EVERY rule to every query — but a rule that
+    # is correct for its own language's TEXT can be destructive on a foreign
+    # SCRIPT: the gml delete list carries literal α/β (ReN edition markers in
+    # gml text), so the union folded the Greek query αγαπη → γπη, and Greek-
+    # numeral passages containing ΓΠΗ won bm25 as tiny exact hits above every
+    # real ἀγάπη match (owner repro 2026-08-19, the P79-1 defect). Each rule
+    # therefore declares the query script(s) it is safe to touch, keyed
+    # exactly like LANGUAGE_FOLDS, and query_forms applies a rule only when
+    # the query's dominant script (query_script below) is in scope. The
+    # cannot-miss argument survives: a query spelled the way language L's
+    # documents spell it is written in L's script, so the union still carries
+    # extra_L(generic(query)) for it. The INDEX side is untouched — no stored
+    # text_normalized byte changes, no rebuild.
+    #
+    # xct/bod/otb declare tibetan AND latin: their case fold rides the script
+    # neutralization (a Tibetan-script query transcodes to capital-bearing
+    # EWTS that must lower), while a typed Wylie query is downcased before
+    # any fold reaches it — declared for the documented symmetry, provably a
+    # no-op there.
+    QUERY_FOLD_SCRIPTS = {
+      "grc" => %i[greek],
+      "lzh" => %i[han], "och" => %i[han], "jpn" => %i[han],
+      "cop" => %i[coptic],
+      "lat" => %i[latin], "akk" => %i[latin], "sux" => %i[latin],
+      "ang" => %i[latin], "sl" => %i[latin], "gmh" => %i[latin],
+      "gml" => %i[latin],
+      "ara" => %i[arabic], "fas" => %i[arabic],
+      "gem" => %i[latin], "ine" => %i[latin], "sla" => %i[latin],
+      "itc" => %i[latin], "iir" => %i[latin],
+      "egy" => %i[latin],
+      "xct" => %i[tibetan latin], "bod" => %i[tibetan latin],
+      "otb" => %i[tibetan latin]
+    }.freeze
+
+    # The script inventory queries classify against: every script a fold
+    # scope names, plus the other scripts the corpus carries so dominance is
+    # judged against the full set. Kana/hangul ride the han bucket (they mix
+    # freely with Han inside one query). Letters of unlisted scripts
+    # (cuneiform, glagolitic, ...) count for no bucket: their queries read
+    # :unknown and get no per-language extras.
+    QUERY_SCRIPT_PATTERNS = {
+      latin: /\p{Latin}/, greek: /\p{Greek}/, coptic: /\p{Coptic}/,
+      cyrillic: /\p{Cyrillic}/, hebrew: /\p{Hebrew}/, arabic: /\p{Arabic}/,
+      devanagari: /\p{Devanagari}/, tibetan: /\p{Tibetan}/,
+      han: /[\p{Han}\p{Hiragana}\p{Katakana}\p{Hangul}]/
+    }.freeze
+    private_constant :QUERY_SCRIPT_PATTERNS
+
+    # The query's dominant script: the pattern matching strictly the most
+    # characters. No match at all, or a tie (a genuinely mixed query), reads
+    # :unknown — conservative: such a query gets NO per-language extras, only
+    # the generic fold plus the script neutralizations (transcoders keyed to
+    # their own script's codepoints, no-ops elsewhere by construction).
+    def self.query_script(str)
+      counts = QUERY_SCRIPT_PATTERNS.transform_values { |pattern| str.scan(pattern).length }
+      script, best = counts.max_by { |_, count| count }
+      return :unknown if best.zero? || counts.count { |_, count| count == best } > 1
+
+      script
+    end
+
     # == Script neutralization (P27-2; conventions §9) — the cross-script fold
     #
     # Some corpora spell ONE language in TWO scripts: SARIT stores Devanagari
@@ -369,8 +434,9 @@ module Nabu
     # Search ORs the variants in the FTS MATCH. Why this cannot miss: a
     # passage in language L is indexed as search_form(text, L) =
     # extra_L(generic(text)), and this union always contains
-    # extra_L(generic(query)) — so a query spelled the way the source spells
-    # it folds, on that variant, exactly the way the document was folded.
+    # extra_L(generic(query)) for any query written in L's script — which a
+    # query spelled the way the source spells it always is — so it folds, on
+    # that variant, exactly the way the document was folded.
     # And why it cannot break other languages: the variants are ORed, so the
     # generic variant still matches languages whose rule table is empty
     # (Gothic "jah" stays findable even though the lat variant folds the
@@ -380,14 +446,20 @@ module Nabu
     # a language's scripts covers that language's indexed skeleton (the same
     # cannot-miss argument, with neutralization folded into "how the document
     # was folded").
+    # P79-1: the union is SCRIPT-SCOPED — rule L's extra applies only when
+    # the query's dominant script is in QUERY_FOLD_SCRIPTS[L], so no rule
+    # can delete or alter foreign-script letters at query time (the γπη
+    # regression; rationale on QUERY_FOLD_SCRIPTS above). Neutralizations
+    # stay unscoped: they are their-own-script transcoders, no-ops elsewhere.
     def self.query_forms(query)
       src = nfc(query).downcase
       generic = fold_diacritics(src)
+      script = query_script(src)
       keys = LANGUAGE_FOLDS.keys | SCRIPT_NEUTRALIZATIONS.keys
       variants = keys.map do |key|
         neutralizer = SCRIPT_NEUTRALIZATIONS[key]
         folded = neutralizer ? fold_diacritics(neutralizer.call(src).first) : generic
-        extra = LANGUAGE_FOLDS[key]
+        extra = (LANGUAGE_FOLDS[key] if QUERY_FOLD_SCRIPTS.fetch(key, []).include?(script))
         extra ? extra.call(folded) : folded
       end
       [generic, *variants].uniq
