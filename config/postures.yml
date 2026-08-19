@@ -573,3 +573,36 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+
+  # ── P80-6: the small-languages pack (modern-text corpora) ──────────────
+  lo-congres:
+    lect:
+      posture: identity
+      note: bare oci, DELIBERATELY COARSE — the registry does not distinguish
+        Occitan dialects; upstream's variety code rides as the dialect facet.
+        (oci→oc codemap alias is a reported mint candidate, the №11 suite.)
+    dating: {posture: undatable, note: modern news sentences, no per-item dates upstream}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  cv-sardinian:
+    lect: {posture: identity, note: bare srd — the registry's own identity example;
+        modern Sardinian sentence text}
+    dating: {posture: undatable, note: crowd-collected modern sentences, no per-item dates}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  salom:
+    lect: {posture: identity, note: bare lad — modern Judeo-Spanish press,
+        Latin-script Turkish-style orthography}
+    dating: {posture: undatable, note: sentences segmented and shuffled upstream —
+        the 2022-01 extraction stamp rides the urn, per-article dates unrecoverable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  aranese:
+    lect:
+      posture: identity
+      note: bare oci for the Aranese side (a Gascon variety — the lo-congres
+        DELIBERATELY COARSE stance), spa siblings; the corpus is mainly
+        synthetic (card's own words) — held as such, never as attestation
+    dating: {posture: undatable, note: modern MT-oriented sentence pairs, no dates upstream}
+    places: {posture: unplaced}
+    script: {posture: implied}
