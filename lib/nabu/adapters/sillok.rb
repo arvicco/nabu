@@ -61,6 +61,22 @@ module Nabu
         MANIFEST
       end
 
+      # P79-2: data.go.kr serves no Last-Modified and re-mints the download
+      # URL (atchFileId) on every artifact replacement — the probe resolves
+      # the CURRENT url per dataset and drifts on URL identity against the
+      # ZipFetch state file.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        DATASETS.map do |dataset|
+          Nabu::Adapter::HttpProbeTarget.new(
+            label: "#{dataset[:subdir]} (#{dataset[:pk]})", zip_url: nil, metadata_url: nil,
+            state_subdir: dataset[:subdir],
+            resolver: -> { Nabu::DataGoKrFetch.resolve(dataset[:pk]) }
+          )
+        end
+      end
+
       # +resolver+/+zip_fetch_factory+ exist for the tests (no network in
       # the suite, ever); no-arg construction stays the registry contract.
       def initialize(resolver: Nabu::DataGoKrFetch.method(:resolve),

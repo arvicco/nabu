@@ -82,6 +82,18 @@ module Nabu
         )
       end
 
+      # P79-2: the crawl's entry page stands for the corpus — HEAD it for
+      # liveness; TitusFetch's own state file (url + sha) feeds the
+      # URL-identity drift lane.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "avest.htm entry", zip_url: ENTRY_URL, metadata_url: nil,
+          state_subdir: "", state_file: Nabu::TitusFetch::STATE_FILE
+        )]
+      end
+
       # Enumerate the fetched text pages as DocumentRefs (one per page). ref.id
       # IS the document urn (the conformance identity the sync breaker relies on).
       def discover(workdir)

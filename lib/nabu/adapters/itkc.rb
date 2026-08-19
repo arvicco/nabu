@@ -80,6 +80,20 @@ module Nabu
         MANIFEST
       end
 
+      # P79-2: the data.go.kr resolver posture (see Sillok) — one target
+      # per registered dataset, drifting on URL identity.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        DATASETS.map do |dataset|
+          Nabu::Adapter::HttpProbeTarget.new(
+            label: "#{dataset[:work]} (#{dataset[:pk]})", zip_url: nil, metadata_url: nil,
+            state_subdir: dataset[:pk],
+            resolver: -> { Nabu::DataGoKrFetch.resolve(dataset[:pk]) }
+          )
+        end
+      end
+
       def initialize(resolver: Nabu::DataGoKrFetch.method(:resolve),
                      zip_fetch_factory: Nabu::ZipFetch.method(:new))
         super()

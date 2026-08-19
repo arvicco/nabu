@@ -57,6 +57,17 @@ module Nabu
         MANIFEST
       end
 
+      # P79-2: one atlantides.org dump via FileFetch — HEAD for liveness,
+      # Last-Modified / URL identity for drift via .file-fetch.json.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "pleiades-places-latest.json.gz", zip_url: DUMP_URL, metadata_url: nil,
+          state_subdir: "", state_file: Nabu::FileFetch::STATE_FILE
+        )]
+      end
+
       # The dump derives the catalog place index at sync/rebuild time
       # (P45-6): SyncRunner runs the producer after every pleiades sync,
       # Rebuild after replay — the class-note contract.

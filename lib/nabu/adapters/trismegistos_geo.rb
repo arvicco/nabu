@@ -121,6 +121,12 @@ module Nabu
                           "text source — its data derives into the place index; parse is unreachable"
       end
 
+      # P79-2: a ManualDrop source has NO unattended upstream to probe —
+      # the geo export is account-gated, the owner drops it by hand. Empty
+      # repo list routes the remote probe to the vendored/local posture
+      # (alive = the canonical tree is present), the sabellic-loans mold.
+      def self.upstream_repo_urls = []
+
       # force: is the Adapter#fetch signature; a manual ingest has no guard
       # to override (replacement always attics), so it is accepted and unused.
       def fetch(workdir, progress: nil, force: false) # rubocop:disable Lint/UnusedMethodArgument

@@ -45,6 +45,17 @@ module Nabu
         MANIFEST
       end
 
+      # P79-2: one unicode.org dump via FileFetch — HEAD for liveness,
+      # Last-Modified (unicode.org serves it) or URL identity for drift.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "Unikemet.txt", zip_url: DUMP_URL, metadata_url: nil,
+          state_subdir: "", state_file: Nabu::FileFetch::STATE_FILE
+        )]
+      end
+
       # A feature module mints no documents (the osl/cigs shape).
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block

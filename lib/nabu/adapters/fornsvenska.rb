@@ -76,6 +76,19 @@ module Nabu
         MANIFEST
       end
 
+      # P79-2: seven per-part FileFetch targets (the ccmh mold) — one
+      # probe target per part, each against its own state file.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        PARTS.map do |part|
+          Nabu::Adapter::HttpProbeTarget.new(
+            label: part, zip_url: "#{BASE_URL}/#{part}.xml.bz2", metadata_url: nil,
+            state_subdir: part, state_file: Nabu::FileFetch::STATE_FILE
+          )
+        end
+      end
+
       # One DocumentRef per <text>, parts in PARTS order, texts in file
       # order. A workdir without the files (pre-fetch) yields nothing.
       def discover(workdir, &block)
