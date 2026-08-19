@@ -1183,7 +1183,21 @@ class CLITest < Minitest::Test
       catalog.disconnect
       out, _err, status = with_config(config) { run_cli(%w[list shelf]) }
       assert_nil status
-      assert_match(/· sync manual · wired$/, out, "registry wired: true must win over the stale db row")
+      assert_match(/· sync manual · wired · enabled$/, out,
+                   "registry wired: true must win over the stale db row; the card states enablement (P78-r7)")
+    end
+  end
+
+  # P78-r7 (owner: "why doesn't it indicate if the source is enabled?"):
+  # the card STATES the box-enablement fact — the hint's silence was not
+  # legible. Un-enabled reads loud, with the on-ramp hint beneath.
+  def test_list_card_states_not_enabled_when_the_profile_excludes_the_source
+    with_list_corpus do |config|
+      Nabu::Profile.new([]).save(config.profile_path)
+      out, _err, status = with_config(config) { run_cli(%w[list shelf]) }
+      assert_nil status
+      assert_match(/· sync manual · wired · NOT ENABLED on this box \(nabu enable shelf\)$/, out,
+                   "the card states the fact AND carries the on-ramp inline")
     end
   end
 
