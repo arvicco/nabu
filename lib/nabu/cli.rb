@@ -1460,10 +1460,11 @@ module Nabu
         end
       else
         registry = Nabu::SourceRegistry.load(config.sources_path)
-        print_list_card(query.card(slug), registry[slug])
+        view = focus_view(config, registry, catalog: catalog)
+        print_list_card(query.card(slug), registry[slug], enabled: card_enablement(view, registry[slug], slug))
         # A named SOURCE is a scoped request too: hint the enable on-ramp only
         # when that source is not yet enabled (silence otherwise).
-        print_source_enable_hint(focus_view(config, registry, catalog: catalog), registry, slug)
+        print_source_enable_hint(view, registry, slug)
       end
     rescue Nabu::Query::List::Error => e
       # Unknown source slug: a clean stderr line naming the valid slugs —
@@ -5182,10 +5183,10 @@ module Nabu
         prose[/\A.*?[.!?](?=\s)/] || prose
       end
 
-      def print_list_card(card, entry)
+      def print_list_card(card, entry, enabled: nil)
         say "#{card.slug} — #{card.name}"
         wrap_text(card.description).each { |line| say "  #{line}" } if card.description
-        say "  adapter #{card.adapter_class}#{registry_fragment(entry)}"
+        say "  adapter #{card.adapter_class}#{registry_fragment(entry)}#{enablement_fragment(enabled, card.slug)}"
         credit = card.license_text.to_s.strip
         say "  license #{card.license_classes.join(',')}#{" · #{truncate_line(credit)}" unless credit.empty?}"
         say "  #{card_counts(card)}"
@@ -5196,6 +5197,25 @@ module Nabu
           say "  dict #{dict.slug} — #{dict.title} [#{dict.language}] entries=#{dict.entries}"
         end
         print_card_axes(card)
+      end
+
+      # P78-r7 (owner: "why doesn't it indicate if the source is enabled?"):
+      # the card STATES the box-enablement fact instead of implying it by the
+      # hint's silence — enablement gates whether `sync` will even run, so a
+      # dossier card without it is incomplete. nil = not an enable target
+      # (shelf/module/unregistered).
+      def card_enablement(view, entry, slug)
+        return nil if entry.nil? || entry.shelf? || entry.feature_module?
+
+        view.resolution.slugs.include?(slug)
+      end
+
+      def enablement_fragment(enabled, slug)
+        case enabled
+        when true then " · enabled"
+        when false then " · NOT ENABLED on this box (nabu enable #{slug})"
+        else ""
+        end
       end
 
       # Registry facts on the header line; a catalog source missing from the
