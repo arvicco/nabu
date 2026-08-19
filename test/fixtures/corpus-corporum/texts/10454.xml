@@ -1,0 +1,358 @@
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+        schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+     <fileDesc>
+         <titleStmt>
+              <title>Abbrevatia historia Francorum</title>
+              <author ref="http://viaf.org/viaf/75436192">Petrus Bibliothecarius<date>fl. 892</date> </author>
+         </titleStmt>
+         <editionStmt>
+              <edition>early modern edition, no apparatus</edition>
+              <editor>Jacques-Paul Migne</editor>
+         </editionStmt>
+         <publicationStmt>
+                 <publisher>J. P. Migne</publisher>
+                 <pubPlace>Parisiis</pubPlace>
+                 <date>1853</date>
+              </publicationStmt>
+          <seriesStmt>
+           <title>Patrologia Latina, vol. 151</title>
+           <idno>PetBib.AbHiFr</idno>
+          </seriesStmt>
+          <notesStmt>
+  			<note/>
+ 		  </notesStmt>
+  		<sourceDesc>
+    		<p>Patrologia Latina</p>
+  		</sourceDesc>
+ 	</fileDesc>
+      <encodingDesc>
+         <projectDesc>
+        <p>this file was encoded in TEI xml for the University of Zurich's <emph>Corpus Corporum</emph> project (www.mlat.uzh.ch) by Ph. Roelli in 2019</p>
+      </projectDesc>
+          <editorialDecl>
+             <normalization>
+          <p>Classical Latin orthography</p>
+        </normalization>
+          </editorialDecl>
+      </encodingDesc>
+ 	  <profileDesc>
+		<creation>
+ 		<date/>
+  		</creation>
+  	  <langUsage>
+  		<language ident="lat">latin</language>
+  	  </langUsage>
+  	  <textClass>
+  		<keywords>
+ 		 <list>
+ 		  <item/>
+		  <item/>
+	  	 </list>
+  		</keywords>
+  		<keywords scheme="genre">
+  		 <list>
+   			<item/>
+  		</list>
+  		</keywords>
+  		<keywords scheme="period">
+ 		 <list>
+   			<item/>
+  		 </list>
+  		</keywords>
+ 	   </textClass>
+ 	</profileDesc>
+ </teiHeader>
+<text>
+ <body>	
+
+<note>
+        <div1>
+          <head>ADMONITIO</head>
+<p>Historiam hanc, Chesnio, qui eam primus tomo III SS. Francicorum p. 540 edidit, testante, Gabriel
+Naudaeus Romae ex codice quodam exscripsit. De auctore operis nemini constat; codicis Annalium Fuldensium
+tertii, Vindobonensis scilicet n. 600, ad verbum fere vestigia legens, nihil sibi proprium continet
+excepta hac anni 749 <hi>Pipinus remansit in regno una cum fratre Griphone, et rem regni optime gesserunt</hi> et
+alia anni 878 sententia <hi>Slavi Dalmatae Soavi</hi> (Sorabi) <hi>Bohemi idem sunt.</hi> Temporum praeterea computatione
+perturbata, nullius jam auctoritatis haberi poterit. Bouqueti sententiam, auctorem circa saeculi noni exitum
+vixisse, inde quod una cum Annalibus Fuldensibus opus suum deponere coactus sit, ortam, ideoque nihil ei
+tribuendum esse censeo.</p>
+<p>
+            <pb n="1279A"/>Arinulfus Metensis civitatis antistes genuit Anchisum,
+Anchisus Pipinum regem, qui post mortem
+Wolfaldi ducis Austriae partem regebat, regnumque
+Francorum obtinuit cum regibus Huludavico, Hildeberto
+et Dagoberto; moritur anno 2 Anastasii imperatoris,
+ab Incarnatione Domini 715.</p>
+<p>Carolus, Pipini filius ex Alberda uxore, tenuit regnum
+Francorum annis 27.</p>
+<p>Plidrudis, Carli noverca, publica custodia servari
+jubet. Hic divino auxilio liberatus, primum contra
+Ratpodum regem Fresonum bellum gerit, suo exercitu
+non incolumi, anno 716.</p>
+<p>Carlus Rangifridum et Hilpricum regem Parisios
+usque terga vertentes persequitur die palmarum. Hoc
+tempore Wilfridus episcopus ordinatur, Bonifacii sibi
+<pb n="1279B"/>
+nomen tradidit; mittitur a Gregorio papa in Franciam,
+ut praedicaret verbum Dei.</p>
+<p>Anno 717 Rangifridus et Hilpricus rex Coloniensium
+finem et regiones contiguas Rheno vastant;
+arreptis a Plidruda muneribus revertuntur.</p>
+<p>Anno 718 Rangifridus et Hilpricus Eudone duce
+Aquitanorum a Carlo rursus superati, Carlus thesaurum
+Plidrudae novercae accepit, et regem constituit
+Hlotharium. Sarracenos Galliam devastantes pluribus
+proeliis Carlus vicit et fugavit.</p>
+<p>Carlus Pannonicos, Alamannos pacificos habuit.</p>
+<p>Carlus anno regni sui 27 moritur Parisiis, apud
+sanctum Dionysium sepelitur, et fuit damnatus; testis
+est Higmarus in prologo in Vita beati Remigii.</p>
+<p>Sanctus Eucharius Aurelianensis episcopus in monasterio
+<pb n="1279C"/>
+sancti Trudonis requiescit; hic in oratione
+vidit Carlum in inferno.</p>
+<p>Sanctus Eucharius post orationem sanctum Bonifacium
+et Phulradum abbatem Sancti Dionysii et capellanum
+<pb n="1280A"/>
+regis Pipini vocavit, et quaecumque de Carlo
+viderat exposuit, signumque dedit, ut iret ad sepulchrum,
+quod illic minime Carli corpus inveniretur.
+Illi sepulchrum aperuerunt, ex quo exivit draco, et
+totum est inventum denigratum.</p>
+<p>Pipinus et Carlomannus filii Carli regnum dividunt
+anno 741.</p>
+<p>Carlomannus post praeclara facinora Romam venit
+anno 747, et in Casino monte monachus efficitur.</p>
+<p>Pipinus remansit in regno una cum fratre Griphone,
+et rem regni optime gesserunt.</p>
+<p>Anno 751 Pipinus legatos Romam misit ad Zachariam
+pontificem maximum, ut qui ex antiqua stirpe
+Merovingiorum fuerit, regnaret in Gallia; exaudit
+pontifex, et mandat Gallis, ut in eorum regem haberent
+<pb n="1280B"/>
+Pipinum.</p>
+<p>Anno 753 Stephanus pontifex auxilium contra
+Haistulphum regem Longobardorum petiit a Pipino,
+a quo venerabiliter susceptus est; apud Parisios duos
+Pipini filios Carlmannum et Carlum unxit reges.
+Carlmannus decessit Lugduni, is qui fuerat monachus,
+anno 754, et Pipinus in Italia Haistulphum
+superavit, et ut redderet bona ecclesiae Stephano
+pontifici maximo coegit, et eum Papiae inclusit. Stephanus
+Romam revertitur.</p>
+<p>Anno 755 Haistulphus sacramenta mentitus Romam
+obsedit, et omnia quae circa urbem erant discerpsit.</p>
+<p>Anno 756 Pipinus iterum Haistulphum vicit.</p>
+<p>Anno 757 Haistulphus moritur in venatione. Constantinus
+<pb n="1280C"/>
+imperator inter cetera munera etiam organum
+mittit.</p>
+<p>Tascilo fuit nepos Pipini.</p>
+<p>Anno 770 Berta regina filiam Desiderii regis Longobardorum
+<pb n="1281A"/>
+Carlo filio suo conjugio sociandum de
+Italia abduxit.</p>
+<p>Anno 771 Carlmannus decessit 2 Non. Decembris,
+cujus uxor et filii Italiam veniunt.</p>
+<p>Carlus pro defensione sancti Petri ad Hadrianum
+pontificem Romam venit, victo Desiderio.</p>
+<p>Anno 778 Carlus in Hispania Pampilonem destruxit.</p>
+<p>Anno 781 Pipinus, filius Carli, Romae baptisatur
+ab Hadriano pontifice. Hoc anno signum crucis in
+vestimentis hominum visum est, et sanguis e coelo
+in terram fluxit.</p>
+<p>Anno 786 Carlus Beneventum expugnat victo Grimualdo,
+filio Aragisi Beneventanorum ducis. Hernodrudis,
+filia regis, a Constantino imperatore desponsatur.</p>
+<p>
+            <pb n="1281B"/>Anno 787 Graecorum exercitus a Francis, Longobardis
+et Beneventanis superatur.</p>
+<p>Anno 796 moritur Adrianus, cui successit Leo
+pontifex.</p>
+<p>Anno 797 Constantinopolitanus imperator excoecatus
+est.</p>
+<p>Anno 801 in die natalis Domini ante confessionem
+beati Petri Leo coronam Carlo imposuit; tunc populus
+Romanus clamavit: <hi>Claro Augusto a Deo coronato
+magno et pacifero imperatori Romanorum vita
+et victoria!</hi> Inde more antiquorum principum adoratus.
+Hoc anno 2 Kalend. Maii terrae motus fuit per
+totam Italiam, ut urbes ruerent, et tectum basilicae
+sancti Pauli Romae cum trabibus decideret.</p>
+<p>
+            <pb n="1281C"/>Anno 806 Herena imperatrix de Constantinopoli
+misit legatum nomine Leonem de pace conficienda
+inter Graecos et Francos.</p>
+<p>Boemii Sclavi alio nomine appellati sunt.</p>
+<p>Carlus junior, filius imperatoris, sororem habuit
+Henrodrud, quae decessit anno 811, 8 Idus
+Junii.</p>
+<p>Hoc tempore Niciforus imperator Graecorum erat,
+qui post multas victorias et res prospere gestas a
+Vulgaris occisus anno 814; cui statim successit Michael,
+qui legatos Carli ad Niciforum missos benigne
+Constantinopoli audivit, ac suos ad Carlum misit.
+Hoc anno fuit eclypsis.</p>
+<p>Anno 815 Carlus 5 Kalend. Febr. decessit, anno
+<pb n="1281D"/>
+suae aetatis 71, regni Francorum 47, subactae Italiae
+44, ex quo Augustus appellatur 14; cui successit
+Huludovicus filius ejus, qui legationes ad genitorem
+missas et inde ad se audivit; et Romae quidam in
+necem Leonis papae conspirantes interficiuntur anno
+816.</p>
+<p>Anno 817, 8 Kalend. Junii, moritur Leo pontifex,
+cui successit Stephanus diaconus.</p>
+<p>Anno 818, Non. Febr. eclypsis facta; nocte vero
+cometes apparuit. Moritur Stephanus pontifex 8
+Idus Febr., cui successit Paschalis presbyter. Imperator
+vero filium suum Hlotharium coronavit, et
+locum in imperio sibi constituit. Bernhardus, rex
+Langobardorum, imperatori se tradidit. Leo, imperator
+Romanorum in Graecia, ad Huludovicum misit
+de pace.</p>
+<p>
+            <pb n="1282A"/>Anno 819 eclypsis maxima.</p>
+<p>Anno 820 Pipinus, Huludovici filius, Vascones
+vicit.</p>
+<p>Anno 823 imperator Huludovicus poenitentiam
+suorum delictorum fecit. Hulotharius Italiam venit;
+Pipinus ejus frater cum uxore in Aquitaniam missus
+est.</p>
+<p>Anno 824 Hlutharius a Paschale coronatur, et a
+populo Romano Augustus appellatur. Liudevithus
+dolo Alvidemilii, avunculi Bornae ducis Dalmatarum,
+interficitur, et multa prodigia fuerunt.</p>
+<p>Anno 825 moritur Paschalis pontifex, cui successit
+Eugenius.</p>
+<p>Anno 827 abbas sancti Dionysii Romam mittit,
+et annuente Eugenio ossa Sebastiani martyris transportantur,
+<pb n="1282B"/>
+et collocantur apud Suessonam civitatem
+in templo sancti Medardi.</p>
+<p>Anno 828 corpora sanctorum martyrum Marcellini
+et Petri in Galliam transferuutur. Eugenius
+pontifex moritur; cui successit Valentinus diaconus,
+cui deinde successit Gregorius presbyter sancti
+Marci.</p>
+<p>Anno 833 imperator cum exercitu contra Hlotharium
+filium venit, Pipinum regno privat; eclypsis
+solis 2 Non. Maii, Lunae vero 13 Kalend.
+Maii.</p>
+<p>Sequenti anno imperator a suis desertus, a filiis
+captus, cum quibus erat Gregorius pontifex.</p>
+<p>Sequenti anno consilio episcoporum poenitentia ab
+imperatore efficitur.</p>
+<p>
+            <pb n="1282C"/>Anno 838 Ticinum in Italia fertur 3 Kal. Januarii
+tremuisse; cometes in signo Librae 3 Idus April. per
+tres noctes apparuit: primores in Italia moriuntur,
+suorum praecipui Lanthberdus et Hugus.</p>
+<p>Sequenti anno 15 Kal. Februar. terraemotus apud
+sanctum Nazarium. Pipinus filius, rex Aquitanorum,
+mense Novembris moritur.</p>
+<p>Anno 840 imperator Hludavico Hluthario filio et
+Carlo minimo filio regnum Francorum dividit; Hluthario
+suam dignitatem reliquit. Cometes apparuit
+in signo Arietis; coelum noctu in serenitate erubuit,
+igniculi similes stellis per coelum discurrebant.</p>
+<p>Imperator moritur 12 Kalend. Julii in quadam
+insula Rheni fluvii; in templo Sancti Arinulphi sepelitur.
+<pb n="1282D"/>
+Hludatharium filium suscipiunt Franci; ejus
+fratres, id est Hludavicus et Carlus, contra eum venientes
+confregit; inde in Carlum exercitum direxit.
+Hludavicus vero manu valida Francos, Alamannos,
+Saxones, Thuringios sibi confirmat pace.</p>
+<p>Anno 843 atrox bellum inter imperatorem et fratres;
+eclypsis lunae fuit 3 Kal. April.</p>
+<p>Sequenti anno dividuntur regna inter fratres et
+imperatorem; moritur Gregorius pontifex, cui successit
+Sergius. Mauri Beneventum occupant.</p>
+<p>Anno 845 Hrabanus monachus laudes crucis carmine
+composuit, et Sergio transmisit.</p>
+<p>Anno 847 Mauri, cum urbem Romae expugnare
+non possent, templum sancti Petri vastaverunt.</p>
+<p>Anno 856 16 Kalend. Novemb. igniculi instar spiculorum
+<pb n="1283A"/>
+occidentem versus per aerem vagabantur,
+quare Hlutharius imperator omnia relinquens, monachus
+efficitur in Prumiensi monasterio, et 3 Kalend.
+Octobris moritur. Primores regni Hlutharium, Hlutharii
+filium, annuente Hludovico, rege Orientis,
+constituunt sibi dominum.</p>
+<p>Imperator Hlutharius reliquit tres filios, Huludovicum,
+Hludatharium et Carlum, qui pacem inierunt
+cum Carlo et Huludovico patruis anno 867. Quo anno
+hybernum tempus asperum, et nix sanguinolenta de
+coelo decidit.</p>
+<p>Carlus, frater Hludatharii imperatoris, filium
+habuit Carlamannum; hoc tempore Nicolaus pontifex
+erat.</p>
+<p>Ruodolphus, monachus et poeta historicus, in Germania
+<pb n="1283B"/>
+floruit, et moritur 8 Idus Mart. anno 866.</p>
+<p>Anno 870 Hludavicus rex aegrotat, ut de eo desperarent
+medici; qui sentiens, pene omnia bona sua
+pauperibus distribuit, et se a Deo curari maluit.</p>
+<p>Carlus frater regnum Hludatharii invasit, et sibi
+ab episcopo Metensi diademate caput ornari jussit,
+et se Augustum effecit propter aegrotationem fratris.</p>
+<p>Anno sequenti aegrotatione liberatur Hludavicus
+rex.</p>
+<p>Anno 876 Hludavicus moritur, sepultus Mediolano
+in sancto Ambrosio. Carlus hoc sentiens Italiam petiit,
+et thesauros imperatoris sustulit.</p>
+<p>Anno 878 mense Januarii Lanthbertus, Widhonis
+filius, et Adalberthus, Bonifacii filius, valida manu
+<pb n="1283C"/>
+Romam venerunt, Joannem poniificem vinculis redegerunt,
+primores populi Romani coegit, ut Carlomannus
+pro Caesare haberetur; quo peracto Joannes
+pontifex thesauros Petri Lateranum sustulit et transtulit,
+inde templum Petri clausit; cujus ara prius
+<pb n="1284A"/>
+alma adoperta erat; advenientes templum non introibant.
+Pontifex Thyrrenum petiit, quaeritans
+Carlmannum privare, qui paralysi morbo oppressus
+erat, neque verbum loqui poterat.--4 Kal. Novemb.,
+hora nona officii, eclypsis solaris maxima,
+ut stellae apparerent, et luna Idus Octobris ultima
+hora noctis. Boum pestilentia in Germania, quam
+clades hominum secuta est. Slavi, Dalmatae, Soavi,
+Bohemi idem sunt. Carlmannus 11 Kal. April. obiit
+anno 881.</p>
+<p>Sequenti anno, 4 Kal. Januar., ante gallicinium
+Magonciae terraemotus magnus, et 15 Kal. Septemb.
+Hludovicus moritur, cujus corpus in monasterio sancti
+Nazarii juxta corpus patris sepelitur.</p>
+<p>Arinulphus, Carlmanni filius, rex in Alamannia
+<pb n="1284B"/>
+creatur, invito parvo Carlo. Carlus anno 888, 3
+Non. Januarii moritur.</p>
+<p>Anno 892 bellum atrox inter Arinulphum regem
+christianum et Sigiphridum et Godophridum, reges
+Nortmannorum et Danorum paganos, adeo ut caesis
+regibus et pene totus exercitus fuerit, et unus tantummodo
+christianus fuerit inventus interemptus.</p>
+<p>Sequenti anno Itali ad regem pergunt, ut Italiam
+de manibus tyrannorum liberaret; rex hoc pollicetur.</p>
+<p>Anno 894 Arinulphus rex Italiam venit cum exercitu,
+mox Pergamum expugnat, regulos in fidelitatem
+junxit, inde revertitur.</p>
+<p>Hoc etiam anno Romae Formosus pontifex moritui,
+cui successit Stephanus. Graeci cum Hunis pacem
+<pb n="1284C"/>
+ineunt. Leo, imperator Graecorum, Lazarium legatum
+ad imperatorem Italum mittit.</p>
+<p>Anno 898 Arinulphus moritur, cui successit Huludavicus
+filius parvulus.
+</p>
+</div1>
+      </note>
+</body>
+  </text>
+</TEI>
