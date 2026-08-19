@@ -10,6 +10,20 @@
 # Precedence, highest first: per-document > per-collection > this file > identity.
 
 map:
+  # The 639-3 ↔ 639-1 alias suite (№11, 2026-08-10): the registry anchors
+  # the two-letter codes; a collection spelling the same language in
+  # 639-3 means exactly that language — a code alias, not a claim.
+  deu:     de
+  nld:     nl
+  spa:     es
+  arg:     an
+  swe:     sv
+  ita:     it
+
+  # Old Swedish / Old Italian (Wiktionary etymology-only codes)
+  gmq-osw: sv:old
+  roa-oit: it:old
+
   # Greek stages that outgrew their codes
   gkm:     grc:byz
   grc-koi: grc:koi

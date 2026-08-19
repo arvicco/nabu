@@ -240,6 +240,12 @@ module Nabu
           {
             "sigle" => header.sigle,
             "subcorpus" => File.basename(File.dirname(document_ref.path)),
+            # The subcorpus as a FACET row (FacetBuilder projects the
+            # "facets" key): the total facet the ref-enhg lect rule keys
+            # on (every text sits in exactly one deposit dir).
+            "facets" => { "subcorpus" => {
+              "value" => File.basename(File.dirname(document_ref.path))
+            } },
             "dialects" => (dialects unless dialects.empty?),
             "shifttags" => (body.shifttags unless body.shifttags.empty?),
             "comments" => (body.comments if body.comments.positive?),
