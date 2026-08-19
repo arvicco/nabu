@@ -218,6 +218,10 @@ module Nabu
       # pinned.
       def backfill_http_source(entry)
         entry.adapter_class.http_probe_targets.filter_map do |target|
+          # Resolver targets have no stable URL to key a pin by, and
+          # liveness-only targets have no state file to read — neither is
+          # backfillable (P79-2).
+          next if target.zip_url.nil? || target.liveness_only
           next if pinned?(entry.slug, target.zip_url)
 
           sha = state_file_sha(entry.slug, target)
@@ -620,8 +624,12 @@ module Nabu
       # Mirrors the git path's SourceHealth shape from HEAD/GET instead of
       # ls-remote. One ZipProbe per project (its zip URL — also the ledger-pin
       # key), the HEAD reachability + Last-Modified, and the stored
-      # .zip-fetch.json Last-Modified to diff against.
-      ZipProbe = Data.define(:url, :label, :liveness, :remote_last_modified, :stored_last_modified, :metadata_url)
+      # .zip-fetch.json Last-Modified to diff against. +stored_url+ (P79-2)
+      # is the state file's recorded fetch URL — the drift signal when
+      # neither side carries Last-Modified (data.go.kr serves none; Zenodo
+      # state records null): a replaced artifact gets a new URL.
+      ZipProbe = Data.define(:url, :label, :liveness, :remote_last_modified,
+                             :stored_last_modified, :stored_url, :metadata_url, :liveness_only)
       private_constant :ZipProbe
 
       def probe_http_source(entry)
@@ -640,13 +648,31 @@ module Nabu
       end
 
       def probe_zip(slug, target)
-        stored = stored_last_modified(slug, target)
-        liveness, last_modified = head_liveness(target.zip_url)
+        stored = stored_state(slug, target)
+        url = current_zip_url(target)
+        liveness, last_modified = head_liveness(url)
         ZipProbe.new(
-          url: target.zip_url, label: target.label, liveness: liveness,
-          remote_last_modified: last_modified, stored_last_modified: stored,
-          metadata_url: target.metadata_url
+          url: url, label: target.label, liveness: liveness,
+          remote_last_modified: last_modified, stored_last_modified: stored["last_modified"],
+          stored_url: stored["url"], metadata_url: target.metadata_url,
+          liveness_only: target.liveness_only
         )
+      rescue Nabu::FetchError => e
+        # A resolver target that can't resolve IS the drift signal (the
+        # portal page shape changed) — an honest :gone, loudly detailed.
+        ZipProbe.new(
+          url: target.zip_url, label: target.label,
+          liveness: Liveness.new(status: :gone, detail: "resolve: #{e.message}"),
+          remote_last_modified: nil, stored_last_modified: nil, stored_url: nil,
+          metadata_url: target.metadata_url, liveness_only: target.liveness_only
+        )
+      end
+
+      # The URL to HEAD: static for a plain target; resolved at probe time
+      # for a resolver target (raises Nabu::FetchError on portal drift —
+      # handled by probe_zip's rescue above).
+      def current_zip_url(target)
+        target.resolver ? target.resolver.call : target.zip_url
       end
 
       # HEAD the zip: 200 → alive (with its Last-Modified); a redirect →
@@ -678,25 +704,48 @@ module Nabu
 
         per_repo = probes.map { |probe| [probe, zip_repo_drift(probe, no_pin)] }
         worst = per_repo.map { |_probe, status| status }.max_by { |status| DRIFT_SEVERITY.fetch(status) }
-        behind = per_repo.select { |_probe, status| status == :behind }.map { |probe, _status| probe.label }
-        Drift.new(status: worst, detail: zip_drift_detail(worst, behind, multi: multi))
+        behind = per_repo.select { |_probe, status| status == :behind }
+        replaced = behind.any? { |probe, _status| url_replaced?(probe) }
+        Drift.new(status: worst, detail: zip_drift_detail(worst, behind.map { |probe, _status| probe.label },
+                                                          multi: multi, url_replaced: replaced))
       end
 
       # Multi-unit: name the behind projects. Single-unit :unpinned: the honest
-      # pre-ledger hint, exactly as the git single-repo path.
-      def zip_drift_detail(worst, behind, multi:)
+      # pre-ledger hint, exactly as the git single-repo path. A single-unit
+      # URL-identity :behind names the cause — the artifact was REPLACED
+      # (new download URL), not merely updated in place.
+      def zip_drift_detail(worst, behind, multi:, url_replaced: false)
         return "behind: #{behind.join(', ')}" if multi && !behind.empty?
+        return "upstream artifact replaced (new download URL) — re-sync" if worst == :behind && url_replaced
         return UNPINNED_HINT if !multi && worst == :unpinned
 
         nil
       end
 
+      # Drift ladder (P79-2): Last-Modified compare when BOTH sides carry it
+      # (the ORACC in-place-update signal — it must never be masked); else
+      # URL identity against the state file's recorded url (data.go.kr's
+      # re-minted atchFileId, Zenodo's versioned artifact names); else the
+      # honest no-comparison verdicts. A liveness_only target (no state
+      # file by design) always answers :unknown.
       def zip_repo_drift(probe, no_pin)
+        return :unknown if probe.liveness_only
         return :unknown unless probe.liveness.status == :alive
-        return no_pin if blank?(probe.stored_last_modified)
-        return :unknown if blank?(probe.remote_last_modified)
+        return no_pin if blank?(probe.stored_last_modified) && blank?(probe.stored_url)
 
-        probe.stored_last_modified == probe.remote_last_modified ? :current : :behind
+        if !blank?(probe.stored_last_modified) && !blank?(probe.remote_last_modified)
+          probe.stored_last_modified == probe.remote_last_modified ? :current : :behind
+        elsif !blank?(probe.stored_url)
+          probe.stored_url == probe.url ? :current : :behind
+        else
+          :unknown
+        end
+      end
+
+      # Did this probe's :behind come from the URL-identity lane?
+      def url_replaced?(probe)
+        !blank?(probe.stored_url) && probe.stored_url != probe.url &&
+          (blank?(probe.stored_last_modified) || blank?(probe.remote_last_modified))
       end
 
       # License drift, per project, aggregated exactly like multi_repo_license:
@@ -725,10 +774,12 @@ module Nabu
       # 2026-07-09), or a missing license field → :unchecked, never an error.
       def zip_repo_license(probe, row)
         return unchecked("upstream unreachable") unless probe.liveness.status == :alive
-        return unchecked("never synced") unless row
         # No metadata endpoint at all (ASPR: the license lives inside the
-        # fetched file) → honestly unchecked, no GET issued.
+        # fetched file) → honestly unchecked, no GET issued — checked BEFORE
+        # the pin so an unpinned unit names the missing endpoint, not a
+        # misleading "never synced" (P79-2).
         return unchecked("no license metadata") unless probe.metadata_url
+        return unchecked("never synced") unless row
 
         license = fetch_license_field(probe.metadata_url)
         return unchecked("no license metadata") unless license
@@ -746,20 +797,22 @@ module Nabu
         nil
       end
 
-      # The stored Last-Modified pin for one probe target:
+      # The stored fetch state for one probe target:
       # <canonical_dir>/<source-slug>/<state_subdir>/<state_file> — the
       # target names its state file (.zip-fetch.json for zip units,
-      # .file-fetch.json for a FileFetch single-file source). Missing dir /
-      # file / key (never synced) → nil.
-      def stored_last_modified(slug, target)
-        return nil unless @canonical_dir
+      # .file-fetch.json for a FileFetch single-file source,
+      # .titus-fetch.json for the TITUS crawl). The whole parsed hash:
+      # drift reads "last_modified" and — P79-2 — "url". Missing dir /
+      # file (never synced) or unparseable → {}.
+      def stored_state(slug, target)
+        return {} unless @canonical_dir
 
         path = File.join(@canonical_dir, slug, target.state_subdir, target.state_file)
-        return nil unless File.file?(path)
+        return {} unless File.file?(path)
 
-        JSON.parse(File.read(path))["last_modified"]
+        JSON.parse(File.read(path))
       rescue JSON::ParserError
-        nil
+        {}
       end
 
       def blank?(value) = value.nil? || value.to_s.empty?

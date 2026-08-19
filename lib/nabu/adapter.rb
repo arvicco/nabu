@@ -46,8 +46,22 @@ module Nabu
     # the probe diffs against — +state_file+ names it (ZipFetch's
     # .zip-fetch.json by default; a FileFetch-backed source points it at
     # FileFetch::STATE_FILE).
-    HttpProbeTarget = Data.define(:label, :zip_url, :metadata_url, :state_subdir, :state_file) do
-      def initialize(label:, zip_url:, metadata_url:, state_subdir:, state_file: ZipFetch::STATE_FILE)
+    #
+    # Two P79-2 postures for sources the plain shape can't probe honestly:
+    #
+    # - +resolver+ (with zip_url nil): the current download URL exists only
+    #   at probe time (data.go.kr re-mints atchFileId on every artifact
+    #   replacement) — a callable returning the URL to HEAD, raising
+    #   Nabu::FetchError on portal-shape drift (which the probe reports as
+    #   the liveness verdict). Drift then rides URL identity against the
+    #   state file's recorded url.
+    # - +liveness_only+: crawl-style fetchers with NO state file (kitab,
+    #   burman-concordance) — HEAD answers reachability; drift honestly
+    #   reads :unknown instead of a false pre-ledger hint.
+    HttpProbeTarget = Data.define(:label, :zip_url, :metadata_url, :state_subdir, :state_file,
+                                  :resolver, :liveness_only) do
+      def initialize(label:, zip_url:, metadata_url:, state_subdir:, state_file: ZipFetch::STATE_FILE,
+                     resolver: nil, liveness_only: false)
         super
       end
     end

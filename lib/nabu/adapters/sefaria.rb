@@ -312,6 +312,18 @@ module Nabu
         MANIFEST
       end
 
+      # P79-2: the fetch crawls raw.githubusercontent.com (not a clone), so
+      # ls-remote drift vs the index sha256 pin would read false-behind
+      # forever — HEAD the raw index for liveness only, honestly.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        [Nabu::Adapter::HttpProbeTarget.new(
+          label: "books.json index", zip_url: INDEX_URL, metadata_url: nil,
+          state_subdir: "", liveness_only: true
+        )]
+      end
+
       # The shelf whose scope covers these categories (nil = off-shelf).
       # bavli/bavli-minor share a prefix and split on the division pattern,
       # so first-match is unambiguous. +title+ (P59-5): a TITLE-scoped
