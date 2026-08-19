@@ -40,8 +40,9 @@ module Nabu
     #   <lem>       the editor's accepted reading (its <rdg> siblings drop)
     #   <reg>       the regularized spelling (its <orig> sibling drops)
     #   <add>       scribal additions — inside <subst> it is the scribe's
-    #               final intent (the paired <del> drops); standalone
-    #               (place="above" insertions) it is equally part of the text
+    #               final intent (the paired <del> renders in ⟦…⟧ beside it);
+    #               standalone (place="above" insertions) it is equally part
+    #               of the text
     #   <supplied>  editorial restorations ARE the readable text — print
     #               editions read straight through their square brackets
     #   <unclear>   dotted-but-read letters
@@ -49,12 +50,13 @@ module Nabu
     #               read expanded ("plur(imam)" reads "plurimam")
     #   <num>       the numeral's text content (@value is metadata)
     #
+    # KEEP, RENDERED IN LEIDEN DOUBLE BRACKETS ⟦…⟧ (№R-17; see below):
+    #   <del>       text deleted in antiquity but legible — reading text in
+    #               Leiden, printed inside ⟦…⟧; nesting nests the brackets
+    #
     # DROP (apparatus/metadata, never reading text):
     #   <rdg>       rejected variant readings
     #   <orig>      pre-regularization spellings
-    #   <del>       erased text — both inside <subst> and standalone; erasure
-    #               may nest (<del><del>…</del></del>) and drops wholesale.
-    #               EXCEPTION: the cancelled-document fallback below.
     #   <note>, <figure>   editorial noise
     #   <handShift> a metadata milestone — the hand id goes to annotations
     #   <g>         glyph placeholders (interpuncts, <g type="middot"/>):
@@ -71,7 +73,7 @@ module Nabu
     # mid-word). Any children of <gap> (<desc>, <certainty>) are dropped.
     #
     # A dropped subtree drops EVERYTHING inside it: a <supplied> inside a
-    # dropped <orig> counts nothing, a <gap> inside a dropped <del> marks
+    # dropped <orig> counts nothing, a <del> inside a dropped <rdg> renders
     # nothing, an <lb> inside a dropped branch is NOT a line boundary. The
     # nested-markup reality (choice inside lem inside app; subst>add>choice>
     # reg with an lb inside) is handled by a keep/drop depth stack: once a
@@ -146,49 +148,52 @@ module Nabu
     # inside <ab> before the first <lb> is not citable (upstream puts only
     # whitespace there) and is discarded.
     #
-    # == Cancelled-document fallback (P6-2; conventions.md §5)
+    # == <del> renders ALWAYS in ⟦…⟧ (P6-2 → №R-17; conventions.md §5)
     #
-    # ~40 DDbDP documents are entirely ancient cancellations: every line of
-    # the edition sits inside <del rend="cross-strokes"|"slashes"|"erasure">
-    # — the scribe crossed the text out, but it is fully legible and fully
-    # edited, and print editions read it inside Leiden double brackets ⟦…⟧.
-    # Under the blanket drop-<del> policy such a document extracts zero
-    # citable lines and quarantines, erasing it entirely (o.claud.3.457,
-    # cpr.6.3, bgu.1.179, apf.59.139).
+    # In Leiden double brackets ⟦…⟧ mean *deleted in antiquity but legible*:
+    # the scribe crossed the text out (cross-strokes, slashes, wash-out), yet
+    # the editor reads every letter — so print editions print the text,
+    # inside the brackets. Cancelled is not deleted: reading text, not
+    # apparatus. History: the original policy dropped <del> wholesale, which
+    # erased the ~40 documents that are cancellations end to end
+    # (o.claud.3.457, cpr.6.3, bgu.1.179, apf.59.139 — zero citable lines,
+    # quarantined); P6-2 recovered exactly that class via a document-scoped
+    # fallback pass; №R-17 (owner-delegated ruling, 2026-08-10) adopted the
+    # faithful general rule — <del> ALWAYS renders in ⟦…⟧, partial
+    # cancellations included — retiring both the blanket drop and the
+    # fallback machinery (single standard pass again). The corpus-wide
+    # consequence (9,696 affected documents measured at ruling time) is a
+    # deliberate, journaled re-parse: packet 79-3b, not this parser patch.
     #
-    # The rule: when (and ONLY when) the standard pass extracts ZERO citable
-    # lines, the document is re-read once in fallback mode, where <del>
-    # content is KEPT and wrapped in ⟦…⟧ — "⟦" where the del opens, "⟧"
-    # where it closes, exactly the gap-marker philosophy (a multi-line
-    # cancellation prints one opening and one closing bracket, as in print
-    # practice; nested dels nest their brackets). Everything else about the
-    # policy is unchanged inside the kept del: rdg/orig/note/figure still
-    # drop, gaps still mark, lbs still delimit (restart blocks included).
-    # Every line whose content lies in a cancellation carries
-    # {"leiden" => {"cancelled" => true}}. A document that is still empty
-    # after the fallback quarantines exactly as before.
+    # The rendering: "⟦" where the del opens, "⟧" where it closes, exactly
+    # the gap-marker philosophy (a multi-line cancellation prints one
+    # opening and one closing bracket, as in print practice; nested dels
+    # nest their brackets). Everything else about the policy is unchanged
+    # inside the kept del: rdg/orig/note/figure still drop, gaps still mark,
+    # supplied/unclear still count, lbs still delimit (restart blocks
+    # included). Every line any part of whose content lies in a cancellation
+    # carries {"leiden" => {"cancelled" => true}}. A <del> inside a DROPPED
+    # branch (rdg/orig) still drops with that branch — the branch as a whole
+    # is not reading text. Lines whose entire content is a del are now
+    # citable ("⟦…⟧" is non-empty text): the resurrection class.
     #
-    # DOCUMENT-scoped on purpose — the frozen-text argument: the fallback
-    # engages iff the standard pass yields zero lines, i.e. iff the document
-    # quarantined before P6-2. Every already-loaded document has ≥1 passage,
-    # so for it the fallback provably never runs and its urns AND text stay
-    # byte-identical (the standard-pass code path is untouched). A per-line
-    # rule ("keep the del when the line would otherwise be empty") would
-    # resurrect skipped lines inside LOADED documents, shifting frozen
-    # sequences; the honest general rule ("render every <del> in ⟦⟧") would
-    # rewrite loaded passages containing partial dels. FUTURE WORK (owner
-    # decision, corpus-wide revision): should <del> ALWAYS render in ⟦⟧?
-    # Papyrologically it is the more faithful reading (⟦⟧ is reading text in
-    # Leiden), but adopting it means revising every loaded passage with a
-    # partial del — a deliberate, journaled corpus revision, not a parser
-    # patch. Recorded in conventions.md §5.
+    # One structural exception guards the frozen-urn law: inside a <subst>,
+    # upstream duplicates a line-spanning <lb> into BOTH branches (add and
+    # del each carry their own copy, so either branch reads alone —
+    # bgu.1.100's revision history). With both branches now kept, only the
+    # <add> branch's copy fires as a line boundary; the del branch's copy is
+    # the SAME physical line break and is suppressed (firing it would mint a
+    # colliding suffix and re-mint frozen urns via the implicit-block
+    # machinery). Scope-tested nearest-first, so a subst nested inside a
+    # cancellation del keeps its add-branch <lb> live.
     #
     # == Annotations (lean; only non-empty keys)
     #
     #   {"leiden" => {"gaps" => [{"reason","quantity","unit"}…],   # kept gaps
     #                 "supplied_chars" => <grapheme count>,        # restored
     #                 "unclear_chars"  => <grapheme count>,        # dotted
-    #                 "hands" => ["m2", …]},                       # handShift
+    #                 "hands" => ["m2", …],                        # handShift
+    #                 "cancelled" => true},                        # any <del> touched the line
     #    "languages" => ["lat", …]}   # inline xml:lang scopes differing from
     #                                 # the document language, mapped (la→lat)
     #
@@ -219,8 +224,7 @@ module Nabu
       GAP_MARKER = "[…]"
 
       # Leiden double brackets — ancient cancellation, legible text. Emitted
-      # around kept <del> content by the cancelled-document fallback only
-      # (see file header).
+      # around every <del>'s kept content (№R-17; see file header).
       CANCELLATION_OPEN = "⟦"
       CANCELLATION_CLOSE = "⟧"
 
@@ -243,7 +247,6 @@ module Nabu
       def parse(source, urn:, language:, title: nil, canonical_path: nil)
         path = resolve_canonical_path(source, canonical_path)
         lines = extract_lines(source, path: path, urn: urn, language: language)
-        lines = cancelled_document_retry(source, path: path, urn: urn, language: language) if lines.empty?
         build_document(lines, urn: urn, language: language, title: title, path: path)
       end
 
@@ -257,23 +260,14 @@ module Nabu
         raise ArgumentError, "canonical_path: is required when parsing from an IO without a #path"
       end
 
-      def extract_lines(source, path:, urn:, language:, cancelled_fallback: false)
+      def extract_lines(source, path:, urn:, language:)
         with_io(source) do |io|
           Extraction.new(
-            reader: Nokogiri::XML::Reader(io, path), path: path, urn: urn, language: language,
-            cancelled_fallback: cancelled_fallback
+            reader: Nokogiri::XML::Reader(io, path), path: path, urn: urn, language: language
           ).call
         end
       rescue Nokogiri::XML::SyntaxError => e
         raise ParseError, "#{path}: malformed XML: #{e.message}"
-      end
-
-      # The cancelled-document fallback (see file header): a second pass with
-      # <del> kept in ⟦…⟧, run ONLY when the standard pass extracted zero
-      # citable lines — the class that would otherwise quarantine wholesale.
-      def cancelled_document_retry(source, path:, urn:, language:)
-        source.rewind if source.respond_to?(:rewind)
-        extract_lines(source, path: path, urn: urn, language: language, cancelled_fallback: true)
       end
 
       def with_io(source, &)
@@ -316,17 +310,18 @@ module Nabu
           READER::TYPE_WHITESPACE, READER::TYPE_SIGNIFICANT_WHITESPACE
         ].freeze
         # Subtrees that are never reading text (see file header). <gap> is
-        # handled separately: marker first, then its children drop too.
-        DROPPED_ELEMENTS = %w[rdg orig del note figure].freeze
+        # handled separately: marker first, then its children drop too;
+        # <del> is handled separately too — kept, rendered in ⟦…⟧ (№R-17).
+        DROPPED_ELEMENTS = %w[rdg orig note figure].freeze
         private_constant :READER, :TEXT_NODE_TYPES, :DROPPED_ELEMENTS
 
-        def initialize(reader:, path:, urn:, language:, cancelled_fallback: false)
+        def initialize(reader:, path:, urn:, language:)
           @reader = reader
           @path = path
           @urn = urn
           @language = language
-          @cancelled_fallback = cancelled_fallback
-          @del_depths = [] # open kept-<del> depths, fallback mode only
+          @del_depths = [] # open <del> depths (rendered in ⟦…⟧, №R-17)
+          @subst_depths = [] # open <subst> depths (duplicate-lb suppression)
           @hybrid = nil
           @capture_idno = false
           @edition_seen = false
@@ -377,7 +372,7 @@ module Nabu
         # text nodes stream past and accumulate via #text_node.
         def edition_element(node)
           name = local_name(node)
-          return open_cancellation(node) if name == "del" && @cancelled_fallback
+          return open_cancellation(node) if name == "del"
 
           if DROPPED_ELEMENTS.include?(name)
             @drop_depth = node.depth unless node.empty_element?
@@ -392,6 +387,7 @@ module Nabu
           when "div" then push_textpart(node)
           when "supplied" then @supplied_depths << node.depth unless node.empty_element?
           when "unclear" then @unclear_depths << node.depth unless node.empty_element?
+          when "subst" then @subst_depths << node.depth unless node.empty_element?
           end
         end
 
@@ -405,9 +401,10 @@ module Nabu
           when "idno" then @capture_idno = false
           when "ab" then finish_line
           when "div" then end_div(node)
-          when "del" then close_cancellation(node) # fallback mode only (standard dels drop above)
+          when "del" then close_cancellation(node)
           when "supplied" then @supplied_depths.pop if @supplied_depths.last == node.depth
           when "unclear" then @unclear_depths.pop if @unclear_depths.last == node.depth
+          when "subst" then @subst_depths.pop if @subst_depths.last == node.depth
           end
         end
 
@@ -473,6 +470,8 @@ module Nabu
 
         def start_line(node)
           @lb_ordinal += 1
+          return if duplicate_subst_del_lb?
+
           n = node.attribute("n")
           raise ParseError, "#{@path}: <lb> ##{@lb_ordinal} (document order) is missing its @n" if n.nil? || n.empty?
 
@@ -528,11 +527,26 @@ module Nabu
           result
         end
 
-        # -- cancelled-document fallback (P6-2; see file header) -----------------
+        # -- <del> rendering (P6-2 → №R-17; see file header) ---------------------
 
-        # Fallback mode's <del> start: keep the content, open the Leiden
-        # double bracket in place (the marker sits exactly where the
-        # cancellation begins, gap-marker style).
+        # An <lb> inside a subst's <del> branch is upstream's DUPLICATE copy
+        # of the line break (when a correction spans a line break, both
+        # branches carry their own <lb> so either reads alone — bgu.1.100's
+        # revision history). The kept <add> branch's copy is the boundary
+        # that fires; firing the del branch's copy too would mint the same
+        # suffix twice and re-mint frozen urns via the implicit-block
+        # collision machinery. Nearest-scope test — the innermost open del
+        # must sit INSIDE the innermost open subst: a subst nested inside a
+        # cancellation <del> keeps its own add-branch <lb> live.
+        def duplicate_subst_del_lb?
+          return false if @del_depths.empty? || @subst_depths.empty?
+
+          @del_depths.last > @subst_depths.last
+        end
+
+        # <del> start: keep the content, open the Leiden double bracket in
+        # place (the marker sits exactly where the cancellation begins,
+        # gap-marker style; nested dels nest their brackets).
         def open_cancellation(node)
           return if node.empty_element?
 

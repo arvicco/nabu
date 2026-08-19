@@ -189,8 +189,10 @@ The parser policy question these pose — is restored text "text"? — was
 fixed when the Papyri.info adapter landed (P3-6), and it mirrors print
 practice: a passage's `text` is what a print edition's main text would
 read. Keep `<lem>`, `<reg>`, `<add>`, `<supplied>`, `<unclear>` and
-`<expan>` (including its `<ex>` expansions); drop `<rdg>`, `<orig>` and
-`<del>` (apparatus, not reading text); every `<gap>` becomes the single
+`<expan>` (including its `<ex>` expansions); drop `<rdg>` and `<orig>`
+(apparatus, not reading text); render `<del>` inside `⟦…⟧` (reading text
+in Leiden — №R-17, ruled below; originally dropped, migrated at P79-3);
+every `<gap>` becomes the single
 marker `[…]` so a search hit can never match across a lacuna as if the
 text were contiguous. Certainty data (gap extents, supplied/unclear letter
 counts, hand shifts) lives in per-passage `"leiden"` annotations. The
