@@ -1,0 +1,63 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Corpus Córporum serves per-text TEI at download.php?idno=<i>&type=file-xml
+# and catalog XML at navigate.php?path=<p>. texts/, author/work catalog
+# files and the refusal body are WHOLE upstream responses; corpus-38.xml is
+# a DOCUMENTED TRIM (1,528 authors → the three fixture authors, every kept
+# byte upstream's own). adapter_test is null — the source-specific test pins
+# idnos/counts/snippets a refetch would not false-fail.
+source: corpus-corporum
+adapter_test:
+retrieved: 2026-08-19
+files:
+  - path: texts/10454.xml
+    url: https://mlat.uzh.ch/php_modules/download.php?idno=10454&type=file-xml
+    whole: true
+    trim: none
+  - path: texts/10468.xml
+    url: https://mlat.uzh.ch/php_modules/download.php?idno=10468&type=file-xml
+    whole: true
+    trim: none
+  - path: texts/10821.xml
+    url: https://mlat.uzh.ch/php_modules/download.php?idno=10821&type=file-xml
+    whole: true
+    trim: none
+  - path: catalog/root.xml
+    url: https://mlat.uzh.ch/php_modules/navigate.php?path=/
+    whole: true
+    trim: none
+  - path: catalog/corpus-38.xml
+    url: https://mlat.uzh.ch/php_modules/navigate.php?path=/38
+    whole: false
+    trim: contents trimmed from 1,528 author entries to the three fixture
+      authors (idnos 2028, 2034, 2173); navigation head, path_steps and the
+      corpus item block byte-intact.
+  - path: catalog/author-2028.xml
+    url: https://mlat.uzh.ch/php_modules/navigate.php?path=/38/2028
+    whole: true
+    trim: none
+  - path: catalog/author-2034.xml
+    url: https://mlat.uzh.ch/php_modules/navigate.php?path=/38/2034
+    whole: true
+    trim: none
+  - path: catalog/author-2173.xml
+    url: https://mlat.uzh.ch/php_modules/navigate.php?path=/38/2173
+    whole: true
+    trim: none
+  - path: catalog/work-5420.xml
+    url: https://mlat.uzh.ch/php_modules/navigate.php?path=/38/2028/5420
+    whole: true
+    trim: none
+  - path: catalog/work-5434.xml
+    url: https://mlat.uzh.ch/php_modules/navigate.php?path=/38/2034/5434
+    whole: true
+    trim: none
+  - path: catalog/work-5783.xml
+    url: https://mlat.uzh.ch/php_modules/navigate.php?path=/38/2173/5783
+    whole: true
+    trim: none
+  - path: refusal.txt
+    url: https://mlat.uzh.ch/php_modules/download.php?idno=999999999&type=file-xml
+    whole: true
+    trim: none
