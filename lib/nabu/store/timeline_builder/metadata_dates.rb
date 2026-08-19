@@ -45,6 +45,7 @@ module Nabu
           "sillok" => :structured, # P78-1: the volume's 서기 year, one-year envelope
           "sjw" => :structured,    # P78-2: same shape, per reign-year member
           "itkc" => :structured,   # P78-7: the 원문간행년 original print year, per work
+          "ctilc" => :structured,  # P80-8: the ANY publication year, one-year envelope
           "bfm" => :iso_keys,
           "croala" => :year_range,
           "ebl" => :period_label

@@ -437,6 +437,19 @@ sources:
     places: {posture: unplaced, note: "birthplace is author biography, not
         composition place — rides metadata verbatim"}
     script: {posture: implied}
+  ctilc:
+    lect: {posture: identity, note: "P80-8: bare cat is the honest one-tag claim
+        for 19th-20th c. printed Catalan (no Catalan node in nabu-lects yet —
+        identity-default bare anchor); the CLASSIFICACIÓ_TEXTUAL variant=
+        dialect attr (baleàric/central/valencià…) rides metadata AND the
+        variant facet — the future lect seam, no rules ruled yet"}
+    dating: {posture: dated, note: "the ANY publication year per work, riding
+        the :structured MetadataDates one-year envelope (the sillok mold);
+        a work without a clean YYYY skips honestly"}
+    places: {posture: unplaced, note: "the listing citation's imprint place
+        (Barcelona, Vic…) is publication metadata, riding the citation string
+        verbatim — never a composition-place claim"}
+    script: {posture: implied}
   osta:
     # lect declaration retired P77-r8: the osta-leones/osta-aragones lengua
     # rules machine-posture osta now (the shadowing rule; nabu-lects PR #3

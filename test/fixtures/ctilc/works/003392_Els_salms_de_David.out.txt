@@ -1,0 +1,29 @@
+﻿<DOCUMENT>
+<OBRA id="3392">
+<AUTOR>Febrer i Cardona, Antoni</AUTOR>
+<TÍTOL>Els sálms de David</TÍTOL>
+<ANY>1840</ANY>
+<CLASSIFICACIÓ_TEXTUAL llengua="LIT" gènere="P" tema="" subtema="" traducció="sí" variant="baleàric" />
+</OBRA>
+<TEXT>Els sálms de David.
+
+Sálm 3  
+/Domine, quid multiplicati sunt qui tribulant me\...
+
+1. ¿Cóm es, Señòr, qu'áre axí  
+Son tánts els qui me tormèntan;  
+Y en nombre mèstóst aumèntan  
+Els qui s'álsan cóntre mi?
+
+2. Molts son qui m'están diènt,  
+Que no hi há perque cansar-me,  
+Qu'esperar en Dèu salvár-me,  
+Es d'el tot inutilmènt.
+
+3. Però vos sol sou, Señòr,  
+Mon protector, mon sustènto:  
+La mía glória, el contènto,  
+La fortalêsa y l'honòr.
+
+</TEXT>
+</DOCUMENT>
