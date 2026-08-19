@@ -68,6 +68,25 @@ class UnihanTest < Minitest::Test
     assert_includes qi.body, "kSimplifiedVariant: U+5F03", "棄 → 弃 (the trad→simp fold)"
   end
 
+  # P78-6 (C-1, the korean-desk census revisit — survey P47-s4): kHangul
+  # carried back in (censused out at P32-4 when no desk read hangul-script
+  # readings; the Koreanist does), and kIRG_VSource censused in from the
+  # IRGSources member (the TCVN source mappings — the Vietnamese leg's
+  # character census, survey V-B). The rest of the censused-out set stays
+  # out — this is a revisit, not an open door.
+  def test_the_korean_desk_census_revisit_carries_khangul_and_the_v_source
+    document = adapter.parse(adapter.discover(FIXTURES).first)
+    one = document.find { |e| e.entry_id == "U+4E00" }
+    assert_includes one.body, "kHangul: 일:0E", "the hangul-script reading rides beside kKorean"
+    assert_includes one.body, "kKorean: IL", "the romanized layer stays"
+    assert_includes one.body, "kIRG_VSource: V1-4A21", "一 carries its TCVN source mapping"
+    assert_includes document.find { |e| e.entry_id == "U+4E9E" }.body, "kIRG_VSource: V2-8A2C"
+    wen = document.find { |e| e.entry_id == "U+349A" }
+    assert_includes wen.body, "kHangul: 온:N 은:N"
+    refute_includes wen.body, "kCantonese",
+                    "the revisit carries TWO fields in; the rest of the censused-out set stays out"
+  end
+
   def test_entry_ids_are_unique_and_stable_across_independent_passes
     snapshot = -> { adapter.parse(adapter.discover(FIXTURES).first).map(&:entry_id) }
     first = snapshot.call

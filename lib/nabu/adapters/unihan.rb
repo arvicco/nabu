@@ -18,10 +18,13 @@ module Nabu
     # 17.0.0, in-file date 2025-07-24) at unicode.org/Public/UCD/latest/.
     # Eight member files; the adapter reads Unihan_Readings.txt (67,916
     # codepoints) + Unihan_Variants.txt + Unihan_IRGSources.txt (the
-    # radical-stroke fields kRSUnicode/kTotalStrokes, P37-4 expansion) — the
-    # carried-field census and the censused-out fields are documented on
-    # UnihanTxtParser. 65,092 codepoints carry at least one carried field and
-    # mint entries.
+    # radical-stroke fields kRSUnicode/kTotalStrokes, P37-4 expansion;
+    # kIRG_VSource, P78-6) — the carried-field census and the censused-out
+    # fields are documented on UnihanTxtParser. 102,998 codepoints carry at
+    # least one carried field and mint entries (the P37-4 radical-stroke
+    # fields brought near-total coverage; the P78-6 fields — kHangul,
+    # kIRG_VSource — ride existing entries and mint none, verified against
+    # the 17.0 members).
     # The /latest/ URL moves with each Unicode release (annual cadence) —
     # sync_policy manual; the .zip-fetch.json Last-Modified pin plus the
     # in-file version headers date every canonical tree.

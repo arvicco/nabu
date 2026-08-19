@@ -23,13 +23,13 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 19 August 2026)</span> |
 |---|---|---|---|---|
 | `betamasaheft-works` | texts | attribution | wired · manual | 3,796 docs / 66,516 passages |
 | `dillmann` | dictionary | nc | wired · manual | 13,727 entries |
 | `traces` | texts | nc | wired · manual | 15 docs / 75,436 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 August 2026)</span>: `gez` 17,516 · `amh` 22.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 19 August 2026)</span>: `gez` 17,516 · `amh` 22.
 
 ## The desk's instruments
 
@@ -71,4 +71,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-three research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-four research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

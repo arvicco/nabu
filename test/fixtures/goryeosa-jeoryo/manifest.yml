@@ -1,0 +1,29 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# Goryeosa-jeoryo (P78-3): one whole + one trimmed real member + the DTD
+# out of the data.go.kr dump zip (dataset 15115521). The upstream is one
+# zip behind the DataGoKrFetch three-step resolution, so per-file URLs
+# do not exist — refresh re-downloads the zip and re-extracts; the
+# dataset-page URL below is the stable anchor.
+source: goryeosa-jeoryo
+adapter_test: test/adapters/goryeosa_jeoryo_test.rb
+retrieved: 2026-08-18
+files:
+  - path: kj_000.xml
+    url: https://www.data.go.kr/data/15115521/fileData.do
+    whole: false
+    reason: byte-verbatim — the zip's ONE <item>-rooted front-matter member (four sibling
+      level1 leaves with $-carrying ids, no dates)
+  - path: kj_033.xml
+    url: https://www.data.go.kr/data/15115521/fileData.do
+    whole: false
+    reason: trimmed by whole-line cuts (level5 siblings 0050-0090 and the 2월-onward
+      level4s removed, kept bytes verbatim) — 卷33, 우왕 14년 (1388), the full
+      level1→2→3→4→5 chain with 음-dated articles and the level3 bare-year front
+  - path: history.dtd
+    url: https://www.data.go.kr/data/15115521/fileData.do
+    whole: true
+    reason: the Korean History Database unified DTD, the 2023 comment-reflowed ver 1.4
+      copy this zip ships (contributor emails scrubbed, declarations unchanged) — the
+      family's spec travels with the fixture

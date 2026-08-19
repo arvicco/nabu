@@ -2,7 +2,7 @@
 
 The third dimension, after language and time. As of **2026-08-09**:
 **585,682 documents carry a machine place reference** (708,905 name a
-place; ~975,000 documents total) — 151,157 before the places program.
+place; ~977,000 documents total as of the P77 census) — 151,157 before the places program.
 The public summary of this page is site/places.md; this is the
 maintained original, in the docs/languages.md mold.
 

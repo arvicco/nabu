@@ -23,7 +23,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 19 August 2026)</span> |
 |---|---|---|---|---|
 | `e84000` | texts | nc | wired · manual | 388 docs / 124,223 passages |
 | `otdo` | texts | attribution | wired · manual | 413 docs / 13,593 passages |
@@ -37,7 +37,7 @@ A source wears every desk it serves — these eleven answer this desk. Holdings 
 | `wiktionary-bo` | dictionary | attribution | wired · manual | 3,651 entries |
 | `nabu-data` | feature module | attribution | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 August 2026)</span>: `san` 9,379 · `bod` 6,142 · `xct` 4,564 · `otb` 410 · `en` 388 · `xzh` 5 · `eng` 1.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 19 August 2026)</span>: `san` 9,379 · `bod` 6,142 · `xct` 4,564 · `otb` 410 · `en` 388 · `xzh` 5 · `eng` 1.
 
 ## The desk's instruments
 
@@ -75,4 +75,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-three research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-four research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

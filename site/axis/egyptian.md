@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these nine answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 18 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 19 August 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `ccl` | dictionary | attribution | wired · manual | 11,284 entries |
@@ -27,7 +27,7 @@ A source wears every desk it serves — these nine answer this desk. Holdings ar
 | `edubba-overlay` | feature module | attribution | wired · manual | nothing held yet |
 | `unikemet` | feature module | open | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 18 August 2026)</span>: `egy` 51,130 · `ger` 12,985 · `cop` 12,222 · `eng` 4,861 · `grc` 3,311 · `egy-Egyd` 1,424 · `arc` 1,189 · `ara` 962 · `und` 168 · `phn` 94 … and 20 more (`nabu axis egyptian` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 19 August 2026)</span>: `egy` 51,130 · `ger` 12,985 · `cop` 12,222 · `eng` 4,861 · `grc` 3,311 · `egy-Egyd` 1,424 · `arc` 1,189 · `ara` 962 · `und` 168 · `phn` 94 … and 20 more (`nabu axis egyptian` lists all).
 
 ## The desk's instruments
 
@@ -81,4 +81,4 @@ The full guidance, per script, is on the [display page](https://github.com/arvic
 
 ---
 
-One of the [twenty-three research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).
+One of the [twenty-four research desks]({{ '/axis/' | relative_url }}); the flat shelf map is [The Library]({{ '/library/' | relative_url }}) and the reasoning is [docs/axes.md](https://github.com/arvicco/nabu/blob/main/docs/axes.md).

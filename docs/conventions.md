@@ -44,7 +44,12 @@ the same seam). One text = one byte sequence still holds *within* the shelf
 — the WLC is mark-order-consistent — and the search side is unaffected:
 `text_normalized`/query folding pass through NFC + mark strip either way, so
 find-ability never depends on the stored byte order. Every other language
-keeps the refuse-non-NFC invariant (see architecture §3).
+keeps the refuse-non-NFC invariant (see architecture §3). Settled so it
+never gets re-litigated: **hangul NFC is SAFE for Middle Korean** (P78-4,
+verified empirically — archaic conjoining jamo survive NFC byte-identical;
+modern-L+V+archaic-T partially composes, losslessly; NFKC would be
+destructive and is never used) — `okm` needs NO exemption, and the list
+stays hbo/arc only.
 
 Related traps worth knowing:
 
@@ -505,7 +510,7 @@ transliteration) would be mis-joined — the pristine text is untouched
 either way. Content hashes cover `text_normalized` + annotations, and the
 derivation is deterministic, so two parses and rebuilds agree.
 
-**HSMS markup reading (P77-1 — PARSER-SCOPED, the second registrant of
+**HSMS markup reading (P77-1 — PARSER-SCOPED, a later registrant of
 the derivation contract).** OSTA's transcriptions are semi-paleographic:
 the pristine passage text keeps the HSMS markup VERBATIM (`q<ue>`
 abbreviation expansions, `[*x]` reconstructions, `[^x]` interlinear

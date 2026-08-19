@@ -1,19 +1,20 @@
 # Languages of the library
 
-**As of 2026-08-04** (post the P57 full rebuild — 68,408,109 live
-passages across the 126-row registry; live inventory: every code below
-appears in the catalog, the lemma index, or the reference shelf). This
-page explains the code system once, then lists the significant codes
-with one sentence each (the corpus now carries 122 document language
-codes; the long tail of single-inscription script variants is folded
-into grouped rows).
+**As of 2026-08-19** (post the P77 wave and the overnight P78 Korean
+first syncs — 71,073,017 live passages across the 145-row registry;
+live inventory: every code below appears in the catalog, the lemma
+index, or the reference shelf). This page explains the code system
+once, then lists the significant codes with one sentence each (the
+corpus now carries 128 document language codes; the long tail of
+single-inscription script variants is folded into grouped rows).
 
-**The headline has moved again — to the Islamicate world.** With the
-OpenITI load (2026-07-22 evening), **`ara` (Classical Arabic) is the
-library's largest language — 33.3M passages**, more than the whole
-pre-Arabic corpus combined; `lzh` (Literary Chinese, 13.4M) is second,
-Sumerian (3.04M) third, Ancient Greek (3.01M) fourth, and Japanese
-(2.98M) fifth.
+**The headline is still the Islamicate world.** **`ara` (Classical
+Arabic) is the library's largest language — 33.3M passages**, more
+than the whole pre-Arabic corpus combined; `lzh` (Literary Chinese,
+15.9M — the Korean historiographical wave's first syncs landed
+2026-08-18/19, their registry rows still `wired: false` pending the
+owner's verification flips) is second, Sumerian (3.04M) third,
+Ancient Greek (3.02M) fourth, and Japanese (2.98M) fifth.
 
 **The desk reference is a command (P18-4), and languages are now
 file-backed (P19-1):** `nabu language CODE` explains any code this page
@@ -154,10 +155,10 @@ module if used), the old `-pro`-suffix string test, the old bracket names.
 
 | Code | Language | One sentence |
 |---|---|---|
-| `lzh` | Literary Chinese | The library's largest language by passages (13.0M) — the Kanripo classical-Chinese repository and the CBETA Buddhist canon (Taishō + Xuzangjing), plus the HDIC Heian-period character-dictionary line. Since P37-2, traditional/simplified/z-variant spellings fold to one search skeleton (conventions §9). |
-| `grc` | Ancient Greek | The largest *Western* language and second overall (1.99M passages) — Homer through the papyri to Swete's Septuagint, both Greek NTs, and the EDH bilinguals, polytonic. |
+| `lzh` | Literary Chinese | The library's second-largest language (15.9M passages, 2026-08-19) — the Kanripo classical-Chinese repository and the CBETA Buddhist canon (Taishō + Xuzangjing), plus the HDIC Heian-period character-dictionary line — and now the hanmun written tradition beyond China: Korea's dynastic records (the sillok, the Royal Secretariat's daily registers, the Goryeo histories, the ITKC classics) and Đại Việt's annals, the Korean wave's first syncs landed 2026-08-18/19. Since P37-2, traditional/simplified/z-variant spellings fold to one search skeleton (conventions §9). |
+| `grc` | Ancient Greek | The largest *Western* language — fourth overall at 3.02M passages — Homer through the papyri to Swete's Septuagint, both Greek NTs, and the EDH bilinguals, polytonic. |
 | `sux` | Sumerian | The language isolate of the earliest written literature, from Ur III royal inscriptions to the great lexical lists — 3.03M passages, the largest cuneiform language. |
-| `akk` | Akkadian | East Semitic language of Babylon and Assyria, held in transliteration with ORACC's gold lemmas (SAA letters, omens, royal inscriptions) — now joined at scale by the CDLI and eBL fragment shelves. |
+| `akk` | Akkadian | East Semitic language of Babylon and Assyria, held in transliteration with ORACC's gold lemmas (SAA letters, omens, royal inscriptions) — joined at scale by the CDLI and eBL fragment shelves, and since 2026-08-18 by the Achemenet archives: 2,774 Achaemenid-period legal/administrative texts and letters (Murašû, Eanna, Sippar), silver-lemmatized with English glosses. |
 | `san-Latn` | Sanskrit (IAST romanization) | The GRETIL, SARIT, and DCS shelves — Vedas to early-modern śāstra — stored in the international transliteration scheme with accents preserved (0.84M passages). |
 | `san` | Sanskrit (Devanagari / CoNLL-U) | The UD Vedic treebank and the gold-lemmatized Digital Corpus of Sanskrit; `san-Deva` holds the Devanagari-scripted SARIT slice separately. |
 | `pli` | Pali | The SuttaCentral Tipiṭaka — the segmented Pali canon (0.44M passages), aligned to its English and the Chinese Āgamas. |
@@ -165,7 +166,7 @@ module if used), the old `-pro`-suffix string test, the old bracket names.
 | `hit` | Hittite | The Anatolian cuneiform corpus at fragment scale — the TLHdig transliterations beside the lexical-list entries, gold- and silver-lemmatized (0.36M passages). |
 | `syc` | Classical Syriac | The Digital Syriac Corpus (632 TEI documents) and the ETCBC Peshitta OT — extending the Aramaic axis by a millennium (0.17M passages). |
 | `egy` | Egyptian | The Ancient Egyptian Sentences (AES/TLA) and Late-Egyptian/Demotic Hugging-Face shelves — 0.12M gold-lemmatized passages from the Pyramid Texts onward; `egy-Egyd` holds a couple of Demotic papyri separately. |
-| `lat` | Latin | Republican and Imperial classics, Jerome's Vulgate, the Clementine bible, papyrus fragments — and, since the EDH sync, ~81,000 inscriptions (library.md §8g); 0.80M passages. |
+| `lat` | Latin | Republican and Imperial classics, Jerome's Vulgate, the Clementine bible, papyrus fragments, the Romance-wave shelves (BFM's medieval Latin side, CroALa, digilibLT, openMGH) — and the EDH + EDR inscriptions, ~196,000 epigraphic documents (library.md §8g, §8aa); 2.18M passages (2026-08-19). |
 | `cop` | Coptic | The last stage of Egyptian: documentary papyri plus the literary Coptic Scriptorium shelf in Sahidic and Bohairic, gold-lemmatized (233,020 rows; library.md §8f). |
 | `qpc` | Proto-cuneiform | The pre-linguistic administrative tablets of the late 4th millennium BCE (dcclt archaic lists) — signs before language. |
 | `hbo` | Biblical Hebrew | The Masoretic shelves — OSHB Westminster Leningrad, the BHSA/ETCBC treebank, the Dead Sea Scrolls — gold-lemmatized, NFC-exempt (0.09M passages). |
@@ -184,7 +185,11 @@ module if used), the old `-pro`-suffix string test, the old bracket names.
 | `non` / `gmq-pro` | Old Norse / Proto-Norse | The North Germanic lane (synced live 2026-07-22): Menotec's seven Old Norwegian treebanks and the Poetic Edda of Codex Regius (gold PROIEL-scheme morphology), plus Rundata's runic corpus in transliteration with its Old-West-Norse normalisation lane — 39,923 passages; the urnordisk-dated inscriptions carry `gmq-pro` (the wiktionary-recon proto-code convention of rule 4 — no ISO code exists; 822 passages). |
 | `osx` | Old Saxon | The *Heliand* (HeliPaD, synced live 2026-07-22): 3,549 syntactically parsed tree blocks with gold form-lemma pairs — the 9th-century gospel harmony beside its Gothic and Old English gospel cousins. |
 | `is` | Icelandic (diachronic) | IcePaHC via UD, live 2026-07-22 — the 12th–21st c. under the one modern tag (the `orv`/Middle-Russian precedent of rule 3): 44,029 passages whose 812,484 gold rows enter straight at #4 of the lemma pools. |
+| `sv` | Old Swedish (under the modern tag) | Fornsvenska textbanken, live 2026-08-18 — the medieval law codes, prose and rhymed chronicles, 170,872 sentence passages; no ISO code exists for Old Swedish (the IcePaHC-under-`is` precedent of rule 3), so the stage rides the `sv:old` lect minted in nabu-lects (PR #4). |
+| `osp` | Old Spanish | The Old Spanish Textual Archive (osta), live 2026-08-18 — 684 documents of semi-paleographic manuscript transcription (5,091 passages), with the codices' Leonese (`ast`), Navarro-Aragonese (`arg`, under the `an:old` lect) and Latin work layers coded per document from the archive's own works tables. |
+| `spa` | Spanish (diachronic) | The DISCO sonnet corpus, live 2026-08-18 — 4,527 sonnet passages by 1,216 authors, 15th–20th c., under the one modern tag (the etym-desk reflex code, so cognate joins connect); per-line meter and rhyme ride as labelled machine annotations. |
 | `jpn` | Japanese | The Aozora Bunko reading desk (synced live 2026-07-21): 2.99M passages of Meiji-and-later public-domain literature, ruby readings as annotations, kyūjitai works reachable through the reform fold (rule 5 / conventions §9). |
+| `okm` | Middle Korean | The 용비어천가 shelf (ko-wikisource-mk, first sync 2026-08-18, wired flip pending): the 1447 hangul epic's 125 cantos of Middle Korean verse in the archaic orthography (arae-a, tone dots — hangul NFC-safe, never NFKC), beside their parallel hanmun. |
 | `xcl` / `xhu` / `uga` / `elx` / `peo` | Classical Armenian / Hurrian / Ugaritic / Elamite / Old Persian | The 5th-century Armenian NT plus lexical-list and inscriptional traces from the cuneiform and Achaemenid shelves — small but gold-lemmatized. |
 | `ett` / `osc` / `xlu` / `xtg` / `xfa` / `xve` / `scx` / `xly` / `xpu` / `xrr` | Etruscan / Oscan / Luwian / …the pre-Roman epigraphic long tail | The Italic, Anatolian, and Mediterranean inscription corpora (OpenEtruscan, CEIPoM, ItAnt, LexLep, TIR, I.Sicily) — dozens of languages, mostly script-tagged (`-Grek`/`-Latn`/`-Ital`), many at a few hundred passages each. |
 | `eng` / `en` / `ger` / `deu` / `ita` / `pol` / `fra` | Modern translation tags | The facing-translation layer (Perseus/First1K, WEB/Vulgate, SuttaCentral, Freising) — never originals; `en`/`deu` are legacy strays standardizing on `eng`/`ger`. |
@@ -223,23 +228,27 @@ multi-hop closure and per-edge "(loan)" flags — the Phase-18 trio
 (`iecor`, `liv`, `edl`) synced live 2026-07-14, and the Phase-30–33
 expansion added the StarLing bases, the Hebrew/Egyptian/Slovenian
 desks, and the Sino/Japanese shelves. The table above is representative:
-**56 dictionary shelves** now hold **1,310,763 entries** total
-(2026-07-22 census) —
+**105 dictionary shelves** now hold **1,410,205 entries** total
+(2026-08-19 census) —
 library.md §8c/§8h/§8j/§8k/§8m/§8o/§8q/§8s/§8t enumerate them per phase.)*
 
-## Gold-lemma languages (searchable via `--lemma`, 28 as of today)
+## Gold-lemma languages (searchable via `--lemma`, 38 as of the 2026-08-19 census)
 
-`san, sux, gmh, is, egy, lat, grc, orv, lzh, akk, hbo, non, cop, sl,
-chu, ojp, sga, got, osx, bul, ang, xcl, peo, arc, hit, xhu, elx, uga` —
-the treebanks, ORACC, goo300k, DCS, ONCOJ, the Hebrew/Egyptian shelves,
-Coptic Scriptorium, and the P40 Germanic shelves feed these
-**16,240,531 gold rows** (ordered above by pool size: `san` 5.54M and
-`sux` 2.97M lead; **`gmh` debuts third at 2.10M** — the ReM sync of
-2026-07-22 — and the owner's same-day `sync ud` landed `is` at **#4**
-(IcePaHC, 812K) plus `lzh`'s first gold lane (427K), with `non` 258K
-and `osx` 47K in the same wave). A parallel **silver layer** adds
-8,244,309 machine-suggested rows in 8 languages (chiefly Greek/Diorisis
-7.54M and Hittite/TLHdig), always labelled. Everything else is
+`san, sux, gmh, gml, lat, egy, akk, is, grc, ro, orv, lzh, hbo, non,
+cop, sl, fro, chu, ojp, sga, got, xcl, it, gez, frm, osx, bul, ota,
+ang, xur, peo, arc, hit, xhu, elx, uga, qur, hlu` — the treebanks,
+ORACC, goo300k, DCS, ONCOJ, the Hebrew/Egyptian shelves, Coptic
+Scriptorium, and the Germanic reference corpora feed these
+**19,319,627 gold rows** (2026-08-19 census; ordered above by pool
+size: `san` 5.54M and `sux` 2.98M lead, `gmh` 2.10M third — ReM —
+and `gml` 1.23M fourth — ReN — with `lat` 851K, `egy` 826K, `akk`
+826K and `is` 812K the next tier). A parallel **silver layer** adds
+**28,451,399 machine-suggested rows in 14 codes**, always labelled
+(`--gold-only` excludes it): chiefly Greek at corpus scale (GLAUx +
+Diorisis, 21.5M) and Latin (digilibLT + BFM lanes, 5.7M), with
+Hittite/TLHdig 462K, Old French 319K — and the P77 newcomers, OSTA's
+Old Spanish 249K (plus its `arg`/`ast` layers) and Achemenet's
+Akkadian 121K. Everything else is
 full-text-searchable but not lemma-searchable (yet — see improvements
 §3.1 for the cluster plan to project lemmas onto the rest).
 

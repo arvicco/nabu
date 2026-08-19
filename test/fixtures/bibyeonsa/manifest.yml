@@ -1,0 +1,29 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# Bibyeonsa (P78-3): two trimmed real members + the DTD out of the
+# data.go.kr dump zip (dataset 15053636). The upstream is one zip behind
+# the DataGoKrFetch three-step resolution, so per-file URLs do not
+# exist — refresh re-downloads the zip and re-extracts; the dataset-page
+# URL below is the stable anchor.
+source: bibyeonsa
+adapter_test: test/adapters/bibyeonsa_test.rb
+retrieved: 2026-08-18
+files:
+  - path: bb_001.xml
+    url: https://www.data.go.kr/data/15053636/fileData.do
+    whole: false
+    reason: trimmed by whole-line cuts (level2 year siblings 003-007 removed, kept bytes
+      verbatim) — the zip's ONE <item>-rooted member, the 1959 print-edition front with
+      the 서문 introduction and the non-monotonic 1617/1616 year interleave
+  - path: bb_054.xml
+    url: https://www.data.go.kr/data/15053636/fileData.do
+    whole: false
+    reason: trimmed by whole-line cuts (level4 siblings 0030 onward + months 02-05
+      removed, kept bytes verbatim) — the level1-rooted norm (숙종 30년 = 1704) with the
+      year-attr level2, a 좌목 roster table leaf and the 비망기 entry leaf
+  - path: history.dtd
+    url: https://www.data.go.kr/data/15053636/fileData.do
+    whole: true
+    reason: the Korean History Database unified DTD ver 1.4 (2020-07-30), byte-identical
+      to the goryeosa zip's copy — the family's spec travels with the fixture

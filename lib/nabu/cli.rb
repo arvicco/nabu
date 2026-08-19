@@ -1460,10 +1460,11 @@ module Nabu
         end
       else
         registry = Nabu::SourceRegistry.load(config.sources_path)
-        print_list_card(query.card(slug), registry[slug])
+        view = focus_view(config, registry, catalog: catalog)
+        print_list_card(query.card(slug), registry[slug], enabled: card_enablement(view, registry[slug], slug))
         # A named SOURCE is a scoped request too: hint the enable on-ramp only
         # when that source is not yet enabled (silence otherwise).
-        print_source_enable_hint(focus_view(config, registry, catalog: catalog), registry, slug)
+        print_source_enable_hint(view, registry, slug)
       end
     rescue Nabu::Query::List::Error => e
       # Unknown source slug: a clean stderr line naming the valid slugs —
@@ -3768,7 +3769,7 @@ module Nabu
       catalog&.disconnect
     end
 
-    desc "backup", "Snapshot the three permanent folders (canonical/, config/, local/) + the derived dbs"
+    desc "backup", "Snapshot the permanent set (canonical/, config/, local/, .docs/) — never the derived dbs"
     long_desc <<~HELP, wrap: false
       File-level rsync backup (architecture §8, P7-2; the P71 three-folder
       contract) — the concept's promise: restorable from a plain rsync copy
@@ -3803,7 +3804,8 @@ module Nabu
         nabu backup --to /Volumes/NabuBackup/nabu     # explicit target
         nabu backup --dry-run                          # show the plan
     HELP
-    option :to, type: :string, desc: "Target path override (default: config/nabu.yml backup.target)"
+    option :to, type: :string,
+                desc: "Target path override (default: backup.target in the local/config/settings.yml overlay)"
     option :dry_run, type: :boolean, default: false, desc: "Print the rsync plan and change nothing"
     option :allow_unmounted, type: :boolean, default: false,
                              desc: "Skip the mount-point guard (for a deliberately-local target)"
@@ -5181,10 +5183,10 @@ module Nabu
         prose[/\A.*?[.!?](?=\s)/] || prose
       end
 
-      def print_list_card(card, entry)
+      def print_list_card(card, entry, enabled: nil)
         say "#{card.slug} — #{card.name}"
         wrap_text(card.description).each { |line| say "  #{line}" } if card.description
-        say "  adapter #{card.adapter_class}#{registry_fragment(entry)}"
+        say "  adapter #{card.adapter_class}#{registry_fragment(entry)}#{enablement_fragment(enabled, card.slug)}"
         credit = card.license_text.to_s.strip
         say "  license #{card.license_classes.join(',')}#{" · #{truncate_line(credit)}" unless credit.empty?}"
         say "  #{card_counts(card)}"
@@ -5195,6 +5197,25 @@ module Nabu
           say "  dict #{dict.slug} — #{dict.title} [#{dict.language}] entries=#{dict.entries}"
         end
         print_card_axes(card)
+      end
+
+      # P78-r7 (owner: "why doesn't it indicate if the source is enabled?"):
+      # the card STATES the box-enablement fact instead of implying it by the
+      # hint's silence — enablement gates whether `sync` will even run, so a
+      # dossier card without it is incomplete. nil = not an enable target
+      # (shelf/module/unregistered).
+      def card_enablement(view, entry, slug)
+        return nil if entry.nil? || entry.shelf? || entry.feature_module?
+
+        view.resolution.slugs.include?(slug)
+      end
+
+      def enablement_fragment(enabled, slug)
+        case enabled
+        when true then " · enabled"
+        when false then " · NOT ENABLED on this box (nabu enable #{slug})"
+        else ""
+        end
       end
 
       # Registry facts on the header line; a catalog source missing from the
@@ -8637,13 +8658,28 @@ module Nabu
       # is on and how long each stage took. A stage closes when the next one
       # opens (or at finish_progress), its line ending in final counts +
       # elapsed; sync paths never call stage, so they keep the bare counter.
+      # +eta+ (P78-r2, Q34): when the runner consulted the stage_timings
+      # history, the open line SPEAKS the estimate — including the honest
+      # "first run — no estimate" — and non-tty (the caffeinate/drill logs,
+      # where every owner-perceived "hang" of P77 was read) gets the open
+      # line too, so the log names what is running BEFORE it finishes.
       def stage_tick(tty, state)
-        lambda do |label|
+        lambda do |label, eta = nil|
           close_stage(state)
           state[:stage] = label
+          state[:eta] = eta
           state[:started] = Process.clock_gettime(Process::CLOCK_MONOTONIC)
           state[:processed] = state[:errored] = state[:last] = 0
-          $stderr.print("\r\e[K  #{label}… ") if tty
+          suffix = eta ? "#{eta.render} " : ""
+          if tty
+            $stderr.print("\r\e[K  #{label}… #{suffix}")
+          elsif eta&.real?
+            # Non-tty prints the open line only when there is a REAL
+            # estimate to speak (P78-r3: "first run — no estimate" on
+            # every tiny shelf sync is noise in a log; the close line
+            # with counts + elapsed is the record either way).
+            warn("  #{label}… #{suffix}")
+          end
         end
       end
 
@@ -8673,13 +8709,29 @@ module Nabu
           state[:processed] = processed
           state[:errored] = errored
           label = state[:stage] || "loading"
+          left = time_left_suffix(state, processed)
           if tty
-            $stderr.print("\r\e[K  #{label}… #{processed} docs#{quarantine_suffix(errored)}  ")
+            $stderr.print("\r\e[K  #{label}… #{processed} docs#{quarantine_suffix(errored)}#{left}  ")
           elsif processed - state[:last] >= (state[:stage] ? 1000 : 100)
             state[:last] = processed
-            warn("  #{label}… #{processed} docs#{quarantine_suffix(errored)}")
+            warn("  #{label}… #{processed} docs#{quarantine_suffix(errored)}#{left}")
           end
         end
+      end
+
+      # P78-r2: the in-stage extrapolation — once ticks flow and the last
+      # run recorded a row count, the observed rate projects the remainder
+      # (" ~3m left"). Guarded: enough ticks and elapsed time to trust the
+      # rate, and only while the recorded total still lies ahead (past it,
+      # the estimate would be a lie — drift means more rows this run).
+      def time_left_suffix(state, processed)
+        basis = state[:eta].respond_to?(:basis_rows) ? state[:eta].basis_rows : nil
+        return "" unless basis&.positive? && processed >= 100 && processed < basis
+
+        elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - state[:started]
+        return "" if elapsed < 5
+
+        " ~#{Nabu::Eta.format_seconds(elapsed / processed * (basis - processed))} left"
       end
 
       def quarantine_suffix(errored)
@@ -8878,9 +8930,9 @@ module Nabu
         # `sync kr-gaiji` / `sync local-notes` knows what it does (and does not) do.
         say kind_nature_note(entry), :yellow if entry && !entry.source?
         # The verification-pending note belongs to kind: source rows alone —
-        # module/shelf rows are PERMANENTLY wired: false by registry invariant
-        # (the P46-r1 rule; P52 owner report caught this last surface still
-        # promising a flip that never comes).
+        # module/shelf rows verify their channel once and stay wired (the
+        # 2026-08-18 wired-semantics ruling: wired = channel verified, for
+        # every kind; --all participation is governed by kind + sync_policy).
         if entry && !entry.wired && entry.source?
           say "Note: #{slug} is not wired yet (this sync is the verification); syncing anyway (explicit request).",
               :yellow
@@ -8890,6 +8942,12 @@ module Nabu
         # the explicit path; the batch paths pre-skip blocked sources).
         enforce_grant!(entry, ledger)
         redownload_wipe!(config_for_runner(runner), slug) if options[:redownload]
+        # P78-r2 (Q34): the runs history already answers "how long does this
+        # usually take" — say it up front, before the wait begins. Coarse on
+        # purpose (fetch variance, parse-only runs); silent for a first sync.
+        if (eta = Nabu::Eta.last_sync(ledger, slug: slug))
+          say "#{slug}: last sync took #{Nabu::Eta.format_seconds(eta.seconds)}"
+        end
         outcome = runner.sync(slug, parse_only: options[:parse_only], force: options[:force],
                                     progress: progress_reporter)
         finish_progress

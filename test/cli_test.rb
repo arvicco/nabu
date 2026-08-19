@@ -1183,7 +1183,21 @@ class CLITest < Minitest::Test
       catalog.disconnect
       out, _err, status = with_config(config) { run_cli(%w[list shelf]) }
       assert_nil status
-      assert_match(/· sync manual · wired$/, out, "registry wired: true must win over the stale db row")
+      assert_match(/· sync manual · wired · enabled$/, out,
+                   "registry wired: true must win over the stale db row; the card states enablement (P78-r7)")
+    end
+  end
+
+  # P78-r7 (owner: "why doesn't it indicate if the source is enabled?"):
+  # the card STATES the box-enablement fact — the hint's silence was not
+  # legible. Un-enabled reads loud, with the on-ramp hint beneath.
+  def test_list_card_states_not_enabled_when_the_profile_excludes_the_source
+    with_list_corpus do |config|
+      Nabu::Profile.new([]).save(config.profile_path)
+      out, _err, status = with_config(config) { run_cli(%w[list shelf]) }
+      assert_nil status
+      assert_match(/· sync manual · wired · NOT ENABLED on this box \(nabu enable shelf\)$/, out,
+                   "the card states the fact AND carries the on-ramp inline")
     end
   end
 
@@ -3109,27 +3123,34 @@ class CLITest < Minitest::Test
   # -- progress reporting (P2-6) -------------------------------------------
 
   # When $stderr is a tty, the loader's per-document ticks render a \r-updating
-  # "loading…" counter on $stderr; the final counts still land on $stdout.
+  # counter on $stderr — since P78-r3 labeled with the sync stage
+  # ("parse+load: <slug>…", the eta beside it once history exists); the
+  # final counts still land on $stdout.
   def test_sync_progress_hits_stderr_when_tty_stdout_counts_unchanged
     with_sync_env(wired: true) do |config|
       out, err = with_config(config) do
         capture_with_tty(stderr_tty: true) { Nabu::CLI.start(%w[sync corpus --parse-only]) }
       end
-      assert_match(/loading…/, err, "tty progress must write the counter to $stderr")
+      assert_match(/parse\+load: corpus…/, err, "tty progress must write the counter to $stderr")
+      assert_match(/first run — no estimate/, err, "the honest no-estimate note shows interactively")
       assert_match(/corpus\s+parse-only/, out, "final counts stay on $stdout")
       assert_match(/\+2 added/, out)
-      refute_match(/loading…/, out, "progress must not leak into $stdout")
+      refute_match(/parse\+load/, out, "progress must not leak into $stdout")
     end
   end
 
-  # Non-tty (the default in the suite): a small corpus stays completely silent
-  # on $stderr — the per-100-docs line never triggers for two documents.
-  def test_sync_non_tty_small_corpus_emits_no_progress
+  # Non-tty (the default in the suite): a small corpus emits ONLY the stage
+  # close line (counts + elapsed — the log record); the per-100-docs tick
+  # never triggers for two documents, and "first run — no estimate" is
+  # deliberately tty-only (P78-r3: noise in a log, honesty on a screen).
+  def test_sync_non_tty_small_corpus_emits_only_the_stage_record
     with_sync_env(wired: true) do |config|
       _out, err = with_config(config) do
         capture_with_tty(stderr_tty: false) { Nabu::CLI.start(%w[sync corpus --parse-only]) }
       end
-      assert_empty err, "non-tty small corpus must not emit progress"
+      lines = err.lines
+      assert_equal 1, lines.size, "one close line, nothing else: #{err.inspect}"
+      assert_match(/\A  parse\+load: corpus… 2 docs .*s\n\z/, lines.first)
     end
   end
 

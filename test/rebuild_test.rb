@@ -143,7 +143,7 @@ class RebuildTest < Minitest::Test
     write_canonical("corpus", "one.txt" => ILIAD)
 
     stages = []
-    reporter = Nabu::ProgressReporter.new(on_stage: ->(label) { stages << label })
+    reporter = Nabu::ProgressReporter.new(on_stage: ->(label, _eta) { stages << label })
     rebuilder.run(progress: reporter)
 
     assert_equal ["corpus", "timeline", "place apply", "facets", "lect journal", "lect facets",
@@ -413,6 +413,83 @@ class RebuildTest < Minitest::Test
     # A skip is not a run: only the replayed source gets a runs row / sources row.
     with_ledger { assert_equal 1, Nabu::Store::Run.count }
     with_db { assert_equal %w[corpus], Nabu::Store::Source.select_order_map(:slug) }
+  end
+
+  # -- stage timings persist to the ledger (P78-r1, Q34) ---------------------
+
+  # The P36-0 profiler measured and DISCARDED; now every rebuild appends its
+  # per-source :load roll-ups and corpus stages to the ledger's stage_timings
+  # so the NEXT run can render an ETA. Rebuild-surviving by construction
+  # (№R-21: the ledger is never touched by the db drop).
+  def test_rebuild_persists_stage_timings_to_the_ledger
+    # Slug deliberately NOT "corpus": the (kind, scope, stage) key reserves
+    # scope="corpus" for corpus-wide stages; per-source rows carry the slug
+    # and the per-source-only stage names (:load/:parse/:insert) keep the
+    # two vocabularies disjoint even for a perversely named source.
+    write_sources(<<~YAML)
+      hexameter:
+        adapter: TestAdapter
+    YAML
+    write_canonical("hexameter", "one.txt" => ILIAD)
+
+    rebuilder.run
+
+    with_ledger do |ledger|
+      load_row = Nabu::Store::StageTimings.last(ledger, kind: "rebuild", scope: "hexameter",
+                                                        stage: "load")
+      refute_nil load_row, "the per-source :load roll-up lands under kind=rebuild"
+      assert_operator load_row[:seconds], :>=, 0.0
+      assert_equal 1, load_row[:rows], "rows carries the replayed document count (drift scaling)"
+      timeline = Nabu::Store::StageTimings.last(ledger, kind: "rebuild", scope: "corpus",
+                                                        stage: "timeline")
+      refute_nil timeline, "corpus stages land under scope=corpus"
+      refute_nil Nabu::Store::StageTimings.last(ledger, kind: "rebuild", scope: "corpus",
+                                                        stage: "analyze")
+    end
+  end
+
+  # P78-r2: the announcements SPEAK the history — first run honestly empty,
+  # second run estimating from the first's persisted timings.
+  def test_a_second_rebuild_announces_stages_with_estimates_from_history
+    write_sources(<<~YAML)
+      hexameter:
+        adapter: TestAdapter
+    YAML
+    write_canonical("hexameter", "one.txt" => ILIAD)
+    capture = ->(into) { Nabu::ProgressReporter.new(on_stage: ->(label, eta) { into << [label, eta] }) }
+
+    first = []
+    rebuilder.run(progress: capture.call(first))
+    eta = first.assoc("timeline").fetch(1)
+    refute_nil eta, "the runner consults the history for every profiled stage"
+    assert_predicate eta, :none?, "first run — no estimate, honestly"
+
+    second = []
+    rebuilder.run(progress: capture.call(second))
+    timeline = second.assoc("timeline").fetch(1)
+    refute_predicate timeline, :none?
+    assert_match(/\A~.+\(last run /, timeline.render)
+    refute_predicate second.assoc("hexameter").fetch(1), :none?, "per-source load estimates too"
+    refute_predicate second.assoc("fulltext index").fetch(1), :none?,
+                     "the umbrella stage sums the six recorded index sub-stages"
+    assert_nil second.assoc("place apply").fetch(1),
+               "an unprofiled stage carries no eta — the CLI stays quiet, never guesses"
+  end
+
+  def test_a_second_rebuild_appends_timing_history_rather_than_overwriting
+    write_sources(<<~YAML)
+      corpus:
+        adapter: TestAdapter
+    YAML
+    write_canonical("corpus", "one.txt" => ILIAD)
+
+    rebuilder.run
+    rebuilder.run
+
+    with_ledger do |ledger|
+      rows = ledger[:stage_timings].where(kind: "rebuild", scope: "corpus", stage: "timeline").count
+      assert_equal 2, rows, "history appends; the latest row governs the estimate"
+    end
   end
 
   # -- errored > 0: DELTA-aware vs the ledger baseline (P18-7) ---------------

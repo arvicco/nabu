@@ -1,0 +1,33 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+#
+# Sillok (P78-1): three real whole members + the DTD out of the two
+# data.go.kr dump zips (datasets 15053647 + 15053646). The upstream is
+# zips behind the DataGoKrFetch three-step resolution, so per-file URLs
+# do not exist — refresh re-downloads the zips and re-extracts; the
+# dataset-page URLs below are the stable anchors.
+source: sillok
+adapter_test: test/adapters/sillok_test.rb
+retrieved: 2026-08-18
+files:
+  - path: 2nd_wzc_121.xml
+    url: https://www.data.go.kr/data/15053646/fileData.do
+    whole: false
+    reason: the anchor member, byte-verbatim — Sunjong appendix year 21 (1928), full
+      level2→3→4→5 chain, two dated 기사 articles, the seven-calendar apparatus with
+      the 일본연호 line filled (the post-annexation structural witness)
+  - path: 2nd_waa_200.xml
+    url: https://www.data.go.kr/data/15053647/fileData.do
+    whole: false
+    reason: Taejo appendix, byte-verbatim — level3 leaves with archive-source citations
+      and NO dates (the honest-absence case)
+  - path: 2nd_wqa_000.xml
+    url: https://www.data.go.kr/data/15053647/fileData.do
+    whole: false
+    reason: Hyojong 總序, byte-verbatim — the level1-rooted member (root id is the bare
+      reign code; only the filename disambiguates)
+  - path: history.dtd
+    url: https://www.data.go.kr/data/15053647/fileData.do
+    whole: true
+    reason: the Korean History Database unified DTD ver 1.3, shipped verbatim in every
+      dump zip — the family's spec travels with the fixture

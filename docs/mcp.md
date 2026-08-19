@@ -2,10 +2,11 @@
 
 `bin/nabu mcp` runs a **Model Context Protocol** server: a read-only,
 conversational surface over your local nabu corpus, spoken to by an AI client
-(Claude Code, Claude Desktop) over stdio. It exposes twelve tools — search,
+(Claude Code, Claude Desktop) over stdio. It exposes thirteen tools — search,
 read by urn, concordance, cross-source alignment, dictionary lookup, the
 reconstruction walk, intertext (quotation/echo finding), cognates-in-parallel,
-the mined links graph, the place desk, the cuneiform sign desk, and coverage —
+the mined links graph, the place desk, the character card, the cuneiform
+sign desk, and coverage —
 so a model can look things up in your texts, quote them, and cite them,
 without any ability to change the collection.
 
@@ -35,7 +36,7 @@ corpus. What you register today is what that surface promises.
 
 ---
 
-## 2. The twelve tools
+## 2. The thirteen tools
 
 Every passage in every response carries **urn**, **language**, and
 **license_class** (search, concord, align, and parallels rows also carry the
@@ -369,9 +370,10 @@ present-only `via` key), never one silently. An **Egyptian hieroglyph**
 (𓅃) or Gardiner-style code (G5, N35) serves the Unikemet card — catalog
 code, description, function, phonetic value, JSesh/Hieroglyphica/IFAO
 concordances, aes `hiero_inventar` attestation. A Han character answers a
-state note (no machine contract yet — `nabu_define` serves Han dictionary
-entries meanwhile); a missing module answers the sync-hint note (the
-lane-off rule). Absent data is null/[], never a placeholder.
+state note — the Han card is CLI-only for now (`nabu char`'s `--json`
+contract froze at P72-2, the reading lane's at P77-r15; MCP exposure is a
+documented gap, `nabu_define` serves Han dictionary entries meanwhile); a
+missing module answers the sync-hint note (the lane-off rule). Absent data is null/[], never a placeholder.
 
 ### `nabu_signs`
 
@@ -572,6 +574,9 @@ new, present-only keys.
 | The place desk | `nabu place NAME\|ID` (P44-2) | `nabu_place` | **added P44-3** — new tool, read-only, `Query::Place` unchanged; dump-absent degradation mirrors the CLI (id counts holdings, name lookup notes the sync hint) |
 | Findspot line | `nabu show` findspot (P44-2) | `nabu_show` — additive `findspot` key when the captured id resolves through the dump | **added P44-3** (pinned, incl. the dump-absent byte-identical case) |
 | Meter line | `nabu show` meter (P44-6/7 enrichments) | `nabu_show` — additive `meter` key on scanned passages | **added P44-3** (pinned) |
+| Sign-coverage graded search (`search --signset "ŠEŠ, AK" --max-foreign N`, P77-r16) | CLI only | no `nabu_search` parameter yet | **documented gap** — MCP exposure pending |
+| The Han character card (`nabu char 棄 --json`, contract frozen P72-2; reading lane P77-r15) | CLI only | `nabu_char` answers the state note; `nabu_define` covers dictionary entries | **documented gap** — MCP exposure pending |
+| Reading→character reverse lane (`nabu char wen`, P65) | CLI only | not exposed | **documented gap** |
 | Meter search facet | `search --meter CODE [--meter-pattern PATTERN]` (P45-5) | `nabu_search` `meter`/`meter_pattern` — text mode only, refusal parity with lemma/near; the honesty note (source layer named, empty layer explained) rides the free-text `note` | **added P45-5** (pinned; no frozen payload key changed) |
 | Tibetan word-grain search | `search --words` (P54-4) | `nabu_search` `words` — text mode only, refusal parity with lemma/near; present-only `word_grain` key when the filter ran, present-only `word_grain_note` when it degraded (non-Tibetan query / nabu-data not synced) | **added P54-4** (pinned; additive keys only, flag-off byte-identical) |
 | `--lang` on search/concordance | `search`/`concord` `--lang` | `nabu_search` / `nabu_concord` `lang` | parity (pinned P8) |

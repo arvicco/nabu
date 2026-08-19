@@ -3612,3 +3612,101 @@ burman-concordance:
   # ET-keyed held corpus), never guessed.
   license_watch: https://zenodo.org/records/7801485
   sync_policy: manual
+
+sillok:
+  adapter: Nabu::Adapters::Sillok
+  axes: [korean]   # P78-1: MINTS the korean axis — the hanmun state record's anchor
+  wired: true     # P78-1 first sync owner-verified (743 docs / 414,321 passages, both datasets); flipped 2026-08-19 (owner: 'wire everything on')
+  # 조선왕조실록 원문 (NIKH via data.go.kr 15053647 Taejo–Cheoljong +
+  # 15053646 Gojong/Sunjong; 제한 없음 → D47-a attribution). Hanmun only —
+  # the modern Korean translation layer is NOT in the dumps, never fetched.
+  # Fetch resolves the CURRENT atchFileId per dataset (DataGoKrFetch —
+  # the id bumps on upstream file replacement; .docs/p78-plan.md
+  # §Acquisition), then normal ZipFetch per dataset subdir.
+  license_watch: https://www.data.go.kr/data/15053647/fileData.do
+  sync_policy: manual
+
+sjw:
+  adapter: Nabu::Adapters::Sjw
+  axes: [korean]
+  wired: true     # P78-2 first sync owner-verified (297 docs / 1,896,858 passages; re-synced 2026-08-19 with the ETA lane narrating); flipped 2026-08-19 (owner: 'wire everything on')
+  # 승정원일기 (NIKH via data.go.kr 15064218; 제한 없음 → D47-a attribution).
+  # SCALE WARNING (the Kyoto precedent, said LOUD): the library's largest
+  # single source by characters — one ~418 MB zip unpacking to 2.44 GB /
+  # 298 members / members up to 19 MB; the first sync is a multi-hour
+  # parse+load and should run attended once, with the P78-r2 ETAs
+  # narrating. The nikh-xml family streams (P78-2a), so memory stays flat.
+  license_watch: https://www.data.go.kr/data/15064218/fileData.do
+ko-wikisource-mk:
+  adapter: Nabu::Adapters::KoWikisourceMk
+  axes: [korean]   # P78-4: the korean axis's vernacular leg — the first hangul print
+  wired: true     # P78-4 first sync owner-verified (1 work doc / 159 passages, okm 125); flipped 2026-08-19 (owner: 'wire everything on')
+  # 용비어천가 (1447) from Korean Wikisource — curated title list, ONE page
+  # carries all 125 cantos (census 2026-08-18). PD text + CC BY-SA 4.0
+  # transcription layer → attribution, credit the contributors. Middle
+  # Korean (okm) passages per canto + the hanmun ruby verse (lzh); the
+  # modern rendering rides as annotation, never as passage text.
+  # 월인천강지곡/석보상절 stay OUT until a completeness census passes
+  # (scan transclusions / fragmentary — the P78-4 audit).
+  license_watch: https://ko.wikisource.org/wiki/%EC%9A%A9%EB%B9%84%EC%96%B4%EC%B2%9C%EA%B0%80
+viet-wikisource:
+  adapter: Nabu::Adapters::VietWikisource
+  axes: [sinitic]  # P78-5: the Vietnamese classical shelf — deliberately NO
+                   # vietnamese axis (P47-s4 survey ruling: a shelf, not a desk)
+  wired: true     # P78-5 first sync verified (32 docs / 7,674 passages); flipped 2026-08-19 (owner: 'wire everything on')
+  # 大越史記全書 COMPLETE from zh.wikisource (卷首 + 29 quyển subpages;
+  # the index's own {{Textquality|50%}} proofreading status) + the two
+  # chữ-Hán showpieces: 平吳大誥 from vi.wikisource (parallel phiên âm
+  # rides as annotation), 諭諸裨將檄文 from ZH.wikisource (vi's bản-gốc
+  # link is a redlink — censused 2026-08-18). Curated title-list fetch
+  # (PAGES is the naming authority), 2 batched api.php requests; PD texts
+  # + CC BY-SA 4.0 transcription → attribution. All lzh.
+  license_watch: https://zh.wikisource.org/wiki/Wikisource:%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF
+goryeosa:
+  adapter: Nabu::Adapters::Goryeosa
+  axes: [korean]   # P78-3: the goryeosa family — the pre-Joseon dynastic history
+  wired: true     # P78-3 first sync owner-verified (138 docs / 31,207 passages); flipped 2026-08-19 (owner: 'wire everything on')
+  # 고려사 원문 (NIKH via data.go.kr 15053637; 제한 없음 → D47-a
+  # attribution). Hanmun only — no modern Korean translation layer in the
+  # dump. Fetch resolves the CURRENT atchFileId (DataGoKrFetch), then one
+  # ZipFetch into the flat workdir. 138 members kr_000..kr_137 (~50 MB
+  # unpacked), nikh-xml family, DTD ver 1.4.
+  license_watch: https://www.data.go.kr/data/15053637/fileData.do
+  sync_policy: manual
+
+goryeosa-jeoryo:
+  adapter: Nabu::Adapters::GoryeosaJeoryo
+  axes: [korean]   # P78-3: the goryeosa family — the chronological digest sibling
+  wired: true     # P78-3 first sync owner-verified (36 docs / 11,226 passages; the junk-named .jpg salvage-skipped, P78-r4); flipped 2026-08-19 (owner: 'wire everything on')
+  # 고려사절요 원문 (NIKH via data.go.kr 15115521; 제한 없음 → D47-a
+  # attribution). Hanmun only. Fetch resolves the CURRENT atchFileId
+  # (DataGoKrFetch), then one ZipFetch into the flat workdir. 36 members
+  # kj_000..kj_035 (~22 MB unpacked) + one stray mojibake .jpg the census
+  # counts loudly; nikh-xml family.
+  license_watch: https://www.data.go.kr/data/15115521/fileData.do
+  sync_policy: manual
+
+bibyeonsa:
+  adapter: Nabu::Adapters::Bibyeonsa
+  axes: [korean]   # P78-3: the goryeosa family — the state council's daily register
+  wired: true     # P78-3 first sync owner-verified (273 docs / 93,528 passages); flipped 2026-08-19 (owner: 'wire everything on')
+  # 비변사등록 원문 (NIKH via data.go.kr 15053636; 제한 없음 → D47-a
+  # attribution). Hanmun only. Fetch resolves the CURRENT atchFileId
+  # (DataGoKrFetch), then one ZipFetch into the flat workdir. 273 members
+  # bb_001..bb_273 (~180 MB unpacked — the family's bulk sibling);
+  # nikh-xml family, DTD ver 1.4.
+  license_watch: https://www.data.go.kr/data/15053636/fileData.do
+  sync_policy: manual
+
+itkc:
+  adapter: Nabu::Adapters::Itkc
+  axes: [korean]
+  wired: true     # P78-7 first sync owner-verified (473 docs / 13,185 passages); flipped 2026-08-19 (owner: 'wire everything on')
+  # 한국고전번역원 classical originals (P78-7): the OPEN-LICENSED slice —
+  # 17 complete works, one data.go.kr dataset each (제한 없음 → D47-a
+  # attribution; the itkc.or.kr site is ARR, ONLY the portal carries the
+  # grant). HONEST COVERAGE: ~17 of the GO family's 257 works; the rest
+  # ride the owner letter path (공공데이터 제공신청 — see the P78-7 scout
+  # report in .docs/p78-plan.md). The munjip stays parked per D47-c.
+  license_watch: https://www.data.go.kr/data/15022432/fileData.do
+  sync_policy: manual
