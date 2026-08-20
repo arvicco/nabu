@@ -52,7 +52,10 @@ module Nabu
   # lands, the crawl continues, and the next sync re-attempts (upstream may
   # unlock a text). A SYSTEMIC refusal rate (> REFUSED_CAP) aborts — that
   # shape means the download endpoint moved, not a restricted tail. A 200
-  # body that is neither TEI nor the refusal is immediate shape drift.
+  # body that is neither TEI nor the refusal is retried with backoff
+  # (P80-r2 — the live crawl died at hour 9 on ONE transient garbage body;
+  # the same idno served valid TEI on re-probe); a PERSISTENT wrong shape
+  # is a recorded malformed skip counted against the same systemic cap.
   #
   # == The truncation defense
   #
@@ -93,6 +96,10 @@ module Nabu
     # const: retry ceiling, not a corpus claim
     MAX_ATTEMPTS = 3
 
+    # Wrong-shape 200 re-asks before the body counts as malformed (P80-r2).
+    # const: retry ceiling, not a corpus claim
+    SHAPE_ATTEMPTS = 3
+
     # const: HTTP semantics, not a corpus claim
     RETRIABLE_STATUSES = [500, 502, 503, 504].freeze
 
@@ -114,7 +121,7 @@ module Nabu
     TRUNCATION_TOLERANCE = 0.01
 
     Result = Data.define(:sha, :atticked, :fetched, :cached, :refused,
-                         :inaccessible, :texts, :corpora)
+                         :malformed, :inaccessible, :texts, :corpora)
 
     def self.navigate_url(base_url, path)
       "#{base_url}/php_modules/navigate.php?path=#{path}"
@@ -138,8 +145,8 @@ module Nabu
       guard&.call(fetch.doomed_paths)
       fetch.complete!
       Result.new(sha: fetch.sha, atticked: fetch.atticked, fetched: fetch.fetched,
-                 cached: fetch.cached, refused: fetch.refused, inaccessible: fetch.inaccessible,
-                 texts: fetch.texts, corpora: fetch.corpora)
+                 cached: fetch.cached, refused: fetch.refused, malformed: fetch.malformed,
+                 inaccessible: fetch.inaccessible, texts: fetch.texts, corpora: fetch.corpora)
     end
 
     def initialize(base_url:, dir:, attic_dir:, corpus_idnos: DEFAULT_CORPUS_IDNOS,
@@ -158,10 +165,11 @@ module Nabu
       @fetched = 0
       @cached = 0
       @refused = []
+      @malformed = []
       @requests = 0
     end
 
-    attr_reader :atticked, :sha, :fetched, :cached, :refused, :corpora
+    attr_reader :atticked, :sha, :fetched, :cached, :refused, :malformed, :corpora
 
     def texts = walked_texts.size
 
@@ -295,15 +303,16 @@ module Nabu
         fetch_text!(idno)
       end
       cap = [(planned.size * REFUSED_CAP_FRACTION).ceil, REFUSED_CAP_FLOOR].max
-      return if @refused.size <= cap
+      skipped = @refused.size + @malformed.size
+      return if skipped <= cap
 
-      raise Error, "#{@refused.size} of #{planned.size} downloads refused — a systemic rate, " \
-                   "not a restricted tail: download.php moved upstream " \
-                   "(first refused: #{@refused.first(3).join(', ')})"
+      raise Error, "#{skipped} of #{planned.size} downloads refused or malformed — a systemic " \
+                   "rate, not a restricted tail: download.php moved upstream " \
+                   "(first: #{(@refused.first(3) + @malformed.first(3)).first(3).join(', ')})"
     end
 
     def fetch_text!(idno)
-      body = get_with_retry(self.class.download_url(@base_url, idno))
+      body = text_body_with_shape_retry(idno)
       if body.lstrip.start_with?(REFUSAL_PREFIX)
         @refused << idno
         @progress&.call("corpus-corporum text #{idno}: refused upstream " \
@@ -311,12 +320,33 @@ module Nabu
         return
       end
       unless body.include?("<TEI")
-        raise Error, "download.php?idno=#{idno} returned neither TEI nor the refusal body — " \
-                     "the endpoint's shape moved upstream"
+        @malformed << idno
+        @progress&.call("corpus-corporum text #{idno}: 200 body neither TEI nor the refusal " \
+                        "after #{SHAPE_ATTEMPTS} attempts — recorded skip, re-attempted next sync\n")
+        return
       end
 
       write_text!(idno, body)
       @fetched += 1
+    end
+
+    # A wrong-shape 200 re-asks with backoff before it counts (P80-r2):
+    # gateways flake, and one garbage body among thousands is a flake
+    # until it persists.
+    def text_body_with_shape_retry(idno)
+      url = self.class.download_url(@base_url, idno)
+      body = get_with_retry(url)
+      attempt = 1
+      until attempt >= SHAPE_ATTEMPTS || expected_shape?(body)
+        sleep(@delay * (2**attempt)) if @delay.positive?
+        body = get_with_retry(url)
+        attempt += 1
+      end
+      body
+    end
+
+    def expected_shape?(body)
+      body.include?("<TEI") || body.lstrip.start_with?(REFUSAL_PREFIX)
     end
 
     # -- HTTP -------------------------------------------------------------------
@@ -395,7 +425,7 @@ module Nabu
     def write_state!(sha:)
       state = { "url" => @base_url, "fetched_at" => Time.now.utc.iso8601,
                 "sha256" => sha, "corpora" => @corpora, "catalog" => @catalog,
-                "refused" => @refused.sort, "texts" => texts,
+                "refused" => @refused.sort, "malformed" => @malformed.sort, "texts" => texts,
                 "fetched" => @fetched, "cached" => @cached }
       File.write(File.join(@dir, STATE_FILE), JSON.pretty_generate(state))
     end
