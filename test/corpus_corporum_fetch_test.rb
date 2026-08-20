@@ -182,6 +182,41 @@ class CorpusCorporumFetchTest < Minitest::Test
     assert_requested :get, DOWNLOAD, query: { "idno" => "10468", "type" => "file-xml" }, times: 2
   end
 
+  # P80-r2 (the live 9-hour crawl death, 2026-08-20): after 3,485 clean
+  # texts, ONE transient 200 body that was neither TEI nor the refusal
+  # killed the whole run at idno 9740 — which served perfectly valid TEI
+  # on re-probe. A wrong-shape 200 is now retried with backoff, and a
+  # PERSISTENT one is a recorded malformed skip (the refusal mold,
+  # re-attempted next sync) counted against the same systemic cap —
+  # endpoint drift still aborts, one flake never does.
+  def test_a_transient_garbage_body_is_retried_then_fetched
+    stub_catalog
+    stub_texts(except: ["10468"])
+    stub_request(:get, DOWNLOAD).with(query: { "idno" => "10468", "type" => "file-xml" })
+                                .to_return({ status: 200, body: "<html>gateway hiccup</html>" },
+                                           { status: 200, body: fixture("texts", "10468.xml") })
+
+    result = sync!
+    assert_equal 3, result.fetched
+    assert_empty result.malformed
+    assert File.exist?(File.join(@dir, "texts", "10468.xml")), "the retry lands the real body"
+    assert_requested :get, DOWNLOAD, query: { "idno" => "10468", "type" => "file-xml" }, times: 2
+  end
+
+  def test_a_persistent_garbage_body_is_a_recorded_malformed_skip
+    stub_catalog
+    stub_texts(except: ["10468"])
+    stub_request(:get, DOWNLOAD).with(query: { "idno" => "10468", "type" => "file-xml" })
+                                .to_return(status: 200, body: "<html>always broken</html>")
+
+    result = sync!
+    assert_equal ["10468"], result.malformed
+    assert_equal 2, result.fetched, "the crawl continues past the malformed text"
+    refute File.exist?(File.join(@dir, "texts", "10468.xml")), "garbage never lands as a file"
+    state = JSON.parse(File.read(File.join(@dir, Nabu::CorpusCorporumFetch::STATE_FILE)))
+    assert_equal ["10468"], state["malformed"], "the recorded skip survives into the state"
+  end
+
   # --- the truncation / shape-drift defense ----------------------------------
 
   def test_a_walk_that_undercounts_the_corpus_listing_aborts_before_any_write
