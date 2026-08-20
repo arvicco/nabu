@@ -29,6 +29,29 @@ module Nabu
     # Hop cap — beyond this the chain is honestly a loop.
     MAX_REDIRECTS = 5
 
+    # A signed CDN URL's query must travel BYTE-VERBATIM (the aranese/HF
+    # xet-bridge 403, 2026-08-20): Faraday's default params machinery
+    # decode/encode-cycles the query — re-sorting params, normalizing
+    # escapes (%7E → ~) — and CloudFront matches the requested URL against
+    # the signed Policy's Resource string byte-for-byte, so any mangle is
+    # a 403 on a URL that curls fine. This encoder satisfies Faraday's
+    # decode→Hash / encode→String contract while smuggling the raw query
+    # through untouched. Callers passing explicit params would land beside
+    # the raw key — RedirectFollow never does (headers only).
+    module VerbatimQuery
+      RAW = "__nabu_raw_query__"
+
+      def self.decode(query) = { RAW => query }
+
+      def self.encode(params)
+        raw = params[RAW]
+        rest = params.except(RAW)
+        return raw.to_s if rest.empty?
+
+        [raw, Faraday::FlatParamsEncoder.encode(rest)].reject { |part| part.to_s.empty? }.join("&")
+      end
+    end
+
     # GET +url+ over the Faraday connection +http+, following redirects.
     # Returns [response, final_url] when the status lands in +accept+;
     # raises +error+ (the caller's error class) for any other non-redirect
@@ -60,11 +83,14 @@ module Nabu
     end
 
     def self.attempt(url, http:, error:, headers:, on_data: nil)
-      return http.get(url, nil, headers) if on_data.nil?
-
-      http.get(url) do |request|
+      # The encoder must be in place BEFORE the url is assigned — Request#url
+      # decodes the query with options.params_encoder at assignment time, so
+      # `http.get(url) { … }` would already have mangled it.
+      http.get do |request|
+        request.options.params_encoder = VerbatimQuery
+        request.url(url)
         request.headers.update(headers)
-        request.options.on_data = on_data
+        request.options.on_data = on_data unless on_data.nil?
       end
     rescue Faraday::Error => e
       raise error, "transport error for #{url}: #{e.message}"
