@@ -90,6 +90,30 @@ module Query
       assert_equal 1, search("mann", lang: "deu").size
     end
 
+    # -- query-side neutralization scoping (P81-2 / Q40) ---------------------
+
+    # OWNER REPRO (2026-08-20): `search houlá` (bdcamoes, Portuguese) served
+    # Romanian "hulă" passages — the Slavonic neutralizer's Latin ou→u arm
+    # fired on a Latin query. The arm is now scoped to Cyrillic queries;
+    # --lang asserts a language and restores its full pipeline, so the
+    # damaskini diplomatic surface stays reachable on request.
+    def test_latin_query_no_longer_collapses_ou_into_foreign_language_hits
+      ron = make_document(source: @open, urn: "urn:d:ron", language: "ron")
+      make_passage(ron, urn: "urn:d:ron:1", text: "hulă grea", sequence: 0, language: "ron")
+      dam = make_document(source: @open, urn: "urn:d:chu", language: "chu")
+      make_passage(dam, urn: "urn:d:chu:1", text: "kako oubi siona", sequence: 0, language: "chu")
+      rebuild!
+
+      assert_empty search("houlá"), "a Portuguese hail must not reach Romanian hulă via ou→u"
+      assert_empty search("oubi"), "the bare diplomatic spelling no longer infers the Slavonic collapse"
+      assert_equal ["urn:d:chu:1"], search("oubi", lang: "chu").map(&:urn),
+                   "--lang chu asserts the language: its neutralizer rejoins the union"
+      assert_equal ["urn:d:chu:1"], searcher.run_scan("oubi", lang: "chu").map(&:urn),
+                   "the scan mode rides the same asserted-language union"
+      assert_equal ["urn:d:chu:1"], search("оуби").map(&:urn),
+                   "a Cyrillic-script query still folds through its own neutralizer unasked"
+    end
+
     # -- FTS5 syntax hardening (owner report 2026-07-18: `search --help`
     # crashed with a raw fts5 backtrace; any hyphen-leading token does) ----
 
