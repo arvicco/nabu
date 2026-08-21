@@ -1,0 +1,29 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# TLS chain snapshots for the vendored-intermediate regression tests
+# (ZipFetchExtraCertsTest). Not refetchable: these are s_client captures,
+# not GET-able documents, and the Let's Encrypt leaf rotates every ~90
+# days — a refetch would silently swap the pinned chain the test reasons
+# about. Re-capture deliberately (see README.md) only when the regression
+# itself changes.
+source: certs
+adapter_test: null
+retrieved: 2026-08-21
+files:
+  - path: trismegistos-leaf.pem
+    refetchable: false
+    reason: >-
+      s_client capture (openssl s_client -connect www.trismegistos.org:443
+      -showcerts), not a GET-able URL; the leaf rotates ~90-daily and the
+      test pins this exact chain with a fixed verification time.
+    whole: true
+    trim: none (verbatim served certificate)
+  - path: trismegistos-intermediate-yr2.pem
+    refetchable: false
+    reason: >-
+      Same s_client capture as trismegistos-leaf.pem — the intermediate as
+      the server actually sent it, kept verbatim as the served-chain
+      snapshot the regression test verifies.
+    whole: true
+    trim: none (verbatim served certificate)
