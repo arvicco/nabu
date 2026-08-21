@@ -482,6 +482,16 @@ class LectsTest < Minitest::Test
     assert_nil Nabu::Lects.parse_id("sux:3ur"), "digits never lead a tag"
   end
 
+  def test_variety_tags_admit_up_to_eight_chars
+    match = Nabu::Lects.parse_id("oc/lengadoc")
+    assert_equal "lengadoc", match[:variety],
+                 "№R-41 grammar widening: IANA-verbatim dialect subtags (2-8 chars)"
+    assert_equal "vivaraup", Nabu::Lects.parse_id("oc/vivaraup")[:variety]
+    assert_nil Nabu::Lects.parse_id("oc/ninecharsx"), "nine chars stays out"
+    assert_nil Nabu::Lects.parse_id("oc:lengadoc"),
+               "stages keep the 2-5 cap — only the variety axis widened"
+  end
+
   # --- Nabu::Lects.parse_id: the grammar utility --------------------------------
 
   def test_parse_id_captures_every_axis
