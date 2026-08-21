@@ -35,11 +35,12 @@ module MCP
 
     def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil, links: nil, registry: nil,
               enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil,
-              readings: nil, hieroglyphs: nil)
+              readings: nil, hieroglyphs: nil, lect_rules: nil, lect_override_tiers: nil)
       Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger, links: links,
                            registry: registry, enabled_slugs: enabled_slugs, pleiades: pleiades,
                            sign_list: sign_list, tibetan_words: tibetan_words, lects: lects,
-                           readings: readings, hieroglyphs: hieroglyphs)
+                           readings: readings, hieroglyphs: hieroglyphs, lect_rules: lect_rules,
+                           lect_override_tiers: lect_override_tiers)
     end
 
     def make_document(source: @open, urn: "urn:d:1", title: "Iliad", language: "grc",
@@ -873,6 +874,38 @@ module MCP
       refute plain.key?("lect"), "no facet row means identity — the key never appears bare"
     end
 
+    # P81 U-5: the facet row's provenance basis rides as lect_basis, and a
+    # ruling that STATES a below-certain tier merges the lect_certainty
+    # object — certain and untiered bases add no certainty key (the
+    # empty-hash idiom), a basis-less legacy row adds neither key.
+    def test_show_passage_glosses_the_lect_tier_from_the_facet_basis
+      seed_corpus
+      grc_id = @catalog[:documents].where(urn: @grc.urn).get(:id)
+      @catalog[:document_facets].insert(document_id: grc_id, facet: "lect",
+                                        value: "grc:koi", raw: "rule:sef")
+      rules = Nabu::LectRules.new(rules: [
+                                    Nabu::LectRules::Rule.new(id: "sef", sources: ["src"], code: "grc",
+                                                              facet: "period", map: {},
+                                                              tier: "approximation")
+                                  ])
+
+      shown = payload(tools(lect_rules: rules).call("nabu_show", { "urn" => "#{@grc.urn}:1.1" }))
+      assert_equal "grc:koi", shown.fetch("lect")
+      assert_equal "rule:sef", shown.fetch("lect_basis")
+      assert_equal({ "tier" => "probable", "upstream" => "approximation", "carrier" => "lect-tier" },
+                   shown.fetch("lect_certainty"))
+
+      @catalog[:document_facets].where(document_id: grc_id, facet: "lect").update(raw: "owner")
+      certain = payload(tools(lect_rules: rules).call("nabu_show", { "urn" => "#{@grc.urn}:1.1" }))
+      assert_equal "owner", certain.fetch("lect_basis"), "provenance always rides"
+      refute certain.key?("lect_certainty"), "an owner ruling is certain — no certainty object"
+
+      @catalog[:document_facets].where(document_id: grc_id, facet: "lect").update(raw: nil)
+      legacy = payload(tools(lect_rules: rules).call("nabu_show", { "urn" => "#{@grc.urn}:1.1" }))
+      refute legacy.key?("lect_basis"), "a pre-P81 row carries no basis — no key, honestly"
+      refute legacy.key?("lect_certainty")
+    end
+
     def lilybaeum_resolver
       Nabu::Pleiades.from_entries([{
                                     "id" => "462281", "title" => "Lilybaeum",
@@ -992,6 +1025,27 @@ module MCP
                                         gazetteer_b: "tm", id_b: "33")
       card = payload(rig.call("nabu_place", { "query" => "462281" })).fetch("cards").fetch(0)
       assert_equal ["tm:33"], card.fetch("equivalences")
+    end
+
+    # P81 U-3 (survey A3): a gazetteer's own "?"-suffixed title merges the
+    # cataloguer's-"?" certainty object beside the verbatim title; unmarked
+    # titles stay byte-identical (the empty-hash idiom).
+    def test_place_card_glosses_a_query_suffixed_title
+      seed_epigraphy
+      doubtful = Nabu::Pleiades.from_entries([{
+                                               "id" => "580101", "title" => "Limenas Chersonesou?",
+                                               "reprPoint" => [25.02, 35.12],
+                                               "placeTypes" => ["settlement"], "names" => []
+                                             }])
+      card = payload(tools(pleiades: doubtful).call("nabu_place", { "query" => "580101" }))
+             .fetch("cards").fetch(0)
+      assert_equal "Limenas Chersonesou?", card.fetch("title"), "the upstream mark rides verbatim"
+      assert_equal({ "tier" => "probable", "upstream" => "?", "carrier" => "cataloguer-query" },
+                   card.fetch("title_certainty"))
+
+      plain = payload(tools(pleiades: lilybaeum_resolver).call("nabu_place", { "query" => "462281" }))
+              .fetch("cards").fetch(0)
+      refute plain.key?("title_certainty"), "an unmarked title adds no key"
     end
 
     def test_place_by_exact_title_and_unknown_title

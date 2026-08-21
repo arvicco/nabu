@@ -83,6 +83,28 @@ module Store
       refute_includes lect_rows.keys, @docs["urn:m:journal"]
     end
 
+    # P81 U-5: the facet row's raw column records WHERE each resolution
+    # came from (Lects#resolution's basis) — the render side joins it back
+    # to the ruling's stated tier without re-resolving.
+    def test_rebuild_records_the_provenance_basis_in_raw
+      overlay = { "urn:m:journal" => { "grc" => "grc:koi" } }
+      Nabu::Store::LectFacets.rebuild!(catalog: @catalog, registry: registry(overlay: overlay))
+      raws = @catalog[:document_facets].where(facet: "lect").select_hash(:document_id, :raw)
+      assert_equal "codemap", raws[@docs["urn:m:codemap"]]
+      assert_equal "override:derom", raws[@docs["urn:m:override"]]
+      assert_equal "overlay", raws[@docs["urn:m:journal"]],
+                   "a plain-hash overlay has no journal basis — the generic word"
+    end
+
+    def test_refresh_document_records_the_basis_too
+      Nabu::Store::LectFacets.rebuild!(catalog: @catalog, registry: registry)
+      overlay = { "urn:m:journal" => { "grc" => "grc:koi" } }
+      Nabu::Store::LectFacets.refresh_document!(catalog: @catalog, registry: registry(overlay: overlay),
+                                                urn: "urn:m:journal")
+      row = @catalog[:document_facets].first(document_id: @docs["urn:m:journal"], facet: "lect")
+      assert_equal ["grc:koi", "overlay"], row.values_at(:value, :raw)
+    end
+
     def test_materialized_predicate
       refute Nabu::Store::LectFacets.materialized?(@catalog)
       Nabu::Store::LectFacets.rebuild!(catalog: @catalog, registry: registry)
