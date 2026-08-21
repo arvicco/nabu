@@ -1010,17 +1010,29 @@ and never re-parses canonical. Live coverage (2026-07-12 sanctioned build):
 goo300k + 658 IMP = 61,670 dated/placed documents in 46.6 s; `document_axes`
 is 10.7 MB.
 
-**The lane census (as of P78).** The builder grew into a family: a
+**The lane census (as of P81).** The builder grew into a family: a
 per-source extractor per dating shape under `timeline_builder/`
 (OraccDates, ChronicleAnnals, EdhDates, CdliDates, …) plus the shared
 `MetadataDates` lane, which reads date shapes off stored document metadata
 rather than walking canonical — its shapes now include the Korean trio
-sillok/sjw/itkc (P78). The coordinates lane (migration 027, P69-1) added
-`place_lat`/`place_lon` to `document_axes`, feeding `search --within`.
-Since P47-r3 a sync refreshes the synced source's facet and
-metadata-timeline slices post-load (`FacetBuilder.refresh_source!` +
-`MetadataDates.refresh_source!`, mirroring the Indexer's per-source
+sillok/sjw/itkc (P78), ref (the ENHG century-half grid) and
+corpus-corporum (the fetch checkpoint's work_composition/author-life
+years with the teiHeader author_date ladder as fallback, P81-1); its ebl
+shape carries the era ladder (exact Seleucid conversion + king-reign
+bands above the ruled period table, P81-1). The P81-1 `NikhEntryDates`
+lane projects the NIKH chronicle family's per-entry machine dates from
+CATALOG annotations (load-verified f(canonical) — no re-parse):
+passage-grain year runs (axis_source `<slug>-entries`) plus document
+envelopes where the metadata lane makes no claim. The coordinates lane
+(migration 027, P69-1) added `place_lat`/`place_lon` to `document_axes`,
+feeding `search --within`. Since P47-r3 a sync refreshes the synced
+source's facet and metadata-timeline slices post-load
+(`FacetBuilder.refresh_source!` + `MetadataDates.refresh_source!` +
+`NikhEntryDates.refresh_source!`, mirroring the Indexer's per-source
 refresh) — only the canonical-walking extractors stay rebuild-scoped.
+The whole-library chronological views over this table are `nabu list
+--by-date` (century census, earliest-bound buckets with the announced
+multi-century count) and the generated `/dates/` site page (P81-1, C-6).
 
 **Part 2a — ORACC catalogue dates (`TimelineBuilder::OraccDates`, P16-3).** Every
 ORACC project ships a `catalogue.json`; the 2026-07-13 census (33 catalogues,
