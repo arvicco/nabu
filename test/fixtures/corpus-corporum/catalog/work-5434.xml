@@ -1,0 +1,57 @@
+<navigation xmlns="http://mlat.uzh.ch/2.0" address="home/38/2034/5434" group_by="" a="0">
+  <path_steps>
+    <path_step idno="" id="" type="" full_path="/" text_section="">home</path_step>
+    <path_step idno="38" id="" type="corpus" full_path="/38" text_section="">Patrologia Latina</path_step>
+    <path_step idno="2034" id="" type="author" full_path="38/2034" text_section="">Wido monachus</path_step>
+    <path_step idno="5434" id="" type="work" full_path="38/2034/5434" text_section="">Epistola ad Heribertum</path_step>
+  </path_steps>
+  <last_step accessible="1">
+    <item cc_idno="5434" type="work" collection="cc_works">
+      <cc_idno>5434</cc_idno>
+      <cc_id>WidMon.EpAdHe6</cc_id>
+      <name_data>
+      <name>Epistola ad Heribertum</name>
+    </name_data>
+      <author_data>
+      <primary_author_idno exp-referenced_item_name="" cc_idno_ref="true">2034</primary_author_idno>
+    </author_data>
+      <cc_metadata>
+      <created>2020-07-09T23:03:00.565</created>
+      <last_modification>2020-07-10T13:00:14.774</last_modification>
+    </cc_metadata>
+      <time_data>
+      <event what="work_composition">
+        <date1>
+          <year>1000</year>
+        </date1>
+      </event>
+    </time_data>
+    </item>
+    <extra_informations>
+      <author_name>Wido monachus</author_name>,
+              if ($steps[last()]/@type="work") then
+              (
+                let $alternative:=db:index($steps[last()]/cc_idno/data())/parent::*/local-name()
+                return $alternative
+              )
+            </extra_informations>
+  </last_step>
+  <summary>
+    <texts>1</texts>
+    <availible_texts>0</availible_texts>
+    <corpora>1</corpora>
+    <works>0</works>
+    <authors>1</authors>
+    <words>0</words>
+  </summary>
+  <contents>
+    <text type="text">
+      <name>Epistola ad Heribertum (Wido monachus), J. P. Migne</name>
+      <words_count>0</words_count>
+      <loaded/>
+      <idno>10468</idno>
+      <corpus_name>Patrologia Latina</corpus_name>
+      <accessible>1</accessible>
+    </text>
+  </contents>
+</navigation>

@@ -2557,6 +2557,34 @@ aozora:
   wired: true    # P38: first sync verified 2026-07-21 (16,004 works / 2.98M passages), owner-flipped
   sync_policy: manual
 
+# P80-5: Referenzkorpus Frühneuhochdeutsch (1350-1650) v1.0.2, 190 texts /
+# ~3.1M tokens of diplomatically transcribed ENHG — the first cora-xml
+# registrant (the RAW CorA export; the deposit ships NO TEI, so the
+# family the ReM/ReN siblings ride does not apply). Ingests the two
+# CorA-XML subcorpora (ref-mlu + ref-rub = all 190 texts); the ref-up
+# TigerXML syntax overlay (26 excerpt duplicates) is a documented
+# follow-up. One immutable Zenodo artifact (record 5793616,
+# ReF-v1.0.2.tar.gz, hard sha256 pin — the rem/iecor mold, tar.gz
+# flavor) → manual. CC BY-SA 4.0 (rub.de statement + in-deposit
+# README/LICENSE; the Zenodo record FIELD says cc-by-4.0 — recorded
+# discrepancy, the deposit's own grant governs, the tls precedent).
+ref:
+  adapter: Nabu::Adapters::Ref
+  axes: [germanic]
+  wired: false   # P80-5: adapter + fixtures landed 2026-08-19; first sync is
+                 # owner-fired. Checklist §6: bin/nabu sync ref — expect 190
+                 # documents (~447K physical lines / ~3.42M anno records
+                 # censused across the deposit), eyeball nabu show
+                 # urn:nabu:ref:f011:001r.01 ("AUs der geometrey ettliche
+                 # nuczpere ſtucklē…", manual lemma/pos/morph tokens) + 5
+                 # random passages, then flip.
+  license_watch: https://www.linguistics.rub.de/ref/access/index.en.html
+  # SILVER lemmas (the achemenet rule): CorA auto-annotation carries the
+  # corpus (censused 2,874,451 auto vs 544,520 manual anno units); the
+  # manual minority rides anno_type on each token record.
+  lemma_tier: silver
+  sync_policy: manual
+
 # P40-5: Referenzkorpus Mittelhochdeutsch (1050-1350) v2.1, ~400 texts /
 # ~2M word forms of manually annotated MHG — the first cora-tei registrant
 # (ReA/ReN ride the family when their license replies land, backlog
@@ -3573,6 +3601,15 @@ fornsvenska:
   wired: true    # P77 first sync owner-verified (155 docs), flipped 2026-08-18 (owner: "wire on all recent sources")
   sync_policy: manual
 
+# P80-8
+ctilc:
+  adapter: Nabu::Adapters::Ctilc
+  axes: [romance]
+  wired: false
+  # New works enter the public domain each January (Llei 21/2014 rolling
+  # horizon) — a yearly owner-fired re-sync re-diffs the listing.
+  sync_policy: manual
+
 # Template for the next source (leave commented until its adapter exists):
 #
 # <slug>:
@@ -3698,6 +3735,19 @@ bibyeonsa:
   license_watch: https://www.data.go.kr/data/15053636/fileData.do
   sync_policy: manual
 
+bdcamoes:
+  adapter: Nabu::Adapters::BdCamoes
+  axes: [romance]
+  wired: false   # P80-7: flip after the first real sync is owner-verified
+  # BDCamões Part I (PORTULAN CLARIN): 127 Portuguese literary works,
+  # ~3.1 M words, 15th–20th c. — CC-BY per the record page; the download
+  # click-through is accepted by LicenseAgreeFetch on owner ruling №R-37
+  # (2026-08-19), and the fetch REFUSES if the form's licence field
+  # drifts from CC-BY. Part II is a different grant (MS NC-NoReD-ND
+  # 2.0) and is deliberately NOT ingested.
+  license_watch: https://portulanclarin.net/repository/browse/bdcamoes-corpus-collection-of-portuguese-literary-documents-from-the-digital-library-of-camoes-ip-part-i/52f2b16412c411ea8a1302420a000005407eb504ccc045a4a0582ab53dfd43fd/
+  sync_policy: manual
+
 itkc:
   adapter: Nabu::Adapters::Itkc
   axes: [korean]
@@ -3709,4 +3759,113 @@ itkc:
   # ride the owner letter path (공공데이터 제공신청 — see the P78-7 scout
   # report in .docs/p78-plan.md). The munjip stays parked per D47-c.
   license_watch: https://www.data.go.kr/data/15022432/fileData.do
+  sync_policy: manual
+
+corpus-corporum:
+  adapter: Nabu::Adapters::CorpusCorporum
+  axes: [classical, romance]  # the croala/digiliblt precedent: the continuum's Latin side
+  wired: false   # adapter built P80-1/80-2, UNSYNCED — the first real sync is
+                 # owner-fired (a multi-hour polite crawl: ~6,700 catalog GETs
+                 # + 5,277 downloads at 1 req/s; two-grain resumable). Flip
+                 # after eyeballing status counts + 5 random passages.
+  # Corpus Córporum (mlat.uzh.ch, Univ. of Zurich, dir. Philipp Roelli): the
+  # Latin (meta-)repository — 30 corpora / ~10k texts / 226M words. V1 SCOPE =
+  # corpus idno 38, Patrologia Latina (Migne 1844–1864): 5,277 texts / 85.5M
+  # words, authors 105–1847 CE (census 2026-08-19, navigate.php root listing).
+  # De-facto XML API: navigate.php catalog walk (corpus→author→work→text
+  # idnos) + download.php per-text TEI P5; refusal bodies are recorded skips.
+  # NEW `corpus-corporum-tei` streaming family (COMPOSE REFUTED from bytes:
+  # PL wraps the ENTIRE reading text in <body><note><div1> — the blanket
+  # drop-<note> rule of epidoc/croala-tei/openmgh-tei parses every PL text to
+  # ZERO passages; here structural notes are transparent, inline notes drop,
+  # Migne column <pb n> rides a "column" annotation).
+  # LICENSE (80-1, the ETCSL class-3 mold): source nc — homepage verbatim
+  # "reused freely (but non-commercially) as long as the source is indicated",
+  # download offered "for non-commercial use"; per-text teiHeaders are
+  # license-SILENT (censused) → sefaria-mold override only when a header ever
+  # carries an explicit grant. Upstream warns some files don't validate as
+  # TEI → tolerant parse, ParseError→quarantine.
+  license_watch: https://mlat.uzh.ch/home
+lo-congres:
+  adapter: Nabu::Adapters::LoCongres
+  axes: [romance]
+  siblings: ["-fr"]  # P34-0: literal tail — dialect slugs are hyphen-free, none ends in -fr
+  translations: true # French coverage is 100% (censused) — -fr siblings ride the same parse
+  wired: false   # flip after the owner-verified first real sync (six FileFetch GETs,
+                   # ~1.3 MB total; then eyeball urn:nabu:lo-congres:gascon:1 --parallel
+                   # --lang fra and 5 random passages)
+  # Lo Congrès Occitan news corpus (P80-6): Zenodo record 8411197 v1.0 —
+  # sentences from the bilingual locongres.org news site, six dialect CSVs
+  # (auvern 17, gascon 2,194, lemosin 90, lengadoc 2,658, provenc 157,
+  # vivaraup 36 — 5,152 French-aligned pairs censused 2026-08-19).
+  # `§`-quadruple lines, no header; passage identity = 1-based line number
+  # (the tla-hf precedent). Passages bare `oci` — the registry does not
+  # distinguish Occitan dialects, so the claim stays DELIBERATELY COARSE
+  # and upstream's own variety code rides as the `dialect` document facet.
+  # LICENSE: record README verbatim "distributed under the Creative
+  # Commons Attribution 4.0 License" (record API cc-by-4.0) → attribution.
+  # Zenodo-version-pinned URLs (the cigs posture: a new release is a new
+  # record URL the owner re-pins).
+  sync_policy: manual
+
+cv-sardinian:
+  adapter: Nabu::Adapters::CvSardinian
+  axes: [romance]
+  wired: false   # flip after the owner-verified first real sync (one FileFetch GET,
+                   # ~260 kB; then eyeball urn:nabu:cv-sardinian:sentence-collector:1
+                   # and 5 random passages)
+  # Common Voice Sardinian sentence text (P80-6): server/data/sc/
+  # sentence-collector.txt in Mozilla's common-voice repo — 5,237
+  # sentences censused 2026-08-19, one per line, `sc` = ISO 639-3 `srd`.
+  # THE TEXT SIDE ONLY — no audio, ever (the audio datasets are
+  # account-gated and fail the automation bar; the sentence text rides a
+  # stable public raw.githubusercontent URL). Passage identity = 1-based
+  # line number (the sentence-lines family); the artifact's censused
+  # no-trailing-newline tail is a pinned fixture quirk. LICENSE:
+  # server/data/LICENSE is the full CC0 1.0 Universal text (Common Voice
+  # accepts sentences only under CC0) → open. Living collection on the
+  # main branch — drift rides the FileFetch state.
+  sync_policy: manual
+
+salom:
+  adapter: Nabu::Adapters::Salom
+  axes: [romance]
+  wired: false   # flip after the owner-verified first real sync (one FileFetch GET,
+                   # ~1 MB; then eyeball urn:nabu:salom:articles-2022:1 and 5 random
+                   # passages)
+  # Şalom Ladino articles text corpus (P80-6): Hugging Face
+  # collectivat/salom-ladino-articles — 10,685 Ladino (lad, Judeo-Spanish)
+  # sentences from 397 articles of Şalom newspaper's Judeo-Espanyol
+  # section (Col·lectivaT + Sephardic Center of Istanbul; the EURALI 2022
+  # corpus), censused 2026-08-19. Upstream ships the sentences SEGMENTED
+  # AND SHUFFLED — article structure unrecoverable, so ONE document at
+  # sentence grain is the honest shape; passage identity = 1-based line
+  # number (upstream's `\n\n` tail mints nothing — a pinned fixture
+  # quirk). Latin-script Turkish-style orthography. LICENSE: card
+  # frontmatter verbatim `license: cc-by-4.0`, citation requested →
+  # attribution. A revised corpus is a new filename — an owner re-pin.
+  sync_policy: manual
+
+aranese:
+  adapter: Nabu::Adapters::Aranese
+  axes: [romance]
+  siblings: ["-es"]  # P34-0: literal tail — the one base id is "corpus", it does not end in -es
+  translations: true # the Spanish side is the point of a parallel corpus — -es rides
+  wired: false   # flip after the owner-verified first real sync (two FileFetch GETs,
+                   # ~103 MB total → 2 docs / ~840k passages, the pack's largest load;
+                   # then eyeball urn:nabu:aranese:corpus:1 --parallel --lang spa)
+  # ES-OC (Spanish–Aranese) Parallel Corpus (P80-6): Hugging Face
+  # projecte-aina/ES-OC_Parallel_Corpus (BSC LangTech, WMT24 low-resource
+  # shared task) — 419,908 line-aligned pairs censused 2026-08-19, the
+  # largest openly licensed Aranese text mass there is. PROVENANCE
+  # HONESTY (the card's own words): "mainly synthetic" —
+  # Apertium-generated (synthetic Spanish from the authentic Aranese
+  # PILAR set, synthetic Aranese from OPUS Spanish), rows unmarked
+  # upstream, possible misalignments — the caveat rides the manifest
+  # license field AND every parsed document's metadata, never presented
+  # as an attested corpus. Aranese side bare `oci` (a Gascon variety —
+  # the lo-congres coarseness stance); Spanish rides as spa -es siblings,
+  # line-aligned (equal counts ARE the format; a mismatch is ParseError).
+  # LICENSE: card verbatim "Attribution-Share Alike 4.0 International"
+  # (frontmatter cc-by-sa-4.0) → attribution (the house BY-SA class).
   sync_policy: manual

@@ -1,0 +1,33 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml.
+source: ctilc
+# All entries are documented TRIMS (whole: false) of larger upstream files,
+# so adapter_test stays null (a count-based re-run against untrimmed
+# upstream would false-fail; the drift signal is fetch-liveness).
+adapter_test: null
+retrieved: 2026-08-19
+files:
+  - path: works/000041_Poemes_biblics.out.txt
+    url: https://ctilc.iec.cat/scripts/CTILCCorpus_DescarrF.asp?fitxer=000041_Poemes_biblics.out.txt
+    whole: false
+    trim: header + first 6 of 159 <TEXT> paragraphs (byte-identical in the kept
+      region, BOM included) + the closing </TEXT>/</DOCUMENT>; full file 40,248
+      bytes. Verse work — the trailing two-space soft line breaks are real.
+  - path: works/003392_Els_salms_de_David.out.txt
+    url: https://ctilc.iec.cat/scripts/CTILCCorpus_DescarrF.asp?fitxer=003392_Els_salms_de_David.out.txt
+    whole: false
+    trim: header + first 5 of 174 <TEXT> paragraphs + closing tags; full file
+      20,932 bytes. The traducció="sí" witness; its listing citation carries
+      no publisher ([Inèdit]).
+  - path: works/001607_La_llibertat_en_la_lley_civil.out.txt
+    url: https://ctilc.iec.cat/scripts/CTILCCorpus_DescarrF.asp?fitxer=001607_La_llibertat_en_la_lley_civil.out.txt
+    whole: false
+    trim: header + first 4 of 128 <TEXT> paragraphs + closing tags; full file
+      62,494 bytes. The NO LITERARI witness (llengua="NLIT", empty gènere,
+      tema/subtema set, variant central).
+  - path: listing/CTILCCorpus_Descarr.html
+    url: https://ctilc.iec.cat/scripts/CTILCCorpus_Descarr.asp
+    whole: false
+    trim: the real page head + the verbatim terms table + both section frames,
+      the 967 entry divs reduced to the three held works' (each byte-identical);
+      full page 318,774 bytes, CRLF as served.

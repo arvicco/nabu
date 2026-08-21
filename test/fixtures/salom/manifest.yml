@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# A TRIM of the full Şalom sentence artifact (whole: false — a fresh GET
+# returns the full file and is fetched for URL-liveness only, never
+# byte-compared). Lines are byte-verbatim; the fixture mirrors upstream's
+# `\n\n` tail (the one blank line, which must mint no passage). See the
+# README for provenance and the full-artifact sha256.
+source: salom
+adapter_test: test/adapters/salom_test.rb
+retrieved: 2026-08-19
+files:
+  - path: Salom-ladino-2022-01-ext-04_segmented_shuffled.txt
+    url: https://huggingface.co/datasets/collectivat/salom-ladino-articles/resolve/main/Salom-ladino-2022-01-ext-04_segmented_shuffled.txt
+    whole: false
+    trim: upstream lines 1-8 byte-verbatim plus the trailing blank line (991,480 B
+      / 10,686 lines incl. the final blank -> 9 lines)

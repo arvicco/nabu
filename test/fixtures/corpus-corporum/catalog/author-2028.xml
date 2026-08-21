@@ -1,0 +1,55 @@
+<navigation xmlns="http://mlat.uzh.ch/2.0" address="home/38/2028" group_by="" a="0">
+  <path_steps>
+    <path_step idno="" id="" type="" full_path="/" text_section="">home</path_step>
+    <path_step idno="38" id="" type="corpus" full_path="/38" text_section="">Patrologia Latina</path_step>
+    <path_step idno="2028" id="" type="author" full_path="38/2028" text_section="">Petrus Bibliothecarius</path_step>
+  </path_steps>
+  <last_step accessible="1">
+    <item cc_idno="2028" type="author" collection="cc_authors">
+      <cc_idno>2028</cc_idno>
+      <type>Person</type>
+      <name_data>
+      <name>Petrus Bibliothecarius</name>
+    </name_data>
+      <time_data>
+      <event what="born">
+        <date1>
+          <year>850</year>
+        </date1>
+      </event>
+    </time_data>
+      <cc_metadata>
+      <created>2020-07-09T23:02:51.984</created>
+      <last_modification>2020-07-10T07:27:29.48</last_modification>
+    </cc_metadata>
+      <external type="id" source="VIAF" value="75436192"/>
+      <external type="id" source="Mirabile" value="225245" ref="http://www.mirabileweb.it/author/petrus-bibliothecarius-fl-saec-ix-ex-/225245"/>
+      <external type="id" source="WikiData" value="Q41493652"/>
+      <external type="id" source="DNB" value="100957579"/>
+    </item>
+  </last_step>
+  <summary>
+    <texts>1</texts>
+    <availible_texts>0</availible_texts>
+    <corpora>1</corpora>
+    <works>1</works>
+    <authors>0</authors>
+    <words>0</words>
+  </summary>
+  <contents>
+    <work type="work" text_count="1">
+      <corpora count="1">
+        <corpus>
+          <name>Patrologia Latina</name>
+          <nr>2</nr>
+          <cc_idno>38</cc_idno>
+        </corpus>
+      </corpora>
+      <name>Abbrevatia historia Francorum</name>
+      <idno>5420</idno>
+      <texts_count>1</texts_count>
+      <accessible_texts_count>1</accessible_texts_count>
+      <words_count>0</words_count>
+    </work>
+  </contents>
+</navigation>

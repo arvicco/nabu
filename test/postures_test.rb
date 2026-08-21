@@ -153,14 +153,20 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 63, lect.size,
+    assert_equal 70, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3, " \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
                  "added-then-retired P77-r18→№R-34 — each when a machine grain took over: " \
                  "the shadowing rule, working; disco ADDED P77-4; P78 ADDED SEVEN — sillok+sjw+" \
                  "the goryeosa family three+viet-wikisource all codemap on the kanripo lzh " \
-                 "precedent, ko-wikisource-mk identity okm; itkc ADDED P78-7 — codemap)"
+                 "precedent, ko-wikisource-mk identity okm; itkc ADDED P78-7 — codemap; " \
+                 "corpus-corporum ADDED P80-1/2 — identity, the D57-f mixed-Latin class; ref " \
+                 "ADDED P80-5 — pending on the de:early nabu-lects mint, the fornsvenska " \
+                 "add-then-retire shape, RETIRED same phase — nabu-lects PR #5 merged and " \
+                 "the ref-enhg rule machine-postures it; P80-6 ADDS the small-languages pack as identity — " \
+                 "lo-congres/aranese bare oci, cv-sardinian bare srd, salom bare lad; " \
+                 "bdcamoes ADDED P80-7 — identity por; ctilc ADDED P80-8 — identity cat)"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -170,7 +176,13 @@ class PosturesTest < Minitest::Test
     # mints) machine-postures both sources. Zero pendings again; disco
     # joined as identity (the one-tag practice).
     # №R-34 (2026-08-18) retired achemenet's pending row into the
-    # achemenet-nb machine rule — the pending class is back to zero.
-    assert_equal({ "identity" => 42, "dates" => 10, "codemap" => 11 }, by_posture)
+    # achemenet-nb machine rule — the pending class was back to zero.
+    # P80-5 reopened it honestly: ref pends on the de:early nabu-lects
+    # mint (ENHG has no ISO code; the mint aggregates into the next
+    # lect-package PR, then a ruled whole-source rule retires the row —
+    # the fornsvenska add-then-retire shape).
+    # Q39 (same day): PR #5 merged, the ref-enhg rule landed, the pending
+    # row retired — zero pendings again, the add-then-retire shape complete.
+    assert_equal({ "identity" => 49, "dates" => 10, "codemap" => 11 }, by_posture)
   end
 end

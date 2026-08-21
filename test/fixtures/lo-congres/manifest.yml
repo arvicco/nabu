@@ -1,0 +1,24 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# All three files are TRIMS of the full Zenodo dialect CSVs (whole: false
+# — a fresh GET returns the full file and is fetched for URL-liveness
+# only, never byte-compared). Lines are byte-verbatim; see the README for
+# the upstream line provenance and full-artifact sha256s.
+source: lo-congres
+adapter_test: test/adapters/lo_congres_test.rb
+retrieved: 2026-08-19
+files:
+  - path: auvern/oc-auvern-grclass_fr.csv
+    url: https://zenodo.org/records/8411197/files/oc-auvern-grclass_fr.csv?download=1
+    whole: false
+    trim: upstream lines 1-6 byte-verbatim (4,817 B / 17 lines -> 6 lines)
+  - path: gascon/oc-gascon-grclass_fr.csv
+    url: https://zenodo.org/records/8411197/files/oc-gascon-grclass_fr.csv?download=1
+    whole: false
+    trim: upstream lines 1-4, 2132 (fr-side non-NFC), 2161 (oc-side non-NFC) byte-verbatim
+      (619,135 B / 2,194 lines -> 6 lines)
+  - path: provenc/oc-provenc-grclass_fr.csv
+    url: https://zenodo.org/records/8411197/files/oc-provenc-grclass_fr.csv?download=1
+    whole: false
+    trim: upstream lines 1-5 byte-verbatim (40,210 B / 157 lines -> 5 lines)

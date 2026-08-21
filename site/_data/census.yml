@@ -3,8 +3,8 @@
 as_of: 19 August 2026
 documents: 982008
 documents_display: '982,008'
-passages: 71081014
-passages_display: '71,081,014'
+passages: 71084899
+passages_display: '71,084,899'
 language_codes: 128
 top_languages:
 - code: ara
@@ -17,7 +17,7 @@ top_languages:
   passages: 3042296
   millions: '3.0'
 - code: grc
-  passages: 3012032
+  passages: 3015780
   millions: '3.0'
 - code: jpn
   passages: 2983332

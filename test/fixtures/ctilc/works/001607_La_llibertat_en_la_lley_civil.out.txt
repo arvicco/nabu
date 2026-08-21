@@ -1,0 +1,17 @@
+﻿<DOCUMENT>
+<OBRA id="1607">
+<AUTOR>Abadal i Calderó, Ramon d'</AUTOR>
+<TÍTOL>La llibertat en la lley civil</TÍTOL>
+<ANY>1905</ANY>
+<CLASSIFICACIÓ_TEXTUAL llengua="NLIT" gènere="" tema="3" subtema="3.4" traducció="no" variant="central" />
+</OBRA>
+<TEXT>La llibertat en la lley civil Senyors:
+
+Jo no sé còm respondre á la vostre benevolensa al reelegirme pera aquest càrrech.
+
+He pensat lo que 'm caldría fer pera correspondrehi; y jo no trobo manera en les meves facultats pera arribar á lo que desitjaría el meu voler. Estigueu segurs de que posaré tot lo que pugui de ma part pera que no surti enganyada la vostre confiansa.
+
+He lligat la idèa de la reelecció ab la del compliment del primer deber que m' imposà la vostre elecció are fa un any, y no m' he pogut sustraure al recort del tema d'estudi que llavors vaig proposarvos, que hauría pogut ser interessant, si no hagués hagut de posarhi jo la mà pera malmetrel. Y m'ha semblat que havía de rependre la mateixa idèa, posant tota la meva bona voluntat en estudiar com portada á la pràctica, es la única que respón al ideal de perfecció jurídica que ens ha de guiar á tots en aquesta casa.
+
+</TEXT>
+</DOCUMENT>

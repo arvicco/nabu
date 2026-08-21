@@ -1,0 +1,22 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Both files are TRIMS of the full ES-OC parallel artifacts (whole: false
+# — a fresh GET returns the full file and is fetched for URL-liveness
+# only, never byte-compared). Both trims select the SAME upstream line
+# numbers so the pair stays line-aligned. See the README for provenance,
+# the synthetic-corpus honesty note, and the full-artifact sha256s.
+source: aranese
+adapter_test: test/adapters/aranese_test.rb
+retrieved: 2026-08-19
+files:
+  - path: arn/es-arn_corpus.arn
+    url: https://huggingface.co/datasets/projecte-aina/ES-OC_Parallel_Corpus/resolve/main/es-arn_corpus.arn
+    whole: false
+    trim: upstream lines 1-5, 77909 (first non-NFC line) byte-verbatim
+      (51,087,360 B / 419,908 lines -> 6 lines)
+  - path: es/es-arn_corpus.es
+    url: https://huggingface.co/datasets/projecte-aina/ES-OC_Parallel_Corpus/resolve/main/es-arn_corpus.es
+    whole: false
+    trim: upstream lines 1-5, 77909 (first non-NFC line) byte-verbatim
+      (51,463,705 B / 419,908 lines -> 6 lines)
