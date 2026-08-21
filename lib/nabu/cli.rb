@@ -1389,6 +1389,9 @@ module Nabu
                   desc: "Group the census under the research axes (config/axes.yml): bare = all in " \
                         "ratified order, NAME[,NAME…] = those axes only. A source appears under each " \
                         "axis it serves"
+    option :"by-date", type: :boolean, default: false,
+                       desc: "The chronological census: dated documents by century (earliest-bound " \
+                             "buckets, per-century source breakdown) — the whole-library timeline view"
     option :"export-source-dossiers", type: :boolean, default: false,
                                       desc: "Owner one-shot: scaffold a canonical/local-source dossier for " \
                                             "EVERY registered source, descriptions seeded from existing " \
@@ -1419,7 +1422,10 @@ module Nabu
       # a dictionary shelf lists entries, a text shelf documents — and the
       # header announces the implication so it stays legible.
       implied = implied_list_mode(query, slug)
-      if options[:axis]
+      if options[:"by-date"]
+        require_timeline!(catalog)
+        print_census_by_date(query.by_date_census)
+      elsif options[:axis]
         registry = Nabu::SourceRegistry.load(config.sources_path)
         view = focus_view(config, registry, catalog: catalog)
         warn_focus_drift(view)
@@ -3839,6 +3845,9 @@ module Nabu
     # before the "… and N more" tail (P48-r3; --long lists all — the same
     # house render-cap rule).
     AXIS_LANGUAGES_ITEMS = 10
+    # Sources named per century row by `nabu list --by-date` before the
+    # "+N more" tail (P81-1; the same house render-cap rule).
+    BY_DATE_SOURCES = 4
     # Crosswalk equivalences shown on the place card's "=" line before the
     # "… and N more" tail (P75 C-3, the same house render-cap rule).
     # const: a render cap, not a corpus census
@@ -4486,6 +4495,15 @@ module Nabu
           raise Thor::Error, "list: --axis groups the census under the research axes — " \
                              "drop the SOURCE/enumeration flags"
         end
+        # --by-date is a census view like --sources/--axis: it composes
+        # with nothing (a SOURCE's own timeline lives on its card; date
+        # FILTERS belong to --documents' --from/--to/--century).
+        if options[:"by-date"] && (!slug.empty? || modes.any? || options[:sources] || options[:axis] ||
+                                   options.values_at("long", "export-source-dossiers", "dry-run",
+                                                     "from", "to", "century").any?)
+          raise Thor::Error, "list: --by-date is the whole-library chronological census — " \
+                             "it composes with nothing (per-source dating sits on `list SOURCE`)"
+        end
         if modes.size > 1
           raise Thor::Error, "list: give one of --documents, --entries, --collections, --loans per invocation"
         end
@@ -5027,6 +5045,31 @@ module Nabu
         # never the whole-library aggregate a scoped view didn't display.
         # A source on two selected desks counts once (tags, not folders).
         say census_summary(shown.values)
+      end
+
+      # The chronological census (`list --by-date`, P81-1/C-6): one line
+      # per century, count + the top sources; the bucketing doctrine
+      # (earliest bound, spans announced) stated in the header, never
+      # hidden. Source tails cap at BY_DATE_SOURCES with an honest count.
+      def print_census_by_date(census)
+        return say("no dated documents yet — run nabu sync or nabu rebuild") if census.buckets.empty?
+
+        say "chronological census — dated documents by century (bucketed by earliest bound; " \
+            "#{commas(census.multi_century)} span multiple centuries)"
+        width = census.buckets.map { |bucket| bucket.label.length }.max
+        census.buckets.each do |bucket|
+          say "  #{bucket.label.ljust(width)}  #{commas(bucket.documents).rjust(9)}  " \
+              "#{by_date_sources(bucket.sources)}"
+        end
+        share = census.total_documents.positive? ? (census.dated_documents * 100) / census.total_documents : 0
+        say "dated #{commas(census.dated_documents)} of #{commas(census.total_documents)} " \
+            "live documents (#{share}%)"
+      end
+
+      def by_date_sources(sources)
+        shown = sources.first(BY_DATE_SOURCES).map { |slug, count| "#{slug} #{commas(count)}" }
+        tail = sources.size - BY_DATE_SOURCES
+        (shown + (tail.positive? ? ["+#{tail} more"] : [])).join(" · ")
       end
 
       # Compact census fragments, zero fields suppressed (conventions §10).
