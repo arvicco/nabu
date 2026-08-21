@@ -457,10 +457,11 @@ sources:
     # lect: machine-postured by the ref-enhg rule (Q39, nabu-lects PR #5
     # merged 2026-08-19) — the pending row retired, the fornsvenska
     # add-then-retire shape.
-    dating: {posture: pending, note: "candidate: the header date/time lanes
-        riding metadata verbatim ('1487/88'; time '15,2' = 15th c., 2nd
-        half — upstream's own century-half grid) — extractor over real
-        synced data, the isicily discipline"}
+    dating: {posture: dated, note: "P81-1: the header date lane parsed clean
+        ('1487/88', '1493', '1383-1407') with upstream's own century-half
+        time grid ('15,2' → [1450,1500]) as the prose fallback — all 190
+        texts carry the grid, so every document bounds; MetadataDates
+        :structured"}
     places: {posture: pending, note: "candidate: the header place lane riding
         metadata verbatim ('Regensburg', 'Bamberg' — print/scriptorium
         place, a genuine origin claim, not a holding library)"}
