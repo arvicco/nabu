@@ -81,12 +81,16 @@ sources:
       note: lzh → zho/lit (the kanripo precedent — Literary Chinese as read
         in Korea; a ko-tradition lect claim stays DELIBERATELY coarse until
         a use case needs it, P78-1)
-    dating: {posture: dated, note: "per-volume 서기 year via MetadataDates :structured; per-day dates ride annotations raw"}
+    dating: {posture: dated, note: "per-volume 서기 year via MetadataDates :structured; P81-1: the
+        per-day entry dates also project as passage-grain year runs (NikhEntryDates), and undated
+        volumes (prefaces/indexes) gain leaf-derived envelopes"}
     places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
     script: {posture: implied}
   sjw:
     lect: {posture: codemap, note: lzh → zho/lit (the sillok/kanripo precedent, P78-2)}
-    dating: {posture: dated, note: "per-member 서기 year via MetadataDates :structured; per-day dates + weather ride annotations"}
+    dating: {posture: dated, note: "per-member 서기 year via MetadataDates :structured; P81-1: the
+        per-day entry dates also project as passage-grain year runs (NikhEntryDates); weather still
+        rides annotations raw"}
     places: {posture: unplaced}
     script: {posture: implied}
   viet-wikisource:
@@ -103,27 +107,28 @@ sources:
     lect:
       posture: codemap
       note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
-    dating: {posture: undatable, note: "P78-3 census: volume fronts carry no dateOccured (no 서기 line
-        exists in the zip); the leaf-grain 음/양 machine dates ride annotations raw — a future
-        extractor revisit, not a claim"}
+    dating: {posture: dated, note: "P81-1: the leaf-grain 음/양 machine dates (877–1392, '0877-01-99L0';
+        '9999' filler skipped counted) project via NikhEntryDates — document envelopes + passage-grain
+        year runs; volume fronts still carry no dateOccured, so the envelope IS the document claim"}
     places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
     script: {posture: implied}
   goryeosa-jeoryo:
     lect:
       posture: codemap
       note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
-    dating: {posture: undatable, note: "P78-3 census: root fronts carry coveragePeriod prose, never a
-        dateOccured (the bare machine year sits on the level3 year front, two levels down); the
-        per-article 음 dates ride annotations raw — a future extractor revisit, not a claim"}
+    dating: {posture: dated, note: "P81-1: the per-article 음 machine dates (918–1434) project via
+        NikhEntryDates — document envelopes + passage-grain year runs; root fronts still carry only
+        coveragePeriod prose, so the envelope IS the document claim"}
     places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
     script: {posture: implied}
   bibyeonsa:
     lect:
       posture: codemap
       note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
-    dating: {posture: undatable, note: "P78-3 census: book fronts carry only the 1959 print-edition
-        publication data; content years live on level2 value attrs and the untyped per-entry machine
-        dates riding annotations raw — a future extractor revisit, not a claim"}
+    dating: {posture: dated, note: "P81-1: the untyped per-entry machine dates (1616–1892,
+        '1617-01-00L0') project via NikhEntryDates — document envelopes + passage-grain year runs
+        (bb_001's interleaved years stay separate runs, never merged); book fronts still carry only
+        the 1959 print-edition data, so the envelope IS the document claim"}
     places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
     script: {posture: implied}
   itkc:
@@ -360,11 +365,14 @@ sources:
         deliberately-unstaged class (the first1k-greek/croala precedent);
         refinement candidate rides the dating note.
     dating:
-      posture: pending
-      note: "candidate: the navigate.php catalog's per-work work_composition
-        + per-author born/died years (walked and checkpointed by the fetch)
-        and the teiHeader author floruit strings (\"fl. 892\") — none wired
-        yet; wiring them would also unlock a lat stage-band refinement."
+      posture: partial
+      note: "P81-1: three lanes in confidence order — the checkpoint's per-work
+        work_composition year, its author born/died life band (both captured by
+        the schema-2 fetch walk; the pre-P81 checkpoint carries no years until
+        the owner-fired re-walk), and the teiHeader author_date ladder
+        ('354-430', '-258', 'fl. 892', c.-forms; 2,977/5,248 docs carry one,
+        'sine-data'/prose mint nothing). MetadataDates :structured; partial
+        until the re-walk covers the header-silent remainder."
     places: {posture: unplaced}
     script: {posture: implied}
   proiel:
@@ -457,10 +465,11 @@ sources:
     # lect: machine-postured by the ref-enhg rule (Q39, nabu-lects PR #5
     # merged 2026-08-19) — the pending row retired, the fornsvenska
     # add-then-retire shape.
-    dating: {posture: pending, note: "candidate: the header date/time lanes
-        riding metadata verbatim ('1487/88'; time '15,2' = 15th c., 2nd
-        half — upstream's own century-half grid) — extractor over real
-        synced data, the isicily discipline"}
+    dating: {posture: dated, note: "P81-1: the header date lane parsed clean
+        ('1487/88', '1493', '1383-1407') with upstream's own century-half
+        time grid ('15,2' → [1450,1500]) as the prose fallback — all 190
+        texts carry the grid, so every document bounds; MetadataDates
+        :structured"}
     places: {posture: pending, note: "candidate: the header place lane riding
         metadata verbatim ('Regensburg', 'Bamberg' — print/scriptorium
         place, a genuine origin claim, not a holding library)"}
@@ -543,8 +552,10 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   ebl:
-    dating: {posture: dated, note: "P62-0: 22,807/23,288 banded via the ruled period table; the 40
-        Seleucid day/month objects band coarsely — exact era conversion deliberately out"}
+    dating: {posture: dated, note: "P62-0: 22,807/23,288 banded via the ruled period table; P81-1
+        adds the era ladder above the band — clean Seleucid-era years convert exactly (SE 219 →
+        93/92 BCE; month/day ride raw at year grain) and regnal date objects band to the king's
+        own reign span ('555–539'); regnal-YEAR arithmetic stays deliberately out"}
     places: {posture: unplaced}
     script: {posture: implied}
   elephantine:

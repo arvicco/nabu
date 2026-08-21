@@ -80,13 +80,19 @@ module Nabu
       # +license_mapper+: an optional callable mapping the header's verbatim
       # availability text (or nil) to a license_override class or nil — the
       # adapter owns the mapping policy, the parser owns the capture.
-      def parse(source, urn:, language:, title: nil, canonical_path: nil, license_mapper: nil)
+      # +metadata_mapper+ (P81-1): an optional callable given the extracted
+      # header metadata, returning extra keys to merge (the adapter's
+      # dating envelope) — the parser owns the capture, the adapter the
+      # judgment; header keys always win a collision.
+      def parse(source, urn:, language:, title: nil, canonical_path: nil,
+                license_mapper: nil, metadata_mapper: nil)
         path = resolve_canonical_path(source, canonical_path)
         extraction = extract(source, path: path)
         units = disambiguate_collisions(extraction.units)
+        metadata = (metadata_mapper&.call(extraction.metadata) || {}).merge(extraction.metadata)
         build_document(units, urn: urn, language: language,
                               title: title || extraction.title,
-                              path: path, metadata: extraction.metadata,
+                              path: path, metadata: metadata,
                               license_override: license_mapper&.call(extraction.metadata["availability"]))
       end
 
