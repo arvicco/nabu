@@ -84,4 +84,31 @@ class PlaceApplyTest < Minitest::Test
       assert_nil Nabu::PlaceApply.run(catalog: @db, canonical_dir: dir)
     end
   end
+
+  # P81 U-3 (the A1 dies-at-apply defect): an applied decision whose
+  # registry certainty sits below certain reports itself in the census —
+  # name, rows, and the upstream word verbatim. High-certainty applies
+  # merge no :uncertain key at all (the empty-hash idiom), and a
+  # re-run that applies nothing reports nothing.
+  def test_low_certainty_applied_decisions_ride_the_census
+    seed_axis("urn:nabu:cdli:p6", place_name: "Nereb (mod. Neirab) ?")
+    seed_axis("urn:nabu:cdli:p7", place_name: "Girsu (mod. Tello)")
+    with_canonical do |dir|
+      census = Nabu::PlaceApply.run(catalog: @db, canonical_dir: dir)
+      assert_equal({ "Nereb (mod. Neirab) ?" => { rows: 1, certainty: "low" } },
+                   census.dig("cdli", :uncertain))
+      assert_equal 2, census.dig("cdli", :names_applied), "the low name still counts as applied"
+
+      second = Nabu::PlaceApply.run(catalog: @db, canonical_dir: dir)
+      refute second.fetch("cdli").key?(:uncertain), "nothing applied — nothing to report"
+    end
+  end
+
+  def test_high_certainty_only_applies_carry_no_uncertain_key
+    seed_axis("urn:nabu:cdli:p8", place_name: "Umma (mod. Tell Jokha)")
+    with_canonical do |dir|
+      census = Nabu::PlaceApply.run(catalog: @db, canonical_dir: dir)
+      refute census.fetch("cdli").key?(:uncertain)
+    end
+  end
 end

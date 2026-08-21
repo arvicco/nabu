@@ -782,10 +782,16 @@ module Nabu
       # the entrypoint, resolved per call like the connection slots.
       def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil,
                      enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil,
-                     readings: nil, hieroglyphs: nil)
+                     readings: nil, hieroglyphs: nil, lect_rules: nil, lect_override_tiers: nil)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
+        # The P81 U-5 lect-provenance gloss seams: the compiled rules (their
+        # tier: words) and the {slug => {code => tier}} override map. Static
+        # config, loaded once by the entrypoint (the alignments posture);
+        # nil = untiered rendering — payloads carry the bare basis only.
+        @lect_rules = lect_rules
+        @lect_override_tiers = lect_override_tiers
         # The Tibetan words slot, shared by TWO consumers (P54-2 show's
         # `segmented` flag, P54-4 search's `words` flag): nil (unconfigured —
         # each flag answers with its honest sync-hint note, every other
@@ -1940,8 +1946,16 @@ module Nabu
         end
         place = card.place
         if place
-          base.merge(title: place.title, place_types: place.place_types,
-                     time_periods: place.time_periods, lat: place.lat, lon: place.lon)
+          base = base.merge(title: place.title, place_types: place.place_types,
+                            time_periods: place.time_periods, lat: place.lat, lon: place.lon)
+          # P81 U-3 (survey A3): a gazetteer's own "?"-suffixed title — the
+          # Barrington less-certain lineage — merges the cataloguer's-"?"
+          # certainty object beside the verbatim title; unmarked titles
+          # stay byte-identical (the empty-hash idiom).
+          if place.title.to_s.strip.end_with?("?")
+            base[:title_certainty] = Nabu::Certainty.payload(:cataloguer_query, "?").fetch(:certainty)
+          end
+          base
         elsif dump_loaded
           base.merge(note: "id not in the local gazetteer dump")
         else
@@ -2001,11 +2015,21 @@ module Nabu
       # materialized lect facet row — the one surface that sees per-document
       # journal rulings. "No row means identity" (P58-4), so a bare-code
       # document's payload stays byte-identical and the key never appears
-      # carrying a mere echo of `language`.
+      # carrying a mere echo of `language`. P81 U-5: the facet row's
+      # provenance basis rides as lect_basis, and where the ruling behind it
+      # states a tier the :lect_tier certainty object merges below certain
+      # (the empty-hash idiom — certain and untiered bases add no key).
       def lect_field(result)
         return {} unless result.respond_to?(:lect) && result.lect
 
-        { lect: result.lect }
+        field = { lect: result.lect }
+        basis = result.respond_to?(:lect_basis) ? result.lect_basis : nil
+        return field unless basis
+
+        field[:lect_basis] = basis
+        gloss = Nabu::LectGloss.payload(basis, code: result.language, rules: @lect_rules,
+                                               override_tiers: @lect_override_tiers)
+        field.merge(gloss)
       end
 
       # The meter enrichment (P44-3, mirroring the CLI's P44-7 meter line):
