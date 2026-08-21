@@ -3702,7 +3702,12 @@ module Nabu
         # canonical/nabu-lects lazily per call (nabu_search's `lect`
         # filter); an unsynced box answers `lect` with an InvalidArguments
         # naming the module, every other tool byte-identical.
-        lects: :auto
+        lects: :auto,
+        # The lect-provenance gloss seams (P81 U-5): static config, loaded
+        # once — the rules' tier: words and the override rows' tier: map,
+        # joined against each shown document's facet basis.
+        lect_rules: Nabu::LectRules.load(config.lect_facet_rules_paths),
+        lect_override_tiers: Nabu::Lects.override_tiers(config.lect_overrides_paths)
       )
       $stdout.sync = true
       install_mcp_signal_traps
@@ -5666,6 +5671,7 @@ module Nabu
         say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
         print_credit(passage)
+        print_lect(passage)
         print_timeline(passage.timeline)
         print_findspot(passage)
         print_meter(passage)
@@ -5731,7 +5737,7 @@ module Nabu
         print_timeline(document.timeline)
         print_findspot(document)
         print_artifact(document)
-        print_facets(document.facets)
+        print_facets(document.facets, language: document.language)
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
           say "    #{passage_label(document, line)}#{withdrawn_tag(line.withdrawn)}  " \
@@ -5759,6 +5765,47 @@ module Nabu
                               source: range.source_slug, annotations: line.annotations)}"
         end
         print_unreadable_annotations_count(range.passages)
+      end
+
+      # P81 U-5: the lect line — only when the document carries a
+      # materialized lect facet row ("no row means identity", P58-4; a
+      # bare-code passage prints nothing). The resolution's provenance
+      # basis rides in parentheses; where the ruling behind the basis
+      # STATES a tier (the rule's tier:, the override row's tier:) the
+      # parenthetical glosses through Certainty's :lect_tier carrier
+      # instead — certain stays provenance-only ink, deviation is labeled:
+      # "lect: arc:mid (probable — rule sefaria-arc-subshelf, approximation)".
+      def print_lect(passage)
+        return unless passage.lect
+
+        say "  lect: #{passage.lect}#{lect_facet_note(passage.lect_basis, code: passage.language)}"
+      end
+
+      # " (<gloss>)" when the basis's ruling states a tier, " (<basis>)"
+      # as bare provenance otherwise, "" for a basis-less row (materialized
+      # before the P81 basis lane) — shared by the passage lect line and
+      # the document facets line.
+      def lect_facet_note(basis, code:)
+        return "" unless basis
+
+        gloss = Nabu::LectGloss.gloss(basis, code: code, rules: cli_lect_rules,
+                                             override_tiers: cli_lect_override_tiers)
+        " (#{gloss || basis})"
+      end
+
+      # The config-stated tier carriers, memoized per command run (both are
+      # small YAML reads; nil rules = no rules file, an honest untiered
+      # render).
+      def cli_lect_rules
+        return @cli_lect_rules if defined?(@cli_lect_rules)
+
+        @cli_lect_rules = Nabu::LectRules.load(Nabu::Config.load.lect_facet_rules_paths)
+      end
+
+      def cli_lect_override_tiers
+        return @cli_lect_override_tiers if defined?(@cli_lect_override_tiers)
+
+        @cli_lect_override_tiers = Nabu::Lects.override_tiers(Nabu::Config.load.lect_overrides_paths)
       end
 
       # The timeline line (P15-2), when the document has one. A date span
@@ -5805,13 +5852,19 @@ module Nabu
       # The facets line (P17-2), one compact line and only when faceted:
       # "facets: genre=epitaph (titsep) · province=Latium et Campania …". The
       # raw code rides in parentheses when it differs from the value (the `?`
-      # certainty stays visible).
-      def print_facets(facets)
+      # certainty stays visible). P81 U-5: the lect facet's raw is its
+      # provenance basis — it renders through the tier gloss (or as the bare
+      # basis) exactly like the passage card's lect line.
+      def print_facets(facets, language: nil)
         return if facets.nil? || facets.empty?
 
         rendered = facets.map do |facet|
-          raw = facet.raw && facet.raw != facet.value ? " (#{facet.raw})" : ""
-          "#{facet.facet}=#{facet.value}#{raw}"
+          if facet.facet == "lect"
+            "lect=#{facet.value}#{lect_facet_note(facet.raw, code: language)}"
+          else
+            raw = facet.raw && facet.raw != facet.value ? " (#{facet.raw})" : ""
+            "#{facet.facet}=#{facet.value}#{raw}"
+          end
         end
         say "  facets: #{rendered.join(' · ')}"
       end

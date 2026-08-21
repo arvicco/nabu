@@ -4834,6 +4834,43 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P81 U-5: the materialized lect renders with its provenance basis — a
+  # ruling that STATES a below-certain tier glosses through Certainty's
+  # :lect_tier carrier; certain bases (an owner ruling) stay provenance-only.
+  def test_show_glosses_the_lect_tier_from_the_facet_basis
+    with_dated_corpus do |config|
+      FileUtils.mkdir_p(config.config_dir)
+      File.write(File.join(config.config_dir, "lect_facet_rules.yml"), <<~YAML)
+        rules:
+          - id: pap-stage
+            tier: approximation
+            sources: [p]
+            code: grc
+            facet: period
+            map: { "Ptolemaic": "grc:koi" }
+      YAML
+      catalog = Nabu::Store.connect(config.catalog_path)
+      %w[a b].zip(["rule:pap-stage", "owner"]).each do |slug, basis|
+        doc = catalog[:documents].first(urn: "urn:nabu:ddbdp:#{slug}")
+        catalog[:document_facets].insert(document_id: doc[:id], facet: "lect",
+                                         value: "grc:koi", raw: basis)
+      end
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:a:1]) }
+      assert_nil status
+      assert_match(/lect: grc:koi \(probable — rule pap-stage, approximation\)/, out)
+
+      out_doc, _err_d, = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:a]) }
+      assert_match(/facets: genre=epitaph \(titsep\?\) · lect=grc:koi \(probable — rule pap-stage, approximation\)/,
+                   out_doc, "the document facets line glosses the lect facet the same way")
+
+      out_b, _err_b, = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:b:1]) }
+      assert_match(/lect: grc:koi \(owner\)/, out_b,
+                   "an owner ruling is certain — bare provenance, no doubt ink")
+    end
+  end
+
   # P76 U-2: the doubt word routes through Certainty — the house tier plus
   # the upstream word verbatim (was the bare "(low)" before the doctrine).
   def test_show_prints_the_timeline_line
