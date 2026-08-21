@@ -121,3 +121,12 @@ sources:
   # exemplar the registry's sl:old note names (12 sl docs at ruling).
   freising:
     sl: { lect: "sl:old", tier: certain }
+  # №R-41 (owner ruling 2026-08-21, option A): the aranese corpus IS
+  # Aranese — the Val d'Aran variety of Gascon, minted as oc/aranes by
+  # nabu-lects PR #6 (its own IANA subtag and orthographic norm; the
+  # gascon ⊃ aranes nesting rides the registry note). A per-collection
+  # fact the universal codemap cannot state: upstream codes the whole
+  # ~420k-pair Occitan side bare `oci`. Tier certain: the corpus is
+  # definitionally Aranese (the card's own description).
+  aranese:
+    oci: { lect: "oc/aranes", tier: certain }

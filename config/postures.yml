@@ -607,11 +607,11 @@ sources:
 
   # ── P80-6: the small-languages pack (modern-text corpora) ──────────────
   lo-congres:
-    lect:
-      posture: identity
-      note: bare oci, DELIBERATELY COARSE — the registry does not distinguish
-        Occitan dialects; upstream's variety code rides as the dialect facet.
-        (oci→oc codemap alias is a reported mint candidate, the №11 suite.)
+    # lect: machine-postured by the oci-dialect rule (№R-41 ruled
+    # 2026-08-21, nabu-lects PR #6 minted the oc dialect varieties +
+    # the oci→oc alias) — the identity row retired, the ref
+    # add-then-retire shape. "DELIBERATELY COARSE" was forced, not
+    # chosen; no longer either.
     dating: {posture: undatable, note: modern news sentences, no per-item dates upstream}
     places: {posture: unplaced}
     script: {posture: implied}
@@ -629,11 +629,10 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   aranese:
-    lect:
-      posture: identity
-      note: bare oci for the Aranese side (a Gascon variety — the lo-congres
-        DELIBERATELY COARSE stance), spa siblings; the corpus is mainly
-        synthetic (card's own words) — held as such, never as attestation
+    # lect: machine-postured by the aranese override (oci → oc/aranes,
+    # №R-41 ruled 2026-08-21, nabu-lects PR #6 minted oc/aranes) — the
+    # identity row retired. The synthetic-corpus caveat stays on the
+    # card and the spa siblings stay bare (the override keys oci only).
     dating: {posture: undatable, note: modern MT-oriented sentence pairs, no dates upstream}
     places: {posture: unplaced}
     script: {posture: implied}
