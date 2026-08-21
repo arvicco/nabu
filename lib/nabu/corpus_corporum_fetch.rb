@@ -109,6 +109,12 @@ module Nabu
     # The refusal body's stable opening (re-verified 2026-08-19).
     REFUSAL_PREFIX = "We are sorry"
 
+    # Checkpoint schema: 2 = the P81-1 dating capture (per-author
+    # born/died + per-work work_composition years ride the catalog rows).
+    # A checkpoint from an earlier schema is never reused — see
+    # #previous_catalog.
+    CATALOG_SCHEMA = 2
+
     # Refusal-rate ceiling before the crawl calls the endpoint moved
     # (the Elephantine MISSING_CAP mold).
     # const: abort threshold, not a corpus claim
@@ -261,14 +267,46 @@ module Nabu
 
     def walk_author(corpus_idno:, author:)
       author_path = "/#{corpus_idno}/#{author['idno']}"
-      work_idnos = navigation(path: author_path).xpath("//contents/work/idno").map(&:text)
-      texts = work_idnos.flat_map do |work_idno|
-        navigation(path: "#{author_path}/#{work_idno}").xpath("//contents/text").map do |node|
+      author_page = navigation(path: author_path)
+      born, died = author_years(author_page)
+      texts = author_page.xpath("//contents/work/idno").map(&:text).flat_map do |work_idno|
+        work_page = navigation(path: "#{author_path}/#{work_idno}")
+        composition = work_composition(work_page)
+        work_page.xpath("//contents/text").map do |node|
           { "idno" => child_text(node, "idno"),
-            "accessible" => child_text(node, "accessible") == "1" }
+            "accessible" => child_text(node, "accessible") == "1",
+            "work_composition" => composition }
         end
       end
-      { "texts_count" => author["texts_count"], "texts" => texts }
+      { "texts_count" => author["texts_count"], "born" => born, "died" => died, "texts" => texts }
+    end
+
+    # -- the dating capture (P81-1) ---------------------------------------------
+    #
+    # The walked author/work pages carry <time_data> the crawl previously
+    # discarded — per-author born/died events, per-work work_composition
+    # years. Both pages are already requested, so the capture costs zero
+    # extra GETs; it rides the checkpoint, where the TEI parser side reads
+    # it at parse time (the state file IS canonical/<slug> content).
+
+    # born envelopes to its EARLIEST year, died to its LATEST (a
+    # certainty="between" event carries date1+date2) — the honest life
+    # band. An absent event stays nil, never guessed.
+    def author_years(page)
+      [event_years(page, "born")&.min, event_years(page, "died")&.max]
+    end
+
+    def work_composition(page)
+      years = event_years(page, "work_composition")
+      years && years.minmax
+    end
+
+    def event_years(page, what)
+      years = page.xpath("//last_step//time_data/event[@what='#{what}']//year").filter_map do |node|
+        text = node.text.strip
+        Integer(text, 10) if /\A-?\d+\z/.match?(text)
+      end
+      years.empty? ? nil : years
     end
 
     def walked_texts
@@ -424,7 +462,8 @@ module Nabu
 
     def write_state!(sha:)
       state = { "url" => @base_url, "fetched_at" => Time.now.utc.iso8601,
-                "sha256" => sha, "corpora" => @corpora, "catalog" => @catalog,
+                "sha256" => sha, "catalog_schema" => CATALOG_SCHEMA,
+                "corpora" => @corpora, "catalog" => @catalog,
                 "refused" => @refused.sort, "malformed" => @malformed.sort, "texts" => texts,
                 "fetched" => @fetched, "cached" => @cached }
       File.write(File.join(@dir, STATE_FILE), JSON.pretty_generate(state))
@@ -439,8 +478,16 @@ module Nabu
       {}
     end
 
+    # A checkpoint written by an earlier catalog schema is NOT reused: the
+    # P81-1 dating capture must reach every author once, and PL is a
+    # closed corpus whose texts_count never drifts — reuse would keep the
+    # dating lane dark forever. One full re-walk (~6,700 GETs, owner-fired)
+    # pays for it; thereafter the count-match reuse rule applies as before.
     def previous_catalog
-      previous_state.fetch("catalog", {})
+      state = previous_state
+      return {} unless state["catalog_schema"] == CATALOG_SCHEMA
+
+      state.fetch("catalog", {})
     end
 
     # -- retention --------------------------------------------------------------

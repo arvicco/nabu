@@ -365,11 +365,14 @@ sources:
         deliberately-unstaged class (the first1k-greek/croala precedent);
         refinement candidate rides the dating note.
     dating:
-      posture: pending
-      note: "candidate: the navigate.php catalog's per-work work_composition
-        + per-author born/died years (walked and checkpointed by the fetch)
-        and the teiHeader author floruit strings (\"fl. 892\") — none wired
-        yet; wiring them would also unlock a lat stage-band refinement."
+      posture: partial
+      note: "P81-1: three lanes in confidence order — the checkpoint's per-work
+        work_composition year, its author born/died life band (both captured by
+        the schema-2 fetch walk; the pre-P81 checkpoint carries no years until
+        the owner-fired re-walk), and the teiHeader author_date ladder
+        ('354-430', '-258', 'fl. 892', c.-forms; 2,977/5,248 docs carry one,
+        'sine-data'/prose mint nothing). MetadataDates :structured; partial
+        until the re-walk covers the header-silent remainder."
     places: {posture: unplaced}
     script: {posture: implied}
   proiel:
