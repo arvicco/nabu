@@ -125,6 +125,9 @@ module Nabu
       # {code => lect_id}, or nil for a miss (the resolve contract). Point
       # lookups ride the unique (urn, code) index; results memoize because
       # display paths re-resolve the same page of urns repeatedly.
+      # P81 U-5: the memoized rows also carry each assignment's +basis+, so
+      # Lects#resolution can report the journal's own provenance ("owner",
+      # "rule:<id>") through #basis — same single query per urn.
       class Overlay
         # const: memo bound — a page of results touches tens of urns; the cap
         # only guards a pathological full-corpus sweep from unbounded growth
@@ -136,10 +139,23 @@ module Nabu
         end
 
         def [](urn)
+          rows_for(urn)&.transform_values { |lect_id, _basis| lect_id }
+        end
+
+        # The journal row's basis for (+urn+, +code+) — the provenance the
+        # facet materializer records (P81 U-5); nil when unassigned.
+        def basis(urn, code)
+          rows_for(urn)&.dig(code)&.last
+        end
+
+        private
+
+        # {code => [lect_id, basis]} for +urn+, or nil for a miss.
+        def rows_for(urn)
           @memo.clear if @memo.size >= MAX_MEMO
           return @memo[urn] if @memo.key?(urn)
 
-          map = LectJournal.overlay_for(@db, urn)
+          map = @db[:lect_assignments].where(urn: urn).select_hash(:code, %i[lect_id basis])
           @memo[urn] = map.empty? ? nil : map
         end
       end

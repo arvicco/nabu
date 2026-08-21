@@ -603,6 +603,11 @@ module Nabu
           say "    pending sniff — date-shaped metadata keys on undated docs: #{keys} " \
               "(sampled ≤#{Nabu::LectSuggest::SNIFF_SAMPLE})"
         end
+        if dating.annotation_candidates.any?
+          keys = dating.annotation_candidates.first(6).map { |key, count| "#{key} (#{count})" }.join(", ")
+          say "    annotation sniff — date-shaped keys on undated docs' passages: #{keys} " \
+              "(sampled ≤#{Nabu::LectSuggest::SNIFF_SAMPLE} passages)"
+        end
         places = report.places_layer
         say "  places layer: #{places.linked} ref-linked · #{places.named} named · " \
             "#{places.total} docs#{" · #{places.latent} LATENT refs in raw metadata" if places.latent.positive?}"
@@ -1384,6 +1389,9 @@ module Nabu
                   desc: "Group the census under the research axes (config/axes.yml): bare = all in " \
                         "ratified order, NAME[,NAME…] = those axes only. A source appears under each " \
                         "axis it serves"
+    option :"by-date", type: :boolean, default: false,
+                       desc: "The chronological census: dated documents by century (earliest-bound " \
+                             "buckets, per-century source breakdown) — the whole-library timeline view"
     option :"export-source-dossiers", type: :boolean, default: false,
                                       desc: "Owner one-shot: scaffold a canonical/local-source dossier for " \
                                             "EVERY registered source, descriptions seeded from existing " \
@@ -1414,7 +1422,10 @@ module Nabu
       # a dictionary shelf lists entries, a text shelf documents — and the
       # header announces the implication so it stays legible.
       implied = implied_list_mode(query, slug)
-      if options[:axis]
+      if options[:"by-date"]
+        require_timeline!(catalog)
+        print_census_by_date(query.by_date_census)
+      elsif options[:axis]
         registry = Nabu::SourceRegistry.load(config.sources_path)
         view = focus_view(config, registry, catalog: catalog)
         warn_focus_drift(view)
@@ -3221,6 +3232,13 @@ module Nabu
         end
         census.except(:total).each do |slug, c|
           say "  #{slug}: #{c[:rows_updated]} rows gained refs across #{c[:names_applied]} names"
+          # P81 U-3: a below-certain registry decision no longer dies at
+          # apply — each applied low-certainty name reports its rows with
+          # the Certainty gloss, upstream word verbatim.
+          (c[:uncertain] || {}).each do |name, info|
+            say "    #{name} — #{info[:rows]} #{info[:rows] == 1 ? 'row' : 'rows'} " \
+                "(#{Nabu::Certainty.gloss(:places_certainty, info[:certainty])})"
+          end
         end
         say "place apply: #{census[:total]} axis rows updated"
       rescue Nabu::CatalogBusyError => e
@@ -3702,7 +3720,12 @@ module Nabu
         # canonical/nabu-lects lazily per call (nabu_search's `lect`
         # filter); an unsynced box answers `lect` with an InvalidArguments
         # naming the module, every other tool byte-identical.
-        lects: :auto
+        lects: :auto,
+        # The lect-provenance gloss seams (P81 U-5): static config, loaded
+        # once — the rules' tier: words and the override rows' tier: map,
+        # joined against each shown document's facet basis.
+        lect_rules: Nabu::LectRules.load(config.lect_facet_rules_paths),
+        lect_override_tiers: Nabu::Lects.override_tiers(config.lect_overrides_paths)
       )
       $stdout.sync = true
       install_mcp_signal_traps
@@ -3834,6 +3857,9 @@ module Nabu
     # before the "… and N more" tail (P48-r3; --long lists all — the same
     # house render-cap rule).
     AXIS_LANGUAGES_ITEMS = 10
+    # Sources named per century row by `nabu list --by-date` before the
+    # "+N more" tail (P81-1; the same house render-cap rule).
+    BY_DATE_SOURCES = 4
     # Crosswalk equivalences shown on the place card's "=" line before the
     # "… and N more" tail (P75 C-3, the same house render-cap rule).
     # const: a render cap, not a corpus census
@@ -4481,6 +4507,15 @@ module Nabu
           raise Thor::Error, "list: --axis groups the census under the research axes — " \
                              "drop the SOURCE/enumeration flags"
         end
+        # --by-date is a census view like --sources/--axis: it composes
+        # with nothing (a SOURCE's own timeline lives on its card; date
+        # FILTERS belong to --documents' --from/--to/--century).
+        if options[:"by-date"] && (!slug.empty? || modes.any? || options[:sources] || options[:axis] ||
+                                   options.values_at("long", "export-source-dossiers", "dry-run",
+                                                     "from", "to", "century").any?)
+          raise Thor::Error, "list: --by-date is the whole-library chronological census — " \
+                             "it composes with nothing (per-source dating sits on `list SOURCE`)"
+        end
         if modes.size > 1
           raise Thor::Error, "list: give one of --documents, --entries, --collections, --loans per invocation"
         end
@@ -5024,6 +5059,31 @@ module Nabu
         say census_summary(shown.values)
       end
 
+      # The chronological census (`list --by-date`, P81-1/C-6): one line
+      # per century, count + the top sources; the bucketing doctrine
+      # (earliest bound, spans announced) stated in the header, never
+      # hidden. Source tails cap at BY_DATE_SOURCES with an honest count.
+      def print_census_by_date(census)
+        return say("no dated documents yet — run nabu sync or nabu rebuild") if census.buckets.empty?
+
+        say "chronological census — dated documents by century (bucketed by earliest bound; " \
+            "#{commas(census.multi_century)} span multiple centuries)"
+        width = census.buckets.map { |bucket| bucket.label.length }.max
+        census.buckets.each do |bucket|
+          say "  #{bucket.label.ljust(width)}  #{commas(bucket.documents).rjust(9)}  " \
+              "#{by_date_sources(bucket.sources)}"
+        end
+        share = census.total_documents.positive? ? (census.dated_documents * 100) / census.total_documents : 0
+        say "dated #{commas(census.dated_documents)} of #{commas(census.total_documents)} " \
+            "live documents (#{share}%)"
+      end
+
+      def by_date_sources(sources)
+        shown = sources.first(BY_DATE_SOURCES).map { |slug, count| "#{slug} #{commas(count)}" }
+        tail = sources.size - BY_DATE_SOURCES
+        (shown + (tail.positive? ? ["+#{tail} more"] : [])).join(" · ")
+      end
+
       # Compact census fragments, zero fields suppressed (conventions §10).
       def census_fragments(row)
         parts = []
@@ -5552,18 +5612,21 @@ module Nabu
             "(text match, no Pleiades id — not counted above): #{format_source_counts(result.unlinked)}"
       end
 
+      # P81 U-3 (survey A3): a gazetteer's own "?"-suffixed title — the
+      # Barrington less-certain lineage — glosses right after the title via
+      # the shared cataloguer's-"?" helper; unmarked titles stay ink-free.
       def print_place_card(card, dump_loaded:)
         place = card.place
         if card.pleiades_id.nil?
           # P66-2: a namespaced ref card (tm:2810, cigs:GIR) — the title
           # resolves through that gazetteer's own index slice where derived.
           if place
-            say "#{place.title}, #{card.ref}#{place_card_tail(place)}"
+            say "#{place.title}#{place_query_gloss(place.title)}, #{card.ref}#{place_card_tail(place)}"
           else
             say "#{card.ref} — not in the derived place index"
           end
         elsif place
-          say "#{place.title}, Pleiades #{place.id}#{place_card_tail(place)}"
+          say "#{place.title}#{place_query_gloss(place.title)}, Pleiades #{place.id}#{place_card_tail(place)}"
         elsif dump_loaded
           say "Pleiades #{card.pleiades_id} — not in the local gazetteer dump"
         else
@@ -5666,6 +5729,7 @@ module Nabu
         say "  source: #{passage.source_slug}   license: #{passage.license_class}   " \
             "sequence: #{passage.sequence}   revision: #{passage.revision}"
         print_credit(passage)
+        print_lect(passage)
         print_timeline(passage.timeline)
         print_findspot(passage)
         print_meter(passage)
@@ -5731,7 +5795,7 @@ module Nabu
         print_timeline(document.timeline)
         print_findspot(document)
         print_artifact(document)
-        print_facets(document.facets)
+        print_facets(document.facets, language: document.language)
         say "  passages (#{document.passages.size}):"
         document.passages.each do |line|
           say "    #{passage_label(document, line)}#{withdrawn_tag(line.withdrawn)}  " \
@@ -5759,6 +5823,47 @@ module Nabu
                               source: range.source_slug, annotations: line.annotations)}"
         end
         print_unreadable_annotations_count(range.passages)
+      end
+
+      # P81 U-5: the lect line — only when the document carries a
+      # materialized lect facet row ("no row means identity", P58-4; a
+      # bare-code passage prints nothing). The resolution's provenance
+      # basis rides in parentheses; where the ruling behind the basis
+      # STATES a tier (the rule's tier:, the override row's tier:) the
+      # parenthetical glosses through Certainty's :lect_tier carrier
+      # instead — certain stays provenance-only ink, deviation is labeled:
+      # "lect: arc:mid (probable — rule sefaria-arc-subshelf, approximation)".
+      def print_lect(passage)
+        return unless passage.lect
+
+        say "  lect: #{passage.lect}#{lect_facet_note(passage.lect_basis, code: passage.language)}"
+      end
+
+      # " (<gloss>)" when the basis's ruling states a tier, " (<basis>)"
+      # as bare provenance otherwise, "" for a basis-less row (materialized
+      # before the P81 basis lane) — shared by the passage lect line and
+      # the document facets line.
+      def lect_facet_note(basis, code:)
+        return "" unless basis
+
+        gloss = Nabu::LectGloss.gloss(basis, code: code, rules: cli_lect_rules,
+                                             override_tiers: cli_lect_override_tiers)
+        " (#{gloss || basis})"
+      end
+
+      # The config-stated tier carriers, memoized per command run (both are
+      # small YAML reads; nil rules = no rules file, an honest untiered
+      # render).
+      def cli_lect_rules
+        return @cli_lect_rules if defined?(@cli_lect_rules)
+
+        @cli_lect_rules = Nabu::LectRules.load(Nabu::Config.load.lect_facet_rules_paths)
+      end
+
+      def cli_lect_override_tiers
+        return @cli_lect_override_tiers if defined?(@cli_lect_override_tiers)
+
+        @cli_lect_override_tiers = Nabu::Lects.override_tiers(Nabu::Config.load.lect_overrides_paths)
       end
 
       # The timeline line (P15-2), when the document has one. A date span
@@ -5805,13 +5910,19 @@ module Nabu
       # The facets line (P17-2), one compact line and only when faceted:
       # "facets: genre=epitaph (titsep) · province=Latium et Campania …". The
       # raw code rides in parentheses when it differs from the value (the `?`
-      # certainty stays visible).
-      def print_facets(facets)
+      # certainty stays visible). P81 U-5: the lect facet's raw is its
+      # provenance basis — it renders through the tier gloss (or as the bare
+      # basis) exactly like the passage card's lect line.
+      def print_facets(facets, language: nil)
         return if facets.nil? || facets.empty?
 
         rendered = facets.map do |facet|
-          raw = facet.raw && facet.raw != facet.value ? " (#{facet.raw})" : ""
-          "#{facet.facet}=#{facet.value}#{raw}"
+          if facet.facet == "lect"
+            "lect=#{facet.value}#{lect_facet_note(facet.raw, code: language)}"
+          else
+            raw = facet.raw && facet.raw != facet.value ? " (#{facet.raw})" : ""
+            "#{facet.facet}=#{facet.value}#{raw}"
+          end
         end
         say "  facets: #{rendered.join(' · ')}"
       end

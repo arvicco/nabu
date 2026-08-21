@@ -4834,6 +4834,43 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P81 U-5: the materialized lect renders with its provenance basis — a
+  # ruling that STATES a below-certain tier glosses through Certainty's
+  # :lect_tier carrier; certain bases (an owner ruling) stay provenance-only.
+  def test_show_glosses_the_lect_tier_from_the_facet_basis
+    with_dated_corpus do |config|
+      FileUtils.mkdir_p(config.config_dir)
+      File.write(File.join(config.config_dir, "lect_facet_rules.yml"), <<~YAML)
+        rules:
+          - id: pap-stage
+            tier: approximation
+            sources: [p]
+            code: grc
+            facet: period
+            map: { "Ptolemaic": "grc:koi" }
+      YAML
+      catalog = Nabu::Store.connect(config.catalog_path)
+      %w[a b].zip(["rule:pap-stage", "owner"]).each do |slug, basis|
+        doc = catalog[:documents].first(urn: "urn:nabu:ddbdp:#{slug}")
+        catalog[:document_facets].insert(document_id: doc[:id], facet: "lect",
+                                         value: "grc:koi", raw: basis)
+      end
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:a:1]) }
+      assert_nil status
+      assert_match(/lect: grc:koi \(probable — rule pap-stage, approximation\)/, out)
+
+      out_doc, _err_d, = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:a]) }
+      assert_match(/facets: genre=epitaph \(titsep\?\) · lect=grc:koi \(probable — rule pap-stage, approximation\)/,
+                   out_doc, "the document facets line glosses the lect facet the same way")
+
+      out_b, _err_b, = with_config(config) { run_cli(%w[show urn:nabu:ddbdp:b:1]) }
+      assert_match(/lect: grc:koi \(owner\)/, out_b,
+                   "an owner ruling is certain — bare provenance, no doubt ink")
+    end
+  end
+
   # P76 U-2: the doubt word routes through Certainty — the house tier plus
   # the upstream word verbatim (was the bare "(low)" before the doctrine).
   def test_show_prints_the_timeline_line
@@ -6821,6 +6858,61 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[place 570685]) }
       assert_nil status
       assert_match(/^  = tm:2810$/, out)
+    end
+  end
+
+  # P81 U-3 (survey A3): a gazetteer's own "?"-suffixed title glosses on
+  # the card headline through Certainty — the Barrington less-certain
+  # lineage, upstream mark kept verbatim in the title itself.
+  def test_place_card_glosses_a_query_suffixed_title
+    with_place_corpus do |config|
+      catalog = Nabu::Store.connect(config.catalog_path)
+      doubtful = Nabu::Pleiades::Place.new(id: "580101", title: "Limenas Chersonesou?",
+                                           lat: 35.12, lon: 25.02, place_types: ["settlement"],
+                                           time_periods: [])
+      Nabu::Store::PlaceIndex.derive!(catalog, places: [doubtful], gazetteer: "pleiades")
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[place 580101]) }
+      assert_nil status
+      assert_match(/Limenas Chersonesou\? \(probable — cataloguer's "\?"\), Pleiades 580101 — settlement/,
+                   out)
+    end
+  end
+
+  # P81 U-3 (the A1 dies-at-apply defect): a below-certain registry
+  # decision renders on the apply report — name, rows, the upstream word
+  # verbatim; high-certainty names stay one summary line.
+  def test_place_apply_reports_low_certainty_decisions
+    Dir.mktmpdir("nabu-cli-place-apply") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, "# none\n")
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources,
+        config_path: File.join(File.dirname(sources), "config", "nabu.yml")
+      )
+      FileUtils.mkdir_p(config.db_dir)
+      dest = File.join(config.canonical_dir, "nabu-places")
+      FileUtils.mkdir_p(dest)
+      FileUtils.cp(File.join(Nabu::TestSupport.fixtures("nabu-places"), "names.yml"), dest)
+      catalog = Nabu::Store.connect(config.catalog_path)
+      Nabu::Store.migrate!(catalog)
+      Nabu::Store.setup!(catalog)
+      src = catalog[:sources].insert(slug: "cdli", name: "CDLI", adapter_class: "T",
+                                     license_class: "open", enabled: true)
+      { "urn:c:1" => "Nereb (mod. Neirab) ?", "urn:c:2" => "Girsu (mod. Tello)" }.each do |urn, name|
+        doc = catalog[:documents].insert(source_id: src, urn: urn, title: urn, language: "sux",
+                                         content_sha256: urn, revision: 1, withdrawn: false)
+        catalog[:document_axes].insert(document_id: doc, axis_source: "cdli", place_name: name)
+      end
+      catalog.disconnect
+
+      out, _err, status = with_config(config) { run_cli(%w[place apply]) }
+      assert_nil status
+      assert_match(/cdli: 2 rows gained refs across 2 names/, out)
+      assert_match(/Nereb \(mod\. Neirab\) \? — 1 row \(probable — registry "low"\)/, out)
+      refute_match(/Girsu.*registry/, out, "high-certainty names add no per-name line")
     end
   end
 

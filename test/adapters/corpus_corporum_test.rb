@@ -121,6 +121,76 @@ class CorpusCorporumTest < Minitest::Test
     assert_equal "lat", metadata["language_ident"]
   end
 
+  # -- the dating envelope (P81-1) --------------------------------------------
+  #
+  # Three lanes, walked in confidence order: the checkpoint's per-work
+  # work_composition year, the checkpoint's author life band (born/died),
+  # and the teiHeader's author floruit/life string. The fixture state file
+  # is the real product of the new walk over the real 2026-08-19 catalog
+  # responses (test/fixtures/corpus-corporum/README.md).
+
+  def test_the_checkpoints_work_composition_year_rules_the_envelope
+    metadata = adapter.parse(ref_for(HISTORIA)).metadata
+    assert_equal({ "not_before" => 892, "not_after" => 892, "raw" => "work composition 892" },
+                 metadata["date"])
+    assert_equal "fl. 892", metadata["author_date"], "the header lane still rides verbatim"
+  end
+
+  def test_the_author_life_band_serves_when_a_work_carries_no_composition_year
+    with_doctored_state(drop_composition: true) do |dir|
+      metadata = adapter.parse(adapter.discover(dir).find { |r| r.id == EPISTOLA }).metadata
+      assert_equal({ "not_before" => 992, "not_after" => 1050, "raw" => "author 992–1050" },
+                   metadata["date"])
+    end
+  end
+
+  def test_the_header_author_date_serves_when_no_checkpoint_exists
+    # Today's LIVE canonical state: the pre-P81 checkpoint carries no years
+    # (and is schema-invalidated) — the teiHeader floruit still bounds.
+    with_doctored_state(remove: true) do |dir|
+      metadata = adapter.parse(adapter.discover(dir).find { |r| r.id == EPISTOLA }).metadata
+      assert_equal({ "not_before" => 1000, "not_after" => 1000, "raw" => "fl. 1000" },
+                   metadata["date"])
+    end
+  end
+
+  def test_the_author_date_ladder_reads_the_censused_header_forms
+    bounds = Nabu::Adapters::CorpusCorporum.method(:author_date_bounds)
+    # Real live-catalog values (censused 2026-08-21): Augustine's life
+    # band, Cyprian's bare death year, the c.-qualified pair, floruits.
+    assert_equal({ "not_before" => 354, "not_after" => 430, "raw" => "354-430" }, bounds.call("354-430"))
+    assert_equal({ "not_before" => nil, "not_after" => 258, "raw" => "-258" }, bounds.call("-258"))
+    assert_equal({ "not_before" => 470, "not_after" => 544, "raw" => "c.470–c.544" },
+                 bounds.call("c.470–c.544"))
+    assert_equal({ "not_before" => 1150, "not_after" => 1150, "raw" => "fl. 1150" }, bounds.call("fl. 1150"))
+    assert_equal 450, bounds.call("fl.450")["not_before"], "the unspaced floruit variant"
+    assert_nil bounds.call("sine-data"), "upstream's own no-data marker mints nothing"
+    assert_nil bounds.call("1067-1055"), "a descending pair is not a clean claim"
+    assert_nil bounds.call(nil)
+  end
+
+  def test_corpus_corporum_is_registered_for_the_structured_metadata_dates_shape
+    assert_equal :structured, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["corpus-corporum"]
+  end
+
+  # Copy the fixture tree into a tmpdir and doctor the CHECKPOINT (our own
+  # derived state, never the upstream fixtures): drop the work_composition
+  # years, or remove the state file entirely.
+  def with_doctored_state(drop_composition: false, remove: false)
+    Dir.mktmpdir do |dir|
+      FileUtils.cp_r(File.join(workdir, "texts"), dir)
+      state_path = File.join(dir, Nabu::CorpusCorporumFetch::STATE_FILE)
+      FileUtils.cp(File.join(workdir, Nabu::CorpusCorporumFetch::STATE_FILE), state_path)
+      if drop_composition
+        state = JSON.parse(File.read(state_path))
+        state["catalog"].each_value { |row| row["texts"].each { |t| t.delete("work_composition") } }
+        File.write(state_path, JSON.pretty_generate(state))
+      end
+      FileUtils.rm_f(state_path) if remove
+      yield dir
+    end
+  end
+
   def test_license_silent_headers_inherit_the_source_nc_class
     adapter.discover(workdir).each do |ref|
       document = adapter.parse(ref)

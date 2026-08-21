@@ -157,6 +157,26 @@ anchors:
   oc:
     name: Occitan
     parent: pro
+    # The dialect varieties (№R-41, 2026-08-21): tags are the IANA variant
+    # subtag names VERBATIM (the 2018 Occitan registration; the ortho
+    # axis's reuse-IANA doctrine, now shared) — Bec's six-dialect
+    # classification, which is also the first consuming corpus's own
+    # division, plus aranes. Deliberately unminted: nicard/cisaup/creiss
+    # (IANA-registered, no holdings — use-case doctrine) and the
+    # orthography variants grclass/grital/grmistr (no source
+    # distinguishes orthography yet).
+    varieties:
+      gascon:   {name: Gascon,        kind: dialect}
+      lengadoc: {name: Languedocien,  kind: dialect}
+      provenc:  {name: Provençal,     kind: dialect}
+      auvern:   {name: Auvergnat,     kind: dialect}
+      lemosin:  {name: Limousin,      kind: dialect}
+      vivaraup: {name: Vivaro-Alpine, kind: dialect}
+      aranes:   {name: Aranese, kind: dialect,
+                 note: "the Val d'Aran variety of Gascon — its own IANA
+                        subtag and orthographic norm; the registry's flat
+                        variety set carries the gascon ⊃ aranes nesting
+                        in prose, not structure"}
 
   osp:
     name: Old Spanish
@@ -555,6 +575,66 @@ anchors:
     varieties:
       lit: {name: Standard Babylonian, kind: register,
             note: "the literary register of first-millennium scholarship"}
+
+  # ── The Anatolian flank (P81-r1: hit was the largest node-less language
+  # in the first consuming collection — 35.9k docs, tlhdig + cdli; the
+  # standing deliberately-unminted note retired by the owner's 2026-08-21
+  # review request) ─────────────────────────────────────────────────────────
+
+  ine-ana:
+    name: Anatolian
+    kind: family
+    parent: ine
+    note: "established Wiktionary family code; the earliest-attested
+           branch of Indo-European"
+
+  hit:
+    name: Hittite
+    parent: ine-ana
+    band: [-1650, -1180]
+    band_note: "conventional Hittitological span, approximate — the Old
+                Kingdom archives to the fall of Ḫattuša"
+    note: "deliberately stage-less: the conventional Old/Middle/New
+           Hittite grid is real, but no consuming source carries
+           per-document stage data to materialize it — CDLI's period
+           facet is one blanket value ('Middle Hittite (ca. 1500-1100
+           BC)', 14,653 of 14,671 hit docs censused 2026-08-21) and
+           TLHdig carries CTH numbers and project sigla only. The
+           stages are a future mint for a consumer that can use them"
+
+  xlu:
+    name: Cuneiform Luwian
+    parent: ine-ana
+
+  hlu:
+    name: Hieroglyphic Luwian
+    parent: ine-ana
+    note: "with xlu the two written traditions of the Luwian complex;
+           a joint Luwic node is deliberately unminted — no consumer
+           needs the distinction drawn finer than the ISO codes draw it"
+
+  plq:
+    name: Palaic
+    parent: ine-ana
+
+  # The Boğazköy-archive neighbors riding the same sources but NOT
+  # Anatolian Indo-European — bare anchors, no parent edge where no
+  # family node exists (the Aramaic-fan discipline):
+
+  xht:
+    name: Hattic
+    note: "isolate (the pre-Hittite substrate of central Anatolia) —
+           no parent edge; rides the Hittite archives (tlhdig)"
+
+  xhu:
+    name: Hurrian
+    note: "Hurro-Urartian; the family node is deliberately unminted —
+           no ISO 639-5 code exists and no consumer needs the edge"
+
+  xur:
+    name: Urartian
+    note: "Hurro-Urartian, xhu's sibling; same deliberately-unminted
+           family node"
 
   # ── Sanskrit ───────────────────────────────────────────────────────────────
 

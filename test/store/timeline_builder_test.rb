@@ -90,6 +90,58 @@ module Store
                  "a REGISTER label misfiled as a period mints no date claim"
     end
 
+    # P81-1: the ebl era ladder — the exact lanes P62-0 deliberately left
+    # out, now in at YEAR grain: a Seleucid-era date object converts
+    # exactly (SE 1 begins Nisanu, spring 311 BCE, so SE Y spans the two
+    # Julian years (312−Y)/(311−Y) BCE — month/day ride raw, never a
+    # sub-year bound); a regnal date object bands to the king's own
+    # upstream-stated reign span ("555–539", unsigned BCE, descending).
+    # Regnal-year arithmetic stays deliberately out (accession-convention
+    # judgment); broken/uncertain years fall through to the period band.
+    def test_metadata_dates_ebl_seleucid_date_objects_convert_exactly
+      # The real shape of urn:nabu:ebl's BM 1878,0730.7 (SE Arsaces 219).
+      seed_metadata_doc("ebl", "urn:nabu:ebl:se1",
+                        { "period" => "Parthian",
+                          "date" => { "isSeleucidEra" => true,
+                                      "year" => { "isBroken" => false, "isUncertain" => false,
+                                                  "value" => "219" },
+                                      "month" => { "isBroken" => false, "isIntercalary" => false,
+                                                   "isUncertain" => false, "value" => "1" },
+                                      "day" => { "isBroken" => false, "isUncertain" => false,
+                                                 "value" => "28" } } })
+      seed_metadata_doc("ebl", "urn:nabu:ebl:se2",
+                        { "period" => "Hellenistic",
+                          "date" => { "isSeleucidEra" => true,
+                                      "year" => { "isBroken" => false, "isUncertain" => false,
+                                                  "value" => "" } } })
+      build!
+
+      row = timeline_for("urn:nabu:ebl:se1")
+      assert_equal(-93, row[:not_before], "SE 219 = 93/92 BCE, not the Parthian band")
+      assert_equal(-92, row[:not_after])
+      assert_equal "SE 219, month 1, day 28", row[:date_raw]
+      blank = timeline_for("urn:nabu:ebl:se2")
+      assert_equal(-323, blank[:not_before], "a blank SE year falls through to the period band")
+      assert_equal "Hellenistic", blank[:date_raw]
+    end
+
+    def test_metadata_dates_ebl_regnal_dates_band_to_the_kings_reign
+      # The real regnal shape: Nabonidus, reign 555–539 (Neo-Babylonian).
+      seed_metadata_doc("ebl", "urn:nabu:ebl:rg1",
+                        { "period" => "Neo-Babylonian",
+                          "date" => { "isSeleucidEra" => false,
+                                      "king" => { "date" => "555–539", "name" => "Nabonidus",
+                                                  "dynastyName" => "Neo-Babylonian Dynasty" },
+                                      "year" => { "isBroken" => false, "isUncertain" => false,
+                                                  "value" => "3" } } })
+      build!
+
+      row = timeline_for("urn:nabu:ebl:rg1")
+      assert_equal(-555, row[:not_before], "the king's reign envelope, finer than the NB band")
+      assert_equal(-539, row[:not_after])
+      assert_equal "Nabonidus (555–539)", row[:date_raw]
+    end
+
     def test_metadata_dates_place_only_document_gets_a_place_row
       seed_metadata_doc("elephantine", "urn:nabu:elephantine:100001",
                         { "place" => { "ancient" => "Syene" } })

@@ -130,6 +130,65 @@ class CorpusCorporumFetchTest < Minitest::Test
                  state["catalog"].values.flat_map { |row| row["texts"].map { |t| t["idno"] } }.sort
   end
 
+  # --- the dating capture (P81-1) --------------------------------------------
+  #
+  # The walked author/work listings carry time_data the crawl previously
+  # discarded: per-author born/died events, per-work work_composition years.
+  # Both pages are already requested — the capture costs zero extra GETs
+  # and rides the same checkpoint, where the parser reads it at parse time.
+
+  def test_the_walk_checkpoints_author_and_work_composition_years
+    stub_catalog
+    stub_texts
+    sync!
+
+    state = JSON.parse(File.read(File.join(@dir, Nabu::CorpusCorporumFetch::STATE_FILE)))
+    assert_equal Nabu::CorpusCorporumFetch::CATALOG_SCHEMA, state["catalog_schema"]
+
+    petrus = state.dig("catalog", "2028")
+    assert_equal 850, petrus["born"], "author-page time_data event what='born'"
+    assert_nil petrus["died"], "no died event — never guessed"
+    assert_equal [892, 892], petrus["texts"].first["work_composition"],
+                 "the work page's work_composition year rides the text row"
+
+    wido = state.dig("catalog", "2034")
+    assert_equal 992, wido["born"]
+    assert_equal 1050, wido["died"], "the certainty='between' died event envelopes to its latest year"
+    assert_equal [1000, 1000], wido["texts"].first["work_composition"]
+
+    abbaudus = state.dig("catalog", "2173")
+    assert_equal [1100, 1199], [abbaudus["born"], abbaudus["died"]]
+    assert_equal [1130, 1130], abbaudus["texts"].first["work_composition"]
+  end
+
+  def test_a_pre_dating_checkpoint_is_not_reused
+    stub_catalog
+    stub_texts
+    sync!
+
+    # Rewrite the state as a schema-1 (pre-P81) checkpoint: no
+    # catalog_schema key, no years — the walk must NOT reuse it, or the
+    # dating lane would stay dark until texts_count drifts (PL is closed:
+    # it never does).
+    path = File.join(@dir, Nabu::CorpusCorporumFetch::STATE_FILE)
+    state = JSON.parse(File.read(path))
+    state.delete("catalog_schema")
+    state["catalog"].each_value do |row|
+      row.delete("born")
+      row.delete("died")
+      row["texts"].each { |t| t.delete("work_composition") }
+    end
+    File.write(path, JSON.pretty_generate(state))
+
+    sync!
+    AUTHORS.each do |author, work|
+      assert_requested :get, NAVIGATE, query: { "path" => "/38/#{author}" }, times: 2
+      assert_requested :get, NAVIGATE, query: { "path" => "/38/#{author}/#{work}" }, times: 2
+    end
+    refreshed = JSON.parse(File.read(path))
+    assert_equal 850, refreshed.dig("catalog", "2028", "born"), "the re-walk captured the years"
+  end
+
   # --- resume ----------------------------------------------------------------
 
   def test_a_text_already_on_disk_is_never_refetched

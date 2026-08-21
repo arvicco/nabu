@@ -12,6 +12,13 @@
 # THIS FILE (per-source) > codemap.yml (universal) > identity (the code
 # itself). Every entry here is a ratified owner decision — do not add a row
 # without one.
+#
+# Row shape (P81 U-5): either the bare lect id string, or
+# `{ lect: "<id>", tier: certain|approximation }` — the ruling's stated
+# tier promoted from prose comment to machine field, so render surfaces
+# can gloss it (Nabu::LectGloss over Certainty's :lect_tier carrier:
+# certain is silent, approximation glosses "probable — override <slug>,
+# approximation"). The comments keep the ruling's own wording.
 sources:
   derom:
     # DÉRom (config/sources.yml `derom`) files its etymon articles under the
@@ -19,7 +26,7 @@ sources:
     # these ARE comparative-method reconstructions (the whole point of the
     # dictionary) — the reconstructed roa:pro lect, not the universal
     # codemap's attested-register default (lat/vul). Owner ruling, P57-3.
-    la-vul: "roa:pro"
+    la-vul: { lect: "roa:pro", tier: certain }
   rundata:
     # Rundata (config/sources.yml `rundata`) tags urnordisk-dated
     # inscriptions gmq-pro (the wiktionary-recon proto-language convention —
@@ -27,7 +34,7 @@ sources:
     # runic epigraphy (the Elder Futhark span), not the universal codemap's
     # reconstructed default (gmq:pro) — nabu-lects registers exactly this
     # distinction as the attested gmq:run stage. Owner ruling, P57-3.
-    gmq-pro: "gmq:run"
+    gmq-pro: { lect: "gmq:run", tier: certain }
 
   # ── D57-f (owner ruling 2026-08-02): the first text-corpus stage
   # assignments. Two tiers, stated per row: CERTAIN (the corpus's own
@@ -38,43 +45,43 @@ sources:
   # unstaged — bare-anchor honesty at source grain.
   openmgh:
     # MGH medieval critical editions — certain.
-    lat: "lat:med"
+    lat: { lect: "lat:med", tier: certain }
   vulgate:
     # Jerome — certain.
-    lat: "lat:late/ecc"
+    lat: { lect: "lat:late/ecc", tier: certain }
   digiliblt:
     # The corpus is defined as "testi latini tardoantichi" — certain.
-    lat: "lat:late"
+    lat: { lect: "lat:late", tier: certain }
   sblgnt:
     # The SBL Greek New Testament — certain.
-    grc: "grc:koi"
+    grc: { lect: "grc:koi", tier: certain }
   papyri-ddbdp:
     # Documentary papyri, Ptolemaic through Roman — approximation.
-    grc: "grc:koi"
+    grc: { lect: "grc:koi", tier: approximation }
     # P61-3 (D60-b): Demotic papyri held as Latin transliteration — the
     # surface claim; the artifact's Egyd rides config/artifact_scripts.yml.
-    egy-Egyd: "egy~latn"
+    egy-Egyd: { lect: "egy~latn", tier: certain }
   perseus-greek:
     # Classical canon — approximation; Homer refines to grc:hom per-doc.
-    grc: "grc:cla"
+    grc: { lect: "grc:cla", tier: approximation }
   perseus-latin:
     # Classical canon — approximation; Plautus refines to lat:arch per-doc.
-    lat: "lat:cla"
+    lat: { lect: "lat:cla", tier: approximation }
   elephantine:
     # The island's Greek record is Ptolemaic — approximation. (The source's
     # other twelve languages are untouched: overrides are per (source, code).)
-    grc: "grc:koi"
+    grc: { lect: "grc:koi", tier: approximation }
     # The island's Aramaic record IS the Imperial Aramaic corpus — certain.
     # Owner ruling, P58 D58-d.
-    arc: "arc:imp"
+    arc: { lect: "arc:imp", tier: certain }
     # P61-3 (D60-b): the Demotic papyri are HELD as Latin transliteration
     # (byte-census P60-1) — surface claim ~latn; the artifact's Egyd rides
     # config/artifact_scripts.yml.
-    egy-Egyd: "egy~latn"
+    egy-Egyd: { lect: "egy~latn", tier: certain }
   openiti:
     # OpenITI is the premodern Classical Arabic written tradition —
     # approximation (the fas rows are untouched). Owner ruling, P58 D58-d.
-    ara: "ara:cla"
+    ara: { lect: "ara:cla", tier: approximation }
   dss:
     # The Scrolls' Aramaic IS the corpus the registry stage is named for
     # ("Biblical (Qumran) Aramaic") — certain. The source carries zero
@@ -82,7 +89,7 @@ sources:
     # is the only machine grain available; the hbo majority (857 docs)
     # stays deliberately bare — the registry mints no Qumran-Hebrew stage.
     # Owner ruling, P59 D59-b.
-    arc: "arc:bib"
+    arc: { lect: "arc:bib", tier: certain }
   # P61-3 (D60-b applied; the wave-1 architecture the owner ratified
   # 2026-08-07): the ARTIFACT-claiming script suffixes — the byte-census
   # (P60-1) measured these codes' held text 100% Latin transliteration,
@@ -96,21 +103,30 @@ sources:
   # first; the P61-3 incident that cost grc:koi 57,911 rows for one
   # materialize run.)
   itant:
-    osc-Ital-x-oscetr: "osc~latn"
-    xcg-Ital-x-xcglep: "xcg~latn"
+    osc-Ital-x-oscetr: { lect: "osc~latn", tier: certain }
+    xcg-Ital-x-xcglep: { lect: "xcg~latn", tier: certain }
   # №1 (owner ruling 2026-08-09): ETCSL is the canonical Sumerian literary
   # corpus — Old Babylonian-era copies from after Sumerian died as a
   # vernacular, exactly the registry's sux:post claim. Source-grain tier
   # approximation (394 sux docs at ruling; the eng siblings stay bare).
   etcsl:
-    sux: "sux:post"
+    sux: { lect: "sux:post", tier: approximation }
   # №4 (owner ruling 2026-08-09): the CCMH corpus IS Croatian Church
   # Slavonic — the chu/cro recension minted upstream for exactly this
   # (19 chu docs at ruling). torot's six canonical mss stay BARE chu:
   # the registry's bare anchor names the canonical corpus itself.
   ccmh:
-    chu: "chu/cro"
+    chu: { lect: "chu/cro", tier: certain }
   # №5 (owner ruling 2026-08-09): the Freising Fragments are literally the
   # exemplar the registry's sl:old note names (12 sl docs at ruling).
   freising:
-    sl: "sl:old"
+    sl: { lect: "sl:old", tier: certain }
+  # №R-41 (owner ruling 2026-08-21, option A): the aranese corpus IS
+  # Aranese — the Val d'Aran variety of Gascon, minted as oc/aranes by
+  # nabu-lects PR #6 (its own IANA subtag and orthographic norm; the
+  # gascon ⊃ aranes nesting rides the registry note). A per-collection
+  # fact the universal codemap cannot state: upstream codes the whole
+  # ~420k-pair Occitan side bare `oci`. Tier certain: the corpus is
+  # definitionally Aranese (the card's own description).
+  aranese:
+    oci: { lect: "oc/aranes", tier: certain }
