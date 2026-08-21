@@ -552,8 +552,10 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   ebl:
-    dating: {posture: dated, note: "P62-0: 22,807/23,288 banded via the ruled period table; the 40
-        Seleucid day/month objects band coarsely — exact era conversion deliberately out"}
+    dating: {posture: dated, note: "P62-0: 22,807/23,288 banded via the ruled period table; P81-1
+        adds the era ladder above the band — clean Seleucid-era years convert exactly (SE 219 →
+        93/92 BCE; month/day ride raw at year grain) and regnal date objects band to the king's
+        own reign span ('555–539'); regnal-YEAR arithmetic stays deliberately out"}
     places: {posture: unplaced}
     script: {posture: implied}
   elephantine:
