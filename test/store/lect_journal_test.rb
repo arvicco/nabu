@@ -126,6 +126,22 @@ module Store
       assert_nil overlay["urn:none"], "a miss is nil — Lects#resolve's overlay contract"
     end
 
+    # P81 U-5: the overlay reports each assignment's journal basis — the
+    # provenance Lects#resolution hands to the facet materializer — from
+    # the same memoized per-urn query the [] lookup rides.
+    def test_the_lazy_overlay_reports_the_journal_basis
+      assign(code: "lat", lect_id: "lat:arch", basis: "owner")
+      assign(code: "akk", lect_id: "akk:ob", basis: "rule:akk-period")
+      overlay = Nabu::Store::LectJournal::Overlay.new(@db)
+      urn = "urn:nabu:perseus-latin:phi0119.phi001"
+      assert_equal "owner", overlay.basis(urn, "lat")
+      assert_equal "rule:akk-period", overlay.basis(urn, "akk")
+      assert_nil overlay.basis(urn, "grc"), "an unassigned code has no basis"
+      assert_nil overlay.basis("urn:none", "lat"), "a missing urn has no basis"
+      assert_equal({ "lat" => "lat:arch", "akk" => "akk:ob" }, overlay[urn],
+                   "the [] contract is unchanged beside the basis read")
+    end
+
     def test_the_lazy_overlay_reads_through_after_new_writes_to_a_fresh_instance
       overlay = Nabu::Store::LectJournal::Overlay.new(@db)
       assert_nil overlay["urn:x"]

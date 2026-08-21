@@ -90,6 +90,30 @@ module Query
       assert_equal 1, search("mann", lang: "deu").size
     end
 
+    # -- query-side neutralization scoping (P81-2 / Q40) ---------------------
+
+    # OWNER REPRO (2026-08-20): `search houlá` (bdcamoes, Portuguese) served
+    # Romanian "hulă" passages — the Slavonic neutralizer's Latin ou→u arm
+    # fired on a Latin query. The arm is now scoped to Cyrillic queries;
+    # --lang asserts a language and restores its full pipeline, so the
+    # damaskini diplomatic surface stays reachable on request.
+    def test_latin_query_no_longer_collapses_ou_into_foreign_language_hits
+      ron = make_document(source: @open, urn: "urn:d:ron", language: "ron")
+      make_passage(ron, urn: "urn:d:ron:1", text: "hulă grea", sequence: 0, language: "ron")
+      dam = make_document(source: @open, urn: "urn:d:chu", language: "chu")
+      make_passage(dam, urn: "urn:d:chu:1", text: "kako oubi siona", sequence: 0, language: "chu")
+      rebuild!
+
+      assert_empty search("houlá"), "a Portuguese hail must not reach Romanian hulă via ou→u"
+      assert_empty search("oubi"), "the bare diplomatic spelling no longer infers the Slavonic collapse"
+      assert_equal ["urn:d:chu:1"], search("oubi", lang: "chu").map(&:urn),
+                   "--lang chu asserts the language: its neutralizer rejoins the union"
+      assert_equal ["urn:d:chu:1"], searcher.run_scan("oubi", lang: "chu").map(&:urn),
+                   "the scan mode rides the same asserted-language union"
+      assert_equal ["urn:d:chu:1"], search("оуби").map(&:urn),
+                   "a Cyrillic-script query still folds through its own neutralizer unasked"
+    end
+
     # -- FTS5 syntax hardening (owner report 2026-07-18: `search --help`
     # crashed with a raw fts5 backtrace; any hyphen-leading token does) ----
 
@@ -564,10 +588,12 @@ module Query
                    "the axis filter AND-composes with the single --source"
     end
 
-    # The membership filter is catalog-side, so it arms the P35-6 inner-window
-    # honesty hint exactly like --source: a full inner window thinned to a
-    # short page under an active axis filter announces itself.
-    def test_sources_membership_filter_arms_the_incomplete_hint
+    # P81-3 rewrote this P37-8 pin: the membership filter used to be
+    # catalog-side and ARMED the P35-6 hint when the inner window starved.
+    # On the current index shape it rides IN the MATCH, so the same seed now
+    # FINDS the beyond-the-window row and needs no hint; the historical
+    # catalog-side behavior stays pinned against the downgraded index.
+    def test_sources_membership_filter_reaches_past_the_window_it_used_to_starve_on
       searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
       open_doc = make_document(source: @open, urn: "urn:d:open")
       # Ten open rows fill the limit×10 inner window; the one nc row the axis
@@ -578,9 +604,21 @@ module Query
       rebuild!
 
       page = searcher.run("aurora", sources: %w[nc], limit: 1)
-      assert_operator page.size, :<, 1 + 1
-      assert_equal Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT, searcher.incomplete_hint,
-                   "the axis membership filter arms the exhausted-window hint"
+      assert_equal %w[urn:d:nc:1], page.map(&:urn), "the in-MATCH axis filter fills the page"
+      assert_nil searcher.incomplete_hint, "an in-MATCH filter cannot starve the window"
+
+      downgrade_index!
+      starved = searcher_on_downgraded_index.run("aurora", sources: %w[nc], limit: 1)
+      assert_empty starved, "the pre-P81-3 catalog-side path starves exactly as it always did"
+      assert_equal Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT,
+                   searcher_on_downgraded_index.incomplete_hint,
+                   "…and arms the exhausted-window hint exactly as it always did"
+    end
+
+    # A fresh searcher after downgrade_index! — the column feature-detect is
+    # memoized per instance, so the pre-rebuild path needs its own.
+    def searcher_on_downgraded_index
+      @searcher_on_downgraded_index ||= Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
     end
 
     # -- P57-4: --lect, the resolution-level filter ----------------------------
@@ -1492,6 +1530,92 @@ module Query
                    "the Icelandic rows' language tokens are sentinel-prefixed — a plain 'is' cannot match them"
       assert_nil searcher.rank_note,
                  "df('is') counts the ONE text occurrence, not the 5 language tokens — the guard stays off"
+    end
+
+    # -- index-side --source/--axis (P81-3) ----------------------------------
+    # The same starvation genus as P42-3's --lang, found live 2026-08-20:
+    # `search 王 --source sillok` returned empty because --source was a
+    # catalog-side post-filter over the bounded global window, which held no
+    # sillok row. passages_fts now carries a source sentinel token, so
+    # --source (one slug) and --axis (its member slugs, already compiled to
+    # a slug list CLI-side) ride INSIDE the MATCH. Against a pre-rebuild
+    # index (no column) the catalog-side path runs byte-identically, honesty
+    # hint included.
+
+    def test_source_no_longer_starves_the_window_on_the_new_index
+      seed_window_exhausting_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("arma", source: "nc", limit: 1)
+      assert_equal %w[urn:d:grc:1], results.map(&:urn),
+                   "the in-MATCH source filter reaches past the window the scoped source never entered"
+      assert_nil searcher.incomplete_hint,
+                 "source rides in the MATCH — it cannot starve the window, so it no longer arms the hint"
+    end
+
+    def test_axis_slugs_no_longer_starve_the_window_on_the_new_index
+      seed_window_exhausting_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("arma", sources: ["nc"], limit: 1)
+      assert_equal %w[urn:d:grc:1], results.map(&:urn),
+                   "--axis compiles to its member slugs — the same in-MATCH lane as --source"
+      assert_nil searcher.incomplete_hint
+    end
+
+    def test_lang_and_source_compose_inside_the_match
+      seed_window_exhausting_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("arma", lang: "grc", source: "nc", limit: 1)
+      assert_equal %w[urn:d:grc:1], results.map(&:urn), "both conjuncts filter the draw itself"
+      assert_nil searcher.incomplete_hint
+
+      mismatched = searcher.run("arma", lang: "lat", source: "nc", limit: 1)
+      assert_empty mismatched, "no nc row is Latin — an honest empty"
+      assert_nil searcher.incomplete_hint, "…and honestly empty: the MATCH itself proved exhaustion"
+    end
+
+    def test_empty_sources_list_is_no_filter_index_side_too
+      seed_window_exhausting_corpus
+
+      results = search("arma", sources: [], limit: 1)
+      assert_equal 1, results.size, "an empty axis expansion never becomes a silent match-nothing filter"
+    end
+
+    def test_pre_rebuild_index_keeps_the_catalog_side_source_path_byte_identical
+      seed_window_exhausting_corpus
+      downgrade_index!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("arma", source: "nc", limit: 1)
+      assert_empty results, "the pre-P81-3 window starves exactly as before (the 2026-08-20 live defect)"
+      assert_equal Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT, searcher.incomplete_hint,
+                   "…and announces itself exactly as before"
+    end
+
+    def test_guard_composes_with_the_source_filter
+      seed_ubiquity_corpus
+      nc_doc = make_document(source: @nc, urn: "urn:d:nc", language: "lat")
+      make_passage(nc_doc, urn: "urn:d:nc:1", text: "aurora", sequence: 0, language: "lat")
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run("aurora", source: "nc", ubiquity_threshold: 2)
+      assert_equal %w[urn:d:nc:1], results.map(&:urn),
+                   "the sampled corpus-order path applies the in-MATCH source filter to the draw itself"
+      assert_equal Nabu::Query::Search::RANK_SKIP_NOTE, searcher.rank_note
+      refute_includes searcher.rank_note.to_s, "thinned",
+                      "an in-MATCH source cannot thin the sampled page, so it never blames the sample"
+    end
+
+    def test_scan_mode_composes_the_source_filter_into_the_match
+      seed_window_exhausting_corpus
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      results = searcher.run_scan("arma", source: "nc", limit: 1)
+      assert_equal %w[urn:d:grc:1], results.map(&:urn),
+                   "--scan walks only the scoped source's postings on the new index"
     end
 
     # -- term-less filtered browse (P42-6) -----------------------------------

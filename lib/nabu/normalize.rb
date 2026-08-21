@@ -328,9 +328,10 @@ module Nabu
 
     # The query's dominant script: the pattern matching strictly the most
     # characters. No match at all, or a tie (a genuinely mixed query), reads
-    # :unknown — conservative: such a query gets NO per-language extras, only
-    # the generic fold plus the script neutralizations (transcoders keyed to
-    # their own script's codepoints, no-ops elsewhere by construction).
+    # :unknown — conservative: such a query gets NO per-language extras and
+    # (P81-2) NO neutralizations, only the generic fold — unless the caller
+    # asserts a language (query_forms +language:+), which no script scope
+    # gates.
     def self.query_script(str)
       counts = QUERY_SCRIPT_PATTERNS.transform_values { |pattern| str.scan(pattern).length }
       script, best = counts.max_by { |_, count| count }
@@ -356,7 +357,8 @@ module Nabu
     # Each entry is a with_map callable: str → [neutralized, char-index map]
     # (fold_with_map composes the maps for KWIC). Applied SYMMETRICALLY:
     # search_form neutralizes documents at the adapter boundary, query_forms
-    # adds each neutralized variant to the union. The Cyrl table's widenings
+    # adds each neutralized variant to the union (script-scoped query-side
+    # since P81-2 — the scope table below). The Cyrl table's widenings
     # and deliberate non-rules are documented (and journaled) on Nabu::Cyrl.
     #
     # Changing (or adding) a neutralization changes text_normalized for its
@@ -384,6 +386,33 @@ module Nabu
       "xct" => Xct.method(:to_ewts_with_map),
       "bod" => Xct.method(:to_ewts_with_map),
       "otb" => Xct.method(:to_ewts_with_map)
+    }.freeze
+
+    # == Query-side neutralization scopes (P81-2 / Q40) — the P79-1 discipline
+    #    extended to SCRIPT_NEUTRALIZATIONS
+    #
+    # P79-1 left neutralizations unscoped on the assumption they are
+    # their-own-script transcoders, no-ops elsewhere. TRUE for Deva and Xct
+    # (inventory-keyed to Devanagari/Tibetan codepoints, everything else
+    # passes through) — FALSE for Cyrl: its table bridges TWO surfaces, and
+    # the Latin-diplomatic arm collapses the ou digraph on ANY Latin text
+    # (оу ≡ ou ≡ u, the damaskini widening). The owner repro (2026-08-20):
+    # `search houlá` — Gil Vicente's Portuguese hail — grew a "hula" variant
+    # and surfaced Romanian "hulă" passages: recall noise from a neutralizer
+    # arm firing outside its home script. Each neutralization therefore
+    # declares the query script(s) it may touch, keyed exactly like
+    # SCRIPT_NEUTRALIZATIONS, and query_forms applies one only when the
+    # query's dominant script is in scope — or when the CALLER asserts the
+    # language (search --lang), which applies that language's full index
+    # pipeline regardless of script (the cannot-miss argument with the
+    # language supplied instead of inferred). A Latin diplomatic query
+    # without the assertion types the folded form ("ubi") or adds --lang chu.
+    # The INDEX side is untouched: search_form still neutralizes by the
+    # document's own language — no text_normalized byte changes, no rebuild.
+    QUERY_NEUTRALIZATION_SCRIPTS = {
+      "san" => %i[devanagari],
+      "chu" => %i[cyrillic], "orv" => %i[cyrillic], "bul" => %i[cyrillic],
+      "xct" => %i[tibetan], "bod" => %i[tibetan], "otb" => %i[tibetan]
     }.freeze
 
     # == The per-language NFC exemption (P26-3, owner ruling 2026-07-18)
@@ -441,29 +470,48 @@ module Nabu
     # generic variant still matches languages whose rule table is empty
     # (Gothic "jah" stays findable even though the lat variant folds the
     # query to "iah").
-    # P27-2: the union now also carries each SCRIPT_NEUTRALIZATIONS variant —
-    # extra_L(generic(neutralize_L(query))) — so a query spelled in EITHER of
-    # a language's scripts covers that language's indexed skeleton (the same
-    # cannot-miss argument, with neutralization folded into "how the document
-    # was folded").
+    # P27-2: the union also carries the SCRIPT_NEUTRALIZATIONS variants —
+    # extra_L(generic(neutralize_L(query))) — so a query in a neutralized
+    # language's HOME script covers that language's indexed skeleton (the
+    # same cannot-miss argument, with neutralization folded into "how the
+    # document was folded"). A query in the language's OTHER surface (the
+    # Latin diplomatic side of chu/orv/bul) covers it only where the
+    # transcode is identity, or under an asserted +language:+ — see P81-2
+    # below.
     # P79-1: the union is SCRIPT-SCOPED — rule L's extra applies only when
     # the query's dominant script is in QUERY_FOLD_SCRIPTS[L], so no rule
     # can delete or alter foreign-script letters at query time (the γπη
-    # regression; rationale on QUERY_FOLD_SCRIPTS above). Neutralizations
-    # stay unscoped: they are their-own-script transcoders, no-ops elsewhere.
-    def self.query_forms(query)
+    # regression; rationale on QUERY_FOLD_SCRIPTS above).
+    # P81-2: neutralizations carry the same discipline — one applies only
+    # when the query's script is in QUERY_NEUTRALIZATION_SCRIPTS[L] (the
+    # Cyrl Latin arm's houlá→hula regression; rationale on the table above).
+    # An asserted +language:+ (search --lang) overrides both scopes FOR THAT
+    # LANGUAGE ONLY: the caller named the language, so its full index
+    # pipeline — neutralizer and fold — joins the union regardless of script.
+    def self.query_forms(query, language: nil)
       src = nfc(query).downcase
       generic = fold_diacritics(src)
       script = query_script(src)
+      asserted = language && primary_subtag(language)
       keys = LANGUAGE_FOLDS.keys | SCRIPT_NEUTRALIZATIONS.keys
       variants = keys.map do |key|
-        neutralizer = SCRIPT_NEUTRALIZATIONS[key]
-        folded = neutralizer ? fold_diacritics(neutralizer.call(src).first) : generic
-        extra = (LANGUAGE_FOLDS[key] if QUERY_FOLD_SCRIPTS.fetch(key, []).include?(script))
+        in_lang = key == asserted
+        neutralize = in_lang || QUERY_NEUTRALIZATION_SCRIPTS.fetch(key, []).include?(script)
+        folded = neutralize ? neutralized(src, key, generic) : generic
+        extra = (LANGUAGE_FOLDS[key] if in_lang || QUERY_FOLD_SCRIPTS.fetch(key, []).include?(script))
         extra ? extra.call(folded) : folded
       end
       [generic, *variants].uniq
     end
+
+    # The generically-folded neutralization variant for rule +key+ — the
+    # query-side mirror of search_form's neutralize-then-fold order. A
+    # fold-only key (no neutralizer) rides the precomputed +generic+ form.
+    def self.neutralized(src, key, generic)
+      neutralizer = SCRIPT_NEUTRALIZATIONS[key]
+      neutralizer ? fold_diacritics(neutralizer.call(src).first) : generic
+    end
+    private_class_method :neutralized
 
     # Fold +text+ exactly as search_form does, but return a CHARACTER-INDEX
     # MAP alongside the folded string so a match located in the folded form

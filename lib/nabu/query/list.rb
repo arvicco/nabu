@@ -3,6 +3,7 @@
 require "json"
 
 require_relative "../normalize"
+require_relative "../timeline"
 require_relative "catalog_join"
 
 module Nabu
@@ -73,6 +74,12 @@ module Nabu
       # The dossier shelf's enumeration grain (language records, not documents).
       DossierRow = Data.define(:code, :name, :family)
       EntryRow = Data.define(:headword, :gloss, :dictionary_slug, :language)
+
+      # One century of the chronological census (`list --by-date`, P81-1):
+      # signed index (the sort key), human label, document count, and the
+      # per-source breakdown [[slug, docs]…] count-descending.
+      DateBucket = Data.define(:index, :label, :documents, :sources)
+      DateCensus = Data.define(:buckets, :dated_documents, :total_documents, :multi_century)
 
       # One line of the grouped source map (`nabu list --sources`, P28-4).
       # +enabled+ is the CATALOG's flag — the CLI overrides it with the
@@ -289,6 +296,31 @@ module Nabu
                   )
                   .order(Sequel.desc(:tokens), Sequel[:documents][:urn])
         page(dataset, limit) { |row| LoanDocRow.new(**row.slice(:urn, :title, :language, :tokens, :passages)) }
+      end
+
+      # The chronological census (`nabu list --by-date`, P81-1/C-6): dated
+      # documents bucketed by century with a per-source breakdown — the
+      # Query::Century doctrine at census grain: bucketed by EARLIEST bound
+      # (no fake midpoints), spans counted in +multi_century+ so the render
+      # announces the earlier-shift. Document-grain axis rows only
+      # (passage_seq NULL — annal/entry runs never double-count a
+      # document); a document's several rows envelope to min/max first.
+      def by_date_census
+        buckets = Hash.new { |hash, key| hash[key] = Hash.new(0) }
+        dated = 0
+        multi = 0
+        dated_document_rows.each do |row|
+          index = century_of(row[:year]) or next
+
+          buckets[index][row[:slug]] += 1
+          dated += 1
+          low = century_of(row[:nb])
+          high = century_of(row[:na])
+          multi += 1 if low && high && low != high
+        end
+        DateCensus.new(buckets: date_buckets(buckets), dated_documents: dated,
+                       total_documents: @catalog[:documents].where(withdrawn: false).count,
+                       multi_century: multi)
       end
 
       # The dossier shelf's --documents: one row per language code (name and
@@ -683,6 +715,41 @@ module Nabu
             entries: @catalog[:dictionary_entries]
                      .where(dictionary_id: dict.fetch(:id), withdrawn: false).count
           )
+        end
+      end
+
+      # One row per dated live document: source slug, the earliest bound
+      # (the bucket year — Query::Century's ruled bias), and the document's
+      # envelope bounds for the multi-century count. GROUP BY document
+      # collapses multi-row documents (HGV alternatives, metadata+entry
+      # lanes) into one envelope. Runs at census scale (~750k dated docs
+      # live): one grouped scan of document_axes, streamed.
+      def dated_document_rows
+        axes = Sequel[:document_axes]
+        @catalog[:document_axes]
+          .join(:documents, id: axes[:document_id])
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:documents][:withdrawn] => false, axes[:passage_seq_from] => nil)
+          .where(Sequel.~(axes[:not_before] => nil) | Sequel.~(axes[:not_after] => nil))
+          .group(axes[:document_id])
+          .select do
+            [max(Sequel[:sources][:slug]).as(:slug),
+             min(Sequel.function(:coalesce, axes[:not_before], axes[:not_after])).as(:year),
+             min(axes[:not_before]).as(:nb), max(axes[:not_after]).as(:na)]
+          end
+      end
+
+      # nil for nil years AND for a defective year-0 row (the builders
+      # reject year 0, but a census must never crash on one).
+      def century_of(year)
+        year.nil? || year.zero? ? nil : Nabu::Timeline.century_index(year)
+      end
+
+      def date_buckets(tallies)
+        tallies.sort_by { |index, _| index }.map do |index, slugs|
+          DateBucket.new(index: index, label: Nabu::Timeline.century_label(index),
+                         documents: slugs.values.sum,
+                         sources: slugs.sort_by { |slug, count| [-count, slug] })
         end
       end
 

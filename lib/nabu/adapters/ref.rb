@@ -126,8 +126,20 @@ module Nabu
 
       # Header fields consumed structurally rather than ridden verbatim:
       # language is the verified pin; the language-* chain becomes
-      # metadata["dialects"].
-      CONSUMED_FIELDS = %w[language language-type language-region language-area].freeze
+      # metadata["dialects"]; date becomes the structured envelope (raw
+      # preserved inside it — the P81-1 harvest).
+      CONSUMED_FIELDS = %w[language language-type language-region language-area date].freeze
+
+      # The clean date-lane parses (P81-1). Anything else — "ca. 1350-75",
+      # "3. Viertel 14. Jh.", multi-source prose — is never number-scraped:
+      # it falls back to the century-half grid below.
+      DATE_EXACT = /\A(\d{4})\z/
+      # "1383-1407", "1538 - 1545", "1487/88", "1481/96" — a 2-digit tail
+      # expands with the head's century ("1487/88" → 1488).
+      DATE_SPAN = %r{\A(\d{4})\s*[-–/]\s*(\d{2}|\d{4})\z}
+      # Upstream's own century-half grid, on ALL 190 texts (censused
+      # 2026-08-20): time "15,2" = 15th c., 2nd half → [1450, 1500].
+      TIME_GRID = /\A(\d{2}),([12])\z/
 
       def self.manifest
         MANIFEST
@@ -238,6 +250,7 @@ module Nabu
                    .filter_map { |k| header.fields[k] }
         header.fields.except(*CONSUMED_FIELDS).merge(
           {
+            "date" => date_envelope(header.fields["date"], header.fields["time"]),
             "sigle" => header.sigle,
             "subcorpus" => File.basename(File.dirname(document_ref.path)),
             # The subcorpus as a FACET row (FacetBuilder projects the
@@ -252,6 +265,39 @@ module Nabu
             "unrecognized_elements" => (body.unrecognized unless body.unrecognized.empty?)
           }.compact
         )
+      end
+
+      # The MetadataDates :structured envelope (P81-1): a clean date-lane
+      # parse rules; prose datings take upstream's own century-half grid
+      # (raw then names both claims); neither lane clean → the raw string
+      # rides alone, minting nothing (the bdcamoes "18??" discipline).
+      def date_envelope(date, time)
+        clean = parse_date_lane(date)
+        bounds = clean || parse_time_grid(time)
+        raw = [date, ("(time #{time})" if clean.nil? && time)].compact.join(" ")
+        return nil if raw.empty?
+        return { "raw" => raw } if bounds.nil?
+
+        { "not_before" => bounds[0], "not_after" => bounds[1], "raw" => raw }
+      end
+
+      def parse_date_lane(date)
+        text = date.to_s.strip
+        if (match = DATE_EXACT.match(text))
+          year = Integer(match[1], 10)
+          [year, year]
+        elsif (match = DATE_SPAN.match(text))
+          from = Integer(match[1], 10)
+          to = match[2].length == 2 ? Integer("#{match[1][0, 2]}#{match[2]}", 10) : Integer(match[2], 10)
+          from <= to ? [from, to] : nil # a descending pair is not a clean claim
+        end
+      end
+
+      def parse_time_grid(time)
+        match = TIME_GRID.match(time.to_s.strip) or return nil
+
+        start = ((Integer(match[1], 10) - 1) * 100) + ((Integer(match[2], 10) - 1) * 50)
+        [start, start + 50]
       end
 
       # Ref = <page><side><column>.<label> (named columns join the folio —

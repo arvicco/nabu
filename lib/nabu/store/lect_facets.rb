@@ -38,10 +38,10 @@ module Nabu
         count = 0
         batch = []
         each_language_document(catalog) do |row|
-          value = resolved_value(registry, row)
-          next unless value
+          resolution = resolved(registry, row)
+          next unless resolution
 
-          batch << { document_id: row[:id], facet: FACET, value: value }
+          batch << { document_id: row[:id], facet: FACET, value: resolution.id, raw: resolution.basis }
           next unless batch.size >= INSERT_BATCH
 
           catalog[:document_facets].multi_insert(batch)
@@ -69,9 +69,12 @@ module Nabu
 
         old_value = catalog[:document_facets].where(document_id: row[:id], facet: FACET).get(:value)
         catalog[:document_facets].where(document_id: row[:id], facet: FACET).delete
-        value = registry && resolved_value(registry, row)
-        catalog[:document_facets].insert(document_id: row[:id], facet: FACET, value: value) if value
-        refresh_stats_for!(catalog, values: [old_value, value].compact.uniq,
+        resolution = registry && resolved(registry, row)
+        if resolution
+          catalog[:document_facets].insert(document_id: row[:id], facet: FACET,
+                                           value: resolution.id, raw: resolution.basis)
+        end
+        refresh_stats_for!(catalog, values: [old_value, resolution&.id].compact.uniq,
                                     codes: [row[:language]].compact)
       end
 
@@ -136,9 +139,15 @@ module Nabu
         end
       end
 
-      def resolved_value(registry, row)
-        resolved = registry.resolve(row[:language], source: row[:slug], urn: row[:urn])
-        resolved == row[:language] ? nil : resolved
+      # The document's non-identity Resolution (id + provenance basis), or
+      # nil for identity (no row — the D58-e invariant). P81 U-5: the basis
+      # is written into the facet row's raw column, so render surfaces can
+      # join it back to the ruling's stated tier (Nabu::LectGloss) without
+      # re-resolving — the raw column is exactly the facet family's
+      # "upstream verbatim" slot (migration 009).
+      def resolved(registry, row)
+        resolution = registry.resolution(row[:language], source: row[:slug], urn: row[:urn])
+        resolution.id == row[:language] ? nil : resolution
       end
 
       def each_language_document(catalog, &)
@@ -150,7 +159,7 @@ module Nabu
                   Sequel[:documents][:language].as(:language), Sequel[:sources][:slug].as(:slug))
           .each(&)
       end
-      private_class_method :resolved_value, :each_language_document, :upsert_stat
+      private_class_method :resolved, :each_language_document, :upsert_stat
     end
   end
 end

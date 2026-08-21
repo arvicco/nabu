@@ -530,4 +530,30 @@ class ZipFetchExtraCertsTest < Minitest::Test
     assert_equal true, conn.ssl.verify
     assert_kind_of OpenSSL::X509::Store, conn.ssl.cert_store
   end
+
+  # The trismegistos regression (P81-4, defect found by P79-2 2026-08-19):
+  # www.trismegistos.org serves a Let's Encrypt gen-Y chain — leaf ←
+  # intermediate YR2 — and stops there. YR2's issuer, ISRG "Root YR", is not
+  # yet in the major trust stores, so without the ISRG cross-sign
+  # (Root YR ← ISRG Root X1, the chain Let's Encrypt marks Default)
+  # verification dies with code 20, "unable to get local issuer certificate".
+  # The vendored config/certs/isrg-root-yr-by-x1.pem closes exactly that
+  # link. Fixture chain: the live chain as served 2026-08-21 (see
+  # test/fixtures/certs/README.md); the store's verification time is pinned
+  # just inside the leaf's validity so the fixture never expires the test.
+  def test_trismegistos_served_chain_closes_through_the_vendored_cross_sign
+    fixtures = File.expand_path("fixtures/certs", __dir__)
+    leaf = OpenSSL::X509::Certificate.new(File.read(File.join(fixtures, "trismegistos-leaf.pem")))
+    served = OpenSSL::X509::Certificate.new(
+      File.read(File.join(fixtures, "trismegistos-intermediate-yr2.pem"))
+    )
+    store = Nabu::ZipFetch.extra_cert_store
+    store.time = leaf.not_before + 60
+    assert store.verify(leaf, [served]),
+           "leaf + served YR2 must verify against the extra store (#{store.error_string}) — " \
+           "the vendored ISRG Root YR cross-sign closes the link upstream omits"
+    subjects = store.chain.map { |cert| cert.subject.to_s }
+    assert_includes subjects, "/C=US/O=ISRG/CN=Root YR",
+                    "the verified path must run through the Root YR link the server fails to send"
+  end
 end

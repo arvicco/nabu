@@ -650,5 +650,46 @@ module Query
       assert_equal %w[urn:cs:a], page.rows.map(&:urn)
       assert_empty list.loan_documents("cs", code: "xyz").rows, "an unattested code is an honest miss"
     end
+
+    # -- the chronological census (`nabu list --by-date`, P81-1/C-6) ---------
+
+    def test_by_date_census_buckets_dated_documents_by_earliest_bound_per_source
+      a = make_document(source: @ccmh, urn: "urn:c:a")
+      b = make_document(source: @ccmh, urn: "urn:c:b")
+      c = make_document(source: @library, urn: "urn:l:c")
+      make_document(source: @library, urn: "urn:l:undated")
+      make_timeline(a, not_before: 1050, not_after: 1080)
+      make_timeline(b, not_before: 1099, not_after: 1150) # spans two centuries → earliest bucket
+      make_timeline(c, not_before: -250, not_after: -201) # 3rd c. BCE is -300..-201
+
+      census = list.by_date_census
+      assert_equal [-3, 11], census.buckets.map(&:index), "signed century order: 3rd c. BCE first"
+      bce = census.buckets.first
+      assert_equal "3rd c. BCE", bce.label
+      assert_equal 1, bce.documents
+      assert_equal [["local-library", 1]], bce.sources
+      eleventh = census.buckets.last
+      assert_equal 2, eleventh.documents
+      assert_equal [["ccmh", 2]], eleventh.sources
+      assert_equal 3, census.dated_documents
+      assert_equal 4, census.total_documents
+      assert_equal 1, census.multi_century, "the 1099-1150 span is the announced earlier-shift"
+    end
+
+    def test_by_date_census_counts_a_multi_row_document_once_and_skips_passage_grain_rows
+      doc = make_document(source: @ccmh, urn: "urn:c:multi")
+      make_timeline(doc, not_before: 1300, not_after: 1300)
+      make_timeline(doc, not_before: 1320, not_after: 1340)
+      @catalog[:document_axes].insert(document_id: doc.id, not_before: 1600, not_after: 1600,
+                                      passage_seq_from: 0, passage_seq_to: 3,
+                                      axis_source: "ccmh-entries")
+      withdrawn = make_document(source: @ccmh, urn: "urn:c:w", withdrawn: true)
+      make_timeline(withdrawn, not_before: 1300, not_after: 1300)
+
+      census = list.by_date_census
+      assert_equal 1, census.dated_documents, "two document-grain rows = ONE document, envelope min..max"
+      assert_equal [13], census.buckets.map(&:index),
+                   "the passage-grain 1600 run never buckets a document; withdrawn never counts"
+    end
   end
 end

@@ -106,7 +106,7 @@ end
 Key decisions:
 
 - **Neutral model, not neutral file format.** Adapters emit `Document`/`Passage` Ruby objects; the shared loader handles all persistence. Adapters never touch SQL.
-- **Passage = the citable unit.** For CTS sources, the smallest citation level (line, section). For treebanks, the sentence. For ad-hoc, the page or editor-defined chunk. Fields: `urn`, `language` (BCP-47 with ISO-639-3, e.g. `grc`, `chu`, `hit`), `text` (NFC Unicode), `text_normalized` (the TRUE search form, minted once at the adapter boundary: `Passage.new` defaults it to `Normalize.search_form` — marks stripped, downcased, plus per-language rules (grc final-sigma ς→σ; lat v→u, j→i; conventions.md §9). The FTS index stores it as-is; queries carry no language, so `Query::Search` matches the union of per-language query folds via `Normalize.query_forms` — script-scoped since P79-1: a rule only touches queries whose dominant script it declares, conventions.md §9), `annotations` (JSON: lemmas, morphology if source provides), `sequence`, `document_id`.
+- **Passage = the citable unit.** For CTS sources, the smallest citation level (line, section). For treebanks, the sentence. For ad-hoc, the page or editor-defined chunk. Fields: `urn`, `language` (BCP-47 with ISO-639-3, e.g. `grc`, `chu`, `hit`), `text` (NFC Unicode), `text_normalized` (the TRUE search form, minted once at the adapter boundary: `Passage.new` defaults it to `Normalize.search_form` — marks stripped, downcased, plus per-language rules (grc final-sigma ς→σ; lat v→u, j→i; conventions.md §9). The FTS index stores it as-is; queries carry no language, so `Query::Search` matches the union of per-language query folds via `Normalize.query_forms` — script-scoped since P79-1 (P81-2 for the script neutralizations): a rule only touches queries whose dominant script it declares, unless `--lang` asserts its language; conventions.md §9), `annotations` (JSON: lemmas, morphology if source provides), `sequence`, `document_id`.
 - **The NFC invariant, and its one named exception (P26-3, owner ruling 2026-07-18).** `text` is NFC Unicode, normalized once at the adapter boundary (`Nabu::Normalize.nfc`) and *refused* non-NFC by `Passage` construction — for every language **except Biblical Hebrew and Biblical Aramaic** (`Normalize::NFC_EXEMPT_LANGUAGES = ["hbo", "arc"]`). NFC canonical ordering *reorders* Hebrew combining marks (dagesh/shin-dot ccc 21/24 vs vowel points ccc 10–19), silently rewriting the Masoretic mark order the Westminster Leningrad Codex ships; upstream OSHB warns against NFC outright, and the warning is measured-true (Ruth 1:1 is not NFC-stable — the pinned regression fixture). So `hbo`/`arc` text is stored **byte-verbatim exactly as upstream ships it**: `Passage` validates UTF-8 well-formedness only, and the adapter conformance suite asserts the same seam, keyed on the central exemption list so no adapter can quietly opt another language out. Find-ability is unaffected — `text_normalized` and query folding pass through NFC + mark strip on the search side regardless (an unpointed `בראשית` finds the pointed verse). Content hashing still works: the WLC is internally mark-order-consistent, so one text remains one byte sequence within the shelf. See conventions §1. The exemption extends to the dictionary shelf (P30-1): `DictionaryEntry` headword/gloss/body in an exempt language are validated verbatim-UTF-8, not NFC (measured on the OSHB lexicon: 4,053 LexicalIndex / 3,796 HebrewStrong / 4,720 BDB headwords are not NFC-stable), while `headword_folded` — the minted search form — stays NFC for every language.
 - **Parser families as components.** `EpidocParser`, `ProielParser`, `ConlluParser`, `AtfParser` are standalone, individually tested classes; adapters are thin compositions (Perseus ≈ EpidocParser + repo layout knowledge + URN extraction). New source in a known family ≈ 100 lines.
 - **Idempotency via content hashing.** Loader upserts on `urn`; a passage row stores `content_sha256`. Unchanged content is skipped; changed content bumps `revision` and journals the old hash. Deletions upstream mark rows `withdrawn`, never hard-delete. **The within-pass collision seam (P39-4):** "changed content bumps revision" means a legitimate update *across runs*; two files claiming one `urn` *within a single load pass* would instead make revision inflation glob-order-dependent (the last file parsed silently wins — the diorisis rebuild's `~3 updated` on a clean db, from an adapter minting the same urn thrice). So a urn re-encountered in the same pass is **kept-first**: identical content is an idempotent skip, different content is a `collision` — journaled loudly, counted (`LoadReport#collided`, surfaced as `!N collision`), the first file's content preserved deterministically. The discriminator is purely "already persisted this pass"; a urn seen for the first time this pass revises exactly as before. Adapters should mint unique urns so the seam never fires (diorisis disambiguates upstream's reused `tlgAuthor:tlgId` by a title slug); the seam is the loader-side invariant that no future adapter bug can silently last-writer-wins.
@@ -1010,17 +1010,29 @@ and never re-parses canonical. Live coverage (2026-07-12 sanctioned build):
 goo300k + 658 IMP = 61,670 dated/placed documents in 46.6 s; `document_axes`
 is 10.7 MB.
 
-**The lane census (as of P78).** The builder grew into a family: a
+**The lane census (as of P81).** The builder grew into a family: a
 per-source extractor per dating shape under `timeline_builder/`
 (OraccDates, ChronicleAnnals, EdhDates, CdliDates, …) plus the shared
 `MetadataDates` lane, which reads date shapes off stored document metadata
 rather than walking canonical — its shapes now include the Korean trio
-sillok/sjw/itkc (P78). The coordinates lane (migration 027, P69-1) added
-`place_lat`/`place_lon` to `document_axes`, feeding `search --within`.
-Since P47-r3 a sync refreshes the synced source's facet and
-metadata-timeline slices post-load (`FacetBuilder.refresh_source!` +
-`MetadataDates.refresh_source!`, mirroring the Indexer's per-source
+sillok/sjw/itkc (P78), ref (the ENHG century-half grid) and
+corpus-corporum (the fetch checkpoint's work_composition/author-life
+years with the teiHeader author_date ladder as fallback, P81-1); its ebl
+shape carries the era ladder (exact Seleucid conversion + king-reign
+bands above the ruled period table, P81-1). The P81-1 `NikhEntryDates`
+lane projects the NIKH chronicle family's per-entry machine dates from
+CATALOG annotations (load-verified f(canonical) — no re-parse):
+passage-grain year runs (axis_source `<slug>-entries`) plus document
+envelopes where the metadata lane makes no claim. The coordinates lane
+(migration 027, P69-1) added `place_lat`/`place_lon` to `document_axes`,
+feeding `search --within`. Since P47-r3 a sync refreshes the synced
+source's facet and metadata-timeline slices post-load
+(`FacetBuilder.refresh_source!` + `MetadataDates.refresh_source!` +
+`NikhEntryDates.refresh_source!`, mirroring the Indexer's per-source
 refresh) — only the canonical-walking extractors stay rebuild-scoped.
+The whole-library chronological views over this table are `nabu list
+--by-date` (century census, earliest-bound buckets with the announced
+multi-century count) and the generated `/dates/` site page (P81-1, C-6).
 
 **Part 2a — ORACC catalogue dates (`TimelineBuilder::OraccDates`, P16-3).** Every
 ORACC project ships a `catalogue.json`; the 2026-07-13 census (33 catalogues,

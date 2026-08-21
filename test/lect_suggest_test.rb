@@ -84,6 +84,30 @@ class LectSuggestTest < Minitest::Test
     end
   end
 
+  def test_dating_layer_sniffs_annotation_borne_dates_on_undated_docs
+    with_catalog do |suggest, catalog|
+      # The P81-1 blind spot: dates riding PASSAGE annotations (the NIKH
+      # entry shape, "1617-01-00L0") were invisible to the metadata-key
+      # sniff. Seed an undated doc with dated entries and a dated doc
+      # whose annotations must NOT count.
+      undated = catalog[:documents].where(urn: "urn:t:n:akk0").get(:id)
+      dated = catalog[:documents].where(urn: "urn:t:n:akk9").get(:id)
+      { undated => "u", dated => "d" }.each do |doc_id, tag|
+        2.times do |i|
+          catalog[:passages].insert(
+            document_id: doc_id, urn: "urn:t:n:#{tag}:#{i}", sequence: i, text: "x",
+            text_normalized: "x", content_sha256: "#{tag}#{i}",
+            annotations_json: %({"date":"1617-01-0#{i}L0","title":"座目"})
+          )
+        end
+      end
+      report = suggest.run("newsource")
+      assert_equal [["date", 2]], report.dating_layer.annotation_candidates,
+                   "date-shaped ANNOTATION keys on undated docs' passages are sniffed; " \
+                   "the dated doc's entries never count, 'title' never matches"
+    end
+  end
+
   def test_places_layer_reports_the_ref_name_split_and_latent_refs
     with_catalog do |suggest, catalog|
       doc_ids = catalog[:documents].where(source_id: catalog[:sources].where(slug: "newsource")

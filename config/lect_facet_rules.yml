@@ -251,6 +251,29 @@ rules:
       "Strassmaier": "akk:nb"
       "YOS7": "akk:nb"
 
+  # ── №R-41 (owner-ruled 2026-08-21, option A of the dialect-placement
+  # doc; targets minted by nabu-lects PR #6): the lo-congres dialect
+  # facet — upstream's own six-way division, letter-for-letter the
+  # 2018-registered IANA Occitan variant subtags, mapped onto the
+  # kind:dialect varieties on the cop-dialect mold. The facet is total
+  # (every oci doc carries its dialect from the CSV set it came from).
+  # Tier certain: the corpus IS organized by these dialects upstream.
+  # This rule + the oci→oc codemap alias retire lo-congres's identity
+  # posture row (the ref add-then-retire shape); aranese rides its own
+  # override (oci → oc/aranes — a per-collection fact, not a code fact).
+  - id: oci-dialect
+    tier: certain
+    sources: [lo-congres]
+    code: oci
+    facet: dialect
+    map:
+      "gascon": "oc/gascon"
+      "lengadoc": "oc/lengadoc"
+      "provenc": "oc/provenc"
+      "auvern": "oc/auvern"
+      "lemosin": "oc/lemosin"
+      "vivaraup": "oc/vivaraup"
+
   # ── D59-b (2026-08-06): the eBL Standard Babylonian register — the
   # registry's own note ("the literary register of first-millennium
   # scholarship") made a rule. kind: compose refines EXISTING stage rows

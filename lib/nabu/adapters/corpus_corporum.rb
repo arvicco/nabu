@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+
 require_relative "corpus_corporum_tei_parser"
 require_relative "../corpus_corporum_fetch"
 
@@ -78,6 +80,32 @@ module Nabu
         )]
       end
 
+      # The teiHeader author-date ladder (P81-1) — the third dating lane,
+      # serving when the fetch checkpoint carries no years for a text
+      # (today's pre-P81 live state; the re-walk retires it to a
+      # fallback). Only the censused clean forms parse (2026-08-21 census
+      # of all 2,977 author_date values): the life band "354-430" (hyphen
+      # or en-dash, either side c.-qualified), the bare death year "-258",
+      # the floruit "fl. 1150"/"fl.450". "sine-data", descending pairs and
+      # prose mint nothing — never guessed.
+      AUTHOR_LIFE = /\A(?:c\.\s*)?(\d{1,4})\s*[-–]\s*(?:c\.\s*)?(\d{1,4})\z/
+      AUTHOR_DEATH = /\A[-–]\s*(?:c\.\s*)?(\d{1,4})\z/
+      AUTHOR_FLORUIT = /\Afl\.?\s*(\d{1,4})\z/
+
+      def self.author_date_bounds(value)
+        text = value.to_s.strip
+        if (match = AUTHOR_LIFE.match(text))
+          from = Integer(match[1], 10)
+          to = Integer(match[2], 10)
+          { "not_before" => from, "not_after" => to, "raw" => text } if from <= to
+        elsif (match = AUTHOR_DEATH.match(text))
+          { "not_before" => nil, "not_after" => Integer(match[1], 10), "raw" => text }
+        elsif (match = AUTHOR_FLORUIT.match(text))
+          year = Integer(match[1], 10)
+          { "not_before" => year, "not_after" => year, "raw" => text }
+        end
+      end
+
       # The sefaria-mold per-text license map, for the day a teiHeader DOES
       # carry an <availability>/<licence> grant: only an explicit
       # machine-recognizable statement maps; anything else (including the
@@ -119,7 +147,11 @@ module Nabu
         CorpusCorporumTeiParser.new.parse(
           document_ref.path,
           urn: document_ref.id, language: LANGUAGE,
-          license_mapper: self.class.method(:license_override_for)
+          license_mapper: self.class.method(:license_override_for),
+          metadata_mapper: lambda { |header|
+            envelope = date_envelope(document_ref, header)
+            envelope ? { "date" => envelope } : {}
+          }
         )
       rescue Nabu::ValidationError => e
         raise ParseError, "#{document_ref.path}: #{e.message}"
@@ -140,6 +172,52 @@ module Nabu
       end
 
       private
+
+      # The MetadataDates :structured envelope (P81-1), three lanes in
+      # confidence order: the checkpoint's per-work work_composition year
+      # (upstream's own composition claim), the checkpoint's author life
+      # band (born/died — coarse but honest: composition within the life),
+      # the teiHeader author_date string. All are f(canonical): the state
+      # file lives in the source's own canonical dir, written by the fetch.
+      def date_envelope(document_ref, metadata)
+        dating = catalog_dating(document_ref)[document_ref.metadata["idno"]]
+        if dating&.dig("work_composition")
+          from, to = dating["work_composition"]
+          { "not_before" => from, "not_after" => to,
+            "raw" => "work composition #{from == to ? from : "#{from}–#{to}"}" }
+        elsif dating && (dating["born"] || dating["died"])
+          { "not_before" => dating["born"], "not_after" => dating["died"],
+            "raw" => "author #{dating['born']}–#{dating['died']}" }
+        else
+          self.class.author_date_bounds(metadata["author_date"])
+        end
+      end
+
+      # idno => {"work_composition" =>, "born" =>, "died" =>} from the
+      # fetch checkpoint, memoized per workdir (texts/<idno>.xml sits one
+      # level under it). A missing or pre-P81 checkpoint (no years) reads
+      # as {} / year-less rows — the header lane then serves. A text
+      # listed under two authors keeps its first row (the download rule).
+      def catalog_dating(document_ref)
+        workdir = File.dirname(document_ref.path, 2)
+        (@catalog_dating ||= {})[workdir] ||= load_catalog_dating(workdir)
+      end
+
+      def load_catalog_dating(workdir)
+        path = File.join(workdir, Nabu::CorpusCorporumFetch::STATE_FILE)
+        return {} unless File.file?(path)
+
+        index = {}
+        JSON.parse(File.read(path)).fetch("catalog", {}).each_value do |row|
+          (row["texts"] || []).each do |text|
+            index[text["idno"]] ||= { "work_composition" => text["work_composition"],
+                                      "born" => row["born"], "died" => row["died"] }
+          end
+        end
+        index
+      rescue JSON::ParserError
+        {}
+      end
 
       def document_refs(workdir)
         Dir.glob(File.join(workdir, Nabu::CorpusCorporumFetch::TEXTS_DIR, "*.xml")).filter_map do |path|

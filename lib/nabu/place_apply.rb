@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "certainty"
 require_relative "places"
 
 module Nabu
@@ -16,6 +17,11 @@ module Nabu
     module_function
 
     # Census: {source => {rows_updated:, names_applied:}} plus :total.
+    # P81 U-3 (the A1 dies-at-apply defect): a source whose APPLIED names
+    # carry a below-certain registry certainty additionally reports them
+    # under :uncertain ({name => {rows:, certainty:}}, the upstream word
+    # verbatim) — the key merges only when non-empty (the empty-hash
+    # idiom), so certainty:low no longer dies at the seam.
     # Returns nil when no registry is synced (the lane-off posture).
     def run(catalog:, canonical_dir:)
       registry = Nabu::Places.load_default(canonical_dir: canonical_dir)
@@ -28,6 +34,7 @@ module Nabu
         matched = registry.decisions_for(slug).select { |_, d| d.matched? }
         updated = 0
         names = 0
+        uncertain = {}
         catalog.transaction do
           matched.each do |name, decision|
             n = catalog[:document_axes]
@@ -35,10 +42,15 @@ module Nabu
                 .where(document_id: catalog[:documents].where(source_id: source_id).select(:id))
                 .update(place_ref: decision.refs.join(" "))
             updated += n
-            names += 1 if n.positive?
+            next unless n.positive?
+
+            names += 1
+            tier = Nabu::Certainty.tier(:places_certainty, decision.certainty)
+            uncertain[name] = { rows: n, certainty: decision.certainty } if tier && tier != "certain"
           end
         end
         census[slug] = { rows_updated: updated, names_applied: names }
+        census[slug][:uncertain] = uncertain unless uncertain.empty?
         total += updated
       end
       census.merge(total: total)

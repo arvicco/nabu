@@ -10,15 +10,37 @@
 # Precedence, highest first: per-document > per-collection > this file > identity.
 
 map:
-  # The 639-3 ↔ 639-1 alias suite (№11, 2026-08-10): the registry anchors
-  # the two-letter codes; a collection spelling the same language in
-  # 639-3 means exactly that language — a code alias, not a claim.
+  # The 639-3 ↔ 639-1 alias suite (№11, 2026-08-10; completed 2026-08-21,
+  # the maturity-review gap): the registry anchors the two-letter codes; a
+  # collection spelling the same language in 639-3 means exactly that
+  # language — a code alias, not a claim.
   deu:     de
   nld:     nl
   spa:     es
   arg:     an
   swe:     sv
   ita:     it
+  eng:     en
+  fra:     fr
+  fas:     fa
+  oci:     oc
+  gle:     ga
+  cym:     cy
+  cor:     kw
+  ger:     de   # the 639-2/B bibliographic spelling (deu is the /T twin)
+
+  # The suite mirrored: where the registry anchored the 639-2/3 code, a
+  # collection spelling the same language in 639-1 means exactly that
+  # language — the same №11 logic, opposite spelling.
+  ar:      ara
+  is:      isl
+
+  # 639-2 Syriac, read as the classical literary language: historical text
+  # collections use syr in its pre-2007 scope (syc was split out of syr in
+  # 2007). A collection holding the MODERN Neo-Aramaic members of today's
+  # 639-3 syr macrolanguage overrides per-collection — the gkm precedent,
+  # a code whose default reading is a specific historical lect.
+  syr:     syc
 
   # Old Swedish / Old Italian (Wiktionary etymology-only codes)
   gmq-osw: sv:old

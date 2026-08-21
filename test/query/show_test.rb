@@ -424,6 +424,27 @@ module Query
       assert_equal "titsep?", facets.first.raw, "the certainty rider stays visible"
     end
 
+    # P81 U-5: a passage carries the document's materialized lect AND the
+    # facet row's provenance basis (raw), so renderers can gloss the
+    # ruling's tier without re-resolving.
+    def test_passage_carries_the_materialized_lect_with_its_basis
+      load_document("1", [%w[1 μῆνιν]])
+      doc = @catalog[:documents].first(urn: "urn:d:1")
+      @catalog[:document_facets].insert(document_id: doc.fetch(:id), facet: "lect",
+                                        value: "grc:koi", raw: "rule:sef")
+
+      result = show("urn:d:1:1")
+      assert_equal "grc:koi", result.lect
+      assert_equal "rule:sef", result.lect_basis
+    end
+
+    def test_a_bare_code_passage_has_nil_lect_and_basis
+      load_document("1", [%w[1 μῆνιν]])
+      result = show("urn:d:1:1")
+      assert_nil result.lect
+      assert_nil result.lect_basis
+    end
+
     def test_unfaceted_document_has_empty_facets
       load_document("2", [%w[1 ἄειδε]])
       assert_empty show("urn:d:2").facets
