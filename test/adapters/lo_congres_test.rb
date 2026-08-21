@@ -202,7 +202,7 @@ class LoCongresTest < Minitest::Test
     entry = registry["lo-congres"]
     refute_nil entry, "lo-congres must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::LoCongres, entry.adapter_class
-    refute entry.wired, "wired flips only after the owner-verified first real sync"
+    assert entry.wired, "flipped 2026-08-21 — first sync owner-round-verified (12 docs)"
     assert entry.translations, "french coverage is 100% (censused) — -fr siblings ride the same parse"
     assert_equal Nabu::Adapters::LoCongres.manifest, entry.manifest
   end

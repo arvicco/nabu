@@ -171,7 +171,7 @@ class SalomTest < Minitest::Test
     entry = registry["salom"]
     refute_nil entry, "salom must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Salom, entry.adapter_class
-    refute entry.wired, "wired flips only after the owner-verified first real sync"
+    assert entry.wired, "flipped 2026-08-21 — first sync owner-round-verified (10,685 sentences)"
     assert_equal Nabu::Adapters::Salom.manifest, entry.manifest
   end
 

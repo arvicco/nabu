@@ -37,7 +37,7 @@ module Adapters
       registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
       entry = registry["bdcamoes"]
       refute_nil entry, "bdcamoes must be registered in config/sources.yml"
-      refute entry.wired, "wired stays false until the first real sync is owner-verified"
+      assert entry.wired, "flipped 2026-08-21 — first sync owner-round-verified (69,812 passages)"
       assert_equal "manual", entry.sync_policy
       assert_includes entry.axes, "romance"
     end
