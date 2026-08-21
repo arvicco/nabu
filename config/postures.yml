@@ -81,12 +81,16 @@ sources:
       note: lzh → zho/lit (the kanripo precedent — Literary Chinese as read
         in Korea; a ko-tradition lect claim stays DELIBERATELY coarse until
         a use case needs it, P78-1)
-    dating: {posture: dated, note: "per-volume 서기 year via MetadataDates :structured; per-day dates ride annotations raw"}
+    dating: {posture: dated, note: "per-volume 서기 year via MetadataDates :structured; P81-1: the
+        per-day entry dates also project as passage-grain year runs (NikhEntryDates), and undated
+        volumes (prefaces/indexes) gain leaf-derived envelopes"}
     places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
     script: {posture: implied}
   sjw:
     lect: {posture: codemap, note: lzh → zho/lit (the sillok/kanripo precedent, P78-2)}
-    dating: {posture: dated, note: "per-member 서기 year via MetadataDates :structured; per-day dates + weather ride annotations"}
+    dating: {posture: dated, note: "per-member 서기 year via MetadataDates :structured; P81-1: the
+        per-day entry dates also project as passage-grain year runs (NikhEntryDates); weather still
+        rides annotations raw"}
     places: {posture: unplaced}
     script: {posture: implied}
   viet-wikisource:
@@ -103,27 +107,28 @@ sources:
     lect:
       posture: codemap
       note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
-    dating: {posture: undatable, note: "P78-3 census: volume fronts carry no dateOccured (no 서기 line
-        exists in the zip); the leaf-grain 음/양 machine dates ride annotations raw — a future
-        extractor revisit, not a claim"}
+    dating: {posture: dated, note: "P81-1: the leaf-grain 음/양 machine dates (877–1392, '0877-01-99L0';
+        '9999' filler skipped counted) project via NikhEntryDates — document envelopes + passage-grain
+        year runs; volume fronts still carry no dateOccured, so the envelope IS the document claim"}
     places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
     script: {posture: implied}
   goryeosa-jeoryo:
     lect:
       posture: codemap
       note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
-    dating: {posture: undatable, note: "P78-3 census: root fronts carry coveragePeriod prose, never a
-        dateOccured (the bare machine year sits on the level3 year front, two levels down); the
-        per-article 음 dates ride annotations raw — a future extractor revisit, not a claim"}
+    dating: {posture: dated, note: "P81-1: the per-article 음 machine dates (918–1434) project via
+        NikhEntryDates — document envelopes + passage-grain year runs; root fronts still carry only
+        coveragePeriod prose, so the envelope IS the document claim"}
     places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
     script: {posture: implied}
   bibyeonsa:
     lect:
       posture: codemap
       note: lzh → zho/lit (hanmun — the kanripo/sillok precedent, P78-3)
-    dating: {posture: undatable, note: "P78-3 census: book fronts carry only the 1959 print-edition
-        publication data; content years live on level2 value attrs and the untyped per-entry machine
-        dates riding annotations raw — a future extractor revisit, not a claim"}
+    dating: {posture: dated, note: "P81-1: the untyped per-entry machine dates (1616–1892,
+        '1617-01-00L0') project via NikhEntryDates — document envelopes + passage-grain year runs
+        (bb_001's interleaved years stay separate runs, never merged); book fronts still carry only
+        the 1959 print-edition data, so the envelope IS the document claim"}
     places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
     script: {posture: implied}
   itkc:

@@ -73,7 +73,7 @@ module Nabu
                             :open_etruscan_undated, :open_etruscan_invalid,
                             :lexlep_undated, :lexlep_invalid, :tir_undated, :tir_invalid,
                             :iip_undated, :iip_invalid, :cdli_undated, :cdli_invalid,
-                            :rundata_undated, :openiti_undated) do
+                            :rundata_undated, :openiti_undated, :nikh_entries) do
         def initialize(coptic: 0, coptic_invalid: 0, edh: 0, edh_undated: 0, edh_invalid: 0,
                        damaskini: 0, corph: 0, corph_undated: 0,
                        riig: 0, riig_undated: 0, riig_invalid: 0,
@@ -86,14 +86,18 @@ module Nabu
                        iip: 0, iip_undated: 0, iip_invalid: 0,
                        cdli: 0, cdli_undated: 0, cdli_invalid: 0,
                        rundata: 0, rundata_undated: 0, openiti: 0, openiti_undated: 0,
-                       metadata_dates: {}, **)
+                       metadata_dates: {}, nikh_entries: {}, **)
           super
         end
 
         def total
           hgv + goo300k + imp + oracc + torot + coptic + edh + damaskini + corph + riig +
             tla_hf + aes + ceipom + isicily + open_etruscan + lexlep + tir + iip + cdli +
-            rundata + openiti + metadata_dates.values.sum
+            rundata + openiti + metadata_dates.values.sum +
+            # the leaf-grain lane's DOCUMENT contribution: envelopes minted
+            # for documents the metadata lane left undated (runs are
+            # passage grain and never double-count a document)
+            nikh_entries.values.sum { |counts| counts[:documents] }
         end
       end
 
@@ -125,8 +129,9 @@ module Nabu
         rundata = RundataDates.build(catalog: catalog, canonical_dir: canonical_dir)
         openiti = OpenitiDates.build(catalog: catalog, canonical_dir: canonical_dir)
         metadata = MetadataDates.build(catalog: catalog, canonical_dir: canonical_dir)
+        nikh = NikhEntryDates.build(catalog: catalog)
         Summary.new(hgv: hgv[:rows], goo300k: goo, imp: imp,
-                    metadata_dates: metadata,
+                    metadata_dates: metadata, nikh_entries: nikh,
                     oracc: oracc[:documents], torot: torot[:documents],
                     coptic: coptic[:documents], edh: edh[:documents],
                     damaskini: damaskini[:documents], corph: corph[:documents],
@@ -303,6 +308,7 @@ require_relative "timeline_builder/chronicle_annals"
 require_relative "timeline_builder/coptic_scriptorium_dates"
 require_relative "timeline_builder/edh_dates"
 require_relative "timeline_builder/metadata_dates"
+require_relative "timeline_builder/nikh_entry_dates"
 require_relative "timeline_builder/damaskini_dates"
 require_relative "timeline_builder/corph_dates"
 require_relative "timeline_builder/riig_dates"
