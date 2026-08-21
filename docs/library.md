@@ -1,22 +1,22 @@
 # The Library — content review
 
-**As of 2026-08-19** (post the P77 Iberian–Norse–Babylonian wave and
-the overnight P78 Korean first syncs). Live totals: **981,976
-documents / 71,073,017 passages and 1,410,205 dictionary entries**
-across the **145 registry rows** — 122 corpus sources + 4 local
-shelves + 19 feature modules, every corpus source wired (the P78
-Korean/Vietnamese wave, §8ag, verified its first syncs and flipped
-2026-08-19). **Classical Arabic (`ara`, §8x) is the largest language
-at 33.3M passages**, ahead of Literary Chinese (15.9M — the Korean
-historiographical wave now aboard), Sumerian and Ancient Greek (3.0M
-each), and Japanese (2.98M); the catalog spans **128 document
-language codes**. The reference shelf spans the dictionary shelves of
-§8c, §8h, §8j, §8k, §8m, §8o, §8q, §8s, §8t and §8ae — **105
-dictionary shelves / 1,410,205 entries** (2026-08-19 census). The
-gold-lemma layer stands at **19,319,627 gold rows in 38 languages**
-(2026-08-19 census) plus the honest silver tier (machine-suggested or
-upstream-undisambiguated, always labelled — 28,451,399 rows, chiefly
-GLAUx and Diorisis Greek, §8n/§8z). Since August 2026 stored codes also resolve through the
+**As of 2026-08-21** (post the P80 Latin–Romance wave first syncs).
+Live totals: **988,556 documents / 73,625,479 passages and 1,410,205
+dictionary entries** across the **153 registry rows** — 130 corpus
+sources + 4 local shelves + 19 feature modules, every corpus source
+wired (the P80 Latin–Romance wave, §8ai, verified its first syncs and
+flipped 2026-08-21). **Classical Arabic (`ara`, §8x) is the largest
+language at 33.3M passages**, ahead of Literary Chinese (15.9M),
+Latin (3.1M — the Patrologia Latina now aboard), Sumerian and Ancient
+Greek (3.0M each), and Japanese (2.98M); the catalog spans **134
+document language codes**. The reference shelf spans the dictionary
+shelves of §8c, §8h, §8j, §8k, §8m, §8o, §8q, §8s, §8t and §8ae —
+**105 dictionary shelves / 1,410,205 entries** (2026-08-21 census).
+The gold-lemma layer stands at **19,319,627 gold rows in 38
+languages** (2026-08-21 census) plus the honest silver tier
+(machine-suggested or upstream-undisambiguated, always labelled —
+30,999,504 rows, chiefly GLAUx and Diorisis Greek, now with the ReF
+German aboard, §8n/§8z). Since August 2026 stored codes also resolve through the
 **lect layer** (languages.md, "The lect layer"): historical-stage
 ladders on language cards, `search --lect`, and registry-keyed
 reconstruction display. The four canonical-memory shelves (§8i) hold
@@ -882,6 +882,26 @@ rack, grouped:
   this library publishes back to the world: the DCS-derived Sanskrit
   form-to-lemma table (428,825 rows) and the Tibetan folding tables,
   each with its full attribution chain (CC BY).
+
+## 8ai. The P80 wave — the Patrologia Latina and the Romance breadth (`corpus-corporum`, `ref`, `ctilc`, `bdcamoes`, `aranese`, `lo-congres`, `salom`, `cv-sardinian`; P80 — first syncs owner-verified, all eight wired 2026-08-21)
+
+| | |
+|---|---|
+| **Category** | The medieval Latin mass — Migne's Patrologia — plus the Early New High German reference corpus and a Romance breadth wave: Catalan, Portuguese, Occitan (with Aranese), Judeo-Spanish, Sardinian |
+| **Languages** | Medieval/patristic Latin (`lat`), Early New High German (`de`), Catalan (`cat`), Portuguese (`por`), Occitan (`oci`, with Spanish `spa` and French `fra` parallel sides), Judeo-Spanish/Ladino (`lad`), Sardinian (`srd`) — six codes new to the library: `cat`, `de`, `lad`, `oci`, `por`, `srd` |
+| **Size** | `corpus-corporum`: **5,248 docs / 896,770 passages** — Migne's Patrologia Latina (the 221-volume series, 1844–1864) as held by Corpus Córporum, the Zurich Latin meta-repository: patristic and medieval Latin works by 1,528 authors spanning 105–1847 CE — the church fathers (Augustine, Jerome, Gregory the Great), monastic rules, chronicles, sermons, hagiography, and the series' own editorial prefaces; Migne column references ride the passages as annotations; digitized from the non-critical 16th–18th-c. editions Migne reprinted (OCR — upstream's own caveat, held verbatim). Coverage honesty: 5,276 of the 5,277 PL texts held (one upstream refusal, recorded), 28 quarantined at parse (baseline recorded). `ref`: **190 docs / 447,115 passages** — the Referenzkorpus Frühneuhochdeutsch: diplomatically transcribed German of 1350–1650 — sermons, chronicles, legal and medical prose, private letters — with morphological annotation (feeding the silver lemma lane: `de` 2.5M rows) and manuscript layout, the third rung of the Bochum reference-corpus ladder after ReM (§8w) and ReN (§8aa). `ctilc`: **967 docs / 256,685 passages** — the public-domain slice of the IEC's Corpus Textual Informatitzat de la Llengua Catalana: 348 literary works (poetry, drama, novel — the Renaixença era onward) and 619 non-literary (essays, press, science), chiefly 19th–early-20th-c. printed books, with genre, dialect variant (central, baleàric, valencià…) and publication year on every work. `bdcamoes`: **127 docs / 69,812 passages** — BDCamões Part I (~3.1M words), the Digital Library of Camões IP: Portuguese drama from Gil Vicente (1517) through Garrett, novels of Camilo and Herculano, essays and poetry into the early 20th century, each work dated (Part II stays unheld under restrictive terms). `aranese`: **2 docs / 839,816 passages** — the projecte-aina Spanish–Aranese parallel corpus: ~420k aligned sentence pairs of Aranese (the Val d'Aran variety of Gascon Occitan, co-official in Catalonia) beside their Spanish sources — largely Apertium-generated (upstream's own statement), held as synthetic parallel data, never as attested usage. `lo-congres`: **12 docs / 10,304 passages** — Lo Congrès permanent de la lenga occitana's classroom sentence corpus: 5,152 French–Occitan sentence pairs across six written dialect norms (auvernhat, gascon, lengadocian, lemosin, provençau, vivaroaupenc), the same French sentence rendered in each — a compact matrix of modern written Occitan variation. `salom`: **1 doc / 10,685 passages** — Judeo-Spanish (Ladino) press prose: sentences from Şalom, the Istanbul Sephardic community's newspaper — 2022 articles in Latin-script Ladino, the living written register of the language. `cv-sardinian`: **1 doc / 5,237 passages** — the Common Voice Sardinian sentence collection: modern Sardinian everyday prose in current orthography, gathered by Mozilla's volunteer community as speech-recording prompts (text layer only; the audio side is not held) |
+| **Licenses** | corpus-corporum → `nc` (the Zurich transcription layer is share-alike non-commercial; most underlying texts public domain; MCP-excluded); ref CC BY-SA 4.0 → `attribution`; ctilc IEC-citation CC wrapper → `attribution`; bdcamoes CC BY → `attribution`; aranese CC BY-SA 4.0 → `attribution`; lo-congres CC BY 4.0 → `attribution`; salom CC BY 4.0 → `attribution`; cv-sardinian CC0 → `open` |
+
+**Research uses:** patristics and medieval theology at reading grain —
+the Latin shelf now 3.1M passages, joining the Vulgate (§8b) and the
+medieval Latin shelves (§8y) with Migne column citations resolving
+natively; the German reference-corpus ladder completed to 1650
+(ReM §8w → ReF), searchable by silver lemma; the Romance desk widened
+past its historical stages (cantigas §8ad, BFM/CroALa §8y, OSTA §8af)
+into Catalan, Portuguese and the minority written record — the
+six-norm Occitan variation matrix, living Latin-script Ladino press,
+modern Sardinian — with the Aranese pair held honestly as synthetic
+parallel data.
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 
