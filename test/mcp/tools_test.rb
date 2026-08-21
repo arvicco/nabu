@@ -35,11 +35,12 @@ module MCP
 
     def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil, links: nil, registry: nil,
               enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil,
-              readings: nil, hieroglyphs: nil)
+              readings: nil, hieroglyphs: nil, lect_rules: nil, lect_override_tiers: nil)
       Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger, links: links,
                            registry: registry, enabled_slugs: enabled_slugs, pleiades: pleiades,
                            sign_list: sign_list, tibetan_words: tibetan_words, lects: lects,
-                           readings: readings, hieroglyphs: hieroglyphs)
+                           readings: readings, hieroglyphs: hieroglyphs, lect_rules: lect_rules,
+                           lect_override_tiers: lect_override_tiers)
     end
 
     def make_document(source: @open, urn: "urn:d:1", title: "Iliad", language: "grc",
@@ -871,6 +872,38 @@ module MCP
 
       plain = payload(call("nabu_show", { "urn" => "#{@eng.urn}:1.1" }))
       refute plain.key?("lect"), "no facet row means identity — the key never appears bare"
+    end
+
+    # P81 U-5: the facet row's provenance basis rides as lect_basis, and a
+    # ruling that STATES a below-certain tier merges the lect_certainty
+    # object — certain and untiered bases add no certainty key (the
+    # empty-hash idiom), a basis-less legacy row adds neither key.
+    def test_show_passage_glosses_the_lect_tier_from_the_facet_basis
+      seed_corpus
+      grc_id = @catalog[:documents].where(urn: @grc.urn).get(:id)
+      @catalog[:document_facets].insert(document_id: grc_id, facet: "lect",
+                                        value: "grc:koi", raw: "rule:sef")
+      rules = Nabu::LectRules.new(rules: [
+                                    Nabu::LectRules::Rule.new(id: "sef", sources: ["src"], code: "grc",
+                                                              facet: "period", map: {},
+                                                              tier: "approximation")
+                                  ])
+
+      shown = payload(tools(lect_rules: rules).call("nabu_show", { "urn" => "#{@grc.urn}:1.1" }))
+      assert_equal "grc:koi", shown.fetch("lect")
+      assert_equal "rule:sef", shown.fetch("lect_basis")
+      assert_equal({ "tier" => "probable", "upstream" => "approximation", "carrier" => "lect-tier" },
+                   shown.fetch("lect_certainty"))
+
+      @catalog[:document_facets].where(document_id: grc_id, facet: "lect").update(raw: "owner")
+      certain = payload(tools(lect_rules: rules).call("nabu_show", { "urn" => "#{@grc.urn}:1.1" }))
+      assert_equal "owner", certain.fetch("lect_basis"), "provenance always rides"
+      refute certain.key?("lect_certainty"), "an owner ruling is certain — no certainty object"
+
+      @catalog[:document_facets].where(document_id: grc_id, facet: "lect").update(raw: nil)
+      legacy = payload(tools(lect_rules: rules).call("nabu_show", { "urn" => "#{@grc.urn}:1.1" }))
+      refute legacy.key?("lect_basis"), "a pre-P81 row carries no basis — no key, honestly"
+      refute legacy.key?("lect_certainty")
     end
 
     def lilybaeum_resolver

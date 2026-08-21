@@ -51,10 +51,10 @@ module Nabu
       PassageResult = Data.define(
         :urn, :language, :sequence, :revision, :withdrawn, :text,
         :document_urn, :document_title, :source_slug, :license_class, :provenance, :timeline,
-        :annotations, :credit, :meter, :findspot, :lect
+        :annotations, :credit, :meter, :findspot, :lect, :lect_basis
       ) do
         def initialize(timeline: nil, annotations: {}, credit: nil, meter: nil, findspot: nil,
-                       lect: nil, **)
+                       lect: nil, lect_basis: nil, **)
           super
         end
       end
@@ -358,7 +358,7 @@ module Nabu
           credit: row.fetch(:credit),
           meter: meter_for(row.fetch(:passage_id)),
           findspot: findspot_for(row),
-          lect: lect_for(row.fetch(:document_id))
+          **lect_fields(row.fetch(:document_id))
         )
       end
 
@@ -496,10 +496,16 @@ module Nabu
       # The document's materialized lect (P59-3): the facet='lect' row's
       # value, nil when none — "no row means identity" (P58-4), and the
       # consumer keeps its payload byte-identical for bare-code documents.
-      def lect_for(document_id)
-        return nil unless @catalog.table_exists?(:document_facets)
+      # P81 U-5: the row's raw column carries the resolution's provenance
+      # basis ("owner"/"rule:<id>"/"override:<slug>"/"codemap" — nil on rows
+      # materialized before the basis lane), surfaced as +lect_basis+ so
+      # renderers can gloss the ruling's tier (Nabu::LectGloss).
+      def lect_fields(document_id)
+        return { lect: nil, lect_basis: nil } unless @catalog.table_exists?(:document_facets)
 
-        @catalog[:document_facets].where(document_id: document_id, facet: "lect").get(:value)
+        row = @catalog[:document_facets].where(document_id: document_id, facet: "lect")
+                                        .select(:value, :raw).first
+        { lect: row && row[:value], lect_basis: row && row[:raw] }
       end
 
       # The document's timeline (P15-2), or nil when undated. A document

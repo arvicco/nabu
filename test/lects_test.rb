@@ -241,6 +241,74 @@ class LectsTest < Minitest::Test
     end
   end
 
+  # --- #resolution: the with-basis variant (P81 U-5) --------------------------
+
+  def test_resolution_reports_the_precedence_basis
+    overlay = { "urn:nabu:derom:test:1" => { "la-vul" => "lat:arch" } }
+    overlaid = Nabu::Lects.load(FIXTURES, overrides_path: LECT_OVERRIDES_PATH, overlay: overlay)
+
+    assert_equal Nabu::Lects::Resolution.new(id: "grc:byz", basis: "codemap"),
+                 overlaid.resolution("gkm")
+    assert_equal Nabu::Lects::Resolution.new(id: "roa:pro", basis: "override:derom"),
+                 overlaid.resolution("la-vul", source: "derom")
+    assert_equal Nabu::Lects::Resolution.new(id: "lat:arch", basis: "overlay"),
+                 overlaid.resolution("la-vul", source: "derom", urn: "urn:nabu:derom:test:1"),
+                 "a plain-hash overlay carries no journal basis — the generic word, honestly"
+    assert_equal Nabu::Lects::Resolution.new(id: "srd", basis: nil),
+                 overlaid.resolution("srd"), "identity makes no claim — no basis"
+    assert_equal overlaid.resolve("la-vul", source: "derom"),
+                 overlaid.resolution("la-vul", source: "derom").id,
+                 "resolve delegates — one walk, never two answers"
+  end
+
+  def test_resolution_reads_the_journal_basis_through_the_overlay
+    Dir.mktmpdir do |root|
+      seed_module_tree(root)
+      config = journal_config(root)
+      db = Nabu::Store::LectJournal.open!(config.lects_journal_path)
+      Nabu::Store::LectJournal.assign!(db, urn: "urn:nabu:x:1", code: "lat", lect_id: "lat:med",
+                                           basis: "rule:akk-period")
+      db.disconnect
+
+      live = Nabu::Lects.load_default(config: config)
+      resolution = live.resolution("lat", urn: "urn:nabu:x:1")
+      assert_equal "lat:med", resolution.id
+      assert_equal "rule:akk-period", resolution.basis,
+                   "the journal-backed overlay reports the row's own basis verbatim"
+    end
+  end
+
+  # --- override tier machine fields (P81 U-5) ---------------------------------
+
+  def test_an_override_row_may_carry_a_promoted_tier_field
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "lect_overrides.yml")
+      File.write(path, <<~YAML)
+        sources:
+          etcsl:
+            sux: { lect: "sux:post", tier: approximation }
+          sblgnt:
+            grc: "grc:koi"
+      YAML
+      lects = Nabu::Lects.load(FIXTURES, overrides_path: path)
+      assert_equal "sux:post", lects.resolve("sux", source: "etcsl"),
+                   "a hash row resolves exactly like the bare string shape"
+      assert_equal "approximation", lects.override_tier("etcsl", "sux")
+      assert_nil lects.override_tier("sblgnt", "grc"), "a bare string row states no tier"
+      assert_nil lects.override_tier("nobody", "sux")
+
+      assert_equal({ "etcsl" => { "sux" => "approximation" } },
+                   Nabu::Lects.override_tiers([path]),
+                   "the class-level reader serves render surfaces without a registry instance")
+    end
+  end
+
+  def test_the_live_overrides_file_carries_the_promoted_tiers
+    assert_equal "approximation", lects.override_tier("etcsl", "sux"),
+                 "№1's stated source-grain tier, machine-readable since P81 U-5"
+    assert_equal "certain", lects.override_tier("elephantine", "arc"), "D58-d's certain row"
+  end
+
   # --- #parent_of: the descent walk -------------------------------------------
 
   def test_a_root_anchor_has_no_parent

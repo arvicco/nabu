@@ -78,6 +78,15 @@ module Nabu
       def initialize(band_note: nil, **) = super
     end
 
+    # One resolved code→lect mapping WITH its provenance (P81 U-5): +id+ is
+    # the string #resolve returns; +basis+ names the precedence tier that
+    # won — the journal row's own basis ("owner", "rule:<id>") when the
+    # overlay can report one (Store::LectJournal::Overlay#basis), the
+    # generic "overlay" for a plain-hash overlay, "override:<slug>" for a
+    # per-source override, "codemap" for the universal default, nil for
+    # identity (the code itself — no claim, no provenance to speak).
+    Resolution = Data.define(:id, :basis)
+
     LECTS_FILE = "lects.yml"
     CODEMAP_FILE = "codemap.yml"
     SLUG = "nabu-lects"
@@ -154,11 +163,42 @@ module Nabu
     end
     private_class_method :read_yaml
 
+    # An override row is either the bare lect-id string (the P57-3 shape) or
+    # a {lect:, tier:} hash (P81 U-5 — the D57-f tier comments promoted to
+    # machine fields). Split one raw sources map into the id map #resolve
+    # walks and the tier map the render side glosses from.
+    def self.split_override_rows(sources_map)
+      ids = {}
+      tiers = {}
+      sources_map.each do |slug, rows|
+        ids[slug] = {}
+        (rows || {}).each do |code, entry|
+          if entry.is_a?(Hash)
+            ids[slug][code] = entry.fetch("lect")
+            (tiers[slug] ||= {})[code] = entry["tier"] if entry["tier"]
+          else
+            ids[slug][code] = entry
+          end
+        end
+      end
+      [ids, tiers]
+    end
+
+    # {slug => {code => tier word}} straight from the overrides file(s) —
+    # the render-side lookup (Nabu::LectGloss) reads the config directly, so
+    # an unsynced registry module never hides a config-stated tier.
+    def self.override_tiers(paths)
+      merged = Array(paths).each_with_object({}) do |path, acc|
+        acc.merge!(read_yaml(path).fetch("sources", nil) || {})
+      end
+      split_override_rows(merged).last
+    end
+
     def initialize(anchors:, codemap:, overrides: {}, overlay: {}, scripts: {})
       @anchors = anchors
       @scripts = scripts
       @codemap = codemap
-      @overrides = overrides
+      @overrides, @override_tiers = self.class.split_override_rows(overrides)
       @overlay = overlay
     end
 
@@ -196,15 +236,34 @@ module Nabu
     # Always returns a string — a code with no mapping anywhere resolves to
     # itself (the identity default rule).
     def resolve(code, source: nil, urn: nil)
+      resolution(code, source: source, urn: urn).id
+    end
+
+    # The with-basis variant (P81 U-5): the same precedence walk, returning
+    # a Resolution so the facet materializer can record WHERE the id came
+    # from (class Resolution note). #resolve delegates here — one walk,
+    # never two answers.
+    def resolution(code, source: nil, urn: nil)
       code = code.to_s
 
       per_document = urn && @overlay[urn]
-      return per_document[code] if per_document&.key?(code)
+      if per_document&.key?(code)
+        basis = (@overlay.basis(urn, code) if @overlay.respond_to?(:basis))
+        return Resolution.new(id: per_document[code], basis: basis || "overlay")
+      end
 
       per_source = source && @overrides[source.to_s]
-      return per_source[code] if per_source&.key?(code)
+      return Resolution.new(id: per_source[code], basis: "override:#{source}") if per_source&.key?(code)
+      return Resolution.new(id: @codemap[code], basis: "codemap") if @codemap.key?(code)
 
-      @codemap.fetch(code, code)
+      Resolution.new(id: code, basis: nil)
+    end
+
+    # The config-stated tier word ("certain"/"approximation") for a
+    # per-source override row (P81 U-5), nil when the row — or its tier —
+    # is absent (an honest untiered override, never a guess).
+    def override_tier(source, code)
+      @override_tiers.dig(source.to_s, code.to_s)
     end
 
     # The descent edge for +id+ (class doc, "the parent walk"): a staged
