@@ -195,7 +195,7 @@ class AraneseTest < Minitest::Test
     entry = registry["aranese"]
     refute_nil entry, "aranese must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Aranese, entry.adapter_class
-    refute entry.wired, "wired flips only after the owner-verified first real sync"
+    assert entry.wired, "flipped 2026-08-21 — first sync owner-round-verified (839,816 passages)"
     assert entry.translations, "the Spanish side is the point of a parallel corpus — -es rides"
     assert_equal Nabu::Adapters::Aranese.manifest, entry.manifest
   end

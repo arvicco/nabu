@@ -2571,7 +2571,7 @@ aozora:
 ref:
   adapter: Nabu::Adapters::Ref
   axes: [germanic]
-  wired: false   # P80-5: adapter + fixtures landed 2026-08-19; first sync is
+  wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
                  # owner-fired. Checklist §6: bin/nabu sync ref — expect 190
                  # documents (~447K physical lines / ~3.42M anno records
                  # censused across the deposit), eyeball nabu show
@@ -3605,7 +3605,7 @@ fornsvenska:
 ctilc:
   adapter: Nabu::Adapters::Ctilc
   axes: [romance]
-  wired: false
+  wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
   # New works enter the public domain each January (Llei 21/2014 rolling
   # horizon) — a yearly owner-fired re-sync re-diffs the listing.
   sync_policy: manual
@@ -3738,7 +3738,7 @@ bibyeonsa:
 bdcamoes:
   adapter: Nabu::Adapters::BdCamoes
   axes: [romance]
-  wired: false   # P80-7: flip after the first real sync is owner-verified
+  wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
   # BDCamões Part I (PORTULAN CLARIN): 127 Portuguese literary works,
   # ~3.1 M words, 15th–20th c. — CC-BY per the record page; the download
   # click-through is accepted by LicenseAgreeFetch on owner ruling №R-37
@@ -3764,7 +3764,7 @@ itkc:
 corpus-corporum:
   adapter: Nabu::Adapters::CorpusCorporum
   axes: [classical, romance]  # the croala/digiliblt precedent: the continuum's Latin side
-  wired: false   # adapter built P80-1/80-2, UNSYNCED — the first real sync is
+  wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
                  # owner-fired (a multi-hour polite crawl: ~6,700 catalog GETs
                  # + 5,277 downloads at 1 req/s; two-grain resumable). Flip
                  # after eyeballing status counts + 5 random passages.
@@ -3791,7 +3791,7 @@ lo-congres:
   axes: [romance]
   siblings: ["-fr"]  # P34-0: literal tail — dialect slugs are hyphen-free, none ends in -fr
   translations: true # French coverage is 100% (censused) — -fr siblings ride the same parse
-  wired: false   # flip after the owner-verified first real sync (six FileFetch GETs,
+  wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
                    # ~1.3 MB total; then eyeball urn:nabu:lo-congres:gascon:1 --parallel
                    # --lang fra and 5 random passages)
   # Lo Congrès Occitan news corpus (P80-6): Zenodo record 8411197 v1.0 —
@@ -3811,7 +3811,7 @@ lo-congres:
 cv-sardinian:
   adapter: Nabu::Adapters::CvSardinian
   axes: [romance]
-  wired: false   # flip after the owner-verified first real sync (one FileFetch GET,
+  wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
                    # ~260 kB; then eyeball urn:nabu:cv-sardinian:sentence-collector:1
                    # and 5 random passages)
   # Common Voice Sardinian sentence text (P80-6): server/data/sc/
@@ -3830,7 +3830,7 @@ cv-sardinian:
 salom:
   adapter: Nabu::Adapters::Salom
   axes: [romance]
-  wired: false   # flip after the owner-verified first real sync (one FileFetch GET,
+  wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
                    # ~1 MB; then eyeball urn:nabu:salom:articles-2022:1 and 5 random
                    # passages)
   # Şalom Ladino articles text corpus (P80-6): Hugging Face
@@ -3851,7 +3851,7 @@ aranese:
   axes: [romance]
   siblings: ["-es"]  # P34-0: literal tail — the one base id is "corpus", it does not end in -es
   translations: true # the Spanish side is the point of a parallel corpus — -es rides
-  wired: false   # flip after the owner-verified first real sync (two FileFetch GETs,
+  wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
                    # ~103 MB total → 2 docs / ~840k passages, the pack's largest load;
                    # then eyeball urn:nabu:aranese:corpus:1 --parallel --lang spa)
   # ES-OC (Spanish–Aranese) Parallel Corpus (P80-6): Hugging Face

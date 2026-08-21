@@ -166,7 +166,7 @@ class CvSardinianTest < Minitest::Test
     entry = registry["cv-sardinian"]
     refute_nil entry, "cv-sardinian must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::CvSardinian, entry.adapter_class
-    refute entry.wired, "wired flips only after the owner-verified first real sync"
+    assert entry.wired, "flipped 2026-08-21 — first sync owner-round-verified (5,237 sentences)"
     assert_equal Nabu::Adapters::CvSardinian.manifest, entry.manifest
   end
 
