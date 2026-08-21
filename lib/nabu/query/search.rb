@@ -65,6 +65,18 @@ module Nabu
     # pre-rebuild index the old catalog-side path runs byte-identically,
     # honesty hint included.
     #
+    # == --source/--axis ride the same lane (P81-3)
+    #
+    # The same genus, found live 2026-08-20: `search 王 --source sillok`
+    # returned empty because the global top window filled with cbeta/kanripo
+    # rows the catalog-side source filter then rejected. When the fts table
+    # carries the P81-3 source column, --source becomes a
+    # `source : ("0srcsillok")` MATCH conjunct and --axis an OR of its
+    # member slugs' tokens (an axis is a registry tag over sources, expanded
+    # CLI-side — it deliberately has no index column of its own), both
+    # leaving the catalog-side filter set exactly as --lang did. Same
+    # --exact/--word carve-out, same pre-rebuild fallback.
+    #
     # Two-step id join (not ATTACH) and the exact-class license semantics are
     # documented on CatalogJoin, which owns that half.
     class Search
@@ -150,9 +162,9 @@ module Nabu
       end
 
       # Pull more FTS hits than the caller's limit so that catalog-side filtering
-      # (license, timeline, facets, source — and language only against a
-      # pre-P42-3 index; on the current shape --lang rides in the MATCH, class
-      # note) can drop non-matching rows and still fill the page.
+      # (license, timeline, facets — and language/source/axis only against a
+      # pre-P42-3/P81-3 index; on the current shape those ride in the MATCH,
+      # class note) can drop non-matching rows and still fill the page.
       # Exhaustion is ANNOUNCED (P35-6): a full window + active filters + a
       # short page sets incomplete_hint (CatalogJoin::INCOMPLETE_PAGE_HINT).
       # census: 68408109, 2026-08-04, live passages (P57 full rebuild; 3.76M at tuning,
@@ -344,9 +356,10 @@ module Nabu
         # P75 C-10: a guard-sampled page thinned below its limit by active
         # CATALOG-SIDE filters is the starvation genus — the note teaches
         # the mode built for that question instead of serving degenerate
-        # pages silently. A lang that rode IN the MATCH (P42-3) filtered
-        # the draw itself, so it never thins and never fires this.
-        catalog_side = index_language_match(filters[:lang]) ? filters.merge(lang: nil) : filters
+        # pages silently. A lang (P42-3) or source/axis (P81-3) that rode
+        # IN the MATCH filtered the draw itself, so it never thins and
+        # never fires this.
+        catalog_side = catalog_side_filters(filters)
         if @rank_note && page.size < limit && filters_active?(catalog_side)
           @rank_note = "#{@rank_note} — filters thinned the sampled page; " \
                        "--scan walks the filtered set deterministically"
@@ -423,11 +436,11 @@ module Nabu
                     facets: facets, source: source, sources: sources, loans: loans,
                     meter: meter, meter_pattern: meter_pattern, script: script_code(script),
                     within: within_spec(within) }.merge(lect_filter(lect))
-        lang_match = index_language_match(filters[:lang])
-        filters = filters.merge(lang: nil) if lang_match
+        index_match = index_match_filter(filters)
+        filters = catalog_side_filters(filters)
 
         page = scan_walk(variants, filters, limit: limit, scan_page: scan_page,
-                                            scan_ceiling: scan_ceiling, lang_match: lang_match)
+                                            scan_ceiling: scan_ceiling, index_match: index_match)
         note_meter(meter, meter_pattern, empty: page.empty?)
         page.map { |row| build_result(row, query, exact: false, word: false) }
       end
@@ -561,9 +574,10 @@ module Nabu
       # filters, same snippets — and #rank_note arms the honest footer clause.
       # Below (or when the probe is unavailable — nil — or under the
       # ranking-independent urn probe), byte-identical to before.
-      # (The probe reads the TEXT variants only; the sentinel language tokens
-      # are invisible to it, so the ceiling stays a valid upper bound — a
-      # lang-narrowed candidate set is only ever smaller.)
+      # (The probe reads the TEXT variants only; the sentinel language and
+      # source tokens are invisible to it, so the ceiling stays a valid
+      # upper bound — a lang/source-narrowed candidate set is only ever
+      # smaller.)
       # P42-r3: the skipped-rank window is a corpus-wide SAMPLE (rowid-anchor
       # probes over the posting list), not the head of the list — the head
       # window collapsed onto the first matching document in id space and
@@ -573,17 +587,17 @@ module Nabu
       # the note. A fixture-scale corpus samples exhaustively (the attempt
       # budget dwarfs the posting list), where sample == the full match set.
       def folded_page(variants, filters, limit:, urn:, ubiquity_threshold:)
-        lang_match = index_language_match(filters[:lang])
-        filters = filters.merge(lang: nil) if lang_match
+        index_match = index_match_filter(filters)
+        filters = catalog_side_filters(filters)
         ranked = urn ? true : rank?(variants, ubiquity_threshold)
         @rank_note = ranked ? nil : RANK_SKIP_NOTE
         inner_limit = limit * INNER_LIMIT_FACTOR
         hits = if ranked
                  fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn,
-                                                          ranked: true, lang_match: lang_match)
+                                                          ranked: true, index_match: index_match)
                else
                  sampled_hits_with_literal_fallback(variants, inner_limit: inner_limit,
-                                                              lang_match: lang_match)
+                                                              index_match: index_match)
                end
         return [] if hits.empty?
 
@@ -623,6 +637,49 @@ module Nabu
         "language : (#{tokens.map { |token| %("#{token}") }.join(' OR ')})"
       end
 
+      # The composed `source :` MATCH conjunct(s) for --source/--axis
+      # (P81-3) — nil when neither is active or the index predates the
+      # source column (catalog-side path, exactly the old behavior).
+      # +source+ (one slug) and +sources+ (an axis's member slugs, expanded
+      # CLI-side — the axis itself is deliberately NOT in the index: an axis
+      # is a registry tag over sources, so it compiles to an OR of source
+      # tokens) AND-compose when both are given, exactly as the catalog
+      # WHEREs did. An empty +sources+ stays "no filter", never a silent
+      # match-nothing (the CatalogJoin contract).
+      def index_source_match(source, sources)
+        clauses = []
+        clauses << source_column_filter([source]) if source
+        slugs = Array(sources)
+        clauses << source_column_filter(slugs) unless slugs.empty?
+        return nil if clauses.empty? || !index_source_column?
+
+        clauses.join(" AND ")
+      end
+
+      # One `source :` column filter over +slugs+ — the Indexer's sentinel
+      # mint, ORed inside the column so any member slug matches.
+      def source_column_filter(slugs)
+        tokens = slugs.map { |slug| Store::Indexer.source_token(slug) }
+        "source : (#{tokens.map { |token| %("#{token}") }.join(' OR ')})"
+      end
+
+      # The AND-composition of every index-side filter conjunct for
+      # +filters+ (language + source today), or nil when none is active —
+      # what the MATCH composers downstream take alongside the query.
+      def index_match_filter(filters)
+        conjuncts = [index_language_match(filters[:lang]),
+                     index_source_match(filters[:source], filters[:sources])].compact
+        conjuncts.empty? ? nil : conjuncts.join(" AND ")
+      end
+
+      # +filters+ with every conjunct that rides in the MATCH removed — the
+      # catalog-side remainder (what thins windows and arms honesty hints).
+      def catalog_side_filters(filters)
+        filters = filters.merge(lang: nil) if index_language_match(filters[:lang])
+        filters = filters.merge(source: nil, sources: nil) if index_source_match(filters[:source], filters[:sources])
+        filters
+      end
+
       # Feature-detect, memoized per instance: does the live fts table carry
       # the P42-3 language column? A missing fts table reads as false — the
       # MATCH itself then raises exactly as it always has.
@@ -631,6 +688,17 @@ module Nabu
 
         @index_language_column = begin
           Store::Indexer.fts_language_column?(@fulltext)
+        rescue Sequel::DatabaseError
+          false
+        end
+      end
+
+      # Same memoized feature detect for the P81-3 source column.
+      def index_source_column?
+        return @index_source_column if defined?(@index_source_column)
+
+        @index_source_column = begin
+          Store::Indexer.fts_source_column?(@fulltext)
         rescue Sequel::DatabaseError
           false
         end
@@ -763,27 +831,27 @@ module Nabu
       # — the escaped form cannot syntax-error), so hyphenated words and
       # option-looking strings just search. Non-fts errors re-raise.
       def fts_hits_with_literal_fallback(variants, inner_limit:, offset: 0, urn: nil, ranked: true,
-                                         lang_match: nil)
+                                         index_match: nil)
         fts_hits(match_expression(variants), inner_limit: inner_limit, offset: offset, urn: urn,
-                                             ranked: ranked, lang_match: lang_match)
+                                             ranked: ranked, index_match: index_match)
       rescue Sequel::DatabaseError => e
         raise unless e.message.match?(/fts5|unterminated string|no such column/)
 
         literal = variants.map { |variant| literal_expression(variant) }
         fts_hits(match_expression(literal), inner_limit: inner_limit, offset: offset, urn: urn,
-                                            ranked: ranked, lang_match: lang_match)
+                                            ranked: ranked, index_match: index_match)
       end
 
       # The --scan posting walk (P75 C-10): pages of (passage_id, rowid) in
       # rowid = corpus order, each intersected with the catalog filters;
       # keyset-paged on the last rowid so no posting is ever re-walked.
-      def scan_walk(variants, filters, limit:, scan_page:, scan_ceiling:, lang_match:)
+      def scan_walk(variants, filters, limit:, scan_page:, scan_ceiling:, index_match:)
         page = []
         after = 0
         walked = 0
         loop do
           hits = scan_posting_page(variants, after_rowid: after, page_size: scan_page,
-                                             lang_match: lang_match)
+                                             index_match: index_match)
           break if hits.empty?
 
           collect_scan_survivors(hits, filters, into: page, limit: limit)
@@ -813,19 +881,19 @@ module Nabu
         end
       end
 
-      def scan_posting_page(variants, after_rowid:, page_size:, lang_match:)
+      def scan_posting_page(variants, after_rowid:, page_size:, index_match:)
         scan_hits(match_expression(variants), after_rowid: after_rowid, page_size: page_size,
-                                              lang_match: lang_match)
+                                              index_match: index_match)
       rescue Sequel::DatabaseError => e
         raise unless e.message.match?(/fts5|unterminated string|no such column/)
 
         literal = variants.map { |variant| literal_expression(variant) }
         scan_hits(match_expression(literal), after_rowid: after_rowid, page_size: page_size,
-                                             lang_match: lang_match)
+                                             index_match: index_match)
       end
 
-      def scan_hits(match, after_rowid:, page_size:, lang_match:)
-        match = "(#{match}) AND #{lang_match}" if lang_match
+      def scan_hits(match, after_rowid:, page_size:, index_match:)
+        match = "(#{match}) AND #{index_match}" if index_match
         @fulltext[Store::Indexer::TABLE]
           .where(Sequel.lit("passages_fts MATCH ?", match))
           .where(Sequel.lit("rowid > ?", after_rowid))
@@ -837,13 +905,13 @@ module Nabu
 
       # The sampled guarded window (P42-r3), with the same literal-fallback
       # symmetry as the ranked path.
-      def sampled_hits_with_literal_fallback(variants, inner_limit:, lang_match:)
-        sampled_hits(match_expression(variants), inner_limit: inner_limit, lang_match: lang_match)
+      def sampled_hits_with_literal_fallback(variants, inner_limit:, index_match:)
+        sampled_hits(match_expression(variants), inner_limit: inner_limit, index_match: index_match)
       rescue Sequel::DatabaseError => e
         raise unless e.message.match?(/fts5|unterminated string|no such column/)
 
         literal = variants.map { |variant| literal_expression(variant) }
-        sampled_hits(match_expression(literal), inner_limit: inner_limit, lang_match: lang_match)
+        sampled_hits(match_expression(literal), inner_limit: inner_limit, index_match: index_match)
       end
 
       # Corpus-spread sample of a guarded term's postings — the P41-r2
@@ -857,8 +925,8 @@ module Nabu
       # shelves — and anchors past the last posting simply miss (bounded by
       # SAMPLE_ATTEMPTS). The final page presents in passage-id order: a stable
       # corpus-order READING of an unbiased corpus-wide draw.
-      def sampled_hits(match, inner_limit:, lang_match:)
-        match = "(#{match}) AND #{lang_match}" if lang_match
+      def sampled_hits(match, inner_limit:, index_match:)
+        match = "(#{match}) AND #{index_match}" if index_match
         max_rowid = @fulltext[Store::Indexer::TABLE].max(Sequel.lit("rowid"))
         return [] unless max_rowid
 
@@ -906,11 +974,12 @@ module Nabu
       # +ranked: false+ (the P42-2 guard) keeps the identical MATCH but orders
       # by rowid — the index's insertion order, which the Indexer streams in
       # catalog (document/sequence) order — so no bm25 is computed at all.
-      # +lang_match+ (P42-3) is the pre-built `language :` conjunct (or nil);
-      # AND-composed around the whole user expression — the user's own syntax
-      # stays intact inside its parentheses, on the literal-fallback retry too.
-      def fts_hits(match, inner_limit:, offset: 0, urn: nil, ranked: true, lang_match: nil)
-        match = "(#{match}) AND #{lang_match}" if lang_match
+      # +index_match+ (P42-3 `language :`, P81-3 `source :`) is the pre-built
+      # index-side filter conjunct (or nil); AND-composed around the whole
+      # user expression — the user's own syntax stays intact inside its
+      # parentheses, on the literal-fallback retry too.
+      def fts_hits(match, inner_limit:, offset: 0, urn: nil, ranked: true, index_match: nil)
+        match = "(#{match}) AND #{index_match}" if index_match
         dataset = @fulltext[Store::Indexer::TABLE]
                   .where(Sequel.lit("passages_fts MATCH ?", match))
         dataset = dataset.where(urn: urn) if urn # urn rides UNINDEXED in the index row
