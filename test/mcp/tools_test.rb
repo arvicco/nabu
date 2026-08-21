@@ -1027,6 +1027,27 @@ module MCP
       assert_equal ["tm:33"], card.fetch("equivalences")
     end
 
+    # P81 U-3 (survey A3): a gazetteer's own "?"-suffixed title merges the
+    # cataloguer's-"?" certainty object beside the verbatim title; unmarked
+    # titles stay byte-identical (the empty-hash idiom).
+    def test_place_card_glosses_a_query_suffixed_title
+      seed_epigraphy
+      doubtful = Nabu::Pleiades.from_entries([{
+                                               "id" => "580101", "title" => "Limenas Chersonesou?",
+                                               "reprPoint" => [25.02, 35.12],
+                                               "placeTypes" => ["settlement"], "names" => []
+                                             }])
+      card = payload(tools(pleiades: doubtful).call("nabu_place", { "query" => "580101" }))
+             .fetch("cards").fetch(0)
+      assert_equal "Limenas Chersonesou?", card.fetch("title"), "the upstream mark rides verbatim"
+      assert_equal({ "tier" => "probable", "upstream" => "?", "carrier" => "cataloguer-query" },
+                   card.fetch("title_certainty"))
+
+      plain = payload(tools(pleiades: lilybaeum_resolver).call("nabu_place", { "query" => "462281" }))
+              .fetch("cards").fetch(0)
+      refute plain.key?("title_certainty"), "an unmarked title adds no key"
+    end
+
     def test_place_by_exact_title_and_unknown_title
       seed_epigraphy
       rig = tools(pleiades: lilybaeum_resolver)
