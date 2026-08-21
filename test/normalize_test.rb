@@ -352,23 +352,39 @@ class NormalizeTest < Minitest::Test
   end
 
   # THE union invariant that makes every per-language document form findable:
-  # for any query and any language rule L whose declared script scope covers
-  # the query's script (P79-1 — a query spelled the way L's documents spell
-  # it IS written in L's script), search_form(query, L) is among
+  # for any query and any language rule L whose declared script scopes cover
+  # the query's script (P79-1/P81-2 — a query spelled the way L's documents
+  # spell it IS written in L's script), search_form(query, L) is among
   # query_forms(query) — so such a query always folds (on some variant) to
-  # exactly the indexed form. Every sample×language pair below is
-  # script-compatible, so the pre-P79-1 grid holds unchanged.
+  # exactly the indexed form. A pair the scopes EXCLUDE (P81-2 exposed one:
+  # می‌دانی×san — the Deva ZWNJ drop is script-neutral, so the unscoped union
+  # minted the fused variant the ara fold deliberately refuses) is instead
+  # covered by the asserted-language union, the search --lang rescue.
   def test_query_forms_covers_every_language_rule
     samples = ["ἀοιδῆς", "Arma Virumque", "jah", "дх҃омь", "kṛṣṇa", "Café", "du-un-nu-um{ki}", "ZI₃", "æðele",
                "فى", "می‌دانی"]
     languages = %w[grc lat chu orv got san akk sux ang ara fas xx]
     samples.each do |sample|
       variants = Nabu::Normalize.query_forms(sample)
+      script = Nabu::Normalize.query_script(sample)
       languages.each do |language|
-        assert_includes variants, form(sample, language),
-                        "query_forms(#{sample.inspect}) must cover the #{language} document form"
+        if scopes_cover?(language, script)
+          assert_includes variants, form(sample, language),
+                          "query_forms(#{sample.inspect}) must cover the #{language} document form"
+        else
+          assert_includes Nabu::Normalize.query_forms(sample, language: language), form(sample, language),
+                          "the asserted-language union must cover the #{language} form of #{sample.inspect}"
+        end
       end
     end
+  end
+
+  # True when +language+'s declared query scopes (fold and neutralization —
+  # absent tables read as unrestricted) both cover +script+.
+  def scopes_cover?(language, script)
+    fold = Nabu::Normalize::QUERY_FOLD_SCRIPTS[language]
+    neutralization = Nabu::Normalize::QUERY_NEUTRALIZATION_SCRIPTS[language]
+    (fold.nil? || fold.include?(script)) && (neutralization.nil? || neutralization.include?(script))
   end
 
   # -- query-side script scoping (P79-1) -------------------------------------
@@ -419,7 +435,7 @@ class NormalizeTest < Minitest::Test
   # script; the hyphens make the cuneiform rule's cross-application
   # detectable (non-vacuous) beyond the gml×greek letter deletion.
   SCRIPT_PROBES = {
-    latin: "iustitia a-na went(e) bʰewgʰ",
+    latin: "iustitia a-na went(e) bʰewgʰ oubi",
     greek: "ἀγάπη βασιλεία-μῆνις",
     coptic: "ⲛⲟⲩⲧⲉ ⲙⲏⲣ⳿",
     cyrillic: "въста дх҃омь-та",
@@ -456,6 +472,71 @@ class NormalizeTest < Minitest::Test
     end
     assert_operator checked, :>=, 1,
                     "the sweep must exercise at least one real cross-script mutation (gml × greek)"
+  end
+
+  # -- query-side neutralization scoping (P81-2 / Q40) -----------------------
+
+  # OWNER REPRO (2026-08-20): `search houlá` (Gil Vicente's Portuguese hail,
+  # bdcamoes) surfaced Romanian "hulă" passages. The chu/orv/bul Slavonic
+  # neutralizer's LATIN transliteration arm (оу ≡ ou ≡ u, the damaskini
+  # diplomatic digraph) collapsed ou→u on a query that has nothing Slavonic
+  # about it — P79-1 left neutralizations unscoped on the assumption they are
+  # no-ops outside their home script, and the Slavonic transliteration arm IS
+  # Latin script. Neutralizers now declare query-script scopes exactly like
+  # the folds: the Cyrl neutralizer touches Cyrillic queries only.
+  def test_query_forms_never_mint_the_slavonic_u_collapse_on_a_latin_query
+    assert_equal ["houla"], Nabu::Normalize.query_forms("houlá"),
+                 "a Latin-script query gets no Slavonic ou→u variant"
+    refute_includes Nabu::Normalize.query_forms("oubi"), "ubi",
+                    "the diplomatic spelling no longer collapses without the language asserted"
+  end
+
+  # The rescue for the genuinely Slavonic case: an ASSERTED language (search
+  # --lang) applies that language's full index pipeline — neutralizer and
+  # fold — regardless of the query's script, exactly the cannot-miss
+  # argument with the language supplied by the caller instead of inferred
+  # from script. `search oubi --lang chu` still reaches damaskini's indexed
+  # "ubi"; the index side is untouched either way.
+  def test_query_forms_apply_the_asserted_languages_neutralizer_regardless_of_script
+    assert_includes Nabu::Normalize.query_forms("oubi", language: "chu"), "ubi"
+    assert_includes Nabu::Normalize.query_forms("oubi", language: "chu-Cyrs"), "ubi",
+                    "the assertion scopes by primary subtag, like every rule table"
+    assert_equal "ubi", Nabu::Normalize.search_form("oubi", language: "chu"),
+                 "index side unchanged: the diplomatic surface still folds to the skeleton"
+  end
+
+  def test_every_script_neutralization_declares_a_query_script_scope
+    assert_equal Nabu::Normalize::SCRIPT_NEUTRALIZATIONS.keys.sort,
+                 Nabu::Normalize::QUERY_NEUTRALIZATION_SCRIPTS.keys.sort,
+                 "every SCRIPT_NEUTRALIZATIONS entry must declare which query scripts it may touch"
+  end
+
+  # The doctrine sweep, extended to neutralizations: no neutralizer may alter
+  # a query whose dominant script is outside its declared scope. The latin
+  # probe carries "oubi" so the Cyrl Latin arm's cross-application is
+  # exercised non-vacuously (Deva/Xct are inventory-keyed to their own
+  # scripts and cross-apply as identity — the sweep keeps them honest should
+  # an arm ever grow).
+  def test_no_neutralizer_touches_a_query_in_a_script_outside_its_declared_scope
+    checked = 0
+    SCRIPT_PROBES.each do |script, probe|
+      union = Nabu::Normalize.query_forms(probe)
+      src = Nabu::Normalize.nfc(probe).downcase
+      generic = Nabu::Normalize.fold_diacritics(src)
+      Nabu::Normalize::SCRIPT_NEUTRALIZATIONS.each do |language, neutralizer|
+        next if Nabu::Normalize::QUERY_NEUTRALIZATION_SCRIPTS.fetch(language).include?(script)
+
+        cross = Nabu::Normalize.fold_diacritics(neutralizer.call(src).first)
+        next if cross == generic
+
+        checked += 1
+        refute_includes union, cross,
+                        "the #{language} neutralizer must not touch a #{script} query " \
+                        "(#{probe.inspect} → #{cross.inspect})"
+      end
+    end
+    assert_operator checked, :>=, 1,
+                    "the sweep must exercise at least one real cross-script arm (Cyrl ou→u × latin)"
   end
 
   # -- fold_with_map: char-aligned fold for KWIC (P8-3) ----------------------
@@ -546,10 +627,13 @@ class NormalizeTest < Minitest::Test
   # The round-trip property, both neutralized scripts: a query spelled the
   # way the source spells it folds — on some variant — to exactly the
   # indexed form. (The §9 union invariant, extended to neutralization.)
+  # P81-2: "oubi" left the bare grid — the Latin diplomatic surface only
+  # collapses ou→u under an asserted language now (the houlá→hula noise
+  # class); the language-asserted row below carries it instead.
   def test_query_forms_covers_every_neutralized_document_form
     samples = {
       "san" => ["धर्मन्", "नारायणं नमस्कृत्य", "kṛṣṇa"],
-      "chu" => %w[крьститъ vъsta щедроты oubi],
+      "chu" => %w[крьститъ vъsta щедроты],
       "orv" => %w[Петрушъка нашей],
       "bul" => %w[světъ поучение]
     }
@@ -558,6 +642,25 @@ class NormalizeTest < Minitest::Test
         assert_includes Nabu::Normalize.query_forms(text),
                         Nabu::Normalize.search_form(text, language: language),
                         "query_forms(#{text.inspect}) must cover the #{language} document form"
+      end
+    end
+  end
+
+  # The asserted-language union covers the document form for EVERY sample —
+  # including the Latin diplomatic spellings whose script no longer infers
+  # the neutralizer (P81-2).
+  def test_lang_asserted_query_forms_cover_every_neutralized_document_form
+    samples = {
+      "san" => %w[धर्मन् kṛṣṇa],
+      "chu" => %w[крьститъ vъsta oubi],
+      "orv" => %w[нашей],
+      "bul" => %w[поучение]
+    }
+    samples.each do |language, texts|
+      texts.each do |text|
+        assert_includes Nabu::Normalize.query_forms(text, language: language),
+                        Nabu::Normalize.search_form(text, language: language),
+                        "query_forms(#{text.inspect}, language: #{language}) must cover the document form"
       end
     end
   end

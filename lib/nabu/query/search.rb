@@ -35,7 +35,13 @@ module Nabu
     # even though the lat variant reads "iah") — and, since P79-1, a rule
     # only touches queries whose dominant script it declares
     # (Normalize::QUERY_FOLD_SCRIPTS: the gml α/β delete no longer folds a
-    # Greek αγαπη to γπη; conventions.md §9).
+    # Greek αγαπη to γπη; conventions.md §9). P81-2 extends the discipline
+    # to script neutralizations (Normalize::QUERY_NEUTRALIZATION_SCRIPTS:
+    # the Slavonic Latin-diplomatic ou→u arm no longer folds a Portuguese
+    # houlá to hula) — and an active --lang is passed through to
+    # Normalize.query_forms as the asserted language, so `search oubi
+    # --lang chu` still reaches damaskini's indexed "ubi" skeleton: the
+    # caller named the language, its full pipeline joins the union.
     #
     # == --lang rides IN the MATCH when the index carries it (P42-3)
     #
@@ -321,7 +327,7 @@ module Nabu
         @place_note = nil
         raise Nabu::Error, WORD_REFUSAL if word && self.class.word_refusal_for(query)
 
-        variants = Nabu::Normalize.query_forms(query.to_s)
+        variants = Nabu::Normalize.query_forms(query.to_s, language: lang)
         return [] if variants.first.strip.empty? # generic form first; extras never add characters
 
         filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),
@@ -410,7 +416,7 @@ module Nabu
         @word_grain = nil
         @place_note = nil
         @rank_note = SCAN_MODE_NOTE
-        variants = Nabu::Normalize.query_forms(query.to_s)
+        variants = Nabu::Normalize.query_forms(query.to_s, language: lang)
         return [] if variants.first.strip.empty?
 
         filters = { lang: lang, license: license, from: from, to: to, place: place_resolution(place),

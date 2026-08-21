@@ -455,13 +455,33 @@ rule only when the query's *dominant* script (`Normalize.query_script` —
 strict majority of script-classified characters; none or a tie reads
 `:unknown`) is in scope. The cannot-miss argument above survives because a
 query spelled the way L's documents spell it is written in L's script; an
-unknown/mixed-script query conservatively gets the generic fold and the
-script neutralizations only (neutralizers stay unscoped — they are
-their-own-script transcoders, no-ops elsewhere by construction). The INDEX
-side is untouched: `search_form` still applies exactly the document's own
-language rules in full, so no `text_normalized` byte changes and no
-rebuild. A doctrine sweep test pins the invariant: no rule may delete or
-alter foreign-script letters at query time.
+unknown/mixed-script query conservatively gets the generic fold only. The
+INDEX side is untouched: `search_form` still applies exactly the
+document's own language rules in full, so no `text_normalized` byte
+changes and no rebuild. A doctrine sweep test pins the invariant: no rule
+may delete or alter foreign-script letters at query time.
+
+**Neutralizations carry the same discipline (P81-2).** P79-1 left
+`SCRIPT_NEUTRALIZATIONS` unscoped on the assumption they are
+their-own-script transcoders, no-ops elsewhere — false twice over: the
+Cyrl table bridges TWO surfaces, and its Latin-diplomatic arm collapsed
+`ou`→`u` on ANY Latin query (owner repro 2026-08-20: `search houlá`, Gil
+Vicente's Portuguese hail, surfaced Romanian "hulă" passages), and the
+Deva transcoder's ZWNJ/ZWJ drop is script-neutral (it minted the fused
+variant of a Persian ZWNJ query that the ara fold deliberately refuses).
+Each neutralization now declares its query scripts
+(`Normalize::QUERY_NEUTRALIZATION_SCRIPTS`: san → Devanagari; chu/orv/bul
+→ Cyrillic; xct/bod/otb → Tibetan), applied only on a matching dominant
+script — with one rescue: an ASSERTED language (`search --lang`, passed
+through to `Normalize.query_forms language:`) overrides both scope tables
+for that language alone, joining its full index pipeline — neutralizer
+and fold — to the union regardless of script. So `search oubi --lang chu`
+still reaches damaskini's indexed "ubi" skeleton, while a bare Latin
+`oubi`/`houlá` no longer grows Slavonic variants; a Latin diplomatic
+query without `--lang` types the folded form the upstream lemma column
+itself writes ("ubija"). The neutralizer doctrine sweep pins the class
+closed: a new neutralization without a declared scope fails the suite,
+and no neutralizer may alter an out-of-scope-script query.
 
 **Lemmas fold by the same table (P7-5):** a lemma is a dictionary form in
 its passage's language, so the lemma index stores
