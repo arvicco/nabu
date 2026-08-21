@@ -1,6 +1,6 @@
 ---
 title: "The annals, the fathers, and the honest instruments"
-date: 2026-08-21 12:00:00 +0000
+date: 2026-08-21 06:00:00 +0000
 description: >-
   Three phases in one arc: the Korean desk opens with half a
   millennium of Joseon state records, the instruments get honest —
