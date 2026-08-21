@@ -3221,6 +3221,13 @@ module Nabu
         end
         census.except(:total).each do |slug, c|
           say "  #{slug}: #{c[:rows_updated]} rows gained refs across #{c[:names_applied]} names"
+          # P81 U-3: a below-certain registry decision no longer dies at
+          # apply — each applied low-certainty name reports its rows with
+          # the Certainty gloss, upstream word verbatim.
+          (c[:uncertain] || {}).each do |name, info|
+            say "    #{name} — #{info[:rows]} #{info[:rows] == 1 ? 'row' : 'rows'} " \
+                "(#{Nabu::Certainty.gloss(:places_certainty, info[:certainty])})"
+          end
         end
         say "place apply: #{census[:total]} axis rows updated"
       rescue Nabu::CatalogBusyError => e
@@ -5557,18 +5564,21 @@ module Nabu
             "(text match, no Pleiades id — not counted above): #{format_source_counts(result.unlinked)}"
       end
 
+      # P81 U-3 (survey A3): a gazetteer's own "?"-suffixed title — the
+      # Barrington less-certain lineage — glosses right after the title via
+      # the shared cataloguer's-"?" helper; unmarked titles stay ink-free.
       def print_place_card(card, dump_loaded:)
         place = card.place
         if card.pleiades_id.nil?
           # P66-2: a namespaced ref card (tm:2810, cigs:GIR) — the title
           # resolves through that gazetteer's own index slice where derived.
           if place
-            say "#{place.title}, #{card.ref}#{place_card_tail(place)}"
+            say "#{place.title}#{place_query_gloss(place.title)}, #{card.ref}#{place_card_tail(place)}"
           else
             say "#{card.ref} — not in the derived place index"
           end
         elsif place
-          say "#{place.title}, Pleiades #{place.id}#{place_card_tail(place)}"
+          say "#{place.title}#{place_query_gloss(place.title)}, Pleiades #{place.id}#{place_card_tail(place)}"
         elsif dump_loaded
           say "Pleiades #{card.pleiades_id} — not in the local gazetteer dump"
         else

@@ -1946,8 +1946,16 @@ module Nabu
         end
         place = card.place
         if place
-          base.merge(title: place.title, place_types: place.place_types,
-                     time_periods: place.time_periods, lat: place.lat, lon: place.lon)
+          base = base.merge(title: place.title, place_types: place.place_types,
+                            time_periods: place.time_periods, lat: place.lat, lon: place.lon)
+          # P81 U-3 (survey A3): a gazetteer's own "?"-suffixed title — the
+          # Barrington less-certain lineage — merges the cataloguer's-"?"
+          # certainty object beside the verbatim title; unmarked titles
+          # stay byte-identical (the empty-hash idiom).
+          if place.title.to_s.strip.end_with?("?")
+            base[:title_certainty] = Nabu::Certainty.payload(:cataloguer_query, "?").fetch(:certainty)
+          end
+          base
         elsif dump_loaded
           base.merge(note: "id not in the local gazetteer dump")
         else
