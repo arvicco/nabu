@@ -1,0 +1,66 @@
+{
+  "url": "https://mlat.uzh.ch",
+  "fetched_at": "2026-08-21T10:53:32Z",
+  "sha256": "2f6a3d2afa90f106b8b8190c7448ae160acf46e369cfe35a83bc2a2d40c4f780",
+  "catalog_schema": 2,
+  "corpora": [
+    {
+      "idno": "38",
+      "name": "Patrologia Latina",
+      "texts_count": 5277,
+      "words_count": 85539587
+    }
+  ],
+  "catalog": {
+    "2028": {
+      "texts_count": 1,
+      "born": 850,
+      "died": null,
+      "texts": [
+        {
+          "idno": "10454",
+          "accessible": true,
+          "work_composition": [
+            892,
+            892
+          ]
+        }
+      ]
+    },
+    "2034": {
+      "texts_count": 1,
+      "born": 992,
+      "died": 1050,
+      "texts": [
+        {
+          "idno": "10468",
+          "accessible": true,
+          "work_composition": [
+            1000,
+            1000
+          ]
+        }
+      ]
+    },
+    "2173": {
+      "texts_count": 1,
+      "born": 1100,
+      "died": 1199,
+      "texts": [
+        {
+          "idno": "10821",
+          "accessible": true,
+          "work_composition": [
+            1130,
+            1130
+          ]
+        }
+      ]
+    }
+  },
+  "refused": [],
+  "malformed": [],
+  "texts": 3,
+  "fetched": 3,
+  "cached": 0
+}

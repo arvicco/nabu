@@ -50,6 +50,8 @@ module Nabu
           "ctilc" => :structured, # P80-8: the ANY publication year, one-year envelope
           "ref" => :structured, # P81-1: the header date lane (clean parses) with the
           #                       century-half time grid as the prose fallback
+          "corpus-corporum" => :structured, # P81-1: work_composition / author life band
+          #                                   (fetch checkpoint) / teiHeader author_date
           "bfm" => :iso_keys,
           "croala" => :year_range,
           "ebl" => :period_label
