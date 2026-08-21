@@ -113,6 +113,7 @@ module Nabu
     # born/died + per-work work_composition years ride the catalog rows).
     # A checkpoint from an earlier schema is never reused — see
     # #previous_catalog.
+    # const: a state-file format version, not a corpus claim
     CATALOG_SCHEMA = 2
 
     # Refusal-rate ceiling before the crawl calls the endpoint moved
@@ -297,8 +298,7 @@ module Nabu
     end
 
     def work_composition(page)
-      years = event_years(page, "work_composition")
-      years && years.minmax
+      event_years(page, "work_composition")&.minmax
     end
 
     def event_years(page, what)
