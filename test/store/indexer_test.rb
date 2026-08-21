@@ -204,6 +204,59 @@ module Store
                    "new syncs land in the old shape unchanged"
     end
 
+    # -- the source column (P81-3) -------------------------------------------
+    # passages_fts carries each row's SOURCE SLUG as one indexed sentinel
+    # token ("0src" + folded slug) so Query::Search can put --source/--axis
+    # INSIDE the MATCH — the same starvation genus as P42-3's language
+    # column, found live 2026-08-20 (`search 王 --source sillok` empty while
+    # sillok holds matches: the global top-window held none).
+
+    # The pre-P81-3 table shape (language column present, no source) — the
+    # owner's live fulltext file until the next full rebuild.
+    PRE_SOURCE_FTS_DDL = <<~SQL
+      CREATE VIRTUAL TABLE passages_fts USING fts5(
+        text_normalized,
+        language,
+        urn UNINDEXED,
+        passage_id UNINDEXED,
+        tokenize = 'unicode61 remove_diacritics 2'
+      )
+    SQL
+
+    def test_fresh_build_carries_the_source_sentinel_token
+      other = Nabu::Store::Source.create(
+        slug: "nabu-data", name: "N", adapter_class: "TestAdapter", license_class: "open"
+      )
+      make_passage(make_document(urn: "urn:d:1"), urn: "urn:d:1:1", text_normalized: "aurora", sequence: 0)
+      make_passage(make_document(urn: "urn:d:2", source: other),
+                   urn: "urn:d:2:1", text_normalized: "aurora", sequence: 0)
+      rebuild!
+
+      assert_includes fts.columns, :source, "a from-scratch build mints the P81-3 column"
+      assert_equal "0srcs", fts.where(urn: "urn:d:1:1").get(:source)
+      assert_equal "0srcnabudata", fts.where(urn: "urn:d:2:1").get(:source),
+                   "downcased, non-alphanumerics stripped — one token per slug, never several"
+      hits = match(%{aurora AND source : ("0srcnabudata")})
+      assert_equal %w[urn:d:2:1], hits.map { |row| row.fetch(:urn) },
+                   "the sentinel token filters the MATCH itself — the P81-3 point"
+    end
+
+    def test_incremental_refresh_writes_the_pre_source_shape_unchanged
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      # Downgrade to the pre-P81-3 shape (language yes, source no): the
+      # owner's live file keeps taking incremental syncs until the rebuild.
+      @fulltext.drop_table(:passages_fts)
+      @fulltext.run(PRE_SOURCE_FTS_DDL)
+
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      assert_equal 2, refresh!
+      refute_includes fts.columns, :source, "an incremental sync never upgrades the table shape"
+      assert_equal "0langgrc", fts.where(urn: "urn:d:s:2").get(:language),
+                   "the language token still writes into a language-bearing table"
+    end
+
     # -- the lemma index (P7-5) ----------------------------------------------
 
     def test_lemma_rows_built_from_stored_annotations
