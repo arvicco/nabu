@@ -24,11 +24,14 @@ module Nabu
     CodeRow = Data.define(:code, :docs, :resolution, :stages)
     FacetRow = Data.define(:facet, :distinct, :docs, :top)
     # P61-2, the layer sections: dating (bounds coverage + the pending
-    # sniff — date-shaped metadata keys on UNDATED docs), places (the
-    # ref/name split + the latent-ref sniff — gazetteer URLs in raw
-    # metadata on unlinked docs), script (suffixed-code census with the
-    # ScriptCheck byte verdict on the held surface).
-    DatingLayer = Data.define(:dated, :total, :candidates)
+    # sniff — date-shaped metadata keys on UNDATED docs; P81-1 extends it
+    # one level down with the annotation sniff — date-shaped ANNOTATION
+    # keys on undated docs' passages, the NIKH entry shape the metadata
+    # sniff was blind to), places (the ref/name split + the latent-ref
+    # sniff — gazetteer URLs in raw metadata on unlinked docs), script
+    # (suffixed-code census with the ScriptCheck byte verdict on the held
+    # surface).
+    DatingLayer = Data.define(:dated, :total, :candidates, :annotation_candidates)
     PlacesLayer = Data.define(:linked, :named, :total, :latent)
     ScriptRow = Data.define(:code, :docs, :surface, :share)
     Report = Data.define(:slug, :codes, :facets, :dating,
@@ -120,7 +123,28 @@ module Nabu
       end
       DatingLayer.new(dated: live_docs(source_id).where(id: dated_ids).count,
                       total: live_docs(source_id).count,
-                      candidates: candidates.sort_by { |_, count| -count })
+                      candidates: candidates.sort_by { |_, count| -count },
+                      annotation_candidates: annotation_date_sniff(source_id, dated_ids))
+    end
+
+    # The P81-1 annotation sniff: date-shaped keys in the PASSAGE
+    # annotations of undated docs (the NIKH entry shape — every sillok/
+    # bibyeonsa entry carries "date", none of it visible to the
+    # metadata-key sniff above). Same cap, same advisory nature.
+    def annotation_date_sniff(source_id, dated_ids)
+      candidates = Hash.new(0)
+      @catalog[:passages]
+        .where(document_id: live_docs(source_id).exclude(id: dated_ids).select(:id), withdrawn: false)
+        .exclude(annotations_json: nil).exclude(annotations_json: "{}")
+        .limit(SNIFF_SAMPLE).select_map(:annotations_json).each do |raw|
+          annotations = JSON.parse(raw)
+          next unless annotations.is_a?(Hash)
+
+          annotations.each_key { |key| candidates[key] += 1 if key.match?(DATE_KEY) }
+      rescue JSON::ParserError
+        next
+        end
+      candidates.sort_by { |_, count| -count }
     end
 
     def places_layer(source_id)

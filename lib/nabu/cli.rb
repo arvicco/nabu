@@ -603,6 +603,11 @@ module Nabu
           say "    pending sniff — date-shaped metadata keys on undated docs: #{keys} " \
               "(sampled ≤#{Nabu::LectSuggest::SNIFF_SAMPLE})"
         end
+        if dating.annotation_candidates.any?
+          keys = dating.annotation_candidates.first(6).map { |key, count| "#{key} (#{count})" }.join(", ")
+          say "    annotation sniff — date-shaped keys on undated docs' passages: #{keys} " \
+              "(sampled ≤#{Nabu::LectSuggest::SNIFF_SAMPLE} passages)"
+        end
         places = report.places_layer
         say "  places layer: #{places.linked} ref-linked · #{places.named} named · " \
             "#{places.total} docs#{" · #{places.latent} LATENT refs in raw metadata" if places.latent.positive?}"
