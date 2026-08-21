@@ -219,15 +219,30 @@ module Nabu
       #   widening over the case-sensitive catalog WHERE, documented on
       #   Query::Search).
       #
+      # == The source column (P81-3) — index-side --source/--axis
+      #
+      # The SAME starvation genus, found live 2026-08-20: `search 王 --source
+      # sillok` returned empty because --source post-filtered the bounded
+      # global window, which the Han-dense cbeta/kanripo shelves had filled.
+      # `source` holds one sentinel token per row ("0src" + the slug
+      # downcased with non-alphanumerics stripped — "sillok" → "0srcsillok",
+      # "nabu-data" → "0srcnabudata"), and Query::Search composes
+      # `... AND source : ("0srcsillok")`. --axis needs no column of its
+      # own: an axis is a registry TAG over the source list, already
+      # expanded to member slugs CLI-side, so it compiles to an OR of
+      # source tokens inside the one column filter.
+      #
       # The column appears when this table is next built FROM SCRATCH (the
       # owner's scheduled full rebuild). Incremental refreshes write the
       # shape the live table actually has (insert_passage_batches feature-
-      # detects), so a pre-P42-3 index keeps taking syncs unchanged until
-      # then, and Query::Search serves the old catalog-side path against it.
+      # detects), so a pre-P42-3/P81-3 index keeps taking syncs unchanged
+      # until then, and Query::Search serves the old catalog-side path
+      # against it.
       CREATE_TABLE = <<~SQL
         CREATE VIRTUAL TABLE passages_fts USING fts5(
           text_normalized,
           language,
+          source,
           urn UNINDEXED,
           passage_id UNINDEXED,
           tokenize = 'unicode61 remove_diacritics 2'
@@ -237,6 +252,10 @@ module Nabu
       # The language sentinel-token prefix (CREATE_TABLE note): a leading
       # digit guarantees no natural-language token ever collides.
       LANGUAGE_TOKEN_PREFIX = "0lang"
+
+      # The source sentinel-token prefix (P81-3, source-column note): same
+      # leading-digit disjointness, distinct from the language namespace.
+      SOURCE_TOKEN_PREFIX = "0src"
 
       # Trigram FTS5 DDL (class note; same raw-DDL exception as CREATE_TABLE —
       # virtual-table DDL has no Sequel API). Same column shape as
@@ -294,7 +313,8 @@ module Nabu
         count = 0
         timed(profile, :fts_lemma) do
           fulltext.transaction do
-            count, _lemmas, chars = insert_passage_batches(fulltext, live_passages(catalog), tiers)
+            count, _lemmas, chars = insert_passage_batches(fulltext, live_passages(catalog), tiers,
+                                                           source_slugs(catalog))
             write_char_postings(fulltext, chars)
           end
           # P36-2: the lemma table was created BARE (create_lemma_table); build
@@ -414,7 +434,7 @@ module Nabu
             delete_fts_rows(fulltext, TABLE, ids)
             count, inserted, chars = insert_passage_batches(
               fulltext, live_passages(catalog).where(Sequel[:documents][:source_id] => source_id),
-              source_tiers(catalog, lemma_tiers || {})
+              source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog)
             )
             lemmas_changed = deleted.positive? || inserted.positive?
             LemmaFrequencies.apply_delta(fulltext, before: before, after: LemmaFrequencies.snapshot(fulltext, urns))
@@ -538,6 +558,15 @@ module Nabu
         LANGUAGE_TOKEN_PREFIX + code.to_s.downcase.gsub(/[^a-z0-9]/, "")
       end
 
+      # The source column's one-token search value for +slug+ (P81-3,
+      # source-column note): the language_token mint over source slugs.
+      # Slugs are lowercase-and-dashes by house convention, so the strip
+      # only ever removes separators; the write side and Query::Search's
+      # `source :` filter share this mint, fold-both-sides.
+      def source_token(slug)
+        SOURCE_TOKEN_PREFIX + slug.to_s.downcase.gsub(/[^a-z0-9]/, "")
+      end
+
       # Whether the LIVE fts table carries the P42-3 language column — the
       # write-side feature detect (insert_passage_batches) and Query::Search's
       # read-side one. A fresh rebuild! always creates it; an incremental
@@ -547,17 +576,29 @@ module Nabu
         fulltext[TABLE].columns.include?(:language)
       end
 
+      # Whether the LIVE fts table carries the P81-3 source column — same
+      # contract as fts_language_column?, same next-full-rebuild arrival.
+      def fts_source_column?(fulltext)
+        fulltext[TABLE].columns.include?(:source)
+      end
+
       # One streaming pass feeding the FTS and lemma tables (shared by
       # rebuild! and refresh_source!). Returns [passage count, lemma-row
       # count]. The fts row shape is detected ONCE from the live table
-      # (CREATE_TABLE note): a pre-P42-3 table takes language-less rows.
-      def insert_passage_batches(fulltext, dataset, tiers)
+      # (CREATE_TABLE note): a pre-P42-3 table takes language-less rows, a
+      # pre-P81-3 one source-less rows. +slugs+ maps source_id → slug (the
+      # source_slugs map) for the source token; nil suppresses the column
+      # even against a source-bearing table (no caller does today).
+      def insert_passage_batches(fulltext, dataset, tiers, slugs = nil)
         with_language = fts_language_column?(fulltext)
+        with_source = slugs && fts_source_column?(fulltext) ? slugs : nil
         count = 0
         lemma_count = 0
         chars = Hash.new(0)
         dataset.each_slice(BATCH_SIZE) do |batch|
-          fulltext[TABLE].multi_insert(batch.map { |row| fts_row(row, language: with_language) })
+          fulltext[TABLE].multi_insert(
+            batch.map { |row| fts_row(row, language: with_language, source_slugs: with_source) }
+          )
           rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers) }
           fulltext[LEMMA_TABLE].multi_insert(rows)
           batch.each { |row| accumulate_char_postings(chars, row) }
@@ -972,6 +1013,13 @@ module Nabu
           )
       end
 
+      # { source_id => slug } for the P81-3 source token (fts_row) — a
+      # handful of rows, resolved once per rebuild/refresh, exactly the
+      # source_tiers pattern.
+      def source_slugs(catalog)
+        catalog[:sources].select_map(%i[id slug]).to_h
+      end
+
       # { source_id => tier } from the catalog's sources and the registry's
       # non-gold map (P26-0). Absent slug = gold; the whole map is a handful
       # of rows, resolved once per rebuild.
@@ -1015,12 +1063,15 @@ module Nabu
       end
 
       # The passages_fts row: index_row plus — when the live table carries
-      # the P42-3 column — the language sentinel token. The language-less
-      # branch keeps incremental syncs into a pre-rebuild file unchanged.
-      def fts_row(row, language:)
-        return index_row(row) unless language
-
-        index_row(row).merge(language: language_token(row.fetch(:language)))
+      # them — the P42-3 language sentinel token and the P81-3 source one
+      # (+source_slugs+ is the source_id → slug map, or nil against a
+      # pre-P81-3 table). The bare branches keep incremental syncs into a
+      # pre-rebuild file unchanged.
+      def fts_row(row, language:, source_slugs: nil)
+        base = index_row(row)
+        base = base.merge(language: language_token(row.fetch(:language))) if language
+        base = base.merge(source: source_token(source_slugs.fetch(row.fetch(:source_id)))) if source_slugs
+        base
       end
 
       # The passage's lemma-index rows: one per distinct FOLDED lemma its
