@@ -232,6 +232,7 @@ module Nabu
 
       Store::FacetBuilder.refresh_source!(catalog: @db, slug: entry.slug)
       Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: entry.slug)
+      Store::TimelineBuilder::NikhEntryDates.refresh_source!(catalog: @db, slug: entry.slug)
     end
 
     # P42-4: after a BULK load, refresh the query-planner statistics — the
