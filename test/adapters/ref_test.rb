@@ -116,7 +116,6 @@ class RefTest < Minitest::Test
     assert_equal({ "subcorpus" => { "value" => "ref-mlu" } }, md["facets"],
                  "the subcorpus rides as a facet — the ref-enhg lect rule's key (Q39)")
     assert_equal "ReF.MLU", md["corpus"], "the header's own corpus line, verbatim"
-    assert_equal "1487/88", md["date"]
     assert_equal "Regensburg", md["place"]
     assert_equal %w[oberdeutsch ostoberdeutsch nordbairisch], md["dialects"],
                  "the language-type → language-region → language-area chain, coarse to fine"
@@ -129,6 +128,42 @@ class RefTest < Minitest::Test
     assert_equal({ "lat" => 4 }, f240["shifttags"])
     assert_equal 12, f240["comments"], "swallowed transcriber apparatus is censused, never silent"
     refute parse("urn:nabu:ref:f011").metadata.key?("shifttags"), "empty census stays silent"
+  end
+
+  # --- parse: the dating envelope (P81-1) -------------------------------------
+  #
+  # The header's date lane in its four censused forms (all real fixture
+  # headers): slash pair "1487/88", exact "1493", and the two prose forms
+  # ("3. Viertel 14. Jh.", "1. Hälfte 16. Jh.") that fall back to
+  # upstream's own century-half grid (time "14,2" = 14th c., 2nd half).
+  # Bounds are never guessed: a clean date parse rules; anything else
+  # takes the grid, which every one of the 190 texts carries.
+
+  def test_slash_pair_date_becomes_a_two_year_envelope
+    md = parse("urn:nabu:ref:f011").metadata
+    assert_equal({ "not_before" => 1487, "not_after" => 1488, "raw" => "1487/88" }, md["date"])
+    assert_equal "15,2", md["time"], "the grid lane still rides verbatim"
+  end
+
+  def test_exact_year_date_becomes_a_one_year_envelope
+    md = parse("urn:nabu:ref:f313").metadata
+    assert_equal({ "not_before" => 1493, "not_after" => 1493, "raw" => "1493" }, md["date"])
+  end
+
+  def test_prose_date_falls_back_to_the_century_half_grid
+    md = parse("urn:nabu:ref:f240").metadata
+    assert_equal({ "not_before" => 1350, "not_after" => 1400,
+                   "raw" => "3. Viertel 14. Jh. (time 14,2)" }, md["date"],
+                 "prose dating is never number-scraped — the grid bounds it, " \
+                 "and the raw names both claims")
+    md166 = parse("urn:nabu:ref:f166").metadata
+    assert_equal({ "not_before" => 1500, "not_after" => 1550,
+                   "raw" => "1. Hälfte 16. Jh. (time 16,1)" }, md166["date"])
+  end
+
+  def test_ref_is_registered_for_the_structured_metadata_dates_shape
+    assert_equal :structured, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["ref"],
+                 "the P81-1 harvest: the date envelope reaches document_axes at load"
   end
 
   def test_a_non_fnhd_language_header_quarantines_the_document

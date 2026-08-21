@@ -48,6 +48,8 @@ module Nabu
           "bdcamoes" => :structured, # P80-7: the header's YY: publication year, per work;
           #                            unresolved "18??" marks carry raw only and mint nothing
           "ctilc" => :structured, # P80-8: the ANY publication year, one-year envelope
+          "ref" => :structured, # P81-1: the header date lane (clean parses) with the
+          #                       century-half time grid as the prose fallback
           "bfm" => :iso_keys,
           "croala" => :year_range,
           "ebl" => :period_label
