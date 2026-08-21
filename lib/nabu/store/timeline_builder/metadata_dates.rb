@@ -29,9 +29,15 @@ module Nabu
       #     else (ca., floruit prose) is skipped honestly.
       #   :period_label — top-level "period" Assyriological labels banded
       #     through the ruled config/period_bands.yml table (ebl, P62-0 —
-      #     the P61-1 sweep's pending served; unruled labels mint nothing;
-      #     the 40 Seleucid day/month objects band coarsely, exact era
-      #     conversion deliberately out).
+      #     the P61-1 sweep's pending served; unruled labels mint nothing).
+      #     P81-1 adds the era ladder ABOVE the band for ebl's date
+      #     objects: a Seleucid-era year converts exactly (SE Y = the two
+      #     Julian years (312−Y)/(311−Y) BCE; month/day ride raw, never a
+      #     sub-year bound), a regnal object bands to the king's own
+      #     stated reign span ("555–539" descending BCE; regnal-YEAR
+      #     arithmetic stays deliberately out — accession conventions are
+      #     judgment, the envelope is upstream's claim); broken/uncertain
+      #     years fall through to the period band.
       # Audited and deliberately ABSENT: ogham ("date" =>
       # {"text" => "Fifth century…"} free prose, 133 docs).
       module MetadataDates
@@ -153,8 +159,65 @@ module Nabu
         end
 
         def period_label(meta)
+          seleucid_era(meta["date"]) || king_reign(meta["date"]) || period_band(meta)
+        end
+
+        def period_band(meta)
           band = Nabu::PeriodBands.default&.lookup(meta["period"])
           band ? [band[0], band[1], meta["period"]] : [nil, nil, nil]
+        end
+
+        # The exact Seleucid conversion (P81-1). SE 1 begins Nisanu
+        # (spring) 311 BCE; a clean SE year Y therefore spans the two
+        # Julian years (312−Y) and (311−Y) BCE, crossing into CE with no
+        # year 0 (SE 311 = 1 BCE–1 CE). Year grain only — the Babylonian
+        # lunar months drift against Julian years, so month/day refine
+        # the RAW, never the bounds.
+        def seleucid_era(date)
+          return nil unless date.is_a?(Hash) && date["isSeleucidEra"] == true
+
+          se = clean_component(date["year"])
+          return nil if se.nil? || !se.positive?
+
+          tail = %w[month day].filter_map do |part|
+            value = clean_component(date[part])
+            value && "#{part} #{value}"
+          end
+          [signed_from_bce(312 - se), signed_from_bce(311 - se), (["SE #{se}"] + tail).join(", ")]
+        end
+
+        # A regnal date object bands to the king's OWN reign span — the
+        # "555–539" upstream string, unsigned BCE, descending. Anything
+        # else (ascending, era-crossing, prose) is ambiguous and skips to
+        # the period band.
+        KING_REIGN = /\A(\d{1,4})\s*[–-]\s*(\d{1,4})\z/
+        def king_reign(date)
+          king = date.is_a?(Hash) ? date["king"] : nil
+          return nil unless king.is_a?(Hash)
+
+          match = KING_REIGN.match(king["date"].to_s.strip) or return nil
+
+          from = Integer(match[1], 10)
+          to = Integer(match[2], 10)
+          return nil unless from > to # descending = unambiguously BCE
+
+          [-from, -to, "#{king['name']} (#{king['date']})".strip]
+        end
+
+        # A date-object component's integer value, nil when broken,
+        # uncertain or non-numeric — never a guessed digit.
+        def clean_component(field)
+          return nil unless field.is_a?(Hash)
+          return nil if field["isBroken"] || field["isUncertain"]
+
+          value = field["value"].to_s
+          /\A\d+\z/.match?(value) ? Integer(value, 10) : nil
+        end
+
+        # Signed historical year from a BCE magnitude that may cross the
+        # era: 93 → −93 (93 BCE), 0 → 1 (1 CE — there is no year 0).
+        def signed_from_bce(bce)
+          bce >= 1 ? -bce : 1 - bce
         end
 
         def structured(meta)
