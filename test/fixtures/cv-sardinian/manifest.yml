@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# A TRIM of the full sentence-collector artifact (whole: false — a fresh
+# GET returns the full file and is fetched for URL-liveness only, never
+# byte-compared). Lines are byte-verbatim; like the full artifact, the
+# fixture ends WITHOUT a trailing newline (the documented quirk). See the
+# README for provenance and the full-artifact sha256.
+source: cv-sardinian
+adapter_test: test/adapters/cv_sardinian_test.rb
+retrieved: 2026-08-19
+files:
+  - path: sentence-collector.txt
+    url: https://raw.githubusercontent.com/common-voice/common-voice/main/server/data/sc/sentence-collector.txt
+    whole: false
+    trim: upstream lines 1-10 plus the final line 5237 byte-verbatim, no trailing
+      newline (265,677 B / 5,237 lines -> 11 lines)

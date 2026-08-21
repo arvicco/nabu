@@ -1,0 +1,43 @@
+﻿<DOCUMENT>
+<OBRA id="41">
+<AUTOR>Alcover, Joan</AUTOR>
+<TÍTOL>Poemes bíblics</TÍTOL>
+<ANY>1918</ANY>
+<CLASSIFICACIÓ_TEXTUAL llengua="LIT" gènere="P" tema="" subtema="" traducció="no" variant="baleàric" />
+</OBRA>
+<TEXT>Henoc  
+/An En Miquel d'Unamuno\  
+I  
+Henoc és la ciutat mare  
+de les ciutats d'aquest món.  
+Viatger, ningú sap ara  
+les ruïnes a on són.
+
+A l'orient fou bastida  
+del carme isolat i buid  
+on penja l'inútil fruit  
+de l'arbre d'eterna vida.
+
+I dels vergers primitius,  
+a l'hora silenciosa,  
+creia sentir, enyorosa,  
+la remor dels quatre rius.
+
+II  
+Temps enrera, no hi havia  
+fites, partions ni tanques:  
+per tots, com la llum del dia,  
+eren els fruits de les branques.
+
+Temps de pau i germanor,  
+que les famílies humanes  
+dormien en les cabanes  
+obertes, sense temor.
+
+Llavors s'alletava el nin  
+als pits de la bèstia brava,  
+i la fera els peus llepava  
+de la mare de Caín.
+
+</TEXT>
+</DOCUMENT>

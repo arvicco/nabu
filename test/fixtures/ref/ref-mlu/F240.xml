@@ -1,0 +1,2171 @@
+<?xml version='1.0' encoding='utf-8'?>
+<text id="F240">
+  <cora-header sigle="F240" name="Thüringer Spiele"/>
+  <header>corpus: ReF.MLU
+language-area: thüringisch
+language-region: ostmitteldeutsch
+language-type: mitteldeutsch
+genre: V
+medium: Handschrift
+time: 14,2
+reference: Hs.: Blatt (r/v), Kolumne (a/b), Zeile
+corpus-sigle: F240; I-Da-V1,H
+text: Thüringer Spiele
+text-author: -
+text-type: UN (Unterhaltende Literatur)
+assignment_quality: -
+hoffmann_wetter_nr: -
+library: Mühlhausen, Stadtarchiv
+library-shelfmark: Ms. 87/20
+date: 3. Viertel 14. Jh.
+place: -
+text-place: -
+printer: -
+edition: Beckers, O. (Hrsg.): Das Spiel von den zehn Jungfrauen und das Katharinenspiel, in: Vogt, F. (Hrsg.): Germanische Abhandlungen 24, begründet von Weinhold, K., Breslau 1905
+size: -
+language: fnhd
+literature: -
+notes-transcription: - Vor dem Text, der auf der rechten Spalte des ersten Blattes beginnt, steht eine lateinische Kapitelliste mit römischen Seitenzahlen, diese wurde nicht mittranskribiert; - Der Text ist voller Abkürzungen, die nicht mit den Konventionen auszulösen waren, dies wurde jeweils kommentiert (xx abgekürzt); - das häufig vorkommende ‚respondet‘ (z.B. 01,11b, 01,23b), aufgelöst: respondet +K respondet: abgekürzt @K, dies wird ab Zeile 02, 19a nicht mehr eigens vermerkt; -‚dicit‘: ‚d‘ mit einem rechts darüber geschriebenen ‚t‘ (z.B. 01,24b – aufgelöst: ‚d\/t‘; - populus/-um: aufgelöst: p\/p\/s bzw. p\/p\/m (z.b. 01,54a); - ‚iuncfrowe‘ usw. – das ‚o‘ steht immer über der Zeile, dies wird ab Zeile 02,21a nicht mehr eigens vermerkt; - ‚Silete‘: häufig abgekürzt: $it (z.B. 02,15b, 02,21b); - vor allem bei den Bezeichnungen der Sprecher; - Servus (vgl. 01,11b) S’ru%9; - Maxentius: 01,11b: Maxe\-%9; 01,21b: Maxe%9; - Katherina z.B.. 01,22b, dieser Name wurde immer (und fast immer unterschiedlich, je nach Platz in der Zeile) abgekürzt. Dies wurde nicht mehr eigens kommentiert; - Dominica persona: wurde auch IMMER abgekürzt (z.B. 03,02b), dies wurde auch nicht mehr eigens vermerkt; - Cursates: C%2$ates (z.B. 02,06a), wobei hier häufig die Endung fehlt (z.B. 02,42a, 02,27b); - Nach den Sprecherwechseln sind die Namen der Sprecher usw. immer unterstrichen (fast immer steht dies in L-Klammern). Dies wurde nicht mehr eigens kommentiert; - zwei verschiedene r-Graphien (normales r und rundes r); in der Transkription nicht unterschieden; - An drei Stellen ( 01,01b-01,05b und 03,48a-03,50a und 06,38a-06,41a) ist der Text durch die vielen verschiedenen und individuellen Abkürzungen kaum noch verständlich aufzulösen und wurde aus der Edition übernommen; hierbei handelt es sich in beiden Fällen um lateinische Absätze
+abbr_ddd: ThueFes
+extent: FnhdC: -; compl: Volltext (5 Blatt)
+extent-size: FnhdC: -; compl: 4.564 WF</header>
+  <layoutinfo>
+    <page id="p2" no="090" range="c2"/>
+    <column id="c2" range="l55..l157"/>
+    <line id="l55" name="01" range="t432_d1..t442_d1"/>
+    <line id="l56" name="02" range="t443_d1..t450_d1"/>
+    <line id="l57" name="03" range="t451_d1..t471_d1"/>
+    <line id="l58" name="04" range="t472_d1..t480_d2"/>
+    <line id="l59" name="05" range="t480_d3..t490_d1"/>
+    <line id="l60" name="06" range="t491_d1..t498_d1"/>
+    <line id="l61" name="07" range="t499_d1..t506_d1"/>
+    <line id="l62" name="08" range="t507_d1..t515_d1"/>
+    <line id="l63" name="08" range="t516_d1..t525_d1"/>
+    <line id="l64" name="09" range="t525_d2..t535_d1"/>
+    <line id="l65" name="10" range="t535_d2..t543_d1"/>
+    <line id="l66" name="11" range="t544_d1..t553_d1"/>
+    <line id="l67" name="12" range="t554_d1..t570_d1"/>
+    <line id="l68" name="13" range="t571_d1..t581_d1"/>
+    <line id="l69" name="14" range="t582_d1..t589_d1"/>
+    <line id="l70" name="15" range="t590_d1..t606_d1"/>
+  </layoutinfo>
+  <shifttags>
+    <lat range="t446..t448"/>
+    <lat range="t491..t493"/>
+    <lat range="t515..t516"/>
+    <lat range="t565..t566"/>
+  </shifttags>
+  <token id="t432" trans="uch">
+    <tok_dipl id="t432_d1" trans="uch" utf="uch"/>
+    <tok_anno id="t432_m1" trans="uch" utf="uch" ascii="uch">
+      <lemma tag="ihr"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Pl.*.Dat"/>
+      <lemmaId tag="[GI00142]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GI00142"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t433" trans="$teit.">
+    <tok_dipl id="t433_d1" trans="$teit." utf="ſteit."/>
+    <tok_anno id="t433_m1" trans="$teit" utf="ſteit" ascii="steit">
+      <lemma tag="stan"/>
+      <lemmaId tag="[GS40362]"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS40362"/>
+      <annoType tag="auto"/>
+    </tok_anno>
+    <tok_anno id="t433_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t434" trans="daz">
+    <tok_dipl id="t434_d1" trans="daz" utf="daz"/>
+    <tok_anno id="t434_m1" trans="daz" utf="daz" ascii="daz">
+      <lemma tag="dasz"/>
+      <pos tag="KOUS"/>
+      <lemmaId tag="[GD00875]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD00875"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t435" trans="$age">
+    <tok_dipl id="t435_d1" trans="$age" utf="ſage"/>
+    <tok_anno id="t435_m1" trans="$age" utf="ſage" ascii="sage">
+      <lemma tag="sagen"/>
+      <pos tag="VVINF"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GS00613]"/>
+      <posLemma tag="VV"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS00613"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t436" trans="uch">
+    <tok_dipl id="t436_d1" trans="uch" utf="uch"/>
+    <tok_anno id="t436_m1" trans="uch" utf="uch" ascii="uch">
+      <lemma tag="ihr"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Pl.*.Dat"/>
+      <lemmaId tag="[GI00142]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GI00142"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t437" trans="al">
+    <tok_dipl id="t437_d1" trans="al" utf="al"/>
+    <tok_anno id="t437_m1" trans="al" utf="al" ascii="al">
+      <lemma tag="all"/>
+      <pos tag="DIA"/>
+      <morph tag="Fem.Nom.Sg"/>
+      <lemmaId tag="[GA02367]"/>
+      <posLemma tag="DI"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GA02367"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t438" trans="uffe\-bar.">
+    <tok_dipl id="t438_d1" trans="uffe\-bar." utf="uffēbar."/>
+    <tok_anno id="t438_m1" trans="uffe\-bar" utf="uffēbar" ascii="uffenbar">
+      <annoType tag="auto"/>
+    </tok_anno>
+    <tok_anno id="t438_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t439" trans="iz">
+    <tok_dipl id="t439_d1" trans="iz" utf="iz"/>
+    <tok_anno id="t439_m1" trans="iz" utf="iz" ascii="iz">
+      <lemma tag="er"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.Neut.Nom"/>
+      <lemmaId tag="[GE05989]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GE05989"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t440" trans="ist">
+    <tok_dipl id="t440_d1" trans="ist" utf="ist"/>
+    <tok_anno id="t440_m1" trans="ist" utf="ist" ascii="ist">
+      <lemma tag="sein"/>
+      <pos tag="VAFIN"/>
+      <morph tag="3.Sg.Präs.Ind.Unr"/>
+      <lemmaId tag="[GS25450]"/>
+      <posLemma tag="VA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS25450"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t441" trans="ey\-">
+    <tok_dipl id="t441_d1" trans="ey\-" utf="eȳ"/>
+    <tok_anno id="t441_m1" trans="ey\-" utf="eȳ" ascii="eyn">
+      <lemma tag="ein"/>
+      <pos tag="PI"/>
+      <morph tag="Fem.Nom.Sg"/>
+      <lemmaId tag="[GE01320]"/>
+      <posLemma tag="PI"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GE01320"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t442" trans="tu\ofel">
+    <tok_dipl id="t442_d1" trans="tu\ofel" utf="tuͦfel"/>
+    <tok_anno id="t442_m1" trans="tu\ofel" utf="tuͦfel" ascii="tuofel">
+      <lemma tag="teufel"/>
+      <pos tag="NA"/>
+      <morph tag="Mask.Dat.Sg"/>
+      <lemmaId tag="[GT02278]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GT02278"/>
+      <annoType tag="auto"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t443" trans="daz">
+    <tok_dipl id="t443_d1" trans="daz" utf="daz"/>
+    <tok_anno id="t443_m1" trans="daz" utf="daz" ascii="daz">
+      <lemma tag="dasz"/>
+      <pos tag="KOUS"/>
+      <lemmaId tag="[GD00875]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD00875"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t444" trans="i$t">
+    <tok_dipl id="t444_d1" trans="i$t" utf="iſt"/>
+    <tok_anno id="t444_m1" trans="i$t" utf="iſt" ascii="ist">
+      <lemma tag="sein"/>
+      <pos tag="VAFIN"/>
+      <morph tag="3.Sg.Präs.Ind.Unr"/>
+      <lemmaId tag="[GS25450]"/>
+      <posLemma tag="VA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS25450"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <comment type="K">war(.): Danach Zeichen für Sprecherwechsel</comment>
+  <token id="t445" trans="war">
+    <tok_dipl id="t445_d1" trans="war" utf="war"/>
+    <tok_anno id="t445_m1" trans="war" utf="war" ascii="war">
+      <lemma tag="sein"/>
+      <pos tag="VAFIN"/>
+      <morph tag="3.Sg.Prät.Konj.Unr"/>
+      <lemmaId tag="[GS25450]"/>
+      <posLemma tag="VA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS25450"/>
+      <annoType tag="auto"/>
+      <punc tag="(.)"/>
+      <cora-flag name="punc"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t446" trans="Maxe\-ti%9">
+    <tok_dipl id="t446_d1" trans="Maxe\-ti%9" utf="Maxētiꝰ"/>
+    <tok_anno id="t446_m1" trans="Maxe\-ti%9" utf="Maxētiꝰ" ascii="Maxentius">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t447" trans="ad">
+    <tok_dipl id="t447_d1" trans="ad" utf="ad"/>
+    <tok_anno id="t447_m1" trans="ad" utf="ad" ascii="ad">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <comment type="K">Katherinam(:): L-Klammer unterstrichen</comment>
+  <token id="t448" trans="Katherinam">
+    <tok_dipl id="t448_d1" trans="Katherinam" utf="Katherinam"/>
+    <tok_anno id="t448_m1" trans="Katherinam" utf="Katherinam" ascii="Katherinam">
+      <annoType tag="auto"/>
+      <punc tag="(:)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <comment type="K">Ju\-cvrowe: ‚o‘ üdZ</comment>
+  <token id="t449" trans="Ju\-cvrowe">
+    <tok_dipl id="t449_d1" trans="Ju\-cvrowe" utf="Jūcvrowe"/>
+    <tok_anno id="t449_m1" trans="Ju\-cvrowe" utf="Jūcvrowe" ascii="Juncvrowe">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t450" trans="edele">
+    <tok_dipl id="t450_d1" trans="edele" utf="edele"/>
+    <tok_anno id="t450_m1" trans="edele" utf="edele" ascii="edele">
+      <lemma tag="edel"/>
+      <pos tag="ADJA"/>
+      <morph tag="Pos.Fem.Akk.Sg"/>
+      <lemmaId tag="[GE00191]"/>
+      <posLemma tag="ADJ"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GE00191"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t451" trans="vn\-$tolz">
+    <tok_dipl id="t451_d1" trans="vn\-$tolz" utf="vn̄ſtolz"/>
+    <tok_anno id="t451_m1" trans="vn\-$tolz" utf="vn̄ſtolz" ascii="vndstolz">
+      <annoType tag="auto"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t452" trans="ich">
+    <tok_dipl id="t452_d1" trans="ich" utf="ich"/>
+    <tok_anno id="t452_m1" trans="ich" utf="ich" ascii="ich">
+      <lemma tag="ich"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GI00028]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GI00028"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t453" trans="wa$">
+    <tok_dipl id="t453_d1" trans="wa$" utf="waſ"/>
+    <tok_anno id="t453_m1" trans="wa$" utf="waſ" ascii="was">
+      <lemma tag="sein"/>
+      <pos tag="VAFIN"/>
+      <morph tag="3.Sg.Prät.Ind.Unr"/>
+      <lemmaId tag="[GS25450]"/>
+      <posLemma tag="VA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS25450"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t454" trans="dy">
+    <tok_dipl id="t454_d1" trans="dy" utf="dy"/>
+    <tok_anno id="t454_m1" trans="dy" utf="dy" ascii="dy">
+      <lemma tag="der"/>
+      <pos tag="DDART"/>
+      <morph tag="Fem.Akk.Sg"/>
+      <lemmaId tag="[GD01616]"/>
+      <posLemma tag="DD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD01616"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t455" trans="ie">
+    <tok_dipl id="t455_d1" trans="ie" utf="ie"/>
+    <tok_anno id="t455_m1" trans="ie" utf="ie" ascii="ie">
+      <lemma tag="je"/>
+      <pos tag="AVD"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GJ00745]"/>
+      <posLemma tag="AVD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GJ00745"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t456" trans="vo\-">
+    <tok_dipl id="t456_d1" trans="vo\-" utf="vō"/>
+    <tok_anno id="t456_m1" trans="vo\-" utf="vō" ascii="von">
+      <lemma tag="von"/>
+      <pos tag="APPR"/>
+      <lemmaId tag="[GV11391]"/>
+      <posLemma tag="AP"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GV11391"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t457" trans="h'ze\-">
+    <tok_dipl id="t457_d1" trans="h'ze\-" utf="hˢzē"/>
+    <tok_anno id="t457_m1" trans="h'ze\-" utf="hˢzē" ascii="herzen">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t458" trans="holt">
+    <tok_dipl id="t458_d1" trans="holt" utf="holt"/>
+    <tok_anno id="t458_m1" trans="holt" utf="holt" ascii="holt">
+      <lemma tag="hold"/>
+      <pos tag="ADJD"/>
+      <morph tag="Pos.*.*.*"/>
+      <lemmaId tag="[GH11459]"/>
+      <posLemma tag="ADJ"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GH11459"/>
+      <annoType tag="auto"/>
+      <punc tag="(.)"/>
+      <cora-flag name="punc"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t459" trans="hettes">
+    <tok_dipl id="t459_d1" trans="hettes" utf="hettes"/>
+    <tok_anno id="t459_m1" trans="hettes" utf="hettes" ascii="hettes">
+      <lemma tag="han"/>
+      <lemmaId tag="[GH01740]"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GH01740"/>
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t460" trans="du">
+    <tok_dipl id="t460_d1" trans="du" utf="du"/>
+    <tok_anno id="t460_m1" trans="du" utf="du" ascii="du">
+      <lemma tag="du"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GD05295]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD05295"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t461" trans="v\-$e">
+    <tok_dipl id="t461_d1" trans="v\-$e" utf="v̄ſe"/>
+    <tok_anno id="t461_m1" trans="v\-$e" utf="v̄ſe" ascii="vnse">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t462" trans="E">
+    <tok_dipl id="t462_d1" trans="E" utf="E"/>
+    <tok_anno id="t462_m1" trans="E" utf="E" ascii="E">
+      <lemma tag="eh"/>
+      <pos tag="AVD"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GE00324]"/>
+      <posLemma tag="AVD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GE00324"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t463" trans="gele$e\-.">
+    <tok_dipl id="t463_d1" trans="gele$e\-." utf="geleſē."/>
+    <tok_anno id="t463_m1" trans="gele$e\-" utf="geleſē" ascii="gelesen">
+      <lemma tag="lesen"/>
+      <pos tag="ADJD"/>
+      <morph tag="*.*.*.*"/>
+      <lemmaId tag="[GL04895]"/>
+      <posLemma tag="VVPP"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GL04895"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t463_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t464" trans="du">
+    <tok_dipl id="t464_d1" trans="du" utf="du"/>
+    <tok_anno id="t464_m1" trans="du" utf="du" ascii="du">
+      <lemma tag="du"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GD05295]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD05295"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t465" trans="lize$">
+    <tok_dipl id="t465_d1" trans="lize$" utf="lizeſ"/>
+    <tok_anno id="t465_m1" trans="lize$" utf="lizeſ" ascii="lizes">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t466" trans="de$e">
+    <tok_dipl id="t466_d1" trans="de$e" utf="deſe"/>
+    <tok_anno id="t466_m1" trans="de$e" utf="deſe" ascii="dese">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t467" trans="r'de">
+    <tok_dipl id="t467_d1" trans="r'de" utf="ˢde"/>
+    <tok_anno id="t467_m1" trans="r'de" utf="ˢde" ascii="erde">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t468" trans="we$y\-.">
+    <tok_dipl id="t468_d1" trans="we$y\-." utf="weſȳ."/>
+    <tok_anno id="t468_m1" trans="we$y\-" utf="weſȳ" ascii="wesyn">
+      <annoType tag="auto"/>
+    </tok_anno>
+    <tok_anno id="t468_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t469" trans="Daz">
+    <tok_dipl id="t469_d1" trans="Daz" utf="Daz"/>
+    <tok_anno id="t469_m1" trans="Daz" utf="Daz" ascii="Daz">
+      <lemma tag="dasz"/>
+      <pos tag="KOUS"/>
+      <lemmaId tag="[GD00875]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD00875"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t470" trans="du">
+    <tok_dipl id="t470_d1" trans="du" utf="du"/>
+    <tok_anno id="t470_m1" trans="du" utf="du" ascii="du">
+      <lemma tag="du"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GD05295]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD05295"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t471" trans="$childi$t">
+    <tok_dipl id="t471_d1" trans="$childi$t" utf="ſchildiſt"/>
+    <tok_anno id="t471_m1" trans="$childi$t" utf="ſchildiſt" ascii="schildist">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t472" trans="vn$e">
+    <tok_dipl id="t472_d1" trans="vn$e" utf="vnſe"/>
+    <tok_anno id="t472_m1" trans="vn$e" utf="vnſe" ascii="vnse">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t473" trans="gote.">
+    <tok_dipl id="t473_d1" trans="gote." utf="gote."/>
+    <tok_anno id="t473_m1" trans="gote" utf="gote" ascii="gote">
+      <lemma tag="gott"/>
+      <pos tag="NA"/>
+      <morph tag="*.Dat.Sg"/>
+      <lemmaId tag="[GG22661]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GG22661"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t473_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t474" trans="bi">
+    <tok_dipl id="t474_d1" trans="bi" utf="bi"/>
+    <tok_anno id="t474_m1" trans="bi" utf="bi" ascii="bi">
+      <lemma tag="bei"/>
+      <pos tag="APPR"/>
+      <lemmaId tag="[GB02856]"/>
+      <posLemma tag="AP"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GB02856"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t475" trans="de\-#$elbe\-">
+    <tok_dipl id="t475_d1" trans="de\-#" utf="dē"/>
+    <tok_dipl id="t475_d2" trans="$elbe\-" utf="ſelbē"/>
+    <tok_anno id="t475_m1" trans="de\-#$elbe\-" utf="dēſelbē" ascii="denselben">
+      <annoType tag="auto"/>
+      <token_type tag="US"/>
+    </tok_anno>
+  </token>
+  <token id="t476" trans="$v'e">
+    <tok_dipl id="t476_d1" trans="$v'e" utf="ſvˢe"/>
+    <tok_anno id="t476_m1" trans="$v'e" utf="ſvˢe" ascii="svere">
+      <lemma tag="sie"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Pl.*.Nom"/>
+      <lemmaId tag="[GS27463]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS27463"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t477" trans="ich">
+    <tok_dipl id="t477_d1" trans="ich" utf="ich"/>
+    <tok_anno id="t477_m1" trans="ich" utf="ich" ascii="ich">
+      <lemma tag="ich"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GI00028]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GI00028"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t478" trans="hute.">
+    <tok_dipl id="t478_d1" trans="hute." utf="hute."/>
+    <tok_anno id="t478_m1" trans="hute" utf="hute" ascii="hute">
+      <lemma tag="heute"/>
+      <pos tag="AVD"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GH08116]"/>
+      <posLemma tag="AVD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GH08116"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t478_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(.)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t479" trans="du\o">
+    <tok_dipl id="t479_d1" trans="du\o" utf="duͦ"/>
+    <tok_anno id="t479_m1" trans="du\o" utf="duͦ" ascii="duo">
+      <lemma tag="du"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GD05295]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD05295"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t480" trans="en#la(=)zi$">
+    <tok_dipl id="t480_d1" trans="en#" utf="en"/>
+    <tok_dipl id="t480_d2" trans="la(=)" utf="la"/>
+    <tok_dipl id="t480_d3" trans="zi$" utf="ziſ"/>
+    <tok_anno id="t480_m1" trans="en#la(=)zi$" utf="enlaziſ" ascii="enlazis">
+      <annoType tag="auto"/>
+      <token_type tag="US UL"/>
+    </tok_anno>
+  </token>
+  <token id="t481" trans="de$e">
+    <tok_dipl id="t481_d1" trans="de$e" utf="deſe"/>
+    <tok_anno id="t481_m1" trans="de$e" utf="deſe" ascii="dese">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t482" trans="r'de">
+    <tok_dipl id="t482_d1" trans="r'de" utf="ˢde"/>
+    <tok_anno id="t482_m1" trans="r'de" utf="ˢde" ascii="erde">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t483" trans="$te.">
+    <tok_dipl id="t483_d1" trans="$te." utf="ſte."/>
+    <tok_anno id="t483_m1" trans="$te" utf="ſte" ascii="ste">
+      <lemma tag="stehen"/>
+      <pos tag="VVIMP"/>
+      <morph tag="Sg"/>
+      <lemmaId tag="[GS42250]"/>
+      <posLemma tag="VV"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS42250"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t483_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t484" trans="iz">
+    <tok_dipl id="t484_d1" trans="iz" utf="iz"/>
+    <tok_anno id="t484_m1" trans="iz" utf="iz" ascii="iz">
+      <lemma tag="er"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.Neut.Nom"/>
+      <lemmaId tag="[GE05989]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GE05989"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t485" trans="muz">
+    <tok_dipl id="t485_d1" trans="muz" utf="muz"/>
+    <tok_anno id="t485_m1" trans="muz" utf="muz" ascii="muz">
+      <lemma tag="müssen"/>
+      <pos tag="VMFIN"/>
+      <morph tag="3.Sg.Präs.Ind.Unr"/>
+      <lemmaId tag="[GM08653]"/>
+      <posLemma tag="VM"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GM08653"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t486" trans="dir">
+    <tok_dipl id="t486_d1" trans="dir" utf="dir"/>
+    <tok_anno id="t486_m1" trans="dir" utf="dir" ascii="dir">
+      <lemma tag="du"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Dat"/>
+      <lemmaId tag="[GD05295]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD05295"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t487" trans="an">
+    <tok_dipl id="t487_d1" trans="an" utf="an"/>
+    <tok_anno id="t487_m1" trans="an" utf="an" ascii="an">
+      <lemma tag="an"/>
+      <pos tag="APPR"/>
+      <lemmaId tag="[GA03324]"/>
+      <posLemma tag="AP"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GA03324"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t488" trans="das">
+    <tok_dipl id="t488_d1" trans="das" utf="das"/>
+    <tok_anno id="t488_m1" trans="das" utf="das" ascii="das">
+      <lemma tag="dasz"/>
+      <pos tag="KOUS"/>
+      <lemmaId tag="[GD00875]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD00875"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t489" trans="lebe\-">
+    <tok_dipl id="t489_d1" trans="lebe\-" utf="lebē"/>
+    <tok_anno id="t489_m1" trans="lebe\-" utf="lebē" ascii="leben">
+      <lemma tag="leben"/>
+      <pos tag="VVFIN"/>
+      <morph tag="3.Sg.Präs.Konj.Sw"/>
+      <lemmaId tag="[GL02595]"/>
+      <posLemma tag="VV"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GL02595"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <comment type="K">ge.(.): Danach in dieser und der nächsten Zeile Zeichen für Sprecherwechsel</comment>
+  <token id="t490" trans="ge.">
+    <tok_dipl id="t490_d1" trans="ge." utf="ge."/>
+    <tok_anno id="t490_m1" trans="ge" utf="ge" ascii="ge">
+      <lemma tag="pflegen"/>
+      <pos tag="ADJA"/>
+      <morph tag="Pos.Fem.Akk.Sg"/>
+      <lemmaId tag="[GP04052]"/>
+      <posLemma tag="VVPP"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GP04052"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t490_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(.)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t491" trans="Maxe\ti%9">
+    <tok_dipl id="t491_d1" trans="Maxe\ti%9" utf="Maxeͭiꝰ"/>
+    <tok_anno id="t491_m1" trans="Maxe\ti%9" utf="Maxeͭiꝰ" ascii="Maxetius">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t492" trans="ad">
+    <tok_dipl id="t492_d1" trans="ad" utf="ad"/>
+    <tok_anno id="t492_m1" trans="ad" utf="ad" ascii="ad">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <comment type="K">C%2ate\-(:): L-Klammer unterstrichen</comment>
+  <token id="t493" trans="C%2$ate\-">
+    <tok_dipl id="t493_d1" trans="C%2$ate\-" utf="C᷑ſatē"/>
+    <tok_anno id="t493_m1" trans="C%2$ate\-" utf="C᷑ſatē" ascii="Cursaten">
+      <annoType tag="auto"/>
+      <punc tag="(:)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t494" trans="Cur$ates">
+    <tok_dipl id="t494_d1" trans="Cur$ates" utf="Curſates"/>
+    <tok_anno id="t494_m1" trans="Cur$ates" utf="Curſates" ascii="Cursates">
+      <annoType tag="auto"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t495" trans="ny\-">
+    <tok_dipl id="t495_d1" trans="ny\-" utf="nȳ"/>
+    <tok_anno id="t495_m1" trans="ny\-" utf="nȳ" ascii="nyn">
+      <lemma tag="nie"/>
+      <pos tag="AVNEG"/>
+      <lemmaId tag="[GN05069]"/>
+      <posLemma tag="AVD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GN05069"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t496" trans="vil">
+    <tok_dipl id="t496_d1" trans="vil" utf="vil"/>
+    <tok_anno id="t496_m1" trans="vil" utf="vil" ascii="vil">
+      <lemma tag="viel"/>
+      <pos tag="AVD"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GV07578]"/>
+      <posLemma tag="ADJ"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GV07578"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t497" trans="balde.">
+    <tok_dipl id="t497_d1" trans="balde." utf="balde."/>
+    <tok_anno id="t497_m1" trans="balde" utf="balde" ascii="balde">
+      <lemma tag="bald"/>
+      <pos tag="AVD"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GB00319]"/>
+      <posLemma tag="AVD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GB00319"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t497_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+    </tok_anno>
+  </token>
+  <token id="t498" trans="vn\-">
+    <tok_dipl id="t498_d1" trans="vn\-" utf="vn̄"/>
+    <tok_anno id="t498_m1" trans="vn\-" utf="vn̄" ascii="vnd">
+      <lemma tag="und"/>
+      <pos tag="KON"/>
+      <lemmaId tag="[GU05758]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GU05758"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t499" trans="laz">
+    <tok_dipl id="t499_d1" trans="laz" utf="laz"/>
+    <tok_anno id="t499_m1" trans="laz" utf="laz" ascii="laz">
+      <lemma tag="lassen"/>
+      <pos tag="VVIMP"/>
+      <morph tag="Sg"/>
+      <lemmaId tag="[GL01735]"/>
+      <posLemma tag="VV"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GL01735"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t500" trans="vil">
+    <tok_dipl id="t500_d1" trans="vil" utf="vil"/>
+    <tok_anno id="t500_m1" trans="vil" utf="vil" ascii="vil">
+      <lemma tag="viel"/>
+      <pos tag="AVD"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GV07578]"/>
+      <posLemma tag="ADJ"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GV07578"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t501" trans="wol">
+    <tok_dipl id="t501_d1" trans="wol" utf="wol"/>
+    <tok_anno id="t501_m1" trans="wol" utf="wol" ascii="wol">
+      <lemma tag="wohl"/>
+      <pos tag="AVD"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GW24777]"/>
+      <posLemma tag="AVD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GW24777"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t502" trans="behalde">
+    <tok_dipl id="t502_d1" trans="behalde" utf="behalde"/>
+    <tok_anno id="t502_m1" trans="behalde" utf="behalde" ascii="behalde">
+      <lemma tag="halten"/>
+      <lemmaId tag="[GH01602]"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GH01602"/>
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t503" trans="de$e">
+    <tok_dipl id="t503_d1" trans="de$e" utf="deſe"/>
+    <tok_anno id="t503_m1" trans="de$e" utf="deſe" ascii="dese">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t504" trans="iu\-cvrowe\-">
+    <tok_dipl id="t504_d1" trans="iu\-cvrowe\-" utf="iūcvrowē"/>
+    <tok_anno id="t504_m1" trans="iu\-cvrowe\-" utf="iūcvrowē" ascii="iuncvrowen">
+      <annoType tag="auto"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t505" trans="daz">
+    <tok_dipl id="t505_d1" trans="daz" utf="daz"/>
+    <tok_anno id="t505_m1" trans="daz" utf="daz" ascii="daz">
+      <lemma tag="dasz"/>
+      <pos tag="KOUS"/>
+      <lemmaId tag="[GD00875]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD00875"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t506" trans="gebite">
+    <tok_dipl id="t506_d1" trans="gebite" utf="gebite"/>
+    <tok_anno id="t506_m1" trans="gebite" utf="gebite" ascii="gebite">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t507" trans="ich">
+    <tok_dipl id="t507_d1" trans="ich" utf="ich"/>
+    <tok_anno id="t507_m1" trans="ich" utf="ich" ascii="ich">
+      <lemma tag="ich"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GI00028]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GI00028"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t508" trans="dy.">
+    <tok_dipl id="t508_d1" trans="dy." utf="dy."/>
+    <tok_anno id="t508_m1" trans="dy" utf="dy" ascii="dy">
+      <lemma tag="der"/>
+      <pos tag="DDART"/>
+      <morph tag="Fem.Akk.Sg"/>
+      <lemmaId tag="[GD01616]"/>
+      <posLemma tag="DD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD01616"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t508_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t509" trans="wa\-">
+    <tok_dipl id="t509_d1" trans="wa\-" utf="wā"/>
+    <tok_anno id="t509_m1" trans="wa\-" utf="wā" ascii="wan">
+      <lemma tag="wo"/>
+      <pos tag="AVW"/>
+      <lemmaId tag="[GW24313]"/>
+      <posLemma tag="AVW"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GW24313"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t510" trans="biz">
+    <tok_dipl id="t510_d1" trans="biz" utf="biz"/>
+    <tok_anno id="t510_m1" trans="biz" utf="biz" ascii="biz">
+      <lemma tag="sein"/>
+      <lemmaId tag="[GS25450]"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS25450"/>
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t511" trans="daz">
+    <tok_dipl id="t511_d1" trans="daz" utf="daz"/>
+    <tok_anno id="t511_m1" trans="daz" utf="daz" ascii="daz">
+      <lemma tag="dasz"/>
+      <pos tag="KOUS"/>
+      <lemmaId tag="[GD00875]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD00875"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t512" trans="opher">
+    <tok_dipl id="t512_d1" trans="opher" utf="opher"/>
+    <tok_anno id="t512_m1" trans="opher" utf="opher" ascii="opher">
+      <lemma tag="opfer"/>
+      <lemmaId tag="[GO01801]"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GO01801"/>
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t513" trans="vor#ga\-ge\-">
+    <tok_dipl id="t513_d1" trans="vor#" utf="vor"/>
+    <tok_dipl id="t513_d2" trans="ga\-ge\-" utf="gāgē"/>
+    <tok_anno id="t513_m1" trans="vor#ga\-ge\-" utf="vorgāgē" ascii="vorgangen">
+      <annoType tag="auto"/>
+      <token_type tag="US"/>
+    </tok_anno>
+  </token>
+  <comment type="K">$y(.): Danach Zeichen für Sprecherwechsel</comment>
+  <token id="t514" trans="$y">
+    <tok_dipl id="t514_d1" trans="$y" utf="ſy"/>
+    <tok_anno id="t514_m1" trans="$y" utf="ſy" ascii="sy">
+      <lemma tag="sie"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Pl.*.Nom"/>
+      <lemmaId tag="[GS27463]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS27463"/>
+      <annoType tag="auto"/>
+      <punc tag="(.)"/>
+      <cora-flag name="punc"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t515" trans="Cur$ates">
+    <tok_dipl id="t515_d1" trans="Cur$ates" utf="Curſates"/>
+    <tok_anno id="t515_m1" trans="Cur$ates" utf="Curſates" ascii="Cursates">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <comment type="K">respondet(:) abgekürzt, L-Klammer unterstrichen</comment>
+  <token id="t516" trans="respondet">
+    <tok_dipl id="t516_d1" trans="respondet" utf="respondet"/>
+    <tok_anno id="t516_m1" trans="respondet" utf="respondet" ascii="respondet">
+      <annoType tag="auto"/>
+      <punc tag="(:)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t517" trans="Here">
+    <tok_dipl id="t517_d1" trans="Here" utf="Here"/>
+    <tok_anno id="t517_m1" trans="Here" utf="Here" ascii="Here">
+      <lemma tag="herr"/>
+      <pos tag="NA"/>
+      <morph tag="*.Nom.Sg"/>
+      <lemmaId tag="[GH06861]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GH06861"/>
+      <annoType tag="auto"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t518" trans="by">
+    <tok_dipl id="t518_d1" trans="by" utf="by"/>
+    <tok_anno id="t518_m1" trans="by" utf="by" ascii="by">
+      <lemma tag="bei"/>
+      <pos tag="APPR"/>
+      <lemmaId tag="[GB02856]"/>
+      <posLemma tag="AP"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GB02856"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t519" trans="de\-">
+    <tok_dipl id="t519_d1" trans="de\-" utf="dē"/>
+    <tok_anno id="t519_m1" trans="de\-" utf="dē" ascii="den">
+      <lemma tag="der"/>
+      <pos tag="DDART"/>
+      <morph tag="Mask.Akk.Sg"/>
+      <lemmaId tag="[GD01616]"/>
+      <posLemma tag="DD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD01616"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t520" trans="hulde\-">
+    <tok_dipl id="t520_d1" trans="hulde\-" utf="huldē"/>
+    <tok_anno id="t520_m1" trans="hulde\-" utf="huldē" ascii="hulden">
+      <lemma tag="hulde"/>
+      <pos tag="NA"/>
+      <morph tag="Fem.Akk.Sg"/>
+      <lemmaId tag="[GH13078]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GH13078"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t521" trans="dy\-.">
+    <tok_dipl id="t521_d1" trans="dy\-." utf="dȳ."/>
+    <tok_anno id="t521_m1" trans="dy\-" utf="dȳ" ascii="dyn">
+      <lemma tag="der"/>
+      <pos tag="DDART"/>
+      <morph tag="Fem.Akk.Sg"/>
+      <lemmaId tag="[GD01616]"/>
+      <posLemma tag="DD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD01616"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t521_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t522" trans="alliz">
+    <tok_dipl id="t522_d1" trans="alliz" utf="alliz"/>
+    <tok_anno id="t522_m1" trans="alliz" utf="alliz" ascii="alliz">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t523" trans="daz">
+    <tok_dipl id="t523_d1" trans="daz" utf="daz"/>
+    <tok_anno id="t523_m1" trans="daz" utf="daz" ascii="daz">
+      <lemma tag="dasz"/>
+      <pos tag="KOUS"/>
+      <lemmaId tag="[GD00875]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD00875"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t524" trans="du">
+    <tok_dipl id="t524_d1" trans="du" utf="du"/>
+    <tok_anno id="t524_m1" trans="du" utf="du" ascii="du">
+      <lemma tag="du"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GD05295]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD05295"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t525" trans="gebu(=)tes">
+    <tok_dipl id="t525_d1" trans="gebu(=)" utf="gebu"/>
+    <tok_dipl id="t525_d2" trans="tes" utf="tes"/>
+    <tok_anno id="t525_m1" trans="gebu(=)tes" utf="gebutes" ascii="gebutes" checked="y">
+      <lemma tag="bieten"/>
+      <lemmaId tag="[GB07095]"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GB07095"/>
+      <annoType tag="manual"/>
+      <token_type tag="UL"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t526" trans="daz">
+    <tok_dipl id="t526_d1" trans="daz" utf="daz"/>
+    <tok_anno id="t526_m1" trans="daz" utf="daz" ascii="daz">
+      <lemma tag="dasz"/>
+      <pos tag="KOUS"/>
+      <lemmaId tag="[GD00875]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD00875"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t527" trans="$al">
+    <tok_dipl id="t527_d1" trans="$al" utf="ſal"/>
+    <tok_anno id="t527_m1" trans="$al" utf="ſal" ascii="sal">
+      <lemma tag="saal"/>
+      <pos tag="NA"/>
+      <morph tag="Mask.Akk.Sg"/>
+      <lemmaId tag="[GS00005]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS00005"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t528" trans="$y.">
+    <tok_dipl id="t528_d1" trans="$y." utf="ſy."/>
+    <tok_anno id="t528_m1" trans="$y" utf="ſy" ascii="sy">
+      <lemma tag="sie"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Pl.*.Nom"/>
+      <lemmaId tag="[GS27463]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS27463"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t528_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(.)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t529" trans="ich">
+    <tok_dipl id="t529_d1" trans="ich" utf="ich"/>
+    <tok_anno id="t529_m1" trans="ich" utf="ich" ascii="ich">
+      <lemma tag="ich"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GI00028]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GI00028"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t530" trans="wil">
+    <tok_dipl id="t530_d1" trans="wil" utf="wil"/>
+    <tok_anno id="t530_m1" trans="wil" utf="wil" ascii="wil">
+      <lemma tag="viel"/>
+      <pos tag="AVD"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GV07578]"/>
+      <posLemma tag="ADJ"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GV07578"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t531" trans="dyn">
+    <tok_dipl id="t531_d1" trans="dyn" utf="dyn"/>
+    <tok_anno id="t531_m1" trans="dyn" utf="dyn" ascii="dyn">
+      <lemma tag="dein"/>
+      <pos tag="DPOSA"/>
+      <morph tag="Fem.Akk.Sg"/>
+      <lemmaId tag="[GD01412]"/>
+      <posLemma tag="DPOS"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD01412"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t532" trans="gebot">
+    <tok_dipl id="t532_d1" trans="gebot" utf="gebot"/>
+    <tok_anno id="t532_m1" trans="gebot" utf="gebot" ascii="gebot">
+      <lemma tag="gebot"/>
+      <pos tag="NA"/>
+      <morph tag="Neut.Nom.Sg"/>
+      <lemmaId tag="[GG02904]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GG02904"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t533" trans="g'ne">
+    <tok_dipl id="t533_d1" trans="g'ne" utf="gˢne"/>
+    <tok_anno id="t533_m1" trans="g'ne" utf="gˢne" ascii="gerne">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t534" trans="tu\o.">
+    <tok_dipl id="t534_d1" trans="tu\o." utf="tuͦ."/>
+    <tok_anno id="t534_m1" trans="tu\o" utf="tuͦ" ascii="tuo">
+      <lemma tag="du"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GD05295]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD05295"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t534_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+    </tok_anno>
+  </token>
+  <token id="t535" trans="bey(=)de">
+    <tok_dipl id="t535_d1" trans="bey(=)" utf="bey"/>
+    <tok_dipl id="t535_d2" trans="de" utf="de"/>
+    <tok_anno id="t535_m1" trans="bey(=)de" utf="beyde" ascii="beyde" checked="y">
+      <lemma tag="beide"/>
+      <pos tag="DIA"/>
+      <morph tag="*.*.Pl"/>
+      <lemmaId tag="[GB02907]"/>
+      <posLemma tag="DI"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GB02907"/>
+      <annoType tag="manual"/>
+      <token_type tag="UL"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t536" trans="spote">
+    <tok_dipl id="t536_d1" trans="spote" utf="spote"/>
+    <tok_anno id="t536_m1" trans="spote" utf="spote" ascii="spote">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t537" trans="vn\-">
+    <tok_dipl id="t537_d1" trans="vn\-" utf="vn̄"/>
+    <tok_anno id="t537_m1" trans="vn\-" utf="vn̄" ascii="vnd">
+      <lemma tag="und"/>
+      <pos tag="KON"/>
+      <lemmaId tag="[GU05758]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GU05758"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t538" trans="ouch">
+    <tok_dipl id="t538_d1" trans="ouch" utf="ouch"/>
+    <tok_anno id="t538_m1" trans="ouch" utf="ouch" ascii="ouch">
+      <lemma tag="auch"/>
+      <pos tag="AVD"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GA05989]"/>
+      <posLemma tag="AVD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GA05989"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t539" trans="vru\o.">
+    <tok_dipl id="t539_d1" trans="vru\o." utf="vruͦ."/>
+    <tok_anno id="t539_m1" trans="vru\o" utf="vruͦ" ascii="vruo">
+      <annoType tag="auto"/>
+    </tok_anno>
+    <tok_anno id="t539_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(.)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t540" trans="wol">
+    <tok_dipl id="t540_d1" trans="wol" utf="wol"/>
+    <tok_anno id="t540_m1" trans="wol" utf="wol" ascii="wol">
+      <lemma tag="wohl"/>
+      <pos tag="AVD"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GW24777]"/>
+      <posLemma tag="AVD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GW24777"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t541" trans="her">
+    <tok_dipl id="t541_d1" trans="her" utf="her"/>
+    <tok_anno id="t541_m1" trans="her" utf="her" ascii="her">
+      <lemma tag="herr"/>
+      <pos tag="NA"/>
+      <morph tag="*.Nom.Sg"/>
+      <lemmaId tag="[GH06861]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GH06861"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t542" trans="edele">
+    <tok_dipl id="t542_d1" trans="edele" utf="edele"/>
+    <tok_anno id="t542_m1" trans="edele" utf="edele" ascii="edele">
+      <lemma tag="edel"/>
+      <pos tag="ADJA"/>
+      <morph tag="Pos.Fem.Akk.Sg"/>
+      <lemmaId tag="[GE00191]"/>
+      <posLemma tag="ADJ"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GE00191"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <comment type="K">iu\-cvrowely\-: ‘o’ üdZ</comment>
+  <token id="t543" trans="iu\-cvrowely\-">
+    <tok_dipl id="t543_d1" trans="iu\-cvrowely\-" utf="iūcvrowelȳ"/>
+    <tok_anno id="t543_m1" trans="iu\-cvrowely\-" utf="iūcvrowelȳ" ascii="iuncvrowelyn">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t544" trans="ich">
+    <tok_dipl id="t544_d1" trans="ich" utf="ich"/>
+    <tok_anno id="t544_m1" trans="ich" utf="ich" ascii="ich">
+      <lemma tag="ich"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GI00028]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GI00028"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t545" trans="tu">
+    <tok_dipl id="t545_d1" trans="tu" utf="tu"/>
+    <tok_anno id="t545_m1" trans="tu" utf="tu" ascii="tu">
+      <lemma tag="du"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GD05295]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD05295"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t546" trans="daz">
+    <tok_dipl id="t546_d1" trans="daz" utf="daz"/>
+    <tok_anno id="t546_m1" trans="daz" utf="daz" ascii="daz">
+      <lemma tag="dasz"/>
+      <pos tag="KOUS"/>
+      <lemmaId tag="[GD00875]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD00875"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t547" trans="gebot">
+    <tok_dipl id="t547_d1" trans="gebot" utf="gebot"/>
+    <tok_anno id="t547_m1" trans="gebot" utf="gebot" ascii="gebot">
+      <lemma tag="gebot"/>
+      <pos tag="NA"/>
+      <morph tag="Neut.Nom.Sg"/>
+      <lemmaId tag="[GG02904]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GG02904"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t548" trans="des">
+    <tok_dipl id="t548_d1" trans="des" utf="des"/>
+    <tok_anno id="t548_m1" trans="des" utf="des" ascii="des">
+      <lemma tag="der"/>
+      <pos tag="DDART"/>
+      <morph tag="*.Gen.Sg"/>
+      <lemmaId tag="[GD01616]"/>
+      <posLemma tag="DD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD01616"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t549" trans="here\-">
+    <tok_dipl id="t549_d1" trans="here\-" utf="herē"/>
+    <tok_anno id="t549_m1" trans="here\-" utf="herē" ascii="heren">
+      <lemma tag="herr"/>
+      <pos tag="NA"/>
+      <morph tag="*.Nom.Sg"/>
+      <lemmaId tag="[GH06861]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GH06861"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t550" trans="my\-.">
+    <tok_dipl id="t550_d1" trans="my\-." utf="mȳ."/>
+    <tok_anno id="t550_m1" trans="my\-" utf="mȳ" ascii="myn">
+      <annoType tag="auto"/>
+    </tok_anno>
+    <tok_anno id="t550_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(:)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t551" trans="ich">
+    <tok_dipl id="t551_d1" trans="ich" utf="ich"/>
+    <tok_anno id="t551_m1" trans="ich" utf="ich" ascii="ich">
+      <lemma tag="ich"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GI00028]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GI00028"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t552" trans="behalde">
+    <tok_dipl id="t552_d1" trans="behalde" utf="behalde"/>
+    <tok_anno id="t552_m1" trans="behalde" utf="behalde" ascii="behalde">
+      <lemma tag="halten"/>
+      <lemmaId tag="[GH01602]"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GH01602"/>
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t553" trans="dich">
+    <tok_dipl id="t553_d1" trans="dich" utf="dich"/>
+    <tok_anno id="t553_m1" trans="dich" utf="dich" ascii="dich">
+      <lemma tag="du"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Akk"/>
+      <lemmaId tag="[GD05295]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD05295"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t554" trans="$o">
+    <tok_dipl id="t554_d1" trans="$o" utf="ſo"/>
+    <tok_anno id="t554_m1" trans="$o" utf="ſo" ascii="so">
+      <lemma tag="so"/>
+      <pos tag="AVD"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GE02755]"/>
+      <posLemma tag="AVD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GE02755"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t555" trans="ich">
+    <tok_dipl id="t555_d1" trans="ich" utf="ich"/>
+    <tok_anno id="t555_m1" trans="ich" utf="ich" ascii="ich">
+      <lemma tag="ich"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GI00028]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GI00028"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t556" trans="be$t">
+    <tok_dipl id="t556_d1" trans="be$t" utf="beſt"/>
+    <tok_anno id="t556_m1" trans="be$t" utf="beſt" ascii="best">
+      <lemma tag="gut"/>
+      <pos tag="ADJA"/>
+      <morph tag="Sup.Mask.Nom.Sg"/>
+      <lemmaId tag="[GG32499]"/>
+      <posLemma tag="ADJ"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GG32499"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t557" trans="ka\-.">
+    <tok_dipl id="t557_d1" trans="ka\-." utf="kā."/>
+    <tok_anno id="t557_m1" trans="ka\-" utf="kā" ascii="kan">
+      <lemma tag="können"/>
+      <pos tag="VMFIN"/>
+      <morph tag="3.Sg.Präs.Ind.Unr"/>
+      <lemmaId tag="[GK10636]"/>
+      <posLemma tag="VM"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GK10636"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t557_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t558" trans="des">
+    <tok_dipl id="t558_d1" trans="des" utf="des"/>
+    <tok_anno id="t558_m1" trans="des" utf="des" ascii="des">
+      <lemma tag="der"/>
+      <pos tag="DDART"/>
+      <morph tag="*.Gen.Sg"/>
+      <lemmaId tag="[GD01616]"/>
+      <posLemma tag="DD"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD01616"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t559" trans="laze">
+    <tok_dipl id="t559_d1" trans="laze" utf="laze"/>
+    <tok_anno id="t559_m1" trans="laze" utf="laze" ascii="laze">
+      <lemma tag="lassen"/>
+      <pos tag="VVIMP"/>
+      <morph tag="Sg"/>
+      <lemmaId tag="[GL01735]"/>
+      <posLemma tag="VV"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GL01735"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t560" trans="ich">
+    <tok_dipl id="t560_d1" trans="ich" utf="ich"/>
+    <tok_anno id="t560_m1" trans="ich" utf="ich" ascii="ich">
+      <lemma tag="ich"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GI00028]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GI00028"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t561" trans="nicht">
+    <tok_dipl id="t561_d1" trans="nicht" utf="nicht"/>
+    <tok_anno id="t561_m1" trans="nicht" utf="nicht" ascii="nicht">
+      <lemma tag="nicht"/>
+      <pos tag="PTKNEG"/>
+      <lemmaId tag="[GN04912]"/>
+      <posLemma tag="PI"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GN04912"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t562" trans="dorch">
+    <tok_dipl id="t562_d1" trans="dorch" utf="dorch"/>
+    <tok_anno id="t562_m1" trans="dorch" utf="dorch" ascii="dorch">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t563" trans="ichey\-">
+    <tok_dipl id="t563_d1" trans="ichey\-" utf="icheȳ"/>
+    <tok_anno id="t563_m1" trans="ichey\-" utf="icheȳ" ascii="icheyn">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <comment type="K">man.(.): Danach Zeichen für Sprecherwechsel</comment>
+  <token id="t564" trans="man.">
+    <tok_dipl id="t564_d1" trans="man." utf="man."/>
+    <tok_anno id="t564_m1" trans="man" utf="man" ascii="man">
+      <lemma tag="man"/>
+      <pos tag="PI"/>
+      <morph tag="*.*.*"/>
+      <lemmaId tag="[GM00799]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GM00799"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t564_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(.)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t565" trans="Dya%9">
+    <tok_dipl id="t565_d1" trans="Dya%9" utf="Dyaꝰ"/>
+    <tok_anno id="t565_m1" trans="Dya%9" utf="Dyaꝰ" ascii="Dyaus">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <comment type="K">maxe\-tium(:) L-Klammer unterstrichen</comment>
+  <token id="t566" trans="ad|maxe\-tium">
+    <tok_dipl id="t566_d1" trans="ad|maxe\-tium" utf="admaxētium"/>
+    <tok_anno id="t566_m1" trans="ad|" utf="ad" ascii="ad">
+      <annoType tag="auto"/>
+      <token_type tag="MS1"/>
+    </tok_anno>
+    <tok_anno id="t566_m2" trans="maxe\-tium" utf="maxētium" ascii="maxentium">
+      <annoType tag="auto"/>
+      <token_type tag="MS2"/>
+      <punc tag="(:)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t567" trans="Maxe\-ti%9">
+    <tok_dipl id="t567_d1" trans="Maxe\-ti%9" utf="Maxētiꝰ"/>
+    <tok_anno id="t567_m1" trans="Maxe\-ti%9" utf="Maxētiꝰ" ascii="Maxentius">
+      <annoType tag="auto"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t568" trans="vil">
+    <tok_dipl id="t568_d1" trans="vil" utf="vil"/>
+    <tok_anno id="t568_m1" trans="vil" utf="vil" ascii="vil">
+      <lemma tag="viel"/>
+      <pos tag="AVD"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GV07578]"/>
+      <posLemma tag="ADJ"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GV07578"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t569" trans="liber">
+    <tok_dipl id="t569_d1" trans="liber" utf="liber"/>
+    <tok_anno id="t569_m1" trans="liber" utf="liber" ascii="liber">
+      <lemma tag="lieb"/>
+      <lemmaId tag="[GL05387]"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GL05387"/>
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t570" trans="diner">
+    <tok_dipl id="t570_d1" trans="diner" utf="diner"/>
+    <tok_anno id="t570_m1" trans="diner" utf="diner" ascii="diner">
+      <lemma tag="dein"/>
+      <pos tag="DPOSA"/>
+      <morph tag="Fem.Dat.Sg"/>
+      <lemmaId tag="[GD01412]"/>
+      <posLemma tag="DPOS"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD01412"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t571" trans="my\-.">
+    <tok_dipl id="t571_d1" trans="my\-." utf="mȳ."/>
+    <tok_anno id="t571_m1" trans="my\-" utf="mȳ" ascii="myn">
+      <annoType tag="auto"/>
+    </tok_anno>
+    <tok_anno id="t571_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(!)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t572" trans="ich">
+    <tok_dipl id="t572_d1" trans="ich" utf="ich"/>
+    <tok_anno id="t572_m1" trans="ich" utf="ich" ascii="ich">
+      <lemma tag="ich"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GI00028]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GI00028"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t573" trans="bi\-">
+    <tok_dipl id="t573_d1" trans="bi\-" utf="bī"/>
+    <tok_anno id="t573_m1" trans="bi\-" utf="bī" ascii="bin">
+      <lemma tag="bei"/>
+      <pos tag="APPR"/>
+      <lemmaId tag="[GB02856]"/>
+      <posLemma tag="AP"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GB02856"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t574" trans="din">
+    <tok_dipl id="t574_d1" trans="din" utf="din"/>
+    <tok_anno id="t574_m1" trans="din" utf="din" ascii="din">
+      <lemma tag="dein"/>
+      <pos tag="DPOSA"/>
+      <morph tag="Fem.Akk.Sg"/>
+      <lemmaId tag="[GD01412]"/>
+      <posLemma tag="DPOS"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD01412"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t575" trans="got">
+    <tok_dipl id="t575_d1" trans="got" utf="got"/>
+    <tok_anno id="t575_m1" trans="got" utf="got" ascii="got">
+      <lemma tag="gott"/>
+      <pos tag="NA"/>
+      <morph tag="*.Nom.Sg"/>
+      <lemmaId tag="[GG22661]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GG22661"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t576" trans="vn\-">
+    <tok_dipl id="t576_d1" trans="vn\-" utf="vn̄"/>
+    <tok_anno id="t576_m1" trans="vn\-" utf="vn̄" ascii="vnd">
+      <lemma tag="und"/>
+      <pos tag="KON"/>
+      <lemmaId tag="[GU05758]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GU05758"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t577" trans="dyn">
+    <tok_dipl id="t577_d1" trans="dyn" utf="dyn"/>
+    <tok_anno id="t577_m1" trans="dyn" utf="dyn" ascii="dyn">
+      <lemma tag="dein"/>
+      <pos tag="DPOSA"/>
+      <morph tag="Fem.Akk.Sg"/>
+      <lemmaId tag="[GD01412]"/>
+      <posLemma tag="DPOS"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD01412"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <comment type="K">techti\-: ‚e‘ üdZ</comment>
+  <token id="t578" trans="techti\-.">
+    <tok_dipl id="t578_d1" trans="techti\-." utf="techtī."/>
+    <tok_anno id="t578_m1" trans="techti\-" utf="techtī" ascii="techtin">
+      <annoType tag="auto"/>
+    </tok_anno>
+    <tok_anno id="t578_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(.)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t579" trans="du">
+    <tok_dipl id="t579_d1" trans="du" utf="du"/>
+    <tok_anno id="t579_m1" trans="du" utf="du" ascii="du">
+      <lemma tag="du"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GD05295]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD05295"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t580" trans="$alt">
+    <tok_dipl id="t580_d1" trans="$alt" utf="ſalt"/>
+    <tok_anno id="t580_m1" trans="$alt" utf="ſalt" ascii="salt">
+      <lemma tag="sollen"/>
+      <pos tag="VMFIN"/>
+      <morph tag="3.Sg.Prät.*.Unr"/>
+      <lemmaId tag="[GS30695]"/>
+      <posLemma tag="VM"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS30695"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t581" trans="volge">
+    <tok_dipl id="t581_d1" trans="volge" utf="volge"/>
+    <tok_anno id="t581_m1" trans="volge" utf="volge" ascii="volge">
+      <lemma tag="folgen"/>
+      <pos tag="VVFIN"/>
+      <morph tag="3.Sg.Präs.Konj.Sw"/>
+      <lemmaId tag="[GF06823]"/>
+      <posLemma tag="VV"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GF06823"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t582" trans="mi\-re">
+    <tok_dipl id="t582_d1" trans="mi\-re" utf="mīre"/>
+    <tok_anno id="t582_m1" trans="mi\-re" utf="mīre" ascii="minre">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t583" trans="lere.">
+    <tok_dipl id="t583_d1" trans="lere." utf="lere."/>
+    <tok_anno id="t583_m1" trans="lere" utf="lere" ascii="lere">
+      <lemma tag="lehren"/>
+      <pos tag="VVINF"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GL03581]"/>
+      <posLemma tag="VV"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GL03581"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t583_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+    </tok_anno>
+  </token>
+  <token id="t584" trans="vn\-">
+    <tok_dipl id="t584_d1" trans="vn\-" utf="vn̄"/>
+    <tok_anno id="t584_m1" trans="vn\-" utf="vn̄" ascii="vnd">
+      <lemma tag="und"/>
+      <pos tag="KON"/>
+      <lemmaId tag="[GU05758]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GU05758"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t585" trans="$alt">
+    <tok_dipl id="t585_d1" trans="$alt" utf="ſalt"/>
+    <tok_anno id="t585_m1" trans="$alt" utf="ſalt" ascii="salt">
+      <lemma tag="sollen"/>
+      <pos tag="VMFIN"/>
+      <morph tag="3.Sg.Prät.*.Unr"/>
+      <lemmaId tag="[GS30695]"/>
+      <posLemma tag="VM"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS30695"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t586" trans="dich">
+    <tok_dipl id="t586_d1" trans="dich" utf="dich"/>
+    <tok_anno id="t586_m1" trans="dich" utf="dich" ascii="dich">
+      <lemma tag="du"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Akk"/>
+      <lemmaId tag="[GD05295]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD05295"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t587" trans="an">
+    <tok_dipl id="t587_d1" trans="an" utf="an"/>
+    <tok_anno id="t587_m1" trans="an" utf="an" ascii="an">
+      <lemma tag="an"/>
+      <pos tag="APPR"/>
+      <lemmaId tag="[GA03324]"/>
+      <posLemma tag="AP"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GA03324"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t588" trans="Kathe'ne">
+    <tok_dipl id="t588_d1" trans="Kathe'ne" utf="Katheˢne"/>
+    <tok_anno id="t588_m1" trans="Kathe'ne" utf="Katheˢne" ascii="Katherne">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t589" trans="rede">
+    <tok_dipl id="t589_d1" trans="rede" utf="rede"/>
+    <tok_anno id="t589_m1" trans="rede" utf="rede" ascii="rede">
+      <lemma tag="reden"/>
+      <pos tag="VVINF"/>
+      <morph tag="*"/>
+      <lemmaId tag="[GR02440]"/>
+      <posLemma tag="VV"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GR02440"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t590" trans="nicht">
+    <tok_dipl id="t590_d1" trans="nicht" utf="nicht"/>
+    <tok_anno id="t590_m1" trans="nicht" utf="nicht" ascii="nicht">
+      <lemma tag="nicht"/>
+      <pos tag="PTKNEG"/>
+      <lemmaId tag="[GN04912]"/>
+      <posLemma tag="PI"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GN04912"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t591" trans="k'e.">
+    <tok_dipl id="t591_d1" trans="k'e." utf="kˢe."/>
+    <tok_anno id="t591_m1" trans="k'e" utf="kˢe" ascii="kre">
+      <annoType tag="auto"/>
+    </tok_anno>
+    <tok_anno id="t591_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+      <punc tag="(.)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t592" trans="du">
+    <tok_dipl id="t592_d1" trans="du" utf="du"/>
+    <tok_anno id="t592_m1" trans="du" utf="du" ascii="du">
+      <lemma tag="du"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Nom"/>
+      <lemmaId tag="[GD05295]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD05295"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t593" trans="$alt">
+    <tok_dipl id="t593_d1" trans="$alt" utf="ſalt"/>
+    <tok_anno id="t593_m1" trans="$alt" utf="ſalt" ascii="salt">
+      <lemma tag="sollen"/>
+      <pos tag="VMFIN"/>
+      <morph tag="3.Sg.Prät.*.Unr"/>
+      <lemmaId tag="[GS30695]"/>
+      <posLemma tag="VM"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS30695"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t594" trans="an">
+    <tok_dipl id="t594_d1" trans="an" utf="an"/>
+    <tok_anno id="t594_m1" trans="an" utf="an" ascii="an">
+      <lemma tag="an"/>
+      <pos tag="APPR"/>
+      <lemmaId tag="[GA03324]"/>
+      <posLemma tag="AP"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GA03324"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t595" trans="erme">
+    <tok_dipl id="t595_d1" trans="erme" utf="erme"/>
+    <tok_anno id="t595_m1" trans="erme" utf="erme" ascii="erme">
+      <annoType tag="auto"/>
+    </tok_anno>
+  </token>
+  <token id="t596" trans="libe|vor#$uche">
+    <tok_dipl id="t596_d1" trans="libe|vor#" utf="libevor"/>
+    <tok_dipl id="t596_d2" trans="$uche" utf="ſuche"/>
+    <tok_anno id="t596_m1" trans="libe|" utf="libe" ascii="libe">
+      <lemma tag="leib"/>
+      <pos tag="NA"/>
+      <morph tag="*.Dat.Sg"/>
+      <lemmaId tag="[GL03713]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GL03713"/>
+      <annoType tag="auto"/>
+      <token_type tag="MS1"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t596_m2" trans="vor#$uche" utf="vorſuche" ascii="vorsuche" checked="y">
+      <lemma tag="suchen"/>
+      <lemmaId tag="[GS55817]"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS55817"/>
+      <annoType tag="manual"/>
+      <token_type tag="MS2 US"/>
+    </tok_anno>
+  </token>
+  <token id="t597" trans="ma\-(=)ge">
+    <tok_dipl id="t597_d1" trans="ma\-(=)" utf="mā"/>
+    <tok_dipl id="t597_d2" trans="ge" utf="ge"/>
+    <tok_anno id="t597_m1" trans="ma\-(=)ge" utf="māge" ascii="mange" checked="y">
+      <lemma tag="mögen"/>
+      <pos tag="VMFIN"/>
+      <morph tag="3.Sg.Präs.*.Unr"/>
+      <lemmaId tag="[GM06545]"/>
+      <posLemma tag="VM"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GM06545"/>
+      <annoType tag="manual"/>
+      <token_type tag="UL"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t598" trans="pyne">
+    <tok_dipl id="t598_d1" trans="pyne" utf="pyne"/>
+    <tok_anno id="t598_m1" trans="pyne" utf="pyne" ascii="pyne">
+      <lemma tag="peinigen"/>
+      <lemmaId tag="[GP01551]"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GP01551"/>
+      <annoType tag="auto"/>
+      <punc tag="(,)"/>
+      <cora-flag name="punc"/>
+    </tok_anno>
+  </token>
+  <token id="t599" trans="daz">
+    <tok_dipl id="t599_d1" trans="daz" utf="daz"/>
+    <tok_anno id="t599_m1" trans="daz" utf="daz" ascii="daz">
+      <lemma tag="dasz"/>
+      <pos tag="KOUS"/>
+      <lemmaId tag="[GD00875]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GD00875"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t600" trans="$u">
+    <tok_dipl id="t600_d1" trans="$u" utf="ſu"/>
+    <tok_anno id="t600_m1" trans="$u" utf="ſu" ascii="su">
+      <lemma tag="sie"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Pl.*.Nom"/>
+      <lemmaId tag="[GS27463]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GS27463"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t601" trans="laze">
+    <tok_dipl id="t601_d1" trans="laze" utf="laze"/>
+    <tok_anno id="t601_m1" trans="laze" utf="laze" ascii="laze">
+      <lemma tag="lassen"/>
+      <pos tag="VVIMP"/>
+      <morph tag="Sg"/>
+      <lemmaId tag="[GL01735]"/>
+      <posLemma tag="VV"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GL01735"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t602" trans="ere">
+    <tok_dipl id="t602_d1" trans="ere" utf="ere"/>
+    <tok_anno id="t602_m1" trans="ere" utf="ere" ascii="ere">
+      <lemma tag="ehre"/>
+      <pos tag="NA"/>
+      <morph tag="Fem.Nom.Sg"/>
+      <lemmaId tag="[GE00555]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GE00555"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t603" trans="fal$che">
+    <tok_dipl id="t603_d1" trans="fal$che" utf="falſche"/>
+    <tok_anno id="t603_m1" trans="fal$che" utf="falſche" ascii="falsche">
+      <lemma tag="falsch"/>
+      <pos tag="ADJA"/>
+      <morph tag="Pos.*.Akk.Pl"/>
+      <lemmaId tag="[GF00580]"/>
+      <posLemma tag="ADJ"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GF00580"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t604" trans="rete.">
+    <tok_dipl id="t604_d1" trans="rete." utf="rete."/>
+    <tok_anno id="t604_m1" trans="rete" utf="rete" ascii="rete">
+      <lemma tag="rat"/>
+      <pos tag="NA"/>
+      <morph tag="*.Nom.Pl"/>
+      <lemmaId tag="[GR00934]"/>
+      <posLemma tag="NA"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GR00934"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+    <tok_anno id="t604_m2" trans="." utf="." ascii="." checked="y">
+      <pos tag="$_"/>
+      <posLemma tag="$_"/>
+      <annoType tag="manual"/>
+    </tok_anno>
+  </token>
+  <token id="t605" trans="vn\-">
+    <tok_dipl id="t605_d1" trans="vn\-" utf="vn̄"/>
+    <tok_anno id="t605_m1" trans="vn\-" utf="vn̄" ascii="vnd">
+      <lemma tag="und"/>
+      <pos tag="KON"/>
+      <lemmaId tag="[GU05758]"/>
+      <posLemma tag="KO"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GU05758"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <token id="t606" trans="mich">
+    <tok_dipl id="t606_d1" trans="mich" utf="mich"/>
+    <tok_anno id="t606_m1" trans="mich" utf="mich" ascii="mich">
+      <lemma tag="ich"/>
+      <pos tag="PPER"/>
+      <morph tag="*.Sg.*.Akk"/>
+      <lemmaId tag="[GI00028]"/>
+      <posLemma tag="PPER"/>
+      <lemmaURL tag="http://www.woerterbuchnetz.de/DWB?lemid=GI00028"/>
+      <annoType tag="auto"/>
+      <cora-flag name="lemma verified"/>
+    </tok_anno>
+  </token>
+  <comment type="K">mit: ‚t‘ üdZ</comment>
+</text>

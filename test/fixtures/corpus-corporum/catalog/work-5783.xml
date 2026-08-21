@@ -1,0 +1,57 @@
+<navigation xmlns="http://mlat.uzh.ch/2.0" address="home/38/2173/5783" group_by="" a="0">
+  <path_steps>
+    <path_step idno="" id="" type="" full_path="/" text_section="">home</path_step>
+    <path_step idno="38" id="" type="corpus" full_path="/38" text_section="">Patrologia Latina</path_step>
+    <path_step idno="2173" id="" type="author" full_path="38/2173" text_section="">Abbaudus abbas</path_step>
+    <path_step idno="5783" id="" type="work" full_path="38/2173/5783" text_section="">De fractione corporis Christi</path_step>
+  </path_steps>
+  <last_step accessible="1">
+    <item cc_idno="5783" type="work" collection="cc_works">
+      <cc_idno>5783</cc_idno>
+      <cc_id>AbbAbb.DeFrCoC</cc_id>
+      <name_data>
+      <name>De fractione corporis Christi</name>
+    </name_data>
+      <author_data>
+      <primary_author_idno exp-referenced_item_name="" cc_idno_ref="true">2173</primary_author_idno>
+    </author_data>
+      <cc_metadata>
+      <created>2020-07-09T23:06:50.354</created>
+      <last_modification>2020-07-10T13:01:56.493</last_modification>
+    </cc_metadata>
+      <time_data>
+      <event what="work_composition">
+        <date1>
+          <year>1130</year>
+        </date1>
+      </event>
+    </time_data>
+    </item>
+    <extra_informations>
+      <author_name>Abbaudus abbas</author_name>,
+              if ($steps[last()]/@type="work") then
+              (
+                let $alternative:=db:index($steps[last()]/cc_idno/data())/parent::*/local-name()
+                return $alternative
+              )
+            </extra_informations>
+  </last_step>
+  <summary>
+    <texts>1</texts>
+    <availible_texts>0</availible_texts>
+    <corpora>1</corpora>
+    <works>0</works>
+    <authors>1</authors>
+    <words>0</words>
+  </summary>
+  <contents>
+    <text type="text">
+      <name>De fractione corporis Christi (Abbaudus abbas), J. P. Migne</name>
+      <words_count>0</words_count>
+      <loaded/>
+      <idno>10821</idno>
+      <corpus_name>Patrologia Latina</corpus_name>
+      <accessible>1</accessible>
+    </text>
+  </contents>
+</navigation>

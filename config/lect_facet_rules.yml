@@ -213,6 +213,24 @@ rules:
       "navarro-aragonés": "an:old"
       "navarro": "an:old"
 
+  # ── Q39 (owner-ruled 2026-08-19 by merging nabu-lects PR #5 whose body
+  # states this exact consequence): the ref blanket — the whole corpus is
+  # Early New High German (upstream's own `language: fnhd` tag, censused
+  # 190/190 and parse-verified per file; the deposit's 1350–1650 frame is
+  # the registry band verbatim). The subcorpus facet is total (every text
+  # sits in exactly one deposit dir), so the two-value map IS the blanket.
+  # Tier certain: the corpus's own claim. Target minted by nabu-lects
+  # PR #5 (de:early); this rule retired ref's pending posture row — the
+  # fornsvenska add-then-retire shape.
+  - id: ref-enhg
+    tier: certain
+    sources: [ref]
+    code: de
+    facet: subcorpus
+    map:
+      "ref-mlu": "de:early"
+      "ref-rub": "de:early"
+
   # ── №R-34 (2026-08-18, ruled as recommended): the achemenet blanket —
   # the whole corpus is Achaemenid-period Babylonian (550–330 BCE), and
   # the registry's akk:nb band DELIBERATELY folds the Late Babylonian/
