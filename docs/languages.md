@@ -1,7 +1,7 @@
 # Languages of the library
 
-**As of 2026-08-21** (post the P80 Latin–Romance wave first syncs —
-73,625,479 live passages across the 153-row registry; live
+**As of 2026-08-22** (post the P81 full rebuild —
+73,621,000 live passages across the 153-row registry; live
 inventory: every code below appears in the catalog, the lemma
 index, or the reference shelf). This page explains the code system
 once, then lists the significant codes with one sentence each (the
