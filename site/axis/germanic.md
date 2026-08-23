@@ -43,6 +43,7 @@ A source wears every desk it serves — these thirteen answer this desk. Holding
 | `helipad` | treebank | attribution | wired · manual | 1 docs / 3,549 passages |
 | `ren` | texts | attribution | wired · manual | 235 docs / 297,504 passages |
 | `fornsvenska` | texts | attribution | wired · manual | 155 docs / 170,872 passages |
+| `cme` | texts | open | not yet wired | nothing held yet |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 August 2026)</span>: `ang` 63,169 · `non` 20,448 · `eng` 6,813 · `swe` 3,393 · `gmh` 406 · `gml` 235 · `de` 190 · `sv` 155 · `lat` 17 · `grc` 12 … and 19 more (`nabu axis germanic` lists all).
 

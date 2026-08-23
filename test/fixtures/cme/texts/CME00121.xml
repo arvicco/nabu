@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="http://www.textpartnership.net/docs/code/pfs.css"?>
+<!DOCTYPE ETS SYSTEM "http://www.textpartnership.net/docs/code/eebo2prf.xml.dtd">
+<ETS>
+<!-- TEMPHEAD>
+<REVDESCR>
+<CHANGE><DATE>8-31-16</DATE><RESPSTMT><NAME>lattaj</NAME><RESP>MURP</RESP></RESPSTMT><ITEM>Added TEMPHEAD, checked ID, and added TYPEs to DIVs in order to validate. Checked for N=""s. Checked for GROUP tags. Proofed title. Checked <SUP>s</SUP>. Reviewed structure; added FLOATEXT; changed P to HEAD; changed some LGs to Qs; removed incorrect MILESTONEs; added missing MILESTONE. Checked placement and completeness of PBs. Checked for damage GAPs, #s, @s, dashes, and UNCLEARs. Corrected [dollar]s. Checked for &amp;cs with incorrect spacing. Checked for LBs. Checked for startqs and endqs, abq's, oes, qs, Ae's, and Qs. Checked proofsheets and made corrections. Checked italic I / J and U / V. Checked for missing page GAPs. Checked for EPIGRAPHs and ARGUMENTS. Checked CLOSERs, OPENERs, SIGNEDs, SALUTEs, TRAILERs, BYLINEs. Checked decorated initials. Checked FIGUREs. Sample: 2 minutes. Proofing: 0 minutes. Tag review and corrections: 50 minutes. DONE.</ITEM></CHANGE>
+</REVDESCR>
+</TEMPHEAD -->
+
+<HEADER><FILEDESC><TITLESTMT>
+         <TITLE>Zwei Mittelenglische Christmas Carols / ed. Karl Breul [Englische Studien 14 (1890).]</TITLE>
+         <AUTHOR/>
+         <AUTHOR TYPE="add">Breul, Karl</AUTHOR>
+      </TITLESTMT><EXTENT>9 pages, ca. 28 kb</EXTENT><PUBLICATIONSTMT>
+         <PUBLISHER>University of Michigan Library</PUBLISHER>
+         <PUBPLACE>Ann Arbor, Michigan</PUBPLACE>
+         <DATE>2018</DATE>
+         <IDNO TYPE="dlps">CME00121</IDNO>
+         <IDNO TYPE="aleph">08895506</IDNO>
+         <AVAILABILITY><P>The University of Michigan Library provides access to these materials in furtherance of its educational and research mission. This work has been identified as being in the public domain, free of known restrictions under copyright law, including all related and neighboring rights. You may copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission. If you have questions about the collection, please contact Digital Content and Collections (mec-info@umich.edu). If you have concerns about the inclusion of an item in this collection, please contact Library Information Technology (LibraryIT-info@umich.edu).</P></AVAILABILITY>
+      </PUBLICATIONSTMT><SOURCEDESC>
+         <BIBLFULL>
+            <TITLESTMT>
+               <TITLE TYPE="245" I2="0">Englische studien. Zeitschrift für englische Philologie.</TITLE>
+            </TITLESTMT>
+            <PUBLICATIONSTMT>
+               <PUBPLACE>unknown</PUBPLACE>
+               <PUBLISHER>unknown</PUBLISHER>
+               <DATE>unknown</DATE>
+            </PUBLICATIONSTMT>
+         </BIBLFULL>
+      </SOURCEDESC></FILEDESC><ENCODINGDESC><PROJECTDESC>
+         <P>Header created with script paul2teiheader.xsl on 2018-06-14.</P>
+         <P>Header expanded with script MARC2Paulmap.xsl on 2018-07-31.</P>
+      </PROJECTDESC><EDITORIALDECL N="4">
+         <P>Encoding has been done using the recommendations for Level 4 of the TEI in Libraries Guidelines.</P>
+      </EDITORIALDECL></ENCODINGDESC><PROFILEDESC><LANGUSAGE>
+         <LANGUAGE ID="enm">English, Middle (1100-1500) </LANGUAGE>
+      </LANGUSAGE><TEXTCLASS>
+         <KEYWORDS>
+            <TERM>Verband der deutschen neuphilologischen lehrerschaft.</TERM>
+            <TERM>Language and languages.</TERM>
+            <TERM>Literature.</TERM>
+         </KEYWORDS>
+      </TEXTCLASS></PROFILEDESC><REVISIONDESC>
+<CHANGE><DATE>8-31-16</DATE><RESPSTMT><NAME>lattaj</NAME><RESP>MURP</RESP></RESPSTMT><ITEM>Added TEMPHEAD, checked ID, and added TYPEs to DIVs in order to validate. Checked for N=""s. Checked for GROUP tags. Proofed title. Checked <HI REND="sup">s</HI>. Reviewed structure; added FLOATEXT; changed P to HEAD; changed some LGs to Qs; removed incorrect MILESTONEs; added missing MILESTONE. Checked placement and completeness of PBs. Checked for damage GAPs, #s, @s, --s, and UNCLEARs. Corrected [dollar]s. Checked for &amp;cs with incorrect spacing. Checked for LBs. Checked for startqs and endqs, abq's, oes, qs, Ae's, and Qs. Checked proofsheets and made corrections. Checked italic I / J and U / V. Checked for missing page GAPs. Checked for EPIGRAPHs and ARGUMENTS. Checked CLOSERs, OPENERs, SIGNEDs, SALUTEs, TRAILERs, BYLINEs. Checked decorated initials. Checked FIGUREs. Sample: 2 minutes. Proofing: 0 minutes. Tag review and corrections: 50 minutes. DONE.</ITEM></CHANGE>
+</REVISIONDESC></HEADER>
+
+
+<EEBO>
+<IDG S="marc" R="UM" ID="CME00121">
+<STC T="M">121</STC>
+<BIBNO T="mec">CME00121</BIBNO>
+<VID>CME00121</VID>
+</IDG>
+<TEXT LANG="enm">
+<BODY>
+<DIV1 TYPE="poems">
+<PB REF="1"/>
+<PB N="401" REF="2"/>
+<HEAD>ZWEI MITTELENGLISCHE CHRISTMAS CAROLS.</HEAD>
+<DIV2 N="1" TYPE="poem">
+<HEAD>I. Mariae verkündigung.</HEAD>
+<LG N="1">
+<HEAD>I. <NOTE PLACE="foot">I. Lucas I, 26 . . . missus est angelus Gabriel . . ad virginem . . .</NOTE></HEAD>
+<L>»Ecce ancilla domini«,</L>
+<L>Seyd þ<HI REND="italic">o</HI> virgyn w<HI REND="italic">y</HI>t<HI REND="italic">h</HI>owtyn vice</L>
+<L>When <HI REND="italic">G</HI>abriell hur gret graciously,</L>
+<L>That holy pynakell preved of price.</L>
+<L>»Of þ<HI REND="italic">e</HI> schall sprynge a full swete spice«. <MILESTONE N="5"/></L>
+<L>Then seyde þ<HI REND="italic">e</HI> meydon full myldely:</L>
+<L>»And sythen I ame so lytull of p<HI REND="italic">ri</HI>ce:</L>
+<L>Ecce ancilla domini.«</L>
+</LG>
+<LG N="2">
+<HEAD>II. <NOTE PLACE="foot">II. Lucas I 28 Et ingressus angelus ad eam dixit: Have, gratia plena: dominus tecum, bene∣dicta tu in mulieribus.</NOTE></HEAD>
+<L>»Heyll be þow gr<HI REND="italic">a</HI>cius w<HI REND="italic">y</HI>t<HI REND="italic">h</HI>owtton gilte,</L>
+<L>Maydon borne alderbest, <MILESTONE N="10"/></L>
+<L>Wythin þ<HI REND="italic">i</HI> body schall be fulfyllyd</L>
+<L>Þat all these <HI REND="italic">pro</HI>phetes han p<HI REND="italic">re</HI>ched so p<HI REND="italic">re</HI>ste:</L>
+<L>And 'Angelus ad Virginem' he sang.</L>
+<L>Chaucer, The Milleres Tale. 30.</L>
+<L>God will be borne w<HI REND="italic">y</HI>t<HI REND="italic">h</HI>in þ<HI REND="italic">i</HI> brest.«</L>
+<L>Þen seyde þ<HI REND="italic">o</HI> meydon full myldely:</L>
+<L>»To me he schall be a welcom<HI REND="italic">e</HI> geste, <MILESTONE N="15"/></L>
+<L>Ecce ancilla domini.«</L>
+</LG>
+<LG N="3">
+<HEAD>III. <NOTE PLACE="foot">III. Luc. I, 29: Quae cum vidisset, turbata est in sermone eius et cogitabat, qualis esset ista salutatio. 30: Et ait angelus ei: ne timeas, Maria: invenisti enim gratiam apud deum;</NOTE></HEAD>
+<L>Bot whe<HI REND="italic">n</HI> sche sawe an angell bryght</L>
+<L>Sche was aferde in all her thoght,</L>
+<L>And of his speche elles wond<HI REND="italic">ur</HI> sche myght.</L>
+<L>Þen seyde þ<HI REND="italic">o</HI> angell: »<HI REND="italic">D</HI>rede the noght, <MILESTONE N="20"/></L>
+<L>A blestful tyþynge I have þ<HI REND="italic">e</HI> broght.«</L>
+<L>Then seyde þ<HI REND="italic">o</HI> meydon ful myl∣dely:</L>
+<L>»Os god will, so be it wroght,</L>
+<L>Ecce ancilla domini.«</L>
+</LG>
+<LG N="4">
+<PB N="402" REF="3"/>
+<HEAD>IV. <NOTE PLACE="foot">IV. Lucas I, 32: Ecce concipies in utero et paries filium, et vocabis nomen eius Iesum. 31: Hic erit magnus et filius altissimi vocabitur.</NOTE></HEAD>
+<L>Þ<HI REND="italic">a</HI> tangell seyde: <HI REND="italic">C</HI>onceyve þ<HI REND="italic">o</HI>u schalt <MILESTONE N="25"/></L>
+<L>W<HI REND="italic">y</HI>t<HI REND="italic">h</HI>in þ<HI REND="italic">i</HI> body bryght</L>
+<L>A childe þat J<HI REND="italic">e</HI>su schall be called,</L>
+<L>Þ<HI REND="italic">a</HI>t is gra<HI REND="italic">t</HI>e godd<HI REND="italic">ys</HI> son of myght, <NOTE PLACE="foot">28 grate] grace.</NOTE></L>
+<L>Thow art his tabernakull idyght.</L>
+<L>Þen seyde þ<HI REND="italic">o</HI> meydon full myldely: <MILESTONE N="30"/></L>
+<L>—Seþen he seyde nev<HI REND="italic">er</HI> ayeyns ryght—</L>
+<L>»Ecce ancilla domini.«</L>
+</LG>
+<LG N="5">
+<HEAD>V. <NOTE PLACE="foot">V. Lucas I., 32: et dabit illi dominus sedem David patris eius et regnabit in domo Iacob in aeternum. 33: et regni eius non erit finis.</NOTE></HEAD>
+<L>»Call hym J<HI REND="italic">e</HI>su of <HI REND="italic">N</HI>azareth,</L>
+<L>God and mon in on degre:</L>
+<L>Ryght os mon schall suff<HI REND="italic">ur</HI> dethe <MILESTONE N="35"/></L>
+<L>And regne in <HI REND="italic">D</HI>avid dignite;</L>
+<L>A blestfull worde he sende to the.«</L>
+<L>Þen seyde þ<HI REND="italic">o</HI> meydon full myldely:</L>
+<L>»He schall be dere welcu<HI REND="italic">m</HI> to mee,</L>
+<L>Ecce ancilla domini.« <MILESTONE N="40"/></L>
+</LG>
+<LG N="6">
+<HEAD>VI. <NOTE PLACE="foot">VI. Lucas I, 34: Dixit autem Maria ad angelum: quomodo fiet istud? quoniam virum non cog∣nosco. 35: Et respondens angelus dixit ei: spiritus sanctus superveniet in te, et virtus altissimi obumbrabit tibi, ideoque et quod nascetur sanctum vocabitur filius dei. 38: Dixit autem Maria: Ecce ancilla domini, fiat mihi secundum verbum tuum. Et discessit ab illa angelus.</NOTE></HEAD>
+<L>»Bot w<HI REND="italic">y</HI>t<HI REND="italic">h</HI> mann<HI REND="italic">y</HI>s mode nev<HI REND="italic">er</HI> I mette,</L>
+<L>Now lorde, how schall I go w<HI REND="italic">y</HI>t<HI REND="italic">h</HI> chylde?«</L>
+<L>Þen seyde þ<HI REND="italic">o</HI> angell þ<HI REND="italic">a</HI>t her grett:</L>
+<L>»W<HI REND="italic">y</HI>t<HI REND="italic">h</HI> non<HI REND="italic">e</HI> suche þ<HI REND="italic">o</HI>u schalt be fylede,</L>
+<L>Þ<HI REND="italic">o</HI> holy goste will in the byldon.« <MILESTONE N="45"/></L>
+<L>Þen seyde þ<HI REND="italic">o</HI> meydon full myldely:</L>
+<L>»Os god will, so be it done,</L>
+<L>Ecce ancilla domini.«</L>
+</LG>
+<LG N="7">
+<HEAD>VII.</HEAD>
+<L>When þ<HI REND="italic">o</HI> angell was vanesched awey</L>
+<L>Sche stode all in hur thoght, <MILESTONE N="50"/></L>
+<L>And to herselfe sche can sey:</L>
+<L>»All godes wille schall be wroght;</L>
+<L>For he is well of all witte,</L>
+<L>As wytnesse<HI REND="italic">s</HI> welle his story.« <NOTE PLACE="foot">54 wytnesses] wytnesse.</NOTE></L>
+<L>—At that worde knot was knytte.— <MILESTONE N="55"/></L>
+<L>»Ecce ancilla domini.«</L>
+</LG>
+</DIV2>
+<DIV2 N="2" TYPE="poem">
+<HEAD>II. Auf Weihnachten und Epiphanias.</HEAD>
+<LG N="1">
+<HEAD>I.</HEAD>
+<L>J<HI REND="italic">e</HI>su almyghty kyng of blys</L>
+<L>Assumpsit carnem virginis.</L>
+</LG>
+<LG N="2">
+<HEAD>II.</HEAD>
+<L><HI REND="italic">O</HI>s holy kyrke maky<HI REND="italic">s</HI> mynd</L>
+<L>Intravit ventris thalamu<HI REND="italic">m,</HI></L>
+<L>Fro hevyn to erthe to save monkynd <MILESTONE N="5"/> <NOTE PLACE="foot">5 Os] Is; makys] makyd.</NOTE></L>
+<L>Pater misit filium.</L>
+</LG>
+<LG N="3">
+<HEAD>III.</HEAD>
+<L>Of <HI REND="italic">M</HI>ary mylde <HI REND="italic">C</HI>ryste wolde be borne</L>
+<L>Sine virili semine,</L>
+<L>To save monkynd þ<HI REND="italic">a</HI>t was forlorne</L>
+<L>Prime parent<HI REND="italic">is</HI> crimine. <MILESTONE N="10"/></L>
+</LG>
+<LG N="4">
+<HEAD>IV.</HEAD>
+<L>To <HI REND="italic">M</HI>are come a messenger</L>
+<L>Ferens salutem ho<HI REND="italic">min</HI>i,</L>
+<L>Sche aunswerd hym w<HI REND="italic">i</HI>t<HI REND="italic">h</HI> mylde chere:</L>
+<L>»Ecce ancilla d<HI REND="italic">omi</HI>ni.«</L>
+</LG>
+<LG N="5">
+<HEAD>V.</HEAD>
+<L>»Mekely on þ<HI REND="italic">e</HI> þ<HI REND="italic">o</HI> holy goste <MILESTONE N="15"/></L>
+<L>Palaciu<HI REND="italic">m</HI> int<HI REND="italic">ra</HI>ns uteri,</L>
+<L><PB N="403" REF="4"/>
+Of althyng meknes is moste</L>
+<L>In conspectu altissimi.«</L>
+</LG>
+<LG N="6">
+<HEAD>VI.</HEAD>
+<L>When he was borne þat made all thyng,</L>
+<L>Pastor creator omniu<HI REND="italic">m,</HI> <MILESTONE N="20"/></L>
+<L>Angell<HI REND="italic">y</HI>s þei began to syng:</L>
+<L>»Veni redemptor genciu<HI REND="italic">m.</HI>«</L>
+</LG>
+<LG N="7">
+<HEAD>VII.</HEAD>
+<L>Thre kyng<HI REND="italic">ys</HI> come on goid XII day,</L>
+<L>Stella myca<HI REND="italic">n</HI>te p<HI REND="italic">re</HI>via,</L>
+<L>To seche þat chylde þei toke þo wey <MILESTONE N="25"/></L>
+<L>Portantes sibi mun<HI REND="italic">er</HI>a.</L>
+</LG>
+<LG N="8">
+<HEAD>VIII.</HEAD>
+<L>A sterne forth ladde þeis kyng<HI REND="italic">ys</HI> all</L>
+<L>Inquirentes d<HI REND="italic">om</HI>inu<HI REND="italic">m,</HI></L>
+<L>Lyyng in a nasse stall</L>
+<L>Inveneru<HI REND="italic">n</HI>t pueru<HI REND="italic">m.</HI> <MILESTONE N="30"/></L>
+</LG>
+<LG N="9">
+<HEAD>IX.</HEAD>
+<L>For he was kyng of kyng<HI REND="italic">ys</HI> heghe</L>
+<L>Rex p<HI REND="italic">ri</HI>m<HI REND="italic">us</HI> auru<HI REND="italic">m</HI> optulit;</L>
+<L>And allso lord and [kyng ful ryght] <NOTE PLACE="foot">33 kyng ful ryght] ist von einer späteren hand zugesetzt.</NOTE></L>
+<L>S<HI REND="italic">e</HI>c<HI REND="italic">un</HI>d<HI REND="italic">u</HI>s rex thus p<HI REND="italic">er</HI>tulit.</L>
+</LG>
+<LG N="10">
+<HEAD>X.</HEAD>
+<L>For he was god, mon and kyng <MILESTONE N="35"/></L>
+<L>Mirra mortem retulit.</L>
+<L>He hus all to heven bryng</L>
+<L>Qui mortem cruce voluit.</L>
+</LG>
+</DIV2>
+<DIV2 N="1" TYPE="commentary">
+<HEAD>I. Mariae verkündigung.</HEAD>
+<P>Das gedicht folgt, wie der zur bequemlichkeit des vergleichs unter dem texte angeführte lat. bibeltext beweist, im allgemeinen der schrift verhältnissmässig genau, vor allem in den strophen II-VI. Die abweichungen und mehrfachen formelhaften wiederholungen erklären sich theils aus dem zu einem gewissen ab∣schluss am ende jeder strophe drängenden bau des gedichtes, auch aus dem be∣streben, jede strophe mit derselben antwort der jungfrau abzuschliessen. Dadurch wird allerdings in strophe II der gedanke von strophe V in Mariens antwort un∣passend vorweggenommen, in strophe IV und V eng zusammengehöriges aus∣einandergerissen sowie die namengebung zu weitschweifig erzählt. Die strophen I und VII sind am freiesten gebaut, die anordnung der sätze in der ersten ist we∣nig gelungen. Hübsch klingt das gedicht mit dem »Ecce ancilla domini« an und aus. Dass in strophe VI, abweichend von andern englischen gedichten über den∣selben gegenstand, von der berufung auf das beispiel der Elisabeth kein gebrauch gemacht wurde (Lucas I, 36-37), kann nur gebilligt werden. Einen lat. hymnus, von welchem dieser nur eine übersetzung oder enge nachbildung wäre, kann ich nicht nachweisen. Aehnliche finden sich natürlich in nicht geringer anzahl, u. a. bei Mone, »Lat. hymnen d. mittelalters« II. Bis auf einige gelehrte beiworte (4. 29) ist das gedicht in schlichtem und volksthümlich sangbarem tone abgefasst und in jeder strophe begegnen wir vielfach alliterirenden zeilen. Die wiederholungen sind entweder wörtliche, wie die drittletzte und letzte zeile der strophen I-VI, oder leise variirt, wi<HI REND="italic">e</HI> 15, 39; 23, 47, 52; 21, 37. Es werden damit die hauptgedanken ganz besonders eindringlich hervorgehoben; seitens des engels, dass die botschaft »blestfull« sei, seitens der jungfrau, dass gottes wille an ihr in erfüllung gehen möge und des höchsten sohn ihr ein »welcome gest« sein solle. Andere, jedoch weit trocknere, englische gedichte über denselben gegenstand finden sich z. b. in den bänden der Percy Society <NOTE N="1)" PLACE="foot">Vgl. s. 405 und anmerkung.</NOTE> IV<SUP>2</SUP>, 15; IV<SUP>2</SUP>, 44: XXIII, 36; 36; 79.</P>
+<P><PB N="404" REF="5"/>
+Im einzelnen sei noch folgendes bemerkt:</P>
+<P>4. <HI REND="italic">preved of price,</HI> welches dem <HI REND="italic">lytull of price</HI> in der siebten zeile gegenüber∣steht, bedeutet natürlich so viel wie 'proved to be of price', 'of great price', 'of high value'. Die alliterirende verbindung macht den eindruck einer sehr gebräuch∣ltchen phrase, doch kann ich sie ausser an dieser stelle nirgends nachweisen.</P>
+<P>26. Der vers ist um eine hebung zu kurz. Etwa <HI REND="italic">fayre and bryght?</HI></P>
+<P>27. <HI REND="italic">grate</HI> (wie ich anstatt des handschriftlich überlieferten <HI REND="italic">grace</HI> lese) ist die nördliche schreibung für <HI REND="italic">grete. grete goddys son of myght</HI> gibt das <HI REND="italic">filius altissimi</HI> der quelle wieder. Auch sonst zeigt das gedicht spuren nördlichen dialekts, freilich nur im versinnern, z. b. v. 23 <HI REND="italic">os</HI> für <HI REND="italic">as</HI> und v. 35 <HI REND="italic">in David dig∣nite</HI> das flexionslose <HI REND="italic">David.</HI> Freilich könnte man an das lateinische <HI REND="italic">sedem David</HI> denken, doch findet sich, wie mir prof. Skeat mittheilt, <HI REND="italic">David</HI> sowie andere eigennamen noch heute häufig im norden Englands ohne flexion.</P>
+<P>41. <HI REND="italic">mode. mod</HI> bezeichnet hier wie häufig im Altenglischen (vgl. Bosworth-Toller, s. 693<SUP>a</SUP>) und '<HI REND="italic">soul</HI>' oder '<HI REND="italic">spirit</HI>' im Neuenglischen soviel wie 'person'; '<HI REND="italic">wyth mannys mode</HI>' ist daher eine umschreibung für '<HI REND="italic">wyth a man</HI>'.</P>
+<P>45. Bemerkenswerth ist der reim <HI REND="italic">byldon: done</HI> (47).</P>
+<P>54. <HI REND="italic">his story</HI> ist die geschichte 'von ihm', also die bibel.</P>
+<P>55. <HI REND="italic">knot was knytte</HI> ist eine eigenthümliche redensart. Sie scheint an dieser stelle doch mehr bedeuten zu sollen als etwa 'ein ende gemacht'. Darauf deutet das von Thomas Wright für die Percy Society (vol. XXIII, »Songs and Carols« s. 45) veröffentlichte gedicht, welches ich der merkwürdigkeit halber und da es nicht jedem gleich zur hand sein dürfte hersetze. Es lautet:
+<Q><TEXT LANG="enm"><BODY><DIV1 TYPE="poem">
+<HEAD>Off al the knottes that I se, I prese the knot in trenite.</HEAD>
+<LG N="1">
+<HEAD>1.</HEAD>
+<L>An aungell fro hevn gan lyth,</L>
+<L>A greth a maydyn that was so bryth;</L>
+<L>A treu knot ther was knyt</L>
+<L>Betwyn them both in trinyte.</L>
+</LG>
+<LG N="2">
+<HEAD>2.</HEAD>
+<L>After ys that fayyrly fod,</L>
+<L>For hus he bled his hart blod,</L>
+<L>Qwan he was don on the rod,</L>
+<L>The knottes war knit with nales iij.</L>
+</LG>
+<LG N="3">
+<HEAD>3.</HEAD>
+<L>Wettnes of apostyll Johan,</L>
+<L>He ros hup and wold gon;</L>
+<L>The knot was knyt with marbyl ston,</L>
+<L>Thorow the vertu of the trenyte.</L>
+</LG>
+<LG N="4">
+<HEAD>4.</HEAD>
+<L>On Schere Thursday he steyd to hevun,</L>
+<L>Hys fader hym blyssyd with myld stevn;</L>
+<L>For to fulfyl the deddes wyll,</L>
+<L>The knot was knit with persons iij.</L>
+</LG>
+<LG N="5">
+<HEAD>5.</HEAD>
+<L>God xal rysyn at domusday,</L>
+<L>Hys V. knottes for to spray;</L>
+<L>To al men he xal say,</L>
+<L>Lo, man, wat knot I knyt for the.</L>
+</LG></DIV1></BODY></TEXT></Q></P>
+<P>In diesem falle würde unser <HI REND="italic">knot was knytte</HI> sich auf den ersten jener fünf zum heil der welt geschlungenen knoten (Christi geburt, tod, auferstehung, himmelfahrt,
+<PB N="405" REF="6"/>
+wiederkunft zum gericht) beziehen. Sonst ist mir die phrase nicht begegnet. An∣ders ist (Percy-Society XXIII, 84):</P>
+<Q>
+<L>In his byrth holy was knytt</L>
+<L>God and man in his degre.</L>
+</Q>
+<P>Vielleicht fügen kenner der religiösen litteratur des mittelalters gelegentlich den hier angeführten stellen erwünschte parallelen hinzu.</P>
+</DIV2>
+<DIV2 N="2" TYPE="commentary">
+<HEAD>II. Auf Weihnachten und Epiphanias.</HEAD>
+<P>Lieder, in welchen sich mit der volkssprache Latein mischt, begegnen in der mittelalterlichen litteratur sehr häufig und erklären sich leicht aus der gelehrten bildung ihrer verfasser. In weltlichen liedern liebten die fahrenden schüler, in reli∣giösen gedichten die geistlichen die gelehrte, volltönende sprache der wissenschaft und der kirche mit der volkssprache entweder zeilenweise oder doch am schluss jeder strophe abwechseln zu lassen (vgl. ten Brink, Gesch. d. engl. litt. I, 379 ff.). Das letztere scheint das häufigere zu sein, wenigstens in den von Thomas Wright für die Percy Society veröffentlichten geistlichen und weltlichen gedichten, welche hier in erster linie berücksichtigt sind <NOTE N="1)" PLACE="foot">Da es im folgenden nur auf eine erkärung der beiden oben veröffent∣lichten gedichte, keineswegs aber auf eine geschichte der mittelenglischen geist∣lichen lieder überhaupt abgesehen ist, sind nicht alle sammlungen solcher lieder berücksichtigt worden. Die in bd. IV und XXIII der Percy Society Publications von Thomas Wright herausgegebenen lieder citire ich im folg. einfach IV, XXIII. Die arabische zahl bezieht sich auf die seite.</NOTE> (bd. IV [1842] <SUP>1</SUP> »Specimens of Lyric Poetry« [aus dem ms. Harl. 2253, wesshalb Böddeker's ausgabe nicht noch be∣sonders angeführt wird], <SUP>2</SUP> »Christmas Carols«; bd. XXIII [1847] »Songs and Carols«) habe ich nur ein englisch-lateinisches weinlied gefunden (XXIII, 53), welches metrisch dem unsern genau entspricht und auf je eine englische zeile eine la∣teinische folgen lässt, wobei die sprachlich zusammengehörigen reihen auch durch den reim gebunden sind. Meist wird zu schluss jeder strophe entweder derselbe lateinische kehrreim gesungen, wie z. b. in excelsis gloria (IV<SUP>2</SUP>, 32); miserere nobis [IV<SUP>2</SUP>, 54); te deum laudamus (IV<SUP>2</SUP>, 56); parce mihi, domine (XXIII, 40). Zu dieser art gehört auch das vorhin besprochene »Ecce ancilla domini«. Oder es tritt am ende jeder strophe ein anderer abschluss ein, wie z. b. a. a. o. IV<SUP>2</SUP>, 5; IV<SUP>2</SUP>, 7; IV<SUP>2</SUP>, 13; IV<SUP>2</SUP>, 33; XXIII, 17; XXIII, 21; XXIII, 53 u. s. w. Auch gibt es eine anzahl von gedichten, in denen entweder der anfang und schluss einer strophe lateinisch ist, wie XXIII, 18; oder in denen Latein und Englisch völlig durchein∣ander geht, wie in XXIII, 48. Ein mischmasch von Französisch, Latein und am schluss Englisch findet sich IV<SUP>1</SUP>, 64 (vgl. ten Brink 380). Englisch und Französisch in abwechselnden reihen, welche metrisch jedoch nicht von derselben länge sind wie die in unserem gedichte, mischt IV<SUP>1</SUP>, 97; nicht abwechselnd, sondern das Fran∣zösische nur hie und da zu anfang einer strophe eingestreut IV<SUP>2</SUP>, 51. Französich und Lateinisch, im versmass sich unserem gedicht genau zur seite stellend, bieten die Reliquiae Antiquae I, 200; vgl. auch IV<SUP>2</SUP>, 59. In mancher beziehung, besonders zu eingang der strophe, unserem gedicht ähnlich, gegen den schluss stark ab∣weichend und im ganzen kunstvoller gebaut ist die Rel. Ant. I, 89 mitgetheilte 'Hymn to the Virgin'.</P>
+<P><PB N="406" REF="7"/>
+Unser gedicht setzt sich in seiner englischen wie in seiner lateinischen hälfte grossentheils aus phrasen zusammen, welche, wie im folgenden an einigen beispielen gezeigt werden soll, sich in der zeitgenössischen geistlichen litteratur überall wiederfinden. Doch schreitet das lied, mit ausnahme der strophe V, welche anscheinend fehlerhaft überliefert ist, rasch, klar und sangbar fort von gottes rathschluss, die welt zu retten, zur verkündigung Mariae, Christi geburt und dem besuch der drei könige, bei welchem am längsten verweilt wird und welcher die jener zeit geläufige mystische deutung erhält.</P>
+<P>Im einzelnen bemerke ich noch folgendes:</P>
+<P>1. Das beiwort <HI REND="italic">king of blys</HI> wird Jesus in den geistlichen liedern häufig gegeben, z. b. noch IV<SUP>2</SUP>, 55. Zwei anfangszeilen vor sonst vierzeiligem gedicht finden sich auch sonst, vgl. IV<SUP>2</SUP>, 54 und 55.</P>
+<P>3. Die lesart der hs. giebt keinen sinn, ist aber unschwer zu berichtigen. Prof. Skeat machte die bemerkung, dass nördliche umschreibungen ursprünglich südlicher gedichte das ursprüngliche <HI REND="italic">đ</HI> mehrfach durch d ersetzen. Das e in kyrke hat hier auch noch den vollen werth einer silbe. Ist v. 17 vielleicht auch 'alle thing' zu lesen?</P>
+<P>4. <HI REND="italic">Ventris thalamus</HI> ist eine etwas merkwürdige ausdrucksweise, doch vgl. Mone, Lat. Hymn. d. mittelalters II, 58, 36; II. 67, 19, wo ähnliche wendungen mit thalamus sich finden. Vgl. auch V. 16 palatium uteri und die anmerkung dazu.</P>
+<P>&amp;. Vgl. IV<SUP>2</SUP>, 54/55, Jhesu, of a mayde thou woldest be borne, | to save man kynde that was forlorne.</P>
+<P>8. cf. Mone, a. a. o. I, 30, 9; I, 40, 5; und öfter.</P>
+<P>9. Vgl. zu 7 und XXIII, 2 u, ö.</P>
+<P>10. Dieser gegensatz zwischen Eva und Maria ist in den geistlichen ge∣dichten typisch. Vgl. Mone, a. a. o. II, 22, 11-12. Evae lapsus jam restituitur in Maria; ibd. II, 67. 7 ff. Ave mundi domina, | Evae solvens crimina, | o Maria.</P>
+<P>12. <HI REND="italic">Homini</HI> steht ganz allgemein für monkynd (5).</P>
+<P>15. Diese zeile scheint verderbt überliefert zu sein, doch weiss ich nicht, wie zu bessern. Der zusammenhang zwischen v. 16 and 17 ist sehr locker.</P>
+<P>16. <HI REND="italic">Palacium uteri</HI> ist mir sonst in geistlichen gedichten nicht aufgestossen, doch sind derartige umschreibungen nicht selten, vgl. z. b. ausser v. 4, auch Mone, a. a. o. II, 36, 36 in templum tui pectoris.</P>
+<P>22. <HI REND="italic">Veni, redemptor gentium</HI> findet sich häufig in den hymnen als kehrreim z. b. IV<SUP>2</SUP>, 57 und XXIII, 48 heisst es Syng we of hym and sey wolcum, | veni, redemptor gencium. In lat. hymnen gleichfalls häufig, vgl. Mone I, 30, 5; auch I, 58, 2.</P>
+<P>24. cf. Mone, I, 58, 5 ff. Quem <HI REND="italic">stella</HI> natum fulgida | monstrat <HI REND="italic">micans</HI> per aethera | magosque duxit <HI REND="italic">praevia</HI> | ipsius ad cunabula.</P>
+<P>29. Anstatt des 'eselstalles' wird meist ein 'ochsenstall' gesetzt, z. b. IV<SUP>2</SUP>, 51 Criste is now born of a pure mayde, | in an oxe stalle he is layde. XXIII, 42: in an oxstall the chyld was fownd.</P>
+<P>31. Die überlieferung der strophe ist verderbt, v. 33 kyng ful ryght von einer späteren hand zugesetzt und sowohl dem reim wie dem sinne nach unge∣hörig. Die strophen IX und X geben die bekannte mystische deutung der gaben der heiligen drei könige, welche aus den lateinischen hymnen und schriften der kirchenväter auch in die litteratur der volkssprachen überging, sich in der eng∣lischen litteratur häufig nachweisen lässt, in der deutschen z. b. schon bei Otfrid I,
+<PB N="407" REF="8"/>
+17, 71-72 vorkommt. Die hauptsächlichsten lateinischen prosabelegstellen haben Erdmann und Piper in ihren kommentaren zu der betreffenden Otfridstelle ange∣führt; von lat. hymnen erwähne ich Mone I, 39, 16 ff. sowie I, 60, 13 ff. (und Mone zu letzterer stelle), verweise auch auf das in der Zeitschrift f. d. a. XXXII, 415 mitgetheilte dreikönigsspiel, wo sich völlig entsprechendes findet. Zu diesen füge ich aus der englischen litteratur folgende hinzu. Aus den Old Kentish Ser∣mons (Old Engl. Miscell. 27). »And be þet hi offrede Gold. þet is cuuenable yeftte to kinge: seawede þet he was sothfast king, and be þet hi offrede Stor. þet me offrede wylem be þo ialde laghe to here godes sacrefise. seawede þet he was verray prest. And be þet hi offrede Mirre. þet is biter þing. signefieth þet hi hedde biliaue þet he was diadlich. þeth diath solde suffri for man-ken.« Im Cursor Mundi heisst es im abschnitt vom besuch der drei könige v. 120 ff., worauf mich prof. Skeat freundlich hingewiesen hat (Morris and Skeat, Spec. of E. Engl. II, 73):</P>
+<Q>
+<L>Þe first o þam þat Jasper hight,</L>
+<L>He gaf him gold wit resun right,</L>
+<L>And þat was for to sceu takning</L>
+<L>O kynges all þat he was kyng.</L>
+<L>Melchior him com þair neist—</L>
+<L>Heid he was, bath Godd and prist—</L>
+<L>Wit recles forwit him he fell,</L>
+<L>Þat agh be birnt in kirc to smell;</L>
+<L>It es a gum þat cums o firr.</L>
+<L>Bot Attropa gaf gift o mir,</L>
+<L>A smerl o selcuth bitturnes,</L>
+<L>Þat dedman cors wit smerld es,</L>
+<L>For roting es na better rede;</L>
+<L>In taken he man was suld be dede.</L>
+</Q>
+<P>Aber noch heute ist diese deutung in England sehr geläufig, da sie in einer hymne des Book of Common Prayer sich findet (Hymns Ancient and Modern, nr. 76, strophe 4):</P>
+<Q>
+<L>Sacred gifts of mystic meaning:</L>
+<L>Incense doth their God disclose,</L>
+<L>Gold the King of kings proclaimeth,</L>
+<L>Myrrh His sepulchre foreshows.</L>
+</Q>
+<P>Das 'kyng of kyngys' (31) unseres gedichtes wird durch die stelle im Cursor Mundi sowohl wie dieser hymne gestützt. 'Heghe' kann gleichfalls sehr wohl richtig sein, ein reim auf 'ryght' wäre 'hyght', wodurch indess der sinn nicht ge∣winnen würde. Dazu ist 'ryght' in dem ganzen zusammenhange höchst unsicher. Das 'full ryght' schmeckt stark nach einer flickphrase, und anstatt des vorhergehen∣den 'kyng' ist jedenfalls ein anderes substantiv, vielleicht 'prest', einzusetzen, nach analogie der stelle im C. M. Wie aber dann der vers zu enden wäre im reim auf 'heghe' weiss ich nicht.</P>
+<P>35. '<HI REND="italic">God, mon and king</HI>' findet sich mehrfach in dieser weise zusammen∣gestellt, z. b. IV<SUP>2</SUP>, 18 »The XII. day offeryd to him kynges III. | gold, myrre, incens, this ȝiftes fre, | For God and man and kyng is he. (Dasselbe gedicht wiedergedruckt XXIII, 24).</P>
+<P><PB N="408" REF="9"/>
+Beide im vorstehenden mitgetheilten, wohl dem XV. jahrhundert angehörigen gedichte sind der papierhs. 19. 3. 1 der Advocates library zu Edinburgh ent∣nommen, welche auch den Sir Gowther enthält und von mir in meiner ausgabe dieses gedichtes (Oppeln 1886) s. 1 beschrieben ist. Ich habe die gedichte 1882 zugleich mit dem Gowther und dem 'Boke of Curtesy' (cf. Engl. stud. IX, 51 ff.) abgeschrieben. 'Mariae verkündigung' steht auf fol. 89<SUP>vo</SUP> fg. und das Weihnachts∣nachts- und Epiphaniaslied' auf fol. 59<SUP>vo</SUP> fg. Die ursprüngliche mundart beider gedichte ist aus den reimen nicht festzustellen. Die seltsame orthographie der hs. habe ich bereits im grammatischen theile des Sir Gowther genügend erörtert. Hier wie dort finden wir in der schreibung, oft in der schreibung desselben wortes, das grösste schwanken z. b. þ und th wechseln beständig (þ<SUP>t</SUP> II, 9; þat II, 19; þe I, 21; the I, 20. Dann Mary II, 7; Mare II, 11. althyng II, 17; allthyng II, 19; aunswerd II, 13; angellys II, 21. heven II, 37; hevyn II, 5. fulfyllyd I, 11; called I, 27. w<SUP>t</SUP>owtyn II, 2; w<SUP>t</SUP>owton I, 9. hur I, 50; her I, 51. pynakell I, 4; tabernakull I, 29; lytull I, 7. the I, 37; mee I, 39. welcome I, 15; welcum I, 39 etc.). Im vor∣hergehenden ist diese ungleichheit beibehalten und eine normalisirung nur inso∣fern durchgeführt, als dass eigennamen (David, Mary, Gabriell) durchweg den grossen anfangsbuchstaben erhalten haben, am zeilenanfang die majuskel durch∣geführt ist, u und v geschieden sind, und zusammengehöriges zusammengeschrieben ist, z. b. a ferde, w<SUP>t</SUP> in, blest full. Doch ist a nasse stall (II, 29) unverändert ge∣blieben. Alle abweichungen meines textes von der handschriftlichen lesart sind durch cursiven druck ausgezeichnet. Einige bemerkungen hat mir herr prof. Skeat mit gewohnter liebenswürdigkeit beigesteuert.</P>
+<CLOSER><DATELINE>CAMBRIDGE, <DATE>im August 1888.</DATE></DATELINE>
+<SIGNED>Karl Breul.</SIGNED></CLOSER>
+</DIV2>
+</DIV1>
+</BODY>
+</TEXT>
+</EEBO>
+</ETS>
