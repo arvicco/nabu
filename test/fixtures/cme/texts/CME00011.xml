@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="http://www.textpartnership.net/docs/code/pfs.css"?>
+<!DOCTYPE ETS SYSTEM "http://www.textpartnership.net/docs/code/eebo2prf.xml.dtd">
+<ETS>
+<!-- TEMPHEAD>
+<REVDESCR>
+<CHANGE><DATE>6-13-16</DATE><RESPSTMT><NAME>lattaj</NAME><RESP>MURP</RESP></RESPSTMT><ITEM>Added TEMPHEAD, checked ID, and added TYPEs to DIVs in order to validate. Checked for N=""s. Checked for GROUP tags. Proofed title. Checked <SUP>s</SUP>. Reviewed structure; changed CLOSER SIGNED to BYLINE. Checked placement and completeness of PBs. Checked for damage GAPs, #s, @s, dashes, and UNCLEARs. Corrected [dollar]s. Checked for &amp;cs with incorrect spacing. Checked for LBs. Checked for startqs and endqs, abq's, oes, qs, Ae's, and Qs. Checked proofsheets and made corrections. Checked italic I / J and U / V. Checked for missing page GAPs. Checked for EPIGRAPHs and ARGUMENTS. Checked CLOSERs, OPENERs, SIGNEDs, SALUTEs, TRAILERs, BYLINEs. Checked decorated initials. Checked FIGUREs. Sample: 2 minutes. Proofing: 0 minutes. Tag review and corrections: 50 minutes. DONE.</ITEM></CHANGE>
+</REVDESCR>
+</TEMPHEAD -->
+
+<HEADER><FILEDESC><TITLESTMT>
+         <TITLE>Questiones by-twene the Maister of Oxenford and his clerke [Englische Studien 8 (1885)]</TITLE>
+         <AUTHOR/>
+         <AUTHOR TYPE="add">Horstmann, Karl</AUTHOR>
+      </TITLESTMT><EXTENT>4 pages, ca. 16 kb</EXTENT><PUBLICATIONSTMT>
+         <PUBLISHER>University of Michigan Library</PUBLISHER>
+         <PUBPLACE>Ann Arbor, Michigan</PUBPLACE>
+         <DATE>2018</DATE>
+         <IDNO TYPE="dlps">CME00011</IDNO>
+         <IDNO TYPE="aleph">10002175</IDNO>
+         <AVAILABILITY><P>The University of Michigan Library provides access to these materials in furtherance of its educational and research mission. This work has been identified as being in the public domain, free of known restrictions under copyright law, including all related and neighboring rights. You may copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission. If you have questions about the collection, please contact Digital Content and Collections (mec-info@umich.edu). If you have concerns about the inclusion of an item in this collection, please contact Library Information Technology (LibraryIT-info@umich.edu).</P></AVAILABILITY>
+      </PUBLICATIONSTMT><SOURCEDESC>
+         <BIBLFULL>
+            <TITLESTMT>
+               <TITLE TYPE="245" I2="0">Englische studien. Zeitschrift für englische Philologie.</TITLE>
+            </TITLESTMT>
+            <PUBLICATIONSTMT>
+               <PUBPLACE>unknown</PUBPLACE>
+               <PUBLISHER>unknown</PUBLISHER>
+               <DATE>unknown</DATE>
+            </PUBLICATIONSTMT>
+         </BIBLFULL>
+      </SOURCEDESC></FILEDESC><ENCODINGDESC><PROJECTDESC>
+         <P>Header created with script paul2teiheader.xsl on 2018-06-14.</P>
+         <P>Header expanded with script MARC2Paulmap.xsl on 2018-07-31.</P>
+      </PROJECTDESC><EDITORIALDECL N="4">
+         <P>Encoding has been done using the recommendations for Level 4 of the TEI in Libraries Guidelines.</P>
+      </EDITORIALDECL></ENCODINGDESC><PROFILEDESC><LANGUSAGE>
+         <LANGUAGE ID="enm">English, Middle (1100-1500) </LANGUAGE>
+      </LANGUSAGE></PROFILEDESC><REVISIONDESC>
+<CHANGE><DATE>6-13-16</DATE><RESPSTMT><NAME>lattaj</NAME><RESP>MURP</RESP></RESPSTMT><ITEM>Added TEMPHEAD, checked ID, and added TYPEs to DIVs in order to validate. Checked for N=""s. Checked for GROUP tags. Proofed title. Checked <HI REND="sup">s</HI>. Reviewed structure; changed CLOSER SIGNED to BYLINE. Checked placement and completeness of PBs. Checked for damage GAPs, #s, @s, --s, and UNCLEARs. Corrected [dollar]s. Checked for &amp;cs with incorrect spacing. Checked for LBs. Checked for startqs and endqs, abq's, oes, qs, Ae's, and Qs. Checked proofsheets and made corrections. Checked italic I / J and U / V. Checked for missing page GAPs. Checked for EPIGRAPHs and ARGUMENTS. Checked CLOSERs, OPENERs, SIGNEDs, SALUTEs, TRAILERs, BYLINEs. Checked decorated initials. Checked FIGUREs. Sample: 2 minutes. Proofing: 0 minutes. Tag review and corrections: 50 minutes. DONE.</ITEM></CHANGE>
+</REVISIONDESC></HEADER>
+
+
+<EEBO>
+<IDG S="marc" R="UM" ID="CME00011">
+<STC T="M">11</STC>
+<BIBNO T="mec">CME00011</BIBNO>
+<VID>CME00011</VID>
+</IDG>
+<TEXT LANG="enm">
+<BODY>
+<DIV1 TYPE="catechism">
+<PB N="284" REF="1"/>
+<HEAD>QUESTIONES BY-TWENE THE MAIST<HI REND="italic">ER</HI> OF OXENFORD AND HIS CLERKE.</HEAD>
+<HEAD TYPE="sub">Aus MS. Harl. 1304. <NOTE N="1)" PLACE="foot">Eine theilweise gekürzte version in MS. Lansdowne 762 findet sich ab∣gedruckt in Wülcker's Altengl. lesebuch II p. 191-194.</NOTE></HEAD>
+<SP>
+<SPEAKER>Clerk:</SPEAKER>
+<P>Sei me, where was god whanne he made heven and erthe?</P>
+</SP>
+<SP>
+<SPEAKER>Maist<HI REND="italic">er:</HI></SPEAKER>
+<P>I sey the, in the forther<HI REND="italic">e</HI> ende of the wynde.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Telle me þat word þ<HI REND="italic">at</HI> god firste spake.</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Be þe(r) made liȝt, and light was made.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whi is heven clepid heven?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>For the heven cou<HI REND="italic">er</HI>yth all þ<HI REND="italic">at</HI> is vnd<HI REND="italic">er</HI> hym.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>What is God?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>He is god þ<HI REND="italic">at</HI> alle thynge made &amp; alle thynge hathe in his power<HI REND="italic">e.</HI></P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>In how fele dayes made god alle thynge?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>In six dayes: the first day he made lightnes &amp; light.</P>
+<P>The seconde day he made alle thinge þ<HI REND="italic">at</HI> helden þe heven,</P>
+<P>The thirde day he made wat<HI REND="italic">er</HI> and erthe,</P>
+<P>The IIII<SUP>th</SUP> day he made the fyrma∣ment of heven,</P>
+<P>The fifte day he made the sterres,</P>
+<P>The six day he made alle-man<HI REND="italic">er</HI>
+<PB N="285" REF="2"/>
+bestis, fowlis &amp; fysshes in þ<HI REND="italic">e</HI> see, &amp; Adam þe first man.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Wherof was Adam made?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Of VIII<SUP>te</SUP> thinges weyght<HI REND="italic">is</HI> weyande: the fyrst weyght is erthe,</P>
+<P>The secounde is fyre,</P>
+<P>The thirde is wynde,</P>
+<P>The IIII<SUP>te</SUP> is clowdes,</P>
+<P>The fifte is ayer<HI REND="italic">e,</HI> wherthorow he spekyith &amp; thynkyth,</P>
+<P>The sixte dew, wherthorow he sweth,</P>
+<P>The sevent is of flowres, wheroff Adam hath his yeen,</P>
+<P>The VIII<SUP>te</SUP> is salte, wheroff Adam hath salt teris.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Wheroff was fownde þ<HI REND="italic">e</HI> name of Adam?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Of fowre sterris; þeis ben þ<HI REND="italic">er</HI> names: Arax, Bux, Arstolem, Comfunbrie.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Of what state was Adam whan he was made?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>A man of XXX wynt<HI REND="italic">er</HI> age.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>And of what lengith was Adam?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Of fowre-score and of VI enchen.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>How lon̄ge leued Adam in this world?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>IXC and XXX wynt<HI REND="italic">er,</HI> &amp; aft<HI REND="italic">er</HI>ward in helle, &amp; was to-geþ<HI REND="italic">er</HI> .... <NOTE N="1)" PLACE="foot">Die zahl ist mir nicht leserlich.</NOTE></P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Of what age was Adam whan he begate his first childe?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>An C &amp; XXX wynt<HI REND="italic">er,</HI> &amp; hade a son þ<HI REND="italic">at</HI> hight Seth. &amp; Seth leued IX<SUP>C</SUP> wynt<HI REND="italic">er</HI> &amp; XXX<SUP>ti</SUP>. And þ<HI REND="italic">at</HI> Seth had a son þ<HI REND="italic">at</HI> hight Enos, and Enos lyued IX<SUP>C</SUP> wynt<HI REND="italic">er</HI> &amp; V. And þ<HI REND="italic">at</HI> Enos had a son þ<HI REND="italic">at</HI> hight Canaan, &amp; Canaan lyued IX<SUP>C</SUP> wynt<HI REND="italic">er</HI> &amp; X wynt<HI REND="italic">er,</HI> &amp; had a son þ<HI REND="italic">at</HI> hight Malek. &amp; þ<HI REND="italic">at</HI> Malek lyued IX<SUP>C</SUP> &amp; V wynt<HI REND="italic">er,</HI> &amp; had a son þ<HI REND="italic">at</HI> hight Jared. &amp; þ<HI REND="italic">at</HI> Jared lyued IX<SUP>C</SUP> XLII wynt<HI REND="italic">er,</HI> &amp; had a son þ<HI REND="italic">at</HI> hight Matusale. &amp; þ<HI REND="italic">at</HI> Matusale lyued IX<SUP>C</SUP> XLIX wynt<HI REND="italic">er,</HI> &amp; had a son þ<HI REND="italic">at</HI> hight Lamec. &amp; Lamek lyued VII<SUP>C</SUP> XLVII wynt<HI REND="italic">er,</HI> and had a son þ<HI REND="italic">at</HI> hight Noe. &amp; Noe lyued IX<SUP>C</SUP> &amp; XL wynt<HI REND="italic">er,</HI> and had thre sonnes: Sem, Cam &amp; Japheth. &amp; Sem hadde XXX<SUP>ti</SUP> children, &amp; Cam XXX children, &amp; Japheth XII children; &amp; so fele langages weren.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>What was he þ<HI REND="italic">at</HI> neu<HI REND="italic">er</HI> was bore &amp; was buried in his mod<HI REND="italic">ur</HI> wombe &amp; sithe was c<HI REND="italic">ri</HI>stened and saued?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>That was owre fad<HI REND="italic">ur</HI> Adam.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>How longe was Adam in p<HI REND="italic">ar</HI>adise?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Seven yere, and att seven yeris ende he trespased ageyns god for the appell þ<HI REND="italic">at</HI> he yete on a friday, and an angell drofe hym owte.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>How fele wynt<HI REND="italic">er</HI> was Adam whan owre lord was don on the crosse?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>That was VMCC &amp; XXXII yer<HI REND="italic">e.</HI></P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>What hight Noes wyff?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Ballida; and the wiff of Sem Ca∣teslima; and the wiff of Cam Laterecta; and the wiff of Japheth Aurea &amp; oþ<HI REND="italic">er</HI> thre names Ollia, Olina &amp; Olibana.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Where-of was made Noe is shipp<HI REND="italic">e?</HI></P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Of a tree þ<HI REND="italic">at</HI> is clepid chy.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>And what lengith was Noes shipp<HI REND="italic">e?</HI></P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Fyfty fadom of brede, CC fadom of lengith, &amp; XXX<SUP>ti</SUP> fadom of highnes.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>How fele wynt<HI REND="italic">er</HI> was Noes shipp<HI REND="italic">e</HI> in makyng?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Fowre-score wynt<HI REND="italic">er.</HI></P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>How longe durid Noes is flood?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>XL dayes and XL nyght<HI REND="italic">is.</HI></P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>How fele children had Adam &amp; Eue?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>XXX<SUP>ti</SUP> gromes and XXX<SUP>ti</SUP> maidens.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Hoo made the first Citees?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Enos, Seth is son, &amp; the Citee hight Ninimen. &amp; þ<HI REND="italic">er</HI> wer<HI REND="italic">e</HI> þ<HI REND="italic">er</HI>-in XII<SUP>C</SUP> &amp; XXM Cheueteynes, <HI REND="italic">with</HI>-owten women, with-owte bachi∣lers &amp; <HI REND="italic">with</HI>-owte children. And whan Noe is flood was awey, thai made Jerusalem.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>What Cite is ther<HI REND="italic">e</HI> the son gooth to reste?</P>
+</SP>
+<SP>
+<PB N="286" REF="3"/>
+<SPEAKER>M.:</SPEAKER>
+<P>A cite þ<HI REND="italic">at</HI> is clepid Garica.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whiche ben the beste Erbis þ<HI REND="italic">at</HI> god loued?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>The Rose and the Lylye.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whech foule loued god best?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>The Colu<HI REND="italic">er,</HI> for god sent his spirit from heven in lykens of a coluer<HI REND="italic">e.</HI></P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whiche is the beste wat<HI REND="italic">er</HI> þ<HI REND="italic">at</HI> eu<HI REND="italic">er</HI> was?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Flom Jordan, for god was baptiȝed þ<HI REND="italic">er</HI>-ynne.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Wher<HI REND="italic">e</HI> becom thangels þ<HI REND="italic">at</HI> god put owte of heven &amp; bycom develen?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>In thre p<HI REND="italic">ar</HI>ties wer<HI REND="italic">e</HI> þ<HI REND="italic">ei</HI> p<HI REND="italic">ar</HI>tid: some in to hell, &amp; some regnen in the skye, and som in waters and in wodis.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>How fele wat<HI REND="italic">er</HI>is ben ther<HI REND="italic">e</HI>?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Twey salte wat<HI REND="italic">er</HI>ys and II fresshe wa<GAP DESC="illegible" EXTENT="1 letter" REASON="missing" DISP="•"/><HI REND="italic">er</HI>s.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Hoo made firste plowes?</P>
+</SP>
+<SP>
+<SPEAKER>M.</SPEAKER>
+<P>Cam, Noes son.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whi berith not stones frute as well as tres?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>For Caym slough Abell w<HI REND="italic">ith</HI> an asse chekebon.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whiche is the best thynge &amp; the worst amonge men?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Worde is best and worst.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Of what thynge be men most seker<HI REND="italic">e</HI>?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Men ben most sekyr<HI REND="italic">e</HI> of deth.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whiche ar the IIII thynges þ<HI REND="italic">at</HI> man may not leve w<HI REND="italic">ith</HI>-owte?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Wynde and fyer<HI REND="italic">e,</HI> wat<HI REND="italic">er</HI> and erthe.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Wher<HI REND="italic">e</HI> resteth a man is soule whan þ<HI REND="italic">at</HI> he slepith?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>In thre steedis: in the brayn, or in the blood, or in the herte.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Telle me why that the see is salte?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>For the wordes þ<HI REND="italic">at</HI> god co<HI REND="italic">m</HI>manded to Moyses &amp; for the children of Israell þ<HI REND="italic">at</HI> wold not kepe þ<HI REND="italic">er</HI> lay, Moyses brake the Tables and threw þem in the see, and teres felle owte of þem.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Telle me þoo ten wordis and þ<HI REND="italic">er</HI> names.</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>The first word: honowre no god but me, for I made heven &amp; erthe.</P>
+<P>The secound is: clepe me nought in vayn thynge.</P>
+<P>The third is: kepe þ<HI REND="italic">i</HI> sonday, for þ<HI REND="italic">at</HI> is my day.</P>
+<P>The fourth is: hono<HI REND="italic">ur</HI> thi fad<HI REND="italic">ur</HI> and mod<HI REND="italic">ur.</HI></P>
+<P>The fifte is: slee no man w<HI REND="italic">ith</HI> wronge.</P>
+<P>The sixte is: vse no leccherie.</P>
+<P>The sevente is: take no<HI REND="italic">n</HI> oþ<HI REND="italic">er</HI> mannes good w<HI REND="italic">ith</HI> wronge.</P>
+<P>The VIII<SUP>te</SUP> is: bere no fals wytnes.</P>
+<P>The IX is: lat oþ<HI REND="italic">er</HI> men hafe þ<HI REND="italic">er</HI> own goodis.</P>
+<P>The X is: couet non oþ<HI REND="italic">er</HI> mannes wyff.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Wher<HI REND="italic">e</HI> lith Moyses body?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Besides the howse þ<HI REND="italic">at</HI> is clepid Eufegor.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whi is the erthe cursed &amp; the see blessid?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>For Noe and Abrah<HI REND="italic">a</HI>m, &amp; for c<HI REND="italic">ri</HI>sten∣ynge þ<HI REND="italic">at</HI> god co<HI REND="italic">m</HI>manded.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whoo sett fyrst vynes?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Noe sett the first vynes.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Who clepid first god?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>The devell.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whiche is the heuyest thynge ber∣ynge?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Synne is the heviest.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whiche thinge is þ<HI REND="italic">at</HI> som louen &amp; som haton?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>That is Jugement.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whech be the four<HI REND="italic">e</HI> thynges þ<HI REND="italic">at</HI> neu<HI REND="italic">er</HI> wer<HI REND="italic">e</HI> full ne neu<HI REND="italic">er</HI> shall?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>The first is erthe, the second is fyr<HI REND="italic">e,</HI> þ<HI REND="italic">e</HI> thyrde is hell, þ<HI REND="italic">e</HI> fourte is a couetous man.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>How fele man<HI REND="italic">er</HI>s ben þ<HI REND="italic">er</HI> of fleande brides, &amp; how fele fysshes?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Foure &amp; fifty of fowles, XXXVI of fysshes.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whiche was the fyrst clerk þ<HI REND="italic">at</HI> eu<HI REND="italic">er</HI> was?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Elyas &amp; Elyseus patriarches, &amp; aft<HI REND="italic">er</HI> þ<HI REND="italic">e</HI> c<HI REND="italic">ri</HI>stenynge Paule &amp; Antonius first hermit<HI REND="italic">is.</HI></P>
+</SP>
+<SP>
+<PB N="287" REF="4"/>
+<SPEAKER>C.:</SPEAKER>
+<P>What hight the four<HI REND="italic">e</HI> wat<HI REND="italic">er</HI>s þ<HI REND="italic">at</HI> renne thorow p<HI REND="italic">ar</HI>adise?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>The on hiȝt Fison, the oþ<HI REND="italic">er</HI> Geon, the third hight Tigris, the fourth Effraton. Theise ben milke, hony, oyll, &amp; wyn.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Wherfor is þ<HI REND="italic">e</HI> sonne red to-fore mete?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>For he wot not yf he may goo abowte þ<HI REND="italic">e</HI> Fyrmament or nyȝt.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Where-for is þ<HI REND="italic">e</HI> sonne rede att eue?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>For he gōōthe toward hell.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Hoo made fyrst citees?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Mercurius the Geaunte.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>Whech ben the four<HI REND="italic">e</HI> wat<HI REND="italic">er</HI>s þ<HI REND="italic">at</HI> weyen the erthe?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>That on is snow, the oþ<HI REND="italic">er</HI> is occian wat<HI REND="italic">er</HI>s, þ<HI REND="italic">e</HI> III<SUP>de</SUP> is haill, þ<HI REND="italic">e</HI> IIII<SUP>th</SUP> is dewe.</P>
+</SP>
+<SP>
+<SPEAKER>C.:</SPEAKER>
+<P>How fele langages ben þ<HI REND="italic">er</HI>?</P>
+</SP>
+<SP>
+<SPEAKER>M.:</SPEAKER>
+<P>Sixti (!) and two: &amp; so fele disciples had god w<HI REND="italic">ith</HI>-owte his appostels.</P>
+</SP>
+<TRAILER>Explicit.</TRAILER>
+<BYLINE>C. Horstmann.</BYLINE>
+</DIV1>
+</BODY>
+</TEXT>
+</EEBO>
+</ETS>

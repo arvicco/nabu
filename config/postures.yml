@@ -197,6 +197,25 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  cme:
+    lect:
+      posture: identity
+      note: "enm IS Middle English (registry band 1100–1500, parent ang;
+        P82-2) — the corpus's own definition is the claim; upstream
+        LANGUSAGE declarations are inconsistent (censused 2026-08-23: 150
+        files declare enm, 61 'eng', others list only their FOREIGN
+        languages) and ride document metadata verbatim, never the claim"
+    dating:
+      posture: undatable
+      note: "the files carry only MODERN dates (digital-edition year +
+        BIBLFULL print-edition year, censused ×297 — an 1886 edition of a
+        1200 text is not a composition claim; both ride metadata
+        verbatim). Real per-text composition/MS dates live in the MED
+        HyperBibliography stencils, not publicly downloadable — 'exceptions
+        ... on request' (an owner ask via the №77-2 line, a future
+        instrument, deliberately NOT a pending commitment)"
+    places: {posture: unplaced}
+    script: {posture: implied}
   iswoc:
     lect: {posture: identity, note: ang/fro — both stage-coded}
     dating: {posture: undatable}
