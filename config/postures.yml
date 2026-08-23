@@ -192,6 +192,26 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  menota:
+    lect:
+      posture: pending
+      note: "P82-1 candidate: a menota rule over the per-document `language`
+        facet (each file's textLang/langUsage code riding verbatim — census
+        isl 57 / nor 27 / swe 4 / dan 2 / non 1). isl and non ARE registry
+        anchors and swe codemaps to sv; nor and dan have NO registry nodes —
+        the rule needs an owner ruling on whether Menota's nor (Old
+        Norwegian, docs c. 1250-1370) reads under non and what dan mints
+        (a nabu-lects package, the sv:old precedent)"
+    dating: {posture: dated, note: "P82-1: the msDesc origDate's own
+        notBefore/notAfter attributes via MetadataDates :structured, raw
+        preserved (censused: all 91 catalogue rows carry an origDate);
+        attr-less dates ride raw only — never guessed"}
+    places: {posture: named, note: "origPlace rides metadata verbatim
+        ('Norway', 'Vadstena kloster' — an origin claim); repository/
+        settlement/country are the holding library, kept distinct"}
+    script: {posture: implied, note: "Latin alphabet with MUFI entity
+        extensions (many PUA); the menota-rune Corpuscle sibling corpus
+        is deliberately out of v1 scope"}
   aspr:
     lect: {posture: identity, note: ang IS Old English}
     dating: {posture: undatable}

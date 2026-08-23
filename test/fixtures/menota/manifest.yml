@@ -1,0 +1,73 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Menota is served through the Corpuscle (korpuskel) REST API behind the
+# catalogue SPA — every endpoint is gated on an ephemeral session-id
+# (command=get-session), so no static raw GET reproduces the session-gated
+# bytes: those entries are refetchable: false (the menotec/iness-api
+# posture). menota-entities.txt is a stable public URL and stays a live
+# byte-diff tripwire. adapter_test is null — the source-specific test pins
+# ids/counts/snippets a refetch would not false-fail.
+source: menota
+adapter_test:
+retrieved: 2026-08-23
+files:
+  - path: texts/AM-1056-IX-4to.xml
+    refetchable: false
+    provenance: korpuskel-api
+    whole: true
+    trim: none
+    reason: >-
+      The data field of rest?command=download-document&corpus=menota&
+      document-id=AM-1056-IX-4to (UTF-8, byte-verbatim incl. CRLF); the
+      endpoint requires an ephemeral session-id, so no static raw GET
+      reproduces it.
+  - path: texts/NRA-norrfragm-60-A.xml
+    refetchable: false
+    provenance: korpuskel-api
+    whole: true
+    trim: none
+    reason: >-
+      The data field of rest?command=download-document&corpus=menota&
+      document-id=NRA-norrfragm-60-A; session-gated as above.
+  - path: texts/Holm-A-80.xml
+    refetchable: false
+    provenance: korpuskel-api
+    whole: false
+    reason: >-
+      The data field of rest?command=download-document&corpus=menota&
+      document-id=Holm-A-80; session-gated as above.
+    trim: >-
+      teiHeader and body kept byte-intact up to the token before
+      <pb ed="ms" n="3r"/> (pages 2r-2v, 414 <w>, 49 lines), then a
+      synthetic </p></div></body></text></TEI> tail; 3,755,022 B ->
+      133,382 B.
+  - path: menota-entities.txt
+    url: https://www.menota.org/menota-entities.txt
+    whole: true
+    trim: none
+  - path: catalogue/get-session.json
+    refetchable: false
+    provenance: korpuskel-api
+    whole: true
+    trim: none
+    reason: >-
+      rest?command=get-session mints a fresh sessionId per request — a
+      refetch can never byte-match this capture.
+  - path: catalogue/list-page-0-2.json
+    refetchable: false
+    provenance: korpuskel-api
+    whole: true
+    trim: none
+    reason: >-
+      rest?command=list-catalogue-documents&corpus=menota&start=0&end=2
+      (3 rows, documentCount 91); session-gated as above.
+  - path: catalogue/download-AM-1056-IX-4to.json
+    refetchable: false
+    provenance: korpuskel-api
+    whole: true
+    trim: none
+    reason: >-
+      The whole download-document envelope for AM-1056-IX-4to ({"data":
+      ...}); its decoded data field is byte-identical to
+      texts/AM-1056-IX-4to.xml. Session-gated as above.

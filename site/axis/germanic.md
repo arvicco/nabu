@@ -7,7 +7,7 @@ description: >-
 
 > The Germanicist — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches.
 
-Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), and the runic inscriptions (Rundata, dual-tagged epigraphy).
+Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Medieval Nordic manuscript archive (Menota), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
 The desk spans all three Germanic branches. **East** is Gothic (Wulfila,
 gold-lemmatized in PROIEL). **West** runs Old English (ASPR verse, ISWOC
@@ -26,14 +26,15 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these thirteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 August 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
 | `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
 | `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
+| `menota` | texts | attribution | not yet wired | not synced yet |
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
 | `ref` | texts | attribution | wired · manual | 190 docs / 447,115 passages |
@@ -43,7 +44,7 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `ren` | texts | attribution | wired · manual | 235 docs / 297,504 passages |
 | `fornsvenska` | texts | attribution | wired · manual | 155 docs / 170,872 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 August 2026)</span>: `ang` 63,169 · `non` 20,448 · `eng` 6,813 · `swe` 3,393 · `gmh` 406 · `gml` 235 · `de` 190 · `sv` 155 · `lat` 17 · `grc` 12 … and 19 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 August 2026)</span>: `ang` 63,169 · `non` 20,448 · `eng` 6,813 · `swe` 3,393 · `gmh` 406 · `gml` 235 · `de` 190 · `sv` 155 · `lat` 17 · `grc` 12 … and 19 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 
