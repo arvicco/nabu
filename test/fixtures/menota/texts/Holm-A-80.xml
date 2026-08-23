@@ -1,0 +1,2810 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="https://www.menota.org/menotaP5.rng" type="xml" ?>
+<!DOCTYPE TEI 
+[
+<!ENTITY % Menota_entities SYSTEM 'https://www.menota.org/menota-entities.txt'>
+%Menota_entities; 
+]
+>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:me="http://www.menota.org/ns/1.0">
+    <teiHeader xml:lang="eng">
+        <fileDesc>
+            <titleStmt>
+                <title>Birgitta Andersdotters bönbok : Holm A 80 : A digital transcription</title>
+                <editor>
+                    <name>
+                        <persName>
+                            <forename>Ingela</forename>
+                            <surname>Hedström</surname>
+                        </persName>
+                        <orgName type="project">The Vadstena project</orgName>
+                    </name>
+                </editor>
+
+                <respStmt>
+                    <resp>Conversion to Menotic XML</resp>
+                    <name>
+                        <persName>
+                            <forename>Mette</forename>
+                            <surname>Gismerøy Ekker</surname>
+                        </persName>
+                        <orgName type="affiliation">University of Oslo</orgName>
+                    </name>
+
+                </respStmt>
+            </titleStmt>
+            <editionStmt>
+                <edition n="1.0.4">Version 1.0.4, <date when="2016-03-31">31 March 2016</date>.</edition>
+
+            </editionStmt>
+            <extent n="29844">29844 words</extent>
+            <publicationStmt>
+                <distributor>Medieval Nordic Text Archive</distributor>
+                <idno type="Menota">Ms. 17</idno>
+                <date when="2009-04-27">27 April 2009</date>
+                <availability status="free">
+                    <licence target="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</licence>
+                    <p>Licence accepted by Ingela Hedström in 2015.</p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <country key="SE">Sweden</country>
+                        <settlement>Stockholm</settlement>
+                        <repository>The Royal Library</repository>
+
+                        <idno>Holm A 80</idno>
+                        <msName type="nickname">Birgitta Andersdotters bönbok</msName>
+                    </msIdentifier>
+                    <msContents>
+                        <msItem n="1">
+                            <locus>2r–5r</locus>
+                            <title>Birgittakrönikan.</title>
+                            <incipit>Hær wiliom wi sighia aff sancte birgitte slækt swa myket som
+                                witom ffor sant oc wi hørt haffwom, fførst ær witande att sancte
+                                birgitta modherffadher heet herr bænkt laghman…</incipit>
+                            <bibl>Ed. Helige män, s. 275–280</bibl>
+                        </msItem>
+                        <msItem n="2">
+                            <locus>5v–6r</locus>
+                            <p>Blanka</p>
+                        </msItem>
+                        <msItem n="3">
+                            <locus>6v–7r</locus>
+                            <title>Kringlor.</title>
+                        </msItem>
+                        <msItem n="4">
+                            <locus>7v</locus>
+                            <title>Tabula Gerlandi.</title>
+                        </msItem>
+                        <msItem n="5">
+                            <locus>8r–13v</locus>
+                            <title>Kalendarium.</title>
+                        </msItem>
+                        <msItem n="6">
+                            <locus>14r</locus>
+                            <title>Tabula Signorum.</title>
+                        </msItem>
+                        <msItem n="7">
+                            <locus>14v–15r</locus>
+                            <p>Blanka</p>
+                        </msItem>
+                        <msItem n="8">
+                            <locus>15v</locus>
+                            <title>Pinoredskapen.</title>
+                            <incipit>(Bild och text) Swa langher oc tiokker war spiken som gik
+                                gønom war herra … </incipit>
+                        </msItem>
+                        <msItem n="9">
+                            <locus>16r–24r</locus>
+                            <title>Horae de Sancto Spiritu.</title>
+                            <incipit> JN vnitate sancti spiritus Benedicat nos pater et filius …
+                            </incipit>
+                        </msItem>
+                        <msItem n="10">
+                            <locus>24r–43v</locus>
+                            <title>Septem Psalmi Paenitentiales cum Litania. </title>
+                        </msItem>
+                        <msItem n="10:1">
+                            <locus>[24r]</locus>
+                            <incipit> Naar j læsen vij psalmana om freedaghana skulen j
+                                tænkia …</incipit>
+                        </msItem>
+                        <msItem n="10:2">
+                            <locus>[24v]</locus>
+                            <incipit> DOmine ne in furore tuo arguas me …</incipit>
+                        </msItem>
+                        <msItem n="10:3">
+                            <locus>[25r]</locus>
+                            <incipit> { J thenna psalmenom skulen j tænkkia hwru gudz son vart
+                                ffanghin och stodh bundhin alla natthena }. Beati quorum
+                                remisse sunt iniquitates …</incipit>
+                        </msItem>
+                        <msItem n="10:4">
+                            <locus>[26r]</locus>
+                            <incipit> { Hær tænkken mz hwat skri oc obrygdilse han leddhis
+                                fføre pylatuz gud wnne ter sina nadh til }. Domine ne infurore
+                                tuo arguas me …</incipit>
+                        </msItem>
+                        <msItem n="10:5">
+                            <locus>[28r]</locus>
+                            <incipit> { Her tænkke hwru war herra ihesus ryktes til stwdhena
+                                och flænkdis wtan miskundh }. Miserere mei deus secundam
+                                magnam …</incipit>
+                        </msItem>
+                        <msItem n="10:6">
+                            <locus>[29r]</locus>
+                            <incipit> { Hær tænkken hwrw war herra ihesus christus torn
+                                kronadhis }. Domine exaudi orationem meam …</incipit>
+                        </msItem>
+                        <msItem n="10:7">
+                            <locus>[31r]</locus>
+                            <incipit> { J thenna psalmenom tænkken hurw war herra ryktes ather
+                                ffør domen oc dømdes til dødh }. De profundis clamaui ad te
+                                domine …</incipit>
+                        </msItem>
+                        <msItem n="10:8">
+                            <locus>[31v]</locus>
+                            <incipit> { Hær tænkken hurw war herre bar korssit then langa
+                                wæghen oc nidher styrthe wndher thy }. Domine exaudi orationem
+                                meam …</incipit>
+                        </msItem>
+                        <msItem n="10:9">
+                            <locus>[33r]</locus>
+                            <incipit> { Nw skullen j tænkia mz hwath mødho war herra
+                                … }. </incipit>
+                        </msItem>
+                        <msItem n="10:10">
+                            <locus>[33v]</locus>
+                            <incipit> Litania. Kyrieleyson …</incipit>
+                        </msItem>
+                        <msItem n="10:11">
+                            <locus>[34r]</locus>
+                            <incipit> … Sancte sebastiane </incipit>
+                        </msItem>
+                        <msItem n="10:12">
+                            <locus>[34v]</locus>
+                            <incipit> Sancte olaue Sancte erice Sancte henrice Sancte eschille
+                                Sancte bothuide …</incipit>
+                        </msItem>
+                        <msItem n="10:13">
+                            <locus>[35r]</locus>
+                            <incipit> Sancta anna Sancta birgitta b a Sancta katerina …</incipit>
+                        </msItem>
+                        <msItem n="10:14">
+                            <locus>[37v]</locus>
+                            <incipit> Exaudi quesumus domine … JNeffabilem misericordiam … Pietate
+                                tua quesumus domine …</incipit>
+                        </msItem>
+                        <msItem n="10:15">
+                            <locus>[38v]</locus>
+                            <incipit> { S b a Collecta ffor edher siælffwa S }.
+                                Omnipotens sempiterne deus te humiliter …</incipit>
+                        </msItem>
+                        <msItem n="10:16">
+                            <locus>[39r]</locus>
+                            <incipit> { collecta }. Omnipotens mitissime deus respice …
+                                { Collecta ffør th[e]m som in vighias och ffor </incipit>
+                        </msItem>
+                        <msItem n="10:17">
+                            <locus>[39v]</locus>
+                            <incipit> nakon edhan wen b f c b m d }. Omnipotens sempiterne
+                                deus miserere famulo tuo …</incipit>
+                        </msItem>
+                        <msItem n="10:18">
+                            <locus>[40r]</locus>
+                            <incipit> { Før liffwandis wælgærningis mæn }. Deus qui post
+                                baptismi … { Før ffredhenom och wædherlekenom ær oc thzta
+                                læsandhe æpther vij psalmana Om sancti seuerini dagh }.
+                                Benedicamus patrem et filium cum sancto spiritu …</incipit>
+                        </msItem>
+                        <msItem n="10:19">
+                            <locus>[40v]</locus>
+                            <incipit> Omnipotens sempiterne deus qui dedisti nobis famulis tuis
+                            …</incipit>
+                        </msItem>
+                        <msItem n="10:20">
+                            <locus>[41r]</locus>
+                            <incipit> Deus qui miro ordine angelorum … Omni sanctorum tuorum
+                                qeusumus domine … { ffør ffredhenom S b a d }. Deus aquo
+                                sancta desideria …</incipit>
+                        </msItem>
+                        <msItem n="10:21">
+                            <locus>[41v]</locus>
+                            <incipit> { Før at clart wærdher skal komma }. O florens
+                                rosa … { Uersiculus }. Ora pro nobis …
+                                { collecta }. Sancta maria mater domini …
+                                { collecta æpther versiculus }. Ad te nos domine
+                                clamantes …</incipit>
+                        </msItem>
+                        <msItem n="10:22">
+                            <locus>[42r]</locus>
+                            <incipit> { Collecta ad thz regna och aue mundi domina mz
+                                wersiculus som offwer mer staar ffør sol sken }. Deus in quo
+                                vinimus … { Før ffredhenom }. Deus aquo sancta desideria
+                                …</incipit>
+                        </msItem>
+                        <msItem n="10:23">
+                            <locus>[42v]</locus>
+                            <incipit> Factus ihesus in agonia prolixus … { Collecta }.
+                                Deus qui ab vnigenito filio tuo …</incipit>
+                        </msItem>
+                        <msItem n="10:24">
+                            <locus>[43r]</locus>
+                            <incipit> { Memoria aff sancto sebastiano som skal læsas ffør
+                                pæstilencia }. BEatus es et bene tibi … { collecta
+                                æpther memoriam }. Omnipotens semipterne deus qui meritis
+                                beati …</incipit>
+                        </msItem>
+                        <msItem n="10:25">
+                            <locus> [43v]</locus>
+                            <incipit> { Tæssen collecta skal læssas æpter wij psalmana mz
+                                tractum pro punctis ffør pæstilencia }. Parce domine parce
+                                punctis nostris …</incipit>
+                        </msItem>
+                        <msItem n="10:26">
+                            <locus>43v–45r</locus>
+                            <title>Antiphonae in festo Nativitatis Domini.</title>
+                            <incipit> { Thæssen antiphonas skulu læsas ffør jwlen mz the aue
+                                marior thz ær til skipat }. O sapiencia que ex ore altissimi
+                            …</incipit>
+                        </msItem>
+                        <msItem n="10:27">
+                            <locus>[44r]</locus>
+                            <incipit> { Annan daghen }. O adonay … { Tridhi
+                                daghen }. O radix iesse … { Fiærdhe daghen }. O
+                                claius dauit …</incipit>
+                        </msItem>
+                        <msItem n="10:28">
+                            <locus>[44v]</locus>
+                            <incipit> { ffæmthe daghen }. O rex gencium … { vj
+                                daghen }. O oriens spendor … { vij daghen }. O
+                                emanuel rex … { Thzta æpther scriffna ska skal læssas æpther
+                                hwaria … }. O virgo virginum …</incipit>
+                        </msItem>
+                        <msItem n="10:29">
+                            <locus> [45r]</locus>
+                            <incipit> { collecta }. Excita domine potenciam tuam
+                            …</incipit>
+                        </msItem>
+                        <msItem n="11">
+                            <locus>45r–50v</locus>
+                            <title>Litania defunctorum. </title>
+                        </msItem>
+                        <msItem n="11:1">
+                            <incipit> { Thæssa hælga mænnena skulu læsas nar som systhera oc
+                                brødhr olias c m d }. Parce domine parce famule tue …
+                                { bid the troligha ffør mic […] }.</incipit>
+                        </msItem>
+                        <msItem n="11:2">
+                            <locus>[45v]</locus>
+                            <incipit> Kyrieleyson …</incipit>
+                        </msItem>
+                        <msItem n="11:3">
+                            <locus>[46r]</locus>
+                            <incipit> … Sancte sebastiane Sancte olaue Sancte erice Sancte kanute
+                                Sancte henrice Sancte eschille Sancte bothuide …</incipit>
+                        </msItem>
+                        <msItem n="11:4">
+                            <locus>[46v]</locus>
+                            <incipit> … Sancta anna Sancta birgitta Sancta katerina …</incipit>
+                        </msItem>
+                        <msItem n="11:5">
+                            <locus>[48v]</locus>
+                            <incipit> { Versiculus }. Saluam fac ancillam tuam
+                            …</incipit>
+                        </msItem>
+                        <msItem n="11:6">
+                            <locus>[49r]</locus>
+                            <incipit> Omnipotens mittissime deus respice propicius …</incipit>
+                        </msItem>
+                        <msItem n="11:7">
+                            <locus>[49v]</locus>
+                            <incipit> { psalmus }. Domine clamaui ad te exaudi me
+                            …</incipit>
+                        </msItem>
+                        <msItem n="12">
+                            <locus>50v–80v</locus>
+                            <title>Officium Defunctorum. </title>
+                        </msItem>
+                        <msItem n="12:1">
+                            <incipit> DJlexi quoniam exaudiet dominus vocem oracionis mee
+                            …</incipit>
+                        </msItem>
+                        <msItem n="12:2">
+                            <locus>[77r]</locus>
+                            <incipit> { Før edhan eghin ffadher oc modher }. DEus qui
+                                nos patrem et matrem … { for s oc b }. Deus venie
+                                largitor et humane salutis amator … { ffør wæl g m }.
+                                Miserere quesumus domine clementer animabus </incipit>
+                        </msItem>
+                        <msItem n="12:3">
+                            <locus>[77v]</locus>
+                            <incipit> omnium benefactorum … { Føre fflere mænniskior }.
+                                Jnclina domine aurem tuam ad preces nostras … { Før en
+                                brest }. Presta quesumus domine ut anima famuli tui sacerdotis
+                                … { Føre fflerom prestom }. Concede quesumus omnipotens
+                                deus animabus famulorum tuorum sacerdotum …</incipit>
+                        </msItem>
+                        <msItem n="12:4">
+                            <locus>[78r]</locus>
+                            <incipit> { For en man Oracio }. Omnipotens sempiterne deus
+                                cui numquam sine spe … { Før ena qw[i]nna }. Quesumus
+                                domine pro tua pietate miserere anime famule tue … { Føre thwa
+                                qwinnor }. Deus cui proprium est misereri semper et parcere
+                            …</incipit>
+                        </msItem>
+                        <msItem n="12:5">
+                            <locus>[78v]</locus>
+                            <incipit> { ffør antwardhadom }. DEus cuius misericordie non
+                                est numerus suscipe propicius … { Føre alla crisna siæla som
+                                hwilas j kirkiogardhenom }. Deus in cuius miseracione anime
+                                fidelium … { Før ærlendom oc fforglømdom siælum }.
+                                MJserere obsecro domine miseris </incipit>
+                        </msItem>
+                        <msItem n="12:6">
+                            <locus>[79r]</locus>
+                            <incipit> animabus seruorum et ancillarum tuarum … { Før en
+                                byscop }. DA nobis domine ut anima famuli tui episcopi
+                            …</incipit>
+                        </msItem>
+                        <msItem n="12:7">
+                            <locus>[79v]</locus>
+                            <incipit> FJdelium deus omnium conditor et redemptor animabus …
+                                { Før allom crisnom siælom }. Avete fideles anime
+                                christus … { Før alla crisna s[iæla] }. Miserere
+                                quesumus domine animabus omnium fidelium defunctorum …</incipit>
+                        </msItem>
+                        <msItem n="12:8">
+                            <locus>[80r]</locus>
+                            <incipit> { Thæssa antiphona skal læsas æpter benedictus j
+                                vigileseno }. Ego sum resurreccio et vita …</incipit>
+                        </msItem>
+                        <msItem n="13">
+                            <locus>80v–82r</locus>
+                            <title>Om nyttan av Treenighetens tider.</title>
+                            <incipit> Thæt war en ænkia mykit gudhelikin som haffdhe thwa døthrar?
+                                badha jomffrur …</incipit>
+                            <bibl>Ed. Geete 5</bibl>
+                        </msItem>
+                        <msItem n="14">
+                            <locus>82r–87v</locus>
+                            <title>Treenighetens tider på svenska. </title>
+                        </msItem>
+                        <msItem n="14:1">
+                            <incipit> TE inuocamus te adoramus te laudamus …</incipit>
+                        </msItem>
+                        <msItem n="14:2">
+                            <locus>[82v]</locus>
+                            <incipit> O alzwallogher och æwærdhelikin gudh …</incipit>
+                            <bibl>Ed. Geete 6</bibl>
+                        </msItem>
+                        <msItem n="15">
+                            <locus>87v–90v</locus>
+                            <title>Till Treenigheten.</title>
+                            <incipit> { Hær børias ffagra bøner aff the hælga treffalloghet
+                                … }. O J hælgasta och høgxsta treffaldoghet alla thinga
+                                skapare …</incipit>
+                            <bibl>Ed. Geete 7</bibl>
+                        </msItem>
+                        <msItem n="16">
+                            <locus>90v–93v</locus>
+                            <title>Om Guds, jungfru Marias och änglars beskydd.</title>
+                            <incipit> { En lithen ffagher bøn aff warom herra ihesu }.
+                                Gudz ffadhers wælsignilse mz sinom ænglom wari ower mik …</incipit>
+                            <bibl>Ed. Geete 242</bibl>
+                        </msItem>
+                        <msItem n="17">
+                            <locus>93v–95r</locus>
+                            <title>Söndagsbönen.</title>
+                            <incipit> { Hær æpther børias søndagz bønen … }. O herra
+                                gudh ihesus christus j thenna dagh oc tæssa æpther kommandhe atta
+                                dagha …</incipit>
+                            <bibl>Ed. Geete 278 var. a</bibl>
+                        </msItem>
+                        <msItem n="18">
+                            <locus>95r–96v</locus>
+                            <title>Till S:t Erasmus.</title>
+                            <incipit> { Hwilkin som læs hwan synnedagh thæssa bøn och lather
+                                brinna eth wagx liws … }. O sancte erasme ihesu christi dyr
+                                martyr som pino oc plagho tolde a paska dagh …</incipit>
+                            <bibl>Ed. Geete 191</bibl>
+                        </msItem>
+                        <msItem n="19">
+                            <locus>96v–105r</locus>
+                            <title>Jungfru Marie rosenkrans.</title>
+                        </msItem>
+                        <msItem n="19:1">
+                            <incipit> { Thz ffinz screffwath at en gudheliken brodher aff
+                                cartusiensis ordhen … }. </incipit>
+                        </msItem>
+                        <msItem n="19:2">
+                            <locus>[98r]</locus>
+                            <incipit> O æroffullasta gudz modher millasta jomffru sancta maria
+                            …</incipit>
+                        </msItem>
+                        <msItem n="19:3">
+                            <locus>[104v]</locus>
+                            <incipit> { Oracio post rosarium }. O aldra millasta jomffru
+                                maria anama aff mik …</incipit>
+                            <bibl>Ed. Geete 122 </bibl>
+                        </msItem>
+                        <msItem n="19:4">
+                            <locus>105r–107r</locus>
+                            <title>Till heliga tre konungar.</title>
+                            <incipit> { En ærligh Och wærdogh bøn aff them ærofwlla herramen
+                                … }. </incipit>
+                        </msItem>
+                        <msItem n="19:5">
+                            <locus>[106r]</locus>
+                            <incipit> MJne kære herra konugh Jasper konung mælchior konungh baltazar
+                                …</incipit>
+                        </msItem>
+                        <msItem n="19:6">
+                            <locus>[106v]</locus>
+                            <incipit> { Collectha æpther bønene b a }. O herra ihesu
+                                christe ther mz stiærnanna fføregangh …</incipit>
+                            <bibl>Ed. Geete 165 var. a </bibl>
+                        </msItem>
+                        <msItem n="20">
+                            <locus>107r–108v</locus>
+                            <title>Till Kristus före nattvarden.</title>
+                            <incipit> { Thæssa bøner hær æpther standher … }. O herra
+                                gudh ihesu christe hwo ær jak æller hwilken at jak thuri gaa til
+                                tith bordh …</incipit>
+                            <bibl>Ed. Geete 57 </bibl>
+                        </msItem>
+                        <msItem n="21">
+                            <locus>108v–110r</locus>
+                            <title>Nattvardsbön.</title>
+                            <incipit> { En annor godh bøn læsandhe ffør æn j taken gudz
+                                licama }. O Herra gudh jak star mz syndogho samwithi ffør
+                                thins waldz øøghon …</incipit>
+                            <bibl>Ed. Geete 63 </bibl>
+                        </msItem>
+                        <msItem n="22">
+                            <locus>110r–111v</locus>
+                            <title>Till Kristi lekamen före nattvarden.</title>
+                        </msItem>
+                        <msItem n="22:1">
+                            <incipit> { En godh bøn læsande ffør æn </incipit>
+                        </msItem>
+                        <msItem n="22:2">
+                            <locus>[110v]</locus>
+                            <incipit> j taken gudz signadha likama S b a d }. O herra ihesu
+                                christe mz skælwandhe samwithi gaar jak fram at taka thin …</incipit>
+                            <bibl>Ed. Geete 52:1 </bibl>
+                        </msItem>
+                        <msItem n="23">
+                            <locus>111v–112v</locus>
+                            <title>Till Jungfru Maria före man tar Guds lekamen.</title>
+                            <incipit> { En godh bøn til iomffru maria ffør æn j taken
+                                … }. O ælskelighasta ffru ower alla andra sælasta jomffru
+                                Maria thil thin ær mith …</incipit>
+                            <bibl>Ed. Geete 114</bibl>
+                        </msItem>
+                        <msItem n="24">
+                            <locus>112v–117v</locus>
+                            <title>Böner inför nattvarden.</title>
+                            <incipit> { Hær æpther staar nakra puncta j hwat mattho mæniskian
+                                skal … }. IAk syndogh oc owerdogh mænniskia bedher edher all
+                                creatur j himerike …</incipit>
+                            <bibl>Ed. Geete 48:1–5 </bibl>
+                        </msItem>
+                        <msItem n="25">
+                            <locus>117v</locus>
+                            <title>Före man tar Guds lekamen.</title>
+                            <incipit> { ffør æn taken gudz hæga likama }. Ueni dulcissme
+                                ihesu et da michi cibum salutis eterne ...</incipit>
+                        </msItem>
+                        <msItem n="26">
+                            <locus>117v–118r</locus>
+                            <title>Syndabekännelsen.</title>
+                        </msItem>
+                        <msItem n="26:1">
+                            <incipit> { Nar i kommen tith som j skulen genstan taka gudz
+                                licama … }. </incipit>
+                        </msItem>
+                        <msItem n="26:2">
+                            <locus>[118r]</locus>
+                            <incipit> Confiteor deo et beate maria virgini et omnibus
+                            sanctis...</incipit>
+                        </msItem>
+                        <msItem n="27">
+                            <locus>118r</locus>
+                            <title>Då man tar nattvarden.</title>
+                            <incipit> { J thy at j taken gudz licama sighen j hiærtano
+                                swa }. O aldra søtasthe ihesu hwilken jak haffwer astwndat
+                                wærdoghas nw gaa ...</incipit>
+                            <bibl>Ed. Geete 48:6 </bibl>
+                        </msItem>
+                        <msItem n="28">
+                            <locus>118r–120r</locus>
+                            <title>Efter att man mottagit sakramentet.</title>
+                        </msItem>
+                        <msItem n="28:1">
+                            <incipit> { Sedan giffwen edher til alla jnnerlighet at takka
+                                edhrom </incipit>
+                        </msItem>
+                        <msItem n="28:2">
+                            <locus>[118v]</locus>
+                            <incipit> skapara oc brudgumma … }. Min søthe herre ihesu christe
+                                wærdhena helare Jak bedhr tik ...</incipit>
+                            <bibl>Ed. Geete 52:2 </bibl>
+                        </msItem>
+                        <msItem n="29">
+                            <locus>120r–120v</locus>
+                            <title>Till Jungfru Maria efter man tagit Guds lekamen.</title>
+                            <incipit> { Til jomffru maria en godh bøn }. O hælgasta wars
+                                herra ihesu christi modher æwærdheliken jomffru maria ...</incipit>
+                            <bibl>Ed. Geete 117 </bibl>
+                        </msItem>
+                        <msItem n="30">
+                            <locus>120v–122r</locus>
+                            <title>Om antalet av Kristi sår.</title>
+                            <incipit> En enstaka qwinna och jnnelykt astwndhadhe ath wetha taal a
+                                wars herra ...</incipit>
+                            <bibl>Ed. Geete 74 </bibl>
+                        </msItem>
+                        <msItem n="31">
+                            <locus>122r–126v</locus>
+                            <title>Femton böner till Kristi pina, ställda till Kristi kroppsdelar.</title>
+                            <incipit> O Søthe herre ihesu christe æwærdheliken søtma thera som tik
+                                ælska ...</incipit>
+                            <bibl>Ed. Geete 32 var. a </bibl>
+                        </msItem>
+                        <msItem n="32">
+                            <locus>126v–130r</locus>
+                            <title>Till Jesu fem sår.</title>
+                        </msItem>
+                        <msItem n="32:1">
+                            <incipit> { Sanctus gregorius giordhe tæssa æpter screffna bøner
+                                aff wars herra … }. </incipit>
+                        </msItem>
+                        <msItem n="32:2">
+                            <locus>[127r]</locus>
+                            <incipit> O Min søtassthe herre ihesu christe loff hedher och æro wari
+                                thinne høghre handz ...</incipit>
+                            <bibl>Ed. Geete 75 </bibl>
+                        </msItem>
+                        <msItem n="32:3">
+                            <locus>130r</locus>
+                            <title>För att få evig lycksalighet.</title>
+                            <incipit> { Til tæssa bøn ær giffwith swa mangh aar afflat
+                                … }. O korssens høgdh O menløst blodh O christi nødh O stoor
+                                martyr ...</incipit>
+                            <bibl>Ed. Geete 252 </bibl>
+                        </msItem>
+                        <msItem n="33">
+                            <locus>130v</locus>
+                            <p>Spår efter inklistrad bild.</p>
+                        </msItem>
+                        <msItem n="34">
+                            <locus>131r–132v</locus>
+                            <title>Till Jungfru Marie sorg och glädje vid sonens död och
+                                uppståndelse.</title>
+                            <incipit> O æroffulla ffru jomffru Maria gudz modher hirikis drotningh
+                                ...</incipit>
+                            <bibl>Ed. Geete 131 </bibl>
+                        </msItem>
+                        <msItem n="35">
+                            <locus>132v–136v</locus>
+                            <title>Till Jungfru Marie sorger.</title>
+                            <incipit> { Hær æpther ffølgher ffaghra bøner aff xv jomffru maria
+                                drøffwilsom … }. Glædz maria ffridzsens kælla jak takkar
+                                lofwar oc hedhrar tik ...</incipit>
+                            <bibl>Ed. Geete 125 </bibl>
+                        </msItem>
+                        <msItem n="36">
+                            <locus>136v–138v</locus>
+                            <title>Om läsning av Jungfru Marie psaltare och Fyra
+                            antifoner.</title>
+                        </msItem>
+                        <msItem n="36:1">
+                            <incipit> { Jomffru maria thedis enom gudhelikom man som henne
+                                tiænthe gærna … }. </incipit>
+                        </msItem>
+                        <msItem n="36:2">
+                            <locus>[137v]</locus>
+                            <incipit> De te virgo nasciturum mundi saluatorem … { The andra
+                                fæmtighe skulu wara før the glædhina jak haffde … }. Gaudendum
+                                nobis ...</incipit>
+                        </msItem>
+                        <msItem n="36:3">
+                            <locus>[138r]</locus>
+                            <incipit> { The tridhia fæmtighe skulo wara ffør alla the æro jak
+                                nw haffwer … }. Aue regina celorum aue domina angelorum …
+                                { collecta }. </incipit>
+                        </msItem>
+                        <msItem n="36:4">
+                            <locus>[138v]</locus>
+                            <incipit> Deus qui vnigeniti filii tui matrem super omnes sanctorum
+                                angelorum ...</incipit>
+                            <bibl>Ed. Geete 121 </bibl>
+                        </msItem>
+                        <msItem n="37">
+                            <locus>138v–140r</locus>
+                            <title>Hel. Mechtilds bön till Jesu fem glädjer. </title>
+                        </msItem>
+                        <msItem n="37:1">
+                            <incipit> { Thzta ærw ffæm rætther som ihesus </incipit>
+                        </msItem>
+                        <msItem n="37:2">
+                            <locus>[139r]</locus>
+                            <incipit> christus rætthe oppa ffør sancte mæktilde … }. Uar herra
+                                ihesus christus han sagdhe til sancta mæktilde oc henna systra ...</incipit>
+                            <bibl>Ed. Mecht., s. 379–80 (bok I, kap. 39) </bibl>
+                        </msItem>
+                        <msItem n="37:3">
+                            <locus>140v</locus>
+                            <p>Spår efter inklistrad bild.</p>
+                        </msItem>
+                        <msItem n="38">
+                            <locus>140ar–142r</locus>
+                            <title>Hel. Mechtilds fem böner till Kristi uppståndelse.</title>
+                            <incipit> { Hær æpther ffølghe bønenar aff ihesu christi ffrøgdhom
+                                j hans æroffulla wpstandilsom }. IAk loffuar hedrar vphøgher
+                                ærar oc wælsignar tik o godhe ihesu ...</incipit>
+                            <bibl>Ed. Mecht., s. 381–83 (bok I, kap. 40); jfr Geete 92 </bibl>
+                        </msItem>
+                        <msItem n="39">
+                            <locus>142rv</locus>
+                            <title>Till femton nödhjälpare. </title>
+                        </msItem>
+                        <msItem n="39:1">
+                            <incipit> { En ffagher och ærliken dyr bøn aff them æroffulla
+                                hælga ffæmpthan nødhiælpara }. </incipit>
+                        </msItem>
+                        <msItem n="39:2">
+                            <locus>[142v]</locus>
+                            <incipit> O alzmæktoghaste gudh hwilken som wnthe oc gaff thina
+                                æroffulla martyres ...</incipit>
+                            <bibl>Ed. Geete 166 </bibl>
+                        </msItem>
+                        <msItem n="40">
+                            <locus>143r–144v</locus>
+                            <title>Till Kristus för de sju ord han talade på korset.</title>
+                            <incipit> O Herra ihesu christe hwilken som siw ordh sagdhe oppa thinom
+                                ytthersta dagh ...</incipit>
+                            <bibl>Ed. Geete 90 </bibl>
+                        </msItem>
+                        <msItem n="41">
+                            <locus>144v–146v</locus>
+                            <title>Till S:a Anna. </title>
+                        </msItem>
+                        <msItem n="41:1">
+                            <incipit> { Hwilken mænniskia som daghelika læs tæssa æpther
+                                screffna bøn tha giffwer gud henne … }. </incipit>
+                        </msItem>
+                        <msItem n="41:2">
+                            <locus> [145r]</locus>
+                            <incipit> O Æroffulla ffru aldra høwiskasta qw[i]nna sancta anna jomffru
+                                Maria modher ...</incipit>
+                            <bibl>Ed. Geete 174 </bibl>
+                        </msItem>
+                        <msItem n="42">
+                            <locus>146v–147v</locus>
+                            <title>Till S:a Anna.</title>
+                            <incipit> { En lithen bøn aff sancta anna }. Uælsignadher
+                                wari han som tik skapadhe min aldra søtasta ffru sancta anna ...</incipit>
+                            <bibl>Ed. Geete 176 var. a </bibl>
+                        </msItem>
+                        <msItem n="43">
+                            <locus>147v–148v</locus>
+                            <title>Till Jungfru Marie lemmar. </title>
+                        </msItem>
+                        <msItem n="43:1">
+                            <incipit> { Thzta ær aff jomffru Marie lime hwar thera ær
+                                hedrandhe mz enne aue maria }. </incipit>
+                        </msItem>
+                        <msItem n="43:2">
+                            <locus>[148r]</locus>
+                            <incipit> Hwffudit Haarith Ænlitith Øronin Kinbenin Øghonin Jæssonar
+                                Munnen ...</incipit>
+                            <bibl>Ed. Geete 141 var. b </bibl>
+                        </msItem>
+                        <msItem n="44">
+                            <locus>148v</locus>
+                            <title>Till Jungfru Maria.</title>
+                            <incipit> (Endast rubrik) { Jnnocencius paffue then attonde æpter
+                                høghborna fførstinna drotnigh elyzabeth aff hyspania landh
+                                … }. </incipit>
+                            <bibl>Ed. Geete 102 </bibl>
+                        </msItem>
+                        <msItem n="45">
+                            <locus>149rv</locus>
+                            <title>Till S:a Dorothea.</title>
+                            <incipit> { Hwar som hedra sancta dorothea namp hwar dagh
+                                … }. HEl ærlikasta gudz tiænista mø oc skinandhe ffina perla
+                                ...</incipit>
+                            <bibl>Ed. Geete 188 </bibl>
+                        </msItem>
+                        <msItem n="46">
+                            <locus>149v–152r</locus>
+                            <title>Till Jungfru Marie lemmar. </title>
+                        </msItem>
+                        <msItem n="46:1">
+                            <incipit> { Hær æpter staar en ærlikin bøn aff jomfru Maria læsen
+                                hona gærna … }. </incipit>
+                        </msItem>
+                        <msItem n="46:2">
+                            <locus>[150r]</locus>
+                            <incipit> Søta blomsthr lioffua søtasta iomffrv maria ihesu christi
+                                modher ...</incipit>
+                            <bibl>Ed. Geete 140 </bibl>
+                        </msItem>
+                        <msItem n="47">
+                            <locus>152rv</locus>
+                            <title>Till Jungfru Maria.</title>
+                            <incipit> { Thz sigx at jngen ær swa stor syndare om han daghelica
+                                læs tæssa bøn … }. O maria thu som ær alla dygdha ophoff oc
+                                ffulkomnilse tik hedra Oc wælsigna alle ...</incipit>
+                            <bibl>Ed. Geete 109 </bibl>
+                        </msItem>
+                        <msItem n="48">
+                            <locus>152v–153v</locus>
+                            <title>Hel. Mechtilds tre Ave.</title>
+                            <incipit> { Sancta mæktildh badh til jomffru Maria j blandh andra
+                                sina bøner … }. JAk bedher tik min søtasta jomffru Maria at
+                                swa som gudh ffadher mz sinne ...</incipit>
+                            <bibl>Ed. Mecht., s. 390–91 (bok I, kap. 86) </bibl>
+                        </msItem>
+                        <msItem n="49">
+                            <locus>153v–154r</locus>
+                            <title>Till Jungfru Maria.</title>
+                            <incipit> { En godh och ærligh bøn til jomffru Maria læsen henne
+                                gærna hwan dagh }. Min fru sancta Maria j thins mildhetz skøth
+                                oc hændher befælar jak j dag min licama …</incipit>
+                            <bibl>Ed. Geete 111 </bibl>
+                        </msItem>
+                        <msItem n="50">
+                            <locus>154r–155v</locus>
+                            <title>Till S:a Barbara. </title>
+                        </msItem>
+                        <msItem n="50:1">
+                            <incipit> { En ærliken oc dyr bøn aff sancta barbara … }.
+                            </incipit>
+                        </msItem>
+                        <msItem n="50:2">
+                            <locus>[155r]</locus>
+                            <incipit> O Min ælskelika oc kærasta jomffru sancta barbara som ær the
+                                wthualda paradysi rødha rosin ...</incipit>
+                            <bibl>Ed. Geete 181 </bibl>
+                        </msItem>
+                        <msItem n="51">
+                            <locus>155v–158r</locus>
+                            <title>Till Jungfru Marie himmelsfärd.</title>
+                            <incipit> { En ærligh oc ffagher bøn aff jomffru maria hælgasta
+                                opfærdh til himerikis rike }. Uælsignadh see thu jomffru maria
+                                ænglana ffru oc himerikis drotningh ...</incipit>
+                            <bibl>Ed. Geete 145 </bibl>
+                        </msItem>
+                        <msItem n="52">
+                            <locus>158r–160r</locus>
+                            <title>Heliga Birgittas bön till Jungfru Maria.</title>
+                            <incipit> { Thæssa bøn gaff ængilin sancte birgittho swa
+                                sighiandis … }. O thu aldra lustelicasta yrtagardher jomffru
+                                Maria gudz modher ...</incipit>
+                            <bibl>Ed. BU IV, s. 171–73 </bibl>
+                        </msItem>
+                        <msItem n="53">
+                            <locus>160r</locus>
+                            <title>Om läsning av 25 Pater noster.</title>
+                            <incipit> { Thz æru ffæm sinom ffæm pater som war herra sagde
+                                sancte mæktilde at læsandhe ær ffor cristnom siælom }. Førsth
+                                ffæm pater noster ther war hra swettis blodh Bedhis ffor allas wara
+                                fforældra siæla ...</incipit>
+                            <bibl>Ed. Mecht., s. 393 </bibl>
+                        </msItem>
+                        <msItem n="54">
+                            <locus>160v</locus>
+                            <p>Spår efter inklistrad bild.</p>
+                        </msItem>
+                        <msItem n="55">
+                            <locus>161rv</locus>
+                            <title>Till Maria Magdalena.</title>
+                            <incipit> { Hær æpther staar en ærligh oc wærdogh bøn aff sancta
+                                maria magdalena }. O Sancta maria magdalena thu som mz
+                                tharanna kældo kom til miskunninna kællo ...</incipit>
+                            <bibl>Ed. Geete 215, med slutvariant </bibl>
+                        </msItem>
+                        <msItem n="56">
+                            <locus>161v–162r</locus>
+                            <title>Till Jesus Kristus.</title>
+                            <incipit> { Thil tæssa bøn gaff ihesus christus hundradha M
+                                karenor til afflath }. O herra ihesu christe jak bedher tik
+                                ffor the glædhinna som sancta maria magdalena ...</incipit>
+                            <bibl>Ed. Geete 23:3 var. b </bibl>
+                        </msItem>
+                        <msItem n="57">
+                            <locus>162r–164v</locus>
+                            <title>Jungfru Marie fem fröjder.</title>
+                            <incipit> { En dyr bøn aff jomffru maria hwaa hona læs idhkelica
+                                … }. JAk bedher tik min ffru sancta maria gudz moder fullasth
+                                mz alla miskundh ...</incipit>
+                            <bibl>Ed. Geete 134 var. a </bibl>
+                        </msItem>
+                        <msItem n="58">
+                            <locus>164v–165v</locus>
+                            <title>Till Jungfru Marie sorger.</title>
+                            <incipit> { En godh bøn aff iomffrv maria drøffuilse }. O
+                                Min aldra kærasta jomffrv maria gudz modher mz hwat aldra beskasta
+                                sorgh ...</incipit>
+                            <bibl>Ed. Geete 127 </bibl>
+                        </msItem>
+                        <msItem n="59">
+                            <locus>165v</locus>
+                            <title>S:t Augustinus bön till Gud Fader.</title>
+                            <incipit> (Ofullst.) { Thæssa æpther screffna bøn giørdhe sanctus
+                                augustinus … }. Skodha mik vsla obegripelikin milhet </incipit>
+                            <bibl>Ed Geete 4 </bibl>
+                        </msItem>
+                        <msItem n="60">
+                            <locus>166rv</locus>
+                            <title>Till S:t Petrus.</title>
+                            <incipit> { En ærligh oc wærdogh bøn aff then hælgha hærren sancto
+                                petro apostolo b ff b a d }. O sancte pædhar gudz wthwaldhe
+                                apostol thu som fførst sagdhe ihesum wara ...</incipit>
+                            <bibl>Ed. Geete 219 </bibl>
+                        </msItem>
+                        <msItem n="61">
+                            <locus>166v</locus>
+                            <title>Till Jesus Kristus.</title>
+                            <incipit> { Thil tesse bøn gaff johannes paue M c ar ffør
+                                nadheligha syndher pater noster aue maria }. O herra ihesu
+                                christe helare oc atherløsare alla werdhinna iak bedher tik ...</incipit>
+                            <bibl>Ed. Geete 23:2 var. b </bibl>
+                        </msItem>
+                        <msItem n="62">
+                            <locus>166v–167v</locus>
+                            <title>Till Gud Fader. </title>
+                        </msItem>
+                        <msItem n="62:1">
+                            <incipit> { Til tæssa bøn gaff war herra ihesus siælfwer hundradha
+                                M karenor til afflath … }. </incipit>
+                        </msItem>
+                        <msItem n="62:2">
+                            <locus>[167r]</locus>
+                            <incipit> Konungher offwer alla konunga oc herra offwer alla ffør sancte
+                                maria bøn ...</incipit>
+                            <bibl>Ed. Geete 2 </bibl>
+                        </msItem>
+                        <msItem n="63">
+                            <locus>167v–168r</locus>
+                            <title>För våra ovänner.</title>
+                            <incipit> { Hwat mænniskia j mæssa aller ffør mæsso tæssa bøn
+                                gudhelica læs … }. O Herra ihesu christe liffuandis gudz son
+                                thu som hænghiande wppa korsseno ffor ...</incipit>
+                            <bibl>Ed. Geete 232 </bibl>
+                        </msItem>
+                        <msItem n="64">
+                            <locus>168rv</locus>
+                            <title>Heliga Birgittas bön.</title>
+                            <incipit> { Tæssa bøn kændhe gudz son sancte birgitte oc sagde
+                                … }. Jhesus christus liffuandis gudz son thu som nakæn oc
+                                blodhugher hængde ...</incipit>
+                            <bibl>Ed. BU IV, s. 170–71 </bibl>
+                        </msItem>
+                        <msItem n="65">
+                            <locus>168v–169r</locus>
+                            <title>Till det heliga Korset.</title>
+                            <incipit> { Hwilken som bær tæssa bøn oppa sik æller høre læsas
+                                æller siælffwer læs … }. Uars herra ihesu christi kors † wari
+                                mz mik jhesu christi kors † ær thz tekn ...</incipit>
+                            <bibl>Ed. Geete 88 </bibl>
+                        </msItem>
+                        <msItem n="66">
+                            <locus>170r</locus>
+                            <title>Till S:t Andreas.</title>
+                            <incipit> { En ærligh oc dyr bøn aff sancto andrea }. O
+                                Sancte andrea wars herra ihesu christi millaste apostol hwilkin som
+                                at ...</incipit>
+                            <bibl>Ed. Geete 173 </bibl>
+                        </msItem>
+                        <msItem n="67">
+                            <locus>170r–172v</locus>
+                            <title>För syndare. </title>
+                        </msItem>
+                        <msItem n="67:1">
+                            <incipit> { Jnnocencius paue gaff til tæssa bøn them hona
+                                gudhelica læs </incipit>
+                        </msItem>
+                        <msItem n="67:2">
+                            <locus>[170v]</locus>
+                            <incipit> ffør sina syndher … }. O herra gudh thu som søndhersleth
+                                mina syndha oc ffrestilsa bandh thy skal jak ...</incipit>
+                            <bibl>Ed. Geete 262 </bibl>
+                        </msItem>
+                        <msItem n="68">
+                            <locus>172v–173r</locus>
+                            <title>Till S:t Paulus. </title>
+                        </msItem>
+                        <msItem n="68:1">
+                            <incipit> { En ffagher oc wærdogh bøn aff sancto paulo }.
+                            </incipit>
+                        </msItem>
+                        <msItem n="68:2">
+                            <locus>[173r]</locus>
+                            <incipit> O sancte paule wælsignadher wari thu thy at thu war fførsta
+                                kirkionna lius ...</incipit>
+                            <bibl>Ed. Geete 218 </bibl>
+                        </msItem>
+                        <msItem n="69">
+                            <locus>173rv</locus>
+                            <title>Till din ängel. (Ofullst.) </title>
+                        </msItem>
+                        <msItem n="69:1">
+                            <incipit> { En ffagher bøn til edhan hælga ængil }.
+                            </incipit>
+                        </msItem>
+                        <msItem n="69:2">
+                            <locus>[173v]</locus>
+                            <incipit> Signadher wari ffadher oc son och then hælge andhe ffør alla
+                                the glædhi ...</incipit>
+                            <bibl>Ed. Geete 154 </bibl>
+                        </msItem>
+                        <msItem n="70">
+                            <locus>174r–175v</locus>
+                            <title>Till Heliga Birgitta.</title>
+                            <incipit> O hælgasta oc millasta modher sancta birgitta gudz wth walda
+                                brwd ...</incipit>
+                            <bibl>Ed. Geete 184 </bibl>
+                        </msItem>
+                        <msItem n="71">
+                            <locus>175v–176v</locus>
+                            <title>Till Jungfru Maria, för nunnor.</title>
+                            <incipit> { En ffagher oc godh bøn aff jomffrv maria }. O
+                                Miskunsam modher jomffru maria thu see loffuat oc ærat ower al
+                                creatur ...</incipit>
+                            <bibl>Ed. Geete 108 </bibl>
+                        </msItem>
+                        <msItem n="72">
+                            <locus>176v–177v</locus>
+                            <title>Till S:t Hieronymus. </title>
+                        </msItem>
+                        <msItem n="72:1">
+                            <incipit> { Hær æpther st star en wærdog oc dyr bøn aff them
+                                hælgha herranom … }. </incipit>
+                        </msItem>
+                        <msItem n="72:2">
+                            <locus>[177r]</locus>
+                            <incipit> O Min ælskelike ffadher oc herra sancte ieronime snillena
+                                kænnefadher ...</incipit>
+                            <bibl>Ed. Geete 196 </bibl>
+                        </msItem>
+                        <msItem n="73">
+                            <locus>177v–179r</locus>
+                            <title>För klostersystrar.</title>
+                            <incipit> { En god oc dyr bøn aff edhrom brudhgumma ihesu
+                                christo }. MIn søthe gudh oc Min kærasthe herra Min
+                                ælskelicaste brudhgomme liffens ...</incipit>
+                            <bibl>Ed. Geete 265 </bibl>
+                        </msItem>
+                        <msItem n="74">
+                            <locus>179r–181v</locus>
+                            <title>Till Jesus inför hans domare. </title>
+                        </msItem>
+                        <msItem n="74:1">
+                            <incipit> { Hær skulen j tænkkia hwrw war herra ihesus
+                                presenteradhis domarenom … }. </incipit>
+                        </msItem>
+                        <msItem n="74:2">
+                            <locus>[179v]</locus>
+                            <incipit> Førsth takken warom herra ihesu mz enne pater noster ffør hwan
+                                thæn mødhelikan ...</incipit>
+                            <bibl>Ed. Geete 30 </bibl>
+                        </msItem>
+                        <msItem n="75">
+                            <locus>181v–183r</locus>
+                            <title>Till S:a Katarina av Alexandria.</title>
+                            <incipit> { En god bøn aff sancta katherina }. O Min
+                                ælskelika oc aldra kærasta jomffru sancta katherina j thino gømo Oc
+                                wærio ...</incipit>
+                            <bibl>Ed. Geete 206 </bibl>
+                        </msItem>
+                        <msItem n="76">
+                            <locus>183r</locus>
+                            <title>För att få evig lycksalighet.</title>
+                            <incipit> { Til tæssa bøn ær giffwith swa mangh aar afflat som
+                                sandkorn ærw … }. O korssens høgdh O menløsth blodh O christi
+                                nødh O stoor martyr O dywpa ...</incipit>
+                            <bibl>Ed. Geete 252 </bibl>
+                        </msItem>
+                        <msItem n="77">
+                            <locus>183v–184r</locus>
+                            <title>Till Jesu blod.</title>
+                            <incipit> { Hær æpther staar en wærdogh oc dyr bøn aff wars herra
+                                ihesu christi hælgasta blodz droppa … }. O aldra
+                                ælskelighkaste søtaste oc millasthe herre ihesu christe ffuller aff
+                                ...</incipit>
+                            <bibl>Ed. Geete 82 (variant av 22) </bibl>
+                        </msItem>
+                        <msItem n="78">
+                            <locus>184rv</locus>
+                            <title>Till att få syndernas förlåtelse i dödsstunden.</title>
+                            <incipit> { Tæssa æpther screffna bøner læsen hwan dagh … }.
+                                O herra ihesu christe jak bedher tik ffør then blodugha swet thu wth
+                                gødzt ...</incipit>
+                            <bibl>Ed. Geete 259 </bibl>
+                        </msItem>
+                        <msItem n="79">
+                            <locus>184v–186r</locus>
+                            <title>Till S:a Katarina av Vadstena. </title>
+                        </msItem>
+                        <msItem n="79:1">
+                            <incipit> { En godh bøn til sancta katherina sancta birgitta
+                                dotther … }. </incipit>
+                        </msItem>
+                        <msItem n="79:2">
+                            <locus>[185r]</locus>
+                            <incipit> O Min aldra kærasta ffru oc modher sancta katherina swerikis
+                                patrona ...</incipit>
+                            <bibl>Ed. Geete 210 </bibl>
+                        </msItem>
+                        <msItem n="80">
+                            <locus>186r</locus>
+                            <title>Till Jesu törnekrona.</title>
+                            <incipit> { En god bøn aff wars herra ihesu christi
+                                tørnekrono }. O herre ihesu christe jak bedher tik ffør thina
+                                hælga tørnekrono ...</incipit>
+                            <bibl>Ed. Geete 91 </bibl>
+                        </msItem>
+                        <msItem n="81">
+                            <locus>186r–187v</locus>
+                            <title>Till Jungfru Marie sju fröjder. </title>
+                        </msItem>
+                        <msItem n="81:1">
+                            <incipit> { Til tæssa siw bøner som hær æpther screffna staa gaff
+                                war herra … }. </incipit>
+                        </msItem>
+                        <msItem n="81:2">
+                            <locus>[186v]</locus>
+                            <incipit> Glædz jomffru ihesu christi modher maria thu som ensam
+                                fforskulladhe mz aldra ...</incipit>
+                            <bibl>Ed. Geete 133 </bibl>
+                        </msItem>
+                        <msItem n="82">
+                            <locus>187v–188v</locus>
+                            <title>En god bön till din ängel.</title>
+                            <incipit> { En godh oc ffagher bøn til edhan hælga ængil
+                                … }. Iak bedhr tik syndogh oc owerdogh mænniskia O gudz hælga
+                                ængil ...</incipit>
+                            <bibl>Ed. Geete 151 </bibl>
+                        </msItem>
+                        <msItem n="83">
+                            <locus>188v–189r</locus>
+                            <title>Till 10 000 riddare.</title>
+                            <incipit> { En godh oc dyr bøn aff x M ridhdara }. Loff
+                                hedher oc æra wari tik min søtaste gudh som sanctum achasium om
+                                wændhe ...</incipit>
+                            <bibl>Ed. Geete 167 </bibl>
+                        </msItem>
+                        <msItem n="84">
+                            <locus>189v–190r</locus>
+                            <title>Till S:t Martin.</title>
+                            <incipit> { En bøn aff se sancte martino }. Uælsignadher see
+                                thu sancte morten som gudh siælffwer wt waldhe ...</incipit>
+                            <bibl>Ed. Geete 216 </bibl>
+                        </msItem>
+                        <msItem n="85">
+                            <locus>190r–191r</locus>
+                            <title>Till S:a Ursula.</title>
+                            <incipit> { En godh bøn aff sancta wrssula S b a d }. Heel
+                                oc glædz æroffulla gudz jomffrv oc martyr paradysi blomsther ...</incipit>
+                            <bibl>Ed. Geete 224 </bibl>
+                        </msItem>
+                        <msItem n="86">
+                            <locus>191r–192r</locus>
+                            <title>Till Kristi Veronica. </title>
+                        </msItem>
+                        <msItem n="86:1">
+                            <incipit> { Alla the som læsa tæssa æpther screffna </incipit>
+                        </msItem>
+                        <msItem n="86:2">
+                            <locus>[191v]</locus>
+                            <incipit> bøn mz innerlikom hiærtans angher … }. Æra wari wars
+                                herra ihesu christi ænlithe søthezsens klarhet ...</incipit>
+                            <bibl>Ed. Geete 80 var. b </bibl>
+                        </msItem>
+                        <msItem n="87">
+                            <locus>192r–193r</locus>
+                            <title>Till S:t Johannes döparen.</title>
+                            <incipit> { En godh bøn aff sancto johanne baptista }. O Min
+                                aldra kæraste herra sanctus johannes baptista thu æst then godhe ...</incipit>
+                            <bibl>Ed. Geete 200 </bibl>
+                        </msItem>
+                        <msItem n="88">
+                            <locus>193rv</locus>
+                            <title>Till den helige Ande.</title>
+                            <incipit> { En bøn af then hælga andha }. Kom thæn hælge
+                                ande hælga andha oc wt sænt aff himblenom thins lyws gisla ...</incipit>
+                            <bibl>Ed. Geete 15 </bibl>
+                        </msItem>
+                        <msItem n="89">
+                            <locus>193v–194r</locus>
+                            <title>Till Jungfru Maria.</title>
+                            <incipit> { Thenna æpther skriffna bøn fførdhe sanctus michael
+                                ængil skriffna? mz gul bokstaffuom }. Aue sanctissima maria
+                                mater dei regina celi porta paradysi domina ...</incipit>
+                            <bibl>Ed. jfr Geete 103 </bibl>
+                        </msItem>
+                        <msItem n="90">
+                            <locus>194r</locus>
+                            <title>Till Jungfru Maria.</title>
+                            <incipit> { Hwilken mænnisskia som læs tæssa æpther screffna bøn v
+                                sinom hwar dagh … }. O virgo Maria rogo te per ...</incipit>
+                        </msItem>
+                        <msItem n="91">
+                            <locus>194rv</locus>
+                            <title>Då man står upp om morgonen.</title>
+                            <incipit> { Thenna æpther screffna stykke skal man læsa tha han op
+                                staar aff sinne sængh }. Signum saluatoris ihesus nazarenus
+                                rex iudeorum miserere mei peccatrici ...</incipit>
+                        </msItem>
+                        <msItem n="92">
+                            <locus>194v–195v</locus>
+                            <title>Sequuntur versus Beati Bernhardi.</title>
+                            <incipit> { Hær børias the vij værs som j skulen dagheliga
+                                læsa }. Jllumina oculos meos ne vmquam ...</incipit>
+                        </msItem>
+                        <msItem n="93">
+                            <locus>195v–197r</locus>
+                            <title>För den som pinas i döden. </title>
+                        </msItem>
+                        <msItem n="93:1">
+                            <incipit> { En paffwe war hwilken j sinom dødz thima badh en
+                                gudeliken man sin kappelan … }. </incipit>
+                        </msItem>
+                        <msItem n="93:2">
+                            <locus>[196r]</locus>
+                            <incipit> O herra ihesu christe ffør thina stridh oc hælgasta bøn j
+                                hwilke thu badh ffør os ...</incipit>
+                            <bibl>Ed. Geete 233 </bibl>
+                        </msItem>
+                        <msItem n="94">
+                            <locus>197rv</locus>
+                            <title>Till S:a Margareta.</title>
+                            <incipit> { En ffagher aff jomffrv sancta margreta S b a
+                                d }. O Sancta margareta en aff gudz wtualdom jomffru? bid bidh
+                                ffør mik til wan herra ...</incipit>
+                            <bibl>Ed. Geete 214 </bibl>
+                        </msItem>
+                        <msItem n="95">
+                            <locus>197v–198r</locus>
+                            <title>Om värdet av böner till Jesu axelsår.</title>
+                            <incipit> { Sanctus bernardus spordhe wan herra ihesu christum
+                                aath hwat hans obegrundhelikasta … }. Uar herra swaradhe hanom
+                                Jak hadhe eth saar wppa minne aglx ...</incipit>
+                            <bibl>Ed. Geete 77 </bibl>
+                        </msItem>
+                        <msItem n="96">
+                            <locus>198rv</locus>
+                            <title>Magnificat.</title>
+                            <incipit> { J hwaria handa drøffwilsom mænniskian ær j stad tha
+                                læsi tæssa æpther screffna bøner … }. Magnificat anima mea
+                            ...</incipit>
+                        </msItem>
+                        <msItem n="97">
+                            <locus>198v–200r</locus>
+                            <title>Till Jungfru Marie fem fröjder.</title>
+                            <incipit> JAk bedher tik sancta maria mildh oc æwerdhelikin jomffru oc
+                                manar jak tik ...</incipit>
+                            <bibl>Ed. Geete 135 </bibl>
+                        </msItem>
+                        <msItem n="98">
+                            <locus>200r–202r</locus>
+                            <title>Till Jungfru Marie sorg efter hennes sons nedtagning av korset.
+                            </title>
+                        </msItem>
+                        <msItem n="98:1">
+                            <incipit> { Hær æpther staa the ordhen som jomffru maria taladhe
+                                tha henna wælsignadha son … }. </incipit>
+                        </msItem>
+                        <msItem n="98:2">
+                            <locus>[200v]</locus>
+                            <incipit> O thu wt fflytandhe brundher ffør wtan ænda hwi æst thu swa
+                                barmelika wt ...</incipit>
+                        </msItem>
+                        <msItem n="98:3">
+                            <locus>[201r]</locus>
+                            <incipit> { Læssen her vij aue maria oc hedhren her jomffru maria
+                                … }. O jomffru maria jak bedhr tik ffor thin drøffwilse oc
+                                stora sorgh ...</incipit>
+                            <bibl>Ed. Geete 130 </bibl>
+                        </msItem>
+                        <msItem n="99">
+                            <locus>202rv</locus>
+                            <title>Utdrag ur Johannesevangeliet.</title>
+                            <incipit> { Jnicium sancti ewangelij secundum? johannem }.
+                                IN principio erat verbum Et verbum erat apud deum et deus erat
+                                verbum ...</incipit>
+                        </msItem>
+                        <msItem n="100">
+                            <locus>202v–203r</locus>
+                            <title>Trosbekännelsen.</title>
+                            <incipit> Jak thror a gudh ffadher alzmæktoghan skapara himerikes och
+                                jorderikes ...</incipit>
+                            <bibl>Ed. Sv. kyrkobruk 1900, s. 304 </bibl>
+                        </msItem>
+                        <msItem n="101">
+                            <locus>203r</locus>
+                            <title>Fader vår.</title>
+                            <incipit> { Hær æpther star pater noster oppa swænska }.
+                                Fadher war som ær himerike hælogh ær tith napm til komme os tith
+                                rike ...</incipit>
+                            <bibl>Ed. Geete 1 var. e </bibl>
+                        </msItem>
+                        <msItem n="102">
+                            <locus>203r</locus>
+                            <title>Ave Maria.</title>
+                            <incipit> { aue maria oppa swænska }. Heel maria ffull mz
+                                naadh herren ær mz tik wælsignadh æst thu offwer alla ...</incipit>
+                            <bibl>Ed. Geete 94 var c </bibl>
+                        </msItem>
+                        <msItem n="103">
+                            <locus>203rv</locus>
+                            <title>För de avlidnas själar. </title>
+                        </msItem>
+                        <msItem n="103:1">
+                            <incipit> { Jnnocencius then iiii paffwe gaff hwariom enom som læs
+                                aptherscreffna bøn … }. </incipit>
+                        </msItem>
+                        <msItem n="103:2">
+                            <locus>[203v]</locus>
+                            <incipit> Heele oc sæle waren j alle godha cristna siæla ...</incipit>
+                            <bibl>Ed. Geete 241 </bibl>
+                        </msItem>
+                        <msItem n="104">
+                            <locus>204rv</locus>
+                            <title>Heliga Birgittas bön.</title>
+                            <incipit> { Thæssa æpther screffna bøn plaghadhe war kæra modher
+                                oc ffru sancta birgitta daglika læsa }. O herra gudh
+                                alzwaldogher hwilkin alla ledher til goth jak syndherska gik ...</incipit>
+                            <bibl>Ed. Geete 245; BU IV, s. 162 </bibl>
+                        </msItem>
+                        <msItem n="105">
+                            <locus>204v</locus>
+                            <title>Sanctus.</title>
+                            <incipit> { Sanctus damascenus screffwer j sinne xv bok at hwilkin
+                                mænniskia … }. Sanctus Sanctus Sanctus dominus deus
+                            ...</incipit>
+                        </msItem>
+                        <msItem n="106">
+                            <locus>204v–205v</locus>
+                            <title>Till S:t Joakim.</title>
+                            <incipit> { En bøn aff them helga herranom sancte joachym }.
+                                O æroffulle joachim hælgaste ffadher ower alla ffædher ræthwis æpthr
+                                allom gudz ...</incipit>
+                            <bibl>Ed. Geete 198 </bibl>
+                        </msItem>
+                        <msItem n="107">
+                            <locus>205v–206v</locus>
+                            <title>Till S:t Göran. </title>
+                        </msItem>
+                        <msItem n="107:1">
+                            <incipit> { En ærligh oc god bøn aff them æroffulla herranom
+                                riddar sancte ørian }. </incipit>
+                        </msItem>
+                        <msItem n="107:2">
+                            <locus>[206r]</locus>
+                            <incipit> O hælogher herre sancte ørian ædhele riddare ffri oc staldz Oc
+                                martyr bidh ...</incipit>
+                            <bibl>Ed. Geete 195 var. b </bibl>
+                        </msItem>
+                        <msItem n="108">
+                            <locus>206v–207v</locus>
+                            <title>Till Jesu axelsår.</title>
+                            <incipit> (Ofullst.) { En bøn aff wars herra aglxa saar }. O
+                                alzwallogher oc æwerdheliken gudh ihesu christe aldzwallogx gudz
+                                ffadhers ...</incipit>
+                            <bibl>Ed. Geete 79 </bibl>
+                        </msItem>
+                    </msContents>
+                    <physDesc>
+                        <objectDesc form="codex">
+                            <supportDesc>
+                                <support>
+                                    <p>
+                                        <material>Pergament</material>
+                                    </p>
+                                    <p>Originialband från Vadstena. Träpärmar klädda med brunt
+                                        pressat skinn (liljor, Jesus-monogram m.m.). Rygg med tre
+                                        upphöjda band. Fastklistrad pergamentslapp med texten *A 80
+                                        i det tredje fältet. Två mässingsbeslag för spännen. Bladen
+                                        beskurna, vilket drabbat texten på fol. 15v, samt en del
+                                        illuminationer. På 1r har ett gammalt signum stått, men
+                                        eftersom bladet är rivet mitt itu vertikalt, kan endast N°
+                                        läsas.</p>
+                                </support>
+                                <extent>208 blad; 195 mm (h) x 130 mm (b).</extent>
+                                <foliation>
+                                    <p>Information on the pagination will be added.</p>
+                                </foliation>
+                            </supportDesc>
+                            <layoutDesc>
+                                <p>Skrivyta 157 × 107 mm (hand 1); 128–137 × 88–92 mm (hand 2). 1
+                                    spalt (2 spalter i litaniorna på fol. 34r–35v och 46r–47r). Hand
+                                    1 24–25 rader; hand 2 17–19 rader.</p>
+                            </layoutDesc>
+
+                        </objectDesc>
+                        <handDesc>
+                            <p>Skriven av två händer: hand 1 fol. 2r–5r (lägg I, cursiva), och hand
+                                2 (Christina Magnusdotter 1518–1555) återstoden (hybrida). Bekostad
+                                av Birgitta Andersdotter (1491–1532), jfr notis på fol. 160r.
+                                Initialerna c m [d] (Christina Magnusdotter) på minst sju ställen:
+                                fol. 39v, 45r (utskrapat), 82v (utskrapat), 112v (utskrapat), 166v
+                                (utskrapat), 168r, 201r; b a [d] (Birgitta Andersdotter) på minst 27
+                                ställen: fol. 16r (utskrapat), 35r, 38v, 41r, 82r (utskrapat), 95v,
+                                98v, 99v (utskrapat), 101v (utskrapat), 103r (utskrapat), 104r,
+                                106v, 110v, 114v (utskrapat), 132v, 137v, 141r (utskrapat), 160r,
+                                166r, 169v, 176v, 184v, 185r, 186r, 187r, 190r, 197r. Osäkra
+                                initialer (pg.a. bortskrapningar) på fol. 45r, 117v (möjligen c m),
+                                140ar (möjligen b a). Troligen också bortskrapad personlig initial
+                                på fol. 140ar. På fol. 16r är initialerna B A ersatta av K B
+                                (Katarina Bengtsdotter Gylta, abbedissa 1553–1564, 1565–93).
+                                Marginalanteckningar av senare hand.</p>
+                        </handDesc>
+                        <decoDesc>
+                            <p>Handmålad miniatyr av pinoredskapen på pergamentet på fol. 15v. Spår
+                                efter inklistrade bilder på fol. 81v, 97v, 105v, 121v, 130v, 137r,
+                                140v, 155v, 161v, 170v, 177v, 180r, 184v, 187v, 190v, 192v, 194v,
+                                198r, 201v. Anfanger i rött, blått och guld. Bokmärken i form av
+                                markeringslappar på blad 16, 24, 33, 40, 45, 50, 57, 63, 69, 81, 82,
+                                97, 105, 107, 112 (?), 121, 127, 131, 137, 140a, 143, 145, 149, 154,
+                                158, 166, 169, 173 (rester av grön tråd), 179, 184 (?),191, 198.</p>
+                        </decoDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <p>Skriven i <origPlace>Vadstena kloster</origPlace>, 
+                                <origDate notBefore="1518" notAfter="1532">c. 1518-1532</origDate>.</p>
+                            <p> Enligt Klemming (BU V, s. 172) har hs. tillhört Röks kyrka, men
+                                detta grundas på en osäker läsning av en anteckning på fol. 1r.
+                                Tillhört Joh. Messenius, Arnold Messenius och dennes son Pehr Brahe
+                                d.y. från 1641, enligt anteckningar på främre pärmens insida.
+                                Övergick möjligen från Brahe till släkten Gyllenstjerna då Ulrika
+                                Juliana Brahe 1723 gifte sig med Nils Gyllenstjerna. Enligt
+                                anteckningar på fol. 1v förblev hs. på Thorönsborg. Skänktes 1829
+                                till bonden Jonas Svensson i Stänkelsby. Övertogs samma år av
+                                nämndemannen Petter Andersson i Hagen, Åby socken, vars namn också
+                                står på främre pärmens insida. Anträffades 1847 av
+                                expeditionssekreteraren A. O. Carlheim-Gyllenskiöld, som skänkte den
+                                till Kungl. Biblioteket. Blad 140a köptes 18 mars 1991 av ingenjör
+                                Gösta Thames, Mjölby, för 5000 kr. </p>
+                        </origin>
+                    </history>
+                    <additional>
+                        <listBibl>
+                            <bibl>Birgittas Uppenbarelser V. Utg. G. E. Klemming. Samlingar utgivna
+                                av Svenska fornskriftsällskapet, 1884, s. 169–73</bibl>
+                            <bibl> Svenska böner från medeltiden. Utg. R. Geete. Samlingar utgivna
+                                av Svenska fornskriftsällskapet, 1907–09, s. xxix–xxx</bibl>
+                            <bibl>I. Hedström ”Cod. Holm. A 80 i den svenska och nordiska
+                                bönbokstraditionen”. I: C. Falk och L-O. Delsing (red.)
+                                Studier i svensk språkhistoria 8. Lundastudier i nordisk
+                                språkvetenskap A 63. Lund. S. 115–124.</bibl>
+                        </listBibl>
+
+                    </additional>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <projectDesc>
+                <p>This manuscript text has been encoded according to the standard set out in
+                        <title>The Menota handbook</title>, at <ref
+                        target="http://www.aksis.uib.no/menota/guidelines">
+                        http://www.aksis.uib.no/menota/guidelines</ref> as of
+                    <date>2006-06-26</date>.</p>
+
+            </projectDesc>
+            <editorialDecl>
+                <correction status="high">
+                    <p>This text has been proofread by <name>Karl G. Johansson</name>, <orgName
+                            type="affiliation">University of Oslo</orgName>.</p>
+                </correction>
+                <normalization me:level="facs">
+                    <p>Will be corrected</p>
+                </normalization>
+                <interpretation me:lemmatized="none" me:morphAnalyzed="none">
+                    <p>This text has not been lemmatised or morphologically analysed.</p>
+                </interpretation>
+            </editorialDecl>
+        </encodingDesc>
+
+        <profileDesc>
+            <langUsage>
+                <language ident="swe">Swedish</language>
+            </langUsage>
+            <handNotes>
+                <handNote xml:id="h1"/>
+                <handNote xml:id="h2"/>
+            </handNotes>
+        </profileDesc>
+        <revisionDesc>
+            <change>
+                <date>2016-03-31</date>
+                <name>
+                    <persName>Odd Einar Haugen</persName>
+                    <orgName type="affiliation">University of Bergen</orgName>
+                </name>: (1) Since the Corpuscle application does not like entities in the header, a number of "less than"
+                and "greater than" entities in the "msItem" elements in the "msContents" element have been replaced with 
+                curly brackets, { ... }, and the entity "amp" have been replaced with "och"; (2) Made the file v. 1.0.4
+            </change>
+            <change>
+                <date>2016-02-23</date>
+                <name>
+                    <persName>Odd Einar Haugen</persName>
+                    <orgName type="affiliation">University of Bergen</orgName>
+                </name>: (1) Revised the "availability" element in the header with a CC-BY-SA 4.0 licence;
+                (2) Corrected the order of elements in one instance of "sic" + "corr" encoding, and ensured that
+                the rest follows the order of "w" > "me:facs" > "choice" > "sic" + "corr" (in order to facilitate import
+                in the Corpuscle application; (3) Made the file v. 1.0.3
+            </change>
+            <change>
+                <date>2016-01-23</date>
+                <name>
+                    <persName>Odd Einar Haugen</persName>
+                    <orgName type="affiliation">University of Bergen</orgName>
+                </name>: (1) Removed two "me:punct" elements for the "para" entity within "w" elements,
+                so as to make the file better suited for import in the Corpuscle application
+                (2) Made the file v. 1.0.2
+            </change>
+            <change>
+                <date>2016-01-13</date>
+                <name>
+                    <persName>Odd Einar Haugen</persName>
+                    <orgName type="affiliation">University of Bergen</orgName>
+                </name>: (1) Added the attribute ed="ms" to all "pb" and "lb" elements;
+                (2) Made the file v. 1.0.1
+            </change>
+            <change>
+                <date>2016-01-02</date>
+                <name>Odd Einar Haugen</name>, <orgName type="affiliation">University of
+                    Bergen</orgName>: Replaced character entities in the official part of the Unicode Standard with the intended characters,
+                e.g. replacing "slong" with "ſ" (U+017f), thus making the text  easier to read and process; character entities in the Private
+                Use Area and any combining characters have not been replaced, however. Note that the abbreviation characters used here,
+            such as "semi", "bar", "er" etc. should be placed within the "am" element in the next revision of this file;
+            gave the file version number 1.0</change>
+            <change>
+                <date>2009-05-06</date>
+                <name>Odd Einar Haugen</name>, <orgName type="affiliation">University of
+                Bergen</orgName>: Updated the header, but did not make any changes to the text. 
+                The major update concerns the contents of the sourceDesc element, based on information from Ingela Hedström. </change>
+            <change>
+                <date>2008-03-20</date>
+                <name>Tone Merete Bruvik</name>, <orgName type="affiliation">UNIFOB AKSIS</orgName>:
+                Updated the file to Menota P5. </change>
+            <change>
+                <date>2006-07-11</date>
+                <name>Mette Gismerøy Ekker</name>, <orgName type="affiliation">University
+                    of Oslo</orgName>: Revised the transcription in accordance with v. 2.0 beta of
+                the Menota handbook and the corresponding Document Type Definition. </change>
+            <change>
+                <date>2004-05-10</date>
+                <name>Ingela Hedström</name>, <orgName type="affiliation">University of
+                Oslo</orgName>: Revised the transcription in accordance with v. 1.1 of the Menota
+                handbook and the corresponding Document Type Definition. </change>
+        </revisionDesc>
+
+    </teiHeader>
+
+    <text xml:lang="swe">
+        <body>
+            <div type="chapter">
+                <p>
+                    <pb ed="ms" n="2r"/>
+                    <lb ed="ms" n="1"/>
+                    <w>
+                        <me:facs>Hær</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>wilio&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>wi</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſighia</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>aff</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſce</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>birgitte</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſlækt</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſwa</me:facs>
+                    </w>
+                    <lb ed="ms" n="2"/>
+                    <w>
+                        <me:facs>myk&tsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſo&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>wito&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffor</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſant</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>wi</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hørt</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>haffwo&bar;</me:facs>
+                    </w>
+                    <me:punct>
+                        <me:facs>,</me:facs>
+                    </me:punct>
+                    <w>
+                        <me:facs>fførſt</me:facs>
+                    </w>
+                    <lb ed="ms" n="3"/>
+                    <w>
+                        <me:facs>ær</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>witande</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>att</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſce</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>biꝛgitta</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>modhꝛ&er;ffadhꝛ&er;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>heet</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>h&er;ꝛ</me:facs>
+                    </w>
+                    <lb ed="ms" n="4"/>
+                    <w>
+                        <me:facs>bænkt</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>laghman</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>
+                            <del type="overstrike">war</del>
+                        </me:facs>
+                    </w>
+                    <w>
+                        <me:facs>h&er;ꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>biꝛghes</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>brodh&er;ꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſom<note>endret fra mdes-entitet. MGE</note></me:facs>
+                    </w>
+                    <lb ed="ms" n="5"/>
+                    <w>
+                        <me:facs>heetis</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>jæꝛl</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſtyrde</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>tha</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>rikeno</me:facs>
+                    </w>
+                    <me:punct>
+                        <me:facs>,</me:facs>
+                    </me:punct>
+                    <w>
+                        <me:facs>han</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>thok</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſik</me:facs>
+                    </w>
+                    <lb ed="ms" n="6"/>
+                    <w>
+                        <me:facs>hust&vsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>aff</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>lææghe</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſlækt</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffoꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>h&bar;na</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffægrind</me:facs>
+                    </w>
+                    <me:punct>
+                        <me:facs>/</me:facs>
+                    </me:punct>
+                    <w>
+                        <me:facs>aff</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>huil<lb ed="ms" n="7"/>ko</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ha&bar;s</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>brodhꝛ&er;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ha&bar;s</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſyſteꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>myk&tsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>maktok&tsup;</me:facs>
+                    </w>
+                    <lb ed="ms" n="8"/>
+                    <w>
+                        <me:facs>ff&vsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>h&er;ꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>i</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>rikeno</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>fflere</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ha&bar;s</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffrændir</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>w<unclear>ær</unclear><lb ed="ms" n="9"/>do</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>myk&tsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>wredhe</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>Oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>tha</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſændhe</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>byꝛge</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>jaꝛl</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hono&bar;</me:facs>
+                    </w>
+                    <lb ed="ms" n="10"/>
+                    <w>
+                        <me:facs>en</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>kioꝛtil</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>halffwan</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>aff</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>blyanth</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>halffwa&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>aff</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>wal<lb ed="ms" n="11"/>mal</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>til</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>tekn</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ath</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ha&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>haffde</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>miſwørt</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſina</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſlækt</me:facs>
+                    </w>
+                    <lb ed="ms" n="12"/>
+                    <w>
+                        <me:facs>Tha</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>loth</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hꝛ&er;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>bænkt</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſænkia</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>then</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>wadmalsdelin</me:facs>
+                    </w>
+                    <lb ed="ms" n="13"/>
+                    <w>
+                        <me:facs>m&semi;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>gull</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>pæꝛlom</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſwa</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ath</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ha&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>wart</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>koſelika</me:facs>
+                    </w>
+                    <lb ed="ms" n="14"/>
+                    <w>
+                        <me:facs>æn</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>thn&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>andꝛa</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>deelin</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>Æn</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>naar</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>birge</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>jærl</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>och</me:facs>
+                    </w>
+                    <lb ed="ms" n="15"/>
+                    <w>
+                        <me:facs>fflere</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ha&bar;s</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffrændir</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffingo</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſee</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ff&vsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſigride</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <lb ed="ms" n="16"/>
+                    <w>
+                        <me:facs>hn&bar;a</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffagra</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſidhir</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>tha</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>tæktes</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>thm&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hn&bar;e</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſwa</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>wæl</me:facs>
+                    </w>
+                    <lb ed="ms" n="17"/>
+                    <w>
+                        <me:facs>ath</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>thm&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>nøgdhe</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>allo&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>th&semi;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſom</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>giort</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>waꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>æpt&er;</me:facs>
+                    </w>
+                    <lb ed="ms" n="18"/>
+                    <w>
+                        <me:facs>gudz</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>fføreſyn</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>Oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>woro</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>the</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſa&bar;ma&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>nakoꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>aar</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>j</me:facs>
+                    </w>
+                    <lb ed="ms" n="19"/>
+                    <w>
+                        <me:facs>gudi</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>m&semi;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>gudz</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ræddagha</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>fføddo</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>aff</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſik</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>nakoꝛ</me:facs>
+                    </w>
+                    <lb ed="ms" n="20"/>
+                    <w>
+                        <me:facs>iiij</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>barn</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>Thꝛ&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>æpt&urrot;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>tæktis</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>gudh</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>h&bar;ne</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>aff</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>werdi<lb ed="ms" n="21"/>ne</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>kalla</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>tha</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>widh</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſina</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>liffs</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ænda</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>gaff</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ho&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſino</me:facs>
+                    </w>
+                    <lb ed="ms" n="22"/>
+                    <w>
+                        <me:facs>hr&bar;a</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>gudhelikin</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>godh</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>raad</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>badh</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ho<unclear>no&bar;</unclear></me:facs>
+                    </w>
+                    <lb ed="ms" n="23"/>
+                    <w>
+                        <me:facs>ey</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>grata</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſin</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>dødh</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>th&bar;ꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>æpt&urrot;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>thok</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ho&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>alla</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>kyr<lb ed="ms" n="24"/>kiona</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſacrame&bar;ta</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>doo</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>m&semi;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſtora</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>gudelik<pb ed="ms" n="2v"/><lb ed="ms" n="1"/>h&semi;</me:facs>
+                    </w>
+                    <me:punct>
+                        <me:facs>/</me:facs>
+                    </me:punct>
+                    <w>
+                        <me:facs>hꝛ&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>bænkt</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>leeth</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>fføra</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>h&bar;na</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>liik</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>til</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſtokholm</me:facs>
+                    </w>
+                    <lb ed="ms" n="2"/>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>leeth</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>h&bar;ne</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>begaa</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>i</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſca</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>clara</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>m&semi;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſtoro&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hedhꝛ&bar;</me:facs>
+                    </w>
+                    <lb ed="ms" n="3"/>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>koſtnadh</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>Thꝛ&bar;a</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>fførſta</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>barn</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>waꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>en</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſon</me:facs>
+                    </w>
+                    <me:punct>
+                        <me:facs>/</me:facs>
+                    </me:punct>
+                    <w>
+                        <me:facs>ſidan</me:facs>
+                    </w>
+                    <lb ed="ms" n="4"/>
+                    <w>
+                        <me:facs>ffingo</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>thom</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſa&bar;ma&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>iij</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>døthꝛ&ra;</me:facs>
+                    </w>
+                    <me:punct>
+                        <me:facs>/</me:facs>
+                    </me:punct>
+                    <w>
+                        <me:facs>een</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>thꝛ&bar;a</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>dott&urrot;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>he&semi;</me:facs>
+                    </w>
+                    <lb ed="ms" n="5"/>
+                    <w>
+                        <me:facs>ff&vsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ramborgh</me:facs>
+                    </w>
+                    <me:punct>
+                        <me:facs>/</me:facs>
+                    </me:punct>
+                    <w>
+                        <me:facs>nar</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hn&bar;a</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hꝛ&bar;a</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>jonk&urrot;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>erengiſl</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>doo</me:facs>
+                    </w>
+                    <lb ed="ms" n="6"/>
+                    <w>
+                        <me:facs>wptækte</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>han</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ath</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ha&bar;s</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hust&vsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>war</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſwa</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>godh</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>jo&bar;-<lb ed="ms" n="7"/>ff&vsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>æn</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>tha</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſom</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ho&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>kom</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>fførſt</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>i</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſængh</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ha&bar;s</me:facs>
+                    </w>
+                    <me:punct>
+                        <me:facs>,</me:facs>
+                    </me:punct>
+                    <w>
+                        <me:facs>ha&bar;</me:facs>
+                    </w>
+                    <lb ed="ms" n="8"/>
+                    <w>
+                        <me:facs>liggh&bar;ꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>i</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſwa&bar;shals</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>kyrkio</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſom</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffør</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>war</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſte&bar;-<lb ed="ms" n="9"/>hws</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>thꝛ&bar;a</me:facs>
+                    </w>
+                    <me:punct>
+                        <me:facs>/</me:facs>
+                    </me:punct>
+                    <w>
+                        <me:facs>mæn</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ff&vsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ramborgh</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ligghꝛ&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>i</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>risa<lb ed="ms" n="10"/>bærgha</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>cloſt&urrot;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>The</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>andra</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>thꝛ&bar;a</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>dott&urrot;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>heet</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ff&vsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ka-<lb ed="ms" n="11"/>dhꝛin</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>myk&tsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>gudhelikin</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffrw</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hon</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>witnadhe</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>my-<lb ed="ms" n="12"/>k&tsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffør</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>mæſt&urrot;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>pædh&bar;ꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſca</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>biꝛgitta</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>gudelichz</me:facs>
+                    </w>
+                    <lb ed="ms" n="13"/>
+                    <w>
+                        <me:facs>ſom</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hon</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſaa</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>m&semi;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hi&bar;ne</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>j</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hn&bar;a</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>barndome</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>The</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>iij</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>thꝛ&bar;a</me:facs>
+                    </w>
+                    <lb ed="ms" n="14"/>
+                    <w>
+                        <me:facs>dott&urrot;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>heet</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ff&vsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>jngeborgh</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ho&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>atte</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>en</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ærlikan</me:facs>
+                    </w>
+                    <lb ed="ms" n="15"/>
+                    <w>
+                        <me:facs>hꝛ&bar;a</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>heet</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hꝛ&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>birge</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>pædarſſ&is;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>a</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffinſtad</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>lagh&msup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>i</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>wp-<lb ed="ms" n="16"/>landh</me:facs>
+                    </w>
+                    <me:punct>
+                        <me:facs>/</me:facs>
+                    </me:punct>
+                    <w>
+                        <me:facs>ſom</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffadhꝛ&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hans</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>pædhꝛ&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>Andhꝛ&bar;ſſ&is;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>a</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>Mo-<lb ed="ms" n="17"/>ha&bar;mar</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffor</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ho&msup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>warit</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>haffdhe</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſkyldir</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>k</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſwer<lb ed="ms" n="18"/>kir</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>a</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffædirins</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ætt</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>Th&bar;ſſin</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>badha</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>waro</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>myk&tsup;</me:facs>
+                    </w>
+                    <lb ed="ms" n="19"/>
+                    <w>
+                        <me:facs>godhe</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>gudhelika</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>hwilka</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>gaffwo</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>manga</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſkøn</me:facs>
+                    </w>
+                    <lb ed="ms" n="20"/>
+                    <w>
+                        <me:facs>tingh</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>til</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>kyꝛk&urrot;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>cloſt&urrot;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>giorde</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>a&bar;nan</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>myk&nsup;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>gudz</me:facs>
+                    </w>
+                    <lb ed="ms" n="21"/>
+                    <w>
+                        <me:facs>hedh&bar;ꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>The</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>fføddo</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>aff</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſik</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>vij</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>barn</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>iij</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſønør</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>oc</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>iiij</me:facs>
+                    </w>
+                    <lb ed="ms" n="22"/>
+                    <w>
+                        <me:facs>døthꝛ&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>Th&bar;ꝛa</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>fførſta</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſon</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>heet</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>petr&us;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>th&bar;n</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>a&bar;dra</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>bn&bar;-<lb ed="ms" n="23"/>dict&us;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>then</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>tridie</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>heet</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>jſꝛael</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>laghma&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>i</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>wpland</me:facs>
+                    </w>
+                    <lb ed="ms" n="24"/>
+                    <w>
+                        <me:facs>ha&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>waꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>h&bar;ꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>pædh&bar;ꝛ</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>jſraelſſ&is;s</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>riddhs</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ffadꝛ&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſom</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>gioꝛ<lb ed="ms" n="24"/>dhis</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>biltoghꝛ&bar;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>aff</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>ſwærike</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>m&semi;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>k</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>magn&us;</me:facs>
+                    </w>
+                    <w>
+                        <me:facs>erikſſ&is;</me:facs>
+                    </w>
+                </p>
+            </div>
+        </body>
+    </text>
+</TEI>

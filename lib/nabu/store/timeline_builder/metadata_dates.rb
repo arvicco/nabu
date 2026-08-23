@@ -58,6 +58,8 @@ module Nabu
           #                       century-half time grid as the prose fallback
           "corpus-corporum" => :structured, # P81-1: work_composition / author life band
           #                                   (fetch checkpoint) / teiHeader author_date
+          "menota" => :structured, # P82-1: the msDesc origDate's own notBefore/notAfter
+          #                          attrs, raw text preserved; attr-less dates ride raw only
           "bfm" => :iso_keys,
           "croala" => :year_range,
           "ebl" => :period_label

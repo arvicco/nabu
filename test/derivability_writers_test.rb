@@ -50,7 +50,10 @@ class DerivabilityWritersTest < Minitest::Test
   # canonical gateway, the burman/wiki_fetch law kind.
   # corpus_corporum_fetch (P80-2) writes canonical/<slug>/texts/ +
   # attic + its state checkpoint inside Adapter#fetch — the
-  # elephantine_fetch law kind. The P80-8 ctilc
+  # elephantine_fetch law kind. menota_fetch (P82-1) writes
+  # canonical/<slug>/texts/ + the MUFI entity table + attic + its
+  # catalogue checkpoint inside Adapter#fetch — the same
+  # elephantine/corpus-corporum law kind. The P80-8 ctilc
   # adapter writes its crawled works (tmp+rename) and their replacement
   # attic copies into canonical/ inside Adapter#fetch — the riig crawl
   # law kind. ANY new file
@@ -64,6 +67,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/derom_fetch.rb nabu/elephantine_fetch.rb
     nabu/file_fetch.rb nabu/git_fetch.rb nabu/iness_fetch.rb
     nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb
+    nabu/menota_fetch.rb
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
     nabu/wiki_fetch.rb nabu/zip_fetch.rb
