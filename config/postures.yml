@@ -365,14 +365,14 @@ sources:
         deliberately-unstaged class (the first1k-greek/croala precedent);
         refinement candidate rides the dating note.
     dating:
-      posture: partial
+      posture: dated
       note: "P81-1: three lanes in confidence order — the checkpoint's per-work
-        work_composition year, its author born/died life band (both captured by
-        the schema-2 fetch walk; the pre-P81 checkpoint carries no years until
-        the owner-fired re-walk), and the teiHeader author_date ladder
-        ('354-430', '-258', 'fl. 892', c.-forms; 2,977/5,248 docs carry one,
-        'sine-data'/prose mint nothing). MetadataDates :structured; partial
-        until the re-walk covers the header-silent remainder."
+        work_composition year, its author born/died life band (captured by the
+        schema-2 fetch walk), and the teiHeader author_date ladder ('354-430',
+        '-258', 'fl. 892', c.-forms). MetadataDates :structured. The re-walk
+        ran 2026-08-22 (pre-rebuild): 3,933/5,248 dated — the remainder is
+        the 'sine-data'/prose class that honestly mints nothing (partial →
+        dated, the condition resolved)."
     places: {posture: unplaced}
     script: {posture: implied}
   proiel:
