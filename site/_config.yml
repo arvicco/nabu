@@ -27,7 +27,7 @@ nav:
     url: /
   - title: Quickstart
     url: /quickstart/
-  - title: The Library
+  - title: Library
     url: /library/
   - title: Axes
     url: /axis/
@@ -41,6 +41,8 @@ nav:
     url: /languages/
   - title: Places
     url: /places/
+  - title: Dates
+    url: /dates/
   - title: Sources
     url: /sources/
   # Tail order is fixed as: Sources, FAQ, News, About — alphabetical
