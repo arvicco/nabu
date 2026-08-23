@@ -1,7 +1,10 @@
 # The Library — content review
 
-**As of 2026-08-21** (post the P80 Latin–Romance wave first syncs).
-Live totals: **988,556 documents / 73,625,479 passages and 1,410,205
+**As of 2026-08-22** (post the P81 full rebuild — the dating
+harvest, the FTS source column, the oc dialect wiring; the earlier
+73,625,479 figure counted ~4.2k passages on withdrawn documents
+the fresh rebuild no longer carries).
+Live totals: **988,556 documents / 73,621,000 passages and 1,410,205
 dictionary entries** across the **153 registry rows** — 130 corpus
 sources + 4 local shelves + 19 feature modules, every corpus source
 wired (the P80 Latin–Romance wave, §8ai, verified its first syncs and
