@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="http://www.textpartnership.net/docs/code/pfs.css"?>
+<!DOCTYPE ETS SYSTEM "http://www.textpartnership.net/docs/code/eebo2prf.xml.dtd">
+<ETS>
+<!-- TEMPHEAD>
+<REVDESCR>
+<CHANGE><DATE>2020-05-10</DATE><RESPSTMT><NAME>pfs</NAME><RESP>MURP</RESP></RESPSTMT><ITEM>Transcribed.</ITEM></CHANGE>
+<CHANGE><DATE>2020-12-01</DATE><RESPSTMT><NAME>pfs</NAME><RESP>MURP</RESP></RESPSTMT><ITEM>Added markup.</ITEM></CHANGE></REVDESCR>
+</TEMPHEAD -->
+
+<HEADER><FILEDESC><TITLESTMT>
+         <TITLE>"Three Inspections" Hematoscopy / transcribed from manuscripts Sloane 3486 by M. T. Tavormina and Hunter 307 by P. Schaffner.</TITLE>
+         <TITLE TYPE="alt">MED stencils a1500 *3 Inspect.Hematoscopy (Sln 3486) and a1450 *3 Inspect.Hematoscopy (Htrn 307)</TITLE>
+         <AUTHOR>Tavormina, M. Teresa</AUTHOR>
+         <AUTHOR>Schaffner, Paul F.</AUTHOR>
+      </TITLESTMT><EXTENT>Ca. 8 kB</EXTENT><PUBLICATIONSTMT>
+         <PUBLISHER>University of Michigan Library</PUBLISHER>
+         <PUBPLACE>Ann Arbor, Michigan</PUBPLACE>
+         <DATE>2020</DATE>
+         <IDNO TYPE="dlps">CME00301</IDNO>
+         <AVAILABILITY><P>The University of Michigan Library provides access to these materials in furtherance of its educational and research mission. This work has been identified as being in the public domain, free of known restrictions under copyright law, including all related and neighboring rights. You may copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission. If you have questions about the collection, please contact Digital Content and Collections (mec-info@umich.edu). If you have concerns about the inclusion of an item in this collection, please contact Library Information Technology (LibraryIT-info@umich.edu).</P></AVAILABILITY>
+      </PUBLICATIONSTMT></FILEDESC><ENCODINGDESC><PROJECTDESC>
+         <P>Header created manually, 8 May 2026.</P>
+      </PROJECTDESC><EDITORIALDECL N="4">
+         <P>Encoding has been done using the recommendations for Level 4 of the TEI in Libraries Guidelines.</P>
+      </EDITORIALDECL></ENCODINGDESC><PROFILEDESC><LANGUSAGE>
+         <LANGUAGE ID="enm">English, Middle (1100-1500) </LANGUAGE>
+      </LANGUSAGE></PROFILEDESC><REVISIONDESC>
+<CHANGE><DATE>5-08-2026</DATE><RESPSTMT><NAME>pfs</NAME><RESP>MURP</RESP></RESPSTMT><ITEM>Header created and attached.</ITEM></CHANGE>
+</REVISIONDESC></HEADER>
+
+<EEBO>
+<IDG S="marc" R="UM" ID="CME00301">
+<STC T="M">301</STC>
+<BIBNO T="mec">CME00301</BIBNO>
+<VID>CME00301</VID>
+</IDG>
+<TEXT LANG="enm">
+<BODY>
+<DIV1 TYPE="text">
+<HEAD>"Three Inspections" Hematoscopy</HEAD>
+<HEAD TYPE="sub">MED stencils a1500 *<HI>3 Inspect.Hematoscopy</HI> (Sln 3486) and a1450 *<HI>3 Inspect.Hematoscopy</HI> (Htrn 307)</HEAD>
+<OPENER><BYLINE>Transcribed from manuscripts Sloane 3486 by M. T. Tavormina and Hunter 307 by P. Schaffner.</BYLINE>
+<DATELINE><DATE>May, 2020</DATE></DATELINE></OPENER>
+<ARGUMENT>
+<P>Raw transcription from two MSS, arranged in line pairs.
+ <LIST>
+ <ITEM>Upper line: London, BL, Sloane 3486, f. 147v. "A physician behooveth to know three manner inspections in bloodletting that is to say ... " VK 0659.00; eVK2 v0096910000</ITEM>
+ <ITEM>Lower line: Glasgow, Glasgow University Library, Hunter 307 (U.7.1), ff. 165v-66r. "A physician behooveth to know three manner inspections in bloodletting that is to say...." VK 0659.00; eVK2 v0034490000.</ITEM>
+ </LIST>
+</P>
+</ARGUMENT>
+
+<P>A phisiciane bihoueþ to knowe þre manerʼ inspecciouns in blode lettyng 
+<LB/>A phicisian behoueþ to knowe þre manere inspecciouns in blod letyng</P>
+
+
+<P>þat is to sey wheþer it be þicke or þynne or mene whil a man blediþ . 
+<LB/>þat is to seie wheþer it be þicke or þinne or meene whil a man blediþ</P>
+
+
+<P>Blode þat is þicke vnneþe goynge fro þe veyn but fallynge droppemele 
+<LB/>¶ Blod þat is þicke vnneþe goyng fro þe veyne but fallyng dropmeel</P>
+
+
+<P>it is euyl for it bytokneþ þe moisture of þe body to be wastid 
+<LB/>it is euyl for it bitokneþ þe moisture of þe body to be waastid</P>
+
+
+<P>¶ Blode þat is þynne &amp; watrie <CHOICE><SIC>youȝ</SIC><CORR>þouȝ</CORR></CHOICE>
+<LB/>¶ Blod þat is þynne &amp; watry þouȝ</P>
+
+
+<P>it be leyde on þe nayle it wille not engele nor crodde 
+<LB/>it be leid on þe naile it wole not engele ne crudde</P>
+
+
+<P>þan it is euyll for it <DEL>is</DEL> bytokneþ þat 
+<LB/>þan it is euyl for it bitokneþ þat</P>
+
+
+<P>rawe humours ben to habundaunt in þe bodye or 
+<LB/>rawe <UNCLEAR>humours</UNCLEAR> ben to abundaunt in þe body or</P>
+
+
+<P>to mych moisture . 
+<LB/>to moche moisture</P>
+
+
+
+
+<P>Blode þat is mene or mesurable
+<LB/>¶ Blod þat is meene or mesurable</P>
+
+
+
+<P>þat is bytwix þicke &amp; þynne is preisable . 
+<LB/>þat is betwene þicke or þynne <SUPPLIED>is</SUPPLIED> preisable</P>
+
+
+
+<P>Also in þe bledynge men shall beholde wheþer it be hote or colde 
+<LB/>¶ Also in þe bledyng me schal byholde wheþer <UNCLEAR>it</UNCLEAR> be hoot or cold.</P>
+
+
+
+<P>for hote blode bytokneþ hote humours 
+<LB/>for hoot blod bitokneþ hote humours</P>
+
+
+
+<P>to haue þe moisture in þe body &amp; cold 
+<LB/>to haue þe maistrye in þe body &amp; cold</P>
+
+
+
+<P>¶ When it is engeled men shal beholde 
+<LB/>¶ Whan it engeliþ me schal biholde</P>
+
+
+
+<P>wheþer it be harsshe or crassynge or checkynge <NOTE>?cherkynge</NOTE> 
+<LB/>wheþer it be harsch or crassyng or cherkyng <MILESTONE UNIT="fol." N="166r"/></P>
+
+
+
+<P>¶ for if it be so it bytokneþ mych corrupcioun 
+<LB/>¶ for if it be so it bitokneþ moche corrupcioun</P>
+
+
+<P>in þe bodye or disposynge to lepre . 
+<LB/>in þe body or disposyng to lepre</P>
+
+
+<P>and if it be fatty it bytokneþ ouer mych fattenesse . 
+<LB/>¶ Also if it be fatty it bitokneþ ouer moche fatnesse</P>
+
+
+<P>Also if þe smelle of þe blode be stynkynge
+<LB/>¶ Also if þe smel of þe blod be stynkyng </P>
+
+
+<P>it betokneþ corrupcioun of humours . 
+<LB/>it bitokneþ corrupcioun of humour</P>
+
+
+<P>or rotennesse in þe body 
+<LB/>or rootnesse in þe body </P>
+
+
+<P>¶ To knowe þe smel þer of wete a cloþe
+<LB/>To knowe þe smel þerof. wete a cloþ</P>
+
+
+<P>þer in &amp; ley to þi nose 
+<LB/>þerin &amp; lei to þi nose </P>
+
+
+<P>Mich watrynesse in þe blode 
+<LB/>Moche watrynesse in þe blod</P>
+
+
+<P>bytokneþ moistnes 
+<LB/>bitokneþ moysture </P>
+
+
+<P>but lytil watrynesse bytokneþ drienesse 
+<LB/>but litil watrynesse bitokneþ drienesse</P>
+
+
+<P>¶ But þis watrynesse in þe blode 
+<LB/>but þis watrynesse in þe blood</P>
+
+
+<P>if it be gode it is like þe vryn 
+<LB/>if it be good it is liyk þe vryn</P>
+
+
+<P>of hym þat owiþ þe blode 
+<LB/>of him þat owiþ þe blood</P>
+
+
+<P>¶ Now after þe engelynge men shal byholde 
+<LB/>¶ Now aftir þe engelyng me schal biholde</P>
+
+
+
+<P>if it be skummyng for if it be so 
+<LB/>if it be skummyng for if it be so</P>
+
+
+<P>&amp; it be not alonge 
+<LB/>&amp; it be not along</P>
+
+
+<P>on þe hastynesse of fallynge
+<LB/>on þe hastynesse of fallyng</P>
+
+
+<P>it bytokneþ þe blode to be vndefyed 
+<LB/>it bitokneþ þe blod to be vndefyed</P>
+
+
+<P>¶ Also þe ouer party of þe blode 
+<LB/>¶ Also þe ouer party of þe blod</P>
+
+
+<P>oweþ to be rede &amp; pleyn or euen 
+<LB/>owiþ to be reed &amp; pleyn or euen</P>
+
+
+<P>and a parti clerʼ for if it be not euene 
+<LB/>and a party cleer for if it be not euene</P>
+
+
+<P>&amp; if it be not alonge on þe teldyng 
+<LB/>and if it be not along on þe teeldyng</P>
+
+
+<P>of þe vessel it bytokneþ greuance in þe 
+<LB/>of þe vessel it bitokneþ greuaunce in þe</P>
+
+
+<P>body of partyes 
+<LB/>body of partyes</P>
+
+
+<P>¶ Also if ony <ADD>oþer</ADD> colour þan rody or rede 
+<LB/>¶ Also if ony oþer colour þan rody or reed</P>
+
+
+
+<P>appere in þe ouer partie it bytokneþ corrupcioun 
+<LB/>apere in þe ouer party it bitokneþ corrupcioun</P>
+
+
+<P>¶ yelowe blode bytokneþ abundaunce of colre 
+<LB/>¶ ȝelewe blod bitokneþ abundaunce of colre</P>
+
+
+<P>pale blode bytokneþ habundaunce of fleume 
+<LB/>¶ pale blod bitokneþ abundaunce of flewme</P>
+
+
+<P>if it be þicke . 
+<LB/>if it be þicke</P>
+
+
+<P>&amp; if it be þynne it bytokneþ malencolye 
+<LB/>and if it be þynne it bitokneþ malencolie</P>
+
+
+<P>¶ Blode þat nyȝeþ grenesse 
+<LB/>¶ Blod þat nyȝeþ greenesse</P>
+
+
+<P>bytokneþ for brennynge of þe bodye 
+<LB/>bitokneþ for brennyng in þe body </P>
+
+
+<P>And if it be nyȝ to blackenesse 
+<LB/>and if it <SUPPLIED>be</SUPPLIED> neiȝe to blaknesse</P>
+
+
+<P>it bytokneþ more brennynge or mortefyinge 
+<LB/>it bitokneþ more brennyng or mortefiyng</P>
+
+
+<P>¶ Blode þat is skkummynge 
+<LB/>blod þat is skummyng </P>
+
+
+<P>bytokneþ swellynge of humours in þe body 
+<LB/>bitokneþ wellyng of humours in þe body</P>
+
+
+<P>&amp; burbly blode bytokneþ wyndynesse . 
+<LB/>and burbly blod bitokneþ wyndynesse</P>
+
+
+<P>watry blode bytokneþ coldenesse of þe lyuer 
+<LB/>¶ Watry blod bitokneþ coldnesse of þe lyuer</P>
+
+
+<P>If þe blode after þe puttynge of blode water 
+<LB/>If þe blod aftir þe puttyng of blod water</P>
+
+
+<P>is brotil &amp; esy to sundre 
+<LB/>is brotil and esy to sundre</P>
+
+
+<P>it bytokneþ mych dryenesse 
+<LB/>it bitokneþ moche drienesse</P>
+
+
+<P>and if it be touȝ it bytokneþ 
+<LB/>and if it be touȝ it bitokneþ</P>
+
+
+<P>quesye &amp; viscous humours
+<LB/>quesy &amp; viscouse humours</P>
+</DIV1>
+</BODY>
+</TEXT>
+</EEBO>
+</ETS>

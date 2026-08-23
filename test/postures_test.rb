@@ -153,7 +153,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 68, lect.size,
+    assert_equal 69, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3, " \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -168,7 +168,8 @@ class PosturesTest < Minitest::Test
                  "lo-congres/aranese bare oci, cv-sardinian bare srd, salom bare lad; " \
                  "bdcamoes ADDED P80-7 — identity por; ctilc ADDED P80-8 — identity cat; " \
                  "P81-r2 (№R-41, nabu-lects PR #6) RETIRES lo-congres (oci-dialect rule) and " \
-                 "aranese (oc/aranes override) — the add-then-retire shape again, 70→68)"
+                 "aranese (oc/aranes override) — the add-then-retire shape again, 70→68; " \
+                 "cme ADDED P82-2 — identity enm (the aspr/iswoc germanic mold), 68→69"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -185,6 +186,6 @@ class PosturesTest < Minitest::Test
     # the fornsvenska add-then-retire shape).
     # Q39 (same day): PR #5 merged, the ref-enhg rule landed, the pending
     # row retired — zero pendings again, the add-then-retire shape complete.
-    assert_equal({ "identity" => 47, "dates" => 10, "codemap" => 11 }, by_posture)
+    assert_equal({ "identity" => 48, "dates" => 10, "codemap" => 11 }, by_posture)
   end
 end

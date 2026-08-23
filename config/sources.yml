@@ -3869,3 +3869,35 @@ aranese:
   # LICENSE: card verbatim "Attribution-Share Alike 4.0 International"
   # (frontmatter cc-by-sa-4.0) → attribution (the house BY-SA class).
   sync_policy: manual
+
+# P82-2
+cme:
+  adapter: Nabu::Adapters::Cme
+  axes: [germanic]
+  wired: false   # flip after the owner-fired first sync (CLAUDE.md checklist §6:
+                   # bin/nabu enable cme && bin/nabu sync cme — ~298 polite GETs,
+                   # ~200 MB, fetch ≈15–20 min; expect 297 docs / 1,355,279
+                   # passages (scout-copy parse census 2026-08-23, 48 s parse;
+                   # the ~1.36M-row load is the long pole); then eyeball
+                   # urn:nabu:cme:Gawain:d1.l1 and 5 random passages)
+  # Corpus of Middle English Prose and Verse (P82-2): the Middle English
+  # Compendium's text corpus (Univ. of Michigan Library) — ~297 ME texts as
+  # TCP-schema XML (eebo2prf.xml.dtd, UPPERCASE — NOT TEI P5), the May-2026
+  # normalization served by the corpus editors' own companion site
+  # (medictionary.info /texts/ Apache autoindex; the Dropbox/Box CME-all.zip
+  # of point 3 is the same corpus behind share-link tokens that fail the
+  # automation bar — the autoindex serves the identical files from stable
+  # public URLs). NEW `tcp-xml` streaming family (TcpXmlParser) — the
+  # EEBO-TCP/ECCO-TCP/Evans-TCP schema, built for the ~60k-text EEBO wave
+  # Q33 holds; CME is its first rider. Grain: verse <L> lines / prose
+  # blocks / <HEAD> rubrics (transcribed medieval rubrics ARE reading
+  # text). Identity = upstream filename verbatim (the <IDG> id is a
+  # placeholder shared across files, censused). Language bare enm — the
+  # corpus's own definition; upstream LANGUSAGE is inconsistent (censused)
+  # and rides metadata only. LICENSE (grant №77-2, P.F. Schaffner
+  # 2026-08-20): downloads page verbatim "no restrictions on use or reuse"
+  # + one uniform per-file U-M PD statement (censused identical ×297) →
+  # open; credit appreciated-not-insisted, carried on the manifest credit
+  # seam anyway. Upstream moves in rare wholesale normalization waves
+  # (May 2026): refresh = delete stale canonical files, re-sync.
+  sync_policy: manual

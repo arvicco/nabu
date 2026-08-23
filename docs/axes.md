@@ -91,7 +91,7 @@ Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel
 
 Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
-**Members** (12): `ud`, `proiel`, `iswoc`, `menotec`, `aspr`, `bosworth-toller`, `ref`, `rem`, `rundata`, `helipad`, `ren`, `fornsvenska`
+**Members** (13): `ud`, `proiel`, `iswoc`, `menotec`, `aspr`, `bosworth-toller`, `ref`, `rem`, `rundata`, `helipad`, `ren`, `fornsvenska`, `cme`
 
 ### celtic
 
