@@ -1,0 +1,1165 @@
+<?oxygen RNGSchema="https://www.menota.org/menotaP5.rng" type="xml"?>
+<!DOCTYPE TEI [
+    <!ENTITY % Menota_entities SYSTEM "https://www.menota.org/menota-entities.txt">
+    %Menota_entities;
+]>
+<TEI xmlns:me="http://www.menota.org/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0">
+	<teiHeader xml:lang="eng">
+		<fileDesc>
+			<titleStmt>
+				<title>NRA 60 A (A fragment of Stjórn): a digital edition</title>
+				<editor> <name> <persName> <forename>Nina</forename> <surname>Stensaker</surname> 
+				</persName> <orgName type="affiliation">University of Bergen</orgName> </name> </editor>
+				<respStmt resp="annotation">
+					<resp>Transcription and annotation</resp>
+					<name> <persName> <forename>Nina</forename> <surname>Stensaker</surname> </persName> <orgName type="affiliation">University of Bergen</orgName> </name>
+				</respStmt>
+				<respStmt>
+					<resp>Transcription and annotation review</resp>
+					<name> <persName>
+						<forename>Robert</forename>
+						<forename>K.</forename>
+						<surname>Paulsen</surname>
+					</persName> <orgName type="affiliation">University of Bergen</orgName> </name>
+				</respStmt>
+				<respStmt>
+					<resp>Development of menotaBlitz.plx program</resp>
+					<name> <persName>
+						<forename>Robert</forename>
+						<forename>K.</forename>
+						<surname>Paulsen</surname>
+					</persName> <orgName type="affiliation">University of Bergen</orgName> </name>
+				</respStmt>
+				<respStmt>
+					<resp>Project overview</resp>
+					<name> <persName>
+						<forename>Odd </forename>
+						<forename>Einar</forename>
+						<surname>Haugen</surname>
+					</persName> <orgName type="affiliation">University of Bergen</orgName> </name>
+				</respStmt>
+			</titleStmt>
+			<editionStmt>
+				<edition n="1.0">Version 1.0 <date when="2019-11-05">05 November 2019</date>.</edition>
+			</editionStmt>
+			<extent n="120">120 words</extent>
+			<publicationStmt><distributor>Medieval Nordic Text Archive</distributor>
+				<idno type="Menota">Ms. ??</idno>
+				<date when="2019-05-07">07 May 2019</date>
+				<availability status="free">
+					<licence target="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</licence>
+					<p>Licence accepted by the editor Nina Stensaker in a meeting with Odd Einar Haugen, 5 Nov 2019.</p>
+				</availability>
+			</publicationStmt>
+			<notesStmt>
+				<note>Produced as part of my PhD project at <orgName type="affiliation">University of Bergen</orgName>.</note>
+			</notesStmt>
+			<sourceDesc>
+				<bibl facs="yes">Photographic facsimiles of the whole fragment from the Norwegian National Archives (Riksarkivet) in Oslo.</bibl>
+				<msDesc>
+					<msIdentifier>
+						<country key="NO">Norway</country>
+						<settlement>Oslo</settlement>
+						<repository>Riksarkivet</repository>
+						<idno>NRA norr fragm 60 A</idno>
+						<msName>A fragment of Stjórn</msName>
+					</msIdentifier>
+					
+					<msContents>
+						<msItem n="1">
+							<locus to="1v" from="1r">1r–1v</locus>
+							<title type="main">Stjórn</title>
+							<title type="abbreviated">Stj</title>
+							<textLang mainLang="isl">Icelandic</textLang>
+						</msItem>
+					</msContents>
+					<history>
+						<origin> <p>Written in <origPlace>Norway</origPlace> <origDate notBefore="1300" notAfter="1400">c. 1350</origDate>.</p> </origin>
+					</history>
+				</msDesc>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<projectDesc>
+				<p>This encoding follows the standard set out in <title>The Menota handbook</title> (version 3.0), at <ref target="http://www.menota.org/handbook.xml">
+					http://www.menota.org/handbook.xml</ref> as of <date>2019-05-07</date>.</p>
+				<p>The encoded text has numbered pagebreaks and linebreaks according to the manuscript.</p>
+			</projectDesc>
+			<editorialDecl>
+				<correction status="high">
+					<p>This text has been transcribed directly from photographic colour facsimiles of the manuscript.</p>
+				</correction>
+				<normalization me:level="facs dipl norm">
+					<p>This text has been encoded on all three focal levels: facsimile, diplomatic and normalised.</p>
+				</normalization>
+				<interpretation me:morphAnalyzed="completely" me:lemmatized="completely">
+					<p>The whole text has been lemmatised and morphologically analysed.</p>
+				</interpretation>
+			</editorialDecl>
+		</encodingDesc>
+		<profileDesc>
+			<langUsage>
+				<language ident="isl">Icelandic</language>
+				<language ident="lat">Latin</language>
+			</langUsage>
+			<handNotes>
+				<handNote xml:id="h1"></handNote>
+			</handNotes>
+		</profileDesc>
+		<revisionDesc>
+			<change>
+				<date>2024-11-05</date>
+				<name>
+					<persName>Nina Stensaker</persName>
+					<orgName type="affiliation">University of Bergen</orgName>
+				</name>: (1) La til bakgrunn.
+				(2) Endret unit chars > char slik at visning i Menota blir riktig.
+			</change>
+			<change>
+				<date>2019-11-05</date> <name> <persName>Nina Stensaker</persName> <orgName type="affiliation">University of Bergen</orgName> </name>: 
+				(1) Addad a explanatory note about the blank recto page.
+				(2) Minor changes to the header.
+			</change>
+			<change>
+				<date>2019-11-05</date> <name> <persName>Nina Stensaker</persName> <orgName type="affiliation">University of Bergen</orgName> </name>: 
+				(1) Exported the file from emroon to Menota.
+				(2) Added the @ed="ms" to all 'lb'-elements.
+				(3) Added the @rendition to 'supplied'-elements.
+			</change>
+		</revisionDesc>
+	</teiHeader>
+	<text xml:lang="isl">
+		<front>
+			<div type="background">
+				<head>Bakgrunn</head>
+				<p>NRA norr fragm 60 A er et fragment av <title>Stjórn</title>.
+					Teksten i fragmentet svarer til første kapittel etter prologen som omhandler verdens skapelse. 
+					På fragmentets forside (recto) har det aldri vært skrevet noe, men den skulle trolig inneholdt deler av 
+					prologen (Unger 1862, s. xii). Senere har forsiden fått to yngre innskrifter. Øverst står det: 
+					«Overleveret af Bech 6/12/49». Ingvald Undset skriver i Riksarkivets katalog (1880-1881) følgende: 
+					Dette betyr at amanuensis i Det norske Riksarkiv i Christiania, Dominicus Nagel Bech, har levert 
+					fragmentet til registrering der den 6. desember 1849 (Undset 1880-1881).
+					Lengre nede på forsiden står navnet «sóren norby». Håndskriften har altså vært eid av en 
+					dansk offiser og adelsmann som var kong Christian den 2.s lensmann på Island 1514–1517, Søren Norby». 
+					Elise Kleivane (2018, s. 137) skriver at NRA 60 A muligens kom til Norge med Søren Norby og at 
+					fragmentet således aldri har vært brukt i Norge. Teksten i fragmentet tilhører Stjórn 1 og rubrikken 
+					gjør det klart at her starter bibelen. Stefka Georgieva Eriksen  (2024, s. 234) skriver at selv om oversettelsen 
+					av Stjórn 1 kobles til Håkon Magnusson finnes ikke denne teksten i norske manuskripter, men i mange islandske kopier. 
+					</p>
+				<p>Fragmentet inneholder en rubrikk og det er gjort plass til en stor initial A som aldri ble skrevet. 
+					Jonas Kristjánsson (1967, s. 19) skriver at håndskriftet har vært tospaltet.</p>
+				
+				<p>Hånden i fragmentet er gjenfunnet som hånd 2 i AM 227 fol, blad 59vA-90rA, jf. Jonas Kristjansson (1967, s. 19), 
+					Stefan Karlsson (1982, s. 321) og Gudvarður Már Gunnlaugsson (2007, s. 52).
+					Videre har Gudvarður Már Gunnlaugsson (2007, s. 52) og Stefan Drechsler (2021, s. 58-60) 
+					koblet skriveren av NRA 60 A til deler av AM 229 I fol, AM 657 a-b 4to, AM 595 a-b 4to, AM dipl. isl. fasc. V 12 og
+					AM 544 4to (Kun noen får linjer 18v.31-35). 
+				</p>
+				<p>Fragmentet kan dateres til ca. 1350 og skriveren er islandsk. Pergamentet er trolig produsert i Norge.</p>
+			</div>
+		</front>
+<body>
+<div type="text">
+<pb n="1r" ed="ms"/>
+	<space unit="page" quantity="1"></space>
+	<note type="explanation">The recto page has originally been blank. In the top left part of the page, it was written in pencil in the mid-nineteenth century, “Overleveret af Bech
+		6/12 49” [Handed over by Bech, the 6th of December 1849]. In Ingvald Undset’s catalogue (1880–1881), the following entry is made: “Dette betyr at amanuensis i Det norske Riksarkiv i Christiania, Dominicus Nagel Bech, har levert fragmentet til registrering der den 6. desember 1849. 
+		Ned mot midten av samme delen av fragmentet står ‘sóren norby’. Håndskriftet har altså vært eid av en dansk offiser og adelsmann som var kong Christian den 2.s lensmann på
+		Island 1514–1517, Søren Norby.” [This means that <hi rend="italic">amanuensis</hi> in the Norwegian National
+		Archives, Dominicus Nagel Bech, has delievered the fragment for registration in the Archives, the 6th of December 1849. Towards the middle of the same part of the fragmen it is written 
+		‘sóren norby’. The manuscript has thus been owned by a Danish officer and nobleman, who was the <hi rend="italic">lensmann</hi> for king Christian II in Iceland, 1514–1517, Søren Norby.]</note>
+	<pb n="1v" ed="ms"/>
+<lb n="1" ed="ms"/>
+<div n="1" type="chapter">
+<head>
+<handShift new="#h1"></handShift>
+<w xml:id="w100" me:msa="xAV rP" lemma="hér">
+<choice>
+<me:facs>&hrdes;er</me:facs>
+<me:dipl>her</me:dipl>
+<me:norm>Hér</me:norm>
+</choice>
+</w>
+<w xml:id="w200" me:msa="xVB fF tPS mIN p3 nS vA" lemma="hefja">
+<choice>
+<me:facs>&hrdes;e&finsclose;r</me:facs>
+<me:dipl>hefr</me:dipl>
+<me:norm>hefr</me:norm>
+</choice>
+</w>
+<w xml:id="w300" me:msa="xFN" lemma="Biblia">
+<choice>
+<me:facs>b&inodot;ble&aclose;m</me:facs>
+<me:dipl>bibleam</me:dipl>
+<me:norm>Bibliam</me:norm>
+</choice>
+</w>
+<pc xml:id="w400">
+<choice>
+<me:facs></me:facs>
+<me:dipl></me:dipl>
+<me:norm>,</me:norm>
+</choice>
+</pc>
+<w xml:id="w500" me:msa="xAV rP" lemma="svá">
+<choice>
+<me:facs>&slong;u&aclose;</me:facs>
+<me:dipl>sua</me:dipl>
+<me:norm>svá</me:norm>
+</choice>
+</w>
+<w xml:id="w600" me:msa="xCS" lemma="sem">
+<choice>
+<me:facs>&slong;em</me:facs>
+<me:dipl>sem</me:dipl>
+<me:norm>sem</me:norm>
+</choice>
+</w>
+<w xml:id="w700" me:msa="xAJ rP gM nS cN sI" lemma="almáttigr">
+<choice>
+<me:facs>&aclose;lm&aclose;&trottrotlig;&inodot;g&hrdes;r</me:facs>
+<me:dipl>almattighr</me:dipl>
+<me:norm>almáttigr</me:norm>
+</choice>
+</w>
+<w xml:id="w800" me:msa="xNC gM nS cN sI" lemma="guð">
+<choice>
+<me:facs>g<gap unit="char" quantity="2" reason="damage"></gap></me:facs>
+	<me:dipl>g<supplied resp="Unger-1862" reason="restoration">uð</supplied></me:dipl>
+	<me:norm>g<supplied resp="Unger-1862" reason="restoration">uð</supplied></me:norm>
+</choice>
+</w>
+<lb n="2" ed="ms"/>
+<w xml:id="w900" me:msa="xVB fF tPT mIN p3 nS vA" lemma="skapa">
+<choice>
+<me:facs>&slong;k&aclose;p&aclose;ðe</me:facs>
+<me:dipl>skapaðe</me:dipl>
+<me:norm>skapaði</me:norm>
+</choice>
+</w>
+<w xml:id="w1000" me:msa="xNC gM nS cA sI" lemma="himinn">
+<choice>
+<me:facs>&hrdes;&inodot;m&inodot;n</me:facs>
+<me:dipl>himin</me:dipl>
+<me:norm>himin</me:norm>
+</choice>
+</w>
+<w xml:id="w1100" me:msa="xCC" lemma="ok">
+<choice>
+<me:facs><gap unit="char" quantity="2" reason="damage"></gap></me:facs>
+<me:dipl><supplied resp="Unger-1862" reason="restoration">ok</supplied></me:dipl>
+	<me:norm><supplied resp="Unger-1862" reason="restoration">ok</supplied></me:norm>
+</choice>
+</w>
+
+<lb n="3" ed="ms"/>
+<w xml:id="w1200" me:msa="xNC gF nS cA sI" lemma="jǫrð">
+<choice>
+<me:facs>&inodot;orð</me:facs>
+<me:dipl>iorð</me:dipl>
+<me:norm>jǫrð</me:norm>
+</choice>
+</w>
+<w xml:id="w1300" me:msa="xCC" lemma="ok">
+<choice>
+<me:facs>ok</me:facs>
+<me:dipl>ok</me:dipl>
+<me:norm>ok</me:norm>
+</choice>
+</w>
+<w xml:id="w1400" me:msa="xDQ gM nP cA" lemma="allr">
+<choice>
+<me:facs>&aclose;ll&aclose;</me:facs>
+<me:dipl>alla</me:dipl>
+<me:norm>alla</me:norm>
+</choice>
+</w>
+<w xml:id="w1500" me:msa="xNC gM nP cA sI" lemma="hlutr">
+<choice>
+<me:facs>l<gap unit="char" quantity="3" reason="damage"></gap></me:facs>
+	<me:dipl>l<supplied resp="Unger-1862" reason="restoration">uti</supplied></me:dipl>
+	<me:norm>hl<supplied resp="Unger-1862" reason="restoration">uti</supplied></me:norm>
+</choice>
+</w>
+<pc xml:id="w1600">
+<choice>
+<me:facs></me:facs>
+<me:dipl></me:dipl>
+<me:norm>,</me:norm>
+</choice>
+</pc>
+<lb rend="2" n="4" ed="ms"/>
+<w xml:id="w1700" me:msa="xFW" lemma="capitulus">
+<choice>
+<me:facs>c&aclose;<gap unit="char" quantity="7" reason="damage"></gap></me:facs>
+	<me:dipl>ca<supplied resp="Unger-1862" reason="restoration">pitulum</supplied></me:dipl>
+	<me:norm>ca<supplied resp="Unger-1862" reason="restoration">pitulum</supplied></me:norm>
+</choice>
+</w>
+</head>
+<lb rend="1" n="4" ed="ms"/>
+<p>
+<w xml:id="w1800" me:msa="xAJ rP gM nS cN sI" lemma="almáttigr">
+<choice>
+<me:facs><gap unit="char" quantity="1" reason="damage"></gap>lm&aclose;&trottrotlig;&inodot;g&rscap;</me:facs>
+	<me:dipl><supplied resp="Unger-1862" reason="restoration"><c rend="u2 d8 cRed" type="initial">A</c></supplied>lmattig&rscap;</me:dipl>
+	<me:norm><supplied resp="Unger-1862" reason="restoration"><c rend="u2 d8 cRed" type="initial">A</c></supplied>lmáttigr</me:norm>
+</choice>
+</w>
+<lb n="5" ed="ms"/>
+<w xml:id="w1900" me:msa="xNC gM nS cN sI" lemma="guð">
+<choice>
+<me:facs>guð</me:facs>
+<me:dipl>guð</me:dipl>
+<me:norm>guð</me:norm>
+</choice>
+</w>
+<pc xml:id="w2000">
+<choice>
+<me:facs></me:facs>
+<me:dipl></me:dipl>
+<me:norm>,</me:norm>
+</choice>
+</pc>
+<w xml:id="w2100" me:msa="xVB fP tPS vA gM nS cN sD" lemma="vera">
+<choice>
+<me:facs>v<am>&er;</am>&aclose;n&drot;e</me:facs>
+<me:dipl>v<ex>er</ex>ande</me:dipl>
+<me:norm>verandi</me:norm>
+</choice>
+</w>
+<w xml:id="w2200" me:msa="xAJ rP gN nS cN sI" lemma="sannr">
+<choice>
+<me:facs>&slong;&aclose;&trot;<gap unit="char" quantity="1" reason="damage"></gap></me:facs>
+	<me:dipl>sat<supplied resp="Unger-1862" reason="restoration">t</supplied></me:dipl>
+<me:norm>sat<supplied resp="Unger-1862" reason="restoration">t</supplied></me:norm>
+</choice>
+</w>
+<lb n="6" ed="ms"/>
+<w xml:id="w2300" me:msa="xNC gN nS cN sI" lemma="ljós">
+<choice>
+<me:facs>l&inodot;os</me:facs>
+<me:dipl>lios</me:dipl>
+<me:norm>ljós</me:norm>
+</choice>
+</w>
+<pc xml:id="w2400">
+<choice>
+<me:facs></me:facs>
+<me:dipl></me:dipl>
+<me:norm>,</me:norm>
+</choice>
+</pc>
+<w xml:id="w2500" me:msa="xDQ gM nS cN" lemma="hverr">
+<choice>
+<me:facs>&hrdes;ue&rscap;<am>&combdot;</am></me:facs>
+<me:dipl>hue&rscap;</me:dipl>
+<me:norm>hverr</me:norm>
+</choice>
+</w>
+<w xml:id="w2600" me:msa="xCS" lemma="er">
+<choice>
+<me:facs>e<am>&er;</am></me:facs>
+<me:dipl>e<ex>r</ex></me:dipl>
+<me:norm>er</me:norm>
+</choice>
+</w>
+<w xml:id="w2700" me:msa="xNC gN nS cA sD" lemma="ljós">
+<choice>
+<me:facs>l&inodot;o<gap unit="char" quantity="3" reason="damage"></gap></me:facs>
+	<me:dipl>lio<supplied resp="Unger-1862" reason="restoration">sit</supplied></me:dipl>
+	<me:norm>ljó<supplied resp="Unger-1862" reason="restoration">sit</supplied></me:norm>
+</choice>
+</w>
+<lb n="7" ed="ms"/>
+<w xml:id="w2800" me:msa="xVB fF tPS mIN p3 nS vA" lemma="elska">
+<choice>
+<me:facs>el&slong;k&aclose;r</me:facs>
+<me:dipl>elskar</me:dipl>
+<me:norm>elskar</me:norm>
+</choice>
+</w>
+<pc xml:id="w2900">
+<choice>
+<me:facs>.</me:facs>
+<me:dipl>.</me:dipl>
+<me:norm></me:norm>
+</choice>
+</pc>
+<w xml:id="w3000" me:msa="xCC" lemma="ok">
+<choice>
+<me:facs>ok</me:facs>
+<me:dipl>ok</me:dipl>
+<me:norm>ok</me:norm>
+</choice>
+</w>
+<w xml:id="w3100" me:msa="xVB fF tPS mIN p3 nS vA" lemma="gera">
+<choice>
+<me:facs>g<am>&er;</am>er</me:facs>
+<me:dipl>g<ex>er</ex>er</me:dipl>
+<me:norm>gerir</me:norm>
+</choice>
+</w>
+<w xml:id="w3200" me:msa="xDQ gM nP cA" lemma="allr">
+<choice>
+<me:facs><gap unit="char" quantity="4" reason="damage"></gap></me:facs>
+	<me:dipl><supplied resp="Unger-1862" reason="restoration">alla</supplied></me:dipl>
+	<me:norm><supplied resp="Unger-1862" reason="restoration">alla</supplied></me:norm>
+</choice>
+</w>
+<lb n="8" ed="ms"/>
+<w xml:id="w3300" me:msa="xNC gM nP cA sI" lemma="hlutr">
+<choice>
+<me:facs>lu&trot;&hrdes;&inodot;</me:facs>
+<me:dipl>luthi</me:dipl>
+<me:norm>hluti</me:norm>
+</choice>
+</w>
+<w xml:id="w3400" me:msa="xAP" lemma="með">
+<choice>
+<me:facs>með&rrot;</me:facs>
+<me:dipl>meðr</me:dipl>
+<me:norm>meðr</me:norm>
+</choice>
+</w>
+<w xml:id="w3500" me:msa="xNC gN nS cD sI" lemma="ljós">
+<choice>
+<me:facs>l&inodot;o&slong;<gap unit="char" quantity="1" reason="damage"></gap></me:facs>
+	<me:dipl>lios<supplied rendition="first" resp="Unger-1862" reason="restoration">i</supplied></me:dipl>
+	<me:norm>ljós<supplied rendition="first" resp="Unger-1862" reason="restoration">i</supplied></me:norm>
+</choice>
+</w>
+<pc xml:id="w3600">
+<choice>
+<me:facs></me:facs>
+<me:dipl></me:dipl>
+<me:norm>,</me:norm>
+</choice>
+</pc>
+<w xml:id="w3700" me:msa="xVB fP tPS vA gM nS cN sD" lemma="byrja">
+<choice>
+<me:facs><gap unit="char" quantity="2" reason="damage"></gap><lb n="9" ed="ms"/>r&inodot;&aclose;n&drot;e</me:facs>
+	<me:dipl><supplied rendition="last" resp="Unger-1862" reason="restoration">by</supplied><lb n="9" ed="ms"/>riande</me:dipl>
+	<me:norm><supplied rendition="last" resp="Unger-1862" reason="restoration">by</supplied><lb n="9" ed="ms"/>rjandi</me:norm>
+</choice>
+</w>
+<w xml:id="w3800" me:msa="xAJ rP gF nS cA sI" lemma="réttligr">
+<choice>
+<me:facs>re&trottrotlig;leg&hrdes;<gap unit="char" quantity="1" reason="damage"></gap></me:facs>
+	<me:dipl>rettlegh<supplied rendition="first" resp="Unger-1862" reason="restoration">a</supplied></me:dipl>
+	<me:norm>réttlig<supplied rendition="first" resp="Unger-1862" reason="restoration">a</supplied></me:norm>
+</choice>
+</w>
+<w xml:id="w3900" me:msa="xCC" lemma="ok">
+<choice>
+<me:facs><gap unit="char" quantity="2" reason="damage"></gap></me:facs>
+	<me:dipl><supplied rendition="last" resp="Unger-1862" reason="restoration">ok</supplied></me:dipl>
+	<me:norm><supplied rendition="last" resp="Unger-1862" reason="restoration">ok</supplied></me:norm>
+</choice>
+</w>
+<lb n="10" ed="ms"/>
+<w xml:id="w4000" me:msa="xAV rP" lemma="vel">
+<choice>
+<me:facs>vel</me:facs>
+<me:dipl>vel</me:dipl>
+<me:norm>vel</me:norm>
+</choice>
+</w>
+<w xml:id="w4100" me:msa="xAJ rP gF nS cA sI" lemma="viðrkǿmiligr">
+<choice>
+<me:facs>v&inodot;ð&rrot;kím&inodot;l<gap unit="char" quantity="3" reason="damage"></gap></me:facs>
+	<me:dipl>viðrkíæmil<supplied resp="Unger, 1862" reason="restoration">iga</supplied></me:dipl>
+	<me:norm>viðrkǿmil<supplied resp="Unger, 1862" reason="restoration">iga</supplied></me:norm>
+</choice>
+</w>
+<lb n="11" ed="ms"/>
+<w xml:id="w4200" me:msa="xNC gM nS cG sD" lemma="heimr">
+<choice>
+<me:facs>&hrdes;e&inodot;m&slong;&inodot;ns</me:facs>
+<me:dipl>heimsins</me:dipl>
+<me:norm>heimsins</me:norm>
+</choice>
+</w>
+<w xml:id="w4300" me:msa="xNC gF nS cA sI" lemma="skǫpun">
+<choice>
+<me:facs>&slong;k&aclose;p<gap unit="char" quantity="2" reason="damage"></gap></me:facs>
+	<me:dipl>skap<supplied resp="Unger-1862" reason="restoration">an</supplied></me:dipl>
+	<me:norm>skap<supplied resp="Unger-1862" reason="restoration">an</supplied></me:norm>
+</choice>
+</w>
+<lb n="12" ed="ms"/>
+<w xml:id="w4400" me:msa="xCC" lemma="ok">
+<choice>
+<me:facs>ok</me:facs>
+<me:dipl>ok</me:dipl>
+<me:norm>ok</me:norm>
+</choice>
+</w>
+<w xml:id="w4500" me:msa="xNC gF nS cA sI" lemma="smíð">
+<choice>
+<me:facs>&slong;m&inodot;ð</me:facs>
+<me:dipl>smið</me:dipl>
+<me:norm>smíð</me:norm>
+</choice>
+</w>
+<w xml:id="w4600" me:msa="xAP" lemma="af">
+<choice>
+<me:facs>&aclose;&finsclose;</me:facs>
+<me:dipl>af</me:dipl>
+<me:norm>af</me:norm>
+</choice>
+</w>
+<w xml:id="w4700" me:msa="xNC gN nS cD sD" lemma="ljós">
+<choice>
+<me:facs>l&inodot;o&slong;&inodot;nu</me:facs>
+<me:dipl>liosinu</me:dipl>
+<me:norm>ljósinu</me:norm>
+</choice>
+</w>
+<pc xml:id="w4800">
+<choice>
+<me:facs>.</me:facs>
+<me:dipl>.</me:dipl>
+<me:norm></me:norm>
+</choice>
+</pc>
+<w xml:id="w4900" me:msa="xAP" lemma="á">
+<choice>
+<me:facs>&aclose;</me:facs>
+<me:dipl>A</me:dipl>
+<me:norm>á</me:norm>
+</choice>
+</w>
+<w xml:id="w5000" me:msa="xAJ rS gM nS cD sD" lemma="fyrri">
+<choice>
+<me:facs>&finsclose;&ydot;r&slongtlig;&aclose;</me:facs>
+<me:dipl>fyrsta</me:dipl>
+<me:norm>fyrsta</me:norm>
+</choice>
+</w>
+<w xml:id="w5100" me:msa="xNC gM nS cD sI" lemma="dagr">
+<choice>
+<me:facs>&drot;eg&hrdes;&inodot;</me:facs>
+<me:dipl>deghi</me:dipl>
+<me:norm>degi</me:norm>
+</choice>
+</w>
+<pc xml:id="w5200">
+<choice>
+<me:facs></me:facs>
+<me:dipl></me:dipl>
+<me:norm>,</me:norm>
+</choice>
+</pc>
+<w xml:id="w5300" me:msa="xAV rP" lemma="svá">
+<choice>
+<me:facs>&slong;u&aclose;</me:facs>
+<me:dipl>sua</me:dipl>
+<me:norm>svá</me:norm>
+</choice>
+</w>
+<w xml:id="w5400" me:msa="xCS" lemma="sem">
+<choice>
+<me:facs><gap unit="char" quantity="3" reason="damage"></gap></me:facs>
+	<me:dipl><supplied resp="Unger-1862" reason="restoration">sem</supplied></me:dipl>
+	<me:norm><supplied resp="Unger-1862" reason="restoration">sem</supplied></me:norm>
+</choice>
+</w>
+<lb n="13" ed="ms"/>
+<w xml:id="w5500" me:msa="xVB fP tPT vA gN nS cN sI" lemma="segja">
+<choice>
+<me:facs>&slong;&aclose;g&hrdes;&trot;</me:facs>
+<me:dipl>saght</me:dipl>
+<me:norm>sagt</me:norm>
+</choice>
+</w>
+<w xml:id="w5600" me:msa="xVB fF tPS mIN p3 nS vA" lemma="vera">
+<choice>
+<me:facs>e<am>&er;</am></me:facs>
+<me:dipl>e<ex>r</ex></me:dipl>
+<me:norm>er</me:norm>
+</choice>
+</w>
+<w xml:id="w5700" me:msa="xCS" lemma="at">
+<choice>
+<me:facs>&aclose;&trot;</me:facs>
+<me:dipl>at</me:dipl>
+<me:norm>at</me:norm>
+</choice>
+</w>
+<w xml:id="w5800" me:msa="xPE p3 gM nS cN" lemma="hann">
+<choice>
+<me:facs>&hrdes;<am>&bar;</am>n</me:facs>
+<me:dipl>h<ex>an</ex>n</me:dipl>
+<me:norm>hann</me:norm>
+</choice>
+</w>
+<w xml:id="w5900" me:msa="xVB fF tPT mIN p3 nS vA" lemma="skapa">
+<choice>
+<me:facs>&slong;k&aclose;p&aclose;ðe</me:facs>
+<me:dipl>skapaðe</me:dipl>
+<me:norm>skapaði</me:norm>
+</choice>
+</w>
+<w xml:id="w6000" me:msa="xNC gM nS cA sI" lemma="himinn">
+<choice>
+<me:facs>&hrdes;&inodot;mín</me:facs>
+<me:dipl>himín</me:dipl>
+<me:norm>himin</me:norm>
+</choice>
+</w>
+<w xml:id="w6100" me:msa="xCC" lemma="ok">
+<choice>
+<me:facs>ok</me:facs>
+<me:dipl>ok</me:dipl>
+<me:norm>ok</me:norm>
+</choice>
+</w>
+<w xml:id="w6200" me:msa="xNC gF nS cA sI" lemma="jǫrð">
+<choice>
+<me:facs>&inodot;o&rrot;ð</me:facs>
+<me:dipl>iorð</me:dipl>
+<me:norm>jǫrð</me:norm>
+</choice>
+</w>
+<pc xml:id="w6300">
+<choice>
+<me:facs>.</me:facs>
+<me:dipl>.</me:dipl>
+<me:norm>,</me:norm>
+</choice>
+</pc>
+<w xml:id="w6400" me:msa="xDD gN nS cN" lemma="sá">
+<choice>
+<me:facs>þ<gap unit="char" quantity="2" reason="damage"></gap></me:facs>
+	<me:dipl>þ<supplied resp="Unger-1862" reason="restoration">at</supplied></me:dipl>
+	<me:norm>þ<supplied resp="Unger-1862" reason="restoration">at</supplied></me:norm>
+</choice>
+</w>
+<lb n="14" ed="ms"/>
+<w xml:id="w6500" me:msa="xVB fF tPS mIN p3 nS vA" lemma="vera">
+<choice>
+<me:facs>er</me:facs>
+<me:dipl>er</me:dipl>
+<me:norm>er</me:norm>
+</choice>
+</w>
+<w xml:id="w6600" me:msa="xNC gN nS cN sI" lemma="efni">
+<choice>
+<me:facs>e&finsclose;n&inodot;</me:facs>
+<me:dipl>efni</me:dipl>
+<me:norm>efni</me:norm>
+</choice>
+</w>
+<w xml:id="w6700" me:msa="xCC" lemma="ok">
+<choice>
+<me:facs><am>&etslash;</am></me:facs>
+<me:dipl><ex>ok</ex></me:dipl>
+<me:norm>ok</me:norm>
+</choice>
+</w>
+<w xml:id="w6800" me:msa="xAV rP" lemma="svá">
+<choice>
+<me:facs>s<am>&rabar;</am></me:facs>
+<me:dipl>s<ex>ua</ex></me:dipl>
+<me:norm>svá</me:norm>
+</choice>
+</w>
+<w xml:id="w6900" me:msa="xCS" lemma="sem">
+<choice>
+<me:facs>&slong;em</me:facs>
+<me:dipl>sem</me:dipl>
+<me:norm>sem</me:norm>
+</choice>
+</w>
+<w xml:id="w7000" me:msa="xNC gN nS cN sI" lemma="frjó">
+<choice>
+<me:facs>&finsclose;río</me:facs>
+<me:dipl>frío</me:dipl>
+<me:norm>frjó</me:norm>
+</choice>
+</w>
+<w xml:id="w7100" me:msa="xAP" lemma="til">
+<choice>
+<me:facs>&trot;&inodot;l</me:facs>
+<me:dipl>til</me:dipl>
+<me:norm>til</me:norm>
+</choice>
+</w>
+<w xml:id="w7200" me:msa="xNC gM nS cG sI" lemma="himinn">
+<choice>
+<me:facs>&hrdes;ímíns</me:facs>
+<me:dipl>hímíns</me:dipl>
+<me:norm>himins</me:norm>
+</choice>
+</w>
+<w xml:id="w7300" me:msa="xCC" lemma="ok">
+<choice>
+<me:facs><am>&etslash;</am></me:facs>
+<me:dipl><ex>ok</ex></me:dipl>
+<me:norm>ok</me:norm>
+</choice>
+</w>
+<w xml:id="w7400" me:msa="xNC gF nS cG sI" lemma="jǫrð">
+<choice>
+<me:facs>&inodot;&aclose;rð&aclose;<gap unit="char" quantity="1" reason="damage"></gap></me:facs>
+	<me:dipl>iarða<supplied rendition="first" resp="Unger-1862" reason="restoration">r</supplied></me:dipl>
+	<me:norm>jarða<supplied rendition="first" resp="Unger-1862" reason="restoration">r</supplied></me:norm>
+</choice>
+</w>
+<pc xml:id="w7500">
+<choice>
+<me:facs></me:facs>
+<me:dipl></me:dipl>
+<me:norm>,</me:norm>
+</choice>
+</pc>
+<w xml:id="w7600" me:msa="xCC" lemma="ok">
+<choice>
+<me:facs><gap unit="char" quantity="1" reason="damage"></gap></me:facs>
+	<me:dipl><supplied rendition="last" resp="Unger-1862" reason="restoration">ok</supplied></me:dipl>
+	<me:norm><supplied rendition="last" resp="Unger-1862" reason="restoration">ok</supplied></me:norm>
+</choice>
+</w>
+	<lb n="15" ed="ms"/>
+<w xml:id="w7700" me:msa="xAV rP" lemma="þar">
+<choice>
+<me:facs>þ&aclose;r</me:facs>
+<me:dipl>þar</me:dipl>
+<me:norm>þar</me:norm>
+</choice>
+</w>
+<w xml:id="w7800" me:msa="xAP" lemma="með">
+<choice>
+<me:facs>með&rrot;</me:facs>
+<me:dipl>meðr</me:dipl>
+<me:norm>meðr</me:norm>
+</choice>
+</w>
+<w xml:id="w7900" me:msa="xDQ gU nP cG" lemma="allr">
+<choice>
+<me:facs>&aclose;llr&aclose;</me:facs>
+<me:dipl>allra</me:dipl>
+<me:norm>allra</me:norm>
+</choice>
+</w>
+<w xml:id="w8000" me:msa="xAJ rP gU nP cG sI" lemma="líkamligr">
+<choice>
+<me:facs>l&inodot;k&aclose;ml&inodot;g&rrot;&aclose;</me:facs>
+<me:dipl>likamligra</me:dipl>
+<me:norm>líkamligra</me:norm>
+</choice>
+</w>
+<w xml:id="w8100" me:msa="xNC gM nP cG sI" lemma="hlutr">
+<choice>
+<me:facs>lu&trot;&hrdes;&aclose;</me:facs>
+<me:dipl>lutha</me:dipl>
+<me:norm>hluta</me:norm>
+</choice>
+</w>
+<pc xml:id="w8200">
+<choice>
+<me:facs></me:facs>
+<me:dipl></me:dipl>
+<me:norm>,</me:norm>
+</choice>
+</pc>
+<w xml:id="w8300" me:msa="xAV rP" lemma="svá">
+<choice>
+<me:facs>s<am>&rabar;</am></me:facs>
+<me:dipl>s<ex>ua</ex></me:dipl>
+<me:norm>svá</me:norm>
+</choice>
+</w>
+<w xml:id="w8400" me:msa="xVB fP tPS vA gM nS cN sD" lemma="segja">
+<choice>
+<me:facs>&slong;eg&inodot;&aclose;<gap unit="char" quantity="3" reason="damage"></gap></me:facs>
+	<me:dipl>segia<supplied resp="Unger-1862" reason="restoration">ndi</supplied></me:dipl>
+	<me:norm>segja<supplied resp="Unger-1862" reason="restoration">ndi</supplied></me:norm>
+</choice>
+</w>
+<pc xml:id="w8500">
+<choice>
+<me:facs></me:facs>
+<me:dipl></me:dipl>
+<me:norm>:</me:norm>
+</choice>
+</pc>
+</p>
+<lb n="16" ed="ms"/>
+<p>
+<w xml:id="w8600" me:msa="xVB fF tPS mSU p3 nS vA" lemma="verða">
+<choice>
+<me:facs>v<am>&er;</am>ð&inodot;</me:facs>
+<me:dipl>v<ex>er</ex>ði</me:dipl>
+<me:norm>Verði</me:norm>
+</choice>
+</w>
+<w xml:id="w8700" me:msa="xNC gN nS cN sI" lemma="ljós">
+<choice>
+<me:facs>líos</me:facs>
+<me:dipl>líos</me:dipl>
+<me:norm>ljós</me:norm>
+</choice>
+</w>
+<pc xml:id="w8800">
+<choice>
+<me:facs>.</me:facs>
+<me:dipl>.</me:dipl>
+<me:norm>!</me:norm>
+</choice>
+</pc>
+</p>
+<p>
+<w xml:id="w8900" me:msa="xCC" lemma="ok">
+<choice>
+<me:facs>ok</me:facs>
+<me:dipl>ok</me:dipl>
+<me:norm>Ok</me:norm>
+</choice>
+</w>
+<w xml:id="w9000" me:msa="xCS" lemma="þegar">
+<choice>
+<me:facs>þeg<am>&rsup;</am></me:facs>
+<me:dipl>þeg<ex>ar</ex></me:dipl>
+<me:norm>þegar</me:norm>
+</choice>
+</w>
+<w xml:id="w9100" me:msa="xAP" lemma="í">
+<choice>
+<me:facs>&inodot;</me:facs>
+<me:dipl>i</me:dipl>
+<me:norm>í</me:norm>
+</choice>
+</w>
+<w xml:id="w9200" me:msa="xNC gM nS cD sI" lemma="staðr">
+<choice>
+<me:facs>&slongtlig;&aclose;ð</me:facs>
+<me:dipl>stað</me:dipl>
+<me:norm>stað</me:norm>
+</choice>
+</w>
+<w xml:id="w9300" me:msa="xVB fF tPT mIN p3 nS vA" lemma="verða">
+<choice>
+<me:facs>v&aclose;rð</me:facs>
+<me:dipl>varð</me:dipl>
+<me:norm>varð</me:norm>
+</choice>
+</w>
+<w xml:id="w9400" me:msa="xNC gN nS cN sD" lemma="ljós">
+<choice>
+<me:facs>l&inodot;o&slong;í&trot;</me:facs>
+<me:dipl>liosít</me:dipl>
+<me:norm>ljósit</me:norm>
+</choice>
+</w>
+<pc xml:id="w9500">
+<choice>
+<me:facs>.</me:facs>
+<me:dipl>.</me:dipl>
+<me:norm>.</me:norm>
+</choice>
+</pc>
+<w xml:id="w9600" me:msa="xCC" lemma="ok">
+<choice>
+<me:facs><am>&etslash;</am></me:facs>
+<me:dipl><ex>ok</ex></me:dipl>
+<me:norm>Ok</me:norm>
+</choice>
+</w>
+<w xml:id="w9700" me:msa="xDD gN nS cN" lemma="sá">
+<choice>
+<me:facs>þ&aclose;&trot;</me:facs>
+<me:dipl>þat</me:dipl>
+<me:norm>þat</me:norm>
+</choice>
+</w>
+<w xml:id="w9800" me:msa="xAJ" lemma="sami">
+<choice>
+	<me:facs><gap unit="char" quantity="2" reason="damage"></gap><lb n="17" ed="ms"/>m&aclose;</me:facs>
+	<me:dipl><supplied resp="Unger-1862" reason="restoration">sa</supplied><lb n="17" ed="ms"/>ma</me:dipl>
+	<me:norm><supplied resp="Unger-1862" reason="restoration">sa</supplied><lb n="17" ed="ms"/>ma</me:norm>
+</choice>
+</w>
+<w xml:id="w9900" me:msa="xNC gN nS cN sI" lemma="ljós">
+<choice>
+<me:facs>líos</me:facs>
+<me:dipl>líos</me:dipl>
+<me:norm>ljós</me:norm>
+</choice>
+</w>
+<w xml:id="w10000" me:msa="xAP" lemma="með">
+<choice>
+<me:facs>með&rrot;</me:facs>
+<me:dipl>meðr</me:dipl>
+<me:norm>meðr</me:norm>
+</choice>
+</w>
+<w xml:id="w10100" me:msa="xDP gF nS cD" lemma="sinn">
+<choice>
+<me:facs>&slong;&inodot;n<am>&bar;</am>&inodot;</me:facs>
+<me:dipl>sin<ex>n</ex>i</me:dipl>
+<me:norm>sinni</me:norm>
+</choice>
+</w>
+<w xml:id="w10200" me:msa="xNC gF nS cD sI" lemma="birti">
+<choice>
+<me:facs>b&inodot;r&trot;í</me:facs>
+<me:dipl>birtí</me:dipl>
+<me:norm>birti</me:norm>
+</choice>
+</w>
+<w xml:id="w10300" me:msa="xCC" lemma="ok">
+<choice>
+<me:facs><am>&etslash;</am></me:facs>
+<me:dipl><ex>ok</ex></me:dipl>
+<me:norm>ok</me:norm>
+</choice>
+</w>
+<w xml:id="w10400" me:msa="xNC gF nS cD sI" lemma="umferð">
+<choice>
+<me:facs>vm&finsclose;erð</me:facs>
+<me:dipl>vmferð</me:dipl>
+<me:norm>umferð</me:norm>
+</choice>
+</w>
+<w xml:id="w10500" me:msa="xVB fF tPT mIN p3 nS vA" lemma="gera">
+<choice>
+<me:facs>g&inodot;o&rrot;ð<gap unit="char" quantity="1" reason="damage"></gap></me:facs>
+	<me:dipl>giorð<supplied rendition="first" resp="Unger-1862" reason="restoration">i</supplied></me:dipl>
+	<me:norm>gjǫrð<supplied rendition="first" resp="Unger-1862" reason="restoration">i</supplied></me:norm>
+</choice>
+</w>
+<w xml:id="w10600" me:msa="xDQ gM nP cA" lemma="þrír">
+<choice>
+<me:facs><gap unit="char" quantity="2" reason="damage"></gap><lb n="18" ed="ms"/>&inodot;&aclose;</me:facs>
+	<me:dipl><supplied rendition="last" resp="Unger-1862" reason="restoration">þr</supplied><lb n="18" ed="ms"/>ia</me:dipl>
+	<me:norm><supplied rendition="last" resp="Unger-1862" reason="restoration">þr</supplied><lb n="18" ed="ms"/>já</me:norm>
+</choice>
+</w>
+<w xml:id="w10700" me:msa="xAJ" lemma="náttúruligr">
+<choice>
+<me:facs>n&aclose;&trottrotlig;<am>&ur;</am>ul&inodot;g&hrdes;&aclose;</me:facs>
+<me:dipl>natt<ex>ur</ex>uligha</me:dipl>
+<me:norm>natturuligha</me:norm>
+</choice>
+</w>
+<w xml:id="w10800" me:msa="xNC gM nP cA sI" lemma="dagr">
+<choice>
+<me:facs>&drot;&aclose;g&hrdes;&aclose;</me:facs>
+<me:dipl>dagha</me:dipl>
+<me:norm>daga</me:norm>
+</choice>
+</w>
+<pc xml:id="w10900">
+<choice>
+<me:facs>.</me:facs>
+<me:dipl>.</me:dipl>
+<me:norm>,</me:norm>
+</choice>
+</pc>
+<w xml:id="w11000" me:msa="xAV rP" lemma="þar">
+<choice>
+<me:facs>þ<am>&rsup;</am></me:facs>
+<me:dipl>þ<ex>ar</ex></me:dipl>
+<me:norm>þar</me:norm>
+</choice>
+</w>
+<w xml:id="w11100" me:msa="xAP" lemma="til">
+<choice>
+<me:facs>&trot;&inodot;l</me:facs>
+<me:dipl>til</me:dipl>
+<me:norm>til</me:norm>
+</choice>
+</w>
+<w xml:id="w11200" me:msa="xCS" lemma="er">
+<choice>
+<me:facs>er</me:facs>
+<me:dipl>er</me:dipl>
+<me:norm>er</me:norm>
+</choice>
+</w>
+<w xml:id="w11300" me:msa="xNC gF nS cN sI" lemma="sól">
+<choice>
+<me:facs>&slong;ol</me:facs>
+<me:dipl>sol</me:dipl>
+<me:norm>sól</me:norm>
+</choice>
+</w>
+<w xml:id="w11400" me:msa="xCC" lemma="ok">
+<choice>
+<me:facs>ok</me:facs>
+<me:dipl>ok</me:dipl>
+<me:norm>ok</me:norm>
+</choice>
+</w>
+<w xml:id="w11500" me:msa="xDQ gN nP cN" lemma="annarr">
+<choice>
+<me:facs>&ocurl;nn<gap unit="char" quantity="2" reason="damage"></gap></me:facs>
+	<me:dipl>ønn<supplied resp="Unger-1862" reason="restoration">ur</supplied></me:dipl>
+	<me:norm>ǫnn<supplied resp="Unger-1862" reason="restoration">ur</supplied></me:norm>
+</choice>
+</w>
+<lb n="19" ed="ms"/>
+<w xml:id="w11600" me:msa="xNC gN nP cN sI" lemma="himintungl">
+<choice>
+<me:facs>&hrdes;ímín&trot;ungl</me:facs>
+<me:dipl>hímíntungl</me:dipl>
+<me:norm>himintungl</me:norm>
+</choice>
+</w>
+<w xml:id="w11700" me:msa="xVB fF tPT mIN p3 nP vA" lemma="vera">
+<choice>
+<me:facs>vo&rrot;u</me:facs>
+<me:dipl>voru</me:dipl>
+<me:norm>váru</me:norm>
+</choice>
+</w>
+<w xml:id="w11800" me:msa="xVB fP tPT vA gN nP cN sI" lemma="skapa">
+<choice>
+<me:facs>&slong;k&aclose;p&aclose;ð</me:facs>
+<me:dipl>skapað</me:dipl>
+<me:norm>skapað</me:norm>
+</choice>
+</w>
+<w xml:id="w11900" me:msa="xAP" lemma="á">
+<choice>
+<me:facs>&aclose;</me:facs>
+<me:dipl>a</me:dipl>
+<me:norm>á</me:norm>
+</choice>
+</w>
+<w xml:id="w12000" me:msa="xDD gM nS cD" lemma="hinn">
+<choice>
+<me:facs>&hrdes;&inodot;nu<am>&bar;</am></me:facs>
+<me:dipl>hinu<ex>m</ex></me:dipl>
+<me:norm>hinum</me:norm>
+</choice>
+</w>
+<w xml:id="w12100" me:msa="xAJ rP gM nS cD sD" lemma="fjórði">
+<choice>
+<me:facs>&finsclose;&inodot;o&rrot;ð<gap unit="char" quantity="1" reason="damage"></gap></me:facs>
+	<me:dipl>fiorð<supplied rendition="first" resp="Unger-1862" reason="restoration">a</supplied></me:dipl>
+	<me:norm>fjórð<supplied rendition="first" resp="Unger-1862" reason="restoration">a</supplied></me:norm>
+</choice>
+</w>
+<w xml:id="w12200" me:msa="xNC gM nS cD sI" lemma="dagr">
+<choice>
+<me:facs><gap unit="char" quantity="2" reason="damage"></gap><lb n="20" ed="ms"/>g&hrdes;&inodot;</me:facs>
+	<me:dipl><supplied rendition="last" resp="Unger-1862" reason="restoration">de</supplied><lb n="20" ed="ms"/>ghi</me:dipl>
+	<me:norm><supplied rendition="last" resp="Unger-1862" reason="restoration">de</supplied><lb n="20" ed="ms"/>gi</me:norm>
+</choice>
+</w>
+<pc xml:id="w12300">
+<choice>
+<me:facs>.</me:facs>
+<me:dipl>.</me:dipl>
+<me:norm>.</me:norm>
+</choice>
+</pc>
+</p>
+<p>
+<w xml:id="w12400" me:msa="xAV rP" lemma="eigi">
+<choice>
+<me:facs>&Eunc;&inodot;g&inodot;</me:facs>
+<me:dipl>Eigi</me:dipl>
+<me:norm>Eigi</me:norm>
+</choice>
+</w>
+<w xml:id="w12500" me:msa="xVB fF tPS mIN p1 nP vA" lemma="skulu">
+<choice>
+<me:facs>&slong;k<am>&bar;</am>m</me:facs>
+<me:dipl>sk<ex>ulu</ex>m</me:dipl>
+<me:norm>skulum</me:norm>
+</choice>
+</w>
+<w xml:id="w12600" me:msa="xPE p1 nP cN" lemma="vér">
+<choice>
+<me:facs>v<am>&er;</am></me:facs>
+<me:dipl>v<ex>er</ex></me:dipl>
+<me:norm>vér</me:norm>
+</choice>
+</w>
+<w xml:id="w12700" me:msa="xDD gM nS cA" lemma="sá">
+<choice>
+<me:facs>þ&aclose;n<am>&bar;</am></me:facs>
+<me:dipl>þan<ex>n</ex></me:dipl>
+<me:norm>þann</me:norm>
+</choice>
+</w>
+<w xml:id="w12800" me:msa="xNC gM nS cA sI" lemma="skilningr">
+<choice>
+<me:facs>&slong;k&inodot;ln&inodot;ng&hrdes;</me:facs>
+<me:dipl>skilningh</me:dipl>
+<me:norm>skilning</me:norm>
+</choice>
+</w>
+<w xml:id="w12900" me:msa="xCC" lemma="eða">
+<choice>
+<me:facs>eð&rrot;</me:facs>
+<me:dipl>eðr</me:dipl>
+<me:norm>eðr</me:norm>
+</choice>
+</w>
+<w xml:id="w13000" me:msa="xNC gF nS cA sI" lemma="hugleiðing">
+<choice>
+	<me:facs>&hrdes;ug<gap unit="char" quantity="3" reason="damage"></gap><lb n="21" ed="ms"/>&inodot;ng&hrdes;</me:facs>
+	<me:dipl>hug<supplied resp="Unger-1882" reason="restoration">leið</supplied><lb n="21" ed="ms"/>ingh</me:dipl>
+	<me:norm>hug<supplied resp="Unger-1882" reason="restoration">leið</supplied><lb n="21" ed="ms"/>ing</me:norm>
+</choice>
+</w>
+<w xml:id="w13100" me:msa="xAP" lemma="á">
+<choice>
+<me:facs>&aclose;</me:facs>
+<me:dipl>a</me:dipl>
+<me:norm>á</me:norm>
+</choice>
+</w>
+<w xml:id="w13200" me:msa="xVB fI tPS vA" lemma="hafa">
+<choice>
+<me:facs>&hrdes;&aclose;&finsclose;&aclose;</me:facs>
+<me:dipl>hafa</me:dipl>
+<me:norm>hafa</me:norm>
+</choice>
+</w>
+<w xml:id="w13300" me:msa="xAV rC" lemma="fyrr">
+<choice>
+<me:facs>&finsclose;&ydot;&rscap;<am>&combdot;</am></me:facs>
+<me:dipl>fy&rscap;</me:dipl>
+<me:norm>fyrr</me:norm>
+</choice>
+</w>
+<w xml:id="w13400" me:msa="xVB fP tPT vA gU nP cD sI" lemma="segja">
+<choice>
+<me:facs>&slong;ogðum</me:facs>
+<me:dipl>sogðum</me:dipl>
+<me:norm>sǫgðum</me:norm>
+</choice>
+</w>
+<w xml:id="w13500" me:msa="xNC gM nS cG sI" lemma="guð">
+<choice>
+<me:facs>guðs</me:facs>
+<me:dipl>guðs</me:dipl>
+<me:norm>guðs</me:norm>
+</choice>
+</w>
+<w xml:id="w13600" me:msa="xNC gF nP cD sI" lemma="orðagrein">
+<choice>
+<me:facs>o&rrot;ð&aclose; gr<gap unit="char" quantity="5" reason="damage"></gap></me:facs>
+	<me:dipl>orða gr<supplied resp="Unger-1862" reason="restoration">einum</supplied></me:dipl>
+	<me:norm>orðagr<supplied resp="Unger-1862" reason="restoration">einum</supplied></me:norm>
+</choice>
+</w>
+<pc xml:id="w13700">
+<choice>
+<me:facs></me:facs>
+<me:dipl></me:dipl>
+<me:norm>…</me:norm>
+</choice>
+</pc>
+</p>
+</div>
+</div>
+</body>
+</text>
+</TEI>
