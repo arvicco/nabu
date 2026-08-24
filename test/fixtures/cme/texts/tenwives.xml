@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="http://www.textpartnership.net/docs/code/pfs.css"?>
+<!DOCTYPE ETS SYSTEM "http://www.textpartnership.net/docs/code/eebo2prf.xml.dtd">
+<ETS>
+<HEADER>
+<FILEDESC><TITLESTMT><TITLE TYPE="245">A talk of ten wives on their husbands' ware / ed. by Frederick J. Furnivall.</TITLE><TITLE TYPE="alt">Leve lystynes</TITLE><AUTHOR>Aberystwyth. National Library of Wales. Manuscript. Brogyntyn 2.1</AUTHOR><EDITOR>Furnivall, Frederick James, 1825-1910.</EDITOR></TITLESTMT><EXTENT>ca. 8 kB SGML-encoded text file</EXTENT><PUBLICATIONSTMT><PUBLISHER>University of Michigan, Digital Library Production Service</PUBLISHER><PUBPLACE>Ann Arbor, Michigan</PUBPLACE><DATE>2003</DATE><IDNO TYPE="notis">AEH6189</IDNO><IDNO TYPE="dlps">tenwives</IDNO><IDNO TYPE="imev">1852</IDNO><AVAILABILITY><P>The University of Michigan Library provides access to these materials in furtherance of its educational and research mission. This work has been identified as being in the public domain, free of known restrictions under copyright law, including all related and neighboring rights. You may copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission. If you have questions about the collection, please contact Digital Content and Collections (mec-info@umich.edu). If you have concerns about the inclusion of an item in this collection, please contact Library Information Technology (LibraryIT-info@umich.edu).</P></AVAILABILITY></PUBLICATIONSTMT><SOURCEDESC><BIBLFULL><TITLESTMT><TITLE>A talk of ten wives on their husbands' ware [in] Jyl of Breyntford's testament ... and other short pieces / ed. by Frederick J. Furnivall, p. 29-33.</TITLE></TITLESTMT><EXTENT>5 p. of 44</EXTENT><PUBLICATIONSTMT><PUBLISHER>Printed for Private Circulation by Taylor and Co.</PUBLISHER><PUBPLACE>London</PUBPLACE><DATE>1871</DATE></PUBLICATIONSTMT><NOTESSTMT><NOTE>
+<P>Transcribed from Aberystwyth, National Library of Wales, MS Brogyntyn 2.1 (olim Porkington 10).</P></NOTE></NOTESSTMT></BIBLFULL></SOURCEDESC></FILEDESC>
+<ENCODINGDESC><PROJECTDESC>
+<P>Header created by hand based on text and MARC record on 2003-03-26.</P></PROJECTDESC><EDITORIALDECL N="4">
+<P>Encoding has been done using the recommendations for Level 4 of the TEI in Libraries Guidelines.</P></EDITORIALDECL></ENCODINGDESC>
+<PROFILEDESC>
+<LANGUSAGE>
+<LANGUAGE ID="lat">Latin</LANGUAGE></LANGUSAGE>
+<TEXTCLASS><KEYWORDS>
+
+       <TERM>English prose literature -- Middle English, 1100-1500.</TERM>
+       <TERM>English language -- Middle English, 1100-1500 -- Texts.</TERM>
+       <TERM>Women -- Poetry</TERM>
+     </KEYWORDS></TEXTCLASS></PROFILEDESC></HEADER>
+<EEBO>
+<IDG S="marc" R="UM" ID="CME00000"><STC T="X"></STC><BIBNO T="oclc"></BIBNO><VID></VID></IDG>
+<TEXT><FRONT>
+<DIV1 TYPE="title page"><P>Jyl of Breyntford's Testament … And Other Short Pieces.</P>
+<P>Edited by Frederick J. Furnivall</P>
+<P>Printed for Private Circulation, by Taylor and Co. London  1871 </P>
+</DIV1>
+</FRONT>
+<BODY>
+<DIV1 TYPE="poem"><PB REF="" N="29"/>
+<HEAD>A Talk of Ten Wives on their Husbands' Ware</HEAD><MILESTONE N="56v" UNIT="folio"/>
+<LG TYPE="stanza">
+<L>LEve, lystynes to me</L>
+<L>Two wordys or thre,</L>
+<L>And<NOTE PLACE="marg" N="1" ID="DLPS1">Every final d, g, m, n, has a curl to it, which in some cases umst mean<HI REND="I">e</HI>.</NOTE> herkenes to my songe;</L>
+<L>And I schall tell ȝow a tale,</L>
+<L>Howe .x. wyffys satt at þ<HI REND="sup">e</HI> nale,</L>
+<L>And noman hem a-monge.</L>
+</LG>
+<LG TYPE="stanza">
+<L>"Sen we haue no other<HI REND="I">e</HI> songe</L>
+<L>[Forto singen vs amonge,]</L>
+<L>Talys lett vs tell</L>
+<L>Off owr<HI REND="I">e</HI> hosbondes war<HI REND="I">e</HI>,</L>
+<L>Wych of hem most worthy ar<HI REND="I">e</HI></L>
+<L>To-day to ber<HI REND="I">e</HI> the bell.</L>
+</LG>
+<LG TYPE="stanza">
+<L>And I schall nowe begyn att myne:</L>
+<L>I knowe the mett<NOTE PLACE="marg" N="2" ID="DLPS2">measure, length.</NOTE> well &amp; fyne,</L>
+<L>The lenȝte of a snayle,</L>
+<L>And eu<HI REND="I">er</HI> he warse is from day to day.</L>
+<L>To grete god eu<HI REND="I">er</HI> I pray</L>
+<L>To gyve hym evyle hayle."</L>
+</LG>
+<LG TYPE="stanza">
+<L>¶ The secund wyffe sett her ner<HI REND="I">e</HI>,</L>
+<L>And seyd, "by the rode, I haue a war<HI REND="I">e</HI></L><MILESTONE N="57r" UNIT="folio"/>
+<L>That is two so mene<NOTE PLACE="marg" N="3" ID="DLPS3">middling; 'twice as poor.'</NOTE>:</L><PB REF="" N="30"/>
+<L>I mett<NOTE PLACE="marg" N="1" ID="DLPS4">meted, measured.</NOTE> hym in þ<HI REND="sup">e</HI> morowe tyde,</L>
+<L>When he was in his moste pryde,</L>
+<L>The lenȝte of .iij. bene.</L>
+</LG>
+<LG TYPE="stanza">
+<L>"Howe schuld I be s<HI REND="I">er</HI>ved w<HI REND="I">i</HI>t<HI REND="I">h</HI> <HI REND="I">tha</HI>t?</L>
+<L>I wold gybbe, owr<HI REND="I">e</HI> g<HI REND="I">ra</HI>y catt,</L>
+<L>Wer<HI REND="I">e</HI> cord þer<HI REND="I">e</HI> on!</L>
+<L>By sayne peter owte of rome,</L>
+<L>I se neu<HI REND="I">er</HI> a wars lome</L>
+<L>Stondyng opon mone."</L>
+</LG>
+<LG TYPE="stanza">
+<L>¶ The .iij. wyffe was full woo,</L>
+<L>And seyd <HI REND="I">tha</HI>t "I haue one of thoo</L>
+<L>That noȝte is at nede;</L>
+<L>Owr<HI REND="I">e</HI> syr<HI REND="I">e</HI> breche, when hit is torn,</L>
+<L>Hys pentyll pepythe owte be-forn</L>
+<L>Lyke a warbrede<NOTE PLACE="marg" N="2" ID="DLPS5">? Warbot. 'A worme, <HI REND="I">escarbot</HI>, Palsgrave.' Halliwell. Cp. 'War-beetles. The large maggots which are bred in the backs of cattle. Norfolk.' <HI REND="I">Ib</HI>.</NOTE>;</L>
+</LG>
+<LG TYPE="stanza">
+<L>"Hit growethe all w<HI REND="I">i</HI>t<HI REND="I">h</HI>-in þ<HI REND="sup">e</HI> her<HI REND="I">e</HI>:</L>
+<L>Sychon se I neu<HI REND="I">er</HI> er<HI REND="I">e</HI>,</L>
+<L>Stondyng opon schar<HI REND="I">e</HI><NOTE PLACE="marg" N="3" ID="DLPS6">'The pubes of a man.' Halliwell, quoting this passage. 'The fork of the legs,' from A.S. <HI REND="I">sceare</HI> shears, scissors.</NOTE>.</L><MILESTONE N="57v" UNIT="folio"/>
+<L>Ȝett the schrewe is hodles,</L>
+<L>And of all thynge goodles!</L>
+<L>Ther<HI REND="I">e</HI> cryste gyve hym car<HI REND="I">e</HI>!"</L>
+</LG>
+<LG TYPE="stanza">
+<L>¶ The .iiij. wyffe of the floke</L>
+<L>Seyd, "owr<HI REND="I">e</HI> syr<HI REND="I">e</HI> fydecoke<NOTE PLACE="marg" N="4" ID="DLPS7">For <HI REND="I">fyde</HI>, cp. our <HI REND="I">Fiddle</HI>, <HI REND="I">fiddle-de-dee</HI>, nonsense; <HI REND="I">fiddle-head</HI>, stupid, etc.</NOTE></L>
+<L>ffayn wold I skyfte<NOTE PLACE="marg" N="5" ID="DLPS8">shift, change; A.S. <HI REND="I">sciftan</HI>.</NOTE>:</L>
+<L>He is longe, and he is smalle,</L>
+<L>And ȝett hathe þ<HI REND="sup">e</HI> fydefalle<NOTE PLACE="marg" N="4" ID="DLPS9">For <HI REND="I">fyde</HI>, cp. our <HI REND="I">Fiddle</HI>, <HI REND="I">fiddle-de-dee</HI>, nonsense; <HI REND="I">fiddle-head</HI>, stupid, etc.</NOTE>;</L>
+<L>God gyve hym sory thryfte!</L>
+</LG>
+<LG TYPE="stanza"><PB REF="" N="31"/>
+<L>"The leste fynger<HI REND="I">e</HI> on my honde</L>
+<L>Is mor<HI REND="I">e</HI> <HI REND="I">th</HI>an he, whan he dothe stond<HI REND="I">e</HI>:</L>
+<L>Alasse <HI REND="I">tha</HI>t I am lorn!</L>
+<L>Sory mow<HI REND="I">n</HI>tyng com ther<HI REND="I">e</HI>-on!</L>
+<L>He schold a be a womon</L>
+<L>Had he be eer<HI REND="I">e</HI> born."</L>
+</LG>
+<LG TYPE="stanza">
+<L>¶ The .v. wyffe was full fayn</L>
+<L>When sche hard her felowys playn,</L>
+<L>And vp sche gan stond:</L>
+<L>"Now ȝe speke of a tarse<NOTE PLACE="marg" N="1" ID="DLPS10">'Mentula, virga:' Halliwell, citing this passage.</NOTE>!</L><MILESTONE N="58r" UNIT="folio"/>
+<L>In all þ<HI REND="sup">e</HI> warld is not a warse</L>
+<L><HI REND="I">Th</HI>an hathe my hosbond.</L>
+</LG>
+<LG TYPE="stanza">
+<L>"Owr<HI REND="I">e</HI> syr<HI REND="I">e</HI> bradys<NOTE PLACE="marg" N="2" ID="DLPS11">? sheds his horns; ? <HI REND="I">braid</HI>, to draw a sword out of the scabbard.</NOTE> lyke a der<HI REND="I">e</HI></L>
+<L>He pysses his tarse eu<HI REND="I">er</HI>y ȝer<HI REND="I">e</HI>,</L>
+<L>Ryȝte as dothe a boke:</L>
+<L>When men speke of archery,</L>
+<L>He mon stond faste ther<HI REND="I">e</HI>-by,</L>
+<L>Or ellys hys schote woll troke<NOTE PLACE="marg" N="3" ID="DLPS12">fall short: Halliwell, quoting these lines. ?A.S. <HI REND="I">trucan</HI> fail.</NOTE>."</L>
+</LG>
+<LG TYPE="stanza">
+<L>¶ The .vj. wyffe hyȝte sar<HI REND="I">e</HI>;</L>
+<L>Sche seyd: "my hosbondys war<HI REND="I">e</HI></L>
+<L>Is of good a-syse<NOTE PLACE="marg" N="4" ID="DLPS13">measure, standard of weight, etc.</NOTE>;</L>
+<L>He is whyte as ony mylke,</L>
+<L>He is softe as ony sylke,</L>
+<L>Ȝett sert<HI REND="I">is</HI> he may not ryse.</L>
+</LG>
+<LG TYPE="stanza">
+<L>I lyrke<NOTE PLACE="marg" N="5" ID="DLPS14">jerk. <HI REND="I">Lirt</HI> to toss, West. and Cumb. Dial. P. 368: Halliwell, citing this passage.</NOTE> hym vp w<HI REND="I">i</HI>t<HI REND="I">h</HI> my hond,</L>
+<L>And p<HI REND="I">ra</HI>y hym <HI REND="I">tha</HI>t he woll stond,</L>
+<L>And ȝett he lythe styll.</L><PB REF="" N="32"/>
+<L>When I se <HI REND="I">tha</HI>t all is noȝte,</L>
+<L>I thynke mony a thro<NOTE PLACE="marg" N="1" ID="DLPS15">fierce.</NOTE> thoȝte;</L><MILESTONE N="58v" UNIT="folio"/>
+<L>Bot cryste wote my wyll."</L>
+</LG>
+<LG TYPE="stanza">
+<L>¶ The .vij. wyffe sat on the bynch,</L>
+<L>And sche caste her legge on wrynch,</L>
+<L>And bad fyll the wyne:</L>
+<L>"By seynt Iame of galys,</L>
+<L>In englond ne in walys</L>
+<L>Is not a wars <HI REND="I">th</HI>an myne!</L>
+</LG>
+<LG TYPE="stanza">
+<L>"Whon owr<HI REND="I">e</HI> syr<HI REND="I">e</HI> comys In,</L>
+<L>And lokes aft<HI REND="I">er</HI> <HI REND="I">tha</HI>t sory pyne</L>
+<L><HI REND="I">Tha</HI>t schuld hengge bytwen his legg<HI REND="I">is</HI>,</L>
+<L>He is lyke, by the rode,</L>
+<L>A sory lau<HI REND="I">er</HI>oke<NOTE PLACE="marg" N="2" ID="DLPS16">lark.</NOTE> satt on brode</L>
+<L>Opon two adyll egg<HI REND="I">is</HI>."</L>
+</LG>
+<LG TYPE="stanza">
+<L>¶ The .viij. wyffe was wll I-taȝte,</L>
+<L>And seyd, "seldom am I saȝte,</L>
+<L>And so I well may:</L>
+<L>When the froste fresys,</L>
+<L>Owr<HI REND="I">e</HI> syris tarse lesys,</L>
+<L>And all-way gose a-way.</L>
+</LG>
+<LG TYPE="stanza"><MILESTONE N="59r" UNIT="folio"/>
+<L>When the ȝeke<NOTE PLACE="marg" N="3" ID="DLPS17">A.S. <HI REND="I">geac</HI> a cuckoo.</NOTE> gynnys to synge,</L>
+<L>Then the schrewe begynnys to sprynge,</L>
+<L>Lyke a humbulbe;</L>
+<L>He cowres vp on other<HI REND="I">e</HI> two,—</L>
+<L>I know not the warse of tho,</L>
+<L>I schrew hem all thre!"</L>
+</LG>
+<LG TYPE="stanza">
+<L>¶ The .ix. wyffe sett hem nyȝe,</L>
+<L>And held a mett<NOTE PLACE="marg" N="4" ID="DLPS18">measure.</NOTE> vp on hyȝe</L>
+<L>The lenȝte of a fote:</L><PB REF="" N="33"/>
+<L>"Her<HI REND="I">e</HI> is a pyntell of a fayr<HI REND="I">e</HI> lenȝte,</L>
+<L>But he berys a sory strenȝte,—</L>
+<L>God may do boote<NOTE PLACE="marg" N="1" ID="DLPS19">remedy, help.</NOTE>;—</L>
+</LG>
+<LG TYPE="stanza">
+<L>"I bow hym, I bend hym,</L>
+<L>I stroke hym, I wend<NOTE PLACE="marg" N="2" ID="DLPS20">turn.</NOTE> hym;</L>
+<L>The deuell mot hym sterve!</L>
+<L>Be he hote, be he cold,</L>
+<L>Tho I torn hym two fold,</L>
+<L>Ȝett he may not serve."</L>
+</LG>
+<LG TYPE="stanza">
+<L>¶ The .x. wyffe be-gan her tale,</L><MILESTONE N="59v" UNIT="folio"/>
+<L>And seyd, "I haue on of the smale,</L>
+<L>Was wyndowed a-way.</L>
+<L>Of all noȝtes it is noȝte:</L>
+<L>Sert<HI REND="I">is</HI>, and hit schuld be boȝte,</L>
+<L>He is not worth a nay" Amen.</L>
+</LG>
+</DIV1>
+</BODY></TEXT></EEBO>
+</ETS>

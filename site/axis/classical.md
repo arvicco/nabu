@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these sixteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 21 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 23 August 2026)</span> |
 |---|---|---|---|---|
 | `perseus-greek` | texts | attribution | wired · auto | 1,418 docs / 394,706 passages |
 | `perseus-latin` | texts | attribution | wired · auto | 541 docs / 393,921 passages |
@@ -34,7 +34,7 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
 | `corpus-corporum` | texts | nc | wired · manual | 5,248 docs / 896,770 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 21 August 2026)</span>: `grc` 120,553 · `lat` 58,418 · `eng` 872 · `gmh` 11 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 … and 12 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 23 August 2026)</span>: `grc` 120,553 · `lat` 58,418 · `eng` 872 · `gmh` 11 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 … and 12 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 
