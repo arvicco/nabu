@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="https://www.menota.org/menotaP5.rng" type="xml" ?>
+<!DOCTYPE TEI 
+[
+<!ENTITY % Menota_entities SYSTEM 'https://www.menota.org/menota-entities.txt'>
+%Menota_entities; ]>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:me="http://www.menota.org/ns/1.0">
+   <teiHeader xml:lang="eng">
+      <fileDesc>
+         <titleStmt>
+            <title>Elíss saga ok Rósamundar : Upps DG 4–7 : A digital edition</title>
+            <editor>
+               <name>
+                  <persName>
+                     <forename>Ingvil</forename>
+                     <surname>Brügger Budal</surname>
+                  </persName>
+                  <orgName type="affiliation">Høgskulen på Vestlandet, Bergen</orgName>
+               </name>
+            </editor>
+            <respStmt>
+               <resp>Transcribed the text in XML from the edition by Eugen Kölbing (1881) collating
+                  it with the facsimile edition by Mattias Tveitane (1972)</resp>
+               <name>
+                  <persName>
+                     <forename>Ingvil</forename>
+                     <surname>Brügger Budal</surname>
+                  </persName>
+                  <orgName type="affiliation">NLA University College, Bergen</orgName>
+               </name>
+            </respStmt>
+         </titleStmt>
+         <editionStmt>
+            <edition n="1.1">Version 1.1, <date when="2023-06-07">7 June 2023</date></edition>
+         </editionStmt>
+         <extent n="17548">17548 words</extent>
+         <publicationStmt>
+            <distributor>Medieval Nordic Text Archive</distributor>
+            <idno type="Menota">Ms. 23</idno>
+            <date when="2015-08-25">25 August 2015</date>
+            <availability status="free">
+               <licence target="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</licence>
+               <p>License accepted by the editor Ingvil Brügger Budal in a mail to Odd Einar Haugen.</p>
+            </availability>
+         </publicationStmt>
+         <notesStmt>
+            <note>Til Odd Einar Haugen i høve 60-årsdagen hans 1. mai 2014.</note>
+         </notesStmt>
+         <sourceDesc>
+            <bibl facs="yes">Photographic facsimiles of all leaves (fol. 6r–17v) from the University Library in Uppsala.</bibl>
+            <msDesc>
+               <msIdentifier>
+                  <country key="SE">Sweden</country>
+                  <settlement>Uppsala</settlement>
+                  <repository>Uppsala University Library</repository>
+                  <idno>DG 4–7</idno>
+                  <msName>Elíss saga ok Rósamundar</msName>
+               </msIdentifier>
+               <msContents>
+                  <msItem n="1">
+                     <locus from="6rA:14" to="17vA:5">ff. 6rA–17vA</locus>
+                     <title type="main">Elíss saga ok Rósamundar</title>
+                     <title type="abbreviated">Elis</title>
+                     <textLang mainLang="nor">Norwegian</textLang>
+                  </msItem>
+               </msContents>
+               <physDesc>
+                  <objectDesc form="codex">
+                     <supportDesc>
+                        <support>
+                           <p>
+                              <material>Parchment</material>
+                           </p>
+                        </support>
+                        <extent>2 + 42 leaves</extent>
+                        <foliation>
+                           <p>fols. 1–44v</p>
+                        </foliation>
+                     </supportDesc>
+                  </objectDesc>
+               </physDesc>
+               <history>
+                  <origin>
+                  <p>Written in <origPlace>Norway</origPlace>, probably in the Bergen area, <origDate notBefore="1260" notAfter="1290">c. 1270</origDate>.</p>
+                  <p>DG 4-7 now consists of 42 leaves in seven gatherings, each of originally 8
+                     leaves. Thus, the complete manuscript once had (7 x 8) = 56 leaves. The first
+                     gathering lacks the middle pair and another leaf, which has been cut out. The
+                     second gathering also lacks the middle pair. The third and fourth gatherings
+                     are complete. The fifth gathering lacks the middle pair, and the sixth
+                     gathering lacks the fourth leaf, which has been cut out. The seventh gathering
+                     only has the outer pair of leaves. Remnants of the seventh gathering were found
+                     as the lining of a bishop’s mitra in Skálholt, and are now catalogued as AM
+                     666b 4to in Copenhagen.</p>
+                  <p>At the very beginning of DG 4-7, there are two leaves containing a fragment of
+                     "Óláfs saga Tryggvasonar". In the present state of the manuscript (and in the
+                     facsimile edition by Mattias Tveitane, 1972), they are fols. 1–2.</p>
+                  <p>The main part of the manuscript are fols. 3–44, containing the initial two
+                     thirds of "Pamphilus saga", the concluding 13 lines of a dialogue between
+                     courage and fear, "Elis saga" and finally "Strengleikar". Note that in the
+                     facsimile edition and also in the present digital edition, the leaves have been
+                     numbered consecutively in the order they now have in the manuscript,
+                     irrespective of lost leaves and leaves which have been put in the wrong order
+                     as a result of the later binding of the book.</p>
+                  <p>The information compiled here is based on the introduction in the facsimile
+                     edition by Mattias Tveitane (1972).</p>
+                  </origin>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>This manuscript text has been encoded according to the standard set out in <title>The
+                  Menota handbook</title> (version 2.0), at <ref
+                     target="http://www.menota.org/HB_index.xml">
+                     http://www.menota.org/HB_index.xml</ref> as of <date>2008-05-16</date>.</p>
+            <p>The text has numbered pagebreaks according to Kölbing’s edition (referred to as
+               "Kolbing1881"), and numbered pagebreaks, columnbreaks and linebreaks according to the
+               manuscript.</p>
+         </projectDesc>
+         <editorialDecl>
+            <correction status="high">
+               <p>This text is based on Kölbing’s edition as copied by Gammalnorsk Ordboksverk, and
+                  it has subsequently been checked by the editor of this edition against a facsimile
+                  of the manuscript and corrected in several hundred cases.</p>
+            </correction>
+            <normalization me:level="dipl">
+               <p>This text has been encoded on a diplomatic level.</p>
+            </normalization>
+            <interpretation me:lemmatized="none" me:morphAnalyzed="none">
+               <p>The text has not been lemmatised and morphologically analysed.</p>
+            </interpretation>
+         </editorialDecl>
+      </encodingDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="nor">Norwegian</language>
+         </langUsage>
+      </profileDesc>
+      <revisionDesc>
+         <change>
+            <date>2025-08-08</date>
+            <name>Odd Einar Haugen</name>
+            <orgName type="affiliation">University of Bergen</orgName>: Revised the attributes of the “note” elements for better display</change>
+         <change>
+            <date>2023-06-07</date>
+            <name>Odd Einar Haugen</name>
+            <orgName type="affiliation">University of Bergen</orgName>: (1) Index numbers added (by Paul Meurer) 
+            as a preparation for testing annotation by MLA; (2) Added photographic images of all leaves in medium-high quality;
+            (3) Made the file v. 1.1</change>
+         <change>
+            <date>2017-06-06</date>
+            <name>Odd Einar Haugen</name>
+            <orgName type="affiliation">University of Bergen</orgName>: (1) Replaced all "me:punct"
+            elements with "pc" elements as recommended in v. 3.0 of the Menota handbook; (2)
+            Removed all 395 "pc type="supplied"" for hyphens supplied by the editor with nothing, as
+            recommended in v. 3.0 of the Menota handbook and implemented in the latest version of
+            the stylesheet used in the Corpuscle application, assuming that there are no examples of
+            actual hyphens in the manuscript (cf. the comment to the change dated 2016-01-23 below);
+            (3) Added a "respStmt" describing the work by the editor; (4) Made the file v.
+            1.0.7</change>
+         <change>
+            <date>2016-04-28</date>
+            <name>Odd Einar Haugen</name>
+            <orgName type="affiliation">University of Bergen</orgName>: (1) Corrected some
+            imbalanced "w" elements in order to make the file valid with all chapter divisions; (2)
+            Made the file v. 1.0.6</change>
+         <change>
+            <date>2016-04-27</date>
+            <name>Ingvil Brügger Budal</name>
+            <orgName type="affiliation">NLA University College, Bergen</orgName>: Added chapter
+            division after Kolbing 1881</change>
+         <change>
+            <date>2016-03-29</date>
+            <name>
+               <persName>Odd Einar Haugen</persName>
+               <orgName type="affiliation">University of Bergen</orgName>
+            </name>: (1) Changed the encoding of supplied hyphens from "supplied type="hyphenated""
+            to "pc type="supplied"" (for hyphens supplied by the editors, and lacking in the
+            manuscript); (2) Made the file v. 1.0.5 </change>
+         <change>
+            <date>2016-02-21</date>
+            <name>
+               <persName>Odd Einar Haugen</persName>
+               <orgName type="affiliation">University of Bergen</orgName>
+            </name>: (1) Revised the "availability" element in the header with a CC-BY-SA 4.0
+            licence; (2) Made the file v. 1.0.4 </change>
+         <change>
+            <date>2016-01-23</date>
+            <name>
+               <persName>Odd Einar Haugen</persName>
+               <orgName type="affiliation">University of Bergen</orgName>
+            </name>: (1) Replaced all 395 "me:punct type="supplied"" elements within "w" elements
+            with "supplied type="hyphenated"" elements, so as to avoid having "me:punct" elements
+            within "w" elements; (2) Made the file v. 1.0.3
+            <!-- Check the manuscript for any actual hyphens, to ensure that they are not encoded as "supplied":
+               in Pamphilus saga, there were no actual hyphens, so all had to be supplied -->
+         </change>
+         <change>
+            <date>2016-01-19</date>
+            <name>
+               <persName>Odd Einar Haugen</persName>
+               <orgName type="affiliation">University of Bergen</orgName>
+            </name>: (1) Changed the msName to "Elíss saga ok Rósamundar"; (2) Made the file v.
+            1.0.2 </change>
+         <change>
+            <date>2015-12-10</date>
+            <name>Odd Einar Haugen</name>
+            <orgName type="affiliation">University of Bergen</orgName>: Removed three empty <w/>
+            elements, in order to facilitate import into the Corpuscle system.</change>
+         <change>
+            <date>2015-08-25</date>
+            <name>Odd Einar Haugen</name>
+            <orgName type="affiliation">University of Bergen</orgName>: Changed "pb" encoding to
+            "cb" where applicable, so that the whole text is encoded according to page breaks (from
+            6r to 17v) and column breaks (two on each page, A and B).</change>
+         <change>
+            <date>2015-08-18</date>
+            <name>Ingvil Brügger Budal</name>
+            <orgName type="affiliation">NLA University College, Bergen</orgName>: Did a final
+            control of the text; made the file into version 1.0 so that it could be published in the
+            archive</change>
+         <change>
+            <date>2015-03-03</date>
+            <name>Odd Einar Haugen</name>
+            <orgName type="affiliation">University of Bergen</orgName>: Added a new level of "div"
+            elements so that the file can be divided into chapters according to the edition by
+            Kölbing; made the file into version 0.9.1 </change>
+         <change>
+            <date>2015-02-20</date>
+            <name>Odd Einar Haugen</name>
+            <orgName type="affiliation">University of Bergen</orgName>: Inserted all words into "w"
+            elements, specified by the ed attribute which "pb", "cb" and "lb" elements referred to
+            the manuscript, and checked the file for various inconsistencies; made the file into
+            version 0.9 </change>
+         <change>
+            <date>2015-01-19</date>
+            <name>Ingvil Brügger Budal</name>
+            <orgName type="affiliation">NLA University College, Bergen</orgName>: Corrected the file
+            on the basis of the proofreading by Thomas De Ridder</change>
+         <change>
+            <date>2015-01-05</date>
+            <name>Odd Einar Haugen</name>
+            <orgName type="affiliation">University of Bergen</orgName>: Prepared the text for final
+            markup, and corrected some parts of the header in cooperation with the editor </change>
+         <change>
+            <date>2015-01-05</date>
+            <name>Thomas De Ridder</name>
+            <orgName type="affiliation">University of Bergen</orgName>: Proofread the first version
+            of the text </change>
+         <change>
+            <date>2014-09-19</date>
+            <name>Ingvil Brügger Budal</name>
+            <orgName type="affiliation">NLA University College, Bergen</orgName>: Established the
+            first draft version of the edition </change>
+         <change>
+            <date>2014</date>
+            <name>Florian Grammel</name>
+            <orgName type="affiliation">Copenhagen</orgName>: Converted some entities, added a
+            minimal Menota-header from The Menota handbook 2.0 for validation </change>
+         <change>
+            <date>2014-08-01</date>
+            <name>Ingvil Brügger Budal</name>
+            <orgName type="affiliation">NLA University College, Bergen</orgName>: Worked through the
+            actual text of the manuscript </change>
+         <change>
+            <date>2009</date>
+            <name>Ingvil Brügger Budal</name>
+            <orgName type="affiliation">NLA University College, Bergen</orgName>: Began working on
+            the document structure of the edition (such as pagebreaks, columnbreaks and linebreaks).
+         </change>
+      </revisionDesc>
+   </teiHeader>
+   <text xml:lang="nor">
+      <body>
+         <div type="saga">
+            <div type="chapter">
+               <pb n="1" ed="Kolbing1881"/>
+               <pb ed="ms" n="6r"/>
+               <cb ed="ms" n="A"/>
+               <head>
+                  <supplied>Ch. 1</supplied>
+               </head>
+               <p>
+                  <lb ed="ms" n="14"/>
+                  <w xml:id="w100"><supplied resp="Kolbing1881">H</supplied>Æ<add
+                         place="supralinear">Y</add>RIT</w>
+                  <w xml:id="w200">horskir</w>
+                  <w xml:id="w300">men<ex>n</ex></w>
+                  <pc xml:id="w400">.</pc>
+                  <w xml:id="w500">æína</w>
+                  <w xml:id="w600">fagra</w>
+                  <w xml:id="w700">saugu</w><pc xml:id="w800">.</pc>
+                  <lb ed="ms" n="15"/><w xml:id="w900">dyrlegs</w>
+                  <w xml:id="w1000">drengscaps</w><pc xml:id="w1100">.</pc>
+                  <w xml:id="w1200">um</w>
+                  <w xml:id="w1300">raustan</w>
+                  <w xml:id="w1400">ridde <lb ed="ms" n="16"/>ra scap</w>
+                  <w xml:id="w1500"><ex>oc</ex></w>
+                  <w xml:id="w1600">lofsæla</w>
+                  <w xml:id="w1700">atgerð</w><pc xml:id="w1800">.</pc>
+                  <w xml:id="w1900">æíns</w>
+                  <w xml:id="w2000">uirðu <lb ed="ms" n="17"/>legs</w>
+                  <w xml:id="w2100">hertoga</w><pc xml:id="w2200">.</pc>
+                  <w xml:id="w128700">þa</w>
+                  <w xml:id="w128800">gefi</w>
+                  <w xml:id="w128900"><choice>
+                        <am>ih&bar;c</am>
+                        <ex>ieso</ex>
+                     </choice></w>
+                  <w xml:id="w167000">þessi</w>
+                  <w xml:id="w167100">sonr</w>
+                  <w xml:id="w167200">o<note type="comment">IBB: probably corrected from "i" or "u"</note>ckarr</w>
+                  <w xml:id="w167300">upp</w>
+                  <w xml:id="w167400">hallda</w>
+               </p>
+            </div>
+         </div>
+      </body>
+   </text>
+</TEI>

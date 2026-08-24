@@ -45,6 +45,41 @@ the three structural shapes of the archive (91-document census 2026-08-23):
   up to the token before `<pb ed="ms" n="3r"/>` (pages 2r–2v, 414 `<w>`,
   49 lines), then a synthetic `</p></div></body></text></TEI>` tail.
 
+## texts/ — the P82-r1 quarantine-recovery trims
+
+Five more DOCUMENTED TRIMS cut 2026-08-24 from the 2026-08-23 canonical
+sync (`canonical/menota/texts/`, same session-gated korpuskel downloads —
+`refetchable: false`). These are the five shapes the first live sync
+QUARANTINED (8 of 91 documents); each trim keeps the offending bytes.
+Every trim = DOCTYPE + teiHeader byte-intact, body slices cut at token
+boundaries (splice points and synthetic structural glue documented per
+file in manifest.yml):
+
+- `texts/AM-242-fol.xml` — Codex Wormianus (Snorra Edda), isl, `dipl
+  facs` levels. DOCTYPE INTERNAL SUBSET declaring 17 runic entities
+  (`&urun;` → U+16A2 …) plus the empty `<!ENTITY none "">`, runic
+  `<w type="runic-character">` usage, and entity references that occur
+  ONLY inside editorial comments (`&aum;`/`&aumL;`, transcriber's ä —
+  per the XML spec not references at all).
+- `texts/AM-677-4to.xml` — Gregory homilies etc., isl, three levels.
+  Internal-subset entities BUILT FROM table entities (`&BAR;` =
+  `&#x200A;&bar;`, `&escapacute;` = `&escap;&combacute;`, `&THlig;` =
+  `&#x2E24;TH&#x2E25;`, `&gnlig;`/`&nglig;` → U+A77F) — the recursive-
+  resolution regression.
+- `texts/AM-132-fol-Laxdaela-saga.xml` — Laxdæla saga (Möðruvallabók
+  copy), isl, three levels. The SINGLE-QUOTED internal-subset
+  declaration `<!ENTITY aacutenscapbllig '&#xF542;'>` (MUFI PUA).
+- `texts/DG-4at7-Elis.xml` — Elíss saga ok Rósamundar, nor. The
+  SINGLE-LEVEL shape: bare text straight in `<w>`/`<pc>` (no
+  me:facs/dipl/norm anywhere), level claimed by the header's own
+  `<normalization me:level="dipl">`; editorial `<note>` INSIDE a word
+  (`o<note>…</note>ckarr`), abbreviation `<choice><am>ih&bar;c</am>
+  <ex>ieso</ex></choice>`, `<supplied>`/`<add>` in-word.
+- `texts/DG-4at7-Pamph.xml` — Pamphilus saga, nor, single-level dipl
+  like Elis; `<choice><sic>gera</sic><corr resp="HP">gefa</corr>
+  </choice>` emendations, mid-word `gaf<lb/>lak` with XML layout
+  whitespace, `<seg type="nb">` groups, `<unclear>` readings.
+
 Catalogue census pinned by the tests (2026-08-23): 91 documents, license
 column `CC-BY-SA 4.0` on ALL 91; per-file `<availability status="free">
 <licence target="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA

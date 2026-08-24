@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="https://www.menota.org/menotaP5.rng" type="xml" ?>
+<!DOCTYPE TEI 
+[
+<!ENTITY % Menota_entities SYSTEM 'https://www.menota.org/menota-entities.txt'>
+%Menota_entities; 
+
+<!-- Local entities used for runic characters, but not defined in the Menota Entities. -->
+<!-- The runic entities may be changed to "uMedrun", "oMedrun" etc.  since they are all Medieval runes. -->
+<!-- The need for an entity like "none" (occurring only once) will be discussed in ch. 6 of the Menota handbook. -->
+
+<!ENTITY none "">     
+
+<!ENTITY urun "&#x16A2;">        
+<!ENTITY orun "&#x16AE;">        
+<!ENTITY irun "&#x16C1;">        
+<!ENTITY arun "&#x16C6;">        
+<!ENTITY rrun "&#x16B1;">        
+<!ENTITY nrun "&#x16BF;">        
+<!ENTITY lrun "&#x16DA;">        
+<!ENTITY thrun "&#x16A6;">        
+<!ENTITY krun "&#x16B4;">        
+<!ENTITY trun "&#x16D0;">        
+<!ENTITY brun "&#x16D2;">        
+<!ENTITY srun "&#x16CD;">        
+<!ENTITY prun "&#x16D5;">        
+<!ENTITY erun "&#x16C2;">        
+<!ENTITY grun "&#x16B5;">        
+<!ENTITY hrun "&#x16BC;">   
+<!ENTITY yrrun "&#x16E6;">   
+
+]>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:me="http://www.menota.org/ns/1.0">
+    <teiHeader xml:lang="eng">
+        <fileDesc>
+            <titleStmt>
+                <title>Snorra-Edda, the four grammatical treatises, Rígsþula, Maríukvæði, and ókennd heiti : AM 242 fol (Codex Wormianus) : A digital edition</title>
+                <editor>
+                    <name>
+                        <persName>
+                            <forename>Karl</forename>
+                            <forename>Gunnar</forename>
+                            <surname>Johansson</surname>
+                        </persName>
+                        <orgName type="affiliation">University of Oslo</orgName>
+                    </name>
+                </editor>
+            </titleStmt>
+            <editionStmt>
+            <edition n="0.9.9">Version 0.9.9, <date when="2016-04-01">1 April 2016</date>.
+                </edition>
+            </editionStmt>
+            <extent n="62586">62586 words</extent>
+            <publicationStmt>
+                <distributor>Medieval Nordic Text Archive</distributor>
+                <idno type="Menota">Ms. 2</idno>
+                <date when="2006-12-19">19 December 2006</date>
+                <availability status="free">
+                    <licence target="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</licence>
+                    <p>Licence accepted by Karl G. Johansson in a mail to Odd Einar Haugen 2 November 2015.</p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <country key="DK">Denmark</country>
+                        <settlement>Copenhagen</settlement>
+                        <repository>The Arnamagnæan Institute</repository>
+                        <idno>AM 242 fol</idno>
+                        <msName type="nickname" xml:lang="lat">Codex Wormianus</msName>
+                    </msIdentifier>
+                    <msContents>
+                        <msItem n="1">
+                            <locus from="1v" to="35v">pp. 2–82 (including paper leaves)</locus>
+                            <title>Edda Snorra Sturlusonar</title>
+                            <title type="abbreviated">SnE</title>
+                            <textLang mainLang="isl">Icelandic</textLang>
+                            <msItem n="1.1">
+                                <locus from="1v" to="4v">pp. 2–8</locus>
+                                <title>Prologus</title>
+                            </msItem>
+                            <msItem n="1.2">
+                                <locus from="4v" to="20r">pp. 8–44</locus>
+                                <title>Gylfaginning</title>
+                            </msItem>
+                            <msItem n="1.3">
+                                <locus from="20v" to="35v">pp. 44–82</locus>
+                                <title>Skáldskaparmál</title>
+                            </msItem>
+                        </msItem>
+                        <msItem n="2">
+                            <locus from="36r" to="54r">pp. 83–119</locus>
+                            <title>The four grammatical treatises</title>
+                            <title type="abbreviated">Gramm</title>
+                            <textLang mainLang="isl">Icelandic</textLang>
+                            <msItem n="2.1">
+                                <locus from="36r" to="36r">p. 83</locus>
+                                <title>Prologus</title>
+                                <title type="abbreviated">GrammProl</title>
+                            </msItem>
+                            <msItem n="2.2">
+                                <locus from="36v" to="39v">pp. 84–90</locus>
+                                <title>First grammatical treatise</title>
+                                <title type="abbreviated">Gramm1</title>
+                            </msItem>
+                            <msItem n="2.3">
+                                <locus from="40r" to="41v">pp. 91–93</locus>
+                                <title>Second grammatical treatise</title>
+                                <title type="abbreviated">Gramm2</title>
+                            </msItem>
+                            <msItem n="2.4">
+                                <locus from="41v" to="50r">pp. 94–111</locus>
+                                <title>Third grammatical treatise</title>
+                                <title type="abbreviated">Gramm3</title>
+                            </msItem>
+                            <msItem n="2.5">
+                                <locus from="50r" to="54r">pp. 111–119</locus>
+                                <title>Fourth grammatical treatise</title>
+                                <title type="abbreviated">Gramm4</title>
+                            </msItem>
+                        </msItem>
+                        <msItem n="3">
+                            <locus from="54v" to="54v">p. 120</locus>
+                            <title>Maríukvæði</title>
+                            <textLang mainLang="isl">Icelandic</textLang>
+                        </msItem>
+                        <msItem n="1.4" defective="true">
+                            <locus from="55r" to="60v">pp. 121–154 (including paper leaves)</locus>
+                            <title>Háttatal</title>
+                            <title type="abbreviated">SnE</title>
+                            <textLang mainLang="isl">Icelandic</textLang>
+                        </msItem>
+                        <msItem n="4" defective="true">
+                            <locus from="61r" to="61v">pp. 155–156</locus>
+                            <title>Rígsþula</title>
+                            <title type="abbreviated">Edda</title>
+                            <textLang mainLang="isl">Icelandic</textLang>
+                        </msItem>
+                        <msItem n="5" defective="true">
+                            <locus from="62r" to="63r">pp. 167–169</locus>
+                            <title>Ókennd heiti (Orms-eddu-brot)</title>
+                            <textLang mainLang="isl">Icelandic</textLang>
+                        </msItem>
+                        <msItem n="6">
+                            <locus from="63v" to="63v">p. 170</locus>
+                            <title>Maríukvæði</title>
+                            <textLang mainLang="isl">Icelandic</textLang>
+                        </msItem>
+                    </msContents>
+                    <physDesc>
+                        <objectDesc form="codex">
+                            <supportDesc>
+                                <support>
+                                    <p><material>Parchment</material>, but with some <material>paper</material> leaves 
+                                        added in the 17th century for the purpose of completing the text (pp. 61-72, 121-138, 151-154, 157-166).</p>
+                                </support>
+                                <extent>85 leaves, including the younger paper leaves; 280 mm (height) by 202 mm (width).</extent>
+                                
+                                <foliation>
+                                    <p>The manuscript, including the younger paper leaves, is paginated on the recto pages, 1-169.</p>
+                                </foliation>
+                            </supportDesc>
+                        </objectDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <p>Written in <origPlace>Iceland</origPlace> in <origDate>c. 1350</origDate>.</p> <!-- OEH 2020-11-06: Date according to ONP -->
+                        </origin>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <projectDesc>
+                <p>This manuscript text has been encoded according to the standard set out in <title>The
+                    Menota handbook</title> (version 2.0), at <ref
+                        target="http://www.menota.org/HB_index.xml">
+                        http://www.menota.org/HB_index.xml</ref> as of <date>2008-05-16</date>.</p>
+            </projectDesc>
+            <editorialDecl>
+                <correction status="high">
+                    <p>This text has been proofread by <persName>Karl G. Johansson</persName>, <orgName type="affiliation">University of Oslo</orgName>.</p>
+                </correction>
+                <normalization method="silent" me:level="dipl facs"><p>This text has been encoded on a facsimile and diplomatic level.</p></normalization>
+                <interpretation me:lemmatized="none" me:morphAnalyzed="none">
+                    <p>This text has not been lemmatised or morphologically analysed.</p>
+                </interpretation>
+            </editorialDecl>
+        </encodingDesc>
+        <profileDesc>
+            <langUsage>
+                <language ident="isl">Icelandic</language>
+            </langUsage>
+            <handNotes>
+                <handNote xml:id="h1"/>
+                <handNote xml:id="h2"/>
+            </handNotes>
+        </profileDesc>
+        <revisionDesc>
+            <change>
+                <date>2016-04-01</date>
+                <name>
+                    <persName>Odd Einar Haugen</persName>
+                    <orgName type="affiliation">University of Bergen</orgName>
+                </name>: (1) Revised the numbering of lines in the manuscript so that they run from 1 upwards,
+                not 2:1, etc.; (2) Made the file v. 0.9.9
+            </change>
+            <change>
+                <date>2016-02-21</date>
+                <name>
+                    <persName>Odd Einar Haugen</persName>
+                    <orgName type="affiliation">University of Bergen</orgName>
+                </name>: (1) Revised the "availability" element in the header with a CC-BY-SA 4.0 licence;
+                (2) Made the file v. 0.9.8
+            </change>
+            <change>
+                <date>2016-01-23</date>
+                <name>
+                    <persName>Odd Einar Haugen</persName>
+                    <orgName type="affiliation">University of Bergen</orgName>
+                </name>: (1) Removed 18 "me:punct" elements inside "w" elements, 
+                in most cases moving them to a position immediately after the "w" element; 
+                (2) Made the file v. 0.9.7
+            </change>
+            <change>
+                <date>2016-01-12</date>
+                <name>
+                    <persName>Odd Einar Haugen</persName>
+                    <orgName type="affiliation">University of Bergen</orgName>
+                </name>: (1) Added the attribute ed="ms" to all "pb" and "lb" elements;
+                (2) Replaced all "expan" elements with "ex"; (3) Made the file v. 0.9.6
+            </change>
+            <change>
+                <date>2016-01-07</date>
+                <persName>Odd Einar Haugen</persName>, <orgName type="affiliation">University of Bergen</orgName>:
+                (1) Replaced a large number of character entities in the official part of the Unicode Standard with the intended characters,
+                e.g. replacing "slong" with "ſ" (U+017f), thus making the text easier to read and process; character entities in the Private
+                Use Area and any combining characters have not been replaced, however;
+                (2) Replaced the "abbr" element with "am", and the "expan" element with "ex";              
+                (3) When validated against the Relax NG scheme TEI P5, the file had 1027 errors; the majority of these errors concern 
+                the encoding of single characters in the grammatical treatises; they have now been encoded with the "w" element
+                having the type attribute "character" or "runic-character"; 
+                (4) The file has now been versioned as 0.9.5
+            </change>
+        	<change>
+        	     <date>2008-10-15</date>
+                 <persName>Tone Merete Bruvik</persName>, <orgName type="affiliation">Aksis</orgName>: Changed the schema 
+        	    into the Relax NG version, updated the content accordingly. THIS IS NOT COMPLETED; WAITING ON RESPONS FROM KALLE.
+        	</change>
+            <change>
+                <date>2006-12-18</date>
+                <persName>Karl G. Johansson</persName>, <orgName type="affiliation">University of Oslo</orgName>, and <persName>Tone Merete Bruvik</persName>, <orgName type="affiliation">Aksis</orgName>: Validated the file, added a TEI P5 compatible header and published the first version on the web.
+            </change>
+            
+            <change>
+                <date>2006-04-18</date>
+                <persName>Tone Merete Bruvik</persName>, <orgName type="affiliation">Aksis</orgName>: Changed the attribute used in textLang-element from xml:lang into mainLang.
+            </change>
+            <change>
+                <date>2006-03-30</date>
+                <persName>Tone Merete Bruvik</persName>, <orgName type="affiliation">Aksis</orgName>: Revised the transcription in accordance with v. 2.0 beta 
+                of the Menota handbook and the corresponding Document Type Definition.
+            </change>
+            <change>
+                <date>2004-05-10</date>
+                <persName>Karl G. Johansson</persName>, <orgName type="affiliation">University of Oslo</orgName>
+                Revised the transcription in accordance with v. 1.1 of the Menota handbook and the corresponding Document Type Definition.
+            </change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:lang="isl">   
+    <body>
+<div><head>CODEX WORMIANUS, AM 242 FOL.</head>
+<pb ed="ms" n="1"/>
+    
+<note type="explanatory">The first page in this manuscript is blank. The text of Snorra Edda begins on p. 2.</note>
+    
+<pb ed="ms" n="2"/>
+<head>SNORRA EDDA</head>
+<div type="chapter"><head>PROLOGUS</head><p>
+<lb ed="ms" n="1"/>
+<w><me:facs><hi rend="orncp">A</hi>l.mattigr</me:facs><me:dipl>A l.mattigr</me:dipl></w>
+    <note>The illuminated initial is placed in left into text area with the extent 43x40 mm in text area</note>
+    <name>
+<w><me:facs>guð</me:facs><me:dipl>guð</me:dipl></w>
+</name>
+<w><me:facs>ſkapaði</me:facs><me:dipl>ſkapaði</me:dipl></w>
+<w><me:facs>i</me:facs><me:dipl>i</me:dipl></w>
+<w><me:facs>ſkiní</me:facs><me:dipl>ſkiní</me:dipl></w>
+<w><me:facs>ſolar</me:facs><me:dipl>ſolar</me:dipl></w>
+<w><me:facs><am>&et;</am></me:facs><me:dipl><ex>ok</ex></me:dipl></w>
+<w><me:facs>þ<am>&rsup;</am></me:facs><me:dipl>þ<ex>ar</ex></me:dipl></w>
+<lb ed="ms" n="31"/>
+<w><me:facs>m<am>&sem;</am></me:facs><me:dipl>m<ex>eð</ex></me:dipl></w>
+<w><me:facs>avextí</me:facs><me:dipl>avextí</me:dipl></w>
+<w><me:facs>iarðar</me:facs><me:dipl>iarðar</me:dipl></w>
+<!--Kontrollera l&aumL;sning-->
+<w><me:facs><am>&et;</am></me:facs><me:dipl><ex>ok</ex></me:dipl></w>
+<w><me:facs>a</me:facs><me:dipl>a</me:dipl></w>
+<w><me:facs>h<am>&bar;</am></me:facs><me:dipl>h<ex>ann</ex></me:dipl></w>
+<w><me:facs>þ<am>&bar;</am></me:facs><me:dipl>þ<ex>at</ex></me:dipl></w>
+<w><me:facs>ſama</me:facs><me:dipl>ſama</me:dipl></w>
+<w><me:facs>boꝛð</me:facs><me:dipl>boꝛð</me:dipl></w>
+<w><me:facs>hallꝺít</me:facs><me:dipl>hallꝺít</me:dipl></w>
+<w><me:facs>se<am>&bar;</am></me:facs><me:dipl>se<ex>m</ex></me:dipl></w>
+<w><me:facs>eính<am>&er;</am>iar</me:facs><me:dipl>eính<ex>er</ex>iar</me:dipl></w>
+<!--De två sista orden &aum;r sv"rl"sta<me:punct><me:facs>.</me:facs><me:dipl>.</me:dipl></me:punct> Kolla-->
+<me:punct><me:facs>.</me:facs><me:dipl>.</me:dipl></me:punct>
+<name>
+<w><me:facs>h<am>.</am></me:facs><me:dipl>h<ex>ar</ex></me:dipl></w>
+</name>
+<w><me:facs>ſ<am>.</am></me:facs><me:dipl>ſ<ex>agði</ex></me:dipl></w>
+</p></div>
+<p>
+<w><me:facs>Stoꝛð</me:facs><me:dipl>Stoꝛð</me:dipl></w>
+<w><me:facs>ſem</me:facs><me:dipl>ſem</me:dipl></w>
+<name>
+<w><me:facs>ſteina&rscapdot;</me:facs><me:dipl>ſteina&rscapdot;</me:dipl></w>
+</name>
+    <w><me:facs>q<am>&none;</am></me:facs><me:dipl>q<ex>vað</ex></me:dipl></w>
+</p>
+<p>
+<w><me:facs>.v.</me:facs><me:dipl>.v.</me:dipl></w>
+<w><me:facs>hlioðſ ſtaꝼ<am>&er;</am></me:facs><me:dipl>hlioðſ ſtaꝼ<ex>er</ex></me:dipl></w>
+<w><me:facs>ſua</me:facs><me:dipl>ſua</me:dipl></w><me:punct><me:facs>.</me:facs><me:dipl>.</me:dipl></me:punct>
+<w><me:facs>ur</me:facs><me:dipl>ur</me:dipl></w>
+<me:punct><me:facs>.</me:facs><me:dipl>.</me:dipl></me:punct>
+<w type="runic-character"><me:facs>&urun;</me:facs><me:dipl>&urun;</me:dipl></w>
+<w><me:facs>oſſ</me:facs><me:dipl>oſſ</me:dipl></w>
+<me:punct><me:facs>.</me:facs><me:dipl>.</me:dipl></me:punct>
+<w type="runic-character"><me:facs>&orun;</me:facs><me:dipl>&orun;</me:dipl></w>
+<lb ed="ms" n="10"/>
+<w><me:facs>i&sscapdot;</me:facs><me:dipl>i&sscapdot;</me:dipl></w>
+<w type="runic-character"><me:facs>&irun;</me:facs><me:dipl>&irun;</me:dipl></w>
+<me:punct><me:facs>.</me:facs><me:dipl>.</me:dipl></me:punct>
+<w><me:facs>Ar</me:facs><me:dipl>Ar</me:dipl></w>
+<w type="runic-character"><me:facs>&arun;</me:facs><me:dipl>&arun;</me:dipl></w>
+<w><me:facs><am>&et;</am></me:facs><me:dipl><ex>ok</ex></me:dipl></w>
+<w><me:facs>er</me:facs><me:dipl>er</me:dipl></w>
+</p>
+</div>
+</body>
+</text></TEI>
