@@ -42,6 +42,78 @@ files:
       <pb ed="ms" n="3r"/> (pages 2r-2v, 414 <w>, 49 lines), then a
       synthetic </p></div></body></text></TEI> tail; 3,755,022 B ->
       133,382 B.
+  - path: texts/AM-242-fol.xml
+    refetchable: false
+    provenance: korpuskel-api
+    whole: false
+    reason: >-
+      The data field of rest?command=download-document&corpus=menota&
+      document-id=AM-242-fol (via the 2026-08-23 canonical sync);
+      session-gated as above.
+    trim: >-
+      P82-r1 (2026-08-24): DOCTYPE (runic internal subset) + teiHeader +
+      body opening byte-intact (canonical lines 1-288), then token-boundary
+      splices of canonical lines 11455-11466 (the &aumL; comment),
+      15225-15236 (the &aum; comment), synthetic </p></div>, lines
+      41911-41918 (the <!ENTITY none ""> usage, a whole <p>), synthetic
+      <p>, lines 54655-54671 (runic <w type="runic-character"> tokens),
+      synthetic tail; 4,666,466 B -> 18,597 B.
+  - path: texts/AM-677-4to.xml
+    refetchable: false
+    provenance: korpuskel-api
+    whole: false
+    reason: >-
+      The data field of rest?command=download-document&corpus=menota&
+      document-id=AM-677-4to (via the 2026-08-23 canonical sync);
+      session-gated as above.
+    trim: >-
+      P82-r1 (2026-08-24): DOCTYPE (internal subset with table-referencing
+      local entities) + teiHeader + body opening byte-intact (canonical
+      lines 1-293), then whole-<w> splices of canonical lines 1211-1216
+      (&BAR;), 33644-33649 (&nglig;), 34591-34596 (&gnlig;),
+      180658-180663 (&THlig;/&escap;), 250905-250910 (&escapacute;),
+      synthetic tail; 10,802,430 B -> 14,340 B.
+  - path: texts/AM-132-fol-Laxdaela-saga.xml
+    refetchable: false
+    provenance: korpuskel-api
+    whole: false
+    reason: >-
+      The data field of rest?command=download-document&corpus=menota&
+      document-id=AM-132-fol-Laxdaela-saga (via the 2026-08-23 canonical
+      sync); session-gated as above.
+    trim: >-
+      P82-r1 (2026-08-24): DOCTYPE (single-quoted local declaration) +
+      teiHeader + body opening byte-intact (canonical lines 1-206), then a
+      whole-<w> splice of canonical lines 270716-270728 (the
+      &aacutenscapbllig; token), synthetic tail; 13,162,397 B -> 7,254 B.
+  - path: texts/DG-4at7-Elis.xml
+    refetchable: false
+    provenance: korpuskel-api
+    whole: false
+    reason: >-
+      The data field of rest?command=download-document&corpus=menota&
+      document-id=DG-4at7-Elis (via the 2026-08-23 canonical sync);
+      session-gated as above.
+    trim: >-
+      P82-r1 (2026-08-24): teiHeader + body opening byte-intact (canonical
+      lines 1-304; the single-level bare-token shape), then whole-<w>
+      splices of canonical lines 1378-1383 (the <choice><am>/<ex>
+      abbreviation) and 1704-1708 (the in-word <note>), synthetic tail;
+      1,032,446 B -> 17,117 B.
+  - path: texts/DG-4at7-Pamph.xml
+    refetchable: false
+    provenance: korpuskel-api
+    whole: false
+    reason: >-
+      The data field of rest?command=download-document&corpus=menota&
+      document-id=DG-4at7-Pamph (via the 2026-08-23 canonical sync);
+      session-gated as above.
+    trim: >-
+      P82-r1 (2026-08-24): teiHeader + body byte-intact through the
+      <sic>/<corr> choice sentence (canonical lines 1-442, incl. the
+      gaf<lb/>lak layout-whitespace token), then a splice of canonical
+      lines 588-598 (<seg type="nb"> groups + <unclear>), synthetic tail;
+      306,700 B -> 22,727 B.
   - path: menota-entities.txt
     url: https://www.menota.org/menota-entities.txt
     whole: true

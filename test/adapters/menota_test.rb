@@ -37,6 +37,15 @@ class MenotaTest < Minitest::Test
   BONBOK  = "urn:nabu:menota:holm-a-80"          # swe, facs-only trim, 48 lines
   STJORN  = "urn:nabu:menota:nra-norrfragm-60-a" # isl, 3 levels, xml:id tokens, 21 lines
 
+  # The P82-r1 quarantine-recovery trims (all really-quarantined shapes):
+  LAXDAELA = "urn:nabu:menota:am-132-fol-laxdaela-saga" # single-quoted local entity decl
+  WORMIANUS = "urn:nabu:menota:am-242-fol"              # runic local entities + comment refs
+  HOMILIES = "urn:nabu:menota:am-677-4to"               # local decls referencing table entities
+  ELIS = "urn:nabu:menota:dg-4at7-elis"                 # single-level bare tokens, note-in-w
+  PAMPH = "urn:nabu:menota:dg-4at7-pamph"               # single-level bare tokens, sic/corr
+
+  ALL_URNS = [KONUNGS, LAXDAELA, WORMIANUS, HOMILIES, ELIS, PAMPH, BONBOK, STJORN].sort.freeze
+
   def conformance_adapter = Nabu::Adapters::Menota.new
 
   def conformance_workdir = Nabu::TestSupport.fixtures("menota")
@@ -51,7 +60,7 @@ class MenotaTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_text_file_sorted_by_urn
     refs = adapter.discover(workdir).to_a
-    assert_equal [KONUNGS, BONBOK, STJORN], refs.map(&:id),
+    assert_equal ALL_URNS, refs.map(&:id),
                  "one document per texts/<documentId>.xml, urn downcased, sorted"
     assert(refs.all? { |ref| ref.source_id == "menota" })
     assert(refs.all? { |ref| ref.id == adapter.parse(ref).urn },
@@ -59,7 +68,7 @@ class MenotaTest < Minitest::Test
   end
 
   def test_discover_never_yields_the_entity_table_or_catalogue_envelopes
-    assert_equal 3, adapter.discover(workdir).map(&:id).size,
+    assert_equal 8, adapter.discover(workdir).map(&:id).size,
                  "menota-entities.txt and catalogue/*.json are not documents"
   end
 
@@ -189,6 +198,160 @@ class MenotaTest < Minitest::Test
                  "silently inherit BY-SA — the honest conservative class"
   end
 
+  # -- the P82-r1 quarantine recovery -----------------------------------------
+  #
+  # The 2026-08-24 census of the 8 live-sync quarantines found NO unknown
+  # entity in actual content anywhere in the 91-document corpus: every
+  # "unknown" was either (a) an entity reference inside an XML comment —
+  # which the XML spec says is not a reference at all — or (b) declared by
+  # the file's own DOCTYPE internal subset, which the parser stripped
+  # unread. Plus two documents encoded on a SINGLE level (bare text in
+  # <w>, no me:facs/dipl/norm children) the token walker never read.
+
+  def test_entity_references_inside_comments_are_not_references
+    # AM 242 fol carries &aum;/&aumL; (transcriber's ä) ONLY inside
+    # editorial comments; before P82-r1 they quarantined the document.
+    document = adapter.parse(ref_for(WORMIANUS))
+    assert_equal "isl", document.language
+    assert_equal 3, document.count
+    document.each do |passage|
+      refute_match(/Kontrollera|Kolla|aum/, passage.text,
+                   "comment content must never leak into passages")
+    end
+  end
+
+  def test_internal_subset_local_entities_resolve
+    # AM 242 fol declares 17 runic entities + an empty <!ENTITY none "">
+    # in its DOCTYPE internal subset (upstream's own data, not ours).
+    document = adapter.parse(ref_for(WORMIANUS))
+    tokens = document.flat_map { |passage| passage.annotations["tokens"] }
+    rune = tokens.find { |t| t["dipl"] == "ᚢ" }
+    refute_nil rune, "&urun; resolves to RUNIC LETTER URUZ UR U per the file's own declaration"
+    assert_equal "ᚢ", rune["facs"]
+    qvad = tokens.find { |t| t["dipl"] == "qvað" }
+    refute_nil qvad
+    assert_equal "q", qvad["facs"], "<am>&none;</am> — the empty local entity — contributes nothing"
+  end
+
+  def test_local_declarations_may_reference_table_entities
+    # AM 677 4to builds its local entities out of table entities:
+    # &BAR; = &#x200A;&bar;, &escapacute; = &escap;&combacute;,
+    # &THlig; = &#x2E24;TH&#x2E25; — nested references resolve recursively.
+    document = adapter.parse(ref_for(HOMILIES))
+    assert_equal "isl", document.language
+    assert_equal 2, document.count
+    tokens = document.flat_map { |passage| passage.annotations["tokens"] }
+    konunglig = tokens.find { |t| t["dipl"] == "kononglig" }
+    refute_nil konunglig
+    assert_includes konunglig["facs"], " \u0305",
+                    "&BAR; = hair space + combining overline (the house whitespace " \
+                    "squeeze folds U+200A to a plain space)"
+    assert_includes tokens.map { |t| t["dipl"] }, "Tʜᴇs", "&hscap;&escap; from the table"
+    beor = tokens.find { |t| t["dipl"] == "Bᴇ́or" }
+    refute_nil beor, "&escapacute; = &escap;&combacute; resolved through the table"
+    thlig = tokens.find { |t| t["facs"]&.include?("⸤TH⸥") }
+    refute_nil thlig, "&THlig; per the file's own declaration"
+  end
+
+  def test_single_quoted_local_declarations_parse
+    # AM 132 fol (Laxdæla): <!ENTITY aacutenscapbllig '&#xF542;'> — the
+    # internal subset uses single quotes, equally legal XML.
+    document = adapter.parse(ref_for(LAXDAELA))
+    assert_equal "isl", document.language, "no textLang — langUsage ident serves"
+    assert_equal 1, document.count
+    assert_equal "#{LAXDAELA}:156rb.11", document.first.urn
+    tokens = document.first.annotations["tokens"]
+    an = tokens.find { |t| t["facs"] == "" }
+    refute_nil an, "&aacutenscapbllig; -> U+F542 (MUFI PUA) per the file's own declaration"
+    assert_equal "áɴ", an["dipl"]
+  end
+
+  def test_a_single_level_document_stores_bare_tokens_at_the_declared_level
+    # DG 4-7 Elis: no me:facs/dipl/norm anywhere — the reading is bare
+    # text in <w>/<pc>, and the header claims the level itself:
+    # <normalization me:level="dipl">.
+    document = adapter.parse(ref_for(ELIS))
+    assert_equal "nor", document.language
+    assert_equal 4, document.count, "manuscript lines 6rA.14-17"
+    assert_equal "#{ELIS}:6rA.14", document.first.urn
+    assert_equal "HÆYRIT horskir menn . æína fagra saugu .", document.first.text,
+                 "supplied/add/ex text rides the word; <pc> is a token"
+    token = document.first.annotations["tokens"].first
+    assert_equal "w100", token["id"]
+    assert_equal "dipl", token["text_level"], "the header's own me:level claim"
+    assert_equal "HÆYRIT", token["dipl"]
+    assert_equal({ "facs" => 0, "dipl" => 30, "norm" => 0 }, document.metadata["levels"])
+  end
+
+  def test_editorial_notes_inside_bare_words_ride_annotations_not_text
+    document = adapter.parse(ref_for(ELIS))
+    tokens = document.flat_map { |passage| passage.annotations["tokens"] }
+    ockarr = tokens.find { |t| t["id"] == "w167200" }
+    refute_nil ockarr
+    assert_equal "ockarr", ockarr["dipl"], "the <note> splits the word in the source bytes"
+    assert_equal %(IBB: probably corrected from "i" or "u"), ockarr["note"]
+    document.each { |p| refute_match(/probably corrected/, p.text) }
+  end
+
+  def test_abbreviation_choices_in_bare_words_read_the_expansion
+    # <choice><am>ih&bar;c</am><ex>ieso</ex></choice>: dipl shows the
+    # expansion; the abbreviation mark rides the token record.
+    tokens = adapter.parse(ref_for(ELIS)).flat_map { |p| p.annotations["tokens"] }
+    ieso = tokens.find { |t| t["id"] == "w128900" }
+    refute_nil ieso
+    assert_equal "ieso", ieso["dipl"]
+    assert_equal "ih̅c", ieso["am"]
+  end
+
+  def test_sic_corr_choices_in_bare_words_read_the_manuscript
+    # DG 4-7 Pamphilus: <choice><sic>gera</sic><corr resp="HP">gefa</corr>
+    # </choice> — the manuscript reading is the diplomatic text, the
+    # editor's emendation rides the record.
+    document = adapter.parse(ref_for(PAMPH))
+    assert_equal "nor", document.language
+    assert_equal 8, document.count
+    tokens = document.flat_map { |passage| passage.annotations["tokens"] }
+    gera = tokens.find { |t| t["id"] == "w00043" }
+    refute_nil gera
+    assert_equal "gera", gera["dipl"]
+    assert_equal "gefa", gera["corr"]
+    document.each { |p| refute_match(/gefa/, p.text) }
+  end
+
+  def test_milestone_adjacent_whitespace_inside_bare_words_is_layout
+    document = adapter.parse(ref_for(PAMPH))
+    assert_equal "#{PAMPH}:3ra.1", document.first.urn
+    assert_equal "EC EM SÆRÐR . oc ber ec gaflak", document.first.text,
+                 "gaf<lb/>lak: XML indentation around a mid-word milestone is not reading text"
+    tokens = document.flat_map { |passage| passage.annotations["tokens"] }
+    assert_includes tokens.map { |t| t["dipl"] }, "hæilsu hialp",
+                    "a REAL internal space in a bare token is preserved"
+    assert_includes tokens.map { |t| t["dipl"] }, "bæiskari", "<unclear> readings ride the word"
+    assert_equal "#{PAMPH}:3ra.19", document.to_a.last.urn
+  end
+
+  def test_a_bare_token_document_without_a_declared_level_quarantines
+    Dir.mktmpdir("menota-no-level") do |dir|
+      texts = File.join(dir, "texts")
+      FileUtils.mkdir_p(texts)
+      FileUtils.cp(File.join(workdir, "menota-entities.txt"), dir)
+      body = File.read(File.join(workdir, "texts", "DG-4at7-Pamph.xml"))
+                 .sub(%r{<normalization me:level="dipl">.*?</normalization>}m, "")
+      File.write(File.join(texts, "DG-4at7-Pamph.xml"), body)
+      error = assert_raises(Nabu::ParseError) { adapter.parse(adapter.discover(dir).first) }
+      assert_match(/me:level/, error.message,
+                   "a level we cannot attribute honestly is a quarantine, never a guess")
+    end
+  end
+
+  def test_mixed_level_documents_still_drop_level_less_tokens
+    # The status-quo pin for the 83 already-loaded documents: a document
+    # WITH me: levels keeps ignoring bare tokens (AM 1056's counts are
+    # pinned above); recovery must not rewrite loaded corpora.
+    assert_equal 51, adapter.parse(ref_for(KONUNGS)).count
+    assert_equal 48, adapter.parse(ref_for(BONBOK)).count
+  end
+
   # -- damage -----------------------------------------------------------------
 
   def test_a_missing_entity_table_quarantines_with_an_instructive_error
@@ -252,14 +415,15 @@ class MenotaTest < Minitest::Test
     db = store_test_db
     source = create_source(db)
     first = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
-    assert_equal 3, first.added
+    assert_equal 8, first.added
     assert_equal 0, first.errored
-    assert_equal 120, db[:passages].count, "51 + 48 + 21 manuscript lines"
+    assert_equal 138, db[:passages].count,
+                 "51 + 48 + 21 manuscript lines + the P82-r1 trims (3 + 2 + 1 + 4 + 8)"
 
     second = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 0, second.errored
-    assert_equal 3, second.skipped, "a byte-identical reload skips every document"
-    assert_equal 120, db[:passages].count
+    assert_equal 8, second.skipped, "a byte-identical reload skips every document"
+    assert_equal 138, db[:passages].count
     assert_equal [1], db[:passages].distinct.select_map(:revision)
   ensure
     db&.disconnect

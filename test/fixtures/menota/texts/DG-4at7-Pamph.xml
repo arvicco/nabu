@@ -1,0 +1,460 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="https://www.menota.org/menotaP5.rng" type="xml" ?>
+<!DOCTYPE TEI 
+[
+<!ENTITY % Menota_entities SYSTEM 'https://www.menota.org/menota-entities.txt'>
+%Menota_entities; ]>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:me="http://www.menota.org/ns/1.0">
+   <teiHeader xml:lang="eng">
+      <fileDesc>
+         <titleStmt>
+            <title>Pamphilus saga : Upps DG 4–7 : A digital edition</title>
+            <editor role="group">The Bergen group (1) <orgName type="affiliation">University of Bergen</orgName>
+            </editor>
+            <respStmt>
+               <resp>Project overview and finalising of XML file</resp>
+               <name>
+                  <persName>
+                     <forename>Odd Einar</forename>
+                     <surname>Haugen</surname>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+            <respStmt>
+               <resp>Project overview and finalising of XML file</resp>
+               <name>
+                  <persName>
+                     <forename>Robert</forename>
+                     <forename>K.</forename>
+                     <surname>Paulsen</surname>
+                     <addName>RKP</addName>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of fol. 3ra.01-42</resp>
+               <name>
+                  <persName>
+                     <forename>Robert</forename>
+                     <forename>K.</forename>
+                     <surname>Paulsen</surname>
+                     <addName>RKP</addName>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of fol. 3rb.01-22</resp>
+               <name>
+                  <persName>
+                     <forename>Odd Einar</forename>
+                     <surname>Haugen</surname>
+                     <addName>OEH</addName>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of fol. 3rb.23-3va.17</resp>
+               <name>
+                  <persName>
+                     <forename>Jonas</forename>
+                     <surname>Zeit-Altpeter</surname>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of fol. 3va.18-3vb.12</resp>
+               <name>
+                  <persName>
+                     <forename>Sarah</forename>
+                     <surname>Sulollari</surname>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of fol. 3vb.13-4ra.23</resp>
+               <name>
+                  <persName>
+                     <forename>Nina</forename>
+                     <surname>Stensaker</surname>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of fol. 4ra.24-4rb.38</resp>
+               <name>
+                  <persName>
+                     <forename>Mortan</forename>
+                     <surname>Nolsøe</surname>
+                     <surname>Leslie-Jacobsen</surname>
+                     <addName>MNLJ</addName>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of fol. 4rb.39-4vb.13</resp>
+               <name>
+                  <persName>
+                     <forename>Bjarni</forename>
+                     <surname>Steintún</surname>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of fol. 4vb.14-5ra.02</resp>
+               <name>
+                  <persName>
+                     <forename>Sven</forename>
+                     <surname>Kraus</surname>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of fol. 5ra.03-5rb.13</resp>
+               <name>
+                  <persName>
+                     <forename>Rein</forename>
+                     <surname>Tveit</surname>
+                     <addName>RT</addName>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of fol. 5rb.14-5va.04</resp>
+               <name>
+                  <persName>
+                     <forename>Andrea</forename>
+                     <surname>Rocca</surname>
+                     <addName>AR</addName>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of fol. 5va.05-5vb.14</resp>
+               <name>
+                  <persName>
+                     <forename>Jonas</forename>
+                     <surname>Koesling</surname>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+            <respStmt>
+               <resp>Transcription of fol. 5vb.15-5vb.41</resp>
+               <name>
+                  <persName>
+                     <forename>Hans Emil</forename>
+                     <surname>Kvakland</surname>
+                  </persName>
+                  <orgName type="affiliation">University of Bergen</orgName>
+               </name>
+            </respStmt>
+         </titleStmt>
+         <editionStmt>
+            <edition n="1.0.7">Version 1.0.7, <date when="2017-06-06">6 June 2017</date></edition>
+         </editionStmt>
+         <extent n="4276">4276 words</extent>
+         <publicationStmt>
+            <distributor>Medieval Nordic Text Archive</distributor>
+            <idno type="Menota">Ms. 22</idno>
+            <date when="2015-03-04">5 March 2015</date>
+            <availability status="free">
+               <licence target="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</licence>
+               <p>Licence accepted by Odd Einar Haugen and by Robert K. Paulsen on behalf of the encoding group
+                  in a mail to Alex Speed Kjeldsen 9 November 2015.</p>
+            </availability>
+         </publicationStmt>
+         <notesStmt>
+            <note>Produced as part of a course in editing and annotating at the University of Bergen
+               during the spring term 2015. The course was led by Odd Einar Haugen and Robert K.
+               Paulsen.</note>
+         </notesStmt>
+         <sourceDesc>
+            <bibl facs="yes">Photographic facsimiles of all three leaves (fol. 3r-5v) from the University Library in Uppsala.</bibl>
+            <msDesc>
+               <msIdentifier>
+                  <country key="SE">Sweden</country>
+                  <settlement>Uppsala</settlement>
+                  <repository>Uppsala University Library</repository>
+                  <idno>DG 4–7</idno>
+                  <msName>Pamphilus saga</msName>
+               </msIdentifier>
+               <msContents>
+                  <msItem n="1">
+                     <locus from="3rA:01" to="5vB:41">ff. 3ra.01–5vb.41</locus>
+                     <title type="main">Pamphilus saga</title>
+                     <title type="abbreviated">Pamph</title>
+                     <textLang mainLang="nor">Old Norwegian</textLang>
+                  </msItem>
+               </msContents>
+               <physDesc>
+                  <objectDesc form="codex">
+                     <supportDesc>
+                        <support>
+                           <p>
+                              <material>Parchment</material>
+                           </p>
+                        </support>
+                        <extent>2 + 42 leaves</extent>
+                        <foliation>
+                           <p>fols. 1–44v</p>
+                        </foliation>
+                     </supportDesc>
+                  </objectDesc>
+               </physDesc>
+               <history>
+                  <origin>
+                  <p>Written in <origPlace>Norway</origPlace>, probably in the Bergen area, <origDate notBefore="1260" notAfter="1290">c. 1270</origDate>.</p>
+                  <p>DG 4-7 now consists of 42 leaves in seven gatherings, each of originally 8
+                     leaves. Thus, the complete manuscript once had (7 x 8) = 56 leaves. The first
+                     gathering lacks the middle pair and another leaf, which has been cut out. The
+                     second gathering also lacks the middle pair. The third and fourth gatherings
+                     are complete. The fifth gathering lacks the middle pair, and the sixth
+                     gathering lacks the fourth leaf, which has been cut out. The seventh gathering
+                     only has the outer pair of leaves. Remnants of the seventh gathering were found
+                     as the lining of a bishop’s mitra in Skálholt, and are now catalouged as AM
+                     666b 4to in Copenhagen.</p>
+                  <p>At the very beginning of DG 4-7, there are two leaves containing a fragment of
+                     "Óláfs saga Tryggvasonar". In the present state of the manuscript (and in the
+                     facsimile edition by Mattias Tveitane, 1972), they are fols. 1–2.</p>
+                  <p>The main part of the manuscript are fols. 3–44, containing the initial two
+                     thirds of "Pamphilus saga", the concluding 13 lines of a dialogue between
+                     courage and fear, "Elis saga" and finally "Strengleikar". Note that in the
+                     facsimile edition and also in the present digital edition, the leaves have been
+                     numbered consecutively in the order they now have in the manuscript,
+                     irrespective of lost leaves and leaves which have been put in the wrong order
+                     as a result of the later binding of the book.</p>
+                  <p>The information compiled here is based on the introduction in the facsimile
+                     edition by Mattias Tveitane (1972).</p>
+                  </origin>
+               </history>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <projectDesc>
+            <p>This manuscript text has been encoded according to the standard set out in <title>The
+                  Menota handbook</title> (version 2.0), at <ref
+                  target="http://www.menota.org/HB_index.xml">
+                  http://www.menota.org/HB_index.xml</ref> as of <date>2008-05-16</date>.</p>
+            <p>The encoded text has numbered pagebreaks, columnbreaks and linebreaks according to
+               the manuscript.</p>
+         </projectDesc>
+         <editorialDecl>
+            <correction status="high">
+               <p>This text has been transcribed directly from photographic colour facsimiles of the
+                  manuscript, and subsequently compared with the diplomatic edition by Ludvig
+                  Holm-Olsen (LHO) (1940). Emendations in the edition by Hermann Pálsson (HP) in "Gripla" vol. 6 (1984) 
+                  have been added in notes, but the readings in the manuscript have as a rule been followed.</p>
+            </correction>
+            <normalization me:level="dipl">
+               <p>This text has been encoded on a diplomatic level.</p>
+            </normalization>
+            <interpretation me:lemmatized="none" me:morphAnalyzed="none">
+               <p>This text has not yet been annotated.</p>
+            </interpretation>
+         </editorialDecl>
+      </encodingDesc>
+      <profileDesc>
+         <langUsage>
+            <language ident="nor">Norwegian</language>
+         </langUsage>
+      </profileDesc>
+      <revisionDesc>
+         <change>
+            <date>2017-06-06</date>
+            <name>Odd Einar Haugen</name>
+            <orgName type="affiliation">University of Bergen</orgName>: (1) Replaced all "me:punct"
+            elements with "pc" elements as recommended in v. 3.0 of the Menota handbook; (2)
+            Removed all 78 "pc type="supplied"" for hyphens supplied by the editor with nothing, as
+            recommended in v. 3.0 of the Menota handbook and implemented in the latest version of
+            the stylesheet used in the Corpuscle application, assuming that there are no examples of
+            actual hyphens in the manuscript; (3) Made the file v. 1.0.7</change>
+         <change>
+            <date>2016-03-29</date>
+            <name>
+               <persName>Odd Einar Haugen</persName>
+               <orgName type="affiliation">University of Bergen</orgName>
+            </name>: (1) Changed the encoding of supplied hyphens from "supplied type="hyphenated""
+            to "pc type="supplied"" (for hyphens supplied by the editors, and lacking in the manuscript);
+            (2) Made the file v. 1.0.6
+         </change>
+         <change>
+            <date>2016-02-21</date>
+            <name>
+               <persName>Odd Einar Haugen</persName>
+               <orgName type="affiliation">University of Bergen</orgName>
+            </name>: (1) Revised the "availability" element in the header with a CC-BY-SA 4.0 licence;
+            (2) Moved the "choice" element into the "w" element, and put the "sic" and "corr" elements within 
+            the "choice" element, i.e. "w" > "choice" > "sic" + "corr"; (3) Removed XML comments within notes
+            so that the text of the note will be shown; and removed the "note" element around XML comments
+            which are not supposed to be shown, such as comments on the space (or lack of it) between words;
+            (4) Made the file v. 1.0.5
+         </change>        
+         <change>
+            <date>2016-02-18</date>
+            <name>
+               <persName>Odd Einar Haugen</persName>
+               <orgName type="affiliation">University of Bergen</orgName>
+            </name>: (1) In order to facilitate import in the Corpuscle application, the "sic" and "corr" elements
+            are no longer brought together in a "seg" element, but in a "choice" element; (2) Made the file v. 1.0.4
+         </change>
+         <change>
+            <date>2016-01-23</date>
+            <name>
+               <persName>Odd Einar Haugen</persName>
+               <orgName type="affiliation">University of Bergen</orgName>
+            </name>: (1) Replaced all 78 "me:punct type="supplied"" elements within "w" elements 
+            with "supplied type="hyphenated"" elements, so as to avoid having "me:punct" elements 
+            within "w" elements; (2) Made the file v. 1.0.3
+         </change>
+         <change>
+            <date>2016-01-19</date>
+            <name>
+               <persName>Odd Einar Haugen</persName>
+               <orgName type="affiliation">University of Bergen</orgName>
+            </name>: (1) Added role="group" as an attribute to the "editor" element; (2) Made the file v. 1.0.2
+         </change>
+         <change>
+            <date>2016-01-19</date>
+            <name>
+               <persName>Odd Einar Haugen</persName>
+               <orgName type="affiliation">University of Bergen</orgName>
+            </name>: (1) Changed the "msName" to "Pamphilus saga"; 
+            (2) Made the file v. 1.0.1
+         </change>
+         <change>
+            <date>2015-03-19</date>
+            <name>Odd Einar Haugen</name>
+            <orgName type="affiliation">University of Bergen</orgName>: The "div" attribute type="chapter" was 
+            changed to type="annotation-chapter" to enable a separate display from the encoding in e.g. AM 242 fol;
+            kept the file as v. 1.0</change>
+         <change>
+         <date>2015-03-04</date>
+         <name>Odd Einar Haugen</name>
+         <orgName type="affiliation">University of Bergen</orgName>: Described the first "div" level as "saga",
+         the second as "chapter", and the third as "reply"; added space between the "oc" abbreviation and
+         the following word (adding a note about this in each case), corrected some minor mistakes in the encoding;
+         made the file into v. 1.0.</change>
+         <change>
+            <date>2015-03-04</date>
+            <name>Robert K. Paulsen</name>
+            <orgName type="affiliation">University of Bergen</orgName>: Corrected a number of readings
+        on the basis of proofreading by the student group, added "div" elements for dialogue in the text and "s" elements
+         for sentence division; made the file into version 0.9.2.</change>
+         <change>
+            <date>2015-02-20</date>
+            <name>Odd Einar Haugen</name><orgName type="affiliation">University of Bergen</orgName>
+            and <name>Robert K. Paulsen</name>
+            <orgName type="affiliation">University of Bergen</orgName>: Compiled the text on the
+            basis of individual transcriptions from the student group; gave the file version number 0.9.1.</change>
+      </revisionDesc>
+   </teiHeader>
+   <text xml:lang="nor">
+      <body>
+         <div type="saga">
+
+         <!-- HERE BEGINS THE TRANSCRIPTION BY ROBERT K. PAULSEN -->
+
+         <div type="annotation-chapter">
+            <head><supplied>Ch. 1</supplied></head>
+            <div type="reply">
+               <head><supplied>Pamphilus:</supplied></head>
+               <p>
+                  <pb ed="ms" n="3r"/>
+                  <cb ed="ms" n="a"/>
+                  <lb ed="ms" n="1"/>
+                  <s>
+                     <w xml:id="w00001">EC</w>
+                     <w xml:id="w00002">EM</w>
+                     <w xml:id="w00003">SÆRÐR</w><pc>.</pc>
+                  </s>
+                  <s>
+                     <w xml:id="w00004"><ex>oc</ex></w>
+                     <w xml:id="w00005">ber</w>
+                     <w xml:id="w00006">ec</w>
+                     <w xml:id="w00007">gaf
+                        <lb ed="ms" n="2"/>lak</w>
+                     <w xml:id="w00008">undir</w>
+                     <w xml:id="w00009">hiarta</w>
+                     <w xml:id="w00010">mínu</w>
+                     <pc>.</pc>
+                  </s>
+                  <s>
+                     <w xml:id="w00011">sár</w>
+                     <lb ed="ms" n="3"/>
+                     <w xml:id="w00012"><ex>oc</ex></w><!-- OEH: Added space after "oc" -->
+                     <w xml:id="w00013">harmr</w>
+                     <w xml:id="w00014">vex</w>
+                     <w xml:id="w00015">mer</w>
+                     <w xml:id="w00016">iafnan</w><pc>.</pc>
+                  </s>
+                  <s>
+                     <w xml:id="w00017"><ex>oc</ex></w><!-- OEH: Added space after "oc" -->
+                     <w xml:id="w00018">æi</w>
+                     <lb ed="ms" n="4"/>
+                     <w xml:id="w00019">dirfumz</w>
+                     <w xml:id="w00020">ec</w>
+                     <w xml:id="w00021">at</w>
+                     <w xml:id="w00022">segia</w>
+                     <w xml:id="w00023">nafn</w>
+                     <w xml:id="w00024">hog
+                        <lb ed="ms" n="5"/>guanda</w>
+                  </s>
+                  <s>
+                     <w xml:id="w00025"><ex>oc</ex></w><!-- OEH: Added space after "oc" -->
+                     <w xml:id="w00026">æi</w>
+                     <w xml:id="w00027">lætr</w>
+                     <w xml:id="w00028">sialft</w>
+                     <w xml:id="w00029">sár</w>
+                     <w xml:id="w00030">synaz</w><pc>.</pc>
+                  </s>
+                  <s>
+                     <w xml:id="w00031">þui</w>
+                     <w xml:id="w00032">ven
+                        <lb ed="ms" n="6"/>ti</w>
+                     <w xml:id="w00033">ec</w>
+                     <w xml:id="w00034">þar</w>
+                     <w xml:id="w00035">mæíra</w>
+                     <w xml:id="w00036">haska</w>
+                     <w xml:id="w00037">mino<ex>m</ex></w>
+                     <w xml:id="w00038">scaða</w><pc>.</pc>
+                  </s>
+                  <s>
+                     <w xml:id="w00039">Oc</w>
+                     <w xml:id="w00040">ængi</w>
+                     <lb ed="ms" n="7"/>
+                     <w xml:id="w00041">lækning</w>
+                     <w xml:id="w00042">man</w>                    
+                     <w xml:id="w00043"><choice><sic>gera</sic><corr resp="HP">gefa</corr></choice></w>
+                     <w xml:id="w00044">hæilsu hialp</w><pc>.</pc>
+                  </s>
+                     <seg type="nb"><w xml:id="w00150">þui</w>
+                        <w xml:id="w00151">at</w></seg>
+                     <lb ed="ms" n="19"/>
+                     <w xml:id="w00152">ælldr</w>
+                     <w xml:id="w00153">er</w>
+                     <w xml:id="w00154"><unclear>b</unclear>æiskari</w>
+                     <w xml:id="w00155">i</w>
+                     <w xml:id="w00156">utkomo</w>
+                     <w xml:id="w00157">en</w>
+                     <seg type="nb"><w xml:id="w00158">in<ex>n</ex>i</w>
+                        <w xml:id="w00159">byrgðr</w></seg><pc>.</pc>
+                  </p>
+            </div>
+         </div>
+         </div>
+      </body>
+   </text>
+</TEI>
