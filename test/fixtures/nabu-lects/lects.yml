@@ -788,6 +788,41 @@ anchors:
                         Gustav Vasa Bible; covers the klassisk/yngre
                         internal split"}
 
+  "no":
+    name: Norwegian
+    parent: non
+    note: "ISO 639-1 no / 639-2/3 nor is the MACROLANGUAGE covering the
+           two modern written standards, Bokmål (nb/nob) and Nynorsk
+           (nn/nno) — standards, not stages; both deliberately unminted
+           until a consumer holds modern Norwegian text. When one does,
+           the descent question is a trap the single-parent tree cannot
+           dodge: Bokmål continues the DANISH written norm of the union
+           centuries over a Norwegian substrate, Nynorsk was built on
+           the dialects continuing Middle Norwegian — prose here, never
+           edges, per the contact doctrine. Parent is the undivided Old
+           Norse anchor (the isl/sv precedent)."
+    stages:
+      old: {name: Old Norwegian, band: [1050, 1350], ord: 10,
+            band_note: "conventional Norwegian philology (gammelnorsk),
+                        approximate — the Christianization-era scribal
+                        emergence to the Black Death; mellomnorsk
+                        [1350, 1525] is the next rung, deliberately
+                        unminted until a consumer can materialize it"}
+
+  da:
+    name: Danish
+    parent: non
+    note: "parent is the undivided Old Norse anchor (the isl/sv
+           precedent; the East Norse fork stays unsplit per the sv
+           note). Modern Danish (from ~1525) is the bare anchor's
+           open end."
+    stages:
+      old: {name: Old Danish, band: [1100, 1525], ord: 10, wikt: gmq-oda,
+            band_note: "Brøndum-Nielsen's gammeldansk — Early and Late
+                        Middle Danish (1100–1350–1525) folded into one
+                        stage, the sv:old mold; the runic-Danish record
+                        (800–1100) stays under non/gmq:run"}
+
   ara:
     name: Arabic
     stages:
