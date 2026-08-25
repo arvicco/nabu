@@ -65,9 +65,19 @@ module Nabu
       TEXT_LEVEL_ORDER = %w[dipl facs norm].freeze
 
       ENTITY_REFERENCE = /&([A-Za-z][A-Za-z0-9._-]*);/
-      ENTITY_DECLARATION = /<!ENTITY\s+(\S+)\s+"([^"]*)"\s*>/
+      ENTITY_DECLARATION = /<!ENTITY\s+(\S+)\s+(?:"([^"]*)"|'([^']*)')\s*>/
       NUMERIC_CHARACTER = /&#x([0-9A-Fa-f]+);|&#(\d+);/
       DOCTYPE = /<!DOCTYPE[^\[>]*(?:\[[^\]]*\]\s*)?>/m
+      COMMENT = /<!--.*?-->/m
+      # Split-with-capture: comment segments survive verbatim, everything
+      # else goes through entity resolution (XML: a reference inside a
+      # comment is NOT a reference — the P82-r1 census found &aum;, &zzz;,
+      # &fish; etc. ONLY inside editorial comments).
+      COMMENT_SPLIT = /(<!--.*?-->)/m
+      # One internal-subset binding, in document order: either the
+      # %Menota_entities; parameter reference (which binds the fetched
+      # table) or a local general-entity declaration (either quote style).
+      SUBSET_BINDING = /%[A-Za-z][A-Za-z0-9._-]*;|#{ENTITY_DECLARATION.source}/
 
       # name => resolved UTF-8 string, from a menota-entities.txt table.
       # First declaration wins (upstream keeps a few alternative spellings
@@ -105,14 +115,30 @@ module Nabu
         raise ParseError, "#{path}: malformed XML: #{e.message}"
       end
 
-      # Strip the DOCTYPE (its external entity set is the table we already
-      # hold) and resolve every Menota entity from the table. Unknown
-      # entities quarantine loudly — a silent drop would fake a cleaner
-      # manuscript than upstream published.
+      # Strip the DOCTYPE — after honoring its INTERNAL SUBSET: local
+      # <!ENTITY> declarations are upstream's own data (Codex Wormianus
+      # declares its runic entities there) and bind per XML's
+      # first-declaration-wins rule, the %Menota_entities; reference
+      # binding the fetched table at its document position. Then resolve
+      # every Menota entity OUTSIDE comments (XML never recognizes
+      # references inside them). Unknown entities in content quarantine
+      # loudly — a silent drop would fake a cleaner manuscript than
+      # upstream published.
       def resolved_source(path, entities)
-        text = File.read(path, encoding: Encoding::UTF_8).sub(DOCTYPE, "")
+        text = File.read(path, encoding: Encoding::UTF_8)
+        entities = merge_internal_subset(text[DOCTYPE], entities)
         unknown = []
-        resolved = text.gsub(ENTITY_REFERENCE) do
+        resolved = text.sub(DOCTYPE, "").split(COMMENT_SPLIT).map do |segment|
+          segment.start_with?("<!--") ? segment : substitute(segment, entities, unknown)
+        end.join
+        return resolved if unknown.empty?
+
+        raise ParseError, "#{path}: unknown Menota entities #{unknown.uniq.sort.join(', ')} — " \
+                          "the menota-entities.txt table may be stale (delete it and re-sync)"
+      end
+
+      def substitute(segment, entities, unknown)
+        segment.gsub(ENTITY_REFERENCE) do
           name = Regexp.last_match(1)
           if XML_BUILTIN_ENTITIES.include?(name)
             Regexp.last_match(0)
@@ -122,10 +148,50 @@ module Nabu
             xml_safe(value.to_s)
           end
         end
-        return resolved if unknown.empty?
+      end
 
-        raise ParseError, "#{path}: unknown Menota entities #{unknown.uniq.sort.join(', ')} — " \
-                          "the menota-entities.txt table may be stale (delete it and re-sync)"
+      # The internal-subset merge: bindings apply in document order (every
+      # censused file references %Menota_entities; FIRST, so the shared
+      # table wins over any local re-declaration — exactly what a
+      # validating XML parser would do). Local values may nest numeric
+      # references, table entities, or other locals; a value that cannot
+      # be fully resolved (unknown reference, cycle) stays UNBOUND, so its
+      # use in content still quarantines by name.
+      def merge_internal_subset(doctype, table)
+        return table if doctype.nil?
+
+        bound = {}
+        raw = {}
+        doctype.gsub(COMMENT, "").scan(SUBSET_BINDING) do |name, double_quoted, single_quoted|
+          if name.nil? # the parameter reference — bind the fetched table
+            table.each { |key, value| bound[key] = value unless bound.key?(key) || raw.key?(key) }
+          elsif !bound.key?(name) && !raw.key?(name)
+            raw[name] = double_quoted || single_quoted
+          end
+        end
+        return table if raw.empty? # nothing local — spare the copy
+
+        raw.each_key { |name| resolve_local(name, raw, bound, []) }
+        bound
+      end
+
+      def resolve_local(name, raw, bound, stack)
+        return bound[name] if bound.key?(name)
+        return nil unless raw.key?(name) # unknown reference target
+        return nil if stack.include?(name) # cycle — unresolvable
+
+        failed = false
+        value = raw[name].gsub(NUMERIC_CHARACTER) do
+          (Regexp.last_match(1) ? Regexp.last_match(1).to_i(16) : Regexp.last_match(2).to_i)
+            .chr(Encoding::UTF_8)
+        end
+        value = value.gsub(ENTITY_REFERENCE) do
+          inner = resolve_local(Regexp.last_match(1), raw, bound, stack + [name])
+          failed = true if inner.nil?
+          inner.to_s
+        end
+        bound[name] = value unless failed
+        failed ? nil : value
       end
 
       # An entity resolving to a markup-significant character re-enters as
@@ -168,7 +234,16 @@ module Nabu
         ].freeze
         TOKEN_ELEMENTS = %w[w pc punct].freeze
         MILESTONES = %w[pb cb lb].freeze
-        private_constant :READER, :TEXT_NODE_TYPES, :TOKEN_ELEMENTS, :MILESTONES
+        # Subtrees suppressed from a BARE token's reading text (the
+        # single-level shape): editorial commentary (<note>), the
+        # editor's emendation (<corr> — the manuscript's <sic> is the
+        # diplomatic reading), and the unexpanded abbreviation mark
+        # (<am> — the <ex> expansion is the diplomatic reading). Each
+        # rides the token record under its own key instead. Level-bearing
+        # tokens are untouched — the 83 loaded documents stay bit-stable.
+        EXTRA_ELEMENTS = %w[note corr am].freeze
+        private_constant :READER, :TEXT_NODE_TYPES, :TOKEN_ELEMENTS, :MILESTONES,
+                         :EXTRA_ELEMENTS
 
         Result = Data.define(:lines, :title, :main_lang, :lang_usage, :metadata)
 
@@ -181,6 +256,9 @@ module Nabu
           @column = nil
           @line = nil
           @token = nil
+          @level = nil
+          @extra = nil
+          @bare_break = false
           @tokens = []
           @header = {}
           @capture = nil
@@ -220,6 +298,7 @@ module Nabu
           when *MILESTONES then milestone(node, name)
           when *TOKEN_ELEMENTS then open_token(node, name)
           when *MenotaTeiParser::LEVELS then open_level(node, name)
+          when *EXTRA_ELEMENTS then open_extra(node, name)
           end
         end
 
@@ -232,15 +311,33 @@ module Nabu
           when "body" then @in_body = false
           when *TOKEN_ELEMENTS then close_token(node, name)
           when *MenotaTeiParser::LEVELS then @level = nil if menota_ns?(node)
+          when *EXTRA_ELEMENTS then close_extra(node, name)
           end
         end
 
         def text_node(node)
           if !@seen_body
             @capture << node.value.to_s if @capture
-          elsif @in_body && @token && @level
-            @token[:levels][@level] << node.value.to_s
+          elsif @in_body && @token
+            if @level
+              @token[:levels][@level] << node.value.to_s
+            elsif @extra
+              @token[:extras][@extra.fetch(:name)] << node.value.to_s
+            else
+              bare_text(node.value.to_s)
+            end
           end
+        end
+
+        # Milestone-adjacent whitespace inside a bare token is XML layout
+        # (gaf<lb/>lak wrapped across source lines), never reading text;
+        # a REAL internal space ("hæilsu hialp") is preserved.
+        def bare_text(value)
+          if @bare_break
+            value = value.lstrip
+            @bare_break = false unless value.empty?
+          end
+          @token[:bare] << value
         end
 
         # -- header -----------------------------------------------------------
@@ -270,6 +367,7 @@ module Nabu
           when "origPlace" then open_capture(:orig_place) if context?("history") && !node.empty_element?
           when "origDate" then orig_date(node)
           when "textLang" then @header[:main_lang] ||= presence(node.attribute("mainLang"))
+          when "normalization" then @header[:me_level] ||= presence(node.attribute("me:level"))
           when "language" then @header[:lang_usage] ||= presence(node.attribute("ident")) if context?("langUsage")
           when "licence"
             @header[:license_url] ||= presence(node.attribute("target"))
@@ -363,6 +461,10 @@ module Nabu
           when "cb" then @column = value
           when "lb" then @line = value
           end
+          return unless @token && @level.nil? && @extra.nil?
+
+          @token[:bare].rstrip!
+          @bare_break = true
         end
 
         def open_token(node, name)
@@ -376,9 +478,12 @@ module Nabu
             lemma: presence(node.attribute("lemma")),
             msa: presence(node.attribute("me:msa")),
             position: [@page, @column, @line],
-            levels: MenotaTeiParser::LEVELS.to_h { |level| [level, +""] }
+            levels: MenotaTeiParser::LEVELS.to_h { |level| [level, +""] },
+            bare: +"", extras: {}
           }
           @level = nil
+          @extra = nil
+          @bare_break = false
         end
 
         def open_level(node, name)
@@ -387,19 +492,34 @@ module Nabu
           @level = name
         end
 
+        def open_extra(node, name)
+          return unless @token && @level.nil? && @extra.nil? && !node.empty_element?
+
+          @extra = { name: name, depth: node.depth }
+          @token[:extras][name] ||= +""
+        end
+
+        def close_extra(node, name)
+          @extra = nil if @extra && @extra.fetch(:name) == name && @extra.fetch(:depth) == node.depth
+        end
+
         def close_token(node, name)
           return unless @token && @token[:name] == name && @token[:depth] == node.depth
 
           token = @token
           @token = nil
           @level = nil
+          @extra = nil
           finalize_token(token)
         end
 
         def finalize_token(token)
-          levels = token[:levels].transform_values { |text| Normalize.nfc(text.gsub(/[[:space:]]+/, " ").strip) }
+          levels = token[:levels].transform_values { |text| flatten(text).to_s }
           text_level = MenotaTeiParser::TEXT_LEVEL_ORDER.find { |level| !levels[level].empty? }
-          return if text_level.nil? # a fully empty token carries no reading
+          if text_level.nil?
+            queue_bare_token(token)
+            return
+          end
 
           levels.each { |level, text| @levels_census[level] += 1 unless text.empty? }
           @tokens << {
@@ -407,6 +527,23 @@ module Nabu
             text: levels[text_level],
             position: token[:position]
           }
+        end
+
+        # A token with NO me: level readings: in a single-level document
+        # (the DG 4-7 shape — bare text straight in <w>) it IS the
+        # transcription, at the level the header itself declares; in a
+        # level-bearing document it stays dropped (the status quo for the
+        # loaded corpus). The verdict falls at line-assembly time.
+        def queue_bare_token(token)
+          text = flatten(token[:bare])
+          return if text.nil?
+
+          extras = token[:extras].filter_map do |name, value|
+            flattened = flatten(value)
+            [name, flattened] if flattened
+          end.to_h
+          @tokens << { record: token_record(token, {}, nil), text: text,
+                       position: token[:position], bare: true, extras: extras }
         end
 
         def token_record(token, levels, text_level)
@@ -422,7 +559,7 @@ module Nabu
         # Consecutive tokens sharing a (page, column, line) position form
         # one passage; refs disambiguate with the house :b<n> belt.
         def lines
-          groups = @tokens.slice_when { |a, b| a[:position] != b[:position] }.to_a
+          groups = materialized_tokens.slice_when { |a, b| a[:position] != b[:position] }.to_a
           seen = Hash.new(0)
           groups.each_with_index.map do |group, index|
             ref = position_ref(group.first[:position], index)
@@ -430,6 +567,39 @@ module Nabu
             ref = "#{ref}:b#{count}" if count > 1
             build_line(ref, group)
           end
+        end
+
+        # The single-level verdict: a document with ANY level-bearing token
+        # drops its bare strays (status quo — recovery must not rewrite
+        # loaded corpora); a document with NONE reads its bare tokens at
+        # the single level the header itself declares.
+        def materialized_tokens
+          return @tokens.reject { |token| token[:bare] } if @levels_census.values.any?(&:positive?)
+
+          level = nil
+          @tokens.each do |token|
+            next unless token[:bare]
+
+            level ||= declared_single_level
+            token[:record] = token[:record].merge(
+              { "text_level" => level, level => token[:text] }, token[:extras]
+            )
+            @levels_census[level] += 1
+          end
+          @tokens
+        end
+
+        # Never guess the level: the header's own <normalization
+        # me:level="dipl"> claim serves, and only when it names exactly
+        # one known level.
+        def declared_single_level
+          declared = @header[:me_level].to_s.split
+          return declared.first if declared.size == 1 && MenotaTeiParser::LEVELS.include?(declared.first)
+
+          raise ParseError, "#{@path}: tokens carry no me: reading levels and the header's " \
+                            "<normalization me:level=#{@header[:me_level].to_s.inspect}> does " \
+                            "not name exactly one level — cannot attribute the transcription " \
+                            "level honestly"
         end
 
         def position_ref(position, index)

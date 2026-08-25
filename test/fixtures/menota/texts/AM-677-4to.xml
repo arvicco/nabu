@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="https://www.menota.org/menotaP5.rng" type="xml" ?>
+<!DOCTYPE TEI
+[
+<!ENTITY % Menota_entities SYSTEM 'https://www.menota.org/menota-entities.txt'>
+%Menota_entities;
+
+<!ENTITY BAR  "&#x200A;&bar;">
+<!ENTITY drotstrok "&drot;&macrmed;">
+<!ENTITY trotdot   "&trot;&combdot;">    <!-- LATIN SMALL LETTER T ROTUNDA with dot -->
+<!ENTITY gnlig "&#xA77F;">               <!-- gn ligature, looks more or less like &ginsturn  -->
+<!ENTITY nglig "&#xA77F;">               <!-- ng ligature, looks quite similar to gnlig, so for the moment &ginsturn  -->
+<!ENTITY eracute "&#x035B;&combacute;"> <!-- tittle with acute; OEH: "sup" not allowed here, not sure what the character will look like in the Corpuscle display, let us make a test -->
+<!ENTITY amacrsup   "&asup;&macrhigh;">                    <!-- superscript amacr  -->
+<!ENTITY ocurlsup "&#x0024;">   <!-- superscript ocurl; OEH: "sup" not allowed here, solution postponed  -->
+<!ENTITY eacutesup "&#x0024;">   <!-- superscript eacute; OEH: "sup" not allowed here, solution postponed  -->
+<!ENTITY eenlacute "&eenl;&combacute;">    <!-- LATIN ENLARGED LETTER SMALL E with acute OEH: "sup" not allowed here, but the "combacute" entity might do the trick  -->
+<!ENTITY THORNbar "&THORN;&bar;">
+<!ENTITY THlig "&#x2E24;TH&#x2E25;">     <!-- an accidental ligature of T and H, instead of an initial THORN, because there was no place for that initial THORN -->
+<!ENTITY oslashcurlacute "&oslashcurl;&combacute;">        <!-- o with slash and curl and acute -->
+<!ENTITY escapacute "&escap;&combacute;">                  <!-- smallcap e with acute    -->
+<!ENTITY zero "0">                                              <!-- This should be a small zero, not Old Style, but the narrow one that is found in most fonts, and in Andron Scriptor Web,
+                                                                preferably in a smaller size than the rest of the text; it has now been changed to "smallzero" in the whole file, since this character looks much better -->
+]>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:me="http://www.menota.org/ns/1.0">
+ <teiHeader xml:lang="eng">
+  <fileDesc>
+   <titleStmt>
+    <title>De xii abusivis saeculi, Prosper’s Epigrams, Gregory’s Homilies on the Gospels, Gregory’s Dialogues : AM 677 4to : A digital edition</title>
+    <editor>
+     <name>
+      <persName>
+       <forename>Andrea</forename>
+       <surname>de Leeuw van Weenen</surname>
+      </persName>
+     </name>
+    </editor>
+    <respStmt resp="annotation">
+     <resp>Transcription of source</resp>
+     <resp>Lemmatization and morphological analysis</resp>
+     <resp>Conversion to Menotic XML</resp>
+     <name>
+      <persName>
+       <forename>Andrea</forename>
+       <surname>de Leeuw van Weenen</surname>
+      </persName>
+     </name>
+    </respStmt>
+   </titleStmt>
+   <editionStmt>
+    <edition n="1.0">Version 1.0, <date when="2019-12-04">4 December 2019.</date> 
+    </edition>
+   </editionStmt>
+   <extent n="51726">51726 words</extent>
+   <publicationStmt>
+    <distributor>Medieval Nordic Text Archive</distributor>
+    <idno type="Menota">Ms. 41</idno>
+    <date when="2019-12-04">4 December 2019</date>
+    
+    <availability status="free">
+     <licence target="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</licence>
+     <p>License accepted by the editor Andrea de Leeuw van Weenen in a mail dated 28 February 
+        2024 to the head of the Menota archive, Alex Speed Kjeldsen.</p>
+    </availability>
+    
+   </publicationStmt>
+   <sourceDesc>
+    <bibl facs="yes">Photographic facsimiles of the whole manuscript from the Arnamagnæan Collection in Copenhagen.</bibl>
+    <msDesc>
+     <msIdentifier>
+      <country key="DK">Denmark</country>
+      <settlement>Copenhagen</settlement>
+      <repository>Den Arnamagnæanske Samling</repository>
+      <idno>AM 677 4to</idno>
+      <msName>De xii abusivis saeculi, Prosper’s Epigrams, Gregory’s Homilies on the Gospels, Gregory’s Dialogues</msName>
+     </msIdentifier>
+     <msContents>
+      <msItem n="1">
+       <locus from="1r" to="1v">f. 1r</locus>
+       <title type="main">1. De xii abusivis saeculi</title>
+       <title type="abbreviated">Ab</title>
+       <textLang mainLang="isl">Icelandic</textLang>
+      </msItem>
+      <msItem n="2">
+       <locus from="1v" to="6v">ff. 1v–6v</locus>
+       <title type="main">2. Prosper’s Epigrams</title>
+       <title type="abbreviated">Ep</title>
+       <textLang mainLang="isl">Icelandic</textLang>
+      </msItem>
+      <msItem n="3">
+       <locus from="7r" to="24v">ff. 7r–24v</locus>
+       <title type="main">3. Gregory’s Homilies on the Gospels</title>
+       <title type="abbreviated">He</title>
+       <textLang mainLang="isl">Icelandic</textLang>
+      </msItem>
+      <msItem n="4">
+       <locus from="25r" to="41v">ff. 25r–41v</locus>
+       <title type="main">4. Gregory’s Dialogues</title>
+       <title type="abbreviated">Di</title>
+       <textLang mainLang="isl">Icelandic</textLang>
+      </msItem>
+     </msContents>
+     <physDesc>
+      <objectDesc form="codex">
+       <supportDesc>
+        <support>
+         <p>
+          <material>Parchment</material>
+         </p>
+        </support>
+        <extent>41</extent>
+        <foliation>
+         <p>fols. 1–41</p>
+        </foliation>
+       </supportDesc>
+      </objectDesc>
+     </physDesc>
+     <history>
+      <origin>
+      <p>The manuscript has been written in <origPlace>Iceland</origPlace> in <origDate notBefore="1200" notAfter="1225">c. 1200-1225</origDate>.</p> <!-- OEH 2020-11-06: This dating was added by me according to that of ONP -->
+      </origin>
+     </history>
+    </msDesc>
+   </sourceDesc>
+  </fileDesc>
+  <encodingDesc>
+   <projectDesc>
+    <p>This manuscript text has been encoded according to the standard
+     set out in <title>The Menota handbook</title> (version 3.0
+     beta) as of 6 December 2017.</p>
+   </projectDesc>
+   <editorialDecl>
+    <normalization me:level="facs dipl norm">
+     <p>This manuscript text has been encoded on three levels: facsimile, diplomatic and normalised.</p>
+    </normalization>
+    <correction status="high">
+     <p>The text was proofread several times by Andrea de Leeuw van Weenen
+      and a final time before printing by Tom Lorenz in September 2016.</p>
+    </correction>
+    <interpretation me:lemmatized="completely" me:morphAnalyzed="completely">
+     <p>This text has been fully lemmatised and morphologically analysed according to the rules
+      specified in ch. 11 of the Menota Handbook, v. 3.0 beta. Words missing in the manuscript text
+      and added in supplied tags by the editor are neither lemmatized nor morphologically analyzed.</p>
+    </interpretation>
+   </editorialDecl>
+  </encodingDesc>
+  <profileDesc>
+   <langUsage>
+    <language ident="isl">Icelandic</language>
+   </langUsage>
+  </profileDesc>
+  <revisionDesc>
+   
+   <change>
+    <date>2024-02-29</date>
+    <name>
+     <persName>Odd Einar Haugen</persName>
+     <orgName type="affiliation">University of Bergen</orgName>
+    </name>: Updated the “availability” element in the header so that the file is now free (CC-BY-SA 4.0) </change>
+ 
+   <change>
+    <date>2020-02-26</date>
+    <name>
+     <persName>Odd Einar Haugen</persName>
+     <orgName type="affiliation">University of Bergen</orgName>
+    </name>: Words in the “supplied” element had been given lemma and me:msa attributes with the values “xxx”,
+    i.e. “w lemma="###" me:msa="###"”; these attributes have now been deleted so that words in the “supplied” element only
+   have a “w” element with no attributes; these words will be equally searchable in the XML file, but will not
+   cause confusion for the Corpuscle application in morphological queries</change>
+   
+   <change>
+    <date>2020-02-25</date>
+    <name>
+     <persName>Odd Einar Haugen</persName>
+     <orgName type="affiliation">University of Bergen</orgName>
+    </name>: Changed all “eE” to “eP” (enclitic pronoun) according to the v. 3.0 guidelines of Menota </change>
+   
+   <change>
+    <date>2020-02-24</date>
+    <name>
+     <persName>Odd Einar Haugen</persName>
+     <orgName type="affiliation">University of Bergen</orgName>
+    </name>: (1) Changed all “yDA” name tokens (for government of accusative or dative) with “yAD”; 
+    (2) Changed all “cDA” name tokens with “cAD” (for case accusative or dative)</change>
+   
+   <change>
+    <date>2020-02-20</date>
+    <name>
+     <persName>Odd Einar Haugen</persName>
+     <orgName type="affiliation">University of Bergen</orgName>
+    </name>: Corrected three typos in the me:msa attribute: from “cb” to “cB”, from “nvR” to “vR”
+   and from “gu nFN” to “gFN nS”</change>
+   
+   <change>
+    <date>2019-12-04</date>
+    <name>Odd Einar Haugen</name>
+    <orgName type="affiliation">University of Bergen</orgName>: Moved the file to the public part of Menota 
+    and gave it version number 1.0 with the date 4 December 2019; otherwise no changes to the file. 
+   </change>
+   
+   <change>
+    <date>2018-08-27</date>
+    <name>Odd Einar Haugen</name>
+    <orgName type="affiliation">University of Bergen</orgName>: After having received a revised file from
+    Andrea de Leeuw van Weenen on 26 July 2018, I have changed the "zero" entity to the "smallzero" entity 
+    which will display the character as a small zero in the Tabular style of Andron Scriptor Web (actually using
+    U+F1BD in the Private Use Area of Andron Mega Corpus); there are a total of 138 instances of this character in the file.
+   </change>
+
+   <change>
+    <date>2018-01-25</date>
+    <name>Odd Einar Haugen</name>
+    <orgName type="affiliation">University of Bergen</orgName>: As a stop-gap measure, added rend="red"
+    to all "seg type="head"", until a more correct encoding can be made; also moved down the "handShift" element
+    into the nearest "p"
+   </change>
+
+   <change>
+    <date>2017-12-06</date>
+    <name>Andrea de Leeuw van Weenen</name>
+    <orgName type="affiliation">University of Bergen</orgName>: Revised the encoding of the whole file
+   </change>
+
+   <change>
+    <date>2017-11-14</date>
+    <name>Odd Einar Haugen</name>
+    <orgName type="affiliation">University of Bergen</orgName>: Made a number of corrections of mistakes pointed out by the editor in mails of 3, 6, 7 and 8 November
+   </change>
+
+   <change>
+    <date>2017-10-28</date>
+    <name>Odd Einar Haugen</name>
+    <orgName type="affiliation">University of Bergen</orgName>: Added red colour to the last line on f. 1r, and did a test with having a new sections begin on a new line on ff. 2r and 2v
+   </change>
+
+   <change>
+    <date>2017-10-03</date>
+    <name>Odd Einar Haugen</name>
+    <orgName type="affiliation">University of Bergen</orgName>: Revised the encoding of f. 1r–2v, adding missing "lb/" elements and specified initial types, introducing a "subtype" attribute
+   </change>
+
+   <change>
+    <date>2017-09-17</date>
+    <name>Odd Einar Haugen</name>
+    <orgName type="affiliation">University of Bergen</orgName>: Changed the interpretation of the "THORNbar" entity from "0024" (question mark) to a sequence of the "THORN" and "bar" entities
+   </change>
+
+   <change>
+    <date>2017-09-12</date>
+    <name>Odd Einar Haugen</name>
+    <orgName type="affiliation">University of Bergen</orgName>: Added the ed="ms" attribute
+    in the "pb", "cb" and "lb" elements
+   </change>
+
+   <change>
+    <date>2017-09-11</date>
+    <name>Odd Einar Haugen</name>
+    <orgName type="affiliation">University of Bergen</orgName>: Made various updates to the header.
+   </change>
+   <change>
+    <date>2017-07-31</date>
+    <name>Odd Einar Haugen</name>
+    <orgName type="affiliation">University of Bergen</orgName>: By request from the editor, changed the lemma at 5r1512 from "orðigr" to "ǫrðigr" and the normalised form accordingly.
+   </change>
+   <change>
+    <date>2017-06-13</date>
+    <name>Odd Einar Haugen</name>
+    <orgName type="affiliation">University of Bergen</orgName>: Revised the
+    XML elements and attributes according to the latest schema in Menota,
+    corrected imbalanced or missing elements, added a top level of four major div’s,
+    and supplied several elements in the header
+   </change>
+   <change>
+    <date>2017-04-21</date>
+    <name>Andrea de Leeuw van Weenen</name>:
+    Converted Menotic XML file from database
+   </change>
+  </revisionDesc>
+ </teiHeader>
+ <text xml:lang="isl">
+  <body>
+<div type="text">
+<div type="major-part" n="A1">
+<div n="Ab11">
+<p>
+<pb ed="ms" n="1r"/>
+<lb ed="ms" n="1"/>
+<w lemma="kraftr" me:msa="xNC gM nS cD sI">
+ <me:facs>&trot;&inodot;</me:facs>
+ <me:dipl>ti</me:dipl>
+ <me:norm>ti</me:norm>
+ <note type="msLocation"> 1r0101 </note>
+</w>
+<w lemma="konungligr" me:msa="xAJ rP gF nS cN sI">
+ <me:facs>k&BAR;g<lb ed="ms" n="14"/>l&inodot;g</me:facs>
+ <me:dipl>k<ex>onon</ex>g<lb ed="ms" n="14"/>lig</me:dipl>
+ <me:norm>konung<lb ed="ms" n="14"/>lig</me:norm>
+ <note type="msLocation"> 1r1310 </note>
+</w>
+<w lemma="kynning" me:msa="xNC gF nS cA sI">
+ <me:facs>kv&nscap;&inodot;&nglig;</me:facs>
+ <me:dipl>kv&nscap;ing</me:dipl>
+ <me:norm>kynning</me:norm>
+ <note type="msLocation"> 7r0105 </note>
+</w>
+<w lemma="&iacute; gegn" me:msa="xVP">
+ <me:facs>&inodot; ge&gnlig;</me:facs>
+ <me:dipl>i gegn</me:dipl>
+ <me:norm>&iacute; gegn</me:norm>
+ <note type="msLocation"> 7r07162</note>
+</w>
+<w lemma="s&aacute;" me:msa="xDD gN nS cG">
+ <me:facs><c type="initial">&THlig;</c>&escap;s</me:facs>
+ <me:dipl><c type="initial">T</c>&hscap;&escap;s</me:dipl>
+ <me:norm>&THORN;ess</me:norm>
+ <note type="msLocation">22r3901 </note>
+</w>
+<w lemma="b&oslashacute;r" me:msa="xNC gM nS cN sI">
+ <me:facs><c type="initial">B</c>&escapacute;o&rrot;</me:facs>
+ <me:dipl><c type="initial">B</c>&escapacute;or</me:dipl>
+ <me:norm>B&oslashacute;r</me:norm>
+ <note type="msLocation">32r1601 </note>
+</w>
+</p>
+</div>
+</div>
+</div>
+</body>
+</text>
+</TEI>
