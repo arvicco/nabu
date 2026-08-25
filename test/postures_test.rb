@@ -153,7 +153,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 70, lect.size,
+    assert_equal 69, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3, " \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -171,7 +171,8 @@ class PosturesTest < Minitest::Test
                  "aranese (oc/aranes override) — the add-then-retire shape again, 70→68; " \
                  "menota ADDED P82-1 — pending on the language-facet rule (nor/dan need " \
                  "registry decisions) — and cme ADDED P82-2 — identity enm (the aspr/iswoc " \
-                 "germanic mold): 68→70"
+                 "germanic mold): 68→70; №R-42 RETIRES menota (nabu-lects v1.1.0 minted " \
+                 "no/da, the menota-dan rule + onw override machine-posture it): 70→69"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -188,10 +189,10 @@ class PosturesTest < Minitest::Test
     # the fornsvenska add-then-retire shape).
     # Q39 (same day): PR #5 merged, the ref-enhg rule landed, the pending
     # row retired — zero pendings again, the add-then-retire shape complete.
-    # P82-1 reopens the pending class honestly again (the ref shape):
-    # menota pends on the language-facet rule — nor/dan have no registry
-    # nodes, and the mint + rule need an owner ruling (№R-42). P82-2
-    # adds cme as plain identity in the same phase.
-    assert_equal({ "identity" => 48, "dates" => 10, "codemap" => 11, "pending" => 1 }, by_posture)
+    # P82-1 reopened the pending class honestly (the ref shape); №R-42
+    # closed it the next day — nabu-lects v1.1.0 minted no/da and the
+    # menota-dan rule + onw override machine-posture the source. Zero
+    # pendings again. cme stays plain identity (P82-2).
+    assert_equal({ "identity" => 48, "dates" => 10, "codemap" => 11 }, by_posture)
   end
 end

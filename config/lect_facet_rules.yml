@@ -274,6 +274,23 @@ rules:
       "lemosin": "oc/lemosin"
       "vivaraup": "oc/vivaraup"
 
+  # ── №R-42 (owner-ruled 2026-08-24 as surveyed; targets minted by
+  # nabu-lects v1.1.0): the two Menota dan docs — Codex Runicus and
+  # Mariaklagen, both c. 1300 Scanian, comfortably inside every
+  # convention's Old Danish — carry raw "c. 1300" origDates with NO
+  # parsed interval, so infer-dates cannot see them; this rule states
+  # what the dates would have said. The nor docs need NO rule: they
+  # stage into no:old via date-band inference off their real parsed
+  # origDates (the survey's recommendation — Menota's own modern-code
+  # + dating doctrine, executed by the machinery).
+  - id: menota-dan
+    tier: certain
+    sources: [menota]
+    code: dan
+    facet: language
+    map:
+      "dan": "da:old"
+
   # ── D59-b (2026-08-06): the eBL Standard Babylonian register — the
   # registry's own note ("the literary register of first-millennium
   # scholarship") made a rule. kind: compose refines EXISTING stage rows
