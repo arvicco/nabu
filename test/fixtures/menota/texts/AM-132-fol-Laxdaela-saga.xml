@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="https://www.menota.org/menotaP5.rng" type="xml" ?>
+<!DOCTYPE TEI
+[
+<!ENTITY % Menota_entities SYSTEM 'https://www.menota.org/menota-entities.txt'>
+%Menota_entities;
+<!ENTITY aacutenscapbllig '&#xF542;'>
+]>
+
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:me="http://www.menota.org/ns/1.0">
+ <teiHeader xml:lang="eng">
+ <fileDesc>
+  <titleStmt>
+   <title>Laxd&aeligacute; saga according to AM 132 fol : A digital edition</title>
+   <editor>
+    <name>
+     <persName>
+      <forename>Andrea</forename>
+      <surname>de Leeuw van Weenen</surname>
+     </persName>
+    </name>
+   </editor>
+
+  <respStmt>
+    <resp>Transcription of source</resp>
+    <name>
+     <persName>
+      <forename>Andrea</forename>
+      <surname>de Leeuw van Weenen</surname>
+     </persName>
+    </name>
+  </respStmt>
+   <respStmt resp="annotation">
+    <resp>Lemmatization and morphological analysis</resp>
+    <name>
+     <persName>
+      <forename>Andrea</forename>
+      <surname>de Leeuw van Weenen</surname>
+     </persName>
+    </name>
+   </respStmt>
+   <respStmt >
+    <resp>Conversion to Menotic XML</resp>
+    <name>
+     <persName>
+      <forename>Andrea</forename>
+      <surname>de Leeuw van Weenen</surname>
+     </persName>
+    </name>
+   </respStmt>
+  </titleStmt>
+
+  <editionStmt>
+   <edition n="1.0">Converted from database, <date when="2024-09-02">2 September 2024.</date>
+   </edition>
+  </editionStmt>
+
+  <extent n="82259">82259 words</extent>
+
+  <publicationStmt>
+   <distributor>Medieval Nordic Text Archive</distributor>
+   <idno type="Menota">   </idno> <!-- Provisional number -->
+   <date when="2024-09-02"> 2 September 2024</date> <!-- Provisional date -->
+   <availability status="free">
+     <licence target="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</licence>
+   </availability>
+  </publicationStmt>
+
+  <sourceDesc>
+   <!-- <bibl facs="yes">Photographic facsimiles of ff. 156-197 from the Arnamagn&aelig;an Collection in Reykjavík.</bibl> --> <!-- OEH: Opened when facsimiles have been added to the server -->
+   <msDesc>
+    <msIdentifier>
+     <country key="IS">Iceland</country>
+     <settlement>Reykjav&iacute;k</settlement>
+     <repository>Stofnun &Aacute;rna Magn&uacute;ssonar</repository>
+     <idno>AM 132 fol (156rb11 - 198rb08)</idno>
+     <msName>Laxd&aeligacute;la saga (M&ouml;&eth;ruvallab&oacute;k)</msName>
+    </msIdentifier>
+    <msContents><p>OEH: Description of the contents of the manuscript may be added here</p></msContents>
+    <history>
+     <origin>
+      <p>This manuscript was written in <origPlace>Iceland</origPlace>
+       <origDate>c. 1320-1350</origDate>.</p>
+     </origin>
+    </history>
+   </msDesc>
+  </sourceDesc>
+ </fileDesc>
+
+  <encodingDesc>
+    <projectDesc>
+     <p>This manuscript text has been encoded according to the standard
+      set out in ........ (OEH: can be specified with reference to a version of the Menota Handbook)</p>
+    </projectDesc>
+
+   <editorialDecl>
+     <normalization me:level="facs dipl norm">
+      <p>This manuscript text has been encoded on three levels: facsimile, diplomatic and normalised.</p>
+     </normalization>
+     <correction status="high">
+      <p>OEH: Comments on the correction may be added here.</p>
+     </correction>
+     <interpretation me:lemmatized="completely" me:morphAnalyzed="completely">
+        <p>Words missing in the manuscript text and added
+        by the editor are lemmatized and morphologically analyzed, except when occurring in a verse.</p>
+        <p>Headings were not included in the original database, but have been added in this version in all 3 versions and
+           have been lemmatized and analyzed.</p>
+        <p>Verses have been added to the database in all 3 versions. </p>
+     </interpretation>
+    </editorialDecl>
+   </encodingDesc>
+
+  <profileDesc>
+   <langUsage>
+    <language ident="isl">Icelandic</language>
+    <language ident="lat">Latin</language>
+   </langUsage>
+  </profileDesc>
+
+  <revisionDesc>
+   <change>
+    <date>2026-01-30</date>
+    <name>Robert K. Paulsen</name>:
+    Added a definition of the &amp;aacutenscapbllig&semi; entity to the DTD.
+   </change>
+   <change>
+    <date>2024-09-02</date>
+    <name>Odd Einar Haugen</name>:
+    Made a few changes in the header in order to publish the text in the Menota archive.
+   </change>
+   <change>
+    <date>2023-11</date>
+    <name>Andrea de Leeuw van Weenen</name>:
+    Interpunction revised, specifically in connection with abbreviation.
+   </change>
+   <change>
+    <date>2021-11</date>
+    <name>Andrea de Leeuw van Weenen</name>:
+    Verses added, but without analysis.
+   </change>
+   <change>
+    <date>2023-02</date>
+    <name>Andrea de Leeuw van Weenen</name>:
+     Joined words marked in database;
+   </change>
+   <change>
+    <date>2021-10</date>
+    <name>Andrea de Leeuw van Weenen</name>:
+     Digraphs reintroduced using the list in preface edition;
+   </change>
+   <change>
+    <date>2021-09</date>
+    <name>Andrea de Leeuw van Weenen</name>:
+    Adding code for linebreaks
+   </change>
+   <change>
+    <date>2021-08</date>
+    <name>Andrea de Leeuw van Weenen</name>:
+    Adding headings
+   </change>
+   <change>
+    <date>december 2018</date>
+    <name>Andrea de Leeuw van Weenen</name>:
+    Distinguishing between capitals/versals and enlarged minuscules
+   </change>
+   <change>
+   The original database as established during the M&ouml;&eth;ruvallab&oacute;k project in the early 1980's has been enriched with
+   normalized forms and real diplomatic forms.
+   </change>
+  </revisionDesc>
+
+</teiHeader>
+
+<text xml:lang="isl">
+<body>
+<div type="chapter" n="1">
+<pb ed="ms" n="156r"/>
+<cb ed="ms" n="b"/>
+<lb ed="ms" n="11" rend="2"/>
+<head>
+<w lemma="laxd&oslashacute;ll" me:msa="xNC gM nP cG sI">
+ <me:facs>lax&drot;&aelig;la</me:facs>
+ <me:dipl>laxd&aelig;la</me:dipl>
+ <me:norm>Laxd&oslashacute;la</me:norm>
+ <note type="location">156rb112 </note>
+</w>
+<w lemma="saga" me:msa="xNC gF nS cN sI">
+ <me:facs>&slong;aga</me:facs>
+ <me:dipl>&slong;aga</me:dipl>
+ <me:norm>saga</me:norm>
+ <note type="location">156rb113 </note>
+</w>
+</head><p>
+<lb ed="ms" n="11" rend="1"/>
+<w lemma="ketill" me:msa="xNP gM nS cN sI">
+ <me:facs><c type="initial">&kenl;</c>e&trot;&inodot;ll</me:facs>
+ <me:dipl><c type="initial">&kenl;</c>etill</me:dipl>
+ <me:norm>Ketill</me:norm>
+ <note type="location">156rb110 </note>
+</w>
+<w lemma="flatnefr" me:msa="xNC gM nS cN sI">
+ <me:facs>&fins;la&trot;ne&fins;r</me:facs>
+ <me:dipl>flatnefr</me:dipl>
+ <me:norm>flatnefr</me:norm>
+ <note type="location">156rb111 </note>
+</w>
+<w lemma="falla" me:msa="xVB fF tPT mIN p3 nS vA">
+ <me:facs>&fins;&inodot;ell</me:facs>
+ <me:dipl>fiell</me:dipl>
+ <me:norm>fell</me:norm>
+ <note type="location">182ra10D </note>
+</w>
+<w lemma="&aacute;n" me:msa="xNP gM nS cN sI">
+ <me:facs>&aacutenscapbllig;</me:facs>
+ <me:dipl>&aacute;&nscap;</me:dipl>
+ <me:norm>&Aacute;n</me:norm>
+ <note type="location">182ra10E </note>
+</w>
+<lb ed="ms" n="11"/>
+</p></div>
+</body>
+</text>
+</TEI>

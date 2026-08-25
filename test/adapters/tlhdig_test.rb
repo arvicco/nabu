@@ -79,8 +79,11 @@ class TlhdigTest < Minitest::Test
     assert_equal ALL_URNS, refs.map(&:id), "urn:nabu:tlhdig:<cth>:<project>:<manuscript>, sorted"
     merged = refs.find { |ref| ref.id == MERGED_URN }
     assert_equal({ "cth" => "626", "project" => "HFR" }, merged.metadata)
-    refute refs.any? { |ref| ref.path.include?("quarantine") },
-           "only 'CTH *' folders are corpus shape"
+    relative = refs.map { |ref| ref.path.delete_prefix("#{File.expand_path(workdir)}/") }
+    refute relative.any? { |path| path.include?("quarantine") },
+           "only 'CTH *' folders are corpus shape (the fixture quarantine/ bin never discovers; " \
+           "checked relative to the workdir so a 'quarantine' in the CHECKOUT path cannot " \
+           "false-fail)"
   end
 
   def test_discover_yields_nothing_from_a_pre_fetch_workdir
