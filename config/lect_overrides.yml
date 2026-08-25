@@ -130,3 +130,11 @@ sources:
   # definitionally Aranese (the card's own description).
   aranese:
     oci: { lect: "oc/aranes", tier: certain }
+  # №R-42 (owner ruling 2026-08-24): Menota's onw is the Handbook's own
+  # DEPRECATED legacy code for Old Norwegian (ch. 14 prescribes nor +
+  # dating instead); the one file carrying it glosses itself "Old
+  # Norwegian", doc dated 1260-70 — inside no:old's band. NEVER a
+  # codemap row: ISO 639-3 assigns onw to Old Nubian; this is
+  # per-collection knowledge by definition.
+  menota:
+    onw: { lect: "no:old", tier: certain }

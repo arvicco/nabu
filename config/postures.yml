@@ -193,15 +193,15 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   menota:
-    lect:
-      posture: pending
-      note: "P82-1 candidate: a menota rule over the per-document `language`
-        facet (each file's textLang/langUsage code riding verbatim — census
-        isl 57 / nor 27 / swe 4 / dan 2 / non 1). isl and non ARE registry
-        anchors and swe codemaps to sv; nor and dan have NO registry nodes —
-        the rule needs an owner ruling on whether Menota's nor (Old
-        Norwegian, docs c. 1250-1370) reads under non and what dan mints
-        (a nabu-lects package, the sv:old precedent)"
+    # lect: machine-postured (№R-42 ruled 2026-08-24, nabu-lects v1.1.0
+    # minted no/no:old + da/da:old + the nor/dan/gmq-oda codemap rows) —
+    # the pending row retired, the ref add-then-retire shape. Coverage:
+    # nor/dan/swe ride the universal codemap; isl/non are identity
+    # anchors; the menota-dan rule stages the two Scanian docs (dates
+    # unparsed upstream); the onw override reads Menota's deprecated
+    # legacy code (ISO Old Nubian collision — never a codemap row);
+    # nor stages into no:old via lect infer-dates off real origDates
+    # (25/27 contained; two boundary straddlers honestly bare).
     dating: {posture: dated, note: "P82-1: the msDesc origDate's own
         notBefore/notAfter attributes via MetadataDates :structured, raw
         preserved (censused: all 91 catalogue rows carry an origDate);

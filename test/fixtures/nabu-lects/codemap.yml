@@ -28,6 +28,8 @@ map:
   cym:     cy
   cor:     kw
   ger:     de   # the 639-2/B bibliographic spelling (deu is the /T twin)
+  nor:     "no" # the macrolanguage alias, claiming nothing historical (quoted: YAML 1.1 reads bare no as false)
+  dan:     da
 
   # The suite mirrored: where the registry anchored the 639-2/3 code, a
   # collection spelling the same language in 639-1 means exactly that
@@ -42,9 +44,10 @@ map:
   # a code whose default reading is a specific historical lect.
   syr:     syc
 
-  # Old Swedish / Old Italian (Wiktionary etymology-only codes)
+  # Old Swedish / Old Italian / Old Danish (Wiktionary etymology-only codes)
   gmq-osw: sv:old
   roa-oit: it:old
+  gmq-oda: da:old
 
   # Greek stages that outgrew their codes
   gkm:     grc:byz
