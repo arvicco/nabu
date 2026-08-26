@@ -1,11 +1,10 @@
 # The Library — content review
 
-**As of 2026-08-22** (post the P81 full rebuild — the dating
-harvest, the FTS source column, the oc dialect wiring; the earlier
-73,625,479 figure counted ~4.2k passages on withdrawn documents
-the fresh rebuild no longer carries).
-Live totals: **988,556 documents / 73,621,000 passages and 1,410,205
-dictionary entries** across the **153 registry rows** — 130 corpus
+**As of 2026-08-26** (post the P82 granted-doors wave — Menota's
+91 Nordic manuscripts, 91/91 after the P82-r1 quarantine recovery,
+and the Corpus of Middle English).
+Live totals: **988,944 documents / 75,217,907 passages and 1,410,205
+dictionary entries** across the **155 registry rows** — 132 corpus
 sources + 4 local shelves + 19 feature modules, every corpus source
 wired (the P80 Latin–Romance wave, §8ai, verified its first syncs and
 flipped 2026-08-21). **Classical Arabic (`ara`, §8x) is the largest
@@ -905,6 +904,23 @@ into Catalan, Portuguese and the minority written record — the
 six-norm Occitan variation matrix, living Latin-script Ladino press,
 modern Sardinian — with the Aranese pair held honestly as synthetic
 parallel data.
+
+## 8aj. The P82 wave — the granted doors (`menota`, `cme`; P82 — first syncs owner-fired 2026-08-24, both wired 2026-08-26)
+
+| | |
+|---|---|
+| **Category** | The two 2026-08-20 correspondence grants become shelves: the Medieval Nordic manuscript archive and the Middle English corpus behind the Middle English Dictionary |
+| **Languages** | Old Icelandic (`isl`), Old Norwegian (`nor` → `no:old` via the №R-42 nabu-lects v1.1.0 mints), Old Swedish (`swe`), Old Danish (`dan` → `da:old`), Old Norse (`non`), Middle English (`enm`) — `nor`, `dan`, `onw`, `enm` new codes to the library |
+| **Size** | `menota`: **91 docs / 241,628 passages** — the Menota archive (Univ. of Bergen/CLARINO): 91 medieval Nordic manuscripts in multi-level Menota-TEI (facsimile/diplomatic/normalized per word; stored text = the diplomatic reading at manuscript-line grain, MUFI entities resolved) — Laxdæla saga, the Codex Wormianus (with its self-declared runic entities), Konungs skuggsjá, the Landslǫg law cluster, the Old Norwegian homily book, Elis saga, c. 1200–1700, all dated by origDate; 91/91 held after the P82-r1 quarantine recovery (+8 docs incl. Laxdæla — DOCTYPE internal-subset entities, comment-borne false references, single-level texts). `cme`: **297 docs / 1,355,279 passages** — the Corpus of Middle English Prose and Verse (Univ. of Michigan, the MED's quotation base), May-2026 TCP-schema normalization: Chaucer, Sir Gawain, the York and Towneley cycles, Piers Plowman versions, Ayenbite, wills and gild records, over the NEW `tcp-xml` streaming family — the exact machinery a future EEBO-TCP wave would ride |
+| **Licenses** | menota CC BY-SA 4.0 (catalogue-censused on all 91 + per-file availability; the crawl upstream-blessed, №77-1) → `attribution`; cme "no restrictions on use or reuse" + grant №77-2 → `open` |
+
+**Research uses:** Norse philology at manuscript grain — the diplomatic
+readings with lemma/morphology annotations beside Menotec (§8w) and the
+runestones (§8ab), the registry's new `no`/`da` ladders staging 62 docs
+by date inference; Middle English at reading grain — the MED's own
+corpus joining the `germanic` desk between Bosworth-Toller's Old
+English and ReM's Middle High German, the `tcp-xml` family holding the
+EEBO door open.
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 
