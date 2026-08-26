@@ -84,11 +84,16 @@ module Nabu
       private_constant :Unit
 
       def parse(source, urn:, language:, title: nil, canonical_path: nil,
-                license_mapper: nil, metadata_mapper: nil)
+                license_mapper: nil, metadata_mapper: nil, language_mapper: nil)
         path = resolve_canonical_path(source, canonical_path)
         extraction = extract(source, path: path)
         units = disambiguate_collisions(extraction.units)
         metadata = (metadata_mapper&.call(extraction.metadata) || {}).merge(extraction.metadata)
+        # The P83-1 seam (the license/metadata mold): the adapter judges the
+        # document's language claim from the mined header (EEBO-TCP:
+        # LANGUSAGE, one entry per file, censused); a declining mapper
+        # (nil/false) falls back to the caller's language:.
+        language = language_mapper&.call(extraction.metadata) || language
         build_document(units, urn: urn, language: language,
                               title: title || extraction.title,
                               path: path, metadata: metadata,
@@ -163,7 +168,14 @@ module Nabu
                          DATELINE TRAILER EPIGRAPH ARGUMENT HEADNOTE STAGE BIBL DATE].freeze
         UNIT_ELEMENTS = (VERSE_UNITS + HEAD_UNITS + PROSE_UNITS).freeze
         SEPARATOR_ELEMENTS = %w[PB MILESTONE LB GAP].freeze
-        DROPPED_ELEMENTS = %w[NOTE TAILNOTE FIGDESC].freeze
+        # FW is forme work — running titles, catchwords, page numbers: the
+        # DTD allows it "in a few page-crossing objects (p q letter div
+        # etc.) … following directly on pb" (eebo2prf.xml.dtd changelog
+        # 2011-05) with #PCDATA content, so inside a page-crossing <P> its
+        # running title would leak mid-passage. Apparatus, never reading
+        # text (P83-1; censused: 1 FW-bearing file in 5,782 EEBO-P4 files,
+        # 0 in all 297 CME files).
+        DROPPED_ELEMENTS = %w[NOTE TAILNOTE FIGDESC FW].freeze
         # FRONT/BACK mark passage provenance; BODY is the silent default.
         DIVISION_ELEMENTS = %w[FRONT BACK].freeze
         private_constant :READER, :TEXT_NODE_TYPES, :DIV_ELEMENTS, :VERSE_UNITS,
@@ -429,8 +441,12 @@ module Nabu
           context?("BIBLFULL") ? SOURCE_KEYS.fetch(key) : key
         end
 
+        # TYPE case-insensitive: CME writes "dlps", the EEBO-TCP generation
+        # "DLPS" (censused ×3,325) — same schema, case drift between
+        # generations.
         def idno_capture?(node)
-          context?("PUBLICATIONSTMT") && !context?("BIBLFULL") && node.attribute("TYPE") == "dlps"
+          context?("PUBLICATIONSTMT") && !context?("BIBLFULL") &&
+            node.attribute("TYPE")&.casecmp?("dlps")
         end
 
         def start_language(node)
