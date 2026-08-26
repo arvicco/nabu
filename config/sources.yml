@@ -315,9 +315,9 @@ menotec:
 menota:
   adapter: Nabu::Adapters::Menota
   axes: [germanic]
-  wired: false   # P82-1: adapter built; flip after the owner-fired first sync
-                 # (~95 requests at 1 req/s — minutes; then eyeball status
-                 # counts + 5 random passages, e.g.
+  wired: true    # flipped 2026-08-26 (owner: "wire everything on"; first sync
+                 # owner-fired 2026-08-24, 91/91 after the P82-r1 recovery
+                 # re-parse — 241,628 passages; e.g.
                  # nabu show urn:nabu:menota:am-1056-ix-4to:1rB.1)
   # Menota — the Medieval Nordic Text Archive (P82-1, Q42 / grant №77-1):
   # 91 manuscripts / ~2.1M words in Menota-TEI (multi-level facs/dipl/norm
@@ -3901,9 +3901,9 @@ aranese:
 cme:
   adapter: Nabu::Adapters::Cme
   axes: [germanic]
-  wired: false   # flip after the owner-fired first sync (CLAUDE.md checklist §6:
-                   # bin/nabu enable cme && bin/nabu sync cme — ~298 polite GETs,
-                   # ~200 MB, fetch ≈15–20 min; expect 297 docs / 1,355,279
+  wired: true    # flipped 2026-08-26 (owner: "wire everything on"; first sync
+                   # owner-fired 2026-08-24 — 297 docs / 1,355,279 passages,
+                   # exact to the scout census;
                    # passages (scout-copy parse census 2026-08-23, 48 s parse;
                    # the ~1.36M-row load is the long pole); then eyeball
                    # urn:nabu:cme:Gawain:d1.l1 and 5 random passages)
