@@ -60,6 +60,9 @@ module Nabu
           #                                   (fetch checkpoint) / teiHeader author_date
           "menota" => :structured, # P82-1: the msDesc origDate's own notBefore/notAfter
           #                          attrs, raw text preserved; attr-less dates ride raw only
+          "eebo-tcp" => :structured, # P83-1: the BIBLFULL imprint year through the censused
+          #                            molds (85.7% dated on the 3,325-file sample); ?/ca.
+          #                            uncertainty stays raw-only — no bounds invented
           "bfm" => :iso_keys,
           "croala" => :year_range,
           "ebl" => :period_label

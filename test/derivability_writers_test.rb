@@ -56,7 +56,11 @@ class DerivabilityWritersTest < Minitest::Test
   # elephantine/corpus-corporum law kind. cme_fetch (P82-2) writes
   # canonical/cme/texts/ (tmp+rename) + attic copies + its state
   # ledger inside Adapter#fetch — the derom_fetch law kind, its
-  # fifth crawl sibling. The P80-8 ctilc
+  # fifth crawl sibling. eebo_tcp_fetch (P83-1) writes
+  # canonical/eebo-tcp/texts/<phase>/<stem>/ (per-zip ZipFetch staging
+  # + tmp discipline), the ID-list/DTD sidecars (tmp+rename), attic
+  # copies and its state ledger inside Adapter#fetch — the
+  # zip_fetch/corpus_corporum law kind at zip grain. The P80-8 ctilc
   # adapter writes its crawled works (tmp+rename) and their replacement
   # attic copies into canonical/ inside Adapter#fetch — the riig crawl
   # law kind. ANY new file
@@ -67,7 +71,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/adapters/riig.rb nabu/adapters/rundata.rb
     nabu/adapters/sabellic_loans.rb nabu/adapters/trismegistos.rb
     nabu/cantigas_fetch.rb nabu/cme_fetch.rb
-    nabu/corpus_corporum_fetch.rb
+    nabu/corpus_corporum_fetch.rb nabu/eebo_tcp_fetch.rb
     nabu/derom_fetch.rb nabu/elephantine_fetch.rb
     nabu/file_fetch.rb nabu/git_fetch.rb nabu/iness_fetch.rb
     nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb
