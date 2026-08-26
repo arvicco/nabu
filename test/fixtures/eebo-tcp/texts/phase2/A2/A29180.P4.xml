@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="http://www.textcreationpartnership.org/docs/code/pfs.css"?>
+<!DOCTYPE ETS SYSTEM "http://www.textcreationpartnership.org/docs/code/eebo2prf.xml.dtd">
+<ETS>
+
+<HEADER><FILEDESC><TITLESTMT><TITLE TYPE="245" I2="4">The passion of our Saviour a pindarick ode on the suffering God, in imitation of rapins Christus patiens / by Francis Bragge.</TITLE><AUTHOR>Bragge, Francis, 1664-1728.</AUTHOR></TITLESTMT><EXTENT>Approx. 12 KB of XML-encoded text transcribed from 21 1-bit group-IV TIFF page images.</EXTENT><PUBLICATIONSTMT><PUBPLACE>Ann Arbor, MI ; Oxford (UK) :</PUBPLACE><PUBLISHER>Text Creation Partnership,</PUBLISHER><DATE>2014-11 (EEBO-TCP Phase 2).</DATE><IDNO TYPE="DLPS">A29180</IDNO>
+
+
+<IDNO TYPE="stc">Wing B4200</IDNO>
+
+<IDNO TYPE="stc">ESTC T221457</IDNO>
+
+<IDNO TYPE="eebo citation">12774817</IDNO>
+
+<IDNO TYPE="oclc">ocm 12774817</IDNO>
+
+<IDNO TYPE="vid">93745</IDNO>
+<AVAILABILITY><P>To the extent possible under law, the Text Creation Partnership has waived all copyright and related or neighboring rights to this keyboarded and encoded edition of the work described above, according to the terms of the CC0 1.0 Public Domain Dedication (http://creativecommons.org/publicdomain/zero/1.0/). This waiver does not extend to any page images or other supplementary files associated with this work, which may be protected by copyright or other license restrictions. Please go to https://www.textcreationpartnership.org/ for more information about the project.</P></AVAILABILITY></PUBLICATIONSTMT><SERIESSTMT><TITLE>Early English books online text creation partnership.</TITLE></SERIESSTMT><NOTESSTMT><NOTE>(EEBO-TCP ; phase 2, no. A29180)</NOTE><NOTE>Transcribed from: (Early English Books Online ; image set 93745)</NOTE><NOTE>Images scanned from microfilm: (Early English books, 1641-1700 ; 1521:16)</NOTE></NOTESSTMT><SOURCEDESC><BIBLFULL><TITLESTMT><TITLE TYPE="245" I2="4">The passion of our Saviour a pindarick ode on the suffering God, in imitation of rapins Christus patiens / by Francis Bragge.</TITLE><AUTHOR>Bragge, Francis, 1664-1728.</AUTHOR></TITLESTMT><EXTENT>[21] leaves.   </EXTENT><PUBLICATIONSTMT>
+<PUBPLACE>[S.l.] :</PUBPLACE>
+<PUBLISHER>Engraved ... and sold by John Sturt ...,</PUBLISHER>
+<DATE>[1694?]</DATE>
+</PUBLICATIONSTMT><NOTESSTMT><NOTE>In verse.</NOTE><NOTE>Engraved illustration t.p.</NOTE><NOTE>Date of publication suggested by Wing.</NOTE><NOTE>Reproduction of original in the British Library.</NOTE></NOTESSTMT></BIBLFULL></SOURCEDESC></FILEDESC><ENCODINGDESC><PROJECTDESC><P>Header created with script mrcb2eeboutf.xsl on 2014-10-10.</P></PROJECTDESC><EDITORIALDECL N="4"><P>Manually keyed and coded text linked to page images in accordance with level 4 of the TEI in Libraries guidelines.</P><P>Issued variously as SGML (TCP schema; ASCII text with mnemonic sdata character entities); displayable XML (TCP schema; characters represented either as UTF-8 Unicode or text strings within braces); or lossless XML (TEI P5, characters represented either as UTF-8 Unicode or TEI g elements).</P><P>Keying and markup guidelines available at TCP web site (http://www.textcreationpartnership.org/docs/)</P></EDITORIALDECL></ENCODINGDESC><PROFILEDESC><LANGUSAGE ID="eng"><LANGUAGE>eng</LANGUAGE></LANGUSAGE><TEXTCLASS><KEYWORDS><TERM>Jesus Christ --  Poetry.</TERM></KEYWORDS></TEXTCLASS></PROFILEDESC><REVISIONDESC><CHANGE><DATE>2013-01</DATE><RESPSTMT><RESP>TCP</RESP></RESPSTMT><ITEM>Assigned for keying and markup</ITEM></CHANGE><CHANGE><DATE>2013-02</DATE><RESPSTMT><RESP>SPi Global</RESP></RESPSTMT><ITEM>Keyed and coded from ProQuest page images</ITEM></CHANGE><CHANGE><DATE>2013-03</DATE><RESPSTMT><RESP>John Pas</RESP></RESPSTMT><ITEM>Sampled and proofread</ITEM></CHANGE><CHANGE><DATE>2013-03</DATE><RESPSTMT><RESP>John Pas</RESP></RESPSTMT><ITEM>Text and markup reviewed and edited</ITEM></CHANGE><CHANGE><DATE>2014-03</DATE><RESPSTMT><RESP>pfs</RESP></RESPSTMT><ITEM>Batch review (QC) and XML conversion</ITEM></CHANGE></REVISIONDESC></HEADER>
+<EEBO>
+<IDG S="marc" R="UM" ID="A29180">
+<STC T="W">B4200</STC>
+<STC T="C">T221457</STC>
+<BIBNO T="oclc">12774817</BIBNO>
+<VID>93745</VID>
+</IDG>
+<TEXT LANG="eng">
+<FRONT>
+<DIV1 TYPE="title page">
+<PB REF="1" MS="y"/>
+<P>The PASSION of our SAVIOUR.</P>
+<P>A PINDARICK ODE <HI>on the</HI> Suffering GOD. In Imitation of <HI>RAPINS</HI> CHRISTUS Patiens.</P>
+<P><HI>By Francis Bragge Gent.</HI></P>
+<P>Engra<GAP DESC="illegible" RESP="murp" EXTENT="1 chunk" DISP="…"/> <GAP DESC="illegible" RESP="murp" EXTENT="1 span" DISP="〈…〉"/> and sold by John S<GAP DESC="illegible" RESP="murp" EXTENT="1 chunk" DISP="…"/> in Golden Lion Court in Aldersgate <GAP DESC="illegible" RESP="murp" EXTENT="1 span" DISP="〈…〉"/></P>
+<P><FIGURE>
+<FIGDESC>engraved title page</FIGDESC>
+</FIGURE></P>
+</DIV1>
+</FRONT>
+<BODY>
+<DIV1 TYPE="ode">
+<PB REF="2"/>
+<LG N="1">
+<PB N="1" REF="2"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<HEAD>I.</HEAD>
+<L>WHAT Dark and <HI>Dismal shade</HI> is this?</L>
+<L>What <HI>Gloomy Sadness</HI> spreading o'er the Skies?</L>
+<L>What Black and Melancholy Vail,</L>
+<L>Which Covers Mourning Natures Face?</L>
+<L>Why has th'Affrighted Sun forsook his Place?</L>
+<L>And why the Universe so Pale?</L>
+<L>Why does the Trembling Moon turn back her Weeping Eyes?</L>
+<L>Sure there was never cause of grief <HI>like this!</HI></L>
+<L>The Sun beheld the DEITY,</L>
+<PB REF="3"/>
+<PB N="2" REF="3"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>Beheld his <HI>Maker</HI> Hanging on a Tree.</L>
+<L>He saw—and started back—and hid his Face,</L>
+<L>Asham'd to shew his own <HI>Created</HI> Rays,</L>
+<L>When once he'd seen the <HI>Source of Light,</HI></L>
+<L>Th' <HI>Eternal GOD,</HI> involv'd in <HI>Night.</HI></L>
+</LG>
+<LG N="2">
+<HEAD>II.</HEAD>
+<L>But where should I begin? where should I end?</L>
+<L>This <HI>Sad,</HI> if there was <HI>ever</HI> sad Complaint?</L>
+<L>Shall I relate his Flesh with Scourges <GAP DESC="illegible" RESP="keyers" EXTENT="1 letter" DISP="•"/>orn,</L>
+<L>And how he bore the Pain, and how he bore y<SUP>e</SUP> Scorn?</L>
+<PB REF="4"/>
+<PB N="3" REF="4"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>Or what is stranger yet that <HI>Man</HI> could dare,</L>
+<L>To pierce the <HI>GOD</HI> of <HI>Nature</HI> with a Spear?</L>
+<L>Shall I tell how the <HI>Softer Rock,</HI></L>
+<L>When cover'd ore</L>
+<L>With Heav'nly Gore:</L>
+<L>Unable to sustain the shock</L>
+<L>Of so Impetuous and so just a Grief,</L>
+<L>Burst—and its Stony Heart did into pieces cleave?</L>
+<L>Or JESUS shall I tell thy Bloody Sweat,</L>
+<L>When on the Flow'ry top of <HI>Olivet,</HI></L>
+<PB REF="5"/>
+<PB N="4" REF="5"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>Thou saw'st approaching near</L>
+<L>The Dreadfull Hour,</L>
+<L>How exquisite thy Pangs, how earnest was thy Prayer!</L>
+<L>Then what a Flood of Gore,</L>
+<L>Ran down and Scarlet dy'd each Briny Tear?</L>
+<L>A wond'ring Angel saw the <HI>Trembling GOD,</HI></L>
+<L>Saw all his Grief but <HI>wonder'd more,</HI></L>
+<L>To see his <HI>Love</HI> Triumphant o're his <HI>Fear;</HI></L>
+<L>To see him take the Cup, and kiss his Fathers Rod.</L>
+</LG>
+<LG N="3">
+<HEAD>III.</HEAD>
+<PB REF="6"/>
+<PB N="5" REF="6"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>Whither Audacious Man! O whither dost thou go?</L>
+<L>Hold in thy Desperate hand and see.</L>
+<L>It is the humble Deity!</L>
+<L>O! Wound not him who Loves thee so,</L>
+<L>All this he Suffers for <HI>Redeeming</HI> thee.</L>
+<L>Yet while I speak, Behold! The Armed Throng</L>
+<L>Pours like a Mighty Torrent in</L>
+<L>See! how they drag the <HI>Patient GOD</HI> along</L>
+<L>Who feels not half so quick their <HI>Fury</HI> as their <HI>Sin.</HI></L>
+<L>The <HI>Impious Crowd</HI> upon him Press,</L>
+<PB REF="7"/>
+<PB N="6" REF="7"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>One tears his Hair, another wounds his Face;</L>
+<L>And all with Eager Zeal contend,</L>
+<L>Who shall the most abuse their <HI>Greatest Friend.</HI></L>
+<L>So when with stinging hunger Mad,</L>
+<L>Th'<HI>Hyreanian</HI> Lions range the Forrest ore;</L>
+<L>Terror thro' all the Flocks and Herds they spread</L>
+<L>And ev'ry trembling Shepherd Flies before;</L>
+<L>If e're a <HI>Tender Lamb</HI> is left behind,</L>
+<L>Not to <HI>one</HI> Savage does the <HI>Victim</HI> fall,</L>
+<L>But with contending fierceness <HI>all,</HI></L>
+<L>Tear Limb from Limb, and into <HI>Atoms</HI> Grind.</L>
+<PB REF="8"/>
+</LG>
+<LG N="4">
+<PB N="7" REF="8"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<HEAD>IV.</HEAD>
+<L>And can the avenging Thunder hold,</L>
+<L>And let such <HI>Monstrous</HI> Guilt unpunishd go?</L>
+<L>Sure <HI>Heav'ns it self</HI> afraid to see so <HI>Bold</HI></L>
+<L>And so <HI>Triumphant</HI> Wickedness below!</L>
+<L><HI>As well it may,</HI> since <HI>GOD</HI> must plead his Cause</L>
+<L>Before a <HI>Mortal</HI> Judge, and fall by <HI>Human</HI> Laws.</L>
+<L>'Twas Night <HI>&amp;</HI> all things hush'd in a <HI>short liv'd</HI> repose,</L>
+<L>Nature opprest with Grief had fall'n asleep,</L>
+<L>Only the <HI>Silver Moon</HI> sat up to weep,</L>
+<PB REF="9"/>
+<PB N="8" REF="9"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>And restless <HI>Malice Rose.</HI></L>
+<L>The Raving <HI>Jews</HI> each other call,</L>
+<L>And Drag the wearied <HI>JESUS</HI> to the Hall.</L>
+<L>O! Let me ne'er Describe the Dismal Scene</L>
+<L><HI>Of that sad Night!</HI> How piercing was his Pain!</L>
+<L>How many Cruel Stripes in <HI>that sad Night</HI> he Bore,</L>
+<L>Yet nought return'd but Tears and Gore.</L>
+<L>All that the Maddest Fury could Invent,</L>
+<L>All that <HI>Revenge</HI> could <HI>Wish,</HI> or <HI>Guilt</HI> could <HI>Fear;</HI></L>
+<L>Or Keenest <HI>Hatred</HI> ever meant,</L>
+<PB REF="10"/>
+<PB N="9" REF="10"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>All this and more—</L>
+<L>In that <HI>one Dismal Night</HI> they made him bear;</L>
+<L>And thought it not enough, but Crown'd the rest</L>
+<L>With Scornful Jeers, and made their <HI>GOD</HI> their <HI>Jest.</HI></L>
+</LG>
+<LG N="5">
+<HEAD>V.</HEAD>
+<L>Scarce had <HI>Aurora</HI> shew'd the coming Light;</L>
+<L>And <HI>Phoebus</HI> from his <HI>Watry</HI> Bed,</L>
+<L>Rowz'd up his <HI>Fiery Steeds,</HI> and Chas'd away y<SUP>e</SUP> <HI>Night</HI></L>
+<L>When all <HI>Amaz'd</HI> he Look'd, and of a <HI>Bloody</HI> Red.</L>
+<L><HI>Trembling</HI> he saw th'enrag'd Crow'd,</L>
+<PB REF="11"/>
+<PB N="10" REF="11"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L><HI>Athirst</HI> for their <HI>Redeemers</HI> Blood,</L>
+<L><HI>Trembling</HI> he heard their Horrid Cry,</L>
+<L>Rending the Air with <HI>Crucify.</HI></L>
+<L><HI>Crucify him,</HI> does all the Place Resound,</L>
+<L><HI>Crucify him,</HI> th'<HI>unwilling</HI> Hills Rebound.</L>
+<L>The <HI>Judge</HI> perceiv'd his Spotless Innocence,</L>
+<L>Try'd to Asswage</L>
+<L>Their swelling Rage;</L>
+<L>And gave him to be Scourg'd for no <HI>Offence;</HI></L>
+<L>Away with Eager hast they bear</L>
+<L>Th'Afflicted <HI>GOD.</HI></L>
+<PB REF="12"/>
+<PB N="11" REF="12"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>Still now and greater Torments they prepare,</L>
+<L>Naked they tye their <HI>Maker</HI> to a Stake,</L>
+<L>Then with a twisted prickly Rod</L>
+<L>The <HI>unrelenting</HI> Soldier Tears his Back;</L>
+<L>Again renews the stroke and opens ev'ry Wound;</L>
+<L>Again the Ecchoing Walls y<SUP>e</SUP> <HI>Hissing</HI> Stroke rebound.</L>
+</LG>
+<LG N="6">
+<HEAD>VI.</HEAD>
+<L>Now thick as Summers Hail or Winter Rain</L>
+<L>(When with a mighty Deluge Big</L>
+<L>The teeming Clouds upon a Mountain break)</L>
+<PB REF="13"/>
+<PB N="12" REF="13"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>The trickling Blood pours down from ev'ry Vein,</L>
+<L>And all the Slipp'ry Pavements cover'd o're,</L>
+<L>With Scarlet streams and knots of <HI>Clotted</HI> Gore.</L>
+<L>This did th'avenging <HI>Father</HI> See</L>
+<L>Beheld his suffering <HI>Son</HI> in all his Agony,</L>
+<L>And yet in ne'er a Cloud of Thunder spoke,</L>
+<L>Nor Crush'd 'em down to Hell with one <HI>Almighty Stroke.</HI></L>
+<L>A Diadem of peircing Thorns they made,</L>
+<L>And <HI>Crown'd</HI> at once and <HI>Tore</HI> his tender Head.</L>
+<L>A <HI>Reed</HI> they for a <HI>Scepter</HI> bring,</L>
+<PB REF="14"/>
+<PB N="13" REF="14"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>Cry Hail! <HI>&amp;</HI> Bow the Knee, <HI>&amp;</HI> Mock their <HI>Bleeding King,</HI></L>
+<L>They See with <HI>Horrid Joy,</HI> the streaming Blood</L>
+<L>Down from his wounded Temples pour,</L>
+<L>They see his Face with Scars disfigur'd o'er,</L>
+<L>And <HI>Laughing</HI> say—Behold the Son of <HI>GOD!</HI></L>
+<L>Now does the Workman rend the sturdy Oak,</L>
+<L>And <HI>Unconcern'd</HI> redoubles ev'ry stroke;</L>
+<L><HI>Securely</HI> He the fatal <HI>Engine</HI> makes,</L>
+<L>While at the Dreadful sight <HI>Affrighted Nature</HI> shakes.</L>
+</LG>
+<PB REF="15"/>
+<LG N="7">
+<PB N="14" REF="15"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<HEAD>VII.</HEAD>
+<L>'Tis Done—and <HI>Jesus</HI> bears away his Cross,</L>
+<L>The Scene of all his <HI>Triumphs,</HI> all his <HI>Woes,</HI></L>
+<L>'Gainst mighty <HI>Death</HI> he goes to take the Field</L>
+<L>Resolv'd to <HI>Conquer,</HI> yet Resolv'd to <HI>Yield.</HI></L>
+<L>And now he sinks below th'unequal weight</L>
+<L>Of such a Load as <HI>Sin</HI> and <HI>That,</HI></L>
+<L>Too soon they fear his Pains would cease,</L>
+<L>And out of <HI>Cruel Pity</HI> lend a little Ease.</L>
+<L>Another takes the Cross, and on they go</L>
+<PB REF="16"/>
+<PB N="15" REF="16"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>To Lofty <HI>Golgotha</HI>'s Aspiring Brow,</L>
+<L>Thrice did the trembling Mountain sound,</L>
+<L>And thrice the hollow Caverns Groan'd,</L>
+<L>All Nature into dire <HI>Convulsions</HI> fell,</L>
+<L>To see the <HI>Drooping Heav'ns, &amp;</HI> hear y<SUP>e</SUP> Shouts of <HI>Hell!</HI></L>
+<L>The harden'd <HI>Jews</HI> alone with Fury Blind,</L>
+<L>Stretch forth their Naked <HI>GOD;</HI></L>
+<L>His Hands <HI>&amp;</HI> Feet upon the <HI>Cross</HI> they Bind,</L>
+<L>And fix with Nails unto the <HI>Groaning</HI> Wood.</L>
+<L>Aloft the <HI>Pond'rous</HI> Trunk they rear,</L>
+<PB REF="17"/>
+<PB N="16" REF="17"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>And poize their Bleeding <HI>Maker</HI> in the Air.</L>
+<L>Amazing Sight! between two Thieves to see</L>
+<L><HI>Him</HI> hanging on one <HI>Slender Tree,</HI></L>
+<L>Who y<SUP>e</SUP> Prodigious weight—of all y<SUP>e</SUP> Sins—of the whole World did bear.</L>
+</LG>
+<LG N="8">
+<HEAD>VIII.</HEAD>
+<L>Why <HI>Nature</HI> dost thou Blush? why Tremble so?</L>
+<L>It was not <HI>Thou</HI> that wert to Blame,</L>
+<L>Not all <HI>thy Pow'rs</HI> th'amazing Deed could do;</L>
+<L>'Twas <HI>Love</HI> that <HI>bore the Crime,</HI> 'twas <HI>Love</HI> that <HI>bore</HI> the <HI>Shame.</HI></L>
+<L>A Daring Soldier stabs th'<HI>Expiring GOD,</HI></L>
+<PB REF="18"/>
+<PB N="17" REF="18"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>And down there pours a Rapid Stream of <HI>Blood.</HI></L>
+<L>No longer could th'<HI>Affrighted Sun</HI> Behold</L>
+<L>So Monstrous and so sad a Sight;</L>
+<L>But headlong to the <HI>Ocean</HI> rowl'd,</L>
+<L>And hid his Blushes in the Vail of Night.</L>
+<L>Each <HI>Trembling Mountain</HI> shook its Snowy Head,</L>
+<L>The all Devouring Grave gave up her Dead.</L>
+<L>The <HI>Temples</HI> sacred <HI>Vail</HI> was rent in Twain</L>
+<L>And all things felt their Makers grief, but <HI>Man.</HI></L>
+<L>Back to their Fountains did the Rivers flow</L>
+<PB REF="19"/>
+<PB N="18" REF="19"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>And falling Hills their Channels fill'd below.</L>
+<L>The hardest Rocks in pieces broke,</L>
+<L>And all the Earth's Foundations shook;</L>
+<L>While o'er the City Frightful Ghosts appear,</L>
+<L>And horrid Spectres fill the Dusky, Troubled Air.</L>
+</LG>
+<LG N="9">
+<HEAD>IX.</HEAD>
+<L>Thee <HI>Jesus!</HI> did the hollow Grotts Bemoan,</L>
+<L>And all were melted into Pearly Tears.</L>
+<L>For thee the Lions and <HI>Getulian</HI> Bears,</L>
+<L>For thee th'<HI>Armenian</HI> Tygers Groan.</L>
+<PB REF="20"/>
+<PB N="19" REF="20"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>Each purling Stream ran murm'ring thro' the Plain</L>
+<L>And told in <HI>Hollow</HI> Sighs its <HI>Makers</HI> Pain</L>
+<L>Ore all the World a <HI>Pompous Sorrow</HI> spread,</L>
+<L><HI>All things were Sad, for GOD himself lay Dead.</HI></L>
+<L>And while the Savage Lions grieve,</L>
+<L>Shall harden'd <HI>Man</HI> alone refuse to give</L>
+<L>His Tributary share of Flowing Tears,</L>
+<L>Upon his Meek <HI>Redeemer's</HI> Hearse?</L>
+<L>O! Let him weep a Mighty Flood,</L>
+<L><HI>Strong</HI> as his Saviours <HI>Love,</HI> and <HI>Reeking</HI> as his <HI>Blood.</HI></L>
+<PB REF="21"/>
+<PB N="20" REF="21"/>
+<FW><FIGURE>
+<FIGDESC>decorative border resembling a picture frame</FIGDESC>
+</FIGURE></FW>
+<L>Let ev'ry Distant Shore his Griefs resound,</L>
+<L>Nor let his Sorrows ever stay,</L>
+<L>Till he has wash'd those <HI>Sins</HI> away</L>
+<L>Which <HI>Crucify'd</HI> his <HI>GOD,</HI> and gave the <HI>Fatal Wound.</HI></L>
+</LG>
+<TRAILER>FINIS.</TRAILER>
+</DIV1>
+</BODY>
+</TEXT>
+</EEBO>
+</ETS>
+
