@@ -1,0 +1,1888 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="http://www.textcreationpartnership.org/docs/code/pfs.css"?>
+<!DOCTYPE ETS SYSTEM "http://www.textcreationpartnership.org/docs/code/eebo2prf.xml.dtd">
+<ETS>
+
+<HEADER><FILEDESC><TITLESTMT><TITLE TYPE="245" I2="4">The schoole of slovenrie: or, Cato turnd wrong side outward. Translated out of Latine into English verse, to the vse of all English Christendome, except court and cittie. By R.F. Gent</TITLE><TITLE TYPE="alt" I2="0">Grobianus. English</TITLE><AUTHOR>Dedekind, Friedrich, d. 1598.</AUTHOR></TITLESTMT><EXTENT>Approx. 355 KB of XML-encoded text transcribed from 80 1-bit group-IV TIFF page images.</EXTENT><PUBLICATIONSTMT><PUBPLACE>Ann Arbor, MI ; Oxford (UK) :</PUBPLACE><PUBLISHER>Text Creation Partnership,</PUBLISHER><DATE>2011-12 (EEBO-TCP Phase 2).</DATE><IDNO TYPE="DLPS">A20018</IDNO>
+
+
+<IDNO TYPE="stc">STC 6457</IDNO>
+
+<IDNO TYPE="stc">ESTC S109490</IDNO>
+
+<IDNO TYPE="eebo citation">99845137</IDNO>
+
+<IDNO TYPE="proquest">99845137</IDNO>
+
+<IDNO TYPE="vid">10022</IDNO>
+<AVAILABILITY><P>To the extent possible under law, the Text Creation Partnership has waived all copyright and related or neighboring rights to this keyboarded and encoded edition of the work described above, according to the terms of the CC0 1.0 Public Domain Dedication (http://creativecommons.org/publicdomain/zero/1.0/). This waiver does not extend to any page images or other supplementary files associated with this work, which may be protected by copyright or other license restrictions. Please go to https://www.textcreationpartnership.org/ for more information about the project.</P></AVAILABILITY></PUBLICATIONSTMT><SERIESSTMT><TITLE>Early English books online.</TITLE></SERIESSTMT><NOTESSTMT><NOTE>(EEBO-TCP ; phase 2, no. A20018)</NOTE><NOTE>Transcribed from: (Early English Books Online ; image set 10022)</NOTE><NOTE>Images scanned from microfilm: (Early English books, 1475-1640 ; 986:06)</NOTE></NOTESSTMT><SOURCEDESC><BIBLFULL><TITLESTMT><TITLE TYPE="245" I2="4">The schoole of slovenrie: or, Cato turnd wrong side outward. Translated out of Latine into English verse, to the vse of all English Christendome, except court and cittie. By R.F. Gent</TITLE><TITLE TYPE="alt" I2="0">Grobianus. English</TITLE><AUTHOR>Dedekind, Friedrich, d. 1598.</AUTHOR><AUTHOR>R. F., Gent.</AUTHOR></TITLESTMT><EXTENT>[24], 136 p.   </EXTENT><PUBLICATIONSTMT>
+<PUBPLACE>London :</PUBPLACE>
+<PUBLISHER>Printed by Valentine Simmes dwelling on Adling hill neere Bainards castle at the signe of the White Swanne.,</PUBLISHER>
+<DATE>1605.</DATE>
+</PUBLICATIONSTMT><NOTESSTMT><NOTE>The name of the author, Friedrich Dedekind, appears on [fleuron]4v.</NOTE><NOTE>A translation of: Grobianus.</NOTE><NOTE>Verse satire.</NOTE><NOTE>First word of the title is xylographic.</NOTE><NOTE>The first leaf is blank except for signature-mark "[fleuron]".</NOTE><NOTE>Reproduction of the original in the British Library.</NOTE></NOTESSTMT></BIBLFULL></SOURCEDESC></FILEDESC><ENCODINGDESC><PROJECTDESC><P>Header created with script mrcb2eeboutf.xsl on 2014-03-05.</P></PROJECTDESC><EDITORIALDECL N="4"><P>Manually keyed and coded text linked to page images in accordance with level 4 of the TEI in Libraries guidelines.</P><P>Issued variously as SGML (TCP schema; ASCII text with mnemonic sdata character entities); displayable XML (TCP schema; characters represented either as UTF-8 Unicode or text strings within braces); or lossless XML (TEI P5, characters represented either as UTF-8 Unicode or TEI g elements).</P><P>Keying and markup guidelines available at TCP web site (http://www.textcreationpartnership.org/docs/)</P></EDITORIALDECL></ENCODINGDESC><PROFILEDESC><LANGUSAGE ID="eng"><LANGUAGE>eng</LANGUAGE></LANGUSAGE><TEXTCLASS><KEYWORDS><TERM>Manners and customs --  Early works to 1800.</TERM></KEYWORDS></TEXTCLASS></PROFILEDESC><REVISIONDESC><CHANGE><DATE>2011-01</DATE><RESPSTMT><RESP>TCP</RESP></RESPSTMT><ITEM>Assigned for keying and markup</ITEM></CHANGE><CHANGE><DATE>2011-01</DATE><RESPSTMT><RESP>SPi Global</RESP></RESPSTMT><ITEM>Keyed and coded from ProQuest page images</ITEM></CHANGE><CHANGE><DATE>2011-02</DATE><RESPSTMT><RESP>Kayla Ondracek</RESP></RESPSTMT><ITEM>Sampled and proofread</ITEM></CHANGE><CHANGE><DATE>2011-02</DATE><RESPSTMT><RESP>Kayla Ondracek</RESP></RESPSTMT><ITEM>Text and markup reviewed and edited</ITEM></CHANGE><CHANGE><DATE>2011-06</DATE><RESPSTMT><RESP>pfs</RESP></RESPSTMT><ITEM>Batch review (QC) and XML conversion</ITEM></CHANGE></REVISIONDESC></HEADER>
+<EEBO>
+<IDG S="marc" R="UM" ID="A20018">
+<STC T="S">6457</STC>
+<BIBNO T="umi">99845137</BIBNO>
+<VID>10022</VID>
+</IDG>
+<TEXT LANG="eng">
+<FRONT>
+<DIV1 TYPE="title page">
+<PB REF="1" MS="y"/>
+<PB REF="1" MS="y"/>
+<P><HI>THE</HI> Schoole of Slovenrie: Or, Cato turnd wrong side outward.</P>
+<P>Translated out of Latine into English verse, to the vse of all English Christendome, except Court and Cittie.</P>
+<P>By <HI>R. F.</HI> Gent.</P>
+<P>LONDON Printed by <HI>Valentine Simmes</HI> dwelling on Adling hill neere Bainards castle at the signe of the white Swanne. 1605.</P>
+</DIV1>
+<DIV1 TYPE="translator to the reader">
+<PB REF="2"/>
+<PB REF="2"/>
+<HEAD>¶ To all that can write and reade and cast accompt, the Translator.</HEAD>
+<P><SEG REND="decorInit">M</SEG>AY it please you: To bee a foole in Print, is as ordinarie, as a foole at an Ordinarie; and therefore t'were no good fel∣lowship to breake companie. Tis a Proverb, The child thats borne must be kept, though't be a bastard, seeing tis murder by the law to make away even the vn∣lawfully begotten. If the rugged cadence of this Verse, and scurrile harshnesse of this subiect, doe chance to escape a murdring censure <HI>(Quod Dij pri∣us omen in ipsum)</HI> If: then the Translator vowes to conclude, that either Signior <HI>Malevole</HI> his sure of Gumme is fretted out at elbowes, and hee put to the naked shift of keeping his chamber (tis well he hath a chamber;) or at least the subiect of this Booke is entertained with such abiection, that de∣traction like your breath-broaker in a Midsum∣mer vacation can find no subiect to worke vpon. Many a man may <HI>Petere sibi simile,</HI> that intends not <HI>Procreare sibi simile,</HI> may take a snatch and away,
+<PB REF="3"/>
+that would be loth to be tied to racke and manger, or passe billes of sope and candle. Tis my case: Who, though in the minority of my grammar-schollership, I was induced by those, whom du∣tie might not withstand, to vnmaske these Ro∣man manners, and put them on an English face; notwithstanding, witnesse my native bashfull ig∣norance, how distant it ever was from my desires; nay, how I ever feard to be pressed to death, by the publike censure of those, who (as I have heard) have it by Patent to scandalize whatsoever vn∣dergoes the publike Presse. The truth is, this tran∣slation was halfe Printed ere I knew who had it: So that <HI>Quo fata trahunt,</HI> without prevention or correction the fooles bolt must needes be shot. And this is it. Those which mislike the verse in English, let them reade it in Latine (for I allowe no mislikers, vnlesse at least they can reade Latin) &amp; then perhaps thei'le wonder that a man of such wisedome as my Author, being neyther borne a Roman, nor a <HI>Naso,</HI> should with such confidence of a generall applause publish so elaborate a trifle: from which admiration of yours, I hope your curtesie will derive a miracle viz. my pardon, especially considering that both <HI>Ovid</HI> and <HI>Virgill</HI> (both Poets Laureat) have beene metamorpho∣sed into as indigest and breathlesse a kind of verse
+<PB REF="3"/>
+as this. All that I can say for my Author, is, hee speakes broad English, but by contraries: all for myselfe, is, tis a Punies translation onely, an or∣phane, howsoever (fathered vpon me, because I taught him English, yet begotten without my presence, borne before my witte, and published against my will, vnlesse wee may be saide to will what we can not prevent. So fare ye well, and I pray picke as much matter out of this Epistle, as may be,</P>
+<CLOSER><SIGNED>Yours in print against his will, R.F. Gent. and no more.</SIGNED></CLOSER>
+</DIV1>
+</FRONT>
+<BODY>
+<DIV1 N="1" TYPE="book">
+<PB N="1" REF="12"/>
+<HEAD>THE FIRST BOOKE OF antient Simplicitie of Behavi∣our. Written by M. Fredericke Dedekinde.</HEAD>
+<L><SEG REND="decorInit">I</SEG>F thou desire an antient, harmelesse, simple life to lead,</L>
+<L>And in old, homely, clownish plow-mens perfit steps to tread:</L>
+<L>Come hither, and vnto my verse lend thine attentive eare,</L>
+<L>It may be for thy private vse, some profit thou maist heare.</L>
+<L>Pervse it through, and it no doubt, a way to thee will tell,</L>
+<L>How to conforme thy manners so, as thou maist live right well:</L>
+<L>Doubt not a single simple man, thou certainely shalt be,</L>
+<L>If thou with good advise doost marke, the things thou learn'st of me.</L>
+<L>Too hard and intricate a thing it is, and farre from ease,</L>
+<L>So strictly to behave thy selfe, as all men thou maist please:</L>
+<L>Those I commend, which scorne to suffer every paltry foole</L>
+<L>To weigh their words, and iudge their deedes, as Maister of a Schoole.</L>
+<L>And those which scorn a masters check, and think their own deeds good,</L>
+<L>Are right true Troyans, gallant souldiers, brave men by the Rood:</L>
+<L>Pine-girted <HI>Silvane,</HI> country god, thou art most welcome hither,</L>
+<L>Concerning country customes, let vs two conferre together.</L>
+<L>The praise of rude simplicitie, in country swaines wee'le sing,</L>
+<L>Of all my thoughts, of all my words, O <HI>Silvane</HI> thou art king:</L>
+<L>You mountaine-treading gods in woods and fields, I you request,</L>
+<L>Declare to me, for country-men, the life that you thinke best.</L>
+<L><PB N="2" REF="13"/>Old <HI>Bacchus</HI> father, god of wine, best knowne to drunken crew,</L>
+<L>The perfect way of quaffing right, set downe before my view:</L>
+<L>And thou which of the gut wert wont iolly governour to be,</L>
+<L>Further me, if I chance to handle all thy rights and thee.</L>
+<L>And thou neate god Rusticitie, the greatest of our time,</L>
+<L>Be present heere, and set thy hands to this my Rusticke rime:</L>
+<L>T'is no small thing in perfect sort, good manners thus to frame,</L>
+<L>Great men, good schollers, have beene oft times troubled with the same.</L>
+<L>Yet by the helpe of all those gods and goddesses Ile try,</L>
+<L>To passe the tedious laborinth, of this simplicitie:</L>
+<L>O helpe (friend <HI>Bing.</HI>) judge of this cause, your aide heerein I aske,</L>
+<L>For trusting to your helpe and aide, I vnder-go this taske.</L>
+<L>If then my Muse with cheerefull lookes, you kindely do revive,</L>
+<L>My vaine will be more plentifull, my verse will better thrive.</L>
+<DIV2 N="1" TYPE="chapter">
+<HEAD>What modestie is to be observed each morning in the apparell, and making the haire, the face, and the teeth cleane. <HI>Chapter. I.</HI></HEAD>
+<LG>
+<L>WHose're thou art that hat'st at heart a Masters crabbed charge,</L>
+<L>Which reades a Lecture every day of gravitie at large:</L>
+<L>Harke hither, come and heare this man, a man of quiet speech,</L>
+<L>No thunder-thumping Catonist, you neede him not beseech.</L>
+<L>My speech is brode, be rul'd, and then Ile do the best I can,</L>
+<L>Be rudible, and sure I thinke you'le prove a learned man:</L>
+<L>Be but a carefull and: for and scholler vnto me,</L>
+<L>And then you'le soone excell your Master in simplicitie.</L>
+<L>What though some crabbed wittall do not like my precepts well,</L>
+<L>Yet they can never hurte you, if you marke all that I tell.</L>
+</LG>
+<LG>
+<L>When <HI>Morpheus</HI> drowsie god of sleepe, from bed doth thee dismisse,</L>
+<L>(Which must be iust at dinner time, for so my counsell is:)</L>
+<L>Thy parents blessing never aske, learne that good point of me,</L>
+<L>This is a rule and perfect note, of great civilitie.</L>
+<L><PB N="3" REF="13"/>Good morrow nor good even to friend nor foe impart too fast:</L>
+<L>If they beginne, repay no thanks, walke on, you are in haste:</L>
+<L>What though you both should vse, to both you know t'would be but vaine,</L>
+<L>Then loose no words, for good words past, cannot be cal'd againe.</L>
+<L>Let fond Hebritians which account, their superstition wealth,</L>
+<L>Salute their friends, pray for their foes, and aske them of their health:</L>
+<L>T'is vaine to have so great a care, of such superfluous things,</L>
+<L>This too much care to iocond youth, white haires and sorrow brings.</L>
+</LG>
+<LG>
+<L>When you are vp, to stretch your selfe, deserveth mickle praise;</L>
+<L>This is prescrib'd by all that practise phisicke in our daies:</L>
+<L>For when your sinews numb'd with sleepe, cannot performe their worke,</L>
+<L>This stretching drives away all numbnesse, which in them did lurke.</L>
+</LG>
+<LG>
+<L>Being out of bed, let it suffice, to clothe thee in thy shurt,</L>
+<L>To stay to put on all thy clothes, with colde thou mightst thee hurt:</L>
+<L>All thy apparrell else get vp forth-with vnder thine arme,</L>
+<L>Then to the chimney corner runne, for there thou maist it warme.</L>
+<L>What though a maide or married wife, be there before thou come,</L>
+<L>Go forward with thy purpose though, as thou wouldst erst have done.</L>
+<L>If any man obiect to thee, that manners thou doost lacke,</L>
+<L>Bid him if he mislike that sight, be gone and shew his backe.</L>
+<L>Let every man give place to thee, thy selfe give place to none,</L>
+<L>What man? why Nature made thee free, then boldely hold thine owne.</L>
+</LG>
+<LG>
+<L>At length, when thou art well araide, let both thy hose hang downe</L>
+<L>About thy heeles, this onely thing will get thee great renowne:</L>
+<L>For by this secret meanes, the maides will seeke thy love to have,</L>
+<L>And every wench thee for her husband, of her friends will crave.</L>
+<L>Your reason sir. O sir, there is a speciall reason why,</L>
+<L>I cannot stay to tell it now, Ile tell it by and by.</L>
+</LG>
+<LG>
+<L>Simplicitie commands, that you forget to trusse your pointes,</L>
+<L>Hard tying is an enimie to bellie and to ioynts.</L>
+</LG>
+<LG>
+<L>Lest some men say, you are too hansome, ne're combe your haire,</L>
+<L>As Nature sets it, and bed leaves it, vse it so to weare:</L>
+<L>Leave plaited haires, and curled lockes, vnto the female sex,</L>
+<L>And let them vse to combe their haire, whom cruell love doth vex.</L>
+<L>Beleeve me, not a wench vnto thee will affection beare,</L>
+<L>If she perceive that thou observ'st such nicenesse in thy haire:</L>
+<L><PB N="4" REF="14"/>Who can abide yong men that dresse themselves as female crew,</L>
+<L>A Creetish dame writ to an Amazonian lover true:</L>
+<L>Tis praise and credite to have feathers store vpon your head,</L>
+<L>For thereby men may well perceive, you scorne straw in your bed.</L>
+</LG>
+<LG>
+<L>In any case cut not your haire, but let it hang at length,</L>
+<L>For t'will both keepe away the colde, and argue <HI>Sampsons</HI> strength.</L>
+<L>When father <HI>Saturne</HI> rulde the world, all men did vse long haire,</L>
+<L>And gloried in it, though now wenches vse it most to weare:</L>
+<L>Fore-fathers plaine simplicitie, is prais'd in every place,</L>
+<L>Then let not vs disdaine to vse it, it is no disgrace.</L>
+</LG>
+<LG>
+<L>Thy face and hands too oft to wash, is cause of mickle hurt,</L>
+<L>Therefore (a Gods name) let them both, have ever store of durt:</L>
+<L>Let other men, that with hands, have care to wash them cleane;</L>
+<L>But as for washing of my hands, to take no care I meane.</L>
+</LG>
+<LG>
+<L>Some nice-controuling mate, will counsell thee to wash thy teeth;</L>
+<L>But I say water in the mouth, not with the health agreeth:</L>
+<L>What though your teeth through o're-much rust, are dide to a red hue?</L>
+<L>That is a perfect saffron colour, t'will much credite you.</L>
+<L>What other colour then this red, hath the bright glittering gold,</L>
+<L>For which prossessions, tenements, lands, lives, and all are sold?</L>
+<L>Then thinke not, that golds perfect colour, doth your teeth disgrace,</L>
+<L>That colour which in few mens purses, in your teeth hath place.</L>
+</LG>
+</DIV2>
+<DIV2 N="2" TYPE="chapter">
+<HEAD>The breakefast, the modestie of the eyes, the forehead and the nosthrills: also of pratling, sneezing, bawdinesse, belching and going, and behaviour in the streetes. <HI>Chapter II.</HI></HEAD>
+<LG>
+<L>WHen your are vp, before that sleepe hath fully left your eyes,</L>
+<L>Call for you breakefast presently, marke that in any wise.</L>
+<L>Which being got, incontinent, with both hands gripe it round,</L>
+<L>Lest if you take not sure fast hold, it slip vpon the ground,</L>
+<L>At breakefast never vse a trencher, wherefore serves your hand?</L>
+<L><PB N="5" REF="14"/>At dinner time t'is farre more meete vpon such pointes to stand.</L>
+<L>In any case see that the fat runne downe thy fingers thicke,</L>
+<L>Which with your tongue as downe it runnes, you alwaies ought to licke.</L>
+<L>As for a ready way at meate, your dinner to devoure,</L>
+<L>I cannot tell you yet, but you shall heare within this houre.</L>
+<L>For first I must instruct you how, your bodie for to frame,</L>
+<L>And all your lookes in fittest sort, then briefly of the same.</L>
+</LG>
+<LG>
+<L>And first in any case take heede, of too much modestie,</L>
+<L>For that doth very much abhorre; from true simplicitie.</L>
+<L>Ist not a foolish thing, that yong hot bloods should be so nice,</L>
+<L>You will be callde a ledden slouthfull fellow of the wise.</L>
+</LG>
+<LG>
+<L>I will that all men with turnde lookes, you vse for to behold,</L>
+<L>For if you looke men in the face, they'le say you are too bold.</L>
+<L>Tis not allowed that tender youth, such gravitie should vse,</L>
+<L>Wherefore with distort eyes and forehead, every man abuse.</L>
+</LG>
+<LG>
+<L>Let such as learne at vertues schoole, and purpose to be wise,</L>
+<L>And seeke to live by others praises, care for bashfull eyes.</L>
+<L>But as for you, we give you leave, each way to rowle your eye,</L>
+<L>Then vse it, for it is a marke of great simplicitie.</L>
+</LG>
+<LG>
+<L>Tis not amisse though store of wrinckles, do thy forehead plow,</L>
+<L>And though your face be full of furrowes, we will it allow.</L>
+<L>Tis like a plowing heifers face, that many a blow of might</L>
+<L>Hath borne; or like a savage beast, which gainst a man doth fight:</L>
+<L>Even so a valiant gentleman, his countenance should frame,</L>
+<L>Which hopes by stratagems in fight, to get renowne and fame.</L>
+<L>For all those hidden vertues, which mans minde do decke and grace.</L>
+<L>Are with a lively portraiture, prefigurd in the face.</L>
+</LG>
+<LG>
+<L>To no man speake, but with such wordes, as may him halfe affright,</L>
+<L>For if thou doost, as by a foole, by thee they'le set but light.</L>
+<L>Wherefore with might and maine, prevent such ill report alwaies,</L>
+<L>(And yet I'de with you never try, the meanes to get true praise.)</L>
+</LG>
+<LG>
+<L>The proper vse of every tongue, is for to talke apace,</L>
+<L>Then let your tongue like a mill-clacke go fast in every place.</L>
+</LG>
+<LG>
+<L>It is a custome in some countries, at each nosthrills ends,</L>
+<L>To hang great jems and pretious stones, such as rich <HI>India</HI> sends.</L>
+<L>Hath Fortune in these pretious jems, denyde to thee a part?</L>
+<L><PB N="6" REF="15"/>Take courage though, and heare a friend, that loves thee at his heart,</L>
+<L>As ice sikles in winter time, which hang on houses hie</L>
+<L>Doe grace the roofes, and shew full faire to him that passeth by;</L>
+<L>So snot, which from the nostrils both, like bel-ropes hangeth downe,</L>
+<L>Doth grace a youth, which doth professe himselfe a simple clowne.</L>
+<L>Nature the maker of all things, to decke thy life the more,</L>
+<L>Hath lent thee, of such ornaments, a most aboundant store:</L>
+<L>Wherefore, as in all things besides, so in this, keepe this meane,</L>
+<L>When store of snot is in thy mouth, thy nose then make thou cleane:</L>
+<L>Do this, but closely now and then, and sure I thinke, than thee</L>
+<L>No man deserveth greater praise, for his civilitie.</L>
+<L>If when thou lackst an handkerchiefe, thou vse thy cloake or hat</L>
+<L>To blow thy nose, thou wilt be knowne a perfect clowne by that:</L>
+<L>Or fill thy hand top full with snot, and cast it on the ground.</L>
+<L>It is a very seemely thing to heare the same resound,</L>
+<L>And let it lie: What neede you care? I charge you stirre it not,</L>
+<L>And let them treade it out, that say you have not store of snot.</L>
+<L>I sawe a custome in a country where I lately was,</L>
+<L>Where hung with cordes vpon their sleeves a little pretty glasse:</L>
+<L>You may (if so it please you) take example from that towne,</L>
+<L>And see your picture in your snot, as it hangs dangling downe.</L>
+</LG>
+<LG>
+<L>And lest you should lacke change of manners, fetch sighs now &amp; then,</L>
+<L>And rattle in the nose, this gesture pleaseth many men:</L>
+<L>To fetch great blasts of breath together, argues that you can</L>
+<L>Blowe downe whole townes, and all will say, Oh, hee's a valiant man.</L>
+</LG>
+<LG>
+<L>When you would sneeze, strait turne your selfe vnto your neibors face:</L>
+<L>As for my part, wherein to sneeze, I know no fitter place;</L>
+<L>It is an order, when you sneeze, good men will pray for you:</L>
+<L>Marke him that doth so, for I thinke he is your friend most true.</L>
+<L>And that your friend may know who sneezes, and may for you pray,</L>
+<L>Be sure you not forget to sneeze full in his face alway.</L>
+<L>But when thou hearst another sneeze, although he be thy father,</L>
+<L>Say not, God blesse him, but, Choake vp, or some such matter, rather.</L>
+</LG>
+<LG>
+<L>Never be shamefast, never blush for any fault thats past,</L>
+<L>Let them do so which, sory, say, This fault shall be the last.</L>
+<L>What though thou speake vnseemely words, yet know it is not good</L>
+<L><PB N="7" REF="15"/>To have thy face and cheekes looke red, as they were dide with blood.</L>
+<L>What though of bawdie beastly words, thou learnst to speake great store,</L>
+<L>Why tis a shame that from a childe, thou didst not so before.</L>
+<L>To give each thing that proper name, which it of Nature had,</L>
+<L>Is neither in the law of God, nor man, accounted bad.</L>
+<L>The reason-wanting multitude, do thinke those things are base,</L>
+<L>Which nature in her secret wisedome, made mankinde to grace.</L>
+<L>I would not have you from the common speech depart so farre,</L>
+<L>As against Nature our best guide, vnwisely to wage warre.</L>
+<L>All that which in thy bladder and thy belly lieth hid,</L>
+<L>To empty whenas thou hast neede, what man will thee forbid?</L>
+<L>Crabbed precise fault-finders, only will not speake each word,</L>
+<L>Thinking it is by proper names, to call each thing absurd.</L>
+<L>What kinde of men are these? true reason soone will prove them mad,</L>
+<L>Which will not speake the words, but do the deedes, which is as bad.</L>
+</LG>
+<LG>
+<L>If any man do tell you newes, which ne're before you heard,</L>
+<L>And presently with ready words, you can him not reward,</L>
+<L>Then tis a great decorum, your wide mouth forthwith to stretch,</L>
+<L>And so stand still, as though some harmelesse flies you meant to catch.</L>
+<L>If that he tell a ieast, which worth your laughter you suppose,</L>
+<L>(But laugh not at each trifling thing,) then laugh so lowde that those</L>
+<L>Which do about their owne affaires, walke over-thwart the streete,</L>
+<L>May tell you that you laugh full lowde, when next they do you meete.</L>
+<L>And if by laughing your red teeth, some pretty wench espy,</L>
+<L>Because that colour is the best, shee'le love you presently.</L>
+<L>And if you see shee likes you well, then laugh afresh againe,</L>
+<L>This is of rude simplicitie, an argument most plaine.</L>
+<L>It is a very prettie thing, when you by laughing much,</L>
+<L>Do make your mouth by distorture, your very eares to tutch.</L>
+<L>Sometimes though no man give you cause, laugh as lowd as you can,</L>
+<L>For this is a most speciall signe, of a praise-worthy man.</L>
+<L>Oft times you shall espy some sober man with lookes most grimme,</L>
+<L>Which will be angry, thinking that you laugh at none but him.</L>
+<L>And this will be exceeding good, and make you laugh the more,</L>
+<L>To see a fellow collericke, knowing no cause wherefore.</L>
+</LG>
+<LG>
+<L>If now and then you meane to lie, (as who would tell the truth?)</L>
+<L><PB N="8" REF="16"/>Betweene each word cough once or twise, this is a tricke of youth.</L>
+<L>Are not your words in readinesse, according to your minde?</L>
+<L>Then cough a while, and by this meanes, perhaps you them may finde.</L>
+<L>Tut, doubt not man none can perceive whether you cough or no,</L>
+<L>It is great cunning, what is true, and what is false to know.</L>
+</LG>
+<LG>
+<L>When you have neede to cough indeede, you know this tricke of old,</L>
+<L>To cough into your neighbours face, you well may be so bold.</L>
+<L>Let him take halfe the breath, which from thy winde-pipe thou hast got,</L>
+<L>T'wil serve him for a cooler well, if that he be too hot.</L>
+<L>If he take that in ill part, which thou gav'st to him in good,</L>
+<L>What neede you care? his force is weake, it well may be withstood.</L>
+<L>Whatsoe're thou didst, thou'lt answer it, where, when and how he can;</L>
+<L>Thus thou by great out-braving words, must prove thy selfe a man.</L>
+<L>Tell him, within his currish heart, anger hath set her rest,</L>
+<L>If that he cannot take that well, which thou didst meane in iest;</L>
+<L>What would he do (trow,) if he were not, as thou art, a man?</L>
+<L>Which no such little trifling iest, with patience suffer can.</L>
+<L>Or bid him, if he thinke thy breath could do him any ill,</L>
+<L>That presently for full revenge, he would thy heart blood spill.</L>
+</LG>
+<LG>
+<L>When thou hast neede to belch, ne're hold it, freely let it out,</L>
+<L>Dissemble not, it will not stay, helpe it away you lowt.</L>
+<L>Tis hard to hold it without hurt, if that it seeke a vent,</L>
+<L>Then let those blasts from forth thy stomacke sayle, be freely sent.</L>
+<L>They le breede diseases infinite, in head, and every part,</L>
+<L>As stinking breath which doth infect, and the vnsavory fart.</L>
+<L>Therefore, to shunne all hurtes and harmes, which thereof soone would breede,</L>
+<L>Be not too coy, but belch thy fill, whensoe're thou hast neede,</L>
+</LG>
+<LG>
+<L>If thou desire at any time to walke into the streete,</L>
+<L>That all thy hat with dirt and dust besprinkled it is meete.</L>
+<L>He that regardeth cleanelinesse, which onely women vse,</L>
+<L>At him let all men mocke and scoffe, let all men him abuse.</L>
+</LG>
+<LG>
+<L>What though thy shooes be doubde with dirt: to make them cleane tis vaine,</L>
+<L>For why you know, do what you can, they must be fowlde againe.</L>
+</LG>
+<LG>
+<L>A long gowne weare, which all the ground may sweepe as thou doost go,</L>
+<L>For so no man the place whereon thou troddest well can know.</L>
+<L>The dirt which on thy hem thou getst, as thou doost walke along,</L>
+<L><PB N="9" REF="16"/>Will make the lowe welt of thy Gowne seeme to be very strong:</L>
+<L>And if a man espy the durt, when he is farre remote,</L>
+<L>Hee'le thinke you weare a very rich embroydred garded cote;</L>
+<L>Cloth made by silke-wormes paineful Art, from <HI>Scythia</HI> land doth come:</L>
+<L>Some strangers give to deerest friends, to others they sell some;</L>
+<L>A man would think, that with this cloth, your gowne were garded thick,</L>
+<L>If on the hemme, a great way off, he should see dry durt sticke;</L>
+<L>Or if you like not these long gownes (as oftentimes we see</L>
+<L>As many men, so many mindes and manners there will be)</L>
+<L>Weare a short coate, which scarce will keepe your buttockes out of sight,</L>
+<L>Like Noble men, and those which doe reioyce in martiall fight;</L>
+<L>Olde sage <HI>Erasmus</HI> counsaile tis, Regarde not thine attire.</L>
+<L>(The precept of so grave a man, who will not much admire?)</L>
+<L>Doe as he bids thee then, regarde not how thy garments sit,</L>
+<L>Whether they be too little, or too bigge, or very fit.</L>
+<L>Let both thy hands behinde thy backe together alwayes meete;</L>
+<L>Whether thou sit, or stand, or walke, in citty, or in streete.</L>
+<L>But lest my Lecture seeme too tedious for the multitude,</L>
+<L>This Exercise in three short wordes I purpose to conclude:</L>
+<L>Thus I would have thee frame thy life and deedes in any case:</L>
+<L>Let this thy manners and behaviour be in every place,</L>
+<L>That he which sees the good behaviour, which thou learnst of me,</L>
+<L>May know thou arte an expert Scholler, in Simplicitie.</L>
+</LG>
+</DIV2>
+<DIV2 N="3" TYPE="chapter">
+<HEAD>The setting on, and taking off the meate, and waiting at the Table. <HI>Chap. III.</HI></HEAD>
+<LG>
+<L>BEhold; the boy hath layde the cloth, and on the Table put</L>
+<L>Those cates, which Cookery provides, to fill mans hungry gut:</L>
+<L>You're glad of that, that you such dainty dishes shall oresee,</L>
+<L>As with your rav'nous empty stomacke very well agree.</L>
+<L><PB N="10" REF="17"/>But soft sir, first vpon your Maisters trencher you must waite;</L>
+<L>And afterward, when he hath dinde, you shall be served strait:</L>
+<L>And yet too ready never be vnto your Maisters hand,</L>
+<L>Vnlesse your helpe, by word of mouth, he twice or thrice command.</L>
+<L>And now sit, your behaviour fit I will lay foorth at large;</L>
+<L>Your onely duetie is (as you were wont) to marke my charge,</L>
+<L>You cannot say my precepts are too subtile for your reach,</L>
+<L>And therefore doubt, I shall not learne, the things which I shall teach</L>
+<L>My muse is rusticke, and my Muse is easie, homely, plaine,</L>
+<L>Which being perfectly attainde, can ne're be lost againe.</L>
+<L>Whether your service be at home, or out of doores extend:</L>
+<L>Whether you serve your maister onely, or your maisters friend,</L>
+<L>Your methode and your maners eke, must be the selfe same ever.</L>
+<L>And all which you have done before, must be forgotten never.</L>
+</LG>
+<LG>
+<L>At dinner when you meane to wait, lay by your clothes all,</L>
+<L>So shall you be the lighter for to come at every call.</L>
+<L>Have on your hose whenas you wait on them that are at meate;</L>
+<L>But let your breast be naked, to be seene of them that eate,</L>
+<L>That so your bodies slendernesse the strangers may perceave,</L>
+<L>And give you praise, which none but fooles &amp; mad men ought to leave.</L>
+</LG>
+<LG>
+<L>But if, the weather being colde, apparell you doe weare,</L>
+<L>The same to button, tie, or trusse, be sure that you forbeare.</L>
+<L>As for those partes which we are bound to hide by natures bandes.</L>
+<L>My counsell is, that all them partes thou cover with thy hands;</L>
+<L>So modest Matrons and wilde wenches thou shalt please I know,</L>
+<L>And shalt thy selfe a prety stripling vnto all men show.</L>
+</LG>
+<LG>
+<L>I like not those, which when they wait, must stand on both their feete,</L>
+<L>And carefull be, that as they stand, their legges may alwayes meete.</L>
+<L>To vse the right foote and the left by turnes I holde it best:</L>
+<L>For so, while that you vse the one, the other legge may rest.</L>
+<L>But if my counsaile you will take, ne're stand on both togither;</L>
+<L>For that which wanteth rest and ease, must needes wax weake and lither.</L>
+</LG>
+<LG>
+<L>A nimble, stirring, hobling pase in yong men I like best:</L>
+<L>The scabs, the gowt, and such diseases breed, by too much rest.</L>
+<L>Good Smiths do hobble with their feete, as they their bellowes blowe.</L>
+<L>Then since good trades doe it allow, why shouldst not thou doe so?</L>
+<L><PB N="11" REF="17"/>Marke that which most men vse to doe, and scorne to learne of none;</L>
+<L>But good behaviour, and perfection get of every one.</L>
+</LG>
+<LG>
+<L>Be sure, that wheresoe're you wayt, your fingers never stand,</L>
+<L>But still be fumbling, tis a credite, not to hold your hand.</L>
+<L>Praise comes to them by due desert, which something do alwayes:</L>
+<L>But slouthfulnesse is a great let to him that seeketh praise:</L>
+<L>Wherefore be sure in both thy hands, thou alwayes something have,</L>
+<L>Lest such as finde thee doing nothing, call thee idle knave.</L>
+<L>In right hand hold thy trencher still, and let thy left hand hold</L>
+<L>Thy breeches, lest they slipping downe, thou chance to catch some cold;</L>
+<L>Though thou doost nothing else, yet let thy finger scratch thine eare,</L>
+<L>Or with thy left hand lay at length, thy knotty tangled haire:</L>
+<L>Or turne thy hat vpon thy finger, or, among the rest,</L>
+<L>Finde out some pretty pleasing sport, that fits thy humour best.</L>
+<L>Or if you would be thought a learned Poet of your friends,</L>
+<L>Then licke and gnawe with tong and teeth, your nailes and fingers ends;</L>
+<L>They vse this action, whome, for thoughts aspiring men admire:</L>
+<L>And so doe they which Hymnes doe say, in god <HI>Apolloes</HI> quire.</L>
+</LG>
+<LG>
+<L>Or set your armes vp by your side, like to a man of might,</L>
+<L>And frowne, and by your very lookes, theile thinke you meane to fight.</L>
+</LG>
+<LG>
+<L>Doe nothing that is fit or meete, vnlesse they you constraine:</L>
+<L>For if you do, nor praise, nor price, youle get, you worke in vaine.</L>
+</LG>
+<LG>
+<L>If you perceive a man ill nurturde, marke him presently;</L>
+<L>His going, sitting, standing, deedes, marke with a carefull eie.</L>
+<L>Marke how he eates and drinkes, and how his hands he placeth best;</L>
+<L>And if out of his life and maners, you can picke some jeast</L>
+<L>Thats worth the laughing, thats enough, deride him presently.</L>
+<L>Be not ashamde, but laugh so long, till that you seeme to cry:</L>
+<L>And from thy wit, of his behaviour, let some quips arise:</L>
+<L>It may be, when he sees his faults, hee'le learne to be more wise</L>
+<L>And when thy maister shall have greatest store of merry guests;</L>
+<L>Then from thy biting budget bring most store of pleasant jeasts:</L>
+<L>And this will be an argument of thine exceeding wit.</L>
+<L>If each mans sundry humour, thou with biting jeasts canst fit.</L>
+</LG>
+<LG>
+<L>Perchaunce at length for second course, some rowme must needes be made;</L>
+<L>Then learne this tricke, a point most fit, for this thy serving trade:</L>
+<L><PB N="12" REF="18"/>Art thou an hungry? on a trencher some good bit, lay by,</L>
+<L>That is a waiters proper fee, no man will it deny:</L>
+<L>Thou hast a leather sachell, to what purpose boughtst thou it?</L>
+<L>But now and then, for thine owne vse, to keepe a friendly bit.</L>
+<L>What though perchance some man espie thy sachell in thy sleeve;</L>
+<L>Take a good courage though, and let not that thy conscience grieve.</L>
+<L>But if perchance for this thy tricke, he give thee some reproofe,</L>
+<L>Have something still which thou maist freely say for thy behoofe.</L>
+<L>What sir, when other strangers have their bellies full, at least</L>
+<L>Ist any reason that I should goe empty from the feast?</L>
+<L>What can he say when this he heares? perforce hee'le surely yeelde.</L>
+<L>Then courage man, for sure from him thou'lt quickely winne the field.</L>
+</LG>
+<LG>
+<L>If thou setst on a dainty dish of creame filld to the brimme,</L>
+<L>Make bread, and meate, and salt, and all, in curds and creame to swimme.</L>
+</LG>
+<LG>
+<L>When all is gone, and for a voider they doe call to thee,</L>
+<L>Learne this good point of manners and behaviour of me;</L>
+<L>Get from thy maisters sight; and lest with worke thy bones should ake,</L>
+<L>Thou setst all on for his, let him remoove all for thy sake:</L>
+<L>Say you have waited long enough, and are ev'n starv'd for meate.</L>
+<L>And its a hard case, if that now you may not freely eate.</L>
+<L>But if at length with thundring words, your maister call his man;</L>
+<L>Returne, but with as slow a pase, as possible you can:</L>
+<L>Haste maketh waste, and he which runneth, oft doth catch a fall,</L>
+<L>When he which goes a sober pase, doth surely best of all.</L>
+</LG>
+<LG>
+<L>And when you come, out of its order every dish remove,</L>
+<L>When all the sweetest bittes are gone, what man would order love?</L>
+</LG>
+<LG>
+<L>Take all at once, a weary man ought not to stand all day.</L>
+<L>What foole will goe about, when he can goe a neerer way?</L>
+<L>What though perhaps out of your hands, the meate doe chance to fall?</L>
+<L>Tush, a small matter, care not for it, tis no fault at all.</L>
+<L>In trueth, the platters were so heavy, they weighd downe mine arme,</L>
+<L>If that I had not let them fall, I should have caught some harme:</L>
+<L>If that a stronger man than I, had felt the weight of all,</L>
+<L>I doe not thinke but that he also, would have let them fall:</L>
+<L>And if your maister greet you not, with, Take them vp I pray:</L>
+<L>First looke vpon them a good while, and then depart away.</L>
+<L><PB N="13" REF="18"/>And laugh, as though you did reioyce in doing of the same.</L>
+<L>And for that fault, its tenne to one, that no man will you blame.</L>
+<L>But if your maister, with a frowne, bid you remove them thence;</L>
+<L>Looke sadly, and hee'le thinke that you are sorie for th'offence:</L>
+<L>If all at once you cannot take, tis good to let some lie,</L>
+<L>And after you have placde the other, fetch them presently:</L>
+<L>I thinke not one of all the guests will judge your fault so great,</L>
+<L>As for the spilling a few scraps, your maister should you beate.</L>
+<L>Nay rather, in a merrie vaine, thei'le laugh and jeast at thee,</L>
+<L>Which proov'st thy selfe a perfect Scholler in Simplicitie.</L>
+</LG>
+</DIV2>
+<DIV2 N="4" TYPE="chapter">
+<HEAD>Concerning the behaviour at the Table, before meate be set on. <HI>Chap. IIII.</HI></HEAD>
+<LG>
+<L>HArke how thy hunger-pining panch for meate doth crie and rore,</L>
+<L>And yet to comfort it with foode, whie hastest thou no more?</L>
+<L>Make haste, make haste, and now at length, after thy fast so great,</L>
+<L>Prepare thy selfe most speedily to give thy bellie meate.</L>
+</LG>
+<LG>
+<L>If anie great impediment forbids thee to proceede,</L>
+<L>As points, or girdle, thou wert best to loose them all with speede:</L>
+<L>Although if thou remove all lets, thou wilt be thought vnkinde,</L>
+<L>Thy doublet thou maist well vnbutton, when thou hast halfe dinde.</L>
+</LG>
+<LG>
+<L>Tis vaine with water (which cannot be cleane) to wash thy hands:</L>
+<L>How often into cleerest ponds are clods throwne from the lands?</L>
+<L>If water which should cleanse our hands, have lumps of durt in it:</L>
+<L>Then surely from our hands it cannot wash the durt a whit.</L>
+</LG>
+<LG>
+<L>Thy nailes ne're cut, but let them grow, it is a comely sight:</L>
+<L>Hawks with long nailes do catch their meate; yet Lords in them delight:</L>
+<L>Or if thou needes wilt cut thy nailes, cut them as thou doost dine,</L>
+<L>Betweene the first and second course, for then thou hast good time.</L>
+</LG>
+<LG>
+<PB N="14" REF="19"/>
+<L>If any gentleman, at dinner with thee chance to sit,</L>
+<L>Be sure to get the highest roome, thats for thy credite fit.</L>
+<L>If any man chance to presume, to bid thee leave that place,</L>
+<L>Yet sit thou still, for if thou rise, twill be a great disgrace.</L>
+<L>For when a man is plac'd aloft, according to his vse,</L>
+<L>Vnto a worse place to be thrust, it is a great abuse.</L>
+<L>What reason hast thou for to shew, thou hast so base a minde,</L>
+<L>As when thou hast a place before, thou wilt be thrust behinde?</L>
+<L>Had we not all one father <HI>Adam,</HI> and one mother <HI>Eve?</HI></L>
+<L>Shall earth and ashes thrust thee downe? at that who would not grieve?</L>
+</LG>
+<LG>
+<L>Whenas our Grandsire <HI>Adam</HI> dig'd, and Grandam <HI>Eve</HI> span,</L>
+<L>Who then I pray amongst vs all, was the best gentleman?</L>
+<L>Whenas you come too late to dinner, and a stoole you lacke,</L>
+<L>(Stand not in any case, for too much standing hurtes your backe.)</L>
+<L>By head and shoulders, from his place, thrust out some simple foole,</L>
+<L>If to his elder, and his better, hee'le not yeelde his stoole.</L>
+</LG>
+<LG>
+<L>Perchance your knife is fowle, with bread which yesterday it cut,</L>
+<L>Or in some other dirtie place, perhaps it hath beene put.</L>
+<L>This fault your shoo will quickely mend, if you no whetstone have,</L>
+<L>For whet it on your shoo-sole well, and it will shine most brave.</L>
+<L>If any man do marvaile, that you vse so plaine a way,</L>
+<L>Tell him, that you have vsde that custome many a summers day.</L>
+</LG>
+<LG>
+<L>If when you are sharpe set to dine, you nothing have to eate,</L>
+<L>And for your hungry bellie, you can get no store of meate;</L>
+<L>Because the Cooke is somewhat long, before he will you serve,</L>
+<L>If that you thinke, vnlesse you eate forthwith, you strait shall sterve:</L>
+<L>Be angry strait, for why you have good cause, stampe, stare, and fume,</L>
+<L>How dare they on thy patience, base pesants, thus presume?</L>
+<L>Aske thou thy meate with angrie lookes, with choller, and with heate,</L>
+<L>And if they will not bring it thee, cry still out, meate, meate, meate.</L>
+<L>But if they still deny to come, with angry forehead say,</L>
+<L>That thou wilt beate them everie one, if that they thus delay.</L>
+</LG>
+<LG>
+<L>Perhaps at length the meate is readie, and they onely tarrie</L>
+<L>For one, which should the meate from thence, vnto the table carrie.</L>
+<L>Then sit thou still, stirre not a foote, tis better farre to sterve,</L>
+<L>Then like a paltry blew-cote knave (thats base) thy selfe to serve.</L>
+<L><PB N="15" REF="19"/>Let no man, had he <HI>Tullies</HI> wit, make thee such follie vse,</L>
+<L>What? serve thy selfe? thou never canst thine honour more abuse.</L>
+<L>Meane time be casting with thy selfe, which way the time to spend,</L>
+<L>Beware on idlenes, on which all vices do attend.</L>
+<L>Hath the scabd-dogge, with tickling itching all thy bodie bit?</L>
+<L>Thou maist have meanes to spend thy time, by over-looking it.</L>
+</LG>
+<LG>
+<L>Scratch off the scabs with busie fingers, that is verie good,</L>
+<L>For so of putrefaction, thou maist let out a flood:</L>
+<L>Or as our Mettall-mongers do, with their industrious paines,</L>
+<L>By digging mountaines, rob the earth, of her rich mettall vaines.</L>
+<L>So with thy knife, from out thy body scabs thou maist dig store,</L>
+<L>And seeke diseases which do lacke, in every hidden pore.</L>
+<L>Then with your vnwasht knife to cut your meate, can breede no hurt,</L>
+<L>Nor wash your hands, you know that water cannot scowre off durt.</L>
+</LG>
+<LG>
+<L>Tis common for yong men, to have great store of lustie lice.</L>
+<L>Their names declare their forme, they have six feete, be not so nice.</L>
+<L>If that your flesh doth suffer any hurt by their sharpe teeth,</L>
+<L>Deferre no whit their punishment, that with your health agreeth.</L>
+<L>But with a courage from your head, strait pull them by the taile,</L>
+<L>And for their treason, strait behead them, with your thumbs sharpe nail</L>
+<L>From forth your bosome take them quicke, vnto their great disgrace,</L>
+<L>And on the table valiantly, their captive bodies place.</L>
+<L>T'will be a prettie sight to see, how fast thei'le run away,</L>
+<L>To save themselves, and all their kinne, from that most bloodie day.</L>
+</LG>
+<LG>
+<L>Though all things faile thee else, yet sure thou shalt finde trenchers strong,</L>
+<L>To help to drive away the time, which thou dost think so long.</L>
+<L>O'relooke them well on every side, each corner, and each end,</L>
+<L>And if they are not, as they should be, helpe their faults to mend.</L>
+<L>The Trencher-maker in his worke, doth often make great waste,</L>
+<L>Whenas he cannot stay, to finifie each part for haste.</L>
+<L>Thou which hast time enough, correct those faults in any wise,</L>
+<L>With thy sharpe knife, which seeme not hansome in thy curious eyes.</L>
+<L>And when thou hast corrected, of each trencher everie whit,</L>
+<L>Thy Master cannot choose, but praise thy labour and thy wit.</L>
+</LG>
+<LG>
+<L>The table-cloth, with pin or knife, to pricke, or cut, beginne,</L>
+<L>No reasonable man I trow, will say this is a sinne.</L>
+<L><PB N="16" REF="20"/>For let the foole your Master know, that he did cause this deede,</L>
+<L>In keeping such bad Cookes, as would not give you meate with speede.</L>
+<L>T'will make him charge his Cookes, that at the first call they you serve,</L>
+<L>And not to let his servants, to sit without meate and sterve.</L>
+</LG>
+<LG>
+<L>Perhaps a salt-seller stands by, tis good with that to play,</L>
+<L>And strike it with your knife, t'will serve to drive the time away.</L>
+<L>This by two sundry profits, sure will stand thee in great steed,</L>
+<L>For first the noise will make the Cookes, remember thee to feed.</L>
+<L>And secondly, vnto thine eares, a pretty sound t'will send,</L>
+<L>Wherefore, above all other trickes, this one I do commend.</L>
+</LG>
+<LG>
+<L>If that your master, or your father, leave his knife behinde,</L>
+<L>For their sakes vse it favourably, never be vnkinde.</L>
+<L>With stones, or wood, or keyes, be sure you make it blunt and dull,</L>
+<L>Lest that it cut too fast as from their sheathes they do it pull.</L>
+<L>So when their knife dooth cut their hands, in carving out a messe,</L>
+<L>By that good meanes which you foresaw, their wound will be the lesse.</L>
+</LG>
+<LG>
+<L>In briefe, if that you had almost forgot your points to loose,</L>
+<L>And now you have such suddaine haste, you cannot will, nor choose,</L>
+<L>And that you feare your breeches shall partake your heavie waight,</L>
+<L>And all the house you shall perfume, if you depart not straight.</L>
+<L>Then rise, and if your fellow needes will know whither you went,</L>
+<L>Tell him, to thrust away a knave, that would not pay his rent.</L>
+<L>So come againe, and without washing either hands or face,</L>
+<L>As soone as may be, (as I told you,) get the vpper place.</L>
+<L>Perchance if you in washing of your hands, had staied long,</L>
+<L>The knaves would soone have parted all your part themselves among.</L>
+</LG>
+</DIV2>
+<DIV2 N="5" TYPE="chapter">
+<HEAD>Your behaviour all the while you eate. <HI>Chapter V.</HI></HEAD>
+<LG>
+<L>VVHen you are set with pottage, first your stomacke is vnlockt,</L>
+<L>Because, before all other meates, you may that best concoct.</L>
+<L><PB N="17" REF="20"/>And now forsooth you lacke a spoone, yet hardely can abstaine,</L>
+<L>Why then to sup it vp with mouth and lips, you must be faine:</L>
+<L>Aske but of Nature, our deare mother, and shee'le lend thee soone,</L>
+<L>A paire of lips, which thou maist vse, better then scoupe or spoone.</L>
+<L><HI>Diogenes</HI> did scorne a spoone, but from a fountaine cleere.</L>
+<L>Did drinke as well out of his hand, as we from pots of beere.</L>
+<L>And sure he had no other cause, the spoone for to despise,</L>
+<L>But that he saw his ancesters, do so before his eyes.</L>
+</LG>
+<LG>
+<L>When as the meate is all set downe, according to thy wish,</L>
+<L>See that thy right hand wrest and all, be first in every dish.</L>
+<L>And if there be a daintie bit, tis good to snatch it strait,</L>
+<L>Lest that another for the same, do craftilie lay wait.</L>
+<L>If thou be wise, observe this course and custome evermore,</L>
+<L>So for thy bellie, daintie bits, thou ever shalt have store.</L>
+<L>If that some envious man, do seeme for to repine at this,</L>
+<L>Love others well, but thy selfe better, say the proverbe is,</L>
+</LG>
+<LG>
+<L>Perchance vpon the platters furthest side, there lies a bit,</L>
+<L>Which thou doost verie much desire, but canst not reach to it.</L>
+<L>And if thou sit by no such friend, as strait will helpe thee to it,</L>
+<L>By stretching out thy limbes vpon the table, thou maist do it,</L>
+<L>If any seeme offended with thee, tell them tis the fashion,</L>
+<L>To set the best meate, to the best men of the congregation.</L>
+<L>Now sir, tis a more seemely tricke, to turne the platter round,</L>
+<L>That by that meanes, the daintie bits may on your side be found.</L>
+<L>The turning of the platter round, in this sort it is best</L>
+<L>To hide, and cloake, and in my minde it is a prettie iest.</L>
+<L>After this sort, all starres, and the celestiall bodies move,</L>
+<L>Which daily motion, and perpetuall stirring ever love.</L>
+<L>Then bid your neighbour speake of plants, so your talke to quite,</L>
+<L>He smiling hits you on the eare, yo'are planet-strucken right.</L>
+</LG>
+<LG>
+<L>Whenas your friend doth on your trencher, daintie wilde-fowle lay,</L>
+<L>Strait cover it with both your hands, for feare it flie away.</L>
+<L>And though your neighbour ne're so much, vpon you do bestow,</L>
+<L>Yet keepe it all within your clutches, let not one bit go.</L>
+<L>It is no profit for to give thy neighbour any part,</L>
+<L>Of those good bits, which thou thy selfe doost love with all thy heart.</L>
+<L><PB N="18" REF="21"/>And as for him which gave it you, his kindnes ne'recommend,</L>
+<L>Although he be a man of worship, and your very friend;</L>
+<L>Tell him, you were of age enough, your selfe with cares to fit,</L>
+<L>Although from off his trencher he had reachd you ne're a bit.</L>
+<L>After that you have twice or thrice thus answerd everie friend,</L>
+<L>No man from off his trencher dainties vnto you will send;</L>
+<L>And so heereafter for your selfe, you where you will may out,</L>
+<L>And out of everie daintie dish, choose bits for your owne gut.</L>
+</LG>
+<LG>
+<L>On everie side of everie dish, be sure you taste and trie,</L>
+<L>And that which pleaseth not your minde, for others let it lie:</L>
+<L>False obiects oftentimes deceive this mortall sight of our,</L>
+<L>And that which beares the sweetest shew, in taste is often sowre:</L>
+<L>Wherefore my counsell is, that in thy mouth thou taste aright,</L>
+<L>That which doth make so faire a shew, vnto the outward sight.</L>
+<L>If that it hath a pleasant taste, and like your pallate well,</L>
+<L>What then you ought to doe therewith, I hope I neede not tell.</L>
+<L>But if the taste which you expected, fit not to your minde;</L>
+<L>Then take my counsell, for in it great profit thou shalt finde:</L>
+<L>Into the platter with an angry looke you may it cast,</L>
+<L>There is no sense that you should eate that meate you cannot taste:</L>
+<L>Or keepe it, and the best thereof in cleanely sort gnaw round;</L>
+<L>For doing this, as I suppose, no fault can well be found.</L>
+</LG>
+<LG>
+<L>For whie, with tooth and naile, to bite, and scratch, and gnaw your meate,</L>
+<L>Is both a seemelie thing, and also bringeth profite great:</L>
+<L>For by this meanes, you spare your knife, which else might loose his edge,</L>
+<L>If in your meate there should be bones. O Wisedomes priviledge?</L>
+<L>That which thou leav'st, into the platter wilt thou throw? O wit!</L>
+<L>Perchance some other will it take, for a most pleasing bit.</L>
+<L>Ill men (as thou art) ever bare such malice in their hart,</L>
+<L>That if they have a good thing, thei'le not give their neighbor part.</L>
+<L>That which you cannot eate, some greedie got will snatch vp strait,</L>
+<L>And give you thankes, as if for him you had reserv'd that bait:</L>
+<L>And that his hungrie paunch at length may well be cramd with meate,</L>
+<L>That which vpon your trencher lies, most ravenouslie hee'le eate.</L>
+</LG>
+<LG>
+<L>But yet I thinke it is a tricke more civill, and more fine,</L>
+<L>To loade thy neighbours trencher with those scraps that lie on thine.</L>
+<L><PB N="19" REF="21"/>Hee'le thanke you with a ioyfull heart, for that so royall fare,</L>
+<L>And saie, he sees (he thankes you) that you mindefull of him are;</L>
+<L>T'will moove you for to be his friend most faithfull and most kinde,</L>
+<L>And yet a faithfull friend, in these bad daies is hard to finde:</L>
+<L>Such meate as thou gav'st to thy friend, when he did none desire,</L>
+<L>I thinke a ful-filld dog, would scorne to give his hungrie fire.</L>
+</LG>
+<LG>
+<L>When bisket bread, cimnells, and wine vpon the Table stand,</L>
+<L>If that thou seest the Butler fills it, with a sparing hand,</L>
+<L>Hide thou the pot behinde thy backe, and vnto others fill:</L>
+<L>And vnto no man present give a droppe against thy will.</L>
+<L>If anie one of them be griev'd which at the Table are,</L>
+<L>Tell him, tis good that everie man should for himselfe have care.</L>
+<L>And sir, my counsell is, that you the pot doe next time get,</L>
+<L>If when you dine abroad, you meane your lippes with wine to wet.</L>
+</LG>
+<LG>
+<L>Thus, having filld your stomacke with the first course at the boord,</L>
+<L>If that you thinke the second will some daintie cates affoord,</L>
+<L>And that you feele your girdle doth your swelling bellie pinch,</L>
+<L>Tis better strait to take it off, than from good meate to flinch:</L>
+<L>Thinke it no shame, or if thou dar'st not do so, tis thy best,</L>
+<L>To pull it off though, for thou well maist cloake it with this jest:</L>
+<L>Neighbour, you have a prettie gerdle, it shews verie fine;</L>
+<L>What boote ifaith? let me see yours, and you shall strait see mine.</L>
+<L>And by this meanes you may have cause, your gerdle to put off.</L>
+<L>Whereas if you had not done so, you might have had a scoffe.</L>
+<L>And if some bits of new gnawne meate, within your mouth doe sticke,</L>
+<L>Out of the same with hands and nailes, tis maners it to picke;</L>
+<L>Within the Crocodiles wide jawes, when jagges of flesh do lie,</L>
+<L>Some little bird to pull them out, doth help her presently.</L>
+<L>For while that she her tonguelesse mouth, in widest sorte dooth stretch,</L>
+<L>Some sharp billd bird from forth hir jawes, the meat for food doth fetch:</L>
+<L>The seelie bird within the beasts wide jawes doth walke, and feede,</L>
+<L>And hath no hurt, because her bellie dooth help the beast at neede.</L>
+<L>But as for thee, thou needst not this, Nature our mother free,</L>
+<L>Foreseeing this, hath lent both hands and fingers ends to thee,</L>
+<L>Then with thy fingers search thy mouth, or with a knife, or pinne:</L>
+<L>Since thou hast such meanes of thine owne, a birds help scorne herein.</L>
+</LG>
+<LG>
+<PB N="20" REF="22"/>
+<L>And if from foorth thy teeth thou bring a bloodie peece of meate,</L>
+<L>Lest that it should be lost, tis good foorthwith thou shouldst it eate:</L>
+<L>Or with your vnwipte knife, from foorth the platter take some bit,</L>
+<L>Which for your almost halfe-filld stomacke you doe thinke most fit.</L>
+<L>Your gnawne meate on your neighbours trencher smiling you may lay,</L>
+<L>Vsing these flattring glosing termes, refuse it not I pray.</L>
+<L>And if that he accept the meate, which from your teeth you drew,</L>
+<L>T'will stirre vp store of laughter, vnto all that merry crew:</L>
+<L>And by this meanes all men will saie, your wit is very quicke,</L>
+<L>And count you for a merrie fellow for this cleanely tricke.</L>
+<L>Some fooles (to what intent, who knowes?) their knife must needs make cleane,</L>
+<L>When as to cut a cleanly piece of common bread they meane.</L>
+<L>Thou foole, whie dost thou wipe the fat vpon the table cloth?</L>
+<L>Who ever knew a senslesse foole, to learne good maners loth?</L>
+<L>Wert not a thing more pleasing, and more welcome to thy tongue,</L>
+<L>To wipe it on the common loafe, when thou doost cut along?</L>
+<L>Perhaps manie a hungrie man would give thee thankes for that,</L>
+<L>Which bread and butter loves at heart, and such things as are fat.</L>
+</LG>
+<LG>
+<L>This tricke, although there be some shew of beastlinesse in it:</L>
+<L>Yet sure of manie a daintie dish, t'will get thee many a bit,</L>
+<L>Whenas your hoste some daintie cates vnto the Table sends,</L>
+<L>Which vnto you your meate and drinke-consuming gut commends,</L>
+<L>Take thou those jewells from thy nose whereof before I tolde,</L>
+<L>I meane thy snot, and in thy hollow palme do thou it holde,</L>
+<L>And craftily into the platter, either cast it all,</L>
+<L>Or hold it dangling over, so that it may almost fall:</L>
+<L>And by this meanes the company will straitway loathe their meate,</L>
+<L>And all the delicates remaining, thou thy selfe maist eate.</L>
+<L>A man well knowne in everie place, did often doe the same,</L>
+<L>Who from an Owle joynd to a Glasse did first derive his name.</L>
+<L>This Owglasse all in everie place, praisde, honoured and admirde;</L>
+<L>And to relate his prettie prancks, each merrie man desirde:</L>
+<L>Wherefore his life, and his behaviour doe not thou refuse,</L>
+<L>And then no doubt but times to come, thy merrie trickes will vse.</L>
+</LG>
+<LG>
+<L>Dost thou a meane and end of eating now at length require?</L>
+<L>And when to know a readie time to leave doost thou desire?</L>
+<L><PB N="21" REF="22"/>Leave eating when thy swelling bellie will not let thee speake,</L>
+<L>And when thou thinkst with one bit more, thy very guts would breake.</L>
+<L>I should proceede, and yet more precepts for thy dinner tell,</L>
+<L>But tis too late, and I at supper time may doo't as well.</L>
+</LG>
+</DIV2>
+<DIV2 N="6" TYPE="chapter">
+<HEAD>Behaviour fit to be observed after dinner, and when you are walking. <HI>Chapter VI.</HI></HEAD>
+<LG>
+<L>NOw having fild your bellie full, with daintie pleasing fare,</L>
+<L>Be sure that for your owne affaires, you take but little care.</L>
+<L>The belly fild with daintie meates, can hardely cares indure,</L>
+<L>For carefull thoughts, are deadly foes, vnto concoction sure.</L>
+<L>And care doth with diseases, the best bodies oft infect;</L>
+<L>Wherefore out of thy mind, all care in any case reiect.</L>
+</LG>
+<LG>
+<L>If that in summer, you your dinners in the fields do keepe,</L>
+<L>Be sure that forthwith in a baulke, you frame your selfe to sleepe.</L>
+<L>There you may lie, vntill you thinke, tis almost time to sup,</L>
+<L>And then tis time from drowzie sleepe, to rowze your spirits vp.</L>
+</LG>
+<LG>
+<L>And as you lie, to fart and fiste at pleasure, you have leave,</L>
+<L>For why you know theres no man by, such trickes for to perceive.</L>
+<L>If that you finde by triall, that no man a fart can hold,</L>
+<L>By good experience so to sweare, I thinke you may be bold.</L>
+</LG>
+<LG>
+<L>If that to lie and sleepe all day, doth not your fancie please,</L>
+<L>Because your nimble body, alwaies scorned slouthfull ease,</L>
+<L>Then rise at leisure, and through every streete walke vp and downe,</L>
+<L>The doing so, will sure procure both profit, and renowne:</L>
+<L>For by this walking, thou thy meate, the better maist digest;</L>
+<L>Among all other rules, Phisitians hold this for the best.</L>
+</LG>
+<LG>
+<L>As thou didst come to dinner with vnwasht hands, even so</L>
+<L>My counsell is, that from the same with vnwasht hands thou go.</L>
+<L><PB N="22" REF="23"/>Tis better that of daintie meats, thy dirtie hands should smell,</L>
+<L>Then of that water, which is drawne, from every dirtie well.</L>
+</LG>
+<LG>
+<L>What though your shooes be thicke with diet? to purge them it is vaine,</L>
+<L>For why you know in dirt and dung, they must be fowlde againe.</L>
+</LG>
+<LG>
+<L>If thou hast cause to vomit, as the streete thou walkst about,</L>
+<L>All which thou canst not keepe, with wide mouth freely let it out.</L>
+<L>Nor care thou though great store of people stand about thee round,</L>
+<L>But all that goes against thy stomacke, cast it on the ground.</L>
+<L>Grave <HI>Anthony</HI> the same did do, when many did him see,</L>
+<L>Yet he was chose in famous <HI>Rome,</HI> a Consull for to bee.</L>
+<L>And looke how much worlds mirrour <HI>Rome,</HI> our small townes doth surpas,</L>
+<L>So much to be preferd before thee, good <HI>Antonius</HI> was.</L>
+<L>That which so great a man as he, durst do in such a place,</L>
+<L>For thee to do in this small towne, can be no great disgrace.</L>
+<L>But if this mans example, cannot move thy minde one whit,</L>
+<L>Yet if I vrge thine owne good health, I know thou'lt yeelde to it.</L>
+<L>The learned wise Phisitians, their patients hurt to cure,</L>
+<L>Prescribe them certaine bitter vomits, which they must indure.</L>
+<L>Ech month one vomit at the least, or more, they ought to vse,</L>
+<L>A vomit doth mens lives preserve, you can it not refuse.</L>
+<L>If in a month, one vomits vse, can drive all hurts away,</L>
+<L>How long shalt thou live, if thou vomit twice or thrice a day?</L>
+</LG>
+<LG>
+<L>If thou hast neede to pisse, as thou doost walke thy friends among,</L>
+<L>Vnlode thy bladder presently, tis ill to keepe it long.</L>
+<L>What though some honest Matron, or some chaste maid thee perceave,</L>
+<L>Yet do not thou in any case, thy former purpose leave.</L>
+<L>Respect good manners, but respect thy health a great deale more,</L>
+<L>Care while thou maist, for health once lost, is hard for to restore.</L>
+<L>Men that are carelesse of themselves, do lose that in one night,</L>
+<L>For which they'de give, what not? poore fooles, if so they get it might.</L>
+</LG>
+<LG>
+<L>If any cloake, or such like garment on thy shoulders be,</L>
+<L>What needst thou care which way it hangs, such vaine care cast from thee.</L>
+<L>Or if you weare a gowne, take heede that not your legs it hides,</L>
+<L>Lest that it hinder all your pace, your steps, and eke your shides.</L>
+<L>Cast it behinde with both your hands, that all men so may see,</L>
+<L>Your perfect bodie, and your limbs, and fore parts what they bee.</L>
+<L><PB N="23" REF="23"/>And that which else your gowne would cover, tis enough to hide</L>
+<L>It with your doublet, and your breeches, lac'd on every side.</L>
+<L>Such sights do please old Matrons very well, I tell the trew,</L>
+<L>And these are very welcome sights, vnto the virgins crew.</L>
+<L>For then thei le marke your slendernes, and all your nimble ioyntes,</L>
+<L>And eke how well your bellie is tide, with girdle and with pointes.</L>
+<L>And then forthwith with love of thee, thei'le quite be set on fire,</L>
+<L>Which done, each act will more and more inflame their hot desire.</L>
+</LG>
+<LG>
+<L>If as you go, some friend or foe, do bid you, sir God speede,</L>
+<L>I thinke to give him a good answer, there is little neede.</L>
+<L>First looke him in the face, and marke with what good minde t'was said,</L>
+<L>And as you like his, sir God speede, so let it be repaid.</L>
+<L>Thou oughtst to bid no man God speede, vntill that thou hast seene,</L>
+<L>What his behaviour, and his manners, vnto thee have beene.</L>
+</LG>
+<LG>
+<L>For why the wandring multitudes good will, thou needes must lacke,</L>
+<L>If they perceive thou speakst so friendly vnto every jacke.</L>
+<L>And by this meanes, the name of a light fellow thou wilt have,</L>
+<L>Which even now wert thought to be a man both wise and grave.</L>
+<L>And thus thine honour and thy maiestie, will have a fall,</L>
+<L>If thou by such familiar termes, doost every fellow call.</L>
+</LG>
+<LG>
+<L>But if perchance some prettie wench, do stand at any doore,</L>
+<L>Then which, a fairer in thy life, thou never saw'st before.</L>
+<L>Cast thou vpon her all the cheerefull loookes thou canst devise,</L>
+<L>Though she be one, whome ne're before, thou didst behold with eyes.</L>
+<L>Then go strait to her, and in this case lay aside all shame,</L>
+<L>And with a pleasant smiling looke, demand the virgins name.</L>
+<L>All that thou thinkst can laughter moove, lay downe before her face,</L>
+<L>Let nothing seeme vncivill, or vnseemely in this case.</L>
+<L>Mongst all the things which Nature made in wisedome, for mans vse,</L>
+<L>Nothing is simply bad, but it from man receives abuse.</L>
+<L>If nothing but the crabbed mindes of Stoickes, you do tell,</L>
+<L>She ne're will laugh, such sadnes will not please her fancie well.</L>
+<L>Despise the sharpe decrees of Catonists, that are severe,</L>
+<L>And lest you tell her <HI>Zenoes</HI> statutes, you must have a care.</L>
+<L>The flattering sect of shameles men, fulfills her fancie fit,</L>
+<L>And that which currish Cinickes teach, tis good to tell her it.</L>
+<L><PB N="24" REF="24"/>When thou hast tolde her all thy minde, and ript vp all thy heart,</L>
+<L>And that thou thinkst tis time for thee, now homeward to depart;</L>
+<L>Then round about her necke, be sure that thou thine armes do cast,</L>
+<L>And till that thou hast kist thy fill, be sure thou hold her fast,</L>
+<L>If she reiect thy gentle offers, and away would go,</L>
+<L>Then kisse her and embrace her both, whether she will or no.</L>
+<L>If that she flie, then follow her, and once caught, hold her fast,</L>
+<L>Though she dissemble for a while, yet sure sheele yeelde at last.</L>
+<L>And call her mistris sweete hart, love, and speake her very faire,</L>
+<L>Lest she should thinke, thy protestations are but winde and aire.</L>
+<L>Let all the yong men of the towne, behold your sport and ieast,</L>
+<L>That all may say, he is a comely fellow I protest.</L>
+<L>What other wench so e're you meete, while you do vse this sport,</L>
+<L>Be sure she taste of the same cup, and vse her in this sort.</L>
+<L>You can no whit impeach by this, your gravitie and fame;</L>
+<L>Nor is there any man, that ought to blame you for the same.</L>
+<L>If any wench speake to thee first, thanke her not for that deede,</L>
+<L>But count her light in speaking first, let that be all her meede.</L>
+</LG>
+<LG>
+<L>What though you count your selfe a praiser of Simplicitie,</L>
+<L>And by your clownish manners, looke to get some high degree.</L>
+<L>Yet beare so brave a loftie minde, as all men to despise,</L>
+<L>And with a frowning scowling looke, on all men cast your eyes.</L>
+<L>He which doth beare a baser minde, and thoughtes which are so low,</L>
+<L>Doth seeme his owne perfections, not perfectly to know.</L>
+<L>And by this meanes, he soone may take vnworthily disgrace,</L>
+<L>Whereas if he would brave it out, all men would give him place.</L>
+<L>What every man thinkes of himselfe, that others thinke its meete,</L>
+<L>And he that will not raise himselfe, may long he vnder feete.</L>
+<L>Then yeelde to none, but scorne thou all, of none respectfull be,</L>
+<L>And thinke all places, all degrees, are farre too low for thee.</L>
+</LG>
+<LG>
+<L>If that you meete a man of worth, whom all the people grace,</L>
+<L>Whether he be a Magistrate, or Ruler in that place;</L>
+<L>Or teach the ruder multitude, to heaven to lift their eyes,</L>
+<L>Or for some other honest life, he be accounted wise:</L>
+<L>In any case scorne to looke on him, when your head is bare,</L>
+<L>But let your cap for feare of cold, cover your head and haire.</L>
+<L><PB N="25" REF="24"/>We all are dust, we all one forme, we all one matter have</L>
+<L>Both rich and poore shall have alike, whenas they go to grave.</L>
+<L>The fatall sister <HI>Clotho,</HI> neither spareth rich nor poore,</L>
+<L>Since then we all are like, why should some men be honour'd more?</L>
+<L>Wherefore, wheresoe're thou art, give none the way, whosoe're he be,</L>
+<L>Nay, if he stand vpon such points, then make him yeelde to thee.</L>
+</LG>
+<LG>
+<L>When in a common way, thou with thy friend doost walke the streete,</L>
+<L>Take thou the right hand both of him, and all that thou doost meete:</L>
+<L>But if the way bee fowle, then marke this order not a whit,</L>
+<L>Take thou the cleane as for the durtie, let him go in it.</L>
+</LG>
+<LG>
+<L>Perchance you have a fart, to send into the world so wide,</L>
+<L>Which rumbling in your bellie, troubled you on every side;</L>
+<L>Then let it forth in every place, and wheresoe're you will;</L>
+<L>That which our mother Nature made, I thinke cannot be ill.</L>
+<L>If any man for doing so, you are a sloven say,</L>
+<L>In this good sort, his vaine obiections, you well answer may.</L>
+<L>Foure great diseases will arise, by keeping in your winde,</L>
+<L>A giddie head, the cholicke, dropsie, and the crampe vnkinde.</L>
+<L>Phisitians do prescribe this rule, amongst their counsells deepe,</L>
+<L>A rule, which every man that loves his health, should alwaies keepe.</L>
+<L><HI>Claudius</HI> bids that farts and belches, we should never hold,</L>
+<L>Lest in presuming on our health, we make our selves too bold.</L>
+<L>All that which in this point is said, it tendeth to this end,</L>
+<L>Thy good behaviour for to praise thy bad for to defend.</L>
+</LG>
+<LG>
+<L>In summer time, whenas the hearbes grow greener every day,</L>
+<L>With some good talke, the tedious time, tis good to drive away.</L>
+<L>When some in sober sort, of weightie matters do intreate,</L>
+<L>And proove the land that lives in peace, hath sure a blessing great,</L>
+<L>Or some one read in history, doth orderly declare,</L>
+<L>The manners of our ancestors, and customes what they were.</L>
+<L>Be sure with trifling matters, that thou crosse their purpose quite,</L>
+<L>Let others talke of former times, in ours take thou delight.</L>
+<L>Old wine, old friends, and eke old faith, may be allowed well,</L>
+<L>And yet tis follie to allow, all old things that you tell.</L>
+<L>Tis fitter for vs yonger men, to speake of yonger daies,</L>
+<L>And see if for their good deserts, they may have any praise.</L>
+<L><PB N="26" REF="25"/>And then beginne vnto them all, to tell some prettie iest,</L>
+<L>Which may enforce great store of laughter vnto all the rest.</L>
+<L>Tell them what kindenes you of late, did of your love receave;</L>
+<L>And thus with stories of her flattring words, the time deceave.</L>
+<L>Since none in crabbed words delight, vse iests in every place,</L>
+<L>And bawdie termes, for these oft times, procure a speciall grace.</L>
+<L>O yong man, while thy time is fit, in pleasure take thine ease,</L>
+<L>If thou thy good companions mindes, doost purpose for to please;</L>
+<L>Reiecting shame, speake any filthie words that may be namde,</L>
+<L>No valiant man, but onely fainting cowards are ashamde.</L>
+<L>This all your yonkers vse to do, whenas abroade they walke,</L>
+<L>And scorning honest sober words, they fall to shamelesse talke.</L>
+<L>That which all yong men vse to do, the life that all men leade,</L>
+<L>(Since it is sure, the safest course in best knowne paths to treade.)</L>
+<L>The same in every point to imitate I counsell thee,</L>
+<L>And say, and do, that which thou thinkst to most will pleasing bee.</L>
+<L>As long as you of nothing else, but toies and trifles talke,</L>
+<L>So long you may have worke enough, how farre soe're you walke.</L>
+</LG>
+<LG>
+<L>But if at length, when you have vttred all that e're you meant,</L>
+<L>(Although I thinke your store of words, can hardly soone be spent;)</L>
+<L>Then whatsoe're another saith, be sure you mocke and flowt,</L>
+<L>As scorning to be over-talkt, by such a clownish lowt.</L>
+</LG>
+</DIV2>
+<DIV2 N="7" TYPE="chapter">
+<HEAD>The adorning the Table before supper, and other such like duties. <HI>Chap. VII.</HI></HEAD>
+<LG>
+<L>BVt now sir <HI>Phoebus</HI> prancing horses to the sea do haste,</L>
+<L>There to refresh that strength againe, which burning <HI>Sol</HI> did waste.</L>
+<L>And now I thinke the time drawes neere, thy supper for to take,</L>
+<L>Wherefore go home, that thou in readinesse each thing maist make.</L>
+</LG>
+<LG>
+<PB N="27" REF="25"/>
+<L>Bid talke farewell, which staies the bellie from his wish for food,</L>
+<L>The finest speech vnto a gut halfe ster'vd, can do no good.</L>
+<L>Yet will I not in any case, that too much haste thou make,</L>
+<L>But with a good advise and counsell, all things vndertake.</L>
+<L>Sometimes tis good thou shouldst stay out, beyond the pointed time,</L>
+<L>For then some other will performe that dutie which was thine.</L>
+<L>Some other then will lay the cloth, and on thy master tend,</L>
+<L>And e're thou comst, of all thy busines he will make an end.</L>
+<L>If that thy father or thine host, do for thy comming stay,</L>
+<L>Thou sure shalt get great profit and great credite by that way.</L>
+<L>Profit, for why thou both their loves shalt try, how great they be;</L>
+<L>And ist not credite when thine host or father staies for thee?</L>
+<L>And sure I thinke, for shame their hunger cannot be so great,</L>
+<L>As whenas thou art in the fields, they should devoure the meate.</L>
+</LG>
+<LG>
+<L>When home you come, if that you see that neither man nor maid</L>
+<L>Did lay the cloth, and yet tis more then time that it were laid;</L>
+<L>Vnlesse thy master thee command, lay thou no cloth at all,</L>
+<L>For if thou too officious art, who can thee simple call?</L>
+</LG>
+<LG>
+<L>Ne're labour for great store of wisedome and agilitie,</L>
+<L>For neither wit nor vertues deedes can one whit profit thee.</L>
+<L>Simplicitie great profit brings, this will defend thee still,</L>
+<L>At every time, in every place where thou committest ill.</L>
+<L>And if in every dutie thou doost shew thy selfe vnfit,</L>
+<L>Thy master in his great affaires, will never trust thy wit.</L>
+<L>The man that strives to shun the harmes, he sees before his eyes,</L>
+<L>And he which knowes whats fittest for himselfe, is surely wise.</L>
+<L>The man which boasteth of his wealth, is often robd we see,</L>
+<L>When those which hide their goods vp close, in pleasure still may bee.</L>
+<L>Such as do of their vertues brag, are oft vndone thereby,</L>
+<L>When those that looke like lazie knaves, in quiet still may lie.</L>
+<L>That <HI>Chicons</HI> darling, brave <HI>Vlysses,</HI> might escape vnspide,</L>
+<L>All his exploites vnder a distaffe he was glad to hide.</L>
+<L>And had not wise <HI>Vlysses</HI> faind himselfe to have beene mad,</L>
+<L>In those hot broiles of Troian warres, he surely perish'd had.</L>
+<L>In like sort thou, if any act or vertue in thee lie,</L>
+<L>Be sure thou keepe it all so close, that no man may it spie.</L>
+<L><PB N="28" REF="26"/>Thy master and thy father both, will set great taskes to thee,</L>
+<L>If they discry those vertuous parts, which by thee cloak'd should bee.</L>
+</LG>
+<LG>
+<L>The trenchers and the bread to place, before the guests do sit,</L>
+<L>Vnlesse thy master thee command, thou needst not count it fit.</L>
+<L>You neede not have a care, in what good sort the stooles do stand,</L>
+<L>Nor neede you care to order every thing, with your owne hand.</L>
+</LG>
+<LG>
+<L>It is not meete that from the loafe, you chip the vpper crust,</L>
+<L>Which on your masters trencher, for his owne mouth place you must.</L>
+<L>Your master oft forbids, that any good thing should be lost,</L>
+<L>Then if his chippings he should loose, t'would put him to great cost.</L>
+</LG>
+<LG>
+<L>Do onely that which thou art bid, but do thou that with speede,</L>
+<L>It is not good at any time, to take more paines then neede.</L>
+<L>Most wretched is that servants case, whose lucke it is to have,</L>
+<L>A master at whose becke, he must do all that hee shall crave.</L>
+<L>If he do that which no man bade him, tis a fault most great,</L>
+<L>And for it he forthwith is sure, most soundly to be beat.</L>
+<L>Which to prevent, a wittie youth that well did love his ease,</L>
+<L>Did take this order, lest he else his master should displease.</L>
+<L>Of all the things he had to do, he forthwith made a bill,</L>
+<L>That by this meanes, his masters minde he better might fulfill.</L>
+<L>And having made it by oft reading got it all by heart,</L>
+<L>Thinking that he by no meanes then, could from his dutie part.</L>
+<L>And as for doing other things, he durst not be so bold,</L>
+<L>Vnlesse he them within his paper, written did behold.</L>
+<L>By chance his master on a time, bade him put out a flame,</L>
+<L>Which kindling in a corner of the house, had burnt the same.</L>
+<L>He fearing lest he should do more, then in his bill he found,</L>
+<L>Stood seeking, till the house was almost burnt vnto the ground.</L>
+<L>Get such a b ll as this, and then you evermore shall finde,</L>
+<L>If any businesse chance to fall out of your slipperie minde.</L>
+<L>I told thee many duties fit for dinner time before,</L>
+<L>Which lest I spend my time in vaine, I will recite no more.</L>
+<L>Vnto each willing person, all my precepts are but plaine,</L>
+<L>If by my doctrine they their lives to guide, will take the paine.</L>
+<L>For many have so quicke a wit, that they my precepts know,</L>
+<L>Although my methode and my doctrine, no man to them shew.</L>
+</LG>
+<LG>
+<PB N="29" REF="26"/>
+<L>Whenas your master hath to supper, neither guest nor friend,</L>
+<L>And doth for all his houshold servants, very kindely send;</L>
+<L>Forthwith to get the vpper place, have alwaies in your minde,</L>
+<L>Lest others getting it before, they thrust you downe behinde.</L>
+<L>Its alwaies seene, that he most labour still doth vndergo,</L>
+<L>Which comming after all his fellowes, hath his place below.</L>
+<L>Ho, sirra, boy, vnlocke the doore for them that knocke so fast,</L>
+<L>If they be strangers, aske their arrants, why they make such haste.</L>
+<L>Go fetch some bread, and bring the venson pastie in your hands,</L>
+<L>And draw some wine out of the tunne, which in the corner stands.</L>
+<L>Perchance the dog hath let a scape, for which he must be gone,</L>
+<L>Then leade him out, and when hees sweeter, bring him in anone.</L>
+<L>These things must sometimes all be done, by him that sits below,</L>
+<L>Wherefore for any other seate, the lowest place for go.</L>
+</LG>
+<LG>
+<L>But if perchance, your master makes you onely stand and waite,</L>
+<L>While all your fellowes take their choise, of every pleasing bait.</L>
+<L>Then shew some token, that this place is yours against your will,</L>
+<L>And with such angry words as these, your hungry stomacke fill.</L>
+<L>Ist any reason that I onely, in such servile sort</L>
+<L>Should stand and waite, while others eate their meate with pleasant sport?</L>
+<L>I see no sense, why onely I should stand and waite on thee,</L>
+<L>Whenas my fellowes are at supper, from such bondage free.</L>
+<L>But as the hedge is most gone over, where it lieth low,</L>
+<L>Because it in that lownesse, most humilitie doth show.</L>
+<L>So I because I lesse resist, then others that stand by,</L>
+<L>Am quite cast downe, and at my masters feete most basely lie,</L>
+<L>And thus the more I do obey, the more I still must toile,</L>
+<L>I see tis hard for him to rise, that once hath tooke the foile.</L>
+<L>It may be, these thy words to moove thy masters heart may seeme,</L>
+<L>And hee'le both give thee lesse to do, and better thee esteeme.</L>
+<L>And if hee sees, in ioyfull manner that thou part away,</L>
+<L>Hee'le love thee better, and appoint thee lesser taskes each day.</L>
+</LG>
+<LG>
+<L>But if he be obdurate still, refuse not then to waite,</L>
+<L>Lest he a crooked sticke, vpon thy shoulders broad make straight.</L>
+<L>Simplicitie that is too foolish, she in any case,</L>
+<L>Lest it procure thee store of stripes, on shoulders, backe, and face.</L>
+</LG>
+<LG>
+<PB N="30" REF="27"/>
+<L>As erst I told thee, so be sure thou never tie thy points,</L>
+<L>So maist thou as thou serv'st at boord, be nimbler in thy ioynts.</L>
+<L>Whether your master and his houshold, onely dine together,</L>
+<L>Or else your master store of strangers, hath invited thither;</L>
+<L>Let all things after one set order, still be done of thee,</L>
+<L>And still observe one onely kinde, of rude Simplicitie.</L>
+<L>Why shouldst thou strive at any time, more manners for to reach,</L>
+<L>Then this my home-bred country muse, in simple verse can teach?</L>
+<L>Whether you sup at home, or all your curious friends among,</L>
+<L>The selfe-same manners in both places, vnto you belong.</L>
+<L>To differ in your actions, cannot choose but breede disgrace,</L>
+<L>That which is seemely heere, is not amisse in any place.</L>
+</LG>
+</DIV2>
+<DIV2 N="8" TYPE="chapter">
+<HEAD>Waiting at the Table all supper time. <HI>Chapter VIII.</HI></HEAD>
+<LG>
+<L>WHen all the guests thou hast invited for thy masters sake,</L>
+<L>Whom he with store of <HI>Bacchus</HI> liquors, merry means to make.</L>
+<L>As thou wert wont, so have a care, a trencher to provide,</L>
+<L>And let Simplicitie in all thy actions be thy guide.</L>
+</LG>
+<LG>
+<L>Then be thou carefull to observe, all that I said before,</L>
+<L>And vnto that tis requisite, I adde a little more.</L>
+</LG>
+<LG>
+<L>Carry your dish so stedfastly, that being filld to'th brim,</L>
+<L>The bread, the salt, the cloth and all, may in the potrage swim.</L>
+<L>What though the pottage spilt, do all the strangers clothes staine,</L>
+<L>Yet those that know the profit, could indure it so againe.</L>
+<L>For why the spice wherewith the Cooke did store the pottage well,</L>
+<L>Besides the daintie taste, will also yeelde a fragrant smell.</L>
+<L>And by this meanes, their garments afterward will smell more sweete,</L>
+<L>Then e're they could, before they with this hot perfume did meete.</L>
+<L>They cannot well forget this kindenesse, if you have your due,</L>
+<L><PB N="31" REF="27"/>For alwaies when they smell that spice, they needes must thinke of you.</L>
+<L>If that this deede do seeme to make them ioyfull at the heart,</L>
+<L>Then forthwith for to laugh aloude, you know it is your part.</L>
+<L>And by this meanes, the company will surely laugh at thee,</L>
+<L>And praise thee for thy good intent, and plaine Simplicitie.</L>
+<L>But if some testie crabbed fellow, liking not this vse,</L>
+<L>With angry lookes do tell thee plaine, thou offerst him abuse.</L>
+<L>It shall suffice, if with good words, thou lessen his disgrace,</L>
+<L>Since hottest anger vnto gentle words, oft giveth place.</L>
+<L>Sir, so it is, each mortall man doth often times offend</L>
+<L>Against his will, and cannot presently his fault amend.</L>
+<L>But seeing that his fault is great, he forthwith doth repent,</L>
+<L>And then lest he should thus dispaire, he hath a pardon sent.</L>
+<L>And by this meanes, I doubt not but his anger you'le appease,</L>
+<L>What though he were so hot of late? yet thus you may him please.</L>
+<L>Or if the foole will needes be angry, raile as fast as hee,</L>
+<L>I hope the foole was old enough, vnto his clothes to see.</L>
+</LG>
+<LG>
+<L>Then as you stand, with carefull lookes marke all that sit at meate,</L>
+<L>And marke the quantitie, that every man doth drinke and eate.</L>
+<L>Hide not your lookes, but vnto every man vnfold your minde,</L>
+<L>For why your master by this meanes, great profit sure shall finde.</L>
+<L>For then for shame, each man lesse bits into his mouth will put,</L>
+<L>And leave halfe that, which else he would have thrust into his gut.</L>
+</LG>
+<LG>
+<L>Have neither care nor reverence, of master, man, nor maid,</L>
+<L>But all that fits thy fancie best, let that be done and said.</L>
+<L>Though all men blame thee, yet if thou doost like thy deedes alwaies,</L>
+<L>Thou knowst a mans owne guiltlesse minde, deserves the great st praise.</L>
+</LG>
+<LG>
+<L>If any man thats not thy master, do thy service crave.</L>
+<L>Strait bid him doo't himselfe, for why thy helpe he shall not have.</L>
+<L>But if thy father or thy master, bid thee do the same,</L>
+<L>If then thou giv'st them such an answer, thou art much too blame.</L>
+<L>Do that which they command at leisure, alwaies be thou slow,</L>
+<L>Lest something thou shouldst hurt or loose, if thou too fast shouldst go.</L>
+<L>Be sure to frowne, and make such store of faces in that kinde,</L>
+<L>That all may know, thou goest about it with no willing minde.</L>
+</LG>
+<LG>
+<L>Perhaps thou seest the candle lacke a snuffer, that it might</L>
+<L><PB N="32" REF="28"/>Vnto the strangers at the table, cast a better light.</L>
+<L>Thou foole, why doost thou make such haste to snuffe it with thy hand,</L>
+<L>Vnlesse thy master twice or thrice at least, do thee command</L>
+<L>If thou doost put it out, while thou to snuffe it doost intend,</L>
+<L>All that are by, will presently, this cleanely tricke commend.</L>
+</LG>
+<LG>
+<L>It is a very civill tricke, whenas the candle's out,</L>
+<L>To let the stincking smoake, ascend their nostrills round about.</L>
+<L>If that you dare not put it out quite, lest your master chide,</L>
+<L>Yet that the stincke may trouble them, you thus may well provide.</L>
+<L>The snuffe cut off you on the ground may cast without offence,</L>
+<L>A smoakie vapor, will disturbe their noses all from thence.</L>
+<L>Why should you treade it out? vnlesse they ernestly you pray,</L>
+<L>Although they you command, yet scorne their pleasures to obey.</L>
+<L>Nay, rather you to leave the snuffers open should presume,</L>
+<L>From whence will come a smell, which will againe the house perfume.</L>
+<L>I thinke this smell to wives with childe, but little good will do,</L>
+<L>Though sure t'will profit in some sort, both men and women too.</L>
+<L>If some one man among the rest do firmely that denie,</L>
+<L>And say hee'le prove the contrarie by reasons presently:</L>
+<L>And that he may the better proove, that which he doth defend,</L>
+<L>Doth vrge the words of men, whose writings all times did commend.</L>
+<L>(For <HI>Plinie</HI> saith, the babe which in the mothers wombe doth lie,</L>
+<L>If that the mother feele this smell, immediately doth die.)</L>
+<L>Then cry aloude, that he against the truth doth plainely speake,</L>
+<L>And that thou presently, wilt proove his argument but weake.</L>
+<L>Nor be asham'd to trouble and disturbe the standers by,</L>
+<L>But with these words in loftie sort, be sure thou him defie,</L>
+<L>I hope good fellow, thou wilt freely give me leave to speake,</L>
+<L>Since thou the lawes of modestie, long since thy selfe didst breake.</L>
+<L>He surely is a wicked man, which seekes by vaunting lies,</L>
+<L>To get him credite and renowne, before vs that are wise.</L>
+<L>As I remember, I no place of <HI>Plinies</HI> can recall,</L>
+<L>Wherein he any whit makes mention of these words at all.</L>
+<L>For how could he know this? or else put case he did say so,</L>
+<L>Tis vaine for to beleeve each word, of every man you know.</L>
+<L>For many things vnto this day, are extant in his bookes,</L>
+<L><PB N="33" REF="28"/>Which he may finde to be most false, that wisely in them lookes.</L>
+<L>If thus you answer his obiection, everie man will sweare,</L>
+<L>That surely you a skilfull man, and well read scholler are.</L>
+</LG>
+<LG>
+<L>The cups being emptie, catch them in your hand with wine to fill,</L>
+<L>And then in haste fill them so full, that they may almost spill.</L>
+<L>Tis good to fill them ful at first, lest you more paines should take,</L>
+<L>What though your trembling hand spill some? you soone amends may make.</L>
+</LG>
+<LG>
+<L>What though the cup being too full, you powre some on the ground?</L>
+<L>I thinke if you should vse this tricke, great fault could not be found.</L>
+<L>Or if you dare not give it full, for feare your master brawle,</L>
+<L>Then kindely sup off some, as if you dranke vnto them all.</L>
+<L>Or (which is much more civill,) if too much you chance to fill,</L>
+<L>Into the flaggon emptie some, for feare you should it spill.</L>
+<L>For if perchance some durtie drugs, within the cup do lie,</L>
+<L>By mingling it with all the wine, t'will forthwith clarifie.</L>
+</LG>
+<LG>
+<L>Perhaps your master on his guests, bestowes such store of wine,</L>
+<L>That no two cup fulls, grew vpon the selfe-same kinde of vine.</L>
+<L>You neede not take great care, to know each sundry sort and kinde,</L>
+<L>But alwaies fill of that, which next vnto your hand you finde.</L>
+<L>What though a man should alwaies mixe, all kindes of wine together?</L>
+</LG>
+<LG>
+<L>The selfe-same earth did beare all wine, which Marchants can bring hether.</L>
+<L>The vertues of all sortes of wine, in one cup one might hold,</L>
+<L>If all men in this sort, would vse to mingle new with old.</L>
+<L>As many vertues ioynde in one, do make that one excell,</L>
+<L>So divers wines are of most force, when they be mingled well.</L>
+<L>If any man this custome, with some vp-start name abuse,</L>
+<L>Tell him, he knowes no orders, which the wise Phisitians vse:</L>
+<L>Which would not vse to give their patients compound potions still,</L>
+<L>Vnlesse they found such mixture good, by Phisickes sacred skill.</L>
+<L>The selfe-same order must be kept, which I prescrib'd before,</L>
+<L>In that good ale which vnto vs is brought from <HI>Saxon</HI> shore.</L>
+<L>From <HI>Hamburg</HI> cittie on our shore, great store thereof is cast,</L>
+<L>Which doth both nourish very well, and hath a pleasant taste,</L>
+<L>Next vnto that, Bracket, a kinde of happy pleasant beere,</L>
+<L>A kinde of drinke thats made of <HI>Hannoveraes</HI> water cleere.</L>
+<L>And Cydar which was brought from thence, where <HI>Brunon</HI> old was king,</L>
+<L><PB N="34" REF="29"/>And that good kinde of drinke which men from <HI>Embecke</HI> cittie bring.</L>
+<L>Let all these sundrie sortes of drinke, be mingled well together,</L>
+<L>Since onely for the dry throates vse, they were convaied hether.</L>
+</LG>
+<LG>
+<L>If any man intreateth you, to fill his emptie cup,</L>
+<L>All that which in the bottome lies, be sure you strait drinke vp.</L>
+<L>If thou perhaps art drunke to, by some antient friend of thine,</L>
+<L>Which presently, will have thee pledge him in a cup of wine,</L>
+<L>At first refuse his gentle offer, after take the cup,</L>
+<L>And all the wine that is therein, most boldly drinke it vp,</L>
+<L>As for the cup, in any case let it not emptie stand,</L>
+<L>And having silld it fresh, restore it to your masters hand,</L>
+</LG>
+<LG>
+<L>I do not bid you stirre your hat, whenas you pledge your friends;</L>
+<L>Or if you will, then onely touch it with your fingers ends.</L>
+<L>Or if for manners sake, at length to take it off you choose,</L>
+<L>Then cast it strait behinde your backe, as meaning it to loose.</L>
+</LG>
+<LG>
+<L>And as you stand expecting carefully your masters will,</L>
+<L>As fast as they can drinke them off, the emptie cups to fill.</L>
+<L>If as you fill, from forth your hands, the bottle you let fall,</L>
+<L>You shall be thought to be a hansome fellow of them all.</L>
+<L>What though your master heerevpon, beginne to fume and rage?</L>
+<L>Yet with this gentle answer, you his answer may asswage.</L>
+<L>Forsooth you ought for this, to blame my drunkennes, not mee,</L>
+<L>And heerevpon he cannot choose, but pardon give to thee.</L>
+</LG>
+<LG>
+<L>If thou perchance espi'st a cup, which voide of liquor is,</L>
+<L>Which everie man doth constantly, denie to have beene his</L>
+<L>Because perhaps some sober man, to scape it so, did thinke,</L>
+<L>And set it by, lest else he should be over-come with drinke.</L>
+<L>It is great shame, that emptie cups should on the table stand,</L>
+<L>And tis your fault, if any guest want liquor in his hand.</L>
+<L>Then take it strait and drinke to him, which for your friend you faine,</L>
+<L>And by this meanes, the vse of drinking you'le renew againe.</L>
+<L>Yet do not this, without some cunning tricke of craft or other,</L>
+<L>For tis a credite nowadaies, to coofin your owne brother.</L>
+<L>Wherefore be sure to fill the cup whereon you drinke, with beere,</L>
+<L>The common kinde of <HI>Saxon</HI> drinke, which daily we vse heere.</L>
+<L>But for your friend mingle good wine, your strongest beere among,</L>
+<L><PB N="35" REF="29"/>For why the mixture of these liquors, makes them both more strong.</L>
+<L>And by this meanes, if of this drinke you give them but your fill,</L>
+<L>The company will all be drunke, when you are sober still.</L>
+</LG>
+<LG>
+<L>Or if your masters friends you love not thus for to deceive,</L>
+<L>Then of each cup of perfect wine, be sure no drop to leave.</L>
+<L>And thus to drunkards haven thou thy shipping first shalt take,</L>
+<L>And all that halfe-drunke company, most merrie thou shalt make.</L>
+<L>And thus by thy example, thou wilt make them drinke the more,</L>
+<L>Because they see such good effects of wine in thee before.</L>
+<L>For since that wine stirres vp such gallant sporting trickes in thee,</L>
+<L>Thei'le all be drunke, that in like sort they all may pleasant bee.</L>
+</LG>
+</DIV2>
+<DIV2 N="9" TYPE="chapter">
+<HEAD>The manner how to serve the guests with drinke after supper, and how to prevent them with craftie trickes. <HI>Chapter IX.</HI></HEAD>
+<LG>
+<L>THat you have done your busines well, t'wil make your master think,</L>
+<L>If by your meanes your masters friends, have tooke good store of drinke.</L>
+<L>Wherefore let no man of your master offer leave to take,</L>
+<L>Before he with his feete do seeme, indentures for to make.</L>
+<L>And though your master give him leave, at length to go his way,</L>
+<L>Yet tis your dutie ne'rethelesse, perforce to make him stay.</L>
+</LG>
+<LG>
+<L>Nor would I have you fill the cup, at any mans request,</L>
+<L>Before he doth each drop which in the bottome lies, digest.</L>
+<L>Sir, you must drinke off everie whit, else not a drop Ile fill,</L>
+<L>My office bindes me thus to do, and that observe I will.</L>
+<L>Plaine dealing's best, such drops of wine to what end should you spare?</L>
+<L>Thinke you that I of right and iustice, have no better care?</L>
+<L>Drunkards, have alwaies beene the iustest men in every place,</L>
+<L>Wherefore I scorne that our old custome, you should now deface.</L>
+<L>My master alwaies gives me charge, to give his guests their due,</L>
+<L><PB N="36" REF="30"/>Which charge I could not choose but breake, if I should favour you.</L>
+<L>Thus say, and though a thousand times he bid you fill it vp,</L>
+<L>Fill not a whit, vntill each drop he drinke out of the cup.</L>
+<L>This profit thou shalt get, if thou dost that which I have sed,</L>
+<L>Thy guest, will sooner all be drunke, and sooner gone to bed.</L>
+<L>And thou maist sooner take thy rest, and get againe that sleepe,</L>
+<L>From which thy early rising, doth thine eyes so often keepe.</L>
+<L><HI>Naso,</HI> which in such learned sort of flattring love doth speake,</L>
+<L>Doth say that want of sleepe doth make mens bodies verie weake.</L>
+<L>Then since sleepe doth the contrarie, be sure thou have a care,</L>
+<L>That all thy masters guests betimes, with wine well drunken are.</L>
+<L>And by the way hee<GAP DESC="illegible" RESP="uom" EXTENT="1 letter" DISP="•"/>e is a tricke, which I must teach to thee,</L>
+<L>Which surely is a perfect point, of pure Simplicitie.</L>
+</LG>
+<LG>
+<L>Have you two sundry sortes of guests, at supper in your house,</L>
+<L>As heere a sort of bellie gods, that love the grand carouse.</L>
+<L>And heere a sort of honest quiet men, that vse to play</L>
+<L>At Ruffe, at Noddie, and at Pinke, to drive the time away:</L>
+<L>And hath thy master made thee supravisor over all his wine?</L>
+<L>Is both his key, his wine, his seller, and his sugar thine?</L>
+<L>The strong wine to the clownes, the worse vnto the good men give,</L>
+<L>And theres good reason, why good men without good wine should live.</L>
+<L>Such men as rule the multitude, and weightie causes heare,</L>
+<L>Lest they should erre by drunkennes, should hate strong wine and beere.</L>
+<L>For drunkennes o'recomes our sence, and captivates the minde,</L>
+<L>And is the greatest fault, when it in greatest men we finde.</L>
+<L>Wherefore, lest thou shouldst seeme the cause and author of this ill,</L>
+<L>Be sure th<GAP DESC="illegible" RESP="uom" EXTENT="1 letter" DISP="•"/>t thou the worst wine, for the best men alwaies fill.</L>
+<L>Thou seest they love to sit and talke, and passe away the time,</L>
+<L>Which prove's that they love honest talke, better then strongest wine.</L>
+<L>Thus will they sit and talke all night, forgetting to depart,</L>
+<L>Vnlesse thou carefully prevent them with this cunning art,</L>
+<L>Give them such tastelesse wine, as thou doost vse with drugs to mixe,</L>
+<L>And then thei'le surely strait depart, not liking these thy trickes.</L>
+<L>For they will neither for such tappings any mony spend,</L>
+<L>Now will such tastelesse drugs as those, their stomacks so offend.</L>
+<L>But every man to leave that house, will forthwith thinke it best,</L>
+<L><PB N="37" REF="30"/>And to his owne house, every man will go to take his rest.</L>
+<L><HI>Xantip,</HI> wife to <HI>Socrates,</HI> in fame shall ever live,</L>
+<L>Who when to certaine worthie men, a banquet she did give.</L>
+<L>They talked long and learnedly, of things that lik'd them best,</L>
+<L>Including many a weightie matter in a pleasant iest.</L>
+<L>When halfe the night they thus had spent, <HI>Xantip</HI> malecontent,</L>
+<L>Devisde some meanes, whereby at length their pratling to prevent.</L>
+<L>She being well tong'd, both her husband and her guests did chide,</L>
+<L>But seeing that they scornde her words, this other meanes she tride.</L>
+<L>She threw the table vnder feete, and forc'd them all to go</L>
+<L>Incontinent out of her house, whether they would or no.</L>
+<L>This I could wish thee eke to do, if they should sit too long,</L>
+<L>But this I doubt thou scarce wouldst do, such sober men among.</L>
+<L>Wherefore I thinke with naughtie wine, they sooner will leave talke,</L>
+<L>And every man will care, vnto his proper house to walke.</L>
+</LG>
+<LG>
+<L>Perchance t'will make them leave their chat, to tell them suddainely,</L>
+<L>Where <HI>Charles waine</HI> is, and other well knowne candles of the skie.</L>
+</LG>
+<LG>
+<L>What though you tell a lie? tush, thats a trifle very light;</L>
+<L>Or, that they may be gone to bed, tell them what time of night,</L>
+<L>Suppose the Cocke hath scarce crow'd once, nights comming to declare,</L>
+<L>Yet say the starres vnto the waters, now descending are.</L>
+</LG>
+<LG>
+<L>Or say (what though thou liest?) that each man may his owne house see,</L>
+<L>Why should their trifling ieasts, disturbe thy master thus and thee?</L>
+</LG>
+<LG>
+<L>Or if thou wilt not drive away such grave men in this wise,</L>
+<L>Then let them talke, and do what soe're is seemely in their eyes.</L>
+<L>But leave those wise men all alone, vnto the clownes go thou,</L>
+<L>Who pleasant ieasts, and store of wine; vnto thee will allow.</L>
+<L>Mean while, leave those grave Catonists, as men that are forlorne,</L>
+<L>And let them sit, (but without wine,) vntill the next day morne.</L>
+<L>Wh n they perceive you scorne them thus, and leave them all alone,</L>
+<L>Then sure (if ever,) every man will to his house be gone.</L>
+</LG>
+<LG>
+<L>But for the drunkards, men well minded, give them better drinke,</L>
+<L>Because on nothing but the throate well drench'd, they vse to thinke.</L>
+<L>As little wisedome as you can, will fit their humours best,</L>
+<L>And as for knowledge and good conscience, th y do both detest.</L>
+<L>Their heads with matters of importance, seldome troubled are,</L>
+<L><PB N="38" REF="31"/>And from their mindes, I thinke they alwaies banisht carke and care.</L>
+<L>They neither care for wife, nor children, nor excesse of wealth,</L>
+<L>Their onely care, is now and then in mirth to drinke a health.</L>
+<L>God <HI>Bacchus</HI> frolicke feasts, and pleasant wine they still commend,</L>
+<L>And all their life in sportive plaies and trickes, they vse to spend.</L>
+<L>For those good fellowes at the first, bring forth immediately,</L>
+<L>The strongest wine, though vnder twentie lockes and keyes it lie.</L>
+<L>Such men as these each day and houre, make drunkennes a ieast,</L>
+<L>And if you bring your strongest wine, the strongest they love best.</L>
+<L>Vse all thy wit, to make these wel-nie drunken fellowes mad,</L>
+<L>And though they come too fast before, yet vse a spurre to adde;</L>
+<L>And force them thus to runne that way, which they before did go,</L>
+<L>By giving the stalest wine, which strongest thou dost know.</L>
+<L>For why, the sooner they be drunke, the sooner thei'le forsake</L>
+<L>The house; the sooner thei'le depart, the sooner sleepe thei'le take.</L>
+</LG>
+</DIV2>
+<DIV2 N="10" TYPE="chapter">
+<HEAD>The talke, debating, and wrangling of the guests after supper. <HI>Chapter X.</HI></HEAD>
+<LG>
+<L>VVHenas with <HI>Bacchus</HI> pleasant iuyce, they have bin liquord well,</L>
+<L>Thei'le fall to talke, and every man his sundrie tale must tell:</L>
+<L>Then all the newes that flies abroad, you shall be sure to heare,</L>
+<L>And all the miracles that have beene done, both farre and neere.</L>
+</LG>
+<LG>
+<L>One tells how gallantly he spent his sportive youthfull daies,</L>
+<L>How readie and how apt he was to sundry kinde of plaies;</L>
+<L>How cunningly his hobbie-horse, in those daies he could drive,</L>
+<L>And in the Troyan horse how they their battaile did contrive.</L>
+</LG>
+<LG>
+<L>Another shewes some lines, received from his whilome love,</L>
+<L>And tells how happie and effectuall, all his suites did prove:</L>
+<L>And often-times, a cause of fetching bitter sighes hee'le finde,</L>
+<L>When his prosperitie thats past, he calles into his minde.</L>
+<L><PB N="39" REF="31"/>When he his sweetest daies and pleasures past, doth thus recall,</L>
+<L>He cannot choose, but into store of sighes he needes must fall.</L>
+</LG>
+<LG>
+<L>A third will on the tother side, his ill successe recite,</L>
+<L>While he, (vnhappie he) did vnder <HI>Cupids</HI> colours fight,</L>
+<L>How he was cold and numbe, even in the midst of all his fire:</L>
+<L>And how he went through frost and snow, to compasse his desire.</L>
+<L>And yet for all this, he his purpose never could attaine,</L>
+<L>But for his praiers and his paines, bad words were all his gaine.</L>
+</LG>
+<LG>
+<L>Another yonker to the heavens, his sweete harts praise will tell,</L>
+<L>And sweare her haire strives with the gold, the saffron doth excell.</L>
+<L>Her glittring eyes do shine like starres, to them that passe them by,</L>
+<L><HI>Ʋenus</HI> I thinke <HI>Idaliaes</HI> Queene, had not a purer eye.</L>
+<L>Her mouth well framde, her face and cheekes in forme are verie round,</L>
+<L>Life-breathing kisses, in her rose-excelling lips are found,</L>
+<L>Her white with red, and red with white, so well is inter-linde,</L>
+<L>As if the blushing Rose, were to the pale-fac'd Lillie ioynde:</L>
+<L>Her fingers long and slender are, her teates are even so,</L>
+<L>Her thighs (sweete thighs,) excell in whitenes the <HI>Sithonian</HI> snow.</L>
+</LG>
+<LG>
+<L>Others perchance in other matters place their chiefe delight,</L>
+<L>And everie man will speake of that, which fits his state most right,</L>
+<L>The souldier speakes of cruell battailes, <HI>Mars,</HI> and bloodie wounds,</L>
+<L>The hunts-man which delightes in dogs, commends the swiftest hounds.</L>
+<L>He that delightes in store of fruites, commends most fertile fields,</L>
+<L>The shepheard he commends the flock, which most wooll to him yields.</L>
+<L>The marriner sets forth the windes, and quicke-sands where they bee,</L>
+<L>And talkes to them of raging seas, which never sea did see.</L>
+<L>Each man according to his life, doth speake of every thing,</L>
+<L>The hearing of such newes as these, great profite may thee bring.</L>
+</LG>
+<LG>
+<L>Some will repeate those trickes, which they have done in all their daies,</L>
+<L>And for these tricks (though they be faults,) wil looke to have some praise.</L>
+<L>Oft have I heard old chancelesse men, with one foote in the grave,</L>
+<L>Brag of those vices, which they in their youth committed have.</L>
+</LG>
+<LG>
+<L>Those good examples of old men will teach thee, in like sort,</L>
+<L>Yong heads vnto decrepite syres, for counsell should resort.</L>
+<L>Be sure thou listen with both eares, vnto each word they say,</L>
+<L>And in thy carefull minde, each matter firmely beare away.</L>
+<L><PB N="40" REF="32"/>If in the meane time any guest, desire thy helping hand,</L>
+<L>And either bid thee fill some wine, or something else command.</L>
+<L>Looke thou another way, as if his voice thou didst not heare,</L>
+<L>And with each hand from that ill sound, be sure thou stop each eare.</L>
+<L><HI>Ʋlisses,</HI> lest the Syrens songs to death should him intice,</L>
+<L>Stopt all his fellowes eares with wax, and scapt by that devise.</L>
+<L>So lest thou shouldst be forc'd to go, whither thou hast no minde,</L>
+<L>Be deafe, and then to heare their talke, thou still maist stay behinde.</L>
+<L>But if without your credites cracke, you can no longer stay,</L>
+<L>Because he still with lowdest voice praies you to come away,</L>
+<L>And yet to heare their trifling talke, you have a great desire,</L>
+<L>This favour at his hands, by this meanes you may well require.</L>
+<L>Pray him to stay, but till you heare the end of that one ieast,</L>
+<L>And then you'le come, he cannot choose but grant that small request.</L>
+</LG>
+<LG>
+<L>When store of <HI>Bacchus</HI> drunken iuyce, into their braine is sent,</L>
+<L>And drunkennes in every part, hath firmely pitch'd his tent;</L>
+<L>Triumphing, that poore reason from his native seate is gone:</L>
+<L>And when the soule is headlong thrust, by force from off her throne,</L>
+<L>Great strife, concerning sundry weightie matters will arise,</L>
+<L>And every tongue made glib with drinke, will talke in divers wise.</L>
+<L>One saieth, that after death, our soules do live eternally,</L>
+<L>And that it is not like, that with our bodies they should die.</L>
+<L>They change their place indeede, but enter other subiects tho,</L>
+<L>As that soule which was once a mans, into a beast doth go.</L>
+<L>But this absurde opinion, will of some reiected be,</L>
+<L>Which in like iudgement, with <HI>Pythagoras</HI> do not agree.</L>
+<L>Others will thinke, the soule and bodie both together die,</L>
+<L>Even as the heare together with the fire, ends presently.</L>
+<L>And that this is impossible, another forthwith saith,</L>
+<L>Most constantly dispraising those that dare defend this faith.</L>
+</LG>
+<LG>
+<L>Another will declare great wonders of another land,</L>
+<L>Which in a place, thats farre beyond heavens axletree, doth stand.</L>
+<L>There <GAP DESC="illegible" RESP="uom" EXTENT="2 letters" DISP="••"/>en have mouthes &amp; teeth like dogs, and do on mans flesh feede;</L>
+<L>Thats false another cries, with monsters Nature ner'e agreed.</L>
+<L>Each man brings store of arguments, that he may get the field,</L>
+<L>And every man will rather die than to another yield.</L>
+</LG>
+<LG>
+<PB N="41" REF="32"/>
+<L>Others would gainst such kings as they, mislike, exception take,</L>
+<L>And oftentimes great iarres and warres, by their great words they make,</L>
+<L>Some Captaines thei'le extoll beyond the heavens, and stars with praise,</L>
+<L>Others thei'le wish at <HI>Stigian</HI> lakes, in hell to end their daies.</L>
+<L>Others will speake quite contrarie to these, to move debate,</L>
+<L>And those which they so hate, thei'le praise, which they so praise, thei'le hate.</L>
+</LG>
+<LG>
+<L>Others make difference in the daies, one blacke, another white;</L>
+<L>Others by making all alike, dash this distinction quite.</L>
+</LG>
+<LG>
+<L>Each man will onely like of that, which he himselfe doth know,</L>
+<L>Iudgeing, that as he thinkes, tis meete that every man thinke so.</L>
+<L>Another cannot suffer that, but thus it needes must be,</L>
+<L>That he knowes what belongs to things, as well as any he.</L>
+<L>And then thei'le proove and disproove, all the causes they can get,</L>
+<L>And thus their wrangling, wrestling strife, and swaggring will be great.</L>
+</LG>
+<LG>
+<L>It may be then from words to bloodie blowes this strife will leade,</L>
+<L>And then insteede of arguments, a naked sword must pleade.</L>
+<L>As for old Logicke, that in this case can no whit suffise,</L>
+<L>Which never taught to prove your words, in this so boistrous wise.</L>
+<L>Some <HI>Aristotle</HI> must be found, to print this art anew,</L>
+<L>By shewing from what secret place, his shining sword he drew.</L>
+<L>Be sure that with a lustie courage, thou on one side take,</L>
+<L>And by thy counsell and advise, the battell greater make.</L>
+<L>Thrust thou thy selfe into the midst, and all feare cast behinde,</L>
+<L>Concerning all the matter, freely vtter thou thy minde.</L>
+<L>In store of stirre, and whooping lowde, be sure thou passe them all,</L>
+<L>And speake so lowde, that thou maist almost shake thy masters hall.</L>
+</LG>
+<LG>
+<L>Boldly give thou the lie, to him which contradicteth thee,</L>
+<L>Then at thy thunder-thumping words, thei'le all amazed bee.</L>
+<L>And thus to honour and renowne, thou presently shalt rise,</L>
+<L>And for this wit, the multitude will praise thee to the skies.</L>
+<L>But from his hands to whom thou gav'st the lie, be sure thou live,</L>
+<L>Lest for that salutation, some wound to thee he give.</L>
+</LG>
+</DIV2>
+<DIV2 N="11" TYPE="chapter">
+<PB N="42" REF="33"/>
+<HEAD>The manner how to send away the guests after supper, and what is to be done before you go to bed, and the con∣clusion of this first booke. <HI>Chapter XI.</HI></HEAD>
+<LG>
+<L>IF halfe the night be spent in waging warre the guests among,</L>
+<L>This iniurie in any case, must not be tooke too long.</L>
+<L>He which with carefull diligence, vnto his things will looke,</L>
+<L>Must have a care, that all his guests with craft be over-tooke.</L>
+<L>That banquet, last it ne're so long can bring to thee no gaine,</L>
+<L>Although by keeping thee from sleepe, it put thee to great paine.</L>
+<L>Wherefore to make them all depart, thy wit must finde some feate,</L>
+<L>Some trickes I have alreadie taught, which heere I will repeate.</L>
+</LG>
+<LG>
+<L>Perchance some one among the rest, demands what time of night,</L>
+<L>Then be thou sure in any case, thou never tell him right.</L>
+<L>Perhaps the Cocke doth tell you plaine, t'was ten the clocke strucke last,</L>
+<L>Yet be not thou ashamde, to say that it is twelve and past.</L>
+<L>Though no man aske, yet tell them this each houre, on thine owne head,</L>
+<L>That they may know the better, that its time to go to bed.</L>
+</LG>
+<LG>
+<L>If neither they respect thy words, nor yet the time thats past.</L>
+<L>Then warne them flatlie, that each person to his house make haste.</L>
+<L>And though your master did not bid you, thus his guests to vse,</L>
+<L>Yet if you do so, this his credite cannot much abuse.</L>
+<L>I doubt not, but your master would himselfe have said the same,</L>
+<L>If that it would not have beene preiudiciall to his fame.</L>
+</LG>
+<LG>
+<L>As soone as they halfe-drunken, do beginne to part away,</L>
+<L>Set ope the doore, lest thou shouldst give them any cause of stay.</L>
+<L>Set ope the doores I say, and freely lend them store of light,</L>
+<L>And tell each man which is the way, vnto his owne house right.</L>
+<L>And when each one hath tooke his leave, as fits his humour best,</L>
+<L>Be take thee to thy chamber, there at length to take thy rest.</L>
+</LG>
+<LG>
+<L>As for the shutting of the doores, it is thy masters right</L>
+<L>To shut them all, if that he meanes they shall be shut that night.</L>
+<L>Let him put out the candles all, and eke rake vp the fire,</L>
+<L><PB N="43" REF="33"/>Thy master must go last to bed, that <HI>Cato</HI> doth require.</L>
+</LG>
+<LG>
+<L>Or else take thou the candle, for I thinke thats farre more fit,</L>
+<L>Whenas thou go'st to bed, and for thine owne vse keepe thou it;</L>
+<L>Lest in the darke, thy legs or feete be hurt by any thing,</L>
+<L>The night, before all other times most hurt doth soonest bring.</L>
+<L>As for your master, he may in the darke more safely go,</L>
+<L>Because each corner in the house, he perfectly doth know.</L>
+<L>Let him a Gods name in the darke, put off his clothes alone,</L>
+<L>Hee's old enough, as for thy helpe, be sure thou give him none.</L>
+</LG>
+<LG>
+<L>The night is shorter then the day, then sure I thinke it best,</L>
+<L>To have a care, that nothing hinder thine expected rest.</L>
+<L>Wherefore prevent the hasting time, by all meanes that thou can,</L>
+<L>Care for thy selfe, but have no care for any other man.</L>
+</LG>
+<LG>
+<L>As for the pots and cups, which still are left vpon the table,</L>
+<L>To sturre them ere tomorrow morne, I thinke thou art not able.</L>
+<L>If all the pots should be remoov'd that night, and purg'd by you,</L>
+<L>After such paines and losse of sleepe, what profit would ensue?</L>
+<L>Then let them stand, that every man may tell his fellow, heere</L>
+<L>Was yester night a royall banquet, stuffde with daintie cheere.</L>
+<L>For by this meanes, of those great pleasures they may have a taste,</L>
+<L>Tis comfortable to remember pleasures that are past.</L>
+<L>Nay which is more, this businesse thou ever shouldst neglect,</L>
+<L>Because no wise man, will such labour and such paines respect.</L>
+</LG>
+<LG>
+<L>Next morning, tis my counsell, that thou sleepe till iust mid-noone,</L>
+<L>Left thou shouldst hurt thy braine and wit, if thou shouldst rise too soone.</L>
+<L>Nay then, to leave thy sleepie bed, take thou no care at all,</L>
+<L>Vnlesse thy father or thy master, twice or thrice thee call.</L>
+<L>Meane time, the servants all the pots will place in comely wise,</L>
+<L>And quite dispatch thy businesse, before that thou canst rise.</L>
+</LG>
+<LG>
+<L>When thou hast slept so well, that all thy wine is wash'd away,</L>
+<L>Then rise, whenas the sunne hath shined brightly halfe the day.</L>
+<L>Such precepts as are fittest for thee, whenas thou doost rise,</L>
+<L>And all fit manners, we have tolde before in ample wise.</L>
+<L>Be sure that thou in every place, doost all of them maintaine,</L>
+<L>Lest thy forgetfulnes, make me repeate them all againe.</L>
+</LG>
+<LG>
+<L>Many there are, which next their heart do burnt wine wholesome thinke,</L>
+<L><PB N="44" REF="34"/>For why (say they,) our sences are restorde by that warme drinke.</L>
+<L>Do thou the same if for such kinde of drinke thy purse do care;</L>
+<L>For ill with ill, and wine with wine, oft times expelled are.</L>
+<L>To teach thee more, concerning this thy simple life I meant,</L>
+<L>But I must haste, for why mine owne affaires do me prevent.</L>
+<L>Vse thine owne wit as much as may be, for thou so maist well</L>
+<L>By thine owne practise, all my words and counsell farre excell.</L>
+<L>I onely slightly touch those precepts, which I give to thee,</L>
+<L>Which if I should at large define, too tedious I should bee.</L>
+<L>Few words will serve, since from thy vse great learning thou hast had.</L>
+<L>Vnto my precepts by thy practise, thou maist daily adde.</L>
+<L>For me to put all things in one booke, it would be but vaine,</L>
+<L>Because the greatest place that is, could not that booke containe.</L>
+<L>How I (poore wretch,) such labour should sustaine, I do not know,</L>
+<L>It is a burthen, greater then my wit can vndergo.</L>
+<L>For why, no place (though ne're so wide,) all fooles can comprehend.</L>
+<L>Because their court is infinite, their number without end.</L>
+<L>Cast but your eyes in carefull sort, through all the worlds wide round,</L>
+<L>And marke each sundry sort of men, that therein can be found.</L>
+<L>You still most shamelesse filthie faults, in every place shall finde,</L>
+<L>For why alas to rudenes, now no meane can be assignde.</L>
+<L>Old age to live by vertues line, have nowadaies no care,</L>
+<L>Not shaming by vilde vices, to disgrace their silver haire.</L>
+<L>And which is worse, they vnto youth such bad examples give,</L>
+<L>That they in imitating them, most wickedly do live.</L>
+<L>And youth, (such is the wickednes of these inclining daies,)</L>
+<L>Doth thinke, that living out of order, merits mickle praise.</L>
+<L>Who teacheth youth to mend their lives, or bids them to forsake</L>
+<L>Their former most disorderd life, and better courses take?</L>
+<L>Nor man nor woman nowadaies, their credite do respect,</L>
+<L>But loving vice most shamelesly, all vertue they neglect.</L>
+<L>In times of olde, when men by vertue did to honour rise,</L>
+<L>Yong maids were much commended, for their chaste &amp; shamefaste eyes.</L>
+<L>They seldom spake, and when they spake, their speech was chaste &amp; pure,</L>
+<L>Which of a chaste and pure minde, was an argument most sure.</L>
+<L>Now tis a credite for a wench, to have a gadding eye,</L>
+<L><PB N="45" REF="34"/>And if she cannot keepe her way, shee's praisde immediatly.</L>
+<L>Now, tis a credite for a wench, to have her tongue to walke;</L>
+<L>And she is thought a clownish wench which cannot boldely talke.</L>
+<L>Tis vaine to talke of those great men, which are in great account,</L>
+<L>And, which in rule and dignitie all others do surmount.</L>
+<L>Forgetfull of all comelines, those things they speake and doe,</L>
+<L>Which all their mindes regardlesse lust most headlong leades them to:</L>
+<L>And those which in a kingdome over others rulers are,</L>
+<L>Doe that themselves, from which they should keepe others with great care.</L>
+<L>Enter the halles of noble men, pufft vp with pompe and pride;</L>
+<L>The high built houses of great men, their porches large and wide:</L>
+<L>And at your very entring in, such obiects you shall see,</L>
+<L>I meane such men as you, of soules would iudge them voyde to be:</L>
+<L>There drunkennesse, and lives beseeming beasts, do rule and raigne:</L>
+<L>Heere gluttony the chiefest rule and empire dooth obtaine:</L>
+<L>And in another corner pride doth beare the greatest sway,</L>
+<L>Which doth mens mindes from good behaviour headlong leade away.</L>
+<L>In these and such like steppes, the subiect multitude doth treade,</L>
+<L>Which from all vertue to all vice, our mindes do captiue leade.</L>
+<L>I would proceede by these complaints these vices to amend,</L>
+<L>But that I am inforc'd at this time here to make an end:</L>
+<L>For why, the rusticke rowt with piercing cries do me command,</L>
+<L>To finish that my taske, which lately I have tooke in hand.</L>
+</LG>
+</DIV2>
+<TRAILER>The end of the first Booke.</TRAILER>
+</DIV1>
+</BODY>
+</TEXT>
+</EEBO>
+</ETS>
