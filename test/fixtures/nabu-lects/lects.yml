@@ -267,6 +267,13 @@ anchors:
   en:
     name: English
     parent: enm
+    stages:
+      early: {name: Early Modern English, band: [1500, 1700], ord: 10,
+              band_note: "conventional English philology, approximate —
+                          the Great Vowel Shift's middle passage to the
+                          Restoration's settling orthography; the enm
+                          band ends 1500 (ISO/MARC), this stage picks
+                          up the seam"}
 
   # ── The other Germanic ladders (the P59 ISO-parentage wave: ISO already
   # staged these — anchors mirror its Historical-type chains within the
