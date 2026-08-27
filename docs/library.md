@@ -1,11 +1,12 @@
 # The Library — content review
 
-**As of 2026-08-26** (post the P82 granted-doors wave — Menota's
-91 Nordic manuscripts, 91/91 after the P82-r1 quarantine recovery,
-and the Corpus of Middle English).
-Live totals: **988,944 documents / 75,217,907 passages and 1,410,205
-dictionary entries** across the **155 registry rows** — 132 corpus
-sources + 4 local shelves + 19 feature modules, every corpus source
+**As of 2026-08-27** (post the P83 EEBO wave — the library's
+first million: EEBO-TCP Phase I, 25,368 early-modern English
+texts).
+Live totals: **1,014,312 documents / 89,934,635 passages and
+1,410,205 dictionary entries** across the **156 registry rows** —
+133 corpus sources + 4 local shelves + 19 feature modules, every
+corpus source
 wired (the P80 Latin–Romance wave, §8ai, verified its first syncs and
 flipped 2026-08-21). **Classical Arabic (`ara`, §8x) is the largest
 language at 33.3M passages**, ahead of Literary Chinese (15.9M),
@@ -921,6 +922,22 @@ by date inference; Middle English at reading grain — the MED's own
 corpus joining the `germanic` desk between Bosworth-Toller's Old
 English and ReM's Middle High German, the `tcp-xml` family holding the
 EEBO door open.
+
+## 8ak. The P83 wave — the EEBO door (`eebo-tcp`; P83 — first sync owner-fired 2026-08-27, wired 2026-08-27)
+
+| | |
+|---|---|
+| **Category** | Everything printed in England, 1473–1700, that the Text Creation Partnership hand-keyed — the early-modern English corpus, and the library's million-crossing wave |
+| **Languages** | Early Modern English (`en`, staged `en:early` over nabu-lects v1.2.0 — 20,981 docs by imprint-date inference), with the corpus's own minority lanes riding verbatim: Latin 381 (28 → `lat:ren`), Welsh 59, Scots 27, French, Dutch — `en` at 24,857 docs becomes a top-tier code overnight |
+| **Size** | `eebo-tcp`: **25,368 docs / 14,716,728 passages** (wave 1 = Phase I per №R-43; Phase II's 34,958 stays a one-line follow-on) — Milton, Raleigh's farewell broadside, Bacon, Donne, sermons, petitions, civil-war tracts, folios; per-document imprint dating (21,435 dated); over the shared `tcp-xml` family (built P82 for CME, proven here at 25k scale: one quarantine in the wave, diagnosed to 20 orphaned combining macrons and recovered same-day — Q47) |
+| **Licenses** | uniform per-file CC0 1.0 dedication (censused) + grant №77-2 → `open` |
+
+**Research uses:** the early-modern print world at reading grain —
+pamphlet-era polemic beside the CME's Middle English (§8aj) and the
+Old English shelves, the full English descent ladder now populated
+at every rung (ang → enm → en:early); imprint-dated at scale for
+the /dates/ timeline; the germanic desk's English line five sources
+strong.
 
 ## 8i. The local shelves — canonical memory (architecture §16)
 
