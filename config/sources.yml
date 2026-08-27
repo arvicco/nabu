@@ -3936,10 +3936,10 @@ eebo-tcp:
                      # iswoc + eng-web + eebo-tcp the English line is now five
                      # sources riding `germanic` — whether an `english` desk/axis
                      # should be minted is a future owner question, not a P83 call
-  classes: [phase1]  # №R-43 RULED (2026-08-26): wave 1 = option (b), Phase I whole
-                     # (25,368 texts ≈1.73 GB zipped), with (c) — both phases,
-                     # all 60,326 — the stated follow-on: widening is exactly
-                     # this line becoming [phase1, phase2], no code change
+  classes: [phase1, phase2]  # P84-2 (owner cut 2026-08-27): the stated follow-on
+                     # lands — both phases, all 60,326 texts. Phase I zips skip
+                     # free at the sync; Phase II ≈1.57 GB / ≈35k docs. Wave 1
+                     # was №R-43's option (b), Phase I, synced 2026-08-27.
   wired: true        # flipped 2026-08-27 (owner: "wire on eebo"; the verification
                      # sync landed 25,367 docs / 14,702,780 passages 2026-08-27,
                      # +A15970's 13,948 after the Q47 recovery)
