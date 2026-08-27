@@ -1,0 +1,23 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The P84-1 silver-lemma enricher's PROTOCOL fixtures — not an upstream
+# source: the recorded-shape lines are REAL output of the real worker
+# (stanza 1.14.0, la:ittb_nocharlm, CPU) captured during the P84-1 smoke
+# run; the fake worker is the suite's protocol-identical model stand-in.
+source: lemma
+adapter_test: test/lemma_enrich_test.rb
+retrieved: 2026-08-27
+files:
+  - path: fake_worker.rb
+    whole: true
+    refetchable: false
+    reason: the suite's deterministic worker stand-in (no upstream; runs a protocol loop, so it cannot live in test/support)
+  - path: worker_ready.jsonl
+    whole: true
+    refetchable: false
+    reason: recorded-shape fixture — real stanza 1.14.0 ready line (local model run, no upstream)
+  - path: worker_response.jsonl
+    whole: true
+    refetchable: false
+    reason: recorded-shape fixture — real la:ittb_nocharlm response for two Latin texts (local model run, no upstream)

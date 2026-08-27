@@ -689,6 +689,9 @@ mw:
 edh:
   adapter: Nabu::Adapters::Edh
   axes: [epigraphy]
+  # P84-1: the epigraphy dictionary filter (see edr) — same argument, the
+  # provinces' half of the same corpus family.
+  lemma_dictionary_filter: true
   wired: true    # owner sign-off 2026-07-13: synced 81,856 docs / 406,281 passages
                    # (27 quarantines pending triage), flipped. Original gate note
                    # (P17-2): awaiting the owner-fired first (and only) sync —
@@ -927,6 +930,24 @@ local-notes:
   # default, withheld wherever the target document is withheld).
   # (P39-0: kind: shelf replaces the P31 sync_policy: local rider — kind now
   # routes this upstream-less shelf at the local probe, never the git one.)
+
+local-lemmas:
+  adapter: Nabu::Adapters::LocalLemmas
+  kind: shelf   # P84-1: the model-output shelf — local fetch, no network, up=local
+  axes: [local]
+  wired: true    # the local-shelf argument verbatim (see local-notes): no
+                 # network cost, no upstream license; populates only through
+                 # `bin/nabu lemma-enrich <language>` (the sanctioned front
+                 # door: Nabu::LemmaShelf gateway). Empty until the owner
+                 # fires the first campaign — an absent tree loads nothing.
+  # The FIFTH canonical-memory shelf (P84-1, №R-35, architecture §16): the
+  # silver-lemma enricher's raw model output (venv-managed Stanza; la:ittb
+  # for the Latin wave), JSONL shards per language lane. NON-DERIVABLE
+  # (hours of CPU), hence a shelf, never db/. UNLIKE the other shelves its
+  # derived product is fulltext-side: Store::SilverLemmaIndexer projects
+  # shards into passage_lemmas as tier-silver rows (never beside gold) at
+  # every rebuild/sync and on `lemma-enrich --index`; the loader lane only
+  # validates (a malformed shard quarantines loudly).
 
 riig:
   adapter: Nabu::Adapters::Riig
@@ -2927,6 +2948,10 @@ edr:   # P46-4
   # P47 D47-g (owner ruling 2026-07-28): 596K passages of damaged Latin
   # inscriptions — the fragment desk's biggest constituency by far.
   fuzzy_index: true
+  # P84-1: silver lemmas land here only when Lewis-Short attests them (or
+  # they fold to a surface form) — the P79-4 trial put epigraphy at the 75%
+  # band, invented proper-name nominatives the worst error class.
+  lemma_dictionary_filter: true
   axes: [epigraphy]
   wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box) — 115,590 docs / 596,064 passages / 1 predicted quarantine, D46-i license ruling 2026-07-26
                  # First sync shape: ONE ~268 MB Zenodo GET
