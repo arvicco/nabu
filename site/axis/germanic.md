@@ -26,7 +26,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these fifteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these seventeen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 August 2026)</span> |
 |---|---|---|---|---|
@@ -37,6 +37,8 @@ A source wears every desk it serves — these fifteen answer this desk. Holdings
 | `menota` | texts | attribution | wired · manual | 91 docs / 241,628 passages |
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
+| `corpus-oudnederlands` | texts | research_private | not yet wired | nothing held yet |
+| `corpus-gysseling` | texts | research_private | not yet wired | nothing held yet |
 | `ref` | texts | attribution | wired · manual | 190 docs / 447,115 passages |
 | `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
