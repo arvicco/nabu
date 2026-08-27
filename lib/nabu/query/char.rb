@@ -53,6 +53,51 @@ module Nabu
       # fixed shelf-slug list (the P32-4 census), not a corpus count.
       HDIC_SLUGS = %w[yyp ktb tsj syp krm].freeze
 
+      # The reduced non-Han card (P84-5): glyph identity only — codepoint
+      # and a best-effort script name. The Han card's shelf lanes (the
+      # define join, TLS, Unihan…) never run for a non-Han glyph: the
+      # define pipeline's Sanskrit stem expansion turned "a" into "as" and
+      # matched the TLS concept headword "AS" (the 2026-08-26 defect).
+      # Any richer non-Han design is №R-44's gated question.
+      Reduced = Data.define(:glyph, :codepoint, :script)
+
+      # The best-effort script probe for the reduced card, in order; a glyph
+      # matching none stays an honest nil ("non-Han" at render).
+      SCRIPT_PROBES = [
+        ["Hangul", /\p{Hangul}/], ["Latin", /\p{Latin}/], ["Greek", /\p{Greek}/],
+        ["Cyrillic", /\p{Cyrillic}/], ["Arabic", /\p{Arabic}/], ["Hebrew", /\p{Hebrew}/],
+        ["Devanagari", /\p{Devanagari}/], ["Thai", /\p{Thai}/]
+      ].freeze
+
+      def self.reduced(glyph)
+        glyph = Nabu::Normalize.nfc(glyph.to_s)
+        Reduced.new(
+          glyph: glyph, codepoint: format("U+%04X", glyph.each_char.first.ord),
+          script: SCRIPT_PROBES.find { |_, probe| glyph.match?(probe) }&.first
+        )
+      end
+
+      # The reduced card's machine shape: the Han payload stays stable
+      # ({glyph, card}); non-Han is additive — card is null (no Han card
+      # exists for the glyph) and the reduced identity rides its own key.
+      def self.reduced_json_payload(glyph, reduced)
+        { "glyph" => glyph, "card" => nil, "reduced" => serialize(reduced) }
+      end
+
+      # The CJK shelf family the Han card composes: sync source → the
+      # dictionary slugs it shelves. The empty-card hint (P84-5) reads this
+      # to tell held-but-silent shelves apart from never-synced ones.
+      CJK_SHELF_SOURCES = {
+        "unihan" => %w[unihan],
+        "edrdg" => %w[kanjidic2 jmdict],
+        "babelstone-ids" => %w[babelstone-ids],
+        "kradfile" => %w[kradfile],
+        "baxter-sagart" => %w[baxter-sagart-oc baxter-sagart-mc],
+        "tshet-uinh" => %w[guangyun],
+        "hdic" => HDIC_SLUGS,
+        "tls" => %w[tls-words tls-concepts]
+      }.freeze
+
       # The sinoxenic reading strata Unihan carries (Jisho shows Mandarin +
       # kun'yomi; nabu adds Korean/Vietnamese and the historical kJapanese
       # unified layer). Only present strata appear. kHangul (P78-6, the
@@ -103,6 +148,15 @@ module Nabu
       end
 
       def shelf? = @catalog.table_exists?(:dictionary_entries)
+
+      # The CJK sync sources present in this catalog's dictionaries table
+      # (any of a source's shelves counts), in CJK_SHELF_SOURCES order.
+      def held_cjk_sources
+        return [] unless @catalog.table_exists?(:dictionaries)
+
+        held = @catalog[:dictionaries].select_map(:slug).to_set
+        CJK_SHELF_SOURCES.select { |_, slugs| slugs.any? { |slug| held.include?(slug) } }.keys
+      end
 
       # -- the reading→character reverse lane (P65 gate: `nabu char wen`) ----
 
