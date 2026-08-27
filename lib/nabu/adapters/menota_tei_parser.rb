@@ -28,17 +28,26 @@ module Nabu
     #
     # Per token: the DIPLOMATIC reading when attested, else FACSIMILE, else
     # NORMALIZED — so dipl-bearing documents read diplomatically and the
-    # facs-only five read at their only attested level. Every attested
-    # level rides annotations["tokens"] verbatim (with lemma, me:msa,
-    # xml:id and the chosen text_level), so nothing is lost. NFC at this
-    # boundary; PUA codepoints are NFC-stable.
+    # facs-only five read at their only attested level. A token with NO
+    # level children (bare <pc> punctuation, fully <supplied> words —
+    # level-invariant text the encoders write once, unwrapped; Q45) reads
+    # at the level the document's stored text reads at, or at the
+    # header's declared me:level when the document carries no level
+    # markup at all. Every attested level rides annotations["tokens"]
+    # verbatim (with lemma, me:msa, xml:id and the chosen text_level), so
+    # nothing is lost. NFC at this boundary; PUA codepoints are
+    # NFC-stable.
     #
     # == The citation scheme
     #
     # Passage = one manuscript LINE (the corpus's own layout grain, the
-    # ReF rule): <page><column>.<line> — 1rB.1, 2v.24. Duplicate refs
-    # take the house :b<n> positional disambiguator; a token stream with
-    # no milestones at all falls back to s<n> segment refs.
+    # ReF rule): <page><column>.<line> — 1rB.1, 2v.24. Only the
+    # manuscript's OWN layout mints refs: pb/cb/lb with ed="ms" or no ed
+    # (Q45) — milestones carrying any other ed replay a printed edition,
+    # another hand, or a parallel manuscript and never advance the
+    # position. Duplicate refs take the house :b<n> positional
+    # disambiguator; a token stream with no milestones at all falls back
+    # to s<n> segment refs.
     #
     # == Header capture
     #
@@ -454,17 +463,34 @@ module Nabu
         # Milestones advance position wherever they occur — INCLUDING
         # inside an open token's levels (þur<lb/>fu): the token keeps the
         # position it OPENED at, the next token starts on the new line.
+        # But ONLY the manuscript's own layout counts (Q45): ed="ms" or
+        # no ed at all (AM 36's main text numbers its lines with ed-less
+        # <lb n="06"/>). Any other ed names ANOTHER source's layout —
+        # a printed edition (<pb ed="Unger" n="0001"/> interleaves with
+        # <lb ed="ms" n="6"/> in DG 4-7 Streng and would overwrite the
+        # folio in an ms-line ref), another hand (ed="younger hand"
+        # inside <add>), the transcriber's lacuna markers (ed="added"),
+        # a parallel manuscript (ed="AM 237a fol") — and never advances
+        # the citation. Whitespace around ANY milestone inside a bare
+        # token is XML layout either way.
         def milestone(node, name)
-          value = presence(node.attribute("n"))
-          case name
-          when "pb" then @page = value
-          when "cb" then @column = value
-          when "lb" then @line = value
+          if ms_layout?(node)
+            value = presence(node.attribute("n"))
+            case name
+            when "pb" then @page = value
+            when "cb" then @column = value
+            when "lb" then @line = value
+            end
           end
           return unless @token && @level.nil? && @extra.nil?
 
           @token[:bare].rstrip!
           @bare_break = true
+        end
+
+        def ms_layout?(node)
+          ed = node.attribute("ed")
+          ed.nil? || ed == "ms"
         end
 
         def open_token(node, name)
@@ -534,9 +560,12 @@ module Nabu
         # transcription, at the level the header itself declares; in a
         # level-bearing document it stays dropped (the status quo for the
         # loaded corpus). The verdict falls at line-assembly time.
+        # Whitespace-only stays dropped via flatten; marks-only likewise
+        # (the P83/Q47 A15970 lesson): a token of bare combining marks
+        # has no base characters — blank, never reading text.
         def queue_bare_token(token)
           text = flatten(token[:bare])
-          return if text.nil?
+          return if text.nil? || text.match?(/\A[[:space:]\p{M}]*\z/)
 
           extras = token[:extras].filter_map do |name, value|
             flattened = flatten(value)
@@ -569,14 +598,18 @@ module Nabu
           end
         end
 
-        # The single-level verdict: a document with ANY level-bearing token
-        # drops its bare strays (status quo — recovery must not rewrite
-        # loaded corpora); a document with NONE reads its bare tokens at
-        # the single level the header itself declares.
+        # Bare tokens are reading text at the level the encoder left
+        # implicit (Q45 census 2026-08-27: 30 of 91 documents leave
+        # 98,575 tokens bare — 99.9% punctuation, plus fully <supplied>
+        # words; level-invariant text is written ONCE, unwrapped). In a
+        # document with me: levels they read at the level the document's
+        # stored text reads at (the dominant attested level — the
+        # header's own me:level claim wherever the two could be compared,
+        # but HolmPerg 4 fol declares "dipl" while attesting all three,
+        # so the census is the trusted witness); in a document with NONE,
+        # at the single level the header itself declares.
         def materialized_tokens
-          return @tokens.reject { |token| token[:bare] } if @levels_census.values.any?(&:positive?)
-
-          level = nil
+          level = dominant_level
           @tokens.each do |token|
             next unless token[:bare]
 
@@ -587,6 +620,10 @@ module Nabu
             @levels_census[level] += 1
           end
           @tokens
+        end
+
+        def dominant_level
+          MenotaTeiParser::TEXT_LEVEL_ORDER.find { |level| @levels_census[level].positive? }
         end
 
         # Never guess the level: the header's own <normalization
