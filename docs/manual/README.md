@@ -79,3 +79,11 @@ Pending acquisitions (adapter not built yet; the doc leads the code):
 - [ivdnt-corpora.md](ivdnt-corpora.md) — the IvdNT/INT Dutch corpora
   behind the taalmaterialen registration wall (Corpus Gysseling,
   Corpus Oudnederlands; CRM14 and Corpus Oudfries tracked).
+
+Tool bootstraps (a one-time local setup a human runs once, not a data
+acquisition — kept here because it is the same "replayable human step"
+class):
+
+- [silver-lemma-venv.md](silver-lemma-venv.md) — the Python/Stanza
+  venv `nabu lemma-enrich` needs (P84-1); a tool, re-creatable from
+  the network, never data.
