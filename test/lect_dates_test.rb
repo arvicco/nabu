@@ -70,6 +70,60 @@ class LectDatesTest < Minitest::Test
     end
   end
 
+  # -- open-ended bands (P84-3, the Q44 gap) ----------------------------------
+
+  # The №R-42 survey's find: two Menota documents (Þiðriks supplements
+  # 1600–1700, Heimskringla 2 1695–1705) sit wholly inside isl:mod's
+  # [1550, null] band yet were never offered — banded_stages demanded BOTH
+  # bounds, so an open-ended band was no band at all. The law:
+  # [a, null] contains [x, y] iff a <= x.
+  def test_an_interval_inside_an_open_ended_band_is_inferable
+    with_seeded_catalog do |catalog|
+      seed_document(catalog, slug: "edh", urn: "urn:t:edh:new", language: "lat",
+                             not_before: 1600, not_after: 1700)
+      report = dates.census(catalog: catalog)
+      assert_equal 1, report.assignable.fetch(["edh", "lat", "lat:new"]),
+                   "1600..1700 sits wholly inside lat:new [1550, null]"
+    end
+  end
+
+  def test_an_interval_straddling_an_open_bands_start_stays_bare
+    with_seeded_catalog do |catalog|
+      seed_document(catalog, slug: "edh", urn: "urn:t:edh:straddle", language: "lat",
+                             not_before: 1500, not_after: 1700)
+      report = dates.census(catalog: catalog)
+      refute_includes report.candidates.map(&:urn), "urn:t:edh:straddle",
+                      "1500..1700 crosses ren|new — contained in neither"
+    end
+  end
+
+  # No live registry row carries a null START today (the 2026-08-27 census:
+  # lat:new and isl:mod, both [1550, null]) — but the containment law is
+  # symmetric: [null, b] contains [x, y] iff y <= b.
+  def test_a_null_start_band_contains_intervals_up_to_its_end
+    stub_registry = Object.new.tap do |registry|
+      def registry.resolve(code, source:) = code # rubocop:disable Lint/UnusedMethodArgument
+
+      def registry.stages_of(_anchor)
+        [Nabu::Lects::Record.new(id: "xx:old", anchor: "xx", stage: "old", variety: nil,
+                                 script: nil, ortho: nil, name: "Old Xx", mode: :attested,
+                                 ord: 10, band: [nil, 1500])]
+      end
+    end
+    dates = Nabu::LectDates.new(registry: stub_registry)
+    with_seeded_catalog do |catalog|
+      seed_document(catalog, slug: "edh", urn: "urn:t:edh:xx-old", language: "xx",
+                             not_before: 1200, not_after: 1400)
+      seed_document(catalog, slug: "edh", urn: "urn:t:edh:xx-late", language: "xx",
+                             not_before: 1400, not_after: 1600)
+      report = dates.census(catalog: catalog, lang: "xx")
+      assert_equal 1, report.assignable.fetch(["edh", "xx", "xx:old"]),
+                   "1200..1400 sits inside [null, 1500]"
+      refute_includes report.candidates.map(&:urn), "urn:t:edh:xx-late",
+                      "1400..1600 overruns the closed end"
+    end
+  end
+
   # -- apply! -----------------------------------------------------------------
 
   def test_apply_writes_date_band_rows_and_respects_existing_rulings
@@ -131,6 +185,23 @@ class LectDatesTest < Minitest::Test
     end
   end
 
+  # P84-3: the reverse audit covers open-ended bands too — a document dated
+  # wholly BEFORE an open band's start is outside it, null end or not.
+  def test_check_flags_dates_before_an_open_ended_bands_start
+    with_seeded_catalog do |catalog|
+      journal = Nabu::Store::LectJournal.connect("sqlite::memory:")
+      Nabu::Store::LectJournal.migrate!(journal)
+      # lat:new is [1550, null]; urn:t:edh:late is dated 250..450 — outside.
+      Nabu::Store::LectJournal.assign!(journal, urn: "urn:t:edh:late", code: "lat",
+                                                lect_id: "lat:new", basis: "owner")
+      findings = dates.check(catalog: catalog, journal: journal)
+      assert_equal 1, findings.size
+      assert_equal "lat:new", findings.first.lect_id
+      assert_equal [1550, nil], findings.first.band
+      journal.disconnect
+    end
+  end
+
   def test_check_ignores_bandless_and_undated_assignments
     with_seeded_catalog do |catalog|
       journal = Nabu::Store::LectJournal.connect("sqlite::memory:")
@@ -145,6 +216,17 @@ class LectDatesTest < Minitest::Test
   end
 
   private
+
+  def seed_document(catalog, slug:, urn:, language:, not_before:, not_after:)
+    doc = catalog[:documents].insert(
+      source_id: catalog[:sources].first(slug: slug)[:id],
+      urn: urn, language: language, content_sha256: "x"
+    )
+    return if not_before.nil? && not_after.nil?
+
+    catalog[:document_axes].insert(document_id: doc, not_before: not_before,
+                                   not_after: not_after, axis_source: "test")
+  end
 
   # edh (no source-grain override): one doc inside lat:late alone, one
   # spanning cla|late, one open-ended, one undated. papyri-ddbdp: a dated
