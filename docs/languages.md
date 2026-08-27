@@ -1,11 +1,11 @@
 # Languages of the library
 
-**As of 2026-08-26** (post the P82 granted-doors wave —
-75,217,907 live passages across the 155-row registry; live
+**As of 2026-08-27** (post the P83 EEBO wave — the first
+million: 89,934,635 live passages across the 156-row registry; live
 inventory: every code below appears in the catalog, the lemma
 index, or the reference shelf). This page explains the code system
 once, then lists the significant codes with one sentence each (the
-corpus now carries 139 document language codes; the long tail of
+corpus now carries 146 document language codes; the long tail of
 single-inscription script variants is folded into grouped rows).
 
 **The headline is still the Islamicate world.** **`ara` (Classical
@@ -185,6 +185,7 @@ module if used), the old `-pro`-suffix string test, the old bracket names.
 | `non` / `gmq-pro` | Old Norse / Proto-Norse | The North Germanic lane (synced live 2026-07-22): Menotec's seven Old Norwegian treebanks and the Poetic Edda of Codex Regius (gold PROIEL-scheme morphology), plus Rundata's runic corpus in transliteration with its Old-West-Norse normalisation lane — 39,923 passages; the urnordisk-dated inscriptions carry `gmq-pro` (the wiktionary-recon proto-code convention of rule 4 — no ISO code exists; 822 passages). |
 | `isl` / `nor` / `swe` / `dan` | The Menota manuscript codes | The Medieval Nordic Text Archive (P82, live 2026-08-24, 91/91 after the P82-r1 recovery — 241,628 diplomatic manuscript-line passages): per-file modern ISO codes with manuscript dating, the Handbook's own doctrine — `isl` 53 (Laxdæla saga, the Codex Wormianus, AM homilies), `nor` 30 (Konungs skuggsjá, the Landslǫg laws, the homily book — staged `no:old` by date inference over the №R-42 nabu-lects v1.1.0 mints), `swe` 4, `dan` 2 (Codex Runicus, Mariaklagen → `da:old`); the deprecated house code `onw` (1 doc) rides a per-source override — ISO says Old Nubian. |
 | `enm` | Middle English | The Corpus of Middle English (P82, live 2026-08-24): 297 texts / 1,355,279 passages — Chaucer, Sir Gawain, the mystery cycles, Piers Plowman, the MED's own quotation base over the new `tcp-xml` family; registry band 1100–1500 under parent `ang`, joining ASPR and Bosworth-Toller on the English descent ladder. |
+| `en` | Early Modern English | EEBO-TCP Phase I (P83, live 2026-08-27, the million-crossing wave): 24,857 English docs of the 25,368-text corpus — everything printed in England 1473–1700 that the TCP hand-keyed, Milton to broadside petitions; 20,981 staged `en:early` (nabu-lects v1.2.0, [1500, 1700]) by imprint-date inference. The English descent ladder is now populated at every rung: ang (ASPR/ISWOC) → enm (CME) → en:early. The corpus's minority lanes ride verbatim: `lat` 381 (28 → lat:ren), `wel` 59, `sco` 27, `fre`/`dut`/`frm` tails. |
 | `osx` | Old Saxon | The *Heliand* (HeliPaD, synced live 2026-07-22): 3,549 syntactically parsed tree blocks with gold form-lemma pairs — the 9th-century gospel harmony beside its Gothic and Old English gospel cousins. |
 | `is` | Icelandic (diachronic) | IcePaHC via UD, live 2026-07-22 — the 12th–21st c. under the one modern tag (the `orv`/Middle-Russian precedent of rule 3): 44,029 passages whose 812,484 gold rows enter straight at #4 of the lemma pools. |
 | `sv` | Old Swedish (under the modern tag) | Fornsvenska textbanken, live 2026-08-18 — the medieval law codes, prose and rhymed chronicles, 170,872 sentence passages; no ISO code exists for Old Swedish (the IcePaHC-under-`is` precedent of rule 3), so the stage rides the `sv:old` lect minted in nabu-lects (PR #4). |

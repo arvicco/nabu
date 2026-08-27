@@ -278,6 +278,32 @@ class TcpXmlParserTest < Minitest::Test
     assert_equal "real reading text", document.first.text
   end
 
+  # -- the orphaned-combining-marks unit (regression — offending bytes from
+  # eebo-tcp A15970, censused 2026-08-27: 20 <P>s holding only U+0304
+  # macrons whose base letters the transcription GAP'd) -----------------------
+
+  def test_a_marks_only_unit_consumes_no_ordinal_and_mints_no_passage
+    # "̄ ̄" survives the whitespace-blank gate (marks are not
+    # spaces) but the search fold strips lone combining marks, so the
+    # minted Passage's text_normalized emptied (ValidationError) and the
+    # whole document quarantined. A unit with no base characters — only
+    # whitespace and \p{M} — is not citable text; it drops like the NBSP.
+    document = Nabu::Adapters::TcpXmlParser.new.parse(
+      StringIO.new(<<~XML), urn: "urn:nabu:eebo-tcp:marks", language: "en", canonical_path: "marks.xml"
+        <?xml version="1.0" encoding="utf-8"?>
+        <ETS><HEADER><FILEDESC><TITLESTMT><TITLE>Marks</TITLE></TITLESTMT></FILEDESC></HEADER>
+        <EEBO><IDG S="marc" R="UM" ID="A15970"/><TEXT><BODY><DIV1 TYPE="text">
+        <P>̄ ̄</P>
+        <P>real reading text</P>
+        </DIV1></BODY></TEXT></EEBO></ETS>
+      XML
+    )
+    assert_equal 1, document.size, "the marks-only unit mints no passage"
+    assert_equal "real reading text", document.first.text
+    assert_equal "d1.p1", document.first.urn.split(":").last,
+                 "the marks-only unit consumes no ordinal"
+  end
+
   # -- damage ------------------------------------------------------------------
 
   def test_malformed_xml_raises_parse_error
