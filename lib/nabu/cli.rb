@@ -7660,8 +7660,13 @@ module Nabu
       # -- the P65 `nabu char` dispatch lanes --------------------------------
 
       # The original P37-4 Han path; --json emits the P72-2 frozen contract
-      # (the sign cards' P65 pattern extended to the Han card).
+      # (the sign cards' P65 pattern extended to the Han card). A single
+      # glyph OUTSIDE \p{Han} takes the reduced lane (P84-5) — the Han
+      # card's shelf pipeline must never run for it (the define join's
+      # Sanskrit stem expansion turned "a" into the TLS concept "AS").
       def han_char_card(config, input)
+        return non_han_char_card(input) unless input.match?(/\p{Han}/)
+
         catalog = open_catalog(config)
         raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
         unless catalog.table_exists?(:dictionary_entries)
@@ -7670,15 +7675,38 @@ module Nabu
         end
 
         fulltext = open_fulltext(config)
-        card = Nabu::Query::Char.new(catalog: catalog, fulltext: fulltext).run(input)
+        query = Nabu::Query::Char.new(catalog: catalog, fulltext: fulltext)
+        card = query.run(input)
         if options[:json]
           say JSON.pretty_generate(Nabu::Query::Char.json_payload(input, card))
         else
-          print_char_card(card)
+          print_char_card(card, held_cjk: query.held_cjk_sources)
         end
       ensure
         catalog&.disconnect
         fulltext&.disconnect
+      end
+
+      # The reduced non-Han card (P84-5): glyph, codepoint, script probe,
+      # search hint — no shelf lane, no CJK sections. Pure Unicode, so no
+      # catalog is opened. Single Latin stays here for now (№R-44 owns the
+      # reading-lane question).
+      def non_han_char_card(input)
+        reduced = Nabu::Query::Char.reduced(input)
+        return say(JSON.pretty_generate(Nabu::Query::Char.reduced_json_payload(input, reduced))) if
+          options[:json]
+
+        say "#{reduced.glyph}  #{reduced.codepoint}#{"  ·  #{reduced.script}" if reduced.script}"
+        noun = case reduced.script
+               when "Hangul" then "a Hangul syllable"
+               when nil then "not a Han character"
+               else "a #{reduced.script} letter"
+               end
+        say ""
+        say "#{reduced.glyph} is #{noun} — the char card's shelf lanes cover Han characters; " \
+            "no CJK shelf claims it"
+        say ""
+        say "search: nabu search #{reduced.glyph}"
       end
 
       def cuneiform_char_card(config, input)
@@ -7994,7 +8022,7 @@ module Nabu
       # shelf backs it for this glyph (the "absent, never —" rule). The
       # diachronic column is what nabu adds over Jisho; the synchronic
       # sections match it field-for-field where the shelves reach.
-      def print_char_card(card)
+      def print_char_card(card, held_cjk: [])
         return say("no dictionary shelf in this catalog yet — run nabu sync unihan") if card.nil?
 
         say "#{card.glyph}  #{card.codepoint}#{char_header_tail(card)}"
@@ -8008,7 +8036,7 @@ module Nabu
         print_char_diachronic(card)
         print_char_corpus(card)
         print_char_search_affordances(card)
-        print_char_absence(card)
+        print_char_absence(card, held_cjk)
       end
 
       # glyph · N strokes · radical M NAME — only the parts Unihan backs.
@@ -8141,14 +8169,24 @@ module Nabu
       end
 
       # When NOTHING backed the card, say so honestly (the glyph is unknown to
-      # every held shelf) rather than printing a bare header.
-      def print_char_absence(card)
+      # every held shelf) rather than printing a bare header. P84-5: the hint
+      # tells shelves-absent apart from char-not-covered — held CJK shelves
+      # that stay silent on this glyph are named as held, and the sync points
+      # only at the shelves actually missing from the dictionaries table.
+      def print_char_absence(card, held_cjk)
         return unless card.held_shelves.empty? && card.ids.empty? && card.components.empty? &&
-                      card.radical.nil? && card.corpus.empty?
+                      card.radical.nil? && (card.corpus || {}).empty?
 
+        missing = Nabu::Query::Char::CJK_SHELF_SOURCES.keys - held_cjk
         say ""
-        say "no held shelf carries #{card.glyph} yet — sync the CJK shelves " \
-            "(unihan, edrdg, babelstone-ids, kradfile, baxter-sagart, tshet-uinh, hdic, tls)"
+        if held_cjk.empty?
+          say "no held shelf carries #{card.glyph} yet — sync the CJK shelves (#{missing.join(', ')})"
+        elsif missing.empty?
+          say "the held CJK shelves (#{held_cjk.join(', ')}) don't carry #{card.glyph}"
+        else
+          say "the held CJK shelves (#{held_cjk.join(', ')}) don't carry #{card.glyph} — " \
+              "sync the missing CJK shelves (#{missing.join(', ')})"
+        end
       end
 
       # A reconstruction entry's descendant reflexes (P14-1): attested-here

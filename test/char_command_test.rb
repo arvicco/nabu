@@ -131,6 +131,89 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  # --- the reduced non-Han card (P84-5, the Q46 mechanical half) ---
+
+  # The 2026-08-26 defect: a single non-Han char rode the FULL Han card
+  # path, whose define pipeline's Sanskrit stem expansion turned "a" into
+  # "as" and matched the TLS concept headword "AS" — nonsense rendered
+  # with a straight face. A non-Han glyph now gets a reduced honest card:
+  # glyph, codepoint, script probe, search hint — never a define call.
+  # (The Latin-letter reading-lane question is №R-44's — single Latin
+  # stays on the reduced card for now.)
+  def test_char_of_a_latin_letter_renders_the_reduced_card_never_tls
+    with_char_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char a]) }
+      assert_nil status
+      assert_match(/a\s+U\+0061\s+·\s+Latin/, out)
+      assert_match(/a is a Latin letter — the char card's shelf lanes cover Han characters; /, out)
+      assert_match(/no CJK shelf claims it/, out)
+      assert_match(/search: nabu search a/, out)
+      refute_match(/TLS|Thesaurus/, out, "the define pipeline never runs for a non-Han glyph")
+      refute_match(/decomposition|radical|Mandarin/, out, "no CJK sections on the reduced card")
+    end
+  end
+
+  def test_char_of_a_hangul_syllable_renders_the_reduced_card
+    with_char_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char 입]) }
+      assert_nil status
+      assert_match(/입\s+U\+C785\s+·\s+Hangul/, out)
+      assert_match(/입 is a Hangul syllable — the char card's shelf lanes cover Han characters; /, out)
+      assert_match(/no CJK shelf claims it/, out)
+    end
+  end
+
+  # The reduced card's --json: the Han payload shape stays stable
+  # ({glyph, card}); non-Han is additive — card stays null (no Han card
+  # exists) and the reduced identity rides its own key.
+  def test_reduced_card_json_is_additive_beside_the_frozen_han_contract
+    with_char_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char 입 --json]) }
+      assert_nil status
+      payload = JSON.parse(out)
+      assert_equal "입", payload["glyph"]
+      assert_nil payload["card"]
+      assert_equal "Hangul", payload.dig("reduced", "script")
+      assert_equal "U+C785", payload.dig("reduced", "codepoint")
+    end
+  end
+
+  # --- the empty-Han-card hint distinguishes held from missing (P84-5) ---
+
+  # The rig holds unihan/edrdg/babelstone-ids/kradfile/tls — an unknown Han
+  # glyph must name THOSE as held-but-silent and point the sync at the
+  # actually-missing shelves, not claim nothing is held.
+  def test_empty_han_card_names_held_shelves_apart_from_missing_ones
+    with_char_catalog do |config|
+      out, _err, status = with_config(config) { run_cli(%w[char 玤]) }
+      assert_nil status
+      assert_match(
+        /the held CJK shelves \(unihan, edrdg, babelstone-ids, kradfile, tls\) don't carry 玤/,
+        out
+      )
+      assert_match(/sync the missing CJK shelves \(baxter-sagart, tshet-uinh, hdic\)/, out)
+      refute_match(/no held shelf carries/, out)
+    end
+  end
+
+  def test_empty_han_card_with_no_cjk_shelf_held_says_sync_them_all
+    Dir.mktmpdir("nabu-char-bare") do |root|
+      config = char_config(root)
+      db, fulltext = open_dbs(config)
+      Nabu::Store::Indexer.rebuild!(catalog: db, fulltext: fulltext)
+      fulltext.disconnect
+      db.disconnect
+      out, _err, status = with_config(config) { run_cli(%w[char 玤]) }
+      assert_nil status
+      assert_match(
+        /no held shelf carries 玤 yet — sync the CJK shelves \(unihan, edrdg, babelstone-ids, /,
+        out
+      )
+      assert_match(/kradfile, baxter-sagart, tshet-uinh, hdic, tls\)/, out)
+      refute_match(/held CJK shelves/, out)
+    end
+  end
+
   def test_bare_char_errors_helpfully
     with_char_catalog do |config|
       _out, err, status = with_config(config) { run_cli(%w[char]) }
