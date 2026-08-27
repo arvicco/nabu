@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="http://www.textcreationpartnership.org/docs/code/pfs.css"?>
+<!DOCTYPE ETS SYSTEM "http://www.textcreationpartnership.org/docs/code/eebo2prf.xml.dtd">
+<ETS>
+
+<HEADER><FILEDESC><TITLESTMT><TITLE TYPE="245" I2="0">To day a man, to morrow none: or, Sir VValter Ravvleighs farewell to his lady, the night before hee was beheaded; together vvith his advice concerning her, and her sonne.</TITLE><AUTHOR>Raleigh, Walter, Sir, 1552?-1618.</AUTHOR></TITLESTMT><EXTENT>Approx. 7 KB of XML-encoded text transcribed from 5 1-bit group-IV TIFF page images.</EXTENT><PUBLICATIONSTMT><PUBPLACE>Ann Arbor, MI ; Oxford (UK) :</PUBPLACE><PUBLISHER>Text Creation Partnership,</PUBLISHER><DATE>2009-03 (EEBO-TCP Phase 1).</DATE><IDNO TYPE="DLPS">A57617</IDNO>
+
+
+<IDNO TYPE="stc">Wing R191</IDNO>
+
+<IDNO TYPE="stc">ESTC R3572</IDNO>
+
+<IDNO TYPE="eebo citation">99872426</IDNO>
+
+<IDNO TYPE="proquest">99872426</IDNO>
+
+<IDNO TYPE="vid">124862</IDNO>
+<AVAILABILITY><P>To the extent possible under law, the Text Creation Partnership has waived all copyright and related or neighboring rights to this keyboarded and encoded edition of the work described above, according to the terms of the CC0 1.0 Public Domain Dedication (http://creativecommons.org/publicdomain/zero/1.0/). This waiver does not extend to any page images or other supplementary files associated with this work, which may be protected by copyright or other license restrictions. Please go to http://www.textcreationpartnership.org/ for more information.</P></AVAILABILITY></PUBLICATIONSTMT><SERIESSTMT><TITLE>Early English books online.</TITLE></SERIESSTMT><NOTESSTMT><NOTE>(EEBO-TCP ; phase 1, no. A57617)</NOTE><NOTE>Transcribed from: (Early English Books Online ; image set 124862)</NOTE><NOTE>Images scanned from microfilm: (Thomason Tracts ; 5:E29[5])</NOTE></NOTESSTMT><SOURCEDESC><BIBLFULL><TITLESTMT><TITLE TYPE="245" I2="0">To day a man, to morrow none: or, Sir VValter Ravvleighs farewell to his lady, the night before hee was beheaded; together vvith his advice concerning her, and her sonne.</TITLE><AUTHOR>Raleigh, Walter, Sir, 1552?-1618.</AUTHOR></TITLESTMT><EXTENT>[2], 6 p.   </EXTENT><PUBLICATIONSTMT>
+<PUBPLACE>London :</PUBPLACE>
+<PUBLISHER>Printed for R. H.,</PUBLISHER>
+<DATE>1644.</DATE>
+</PUBLICATIONSTMT><NOTESSTMT><NOTE>Annotation on Thomason copy: the 4 in imprint date is crossed out and altered to 1643; "January 16".</NOTE><NOTE>Reproduction of the original in the British Library.</NOTE></NOTESSTMT></BIBLFULL></SOURCEDESC></FILEDESC><ENCODINGDESC><PROJECTDESC><P>Header created with script mrcb2eeboutf.xsl on 2014-03-05.</P></PROJECTDESC><EDITORIALDECL N="4"><P>Manually keyed and coded text linked to page images in accordance with level 4 of the TEI in Libraries guidelines.</P><P>Issued variously as SGML (TCP schema; ASCII text with mnemonic sdata character entities); displayable XML (TCP schema; characters represented either as UTF-8 Unicode or text strings within braces); or lossless XML (TEI P5, characters represented either as UTF-8 Unicode or TEI g elements).</P><P>Keying and markup guidelines available at TCP web site (http://www.textcreationpartnership.org/docs/)</P></EDITORIALDECL></ENCODINGDESC><PROFILEDESC><LANGUSAGE ID="eng"><LANGUAGE>eng</LANGUAGE></LANGUSAGE><TEXTCLASS><KEYWORDS><TERM>Raleigh, Walter, --  Sir, 1552?-1618.</TERM></KEYWORDS></TEXTCLASS></PROFILEDESC><REVISIONDESC><CHANGE><DATE>2000-00</DATE><RESPSTMT><RESP>TCP</RESP></RESPSTMT><ITEM>Assigned for keying and markup</ITEM></CHANGE><CHANGE><DATE>2001-00</DATE><RESPSTMT><RESP>Aptara</RESP></RESPSTMT><ITEM>Keyed and coded from ProQuest page images</ITEM></CHANGE><CHANGE><DATE>2001-07</DATE><RESPSTMT><RESP>TCP Staff (Michigan)</RESP></RESPSTMT><ITEM>Sampled and proofread</ITEM></CHANGE><CHANGE><DATE>2001-07</DATE><RESPSTMT><RESP>TCP Staff (Michigan)</RESP></RESPSTMT><ITEM>Text and markup reviewed and edited</ITEM></CHANGE><CHANGE><DATE>2001-11</DATE><RESPSTMT><RESP>pfs</RESP></RESPSTMT><ITEM>Batch review (QC) and XML conversion</ITEM></CHANGE></REVISIONDESC></HEADER>
+<EEBO>
+<IDG S="fulc" R="UM" ID="A57617">
+<STC T="W">R191</STC>
+<BIBNO T="umi">99872426</BIBNO>
+<VID>124862</VID>
+</IDG>
+<TEXT LANG="eng">
+<BODY>
+<DIV1 TYPE="title page">
+<PB REF="1"/>
+<P><HI>To day a man, To morrow none</HI>:
+OR, SIR
+VValter Ravvleighs
+Farewell to his LADY,
+The night before hee was beheaded:
+Together with his advice concerning
+HER, and her SONNE.</P>
+<P>LONDON, Printed for <HI>R. H.</HI> 1664.</P>
+</DIV1>
+<DIV1 TYPE="letter">
+<PB REF="2"/>
+<PB N="1" REF="2"/>
+<HEAD>Sir <HI>Walter Rawleighs</HI> farewell to his LADY
+the night before he was beheaded.</HEAD>
+<HEAD>Together with his advice concerning her, and
+her Sonne.</HEAD>
+<OPENER><SALUTE><HI>Dear</HI> WIFE,</SALUTE></OPENER>
+<P>YOu shall receive my last words in
+these my last lines; my love I
+send you that you may keepe it
+when I am dead, and my counsel
+that you may remember it when I
+am no more. I would not with
+my will present you sorrows (dear <HI>Besse</HI>) let them
+go to the grave with me, and be buried in the dust.
+And seeing it is not the will of God that ever I shall
+see you any more in this life, beare my destruction
+gently, and with a heart like your selfe.</P>
+<P><PB N="2" REF="3"/>
+First, I send you all the thanks which my heart
+can conceive, or my words expresse, for your ma∣ny
+troubles and cares taken for me, which though
+they have not taken effect as you wished, yet my
+debt to you is not lesse, but I shall never recom∣pence
+it in this world.</P>
+<P>Secondly, I beseech you even for the love you
+bare me living, that you doe not hide your selfe
+many dayes, but by your travell seek to helpe your
+miserable fortune, and the right of your poore
+childe: Your mourning cannot availe me that am
+but dust.</P>
+<P>Thirdly, you shall understand that my Lands
+were conveied (<HI>bona fide</HI>) to my childe, the wri∣tings
+were drawne at Mid summer was twelve∣month,
+as divers can witnesse, and I trust that my
+blood will quench their malice that desire my
+slaughter, and that they will not seek also to kill
+you and yours with extream poverty.</P>
+<P>To what friend to direct you I know not, for all
+mine have left me in the true time of tryall; most
+sorry I am (as God knoweth) that being thus sur∣prised
+with death I can leave you no better estate;
+I meant you all my Office of wines or that I should
+purchase by selling it, halfe my stuffe and my jewels,
+<PB N="3" REF="3"/>
+(but some few for the boy) but God hath preven∣ted
+all my determinations; The great God that
+worketh all in all.</P>
+<P>But if you can live free from want, dare for no
+more, for the rest is but vanity.</P>
+<P>Love God, and begin betime to repose your selfe
+on him, therein shall you finde true and everlasting
+riches and endlesse comfort: for the rest when you
+have travelled and wearied your thoughts over all
+sorts of worldly congitations, you shall sit downe by
+sorrow in the end.</P>
+<P>Teach your son also to serve and fear God whilst
+he is young, that the feare of God may grow up
+with him, then will God be a husband unto you,
+and a father unto him, a husband and a father that
+can never be taken from you.</P>
+<P><HI>Bayly</HI> oweth me 1000 l. <HI>Arion</HI> 600 l. In <HI>Iersie</HI>
+also I have much owing me; the arrerages of the
+wines will pay your debts.</P>
+<P>And howsoever (I beseech you for my soules
+sake) pay all poore men when I am gone: no
+doubt you shall bee sought unto, for the world
+thinks I was very rich.</P>
+<P>But take heed of the pretence of men and of their
+affections, for they last but in honest and worthy
+<PB N="4" REF="4"/>
+men: and no greater misery can befall you in this
+life, then to become a prey, and after to bee despi∣sed:
+I speake it (God knoweth) not to disswade you
+from marriage, for that will be best for you, both in
+respect of God and the world.</P>
+<P>As for me I am no more yours, not you mine,
+death hath cut us asunder, and God hath divided
+me from the world, and you from me: Remem∣ber
+your poore childe for his fathers sake that
+comforted you, and loved you in his happiest
+times.</P>
+<P>I sued for my life (but God knowes) it was for
+you and yours that I desired it: for know it (deare
+wife) that your sonne is the childe of a true man,
+and who in his owne heart despiseth death, and all
+his mishapen and ugly forms.</P>
+<P>I cannot write much: God knoweth how hard∣ly
+I stole this time when all were asleep, and it
+is now time to separate my thoughts from the
+world. Beg my dead body which living was de∣nyed
+you, and either lay it in <HI>Sherborne</HI> or in <HI>Exeter</HI>
+Church by my father and mother. I can say no
+more, time and death call me away. The ever∣lasting
+God, infinite, powerfull, and inscrutable
+God, That Almighty God which is goodnesse it∣selfe,
+<PB N="5" REF="4"/>
+mercy it selfe, the true light and life, keep you
+and yours, and have mercy upon me.</P>
+<P>Teach me to forgive my persecuters and false
+accusers, and send me to meet him in his glorious
+Kingdome.</P>
+<P>My true wife farewell, God blesse my poore boy,
+pray for me, my true God hold you both in His
+Armes.</P>
+<Q><L>EVen such is time, which takes in trust</L>
+<L>Our youth, our age, and all we have,</L>
+<L>And payes us but with age and dust,</L>
+<L>Who in the darke and silent grave,</L>
+<L>When we have wandred all our wayes</L>
+<L>Shuts up the story of our dayes.</L>
+<L>And from the earth, the grave, and dust,</L>
+<L>The Lord shall raise me up, I trust.</L></Q>
+<CLOSER><SIGNED>WALTER RAVVLEIGH.</SIGNED></CLOSER>
+</DIV1>
+<DIV1 TYPE="poem">
+<PB N="6" REF="5"/>
+<LG>
+<L>LIke Hermite, poore in pensive place obscure</L>
+<L>I mean to end my dayes with endlesse doubt,</L>
+<L>To waile such woes as time cannot recure,</L>
+<L>Where none but love shall ever finde me out.</L>
+<L>And at my gates despair shall linger still</L>
+<L>To let in death when love and fortune will.</L>
+</LG>
+<LG>
+<L>A Gowne of gray my body shall attire,</L>
+<L>My staffe of broken hope whereon I stay</L>
+<L>Of late repentance linkt with long desire,</L>
+<L>The couch is fram'd whereon my limbs I lay.</L>
+<L>And at my gates, &amp;c.</L>
+</LG>
+<LG>
+<L>My food shall be of care and sorrow made,</L>
+<L>My drink nought else but tears falne from mine eies,</L>
+<L>And for my light in this obscured shade</L>
+<L>The flames may serve which from my heart arise.</L>
+<L>And at my gates, &amp;c.</L>
+<SIGNED>WALTER RAVVLEIGH.</SIGNED>
+</LG>
+<TRAILER>FINIS.</TRAILER>
+</DIV1>
+</BODY>
+</TEXT>
+</EEBO>
+</ETS>
+

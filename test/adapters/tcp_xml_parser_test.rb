@@ -202,6 +202,59 @@ class TcpXmlParserTest < Minitest::Test
     assert_equal "CME00301", document.metadata["idno"]
   end
 
+  def test_the_language_mapper_seam_sets_the_claim_from_the_mined_header
+    document = parse("CME301.xml",
+                     language_mapper: ->(header) { header["language_usage"]&.start_with?("enm") && "enm" })
+    assert_equal "enm", document.language
+    assert(document.all? { |passage| passage.language == "enm" })
+    assert_equal "enm", parse("CME301.xml", language_mapper: ->(_header) {}).language,
+                 "a mapper declining (nil/false) falls back to the caller's language:"
+  end
+
+  # -- FW forme work (P83-1 — the EEBO-TCP family fix) -------------------------
+
+  def test_fw_forme_work_drops_from_reading_text
+    # <FW> is the page's furniture — running titles, catchwords, page
+    # numbers ("added FW element, allowed it in a few page-crossing objects
+    # (p q letter div etc.), and constrained it to following directly on
+    # pb" — eebo2prf.xml.dtd changelog 2011-05; content model #PCDATA|…).
+    # Inside a page-crossing <P> its PCDATA would leak mid-passage; it is
+    # apparatus, never reading text. Censused vanishingly rare in the wild
+    # (1 FW-bearing file in 5,782 EEBO-P4 files sampled 2026-08-26, 0 in
+    # all 297 CME files) — but one leaked running title is still a corrupt
+    # passage. DTD-shaped reproduction; the real-bytes FW file (A29180,
+    # FW wrapping a FIGURE) is pinned in the eebo-tcp adapter suite.
+    document = Nabu::Adapters::TcpXmlParser.new.parse(
+      StringIO.new(<<~XML), urn: "urn:nabu:eebo-tcp:fw", language: "en", canonical_path: "fw.xml"
+        <?xml version="1.0" encoding="utf-8"?>
+        <ETS><HEADER><FILEDESC><TITLESTMT><TITLE>FW</TITLE></TITLESTMT></FILEDESC></HEADER>
+        <EEBO><IDG S="marc" R="UM" ID="A00000"/><TEXT LANG="eng"><BODY><DIV1 TYPE="text">
+        <P>the sentence begins <PB N="2" REF="2"/><FW PLACE="pageTop">The Running Title.</FW>and ends across the page.</P>
+        </DIV1></BODY></TEXT></EEBO></ETS>
+      XML
+    )
+    assert_equal 1, document.count
+    assert_equal "the sentence begins and ends across the page.", document.first.text,
+                 "the running title must not leak into the passage"
+  end
+
+  def test_idno_type_matching_is_case_insensitive
+    # CME headers write <IDNO TYPE="dlps">, the EEBO-TCP generation writes
+    # <IDNO TYPE="DLPS"> (censused: all 3,325 sampled EEBO files) — same
+    # schema, case drift between generations.
+    document = Nabu::Adapters::TcpXmlParser.new.parse(
+      StringIO.new(<<~XML), urn: "urn:nabu:eebo-tcp:dlps", language: "en", canonical_path: "dlps.xml"
+        <?xml version="1.0" encoding="utf-8"?>
+        <ETS><HEADER><FILEDESC><TITLESTMT><TITLE>DLPS</TITLE></TITLESTMT></FILEDESC>
+        <PUBLICATIONSTMT><IDNO TYPE="DLPS">A00000</IDNO></PUBLICATIONSTMT></HEADER>
+        <EEBO><IDG S="marc" R="UM" ID="A00000"/><TEXT LANG="eng"><BODY><DIV1 TYPE="text">
+        <P>text</P>
+        </DIV1></BODY></TEXT></EEBO></ETS>
+      XML
+    )
+    assert_equal "A00000", document.metadata["idno"]
+  end
+
   # -- the NBSP placeholder (regression — offending bytes from CME00006) ------
 
   def test_an_nbsp_only_unit_consumes_no_ordinal_and_mints_no_passage

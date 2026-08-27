@@ -1,0 +1,97 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# EEBO-TCP ships as per-phase zips from the TCP's public Box folder —
+# there is NO per-text upstream URL, so the four corpus texts are
+# refetchable: false (members of the real zips named below); the zip
+# fixtures are subset re-zips of those same real members; the listing
+# pages are documented trims of the real Box postStreamData pages. The
+# DTD is a whole byte-identical file; the ID lists are documented trims
+# fetched for URL-liveness only. adapter_test is null — the
+# source-specific test pins urns/counts/snippets a refetch would
+# false-fail.
+source: eebo-tcp
+adapter_test:
+retrieved: 2026-08-26
+files:
+  - path: texts/phase1/A9/A90004.P4.xml
+    refetchable: false
+    provenance: zip-member
+    reason: whole real member of Phase-1 A9.zip (Box file_id 841160372075);
+      no per-text upstream URL exists — the corpus ships as zips only
+  - path: texts/phase1/A5/A57617.P4.xml
+    refetchable: false
+    provenance: zip-member
+    reason: whole real member of Phase-1 A5.zip (Box file_id 841160364875)
+  - path: texts/phase2/A2/A29180.P4.xml
+    refetchable: false
+    provenance: zip-member
+    reason: whole real member of Phase-2 A2.zip (Box file_id 841165246490);
+      carries the corpus's one censused <FW> instance
+  - path: texts/phase2/A2/A20018.P4.xml
+    refetchable: false
+    provenance: zip-member-trim
+    reason: 'TRIMMED real member of Phase-2 A2.zip: full HEADER + first two
+      FRONT DIV1s + BODY Book 1, closers intact (front DIV1s 3-5 and Books
+      2-3 removed; well-formedness verified)'
+  - path: fetch/A9.zip
+    refetchable: false
+    provenance: subset-rezip
+    reason: re-zip of the real A90004.P4.xml member preserving the real
+      A9/ top-level layout (the real zip is 28 MB / 1,189 members)
+  - path: fetch/A5.zip
+    refetchable: false
+    provenance: subset-rezip
+    reason: re-zip of the real A57617.P4.xml member preserving the real
+      A5/ top-level layout (the real zip is 195 MB / 2,456 members)
+  - path: fetch/ph2_A2.zip
+    refetchable: false
+    provenance: subset-rezip
+    reason: re-zip of the real A29180 + trimmed A20018 members preserving
+      the real A2/ top-level layout (Phase 2's A2.zip — the fixture name
+      disambiguates from Phase 1's A2.zip on disk only)
+  - path: fetch/root.html
+    refetchable: false
+    provenance: trimmed-listing
+    reason: the real Box shared-folder page's server-side postStreamData
+      JSON (real folder/file ids) with items pruned to the fixture subset
+      and page chrome reduced to a shell
+  - path: fetch/phase1.html
+    refetchable: false
+    provenance: trimmed-listing
+    reason: same trim of the real eebo_phase1 folder page
+  - path: fetch/phase1_p4.html
+    refetchable: false
+    provenance: trimmed-listing
+    reason: same trim of the real P4_XML_TCP folder page; zip itemSize
+      values updated to the fixture zips' sizes
+  - path: fetch/phase2.html
+    refetchable: false
+    provenance: trimmed-listing
+    reason: same trim of the real eebo_phase2 folder page
+  - path: fetch/phase2_p4.html
+    refetchable: false
+    provenance: trimmed-listing
+    reason: same trim of the real P4_XML_TCP_Ph2 folder page; zip itemSize
+      updated to the fixture zip's size
+  - path: fetch/eebo2prf.xml.dtd
+    url: https://app.box.com/index.php?rm=box_v2_download_shared_file&shared_name=jjzmnrx98dkvanipopz3nxkvymnjccht&file_id=f_1333777767630
+    whole: true
+    trim: none
+  - path: fetch/IDnos_in_phase1.txt
+    url: https://app.box.com/index.php?rm=box_v2_download_shared_file&shared_name=jjzmnrx98dkvanipopz3nxkvymnjccht&file_id=f_841168372645
+    whole: false
+    trim: first 6 rows of the real 25,368-row list + the two Phase-1
+      fixture ids (A57617, A90004)
+  - path: fetch/eebo_phase1_IDs_and_dates.txt
+    url: https://app.box.com/index.php?rm=box_v2_download_shared_file&shared_name=jjzmnrx98dkvanipopz3nxkvymnjccht&file_id=f_841168371445
+    whole: false
+    trim: first 6 rows + the two Phase-1 fixture rows (id TAB year)
+  - path: fetch/IDnos_in_phase2.txt
+    url: https://app.box.com/index.php?rm=box_v2_download_shared_file&shared_name=jjzmnrx98dkvanipopz3nxkvymnjccht&file_id=f_841168065045
+    whole: false
+    trim: first 6 rows + the two Phase-2 fixture ids (A20018, A29180)
+  - path: fetch/EEBO_Phase2_IDs_and_dates.txt
+    url: https://app.box.com/index.php?rm=box_v2_download_shared_file&shared_name=jjzmnrx98dkvanipopz3nxkvymnjccht&file_id=f_841168068645
+    whole: false
+    trim: first 6 rows + the two Phase-2 fixture rows (id TAB year)

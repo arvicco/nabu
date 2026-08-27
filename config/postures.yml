@@ -236,6 +236,34 @@ sources:
         instrument, deliberately NOT a pending commitment)"
     places: {posture: unplaced}
     script: {posture: implied}
+  eebo-tcp:
+    lect:
+      posture: identity
+      note: "en IS the claim and it is TRUE today (P83-1): 97.6% of the
+        corpus declares LANGUSAGE eng (censused ×3,325), mapped through
+        the codemap's eng→en alias; the registry anchor is en (parent
+        enm). The en:early stage mint is APPROVED (№R-43 rider,
+        nabu-lects PR #9: en:early [1500, 1700] — the de:early shape,
+        pending owner merge); once the v1.2.0 mint reaches
+        canonical/nabu-lects the en:early staging rides DATE-BAND
+        INFERENCE over the imprint envelopes (the no:old/Menota
+        precedent — no blanket rule), and the registry-fixture sweep
+        happens at that merge, not here. Identity stays the honest
+        declaration meanwhile. The foreign-language minority (lat 1.4%;
+        wel/roa/frm/fre/dut/spa/iri/ita tails) claims its upstream MARC
+        code verbatim — those ride as-is, deliberately coarse"
+    dating:
+      posture: dated
+      note: "the BIBLFULL imprint year via MetadataDates :structured —
+        the censused molds (plain/bracketed years, [i.e. YYYY]
+        corrections, ranges, OS/NS split years, Anno Dom.) date 85.7% of
+        the 3,325-file sample; ?/ca. uncertainty stays raw-only, bounds
+        never invented. The imprint is the PRINT year, an honest
+        early-modern envelope (composition≈print for this corpus)"
+    places: {posture: unplaced, note: "imprint PUBPLACE rides metadata
+        verbatim (London etc. — publication, not provenance); no
+        place claim minted"}
+    script: {posture: implied}
   iswoc:
     lect: {posture: identity, note: ang/fro — both stage-coded}
     dating: {posture: undatable}
