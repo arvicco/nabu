@@ -3940,7 +3940,9 @@ eebo-tcp:
                      # (25,368 texts ≈1.73 GB zipped), with (c) — both phases,
                      # all 60,326 — the stated follow-on: widening is exactly
                      # this line becoming [phase1, phase2], no code change
-  wired: false       # flip after the owner-fired first sync verifies counts
+  wired: true        # flipped 2026-08-27 (owner: "wire on eebo"; the verification
+                     # sync landed 25,367 docs / 14,702,780 passages 2026-08-27,
+                     # +A15970's 13,948 after the Q47 recovery)
   # EEBO-TCP (P83-1): Early English Books Online, Text Creation Partnership
   # — 60,326 hand-keyed early-modern English texts (Phase I 25,368 /
   # Phase II 34,958; census 2026-08-26), THE wave the tcp-xml family
