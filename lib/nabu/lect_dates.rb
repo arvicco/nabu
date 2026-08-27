@@ -11,7 +11,10 @@ module Nabu
   #      max not_after over its document_axes rows);
   #   3. the interval is CONTAINED IN EXACTLY ONE of the anchor's attested,
   #      banded stages — containment, never overlap: a date spanning two
-  #      bands stays honestly bare.
+  #      bands stays honestly bare. Open-ended bands are real bands
+  #      (P84-3, the Q44 gap): [a, null] contains [x, y] iff a <= x, and
+  #      symmetrically [null, b] iff y <= b — the registry's live open
+  #      bands are lat:new and isl:mod, both [1550, null].
   #
   # apply! compiles candidates into the lect journal (basis rule:date-band,
   # note = the dating evidence) under the same discipline as LectRules: a
@@ -74,19 +77,21 @@ module Nabu
     # The reverse audit: every journal assignment whose stage carries a band
     # and whose document interval falls entirely outside it. Bandless lects,
     # undated documents, and half-open intervals that still touch the band
-    # are never findings.
+    # are never findings. Open-ended bands (P84-3) are audited on their
+    # bounded side — a null bound excludes nothing.
     def check(catalog:, journal:)
       findings = []
       journal[:lect_assignments].each do |assignment|
         lect = @registry.lect(assignment[:lect_id])
         band = lect&.band
-        next unless band && band[0] && band[1]
+        next unless band && (band[0] || band[1])
 
         bounds = document_bounds(catalog, assignment[:urn])
         next unless bounds
 
         not_before, not_after = bounds
-        outside = (not_before && not_before > band[1]) || (not_after && not_after < band[0])
+        outside = (not_before && band[1] && not_before > band[1]) ||
+                  (not_after && band[0] && not_after < band[0])
         next unless outside
 
         findings << Finding.new(urn: assignment[:urn], code: assignment[:code],
@@ -130,7 +135,7 @@ module Nabu
       return :no_banded_stages if bands.empty?
 
       containing = bands.select do |stage|
-        stage.band[0] <= row[:not_before] && row[:not_after] <= stage.band[1]
+        band_contains?(stage.band, not_before: row[:not_before], not_after: row[:not_after])
       end
       return :spans_bands unless containing.size == 1
 
@@ -139,13 +144,21 @@ module Nabu
                     not_before: row[:not_before], not_after: row[:not_after])
     end
 
-    # The anchor's attested stages with closed bands — reconstructed stages
-    # are never date-inference targets (a date puts an attested document in
-    # an attested slice, never in a reconstruction).
+    # A closed document interval against a possibly open-ended band: a null
+    # bound constrains nothing on its side (P84-3). A band with BOTH bounds
+    # null never reaches here — banded_stages requires at least one.
+    def band_contains?(band, not_before:, not_after:)
+      (band[0].nil? || band[0] <= not_before) && (band[1].nil? || not_after <= band[1])
+    end
+
+    # The anchor's attested stages with at least one band bound —
+    # reconstructed stages are never date-inference targets (a date puts an
+    # attested document in an attested slice, never in a reconstruction),
+    # and a bound-less band would contain everything vacuously.
     def banded_stages(anchor)
       @banded ||= {}
       @banded[anchor] ||= @registry.stages_of(anchor).select do |stage|
-        stage.mode == :attested && stage.band && stage.band[0] && stage.band[1]
+        stage.mode == :attested && stage.band && (stage.band[0] || stage.band[1])
       end
     end
 
