@@ -656,9 +656,10 @@ freising:
 corpus-oudnederlands:
   adapter: Nabu::Adapters::CorpusOudnederlands
   axes: [germanic]
-  wired: false   # P84-7: adapter built + local suite green against real bytes,
-                   # but NOT yet owner-first-synced+eyeballed — flip after the
-                   # owner-fired sync (checklist §6).
+  wired: true    # P84-7 (owner-fired sync 2026-08-27): synced 89 docs / 5,745
+                   # passages, 1 honest quarantine (lex.sal.xml — duplicate
+                   # xml:id upstream), eyeballed (Kam van Toornwerd → "kobu"),
+                   # flipped.
   sync_policy: manual
   # P84-7 (Q48): the INT/IvdNT Corpus Oudnederlands — all surviving Old-Dutch
   # (odt) word material 475–1200, 90 TEI works, GOLD lemma+POS. LICENSE: INT
@@ -676,8 +677,10 @@ corpus-oudnederlands:
 corpus-gysseling:
   adapter: Nabu::Adapters::CorpusGysseling
   axes: [germanic]
-  wired: false   # P84-7: adapter built + local suite green; awaiting the
-                   # owner-fired first sync + eyeball before the flip.
+  wired: true    # P84-7 (owner-fired sync 2026-08-27): synced 2,226 docs /
+                   # 207,793 passages, 2 honest quarantines (0032a, 0644TEST —
+                   # no citable lines), eyeballed (0016 mint ordinance, dum),
+                   # flipped.
   sync_policy: manual
   # P84-7 (Q48): the INT/IvdNT Corpus Gysseling — the 13th-c. originals that
   # sourced the Vroegmiddelnederlands Woordenboek, ~2,228 .fromdb documents of
