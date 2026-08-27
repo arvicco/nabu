@@ -653,6 +653,41 @@ freising:
   # the terms before enabling):
   # license_watch: https://nl.ijs.si/e-zrc/bs/
 
+corpus-oudnederlands:
+  adapter: Nabu::Adapters::CorpusOudnederlands
+  axes: [germanic]
+  wired: false   # P84-7: adapter built + local suite green against real bytes,
+                   # but NOT yet owner-first-synced+eyeballed — flip after the
+                   # owner-fired sync (checklist §6).
+  sync_policy: manual
+  # P84-7 (Q48): the INT/IvdNT Corpus Oudnederlands — all surviving Old-Dutch
+  # (odt) word material 475–1200, 90 TEI works, GOLD lemma+POS. LICENSE: INT
+  # "Niet-commercieel (non-commercial)" with NO explicit redistribution grant
+  # → the owner's strictest reading: research_private (never served to third
+  # parties, never redistributed). The repo is PUBLIC, so NO corpus bytes are
+  # committed — fixtures live under gitignored local/fixtures/, the suite skips
+  # when absent. ACQUISITION: behind the taalmaterialen registration wall (a
+  # one-time personal license acceptance) → the Manual Adapter pattern (ruling
+  # Dp-a): the owner drops corpus-oudnederlands.zip into incoming/
+  # corpus-oudnederlands/; the ZIP is the canonical asset (discover/parse read
+  # members in-process, rebuild stays pure). See docs/manual/
+  # corpus-oudnederlands.md.
+
+corpus-gysseling:
+  adapter: Nabu::Adapters::CorpusGysseling
+  axes: [germanic]
+  wired: false   # P84-7: adapter built + local suite green; awaiting the
+                   # owner-fired first sync + eyeball before the flip.
+  sync_policy: manual
+  # P84-7 (Q48): the INT/IvdNT Corpus Gysseling — the 13th-c. originals that
+  # sourced the Vroegmiddelnederlands Woordenboek, ~2,228 .fromdb documents of
+  # Early Middle Dutch (dum), GOLD lemma+POS. LICENSE + posture identical to
+  # corpus-oudnederlands (INT-NC, no redistribution grant → research_private,
+  # no bytes in git). ACQUISITION: Manual Adapter — the owner drops
+  # corpus-gysseling.zip (the .fromdb documents plus plaats.txt/regio.txt, the
+  # place/region code tables the adapter resolves) into incoming/
+  # corpus-gysseling/. See docs/manual/corpus-gysseling.md.
+
 coptic-scriptorium:
   adapter: Nabu::Adapters::CopticScriptorium
   axes: [egyptian, biblical]

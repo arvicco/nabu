@@ -74,7 +74,17 @@ route breaks or a human wants the files directly:
 - [itkc.md](itkc.md) — data.go.kr bulk XML, seventeen datasets +
   the formal request path for the rest.
 
-Pending acquisitions (adapter not built yet; the doc leads the code):
+Sources whose adapter is built but awaits the owner's first sync
+(research_private — the bytes never enter git; fixtures under gitignored
+`local/fixtures/`, the suite skips when absent):
+
+- [corpus-oudnederlands.md](corpus-oudnederlands.md) — INT/IvdNT Corpus
+  Oudnederlands (Old Dutch 475–1200, TEI, gold lemma+POS; P84-7/Q48).
+- [corpus-gysseling.md](corpus-gysseling.md) — INT/IvdNT Corpus Gysseling
+  (13th-c. Early Middle Dutch, .fromdb, gold lemma+POS; P84-7/Q48).
+
+Acquisition overview (spans several corpora; the per-source cards above
+are authoritative for the two built adapters):
 
 - [ivdnt-corpora.md](ivdnt-corpora.md) — the IvdNT/INT Dutch corpora
   behind the taalmaterialen registration wall (Corpus Gysseling,
