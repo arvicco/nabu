@@ -134,4 +134,39 @@ class ShellTest < Minitest::Test
       Nabu::Shell.stream("/nonexistent/nabu-definitely-not-here") { |line| line }
     end
   end
+
+  # -- duplex (P84-1): a long-lived request/response subprocess session --
+
+  UPCASE_WORKER = "STDOUT.sync = true; while (l = STDIN.gets); puts l.upcase; end"
+
+  def test_duplex_exchanges_lines_with_a_long_lived_subprocess
+    result = Nabu::Shell.duplex(RbConfig.ruby, "-e", UPCASE_WORKER) do |session|
+      session.write_line("ping")
+      first = session.read_line
+      session.write_line("pong")
+      [first, session.read_line]
+    end
+    assert_equal %w[PING PONG], result
+  end
+
+  def test_duplex_raises_on_nonzero_exit_carrying_stderr
+    error = assert_raises(Nabu::Shell::Error) do
+      Nabu::Shell.duplex(RbConfig.ruby, "-e", 'warn "boom detail"; exit 3', &:read_line)
+    end
+    assert_equal 3, error.status
+    assert_match(/boom detail/, error.stderr)
+  end
+
+  def test_duplex_read_after_worker_death_names_the_stderr
+    error = assert_raises(Nabu::Shell::Error) do
+      Nabu::Shell.duplex(RbConfig.ruby, "-e", 'warn "died at startup"; exit 0', &:read_line)
+    end
+    assert_match(/died at startup/, error.message)
+  end
+
+  def test_duplex_unknown_command_raises_nabu_error
+    assert_raises(Nabu::Error) do
+      Nabu::Shell.duplex("/nonexistent/nabu-definitely-not-here", &:read_line)
+    end
+  end
 end

@@ -2629,6 +2629,98 @@ module Nabu
       raise Thor::Error, e.message
     end
 
+    desc "lemma-enrich LANGUAGE", "Run the silver-lemma enricher over the uncovered slice (P84-1, №R-35)"
+    long_desc <<~HELP, wrap: false
+      The silver-lemma lane (P84-1): a local CPU lemmatizer (venv-managed
+      Stanza; la:ittb for the Latin wave) runs over every live passage of
+      LANGUAGE that has NO lemma coverage, and the raw model output lands
+      on the local-lemmas shelf (local/shelves/local-lemmas/<language>/,
+      through the Nabu::LemmaShelf gateway — model output costs hours of
+      compute, so the derivability law homes it in a shelf, never db/).
+      The shelf then projects into passage_lemmas as tier-silver rows at
+      every rebuild/sync, or immediately with --index. Gold rows are never
+      touched: a passage with ANY existing lemma coverage is skipped.
+
+      RESUMABLE: the campaign checkpoints at every shard flush — re-fire
+      the same command after any interruption and it continues where the
+      shelf left off. LANGUAGE accepts the catalog code or common aliases
+      (lat/la). Wave-1 is Latin only; grc is measured but deliberately
+      parked for its own wave.
+
+      One-time setup: the venv (python + stanza + the la model) is an
+      owner-run bootstrap — docs/manual/silver-lemma-venv.md. The default
+      home is ~/.nabu/venvs/stanza (override: --venv or $NABU_STANZA_VENV).
+
+      Modes:
+        nabu lemma-enrich lat --dry-run        census + honest ETA, nothing runs
+        nabu lemma-enrich lat                  the campaign (hours; resumable)
+        nabu lemma-enrich lat --limit 100      bounded smoke run
+        nabu lemma-enrich lat --index          campaign, then project the shelf
+        nabu lemma-enrich lat --index-only     project the shelf, run nothing
+        nabu lemma-enrich lat --spot-check 250 the P79-4 gold protocol: sample
+                                               gold-annotated passages, score
+                                               folded-lemma accuracy per source
+    HELP
+    option :dry_run, type: :boolean, default: false,
+                     desc: "Census the uncovered slice and print the ETA; run nothing"
+    option :limit, type: :numeric, banner: "N", desc: "Stop after N passages (smoke runs)"
+    option :venv, type: :string, banner: "DIR",
+                  desc: "The stanza venv (default ~/.nabu/venvs/stanza or $NABU_STANZA_VENV)"
+    option :batch_size, type: :numeric, default: Nabu::LemmaEnrich::DEFAULT_BATCH,
+                        desc: "Passages per model request (default #{Nabu::LemmaEnrich::DEFAULT_BATCH})"
+    option :shard_size, type: :numeric, default: Nabu::LemmaEnrich::DEFAULT_SHARD,
+                        desc: "Records per shelf shard / checkpoint stride " \
+                              "(default #{Nabu::LemmaEnrich::DEFAULT_SHARD})"
+    option :index, type: :boolean, default: false,
+                   desc: "After the run, project the shelf into passage_lemmas (tier silver) now " \
+                         "instead of waiting for the next rebuild/sync"
+    option :index_only, type: :boolean, default: false,
+                        desc: "Only project the existing shelf into passage_lemmas; run no model"
+    option :spot_check, type: :numeric, banner: "N",
+                        desc: "Score the model against N gold-annotated passages; writes nothing"
+    def lemma_enrich(language_name)
+      config = Nabu::Config.load
+      language = Nabu::LemmaEnrich.resolve_language(language_name)
+      shelf = Nabu::LemmaShelf.new(dir: Nabu::LemmaShelf.dir(config))
+      return lemma_index_only(config, shelf) if options[:index_only]
+
+      catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+      fulltext = Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
+      begin
+        enricher = Nabu::LemmaEnrich.new(
+          catalog: catalog, fulltext: fulltext, shelf: shelf, language: language,
+          worker_argv: options[:dry_run] ? nil : lemma_worker_argv(language),
+          batch_size: options[:batch_size].to_i, shard_size: options[:shard_size].to_i,
+          limit: options[:limit]&.to_i, progress: progress_reporter
+        )
+        return lemma_spot_check(enricher) if options[:spot_check]
+
+        census = enricher.census
+        say "silver lemmas (#{language}): #{commas(census.total)} live passages — " \
+            "#{commas(census.covered)} covered, #{commas(census.shelved)} shelved, " \
+            "#{commas(census.uncovered)} uncovered"
+        say "  estimated #{Nabu::Eta.format_seconds(census.eta_seconds)} single-process " \
+            "at the measured #{Nabu::LemmaEnrich::TRIAL_RATE.to_i} passages/s (P79-4)"
+        return if options[:dry_run]
+
+        result = enricher.run!
+        finish_progress
+        say "lemmatized #{commas(result.processed)} passages in " \
+            "#{Nabu::Eta.format_seconds(result.elapsed_seconds)} " \
+            "(#{format('%.1f', result.rate)}/s) — #{result.shards_written} shard(s) shelved; " \
+            "skipped: #{commas(result.skipped_covered)} covered, " \
+            "#{commas(result.skipped_shelved)} shelved, #{commas(result.skipped_empty)} empty"
+        say "  model: #{result.model} #{result.model_version} (#{result.package})"
+        say "  shelf: #{shelf.language_dir(language)}"
+      ensure
+        catalog.disconnect
+        fulltext.disconnect
+      end
+      lemma_index_only(config, shelf) if options[:index]
+    rescue Nabu::Error => e
+      raise Thor::Error, e.message
+    end
+
     desc "align REF", "Render one citation across every witness of a registered work (the alignment hub)"
     long_desc <<~HELP, wrap: false
       Cross-source alignment (architecture §10): one citation of a registered
@@ -6871,6 +6963,54 @@ module Nabu
         ensure
           ledger&.disconnect
         end
+      end
+
+      # -- lemma-enrich helpers (P84-1) ------------------------------------
+
+      def lemma_worker_argv(language)
+        Nabu::LemmaEnrich.worker_argv(language: language, venv: options[:venv])
+      end
+
+      # Project the shelf into passage_lemmas now (tier silver,
+      # insert-if-absent, frequencies delta'd) — the same pass every
+      # rebuild/sync runs, fired standalone so a finished campaign is
+      # searchable without waiting for one.
+      def lemma_index_only(config, shelf)
+        raise Thor::Error, "no local-lemmas shelf at #{shelf.dir} — run a campaign first" \
+          if shelf.languages.empty?
+
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+        fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
+        begin
+          progress_reporter.stage("silver lemmas: projecting the shelf into passage_lemmas")
+          result = Nabu::Store::SilverLemmaIndexer.apply!(
+            catalog: catalog, fulltext: fulltext, shelf: shelf,
+            dictionary_filter_slugs: registry.lemma_filter_slugs,
+            update_frequencies: true, progress: progress_reporter
+          )
+          finish_progress
+          say "indexed #{commas(result.passages_indexed)} passages " \
+              "(#{commas(result.rows_inserted)} silver rows) — skipped: " \
+              "#{commas(result.skipped_covered)} already covered, " \
+              "#{commas(result.skipped_missing)} missing/withdrawn, " \
+              "#{commas(result.skipped_mismatch)} language-drifted; " \
+              "#{commas(result.filtered_lemmas)} lemmas dictionary-filtered"
+        ensure
+          catalog.disconnect
+          fulltext.disconnect
+        end
+      end
+
+      def lemma_spot_check(enricher)
+        report = enricher.spot_check(sample: options[:spot_check].to_i)
+        finish_progress
+        say "gold spot-check (folded-lemma agreement on LCS-aligned tokens):"
+        report.sort_by { |_slug, row| -row[:accuracy] }.each do |slug, row|
+          say format("  %<slug>-18s gold_tokens=%<gold>-7d aligned=%<aligned>-7d folded=%<acc>.1f%%",
+                     slug: slug, gold: row[:gold_tokens], aligned: row[:aligned], acc: row[:accuracy])
+        end
+        say "  (P79-4 bands: ~99% in-domain ITTB; 75–89% cross-domain — investigate a fall below them)"
       end
 
       def note_list(config, urn_arg)

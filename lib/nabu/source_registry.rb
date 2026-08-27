@@ -174,13 +174,21 @@ module Nabu
     # the gate renders (grantor/date/terms/thread/request_hint). The two travel
     # together — a grant block without the flag, or the flag without a block, is
     # a configuration error caught at load. Absent on every ordinary source.
+    # +lemma_dictionary_filter+ (P84-1): arms the silver-lemma epigraphy
+    # filter for this source — shelf-projected lemmas land only when the
+    # language's reference dictionary attests them or they fold to a
+    # surface form (SilverLemmaIndexer's class note carries the argument).
+    # An index-time policy flag like fuzzy_index, and the same posture
+    # doctrine: declared per source in sources.yml, never hardcoded.
     Entry = Data.define(:slug, :adapter_class_name, :wired, :sync_policy, :kind, :translations,
-                        :license_watch, :fuzzy_index, :lemma_tier, :classes, :siblings, :axes,
+                        :license_watch, :fuzzy_index, :lemma_tier, :lemma_dictionary_filter,
+                        :classes, :siblings, :axes,
                         :grant_required, :grant, :availability, :quickstart, :multilingual,
                         :group, :requires) do
       def initialize(slug:, adapter_class_name:, wired:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false,
-                     lemma_tier: DEFAULT_LEMMA_TIER, classes: nil, siblings: nil, axes: [],
+                     lemma_tier: DEFAULT_LEMMA_TIER, lemma_dictionary_filter: false,
+                     classes: nil, siblings: nil, axes: [],
                      grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
                      quickstart: DEFAULT_QUICKSTART, multilingual: DEFAULT_MULTILINGUAL,
                      group: nil, requires: [])
@@ -365,6 +373,7 @@ module Nabu
         license_watch: license_watch!(slug, config),
         fuzzy_index: boolean!(slug, config, "fuzzy_index"),
         lemma_tier: lemma_tier!(slug, config),
+        lemma_dictionary_filter: boolean!(slug, config, "lemma_dictionary_filter"),
         classes: classes!(slug, config),
         siblings: siblings!(slug, config),
         axes: axes!(slug, config, axis_registry),
@@ -760,6 +769,12 @@ module Nabu
     # what the Indexer scopes its trigram pass to. Registration order.
     def fuzzy_slugs
       @entries.each_value.select(&:fuzzy_index).map(&:slug)
+    end
+
+    # Slugs under the silver-lemma dictionary filter (P84-1) — what the
+    # SilverLemmaIndexer confirms against the reference dictionary.
+    def lemma_filter_slugs
+      @entries.each_value.select(&:lemma_dictionary_filter).map(&:slug)
     end
 
     # { slug => tier } for the NON-gold sources only (P26-0) — absent-is-gold

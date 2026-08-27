@@ -60,7 +60,12 @@ class DerivabilityWritersTest < Minitest::Test
   # canonical/eebo-tcp/texts/<phase>/<stem>/ (per-zip ZipFetch staging
   # + tmp discipline), the ID-list/DTD sidecars (tmp+rename), attic
   # copies and its state ledger inside Adapter#fetch — the
-  # zip_fetch/corpus_corporum law kind at zip grain. The P80-8 ctilc
+  # zip_fetch/corpus_corporum law kind at zip grain. lemma_shelf (P84-1)
+  # is the FIFTH local-shelf gateway: it writes the silver-lemma
+  # enricher's non-derivable model output as JSONL shards
+  # (tmp+validate+rename) plus its campaign checkpoint under
+  # local/shelves/local-lemmas/ — the shelf-gateway law kind at machine
+  # grain, the corpus-corporum checkpoint kind for state. The P80-8 ctilc
   # adapter writes its crawled works (tmp+rename) and their replacement
   # attic copies into canonical/ inside Adapter#fetch — the riig crawl
   # law kind. ANY new file
@@ -81,7 +86,8 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/wiki_fetch.rb nabu/zip_fetch.rb
     nabu/adapters/burman_concordance.rb
     nabu/adapters/ko_wikisource_mk.rb nabu/adapters/viet_wikisource.rb
-    nabu/language_shelf.rb nabu/library_shelf.rb nabu/note_shelf.rb
+    nabu/language_shelf.rb nabu/lemma_shelf.rb
+    nabu/library_shelf.rb nabu/note_shelf.rb
     nabu/source_shelf.rb nabu/ingest.rb
     nabu/lect_rulings.rb nabu/link_scopes.rb nabu/grant_gate.rb
     nabu/health/quarantine_baseline.rb nabu/profile.rb
