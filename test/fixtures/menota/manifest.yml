@@ -114,6 +114,44 @@ files:
       gaf<lb/>lak layout-whitespace token), then a splice of canonical
       lines 588-598 (<seg type="nb"> groups + <unclear>), synthetic tail;
       306,700 B -> 22,727 B.
+  - path: texts/DG-4at7-Streng.xml
+    refetchable: false
+    provenance: korpuskel-api
+    whole: false
+    reason: >-
+      The data field of rest?command=download-document&corpus=menota&
+      document-id=DG-4at7-Streng (via the 2026-08-23 canonical sync);
+      session-gated as above.
+    trim: >-
+      Q45 (2026-08-27): DOCTYPE + teiHeader + body byte-intact through
+      canonical line 444 (ms lines 17va.6-12, w00001-w00047, the
+      <pb ed="Unger" n="0001"/> interleave and a mid-word
+      skyn<lb ed="Unger" n="5"/>semdom break), then a synthetic
+      </p></div></div></body></text></TEI> tail; 4,599,784 B -> 20,490 B.
+  - path: texts/AM-243-b-alfa-fol.xml
+    refetchable: false
+    provenance: korpuskel-api
+    whole: false
+    reason: >-
+      The data field of rest?command=download-document&corpus=menota&
+      document-id=AM-243-b-alfa-fol (via the 2026-08-23 canonical sync);
+      session-gated as above.
+    trim: >-
+      Q45 (2026-08-27): DOCTYPE + teiHeader + body byte-intact through
+      canonical line 663 (a </s> sentence close; ed="AM"/"FJ_utg"/"H-O"
+      edition layouts, bare <pc xml:id> punctuation, the fully supplied
+      <w xml:id="w24400"><supplied>missir</supplied></w>), then a
+      synthetic </p></div></div></body></text></TEI> tail;
+      11,113,642 B -> 75,571 B.
+  - path: texts/NRA-norrfragm-55-B.xml
+    refetchable: false
+    provenance: korpuskel-api
+    whole: true
+    trim: none
+    reason: >-
+      The data field of rest?command=download-document&corpus=menota&
+      document-id=NRA-norrfragm-55-B (via the 2026-08-23 canonical sync);
+      session-gated as above.
   - path: menota-entities.txt
     url: https://www.menota.org/menota-entities.txt
     whole: true

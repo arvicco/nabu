@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="https://www.menota.org/menotaP5.rng" type="xml" ?>
+<!DOCTYPE TEI 
+[
+<!ENTITY % Menota_entities SYSTEM 'https://www.menota.org/menota-entities.txt'>
+%Menota_entities; ]>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:me="http://www.menota.org/ns/1.0">
+ <teiHeader xml:lang="eng">
+  <fileDesc>
+   <titleStmt>
+    <title>Strengleikar (eds. Carl Richard Unger and Rudolf Keyser, Christiania 1850) : Upps DG 4–7 : A
+     digital edition</title>
+
+    <editor role="institution">
+     <orgName>Språksamlingane</orgName>
+    </editor>    
+    <respStmt resp="annotation">
+     <resp>Lemmatisation and morphological annotation</resp>
+     <orgName type="institution">Gammelnorsk ordboksverk <orgName type="affiliation">University of Oslo</orgName>
+     </orgName>
+    </respStmt>
+    <respStmt>
+     <resp>Digitisation of the text and its annotation in the slip archives of Gammelnorsk ordboksverk</resp>
+     <orgName type="institution">The Documentation Project (DokPro)
+      <orgName type="affiliation">University of Oslo</orgName>
+     </orgName>
+    </respStmt>
+    <respStmt>
+     <resp>Conversion to Menotic XML</resp>
+     <name>
+      <persName>
+       <forename>Christian-Emil</forename>
+       <surname>Smith</surname>
+       <surname>Ore</surname>
+      </persName>
+      <orgName type="affiliation">University of Oslo</orgName>
+     </name>
+    </respStmt>
+    <respStmt>
+     <resp>Reorganisation and revision of the encoded file</resp>
+     <name>
+      <persName>
+       <forename>Odd</forename>
+       <forename>Einar</forename>
+       <surname>Haugen</surname>
+      </persName>
+      <orgName type="affiliation">University of Bergen</orgName>
+     </name>
+    </respStmt>
+   </titleStmt>
+   <editionStmt>
+    <edition n="1.1.2">Version 1.1.2, <date when="2016-02-21">21 February 2016</date>.</edition>
+   </editionStmt>
+   <extent n="38453">38453 words</extent>
+   <publicationStmt>
+    <distributor>Medieval Nordic Text Archive</distributor>
+    <idno type="Menota">Ms. 8</idno>
+    <date when="2008-10-24">24 October 2008</date>
+    <availability status="free">
+     <licence target="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</licence>
+     <p>Licence accepted by Christian-Emil Ore and Karl G. Johansson
+      in mails to Odd Einar Haugen 29 October and 2 November 2015.</p>
+    </availability>
+   </publicationStmt>
+   <sourceDesc>
+    <bibl ana="yes">Syntactic annotation by the Menotec project, extracted from the INESS database</bibl>
+    <msDesc>
+     <msIdentifier>
+      <country key="SE">Sweden</country>
+      <settlement>Uppsala</settlement>
+      <repository>Uppsala Universitetsbibliotek</repository>
+      <collection>Delagardieska samlingen</collection>
+      <idno>DG 4–7</idno>
+      <msName>Strengleikar</msName>
+     </msIdentifier>
+     <msContents>
+      <msItem n="1">
+       <locus from="17vA.6" to="43vB.38">Fols. 17vA.6 to 43vB.38</locus>
+       <title type="main">Strengleikar</title>
+       <title type="abbreviated">Str</title>
+       <textLang mainLang="nor">Norwegian</textLang>
+      </msItem>
+     </msContents>
+     <physDesc>
+      <objectDesc form="codex">
+       <supportDesc>
+        <support>
+         <p>
+          <material>Parchment</material>
+         </p>
+        </support>
+        <extent>2 + 42 leaves</extent>
+        <foliation>
+         <p>fols. 1–44v</p>
+        </foliation>
+       </supportDesc>
+      </objectDesc>
+     </physDesc>
+     <history>
+      <origin>
+       <p>Written in <origPlace>Norway</origPlace>, probably in the Bergen area, <origDate notBefore="1260" notAfter="1290">c. 1270</origDate>.</p>
+      <p>DG 4-7 now consists of 42 leaves in seven gatherings, each of originally 8 leaves. Thus,
+       the complete manuscript once had (7 x 8) = 56 leaves. The first gathering lacks the middle
+       pair and another leaf, which has been cut out. The second gathering also lacks the middle
+       pair. The third and fourth gatherings are complete. The fifth gathering lacks the middle
+       pair, and the sixth gathering lacks the fourth leaf, which has been cut out. The seventh
+       gathering only has the outer pair of leaves. Remnants of the seventh gathering were found as
+       the lining of a bishop’s mitra in Skálholt, and are now catalouged as AM 666b 4to in
+       Copenhagen.</p>
+      <p>At the very beginning of DG 4-7, there are two leaves containing a fragment of "Óláfs
+       saga". In the present state of the manuscript (and in the facsimile edition by Mattias
+       Tveitane, 1972), they are fols. 1–2.</p>
+      <p>The main part of the manuscript are fols. 3–44, containing the end of "Pamphilus saga", 13
+       lines of a dialogue between courage and fear, "Elis saga" and finally "Strengleikar". Note
+       that in the facsimile edition and also in the present electronic edition, the leaves have
+       been numbered consecutively in the order they now have in the manuscript, irrespective of
+       lost leaves and leaves which have been put in the wrong order as a result of the later
+       binding of the book.</p>
+      <p>The present electronic edition begins with the opening of "Strengleikar" at fol. 17vA.6 and
+       contains all the rest of the text in the manuscript, thus ending at fol. 43vB.38. There are
+       two lacunas, one between the present fols. 32v and 33r (making "Tidorel" and "Chetovel"
+       incomplete) and another between the present fols. 38v and 39r (a leaf has been cut out here,
+       removing most of the presumably indecent "Leikara ljóð" and the beginning of "Janual")
+       Finally, "Ricar hinn gamli" breaks off shortly after the beginning, since the 7th gathering
+       is so damaged. The two lais in the remainder of the 7th gathering, "Tveggja elskanda
+       strengleikr" and "Grelent", are preserved in parts in what is now AM 666b 4to.</p>
+      <p>When the manuscript was bound for Stephanus Johannis Stephanius (1599–1650) in the 17th
+       century, the two inner pairs of leaves in the 4th gathering were shifted round; in the
+       present foliation they are fols. 24, 25, 26 and 27. In this edition, the text is rendered in
+       the sequence it once had, so the leaves will be found in the following order: ... fol. 21,
+       fol. 22, fol. 23, fol. 25, fol. 24, fol. 27, fol. 26, fol. 28, fol. 29, fol. 30 ...</p>
+      <p>The information compiled here is based on the introduction in the facsimile edition by
+       Mattias Tveitane (1972) and the introduction in the edition by Mattias Tveitane and Robert
+       Cook (1979).</p>
+      </origin>
+     </history>
+    </msDesc>
+   </sourceDesc>
+  </fileDesc>
+  <encodingDesc>
+   <projectDesc>
+    <p>This manuscript text has been encoded according to the standard set out in <title>The Menota
+      handbook</title> (version 2.0 beta), at <ref target="http://www.menota.org/guidelines">
+      http://www.menota.org/guidelines</ref> as of <date>2007-01-30</date>.</p>
+    <p>The text has numbered pagebreaks and linebreaks according to Unger’s and Keyser’s edition
+     (referred to as "Unger"), and numbered pagebreaks, columnbreaks and linebreaks according to the
+     manuscript.</p>
+    <!-- The orthography of the lemmata is based on the standard of Gammelnorsk Ordboksverk, 
+     using "i" for "j", "øy" for "ey", and "o" for both "o" and "ǫ" (o ogonek), e.g. "høyra", "iorð".
+     Lemmata in the orthography of "Ordbog over det norrøne prosasprog" will be added at a later stage. -->
+    <!-- There are 123 instances of the word "ei" which has been lemmatised as "eigi". 
+     This is unfortunate, but may be changed at a later date. -->
+
+   </projectDesc>
+   <editorialDecl>
+    <correction status="high">
+     <p>This text is based on the text in the slip collection of Gammelnorsk Ordboksverk and the
+      text in Unger's and Keyser’s edition and corrected against the manuscript.</p>
+    </correction>
+    <normalization me:level="dipl">
+     <p>This text has been encoded on a diplomatic level.</p>
+    </normalization>
+    <interpretation me:lemmatized="completely" me:morphAnalyzed="completely">
+     <p>The complete text has been lemmatised and morphologically analysed by the Gammelnorsk
+      Ordboksverk and then transformed according to the rules specified in ch. 8 of the Menota
+      Handbook, v. 2.0.</p>
+    </interpretation>
+   </editorialDecl>
+  </encodingDesc>
+  <profileDesc>
+   <langUsage>
+    <language ident="nor">Norwegian</language>
+    <language ident="lat">Latin</language>
+   </langUsage>
+  </profileDesc>
+  <revisionDesc>
+   <change><date>2020-09-12</date><name><persName>Odd Einar Haugen</persName>
+    <orgName type="affiliation">University of Bergen</orgName></name>: 
+    Revised the “history” element of the header
+   </change>
+   <change>
+    <date>2020-02-24</date>
+    <name>
+     <persName>Odd Einar Haugen</persName>
+     <orgName type="affiliation">University of Bergen</orgName>
+    </name>: (1) Changed all “mIM” name tokens (for imperative mood) with “mIP”; 
+    (2) Changed all “rPgM” name tokens with “rP gM” (adding a space between them)</change>
+   <change>
+    <date>2016-02-21</date>
+    <name>
+     <persName>Odd Einar Haugen</persName>
+     <orgName type="affiliation">University of Bergen</orgName>
+    </name>: (1) Revised the "availability" element in the header with a CC-BY-SA 4.0 licence;
+    (2) Made the file v. 1.1.2
+   </change>
+   <change>
+    <date>2016-01-19</date>
+    <name>
+     <persName>Odd Einar Haugen</persName>
+     <orgName type="affiliation">University of Bergen</orgName>
+    </name>: (1) Added role="person" as an attribute to the second "editor" element; (2) Made the file v. 1.1.1
+   </change>
+   <change>
+    <date>2010-10-04</date>
+    <name>Odd Einar Haugen</name>, <orgName type="affiliation">University of Bergen</orgName>: Added
+    one "div" for each of the 20 "lais" in the text; corrected the morphological annotation of words
+    marked as "sjekk" (38 examples) and "ukjent" (4 examples); added the attribute "xml:lang="lat""
+    in Latin words (45 examples); changed all words marked as "xPD" into either "xPE" (vér, vit,
+    ér), "xPR" (sik), "xPQ" (hvat, hveim), "xPI" (einn, hvetvetna), "xDD" (sá, siá, hinn), "xDQ"
+    (annarr, báðir, einn, einnhverr, engi, fyrstr/fyrsti, hvárgi, hvárr, hvárrtveggi, hvárrtveggja,
+    hvergi, hvílíkr, hverr, jafnmargr, nǫkkurr, margr, plus the cardinal numbers, tveir, þrír,
+    fiórir, etc.) or "xDP" (yðarr), changed all "xNU" to either "xNA" or "xNO" (fiórir and fiórði)
+    (16 examples), changed all "xAT" to "xDQ" (the word einn) (94 examples), changed all remaining
+    "xCU" to "xCS" (the words at, né, ef, sem and hvárt) (971 examples); changed all "xNU" to either
+    "xDQ" (cardinals) or "xAJ" (ordinals); changed several words to "xAQ" (hvar, hvert, hvaðan,
+    hvesu, hví); put one dittographical word into "me:expunged" element (with resp="Odd Einar
+    Haugen") and removed the superfluous sign "°" (117 examples). Removed dummy values
+    ("lemma="xyzzy" me:msa="xyzzy") for words that for some reason had not received annotation (915
+    examples). Made the file into version 1.1.</change>
+   <change>
+    <date>2010-09-22</date>
+    <name>Odd Einar Haugen</name>, <orgName type="affiliation">University of Bergen</orgName>:
+    Changed the word class code for the subjunction "er" from "xRP" (relative particle) to "xCS"
+    (subjunction), checked the file and declared it (with some trepidation) version 1.0 </change>
+   <change>
+    <date>2010-09-21</date>
+    <name>Christian-Emil Ore</name>, <orgName type="affiliation">University of Oslo</orgName>: Added
+    line numbers to the "lb" milestones referring to the manuscript, identified words outside "word"
+    elements, changed a number of word class codes, and did some clean-up of the file.</change>
+   <change>
+    <date>2010-08-30</date>
+    <name>Odd Einar Haugen</name>, <orgName type="affiliation">University of Bergen</orgName>: Moved
+    the last part of the file, containing the four defective leaves from the bishop’s mitra in
+    Skálholt and established a new file, AM 666b 4to, for them, since the entries in the Menota
+    corpus should be organised according to manuscript catalogue numbers. Updated the header in a
+    number of places. Corrected a number of wrong values for pagebreak and columnbreak in the
+    encoding. Changed the element "expan" to "ex", according to TEI P5. Changed all character
+    entities to Unicode characters, e.g. converting "eth" to "ð", so that the text should be more
+    readable; the only exception being "vacute" for which there is no safe rendering. Commented on a
+    number of "w" elements missing attributes, and a smaller number of attribute values tagged as
+    "sjekk". Made it into version 0.9.8. </change>
+   <change>
+    <date>2008-10-24</date>
+    <name>Tone Merete Bruvik</name>, <orgName type="affiliation">Aksis</orgName>: Introduced Relax
+    NG Schema and did the changes necessary for that transformation. The encoding of extent in gap
+    has been changed, and unit has been supplied. Made the file into version 0.9.7. </change>
+   <change>
+    <date>2008-01-18</date>
+    <name>Tone Merete Bruvik</name>: Updated the text to Menota 2.0, which is based on TEI P5 1.0.
+    Made some changes in the header. </change>
+   <change>
+    <date>2007.06.29</date>
+    <name>Tone Merete Bruvik</name>: Added namespace reference in the root element, and removed
+    empty persName in the editor element. </change>
+   <change>
+    <date>2007.06.28</date>
+    <name>Tone Merete Bruvik</name>: Removed rombe character from the file. </change>
+   <change>
+    <date>2007.06.25</date>
+    <name>Odd Einar Haugen</name>: Changed the characters /´æ/ to ǽ and /e,/ to ę. </change>
+   <change>
+    <date>2007.05.29</date>
+    <name>Jonas Wellendorf</name>: Added column breaks according to the manuscript, and also
+    linebreak for the first line of each column. </change>
+
+   <change>
+    <date>2007.01.30</date>
+    <name>Christian-Emil Ore</name>: Converted the electronic files (the transcription and the
+    lemmatisation) into XML (Extensible Markup Language) according to the guidelines in the Menota
+    handbook. </change>
+  </revisionDesc>
+ </teiHeader>
+ <text xml:lang="nor">
+  <body>
+   <div type="book">
+    <div type="chapter">
+     <head>
+      <supplied>Forrœða</supplied>
+     </head>
+     <p>
+
+      <pb ed="ms" n="17v"/>
+      <cb ed="ms" n="a"/>
+      <lb ed="ms" n="6"/>
+      <pb ed="Unger" n="0001"/>
+      <lb ed="Unger" n="3"/>
+      <w xml:id="w00001" lemma="athæfi" me:msa="xNC gN nP cA sI">
+       <me:dipl>AT hæve</me:dipl>
+      </w>
+      <w xml:id="w00002" lemma="sá" me:msa="xDD gU nP cG">
+       <me:dipl>þæirra</me:dipl>
+      </w>
+      <w xml:id="w00003">
+       <me:dipl>er</me:dipl>
+      </w>
+      <w xml:id="w00004" lemma="í" me:msa="xAP yD">
+       <me:dipl>i</me:dipl>
+      </w>
+      <w xml:id="w00005" lemma="fyrnska" me:msa="xNC gF nS cD sD">
+       <me:dipl>fyrnskun<ex>n</ex>i</me:dipl>
+      </w>
+      <w xml:id="w00006" lemma="vera" me:msa="xVB fF tPT mIN p3 nP vA iU">
+       <me:dipl>varo</me:dipl>
+      </w>
+      <lb ed="ms" n="7"/>
+      <w xml:id="w00007" lemma="líka" me:msa="xVB fF tPT mIN p3 nS vA iU">
+       <me:dipl>likaðe</me:dipl>
+      </w>
+      <w xml:id="w00008" lemma="vér" me:msa="xPE cD">
+       <me:dipl>oss</me:dipl>
+      </w>
+      <w xml:id="w00009" lemma="at" me:msa="xIM">
+       <me:dipl>at</me:dipl>
+      </w>
+      <w xml:id="w00010" lemma="forvitna" me:msa="xVB fI tPS vA iU">
+       <me:dipl>forvitna</me:dipl>
+      </w>
+      <w xml:id="w00011">
+       <me:dipl>
+        <ex>oc</ex>
+       </me:dipl>
+      </w>
+      <lb ed="Unger" n="4"/>
+      <w xml:id="w00012" lemma="rannsaka" me:msa="xVB fI tPS vA iU">
+       <me:dipl>ran<ex>n</ex>zaka</me:dipl>
+      </w>
+      <w xml:id="w00013" lemma="sá" me:msa="xDD gN nS cD">
+       <me:dipl>þui</me:dipl>
+      </w>
+      <w xml:id="w00014" lemma="at" me:msa="xCS yIN">
+       <me:dipl>at</me:dipl>
+      </w>
+      <lb ed="ms" n="8"/>
+      <w xml:id="w00015" lemma="sá" me:msa="xDD gM nP cN">
+       <me:dipl>þæir</me:dipl>
+      </w>
+      <w xml:id="w00016" lemma="vera" me:msa="xVB fF tPT mIN p3 nP vA iU">
+       <me:dipl>varo</me:dipl>
+      </w>
+      <w xml:id="w00017" lemma="listugr" me:msa="xAJ rP gM nP cN sI">
+       <me:dipl>listugir</me:dipl>
+      </w>
+      <w xml:id="w00018" lemma="í" me:msa="xAP yD">
+       <me:dipl>i</me:dipl>
+      </w>
+      <w xml:id="w00019" lemma="vél" me:msa="xNC gF nP cD sI">
+       <me:dipl>velom</me:dipl>
+      </w>
+      <w xml:id="w00020" lemma="sinn" me:msa="xDP gU nP cD">
+       <me:dipl>sino<ex>m</ex></me:dipl>
+      </w>
+      <w xml:id="w00021" lemma="gløggsýnn" me:msa="xAJ rP gM nP cN sI">
+       <me:dipl>glœgsyn<ex>ir</ex></me:dipl>
+      </w>
+      <lb ed="ms" n="9"/>
+      <w xml:id="w00022" lemma="í" me:msa="xAP yD">
+       <me:dipl>i</me:dipl>
+      </w>
+      <w xml:id="w00023" lemma="skynsemd" me:msa="xNC gF nP cD sI">
+       <me:dipl>skyn<lb ed="Unger" n="5"/>semdo<ex>m</ex></me:dipl>
+      </w>
+      <me:punct>.</me:punct>
+      <w xml:id="w00024" lemma="hygginn" me:msa="xAJ rP gM nP cN sI">
+       <me:dipl>hygnir</me:dipl>
+      </w>
+      <w xml:id="w00025" lemma="í" me:msa="xAP yD">
+       <me:dipl>i</me:dipl>
+      </w>
+      <w xml:id="w00026" lemma="ráðagerð" me:msa="xNC gF nP cD sI">
+       <me:dipl>raðagærðom</me:dipl>
+      </w>
+      <w xml:id="w00027" lemma="vaskr" me:msa="xAJ rP gM nP cN sI">
+       <me:dipl>vask<ex>ir</ex></me:dipl>
+      </w>
+      <lb ed="ms" n="10"/>
+      <w xml:id="w00028" lemma="í" me:msa="xAP yD">
+       <me:dipl>i</me:dipl>
+      </w>
+      <w xml:id="w00029" lemma="vápn" me:msa="xNC gN nP cD sI">
+       <me:dipl>vapno<ex>m</ex></me:dipl>
+      </w>
+      <w xml:id="w00030" lemma="hœverskr" me:msa="xAJ rP gM nP cN sI">
+       <me:dipl>hœv<ex>er</ex>sk<ex>ir</ex></me:dipl>
+      </w>
+      <w xml:id="w00031" lemma="í" me:msa="xAP yD">
+       <me:dipl>i</me:dipl>
+      </w>
+      <w xml:id="w00032" lemma="hirðsiðr" me:msa="xNC gM nP cD sI">
+       <me:dipl>hirðsiðum</me:dipl>
+      </w>
+      <lb ed="Unger" n="6"/>
+      <w xml:id="w00033" lemma="mildr" me:msa="xAJ rP gM nP cN sI">
+       <me:dipl>millder</me:dipl>
+      </w>
+      <w xml:id="w00034" lemma="í" me:msa="xAP yD">
+       <me:dipl>i</me:dipl>
+      </w>
+      <w xml:id="w00035" lemma="giof" me:msa="xNC gF nP cD sI">
+       <me:dipl>giofu<ex>m</ex></me:dipl>
+      </w>
+      <w xml:id="w00036" lemma="ok" me:msa="xCC">
+       <me:dipl>
+        <ex>oc</ex>
+       </me:dipl>
+      </w>
+      <w xml:id="w00037">
+       <me:dipl>at</me:dipl>
+      </w>
+      <w xml:id="w00038" lemma="allskonar" me:msa="xAJ">
+       <me:dipl>allz<lb ed="ms" n="11"/>skonar</me:dipl>
+      </w>
+      <w xml:id="w00039" lemma="drengskapr" me:msa="xNC gM nS cD sI">
+       <me:dipl>drængscap</me:dipl>
+      </w>
+      <me:punct>.</me:punct>
+      <w xml:id="w00040" lemma="hinn" me:msa="xDD gM nP cN">
+       <me:dipl>hinir</me:dipl>
+      </w>
+      <w xml:id="w00041" lemma="frægr" me:msa="xAJ rS gM nP cN sD">
+       <me:dipl>frægiazsto</me:dipl>
+      </w>
+      <me:punct>.</me:punct>
+      <w xml:id="w00042" lemma="ok" me:msa="xCC">
+       <me:dipl>
+        <ex>Oc</ex>
+       </me:dipl>
+      </w>
+      <w xml:id="w00043" lemma="fyrir" me:msa="xAP yD">
+       <me:dipl>fyr<ex>ir</ex></me:dipl>
+      </w>
+      <lb ed="Unger" n="7"/>
+      <w xml:id="w00044" lemma="sá" me:msa="xDD gN nS cD">
+       <me:dipl>þui</me:dipl>
+      </w>
+      <w xml:id="w00045" lemma="at" me:msa="xCS yIN">
+       <me:dipl>at</me:dipl>
+      </w>
+      <w xml:id="w00046" lemma="í" me:msa="xAP yD">
+       <me:dipl>i</me:dipl>
+      </w>
+      <lb ed="ms" n="12"/>
+      <w xml:id="w00047" lemma="fyrnska" me:msa="xNC gF nS cD sD">
+       <me:dipl>fyrnskun<ex>n</ex>i</me:dipl>
+      </w>
+     </p>
+    </div>
+   </div>
+  </body>
+ </text>
+</TEI>

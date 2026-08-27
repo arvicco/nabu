@@ -44,7 +44,13 @@ class MenotaTest < Minitest::Test
   ELIS = "urn:nabu:menota:dg-4at7-elis"                 # single-level bare tokens, note-in-w
   PAMPH = "urn:nabu:menota:dg-4at7-pamph"               # single-level bare tokens, sic/corr
 
-  ALL_URNS = [KONUNGS, LAXDAELA, WORMIANUS, HOMILIES, ELIS, PAMPH, BONBOK, STJORN].sort.freeze
+  # The Q45 mixed-level trims (bare tokens + edition milestones):
+  STRENG = "urn:nabu:menota:dg-4at7-streng"      # Unger milestones interleaved, bare me:punct
+  FRAG243 = "urn:nabu:menota:am-243-b-alfa-fol"  # bare <pc xml:id>, <supplied> bare words, 3 edition layouts
+  FRAG55B = "urn:nabu:menota:nra-norrfragm-55-b" # three-level fragment, bare <pc> throughout (whole)
+
+  ALL_URNS = [KONUNGS, LAXDAELA, WORMIANUS, HOMILIES, ELIS, PAMPH, BONBOK, STJORN,
+              STRENG, FRAG243, FRAG55B].sort.freeze
 
   def conformance_adapter = Nabu::Adapters::Menota.new
 
@@ -68,7 +74,7 @@ class MenotaTest < Minitest::Test
   end
 
   def test_discover_never_yields_the_entity_table_or_catalogue_envelopes
-    assert_equal 8, adapter.discover(workdir).map(&:id).size,
+    assert_equal 11, adapter.discover(workdir).map(&:id).size,
                  "menota-entities.txt and catalogue/*.json are not documents"
   end
 
@@ -344,10 +350,100 @@ class MenotaTest < Minitest::Test
     end
   end
 
-  def test_mixed_level_documents_still_drop_level_less_tokens
-    # The status-quo pin for the 83 already-loaded documents: a document
-    # WITH me: levels keeps ignoring bare tokens (AM 1056's counts are
-    # pinned above); recovery must not rewrite loaded corpora.
+  # -- Q45: mixed-level bare tokens + edition milestones ----------------------
+  #
+  # The 2026-08-27 census over the 91 canonical documents: 30 mixed-level
+  # documents leave 98,575 tokens level-LESS — 98,496 punctuation (<pc>,
+  # <me:punct>: "." x58k, "·" x26k, "," x12k) plus 79 bare <w> words (46
+  # of them fully <supplied> in AM 243 b alfa). The encoders write
+  # level-invariant tokens ONCE, unwrapped — a "." reads the same at
+  # facs/dipl/norm — so bare tokens in a level-bearing document are
+  # reading text at the level the document's stored text reads at, not
+  # droppable strays. Separately, 11 documents interleave OTHER layouts
+  # with the manuscript's own: printed editions (<pb ed="Unger"
+  # n="0001"/> right after <lb ed="ms" n="6"/> in DG-4at7-Streng),
+  # another hand (ed="younger hand"), the transcriber's lacuna markers
+  # (ed="added"), a parallel manuscript (ed="AM 237a fol") — an ms-line
+  # citation keys on the ms's own milestones (ed="ms" or no ed) only.
+
+  def test_bare_punctuation_in_a_mixed_level_document_is_reading_text
+    document = adapter.parse(ref_for(STRENG))
+    assert_equal "nor", document.language
+    line9 = document.find { |p| p.urn == "#{STRENG}:17va.9" }
+    refute_nil line9
+    assert_includes line9.text, "skynsemdom .",
+                    "the bare <me:punct> joins the line; skyn<lb ed=\"Unger\"/>semdom stays whole"
+    punct = line9.annotations["tokens"].find { |t| t["kind"] == "me:punct" }
+    refute_nil punct
+    assert_equal ".", punct["dipl"], "restored at the level the document's stored text reads at"
+    assert_equal "dipl", punct["text_level"]
+  end
+
+  def test_the_citation_grain_keys_on_the_manuscripts_own_layout
+    document = adapter.parse(ref_for(STRENG))
+    assert_equal 7, document.count, "ms lines 17va.6-12; Unger pages and lines advance nothing"
+    assert_equal (6..12).map { |n| "#{STRENG}:17va.#{n}" }, document.map(&:urn),
+                 "<pb ed=\"Unger\" n=\"0001\"/> must never overwrite the folio in an ms-line ref"
+    assert document.first.text.start_with?("AT hæve"), "the prologue opens on ms line 6"
+  end
+
+  def test_a_fully_supplied_bare_word_is_reading_text
+    document = adapter.parse(ref_for(FRAG243))
+    assert_equal "nor", document.language
+    tokens = document.flat_map { |passage| passage.annotations["tokens"] }
+    missir = tokens.find { |t| t["id"] == "w24400" }
+    refute_nil missir
+    assert_equal "missir", missir["dipl"], "<w><supplied>missir</supplied></w> IS reading text"
+    assert_equal "dipl", missir["text_level"]
+    line = document.find { |p| p.urn == "#{FRAG243}:1va.10" }
+    assert_includes line.text, "yðar missir"
+  end
+
+  def test_bare_pc_tokens_restore_with_their_ids_and_edition_layouts_stay_out
+    document = adapter.parse(ref_for(FRAG243))
+    tokens = document.flat_map { |passage| passage.annotations["tokens"] }
+    w600 = tokens.find { |t| t["id"] == "w600" }
+    refute_nil w600
+    assert_equal "pc", w600["kind"]
+    assert_equal ".", w600["dipl"]
+    document.each do |passage|
+      assert_match(/\A1[rv][ab]\.\d+(:b\d+)?\z/, passage.urn.split(":", 5).last,
+                   "only ed=\"ms\" pb/cb/lb mint refs — never ed=\"AM\"/\"FJ_utg\"/\"H-O\"")
+    end
+  end
+
+  def test_a_three_level_fragment_restores_bare_punctuation_at_the_stored_level
+    document = adapter.parse(ref_for(FRAG55B))
+    assert_equal "isl", document.language
+    assert_equal 53, document.count, "restored punctuation joins existing ms lines"
+    tokens = document.flat_map { |passage| passage.annotations["tokens"] }
+    assert_equal 107, tokens.count { |t| t["kind"] == "pc" && t["dipl"] == "." },
+                 "79 level-bearing <pc> + all 28 bare <pc xml:id>.</pc> restored"
+    assert_equal({ "facs" => 707, "dipl" => 759, "norm" => 706 }, document.metadata["levels"],
+                 "731 attested dipl (empty levels in the damaged fragment count nothing) " \
+                 "+ 28 restored bare tokens")
+  end
+
+  def test_marks_only_bare_tokens_stay_blank
+    # The P83 gate (Q47, the A15970 lesson): a token of bare combining
+    # marks has no base characters — restoring it would fake reading text.
+    Dir.mktmpdir("menota-marks-only") do |dir|
+      texts = File.join(dir, "texts")
+      FileUtils.mkdir_p(texts)
+      FileUtils.cp(File.join(workdir, "menota-entities.txt"), dir)
+      body = File.read(File.join(workdir, "texts", "AM-1056-IX-4to.xml"))
+                 .sub("<w ", "<pc>&combacute;</pc><w ")
+      File.write(File.join(texts, "AM-1056-IX-4to.xml"), body)
+      document = adapter.parse(adapter.discover(dir).first)
+      assert_equal 51, document.count
+      tokens = document.flat_map { |passage| passage.annotations["tokens"] }
+      refute(tokens.any? { |t| t["dipl"] == "́" }, "a marks-only bare token stays dropped")
+    end
+  end
+
+  def test_documents_without_bare_tokens_are_untouched
+    # The phantom guard: restoring bare tokens must not invent any in
+    # documents that have none (AM 1056's counts are pinned above).
     assert_equal 51, adapter.parse(ref_for(KONUNGS)).count
     assert_equal 48, adapter.parse(ref_for(BONBOK)).count
   end
@@ -415,15 +511,16 @@ class MenotaTest < Minitest::Test
     db = store_test_db
     source = create_source(db)
     first = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
-    assert_equal 8, first.added
+    assert_equal 11, first.added
     assert_equal 0, first.errored
-    assert_equal 138, db[:passages].count,
-                 "51 + 48 + 21 manuscript lines + the P82-r1 trims (3 + 2 + 1 + 4 + 8)"
+    assert_equal 237, db[:passages].count,
+                 "51 + 48 + 21 manuscript lines + the P82-r1 trims (3 + 2 + 1 + 4 + 8) " \
+                 "+ the Q45 trims (7 + 39 + 53)"
 
     second = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 0, second.errored
-    assert_equal 8, second.skipped, "a byte-identical reload skips every document"
-    assert_equal 138, db[:passages].count
+    assert_equal 11, second.skipped, "a byte-identical reload skips every document"
+    assert_equal 237, db[:passages].count
     assert_equal [1], db[:passages].distinct.select_map(:revision)
   ensure
     db&.disconnect
