@@ -291,6 +291,7 @@ module Nabu
         when :dictionary then "dictionary"
         when :language then "language dossiers"
         when :notes then "owner notes"
+        when :lemmas then "silver lemmas"
         when :source then "source records"
         else "texts"
         end

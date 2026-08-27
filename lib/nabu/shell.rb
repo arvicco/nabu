@@ -65,14 +65,82 @@ module Nabu
       raise Error.new("command not found: #{argv.first} (#{e.message})", status: nil, stderr: "")
     end
 
+    # A line-oriented REQUEST/RESPONSE session with one long-lived
+    # subprocess (P84-1: the stanza lemma worker — model load costs ~10s,
+    # so the enricher keeps ONE worker alive and feeds it batches). The
+    # block receives a Duplex session (#write_line / #read_line); stderr is
+    # drained concurrently and carried onto the Error whether the worker
+    # exits nonzero, dies mid-protocol, or ends before answering. Returns
+    # the block's value on clean exit.
+    #
+    #   Shell.duplex(python, "worker.py") do |w|
+    #     w.write_line(request_json)
+    #     JSON.parse(w.read_line)
+    #   end
+    def self.duplex(*argv)
+      raise ArgumentError, "Shell.duplex requires a command" if argv.empty?
+      raise ArgumentError, "Shell.duplex requires a block" unless block_given?
+
+      captured = +""
+      Open3.popen3(*argv) do |stdin, stdout, stderr, wait_thread|
+        drain = Thread.new do
+          stderr.each_line { |line| captured << line }
+        rescue IOError
+          # A block-raised exception unwinds popen3, which closes stderr
+          # under us — the drain has captured everything it could.
+          nil
+        end
+        on_death = lambda do |reason|
+          stdin.close unless stdin.closed?
+          status = wait_thread.value
+          drain.join
+          raise failure(argv, status.exitstatus, captured, prefix: reason)
+        end
+        result = yield Duplex.new(stdin: stdin, stdout: stdout, on_death: on_death)
+        stdin.close unless stdin.closed?
+        status = wait_thread.value
+        drain.join
+        raise failure(argv, status.exitstatus, captured) unless status.success?
+
+        result
+      end
+    rescue Errno::ENOENT => e
+      raise Error.new("command not found: #{argv.first} (#{e.message})", status: nil, stderr: "")
+    end
+
+    # The two ends of a duplex session. Any sign the worker is gone (EPIPE
+    # on write, EOF on read) routes to +on_death+, which raises a
+    # Shell::Error carrying the worker's stderr — the protocol never
+    # returns a half-truth.
+    class Duplex
+      def initialize(stdin:, stdout:, on_death:)
+        @stdin = stdin
+        @stdout = stdout
+        @on_death = on_death
+      end
+
+      def write_line(line)
+        @stdin.puts(line)
+        @stdin.flush
+      rescue Errno::EPIPE
+        @on_death.call("worker closed its input pipe")
+      end
+
+      def read_line
+        line = @stdout.gets
+        @on_death.call("worker ended before answering") if line.nil?
+        line.chomp
+      end
+    end
+
     # The message names the command AND (bounded, one line) what it said —
     # P77-r12: a bare "command failed (exit 1): rsync" hid an out-of-disk
     # condition; the stderr was captured, carried, and shown nowhere. The
     # full untruncated stderr still rides on the error object.
     DETAIL_CHARS = 300
 
-    def self.failure(argv, exitstatus, stderr)
-      message = "command failed (exit #{exitstatus}): #{argv.first}"
+    def self.failure(argv, exitstatus, stderr, prefix: "command failed")
+      message = "#{prefix} (exit #{exitstatus}): #{argv.first}"
       # P78-r4: stderr is UNTRUSTED BYTES (unzip echoes junk-named zip
       # members raw — the goryeosa-jeoryo CP949 crash); scrub before any
       # string surgery or the message builder masks the real failure.

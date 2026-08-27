@@ -163,6 +163,15 @@ module Nabu
 
     private
 
+    # P84-1: the local-lemmas shelf when it exists on this box — an absent
+    # shelf projects nothing, honestly (the silver-lemma pass is skipped).
+    def lemma_shelf
+      dir = LemmaShelf.dir(@config)
+      return nil unless Dir.exist?(dir)
+
+      LemmaShelf.new(dir: dir)
+    end
+
     def live_enabled
       # `sync --all` sweeps only kind: source rows on the `auto` cadence
       # (P39-0): shelves are local (no network) and modules mint no catalog
@@ -378,7 +387,9 @@ module Nabu
                                      reflexes_changed: adapter.class.content_kind == :dictionary,
                                      sign_list: Nabu::SignList.load_default(config: @config),
                                      progress: progress,
-                                     ledger: @ledger)
+                                     ledger: @ledger,
+                                     lemma_shelf: lemma_shelf,
+                                     lemma_filter_slugs: @registry.lemma_filter_slugs)
     ensure
       fulltext&.disconnect
     end
@@ -446,6 +457,8 @@ module Nabu
         Store::LanguageDossierLoader.new(db: @db, source: source, ledger: @ledger)
       when :notes
         Store::NoteLoader.new(db: @db, source: source, ledger: @ledger)
+      when :lemmas
+        Store::LemmaShelfLoader.new(db: @db, source: source, ledger: @ledger)
       when :source
         Store::SourceDossierLoader.new(db: @db, source: source, ledger: @ledger)
       else

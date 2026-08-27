@@ -1309,7 +1309,9 @@ local-library shelf it is `Nabu::LibraryShelf` (P19-5: copy-in — never
 move — plus the mechanical, append-only manifest append) and for the
 local-source shelf `Nabu::SourceShelf` (P24-0) — all driven by `nabu
 ingest`; for the local-notes shelf it is `Nabu::NoteShelf` (P24-1),
-driven by `nabu note`. Everything else stays read-only on the shelves.
+driven by `nabu note`; for the local-lemmas shelf it is
+`Nabu::LemmaShelf` (P84-1), driven by `nabu lemma-enrich`. Everything
+else stays read-only on the shelves.
 
 **Shelf one: `local/shelves/local-language/`** — one Markdown + YAML
 front-matter dossier per language code (`Nabu::LanguageDossier`): curated
@@ -1472,6 +1474,38 @@ context), attached strictly AFTER the withhold gate so a note on a
 research_private/restricted document is withheld with its target: a note
 must never leak a withheld text's content frame. The shelf itself is class
 `open` (owner-authored, the local-language argument).
+
+**Shelf five: `local/shelves/local-lemmas/` (P84-1, №R-35)** — the first
+shelf at MACHINE grain: the silver-lemma enricher's raw model output.
+`nabu lemma-enrich <language>` runs a local CPU lemmatizer (venv-managed
+Stanza — the venv itself is a re-creatable TOOL, bootstrapped once by the
+owner per docs/manual/silver-lemma-venv.md, default `~/.nabu/venvs/stanza`)
+over every live passage of the lane that has NO lemma coverage, and lands
+one JSONL record per passage — raw `[surface, lemma, upos]` triples plus
+model/version/package provenance — in numbered shards
+(`<language>/shard-NNNNNN.jsonl`, tmp+validate+rename) through the
+`Nabu::LemmaShelf` gateway, the shelf's one write path. Model output costs
+HOURS of compute, so the derivability law homes it here, never db/; the
+campaign is resumable at two grains (the corpus-corporum mold: the shelf's
+own urns are the fine grain, a checkpoint state file written at every
+shard flush the coarse one). The derived product is — uniquely among the
+shelves — FULLTEXT-side: `Store::SilverLemmaIndexer` projects shards into
+`passage_lemmas` as tier-`silver` rows (the P26-0 tier machinery
+unchanged) at every rebuild and source refresh, and immediately on
+`lemma-enrich --index`. The projection is insert-if-absent at passage
+grain: a urn with ANY existing lemma rows is skipped whole — the
+never-overwrite-gold guarantee, the idempotency proof, and the ordering
+contract with the annotation pass in one rule. Index-time POLICY stays
+re-derivable: sources declared `lemma_dictionary_filter: true` (edr, edh —
+the P79-4 trial's 75% epigraphy band, invented proper-name nominatives the
+worst error class) keep a silver lemma only when the language's reference
+dictionary attests it or it folds identically to a surface form; changing
+the filter re-projects the same shards, never re-runs the model. The
+loader lane (`content_kind :lemmas`) VALIDATES only — a malformed shard
+quarantines loudly at sync/rebuild — and the gold spot-check
+(`lemma-enrich --spot-check N`, the P79-4 protocol: LCS token alignment on
+folded surface forms, folded-lemma agreement per source) guards the model
+against drift.
 
 **What this does not change.** The ledger keeps runs/pins/probes/revisions;
 the links journal keeps batch edges; `nabu language`'s command surface is

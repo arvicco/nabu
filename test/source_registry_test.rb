@@ -1052,8 +1052,9 @@ class SourceRegistryTest < Minitest::Test
     # The hebrew/biblical coexistence is BY DESIGN (D35-a): cross-language hat + language desk.
     assert_equal %w[biblical hebrew], registry["oshb"].axes.sort
     assert_equal %w[biblical hebrew], registry["bridging"].axes.sort, "the feature module rides its host's desks"
-    # The Librarian's four local shelves, and nothing else.
-    assert_equal %w[local-language local-library local-notes local-source],
+    # The Librarian's five local shelves, and nothing else (P84-1 added
+    # the machine-grain local-lemmas shelf).
+    assert_equal %w[local-language local-lemmas local-library local-notes local-source],
                  registry.axis_members("local").sort
     # Manifest-verified corrections vs the draft table (see the P35-0 report):
     assert_includes registry["ud"].axes, "sinitic", "UD ships two lzh treebanks (P32-0)"
