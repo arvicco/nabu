@@ -6,13 +6,14 @@ description: >-
   maintainer.
 ---
 
+{% assign census = site.data.census -%}
 ## What this is
 
 Nabu is **personal research infrastructure**: one scholar's local library
 of ancient-text corpora, built to serve that scholar's reading and research
 first, and shared because the approach — local, license-honest, citation
 native, rebuildable — may be useful to others: the readers it pictures wear
-one of twenty-three scholarly hats, the [research desks]({{ '/axis/' | relative_url }})
+one of {{ census.desks }} scholarly hats, the [research desks]({{ '/axis/' | relative_url }})
 from the Classicist to the Assyriologist, each with its own shelves and
 recipes. It is a young project:
 versioned releases begin with v1.0.0 (July 2026), there is no packaged

@@ -31,12 +31,18 @@ module Site
     def test_census_data_carries_every_key_the_site_prose_cites
       census = YAML.safe_load_file(File.join(DATA_DIR, "census.yml"))
       %w[as_of documents documents_display passages passages_display language_codes
-         top_languages dictionary_entries_display dictionary_shelves
-         gold_lemmas_m silver_lemmas_m gold_languages desks].each do |key|
+         registry_rows corpus_sources live_sources local_shelves feature_modules
+         top_languages dictionary_entries dictionary_entries_display dictionary_shelves
+         gold_lemmas gold_lemmas_display gold_lemmas_m gold_languages
+         silver_lemmas silver_lemmas_display silver_lemmas_m silver_languages
+         desks].each do |key|
         assert census.key?(key), "census.yml lost the #{key} key the site prose cites"
       end
       assert_match(/\A\d{1,2} \w+ \d{4}\z/, census.fetch("as_of"), "as_of must be a dated stamp")
-      refute_empty census.fetch("top_languages")
+      assert_operator census.fetch("top_languages").size, :>=, 10,
+                      "the headline languages table (languages.md) reads up to 16 rows from the SSOT"
+      first = census.fetch("top_languages").first
+      %w[code passages millions].each { |k| assert first.key?(k), "each top_languages row needs #{k}" }
     end
 
     def test_generated_files_carry_the_do_not_hand_edit_marker

@@ -1,0 +1,30 @@
+# Curated one-line descriptions for the headline corpus-languages table on
+# /languages/ (site/languages.md), keyed by language code. HAND-EDITED
+# editorial prose — the counterpart to the GENERATED numbers: the table
+# reads its passage figures from site/_data/census.yml (the SSOT) and its
+# descriptions from here, so a growth wave never leaves the numbers stale.
+# Cover every code that can enter census.top_languages (the 16 largest by
+# passages); a code with no note falls back to the bare code.
+---
+ara: Classical Arabic — the OpenITI corpus, the library's largest language
+en: Early Modern English — EEBO-TCP, the first printed books transcribed
+lzh: Literary Chinese — Kanripo and the CBETA Buddhist canon, spelling-variant folded
+lat: Latin — classics, Vulgate, charters, and ~195K inscriptions
+sux: Sumerian — Ur III administration to the great lexical lists
+grc: Ancient Greek — Homer through the papyri to both New Testaments
+jpn: Japanese — the Aozora Bunko reading desk, ruby readings preserved
+xct: Classical Tibetan — the Derge Kangyur and Tengyur
+enm: Middle English — the Corpus of Middle English, Chaucer to the mystery plays
+fas: Persian — the OpenITI Persian shelf
+akk: Akkadian — ORACC gold corpora, CDLI, the eBL Fragmentarium
+san-Latn: Sanskrit (romanized) — GRETIL/SARIT/DCS transliteration and the Vedic treebank
+san: Sanskrit (native script) — the DCS and Devanagari editions
+eng: English — the translation layer, never an original
+de: German — editions, apparatus and translations across the corpus
+pli: Pali — the segmented Tipiṭaka, aligned to English
+sl: Slovenian (historical) — Dalmatin 1584 onward, plus the Freising Manuscripts
+hit: Hittite — TLHdig at fragment scale beside the gold treebank
+gmh: Middle High German — the ReM reference corpus, diplomatic layer
+oci: Occitan — the medieval troubadour and administrative corpus
+spa: Spanish — the Old Spanish charters and chronicle tradition
+dum: Middle Dutch — the Corpus Gysseling, 13th-century originals

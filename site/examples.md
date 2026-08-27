@@ -7,10 +7,11 @@ description: >-
   biblical studies.
 ---
 
+{% assign census = site.data.census -%}
 Ten short walk-throughs, one per discipline, using real commands and output
 from live runs of 11–12 July 2026. Nothing below is a mock-up; trims are
 marked with ellipses. Each discipline is also a **research desk** — one of
-the twenty-three [research axes]({{ '/axis/' | relative_url }}), where that
+the {{ census.desks }} [research axes]({{ '/axis/' | relative_url }}), where that
 desk's shelves, instruments, CLI recipes and terminal setup live on one page.
 
 ## For the classicist
@@ -324,6 +325,6 @@ license classes, and lect filters above.
 
 These walk-throughs sample the disciplines the library serves; they are not
 the whole of it. The desk index at [Research axes]({{ '/axis/' | relative_url }})
-covers all twenty-three — the Germanicist, the Indologist and the Sinologist among
+covers all {{ census.desks }} — the Germanicist, the Indologist and the Sinologist among
 those with no walk-through above — each with its own member shelves,
 instruments and CLI recipes.

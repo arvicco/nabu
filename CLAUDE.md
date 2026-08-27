@@ -64,6 +64,8 @@ rake fixtures:refresh[source]           # re-snapshot upstream sample (network, 
 - Don't invent upstream formats. If unsure how a source structures its data, inspect the fixture; if there is no fixture, ask for one rather than guessing.
 - Long-running/network operations (real syncs, fixture refresh) are human-initiated only. Claude Code runs `rake test` and `rake lint` freely.
 - Keep `docs/architecture.md` truthful: if an implementation decision deviates from it, update the doc in the same change.
+
+- **Site freshness rides the phase gate, from one source of truth.** At every gate, *after* the gate's syncs and re-parses land (so the catalog is the state being published), run `bundle exec rake site:refresh` — it regenerates `site/_data/census.yml` (the SSOT: every library-wide headline number — documents, passages, codes, sources, dictionary/gold/silver totals, desk count — stamped today) and the axis pages from the live catalog. The site's prose pages render those figures through Liquid (`{{ site.data.census.* }}`) and MUST NOT hardcode them, so the refresh is the *only* number-entry step. Two suite guards enforce it: `test/site/site_data_test.rb` (SSOT shape) and `test/site/site_prose_ssot_test.rb` (no page hardcodes a headline figure or carries a stale literal). A new headline number a page needs = a new field on `Nabu::Ops::SiteData#census`, never prose. Full routine: `site/MAINTENANCE.md` duty 1.
 - Commit messages: imperative summary line, body explains *why*, references doc section if implementing planned work. One logical change per commit.
 
 ## Things that look like good ideas but aren't
