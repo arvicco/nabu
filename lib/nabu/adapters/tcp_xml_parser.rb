@@ -514,8 +514,15 @@ module Nabu
 
         # Unicode-blank — the same [[:space:]] notion the collapse uses, so
         # the emit gate and the collapse can never disagree again.
+        # Blank = no BASE characters: whitespace and bare combining marks
+        # only. NBSP placeholders (<P>&#xA0;</P>, CME00006 and kin) survive
+        # String#strip; orphaned combining marks (A15970's 20 U+0304-only
+        # <P>s — suspension macrons whose base letters are GAP'd) survive
+        # the whitespace test but empty under the search fold, and an
+        # empty text_normalized fails Passage validation. Neither is
+        # citable text; both consume no ordinal.
         def blank?(text)
-          text.match?(/\A[[:space:]]*\z/)
+          text.match?(/\A[[:space:]\p{M}]*\z/)
         end
 
         def flatten(value)
