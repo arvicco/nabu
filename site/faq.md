@@ -6,6 +6,7 @@ description: >-
   licensing and use, AI assistants, contributing, and contact.
 ---
 
+{% assign census = site.data.census -%}
 Short answers to the questions newcomers ask most, each pointing at the
 page or repository document that carries the full context.
 
@@ -21,7 +22,7 @@ service. It is a command-line pipeline and database, not a website or a
 reading application. What it is and why it exists is set out on
 [About]({{ '/about/' | relative_url }}); worked walk-throughs for ten
 scholarly personas are on [Examples]({{ '/examples/' | relative_url }}), and
-the full set of twenty-three [research desks]({{ '/axis/' | relative_url }}) —
+the full set of {{ census.desks }} [research desks]({{ '/axis/' | relative_url }}) —
 one scholarly hat per field, each with its own shelves and recipes — is the
 reader's-eye map of the whole collection.
 
@@ -89,10 +90,10 @@ goes offline, a Nabu library keeps working. The shelf survey is on
 
 ### What is included?
 
-As of 4 August 2026: 975,074 documents and 68,408,109 passages across 109
-registered, synced sources, plus 1,407,280 dictionary entries and
-19.2 million gold
-lemma annotations in thirty-seven languages — the Islamicate library
+As of {{ census.as_of }}: {{ census.documents_display }} documents and {{ census.passages_display }} passages across {{ census.live_sources }}
+registered, synced sources, plus {{ census.dictionary_entries_display }} dictionary entries and
+{{ census.gold_lemmas_m }} million gold
+lemma annotations in {{ census.gold_languages }} languages — the Islamicate library
 (OpenITI, the corpus's largest holding — Classical Arabic and Persian,
 added 22 July 2026), the classical Chinese library and the Buddhist
 canon, classical
@@ -100,7 +101,7 @@ Greek and Latin, papyri, Latin inscriptions, cuneiform and the Ancient
 Near East, Sanskrit and the Pali canon, Hebrew and Aramaic, Egyptian,
 Coptic, Japanese, Old English and the wider Germanic wave (Old Norse,
 Old Saxon, Middle High German, and the runestones, added 22 July 2026),
-Slavic, Celtic, biblical editions, and a reference shelf of fifty-six
+Slavic, Celtic, biblical editions, and a reference shelf of {{ census.dictionary_shelves }}
 dictionary shelves. The
 full survey is [The Library]({{ '/library/' | relative_url }}); the
 authoritative living inventory is

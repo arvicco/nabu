@@ -19,26 +19,42 @@ are deliberately avoided because this box previews sibling sites
 At **every phase gate**, alongside the README/library.md truthfulness pass
 (library.md §10 duty 1), the site is re-synced:
 
-1. **Headline numbers** (index.md, library.md, tools.md, languages.md).
-   **index.md is data-driven** (P58): its desk list and every headline
-   number render from `site/_data/desks.yml` + `census.yml`, GENERATED
-   by `bundle exec rake site:data` (or `site:refresh`, which also runs
-   site:axes) — regenerate at every gate and the home page is done; the
-   suite's drift guard (`test/site/site_data_test.rb`) goes red if a new
-   desk lands without a regeneration, and no hand desk list may return
-   to index.md (also pinned). The remaining hand-prose pages
-   (library.md, tools.md, languages.md) still copy their numbers from
-   the freshly refreshed docs/library.md header, **never re-derived**,
-   with every "as of" date updated to the gate date — migrate more of
-   them onto `site:data` fields as occasions arise. quickstart.md carries measured on-disk
-   sizes (the starter shelf and the growth table) — re-measure (`du -sh`
-   of the live canonical dirs) when a listed shelf changes materially,
-   and keep it consistent with what `bin/nabu quickstart` prints.
-   faq.md restates a few of these figures (starter-shelf and full-build
-   sizes, source/document counts, the class percentages) — re-check its
-   dated numbers against quickstart.md/library.md/index.md at the same
-   pass, and keep its answers truthful when postures, funnels, or the
-   citation story (a DOI is planned) change.
+1. **Headline numbers — the single source of truth.** Every library-wide
+   figure any page states (document / passage / language-code / source /
+   registry / dictionary / gold & silver lemma totals, the desk count, and
+   their as-of date) lives in ONE generated file, `site/_data/census.yml`,
+   and every page renders it through Liquid (`{{ site.data.census.* }}`) —
+   **never a hardcoded copy**. The routine, in order:
+
+   1. **Bring the library up to date first** — the gate's syncs and
+      re-parses are done, so the catalog is the state you are about to
+      publish (the SSOT is "created from the up-to-date library, before the
+      site refresh").
+   2. **Regenerate the SSOT from the live catalog**: `bundle exec rake
+      site:refresh` (= `site:data` — recomputes `census.yml` + `desks.yml`
+      + `dates.yml` against the live catalog, stamped today — then
+      `site:axes`). This is the ONLY number-entry step; the prose pages
+      update themselves because they read the data.
+   3. **Commit** the regenerated `site/_data/*.yml` and the axis pages.
+
+   Two suite guards make this a red/green gate — drift fails the build,
+   not a human's memory: `test/site/site_data_test.rb` pins the census /
+   desks / dates SHAPE and that index.md reads the data; and
+   `test/site/site_prose_ssot_test.rb` fails if any headline page stops
+   reading the census SSOT, if any page carries a known-stale headline
+   literal, or if a pure-headline page hardcodes a million-scale total.
+   **A new headline figure a page needs = add a field to
+   `Nabu::Ops::SiteData#census`** (and its shape assertion in
+   site_data_test), regenerate, then reference `{{ site.data.census.NEW }}`
+   — never type the number into prose.
+
+   Page-local detail numbers stay hand-maintained (out of the SSOT, out of
+   the guard): quickstart.md's measured on-disk sizes (`du -sh` the live
+   canonical dirs when a listed shelf changes materially; keep consistent
+   with `bin/nabu quickstart`); places.md's place-program census; the
+   per-source rows on sources.md and the per-section counts on library.md
+   — the last a standing future target (fold those into a generated table
+   the way the headline figures now are).
 2. **New shelves/sources**: a new synced source gets its row/paragraph on
    library.md + sources.md (upstream link, license, class). A source
    flipped from pending to live moves out of the "awaiting first
