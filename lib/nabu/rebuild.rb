@@ -229,7 +229,9 @@ module Nabu
                                         lemma_tiers: @registry.lemma_tiers,
                                         profile: profile,
                                         sign_list: Nabu::SignList.load_default(config: @config),
-                                        progress: progress)
+                                        progress: progress,
+                                        lemma_shelf: lemma_shelf,
+                                        lemma_filter_slugs: @registry.lemma_filter_slugs)
       # P70-3b (the derivability contract): the links instrument is DERIVED —
       # drop and re-mine it wholesale: every slug-scoped reference producer
       # (the sync-time lane replayed over the re-minted catalog) plus every
@@ -264,6 +266,15 @@ module Nabu
     end
 
     private
+
+    # P84-1: the local-lemmas shelf when it exists on this box — an absent
+    # shelf projects nothing, honestly (the silver-lemma pass is skipped).
+    def lemma_shelf
+      dir = LemmaShelf.dir(@config)
+      return nil unless Dir.exist?(dir)
+
+      LemmaShelf.new(dir: dir)
+    end
 
     # Reconcile the source row from the manifest, then replay its canonical
     # snapshot under a "rebuild"-kind ledger run row (slug-keyed; health
@@ -353,6 +364,8 @@ module Nabu
         Store::LanguageDossierLoader.new(db: db, source: source, ledger: ledger)
       when :notes
         Store::NoteLoader.new(db: db, source: source, ledger: ledger)
+      when :lemmas
+        Store::LemmaShelfLoader.new(db: db, source: source, ledger: ledger)
       when :source
         Store::SourceDossierLoader.new(db: db, source: source, ledger: ledger)
       else
