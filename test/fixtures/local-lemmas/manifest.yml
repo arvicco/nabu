@@ -1,0 +1,15 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The local-lemmas shelf has NO upstream by definition (P84-1, kind:
+# shelf) — nothing here can ever be refetched. The shard is a two-record
+# trim of REAL smoke-run output, exactly the shape the Nabu::LemmaShelf
+# gateway writes.
+source: local-lemmas
+adapter_test: test/adapters/local_lemmas_test.rb
+retrieved: 2026-08-27
+files:
+  - path: lat/shard-000001.jsonl
+    whole: false
+    refetchable: false
+    reason: local shelf — no upstream; real stanza la:ittb output over two perseus-latin passages, trimmed from the P84-1 smoke run

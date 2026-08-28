@@ -11,11 +11,20 @@ require "tmpdir"
 # the "BS I, fol. 78r, l. 1" citation. The MCP tests are the packet's
 # exclusion EVIDENCE: the real manifest's license_class wired through source
 # row → indexer → tools, default-hidden, include_restricted opt-in.
+#
+# P84-8 (the bright line applied to a research_private source): the real bytes
+# MOVED to the gitignored local/fixtures/freising/ (BY-ND permits verbatim
+# redistribution, so keeping them was legal-but-inconsistent with the standing
+# rule that restricted material lives under local/ — owner-ruled the move
+# 2026-08-27). Every fixture-touching case now SKIPs when the local fixtures
+# are absent, so CI and other users pass without the bytes; the manifest,
+# registry, probe and http-failure tests stay in CI (no bytes needed).
 class FreisingTest < Minitest::Test
   include AdapterConformance
   include StoreTestDB
 
-  FIXTURES = Nabu::TestSupport.fixtures("freising")
+  SLUG = "freising"
+  FIXTURES = Nabu::TestSupport.local_fixtures(SLUG)
 
   ZIP_URL = "https://nl.ijs.si/e-zrc/bs-text.zip"
 
@@ -36,6 +45,7 @@ class FreisingTest < Minitest::Test
   end
 
   def conformance_workdir
+    require_fixtures!
     FIXTURES
   end
 
@@ -60,6 +70,7 @@ class FreisingTest < Minitest::Test
   # --- discover: (monument x layer) ---------------------------------------------
 
   def test_discover_mints_one_ref_per_monument_and_layer
+    require_fixtures!
     refs = Nabu::Adapters::Freising.new.discover(FIXTURES).to_a
     assert_equal 27, refs.size, "3 monuments x 9 layers"
     assert_equal BS1_FAMILY, refs.map(&:id).grep(/bs1/),
@@ -68,6 +79,7 @@ class FreisingTest < Minitest::Test
   end
 
   def test_discover_titles_name_monument_and_layer
+    require_fixtures!
     titles = Nabu::Adapters::Freising.new.discover(FIXTURES).to_h { |r| [r.id, r.metadata["title"]] }
     assert_equal "Brižinski spomeniki I — critical transcription", titles["urn:nabu:freising:bs1"]
     assert_equal "Brižinski spomeniki II — diplomatic transcription", titles["urn:nabu:freising:bs2-dt"]
@@ -222,7 +234,16 @@ class FreisingTest < Minitest::Test
 
   private
 
+  # The bytes live under gitignored local/fixtures/freising/ (research_private,
+  # P84-8). Skip every data-bearing case when they are absent.
+  def require_fixtures!
+    return if Nabu::TestSupport.local_fixtures?(SLUG)
+
+    skip "#{SLUG} local fixtures absent (research_private — bytes live in local/fixtures/, never in git)"
+  end
+
   def parse_urn(urn)
+    require_fixtures!
     adapter = Nabu::Adapters::Freising.new
     ref = adapter.discover(FIXTURES).find { |r| r.id == urn }
     refute_nil ref, "expected discover to yield #{urn}"
@@ -236,6 +257,7 @@ class FreisingTest < Minitest::Test
   # Load the whole fixture corpus through the REAL manifest license_class —
   # the wiring under evidence — then hand the MCP tools over.
   def with_loaded_corpus
+    require_fixtures!
     catalog = store_test_db
     fulltext = Nabu::Store.connect_fulltext("sqlite::memory:")
     source = Nabu::Store::Source.create(
@@ -253,6 +275,7 @@ class FreisingTest < Minitest::Test
   # Zip the checked-in fixture tree under the upstream's single top dir
   # (bs/, with tei/ inside) and stub the download URL.
   def stub_zip
+    require_fixtures!
     Dir.mktmpdir do |dir|
       staging = File.join(dir, "bs", "tei")
       FileUtils.mkdir_p(staging)

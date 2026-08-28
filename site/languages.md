@@ -7,10 +7,12 @@ description: >-
   corpus languages, reference-shelf dictionaries, the gold-lemma index.
 ---
 
-As of **4 August 2026** — a live inventory: **122 language codes** across
-~975,000 documents and ~68.4 million passages, every code appearing in the
-catalog, the lemma index, or the reference shelf. The maintained original of
-this page is
+{% assign census = site.data.census -%}
+As of **{{ census.as_of }}** — a live inventory: **{{ census.language_codes }}
+language codes** across {{ census.documents_display }} documents and
+{{ census.passages_display }} passages, every code appearing in the catalog,
+the lemma index, or the reference shelf. The maintained original of this page
+is
 [docs/languages.md](https://github.com/arvicco/nabu/blob/main/docs/languages.md)
 in the repository; this page states the system and the headline holdings.
 
@@ -86,15 +88,15 @@ document whose date interval falls inside exactly one stage's band is
 staged by date, containment, never overlap); and **per-document rulings**
 refine single texts. Every assignment lives in a journal that survives
 rebuilds, states its evidence, and is audited against the documents' own
-dates (`nabu lect check-dates`). As of 6 August 2026 the journal holds
-**410,602 assignments** — 279k from the period/corpus rules, 130k from
-date × stage-band inference — and an unmapped code still resolves to
-itself, honest coarseness.
+dates (`nabu lect check-dates`). The journal holds hundreds of thousands
+of assignments — most from the period/corpus rules, the rest from date ×
+stage-band inference — and an unmapped code still resolves to itself,
+honest coarseness.
 
 What it buys, on three surfaces:
 
 **The stage ladder.** `nabu language lat` now ends with live holdings per
-historical stage (4 August 2026):
+historical stage (a representative run — the command prints today's counts):
 
 ```
   stages:
@@ -132,27 +134,17 @@ asterisk. Cognate lists prefer the resolved reading throughout —
 
 ## Corpus languages — the headline view
 
-The sixteen largest passage languages, live (4 August 2026); the full
-per-code inventory with one-line notes is maintained in
+The {{ census.top_languages.size }} largest passage languages, live (as of
+{{ census.as_of }}) — passage counts read from the census SSOT, descriptions
+from the hand-curated `site/_data/language_notes.yml`; the full per-code
+inventory is maintained in
 [docs/languages.md](https://github.com/arvicco/nabu/blob/main/docs/languages.md).
 
 | Code | Language | Passages |
 |---|---|---|
-| `ara` | Classical Arabic — the OpenITI corpus, the library's largest language | 33.3M |
-| `lzh` | Literary Chinese — Kanripo and the CBETA Buddhist canon, spelling-variant folded | 13.4M |
-| `sux` | Sumerian — Ur III administration to the great lexical lists | 3.0M |
-| `grc` | Ancient Greek — Homer through the papyri to both New Testaments | 3.0M |
-| `jpn` | Japanese — the Aozora Bunko reading desk, ruby readings preserved | 3.0M |
-| `lat` | Latin — classics, Vulgate, charters, and ~195K inscriptions | 2.2M |
-| `xct` | Classical Tibetan — the Derge Kangyur and Tengyur | 1.4M |
-| `fas` | Persian — the OpenITI Persian shelf | 1.3M |
-| `akk` | Akkadian — ORACC gold corpora, CDLI, the eBL Fragmentarium | 1.1M |
-| `san-Latn` / `san` | Sanskrit — GRETIL/SARIT/DCS romanization and the Vedic treebank | 1.6M |
-| `eng` | English — the translation layer, never an original | 0.8M |
-| `pli` | Pali — the segmented Tipiṭaka, aligned to English | 0.4M |
-| `sl` | Slovenian (historical) — Dalmatin 1584 onward, plus the Freising Manuscripts | 0.4M |
-| `hit` | Hittite — TLHdig at fragment scale beside the gold treebank | 0.4M |
-| `gmh` | Middle High German — the ReM reference corpus, diplomatic layer | 0.4M |
+{% for l in census.top_languages -%}
+| `{{ l.code }}` | {{ site.data.language_notes[l.code] | default: l.code }} | {{ l.millions }}M |
+{% endfor %}
 
 Beyond these: the epigraphic mass (Latin and Greek inscriptions, the
 Sabellic and Alpine corpora, pre-Greek Sicily), the cuneiform state
@@ -165,7 +157,8 @@ medieval corpora, Old Galician-Portuguese lyric, and the honest
 
 ## Reference-shelf languages (dictionaries)
 
-**1.41 million dictionary entries** live (4 August 2026). The classical
+**{{ census.dictionary_entries_display }} dictionary entries** live (as of
+{{ census.as_of }}). The classical
 reference shelf: Liddell-Scott-Jones (Greek, 116,497 entries), Lewis &amp;
 Short (Latin, 51,636), Monier-Williams (Sanskrit, 193,890),
 Bosworth-Toller (Old English, 62,815) — citations resolving into the
@@ -181,13 +174,14 @@ the Tibetan lexica round out the reference floor.
 
 ## Gold-lemma languages
 
-Thirty-seven languages are searchable by dictionary form (`search
---lemma`) — **19.2 million gold rows** (26 July 2026 census; Sanskrit and
-Sumerian lead), fed by the treebanks, ORACC, the DCS, the Hebrew and
-Egyptian shelves, and the Germanic reference corpora. A further 28.1
-million machine-suggested rows in ten languages ride an honestly labelled
+{{ census.gold_languages }} languages are searchable by dictionary form
+(`search --lemma`) — **{{ census.gold_lemmas_display }} gold rows** (as of
+{{ census.as_of }}; Sanskrit and Sumerian lead), fed by the treebanks,
+ORACC, the DCS, the Hebrew and Egyptian shelves, and the Germanic reference
+corpora. A further {{ census.silver_lemmas_m }} million machine-suggested
+rows in {{ census.silver_languages }} languages ride an honestly labelled
 silver tier. Everything else is full-text-searchable but not yet
 lemma-searchable.
 
 The same languages, grouped by the scholar who reads them rather than by
-code, are the twenty-three [research desks]({{ '/axis/' | relative_url }}).
+code, are the {{ census.desks }} [research desks]({{ '/axis/' | relative_url }}).

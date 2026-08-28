@@ -653,6 +653,44 @@ freising:
   # the terms before enabling):
   # license_watch: https://nl.ijs.si/e-zrc/bs/
 
+corpus-oudnederlands:
+  adapter: Nabu::Adapters::CorpusOudnederlands
+  axes: [germanic]
+  wired: true    # P84-7 (owner-fired sync 2026-08-27): synced 89 docs / 5,745
+                   # passages, 1 honest quarantine (lex.sal.xml — duplicate
+                   # xml:id upstream), eyeballed (Kam van Toornwerd → "kobu"),
+                   # flipped.
+  sync_policy: manual
+  # P84-7 (Q48): the INT/IvdNT Corpus Oudnederlands — all surviving Old-Dutch
+  # (odt) word material 475–1200, 90 TEI works, GOLD lemma+POS. LICENSE: INT
+  # "Niet-commercieel (non-commercial)" with NO explicit redistribution grant
+  # → the owner's strictest reading: research_private (never served to third
+  # parties, never redistributed). The repo is PUBLIC, so NO corpus bytes are
+  # committed — fixtures live under gitignored local/fixtures/, the suite skips
+  # when absent. ACQUISITION: behind the taalmaterialen registration wall (a
+  # one-time personal license acceptance) → the Manual Adapter pattern (ruling
+  # Dp-a): the owner drops corpus-oudnederlands.zip into incoming/
+  # corpus-oudnederlands/; the ZIP is the canonical asset (discover/parse read
+  # members in-process, rebuild stays pure). See docs/manual/
+  # corpus-oudnederlands.md.
+
+corpus-gysseling:
+  adapter: Nabu::Adapters::CorpusGysseling
+  axes: [germanic]
+  wired: true    # P84-7 (owner-fired sync 2026-08-27): synced 2,226 docs /
+                   # 207,793 passages, 2 honest quarantines (0032a, 0644TEST —
+                   # no citable lines), eyeballed (0016 mint ordinance, dum),
+                   # flipped.
+  sync_policy: manual
+  # P84-7 (Q48): the INT/IvdNT Corpus Gysseling — the 13th-c. originals that
+  # sourced the Vroegmiddelnederlands Woordenboek, ~2,228 .fromdb documents of
+  # Early Middle Dutch (dum), GOLD lemma+POS. LICENSE + posture identical to
+  # corpus-oudnederlands (INT-NC, no redistribution grant → research_private,
+  # no bytes in git). ACQUISITION: Manual Adapter — the owner drops
+  # corpus-gysseling.zip (the .fromdb documents plus plaats.txt/regio.txt, the
+  # place/region code tables the adapter resolves) into incoming/
+  # corpus-gysseling/. See docs/manual/corpus-gysseling.md.
+
 coptic-scriptorium:
   adapter: Nabu::Adapters::CopticScriptorium
   axes: [egyptian, biblical]
@@ -689,6 +727,9 @@ mw:
 edh:
   adapter: Nabu::Adapters::Edh
   axes: [epigraphy]
+  # P84-1: the epigraphy dictionary filter (see edr) — same argument, the
+  # provinces' half of the same corpus family.
+  lemma_dictionary_filter: true
   wired: true    # owner sign-off 2026-07-13: synced 81,856 docs / 406,281 passages
                    # (27 quarantines pending triage), flipped. Original gate note
                    # (P17-2): awaiting the owner-fired first (and only) sync —
@@ -927,6 +968,24 @@ local-notes:
   # default, withheld wherever the target document is withheld).
   # (P39-0: kind: shelf replaces the P31 sync_policy: local rider — kind now
   # routes this upstream-less shelf at the local probe, never the git one.)
+
+local-lemmas:
+  adapter: Nabu::Adapters::LocalLemmas
+  kind: shelf   # P84-1: the model-output shelf — local fetch, no network, up=local
+  axes: [local]
+  wired: true    # the local-shelf argument verbatim (see local-notes): no
+                 # network cost, no upstream license; populates only through
+                 # `bin/nabu lemma-enrich <language>` (the sanctioned front
+                 # door: Nabu::LemmaShelf gateway). Empty until the owner
+                 # fires the first campaign — an absent tree loads nothing.
+  # The FIFTH canonical-memory shelf (P84-1, №R-35, architecture §16): the
+  # silver-lemma enricher's raw model output (venv-managed Stanza; la:ittb
+  # for the Latin wave), JSONL shards per language lane. NON-DERIVABLE
+  # (hours of CPU), hence a shelf, never db/. UNLIKE the other shelves its
+  # derived product is fulltext-side: Store::SilverLemmaIndexer projects
+  # shards into passage_lemmas as tier-silver rows (never beside gold) at
+  # every rebuild/sync and on `lemma-enrich --index`; the loader lane only
+  # validates (a malformed shard quarantines loudly).
 
 riig:
   adapter: Nabu::Adapters::Riig
@@ -2927,6 +2986,10 @@ edr:   # P46-4
   # P47 D47-g (owner ruling 2026-07-28): 596K passages of damaged Latin
   # inscriptions — the fragment desk's biggest constituency by far.
   fuzzy_index: true
+  # P84-1: silver lemmas land here only when Lewis-Short attests them (or
+  # they fold to a surface form) — the P79-4 trial put epigraphy at the 75%
+  # band, invented proper-name nominatives the worst error class.
+  lemma_dictionary_filter: true
   axes: [epigraphy]
   wired: true    # flipped 2026-07-26 (owner ruling "flip all wired"; first sync verified on the live box) — 115,590 docs / 596,064 passages / 1 predicted quarantine, D46-i license ruling 2026-07-26
                  # First sync shape: ONE ~268 MB Zenodo GET
@@ -3936,10 +3999,10 @@ eebo-tcp:
                      # iswoc + eng-web + eebo-tcp the English line is now five
                      # sources riding `germanic` — whether an `english` desk/axis
                      # should be minted is a future owner question, not a P83 call
-  classes: [phase1]  # №R-43 RULED (2026-08-26): wave 1 = option (b), Phase I whole
-                     # (25,368 texts ≈1.73 GB zipped), with (c) — both phases,
-                     # all 60,326 — the stated follow-on: widening is exactly
-                     # this line becoming [phase1, phase2], no code change
+  classes: [phase1, phase2]  # P84-2 (owner cut 2026-08-27): the stated follow-on
+                     # lands — both phases, all 60,326 texts. Phase I zips skip
+                     # free at the sync; Phase II ≈1.57 GB / ≈35k docs. Wave 1
+                     # was №R-43's option (b), Phase I, synced 2026-08-27.
   wired: true        # flipped 2026-08-27 (owner: "wire on eebo"; the verification
                      # sync landed 25,367 docs / 14,702,780 passages 2026-08-27,
                      # +A15970's 13,948 after the Q47 recovery)

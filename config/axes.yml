@@ -117,4 +117,4 @@ japonic:
 # P45-3: minted with digilibLT, the first shelf of the Latin→Romance band the
 local:
   persona: "The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records."
-  desc: "The canonical-memory shelves (architecture §16): local-language, local-library, local-notes, local-source."
+  desc: "The canonical-memory shelves (architecture §16): local-language, local-lemmas, local-library, local-notes, local-source."

@@ -9,8 +9,18 @@ require "test_helper"
 # add/del kept in the diplomatic layer, dropped end-notes, the skipped empty
 # line 36, and per-line @lang (the Latin tail of BS I).
 class FreisingTeiParserTest < Minitest::Test
-  FIXTURES = Nabu::TestSupport.fixtures("freising")
+  # P84-8: the bytes moved to the gitignored local/fixtures/freising/
+  # (research_private). Every case here parses real bytes, so the whole class
+  # skips when the local fixtures are absent — CI passes without them.
+  SLUG = "freising"
+  FIXTURES = Nabu::TestSupport.local_fixtures(SLUG)
   MASTER = File.join(FIXTURES, "tei", "bs.xml")
+
+  def setup
+    return if Nabu::TestSupport.local_fixtures?(SLUG)
+
+    skip "#{SLUG} local fixtures absent (research_private — bytes live in local/fixtures/, never in git)"
+  end
 
   def glyph_map
     @glyph_map ||= Nabu::Adapters::FreisingTeiParser.glyph_map(MASTER)

@@ -7,9 +7,10 @@ description: >-
   and the coverage — how named documents become place-queryable.
 ---
 
+{% assign census = site.data.census -%}
 As of **9 August 2026** — a live census: **585,682 documents carry a
 machine place reference** (of 708,905 that name a place at all, across
-~975,000 documents) — up from 151,157 before the places program, a 3.9×
+{{ census.documents_display }} documents) — up from 151,157 before the places program, a 3.9×
 gain in two phases. The maintained original of this page is
 [docs/places.md](https://github.com/arvicco/nabu/blob/main/docs/places.md)
 in the repository; this page states the system and the headline coverage.

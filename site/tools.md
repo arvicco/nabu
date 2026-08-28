@@ -6,6 +6,7 @@ description: >-
   task: search, citation, alignment, lexicography, etymology, and intertext.
 ---
 
+{% assign census = site.data.census -%}
 Nabu is operated from the command line (`bin/nabu`), and the same
 capabilities are exposed to AI clients through a read-only
 [MCP server](https://github.com/arvicco/nabu/blob/main/docs/mcp.md). The
@@ -102,8 +103,8 @@ Uppsala. All of these compose with each other and with the date, genre,
 license, and lect filters.
 
 **Lemma search** (`search --lemma FORM`) queries by dictionary form rather
-than surface string, over 19.2 million gold lemma annotations in
-thirty-seven languages (26 July 2026 census) — inflection and suppletion included:
+than surface string, over {{ census.gold_lemmas_m }} million gold lemma annotations in
+{{ census.gold_languages }} languages ({{ census.as_of }} census) — inflection and suppletion included:
 
 ```
 $ bin/nabu search --lemma λέγω --limit 3
@@ -444,7 +445,7 @@ $ bin/nabu list corph --documents --limit 10
 ```
 
 **Working by research desk.** The flat source list is also tagged into
-twenty-three [research axes]({{ '/axis/' | relative_url }}) — the owner's
+{{ census.desks }} [research axes]({{ '/axis/' | relative_url }}) — the owner's
 scholarly desks (the Classicist, the Assyriologist, the Sinologist…). A
 source wears every desk it serves, and four surfaces read those tags:
 `nabu enable NAME` puts a desk's shelves in this box's profile (the first-time
