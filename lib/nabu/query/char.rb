@@ -103,10 +103,14 @@ module Nabu
       # +chart_aliases+/+chart_notes+/+see_also+ (the NamesList charts
       # annotation layer, labeled as informative). Absent member → nil/[] and
       # the card stays the P85 floor, line for line.
+      # +numerals+ (P86-4b): the letter-numeral convention values from the
+      # config fact tables (isopsephy/gematria/abjad/titlo/gothic) — the
+      # numbers Unicode's own numeric property deliberately lacks.
       Universal = Data.define(
         :glyph, :codepoint, :name, :category, :script, :numeric,
         :combining_class, :decomposition,
-        :block, :script_code, :age, :aliases, :chart_aliases, :chart_notes, :see_also
+        :block, :script_code, :age, :aliases, :chart_aliases, :chart_notes, :see_also,
+        :numerals
       )
 
       # A "see also" chart cross-reference, resolved against the seam when the
@@ -151,7 +155,8 @@ module Nabu
           see_also: (annotations&.crossrefs || []).map do |ref|
             SeeAlso.new(codepoint: format("U+%04X", ref.codepoint),
                         glyph: ucd.lookup(ref.codepoint)&.glyph, text: ref.text)
-          end
+          end,
+          numerals: Nabu::CharNumerals.lookup(glyph)
         )
       end
 

@@ -303,6 +303,16 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  def test_universal_card_renders_the_letter_numeral_conventions
+    with_char_catalog do |config|
+      seed_ucd(config)
+      alpha, = with_config(config) { run_cli(%w[char α]) }
+      assert_match(/numeric \(isopsephy\): 1 — Greek alphabetic/, alpha)
+      alef, = with_config(config) { run_cli(%w[char א]) }
+      assert_match(/numeric \(gematria\): 1 — Hebrew letter values/, alef)
+    end
+  end
+
   def test_universal_card_corpus_panel_is_era_honest
     with_char_catalog do |config|
       seed_ucd(config)
