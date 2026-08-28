@@ -3235,7 +3235,8 @@ module Nabu
 
         registry = Nabu::SourceRegistry.load(config.sources_path)
         lects = Nabu::Lects.load_default(config: config)
-        print_language_card(term, languages, info, registry: registry, lects: lects)
+        dossiers = Nabu::LanguageDossiers.load_default(config: config)
+        print_language_card(term, languages, info, registry: registry, lects: lects, dossiers: dossiers)
       end
     ensure
       catalog&.disconnect
@@ -8607,10 +8608,16 @@ module Nabu
       # card-worthy on its own even when nothing else about the bare code is
       # curated: a real ladder is content, not a miss). An unknown code
       # misses honestly, with a family hint when the prefix is a known family.
-      def print_language_card(code, languages, info, registry: nil, lects: nil)
-        name = languages.name(code)
-        context = languages.context(code)
+      def print_language_card(code, languages, info, registry: nil, lects: nil, dossiers: nil)
+        # P85-A4: the published curated overlay (nabu-data mul/language-
+        # dossiers) fills any curated lane the instance's own local dossiers
+        # leave absent — identical content on the originating box (local wins),
+        # the same context on a fresh install that has only the overlay.
+        overlay = dossiers&.dossier(code)
+        name = languages.name(code) || overlay&.name
+        context = languages.context(code) || overlay&.context
         extras = languages.extra_notes(code)
+        extras = overlay.extras.merge(extras) if overlay
         fallback = languages.family_fallback(code)
         relevance = info&.relevance(code)
         held = relevance && !relevance.empty?
@@ -8619,12 +8626,12 @@ module Nabu
         # the registry names it and its descent line renders even with zero
         # holdings (the Aramaic-fan anchors are exactly this case).
         registry_record = lects&.lect(code)
-        unless name || context || held || extras.any? || stages.any? || registry_record
+        unless name || context || held || extras.any? || stages.any? || registry_record || overlay
           return print_language_miss(code, fallback)
         end
 
         say "#{code} — #{name || registry_record&.name || '(no name in the held kaikki extracts)'}"
-        print_language_family(code, languages, fallback)
+        print_language_family(code, languages, fallback, overlay_family: overlay&.family)
         print_language_descent(code, lects)
         print_language_context(context, fallback)
         # The accreted dossier "stages" section (Nabu::LectDossiers) never
@@ -8814,8 +8821,8 @@ module Nabu
         say "  held languages: nabu language --list"
       end
 
-      def print_language_family(code, languages, fallback)
-        family = languages.family(code)
+      def print_language_family(code, languages, fallback, overlay_family: nil)
+        family = languages.family(code) || overlay_family
         if family
           say_wrapped("family: #{family}", indent: 2)
         elsif fallback&.name
