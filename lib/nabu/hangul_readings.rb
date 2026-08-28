@@ -67,8 +67,7 @@ module Nabu
 
         suffix = name.delete_prefix("HANGUL LETTER ")
         twins = table(path: path).filter_map do |twin_cp, reading|
-          twin = ucd.lookup(twin_cp)
-          reading if twin && twin.name.end_with?(" #{suffix}")
+          reading if ucd.lookup(twin_cp)&.name&.end_with?(" #{suffix}")
         end
         return nil if twins.empty?
 
