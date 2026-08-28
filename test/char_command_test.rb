@@ -211,8 +211,15 @@ class CharCommandTest < Minitest::Test
 
       hangul, = with_config(config) { run_cli(%w[char 입]) }
       assert_match(/HANGUL SYLLABLE IB — Other Letter/, hangul)
-      assert_match(/decomposes \(jamo\): ᄋ \(U\+110B\) \+ ᅵ \(U\+1175 I\) \+ ᆸ \(U\+11B8 B\)/, hangul,
-                   "the B4 hangul fix: the syllable spells its jamo through Jamo.txt")
+      assert_match(/reading: ib — Revised Romanization, letter-wise/, hangul,
+                   "the head syllable states its romanization (owner request 2026-08-28)")
+      assert_match(%r{decomposes \(jamo\): ᄋ \(U\+110B\) \+ ᅵ \(U\+1175 I /i/\) \+ ᆸ \(U\+11B8 B /p̚/\)},
+                   hangul, "the B4 hangul fix + per-jamo IPA")
+
+      jamo, = with_config(config) { run_cli(%w[char ᆸ]) }
+      assert_match(/reading: b \(RR\) · IPA \[p̚\] — final/, jamo)
+      ieung, = with_config(config) { run_cli(%w[char ᄋ]) }
+      assert_match(/reading: silent — the silent initial ieung/, ieung)
     end
   end
 
