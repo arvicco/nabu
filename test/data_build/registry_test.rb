@@ -14,7 +14,7 @@ class DataBuildRegistryTest < Minitest::Test
                       jpn/kyujitai-fold lzh/kanripo-gaiji sux/value-signs
                       xct/actib-anchors roa-opt/cantigas mul/lect-assignments
                       mul/place-refs mul/places-lpf mul/document-dates
-                      mul/char-postings mul/language-dossiers sux/sign-table
+                      mul/char-postings mul/language-dossiers mul/script-dossiers sux/sign-table
                       egy/unikemet-signs egy/hiero-frequency].freeze
 
   def features
@@ -414,6 +414,8 @@ class DataBuildRegistryTest < Minitest::Test
       # P85-A: ~71% Wikipedia-derived context prose — the whole overlay
       # inherits share-alike (№R-48).
       "mul/language-dossiers" => "CC-BY-SA-4.0",
+      # P86-4c: own authorship throughout (no Wikipedia text) — plain BY.
+      "mul/script-dossiers" => "CC-BY-4.0",
       # P73-9: CC0/permissive inputs — both stay clean BY (the BY-SA sense
       # lanes are deferred to a later sidecar so the core stays BY).
       "sux/sign-table" => "CC-BY-4.0",
