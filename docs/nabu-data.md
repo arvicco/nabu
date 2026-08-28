@@ -195,6 +195,7 @@ no page update is a red suite, and vice versa.
 | `mul/places-lpf` | available | gold-derived | CC-BY-SA-4.0 | mul | pleiades, trismegistos, cigs |
 | `mul/document-dates` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `mul/char-postings` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `mul/language-dossiers` | available | curated | CC-BY-SA-4.0 | mul | — |
 | `sux/sign-table` | available | gold-derived | CC-BY-4.0 | sux | osl |
 | `egy/unikemet-signs` | available | gold-derived | CC-BY-4.0 | egy | unikemet |
 | `egy/hiero-frequency` | available | gold-derived | CC-BY-SA-4.0 | egy | aes |
@@ -342,6 +343,14 @@ Publishes the dating layer behind Nabu's timeline — ~700K dated documents as n
 Publishes the char_postings census behind Nabu's Han cards and graded-reading lane — one row per (character, corpus) with the attesting document count, spanning lzh/jpn/otb/ojp collections (hence mul/ — the naming the survey left TBD, settled here). The Edubba P-1 rider's character half: frequency data any school can consume, derived from Nabu's ingested corpora only (Edubba's own TSVs are NEVER an input — the circularity guard). nc slices (cbeta, ud, e84000, openiti) excluded row-by-row, censused; CC BY-SA 4.0 — the kanripo lane's share-alike grant (№R-24).
 
 **Maintenance**: re-derive after CJK-lane syncs (the census rebuilds with the fulltext index); the published-slice digest makes an unchanged census a fingerprint no-op
+
+### `mul/language-dossiers` — Curated language dossiers — the human-written name/family/context per language
+
+**Status**: available · **Tier**: curated · **Anchoring**: language-code · **Inputs**: —
+
+Fixes the replicability gap the curated dossiers left behind: the hand-authored name/family/context lanes lived only in the originating instance's local/ shelf, so a fresh install saw bare language codes. Published as an overlay (re-consumed via `nabu sync nabu-data`), every install composes the same curated context beneath its live holdings and lect ladder. Only the non-derivable curated layer travels — section accretions (iecor varieties, corpus witnesses, the lect stage ladder) are excluded, each install rebuilds them from its own synced sources. CC BY-SA 4.0: ~71% of the context prose is Wikipedia-derived (share-alike), so the whole dataset inherits it (№R-48); the Wikipedia-derived share is censused in nabu.eval, and personal notes ride the private `nabu note` layer, never here.
+
+**Maintenance**: re-derive after curating dossiers (owner front-matter/context edits, the coming `nabu note` language layer); the published-slice digest makes an unchanged dossier corpus a fingerprint no-op
 
 ### `sux/sign-table` — Compiled cuneiform sign cards — OSL identity, concordances, attestation counts
 
