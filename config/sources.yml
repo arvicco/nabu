@@ -3559,8 +3559,10 @@ ucd:
                       # `nabu char` identity questions cluster
   kind: module   # P85: character-identity instrument (names/category/numeric/
                  # decomposition for every code point), zero document rows
-  wired: false   # skeleton landed; flip after the owner-fired first sync
-                   # (`nabu sync ucd`) + eyeball, then the read seam + cards
+  wired: true    # channel verified (first sync landed; canonical present, 40,575
+                   # code points at 17.0; card eyeballed 2026-08-28). `--all`
+                   # participation is governed by kind + sync_policy, NEVER by
+                   # wired (owner semantics ruling 2026-08-18)
   sync_policy: manual
   # P85 (№R-44 = Shape C): UCD core (UnicodeData.txt) — the universal
   # character-identity backbone of `nabu char`: name, general category,
