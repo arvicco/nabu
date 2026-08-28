@@ -322,6 +322,23 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  # Owner defect 2026-08-28 ("none of these Han readings actually CONTAIN
+  # a"): the okurigana-STEM match (一 ひと.つ answering ひと — wanted) also
+  # fired for single-kana queries, claiming every kun reading that merely
+  # STARTS with the kana (`char a` → 153 okurigana stems sold as "carries
+  # this reading"). A single kana now matches FULL readings only.
+  def test_a_single_kana_matches_full_readings_never_okurigana_stems
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char つ]) }
+      refute_match(/つ\.ぐ/, out, "亜's つ.ぐ stem must NOT answer the single kana つ")
+      refute_match(/also a Japanese reading/, out, "no full reading つ exists in the rig")
+
+      multi, = with_config(config) { run_cli(%w[char ひと]) }
+      assert_match(/一 ひと\.つ/, multi, "multi-kana keeps the stem semantics — ひと.つ answers ひと")
+    end
+  end
+
   def test_universal_card_corpus_panel_is_era_honest
     with_char_catalog do |config|
       seed_ucd(config)
