@@ -14,8 +14,8 @@ class DataBuildRegistryTest < Minitest::Test
                       jpn/kyujitai-fold lzh/kanripo-gaiji sux/value-signs
                       xct/actib-anchors roa-opt/cantigas mul/lect-assignments
                       mul/place-refs mul/places-lpf mul/document-dates
-                      mul/char-postings sux/sign-table egy/unikemet-signs
-                      egy/hiero-frequency].freeze
+                      mul/char-postings mul/language-dossiers sux/sign-table
+                      egy/unikemet-signs egy/hiero-frequency].freeze
 
   def features
     Nabu::DataBuild::REGISTRY
@@ -411,6 +411,9 @@ class DataBuildRegistryTest < Minitest::Test
       "mul/document-dates" => "CC-BY-SA-4.0",
       # P73-8: the kanripo lane's share-alike grant.
       "mul/char-postings" => "CC-BY-SA-4.0",
+      # P85-A: ~71% Wikipedia-derived context prose — the whole overlay
+      # inherits share-alike (№R-48).
+      "mul/language-dossiers" => "CC-BY-SA-4.0",
       # P73-9: CC0/permissive inputs — both stay clean BY (the BY-SA sense
       # lanes are deferred to a later sidecar so the core stays BY).
       "sux/sign-table" => "CC-BY-4.0",

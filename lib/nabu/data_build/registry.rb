@@ -11,6 +11,7 @@ require_relative "hani_fold_builder"
 require_relative "hiero_frequency_builder"
 require_relative "kanripo_gaiji_builder"
 require_relative "kyujitai_fold_builder"
+require_relative "language_dossiers_builder"
 require_relative "lect_assignments_builder"
 require_relative "meter_builder"
 require_relative "place_refs_builder"
@@ -423,6 +424,31 @@ module Nabu
         maintenance: "re-derive after CJK-lane syncs (the census rebuilds with the fulltext " \
                      "index); the published-slice digest makes an unchanged census a " \
                      "fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/language-dossiers", language: LANGUAGES.fetch("mul"),
+        title: "Curated language dossiers — the human-written name/family/context per language",
+        # CURATED: hand-authored prose, not a mechanical derivation — the
+        # honest tier for the overlay layer (№R-47/48).
+        status: :available, tier: "curated", license: "CC-BY-SA-4.0",
+        anchoring: "language-code",
+        # The local dossier files are the source of truth (own authorship, no
+        # canonical cone); the recipe embeds the published-slice sha256.
+        inputs: [], canonical_cones: [], builder: LanguageDossiersBuilder,
+        rationale: "Fixes the replicability gap the curated dossiers left behind: the hand-" \
+                   "authored name/family/context lanes lived only in the originating instance's " \
+                   "local/ shelf, so a fresh install saw bare language codes. Published as an " \
+                   "overlay (re-consumed via `nabu sync nabu-data`), every install composes the " \
+                   "same curated context beneath its live holdings and lect ladder. Only the " \
+                   "non-derivable curated layer travels — section accretions (iecor varieties, " \
+                   "corpus witnesses, the lect stage ladder) are excluded, each install rebuilds " \
+                   "them from its own synced sources. CC BY-SA 4.0: ~71% of the context prose is " \
+                   "Wikipedia-derived (share-alike), so the whole dataset inherits it (№R-48); " \
+                   "the Wikipedia-derived share is censused in nabu.eval, and personal notes ride " \
+                   "the private `nabu note` layer, never here.",
+        maintenance: "re-derive after curating dossiers (owner front-matter/context edits, the " \
+                     "coming `nabu note` language layer); the published-slice digest makes an " \
+                     "unchanged dossier corpus a fingerprint no-op"
       ),
       Feature.new(
         slug: "sux/sign-table", language: LANGUAGES.fetch("sux"),

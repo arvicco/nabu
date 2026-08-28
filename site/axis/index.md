@@ -218,7 +218,7 @@ The Japanese lane: the ONCOJ corpus and lexicon, EDRDG's dictionaries, HDIC and 
 
 > The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records.
 
-The canonical-memory shelves (architecture §16): local-language, local-library, local-notes, local-source.
+The canonical-memory shelves (architecture §16): local-language, local-lemmas, local-library, local-notes, local-source.
 
 [Open the local desk]({{ '/axis/local/' | relative_url }})
 

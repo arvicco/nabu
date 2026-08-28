@@ -2563,11 +2563,15 @@ module Nabu
       catalog&.disconnect
     end
 
-    desc "note URN [TEXT]", "Annotate any urn the corpus knows (owner notes → canonical/local-notes/)"
+    desc "note URN|CODE [TEXT]", "Annotate any urn the corpus knows, or a language code (→ local-notes/)"
     long_desc <<~HELP, wrap: false
       The owner's annotation lane (architecture §16) — scholia of one's own,
       keyed by ANY urn the corpus knows: a document, a passage, a range, a
-      dictionary entry. Notes are canonical memory: they live as YAML files
+      dictionary entry. A bare LANGUAGE CODE (chu, zle-ort — no colon) is a
+      target too (P85): `nabu note chu "…"` files a PRIVATE per-language note
+      that the `nabu language chu` card composes beneath the published overlay
+      (it stays local/, never published — the urn:nabu:lang:<code> layer).
+      Notes are canonical memory: they live as YAML files
       under canonical/local-notes/<topic>.yml (append-only through the
       Nabu::NoteShelf gateway; hand-edits welcome — the file is the record),
       and the catalog only indexes them (urn_notes, rebuilt at every
@@ -2617,8 +2621,14 @@ module Nabu
       return note_list(config, urn) if options[:list]
       return note_remove(config, urn) if options[:rm]
 
-      urn = urn.to_s.strip
-      raise Thor::Error, "note: give a urn (or --list)" if urn.empty?
+      target = urn.to_s.strip
+      raise Thor::Error, "note: give a urn or a language code (or --list)" if target.empty?
+
+      # P85-A: a bare language code (chu, zle-ort — no colon) targets the
+      # private language-note layer via its canonical pseudo-URN; anything
+      # colon-bearing stays an ordinary corpus-URN note.
+      code = Nabu::LanguageNote.code_for(target)
+      urn = code ? Nabu::LanguageNote.urn(code) : target
 
       text = text_parts.join(" ").strip
       text = show_notes_or_prompt(config, urn) if text.empty?
@@ -3087,6 +3097,7 @@ module Nabu
       case Nabu::CharDispatch.lane(input)
       when :cuneiform then cuneiform_char_card(config, input)
       when :hieroglyphic then hieroglyphic_char_card(config, input)
+      when :marks then editorial_marks_char_card(config, input)
       when :name then name_char_card(config, input)
       else han_char_card(config, input)
       end
@@ -3234,7 +3245,10 @@ module Nabu
 
         registry = Nabu::SourceRegistry.load(config.sources_path)
         lects = Nabu::Lects.load_default(config: config)
-        print_language_card(term, languages, info, registry: registry, lects: lects)
+        dossiers = Nabu::LanguageDossiers.load_default(config: config)
+        notes = catalog ? Nabu::Query::Notes.new(catalog: catalog).for_urn(Nabu::LanguageNote.urn(term)) : []
+        print_language_card(term, languages, info, registry: registry, lects: lects,
+                                                   dossiers: dossiers, notes: notes)
       end
     ensure
       catalog&.disconnect
@@ -7071,6 +7085,28 @@ module Nabu
         catalog&.disconnect
       end
 
+      # The note-resolution seam (P85-A): a language pseudo-URN resolves when
+      # the library actually knows the code (a held corpus language OR a
+      # curated/census-named one) — so a note on a typo'd code refuses like a
+      # note on a typo'd corpus URN; everything else defers to the standard
+      # corpus-URN resolver.
+      def note_resolver(catalog)
+        return nil unless catalog
+
+        base = Nabu::NoteShelf.catalog_resolver(catalog)
+        languages = Nabu::Languages.new(catalog: catalog)
+        lambda do |urn|
+          code = Nabu::LanguageNote.code_of(urn)
+          code ? known_language?(catalog, languages, code) : base.call(urn)
+        end
+      end
+
+      def known_language?(catalog, languages, code)
+        return true if languages.name(code)
+
+        catalog.table_exists?(:documents) && !catalog[:documents].where(language: code).empty?
+      end
+
       # The write path: resolution-checked append through the NoteShelf
       # gateway, then a SURGICAL derived refresh — parse the one topic file,
       # replace its urn_notes rows, upsert its ledger pin. NEVER the shelf's
@@ -7083,7 +7119,7 @@ module Nabu
         resolved = true
         catalog = open_catalog(config)
         begin
-          resolver = catalog && Nabu::NoteShelf.catalog_resolver(catalog)
+          resolver = note_resolver(catalog)
           resolved = resolver ? resolver.call(urn) : false if options[:force]
           shelf = Nabu::NoteShelf.new(dir: Nabu::NoteShelf.dir(config), resolver: resolver)
           path = shelf.append_note!(urn: urn, note: text,
@@ -7805,7 +7841,7 @@ module Nabu
       # card's shelf pipeline must never run for it (the define join's
       # Sanskrit stem expansion turned "a" into the TLS concept "AS").
       def han_char_card(config, input)
-        return non_han_char_card(input) unless input.match?(/\p{Han}/)
+        return non_han_char_card(config, input) unless input.match?(/\p{Han}/)
 
         catalog = open_catalog(config)
         raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
@@ -7827,11 +7863,17 @@ module Nabu
         fulltext&.disconnect
       end
 
-      # The reduced non-Han card (P84-5): glyph, codepoint, script probe,
-      # search hint — no shelf lane, no CJK sections. Pure Unicode, so no
-      # catalog is opened. Single Latin stays here for now (№R-44 owns the
-      # reading-lane question).
-      def non_han_char_card(input)
+      # The non-Han card. With the UCD identity floor synced (P85-B2) this is
+      # the UNIVERSAL card (№R-44 = Shape C): name, category, numeric value and
+      # decomposition for any writing system. Without it, the P84-5 reduced
+      # card — glyph, codepoint, script probe — byte-identical (the feature-
+      # module law). Pure Unicode either way, so no catalog is opened.
+      def non_han_char_card(config, input)
+        universal = Nabu::Ucd.load_default(config: config)&.then do |ucd|
+          Nabu::Query::Char.universal(input, ucd)
+        end
+        return print_universal_char_card(input, universal) if universal
+
         reduced = Nabu::Query::Char.reduced(input)
         return say(JSON.pretty_generate(Nabu::Query::Char.reduced_json_payload(input, reduced))) if
           options[:json]
@@ -7847,6 +7889,58 @@ module Nabu
             "no CJK shelf claims it"
         say ""
         say "search: nabu search #{reduced.glyph}"
+      end
+
+      # The universal char card (P85-B2): the UCD identity layer, rendered.
+      # Absent layers stay absent (binding-honesty) — numeric value, combining
+      # class and decomposition print only when the character carries them.
+      def print_universal_char_card(input, card)
+        payload = Nabu::Query::Char.universal_json_payload(input, card)
+        return say(JSON.pretty_generate(payload)) if options[:json]
+
+        say "#{card.glyph}  #{card.codepoint}#{"  ·  #{card.script}" if card.script}"
+        say ""
+        say "#{card.name} — #{card.category}"
+        say "numeric value: #{card.numeric}" if card.numeric
+        say "combining class: #{card.combining_class}" if card.combining_class.positive?
+        print_universal_decomposition(card.decomposition) if card.decomposition
+        say ""
+        say "search: nabu search #{card.glyph}"
+      end
+
+      def print_universal_decomposition(decomp)
+        pieces = decomp.parts.map do |part|
+          "#{part.glyph} (#{part.codepoint}#{" #{part.name}" if part.name})"
+        end
+        label = decomp.kind ? "decomposes (#{decomp.kind})" : "decomposes"
+        say "#{label}: #{pieces.join(' + ')}"
+      end
+
+      # The editorial/house-mark card (P85): what a single mark (⟦ ⌈ ⸀ ⿰ …)
+      # MEANS in this library — its convention, the `--display` knob that
+      # transforms it, and where it comes from. Pure config read (Nabu's own
+      # convention, config/editorial_marks.yml), no catalog. The one card no
+      # external Unicode tool can supply.
+      def editorial_marks_char_card(config, input)
+        mark = Nabu::EditorialMarks.lookup(input)
+        # The dispatch set and the table are pinned to agree, so a routed mark
+        # is always found; fall back to the universal/reduced card if it drifts.
+        return non_han_char_card(config, input) unless mark
+
+        if options[:json]
+          return say(JSON.pretty_generate(
+                       "glyph" => mark.glyph, "codepoint" => mark.codepoint, "class" => "editorial-mark",
+                       "name" => mark.name, "meaning" => mark.meaning,
+                       "display" => mark.display_rule, "seen_in" => mark.seen_in
+                     ))
+        end
+
+        say "#{mark.glyph}  #{mark.codepoint}  ·  editorial mark"
+        say ""
+        say "#{mark.name} — #{mark.meaning}"
+        say ""
+        say "display: #{mark.display_rule}" if mark.display_rule
+        say "seen in: #{mark.seen_in}" if mark.seen_in
       end
 
       def cuneiform_char_card(config, input)
@@ -8548,10 +8642,16 @@ module Nabu
       # card-worthy on its own even when nothing else about the bare code is
       # curated: a real ladder is content, not a miss). An unknown code
       # misses honestly, with a family hint when the prefix is a known family.
-      def print_language_card(code, languages, info, registry: nil, lects: nil)
-        name = languages.name(code)
-        context = languages.context(code)
+      def print_language_card(code, languages, info, registry: nil, lects: nil, dossiers: nil, notes: [])
+        # P85-A4: the published curated overlay (nabu-data mul/language-
+        # dossiers) fills any curated lane the instance's own local dossiers
+        # leave absent — identical content on the originating box (local wins),
+        # the same context on a fresh install that has only the overlay.
+        overlay = dossiers&.dossier(code)
+        name = languages.name(code) || overlay&.name
+        context = languages.context(code) || overlay&.context
         extras = languages.extra_notes(code)
+        extras = overlay.extras.merge(extras) if overlay
         fallback = languages.family_fallback(code)
         relevance = info&.relevance(code)
         held = relevance && !relevance.empty?
@@ -8560,12 +8660,12 @@ module Nabu
         # the registry names it and its descent line renders even with zero
         # holdings (the Aramaic-fan anchors are exactly this case).
         registry_record = lects&.lect(code)
-        unless name || context || held || extras.any? || stages.any? || registry_record
+        unless name || context || held || extras.any? || stages.any? || registry_record || overlay || notes.any?
           return print_language_miss(code, fallback)
         end
 
         say "#{code} — #{name || registry_record&.name || '(no name in the held kaikki extracts)'}"
-        print_language_family(code, languages, fallback)
+        print_language_family(code, languages, fallback, overlay_family: overlay&.family)
         print_language_descent(code, lects)
         print_language_context(context, fallback)
         # The accreted dossier "stages" section (Nabu::LectDossiers) never
@@ -8574,6 +8674,7 @@ module Nabu
         # surface. Every other accreted kind renders as before.
         extras.except(Nabu::LectDossiers::KIND).each { |kind, body| say_wrapped("#{kind}: #{body}", indent: 2) }
         print_language_witnesses(code, languages)
+        print_language_notes(notes)
         print_language_relevance(code, relevance) if relevance
         print_language_axes(code, info, registry)
         print_language_stage_ladder(code, stages, lects, info)
@@ -8755,13 +8856,24 @@ module Nabu
         say "  held languages: nabu language --list"
       end
 
-      def print_language_family(code, languages, fallback)
-        family = languages.family(code)
+      def print_language_family(code, languages, fallback, overlay_family: nil)
+        family = languages.family(code) || overlay_family
         if family
           say_wrapped("family: #{family}", indent: 2)
         elsif fallback&.name
           say_wrapped("family: #{fallback.code}-* — #{fallback.name}", indent: 2)
         end
+      end
+
+      # P85-A (№R-48-2): the private language-note layer — the owner's own
+      # per-language notes (`nabu note <code> "…"`), kept local/ and never
+      # published, composed beneath the universal overlay. Absent = nothing
+      # printed (binding honesty).
+      def print_language_notes(notes)
+        return if notes.empty?
+
+        say "  notes (private):"
+        notes.each { |note| say_wrapped("#{note.note}#{note_tags_fragment(note)}", indent: 4) }
       end
 
       def print_language_context(context, fallback)
