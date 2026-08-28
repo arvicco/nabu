@@ -28,17 +28,17 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these seventeen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 28 August 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
 | `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
 | `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
-| `menota` | texts | attribution | wired · manual | 91 docs / 241,628 passages |
+| `menota` | texts | attribution | wired · manual | 91 docs / 200,523 passages |
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
-| `corpus-oudnederlands` | texts | research_private | not yet wired | nothing held yet |
-| `corpus-gysseling` | texts | research_private | not yet wired | nothing held yet |
+| `corpus-oudnederlands` | texts | research_private | wired · manual | 89 docs / 5,745 passages |
+| `corpus-gysseling` | texts | research_private | wired · manual | 2,226 docs / 207,793 passages |
 | `ref` | texts | attribution | wired · manual | 190 docs / 447,115 passages |
 | `rem` | texts | attribution | wired · manual | 406 docs / 355,449 passages |
 | `rundata` | inscriptions | odbl | wired · manual | 30,647 docs / 30,645 passages |
@@ -46,9 +46,9 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `ren` | texts | attribution | wired · manual | 235 docs / 297,504 passages |
 | `fornsvenska` | texts | attribution | wired · manual | 155 docs / 170,872 passages |
 | `cme` | texts | open | wired · manual | 297 docs / 1,355,279 passages |
-| `eebo-tcp` | texts | open | wired · manual | 25,368 docs / 14,716,728 passages |
+| `eebo-tcp` | texts | open | wired · manual | 60,324 docs / 25,064,564 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 August 2026)</span>: `ang` 63,169 · `en` 24,857 · `non` 20,449 · `eng` 6,813 · `swe` 3,397 · `gmh` 406 · `lat` 398 · `enm` 297 · `gml` 235 · `de` 190 … and 34 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 August 2026)</span>: `ang` 63,169 · `en` 59,432 · `non` 20,449 · `eng` 6,813 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 · `gml` 235 … and 42 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 
