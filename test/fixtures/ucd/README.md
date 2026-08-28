@@ -20,9 +20,10 @@ Twenty real lines, chosen to exercise every shape the read seam
 - **range pairs** — `<CJK Ideograph, First>`/`<…, Last>` (`4E00`/`9FFF`)
   and `<Hangul Syllable, First>`/`<…, Last>` (`AC00`/`D7A3`): interior
   code points have algorithmically-DERIVED names, never listed lines.
-- P86-1 appended a 21st line, `16A0` (ᚠ RUNIC LETTER FEHU FEOH FE F),
-  the member-context tests' anchor (out of code-point order at the file
-  tail — the parser indexes by code point, order-independent).
+- P86 appended real lines at the file tail (the parser indexes by code
+  point, order-independent): `16A0` (ᚠ, the member-context anchor),
+  `30A2` (ア, the ambiguity-panel anchor), and the jamo/letter cast
+  `110B`/`1175`/`11B8`/`3147` (the hangul reading-line tests).
 
 ## Member files (P86-1, №R-49a — the useful-context tier)
 

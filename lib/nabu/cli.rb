@@ -8073,6 +8073,7 @@ module Nabu
         end
         say "script context: #{card.script_context}" if card.script_context
         say "desk: #{card.script_desk}" if card.script_desk
+        say "reading: #{card.reading}" if card.reading
         card.aliases.each do |a|
           say "#{a.type == 'correction' ? 'corrected name' : "#{a.type} alias"}: #{a.name}"
         end

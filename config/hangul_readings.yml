@@ -1,0 +1,102 @@
+# Hangul jamo reading table (P86, owner request 2026-08-28: "Hangul cards
+# need IPA or Romanized reading, both in the head char and decomposed
+# characters") — a FACT TABLE in the char_numerals mold: per positional
+# jamo, the Revised Romanization TRANSLITERATION letter (the NIKL
+# letter-wise system — deterministic, no sound-change rules, so a syllable
+# composes mechanically: 입 → i+b → "ib") and the IPA value.
+#
+# Keys are positional-jamo code points (U+1100 block), hex. rr is the
+# transliteration letter ('' is real — the silent initial ieung); ipa is
+# the segment's value (finals carry their unreleased allophone). The
+# eleven CLUSTER finals (ㄳ ㄵ …) carry rr only — their surface IPA
+# depends on sound rules the card deliberately does not apply (absent is
+# honest, never a guess). NOTE where RR diverges from Unicode's jamo
+# short names (WEO→wo, YI→ui) — the reason this is a table, not a
+# name-downcase.
+#
+# The four famous pre-modern letters ride at the end, marked historical
+# (the Middle-Korean shelf's need); every other archaic jamo is absent.
+
+choseong:
+  "1100": { rr: g,  ipa: k }
+  "1101": { rr: kk, ipa: k͈ }
+  "1102": { rr: n,  ipa: n }
+  "1103": { rr: d,  ipa: t }
+  "1104": { rr: tt, ipa: t͈ }
+  "1105": { rr: r,  ipa: ɾ }
+  "1106": { rr: m,  ipa: m }
+  "1107": { rr: b,  ipa: p }
+  "1108": { rr: pp, ipa: p͈ }
+  "1109": { rr: s,  ipa: s }
+  "110A": { rr: ss, ipa: s͈ }
+  "110B": { rr: "", ipa: "", note: the silent initial ieung }
+  "110C": { rr: j,  ipa: tɕ }
+  "110D": { rr: jj, ipa: tɕ͈ }
+  "110E": { rr: ch, ipa: tɕʰ }
+  "110F": { rr: k,  ipa: kʰ }
+  "1110": { rr: t,  ipa: tʰ }
+  "1111": { rr: p,  ipa: pʰ }
+  "1112": { rr: h,  ipa: h }
+
+jungseong:
+  "1161": { rr: a,   ipa: a }
+  "1162": { rr: ae,  ipa: ɛ }
+  "1163": { rr: ya,  ipa: ja }
+  "1164": { rr: yae, ipa: jɛ }
+  "1165": { rr: eo,  ipa: ʌ }
+  "1166": { rr: e,   ipa: e }
+  "1167": { rr: yeo, ipa: jʌ }
+  "1168": { rr: ye,  ipa: je }
+  "1169": { rr: o,   ipa: o }
+  "116A": { rr: wa,  ipa: wa }
+  "116B": { rr: wae, ipa: wɛ }
+  "116C": { rr: oe,  ipa: ø }
+  "116D": { rr: yo,  ipa: jo }
+  "116E": { rr: u,   ipa: u }
+  "116F": { rr: wo,  ipa: wʌ, note: "Unicode's jamo short name is WEO — RR says wo" }
+  "1170": { rr: we,  ipa: we }
+  "1171": { rr: wi,  ipa: ɥi }
+  "1172": { rr: yu,  ipa: ju }
+  "1173": { rr: eu,  ipa: ɯ }
+  "1174": { rr: ui,  ipa: ɰi, note: "Unicode's jamo short name is YI — RR says ui" }
+  "1175": { rr: i,   ipa: i }
+
+jongseong:
+  "11A8": { rr: g,  ipa: k̚ }
+  "11A9": { rr: kk, ipa: k̚ }
+  "11AA": { rr: gs }
+  "11AB": { rr: n,  ipa: n }
+  "11AC": { rr: nj }
+  "11AD": { rr: nh }
+  "11AE": { rr: d,  ipa: t̚ }
+  "11AF": { rr: l,  ipa: ɭ }
+  "11B0": { rr: lg }
+  "11B1": { rr: lm }
+  "11B2": { rr: lb }
+  "11B3": { rr: ls }
+  "11B4": { rr: lt }
+  "11B5": { rr: lp }
+  "11B6": { rr: lh }
+  "11B7": { rr: m,  ipa: m }
+  "11B8": { rr: b,  ipa: p̚ }
+  "11B9": { rr: bs }
+  "11BA": { rr: s,  ipa: t̚ }
+  "11BB": { rr: ss, ipa: t̚ }
+  "11BC": { rr: ng, ipa: ŋ }
+  "11BD": { rr: j,  ipa: t̚ }
+  "11BE": { rr: ch, ipa: t̚ }
+  "11BF": { rr: k,  ipa: k̚ }
+  "11C0": { rr: t,  ipa: t̚ }
+  "11C1": { rr: p,  ipa: p̚ }
+  "11C2": { rr: h,  ipa: t̚ }
+
+# Pre-modern letters (Middle Korean; rr deliberately absent — RR is a
+# modern-Korean system and would be an invention here).
+historical:
+  "119E": { ipa: ʌ, note: "arae-a (ㆍ) — the lost low vowel of Middle Korean" }
+  "1140": { ipa: z, note: "bansiot (ㅿ) — Middle Korean /z/" }
+  "114C": { ipa: ŋ, note: "yet-ieung (ㆁ) — the audible initial /ŋ/ Middle Korean distinguished from silent ieung" }
+  "1159": { ipa: ʔ, note: "yeorin-hieut (ㆆ) — the Middle Korean glottal stop" }
+  "11EB": { ipa: z, note: "bansiot, final position" }
+  "11F0": { ipa: ŋ, note: "yet-ieung, final position" }
+  "11F9": { ipa: ʔ, note: "yeorin-hieut, final position" }

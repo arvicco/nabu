@@ -110,7 +110,7 @@ module Nabu
         :glyph, :codepoint, :name, :category, :script, :numeric,
         :combining_class, :decomposition,
         :block, :script_code, :age, :aliases, :chart_aliases, :chart_notes, :see_also,
-        :numerals, :script_context, :script_desk
+        :numerals, :script_context, :script_desk, :reading
       )
 
       # A "see also" chart cross-reference, resolved against the seam when the
@@ -158,7 +158,8 @@ module Nabu
                         glyph: ucd.lookup(ref.codepoint)&.glyph, text: ref.text)
           end,
           numerals: Nabu::CharNumerals.lookup(glyph),
-          script_context: dossier&.context, script_desk: dossier&.desk
+          script_context: dossier&.context, script_desk: dossier&.desk,
+          reading: hangul_reading_of(cp, ucd)
         )
       end
 
@@ -182,10 +183,24 @@ module Nabu
 
         parts = jamo.map do |code|
           short = ucd.jamo_short_name(code)
+          ipa = Nabu::HangulReadings.lookup(code)&.ipa
+          label = [short.to_s.empty? ? nil : short, ipa && "/#{ipa}/"].compact.join(" ")
           DecompPart.new(codepoint: format("U+%04X", code), glyph: code.chr(Encoding::UTF_8),
-                         name: short.to_s.empty? ? nil : short)
+                         name: label.empty? ? nil : label)
         end
         UniversalDecomp.new(kind: "jamo", parts: parts)
+      end
+
+      # The hangul reading line (P86, owner request 2026-08-28): a syllable
+      # composes its letter-wise RR from the jamo; a jamo (or compat letter)
+      # states its own RR + IPA + position. nil for every other script.
+      def self.hangul_reading_of(codepoint, ucd)
+        if (jamo = ucd.hangul_jamo(codepoint))
+          rr = Nabu::HangulReadings.syllable_rr(jamo)
+          rr && "#{rr} — Revised Romanization, letter-wise"
+        else
+          Nabu::HangulReadings.describe(codepoint, ucd: ucd)
+        end
       end
 
       def self.universal_json_payload(glyph, universal)
