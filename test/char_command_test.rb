@@ -258,6 +258,49 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  # --- the ambiguity layer (P86-5 + Q50) ------------------------------------
+
+  def test_single_kana_gets_its_identity_card_with_a_capped_reading_panel
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, _err, status = with_config(config) { run_cli(%w[char ア]) }
+      assert_nil status
+      assert_match(/KATAKANA LETTER A — Other Letter/, out, "Q50: the identity card renders FIRST")
+      assert_match(/also a Japanese reading — 2 Han character/, out)
+      assert_match(/亜 ア \(on\)/, out)
+      refute_match(/not a Han character/, out)
+    end
+  end
+
+  def test_as_reading_keeps_the_pure_reading_query
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char ア --as reading]) }
+      assert_match(/2 Han character\(s\) carry this reading/, out)
+      assert_match(/亜 ア \(on\)/, out)
+      refute_match(/KATAKANA LETTER A/, out, "--as reading narrows to the reading lens")
+    end
+  end
+
+  def test_latin_letter_card_shows_the_confusables_looks_like_panel
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char a]) }
+      assert_match(/LATIN SMALL LETTER A — Lowercase Letter/, out)
+      assert_match(/looks like:/, out)
+      assert_match(/U\+FF41/, out, "the fullwidth confusable rides the panel")
+    end
+  end
+
+  def test_as_identity_renders_the_universal_card_for_a_han_char
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char 木 --as identity]) }
+      assert_match(/CJK UNIFIED IDEOGRAPH-6728/, out, "the range-derived identity, no Han card")
+      refute_match(/kun|on\b|pinyin/, out, "--as identity narrows to pure identity")
+    end
+  end
+
   # Copy the trimmed real UCD fixtures into the instance's canonical tree, so
   # `nabu char` finds the identity floor and (by default) the member-context
   # tier, as after `nabu sync ucd`. members: false seeds the bare P85 floor.

@@ -113,10 +113,13 @@ module Nabu
       # target is held (glyph may be nil — the hex + chart text still serve).
       SeeAlso = Data.define(:codepoint, :glyph, :text)
 
-      # const: render caps for the charts annotation layer — a display
-      # choice, not a census claim; truncation is announced at render.
+      # const: render caps for the charts annotation layer and the P86-5
+      # ambiguity panels — display choices, not census claims; truncation is
+      # announced at render (`--as reading` lifts the reading cap).
       CHART_NOTE_CAP = 3
       CHART_SEE_ALSO_CAP = 4
+      READING_PANEL_CAP = 6
+      LOOKS_LIKE_CAP = 5
 
       # One target of a decomposition: the piece's own code point, glyph and
       # UCD name (À → A + COMBINING GRAVE ACCENT), so the card can spell it out.

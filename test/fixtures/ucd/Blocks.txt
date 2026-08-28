@@ -51,3 +51,4 @@ AC00..D7AF; Hangul Syllables
 12000..123FF; Cuneiform
 13000..1342F; Egyptian Hieroglyphs
 17000..187FF; Tangut
+30A0..30FF; Katakana
