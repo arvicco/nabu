@@ -178,6 +178,64 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  # --- the universal card (P85-B2): the UCD identity floor, when synced -----
+
+  def test_universal_card_names_a_greek_letter_when_ucd_is_synced
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, _err, status = with_config(config) { run_cli(%w[char α]) }
+      assert_nil status
+      assert_match(/α\s+U\+03B1\s+·\s+Greek/, out)
+      assert_match(/GREEK SMALL LETTER ALPHA — Lowercase Letter/, out)
+      refute_match(/not a Han character|no CJK shelf claims it/, out, "the universal card replaces the apology")
+      assert_match(/search: nabu search α/, out)
+    end
+  end
+
+  def test_universal_card_spells_out_a_decomposition
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char À]) }
+      assert_match(/LATIN CAPITAL LETTER A WITH GRAVE — Uppercase Letter/, out)
+      assert_match(/decomposes: A \(U\+0041 LATIN CAPITAL LETTER A\) \+ .*\(U\+0300 COMBINING GRAVE ACCENT\)/, out)
+    end
+  end
+
+  def test_universal_card_shows_a_numeric_value_and_a_derived_hangul_name
+    with_char_catalog do |config|
+      seed_ucd(config)
+      half, = with_config(config) { run_cli(%w[char ½]) }
+      assert_match(/VULGAR FRACTION ONE HALF — Other Number/, half)
+      assert_match(%r{numeric value: 1/2}, half)
+      assert_match(/decomposes \(fraction\):/, half)
+
+      hangul, = with_config(config) { run_cli(%w[char 입]) }
+      assert_match(/HANGUL SYLLABLE IB — Other Letter/, hangul)
+    end
+  end
+
+  def test_universal_card_json_is_additive_beside_the_frozen_han_contract
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char α --json]) }
+      payload = JSON.parse(out)
+      assert_nil payload["card"], "no Han card exists for a Greek letter"
+      assert_equal "GREEK SMALL LETTER ALPHA", payload.dig("universal", "name")
+      assert_equal "Lowercase Letter", payload.dig("universal", "category")
+      assert_equal "Greek", payload.dig("universal", "script")
+    end
+  end
+
+  # Copy the trimmed real UnicodeData.txt fixture into the instance's canonical
+  # tree, so `nabu char` finds the UCD identity floor (as after `nabu sync ucd`).
+  def seed_ucd(config)
+    dir = File.join(config.canonical_dir, "ucd")
+    FileUtils.mkdir_p(dir)
+    FileUtils.cp(File.expand_path("fixtures/ucd/UnicodeData.txt", __dir__),
+                 File.join(dir, "UnicodeData.txt"))
+    Nabu::Ucd.reset!
+  end
+
   # --- the empty-Han-card hint distinguishes held from missing (P84-5) ---
 
   # The rig holds unihan/edrdg/babelstone-ids/kradfile/tls — an unknown Han

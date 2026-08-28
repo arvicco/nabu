@@ -3087,7 +3087,7 @@ module Nabu
       case Nabu::CharDispatch.lane(input)
       when :cuneiform then cuneiform_char_card(config, input)
       when :hieroglyphic then hieroglyphic_char_card(config, input)
-      when :marks then editorial_marks_char_card(input)
+      when :marks then editorial_marks_char_card(config, input)
       when :name then name_char_card(config, input)
       else han_char_card(config, input)
       end
@@ -7806,7 +7806,7 @@ module Nabu
       # card's shelf pipeline must never run for it (the define join's
       # Sanskrit stem expansion turned "a" into the TLS concept "AS").
       def han_char_card(config, input)
-        return non_han_char_card(input) unless input.match?(/\p{Han}/)
+        return non_han_char_card(config, input) unless input.match?(/\p{Han}/)
 
         catalog = open_catalog(config)
         raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless catalog
@@ -7828,11 +7828,17 @@ module Nabu
         fulltext&.disconnect
       end
 
-      # The reduced non-Han card (P84-5): glyph, codepoint, script probe,
-      # search hint — no shelf lane, no CJK sections. Pure Unicode, so no
-      # catalog is opened. Single Latin stays here for now (№R-44 owns the
-      # reading-lane question).
-      def non_han_char_card(input)
+      # The non-Han card. With the UCD identity floor synced (P85-B2) this is
+      # the UNIVERSAL card (№R-44 = Shape C): name, category, numeric value and
+      # decomposition for any writing system. Without it, the P84-5 reduced
+      # card — glyph, codepoint, script probe — byte-identical (the feature-
+      # module law). Pure Unicode either way, so no catalog is opened.
+      def non_han_char_card(config, input)
+        universal = Nabu::Ucd.load_default(config: config)&.then do |ucd|
+          Nabu::Query::Char.universal(input, ucd)
+        end
+        return print_universal_char_card(input, universal) if universal
+
         reduced = Nabu::Query::Char.reduced(input)
         return say(JSON.pretty_generate(Nabu::Query::Char.reduced_json_payload(input, reduced))) if
           options[:json]
@@ -7850,16 +7856,41 @@ module Nabu
         say "search: nabu search #{reduced.glyph}"
       end
 
+      # The universal char card (P85-B2): the UCD identity layer, rendered.
+      # Absent layers stay absent (binding-honesty) — numeric value, combining
+      # class and decomposition print only when the character carries them.
+      def print_universal_char_card(input, card)
+        payload = Nabu::Query::Char.universal_json_payload(input, card)
+        return say(JSON.pretty_generate(payload)) if options[:json]
+
+        say "#{card.glyph}  #{card.codepoint}#{"  ·  #{card.script}" if card.script}"
+        say ""
+        say "#{card.name} — #{card.category}"
+        say "numeric value: #{card.numeric}" if card.numeric
+        say "combining class: #{card.combining_class}" if card.combining_class.positive?
+        print_universal_decomposition(card.decomposition) if card.decomposition
+        say ""
+        say "search: nabu search #{card.glyph}"
+      end
+
+      def print_universal_decomposition(decomp)
+        pieces = decomp.parts.map do |part|
+          "#{part.glyph} (#{part.codepoint}#{" #{part.name}" if part.name})"
+        end
+        label = decomp.kind ? "decomposes (#{decomp.kind})" : "decomposes"
+        say "#{label}: #{pieces.join(' + ')}"
+      end
+
       # The editorial/house-mark card (P85): what a single mark (⟦ ⌈ ⸀ ⿰ …)
       # MEANS in this library — its convention, the `--display` knob that
       # transforms it, and where it comes from. Pure config read (Nabu's own
       # convention, config/editorial_marks.yml), no catalog. The one card no
       # external Unicode tool can supply.
-      def editorial_marks_char_card(input)
+      def editorial_marks_char_card(config, input)
         mark = Nabu::EditorialMarks.lookup(input)
         # The dispatch set and the table are pinned to agree, so a routed mark
-        # is always found; fall back to the reduced card if that ever drifts.
-        return non_han_char_card(input) unless mark
+        # is always found; fall back to the universal/reduced card if it drifts.
+        return non_han_char_card(config, input) unless mark
 
         if options[:json]
           return say(JSON.pretty_generate(
