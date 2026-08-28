@@ -1,0 +1,25 @@
+# confusables.txt
+# Date: 2024-08-14, 23:39:57 GMT
+# © 2024 Unicode®, Inc.
+# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+# For terms of use and license, see https://www.unicode.org/terms_of_use.html
+#
+# Unicode Security Mechanisms for UTS #39
+# Version: 16.0.0
+#
+# For documentation and usage, see https://www.unicode.org/reports/tr39
+#
+237A ;	0061 ;	MA	#* ( ⍺ → a ) APL FUNCTIONAL SYMBOL ALPHA → LATIN SMALL LETTER A	# →α→
+FF41 ;	0061 ;	MA	# ( ａ → a ) FULLWIDTH LATIN SMALL LETTER A → LATIN SMALL LETTER A	# →а→
+1D41A ;	0061 ;	MA	# ( 𝐚 → a ) MATHEMATICAL BOLD SMALL A → LATIN SMALL LETTER A	# 
+1D44E ;	0061 ;	MA	# ( 𝑎 → a ) MATHEMATICAL ITALIC SMALL A → LATIN SMALL LETTER A	# 
+1D482 ;	0061 ;	MA	# ( 𝒂 → a ) MATHEMATICAL BOLD ITALIC SMALL A → LATIN SMALL LETTER A	# 
+1D4B6 ;	0061 ;	MA	# ( 𝒶 → a ) MATHEMATICAL SCRIPT SMALL A → LATIN SMALL LETTER A	# 
+1D4EA ;	0061 ;	MA	# ( 𝓪 → a ) MATHEMATICAL BOLD SCRIPT SMALL A → LATIN SMALL LETTER A	# 
+1D51E ;	0061 ;	MA	# ( 𝔞 → a ) MATHEMATICAL FRAKTUR SMALL A → LATIN SMALL LETTER A	# 
+1D552 ;	0061 ;	MA	# ( 𝕒 → a ) MATHEMATICAL DOUBLE-STRUCK SMALL A → LATIN SMALL LETTER A	# 
+1D586 ;	0061 ;	MA	# ( 𝖆 → a ) MATHEMATICAL BOLD FRAKTUR SMALL A → LATIN SMALL LETTER A	# 
+1D5BA ;	0061 ;	MA	# ( 𝖺 → a ) MATHEMATICAL SANS-SERIF SMALL A → LATIN SMALL LETTER A	# 
+1D5EE ;	0061 ;	MA	# ( 𝗮 → a ) MATHEMATICAL SANS-SERIF BOLD SMALL A → LATIN SMALL LETTER A	# 
+1D622 ;	0061 ;	MA	# ( 𝘢 → a ) MATHEMATICAL SANS-SERIF ITALIC SMALL A → LATIN SMALL LETTER A	# 
+1D656 ;	0061 ;	MA	# ( 𝙖 → a ) MATHEMATICAL SANS-SERIF BOLD ITALIC SMALL A → LATIN SMALL LETTER A	# 

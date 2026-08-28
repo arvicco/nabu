@@ -3564,13 +3564,16 @@ ucd:
                    # participation is governed by kind + sync_policy, NEVER by
                    # wired (owner semantics ruling 2026-08-18)
   sync_policy: manual
-  # P85 (№R-44 = Shape C): UCD core (UnicodeData.txt) — the universal
-  # character-identity backbone of `nabu char`: name, general category,
-  # numeric value and canonical decomposition for EVERY Unicode code point,
-  # the "any character, any writing system" floor. FileFetch one flat file on
-  # a versioned immutable pin (17.0.0). LICENSE: Unicode License v3 (MIT-style)
-  # → open, the Unihan/Unikemet class. Blocks.txt (block NAMES) is a planned
-  # follow-on (FileFetch is single-file).
+  # P85 (№R-44 = Shape C): UCD core — the universal character-identity
+  # backbone of `nabu char`: name, general category, numeric value and
+  # canonical decomposition for EVERY Unicode code point, the "any character,
+  # any writing system" floor. P86-1 (№R-49a/b) widened the ingest to the
+  # useful-context member set: ONE ZipFetch of UCD.zip on the versioned
+  # immutable pin (17.0.0 — Blocks/Scripts/NameAliases/DerivedAge/Jamo/
+  # NamesList/radicals/Tangut-Nushu sources ride the same artifact), plus
+  # confusables.txt from the security tree's OWN version line (16.0.0 —
+  # UTS #39 lags the main release) under canonical/ucd/security/. LICENSE:
+  # Unicode License v3 (MIT-style) → open, the Unihan/Unikemet class.
 
 unikemet:
   adapter: Nabu::Adapters::Unikemet

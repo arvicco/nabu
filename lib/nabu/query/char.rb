@@ -91,10 +91,27 @@ module Nabu
       # absent the caller renders the reduced card, byte-identical (the
       # feature-module law). Corpus attestation and the curated overlay layer
       # onto this next; this is the canonical-reference layer alone.
+      # P86-1 (№R-49a) widens the identity layer with the member-context tier:
+      # +block+ ("Runic (U+16A0–U+16FF)"), +script_code+ (ISO 15924 "Runr" —
+      # +script+ upgrades from the probe list to the Scripts.txt name when the
+      # member is held), +age+ ("3.0"), +aliases+ (formal NameAliases rows),
+      # +chart_aliases+/+chart_notes+/+see_also+ (the NamesList charts
+      # annotation layer, labeled as informative). Absent member → nil/[] and
+      # the card stays the P85 floor, line for line.
       Universal = Data.define(
         :glyph, :codepoint, :name, :category, :script, :numeric,
-        :combining_class, :decomposition
+        :combining_class, :decomposition,
+        :block, :script_code, :age, :aliases, :chart_aliases, :chart_notes, :see_also
       )
+
+      # A "see also" chart cross-reference, resolved against the seam when the
+      # target is held (glyph may be nil — the hex + chart text still serve).
+      SeeAlso = Data.define(:codepoint, :glyph, :text)
+
+      # const: render caps for the charts annotation layer — a display
+      # choice, not a census claim; truncation is announced at render.
+      CHART_NOTE_CAP = 3
+      CHART_SEE_ALSO_CAP = 4
 
       # One target of a decomposition: the piece's own code point, glyph and
       # UCD name (À → A + COMBINING GRAVE ACCENT), so the card can spell it out.
@@ -107,12 +124,26 @@ module Nabu
         glyph = Nabu::Normalize.nfc(glyph.to_s)
         char = ucd.lookup(glyph) or return nil
 
+        cp = char.codepoint
+        script = ucd.script(cp)
+        block = ucd.block(cp)
+        annotations = ucd.annotations(cp)
         Universal.new(
           glyph: glyph, codepoint: char.hex, name: char.display_name,
           category: char.category_label,
-          script: SCRIPT_PROBES.find { |_, probe| glyph.match?(probe) }&.first,
+          script: script&.name || SCRIPT_PROBES.find { |_, probe| glyph.match?(probe) }&.first,
           numeric: char.numeric, combining_class: char.combining_class,
-          decomposition: decomposition_of(char, ucd)
+          decomposition: decomposition_of(char, ucd),
+          block: block && format("%<name>s (U+%<first>04X–U+%<last>04X)",
+                                 name: block.name, first: block.range.first,
+                                 last: block.range.last),
+          script_code: script&.code, age: ucd.age(cp), aliases: ucd.name_aliases(cp),
+          chart_aliases: annotations&.aliases || [],
+          chart_notes: annotations&.notes || [],
+          see_also: (annotations&.crossrefs || []).map do |ref|
+            SeeAlso.new(codepoint: format("U+%04X", ref.codepoint),
+                        glyph: ucd.lookup(ref.codepoint)&.glyph, text: ref.text)
+          end
         )
       end
 

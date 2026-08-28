@@ -1,0 +1,42 @@
+# Scripts-17.0.0.txt
+# Date: 2025-07-24, 13:28:55 GMT
+# © 2025 Unicode®, Inc.
+# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+# For terms of use and license, see https://www.unicode.org/terms_of_use.html
+#
+# Unicode Character Database
+#   For documentation, see https://www.unicode.org/reports/tr44/
+# For more information, see:
+#   UAX #24, Unicode Script Property: https://www.unicode.org/reports/tr24/
+#     Especially the sections:
+#       https://www.unicode.org/reports/tr24/#Assignment_Script_Values
+#       https://www.unicode.org/reports/tr24/#Assignment_ScriptX_Values
+#
+
+# ================================================
+
+# Property:	Script
+
+#  All code points not explicitly listed for Script
+#  have the value Unknown (Zzzz).
+
+# @missing: 0000..10FFFF; Unknown
+
+# ================================================
+
+0041..005A    ; Latin # L&  [26] LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER Z
+0061..007A    ; Latin # L&  [26] LATIN SMALL LETTER A..LATIN SMALL LETTER Z
+2160..2182    ; Latin # Nl  [35] ROMAN NUMERAL ONE..ROMAN NUMERAL TEN THOUSAND
+05D0..05EA    ; Hebrew # Lo  [27] HEBREW LETTER ALEF..HEBREW LETTER TAV
+0660..0669    ; Arabic # Nd  [10] ARABIC-INDIC DIGIT ZERO..ARABIC-INDIC DIGIT NINE
+0BD0          ; Tamil # Lo       TAMIL OM
+AC00..D7A3    ; Hangul # Lo [11172] HANGUL SYLLABLE GA..HANGUL SYLLABLE HIH
+16A0..16EA    ; Runic # Lo  [75] RUNIC LETTER FEHU FEOH FE F..RUNIC LETTER X
+3041..3096    ; Hiragana # Lo  [86] HIRAGANA LETTER SMALL A..HIRAGANA LETTER SMALL KE
+4E00..9FFF    ; Han # Lo [20992] CJK UNIFIED IDEOGRAPH-4E00..CJK UNIFIED IDEOGRAPH-9FFF
+10300..1031F  ; Old_Italic # Lo  [32] OLD ITALIC LETTER A..OLD ITALIC LETTER ESS
+10330..10340  ; Gothic # Lo  [17] GOTHIC LETTER AHSA..GOTHIC LETTER PAIRTHRA
+10341         ; Gothic # Nl       GOTHIC LETTER NINETY
+0300..036F    ; Inherited # Mn [112] COMBINING GRAVE ACCENT..COMBINING LATIN SMALL LETTER X
+12000..12399  ; Cuneiform # Lo [922] CUNEIFORM SIGN A..CUNEIFORM SIGN U U
+13000..1342F  ; Egyptian_Hieroglyphs # Lo [1072] EGYPTIAN HIEROGLYPH A001..EGYPTIAN HIEROGLYPH V011D
