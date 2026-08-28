@@ -303,6 +303,19 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  def test_universal_card_corpus_panel_is_era_honest
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char α]) }
+      assert_match(/corpus attestation: no live passage carries it/, out,
+                   "a current-class index answers a real zero, never a silent nothing")
+
+      kana, = with_config(config) { run_cli(%w[char と]) }
+      assert_match(/corpus attestation: jpn 1/, kana,
+                   "B3: the widened postings attest the rig's jpn kana — Q50's own char")
+    end
+  end
+
   # Copy the trimmed real UCD fixtures into the instance's canonical tree, so
   # `nabu char` finds the identity floor and (by default) the member-context
   # tier, as after `nabu sync ucd`. members: false seeds the bare P85 floor.

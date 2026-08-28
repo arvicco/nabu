@@ -7942,8 +7942,10 @@ module Nabu
       end
 
       # Gather the other-lens panels for a single glyph: the reverse-reading
-      # matches (the same query the :name lane runs) and the UTS #39
-      # confusables cluster. Multi-char input never panels.
+      # matches (the same query the :name lane runs), the UTS #39 confusables
+      # cluster, and (non-ASCII only — plain letters occur everywhere and
+      # attest nothing) the corpus-attestation postings. Multi-char input
+      # never panels.
       def char_ambiguity_panels(config, input)
         return {} unless input.each_char.one?
 
@@ -7958,8 +7960,15 @@ module Nabu
           matches = Nabu::Query::Char.new(catalog: catalog).characters_for_reading(input)
           panels[:readings] = matches if matches.any?
         end
+        if catalog && input.match?(/[^\x00-\x7F]/)
+          fulltext = open_fulltext(config)
+          corpus = Nabu::Query::Char.new(catalog: catalog, fulltext: fulltext)
+                                    .universal_corpus(input)
+          panels[:corpus] = corpus if corpus
+        end
         panels
       ensure
+        fulltext&.disconnect
         catalog&.disconnect
       end
 
@@ -7975,15 +7984,34 @@ module Nabu
               "#{labels.join(' · ')}"
           say "  … nabu char #{input} --as reading for all #{matches.size}" if matches.size > shown.size
         end
-        return unless (partners = panels[:looks_like])
-
-        shown = partners.first(Nabu::Query::Char::LOOKS_LIKE_CAP)
-        pieces = shown.map do |(hex, char)|
-          [char&.glyph, hex, char&.display_name].compact.join(" ")
+        if (partners = panels[:looks_like])
+          shown = partners.first(Nabu::Query::Char::LOOKS_LIKE_CAP)
+          pieces = shown.map do |(hex, char)|
+            [char&.glyph, hex, char&.display_name].compact.join(" ")
+          end
+          say ""
+          say "looks like: #{pieces.join(' · ')}" \
+              "#{" · … #{partners.size - shown.size} more" if partners.size > shown.size}"
         end
+        print_corpus_panel(panels[:corpus])
+      end
+
+      # The B3 corpus line, era-honest: counts from a current-class index;
+      # zero on a current-class index is a real zero; a miss on a legacy
+      # (pre-widening) index names the rebuild instead of lying "0".
+      def print_corpus_panel(corpus)
+        return unless corpus
+
         say ""
-        say "looks like: #{pieces.join(' · ')}" \
-            "#{" · … #{partners.size - shown.size} more" if partners.size > shown.size}"
+        if corpus.counts.any?
+          ranked = corpus.counts.sort_by { |_, docs| -docs }
+          say "corpus attestation: #{ranked.map { |lang, docs| "#{lang || '?'} #{docs}" }.join(' · ')}"
+        elsif corpus.class_stamp
+          say "corpus attestation: no live passage carries it"
+        else
+          say "corpus attestation: the char index predates the P86 non-ASCII widening — " \
+              "the next rebuild re-accumulates it"
+        end
       end
 
       def reading_panel_noun(matches)
@@ -8005,6 +8033,9 @@ module Nabu
           out["looks_like"] = partners.map do |(hex, char)|
             { "codepoint" => hex, "glyph" => char&.glyph, "name" => char&.display_name }
           end
+        end
+        if (corpus = panels[:corpus])
+          out["corpus"] = { "counts" => corpus.counts, "class" => corpus.class_stamp }
         end
         out.empty? ? {} : { "panels" => out }
       end

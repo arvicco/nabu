@@ -924,21 +924,41 @@ module Store
 
     # The postings ride the SAME streaming pass as the fts/lemma tables:
     # per (source, char, language), the count of live passages containing
-    # each Han character. Desk time is one B-tree lookup.
+    # each character outside plain ASCII (P86-3 widened the class from
+    # Han-only — the universal card's corpus panel for any script). Desk
+    # time is one B-tree lookup.
 
-    def test_char_postings_count_han_chars_per_language_docwise
+    def test_char_postings_count_non_ascii_chars_per_language_docwise
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "棄而棄之", sequence: 0, language: "lzh")
       make_passage(doc, urn: "urn:d:s:2", text_normalized: "棄の国", sequence: 1, language: "jpn")
       make_passage(doc, urn: "urn:d:s:3", text_normalized: "no han here", sequence: 2, language: "eng")
+      make_passage(doc, urn: "urn:d:s:4", text_normalized: "μῆνιν ἄειδε", sequence: 3, language: "grc")
       rebuild!
 
       assert_equal 1, postings.where(char: "棄", language: "lzh").get(:docs),
                    "a char twice in ONE passage counts one doc"
       assert_equal 1, postings.where(char: "棄", language: "jpn").get(:docs)
       assert_equal 1, postings.where(char: "国").get(:docs)
-      assert_empty postings.where(language: "eng").all, "han-less passages contribute nothing"
-      assert_empty postings.where(char: "の").all, "kana is not a Han posting"
+      assert_empty postings.where(language: "eng").all, "plain-ASCII passages contribute nothing"
+      assert_equal 1, postings.where(char: "の").get(:docs),
+                   "P86-3 (flipping the P65 Han-only pin): kana posts now"
+      assert_equal 1, postings.where(char: "μ", language: "grc").get(:docs),
+                   "Greek posts — the widening's point"
+    end
+
+    def test_char_postings_carry_the_class_stamp_on_full_builds_only
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "棄", sequence: 0, language: "lzh")
+      rebuild!
+      stamp = postings.where(source_id: Nabu::Store::Indexer::POSTINGS_CLASS_SOURCE)
+      assert_equal 1, stamp.count, "one sentinel row, idempotent across rebuilds"
+      assert_equal Nabu::Store::Indexer::POSTINGS_CLASS, stamp.get(:language)
+      rebuild!
+      assert_equal 1, postings.where(source_id: Nabu::Store::Indexer::POSTINGS_CLASS_SOURCE).count
+      assert_empty postings.where(char: "").exclude(
+        source_id: Nabu::Store::Indexer::POSTINGS_CLASS_SOURCE
+      ).all, "the sentinel never collides with a real posting"
     end
 
     def test_char_postings_exclude_withdrawn_and_are_idempotent

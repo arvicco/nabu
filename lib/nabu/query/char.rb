@@ -327,6 +327,23 @@ module Nabu
         )
       end
 
+      # The universal card's corpus panel (P86-3, B3): the per-language
+      # postings for a glyph + the index's class stamp, so the renderer can
+      # tell an honest ZERO (current-class index, char truly unattested)
+      # from an index built before the non-ASCII widening. nil when no
+      # postings index is held (the not-indexed hint renders instead).
+      PostingsPanel = Data.define(:counts, :class_stamp)
+
+      def universal_corpus(glyph)
+        table = Nabu::Store::Indexer::CHAR_POSTINGS_TABLE
+        return nil unless @fulltext&.table_exists?(table)
+
+        stamp = @fulltext[table]
+                .where(source_id: Nabu::Store::Indexer::POSTINGS_CLASS_SOURCE)
+                .get(:language)
+        PostingsPanel.new(counts: corpus_attestation(glyph) || {}, class_stamp: stamp)
+      end
+
       private
 
       # unihan kMandarin values ("wén", space-separated when several) vs the
