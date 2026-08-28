@@ -391,10 +391,16 @@ module Nabu
           kun_hits = if kun
                        body_list(body, "kun").filter_map do |reading|
                          base = reading.delete("-")
+                         # The okurigana-STEM alternative (一 ひと.つ answers
+                         # ひと) applies to multi-kana queries ONLY: for a
+                         # single kana the stem would claim every kun reading
+                         # that merely starts with it (the 2026-08-28 owner
+                         # defect — `char a` listed 153 okurigana stems as
+                         # "readings a"). One kana = full readings only.
+                         forms = [base.delete(".")]
+                         forms << base.split(".").first if target.each_char.count > 1
                          ReadingMatch.new(glyph: headword, reading: reading, kind: "kun") if
-                           [base.delete("."), base.split(".").first].map do |form|
-                             to_hiragana(form)
-                           end.include?(target)
+                           forms.map { |form| to_hiragana(form) }.include?(target)
                        end
                      else
                        []
