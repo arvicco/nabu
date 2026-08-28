@@ -211,6 +211,8 @@ class CharCommandTest < Minitest::Test
 
       hangul, = with_config(config) { run_cli(%w[char 입]) }
       assert_match(/HANGUL SYLLABLE IB — Other Letter/, hangul)
+      assert_match(/decomposes \(jamo\): ᄋ \(U\+110B\) \+ ᅵ \(U\+1175 I\) \+ ᆸ \(U\+11B8 B\)/, hangul,
+                   "the B4 hangul fix: the syllable spells its jamo through Jamo.txt")
     end
   end
 
