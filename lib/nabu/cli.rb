@@ -8067,6 +8067,10 @@ module Nabu
         say "block: #{card.block}" if card.block
         say "script: #{card.script} (#{card.script_code})" if card.script_code
         say "in Unicode since #{card.age}" if card.age
+        card.numerals.each do |numeral|
+          suffix = numeral.extended ? ", extended/sofit convention" : ""
+          say "numeric (#{numeral.scheme}): #{numeral.value}#{suffix} — #{numeral.name}"
+        end
         card.aliases.each do |a|
           say "#{a.type == 'correction' ? 'corrected name' : "#{a.type} alias"}: #{a.name}"
         end
