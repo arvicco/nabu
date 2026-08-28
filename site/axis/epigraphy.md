@@ -37,7 +37,7 @@ A source wears every desk it serves — these twenty-one answer this desk. Holdi
 | `edr` | inscriptions | attribution | wired · manual | 115,590 docs / 596,064 passages |
 | `elephantine` | papyri & ostraca | attribution | wired · manual | 15,539 docs / 69,350 passages |
 | `nabu-places` | feature module | attribution | wired · manual | nothing held yet |
-| `ucd` | feature module | open | not yet wired | nothing held yet |
+| `ucd` | feature module | open | wired · manual | nothing held yet |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 August 2026)</span>: `lat` 195,002 · `grc` 74,274 · `hit` 21,209 · `non` 20,442 · `eng` 14,964 · `ett` 6,259 · `swe` 3,393 · `egy` 3,047 · `arc` 2,970 · `cop` 2,515 … and 55 more (`nabu axis epigraphy` lists all).
 
