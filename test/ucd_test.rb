@@ -204,6 +204,12 @@ class UcdTest < Minitest::Test
     assert_nil @ucd.jamo_short_name(0x0061)
   end
 
+  def test_hangul_jamo_decomposition_is_algorithmic
+    assert_equal [0x110B, 0x1175, 0x11B8], @ucd.hangul_jamo(0xC785) # 입 = ᄋ ᅵ ᆸ
+    assert_equal [0x1100, 0x1161], @ucd.hangul_jamo(0xAC00), "가 has no trailing jamo"
+    assert_nil @ucd.hangul_jamo(0x0061), "not a Hangul syllable → nil"
+  end
+
   def test_member_lookups_degrade_when_files_are_absent
     Dir.mktmpdir do |dir|
       FileUtils.cp(FIXTURE, File.join(dir, "UnicodeData.txt"))

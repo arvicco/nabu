@@ -156,7 +156,8 @@ module Nabu
       end
 
       def self.decomposition_of(char, ucd)
-        decomp = char.decomposition or return nil
+        decomp = char.decomposition
+        return hangul_decomposition_of(char, ucd) if decomp.nil?
 
         parts = decomp.codepoints.map do |code|
           target = ucd.lookup(code)
@@ -164,6 +165,20 @@ module Nabu
                          glyph: target&.glyph, name: target&.display_name)
         end
         UniversalDecomp.new(kind: decomp.kind, parts: parts)
+      end
+
+      # A Hangul syllable's decomposition is ALGORITHMIC (UnicodeData lists
+      # none): the §3.12 jamo arithmetic + Jamo.txt short names — the P86-4
+      # hangul fix (`char 입` spells ᄋ + ᅵ (I) + ᆸ (B)).
+      def self.hangul_decomposition_of(char, ucd)
+        jamo = ucd.hangul_jamo(char.codepoint) or return nil
+
+        parts = jamo.map do |code|
+          short = ucd.jamo_short_name(code)
+          DecompPart.new(codepoint: format("U+%04X", code), glyph: code.chr(Encoding::UTF_8),
+                         name: short.to_s.empty? ? nil : short)
+        end
+        UniversalDecomp.new(kind: "jamo", parts: parts)
       end
 
       def self.universal_json_payload(glyph, universal)

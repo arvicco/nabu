@@ -336,6 +336,26 @@ module Nabu
         member(:jamo) { parse_jamo }[codepoint]
       end
 
+      # const: the Hangul syllable block and the three jamo block bases —
+      # Unicode §3.12 arithmetic, fixed by the standard, not a census.
+      HANGUL_SYLLABLES = (0xAC00..0xD7A3)
+      JAMO_L_BASE = 0x1100
+      JAMO_V_BASE = 0x1161
+      JAMO_T_BASE = 0x11A7
+
+      # The algorithmic jamo decomposition of a Hangul syllable (Unicode
+      # §3.12): [leading, vowel, trailing?] jamo code points — the B4 fix
+      # that lets `char 입` spell ᄋ + ᅵ + ᆸ. nil for a non-syllable.
+      def hangul_jamo(codepoint)
+        return nil unless HANGUL_SYLLABLES.cover?(codepoint)
+
+        index = codepoint - HANGUL_SYLLABLES.first
+        trailing = index % 28
+        parts = [JAMO_L_BASE + (index / (28 * 21)), JAMO_V_BASE + ((index / 28) % 21)]
+        parts << (JAMO_T_BASE + trailing) if trailing.positive?
+        parts
+      end
+
       private
 
       def range_char(code)
