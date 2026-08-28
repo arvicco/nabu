@@ -10,7 +10,7 @@ referential-integrity gaps the drift guard exists to catch).
 - **Retrieved:** 2026-08-07 (re-adopted at the P61-3 script-suffix
   suite — 27 universal surface-verified codemap rows + 10 bare anchors
   (94 total) carrying their targets; on top of the P60-0 script axis:
-  the `~script` grammar segment, the global `scripts:` table with 20
+  the `~script` grammar segment, the global `scripts:` table with 26
   ISO 15924 rows, ortho `script:` scopes), from the owner's live
   checkout (`~/Dev/nabu-lects`, clean at commit
   `12aea619029e5266bea18b384eb5f6cb15577143`, the repo's `main`).
