@@ -110,7 +110,7 @@ module Nabu
         :glyph, :codepoint, :name, :category, :script, :numeric,
         :combining_class, :decomposition,
         :block, :script_code, :age, :aliases, :chart_aliases, :chart_notes, :see_also,
-        :numerals
+        :numerals, :script_context, :script_desk
       )
 
       # A "see also" chart cross-reference, resolved against the seam when the
@@ -140,6 +140,7 @@ module Nabu
         script = ucd.script(cp)
         block = ucd.block(cp)
         annotations = ucd.annotations(cp)
+        dossier = script&.code && Nabu::ScriptDossiers.lookup(script.code)
         Universal.new(
           glyph: glyph, codepoint: char.hex, name: char.display_name,
           category: char.category_label,
@@ -156,7 +157,8 @@ module Nabu
             SeeAlso.new(codepoint: format("U+%04X", ref.codepoint),
                         glyph: ucd.lookup(ref.codepoint)&.glyph, text: ref.text)
           end,
-          numerals: Nabu::CharNumerals.lookup(glyph)
+          numerals: Nabu::CharNumerals.lookup(glyph),
+          script_context: dossier&.context, script_desk: dossier&.desk
         )
       end
 

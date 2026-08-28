@@ -313,6 +313,15 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  def test_universal_card_composes_the_curated_script_dossier
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char ᚠ]) }
+      assert_match(/script context: The Germanic angular alphabets/, out)
+      assert_match(/desk: The runic shelf \(Rundata\)/, out)
+    end
+  end
+
   def test_universal_card_corpus_panel_is_era_honest
     with_char_catalog do |config|
       seed_ucd(config)

@@ -8071,6 +8071,8 @@ module Nabu
           suffix = numeral.extended ? ", extended/sofit convention" : ""
           say "numeric (#{numeral.scheme}): #{numeral.value}#{suffix} — #{numeral.name}"
         end
+        say "script context: #{card.script_context}" if card.script_context
+        say "desk: #{card.script_desk}" if card.script_desk
         card.aliases.each do |a|
           say "#{a.type == 'correction' ? 'corrected name' : "#{a.type} alias"}: #{a.name}"
         end

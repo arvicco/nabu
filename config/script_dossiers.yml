@@ -1,0 +1,308 @@
+# Per-script curated dossiers (P86-4c, №R-49) — the human-written context
+# the char card composes beneath a script's mechanical identity: what the
+# writing system IS, when and how it ran, and the reading/transliteration
+# conventions THIS library's shelves actually use. Keys are the registry's
+# script tags (nabu-lects global scripts table — the drift guard's suite
+# covers the correspondence); prose is own authorship (no Wikipedia text),
+# written against the standard handbooks and our own shelves' conventions.
+#
+# Published as nabu-data `mul/script-dossiers` (the wylie-fold pattern:
+# config is the source of truth, the dataset is its public mirror); the
+# card reads THIS file, so every install answers identically with no
+# sync dependency.
+#
+# Fields: name (display, agrees with the registry row), context (the
+# paragraph), desk (how OUR shelves hold/transliterate it — omitted when
+# nothing shelf-specific applies).
+
+latn:
+  name: Latin
+  context: >-
+    The Roman alphabet, running left-to-right from the 7th c. BCE to the
+    present; the vast majority of this library's medieval and early-modern
+    shelves are Latin-script, and it doubles as the transliteration surface
+    for many ancient-script corpora.
+  desk: >-
+    Many shelves hold ancient-language text AS Latin transliteration (the
+    ~latn surface claim); the artifact's original script, where it differs,
+    rides the artifact-script field, not the surface claim.
+
+grek:
+  name: Greek
+  context: >-
+    The Greek alphabet, adapted from Phoenician by the 8th c. BCE — the
+    first alphabet with full vowel letters. Classical texts are polytonic
+    (breathings + three accents); the library's largest single language
+    (Ancient Greek) runs on it, Homer through the papyri.
+  desk: >-
+    Polytonic throughout the ancient shelves; betacode input folds to
+    Greek in search. Letters double as Milesian numerals (the isopsephy
+    table renders per-letter values).
+
+ogam:
+  name: Ogham
+  context: >-
+    The early Irish stroke script, carved along stone edges, chiefly
+    4th–6th c. CE — some 400 monument inscriptions, mostly names, the
+    earliest written Irish (and some Pictish).
+  desk: >-
+    The ogham shelf holds both the stroke characters and their standard
+    Latin transliterations; a lat~ogam claim exists (Latin text carved in
+    ogham strokes).
+
+deva:
+  name: Devanagari (Nagari)
+  context: >-
+    The North-Indian abugida (consonants carry an inherent vowel, marks
+    modify it), standard for Sanskrit printing since the 19th c. and for
+    Hindi and Nepali today; the library's Sanskrit shelves meet it beside
+    romanized IAST.
+  desk: >-
+    Sanskrit shelves hold Devanagari and IAST side by side; the san-Deva /
+    san-Latn codemap rows carry the surface distinction.
+
+ital:
+  name: Old Italic (Etruscan, Oscan, etc.)
+  context: >-
+    The family of pre-Roman Italian alphabets derived from Euboean Greek —
+    Etruscan (usually right-to-left), Oscan, Umbrian, Faliscan and their
+    kin, 7th–1st c. BCE; the ancestors of the Latin alphabet.
+  desk: >-
+    The Italic epigraphic shelves mostly hold Latin-script transliteration
+    (the -Ital-x- tag convention is per-collection knowledge); Unicode Old
+    Italic appears where editions carry it.
+
+egyd:
+  name: Egyptian demotic
+  context: >-
+    The late cursive stage of Egyptian writing (roughly 7th c. BCE – 5th
+    c. CE), used for contracts, letters and literature — the middle script
+    of the Rosetta Stone. It has NO Unicode encoding: demotic text
+    survives digitally only as transliteration.
+  desk: >-
+    An artifact-script fact only (~egyd never occurs as a held surface) —
+    demotic documents in the papyrological shelves are held in Latin
+    transliteration with the artifact script recorded as egyd.
+
+egyp:
+  name: Egyptian hieroglyphs
+  context: >-
+    The monumental Egyptian script — logograms, phonograms and classifiers
+    in one system — from c. 3200 BCE to the 4th c. CE. Unicode encodes
+    5,000+ signs (the Gardiner-style repertoire), and the Unikemet data
+    file is its normative per-sign registry.
+  desk: >-
+    The Egyptian card (`nabu char 𓅃` or a Gardiner-style code like G5)
+    rides the Unikemet instrument; corpus shelves carry the MdC/Unicode
+    layers where editions provide them.
+
+xsux:
+  name: Cuneiform, Sumero-Akkadian
+  context: >-
+    Wedge-writing on clay, c. 3200 BCE to the 1st c. CE — the longest-lived
+    writing system in history, carrying Sumerian, Akkadian, Hittite and
+    more. One sign can be a word-sign, a syllable or a determinative; the
+    Oracc Sign List is the modern registry of sign identities.
+  desk: >-
+    The ATF corpora (CDLI, Oracc, eBL…) hold transliteration as the
+    primary surface; `nabu char 𒊬` and `nabu signs` resolve through the
+    OSL instrument; C-ATF ASCII folds (sz→š, s,→ṣ) apply on input.
+
+hebr:
+  name: Hebrew
+  context: >-
+    The Jewish square script (an Aramaic-derived abjad, right-to-left),
+    standard for Hebrew and Jewish Aramaic since the last centuries BCE;
+    the Masoretic pointing system adds vowels and cantillation as
+    combining marks.
+  desk: >-
+    Masoretic texts are held in their upstream combining-mark order — hbo
+    and arc are on the NFC exemption list (normalizing would break the
+    pointing; owner ruling 2026-07-18). Letters carry gematria values
+    (rendered from the numerals table).
+
+arab:
+  name: Arabic
+  context: >-
+    The cursive right-to-left abjad, from the 4th c. CE Nabataean line;
+    positional letter forms and optional vowel pointing. Beyond Arabic it
+    historically wrote Persian, Ottoman Turkish and many others.
+  desk: >-
+    Letters carry the Mashriqi abjad numeral values (the ḥisāb al-jummal
+    table); classical shelves hold pointed and unpointed text as upstream
+    provides it.
+
+syrc:
+  name: Syriac
+  context: >-
+    The cursive Aramaic script of Edessa (right-to-left), in three styles —
+    Estrangela, Serto (West), East Syriac — carrying the Peshitta and the
+    great Syriac Christian literature from the 1st c. CE onward.
+  desk: >-
+    The Peshitta and Syriac shelves hold Unicode Syriac; SBL-style
+    transliteration meets it in the search fold where registered.
+
+copt:
+  name: Coptic
+  context: >-
+    The last stage of Egyptian, written in Greek letters plus six or seven
+    signs taken from demotic, 3rd c. CE onward — the language of Egyptian
+    Christianity. Unicode disunified it from Greek in 4.1.
+  desk: >-
+    Coptic shelves (Scriptorium…) hold Unicode Coptic; Greek loanwords
+    inside Coptic text are the classic mixed-script posture case.
+
+cyrl:
+  name: Cyrillic
+  context: >-
+    The Slavic alphabet built on Greek uncial with additions for Slavic
+    sounds, from the First Bulgarian Empire (c. 900 CE); Church Slavonic
+    manuscripts through modern Slavic languages. Early Cyrillic letters
+    double as numerals under the titlo mark.
+  desk: >-
+    The OCS/Church Slavonic shelves hold early-Cyrillic repertoire
+    (yers, yuses, ѣ); titlo numeral values render from the numerals
+    table; Latin-diplomatic spellings meet Cyrillic in the Slavic search
+    folds.
+
+glag:
+  name: Glagolitic
+  context: >-
+    The FIRST Slavic alphabet, devised by Cyril and Methodius (860s CE),
+    with an angular Croatian line that lived into the early modern period;
+    most of the oldest Church Slavonic monuments are Glagolitic. Its
+    letters carry numeral values in their OWN alphabet order (not the
+    Cyrillic-mirrored-Greek order — that table is deferred until entered
+    against a checked source).
+  desk: >-
+    Glagolitic appears in the OCS dictionary shelves as variant forms
+    rather than passage text; the search hint layer names the absence of
+    a cross-script fold honestly.
+
+armn:
+  name: Armenian
+  context: >-
+    Mesrop Mashtots' alphabet (c. 405 CE), created for the Armenian Bible
+    translation — 36 original letters, left-to-right, with its own
+    numeral convention; the vehicle of the whole classical Armenian
+    literature.
+
+hant:
+  name: Han (Traditional variant)
+  context: >-
+    The Chinese characters in their full traditional forms — the script of
+    the classical canon and of the library's largest holdings (the
+    Buddhist canons, the classical corpus). One character is typically one
+    morpheme; readings differ per language and era.
+  desk: >-
+    The Han card is the deep one (Unihan, KANJIDIC2, IDS decomposition,
+    OC/MC reconstructions, TLS); simplified-script queries reach the
+    traditional canon through the published hani-fold table.
+
+jpan:
+  name: Japanese (Han + Hiragana + Katakana)
+  context: >-
+    The composite Japanese surface: Han characters (kanji) for stems,
+    hiragana for grammar, katakana for emphasis and loans. A composite
+    claim at collection grain — its characters byte-classify per
+    component script.
+  desk: >-
+    Kana route to identity cards with the reading panel beside them
+    (`--as reading` for the pure query); kyūjitai↔shinjitai reform pairs
+    cross-reference on the Han card; romaji reaches readings (CAPS=on,
+    lowercase=kun).
+
+phnx:
+  name: Phoenician
+  context: >-
+    The 22-letter consonantal alphabet of the Levantine coast (c. 1050
+    BCE onward), ancestor — directly or at one remove — of Greek, Aramaic,
+    Hebrew, Arabic and ultimately most alphabets in use today.
+
+runr:
+  name: Runic
+  context: >-
+    The Germanic angular alphabets ("futhark", after the first six
+    letters): the Elder Futhark (c. 150–800 CE), the Anglo-Saxon futhorc,
+    and the Younger Futhark of the Viking Age — several thousand
+    inscriptions on stone, metal and wood. Runes have NO standard numeric
+    values (runic calendars use a separate golden-number system).
+  desk: >-
+    The runic shelf (Rundata) holds transliteration as the working
+    surface with Unicode runes where editions carry them.
+
+goth:
+  name: Gothic
+  context: >-
+    Wulfila's 4th-c. CE alphabet for the Gothic Bible — Greek uncial base
+    with Latin and runic admixture; almost everything surviving in it is
+    the Bible translation. Every letter doubles as a numeral; two letters
+    are numeral-only.
+  desk: >-
+    The Gothic corpora are held romanized (conventions §9); the search
+    hint layer says so instead of failing silently. Letter numeral values
+    render from the numerals table.
+
+tibt:
+  name: Tibetan
+  context: >-
+    The Tibetan abugida (7th c. CE, from a North-Indian model), stacking
+    consonant clusters vertically; the vehicle of the Kangyur/Tengyur
+    canons and the whole classical Tibetan literature.
+  desk: >-
+    The Tibetan shelves hold both Tibetan script and Wylie (EWTS)
+    romanization; the published wylie-fold table lets both meet in one
+    query space (xct~latn and Tibetan-script surfaces are distinct
+    claims).
+
+ethi:
+  name: Ethiopic (Geʿez)
+  context: >-
+    The Ethiopian syllabary — an abugida since the 4th c. CE vocalization,
+    written left-to-right (unusual for a Semitic-derived script); the
+    liturgical Geʿez literature and the Beta maṣāḥǝft manuscript corpus
+    run on it.
+
+hang:
+  name: Hangul
+  context: >-
+    The Korean featural alphabet, promulgated 1446 — letters model the
+    articulators, and jamo compose into syllable blocks. Unicode encodes
+    the blocks algorithmically; a syllable decomposes mechanically into
+    its jamo.
+  desk: >-
+    The card derives syllable names and jamo decomposition
+    algorithmically (§3.12 + Jamo.txt); the Korean stratum also rides the
+    Han card (kHangul readings) for Sino-Korean.
+
+avst:
+  name: Avestan
+  context: >-
+    The alphabet devised (c. 5th–6th c. CE, on a Pahlavi base) to record
+    the Avesta's recitation exactly — right-to-left, unusually rich in
+    vowel letters for precision over a sacred oral text.
+  desk: >-
+    The Avestan shelves hold scholarly romanization as the working
+    surface; Unicode Avestan appears where editions carry it. The
+    artifact-script field records avst for romanized holdings.
+
+ugar:
+  name: Ugaritic
+  context: >-
+    The cuneiform ALPHABET of Ugarit (13th c. BCE) — thirty wedge-formed
+    letters, a Semitic abjad in cuneiform clothing; the Baal cycle and
+    the Ugaritic corpus ride it.
+  desk: >-
+    The RSTI/Ugaritic shelves render real Unicode Ugaritic beside
+    transliteration at line grain; KTU/RS concordances resolve through
+    the sign-adjacent instruments.
+
+xpeo:
+  name: Old Persian cuneiform
+  context: >-
+    The syllabo-alphabetic cuneiform devised for the Achaemenid royal
+    inscriptions (6th–4th c. BCE, Behistun above all) — a deliberately
+    simple, largely new-made system, deciphered first among cuneiforms.
+  desk: >-
+    The Achaemenid shelves hold transliteration as the working surface;
+    the artifact-script field records xpeo.
