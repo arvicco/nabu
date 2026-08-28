@@ -226,13 +226,53 @@ class CharCommandTest < Minitest::Test
     end
   end
 
-  # Copy the trimmed real UnicodeData.txt fixture into the instance's canonical
-  # tree, so `nabu char` finds the UCD identity floor (as after `nabu sync ucd`).
-  def seed_ucd(config)
+  # --- the member-context tier (P86-1, №R-49a) ------------------------------
+
+  def test_universal_card_carries_block_script_and_age
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char ᚠ]) }
+      assert_match(/RUNIC LETTER FEHU FEOH FE F — Other Letter/, out)
+      assert_match(/block: Runic \(U\+16A0–U\+16FF\)/, out)
+      assert_match(/script: Runic \(Runr\)/, out)
+      assert_match(/in Unicode since 3\.0/, out)
+    end
+  end
+
+  def test_universal_card_renders_chart_annotations_and_formal_aliases
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char א]) }
+      assert_match(/charts: = aleph/, out)
+      assert_match(/see also: U\+2135 alef symbol/, out)
+    end
+  end
+
+  def test_universal_card_without_member_files_stays_the_p85_floor
+    with_char_catalog do |config|
+      seed_ucd(config, members: false)
+      out, = with_config(config) { run_cli(%w[char ᚠ]) }
+      assert_match(/RUNIC LETTER FEHU FEOH FE F — Other Letter/, out)
+      refute_match(/block:/, out, "absent member → absent line, never a guess")
+      refute_match(/in Unicode since/, out)
+    end
+  end
+
+  # Copy the trimmed real UCD fixtures into the instance's canonical tree, so
+  # `nabu char` finds the identity floor and (by default) the member-context
+  # tier, as after `nabu sync ucd`. members: false seeds the bare P85 floor.
+  def seed_ucd(config, members: true)
     dir = File.join(config.canonical_dir, "ucd")
     FileUtils.mkdir_p(dir)
-    FileUtils.cp(File.expand_path("fixtures/ucd/UnicodeData.txt", __dir__),
-                 File.join(dir, "UnicodeData.txt"))
+    fixture_dir = File.expand_path("fixtures/ucd", __dir__)
+    if members
+      FileUtils.cp_r(Dir[File.join(fixture_dir, "*.txt")], dir)
+      FileUtils.mkdir_p(File.join(dir, "security"))
+      FileUtils.mv(File.join(dir, "confusables.txt"),
+                   File.join(dir, "security", "confusables.txt"))
+    else
+      FileUtils.cp(File.join(fixture_dir, "UnicodeData.txt"), File.join(dir, "UnicodeData.txt"))
+    end
     Nabu::Ucd.reset!
   end
 

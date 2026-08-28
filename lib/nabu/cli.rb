@@ -7901,11 +7901,41 @@ module Nabu
         say "#{card.glyph}  #{card.codepoint}#{"  ·  #{card.script}" if card.script}"
         say ""
         say "#{card.name} — #{card.category}"
+        print_universal_context(card)
         say "numeric value: #{card.numeric}" if card.numeric
         say "combining class: #{card.combining_class}" if card.combining_class.positive?
         print_universal_decomposition(card.decomposition) if card.decomposition
+        print_universal_charts(card)
         say ""
         say "search: nabu search #{card.glyph}"
+      end
+
+      # The member-context tier (P86-1): block, script identity, age, formal
+      # aliases. Absent member → absent line (the P85 floor, byte-identical).
+      def print_universal_context(card)
+        say "block: #{card.block}" if card.block
+        say "script: #{card.script} (#{card.script_code})" if card.script_code
+        say "in Unicode since #{card.age}" if card.age
+        card.aliases.each do |a|
+          say "#{a.type == 'correction' ? 'corrected name' : "#{a.type} alias"}: #{a.name}"
+        end
+      end
+
+      # The NamesList charts annotation layer — informative, labeled as the
+      # charts' voice, capped at render (truncation announced; caps live on
+      # Nabu::Query::Char beside the card shape).
+      def print_universal_charts(card)
+        card.chart_aliases.each { |a| say "charts: = #{a}" }
+        card.chart_notes.first(Nabu::Query::Char::CHART_NOTE_CAP).each { |n| say "charts: * #{n}" }
+        if card.chart_notes.size > Nabu::Query::Char::CHART_NOTE_CAP
+          say "charts: … #{card.chart_notes.size - Nabu::Query::Char::CHART_NOTE_CAP} more note(s)"
+        end
+        card.see_also.first(Nabu::Query::Char::CHART_SEE_ALSO_CAP).each do |ref|
+          say "see also: #{"#{ref.glyph} " if ref.glyph}#{ref.codepoint} #{ref.text}".rstrip
+        end
+        return unless card.see_also.size > Nabu::Query::Char::CHART_SEE_ALSO_CAP
+
+        say "see also: … #{card.see_also.size - Nabu::Query::Char::CHART_SEE_ALSO_CAP} more"
       end
 
       def print_universal_decomposition(decomp)

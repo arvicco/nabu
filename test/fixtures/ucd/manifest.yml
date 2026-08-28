@@ -14,4 +14,70 @@ files:
   - path: UnicodeData.txt
     url: https://www.unicode.org/Public/17.0.0/ucd/UnicodeData.txt
     whole: false
-    trim: 20 of 40,575 lines — representative code points across scripts (Latin, Greek, Hebrew, Old Italic, Egyptian), a control, combining mark, canonical/compat/fraction decompositions, numeric values, and the CJK/Hangul First/Last range pairs; recipe in README.md
+    trim: 21 of 40,575 lines — representative code points across scripts (Latin, Greek, Hebrew, Runic, Old Italic, Egyptian), a control, combining mark, canonical/compat/fraction decompositions, numeric values, and the CJK/Hangul First/Last range pairs; recipe in README.md
+  # P86-1 (№R-49a): the member-context tier. All members ride the ONE
+  # UCD.zip artifact (the adapter's actual fetch); per-member URLs below
+  # name the same content's standalone form for reference. confusables.txt
+  # is the exception — the security tree, its own version line (16.0.0).
+  - path: Blocks.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/Blocks.txt
+    whole: false
+    trim: 18 real block rows of ~400, covering the identity cast; README.md
+  - path: Scripts.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/Scripts.txt
+    whole: false
+    trim: rows covering the cast's scripts; README.md
+  - path: ScriptExtensions.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/ScriptExtensions.txt
+    whole: false
+    trim: a handful of real rows incl. 30FC (Hira Kana); README.md
+  - path: NameAliases.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/NameAliases.txt
+    whole: false
+    trim: control names, abbreviations, and the FE18 correction; README.md
+  - path: DerivedAge.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/DerivedAge.txt
+    whole: false
+    trim: version rows covering the cast; README.md
+  - path: Jamo.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/Jamo.txt
+    whole: true
+  - path: CJKRadicals.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/CJKRadicals.txt
+    whole: true
+  - path: EquivalentUnifiedIdeograph.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/EquivalentUnifiedIdeograph.txt
+    whole: false
+    trim: the 2F4A (Kangxi wood) rows among real others; README.md
+  - path: PropertyValueAliases.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/PropertyValueAliases.txt
+    whole: false
+    trim: the full gc and sc sections; README.md
+  - path: NamesList.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/NamesList.txt
+    whole: false
+    trim: chart entries for the cast (05D0 aleph alias + crossref shapes); README.md
+  - path: NamedSequences.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/NamedSequences.txt
+    whole: false
+    trim: header + a handful of real rows; README.md
+  - path: StandardizedVariants.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/StandardizedVariants.txt
+    whole: false
+    trim: header + a handful of real rows; README.md
+  - path: DoNotEmit.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/DoNotEmit.txt
+    whole: false
+    trim: header + a handful of real rows; README.md
+  - path: TangutSources.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/TangutSources.txt
+    whole: false
+    trim: the U+17000-area rows; README.md
+  - path: NushuSources.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/NushuSources.txt
+    whole: false
+    trim: header + first real rows; README.md
+  - path: confusables.txt
+    url: https://www.unicode.org/Public/security/16.0.0/confusables.txt
+    whole: false
+    trim: the Latin-a confusable cluster rows; README.md
