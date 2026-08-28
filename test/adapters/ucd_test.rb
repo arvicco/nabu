@@ -18,13 +18,13 @@ class UcdTest < Minitest::Test
     assert_equal "ucd-txt", manifest.parser_family
   end
 
-  def test_registry_resolves_ucd_as_an_unwired_manual_module
+  def test_registry_resolves_ucd_as_a_wired_manual_module
     registry = Nabu::SourceRegistry.load(File.expand_path("../../config/sources.yml", __dir__))
     entry = registry["ucd"]
     refute_nil entry, "ucd must be registered in config/sources.yml"
     assert_equal Nabu::Adapters::Ucd, entry.adapter_class
     assert entry.feature_module?, "ucd is a character-identity instrument (kind: module), no doc rows"
-    refute entry.wired, "flips after the owner-fired first sync + eyeball"
+    assert entry.wired, "wired 2026-08-28: owner-fired first sync landed + card eyeballed"
     assert_equal "manual", entry.sync_policy
   end
 
