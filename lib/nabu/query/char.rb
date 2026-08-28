@@ -62,11 +62,16 @@ module Nabu
       Reduced = Data.define(:glyph, :codepoint, :script)
 
       # The best-effort script probe for the reduced card, in order; a glyph
-      # matching none stays an honest nil ("non-Han" at render).
+      # matching none stays an honest nil ("non-Han" at render). This is the
+      # DEGRADED path only — with `nabu sync ucd` held, the universal card
+      # names every script from Scripts.txt and never consults this list.
       SCRIPT_PROBES = [
         ["Hangul", /\p{Hangul}/], ["Latin", /\p{Latin}/], ["Greek", /\p{Greek}/],
         ["Cyrillic", /\p{Cyrillic}/], ["Arabic", /\p{Arabic}/], ["Hebrew", /\p{Hebrew}/],
-        ["Devanagari", /\p{Devanagari}/], ["Thai", /\p{Thai}/]
+        ["Devanagari", /\p{Devanagari}/], ["Thai", /\p{Thai}/],
+        ["Tibetan", /\p{Tibetan}/], ["Ethiopic", /\p{Ethiopic}/],
+        ["Avestan", /\p{Avestan}/], ["Ugaritic", /\p{Ugaritic}/],
+        ["Old Persian", /\p{Old_Persian}/]
       ].freeze
 
       def self.reduced(glyph)
