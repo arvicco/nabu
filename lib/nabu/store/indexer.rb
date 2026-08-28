@@ -300,8 +300,14 @@ module Nabu
       # tokenize and lemma build are ONE stage (fts_lemma): they share this
       # single streaming row scan, so separating them would need a per-passage
       # timer. nil keeps the sync-time incremental path unmeasured.
+      # +lemma_shelf+ (P84-1) is the Nabu::LemmaShelf (local-lemmas) — when
+      # present, the silver-lemma projection runs AFTER the annotation pass
+      # and its index build (insert-if-absent needs the urn B-tree) and
+      # BEFORE the frequency census, so lemma_frequencies counts silver
+      # rows wholesale. +lemma_filter_slugs+ names the sources under the
+      # epigraphy dictionary filter (sources.yml `lemma_dictionary_filter`).
       def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, lemma_tiers: nil, profile: nil,
-                   sign_list: nil, progress: nil)
+                   sign_list: nil, progress: nil, lemma_shelf: nil, lemma_filter_slugs: nil)
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
         fulltext.drop_table?(CHAR_POSTINGS_TABLE)
@@ -323,6 +329,15 @@ module Nabu
           # per-row inserts. Still inside the fts_lemma stage and BEFORE the
           # reflex pass, which reads passage_lemmas by these very indexes.
           create_lemma_indexes(fulltext)
+          # P84-1: the silver-lemma projection — shelf records land as
+          # tier-silver rows on still-uncovered passages (insert-if-absent;
+          # the class note in SilverLemmaIndexer carries the argument).
+          if lemma_shelf
+            progress&.stage("silver lemmas: applying the local-lemmas shelf")
+            SilverLemmaIndexer.apply!(catalog: catalog, fulltext: fulltext, shelf: lemma_shelf,
+                                      dictionary_filter_slugs: Array(lemma_filter_slugs),
+                                      progress: progress)
+          end
           # P42-1: the corpus lemma-frequency census, one grouped INSERT-SELECT
           # over the now-indexed lemma table (vocab's denominator + etym's
           # per-reflex counts read it instead of re-aggregating per query).
@@ -397,11 +412,11 @@ module Nabu
       # Returns the SOURCE's live passage count — never the corpus total.
       def refresh_source!(catalog:, fulltext:, slug:, alignments: nil, fuzzy_slugs: nil,
                           lemma_tiers: nil, reflexes_changed: false, sign_list: nil, progress: nil,
-                          ledger: nil)
+                          ledger: nil, lemma_shelf: nil, lemma_filter_slugs: nil)
         unless incremental_ready?(fulltext)
           rebuild!(catalog: catalog, fulltext: fulltext, alignments: alignments,
                    fuzzy_slugs: fuzzy_slugs, lemma_tiers: lemma_tiers, sign_list: sign_list,
-                   progress: progress)
+                   progress: progress, lemma_shelf: lemma_shelf, lemma_filter_slugs: lemma_filter_slugs)
           return source_live_count(catalog, slug)
         end
 
@@ -436,6 +451,17 @@ module Nabu
               fulltext, live_passages(catalog).where(Sequel[:documents][:source_id] => source_id),
               source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog)
             )
+            # P84-1: re-apply the silver-lemma slice — the delete above
+            # stripped any shelf-projected rows for these urns, and the
+            # annotation re-derivation never re-mints them. Scoped to this
+            # source's urns; the frequency delta below counts the re-landed
+            # rows because the after-snapshot runs later in this txn.
+            if lemma_shelf
+              silver = SilverLemmaIndexer.apply!(catalog: catalog, fulltext: fulltext, shelf: lemma_shelf,
+                                                 urns: urns.to_set,
+                                                 dictionary_filter_slugs: Array(lemma_filter_slugs))
+              inserted += silver.rows_inserted
+            end
             lemmas_changed = deleted.positive? || inserted.positive?
             LemmaFrequencies.apply_delta(fulltext, before: before, after: LemmaFrequencies.snapshot(fulltext, urns))
             refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)

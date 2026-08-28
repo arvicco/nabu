@@ -8,19 +8,21 @@ description: >-
   Germanic, Slavic, and Celtic — with the reference shelf of dictionaries.
 ---
 
-Live counts as of **4 August 2026**: **975,074 documents / 68,408,109
-passages** across 109 registered, synced sources (the full registry counts
-131 rows as of 11 August 2026: 109 corpus sources, 4 local shelves, and
-18 feature modules),
-plus **1,407,706 dictionary entries** on the reference shelf and **19.2
-million gold lemma annotations in thirty-seven languages** (censused 26
-July 2026; a further 28,054,494 lemma rows in ten languages ride an
-honestly labelled silver tier — machine-suggested or
-upstream-undisambiguated, excluded from gold-only search). Classical
-Arabic is the largest language in the catalog at 33.3 million passages,
-ahead of Literary Chinese (13.4 million), Sumerian and Ancient Greek (3.0
-million each), and Japanese (2.98 million); 122 language codes appear in
-all, and since August 2026 stored codes also resolve through the lect
+{% assign census = site.data.census -%}
+Live counts as of **{{ census.as_of }}**: **{{ census.documents_display }} documents /
+{{ census.passages_display }} passages** across {{ census.live_sources }} registered, synced
+sources (the full registry counts {{ census.registry_rows }} rows: {{ census.corpus_sources }}
+corpus sources, {{ census.local_shelves }} local shelves, and {{ census.feature_modules }}
+feature modules), plus **{{ census.dictionary_entries_display }} dictionary entries** on the
+reference shelf and **{{ census.gold_lemmas_m }} million gold lemma annotations in
+{{ census.gold_languages }} languages** (a further {{ census.silver_lemmas_display }} lemma
+rows in {{ census.silver_languages }} languages ride an honestly labelled silver tier —
+machine-suggested or upstream-undisambiguated, excluded from gold-only search). Classical
+Arabic is the largest language in the catalog at {{ census.top_languages[0].millions }} million
+passages, ahead of early-modern English ({{ census.top_languages[1].millions }} million — the
+EEBO-TCP corpus) and Literary Chinese ({{ census.top_languages[2].millions }} million), with
+Latin, Sumerian and Ancient Greek next (about 3 million each); {{ census.language_codes }}
+language codes appear in all, and since August 2026 stored codes also resolve through the lect
 layer — historical-stage ladders on the language cards and stage-scoped
 search, described on the [Languages]({{ '/languages/' | relative_url }})
 page. The authoritative shelf map, refreshed at every
@@ -64,7 +66,7 @@ the [research axes]({{ '/axis/' | relative_url }}).
 | Tibetan | The Derge Kangyur and Tengyur complete, the 84000 English translations, the Old Tibetan documents (OTDO), the SOAS gold-POS corpus | 8th c. – the 18th-c. Derge woodblocks | 5,370 / 1,499,922 | PD / CC BY / CC BY-NC-ND (84000) |
 | Japanese | Aozora Bunko, the public-domain library (ruby-annotated; kyūjitai reachable through the reform fold), beside ONCOJ's gold-morphology Old Japanese (4,991 / 33,192) | 7th c. – 20th c. CE | 17,195 / 2,991,807 | open (PD grant) / CC BY |
 | Germanic | Menotec Old Norwegian treebanks + the Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German, ReN Middle Low German, the Rundata runic corpus in five text lanes | c. 200 – 1650 CE | 31,292 / 707,451 | nc / CC BY / CC BY-SA / ODbL |
-| Reference shelf | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, Wiktionary lexica and reconstruction dictionaries, the IE-CoR, LIV, and de Vaan etymological witnesses, the five StarLing bases, three Slovenian historical dictionaries, the Hebrew and Egyptian lexica, the Sino-Japanese desk (Unihan, KANJIDIC2/JMdict, HDIC, the Guangyun), the Tibetan rack (Mahāvyutpatti, the Verbs Database), Dillmann's Gǝʿǝz lexicon, DÉRom, CLICS and WOLD | — | 1,407,706 entries | CC BY-SA / CC BY / CC BY-NC-SA / written grant |
+| Reference shelf | LSJ, Lewis &amp; Short, Bosworth-Toller, Monier-Williams, Wiktionary lexica and reconstruction dictionaries, the IE-CoR, LIV, and de Vaan etymological witnesses, the five StarLing bases, three Slovenian historical dictionaries, the Hebrew and Egyptian lexica, the Sino-Japanese desk (Unihan, KANJIDIC2/JMdict, HDIC, the Guangyun), the Tibetan rack (Mahāvyutpatti, the Verbs Database), Dillmann's Gǝʿǝz lexicon, DÉRom, CLICS and WOLD | — | {{ census.dictionary_entries_display }} entries | CC BY-SA / CC BY / CC BY-NC-SA / written grant |
 
 ## Classical Greek literature
 
@@ -238,8 +240,8 @@ treebanks, Hittite (HitTB), Classical Chinese (Kyoto), Old Icelandic
 (IcePaHC), and the two Perseus conversions for Ancient Greek and Latin.
 Together with the gold layers of ORACC, DCS, AES, Coptic Scriptorium,
 CorPH, ReM, ReN, IcePaHC, goo300k, damaskini, TraCES, and ETCSL these
-feed a gold lemma index of **19.2 million rows in thirty-seven
-languages** (26 July 2026 census).
+feed a gold lemma index of **{{ census.gold_lemmas_m }} million rows in
+{{ census.gold_languages }} languages** (as of {{ census.as_of }}).
 
 ## Cuneiform and the Ancient Near East
 
@@ -470,7 +472,7 @@ German and the Norse and Old English shelves.
 ## Reference shelf
 
 Dictionary shelves as structured data rather than page
-images — **1,407,706 entries** as of 4 August 2026.
+images — **{{ census.dictionary_entries_display }} entries** as of {{ census.as_of }}.
 Liddell-Scott-Jones (116,497 entries), Lewis &amp; Short (51,636),
 Bosworth-Toller (62,815), the Monier-Williams Sanskrit-English dictionary
 (193,890, synchronized 13 July 2026, with transliteration-tolerant lookup

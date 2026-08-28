@@ -6,6 +6,7 @@ description: >-
   and license terms, and the project's licensing philosophy.
 ---
 
+{% assign census = site.data.census -%}
 Nabu is an aggregation of other people's scholarship. Every text in the
 library exists because an upstream project digitized, edited, annotated,
 and published it under terms that permit this kind of use; those projects
@@ -50,7 +51,7 @@ classes are the gate that decides what may pass.
 
 ## Corpus sources
 
-All 109 sources below are synced and live as of 4 August 2026, listed
+All {{ census.live_sources }} sources below are synced and live as of {{ census.as_of }}, listed
 alphabetically by source id. The same sources grouped by research desk —
 each desk's member shelves, license mix and sync status on one page —
 appear on the [research axes]({{ '/axis/' | relative_url }}).

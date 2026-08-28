@@ -87,6 +87,36 @@ column `CC-BY-SA 4.0` on ALL 91; per-file `<availability status="free">
 dan 2, non 1. 86/91 carry the dipl level; the 5 without (incl. Holm A 80)
 are facs-only.
 
+## texts/ — the Q45 mixed-level trims
+
+Three more fixtures cut/copied 2026-08-27 from the 2026-08-23 canonical
+sync (same session-gated korpuskel downloads — `refetchable: false`).
+The Q45 census (91 canonical documents): 30 mixed-level documents leave
+98,575 tokens bare (no me: level children) — 98,496 punctuation, 79
+real `<w>` words — and 11 documents interleave OTHER layouts (printed
+editions, another hand, the transcriber's lacuna markers, a parallel
+manuscript) with the manuscript's own `ed="ms"` milestones:
+
+- `texts/DG-4at7-Streng.xml` — DOCUMENTED TRIM (4,599,784 B → 20,490 B).
+  Strengleikar, nor, declared `me:level="dipl"`. DOCTYPE + teiHeader +
+  body byte-intact through canonical line 444 (ms lines 17va.6–12,
+  w00001–w00047), then a synthetic `</p></div></div></body></text></TEI>`
+  tail. The EDITION-MILESTONE shape: `<pb ed="Unger" n="0001"/>` +
+  `<lb ed="Unger" n="3"/>` immediately after `<lb ed="ms" n="6"/>`, a
+  mid-word Unger break (`skyn<lb ed="Unger" n="5"/>semdo<ex>m</ex>`),
+  bare `<me:punct>.</me:punct>` between level-bearing words.
+- `texts/AM-243-b-alfa-fol.xml` — DOCUMENTED TRIM (11,113,642 B →
+  75,571 B). Konungs skuggsjá, nor, declared `me:level="dipl"`. DOCTYPE
+  + teiHeader + body byte-intact through canonical line 663 (a `</s>`
+  sentence close), same synthetic tail. THREE edition layouts
+  (`ed="AM"`, `ed="FJ_utg"`, `ed="H-O"`) interleaved with `ed="ms"`,
+  bare `<pc xml:id="w600">.</pc>` punctuation, and fully supplied bare
+  words (`<w xml:id="w24400"><supplied>missir</supplied></w>`).
+- `texts/NRA-norrfragm-55-B.xml` — WHOLE (142,234 B). A fragment of
+  Hákonar saga Hákonarsonar, isl, c. 1275–1350, all three levels on
+  every word (`me:level="facs dipl norm"`) with 28 bare
+  `<pc xml:id>.</pc>` — bare punctuation in a three-level document.
+
 ## menota-entities.txt — the MUFI entity table
 
 https://www.menota.org/menota-entities.txt, WHOLE (156,805 B, version of

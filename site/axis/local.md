@@ -7,19 +7,20 @@ description: >-
 
 > The Librarian — the owner's own shelves: dossiers, library, notes, and the sources' own records.
 
-The canonical-memory shelves (architecture §16): local-language, local-library, local-notes, local-source.
+The canonical-memory shelves (architecture §16): local-language, local-lemmas, local-library, local-notes, local-source.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these five answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 27 August 2026)</span> |
 |---|---|---|---|---|
 | `local-language` | language dossiers | open | wired · manual | 618 dossiers |
 | `local-library` | texts | research_private | wired · manual | 21 docs / 8,731 passages |
 | `local-notes` | owner notes | open | wired · manual | nothing held yet |
+| `local-lemmas` | silver lemmas | open | wired · manual | nothing held yet |
 | `local-source` | source records | open | wired · manual | 155 dossiers |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 27 August 2026)</span>: `sga` 5 · `cel` 3 · `chu` 2 · `grc` 2 · `akk` 1 · `ang` 1 · `cor` 1 · `cym` 1 · `got` 1 · `ine` 1 … and 3 more (`nabu axis local` lists all).

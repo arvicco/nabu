@@ -153,8 +153,8 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 70, lect.size,
-                 "the P59-4 declarations survive the move (61 at migration; itant retired P61-3, " \
+    assert_equal 72, lect.size,
+                 "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
                  "added-then-retired P77-r18→№R-34 — each when a machine grain took over: " \
@@ -199,6 +199,10 @@ class PosturesTest < Minitest::Test
     # identity (P83-1 — identity is true today; the approved en:early
     # mint (nabu-lects PR #9) refines by date-band inference at the
     # merge sweep, never a pending here).
-    assert_equal({ "identity" => 49, "dates" => 10, "codemap" => 11 }, by_posture)
+    # P84-7 (Q48) ADDS TWO as identity: corpus-oudnederlands (odt) and
+    # corpus-gysseling (dum) — both real nabu-lects anchors, so identity is the
+    # honest claim (no machine rule/override covers odt/dum, no shadowing):
+    # 70→72, identity 49→51.
+    assert_equal({ "identity" => 51, "dates" => 10, "codemap" => 11 }, by_posture)
   end
 end

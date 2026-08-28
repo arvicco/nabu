@@ -507,6 +507,19 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  corpus-oudnederlands:
+    # P84-7 (Q48): odt is a real nabu-lects anchor (Old Dutch), so identity is
+    # the honest claim — no machine rule/override covers odt, no shadowing.
+    lect: {posture: identity, note: "odt — Old Dutch anchor (nabu-lects); bare code is the claim"}
+    dating: {posture: dated, note: "every TEI work carries a witness-year <date> (e.g. 701-800)"}
+    places: {posture: named, note: "witnessLocalization place names ride in metadata; not gazetteer-linked"}
+    script: {posture: implied}
+  corpus-gysseling:
+    # dum is a real nabu-lects anchor (Middle Dutch); identity, no shadowing.
+    lect: {posture: identity, note: "dum — Middle Dutch anchor (nabu-lects); bare code is the claim"}
+    dating: {posture: dated, note: "each doc carries <datering jaar_van jaar_tot>; span = min..max"}
+    places: {posture: named, note: "atlas plaats_1/regio_1 codes resolved to names via plaats.txt/regio.txt"}
+    script: {posture: implied}
   gretil:
     lect: {posture: identity, note: "№6 ruled 2026-08-09: the census found NO
         content facets (nothing DCS-veda-like) — bare san~latn stands"}

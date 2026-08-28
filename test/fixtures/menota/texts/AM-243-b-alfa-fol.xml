@@ -1,0 +1,664 @@
+<?oxygen RNGSchema="https://www.menota.org/menotaP5.rng" type="xml"?>
+<!DOCTYPE TEI [
+    <!ENTITY % Menota_entities SYSTEM "https://www.menota.org/menota-entities.txt">
+    %Menota_entities;
+]>
+<TEI xmlns:me="http://www.menota.org/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0">
+          <teiHeader xml:lang="eng">
+                    <fileDesc>
+                              <titleStmt>
+                                        <title>Konungs skuggsjá (ed. Ludvig Holm-Olsen, Oslo 1945 and 1983) : AM 243 bα fol : A digital edition</title>                                        
+                                        <editor role="institution">
+                                                  <orgName>Språksamlingane</orgName>
+                                        </editor>
+                                  
+                                        <respStmt resp="annotation">
+                                                  <resp>Manual lemmatisation and morphological annotation, based on the Ludvig Holm-Olsen’s printed edition (1945)</resp>
+                                                  <name type="institution">Gammelnorsk ordboksverk</name>
+                                                  <orgName type="affiliation">University of Oslo</orgName>
+                                        </respStmt>
+
+                                        <respStmt>
+                                                  <resp>Building an electronic transcription of Ludvig Holm Olsen’s edition (1945) according to the encoding scheme used in the Documentation
+                                                            Project</resp>
+                                                  <name>
+                                                            <orgName type="affiliation">The Documentation Project, Oslo</orgName>
+                                                  </name>
+                                        </respStmt>
+
+                                        <respStmt>
+                                                  <resp>Conversion to Menotic XML, including morphological annotation of approx. two thirds of all words in the file</resp>
+                                                  <name>
+                                                            <persName>
+                                                                      <forename>Christian-Emil</forename>
+                                                                      <surname>Ore</surname>
+                                                            </persName>
+                                                            <orgName type="affiliation">University of Oslo</orgName>
+                                                  </name>
+                                        </respStmt>
+
+                                        <respStmt>
+                                                  <resp>Lemmatisation and morphological encoding of the remaining part of the file (approx. one third of all words), as well as checking the earlier part</resp>
+                                                  <name>
+                                                            <persName>Juliane Marie-Thérèse Tiemann</persName>
+                                                            <orgName type="affiliation">University of Bergen</orgName>
+                                                  </name>
+                                                  <name>
+                                                            <persName>Eiríkur Kristjásson</persName>
+                                                            <orgName type="affiliation">University of Iceland</orgName>
+                                                  </name>
+                                                  <name>
+                                                            <persName>Þorsteinn Vilhjálmsson</persName>
+                                                            <orgName type="affiliation">University of Iceland</orgName>
+                                                  </name>
+                                                  <name>
+                                                            <persName>Fartein Th. Øverland</persName>
+                                                            <orgName type="affiliation">University of Cluj-Napoca</orgName>
+                                                  </name>
+                                        </respStmt>
+                                        
+                                        <respStmt>
+                                                  <resp>Import of revised and additional annotation from the PROIEL database</resp>
+                                                  <name>
+                                                            <persName>Paul Meurer</persName>
+                                                            <orgName type="affiliation">University Library of Bergen</orgName>
+                                                  </name>
+                                        </respStmt>
+                                        
+                                        <respStmt>
+                                                  <resp>Project overview (since 2015)</resp>
+                                                  <name>
+                                                            <persName>Odd Einar Haugen</persName>
+                                                            <orgName type="affiliation">University of Bergen</orgName>
+                                                  </name>
+                                        </respStmt>
+                              </titleStmt>
+
+                              <editionStmt>
+                                        <edition n="1.0">Version 1.0, <date when="2022-05-23">23 May 2022</date>.</edition>
+                              </editionStmt>
+                              <extent n="63910">63910 words</extent>
+
+                              <publicationStmt>
+                                        <distributor>Medieval Nordic Text Archive</distributor>
+                                        <idno type="Menota">Ms. 27</idno>
+                                        <date when="2015-10-20">20 October 2015</date>
+                                        <availability status="free">
+                                                  <licence target="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</licence>
+                                                  <p>Licence accepted by Christian-Emil Ore and Karl G. Johansson in mails to Odd Einar Haugen 29 October and 2 November 2015.</p>
+                                        </availability>
+                              </publicationStmt>
+
+                              <sourceDesc>
+                                        <bibl ana="yes">Syntactic annotation by the Menotec project, extracted from the INESS database</bibl>
+                                        <msDesc>
+                                                  <msIdentifier>
+                                                            <country key="DK">Denmark</country>
+                                                            <settlement>Copenhagen</settlement>
+                                                            <repository>The Arnamagnæan Collection</repository>
+                                                            <idno>AM 243 bα fol</idno>
+                                                            <msName>Konungs skuggsjá</msName>
+                                                  </msIdentifier>
+                                                  <msContents>
+                                                            <msItem n="1">
+                                                                      <locus from="1" to="68">Fols. 1 to 68</locus>
+                                                                      <title type="main">Konungs skuggsjá</title>
+                                                                      <title type="abbreviated">Kgs</title>
+                                                                      <textLang mainLang="nor">Norwegian</textLang>
+                                                            </msItem>
+                                                  </msContents>
+                                                  <physDesc>
+                                                            <objectDesc form="codex">
+                                                                      <supportDesc>
+                                                                                <support>
+                                                                                          <p>
+                                                                                                    <material>Parchment</material>
+                                                                                          </p>
+                                                                                </support>
+                                                                                <extent>68 leaves</extent>
+                                                                                <foliation>
+                                                                                          <p>fols. 1–68</p>
+                                                                                </foliation>
+                                                                      </supportDesc>
+                                                            </objectDesc>
+                                                  </physDesc>
+                                                  <history>
+                                                            <origin>
+                                                            <p>Written in <origPlace>Norway</origPlace>, probably in the Bergen area, in <origDate notBefore="1270" notAfter="1280">c. 1275</origDate>.</p>
+                                                            <p>Ludvig Holm-Olsen believes that the manuscript was copied from an exemplar from the South-Eastern part of Norway, and that the scribe had
+                                                                      been trained in Bergen. For this reason, there are Eastern as well as Western Norwegian traits in the orthography of the
+                                                                      manuscript.</p>
+                                                            </origin>
+                                                  </history>
+                                        </msDesc>
+                              </sourceDesc>
+                    </fileDesc>
+
+                    <encodingDesc>
+                              <projectDesc>
+                                        <p>This manuscript text has been encoded according to the standard set out in <title>The Menota handbook</title> (version 3.0 beta), at <ref target="http://www.menota.org/HB3_index.xml"> http://www.menota.org/HB3_index.xml</ref> as of <date>2018-09-12</date>.</p>
+                                        <p>The text has numbered pagebreaks and linebreaks according to Ludvig Holm-Olsen’s edition (referred to as ed="H-O"), Finnur Jónsson’s edition (referred to as
+                                                  ed="FJ_utg") and numbered pagebreaks, columnbreaks and linebreaks according to the manuscript. The latter refers to the foliation of the manuscript,
+                                                  e.g. 1r, 1v, 2r, 2v, etc. The later pagination of the mansucript has been given as values to the ed="AM" attribute, i.e. 1, 2, 3, 4, etc.</p>
+                              </projectDesc>
+                              <editorialDecl>
+                                        <correction status="high">
+                                                  <p>This text is based on the text in the slip collection of Gammelnorsk Ordboksverk and the text in Ludvig Holm Olsen’s edition and corrected against
+                                                            the manuscript.</p>
+                                        </correction>
+                                        <normalization me:level="dipl">
+                                                  <p>This text has been encoded on a diplomatic level.</p>
+                                        </normalization>
+                                        <interpretation me:lemmatized="completely" me:morphAnalyzed="completely">
+                                                  <p>Approx. two thirds of the text has been lemmatised and morphologically analysed by the Gammelnorsk Ordboksverk at the University of Oslo and then
+                                                            transformed according to the rules specified in ch. 11 of the Menota Handbook, v. 3.0. The remaining one third of the text was partly lemmatised and
+                                                            morphologically analysed by <persName>Juliane Marie-Thérèse Tiemann</persName>, and later supplied and corrected by <persName>Eiríkur Kristjánsson</persName>,
+                                                            <persName>Þorsteinn Vilhjálmsson</persName> and <persName>Fartein Th. Øverland</persName>. The whole text, apart from the Latin section, 
+                                                            has now been annotated for morphology. In a parallel project, Menotec, the whole text has been annotated for syntax by <persName>Eiríkur Kristjánsson</persName>,
+                                                            <persName>Þorsteinn Vilhjálmsson</persName> and <persName>Fartein Th. Øverland</persName> in the period 2019-2021.</p>
+                                        </interpretation>
+                              </editorialDecl>
+                    </encodingDesc>
+
+                    <profileDesc>
+                              <langUsage>
+                                        <language ident="nor">Norwegian</language>
+                                        <language ident="lat">Latin</language>
+                              </langUsage>
+                    </profileDesc>
+
+                    <revisionDesc>
+                      <change>
+                        <date>2025-01-16</date>
+                        <name>
+                          <persName>Paul Meurer</persName>
+                          <orgName type="affiliation">University of Bergen</orgName>
+                          </name>Removed @old-id
+                      </change>
+                      <change>
+                        <date>2024-06-23</date>
+                        <name>
+                          <persName>Paul Meurer</persName>
+                          <orgName type="affiliation">University of Bergen</orgName>
+                          </name>Replaced old @xml:id with new ones of type ‘wxxx00’, moved old ones to @old-id
+                      </change>
+                      <change>
+                        <date>2023-11-24</date>
+                        <name>
+                          <persName>Odd Einar Haugen</persName>
+                          <orgName type="affiliation">University of Bergen</orgName>
+                          </name>Removed occurences of wrong entities
+                      </change>
+                      <change>
+                        <date>2022-05-23</date>
+                        <name>
+                                                  <persName>Odd Einar Haugen</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: (1) Corrrected the sequence of elements in w3644, w5541, w5574, w53921 and w58469;
+                                        (2) Put all supplied words into “w” elements, and removed the morphological annotation in a few supplied words, since we as a rule do not annotate words that are not in the manuscript;
+                                        (3) Checked the lemma orthography for consistency with the rules of Gammelnorsk Ordboksverk, making the following corrrections
+                                           (a) all ey > øy (e.g. heyra > høyra)
+                                           (b) all j > i (in asyllabic position, such as in jafn > iafn)
+                                           (c) all ọ > o, which (unfortunately) means a merger, so here is the complete list of words which in ONP orthography has ǫ rather than o:
+                                        dǫgg, dvǫl, fǫr, gǫfugr, gǫrla, gǫrr, herfǫr, hiǫlp, hlífisskiǫldr, hǫfðingi, hǫfn, hǫfuð, hǫgg, hǫggva, hǫll, hǫnd, kvǫl, lǫg, lǫgr, lǫstr, manvitsgrundvǫllr, 
+                                        mǫrk, nǫs, rǫdd, skiǫldr [= skjọldr], sǫðull, sǫgn, sǫk, sǫngr, stórsǫk, strǫnd, tǫnn, verǫld, vǫllr, vǫrðr, vǫrn, vǫxtr, ǫflugr, ǫfund, ǫfunda, ǫnd, ǫndverðr, ǫnn;
+                                        (4) Added chapter numbers 1–60 in the “head” elements;
+                                        (5) Changed &amp;lt; to &lt;, used in notes to indicate the direction of correction;
+                                        (6) Made the file v. 1.0</change>
+                              
+                              <change>
+                                        <date>2022-05-13</date>
+                                        <name>
+                                                  <persName>Paul Meurer</persName>
+                                                  <orgName type="affiliation">University Library of Bergen</orgName>
+                                        </name>: Imported the revised morphological annotation from the PROIEL database and updated the Menota file accordingly, so that all corrections made during the syntactic annotation of the text 2019-2021 have been integrated in the present file. The full-scale revision of the morphological annotation in the PROIEL database was made by Eiríkur Kristjánsson, Þorsteinn Vilhjálmsson and Fartein Thorsen Øverland.</change>
+                              
+                              <change>
+                                        <date>2020-02-24</date>
+                                        <name>
+                                                  <persName>Odd Einar Haugen</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: (1) Changed all “mIM” name tokens (for imperative mood) with “mIP”; 
+                                        (2) Changed all “rPgM” name tokens with “rP gM” (adding a space between them);
+                                        (3) Changed all “yDA” name tokens (for government of accusative or dative) with “yAD”; 
+                                        (4) Changed all “cDA” name tokens with “cAD” (for case accusative or dative)</change>
+                              
+                              <change>
+                                        <date>2020-02-20</date>
+                                        <name>
+                                                  <persName>Odd Einar Haugen</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: Made a few consistency corrections of the me:msa name tokens</change>
+                              
+                              <change>
+                                        <date>2019-09-14</date>
+                                        <name>
+                                                  <persName>Odd Einar Haugen</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: Removed all entities in the header spelt with ampersand and semicolon, 
+                                        which creates problems for Corpuscle; entities are now given within curly quotation marks, 
+                                        e.g. “oeligacute”</change>
+                              
+                              <change>
+                                        <date>2019-08-10</date>
+                                        <name>
+                                                  <persName>Odd Einar Haugen</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: (1) Commented out a supplied head at the very begining of the text - for the missing prologue 
+                                        (7) Made the file v. 0.9.4 </change>
+                              
+                              <change>
+                                        <date>2019-06-06</date>
+                                        <name>
+                                                  <persName>Odd Einar Haugen</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: (1) Made "sunr" and "faðer" into separate sentences by closing and adding a new "s" element, so that they can be syntactically annotated as elliptical constructions; 
+                                        (2) Corrected 58 instances of me:msa values, which had a “sjekk” comment (many examples of "bæði" as a conjunction, as well as numbers that had not been annotated); 
+                                        (3) Corrected the encoding of several proper nouns, and removed the xml:lang="he" on the name Saul; (4) Corrected one instance of /´oe/ for the entity “oeligacute” and two of /,o/ for the entity “ocurl” 
+                                        (5) Corrected the usage of the entities “lt” and “gt”; in notes and in one instance in the text; (6) Changed most cases of "meðan" from xAV to xCS, i.e. subjunction; 
+                                        (7) Made the file v. 0.9.3 </change>
+                              
+                              <change>
+                                        <date>2019-05-24</date>
+                                        <name>
+                                                  <persName>Nina Stensaker</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: (1) Added "div" elements on two levels, "major-section" and "part", according to Holm-Olsen’s edition, deciding on English titles for these "div" elements
+                                        based partly on his edition and partly on other sources, and also deleted some "div" elements; (2) Did some changes to the "gap" encoding; (3) Replaced "μ" with "ý" (in lemmata);
+                                        (4) Made the file v. 0.9.2 </change>
+
+                              <change>
+                                        <date>2019-05-23</date>
+                                        <name>
+                                                  <persName>Odd Einar Haugen</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: (1) Reorganised the "titleStmt"; (2) Replaced the annotation of syncretism having been encoded with the vertical bar, e.g. "xNC gF nS cA sI | xNC gF nS
+                                        cD sI", with combined traits, "xNC gF nS cAD sI", only leaving the vertical bar in the case of "xAJ rP gN nS cA sI | xAV rP" and other combinations, where the
+                                        first part of speech (word class) should be selected; (3) Revised the encoding of conjunctions, xCC, and subjunctions, xCS, but made a note of several "en"
+                                        which probably should be analysed as subjunctions rather than conjunctions; did not check other similar words such as "ok" and "at", but expect that there will
+                                        some disambiguation to be done; (4) Identified 3757 words that still lack morphological annotation; (5) Made the file v. 0.9.1</change>
+
+                              <change>
+                                        <date>2018-09-12</date>
+                                        <name>
+                                                  <persName>Odd Einar Haugen</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: (1) Replaced all type="H-O" with ed="H-O"; (2) Replaced all type="FJ_utg" with ed="FJ_utg"; (3) Updated the header with information about the supplying
+                                        of the missing annotation by <persName>Juliane Marie-Thérèse Tiemann</persName>; (4) Made the file v. 0.9 </change>
+
+                              <change>
+                                        <date>2018-09-12</date>
+                                        <name>
+                                                  <persName>Juliane Marie-Thérèse Tiemann</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: changed all remaining /th/ to ‘þ’ and /edd/ to ‘ð’ </change>
+
+                              <change>
+                                        <date>2018-09-12</date>
+                                        <name>
+                                                  <persName>Juliane Marie-Thérèse Tiemann</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: Finished first completion of all missing annoatation in the file (approx. one third of all words)</change>
+
+                              <change>
+                                        <date>2017-06-25</date>
+                                        <name>
+                                                  <persName>Juliane Marie-Thérèse Tiemann</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: (1) inserted an extra lemma-tag "me:orig-lemma" for the original lemmatization; "lemma" is now used for the ONP-lemmatization </change>
+
+                              <change>
+                                        <date>2017-12-19</date>
+                                        <name>
+                                                  <persName>Juliane Marie-Thérèse Tiemann</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: (1) inserted an extra line to separate words: <seg></seg>- Element; the second word gets no ID (<w></w>) </change>
+
+                              <change>
+                                        <date>2017-06-06</date>
+                                        <name>
+                                                  <persName>Odd Einar Haugen</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: (1) replaced the "me:punct" element with the "pc" element (for all punctuation in the manuscript); (2) Made the file v. 0.8.5 </change>
+
+                              <change>
+                                        <date>2016-02-21</date>
+                                        <name>
+                                                  <persName>Odd Einar Haugen</persName>
+                                                  <orgName type="affiliation">University of Bergen</orgName>
+                                        </name>: (1) Revised the "availability" element in the header with a CC-BY-SA 4.0 licence; (2) Made the file v. 0.8.4 </change>
+
+                              <change>
+                                        <date>2016-01-19</date>
+                                        <name>Odd Einar Haugen</name>, <orgName type="affiliation">University of Bergen</orgName>: (1) Added role="person" to the second of the editors in the
+                                        "titleStmt" element, thus making a distinction between institution and person; (2) made the file v. 0.8.2</change>
+
+                              <change>
+                                        <date>2016-01-14</date>
+                                        <name>Odd Einar Haugen</name>, <orgName type="affiliation">University of Bergen</orgName>: (1) Changed the links to the Relax NG schema in accordance with the
+                                        other files in the archive; made no other changes; (2) Replaced the "type" attribute with the ed="ms" attribute in the "pb", "cb" and "lb" elements; (3)
+                                        Replaced /oe/ with "œ" (old-style notation of entities); (5) Removed a "w" containing six "w" elements (with the xml:id w31079-w31084); (6) Gave the file
+                                        version number 0.8.1.</change>
+
+                              <change>
+                                        <date>2015-10-20</date>
+                                        <name>Odd Einar Haugen</name>, <orgName type="affiliation">University of Bergen</orgName>: Added a full header to the text, and explanatory notes explaining the
+                                        major lacunae in the manuscript.</change>
+                    </revisionDesc>
+
+          </teiHeader>
+          <text xml:lang="nor">
+                    <body>
+                              <div type="major-section"><head><supplied>Prologue</supplied></head>
+                                        <div type="part">
+                                                  
+                                                  
+                                                  <p>
+                                                            <gap extent="2" unit="leaf"></gap><pb ed="AM" n="1"/>
+                                                            <pb ed="ms" n="1r"/>
+                                                            <cb ed="ms" n="a"/>
+                                                            <gap extent="16" unit="line"></gap>
+                                                            <lb n="1" ed="FJ_utg"/>
+                                                  </p>
+                                        </div>
+
+                                        <note type="explanatory">The three first leaves of the first quire of AM 243 bα fol have been lost, apart from a small strip of the third leaf. The prologue of
+                                                  Konungs skuggsjá may have been part of this lacuna, and in Ludvig Holm-Olsen’s edition (1945), the prologue is transcribed after the later Icelandic
+                                                  manuscript AM 243 e fol and is rendered on pp. 1.01–2.41.</note>
+
+                                        
+                              </div>
+                              <div type="major-section"><head><supplied>First part: The merchant and the natural world</supplied></head>
+                                        <div type="part"><head><supplied>1. The fear of the Lord is the beginning of wisdom</supplied></head>
+                                                  
+                                                  <p>
+                                                            <lb ed="ms" n="17"/>
+                                                            <s>
+                                                                      <title><w me:msa="xNC nS gM cN sI" lemma="sunr" xml:id="w100"><me:dipl>Sunr</me:dipl></w></title>
+                                                            </s>
+                                                            <s>
+                                                                      <lb ed="ms" n="18"/><w me:msa="xAJ nS gM cA rP sI" lemma="góðr" xml:id="w200"><me:dipl><c type="initial" rend="red blue">G</c>oðan</me:dipl></w>
+                                                                      <w me:msa="xNC nS gM cA sI" lemma="dagr" xml:id="w300"><me:dipl>dag</me:dipl></w>
+                                                                      <lb ed="ms" n="19"/><w me:msa="xNC nS gM cN sI" lemma="herra" xml:id="w400">
+                                                                                <me:dipl>hærra</me:dipl></w>
+                                                                      <w me:msa="xDP nS gM cN" lemma="minn" xml:id="w500"><me:dipl>min<ex>n</ex></me:dipl></w><pc xml:id="w600">.</pc>
+                                                            </s>
+                                                            <lb ed="ms" n="20"/>
+                                                            <s><w me:msa="xPE cN" lemma="ek" xml:id="w700"><me:dipl>Ec</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPS mIN vA" lemma="vera" xml:id="w800"><me:dipl>em</me:dipl></w>
+                                                                      <w me:msa="xAV rP" lemma="svá" xml:id="w900"><me:dipl>sꝩa</me:dipl></w>
+                                                                      <w me:msa="xVB nS tPT fP vA gM cN sI" lemma="koma" xml:id="w1000"><me:dipl>ko<lb ed="ms" n="21"/>min<ex>n</ex></me:dipl></w>
+                                                                      <w me:msa="xAP " lemma="til" xml:id="w1100"><me:dipl>til</me:dipl></w>
+                                                                      <lb n="2" ed="FJ_utg"/>
+                                                                      <w me:msa="xDP nS gM cG" lemma="yðarr" xml:id="w1200"><me:dipl>yðars</me:dipl></w>
+                                                                      <lb ed="ms" n="22"/><w me:msa="xNC nS gM cG sI" lemma="fundr" xml:id="w1300"><me:dipl>fun<ex>n</ex>dar</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="sem" xml:id="w1400"><me:dipl>sæm</me:dipl></w>
+                                                                      <lb ed="ms" n="23"/><w me:msa="xVB p3 nS tPS mIN vA" lemma="byria" xml:id="w1500"><me:dipl>byriar</me:dipl></w><lb n="1" ed="H-O"/>
+                                                                      <w me:msa="xAJ nS gM cD rP sI" lemma="lýðinn" xml:id="w1600"><me:dipl>lyðnum</me:dipl></w>
+                                                                      <lb ed="ms" n="24"/><w me:msa="xNC nS gM cD sI" lemma="sunr" xml:id="w1700"><me:dipl>syni</me:dipl></w>
+                                                                      <w me:msa="xCC " lemma="ok" xml:id="w1800"><me:dipl>oc</me:dipl></w>
+                                                                      <w me:msa="xAJ nS gM cD rP sI" lemma="lítillátr" xml:id="w1900"><me:dipl>litillato<ex>m</ex></me:dipl></w>
+                                                                      <lb ed="ms" n="25"/><w me:msa="xIM " lemma="at" xml:id="w2000"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="finna" xml:id="w2100"><me:dipl>fin<ex>n</ex>a</me:dipl></w>
+                                                                      <lb n="3" ed="FJ_utg"/>
+                                                                      <w me:msa="xAJ nS gM cA rP sI" lemma="ástsamligr" xml:id="w2200"><me:dipl>astsam<lb ed="ms" n="26"/>legan</me:dipl></w>
+                                                                      <w me:msa="xNC nS gM cA sI" lemma="faðir" xml:id="w2300"><me:dipl>foður</me:dipl></w>
+                                                                      <w me:msa="xCC " lemma="ok" xml:id="w2400"><me:dipl>oc</me:dipl></w>
+                                                                      <w me:msa="xAJ nS gM cA rP sI" lemma="gofugr" xml:id="w2500"><me:dipl>gofgan</me:dipl></w>
+                                                                      <pc xml:id="w2600">.</pc></s>
+                                                            <s><w me:msa="xCC " lemma="ok" xml:id="w2700"><me:dipl>Oc</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPS mIN vA" lemma="vilia" xml:id="w2800"><me:dipl>ꝩil</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ek" xml:id="w2900"><me:dipl>ec</me:dipl></w>
+                                                                      <w me:msa="xDD nS gN cG" lemma="sá" xml:id="w3000"><me:dipl>þæs</me:dipl></w>
+                                                                      <lb ed="ms" n="27"/><w me:msa="xPE cA" lemma="ér" xml:id="w3100"><me:dipl>yðr</me:dipl></w><lb n="2" ed="H-O"/>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="biðia" xml:id="w3200"><me:dipl>biðia</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="at" xml:id="w3300"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ér" xml:id="w3400"><me:dipl>þer</me:dipl></w>
+                                                                      <lb n="4" ed="FJ_utg"/>
+                                                                      <w me:msa="xVB p2 nS tPS mSU vA" lemma="hafa" xml:id="w3500"><me:dipl>hafer</me:dipl></w>
+                                                                      <w me:msa="xNC nS gFN cA sI" lemma="þolinmǿði" xml:id="w3600"><me:dipl>þolenmœðe</me:dipl></w>
+                                                                      <w me:msa="xIM " lemma="at" xml:id="w3700"><me:dipl>at</me:dipl></w>
+                                                                      <lb ed="ms" n="28"/><w me:msa="xVB tPS fI vA" lemma="lýða" xml:id="w3800"><me:dipl>lyða</me:dipl></w>
+                                                                      <w me:msa="xDD nP gMFN cD" lemma="sá" xml:id="w3900"><me:dipl>þeim</me:dipl></w>
+                                                                      <w me:msa="xNC nP gM cD sI" lemma="lutr" xml:id="w4000"><me:dipl>lutum</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="er" xml:id="w4100"><me:dipl>er</me:dipl></w>
+                                                                      <w me:msa="xPE cA" lemma="ek" xml:id="w4200"><me:dipl>mec</me:dipl></w>
+                                                                      <w me:msa="xVB p3 nS tPS mIN vA" lemma="fýsa" xml:id="w4300"><me:dipl>fyser</me:dipl></w>
+                                                                      <w me:msa="xIM " lemma="at" xml:id="w4400"><me:dipl>at</me:dipl></w>
+                                                                      <lb ed="ms" n="29"/><w me:msa="xVB tPS fI vA" lemma="spyria" xml:id="w4500"><me:dipl>spyria</me:dipl></w><pc xml:id="w4600">.</pc></s>
+                                                            <s><w me:msa="xCC " lemma="en" xml:id="w4700"><me:dipl>en</me:dipl></w>
+                                                                      <lb n="5" ed="FJ_utg"/>
+                                                                      <w me:msa="xNC nS gN cA sI" lemma="lítillæti" xml:id="w4800"><me:dipl>litillæti</me:dipl></w><lb n="3" ed="H-O"/>
+                                                                      <w me:msa="xIM " lemma="at" xml:id="w4900"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="svara" xml:id="w5000"><me:dipl>sꝩara</me:dipl></w>
+                                                                      <w me:msa="xAP " lemma="með" xml:id="w5100"><me:dipl>mæð</me:dipl></w>
+                                                                      <w me:msa="xNC nS gF cD sI" lemma="góðfýsi" xml:id="w5200"><me:dipl>goð <lb ed="ms" n="30"/>fysi</me:dipl></w>
+                                                                      <w me:msa="xVB nP tPT fP vA gMFN cD sI" lemma="spyria" xml:id="w5300"><me:dipl>spurnu<ex>m</ex></me:dipl></w>
+                                                                      <w me:msa="xNC nP gM cD sI" lemma="lutr" xml:id="w5400"><me:dipl>lutu<ex>m</ex></me:dipl></w><pc xml:id="w5500">.</pc></s><lb n="4" ed="H-O"/>
+                                                            <lb n="6" ed="FJ_utg"/>
+                                                            <s><title><w me:msa="xNC nS gM cN sI" lemma="faðir" xml:id="w5600"><me:dipl>Faðeʀ</me:dipl></w></title>
+                                                            </s>
+                                                                      <cb ed="ms" n="b"/><gap extent="17" unit="line"></gap>                                                                    
+                                                                      <note type="explanatory">Column B at 1r in AM 243 bα fol starts here, but the first 17 lines on both the A and B column have been lost. The prologue of
+                                                                                Konungs skuggsjá may have been part of this lacuna, and in Ludvig Holm-Olsen’s edition (1945), the prologue is transcribed after the later Icelandic
+                                                                                manuscript AM 243 e fol and is rendered on pp. 1.01–2.41.</note>
+                                                                      <lb ed="ms" n="18"/>
+                                                            <s>
+                                                                      <w me:msa="xAP " lemma="með" xml:id="w5700"><me:dipl><c type="initial" rend="red green">M</c>æð</me:dipl></w>
+                                                                      <w me:msa="xDD nS gN cD" lemma="sá" xml:id="w5800"><me:dipl>þꝩi</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="at" xml:id="w5900"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="þú" xml:id="w6000"><me:dipl>þu</me:dipl></w>
+                                                                      <w me:msa="xVB p2 nS tPS mIN vA" lemma="vera" xml:id="w6100"><me:dipl>ert</me:dipl></w>
+                                                                      <w me:msa="xNC nS gM cN sI" lemma="einkasonr" xml:id="w6200"><me:dipl>æinka son</me:dipl></w>
+                                                                      <w me:msa="xDP nS gM cN" lemma="minn" xml:id="w6300"><me:dipl>min<ex>n</ex></me:dipl></w>
+                                                                      <lb ed="ms" n="19"/><w me:msa="xAV rP" lemma="þá" xml:id="w6400"><me:dipl>þa</me:dipl></w>
+                                                                      <w me:msa="xVB p3 nS tPS mIN vA" lemma="líka" xml:id="w6500"><me:dipl>licar</me:dipl></w>
+                                                                      <w me:msa="xPE cD" lemma="ek" xml:id="w6600"><me:dipl>mer</me:dipl></w>
+                                                                      <lb n="7" ed="FJ_utg"/>
+                                                                      <w me:msa="xAV rP" lemma="vel" xml:id="w6700"><me:dipl>ꝩæl</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="at" xml:id="w6800"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="þú" xml:id="w6900"><me:dipl>þu</me:dipl></w>
+                                                                      <w me:msa="xVB p2 nS tPS mSU vA" lemma="koma" xml:id="w7000"><me:dipl>komer</me:dipl></w>
+                                                                      <w me:msa="xAV rP" lemma="opt" xml:id="w7100"><me:dipl>opt</me:dipl></w><lb n="5" ed="H-O"/>
+                                                                      <lb ed="ms" n="20"/><w me:msa="xAP " lemma="til" xml:id="w7200"><me:dipl>til</me:dipl></w>
+                                                                      <w me:msa="xDP nS gM cG" lemma="minn" xml:id="w7300"><me:dipl>mins</me:dipl></w>
+                                                                      <w me:msa="xNC nS gM cG sI" lemma="fundr" xml:id="w7400"><me:dipl>fun<ex>n</ex>dar</me:dipl></w><pc xml:id="w7500">.</pc></s>
+                                                            <s><w me:msa="xDD nS gN cD" lemma="sá" xml:id="w7600"><me:dipl>þꝩi</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="at" xml:id="w7700"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xAJ nS gN cN rP sI" lemma="skyldr" xml:id="w7800"><me:dipl>skyllt</me:dipl></w>
+                                                                      <w me:msa="xVB p3 nS tPT mSU vA" lemma="vera" xml:id="w7900"><me:dipl>ꝩæri</me:dipl></w>
+                                                                      <w me:msa="xNC nS gN cN sI" lemma="tal" xml:id="w8000"><me:dipl>tal</me:dipl></w>
+                                                                      <lb n="8" ed="FJ_utg"/>
+                                                                      <lb ed="ms" n="21"/><w me:msa="xDP nS gN cN" lemma="okkarr" xml:id="w8100"><me:dipl>occat</me:dipl></w>
+                                                                      <w me:msa="xAP " lemma="um" xml:id="w8200"><me:dipl>um</me:dipl></w>
+                                                                      <w me:msa="xAJ nP gM cA rP sI" lemma="margr" xml:id="w8300"><me:dipl>marga</me:dipl></w>
+                                                                      <w me:msa="xNC nP gM cA sI" lemma="lutr" xml:id="w8400"><me:dipl>luti</me:dipl></w>
+                                                                      <w me:msa="xCC " lemma="ok" xml:id="w8500"><me:dipl>oc</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPS mIN vA" lemma="vilia" xml:id="w8600"><me:dipl>ꝩil</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ek" xml:id="w8700"><me:dipl>ec</me:dipl></w>
+                                                                      <w me:msa="xAV rP" lemma="giarna" xml:id="w8800"><me:dipl>giarna</me:dipl></w>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="lýða" xml:id="w8900"><me:dipl>ly<lb ed="ms" n="22"/>ða</me:dipl></w>
+                                                                      <w me:msa="xDD nS gN cD" lemma="sá" xml:id="w9000"><me:dipl>þꝩi</me:dipl></w><lb n="6" ed="H-O"/>
+                                                                      <w me:msa="xCS " lemma="er" xml:id="w9100"><me:dipl>er</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="þú" xml:id="w9200"><me:dipl>þu</me:dipl></w>
+                                                                      <w me:msa="xVB p2 nS tPS mIN vA" lemma="vilia" xml:id="w9300"><me:dipl>ꝩilt</me:dipl></w>
+                                                                      <w me:msa="xVB nS tPT fP vA gN cA sI" lemma="spyria" xml:id="w9400"><me:dipl>spurt</me:dipl></w>
+                                                                      <lb n="9" ed="FJ_utg"/>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="hafa" xml:id="w9500"><me:dipl>hafa</me:dipl></w>
+                                                                      <w me:msa="xCC " lemma="ok" xml:id="w9600"><me:dipl>oc</me:dipl></w>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="veita" xml:id="w9700"><me:dipl>ꝩæita</me:dipl></w>
+                                                                      <lb ed="ms" n="23"/><w me:msa="xNC nP gN cA sI" lemma="andsvar" xml:id="w9800"><me:dipl>an<ex>n</ex>sꝩor</me:dipl></w>
+                                                                      <w me:msa="xDD nP gMFN cD" lemma="sá" xml:id="w9900"><me:dipl>þei<ex>m</ex></me:dipl></w>
+                                                                      <w me:msa="xNC nP gM cD sI" lemma="lutr" xml:id="w10000"><me:dipl>lutu<ex>m</ex></me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="er" xml:id="w10100"><me:dipl>er</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ek" xml:id="w10200"><me:dipl>ec</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPS mIN vA" lemma="vera" xml:id="w10300"><me:dipl>em</me:dipl></w>
+                                                                      <w me:msa="xAP " lemma="með" xml:id="w10400"><me:dipl>mæð</me:dipl></w>
+                                                                      <w me:msa="xNC nS gF cD sI" lemma="skynsemd" xml:id="w10500"><me:dipl>skynsæmð</me:dipl></w>
+                                                                      <lb n="10" ed="FJ_utg"/>
+                                                                      <add place="under"><w me:msa="xVB nS tPT fP vA gM cN sI" lemma="spyria" xml:id="w10600"><me:dipl>spurðr</me:dipl></w><pc xml:id="w10700">.</pc></add></s><lb n="7" ed="H-O"/>
+                                                            <lb n="11" ed="FJ_utg"/>
+                                                            <lb ed="ms" n="24"/>
+                                                            <s><title><w me:msa="xNC nS gM cN sI" lemma="sunr" xml:id="w10800"><me:dipl>Sunr</me:dipl></w></title>
+                                                                      </s>
+                                                                       <s>
+                                                                      <w me:msa="xPE cN" lemma="ek" xml:id="w10900"><me:dipl><c type="initial" rend="blue red">E</c>c</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPS mIN vA" me:orig-lemma="høyra" lemma="heyra" xml:id="w11000"><me:dipl>heyri</me:dipl></w>
+                                                                      <w me:msa="xDD nS gN cA" lemma="sá" xml:id="w11100"><me:dipl>þ<ex>at</ex></me:dipl></w>
+                                                                      <w me:msa="xNC nS gN cA sI" lemma="alþýðuvitni" xml:id="w11200"><me:dipl>alþyðu <lb ed="ms" n="25"/>ꝩitni</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="sem" xml:id="w11300"><me:dipl>sæm</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ek" xml:id="w11400"><me:dipl>ec</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPS mIN vA" lemma="ætla" xml:id="w11500"><me:dipl>ætla</me:dipl></w>
+                                                                      <w me:msa="xAJ nS gN cA rP sI" lemma="sannr" xml:id="w11600"><me:dipl>satt</me:dipl></w>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="vera" xml:id="w11700"><me:dipl>ꝩæra</me:dipl></w>
+                                                                      <lb n="12" ed="FJ_utg"/>
+                                                                      <lb ed="ms" n="26"/><w me:msa="xAP " lemma="um" xml:id="w11800"><me:dipl>um</me:dipl></w>
+                                                                      <w me:msa="xNC nS gF cA sI" lemma="vizka" xml:id="w11900"><me:dipl>ꝩitzku</me:dipl></w>
+                                                                      <w me:msa="xDP nS gF cA" lemma="yðarr" xml:id="w12000"><me:dipl>yðra</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="at" xml:id="w12100"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xAV rP" lemma="varla" xml:id="w12200"><me:dipl>ꝩarla</me:dipl></w><lb n="8" ed="H-O"/>
+                                                                      <w me:msa="xVB p3 nS tPS mSU vA" lemma="fá" xml:id="w12300"><me:dipl>fai</me:dipl></w>
+                                                                      <w me:msa="xAJ nS gM cA rC sD" lemma="vitr" xml:id="w12400"><me:dipl>ꝩitrari</me:dipl></w>
+                                                                      <w me:msa="xNC nS gM cA sI" lemma="maðr" xml:id="w12500"><me:dipl>man<ex>n</ex></me:dipl></w>
+                                                                      <lb ed="ms" n="27"/><w me:msa="xAP " lemma="í" xml:id="w12600"><me:dipl>i</me:dipl></w>
+                                                                      <w me:msa="xDD nS gN cD" lemma="siá" xml:id="w12700"><me:dipl>þæsso</me:dipl></w>
+                                                                      <w me:msa="xNC nS gN cD sI" lemma="land" xml:id="w12800"><me:dipl>lan<ex>n</ex>de</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="en" xml:id="w12900"><me:dipl>en</me:dipl></w>
+                                                                      <lb n="13" ed="FJ_utg"/>
+                                                                      <w me:msa="xPE cN" lemma="ér" xml:id="w13000"><me:dipl>þer</me:dipl></w>
+                                                                      <w me:msa="xVB p2 nP tPS mIN vA" lemma="vera" xml:id="w13100"><me:dipl>erut</me:dipl></w>
+                                                                      <w me:msa="xAP " lemma="til" xml:id="w13200"><me:dipl>til</me:dipl></w>
+                                                                      <w me:msa="xDQ nS gF cG" lemma="allr" xml:id="w13300"><me:dipl>alrar</me:dipl></w>
+                                                                      <w me:msa="xNC nS gF cG sI" lemma="speki" xml:id="w13400"><me:dipl>spæki</me:dipl></w>
+                                                                      <lb ed="ms" n="28"/><w me:msa="xDD nS gN cD" lemma="sá" xml:id="w13500"><me:dipl>þꝩi</me:dipl></w><w me:msa="xCS " lemma="at" xml:id="w13600"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xAP " lemma="til" xml:id="w13700"><me:dipl>til</me:dipl></w>
+                                                                      <w me:msa="xDP nS gF cG" lemma="yðarr" xml:id="w13800"><me:dipl>yðarrar</me:dipl></w>
+                                                                      <w me:msa="xNC nS gF cG sI" lemma="órlausn" xml:id="w13900"><me:dipl>orlausnar</me:dipl></w><lb n="9" ed="H-O"/>
+                                                                      <w me:msa="xVB p3 nP tPS mIN vA" lemma="stunda" xml:id="w14000"><me:dipl>stun<ex>n</ex>da</me:dipl></w>
+                                                                      <lb n="14" ed="FJ_utg"/>
+                                                                      <w me:msa="xDQ nP gM cN" lemma="allr" xml:id="w14100"><me:dipl>aller</me:dipl></w>
+                                                                      <lb ed="ms" n="29"/><w me:msa="xDD nP gM cN" lemma="sá" xml:id="w14200"><me:dipl>þæir</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="er" xml:id="w14300"><me:dipl>er</me:dipl></w>
+                                                                      <w me:msa="xNC nP gN cD sI" lemma="vandamál" xml:id="w14400"><me:dipl>ꝩan<ex>n</ex>da
+                                                                                          malu<ex>m</ex></me:dipl></w>
+                                                                      <w me:msa="xVB p3 nP tPS mIN vA" lemma="eiga" xml:id="w14500"><me:dipl>æigu</me:dipl></w>
+                                                                      <w me:msa="xIM " lemma="at" xml:id="w14600"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="skipta" xml:id="w14700"><me:dipl>skipta</me:dipl></w><pc xml:id="w14800">.</pc></s>
+                                                            <lb ed="ms" n="30"/>
+                                                            <s><w me:msa="xCC " lemma="enda" xml:id="w14900"><me:dipl>En<ex>n</ex>da</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPS mIN vA" me:orig-lemma="høyra" lemma="heyra" xml:id="w15000"><me:dipl>heyri</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ek" xml:id="w15100"><me:dipl>ec</me:dipl></w>
+                                                                      <lb n="15" ed="FJ_utg"/>
+                                                                      <w me:msa="xAV rP" lemma="ok" xml:id="w15200"><me:dipl>oc</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="at" xml:id="w15300"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xAV rP" lemma="svá" xml:id="w15400"><me:dipl>sꝩa</me:dipl></w>
+                                                                      <w me:msa="xVB p3 nS tPT mSU vA" lemma="vera" xml:id="w15500"><me:dipl>ꝩæri</me:dipl></w><lb n="10" ed="H-O"/>
+                                                                      <w me:msa="xAV rP" lemma="þá" xml:id="w15600"><me:dipl>þa</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="er" xml:id="w15700"><me:dipl>er</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ér" xml:id="w15800"><me:dipl>þer</me:dipl></w>
+                                                                      <w me:msa="xVB p2 nP tPT mIN vA" lemma="vera" xml:id="w15900"><me:dipl>ꝩaruð</me:dipl></w>
+                                                                      <pb ed="AM" n="2"/><pb ed="ms" n="1v"/><cb ed="ms" n="a"/><lb ed="ms" n="1"/>
+                                                                      <w me:msa="xAP " lemma="með" xml:id="w16000"><me:dipl>mæð</me:dipl></w>
+                                                                      <w me:msa="xNC nP gM cD sI" lemma="konungr" xml:id="w16100"><me:dipl>k<ex>onon</ex>gu<ex>m</ex></me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="at" xml:id="w16200"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xAP " lemma="í" xml:id="w16300"><me:dipl>í</me:dipl></w>
+                                                                      <w me:msa="xDP nS gM cD" lemma="yðarr" xml:id="w16400"><me:dipl>yðru<ex>m</ex></me:dipl></w>
+                                                                      <lb n="16" ed="FJ_utg"/>
+                                                                      <w me:msa="xNC nS gM cD sI" lemma="munnr" xml:id="w16500"><me:dipl>mun<ex>n</ex>e</me:dipl></w>
+                                                                      <w me:msa="xVB p3 nS tPT mIN vA" lemma="þykkia" xml:id="w16600"><me:dipl>þotte</me:dipl></w>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="vera" xml:id="w16700"><me:dipl>ꝩæra</me:dipl></w>
+                                                                      <w me:msa="xDQ nP gN cN" lemma="allr" xml:id="w16800"><me:dipl>oll</me:dipl></w>
+                                                                      <lb ed="ms" n="2"/><w me:msa="xNC nP gN cN sI" lemma="landráð" xml:id="w16900"><me:dipl>lan<ex>n</ex>drað</me:dipl></w><pc xml:id="w17000">.</pc></s>
+                                                            <s><w me:msa="xAV rP" lemma="svá" xml:id="w17100"><me:dipl>sꝩa</me:dipl></w>
+                                                                      <w me:msa="xNC nP gN cN sI" lemma="mál" xml:id="w17200"><me:dipl>log<lb n="11" ed="H-O"/>mal</me:dipl></w>
+                                                                      <w me:msa="xCC " lemma="ok" xml:id="w17300"><me:dipl>oc</me:dipl></w>
+                                                                      <w me:msa="xNC nP gF cN sI" lemma="sættargerð" xml:id="w17400"><me:dipl>sættar gerðer</me:dipl></w>
+                                                                      <w me:msa="xCC " lemma="ok" xml:id="w17500"><me:dipl>oc</me:dipl></w>
+                                                                      <lb n="17" ed="FJ_utg"/>
+                                                                      <w me:msa="xDQ nS gM cG" lemma="allr" xml:id="w17600"><me:dipl>alz<lb ed="ms" n="3"/>skonar</me:dipl></w>
+                                                                      <w me:msa="xNC nS gF cN sI" lemma="speki" xml:id="w17700"><me:dipl>spæki</me:dipl></w><pc xml:id="w17800">.</pc></s>
+                                                            <lb n="17" ed="FJ_utg"/>
+                                                            <s><w me:msa="xAV rP" lemma="nú" xml:id="w17900"><me:dipl>Nu</me:dipl></w>
+                                                                      <w me:msa="xAP " lemma="með" xml:id="w18000"><me:dipl>mæð</me:dipl></w>
+                                                                      <w me:msa="xDD nS gN cD" lemma="sá" xml:id="w18100"><me:dipl>þꝩi</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="at" xml:id="w18200"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ek" xml:id="w18300"><me:dipl>ec</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPS mIN vA" lemma="vera" xml:id="w18400"><me:dipl>eᴍ</me:dipl></w>
+                                                                      <w me:msa="xAJ nS gM cN rP sI" lemma="hœfiligr" xml:id="w18500"><me:dipl>hœ<lb ed="ms" n="4"/>filegr</me:dipl></w>
+                                                                      <w me:msa="xNC nS gM cN sI" lemma="arfi" xml:id="w18600"><me:dipl>arfi</me:dipl></w>
+                                                                      <w me:msa="xPE cG" lemma="ér" xml:id="w18700"><me:dipl>yðar</me:dipl></w>
+                                                                      <lb n="18" ed="FJ_utg"/>
+                                                                      <w me:msa="xAP " lemma="til" xml:id="w18800"><me:dipl>til</me:dipl></w><lb n="12" ed="H-O"/>
+                                                                      <w me:msa="xNC nS gF cG sI" lemma="fiárgæzla" xml:id="w18900"><me:dipl>fiargezlo</me:dipl></w>
+                                                                      <w me:msa="xAV rP" lemma="þá" xml:id="w19000"><me:dipl>þa</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPT mSU vA" lemma="vilia" xml:id="w19100"><me:dipl>ꝩildi</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ek" xml:id="w19200"><me:dipl>ec</me:dipl></w>
+                                                                      <lb ed="ms" n="5"/><w me:msa="xAV rP" lemma="ok" xml:id="w19300"><me:dipl>oc</me:dipl></w>
+                                                                      <w me:msa="xAV rP" lemma="giarna" xml:id="w19400"><me:dipl>giarna</me:dipl></w>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="verða" xml:id="w19500"><me:dipl>ꝩærða</me:dipl></w>
+                                                                      <w me:msa="xDQ nS gN cG" lemma="nokkurr" xml:id="w19600"><me:dipl>noccors</me:dipl></w>
+                                                                      <w me:msa="xNC nS gM cN sI" lemma="luttakari" xml:id="w19700"><me:dipl>luttakare</me:dipl></w>
+                                                                      <w me:msa="xAP " lemma="af" xml:id="w19800"><me:dipl>af</me:dipl></w>
+                                                                      <lb n="19" ed="FJ_utg"/>
+                                                                      <w me:msa="xNC nS gM cD sI" lemma="arfr" xml:id="w19900"><me:dipl>arfe</me:dipl></w>
+                                                                      <lb ed="ms" n="6"/><w me:msa="xNC nS gF cG sI" lemma="spekt" xml:id="w20000"><me:dipl>spæcðar</me:dipl></w><note>utg. specðar</note>
+                                                                      <w me:msa="xDP nS gF cG" lemma="yðarr" xml:id="w20100"><me:dipl>yðaʀ<ex>r</ex>ar</me:dipl></w>
+                                                                      <w me:msa="xCC " lemma="ok" xml:id="w20200"><me:dipl>oc</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPT mSU vA" lemma="vilia" xml:id="w20300"><me:dipl>ꝩilde</me:dipl></w><lb n="13" ed="H-O"/>
+                                                                      <w me:msa="xPE cN" lemma="ek" xml:id="w20400"><me:dipl>ec</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="at" xml:id="w20500"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ér" xml:id="w20600"><me:dipl>þer</me:dipl></w>
+                                                                      <w me:msa="xVB p2 nP tPT mSU vA" lemma="læra" xml:id="w20700"><me:dipl>lærðet</me:dipl></w>
+                                                                      <lb ed="ms" n="7"/><w me:msa="xPE cA" lemma="ek" xml:id="w20800"><me:dipl>mec</me:dipl></w>
+                                                                      <w me:msa="xDQ nS gN cA" lemma="hverr" xml:id="w20900"><me:dipl>hvært</me:dipl></w>
+                                                                      <w me:msa="xNC nS gN cA sI" lemma="stafróf" xml:id="w21000"><me:dipl>stafrof</me:dipl></w>
+                                                                      <lb n="20" ed="FJ_utg"/>
+                                                                      <w me:msa="xCC " lemma="eða" xml:id="w21100"><me:dipl>eða</me:dipl></w>
+                                                                      <w me:msa="xNC nS gN cA sI" lemma="upphaf" xml:id="w21200"><me:dipl>uphaf</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="er" xml:id="w21300"><me:dipl>er</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ek" xml:id="w21400"><me:dipl>ec</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPS mSU vA" lemma="mega" xml:id="w21500"><me:dipl>mæga</me:dipl></w>
+                                                                      <lb ed="ms" n="8"/><w me:msa="xDD nS gN cA" lemma="sá" xml:id="w21600"><me:dipl>þ<ex>at</ex></me:dipl></w>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="nema" xml:id="w21700"><me:dipl>næma</me:dipl></w>
+                                                                      <w me:msa="xAP " lemma="af" xml:id="w21800"><me:dipl>af</me:dipl></w>
+                                                                      <w me:msa="xPE cD" lemma="ér" xml:id="w21900"><me:dipl>yðr</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="at" xml:id="w22000"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ek" xml:id="w22100"><me:dipl>ec</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPS mSU vA" lemma="mega" xml:id="w22200"><me:dipl>mæga</me:dipl></w><lb n="14" ed="H-O"/>
+                                                                      <w me:msa="xAV rP" lemma="þaðan" xml:id="w22300"><me:dipl>þæðan</me:dipl></w><note>ð &lt; g</note>
+                                                                      <lb n="21" ed="FJ_utg"/>
+                                                                      <w me:msa="xAP " lemma="af" xml:id="w22400"><me:dipl>af</me:dipl></w>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="læsa" xml:id="w22500"><me:dipl>læsa</me:dipl></w><note>s &lt; r</note>
+                                                                      <lb ed="ms" n="9"/><w me:msa="xDQ nP gF cA" lemma="allr" xml:id="w22600"><me:dipl>allar</me:dipl></w>
+                                                                      <w me:msa="xNC nP gF cA sI" lemma="ritning" xml:id="w22700"><me:dipl>ritningar</me:dipl></w>
+                                                                      <w me:msa="xNC nS gN cG sI" lemma="manvit" xml:id="w22800"><me:dipl>monꝩitz</me:dipl></w>
+                                                                      <w me:msa="xDP nS gN cG" lemma="yðarr" xml:id="w22900"><me:dipl>yðars</me:dipl></w><pc xml:id="w23000">.</pc></s>
+                                                            <s><w me:msa="xCC " lemma="ok" xml:id="w23100"><me:dipl>oc</me:dipl></w>
+                                                                      <w me:msa="xAV rP" lemma="svá" xml:id="w23200"><me:dipl>sꝩa</me:dipl></w>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="stíga" xml:id="w23300"><me:dipl>sti<lb ed="ms" n="10"/>ga</me:dipl></w>
+                                                                      <w me:msa="xAP " lemma="í" xml:id="w23400"><me:dipl>i</me:dipl></w>
+                                                                      <w me:msa="xDP nP gN cA" lemma="yðarr" xml:id="w23500"><me:dipl>yðor</me:dipl></w>
+                                                                      <w me:msa="xNC nS gN cA sI" lemma="fótspor" xml:id="w23600"><me:dipl>fot <lb n="1" ed="FJ_utg"/> spor</me:dipl></w><pc xml:id="w23700">.</pc></s><lb n="15" ed="H-O"/> <s><w me:msa="xDD nS gN cD" lemma="sá" xml:id="w23800"><me:dipl>þꝩi</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="at" xml:id="w23900"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ek" xml:id="w24000"><me:dipl>ec</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPS mIN vA" lemma="vænta" xml:id="w24100"><me:dipl>ꝩæn<ex>n</ex>dti</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="ef" xml:id="w24200"><me:dipl>æf</me:dipl></w>
+                                                                      <w me:msa="xPE cG" lemma="ér" xml:id="w24300"><me:dipl>yðar</me:dipl></w>
+                                                                                <w xml:id="w24400"><supplied>missir</supplied></w>
+                                                                      <lb ed="ms" n="11"/><w me:msa="xAP " lemma="viðr" xml:id="w24500"><me:dipl>ꝩið</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="at" xml:id="w24600"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xAJ nP gM cN rP sI" lemma="margr" xml:id="w24700"><me:dipl>marg<ex>ir</ex></me:dipl></w>
+                                                                      <w me:msa="xVB p3 nP tPS mSU vA" lemma="munu" xml:id="w24800"><me:dipl>muni</me:dipl></w>
+                                                                      <w me:msa="xAP " lemma="á" xml:id="w24900"><me:dipl>a</me:dipl></w><w me:msa="xDD nS gN cA" lemma="sá" xml:id="w25000"><me:dipl>þat</me:dipl></w>
+                                                                      <lb n="2" ed="FJ_utg"/>
+                                                                      <w me:msa="xVB tPS fI vA" lemma="stunda" xml:id="w25100"><me:dipl>stun<ex>n</ex>da</me:dipl></w>
+                                                                      <w me:msa="xCS " lemma="at" xml:id="w25200"><me:dipl>at</me:dipl></w>
+                                                                      <w me:msa="xPE cN" lemma="ér" xml:id="w25300"><me:dipl>þer</me:dipl></w>
+                                                                      <lb ed="ms" n="12"/><w me:msa="xVB p2 nP tPS mSU vA" lemma="munu" xml:id="w25400"><me:dipl>muner</me:dipl></w><lb n="16" ed="H-O"/>
+                                                                      <w me:msa="xPE cA" lemma="ek" xml:id="w25500"><me:dipl>mec</me:dipl></w>
+                                                                      <w me:msa="xVB nS tPT fP vA gM cA sI" lemma="læra" xml:id="w25600"><me:dipl>lærðan</me:dipl></w>
+                                                                      <w me:msa="xVB p1 nS tPS mSU vA" lemma="hafa" xml:id="w25700"><me:dipl>hafa</me:dipl></w>
+                                                                      <w me:msa="xAP " lemma="eptir" xml:id="w25800"><me:dipl>æpter</me:dipl></w>
+                                                                      <w me:msa="xDP nP gMFN cD" lemma="yðarr" xml:id="w25900"><me:dipl>yðru<ex>m</ex></me:dipl></w>
+                                                                      <w me:msa="xNC nP gM cD sI" lemma="siðr" xml:id="w26000"><me:dipl>siðu<ex>m</ex></me:dipl></w><pc xml:id="w26100">.</pc></s><lb n="17" ed="H-O"/>
+</p></div></div></body></text></TEI>
