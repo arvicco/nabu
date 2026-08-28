@@ -617,6 +617,35 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P85-A (№R-48-2): `nabu note <code> "…"` writes a PRIVATE language note
+  # (urn:nabu:lang:<code>), and the language card composes it as the fourth
+  # layer beneath the overlay. A note on a code the library does not know
+  # refuses, like a note on a typo'd corpus URN.
+  def test_language_note_writes_and_composes_as_the_private_layer
+    with_recon_shelf do |config|
+      with_config(config) do
+        out, _err, status = run_cli(["note", "sla-pro", "check the accentual paradigm here"])
+        assert_nil status
+        assert_match(/noted\s+urn:nabu:lang:sla-pro/, out, "a bare code targets the language-note URN")
+
+        card, _err, card_status = run_cli(%w[language sla-pro])
+        assert_nil card_status
+        assert_match(/notes \(private\):/, card)
+        assert_match(/check the accentual paradigm here/, card)
+      end
+    end
+  end
+
+  def test_language_note_on_an_unknown_code_refuses
+    with_recon_shelf do |config|
+      with_config(config) do
+        _out, err, status = run_cli(%w[note qqqqq nope])
+        refute_nil status, "an unknown language code is not notable without --force"
+        assert_match(/qqqqq/, err)
+      end
+    end
+  end
+
   def seed_dossier_overlay(config, rows)
     path = File.join(config.canonical_dir, "nabu-data", "mul", "language-dossiers",
                      "language-dossiers.csv")
@@ -3819,6 +3848,7 @@ class CLITest < Minitest::Test
     assert_match(/dangling/, out)
     assert_match(/--list/, out)
     assert_match(/Examples:/, out)
+    assert_match(/LANGUAGE CODE/, out, "the private per-language note target is documented")
   end
 
   # `nabu help ingest` must teach the front door: the three modes, the
