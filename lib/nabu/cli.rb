@@ -3087,6 +3087,7 @@ module Nabu
       case Nabu::CharDispatch.lane(input)
       when :cuneiform then cuneiform_char_card(config, input)
       when :hieroglyphic then hieroglyphic_char_card(config, input)
+      when :marks then editorial_marks_char_card(input)
       when :name then name_char_card(config, input)
       else han_char_card(config, input)
       end
@@ -7847,6 +7848,33 @@ module Nabu
             "no CJK shelf claims it"
         say ""
         say "search: nabu search #{reduced.glyph}"
+      end
+
+      # The editorial/house-mark card (P85): what a single mark (⟦ ⌈ ⸀ ⿰ …)
+      # MEANS in this library — its convention, the `--display` knob that
+      # transforms it, and where it comes from. Pure config read (Nabu's own
+      # convention, config/editorial_marks.yml), no catalog. The one card no
+      # external Unicode tool can supply.
+      def editorial_marks_char_card(input)
+        mark = Nabu::EditorialMarks.lookup(input)
+        # The dispatch set and the table are pinned to agree, so a routed mark
+        # is always found; fall back to the reduced card if that ever drifts.
+        return non_han_char_card(input) unless mark
+
+        if options[:json]
+          return say(JSON.pretty_generate(
+                       "glyph" => mark.glyph, "codepoint" => mark.codepoint, "class" => "editorial-mark",
+                       "name" => mark.name, "meaning" => mark.meaning,
+                       "display" => mark.display_rule, "seen_in" => mark.seen_in
+                     ))
+        end
+
+        say "#{mark.glyph}  #{mark.codepoint}  ·  editorial mark"
+        say ""
+        say "#{mark.name} — #{mark.meaning}"
+        say ""
+        say "display: #{mark.display_rule}" if mark.display_rule
+        say "seen in: #{mark.seen_in}" if mark.seen_in
       end
 
       def cuneiform_char_card(config, input)

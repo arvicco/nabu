@@ -9,6 +9,9 @@ module Nabu
   #                  (𒋀𒀊) stay ONE sign identity, so multi-char is fine
   #   :hieroglyphic  every char in the Egyptian Hieroglyph blocks (basic,
   #                  format controls, Extended-A)
+  #   :marks         a single editorial/house mark (⟦ ⌈ ⸀ ⿰ …) — the
+  #                  library's own convention card (config/editorial_marks.yml).
+  #                  P85: no external tool answers "what does ⟦ mean HERE"
   #   :han           any other SINGLE character — the existing P37-4 card
   #                  path, unchanged (its own grain/shelf errors apply)
   #   :name          any other multi-char input — the sign-NAME lane (OSL
@@ -28,10 +31,24 @@ module Nabu
     # reading query for the :name lane, never a Han glyph card.
     KANA = /\A[\p{Hiragana}\p{Katakana}ー]+\z/
 
+    # The editorial/house marks that get their own card (P85): the exact
+    # code points documented in config/editorial_marks.yml. A single such
+    # char routes to the marks card; the two must agree — the char-dispatch
+    # test pins this set against the config keys, so a new mark added to the
+    # table without a code point here (or vice versa) turns the suite red.
+    MARKS = [
+      0x27E6, 0x27E7,           # ⟦ ⟧ erasure brackets
+      0x2308, 0x2309,           # ⌈ ⌉ substitute brackets
+      0x2B1A,                   # ⬚ gaiji placeholder
+      0x2E00, 0x2E02, 0x2E03,   # ⸀ ⸂ ⸃ apparatus sigla
+      0x2FF0, 0x2FF1            # ⿰ ⿱ IDS operators
+    ].to_set.freeze
+
     def self.lane(input)
       ords = input.each_char.map(&:ord)
       return :cuneiform if ords.all? { |ord| CUNEIFORM.any? { |range| range.cover?(ord) } }
       return :hieroglyphic if ords.all? { |ord| HIEROGLYPHIC.any? { |range| range.cover?(ord) } }
+      return :marks if ords.size == 1 && MARKS.include?(ords.first)
       return :name if input.match?(KANA)
 
       ords.size == 1 ? :han : :name
