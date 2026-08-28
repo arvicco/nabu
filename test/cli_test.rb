@@ -594,6 +594,68 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P85-A4: the published curated overlay (nabu-data mul/language-dossiers)
+  # fills the curated lanes a fresh install's local shelf lacks — here a code
+  # with NO local curation renders its name/family/context from the overlay.
+  def test_language_card_composes_the_published_dossier_overlay
+    with_recon_shelf do |config|
+      seed_dossier_overlay(config, [
+                             %w[ovl-name ovl name] + ["Overlay Tongue"],
+                             %w[ovl-family ovl family] + ["Some Family"],
+                             %w[ovl-context ovl context] + ["A language known only through the overlay."],
+                             %w[ovl-period ovl period] + ["3rd c."]
+                           ])
+      with_config(config) do
+        out, _err, status = run_cli(%w[language ovl])
+        assert_nil status
+        assert_match(/^ovl — Overlay Tongue$/, out, "name from the overlay")
+        assert_match(/family: Some Family/, out, "family from the overlay")
+        assert_match(/A language known only through the overlay\./, out, "context from the overlay")
+        assert_match(/period: 3rd c\./, out, "extra lanes from the overlay")
+        refute_match(/no curated note/, out)
+      end
+    end
+  end
+
+  # P85-A (№R-48-2): `nabu note <code> "…"` writes a PRIVATE language note
+  # (urn:nabu:lang:<code>), and the language card composes it as the fourth
+  # layer beneath the overlay. A note on a code the library does not know
+  # refuses, like a note on a typo'd corpus URN.
+  def test_language_note_writes_and_composes_as_the_private_layer
+    with_recon_shelf do |config|
+      with_config(config) do
+        out, _err, status = run_cli(["note", "sla-pro", "check the accentual paradigm here"])
+        assert_nil status
+        assert_match(/noted\s+urn:nabu:lang:sla-pro/, out, "a bare code targets the language-note URN")
+
+        card, _err, card_status = run_cli(%w[language sla-pro])
+        assert_nil card_status
+        assert_match(/notes \(private\):/, card)
+        assert_match(/check the accentual paradigm here/, card)
+      end
+    end
+  end
+
+  def test_language_note_on_an_unknown_code_refuses
+    with_recon_shelf do |config|
+      with_config(config) do
+        _out, err, status = run_cli(%w[note qqqqq nope])
+        refute_nil status, "an unknown language code is not notable without --force"
+        assert_match(/qqqqq/, err)
+      end
+    end
+  end
+
+  def seed_dossier_overlay(config, rows)
+    path = File.join(config.canonical_dir, "nabu-data", "mul", "language-dossiers",
+                     "language-dossiers.csv")
+    FileUtils.mkdir_p(File.dirname(path))
+    CSV.open(path, "w") do |csv|
+      csv << %w[ID Language_ID Parameter_ID Value]
+      rows.each { |row| csv << row }
+    end
+  end
+
   # P67-2 (№11): the descent line — the registry's parent arc rendered on
   # the card, code → root, each ancestor named. chu's parent is the STAGED
   # sla:pro (the walk crosses stage → anchor-parent correctly).
@@ -3786,6 +3848,7 @@ class CLITest < Minitest::Test
     assert_match(/dangling/, out)
     assert_match(/--list/, out)
     assert_match(/Examples:/, out)
+    assert_match(/LANGUAGE CODE/, out, "the private per-language note target is documented")
   end
 
   # `nabu help ingest` must teach the front door: the three modes, the

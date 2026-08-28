@@ -1,0 +1,93 @@
+# Editorial & house marks — what each mark MEANS in this library.
+#
+# These are Nabu's OWN editorial and display conventions (not universal
+# character facts — those come from Unicode/UCD): the brackets, sigla and
+# operators the corpus and the renderer use, and which `--display` knob (if
+# any) touches each. The `nabu char` command reads this table so that
+# `nabu char ⟦` answers "erasure kept as content, here" instead of a
+# Han-shelf shrug — the one question no external tool can answer.
+#
+# Home: config/ (project definition), because these are Nabu's conventions,
+# authored here and shipped with the repo — every install renders them the
+# same. Keyed by the mark's glyph; codepoint is informational.
+#
+# Fields per mark:
+#   name      the mark's role, in a few words
+#   meaning   what it signals in a Nabu passage
+#   display   the `--display <rule>` knob that transforms it, or ~ (none)
+#   seen_in   where the convention comes from / where it shows up
+---
+"⟦":
+  codepoint: U+27E6
+  name: erasure (opening)
+  meaning: >-
+    An erasure kept AS CONTENT — text struck out on the artifact but preserved
+    (a damnatio memoriae on an inscription, a scribal deletion). Nabu keeps the
+    reading by default; the brackets can be dropped, never the text.
+  display: "erasures:unwrap (drops the brackets, keeps the text)"
+  seen_in: EDH damnatio-memoriae, Celtic Leiden <del>
+"⟧":
+  codepoint: U+27E7
+  name: erasure (closing)
+  meaning: Closes an erasure span opened by ⟦.
+  display: "erasures:unwrap"
+  seen_in: EDH, Celtic Leiden
+"⌈":
+  codepoint: U+2308
+  name: substitute (opening)
+  meaning: >-
+    Wraps a STAND-IN glyph — a character the source could not encode faithfully,
+    shown by a substitute so it can never be quoted as if it were the original.
+    Deliberately an unclaimed bracket, so it collides with no other convention.
+  display: ~
+  seen_in: Nabu's gaiji substitution ladder (display.rb)
+"⌉":
+  codepoint: U+2309
+  name: substitute (closing)
+  meaning: Closes a substitute span opened by ⌈.
+  display: ~
+  seen_in: Nabu's gaiji ladder
+"⬚":
+  codepoint: U+2B1A
+  name: gaiji placeholder
+  meaning: >-
+    The box left in place of a character that has no faithful glyph, no IDS
+    composition and no chosen substitute — an honest "something is here we
+    cannot show," never silently dropped.
+  display: ~
+  seen_in: Nabu's gaiji ladder (the last rung)
+"⸀":
+  codepoint: U+2E00
+  name: apparatus siglum
+  meaning: >-
+    A critical-apparatus cross-reference marker — points from the running text
+    to a note in the edition's apparatus about a variant reading.
+  display: "sigla:strip (removes the markers)"
+  seen_in: SBLGNT (censused ×69)
+"⸂":
+  codepoint: U+2E02
+  name: apparatus siglum (opening)
+  meaning: Opens an apparatus span flagging a variant reading.
+  display: "sigla:strip"
+  seen_in: SBLGNT
+"⸃":
+  codepoint: U+2E03
+  name: apparatus siglum (closing)
+  meaning: Closes an apparatus span opened by ⸂.
+  display: "sigla:strip"
+  seen_in: SBLGNT
+"⿰":
+  codepoint: U+2FF0
+  name: IDS operator — left/right
+  meaning: >-
+    An Ideographic Description Sequence operator: composes a Han glyph from
+    parts arranged left-to-right (⿰氵丐 = 氵 beside 丐). Used to render a
+    character that has no code point of its own.
+  display: ~
+  seen_in: Nabu's IDS composition lane; Unicode IDC block
+"⿱":
+  codepoint: U+2FF1
+  name: IDS operator — above/below
+  meaning: Composes a Han glyph from parts stacked top-to-bottom.
+  display: ~
+  seen_in: Nabu's IDS lane; Unicode IDC block

@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# UnicodeData.txt is one flat, permissively-licensed file on the immutable
+# versioned release URL (/Public/17.0.0/); the fixture is a documented TRIM
+# — 20 real lines of 40,575, chosen to exercise every shape the read seam
+# parses (scripts, range pairs, decompositions, numeric values). The
+# sentinel fetches the URL for liveness only; a new Unicode release is a NEW
+# pin (a fresh versioned URL), never a drift at this one.
+source: ucd
+adapter_test: test/adapters/ucd_test.rb
+retrieved: 2026-08-28
+files:
+  - path: UnicodeData.txt
+    url: https://www.unicode.org/Public/17.0.0/ucd/UnicodeData.txt
+    whole: false
+    trim: 20 of 40,575 lines — representative code points across scripts (Latin, Greek, Hebrew, Old Italic, Egyptian), a control, combining mark, canonical/compat/fraction decompositions, numeric values, and the CJK/Hangul First/Last range pairs; recipe in README.md

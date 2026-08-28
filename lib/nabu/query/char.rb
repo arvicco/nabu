@@ -84,6 +84,53 @@ module Nabu
         { "glyph" => glyph, "card" => nil, "reduced" => serialize(reduced) }
       end
 
+      # The UNIVERSAL card (P85-B2, №R-44 = Shape C): the reduced card lifted
+      # by the UCD identity layer — the character's NAME, general category,
+      # numeric value and decomposition, for any writing system, not just Han.
+      # Composed only when `nabu sync ucd` has landed the identity floor; when
+      # absent the caller renders the reduced card, byte-identical (the
+      # feature-module law). Corpus attestation and the curated overlay layer
+      # onto this next; this is the canonical-reference layer alone.
+      Universal = Data.define(
+        :glyph, :codepoint, :name, :category, :script, :numeric,
+        :combining_class, :decomposition
+      )
+
+      # One target of a decomposition: the piece's own code point, glyph and
+      # UCD name (À → A + COMBINING GRAVE ACCENT), so the card can spell it out.
+      DecompPart = Data.define(:codepoint, :glyph, :name)
+      UniversalDecomp = Data.define(:kind, :parts)
+
+      # Compose the universal identity card from the UCD seam, or nil when the
+      # seam does not carry the glyph (an unassigned code point stays honest).
+      def self.universal(glyph, ucd)
+        glyph = Nabu::Normalize.nfc(glyph.to_s)
+        char = ucd.lookup(glyph) or return nil
+
+        Universal.new(
+          glyph: glyph, codepoint: char.hex, name: char.display_name,
+          category: char.category_label,
+          script: SCRIPT_PROBES.find { |_, probe| glyph.match?(probe) }&.first,
+          numeric: char.numeric, combining_class: char.combining_class,
+          decomposition: decomposition_of(char, ucd)
+        )
+      end
+
+      def self.decomposition_of(char, ucd)
+        decomp = char.decomposition or return nil
+
+        parts = decomp.codepoints.map do |code|
+          target = ucd.lookup(code)
+          DecompPart.new(codepoint: format("U+%04X", code),
+                         glyph: target&.glyph, name: target&.display_name)
+        end
+        UniversalDecomp.new(kind: decomp.kind, parts: parts)
+      end
+
+      def self.universal_json_payload(glyph, universal)
+        { "glyph" => glyph, "card" => nil, "universal" => serialize(universal) }
+      end
+
       # The CJK shelf family the Han card composes: sync source → the
       # dictionary slugs it shelves. The empty-card hint (P84-5) reads this
       # to tell held-but-silent shelves apart from never-synced ones.

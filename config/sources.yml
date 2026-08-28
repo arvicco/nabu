@@ -3551,6 +3551,25 @@ edubba-overlay:
                    # wired = the sync link is tested and declared working).
   sync_policy: manual   # course releases, not a nightly feed
 
+ucd:
+  adapter: Nabu::Adapters::Ucd
+  axes: [epigraphy]   # a universal char-identity instrument has no one desk;
+                      # the epigraphy desk is the most script-diverse home
+                      # (Greek/Latin/Old Italic/ogham/runic/Phoenician…), where
+                      # `nabu char` identity questions cluster
+  kind: module   # P85: character-identity instrument (names/category/numeric/
+                 # decomposition for every code point), zero document rows
+  wired: false   # skeleton landed; flip after the owner-fired first sync
+                   # (`nabu sync ucd`) + eyeball, then the read seam + cards
+  sync_policy: manual
+  # P85 (№R-44 = Shape C): UCD core (UnicodeData.txt) — the universal
+  # character-identity backbone of `nabu char`: name, general category,
+  # numeric value and canonical decomposition for EVERY Unicode code point,
+  # the "any character, any writing system" floor. FileFetch one flat file on
+  # a versioned immutable pin (17.0.0). LICENSE: Unicode License v3 (MIT-style)
+  # → open, the Unihan/Unikemet class. Blocks.txt (block NAMES) is a planned
+  # follow-on (FileFetch is single-file).
+
 unikemet:
   adapter: Nabu::Adapters::Unikemet
   group: signs  # P68-4: the sign-restore sweep (nabu enable signs && nabu sync signs)
