@@ -1,0 +1,22 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Both entries are documented head trims of stable raw URLs — fetched for
+# URL-liveness only on check. adapter_test is null: fresh full copies would
+# false-fail the count assertions.
+source: monlam-lexicon
+adapter_test:
+retrieved: 2026-08-29
+files:
+  - path: monlam-lexicon-1.txt
+    url: https://raw.githubusercontent.com/MonlamIT/Tibetan-Lexicon/master/monlam-lexicon-1.txt
+    refetchable: true
+    whole: false
+    trim: >-
+      the REAL first 40 UTF-16LE lines (782 bytes, cut at the 40th 0A00
+      line end), byte-verbatim — BOM + CRLF + the "word" header
+  - path: monlam-lexicon-2.txt
+    url: https://raw.githubusercontent.com/MonlamIT/Tibetan-Lexicon/master/monlam-lexicon-2.txt
+    refetchable: true
+    whole: false
+    trim: the REAL first 60 of 367,011 lines (head -n 60), byte-verbatim
