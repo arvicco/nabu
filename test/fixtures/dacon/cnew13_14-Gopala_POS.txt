@@ -1,0 +1,48 @@
+﻿form    POS
+*fn30a    fol
+samvat    n
+501    num.ar
+mārgaśira    n
+va    adv.temp
+12    num.ar
+fn30b    fol
+oṃ    skt
+śrīviṣṇugupta    n.prop
+rājā    n
+sana    case.erg.h
+prathamasa    adv.temp
+,    punc
+<utt>
+pracakra    n
+jayarapesa    adv.man
+thāprapā    v.perf.part
+śrīviṣṇutīrtha    n.prop
+nārāyanasaḥ    n.prop
+thvasa    d.dem
+yecaṅgaṃ    n.prop
+dhāye    v.n
+..    punc
+<utt>
+thva    d.dem
+yā    case.gen
+liva    adv.temp
+yocaṃguṃ    n.prop
+thāprapā    v.perf.part
+durbhikṣa    n
+tu    cl.focus
+juraṃṅāna    cv.caus
+asahana    adv.man
+juyāva    cv.ant
+,    punc
+<utt>
+thvalasaṃ    adv.temp
+lisa    adv.dir
+subhikṣa    n
+juva    v.impst
+,    punc
+<utt>
+thva    d.dem
+yocaṃguṃ    n.prop
+dhāye    v.n
+..    punc
+<utt>
