@@ -73,7 +73,7 @@
 - slug: indic
   persona: The Indologist
   blurb: Veda to sastra, the Sanskrit library and its instruments
-  members: 7
+  members: 8
 - slug: buddhist
   persona: The Buddhologist
   blurb: the dharma across the Pali, Sanskrit, Chinese and Tibetan canons
@@ -81,7 +81,7 @@
 - slug: tibetan
   persona: The Tibetologist
   blurb: the Land of Snows from Dunhuang documents to the complete Derge canon
-  members: 11
+  members: 12
 - slug: korean
   persona: The Koreanist
   blurb: the hanmun state record and the first hangul vernacular
@@ -89,7 +89,7 @@
 - slug: sinitic
   persona: The Sinologist
   blurb: the classical Chinese written world and its phonological deep past
-  members: 13
+  members: 15
 - slug: japonic
   persona: The Japanologist
   blurb: Old Japanese song to the Sino-Japanese dictionary tradition

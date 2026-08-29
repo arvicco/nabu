@@ -2383,6 +2383,26 @@ classical-modern:   # P88-A2, 02-sources row 184
   # 14,608 documents (7,304 lzh + 7,304 -cmn) / ~1.93M passages.
   sync_policy: manual
 
+menggu-ziyun:   # P88-A2, 02-sources row 185; unblocked by nabu-lects v1.4.0 (zho:oman)
+  adapter: Nabu::Adapters::MengguZiyun
+  axes: [sinitic]
+  wired: false   # flip after the owner-fired first sync verifies live
+  # 蒙古字韻 (1308) — the 'Phags-pa rhyme book, the primary phonological
+  # record of Old Mandarin (nk2028/menggu-ziyun-data; MIT in-repo
+  # verified 2026-08-29; 沈鍾偉 2015 collation + unt 2023 reconstructions
+  # + ccamc.org variants). Dictionary slug `menggu-ziyun`, language
+  # HONEST-COARSE zho — no ISO code exists for Old Mandarin; the
+  # registry's zho:oman stage (№R-53 / nabu-lects PR #11) refines, the
+  # en:early pattern. Body carries the 'Phags-pa spelling, tone, rhyme
+  # class, unt reconstruction, variants, editorial verdicts (此字當刪
+  # rows still mint — the guangyun 應刪字 stance) AND the
+  # 對應切韻音系音韻地位 formula — the ready-made join into the held
+  # guangyun shelf. small_rhymes.tsv (853 rows) censused, lands with the
+  # clone as a future seam. EXPECTED FIRST SYNC (~84 KB clone): 9,446
+  # zho entries. Sibling zhongyuan-data stays the row-99 owner call —
+  # now answerable the same zho:oman way (Q53).
+  sync_policy: manual
+
 qieyun-restored:   # P88-A2, 02-sources row 182
   adapter: Nabu::Adapters::QieyunRestored
   axes: [sinitic]
