@@ -8031,12 +8031,12 @@ module Nabu
           say format("encoded variants: %<desc>s (U+%<sel>04X)",
                      desc: variant.description, sel: variant.selector)
         end
-        shown = card.named_sequences.first(3)
+        shown = card.named_sequences.first(3) # const: a render cap, not a corpus census
         say "named sequences: #{shown.join(' · ')}" if shown.any?
         if card.named_sequences.size > shown.size
           say "named sequences: … #{card.named_sequences.size - shown.size} more"
         end
-        card.discouraged.first(2).each do |row|
+        card.discouraged.first(2).each do |row| # const: a render cap, not a corpus census
           preferred = row.preferred.split.map { |hex| Integer(hex, 16).chr(Encoding::UTF_8) }.join
           say "discouraged sequence (#{row.type}): heads #{row.sequence} — prefer #{preferred}"
         end
