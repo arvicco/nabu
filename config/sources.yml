@@ -2359,9 +2359,9 @@ tshet-uinh:
   # test/fixtures/tshet-uinh/README.md). CC0 1.0 (full legal code verified
   # IN-REPO, LICENSE at root, 2026-07-19). The repo's other files (王三
   # 17,232 rows in-progress, 王一 stub, 韻鏡 ×2 rhyme tables, 反切音韻地位
-  # analyses) are censused in 02-sources row 99, not ingested; sibling
-  # zhongyuan-data (中原音韻, CC0) journaled there too — format + language-tag
-  # honesty reasons, an owner call.
+  # analyses) are censused in 02-sources row 99, not ingested. Sibling
+  # zhongyuan-data's journal note CLOSED P88-R3 (2026-08-29): the
+  # zho:oman stage + owner GO built it as the `zhongyuan` source below.
 classical-modern:   # P88-A2, 02-sources row 184
   adapter: Nabu::Adapters::ClassicalModern
   axes: [sinitic]
@@ -2399,8 +2399,8 @@ menggu-ziyun:   # P88-A2, 02-sources row 185; unblocked by nabu-lects v1.4.0 (zh
   # 對應切韻音系音韻地位 formula — the ready-made join into the held
   # guangyun shelf. small_rhymes.tsv (853 rows) censused, lands with the
   # clone as a future seam. EXPECTED FIRST SYNC (~84 KB clone): 9,446
-  # zho entries. Sibling zhongyuan-data stays the row-99 owner call —
-  # now answerable the same zho:oman way (Q53).
+  # zho entries. Sibling zhongyuan built the same day (P88-R3, owner GO)
+  # — the `zhongyuan` source below.
   sync_policy: manual
 
 zhongyuan:   # P88-R3, 02-sources row 186; the row-99 un-park (zho:oman + owner GO 2026-08-29)
