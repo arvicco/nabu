@@ -803,29 +803,80 @@ module Nabu
 
         inventory = Nabu::SignInventory.new(sign_list)
         create_sign_postings_table(fulltext)
-        progress&.stage("sign coverage 1/2: postings census (tokenizing #{SIGN_SOURCES.join('/')})")
+        create_passage_signs_table(fulltext)
+        # P87-4 (Q52b): ONE tokenization feeds BOTH tables — the P77-r16
+        # shape tokenized the same 4.36M ATF documents twice (the
+        # 2026-08-29 profile: 98m census + 66m re-tokenize). Passage rows
+        # land rank-less in the census pass; only r1..r4 need the COMPLETED
+        # census, and they stamp in a cheap by-rowid update sweep after.
+        progress&.stage("sign coverage: tokenizing #{SIGN_SOURCES.join('/')} " \
+                        "(single pass — postings census + passage index)")
         posts = Hash.new(0)
         seen = 0
+        count = 0
+        batch = []
         each_sign_passage(catalog, inventory: inventory) do |row, line|
-          line.signs.each { |name| posts[[row.fetch(:source_id), name, row[:language]]] += 1 }
           progress&.load_tick(seen, 0) if ((seen += 1) % TICK_EVERY).zero?
+          line.signs.each { |name| posts[[row.fetch(:source_id), name, row[:language]]] += 1 }
+          next if line.signs.empty?
+
+          sorted = line.signs.sort
+          batch << { rowid: row.fetch(:passage_id), source_id: row.fetch(:source_id),
+                     language: row[:language], nsigns: sorted.size, signs: sorted.join(SIGN_SEP),
+                     strays: line.strays, r1: nil, r2: nil, r3: nil, r4: nil }
+          next if batch.size < BATCH_SIZE
+
+          fulltext[PASSAGE_SIGNS_TABLE].multi_insert(batch)
+          count += batch.size
+          batch = []
+        end
+        unless batch.empty?
+          fulltext[PASSAGE_SIGNS_TABLE].multi_insert(batch)
+          count += batch.size
         end
         fulltext.transaction do
-          posts.each_slice(BATCH_SIZE) do |batch|
+          posts.each_slice(BATCH_SIZE) do |post_batch|
             fulltext[SIGN_POSTINGS_TABLE].multi_insert(
-              batch.map do |(source_id, sign, language), docs|
+              post_batch.map do |(source_id, sign, language), docs|
                 { source_id: source_id, sign: sign, language: language, docs: docs }
               end
             )
           end
         end
-        progress&.stage("sign coverage 2/2: passage index (re-tokenizing)")
-        create_passage_signs_table(fulltext)
-        count = write_passage_signs(fulltext, passage_signs_rows(catalog, fulltext, sign_list,
-                                                                 inventory: inventory,
-                                                                 progress: progress))
+        stamp_sign_ranks(fulltext, posts, progress: progress)
         index_passage_signs(fulltext)
         count
+      end
+
+      # The r1..r4 rarity stamp (P87-4): the same [global docs-rank, name]
+      # ordering pass 2 used, computed from the census just taken and
+      # applied by rowid over the rank-less rows — string splits and point
+      # updates, never a second tokenization. Runs BEFORE
+      # index_passage_signs, so the updates pay no index maintenance.
+      def stamp_sign_ranks(fulltext, posts, progress: nil)
+        progress&.stage("sign coverage: stamping rarity ranks")
+        totals = Hash.new(0)
+        posts.each { |(_, name, _), docs| totals[name] += docs }
+        last = -1
+        seen = 0
+        loop do
+          page = fulltext[PASSAGE_SIGNS_TABLE].where { rowid > last }.order(:rowid)
+                                              .limit(BATCH_SIZE).select_map(%i[rowid signs])
+          break if page.empty?
+
+          fulltext.transaction do
+            page.each do |rowid, signs|
+              rarest = signs.split(SIGN_SEP)
+                            .min_by(RAREST_SLOTS) { |name| [totals.fetch(name, -1), name] }
+              fulltext[PASSAGE_SIGNS_TABLE].where(rowid: rowid)
+                                           .update(r1: rarest[0], r2: rarest[1],
+                                                   r3: rarest[2], r4: rarest[3])
+            end
+          end
+          last = page.last[0]
+          seen += page.size
+          progress&.load_tick(seen, 0)
+        end
       end
 
       # One progress tick per this many sign passages — frequent enough
