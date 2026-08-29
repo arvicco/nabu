@@ -195,7 +195,7 @@ The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old
 
 The Sanskrit, Prakrit and Pali lane: GRETIL and SARIT, the DCS treebank, Monier-Williams, the Vedic UD treebank, and SuttaCentral's canon.
 
-**Members** (7): `ud`, `gretil`, `mw`, `suttacentral`, `sarit`, `dcs`, `nabu-data`
+**Members** (8): `ud`, `gretil`, `mw`, `suttacentral`, `sarit`, `dacon`, `dcs`, `nabu-data`
 
 ### buddhist
 
@@ -211,7 +211,7 @@ Cross-cutting by design: SuttaCentral, CBETA, SARIT, and GRETIL whole — member
 
 The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kangyur and Tengyur (Esukhia's exact-representation of the woodblocks, Toh numbers as the crosswalk key), 84000's English translation layer, OTDO's Old Tibetan documents, and the gold-annotation lane (SOAS POS, the Annals and Chronicle); the lexicon shelves join as their packets land.
 
-**Members** (11): `e84000`, `otdo`, `soas-tibetan`, `old-tibetan`, `derge-kangyur`, `actib`, `derge-tengyur`, `mvp`, `tibetan-verbs`, `wiktionary-bo`, `nabu-data`
+**Members** (12): `e84000`, `otdo`, `soas-tibetan`, `old-tibetan`, `derge-kangyur`, `actib`, `derge-tengyur`, `mvp`, `tibetan-verbs`, `monlam-lexicon`, `wiktionary-bo`, `nabu-data`
 
 ### korean
 
@@ -227,7 +227,7 @@ The Korean desk opens on the dynastic record itself: the Veritable Records of Jo
 
 Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — and, since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea).
 
-**Members** (13): `ud`, `wiktionary-recon`, `suttacentral`, `baxter-sagart`, `tshet-uinh`, `unihan`, `hdic`, `babelstone-ids`, `cbeta`, `kanripo`, `kr-gaiji`, `tls`, `viet-wikisource`
+**Members** (15): `ud`, `wiktionary-recon`, `suttacentral`, `baxter-sagart`, `tshet-uinh`, `classical-modern`, `qieyun-restored`, `unihan`, `hdic`, `babelstone-ids`, `cbeta`, `kanripo`, `kr-gaiji`, `tls`, `viet-wikisource`
 
 ### japonic
 
