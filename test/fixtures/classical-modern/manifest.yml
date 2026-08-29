@@ -1,0 +1,43 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every entry is a COMPLETE real file with a stable raw URL — whole files
+# byte-compare on check. adapter_test is null only because the registry/
+# discover pins expect exactly these two chapters (a fresh copy passes; the
+# convention for multi-file fixture sets).
+source: classical-modern
+adapter_test:
+retrieved: 2026-08-29
+files:
+  - path: 双语数据/世说新语/仇隙/source.txt
+    url: https://raw.githubusercontent.com/NiuTrans/Classical-Modern/main/%E5%8F%8C%E8%AF%AD%E6%95%B0%E6%8D%AE/%E4%B8%96%E8%AF%B4%E6%96%B0%E8%AF%AD/%E4%BB%87%E9%9A%99/source.txt
+    refetchable: true
+    whole: true
+  - path: 双语数据/世说新语/仇隙/target.txt
+    url: https://raw.githubusercontent.com/NiuTrans/Classical-Modern/main/%E5%8F%8C%E8%AF%AD%E6%95%B0%E6%8D%AE/%E4%B8%96%E8%AF%B4%E6%96%B0%E8%AF%AD/%E4%BB%87%E9%9A%99/target.txt
+    refetchable: true
+    whole: true
+  - path: 双语数据/世说新语/仇隙/bitext.txt
+    url: https://raw.githubusercontent.com/NiuTrans/Classical-Modern/main/%E5%8F%8C%E8%AF%AD%E6%95%B0%E6%8D%AE/%E4%B8%96%E8%AF%B4%E6%96%B0%E8%AF%AD/%E4%BB%87%E9%9A%99/bitext.txt
+    refetchable: true
+    whole: true
+  - path: 双语数据/世说新语/仇隙/数据来源.txt
+    url: https://raw.githubusercontent.com/NiuTrans/Classical-Modern/main/%E5%8F%8C%E8%AF%AD%E6%95%B0%E6%8D%AE/%E4%B8%96%E8%AF%B4%E6%96%B0%E8%AF%AD/%E4%BB%87%E9%9A%99/%E6%95%B0%E6%8D%AE%E6%9D%A5%E6%BA%90.txt
+    refetchable: true
+    whole: true
+  - path: 双语数据/三十六计/并战计/上屋抽梯/source.txt
+    url: https://raw.githubusercontent.com/NiuTrans/Classical-Modern/main/%E5%8F%8C%E8%AF%AD%E6%95%B0%E6%8D%AE/%E4%B8%89%E5%8D%81%E5%85%AD%E8%AE%A1/%E5%B9%B6%E6%88%98%E8%AE%A1/%E4%B8%8A%E5%B1%8B%E6%8A%BD%E6%A2%AF/source.txt
+    refetchable: true
+    whole: true
+  - path: 双语数据/三十六计/并战计/上屋抽梯/target.txt
+    url: https://raw.githubusercontent.com/NiuTrans/Classical-Modern/main/%E5%8F%8C%E8%AF%AD%E6%95%B0%E6%8D%AE/%E4%B8%89%E5%8D%81%E5%85%AD%E8%AE%A1/%E5%B9%B6%E6%88%98%E8%AE%A1/%E4%B8%8A%E5%B1%8B%E6%8A%BD%E6%A2%AF/target.txt
+    refetchable: true
+    whole: true
+  - path: 双语数据/三十六计/并战计/上屋抽梯/bitext.txt
+    url: https://raw.githubusercontent.com/NiuTrans/Classical-Modern/main/%E5%8F%8C%E8%AF%AD%E6%95%B0%E6%8D%AE/%E4%B8%89%E5%8D%81%E5%85%AD%E8%AE%A1/%E5%B9%B6%E6%88%98%E8%AE%A1/%E4%B8%8A%E5%B1%8B%E6%8A%BD%E6%A2%AF/bitext.txt
+    refetchable: true
+    whole: true
+  - path: 双语数据/三十六计/并战计/上屋抽梯/数据来源.txt
+    url: https://raw.githubusercontent.com/NiuTrans/Classical-Modern/main/%E5%8F%8C%E8%AF%AD%E6%95%B0%E6%8D%AE/%E4%B8%89%E5%8D%81%E5%85%AD%E8%AE%A1/%E5%B9%B6%E6%88%98%E8%AE%A1/%E4%B8%8A%E5%B1%8B%E6%8A%BD%E6%A2%AF/%E6%95%B0%E6%8D%AE%E6%9D%A5%E6%BA%90.txt
+    refetchable: true
+    whole: true

@@ -2362,6 +2362,27 @@ tshet-uinh:
   # analyses) are censused in 02-sources row 99, not ingested; sibling
   # zhongyuan-data (中原音韻, CC0) journaled there too — format + language-tag
   # honesty reasons, an owner call.
+classical-modern:   # P88-A2, 02-sources row 184
+  adapter: Nabu::Adapters::ClassicalModern
+  axes: [sinitic]
+  wired: false   # flip after the owner-fired first sync verifies live
+  translations: true  # the modern side IS the point of a parallel corpus
+  siblings: ["-cmn"]  # the aranese -es mold: show --parallel pairs the
+                      # chapter doc with its -cmn sibling by line number
+  # NiuTrans/Classical-Modern (MIT in-repo, verified 2026-08-29): ~967k
+  # Classical↔Modern Chinese sentence pairs at CHAPTER grain — 97 books /
+  # 7,304 chapter units (blobless-clone census 2026-08-29), each
+  # source.txt (lzh, one sentence per line) + line-aligned target.txt
+  # (cmn sibling) + bitext/数据来源 renditions (censused skips; the
+  # per-chapter crawl sources ride document `provenance` metadata —
+  # translations are web-crawled, the README's own words, never a
+  # scholarly translation). BOTH sides simplified script (censused —
+  # the script posture records it). The nk2028 fork (frozen 2022,
+  # per-chapter identity destroyed) is deliberately NOT the source.
+  # EXPECTED FIRST SYNC (sparse 双语数据 cone, ~420 MB repo objects):
+  # 14,608 documents (7,304 lzh + 7,304 -cmn) / ~1.93M passages.
+  sync_policy: manual
+
 qieyun-restored:   # P88-A2, 02-sources row 182
   adapter: Nabu::Adapters::QieyunRestored
   axes: [sinitic]
