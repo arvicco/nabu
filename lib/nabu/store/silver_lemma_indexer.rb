@@ -73,6 +73,84 @@ module Nabu
                    skipped_mismatch: counts[:skipped_mismatch], filtered_lemmas: counts[:filtered_lemmas])
       end
 
+      # P87-2: apply from the PROJECTION CACHE — the fold/group work was
+      # done once at cache build; this pass only resolves urns, checks
+      # coverage, applies the dictionary filter (a set lookup over the
+      # cached folded values + the precomputed identity bit) and inserts.
+      # Row-identical to apply! by test pin.
+      def apply_cached!(catalog:, fulltext:, cache:, dictionary_filter_slugs: [],
+                        update_frequencies: false, progress: nil)
+        counts = Hash.new(0)
+        frequencies = Hash.new(0)
+        dictionaries = {}
+        cache.each_urn_batch do |rows|
+          apply_cached_batch(catalog, fulltext, rows,
+                             counts: counts, frequencies: frequencies,
+                             dictionaries: dictionaries, filter_slugs: dictionary_filter_slugs)
+          progress&.load_tick(counts[:passages_indexed], 0)
+        end
+        upsert_frequencies(fulltext, frequencies) if update_frequencies
+        Result.new(passages_indexed: counts[:passages_indexed], rows_inserted: counts[:rows_inserted],
+                   skipped_covered: counts[:skipped_covered], skipped_missing: counts[:skipped_missing],
+                   skipped_mismatch: counts[:skipped_mismatch], filtered_lemmas: counts[:filtered_lemmas])
+      end
+
+      def apply_cached_batch(catalog, fulltext, rows, counts:, frequencies:, dictionaries:,
+                             filter_slugs:)
+        by_urn = rows.group_by { |row| row[:urn] }
+        urns = by_urn.keys
+        covered = fulltext[Indexer::LEMMA_TABLE].where(urn: urns).distinct.select_map(:urn).to_set
+        live = live_passages_for_urns(catalog, urns)
+        insert_rows = []
+        by_urn.each do |urn, cache_rows|
+          next counts[:skipped_covered] += 1 if covered.include?(urn)
+
+          passage = live[urn]
+          next counts[:skipped_missing] += 1 if passage.nil?
+
+          language = cache_rows.first[:language]
+          next counts[:skipped_mismatch] += 1 if passage[:language] != language
+
+          filter = if filter_slugs.include?(passage[:slug])
+                     dictionaries.fetch(language) do
+                       dictionaries[language] = dictionary_folded(catalog, language, filter_slugs)
+                     end
+                   end
+          kept = cache_rows.filter_map do |row|
+            if filter && !filter.include?(row[:lemma_folded]) && row[:identity].zero?
+              counts[:filtered_lemmas] += 1
+              next
+            end
+            { lemma_folded: row[:lemma_folded], lemma_raw: row[:lemma_raw],
+              passage_id: passage[:passage_id], urn: urn, language: row[:language],
+              surface_forms: row[:surface_forms], tier: TIER }
+          end
+          next if kept.empty?
+
+          counts[:passages_indexed] += 1
+          counts[:rows_inserted] += kept.size
+          kept.each { |row| frequencies[[row[:lemma_folded], row[:language]]] += 1 }
+          insert_rows.concat(kept)
+        end
+        fulltext.transaction do
+          insert_rows.each_slice(BATCH) { |slice| fulltext[Indexer::LEMMA_TABLE].multi_insert(slice) }
+        end
+      end
+
+      # { urn => { passage_id:, language:, slug: } } for LIVE passages, by
+      # bare urn list (the cache path's twin of live_passages_by_urn).
+      def live_passages_for_urns(catalog, urns)
+        catalog[:passages]
+          .join(:documents, id: :document_id)
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:passages][:urn] => urns,
+                 Sequel[:passages][:withdrawn] => false,
+                 Sequel[:documents][:withdrawn] => false)
+          .select(Sequel[:passages][:id].as(:passage_id), Sequel[:passages][:urn],
+                  Sequel[:passages][:language], Sequel[:sources][:slug].as(:slug))
+          .to_hash(:urn)
+      end
+
       def each_batch(shelf, language, urns)
         batch = []
         shelf.each_record(language: language) do |record|

@@ -84,6 +84,15 @@ module Nabu
 
     # Re-derive the dirty sources into the LIVE catalog; skip the clean ones
     # entirely (one Clean per skip). Raises Nabu::Error on any refusal.
+    # +trust_stages+ (P87-3): mint the fulltext stage stamps at current
+    # versions WITHOUT re-deriving — the documented bridge for an index
+    # known to have been built by the current code (e.g. the full rebuild
+    # that shipped just before the stamps machinery landed).
+    def initialize(config:, registry:, trust_stages: false)
+      super(config: config, registry: registry)
+      @trust_stages = trust_stages
+    end
+
     def run(progress: nil)
       refusal = refusal_reason
       raise Nabu::Error, refusal if refusal
@@ -170,6 +179,21 @@ module Nabu
         link_failures = rederive_links!(db, fulltext)
       end
       indexed = heal_index(db, fulltext, progress) if outcomes.empty? && !Store::Indexer.incremental_ready?(fulltext)
+      # P87-3 (Q52a): reconcile the fulltext STAGE stamps — a derivation
+      # version bump (the P86-3 postings widening is the type specimen)
+      # surgically re-derives exactly its own stage against the kept
+      # catalog; unreconcilable stages refuse loudly; a pre-P87 index
+      # no-ops with the honest note.
+      redone_stages, stage_refusal, stage_note = Store::Indexer.reconcile_stages!(
+        catalog: db, fulltext: fulltext,
+        sign_list: Nabu::SignList.load_default(config: @config),
+        alignments: AlignmentRegistry.load(@config.alignments_path),
+        trust: @trust_stages, progress: progress
+      )
+      raise Nabu::Error, stage_refusal if stage_refusal
+
+      progress&.stage(stage_note) if stage_note
+      indexed = (indexed || 0) + 1 if redone_stages.any? && indexed.nil?
       # P42-4: refresh the planner stats when dirty sources re-derived — their
       # replays revised the catalog and (per source) the index, so the
       # sqlite_stat1 both carry may no longer match (ops §10). A clean-swept run
