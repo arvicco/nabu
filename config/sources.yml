@@ -1642,6 +1642,28 @@ sarit:
   # (Nabu::Deva), so IAST queries land on both scripts. Upstream is a
   # dormant scholarly project (last merge 2021) → re-syncs owner-fired.
 
+dacon:   # P88-A4, 02-sources row 181
+  adapter: Nabu::Adapters::Dacon
+  # The Sanskrit-cosmopolis lane: DACON's texts are Newar reworkings of
+  # Sanskrit-tradition works (Vetālapañcaviṃśati, Maṇicūḍāvadāna) + the
+  # Gopālarājavaṃśāvalī chronicle — the indic desk's Himalayan shelf.
+  axes: [indic]
+  wired: false   # flip after the owner-fired first sync verifies live
+  # DACON — the Diachronic Annotated Corpus of Newar (O'Neill & Meelen,
+  # AHRC "The Emergence of Egophoricity"; Zenodo record 12887386, DOI
+  # 10.5281/zenodo.12887386, VERIFIED cc-by-4.0 on the record 2026-08-29).
+  # Four texts × (SEG, POS), 12th–19th c. Classical Newar (nwc) in IAST
+  # romanization, ~28.8k gold-tagged tokens; POS files parse, SEG files
+  # are censused discovery skips (same tokens, recoverable). No lemma
+  # column anywhere → zero lemma rows (the soas-tibetan honest absence).
+  # Fetch: 8 per-file GETs against the immutable record API, one FileFetch
+  # subdir each, every file under a hard sha256 pin (FILES). EXPECTED
+  # FIRST SYNC (~641 KB): 4 documents / 977 passages (cnew12 1 ·
+  # cnew13_14 856 · cnew17 36 · cnew19 84; 28,166 tokens). A future
+  # release is a NEW DOI the owner re-pins. Lect posture pending on the
+  # nwc anchor mint (P88-B3, nabu-lects).
+  sync_policy: manual
+
 dcs:
   adapter: Nabu::Adapters::Dcs
   axes: [indic]

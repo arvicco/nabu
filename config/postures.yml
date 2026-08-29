@@ -619,6 +619,20 @@ sources:
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: implied}
+  dacon:
+    # P88-A4: nwc has NO nabu-lects anchor yet (censused 2026-08-29 —
+    # zero nwc/new/Newar rows in lects.yml/codemap.yml); the mint rides
+    # the P88-B3 aggregated nabu-lects PR, and this posture flips to
+    # identity when it lands in canonical/nabu-lects.
+    lect: {posture: pending, note: "candidate: a bare nwc anchor (Classical
+        Newari, ISO 639-3) + a new (modern Newar) parent arc — the xct/bod
+        two-anchor mold; queued on the P88-B3 nabu-lects mint"}
+    dating: {posture: dated, note: "the deposit's own century attributions
+        (cnew<cc> stems) as per-document envelopes via MetadataDates
+        :structured"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "IAST romanization (Latn) throughout —
+        the deposit carries no native Newa/Devanagari surface"}
   dcs:
     dating: {posture: undatable}
     places: {posture: unplaced}

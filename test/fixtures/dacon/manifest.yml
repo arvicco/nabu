@@ -1,0 +1,35 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Every file has its own stable raw URL on the immutable Zenodo record —
+# whole files byte-compare on check; the two trims are fetched for
+# URL-liveness only (a trim can never byte-match its source). adapter_test
+# is null: the trims are documented heads, so a fresh-copy re-run would
+# false-fail the count assertions.
+source: dacon
+adapter_test:
+retrieved: 2026-08-29
+files:
+  - path: cnew12-Ukubahah_POS.txt
+    url: https://zenodo.org/api/records/12887386/files/cnew12-Ukubahah_POS.txt/content
+    refetchable: true
+    whole: true
+  - path: cnew12-Ukubahah_SEG.txt
+    url: https://zenodo.org/api/records/12887386/files/cnew12-Ukubahah_SEG.txt/content
+    refetchable: true
+    whole: true
+  - path: cnew13_14-Gopala_POS.txt
+    url: https://zenodo.org/api/records/12887386/files/cnew13_14-Gopala_POS.txt/content
+    refetchable: true
+    whole: false
+    trim: >-
+      the REAL first 48 of 9,130 lines (head -n 48), byte-verbatim — BOM +
+      CRLF + header + five <utt> blocks
+  - path: cnew17-vetala-MSB-10000_POS.txt
+    url: https://zenodo.org/api/records/12887386/files/cnew17-vetala-MSB-10000_POS.txt/content
+    refetchable: true
+    whole: false
+    trim: >-
+      the REAL first 120 of 9,999 lines (head -n 120), byte-verbatim — the
+      TAB-separator variant; no <utt> in the head (the first sits at line
+      6,280), so the trim parses as one trailing block

@@ -63,6 +63,8 @@ module Nabu
           "eebo-tcp" => :structured, # P83-1: the BIBLFULL imprint year through the censused
           #                            molds (85.7% dated on the 3,325-file sample); ?/ca.
           #                            uncertainty stays raw-only — no bounds invented
+          "dacon" => :structured, # P88-A4: the deposit's own century attributions
+          #                         (cnew<cc> stems) as per-document envelopes
           "bfm" => :iso_keys,
           "croala" => :year_range,
           "ebl" => :period_label
