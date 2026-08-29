@@ -15,6 +15,14 @@ sources:
   elephantine:
     egy-Egyd:
       script: egyd
+    phn:
+      script: phnx
+      note: "№R-50 census discovery — the Phoenician documents are held in
+        Hebrew square-script transcription (surface 90% hebr), artifact
+        Phoenician. (Merged INTO this section 2026-08-29: the row first
+        landed as a DUPLICATE elephantine: key, which YAML silently
+        resolved by dropping the egy-Egyd row — the guard test now parses
+        raw text for duplicate source keys.)"
   papyri-ddbdp:
     egy-Egyd:
       script: egyd
@@ -57,11 +65,6 @@ sources:
       script: xsux
       note: Achaemenid Babylonian cuneiform (the corpus's Akkadian side; no
         peo documents held, so no xpeo row yet)
-  elephantine:
-    phn:
-      script: phnx
-      note: census discovery — the Phoenician documents are held in Hebrew
-        square-script transcription (surface 90% hebr), artifact Phoenician
   oncoj:
     ojp:
       script: hant
