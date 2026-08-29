@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The one entry is a documented head trim of a stable raw URL — fetched for
+# URL-liveness only on check. adapter_test is null: a fresh full copy would
+# false-fail the count assertions.
+source: menggu-ziyun
+adapter_test:
+retrieved: 2026-08-29
+files:
+  - path: data.tsv
+    url: https://raw.githubusercontent.com/nk2028/menggu-ziyun-data/main/data.tsv
+    refetchable: true
+    whole: false
+    trim: >-
+      the REAL first 160 of 9,447 lines (head -n 160), byte-verbatim —
+      small rhymes 1-14 with every optional-field kind represented
