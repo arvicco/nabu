@@ -34,11 +34,15 @@ class TshetUinhTest < Minitest::Test
 
   # --- discover / parse -------------------------------------------------------
 
+  def refs
+    adapter.discover(FIXTURES).to_a
+  end
+
   def parsed
-    refs = adapter.discover(FIXTURES).to_a
-    assert_equal 1, refs.size
-    assert_equal "guangyun:廣韻.csv", refs.first.id
-    adapter.parse(refs.first)
+    all = refs
+    assert_equal 2, all.size
+    assert_equal "guangyun:廣韻.csv", all.first.id
+    adapter.parse(all.first)
   end
 
   def entries_by_id
@@ -111,6 +115,88 @@ class TshetUinhTest < Minitest::Test
 
   def test_headwords_fold_for_lookup
     dong = entries_by_id.fetch("1.1")
+    assert_equal Nabu::Normalize.search_form("東", language: "ltc"), dong.headword_folded
+  end
+
+  # --- the 王三 second shelf (P88-R4) -----------------------------------------
+
+  def wangsan_parsed
+    all = refs
+    assert_equal ["guangyun:廣韻.csv", "wangsan:王三.csv"], all.map(&:id),
+                 "discover yields both shelves, sorted"
+    adapter.parse(all.last)
+  end
+
+  def wangsan_by_id
+    wangsan_parsed.to_h { |entry| [entry.entry_id, entry] }
+  end
+
+  def test_wangsan_parses_as_its_own_dictionary
+    document = wangsan_parsed
+    assert_equal "wangsan", document.slug
+    assert_equal "ltc", document.language
+    assert_match(/王仁昫/, document.title)
+    assert_equal 10, document.count, "11 fixture rows − 1 headword-less 待校 slot"
+    assert_equal document.count, document.entries.map(&:entry_id).uniq.size,
+                 "小韻號.小韻內字序 is the unique pair (小韻號.字號 is NOT unique upstream)"
+  end
+
+  def test_wangsan_plain_entry_carries_position_pinyin_and_locus
+    dong = wangsan_by_id.fetch("1.1")
+    assert_equal "東", dong.headword
+    assert_equal "徳紅反。木方。二。", dong.gloss, "釋義 verbatim (upstream writes 徳, not 德, here)"
+    assert_match(/音韻地位：端一東平/, dong.body)
+    assert_match(/切韻拼音：toung/, dong.body)
+    assert_match(/韻目：東/, dong.body)
+    assert_match(/小韻首字：東/, dong.body)
+    assert_match(/反切：德紅反/, dong.body)
+    assert_match(/底本位置：頁2 行11 字1/, dong.body)
+  end
+
+  def test_wangsan_supplemented_headword_is_flagged_not_silently_added
+    row = wangsan_by_id.fetch("23.7.1")
+    assert_equal "𩦺", row.headword
+    assert_equal "［𩦺］", row.key_raw
+    assert_match(/應補字/, row.body, "the ［X］ shape with the '.1' ordinal suffix, flagged like guangyun's a1")
+  end
+
+  def test_wangsan_corrected_headword_keeps_the_transmitted_form_as_annotation
+    row = wangsan_by_id.fetch("539.3")
+    assert_equal "𥮒", row.headword, "the correction verdict is the headword"
+    assert_equal "箈〈𥮒〉", row.key_raw
+    assert_match(/校訛字：底本作「箈」/, row.body)
+    assert_match(/釋義：籠。又子田反。［亦作］⿱竹㵶〈𥷰〉。/, row.body,
+                 "annotation brackets inside 釋義 ride verbatim, never applied")
+  end
+
+  def test_wangsan_empty_supplement_slot_rides_verbatim
+    row = wangsan_by_id.fetch("164.6.1")
+    assert_equal "［］", row.headword, "an unrecovered supplied slot — kept raw, never interpreted"
+    assert_equal "［］", row.key_raw
+    assert_equal "［］", row.gloss
+  end
+
+  def test_wangsan_undocumented_bracket_shape_rides_verbatim
+    row = wangsan_by_id.fetch("804.2")
+    assert_equal "【佯】", row.headword, "【】 is undocumented upstream — verbatim, not invented syntax"
+    assert_nil row.gloss, "empty 釋義 → nil gloss"
+  end
+
+  def test_wangsan_fanqie_less_row_omits_the_line_honestly
+    row = wangsan_by_id.fetch("312.1")
+    assert_equal "絓", row.headword
+    refute_match(/反切：/, row.body)
+    assert_equal "［。］𢙣𢇁。", row.gloss, "釋義 verbatim, brackets included"
+  end
+
+  def test_wangsan_headword_less_rows_are_skipped_censused
+    entries = wangsan_by_id
+    refute entries.key?("45.9"), "the 5 headword-less 待校 slots cannot mint (no key) — censused skip"
+    assert_equal 10, entries.size
+  end
+
+  def test_wangsan_headwords_fold_for_lookup
+    dong = wangsan_by_id.fetch("1.1")
     assert_equal Nabu::Normalize.search_form("東", language: "ltc"), dong.headword_folded
   end
 

@@ -12,3 +12,7 @@ files:
     url: https://raw.githubusercontent.com/nk2028/tshet-uinh-data/main/韻書/廣韻.csv
     whole: false
     trim: header + 12 byte-verbatim rows (小韻號.字號 1.1/1.2/2.43/133.1/157.1/318.9/961.1/961.1a1/1692a.1/1919.1/1919.2/3067.1 — every documented 校本 annotation type, 直音, suffixed ids, nil-gloss) — 1,640,287 B -> ~3 KB; recipe in README.md
+  - path: 韻書/王三.csv
+    url: https://raw.githubusercontent.com/nk2028/tshet-uinh-data/main/韻書/王三.csv
+    whole: false
+    trim: header + 11 byte-verbatim rows (full-file lines 1-6/118/266/993/2160/3387/5062 = ids 1.1/1.2/2.1/2.2/2.3/23.7.1/45.9/164.6.1/312.1/539.3/804.2 — plain head, 應補字, headword-less 待校 slot, empty ［］ slot, 反切-less row, the one 校訛字, a 【】-marked row) — 1,566,059 B -> ~1 KB; recipe in README.md

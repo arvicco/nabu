@@ -2357,8 +2357,14 @@ tshet-uinh:
   # 廣韻 critical edition (澤存堂本 + 校本 corrections AS ANNOTATIONS, never
   # silent fixes — the documented upstream syntax, quoted in
   # test/fixtures/tshet-uinh/README.md). CC0 1.0 (full legal code verified
-  # IN-REPO, LICENSE at root, 2026-07-19). The repo's other files (王三
-  # 17,232 rows in-progress, 王一 stub, 韻鏡 ×2 rhyme tables, 反切音韻地位
+  # IN-REPO, LICENSE at root, 2026-07-19). P88-R4 adds 王三.csv as the
+  # SECOND shelf on this source (slug wangsan, ltc): 王仁昫《刊謬補缺切韻》
+  # (~706), 17,232 rows → 17,227 entries (5 headword-less 待校 slots are a
+  # censused skip); upstream still marks it 小韻內部待校 — entries parse
+  # verbatim regardless. Data already on disk from the guangyun clone, so
+  # `bin/nabu sync tshet-uinh --parse-only` mints it WITHOUT network;
+  # expected re-sync total: 25,336 guangyun + 17,227 wangsan entries.
+  # The repo's other files (王一 stub, 韻鏡 ×2 rhyme tables, 反切音韻地位
   # analyses) are censused in 02-sources row 99, not ingested. Sibling
   # zhongyuan-data's journal note CLOSED P88-R3 (2026-08-29): the
   # zho:oman stage + owner GO built it as the `zhongyuan` source below.
