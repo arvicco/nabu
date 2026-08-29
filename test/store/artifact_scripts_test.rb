@@ -110,4 +110,23 @@ class ArtifactScriptsTest < Minitest::Test
     assert_equal %w[avst egyd hant ital phnx tibt ugar xsux], tags,
                  "the №R-50 census set — a new tag here means a new owner ruling"
   end
+
+  # The 2026-08-29 regression class: YAML resolves a DUPLICATE source key by
+  # silently dropping the earlier section (a second `elephantine:` cost the
+  # P61 egy-Egyd row its existence, invisible to every post-parse check).
+  # Guard at the raw-text level: each source key appears exactly once.
+  def test_the_shipped_config_has_no_duplicate_source_keys
+    raw = File.read(File.join(Nabu::Config::PROJECT_ROOT, "config", "artifact_scripts.yml"))
+    keys = raw.scan(/^  (\S+):\s*$/).flatten
+    dupes = keys.tally.select { |_, count| count > 1 }.keys
+    assert_empty dupes, "duplicate source sections (YAML keeps only the last): #{dupes.join(', ')}"
+  end
+
+  def test_elephantine_carries_both_its_rows
+    shipped = YAML.safe_load_file(
+      File.join(Nabu::Config::PROJECT_ROOT, "config", "artifact_scripts.yml")
+    ).fetch("sources")
+    assert_equal %w[egy-Egyd phn], shipped.fetch("elephantine").keys.sort,
+                 "the P61 egyd row and the №R-50 phnx row coexist in ONE section"
+  end
 end
