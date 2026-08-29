@@ -185,6 +185,9 @@ files:
     refetchable: false
     provenance: korpuskel-api
     whole: false
+    reason: >-
+      The data field of rest?command=download-document&corpus=menota&
+      document-id=AM-36-fol; session-gated as above.
     trim: >-
       P88-B1 (№R-45 flaw 1): the full teiHeader + the body's first two
       <app> blocks of the real AM-36-fol download — app 1 with
