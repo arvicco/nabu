@@ -383,6 +383,9 @@ module Nabu
         timed(profile, :reflex) do
           ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
         end
+        # P87-3: the reference path stamps every stage at its current
+        # derivation version — the incremental path's comparison baseline.
+        stamp_stages!(fulltext)
         count
       end
 
@@ -664,6 +667,118 @@ module Nabu
         text.scan(POSTED).uniq.each do |char|
           chars[[row.fetch(:source_id), char, row[:language]]] += 1
         end
+      end
+
+      # -- fulltext stage stamps (P87-3, Q52a) ------------------------------
+      # Each heavy fulltext-side stage records the derivation VERSION it
+      # was built under. `--incremental` (whose kept catalog makes carrying
+      # sound) compares and surgically re-runs exactly the stage a version
+      # bump dirtied; plain `rebuild` stays the reference and re-mints all
+      # stamps. A missing stamps TABLE means a pre-P87 index: incremental
+      # keeps its legacy behavior (no stage protection existed then either)
+      # and says so — the next full rebuild, or --trust-stages, mints them.
+
+      STAGE_STAMPS_TABLE = :stage_stamps
+
+      # const: derivation-version tokens per stage — bump a stage's token
+      # whenever ITS derivation semantics change (the P86-3 postings
+      # widening is the type specimen; its class token doubles here).
+      # Display choices/census claims live elsewhere; these are code-era
+      # markers.
+      STAGE_VERSIONS = {
+        "fts_lemma" => "v1",
+        "char_postings" => POSTINGS_CLASS,
+        "trigram" => "v1",
+        "passage_chars" => "v1",
+        "sign_coverage" => "v1-tokenize-once",
+        "alignment" => "v1",
+        "reflex" => "v1"
+      }.freeze
+
+      # The stages reconcile_stages! can re-derive standalone against a
+      # kept catalog. A stale stage OUTSIDE this set (fts_lemma — the
+      # composite streaming pass; trigram — its scope memory) refuses
+      # loudly: a full rebuild is the honest answer there.
+      RECONCILABLE_STAGES = %w[char_postings passage_chars sign_coverage alignment reflex].freeze
+
+      def stamp_stages!(fulltext, versions: STAGE_VERSIONS)
+        create_stage_stamps_table(fulltext)
+        now = Time.now.utc.iso8601
+        versions.each do |stage, version|
+          fulltext[STAGE_STAMPS_TABLE]
+            .insert_conflict(target: :stage, update: { version: version, stamped_at: now })
+            .insert(stage: stage, version: version, stamped_at: now)
+        end
+      end
+
+      def create_stage_stamps_table(fulltext)
+        fulltext.create_table?(STAGE_STAMPS_TABLE) do
+          String :stage, primary_key: true
+          String :version, null: false
+          String :stamped_at, null: false
+        end
+      end
+
+      # Stage names whose stamped version differs from +versions+ (all of
+      # them when the table is absent — the caller decides how to treat a
+      # pre-P87 index).
+      def stale_stages(fulltext, versions: STAGE_VERSIONS)
+        return versions.keys unless fulltext.table_exists?(STAGE_STAMPS_TABLE)
+
+        stamped = fulltext[STAGE_STAMPS_TABLE].select_hash(:stage, :version)
+        versions.reject { |stage, version| stamped[stage] == version }.keys
+      end
+
+      # P87-3: the incremental path's stage reconciliation. Returns
+      # [redone_stage_names, refusal_or_nil, note_or_nil]:
+      # - pre-P87 index (no stamps table): no-op with an honest note
+      #   (legacy behavior — no protection existed before either);
+      # - +trust+: mint stamps at current versions without re-deriving
+      #   (the documented bridge for an index KNOWN built by current code);
+      # - a stale stage in RECONCILABLE_STAGES re-derives corpus-wide and
+      #   re-stamps; any other stale stage refuses — full rebuild required.
+      def reconcile_stages!(catalog:, fulltext:, sign_list: nil, alignments: nil,
+                            versions: STAGE_VERSIONS, trust: false, progress: nil)
+        unless fulltext.table_exists?(STAGE_STAMPS_TABLE)
+          if trust
+            stamp_stages!(fulltext, versions: versions)
+            return [[], nil, "stage stamps minted at current versions (--trust-stages)"]
+          end
+          return [[], nil,
+                  "fulltext stages are unstamped (pre-P87 index) — derivation-change " \
+                  "protection starts at the next full rebuild (or --trust-stages if this " \
+                  "index was built by the current code)"]
+        end
+
+        stale = stale_stages(fulltext, versions: versions)
+        return [[], nil, nil] if stale.empty?
+
+        if trust
+          stamp_stages!(fulltext, versions: versions)
+          return [[], nil, "stage stamps advanced without re-derive (--trust-stages)"]
+        end
+        unreconcilable = stale - RECONCILABLE_STAGES
+        unless unreconcilable.empty?
+          return [[], "derivation changed for stage(s) #{unreconcilable.join(', ')} — no " \
+                      "standalone corpus re-run exists for them; a full rebuild is required",
+                  nil]
+        end
+
+        stale.each do |stage|
+          progress&.stage("stage re-derive: #{stage} (derivation version moved)")
+          case stage
+          when "char_postings" then rebuild_char_postings!(catalog: catalog, fulltext: fulltext)
+          when "passage_chars" then rebuild_passage_chars!(catalog: catalog, fulltext: fulltext)
+          when "sign_coverage"
+            rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
+                                   progress: progress)
+          when "alignment"
+            AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
+          when "reflex" then ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
+          end
+          stamp_stages!(fulltext, versions: { stage => versions.fetch(stage) })
+        end
+        [stale, nil, nil]
       end
 
       # №R-51-B: is silver ARMED — has the owner projected the shelf into

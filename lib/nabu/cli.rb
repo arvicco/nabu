@@ -1515,6 +1515,10 @@ module Nabu
     option :incremental, type: :boolean, default: false,
                          desc: "Keep the catalog; re-derive only fingerprint-dirty sources " \
                                "(full rebuild remains the reference)"
+    option :trust_stages, type: :boolean, default: false,
+                          desc: "--incremental only (P87-3): mint the fulltext stage stamps at " \
+                                "current versions without re-deriving — ONLY when this index " \
+                                "was built by the current code"
     def rebuild
       config = Nabu::Config.load
       # P62 rider: rebuild DROPS the catalog — doing that under a live
@@ -10199,7 +10203,8 @@ module Nabu
       # skipped on their derivation stamp. Refusals (schema drift, orphan
       # rows, no catalog) are loud exit-1 errors — full rebuild required.
       def rebuild_incremental(config, registry)
-        incremental = Nabu::IncrementalRebuild.new(config: config, registry: registry)
+        incremental = Nabu::IncrementalRebuild.new(config: config, registry: registry,
+                                                   trust_stages: options[:trust_stages])
         return print_incremental_plan(incremental.plan) if options[:dry_run]
 
         result = incremental.run(progress: progress_reporter)
