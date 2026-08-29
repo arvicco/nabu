@@ -2362,6 +2362,23 @@ tshet-uinh:
   # analyses) are censused in 02-sources row 99, not ingested; sibling
   # zhongyuan-data (中原音韻, CC0) journaled there too — format + language-tag
   # honesty reasons, an owner call.
+qieyun-restored:   # P88-A2, 02-sources row 182
+  adapter: Nabu::Adapters::QieyunRestored
+  axes: [sinitic]
+  wired: false   # flip after the owner-fired first sync verifies live
+  # 切韻 itself (Lu Fayan, 601) — the PARENT of the held guangyun shelf —
+  # in Fujita Takumi's restoration (2017 thesis / 2023 monograph),
+  # extracted upstream from the thesis PDF (nk2028/qieyun-restored, MIT
+  # in-repo LICENSE verified 2026-08-29). Dictionary slug `qieyun`,
+  # language ltc, entry_id = the thesis-table 頁.行 (unique ×11,158; 小韻
+  # numbering restarts per 韻目 — censused). Li Yongfu's parallel
+  # restoration (97.4% byte-identical) + small-rime-diffs are censused
+  # witness lanes, deliberately unmined; to_tshet_uinh_data/
+  # small_rimes.csv carries the 對應廣韻小韻號 join key into guangyun —
+  # lands with the sparse clone as a future consumer seam. EXPECTED FIRST
+  # SYNC (sparse CSV cone ~5 MB): 11,158 ltc entries on the qieyun shelf.
+  sync_policy: manual
+
 # P32-4: the Sinoxenic character bridge — three dictionary-kind registrants.
 # The shelf keys speak one join language: Unihan entry ids are "U+XXXX"
 # codepoints, KANJIDIC2 mints the same key (13,043 of its 13,108 kanji land
