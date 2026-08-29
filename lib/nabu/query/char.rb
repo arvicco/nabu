@@ -110,7 +110,8 @@ module Nabu
         :glyph, :codepoint, :name, :category, :script, :numeric,
         :combining_class, :decomposition,
         :block, :script_code, :age, :aliases, :chart_aliases, :chart_notes, :see_also,
-        :numerals, :script_context, :script_desk, :reading
+        :numerals, :script_context, :script_desk, :reading,
+        :variants, :named_sequences, :discouraged, :char_sources
       )
 
       # A "see also" chart cross-reference, resolved against the seam when the
@@ -159,7 +160,9 @@ module Nabu
           end,
           numerals: Nabu::CharNumerals.lookup(glyph),
           script_context: dossier&.context, script_desk: dossier&.desk,
-          reading: hangul_reading_of(cp, ucd)
+          reading: hangul_reading_of(cp, ucd),
+          variants: ucd.variants(cp), named_sequences: ucd.named_sequences(cp),
+          discouraged: ucd.do_not_emit(cp), char_sources: char_sources_of(cp, ucd)
         )
       end
 
@@ -189,6 +192,16 @@ module Nabu
                          name: label.empty? ? nil : label)
         end
         UniversalDecomp.new(kind: "jamo", parts: parts)
+      end
+
+      # 88-B2: the Tangut/Nushu per-character source fields, labeled by
+      # register ("Tangut sources: kTGT_MergedSrc … · kTGT_RSUnicode …").
+      def self.char_sources_of(codepoint, ucd)
+        if (fields = ucd.tangut_source(codepoint))
+          ["Tangut", fields]
+        elsif (fields = ucd.nushu_source(codepoint))
+          ["Nüshu", fields]
+        end
       end
 
       # The hangul reading line (P86, owner request 2026-08-28): a syllable
