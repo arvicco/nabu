@@ -587,10 +587,9 @@ module Nabu
         path = member_path("DoNotEmit.txt")
         rows = Hash.new { |h, k| h[k] = [] }
         if path
+          seq = /[0-9A-F]{4,6}(?:\s+[0-9A-F]{4,6})*/
           File.foreach(path, encoding: Encoding::UTF_8) do |line|
-            unless (m = line.match(/\A([0-9A-F]{4,6}(?:\s+[0-9A-F]{4,6})*)\s*;\s*([0-9A-F]{4,6}(?:\s+[0-9A-F]{4,6})*)\s*;\s*(\w+)/))
-              next
-            end
+            next unless (m = line.match(/\A(#{seq})\s*;\s*(#{seq})\s*;\s*(\w+)/o))
 
             head = Integer(m[1].split.first, 16)
             rows[head] << Discouraged.new(sequence: m[1].strip, preferred: m[2].strip,
