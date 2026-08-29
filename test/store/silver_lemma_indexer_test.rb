@@ -195,16 +195,36 @@ module Store
       assert_equal %w[urn:d:1:2], lemmas.select_map(:urn)
     end
 
-    def test_full_rebuild_with_shelf_carries_silver_rows_and_frequencies
+    # №R-51-B (2026-08-29, flipping the P84-1 pin DELIBERATELY): a full
+    # rebuild never projects the shelf — the projection is an owner-fired
+    # act (`nabu lemma-enrich --index-only`), so the 99-minute replay tax
+    # died with this test's old expectation.
+    def test_full_rebuild_leaves_the_shelf_unprojected
       doc = make_document
       make_passage(doc, urn: "urn:d:1:1")
       rebuild_gold!
       shelve(urn: "urn:d:1:1", tokens: [%w[fronte frons NOUN]])
 
       Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, lemma_shelf: @shelf)
-      assert_equal %w[silver], lemmas.where(urn: "urn:d:1:1").select_map(:tier)
-      assert_equal 1, @fulltext[:lemma_frequencies].where(lemma_folded: "frons", tier: "silver")
-                                                   .get(:passage_count)
+      assert_empty lemmas.where(urn: "urn:d:1:1", tier: "silver").all,
+                   "the shelf stays unprojected until the owner fires the apply"
+      assert_empty @fulltext[:lemma_frequencies].where(tier: "silver").all
+    end
+
+    # The arm-gate's other half: an index the owner never armed stays
+    # silver-free through routine source refreshes — the projection can
+    # never sneak back without an owner act.
+    def test_refresh_source_stays_silver_free_when_unarmed
+      doc = make_document
+      make_passage(doc, urn: "urn:d:1:1")
+      rebuild_gold!
+      shelve(urn: "urn:d:1:1", tokens: [%w[fronte frons NOUN]])
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, lemma_shelf: @shelf)
+
+      Nabu::Store::Indexer.refresh_source!(catalog: @catalog, fulltext: @fulltext, slug: "edr",
+                                           lemma_shelf: @shelf)
+      assert_empty lemmas.where(tier: "silver").all,
+                   "unarmed → the sync-refresh must NOT re-introduce silver"
     end
 
     def test_refresh_source_reapplies_the_silver_slice
