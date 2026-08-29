@@ -49,8 +49,10 @@ class MenotaTest < Minitest::Test
   FRAG243 = "urn:nabu:menota:am-243-b-alfa-fol"  # bare <pc xml:id>, <supplied> bare words, 3 edition layouts
   FRAG55B = "urn:nabu:menota:nra-norrfragm-55-b" # three-level fragment, bare <pc> throughout (whole)
 
+  # P88-B1: +AM36 (the apparatus fixture — №R-45 flaw 1).
+  AM36 = "urn:nabu:menota:am-36-fol"
   ALL_URNS = [KONUNGS, LAXDAELA, WORMIANUS, HOMILIES, ELIS, PAMPH, BONBOK, STJORN,
-              STRENG, FRAG243, FRAG55B].sort.freeze
+              STRENG, FRAG243, FRAG55B, AM36].sort.freeze
 
   def conformance_adapter = Nabu::Adapters::Menota.new
 
@@ -74,7 +76,7 @@ class MenotaTest < Minitest::Test
   end
 
   def test_discover_never_yields_the_entity_table_or_catalogue_envelopes
-    assert_equal 11, adapter.discover(workdir).map(&:id).size,
+    assert_equal 12, adapter.discover(workdir).map(&:id).size,
                  "menota-entities.txt and catalogue/*.json are not documents"
   end
 
@@ -511,19 +513,41 @@ class MenotaTest < Minitest::Test
     db = store_test_db
     source = create_source(db)
     first = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
-    assert_equal 11, first.added
+    assert_equal 12, first.added # P88-B1: +AM-36-fol
     assert_equal 0, first.errored
-    assert_equal 237, db[:passages].count,
+    assert_equal 238, db[:passages].count,
                  "51 + 48 + 21 manuscript lines + the P82-r1 trims (3 + 2 + 1 + 4 + 8) " \
                  "+ the Q45 trims (7 + 39 + 53)"
 
     second = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 0, second.errored
-    assert_equal 11, second.skipped, "a byte-identical reload skips every document"
-    assert_equal 237, db[:passages].count
+    assert_equal 12, second.skipped, "a byte-identical reload skips every document"
+    assert_equal 238, db[:passages].count
     assert_equal [1], db[:passages].distinct.select_map(:revision)
   ensure
     db&.disconnect
+  end
+
+  # P88-B1 (№R-45 flaw 1): AM-36-fol interleaves parallel witnesses in a
+  # critical apparatus — <app><lem>the manuscript's OWN reading</lem>
+  # <rdg wit="…">another manuscript's words</rdg></app>. Witness readings
+  # must never enter the searchable text (they tripled phrases); they ride
+  # the passage's `apparatus` annotation instead, sigla labeled, and
+  # no-parallel witnesses (comment-only rdg) contribute nothing.
+  def test_apparatus_witness_readings_annotate_and_never_enter_the_text
+    document = adapter.parse(ref_for(AM36))
+    assert_equal 1, document.passages.size, "the fixture's n-less lbs share one position"
+    passage = document.passages.first
+    assert_equal "Upphaf ſǫgu hins Helga Olafs Konungs I Cap . Uppfostr Olafs Helga " \
+                 "Harallds ſonar", passage.text,
+                 "the lems — the manuscript's own reading — are the whole text"
+    refute_match(/Sogu|saugo/, passage.text, "witness spellings never enter the text")
+
+    apparatus = passage.annotations.fetch("apparatus")
+    assert_equal %w[AM18 AM70], apparatus.map { |row| row.fetch("wit") }.sort,
+                 "app 1's parallel witnesses ride labeled; app 2's no-parallel rdgs add nothing"
+    am70 = apparatus.find { |row| row["wit"] == "AM70" }
+    assert_match(/Sogu hins helga Olafs/, am70.fetch("text"))
   end
 
   private
