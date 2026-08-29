@@ -27,3 +27,4 @@ D7A3;<Hangul Syllable, Last>;Lo;0;L;;;;;N;;;;;
 0030;DIGIT ZERO;Nd;0;EN;;0;0;0;N;;;;;
 17000;<Tangut Ideograph, First>;Lo;0;L;;;;;N;;;;;
 187FF;<Tangut Ideograph, Last>;Lo;0;L;;;;;N;;;;;
+2C30;GLAGOLITIC SMALL LETTER AZU;Ll;0;L;;;;;N;;;2C00;;2C00
