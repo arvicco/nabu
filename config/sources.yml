@@ -2403,6 +2403,23 @@ menggu-ziyun:   # P88-A2, 02-sources row 185; unblocked by nabu-lects v1.4.0 (zh
   # now answerable the same zho:oman way (Q53).
   sync_policy: manual
 
+zhongyuan:   # P88-R3, 02-sources row 186; the row-99 un-park (zho:oman + owner GO 2026-08-29)
+  adapter: Nabu::Adapters::Zhongyuan
+  axes: [sinitic]
+  wired: false   # flip after the owner-fired first sync verifies live
+  # 中原音韻 (1324) — the arch-source of Old Mandarin phonology
+  # (nk2028/zhongyuan-data; CC0 1.0 full legal code in-repo, verified
+  # 2026-08-29). 5,877 character rows, each with 聲母/韻母/聲調 and FOUR
+  # parallel reconstructions (楊耐思 1981 · 寧繼福 1985 · 薛鳳生 1990 ·
+  # unt 2021); 校註 editorial notes ×94 ride verbatim. Journaled since
+  # P32-3 over the no-ISO-code question; the zho:oman stage (№R-53 /
+  # nabu-lects v1.4.0) + the owner's P88-R3 GO close it: language
+  # HONEST-COARSE zho, the stage row refines (the menggu-ziyun pattern).
+  # Dictionary slug `zhongyuan`. EXPECTED FIRST SYNC (~350 KB clone):
+  # 5,877 zho entries. The README says the series may grow ("now
+  # including only Zhongyuan Yinyun itself") — re-syncs owner-fired.
+  sync_policy: manual
+
 qieyun-restored:   # P88-A2, 02-sources row 182
   adapter: Nabu::Adapters::QieyunRestored
   axes: [sinitic]
