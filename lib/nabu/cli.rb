@@ -7005,12 +7005,32 @@ module Nabu
         catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
         fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
         begin
-          progress_reporter.stage("silver lemmas: projecting the shelf into passage_lemmas")
-          result = Nabu::Store::SilverLemmaIndexer.apply!(
-            catalog: catalog, fulltext: fulltext, shelf: shelf,
-            dictionary_filter_slugs: registry.lemma_filter_slugs,
-            update_frequencies: true, progress: progress_reporter
+          # P87-2 (№R-51-B): the apply rides the projection cache — the
+          # fold/group work runs once per shelf state; a valid cache makes
+          # this pass resolution+insert only. An UNARMED index (no silver
+          # anywhere — the post-rebuild case) gets the bare-table window:
+          # indexes drop, the bulk lands, each index rebuilds sorted.
+          cache = Nabu::Store::SilverLemmaCache.new(
+            path: Nabu::Store::SilverLemmaCache.default_path(config)
           )
+          progress_reporter.stage("silver lemmas: fingerprinting the shelf")
+          fingerprint = shelf.fingerprint
+          cache.build!(shelf: shelf, progress: progress_reporter) unless cache.valid_for?(fingerprint)
+          armed = Nabu::Store::Indexer.silver_armed?(fulltext)
+          apply = lambda do
+            Nabu::Store::SilverLemmaIndexer.apply_cached!(
+              catalog: catalog, fulltext: fulltext, cache: cache,
+              dictionary_filter_slugs: registry.lemma_filter_slugs,
+              update_frequencies: true, progress: progress_reporter
+            )
+          end
+          progress_reporter.stage("silver lemmas: projecting the cache into passage_lemmas" \
+                                  "#{' (bare-table window — indexes cycle)' unless armed}")
+          result = if armed
+                     apply.call
+                   else
+                     Nabu::Store::Indexer.cycle_lemma_indexes(fulltext) { apply.call }
+                   end
           finish_progress
           say "indexed #{commas(result.passages_indexed)} passages " \
               "(#{commas(result.rows_inserted)} silver rows) — skipped: " \

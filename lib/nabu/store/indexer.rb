@@ -1107,6 +1107,25 @@ module Nabu
         fulltext.add_index(LEMMA_TABLE, :language)
       end
 
+      # P87-2: the bulk-apply window — drop the three lemma indexes, run
+      # the block's bulk inserts against the bare table, rebuild each index
+      # in one sorted pass (the P36-2 trick at command grain). The ensure
+      # arm means an interrupted apply still leaves the table indexed.
+      def cycle_lemma_indexes(fulltext)
+        drop_lemma_indexes(fulltext)
+        yield
+      ensure
+        create_lemma_indexes(fulltext)
+      end
+
+      def drop_lemma_indexes(fulltext)
+        %i[lemma_folded urn language].each do |column|
+          fulltext.drop_index(LEMMA_TABLE, column)
+        rescue Sequel::DatabaseError
+          nil # a prior interrupted cycle may have left this one missing
+        end
+      end
+
       # Streaming dataset of catalog rows for every live passage under a live
       # document. Qualified selects avoid the passages/documents column-name
       # collisions (both carry urn, withdrawn, revision, id). The dataset is
