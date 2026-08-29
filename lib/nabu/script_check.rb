@@ -12,6 +12,9 @@ module Nabu
   # The tag set mirrors the registry's global scripts table where Ruby's
   # regex engine names the property; a text dominated by none of them
   # (punctuation-only, digits) classifies nil — honest, never guessed.
+  # P86-2: the mirror claim is now ENFORCED — test/script_check_test.rb is
+  # the drift guard (registry tags = PROPERTIES ∪ UNMIRRORED, no ghosts), so
+  # a nabu-lects script mint without a row here turns the suite red.
   module ScriptCheck
     PROPERTIES = {
       "latn" => /\p{Latin}/,
@@ -30,7 +33,27 @@ module Nabu
       "hant" => /\p{Han}/,
       "runr" => /\p{Runic}/,
       "goth" => /\p{Gothic}/,
-      "xsux" => /\p{Cuneiform}/
+      "xsux" => /\p{Cuneiform}/,
+      "phnx" => /\p{Phoenician}/,
+      "tibt" => /\p{Tibetan}/,
+      "ethi" => /\p{Ethiopic}/,
+      "hang" => /\p{Hangul}/,
+      "avst" => /\p{Avestan}/,
+      "ugar" => /\p{Ugaritic}/,
+      "xpeo" => /\p{Old_Persian}/
+    }.freeze
+
+    # Registry scripts a byte check CANNOT mirror, with the reason stated —
+    # the drift guard accepts a tag here instead of a PROPERTIES row, so the
+    # gap is a documented decision, never an oversight.
+    UNMIRRORED = {
+      "egyd" => "Egyptian Demotic has no Unicode encoding — held surfaces are " \
+                "transliteration (latn) or hieroglyphic; the ~egyd claim is an " \
+                "artifact-script fact, not a byte-checkable surface",
+      "jpan" => "a COMPOSITE surface (Han + Hiragana + Katakana): its Han " \
+                "characters byte-classify as hant, and the kana scripts are not " \
+                "separate registry claims — a ~jpan surface is asserted at the " \
+                "collection grain, not per byte"
     }.freeze
 
     # {tag => char count} over +text+, script-bearing characters only.

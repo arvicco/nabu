@@ -196,6 +196,7 @@ no page update is a red suite, and vice versa.
 | `mul/document-dates` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `mul/char-postings` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `mul/language-dossiers` | available | curated | CC-BY-SA-4.0 | mul | — |
+| `mul/script-dossiers` | available | curated | CC-BY-4.0 | mul | — |
 | `sux/sign-table` | available | gold-derived | CC-BY-4.0 | sux | osl |
 | `egy/unikemet-signs` | available | gold-derived | CC-BY-4.0 | egy | unikemet |
 | `egy/hiero-frequency` | available | gold-derived | CC-BY-SA-4.0 | egy | aes |
@@ -351,6 +352,14 @@ Publishes the char_postings census behind Nabu's Han cards and graded-reading la
 Fixes the replicability gap the curated dossiers left behind: the hand-authored name/family/context lanes lived only in the originating instance's local/ shelf, so a fresh install saw bare language codes. Published as an overlay (re-consumed via `nabu sync nabu-data`), every install composes the same curated context beneath its live holdings and lect ladder. Only the non-derivable curated layer travels — section accretions (iecor varieties, corpus witnesses, the lect stage ladder) are excluded, each install rebuilds them from its own synced sources. CC BY-SA 4.0: ~71% of the context prose is Wikipedia-derived (share-alike), so the whole dataset inherits it (№R-48); the Wikipedia-derived share is censused in nabu.eval, and personal notes ride the private `nabu note` layer, never here.
 
 **Maintenance**: re-derive after curating dossiers (owner front-matter/context edits, the coming `nabu note` language layer); the published-slice digest makes an unchanged dossier corpus a fingerprint no-op
+
+### `mul/script-dossiers` — Curated script dossiers — the human-written context per writing system
+
+**Status**: available · **Tier**: curated · **Anchoring**: script-tag · **Inputs**: —
+
+The char desk's script layer (P86, №R-49): every writing system in the registry's scripts table gets a human-written dossier — what the script IS, and the desk conventions a working library actually uses for it (transliteration surfaces, fold tables, honest gaps). Unlike the language dossiers (curated per-instance in local/), the source of truth is the git-shared config fact file, so every install answers identically and this dataset is the citable public mirror. The suite's drift guard pins dossier tags to the nabu-lects scripts table, so registry mints and dossiers cannot diverge silently.
+
+**Maintenance**: re-derive after editing config/script_dossiers.yml (a new registry script mint forces a dossier via the drift guard); the published-slice digest makes an unchanged table a fingerprint no-op
 
 ### `sux/sign-table` — Compiled cuneiform sign cards — OSL identity, concordances, attestation counts
 

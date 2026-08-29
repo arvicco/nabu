@@ -89,4 +89,25 @@ class ArtifactScriptsTest < Minitest::Test
       assert_equal 0, report.minted
     end
   end
+
+  # P86 (№R-50): the REAL config file's rows validate at TEST time, not
+  # first at rebuild — every script tag must be a registry script, and
+  # every row carries a note or is one of the two note-less P61 originals.
+  # The compiler raises on unregistered tags at derive; this guard moves
+  # that failure into the suite the moment a row is added.
+  def test_the_shipped_config_rows_resolve_against_the_registry
+    shipped = YAML.safe_load_file(
+      File.join(Nabu::Config::PROJECT_ROOT, "config", "artifact_scripts.yml")
+    ).fetch("sources")
+    live_registry = Nabu::Lects.load(File.expand_path("../fixtures/nabu-lects", __dir__))
+    shipped.each do |source, langs|
+      langs.each do |lang, row|
+        assert live_registry.script?(row.fetch("script")),
+               "#{source}/#{lang}: artifact script #{row['script']} is not a registry tag"
+      end
+    end
+    tags = shipped.values.flat_map { |langs| langs.values.map { |row| row["script"] } }.uniq.sort
+    assert_equal %w[avst egyd hant ital phnx tibt ugar xsux], tags,
+                 "the №R-50 census set — a new tag here means a new owner ruling"
+  end
 end

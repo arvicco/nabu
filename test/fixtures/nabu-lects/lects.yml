@@ -924,3 +924,9 @@ scripts:
   phnx: {name: Phoenician,                           iso15924: Phnx}
   runr: {name: Runic,                                iso15924: Runr}
   goth: {name: Gothic,                               iso15924: Goth}
+  tibt: {name: Tibetan,                              iso15924: Tibt}
+  ethi: {name: "Ethiopic (Geʿez)",                   iso15924: Ethi}
+  hang: {name: Hangul,                               iso15924: Hang}
+  avst: {name: Avestan,                              iso15924: Avst}
+  ugar: {name: Ugaritic,                             iso15924: Ugar}
+  xpeo: {name: Old Persian cuneiform,                iso15924: Xpeo}

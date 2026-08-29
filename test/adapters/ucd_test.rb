@@ -14,7 +14,7 @@ class UcdTest < Minitest::Test
     assert_equal "ucd", manifest.id
     assert_equal "open", manifest.license_class
     assert_match(/UNICODE LICENSE V3/, manifest.license)
-    assert_match(%r{unicode\.org/Public/17\.0\.0/ucd/UnicodeData\.txt}, manifest.upstream_url)
+    assert_match(%r{unicode\.org/Public/17\.0\.0/ucd/UCD\.zip}, manifest.upstream_url)
     assert_equal "ucd-txt", manifest.parser_family
   end
 
@@ -37,12 +37,21 @@ class UcdTest < Minitest::Test
     assert_raises(Nabu::ParseError) { Nabu::Adapters::Ucd.new.parse(ref) }
   end
 
-  def test_remote_probe_heads_the_versioned_dump
+  def test_remote_probe_heads_the_zip_and_the_confusables_pin
     assert_equal :http_zip, Nabu::Adapters::Ucd.remote_probe_strategy
     targets = Nabu::Adapters::Ucd.http_probe_targets
-    assert_equal 1, targets.size
-    assert_equal "UnicodeData.txt", targets[0].label
-    assert_match(/UnicodeData\.txt\z/, targets[0].zip_url)
-    assert_nil targets[0].metadata_url, "the identity file has no separate metadata endpoint"
+    assert_equal 2, targets.size
+    assert_equal "UCD.zip", targets[0].label
+    assert_match(%r{Public/17\.0\.0/ucd/UCD\.zip\z}, targets[0].zip_url)
+    assert_nil targets[0].metadata_url, "the zip has no separate metadata endpoint"
+    assert_equal "confusables.txt", targets[1].label
+    assert_match(%r{Public/security/16\.0\.0/confusables\.txt\z}, targets[1].zip_url,
+                 "UTS #39 security data has its OWN version cadence (16.0.0 is current)")
+    assert_equal "security", targets[1].state_subdir
+  end
+
+  def test_manifest_upstream_is_the_whole_zip
+    assert_match(%r{ucd/UCD\.zip\z}, Nabu::Adapters::Ucd.manifest.upstream_url,
+                 "P86-1 (\u2116R-49a): the member set rides ONE versioned zip artifact")
   end
 end

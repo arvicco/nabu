@@ -211,6 +211,15 @@ class CharCommandTest < Minitest::Test
 
       hangul, = with_config(config) { run_cli(%w[char 입]) }
       assert_match(/HANGUL SYLLABLE IB — Other Letter/, hangul)
+      assert_match(/reading: ib — Revised Romanization, letter-wise/, hangul,
+                   "the head syllable states its romanization (owner request 2026-08-28)")
+      assert_match(%r{decomposes \(jamo\): ᄋ \(U\+110B\) \+ ᅵ \(U\+1175 I /i/\) \+ ᆸ \(U\+11B8 B /p̚/\)},
+                   hangul, "the B4 hangul fix + per-jamo IPA")
+
+      jamo, = with_config(config) { run_cli(%w[char ᆸ]) }
+      assert_match(/reading: b \(RR\) · IPA \[p̚\] — final/, jamo)
+      ieung, = with_config(config) { run_cli(%w[char ᄋ]) }
+      assert_match(/reading: silent — the silent initial ieung/, ieung)
     end
   end
 
@@ -226,13 +235,145 @@ class CharCommandTest < Minitest::Test
     end
   end
 
-  # Copy the trimmed real UnicodeData.txt fixture into the instance's canonical
-  # tree, so `nabu char` finds the UCD identity floor (as after `nabu sync ucd`).
-  def seed_ucd(config)
+  # --- the member-context tier (P86-1, №R-49a) ------------------------------
+
+  def test_universal_card_carries_block_script_and_age
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char ᚠ]) }
+      assert_match(/RUNIC LETTER FEHU FEOH FE F — Other Letter/, out)
+      assert_match(/block: Runic \(U\+16A0–U\+16FF\)/, out)
+      assert_match(/script: Runic \(Runr\)/, out)
+      assert_match(/in Unicode since 3\.0/, out)
+    end
+  end
+
+  def test_universal_card_renders_chart_annotations_and_formal_aliases
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char א]) }
+      assert_match(/charts: = aleph/, out)
+      assert_match(/see also: U\+2135 alef symbol/, out)
+    end
+  end
+
+  def test_universal_card_without_member_files_stays_the_p85_floor
+    with_char_catalog do |config|
+      seed_ucd(config, members: false)
+      out, = with_config(config) { run_cli(%w[char ᚠ]) }
+      assert_match(/RUNIC LETTER FEHU FEOH FE F — Other Letter/, out)
+      refute_match(/block:/, out, "absent member → absent line, never a guess")
+      refute_match(/in Unicode since/, out)
+    end
+  end
+
+  # --- the ambiguity layer (P86-5 + Q50) ------------------------------------
+
+  def test_single_kana_gets_its_identity_card_with_a_capped_reading_panel
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, _err, status = with_config(config) { run_cli(%w[char ア]) }
+      assert_nil status
+      assert_match(/KATAKANA LETTER A — Other Letter/, out, "Q50: the identity card renders FIRST")
+      assert_match(/also a Japanese reading — 2 Han character/, out)
+      assert_match(/亜 ア \(on\)/, out)
+      refute_match(/not a Han character/, out)
+    end
+  end
+
+  def test_as_reading_keeps_the_pure_reading_query
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char ア --as reading]) }
+      assert_match(/2 Han character\(s\) carry this reading/, out)
+      assert_match(/亜 ア \(on\)/, out)
+      refute_match(/KATAKANA LETTER A/, out, "--as reading narrows to the reading lens")
+    end
+  end
+
+  def test_latin_letter_card_shows_the_confusables_looks_like_panel
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char a]) }
+      assert_match(/LATIN SMALL LETTER A — Lowercase Letter/, out)
+      assert_match(/looks like:/, out)
+      assert_match(/U\+FF41/, out, "the fullwidth confusable rides the panel")
+    end
+  end
+
+  def test_as_identity_renders_the_universal_card_for_a_han_char
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char 木 --as identity]) }
+      assert_match(/CJK UNIFIED IDEOGRAPH-6728/, out, "the range-derived identity, no Han card")
+      refute_match(/kun|on\b|pinyin/, out, "--as identity narrows to pure identity")
+    end
+  end
+
+  def test_universal_card_renders_the_letter_numeral_conventions
+    with_char_catalog do |config|
+      seed_ucd(config)
+      alpha, = with_config(config) { run_cli(%w[char α]) }
+      assert_match(/numeric \(isopsephy\): 1 — Greek alphabetic/, alpha)
+      alef, = with_config(config) { run_cli(%w[char א]) }
+      assert_match(/numeric \(gematria\): 1 — Hebrew letter values/, alef)
+    end
+  end
+
+  def test_universal_card_composes_the_curated_script_dossier
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char ᚠ]) }
+      assert_match(/script context: The Germanic angular alphabets/, out)
+      assert_match(/desk: The runic shelf \(Rundata\)/, out)
+    end
+  end
+
+  # Owner defect 2026-08-28 ("none of these Han readings actually CONTAIN
+  # a"): the okurigana-STEM match (一 ひと.つ answering ひと — wanted) also
+  # fired for single-kana queries, claiming every kun reading that merely
+  # STARTS with the kana (`char a` → 153 okurigana stems sold as "carries
+  # this reading"). A single kana now matches FULL readings only.
+  def test_a_single_kana_matches_full_readings_never_okurigana_stems
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char つ]) }
+      refute_match(/つ\.ぐ/, out, "亜's つ.ぐ stem must NOT answer the single kana つ")
+      refute_match(/also a Japanese reading/, out, "no full reading つ exists in the rig")
+
+      multi, = with_config(config) { run_cli(%w[char ひと]) }
+      assert_match(/一 ひと\.つ/, multi, "multi-kana keeps the stem semantics — ひと.つ answers ひと")
+    end
+  end
+
+  def test_universal_card_corpus_panel_is_era_honest
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char α]) }
+      assert_match(/corpus attestation: no live passage carries it/, out,
+                   "a current-class index answers a real zero, never a silent nothing")
+
+      kana, = with_config(config) { run_cli(%w[char と]) }
+      assert_match(/corpus attestation: jpn 1/, kana,
+                   "B3: the widened postings attest the rig's jpn kana — Q50's own char")
+    end
+  end
+
+  # Copy the trimmed real UCD fixtures into the instance's canonical tree, so
+  # `nabu char` finds the identity floor and (by default) the member-context
+  # tier, as after `nabu sync ucd`. members: false seeds the bare P85 floor.
+  def seed_ucd(config, members: true)
     dir = File.join(config.canonical_dir, "ucd")
     FileUtils.mkdir_p(dir)
-    FileUtils.cp(File.expand_path("fixtures/ucd/UnicodeData.txt", __dir__),
-                 File.join(dir, "UnicodeData.txt"))
+    fixture_dir = File.expand_path("fixtures/ucd", __dir__)
+    if members
+      FileUtils.cp_r(Dir[File.join(fixture_dir, "*.txt")], dir)
+      FileUtils.mkdir_p(File.join(dir, "security"))
+      FileUtils.mv(File.join(dir, "confusables.txt"),
+                   File.join(dir, "security", "confusables.txt"))
+    else
+      FileUtils.cp(File.join(fixture_dir, "UnicodeData.txt"), File.join(dir, "UnicodeData.txt"))
+    end
     Nabu::Ucd.reset!
   end
 

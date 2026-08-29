@@ -57,13 +57,22 @@ module Nabu
       Error = Align::Error
 
       # The Unicode scripts collation can name (majority wins; anything else is
-      # "Other"). Order is irrelevant — the counts decide.
+      # "Other"). Order is irrelevant — the counts decide. P86-2: covers every
+      # byte-checkable registry script (the script_check_test drift guard
+      # asserts ⊇ ScriptCheck::PROPERTIES) plus the display-grouping extras a
+      # witness cell needs beyond registry claims (Georgian, the kana pair).
       SCRIPTS = {
         "Greek" => /\p{Greek}/, "Latin" => /\p{Latin}/, "Cyrillic" => /\p{Cyrillic}/,
         "Armenian" => /\p{Armenian}/, "Hebrew" => /\p{Hebrew}/, "Arabic" => /\p{Arabic}/,
         "Georgian" => /\p{Georgian}/, "Coptic" => /\p{Coptic}/, "Syriac" => /\p{Syriac}/,
         "Devanagari" => /\p{Devanagari}/, "Han" => /\p{Han}/,
-        "Hiragana" => /\p{Hiragana}/, "Katakana" => /\p{Katakana}/
+        "Hiragana" => /\p{Hiragana}/, "Katakana" => /\p{Katakana}/,
+        "Ogham" => /\p{Ogham}/, "Old Italic" => /\p{Old_Italic}/,
+        "Egyptian Hieroglyphs" => /\p{Egyptian_Hieroglyphs}/, "Glagolitic" => /\p{Glagolitic}/,
+        "Runic" => /\p{Runic}/, "Gothic" => /\p{Gothic}/, "Cuneiform" => /\p{Cuneiform}/,
+        "Phoenician" => /\p{Phoenician}/, "Tibetan" => /\p{Tibetan}/,
+        "Ethiopic" => /\p{Ethiopic}/, "Hangul" => /\p{Hangul}/, "Avestan" => /\p{Avestan}/,
+        "Ugaritic" => /\p{Ugaritic}/, "Old Persian" => /\p{Old_Persian}/
       }.freeze
       private_constant :SCRIPTS
 

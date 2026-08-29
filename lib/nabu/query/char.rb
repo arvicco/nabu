@@ -62,11 +62,16 @@ module Nabu
       Reduced = Data.define(:glyph, :codepoint, :script)
 
       # The best-effort script probe for the reduced card, in order; a glyph
-      # matching none stays an honest nil ("non-Han" at render).
+      # matching none stays an honest nil ("non-Han" at render). This is the
+      # DEGRADED path only — with `nabu sync ucd` held, the universal card
+      # names every script from Scripts.txt and never consults this list.
       SCRIPT_PROBES = [
         ["Hangul", /\p{Hangul}/], ["Latin", /\p{Latin}/], ["Greek", /\p{Greek}/],
         ["Cyrillic", /\p{Cyrillic}/], ["Arabic", /\p{Arabic}/], ["Hebrew", /\p{Hebrew}/],
-        ["Devanagari", /\p{Devanagari}/], ["Thai", /\p{Thai}/]
+        ["Devanagari", /\p{Devanagari}/], ["Thai", /\p{Thai}/],
+        ["Tibetan", /\p{Tibetan}/], ["Ethiopic", /\p{Ethiopic}/],
+        ["Avestan", /\p{Avestan}/], ["Ugaritic", /\p{Ugaritic}/],
+        ["Old Persian", /\p{Old_Persian}/]
       ].freeze
 
       def self.reduced(glyph)
@@ -91,10 +96,34 @@ module Nabu
       # absent the caller renders the reduced card, byte-identical (the
       # feature-module law). Corpus attestation and the curated overlay layer
       # onto this next; this is the canonical-reference layer alone.
+      # P86-1 (№R-49a) widens the identity layer with the member-context tier:
+      # +block+ ("Runic (U+16A0–U+16FF)"), +script_code+ (ISO 15924 "Runr" —
+      # +script+ upgrades from the probe list to the Scripts.txt name when the
+      # member is held), +age+ ("3.0"), +aliases+ (formal NameAliases rows),
+      # +chart_aliases+/+chart_notes+/+see_also+ (the NamesList charts
+      # annotation layer, labeled as informative). Absent member → nil/[] and
+      # the card stays the P85 floor, line for line.
+      # +numerals+ (P86-4b): the letter-numeral convention values from the
+      # config fact tables (isopsephy/gematria/abjad/titlo/gothic) — the
+      # numbers Unicode's own numeric property deliberately lacks.
       Universal = Data.define(
         :glyph, :codepoint, :name, :category, :script, :numeric,
-        :combining_class, :decomposition
+        :combining_class, :decomposition,
+        :block, :script_code, :age, :aliases, :chart_aliases, :chart_notes, :see_also,
+        :numerals, :script_context, :script_desk, :reading
       )
+
+      # A "see also" chart cross-reference, resolved against the seam when the
+      # target is held (glyph may be nil — the hex + chart text still serve).
+      SeeAlso = Data.define(:codepoint, :glyph, :text)
+
+      # const: render caps for the charts annotation layer and the P86-5
+      # ambiguity panels — display choices, not census claims; truncation is
+      # announced at render (`--as reading` lifts the reading cap).
+      CHART_NOTE_CAP = 3
+      CHART_SEE_ALSO_CAP = 4
+      READING_PANEL_CAP = 6
+      LOOKS_LIKE_CAP = 5
 
       # One target of a decomposition: the piece's own code point, glyph and
       # UCD name (À → A + COMBINING GRAVE ACCENT), so the card can spell it out.
@@ -107,17 +136,36 @@ module Nabu
         glyph = Nabu::Normalize.nfc(glyph.to_s)
         char = ucd.lookup(glyph) or return nil
 
+        cp = char.codepoint
+        script = ucd.script(cp)
+        block = ucd.block(cp)
+        annotations = ucd.annotations(cp)
+        dossier = script&.code && Nabu::ScriptDossiers.lookup(script.code)
         Universal.new(
           glyph: glyph, codepoint: char.hex, name: char.display_name,
           category: char.category_label,
-          script: SCRIPT_PROBES.find { |_, probe| glyph.match?(probe) }&.first,
+          script: script&.name || SCRIPT_PROBES.find { |_, probe| glyph.match?(probe) }&.first,
           numeric: char.numeric, combining_class: char.combining_class,
-          decomposition: decomposition_of(char, ucd)
+          decomposition: decomposition_of(char, ucd),
+          block: block && format("%<name>s (U+%<first>04X–U+%<last>04X)",
+                                 name: block.name, first: block.range.first,
+                                 last: block.range.last),
+          script_code: script&.code, age: ucd.age(cp), aliases: ucd.name_aliases(cp),
+          chart_aliases: annotations&.aliases || [],
+          chart_notes: annotations&.notes || [],
+          see_also: (annotations&.crossrefs || []).map do |ref|
+            SeeAlso.new(codepoint: format("U+%04X", ref.codepoint),
+                        glyph: ucd.lookup(ref.codepoint)&.glyph, text: ref.text)
+          end,
+          numerals: Nabu::CharNumerals.lookup(glyph),
+          script_context: dossier&.context, script_desk: dossier&.desk,
+          reading: hangul_reading_of(cp, ucd)
         )
       end
 
       def self.decomposition_of(char, ucd)
-        decomp = char.decomposition or return nil
+        decomp = char.decomposition
+        return hangul_decomposition_of(char, ucd) if decomp.nil?
 
         parts = decomp.codepoints.map do |code|
           target = ucd.lookup(code)
@@ -125,6 +173,34 @@ module Nabu
                          glyph: target&.glyph, name: target&.display_name)
         end
         UniversalDecomp.new(kind: decomp.kind, parts: parts)
+      end
+
+      # A Hangul syllable's decomposition is ALGORITHMIC (UnicodeData lists
+      # none): the §3.12 jamo arithmetic + Jamo.txt short names — the P86-4
+      # hangul fix (`char 입` spells ᄋ + ᅵ (I) + ᆸ (B)).
+      def self.hangul_decomposition_of(char, ucd)
+        jamo = ucd.hangul_jamo(char.codepoint) or return nil
+
+        parts = jamo.map do |code|
+          short = ucd.jamo_short_name(code)
+          ipa = Nabu::HangulReadings.lookup(code)&.ipa
+          label = [short.to_s.empty? ? nil : short, ipa && "/#{ipa}/"].compact.join(" ")
+          DecompPart.new(codepoint: format("U+%04X", code), glyph: code.chr(Encoding::UTF_8),
+                         name: label.empty? ? nil : label)
+        end
+        UniversalDecomp.new(kind: "jamo", parts: parts)
+      end
+
+      # The hangul reading line (P86, owner request 2026-08-28): a syllable
+      # composes its letter-wise RR from the jamo; a jamo (or compat letter)
+      # states its own RR + IPA + position. nil for every other script.
+      def self.hangul_reading_of(codepoint, ucd)
+        if (jamo = ucd.hangul_jamo(codepoint))
+          rr = Nabu::HangulReadings.syllable_rr(jamo)
+          rr && "#{rr} — Revised Romanization, letter-wise"
+        else
+          Nabu::HangulReadings.describe(codepoint, ucd: ucd)
+        end
       end
 
       def self.universal_json_payload(glyph, universal)
@@ -273,6 +349,23 @@ module Nabu
         )
       end
 
+      # The universal card's corpus panel (P86-3, B3): the per-language
+      # postings for a glyph + the index's class stamp, so the renderer can
+      # tell an honest ZERO (current-class index, char truly unattested)
+      # from an index built before the non-ASCII widening. nil when no
+      # postings index is held (the not-indexed hint renders instead).
+      PostingsPanel = Data.define(:counts, :class_stamp)
+
+      def universal_corpus(glyph)
+        table = Nabu::Store::Indexer::CHAR_POSTINGS_TABLE
+        return nil unless @fulltext&.table_exists?(table)
+
+        stamp = @fulltext[table]
+                .where(source_id: Nabu::Store::Indexer::POSTINGS_CLASS_SOURCE)
+                .get(:language)
+        PostingsPanel.new(counts: corpus_attestation(glyph) || {}, class_stamp: stamp)
+      end
+
       private
 
       # unihan kMandarin values ("wén", space-separated when several) vs the
@@ -313,10 +406,16 @@ module Nabu
           kun_hits = if kun
                        body_list(body, "kun").filter_map do |reading|
                          base = reading.delete("-")
+                         # The okurigana-STEM alternative (一 ひと.つ answers
+                         # ひと) applies to multi-kana queries ONLY: for a
+                         # single kana the stem would claim every kun reading
+                         # that merely starts with it (the 2026-08-28 owner
+                         # defect — `char a` listed 153 okurigana stems as
+                         # "readings a"). One kana = full readings only.
+                         forms = [base.delete(".")]
+                         forms << base.split(".").first if target.each_char.count > 1
                          ReadingMatch.new(glyph: headword, reading: reading, kind: "kun") if
-                           [base.delete("."), base.split(".").first].map do |form|
-                             to_hiragana(form)
-                           end.include?(target)
+                           forms.map { |form| to_hiragana(form) }.include?(target)
                        end
                      else
                        []
