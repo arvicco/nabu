@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "sequel"
-
 module Nabu
   module Store
     # P87-2 (Q51, under №R-51-B) — the silver-lemma PROJECTION CACHE.
@@ -45,7 +43,10 @@ module Nabu
       def db
         @db ||= begin
           FileUtils.mkdir_p(File.dirname(path))
-          Sequel.sqlite(path)
+          # Through the ONE Sequel gate (the derivability-writers guard):
+          # the cache is its own sqlite file, but connection discipline
+          # (WAL, timeouts) is Store's to own everywhere.
+          Store.connect(path)
         end
       end
 
