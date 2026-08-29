@@ -321,7 +321,8 @@ module Nabu
       # rows wholesale. +lemma_filter_slugs+ names the sources under the
       # epigraphy dictionary filter (sources.yml `lemma_dictionary_filter`).
       def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, lemma_tiers: nil, profile: nil,
-                   sign_list: nil, progress: nil, lemma_shelf: nil, lemma_filter_slugs: nil)
+                   sign_list: nil, progress: nil, lemma_shelf: nil,
+                   lemma_filter_slugs: nil) # rubocop:disable Lint/UnusedMethodArgument -- №R-51-B: the full path no longer projects (filter slugs ride the owner-fired apply); kept for caller stability
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
         fulltext.drop_table?(CHAR_POSTINGS_TABLE)
@@ -343,14 +344,16 @@ module Nabu
           # per-row inserts. Still inside the fts_lemma stage and BEFORE the
           # reflex pass, which reads passage_lemmas by these very indexes.
           create_lemma_indexes(fulltext)
-          # P84-1: the silver-lemma projection — shelf records land as
-          # tier-silver rows on still-uncovered passages (insert-if-absent;
-          # the class note in SilverLemmaIndexer carries the argument).
+          # №R-51-B (2026-08-29): the silver projection LEFT the rebuild
+          # path — a full rebuild never pays the whole-shelf replay again
+          # (the 2026-08-29 profile: 99m39s). The shelf is announced
+          # honestly; `nabu lemma-enrich <lang> --index-only` projects it
+          # when the owner chooses. The sync-refresh slice re-apply below
+          # stays, ARM-GATED, so an owner-projected index survives routine
+          # syncs but silver never sneaks back into a clean one.
           if lemma_shelf
-            progress&.stage("silver lemmas: applying the local-lemmas shelf")
-            SilverLemmaIndexer.apply!(catalog: catalog, fulltext: fulltext, shelf: lemma_shelf,
-                                      dictionary_filter_slugs: Array(lemma_filter_slugs),
-                                      progress: progress)
+            progress&.stage("silver lemmas: shelf present, NOT projected (№R-51-B) — " \
+                            "nabu lemma-enrich <lang> --index-only applies it")
           end
           # P42-1: the corpus lemma-frequency census, one grouped INSERT-SELECT
           # over the now-indexed lemma table (vocab's denominator + etym's
@@ -470,7 +473,10 @@ module Nabu
             # annotation re-derivation never re-mints them. Scoped to this
             # source's urns; the frequency delta below counts the re-landed
             # rows because the after-snapshot runs later in this txn.
-            if lemma_shelf
+            # №R-51-B ARM-GATE: only when the owner has projected the shelf
+            # (any silver row standing) — an unarmed index stays
+            # silver-free through syncs.
+            if lemma_shelf && silver_armed?(fulltext)
               silver = SilverLemmaIndexer.apply!(catalog: catalog, fulltext: fulltext, shelf: lemma_shelf,
                                                  urns: urns.to_set,
                                                  dictionary_filter_slugs: Array(lemma_filter_slugs))
@@ -658,6 +664,16 @@ module Nabu
         text.scan(POSTED).uniq.each do |char|
           chars[[row.fetch(:source_id), char, row[:language]]] += 1
         end
+      end
+
+      # №R-51-B: is silver ARMED — has the owner projected the shelf into
+      # this index? Read from lemma_frequencies (small, tier-keyed — the
+      # projection always maintains it) rather than scanning the 100M-row
+      # lemma table for a tier value.
+      def silver_armed?(fulltext)
+        return false unless fulltext.table_exists?(LemmaFrequencies::TABLE)
+
+        !fulltext[LemmaFrequencies::TABLE].where(tier: SilverLemmaIndexer::TIER).empty?
       end
 
       def create_char_postings_table(fulltext)

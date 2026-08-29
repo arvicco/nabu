@@ -2647,9 +2647,12 @@ module Nabu
       on the local-lemmas shelf (local/shelves/local-lemmas/<language>/,
       through the Nabu::LemmaShelf gateway — model output costs hours of
       compute, so the derivability law homes it in a shelf, never db/).
-      The shelf then projects into passage_lemmas as tier-silver rows at
-      every rebuild/sync, or immediately with --index. Gold rows are never
-      touched: a passage with ANY existing lemma coverage is skipped.
+      The shelf projects into passage_lemmas as tier-silver rows ONLY on
+      the owner's word (№R-51-B, 2026-08-29): --index after a campaign, or
+      --index-only any time. A full rebuild never projects it (it announces
+      the shelf and names this command); routine source syncs maintain
+      already-projected slices but never arm a clean index. Gold rows are
+      never touched: a passage with ANY existing lemma coverage is skipped.
 
       RESUMABLE: the campaign checkpoints at every shard flush — re-fire
       the same command after any interruption and it continues where the
