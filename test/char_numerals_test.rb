@@ -44,6 +44,10 @@ class CharNumeralsTest < Minitest::Test
     assert_equal 700, lookup1("ѱ").value, "titlo psi, straight from the Greek"
     assert_equal 90, lookup1("ч").value, "červь took koppa's slot — NOT alphabet order"
     assert_equal 900, lookup1("𐍊").value, "the numeral-only Gothic 900"
+    assert_equal 1, lookup1("ⰰ").value, "Glagolitic az — alphabet order, not the Greek order"
+    assert_equal 800, lookup1("ⱋ").value, "shta is 800 — the rare pe (ⱊ) stands outside the sequence"
+    assert_equal 10, lookup1("ⰺ").value, "initial izhe shares 10 with ⰹ"
+    assert_empty Nabu::CharNumerals.lookup("ⱊ"), "pe carries no value — deliberately absent"
   end
 
   def test_case_folds_and_extended_values_are_marked
