@@ -54,6 +54,18 @@ module Store
                            ])
     end
 
+    def seed_dictionary!(*headwords)
+      dict = Nabu::Store::Dictionary.create(source_id: @source.id, slug: "lewis-short",
+                                            title: "LS", language: "lat")
+      headwords.each do |headword|
+        @catalog[:dictionary_entries].insert(
+          dictionary_id: dict.id, urn: "urn:dict:ls:#{headword}", entry_id: headword,
+          key_raw: headword, headword: headword, headword_folded: headword,
+          body: "b", content_sha256: "x"
+        )
+      end
+    end
+
     def rebuild_gold! = Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext)
 
     def apply!(**)
@@ -209,6 +221,74 @@ module Store
       assert_empty lemmas.where(urn: "urn:d:1:1", tier: "silver").all,
                    "the shelf stays unprojected until the owner fires the apply"
       assert_empty @fulltext[:lemma_frequencies].where(tier: "silver").all
+    end
+
+    # P87-2: the cached apply lands rows IDENTICAL to the direct apply —
+    # the cache moves the fold/group work, never the semantics.
+    def test_cached_apply_is_row_identical_to_the_direct_apply
+      doc = make_document
+      make_passage(doc, urn: "urn:d:1:1")
+      make_passage(doc, urn: "urn:d:1:2", sequence: 1)
+      rebuild_gold!
+      shelve(urn: "urn:d:1:1", tokens: [%w[Fronte frons NOUN], %w[fronte frons NOUN]])
+      shelve(urn: "urn:d:1:2", tokens: [%w[et et CCONJ], ["x", nil, "X"]])
+
+      direct = apply!(update_frequencies: true)
+      reference = lemmas.where(tier: "silver")
+                        .select_map(%i[urn lemma_folded lemma_raw surface_forms language]).sort
+      lemmas.where(tier: "silver").delete
+      @fulltext[:lemma_frequencies].where(tier: "silver").delete
+
+      cache = Nabu::Store::SilverLemmaCache.new(path: File.join(@tmpdir, "cache.sqlite3"))
+      cache.build!(shelf: @shelf)
+      cached = Nabu::Store::SilverLemmaIndexer.apply_cached!(
+        catalog: @catalog, fulltext: @fulltext, cache: cache, update_frequencies: true
+      )
+      assert_equal direct.rows_inserted, cached.rows_inserted
+      assert_equal direct.passages_indexed, cached.passages_indexed
+      assert_equal reference,
+                   lemmas.where(tier: "silver")
+                         .select_map(%i[urn lemma_folded lemma_raw surface_forms language]).sort
+    end
+
+    def test_cached_apply_honors_coverage_and_the_dictionary_filter
+      doc = make_document
+      make_passage(doc, urn: "urn:d:1:1", annotations: { "tokens" => [
+                     { "form" => "In", "lemma" => "in" }
+                   ] })
+      make_passage(doc, urn: "urn:d:1:2", sequence: 1)
+      rebuild_gold!
+      shelve(urn: "urn:d:1:1", tokens: [%w[fronte frons NOUN]])
+      shelve(urn: "urn:d:1:2", tokens: [%w[fronte frons NOUN], %w[Aureliae Aurelius PROPN]])
+      seed_dictionary!("frons")
+
+      cache = Nabu::Store::SilverLemmaCache.new(path: File.join(@tmpdir, "cache.sqlite3"))
+      cache.build!(shelf: @shelf)
+      result = Nabu::Store::SilverLemmaIndexer.apply_cached!(
+        catalog: @catalog, fulltext: @fulltext, cache: cache,
+        dictionary_filter_slugs: %w[edr]
+      )
+      assert_equal 1, result.skipped_covered, "gold-covered urn skipped whole"
+      assert_equal 1, result.filtered_lemmas, "unattested non-identity Aurelius dropped"
+      assert_equal %w[frons], lemmas.where(urn: "urn:d:1:2", tier: "silver").select_map(:lemma_raw),
+                   "attested frons lands; identity check rides the precomputed bit"
+    end
+
+    # P87-2: the bulk-apply window always restores the indexes — even
+    # when the block raises (the ensure arm).
+    def test_cycle_lemma_indexes_restores_indexes_even_on_raise
+      rebuild_gold!
+      index_names = -> { @fulltext.indexes(:passage_lemmas).keys.sort }
+      before = index_names.call
+      refute_empty before
+
+      assert_raises(RuntimeError) do
+        Nabu::Store::Indexer.cycle_lemma_indexes(@fulltext) do
+          assert_empty index_names.call, "the window is bare"
+          raise "boom"
+        end
+      end
+      assert_equal before, index_names.call, "indexes restored by ensure"
     end
 
     # The arm-gate's other half: an index the owner never armed stays
