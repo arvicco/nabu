@@ -346,6 +346,27 @@ class CharCommandTest < Minitest::Test
     end
   end
 
+  # 88-B2: the №R-49(a) ruled set completes END-TO-END — the last three
+  # members render, and the Tangut/Nushu source lookups reach their cards.
+  def test_universal_card_renders_variants_sequences_and_discouraged
+    with_char_catalog do |config|
+      seed_ucd(config)
+      zero, = with_config(config) { run_cli(%w[char 0]) }
+      assert_match(/DIGIT ZERO — Decimal Number/, zero)
+      assert_match(/encoded variants: short diagonal stroke form \(U\+FE00\)/, zero)
+      assert_match(/named sequences: KEYCAP DIGIT ZERO/, zero)
+    end
+  end
+
+  def test_tangut_card_carries_its_source_fields
+    with_char_catalog do |config|
+      seed_ucd(config)
+      out, = with_config(config) { run_cli(%w[char 𗀀]) }
+      assert_match(/TANGUT IDEOGRAPH-17000/, out)
+      assert_match(/Tangut sources: kTGT_MergedSrc L2008-0008 · kTGT_RSUnicode 1.6/, out)
+    end
+  end
+
   def test_universal_card_corpus_panel_is_era_honest
     with_char_catalog do |config|
       seed_ucd(config)
