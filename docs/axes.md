@@ -227,7 +227,7 @@ The Korean desk opens on the dynastic record itself: the Veritable Records of Jo
 
 Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — and, since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea).
 
-**Members** (16): `ud`, `wiktionary-recon`, `suttacentral`, `baxter-sagart`, `tshet-uinh`, `classical-modern`, `menggu-ziyun`, `qieyun-restored`, `unihan`, `hdic`, `babelstone-ids`, `cbeta`, `kanripo`, `kr-gaiji`, `tls`, `viet-wikisource`
+**Members** (17): `ud`, `wiktionary-recon`, `suttacentral`, `baxter-sagart`, `tshet-uinh`, `classical-modern`, `menggu-ziyun`, `zhongyuan`, `qieyun-restored`, `unihan`, `hdic`, `babelstone-ids`, `cbeta`, `kanripo`, `kr-gaiji`, `tls`, `viet-wikisource`
 
 ### japonic
 

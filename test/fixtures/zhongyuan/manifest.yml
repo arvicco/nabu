@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4 "fixture sentinel"). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# The one entry is a documented head trim of a stable raw URL — fetched for
+# URL-liveness only on check. adapter_test is null: a fresh full copy would
+# false-fail the count assertions.
+source: zhongyuan
+adapter_test:
+retrieved: 2026-08-29
+files:
+  - path: 中原音韻.tsv
+    url: https://raw.githubusercontent.com/nk2028/zhongyuan-data/main/%E4%B8%AD%E5%8E%9F%E9%9F%B3%E9%9F%BB.tsv
+    refetchable: true
+    whole: false
+    trim: >-
+      the REAL first 80 of 5,878 lines (head -n 80), byte-verbatim — the
+      東鍾 opening with every optional-field kind represented
