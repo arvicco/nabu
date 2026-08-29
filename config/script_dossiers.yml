@@ -171,9 +171,9 @@ glag:
     The FIRST Slavic alphabet, devised by Cyril and Methodius (860s CE),
     with an angular Croatian line that lived into the early modern period;
     most of the oldest Church Slavonic monuments are Glagolitic. Its
-    letters carry numeral values in their OWN alphabet order (not the
-    Cyrillic-mirrored-Greek order — that table is deferred until entered
-    against a checked source).
+    letters carry numeral values in their OWN alphabet order, not the
+    Cyrillic-mirrored Greek order (the numerals table renders them;
+    P88-B4).
   desk: >-
     Glagolitic appears in the OCS dictionary shelves as variant forms
     rather than passage text; the search hint layer names the absence of
