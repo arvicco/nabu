@@ -3086,6 +3086,9 @@ module Nabu
     HELP
     option :json, type: :boolean, default: false,
                   desc: "Sign cards only: emit the frozen machine-readable contract"
+    option :as, type: :string,
+                desc: "Narrow an ambiguous input to ONE lens: identity · reading · sign · han " \
+                      "(P86-5 — `char a` is a Latin letter AND a reading AND a sign value)"
     def char(glyph = nil)
       input = Nabu::Normalize.nfc(glyph.to_s.strip)
       if input.empty?
@@ -3094,6 +3097,8 @@ module Nabu
       end
 
       config = Nabu::Config.load
+      return char_as_lens(config, input) if options[:as]
+
       case Nabu::CharDispatch.lane(input)
       when :cuneiform then cuneiform_char_card(config, input)
       when :hieroglyphic then hieroglyphic_char_card(config, input)
@@ -7868,15 +7873,19 @@ module Nabu
       # decomposition for any writing system. Without it, the P84-5 reduced
       # card — glyph, codepoint, script probe — byte-identical (the feature-
       # module law). Pure Unicode either way, so no catalog is opened.
-      def non_han_char_card(config, input)
+      def non_han_char_card(config, input, panels: nil)
+        panels ||= char_ambiguity_panels(config, input)
         universal = Nabu::Ucd.load_default(config: config)&.then do |ucd|
           Nabu::Query::Char.universal(input, ucd)
         end
-        return print_universal_char_card(input, universal) if universal
+        return print_universal_char_card(input, universal, panels: panels) if universal
 
         reduced = Nabu::Query::Char.reduced(input)
-        return say(JSON.pretty_generate(Nabu::Query::Char.reduced_json_payload(input, reduced))) if
-          options[:json]
+        if options[:json]
+          payload = Nabu::Query::Char.reduced_json_payload(input, reduced)
+                                     .merge(char_panels_json(panels))
+          return say(JSON.pretty_generate(payload))
+        end
 
         say "#{reduced.glyph}  #{reduced.codepoint}#{"  ·  #{reduced.script}" if reduced.script}"
         noun = case reduced.script
@@ -7887,25 +7896,204 @@ module Nabu
         say ""
         say "#{reduced.glyph} is #{noun} — the char card's shelf lanes cover Han characters; " \
             "no CJK shelf claims it"
+        print_ambiguity_panels(input, panels)
         say ""
         say "search: nabu search #{reduced.glyph}"
+      end
+
+      # -- the ambiguity layer (P86-5 + Q50) ---------------------------------
+      # A single glyph can carry several identities at once: `a` is a Latin
+      # letter AND a pinyin/romaji reading; `と` is a hiragana letter AND a
+      # kun reading; `α` looks like `a` and `а`. The card leads with the
+      # IDENTITY and composes every other lens as a labeled, capped panel;
+      # `--as <lens>` narrows to one.
+
+      def char_as_lens(config, input)
+        case options[:as]
+        when "identity" then identity_char_card(config, input)
+        when "reading" then reading_lens_card(config, input)
+        when "sign" then sign_lens_card(config, input)
+        when "han" then han_char_card(config, input)
+        else
+          raise Thor::Error, "char --as: one of identity · reading · sign · han (got #{options[:as]})"
+        end
+      end
+
+      # The pure identity lens: the universal card with no panels — works for
+      # ANY code point, Han included (`char 木 --as identity`).
+      def identity_char_card(config, input)
+        raise Thor::Error, "char --as identity: the identity lens is one glyph (#{input})" unless input.each_char.one?
+
+        non_han_char_card(config, input, panels: {})
+      end
+
+      def reading_lens_card(config, input)
+        return if reading_char_card(config, input)
+
+        raise Thor::Error, "#{input}: no held Han reading matches (kana kun/on · CAPS/lowercase " \
+                           "romaji · pinyin) — is a dictionary shelf synced?"
+      end
+
+      def sign_lens_card(config, input)
+        return cuneiform_char_card(config, input) if
+          Nabu::CharDispatch.lane(input) == :cuneiform
+
+        name_char_card(config, input)
+      end
+
+      # Gather the other-lens panels for a single glyph: the reverse-reading
+      # matches (the same query the :name lane runs), the UTS #39 confusables
+      # cluster, and (non-ASCII only — plain letters occur everywhere and
+      # attest nothing) the corpus-attestation postings. Multi-char input
+      # never panels.
+      def char_ambiguity_panels(config, input)
+        return {} unless input.each_char.one?
+
+        panels = {}
+        if (ucd = Nabu::Ucd.load_default(config: config))
+          partners = ucd.confusables(input.each_char.first.ord)
+                        .map { |other| [format("U+%04X", other), ucd.lookup(other)] }
+          panels[:looks_like] = partners if partners.any?
+        end
+        catalog = open_catalog(config)
+        if catalog&.table_exists?(:dictionary_entries)
+          matches = Nabu::Query::Char.new(catalog: catalog).characters_for_reading(input)
+          panels[:readings] = matches if matches.any?
+        end
+        if catalog && input.match?(/[^\x00-\x7F]/)
+          fulltext = open_fulltext(config)
+          corpus = Nabu::Query::Char.new(catalog: catalog, fulltext: fulltext)
+                                    .universal_corpus(input)
+          panels[:corpus] = corpus if corpus
+        end
+        panels
+      ensure
+        fulltext&.disconnect
+        catalog&.disconnect
+      end
+
+      def print_ambiguity_panels(input, panels)
+        if (matches = panels[:readings])
+          shown = matches.first(Nabu::Query::Char::READING_PANEL_CAP)
+          labels = shown.map do |match|
+            kind = match.kind == "pinyin" ? "" : " (#{match.kind})"
+            "#{match.glyph} #{match.reading}#{kind}"
+          end
+          say ""
+          say "also a #{reading_panel_noun(matches)} — #{matches.size} Han character(s): " \
+              "#{labels.join(' · ')}"
+          say "  … nabu char #{input} --as reading for all #{matches.size}" if matches.size > shown.size
+        end
+        if (partners = panels[:looks_like])
+          shown = partners.first(Nabu::Query::Char::LOOKS_LIKE_CAP)
+          pieces = shown.map do |(hex, char)|
+            [char&.glyph, hex, char&.display_name].compact.join(" ")
+          end
+          say ""
+          say "looks like: #{pieces.join(' · ')}" \
+              "#{" · … #{partners.size - shown.size} more" if partners.size > shown.size}"
+        end
+        print_corpus_panel(panels[:corpus])
+      end
+
+      # The B3 corpus line, era-honest: counts from a current-class index;
+      # zero on a current-class index is a real zero; a miss on a legacy
+      # (pre-widening) index names the rebuild instead of lying "0".
+      def print_corpus_panel(corpus)
+        return unless corpus
+
+        say ""
+        if corpus.counts.any?
+          ranked = corpus.counts.sort_by { |_, docs| -docs }
+          say "corpus attestation: #{ranked.map { |lang, docs| "#{lang || '?'} #{docs}" }.join(' · ')}"
+        elsif corpus.class_stamp
+          say "corpus attestation: no live passage carries it"
+        else
+          say "corpus attestation: the char index predates the P86 non-ASCII widening — " \
+              "the next rebuild re-accumulates it"
+        end
+      end
+
+      def reading_panel_noun(matches)
+        kinds = matches.map(&:kind).uniq
+        return "pinyin reading" if kinds == ["pinyin"]
+        return "Japanese reading" if (kinds - %w[kun on]).empty?
+
+        "Han reading"
+      end
+
+      def char_panels_json(panels)
+        out = {}
+        if (matches = panels[:readings])
+          out["readings"] = matches.map do |match|
+            { "glyph" => match.glyph, "reading" => match.reading, "kind" => match.kind }
+          end
+        end
+        if (partners = panels[:looks_like])
+          out["looks_like"] = partners.map do |(hex, char)|
+            { "codepoint" => hex, "glyph" => char&.glyph, "name" => char&.display_name }
+          end
+        end
+        if (corpus = panels[:corpus])
+          out["corpus"] = { "counts" => corpus.counts, "class" => corpus.class_stamp }
+        end
+        out.empty? ? {} : { "panels" => out }
       end
 
       # The universal char card (P85-B2): the UCD identity layer, rendered.
       # Absent layers stay absent (binding-honesty) — numeric value, combining
       # class and decomposition print only when the character carries them.
-      def print_universal_char_card(input, card)
+      def print_universal_char_card(input, card, panels: {})
         payload = Nabu::Query::Char.universal_json_payload(input, card)
+                                   .merge(char_panels_json(panels))
         return say(JSON.pretty_generate(payload)) if options[:json]
 
         say "#{card.glyph}  #{card.codepoint}#{"  ·  #{card.script}" if card.script}"
         say ""
         say "#{card.name} — #{card.category}"
+        print_universal_context(card)
         say "numeric value: #{card.numeric}" if card.numeric
         say "combining class: #{card.combining_class}" if card.combining_class.positive?
         print_universal_decomposition(card.decomposition) if card.decomposition
+        print_universal_charts(card)
+        print_ambiguity_panels(input, panels)
         say ""
         say "search: nabu search #{card.glyph}"
+      end
+
+      # The member-context tier (P86-1): block, script identity, age, formal
+      # aliases. Absent member → absent line (the P85 floor, byte-identical).
+      def print_universal_context(card)
+        say "block: #{card.block}" if card.block
+        say "script: #{card.script} (#{card.script_code})" if card.script_code
+        say "in Unicode since #{card.age}" if card.age
+        card.numerals.each do |numeral|
+          suffix = numeral.extended ? ", extended/sofit convention" : ""
+          say "numeric (#{numeral.scheme}): #{numeral.value}#{suffix} — #{numeral.name}"
+        end
+        say "script context: #{card.script_context}" if card.script_context
+        say "desk: #{card.script_desk}" if card.script_desk
+        say "reading: #{card.reading}" if card.reading
+        card.aliases.each do |a|
+          say "#{a.type == 'correction' ? 'corrected name' : "#{a.type} alias"}: #{a.name}"
+        end
+      end
+
+      # The NamesList charts annotation layer — informative, labeled as the
+      # charts' voice, capped at render (truncation announced; caps live on
+      # Nabu::Query::Char beside the card shape).
+      def print_universal_charts(card)
+        card.chart_aliases.each { |a| say "charts: = #{a}" }
+        card.chart_notes.first(Nabu::Query::Char::CHART_NOTE_CAP).each { |n| say "charts: * #{n}" }
+        if card.chart_notes.size > Nabu::Query::Char::CHART_NOTE_CAP
+          say "charts: … #{card.chart_notes.size - Nabu::Query::Char::CHART_NOTE_CAP} more note(s)"
+        end
+        card.see_also.first(Nabu::Query::Char::CHART_SEE_ALSO_CAP).each do |ref|
+          say "see also: #{"#{ref.glyph} " if ref.glyph}#{ref.codepoint} #{ref.text}".rstrip
+        end
+        return unless card.see_also.size > Nabu::Query::Char::CHART_SEE_ALSO_CAP
+
+        say "see also: … #{card.see_also.size - Nabu::Query::Char::CHART_SEE_ALSO_CAP} more"
       end
 
       def print_universal_decomposition(decomp)

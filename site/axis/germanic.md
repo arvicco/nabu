@@ -46,9 +46,9 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `ren` | texts | attribution | wired · manual | 235 docs / 297,504 passages |
 | `fornsvenska` | texts | attribution | wired · manual | 155 docs / 170,872 passages |
 | `cme` | texts | open | wired · manual | 297 docs / 1,355,279 passages |
-| `eebo-tcp` | texts | open | wired · manual | 60,324 docs / 25,064,564 passages |
+| `eebo-tcp` | texts | open | wired · manual | 60,325 docs / 25,065,921 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 August 2026)</span>: `ang` 63,169 · `en` 59,432 · `non` 20,449 · `eng` 6,813 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 · `gml` 235 … and 42 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 28 August 2026)</span>: `ang` 63,169 · `en` 59,433 · `non` 20,449 · `eng` 6,813 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 · `gml` 235 … and 42 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 

@@ -25,3 +25,45 @@ sources:
     xcg-Ital-x-xcglep:
       script: ital
       note: Lepontic alphabet (upstream's -x-xcglep private-use subtag)
+  # P86 (№R-50, ruled 2026-08-28 "as recommended"): the rows the six-script
+  # mint unblocked, each an owner-ruled reading of the 2026-08-28 byte
+  # census (200-passage samples; every held surface measured 100% latn
+  # unless noted).
+  cuc:
+    uga:
+      script: ugar
+      note: Ugaritic cuneiform tablets, held in transliteration
+  derge-kangyur:
+    xct:
+      script: tibt
+      note: Classical Tibetan, held in Wylie (EWTS) romanization
+  soas-tibetan:
+    xct:
+      script: tibt
+      note: Classical Tibetan, held in Wylie (EWTS) romanization
+  otdo:
+    otb:
+      script: tibt
+      note: Old Tibetan (Dunhuang and allied sources), held romanized
+    xzh:
+      script: tibt
+      note: Zhangzhung from Tibetan-script sources, held romanized
+  titus-avestan:
+    ave:
+      script: avst
+      note: the Avestan alphabet, held in scholarly romanization (surface 97% latn)
+  achemenet:
+    akk:
+      script: xsux
+      note: Achaemenid Babylonian cuneiform (the corpus's Akkadian side; no
+        peo documents held, so no xpeo row yet)
+  elephantine:
+    phn:
+      script: phnx
+      note: census discovery — the Phoenician documents are held in Hebrew
+        square-script transcription (surface 90% hebr), artifact Phoenician
+  oncoj:
+    ojp:
+      script: hant
+      note: "man'yōgana — Han characters used phonographically (8th c.,
+        pre-kana); №R-50's judgment call: hant, not the anachronistic jpan"

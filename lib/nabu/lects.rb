@@ -298,6 +298,10 @@ module Nabu
       @scripts.key?(tag.to_s)
     end
 
+    # The registry's script tags, sorted — the naming authority the P86-2
+    # drift guard binds ScriptCheck (and every derived script list) against.
+    def script_tags = @scripts.keys.sort
+
     # Every stage of +anchor+ as a Record (id "<anchor>:<tag>"), ord-sorted
     # (chronological display order — the future card-ladder seam). [] for an
     # undefined anchor or one with no stages.

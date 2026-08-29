@@ -120,4 +120,110 @@ class UcdTest < Minitest::Test
   def test_a_codepoint_past_every_range_and_line_is_nil
     assert_nil @ucd.lookup(0x1FFFF), "beyond the fixture's ranges → nil"
   end
+
+  # -- member context (P86-1, №R-49a: the useful-context tier) ---------------
+  # The seam widens over the sibling member files landed by the UCD.zip fetch;
+  # every lookup degrades to nil/[] when its member file is absent — feature
+  # detection at MEMBER grain, so a partial canonical stays honest.
+
+  def test_block_names_the_containing_block
+    block = @ucd.block(0x16A0)
+    assert_equal "Runic", block.name
+    assert_equal (0x16A0..0x16FF), block.range
+    assert_equal "CJK Unified Ideographs", @ucd.block(0x4E01).name
+    assert_nil @ucd.block(0xE0000), "outside every fixture block → nil"
+  end
+
+  def test_script_carries_long_name_and_short_code
+    script = @ucd.script(0x16A0)
+    assert_equal "Runic", script.name
+    assert_equal "Runr", script.code
+    assert_equal "Old Italic", @ucd.script(0x10300).name
+    assert_equal "Ital", @ucd.script(0x10300).code
+    assert_equal "Hangul", @ucd.script(0xAC00).name
+    assert_nil @ucd.script(0xE0000)
+  end
+
+  def test_script_extensions_list_short_codes
+    exts = @ucd.script_extensions(0x30FC)
+    assert_includes exts, "Hira"
+    assert_includes exts, "Kana"
+    assert_empty @ucd.script_extensions(0x0061), "no extensions line → empty"
+  end
+
+  def test_name_aliases_carry_corrections_and_control_names
+    fe18 = @ucd.name_aliases(0xFE18)
+    assert(fe18.any? { |a| a.type == "correction" && a.name.include?("BRACKET") },
+           "the famous BRAKCET typo carries its correction alias")
+    null = @ucd.name_aliases(0x0000)
+    assert(null.any? { |a| a.type == "control" && a.name == "NULL" })
+    assert(null.any? { |a| a.type == "abbreviation" && a.name == "NUL" })
+    assert_empty @ucd.name_aliases(0x0061)
+  end
+
+  def test_age_states_the_unicode_version
+    assert_equal "3.0", @ucd.age(0x16A0)
+    assert_equal "1.1", @ucd.age(0x0061)
+    assert_nil @ucd.age(0xE0000)
+  end
+
+  def test_annotations_carry_chart_aliases_notes_and_crossrefs
+    alef = @ucd.annotations(0x05D0)
+    assert_includes alef.aliases, "aleph"
+    alpha = @ucd.annotations(0x03B1)
+    assert(alpha.crossrefs.any? { |ref| ref.codepoint == 0x0251 },
+           "α cross-references latin small letter alpha")
+    assert_nil @ucd.annotations(0x16A0).aliases.first, "runic fehu has no chart alias in the fixture"
+  end
+
+  def test_cjk_radical_join
+    radical = @ucd.cjk_radical(0x2F4A) # KANGXI RADICAL WOOD
+    assert_equal 75, radical.number
+    assert_equal 0x6728, radical.unified # 木
+    assert_equal 0x6728, @ucd.equivalent_unified(0x2F4A)
+    assert_nil @ucd.cjk_radical(0x0061)
+  end
+
+  def test_confusables_cluster_both_directions
+    partners = @ucd.confusables(0x0061)
+    assert_includes partners, 0xFF41, "a ↔ fullwidth a"
+    assert_includes @ucd.confusables(0xFF41), 0x0061, "reverse direction holds"
+    refute_includes partners, 0x0061, "never lists itself"
+    assert_empty @ucd.confusables(0x16A0)
+  end
+
+  def test_tangut_source_fields
+    fields = @ucd.tangut_source(0x17000)
+    refute_nil fields
+    assert fields.key?("kTGT_RSUnicode")
+    assert_nil @ucd.tangut_source(0x0061)
+  end
+
+  def test_jamo_short_name
+    assert_equal "G", @ucd.jamo_short_name(0x1100)
+    assert_nil @ucd.jamo_short_name(0x0061)
+  end
+
+  def test_hangul_jamo_decomposition_is_algorithmic
+    assert_equal [0x110B, 0x1175, 0x11B8], @ucd.hangul_jamo(0xC785) # 입 = ᄋ ᅵ ᆸ
+    assert_equal [0x1100, 0x1161], @ucd.hangul_jamo(0xAC00), "가 has no trailing jamo"
+    assert_nil @ucd.hangul_jamo(0x0061), "not a Hangul syllable → nil"
+  end
+
+  def test_member_lookups_degrade_when_files_are_absent
+    Dir.mktmpdir do |dir|
+      FileUtils.cp(FIXTURE, File.join(dir, "UnicodeData.txt"))
+      seam = Nabu::Ucd.load(File.join(dir, "UnicodeData.txt"))
+      assert_nil seam.block(0x16A0)
+      assert_nil seam.script(0x16A0)
+      assert_empty seam.script_extensions(0x30FC)
+      assert_empty seam.name_aliases(0x0000)
+      assert_nil seam.age(0x0061)
+      assert_nil seam.annotations(0x05D0)
+      assert_nil seam.cjk_radical(0x2F4A)
+      assert_empty seam.confusables(0x0061)
+      assert_nil seam.tangut_source(0x17000)
+      assert_nil seam.jamo_short_name(0x1100)
+    end
+  end
 end

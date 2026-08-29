@@ -131,10 +131,24 @@ module Nabu
       PASSAGE_CHARS_TABLE = :passage_chars
       RAREST_SLOTS = 4
 
-      # The postings' character class: Unicode Han (CJK unified + extensions
-      # + compatibility). Kana/hangul/other scripts are not posted — the Han
-      # card is the one consumer.
+      # P86-3 (№R-49, B3): the postings' character class widens from Han-only
+      # to EVERY character outside plain ASCII — the universal char card's
+      # corpus panel ("where does ᚠ / α / ௐ actually occur") for any writing
+      # system. Row count stays bounded by sources × alphabet × languages
+      # (alphabets are small; Han was always the big one); the cost is the
+      # accumulation pass now scanning nearly every passage instead of the
+      # Han-bearing minority — a one-time re-accumulation that rides the next
+      # owner-fired rebuild. passage_chars (the Edubba graded-reading lane)
+      # deliberately stays HAN — its consumer is Han pedagogy.
       HAN = /\p{Han}/
+      POSTED = /[^\x00-\x7F]/
+
+      # The sentinel row stamping WHICH class an index was built with
+      # (source_id −1, the language column carries the class token): the card
+      # reads it to tell "zero attestation" from "index predates the
+      # widening" — never a silent wrong zero.
+      POSTINGS_CLASS = "non-ascii-v1"
+      POSTINGS_CLASS_SOURCE = -1
 
       # P77-r16 (sign-learning survey P-3): the SIGN twins of the two Han
       # coverage tables, for the ATF corpora. sign_postings = per (source,
@@ -321,7 +335,7 @@ module Nabu
           fulltext.transaction do
             count, _lemmas, chars = insert_passage_batches(fulltext, live_passages(catalog), tiers,
                                                            source_slugs(catalog))
-            write_char_postings(fulltext, chars)
+            write_char_postings(fulltext, chars, stamp_class: true)
           end
           # P36-2: the lemma table was created BARE (create_lemma_table); build
           # its three B-tree indexes now, in one sorted pass over the populated
@@ -634,14 +648,14 @@ module Nabu
         [count, lemma_count, chars]
       end
 
-      # One passage's contribution to the char postings: each DISTINCT Han
-      # character counts one doc under (source, char, language). Han-less
-      # passages (most of the corpus) cost one fast regex check.
+      # One passage's contribution to the char postings: each DISTINCT
+      # non-ASCII character counts one doc under (source, char, language).
+      # Plain-ASCII passages cost one fast regex check.
       def accumulate_char_postings(chars, row)
         text = row.fetch(:text_normalized).to_s
-        return unless text.match?(HAN)
+        return unless text.match?(POSTED)
 
-        text.scan(HAN).uniq.each do |char|
+        text.scan(POSTED).uniq.each do |char|
           chars[[row.fetch(:source_id), char, row[:language]]] += 1
         end
       end
@@ -657,7 +671,11 @@ module Nabu
         end
       end
 
-      def write_char_postings(fulltext, chars)
+      # +stamp_class+: only a FULL build (fresh table) stamps the class
+      # sentinel — a per-source slice refresh must never upgrade a legacy
+      # (Han-only) index's stamp, because the class describes the WHOLE
+      # index and only a full re-accumulation makes the claim true.
+      def write_char_postings(fulltext, chars, stamp_class: false)
         chars.each_slice(BATCH_SIZE) do |batch|
           fulltext[CHAR_POSTINGS_TABLE].multi_insert(
             batch.map do |(source_id, char, language), docs|
@@ -665,6 +683,11 @@ module Nabu
             end
           )
         end
+        return unless stamp_class
+
+        fulltext[CHAR_POSTINGS_TABLE].insert(
+          source_id: POSTINGS_CLASS_SOURCE, char: "", language: POSTINGS_CLASS, docs: 0
+        )
       end
 
       # The standalone postings (re)build — ONE lean streaming pass (three
@@ -679,7 +702,7 @@ module Nabu
           .select(Sequel[:passages][:text_normalized], Sequel[:passages][:language],
                   Sequel[:documents][:source_id].as(:source_id))
           .each { |row| accumulate_char_postings(chars, row) }
-        fulltext.transaction { write_char_postings(fulltext, chars) }
+        fulltext.transaction { write_char_postings(fulltext, chars, stamp_class: true) }
         chars.size
       end
 

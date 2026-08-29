@@ -1,0 +1,70 @@
+# DerivedAge-17.0.0.txt
+# Date: 2025-07-30, 23:54:38 GMT
+# © 2025 Unicode®, Inc.
+# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+# For terms of use and license, see https://www.unicode.org/terms_of_use.html
+#
+# Unicode Character Database
+#   For documentation, see https://www.unicode.org/reports/tr44/
+#
+# Unicode Character Database: Derived Property Data
+# This file shows when various code points were first assigned in Unicode.
+#
+# Notes:
+#
+# - The term 'assigned' means that a previously reserved code point was assigned
+#   to be a character (graphic, format, control, or private-use);
+#   a noncharacter code point; or a surrogate code point.
+#   For more information, see the
+#   "General Structure" / "Code Points and Characters" section of the core specification.
+#
+# - Versions are only tracked from 1.1 onwards, since version 1.0
+#   predated changes required by the ISO 10646 merger.
+#
+# - The Hangul Syllables that were removed from 2.0 are not included in the 1.1 listing.
+#
+# - The supplementary private use code points and the non-character code points
+#   were assigned in version 2.0, but not specifically listed in the UCD
+#   until versions 3.0 and 3.1 respectively.
+#
+# - Contiguous ranges are broken into separate lines where they would cross code point
+#   types: graphic, format, control, private-use, surrogate, noncharacter
+#
+# For details on the contents of each version, see
+#   http://www.unicode.org/versions/enumeratedversions.html.
+
+# ================================================
+
+# Property: Age
+#
+# Note: When using the Age property in regular expressions,
+# an expression such as "\p{age=3.0}" matches all of the code points
+# assigned in Version 3.0--that is, all the code points with a value
+# less than or equal to 3.0 for the Age property.
+# For more information, see [https://www.unicode.org/reports/tr18/].
+
+#  All code points not explicitly listed for Age
+#  have the value Unassigned (NA).
+
+# @missing: 0000..10FFFF; Unassigned
+
+# ================================================
+
+# Age=V1_1
+
+# Assigned as of Unicode 1.1.0 (June, 1993)
+# [excluding removed Hangul Syllables]
+
+0020..007E    ; 1.1 #  [95] SPACE..TILDE
+0374..0375    ; 1.1 #   [2] GREEK NUMERAL SIGN..GREEK LOWER NUMERAL SIGN
+05D0..05EA    ; 1.1 #  [27] HEBREW LETTER ALEF..HEBREW LETTER TAV
+3041..3094    ; 1.1 #  [84] HIRAGANA LETTER SMALL A..HIRAGANA LETTER VU
+4E00..9FA5    ; 1.1 # [20902] CJK UNIFIED IDEOGRAPH-4E00..CJK UNIFIED IDEOGRAPH-9FA5
+AC00..D7A3    ; 2.0 # [11172] HANGUL SYLLABLE GA..HANGUL SYLLABLE HIH
+16A0..16F0    ; 3.0 #  [81] RUNIC LETTER FEHU FEOH FE F..RUNIC BELGTHOR SYMBOL
+10300..1031E  ; 3.1 #  [31] OLD ITALIC LETTER A..OLD ITALIC LETTER UU
+10330..1034A  ; 3.1 #  [27] GOTHIC LETTER AHSA..GOTHIC LETTER NINE HUNDRED
+12000..1236E  ; 5.0 # [879] CUNEIFORM SIGN A..CUNEIFORM SIGN ZUM
+2185..2188    ; 5.1 #   [4] ROMAN NUMERAL SIX LATE FORM..ROMAN NUMERAL ONE HUNDRED THOUSAND
+13000..1342E  ; 5.2 # [1071] EGYPTIAN HIEROGLYPH A001..EGYPTIAN HIEROGLYPH AA032
+17000..187EC  ; 9.0 # [6125] TANGUT IDEOGRAPH-17000..TANGUT IDEOGRAPH-187EC

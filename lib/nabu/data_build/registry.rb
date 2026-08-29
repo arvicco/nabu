@@ -18,6 +18,7 @@ require_relative "place_refs_builder"
 require_relative "places_lpf_builder"
 require_relative "segmentation_builder"
 require_relative "sabellic_loans_builder"
+require_relative "script_dossiers_builder"
 require_relative "sign_table_builder"
 require_relative "unikemet_signs_builder"
 require_relative "value_signs_builder"
@@ -449,6 +450,30 @@ module Nabu
         maintenance: "re-derive after curating dossiers (owner front-matter/context edits, the " \
                      "coming `nabu note` language layer); the published-slice digest makes an " \
                      "unchanged dossier corpus a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/script-dossiers", language: LANGUAGES.fetch("mul"),
+        title: "Curated script dossiers — the human-written context per writing system",
+        # CURATED: hand-authored prose (own authorship, no Wikipedia text —
+        # hence plain CC BY, unlike language-dossiers' inherited BY-SA).
+        status: :available, tier: "curated", license: "CC-BY-4.0",
+        anchoring: "script-tag",
+        # config/script_dossiers.yml is the source of truth (the wylie-fold
+        # pattern: git-shared config, dataset = its public mirror); the
+        # recipe embeds the published-slice sha256.
+        inputs: [], canonical_cones: [], builder: ScriptDossiersBuilder,
+        rationale: "The char desk's script layer (P86, №R-49): every writing system in the " \
+                   "registry's scripts table gets a human-written dossier — what the script " \
+                   "IS, and the desk conventions a working library actually uses for it " \
+                   "(transliteration surfaces, fold tables, honest gaps). Unlike the language " \
+                   "dossiers (curated per-instance in local/), the source of truth is the " \
+                   "git-shared config fact file, so every install answers identically and this " \
+                   "dataset is the citable public mirror. The suite's drift guard pins dossier " \
+                   "tags to the nabu-lects scripts table, so registry mints and dossiers " \
+                   "cannot diverge silently.",
+        maintenance: "re-derive after editing config/script_dossiers.yml (a new registry " \
+                     "script mint forces a dossier via the drift guard); the published-slice " \
+                     "digest makes an unchanged table a fingerprint no-op"
       ),
       Feature.new(
         slug: "sux/sign-table", language: LANGUAGES.fetch("sux"),

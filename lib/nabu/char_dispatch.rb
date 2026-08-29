@@ -27,8 +27,12 @@ module Nabu
     # name — the CLI keeps the classic one-glyph grain error for it.
     NAME_SHAPE = /\A[\x20-\x7EšṣṭŠṢṬŋŊʾ×₀-₉ₓ]+\z/
 
-    # Kana input — ANY length, a one-kana on reading included — is a
-    # reading query for the :name lane, never a Han glyph card.
+    # Kana input of length ≥ 2 is a reading query for the :name lane (no
+    # single identity exists for ひと). A SINGLE kana routes to the
+    # single-char lane instead (P86-5/Q50, deliberately flipping the P65-3
+    # "one-kana is a reading query" pin): its card renders the kana IDENTITY
+    # first and composes the reading matches as a labeled panel beside it —
+    # `--as reading` keeps the pure query.
     KANA = /\A[\p{Hiragana}\p{Katakana}ー]+\z/
 
     # The editorial/house marks that get their own card (P85): the exact
@@ -49,7 +53,7 @@ module Nabu
       return :cuneiform if ords.all? { |ord| CUNEIFORM.any? { |range| range.cover?(ord) } }
       return :hieroglyphic if ords.all? { |ord| HIEROGLYPHIC.any? { |range| range.cover?(ord) } }
       return :marks if ords.size == 1 && MARKS.include?(ords.first)
-      return :name if input.match?(KANA)
+      return :name if ords.size > 1 && input.match?(KANA)
 
       ords.size == 1 ? :han : :name
     end
