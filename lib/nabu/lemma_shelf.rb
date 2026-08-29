@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "digest"
+
 require "fileutils"
 require "json"
 require_relative "errors"
@@ -122,6 +124,22 @@ module Nabu
 
     def shard_paths(language)
       Dir[File.join(language_dir(language), SHARD_GLOB)]
+    end
+
+    # The shelf's content fingerprint (P87-2): sha256 over every shard's
+    # streamed sha256, in sorted relative-path order, all languages — the
+    # projection cache's validity key. Shards are append-only in normal
+    # operation, but the per-file hash catches ANY byte drift (a
+    # hand-edited shard invalidates honestly). ~seconds per GB.
+    def fingerprint
+      digest = Digest::SHA256.new
+      languages.sort.each do |language|
+        shard_paths(language).sort.each do |path|
+          digest << File.basename(File.dirname(path)) << "/" << File.basename(path) << ":"
+          digest << Digest::SHA256.file(path).hexdigest << "\n"
+        end
+      end
+      digest.hexdigest
     end
 
     # The shelved language lanes (subdirectories holding at least one

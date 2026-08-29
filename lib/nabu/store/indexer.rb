@@ -321,7 +321,8 @@ module Nabu
       # rows wholesale. +lemma_filter_slugs+ names the sources under the
       # epigraphy dictionary filter (sources.yml `lemma_dictionary_filter`).
       def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, lemma_tiers: nil, profile: nil,
-                   sign_list: nil, progress: nil, lemma_shelf: nil, lemma_filter_slugs: nil)
+                   sign_list: nil, progress: nil, lemma_shelf: nil,
+                   lemma_filter_slugs: nil) # rubocop:disable Lint/UnusedMethodArgument -- №R-51-B: the full path no longer projects (filter slugs ride the owner-fired apply); kept for caller stability
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
         fulltext.drop_table?(CHAR_POSTINGS_TABLE)
@@ -343,14 +344,16 @@ module Nabu
           # per-row inserts. Still inside the fts_lemma stage and BEFORE the
           # reflex pass, which reads passage_lemmas by these very indexes.
           create_lemma_indexes(fulltext)
-          # P84-1: the silver-lemma projection — shelf records land as
-          # tier-silver rows on still-uncovered passages (insert-if-absent;
-          # the class note in SilverLemmaIndexer carries the argument).
+          # №R-51-B (2026-08-29): the silver projection LEFT the rebuild
+          # path — a full rebuild never pays the whole-shelf replay again
+          # (the 2026-08-29 profile: 99m39s). The shelf is announced
+          # honestly; `nabu lemma-enrich <lang> --index-only` projects it
+          # when the owner chooses. The sync-refresh slice re-apply below
+          # stays, ARM-GATED, so an owner-projected index survives routine
+          # syncs but silver never sneaks back into a clean one.
           if lemma_shelf
-            progress&.stage("silver lemmas: applying the local-lemmas shelf")
-            SilverLemmaIndexer.apply!(catalog: catalog, fulltext: fulltext, shelf: lemma_shelf,
-                                      dictionary_filter_slugs: Array(lemma_filter_slugs),
-                                      progress: progress)
+            progress&.stage("silver lemmas: shelf present, NOT projected (№R-51-B) — " \
+                            "nabu lemma-enrich <lang> --index-only applies it")
           end
           # P42-1: the corpus lemma-frequency census, one grouped INSERT-SELECT
           # over the now-indexed lemma table (vocab's denominator + etym's
@@ -380,6 +383,9 @@ module Nabu
         timed(profile, :reflex) do
           ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
         end
+        # P87-3: the reference path stamps every stage at its current
+        # derivation version — the incremental path's comparison baseline.
+        stamp_stages!(fulltext)
         count
       end
 
@@ -470,7 +476,10 @@ module Nabu
             # annotation re-derivation never re-mints them. Scoped to this
             # source's urns; the frequency delta below counts the re-landed
             # rows because the after-snapshot runs later in this txn.
-            if lemma_shelf
+            # №R-51-B ARM-GATE: only when the owner has projected the shelf
+            # (any silver row standing) — an unarmed index stays
+            # silver-free through syncs.
+            if lemma_shelf && silver_armed?(fulltext)
               silver = SilverLemmaIndexer.apply!(catalog: catalog, fulltext: fulltext, shelf: lemma_shelf,
                                                  urns: urns.to_set,
                                                  dictionary_filter_slugs: Array(lemma_filter_slugs))
@@ -660,6 +669,128 @@ module Nabu
         end
       end
 
+      # -- fulltext stage stamps (P87-3, Q52a) ------------------------------
+      # Each heavy fulltext-side stage records the derivation VERSION it
+      # was built under. `--incremental` (whose kept catalog makes carrying
+      # sound) compares and surgically re-runs exactly the stage a version
+      # bump dirtied; plain `rebuild` stays the reference and re-mints all
+      # stamps. A missing stamps TABLE means a pre-P87 index: incremental
+      # keeps its legacy behavior (no stage protection existed then either)
+      # and says so — the next full rebuild, or --trust-stages, mints them.
+
+      STAGE_STAMPS_TABLE = :stage_stamps
+
+      # const: derivation-version tokens per stage — bump a stage's token
+      # whenever ITS derivation semantics change (the P86-3 postings
+      # widening is the type specimen; its class token doubles here).
+      # Display choices/census claims live elsewhere; these are code-era
+      # markers.
+      STAGE_VERSIONS = {
+        "fts_lemma" => "v1",
+        "char_postings" => POSTINGS_CLASS,
+        "trigram" => "v1",
+        "passage_chars" => "v1",
+        "sign_coverage" => "v1-tokenize-once",
+        "alignment" => "v1",
+        "reflex" => "v1"
+      }.freeze
+
+      # The stages reconcile_stages! can re-derive standalone against a
+      # kept catalog. A stale stage OUTSIDE this set (fts_lemma — the
+      # composite streaming pass; trigram — its scope memory) refuses
+      # loudly: a full rebuild is the honest answer there.
+      RECONCILABLE_STAGES = %w[char_postings passage_chars sign_coverage alignment reflex].freeze
+
+      def stamp_stages!(fulltext, versions: STAGE_VERSIONS)
+        create_stage_stamps_table(fulltext)
+        now = Time.now.utc.iso8601
+        versions.each do |stage, version|
+          fulltext[STAGE_STAMPS_TABLE]
+            .insert_conflict(target: :stage, update: { version: version, stamped_at: now })
+            .insert(stage: stage, version: version, stamped_at: now)
+        end
+      end
+
+      def create_stage_stamps_table(fulltext)
+        fulltext.create_table?(STAGE_STAMPS_TABLE) do
+          String :stage, primary_key: true
+          String :version, null: false
+          String :stamped_at, null: false
+        end
+      end
+
+      # Stage names whose stamped version differs from +versions+ (all of
+      # them when the table is absent — the caller decides how to treat a
+      # pre-P87 index).
+      def stale_stages(fulltext, versions: STAGE_VERSIONS)
+        return versions.keys unless fulltext.table_exists?(STAGE_STAMPS_TABLE)
+
+        stamped = fulltext[STAGE_STAMPS_TABLE].select_hash(:stage, :version)
+        versions.reject { |stage, version| stamped[stage] == version }.keys
+      end
+
+      # P87-3: the incremental path's stage reconciliation. Returns
+      # [redone_stage_names, refusal_or_nil, note_or_nil]:
+      # - pre-P87 index (no stamps table): no-op with an honest note
+      #   (legacy behavior — no protection existed before either);
+      # - +trust+: mint stamps at current versions without re-deriving
+      #   (the documented bridge for an index KNOWN built by current code);
+      # - a stale stage in RECONCILABLE_STAGES re-derives corpus-wide and
+      #   re-stamps; any other stale stage refuses — full rebuild required.
+      def reconcile_stages!(catalog:, fulltext:, sign_list: nil, alignments: nil,
+                            versions: STAGE_VERSIONS, trust: false, progress: nil)
+        unless fulltext.table_exists?(STAGE_STAMPS_TABLE)
+          if trust
+            stamp_stages!(fulltext, versions: versions)
+            return [[], nil, "stage stamps minted at current versions (--trust-stages)"]
+          end
+          return [[], nil,
+                  "fulltext stages are unstamped (pre-P87 index) — derivation-change " \
+                  "protection starts at the next full rebuild (or --trust-stages if this " \
+                  "index was built by the current code)"]
+        end
+
+        stale = stale_stages(fulltext, versions: versions)
+        return [[], nil, nil] if stale.empty?
+
+        if trust
+          stamp_stages!(fulltext, versions: versions)
+          return [[], nil, "stage stamps advanced without re-derive (--trust-stages)"]
+        end
+        unreconcilable = stale - RECONCILABLE_STAGES
+        unless unreconcilable.empty?
+          return [[], "derivation changed for stage(s) #{unreconcilable.join(', ')} — no " \
+                      "standalone corpus re-run exists for them; a full rebuild is required",
+                  nil]
+        end
+
+        stale.each do |stage|
+          progress&.stage("stage re-derive: #{stage} (derivation version moved)")
+          case stage
+          when "char_postings" then rebuild_char_postings!(catalog: catalog, fulltext: fulltext)
+          when "passage_chars" then rebuild_passage_chars!(catalog: catalog, fulltext: fulltext)
+          when "sign_coverage"
+            rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
+                                   progress: progress)
+          when "alignment"
+            AlignmentIndexer.rebuild!(catalog: catalog, fulltext: fulltext, registry: alignments)
+          when "reflex" then ReflexRootsIndexer.rebuild!(catalog: catalog, fulltext: fulltext)
+          end
+          stamp_stages!(fulltext, versions: { stage => versions.fetch(stage) })
+        end
+        [stale, nil, nil]
+      end
+
+      # №R-51-B: is silver ARMED — has the owner projected the shelf into
+      # this index? Read from lemma_frequencies (small, tier-keyed — the
+      # projection always maintains it) rather than scanning the 100M-row
+      # lemma table for a tier value.
+      def silver_armed?(fulltext)
+        return false unless fulltext.table_exists?(LemmaFrequencies::TABLE)
+
+        !fulltext[LemmaFrequencies::TABLE].where(tier: SilverLemmaIndexer::TIER).empty?
+      end
+
       def create_char_postings_table(fulltext)
         fulltext.create_table(CHAR_POSTINGS_TABLE) do
           Integer :source_id, null: false
@@ -787,29 +918,80 @@ module Nabu
 
         inventory = Nabu::SignInventory.new(sign_list)
         create_sign_postings_table(fulltext)
-        progress&.stage("sign coverage 1/2: postings census (tokenizing #{SIGN_SOURCES.join('/')})")
+        create_passage_signs_table(fulltext)
+        # P87-4 (Q52b): ONE tokenization feeds BOTH tables — the P77-r16
+        # shape tokenized the same 4.36M ATF documents twice (the
+        # 2026-08-29 profile: 98m census + 66m re-tokenize). Passage rows
+        # land rank-less in the census pass; only r1..r4 need the COMPLETED
+        # census, and they stamp in a cheap by-rowid update sweep after.
+        progress&.stage("sign coverage: tokenizing #{SIGN_SOURCES.join('/')} " \
+                        "(single pass — postings census + passage index)")
         posts = Hash.new(0)
         seen = 0
+        count = 0
+        batch = []
         each_sign_passage(catalog, inventory: inventory) do |row, line|
-          line.signs.each { |name| posts[[row.fetch(:source_id), name, row[:language]]] += 1 }
           progress&.load_tick(seen, 0) if ((seen += 1) % TICK_EVERY).zero?
+          line.signs.each { |name| posts[[row.fetch(:source_id), name, row[:language]]] += 1 }
+          next if line.signs.empty?
+
+          sorted = line.signs.sort
+          batch << { rowid: row.fetch(:passage_id), source_id: row.fetch(:source_id),
+                     language: row[:language], nsigns: sorted.size, signs: sorted.join(SIGN_SEP),
+                     strays: line.strays, r1: nil, r2: nil, r3: nil, r4: nil }
+          next if batch.size < BATCH_SIZE
+
+          fulltext[PASSAGE_SIGNS_TABLE].multi_insert(batch)
+          count += batch.size
+          batch = []
+        end
+        unless batch.empty?
+          fulltext[PASSAGE_SIGNS_TABLE].multi_insert(batch)
+          count += batch.size
         end
         fulltext.transaction do
-          posts.each_slice(BATCH_SIZE) do |batch|
+          posts.each_slice(BATCH_SIZE) do |post_batch|
             fulltext[SIGN_POSTINGS_TABLE].multi_insert(
-              batch.map do |(source_id, sign, language), docs|
+              post_batch.map do |(source_id, sign, language), docs|
                 { source_id: source_id, sign: sign, language: language, docs: docs }
               end
             )
           end
         end
-        progress&.stage("sign coverage 2/2: passage index (re-tokenizing)")
-        create_passage_signs_table(fulltext)
-        count = write_passage_signs(fulltext, passage_signs_rows(catalog, fulltext, sign_list,
-                                                                 inventory: inventory,
-                                                                 progress: progress))
+        stamp_sign_ranks(fulltext, posts, progress: progress)
         index_passage_signs(fulltext)
         count
+      end
+
+      # The r1..r4 rarity stamp (P87-4): the same [global docs-rank, name]
+      # ordering pass 2 used, computed from the census just taken and
+      # applied by rowid over the rank-less rows — string splits and point
+      # updates, never a second tokenization. Runs BEFORE
+      # index_passage_signs, so the updates pay no index maintenance.
+      def stamp_sign_ranks(fulltext, posts, progress: nil)
+        progress&.stage("sign coverage: stamping rarity ranks")
+        totals = Hash.new(0)
+        posts.each { |(_, name, _), docs| totals[name] += docs }
+        last = -1
+        seen = 0
+        loop do
+          page = fulltext[PASSAGE_SIGNS_TABLE].where { rowid > last }.order(:rowid)
+                                              .limit(BATCH_SIZE).select_map(%i[rowid signs])
+          break if page.empty?
+
+          fulltext.transaction do
+            page.each do |rowid, signs|
+              rarest = signs.split(SIGN_SEP)
+                            .min_by(RAREST_SLOTS) { |name| [totals.fetch(name, -1), name] }
+              fulltext[PASSAGE_SIGNS_TABLE].where(rowid: rowid)
+                                           .update(r1: rarest[0], r2: rarest[1],
+                                                   r3: rarest[2], r4: rarest[3])
+            end
+          end
+          last = page.last[0]
+          seen += page.size
+          progress&.load_tick(seen, 0)
+        end
       end
 
       # One progress tick per this many sign passages — frequent enough
@@ -1038,6 +1220,25 @@ module Nabu
         fulltext.add_index(LEMMA_TABLE, :lemma_folded)
         fulltext.add_index(LEMMA_TABLE, :urn)
         fulltext.add_index(LEMMA_TABLE, :language)
+      end
+
+      # P87-2: the bulk-apply window — drop the three lemma indexes, run
+      # the block's bulk inserts against the bare table, rebuild each index
+      # in one sorted pass (the P36-2 trick at command grain). The ensure
+      # arm means an interrupted apply still leaves the table indexed.
+      def cycle_lemma_indexes(fulltext)
+        drop_lemma_indexes(fulltext)
+        yield
+      ensure
+        create_lemma_indexes(fulltext)
+      end
+
+      def drop_lemma_indexes(fulltext)
+        %i[lemma_folded urn language].each do |column|
+          fulltext.drop_index(LEMMA_TABLE, column)
+        rescue Sequel::DatabaseError
+          nil # a prior interrupted cycle may have left this one missing
+        end
       end
 
       # Streaming dataset of catalog rows for every live passage under a live
