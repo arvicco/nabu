@@ -181,3 +181,14 @@ files:
       The whole download-document envelope for AM-1056-IX-4to ({"data":
       ...}); its decoded data field is byte-identical to
       texts/AM-1056-IX-4to.xml. Session-gated as above.
+  - path: texts/AM-36-fol.xml
+    refetchable: false
+    provenance: korpuskel-api
+    whole: false
+    trim: >-
+      P88-B1 (№R-45 flaw 1): the full teiHeader + the body's first two
+      <app> blocks of the real AM-36-fol download — app 1 with
+      token-bearing parallel witnesses (rdg wit AM70/AM18), app 2 with
+      the <!--no parallel--> comment-only rdgs — closed with the file's
+      own tag shapes. The apparatus-suppression regression fixture:
+      witness readings annotate, never enter the text.

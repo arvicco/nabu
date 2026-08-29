@@ -268,6 +268,8 @@ module Nabu
           @level = nil
           @extra = nil
           @bare_break = false
+          @rdg = nil
+          @apparatus = []
           @tokens = []
           @header = {}
           @capture = nil
@@ -303,6 +305,16 @@ module Nabu
           return header_start(node, name) unless @seen_body
           return unless @in_body
 
+          # P88-B1 (№R-45 flaw 1): a critical apparatus interleaves OTHER
+          # manuscripts' readings — <app><lem>own text</lem><rdg wit="…">
+          # witness text</rdg></app> (AM 36 fol: 4,241 apps). <app>/<lem>
+          # are transparent (the lem IS the manuscript's reading); a <rdg>
+          # subtree suppresses WHOLESALE — its words never become tokens,
+          # its <lb ed="ms"/> never advances the line counter — and its
+          # text rides the line's `apparatus` annotation, sigla labeled.
+          return if @rdg
+          return open_rdg(node) if name == "rdg"
+
           case name
           when *MILESTONES then milestone(node, name)
           when *TOKEN_ELEMENTS then open_token(node, name)
@@ -316,6 +328,11 @@ module Nabu
           return header_end(name) unless @seen_body
           return unless @in_body
 
+          if @rdg
+            close_rdg if name == "rdg" && node.depth == @rdg.fetch(:depth)
+            return
+          end
+
           case name
           when "body" then @in_body = false
           when *TOKEN_ELEMENTS then close_token(node, name)
@@ -327,6 +344,8 @@ module Nabu
         def text_node(node)
           if !@seen_body
             @capture << node.value.to_s if @capture
+          elsif @in_body && @rdg
+            @rdg[:text] << node.value.to_s
           elsif @in_body && @token
             if @level
               @token[:levels][@level] << node.value.to_s
@@ -486,6 +505,29 @@ module Nabu
 
           @token[:bare].rstrip!
           @bare_break = true
+        end
+
+        # The witness reading capture: its raw text nodes concatenate
+        # (AM 36's witnesses carry a single me:dipl level, so this IS the
+        # diplomatic reading), whitespace squeezed at close; a rdg with no
+        # text at all (the <!--no parallel--> comment shape) contributes
+        # nothing. Attached at the position current when the rdg opens —
+        # the app straddles its lem's trailing line break, so the entry
+        # annotates the line the apparatus follows.
+        def open_rdg(node)
+          return if node.empty_element?
+
+          @rdg = { depth: node.depth, wit: presence(node.attribute("wit")),
+                   text: +"", position: [@page, @column, @line] }
+        end
+
+        def close_rdg
+          rdg = @rdg
+          @rdg = nil
+          text = rdg[:text].gsub(/\s+/, " ").strip
+          return if text.empty?
+
+          @apparatus << { position: rdg[:position], "wit" => rdg[:wit], "text" => text }
         end
 
         def ms_layout?(node)
@@ -648,12 +690,15 @@ module Nabu
 
         def build_line(ref, group)
           page, column, line = group.first[:position]
+          apparatus = @apparatus.select { |entry| entry[:position] == group.first[:position] }
+                                .map { |entry| entry.except(:position) }
           Line.new(
             ref: ref,
             text: group.map { |token| token[:text] }.join(" "),
             annotations: {
               "addressing" => "ms-line",
               "page" => page, "column" => column, "line" => line,
+              "apparatus" => (apparatus if apparatus.any?),
               "tokens" => group.map { |token| token[:record] }
             }.compact
           )
