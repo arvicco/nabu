@@ -206,11 +206,14 @@ class PosturesTest < Minitest::Test
     # corpus-gysseling (dum) — both real nabu-lects anchors, so identity is the
     # honest claim (no machine rule/override covers odt/dum, no shadowing):
     # 70→72, identity 49→51.
-    # P88-A4 reopens the pending class honestly (the ref/menota shape):
-    # dacon pends on the nwc anchor mint — nothing Newar exists in
-    # nabu-lects (censused 2026-08-29); the P88-B3 aggregated PR mints it,
-    # then identity retires the pending. P88-A2's classical-modern joins
-    # as codemap (the kanripo lzh precedent): 72→74, codemap 11→12.
-    assert_equal({ "identity" => 51, "dates" => 10, "codemap" => 12, "pending" => 1 }, by_posture)
+    # P88-A4 reopened the pending class honestly (the ref/menota shape):
+    # dacon pended on the nwc anchor mint — nothing Newar existed in
+    # nabu-lects (censused 2026-08-29). The P88-B3 aggregated mint
+    # (nabu-lects PR #11, v1.4.0) merged and reached canonical 2026-08-30,
+    # so identity retired the pending same-phase — zero pendings again,
+    # the add-then-retire shape complete a third time. P88-A2's
+    # classical-modern joins as codemap (the kanripo lzh precedent):
+    # 72→74, codemap 11→12, identity 51→52.
+    assert_equal({ "identity" => 52, "dates" => 10, "codemap" => 12 }, by_posture)
   end
 end
