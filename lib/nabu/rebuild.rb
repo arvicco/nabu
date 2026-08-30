@@ -142,7 +142,14 @@ module Nabu
       fulltext = Store.connect_fulltext(fulltext_path, rebuild: true)
       outcomes = []
       skips = []
-      @registry.each_source do |entry|
+      # P89-1: pin every source's code identity BEFORE any replay — a stamp
+      # minted hours into the run must describe the code the run loaded, not
+      # whatever sits on disk by then (DerivationFingerprint#warm).
+      @registry.each_source { |entry| fingerprints.warm(entry) }
+      # Warming must COMPLETE before the first replay begins; folding it into
+      # the replay loop would warm the last source hours after load time,
+      # recreating the lying stamp.
+      @registry.each_source do |entry| # rubocop:disable Style/CombinableLoops
         if replayable?(entry)
           progress&.stage(entry.slug, eta: load_eta(ledger, entry.slug))
           # The :load roll-up is the authoritative per-source number (parse +
@@ -181,6 +188,13 @@ module Nabu
       facets = profile.measure(scope: RebuildProfile::CORPUS, stage: :facets) do
         Store::FacetBuilder.rebuild!(catalog: db)
       end
+      # P89-1 (№R-54 (c)): the corpus builders just ran against the current
+      # code — mint their sentinel so an incremental run can skip them
+      # honestly until a builder file actually changes.
+      Store::DerivationStamp.stamp_builders!(
+        db, digest: DerivationFingerprint.builders_digest,
+            migration_level: DerivationFingerprint.migration_level
+      )
       # P70 (the derivability contract): the lect JOURNAL is derived — re-mint
       # it wholesale from the two-folder truth (config/lect_rulings.yml owner
       # rows + the compiled rules + infer-dates) BEFORE the facet reads it.

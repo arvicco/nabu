@@ -297,6 +297,61 @@ class DerivationFingerprintTest < Minitest::Test
     assert_equal :unstamped, after.drift_against(nil)
   end
 
+  # -- P89-1 (№R-54 (c)): the corpus-builder carve-out ---------------------
+
+  def test_builder_files_are_carved_out_of_the_shared_core
+    # The asymmetry doctrine's sanctioned exit: a file may leave the global
+    # digest ONLY when a scoped mechanism provably covers it — here the
+    # builders digest + the __corpus-builders__ sentinel stamp.
+    assert_includes Nabu::DerivationFingerprint::EXCLUDED_DIRS, "store/timeline_builder"
+    assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, "store/timeline_builder.rb"
+    assert_includes Nabu::DerivationFingerprint::EXCLUDED_FILES, "store/facet_builder.rb"
+  end
+
+  def test_the_builders_digest_censuses_every_carved_file
+    files = Nabu::DerivationFingerprint.builder_files
+    %w[timeline_builder.rb facet_builder.rb metadata_dates.rb].each do |basename|
+      assert files.any? { |file| file.end_with?(basename) },
+             "#{basename} must be inside the covering builders digest"
+    end
+    # Census completeness: every carved path is covered — nothing under the
+    # excluded builder dirs/files escapes both digests (the under-rebuild sin).
+    carved_dir = File.join(Nabu::DerivationFingerprint::LIB_DIR, "store", "timeline_builder")
+    Dir[File.join(carved_dir, "**", "*.rb")].each do |file|
+      assert_includes files, file, "#{file} is excluded from the core but not covered"
+    end
+  end
+
+  def test_a_builder_file_change_moves_the_builders_digest_not_the_parser_digest
+    before_builders = Nabu::DerivationFingerprint.builders_digest
+    before_parser = computer.for_source(entry).parser_digest
+
+    with_changed_builder_file("metadata_dates.rb") do
+      refute_equal before_builders, Nabu::DerivationFingerprint.builders_digest,
+                   "the covering digest must see the change"
+      assert_equal before_parser, computer(fresh: true).for_source(entry).parser_digest,
+                   "a builder-only edit must not dirty per-source parser digests (№R-54)"
+    end
+  end
+
+  # -- P89-1: warm pins code identity at run start -------------------------
+
+  def test_warm_pins_the_parser_digest_against_mid_run_file_changes
+    # The lying-stamp hazard: a rebuild loads code at start but stamps hours
+    # later from disk — a closure file committed mid-run would mint a stamp
+    # describing code the run never executed. #warm memoizes the tokens NOW.
+    perseus = entry(adapter: "Nabu::Adapters::Perseus")
+    computer.warm(perseus)
+    before = computer.for_source(perseus).parser_digest
+
+    with_changed_code_file("perseus.rb") do
+      assert_equal before, computer.for_source(perseus).parser_digest,
+                   "a warmed computer must keep describing the code the process loaded"
+      refute_equal before, computer(fresh: true).for_source(perseus).parser_digest,
+                   "a fresh computer (a new run) must see the changed file"
+    end
+  end
+
   # -- helpers -------------------------------------------------------------
 
   private
@@ -341,6 +396,32 @@ class DerivationFingerprintTest < Minitest::Test
     yield
   ensure
     singleton.define_method(:fold_file_digest, original)
+  end
+
+  # The code-file counterpart of with_changed_fold_file (P89-1): diverts
+  # the seam behind the per-instance token memo, so only UN-warmed
+  # computers see the change.
+  def with_changed_code_file(basename)
+    singleton = Nabu::DerivationFingerprint.singleton_class
+    original = Nabu::DerivationFingerprint.method(:code_file_digest)
+    singleton.define_method(:code_file_digest) do |path|
+      File.basename(path) == basename ? "changed-#{basename}" : original.call(path)
+    end
+    yield
+  ensure
+    singleton.define_method(:code_file_digest, original)
+  end
+
+  # The builders-digest counterpart of with_changed_fold_file (P89-1).
+  def with_changed_builder_file(basename)
+    singleton = Nabu::DerivationFingerprint.singleton_class
+    original = Nabu::DerivationFingerprint.method(:builder_file_digest)
+    singleton.define_method(:builder_file_digest) do |path|
+      File.basename(path) == basename ? "changed-#{basename}" : original.call(path)
+    end
+    yield
+  ensure
+    singleton.define_method(:builder_file_digest, original)
   end
 
   # Identity of +dir+ as it would read without +subtree+ (computed by moving
