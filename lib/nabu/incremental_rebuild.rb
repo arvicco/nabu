@@ -41,6 +41,10 @@ module Nabu
     # A source skipped because its fingerprint matched its stamp.
     Clean = Data.define(:slug, :stamp_short)
 
+    # A source RE-STAMPED without replay under --trust-derivations (P89-1,
+    # №R-54 (b)): parser-only drift + the code voucher's yes.
+    Trusted = Data.define(:slug, :stamp_short)
+
     # One source's dry-run verdict: state :clean | :dirty | :skip, +reason+
     # the drift component for :dirty (:canonical/:parser/:config/:migration/
     # :unstamped/:weak_identity, or — P39-1, a String because it names files —
@@ -52,8 +56,13 @@ module Nabu
     end
 
     # What `--dry-run --incremental` reports. +refusal+ (a message or nil)
-    # preempts the verdicts.
-    Plan = Data.define(:db_path, :db_exists, :refusal, :verdicts)
+    # preempts the verdicts. +builders_dirty+ (P89-1) announces a pending
+    # corpus-builders re-run — it is not a source verdict.
+    Plan = Data.define(:db_path, :db_exists, :refusal, :verdicts, :builders_dirty) do
+      def initialize(db_path:, db_exists:, refusal:, verdicts:, builders_dirty: false)
+        super
+      end
+    end
 
     # What an incremental rebuild did. +indexed+ is the passage count
     # re-indexed across dirty sources (nil when none needed index work);
@@ -61,10 +70,11 @@ module Nabu
     # +analyzed+ (P42-4) is the Store::AnalyzeReport of the post-run planner-
     # stats refresh — present when any source re-derived (the dirty replays
     # shifted the catalog/index distribution), nil when everything was clean.
+    # +trusted+ (P89-1) lists the sources re-stamped without replay.
     Result = Data.define(:db_path, :outcomes, :cleans, :skips, :indexed, :axes, :facets, :analyzed,
-                         :link_failures) do
+                         :link_failures, :trusted) do
       def initialize(db_path:, outcomes:, cleans:, skips:, indexed:, axes:, facets:, analyzed: nil,
-                     link_failures: [])
+                     link_failures: [], trusted: [])
         super
       end
 
@@ -78,7 +88,8 @@ module Nabu
 
       with_readonly_catalog do |db|
         verdicts = @registry.each_source.map { |entry| verdict_for(db, entry) }
-        Plan.new(db_path: db_path, db_exists: true, refusal: nil, verdicts: verdicts)
+        Plan.new(db_path: db_path, db_exists: true, refusal: nil, verdicts: verdicts,
+                 builders_dirty: builders_dirty?(db))
       end
     end
 
@@ -88,9 +99,18 @@ module Nabu
     # versions WITHOUT re-deriving — the documented bridge for an index
     # known to have been built by the current code (e.g. the full rebuild
     # that shipped just before the stamps machinery landed).
-    def initialize(config:, registry:, trust_stages: false)
+    # +trust_derivations+ (P89-1, №R-54 (b)): the derivation-stamp
+    # counterpart — a source whose ONLY drift is the parser digest, and
+    # whose own parser closure +code_voucher+ can vouch predates its stamp,
+    # is re-stamped at its current fingerprint WITHOUT replay (the drift
+    # was shared-core code the owner attests is content-neutral). Anything
+    # the voucher cannot vouch for replays honestly — never a run refusal.
+    def initialize(config:, registry:, trust_stages: false, trust_derivations: false,
+                   code_voucher: nil)
       super(config: config, registry: registry)
       @trust_stages = trust_stages
+      @trust_derivations = trust_derivations
+      @code_voucher = code_voucher || CodeVoucher.new
     end
 
     def run(progress: nil)
@@ -108,15 +128,35 @@ module Nabu
       outcomes = []
       cleans = []
       skips = []
+      trusted = []
       indexed = nil
+      # P89-1: pin code identities before any replay (see Rebuild#run) —
+      # the last verdict of a long dirty run happens hours after load time.
+      @registry.each_source { |entry| fingerprints.warm(entry) }
+      # The trust horizon (№R-54 (b)): the ELDEST per-source stamp, not each
+      # stamp's own time. A long run stamps late from disk bytes while its
+      # rows come from code loaded at start — a closure file committed
+      # mid-run beats the source's own stamped_at and would be wrongly
+      # vouched (the 2026-08-29 tshet-uinh stamp is the type specimen). The
+      # eldest stamp ≈ the oldest run start any surviving stamp could
+      # depend on; sources whose closure moved after it simply replay
+      # (over-rebuild-safe).
+      trust_horizon = @trust_derivations ? Store::DerivationStamp.oldest_stamped_at(db) : nil
       @registry.each_source do |entry|
         unless replayable?(entry)
           skips << Skip.new(slug: entry.slug, reason: :no_canonical)
           next
         end
         fingerprint = fingerprint_for(db, entry)
-        if fingerprint.drift_against(Store::DerivationStamp.fetch(db, entry.slug)).nil?
+        stamp = Store::DerivationStamp.fetch(db, entry.slug)
+        if fingerprint.drift_against(stamp).nil?
           cleans << Clean.new(slug: entry.slug, stamp_short: fingerprint.short)
+          next
+        end
+        if @trust_derivations && trustable?(entry, stamp, fingerprint, trust_horizon)
+          Store::DerivationStamp.stamp!(db, slug: entry.slug, fingerprint: fingerprint)
+          record_ingest_identity(db, entry, fingerprint)
+          trusted << Trusted.new(slug: entry.slug, stamp_short: fingerprint.short)
           next
         end
         progress&.stage(entry.slug)
@@ -148,7 +188,17 @@ module Nabu
         progress&.stage("source stats")
         Store::SourceStats.derive!(db, note: "derived (incremental rebuild)")
       end
-      axes, facets = corpus_builders(db, progress) if outcomes.any?
+      # P89-1 (№R-54 (c)): the builders' own covering mechanism — a drifted
+      # builders digest re-runs the corpus builders even when every source
+      # is clean; the sentinel then records the code they just ran as.
+      builders_ran = outcomes.any? || builders_dirty?(db)
+      axes, facets = corpus_builders(db, progress) if builders_ran
+      if builders_ran
+        Store::DerivationStamp.stamp_builders!(
+          db, digest: DerivationFingerprint.builders_digest,
+              migration_level: DerivationFingerprint.migration_level
+        )
+      end
       # P70/P71-6 (the derivability law): the lect journal re-derives on
       # EVERY incremental run — it is seconds-scale, and always-running
       # closes the hand-edit gap (an edited rulings file, facet rule, or
@@ -198,10 +248,10 @@ module Nabu
       # replays revised the catalog and (per source) the index, so the
       # sqlite_stat1 both carry may no longer match (ops §10). A clean-swept run
       # touched no rows, so the existing stats still describe them.
-      analyzed = analyze_after_incremental(db, fulltext) if outcomes.any?
+      analyzed = analyze_after_incremental(db, fulltext) if builders_ran
       Result.new(db_path: db_path, outcomes: outcomes, cleans: cleans, skips: skips,
                  indexed: indexed, axes: axes, facets: facets, analyzed: analyzed,
-                 link_failures: link_failures)
+                 link_failures: link_failures, trusted: trusted)
     ensure
       db&.disconnect
       fulltext&.disconnect
@@ -256,6 +306,28 @@ module Nabu
     # dirty through those components regardless of the fold set.
     def fingerprint_for(db, entry)
       fingerprints.for_source(entry, languages: Store::DerivationStamp.derived_languages(db, entry.slug))
+    end
+
+    def builders_dirty?(db)
+      Store::DerivationStamp.builders_digest(db) != DerivationFingerprint.builders_digest
+    end
+
+    # May +entry+ be re-stamped without replay (P89-1, №R-54 (b))? Only
+    # when every NON-parser component matches its stamp DIRECTLY (the
+    # drift_against blame order reports the first drift only — a parser
+    # drift could mask a fold or config one) AND the code voucher confirms
+    # the source's own parser closure predates the trust +horizon+ (the
+    # eldest stamp — see #run for why never the source's own stamped_at).
+    # Then the drift can only live in shared-core code, which the owner's
+    # flag attests is content-neutral for existing rows.
+    def trustable?(entry, stamp, fingerprint, horizon)
+      return false if stamp.nil? || fingerprint.weak? || horizon.nil?
+      return false unless stamp[:migration_level] == fingerprint.migration_level &&
+                          stamp[:canonical_identity] == fingerprint.canonical_identity &&
+                          stamp[:fold_digest] == fingerprint.fold_digest &&
+                          stamp[:config_json] == fingerprint.config_json
+
+      @code_voucher.vouches?(files: fingerprints.parser_files(entry), since: horizon)
     end
 
     def with_readonly_catalog
