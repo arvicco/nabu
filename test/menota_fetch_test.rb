@@ -16,7 +16,7 @@ require "json"
 # checkpoint the catalogue, download missing texts skip-on-disk, pin the
 # ledger).
 #
-# The №77-1 grant's promises are REQUIREMENTS tested here: sequential
+# The 2026-08-20 grant's promises are REQUIREMENTS tested here: sequential
 # rate-limited requests, honest User-Agent, once-per-text caching (a text
 # on disk is never re-requested).
 #

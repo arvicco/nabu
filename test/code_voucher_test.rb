@@ -72,6 +72,12 @@ class CodeVoucherTest < Minitest::Test
     assert voucher.vouches?(files: [path("alpha.rb")], since: (Time.now + 60).to_s)
   end
 
+  def test_able_preflight_reports_a_dirty_tree_before_any_vouch
+    assert voucher.able?, "a clean committed tree can vouch"
+    File.write(path("alpha.rb"), "class Alpha; DIRTY = true; end\n")
+    refute voucher.able?, "uncommitted edits disable trust wholesale — the caller must warn loudly"
+  end
+
   private
 
   def voucher = Nabu::CodeVoucher.new(repo_root: @root, watch_dir: @watch)

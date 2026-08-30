@@ -6,7 +6,7 @@
 # URL-liveness only (whole: false), never byte-compared. adapter_test is null:
 # the titus-avestan adapter test asserts trimmed verse counts (39 / 12) an
 # untrimmed upstream page would false-fail. Re-apply the README trim after any
-# refresh. Served under the owner's personal grant №41-3 (Gippert, 2026-07-23,
+# refresh. Served under the owner's personal grant (Gippert, 2026-07-23,
 # non-commercial + credit) — a liveness GET of the public pages is unaffected;
 # any re-snapshot is a manual, grant-holding operator's act.
 source: titus-avestan
@@ -33,6 +33,6 @@ files:
     whole: false
     trim: >-
       the WHOLE live page, copied 2026-08-10 from the owner's held
-      canonical/titus-avestan (grant №41-3) — Yasna 28, the first Gatha:
+      canonical/titus-avestan (personal grant) — Yasna 28, the first Gatha:
       the P66-1 old-avestan facet exemplar (Gathic chapter set)
       verses a-k + footer; ~81 KB -> ~6 KB, structurally intact

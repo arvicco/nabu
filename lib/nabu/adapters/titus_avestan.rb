@@ -9,7 +9,7 @@ module Nabu
     # edition on the basis of Geldner and Westergaard, prepared by Sonja Fritz
     # and corrected by Gippert et al.
     #
-    # == The grant (№41-3) and the credit duty
+    # == The grant (2026-07-23) and the credit duty
     #
     # This corpus is fetched under the owner's PERSONAL grant (Gippert,
     # 2026-07-23): non-commercial use, with "TITUS and the editors clearly

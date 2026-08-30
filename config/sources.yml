@@ -202,7 +202,7 @@ ud:
   #     old-french-profiterole (fro) + middle-french-profiterole (frm)
   #       — CONFLICTING LICENSES (LICENSE.txt BY-SA vs README BY-NC-SA);
   #         conservative nc CONFIRMED upstream 2026-07-28 (Prévost, thread
-  #         №43-1: restrictive governs until their next-release fix, direction
+  #         upstream's 2026-07-25 reply: restrictive governs until their next-release fix, direction
   #         unstated) — re-read both grants at the next UD release (~Nov 2026),
   #     ottoman-boun + ottoman-dudu (ota, CC BY-SA 4.0 → attribution).
   #   SEVEN UNDER EXISTING LANGUAGES/AXES:
@@ -222,7 +222,7 @@ ud:
   # P45-1 (2026-07-25): TREEBANKS grew to TWENTY-NINE — the Romance pack,
   # three treebanks (config-only, licenses read verbatim 2026-07-25; the
   # fourth Romance survey candidate, Old French PROFITEROLE, landed at P43-1
-  # above — its license fork rides thread №43-1):
+  # above — its license fork has an open upstream clarification ask, 2026-07-25):
   #   latin-llct (lat; Late Latin Charter Treebank — 521 Tuscan charters
   #     AD 774–897, 9,023 sentences / 242,411 words by stats.xml census;
   #     LICENSE.txt + README consistent CC BY-SA 4.0 → attribution),
@@ -319,7 +319,7 @@ menota:
                  # owner-fired 2026-08-24, 91/91 after the P82-r1 recovery
                  # re-parse — 241,628 passages; e.g.
                  # nabu show urn:nabu:menota:am-1056-ix-4to:1rB.1)
-  # Menota — the Medieval Nordic Text Archive (P82-1, Q42 / grant №77-1):
+  # Menota — the Medieval Nordic Text Archive (P82-1, Q42 / granted by email 2026-08-20):
   # 91 manuscripts / ~2.1M words in Menota-TEI (multi-level facs/dipl/norm
   # word markup, MUFI entities), served through the Corpuscle (korpuskel)
   # REST API behind clarino.uib.no/menota/catalogue/menota (get-session →
@@ -331,7 +331,7 @@ menota:
   # (<page><column>.<line>). Languages per file (isl/nor/swe/dan/non),
   # riding verbatim + as the `language` facet — lect posture pending.
   # LICENSE: CC BY-SA 4.0 — the catalogue license column (quotable record,
-  # №77-1; censused 2026-08-23 on all 91) + per-file <licence>; stranger
+  # in the grant reply; censused 2026-08-23 on all 91) + per-file <licence>; stranger
   # grants map restricted, never silently BY-SA. The crawl is
   # upstream-blessed (Stegmann 2026-08-20, "we will not keep you from
   # scraping 😉" — robots.txt alone would forbid it) and RETIRES when
@@ -2258,7 +2258,7 @@ rsti:
   # cuneiform)/translation annotations. New `ochre-json` family +
   # Nabu::OchreFetch (resolver pi.lib.uchicago.edu/1001/org/ochre/
   # <uuid>&format=json — literal &, no ?). LICENSE: CC BY-NC-SA 4.0 (the
-  # API's own availability.license), GRANTED №23 (M. Prosser, U. Chicago
+  # API's own availability.license), GRANTED by email 2026-07-27 (M. Prosser, U. Chicago
   # CORPUS/OCHRE, 2026-07-27: "retrieve the RSTI data and add it to your
   # collection, with attribution") → class nc, MCP-excluded; the Bordreuil &
   # Pardee (1989) TEO credit rides the manifest verbatim.
@@ -2506,7 +2506,7 @@ hdic:
   # never fetched). Five published databases → five dictionaries: yyp/ktb/
   # tsj/syp/krm (96,415 upstream rows total). License: CC BY-SA 4.0 —
   # the old LICENSE-file BY-NC-SA legalcode contradiction RESOLVED
-  # UPSTREAM 2026-08-30 (thread №88-3: Prof. Ikeda confirmed BY-SA
+  # UPSTREAM 2026-08-30 (Prof. Ikeda confirmed by email: BY-SA
   # governs, no NC; repos unified, Zenodo refresh to follow). The
   # attribution class stands. Upstream actively maintained → re-syncs
   # owner-fired.
@@ -2782,7 +2782,7 @@ ref:
 # P40-5: Referenzkorpus Mittelhochdeutsch (1050-1350) v2.1, ~400 texts /
 # ~2M word forms of manually annotated MHG — the first cora-tei registrant
 # (ReA/ReN ride the family when their license replies land, backlog
-# №40-1/№40-2). One immutable Zenodo artifact (record 13982324,
+# asked by email 2026-07-22). One immutable Zenodo artifact (record 13982324,
 # ReM-v2.1_tei.zip, hard sha256 pin — the iecor mold) → manual. CC BY-SA
 # 4.0 (in-file <licence>, zip README and Zenodo record agree; parse
 # re-verifies per file and quarantines drift).
@@ -2914,14 +2914,14 @@ titus-avestan:
                          # drops it from the PUBLIC iranian membership (the site page + docs
                          # list only oracc/cdli and carry the private-materials footnote).
   # P44-r3a: grant-gated PRIVATE research material (the fetch right is the owner's
-  # personal grant №41-3, not conveyed by a public clone). The public repo keeps
+  # owner's personal grant of 2026-07-23, not conveyed by a public clone). The public repo keeps
   # this license/scouting record, but must NOT advertise it as a library holding:
   # `availability: blocked` excludes it from the generated site axis pages, the
   # docs/axes.md memberships, and every public census (owner ruling 2026-07-24).
   # Distinct from grant_required (the sync-time gate) and wired — this governs
   # PUBLIC VISIBILITY only; local fetch/serve are unaffected.
   availability: blocked
-  wired: true    # Owner flip 2026-07-25 (grant №41-3 acknowledged on this box,
+  wired: true    # Owner flip 2026-07-25 (the 2026-07-23 grant acknowledged on this box,
                    # synced: 248 docs; status reads `granted` per P44-i2).
                    # `nabu sync titus-avestan` still REFUSES on any box until
                    # its owner types `granted` (the grant gate is per-box and
@@ -2932,7 +2932,7 @@ titus-avestan:
   # prepared by Sonja Fritz (Berlin 1985-88), corrected by J. Gippert et al.
   # One document per text page (avest001.htm …); verses (and chapter/paragraph
   # ritual rubrics) are the passages, keyed off the <A NAME="Avest._…"> anchors.
-  # Served under the owner's PERSONAL grant №41-3 (Prof. Jost Gippert,
+  # Served under the owner's PERSONAL grant (Prof. Jost Gippert,
   # 2026-07-23): non-commercial use, "TITUS and the editors clearly indicated
   # wherever displayed." license_class `nc` (servable, NOT hidden — the grant
   # wants it DISPLAYED, credited); the manifest carries the verbatim credit line,
@@ -2947,7 +2947,7 @@ titus-avestan:
     grantor: Prof. Jost Gippert (TITUS, Frankfurt)
     date: "2026-07-23"
     terms: non-commercial use; TITUS and the editors clearly indicated wherever displayed
-    thread: "№41-3"
+    thread: "personal research grant of 2026-07-23"
     request_hint: >-
       Write to Prof. Jost Gippert (TITUS, titus.uni-frankfurt.de) for your own
       non-commercial grant, and promise to credit TITUS and the editors
@@ -3759,7 +3759,7 @@ cantigas:   # P55-1, 02-sources row 144
   # retried then FATAL (never censused — the sparse-id ground truth),
   # 404 censused (P47-i1), attic + breaker; index sidecars persist in
   # canonical (author/genre columns) but stay out of the ledger pin.
-  # LICENSE (granted 2026-07-27, №45-2, G. V. Lopes): "Our site is free
+  # LICENSE (granted by email 2026-07-27, G. V. Lopes): "Our site is free
   # for all. So, with full attribution, you can do whatever you like with
   # the data." → class attribution; the project's own citation format rides
   # the manifest license verbatim + the credit line. EXPECTED FIRST SYNC:
@@ -3773,7 +3773,7 @@ derom:   # P56-4, 02-sources row 146
   wired: true    # first sync owner-verified 2026-08-02 (513 docs -> 233 entries; define lakt-e / etym cheval eyeballed)
                  # CLAUDE.md checklist §6 — eyeball `nabu define lakt-e` +
                  # `nabu etym lapte` / `nabu etym cheval`, then flip)
-  # P56-4 (license thread №45-3): DÉRom — Dictionnaire Étymologique Roman
+  # P56-4 (license clarification asked by email 2026-07-25): DÉRom — Dictionnaire Étymologique Roman
   # (dir. Éva Buchi & Wolfgang Schweickard; ATILF, CNRS/Université de
   # Lorraine & Universität des Saarlandes), the reference comparative
   # reconstruction of Proto-Romance, from the openly downloadable Ortolang
@@ -3805,7 +3805,7 @@ derom:   # P56-4, 02-sources row 146
   # EXPECTED FIRST SYNC: 513 documents → ~233 entries (188 full + 45
   # renvoi; 280 potiches skipped), ~3.5–4.5k reflex rows (fixture mean ~22
   # signifiants/article over DÉRom-1's densest slice). Next upstream
-  # refresh: September 2026 (É. Buchi, №45-3) — a routine manual re-sync.
+  # refresh: September 2026 (per É. Buchi's reply) — a routine manual re-sync.
   sync_policy: manual
 
 # P77-1 + P77-2
@@ -4134,7 +4134,7 @@ cme:
   # text). Identity = upstream filename verbatim (the <IDG> id is a
   # placeholder shared across files, censused). Language bare enm — the
   # corpus's own definition; upstream LANGUSAGE is inconsistent (censused)
-  # and rides metadata only. LICENSE (grant №77-2, P.F. Schaffner
+  # and rides metadata only. LICENSE (granted by email 2026-08-20, P.F. Schaffner
   # 2026-08-20): downloads page verbatim "no restrictions on use or reuse"
   # + one uniform per-file U-M PD statement (censused identical ×297) →
   # open; credit appreciated-not-insisted, carried on the manifest credit
@@ -4174,7 +4174,7 @@ eebo-tcp:
   # dated), MetadataDates :structured. LICENSE: uniform per-file CC0 1.0
   # Public Domain Dedication (two variants, both explicit; censused
   # ×3,325) → open; the license_mapper maps a stranger availability
-  # restricted, never silently open. Grant №77-2 additionally covers TCP
+  # restricted, never silently open. The 2026-08-20 grant additionally covers TCP
   # files. Median text 35 KB, max 17.6 MB — Reader streaming throughout.
   sync_policy: manual
 
@@ -4187,7 +4187,7 @@ seal:
   # SEAL — Sources of Early Akkadian Literature (P89-3; seal.huji.ac.il;
   # Michael P. Streck & Nathan Wasserman): the edition of record for
   # third/second-millennium Akkadian literature — 1,065 texts (scout census
-  # 2026-08-30). GRANT (email thread №21, N. Wasserman 2026-08-30): local
+  # 2026-08-30). GRANT (N. Wasserman, by email 2026-08-30): local
   # personal-research use ONLY, CC BY-NC-ND terms — local machine, NO
   # redistribution/mirroring/derivative publication, attribution on display,
   # scholarly reference by the fixed SEAL number + permanent URL, TEXT ONLY

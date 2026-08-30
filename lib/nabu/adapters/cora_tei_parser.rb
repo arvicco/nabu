@@ -9,7 +9,7 @@ module Nabu
     # German — ReM (Middle High German) here; ReN (Middle Low German) rides
     # the family since P46-5 through the RenTeiParser subclass (its dialect
     # censused there); ReA (Old High German + Old Saxon) joins when its
-    # license reply lands (backlog №40-1). Censused from the two whole
+    # license reply lands (asked by email 2026-07-22). Censused from the two whole
     # ReM v2.1 texts in test/fixtures/rem/ (never invented):
     #
     #   <body><ab>

@@ -28,7 +28,7 @@ module Nabu
     # discover mints from the filename; parse cross-checks the page's own
     # self-links (drift quarantines).
     #
-    # == License (granted 2026-07-27, license thread №45-2)
+    # == License (granted by email 2026-07-27)
     #
     # Graça Videira Lopes (Projeto Littera coordinator): "Our site is free
     # for all. So, with full attribution, you can do whatever you like with
@@ -57,7 +57,7 @@ module Nabu
         id: "cantigas",
         name: "Cantigas Medievais Galego-Portuguesas (Projeto Littera)",
         license: "Free with attribution — the coordinator's grant (Graça Videira Lopes, " \
-                 "Projeto Littera, IEM/FCSH-NOVA, 2026-07-27, №45-2): \"Our site is free " \
+                 "Projeto Littera, IEM/FCSH-NOVA, by email 2026-07-27): \"Our site is free " \
                  "for all. So, with full attribution, you can do whatever you like with " \
                  "the data.\" Cite (the project's own format): #{CITATION}",
         license_class: "attribution",

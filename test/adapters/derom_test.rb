@@ -3,7 +3,7 @@
 require "test_helper"
 require "tmpdir"
 
-# The DÉRom adapter (P56-4; №45-3): the Dictionnaire Étymologique Roman
+# The DÉRom adapter (P56-4): the Dictionnaire Étymologique Roman
 # (ATILF & Universität des Saarlandes, dir. Buchi/Schweickard) from the
 # openly downloadable Ortolang workspace `derom` — the Latin→Romance
 # etymological bridge, a RECONSTRUCTION shelf in the la-vul (Proto-Romance /

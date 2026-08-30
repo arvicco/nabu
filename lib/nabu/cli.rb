@@ -10232,6 +10232,11 @@ module Nabu
       # skipped on their derivation stamp. Refusals (schema drift, orphan
       # rows, no catalog) are loud exit-1 errors — full rebuild required.
       def rebuild_incremental(config, registry)
+        if options[:trust_derivations] && !Nabu::CodeVoucher.new.able?
+          say "WARNING: --trust-derivations is INERT — the adapters tree has uncommitted " \
+              "changes, so git cannot vouch for any source and every drift will REPLAY " \
+              "(hours, not minutes). Commit or stash first, then re-run.", :yellow
+        end
         incremental = Nabu::IncrementalRebuild.new(config: config, registry: registry,
                                                    trust_stages: options[:trust_stages],
                                                    trust_derivations: options[:trust_derivations])

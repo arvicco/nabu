@@ -6,7 +6,7 @@ require "fileutils"
 
 # SEAL adapter tests (P89-3): Sources of Early Akkadian Literature
 # (seal.huji.ac.il) under the research_private posture — Prof. Nathan
-# Wasserman's personal-research grant (email 2026-08-30, thread №21): local
+# Wasserman's personal-research grant (by email, 2026-08-30): local
 # machine only, NO redistribution/mirroring/derivative publication. The
 # fixture bytes therefore live under the gitignored local/fixtures/seal/
 # (the corpus-oudnederlands/freising mold) and every data-bearing case SKIPs

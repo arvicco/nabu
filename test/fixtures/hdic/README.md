@@ -18,8 +18,7 @@ license grant); only the row SET was trimmed.
   its header. **DISCREPANCY — RESOLVED UPSTREAM 2026-08-30:** the
   repo-level `LICENSE` file long carried the CC BY-NC-SA 4.0 legalcode
   (template mismatch from upstream commit `72cfe74`, 2022-02-02,
-  "ライセンスの記述を変更"). Prof. Ikeda confirmed by email (thread
-  №88-3) that **CC BY-SA 4.0 governs, without any NonCommercial
+  "ライセンスの記述を変更"). Prof. Ikeda confirmed by email that **CC BY-SA 4.0 governs, without any NonCommercial
   restriction** — the legalcode was an unintended leftover, and both
   shikeda/HDIC and shikeda/krm have been unified under CC BY-SA 4.0
   upstream (Zenodo refresh to follow). Classed `attribution`, confirmed.

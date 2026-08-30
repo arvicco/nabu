@@ -4,7 +4,7 @@ require "test_helper"
 require "tmpdir"
 require "fileutils"
 
-# Nabu::Adapters::Menota (P82-1, queue Q42 / grant №77-1): the Medieval
+# Nabu::Adapters::Menota (P82-1, granted by email 2026-08-20): the Medieval
 # Nordic Text Archive — ~100 manuscripts in Menota-TEI served through the
 # Corpuscle REST API behind clarino.uib.no/menota/catalogue/menota.
 #
@@ -25,7 +25,7 @@ require "fileutils"
 # <page><column>.<line> — urn:nabu:menota:am-1056-ix-4to:1rB.1.
 #
 # LICENSE: CC BY-SA 4.0 on the catalogue license column (the quotable
-# record, №77-1) AND in every sampled teiHeader availability/licence →
+# record, in the grant reply) AND in every sampled teiHeader availability/licence →
 # attribution; the per-text gate maps each file's own licence statement and
 # maps an UNRECOGNIZED explicit statement to restricted, never silently to
 # the source class.

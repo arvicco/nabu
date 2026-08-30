@@ -11,7 +11,7 @@ module Nabu
     # census 2026-08-30). A thin composition of the SealHtmlParser family
     # with the SealFetch advanced-search crawl.
     #
-    # == The grant (email thread №21, N. Wasserman 2026-08-30)
+    # == The grant (N. Wasserman, by email, 2026-08-30)
     #
     # Local personal-research use ONLY (CC BY-NC-ND terms): local machine,
     # NO redistribution/mirroring/derivative publication, attribution on
@@ -47,7 +47,7 @@ module Nabu
         id: "seal",
         name: "SEAL — Sources of Early Akkadian Literature",
         license: "Local personal research per N. Wasserman's email grant 2026-08-30 " \
-                 "(thread №21; CC BY-NC-ND terms): local machine only, no redistribution, " \
+                 "(CC BY-NC-ND terms): local machine only, no redistribution, " \
                  "mirroring or derivative publication; attribution on display; scholarly " \
                  "reference by the fixed SEAL number + permanent URL; text only — " \
                  "third-party visual material excluded, never fetched or stored. " \

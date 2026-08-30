@@ -6,7 +6,7 @@ require_relative "../menota_fetch"
 module Nabu
   module Adapters
     # Menota — the Medieval Nordic Text Archive (P82-1, queue Q42 / grant
-    # №77-1): ~100 medieval Nordic manuscripts in Menota-TEI (multi-level
+    # by email 2026-08-20): ~100 medieval Nordic manuscripts in Menota-TEI (multi-level
     # facsimile/diplomatic/normalized transcription), served through the
     # Corpuscle (korpuskel) REST API behind the catalogue SPA at
     # clarino.uib.no/menota/catalogue/menota. Census 2026-08-23: 91
@@ -34,7 +34,7 @@ module Nabu
     # rule keys on; the lect posture is pending on that rule
     # (config/postures.yml — nor/dan have no registry nodes yet).
     #
-    # == License (the №77-1 record)
+    # == License (the 2026-08-20 grant record)
     #
     # CC BY-SA 4.0 on the catalogue's license column (the quotable record)
     # — censused 2026-08-23 on ALL 91 documents — and repeated per-file in

@@ -325,7 +325,7 @@ Park until the axis exists; the corpus can absorb it whenever.
 
 Surveyed and honestly BLOCKED (license/no-export/scans-only) — except that
 the TITUS grant path WORKED for the Avesta: `titus-avestan` shipped P45 on a
-personal research grant (Prof. Jost Gippert, 2026-07-23, thread №41-3 —
+personal research grant (Prof. Jost Gippert, 2026-07-23 —
 `research_private`, credit + nc terms). The Slavic-side TITUS blocks stand. The unblock
 paths are noted in the survey: writing for data grants (`research_private`
 ingestion — the license class exists for exactly this), or HTR for the

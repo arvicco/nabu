@@ -36,7 +36,7 @@ module Nabu
   # with extras). Share-link tokens fail the automation bar; the /texts/
   # autoindex serves the identical May-2026 files (Last-Modified 2026-05-09
   # across all 297) from stable public URLs — the honest unattended fetch.
-  # Grant №77-2 (P.F. Schaffner, 2026-08-20): "obtain them by any means
+  # The grant (P.F. Schaffner, 2026-08-20): "obtain them by any means
   # convenient".
   #
   # == Resume + re-sync posture (the DeromFetch mold)
@@ -89,7 +89,7 @@ module Nabu
     RETRIABLE_STATUSES = [500, 502, 503, 504].freeze
 
     USER_AGENT = "nabu/#{Nabu::VERSION} (personal research corpus; Corpus of Middle English, " \
-                 "grant №77-2 P.F. Schaffner 2026-08-20; +https://github.com/arvicco/nabu; " \
+                 "grant P.F. Schaffner 2026-08-20; +https://github.com/arvicco/nabu; " \
                  "contact: arvicco@nabu.ac)".freeze
 
     Result = Data.define(:sha, :atticked, :fetched, :cached, :listed)
