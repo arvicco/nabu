@@ -8023,6 +8023,30 @@ module Nabu
         print_corpus_panel(panels[:corpus])
       end
 
+      # 88-B2: the last №R-49(a) members render — encoded variants, named
+      # sequences (capped, truncation announced), discouraged-sequence
+      # warnings, Tangut/Nushu source fields. Absent = absent.
+      def print_universal_extras(card)
+        card.variants.each do |variant|
+          say format("encoded variants: %<desc>s (U+%<sel>04X)",
+                     desc: variant.description, sel: variant.selector)
+        end
+        shown = card.named_sequences.first(3) # const: a render cap, not a corpus census
+        say "named sequences: #{shown.join(' · ')}" if shown.any?
+        if card.named_sequences.size > shown.size
+          say "named sequences: … #{card.named_sequences.size - shown.size} more"
+        end
+        card.discouraged.first(2).each do |row| # const: a render cap, not a corpus census
+          preferred = row.preferred.split.map { |hex| Integer(hex, 16).chr(Encoding::UTF_8) }.join
+          say "discouraged sequence (#{row.type}): heads #{row.sequence} — prefer #{preferred}"
+        end
+        return unless card.char_sources
+
+        register, fields = card.char_sources
+        pairs = fields.sort.map { |key, value| "#{key} #{value}" }
+        say "#{register} sources: #{pairs.join(' · ')}"
+      end
+
       # The B3 corpus line, era-honest: counts from a current-class index;
       # zero on a current-class index is a real zero; a miss on a legacy
       # (pre-widening) index names the rebuild instead of lying "0".
@@ -8083,6 +8107,7 @@ module Nabu
         say "combining class: #{card.combining_class}" if card.combining_class.positive?
         print_universal_decomposition(card.decomposition) if card.decomposition
         print_universal_charts(card)
+        print_universal_extras(card)
         print_ambiguity_panels(input, panels)
         say ""
         say "search: nabu search #{card.glyph}"

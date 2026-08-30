@@ -109,6 +109,14 @@ module Nabu
     # character and its unified-ideograph equivalent.
     Radical = Data.define(:number, :radical, :unified)
 
+    # A StandardizedVariants.txt row for a base character: the variation
+    # +selector+ code point and the variant's +description+.
+    Variant = Data.define(:selector, :description)
+
+    # A DoNotEmit.txt row headed by a character: the discouraged
+    # +sequence+ (hex, space-joined), its +preferred+ replacement, +type+.
+    Discouraged = Data.define(:sequence, :preferred, :type)
+
     class << self
       # Build a seam from a UnicodeData.txt-shaped file. The file's directory
       # is remembered as the member root: sibling files (Blocks.txt,
@@ -330,6 +338,23 @@ module Nabu
       def tangut_source(codepoint) = member(:tangut) { parse_tab_sources("TangutSources.txt") }[codepoint]
       def nushu_source(codepoint) = member(:nushu) { parse_tab_sources("NushuSources.txt") }[codepoint]
 
+      # StandardizedVariants.txt: the encoded variation sequences whose
+      # BASE is +codepoint+ ([] when none) — description + the selector.
+      def variants(codepoint)
+        member(:variants) { parse_standardized_variants }.fetch(codepoint, [])
+      end
+
+      # NamedSequences.txt: the named sequences +codepoint+ HEADS ([]).
+      def named_sequences(codepoint)
+        member(:named_sequences) { parse_named_sequences }.fetch(codepoint, [])
+      end
+
+      # DoNotEmit.txt: discouraged sequences +codepoint+ heads, each with
+      # its preferred replacement and type ([]).
+      def do_not_emit(codepoint)
+        member(:do_not_emit) { parse_do_not_emit }.fetch(codepoint, [])
+      end
+
       # Jamo.txt: the jamo short name of +codepoint+ ("G" for U+1100; "" is real —
       # the null-initial ieung), or nil for a non-jamo code point.
       def jamo_short_name(codepoint)
@@ -520,6 +545,59 @@ module Nabu
           end
         end
         rows.default = nil
+        rows
+      end
+
+      # StandardizedVariants.txt `base selector; description; when # …`.
+      def parse_standardized_variants
+        path = member_path("StandardizedVariants.txt")
+        rows = Hash.new { |h, k| h[k] = [] }
+        if path
+          File.foreach(path, encoding: Encoding::UTF_8) do |line|
+            next unless (m = line.match(/\A([0-9A-F]{4,6})\s+([0-9A-F]{4,6})\s*;\s*([^;#\n]+)/))
+
+            rows[Integer(m[1], 16)] << Variant.new(selector: Integer(m[2], 16),
+                                                   description: m[3].strip)
+          end
+        end
+        rows.default = nil
+        rows.default_proc = nil
+        rows
+      end
+
+      # NamedSequences.txt `NAME;cp cp …` — indexed by the HEAD code point.
+      def parse_named_sequences
+        path = member_path("NamedSequences.txt")
+        rows = Hash.new { |h, k| h[k] = [] }
+        if path
+          File.foreach(path, encoding: Encoding::UTF_8) do |line|
+            next unless (m = line.match(/\A([^;#\n]+);\s*([0-9A-F]{4,6})(?:\s|$)/))
+
+            rows[Integer(m[2], 16)] << m[1].strip
+          end
+        end
+        rows.default = nil
+        rows.default_proc = nil
+        rows
+      end
+
+      # DoNotEmit.txt `discouraged-seq; preferred-seq; type # …` — indexed
+      # by the discouraged sequence's head code point.
+      def parse_do_not_emit
+        path = member_path("DoNotEmit.txt")
+        rows = Hash.new { |h, k| h[k] = [] }
+        if path
+          seq = /[0-9A-F]{4,6}(?:\s+[0-9A-F]{4,6})*/
+          File.foreach(path, encoding: Encoding::UTF_8) do |line|
+            next unless (m = line.match(/\A(#{seq})\s*;\s*(#{seq})\s*;\s*(\w+)/o))
+
+            head = Integer(m[1].split.first, 16)
+            rows[head] << Discouraged.new(sequence: m[1].strip, preferred: m[2].strip,
+                                          type: m[3])
+          end
+        end
+        rows.default = nil
+        rows.default_proc = nil
         rows
       end
 

@@ -1642,6 +1642,28 @@ sarit:
   # (Nabu::Deva), so IAST queries land on both scripts. Upstream is a
   # dormant scholarly project (last merge 2021) → re-syncs owner-fired.
 
+dacon:   # P88-A4, 02-sources row 181
+  adapter: Nabu::Adapters::Dacon
+  # The Sanskrit-cosmopolis lane: DACON's texts are Newar reworkings of
+  # Sanskrit-tradition works (Vetālapañcaviṃśati, Maṇicūḍāvadāna) + the
+  # Gopālarājavaṃśāvalī chronicle — the indic desk's Himalayan shelf.
+  axes: [indic]
+  wired: false   # flip after the owner-fired first sync verifies live
+  # DACON — the Diachronic Annotated Corpus of Newar (O'Neill & Meelen,
+  # AHRC "The Emergence of Egophoricity"; Zenodo record 12887386, DOI
+  # 10.5281/zenodo.12887386, VERIFIED cc-by-4.0 on the record 2026-08-29).
+  # Four texts × (SEG, POS), 12th–19th c. Classical Newar (nwc) in IAST
+  # romanization, ~28.8k gold-tagged tokens; POS files parse, SEG files
+  # are censused discovery skips (same tokens, recoverable). No lemma
+  # column anywhere → zero lemma rows (the soas-tibetan honest absence).
+  # Fetch: 8 per-file GETs against the immutable record API, one FileFetch
+  # subdir each, every file under a hard sha256 pin (FILES). EXPECTED
+  # FIRST SYNC (~641 KB): 4 documents / 977 passages (cnew12 1 ·
+  # cnew13_14 856 · cnew17 36 · cnew19 84; 28,166 tokens). A future
+  # release is a NEW DOI the owner re-pins. Lect posture pending on the
+  # nwc anchor mint (P88-B3, nabu-lects).
+  sync_policy: manual
+
 dcs:
   adapter: Nabu::Adapters::Dcs
   axes: [indic]
@@ -2335,11 +2357,92 @@ tshet-uinh:
   # 廣韻 critical edition (澤存堂本 + 校本 corrections AS ANNOTATIONS, never
   # silent fixes — the documented upstream syntax, quoted in
   # test/fixtures/tshet-uinh/README.md). CC0 1.0 (full legal code verified
-  # IN-REPO, LICENSE at root, 2026-07-19). The repo's other files (王三
-  # 17,232 rows in-progress, 王一 stub, 韻鏡 ×2 rhyme tables, 反切音韻地位
-  # analyses) are censused in 02-sources row 99, not ingested; sibling
-  # zhongyuan-data (中原音韻, CC0) journaled there too — format + language-tag
-  # honesty reasons, an owner call.
+  # IN-REPO, LICENSE at root, 2026-07-19). P88-R4 adds 王三.csv as the
+  # SECOND shelf on this source (slug wangsan, ltc): 王仁昫《刊謬補缺切韻》
+  # (~706), 17,232 rows → 17,227 entries (5 headword-less 待校 slots are a
+  # censused skip); upstream still marks it 小韻內部待校 — entries parse
+  # verbatim regardless. Data already on disk from the guangyun clone, so
+  # `bin/nabu sync tshet-uinh --parse-only` mints it WITHOUT network;
+  # expected re-sync total: 25,336 guangyun + 17,227 wangsan entries.
+  # The repo's other files (王一 stub, 韻鏡 ×2 rhyme tables, 反切音韻地位
+  # analyses) are censused in 02-sources row 99, not ingested. Sibling
+  # zhongyuan-data's journal note CLOSED P88-R3 (2026-08-29): the
+  # zho:oman stage + owner GO built it as the `zhongyuan` source below.
+classical-modern:   # P88-A2, 02-sources row 184
+  adapter: Nabu::Adapters::ClassicalModern
+  axes: [sinitic]
+  wired: false   # flip after the owner-fired first sync verifies live
+  translations: true  # the modern side IS the point of a parallel corpus
+  siblings: ["-cmn"]  # the aranese -es mold: show --parallel pairs the
+                      # chapter doc with its -cmn sibling by line number
+  # NiuTrans/Classical-Modern (MIT in-repo, verified 2026-08-29): ~967k
+  # Classical↔Modern Chinese sentence pairs at CHAPTER grain — 97 books /
+  # 7,304 chapter units (blobless-clone census 2026-08-29), each
+  # source.txt (lzh, one sentence per line) + line-aligned target.txt
+  # (cmn sibling) + bitext/数据来源 renditions (censused skips; the
+  # per-chapter crawl sources ride document `provenance` metadata —
+  # translations are web-crawled, the README's own words, never a
+  # scholarly translation). BOTH sides simplified script (censused —
+  # the script posture records it). The nk2028 fork (frozen 2022,
+  # per-chapter identity destroyed) is deliberately NOT the source.
+  # EXPECTED FIRST SYNC (sparse 双语数据 cone, ~420 MB repo objects):
+  # 14,608 documents (7,304 lzh + 7,304 -cmn) / ~1.93M passages.
+  sync_policy: manual
+
+menggu-ziyun:   # P88-A2, 02-sources row 185; unblocked by nabu-lects v1.4.0 (zho:oman)
+  adapter: Nabu::Adapters::MengguZiyun
+  axes: [sinitic]
+  wired: false   # flip after the owner-fired first sync verifies live
+  # 蒙古字韻 (1308) — the 'Phags-pa rhyme book, the primary phonological
+  # record of Old Mandarin (nk2028/menggu-ziyun-data; MIT in-repo
+  # verified 2026-08-29; 沈鍾偉 2015 collation + unt 2023 reconstructions
+  # + ccamc.org variants). Dictionary slug `menggu-ziyun`, language
+  # HONEST-COARSE zho — no ISO code exists for Old Mandarin; the
+  # registry's zho:oman stage (№R-53 / nabu-lects PR #11) refines, the
+  # en:early pattern. Body carries the 'Phags-pa spelling, tone, rhyme
+  # class, unt reconstruction, variants, editorial verdicts (此字當刪
+  # rows still mint — the guangyun 應刪字 stance) AND the
+  # 對應切韻音系音韻地位 formula — the ready-made join into the held
+  # guangyun shelf. small_rhymes.tsv (853 rows) censused, lands with the
+  # clone as a future seam. EXPECTED FIRST SYNC (~84 KB clone): 9,446
+  # zho entries. Sibling zhongyuan built the same day (P88-R3, owner GO)
+  # — the `zhongyuan` source below.
+  sync_policy: manual
+
+zhongyuan:   # P88-R3, 02-sources row 186; the row-99 un-park (zho:oman + owner GO 2026-08-29)
+  adapter: Nabu::Adapters::Zhongyuan
+  axes: [sinitic]
+  wired: false   # flip after the owner-fired first sync verifies live
+  # 中原音韻 (1324) — the arch-source of Old Mandarin phonology
+  # (nk2028/zhongyuan-data; CC0 1.0 full legal code in-repo, verified
+  # 2026-08-29). 5,877 character rows, each with 聲母/韻母/聲調 and FOUR
+  # parallel reconstructions (楊耐思 1981 · 寧繼福 1985 · 薛鳳生 1990 ·
+  # unt 2021); 校註 editorial notes ×94 ride verbatim. Journaled since
+  # P32-3 over the no-ISO-code question; the zho:oman stage (№R-53 /
+  # nabu-lects v1.4.0) + the owner's P88-R3 GO close it: language
+  # HONEST-COARSE zho, the stage row refines (the menggu-ziyun pattern).
+  # Dictionary slug `zhongyuan`. EXPECTED FIRST SYNC (~350 KB clone):
+  # 5,877 zho entries. The README says the series may grow ("now
+  # including only Zhongyuan Yinyun itself") — re-syncs owner-fired.
+  sync_policy: manual
+
+qieyun-restored:   # P88-A2, 02-sources row 182
+  adapter: Nabu::Adapters::QieyunRestored
+  axes: [sinitic]
+  wired: false   # flip after the owner-fired first sync verifies live
+  # 切韻 itself (Lu Fayan, 601) — the PARENT of the held guangyun shelf —
+  # in Fujita Takumi's restoration (2017 thesis / 2023 monograph),
+  # extracted upstream from the thesis PDF (nk2028/qieyun-restored, MIT
+  # in-repo LICENSE verified 2026-08-29). Dictionary slug `qieyun`,
+  # language ltc, entry_id = the thesis-table 頁.行 (unique ×11,158; 小韻
+  # numbering restarts per 韻目 — censused). Li Yongfu's parallel
+  # restoration (97.4% byte-identical) + small-rime-diffs are censused
+  # witness lanes, deliberately unmined; to_tshet_uinh_data/
+  # small_rimes.csv carries the 對應廣韻小韻號 join key into guangyun —
+  # lands with the sparse clone as a future consumer seam. EXPECTED FIRST
+  # SYNC (sparse CSV cone ~5 MB): 11,158 ltc entries on the qieyun shelf.
+  sync_policy: manual
+
 # P32-4: the Sinoxenic character bridge — three dictionary-kind registrants.
 # The shelf keys speak one join language: Unihan entry ids are "U+XXXX"
 # codepoints, KANJIDIC2 mints the same key (13,043 of its 13,108 kanji land
@@ -2395,13 +2498,12 @@ hdic:
   # HDIC — Heian-period hanzi dictionaries (github.com/shikeda/HDIC, the
   # ACTIVE upstream, pushed 2026-07-15; nk2028/HDIC is a stale 2022 mirror,
   # never fetched). Five published databases → five dictionaries: yyp/ktb/
-  # tsj/syp/krm (96,415 upstream rows total). LICENSE DISCREPANCY (owner
-  # gate, see Nabu::Adapters::Hdic): README + every data-file header grant
-  # CC BY-SA 4.0 "Open access" (→ attribution, the scout verdict), but the
-  # repo LICENSE file is the CC BY-NC-SA 4.0 legalcode (template mismatch
-  # in upstream commit 72cfe74, 2022-02-02). If the owner rules the LICENSE
-  # file authoritative (Kyoto/Ruthenian precedent), tighten to nc BEFORE
-  # any enable. Upstream actively maintained → re-syncs owner-fired.
+  # tsj/syp/krm (96,415 upstream rows total). License: CC BY-SA 4.0 —
+  # the old LICENSE-file BY-NC-SA legalcode contradiction RESOLVED
+  # UPSTREAM 2026-08-30 (thread №88-3: Prof. Ikeda confirmed BY-SA
+  # governs, no NC; repos unified, Zenodo refresh to follow). The
+  # attribution class stands. Upstream actively maintained → re-syncs
+  # owner-fired.
   sync_policy: manual
 
 babelstone-ids:
@@ -3410,6 +3512,24 @@ tibetan-verbs:
   # entry apparatus (body lanes); no glosses upstream — gloss nil is
   # honest. LICENSE: CC0-1.0 (repo LICENSE file, verified 2026-07-28) →
   # class open. Small and occasionally edited: re-syncs are an owner call.
+  sync_policy: manual
+
+monlam-lexicon:   # P88-A3, 02-sources row 183
+  adapter: Nabu::Adapters::MonlamLexicon
+  axes: [tibetan]
+  wired: false   # flip after the owner-fired first sync verifies live
+  # The Monlam headword lists (MonlamIT/Tibetan-Lexicon, Apache-2.0
+  # in-repo verified 2026-08-29) — the ONLY licensed machine-readable
+  # slice of the Monlam dictionary world: two lanes under one
+  # `monlam-lexicon` shelf, language bod. HEADWORDS ONLY (gloss nil, the
+  # tibetan-verbs honesty); every definitions-bearing Monlam artifact
+  # found is UNLICENSED and parked (the app SQLite, the scraped CSVs) —
+  # definitions need an upstream ask, never the scrape. The Grand list's
+  # file carries a censused 24,295-line blank hole (the late-འ…ཡ band;
+  # .docs/upstream-reports.md) — README's 367,011 counts raw lines.
+  # EXPECTED FIRST SYNC (~29 MB clone): 449,829 bod entries — monlam
+  # 107,113 + grand 342,716 — the desk's largest lexical shelf by two
+  # orders of magnitude, glossless, complementary to wiktionary-bo.
   sync_policy: manual
 
 wiktionary-bo:

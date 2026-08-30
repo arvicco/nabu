@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="https://www.menota.org/menotaP5.rng" type="xml" ?>
+<!DOCTYPE TEI 
+[
+<!ENTITY % Menota_entities SYSTEM 'https://www.menota.org/menota-entities.txt'>
+%Menota_entities; ]>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:me="http://www.menota.org/ns/1.0">
+	
+    <teiHeader xml:lang="eng">
+        <fileDesc>
+            <titleStmt>
+            	<title>Heimskringla 2 (Óláfs saga helga) : AM 36 fol : A digital edition</title>
+                <editor role="institution">
+                    <orgName>Heimskringlaprosjektet ved Universitetet i Oslo</orgName>
+                </editor>                
+                <editor role="person">
+                    <name>
+                        <persName>
+                            <forename>Kjartan</forename>
+                            <surname>Ottosson </surname>
+                        </persName>
+                        <orgName type="affiliation">University of Oslo</orgName>
+                    </name>
+                </editor> 
+              <respStmt>
+                 <resp>Conversion to Menotic XML</resp>
+                 <name>
+                    <persName>
+                       <forename>Florian</forename>
+                       <surname>Grammel</surname>
+                    </persName>
+                    <orgName type="affiliation">University of Copenhagen</orgName>
+                 </name>
+              </respStmt>
+                <respStmt>
+                    <resp>Transcription of text</resp>
+                    <name>
+                        <persName>
+                            <forename>Hans Olav</forename>
+                            <surname>Enger</surname>
+                        </persName>
+                        <orgName type="affiliation">University of Oslo</orgName>
+                    </name>
+                </respStmt>
+                <respStmt>
+                    <resp>Transcription of text</resp>
+                    <name>
+                        <persName>
+                            <forename>Kristian Emil</forename>
+                            <surname>Kristoffersen</surname>
+                        </persName>
+                        <orgName type="affiliation">University of Oslo</orgName>
+                    </name>
+                </respStmt>
+                <respStmt>
+                    <resp>Transcription of text</resp>
+                    <name>
+                        <persName>
+                            <forename>Bjørg</forename>
+                            <surname>Dale Spørck</surname>
+                        </persName>
+                        <orgName type="affiliation">University of Oslo</orgName>
+                    </name>
+                </respStmt>
+            </titleStmt>
+            <editionStmt>           
+            	<edition n="1.0">Version 1.0, <date when="2023-01-12">12 January 2023</date>.</edition>  
+            </editionStmt>
+        	<extent n="105532">105532 words</extent>
+            <publicationStmt>
+                <distributor>Medieval Nordic Text Archive</distributor>
+                <idno type="Menota">Ms. 15</idno>
+            	<availability status="free">
+            		<licence target="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</licence>
+            		<p>Licence accepted by Jon Gunnar Jørgensen on behalf of the Heimskringla project
+            			in a mail to Odd Einar Haugen 2 November 2015.</p>
+            	</availability>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <country key="DK" >Denmark</country>
+                        <settlement>Copenhagen</settlement>
+                        <repository>Københavns Universitet</repository>
+		                <collection>The Arnamagnæan Collection</collection>
+                        <idno>AM 36 fol</idno>
+                        <msName>Heimskringla 2</msName>
+                    </msIdentifier>
+                    <msContents>
+                        <msItem n="1">
+                            <locus from="1" to="546">pp. 1&ndash;546</locus>
+                            <title type="main">Heimskringla 2</title>
+                            <title type="abbreviated">Hkr 2</title>
+                            <textLang mainLang="isl">Icelandic</textLang>
+                        </msItem>
+                    </msContents>
+                    <physDesc>
+                        <objectDesc form="codex">
+                            <supportDesc>
+                                <support>
+                                    <p><material>Paper</material></p>
+                                </support>                                
+                                <extent>273 leaves (to be verified).</extent>
+                                <foliation>
+                                    <p>The manuscript is paginated on each page, and is given as pp. 1&ndash;546 in this edition. Note, however, that there is a continuous pagination in the three mansucripts AM 35 fol (pp. 1&ndash;218), AM 36 fol (pp. 219&ndash;493) and AM 63 fol (pp. 493&ndash;724). (To be verified.)</p></foliation>
+                            </supportDesc>
+                        </objectDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <p>Written by <name type="scribe">Ásgeir Jónsson</name> (c. 1679&ndash;1707) at <origPlace>Stangeland on Karmøy in Western Norway</origPlace> <origDate notBefore="1695" notAfter="1705">c. 1700</origDate>.</p>
+                        </origin>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <projectDesc>
+                <p>This manuscript text has been encoded according to the standard set out in <title>The Menota handbook</title> 
+                    (version 2.0), at <ref target="http://www.menota.org/guidelines"> http://www.menota.org/guidelines</ref> 
+                    as of <date>2008-05-16</date>.</p>
+                <p>This editon contains a number of variant readings from three other manuscritps, referred to as AM18, AM38 and AM70 (to be confirmed). These variants have been added in &lt;app&gt; elements and do not interfer with the actual transcription of AM 36 fol.</p>
+                <p>This edition also contains a number of comments inserted in escape sequences, i.e. &lt;!-- ... --&gt;. They belong to the original transcription in WordPerfect and have not been edited here.</p>
+            </projectDesc>
+            <editorialDecl>
+                 <correction status="high">
+                    <p>This text was transcribed by members of the Heimskringla Project at the University of Oslo, and proofread by Kjartan Ottosson.</p>
+                </correction>
+                <normalization me:level="dipl">
+                    <p>This text has been encoded on a diplomatic level, according to guidelines for the Heimskringla Project.</p>
+                </normalization>
+                <interpretation me:lemmatized="none" me:morphAnalyzed="none">
+                    <p>This text has not been lemmatised or morphologically analysed.</p>
+                </interpretation>
+            </editorialDecl>
+        </encodingDesc>
+        <profileDesc>
+            <langUsage>
+                <language ident="isl">Icelandic</language>
+             </langUsage>
+        </profileDesc>
+        <revisionDesc>
+        	<change>
+        		<date>2023-01-12</date>
+        		<name>
+        			<persName>Odd Einar Haugen</persName>
+        			<orgName type="affiliation">University of Bergen</orgName>
+        		</name>: (1) Changed the language code to "isl" for "Icelandic" (rather than "oic" for "Old Icelandic");
+        		(2) Made the file v. 1.0
+        	</change>
+        	<change>
+        		<date>2016-02-21</date>
+        		<name>
+        			<persName>Odd Einar Haugen</persName>
+        			<orgName type="affiliation">University of Bergen</orgName>
+        		</name>: (1) Revised the "availability" element in the header with a CC-BY-SA 4.0 licence;
+        		(2) Made the file v. 0.9.8
+        	</change>
+        	<change>
+        		<date>2016-01-19</date>
+        		<name>
+        			<persName>Odd Einar Haugen</persName>
+        			<orgName type="affiliation">University of Bergen</orgName>
+        		</name>: (1) Added role="person" to the second "editor" element; (2) Made the file v. 0.9.7
+        	</change>
+        	<change>
+        		<date>2016-01-12</date>
+        		<name>
+        			<persName>Odd Einar Haugen</persName>
+        			<orgName type="affiliation">University of Bergen</orgName>
+        		</name>: (1) Added the attribute ed="ms" to all "pb" and "lb" elements;
+        		(2) Replaced all "expan" elements with "ex", apart from in connection with "rdg" and "unclear" elements; 
+        		(3) Made the file v. 0.9.6
+        	</change>
+            <change>
+                <date>2009-04-02</date>
+                <name>
+                    <persName>Odd Einar Haugen</persName>
+                    <orgName type="affiliation">University of Bergen</orgName>
+                </name>: Added the names of Hans Olav Enger, Kristian Emil Kristoffersen and Bjørg Dale Spørck to the list of contributors, as specified by Jon Gunnar Jørgensen in an email of 2 April 2009; declared the text as v. 0.9.5 
+            </change>
+            <change>
+                <date>2009-02-05</date>
+                <name>
+                    <persName>Odd Einar Haugen</persName>
+                    <orgName type="affiliation">University of Bergen</orgName>
+                </name>: Changed the name of the editor, so that the Heimskringla project (institution) and Kjartan Ottosson (person) are listed as the main editors 
+            </change>
+        	<change>
+        		<date>2009-01-19</date>
+        		<persName>Tone Merete Bruvik</persName>, <orgName type="affiliation">Aksis</orgName>: The first 399 pages breaks were encoded using pb ed="MS:[page no]", 
+        		this is wrong, and has been replaced with pb n="MS:[page no]". The number of words was also wrong, it has been recalulated by counting the number of ending tags of w-elements. Moreover, there was one p-element without any n-attribute; this has been commented out now. Finally, changed the page shift 6 to 9, as these were left in the text as numbers without encoding.
+        	</change>
+        	<change>
+        		<date>2009-01-08</date>
+        		<persName>Tone Merete Bruvik</persName>, <orgName type="affiliation">Aksis</orgName>: Revised the transcription in accordance with Menota P5, v. 2.0, RELAX NG schema.
+        	</change>
+        	<change>
+                <date>2008-12-03</date>
+                <persName>Odd Einar Haugen</persName>, <orgName type="affiliation">University of Bergen</orgName>: Updated the header
+            </change>
+          <change>
+             <date>2006-2007</date>
+             <persName>Florian Grammel</persName>, <orgName type="affiliation">University of Copenhagen</orgName>: conversion to xml -- detailed description to be added
+          </change>                       
+        </revisionDesc>
+    </teiHeader>
+<text xml:lang="isl">
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+<body>
+    
+<pb ed="ms" n="1"/>
+
+<div type="saga" n="&Oacute;l&aacute;fs saga ins helga">
+
+
+
+<!--(??TEKST: inl-heimskr / HkrIIokt2000 /001, 011 OHLG.H-R)-->
+
+
+<p><!--<head>-->
+<app>
+<lem><w><me:dipl>Upphaf</me:dipl></w>
+<w><me:dipl>&slong;&oogon;gu</me:dipl></w>
+<w><me:dipl>hins</me:dipl></w>
+<w><me:dipl>Helga</me:dipl></w>
+<w><me:dipl>Olafs</me:dipl></w>
+<w><me:dipl>Konungs</me:dipl></w><lb ed="ms"/></lem>
+	<rdg wit="AM70"><w><me:dipl>Vppha&fins;</me:dipl></w>
+<w><me:dipl>Sogu</me:dipl></w>
+<w><me:dipl>hins</me:dipl></w>
+<w><me:dipl>helga</me:dipl></w>
+<w><me:dipl>Olafs</me:dipl></w><lb ed="ms"/>
+<w><me:dipl>konungs</me:dipl></w></rdg>
+	<rdg wit="AM18"><w><me:dipl>Vp<ex>p</ex>ha&fins;</me:dipl></w>
+<w><me:dipl>saugo</me:dipl></w>
+<w><me:dipl>hins</me:dipl></w>
+<w><me:dipl>He&lbrk;ga</me:dipl></w>
+<w><me:dipl>Ola&fins;s</me:dipl></w>
+<w><me:dipl>k<ex>onon</ex>gz</me:dipl></w><lb ed="ms"/></rdg>
+</app>
+
+<app>
+<lem><w><me:dipl>I</me:dipl></w>
+<w><me:dipl>Cap</me:dipl></w><me:punct>&period;</me:punct>
+<w><me:dipl>Uppfostr</me:dipl></w>
+<w><me:dipl>Olafs</me:dipl></w>
+<w><me:dipl>Helga</me:dipl></w>
+<w><me:dipl>Harallds</me:dipl></w>
+<w><me:dipl>&slong;onar</me:dipl></w><lb ed="ms"/><!--@--></lem>
+    <rdg wit="AM70"><!--no parallel--></rdg>
+	<rdg wit="AM18"><!--no parallel--></rdg>
+</app>
+</p>
+</div>
+</body>
+</text>
+</TEI>
