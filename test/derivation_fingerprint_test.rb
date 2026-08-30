@@ -334,6 +334,26 @@ class DerivationFingerprintTest < Minitest::Test
     end
   end
 
+  # -- P89-1c: nested helper classes never glue closures -------------------
+
+  def test_nested_helper_classes_are_not_closure_definitions
+    # The 2026-08-30 specimen: perseus.rb's comment "# Walk <workdir>/…"
+    # plus seal_html_parser.rb's NESTED `class Walk` glued Perseus to the
+    # seal family — and generic nested names (Walk/Extraction/Header/State)
+    # had quietly collapsed the per-family closure toward the whole
+    # directory, which both over-rebuilds massively and defeats the
+    # --trust-derivations voucher (any fresh commit anywhere poisons every
+    # source). Only TOP-LEVEL adapter classes are definitions; nested
+    # helpers are internals no other family can compose.
+    files = computer.parser_files(entry(adapter: "Nabu::Adapters::Perseus"))
+    assert_includes files, adapter_path("perseus.rb")
+    assert_includes files, adapter_path("epidoc_parser.rb")
+    refute_includes files, adapter_path("seal_html_parser.rb"),
+                    "a comment word must not chain Perseus to an unrelated family's nested class"
+    definitions = computer.send(:definitions)
+    refute definitions.key?("Walk"), "nested classes never enter the definitions map"
+  end
+
   # -- P89-1: warm pins code identity at run start -------------------------
 
   def test_warm_pins_the_parser_digest_against_mid_run_file_changes

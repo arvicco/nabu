@@ -377,10 +377,18 @@ module Nabu
       Digest::SHA256.hexdigest((tokens + [shared_core_digest]).join("\n"))
     end
 
-    # { terminal constant name => [defining files] } across adapters/.
+    # { terminal constant name => [defining files] } across adapters/ —
+    # TOP-LEVEL classes only (indent ≤ 4: module Nabu › module Adapters ›
+    # class X). Nested helper classes (Walk, Extraction, Header, …) are
+    # family internals: admitting them made every generic name universal
+    # glue — a comment word chained Perseus to the seal family, closures
+    # collapsed toward the whole directory, and one fresh commit anywhere
+    # poisoned every --trust-derivations vouch (the 2026-08-30 incident).
+    # Genuine cross-family composition always references a top-level
+    # class, so the real edges all survive.
     def definitions
       @definitions ||= adapter_files.each_with_object({}) do |file, map|
-        names = File.read(file).scan(/^\s*(?:class|module)\s+([A-Z]\w*)/).flatten.uniq
+        names = File.read(file).scan(/^ {0,4}(?:class|module)\s+([A-Z]\w*)/).flatten.uniq
         (names - NAMESPACE_NAMES).each { |name| (map[name] ||= []) << file }
       end
     end
