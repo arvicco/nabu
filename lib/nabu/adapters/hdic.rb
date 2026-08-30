@@ -51,24 +51,24 @@ module Nabu
     # (Availability) / Open access". EVERY published data file carries the
     # same in-file grant (e.g. KTB.tsv header: "License: / Creative Commons
     # Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)"),
-    # maintained through the 2026 releases. The repo-level LICENSE file,
-    # however, is the CC BY-NC-SA 4.0 LEGALCODE ("Attribution-NonCommercial-
-    # ShareAlike 4.0 International") — git forensics: commit 72cfe74
-    # (2022-02-02, "ライセンスの記述を変更") moved the project from CC
-    # BY-NC 4.0 to BY-SA in the README and every file header but placed the
-    # BY-NC-SA legalcode in LICENSE, an apparent template mismatch. Classed
-    # "attribution" per the concordant per-file grants + README (the P32-4
-    # scout verdict); the contradiction is journaled here, in the fixture
-    # README and in docs/02-sources.md, and is on the owner queue — if the
-    # owner rules the LICENSE file authoritative (the Kyoto/Ruthenian
-    # precedent), the class tightens to "nc" before any enable.
+    # maintained through the 2026 releases. The repo-level LICENSE file
+    # long carried the CC BY-NC-SA 4.0 LEGALCODE instead — a template
+    # mismatch introduced by upstream commit 72cfe74 (2022-02-02,
+    # "ライセンスの記述を変更"), journaled here since P32-4 with an owner
+    # gate. RESOLVED UPSTREAM 2026-08-30 (thread №88-3): Prof. Ikeda
+    # confirmed by email that "CC BY-SA 4.0 is the governing license,
+    # without any NonCommercial restriction" — the LICENSE legalcode was
+    # an unintended leftover, and both shikeda/HDIC and shikeda/krm have
+    # been unified under CC BY-SA 4.0 (Zenodo refresh to follow). The
+    # "attribution" class (the P32-4 scout verdict) stands confirmed.
     class Hdic < Nabu::Adapter
       MANIFEST = Nabu::SourceManifest.new(
         id: "hdic",
         name: "HDIC — Hanzi Dictionaries in Early Japan (Heian lexicography)",
         license: "CC BY-SA 4.0 (verbatim README + per-file headers: \"Creative Commons " \
                  "Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)\", \"Open access\"; " \
-                 "NB repo LICENSE file carries the BY-NC-SA legalcode — discrepancy journaled, owner gate)",
+                 "confirmed governing by Prof. Ikeda 2026-08-30 — the repo LICENSE file's stray " \
+                 "BY-NC-SA legalcode was an upstream leftover, since unified)",
         license_class: "attribution",
         upstream_url: "https://github.com/shikeda/HDIC",
         parser_family: "hdic-tsv"
