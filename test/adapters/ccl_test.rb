@@ -21,6 +21,8 @@ class CclTest < Minitest::Test
                 "Comprehensive_Coptic_Lexicon-v1.2-2020.xml?sequence=1&isAllowed=y"
   CROSSWALK_URL = "https://raw.githubusercontent.com/oraec/coptic_etymologies/main/" \
                   "digitizing_coptic_etymologies_coptic_list_entries.csv"
+  KELLIA_URL = "https://raw.githubusercontent.com/KELLIA/dictionary/v3.0.0/data/" \
+               "egyptian_etymologies.tab"
 
   def adapter = Nabu::Adapters::Ccl.new
 
@@ -32,6 +34,7 @@ class CclTest < Minitest::Test
     assert_equal "ccl", manifest.id
     assert_match(/CC BY-SA 4\.0/, manifest.license)
     assert_match(/CC ?0/, manifest.license, "the crosswalk's CC0 grant is documented beside BY-SA")
+    assert_match(/KELLIA/, manifest.license, "the KELLIA tab's grant is documented too (№R-52 (c))")
     assert_equal "attribution", manifest.license_class
     assert_equal LEXICON_URL, manifest.upstream_url
     assert_equal "ccl-tei", manifest.parser_family
@@ -86,6 +89,63 @@ class CclTest < Minitest::Test
     assert by_id.fetch("C1").citations.empty?, "no crosswalk row, no citations"
   end
 
+  # --- the KELLIA etymologies tab (P89-2, №R-52 (a)+(c)) -------------------------
+
+  def test_parse_joins_the_kellia_tab_beside_the_oraec_crosswalk
+    by_id = adapter.parse(adapter.discover(FIXTURES).first).to_h { |e| [e.entry_id, e] }
+
+    # C2 exists only in the KELLIA tab; its dm-prefixed id normalizes into
+    # the catalog's ORAEC-convention urn space (dm3836 ≡ -3836).
+    assert_equal ["urn:nabu:dict:tla-demotic:-3836"], by_id.fetch("C2").citations.map(&:urn_raw)
+    assert_match(/KELLIA etymologies/, by_id.fetch("C2").citations.first.label)
+    refute_match(/ORAEC/, by_id.fetch("C2").citations.first.label)
+
+    # C74 is witnessed by BOTH files for the same pair (ORAEC -1427 ≡
+    # KELLIA dm1427): one citation per id, never a duplicate, both credited.
+    assert_equal %w[urn:nabu:dict:aed:39210 urn:nabu:dict:tla-demotic:-1427],
+                 by_id.fetch("C74").citations.map(&:urn_raw)
+    by_id.fetch("C74").citations.each do |citation|
+      assert_match(/ORAEC/, citation.label)
+      assert_match(/KELLIA/, citation.label)
+    end
+
+    # C5: the KELLIA transcription + EN/DE glosses (which ORAEC never had)
+    # land in the entry body — the №R-52 (c) enrichment.
+    assert_match(/ꜥ\.t/, by_id.fetch("C5").body)
+    assert_match(/part \(of something\)/, by_id.fetch("C5").body)
+    assert_match(/Teil \(von etwas\)/, by_id.fetch("C5").body)
+  end
+
+  def test_parse_without_the_kellia_file_stays_oraec_only
+    Dir.mktmpdir do |workdir|
+      FileUtils.cp_r(File.join(FIXTURES, "lexicon"), workdir)
+      FileUtils.cp_r(File.join(FIXTURES, "crosswalk"), workdir)
+      by_id = adapter.parse(adapter.discover(workdir).first).to_h { |e| [e.entry_id, e] }
+
+      assert by_id.fetch("C2").citations.empty?, "no KELLIA file, no KELLIA-only citations"
+      assert_equal %w[urn:nabu:dict:aed:159410 urn:nabu:dict:tla-demotic:6439],
+                   by_id.fetch("C1494").citations.map(&:urn_raw)
+      refute_match(/ꜥ\.t/, by_id.fetch("C5").body, "no KELLIA file, no transcription line")
+    end
+  end
+
+  def test_merge_prefers_the_frozen_oraec_id_on_a_conflict_and_fills_blanks
+    merged = Nabu::Adapters::Ccl.merge_etymologies(
+      { "C1" => ["111", nil] },
+      { "C1" => { hieroglyphic: "222", demotic: "333", egy_lemma: "x", demo_lemma: nil,
+                  gloss_en: "g", gloss_de: nil } }
+    )
+
+    ety = merged.fetch("C1")
+    assert_equal "111", ety.hieroglyphic, "the frozen deposit anchors the id space (option a)"
+    assert_equal ["ORAEC crosswalk"], ety.hieroglyphic_witnesses,
+                 "KELLIA attests a DIFFERENT id — it does not witness the kept one"
+    assert_equal "333", ety.demotic, "KELLIA fills the blank ORAEC left (the census's 127)"
+    assert_equal ["KELLIA etymologies"], ety.demotic_witnesses
+    assert_equal "x", ety.egy_lemma
+    assert_equal "g", ety.gloss_en
+  end
+
   def test_parse_without_the_crosswalk_file_yields_citation_less_entries
     Dir.mktmpdir do |workdir|
       FileUtils.mkdir_p(File.join(workdir, "lexicon"))
@@ -111,21 +171,29 @@ class CclTest < Minitest::Test
       body: File.binread(File.join(FIXTURES, "crosswalk", Nabu::Adapters::Ccl::CROSSWALK_FILENAME)),
       headers: { "Last-Modified" => "Wed, 14 Aug 2024 06:42:43 GMT" }
     )
+    stub_request(:get, KELLIA_URL).to_return(
+      status: 200,
+      body: File.binread(File.join(FIXTURES, "kellia", Nabu::Adapters::Ccl::KELLIA_FILENAME)),
+      headers: { "Last-Modified" => "Sat, 22 Aug 2026 12:00:00 GMT" }
+    )
     Dir.mktmpdir do |workdir|
       report = adapter.fetch(workdir)
       assert_instance_of Nabu::FetchReport, report
       assert_match(/\A\h{64}\z/, report.sha)
-      assert_match(/lexicon \h{8} · crosswalk \h{8}/, report.notes)
+      assert_match(/lexicon \h{8} · crosswalk \h{8} · kellia \h{8}/, report.notes)
       assert_equal 1, adapter.discover(workdir).count, "the fetched TEI is discoverable in place"
       document = adapter.parse(adapter.discover(workdir).first)
       refute_empty document.find { |e| e.entry_id == "C1494" }.citations,
                    "the fetched crosswalk joins the fetched TEI"
+      refute_empty document.find { |e| e.entry_id == "C2" }.citations,
+                   "the fetched KELLIA tab joins too"
     end
   end
 
   def test_fetch_wraps_http_failure_in_fetch_error
     stub_request(:get, LEXICON_URL).to_return(status: 500)
     stub_request(:get, CROSSWALK_URL).to_return(status: 500)
+    stub_request(:get, KELLIA_URL).to_return(status: 500)
     Dir.mktmpdir do |workdir|
       assert_raises(Nabu::FetchError) { adapter.fetch(workdir) }
     end
@@ -133,13 +201,13 @@ class CclTest < Minitest::Test
 
   # --- remote-health probe shape -------------------------------------------------
 
-  def test_probe_targets_head_both_artifacts_with_no_metadata_endpoint
+  def test_probe_targets_head_all_three_artifacts_with_no_metadata_endpoint
     assert_equal :http_zip, Nabu::Adapters::Ccl.remote_probe_strategy
     targets = Nabu::Adapters::Ccl.http_probe_targets
-    assert_equal [LEXICON_URL, CROSSWALK_URL], targets.map(&:zip_url)
-    assert_equal %w[lexicon crosswalk], targets.map(&:state_subdir)
+    assert_equal [LEXICON_URL, CROSSWALK_URL, KELLIA_URL], targets.map(&:zip_url)
+    assert_equal %w[lexicon crosswalk kellia], targets.map(&:state_subdir)
     assert targets.all? { |target| target.metadata_url.nil? },
-           "neither host serves a probe-shaped license endpoint; drift is caught at refetch"
+           "no host serves a probe-shaped license endpoint; drift is caught at refetch"
   end
 
   # --- DictionaryLoader contract (idempotency / revision / urn) -------------------
