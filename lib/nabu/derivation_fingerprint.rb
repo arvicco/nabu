@@ -396,10 +396,17 @@ module Nabu
     def adapter_files = Dir[File.join(ADAPTERS_DIR, "*.rb")]
 
     # Files defining any adapters/-constant referenced in +file+ (one union
-    # regex pass, cached per file).
+    # regex pass, cached per file). CODE LINES ONLY (2026-08-30): full-line
+    # comments are stripped before the scan — doc headers naming sibling
+    # families ("shared with UniversalDependencies…") had glued dozens of
+    # closures together, so one commit anywhere dirtied most of the
+    # registry and poisoned every --trust-derivations vouch. A class a
+    # family actually composes appears in CODE; a comment mention is
+    # documentation, not a dependency.
     def references(file)
       @references[file] ||= begin
-        names = File.read(file).scan(reference_pattern).flatten.uniq
+        code = File.read(file).lines.reject { |line| line.match?(/\A\s*#/) }.join
+        names = code.scan(reference_pattern).flatten.uniq
         names.flat_map { |name| definitions.fetch(name) } - [file]
       end
     end
