@@ -405,7 +405,7 @@ module Nabu
     # documentation, not a dependency.
     def references(file)
       @references[file] ||= begin
-        code = File.read(file).lines.reject { |line| line.match?(/\A\s*#/) }.join
+        code = File.read(file).lines.grep_v(/\A\s*#/).join
         names = code.scan(reference_pattern).flatten.uniq
         names.flat_map { |name| definitions.fetch(name) } - [file]
       end
