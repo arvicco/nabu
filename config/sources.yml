@@ -4177,3 +4177,28 @@ eebo-tcp:
   # restricted, never silently open. Grant №77-2 additionally covers TCP
   # files. Median text 35 KB, max 17.6 MB — Reader streaming throughout.
   sync_policy: manual
+
+# P89-3
+seal:
+  adapter: Nabu::Adapters::Seal
+  axes: [cuneiform]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # SEAL — Sources of Early Akkadian Literature (P89-3; seal.huji.ac.il;
+  # Michael P. Streck & Nathan Wasserman): the edition of record for
+  # third/second-millennium Akkadian literature — 1,065 texts (scout census
+  # 2026-08-30). GRANT (email thread №21, N. Wasserman 2026-08-30): local
+  # personal-research use ONLY, CC BY-NC-ND terms — local machine, NO
+  # redistribution/mirroring/derivative publication, attribution on display,
+  # scholarly reference by the fixed SEAL number + permanent URL, TEXT ONLY
+  # (third-party visual material excluded; the crawl never touches images)
+  # → license_class research_private. NO corpus bytes in the public repo:
+  # fixtures live under gitignored local/fixtures/seal/, the suite skips
+  # when absent (the corpus-oudnederlands/freising mold). Identity: urn =
+  # urn:nabu:seal:<SEAL no.> — the page's own "SEAL no." field (node ids
+  # are NOT SEAL numbers; the node id rides metadata as the permanent URL).
+  # Two censused transliteration shapes parse (the _ts_tb line table and
+  # the <p>-per-line paragraph form); the English translation rides as
+  # document metadata; Vocabulary/Statistics tabs deliberately out of v1.
+  # EXPECTED FIRST SYNC: ~54 search-page GETs (page count from page 0's own
+  # pager) + 1,065 node GETs at 1 req/s ≈ 20 min → 1,065 documents.

@@ -68,7 +68,10 @@ class DerivabilityWritersTest < Minitest::Test
   # grain, the corpus-corporum checkpoint kind for state. The P80-8 ctilc
   # adapter writes its crawled works (tmp+rename) and their replacement
   # attic copies into canonical/ inside Adapter#fetch — the riig crawl
-  # law kind. ANY new file
+  # law kind. seal_fetch (P89-3) writes canonical/seal/texts/
+  # (tmp+rename) + the search-index sidecars + attic copies + its state
+  # ledger inside Adapter#fetch — the cantigas_fetch law kind, its
+  # fourth crawl sibling. ANY new file
   # here is a deliberate allowlist decision, not a drive-by.
   WRITER_ALLOWLIST = %w[
     nabu/adapters/bfm.rb nabu/adapters/ctilc.rb
@@ -82,6 +85,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/kanripo_fetch.rb nabu/lfs_fetch.rb nabu/local_fetch.rb
     nabu/menota_fetch.rb
     nabu/manual_drop.rb nabu/ochre_fetch.rb nabu/otdo_fetch.rb
+    nabu/seal_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
     nabu/wiki_fetch.rb nabu/zip_fetch.rb
     nabu/adapters/burman_concordance.rb
