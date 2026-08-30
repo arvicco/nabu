@@ -354,6 +354,15 @@ class DerivationFingerprintTest < Minitest::Test
     refute definitions.key?("Walk"), "nested classes never enter the definitions map"
   end
 
+  def test_comment_mentions_are_not_closure_references
+    # The other half of the 2026-08-30 glue: conllu_parser.rb's doc header
+    # names UniversalDependencies — documentation, not composition. Only
+    # CODE lines mint closure edges.
+    files = computer.parser_files(entry(adapter: "Nabu::Adapters::Perseus"))
+    refute_includes files, adapter_path("universal_dependencies.rb"),
+                    "a doc-header mention must not chain the epidoc family to the conllu family"
+  end
+
   # -- P89-1: warm pins code identity at run start -------------------------
 
   def test_warm_pins_the_parser_digest_against_mid_run_file_changes
