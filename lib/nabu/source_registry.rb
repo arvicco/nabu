@@ -74,7 +74,7 @@ module Nabu
     # PUBLIC holding — it appears on the generated site axis pages, in
     # docs/axes.md memberships, and its holdings count toward public census
     # surfaces. `blocked` means grant-gated PRIVATE research material (the
-    # fetch right is a personal grant, №41-3/№1): the public repo may keep a
+    # fetch right is a personal grant): the public repo may keep a
     # license/scouting record of it, but must NOT advertise it as a library
     # holding — the public-doc/site generators exclude it and public counts
     # never include it. Orthogonal to `grant_required` (the sync-time gate) and

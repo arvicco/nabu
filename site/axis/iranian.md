@@ -11,7 +11,7 @@ The Iranian-language lane, Zoroastrian canon at its heart: the TITUS Avesta (Old
 
 The desk's heart, the **Avesta** (TITUS, `titus-avestan`), is grant-gated
 PRIVATE research material — served locally under the owner's personal grant
-№41-3 and credited on every serving surface (the grant's own condition), but
+of 2026-07-23 and credited on every serving surface (the grant's own condition), but
 NOT a public library holding, so it is absent from the shelves table above and
 the footnote there says so. What the desk publicly holds is the **Old Persian**
 of the Achaemenid royal inscriptions, riding the shared cuneiform corpora
@@ -39,7 +39,7 @@ Private research materials under personal grants are not listed.
   ave` and citation `show` across the Yasna, Yašts and the rest. It is a text
   edition, not a treebank, so there is **no gold-lemma or morphology layer** —
   `--lemma`, `vocab` and `formulas` do not apply to this desk. Every serving
-  surface carries the verbatim TITUS credit line (the №41-3 grant's condition).
+  surface carries the verbatim TITUS credit line (the grant's condition).
 - **The Old Persian Achaemenid lane (peo):** the royal trilinguals — ORACC's
   `ario` (Achaemenid Royal Inscriptions online) and the CDLI catalog carry the
   Old Persian column of the Bīsotūn / Naqš-e Rostam inscriptions. Reach them

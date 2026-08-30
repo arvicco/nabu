@@ -1,7 +1,7 @@
 # CME fixtures — Corpus of Middle English Prose and Verse
 
 Retrieved **2026-08-23** from the corpus editors' companion site
-(medictionary.info — P.F. Schaffner's "point 3" bulk channel, grant №77-2,
+(medictionary.info — P.F. Schaffner's "point 3" bulk channel, granted by email 2026-08-20,
 2026-08-20). The site's Apache autoindex `http://www.medictionary.info/texts/`
 serves the whole May-2026 normalization (297 files, Last-Modified 2026-05-09
 across the board) as plain files; the Dropbox/Box `CME-all.zip` share links

@@ -5,7 +5,7 @@ require_relative "../derom_fetch"
 
 module Nabu
   module Adapters
-    # DÉRom — Dictionnaire Étymologique Roman (P56-4; license thread №45-3):
+    # DÉRom — Dictionnaire Étymologique Roman (P56-4; license clarification asked by email 2026-07-25):
     # the Latin→Romance etymological bridge. ~500 Proto-Romance etymon
     # articles (dir. Éva Buchi & Wolfgang Schweickard; ATILF, CNRS/
     # Université de Lorraine & Universität des Saarlandes) from the openly

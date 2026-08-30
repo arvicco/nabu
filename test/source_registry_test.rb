@@ -1078,7 +1078,7 @@ class SourceRegistryTest < Minitest::Test
                  "the grant-gated Avesta rides iranian but is excluded from the public listing"
   end
 
-  # P43-2: the shipped TITUS Avestan row is fetch-gated on the №41-3 grant, and
+  # P43-2: the shipped TITUS Avestan row is fetch-gated on the personal grant, and
   # its refusal notice is the on-ramp (terms + whom to ask), never a bare wall.
   def test_shipped_titus_avestan_is_grant_gated_with_the_on_ramp
     registry = Nabu::SourceRegistry.load(File.expand_path("../config/sources.yml", __dir__))
@@ -1086,7 +1086,7 @@ class SourceRegistryTest < Minitest::Test
 
     assert_predicate entry, :grant_required?
     assert_equal "2026-07-23", entry.grant.date
-    assert_equal "№41-3", entry.grant.thread
+    assert_equal "personal research grant of 2026-07-23", entry.grant.thread
     assert_match(/Gippert/, entry.grant.grantor)
     assert_match(/non-commercial/, entry.grant.terms)
 

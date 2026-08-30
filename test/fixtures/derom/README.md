@@ -59,4 +59,4 @@ e.g.
 Collection 1: 110 xml · 2: 40 · 3: 38 · 5 (renvoi): 45 · 6 (potiche): 280
 → 513 open XMLs; expected first sync ≈ 233 entries (188 full + 45 renvoi;
 280 potiches skipped as `<NonRedige/>`). Next upstream refresh announced
-for September 2026 (É. Buchi, correspondence 2026-07-29, №45-3).
+for September 2026 (É. Buchi, correspondence 2026-07-29).

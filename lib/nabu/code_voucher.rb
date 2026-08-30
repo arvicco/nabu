@@ -39,6 +39,16 @@ module Nabu
       false
     end
 
+    # PUBLIC preflight (2026-08-30, after a dirty tree silently disabled
+    # trust for a whole multi-hour run): can this voucher vouch for
+    # ANYTHING right now? False when the watched tree has uncommitted
+    # changes — the caller should say so loudly BEFORE hours of replay.
+    def able?
+      clean?
+    rescue Shell::Error
+      false
+    end
+
     private
 
     def clean?

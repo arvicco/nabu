@@ -331,7 +331,7 @@ module Nabu
         # P45-1 (the Romance pack — THREE treebanks, config-only, the P43-1
         # shape): two new Latin lanes and the library's first ro lane. The
         # fourth Romance survey candidate, Old French PROFITEROLE, landed at
-        # P43-1 above (license fork on thread №43-1) — not re-registered.
+        # P43-1 above (license fork asked upstream 2026-07-25) — not re-registered.
         # Licenses read verbatim from each repo's LICENSE.txt/README on
         # 2026-07-25; every entry carries an explicit :license +
         # :license_class (the P43-1 posture); the SOURCE class stays nc.

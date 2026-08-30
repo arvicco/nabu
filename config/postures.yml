@@ -241,8 +241,8 @@ sources:
         1200 text is not a composition claim; both ride metadata
         verbatim). Real per-text composition/MS dates live in the MED
         HyperBibliography stencils, not publicly downloadable — 'exceptions
-        ... on request' (an owner ask via the №77-2 line, a future
-        instrument, deliberately NOT a pending commitment)"
+        ... on request' (an owner ask via the existing upstream contact,
+        a future instrument, deliberately NOT a pending commitment)"
     places: {posture: unplaced}
     script: {posture: implied}
   eebo-tcp:

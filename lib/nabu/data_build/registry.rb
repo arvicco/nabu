@@ -289,7 +289,7 @@ module Nabu
                    "cancioneiros — projected from the Littera critical edition " \
                    "(cantigas.fcsh.unl.pt) into the corpus's first machine-readable form (the " \
                    "scholarly database is superb and browser-only: no TEI, no export), under the " \
-                   "coordinator's written any-use grant (№45-2) with the project's own citation " \
+                   "coordinator's written any-use grant of 2026-07-27 with the project's own citation " \
                    "format riding every file — verse lines anchored urn+sha into the catalog, the " \
                    "cantiga/author registries, and the corpus-wide cancioneiro concordance parsed " \
                    "from the edition's manuscript sigla, with the citation-fidelity census " \
