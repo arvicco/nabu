@@ -15,7 +15,7 @@ module Nabu
     # Coptic Dictionary Online C-ids. content_kind :dictionary, slug ccl,
     # language cop, urns urn:nabu:dict:ccl:<C-id>.
     #
-    # == Two canonical artifacts, one source (the crosswalk packaging verdict)
+    # == Three canonical artifacts, one source (the crosswalk packaging verdict)
     #
     # Beside the TEI, #fetch pulls ORAEC's coptic_etymologies crosswalk
     # (CC0; 2,177 rows C-id ↔ TLA hieroglyphic lemma id ↔ TLA demotic word
@@ -32,6 +32,27 @@ module Nabu
     # CorphDilReferences pattern). A missing crosswalk file parses to
     # citation-less entries (the day-one state); the entries revise when
     # it lands.
+    #
+    # == The KELLIA etymologies tab (P89-2, №R-52 ruled (a)+(c) 2026-08-30)
+    #
+    # Third artifact: KELLIA/dictionary's data/egyptian_etymologies.tab,
+    # PINNED at release tag v3.0.0 (the lexicon stays on the frozen
+    # Refubium deposit — option (a); the tag is only a refresh candidate if
+    # upstream ever cuts a corrected *deposit*). The 88-R2 census, re-run
+    # verbatim 2026-08-30: 2,311 rows, a STRICT SUPERSET of the ORAEC
+    # crosswalk — 2,050/2,177 shared rows identical after id normalization,
+    # 127 fill blanks ORAEC left, ZERO conflicts, +134 C-ids ORAEC lacks —
+    # and every row carries the Egyptian/Demotic lemma transcription plus
+    # an English AND German gloss the ORAEC file never had. Id
+    # normalization (the census IS the join spec): egy_num is verbatim the
+    # ORAEC hieroglyphic id; demo_num "d<n>" ≡ ORAEC bare <n> and
+    # "dm<n>" ≡ ORAEC negative -<n> (the 220 negative demotic word
+    # numbers), so the catalog's urn space stays ORAEC-convention and no
+    # existing citation urn moves. merge_etymologies composes the two
+    # witnesses (ORAEC id kept on any disagreement — censused zero;
+    # KELLIA fills blanks and contributes the transcriptions/glosses,
+    # which land as a `tla:` body line). Both files stay on disk — two
+    # honest witnesses, never a replacement.
     #
     # == License (both layers verbatim; in-file grant governs, the house
     # doctrine)
@@ -62,10 +83,30 @@ module Nabu
       CROSSWALK_URL = "https://raw.githubusercontent.com/oraec/coptic_etymologies/main/" \
                       "digitizing_coptic_etymologies_coptic_list_entries.csv"
 
+      KELLIA_URL = "https://raw.githubusercontent.com/KELLIA/dictionary/v3.0.0/data/" \
+                   "egyptian_etymologies.tab"
+
       LEXICON_DIRNAME = "lexicon"
       LEXICON_FILENAME = "Comprehensive_Coptic_Lexicon-v1.2-2020.xml"
       CROSSWALK_DIRNAME = "crosswalk"
       CROSSWALK_FILENAME = "digitizing_coptic_etymologies_coptic_list_entries.csv"
+      KELLIA_DIRNAME = "kellia"
+      KELLIA_FILENAME = "egyptian_etymologies.tab"
+
+      ORAEC_WITNESS = "ORAEC crosswalk"
+      KELLIA_WITNESS = "KELLIA etymologies"
+
+      # One C-id's composed etymology (class note): ids in the catalog's
+      # ORAEC-convention space with their attesting witnesses, plus the
+      # KELLIA-only enrichment (transcriptions + glosses).
+      Etymology = Data.define(:hieroglyphic, :demotic, :hieroglyphic_witnesses, :demotic_witnesses,
+                              :egy_lemma, :demo_lemma, :gloss_en, :gloss_de) do
+        def initialize(hieroglyphic: nil, demotic: nil, hieroglyphic_witnesses: [],
+                       demotic_witnesses: [], egy_lemma: nil, demo_lemma: nil,
+                       gloss_en: nil, gloss_de: nil)
+          super
+        end
+      end
 
       DICTIONARY_SLUG = "ccl"
       LANGUAGE = "cop"
@@ -73,11 +114,13 @@ module Nabu
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "ccl",
-        name: "Comprehensive Coptic Lexicon v1.2 (BBAW/DDGLC) + ORAEC egy↔cop crosswalk",
+        name: "Comprehensive Coptic Lexicon v1.2 (BBAW/DDGLC) + ORAEC & KELLIA egy↔cop etymologies",
         license: "CC BY-SA 4.0 (verbatim in-file <licence>: \"Licence for this TEI document: Creative " \
                  "Commons, Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)\"; Refubium record " \
                  "fub188/27813 concurs). Crosswalk: CC0 1.0 (ORAEC coptic_etymologies README verbatim: " \
-                 "\"The mapping was created by the ORAEC project and is licensed under CC 0.\")",
+                 "\"The mapping was created by the ORAEC project and is licensed under CC 0.\"). " \
+                 "KELLIA etymologies tab: CC BY-SA 4.0 (KELLIA/dictionary README: \"Lexicon data " \
+                 "licensed CC BY-SA 4.0\"; fetched pinned at release tag v3.0.0)",
         license_class: "attribution",
         upstream_url: LEXICON_URL,
         parser_family: "ccl-tei"
@@ -113,8 +156,51 @@ module Nabu
           Nabu::Adapter::HttpProbeTarget.new(
             label: CROSSWALK_FILENAME, zip_url: CROSSWALK_URL, metadata_url: nil,
             state_subdir: CROSSWALK_DIRNAME, state_file: Nabu::FileFetch::STATE_FILE
+          ),
+          Nabu::Adapter::HttpProbeTarget.new(
+            label: KELLIA_FILENAME, zip_url: KELLIA_URL, metadata_url: nil,
+            state_subdir: KELLIA_DIRNAME, state_file: Nabu::FileFetch::STATE_FILE
           )
         ]
+      end
+
+      # Compose the two etymology witnesses (class note): the frozen ORAEC
+      # deposit anchors every id it attests; KELLIA fills blanks and — on a
+      # disagreement (censused zero) — is NOT credited for an id it does
+      # not actually attest. Enrichment (transcriptions, glosses) is
+      # KELLIA-only by construction.
+      def self.merge_etymologies(oraec, kellia)
+        (oraec.keys | kellia.keys).to_h do |cid|
+          o_hiero, o_demo = oraec[cid]
+          k = kellia[cid] || {}
+          [cid, Etymology.new(
+            hieroglyphic: o_hiero || k[:hieroglyphic],
+            demotic: o_demo || k[:demotic],
+            hieroglyphic_witnesses: witnesses(o_hiero, k[:hieroglyphic]),
+            demotic_witnesses: witnesses(o_demo, k[:demotic]),
+            egy_lemma: k[:egy_lemma], demo_lemma: k[:demo_lemma],
+            gloss_en: k[:gloss_en], gloss_de: k[:gloss_de]
+          )]
+        end
+      end
+
+      def self.witnesses(oraec_id, kellia_id)
+        list = []
+        list << ORAEC_WITNESS if oraec_id
+        list << KELLIA_WITNESS if kellia_id && (oraec_id.nil? || kellia_id == oraec_id)
+        list
+      end
+      private_class_method :witnesses
+
+      # KELLIA demo_num → the catalog's ORAEC-convention id space (class
+      # note): d<n> ≡ <n>, dm<n> ≡ -<n>; anything else rides verbatim.
+      def self.normalize_demotic(id)
+        case id
+        when nil then nil
+        when /\Adm(\d+)\z/ then "-#{Regexp.last_match(1)}"
+        when /\Ad(\d+)\z/ then Regexp.last_match(1)
+        else id
+        end
       end
 
       # One DocumentRef for the one TEI (the crosswalk is adapter config,
@@ -139,7 +225,8 @@ module Nabu
           slug: DICTIONARY_SLUG, language: LANGUAGE,
           title: TITLE, canonical_path: document_ref.path
         )
-        etymologies = crosswalk_for(document_ref.path)
+        etymologies = self.class.merge_etymologies(crosswalk_for(document_ref.path),
+                                                   kellia_for(document_ref.path))
         CclTeiParser.new.entries(document_ref.path, etymologies: etymologies)
                     .each { |entry| document << entry }
         document
@@ -173,15 +260,46 @@ module Nabu
         path = File.join(File.dirname(lexicon_path, 2), CROSSWALK_DIRNAME, CROSSWALK_FILENAME)
         return {} unless File.file?(path)
 
-        CSV.read(path).to_h { |row| [row[0], [row[1], row[2]]] }
+        CSV.read(path).to_h { |row| [row[0], [presence(row[1]), presence(row[2])]] }
       rescue CSV::MalformedCSVError => e
         raise Nabu::ParseError, "ccl: malformed crosswalk #{path}: #{e.message}"
       end
 
+      # The KELLIA tab beside the lexicon (same relative shape as the
+      # crosswalk; absent file → empty map, the pre-first-refetch state).
+      # Plain tab-split, not CSV: the tab is quote-free TSV and glosses may
+      # carry characters a CSV quote pass would misread. "NA" is upstream's
+      # explicit absent marker.
+      def kellia_for(lexicon_path)
+        path = File.join(File.dirname(lexicon_path, 2), KELLIA_DIRNAME, KELLIA_FILENAME)
+        return {} unless File.file?(path)
+
+        header = nil
+        rows = {}
+        File.foreach(path, chomp: true) do |line|
+          cells = line.split("\t", -1)
+          (header = cells) && next if header.nil?
+
+          row = header.zip(cells).to_h
+          rows[row["tla"]] = {
+            hieroglyphic: na(row["egy_num"]),
+            demotic: self.class.normalize_demotic(na(row["demo_num"])),
+            egy_lemma: na(row["egy_lemma"]), demo_lemma: na(row["demo_lemma"]),
+            gloss_en: na(row["english"]), gloss_de: na(row["german"])
+          }
+        end
+        rows
+      end
+
+      def na(value) = value == "NA" ? nil : presence(value)
+
+      def presence(value) = value.nil? || value.empty? ? nil : value
+
       def file_fetches(workdir, progress)
         {
           lexicon: file_fetch(workdir, LEXICON_URL, LEXICON_DIRNAME, LEXICON_FILENAME, progress),
-          crosswalk: file_fetch(workdir, CROSSWALK_URL, CROSSWALK_DIRNAME, CROSSWALK_FILENAME, progress)
+          crosswalk: file_fetch(workdir, CROSSWALK_URL, CROSSWALK_DIRNAME, CROSSWALK_FILENAME, progress),
+          kellia: file_fetch(workdir, KELLIA_URL, KELLIA_DIRNAME, KELLIA_FILENAME, progress)
         }
       end
 

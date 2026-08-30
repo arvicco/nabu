@@ -93,13 +93,15 @@ class CclEtymologiesTest < Minitest::Test
 
     # Fixture crosswalk: C5 (hiero-only), C6 (entry not in the trim — no
     # citation, no edge), C9 (demotic-only), C74 (both, negative demotic),
-    # C1494 + C1495 (both) → 4 aed + 4 tla-demotic edges.
-    assert_equal 8, result.edges_written
+    # C1494 + C1495 (both) → 4 aed + 4 tla-demotic edges. P89-2 adds the
+    # KELLIA-only C2 (dm3836 ≡ -3836) → a fifth demotic edge; the producer
+    # needed no change — new citations flow through the catalog seam.
+    assert_equal 9, result.edges_written
     assert_equal 0, result.edges_refreshed
     edges = @journal[:links].all
     assert_equal ["etymology"], edges.map { |edge| edge[:kind] }.uniq
     assert_equal(4, edges.count { |edge| edge[:to_urn].start_with?("urn:nabu:dict:aed:") })
-    assert_equal(4, edges.count { |edge| edge[:to_urn].start_with?("urn:nabu:dict:tla-demotic:") })
+    assert_equal(5, edges.count { |edge| edge[:to_urn].start_with?("urn:nabu:dict:tla-demotic:") })
 
     negative = @journal[:links].first(from_urn: "urn:nabu:dict:ccl:C74",
                                       to_urn: "urn:nabu:dict:tla-demotic:-1427")

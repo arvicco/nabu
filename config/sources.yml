@@ -517,8 +517,14 @@ bosworth-toller:
 # Refubium fub188/27813, CC BY-SA 4.0 in-file) + ORAEC's CC0 egy↔cop
 # crosswalk riding as the second fetched artifact (crosswalk/ subdir; the
 # kind=etymology producer Nabu::CclEtymologies refreshes the links journal
-# after every sync). Both upstreams effectively frozen (2020 deposit;
-# crosswalk last moved 2024-08) → manual.
+# after every sync). P89-2 (№R-52 ruled (a)+(c) 2026-08-30): the KELLIA
+# etymologies tab (CC BY-SA 4.0) rides as the THIRD artifact (kellia/
+# subdir), fetched PINNED at release tag v3.0.0 — a strict superset of the
+# ORAEC crosswalk (+134 C-ids, 127 blank-fills, transcriptions + EN/DE
+# glosses); the lexicon stays on the frozen Refubium deposit. Next
+# owner-fired `sync ccl` fetches the tab and revises matched entries.
+# All upstreams effectively frozen (2020 deposit; crosswalk last moved
+# 2024-08; kellia tag-pinned) → manual.
 ccl:
   adapter: Nabu::Adapters::Ccl
   axes: [egyptian]

@@ -40,13 +40,16 @@ module Nabu
     # - body: linearized entry — dialect-labeled forms, gramGrp, numbered
     #   senses with all three gloss languages and their print bibls, etym
     #   notes, cross-references.
-    # - citations: NOT from the TEI. +etymologies+ (the ORAEC crosswalk,
-    #   C-id → [hieroglyphic TLA lemma id, demotic TLA word id]) mints one
-    #   DictionaryCitation per ancestor id — urn_raw in the sibling
-    #   shelves' urn space (urn:nabu:dict:aed:<id>; urn:nabu:dict:
-    #   tla-demotic:<id>, ids verbatim incl. the 220 negative demotic
-    #   word numbers), cts_work/citation nil (these resolve through the
-    #   links journal, never the CTS citation path).
+    # - citations: NOT from the TEI. +etymologies+ (C-id → Ccl::Etymology,
+    #   the ORAEC crosswalk + KELLIA tab composed by Ccl.merge_etymologies
+    #   since P89-2) mints one DictionaryCitation per ancestor id — urn_raw
+    #   in the sibling shelves' urn space (urn:nabu:dict:aed:<id>;
+    #   urn:nabu:dict:tla-demotic:<id>, ids in the ORAEC convention incl.
+    #   the 220 negative demotic word numbers), the label crediting the
+    #   attesting witness(es), cts_work/citation nil (these resolve through
+    #   the links journal, never the CTS citation path). KELLIA's
+    #   transcriptions and EN/DE glosses (№R-52 (c)) ride as a `tla:` body
+    #   line.
     class CclTeiParser
       TEI_NS = { "tei" => "http://www.tei-c.org/ns/1.0" }.freeze
 
@@ -59,9 +62,8 @@ module Nabu
       GLOSS_LANGS = %w[en de fr].freeze
 
       # Parse +path+ and return its DictionaryEntry values in file order.
-      # +etymologies+ maps C-id => [hieroglyphic id, demotic id] (either
-      # may be nil/empty — 350 rows are hieroglyphic-only, 482
-      # demotic-only).
+      # +etymologies+ maps C-id => Ccl::Etymology (either id may be nil —
+      # 350 ORAEC rows are hieroglyphic-only, 482 demotic-only).
       def entries(path, etymologies: {})
         collected = []
         File.open(path) do |io|
@@ -85,13 +87,14 @@ module Nabu
         raise Nabu::ParseError, "ccl-tei: entry without xml:id" if entry_id.nil?
 
         headword = headword(elem, entry_id)
+        etymology = etymologies[entry_id]
         Nabu::DictionaryEntry.new(
           entry_id: entry_id, key_raw: entry_id, language: LANGUAGE,
           headword: headword,
           headword_folded: fold(headword),
           gloss: gloss(elem),
-          body: body(elem),
-          citations: crosswalk_citations(etymologies[entry_id])
+          body: body(elem, etymology),
+          citations: crosswalk_citations(etymology)
         )
       end
 
@@ -124,14 +127,34 @@ module Nabu
 
       # -- body linearization ---------------------------------------------------
 
-      def body(elem)
+      def body(elem, etymology = nil)
         lines = [forms_line(elem), gram_line(elem)]
         elem.xpath("./tei:sense", TEI_NS).each_with_index do |sense, index|
           lines << sense_line(sense, index + 1)
         end
         lines << etym_line(elem)
+        lines << tla_line(etymology)
         elem.xpath("./tei:xr", TEI_NS).each { |xr| lines << xr_line(xr) }
         Nabu::Normalize.nfc(lines.compact.reject(&:empty?).join("\n"))
+      end
+
+      # "tla: egy ꜥ.t · dem ꜥrwe.t — en (lotus) stalk; stem | de Stängel
+      # (Lotos, Schilf) [KELLIA etymologies]" — the transcriptions and
+      # glosses only the KELLIA tab carries (№R-52 (c)); nil when the tab
+      # is absent or contributed nothing for this entry.
+      def tla_line(etymology)
+        return nil if etymology.nil?
+
+        lemmas = []
+        lemmas << "egy #{collapse(etymology.egy_lemma)}" if etymology.egy_lemma
+        lemmas << "dem #{collapse(etymology.demo_lemma)}" if etymology.demo_lemma
+        glosses = []
+        glosses << "en #{collapse(etymology.gloss_en)}" if etymology.gloss_en
+        glosses << "de #{collapse(etymology.gloss_de)}" if etymology.gloss_de
+        return nil if lemmas.empty? && glosses.empty?
+
+        line = [lemmas.join(" · "), glosses.join(" | ")].reject(&:empty?).join(" — ")
+        "tla: #{line} [KELLIA etymologies]"
       end
 
       # "S ⲕⲁϩ; B ⲁ⸗ (Status pronominalis)" — every form with its dialect
@@ -201,21 +224,21 @@ module Nabu
 
       # -- crosswalk citations --------------------------------------------------
 
-      def crosswalk_citations(row)
-        return [] if row.nil?
+      def crosswalk_citations(etymology)
+        return [] if etymology.nil?
 
-        hieroglyphic, demotic = row
         citations = []
-        unless hieroglyphic.nil? || hieroglyphic.empty?
+        if etymology.hieroglyphic
           citations << Nabu::DictionaryCitation.new(
-            urn_raw: "#{AED_URN_PREFIX}#{hieroglyphic}", cts_work: nil, citation: nil,
-            label: "TLA #{hieroglyphic} (hieroglyphic; ORAEC crosswalk)"
+            urn_raw: "#{AED_URN_PREFIX}#{etymology.hieroglyphic}", cts_work: nil, citation: nil,
+            label: "TLA #{etymology.hieroglyphic} (hieroglyphic; " \
+                   "#{etymology.hieroglyphic_witnesses.join(' + ')})"
           )
         end
-        unless demotic.nil? || demotic.empty?
+        if etymology.demotic
           citations << Nabu::DictionaryCitation.new(
-            urn_raw: "#{DEMOTIC_URN_PREFIX}#{demotic}", cts_work: nil, citation: nil,
-            label: "TLA demotic #{demotic} (ORAEC crosswalk)"
+            urn_raw: "#{DEMOTIC_URN_PREFIX}#{etymology.demotic}", cts_work: nil, citation: nil,
+            label: "TLA demotic #{etymology.demotic} (#{etymology.demotic_witnesses.join(' + ')})"
           )
         end
         citations
