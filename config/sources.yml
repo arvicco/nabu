@@ -2498,13 +2498,12 @@ hdic:
   # HDIC — Heian-period hanzi dictionaries (github.com/shikeda/HDIC, the
   # ACTIVE upstream, pushed 2026-07-15; nk2028/HDIC is a stale 2022 mirror,
   # never fetched). Five published databases → five dictionaries: yyp/ktb/
-  # tsj/syp/krm (96,415 upstream rows total). LICENSE DISCREPANCY (owner
-  # gate, see Nabu::Adapters::Hdic): README + every data-file header grant
-  # CC BY-SA 4.0 "Open access" (→ attribution, the scout verdict), but the
-  # repo LICENSE file is the CC BY-NC-SA 4.0 legalcode (template mismatch
-  # in upstream commit 72cfe74, 2022-02-02). If the owner rules the LICENSE
-  # file authoritative (Kyoto/Ruthenian precedent), tighten to nc BEFORE
-  # any enable. Upstream actively maintained → re-syncs owner-fired.
+  # tsj/syp/krm (96,415 upstream rows total). License: CC BY-SA 4.0 —
+  # the old LICENSE-file BY-NC-SA legalcode contradiction RESOLVED
+  # UPSTREAM 2026-08-30 (thread №88-3: Prof. Ikeda confirmed BY-SA
+  # governs, no NC; repos unified, Zenodo refresh to follow). The
+  # attribution class stands. Upstream actively maintained → re-syncs
+  # owner-fired.
   sync_policy: manual
 
 babelstone-ids:
