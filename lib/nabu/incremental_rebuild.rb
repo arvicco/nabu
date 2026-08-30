@@ -154,6 +154,10 @@ module Nabu
           next
         end
         if @trust_derivations && trustable?(entry, stamp, fingerprint, trust_horizon)
+          # A one-time event the owner reads in the TRANSCRIPT (2026-08-30
+          # feedback): each trusted source leaves a durable stage line as
+          # it happens, not only the end-of-run summary.
+          progress&.stage("#{entry.slug} — trusted (re-stamped, no replay)")
           Store::DerivationStamp.stamp!(db, slug: entry.slug, fingerprint: fingerprint)
           record_ingest_identity(db, entry, fingerprint)
           trusted << Trusted.new(slug: entry.slug, stamp_short: fingerprint.short)
