@@ -199,6 +199,23 @@ class UcdTest < Minitest::Test
     assert_nil @ucd.tangut_source(0x0061)
   end
 
+  def test_standardized_variants_named_sequences_and_do_not_emit
+    variants = @ucd.variants(0x0030)
+    assert_equal 1, variants.size
+    assert_equal "short diagonal stroke form", variants.first.description
+    assert_equal 0xFE00, variants.first.selector
+
+    sequences = @ucd.named_sequences(0x0030)
+    assert_includes sequences, "KEYCAP DIGIT ZERO"
+
+    discouraged = @ucd.do_not_emit(0x0905)
+    assert_equal "0904", discouraged.first.preferred
+    assert_equal "Indic_Vowel_Letter", discouraged.first.type
+    assert_empty @ucd.variants(0x16A0)
+    assert_empty @ucd.named_sequences(0x16A0)
+    assert_empty @ucd.do_not_emit(0x16A0)
+  end
+
   def test_jamo_short_name
     assert_equal "G", @ucd.jamo_short_name(0x1100)
     assert_nil @ucd.jamo_short_name(0x0061)

@@ -136,6 +136,15 @@ sources:
     dating: {posture: dated, note: "per-work 원문간행년 original print year via MetadataDates :structured"}
     places: {posture: unplaced}
     script: {posture: implied}
+  classical-modern:
+    lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent; the
+        cmn translation siblings are modern-Chinese apparatus, no lect claim)}
+    dating: {posture: undatable, note: "the chapter units carry no dates —
+        the 97 works span two millennia and upstream states nothing per unit"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "SIMPLIFIED script on BOTH sides
+        (censused 2026-08-29 — 岂/国/宪 on the 古文 side too): a modern-web
+        re-encoding of classical text, never traditional-script witness"}
   kanripo:
     lect: {posture: codemap, note: lzh → zho/lit (Literary Chinese)}
     dating: {posture: undatable}
@@ -619,6 +628,18 @@ sources:
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: implied}
+  dacon:
+    # P88-A4: minted as pending on the nwc anchor (censused absent
+    # 2026-08-29); the P88-B3 aggregated mint (nabu-lects PR #11, v1.4.0)
+    # merged and reached canonical 2026-08-30 — nwc + new now anchor the
+    # xct/bod two-anchor mold, so the bare code IS the claim.
+    lect: {posture: identity}
+    dating: {posture: dated, note: "the deposit's own century attributions
+        (cnew<cc> stems) as per-document envelopes via MetadataDates
+        :structured"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "IAST romanization (Latn) throughout —
+        the deposit carries no native Newa/Devanagari surface"}
   dcs:
     dating: {posture: undatable}
     places: {posture: unplaced}

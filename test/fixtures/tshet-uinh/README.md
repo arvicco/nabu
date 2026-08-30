@@ -43,12 +43,42 @@ The repo documents its inline apparatus — the adapter parses it HONESTLY
   kept whole; 6 直音 rows; 53 suffixed 小韻號; 2 suffixed 小韻字號;
   99 empty-釋義 rows, all with a 參照 pointer; 0 non-NFC rows).
 
+## 韻書/王三.csv — the 王三 second shelf (P88-R4, 2026-08-29)
+
+Byte-verbatim trim of `韻書/王三.csv` — 王仁昫《刊謬補缺切韻》 (~706), the
+fullest surviving Qieyun recension; upstream marks it 小韻內部待校
+(in-rhyme ordering under collation) — rows parse verbatim regardless.
+
+- **Retrieved:** with the same clone (repo last pushed 2025-11-17):
+  `https://raw.githubusercontent.com/nk2028/tshet-uinh-data/main/韻書/王三.csv`
+  — 1,566,059 B, 17,233 lines (header + 17,232 rows, no quoting, no
+  embedded newlines) → **header + 11 fixture rows** (full-file lines
+  1–6, 118, 266, 993, 2160, 3387, 5062; recipe:
+  `sed -n '1p;2p;3p;4p;5p;6p;118p;266p;993p;2160p;3387p;5062p'`).
+- **The column set is NOT the 廣韻 shape** (censused from bytes
+  2026-08-29): 小韻號,鈴木ID,鈴木小韻號,頁號,行號,字號,韻目原貌,首字,反切,
+  地位,切韻拼音,小韻內字序,字頭,釋義 — no 直音/字頭說明/釋義參照; 地位
+  plays 音韻地位's role. entry_id = **小韻號.小韻內字序**, the ONLY unique
+  pair (17,232 distinct; 小韻號.字號 collides at 16,126). 字頭 census:
+  143 應補字 ［X］ (".1" ordinal suffix — the a1 analogue), ONE 校訛字
+  箈〈𥮒〉, ZERO 應刪字, 6 empty ［］ slots (verbatim), 3 undocumented
+  【X】 rows (verbatim), 5 headword-LESS rows (待校 slots → censused
+  SKIP; expect 17,227 entries), 10 empty 反切, 10 empty 釋義.
+- **Selection (小韻號.小韻內字序 → what it pins):** `1.1` 東 (plain head
+  entry: 地位/切韻拼音/首字/locus lines; 釋義 writes 徳, not 德), `1.2` 凍
+  + `2.1`–`2.3` 同/童/僮 (plain rows), `23.7.1` ［𩦺］ (應補字 with the
+  ".1" suffix), line 266 (45.9 — headword-less 待校 slot, asserted
+  SKIPPED), `164.6.1` ［］ (empty supplied slot, verbatim), `312.1` 絓
+  (反切-less; 釋義 with ［。］ bracket), `539.3` 箈〈𥮒〉 (the one 校訛字;
+  釋義 carries ［亦作］⿱竹㵶〈𥷰〉 verbatim), `804.2` 【佯】 (undocumented
+  【】 shape + empty 釋義 → nil gloss).
+
 ## The file-set census (repo whole, 2026-07-19)
 
 | file | rows | verdict |
 |---|---|---|
 | 韻書/廣韻.csv | 25,336 | **INGESTED** — the complete corrected shelf |
-| 韻書/王三.csv | 17,232 | journaled — 王仁昫刊謬補缺切韻, upstream marks it 小韻內部待校 (in progress); different column set (鈴木ID/頁號/行號/切韻拼音); a future second shelf |
+| 韻書/王三.csv | 17,232 | **INGESTED P88-R4** — the `wangsan` second shelf (section below); upstream still marks it 小韻內部待校 |
 | 韻書/王一.csv | 2 | stub ("not completed" upstream) |
 | 韻圖/韻鏡（古逸叢書本）.csv | 3,871 | rhyme-TABLE grid positions (字頭/轉號/上位/右位) — no definitions, different content kind |
 | 韻圖/韻鏡（嘉吉本）.csv | 622 | ditto, "not completed" upstream |

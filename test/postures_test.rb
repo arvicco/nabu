@@ -153,7 +153,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 72, lect.size,
+    assert_equal 74, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -175,7 +175,10 @@ class PosturesTest < Minitest::Test
                  "no/da, the menota-dan rule + onw override machine-posture it): 70→69; " \
                  "eebo-tcp ADDED P83-1 — identity en, TRUE today; the en:early mint is " \
                  "APPROVED (nabu-lects PR #9, [1500, 1700]) and its date-band staging " \
-                 "lands at the merge sweep, not here: 69→70"
+                 "lands at the merge sweep, not here: 69→70; P84-7 ADDS " \
+                 "corpus-oudnederlands (odt) + corpus-gysseling (dum) as identity: 70→72; " \
+                 "dacon ADDED P88-A4 — pending on the nwc nabu-lects mint (P88-B3) — and " \
+                 "classical-modern ADDED P88-A2 — codemap, the kanripo lzh precedent: 72→74"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -203,6 +206,14 @@ class PosturesTest < Minitest::Test
     # corpus-gysseling (dum) — both real nabu-lects anchors, so identity is the
     # honest claim (no machine rule/override covers odt/dum, no shadowing):
     # 70→72, identity 49→51.
-    assert_equal({ "identity" => 51, "dates" => 10, "codemap" => 11 }, by_posture)
+    # P88-A4 reopened the pending class honestly (the ref/menota shape):
+    # dacon pended on the nwc anchor mint — nothing Newar existed in
+    # nabu-lects (censused 2026-08-29). The P88-B3 aggregated mint
+    # (nabu-lects PR #11, v1.4.0) merged and reached canonical 2026-08-30,
+    # so identity retired the pending same-phase — zero pendings again,
+    # the add-then-retire shape complete a third time. P88-A2's
+    # classical-modern joins as codemap (the kanripo lzh precedent):
+    # 72→74, codemap 11→12, identity 51→52.
+    assert_equal({ "identity" => 52, "dates" => 10, "codemap" => 12 }, by_posture)
   end
 end

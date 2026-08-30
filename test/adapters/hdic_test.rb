@@ -22,7 +22,7 @@ class HdicTest < Minitest::Test
 
   # --- manifest + content kind ----------------------------------------------------
 
-  def test_manifest_carries_the_by_sa_grant_and_the_recorded_license_discrepancy
+  def test_manifest_carries_the_by_sa_grant_and_the_resolved_license_history
     manifest = adapter.manifest
     assert_kind_of Nabu::SourceManifest, manifest
     assert_equal "hdic", manifest.id
@@ -30,8 +30,8 @@ class HdicTest < Minitest::Test
     assert_match(/Creative Commons Attribution-ShareAlike 4\.0 International License \(CC BY-SA 4\.0\)/,
                  manifest.license, "the README + per-file grant travels verbatim")
     assert_match(/Open access/, manifest.license)
-    assert_match(/BY-NC-SA legalcode/, manifest.license,
-                 "the contradicting repo LICENSE file is journaled IN the manifest — owner gate")
+    assert_match(/confirmed governing by Prof\. Ikeda 2026-08-30/, manifest.license,
+                 "the old LICENSE-file contradiction resolved upstream (№88-3) — history stays in the manifest")
     assert_equal "https://github.com/shikeda/HDIC", manifest.upstream_url,
                  "the ACTIVE upstream — never the stale nk2028 mirror"
     assert_equal "hdic-tsv", manifest.parser_family

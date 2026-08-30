@@ -15,10 +15,7 @@
 #   - futhark: runes have NO standard numeric values — runic calendars use
 #     the golden-number system (pentimal marks), a different animal; a
 #     rune-numeral table would be an invention.
-#   - glagolitic: a real system (values follow the GLAGOLITIC alphabet
-#     order, differing from Cyrillic!) — deferred until the table can be
-#     entered against a checked source, not memory. Queue note in the
-#     P86 plan.
+#   (glagolitic entered 2026-08-29, P88-B4 — the P86 defer note closed.)
 
 isopsephy:
   script: grek
@@ -199,3 +196,44 @@ gothic:
     𐍈: 700
     𐍉: 800
     𐍊: 900
+
+glagolitic:
+  script: glag
+  name: "Glagolitic letter numerals"
+  note: "values follow the GLAGOLITIC alphabet order (NOT the
+    Cyrillic-mirrored Greek order): tens begin at izhe — ⰹ and ⰺ both
+    carry 10 by tradition — and the rare letter pe (ⱊ) stands outside
+    the sequence (700 otu → 800 shta skips it). Above 999 the evidence
+    conflicts (letters vs a Greek-style thousands sign) — deliberately
+    absent. Entered 2026-08-29 against Wikipedia 'Glagolitic numerals'
+    + the HandWiki mirror cross-check + the alphabet-order rule
+    verified against the Unicode 2C00-block letter order"
+  values:
+    ⰰ: 1
+    ⰱ: 2
+    ⰲ: 3
+    ⰳ: 4
+    ⰴ: 5
+    ⰵ: 6
+    ⰶ: 7
+    ⰷ: 8
+    ⰸ: 9
+    ⰹ: 10
+    ⰺ: 10
+    ⰻ: 20
+    ⰼ: 30
+    ⰽ: 40
+    ⰾ: 50
+    ⰿ: 60
+    ⱀ: 70
+    ⱁ: 80
+    ⱂ: 90
+    ⱃ: 100
+    ⱄ: 200
+    ⱅ: 300
+    ⱆ: 400
+    ⱇ: 500
+    ⱈ: 600
+    ⱉ: 700
+    ⱋ: 800
+    ⱌ: 900

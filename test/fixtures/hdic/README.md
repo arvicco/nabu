@@ -15,14 +15,14 @@ license grant); only the row SET was trimmed.
   Rights"):** "License / Creative Commons Attribution-ShareAlike 4.0
   International License (CC BY-SA 4.0)" + "Access Rights (Availability) /
   Open access". Every data file below carries the same in-file grant in
-  its header. **DISCREPANCY (owner gate):** the repo-level `LICENSE` file
-  is the CC BY-NC-SA 4.0 LEGALCODE ("Attribution-NonCommercial-ShareAlike
-  4.0 International"). Git forensics: upstream commit `72cfe74`
-  (2022-02-02, "ライセンスの記述を変更") moved README + every file header
-  from CC BY-NC 4.0 to BY-SA but placed the BY-NC-SA legalcode in LICENSE
-  — an apparent template mismatch, journaled in the adapter, sources.yml
-  and 02-sources; classed `attribution` per the concordant grants pending
-  the owner ruling.
+  its header. **DISCREPANCY — RESOLVED UPSTREAM 2026-08-30:** the
+  repo-level `LICENSE` file long carried the CC BY-NC-SA 4.0 legalcode
+  (template mismatch from upstream commit `72cfe74`, 2022-02-02,
+  "ライセンスの記述を変更"). Prof. Ikeda confirmed by email (thread
+  №88-3) that **CC BY-SA 4.0 governs, without any NonCommercial
+  restriction** — the legalcode was an unintended leftover, and both
+  shikeda/HDIC and shikeda/krm have been unified under CC BY-SA 4.0
+  upstream (Zenodo refresh to follow). Classed `attribution`, confirmed.
 
 ## The upstream file census (2026-07-19, full-file row counts)
 
