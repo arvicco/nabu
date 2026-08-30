@@ -4197,8 +4197,19 @@ seal:
   # when absent (the corpus-oudnederlands/freising mold). Identity: urn =
   # urn:nabu:seal:<SEAL no.> — the page's own "SEAL no." field (node ids
   # are NOT SEAL numbers; the node id rides metadata as the permanent URL).
-  # Two censused transliteration shapes parse (the _ts_tb line table and
-  # the <p>-per-line paragraph form); the English translation rides as
-  # document metadata; Vocabulary/Statistics tabs deliberately out of v1.
-  # EXPECTED FIRST SYNC: ~54 search-page GETs (page count from page 0's own
-  # pager) + 1,065 node GETs at 1 req/s ≈ 20 min → 1,065 documents.
+  # FOUR censused transliteration shapes parse (first-sync census
+  # 2026-08-30 against all 1,011 fetched pages): the _ts_tb line table,
+  # the <p>-per-line paragraph form (labels may carry a witness letter —
+  # "A1"), the Word-export score tables (line no. | witness siglum | text;
+  # witness rows join their line), and the free-form-prose ordinal
+  # fallback (the GRETIL precedent — p1/p2/… refs, FLAGGED in metadata,
+  # 30 pages). The English translation rides as document metadata;
+  # Vocabulary/Statistics tabs deliberately out of v1. CENSUSED SKIPS, by
+  # rule: 89 sister-series pages (DLL/LBPL — the grant names SEAL; held
+  # out pending a widened blessing), 474 catalog-only pages (no online
+  # transliteration), 37 stubs (pointer/fragment note only); 3 pages with
+  # Word-broken markup quarantine honestly. FETCH: ~54 search-page GETs
+  # (page count from page 0's own pager; the listing's 1,065 rows hold
+  # 1,011 unique texts — upstream's own duplicate genre rows) + node GETs
+  # at 1 req/s ≈ 20 min. EXPECTED STEADY PARSE: 408 documents / 14,953
+  # passages / 3 quarantined.

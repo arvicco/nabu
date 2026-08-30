@@ -92,17 +92,45 @@ module Nabu
         document_refs(workdir).each(&block)
       end
 
-      # The persisted search-index sidecars are content-pattern files
-      # discover deliberately skips (benign, by rule); a node page WITHOUT
-      # a SEAL no. is a defect — unrecognized, censused prominently.
+      # The censused skip classes (first-sync census 2026-08-30 — the
+      # live site holds three numbered series plus text-less entries):
+      # - the persisted search-index sidecars (content-pattern files);
+      # - SISTER SERIES pages ("DLL no.", "LBPL no.") — the grant names
+      #   SEAL, so the ~89 sister texts are HELD OUT pending a widened
+      #   blessing, by rule, never minted;
+      # - CATALOG-ONLY pages (a SEAL no. but no Text field) — ~474
+      #   entries whose editions are not online; nothing to parse.
+      # A node page matching NONE of the series is a defect —
+      # unrecognized, censused prominently.
       def discovery_skips(workdir)
         sidecars = Dir.glob(File.join(workdir, "*.html"))
                       .count { |path| Nabu::SealFetch::INDEX_FILENAME.match?(File.basename(path)) }
-        numberless = record_paths(workdir).reject { |path| seal_number(path) }
+        sisters = 0
+        catalog_only = 0
+        stubs = 0
+        numberless = []
+        record_paths(workdir).each do |path|
+          bytes = File.binread(path)
+          if seal_number_in(bytes)
+            if !text_field?(bytes)
+              catalog_only += 1
+            elsif stub_page?(bytes)
+              stubs += 1
+            end
+          elsif sister_series?(bytes)
+            sisters += 1
+          else
+            numberless << path
+          end
+        end
+        notes = numberless.map { |path| "#{File.basename(path)}: no series number — identity unreadable" }
+        notes << "#{sisters} sister-series pages (DLL/LBPL) held out — the grant names SEAL" if sisters.positive?
+        notes << "#{catalog_only} catalog-only pages skipped — no online transliteration" if catalog_only.positive?
+        notes << "#{stubs} stub pages skipped — Text field holds only a pointer/fragment note" if stubs.positive?
         DiscoverySkips.new(
-          skipped_by_rule: sidecars,
+          skipped_by_rule: sidecars + sisters + catalog_only + stubs,
           unrecognized: numberless.size,
-          notes: numberless.map { |path| "#{File.basename(path)}: no \"SEAL no.\" field — identity unreadable" }
+          notes: notes
         )
       end
 
@@ -135,8 +163,12 @@ module Nabu
 
       def document_refs(workdir)
         pages = record_paths(workdir).filter_map do |path|
-          number = seal_number(path)
-          number && [number, path]
+          bytes = File.binread(path)
+          number = seal_number_in(bytes)
+          # sisters / catalog-only / stubs skip by rule (discovery_skips)
+          next unless number && text_field?(bytes) && !stub_page?(bytes)
+
+          [number, path]
         end
         pages.sort_by { |number, _path| sort_key(number) }.map do |number, path|
           Nabu::DocumentRef.new(source_id: manifest.id, id: "#{SealHtmlParser::URN_PREFIX}#{number}",
@@ -148,8 +180,48 @@ module Nabu
       # heading, read from raw bytes (the pattern is ASCII; the number
       # itself is digits). Parse re-reads it properly and cross-checks.
       def seal_number(path)
-        number = File.binread(path)[/<h4>\s*SEAL no\.\s*([^<]+)</, 1]
+        seal_number_in(File.binread(path))
+      end
+
+      def seal_number_in(bytes)
+        number = bytes[/<h4>\s*SEAL no\.\s*([^<]+)</, 1]
         number&.force_encoding(Encoding::UTF_8)&.strip
+      end
+
+      # The site's sister series (first-sync census): DLL and LBPL pages
+      # ride the same search listing but number their texts in their own
+      # id spaces.
+      def sister_series?(bytes)
+        bytes.match?(/<h4>\s*(?:DLL|LBPL) no\./)
+      end
+
+      # The Text-field byte needle: the class TOKEN with its trailing
+      # space, so `field--name-field-texts-hierarchy` (present on every
+      # page) can never false-positive.
+      def text_field?(bytes)
+        bytes.include?("field--name-field-text ")
+      end
+
+      # A STUB Text field (first-sync census): no tables, fewer than the
+      # parser's fallback threshold of paragraphs, and NO line-labeled
+      # paragraph — an external pointer ("ARET 5, 5 from Ebla Digital
+      # Archives") or a bare fragment note. Nothing to parse; skipped by
+      # rule, never quarantined. Conservative on purpose: any table, ≥3
+      # paragraphs, or one label-led line (node 7044's one-line fragment
+      # is a REAL text) goes to the parser.
+      def stub_page?(bytes)
+        start = bytes.index("field--name-field-text ")
+        return false unless start
+
+        stop = bytes.index('<div id="tabs-3"', start) || bytes.length
+        segment = bytes[start...stop].dup.force_encoding(Encoding::UTF_8)
+        return false unless segment.scan("<table").empty?
+        return false if segment.scan("<p").size >= SealHtmlParser::MIN_FALLBACK_PARAGRAPHS
+
+        segment.split(/<p[ >]/).drop(1).none? do |chunk|
+          text = chunk.gsub(/<[^>]+>/, " ").gsub("&nbsp;", " ").strip
+          text.match?(/\A[A-Za-z]?\d+[ʹ′']*\s+\S/)
+        end
       end
 
       # Numeric SEAL numbers sort numerically; any non-numeric stranger

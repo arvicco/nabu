@@ -66,9 +66,20 @@ module Nabu
 
       SITE_TITLE_SUFFIX = " | Sources of Early Akkadian Literature"
 
-      # A paragraph-shape line label: "5", "5ʹ" (U+02B9/U+2032/'), or a
-      # range "1ʹ–4ʹ" (range = an editorial gap note, not a line).
-      LINE_LABEL = /\A(\d+[ʹ′']*(?:\s*[–-]\s*\d+[ʹ′']*)?)\s+(.*)\z/m
+      # A paragraph-shape line label: "5", "5ʹ" (U+02B9/U+2032/'), a range
+      # "1ʹ–4ʹ" (range = an editorial gap note, not a line), or — the
+      # 2026-08-30 first-sync census — a witness-prefixed "A1"/"B12ʹ"
+      # (one letter, then the number: multi-witness pages label lines per
+      # text siglum; "TIM"/"Obv." stay headings, letters alone don't match).
+      LINE_LABEL = /\A([A-Za-z]?\d+[ʹ′']*(?:\s*[–-]\s*[A-Za-z]?\d+[ʹ′']*)?)\s+(.*)\z/m
+
+      # A Word-export score-table label cell: the bare line number.
+      SCORE_LABEL = /\A\d+[ʹ′']*\z/
+
+      # The free-form fallback threshold: fewer non-empty paragraphs than
+      # this reads as a stub (an external pointer, a lone note), which
+      # stays an honest quarantine rather than minting ordinal noise.
+      MIN_FALLBACK_PARAGRAPHS = 3
 
       # One transliteration line as the walk collects it.
       Line = Data.define(:label, :section, :text)
@@ -171,19 +182,75 @@ module Nabu
       # -- the transliteration field ---------------------------------------------
 
       def transliteration_lines(page, path)
-        item = page.at_css("div.field--name-field-text .field--item") or
+        # The Text field is MULTI-VALUED on some pages (first-sync census:
+        # node 29315 keeps "obv."/"rev." headers in the first item and the
+        # lines in siblings) — the walk scopes over ALL field items.
+        item = page.css("div.field--name-field-text .field--item")
+        if item.empty?
           raise Nabu::ValidationError, "no Text field (field--name-field-text) — every SEAL text " \
                                        "page carries a transliteration, so the page shape drifted (#{path})"
+        end
         walk = Walk.new
-        table = item.at_css("table._ts_tb")
-        table ? walk_table(table, walk) : walk_paragraphs(item, walk)
-        lines = walk.lines
-        if lines.empty?
+        if (table = item.at_css("table._ts_tb"))
+          walk_table(table, walk)
+        elsif (scores = item.css("table")).any?
+          # Word-export score pages fragment into MANY small tables (some
+          # class="Table", some bare — 12 of 25 on the census specimen);
+          # every one is a run of line rows — walk them all in order.
+          scores.each { |score| walk_score_table(score, walk) }
+        else
+          walk_paragraphs(item, walk)
+        end
+        return [walk.lines, walk.metadata] unless walk.lines.empty?
+
+        # The free-form fallback (the GRETIL unaddressed-prose precedent,
+        # 2026-08-30): pages whose transliteration carries no line labels
+        # at all mint ordinal refs (p1, p2, …), FLAGGED in metadata —
+        # coarser citation, honest provenance. Stubs below the threshold
+        # stay a loud quarantine.
+        ordinal = ordinal_fallback(item)
+        if ordinal.empty?
           raise Nabu::ValidationError,
                 "zero transliteration lines in the Text field — the page shape drifted (#{path})"
         end
+        [ordinal, walk.metadata.merge(
+          "line_numbering" => "ordinal — no upstream line labels (free-form page)"
+        )]
+      end
 
-        [lines, walk.metadata]
+      # The Word-export score shape (node-1801 class, first-sync census):
+      # 3-column rows — line number | witness siglum | text; a numbered
+      # row opens the line, unnumbered multi-cell rows are further
+      # witnesses of the SAME line (joined onto it — a score has no
+      # composite text to prefer); single-cell rows are headings.
+      def walk_score_table(table, walk)
+        table.xpath(".//tr").each do |row|
+          cells = row.xpath("./td").map { |td| fold(td.text) }
+          case cells.size
+          when 0 then next
+          when 1 then walk.heading!(cells.first)
+          else
+            label = cells.first
+            rest = cells.drop(1).reject(&:empty?).join(" ")
+            if label.match?(SCORE_LABEL)
+              walk.line!(label: label, text: rest)
+            elsif label.empty? && !rest.empty?
+              walk.append!(rest)
+            else
+              walk.unplaced!
+            end
+          end
+        end
+      end
+
+      # Every non-empty paragraph text, for the ordinal fallback.
+      def ordinal_fallback(item)
+        texts = item.css("p").map { |paragraph| fold(paragraph.text) }.reject(&:empty?)
+        return [] if texts.size < MIN_FALLBACK_PARAGRAPHS
+
+        texts.each_with_index.map do |text, index|
+          Line.new(label: "p#{index + 1}", section: nil, text: text)
+        end
       end
 
       # The table shape: 2-td rows with a _ts_ln cell are lines; single-td
@@ -240,6 +307,17 @@ module Nabu
             @empty += 1
           else
             @lines << Line.new(label: label, section: @section, text: text)
+          end
+        end
+
+        # A score table's further-witness row: joins the open line (the
+        # 2026-08-30 shape); with no line open it is an unplaced row.
+        def append!(text)
+          last = @lines.last
+          if last.nil?
+            @unplaced += 1
+          else
+            @lines[-1] = last.with(text: "#{last.text} | #{text}")
           end
         end
 

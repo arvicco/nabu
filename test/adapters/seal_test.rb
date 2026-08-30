@@ -186,6 +186,77 @@ class SealTest < Minitest::Test
 
   # --- identity defenses -----------------------------------------------------
 
+  # --- P89-3b: the first-sync census fixes (2026-08-30) ----------------------
+  # The live crawl surfaced four page classes the Gilgamesh-corner fixtures
+  # never sampled: sister series (DLL/LBPL), catalog-only entries with no
+  # online transliteration, Word-export score tables, and free-form prose
+  # pages. 1,011 fetched → 376 loaded, 546 quarantined; these pin the fixes.
+
+  def test_sister_series_pages_are_censused_skips_never_unrecognized
+    require_fixtures!
+    Dir.mktmpdir do |dir|
+      texts = File.join(dir, "texts")
+      FileUtils.mkdir_p(texts)
+      %w[node-1526 node-31727 node-36918].each do |node|
+        FileUtils.cp(File.join(FIXTURES, "#{node}.html"), texts)
+      end
+      adapter = Nabu::Adapters::Seal.new
+      assert_equal ["urn:nabu:seal:1526"], adapter.discover(dir).map(&:id),
+                   "DLL/LBPL pages must not yield (the grant names SEAL)"
+      skips = adapter.discovery_skips(dir)
+      assert_equal 2, skips.skipped_by_rule, "the two sister-series pages skip BY RULE"
+      assert_equal 0, skips.unrecognized
+      assert(skips.notes.any? { |note| note.match?(/sister[- ]series/i) },
+             "the census names the held-out class")
+    end
+  end
+
+  def test_catalog_only_pages_are_censused_skips_never_quarantined
+    require_fixtures!
+    Dir.mktmpdir do |dir|
+      texts = File.join(dir, "texts")
+      FileUtils.mkdir_p(texts)
+      %w[node-1526 node-1516].each { |node| FileUtils.cp(File.join(FIXTURES, "#{node}.html"), texts) }
+      adapter = Nabu::Adapters::Seal.new
+      assert_equal ["urn:nabu:seal:1526"], adapter.discover(dir).map(&:id),
+                   "a SEAL page with no online transliteration must not reach the parser"
+      skips = adapter.discovery_skips(dir)
+      assert_equal 1, skips.skipped_by_rule
+      assert(skips.notes.any? { |note| note.match?(/no online transliteration/i) })
+    end
+  end
+
+  def test_word_export_score_tables_parse_as_labeled_lines
+    # node-1801 (Emar wisdom): a 3-column Word-export score — line number |
+    # witness siglum | text; unnumbered witness rows continue their line.
+    document = parse_fixture("node-1801")
+    assert_equal 28, document.size, "28 numbered score lines"
+    first = document.first
+    assert_equal "l. 1", first.annotations["citation"]
+    assert_match(/it-ti/, first.text)
+    assert_match(/Ua/, first.text, "witness continuation rows ride the line")
+  end
+
+  def test_witness_prefixed_line_labels_parse_as_real_lines
+    # node-7181 (TIM 9, 65+66): labels like "A1" — a witness letter before
+    # the number, not a heading.
+    document = parse_fixture("node-7181")
+    assert_operator document.size, :>=, 20
+    assert(document.any? { |passage| passage.annotations["citation"].match?(/\bA1\b/) },
+           "the A1-labeled line is a line, not a heading")
+    assert(document.any? { |passage| passage.text.include?("aṣ-ba-at") })
+  end
+
+  def test_free_form_prose_pages_fall_back_to_flagged_ordinal_lines
+    # node-26977 (the diviner's ritual): 323 prose paragraphs, zero line
+    # labels anywhere — the GRETIL precedent: ordinal refs, flagged.
+    document = parse_fixture("node-26977")
+    assert_operator document.size, :>=, 100
+    assert_equal "l. p1", document.first.annotations["citation"]
+    assert_match(/ordinal/, document.metadata.fetch("line_numbering"),
+                 "ordinal numbering is flagged, never passed off as upstream labels")
+  end
+
   def test_a_page_landed_under_the_wrong_node_id_quarantines
     require_fixtures!
     Dir.mktmpdir do |dir|
@@ -265,5 +336,20 @@ class SealTest < Minitest::Test
     ref = adapter.discover(staged_workdir).find { |r| r.id == urn }
     refute_nil ref, "expected discover to yield #{urn}"
     adapter.parse(ref)
+  end
+
+  # Stage ONE fixture page and parse it through discover (the urn comes
+  # from the page's own SEAL no. — never hardcoded here).
+  def parse_fixture(node)
+    require_fixtures!
+    Dir.mktmpdir do |dir|
+      texts = File.join(dir, "texts")
+      FileUtils.mkdir_p(texts)
+      FileUtils.cp(File.join(FIXTURES, "#{node}.html"), texts)
+      adapter = Nabu::Adapters::Seal.new
+      refs = adapter.discover(dir).to_a
+      assert_equal 1, refs.size, "expected exactly one ref from #{node}"
+      return adapter.parse(refs.first)
+    end
   end
 end
