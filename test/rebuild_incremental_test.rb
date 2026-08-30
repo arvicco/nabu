@@ -243,6 +243,24 @@ class RebuildIncrementalTest < Minitest::Test
     assert_equal %w[alpha beta lexica], followup.cleans.map(&:slug).sort
   end
 
+  def test_trusted_sources_leave_a_durable_stage_line_as_they_happen
+    # Owner feedback 2026-08-30: the 142-source trust sweep was invisible
+    # in the transcript — only the end summary carried it. Each trust now
+    # opens a stage (which the reporter closes durably at the next one).
+    full_rebuilder.run
+    labels = []
+    probe = Nabu::ProgressReporter.new(on_stage: ->(label, _eta) { labels << label })
+
+    with_changed_shared_core do
+      incremental_rebuilder(trust_derivations: true, code_voucher: voucher(true)).run(progress: probe)
+    end
+
+    %w[alpha beta lexica].each do |slug|
+      assert(labels.any? { |l| l.include?(slug) && l.include?("trusted") },
+             "#{slug}'s trust must announce as a stage; saw: #{labels.inspect}")
+    end
+  end
+
   def test_trust_derivations_replays_when_the_voucher_cannot_vouch
     # The tshet-uinh shape: the source's OWN parser files changed after the
     # stamp — trust must fall through to an honest replay, never a re-stamp.
