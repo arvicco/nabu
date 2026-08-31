@@ -1654,7 +1654,7 @@ dacon:   # P88-A4, 02-sources row 181
   # Sanskrit-tradition works (Vetālapañcaviṃśati, Maṇicūḍāvadāna) + the
   # Gopālarājavaṃśāvalī chronicle — the indic desk's Himalayan shelf.
   axes: [indic]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true   # first real sync verified + owner sign-off 2026-08-30: 4 docs / 977 passages
   # DACON — the Diachronic Annotated Corpus of Newar (O'Neill & Meelen,
   # AHRC "The Emergence of Egophoricity"; Zenodo record 12887386, DOI
   # 10.5281/zenodo.12887386, VERIFIED cc-by-4.0 on the record 2026-08-29).
@@ -2377,7 +2377,7 @@ tshet-uinh:
 classical-modern:   # P88-A2, 02-sources row 184
   adapter: Nabu::Adapters::ClassicalModern
   axes: [sinitic]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true   # first real sync verified + owner sign-off 2026-08-30: 14,608 docs / 1,944,934 passages
   translations: true  # the modern side IS the point of a parallel corpus
   siblings: ["-cmn"]  # the aranese -es mold: show --parallel pairs the
                       # chapter doc with its -cmn sibling by line number
@@ -2398,7 +2398,7 @@ classical-modern:   # P88-A2, 02-sources row 184
 menggu-ziyun:   # P88-A2, 02-sources row 185; unblocked by nabu-lects v1.4.0 (zho:oman)
   adapter: Nabu::Adapters::MengguZiyun
   axes: [sinitic]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true   # first real sync verified + owner sign-off 2026-08-30: 9,446 entries
   # 蒙古字韻 (1308) — the 'Phags-pa rhyme book, the primary phonological
   # record of Old Mandarin (nk2028/menggu-ziyun-data; MIT in-repo
   # verified 2026-08-29; 沈鍾偉 2015 collation + unt 2023 reconstructions
@@ -2418,7 +2418,7 @@ menggu-ziyun:   # P88-A2, 02-sources row 185; unblocked by nabu-lects v1.4.0 (zh
 zhongyuan:   # P88-R3, 02-sources row 186; the row-99 un-park (zho:oman + owner GO 2026-08-29)
   adapter: Nabu::Adapters::Zhongyuan
   axes: [sinitic]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true   # first real sync verified + owner sign-off 2026-08-30: 5,877 entries
   # 中原音韻 (1324) — the arch-source of Old Mandarin phonology
   # (nk2028/zhongyuan-data; CC0 1.0 full legal code in-repo, verified
   # 2026-08-29). 5,877 character rows, each with 聲母/韻母/聲調 and FOUR
@@ -2435,7 +2435,7 @@ zhongyuan:   # P88-R3, 02-sources row 186; the row-99 un-park (zho:oman + owner 
 qieyun-restored:   # P88-A2, 02-sources row 182
   adapter: Nabu::Adapters::QieyunRestored
   axes: [sinitic]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true   # first real sync verified + owner sign-off 2026-08-30: 11,158 entries
   # 切韻 itself (Lu Fayan, 601) — the PARENT of the held guangyun shelf —
   # in Fujita Takumi's restoration (2017 thesis / 2023 monograph),
   # extracted upstream from the thesis PDF (nk2028/qieyun-restored, MIT
@@ -3523,7 +3523,7 @@ tibetan-verbs:
 monlam-lexicon:   # P88-A3, 02-sources row 183
   adapter: Nabu::Adapters::MonlamLexicon
   axes: [tibetan]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true   # first real sync verified + owner sign-off 2026-08-30: 449,829 entries
   # The Monlam headword lists (MonlamIT/Tibetan-Lexicon, Apache-2.0
   # in-repo verified 2026-08-29) — the ONLY licensed machine-readable
   # slice of the Monlam dictionary world: two lanes under one
@@ -4182,7 +4182,7 @@ eebo-tcp:
 seal:
   adapter: Nabu::Adapters::Seal
   axes: [cuneiform]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true   # first real sync verified 2026-08-31: 408 docs / 14,953 passages / 3 broken-markup quarantines
   sync_policy: manual
   # SEAL — Sources of Early Akkadian Literature (P89-3; seal.huji.ac.il;
   # Michael P. Streck & Nathan Wasserman): the edition of record for

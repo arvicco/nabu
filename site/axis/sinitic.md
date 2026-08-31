@@ -15,17 +15,17 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these seventeen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 30 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 31 August 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `wiktionary-recon` | dictionary | attribution | wired · manual | 30,261 entries |
 | `suttacentral` | texts | open | wired · manual | 12,348 docs / 697,687 passages |
 | `baxter-sagart` | dictionary | attribution | wired · manual | 9,918 entries |
-| `tshet-uinh` | dictionary | open | wired · manual | 25,336 entries |
-| `classical-modern` | texts | attribution | not yet wired | not synced yet |
-| `menggu-ziyun` | dictionary | attribution | not yet wired | not synced yet |
-| `zhongyuan` | dictionary | open | not yet wired | not synced yet |
-| `qieyun-restored` | dictionary | attribution | not yet wired | not synced yet |
+| `tshet-uinh` | dictionary | open | wired · manual | 42,563 entries |
+| `classical-modern` | texts | attribution | wired · manual | 14,608 docs / 1,944,934 passages |
+| `menggu-ziyun` | dictionary | attribution | wired · manual | 9,446 entries |
+| `zhongyuan` | dictionary | open | wired · manual | 5,877 entries |
+| `qieyun-restored` | dictionary | attribution | wired · manual | 11,158 entries |
 | `unihan` | dictionary | open | wired · manual | 102,998 entries |
 | `hdic` | dictionary | attribution | wired · manual | 96,414 entries |
 | `babelstone-ids` | dictionary | open | wired · manual | 97,680 entries |
@@ -35,7 +35,7 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `tls` | dictionary | attribution | wired · manual | 23,179 entries |
 | `viet-wikisource` | texts | attribution | wired · manual | 32 docs / 7,674 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 30 August 2026)</span>: `zho` 200,678 · `lzh` 72,916 · `jpn` 32,607 · `ltc` 30,295 · `och` 28,138 · `pli` 7,288 · `sga` 6,566 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 … and 28 more (`nabu axis sinitic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 31 August 2026)</span>: `zho` 216,001 · `lzh` 80,220 · `ltc` 58,680 · `jpn` 32,607 · `och` 28,138 · `cmn` 7,304 · `pli` 7,288 · `sga` 6,566 · `gem-pro` 5,717 · `gmw-pro` 5,551 … and 29 more (`nabu axis sinitic` lists all).
 
 ## The desk's instruments
 

@@ -39,7 +39,7 @@ class ClassicalModernTest < Minitest::Test
     entry = registry["classical-modern"]
     refute_nil entry, "config/sources.yml must register classical-modern"
     assert_equal Nabu::Adapters::ClassicalModern, entry.adapter_class
-    refute entry.wired, "wired stays false until the owner-fired first sync verifies live"
+    assert entry.wired, "live (first sync verified + owner sign-off 2026-08-30; flipped 2026-08-31)"
     assert_equal "manual", entry.sync_policy
     assert entry.translations, "the modern side is the point of a parallel corpus"
     assert_equal ["-cmn"], entry.siblings
