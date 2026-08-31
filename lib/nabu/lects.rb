@@ -241,6 +241,28 @@ module Nabu
       resolution(code, source: source, urn: urn).id
     end
 
+    # One anchor's minted extension tails (P90-5): the stage/variety tags
+    # that form lect ids beyond the bare code (grc → hom cla koi …).
+    Ladder = Data.define(:anchor, :name, :stages, :varieties)
+
+    # The registry-extension census (P90-5, the `language --list` gap):
+    # every anchor carrying minted stages or varieties, anchor-tag order —
+    # exactly the id vocabulary the cards, `search --lect` and the postures
+    # accept beyond bare codes.
+    def ladders
+      @anchors.filter_map do |tag, anchor|
+        stages = (anchor["stages"] || {}).keys
+        varieties = (anchor["varieties"] || {}).keys
+        next nil if stages.empty? && varieties.empty?
+
+        Ladder.new(anchor: tag, name: anchor["name"], stages: stages, varieties: varieties)
+      end.sort_by(&:anchor)
+    end
+
+    # The registry's GLOBAL scripts table, tag => row (P90-5: the script
+    # card's registry line reads it).
+    def script_rows = @scripts
+
     # The with-basis variant (P81 U-5): the same precedence walk, returning
     # a Resolution so the facet materializer can record WHERE the id came
     # from (class Resolution note). #resolve delegates here — one walk,

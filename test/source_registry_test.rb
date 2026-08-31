@@ -1109,7 +1109,7 @@ class SourceRegistryTest < Minitest::Test
                     "the full membership (CLI/sync scope) still carries it"
     refute_includes registry.public_axis_members("etym"), "titus-avestan",
                     "the PUBLIC etym membership drops the grant-gated row"
-    assert_equal %w[titus-avestan], registry.blocked_axis_members("etym")
+    assert_equal %w[titus-avestan titus-osco-umbrian], registry.blocked_axis_members("etym")
   end
 
   # The manifest's display posture: nc (servable + credited, not hidden) and a
