@@ -23,7 +23,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these twelve answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 30 August 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 31 August 2026)</span> |
 |---|---|---|---|---|
 | `e84000` | texts | nc | wired · manual | 388 docs / 124,223 passages |
 | `otdo` | texts | attribution | wired · manual | 413 docs / 13,593 passages |
@@ -34,11 +34,11 @@ A source wears every desk it serves — these twelve answer this desk. Holdings 
 | `derge-tengyur` | texts | open | wired · manual | 3,362 docs / 897,142 passages |
 | `mvp` | dictionary | open | wired · manual | 9,379 entries |
 | `tibetan-verbs` | dictionary | open | wired · manual | 2,491 entries |
-| `monlam-lexicon` | dictionary | attribution | not yet wired | not synced yet |
+| `monlam-lexicon` | dictionary | attribution | wired · manual | 449,829 entries |
 | `wiktionary-bo` | dictionary | attribution | wired · manual | 3,651 entries |
 | `nabu-data` | feature module | attribution | wired · manual | nothing held yet |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 30 August 2026)</span>: `san` 9,379 · `bod` 6,142 · `xct` 4,564 · `otb` 410 · `en` 388 · `xzh` 5 · `eng` 1.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 31 August 2026)</span>: `bod` 455,971 · `san` 9,379 · `xct` 4,564 · `otb` 410 · `en` 388 · `xzh` 5 · `eng` 1.
 
 ## The desk's instruments
 
