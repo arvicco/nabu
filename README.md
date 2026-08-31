@@ -25,8 +25,8 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-08-31** the shelves hold **1,066,604 documents /
-102,417,125 passages** in 154 language codes — from proto-cuneiform
+As of **2026-08-31** the shelves hold **1,066,990 documents /
+102,418,822 passages** in 154 language codes — from proto-cuneiform
 tablets of the late 4th millennium BCE to Meiji-era Japanese. The
 August waves crossed the hundred-million-passage line: **EEBO-TCP
 Phase I** brought the early-modern English print library whole (24.1M
@@ -293,7 +293,7 @@ abuts Lebanon."
 
 ## What's on the shelves
 
-A representative slice, not the whole registry (142 corpus sources as of
+A representative slice, not the whole registry (143 corpus sources as of
 2026-08-31); each row carries the date its counts were read. The full
 shelf map with research uses per shelf is
 **[docs/library.md](docs/library.md)**. Rows below without a date are the
@@ -319,17 +319,19 @@ shelf map with research uses per shelf is
 | Germanic wave | Menotec Old Norwegian treebanks + Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German (355k gold manuscript lines), Rundata runic inscriptions in five text lanes (2026-07-22) | 31,057 / 409,947 | nc / CC BY / CC BY-SA / odbl |
 | Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik + the Hebrew/Egyptian/Slovene desks and the Sino-Japanese lexicography (Unihan, KANJIDIC2/JMdict, HDIC, Guangyun) (`nabu define` / `etym`) | 1,310,763 entries / 56 shelves (2026-07-22) | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-The registry holds **142 corpus sources + 5 local shelves + 20 feature
+The registry holds **143 corpus sources + 5 local shelves + 20 feature
 modules** (the kind-split census, 2026-08-31 — `sources.yml`
 distinguishes what a row IS: a corpus that mints catalog rows, an
 owner-authored local memory shelf, or machinery like `osl` (the Oracc
 Sign List behind `nabu signs`), `nabu-data` (Nabu's own published
 datasets, consumed back) and `pedecerto`/`bridging` that fetches
-reference data but mints no documents of its own). All 142 corpus
+reference data but mints no documents of its own). All 143 corpus
 sources are **wired** — adapter built and first sync verified
-(2026-08-31); the newest arrival is `seal` — Sources of Early
-Akkadian Literature, 408 compositions at line grain under the
-editors' written personal-research grant — after the August wave
+(2026-08-31); the newest arrival is `titus-osco-umbrian` — the
+complete Iguvine Tables with the Oscan inscriptions, 386 documents
+at line grain under a personal grant — a day behind `seal` (Sources
+of Early Akkadian Literature, 408 compositions, the editors'
+written personal-research grant), after the August wave
 (the Old Mandarin rhyme books, the Classical↔Modern Chinese parallel
 corpus, the Monlam Tibetan lexicon, DACON's Newar, EEBO-TCP,
 the Corpus of Middle English, Menota, and the INT Dutch corpora)
