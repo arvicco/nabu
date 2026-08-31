@@ -60,20 +60,25 @@ module Nabu
       # census: 426 anchors over 20 sampled pages, 2026-08-31
       MAX_LEVELS = 5
 
-      # Transliteration lanes → the language claim they carry.
-      TRANSLIT_LANES = { "weum16" => "xum", "weos16" => "osc" }.freeze
+      # Transliteration lanes → the language claim they carry. `weal16` is
+      # the Rechtsdokumente section's archaic-Latin comparanda lane
+      # (first-sync census 2026-08-31: "in hoce loucarid…", MARS-1).
+      TRANSLIT_LANES = { "weum16" => "xum", "weos16" => "osc", "weal16" => "lat" }.freeze
 
       # Original-script lanes → [language claim, alphabet].
       ORIGINAL_LANES = {
         "umo16" => %w[xum italic], "weuml16" => %w[xum latin],
         "oso16" => %w[osc italic], "weosl16" => %w[osc latin],
-        "gros16" => %w[osc greek]
+        "gros16" => %w[osc greek], "wealo16" => %w[lat latin]
       }.freeze
 
-      # A span id shaped like a content lane. Anything matching this that the
-      # two vocabularies do not know is a NEW lane — quarantine, never skip.
-      # (`wec…` ids are citation headers, excluded by name.)
-      LANE_SHAPE = /\A(?:we(?!c)[a-z]+|umo|oso|gros)\d+\z/
+      # A span id shaped like a content lane: content lanes ALL carry the
+      # 16 size suffix (full-corpus census over 390 pages, 2026-08-31);
+      # `wec…`/`wed…` 22/12-size spans are citation headers and the
+      # corpus-tail abbreviations index — apparatus, excluded. Anything
+      # matching this that the two vocabularies do not know is a NEW lane —
+      # quarantine, never skip.
+      LANE_SHAPE = /\A(?:we(?!c)[a-z]+|umo|oso|gros)16\z/
 
       # Parse one page's HTML into ordered text-bearing sections. Raises
       # Nabu::ParseError on a structural surprise: an over-deep anchor, lane

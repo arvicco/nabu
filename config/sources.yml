@@ -2964,7 +2964,9 @@ titus-osco-umbrian:   # P90-2, 02-sources row 188
   # Grant-gated PRIVATE research material, the titus-avestan posture verbatim
   # (the fetch right is the owner's personal grant, not conveyed by a clone):
   availability: blocked
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true    # first real sync 2026-08-31 (owner-fired, 390 pages); verified after the
+                   # census fixes: 386 docs / 1,697 passages (osc 323 · xum 62 · lat 1) /
+                   # 0 quarantines / 4 photo-only stubs skipped-by-rule / 0 unrecognized
   # TITUS Osco-Umbrian Corpus (titus.uni-frankfurt.de/texte/etcs/ital/oskumb/):
   # text entry J. Gippert (Frankfurt 1991) and V. Slunečko (Praha 1995), TITUS
   # version with Gippert's synoptical arrangement of the original scripts. One

@@ -55,7 +55,54 @@ class TitusOscoUmbrianTest < Minitest::Test
 
   def test_discover_yields_one_document_per_text_page_and_skips_the_frameset
     pages = @adapter.discover(FIXTURES).map { |ref| ref.metadata.fetch("page") }.sort
-    assert_equal %w[oskum001 oskum012 oskum014 oskum150], pages
+    assert_equal %w[oskum001 oskum012 oskum014 oskum043 oskum150 oskum377], pages
+  end
+
+  # --- the first-sync census fixes (2026-08-31, all 390 real pages) ---------
+
+  def test_photo_stub_pages_skip_at_discovery_with_accounting
+    pages = @adapter.discover(FIXTURES).map { |ref| ref.metadata.fetch("page") }
+    refute_includes pages, "oskum069", "a page with no content lanes is a photograph pointer, not text"
+    skips = @adapter.discovery_skips(FIXTURES)
+    assert_equal 1, skips.skipped_by_rule
+    assert_equal 0, skips.unrecognized
+    assert_match(/photo-only/, skips.notes.join(" "))
+  end
+
+  def test_paren_protected_anchor_components_survive_the_underscore_split
+    # The real SAMN-8 anchor embeds an underscore INSIDE parentheses —
+    # `Inscr.OU_BaI_SAMN-8_(&_HeI)__1` is five levels, not six.
+    document = documents_by_page.fetch("oskum043")
+    assert_equal "osc", document.language
+    assert_equal 2, document.passages.size, "SAMN-8 (& HeI) has 2 lines"
+    refute_nil passage("urn:nabu:titus-osco-umbrian:oskum043:BaI.SAMN-8.(&_HeI).1")
+  end
+
+  def test_archaic_latin_rechtsdokumente_page_parses_as_lat
+    # The Rechtsdokumente section carries the edition's Latin comparanda in
+    # its own lane pair (weal/wealo) — archaic Latin, honestly claimed lat.
+    document = documents_by_page.fetch("oskum377")
+    assert_equal "lat", document.language
+    assert_equal 8, document.passages.size, "MARS-1 has 8 lines"
+    line = passage("urn:nabu:titus-osco-umbrian:oskum377:ReD.MARS-1.1")
+    assert_match(/in hoce loucarid stircus/, line.text)
+    assert_equal "latin", line.annotations["alphabet"]
+    assert_match(/IN HOCE LOUCARID/, line.annotations["original"])
+  end
+
+  def test_size22_apparatus_lanes_are_excluded_not_errors
+    # The corpus-tail abbreviations index rides `wed22` — citation-size
+    # apparatus, never lane text (content lanes all carry the 16 suffix).
+    html = <<~HTML
+      <html><body>
+      <span id=h5>Line: 1<A NAME="Inscr.OU_Var_X-1__1">&nbsp;</A></span>
+      <span id=weos16>arruntiis</span>
+      <span id=wed22>VERZEICHNIS DER ABKÜRZUNGEN</span>
+      </body></html>
+    HTML
+    sections = Nabu::Adapters::TitusOscoUmbrianParser.parse(html)
+    assert_equal 1, sections.size
+    assert_equal "arruntiis", sections.first.text
   end
 
   # --- the four page classes (real full-page counts, censused 2026-08-31) ---

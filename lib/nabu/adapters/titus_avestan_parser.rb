@@ -123,17 +123,19 @@ module Nabu
               "titus-avestan: anchor #{name.inspect} has #{comps.size} components (expected 1..#{MAX_LEVELS})"
       end
 
-      # Split an anchor tail on underscores — except inside square brackets:
-      # some anchors embed a bracketed parallel citation whose own underscores
-      # are not level separators (P43-i2; the real
+      # Split an anchor tail on underscores — except inside square brackets
+      # or parentheses: some anchors embed a grouped citation whose own
+      # underscores are not level separators (P43-i2: the real
       # `FrW_10_39[_Yt._22,_39]_a` is four levels, its third component
-      # carrying "[= Yt. 22,39]" verbatim).
+      # carrying "[= Yt. 22,39]" verbatim; P90 first-sync census: the
+      # Osco-Umbrian `BaI_SAMN-8_(&_HeI)__1` is five levels, its third
+      # component "(&_HeI)" whole).
       def self.split_components(tail)
         parts = [+""]
         depth = 0
         tail.each_char do |ch|
-          depth += 1 if ch == "["
-          depth -= 1 if ch == "]"
+          depth += 1 if "[(".include?(ch)
+          depth -= 1 if "])".include?(ch)
           if ch == "_" && depth.zero?
             parts << +""
           else
