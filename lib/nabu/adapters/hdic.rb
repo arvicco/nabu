@@ -55,7 +55,7 @@ module Nabu
     # long carried the CC BY-NC-SA 4.0 LEGALCODE instead — a template
     # mismatch introduced by upstream commit 72cfe74 (2022-02-02,
     # "ライセンスの記述を変更"), journaled here since P32-4 with an owner
-    # gate. RESOLVED UPSTREAM 2026-08-30 (thread №88-3): Prof. Ikeda
+    # gate. RESOLVED UPSTREAM 2026-08-30: Prof. Ikeda
     # confirmed by email that "CC BY-SA 4.0 is the governing license,
     # without any NonCommercial restriction" — the LICENSE legalcode was
     # an unintended leftover, and both shikeda/HDIC and shikeda/krm have

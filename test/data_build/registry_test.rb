@@ -210,7 +210,7 @@ class DataBuildRegistryTest < Minitest::Test
     assert_equal "roa-opt-cantigas", cantigas.package_name
     assert_match(/first full-corpus re-publication/i, cantigas.rationale,
                  "the milestone is stated where the owner reads it")
-    assert_match(/№45-2/, cantigas.rationale,
+    assert_match(/any-use grant of 2026-07-27/, cantigas.rationale,
                  "the written-grant basis is stated where the owner reads it")
 
     assignments = Nabu::DataBuild.feature("mul/lect-assignments")

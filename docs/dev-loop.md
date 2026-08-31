@@ -160,12 +160,10 @@ live corpus does. Standing rules:
    — a stamped number that has drifted materially is a review question
    for exactly the constant beside it; sites stamped while an index was
    mid-rebuild (the stamp says so) are re-measured first.
-6. **Inbox check (standing, 2026-08-28)**: at every phase gate — and
-   whenever the owner asks — check the Fastmail mailbox (`mcp__fastmail__*`)
-   for replies in tracked threads, update `.docs/email-register.md`, and
-   prepare any new drafts the replies call for. **Draft only; the owner
-   sends.** Surface any draft unsent for 2+ days in the gate's OWNER
-   ACTIONS. Full protocol: `.docs/external-communications.md`.
+6. **Local gate duties (standing, 2026-08-28)**: the owner's untracked
+   protocol defines further duties that run at every phase gate; their
+   definition and state live outside the public tree by design
+   (public-surface hygiene, 2026-08-30).
 
 ## 7. Phase & packet breakdown
 

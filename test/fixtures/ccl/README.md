@@ -69,9 +69,41 @@ Trimmed line-verbatim slice of ORAEC's Coptic-etymologies crosswalk.
   TEI — exercises the unused-row path), C9 (demotic-only), C74 (negative
   demotic id), C1494 and C1495 (both ancestors — the ⲕⲁϩ cluster).
 
+## kellia/egyptian_etymologies.tab (P89-2, №R-52 (c))
+
+Trimmed line-verbatim slice of the **KELLIA etymologies tab** —
+`data/egyptian_etymologies.tab` in github.com/KELLIA/dictionary, the
+Coptic Dictionary Online's own egy↔cop table.
+
+- **Retrieved:** 2026-08-29 (the 88-R2 scout), from
+  `https://raw.githubusercontent.com/KELLIA/dictionary/master/data/egyptian_etymologies.tab`
+  (392,551 bytes, sha256
+  `7962c6eb9ed29b42ae63a3c3afe06602a51888fe80badaa99314e71b72a72487`);
+  byte-identical at release tag **v3.0.0** (tagged 2026-08-26), which is
+  what the adapter fetches (pinned URL).
+- **License (repo README, verbatim):** "Lexicon data licensed CC BY-SA
+  4.0, software under the Apache 2.0 license" — the tab is data → CC
+  BY-SA 4.0.
+- **Columns (header row):** tla (C-id) · cop · egy_num/egy_lemma ·
+  demo_num/demo_lemma · english · german · tla_link/tla_link_d · MT;
+  `NA` marks absence. Full census (2026-08-30, re-run verbatim):
+  **2,310 data rows**, a STRICT SUPERSET of the ORAEC crosswalk —
+  2,050/2,177 shared rows identical after id normalization (egy_num
+  verbatim; demo `d<n>` ≡ ORAEC bare `<n>` ×1,607, `dm<n>` ≡ ORAEC
+  negative `-<n>` ×220), 127 fill blanks ORAEC left, ZERO conflicts,
+  +134 C-ids ORAEC lacks; every row carries a transcription and an
+  EN + DE gloss.
+- **Trim recipe:** header + the 6 rows (upstream order, bytes verbatim)
+  whose C-id is one of C2 (KELLIA-only, dm-prefixed demotic), C5
+  (hieroglyphic match + enrichment), C9 (d-prefixed demotic match), C74
+  (dm1427 ≡ ORAEC −1427), C1494 and C1495 (both-ancestor matches):
+  `grep -E '^(tla|C2|C5|C9|C74|C1494|C1495)\t' egyptian_etymologies.tab`.
+
 ## Attribution
 
 Burns, Dylan Michael; Feder, Frank; John, Katrin; Kupreyev, Maxim:
 *Comprehensive Coptic Lexicon: Including Loanwords from Ancient Greek*
 (v1.2, 2020), BBAW / FU Berlin, DOI 10.17169/refubium-27566. Crosswalk:
 ORAEC — Open Richly Annotated Egyptian Corpus, `coptic_etymologies`.
+Etymologies tab: KELLIA — Koptische/Coptic Electronic Language and
+Literature International Alliance, `KELLIA/dictionary` v3.0.0.

@@ -11,7 +11,7 @@ module Nabu
     # High-German-before-print stretch of the germanic axis. First registrant
     # of the cora-tei family (the CorA-derived DDD TEI dialect); ReN (Middle
     # Low German) is the second (P46-5, its own dialect subclass); ReA (OHG +
-    # Old Saxon) joins when its license reply lands (backlog №40-1).
+    # Old Saxon) joins when its license reply lands (asked by email 2026-07-22).
     #
     # == Identity (FROZEN minting)
     #

@@ -43,7 +43,9 @@ class RebuildIncrementalTest < Minitest::Test
     full_rebuilder.run
 
     with_db do |db|
-      stamps = db[:derivation_stamps].order(:slug).all
+      # Per-source stamps; the __corpus-builders__ sentinel (P89-1) rides the
+      # same table and has its own test below.
+      stamps = db[:derivation_stamps].exclude(slug: builders_slug).order(:slug).all
       assert_equal(%w[alpha beta lexica], stamps.map { |row| row[:slug] })
       stamps.each do |row|
         assert_match(/\A\h{64}\z/, row[:fingerprint])
@@ -126,7 +128,10 @@ class RebuildIncrementalTest < Minitest::Test
 
     assert_equal %w[beta], result.outcomes.map(&:slug)
     assert_equal %w[alpha lexica], result.cleans.map(&:slug).sort
-    with_db { |db| assert_equal 3, db[:derivation_stamps].count, "the re-derive re-stamps" }
+    with_db do |db|
+      assert_equal 3, db[:derivation_stamps].exclude(slug: builders_slug).count,
+                   "the re-derive re-stamps"
+    end
   end
 
   def test_a_fold_wiring_change_dirties_every_source
@@ -172,6 +177,145 @@ class RebuildIncrementalTest < Minitest::Test
     verdicts = plan.verdicts.to_h { |v| [v.slug, [v.state, v.reason]] }
     assert_equal [:dirty, "fold(jpn.rb)"], verdicts.fetch("gamma")
     assert_equal [:clean, nil], verdicts.fetch("alpha")
+  end
+
+  # -- P89-1 (№R-54 (c)): the corpus-builder carve-out ---------------------
+
+  def test_full_rebuild_mints_the_builders_sentinel
+    full_rebuilder.run
+
+    with_db do |db|
+      row = db[:derivation_stamps].first(slug: builders_slug)
+      refute_nil row, "the full rebuild must mint the __corpus-builders__ sentinel"
+      assert_equal Nabu::DerivationFingerprint.builders_digest, row[:fingerprint]
+    end
+  end
+
+  def test_a_builder_file_change_reruns_corpus_builders_without_dirtying_sources
+    full_rebuilder.run
+    before_passages = raw_rows(:passages)
+
+    result = with_changed_builder_file("metadata_dates.rb") { incremental_rebuilder.run }
+
+    assert_empty result.outcomes, "a builder-only edit must not replay any source (№R-54)"
+    assert_equal %w[alpha beta lexica], result.cleans.map(&:slug).sort
+    refute_nil result.axes, "the covering mechanism: builders re-run on their own digest drift"
+    refute_nil result.facets
+    assert_equal before_passages, raw_rows(:passages), "no source row may move"
+
+    # The sentinel re-minted at the drifted digest: a second run inside the
+    # same diversion is fully clean, builders included.
+    second = with_changed_builder_file("metadata_dates.rb") { incremental_rebuilder.run }
+    assert_empty second.outcomes
+    assert_nil second.axes, "builders must not re-run once their digest is stamped"
+  end
+
+  def test_dry_run_reports_builders_drift
+    full_rebuilder.run
+
+    plan = with_changed_builder_file("metadata_dates.rb") { incremental_rebuilder.plan }
+
+    assert plan.builders_dirty, "the dry run must announce the builders re-run honestly"
+    assert(plan.verdicts.all? { |v| v.state == :clean }, "no source verdict may dirty")
+    refute incremental_rebuilder.plan.builders_dirty, "clean when the digest matches the sentinel"
+  end
+
+  # -- P89-1 (№R-54 (b)): the --trust-derivations bridge -------------------
+
+  def test_trust_derivations_restamps_shared_core_drift_without_replay
+    full_rebuilder.run
+    before_passages = raw_rows(:passages)
+    before_fts = fts_snapshot
+
+    result = with_changed_shared_core do
+      incremental_rebuilder(trust_derivations: true, code_voucher: voucher(true)).run
+    end
+
+    assert_empty result.outcomes, "trust must not replay a shared-core-only drift"
+    assert_equal %w[alpha beta lexica], result.trusted.map(&:slug).sort
+    assert_equal before_passages, raw_rows(:passages), "trust must not touch a row"
+    assert_equal before_fts, fts_snapshot, "trust must not touch the index"
+
+    # The re-minted stamps hold: a PLAIN incremental inside the same
+    # diversion sweeps clean — the ~16 h wall is paid off in stamps alone.
+    followup = with_changed_shared_core { incremental_rebuilder.run }
+    assert_empty followup.outcomes
+    assert_equal %w[alpha beta lexica], followup.cleans.map(&:slug).sort
+  end
+
+  def test_trusted_sources_leave_a_durable_stage_line_as_they_happen
+    # Owner feedback 2026-08-30: the 142-source trust sweep was invisible
+    # in the transcript — only the end summary carried it. Each trust now
+    # opens a stage (which the reporter closes durably at the next one).
+    full_rebuilder.run
+    labels = []
+    probe = Nabu::ProgressReporter.new(on_stage: ->(label, _eta) { labels << label })
+
+    with_changed_shared_core do
+      incremental_rebuilder(trust_derivations: true, code_voucher: voucher(true)).run(progress: probe)
+    end
+
+    %w[alpha beta lexica].each do |slug|
+      assert(labels.any? { |l| l.include?(slug) && l.include?("trusted") },
+             "#{slug}'s trust must announce as a stage; saw: #{labels.inspect}")
+    end
+  end
+
+  def test_trust_derivations_replays_when_the_voucher_cannot_vouch
+    # The tshet-uinh shape: the source's OWN parser files changed after the
+    # stamp — trust must fall through to an honest replay, never a re-stamp.
+    full_rebuilder.run
+
+    result = with_changed_shared_core do
+      incremental_rebuilder(trust_derivations: true, code_voucher: voucher(false)).run
+    end
+
+    assert_equal %w[alpha beta lexica], result.outcomes.map(&:slug).sort
+    assert_empty result.trusted
+  end
+
+  def test_trust_vouches_against_the_eldest_stamp_never_each_stamps_own_time
+    # The lying-stamp hazard (the 2026-08-29 tshet-uinh specimen): a long
+    # run stamps late from disk bytes while its rows come from code loaded
+    # at start. The voucher must therefore be asked about the ELDEST stamp
+    # (≈ run start), not the trusted source's own stamped_at.
+    full_rebuilder.run
+    eldest = Time.now - 86_400
+    with_db(write: true) do |db|
+      db[:derivation_stamps].where(slug: "alpha").update(stamped_at: eldest)
+    end
+
+    asked = []
+    probe = Object.new.tap do |stub|
+      stub.define_singleton_method(:vouches?) do |since:, **|
+        asked << since
+        true
+      end
+    end
+    with_changed_shared_core do
+      incremental_rebuilder(trust_derivations: true, code_voucher: probe).run
+    end
+
+    refute_empty asked
+    asked.each do |since|
+      assert_in_delta eldest.to_f, Time.parse(since.to_s).to_f, 1.0,
+                      "every vouch must use the eldest stamp as its horizon"
+    end
+  end
+
+  def test_trust_derivations_never_trusts_canonical_or_fold_drift
+    add_jpn_source
+    full_rebuilder.run
+    write_canonical("beta", "b.txt" => "Odyssey\nἄνδρα πολύτροπον\n")
+
+    result = with_changed_fold_file("jpn.rb") do
+      incremental_rebuilder(trust_derivations: true, code_voucher: voucher(true)).run
+    end
+
+    assert_equal %w[beta gamma], result.outcomes.map(&:slug).sort,
+                 "canonical drift (beta) and fold drift (gamma) are real data changes — always replayed"
+    assert_empty result.trusted
+    assert_equal %w[alpha lexica], result.cleans.map(&:slug).sort
   end
 
   def test_a_schema_behind_catalog_refuses_incremental_loudly
@@ -305,8 +449,31 @@ class RebuildIncrementalTest < Minitest::Test
     Nabu::Rebuild.new(config: config(db_dir: db_dir), registry: registry)
   end
 
-  def incremental_rebuilder
-    Nabu::IncrementalRebuild.new(config: config, registry: registry)
+  def incremental_rebuilder(trust_derivations: false, code_voucher: nil)
+    Nabu::IncrementalRebuild.new(config: config, registry: registry,
+                                 trust_derivations: trust_derivations, code_voucher: code_voucher)
+  end
+
+  def builders_slug = Nabu::Store::DerivationStamp::BUILDERS_SLUG
+
+  # A CodeVoucher stand-in with a fixed verdict (the git-backed real one has
+  # its own test file).
+  def voucher(verdict)
+    Object.new.tap do |stub|
+      stub.define_singleton_method(:vouches?) { |**| verdict }
+    end
+  end
+
+  # Simulate a shared-core code change (the №R-54 type specimen: a store/
+  # file edited mid-flight) by diverting the private instance digest.
+  def with_changed_shared_core
+    original = Nabu::DerivationFingerprint.instance_method(:shared_core_digest)
+    Nabu::DerivationFingerprint.define_method(:shared_core_digest) { "diverted-core" }
+    Nabu::DerivationFingerprint.send(:private, :shared_core_digest)
+    yield
+  ensure
+    Nabu::DerivationFingerprint.define_method(:shared_core_digest, original)
+    Nabu::DerivationFingerprint.send(:private, :shared_core_digest)
   end
 
   def catalog_path = config.catalog_path
@@ -329,6 +496,18 @@ class RebuildIncrementalTest < Minitest::Test
         adapter: JpnTestAdapter
     YAML
     write_canonical("gamma", "g.txt" => "草枕\n學問はどこまでも\n")
+  end
+
+  # The builders-digest counterpart of with_changed_fold_file (P89-1).
+  def with_changed_builder_file(basename)
+    singleton = Nabu::DerivationFingerprint.singleton_class
+    original = Nabu::DerivationFingerprint.method(:builder_file_digest)
+    singleton.define_method(:builder_file_digest) do |path|
+      File.basename(path) == basename ? "changed-#{basename}" : original.call(path)
+    end
+    yield
+  ensure
+    singleton.define_method(:builder_file_digest, original)
   end
 
   # Simulate a content change to ONE fold file (no minitest/mock in this

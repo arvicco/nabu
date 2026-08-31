@@ -3,7 +3,7 @@
 Retrieved 2026-08-13 from github.com/hispanicseminary/OSTA (main branch;
 the Zenodo deposit 10.5281/zenodo.18931376 v1.0.0 archives the same
 data — the license anchor: CC BY-NC-SA 4.0, per the record and the
-№45-1 grant thread).
+2026-08-13 grant correspondence).
 
 - `transcriptions/TEXT.RHJ.txt` — COMPLETE real file (1.7 kB, the
   corpus's smallest): Glosa al romance "Rey que no hace justicia"
@@ -28,7 +28,7 @@ data — the license anchor: CC BY-NC-SA 4.0, per the record and the
   cancionero; RHJ and AC2 have no codex row upstream — the absent-codex
   witnesses.
 
-Per-text citation identifiers follow the №45-1 ruling: TEXT.xxx.txt.
+Per-text citation identifiers follow the grant ruling: TEXT.xxx.txt.
 
 P77-r7 (the first-sync hardening, 2026-08-13) added three real-cut
 witnesses from the live corpus: `TEXT.ACE.txt` (the `{MIN=.}` =-tag

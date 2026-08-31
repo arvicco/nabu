@@ -16,7 +16,7 @@ module Nabu
     # al., IEM/FCSH-NOVA) projected from the catalog into four tables. The
     # scholarly database is superb and browser-only — no TEI, no export, no
     # API — so this dataset is the corpus's first machine-readable edition,
-    # published under the coordinator's written any-use grant (№45-2) with
+    # published under the coordinator's written any-use grant of 2026-07-27 with
     # the project's own citation format riding every file.
     #
     # == The tables (one edition, four projections)
@@ -383,7 +383,7 @@ module Nabu
       end
 
       # The project's own citation format rides verbatim — the grant's one
-      # condition (№45-2). Referenced lazily so the builder file stays
+      # condition (the 2026-07-27 grant). Referenced lazily so the builder file stays
       # loadable without the adapter graph.
       def citation_format
         Nabu::Adapters::Cantigas::CITATION
@@ -400,7 +400,7 @@ module Nabu
             "address" => "Lisboa",
             "howpublished" => "https://cantigas.fcsh.unl.pt",
             "note" => "Free with attribution — the coordinator's written grant (Graça Videira " \
-                      "Lopes, 2026-07-27, №45-2): \"Our site is free for all. So, with full " \
+                      "Lopes, by email, 2026-07-27): \"Our site is free for all. So, with full " \
                       "attribution, you can do whatever you like with the data.\" The project's " \
                       "own citation format: #{citation_format}"
           }
@@ -453,7 +453,7 @@ module Nabu
 
           This corpus is published with the written permission of the
           project's coordinator (Graça Videira Lopes, 2026-07-27, license
-          thread №45-2): "Our site is free for all. So, with full
+          email of 2026-07-27): "Our site is free for all. So, with full
           attribution, you can do whatever you like with the data." Use of
           this dataset therefore carries the project's own citation format,
           verbatim (fill the retrieval-date slot with the date you took this

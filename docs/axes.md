@@ -171,7 +171,7 @@ The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — it
 
 The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL's fragments, the Copenhagen Ugaritic Corpus (alphabetic cuneiform), and TLHdig shared with the Hittitologist.
 
-**Members** (13): `ud`, `oracc`, `wiktionary-sux`, `cigs`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`, `rsti`, `osl`, `edubba-overlay`, `achemenet`
+**Members** (14): `ud`, `oracc`, `wiktionary-sux`, `cigs`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`, `rsti`, `osl`, `edubba-overlay`, `achemenet`, `seal`
 
 ### egyptian
 

@@ -14,7 +14,7 @@ require_relative "version"
 
 module Nabu
   # Polite session-based crawl for the Menota archive (P82-1, queue Q42 /
-  # grant №77-1) — the CorpusCorporumFetch sibling for the Corpuscle
+  # grant of 2026-08-20) — the CorpusCorporumFetch sibling for the Corpuscle
   # (korpuskel) REST API behind the catalogue SPA at
   # clarino.uib.no/menota/catalogue/menota (all endpoints verified live
   # 2026-08-23; the InessFetch cousin — same CLARINO house, same ephemeral
@@ -34,7 +34,7 @@ module Nabu
   # == The blessing (why a crawl at all)
   #
   # clarino.uib.no's robots.txt reads `User-agent: * / Disallow: /`, but the
-  # crawl is explicitly upstream-blessed: Stegmann (2026-08-20, the №77-1
+  # crawl is explicitly upstream-blessed: Stegmann (2026-08-20, the grant
   # grant) — "we will not keep you from scraping 😉" until their bulk
   # endpoint lands. When a bulk endpoint appears, this crawler RETIRES.
   # The thank-you's promises are requirements: sequential requests one
@@ -88,7 +88,7 @@ module Nabu
     # The MUFI entity table's landing name (the DOCTYPE dependency).
     ENTITIES_FILE = "menota-entities.txt"
 
-    # The main archive corpus — the №77-1 scope. The five Corpuscle
+    # The main archive corpus — the granted scope. The five Corpuscle
     # siblings (menota-test, menota-rune, menota-lln, menota-diploma,
     # menota-trans) stay deliberately out of v1.
     CORPUS = "menota"

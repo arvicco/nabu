@@ -737,7 +737,7 @@ glossary closing the `define` loop for the Tibetan desk.
 ## 8ad. The granted sources (`cantigas`, `rsti`; P55, flipped live 2026-07-31)
 
 Both shelves rest on written grants obtained through the license
-correspondence (№45-2, №23) — the first wave built entirely on personal
+correspondence — the first wave built entirely on personal
 answers from the projects' own coordinators.
 
 ### `cantigas` — Cantigas Medievais Galego-Portuguesas (Projeto Littera)
@@ -913,7 +913,7 @@ parallel data.
 | **Category** | The two 2026-08-20 correspondence grants become shelves: the Medieval Nordic manuscript archive and the Middle English corpus behind the Middle English Dictionary |
 | **Languages** | Old Icelandic (`isl`), Old Norwegian (`nor` → `no:old` via the №R-42 nabu-lects v1.1.0 mints), Old Swedish (`swe`), Old Danish (`dan` → `da:old`), Old Norse (`non`), Middle English (`enm`) — `nor`, `dan`, `onw`, `enm` new codes to the library |
 | **Size** | `menota`: **91 docs / 241,628 passages** — the Menota archive (Univ. of Bergen/CLARINO): 91 medieval Nordic manuscripts in multi-level Menota-TEI (facsimile/diplomatic/normalized per word; stored text = the diplomatic reading at manuscript-line grain, MUFI entities resolved) — Laxdæla saga, the Codex Wormianus (with its self-declared runic entities), Konungs skuggsjá, the Landslǫg law cluster, the Old Norwegian homily book, Elis saga, c. 1200–1700, all dated by origDate; 91/91 held after the P82-r1 quarantine recovery (+8 docs incl. Laxdæla — DOCTYPE internal-subset entities, comment-borne false references, single-level texts). `cme`: **297 docs / 1,355,279 passages** — the Corpus of Middle English Prose and Verse (Univ. of Michigan, the MED's quotation base), May-2026 TCP-schema normalization: Chaucer, Sir Gawain, the York and Towneley cycles, Piers Plowman versions, Ayenbite, wills and gild records, over the NEW `tcp-xml` streaming family — the exact machinery a future EEBO-TCP wave would ride |
-| **Licenses** | menota CC BY-SA 4.0 (catalogue-censused on all 91 + per-file availability; the crawl upstream-blessed, №77-1) → `attribution`; cme "no restrictions on use or reuse" + grant №77-2 → `open` |
+| **Licenses** | menota CC BY-SA 4.0 (catalogue-censused on all 91 + per-file availability; the crawl upstream-blessed 2026-08-20) → `attribution`; cme "no restrictions on use or reuse" + the 2026-08-20 grant → `open` |
 
 **Research uses:** Norse philology at manuscript grain — the diplomatic
 readings with lemma/morphology annotations beside Menotec (§8w) and the
@@ -930,7 +930,7 @@ EEBO door open.
 | **Category** | Everything printed in England, 1473–1700, that the Text Creation Partnership hand-keyed — the early-modern English corpus, and the library's million-crossing wave |
 | **Languages** | Early Modern English (`en`, staged `en:early` over nabu-lects v1.2.0 — 20,981 docs by imprint-date inference), with the corpus's own minority lanes riding verbatim: Latin 381 (28 → `lat:ren`), Welsh 59, Scots 27, French, Dutch — `en` at 24,857 docs becomes a top-tier code overnight |
 | **Size** | `eebo-tcp`: **25,368 docs / 14,716,728 passages** (wave 1 = Phase I per №R-43; Phase II's 34,958 stays a one-line follow-on) — Milton, Raleigh's farewell broadside, Bacon, Donne, sermons, petitions, civil-war tracts, folios; per-document imprint dating (21,435 dated); over the shared `tcp-xml` family (built P82 for CME, proven here at 25k scale: one quarantine in the wave, diagnosed to 20 orphaned combining macrons and recovered same-day — Q47) |
-| **Licenses** | uniform per-file CC0 1.0 dedication (censused) + grant №77-2 → `open` |
+| **Licenses** | uniform per-file CC0 1.0 dedication (censused) + the 2026-08-20 grant → `open` |
 
 **Research uses:** the early-modern print world at reading grain —
 pamphlet-era polemic beside the CME's Middle English (§8aj) and the

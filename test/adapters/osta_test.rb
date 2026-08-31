@@ -10,7 +10,7 @@ module Adapters
   # FILENAME siglum mints — the syriac-corpus precedent; the in-file
   # [XXX] header siglum rides metadata verbatim), passage = the HSMS
   # numbered section plus the honest `head` for pre-section text.
-  # License nc under the №45-1 grant (CC BY-NC-SA 4.0, the Zenodo
+  # License nc under the 2026-08-13 grant (CC BY-NC-SA 4.0, the Zenodo
   # record; the emailed "MIT" stays uncorroborated). The credit duty —
   # the Zenodo record citation + the per-text TEXT.xxx.txt identifier —
   # rides every document's metadata. Fixtures: two complete tiny real
@@ -59,7 +59,7 @@ module Adapters
     def test_manifest_is_nc_under_the_45_1_grant
       manifest = Nabu::Adapters::Osta.manifest
       assert_equal "nc", manifest.license_class,
-                   "CC BY-NC-SA 4.0 — the Zenodo record is the sole declared grant (№45-1); " \
+                   "CC BY-NC-SA 4.0 — the Zenodo record is the sole declared grant; " \
                    "the emailed MIT stays uncorroborated, nc governs"
       assert_includes manifest.license, "CC BY-NC-SA 4.0"
       assert_includes manifest.license, "zenodo"
@@ -105,9 +105,9 @@ module Adapters
       assert_equal "RHJ", document.metadata["siglum"]
       citation = document.metadata["citation"]
       assert_includes citation, "TEXT.RHJ.txt",
-                      "the per-text identifier — the №45-1 per-transcription citation form"
+                      "the per-text identifier — the granted per-transcription citation form"
       assert_includes citation, "10.5281/zenodo.18931376",
-                      "the Zenodo record citation rides every document (the №45-1 credit duty)"
+                      "the Zenodo record citation rides every document (the grant ruling)"
     end
 
     def test_passages_are_head_plus_numbered_sections_in_osp

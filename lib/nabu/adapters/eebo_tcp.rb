@@ -83,7 +83,7 @@ module Nabu
                  "Creation Partnership has waived all copyright and related or neighboring rights " \
                  "to this keyboarded and encoded edition of the work described above, according to " \
                  "the terms of the CC0 1.0 Public Domain Dedication\". The waiver covers the " \
-                 "transcriptions only, not the ProQuest page images (not fetched). Grant №77-2 " \
+                 "transcriptions only, not the ProQuest page images (not fetched). The 2026-08-20 grant " \
                  "(P.F. Schaffner, TCP text manager, 2026-08-20) additionally covers the TCP files " \
                  "(\"free to use both the CME and the TCP files in any way you choose, and obtain " \
                  "them by any means convenient\").",

@@ -79,22 +79,39 @@ module Nabu
       "otb" => %w[xct.rb]
     }.freeze
 
+    # P89-1 (№R-54 (c)): the corpus-wide builders — timeline + facets — are
+    # carved OUT of the shared derivation core (the P39-1 pattern's second
+    # application; the type specimen was P88's two-line metadata_dates.rb
+    # edit landing mid-rebuild and staling all 157 stamps). The sanctioned
+    # exit from the asymmetry doctrine below: they may leave the global
+    # digest ONLY because a scoped mechanism provably covers them —
+    # .builders_digest, stamped as the Store::DerivationStamp::BUILDERS_SLUG
+    # sentinel row both rebuild flavors mint; an incremental run re-runs the
+    # builders whenever that digest drifts, even with zero dirty sources.
+    # Safe to carve because their output (document_axes, document_facets) is
+    # whole-table projections re-minted per builder run, never per-source
+    # rows — per-source stamps owe them nothing.
+    BUILDER_DIRS = %w[store/timeline_builder].freeze
+    BUILDER_FILES = %w[store/timeline_builder.rb store/facet_builder.rb].freeze
+
     # The shared derivation core is EVERYTHING under lib/nabu/ except
     # adapters/ (covered per-source by the closure), normalize.rb (input 3),
     # hani.rb/jpn.rb (the fold-table modules — covered per-source by the
-    # language-scoped fold digest, FOLD_MODULE_PATHS above; P39-1), and this
-    # exclusion list of provably read-only / non-derivation code. The failure
-    # modes are asymmetric: forgetting to exclude a file only over-rebuilds
-    # (safe); an include-list that missed one would silently under-rebuild
-    # (the sin). When in doubt, a file stays IN.
+    # language-scoped fold digest, FOLD_MODULE_PATHS above; P39-1), the
+    # corpus builders (covered by the builders digest, BUILDER_DIRS/FILES
+    # above; P89-1), and this exclusion list of provably read-only /
+    # non-derivation code. The failure modes are asymmetric: forgetting to
+    # exclude a file only over-rebuilds (safe); an include-list that missed
+    # one would silently under-rebuild (the sin). When in doubt, a file
+    # stays IN.
     #
     # data_build (the dir + its data_build.rb manifest) is out per owner
     # ruling D50-b: producer-only code — reads the catalog, writes CSV
     # datasets to the external nabu-data clone, influences nothing Nabu
     # stores — guarded by the purity test (no derivation code may reference
     # DataBuild; derivation_fingerprint_test).
-    EXCLUDED_DIRS = %w[adapters mcp query health ops data_build].freeze
-    EXCLUDED_FILES = %w[
+    EXCLUDED_DIRS = (%w[adapters mcp query health ops data_build] + BUILDER_DIRS).freeze
+    EXCLUDED_FILES = (BUILDER_FILES + %w[
       cli.rb display.rb status_report.rb progress_reporter.rb version.rb
       backup.rb review_hook.rb verify.rb fixture_sentinel.rb
       batch_cognates.rb batch_formulas.rb batch_parallels.rb
@@ -109,7 +126,7 @@ module Nabu
       data_build.rb
       normalize.rb
       hani.rb jpn.rb xct.rb
-    ].freeze
+    ]).freeze
 
     # Namespace wrappers every adapter file opens — as "definitions" they
     # would make every file define (and reference) the same names, collapsing
@@ -166,6 +183,19 @@ module Nabu
       @file_tokens = {}
       @references = {}
     end
+
+    # P89-1: pin the entry's code identity NOW. A rebuild loads its code at
+    # process start but stamps hours later from DISK bytes — a closure file
+    # committed mid-run would mint a stamp describing code the run never
+    # executed (rows from the loaded old code, digest from the new bytes: a
+    # lying stamp the next incremental would trust). Both rebuild flavors
+    # call this for every source BEFORE any replay, so the memoized tokens
+    # (@file_tokens + the shared core) describe the bytes that ≈ the loaded
+    # code. Residual (documented, covered by working practice, not
+    # machinery): fold modules and canonical trees are digested at
+    # verdict/stamp time — do not commit to lib/nabu/** or touch canonical/
+    # while a rebuild runs.
+    def warm(entry) = parser_digest(entry)
 
     # Compute the full fingerprint for one registry +entry+. +languages+ is
     # the source's derived-row language census (Store::DerivationStamp
@@ -246,6 +276,35 @@ module Nabu
         Digest::SHA256.file(path).hexdigest
       end
 
+      # Every file the builders digest covers (P89-1): the carved
+      # BUILDER_FILES plus everything under the carved BUILDER_DIRS —
+      # test-pinned so nothing excluded from the core can escape coverage.
+      def builder_files
+        BUILDER_FILES.map { |rel| File.join(LIB_DIR, rel) } +
+          BUILDER_DIRS.flat_map { |rel| Dir[File.join(LIB_DIR, rel, "**", "*.rb")] }
+      end
+
+      # The scoped identity of the corpus-builder code (P89-1, №R-54 (c)) —
+      # stamped as the sentinel row; drift re-runs the builders without
+      # dirtying any per-source stamp.
+      def builders_digest
+        tokens = builder_files.sort.map do |file|
+          "#{file.delete_prefix("#{LIB_DIR}#{File::SEPARATOR}")}:#{builder_file_digest(file)}"
+        end
+        Digest::SHA256.hexdigest(tokens.join("\n"))
+      end
+
+      # Seam (tests divert one file to simulate a builder change).
+      def builder_file_digest(path)
+        Digest::SHA256.file(path).hexdigest
+      end
+
+      # Seam behind the per-instance token memo (tests divert one adapter
+      # file; #warm pins values through this seam at run start).
+      def code_file_digest(path)
+        Digest::SHA256.file(path).hexdigest
+      end
+
       # The latest migration number the running code carries (the catalog's
       # applied schema_info version must equal it for --incremental to run).
       def migration_level
@@ -318,10 +377,18 @@ module Nabu
       Digest::SHA256.hexdigest((tokens + [shared_core_digest]).join("\n"))
     end
 
-    # { terminal constant name => [defining files] } across adapters/.
+    # { terminal constant name => [defining files] } across adapters/ —
+    # TOP-LEVEL classes only (indent ≤ 4: module Nabu › module Adapters ›
+    # class X). Nested helper classes (Walk, Extraction, Header, …) are
+    # family internals: admitting them made every generic name universal
+    # glue — a comment word chained Perseus to the seal family, closures
+    # collapsed toward the whole directory, and one fresh commit anywhere
+    # poisoned every --trust-derivations vouch (the 2026-08-30 incident).
+    # Genuine cross-family composition always references a top-level
+    # class, so the real edges all survive.
     def definitions
       @definitions ||= adapter_files.each_with_object({}) do |file, map|
-        names = File.read(file).scan(/^\s*(?:class|module)\s+([A-Z]\w*)/).flatten.uniq
+        names = File.read(file).scan(/^ {0,4}(?:class|module)\s+([A-Z]\w*)/).flatten.uniq
         (names - NAMESPACE_NAMES).each { |name| (map[name] ||= []) << file }
       end
     end
@@ -329,10 +396,17 @@ module Nabu
     def adapter_files = Dir[File.join(ADAPTERS_DIR, "*.rb")]
 
     # Files defining any adapters/-constant referenced in +file+ (one union
-    # regex pass, cached per file).
+    # regex pass, cached per file). CODE LINES ONLY (2026-08-30): full-line
+    # comments are stripped before the scan — doc headers naming sibling
+    # families ("shared with UniversalDependencies…") had glued dozens of
+    # closures together, so one commit anywhere dirtied most of the
+    # registry and poisoned every --trust-derivations vouch. A class a
+    # family actually composes appears in CODE; a comment mention is
+    # documentation, not a dependency.
     def references(file)
       @references[file] ||= begin
-        names = File.read(file).scan(reference_pattern).flatten.uniq
+        code = File.read(file).lines.grep_v(/\A\s*#/).join
+        names = code.scan(reference_pattern).flatten.uniq
         names.flat_map { |name| definitions.fetch(name) } - [file]
       end
     end
@@ -345,7 +419,7 @@ module Nabu
 
     def file_token(file)
       @file_tokens[file] ||=
-        "#{file.delete_prefix("#{LIB_DIR}#{File::SEPARATOR}")}:#{Digest::SHA256.file(file).hexdigest}"
+        "#{file.delete_prefix("#{LIB_DIR}#{File::SEPARATOR}")}:#{self.class.code_file_digest(file)}"
     end
 
     # Everything under lib/nabu/ that shapes derived rows (class doc), plus

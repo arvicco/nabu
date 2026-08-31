@@ -241,8 +241,8 @@ sources:
         1200 text is not a composition claim; both ride metadata
         verbatim). Real per-text composition/MS dates live in the MED
         HyperBibliography stencils, not publicly downloadable — 'exceptions
-        ... on request' (an owner ask via the №77-2 line, a future
-        instrument, deliberately NOT a pending commitment)"
+        ... on request' (an owner ask via the existing upstream contact,
+        a future instrument, deliberately NOT a pending commitment)"
     places: {posture: unplaced}
     script: {posture: implied}
   eebo-tcp:
@@ -342,6 +342,17 @@ sources:
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
+  seal:
+    # P89-3: akk is a real nabu-lects anchor, so the bare code IS the
+    # claim; OB/OA/MB refinement is a future date-band story, never a
+    # blanket rule over a corpus this period-mixed.
+    lect: {posture: identity, note: akk — Old/Middle Babylonian literature under the coarse anchor}
+    dating: {posture: pending, note: "candidate: the Texts Hierarchy period strings (Old
+        Babylonian, …) ride document metadata verbatim in v1 — no numeric envelopes;
+        a ruled period→band table over the censused vocabulary is the future extractor"}
+    places: {posture: unplaced, note: "the Provenance field (Šaduppûm (mod. Tell Ḥarmal), …)
+        rides document metadata verbatim in v1"}
+    script: {posture: qualified, note: romanized transliteration (Latn)}
   betamasaheft-works:
     lect: {posture: identity, note: gez/amh — no minted stages}
     dating: {posture: undatable}

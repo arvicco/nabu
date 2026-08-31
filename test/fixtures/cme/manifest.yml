@@ -3,7 +3,7 @@
 #
 # The Corpus of Middle English serves the whole May-2026 normalization as
 # plain files behind the medictionary.info /texts/ Apache autoindex (the
-# grant-№77-2 bulk channel). The four texts are WHOLE upstream files
+# granted bulk channel). The four texts are WHOLE upstream files
 # (untrimmed); the fetch listing is a DOCUMENTED TRIM of the real
 # autoindex page. adapter_test is null — the source-specific test pins
 # urns/counts/snippets a refetch would not false-fail.

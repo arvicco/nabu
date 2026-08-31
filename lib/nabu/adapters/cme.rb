@@ -40,7 +40,7 @@ module Nabu
     # Latin/French/German editorial matter); they ride document metadata
     # verbatim (language_usage / text_lang), never the passage claim.
     #
-    # == License (grant №77-2)
+    # == License (granted by email, 2026-08-20)
     #
     # OPEN: the downloads page verbatim — "available for free downloading,
     # with no restrictions on use or reuse" — plus one uniform per-file
@@ -64,7 +64,7 @@ module Nabu
                  "reuse\"; every file carries the U-M Library public-domain statement (\"You may " \
                  "copy, modify, distribute and perform the work, even for commercial purposes, " \
                  "all without asking permission\" — censused identical across all 297 files). " \
-                 "Personal grant №77-2 (P.F. Schaffner, MED editor / TCP text manager, " \
+                 "Personal grant of 2026-08-20 (P.F. Schaffner, MED editor / TCP text manager, " \
                  "2026-08-20): \"free to use both the CME and the TCP files in any way you " \
                  "choose, and obtain them by any means convenient\"; credit appreciated.",
         license_class: "open",

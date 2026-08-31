@@ -299,7 +299,7 @@ class UniversalDependenciesTest < Minitest::Test
   # nonstandard registers, Alba Iulia New Testament 1648 &c under UD's one
   # modern `ro` tag — the IcePaHC/RNC diachronic honesty). The fourth Romance
   # survey candidate, Old French PROFITEROLE, landed at P43-1 already (its
-  # license fork is thread №43-1) — pinned above, not re-registered here.
+  # license fork has an open upstream ask) — pinned above, not re-registered here.
   # NB: UDante's grant CONFLICTS (LICENSE.txt BY-SA 4.0 vs README BY-NC-SA
   # 3.0) — the PROFITEROLE fork shape exactly, conservative nc ruling.
   P45_WAVE = {
