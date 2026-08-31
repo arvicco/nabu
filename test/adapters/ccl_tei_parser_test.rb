@@ -77,7 +77,12 @@ class CclTeiParserTest < Minitest::Test
   end
 
   def test_crosswalk_rows_mint_ancestor_citations
-    etymologies = { "C1494" => %w[159410 6439], "C9" => [nil, "928"], "C74" => ["39210", "-1427"] }
+    # Since P89-2 the parser takes composed Ccl::Etymology values (the
+    # ORAEC + KELLIA merge), never raw crosswalk arrays — this pins the
+    # NEW contract; the merge itself is pinned in ccl_test.
+    etymologies = Nabu::Adapters::Ccl.merge_etymologies(
+      { "C1494" => %w[159410 6439], "C9" => [nil, "928"], "C74" => ["39210", "-1427"] }, {}
+    )
     by_id = entries(etymologies: etymologies).to_h { |entry| [entry.entry_id, entry] }
 
     kah = by_id.fetch("C1494").citations

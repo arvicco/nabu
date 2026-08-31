@@ -17,3 +17,7 @@ files:
     url: https://raw.githubusercontent.com/oraec/coptic_etymologies/main/digitizing_coptic_etymologies_coptic_list_entries.csv
     whole: false
     trim: 6 of 2,177 line-verbatim rows (C5, C6, C9, C74, C1494, C1495) — 35,889 B -> 81 B; recipe in README.md
+  - path: kellia/egyptian_etymologies.tab
+    url: https://raw.githubusercontent.com/KELLIA/dictionary/v3.0.0/data/egyptian_etymologies.tab
+    whole: false
+    trim: header + 6 of 2,310 line-verbatim rows (C2 KELLIA-only/dm, C5, C9 d-prefix, C74 dm≡negative, C1494, C1495) — 392,551 B -> 1,050 B; recipe in README.md

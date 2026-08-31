@@ -11,7 +11,7 @@ module Nabu
   #
   # +credit+ (P43-2) is an OPTIONAL source-level attribution line — the human
   # "who to thank, verbatim" string a grant may require rendered "wherever
-  # displayed" (TITUS Avestan's №41-3 grant). It is DISTINCT from +license+
+  # displayed" (the TITUS Avestan grant). It is DISTINCT from +license+
   # (the legal terms + class): a generic seam any source may carry, threaded
   # beside license_class onto every serving surface (show cards, search hits,
   # MCP payloads) and rendered only when present. nil — the common case —

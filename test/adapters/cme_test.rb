@@ -8,7 +8,7 @@ require "fileutils"
 # the Middle English Compendium's text corpus (University of Michigan),
 # ~297 Middle English texts as TCP-schema XML, fetched from the corpus
 # editors' own companion site (medictionary.info /texts/ autoindex — the
-# May-2026 normalization, grant №77-2 P.F. Schaffner 2026-08-20). First
+# May-2026 normalization, grant, P.F. Schaffner 2026-08-20). First
 # rider of the tcp-xml family; the adapter composes the family and owns
 # none of it (the EEBO-TCP reuse design).
 #
@@ -21,7 +21,7 @@ require "fileutils"
 # THE LICENSE: open — the downloads page verbatim ("available for free
 # downloading, with no restrictions on use or reuse") + the per-file
 # AVAILABILITY public-domain statement (identical across all 297 files,
-# censused 2026-08-23) + the personal grant №77-2. Credit rides the
+# censused 2026-08-23) + the personal 2026-08-20 grant. Credit rides the
 # manifest credit seam (appreciated, not insisted — carried anyway).
 class CmeTest < Minitest::Test
   include AdapterConformance
@@ -113,7 +113,7 @@ class CmeTest < Minitest::Test
     assert_equal "open", manifest.license_class
     assert_equal "tcp-xml", manifest.parser_family
     assert_includes manifest.license, "no restrictions on use or reuse"
-    assert_includes manifest.license, "№77-2"
+    assert_includes manifest.license, "P.F. Schaffner"
     assert_includes manifest.credit, "Corpus of Middle English",
                     "credit appreciated-not-insisted — carried anyway (the grant's spirit)"
     assert_includes manifest.credit, "University of Michigan"

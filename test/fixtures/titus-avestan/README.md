@@ -36,7 +36,7 @@ Y 28–41, 43–51, 53; every other page/book is Young Avestan).
 
 ## Provenance / grant
 
-This corpus is served under the owner's **personal grant №41-3** (Prof. Jost
+This corpus is served under the owner's **personal grant of 2026-07-23** (Prof. Jost
 Gippert, TITUS, 2026-07-23): non-commercial use, with "TITUS and the editors
 clearly indicated wherever displayed." The fetch right is personal to this
 project's author and is NOT conveyed by a public clone — hence

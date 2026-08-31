@@ -17,7 +17,7 @@ Sources not readily ingestible today, with concrete unlock paths. Ordered by exp
 
 **What's locked:** parts of TITUS require registration/permission per agreement with original editors; the public HTML is scrapeable but encoding-hostile.
 
-**Unlocked — the precedent (2026-07-23):** the Avestan corpus is in. `titus-avestan` is wired and synced under a personal research grant from Prof. Jost Gippert (thread №41-3): non-commercial use, TITUS and the editors credited wherever the text is displayed. The letter described the specific texts and the private comparative-IE use; writing it was the entire cost — exactly as this page predicted. The grant is personal, so the source is grant-gated: every box records its own acknowledgment of the terms before its first fetch.
+**Unlocked — the precedent (2026-07-23):** the Avestan corpus is in. `titus-avestan` is wired and synced under a personal research grant from Prof. Jost Gippert (by email, 2026-07-23): non-commercial use, TITUS and the editors credited wherever the text is displayed. The letter described the specific texts and the private comparative-IE use; writing it was the entire cost — exactly as this page predicted. The grant is personal, so the source is grant-gated: every box records its own acknowledgment of the terms before its first fetch.
 
 **Remaining ask:** Tocharian and the long tail (Hittite is meanwhile served by the tlhdig shelf). Same scoped-letter route, now with a working precedent to cite. Worst case, the public HTML remains available for careful per-text scraping.
 

@@ -1519,6 +1519,10 @@ module Nabu
                           desc: "--incremental only (P87-3): mint the fulltext stage stamps at " \
                                 "current versions without re-deriving — ONLY when this index " \
                                 "was built by the current code"
+    option :trust_derivations, type: :boolean, default: false,
+                               desc: "--incremental only (P89-1): re-stamp parser-drift-only sources " \
+                                     "without replay when git vouches their own parser files predate " \
+                                     "the stamp — the №R-54 bridge for a catalog built by current code"
     def rebuild
       config = Nabu::Config.load
       # P62 rider: rebuild DROPS the catalog — doing that under a live
@@ -10228,8 +10232,14 @@ module Nabu
       # skipped on their derivation stamp. Refusals (schema drift, orphan
       # rows, no catalog) are loud exit-1 errors — full rebuild required.
       def rebuild_incremental(config, registry)
+        if options[:trust_derivations] && !Nabu::CodeVoucher.new.able?
+          say "WARNING: --trust-derivations is INERT — the adapters tree has uncommitted " \
+              "changes, so git cannot vouch for any source and every drift will REPLAY " \
+              "(hours, not minutes). Commit or stash first, then re-run.", :yellow
+        end
         incremental = Nabu::IncrementalRebuild.new(config: config, registry: registry,
-                                                   trust_stages: options[:trust_stages])
+                                                   trust_stages: options[:trust_stages],
+                                                   trust_derivations: options[:trust_derivations])
         return print_incremental_plan(incremental.plan) if options[:dry_run]
 
         result = incremental.run(progress: progress_reporter)
@@ -10246,6 +10256,7 @@ module Nabu
         raise Thor::Error, "cannot rebuild incrementally: #{plan.refusal}" if plan.refusal
 
         say "Incremental rebuild against #{plan.db_path}:"
+        say "  BUILDERS dirty — timeline/facets re-run (builder code changed)" if plan.builders_dirty
         plan.verdicts.each do |verdict|
           case verdict.state
           in :clean then say "  clean   #{verdict.slug} (stamp #{verdict.stamp_short})"
@@ -10258,13 +10269,16 @@ module Nabu
       def print_incremental_result(result)
         say "Incremental rebuild against #{result.db_path}:"
         result.cleans.each { |clean| say "  #{clean.slug} clean (stamp #{clean.stamp_short})" }
+        result.trusted.each { |item| say "  #{item.slug} trusted (re-stamped #{item.stamp_short} — no replay)" }
         result.outcomes.each { |outcome| say "  #{format_report(outcome.slug, outcome.report)}" }
         result.skips.each { |skip| say "  skip    #{skip.slug} (no canonical data — never synced)" }
         result.warnings.each do |outcome|
           say "  WARNING: #{outcome.slug} #{outcome.quarantine.message}", :yellow
         end
-        say "  re-derived #{result.outcomes.size}, clean #{result.cleans.size}, " \
-            "skipped #{result.skips.size}"
+        summary = "  re-derived #{result.outcomes.size}, clean #{result.cleans.size}, " \
+                  "skipped #{result.skips.size}"
+        summary += ", trusted #{result.trusted.size}" if result.trusted.any?
+        say summary
         say "  indexed #{result.indexed} passages" if result.indexed
         result.link_failures.each do |failure|
           say "  WARNING: links re-mine failed for #{failure} — the links db has this gap", :yellow

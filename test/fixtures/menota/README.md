@@ -16,7 +16,7 @@ session-gated (ephemeral session-id), so no static raw GET reproduces those
 bytes — the session-gated entries are `refetchable: false` (the menotec/
 iness-api posture). NOTE: clarino.uib.no's robots.txt says `User-agent: *`
 / `Disallow: /`; the crawl is nonetheless upstream-blessed — Stegmann
-(2026-08-20, the №77-1 grant): "we will not keep you from scraping 😉"
+(2026-08-20, the grant reply): "we will not keep you from scraping 😉"
 until their bulk endpoint lands.
 
 ## texts/ — three Menota-TEI documents (the landed form)
@@ -140,5 +140,5 @@ into the MUFI Private Use Area). Refetchable — a stable public URL.
 
 ## License
 
-The catalogue license column (the quotable record, per the №77-1 grant) and
+The catalogue license column (the quotable record, per the grant) and
 every sampled teiHeader: **CC BY-SA 4.0** → source class `attribution`.

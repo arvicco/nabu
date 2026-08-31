@@ -12,7 +12,7 @@ module Nabu
     # transcriptions of medieval Spanish manuscripts and incunabula over
     # the NEW hsms family (HsmsParser — the curly-brace HSMS markup).
     # The headline of the P77 medieval content phase: the foundational
-    # machine-readable record of Old Spanish, unblocked by the №45-1
+    # machine-readable record of Old Spanish, unblocked by the maintainers' 2026-08-13
     # grant — plus the verticalized/ lemma lane (P77-2): the 78
     # .vrt.html lemmatized/tagged token streams as SIBLING documents
     # (`-vrt` layer tail; two editions are two versions, never a
@@ -45,7 +45,7 @@ module Nabu
     # works metadata verbatim; the majority raw value is the "lengua"
     # facet (the future lect hook).
     #
-    # == License (№45-1, recorded 2026-08-13)
+    # == License (maintainers' reply, recorded 2026-08-13)
     #
     # CC BY-NC-SA 4.0 — zenodo.org/records/18931376 is the deposit's
     # SOLE declared grant (verified 2026-08-13: the GitHub repo has no
@@ -54,11 +54,11 @@ module Nabu
     # ruling "keep nc for now"). Class nc → MCP-excluded, never served.
     # CAVEAT recorded (P77-2): verticalized/ lives ONLY in the GitHub
     # repo — the Zenodo deposit holds transcriptions + tables — so the
-    # lemma lane's grant basis is the №45-1 reply's own words ("They
+    # lemma lane's grant basis is the maintainers' reply's own words ("They
     # can be found in our Github and Zenodo repositories"), same
     # rights holder, same nc class; the pending MIT-clarification
     # thread is the place any firmer word arrives. CREDIT DUTY (the
-    # №45-1 citation ruling): the Zenodo record citation on every
+    # citation ruling from that reply): the Zenodo record citation on every
     # surface + the per-text TEXT.xxx identifier — both ride every
     # document's "citation" metadata.
     #
@@ -84,7 +84,7 @@ module Nabu
 
       LANGUAGE = "osp"
 
-      # The №45-1 citation ruling, verbatim from the 2026-08-13 reply.
+      # The citation ruling, verbatim from the 2026-08-13 reply.
       ZENODO_CITATION = "Hispanic Seminary of Medieval Studies & Gago Jover, F. (2026). " \
                         "hispanicseminary/OSTA: Old Spanish Textual Archive materials " \
                         "(Version 1.0.0) [Dataset]. Zenodo. " \
@@ -94,7 +94,7 @@ module Nabu
         id: "osta",
         name: "OSTA — Old Spanish Textual Archive (Hispanic Seminary of Medieval Studies)",
         license: "CC BY-NC-SA 4.0 (zenodo.org/records/18931376 — the deposit's sole declared " \
-                 "grant, verified 2026-08-13; the №45-1 reply's \"an MIT and a CC BY-NC-SA " \
+                 "grant, verified 2026-08-13; the reply's \"an MIT and a CC BY-NC-SA " \
                  "4.0 license\" stays uncorroborated in-repo — nc governs until MIT " \
                  "materializes; owner ruling 2026-08-13 \"keep nc for now\")",
         license_class: "nc",

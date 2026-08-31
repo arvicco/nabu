@@ -13,7 +13,7 @@ require "digest"
 # the catalog into four tables — lines.csv (verse grain, urn+sha anchored),
 # cantigas.csv (the cantiga registry), authors.csv (the distinct troubadour
 # registry) and manuscripts.csv (the corpus-wide cancioneiro concordance
-# parsed from the edition's sigla lines) — under the №45-2 written grant,
+# parsed from the edition's sigla lines) — under the 2026-07-27 written grant,
 # the project's own citation format riding every file.
 #
 # The catalog side is SYNTHETIC BY CONVENTION (the actib-anchors precedent),
@@ -370,7 +370,7 @@ class DataBuildCantigasBuilderTest < Minitest::Test
       readme = File.read(File.join(out_dir, "README.md"))
 
       assert_includes readme, Nabu::Adapters::Cantigas::CITATION,
-                      "the project's own citation format rides the README verbatim (№45-2)"
+                      "the project's own citation format rides the README verbatim (the grant's condition)"
       assert_includes readme, "1066",
                       "the one no-text cantiga is stated honestly — the corpus gap is data"
       assert_match(/read_csv\("lines\.csv"/, readme, "the loading snippet is present")
@@ -385,7 +385,7 @@ class DataBuildCantigasBuilderTest < Minitest::Test
       source = manifest["sources"].first
       assert_includes source["title"], "Cantigas Medievais"
       assert_includes source.dig("licenses", 0, "name"), "free for all",
-                      "the №45-2 grant text rides the manifest sources[] from the adapter manifest"
+                      "the grant text rides the manifest sources[] from the adapter manifest"
       recipe = manifest.dig("nabu", "derivation", "recipe")
       ["one row per verse line", "575/576", "Parenthesized", "cdcant order"].each do |claim|
         assert_includes recipe, claim, "the recipe states the derivation precisely"

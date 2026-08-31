@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # P43-2: a per-source CREDIT line — the human attribution string a grant may
-# require rendered "wherever displayed" (TITUS Avestan's №41-3 grant: "TITUS and
+# require rendered "wherever displayed" (the TITUS Avestan grant of 2026-07-23: "TITUS and
 # the editors clearly indicated wherever displayed"). Distinct from the free-text
 # `license` (legal terms) and the `license_class` enum: a generic, nullable seam
 # any source may carry, written from the adapter manifest by

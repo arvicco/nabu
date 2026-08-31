@@ -223,7 +223,7 @@ class EeboTcpTest < Minitest::Test
     assert_equal "open", manifest.license_class
     assert_equal "tcp-xml", manifest.parser_family
     assert_includes manifest.license, "CC0 1.0 Public Domain Dedication"
-    assert_includes manifest.license, "№77-2"
+    assert_includes manifest.license, "Schaffner"
     assert_includes manifest.credit, "Text Creation Partnership"
     assert_equal SHARED, manifest.upstream_url
   end

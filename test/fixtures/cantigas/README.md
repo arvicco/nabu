@@ -5,7 +5,7 @@ Real pages from Cantigas Medievais Galego-Portuguesas
 Medievais, FCSH/NOVA Lisbon — coordinators Graça Videira Lopes and Manuel
 Pedro Ferreira). Retrieved 2026-07-31 (the P55-1 scout, 11 bounded
 probes). License: free with attribution — the coordinator's grant
-(G. V. Lopes, 2026-07-27, license thread №45-2): "Our site is free for
+(G. V. Lopes, by email, 2026-07-27): "Our site is free for
 all. So, with full attribution, you can do whatever you like with the
 data."
 
