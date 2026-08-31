@@ -1896,6 +1896,16 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P90-3 (Q57 lane 4a): the deprecation stopped naming a release that
+  # already shipped — the pointer promises "a future release", honestly.
+  def test_focus_pointer_no_longer_promises_next_release
+    with_axis_corpus do |config|
+      out, = with_config(config) { run_cli(%w[focus]) }
+      assert_match(/will be removed in a future release/, out)
+      refute_match(/next release/, out, "v1.5.0 shipped with focus alive — 'next release' was a stale promise")
+    end
+  end
+
   # The focus subcommands still work as aliases onto enable/disable, each
   # printing the pointer (P44-r3b).
   def test_focus_aliases_onto_enable_disable_and_print_the_pointer
@@ -2846,6 +2856,72 @@ class CLITest < Minitest::Test
       _out, err, status = with_config(config) { run_cli(%w[sync nope]) }
       assert_equal 1, status
       assert_match(/unknown source/i, err)
+    end
+  end
+
+  # -- P90-3 (Q57): variadic sync ------------------------------------------
+
+  def test_sync_two_sources_runs_in_argument_order_with_a_summary
+    with_two_source_sync_env do |config|
+      out, _err, status = with_config(config) { run_cli(%w[sync corpus-b corpus-a --parse-only]) }
+      assert_nil status
+      assert_match(/corpus-b\s+parse-only/, out)
+      assert_match(/corpus-a\s+parse-only/, out)
+      assert_operator out.index("corpus-b  "), :<, out.index("corpus-a  "),
+                      "members sync in ARGUMENT order, not registry order"
+      assert_match(/synced 2/, out)
+      refute_match(/failed/, out, "an all-green batch reports no failure count")
+    end
+  end
+
+  def test_sync_multi_one_failure_contains_and_the_batch_exits_nonzero
+    with_two_source_sync_env do |config|
+      out, err, status = with_config(config) { run_cli(%w[sync corpus-a nope corpus-b --parse-only]) }
+      assert_equal 1, status, "any failed member fails the batch exit"
+      assert_match(/corpus-a\s+parse-only/, out)
+      assert_match(/corpus-b\s+parse-only/, out, "a later member still runs after an earlier failure")
+      assert_match(/unknown source/i, err)
+      assert_match(/synced 2, failed 1 \(nope\)/, err, "the summary names the failures")
+    end
+  end
+
+  def test_sync_multi_refuses_all_and_axis_with_an_explicit_list
+    with_two_source_sync_env do |config|
+      _out, err, status = with_config(config) { run_cli(%w[sync corpus-a corpus-b --all]) }
+      assert_equal 1, status
+      assert_match(/--all.*explicit list|explicit list.*--all/i, err)
+
+      _out, err, status = with_config(config) { run_cli(%w[sync corpus-a corpus-b --axis etym]) }
+      assert_equal 1, status
+      assert_match(/--axis.*explicit list|explicit list.*--axis/i, err)
+    end
+  end
+
+  # -- P90-3 (Q57): variadic status ----------------------------------------
+
+  def test_status_two_sources_renders_detail_blocks_in_argument_order
+    with_two_source_sync_env do |config|
+      with_config(config) do
+        run_cli(%w[sync corpus-a corpus-b --parse-only])
+        out, _err, status = run_cli(%w[status corpus-b corpus-a])
+        assert_nil status
+        assert_match(/^corpus-b {2}\(/, out)
+        assert_match(/^corpus-a {2}\(/, out)
+        assert_operator out.index(/^corpus-b {2}\(/), :<, out.index(/^corpus-a {2}\(/),
+                        "detail blocks render in argument order"
+      end
+    end
+  end
+
+  def test_status_multi_unknown_slug_prints_known_blocks_then_exits_nonzero
+    with_two_source_sync_env do |config|
+      with_config(config) do
+        run_cli(%w[sync corpus-a --parse-only])
+        out, err, status = run_cli(%w[status corpus-a nope])
+        assert_equal 1, status
+        assert_match(/corpus-a/, out, "the known member's block prints before the batch fails")
+        assert_match(/unknown source "nope"/i, err)
+      end
     end
   end
 
@@ -7164,6 +7240,64 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P90-3 (Q57 lane 4b): lect suggest points at the generalized front door.
+  def test_lect_suggest_points_at_layer_suggest
+    with_lects_cli_env(with_document: "urn:nabu:x:1") do |config|
+      out, _err, status = with_config(config) { run_cli(%w[lect suggest fixture]) }
+      assert_nil status
+      assert_match(/layer suggest fixture/, out.lines.first(3).join,
+                   "the pointer to the all-layers census leads the report")
+    end
+  end
+
+  # P90-3 (Q57 standing rule ①): --lang is the one language-filter spelling;
+  # cognates' --langs stays as a quiet alias.
+  def test_cognates_lang_is_an_alias_for_langs
+    with_cognates_corpus do |config|
+      canonical, _err, s1 = with_config(config) { run_cli(%w[cognates MARK 1.1 --langs grc,chu]) }
+      aliased, _err, s2 = with_config(config) { run_cli(%w[cognates MARK 1.1 --lang grc,chu]) }
+      assert_nil s1
+      assert_nil s2
+      assert_equal canonical, aliased, "--lang and --langs are the same filter"
+    end
+  end
+
+  # P90-3 (Q57 standing rule ①): ingest's --languages gains the --lang alias.
+  def test_ingest_lang_is_an_alias_for_languages
+    with_ingest_env do |config, root|
+      source = write_note(root)
+      out, _err, status = with_config(config) do
+        run_cli(["ingest", source, "--yes", "--collection", "notes", "--lang", "eng"])
+      end
+      assert_nil status
+      assert_match(/minted:\n  urn:nabu:local-library:notes:reading-notes/, out)
+    end
+  end
+
+  # P90-3 (Q57 lane 3): the one destructive command gains a preview — the
+  # victim rows print, nothing is touched (journal AND rulings file).
+  def test_lect_withdraw_dry_run_previews_the_victims_and_writes_nothing
+    with_lects_cli_env do |config|
+      with_config(config) do
+        run_cli(["lect", "assign", "urn:nabu:x:1", "grc:koi", "--code", "grc"])
+        rulings_before = File.read(config.lect_rulings_path)
+        out, _err, status = run_cli(["lect", "withdraw", "urn:nabu:x:1", "--dry-run"])
+        assert_nil status
+        assert_match(/would withdraw 1 assignment/, out)
+        assert_match(/urn:nabu:x:1\s+grc\s+grc:koi/, out, "the victim rows are shown")
+        assert_match(/dry run — nothing written/, out)
+        assert_equal 1, read_lect_journal(config).size, "dry-run leaves the journal untouched"
+        assert_equal rulings_before, File.read(config.lect_rulings_path),
+                     "dry-run leaves the rulings config untouched"
+
+        out, _err, status = run_cli(["lect", "withdraw", "urn:nabu:x:1"])
+        assert_nil status
+        assert_match(/withdrew 1 assignment/, out, "the real run is unchanged")
+        assert_empty read_lect_journal(config)
+      end
+    end
+  end
+
   def test_lect_apply_rules_dry_run_reports_the_census_and_writes_nothing
     with_lect_rules_cli_env do |config|
       out, _err, status = with_config(config) { run_cli(%w[lect apply-rules --dry-run]) }
@@ -8996,6 +9130,33 @@ class CLITest < Minitest::Test
       File.write(File.join(corpus, "two.txt"), "Odyssey\nἄνδρα\n")
       sources = File.join(root, "sources.yml")
       File.write(sources, "corpus:\n  adapter: TestAdapter\n  wired: #{wired}\n  sync_policy: auto\n")
+      yield Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources,
+        config_path: File.join(File.dirname(sources), "config", "nabu.yml")
+      )
+    end
+  end
+
+  # P90-3 (Q57): two wired sources for the variadic sync/status lanes.
+  def with_two_source_sync_env
+    Dir.mktmpdir("nabu-cli-multi") do |root|
+      %w[corpus-a corpus-b].each do |slug|
+        dir = File.join(root, "canonical", slug)
+        FileUtils.mkdir_p(dir)
+        File.write(File.join(dir, "#{slug}-one.txt"), "Iliad\nμῆνιν\nἄειδε\n")
+      end
+      sources = File.join(root, "sources.yml")
+      File.write(sources, <<~YAML)
+        corpus-a:
+          adapter: TestAdapter
+          wired: true
+          sync_policy: auto
+        corpus-b:
+          adapter: TestAdapter
+          wired: true
+          sync_policy: auto
+      YAML
       yield Nabu::Config.new(
         canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
         sources_path: sources,
