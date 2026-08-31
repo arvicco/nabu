@@ -4,6 +4,13 @@ require "thor"
 require_relative "version"
 require_relative "display"
 
+# CLI flag conventions (P90-3 standing rules, applied whenever a command is
+# next touched — never as a sweep):
+#   ① `--lang` is the ONE language-filter spelling, accepting a comma list
+#      where plural makes sense; legacy spellings (`--langs`, `--languages`)
+#      stay as quiet aliases of it.
+#   ② `--json` is the machine-readable opt-in convention (`--format` is
+#      reserved for commands with more than two real formats).
 module Nabu
   # The `nabu data` command family (P50-W1, architecture §17): the production
   # rail for the public nabu-data repository. `list` is the self-documentation
@@ -453,10 +460,27 @@ module Nabu
 
     desc "withdraw URN", "Remove URN's assignment(s) — all codes, or just --code"
     option :code, banner: "CODE"
+    option :dry_run, type: :boolean, default: false,
+                     desc: "Preview the assignment rows that would be removed; write nothing"
     def withdraw(urn)
       config = Nabu::Config.load
       journal = Nabu::Store::LectJournal.open_readonly(config.lects_journal_path)
       raise Thor::Error, "lect withdraw: no journal at #{config.lects_journal_path}" unless journal
+
+      # P90-3 (Q57 lane 3): the one destructive lect command gains a
+      # preview — the victim rows in the `lect list` shape, nothing touched
+      # (neither the journal nor the rulings config).
+      if options[:dry_run]
+        scope = journal[:lect_assignments].where(urn: urn)
+        scope = scope.where(code: options[:code]) if options[:code]
+        rows = scope.order(:code).all
+        journal.disconnect
+        say "would withdraw #{rows.size} assignment#{'s' unless rows.size == 1}  " \
+            "#{urn}#{" #{options[:code]}" if options[:code]}"
+        rows.each { |row| say "  #{row[:urn]}  #{row[:code]}  #{row[:lect_id]}  (#{row[:basis]})" }
+        say "dry run — nothing written"
+        return
+      end
 
       journal.disconnect
       writable = Nabu::Store::LectJournal.open!(config.lects_journal_path)
@@ -567,6 +591,9 @@ module Nabu
       # LectSuggest::TOP_VALUES with the cap announced.
       def render_suggest_report(report)
         say "lect suggest #{report.slug} — report only; apply via rules/overrides/posture"
+        # P90-3 (Q57 lane 4b): the generalized front door covers all four
+        # core layers; this lect-only view stays for depth.
+        say "  (the all-layers census is `nabu layer suggest #{report.slug}` — lect, dating, places, script)"
         say "  codes:"
         report.codes.each do |row|
           verdict = if row.resolution != row.code then "resolved — machine posture exists"
@@ -841,7 +868,7 @@ module Nabu
     desc "layer SUBCOMMAND ...ARGS", "Core-layer postures: the generalized suggest front door"
     subcommand "layer", LayerCLI
 
-    desc "sync [SOURCE]", "Fetch and load a source, an axis's members, or --all live sources"
+    desc "sync [SOURCE...]", "Fetch and load sources, an axis's members, or --all live sources"
     long_desc <<~HELP, wrap: false
       Fetch and load into the store. The positional NAME resolves GROUP
       FIRST (the registry's closed group vocabulary — `core`: the registry
@@ -875,8 +902,16 @@ module Nabu
       triggers either; `nabu sync core` (or the member by name) re-runs
       a sweep explicitly.
 
+      Several names run as an explicit batch (P90-3): each argument
+      resolves exactly as a lone one would, in argument order, each with
+      its own report block; one member's failure is contained (later
+      members still run) and the batch exits non-zero at the end naming
+      the failures. --parse-only/--force apply to every member;
+      --all/--axis refuse combination with an explicit list.
+
       Examples:
         nabu sync sblgnt          # one source (explicit; disabled syncs anyway)
+        nabu sync sblgnt proiel iswoc --parse-only   # an explicit batch, in order
         nabu sync celtic          # the celtic axis's enabled members
         nabu sync --axis celtic,italic --parse-only
         nabu sync --all
@@ -900,13 +935,24 @@ module Nabu
                     desc: "Pipe a JSON sync brief to CMD's stdin at sync end (advisory; " \
                           "the hook's exit status is reported, never fails the sync). " \
                           "Example: --review script/review-sync-claude. Single-source sync only."
-    def sync(slug = nil)
+    def sync(*slugs)
       # --redownload refusals up front (P44-i1): contradictory with
       # --parse-only (nothing to re-download if we skip fetch), and
       # per-source by design (a wipe is an explicit, named decision).
       if options[:redownload]
         raise Thor::Error, "sync: --redownload contradicts --parse-only" if options[:parse_only]
         raise Thor::Error, "sync: --redownload is per-source — name one slug" if options[:all] || options[:axis]
+      end
+      # P90-3 (Q57 lane 1): an explicit multi-slug list is its own batch
+      # shape — the selector flags name a DIFFERENT batch, so combining is
+      # ambiguous intent and refuses loudly. The per-source flags
+      # (--parse-only/--force/--redownload) apply to every member; the
+      # single-source-only flags keep their contract.
+      if slugs.size > 1
+        raise Thor::Error, "sync: --all cannot combine with an explicit list — name slugs OR --all" if options[:all]
+        raise Thor::Error, "sync: --axis cannot combine with an explicit list — name slugs OR --axis" if options[:axis]
+        raise Thor::Error, "sync: --grant-acknowledged is single-source — name one slug" if options[:grant_acknowledged]
+        raise Thor::Error, "sync: --review is single-source — name one slug" if options[:review]
       end
       config = Nabu::Config.load
       # P62 rider: the quarter-second write-lock pre-flight — a concurrent
@@ -919,7 +965,12 @@ module Nabu
       ledger = open_or_create_ledger(config)
       db = open_or_create_catalog(config)
       runner = Nabu::SyncRunner.new(config: config, registry: registry, db: db, ledger: ledger)
-      run_sync(runner, registry, slug, db, ledger, enabled: sync_enabled_slugs(config, registry, db))
+      enabled = sync_enabled_slugs(config, registry, db)
+      if slugs.size <= 1
+        run_sync(runner, registry, slugs.first, db, ledger, enabled: enabled)
+      else
+        run_sync_list(runner, registry, slugs, db, ledger, enabled: enabled)
+      end
     rescue Nabu::Error => e
       # Unknown slug (ValidationError), fetch failure (FetchError), ... all
       # surface as a clean stderr message and exit 1.
@@ -1140,7 +1191,8 @@ module Nabu
     option :title, type: :string, desc: "Title (one file only)"
     option :creator, type: :string, desc: "Creator/author"
     option :year, type: :numeric, desc: "Publication year"
-    option :languages, type: :string, banner: "chu,deu", desc: "Language codes, comma-separated"
+    option :languages, type: :string, banner: "chu,deu", aliases: ["--lang"],
+                       desc: "Language codes, comma-separated (--lang is the standing alias)"
     option :tags, type: :string, banner: "grammar,ocs", desc: "Tags, comma-separated"
     option :related, type: :string, banner: "URN,CODE",
                      desc: "Related urns/language codes, comma-separated (urns become links-journal edges)"
@@ -1188,7 +1240,7 @@ module Nabu
       raise Thor::Error, e.message
     end
 
-    desc "status [SOURCE]", "Show per-source sync status and passage counts (`nabu list` shows what is held)"
+    desc "status [SOURCE...]", "Show per-source sync status and passage counts (`nabu list` shows what is held)"
     long_desc <<~HELP, wrap: false
       The SYNC-STATE view. Bare `nabu status` is the COMPACT table (P40-s):
       one dense row per registered source, grouped by kind — a fused
@@ -1202,7 +1254,9 @@ module Nabu
       `nabu status SOURCE` is one source's full labeled detail block: kind,
       enabled, cadence, the liveness verdict (healthy states included), exact
       thousands-separated counts, license class, the full timestamp/delta, and
-      the last run's status. `nabu status --long` is that extended detail as a
+      the last run's status. Several names render their blocks in argument
+      order (P90-3); an unknown member reports after the known ones print,
+      non-zero exit. `nabu status --long` is that extended detail as a
       labeled table for EVERY row.
 
       --remote probes every upstream first (the same code path as
@@ -1221,9 +1275,10 @@ module Nabu
     option :disabled, type: :boolean, default: false,
                       desc: "The complement view: ONLY the rows nabu enable would add " \
                             "(shelves are always enabled and never appear)"
-    def status(slug = nil)
+    def status(*slugs)
       refuse_all_with_disabled!("status")
-      slug = slug.to_s.strip
+      slugs = slugs.map { |name| name.to_s.strip }.reject(&:empty?)
+      slug = slugs.size <= 1 ? slugs.first.to_s : nil
       config = Nabu::Config.load
       registry = Nabu::SourceRegistry.load(config.sources_path)
       # --remote (P14-12): the one-command informed-update flow — run the live
@@ -1237,6 +1292,22 @@ module Nabu
       # explicit intent; any source, focused or not). The bare/--long/--axis
       # tables scope to the focus profile (P40-f).
       view = focus_view(config, registry, catalog: db)
+      # P90-3 (Q57 lane 2): several names render their detail blocks in
+      # ARGUMENT order; an unknown member is reported after the known ones
+      # print, and the batch exits non-zero naming the unknowns.
+      unless slugs.size <= 1
+        unknown = []
+        slugs.each do |name|
+          say status_report(registry, db, ledger, name)
+          print_source_enable_hint(view, registry, name)
+        rescue Thor::Error => e
+          unknown << name
+          warn e.message
+        end
+        return if unknown.empty?
+
+        raise Thor::Error, "status: #{unknown.size} of #{slugs.size} unknown (#{unknown.join(', ')})"
+      end
       if slug.empty?
         warn_focus_drift(view)
         # An EMPTY --disabled complement renders no table (the "No sources
@@ -3196,6 +3267,46 @@ module Nabu
       catalog&.disconnect
     end
 
+    desc "info QUERY", "One front door: the character, language/lect, or script dossier card for QUERY"
+    long_desc <<~HELP, wrap: false
+      The dossier front door (P90-5): one command that answers "what is
+      this?" across the three desk namespaces, dispatching to the existing
+      cards byte-identically — an alias, never a reimplementation:
+
+        1. a single character (any non-ASCII grapheme) or a Gardiner-style
+           sign code (G5, Aa27)                → the `nabu char` card
+        2. a known language code or lect id (chu, grc:koi, sla-pro)
+                                               → the `nabu language` card
+        3. a script tag or script name (glag / Glagolitic — the curated
+           dossiers of config/script_dossiers.yml) → the script card
+
+      Earlier rungs win; when a language code shadows a script tag the
+      language card renders and a footer names the shadowed reading.
+      Anything else misses honestly, naming all three namespaces.
+    HELP
+    def info(query = nil)
+      term = Nabu::Normalize.nfc(query.to_s.strip)
+      raise Thor::Error, "info: give a character, a language/lect code, or a script tag/name" if term.empty?
+      return char(term) if term.grapheme_clusters.size == 1 && !term.match?(/\A[[:ascii:]]\z/)
+      return char(term) if term.match?(/\A[A-Z][a-z]?\d+[a-z]?\z/) # Gardiner-style sign codes
+
+      config = Nabu::Config.load
+      lects = Nabu::Lects.load_default(config: config, overlay: {})
+      if info_language?(config, term, lects)
+        language(term)
+        if (tag = info_script_tag(term))
+          say "(#{term.inspect} is also script tag #{tag.inspect} — languages resolve first; " \
+              "`nabu info #{Nabu::ScriptDossiers.lookup(tag).name}` shows the script card)"
+        end
+        return
+      end
+      return print_script_card(tag, lects) if (tag = info_script_tag(term))
+
+      raise Thor::Error,
+            "info: #{term.inspect} is not a known character, language/lect code, or script — " \
+            "try nabu char CHAR, nabu language --list, or a script tag from config/script_dossiers.yml"
+    end
+
     desc "language [CODE]", "The language-code desk reference: name, family, context, holdings"
     long_desc <<~HELP, wrap: false
       Explains any language code the library surfaces — the corpus tags
@@ -3254,7 +3365,7 @@ module Nabu
       languages = Nabu::Languages.new(catalog: catalog)
       info = catalog && Nabu::Query::LanguageInfo.new(catalog: catalog, fulltext: fulltext)
       if options[:list]
-        print_language_list(languages, info)
+        print_language_list(languages, info, Nabu::Lects.load_default(config: config, overlay: {}))
       else
         term = code.to_s.strip
         raise Thor::Error, "language: give a code (chu, gkm, zle-ort…) or --list" if term.empty?
@@ -3430,7 +3541,7 @@ module Nabu
     end
 
     # The one pointer line every deprecated `focus` alias prints (P44-r3b).
-    FOCUS_POINTER = "focus is now enable/disable; this alias goes away next release"
+    FOCUS_POINTER = "focus is now enable/disable; this alias will be removed in a future release"
 
     desc "enable AXIS|SOURCE...", "Enable sources or axes on this box (the local enablement config)"
     long_desc <<~HELP, wrap: false
@@ -3519,7 +3630,8 @@ module Nabu
       catalog&.disconnect
     end
 
-    desc "focus [only|add|drop|clear] [NAMES…]", "DEPRECATED — alias for enable/disable (removed next release)"
+    desc "focus [only|add|drop|clear] [NAMES…]",
+         "DEPRECATED — alias for enable/disable (will be removed in a future release)"
     long_desc <<~HELP, wrap: false
       DEPRECATED (P44-r3b): the focus profile was promoted to the local
       enablement config, and the verbs moved to `nabu enable` / `nabu disable`.
@@ -3622,8 +3734,9 @@ module Nabu
     HELP
     option :work, type: :string,
                   desc: "Alignment work id (optional when the target decides it)"
-    option :langs, type: :string, banner: "got,chu",
-                   desc: "Restrict the comparison to these languages (comma-joined, at least two)"
+    option :langs, type: :string, banner: "got,chu", aliases: ["--lang"],
+                   desc: "Restrict the comparison to these languages (comma-joined, at least two); " \
+                         "--lang is the standing alias (the one language-filter spelling)"
     option :all, type: :boolean, default: false,
                  desc: "Show the common-word matches the default suppresses"
     option :long, type: :boolean, default: false,
@@ -9160,7 +9273,7 @@ module Nabu
       # --list: the held languages only (a full dump of the ~800-code
       # etymology tail would be unusable and unpageable; the tail is what
       # `language CODE` is for — stated in the footer, never implied away).
-      def print_language_list(languages, info)
+      def print_language_list(languages, info, lects = nil)
         raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless info
 
         held = info.held
@@ -9170,7 +9283,73 @@ module Nabu
           say "  #{entry.code.ljust(width)}  #{languages.name(entry.code) || '(unnamed)'} — " \
               "#{held_line(entry)}"
         end
+        print_registry_extension(lects)
         say "etymology tail: ~800 more codes appear in reflex edges — nabu language CODE explains any"
+      end
+
+      # P90-5 (Q61 lane 3): is +term+ a language the desks know — a lect id
+      # the registry parses, or a code the names census can name? (The
+      # membership test the front door needs; the language command itself
+      # renders unknown codes as honest misses, which would swallow every
+      # string.)
+      def info_language?(config, term, lects)
+        return true if lects&.lect(term)
+
+        catalog = open_catalog(config)
+        return false unless catalog
+
+        !Nabu::Languages.new(catalog: catalog).name(term).nil?
+      ensure
+        catalog&.disconnect
+      end
+
+      # A script-dossier tag for +term+: the tag itself, or a case-blind
+      # script NAME alias (glag / Glagolitic), else nil.
+      def info_script_tag(term)
+        tag = term.downcase
+        return tag if Nabu::ScriptDossiers.lookup(tag)
+
+        Nabu::ScriptDossiers.table.find { |_t, row| row["name"].to_s.casecmp?(term) }&.first
+      end
+
+      # P90-5 (Q61 lane 2): the script dossier card — the curated context
+      # config/script_dossiers.yml holds (published as nabu-data
+      # mul/script-dossiers) finally readable from the CLI.
+      def print_script_card(tag, lects)
+        dossier = Nabu::ScriptDossiers.lookup(tag)
+        say "script #{dossier.name} (#{dossier.tag})"
+        say_wrapped(dossier.context, indent: 2)
+        if dossier.desk
+          say "  desk:"
+          say_wrapped(dossier.desk, indent: 4)
+        end
+        row = lects&.script_rows&.dig(dossier.tag)
+        if row
+          iso = row["iso15924"] ? ", ISO 15924 #{row['iso15924']}" : ""
+          say "  registry: minted in the nabu-lects scripts table#{iso}"
+        else
+          say "  registry: nabu-lects not synced — the scripts-table row is unavailable"
+        end
+      end
+
+      # P90-5 (Q61 lane 1): the nabu-lects layer the listing was missing —
+      # every anchor with minted stages/varieties, i.e. the lect ids the
+      # cards, `search --lect` and the postures accept beyond bare codes.
+      def print_registry_extension(lects)
+        unless lects
+          say "registry extension: nabu-lects not synced (nabu sync nabu-lects)"
+          return
+        end
+        ladders = lects.ladders
+        say "registry extension (nabu-lects): #{ladders.size} anchors carry minted stages/varieties " \
+            "— ids like grc:koi work on cards, --lect and postures:"
+        width = ladders.map { |ladder| ladder.anchor.length }.max || 0
+        ladders.each do |ladder|
+          bits = []
+          bits << "stages: #{ladder.stages.join(' ')}" unless ladder.stages.empty?
+          bits << "varieties: #{ladder.varieties.join(' ')}" unless ladder.varieties.empty?
+          say "  #{ladder.anchor.ljust(width)}  #{ladder.name} — #{bits.join(' · ')}"
+        end
       end
 
       def held_line(entry)
@@ -9399,6 +9578,28 @@ module Nabu
       # name that is not a slug but is an axis is unambiguous; a name that is
       # neither is the unknown-target error (naming BOTH namespaces). A nil
       # name falls to sync_one's own "slug or --all" guard, unchanged.
+      # P90-3 (Q57 lane 1): the explicit multi-slug batch. Each argument
+      # resolves EXACTLY as a lone argument would (group, slug, axis — the
+      # ordinary run_sync dispatch), in ARGUMENT order, each with its own
+      # report block. One member's failure is contained and reported —
+      # later members still run (the fetch lock is per-source) — and the
+      # batch exits non-zero at the end naming every failure.
+      def run_sync_list(runner, registry, slugs, db, ledger, enabled:)
+        failures = []
+        slugs.each do |slug|
+          run_sync(runner, registry, slug, db, ledger, enabled: enabled)
+        rescue Nabu::ManualDrop::AwaitingAcquisition => e
+          say e.message
+        rescue Nabu::Error, Thor::Error => e
+          failures << slug
+          warn e.message
+        end
+        synced = slugs.size - failures.size
+        return say "synced #{synced}" if failures.empty?
+
+        raise Thor::Error, "sync: synced #{synced}, failed #{failures.size} (#{failures.join(', ')})"
+      end
+
       def run_sync(runner, registry, slug, db, ledger, enabled:)
         if options[:all]
           auto_sync_core!(runner, registry, slug, db)
