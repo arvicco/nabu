@@ -153,7 +153,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 75, lect.size,
+    assert_equal 76, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -180,7 +180,9 @@ class PosturesTest < Minitest::Test
                  "dacon ADDED P88-A4 — pending on the nwc nabu-lects mint (P88-B3) — and " \
                  "classical-modern ADDED P88-A2 — codemap, the kanripo lzh precedent: 72→74; " \
                  "seal ADDED P89-3 — identity akk (a real anchor; the period-mixed OB/OA/MB " \
-                 "refinement is a future date-band story): 74→75"
+                 "refinement is a future date-band story): 74→75; titus-osco-umbrian ADDED " \
+                 "P90-2 — pending on the xum nabu-lects mint (PR #12; osc resolves as identity " \
+                 "once it lands): 75→76"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -219,6 +221,9 @@ class PosturesTest < Minitest::Test
     # P89-3 ADDS seal as identity akk (the cuc/rsti cuneiform cluster
     # shape — the bare code is the claim; its dating posture pends on a
     # period→band table, a non-lect layer): 74→75, identity 52→53.
-    assert_equal({ "identity" => 53, "dates" => 10, "codemap" => 12 }, by_posture)
+    # P90-2 ADDS titus-osco-umbrian as pending (the xum anchor mint,
+    # nabu-lects PR #12, is in flight — the dacon/menota shape; retires
+    # to identity when the mint reaches canonical): 75→76, pending 0→1.
+    assert_equal({ "identity" => 53, "dates" => 10, "codemap" => 12, "pending" => 1 }, by_posture)
   end
 end

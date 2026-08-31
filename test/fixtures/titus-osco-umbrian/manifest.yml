@@ -1,0 +1,29 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# FULL real pages of the TITUS Osco-Umbrian Corpus (frame-based HTML edition),
+# one per script-lane class. Kept byte-verbatim (whole: true for the text
+# pages), so a refresh may byte-compare; the frameset entry is liveness-only.
+# Served under the owner's personal grant (Gippert, by email 2026-08-31,
+# extending the Avestan terms) — a liveness GET of the public pages is
+# unaffected; any re-snapshot is a manual, grant-holding operator's act.
+source: titus-osco-umbrian
+adapter_test: test/adapters/titus_osco_umbrian_test.rb
+retrieved: 2026-08-31
+files:
+  - path: oskum.htm
+    url: https://titus.uni-frankfurt.de/texte/etcs/ital/oskumb/oskum.htm
+    whole: false
+    trim: the 1.3 KB frameset entry, kept verbatim (liveness only, never byte-compared)
+  - path: oskum001.htm
+    url: https://titus.uni-frankfurt.de/texte/etcs/ital/oskumb/oskum001.htm
+    whole: true
+  - path: oskum012.htm
+    url: https://titus.uni-frankfurt.de/texte/etcs/ital/oskumb/oskum012.htm
+    whole: true
+  - path: oskum014.htm
+    url: https://titus.uni-frankfurt.de/texte/etcs/ital/oskumb/oskum014.htm
+    whole: true
+  - path: oskum150.htm
+    url: https://titus.uni-frankfurt.de/texte/etcs/ital/oskumb/oskum150.htm
+    whole: true

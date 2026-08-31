@@ -61,9 +61,9 @@ module Nabu
     # One-shot choreography. +guard+ receives the absolute doomed paths between
     # prepare! and complete!.
     def self.sync!(entry_url:, dir:, attic_dir:, http: ZipFetch.default_http,
-                   delay: DELAY, progress: nil, guard: nil)
+                   delay: DELAY, progress: nil, guard: nil, page_re: nil)
       fetch = new(entry_url: entry_url, dir: dir, attic_dir: attic_dir,
-                  http: http, delay: delay, progress: progress)
+                  http: http, delay: delay, progress: progress, page_re: page_re)
       fetch.prepare!
       guard&.call(fetch.doomed_paths)
       fetch.complete!
@@ -72,13 +72,16 @@ module Nabu
     end
 
     def initialize(entry_url:, dir:, attic_dir:, http: ZipFetch.default_http,
-                   delay: DELAY, progress: nil)
+                   delay: DELAY, progress: nil, page_re: nil)
       @entry_url = entry_url
       @dir = dir
       @attic_dir = attic_dir
       @http = http
       @delay = delay
       @progress = progress
+      # The corpus's own page pattern (P90-2 — the fetch now serves two TITUS
+      # editions); nil keeps the historical Avestan default.
+      @page_re = page_re || Nabu::Adapters::TitusAvestan::PAGE_RE
       @pages = {} # filename => { body:, sha:, on_disk: }
       @doomed = []
       @atticked = []
@@ -168,13 +171,13 @@ module Nabu
       File.join(@dir, name)
     end
 
-    # Live avestNNN.htm files the walk did not reach (renumbered/withdrawn pages).
+    # Live text-page files the walk did not reach (renumbered/withdrawn pages).
     def doomed_relpaths
       return [] unless Dir.exist?(@dir)
 
       Dir.children(@dir)
          .sort
-         .select { |name| name.match?(Nabu::Adapters::TitusAvestan::PAGE_RE) && !@pages.key?(name) }
+         .select { |name| name.match?(@page_re) && !@pages.key?(name) }
     end
 
     # First copy wins; the manifest records the page-set pin each file vanished
