@@ -83,7 +83,7 @@ class QieyunRestoredTest < Minitest::Test
     entry = registry["qieyun-restored"]
     refute_nil entry, "config/sources.yml must register qieyun-restored"
     assert_equal Nabu::Adapters::QieyunRestored, entry.adapter_class
-    refute entry.wired, "wired stays false until the owner-fired first sync verifies live"
+    assert entry.wired, "live (first sync verified + owner sign-off 2026-08-30; flipped 2026-08-31)"
     assert_equal "manual", entry.sync_policy
   end
 

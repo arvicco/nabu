@@ -99,7 +99,7 @@ class MonlamLexiconTest < Minitest::Test
     entry = registry["monlam-lexicon"]
     refute_nil entry, "config/sources.yml must register monlam-lexicon"
     assert_equal Nabu::Adapters::MonlamLexicon, entry.adapter_class
-    refute entry.wired, "wired stays false until the owner-fired first sync verifies live"
+    assert entry.wired, "live (first sync verified + owner sign-off 2026-08-30; flipped 2026-08-31)"
     assert_equal "manual", entry.sync_policy
   end
 
