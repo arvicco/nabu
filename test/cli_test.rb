@@ -724,6 +724,73 @@ class CLITest < Minitest::Test
     end
   end
 
+  # -- P90-5 (Q61): the registry extension on --list + the info front door --
+
+  def test_language_list_carries_the_registry_extension
+    with_recon_shelf_and_lects do |config|
+      out, _err, status = with_config(config) { run_cli(%w[language --list]) }
+      assert_nil status
+      assert_match(/^registry extension \(nabu-lects\)/, out)
+      assert_match(/^ {2}grc\s+Ancient Greek — stages: hom cla koi/, out,
+                   "every anchor with minted stages/varieties lists its lect-id tails")
+      assert_match(/^held languages/, out, "the held section is untouched")
+    end
+  end
+
+  def test_language_list_notes_an_absent_lects_module
+    with_recon_shelf do |config|
+      out, _err, status = with_config(config) { run_cli(%w[language --list]) }
+      assert_nil status
+      assert_match(/registry extension: nabu-lects not synced \(nabu sync nabu-lects\)/, out)
+      refute_match(/— stages:/, out)
+    end
+  end
+
+  def test_info_renders_the_script_dossier_by_tag_and_by_name_alias
+    with_recon_shelf_and_lects do |config|
+      with_config(config) do
+        by_tag, _err, status = run_cli(%w[info glag])
+        assert_nil status
+        assert_match(/^script Glagolitic \(glag\)/, by_tag)
+        assert_match(/FIRST Slavic alphabet/, by_tag, "the curated context renders")
+
+        by_name, _err, status = run_cli(%w[info Glagolitic])
+        assert_nil status
+        assert_equal by_tag, by_name, "the name alias renders the same card"
+      end
+    end
+  end
+
+  def test_info_dispatches_a_language_code_to_the_language_card_verbatim
+    with_recon_shelf_and_lects do |config|
+      with_config(config) do
+        direct, _err, s1 = run_cli(%w[language sla-pro])
+        via_info, _err, s2 = run_cli(%w[info sla-pro])
+        assert_nil s1
+        assert_nil s2
+        assert_equal direct, via_info, "info is a front door, not a reimplementation"
+      end
+    end
+  end
+
+  def test_info_dispatches_a_single_grapheme_to_the_char_card_verbatim
+    with_recon_shelf_and_lects do |config|
+      with_config(config) do
+        direct = run_cli(%w[char 棄])
+        via_info = run_cli(%w[info 棄])
+        assert_equal direct, via_info, "char dispatch is byte-identical, misses included"
+      end
+    end
+  end
+
+  def test_info_misses_honestly_naming_all_three_namespaces
+    with_recon_shelf_and_lects do |config|
+      _out, err, status = with_config(config) { run_cli(%w[info zzz-nope]) }
+      assert_equal 1, status
+      assert_match(%r{not a known character, language/lect code, or script}, err)
+    end
+  end
+
   # P19-1: THE canonical-memory migration — ledger notes export as dossier
   # files, idempotently; --dry-run touches nothing.
   def test_language_export_dossiers_is_idempotent_and_dry_run_touches_nothing
