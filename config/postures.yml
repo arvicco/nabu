@@ -486,6 +486,21 @@ sources:
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: mixed, note: "Greek loans inside Coptic text"}
+  titus-osco-umbrian:
+    # P90-2: `osc` is a real nabu-lects anchor (bare code = the claim);
+    # `xum` awaits its registry mint (the P90 nabu-lects PR) — pending
+    # until that merges and reaches canonical/nabu-lects. The language
+    # split is the edition's own lane split, deliberately coarse: minor
+    # Sabellic dialects (Paelignian, Marsian, …) ride their nearest lane.
+    lect: {posture: pending, note: "candidate: xum anchor (nabu-lects mint in flight);
+        osc resolves as identity once the codemap row lands"}
+    dating: {posture: undatable}
+    places: {posture: unplaced, note: "monument/inscription tokens (POMP-, CUM-, NOLA-, …)
+        carry findspot abbreviations verbatim in annotations — a ruled token→place
+        table is the future extractor"}
+    script: {posture: qualified, note: "per-passage `alphabet` annotation (italic/latin/greek)
+        from the edition's original-script lanes; the text lane is the unified Latin
+        transliteration (Latn)"}
   titus-avestan:
     # lect row RETIRED P66-1 (the machine grain arrived): the adapter now
     # derives the avestan-stage facet from the verse anchors (Gathic
