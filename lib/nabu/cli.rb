@@ -3267,6 +3267,46 @@ module Nabu
       catalog&.disconnect
     end
 
+    desc "info QUERY", "One front door: the character, language/lect, or script dossier card for QUERY"
+    long_desc <<~HELP, wrap: false
+      The dossier front door (P90-5): one command that answers "what is
+      this?" across the three desk namespaces, dispatching to the existing
+      cards byte-identically — an alias, never a reimplementation:
+
+        1. a single character (any non-ASCII grapheme) or a Gardiner-style
+           sign code (G5, Aa27)                → the `nabu char` card
+        2. a known language code or lect id (chu, grc:koi, sla-pro)
+                                               → the `nabu language` card
+        3. a script tag or script name (glag / Glagolitic — the curated
+           dossiers of config/script_dossiers.yml) → the script card
+
+      Earlier rungs win; when a language code shadows a script tag the
+      language card renders and a footer names the shadowed reading.
+      Anything else misses honestly, naming all three namespaces.
+    HELP
+    def info(query = nil)
+      term = Nabu::Normalize.nfc(query.to_s.strip)
+      raise Thor::Error, "info: give a character, a language/lect code, or a script tag/name" if term.empty?
+      return char(term) if term.grapheme_clusters.size == 1 && !term.match?(/\A[[:ascii:]]\z/)
+      return char(term) if term.match?(/\A[A-Z][a-z]?\d+[a-z]?\z/) # Gardiner-style sign codes
+
+      config = Nabu::Config.load
+      lects = Nabu::Lects.load_default(config: config, overlay: {})
+      if info_language?(config, term, lects)
+        language(term)
+        if (tag = info_script_tag(term))
+          say "(#{term.inspect} is also script tag #{tag.inspect} — languages resolve first; " \
+              "`nabu info #{Nabu::ScriptDossiers.lookup(tag).name}` shows the script card)"
+        end
+        return
+      end
+      return print_script_card(tag, lects) if (tag = info_script_tag(term))
+
+      raise Thor::Error,
+            "info: #{term.inspect} is not a known character, language/lect code, or script — " \
+            "try nabu char CHAR, nabu language --list, or a script tag from config/script_dossiers.yml"
+    end
+
     desc "language [CODE]", "The language-code desk reference: name, family, context, holdings"
     long_desc <<~HELP, wrap: false
       Explains any language code the library surfaces — the corpus tags
@@ -3325,7 +3365,7 @@ module Nabu
       languages = Nabu::Languages.new(catalog: catalog)
       info = catalog && Nabu::Query::LanguageInfo.new(catalog: catalog, fulltext: fulltext)
       if options[:list]
-        print_language_list(languages, info)
+        print_language_list(languages, info, Nabu::Lects.load_default(config: config, overlay: {}))
       else
         term = code.to_s.strip
         raise Thor::Error, "language: give a code (chu, gkm, zle-ort…) or --list" if term.empty?
@@ -9233,7 +9273,7 @@ module Nabu
       # --list: the held languages only (a full dump of the ~800-code
       # etymology tail would be unusable and unpageable; the tail is what
       # `language CODE` is for — stated in the footer, never implied away).
-      def print_language_list(languages, info)
+      def print_language_list(languages, info, lects = nil)
         raise Thor::Error, "no corpus — run nabu sync or nabu rebuild" unless info
 
         held = info.held
@@ -9243,7 +9283,73 @@ module Nabu
           say "  #{entry.code.ljust(width)}  #{languages.name(entry.code) || '(unnamed)'} — " \
               "#{held_line(entry)}"
         end
+        print_registry_extension(lects)
         say "etymology tail: ~800 more codes appear in reflex edges — nabu language CODE explains any"
+      end
+
+      # P90-5 (Q61 lane 3): is +term+ a language the desks know — a lect id
+      # the registry parses, or a code the names census can name? (The
+      # membership test the front door needs; the language command itself
+      # renders unknown codes as honest misses, which would swallow every
+      # string.)
+      def info_language?(config, term, lects)
+        return true if lects&.lect(term)
+
+        catalog = open_catalog(config)
+        return false unless catalog
+
+        !Nabu::Languages.new(catalog: catalog).name(term).nil?
+      ensure
+        catalog&.disconnect
+      end
+
+      # A script-dossier tag for +term+: the tag itself, or a case-blind
+      # script NAME alias (glag / Glagolitic), else nil.
+      def info_script_tag(term)
+        tag = term.downcase
+        return tag if Nabu::ScriptDossiers.lookup(tag)
+
+        Nabu::ScriptDossiers.table.find { |_t, row| row["name"].to_s.casecmp?(term) }&.first
+      end
+
+      # P90-5 (Q61 lane 2): the script dossier card — the curated context
+      # config/script_dossiers.yml holds (published as nabu-data
+      # mul/script-dossiers) finally readable from the CLI.
+      def print_script_card(tag, lects)
+        dossier = Nabu::ScriptDossiers.lookup(tag)
+        say "script #{dossier.name} (#{dossier.tag})"
+        say_wrapped(dossier.context, indent: 2)
+        if dossier.desk
+          say "  desk:"
+          say_wrapped(dossier.desk, indent: 4)
+        end
+        row = lects&.script_rows&.dig(dossier.tag)
+        if row
+          iso = row["iso15924"] ? ", ISO 15924 #{row['iso15924']}" : ""
+          say "  registry: minted in the nabu-lects scripts table#{iso}"
+        else
+          say "  registry: nabu-lects not synced — the scripts-table row is unavailable"
+        end
+      end
+
+      # P90-5 (Q61 lane 1): the nabu-lects layer the listing was missing —
+      # every anchor with minted stages/varieties, i.e. the lect ids the
+      # cards, `search --lect` and the postures accept beyond bare codes.
+      def print_registry_extension(lects)
+        unless lects
+          say "registry extension: nabu-lects not synced (nabu sync nabu-lects)"
+          return
+        end
+        ladders = lects.ladders
+        say "registry extension (nabu-lects): #{ladders.size} anchors carry minted stages/varieties " \
+            "— ids like grc:koi work on cards, --lect and postures:"
+        width = ladders.map { |ladder| ladder.anchor.length }.max || 0
+        ladders.each do |ladder|
+          bits = []
+          bits << "stages: #{ladder.stages.join(' ')}" unless ladder.stages.empty?
+          bits << "varieties: #{ladder.varieties.join(' ')}" unless ladder.varieties.empty?
+          say "  #{ladder.anchor.ljust(width)}  #{ladder.name} — #{bits.join(' · ')}"
+        end
       end
 
       def held_line(entry)
