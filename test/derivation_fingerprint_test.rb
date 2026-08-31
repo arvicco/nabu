@@ -76,6 +76,38 @@ class DerivationFingerprintTest < Minitest::Test
     assert_nil identity(dir)
   end
 
+  # -- canonical identity: git-LFS materialization (P90-4, Q59) ------------
+
+  def test_lfs_materialized_payload_is_vouched_not_weak
+    payload = "REAL PAYLOAD BYTES\n" * 3
+    dir = git_tree("corpus", "data.bin" => lfs_pointer(payload), "plain.txt" => "alpha\n")
+    before = identity(dir)
+    refute_nil before
+
+    # LfsFetch materializes the payload in place: git sees ` M data.bin`
+    # forever, but the bytes are EXACTLY what HEAD's pointer names — the
+    # cdli shape (weak-by-design until this vouch).
+    File.write(File.join(dir, "data.bin"), payload)
+    vouched = identity(dir)
+    refute_nil vouched, "a pointer-true materialization keeps the identity honest"
+    assert_equal before, vouched, "identity stays HEAD-based — materialization is a content no-op"
+  end
+
+  def test_lfs_materialization_with_wrong_bytes_stays_weak
+    payload = "REAL PAYLOAD BYTES\n"
+    dir = git_tree("corpus", "data.bin" => lfs_pointer(payload))
+    File.write(File.join(dir, "data.bin"), "tampered bytes\n")
+    assert_nil identity(dir), "bytes that do not match the pointer's oid are ordinary dirt"
+  end
+
+  def test_lfs_vouch_never_covers_other_dirt
+    payload = "REAL PAYLOAD BYTES\n"
+    dir = git_tree("corpus", "data.bin" => lfs_pointer(payload), "plain.txt" => "alpha\n")
+    File.write(File.join(dir, "data.bin"), payload)
+    File.write(File.join(dir, "stray.txt"), "untracked\n")
+    assert_nil identity(dir), "an untracked file beside a vouched materialization stays weak"
+  end
+
   def test_git_attic_content_participates_in_the_identity
     dir = git_tree("corpus", "one.txt" => "alpha\n")
     # Mimic GitFetch's attic: excluded from git's sight, still canonical data.
@@ -483,6 +515,13 @@ class DerivationFingerprintTest < Minitest::Test
     FileUtils.mkdir_p(dir)
     files.each { |name, content| File.write(File.join(dir, name), content) }
     dir
+  end
+
+  # A git-LFS pointer file naming +payload+ (the spec's three-line form).
+  def lfs_pointer(payload)
+    "version https://git-lfs.github.com/spec/v1\n" \
+      "oid sha256:#{Digest::SHA256.hexdigest(payload)}\n" \
+      "size #{payload.bytesize}\n"
   end
 
   def git_tree(slug, files)

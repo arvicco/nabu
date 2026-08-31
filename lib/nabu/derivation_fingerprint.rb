@@ -359,10 +359,35 @@ module Nabu
       end
 
       # Clean = git can vouch that HEAD names the working tree. The attic is
-      # excluded by GitFetch; anything else (edits, untracked files, LFS
-      # materialization) means HEAD is not the bytes we would parse.
+      # excluded by GitFetch; anything else (edits, untracked files) means
+      # HEAD is not the bytes we would parse — with ONE carve-out (P90-4,
+      # Q59): a ` M <path>` whose HEAD blob is a git-LFS POINTER naming
+      # exactly the working file's sha256 and size is an LfsFetch
+      # materialization — the bytes ARE what HEAD says, just smudged in
+      # place — so HEAD still names the tree. Every porcelain line must be
+      # such a vouched materialization; any other dirt poisons the whole.
       def porcelain_clean?(dir)
-        Shell.run("git", "-C", dir, "status", "--porcelain").strip.empty?
+        lines = Shell.run("git", "-C", dir, "status", "--porcelain")
+                     .lines.map(&:chomp).reject(&:empty?)
+        lines.all? { |line| line.start_with?(" M ") && lfs_materialized?(dir, line[3..]) }
+      end
+
+      # Is +path+'s working copy the exact payload its HEAD-side LFS
+      # pointer names? Both gates checked: the cheap size first, then the
+      # full sha256. A non-pointer HEAD blob, a size/sha mismatch, or any
+      # git/file error answers false (ordinary dirt).
+      def lfs_materialized?(dir, path)
+        pointer = Shell.run("git", "-C", dir, "cat-file", "blob", "HEAD:#{path}")
+        return false unless pointer.start_with?("version https://git-lfs.github.com/spec/v1")
+
+        oid = pointer[/^oid sha256:(\h{64})$/, 1]
+        size = pointer[/^size (\d+)$/, 1]
+        return false unless oid && size
+
+        full = File.join(dir, path)
+        File.size(full) == Integer(size, 10) && Digest::SHA256.file(full).hexdigest == oid
+      rescue Shell::Error, Errno::ENOENT
+        false
       end
 
       def relative(path, root)
