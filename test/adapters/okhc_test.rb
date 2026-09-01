@@ -53,7 +53,7 @@ class OkhcTest < Minitest::Test
 
   def test_discover_yields_one_document_per_record_across_all_files
     refs = @adapter.discover(FIXTURES).to_a
-    assert_equal 37, refs.size, "37 records across the 7 fixture files"
+    assert_equal 39, refs.size, "39 records across the 7 fixture files"
     assert(refs.all? { |ref| ref.id.start_with?("urn:nabu:okhc:") })
     assert_includes refs.map(&:id), "urn:nabu:okhc:sagi:sg_003_0030_0070"
   end
@@ -84,11 +84,19 @@ class OkhcTest < Minitest::Test
     assert_match(/db\.history\.go\.kr/, doc.metadata["permanent_url"])
   end
 
-  def test_hanmun_label_maps_to_lzh_and_null_copyright_keeps_the_source_class
+  def test_hanmun_label_maps_to_lzh
     doc = document("urn:nabu:okhc:ilseongnok:1760-01-0-01-영조-GK12811_00-2-000-000")
     refute_nil doc
     assert_equal "lzh", doc.language, "the edition labels Korean-context Literary Sinitic 'Hanmun'"
-    assert_nil doc.license_override, "copyright null -> no relabel; the source's nc governs"
+  end
+
+  # A real ND record (73 exist corpus-wide): ND earns NO upgrade — no
+  # override, the source's nc governs, the verbatim status rides metadata.
+  def test_an_nd_record_keeps_the_source_class
+    doc = document("urn:nabu:okhc:aks_collection:WU.1985.4886-20101008.B015a_025_00001_YYY")
+    refute_nil doc
+    assert_nil doc.license_override
+    assert_equal "CC BY-NC-ND 2.0 KR", doc.metadata["copyright"]
   end
 
   def test_korean_labels_map_to_ko
@@ -102,6 +110,31 @@ class OkhcTest < Minitest::Test
     assert_equal (0...doc.passages.size).to_a, doc.passages.map(&:sequence)
     assert_equal(doc.passages.map(&:urn),
                  doc.passages.each_with_index.map { |_, i| "#{doc.urn}:#{i + 1}" })
+  end
+
+  # P91-1 first-sync census: the DEPOSIT's schema names the field
+  # copyright_status (the repo sample's older schema says copyright — the
+  # drift that silently nulled every override on the first load). This
+  # row is a real deposit line, appended 2026-09-01: real-schema bytes
+  # pin the PD → open relabel and the Hanmun mapping together.
+  def test_the_deposit_schema_copyright_status_field_drives_the_override
+    doc = document("urn:nabu:okhc:sagi:sg_001_0060_0130")
+    refute_nil doc
+    assert_equal "lzh", doc.language
+    assert_equal "open", doc.license_override, "copyright_status: Public Domain relabels open"
+    assert_equal "Public Domain", doc.metadata["copyright"]
+  end
+
+  # P91-1 first-sync census: gongu/jpn_records carry Western-language
+  # documents (2,735 English + 25 French quarantined by the unknown-label
+  # net on the first run) — classified onto the held en/fra codes.
+  def test_western_language_labels_map_to_the_held_codes
+    assert_equal "en", Nabu::Adapters::OkhcJsonlParser::LANGUAGES.fetch("English")
+    assert_equal "fra", Nabu::Adapters::OkhcJsonlParser::LANGUAGES.fetch("French")
+    row = { "id" => "gongu:x1", "content" => { "body" => "An English work", "title" => "t" },
+            "language" => "English", "copyright" => "Public Domain" }
+    record = Nabu::Adapters::OkhcJsonlParser.parse_record(JSON.generate(row))
+    assert_equal "en", record.language
   end
 
   # --- defensive quarantines ------------------------------------------------
