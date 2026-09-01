@@ -3933,7 +3933,7 @@ burman-concordance:
 okhc:   # P91-1, 02-sources row 189
   adapter: Nabu::Adapters::Okhc
   axes: [korean]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true    # first sync + recovery re-parse verified 2026-09-01: 1,198,779 docs / 3,542,662 passages
   sync_policy: manual
   # OKHC — the Open Korean Historical Corpus (Song et al., KAIST; the HF
   # deposit seyoungsong/Open-Korean-Historical-Corpus, public, ungated —

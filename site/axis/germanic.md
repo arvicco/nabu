@@ -34,7 +34,7 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
 | `iswoc` | texts | nc | wired · frozen | 5 docs / 2,536 passages |
 | `menotec` | texts | nc | wired · manual | 7 docs / 20,308 passages |
-| `menota` | texts | attribution | wired · manual | 91 docs / 200,523 passages |
+| `menota` | texts | attribution | wired · manual | 91 docs / 229,501 passages |
 | `aspr` | texts | attribution | wired · manual | 349 docs / 30,550 passages |
 | `bosworth-toller` | dictionary | attribution | wired · manual | 62,815 entries |
 | `corpus-oudnederlands` | texts | research_private | wired · manual | 89 docs / 5,745 passages |
