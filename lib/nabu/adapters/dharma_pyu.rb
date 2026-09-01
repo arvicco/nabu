@@ -17,6 +17,15 @@ module Nabu
       XML_DIR = ""
 
       LANGUAGES = %w[pyx-Latn san-Latn].freeze
+
+      private
+
+      # Flat repo: the editions live at the ROOT, so a sparse cone of
+      # named paths materializes nothing (the first-sync failure) — the
+      # ~1 MB repo clones whole.
+      def sparse_paths
+        nil
+      end
     end
   end
 end

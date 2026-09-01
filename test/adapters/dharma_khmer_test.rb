@@ -51,7 +51,7 @@ class DharmaKhmerTest < Minitest::Test
 
   def test_discover_yields_one_ref_per_edition_file_sorted
     refs = adapter.discover(workdir).to_a
-    assert_equal [K1, K2], refs.map(&:id),
+    assert_equal [K1, K2, "urn:nabu:dharma-khmer:INSCIK00046"], refs.map(&:id),
                  "urn:nabu:dharma-khmer:<stem sans DHARMA_>, sorted"
     assert(refs.all? { |ref| ref.source_id == "dharma-khmer" })
   end
@@ -97,6 +97,20 @@ class DharmaKhmerTest < Minitest::Test
                     "a pada that is only lost-gap markers minted no passage"
     pada = document.passages.find { |p| p.urn == "#{K2}:1.d" }
     assert_match(/m·/, pada.text)
+  end
+
+  # -- K.46: pagelike faces (first-sync regression, 2026-09-01) ---------------
+
+  K46 = "urn:nabu:dharma-khmer:INSCIK00046"
+
+  def test_k46_pagelike_faces_prefix_the_citation
+    document = adapter.parse(ref_for(K46))
+    keys = document.passages.map { |p| p.urn.split(":").last }
+    assert(keys.any? { |k| k.start_with?("A.") }, "face A's units carry the face prefix")
+    assert(keys.any? { |k| k.start_with?("B.") },
+           "face B restarts its numbering — the pagelike milestone opens the section " \
+           "(before this fix the restart collided and quarantined the whole file)")
+    assert_equal keys.uniq, keys
   end
 
   # -- sequences and metadata -------------------------------------------------

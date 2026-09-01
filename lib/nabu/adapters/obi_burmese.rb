@@ -15,9 +15,12 @@ module Nabu
     #
     # == Identity
     #
-    # One file = one FACE: OBI_Vol7_No3a__ob_p6.txt →
-    # urn:nabu:obi-burmese:vol7:3a:ob (face-less files — the
-    # three-underscore shape — mint vol7:36). Passage :<line n>.
+    # One file = one PAGE of one face: OBI_Vol7_No3a__ob_p6.txt →
+    # urn:nabu:obi-burmese:vol7:3a:ob:p6. The page is part of identity —
+    # six inscriptions continue the same face across two files
+    # (vol2 No72 ob spans p148 and p151), so vol:number:face alone
+    # collides; the filename is the deposit's own unit. Face-less
+    # filenames mint vol5:4:p8. Passage :<line n>.
     #
     # == License
     #
@@ -38,7 +41,14 @@ module Nabu
 
       VOLUMES = (1..7)
 
-      FILENAME_RE = /\AOBI_Vol(\d+)_No(\w+?)__(ob|re)?_p(\d+)\z/
+      # The measured face vocabulary (whole-deposit census 2026-09-01):
+      # obverse/reverse, the four cardinal faces of pillar inscriptions,
+      # right/left/upper/lower/side. Language tokens (No1_mya, No2_pali —
+      # the Myazedi-style parallel texts) ride inside the number
+      # component; underscore counts vary (one vol2 file writes a single
+      # one before its face), so the shape is read right-to-left.
+      FACES = /\A(.*?)_{1,2}(ob|re|no|ea|so|we|ri|le|up|si|lo)\z/
+      FILENAME_RE = /\AOBI_Vol(\d+)_No(.+?)_p(\d+)\z/
 
       MANIFEST = Nabu::SourceManifest.new(
         id: SLUG,
@@ -151,7 +161,17 @@ module Nabu
 
       def urn_for(path)
         m = File.basename(path, ".txt").match(FILENAME_RE) or return nil
-        ["urn:nabu:#{SLUG}:vol#{m[1]}:#{m[2]}", m[3]].compact.join(":")
+        mid = m[2]
+        if (f = mid.match(FACES))
+          number = f[1]
+          face = f[2]
+        else
+          number = mid.sub(/_{1,2}\z/, "")
+          face = nil
+        end
+        return nil if number.empty?
+
+        ["urn:nabu:#{SLUG}:vol#{m[1]}:#{number}", face, "p#{m[3]}"].compact.join(":")
       end
     end
   end

@@ -23,7 +23,15 @@ module Nabu
 
       # Measured: kaw-Latn (the kakawin mass), osn-Latn (Sanghyang Hayu and
       # the Old Sundanese prose), san-Latn (mantras, opening stanzas).
+      # Still quarantined honestly: "und" (6) and "nld" (2) editions.
       LANGUAGES = %w[kaw-Latn osn-Latn san-Latn].freeze
+
+      # First-sync censused tag dirt (2026-09-01): "kaw-Latin" is a typo'd
+      # script suffix (3 files); "kaw-ban" tags the Balinese-manuscript
+      # tradition (2 files) whose transcription is nonetheless ROMANIZED —
+      # the held surface is Latin either way, so both resolve to kaw-Latn
+      # (the manuscript's own script is the artifact fact).
+      ALIASES = { "kaw-Latin" => "kaw-Latn", "kaw-ban" => "kaw-Latn" }.freeze
     end
   end
 end

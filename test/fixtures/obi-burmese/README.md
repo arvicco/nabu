@@ -12,3 +12,8 @@ as the adapter extracts them (vol7/OBI_Corpus_Vol7/):
   three-underscore shape) with empty FACE header field.
 - `OBI_Vol7_No19b__re_p59.txt` — a reverse face of a lettered
   inscription number.
+- `vol6/OBI_Vol6_No10__ob_p16.txt` (first-sync regression, 2026-09-01):
+  vol6's parenthesized reconstructed line numbers ("(၁) ",
+  space-separated, no tab) — and the volume zip extracts FLAT, without
+  the vol7-style OBI_Corpus_VolN subdir, which the fixture layout
+  mirrors.
