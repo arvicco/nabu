@@ -25,8 +25,8 @@ divine custodian of Ashurbanipal's library. It is not a website and not a
 reader app: it is a pipeline plus a database, operated from the command
 line, designed to outlive the services it draws from.
 
-As of **2026-08-31** the shelves hold **1,066,990 documents /
-102,418,822 passages** in 154 language codes — from proto-cuneiform
+As of **2026-09-01** the shelves hold **2,265,769 documents /
+105,990,462 passages** in 155 language codes — from proto-cuneiform
 tablets of the late 4th millennium BCE to Meiji-era Japanese. The
 August waves crossed the hundred-million-passage line: **EEBO-TCP
 Phase I** brought the early-modern English print library whole (24.1M
@@ -40,15 +40,22 @@ the Guangyun and Wang Renxu's Qieyun (42,563 entries between them),
 Fujita's restoration of the Qieyun itself, the 'Phags-pa 蒙古字韻, and
 the 中原音韻 of 1324 — beside a 1.9M-passage Classical↔Modern Chinese
 parallel corpus, the Monlam Tibetan lexicon (449,829 entries), and
-DACON's annotated Newar. The newest shelf (2026-08-31) is **SEAL —
-Sources of Early Akkadian Literature** — the edition of record for
-Old Babylonian Gilgamesh and early Akkadian poetry, ingested under
-the editors' written personal-research grant. They join the July
+DACON's annotated Newar; **SEAL — Sources of Early Akkadian
+Literature** — the edition of record for Old Babylonian Gilgamesh and
+early Akkadian poetry, ingested under the editors' written
+personal-research grant. The newest wave (2026-09-01) more than
+doubled the document count in a single source: the historical slice
+of the **Open Korean Historical Corpus** (Song et al., KAIST) —
+1,198,779 documents spanning the Samguk sagi of 1145 (the oldest
+Korean history), the Ilseongnok court diaries, the ITKC munjip mass,
+and the AKS/Kyujanggak old-literature shelves, each record carrying
+its own license (1.2M relabel Public Domain → open under the ud
+split-licensing seam). They join the July
 library: **OpenITI's premodern Islamicate corpus** (Quran and hadith,
 history, fiqh, falsafa, the dīwāns, with its Persian shelf — still
 **the largest language at 33.3 million passages of Classical
-Arabic**, now ahead of early-modern English at 24.2M and Literary
-Chinese at 16.9M), the Rabbinic library (Mishnah, both Talmuds at
+Arabic**, now ahead of early-modern English at 24.3M and Literary
+Chinese at 18.7M), the Rabbinic library (Mishnah, both Talmuds at
 daf-grain citation), the Geʿez shelf (**1 Enoch and Jubilees,
 complete only in Geʿez**), the Romance and Germanic waves, the
 inscriptions of Italy, and the Japanese reading desk.
@@ -293,8 +300,8 @@ abuts Lebanon."
 
 ## What's on the shelves
 
-A representative slice, not the whole registry (143 corpus sources as of
-2026-08-31); each row carries the date its counts were read. The full
+A representative slice, not the whole registry (144 corpus sources as of
+2026-09-01); each row carries the date its counts were read. The full
 shelf map with research uses per shelf is
 **[docs/library.md](docs/library.md)**. Rows below without a date are the
 2026-07-14 census.
@@ -314,24 +321,27 @@ shelf map with research uses per shelf is
 | Old English poetry | The complete ASPR: Beowulf, the Exeter Book, Dream of the Rood… | 349 / 30,550 | CC BY-SA |
 | Slavic & Slovenian | CCMH OCS gospel codices, the ~1000 CE Freising Manuscripts, goo300k + IMP Early Modern Slovenian (1584–1899), the damaskini Balkan Slavic witnesses (15th–19th c., with English siblings) | 839 / 456,189 | CC BY (Freising BY-ND) |
 | Celtic | CorPH Early Irish (gold-lemmatized: Annals of Ulster, the great gloss corpora), RIIG Gaulish inscriptions (with French siblings), the Ogham in 3D stones (real Ogham codepoints + transliteration layers) | 1,387 / 20,318 | CC BY / MIT (ogham `nc` pending clarification) |
-| Chinese library | Kanripo classical Chinese + the CBETA Buddhist canon (Taishō + Xuzangjing) — the corpus's largest language (`lzh`, 13.2M passages), trad/simp/z-variant spellings folded to one search skeleton (2026-07-22) | 13.2M passages | mostly CC BY-NC / CC BY |
+| Chinese library | Kanripo classical Chinese + the CBETA Buddhist canon (Taishō + Xuzangjing) — 13.2M `lzh` passages (2026-07-22; the language now totals 18.7M with the Korean hanmun shelves), trad/simp/z-variant spellings folded to one search skeleton | 13.2M passages | mostly CC BY-NC / CC BY |
 | Japanese reading desk | Aozora Bunko: the Japanese public-domain library, Meiji core with a classical tail — ruby readings as annotations, kyūjitai reachable via the reform fold (2026-07-22) | 17,195 / 2,991,807 | open (PD grant) |
 | Germanic wave | Menotec Old Norwegian treebanks + Poetic Edda, the Old Saxon *Heliand* (HeliPaD), ReM Middle High German (355k gold manuscript lines), Rundata runic inscriptions in five text lanes (2026-07-22) | 31,057 / 409,947 | nc / CC BY / CC BY-SA / odbl |
+| Korean desk | The Veritable Records of Joseon (sillok) in the original hanmun, the Goryeosa family, and since 2026-09-01 the OKHC historical slice: the Samguk sagi (1145), the Ilseongnok, the ITKC munjip mass, the AKS/Kyujanggak/NHM old-literature dbs | 1,198,779 / 3,542,662 (okhc alone) | per-record PD/KOGL/nc (source CC BY-NC 4.0) |
 | Reference shelf | LSJ + Lewis & Short + Bosworth-Toller + Monier-Williams + Wiktionary OCS + ten Wiktionary reconstruction/Celtic shelves + the IE-CoR / LIV / de Vaan etymological witnesses + the five StarLing bases (Pokorny, PIET, **Vasmer**, Germanic, Baltic) + three Slovenian historical dictionaries incl. Pleteršnik + the Hebrew/Egyptian/Slovene desks and the Sino-Japanese lexicography (Unihan, KANJIDIC2/JMdict, HDIC, Guangyun) (`nabu define` / `etym`) | 1,310,763 entries / 56 shelves (2026-07-22) | CC BY-SA / CC BY / CC BY-NC-SA / grant |
 
-The registry holds **143 corpus sources + 5 local shelves + 20 feature
-modules** (the kind-split census, 2026-08-31 — `sources.yml`
+The registry holds **144 corpus sources + 5 local shelves + 20 feature
+modules** (the kind-split census, 2026-09-01 — `sources.yml`
 distinguishes what a row IS: a corpus that mints catalog rows, an
 owner-authored local memory shelf, or machinery like `osl` (the Oracc
 Sign List behind `nabu signs`), `nabu-data` (Nabu's own published
 datasets, consumed back) and `pedecerto`/`bridging` that fetches
-reference data but mints no documents of its own). All 143 corpus
+reference data but mints no documents of its own). All 144 corpus
 sources are **wired** — adapter built and first sync verified
-(2026-08-31); the newest arrival is `titus-osco-umbrian` — the
-complete Iguvine Tables with the Oscan inscriptions, 386 documents
-at line grain under a personal grant — a day behind `seal` (Sources
-of Early Akkadian Literature, 408 compositions, the editors'
-written personal-research grant), after the August wave
+(2026-09-01); the newest arrival is `okhc` — the historical slice of
+the Open Korean Historical Corpus, 1,198,779 documents that more
+than doubled the library's document count in a day — a day behind
+`titus-osco-umbrian` (the complete Iguvine Tables with the Oscan
+inscriptions, 386 documents at line grain under a personal grant)
+and `seal` (Sources of Early Akkadian Literature, 408 compositions,
+the editors' written personal-research grant), after the August wave
 (the Old Mandarin rhyme books, the Classical↔Modern Chinese parallel
 corpus, the Monlam Tibetan lexicon, DACON's Newar, EEBO-TCP,
 the Corpus of Middle English, Menota, and the INT Dutch corpora)
