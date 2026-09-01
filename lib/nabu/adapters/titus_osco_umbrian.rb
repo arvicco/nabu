@@ -71,16 +71,33 @@ module Nabu
         )]
       end
 
-      # One DocumentRef per fetched text page (ref.id IS the document urn).
+      # One DocumentRef per fetched TEXT page (ref.id IS the document urn).
+      # Photo-only stub pages — an inscription entry whose edition is a
+      # linked photograph, no content lanes at all (4 of 390 at the
+      # first-sync census) — skip by rule, censused by discovery_skips.
       def discover(workdir)
         Dir.glob(File.join(workdir, PAGE_GLOB)).filter_map do |path|
           name = File.basename(path)
           next unless name.match?(PAGE_RE)
+          next if photo_stub?(path)
 
           stem = name.delete_suffix(".htm")
           Nabu::DocumentRef.new(source_id: SLUG, id: document_urn(stem), path: path,
                                 metadata: { "page" => stem })
         end
+      end
+
+      # The discovery census: the photo-only stubs, counted and named.
+      def discovery_skips(workdir)
+        stubs = Dir.glob(File.join(workdir, PAGE_GLOB))
+                   .count { |path| File.basename(path).match?(PAGE_RE) && photo_stub?(path) }
+        notes = if stubs.positive?
+                  ["#{stubs} photo-only stub pages skipped — no content lanes, " \
+                   "the edition links a photograph"]
+                else
+                  []
+                end
+        Nabu::Adapter::DiscoverySkips.new(skipped_by_rule: stubs, unrecognized: 0, notes: notes)
       end
 
       # Parse one page into a Document of inscription-line Passages. A page
@@ -125,6 +142,15 @@ module Nabu
       end
 
       private
+
+      # A page carrying NONE of the content-lane ids in its bytes — the
+      # cheap byte needle (the SEAL stub_page? discipline): nothing to
+      # parse, the entry points at a photograph.
+      def photo_stub?(path)
+        bytes = File.binread(path)
+        lanes = TitusOscoUmbrianParser::TRANSLIT_LANES.keys + TitusOscoUmbrianParser::ORIGINAL_LANES.keys
+        lanes.none? { |lane| bytes.include?("span id=#{lane}") }
+      end
 
       # The page's one language claim: the unanimous section vote. The
       # edition keeps monuments (and so pages) single-lane; a mixed page is

@@ -487,13 +487,16 @@ sources:
     places: {posture: named}
     script: {posture: mixed, note: "Greek loans inside Coptic text"}
   titus-osco-umbrian:
-    # P90-2: `osc` is a real nabu-lects anchor (bare code = the claim);
-    # `xum` awaits its registry mint (the P90 nabu-lects PR) — pending
-    # until that merges and reaches canonical/nabu-lects. The language
-    # split is the edition's own lane split, deliberately coarse: minor
-    # Sabellic dialects (Paelignian, Marsian, …) ride their nearest lane.
-    lect: {posture: pending, note: "candidate: xum anchor (nabu-lects mint in flight);
-        osc resolves as identity once the codemap row lands"}
+    # P90-2: `osc` and `xum` are both real nabu-lects anchors (xum minted
+    # upstream 2026-08-31 and synced to canonical the same day — the
+    # pending retired at the gate, the add-then-retire shape within one
+    # phase). The language split is the edition's own lane split,
+    # deliberately coarse: minor Sabellic dialects (Paelignian, Marsian,
+    # …) ride their nearest lane. The single Rechtsdokumente lat doc's
+    # stage refinement (lat:arch — "in hoce loucarid" is archaic Latin)
+    # is a future override candidate, not a blanket rule.
+    lect: {posture: identity, note: osc/xum — the Sabellic pair on the edition's own lane
+        split; one lat comparandum rides bare (lat:arch the future override candidate)}
     dating: {posture: undatable}
     places: {posture: unplaced, note: "monument/inscription tokens (POMP-, CUM-, NOLA-, …)
         carry findspot abbreviations verbatim in annotations — a ruled token→place

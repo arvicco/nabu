@@ -27,3 +27,12 @@ files:
   - path: oskum150.htm
     url: https://titus.uni-frankfurt.de/texte/etcs/ital/oskumb/oskum150.htm
     whole: true
+  - path: oskum043.htm
+    url: https://titus.uni-frankfurt.de/texte/etcs/ital/oskumb/oskum043.htm
+    whole: true
+  - path: oskum069.htm
+    url: https://titus.uni-frankfurt.de/texte/etcs/ital/oskumb/oskum069.htm
+    whole: true
+  - path: oskum377.htm
+    url: https://titus.uni-frankfurt.de/texte/etcs/ital/oskumb/oskum377.htm
+    whole: true

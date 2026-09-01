@@ -181,8 +181,9 @@ class PosturesTest < Minitest::Test
                  "classical-modern ADDED P88-A2 — codemap, the kanripo lzh precedent: 72→74; " \
                  "seal ADDED P89-3 — identity akk (a real anchor; the period-mixed OB/OA/MB " \
                  "refinement is a future date-band story): 74→75; titus-osco-umbrian ADDED " \
-                 "P90-2 — pending on the xum nabu-lects mint (PR #12; osc resolves as identity " \
-                 "once it lands): 75→76"
+                 "P90-2 as pending on the xum mint, RETIRED TO IDENTITY at the same gate " \
+                 "(the mint merged and reached canonical 2026-08-31 — the add-then-retire " \
+                 "shape within ONE phase): 75→76"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -221,9 +222,10 @@ class PosturesTest < Minitest::Test
     # P89-3 ADDS seal as identity akk (the cuc/rsti cuneiform cluster
     # shape — the bare code is the claim; its dating posture pends on a
     # period→band table, a non-lect layer): 74→75, identity 52→53.
-    # P90-2 ADDS titus-osco-umbrian as pending (the xum anchor mint,
-    # nabu-lects PR #12, is in flight — the dacon/menota shape; retires
-    # to identity when the mint reaches canonical): 75→76, pending 0→1.
-    assert_equal({ "identity" => 53, "dates" => 10, "codemap" => 12, "pending" => 1 }, by_posture)
+    # P90-2 ADDS titus-osco-umbrian as pending on the xum mint, retired
+    # to identity at the SAME gate (the mint merged + synced to canonical
+    # 2026-08-31 — the fastest add-then-retire yet): 75→76, identity
+    # 53→54, zero pendings again.
+    assert_equal({ "identity" => 54, "dates" => 10, "codemap" => 12 }, by_posture)
   end
 end
