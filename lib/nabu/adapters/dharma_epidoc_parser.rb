@@ -171,7 +171,6 @@ module Nabu
             case child.name
             when "lg" then verse_units(child, units, child_ctx, allowed, path)
             when "lb" then prose.open_line!(units, child["n"] || "?", lang)
-            when "head" then nil
             when "p", "ab"
               prose.paragraph_boundary!(units, lang)
               walk_edition(child, units, prose, child_ctx, allowed, path)
