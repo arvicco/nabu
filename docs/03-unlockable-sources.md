@@ -27,7 +27,7 @@ Sources not readily ingestible today, with concrete unlock paths. Ordered by exp
 
 **Unlock path:** this is the highest-leverage unlock in the whole project and it requires *no permission for access*, only attention to per-institution image licenses (Vatican: personal study use; BnF Gallica: PD images free for non-commercial; e-codices: mostly CC). Build one **IIIF adapter** (manifest → ordered page images → local cache) and every participating library becomes an input to the HTR pipeline. Glagolitic and Cyrillic manuscripts (Vatican's Assemanianus!), Greek codices, Slovenian material in Austrian libraries — all reachable through the same three hundred lines of Ruby.
 
-**Verdict:** build the IIIF adapter early; it converts the ad-hoc pipeline from "things I photograph" to "the world's digitized manuscripts."
+**Verdict (ruled 2026-09-01):** PARKED until local HTR inference hardware exists — page images only become searchable text through HTR, so the adapter built today would deliver a browsable image cache, real but modest, while the per-institution image-license reads are the actual work. The HTR-hardware decision reopens this as a ready packet.
 
 ## 4. HathiTrust public-domain bulk
 
@@ -63,7 +63,7 @@ A standing option worth naming: many "locked" resources (TLG, Brepols, ProQuest 
 
 ## Priority actions
 
-1. **Build the IIIF adapter** (unlocks #3 and feeds #8) — pure engineering, no permission needed.
+1. **The IIIF adapter** (unlocks #3 and feeds #8) — parked until HTR hardware exists (see §3's verdict); pure engineering once reopened.
 2. **Register:** HathiTrust, HMML, Manuscriptorium — free, immediate.
 3. **Email TITUS** — done: the Avestan grant landed 2026-07-23 (§2); the Tocharian follow-up rides the same precedent.
 4. **Promote the open "unlockables"** — DigilibLT and EDH are already registered and ingested; Corpus Corporum is the one genuinely outstanding (verify current dump availability, then promote).

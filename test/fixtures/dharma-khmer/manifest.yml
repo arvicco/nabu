@@ -1,0 +1,14 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Two whole real DHARMA edition files (see README.md).
+source: dharma-khmer
+adapter_test: null
+retrieved: 2026-09-01
+files:
+  - path: texts/xml/DHARMA_INSCIK00001.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfc-khmer-epigraphy/master/texts/xml/DHARMA_INSCIK00001.xml
+    whole: true
+  - path: texts/xml/DHARMA_INSCIK00002.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfc-khmer-epigraphy/master/texts/xml/DHARMA_INSCIK00002.xml
+    whole: true

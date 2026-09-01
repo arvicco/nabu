@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# A real 23-row slice of the one data file (README.md).
+source: ojw
+adapter_test: null
+retrieved: 2026-09-01
+files:
+  - path: wn-kaw.tab
+    url: https://raw.githubusercontent.com/davidmoeljadi/OJW/master/wn-kaw.tab
+    whole: false
+    trim: header line + 23 rows verbatim (the abrĕsih/pracima blocks + 4-column rows)

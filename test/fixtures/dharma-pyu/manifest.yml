@@ -1,0 +1,11 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# One whole real edition (flat repo layout; its <licence> is the repo's whole grant).
+source: dharma-pyu
+adapter_test: null
+retrieved: 2026-09-01
+files:
+  - path: DHARMA_INSPYU00020.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfc-pyu-epigraphy/master/DHARMA_INSPYU00020.xml
+    whole: true

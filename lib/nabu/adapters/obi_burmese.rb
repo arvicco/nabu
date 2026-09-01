@@ -56,6 +56,21 @@ module Nabu
         MANIFEST
       end
 
+      # HTTP artifacts, not git: HEAD each volume zip for liveness; each
+      # vol subdir's ZipFetch state feeds the URL-identity lane.
+      def self.remote_probe_strategy = :http_zip
+
+      def self.http_probe_targets
+        VOLUMES.map do |volume|
+          Nabu::Adapter::HttpProbeTarget.new(
+            label: "OBI_Corpus_Vol#{volume}.zip",
+            zip_url: "https://zenodo.org/api/records/4321314/files/OBI_Corpus_Vol#{volume}.zip/content",
+            metadata_url: nil, state_subdir: "vol#{volume}",
+            state_file: Nabu::ZipFetch::STATE_FILE
+          )
+        end
+      end
+
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 

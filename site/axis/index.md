@@ -2,7 +2,7 @@
 title: Research axes
 permalink: /axis/
 description: >-
-  The twenty-four research desks of the Nabu library — tags over the
+  The twenty-five research desks of the Nabu library — tags over the
   source list, each a scholarly hat with its own shelves, instruments
   and commands.
 ---
@@ -28,7 +28,7 @@ and terminal setup live.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
-## The twenty-four desks
+## The twenty-five desks
 
 ### classical
 
@@ -197,6 +197,14 @@ The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kan
 The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg. Since P91-1 the OKHC historical slice widens the desk beyond the state record: the Samguk sagi (the oldest Korean history), the Ilseongnok, the ITKC munjip mass, and the AKS/Kyujanggak/NHM old-literature shelves, each record carrying its own PD-vs-nc label.
 
 [Open the korean desk]({{ '/axis/korean/' | relative_url }})
+
+### sea
+
+> The Southeast Asianist — the Indic cosmopolis at its eastern edge: Sanskrit charters beside the vernaculars they seeded.
+
+Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the Cœdès K-numbers), the Campā corpus, the Nusantara charters (Old Malay, Old Javanese, Old Sundanese), the Pyu corpus, and the Bagan Old Burmese inscriptions — with the kakawin critical editions as the literary wing and the Old Javanese Wordnet as its glossary, joining as their packets land.
+
+[Open the sea desk]({{ '/axis/sea/' | relative_url }})
 
 ### sinitic
 
