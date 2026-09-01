@@ -75,6 +75,17 @@ module Nabu
         jpn_records.jsonl
       ].freeze
 
+      # Per-record license relabels (the ud split-licensing seam), from the
+      # full-corpus copyright_status census (2026-09-01, 1,198,780 records):
+      # "Public Domain" ×1,198,692 → open; "KOGL Type 1 (Attribution)" ×15
+      # → attribution (the author's own "functionally equivalent to CC BY");
+      # "CC BY-NC-ND 2.0 KR" ×73 gets NO override — ND earns no upgrade,
+      # the source's nc governs and the verbatim status rides metadata.
+      LICENSE_OVERRIDES = {
+        "Public Domain" => "open",
+        "KOGL Type 1 (Attribution)" => "attribution"
+      }.freeze
+
       # A cheap id probe so discovery never JSON-parses 4 GB twice: the
       # deposit writes ids first and plainly. A line it misses is counted
       # unrecognized (discovery_skips), and parse-time JSON is authoritative.
@@ -148,7 +159,7 @@ module Nabu
         document = Nabu::Document.new(
           urn: document_ref.id, language: record.language,
           canonical_path: document_ref.path, title: record.title,
-          license_override: record.copyright == "Public Domain" ? "open" : nil,
+          license_override: LICENSE_OVERRIDES[record.copyright],
           metadata: record_metadata(record)
         )
         record.lines.each_with_index do |text, index|

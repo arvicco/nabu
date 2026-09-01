@@ -34,7 +34,14 @@ module Nabu
         "Korean" => "ko",
         "Modern Korean" => "ko",
         "North Korean" => "ko",
-        "Japanese" => "jpn"
+        "Japanese" => "jpn",
+        # The first-sync census (2026-09-01, 1,198,780 records): the gongu
+        # PD collection and the legation records carry Western-language
+        # documents — 2,735 English + 25 French, quarantined by the
+        # unknown-label net exactly as designed, classified here (the held
+        # en/fra codes).
+        "English" => "en",
+        "French" => "fra"
       }.freeze
 
       # Parse one jsonl line into a Record. Raises Nabu::ParseError on
@@ -53,7 +60,11 @@ module Nabu
           title: presence(row.dig("content", "title")) || row["corpus"] || row.fetch("id"),
           lines: lines, language: language, year: row["year"],
           script: presence(row["script"]), source: presence(row["source"]),
-          corpus: presence(row["corpus"]), copyright: presence(row["copyright"]),
+          corpus: presence(row["corpus"]),
+          # The deposit names the field copyright_status; the repo's older
+          # sample.jsonl says copyright (schema drift found at the first
+          # sync — read both, deposit spelling first).
+          copyright: presence(row["copyright_status"] || row["copyright"]),
           url: presence(row["url"]), page_path: presence(row.dig("metadata", "page_path"))
         )
       rescue JSON::ParserError => e
