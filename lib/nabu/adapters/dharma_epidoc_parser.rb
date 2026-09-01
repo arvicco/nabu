@@ -28,12 +28,21 @@ module Nabu
     #
     # == Passage grain
     #
-    # - Verse (<lg>): one passage per <l>; citation "<lg n>.<l n>" — the
-    #   edition's own metrical citation (K.2 stanza 1 pāda d = "1.d").
-    # - Prose: one passage per PHYSICAL LINE (<lb n>); lb break="no" still
-    #   ends the line — the straddling word stays split as upstream prints
-    #   it (the titus/menota line-grain precedent). Text before the first
-    #   <lb> (rare) mints suffix "pre".
+    # - Verse (<lg>): one passage per <l>; citation "<lg n>.<l n>",
+    #   PREFIXED by the @n of any ancestor divs inside the edition — the
+    #   kakawin editions nest chapter > canto (met=…) > lg, so
+    #   Deśavarṇana 1.1.1.a cites chapter.canto.stanza.pāda while K.2's
+    #   flat verse keeps "1.d". A canto/lg @met rides each verse
+    #   passage's annotations["met"] (the meter axis's feed).
+    # - Prose WITH <lb> (inscriptions; the diplomatic transcriptions'
+    #   folio-lines "1r1"): one passage per PHYSICAL LINE; lb break="no"
+    #   still ends the line — the straddling word stays split as upstream
+    #   prints it (the titus/menota line-grain precedent). Text before
+    #   the first <lb> (rare) mints suffix "pre".
+    # - Prose WITHOUT any <lb> outside verse (the prose critical
+    #   editions — BhimaSvarga's <p> stream of app/lem/rdg): one passage
+    #   per PARAGRAPH, keys "p1", "p2", … in document order. The mode is
+    #   decided per document by a pre-scan, never mixed.
     # - A unit whose extraction is only gap markers / punctuation mints no
     #   passage (K.2's all-lost pādas); a document with ZERO passages
     #   raises ParseError — metadata-only stubs quarantine loudly.
@@ -64,9 +73,9 @@ module Nabu
       XML_NS = "http://www.w3.org/XML/1998/namespace"
 
       Result = Data.define(:title, :language, :license, :maturity, :passages)
-      Unit = Data.define(:key, :text, :language)
+      Unit = Data.define(:key, :text, :language, :met)
 
-      DROP = %w[note bibl figure desc certainty ref rdg sic orig abbr].freeze
+      DROP = %w[note bibl figure desc certainty ref rdg sic orig abbr head].freeze
       GAP_MARKER = "[…]"
 
       module_function
@@ -82,8 +91,8 @@ module Nabu
 
         language = check_language!(lang_of(edition), allowed_languages, path)
         units = []
-        prose = ProseLines.new
-        walk_edition(edition, units, prose, language, allowed_languages, path)
+        prose = ProseLines.new(paragraph_mode: !edition.at_xpath(".//lb[not(ancestor::lg)]"))
+        walk_edition(edition, units, prose, Walkctx.new(language, [], nil), allowed_languages, path)
         prose.flush!(units)
 
         units = units.reject { |u| marker_only?(u.text) }
@@ -103,21 +112,38 @@ module Nabu
         )
       end
 
-      # Accumulates the current physical prose line across <p> and face
-      # boundaries; flushed when the next <lb> (or the edition's end) closes it.
+      # The walk's inherited state: language, the @n path of ancestor divs
+      # inside the edition, and the nearest @met (canto meter).
+      Walkctx = Data.define(:language, :div_path, :met)
+
+      # Accumulates the current prose unit. Line mode: a unit runs from one
+      # <lb> to the next, across <p> and face boundaries. Paragraph mode
+      # (no <lb> in the document's prose): a unit is one <p>/<ab>, keyed
+      # "p<ordinal>".
       class ProseLines
-        def initialize
+        def initialize(paragraph_mode: false)
+          @paragraph_mode = paragraph_mode
+          @paragraphs = 0
           @key = nil
           @buffer = +""
           @language = nil
-          @seen_first_lb = false
         end
 
         def open_line!(units, number, language)
           flush!(units)
           @key = number
           @language = language
-          @seen_first_lb = true
+        end
+
+        def paragraph_boundary!(units, language)
+          if @paragraph_mode
+            flush!(units)
+            @paragraphs += 1
+            @key = "p#{@paragraphs}"
+            @language = language
+          else
+            append(" ", language)
+          end
         end
 
         def append(text, language)
@@ -127,26 +153,32 @@ module Nabu
 
         def flush!(units)
           text = DharmaEpidocParser.clean(@buffer)
-          units << Unit.new(key: @key || "pre", text: text, language: @language) unless text.empty?
+          units << Unit.new(key: @key || "pre", text: text, language: @language, met: nil) unless text.empty?
           @buffer = +""
           @key = nil
           @language = nil
         end
       end
 
-      def walk_edition(node, units, prose, inherited_lang, allowed, path)
+      def walk_edition(node, units, prose, ctx, allowed, path)
         node.children.each do |child|
           case child
           when Nokogiri::XML::Text
-            prose.append(child.text, inherited_lang)
+            prose.append(child.text, ctx.language)
           when Nokogiri::XML::Element
-            lang = lang_of(child) ? check_language!(lang_of(child), allowed, path) : inherited_lang
+            lang = lang_of(child) ? check_language!(lang_of(child), allowed, path) : ctx.language
+            child_ctx = ctx.with(language: lang, met: child["met"] || ctx.met)
             case child.name
-            when "lg" then verse_units(child, units, lang, allowed, path)
+            when "lg" then verse_units(child, units, child_ctx, allowed, path)
             when "lb" then prose.open_line!(units, child["n"] || "?", lang)
-            when "p", "ab", "div"
+            when "head" then nil
+            when "p", "ab"
+              prose.paragraph_boundary!(units, lang)
+              walk_edition(child, units, prose, child_ctx, allowed, path)
+            when "div"
               prose.append(" ", lang)
-              walk_edition(child, units, prose, lang, allowed, path)
+              div_ctx = child["n"] ? child_ctx.with(div_path: ctx.div_path + [child["n"]]) : child_ctx
+              walk_edition(child, units, prose, div_ctx, allowed, path)
             when *DROP then nil
             else prose.append(extract(child), lang)
             end
@@ -154,12 +186,13 @@ module Nabu
         end
       end
 
-      def verse_units(lg_node, units, inherited_lang, allowed, path)
+      def verse_units(lg_node, units, ctx, allowed, path)
         lg_n = lg_node["n"]
+        met = lg_node["met"] || ctx.met
         lg_node.xpath("./l").each_with_index do |l, index|
-          lang = lang_of(l) ? check_language!(lang_of(l), allowed, path) : inherited_lang
-          key = [lg_n, l["n"] || (index + 1).to_s].compact.join(".")
-          units << Unit.new(key: key, text: clean(extract(l)), language: lang)
+          lang = lang_of(l) ? check_language!(lang_of(l), allowed, path) : ctx.language
+          key = (ctx.div_path + [lg_n, l["n"] || (index + 1).to_s].compact).join(".")
+          units << Unit.new(key: key, text: clean(extract(l)), language: lang, met: met)
         end
       end
 

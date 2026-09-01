@@ -153,7 +153,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 82, lect.size,
+    assert_equal 83, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -189,7 +189,8 @@ class PosturesTest < Minitest::Test
                  "xum shape — flips to identity when the mint reaches canonical): 77→78; " \
                  "P92-2 ADDS the three DHARMA siblings (campa/nusantara/pyu) on the same " \
                  "pending — the whole family flips together at the mint's merge: 78→81; " \
-                 "P92-3 ADDS obi-burmese on the same mint (obr): 81→82"
+                 "P92-3 ADDS obi-burmese on the same mint (obr): 81→82; P92-4 ADDS " \
+                 "dharma-javanese-texts (kaw/osn): 82→83"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -239,7 +240,8 @@ class PosturesTest < Minitest::Test
     # nabu-lects mint reaching canonical — the xum add-then-retire shape;
     # the first pending since P77-6): 77→78, pending 0→1; P92-2 adds the
     # three siblings on the same mint: 78→81, pending 1→4; P92-3 adds
-    # obi-burmese (obr): 82, pending 5.
-    assert_equal({ "identity" => 54, "dates" => 10, "codemap" => 13, "pending" => 5 }, by_posture)
+    # obi-burmese (obr): 82, pending 5; P92-4 dharma-javanese-texts: 83,
+    # pending 6.
+    assert_equal({ "identity" => 54, "dates" => 10, "codemap" => 13, "pending" => 6 }, by_posture)
   end
 end

@@ -551,6 +551,14 @@ sources:
         header fields ride document metadata verbatim where present"}
     script: {posture: qualified, note: "Myanmar-script Unicode surface (~mymr) with a
         Latin transliteration lane riding annotations"}
+  dharma-javanese-texts:
+    lect: {posture: pending, note: "candidate: identity via the SEA mint (kaw/osn +
+        their -Latn codemap rows); san-Latn resolves on the held row today"}
+    dating: {posture: undatable, note: "no machine date field; composition dates are
+        scholarship, not header fields"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "romanized (kaw-Latn/osn-Latn/san-Latn); Kawi and
+        Old Sundanese scripts are the artifact facts"}
   titus-osco-umbrian:
     # P90-2: `osc` and `xum` are both real nabu-lects anchors (xum minted
     # upstream 2026-08-31 and synced to canonical the same day — the

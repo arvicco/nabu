@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_CritEdSchema.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_CritEdSchema.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_CritEdSQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng" xml:id="bhimaSvarga">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="editorial">Bhīma Svarga</title>            
+                <respStmt>
+                    <resp>author of digital edition</resp>
+                        <persName ref="part:adgu">
+                        <name>Aditia Gunawan</name>
+                    </persName>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <authority>DHARMA</authority>
+                <pubPlace>Paris</pubPlace>
+                <idno type="filename">DHARMA_CritEdBhimaSvarga.xml</idno>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">
+                        <p>This work is licenced under the Creative Commons Attribution 4.0 Unported Licence. To view a copy of the licence, visit https://creativecommons.org/licenses/by/4.0/ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.</p>
+                        
+                    </licence>
+                </availability>
+                <date from="2019" to="2025">2019-2025</date>
+            </publicationStmt>
+            <sourceDesc>
+                <listWit>
+                    <witness xml:id="A"><abbr type="siglum">A</abbr>
+                        <msDesc>
+                            <msIdentifier>
+                                <settlement>Jakarta</settlement>
+                                <institution>Perpustakaan Nasional Republik Indonesia</institution>
+                                <idno>L. 455</idno>
+                            </msIdentifier>
+                            <msContents>
+                                <!-- the msContents isn't mandatory -->
+                                <msItem>
+                                    <colophon><quote xml:lang="kaw-Latn" type="diplomatic">Iti tucap-ucapan bima svarga</quote></colophon>
+                                </msItem>
+                            </msContents>
+                            <physDesc>
+                                <objectDesc>
+                                    <p>Décrit par Setyawati et al. (2002). Feuilles de gebang (Corypha Gebanga); 36 folios ; 34,9 × 3,9 cm ; 4 lignes par feuille, écrit recto-verso sauf les folio 1 (verso seulement) et f. 36 (recto seulement). Certains feuilles restaurées avec du papier.</p>
+                                </objectDesc>
+                                <handDesc> 
+                                        <p>La forme des akṣara est similaire à ce qu’on trouve dans un manuscrit du Kuñjarakarṇa (Université de Leyde, LOr 2266 ou manuscrit A dans l’édition de van der Molen, 1983)</p>
+                                </handDesc>
+                            </physDesc>
+                            <history>
+                                <p>Ce manuscrit est parmi les rares exemples de manuscrits gebang originaires de la région des volcans Merapi et Merbabu du centre de Java.</p>
+                            </history>
+                        </msDesc>
+                    </witness>
+                    <witness xml:id="B">
+                        <abbr type="siglum">B</abbr>
+                        <msDesc>
+                            <msIdentifier>
+                                <settlement>Jakarta</settlement>
+                                <institution>Perpustakaan Nasional Republik Indonesia</institution>
+                                <idno>L. 623</idno>
+                            </msIdentifier>
+                            <msContents>
+                                <!-- the msContents isn't mandatory -->
+                                <msItem>
+                                    <colophon><quote xml:lang="osn-Latn" type="diplomatic">Itiḥ kahuvusan·niṁ putaka bima L̥pas· harani :ka, sam·map·ta sam·pun· sinurata <gap reason="lost" unit="character" quantity="1"/>  Iṅ vulan· kasa, saṅ anurat· panadaAn· sakapat· pun·, qәñcu nu ṅaheraṁ bukit· cikuray· samapun</quote></colophon>
+                                </msItem>
+                            </msContents>
+                            <physDesc>
+                                <objectDesc>
+                                    <p>Décrit par Ekadjati (1988), Behrend (1998), Sopian (2009) et Holil &amp; Gunawan (2010). Feuilles de lontar (Borassus flabellifer), 32,8 × 3 cm, 30 folios, 4 lignes/folio, écrit recto-verso sauf folio 1 (verso seulement) et f. 30 (recto seulement), en caractères Java-Ouest ancien.</p>
+                                </objectDesc>
+                                <handDesc> 
+                                    <p/>
+                                </handDesc>
+                            </physDesc>
+                            <!--<history>
+                                <p/>
+                            </history>-->
+                        </msDesc>
+                    </witness>
+                    <witness xml:id="C">
+                        <abbr type="siglum">C</abbr>
+                        <msDesc>
+                            <msIdentifier>
+                                <settlement>Garut, Java-Ouest</settlement>
+                                <institution>Ermitage de Ciburuy</institution>
+                            </msIdentifier>
+                            <physDesc>
+                                <objectDesc>
+                                    <p>Environ vingt-sept manuscrits sur feuilles de palme sont conservés à l’ermitage de Ciburuy. Ce manuscrit n’est pas complet ; il y manque environ 50% du texte.</p>
+                                </objectDesc>
+                                <handDesc> 
+                                    <p/>
+                                </handDesc>
+                            </physDesc>
+                            <!--<history>
+                                <p/>
+                            </history>-->
+                        </msDesc>
+                    </witness>
+                    <witness xml:id="Q">
+                        <abbr type="siglum">Q</abbr>
+                        <msDesc>
+                            <msIdentifier>
+                                <settlement>Bali</settlement>
+                                <institution>Gedong Kirtya</institution>
+                                <idno>Bali 1460</idno>
+                            </msIdentifier>
+                            <msContents>
+                                <!-- the msContents isn't mandatory -->
+                                <msItem>
+                                    <colophon><quote xml:lang="kaw-Latn" type="normalized">iti tatva bima svarga, lulukatan parisamapta</quote></colophon>
+                                </msItem>
+                            </msContents>
+                            <physDesc>
+                                <objectDesc>
+                                    <p>Manuscrit sur lontar (Borassus flabellifer), 50,7 × 3,5 cm, 11 folios, 4 lignes/folio, écrit recto-verso en caractère balinais.</p>
+                                </objectDesc>
+                                <handDesc> 
+                                    <p/>
+                                </handDesc>
+                            </physDesc>
+                            <history>
+                                <p>Ce manuscrit a été acquis par le Gedong Kirtya le 19 mars 1938. Il comporte une note attachée dans le ma- nuscrit qui mentionne qu’il s’agit d’une copie d’un manuscrit appartenant à Anak Agoeng Anom Rai du Puri Denpasar (Bangli) copiée par I Ketut Kad- jeng.</p>
+                            </history>
+                        </msDesc>
+                    </witness>
+                    <!--<witness xml:id="R">
+                        <abbr type="siglum">R</abbr>
+                        <msDesc>
+                            <msIdentifier>
+                                <settlement>Bali</settlement>
+                                <idno>HKS 7507</idno>
+                            </msIdentifier>
+                            <msContents>
+                                <!-\- the msContents isn't mandatory -\->
+                                <msItem>
+                                    <colophon><quote  xml:lang="kaw-Latn" type="normalized">iti bhima svarga</quote></colophon>
+                                </msItem>
+                            </msContents>
+                            <!-\-<physDesc>
+                                <objectDesc>
+                                    <p/>
+                                </objectDesc>
+                                <handDesc> 
+                                    <p/>
+                                </handDesc>
+                            </physDesc>
+                            <history>
+                                <p/>
+                            </history>-\->
+                        </msDesc>
+                    </witness>-->
+                </listWit>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <projectDesc>
+                <p>Encoded in TEI according to the <ref target="{URI for DHARMA editorial conventions or page with link to Encoding Guides}">Conventions of Project DHARMA</ref></p>
+            </projectDesc>
+            <editorialDecl>        
+                <correction>
+                    <p/>
+                </correction>
+                <normalization>
+                    <p/>
+                </normalization>
+                <interpretation>
+                    <p>The asterisk * is used to flag lemmata or forms of lemmata not recorded in the <title>Old Javanese-English Dictionary</title>.
+                    </p> 
+                </interpretation>
+            </editorialDecl>
+            <samplingDecl>
+                <p/>
+            </samplingDecl> 
+        </encodingDesc><revisionDesc>   
+            <change who="part:axja" when="2021-12-27" status="draft">transformation from tex to TEI</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+		<body><div type="edition" xml:lang="kaw-Latn">
+<p><app><lem type="norm">oṁ avighnam astu</lem><rdg wit="#A">// Ø // o<unclear>ṁ</unclear> avignam as<unclear>tu</unclear></rdg><rdg wit="#B">//  ba //<g type="danda"/><g type="circleLarge"/><g type="danda"/>- oṁ me // /// Ø<g type="danda"/> oṁ avignәm astu nama sidәm<g type="danda"/>  Ø <g type="danda"/> Ø</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q">oṁ avignamastu</rdg></app>.</p>
+        
+<p><app><lem type="norm">hana</lem><rdg wit="#A #B">ana</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> sira 
+    <app><lem type="norm">brahmana</lem><rdg wit="#A">brāhmaṇa</rdg><rdg wit="#B">bramana</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> ṛṣi 
+    <app><lem type="norm">māvak siddha</lem><rdg wit="#A">mavak ṣidḍa</rdg><rdg wit="#B">mavaka:sidan</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> tan pahiṅan 
+    <app><lem wit="#A">gәṅnikaṅ</lem><rdg wit="#B">niṅka</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> mahātmanira<g type="danda"/> <app><lem type="emn">vәkasniṅ siddha</lem><rdg wit="#A"><unclear>vakasa</unclear>·niṁsida</rdg><rdg wit="#B">vakasi:ṁsida</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">vākbraja</lem><rdg wit="#A #B">vakbraja</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A">tumus</lem><rdg wit="#B">tu<del>sa</del>mus</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A">tәkeṅ</lem><rdg wit="#B">tikeṅ</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">kulasantānanira</lem><rdg wit="#A">kulasan<unclear>tha</unclear>nanira</rdg><rdg wit="#B">kulasantananira</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> <app><lem wit="#A #B">kapva</lem><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">śūraśāstra</lem><rdg wit="#A">pasurasastra</rdg><rdg wit="#B">surasasṭā</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> tan hana <app><lem wit="#A">kapuṅguṅira</lem><rdg wit="#B">kapigiṅira</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> riṅ sarvaśāstra<g type="danda"/> <app><lem wit="#B">kasrana</lem><rdg wit="#A">kahasra</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A">cakṣuh, virati</lem><rdg wit="#B">caksuh virati</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> <app><lem wit="#A">tan hana</lem><rdg wit="#B">tanana</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> haji huvus <app><lem type="emn">varaha</lem><rdg wit="#A">horaha</rdg><rdg wit="#B">hvaraha</rdg><rdg wit="#C"><gap reason="lost"/></rdg></app> <app><lem wit="#A">ri</lem><rdg wit="#B">riṅ</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> sira<g type="danda"/> <app><lem wit="#A">apan</lem><rdg wit="#B">hapan</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A">sampun</lem><rdg wit="#B">asampun</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm" rend="check">pakṣa</lem><rdg wit="#A">pakna</rdg><rdg wit="#B">pak<unclear>ṣa</unclear></rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">tānugraha</lem><rdg wit="#A">ta<unclear>na</unclear><gap reason="lost" unit="character" quantity="2"/></rdg><rdg wit="#B">ta nugraha</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm" rend="check">bhaṭāra gītapati</lem><rdg wit="#A"><gap reason="lost" unit="character" quantity="3"/>gipati</rdg><rdg wit="#B">baṅira gitapati</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg><rdg wit="#R"> bhaṭāra gitapati</rdg></app><g type="danda"/> <app><lem wit="#A #B">sevu</lem><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">panonira</lem><rdg wit="#A">panonra</rdg><rdg wit="#B">panvaniṅra</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A">tumoniṅ</lem><rdg wit="#B">tumvaniṅ</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A #B">haji kabeh</lem><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> <app><lem wit="#A">ya</lem><rdg wit="#B">ya ta</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A">mataṅyan</lem><rdg wit="#B">matanyan</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#B">hәnti</lem><rdg wit="#A">hәni</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="emn">kvehniṅ</lem><rdg wit="#A">kehniṅ</rdg><rdg wit="#B">tvahniṅ</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> haji ri <app><lem type="norm">dalәm<g type="danda"/> ri aṇḍa<pb edRef="#A" n="1v"/>bhuvana</lem><rdg wit="#A"><gap reason="lost" unit="character" quantity="6"/>buvaṇa</rdg><rdg wit="#B">ri dalәm ri anda buvana</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app>.
+</p>
+
+<listApp type="parallels">
+     <app><lem>tan hana kapuṅguṅira riṅ sarvaśāstra</lem><note><!-- corresp="#Sl_38.4" -->Sl 38.4: <foreign>tan hana kapuṅguṅira riṅ sarvatattva</foreign>.</note></app>
+</listApp>
+<!--oṁ avighnam
+ %\newcommand{\paralel}[2]{{\edtext{#1}{\Cfootnote{#2}}}}
+%\ 1 o\CID{80} avignamastu] B, oṃ °avignәmastunamasidәm A,
+%\ 2 brāhmaṇa] bramana A, brahmana B. māvak siddha] mavaka:sidan∙ A, mavak ṣidḍa B
+%| 2 nikaṅ mahātmanira] em. niṃ kamahat∙manira A, nikaṃ mahatmanara B (bagian atas hilang).
+%\3 vak asisiddha] vakasi:ṃsida A, (vakasa)∙niṅ sida B.| 5 sarva] sarvva AB| 6 kasrana]
+%A, kahasra B| 7 pakṣa ta nugraha] em. paknatanugraha A, pakṣatana†_ _† B.
+%baṅiragitapati] A, †_ _ _†gipati B. panonira] em. panvanniṅra A, panonra B;
+%8 hәnti] A, hәni B; keh] B, tvah A; dalәm ri aṇḍabhuvana] A, †_ _ _ _ _ _ † buvaṇa
+%B| 9 jāhnavī] janavi AB; hilī] A, halit B. nya katrus ta] A, nikaṃgras·ta B|
+%10 tutuknira] A, tutuknara B; sira ta pinakajagat]  em. sira ta pinaḥkajagat A,
+%saratapanakaja†_ _† B; mvaṅ] A, †_ _† B| 12 sahasrakiraṇa] sahasrakirana A,
+%sahaṃsrakirana B| 13 paḍa] B, pada A. kasuluhan] kasuluḥhan A, †_ _†luḥhan B|
+%14 kasiṅgahan] em. kasigaḥhan A, sigaḥha B. kṛtinira] em. kirtrinira A,
+%kәtrinira B| 15 maṇḍala] mandala AB. deniṅ] B, deni A| 16 śāstra] sasṭa A,
+%sastra B| 17 ginunita] A, ganunata B (bagian atas hilang).
+%kavidagdhanira] kavidagdanira A, kavadagdanara B (bagian atas hilang)|
+%19 gumәlaranu] gum·laranu A, gumlaṙranu B| 20 vruh iṅ] vruḥ hiṃ AB;
+%bapamu] A, bapāmu B| 21 bhasmībhūtaha] basmibutaha A, basmībutahā  B.
+-->
+<p>
+<app><lem type="norm">jāhnavī</lem><rdg wit="#A #B">janavi</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app>, <app><lem wit="#A #B">kadi</lem><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#B">hiliniṅ</lem><rdg wit="#A">halitniṅ</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">jāhnavī</lem><rdg wit="#A #B">janavi</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> <app><lem wit="#A">vijilnikaṅ</lem><rdg wit="#B">bijilnya<del>x</del>ka</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A">grasta</lem><rdg wit="#B">trusta</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A #B">sakeṅ</lem><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#B">tutuknira</lem><rdg wit="#A">t<unclear>u</unclear>t<unclear>u</unclear>k<unclear>nara</unclear></rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"/></app><g type="danda"/> <app><lem wit="#A #B">sira ta</lem><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="emn">pinakajagatpatiniṅ jagat</lem><rdg wit="#A"><unclear>panakaja</unclear><gap reason="lost" unit="character" quantity="3"/></rdg><rdg wit="#B">pinakajagat</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg><rdg wit="#R"> pinakadhipaṭiniṅ jagat</rdg></app> <app><lem wit="#B">mvaṅ</lem><rdg wit="#Q #A #C"><gap reason="lost"/></rdg></app> <app><lem wit="#B">pinakasuluhniṅ</lem><rdg wit="#A">pinaḥkasuluḥ<del>na</del>hiṁ</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">bhuvana</lem><rdg wit="#A">bhuhana</rdg><rdg wit="#B">bvana</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app>.
+</p>
+<listApp type="parallels">
+    <app><note><!-- corresp="#BhP_37" -->BhP 37: <foreign>kadi hiliniṅ jahnavi kahidәpanya</foreign>.</note></app>
+</listApp>
+<!--%tan hana kapuṅguṅira riṅ sarvaśāstra. Bandingkan Sl 38.4: tan hana kapuṅguṅ ira riṅ sarwatattwa
+%kemungkinan bisa dipotong setelah vākbraja "vākbraja tumus @tәkeṅ@ kulasantānanira. @kapva śūraśāstra@"
+% edit mavak braja?
+%apan sampun pakṣitanugraha "birdness, oiseaute"
+%gitapati; mungkin diemendasi menjadi bhūtapati (nama lain śiva).
+%Bhismaparva (37): kadi hili niṅ jahnavi kahidәpanya.
+%Uttarakanda 12: kadi pamahmah niṅ vvay mijil sakeṅ tasik
+%pinakajagatpati niṅ jagat; mempertimbangkan bacaan naskah Bali E, pinaka dipati niṅ jagat. Asumsinya terjadinya saut de mêmem au même pada arketip teks dari Jawa Barat-->
+
+<p>
+<app><lem wit="#B">sahasrakiraṇa</lem><rdg wit="#A">sahaṅsrakirana</rdg><rdg wit="#C">sahasrikirana</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> ika<g type="danda"/> <app><lem wit="#A">kadyaṅganiṅ</lem><rdg wit="#B">kadyiṅganiṅ</rdg><rdg wit="#C">kadiagan<unclear>i</unclear></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">bhuvana</lem><rdg wit="#A">bhuvaṇa</rdg><rdg wit="#B">buvana</rdg><rdg wit="#C"><unclear>bvana</unclear></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><pb edRef="#B" n="1v"/><g type="danda"/> tan hana <app><lem wit="#A #B">kalintaṅan</lem><rdg wit="#C"><unclear>kalintaṅan</unclear>denira</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A">paḍa</lem><rdg wit="#C #B"> pada</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#B">kasuluhan</lem><rdg wit="#A"><gap reason="lost" unit="character" quantity="2"/>luhan</rdg><rdg wit="#C">kasuluḥhana</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A #B">deniṅ teja saṅ hyaṅ</lem><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A">sahasrarena</lem><rdg wit="#B">sahasra:renaṁ</rdg><rdg wit="#C"><gap reason="lost" unit="character" quantity="1"/>hasarena</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> maṅkana <app><lem wit="#B #C">tikaṅ</lem><rdg wit="#A">tikeṅ</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">haji</lem><rdg wit="#C #A #B"> aji</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> kabeh<g type="danda"/> <app><lem wit="#A #B">tan</lem><rdg wit="#C">tatan</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">hana</lem><rdg wit="#A #B">ana</rdg><rdg wit="#C">nana</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#B">kasiṅgahan</lem><rdg wit="#A">sigaha</rdg><rdg wit="#C">kas<unclear>i</unclear>ga</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A #B #C">denira</lem><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> <app><lem wit="#A #B">lumah</lem><rdg wit="#C">luma</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A">kṛtinira</lem><rdg wit="#B">kirtinira</rdg><rdg wit="#C">trәtinira</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> ri <app><lem type="norm">bhuvana</lem><rdg wit="#A">bhuvaṇa</rdg><rdg wit="#B">buvana</rdg><rdg wit="#C">bvana</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> <app><lem wit="#A #B">sakasahaban</lem><rdg wit="#C">sakasahaba:n</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A #B #C">deniṅ</lem><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">ākāśa</lem><rdg wit="#C #A #B"> akasa</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> mvaṅ <app><lem type="norm">pṛthivīmaṇḍala</lem><rdg wit="#A">pṛtivimandala</rdg><rdg wit="#B">prәtivi, mandala</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A #B">deniṅ</lem><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">kamahātmānira</lem><rdg wit="#A">kamahatma:nira</rdg><rdg wit="#B">kamahatmanira</rdg><rdg wit="#C">mahatmanira</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A #C">riṅ</lem><rdg wit="#B">niṅ</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> saṅ hyaṅ <app><lem type="norm">śāstra</lem><rdg wit="#A">sastra</rdg><rdg wit="#C #B"> sasṭā</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> <app><lem wit="#A #B #C">tan kәneṅ uca<pb edRef="#A" n="2r"/>p luput</lem><rdg>tan kәneṅ ucap luput</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#B">ginuṇita</lem><rdg wit="#A">ganunata</rdg><rdg wit="#C">ti<unclear>nu</unclear>tita</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> ika <app><lem type="norm">kavidagdhanira</lem><rdg wit="#A"><unclear>kavadag</unclear>danira</rdg><rdg wit="#B">kavidagdanira</rdg><rdg wit="#C">kavidagdani</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> <app><lem type="norm">daśajihvā</lem><rdg wit="#C #A #B"> dasajihva</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> <app><lem wit="#A #B">saptahasta</lem><rdg wit="#C">sa<gap reason="lost" unit="character" quantity="4"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> <app><lem wit="#A #B">aṅiya n</lem><rdg wit="#C">yan</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A">palidaha</lem><rdg wit="#B">paladaha</rdg><rdg wit="#C">paladasa</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#A #B #C">sapuluh</lem><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> <app><lem type="emn">mapitu n</lem><rdg wit="#A">mapatan</rdg><rdg wit="#B">mapaṅtun</rdg><rdg wit="#C">mapitu</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="emn">patuvuha</lem><rdg wit="#A">tuvuha</rdg><rdg wit="#C #B"> satuvuha</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#C">gumәlarana</lem><rdg wit="#A #B">gumәlaranu</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app>.
+    
+</p>
+<listApp type="parallels">
+    <app><lem>sakasahaban deniṅ ākāśa</lem>
+        <note>BhP 172.14: <foreign>sakasahaban deniṅ ākāśa, ya tika deśa vәṅyanira</foreign>.</note>
+</app>
+</listApp>
+<!--%rena: bisa diartikan rahina, naskah bali berisi bacaan kirana.
+%BrP 172.14: sakasahaban de niṅ ākāśa. Zoetmulder TvhA (hlm.88).-->
+
+<p>
+<app><lem type="norm">aḍoh</lem><rdg wit="#A">aḍo</rdg><rdg wit="#B">advah</rdg><rdg wit="#C">adva</rdg><rdg wit="#Q">ah</rdg></app> <app><lem wit="#Q">bhīma</lem><rdg wit="#A #B #C"> bima</rdg></app> mati si <app><lem wit="#A #B #Q">yama</lem><rdg wit="#C"><gap reason="lost"/></rdg></app> <app><lem wit="#A #Q">yen</lem><rdg wit="#B">ye</rdg><rdg wit="#C"><gap reason="lost"/></rdg></app> <app><lem wit="#B">kva</lem><rdg wit="#Q #A"> ko</rdg><rdg wit="#C">k<unclear>va</unclear></rdg></app> vruh iṅ <app><lem wit="#B #C #Q">bapamu</lem><rdg wit="#A"><!--mbox-->bapa:mu</rdg></app> <g type="danda"/> <app><lem wit="#B">mataṅen</lem><rdg wit="#A">mantaṅen</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q">mataṅnya</rdg></app> <app><lem type="norm">guruaniṅ</lem><rdg wit="#Q #A"> guruhaniṅ</rdg><rdg wit="#B">guruhaniku</rdg><rdg wit="#C">guruharan<unclear>i</unclear></rdg></app> sakadevatān kabeh<g type="danda"/> tan <app><lem type="norm">bhasmībhūtaa</lem><rdg wit="#A"><!--mbox-->basmi:butaha:</rdg><rdg wit="#B">basmibutaha</rdg><rdg wit="#C"><unclear>tan basma</unclear>bu<unclear>taha</unclear></rdg><rdg wit="#Q">patuduhan si haku tan manusa</rdg></app>.
+</p>
+
+<p>
+<app><lem type="norm">sapa arane</lem><rdg wit="#C #A">sapa harane</rdg><rdg wit="#B">saparane</rdg><rdg wit="#Q">sapa: ta harane</rdg></app> <app><lem wit="#A #B">bapamu</lem><rdg wit="#C"><gap reason="lost" unit="character" quantity="1"/><unclear>panta</unclear></rdg><rdg wit="#Q">bapa:mu</rdg><note>le ms. <ptr target="#Q"/> donne une leçon différente: <foreign>sapā ta harane bapāmu bhīma, mvaṅ babuntā, pun paṇḍu, pun kuṇti</foreign>.</note></app>.
+</p>
+
+<p>
+pun <app><lem type="norm">pāṇḍu</lem><rdg wit="#A">pandu</rdg><rdg wit="#B #C"> padu</rdg></app>.
+</p>
+
+<p>
+<app><lem wit="#A #B #C">sapa</lem><rdg wit="#Q">sapa harane</rdg></app> <app><lem wit="#A #B #C">babumu</lem><rdg wit="#Q">babunta:</rdg></app>.
+</p>
+
+<p>
+pun <app><lem type="norm">kuntī</lem><rdg wit="#A #B">kunti</rdg><rdg wit="#C"><gap reason="lost"/></rdg></app>.<pb edRef="#B" n="2r"/>
+</p>
+
+<p>
+<app><lem type="norm">aḍoh</lem><rdg wit="#A">ado</rdg><rdg wit="#B">advah</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">bhīma</lem><rdg wit="#A #B">bima</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q">bhima</rdg></app> <app><lem wit="#B">mayan ta</lem><rdg wit="#A"><gap reason="lost" unit="character" quantity="2"/>ta</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q">mapan ta</rdg></app> <app><lem wit="#B">kva</lem><rdg wit="#A">ko</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q">ṅko</rdg></app> salah <app><lem type="norm">hiḍәp</lem><rdg wit="#A">hiḍap</rdg><rdg wit="#B #Q"> idәp</rdg><rdg wit="#C">hdap</rdg></app><g type="danda"/> <app><lem type="norm">aṅucap</lem><rdg wit="#A #B #C #Q"> haṅucap</rdg></app> <app><lem type="norm">haji</lem><rdg wit="#C #A #B"> aji</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app><g type="danda"/> <app><lem wit="#A #B">aṅucap</lem><rdg wit="#C">ṅucap</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">tattvaniṅ</lem><rdg wit="#A #B">tatvaniṅ</rdg><rdg wit="#C">tatvani</rdg><rdg wit="#Q">tatva:niṅ</rdg></app> dadi<g type="danda"/> <app><lem type="emn">әndi</lem><rdg wit="#A">anәndi</rdg><rdg wit="#B">di</rdg><rdg wit="#C">nәndi</rdg></app> <app><lem type="emn">uṅgvanmu</lem><rdg wit="#A">hu<unclear>gonma</unclear></rdg><rdg wit="#B">gonamu</rdg><rdg wit="#C"><unclear>u</unclear>gvanmu</rdg><rdg wit="#Q">ṅgonmu</rdg></app> <app><lem wit="#B">vruha ri</lem><rdg wit="#A"><unclear>vaḥha</unclear></rdg><rdg wit="#C">vruhanana</rdg><rdg wit="#Q">vruha riṅ</rdg></app> <app><lem wit="#A">panone</lem><rdg wit="#B">panvane</rdg><rdg wit="#C">panvana</rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> kami<pb edRef="#A" n="2v"/> <app><lem wit="#B">tatā</lem><rdg wit="#A"><gap reason="lost" unit="character" quantity="2"/></rdg><rdg wit="#C"><gap reason="lost" unit="character" quantity="2"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem wit="#B">saṅ hyaṅ</lem><rdg wit="#A"><gap reason="lost" unit="character" quantity="1"/>hyaṅ</rdg><rdg wit="#C"><gap reason="lost"/></rdg><rdg wit="#Q"><gap reason="omitted"/></rdg></app> <app><lem type="norm">tattva dharma</lem><rdg wit="#A">tatva darmma</rdg><rdg wit="#B">tatva darma</rdg><rdg wit="#C">tatva saṅ hyaṅ darma</rdg><rdg wit="#Q">tatva karmma</rdg></app><g type="danda"/> <app><lem wit="#A">mantaṅen</lem><rdg wit="#B #C"> mataṅen</rdg><rdg wit="#Q">mataṅnya</rdg></app> demu <app><lem type="norm">aṅucap</lem><rdg wit="#A">hucap</rdg><rdg wit="#B #Q"> haṅucap</rdg><rdg wit="#C">hiṅucap</rdg></app> <app><lem wit="#B">bapamu</lem><rdg wit="#A">bhapamu</rdg><rdg wit="#C #Q"> bapanta</rdg></app> si <app><lem type="norm">pāṇḍu</lem><rdg wit="#A #B"> pandu</rdg><rdg wit="#C">pa</rdg><rdg wit="#Q">paṇḍu</rdg></app><g type="danda"/> ibunta si <app><lem type="norm">kuntī</lem><rdg wit="#A #B"> kunti</rdg><rdg wit="#C">kuti</rdg><rdg wit="#Q">kuṇṭi</rdg></app><g type="danda"/> tan vruh <app><lem wit="#B #C">kva</lem><rdg wit="#A #Q"> ko</rdg></app> yen <app><lem wit="#A #Q">panilihanmu</lem><rdg wit="#B">panilihanamu</rdg><rdg wit="#C"><gap reason="lost"/></rdg></app> <app><lem wit="#A #B #Q">talaga</lem><rdg wit="#C"><gap reason="lost" unit="character" quantity="1"/>laga</rdg></app> <app><lem wit="#Q">pañcuran</lem><rdg wit="#A">pañcuṙran</rdg><rdg wit="#B">pancuṙran</rdg><rdg wit="#C">pacurranta</rdg></app><g type="danda"/> <app><lem type="norm">mārgamu</lem><rdg wit="#A">margāmu</rdg><rdg wit="#B #C"> margamu</rdg><rdg wit="#Q">margganta</rdg></app> <app><lem wit="#A #B">gumәlar</lem><rdg wit="#C">garmәlar</rdg><rdg wit="#Q">gumlar</rdg></app> <app><lem wit="#A #B #C">riṅ jagat kaṅ iku</lem><rdg wit="#Q">ri jagat, kaṅ iku bhīma</rdg></app>.
+</p>
+                </div>
+</body>
+	</text>
+</TEI>
