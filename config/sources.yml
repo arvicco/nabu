@@ -4364,3 +4364,18 @@ dharma-javanese-texts:   # P92-4
   # facsimiles: the sparse cone materializes editions/ ONLY. In-file
   # <licence> CC BY 4.0 (the philology repo's own grant — the epigraphy
   # repos say BY-SA; recorded per document); class attribution.
+
+ojw:   # P92-5
+  adapter: Nabu::Adapters::Ojw
+  axes: [sea]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # OJW — the Old Javanese Wordnet (Moeljadi et al., LREC 2020; CC BY
+  # 4.0 in-repo LICENSE + the tab header's own declaration): 5,019
+  # sense rows / 2,054 synsets — the SEA desk's glossary, the open
+  # stand-in for the license-blocked Zoetmulder OJED (extracted from
+  # its digitization; OJED itself stays parked at SEAlang, see the
+  # P47-s3 survey's not-viable table). Entries are lemmas grouped over
+  # sense rows, PWN 3.0 synset ids in the body; glosses do not ship —
+  # nil is honest (the monlam precedent). Sparse GitFetch on the one
+  # tab file + grant.

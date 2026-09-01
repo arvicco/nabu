@@ -559,6 +559,13 @@ sources:
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized (kaw-Latn/osn-Latn/san-Latn); Kawi and
         Old Sundanese scripts are the artifact facts"}
+  ojw:
+    lect: {posture: pending, note: "candidate: identity via the SEA mint (kaw — the
+        lexicon rides the same anchor as the kakawin corpora)"}
+    dating: {posture: undatable, note: "a lexicon shelf; OJED's attestation dates do not
+        ship in the tab"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "romanized headwords (the OJED transliteration)"}
   titus-osco-umbrian:
     # P90-2: `osc` and `xum` are both real nabu-lects anchors (xum minted
     # upstream 2026-08-31 and synced to canonical the same day — the
