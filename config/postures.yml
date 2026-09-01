@@ -75,6 +75,20 @@ sources:
     script: {posture: implied}
 
   # ── codemap: refined universally, no Nabu-specific knowledge needed ────
+  okhc:
+    # P91-1: three codes, each with a real anchor — lzh rides the korean
+    # shelves' codemap precedent (Hanmun = Literary Sinitic as read in
+    # Korea); ko is the honest-coarse claim for the Early Modern/Modern
+    # Korean labels (the stage refinement is a future date-band story
+    # over the per-record year field); okm would ride the held
+    # ko-wikisource-mk precedent if Middle Korean rows surface at sync.
+    lect: {posture: codemap, note: "lzh → zho/lit (the sillok mold); ko/okm identity;
+        Korean stage refinement deferred to a ruled year-band table"}
+    dating: {posture: pending, note: "candidate: the per-record year field rides document
+        metadata verbatim in v1 — a numeric-envelope extractor over it is the future story"}
+    places: {posture: unplaced, note: "archive/corpus provenance rides document metadata"}
+    script: {posture: qualified, note: "the per-record script field (Hanja / Old Hangeul /
+        Hangeul mixes) rides document metadata verbatim"}
   sillok:
     lect:
       posture: codemap

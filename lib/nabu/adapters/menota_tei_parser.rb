@@ -256,6 +256,11 @@ module Nabu
 
         Result = Data.define(:lines, :title, :main_lang, :lang_usage, :metadata)
 
+        # An n-less ms <lb/>'s placeholder position until assembly decides
+        # its fate (№R-45 A): ordinals in a page-cited manuscript, nil in
+        # a line-cited one. Value-compared, one per break.
+        AutoLine = Data.define(:seq)
+
         def initialize(reader:, path:)
           @reader = reader
           @path = path
@@ -264,6 +269,9 @@ module Nabu
           @page = nil
           @column = nil
           @line = nil
+          @auto_seq = 0
+          @auto_line_seen = false
+          @real_line_seen = false
           @token = nil
           @level = nil
           @extra = nil
@@ -498,7 +506,20 @@ module Nabu
             case name
             when "pb" then @page = value
             when "cb" then @column = value
-            when "lb" then @line = value
+            when "lb"
+              # №R-45 A (Q58): an n-less ms line break plants an AUTO
+              # marker instead of erasing the line. Whether markers render
+              # as running ordinals (a PAGE-CITED manuscript) or normalize
+              # back to nil (any manuscript with a real numbered line —
+              # byte-identical refs) is decided at assembly, when the
+              # whole document has been seen (resolve_auto_lines!).
+              if value.nil?
+                @auto_line_seen = true
+                @line = AutoLine.new(seq: @auto_seq += 1)
+              else
+                @real_line_seen = true
+                @line = value
+              end
             end
           end
           return unless @token && @level.nil? && @extra.nil?
@@ -630,6 +651,7 @@ module Nabu
         # Consecutive tokens sharing a (page, column, line) position form
         # one passage; refs disambiguate with the house :b<n> belt.
         def lines
+          resolve_auto_lines!
           groups = materialized_tokens.slice_when { |a, b| a[:position] != b[:position] }.to_a
           seen = Hash.new(0)
           groups.each_with_index.map do |group, index|
@@ -679,6 +701,46 @@ module Nabu
                             "<normalization me:level=#{@header[:me_level].to_s.inspect}> does " \
                             "not name exactly one level — cannot attribute the transcription " \
                             "level honestly"
+        end
+
+        # №R-45 A (Q58): decide every AutoLine marker's fate in one pass.
+        # A manuscript with ANY real numbered ms line keeps today's refs
+        # byte-identical — markers normalize back to nil. A PAGE-CITED
+        # manuscript (n-less ms lbs, zero numbered ones) numbers its own
+        # lines: each distinct folio-carrying position gets a running
+        # ordinal within its folio, first-appearance order ("17v" →
+        # "17v.3"); a position with no folio stays nil-line and falls to
+        # the s<n> belt as before. Apparatus positions map through the
+        # same table (the documented straddle: a rdg annotates the line
+        # current when it opened), unmapped ones normalizing to nil.
+        def resolve_auto_lines!
+          page_cited = @auto_line_seen && !@real_line_seen
+          mapping = page_cited ? auto_ordinals : {}
+          [@tokens, @apparatus].each do |rows|
+            rows.each do |row|
+              position = row[:position]
+              next unless position[2].is_a?(AutoLine) || mapping.key?(position)
+
+              row[:position] = mapping[position] || [position[0], position[1], nil]
+            end
+          end
+        end
+
+        # position => [page, column, ordinal-string], counted per folio in
+        # token order (the nil-line tokens before a page's first break are
+        # that folio's line 1).
+        def auto_ordinals
+          counters = Hash.new(0)
+          mapping = {}
+          @tokens.each do |token|
+            position = token[:position]
+            next if mapping.key?(position)
+
+            page, column, _line = position
+            folio = presence("#{page}#{column}") or next
+            mapping[position] = [page, column, (counters[folio] += 1).to_s]
+          end
+          mapping
         end
 
         def position_ref(position, index)
