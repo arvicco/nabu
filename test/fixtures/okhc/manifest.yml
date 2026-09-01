@@ -1,0 +1,42 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Real OKHC records: the repo's published sample.jsonl filtered to the
+# adapter's included corpora and routed into deposit-named files, plus one
+# live-probed ilseongnok row. A fresh GET of the sample returns the whole
+# 343-row file, so it is liveness-only (whole: false); re-apply the README
+# filter after any refresh. The per-file deposit URLs are the adapter's
+# own fetch targets — liveness rides the source's remote probe, not this
+# manifest.
+source: okhc
+adapter_test: null
+retrieved: 2026-09-01
+files:
+  - path: sagi/sagi.jsonl
+    url: https://raw.githubusercontent.com/seyoungsong/OKHC/master/sample.jsonl
+    whole: false
+    trim: rows with the sagi id-prefix, first 3 (README filter)
+  - path: ilseongnok_part_001_of_003/ilseongnok_part_001_of_003.jsonl
+    url: https://raw.githubusercontent.com/seyoungsong/OKHC/master/sample.jsonl
+    whole: false
+    trim: 3 sample rows + the deposit file's real first record (live range-GET)
+  - path: klc_part_001_of_008/klc_part_001_of_008.jsonl
+    url: https://raw.githubusercontent.com/seyoungsong/OKHC/master/sample.jsonl
+    whole: false
+    trim: rows with the klc id-prefix, first 3
+  - path: gaksa/gaksa.jsonl
+    url: https://raw.githubusercontent.com/seyoungsong/OKHC/master/sample.jsonl
+    whole: false
+    trim: rows with the gaksa id-prefix, first 3
+  - path: gongu/gongu.jsonl
+    url: https://raw.githubusercontent.com/seyoungsong/OKHC/master/sample.jsonl
+    whole: false
+    trim: rows with the gongu id-prefix, first 3
+  - path: aks_kyu_nhm/aks_kyu_nhm.jsonl
+    url: https://raw.githubusercontent.com/seyoungsong/OKHC/master/sample.jsonl
+    whole: false
+    trim: rows with the aks_*/kyu_old/nhm_archive id-prefixes, first 3 each
+  - path: jpn_records/jpn_records.jsonl
+    url: https://raw.githubusercontent.com/seyoungsong/OKHC/master/sample.jsonl
+    whole: false
+    trim: rows with the jpn_records id-prefix, first 3
