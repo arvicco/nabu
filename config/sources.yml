@@ -4332,3 +4332,19 @@ dharma-pyu:   # P92-2
   # romanized (pyx-Latn), flat repo layout. No repo-level LICENSE: the
   # per-file <licence> CC BY-SA 4.0 is the whole grant, recorded
   # verbatim; class attribution.
+
+obi-burmese:   # P92-3
+  adapter: Nabu::Adapters::ObiBurmese
+  axes: [sea, epigraphy]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # OBI — A Structured Corpus of Old Burmese Stone Inscriptions (Zenodo
+  # 4321314, CC BY 4.0 verified on the record 2026-09-01): 1,121
+  # per-face files of Bagan-period epigraphy, Myanmar-script Unicode
+  # (verified — not Zawgyi) with paired transliteration riding
+  # annotations. Old Burmese (obr) — the mainland gap DHARMA doesn't
+  # fill, Myazedi-era onward. Seven DOI-pinned volume zips (~3.7 MB
+  # total) via per-volume ZipFetch subdirs; the source-material scans
+  # and intro PDF deliberately not fetched. Page-based files carrying
+  # the start of the next inscription mint section keys (37.1) —
+  # censused in metadata, never dropped, never duplicated.
