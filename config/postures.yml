@@ -500,6 +500,21 @@ sources:
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: mixed, note: "Greek loans inside Coptic text"}
+  dharma-khmer:
+    # P92-1: okz has no nabu-lects anchor yet — the aggregated SEA mint
+    # (okz/ocm/kaw/omy/osn/pyx/obr + the -Latn codemap rows) rides a
+    # nabu-lects PR awaiting the owner's merge; the posture flips to
+    # identity when the mint reaches canonical/nabu-lects (the xum
+    # add-then-retire shape). san-Latn resolves already (san~latn).
+    lect: {posture: pending, note: "candidate: identity via the SEA mint (okz +
+        okz-Latn→okz~latn) — blocked on the aggregated nabu-lects PR reaching
+        canonical; the corpus's san-Latn lane resolves on the held row today"}
+    dating: {posture: undatable, note: "no machine date field in the editions (working-repo
+        headers carry no origDate); the titles' century prose is not an extractor"}
+    places: {posture: unplaced, note: "no origPlace in the editions; findspots live in the
+        project's separate metadata repos, a future join"}
+    script: {posture: qualified, note: "romanized editions (okz-Latn/san-Latn); the stones'
+        Khmer script is the artifact fact, not the held surface"}
   titus-osco-umbrian:
     # P90-2: `osc` and `xum` are both real nabu-lects anchors (xum minted
     # upstream 2026-08-31 and synced to canonical the same day — the
