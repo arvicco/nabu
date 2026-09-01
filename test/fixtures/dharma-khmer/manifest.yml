@@ -12,3 +12,6 @@ files:
   - path: texts/xml/DHARMA_INSCIK00002.xml
     url: https://raw.githubusercontent.com/erc-dharma/tfc-khmer-epigraphy/master/texts/xml/DHARMA_INSCIK00002.xml
     whole: true
+  - path: texts/xml/DHARMA_INSCIK00046.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfc-khmer-epigraphy/master/texts/xml/DHARMA_INSCIK00046.xml
+    whole: true

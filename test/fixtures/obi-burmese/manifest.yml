@@ -19,3 +19,7 @@ files:
     url: https://zenodo.org/api/records/4321314/files/OBI_Corpus_Vol7.zip/content
     whole: false
     trim: one file out of the 49-file volume zip
+  - path: vol6/OBI_Vol6_No10__ob_p16.txt
+    url: https://zenodo.org/api/records/4321314/files/OBI_Corpus_Vol6.zip/content
+    whole: false
+    trim: one file out of the volume zip (vol6 extracts FLAT, no subdir)

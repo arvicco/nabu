@@ -12,9 +12,9 @@ require "fileutils"
 class ObiBurmeseTest < Minitest::Test
   include AdapterConformance
 
-  NO3A = "urn:nabu:obi-burmese:vol7:3a:ob"
-  NO36 = "urn:nabu:obi-burmese:vol7:36"
-  NO19B = "urn:nabu:obi-burmese:vol7:19b:re"
+  NO3A = "urn:nabu:obi-burmese:vol7:3a:ob:p6"
+  NO36 = "urn:nabu:obi-burmese:vol7:36:p121"
+  NO19B = "urn:nabu:obi-burmese:vol7:19b:re:p59"
 
   def conformance_adapter = Nabu::Adapters::ObiBurmese.new
 
@@ -38,8 +38,10 @@ class ObiBurmeseTest < Minitest::Test
   end
 
   def test_discover_mints_face_grain_urns_from_the_three_filename_shapes
-    assert_equal [NO19B, NO36, NO3A], adapter.discover(workdir).map(&:id),
-                 "vol:number[:face] — the face-less three-underscore shape included"
+    assert_equal ["urn:nabu:obi-burmese:vol6:10:ob:p16", NO19B, NO36, NO3A],
+                 adapter.discover(workdir).map(&:id),
+                 "vol:number[:face]:page — the page is identity (faces span pages " \
+                 "upstream); the face-less three-underscore shape included"
   end
 
   def test_no3a_parses_lines_with_transliteration_annotations
@@ -82,6 +84,16 @@ class ObiBurmeseTest < Minitest::Test
     assert_equal ["37"], document.metadata["sections"]
     refute_includes document.passages.map(&:text).join, "<pg>",
                     "page markers are milestones, dropped"
+  end
+
+  # vol6's parenthesized reconstructed line numbers "(၁) " (space
+  # separator, no tab) — a first-sync regression fixture.
+  def test_parenthesized_line_numbers_parse
+    ref = ref_for("urn:nabu:obi-burmese:vol6:10:ob:p16")
+    refute_nil ref
+    document = adapter.parse(ref)
+    assert_equal "#{ref.id}:1", document.passages.first.urn
+    refute_empty document.passages.first.text
   end
 
   def test_a_file_with_no_inscription_lines_quarantines

@@ -73,9 +73,14 @@ module Nabu
         )
       end
 
+      # Censused upstream tag dirt a subclass maps onto held codes
+      # ("kaw-Latin" typo → kaw-Latn); default none.
+      ALIASES = {}.freeze
+
       def parse(document_ref)
         result = DharmaEpidocParser.parse(
-          document_ref.path, allowed_languages: self.class::LANGUAGES
+          document_ref.path, allowed_languages: self.class::LANGUAGES,
+                             aliases: self.class::ALIASES
         )
         document = Nabu::Document.new(
           urn: document_ref.id, language: result.language,
@@ -93,6 +98,8 @@ module Nabu
           )
         end
         document
+      rescue Nabu::ValidationError => e
+        raise ParseError, "#{document_ref.path}: #{e.message}"
       end
 
       def fetch(workdir, progress: nil, force: false)

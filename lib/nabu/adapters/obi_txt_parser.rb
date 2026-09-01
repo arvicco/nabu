@@ -23,7 +23,11 @@ module Nabu
     # SECTION — its lines mint "<section>.<n>" keys ("37.1"), the file's
     # own inscription keeps bare "<n>", and the section numbers ride
     # Record#sections for the adapter's census. "<pg>…</pg>" page
-    # markers are milestones and drop.
+    # markers are milestones and drop. A HEADING-LESS numbering restart
+    # (vol1 No120: a second text block starting again at ၁ — first-sync
+    # census 2026-09-01) opens an implicit block: its lines mint
+    # "b<k>.<n>" ("b2.1"), the DDbDP/riig implicit-block idiom — never a
+    # duplicate urn, never a dropped line.
     #
     # == Passages
     #
@@ -34,7 +38,11 @@ module Nabu
     # number is the Burmese numeral converted to its Arabic form (၁ → "1").
     # Inline <ftn n</ftn> footnote markers are editorial and stripped from
     # both lanes. A wrapped physical line (rare) continues the open lane.
-    # A file whose INSCRIPTION section yields zero lines quarantines.
+    # EDITORIAL LINES inside the section skip: "{ … }" state notes
+    # ("lines 1 to 6 illegible", No96) and their "¤ <comment>…" mirrors —
+    # a ¤ line with no open inscription line is such a mirror, never
+    # data. A file whose INSCRIPTION section yields zero lines
+    # quarantines.
     #
     # Bilingual header values ("TITLE: <Myanmar> ¤ <translit>") split on
     # the ¤ separator: the Myanmar half is the value, the romanization
@@ -46,10 +54,19 @@ module Nabu
 
       BURMESE_DIGITS = "၀၁၂၃၄၅၆၇၈၉"
       FTN_RE = %r{<ftn>?\s*\d+\s*</ftn>}
-      MYANMAR_LINE_RE = /\A([#{BURMESE_DIGITS}]+)\t(.*)\z/
+      # The censused number styles (2026-09-01, whole-deposit): "၁⇥",
+      # "၁ ⇥" (stray space), "၁။⇥" (danda'd, vol5), "(၁) " (parenthesized
+      # reconstructed numbers, space-separated, vol6). The bare
+      # space-separated form REQUIRES the parentheses — a wrapped text
+      # line starting with a numeral must not false-open a line.
+      MYANMAR_LINE_RE = /\A(?:\(([#{BURMESE_DIGITS}]+)\)|([#{BURMESE_DIGITS}]+)။?) *\t(.*)\z/
+      MYANMAR_PAREN_RE = /\A\(([#{BURMESE_DIGITS}]+)\) +(.*)\z/
+      # One vol6 file (No8, a Pali text) numbers no lines at all — a
+      # bare-tab opening is an unnumbered line, keyed by running ordinal.
+      UNNUMBERED_LINE_RE = /\A\t(.+)\z/
       HEADING_RE = /\A([#{BURMESE_DIGITS}]+)။(.*)\z/
       PG_RE = /\A\s*<pg>/
-      TRANSLIT_LINE_RE = /\A¤\s*(\d+)?\t?(.*)\z/
+      TRANSLIT_LINE_RE = /\A¤\s*(\d+)? *\t?(.*)\z/
 
       module_function
 
@@ -83,29 +100,34 @@ module Nabu
         [header, body]
       end
 
-      def inscription_lines(body, path)
+      def inscription_lines(body, _path)
         lines = []
         sections = []
         section = nil
+        block = 1
+        last_n = nil
         open_lane = nil
         body.each_line do |raw|
           raw = raw.gsub(FTN_RE, "").rstrip
           next if raw.strip.empty? || raw.match?(PG_RE)
 
-          if (m = raw.match(MYANMAR_LINE_RE))
-            n = m[1].tr(BURMESE_DIGITS, "0123456789")
-            lines << { n: [section, n].compact.join("."), text: +m[2], translit: +"" }
+          if (m = raw.match(MYANMAR_LINE_RE) || raw.match(MYANMAR_PAREN_RE) || raw.match(UNNUMBERED_LINE_RE))
+            n = m[1] || m[2] ? (m[1] || m[2]).tr(BURMESE_DIGITS, "0123456789") : ((last_n || 0) + 1).to_s
+            block += 1 if last_n && n.to_i <= last_n
+            last_n = n.to_i
+            key = [section, (block > 1 ? "b#{block}" : nil), n].compact.join(".")
+            lines << { n: key, text: +m[-1], translit: +"" }
             open_lane = :text
           elsif (m = raw.match(HEADING_RE))
             section = m[1].tr(BURMESE_DIGITS, "0123456789")
             sections << section
+            block = 1
+            last_n = nil
             open_lane = :heading
           elsif raw.start_with?("¤")
-            if open_lane == :heading
+            if open_lane == :heading || lines.empty? || raw.include?("<comment>")
               open_lane = nil
             else
-              raise Nabu::ParseError, "#{File.basename(path)}: transliteration before any line" if lines.empty?
-
               lines.last[:translit] << TRANSLIT_LINE_RE.match(raw)[2]
               open_lane = :translit
             end
