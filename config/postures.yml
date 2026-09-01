@@ -515,6 +515,30 @@ sources:
         project's separate metadata repos, a future join"}
     script: {posture: qualified, note: "romanized editions (okz-Latn/san-Latn); the stones'
         Khmer script is the artifact fact, not the held surface"}
+  dharma-campa:
+    # P92-2: the ocm anchor rides the same aggregated SEA nabu-lects PR
+    # as dharma-khmer's okz — the whole family flips together at the merge.
+    lect: {posture: pending, note: "candidate: identity via the SEA mint (ocm +
+        ocm-Latn→ocm~latn); san-Latn resolves on the held row today"}
+    dating: {posture: undatable, note: "no machine date field in the editions"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "romanized (ocm-Latn/san-Latn); the Cham script is
+        the artifact fact"}
+  dharma-nusantara:
+    lect: {posture: pending, note: "candidate: identity via the SEA mint (kaw/omy/osn +
+        their -Latn codemap rows); san-Latn resolves on the held row today"}
+    dating: {posture: undatable, note: "no machine date field; Śaka years live in the
+        edition TEXT (svasti śaka-varṣātīta 1208 …), a future extractor story"}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "romanized; Kawi and Old Sundanese scripts are the
+        artifact facts"}
+  dharma-pyu:
+    lect: {posture: pending, note: "candidate: identity via the SEA mint (pyx +
+        pyx-Latn→pyx~latn); san-Latn resolves on the held row today"}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: qualified, note: "romanized (pyx-Latn); the Pyu script is the
+        artifact fact"}
   titus-osco-umbrian:
     # P90-2: `osc` and `xum` are both real nabu-lects anchors (xum minted
     # upstream 2026-08-31 and synced to canonical the same day — the
