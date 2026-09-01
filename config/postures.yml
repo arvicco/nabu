@@ -539,6 +539,18 @@ sources:
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized (pyx-Latn); the Pyu script is the
         artifact fact"}
+  obi-burmese:
+    # P92-3: obr rides the same aggregated SEA nabu-lects PR as the
+    # DHARMA anchors — the family flips together at the merge.
+    lect: {posture: pending, note: "candidate: identity via the SEA mint (obr — Old
+        Burmese, the Bagan corpus)"}
+    dating: {posture: pending, note: "candidate: the per-file DATE header field rides
+        document metadata verbatim (regnal/CE prose — '19 April 1173'); a ruled
+        extractor over the censused shapes is the future story"}
+    places: {posture: pending, note: "candidate: PLACE OF ORIGIN / CURRENT LOCATION
+        header fields ride document metadata verbatim where present"}
+    script: {posture: qualified, note: "Myanmar-script Unicode surface (~mymr) with a
+        Latin transliteration lane riding annotations"}
   titus-osco-umbrian:
     # P90-2: `osc` and `xum` are both real nabu-lects anchors (xum minted
     # upstream 2026-08-31 and synced to canonical the same day — the
