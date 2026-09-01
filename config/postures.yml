@@ -84,8 +84,9 @@ sources:
     # ko-wikisource-mk precedent if Middle Korean rows surface at sync.
     lect: {posture: codemap, note: "lzh → zho/lit (the sillok mold); ko/okm identity;
         Korean stage refinement deferred to a ruled year-band table"}
-    dating: {posture: pending, note: "candidate: the per-record year field rides document
-        metadata verbatim in v1 — a numeric-envelope extractor over it is the future story"}
+    dating: {posture: dated, note: "P92-6 (Q64): the per-record integer year projects
+        through MetadataDates :year_key — 490,014 of 1,198,779 records carry one
+        (censused 2026-09-01, range 695–1995); year-less records honestly mint nothing"}
     places: {posture: unplaced, note: "archive/corpus provenance rides document metadata"}
     script: {posture: qualified, note: "the per-record script field (Hanja / Old Hangeul /
         Hangeul mixes) rides document metadata verbatim"}
