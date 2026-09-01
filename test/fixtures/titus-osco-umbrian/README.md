@@ -19,6 +19,18 @@ fixtures document every script-lane pairing the corpus serves.
   - `oskum150.htm` — …/oskum150.htm — Oscan **Ross-10** (1 line): Greek-alphabet
     original (`gros16`) + transliteration (`weos16`) → `osc`
 
+First-sync census additions (retrieved with the owner's 2026-08-31 full
+crawl; copied from the held canonical tree, same grant):
+
+  - `oskum043.htm` — **SAMN-8 (& HeI)** (2 lines): the paren-protected anchor
+    shape (`Inscr.OU_BaI_SAMN-8_(&_HeI)__1` — an underscore INSIDE parens is
+    not a level separator) → `osc`
+  - `oskum377.htm` — **MARS-1** (8 lines): the Rechtsdokumente section's
+    archaic-Latin comparanda lane pair (`weal16`/`wealo16`, "in hoce
+    loucarid…") → `lat`
+  - `oskum069.htm` — **Ross-2 (&)**: a photo-only stub (no content lanes —
+    the edition links a photograph); the discovery skip-class exemplar
+
 All four text pages are byte-verbatim upstream pages (small enough to keep
 whole), so the adapter tests assert real full-page counts that survive a
 refresh unchanged unless upstream itself changes.
