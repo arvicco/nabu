@@ -6,8 +6,8 @@ documents_display: '2,265,769'
 passages: 105990462
 passages_display: '105,990,462'
 language_codes: 155
-registry_rows: 169
-corpus_sources: 144
+registry_rows: 176
+corpus_sources: 151
 live_sources: 144
 local_shelves: 5
 feature_modules: 20
@@ -71,4 +71,4 @@ silver_lemmas: 30999504
 silver_lemmas_display: '30,999,504'
 silver_lemmas_m: '31.0'
 silver_languages: 15
-desks: 24
+desks: 25

@@ -12,7 +12,7 @@ its Latin and at the Biblical scholar's for its scripture; the UD treebanks
 answer to a dozen desks at once. Multi-membership is the point, not an
 accident to be tidied away.
 
-Everything below documents **shipped behaviour** — the twenty-four desks
+Everything below documents **shipped behaviour** — the twenty-five desks
 defined in `config/axes.yml`, their memberships declared per source in
 `config/sources.yml`, and the three command surfaces that read them. The
 desk listing on this page is not hand-maintained: it is a projection of the
@@ -75,7 +75,7 @@ The Latin-to-vernacular continuum: CroALa's medieval and neo-Latin opens the des
 
 Documentary corpora at the artifact grain: papyri, the Latin/Greek and Levantine and Sicilian inscription databases, the Continental Celtic, Italic and Tyrsenian editions, ogham stones, Hittite tablets — the shelves where fragment search and findspots earn their keep.
 
-**Members** (21): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `trismegistos`, `pleiades`, `trismegistos-geo`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`, `edr`, `elephantine`, `nabu-places`, `ucd`
+**Members** (26): `papyri-ddbdp`, `edh`, `riig`, `ogham`, `isicily`, `itant`, `trismegistos`, `pleiades`, `trismegistos-geo`, `tlhdig`, `ceipom`, `open-etruscan`, `lexlep`, `lexlep-words`, `tir`, `iip`, `rundata`, `edr`, `elephantine`, `nabu-places`, `ucd`, `dharma-khmer`, `dharma-campa`, `dharma-nusantara`, `dharma-pyu`, `obi-burmese`
 
 ### slavic
 
@@ -220,6 +220,14 @@ The Tibetan desk opens with the canon whole: the Public-Domain Digital Derge Kan
 The Korean desk opens on the dynastic record itself: the Veritable Records of Joseon (sillok) in the original hanmun via NIKH's open XML dumps, joined by the Goryeosa family on the same DTD (the pre-Joseon dynastic history, its chronological digest, and the state council's daily register), with the Seungjeongwon ilgi and the ITKC classics to follow, and the Middle Korean Wikisource shelf as the vernacular leg. Since P91-1 the OKHC historical slice widens the desk beyond the state record: the Samguk sagi (the oldest Korean history), the Ilseongnok, the ITKC munjip mass, and the AKS/Kyujanggak/NHM old-literature shelves, each record carrying its own PD-vs-nc label.
 
 **Members** (8): `okhc`, `sillok`, `sjw`, `ko-wikisource-mk`, `goryeosa`, `goryeosa-jeoryo`, `bibyeonsa`, `itkc`
+
+### sea
+
+> The Southeast Asianist — the Indic cosmopolis at its eastern edge: Sanskrit charters beside the vernaculars they seeded.
+
+Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the Cœdès K-numbers), the Campā corpus, the Nusantara charters (Old Malay, Old Javanese, Old Sundanese), the Pyu corpus, and the Bagan Old Burmese inscriptions — with the kakawin critical editions as the literary wing and the Old Javanese Wordnet as its glossary, joining as their packets land.
+
+**Members** (7): `dharma-khmer`, `dharma-campa`, `dharma-nusantara`, `dharma-pyu`, `obi-burmese`, `dharma-javanese-texts`, `ojw`
 
 ### sinitic
 

@@ -11,7 +11,7 @@
 - slug: epigraphy
   persona: The Papyrologist-Epigraphist
   blurb: reads what survives on stone, sherd, papyrus and tablet, lacunae and all
-  members: 21
+  members: 26
 - slug: slavic
   persona: The Slavicist
   blurb: Cyril and Methodius to the damaskini, canon to vernacular
@@ -86,6 +86,11 @@
   persona: The Koreanist
   blurb: the hanmun state record and the first hangul vernacular
   members: 8
+- slug: sea
+  persona: The Southeast Asianist
+  blurb: 'the Indic cosmopolis at its eastern edge: Sanskrit charters beside the vernaculars
+    they seeded'
+  members: 7
 - slug: sinitic
   persona: The Sinologist
   blurb: the classical Chinese written world and its phonological deep past

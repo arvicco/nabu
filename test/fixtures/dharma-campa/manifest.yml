@@ -1,0 +1,14 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# One whole real edition + upstream's own worklist file (the skip case).
+source: dharma-campa
+adapter_test: null
+retrieved: 2026-09-01
+files:
+  - path: xml/DHARMA_INSCIC00001.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfc-campa-epigraphy/master/xml/DHARMA_INSCIC00001.xml
+    whole: true
+  - path: xml/BROUILLON-LISTE.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfc-campa-epigraphy/master/xml/BROUILLON-LISTE.xml
+    whole: true
