@@ -27,6 +27,10 @@ module Nabu
       #   :year_range — "date" => "1565-1650" | "1565" strings (CroALa
       #     P44): both bounds from a clean YYYY[-YYYY] parse; anything
       #     else (ca., floruit prose) is skipped honestly.
+      #   :year_key — a top-level integer "year" (okhc P92-6/Q64: the
+      #     deposit's own per-record year, 490,014 of 1,198,779 rows
+      #     censused 2026-09-01, range 695–1995, every value an integer
+      #     — a one-year envelope; year-less records mint nothing).
       #   :period_label — top-level "period" Assyriological labels banded
       #     through the ruled config/period_bands.yml table (ebl, P62-0 —
       #     the P61-1 sweep's pending served; unruled labels mint nothing).
@@ -65,6 +69,9 @@ module Nabu
           #                            uncertainty stays raw-only — no bounds invented
           "dacon" => :structured, # P88-A4: the deposit's own century attributions
           #                         (cnew<cc> stems) as per-document envelopes
+          "okhc" => :year_key, # P92-6 (Q64): the per-record integer year — projected
+          #                      from the CATALOG's stored metadata, no re-parse of the
+          #                      1.2M documents (the whole point of the lane)
           "bfm" => :iso_keys,
           "croala" => :year_range,
           "ebl" => :period_label
@@ -167,6 +174,15 @@ module Nabu
 
         def period_label(meta)
           seleucid_era(meta["date"]) || king_reign(meta["date"]) || period_band(meta)
+        end
+
+        # A bare integer year → a one-year envelope (okhc). Anything else
+        # (absent, string, float) mints nothing — no bounds invented.
+        def year_key(meta)
+          year = meta["year"]
+          return [nil, nil, nil] unless year.is_a?(Integer)
+
+          [year, year, year.to_s]
         end
 
         def period_band(meta)
