@@ -48,7 +48,7 @@ module Nabu
       FTN_RE = %r{<ftn>?\s*\d+\s*</ftn>}
       MYANMAR_LINE_RE = /\A([#{BURMESE_DIGITS}]+)\t(.*)\z/
       HEADING_RE = /\A([#{BURMESE_DIGITS}]+)။(.*)\z/
-      PG_RE = %r{\A\s*<pg>}
+      PG_RE = /\A\s*<pg>/
       TRANSLIT_LINE_RE = /\A¤\s*(\d+)?\t?(.*)\z/
 
       module_function

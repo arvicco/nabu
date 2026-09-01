@@ -131,7 +131,7 @@ module Nabu
       end
 
       def txt_paths(workdir)
-        Dir.glob(File.join(workdir, "vol*", "**", "*.txt")).sort
+        Dir.glob(File.join(workdir, "vol*", "**", "*.txt"))
       end
 
       def urn_for(path)
