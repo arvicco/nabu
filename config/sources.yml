@@ -4297,3 +4297,38 @@ dharma-khmer:   # P92-1, the SEA desk anchor
   # attic earns its keep). Line-grain prose / pada-grain verse; the
   # unknown-language net quarantines new codes loudly. First sync
   # owner-fired; ~150 MB repo, texts/xml cone far smaller.
+
+dharma-campa:   # P92-2
+  adapter: Nabu::Adapters::DharmaCampa
+  axes: [sea, epigraphy]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # DHARMA Campā corpus (~121 editions, xml/ cone): Old Cham (ocm-Latn —
+  # the Đông Yên Châu inscription is the oldest attested Austronesian
+  # text) and Sanskrit epigraphy of the Cham polities; absorbs the
+  # ISAW–EFEO CIC corpus. In-file <licence> CC BY-SA 4.0 governs,
+  # recorded verbatim; class attribution. The xml/ dir also carries
+  # upstream's BROUILLON-LISTE.xml worklist — censused, never parsed.
+
+dharma-nusantara:   # P92-2
+  adapter: Nabu::Adapters::DharmaNusantara
+  axes: [sea, epigraphy]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # DHARMA Nusantara epigraphy (~309 editions): Old Javanese sīma
+  # charters, Borobudur, Old Sundanese (Kawali, Batutulis), Old Malay
+  # (Sojomerto, the Laguna copperplate) and Sanskrit. Full-repo language
+  # census 2026-09-01: 345 san-Latn · 196 kaw-Latn · 21 omy-Latn ·
+  # 15 osn-Latn divs; the one "languageb-Latn" template-placeholder div
+  # (INSIDENK00050) quarantines loudly by design.
+
+dharma-pyu:   # P92-2
+  adapter: Nabu::Adapters::DharmaPyu
+  axes: [sea, epigraphy]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # DHARMA Corpus of Pyu Inscriptions (Griffiths et al.) — 161 editions
+  # of the extinct Sino-Tibetan language of the Irrawaddy city-states,
+  # romanized (pyx-Latn), flat repo layout. No repo-level LICENSE: the
+  # per-file <licence> CC BY-SA 4.0 is the whole grant, recorded
+  # verbatim; class attribution.

@@ -172,7 +172,11 @@ module Nabu
         case node.name
         when *DROP then ""
         when "gap" then GAP_MARKER
-        when "space", "lb", "pb", "milestone" then " "
+        when "space" then " "
+        when "lb", "pb", "milestone"
+          # break="no" wraps mid-word (a line around the stone's faces:
+          # ti|thi) — contribute nothing; otherwise the break separates words.
+          node["break"] == "no" ? "" : " "
         when "del" then "⟦#{node.children.map { |c| extract(c) }.join}⟧"
         when "surplus" then "{#{node.children.map { |c| extract(c) }.join}}"
         when "choice"
