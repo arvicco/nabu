@@ -88,7 +88,8 @@ module Nabu
         result.passages.each_with_index do |unit, index|
           document << Nabu::Passage.new(
             urn: "#{document_ref.id}:#{unit.key}", language: unit.language,
-            text: unit.text, sequence: index
+            text: unit.text, sequence: index,
+            annotations: unit.met ? { "met" => unit.met } : {}
           )
         end
         document

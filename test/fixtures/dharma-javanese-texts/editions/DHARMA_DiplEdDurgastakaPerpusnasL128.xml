@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_CritEdSchema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_CritEdSchema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_CritEdSQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng" xml:id="DurgastakaPerpusnasL128">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+            	<title type="editorial">Digital diplomatic edition of lontar L. 128 at Perpusnas, Jakarta</title>
+                <respStmt>
+                    <resp>author of digital edition</resp>
+                	<persName ref="part:mamu">
+                		<name>M. Aftharu Mulya</name>
+                	</persName>
+                	<persName ref="part:argr">
+                		<forename>Arlo</forename>
+                		<surname>Griffiths</surname>
+                	</persName>
+                    <persName ref="part:dapu">
+                        <forename>I Gde Agus</forename>
+                        <surname>Darma Putra</surname>
+                    </persName>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <authority><ref target="{URI for DHARMA website}">DHARMA</ref></authority>
+                <pubPlace>Jakarta</pubPlace>
+                <idno type="filename">DHARMA_DiplEdDurgastakaPerpusnasL128.xml</idno>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">
+                        <p>This work is licenced under the Creative Commons Attribution 4.0 Unported
+                            Licence. To view a copy of the licence, visit
+                            https://creativecommons.org/licenses/by/4.0/ or send a letter to
+                            Creative Commons, 444 Castro Street, Suite 900, Mountain View,
+                            California, 94041, USA.</p>
+                    </licence>
+                </availability>
+                <date from="2019" to="2025">2019-2026</date>
+            </publicationStmt>
+            <sourceDesc>
+                <listWit>
+                    <witness xml:id="L128">
+                        <abbr type="L128"/>
+                        <msDesc>
+                            <msIdentifier>
+                                <settlement>Jakarta</settlement>
+                                <institution>Perpustakaan Nasional Republik Indonesia</institution>
+                                <repository>Lontar</repository>
+                                <idno>L128</idno>
+                            </msIdentifier>
+                            <msContents>
+                                <msItem>
+                                    <title>Durgāṣṭaka</title>
+                                    <!-- You can also add a colophon if needed -->
+                                    <!--<colophon>
+										<quote></quote>
+										</colophon> -->
+                                    <!-- colophon should be *structured* with quote elements with *attributes* @type and @xml:lang when necessary -->
+                                </msItem>
+                            </msContents>
+                            <physDesc>
+                                <objectDesc>
+                                    <p>This manuscript is a <foreign>lontar (ləmpiran)</foreign>. It
+                                        is preserved at Perpustakaan Nasional Republik Indonesia,
+                                        listed by Behrend (<bibl rend="omitname"><ptr target="bib:Behrend1998_01"/><citedRange unit="page">[...]</citedRange><citedRange unit="item">L 128</citedRange></bibl>). A
+                                        commonly occurring circle-shaped symbol appears with two
+                                        different headmarks, and the combinations are marked with
+                                        the @1 or @2.
+                                        </p>
+                                </objectDesc>
+                                <handDesc>
+                                    <!-- Add an attribute @hands if you have more than one hand -->
+                                    <!-- Create a handNote for each hand -->
+                                    <handNote xml:id="H1" scriptRef="class:83239 maturity:83215">
+                                        <!-- update the content of the @xml:id and the @scriptRef using the xml:id-of-the-witness -->
+                                        <abbr type="hand"><hi rend="superscript"/><hi rend="subscript"/></abbr><!-- Give the abbreviation siglum for the hand built on xml:id-of-the-manuscript, ":", H1, the number being incremental -->
+                                        <p/><!-- provide a description of the hand -->
+                                    <p>Main hand of the manuscript, black ink, in Javanese script of the Merapi-Merbabu type</p>
+                                    </handNote>
+                                </handDesc>
+                            </physDesc>
+                            <history>
+                                <!-- Here you can decribe the history of the manuscript in prose. Use <origDate> and <origPlace> to emphasize the place and date of creation -->
+                                <p/>
+                            </history>
+                        </msDesc>
+                    </witness>
+                </listWit>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+            <projectDesc>
+                <p>Encoded in TEI according to the <ref target="{URI for DHARMA editorial conventions or page with link to Encoding Guides}">Conventions of ERC-Project DHARMA</ref>.</p>
+                <!-- A second paragraph can be used to acknowledge any relevant funding agency, project acronym and number, any to specify for instance that the edition results from a personal research project such as a PhD.  
+  -->
+            </projectDesc>
+            <editorialDecl>
+                <p/>
+                <correction>
+                    <p/>
+                </correction>
+                <normalization>
+                    <p/>
+                </normalization>
+                <interpretation>
+                    <p/>
+                </interpretation>
+            </editorialDecl>
+            <samplingDecl>
+                <p/>
+            </samplingDecl>
+        </encodingDesc>
+    	<encodingDesc>
+    		<projectDesc>
+    	<p>The romanized transliteration was funded by the European Union (ERC MANTRATANTRAM, grant agreement no. 101124214).</p>
+    	<p>Encoded in TEI according to the <ref target="{URI for DHARMA editorial conventions or page with link to Encoding Guides}">Conventions of ERC-Project DHARMA</ref>.</p>
+    			<p/>	
+    		</projectDesc>
+    	</encodingDesc>
+        <revisionDesc>
+        	<change who="part:argr part:mamu part:dapu" when="2026-05-29" status="draft">started encoding the diplomatic edition</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:space="preserve">
+		<body>
+			<div type="edition" xml:lang="kaw-Latn">
+<ab>
+<pb n="1r"/> <!-- IDN_MS_JakartaPNRI_Durgasthaka_01recto.jpg --> 
+<lb n="1r1"/><g type="ddandaOrnate">// @1 //</g> O;m̐ ka:li ka:la dutinarahr̥daya saśoka:nite nograhno| O;m̐ ka:reḥ ghoraṇa:do pralaya vita śika:ta:raṅ phīṅgakṣi rodra| hri:m̐ hraḥ tejobi puṙ⌈
+<lb n="1r2"/>ṇne paśa dahaya <unclear reason="eccentric_ductus">pha</unclear>ṭa; pa:tama;
+    bheravītvə| hi;m̐ hraḥ kaṅka;la da<del rend="ui">ra</del>:rī tribūvaṇa mata <space type="binding-hole"/> ha:rakṣamə; badraka:li @1 ha: ha: hī hī samūni vikr̥ta bayakara: hariṇi nilavaṙṇnī| ha:
+<lb n="1r3"/>ha: h<unclear reason="eccentric_ductus">ī</unclear> hi kara:li vikaṭa; daśabūja:śūra ra:hurūpa| jra;m̐ jra;m̐ jri;m̐ vibakṣa: śava rūdi<space type="binding-hole"/>ra maha:maṅśa pa:li vimohī| hi;m̐ hra;ṁ kam̐ ka:la da:rī tribūvaṇa: śūpita: rakṣamə; badra:ka
+<lb n="1r4"/>li @2 O;m̐ ka:raṇa ya;m̐ ya;m̐ caṙmmanetre hara hara hara O;m̐ ka:raṇa: destana:de| kru;m̐ krum̐ yu;m̐ yum̐; vaśaghnīḥ vikr̥tadarasiraṁ skandata:te munande| glom̐ glom̐ ra:m̐ ram̐; la la: la: la la la la
+
+<pb n="1v"/> <!-- F.001v-->
+<lb n="1v1"/>sahite kūlahaste praAste| pa<del rend="strikeout">:</del>yasta;
+    pa:paṇa seda marukaśahite rakṣamə; ba:drakali <g type="ddandaOrnate">@1 vam̐ @1</g> Itiḥ mantra panəhət· @1 @1 O;m̐ ganapati mahiśorai| parameṣṭī harudrañcaḥ
+<lb n="1v2"/>|catūṙ bujai saṅkarañcaḥ| trina:yaṇa śambhuyañcaḥ @1 O;m̐ saṁ hyaṁ hyaṁ hiśorante| O;m̐ saṁ <space type="binding-hole"/> hyaṁ hyaṁ parameṣṭinte| O;m̐ saṁ hyaṁ hyaṁ maha:rudrante @2 O;m̐ saṁ hyaṁ hyaṁ maha:bujante| O;m̐ saṁ
+<lb n="1v3"/>hyaṁ hyaṁ saṁkarante| O;m̐ saṁ hyaṁ hyaṁ trinayante| Om̐; saṁ hyaṁ hyaṁ śambhu namaṣ te @1 Iti<space type="binding-hole"/>ḥ haṣṭakamantra @1 @1 O;m̐ ham̐ ha:m̐ ha:ṅṣa haṅṣe hasita Iha Iha: mūkta ghoṙra ṭa:ha:se|
+<lb n="1v4"/>kam̐ kam̐ kam̐ ka<unclear reason="eccentric_ductus">d</unclear>ka hasve tribūvaṇa: nilaye ka:li kaṅka;ladari| ram̐ ram̐ ram̐ raṅga raṅge prahatava dane piṅgate saṙvvasa:ne| bra;m̐ bram̐ brūm̐ sva;paniye brukuṭi tada paṭe ṭopa ṭaṅka;ragaṙje @
+
+<pb n="2r"/> <!-- F.002r -->
+<lb n="2r1"/>hram̐ hram̐ hrūm̐ lambhajī ye ka ka ka ka ka ka goye hi he hi pracaṇḍe| jhram̐ jhrim̐ jhrūm̐ padmada:re ra ra ra ra ra ra re jvala:ti piṅgalakṣe| ghem̐ ghem̐ ghem̐ būtana:te kili kili rahase caṇḍike kaṙmma
+<lb n="2r2"/>mūṇḍe| ram̐ ram̐ rūm̐ mṣripralambhe pralaya parinate na:gnarūpa:sarūpe @2 satya jha<space type="binding-hole"/>jha: rai ghore la la la la la la ne śūlahasve prahaste| putaiḥ kusmaṇḍa mūṇḍe ha ha
+<lb n="2r3"/>ha ha ha ha rai beravi U:grateje| bram̐ bram̐ brūm̐ ka:laratrī niśica-niśicare bajra<space type="binding-hole"/>ḍaṇḍeśa badre| kam̐ kam̐ kam̐ mantraśa:rai jamūji tiji tara ba:dra da: ba:drakali @2 yogi⌈
+<lb n="2r4"/>yoga:dina:te hana-hana dahane kr̥ṣna kr̥ṣṇe triśūle| nityai prajva:lama:li ra ra ra ra
+    ra ra rai saṙvvacakṣuḥ pracaṇḍe| klam̐ klam̐ kalyana ka:li vikr̥ta naraśive Uṙd<unclear reason="eccentric_ductus">va</unclear>ghoreka 
+
+<pb n="2v"/> <!-- F.002v-->
+<lb n="2v1"/>rapi ghram̐ ghr<unclear reason="eccentric_ductus">i</unclear>m̐ ghrūm̐ ghorana:te prakaṭita vadane bina muṙtti pracaṇḍe @2 A:ka:śe ta:la jaṅg<subst><del>a</del><add place="below" rend="mark">e</add></subst> pralaya parinate granti rode trinetre| kaṣtepa:śa: na madye hutava hanila⌈*
+<lb n="2v2"/>ye ka:li kaṅka:lada:ri| lambhopṭe A<unclear reason="eccentric_ductus">n</unclear>tarikṣe daśadiśī gamane haṙmmama;yantada<space type="binding-hole"/>:ri| cakrī pa:ta:lava:śī haśuraṇa ramita: rakṣamə badraka:li @2 bam̐ bam̐ bham̐ bha:m̐ va ba:⌈
+<lb n="2v3"/>ve bava bava rahite bukti mukti prayūkte| bī bī bī ka:laratri gūha-gūha harinī va:sū <space type="binding-hole"/> bogo svabogi| bū bū bū būmmikampe ga ga ga gama care na:da rakte carikte| be be⌈
+<lb n="2v4"/>be bedane ye hara hara hara ye ka:lakūṭe namas·te @2 gula:ṅga: la:ṅga laṅge dama nama dama hūm̐ satyava:di vadaṅge| hri;m̐ ka:rī gorana:te narapisitamukīna: daki satya de
+
+
+<!-- right margin: ṅaṙ (upside down) -->
+
+<pb n="3r"/> <!--F.003r -->
+<lb n="3r1"/>vi| hrim̐ hrim̐ na:gendraba:vai śaśadaradavale brahmacandre mahendre ram̐ ram̐ rum̐ kṣripralambe damarukasahite rakṣa mai mantramuṙtve @2 Etai mantrokta vijəm prahasanapabayai ma:racoba:ri
+<lb n="3r2"/>nasyai| būta: preta:di duṙggai grahavasa hariṇi gorapa:papraṇa:śai| prittai kiṙtta śvabūdḍai<space type="binding-hole"/>śūkam akilatayoḥ śaṅka būdḍi śvabūdḍai| śvetai mantraṣtakai yaḥ paṭati śūla bate būkti mukti praka:
+<lb n="3r3"/>śyaim· @1 Itiḥ duṙgga:ṣṭakamantra @ pukulun pasaṁtabe punaṁ kavaya<del rend="ui">na</del>han· de<space type="binding-hole"/>n ṣapuraha dene kaṅ amilaṁ kaṅ amisaṙkakən· den patūtalviḥ den· loṁṅana pasiśi
+<lb n="3r4"/>nahon· hanut· babon praśadune kaya pcakiṁ pacul· corak· carik ṣrigītiṅən· jənəṅipun
+    ṣampun hajriḥ haṁloṅi haṅuraṅi kaṅ anu<add rend="mark" place="above">+ ra</add>t· duruṁ ṅave vedaṁ @ 
+
+<pb n="3v"/> <!-- F.003v -->
+<!-- empty -->
+
+
+<pb n="4r"/> <!-- F.004r-->
+<gap reason="lost" quantity="10" unit="character"/> p<unclear reason="eccentric_ductus">u</unclear>tra prakaṭa siṅanab·da saśat· gǝlap sayuta| siṙna sǝpal· kadi sol· kadi kta ya
+<gap reason="lost" quantity="12" unit="character"/> banas·patiña kavǝs· kocak·nikaṁ tasik· guṙnita mavalikan· den aṅi
+<gap reason="lost" quantity="15" unit="character"/><unclear reason="eccentric_ductus">pa</unclear>ḥ
+    baḍavaṁ <gap reason="lost" quantity="2" unit="character"/>katub· lviṙr udan· paḍanikaṁ| jokelaṁ-keluṁ bikas· nagaraja kagugaḥ milu molaḥ vi
+
+
+
+</ab>
+			    
+</div>
+    <div type="translation">
+        <!-- Structure as necessary with <div>, <p>, <ab>, <lg>  -->
+    </div>
+    <div type="commentary">
+        <!-- Comment regarding your edition such as the following example -->
+        <!-- <p>The asterisk * is used to flag lemmata or forms of lemmata not recorded in the <title>Old Javanese-English Dictionary</title>.</p>-->
+    </div>
+    
+
+<div type="bibliography">
+        <p>Transliterated by M. Aftharu Mulia, checked by Arlo Griffiths and I Gde Agus Darma Putra,
+based on photographs by Garin Pharmasetiawan. Encoded by M. Aftharu Mulia, checked by Arlo Griffiths and I Gde Agus Darma Putra.</p>        			    
+<!--<p>original set of photos references in the transcription below</p>
+<p>https://sharedocs.huma-num.fr/wl/?id=ImN90k5xgnX4nTHRuyfduH0zFaMQP0kj</p>
+<p>new set of tiff photos</p>
+<p>https://sharedocs.huma-num.fr/wl/?id=jOSimD60lhzOxwz2kJb7nX32ufjtLtzS</p>-->
+        <listBibl type="bibliography">            
+            <bibl><ptr target="bib:Behrend1998_01"/><citedRange unit="page">...</citedRange></bibl>
+            <bibl><ptr target="bib:Goudriaan+Hooykaas1971_01"/><citedRange unit="page">196–207</citedRange></bibl>
+        </listBibl>
+<!-- <listBibl type="editions">
+<bibl/></listBibl> -->  
+    </div>
+</body>
+</text>
+</TEI>

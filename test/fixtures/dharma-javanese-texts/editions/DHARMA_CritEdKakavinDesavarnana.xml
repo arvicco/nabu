@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_CritEdSchema.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_CritEdSchema.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_CritEdSQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng" xml:id="desavarnana">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                	<title type="editorial">Deśavarṇana, or Description of the Territories by Mpu Prapañca: Digital Critical Edition</title>
+            	<title type="alt">with translation by Stuart Robson (1995)</title>
+            	<title type="original" xml:lang="kaw-Latn">Deśavarṇana</title>
+		<author>Mpu Prapañca</author>
+                <respStmt>
+                    <resp>author of digital edition</resp>
+                    <persName ref="part:argr">
+                        <forename>Arlo</forename>
+                        <surname>Griffiths</surname>
+                    </persName>
+                     <persName ref="part:wjsa">
+                        <forename>Wayan Jarrah</forename>
+                     	<surname>Sastrawan</surname>
+                    </persName>
+                </respStmt>
+            </titleStmt>
+            <publicationStmt>
+                <authority><ref target="{URI for DHARMA website}">DHARMA</ref></authority>
+                <pubPlace>Lyon and Paris (France); Jakarta (Indonesia); Canberra (Australia)</pubPlace>
+                <idno type="filename">DHARMA_CritEdKakavinDesavarnana.xml</idno>
+                <availability>
+                    <licence target="https://creativecommons.org/licenses/by/4.0/">
+                        <p>This work is licenced under the Creative Commons Attribution 4.0 Unported Licence. To view a copy of the licence, visit https://creativecommons.org/licenses/by/4.0/ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.</p>
+                    </licence>
+                </availability>
+                <date from="2019" to="2025">2019-2025</date>
+            </publicationStmt>
+            <sourceDesc>
+                <listWit>
+                	<witness xml:id="mslo">
+                    	<abbr type="siglum">MS<hi rend="superscript">1</hi></abbr>
+                        <msDesc>
+                            <msIdentifier>
+                                <settlement>Leiden</settlement>
+                                <institution>University Library (UB)</institution>
+                                <repository>Special Collections</repository>
+                                <idno>Or. 5023</idno>
+                            </msIdentifier>
+                            <msContents>
+                                <!-- the msContents isn't mandatory -->
+                                <msItem>
+                                   <!-- <author></author>
+                                    <title></title>-->
+                                    <colophon>
+                                    	<quote>Itī nāgarakr̥tāgama samāpta, saṅkatha śrī mahārāja wilwātikta, <pb edRef="#mslo" n="135v"/>tkeṅ nuṣa pranuṣā kacayeṅ sira, makādi bālīrājya pratiṣṭāṅkana‚ makānimitaṅ saṅhyaṅ praśāsti waśītā, tkeṅ yawadwīpa samantā.</quote>
+                                        <quote>Samaṅkana tlas tinular, tkāpnirārcapamāsah, ṅkāneṅ khañcānasthāna, hiṅ pulina bālī, riṅ thānī pradeśa kawyān riṅ wetān iṅ talaga dwāja, sḍəṅiṅ tinaṅguṅ rīpu, kuraṅ kawotnya kapayuṅā de saṅ lotātī śr̥ddhā māccha, āpan tan tameṅ guru laghū pasaṅān, hakeh prabheḍanyā, kewalwya milwa matraṅ nurāt, riṅ dinā, u, wr̥, khiraṅgāpahaṅ; kārttikha māsaniṅ paniḷmān, i śāka, pakṣaṅ r̥ṅə̄ ghanā dewa, 1662; samana kowusanya sinurāt, kāmpuraha dyanira saṅ manəmvaṅ dlāha makadi saṅ amāccha, dumadyāknaṅ kadirghāyūṣanira saṅ anurat, om dirghāyūr astu tatāstu hastu, auṃ sāmasāmpūrṇnaya nāmah swāhā.</quote>
+				</colophon>
+                                    <!-- colophon should be *structured* with quote elements with *attributes* @type and @xml:lang when necessary -->
+                                </msItem>
+                            </msContents>
+                            <physDesc>
+                                <objectDesc>
+                                    <p>Lontar manuscript from the Lombok collection. ... leaves in Balinese script.</p>
+                                </objectDesc>
+                                <handDesc> <!-- Add an attribute @hands if you have more than one hand -->
+                                    <!-- Create a handNote for each hand -->
+                                    <handNote xml:id="A1_H1" scriptRef="class:57470 maturity:83215"> <!-- update the content of the @xml:id and the @scriptRef using the xml:id-of-the-witness -->
+                                        <abbr type="hand">A<hi rend="superscript">1</hi>:H<hi rend="subscript">1</hi></abbr><!-- Give the abbreviation siglum for the hand built on xml:id-of-the-manuscript, ":", H1, the number being incremental -->
+                                        <p>main hand of the manuscript, black ink, Balinese script</p><!-- provide a description of the hand -->
+                                    </handNote>
+                                </handDesc>
+                            </physDesc>
+                            <history>
+                                <p>Looted from Puri Cakaranegara; stored in Leiden Universiry Library; restored to Indonesia; entered into Perpystakaan Nasional Republik Indonesia.</p>
+                            </history>
+                        </msDesc>
+                    </witness>
+                	<witness xml:id="edpi">
+                		<abbr type="siglum">Ed<hi rend="superscript">Pi</hi></abbr>
+                		<bibl><ptr target="bib:Pigeaud1960-1963_01"/><citedRange unit="volume">1</citedRange></bibl>
+                		<!--p. 135.-->
+                	</witness>
+                    <witness xml:id="Catra84">
+                		<abbr type="siglum">Ed<hi rend="subscript">C</hi></abbr>
+                		<msDesc>
+                			<msIdentifier>
+                				<settlement>Karangasem, Bali</settlement>
+                				<repository>Private collection of Dewa Gede Catra</repository>
+                			</msIdentifier>
+                			<physDesc>
+                				<objectDesc>
+                					<p>Dewa Gede Catra’s paper copy of (or edition based on) Griya Pidada</p>
+                				</objectDesc>
+                				<handDesc> <!-- Add an attribute @hands if you have more than one hand -->
+                					<!-- Create a handNote for each hand -->
+                					<handNote xml:id="Catra84_H1" scriptRef="class:57470 maturity:83215"> <!-- update the content of the @xml:id and the @scriptRef using the xml:id-of-the-witness -->
+                						<abbr type="hand">A<hi rend="superscript">1</hi>:H<hi rend="subscript">1</hi></abbr><!-- Give the abbreviation siglum for the hand built on xml:id-of-the-manuscript, ":", H1, the number being incremental -->
+                						<p>Main hand of the manuscript, black ink, Balinese script</p><!-- provide a description of the hand -->
+                					</handNote>
+                				</handDesc>
+                			</physDesc>
+                			
+                		</msDesc>
+                	</witness>
+                </listWit>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc>
+                <projectDesc>
+                    <p>Encoded in TEI according to the <ref target="{URI for DHARMA editorial conventions or page with link to Encoding Guides}">Conventions of ERC-Project DHARMA</ref>.</p>
+                    <!-- A second paragraph can be used to acknowledge any relevant funding agency, project acronym and number, any to specify for instance that the edition results from a personal research project such as a PhD.  
+  -->
+            </projectDesc>
+            <editorialDecl> 
+                <p/>
+                <correction>
+                    <p/>
+                </correction>
+                <normalization>
+                    <p><foreign>Pepet</foreign>: We have freely inserted or removed <foreign>pepet</foreign>s when required by meter, without recording the normalizations in our apparatus.</p>
+                    <p>Vocalic liquids: In words of Austronesian origin, we normalise graphemes [r̥] and [R̥] as [rə] or [ər], and similarly, we normalise [l̥] and [L̥] as [lə] or [əl]. In words of Indo-Aryan origin, for which /r̥/ and /l̥/ are distinct phonemes, we represent them as [r̥] and [l̥]. Hence for the Old Javanese word /gərəh/ “thunder”, the spelling [gəR̥ḥ] is normalised to [gərəh], while for the Sanskrit word /kr̥ta/ “done”, the spelling [kr̥ta] is retained.</p>
+                    <p>Vowel length: We have normalized vowel length using OJED spelling as norm, except when OJED spelling would have yielded an unmetrical sequence. Vowels at the end of pādas are very often written long, frequently without evident justification: we have not shied away from shortening vowels whose length seemed unjustifiable in grammatical terms. </p>
+                    <!-- AG, before conversion to XML: as of now, we have quite a few apparatus entries that concern only vowel length. we can try to weed some of them out in due course, but for now I will continue adding some, here and there, whenever it seems useful. -->
+                     <p>Consonant gemination after r: We have silently degeminated double consonants after r to obtain normal dictionary spellings of words. </p>
+                     <p>Aspiration: We have silently normalized the spelling of aspirated/unaspirated consonants. We do not record variant readings that only concern aspiration of consonants. The Cakranagara manuscript abounds in needless aspiration.</p>
+                </normalization>
+                <interpretation>
+                    <p/>
+                </interpretation>
+            </editorialDecl>
+            <samplingDecl>
+                <p/>
+            </samplingDecl>    
+        </encodingDesc>
+        <revisionDesc>
+        	<change who="part:argr" when="2025-05-25" status="draft">encoded teiHeader; revised meter names</change>
+            <change who="part:axja" when="2025-05-24" status="draft">conversion from googledoc to XML-TEI</change>
+        </revisionDesc>
+    </teiHeader>
+            <text xml:space="preserve">
+                <body>
+                    <div type="edition" xml:lang="kaw-Latn">                 
+<div type="chapter" n="1"><head>CHAPTER 1: THE ROYAL FAMILY</head>
+    <div type="canto" n="1" rend="met" met="jagaddhita">
+<lg n="1">
+<l n="a">oṃ nāthāya namo stu te stutiniṅ atpada ri pada bhaṭāra nityaśa,</l>
+<l n="b">saṅ sūkṣmeṅ tələṅ iṅ samādhi śiva buddha sira sakala niṣkalātmakā,</l>
+<l n="c">saṅ śrī parvatanātha nāthaniṅ anātha sira ta patiniṅ jagatpati,</l>
+<l n="d">saṅ hyaṅniṅ hyaṅ iniṣṭy acintyaniṅ acintya hana taya təmahnireṅ jagat.</l>
+</lg>
+ <!-- <p>d. taya] em., waya EdPi Catra84 PUSDOK.</p>
+
+ --> <lg n="2">
+<l n="a">byāpi byāpaka sarvatattvagata nirguṇa sira riṅ apakṣa vaiṣṇava‚</l>
+<l n="b">riṅ yogīśvara pauruṣeṅ kapila jambhala sakala sirān hyaṅiṅ dhana,</l>
+<l n="c">śrī vāgindra sirān hyaṅiṅ sakalaśāstra manasija sireṅ smarāgama,</l>
+<l n="d">riṅ vighnotsaraṇaprayoga yamarāja sira makaphalaṅ jagaddhita.</l>
+</lg>
+ <!-- <p>a. nirguṇa] niguṇa EdPi. (typo? note a.l. unclear).</p>
+<p>	d. vighnotsaraṇa-] vighnotsarana- EdPi.</p>
+<p>	d. makaphalaṅ] makapalaṅ EdPi.</p>
+
+ --> <lg n="3">
+<l n="a">nāhan doniṅ umastutī padanirāhyun umikəta kathe nareśvara,</l>
+<l n="b">saṅ śrī nātha ri vilvatikta haji rājasanagara viśeṣa bhūpati,</l>
+<l n="c">sākṣāt janma bhaṭāra nātha siran aṅhilaṅakən i kalaṅkaniṅ prajā‚</l>
+<l n="d">həntyaṅ bhūmi javātibhakti manukūla tumuluy i tkeṅ digantara.</l>
+</lg>
+ <!-- <p>a. kathe] kate EdPi. Or katheṅ?</p>
+<p>	c. sākṣāt] sākṣat EdPi.</p>
+
+ --> <lg n="4">
+<l n="a">riṅ śāka rtu śarena rakva ri vijil nr̥pati tlas inastvakən prabhū,</l>
+<l n="b">an garbheśvara nātha riṅ kahuripan vihaganiran amānuṣādbhuta,</l>
+<l n="c">liṇḍuṅ bhūmi ktug hudan havu gərəh kilat avilətan iṅ nabhastala,</l>
+<l n="d">guntur taṅ himavān ri kampud ananāṅ kujana kuhaka māti tan pagap.</l>
+</lg>
+ <!-- <p>b. kahuripan] kavuripan EdPi.</p>
+<p>b. °bhuta] °bhūta EdPi.</p>
+<p>d. kampud] kāmpud EdPi.</p>
+
+ --> <lg n="5">
+<l n="a">nāhan hīṅanirān bhaṭāra girinātha sakala matəmah prabhūttama,</l>
+<l n="b">na lvir sādəgirekanaṅ sayavabhūmi <hi rend="check">cava təluk</hi> umuṅkul ādara,</l>
+<l n="c">vipra kṣatriya vaiśya śūdra caturāśrama sama nipuṇeṅ samāhitā,</l>
+<l n="d">həntyaṅ durjana mary ābuddhi kala kevala matakut i vīrya saṅ prabhū.</l>
+</lg>
+<!--  <p>b. cava] em. chāyā (Abimardha Kurniawan)?</p>
+<p>	c. təluk umuṅkul] em. təlu tumuṅkul? Cf. 42.2b ... paḍā manuṅkul ādara</p>-->
+</div>
+<div type="canto" n="2" rend="met" met="sragdharā">
+  <!--- – - | – ~ – | – ~ ~ | ~ ~ ~ | ~ – - | ~ – - | ~ – = -->
+<lg n="1">
+<l n="a">ndan saṅ śrī rājapatnī prakaśita sira mātāmahā śrī narendra,</l>
+<l n="b">saṅ lvir pāvak bhaṭārī paramabhagavatī chatraniṅ rāt viśeṣa,</l>
+<l n="c">utsāheṅ yoga buddhasmaraṇa ginəṅirān cīvari vr̥ddha muṇḍi,</l>
+<l n="d">riṅ śāka dr̥ṣṭi sāptāruṇa kalahanirān mokta muṅsir kabuddhan.</l>
+</lg>
+ <!-- <p>a. śrī] śri EdPi.</p>
+
+ --> <lg n="2">
+<l n="a">ry antuk śrī rājapatnī jinapada kavəkas duhkhitaṅ rāt byamoha,</l>
+<l n="b">ry ādəg śrī nātha muṅgv iṅ majapahitumuluy tuṣṭa maṅgə̄ṅ kabhaktin,</l>
+<l n="c">reṇa śrī nātha saṅ śrī tribhuvanavijayottuṅgadevī gumanti,</l>
+<l n="d">muṅgv iṅ rājyerikaṅ jīvanapura sira tāmvaṅmvaṅ i śrī narendra.</l>
+</lg>
+ <!-- <p>b. majapahit-] majhapahit- EdPi.</p>
+<p>	c. tribhuvanavijayottuṅgadevī] em., tribhūvana jīvayottuṅgal devī EdPi. Robson's translation implies the emendation proposed here, which makes more sense and solves metrical incongruity, but he gives no note.</p>-->
+</div>
+<div type="canto" n="3" rend="met" met="śārdūlavikrīḍita">
+<!--  – - – | ~ ~ – | ~ – ~ | ~ ~ – | – - ~ | – - ~ | = -->
+<lg n="1">
+<l n="a">təkvan bhakti sirān makebu ri sira śrī rājapatnīśvarī,</l>
+<l n="b">satyānūt brata pakṣa sogata masaṅskāre dagan saṅ pəjah‚</l>
+<l n="c">tan sah śrī kr̥tavardhaneśvara pitā de śrī narendrādhipa‚</l>
+<l n="d">sedampaty apagəh sireṅ sugatamārgāṅde sukhāniṅ jagat.</l>
+</lg>
+ <!-- <p>d. -mārgāṅde] -mārgaṅde EdPi.</p>
+<p>	d. sukhāniṅ] sukhaniṅ EdPi.</p>
+
+ --> <lg n="2">
+<l n="a">ndan śrī bhūpati saṅ pitā nr̥pati muṅgv iṅ siṅhasāry āpagəh,</l>
+<l n="b">sākṣāt hyaṅ vava ratnasambhava sirān maṅgəh parārthaṅ jagat,</l>
+<l n="c">dhīrotsāha sire kavr̥ddhyanikanaṅ rāt satyabhaktye haji,</l>
+<l n="d">lagy aṅgəgvani <hi rend="check">kārya sahana kā</hi>dhyakṣātidakṣeṅ naya.</l>
+</lg>
+<!--<p>a.  āpagəh] apagəh EdPi. 	</p>
+<p>c. kavr̥ddhyanikanaṅ] em. Ke., kadr̥ddhyanikanaṅ EdPi. </p>
+<p>d. kārya sahana kādhyakṣātidakṣeṅ] unmetr. Pi. (III.11) conjectures kārya tan sah anahādhyakṣātidakṣeṅ.</p>-->
+</div>
+<div type="canto" n="4" rend="met" met="mahāmālikā">
+<!--  ~ ~ ~ | ~ ~ ~ | – ~ – | – ~ – | – ~ – | – ~ = -->
+<lg n="1">
+<l n="a">muvah ibu haji saṅ narendrānujā de hajīṅ jīvana,</l>
+<l n="b">prakaśita haji rājadevī mahārājasānindita,</l>
+<l n="c">sira ta sinivi riṅ dahānopameṅ rūpa riṅ ṣaḍguṇa,</l>
+<l n="d">samasama kalavan hajiṅ jīvana lvir sudevy āpalih.</l>
+</lg>
+ <!-- <p>c. dahānopameṅ rūpariṅ] dāha nopameṅ pariṅ EdPi.</p>
+<p>	c. ṣaḍguṇa] sadguṇa EdPi.</p>
+<p>	d. samasama] em. (m.c.) Ke., samasa EdPi. 	</p>
+
+ --> <lg n="2">
+<l n="a">priya haji saṅ umuṅgv i vəṅkər baṅun hyaṅ upendrānurun,</l>
+<l n="b">nr̥pati vijayarājasānopameṅ pāramajñottama,</l>
+<l n="c">samasama kalavan nr̥pe siṅhasāry ekapakṣāpagəh,</l>
+<l n="d">sira vihikani hayvaniṅ thāni yāvat sabhūmī java.</l>
+</lg>
+ <!-- <p>a. umuṅgv i] em. m.c., umuṅgwiṅ EdPi.</p>
+<p>	a. hyaṅ upendrā-] read hyāṅ upendrā-, hyaṅṅ upendrā- or hyaṅ hupendrā- for the meter.</p>
+<p>	b. pāramajñottama] em. (m.c.) Ke., em. Pi. rūpa vijñottama.</p>
+<p>	c. nr̥pe] Sidemen PUSDOK, nr̥pati EdPi.</p>
+<p>	c. ekapakṣāpagəh] Sidemen; akapakṣāpa ... EdPi.</p>
+<p>	d. vihikani hayvaniṅ] PUSDOK, vihikaniṅ EdPi.</p>
+<p>		See Hinzler &amp; Schoterman 1979: 483.</p>
+
+<p>	*AG&amp;MS: probably hayvaniṅ thāni here rather means the same as kahayvaniṅ thāni, so 'welfare of farmers'. See kahayvan in next stanza, in different meaning.</p>-->
+</div>
+<div type="canto" n="5" rend="met" met="praharṣiṇī">
+<!--  – - – | ~ ~ ~ | ~ – ~ | – ~ – | =  -->
+<lg n="1">
+<l n="a">vvantən tāri haji ri vilvatikta rājñī,</l>
+<l n="b">saṅ muṅgv iṅ lasəm anurāga riṅ kahayvan,</l>
+<l n="c">putrī śrī narapati riṅ daha prakāśa,</l>
+<l n="d">saṅ śrī rājasaduhitendudevy anindya.</l>
+</lg>
+ <!-- <p>c. daha] dahā EdPi.</p>
+
+ --> <lg n="2">
+<l n="a">ndan śrī vardhanaduhiteśvarī pamuṅsu,</l>
+<l n="b">rājñī muṅgv i pajaṅ anopameṅ raras rūm,</l>
+<l n="c">putrī śrī nr̥pati ri jīvana prakāśa,</l>
+<l n="d">an sākṣāt anuja təkapniraṅ narendrā.</l>
+</lg>
+ <!-- <p>a. vardhanaduhiteśvarī] vardhanaduhiteśvari EdPi.</p>
+<p>b. i] em. m.c., iṅ EdPi.</p>
+<p>	d. təkapniraṅ] em. m.c. tkapniraṅ EdPi.</p>-->
+</div>
+<div type="canto" n="6" rend="met" met="śārdūlavikrīḍita">
+<!--  – - – | ~ ~ – | ~ – ~ | ~ ~ – | – - ~ | – - ~ | =  -->
+<lg n="1">
+<l n="a">penan śrī naranātha kapva ta huvus labdhābhiṣeka prabhū,</l>
+<l n="b">saṅ nātheṅ matahun priya nr̥pati saṅ rājyeṅ lasəm suśrama</l>
+<l n="c">saṅ śrī rājasavardhana prakaśiteṅ rūpādhivijñeṅ naya,</l>
+<l n="d">tan pendah smarapiṅgalā patəmu saṅ nāthenaləmniṅ jagat.</l>
+</lg>
+ <!-- <p>a. labdhābhiṣeka] labḍa bhiṣeka EdPi.</p>
+<p>b. priya nr̥pati] the final vowel of priya is long by position followed by nrə-.</p>
+<p>b. rājyeṅ] rājñī Ke.</p>
+
+ --> <lg n="2">
+<l n="a">saṅ nātheṅ paguhan priya nr̥pati saṅ rājñī pratiṣṭhe pajaṅ,</l>
+<l n="b">khyāti śrī nr̥pa siṅhavardhana surūpānvam suśīlāpagəh,</l>
+<l n="c">aśry āvarṇa sanatkumāra saha devīḍā papaṅgihnira,</l>
+<l n="d">bhaktī jə̄ṅ haji māsih avvaṅ anak aṅde tuṣṭanī nāgara.</l>
+</lg>
+ <!-- <p>a. rājñī] PUSDOK, rājī EdPi.</p>
+
+ --> <lg n="3">
+<l n="a">təkvan vr̥ddhy avəke narendra saṅ umuṅgv iṅ vīrabhūmy aṅḍiri,</l>
+<l n="b">saṅ śrī nāgaravardhanī pratita rājñī kanyakānopama,</l>
+<l n="c">ndan rantən haji rāja ratv i mataram lvir hyaṅ kumārānurun,</l>
+<l n="d">saṅ śrī vikramavardhaneśvara paniṅkah śrī narendrādhipa.</l>
+</lg>
+ <!-- <p>a. narendra] narendrā EdPi.</p>
+<p>	b. pratita] pratīta EdPi.</p>
+<p>	c. i] iṅ EdPi.</p>
+
+ --> <lg n="4">
+<l n="a">vuṅsu śrī nr̥patīṅ pajaṅ sinivi muṅgv iṅ pavvanavvanpurī,</l>
+<l n="b">rājñī śrī suravardhanī nvamira vāla lvir hajəṅniṅ tulis,</l>
+<l n="c">sakveh śrī yavarāja saṅ paḍa madudvan nāgarātuṅgalan,</l>
+<l n="d">ekasthāna ri vilvatikta maṅisapv ī saṅ narendrādhipa.</l>
+</lg>
+ <!-- <p>a. nr̥patīṅ] nr̥pati EdPi.</p>
+<p>	a. muṅgv iṅ] muṅgvi EdPi.</p>
+<p>	c. yavarāja] PUSDOK msL-pc, yajarāja msL-ac.</p>
+<p>	c. saṅ paḍa] sapaḍa EdPi.</p>
+<p>	c. nāga-] naga- EdPi.</p>
+<p>	d. ekasthāna] ekhasthāna EdPi.</p>-->
+</div>
+<div type="canto" n="7" rend="met" met="jagaddhita">
+<lg n="1">
+<l n="a">varṇan śrī naranātha kastavaniran dinakarasama digjaya prabhu‚</l>
+<l n="b">bhraṣṭaṅ śatru baṅun tamisra sahane bhuvana rinavasan nareśvara‚</l>
+<l n="c">tuṣṭā sajjanapaṅkajāmam ikanaṅ kujanakumuda satya sāttvikā,</l>
+<l n="d">sthityaṅ grāma sabhūmy aveh dhana baṅun jala hinaturakən ya sakrama.</l>
+</lg>
+ <!-- <p>a. dinakara] dinakhara EdPi.</p>
+<p>	b. bhuvana] bhūvana EdPi.</p>
+<p>	b. tamisra] tamiśra EdPi.</p>
+<p>	c. paṅkajāmam] paṅajamam EdPi.</p>
+<p>	c. sāttvikā] satvikā EdPi.</p>
+<p>	d. grāma] ghrāma EdPi.</p>
+ --> <lg n="2">
+<l n="a">lvir saṅ hyaṅ śatamanyu maṅhudani rāt haji tumulak i duhkhaniṅ prajā,</l>
+<l n="b">lvir hyaṅ pitr̥patī kadaṇḍaniṅ anārya baruṇa ri katəmvaniṅ dhana,</l>
+<l n="c">lvir hyaṅ bāyu sirān tameṅ sakalaloka makaśaraṇa dūta nityaśa,</l>
+<l n="d">lvir pr̥thvī ri karakṣaniṅ pura katonanira kadi bhaṭāra candramā.</l>
+</lg>
+
+<lg n="3">
+<l n="a">riṅ varṇākr̥ti kāmadeva sakalānurun umulati ramyaniṅ purī,</l>
+<l n="b">sakveh saṅ para putrikādika vadhū haji kadi pavibhajyaniṅ ratih,</l>
+<l n="c">ndan saṅ śrī parameśvarī svaduhitā nr̥pati vijayarājasottama,</l>
+<l n="d">mukhyāvarṇa suṣumnadevy anupameṅ hayu tuhu savave nareśvara.</l>
+</lg>
+ <!-- <p>d. mukhyā-] mukyā- EdPi.</p>
+<p>	d. suṣumnadevy] susumnadewy EdPi.</p>
+<p>	d. anupameṅ] anūpameṅ EdPi.</p>
+
+ --> <lg n="4">
+<l n="a">təkvan vr̥ddhi sirān pakānak i siraṅ nr̥pati kusumavardhanīśvarī,</l>
+<l n="b">rājñī rājakumāry anindya sinivīṅ pura ri kabalan uttameṅ raras,</l>
+<l n="c">saṅ śrī vikramavardhanendra saniruktyanira paṅucapiṅ sanāgara,</l>
+<l n="d">sākṣāt devata devatī siran atəmva həlam anukhani tvasiṅ jagat.</l>
+</lg>
+ <!-- <p>b. rājñī] rājī EdPi.</p>
+<p>	b. sinivīṅ] em., sinivi EdPi.</p>
+<p>	b. uttameṅ] em., utameṅ EdPi.</p>
+<p>	d. anukhani] anukani EdPi.</p>-->
+</div></div>
+
+                </div>
+<div type="translation" xml:lang="eng"><p>trimmed for fixture</p></div>
+</body>
+</text>
+</TEI>

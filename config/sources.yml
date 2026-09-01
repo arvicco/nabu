@@ -4348,3 +4348,19 @@ obi-burmese:   # P92-3
   # and intro PDF deliberately not fetched. Page-based files carrying
   # the start of the next inscription mint section keys (37.1) —
   # censused in metadata, never dropped, never duplicated.
+
+dharma-javanese-texts:   # P92-4
+  adapter: Nabu::Adapters::DharmaJavaneseTexts
+  axes: [sea]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # DHARMA Nusantara philology — the desk's literary wing: the kakawin
+  # critical editions of the first rank (Deśavarṇana, Sutasoma,
+  # Pararaton, Calon Arang…), prose critical editions (Bhīma Svarga's
+  # four-witness apparatus reads the editor's lem), Old Sundanese
+  # treatises, and diplomatic transcriptions at folio-line grain
+  # (~93 live editions + drafts). Canto met= rides verse passages'
+  # annotations — the meter axis's SEA feed. THE REPO IS ~2.9 GB of
+  # facsimiles: the sparse cone materializes editions/ ONLY. In-file
+  # <licence> CC BY 4.0 (the philology repo's own grant — the epigraphy
+  # repos say BY-SA; recorded per document); class attribution.
