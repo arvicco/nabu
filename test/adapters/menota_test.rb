@@ -515,14 +515,15 @@ class MenotaTest < Minitest::Test
     first = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 12, first.added # P88-B1: +AM-36-fol
     assert_equal 0, first.errored
-    assert_equal 238, db[:passages].count,
+    assert_equal 239, db[:passages].count,
                  "51 + 48 + 21 manuscript lines + the P82-r1 trims (3 + 2 + 1 + 4 + 8) " \
-                 "+ the Q45 trims (7 + 39 + 53)"
+                 "+ the Q45 trims (7 + 39 + 53); +1 at P91-2 — the page-cited AM-36 " \
+                 "auto-numbers its two lem lines (№R-45 A)"
 
     second = Nabu::Store::Loader.new(db: db, source: source).load_from(adapter, workdir: workdir)
     assert_equal 0, second.errored
     assert_equal 12, second.skipped, "a byte-identical reload skips every document"
-    assert_equal 238, db[:passages].count
+    assert_equal 239, db[:passages].count
     assert_equal [1], db[:passages].distinct.select_map(:revision)
   ensure
     db&.disconnect
@@ -536,18 +537,41 @@ class MenotaTest < Minitest::Test
   # no-parallel witnesses (comment-only rdg) contribute nothing.
   def test_apparatus_witness_readings_annotate_and_never_enter_the_text
     document = adapter.parse(ref_for(AM36))
-    assert_equal 1, document.passages.size, "the fixture's n-less lbs share one position"
-    passage = document.passages.first
-    assert_equal "Upphaf ſǫgu hins Helga Olafs Konungs I Cap . Uppfostr Olafs Helga " \
-                 "Harallds ſonar", passage.text,
-                 "the lems — the manuscript's own reading — are the whole text"
-    refute_match(/Sogu|saugo/, passage.text, "witness spellings never enter the text")
+    # P91-2 (№R-45 A): AM-36 is PAGE-CITED (n-less ms lbs, no numbered
+    # line anywhere), so its own lem lines auto-number within the folio.
+    assert_equal %w[1.1 1.2], document.passages.map { |p| p.urn.split(":").last },
+                 "the two lem lines number 1.1/1.2 — page-wide refs retired"
+    assert_equal "Upphaf ſǫgu hins Helga Olafs Konungs", document.passages[0].text
+    assert_equal "I Cap . Uppfostr Olafs Helga Harallds ſonar", document.passages[1].text
+    document.passages.each do |passage|
+      refute_match(/Sogu|saugo/, passage.text, "witness spellings never enter the text")
+    end
 
-    apparatus = passage.annotations.fetch("apparatus")
-    assert_equal %w[AM18 AM70], apparatus.map { |row| row.fetch("wit") }.sort,
-                 "app 1's parallel witnesses ride labeled; app 2's no-parallel rdgs add nothing"
+    # The documented straddle: a rdg annotates the line current when it
+    # OPENED — app 1 straddles its lem's trailing break, so its
+    # witnesses ride line 1.2; app 2's no-parallel rdgs add nothing.
+    assert_nil document.passages[0].annotations["apparatus"]
+    apparatus = document.passages[1].annotations.fetch("apparatus")
+    assert_equal %w[AM18 AM70], apparatus.map { |row| row.fetch("wit") }.sort
     am70 = apparatus.find { |row| row["wit"] == "AM70" }
     assert_match(/Sogu hins helga Olafs/, am70.fetch("text"))
+  end
+
+  # -- P91-2 (Q58, №R-45 A): page-cite auto-numbering -------------------------
+
+  def test_line_cited_manuscripts_keep_their_refs_byte_identical
+    # Streng mixes numbered ms lbs with edition milestones — the
+    # regression pin that auto markers normalize away wherever a real
+    # numbered line exists: these refs are the pre-P91-2 list, verbatim.
+    document = adapter.parse(ref_for("urn:nabu:menota:dg-4at7-streng"))
+    assert_equal(%w[17va.6 17va.7 17va.8 17va.9 17va.10 17va.11 17va.12],
+                 document.passages.map { |p| p.urn.split(":").last })
+  end
+
+  def test_page_cited_auto_numbering_is_idempotent
+    first = adapter.parse(ref_for(AM36)).passages.map(&:urn)
+    second = adapter.parse(ref_for(AM36)).passages.map(&:urn)
+    assert_equal first, second
   end
 
   private
