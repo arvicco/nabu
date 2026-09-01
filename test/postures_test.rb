@@ -153,7 +153,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 76, lect.size,
+    assert_equal 77, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -183,7 +183,8 @@ class PosturesTest < Minitest::Test
                  "refinement is a future date-band story): 74→75; titus-osco-umbrian ADDED " \
                  "P90-2 as pending on the xum mint, RETIRED TO IDENTITY at the same gate " \
                  "(the mint merged and reached canonical 2026-08-31 — the add-then-retire " \
-                 "shape within ONE phase): 75→76"
+                 "shape within ONE phase): 75→76; okhc ADDED P91-1 — codemap, the sillok " \
+                 "lzh mold over the Korean label table: 76→77"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -226,6 +227,9 @@ class PosturesTest < Minitest::Test
     # to identity at the SAME gate (the mint merged + synced to canonical
     # 2026-08-31 — the fastest add-then-retire yet): 75→76, identity
     # 53→54, zero pendings again.
-    assert_equal({ "identity" => 54, "dates" => 10, "codemap" => 12 }, by_posture)
+    # P91-1 ADDS okhc as codemap (the sillok lzh mold over the deposit's
+    # language-label table; ko honest-coarse, refinement a year-band
+    # story): 76→77, codemap 12→13.
+    assert_equal({ "identity" => 54, "dates" => 10, "codemap" => 13 }, by_posture)
   end
 end
