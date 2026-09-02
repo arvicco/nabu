@@ -252,13 +252,33 @@ module Nabu
       # detects), so a pre-P42-3/P81-3 index keeps taking syncs unchanged
       # until then, and Query::Search serves the old catalog-side path
       # against it.
+      #
+      # == The contentless shape (P93-1, №R-16) — the text lives ONCE
+      #
+      # MEASURED problem (2026-09-02): fulltext.sqlite3 stood at 87 GB
+      # beside a 118 GB catalog — passages_fts stored a full second copy of
+      # every passage's folded text, and nothing has READ it since P39-r3
+      # moved snippets onto the pristine catalog text (StoredSnippet). The
+      # fresh shape is `content='' , contentless_delete=1`: only the
+      # inverted index is stored, and — contentless semantics — NO column
+      # value is readable back (UNINDEXED payloads included), so the urn/
+      # passage_id columns are GONE and identity is the ROWID, minted as
+      # the catalog passage id (the passage_chars rowid convention). Every
+      # reader joins back to the catalog by rowid;
+      # fts_passage_id_expression is the shape-aware read seam.
+      # contentless_delete (SQLite ≥3.43; the box runs 3.53) makes per-row
+      # DELETE real, so the incremental slice refresh keeps working — by
+      # key now, no streaming scan (delete_fts_rows_by_rowid).
+      # Same arrival contract as the columns above: the shape appears at
+      # the next FULL rebuild; a legacy contentful file keeps taking syncs
+      # in its own shape, payload columns populated, until then.
       CREATE_TABLE = <<~SQL
         CREATE VIRTUAL TABLE passages_fts USING fts5(
           text_normalized,
           language,
           source,
-          urn UNINDEXED,
-          passage_id UNINDEXED,
+          content = '',
+          contentless_delete = 1,
           tokenize = 'unicode61 remove_diacritics 2'
         )
       SQL
@@ -404,16 +424,16 @@ module Nabu
       # produce from the same catalog (pinned by test).
       #
       # Mechanism, table by table:
-      # - passages_fts / passages_trigram are REGULAR (contentful) FTS5
-      #   tables, so per-row DELETE is real deletion (contentless/external-
-      #   content tables would need the special 'delete' insert — not our
-      #   shape). passage_id is UNINDEXED, so rather than one full-table scan
-      #   per IN-batch, ONE streaming scan collects the doomed rowids (every
-      #   row whose passage_id belongs to the source — withdrawn rows
-      #   included, since the loader never hard-deletes a passage row, every
-      #   indexed id resolves against the catalog forever) and the deletes go
-      #   by rowid. ~4.3M-row scan, seconds — against the minutes of a full
-      #   rebuild.
+      # - passages_fts in the P93-1 contentless shape deletes BY KEY: rowid
+      #   is the catalog passage id and contentless_delete=1 makes per-row
+      #   DELETE real, so the source's slice goes in indexed batches —
+      #   withdrawn rows included, since the loader never hard-deletes a
+      #   passage row, every indexed id resolves against the catalog
+      #   forever. A legacy contentful file (and passages_trigram, still
+      #   contentful) instead pays ONE streaming scan collecting the doomed
+      #   rowids by their stored passage_id (UNINDEXED — per-IN-batch scans
+      #   would each rescan the table), then deletes by rowid. ~4.3M-row
+      #   scan, seconds — against the minutes of a full rebuild.
       # - passage_lemmas deletes by urn IN-batches (B-tree indexed).
       # - trigram: only touched when the source is in scope — flagged now
       #   (fuzzy_slugs) or indexed by the last build (the scope table); a
@@ -466,7 +486,11 @@ module Nabu
             # table exists here; both snapshots are urn-scoped and B-tree bounded.
             before = LemmaFrequencies.snapshot(fulltext, urns)
             deleted = delete_source_lemma_rows(fulltext, urns)
-            delete_fts_rows(fulltext, TABLE, ids)
+            if fts_contentless?(fulltext)
+              delete_fts_rows_by_rowid(fulltext, TABLE, ids)
+            else
+              delete_fts_rows(fulltext, TABLE, ids)
+            end
             count, inserted, chars = insert_passage_batches(
               fulltext, live_passages(catalog).where(Sequel[:documents][:source_id] => source_id),
               source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog)
@@ -631,6 +655,21 @@ module Nabu
         fulltext[TABLE].columns.include?(:source)
       end
 
+      # Whether the LIVE fts table is the P93-1 contentless shape (no
+      # payload columns — every legacy generation carried passage_id).
+      # Same feature-detect contract, same next-full-rebuild arrival.
+      def fts_contentless?(fulltext)
+        !fulltext[TABLE].columns.include?(:passage_id)
+      end
+
+      # The shape-aware passage-id read (P93-1): contentless identity is
+      # the rowid (= passages.id), aliased so every reader keeps consuming
+      # row[:passage_id]; a legacy contentful table reads its stored
+      # column. The query layer's one seam onto the shape difference.
+      def fts_passage_id_expression(fulltext)
+        fts_contentless?(fulltext) ? Sequel.lit("rowid").as(:passage_id) : Sequel[:passage_id]
+      end
+
       # One streaming pass feeding the FTS and lemma tables (shared by
       # rebuild! and refresh_source!). Returns [passage count, lemma-row
       # count]. The fts row shape is detected ONCE from the live table
@@ -641,12 +680,16 @@ module Nabu
       def insert_passage_batches(fulltext, dataset, tiers, slugs = nil)
         with_language = fts_language_column?(fulltext)
         with_source = slugs && fts_source_column?(fulltext) ? slugs : nil
+        contentless = fts_contentless?(fulltext)
         count = 0
         lemma_count = 0
         chars = Hash.new(0)
         dataset.each_slice(BATCH_SIZE) do |batch|
           fulltext[TABLE].multi_insert(
-            batch.map { |row| fts_row(row, language: with_language, source_slugs: with_source) }
+            batch.map do |row|
+              fts_row(row, language: with_language, source_slugs: with_source,
+                           contentless: contentless)
+            end
           )
           rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers) }
           fulltext[LEMMA_TABLE].multi_insert(rows)
@@ -1117,10 +1160,22 @@ module Nabu
         [ids, urns]
       end
 
-      # Delete the source's rows from an FTS5 table: one streaming scan
-      # collects the rowids whose passage_id is in +ids+ (passage_id is
-      # UNINDEXED — per-batch IN deletes would each rescan the table), then
-      # targeted rowid deletes. Returns the number of rows deleted.
+      # The contentless shape's delete (P93-1): rowid IS the catalog
+      # passage id, so the source's rows delete by key — no streaming scan
+      # at all (the legacy path below pays a full-table pass per sync).
+      # contentless_delete=1 makes these real deletions. Returns the
+      # number of rows deleted.
+      def delete_fts_rows_by_rowid(fulltext, table, ids)
+        ids.to_a.each_slice(BATCH_SIZE).sum do |batch|
+          fulltext[table].where(rowid: batch).delete
+        end
+      end
+
+      # Delete the source's rows from a LEGACY contentful FTS5 table: one
+      # streaming scan collects the rowids whose passage_id is in +ids+
+      # (passage_id is UNINDEXED — per-batch IN deletes would each rescan
+      # the table), then targeted rowid deletes. Returns the number of
+      # rows deleted. (The trigram table still uses this shape.)
       def delete_fts_rows(fulltext, table, ids)
         return 0 if ids.empty?
 
@@ -1312,13 +1367,19 @@ module Nabu
         }
       end
 
-      # The passages_fts row: index_row plus — when the live table carries
+      # The passages_fts row: the text plus — when the live table carries
       # them — the P42-3 language sentinel token and the P81-3 source one
       # (+source_slugs+ is the source_id → slug map, or nil against a
       # pre-P81-3 table). The bare branches keep incremental syncs into a
-      # pre-rebuild file unchanged.
-      def fts_row(row, language:, source_slugs: nil)
-        base = index_row(row)
+      # pre-rebuild file unchanged. +contentless:+ (P93-1) mints the fresh
+      # shape's row: rowid = the catalog passage id, no payload columns —
+      # the text feeds the tokenizer at INSERT and is never stored.
+      def fts_row(row, language:, source_slugs: nil, contentless: false)
+        base = if contentless
+                 { rowid: row.fetch(:passage_id), text_normalized: row.fetch(:text_normalized) }
+               else
+                 index_row(row)
+               end
         base = base.merge(language: language_token(row.fetch(:language))) if language
         base = base.merge(source: source_token(source_slugs.fetch(row.fetch(:source_id)))) if source_slugs
         base

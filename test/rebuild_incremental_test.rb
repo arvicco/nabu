@@ -553,10 +553,17 @@ class RebuildIncrementalTest < Minitest::Test
     end
   end
 
+  # passages_fts is contentless (P93-1) — nothing readable but rowids
+  # (= passage ids), so the content snapshot maps them through the same
+  # db_dir's catalog to urn + text (the id-independent comparison the
+  # comparator note below demands).
   def fts_snapshot(db_dir: @db_dir)
     ft = Nabu::Store.connect_fulltext(File.join(db_dir, "fulltext.sqlite3"), readonly: true)
-    ft[:passages_fts].select_order_map(%i[urn text_normalized])
+    cat = Nabu::Store.connect(File.join(db_dir, "catalog.sqlite3"), readonly: true)
+    ids = ft[:passages_fts].select_map(Sequel.lit("rowid"))
+    cat[:passages].where(id: ids).select_order_map(%i[urn text_normalized])
   ensure
+    cat&.disconnect
     ft&.disconnect
   end
 

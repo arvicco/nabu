@@ -1461,12 +1461,16 @@ module Query
       )
     SQL
 
-    # Rebuild passages_fts in its pre-P42-3 shape from the freshly built
-    # rows, preserving rowid (corpus) order.
+    # Rebuild passages_fts in its pre-P42-3 shape from the CATALOG — the
+    # fresh index is contentless (P93-1), so nothing can be read back from
+    # it — preserving passage-id (corpus) order.
     def downgrade_index!
-      rows = @fulltext[:passages_fts]
-             .order(:rowid)
-             .select_map(%i[text_normalized urn passage_id])
+      rows = @catalog[:passages]
+             .join(:documents, id: Sequel[:passages][:document_id])
+             .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+             .order(Sequel[:passages][:id])
+             .select_map([Sequel[:passages][:text_normalized], Sequel[:passages][:urn],
+                          Sequel[:passages][:id]])
              .map { |text, urn, id| { text_normalized: text, urn: urn, passage_id: id } }
       @fulltext.drop_table(:passages_fts)
       @fulltext.run(OLD_FTS_DDL)

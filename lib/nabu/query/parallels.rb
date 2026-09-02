@@ -273,7 +273,7 @@ module Nabu
       def fts_probe(gram)
         @fulltext[Store::Indexer::TABLE]
           .where(Sequel.lit("passages_fts MATCH ?", phrase(gram)))
-          .select(:passage_id)
+          .select(Store::Indexer.fts_passage_id_expression(@fulltext))
           .limit(@common_gram_df)
           .all
       end
