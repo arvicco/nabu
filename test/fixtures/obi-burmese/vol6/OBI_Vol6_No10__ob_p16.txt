@@ -1,0 +1,56 @@
+OBI REF: OBI vol6 n°10 ob p16
+INFORMATION SOURCE: ဦးငြိမ်းမောင်၊ ရှေးဟောင်းမြန်မာကျောက်စာများ ဆဌမတွဲ (ရှေးဟောင်းသုတေသန၊ အမျိုးသားပြတိုက်နှင့်စာကြည့်တိုက်ဦးစီးဌာန၊ ၂၀၁၃။ U Nyein Maung. Ancient Burmese Inscriptions Volume 6. Yangon: Department of Archaeology, National Museum and Library, 2013.
+VOLUME: 6
+PART: 
+INSCRIPTION NUMBER: 10
+PAGE NUMBER: 16
+NUMBER OF FACES: 1
+FACE: obverse
+LANGUAGE: 
+INSCRIPTION SOURCE: primary
+PLACE OF ORIGIN: ရွှေကြက်ယက်မုဌောဘုရား ¤ rvhekrakʻyakʻmuṭho pagoda 
+CURRENT LOCATION: မန္တလေးနန်းတွင်းကျောက်စာရုံကြီးအတွင်း ¤ mantaleḥnanʻḥtvaṅʻḥ inscription room krīḥ 
+REFERENCE NUMBER: 
+REFERENCES: 
+TITLE: ရွှေကြက်ယက်မုဌောဘုရားကျောက်စာ ¤ rvhekrakʻyakʻmuṭho pagoda inscription 
+DATE: CS 1125 = CE 1763 
+DONOR: ဆင်ဖြူရှင်မင်း ¤ chaṅʻphrūrhaṅʻmaṅʻḥ
+SUBJECT: ရွှေကြက်ယက်မုဌောဘုရား
+LENGTH: 15 lines
+NOTES: 
+FOOTNOTES: 
+INSCRIPTION: 
+(၁) . . . . ယ်မှစ်တ်ဖ္လစ် . . . . . 
+¤ (1) . . . . yʻmhacʻtʻphlacʻ . . . . . 
+(၂) . . . . င်ပုဇ်တ်မူသည် . . . .
+¤ (2) . . . . ṅʻpujʻtʻmūsaññʻ . . . .
+(၃) . . . . . . . . . . . . . . . . . ရွာသစ်က္လောင်တ်ကိုဝ်ဆောက်တည် တ်မူရုယ် . . . . . . 
+¤ (3) . . . . . . . . . . . . . . . . . rvāsacʻkloṅʻtʻkuivʻchokʻtaññʻ tʻmūruyʻ . . . . . . 
+(၄) . . . . . . . . . . . . . . . င်တံမ္လက်ဝတ်ဖ္လစ်စိမ်သဝ်ငှါကန်တိလိဟူသဝ်
+¤ (4) . . . . . . . . . . . . . . . ṅʻtaṃmlakʻvatʻphlacʻcimʻsavʻṅhākanʻtilihūsavʻ
+(၅) . . . . . . . . . . . . . . . သက္ကရာဇ် ၇၃၁ ခုတွင် ရတနာပူရရွှေဝပ္လည် . . . .
+¤ (5) . . . . . . . . . . . . . . . sakkarājʻ 731 khutvaṅʻ ratanāpūrarvhevaplaññʻ . . . .
+(၆) . . . . . . . . . . . . . . . . . . . . ရွှေကြက်ယက်မုတ္ထောစေတီဆုတောင်ပ္လည့်ဘုရာ
+¤ (6) . . . . . . . . . . . . . . . . . . . . rvhekrakʻyakʻmutthocetīchutoṅʻplaññɂʻbhurā
+(၇) . . . . . . . . . . . . . . . . . ၂၃၀၇ နှစ်သက္ကရာဇ် ၁၁၂၅ ခု နတ္တော်လပ္လည့်က္လော် ၄
+¤ (7) . . . . . . . . . . . . . . . . . 2307 nhacʻsakkarājʻ 1125 khu nattoʻlaplaññɂʻkloʻ 4
+(၈) . . . . . . . . . . . . . . . . . ဘုရားဧယ်အရိုက်အရာတ်ဖ္လစ်သဝ်ရတနာသိင်္ဃ 
+¤ (8) . . . . . . . . . . . . . . . . . bhurāḥʔeyʻʔaruikʻʔarātʻphlacʻsavʻratanāsiṅʻgha 
+<pg>၁၇</pg> ¤ <pg>17</pg>
+(၉) . . . . . . . . . . . . . . . . . . ကစံတ်မူရုယ်သုနပရန္တတိုင် တမ္ပဒီပတိုင်
+¤ (9) . . . . . . . . . . . . . . . . . . kacaṃtʻmūruyʻsunaparantatuiṅʻ tampadīpatuiṅʻ
+(၁၀) . . . . . . . . . . . . . . . . . . . . . ၁၆ ပ္လည်ငယ်အမ္လိုဝ်အမည်ပးသဝ်ပဒေသရာဇ်ဧက
+¤ (10) . . . . . . . . . . . . . . . . . . . . . 16 plaññʻṅayʻʔamluivʻʔamaññʻpaḥsavʻpadesarājʻʔeka
+(၁၁) . . . . . . . . . . . . . . . . . . . . . . မူလှသဝ်အသျှင်ဘဝရှင်ဆင်ဖြူသိခင်မင်တရာကြီးဘုရာသည်
+¤ (11) . . . . . . . . . . . . . . . . . . . . . . mūlhasavʻʔasyhaṅʻbhavarhaṅʻchaṅʻphrūsikhaṅʻmaṅʻtarākrīḥbhurāsaññʻ
+(၁၂) . . . . . . . . . . . . . . . . . . . . . ကိုဝ်အကြွင်မဲ့သိမ္လင်တ်မူသည်ဖ္လစ်ရုယ်ခပ်သိမ်ကုန်
+¤ (12) . . . . . . . . . . . . . . . . . . . . . kuivʻʔakrvaṅʻmaiɂsimlaṅʻtʻmūsaññʻphlacʻruyʻkhapʻsimʻkunʻ
+(၁၃) . . . . . . . . . . . . . . . . . . . . . အကြံတ်နှလုံမ်တ်အတိုင် ရတနာပူရရွှေဝမြို့ကြီး 
+¤ (13) . . . . . . . . . . . . . . . . . . . . . ʔakraṃtʻnhaluṃmʻtʻʔatuiṅʻ ratanāpūrarvhevamruiɂkrīḥ 
+(၁၄) . . . . . . . . . . . . . စ်ရွှေက္လောင်တ်မှစ၍ကြီစွာသဝ်ဒါနပါရမီကိုဝ် ဖ
+¤ (14) . . . . . . . . . . . . . cʻrvhekloṅʻtʻmhacar*krīcvāsavʻdānapāramīkuivʻ pha
+(၁၅) . . . . . . . . . . . လှူဒါန်သ်လည်မရောင်ရဲသဝ်သဒ္ဓါစေတနာ
+¤ (15) . . . . . . . . . . . lhūdānʻsʻlaññʻmaroṅʻraisavʻsaddhācetanā
+<pg>၁၈</pg> ¤ <pg>18</pg>
+FULL TRANSLITERATION:
+. . . . yʻmhacʻtʻphlacʻ . . . . . . . . . ṅʻpujʻtʻmūsaññʻ . . . .. . . . . . . . . . . . . . . . . rvāsacʻkloṅʻtʻkuivʻchokʻtaññʻ tʻmūruyʻ . . . . . . . . . . . . . . . . . . . . . ṅʻtaṃmlakʻvatʻphlacʻcimʻsavʻṅhākanʻtilihūsavʻ. . . . . . . . . . . . . . . sakkarājʻ 731 khutvaṅʻ ratanāpūrarvhevaplaññʻ . . . .. . . . . . . . . . . . . . . . . . . . rvhekrakʻyakʻmutthocetīchutoṅʻplaññɂʻbhurā. . . . . . . . . . . . . . . . . 2307 nhacʻsakkarājʻ 1125 khu nattoʻlaplaññɂʻkloʻ 4. . . . . . . . . . . . . . . . . bhurāḥʔeyʻʔaruikʻʔarātʻphlacʻsavʻratanāsiṅʻgha . . . . . . . . . . . . . . . . . . kacaṃtʻmūruyʻsunaparantatuiṅʻ tampadīpatuiṅʻ. . . . . . . . . . . . . . . . . . . . . 16 plaññʻṅayʻʔamluivʻʔamaññʻpaḥsavʻpadesarājʻʔeka. . . . . . . . . . . . . . . . . . . . . . mūlhasavʻʔasyhaṅʻbhavarhaṅʻchaṅʻphrūsikhaṅʻmaṅʻtarākrīḥbhurāsaññʻ. . . . . . . . . . . . . . . . . . . . . kuivʻʔakrvaṅʻmaiɂsimlaṅʻtʻmūsaññʻphlacʻruyʻkhapʻsimʻkunʻ. . . . . . . . . . . . . . . . . . . . . ʔakraṃtʻnhaluṃmʻtʻʔatuiṅʻ ratanāpūrarvhevamruiɂkrīḥ . . . . . . . . . . . . . cʻrvhekloṅʻtʻmhacar*krīcvāsavʻdānapāramīkuivʻ pha. . . . . . . . . . . lhūdānʻsʻlaññʻmaroṅʻraisavʻsaddhācetanā

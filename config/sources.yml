@@ -4280,3 +4280,102 @@ seal:
   # 1,011 unique texts — upstream's own duplicate genre rows) + node GETs
   # at 1 req/s ≈ 20 min. EXPECTED STEADY PARSE: 408 documents / 14,953
   # passages / 3 quarantined.
+
+dharma-khmer:   # P92-1, the SEA desk anchor
+  adapter: Nabu::Adapters::DharmaKhmer
+  axes: [sea, epigraphy]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # DHARMA Corpus des inscriptions khmères (EFEO/ERC no. 809994;
+  # github.com/erc-dharma/tfc-khmer-epigraphy, scouted P47-s3 2026-07-26,
+  # re-verified 2026-09-01): the Cœdès K-number corpus digitized — 1,187
+  # live editions of pre-Angkorian and Angkorian epigraphy, Old Khmer
+  # (okz-Latn) and Sanskrit (san-Latn), romanized. In-file <licence>
+  # CC BY-SA 4.0 governs (repo badge CC BY), recorded verbatim per
+  # document; class attribution either way. Sparse GitFetch on the
+  # texts/xml cone; a WORKING repo (maturity codes ride metadata, the
+  # attic earns its keep). Line-grain prose / pada-grain verse; the
+  # unknown-language net quarantines new codes loudly. First sync
+  # owner-fired; ~150 MB repo, texts/xml cone far smaller.
+
+dharma-campa:   # P92-2
+  adapter: Nabu::Adapters::DharmaCampa
+  axes: [sea, epigraphy]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # DHARMA Campā corpus (~121 editions, xml/ cone): Old Cham (ocm-Latn —
+  # the Đông Yên Châu inscription is the oldest attested Austronesian
+  # text) and Sanskrit epigraphy of the Cham polities; absorbs the
+  # ISAW–EFEO CIC corpus. In-file <licence> CC BY-SA 4.0 governs,
+  # recorded verbatim; class attribution. The xml/ dir also carries
+  # upstream's BROUILLON-LISTE.xml worklist — censused, never parsed.
+
+dharma-nusantara:   # P92-2
+  adapter: Nabu::Adapters::DharmaNusantara
+  axes: [sea, epigraphy]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # DHARMA Nusantara epigraphy (~309 editions): Old Javanese sīma
+  # charters, Borobudur, Old Sundanese (Kawali, Batutulis), Old Malay
+  # (Sojomerto, the Laguna copperplate) and Sanskrit. Full-repo language
+  # census 2026-09-01: 345 san-Latn · 196 kaw-Latn · 21 omy-Latn ·
+  # 15 osn-Latn divs; the one "languageb-Latn" template-placeholder div
+  # (INSIDENK00050) quarantines loudly by design.
+
+dharma-pyu:   # P92-2
+  adapter: Nabu::Adapters::DharmaPyu
+  axes: [sea, epigraphy]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # DHARMA Corpus of Pyu Inscriptions (Griffiths et al.) — 161 editions
+  # of the extinct Sino-Tibetan language of the Irrawaddy city-states,
+  # romanized (pyx-Latn), flat repo layout. No repo-level LICENSE: the
+  # per-file <licence> CC BY-SA 4.0 is the whole grant, recorded
+  # verbatim; class attribution.
+
+obi-burmese:   # P92-3
+  adapter: Nabu::Adapters::ObiBurmese
+  axes: [sea, epigraphy]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # OBI — A Structured Corpus of Old Burmese Stone Inscriptions (Zenodo
+  # 4321314, CC BY 4.0 verified on the record 2026-09-01): 1,121
+  # per-face files of Bagan-period epigraphy, Myanmar-script Unicode
+  # (verified — not Zawgyi) with paired transliteration riding
+  # annotations. Old Burmese (obr) — the mainland gap DHARMA doesn't
+  # fill, Myazedi-era onward. Seven DOI-pinned volume zips (~3.7 MB
+  # total) via per-volume ZipFetch subdirs; the source-material scans
+  # and intro PDF deliberately not fetched. Page-based files carrying
+  # the start of the next inscription mint section keys (37.1) —
+  # censused in metadata, never dropped, never duplicated.
+
+dharma-javanese-texts:   # P92-4
+  adapter: Nabu::Adapters::DharmaJavaneseTexts
+  axes: [sea]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # DHARMA Nusantara philology — the desk's literary wing: the kakawin
+  # critical editions of the first rank (Deśavarṇana, Sutasoma,
+  # Pararaton, Calon Arang…), prose critical editions (Bhīma Svarga's
+  # four-witness apparatus reads the editor's lem), Old Sundanese
+  # treatises, and diplomatic transcriptions at folio-line grain
+  # (~93 live editions + drafts). Canto met= rides verse passages'
+  # annotations — the meter axis's SEA feed. THE REPO IS ~2.9 GB of
+  # facsimiles: the sparse cone materializes editions/ ONLY. In-file
+  # <licence> CC BY 4.0 (the philology repo's own grant — the epigraphy
+  # repos say BY-SA; recorded per document); class attribution.
+
+ojw:   # P92-5
+  adapter: Nabu::Adapters::Ojw
+  axes: [sea]
+  wired: false   # flip after the owner-fired first sync verifies live
+  sync_policy: manual
+  # OJW — the Old Javanese Wordnet (Moeljadi et al., LREC 2020; CC BY
+  # 4.0 in-repo LICENSE + the tab header's own declaration): 5,019
+  # sense rows / 2,054 synsets — the SEA desk's glossary, the open
+  # stand-in for the license-blocked Zoetmulder OJED (extracted from
+  # its digitization; OJED itself stays parked at SEAlang, see the
+  # P47-s3 survey's not-viable table). Entries are lemmas grouped over
+  # sense rows, PWN 3.0 synset ids in the body; glosses do not ship —
+  # nil is honest (the monlam precedent). Sparse GitFetch on the one
+  # tab file + grant.

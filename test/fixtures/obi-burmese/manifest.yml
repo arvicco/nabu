@@ -1,0 +1,25 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Three whole real volume-7 files, laid out as the adapter extracts them
+# (the volume zip is the fetch unit — liveness rides the source probe).
+source: obi-burmese
+adapter_test: null
+retrieved: 2026-09-01
+files:
+  - path: vol7/OBI_Corpus_Vol7/OBI_Vol7_No3a__ob_p6.txt
+    url: https://zenodo.org/api/records/4321314/files/OBI_Corpus_Vol7.zip/content
+    whole: false
+    trim: one file out of the 49-file volume zip
+  - path: vol7/OBI_Corpus_Vol7/OBI_Vol7_No36___p121.txt
+    url: https://zenodo.org/api/records/4321314/files/OBI_Corpus_Vol7.zip/content
+    whole: false
+    trim: one file out of the 49-file volume zip
+  - path: vol7/OBI_Corpus_Vol7/OBI_Vol7_No19b__re_p59.txt
+    url: https://zenodo.org/api/records/4321314/files/OBI_Corpus_Vol7.zip/content
+    whole: false
+    trim: one file out of the 49-file volume zip
+  - path: vol6/OBI_Vol6_No10__ob_p16.txt
+    url: https://zenodo.org/api/records/4321314/files/OBI_Corpus_Vol6.zip/content
+    whole: false
+    trim: one file out of the volume zip (vol6 extracts FLAT, no subdir)
