@@ -4284,7 +4284,7 @@ seal:
 dharma-khmer:   # P92-1, the SEA desk anchor
   adapter: Nabu::Adapters::DharmaKhmer
   axes: [sea, epigraphy]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true    # first sync verified 2026-09-02: 1,219 docs / 50,165 passages, 34 honest quarantines
   sync_policy: manual
   # DHARMA Corpus des inscriptions khmères (EFEO/ERC no. 809994;
   # github.com/erc-dharma/tfc-khmer-epigraphy, scouted P47-s3 2026-07-26,
@@ -4301,7 +4301,7 @@ dharma-khmer:   # P92-1, the SEA desk anchor
 dharma-campa:   # P92-2
   adapter: Nabu::Adapters::DharmaCampa
   axes: [sea, epigraphy]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true    # first sync verified 2026-09-02: 121 docs / 2,728 passages, 0 quarantined
   sync_policy: manual
   # DHARMA Campā corpus (~121 editions, xml/ cone): Old Cham (ocm-Latn —
   # the Đông Yên Châu inscription is the oldest attested Austronesian
@@ -4313,7 +4313,7 @@ dharma-campa:   # P92-2
 dharma-nusantara:   # P92-2
   adapter: Nabu::Adapters::DharmaNusantara
   axes: [sea, epigraphy]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true    # first sync verified 2026-09-02: 291 docs / 5,893 passages, 19 quarantined (16 lang-less upstream)
   sync_policy: manual
   # DHARMA Nusantara epigraphy (~309 editions): Old Javanese sīma
   # charters, Borobudur, Old Sundanese (Kawali, Batutulis), Old Malay
@@ -4325,7 +4325,7 @@ dharma-nusantara:   # P92-2
 dharma-pyu:   # P92-2
   adapter: Nabu::Adapters::DharmaPyu
   axes: [sea, epigraphy]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true    # first sync verified 2026-09-02: 145 docs / 629 passages, 17 text-less stubs
   sync_policy: manual
   # DHARMA Corpus of Pyu Inscriptions (Griffiths et al.) — 161 editions
   # of the extinct Sino-Tibetan language of the Irrawaddy city-states,
@@ -4336,7 +4336,7 @@ dharma-pyu:   # P92-2
 obi-burmese:   # P92-3
   adapter: Nabu::Adapters::ObiBurmese
   axes: [sea, epigraphy]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true    # first sync verified 2026-09-02: 1,121 docs / 25,238 passages, 0 quarantined
   sync_policy: manual
   # OBI — A Structured Corpus of Old Burmese Stone Inscriptions (Zenodo
   # 4321314, CC BY 4.0 verified on the record 2026-09-01): 1,121
@@ -4352,7 +4352,7 @@ obi-burmese:   # P92-3
 dharma-javanese-texts:   # P92-4
   adapter: Nabu::Adapters::DharmaJavaneseTexts
   axes: [sea]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true    # first sync verified 2026-09-02: 88 docs / 46,108 passages, 7 quarantined
   sync_policy: manual
   # DHARMA Nusantara philology — the desk's literary wing: the kakawin
   # critical editions of the first rank (Deśavarṇana, Sutasoma,
@@ -4368,7 +4368,7 @@ dharma-javanese-texts:   # P92-4
 ojw:   # P92-5
   adapter: Nabu::Adapters::Ojw
   axes: [sea]
-  wired: false   # flip after the owner-fired first sync verifies live
+  wired: true    # first sync verified 2026-09-02: 3,632 dictionary entries
   sync_policy: manual
   # OJW — the Old Javanese Wordnet (Moeljadi et al., LREC 2020; CC BY
   # 4.0 in-repo LICENSE + the tab header's own declaration): 5,019

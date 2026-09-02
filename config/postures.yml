@@ -502,13 +502,11 @@ sources:
     places: {posture: named}
     script: {posture: mixed, note: "Greek loans inside Coptic text"}
   dharma-khmer:
-    # P92 gate: v1.6.0 (okz + okz-Latn) merged and reached canonical
-    # 2026-09-02, but the FIRST-SYNC census surfaced khm/xhm/pli/pra
-    # -Latn lanes whose rows ride the v1.6.1 follow-up mint — the
-    # posture flips to identity when THAT reaches canonical.
-    lect: {posture: pending, note: "candidate: identity — okz-Latn/san-Latn resolve
-        on canonical today; the censused khm/xhm/pli/pra -Latn lanes await the
-        v1.6.1 nabu-lects mint (xhm/khm/pli anchors + rows)"}
+    # P92 gate: v1.6.0 AND the v1.6.1 census mint both merged and
+    # reached canonical 2026-09-02 — pending retired same-phase (the
+    # xum shape, twice over).
+    lect: {posture: identity, note: "okz/san/khm/xhm/pli/pra -Latn — all six lanes
+        resolve on the canonical v1.6.0+v1.6.1 rows"}
     dating: {posture: undatable, note: "no machine date field in the editions (working-repo
         headers carry no origDate); the titles' century prose is not an extractor"}
     places: {posture: unplaced, note: "no origPlace in the editions; findspots live in the
@@ -533,10 +531,11 @@ sources:
     script: {posture: qualified, note: "romanized; Kawi and Old Sundanese scripts are the
         artifact facts"}
   dharma-pyu:
-    # First-sync census: pli/obr/pra doc lanes + omx passages — their
-    # -Latn rows (and the omx/pli anchors) ride the v1.6.1 mint.
-    lect: {posture: pending, note: "candidate: identity — pyx-Latn/san-Latn resolve
-        today; the censused pli/obr/pra/omx -Latn lanes await the v1.6.1 mint"}
+    # P92 gate: v1.6.1 (omx/pli anchors + the -Latn rows) on canonical
+    # — pending retired; the corpus's six lanes all resolve, Old Mon's
+    # first digital text among them.
+    lect: {posture: identity, note: "pyx/san/pli/obr/pra/omx -Latn — all resolve on
+        the canonical v1.6.0+v1.6.1 rows"}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized (pyx-Latn); the Pyu script is the
