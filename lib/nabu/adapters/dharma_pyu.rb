@@ -16,7 +16,15 @@ module Nabu
       REPO_URL = "https://github.com/erc-dharma/tfc-pyu-epigraphy"
       XML_DIR = ""
 
-      LANGUAGES = %w[pyx-Latn san-Latn].freeze
+      # The full-corpus census (2026-09-02, 162 editions): Pyu and
+      # Sanskrit carry the corpus; Pali, romanized Old Burmese, Prakrit
+      # AND Old Mon (omx — the survey's "no digital Old Mon corpus
+      # exists" gap has two inscriptions living right here) are real
+      # members: Bagan's multilingual epigraphic world. 56 editions
+      # carry no xml:lang at all: this corpus is monolingual by charter
+      # (the Corpus of PYU Inscriptions), so the default claims them.
+      LANGUAGES = %w[pyx-Latn san-Latn pli-Latn obr-Latn pra-Latn omx-Latn].freeze
+      DEFAULT_LANGUAGE = "pyx-Latn"
 
       private
 

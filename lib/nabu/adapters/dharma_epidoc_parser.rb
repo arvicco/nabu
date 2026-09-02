@@ -71,8 +71,12 @@ module Nabu
     # div's own code, falling back to the first lang-carrying inner div
     # (textpart editions), then the first minted unit's. Adapters pass a
     # measured allowed set plus an ALIASES map for censused upstream tag
-    # dirt ("kaw-Latin" typo, "kaw-ban"); anything else — including the
-    # real "languageb-Latn" template bug and "und" stubs — quarantines
+    # dirt ("kaw-Latin" typo, "kaw-ban"); a MONOLINGUAL corpus may
+    # declare a default_language for its lang-less editions (a third of
+    # the Pyu corpus carries no xml:lang — the repo's own name is the
+    # claim; multilingual repos declare none and their lang-less
+    # editions stay quarantined). Anything else — including the real
+    # "languageb-Latn" template bug and "und" stubs — quarantines
     # loudly.
     module DharmaEpidocParser
       XML_NS = "http://www.w3.org/XML/1998/namespace"
@@ -88,7 +92,7 @@ module Nabu
       # Parse one DHARMA edition file. +allowed_languages+ is the adapter's
       # measured code set; +aliases+ maps censused upstream tag dirt onto
       # held codes. Any other code raises Nabu::ParseError at mint.
-      def parse(path, allowed_languages:, aliases: {})
+      def parse(path, allowed_languages:, aliases: {}, default_language: nil)
         doc = Nokogiri::XML(File.read(path, encoding: "UTF-8"), &:noblanks)
         doc.remove_namespaces!
 
@@ -99,7 +103,8 @@ module Nabu
         state = WalkState.new(checker: checker,
                               paragraph_mode: !edition.at_xpath(".//lb[not(ancestor::lg)]"))
         edition_lang = lang_of(edition) ||
-                       edition.xpath(".//div").filter_map { |d| lang_of(d) }.first
+                       edition.xpath(".//div").filter_map { |d| lang_of(d) }.first ||
+                       default_language
         walk_edition(edition, state, Walkctx.new(edition_lang, [], nil))
         state.flush!
 
