@@ -86,6 +86,16 @@ module Nabu
     class Loader
       TOOL = "nabu-loader"
 
+      # P93-2 (№R-16): the two withdrawal reasons the loader can mint —
+      # the full-load completeness sweep (document grain: the urn vanished
+      # from upstream's output) and revision pruning (passage grain: the
+      # document was revised and the passage vanished from the new parse).
+      # A third kind of "gone" — upstream deletion retained by the GitFetch
+      # attic — never withdraws at all: those docs load LIVE flagged
+      # retired_upstream (architecture §8).
+      UPSTREAM_GONE = "upstream-gone"
+      REVISION_PRUNED = "revision-pruned"
+
       # The row-aware batch cap (P37-7): in tx_batch mode a batch also flushes
       # once its buffered documents carry this many PASSAGES, so the grain is
       # bounded in rows, not just documents. Why: the P36-2 doc-count grain
@@ -528,8 +538,9 @@ module Nabu
             row.update(updates) unless updates.empty?
           else
             row.update(updates.merge(withdrawn: true))
-            journal(event: "withdrawn", passage_id: row.id)
-            durable(event: "withdrawn", urn: row.urn, old_sha: row.content_sha256)
+            journal(event: "withdrawn", passage_id: row.id, params: { "reason" => REVISION_PRUNED })
+            durable(event: "withdrawn", urn: row.urn, old_sha: row.content_sha256,
+                    reason: REVISION_PRUNED)
           end
         end
       end
@@ -559,7 +570,12 @@ module Nabu
       # journal "restored", leave revision alone. Works for documents and
       # passages (the model tells us which id column to journal).
       def restore(row)
-        row.update(withdrawn: false)
+        # P93-2: a restore clears the reason with the flag — the row is no
+        # longer gone, so "why it was gone" belongs to the ledger history
+        # alone.
+        updates = { withdrawn: false }
+        updates.merge!(withdrawn_reason: nil, withdrawn_at: nil) if row.is_a?(Document)
+        row.update(updates)
         id_column = row.is_a?(Document) ? :document_id : :passage_id
         journal(event: "restored", id_column => row.id)
         durable(event: "restored", urn: row.urn, new_sha: row.content_sha256)
@@ -575,9 +591,14 @@ module Nabu
                   .each do |id, urn, sha, language, license_override, retired|
             next if seen_urns.include?(urn)
 
-            Document.where(id: id).update(withdrawn: true)
-            journal(event: "withdrawn", document_id: id)
-            durable(event: "withdrawn", urn: urn, old_sha: sha)
+            # P93-2 (№R-16): the sweep is the "upstream-gone" reason — the
+            # urn vanished from a FULL load's output. Stamped on the row
+            # (queryable projection) and the durable event (the record
+            # that survives rebuild).
+            Document.where(id: id).update(withdrawn: true, withdrawn_reason: UPSTREAM_GONE,
+                                          withdrawn_at: Time.now)
+            journal(event: "withdrawn", document_id: id, params: { "reason" => UPSTREAM_GONE })
+            durable(event: "withdrawn", urn: urn, old_sha: sha, reason: UPSTREAM_GONE)
             # P42-0: the withdrawn doc's live contribution leaves the stats.
             @stats&.swept(id: id, language: language, license_override: license_override, retired: retired)
             counts[:withdrawn] += 1
@@ -596,10 +617,11 @@ module Nabu
 
       # One urn-keyed row in the history ledger's revisions table (see class
       # comment). No-op without a ledger.
-      def durable(event:, urn:, old_sha: nil, new_sha: nil)
+      def durable(event:, urn:, old_sha: nil, new_sha: nil, reason: nil)
         return unless @ledger
 
-        Revision.create(urn: urn, event: event, old_sha: old_sha, new_sha: new_sha, at: Time.now)
+        Revision.create(urn: urn, event: event, old_sha: old_sha, new_sha: new_sha,
+                        reason: reason, at: Time.now)
       end
     end
   end

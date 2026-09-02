@@ -368,6 +368,39 @@ module Nabu
         page.map { |row| build_result(row, query, exact: exact, word: word) }
       end
 
+      # One attic hit (P93-2, №R-16 half 1): the withdrawn passage, its
+      # stored-text snippet, and WHY it left — the loader-stamped reason
+      # for a swept document, "revision-pruned" definitionally for a
+      # passage-grain withdrawal, nil (rendered "unrecorded") for rows
+      # withdrawn before the reason column existed.
+      WithdrawnResult = Data.define(:urn, :language, :snippet, :document_title, :reason,
+                                    :withdrawn_at)
+
+      # The attic search (P93-2): `search --withdrawn` scans the WITHDRAWN
+      # set — passages themselves withdrawn OR under a withdrawn document —
+      # matching every whitespace token of any fold variant as a SUBSTRING
+      # of the folded text (the fragment idiom: an attic inspection wants
+      # ]μηνιν too). Deliberately NOT an FTS lane: the set is tiny
+      # (measured 2026-09-02: 9,085 passages / 22 documents live) and
+      # indexing withdrawn rows would complicate the two-level visibility
+      # rule for an on-request question; the stream is bounded by the set,
+      # cut at +limit+, corpus (passage-id) order.
+      def run_withdrawn(query, limit: 20)
+        token_sets = Nabu::Normalize.query_forms(query.to_s)
+                                    .map(&:split).reject(&:empty?).uniq
+        return [] if token_sets.empty?
+
+        results = []
+        withdrawn_rows.each do |row|
+          text = row[:text_normalized].to_s
+          next unless token_sets.any? { |tokens| tokens.all? { |token| text.include?(token) } }
+
+          results << withdrawn_result(row, token_sets.first)
+          break if results.size >= limit
+        end
+        results
+      end
+
       # Term-less filtered browse (P42-6): a direct filtered page of the
       # catalog in CORPUS ORDER — passages.id ascending, the catalog's
       # insertion order. (A rank-skipped SEARCH page is, since P42-r3, a
@@ -1047,6 +1080,32 @@ module Nabu
                .order(Sequel.lit("bm25(passages_cjk)"))
                .limit(inner_limit)
                .all
+      end
+
+      # The withdrawn set's row stream (run_withdrawn): the OR of the two
+      # withdrawal grains, with the document's reason columns riding along.
+      def withdrawn_rows
+        @catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .where(Sequel.|({ Sequel[:passages][:withdrawn] => true },
+                          { Sequel[:documents][:withdrawn] => true }))
+          .select(
+            Sequel[:passages][:urn], Sequel[:passages][:language],
+            Sequel[:passages][:text], Sequel[:passages][:text_normalized],
+            Sequel[:passages][:withdrawn].as(:passage_withdrawn),
+            Sequel[:documents][:title], Sequel[:documents][:withdrawn_reason],
+            Sequel[:documents][:withdrawn_at]
+          )
+          .order(Sequel[:passages][:id])
+      end
+
+      def withdrawn_result(row, terms)
+        reason = row[:passage_withdrawn] ? Store::Loader::REVISION_PRUNED : row[:withdrawn_reason]
+        WithdrawnResult.new(
+          urn: row[:urn], language: row[:language],
+          snippet: StoredSnippet.build(text: row[:text], language: row[:language], terms: terms),
+          document_title: row[:title], reason: reason, withdrawn_at: row[:withdrawn_at]
+        )
       end
 
       # The --urn scope against the index (P93-1): the contentless shape

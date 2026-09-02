@@ -1703,6 +1703,53 @@ module Query
                    "a pre-P93 fulltext file serves main-lane semantics without erroring"
     end
 
+    # -- the attic search (P93-2, №R-16 half 1) ------------------------------
+    # --withdrawn scans the withdrawn set — passages themselves withdrawn
+    # (revision-pruned) or under a swept document — as an on-request attic
+    # inspection: substring match over the folded text, every hit labeled
+    # with its reason. Default search never sees these rows (the two-level
+    # visibility rule, unchanged).
+
+    def test_withdrawn_search_scans_the_attic_with_reason_labels
+      live = make_document(source: @open, urn: "urn:d:live")
+      make_passage(live, urn: "urn:d:live:1", text: "μῆνιν ἄειδε θεά", sequence: 0)
+      swept = make_document(source: @open, urn: "urn:d:swept", withdrawn: true)
+      swept.update(withdrawn_reason: "upstream-gone", withdrawn_at: Time.utc(2026, 9, 1))
+      make_passage(swept, urn: "urn:d:swept:1", text: "μῆνιν οὐλομένην", sequence: 0)
+      pruned_doc = make_document(source: @open, urn: "urn:d:pruned")
+      make_passage(pruned_doc, urn: "urn:d:pruned:1", text: "μῆνιν παλαιά", sequence: 0,
+                               withdrawn: true)
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      hits = searcher.run_withdrawn("μῆνιν")
+      assert_equal %w[urn:d:pruned:1 urn:d:swept:1], hits.map(&:urn).sort
+      swept_hit = hits.find { |hit| hit.urn == "urn:d:swept:1" }
+      assert_equal "upstream-gone", swept_hit.reason
+      refute_nil swept_hit.withdrawn_at
+      assert_includes swept_hit.snippet, "[μῆνιν]", "the stored-text snippet brackets as usual"
+      pruned_hit = hits.find { |hit| hit.urn == "urn:d:pruned:1" }
+      assert_equal "revision-pruned", pruned_hit.reason,
+                   "a passage-grain withdrawal is definitionally revision pruning"
+
+      assert_equal %w[urn:d:live:1], search("μῆνιν").map(&:urn),
+                   "default search never serves the attic"
+    end
+
+    def test_withdrawn_search_matches_substrings_and_reports_unrecorded_reasons
+      legacy = make_document(source: @open, urn: "urn:d:legacy", withdrawn: true)
+      make_passage(legacy, urn: "urn:d:legacy:1", text: "στρατηγοῦ λόγος", sequence: 0)
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      hits = searcher.run_withdrawn("ρατηγ")
+      assert_equal %w[urn:d:legacy:1], hits.map(&:urn),
+                   "attic matching is substring over the folded text — the fragment idiom"
+      assert_nil hits.first.reason, "a pre-P93 withdrawal has no recorded reason — honest nil"
+
+      assert_empty searcher.run_withdrawn("οὐδαμοῦ"), "no match, empty page"
+    end
+
     # -- term-less filtered browse (P42-6) -----------------------------------
     # The mode the shipped recipes always promised: no query, a content filter
     # narrows WHICH passages, and the catalog is listed in corpus order with no
