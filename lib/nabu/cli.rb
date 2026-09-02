@@ -1971,6 +1971,11 @@ module Nabu
                              "characters — floors the cleanest-first order above one-char fragments"
     option :fuzzy, type: :boolean, default: false,
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
+    option :withdrawn, type: :boolean, default: false,
+                       desc: "Attic inspection: search WITHDRAWN passages only (upstream-gone " \
+                             "documents, revision-pruned passages) — substring match over the " \
+                             "folded text, each hit labeled with its reason; composes with " \
+                             "--limit only"
     option :long, type: :boolean, default: false,
                   desc: "With --fuzzy: print the full folded passage instead of the windowed snippet"
     option :gold_only, type: :boolean, default: false,
@@ -2076,6 +2081,16 @@ module Nabu
                              "--lemma/--near/--fuzzy/--morph (they compose with a plain text query)"
         end
         return char_structured_search(query)
+      end
+      if options[:withdrawn]
+        if query.empty? || options[:fuzzy] || options[:near] || options[:lemma] || options[:morph] ||
+           options[:exact] || options[:word] || options[:words] || options[:scan] ||
+           char_filter_options? || options[:sign]
+          raise Thor::Error, "search: --withdrawn is the attic inspection — a plain text query " \
+                             "plus --limit only (the withdrawn set is small; filters would " \
+                             "overpromise)"
+        end
+        return withdrawn_search(query)
       end
       return sign_search(query) if options[:sign]
       return scan_search(query) if options[:scan]
@@ -6053,7 +6068,9 @@ module Nabu
       def print_show_document(document)
         title = document.title ? " — #{document.title}" : ""
         lang = document.language ? " [#{document.language}]" : ""
-        say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}#{retired_tag(document)}"
+        say "#{document.urn}#{title}#{lang}" \
+            "#{withdrawn_tag(document.withdrawn, reason: document.withdrawn_reason,
+                                                 at: document.withdrawn_at)}#{retired_tag(document)}"
         say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
         print_credit(document)
         print_timeline(document.timeline)
@@ -6549,8 +6566,14 @@ module Nabu
         "#{label}#{display_text(line.text, language)}#{withdrawn_tag(line.withdrawn)}"
       end
 
-      def withdrawn_tag(withdrawn)
-        withdrawn ? "  (withdrawn)" : ""
+      # +reason:+/+at:+ (P93-2): the document card names WHY and WHEN it
+      # left when the loader recorded it; a bare flag stays the honest
+      # render for pre-P93 withdrawals and passage lines.
+      def withdrawn_tag(withdrawn, reason: nil, at: nil)
+        return "" unless withdrawn
+
+        detail = [reason, at.respond_to?(:strftime) ? at.strftime("%Y-%m-%d") : at].compact.join(", ")
+        detail.empty? ? "  (withdrawn)" : "  (withdrawn: #{detail})"
       end
 
       # P5-2: upstream scrapped the file; the attic kept it. Live, labeled.
@@ -7542,6 +7565,36 @@ module Nabu
         say "character filter: [#{labels}] — #{outcome.char_count} " \
             "#{outcome.char_count == 1 ? 'character' : 'characters'} resolved#{text_note}"
         say Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT if outcome.incomplete
+      end
+
+      # The attic search (P93-2, №R-16 half 1): scan the withdrawn set,
+      # substring over folded text, reasons labeled. No fulltext file
+      # needed — the scan is catalog-side by design (Search#run_withdrawn's
+      # class note carries the measured argument).
+      def withdrawn_search(query)
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+        fulltext = open_fulltext(config)
+        searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run_withdrawn(query, limit: options[:limit].to_i)
+        if results.empty?
+          say "no matches in the withdrawn set"
+        else
+          results.each do |result|
+            say "#{result.urn}#{" [#{result.language}]" if result.language}  WITHDRAWN " \
+                "(#{result.reason || 'reason unrecorded'}" \
+                "#{", #{result.withdrawn_at.strftime('%Y-%m-%d')}" if result.withdrawn_at})"
+            say "  #{display_snippet(result.snippet, result.language)}"
+          end
+          say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} in the withdrawn set " \
+              "(substring over folded text; nothing here is served by default search)"
+        end
+        print_display_footer
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
       end
 
       def fuzzy_search(query)

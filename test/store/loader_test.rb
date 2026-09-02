@@ -438,6 +438,13 @@ module Store
       row = doc_row("beta")
       assert row.withdrawn
       assert_equal beta_revision, row.revision # withdrawal is not a revision
+      # P93-2 (№R-16): the sweep stamps WHY and WHEN — both on the catalog
+      # row and on the durable ledger event (the record that survives
+      # rebuild).
+      assert_equal "upstream-gone", row.withdrawn_reason
+      refute_nil row.withdrawn_at
+      assert_equal "upstream-gone",
+                   revisions(urn: row.urn, event: "withdrawn").first.reason
       assert_equal 1, provenance_events(document_id: row.id, event: "withdrawn").size
       # Document-level withdrawal does not touch the passages.
       refute passage_row("beta", "1").withdrawn
@@ -467,6 +474,8 @@ module Store
       assert_report report, skipped: 1, updated: 1
       row = doc_row("beta")
       refute row.withdrawn
+      assert_nil row.withdrawn_reason, "a restore clears the reason (P93-2)"
+      assert_nil row.withdrawn_at
       assert_equal 1, row.revision # content unchanged: restore is not a revision
       assert_equal 1, provenance_events(document_id: row.id, event: "restored").size
       assert_empty provenance_events(document_id: row.id, event: "revised")
@@ -500,6 +509,10 @@ module Store
       assert vanished.withdrawn
       assert_equal 1, vanished.revision
       assert_equal 1, provenance_events(passage_id: vanished.id, event: "withdrawn").size
+      # P93-2: a passage withdrawal is definitionally revision pruning —
+      # the durable event says so (no catalog column at passage grain).
+      assert_equal "revision-pruned",
+                   revisions(urn: vanished.urn, event: "withdrawn").first.reason
       assert_equal 1, passage_row("alpha", "3").sequence
 
       # Idempotency after passage withdrawal: same load again is a full skip.

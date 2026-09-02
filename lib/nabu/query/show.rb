@@ -106,9 +106,16 @@ module Nabu
       DocumentResult = Data.define(
         :urn, :title, :language, :source_slug, :license_class,
         :revision, :withdrawn, :retired_upstream, :passages, :timeline, :facets, :credit, :findspot,
-        :artifact
+        :artifact, :withdrawn_reason, :withdrawn_at
       ) do
-        def initialize(timeline: nil, facets: [], credit: nil, findspot: nil, artifact: nil, **) = super
+        # withdrawn_reason/withdrawn_at (P93-2, №R-16): WHY and WHEN a
+        # withdrawn document left — nil on live rows, on pre-P93
+        # withdrawals (honest absence), and on a catalog predating
+        # migration 030.
+        def initialize(timeline: nil, facets: [], credit: nil, findspot: nil, artifact: nil,
+                       withdrawn_reason: nil, withdrawn_at: nil, **)
+          super
+        end
       end
 
       # A range (P7-6): the document header, the inclusive slice of passages,
@@ -388,6 +395,7 @@ module Nabu
           urn: row.fetch(:urn), title: row.fetch(:title), language: row.fetch(:language),
           source_slug: row.fetch(:source_slug), license_class: row.fetch(:license_class),
           revision: row.fetch(:revision), withdrawn: truthy?(row.fetch(:withdrawn)),
+          withdrawn_reason: row[:withdrawn_reason], withdrawn_at: row[:withdrawn_at],
           retired_upstream: truthy?(row.fetch(:retired_upstream)),
           passages: document_passages(row.fetch(:document_id)),
           timeline: timeline_for(row.fetch(:document_id)),
@@ -603,6 +611,8 @@ module Nabu
           Sequel[:documents][:language],
           Sequel[:documents][:revision],
           Sequel[:documents][:withdrawn],
+          Sequel[:documents][:withdrawn_reason],
+          Sequel[:documents][:withdrawn_at],
           Sequel[:documents][:retired_upstream],
           Sequel[:documents][:metadata_json].as(:document_metadata_json),
           Sequel[:sources][:slug].as(:source_slug),
