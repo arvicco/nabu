@@ -633,6 +633,139 @@ module Store
       end
     end
 
+    # -- the CJK bigram lane (P93-3, №R-39 b) --------------------------------
+    # A CONTENTLESS second lane over the cjk-flagged sources: each Han/kana
+    # run indexed as overlapping character pairs (+ trailing unigram), so
+    # mid-run substrings match as bigram phrases. Same scope-table honesty
+    # as the trigram lane; rowid = passages.id like the main index.
+
+    def cjk = @fulltext[Nabu::Store::Indexer::CJK_TABLE]
+
+    def cjk_scope = @fulltext[Nabu::Store::Indexer::CJK_SCOPE_TABLE]
+
+    def cjk_match_urns(query)
+      urns_of(cjk.where(Sequel.lit("passages_cjk MATCH ?", query))
+                 .select_map(Sequel.lit("rowid")))
+    end
+
+    def cjk_rebuild!(slugs: ["s"], **)
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: slugs, **)
+    end
+
+    def test_cjk_lane_scoped_to_the_flagged_sources_and_contentless
+      doc = make_document(urn: "urn:d:s")
+      passage = make_passage(doc, urn: "urn:d:s:1", text_normalized: "時乘六龍以御天", sequence: 0,
+                                  language: "lzh")
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "六龍飛天", sequence: 0, language: "lzh")
+      cjk_rebuild!
+
+      assert_equal [passage.id], cjk.select_map(Sequel.lit("rowid")),
+                   "only the flagged source's rows land, rowid = passages.id"
+      refute_includes cjk.columns, :urn, "contentless — no payload columns"
+      assert_nil cjk.first.fetch(:cjk), "contentless — the token stream is never stored"
+      assert_equal %w[s], cjk_scope.select_map(:slug), "the scope table records what was indexed"
+    end
+
+    def test_cjk_tables_exist_empty_without_flagged_slugs
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
+      rebuild!
+
+      assert_equal 0, cjk.count, "no scope, no rows — the table still exists (queries degrade)"
+      assert_equal 0, cjk_scope.count
+    end
+
+    def test_cjk_lane_matches_a_mid_run_substring
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "時乘六龍以御天", sequence: 0,
+                        language: "lzh")
+      cjk_rebuild!
+
+      assert_equal %w[urn:d:s:1], cjk_match_urns('"六龍"'),
+                   "the №R-39 case: the pair sits mid-run and must match"
+      assert_equal %w[urn:d:s:1], cjk_match_urns('"六龍 龍以"'),
+                   "longer substrings are phrases of consecutive bigrams"
+      assert_equal %w[urn:d:s:1], cjk_match_urns('"御" *'),
+                   "a single char reaches every position via prefix"
+    end
+
+    def test_cjk_bigram_phrases_never_bridge_separate_runs
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍, 飛天", sequence: 0, language: "lzh")
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "六龍飛天", sequence: 1, language: "lzh")
+      cjk_rebuild!
+
+      assert_equal %w[urn:d:s:2], cjk_match_urns('"龍飛"'),
+                   "a pair spanning a run break exists only where the run is unbroken"
+    end
+
+    def test_cjk_lane_skips_runless_and_withdrawn_passages
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "arma virumque", sequence: 0,
+                        language: "lat")
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "六龍", sequence: 1, language: "lzh",
+                        withdrawn: true)
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "飛天", sequence: 2, language: "lzh")
+      cjk_rebuild!
+
+      assert_equal [passage_id("urn:d:s:3")], cjk.select_map(Sequel.lit("rowid")),
+                   "runless passages contribute no row; withdrawn are excluded"
+    end
+
+    def test_cjk_lane_carries_the_language_and_source_sentinels
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "六龍", sequence: 1, language: "jpn")
+      cjk_rebuild!
+
+      assert_equal %w[urn:d:s:2], cjk_match_urns(%{"六龍" AND language : ("0langjpn")}),
+                   "--lang composes inside the lane's MATCH, exactly like the main index"
+      assert_equal %w[urn:d:s:1 urn:d:s:2], cjk_match_urns(%{"六龍" AND source : ("0srcs")})
+    end
+
+    def test_cjk_refresh_updates_the_slice_and_honors_config_drift
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
+      cjk_rebuild!
+
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "飛天", sequence: 1, language: "lzh")
+      refresh!(cjk_slugs: ["s"])
+      assert_equal %w[urn:d:s:1 urn:d:s:2],
+                   urns_of(cjk.select_map(Sequel.lit("rowid"))), "the flagged source's slice refreshes"
+
+      refresh!(cjk_slugs: [])
+      assert_equal 0, cjk.count, "a de-flagged source loses its rows at refresh"
+      assert_equal 0, cjk_scope.count, "…and its scope row, so coverage reads honestly"
+    end
+
+    def test_cjk_refresh_adds_a_newly_flagged_sources_slice
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
+      rebuild! # no cjk slugs — empty lane
+
+      refresh!(cjk_slugs: ["s"])
+      assert_equal [passage_id("urn:d:s:1")], cjk.select_map(Sequel.lit("rowid"))
+      assert_equal %w[s], cjk_scope.select_map(:slug)
+    end
+
+    def test_cjk_lane_is_idempotent_and_regenerates_into_a_fresh_db
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
+      2.times { cjk_rebuild! }
+      assert_equal 1, cjk.count
+      assert_equal 1, cjk_scope.count
+
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh, cjk_slugs: ["s"])
+        assert_equal [passage_id("urn:d:s:1")],
+                     fresh[Nabu::Store::Indexer::CJK_TABLE].select_map(Sequel.lit("rowid"))
+      ensure
+        fresh.disconnect
+      end
+    end
+
     # -- incremental per-source refresh (P26-5) ------------------------------
     # refresh_source! deletes ONE source's rows from the passage-keyed tables
     # and re-inserts them from the current catalog — the sync-time replacement

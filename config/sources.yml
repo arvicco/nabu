@@ -40,6 +40,11 @@
 #                                        #   (search --fuzzy; P16-4, design §4 —
 #                                        #   documentary sources only, index
 #                                        #   economics; default false)
+#     cjk_index: true                    # include in the CJK bigram substring
+#                                        #   lane (P93-3, №R-39 b — the
+#                                        #   Han/kana-run sources; measured
+#                                        #   ~22M CJK passages 2026-09-02;
+#                                        #   default false)
 #     axes: [classical, ...]             # research-axis memberships (P35-0) —
 #                                        #   REQUIRED, >= 1, names defined in
 #                                        #   config/axes.yml. Axes are TAGS
@@ -115,6 +120,7 @@ first1k-greek:
 
 ud:
   adapter: Nabu::Adapters::UniversalDependencies
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   # P35-0 vs the D35 draft: +celtic (two sga treebanks) +sinitic (two lzh treebanks) — TREEBANKS-verified
   # P43-1: +cuneiform (akk RIAO/PISANDUB) +egyptian (cop Bohairic, egy PC)
   # +hebrew (hbo PTNK) +biblical (Septuagint grc-ptnk, Masoretic hbo-ptnk,
@@ -1165,6 +1171,7 @@ corph:
 
 suttacentral:
   adapter: Nabu::Adapters::Suttacentral
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   # P35-0 vs the D35 draft: +sinitic — the P32-1 lzh Agamas ride this same row (whole-source tagging)
   axes: [indic, buddhist, sinitic]
   siblings: ["-en"]  # P34-0 (was P26-1 frozen): literal tail — stems like dhp21-32 are hyphen-rich, none ends in -en
@@ -2376,6 +2383,7 @@ tshet-uinh:
   # zho:oman stage + owner GO built it as the `zhongyuan` source below.
 classical-modern:   # P88-A2, 02-sources row 184
   adapter: Nabu::Adapters::ClassicalModern
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [sinitic]
   wired: true   # first real sync verified + owner sign-off 2026-08-30: 14,608 docs / 1,944,934 passages
   translations: true  # the modern side IS the point of a parallel corpus
@@ -2607,6 +2615,7 @@ oncoj-lexicon:
 
 cbeta:
   adapter: Nabu::Adapters::Cbeta
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [buddhist, sinitic]
   wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # GitFetch cone [T/, X/, canons.json, schema/] ≈ 1.43 GiB
@@ -2636,6 +2645,7 @@ cbeta:
   sync_policy: manual
 kanripo:
   adapter: Nabu::Adapters::Kanripo
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [sinitic]
   wired: true   # flipped 2026-07-20 (owner order, post-P34 gate: P32+P33 sources on)
                    # first many-repo wave (KanripoFetch, architecture §8):
@@ -2747,6 +2757,7 @@ tls:
 
 aozora:
   adapter: Nabu::Adapters::Aozora
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [japonic]
   wired: true    # P38: first sync verified 2026-07-21 (16,004 works / 2.98M passages), owner-flipped
   sync_policy: manual
@@ -3932,6 +3943,7 @@ burman-concordance:
 
 okhc:   # P91-1, 02-sources row 189
   adapter: Nabu::Adapters::Okhc
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [korean]
   wired: true    # first sync + recovery re-parse verified 2026-09-01: 1,198,779 docs / 3,542,662 passages
   sync_policy: manual
@@ -3959,6 +3971,7 @@ okhc:   # P91-1, 02-sources row 189
 
 sillok:
   adapter: Nabu::Adapters::Sillok
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [korean]   # P78-1: MINTS the korean axis — the hanmun state record's anchor
   wired: true     # P78-1 first sync owner-verified (743 docs / 414,321 passages, both datasets); flipped 2026-08-19 (owner: 'wire everything on')
   # 조선왕조실록 원문 (NIKH via data.go.kr 15053647 Taejo–Cheoljong +
@@ -3972,6 +3985,7 @@ sillok:
 
 sjw:
   adapter: Nabu::Adapters::Sjw
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [korean]
   wired: true     # P78-2 first sync owner-verified (297 docs / 1,896,858 passages; re-synced 2026-08-19 with the ETA lane narrating); flipped 2026-08-19 (owner: 'wire everything on')
   # 승정원일기 (NIKH via data.go.kr 15064218; 제한 없음 → D47-a attribution).
@@ -3983,6 +3997,7 @@ sjw:
   license_watch: https://www.data.go.kr/data/15064218/fileData.do
 ko-wikisource-mk:
   adapter: Nabu::Adapters::KoWikisourceMk
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [korean]   # P78-4: the korean axis's vernacular leg — the first hangul print
   wired: true     # P78-4 first sync owner-verified (1 work doc / 159 passages, okm 125); flipped 2026-08-19 (owner: 'wire everything on')
   # 용비어천가 (1447) from Korean Wikisource — curated title list, ONE page
@@ -3995,6 +4010,7 @@ ko-wikisource-mk:
   license_watch: https://ko.wikisource.org/wiki/%EC%9A%A9%EB%B9%84%EC%96%B4%EC%B2%9C%EA%B0%80
 viet-wikisource:
   adapter: Nabu::Adapters::VietWikisource
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [sinitic]  # P78-5: the Vietnamese classical shelf — deliberately NO
                    # vietnamese axis (P47-s4 survey ruling: a shelf, not a desk)
   wired: true     # P78-5 first sync verified (32 docs / 7,674 passages); flipped 2026-08-19 (owner: 'wire everything on')
@@ -4008,6 +4024,7 @@ viet-wikisource:
   license_watch: https://zh.wikisource.org/wiki/Wikisource:%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF
 goryeosa:
   adapter: Nabu::Adapters::Goryeosa
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [korean]   # P78-3: the goryeosa family — the pre-Joseon dynastic history
   wired: true     # P78-3 first sync owner-verified (138 docs / 31,207 passages); flipped 2026-08-19 (owner: 'wire everything on')
   # 고려사 원문 (NIKH via data.go.kr 15053637; 제한 없음 → D47-a
@@ -4020,6 +4037,7 @@ goryeosa:
 
 goryeosa-jeoryo:
   adapter: Nabu::Adapters::GoryeosaJeoryo
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [korean]   # P78-3: the goryeosa family — the chronological digest sibling
   wired: true     # P78-3 first sync owner-verified (36 docs / 11,226 passages; the junk-named .jpg salvage-skipped, P78-r4); flipped 2026-08-19 (owner: 'wire everything on')
   # 고려사절요 원문 (NIKH via data.go.kr 15115521; 제한 없음 → D47-a
@@ -4032,6 +4050,7 @@ goryeosa-jeoryo:
 
 bibyeonsa:
   adapter: Nabu::Adapters::Bibyeonsa
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [korean]   # P78-3: the goryeosa family — the state council's daily register
   wired: true     # P78-3 first sync owner-verified (273 docs / 93,528 passages); flipped 2026-08-19 (owner: 'wire everything on')
   # 비변사등록 원문 (NIKH via data.go.kr 15053636; 제한 없음 → D47-a
@@ -4057,6 +4076,7 @@ bdcamoes:
 
 itkc:
   adapter: Nabu::Adapters::Itkc
+  cjk_index: true   # P93-3 (№R-39 b): the CJK bigram substring lane
   axes: [korean]
   wired: true     # P78-7 first sync owner-verified (473 docs / 13,185 passages); flipped 2026-08-19 (owner: 'wire everything on')
   # 한국고전번역원 classical originals (P78-7): the OPEN-LICENSED slice —

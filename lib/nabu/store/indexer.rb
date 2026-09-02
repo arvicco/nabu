@@ -110,6 +110,20 @@ module Nabu
       LEMMA_TABLE = :passage_lemmas
       TRIGRAM_TABLE = :passages_trigram
       TRIGRAM_SCOPE_TABLE = :passages_trigram_scope
+      # P93-3 (№R-39 b): the CJK bigram lane — a CONTENTLESS second lane
+      # over the cjk-flagged sources (sources.yml `cjk_index: true`,
+      # threaded in as +cjk_slugs+ — the fuzzy_index pattern). Each
+      # Han/kana run of the folded text indexes as its overlapping
+      # character pairs plus a trailing unigram (CjkBigrams — the mint
+      # AND the query grammar), so a mid-run substring matches as a
+      # phrase of consecutive bigrams — the thing unicode61's
+      # one-token-per-run treatment can never answer. rowid = passages.id
+      # (the P93-1 convention); language/source sentinel columns compose
+      # exactly like the main table's; the scope table records what THIS
+      # build actually indexed (the trigram honesty contract). Runless
+      # passages contribute no row.
+      CJK_TABLE = :passages_cjk
+      CJK_SCOPE_TABLE = :passages_cjk_scope
       # P65: per-(source, char, language) counts of live passages containing
       # each Han character — the `nabu char` corpus panel's precompiled
       # answer. Minted here because the desk-time alternative is a LIKE scan
@@ -303,6 +317,21 @@ module Nabu
         )
       SQL
 
+      # The CJK lane's DDL (P93-3, CJK_TABLE note): contentless like the
+      # main table; plain unicode61 — the cjk column holds space-joined
+      # bigram tokens, already the token grain, and the sentinel columns
+      # tokenize as they always have.
+      CREATE_CJK_TABLE = <<~SQL
+        CREATE VIRTUAL TABLE passages_cjk USING fts5(
+          cjk,
+          language,
+          source,
+          content = '',
+          contentless_delete = 1,
+          tokenize = 'unicode61'
+        )
+      SQL
+
       module_function
 
       # Drop and rebuild the whole index (FTS + lemma table + alignment refs)
@@ -340,8 +369,8 @@ module Nabu
       # BEFORE the frequency census, so lemma_frequencies counts silver
       # rows wholesale. +lemma_filter_slugs+ names the sources under the
       # epigraphy dictionary filter (sources.yml `lemma_dictionary_filter`).
-      def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, lemma_tiers: nil, profile: nil,
-                   sign_list: nil, progress: nil, lemma_shelf: nil,
+      def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, cjk_slugs: nil,
+                   lemma_tiers: nil, profile: nil, sign_list: nil, progress: nil, lemma_shelf: nil,
                    lemma_filter_slugs: nil) # rubocop:disable Lint/UnusedMethodArgument -- №R-51-B: the full path no longer projects (filter slugs ride the owner-fired apply); kept for caller stability
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
@@ -382,6 +411,11 @@ module Nabu
         end
         timed(profile, :trigram) do
           rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
+        end
+        # P93-3: the CJK bigram lane — its own scoped streaming pass, the
+        # trigram precedent exactly.
+        timed(profile, :cjk) do
+          rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs))
         end
         # P72-1: the coverage index — its own streaming pass (the trigram
         # precedent), AFTER the postings exist (the rarity ranks read them).
@@ -451,11 +485,13 @@ module Nabu
       # lemma table predates the tier column falls back to the full rebuild!.
       # Returns the SOURCE's live passage count — never the corpus total.
       def refresh_source!(catalog:, fulltext:, slug:, alignments: nil, fuzzy_slugs: nil,
-                          lemma_tiers: nil, reflexes_changed: false, sign_list: nil, progress: nil,
+                          cjk_slugs: nil, lemma_tiers: nil, reflexes_changed: false,
+                          sign_list: nil, progress: nil,
                           ledger: nil, lemma_shelf: nil, lemma_filter_slugs: nil)
         unless incremental_ready?(fulltext)
           rebuild!(catalog: catalog, fulltext: fulltext, alignments: alignments,
-                   fuzzy_slugs: fuzzy_slugs, lemma_tiers: lemma_tiers, sign_list: sign_list,
+                   fuzzy_slugs: fuzzy_slugs, cjk_slugs: cjk_slugs, lemma_tiers: lemma_tiers,
+                   sign_list: sign_list,
                    progress: progress, lemma_shelf: lemma_shelf, lemma_filter_slugs: lemma_filter_slugs)
           return source_live_count(catalog, slug)
         end
@@ -512,6 +548,10 @@ module Nabu
             lemmas_changed = deleted.positive? || inserted.positive?
             LemmaFrequencies.apply_delta(fulltext, before: before, after: LemmaFrequencies.snapshot(fulltext, urns))
             refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
+            # P93-3: the CJK lane's slice — same drift-honest contract as
+            # the trigram slice; a fulltext file predating the lane skips
+            # here and bootstraps below (flagged sources only).
+            refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), ids)
             # P65: swap this source's char-postings slice; a pre-P65 fulltext
             # file (no table) gets the whole postings build below instead —
             # NEVER a full FTS rebuild for a missing derived sub-table.
@@ -559,6 +599,15 @@ module Nabu
             rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
                                    progress: progress)
           end
+          # P93-3 bootstrap: a fulltext file predating the CJK lane gains
+          # it when a FLAGGED source syncs (the sign-coverage gate: the
+          # CJK corpora pay their own indexing cost; an unrelated source's
+          # sync is never ambushed). Elsewhere it arrives at the next
+          # full rebuild.
+          if Array(cjk_slugs).include?(slug) && !fulltext.table_exists?(CJK_TABLE)
+            progress&.stage("cjk bigram lane: building (first flagged sync — scoped sources only)")
+            rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs))
+          end
           refresh_alignment(catalog, fulltext, alignments, source_id)
         end
         if lemmas_changed || reflexes_changed
@@ -604,6 +653,29 @@ module Nabu
           trigram_passages(catalog, fuzzy_slugs).each_slice(BATCH_SIZE) do |batch|
             fulltext[TRIGRAM_TABLE].multi_insert(batch.map { |row| index_row(row) })
             count += batch.size
+          end
+        end
+        count
+      end
+
+      # Drop and rebuild the CJK bigram lane (CJK_TABLE note) over the live
+      # passages of the +cjk_slugs+ sources, and record that scope. Returns
+      # the number of passages indexed (runless passages contribute none).
+      def rebuild_cjk!(catalog:, fulltext:, cjk_slugs:)
+        fulltext.drop_table?(CJK_TABLE)
+        fulltext.drop_table?(CJK_SCOPE_TABLE)
+        fulltext.run(CREATE_CJK_TABLE)
+        fulltext.create_table(CJK_SCOPE_TABLE) do
+          String :slug, null: false
+        end
+
+        count = 0
+        fulltext.transaction do
+          fulltext[CJK_SCOPE_TABLE].multi_insert(cjk_slugs.map { |slug| { slug: slug } })
+          cjk_passages(catalog, cjk_slugs).each_slice(BATCH_SIZE) do |batch|
+            rows = batch.filter_map { |row| cjk_row(row) }
+            fulltext[CJK_TABLE].multi_insert(rows)
+            count += rows.size
           end
         end
         count
@@ -732,6 +804,11 @@ module Nabu
         "fts_lemma" => "v1",
         "char_postings" => POSTINGS_CLASS,
         "trigram" => "v1",
+        # P93-3: the run class + mint grammar era. An index stamped before
+        # the lane existed reads stale here, so `--incremental` builds the
+        # lane standalone — the lane's arrival path beside the full
+        # rebuild and the flagged-sync bootstrap.
+        "cjk" => "v1-han-kana",
         "passage_chars" => "v1",
         "sign_coverage" => "v1-tokenize-once",
         "alignment" => "v1",
@@ -742,7 +819,7 @@ module Nabu
       # kept catalog. A stale stage OUTSIDE this set (fts_lemma — the
       # composite streaming pass; trigram — its scope memory) refuses
       # loudly: a full rebuild is the honest answer there.
-      RECONCILABLE_STAGES = %w[char_postings passage_chars sign_coverage alignment reflex].freeze
+      RECONCILABLE_STAGES = %w[char_postings cjk passage_chars sign_coverage alignment reflex].freeze
 
       def stamp_stages!(fulltext, versions: STAGE_VERSIONS)
         create_stage_stamps_table(fulltext)
@@ -780,7 +857,7 @@ module Nabu
       #   (the documented bridge for an index KNOWN built by current code);
       # - a stale stage in RECONCILABLE_STAGES re-derives corpus-wide and
       #   re-stamps; any other stale stage refuses — full rebuild required.
-      def reconcile_stages!(catalog:, fulltext:, sign_list: nil, alignments: nil,
+      def reconcile_stages!(catalog:, fulltext:, sign_list: nil, alignments: nil, cjk_slugs: nil,
                             versions: STAGE_VERSIONS, trust: false, progress: nil)
         unless fulltext.table_exists?(STAGE_STAMPS_TABLE)
           if trust
@@ -811,6 +888,7 @@ module Nabu
           progress&.stage("stage re-derive: #{stage} (derivation version moved)")
           case stage
           when "char_postings" then rebuild_char_postings!(catalog: catalog, fulltext: fulltext)
+          when "cjk" then rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs))
           when "passage_chars" then rebuild_passage_chars!(catalog: catalog, fulltext: fulltext)
           when "sign_coverage"
             rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
@@ -1213,6 +1291,57 @@ module Nabu
         else
           fulltext[TRIGRAM_SCOPE_TABLE].where(slug: slug).delete
         end
+      end
+
+      # The CJK lane's slice (P93-3): the trigram slice contract — refresh
+      # when flagged, drop rows + scope row when de-flagged since the last
+      # build, hands-off otherwise. Deletes go by rowid (contentless — the
+      # ids ARE the rowids). A fulltext file without the lane skips
+      # (bootstrap is the flagged-sync gate in refresh_source!).
+      def refresh_cjk_slice(catalog, fulltext, slug, cjk_slugs, ids)
+        return unless fulltext.table_exists?(CJK_TABLE)
+
+        flagged = cjk_slugs.include?(slug)
+        in_scope = !fulltext[CJK_SCOPE_TABLE].where(slug: slug).empty?
+        return unless flagged || in_scope
+
+        delete_fts_rows_by_rowid(fulltext, CJK_TABLE, ids) if in_scope
+        if flagged
+          fulltext[CJK_SCOPE_TABLE].insert(slug: slug) unless in_scope
+          cjk_passages(catalog, [slug]).each_slice(BATCH_SIZE) do |batch|
+            fulltext[CJK_TABLE].multi_insert(batch.filter_map { |row| cjk_row(row) })
+          end
+        else
+          fulltext[CJK_SCOPE_TABLE].where(slug: slug).delete
+        end
+      end
+
+      # The CJK pass's slice of live_passages: the trigram_passages shape
+      # plus language and slug (both sentinel columns ride every row).
+      def cjk_passages(catalog, slugs)
+        return [] if slugs.empty?
+
+        catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+          .where(Sequel[:sources][:slug] => slugs)
+          .select(
+            Sequel[:passages][:text_normalized],
+            Sequel[:passages][:id].as(:passage_id),
+            Sequel[:passages][:language],
+            Sequel[:sources][:slug].as(:source_slug)
+          )
+      end
+
+      # One passage's CJK-lane row, or nil when its text carries no run.
+      def cjk_row(row)
+        cjk = CjkBigrams.index_text(row.fetch(:text_normalized))
+        return nil unless cjk
+
+        { rowid: row.fetch(:passage_id), cjk: cjk,
+          language: language_token(row[:language]),
+          source: source_token(row.fetch(:source_slug)) }
       end
 
       # Full alignment rebuild, but ONLY when the source holds a document the

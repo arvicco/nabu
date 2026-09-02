@@ -1622,6 +1622,87 @@ module Query
                    "--scan walks only the scoped source's postings on the new index"
     end
 
+    # -- the CJK bigram lane (P93-3, №R-39 b) --------------------------------
+    # A pure-CJK query rides the contentless bigram lane over the
+    # cjk-flagged sources, so a substring INSIDE an unbroken Han run —
+    # which unicode61's one-token-per-run treatment can never match —
+    # finally answers. Out-of-scope sources keep their whole-run main-lane
+    # matches; mixed/Latin queries never engage the lane.
+
+    def cjk_seed!(slugs: %w[open])
+      doc = make_document(source: @open, urn: "urn:d:han", language: "lzh")
+      make_passage(doc, urn: "urn:d:han:1", text: "時乘六龍以御天", sequence: 0, language: "lzh")
+      make_passage(doc, urn: "urn:d:han:2", text: "飛天之外別有天", sequence: 1, language: "lzh")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: slugs)
+    end
+
+    def test_cjk_substring_inside_a_run_now_matches
+      cjk_seed!
+
+      assert_equal %w[urn:d:han:1], search("六龍").map(&:urn),
+                   "the №R-39 case: 六龍 sits mid-run and must match through the bigram lane"
+      assert_equal %w[urn:d:han:1], search("乘六龍以").map(&:urn),
+                   "longer substrings phrase across consecutive bigrams"
+    end
+
+    def test_cjk_snippet_brackets_the_substring_in_stored_text
+      cjk_seed!
+
+      hit = search("六龍").first
+      assert_includes hit.snippet, "[六龍]",
+                      "StoredSnippet locates the substring in the pristine text as usual"
+    end
+
+    def test_cjk_lane_composes_with_the_lang_filter
+      cjk_seed!
+      jpn_doc = make_document(source: @open, urn: "urn:d:jp", language: "jpn")
+      make_passage(jpn_doc, urn: "urn:d:jp:1", text: "六龍の話", sequence: 0, language: "jpn")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: %w[open])
+
+      assert_equal %w[urn:d:jp:1], search("六龍", lang: "jpn").map(&:urn),
+                   "the language sentinel filters inside the lane's MATCH"
+    end
+
+    def test_cjk_out_of_scope_source_still_answers_whole_run_matches
+      cjk_seed!(slugs: []) # nothing flagged — the lane is empty
+      whole = make_document(source: @nc, urn: "urn:d:whole", language: "lzh")
+      make_passage(whole, urn: "urn:d:whole:1", text: "六龍", sequence: 0, language: "lzh")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: [])
+
+      assert_equal %w[urn:d:whole:1], search("六龍").map(&:urn),
+                   "an un-flagged corpus keeps its whole-run main-lane matches — never fewer hits than before"
+    end
+
+    def test_cjk_scoped_and_main_lane_hits_merge_without_duplicates
+      cjk_seed!
+      whole = make_document(source: @nc, urn: "urn:d:whole", language: "lzh")
+      make_passage(whole, urn: "urn:d:whole:1", text: "六龍", sequence: 0, language: "lzh")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: %w[open])
+
+      urns = search("六龍").map(&:urn)
+      assert_equal %w[urn:d:han:1 urn:d:whole:1], urns.sort,
+                   "scoped substring hits and out-of-scope whole-run hits both serve, deduped"
+    end
+
+    def test_mixed_query_never_engages_the_cjk_lane
+      cjk_seed!
+      eng = make_document(source: @open, urn: "urn:d:eng", language: "eng")
+      make_passage(eng, urn: "urn:d:eng:1", text: "the 六龍 dragons", sequence: 0, language: "eng")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: %w[open])
+
+      assert_equal %w[urn:d:eng:1], search("六龍 dragons").map(&:urn),
+                   "a mixed query keeps plain main-lane semantics"
+    end
+
+    def test_cjk_lane_degrades_when_the_tables_are_absent
+      cjk_seed!
+      @fulltext.drop_table(Nabu::Store::Indexer::CJK_TABLE)
+      @fulltext.drop_table(Nabu::Store::Indexer::CJK_SCOPE_TABLE)
+
+      assert_equal [], search("六龍").map(&:urn),
+                   "a pre-P93 fulltext file serves main-lane semantics without erroring"
+    end
+
     # -- term-less filtered browse (P42-6) -----------------------------------
     # The mode the shipped recipes always promised: no query, a content filter
     # narrows WHICH passages, and the catalog is listed in corpus order with no

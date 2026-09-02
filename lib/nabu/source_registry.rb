@@ -181,12 +181,13 @@ module Nabu
     # An index-time policy flag like fuzzy_index, and the same posture
     # doctrine: declared per source in sources.yml, never hardcoded.
     Entry = Data.define(:slug, :adapter_class_name, :wired, :sync_policy, :kind, :translations,
-                        :license_watch, :fuzzy_index, :lemma_tier, :lemma_dictionary_filter,
+                        :license_watch, :fuzzy_index, :cjk_index, :lemma_tier,
+                        :lemma_dictionary_filter,
                         :classes, :siblings, :axes,
                         :grant_required, :grant, :availability, :quickstart, :multilingual,
                         :group, :requires) do
       def initialize(slug:, adapter_class_name:, wired:, sync_policy:, kind: DEFAULT_KIND,
-                     translations: false, license_watch: nil, fuzzy_index: false,
+                     translations: false, license_watch: nil, fuzzy_index: false, cjk_index: false,
                      lemma_tier: DEFAULT_LEMMA_TIER, lemma_dictionary_filter: false,
                      classes: nil, siblings: nil, axes: [],
                      grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
@@ -372,6 +373,7 @@ module Nabu
         translations: boolean!(slug, config, "translations"),
         license_watch: license_watch!(slug, config),
         fuzzy_index: boolean!(slug, config, "fuzzy_index"),
+        cjk_index: boolean!(slug, config, "cjk_index"),
         lemma_tier: lemma_tier!(slug, config),
         lemma_dictionary_filter: boolean!(slug, config, "lemma_dictionary_filter"),
         classes: classes!(slug, config),
@@ -769,6 +771,15 @@ module Nabu
     # what the Indexer scopes its trigram pass to. Registration order.
     def fuzzy_slugs
       @entries.each_value.select(&:fuzzy_index).map(&:slug)
+    end
+
+    # Slugs opted into the CJK bigram lane (P93-3, №R-39 b) — what the
+    # Indexer scopes its bigram pass to. The fuzzy_index posture doctrine
+    # exactly: an index-economics owner flag in sources.yml (measured
+    # 2026-09-02: ~22M CJK passages across the flagged sources), never a
+    # hardcode. Registration order.
+    def cjk_slugs
+      @entries.each_value.select(&:cjk_index).map(&:slug)
     end
 
     # Slugs under the silver-lemma dictionary filter (P84-1) — what the
