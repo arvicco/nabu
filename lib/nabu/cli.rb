@@ -2857,6 +2857,83 @@ module Nabu
       raise Thor::Error, e.message
     end
 
+    desc "embed", "Build/refresh the semantic vectors over the embed-flagged sources (P93-4, №R-36)"
+    long_desc <<~HELP, wrap: false
+      The semantic-vector build lane (№R-36, P79-5 trial): encodes every
+      live passage of the embed-flagged sources (registry
+      `embed_index: true` — the literary core; the trial priced the full
+      library as a measured NO) with the trial's model
+      (multilingual-e5-base, venv worker) into db/vectors.sqlite3 — the
+      store `search --similar` reads.
+
+      INCREMENTAL BY CONSTRUCTION (the ruling's design constraint): rows
+      key on (model, urn) plus the sha of the exact text embedded, never
+      passage ids — so a rebuild invalidates nothing, and every run is a
+      delta: the first is the priced ~22 h build (batches commit as they
+      land; interrupt and re-fire freely), later runs re-embed only new
+      or revised text, usually seconds. Only a deliberate MODEL change
+      re-embeds everything, beside the old rows, never over them.
+
+      Pointed Hebrew/Aramaic embeds a marks-stripped variant (the trial's
+      finding: the pointed text carries zero signal for this model
+      class); the stored passage text is untouched.
+
+      One-time setup: the venv (python + sentence-transformers + the
+      model) is an owner-run network bootstrap — docs/manual/embed-venv.md.
+      Default home ~/.nabu/venvs/embed (override: --venv or
+      $NABU_EMBED_VENV).
+
+      Modes:
+        nabu embed --status       census (fresh/stale/missing) + honest ETA, nothing runs
+        nabu embed                the campaign (delta; first run ~22 h, resumable)
+        nabu embed --limit 500    bounded smoke run
+    HELP
+    option :status, type: :boolean, default: false,
+                    desc: "Census the scope (fresh/stale/missing) and print the ETA; run nothing"
+    option :limit, type: :numeric, banner: "N", desc: "Stop after N passages (smoke runs)"
+    option :venv, type: :string, banner: "DIR",
+                  desc: "The embed venv (default ~/.nabu/venvs/embed or $NABU_EMBED_VENV)"
+    option :batch_size, type: :numeric, default: Nabu::Embed::DEFAULT_BATCH,
+                        desc: "Passages per model request (default #{Nabu::Embed::DEFAULT_BATCH})"
+    def embed
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      slugs = registry.embed_slugs
+      raise Thor::Error, "no sources flagged embed_index: true in config/sources.yml" if slugs.empty?
+
+      catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+      vectors = Nabu::Store.connect(config.vectors_path)
+      begin
+        embedder = Nabu::Embed.new(
+          catalog: catalog, vectors: vectors, slugs: slugs,
+          worker_argv: options[:status] ? nil : Nabu::Embed.worker_argv(venv: options[:venv]),
+          batch_size: options[:batch_size].to_i, limit: options[:limit]&.to_i,
+          progress: progress_reporter
+        )
+        census = embedder.census
+        say "embed scope: #{slugs.size} sources, #{commas(census.total)} live passages — " \
+            "#{commas(census.fresh)} fresh, #{commas(census.stale)} stale, " \
+            "#{commas(census.missing)} missing"
+        say "  owed: #{commas(census.stale + census.missing)} passages, estimated " \
+            "#{Nabu::Eta.format_seconds(census.eta_seconds)} at the measured " \
+            "#{Nabu::Embed::TRIAL_RATE.round(1)} passages/s (P79-5)"
+        return if options[:status]
+
+        result = embedder.run!
+        say "embedded #{commas(result.embedded)} passages in " \
+            "#{Nabu::Eta.format_seconds(result.elapsed_seconds)} " \
+            "(#{result.rate.round(1)}/s); skipped: #{commas(result.skipped_fresh)} fresh, " \
+            "#{commas(result.skipped_empty)} empty"
+        say "  model: #{result.model} dim #{result.dim} (worker #{result.worker_version})"
+        say "  store: #{config.vectors_path}"
+      ensure
+        catalog.disconnect
+        vectors.disconnect
+      end
+    rescue Nabu::Error => e
+      raise Thor::Error, e.message
+    end
+
     desc "align REF", "Render one citation across every witness of a registered work (the alignment hub)"
     long_desc <<~HELP, wrap: false
       Cross-source alignment (architecture §10): one citation of a registered

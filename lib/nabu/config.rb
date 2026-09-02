@@ -24,6 +24,7 @@ module Nabu
     DEFAULT_PROFILE_PATH = File.join("config", "profile.yml")
     CATALOG_DB_FILENAME = "catalog.sqlite3"
     FULLTEXT_DB_FILENAME = "fulltext.sqlite3"
+    VECTORS_DB_FILENAME = "vectors.sqlite3"
     HISTORY_DB_FILENAME = "history.sqlite3"
     LINKS_DB_FILENAME = "links.sqlite3"
     LECTS_DB_FILENAME = "lects.sqlite3"
@@ -272,6 +273,15 @@ module Nabu
     # the index is derived-of-derived and rebuilt at will.
     def fulltext_path
       File.join(db_dir, FULLTEXT_DB_FILENAME)
+    end
+
+    # The semantic-vector store (P93-4, №R-36; architecture's named home).
+    # Lives in db/ but is EXPENSIVE-derived (~22h to regenerate): rebuild
+    # deletes the catalog/fulltext files by name and never this one —
+    # `nabu embed` maintains it incrementally, keyed (model, urn, text
+    # sha), so its rows stay valid across rebuilds by construction.
+    def vectors_path
+      File.join(db_dir, VECTORS_DB_FILENAME)
     end
 
     # The history ledger (architecture §5, P7-1). LOCAL-INSTANCE since

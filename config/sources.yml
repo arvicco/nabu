@@ -45,6 +45,12 @@
 #                                        #   Han/kana-run sources; measured
 #                                        #   ~22M CJK passages 2026-09-02;
 #                                        #   default false)
+#     embed_index: true                  # include in the semantic-vector scope
+#                                        #   (nabu embed / search --similar;
+#                                        #   P93-4, №R-36 — the literary core:
+#                                        #   17 slugs / 4.94M passages measured
+#                                        #   2026-09-02; full library was a
+#                                        #   measured NO; default false)
 #     axes: [classical, ...]             # research-axis memberships (P35-0) —
 #                                        #   REQUIRED, >= 1, names defined in
 #                                        #   config/axes.yml. Axes are TAGS
@@ -89,6 +95,7 @@
 
 perseus-greek:
   adapter: Nabu::Adapters::Perseus
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [classical]
   siblings: cts  # P34-0: the dotted-version form (perseus-eng<n> editions of one work)
   wired: true   # first real sync verified + owner sign-off 2026-07-03 (P2-5)
@@ -100,6 +107,7 @@ perseus-greek:
 
 perseus-latin:
   adapter: Nabu::Adapters::PerseusLatin
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [classical]
   siblings: cts  # P34-0: the dotted-version form (same mechanism as perseus-greek)
   wired: true   # first real sync + owner sign-off 2026-07-07: 290 docs / 264,555 passages (+85 eng editions, 75,921 passages), Aeneid 1.1 eyeballed grc+eng
@@ -108,6 +116,7 @@ perseus-latin:
 
 first1k-greek:
   adapter: Nabu::Adapters::First1kGreek
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [classical]
   siblings: cts  # P34-0: the dotted-version form (the -eng<n> editions, P9-1)
   wired: true   # first real sync verified + owner sign-off 2026-07-04
@@ -266,6 +275,7 @@ ud:
 
 proiel:
   adapter: Nabu::Adapters::Proiel
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   quickstart: true   # the starter shelf (P44-r3c) — a fresh box's default enabled set
   axes: [classical, slavic, germanic]
   wired: true   # first real sync verified + owner sign-off 2026-07-04
@@ -278,6 +288,7 @@ proiel:
 
 torot:
   adapter: Nabu::Adapters::Torot
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [slavic]
   wired: true   # first real sync verified + owner sign-off 2026-07-04
   # TOROT (Tromsø Old Russian + OCS) is the same PROIEL 2.1 XML as proiel, but
@@ -459,6 +470,7 @@ lexica:
 
 vulgate:
   adapter: Nabu::Adapters::Vulgate
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [classical, biblical]
   wired: true    # OWNER SIGN-OFF 2026-07-10: synced, 73 books / 35,809 verses
                    # (complete Clementine canon), align OT witness eyeballed
@@ -474,6 +486,7 @@ vulgate:
 
 eng-web:
   adapter: Nabu::Adapters::EngWeb
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [biblical]
   wired: true    # OWNER SIGN-OFF 2026-07-10: synced, 84 books / 37,624 verses,
                    # FRT/GLO skip-by-rule; trilingual JON 1 eyeballed.
@@ -489,6 +502,7 @@ eng-web:
 
 sblgnt:
   adapter: Nabu::Adapters::Sblgnt
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   quickstart: true   # the starter shelf (P44-r3c) — a fresh box's default enabled set
   axes: [biblical]
   wired: true    # OWNER SIGN-OFF 2026-07-10: synced, 27 books / 7,939 verses,
@@ -541,6 +555,7 @@ ccl:
 
 ccmh:
   adapter: Nabu::Adapters::Ccmh
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [slavic]
   wired: true    # OWNER SIGN-OFF 2026-07-11: synced, 16 gospel docs / 11,082
                    # verses, Assemanianus Mt 1:1 eyeballed.
@@ -1217,6 +1232,7 @@ suttacentral:
 
 oshb:
   adapter: Nabu::Adapters::Oshb
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [biblical, hebrew]
   wired: true    # flipped 2026-07-18 (owner sign-off: synced, three-legged align eyeballed)
                    # clone of openscriptures/morphhb; wlc/ itself ~27 MB —
@@ -1260,6 +1276,7 @@ sdbh:
   # by its own README and actively growing: re-syncs are an owner decision.
 sefaria:
   adapter: Nabu::Adapters::Sefaria
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [biblical, hebrew]
   wired: true # flipped 2026-07-19 (Targum shelf synced, owner sign-off);
                    # P46-1 adds the Rabbinic wave-1 shelves to the SAME wired
@@ -1560,6 +1577,7 @@ hypotactic:
 
 dss:
   adapter: Nabu::Adapters::Dss
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [biblical, hebrew]
   wired: true # flipped 2026-07-19 (owner sign-off: Hebrew shelf synced, flip ordered)
                    # checklist §6: bin/nabu sync dss — sparse GitFetch cone
@@ -1706,6 +1724,7 @@ dcs:
 
 diorisis:
   adapter: Nabu::Adapters::Diorisis
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [classical]
   wired: true    # flipped 2026-07-18 (owner sign-off: synced via P26-6 live proof — 764 docs / 502,865 passages, 53 Rahlfs files excluded by rule, eyeballed)
                    # the frozen figshare v1 zip — 194,443,428 bytes, md5
@@ -1743,6 +1762,7 @@ diorisis:
 
 glaux:
   adapter: Nabu::Adapters::Glaux
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [classical]
   wired: true    # Owner flip 2026-07-25. First-sync proof 2026-07-24 (the
                    # from-scratch `sync glaux --redownload`: wipe → staged
@@ -1777,6 +1797,7 @@ glaux:
 
 croala:
   adapter: Nabu::Adapters::Croala
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [classical, romance]  # D45-a (owner 2026-07-25): the continuum's Latin side
   wired: true    # Owner flip 2026-07-25 (first sync 2026-07-24: 570 docs /
                    # 309,180 passages; eyeballed via
@@ -3030,6 +3051,7 @@ pedecerto:
 
 digiliblt:   # P45-3
   adapter: Nabu::Adapters::Digiliblt
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [classical, romance]   # late-antique Latin: the classical desk's 2nd–7th c.
                                # band AND the romance desk's ancestor shelf (dual-tag,
                                # never folding — the D35 rule)
@@ -4090,6 +4112,7 @@ itkc:
 
 corpus-corporum:
   adapter: Nabu::Adapters::CorpusCorporum
+  embed_index: true   # P93-4 (№R-36): the semantic-vector literary core
   axes: [classical, romance]  # the croala/digiliblt precedent: the continuum's Latin side
   wired: true   # flipped 2026-08-21 (owner: "wire everything on"; first sync owner-round-verified)
                  # owner-fired (a multi-hour polite crawl: ~6,700 catalog GETs

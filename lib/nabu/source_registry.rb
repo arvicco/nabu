@@ -181,13 +181,14 @@ module Nabu
     # An index-time policy flag like fuzzy_index, and the same posture
     # doctrine: declared per source in sources.yml, never hardcoded.
     Entry = Data.define(:slug, :adapter_class_name, :wired, :sync_policy, :kind, :translations,
-                        :license_watch, :fuzzy_index, :cjk_index, :lemma_tier,
+                        :license_watch, :fuzzy_index, :cjk_index, :embed_index, :lemma_tier,
                         :lemma_dictionary_filter,
                         :classes, :siblings, :axes,
                         :grant_required, :grant, :availability, :quickstart, :multilingual,
                         :group, :requires) do
       def initialize(slug:, adapter_class_name:, wired:, sync_policy:, kind: DEFAULT_KIND,
                      translations: false, license_watch: nil, fuzzy_index: false, cjk_index: false,
+                     embed_index: false,
                      lemma_tier: DEFAULT_LEMMA_TIER, lemma_dictionary_filter: false,
                      classes: nil, siblings: nil, axes: [],
                      grant_required: false, grant: nil, availability: DEFAULT_AVAILABILITY,
@@ -374,6 +375,7 @@ module Nabu
         license_watch: license_watch!(slug, config),
         fuzzy_index: boolean!(slug, config, "fuzzy_index"),
         cjk_index: boolean!(slug, config, "cjk_index"),
+        embed_index: boolean!(slug, config, "embed_index"),
         lemma_tier: lemma_tier!(slug, config),
         lemma_dictionary_filter: boolean!(slug, config, "lemma_dictionary_filter"),
         classes: classes!(slug, config),
@@ -780,6 +782,16 @@ module Nabu
     # hardcode. Registration order.
     def cjk_slugs
       @entries.each_value.select(&:cjk_index).map(&:slug)
+    end
+
+    # Slugs opted into the semantic-vector scope (P93-4, №R-36) — the
+    # literary core `nabu embed` builds vectors for. The trial's ruling
+    # scoped the feature to literary same-language retrieval (the
+    # full-library extrapolation was a measured NO); the flag is the
+    # owner's scope lever, same posture doctrine as fuzzy_index/cjk_index.
+    # Registration order.
+    def embed_slugs
+      @entries.each_value.select(&:embed_index).map(&:slug)
     end
 
     # Slugs under the silver-lemma dictionary filter (P84-1) — what the
