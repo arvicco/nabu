@@ -592,7 +592,11 @@ module Nabu
         ranked = urn ? true : rank?(variants, ubiquity_threshold)
         @rank_note = ranked ? nil : RANK_SKIP_NOTE
         inner_limit = limit * INNER_LIMIT_FACTOR
-        hits = if ranked
+        cjk = ranked ? cjk_lane_expression(variants) : nil
+        hits = if cjk
+                 cjk_merged_hits(cjk, variants, inner_limit: inner_limit, urn: urn,
+                                                index_match: index_match)
+               elsif ranked
                  fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn,
                                                           ranked: true, index_match: index_match)
                else
@@ -991,6 +995,58 @@ module Nabu
           .limit(inner_limit)
           .offset(offset)
           .all
+      end
+
+      # -- the CJK bigram lane (P93-3, №R-39 b) ------------------------------
+      # A ranked pure-CJK query consults the bigram lane FIRST: its hits
+      # are true substring matches over the cjk-flagged sources — the
+      # thing unicode61's one-token-per-run treatment can never answer.
+      # The main lane then contributes what it alone can see (whole-run
+      # matches in out-of-scope sources; within scope its matches are a
+      # subset of the lane's). The guard-sampled path stays main-lane: a
+      # term common enough to trip the guard serves in corpus order as
+      # before, and character-frequency questions belong to `nabu char`.
+      # --exact/--word keep their glyph-literal main-lane semantics.
+
+      # The lane's MATCH expression for +variants+, or nil when the query
+      # leaves the lane (mixed/Latin — CjkBigrams declines) or the
+      # fulltext file predates it (degrade, never error).
+      def cjk_lane_expression(variants)
+        expression = Store::CjkBigrams.search_expression(variants)
+        return nil unless expression
+        return nil unless @fulltext.table_exists?(Store::Indexer::CJK_TABLE)
+
+        expression
+      rescue Sequel::DatabaseError
+        nil
+      end
+
+      # Lane hits first (bm25 within the lane), then the main lane's
+      # remainder, deduped by passage id, capped at the inner window.
+      def cjk_merged_hits(expression, variants, inner_limit:, urn:, index_match:)
+        lane = cjk_hits(expression, inner_limit: inner_limit, urn: urn, index_match: index_match)
+        seen = lane.to_h { |row| [row.fetch(:passage_id), true] }
+        main = fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn,
+                                                        ranked: true, index_match: index_match)
+        (lane + main.reject { |row| seen[row.fetch(:passage_id)] }).first(inner_limit)
+      end
+
+      # The lane query: contentless, so rowid (= passages.id) is the hit,
+      # aliased so the page assembly downstream stays lane-agnostic. The
+      # language/source sentinel conjuncts compose exactly as on the main
+      # table (the lane carries the same columns).
+      def cjk_hits(expression, inner_limit:, urn:, index_match:)
+        expression = "(#{expression}) AND #{index_match}" if index_match
+        dataset = @fulltext[Store::Indexer::CJK_TABLE]
+                  .where(Sequel.lit("passages_cjk MATCH ?", expression))
+        if urn
+          dataset = dataset.where(Sequel.lit("rowid") => @catalog[:passages].where(urn: urn)
+                                                                            .select_map(:id))
+        end
+        dataset.select(Sequel.lit("rowid").as(:passage_id))
+               .order(Sequel.lit("bm25(passages_cjk)"))
+               .limit(inner_limit)
+               .all
       end
 
       # The --urn scope against the index (P93-1): the contentless shape

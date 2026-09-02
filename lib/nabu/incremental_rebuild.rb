@@ -242,6 +242,7 @@ module Nabu
         catalog: db, fulltext: fulltext,
         sign_list: Nabu::SignList.load_default(config: @config),
         alignments: AlignmentRegistry.load(@config.alignments_path),
+        cjk_slugs: @registry.cjk_slugs,
         trust: @trust_stages, progress: progress
       )
       raise Nabu::Error, stage_refusal if stage_refusal

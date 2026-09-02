@@ -62,6 +62,7 @@ module Nabu
       stats: "source stats",
       fts_lemma: "fts+lemma reindex",
       trigram: "trigram",
+      cjk: "cjk bigrams",                 # P93-3: the №R-39 substring lane
       passage_chars: "char coverage",     # P72-1: the char coverage index
       passage_signs: "sign index",        # P77-r16: the OSL sign postings
       alignment: "alignment refs",
