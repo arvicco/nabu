@@ -1976,6 +1976,11 @@ module Nabu
                              "documents, revision-pruned passages) — substring match over the " \
                              "folded text, each hit labeled with its reason; composes with " \
                              "--limit only"
+    option :similar, type: :string, banner: "URN",
+                     desc: "Semantic neighbors of one embedded passage (P93-5, №R-36): " \
+                           "same-language cross-edition retrieval over the nabu-embed vectors, " \
+                           "rendered in bands (close/near/loose), model named in the header — " \
+                           "IS the query (give no term); composes with --limit only"
     option :long, type: :boolean, default: false,
                   desc: "With --fuzzy: print the full folded passage instead of the windowed snippet"
     option :gold_only, type: :boolean, default: false,
@@ -2081,6 +2086,15 @@ module Nabu
                              "--lemma/--near/--fuzzy/--morph (they compose with a plain text query)"
         end
         return char_structured_search(query)
+      end
+      if options[:similar]
+        unless query.empty? && !options[:fuzzy] && !options[:near] && !options[:lemma] &&
+               !options[:morph] && !options[:exact] && !options[:word] && !options[:scan] &&
+               !options[:withdrawn] && !char_filter_options? && !options[:sign]
+          raise Thor::Error, "search: --similar URN is the semantic-neighbors page — the urn IS " \
+                             "the query (give no term); it composes with --limit only"
+        end
+        return similar_search(options[:similar])
       end
       if options[:withdrawn]
         if query.empty? || options[:fuzzy] || options[:near] || options[:lemma] || options[:morph] ||
@@ -4042,6 +4056,11 @@ module Nabu
         # edges. Absent file = no batch has run (a graceful state).
         links: readonly_opener(config.links_path) do
           Nabu::Store.connect(config.links_path, readonly: true)
+        end,
+        # The vector store, read-only (P93-5): nabu_search's similar_to.
+        # Absent file = never embedded (the honest-note state).
+        vectors: readonly_opener(config.vectors_path) do
+          Nabu::Store.connect(config.vectors_path, readonly: true)
         end,
         # Static config, loaded once — a malformed registry fails HERE, loudly,
         # not mid-conversation.
@@ -7642,6 +7661,36 @@ module Nabu
         say "character filter: [#{labels}] — #{outcome.char_count} " \
             "#{outcome.char_count == 1 ? 'character' : 'characters'} resolved#{text_note}"
         say Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT if outcome.incomplete
+      end
+
+      # The semantic-neighbors page (P93-5, №R-36): URN-anchored, no model
+      # at query time — one sqlite-vec scan of the same-language subpool.
+      # Every absent-machinery case surfaces as the query layer's honest
+      # hint (store not built / anchor unembedded / extension missing).
+      def similar_search(urn)
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+        vectors = Nabu::Store.connect(config.vectors_path)
+        finder = Nabu::Query::Similar.new(catalog: catalog, vectors: vectors)
+        page = finder.run(urn, limit: options[:limit].to_i)
+        say "similar to #{page.anchor_urn} [#{page.language}] — model #{page.model}, " \
+            "same-language only (cross-language is not served: the P79-5 measurement)"
+        if page.results.empty?
+          say "no neighbors in the store"
+        else
+          page.results.each do |result|
+            say "#{result.urn}  (#{result.band})#{"  — #{result.document_title}" if result.document_title}"
+            say "  #{display_snippet(result.snippet, result.language)}"
+          end
+          say "#{page.results.size} #{page.results.size == 1 ? 'neighbor' : 'neighbors'} " \
+              "(banded semantic similarity — never a curated alignment; nabu align serves those)"
+        end
+        print_display_footer
+      ensure
+        catalog&.disconnect
+        vectors&.disconnect
       end
 
       # The attic search (P93-2, №R-16 half 1): scan the withdrawn set,

@@ -35,12 +35,13 @@ module MCP
 
     def tools(catalog: @catalog, fulltext: @fulltext, ledger: nil, links: nil, registry: nil,
               enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil,
-              readings: nil, hieroglyphs: nil, lect_rules: nil, lect_override_tiers: nil)
+              readings: nil, hieroglyphs: nil, lect_rules: nil, lect_override_tiers: nil,
+              vectors: nil)
       Nabu::MCP::Tools.new(catalog: catalog, fulltext: fulltext, ledger: ledger, links: links,
                            registry: registry, enabled_slugs: enabled_slugs, pleiades: pleiades,
                            sign_list: sign_list, tibetan_words: tibetan_words, lects: lects,
                            readings: readings, hieroglyphs: hieroglyphs, lect_rules: lect_rules,
-                           lect_override_tiers: lect_override_tiers)
+                           lect_override_tiers: lect_override_tiers, vectors: vectors)
     end
 
     def make_document(source: @open, urn: "urn:d:1", title: "Iliad", language: "grc",
@@ -268,6 +269,53 @@ module MCP
       ranked = payload(call("nabu_search", { "query" => "αειδε" }))
       refute_match(/too common to rank/, ranked.fetch("note"),
                    "below the real threshold the note is byte-identical to before P42-2")
+    end
+
+    # -- nabu_search similar_to: the semantic-neighbors lane (P93-5) -----------
+
+    def test_similar_to_without_a_vector_store_answers_the_build_note
+      result = tools.call("nabu_search", { "similar_to" => "urn:d:1:1" })
+      assert_includes text_of(result), "nabu embed",
+                      "an unconfigured lane answers the honest build hint, never an error"
+    end
+
+    def test_similar_to_serves_banded_neighbors_from_the_store
+      skip "sqlite-vec extension not installed on this box" \
+        unless File.exist?(Nabu::Query::Similar.extension_path)
+
+      doc = make_document(urn: "urn:d:sim", language: "grc")
+      make_passage(doc, urn: "urn:d:sim:1", text: "μῆνιν ἄειδε", sequence: 0)
+      make_passage(doc, urn: "urn:d:sim:2", text: "μῆνιν οὐλομένην", sequence: 1)
+      vectors = Sequel.sqlite
+      begin
+        Nabu::Embed.ensure_schema!(vectors)
+        vectors[Nabu::Embed::META_TABLE].insert(model: Nabu::Embed::MODEL, dim: 4, encoding: "i8",
+                                                worker_version: "test",
+                                                updated_at: Time.now.utc.iso8601)
+        { "urn:d:sim:1" => [127, 0, 0, 0], "urn:d:sim:2" => [126, 9, 0, 0] }.each do |urn, values|
+          vectors[Nabu::Embed::VECTORS_TABLE].insert(
+            model: Nabu::Embed::MODEL, urn: urn, language: "grc",
+            text_sha: "sha-#{urn}", vec: Sequel.blob(values.pack("c*"))
+          )
+        end
+
+        result = tools(vectors: vectors).call("nabu_search", { "similar_to" => "urn:d:sim:1" })
+        body = payload(result)
+        assert_equal "urn:d:sim:1", body.fetch("anchor")
+        assert_equal Nabu::Embed::MODEL, body.fetch("model")
+        assert_equal([%w[urn:d:sim:2 close]],
+                     body.fetch("results").map { |row| [row.fetch("urn"), row.fetch("band")] })
+        assert_match(/never a curated alignment/, body.fetch("note"))
+      ensure
+        vectors.disconnect
+      end
+    end
+
+    def test_similar_to_rejects_a_composed_query
+      error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        tools.call("nabu_search", { "similar_to" => "urn:x", "query" => "μηνιν" })
+      end
+      assert_match(/replaces query/, error.message)
     end
 
     # -- nabu_search words: the Tibetan word-grain filter (P54-4) --------------

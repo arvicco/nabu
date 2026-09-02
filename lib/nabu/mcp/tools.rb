@@ -383,6 +383,16 @@ module Nabu
         properties: {
           query: { type: "string",
                    description: "Full-text query. Mutually exclusive with lemma." },
+          similar_to: { type: "string",
+                        description: "A passage URN: return its SEMANTIC neighbors instead of a " \
+                                     "text search (same-language cross-edition retrieval over " \
+                                     "the local vector store — other witnesses of a verse, " \
+                                     "passages saying the same thing). Banded close/near/loose, " \
+                                     "never raw scores; same-language ONLY (cross-language " \
+                                     "measured unreliable and not served); model named in the " \
+                                     "payload — statistical similarity, never a curated " \
+                                     "alignment (nabu_align/nabu_parallels serve those). " \
+                                     "Replaces query/lemma; composes with limit only." },
           lemma: { type: "string",
                    description: "Dictionary form for exact-lemma treebank search. " \
                                 "Mutually exclusive with query." },
@@ -782,10 +792,16 @@ module Nabu
       # the entrypoint, resolved per call like the connection slots.
       def initialize(catalog:, fulltext:, alignments: nil, ledger: nil, links: nil, registry: nil,
                      enabled_slugs: nil, pleiades: nil, sign_list: nil, tibetan_words: nil, lects: nil,
-                     readings: nil, hieroglyphs: nil, lect_rules: nil, lect_override_tiers: nil)
+                     readings: nil, hieroglyphs: nil, lect_rules: nil, lect_override_tiers: nil,
+                     vectors: nil)
         @catalog = catalog
         @fulltext = fulltext
         @alignments = alignments
+        # The vector store (P93-5, nabu_search's similar_to): nil
+        # (unconfigured — similar_to answers its honest build-hint note,
+        # every other call byte-identical: the lane-off rule) or a
+        # resolvable opener like @catalog.
+        @vectors = vectors
         # The P81 U-5 lect-provenance gloss seams: the compiled rules (their
         # tier: words) and the {slug => {code => tier}} override map. Static
         # config, loaded once by the entrypoint (the alignments posture);
@@ -883,6 +899,8 @@ module Nabu
       # -- handlers --------------------------------------------------------------
 
       def search(args)
+        return similar_neighbors(args) if args["similar_to"]
+
         term, mode = search_term(args)
         morph = search_morph(args, mode)
         near = search_near(args, morph)
@@ -916,6 +934,46 @@ module Nabu
                                place_note: place_note)
       rescue Query::MorphFacets::Error => e
         raise InvalidArguments, e.message
+      end
+
+      # The similar_to lane (P93-5): URN-anchored semantic neighbors from
+      # the vector store — no model at serve time, one sqlite-vec scan.
+      # Every absent-machinery case (store unbuilt, anchor unembedded,
+      # extension missing, lane unconfigured) answers as an honest NOTE the
+      # model can act on, never a protocol error. Restricted license
+      # classes are excluded exactly as the text-search page excludes them.
+      def similar_neighbors(args)
+        raise InvalidArguments, "similar_to replaces query/lemma — give exactly one" if args["query"] || args["lemma"]
+
+        catalog = resolve(@catalog) or return note(NO_CORPUS_NOTE)
+        vectors = resolve(@vectors)
+        if vectors.nil?
+          return note("no vector store on this box — `nabu embed` builds it " \
+                      "(docs/manual/embed-venv.md); similar_to serves nothing until then")
+        end
+
+        limit = clamp(args["limit"], default: SEARCH_DEFAULT_LIMIT, max: SEARCH_MAX_LIMIT)
+        include_restricted = args["include_restricted"] == true
+        page = Query::Similar.new(catalog: catalog, vectors: vectors)
+                             .run(args["similar_to"], limit: limit)
+        results = page.results
+        results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
+        json({
+               anchor: page.anchor_urn, language: page.language, model: page.model,
+               note: "banded semantic similarity (close/near/loose), same-language only — " \
+                     "statistical, never a curated alignment",
+               results: results.map do |result|
+                 {
+                   urn: result.urn, language: result.language, band: result.band,
+                   snippet: result.snippet, document_title: result.document_title,
+                   license_class: result.license_class, credit: result.credit
+                 }.compact
+               end
+             })
+      rescue InvalidArguments
+        raise # the server's isError contract — never folded into a note
+      rescue Nabu::Error => e
+        note(e.message)
       end
 
       def show(args)
