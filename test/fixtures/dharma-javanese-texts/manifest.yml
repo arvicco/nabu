@@ -1,0 +1,19 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Two TRIMMED critical editions + one whole diplomatic transcription (README.md).
+source: dharma-javanese-texts
+adapter_test: null
+retrieved: 2026-09-01
+files:
+  - path: editions/DHARMA_CritEdKakavinDesavarnana.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfd-nusantara-philology/master/editions/DHARMA_CritEdKakavinDesavarnana.xml
+    whole: false
+    trim: the edition's chapter 1 only; translation div stubbed (element-boundary cuts)
+  - path: editions/DHARMA_CritEdBhimaSvarga.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfd-nusantara-philology/master/editions/DHARMA_CritEdBhimaSvarga.xml
+    whole: false
+    trim: the edition's first ten paragraphs (element-boundary cut)
+  - path: editions/DHARMA_DiplEdDurgastakaPerpusnasL128.xml
+    url: https://raw.githubusercontent.com/erc-dharma/tfd-nusantara-philology/master/editions/DHARMA_DiplEdDurgastakaPerpusnasL128.xml
+    whole: true

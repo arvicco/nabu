@@ -137,6 +137,22 @@ class OkhcTest < Minitest::Test
     assert_equal "en", record.language
   end
 
+  # --- P92-6 (Q64): the year field onto the timeline ------------------------
+
+  def test_dating_registers_in_the_metadata_dates_lane
+    assert_equal :year_key, Nabu::Store::TimelineBuilder::MetadataDates::SHAPES["okhc"],
+                 "the per-record year projects through the catalog lane — no re-parse"
+  end
+
+  def test_the_year_key_shape_reads_only_integer_years
+    shape = Nabu::Store::TimelineBuilder::MetadataDates.method(:year_key)
+    assert_equal [1145, 1145, "1145"], shape.call({ "year" => 1145 }),
+                 "a bare integer year is a one-year envelope"
+    assert_equal [nil, nil, nil], shape.call({}), "year-less records mint nothing"
+    assert_equal [nil, nil, nil], shape.call({ "year" => "1145?" }),
+                 "no bounds invented from prose"
+  end
+
   # --- defensive quarantines ------------------------------------------------
 
   def test_an_unknown_language_label_quarantines_the_record

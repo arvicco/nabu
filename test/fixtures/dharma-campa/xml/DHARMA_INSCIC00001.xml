@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://raw.githubusercontent.com/erc-dharma/project-documentation/master/schema/latest/DHARMA_SQF.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="eng">
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>The back of a Viṣṇu Statue at Biên Hòa (C. 1), 1343 Śaka</title>
+				<respStmt>
+					<resp key="contributor">EpiDoc Encoding</resp>
+					<persName ref="part:argr">
+						<forename>Arlo</forename>
+						<surname>Griffiths</surname>
+					</persName>
+				</respStmt>
+				<respStmt>
+					<resp key="creator">intellectual authorship of edition</resp>
+					<persName ref="part:argr">
+						<forename>Arlo</forename>
+						<surname>Griffths</surname>
+					</persName>
+				</respStmt>
+				<respStmt>
+					<resp key="contributor">Conversion of encoding for DHARMA</resp>
+					<persName ref="part:argr">
+						<forename>Arlo</forename>
+						<surname>Griffiths</surname>
+					</persName>
+				</respStmt>
+			</titleStmt>
+			<publicationStmt>
+				<authority><ref target="https://dharmalekha.info">DHARMA</ref></authority>
+				<pubPlace>Paris</pubPlace>
+				<idno type="filename">DHARMA_INSCIC00001.xml</idno>
+				<availability><licence target="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</licence></availability>
+				<date from="2019" to="2026">2019-2026</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblFull>
+					<titleStmt>
+						<title>The back of a Viṣṇu Statue at Biên Hòa</title>
+						<editor>Arlo Griffiths</editor>
+					</titleStmt>
+					<editionStmt>
+						<p>First digital edition made by École française d'Extrême-Orient (EFEO), realized in collaboration with the Institute for the Study of the Ancient World (ISAW) at New York University as <ref target="https://isaw.nyu.edu/publications/inscriptions/campa/index.html">The Corpus of the Inscriptions of Campā, in 2010-2012.</ref>
+						</p>
+					</editionStmt>
+					<publicationStmt>
+						<authority>École française d'Extrême-Orient (EFEO)</authority>
+						<idno type="filename">DHARMA_INSCIC00001</idno>
+						<availability>
+							<licence target="http://creativecommons.org/licenses/by/3.0/">
+								<p>Copyright (c) 2012 by Arlo Griffiths.</p>
+								<p>This work is licensed under the Creative Commons Attribution 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.</p>
+							</licence>
+						</availability>
+					</publicationStmt>
+				</biblFull>
+				<msDesc>
+					<msIdentifier>
+						<repository>DHARMAbase</repository>
+						<idno/>
+						<altIdentifier type="campa">
+							<idno>C. 1</idno>
+						</altIdentifier>
+						<altIdentifier type="majumdar-nr">
+							<idno>No. 121</idno>
+						</altIdentifier>
+					</msIdentifier>
+					<msContents>
+						<summary/>
+					</msContents>
+					<physDesc>
+						<handDesc>
+							<p/>
+						</handDesc>
+					</physDesc>
+				</msDesc>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+         <p>Encoded in TEI/EpiDoc according to the <ref target="https://hal.science/halshs-02888186">DHARMA Encoding Guide for Documentary Editions, version 2</ref></p>
+      </encodingDesc>
+		<revisionDesc>
+		<change when="2024-04-07" who="part:argr" status="draft">corrected respStmt</change>
+		<change when="2024-04-07" who="part:argr" status="draft">corrected encoding of g, updated the whole encoding with DHARMA norms and results published in Griffiths 2019</change>
+		<change when="2021-07-03" who="part:argr" status="draft">Resolved validation problems.</change>
+		<change when="2020-09-14" who="part:axja" status="draft">Campa file transformed to follow the DHARMA encoding structure. Metadata extracted to be checked and updated according DHARMA workflow. Done through XSLT.</change>
+		</revisionDesc>
+	</teiHeader>
+	<facsimile>
+		<graphic url="EFEOB-est.n0263.jpg">
+			<desc>Photograph of EFEO estampage 263 (inverted horizontally).</desc>
+		</graphic>
+	</facsimile>
+	<text xml:space="preserve"><body><div type="edition" xml:lang="ocm-Latn" rendition="class:83233 maturity:00000">
+<p><lb n="1"/><g ref="sym:bar" type="punctuation">.</g><g ref="sym:floret" type="symbol">*</g><g ref="sym:bar" type="punctuation">.</g> svasti<g ref="sym:bar" type="punctuation">.</g> pu pom̃ ku nan· sūnnu
+<lb n="2"/>yām̃ pom̃ ku śrī jaya siṅhavarmmadeva
+<lb n="3"/>Urām̃ ṅauk· glauṅ· vijaya paripāla rāṣ<orig>t</orig>ra sim̃ tmum̃
+<lb n="4"/>jaya di nagara yvan· maUdyāṇna gulāc· tok· nagara
+<lb n="5"/>braḥ kānda nī yuddha Aneka sim̃ tmum̃ gulāc· jem̃ nagara ca<lb break="no" n="6"/>mpa di śaka loka-Aṣṭārdh<orig>a</orig>nalaḥ-ṇrapaḥ pakram̃t<unclear>t</unclear>a tri<lb break="no" n="7"/>bh<choice><sic>a</sic><corr>u</corr></choice>vanākrānta nī ṅan· ri jittasatrāsi sim̃ tmum̃ jaya di kvīra
+<lb n="8"/>tmum̃ vuḥ bhogopabhoga yathādeva liṅga vukam̃n· rim̃ sim̃ jmai tmum̃
+<lb n="9"/>jem̃ nagara kvīra jem̃ nagara campa sadākāla<g ref="sym:bar" type="punctuation">.</g>
+ </p>
+         </div><div type="apparatus">
+<listApp><!--Variants merely due to difference of transliteration conventions are not recorded.-->
+               <app loc="3">
+	<lem source="bib:Griffiths2019_01">Urām̃</lem><rdg source="bib:Cabaton1904_01">uraṅ</rdg>
+	</app>
+	<app loc="3">
+	<lem source="bib:Griffiths2019_01">rāṣ<orig>t</orig>ra</lem>
+	<rdg source="bib:Cabaton1904_01">rāṣṭra</rdg>
+	</app>
+	<app loc="6">
+	<lem source="bib:Griffiths2019_01">-Aṣṭārdh<orig>a</orig>nalaḥ-</lem>
+	<rdg source="bib:Cabaton1904_01">-ṣaṣṭārthānalaḥ-</rdg>
+	<!--<rdg source="bib:Aymonier1891_01">aṣṭārdhānalaḥ</rdg>-->
+	<!--<rdg source="bib:Finot">aṣṭārdhanalaḥ</rdg>-->
+	<note>Aymonier's proposal to read <foreign>aṣṭārdhānalaḥ</foreign> was mentioned in an authorial addition to <bibl><ptr target="bib:Cabaton1904_01"/><citedRange unit="page">690</citedRange></bibl>, while Finot took the editorial liberty of inserting his own reading <foreign>aṣṭārdhanalaḥ</foreign> in n. 5 on that same page. Although I do not see an <foreign>ā</foreign> marker on the <foreign>rdh</foreign>, I agree with Finot and Aymonier that it is necessary to understand <foreign>aṣṭārdha-analaḥ</foreign>.</note>
+	</app>
+	<app loc="6">
+	<lem source="bib:Griffiths2019_01">-ṇrapaḥ</lem>
+	<rdg source="bib:Cabaton1904_01">-ṇdapaḥ</rdg>
+	<note><!--We concur with Finot's reading, proposed in the same footnote. -->The same spelling is found in <ref target="DHARMA_INSCIC00043.xml">C. 43</ref>, face B, lines 4 and 7.</note>
+	</app>
+	<app loc="6">
+	<lem>pakram̃t<unclear>t</unclear>a</lem>
+	<rdg source="bib:Cabaton1904_01 bib:Griffiths2019_01">pakram̃ttha</rdg>
+<!--	<note>Cf. <ref target="DHARMA_INSCIC00043.xml">C. 43</ref>, face A, line 9 and c, lines 15 and 21; <ref target="DHARMA_INSCIC00118.xml">C. 118</ref>.</note>-->
+<note>This word must be equivalent to <foreign>pakram̃tta</foreign> in <ref target="DHARMA_INSCIC00042.xml">C. 42</ref>, line 10, where the subscript <foreign>t</foreign> is clear.</note></app>
+	<app loc="6">
+	<lem>tri<lb break="no" n="7"/>bh<choice><sic>a</sic><corr>u</corr></choice>vanākrānta</lem>
+	<note>Cf. <bibl><ptr target="bib:Vickery2004_01"/><citedRange unit="page">11, 51, 52</citedRange></bibl> for the name of the 16th-century Cambodian ruler Tribhuvanādityavarman, whose name is likewise spelt without the expected <foreign>u</foreign>.</note>
+	</app>
+	<app loc="7">
+	<lem source="bib:Griffiths2019_01">ri jittasatrāsi</lem>
+	<rdg source="bib:Cabaton1904_01">vijitta sa trā si</rdg>
+	<note>I am unable to interpret <foreign>ri</foreign>; as for <foreign>jittasatrāsi</foreign>, I guess that it may represent what would be <foreign>jitaśatru</foreign> (<q>one who has conquered the enemies</q>) in Sanskrit.</note>
+	</app>
+	<app loc="7">
+	<lem source="bib:Griffiths2019_01">kvīra</lem>
+	<rdg source="bib:Cabaton1904_01">kvīr</rdg>
+	</app>
+	<app loc="8">
+		<lem source="bib:Griffiths2019_01">vukam̃n·</lem>
+		<rdg source="bib:Cabaton1904_01">vukān·</rdg>
+	</app>
+	<app loc="9">
+		<lem source="bib:Griffiths2019_01">kvīra</lem>
+		<rdg source="bib:Cabaton1904_01">kvīr</rdg>
+	</app>
+</listApp>
+</div>
+<div type="translation" resp="part:argr">
+<!-- translation in ISAW site: <p>Hail! The P.P.K., son of Y.P.K. Śrī Jaya Siṁhavarmadeva, man of Ṅauk Glauṅ Vijaya, was the protector of the realm. He had obtained victory in the land of the Viet, went out <supplied reason="subaudible">and</supplied> returned to take this land of Braḥ Kānda <supplied reason="subaudible">through</supplied> many battles. He has succeeded to create again <supplied reason="explanation">? <foreign>tmuv gulāc jeṅ</foreign></supplied> a Campa land in Śaka <supplied reason="explanation">3</supplied> worlds, half-of-eight <supplied reason="explanation">4</supplied>, <supplied reason="explanation">3</supplied> fires, <supplied reason="explanation">1</supplied> king <supplied reason="explanation">i.e. in 1343 Śaka</supplied>. He caused this Tribhuvanākrānta <supplied reason="explanation">i.e. Viṣṇu</supplied> to be made. And he ... he obtained victory in Cambodia and succeeded to give property and means of existence per deity for various liṅgas. Also: let the Khmer land never succeed in ruling it, but <supplied reason="subaudible">let</supplied> the Campa land <supplied reason="subaudible">rule it</supplied> forever.</p>-->
+<p>Hail! The P.P.K., son of Y.P.K. Śrī Jaya Siṁhavarmadeva, man of Ṅauk Glauṅ Vijaya, was the protector of the realm. He had obtained victory in the land of the Viet, went out <supplied reason="subaudible">and</supplied> returned to take this land of Braḥ Kānda <supplied reason="subaudible">through</supplied> many battles.<note>The toponym Braḥ Kāṇḍa, which was thus far attested only in this inscription and has been variously identified by previous scholars, is now found twice in <ref target="DHARMA_INSCIC00225.xml">C. 225</ref>.</note> He has succeeded to create again <supplied reason="explanation">? <foreign>tmuv gulāc jeṅ</foreign></supplied> a Campa land in Śaka <supplied reason="explanation">3</supplied> worlds, half-of-eight <supplied reason="explanation">4</supplied>, <supplied reason="explanation">3</supplied> fires, <supplied reason="explanation">1</supplied> king <supplied reason="explanation">i.e., in 1343 Śaka</supplied>. He had this Tribhuvanākrānta <supplied reason="explanation">i.e., Viṣṇu</supplied> made with <foreign>ri jittasatrās</foreign> he obtained victory in Cambodia and succeeded to give property and means of existence per deity for various <foreign>liṅga</foreign>s. Also: let the Khmer land never succeed in ruling it, but <supplied reason="subaudible">let</supplied> the Campa land <supplied reason="subaudible">rule it</supplied> forever.</p>
+</div>
+<div type="translation" xml:lang="fra" source="bib:Cabaton1904_01">
+<p>Le fils de Śrī Jaya Siṁhavarman, Ṅauk Glauṅ Vijaya, protège le royaume. Il a vaincu le royaume annamite. Il est parti <supplied reason="explanation">en campagne</supplied> et est revenu prendre ce nagara Braḥ Kānda. Il a gagné de nombreuses batailles et est revenu au royaume de Champa en <supplied reason="explanation">l'année de l'ère</supplied> śaka <supplied reason="explanation">désignée par</supplied> mondes, soixante <supplied reason="explanation">ou huit</supplied>, trois, roseau <supplied reason="explanation">ou feu</supplied>. Il a édifié pieusement ce Tribhuvanākrānta avec le butin qu'il avait conquis sur les Khmèrs. Il a donné comme possession à différents dieux et liṅgas et il s'abstient à jamais d'en jouir, soit dans le nagara khmèr, soit dans le nagara cham.</p>
+</div>
+<div type="commentary">
+<p>Notwithstanding Cabaton's remark <quote>La date qui, par malheur, est la partie la plus endommagée de l'inscription</quote> (<bibl rend="omitname"><ptr target="bib:Cabaton1904_01"/><citedRange unit="page">688</citedRange></bibl>), <!--perpetuated by Majumdar and Golzio,--> the whole of the inscription is very well preserved. The problems that previous scholars felt in interpreting the chronogram were due to inexperience with the peculiarities of the inscriptions of this period, not due to the state of preservation of the inscription.</p>
+</div>
+<div type="bibliography">
+<p>Partly deciphered on the basis of unsatisfactory documents by Aymonier (<bibl rend="omitname"><ptr target="bib:Aymonier1891_01"/><citedRange unit="page">84-85</citedRange></bibl>),<note>Aymonier observed: <q>Le document doit être assez net, mais nous ne le connaissons que par des photographies de copies faites à la main, procédés dont l'exactitude laise trop à désirer</q>.</note> with French translation of the translated parts. Completely edited for the first time by Cabaton (<bibl rend="omitname"><ptr target="bib:Cabaton1904_01"/></bibl>). Barring a small number of new insights, the present edition reproduces that published in <bibl><ptr target="bib:Griffiths2019_01"/></bibl> based on the EFEO estampages.</p>
+               <listBibl type="primary">
+	    <bibl n="A"><ptr target="bib:Aymonier1891_01"/><citedRange unit="page">84-85</citedRange></bibl>
+                  <bibl n="C"><ptr target="bib:Cabaton1904_01"/></bibl>
+                  <bibl n="G"><ptr target="bib:Griffiths2019_01"/><citedRange unit="page">200-201</citedRange><citedRange unit="figure">4</citedRange></bibl>
+               </listBibl>
+               <listBibl type="secondary">
+	   <bibl><ptr target="bib:Finot1901_01"/><citedRange unit="page">18</citedRange><citedRange unit="figure">4</citedRange></bibl><!-- AG: keep in list, even though Finot 1901 is already mentioned above, for this is an occasion to mention the fig. 4. -->
+	<bibl><ptr target="bib:Finot1915_01"/><citedRange unit="page">14</citedRange></bibl>
+	<bibl><ptr target="bib:Parmentier1909_01"/><citedRange unit="page">553-555</citedRange><citedRange unit="figure">127</citedRange></bibl>
+	<bibl><ptr target="bib:Majumdar1927_01"/><citedRange unit="book">III</citedRange><citedRange unit="page">224</citedRange><citedRange unit="item">121</citedRange></bibl>
+	<bibl><ptr target="bib:Boisselier1963_01"/><citedRange unit="page">365</citedRange><citedRange unit="figure">235</citedRange></bibl>
+	<bibl><ptr target="bib:Golzio2004_01"/><citedRange unit="page">199-200</citedRange></bibl>
+</listBibl>
+</div>
+</body>
+</text>
+</TEI>
