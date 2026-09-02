@@ -77,10 +77,15 @@ module Nabu
       # ("kaw-Latin" typo → kaw-Latn); default none.
       ALIASES = {}.freeze
 
+      # A MONOLINGUAL corpus's claim for lang-less editions (pyu); nil
+      # for multilingual repos — their lang-less editions quarantine.
+      DEFAULT_LANGUAGE = nil
+
       def parse(document_ref)
         result = DharmaEpidocParser.parse(
           document_ref.path, allowed_languages: self.class::LANGUAGES,
-                             aliases: self.class::ALIASES
+                             aliases: self.class::ALIASES,
+                             default_language: self.class::DEFAULT_LANGUAGE
         )
         document = Nabu::Document.new(
           urn: document_ref.id, language: result.language,
