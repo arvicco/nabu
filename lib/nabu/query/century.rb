@@ -93,7 +93,8 @@ module Nabu
 
         match = variants.one? ? variants.first : variants.map { |v| "(#{v})" }.join(" OR ")
         passage_ids = @fulltext[Store::Indexer::TABLE]
-                      .where(Sequel.lit("passages_fts MATCH ?", match)).select_map(:passage_id)
+                      .where(Sequel.lit("passages_fts MATCH ?", match))
+                      .select_map(Store::Indexer.fts_passage_id_expression(@fulltext))
         document_ids_for(passage_ids, lang: lang)
       end
 

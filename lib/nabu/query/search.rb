@@ -897,7 +897,8 @@ module Nabu
         @fulltext[Store::Indexer::TABLE]
           .where(Sequel.lit("passages_fts MATCH ?", match))
           .where(Sequel.lit("rowid > ?", after_rowid))
-          .select(:passage_id, Sequel.lit("rowid").as(:scan_rowid))
+          .select(Store::Indexer.fts_passage_id_expression(@fulltext),
+                  Sequel.lit("rowid").as(:scan_rowid))
           .order(Sequel.lit("rowid"))
           .limit(page_size)
           .all
@@ -937,7 +938,8 @@ module Nabu
           row = @fulltext[Store::Indexer::TABLE]
                 .where(Sequel.lit("passages_fts MATCH ?", match))
                 .where(Sequel.lit("rowid >= ?", @rng.rand(1..max_rowid)))
-                .select(:passage_id).order(Sequel.lit("rowid")).limit(1).first
+                .select(Store::Indexer.fts_passage_id_expression(@fulltext))
+                .order(Sequel.lit("rowid")).limit(1).first
           seen[row[:passage_id]] ||= row if row
         end
         # DRAW order, not id order: the page assembly takes the first +limit+
@@ -982,13 +984,25 @@ module Nabu
         match = "(#{match}) AND #{index_match}" if index_match
         dataset = @fulltext[Store::Indexer::TABLE]
                   .where(Sequel.lit("passages_fts MATCH ?", match))
-        dataset = dataset.where(urn: urn) if urn # urn rides UNINDEXED in the index row
+        dataset = fts_urn_scope(dataset, urn) if urn
         dataset
-          .select(:passage_id)
+          .select(Store::Indexer.fts_passage_id_expression(@fulltext))
           .order(ranked ? Sequel.lit(RANK_SQL) : :rowid)
           .limit(inner_limit)
           .offset(offset)
           .all
+      end
+
+      # The --urn scope against the index (P93-1): the contentless shape
+      # stores no urn column, so the urn(s) resolve to catalog passage ids
+      # and scope by rowid; a legacy contentful file keeps its stored-column
+      # equality. Either way the semantics stay exact-urn.
+      def fts_urn_scope(dataset, urn)
+        if Store::Indexer.fts_contentless?(@fulltext)
+          dataset.where(Sequel.lit("rowid") => @catalog[:passages].where(urn: urn).select_map(:id))
+        else
+          dataset.where(urn: urn)
+        end
       end
 
       # A hit's snippet is a window of its STORED text (StoredSnippet), never the

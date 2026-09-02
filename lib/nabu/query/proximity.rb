@@ -209,7 +209,7 @@ module Nabu
       def fts_hits(match, inner_limit:)
         @fulltext[Store::Indexer::TABLE]
           .where(Sequel.lit("passages_fts MATCH ?", match))
-          .select(:passage_id)
+          .select(Store::Indexer.fts_passage_id_expression(@fulltext))
           .order(Sequel.lit(Search::RANK_SQL))
           .limit(inner_limit)
           .all
