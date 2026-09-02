@@ -191,9 +191,9 @@ class PosturesTest < Minitest::Test
                  "pending — the whole family flips together at the mint's merge: 78→81; " \
                  "P92-3 ADDS obi-burmese on the same mint (obr): 81→82; P92-4 ADDS " \
                  "dharma-javanese-texts (kaw/osn): 82→83; P92-5 ADDS ojw (kaw, the lexicon): " \
-                 "83→84; the P92 GATE retires five pendings to identity (v1.6.0 merged and " \
-                 "reached canonical 2026-09-02 — the xum shape at family scale); dharma-khmer " \
-                 "and dharma-pyu stay pending on the v1.6.1 census mint (khm/xhm/pli/pra/omx)"
+                 "83→84; the P92 GATE retires ALL SEVEN pendings to identity — v1.6.0 and the " \
+                 "v1.6.1 first-sync census mint both merged and reached canonical 2026-09-02 " \
+                 "(the xum add-then-retire shape at family scale, twice in one gate)"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -244,8 +244,9 @@ class PosturesTest < Minitest::Test
     # the first pending since P77-6): 77→78, pending 0→1; P92-2 adds the
     # three siblings on the same mint: 78→81, pending 1→4; P92-3 adds
     # obi-burmese (obr): 82, pending 5; P92-4 dharma-javanese-texts: 83,
-    # pending 6; P92-5 ojw: 84, pending 7. The P92 gate retires FIVE to
-    # identity (v1.6.0 on canonical); khmer + pyu await v1.6.1: pending 2.
-    assert_equal({ "identity" => 59, "dates" => 10, "codemap" => 13, "pending" => 2 }, by_posture)
+    # pending 6; P92-5 ojw: 84, pending 7. The P92 gate retires all
+    # SEVEN to identity (v1.6.0 + v1.6.1 both on canonical): pending 0,
+    # identity 54→61.
+    assert_equal({ "identity" => 61, "dates" => 10, "codemap" => 13 }, by_posture)
   end
 end
