@@ -443,6 +443,14 @@ sources:
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: implied}
+  diccas:   # P95-4
+    lect: {posture: identity, note: "ara IS Arabic — Qurʾān/ḥadīth/chronicle
+        excerpts; an ara:cla whole-source staging is a future ruling, not a
+        default"}
+    dating: {posture: undatable, note: "excerpt corpus — the classical works'
+        composition dates are not per-passage claims upstream makes"}
+    places: {posture: unplaced}
+    script: {posture: implied}
   dta:   # P94-2
     lect: {posture: identity, note: "de IS German — the print era, 1473–1969
         as printed; №R-59 (ruled 2026-09-03) stages the pre-1650 tail into
@@ -787,6 +795,13 @@ sources:
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: qualified}
+  prilit:   # P95-1
+    lect: {posture: dates, note: "as goo300k/imp — the sl stage bands stage
+        the dated corpus via infer-dates (print years on every work)"}
+    dating: {posture: dated, note: "sourceDesc printSource date @when on
+        every work, cert carried"}
+    places: {posture: unplaced}
+    script: {posture: implied}
   openiti:
     dating: {posture: dated}
     places: {posture: unplaced}
@@ -799,6 +814,20 @@ sources:
     dating: {posture: dated}
     places: {posture: linked}
     script: {posture: qualified}
+  perseus-anglit:   # P95-4
+    lect: {posture: identity, note: "ang IS Old English (the aspr mold);
+        Klaeber's Beowulf beside the held ASPR witness — second edition,
+        never merged; the eng lane is the aligned translation"}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
+  perseus-farsilit:   # P95-4
+    lect: {posture: identity, note: "fas IS Persian (codemap → the bare fa
+        anchor) — Hafez; the registry holds no Persian stages yet, so the
+        bare code is the honest claim"}
+    dating: {posture: undatable}
+    places: {posture: unplaced}
+    script: {posture: implied}
   perseus-greek:
     dating: {posture: undatable}
     places: {posture: unplaced}
