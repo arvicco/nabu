@@ -1,6 +1,6 @@
 # Nabu fixture manifest (P5-4). Schema documented in
 # test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
-source: sl-lexica
+source: sl-lexica-francek
 adapter_test: test/sl_lexica_francek_test.rb
 retrieved: 2026-09-04
 files:
