@@ -699,8 +699,12 @@ class SyncRunnerTest < Minitest::Test
     assert_equal 4, outcome.indexed
 
     fulltext = Nabu::Store.connect_fulltext(config.fulltext_path)
-    assert_equal urns.first(4).map { |urn| "#{urn}:1" }.sort,
-                 fulltext[:passages_fts].select_map(:urn).sort,
+    # Contentless index (P93-1): rowids (= passage ids) map back through
+    # the catalog for the urn comparison.
+    indexed = Nabu::Store::Passage.where(
+      id: fulltext[:passages_fts].select_map(Sequel.lit("rowid"))
+    ).select_map(:urn).sort
+    assert_equal urns.first(4).map { |urn| "#{urn}:1" }.sort, indexed,
                  "the withdrawn document's passage must leave the index"
   ensure
     fulltext&.disconnect

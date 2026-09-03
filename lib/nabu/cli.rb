@@ -1971,6 +1971,16 @@ module Nabu
                              "characters — floors the cleanest-first order above one-char fragments"
     option :fuzzy, type: :boolean, default: false,
                    desc: "Substring/fragment search over the documentary trigram index (]μηνιν αει[)"
+    option :withdrawn, type: :boolean, default: false,
+                       desc: "Attic inspection: search WITHDRAWN passages only (upstream-gone " \
+                             "documents, revision-pruned passages) — substring match over the " \
+                             "folded text, each hit labeled with its reason; composes with " \
+                             "--limit only"
+    option :similar, type: :string, banner: "URN",
+                     desc: "Semantic neighbors of one embedded passage (P93-5, №R-36): " \
+                           "same-language cross-edition retrieval over the nabu-embed vectors, " \
+                           "rendered in bands (close/near/loose), model named in the header — " \
+                           "IS the query (give no term); composes with --limit only"
     option :long, type: :boolean, default: false,
                   desc: "With --fuzzy: print the full folded passage instead of the windowed snippet"
     option :gold_only, type: :boolean, default: false,
@@ -2076,6 +2086,25 @@ module Nabu
                              "--lemma/--near/--fuzzy/--morph (they compose with a plain text query)"
         end
         return char_structured_search(query)
+      end
+      if options[:similar]
+        unless query.empty? && !options[:fuzzy] && !options[:near] && !options[:lemma] &&
+               !options[:morph] && !options[:exact] && !options[:word] && !options[:scan] &&
+               !options[:withdrawn] && !char_filter_options? && !options[:sign]
+          raise Thor::Error, "search: --similar URN is the semantic-neighbors page — the urn IS " \
+                             "the query (give no term); it composes with --limit only"
+        end
+        return similar_search(options[:similar])
+      end
+      if options[:withdrawn]
+        if query.empty? || options[:fuzzy] || options[:near] || options[:lemma] || options[:morph] ||
+           options[:exact] || options[:word] || options[:words] || options[:scan] ||
+           char_filter_options? || options[:sign]
+          raise Thor::Error, "search: --withdrawn is the attic inspection — a plain text query " \
+                             "plus --limit only (the withdrawn set is small; filters would " \
+                             "overpromise)"
+        end
+        return withdrawn_search(query)
       end
       return sign_search(query) if options[:sign]
       return scan_search(query) if options[:scan]
@@ -2838,6 +2867,83 @@ module Nabu
         fulltext.disconnect
       end
       lemma_index_only(config, shelf) if options[:index]
+    rescue Nabu::Error => e
+      raise Thor::Error, e.message
+    end
+
+    desc "embed", "Build/refresh the semantic vectors over the embed-flagged sources (P93-4, №R-36)"
+    long_desc <<~HELP, wrap: false
+      The semantic-vector build lane (№R-36, P79-5 trial): encodes every
+      live passage of the embed-flagged sources (registry
+      `embed_index: true` — the literary core; the trial priced the full
+      library as a measured NO) with the trial's model
+      (multilingual-e5-base, venv worker) into db/vectors.sqlite3 — the
+      store `search --similar` reads.
+
+      INCREMENTAL BY CONSTRUCTION (the ruling's design constraint): rows
+      key on (model, urn) plus the sha of the exact text embedded, never
+      passage ids — so a rebuild invalidates nothing, and every run is a
+      delta: the first is the priced ~22 h build (batches commit as they
+      land; interrupt and re-fire freely), later runs re-embed only new
+      or revised text, usually seconds. Only a deliberate MODEL change
+      re-embeds everything, beside the old rows, never over them.
+
+      Pointed Hebrew/Aramaic embeds a marks-stripped variant (the trial's
+      finding: the pointed text carries zero signal for this model
+      class); the stored passage text is untouched.
+
+      One-time setup: the venv (python + sentence-transformers + the
+      model) is an owner-run network bootstrap — docs/manual/embed-venv.md.
+      Default home ~/.nabu/venvs/embed (override: --venv or
+      $NABU_EMBED_VENV).
+
+      Modes:
+        nabu embed --status       census (fresh/stale/missing) + honest ETA, nothing runs
+        nabu embed                the campaign (delta; first run ~22 h, resumable)
+        nabu embed --limit 500    bounded smoke run
+    HELP
+    option :status, type: :boolean, default: false,
+                    desc: "Census the scope (fresh/stale/missing) and print the ETA; run nothing"
+    option :limit, type: :numeric, banner: "N", desc: "Stop after N passages (smoke runs)"
+    option :venv, type: :string, banner: "DIR",
+                  desc: "The embed venv (default ~/.nabu/venvs/embed or $NABU_EMBED_VENV)"
+    option :batch_size, type: :numeric, default: Nabu::Embed::DEFAULT_BATCH,
+                        desc: "Passages per model request (default #{Nabu::Embed::DEFAULT_BATCH})"
+    def embed
+      config = Nabu::Config.load
+      registry = Nabu::SourceRegistry.load(config.sources_path)
+      slugs = registry.embed_slugs
+      raise Thor::Error, "no sources flagged embed_index: true in config/sources.yml" if slugs.empty?
+
+      catalog = Nabu::Store.connect(config.catalog_path, readonly: true)
+      vectors = Nabu::Store.connect(config.vectors_path)
+      begin
+        embedder = Nabu::Embed.new(
+          catalog: catalog, vectors: vectors, slugs: slugs,
+          worker_argv: options[:status] ? nil : Nabu::Embed.worker_argv(venv: options[:venv]),
+          batch_size: options[:batch_size].to_i, limit: options[:limit]&.to_i,
+          progress: progress_reporter
+        )
+        census = embedder.census
+        say "embed scope: #{slugs.size} sources, #{commas(census.total)} live passages — " \
+            "#{commas(census.fresh)} fresh, #{commas(census.stale)} stale, " \
+            "#{commas(census.missing)} missing"
+        say "  owed: #{commas(census.stale + census.missing)} passages, estimated " \
+            "#{Nabu::Eta.format_seconds(census.eta_seconds)} at the measured " \
+            "#{Nabu::Embed::TRIAL_RATE.round(1)} passages/s (P79-5)"
+        return if options[:status]
+
+        result = embedder.run!
+        say "embedded #{commas(result.embedded)} passages in " \
+            "#{Nabu::Eta.format_seconds(result.elapsed_seconds)} " \
+            "(#{result.rate.round(1)}/s); skipped: #{commas(result.skipped_fresh)} fresh, " \
+            "#{commas(result.skipped_empty)} empty"
+        say "  model: #{result.model} dim #{result.dim} (worker #{result.worker_version})"
+        say "  store: #{config.vectors_path}"
+      ensure
+        catalog.disconnect
+        vectors.disconnect
+      end
     rescue Nabu::Error => e
       raise Thor::Error, e.message
     end
@@ -3950,6 +4056,11 @@ module Nabu
         # edges. Absent file = no batch has run (a graceful state).
         links: readonly_opener(config.links_path) do
           Nabu::Store.connect(config.links_path, readonly: true)
+        end,
+        # The vector store, read-only (P93-5): nabu_search's similar_to.
+        # Absent file = never embedded (the honest-note state).
+        vectors: readonly_opener(config.vectors_path) do
+          Nabu::Store.connect(config.vectors_path, readonly: true)
         end,
         # Static config, loaded once — a malformed registry fails HERE, loudly,
         # not mid-conversation.
@@ -6053,7 +6164,9 @@ module Nabu
       def print_show_document(document)
         title = document.title ? " — #{document.title}" : ""
         lang = document.language ? " [#{document.language}]" : ""
-        say "#{document.urn}#{title}#{lang}#{withdrawn_tag(document.withdrawn)}#{retired_tag(document)}"
+        say "#{document.urn}#{title}#{lang}" \
+            "#{withdrawn_tag(document.withdrawn, reason: document.withdrawn_reason,
+                                                 at: document.withdrawn_at)}#{retired_tag(document)}"
         say "  source: #{document.source_slug}   license: #{document.license_class}   revision: #{document.revision}"
         print_credit(document)
         print_timeline(document.timeline)
@@ -6549,8 +6662,14 @@ module Nabu
         "#{label}#{display_text(line.text, language)}#{withdrawn_tag(line.withdrawn)}"
       end
 
-      def withdrawn_tag(withdrawn)
-        withdrawn ? "  (withdrawn)" : ""
+      # +reason:+/+at:+ (P93-2): the document card names WHY and WHEN it
+      # left when the loader recorded it; a bare flag stays the honest
+      # render for pre-P93 withdrawals and passage lines.
+      def withdrawn_tag(withdrawn, reason: nil, at: nil)
+        return "" unless withdrawn
+
+        detail = [reason, at.respond_to?(:strftime) ? at.strftime("%Y-%m-%d") : at].compact.join(", ")
+        detail.empty? ? "  (withdrawn)" : "  (withdrawn: #{detail})"
       end
 
       # P5-2: upstream scrapped the file; the attic kept it. Live, labeled.
@@ -7542,6 +7661,66 @@ module Nabu
         say "character filter: [#{labels}] — #{outcome.char_count} " \
             "#{outcome.char_count == 1 ? 'character' : 'characters'} resolved#{text_note}"
         say Nabu::Query::CatalogJoin::INCOMPLETE_PAGE_HINT if outcome.incomplete
+      end
+
+      # The semantic-neighbors page (P93-5, №R-36): URN-anchored, no model
+      # at query time — one sqlite-vec scan of the same-language subpool.
+      # Every absent-machinery case surfaces as the query layer's honest
+      # hint (store not built / anchor unembedded / extension missing).
+      def similar_search(urn)
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+        vectors = Nabu::Store.connect(config.vectors_path)
+        finder = Nabu::Query::Similar.new(catalog: catalog, vectors: vectors)
+        page = finder.run(urn, limit: options[:limit].to_i)
+        say "similar to #{page.anchor_urn} [#{page.language}] — model #{page.model}, " \
+            "same-language only (cross-language is not served: the P79-5 measurement)"
+        if page.results.empty?
+          say "no neighbors in the store"
+        else
+          page.results.each do |result|
+            say "#{result.urn}  (#{result.band})#{"  — #{result.document_title}" if result.document_title}"
+            say "  #{display_snippet(result.snippet, result.language)}"
+          end
+          say "#{page.results.size} #{page.results.size == 1 ? 'neighbor' : 'neighbors'} " \
+              "(banded semantic similarity — never a curated alignment; nabu align serves those)"
+        end
+        print_display_footer
+      ensure
+        catalog&.disconnect
+        vectors&.disconnect
+      end
+
+      # The attic search (P93-2, №R-16 half 1): scan the withdrawn set,
+      # substring over folded text, reasons labeled. No fulltext file
+      # needed — the scan is catalog-side by design (Search#run_withdrawn's
+      # class note carries the measured argument).
+      def withdrawn_search(query)
+        config = Nabu::Config.load
+        catalog = open_catalog(config)
+        raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+        fulltext = open_fulltext(config)
+        searcher = Nabu::Query::Search.new(catalog: catalog, fulltext: fulltext)
+        results = searcher.run_withdrawn(query, limit: options[:limit].to_i)
+        if results.empty?
+          say "no matches in the withdrawn set"
+        else
+          results.each do |result|
+            say "#{result.urn}#{" [#{result.language}]" if result.language}  WITHDRAWN " \
+                "(#{result.reason || 'reason unrecorded'}" \
+                "#{", #{result.withdrawn_at.strftime('%Y-%m-%d')}" if result.withdrawn_at})"
+            say "  #{display_snippet(result.snippet, result.language)}"
+          end
+          say "#{results.size} #{results.size == 1 ? 'hit' : 'hits'} in the withdrawn set " \
+              "(substring over folded text; nothing here is served by default search)"
+        end
+        print_display_footer
+      ensure
+        catalog&.disconnect
+        fulltext&.disconnect
       end
 
       def fuzzy_search(query)

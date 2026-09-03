@@ -383,6 +383,7 @@ module Nabu
       Store::Indexer.refresh_source!(catalog: @db, fulltext: fulltext, slug: entry.slug,
                                      alignments: AlignmentRegistry.load(@config.alignments_path),
                                      fuzzy_slugs: @registry.fuzzy_slugs,
+                                     cjk_slugs: @registry.cjk_slugs,
                                      lemma_tiers: @registry.lemma_tiers,
                                      reflexes_changed: adapter.class.content_kind == :dictionary,
                                      sign_list: Nabu::SignList.load_default(config: @config),

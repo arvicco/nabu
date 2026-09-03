@@ -240,6 +240,7 @@ module Nabu
       indexed = Store::Indexer.rebuild!(catalog: db, fulltext: fulltext,
                                         alignments: AlignmentRegistry.load(@config.alignments_path),
                                         fuzzy_slugs: @registry.fuzzy_slugs,
+                                        cjk_slugs: @registry.cjk_slugs,
                                         lemma_tiers: @registry.lemma_tiers,
                                         profile: profile,
                                         sign_list: Nabu::SignList.load_default(config: @config),

@@ -60,9 +60,19 @@ module Store
 
     # Raw MATCH: the Indexer's contract is index-as-stored, so tests query
     # with the already-folded form (query-side folding is Search's job).
+    # passages_fts is CONTENTLESS (P93-1) — no stored column values — so a
+    # hit is its rowid (= passages.id), selected explicitly.
     def match(query)
-      fts.where(Sequel.lit("passages_fts MATCH ?", query)).all
+      fts.where(Sequel.lit("passages_fts MATCH ?", query))
+         .select(Sequel.lit("rowid").as(:rowid)).all
     end
+
+    # Readable assertions map contentless rowids back through the catalog.
+    def urns_of(ids) = @catalog[:passages].where(id: ids).select_map(:urn).sort
+
+    def fts_urns = urns_of(fts.select_map(Sequel.lit("rowid")))
+
+    def match_urns(query) = urns_of(match(query).map { |row| row.fetch(:rowid) })
 
     # -- tests ---------------------------------------------------------------
 
@@ -73,7 +83,7 @@ module Store
 
       assert_equal 2, rebuild!, "returns the count indexed"
       assert_equal 2, fts.count
-      assert_equal %w[urn:d:1:1 urn:d:1:2], fts.order(:urn).select_map(:urn)
+      assert_equal %w[urn:d:1:1 urn:d:1:2], fts_urns
     end
 
     def test_withdrawn_passage_excluded
@@ -82,7 +92,7 @@ module Store
       make_passage(doc, urn: "urn:d:1:2", text_normalized: "gone", sequence: 1, withdrawn: true)
 
       assert_equal 1, rebuild!
-      assert_equal %w[urn:d:1:1], fts.select_map(:urn)
+      assert_equal %w[urn:d:1:1], fts_urns
     end
 
     def test_passages_of_a_withdrawn_document_excluded
@@ -94,7 +104,7 @@ module Store
       make_passage(dead, urn: "urn:d:dead:1", text_normalized: "hidden", sequence: 0)
 
       assert_equal 1, rebuild!
-      assert_equal %w[urn:d:live:1], fts.select_map(:urn)
+      assert_equal %w[urn:d:live:1], fts_urns
     end
 
     def test_reindex_is_idempotent
@@ -107,18 +117,23 @@ module Store
       assert_equal 2, fts.count, "drop+recreate leaves no duplicate rows"
     end
 
-    # P6-4: text_normalized is already the boundary-minted search form, so the
-    # Indexer applies NO transform — what the catalog stores is byte-for-byte
-    # what the index carries.
-    def test_indexes_text_normalized_as_stored
+    # P93-1 (№R-16): a fresh build mints a CONTENTLESS table — the folded
+    # text lives ONCE, in the catalog; the index stores only its inverted
+    # index. No urn/passage_id payload columns exist, and reads of the
+    # declared columns return NULL (contentless semantics) — MATCH is the
+    # only read the table serves. P6-4 still holds upstream: what feeds the
+    # tokenizer is text_normalized byte-for-byte (accent-folded μηνιν is
+    # findable below because the INDEX side applied no second transform).
+    def test_fresh_build_is_contentless
       doc = make_document(urn: "urn:d:1")
-      # Deliberately accented: if the Indexer still folded, the stored index
-      # form would differ from the catalog column.
-      make_passage(doc, urn: "urn:d:1:1", text_normalized: "μῆνιν", sequence: 0)
+      make_passage(doc, urn: "urn:d:1:1", text_normalized: "μηνιν", sequence: 0)
       rebuild!
 
-      assert_equal "μῆνιν", fts.first.fetch(:text_normalized),
-                   "index must carry text_normalized exactly as stored"
+      refute_includes fts.columns, :urn, "no payload columns in the contentless shape"
+      refute_includes fts.columns, :passage_id
+      assert_nil fts.first.fetch(:text_normalized),
+                 "contentless — the text is never stored a second time (the №R-16 point)"
+      assert_equal 1, match("μηνιν").size, "…but the inverted index still answers MATCH"
     end
 
     # The boundary-folded form is findable by its own bytes (the end-to-end
@@ -128,17 +143,17 @@ module Store
       make_passage(doc, urn: "urn:d:1:1", text_normalized: "μηνιν", sequence: 0)
       rebuild!
 
-      hits = match("μηνιν")
-      assert_equal 1, hits.size
-      assert_equal "urn:d:1:1", hits.first.fetch(:urn)
+      assert_equal %w[urn:d:1:1], match_urns("μηνιν")
     end
 
-    def test_passage_id_column_links_back_to_the_catalog
+    # P93-1: identity in the contentless shape is the ROWID, minted as the
+    # catalog passage id — the join back to pristine text and annotations.
+    def test_rowid_is_the_catalog_passage_id
       doc = make_document(urn: "urn:d:1")
       passage = make_passage(doc, urn: "urn:d:1:1", text_normalized: "alpha", sequence: 0)
       rebuild!
 
-      assert_equal [passage.id], fts.select_map(:passage_id)
+      assert_equal [passage.id], fts.select_map(Sequel.lit("rowid"))
     end
 
     # -- the language column (P42-3) -----------------------------------------
@@ -166,9 +181,7 @@ module Store
       rebuild!
 
       assert_includes fts.columns, :language, "a from-scratch build mints the P42-3 column"
-      assert_equal "0langgrc", fts.where(urn: "urn:d:1:1").get(:language)
-      hits = match(%{aurora AND language : ("0langlat")})
-      assert_equal %w[urn:d:1:2], hits.map { |row| row.fetch(:urn) },
+      assert_equal %w[urn:d:1:2], match_urns(%{aurora AND language : ("0langlat")}),
                    "the sentinel token filters the MATCH itself — the P42-3 point"
     end
 
@@ -181,10 +194,9 @@ module Store
                          language: "san")
       rebuild!
 
-      assert_equal "0langsandeva", fts.where(urn: "urn:d:deva:1").get(:language),
+      assert_equal "0langsandeva", Nabu::Store::Indexer.language_token("san-Deva"),
                    "downcased, non-alphanumerics stripped — one token, never several"
-      assert_equal %w[urn:d:iast:1],
-                   match(%{dharman AND language : ("0langsan")}).map { |row| row.fetch(:urn) },
+      assert_equal %w[urn:d:iast:1], match_urns(%{dharman AND language : ("0langsan")}),
                    "a san filter must NOT prefix-bleed into san-Deva rows (equality, as the catalog WHERE had)"
     end
 
@@ -233,11 +245,9 @@ module Store
       rebuild!
 
       assert_includes fts.columns, :source, "a from-scratch build mints the P81-3 column"
-      assert_equal "0srcs", fts.where(urn: "urn:d:1:1").get(:source)
-      assert_equal "0srcnabudata", fts.where(urn: "urn:d:2:1").get(:source),
+      assert_equal "0srcnabudata", Nabu::Store::Indexer.source_token("nabu-data"),
                    "downcased, non-alphanumerics stripped — one token per slug, never several"
-      hits = match(%{aurora AND source : ("0srcnabudata")})
-      assert_equal %w[urn:d:2:1], hits.map { |row| row.fetch(:urn) },
+      assert_equal %w[urn:d:2:1], match_urns(%{aurora AND source : ("0srcnabudata")}),
                    "the sentinel token filters the MATCH itself — the P81-3 point"
     end
 
@@ -255,6 +265,39 @@ module Store
       refute_includes fts.columns, :source, "an incremental sync never upgrades the table shape"
       assert_equal "0langgrc", fts.where(urn: "urn:d:s:2").get(:language),
                    "the language token still writes into a language-bearing table"
+    end
+
+    # -- the contentless shape (P93-1, №R-16) --------------------------------
+    # A fresh build mints passages_fts contentless (rowid = passages.id, no
+    # payload columns); a legacy CONTENTFUL file — the owner's live fulltext
+    # until the next full rebuild — keeps taking syncs in its own shape,
+    # payload columns populated.
+
+    # The pre-P93-1 shape (language + source present, contentful).
+    PRE_CONTENTLESS_FTS_DDL = <<~SQL
+      CREATE VIRTUAL TABLE passages_fts USING fts5(
+        text_normalized,
+        language,
+        source,
+        urn UNINDEXED,
+        passage_id UNINDEXED,
+        tokenize = 'unicode61 remove_diacritics 2'
+      )
+    SQL
+
+    def test_incremental_refresh_writes_the_contentful_shape_unchanged
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "alpha", sequence: 0)
+      rebuild!
+      @fulltext.drop_table(:passages_fts)
+      @fulltext.run(PRE_CONTENTLESS_FTS_DDL)
+
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "beta", sequence: 1)
+      assert_equal 2, refresh!
+      assert_equal %w[urn:d:s:1 urn:d:s:2], fts.order(:urn).select_map(:urn),
+                   "a pre-P93 contentful file keeps its payload columns populated through syncs"
+      assert_equal "0langgrc", fts.where(urn: "urn:d:s:2").get(:language)
+      assert_equal "0srcs", fts.where(urn: "urn:d:s:2").get(:source)
     end
 
     # -- the lemma index (P7-5) ----------------------------------------------
@@ -590,6 +633,139 @@ module Store
       end
     end
 
+    # -- the CJK bigram lane (P93-3, №R-39 b) --------------------------------
+    # A CONTENTLESS second lane over the cjk-flagged sources: each Han/kana
+    # run indexed as overlapping character pairs (+ trailing unigram), so
+    # mid-run substrings match as bigram phrases. Same scope-table honesty
+    # as the trigram lane; rowid = passages.id like the main index.
+
+    def cjk = @fulltext[Nabu::Store::Indexer::CJK_TABLE]
+
+    def cjk_scope = @fulltext[Nabu::Store::Indexer::CJK_SCOPE_TABLE]
+
+    def cjk_match_urns(query)
+      urns_of(cjk.where(Sequel.lit("passages_cjk MATCH ?", query))
+                 .select_map(Sequel.lit("rowid")))
+    end
+
+    def cjk_rebuild!(slugs: ["s"], **)
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: slugs, **)
+    end
+
+    def test_cjk_lane_scoped_to_the_flagged_sources_and_contentless
+      doc = make_document(urn: "urn:d:s")
+      passage = make_passage(doc, urn: "urn:d:s:1", text_normalized: "時乘六龍以御天", sequence: 0,
+                                  language: "lzh")
+      lit = make_document(urn: "urn:d:lit", source: literary_source)
+      make_passage(lit, urn: "urn:d:lit:1", text_normalized: "六龍飛天", sequence: 0, language: "lzh")
+      cjk_rebuild!
+
+      assert_equal [passage.id], cjk.select_map(Sequel.lit("rowid")),
+                   "only the flagged source's rows land, rowid = passages.id"
+      refute_includes cjk.columns, :urn, "contentless — no payload columns"
+      assert_nil cjk.first.fetch(:cjk), "contentless — the token stream is never stored"
+      assert_equal %w[s], cjk_scope.select_map(:slug), "the scope table records what was indexed"
+    end
+
+    def test_cjk_tables_exist_empty_without_flagged_slugs
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
+      rebuild!
+
+      assert_equal 0, cjk.count, "no scope, no rows — the table still exists (queries degrade)"
+      assert_equal 0, cjk_scope.count
+    end
+
+    def test_cjk_lane_matches_a_mid_run_substring
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "時乘六龍以御天", sequence: 0,
+                        language: "lzh")
+      cjk_rebuild!
+
+      assert_equal %w[urn:d:s:1], cjk_match_urns('"六龍"'),
+                   "the №R-39 case: the pair sits mid-run and must match"
+      assert_equal %w[urn:d:s:1], cjk_match_urns('"六龍 龍以"'),
+                   "longer substrings are phrases of consecutive bigrams"
+      assert_equal %w[urn:d:s:1], cjk_match_urns('"御" *'),
+                   "a single char reaches every position via prefix"
+    end
+
+    def test_cjk_bigram_phrases_never_bridge_separate_runs
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍, 飛天", sequence: 0, language: "lzh")
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "六龍飛天", sequence: 1, language: "lzh")
+      cjk_rebuild!
+
+      assert_equal %w[urn:d:s:2], cjk_match_urns('"龍飛"'),
+                   "a pair spanning a run break exists only where the run is unbroken"
+    end
+
+    def test_cjk_lane_skips_runless_and_withdrawn_passages
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "arma virumque", sequence: 0,
+                        language: "lat")
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "六龍", sequence: 1, language: "lzh",
+                        withdrawn: true)
+      make_passage(doc, urn: "urn:d:s:3", text_normalized: "飛天", sequence: 2, language: "lzh")
+      cjk_rebuild!
+
+      assert_equal [passage_id("urn:d:s:3")], cjk.select_map(Sequel.lit("rowid")),
+                   "runless passages contribute no row; withdrawn are excluded"
+    end
+
+    def test_cjk_lane_carries_the_language_and_source_sentinels
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "六龍", sequence: 1, language: "jpn")
+      cjk_rebuild!
+
+      assert_equal %w[urn:d:s:2], cjk_match_urns(%{"六龍" AND language : ("0langjpn")}),
+                   "--lang composes inside the lane's MATCH, exactly like the main index"
+      assert_equal %w[urn:d:s:1 urn:d:s:2], cjk_match_urns(%{"六龍" AND source : ("0srcs")})
+    end
+
+    def test_cjk_refresh_updates_the_slice_and_honors_config_drift
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
+      cjk_rebuild!
+
+      make_passage(doc, urn: "urn:d:s:2", text_normalized: "飛天", sequence: 1, language: "lzh")
+      refresh!(cjk_slugs: ["s"])
+      assert_equal %w[urn:d:s:1 urn:d:s:2],
+                   urns_of(cjk.select_map(Sequel.lit("rowid"))), "the flagged source's slice refreshes"
+
+      refresh!(cjk_slugs: [])
+      assert_equal 0, cjk.count, "a de-flagged source loses its rows at refresh"
+      assert_equal 0, cjk_scope.count, "…and its scope row, so coverage reads honestly"
+    end
+
+    def test_cjk_refresh_adds_a_newly_flagged_sources_slice
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
+      rebuild! # no cjk slugs — empty lane
+
+      refresh!(cjk_slugs: ["s"])
+      assert_equal [passage_id("urn:d:s:1")], cjk.select_map(Sequel.lit("rowid"))
+      assert_equal %w[s], cjk_scope.select_map(:slug)
+    end
+
+    def test_cjk_lane_is_idempotent_and_regenerates_into_a_fresh_db
+      doc = make_document(urn: "urn:d:s")
+      make_passage(doc, urn: "urn:d:s:1", text_normalized: "六龍", sequence: 0, language: "lzh")
+      2.times { cjk_rebuild! }
+      assert_equal 1, cjk.count
+      assert_equal 1, cjk_scope.count
+
+      fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
+      begin
+        Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh, cjk_slugs: ["s"])
+        assert_equal [passage_id("urn:d:s:1")],
+                     fresh[Nabu::Store::Indexer::CJK_TABLE].select_map(Sequel.lit("rowid"))
+      ensure
+        fresh.disconnect
+      end
+    end
+
     # -- incremental per-source refresh (P26-5) ------------------------------
     # refresh_source! deletes ONE source's rows from the passage-keyed tables
     # and re-inserts them from the current catalog — the sync-time replacement
@@ -613,13 +789,13 @@ module Store
       make_passage(lit, urn: "urn:d:lit:2", text_normalized: "delta", sequence: 1)
       refresh!
 
-      assert_equal %w[urn:d:lit:1 urn:d:s:1 urn:d:s:2], fts.order(:urn).select_map(:urn),
+      assert_equal %w[urn:d:lit:1 urn:d:s:1 urn:d:s:2], fts_urns,
                    "the refreshed source gains its new row; the other source's slice is untouched"
     end
 
-    # The FTS-deletion mechanism proof (search before/after): passages_fts is
-    # a REGULAR (contentful) FTS5 table, so per-row DELETE is real deletion —
-    # a removed row must stop matching, and other sources' rows must not.
+    # The FTS-deletion mechanism proof (search before/after): the contentless
+    # shape deletes by rowid (= passage id) under contentless_delete=1 — a
+    # removed row must stop matching, and other sources' rows must not.
     def test_refresh_removes_withdrawn_passages_from_the_index
       doc = make_document(urn: "urn:d:s")
       make_passage(doc, urn: "urn:d:s:1", text_normalized: "μηνιν αειδε", sequence: 0)
@@ -631,7 +807,7 @@ module Store
       Nabu::Store::Passage.first(urn: "urn:d:s:1").update(withdrawn: true)
       refresh!
 
-      assert_equal %w[urn:d:lit:1], match("μηνιν").map { |row| row.fetch(:urn) },
+      assert_equal %w[urn:d:lit:1], match_urns("μηνιν"),
                    "the withdrawn passage must stop matching; the other source's hit survives"
     end
 
@@ -675,11 +851,18 @@ module Store
       fresh = Nabu::Store.connect_fulltext("sqlite::memory:")
       begin
         Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: fresh, **options)
-        %i[passages_fts passage_lemmas passages_trigram passages_trigram_scope
+        # passages_fts is contentless — column values are unreadable, so its
+        # identity comparison is the rowid set (= the indexed passage ids)
+        # plus a MATCH probe against the revised text.
+        assert_equal fts_rowids(fresh), fts_rowids(@fulltext),
+                     "passages_fts must hold the identical rowid set"
+        %i[passage_lemmas passages_trigram passages_trigram_scope
            reflex_roots reflex_root_stats].each do |table|
           assert_equal table_rows(fresh, table), table_rows(@fulltext, table),
                        "#{table} must be row-identical to a from-scratch rebuild"
         end
+        assert_equal %w[urn:d:s:2], match_urns("revised"),
+                     "the refreshed slice answers MATCH with the revised tokens"
       ensure
         fresh.disconnect
       end
@@ -688,6 +871,8 @@ module Store
     def table_rows(db, table)
       db[table].all.map { |row| row.sort_by { |key, _| key } }.sort_by(&:inspect)
     end
+
+    def fts_rowids(db) = db[:passages_fts].select_map(Sequel.lit("rowid")).sort
 
     # Bootstrap safety: against a fulltext db that has never been built (the
     # very first sync), refresh falls back to a FULL rebuild — every source
@@ -699,7 +884,7 @@ module Store
       make_passage(lit, urn: "urn:d:lit:1", text_normalized: "beta", sequence: 0)
 
       assert_equal 1, refresh!, "the fallback still reports the SOURCE's count"
-      assert_equal %w[urn:d:lit:1 urn:d:s:1], fts.order(:urn).select_map(:urn),
+      assert_equal %w[urn:d:lit:1 urn:d:s:1], fts_urns,
                    "the bootstrap fallback indexes the whole corpus"
     end
 
