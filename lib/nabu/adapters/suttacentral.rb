@@ -170,6 +170,11 @@ module Nabu
         MANIFEST
       end
 
+      # Q59-a: fetch stage 2 lands the sha-pinned parallels graph at
+      # parallels/parallels.json beside the git tree — declared so the
+      # identity walker hashes it instead of reading the tree as weak.
+      def self.materialized_paths = ["parallels"]
+
       # The parallels-graph edges (class note; P32-6).
       def self.reference_edges? = true
 
