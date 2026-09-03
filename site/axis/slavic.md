@@ -15,7 +15,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 2 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 September 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
@@ -28,7 +28,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `freising` | texts | research_private | wired · manual | 27 docs / 2,037 passages |
 | `sl-lexica` | dictionary | attribution | wired · manual | 139,405 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 2 September 2026)</span>: `sl` 140,164 · `chu` 4,644 · `orv` 43 · `eng` 26 · `bul` 20 · `lat` 20 · `grc` 12 · `ota` 5 · `got` 4 · `lzh` 4 … and 16 more (`nabu axis slavic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 September 2026)</span>: `sl` 140,164 · `chu` 4,644 · `orv` 43 · `eng` 26 · `bul` 20 · `lat` 20 · `grc` 12 · `ota` 5 · `got` 4 · `lzh` 4 … and 16 more (`nabu axis slavic` lists all).
 
 ## The desk's instruments
 
