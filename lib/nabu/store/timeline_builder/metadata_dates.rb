@@ -74,6 +74,9 @@ module Nabu
           #                      1.2M documents (the whole point of the lane)
           "bfm" => :iso_keys,
           "croala" => :year_range,
+          "dta" => :year_range, # P94 (№R-59): the sourceDesc print year, clean "1784"
+          #                       strings on every document; the de:early staging rides
+          #                       LectDates date-band inference off these envelopes
           "ebl" => :period_label
         }.freeze
 
