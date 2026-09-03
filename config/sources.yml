@@ -4422,3 +4422,18 @@ ojw:   # P92-5
   # sense rows, PWN 3.0 synset ids in the body; glosses do not ship —
   # nil is honest (the monlam precedent). Sparse GitFetch on the one
   # tab file + grant.
+
+dta:   # P94-1
+  adapter: Nabu::Adapters::Dta
+  axes: [germanic]
+  wired: false   # flip after the owner-fired first sync (checklist §6)
+  sync_policy: manual
+  # Deutsches Textarchiv (BBAW) — the reference corpus of German print:
+  # 5,481 TEI/P5 (DTA-Basisformat) texts, 1473–1969 (Kernkorpus 1,478
+  # balanced works 1600–1899 + Ergänzungstexte incl. newspapers). One
+  # dated public komplett zip (606,937,636 bytes, 2026-02-10 cut;
+  # Last-Modified served — conditional GET applies; a corpus growth cut
+  # is a deliberate ZIP_URL bump). CC BY-SA 4.0 (nutzungsbedingungen
+  # page), class attribution. Page-grain passages, orthography AS
+  # PRINTED (sic/abbr halves; DTA's corr/expan normalization layers are
+  # deliberately not ingested v1 — corrections are enrichments).

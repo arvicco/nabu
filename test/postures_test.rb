@@ -153,7 +153,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 84, lect.size,
+    assert_equal 85, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -193,7 +193,10 @@ class PosturesTest < Minitest::Test
                  "dharma-javanese-texts (kaw/osn): 82→83; P92-5 ADDS ojw (kaw, the lexicon): " \
                  "83→84; the P92 GATE retires ALL SEVEN pendings to identity — v1.6.0 and the " \
                  "v1.6.1 first-sync census mint both merged and reached canonical 2026-09-02 " \
-                 "(the xum add-then-retire shape at family scale, twice in one gate)"
+                 "(the xum add-then-retire shape at family scale, twice in one gate); " \
+                 "dta ADDED P94-2 — identity de (the print corpus; №R-59 stages its pre-1650 " \
+                 "tail via date-band INFERENCE, the document grain — no facet rule, so the " \
+                 "declaration stays): 84→85"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -247,6 +250,9 @@ class PosturesTest < Minitest::Test
     # pending 6; P92-5 ojw: 84, pending 7. The P92 gate retires all
     # SEVEN to identity (v1.6.0 + v1.6.1 both on canonical): pending 0,
     # identity 54→61.
-    assert_equal({ "identity" => 61, "dates" => 10, "codemap" => 13 }, by_posture)
+    # P94-2 ADDS dta as identity (de, the print corpus; №R-59's pre-1650
+    # staging is date-band inference at document grain — the declaration
+    # stays, unlike a facet-rule retirement): identity 61→62.
+    assert_equal({ "identity" => 62, "dates" => 10, "codemap" => 13 }, by_posture)
   end
 end

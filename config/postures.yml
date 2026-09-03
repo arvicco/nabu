@@ -443,6 +443,16 @@ sources:
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: implied}
+  dta:   # P94-2
+    lect: {posture: identity, note: "de IS German — the print era, 1473–1969
+        as printed; №R-59 (ruled 2026-09-03) stages the pre-1650 tail into
+        de:early via the standing date-band inference (lect infer-dates over
+        the print-year envelopes), post-1650 stays honestly bare"}
+    dating: {posture: dated, note: "every document carries its print year
+        verbatim (TEI sourceDesc/biblFull publicationStmt date)"}
+    places: {posture: unplaced, note: "pubPlace is the PRINTING place (rides
+        document metadata), not a findspot claim"}
+    script: {posture: implied}
   # Ruled deliberately unstaged (D57-f): mixed corpora, bare-anchor honesty.
   first1k-greek:
     lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
