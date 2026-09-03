@@ -67,7 +67,7 @@ module Nabu
     def crosswalk_pairs(path)
       return [] unless File.file?(path)
 
-      doc = Nokogiri::XML(File.read(path)) { |cfg| cfg.strict }
+      doc = Nokogiri::XML(File.read(path), &:strict)
       doc.xpath("//FR-Z").flat_map { |entry| entry_pairs(entry) }
     rescue Nokogiri::XML::SyntaxError => e
       raise Nabu::Error, "francek module #{path}: malformed XML: #{e.message}"
