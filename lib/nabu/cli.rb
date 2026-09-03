@@ -4037,31 +4037,45 @@ module Nabu
       config = Nabu::Config.load
       log = mcp_log(options[:log])
       registry = Nabu::SourceRegistry.load(config.sources_path)
-      # Lazy, memoizing, read-only openers (Procs, per the Tools contract):
-      # resolved on every tool call, so a corpus that appears or is rebuilt
-      # mid-session is picked up without a restart. nil when the file is absent
-      # (Tools renders the graceful "no corpus" / "rebuilding" states).
-      tools = Nabu::MCP::Tools.new(
-        catalog: readonly_opener(config.catalog_path) { Nabu::Store.connect(config.catalog_path, readonly: true) },
-        fulltext: readonly_opener(config.fulltext_path) do
+      # Lazy, memoizing, read-only openers (Nabu::ReadonlyOpener — Q65
+      # extracted the P8-2 plumbing): resolved on every tool call, so a
+      # corpus that appears or is rebuilt mid-session is picked up without
+      # a restart; nil when the file is absent (Tools renders the graceful
+      # "no corpus" / "rebuilding" states). The watchdog below vacates
+      # stale handles on IDLE sessions too — the P93 incident: a deleted
+      # pre-rebuild catalog's 118 GB stayed pinned for days because the
+      # per-call re-stat never ran without a call.
+      openers = {
+        catalog: Nabu::ReadonlyOpener.new(config.catalog_path) do
+          Nabu::Store.connect(config.catalog_path, readonly: true)
+        end,
+        fulltext: Nabu::ReadonlyOpener.new(config.fulltext_path) do
           Nabu::Store.connect_fulltext(config.fulltext_path, readonly: true)
         end,
         # The history ledger, read-only (P14-12): nabu_status surfaces the
         # cached upstream-drift verdicts from source_probes. MCP reads the raw
         # dataset (no model binding) and NEVER probes upstreams live.
-        ledger: readonly_opener(config.history_path) do
+        ledger: Nabu::ReadonlyOpener.new(config.history_path) do
           Nabu::Store.connect(config.history_path, readonly: true)
         end,
         # The links journal, read-only (P16-1): nabu_links reads batch-mined
         # edges. Absent file = no batch has run (a graceful state).
-        links: readonly_opener(config.links_path) do
+        links: Nabu::ReadonlyOpener.new(config.links_path) do
           Nabu::Store.connect(config.links_path, readonly: true)
         end,
         # The vector store, read-only (P93-5): nabu_search's similar_to.
         # Absent file = never embedded (the honest-note state).
-        vectors: readonly_opener(config.vectors_path) do
+        vectors: Nabu::ReadonlyOpener.new(config.vectors_path) do
           Nabu::Store.connect(config.vectors_path, readonly: true)
-        end,
+        end
+      }
+      Nabu::ReadonlyOpener.watch(openers.values)
+      tools = Nabu::MCP::Tools.new(
+        catalog: openers[:catalog].to_proc,
+        fulltext: openers[:fulltext].to_proc,
+        ledger: openers[:ledger].to_proc,
+        links: openers[:links].to_proc,
+        vectors: openers[:vectors].to_proc,
         # Static config, loaded once — a malformed registry fails HERE, loudly,
         # not mid-conversation.
         alignments: Nabu::AlignmentRegistry.load(config.alignments_path),
@@ -11064,31 +11078,6 @@ module Nabu
 
       # -- mcp entrypoint plumbing (P8-2) ----------------------------------
 
-      # A lazy, memoizing, read-only opener returned as a PROC (the Tools
-      # contract resolves each connection slot per tool call). On every call:
-      # absent file → nil (Tools renders the "no corpus" state); present file →
-      # an open read-only handle, cached across calls so a long session does not
-      # churn file descriptors. The cached handle is dropped and reopened when
-      # the file's identity changes — `nabu rebuild` deletes and recreates the
-      # catalog, so a mid-session rebuild is genuinely picked up, not served
-      # stale from a handle onto the deleted inode.
-      def readonly_opener(path, &open)
-        handle = nil
-        identity = nil
-        lambda do
-          current = file_identity(path)
-          if current.nil?
-            handle&.disconnect
-            handle = identity = nil
-          elsif current != identity
-            handle&.disconnect
-            handle = open.call
-            identity = current
-          end
-          handle
-        end
-      end
-
       # The enabled-slug set nabu_status defaults to (P44-r3b). READ-ONLY: unlike
       # the CLI's effective_profile, the MCP server never WRITES a migration
       # (serving is not the moment to touch config). It mirrors the same three
@@ -11114,15 +11103,6 @@ module Nabu
         db.table_exists?(:sources) ? db[:sources].select_map(:slug) : []
       ensure
         db&.disconnect
-      end
-
-      # (device, inode) — a file replaced in place (delete + recreate) changes
-      # inode, which is how the opener notices a rebuild. nil when absent.
-      def file_identity(path)
-        return nil unless File.exist?(path)
-
-        stat = File.stat(path)
-        [stat.dev, stat.ino]
       end
 
       # The diagnostics sink for `nabu mcp`: stderr by default, or a file opened
