@@ -134,6 +134,18 @@ module Nabu
     # silent fall-through.
     def self.content_kind = :passages
 
+    # The paths (workdir-relative) this adapter's #fetch DELIBERATELY
+    # creates inside canonical/<slug>/ beside upstream's tree — tarball
+    # extractions, pinned sidecar files (Q59-a, ruled 2026-09-03). The
+    # incremental rebuild's identity walker tolerates a declared path as
+    # untracked and hashes its bytes into the canonical identity (the
+    # .attic discipline — vouched, never trusted blind); an UNDECLARED
+    # untracked path keeps the tree weak-identity, and a weak source
+    # re-parses on EVERY incremental rebuild. If your fetch materializes
+    # anything into the workdir, declare it here — silence is a standing
+    # replay tax, not a default.
+    def self.materialized_paths = []
+
     # Does this adapter's parser extract descendant reflexes into
     # dictionary_reflexes (P14-1)? Declared HERE — beside content_kind, the
     # other loader-facing capability — so `nabu health` can hold the promise

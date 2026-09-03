@@ -123,6 +123,48 @@ class DerivationFingerprintTest < Minitest::Test
     refute_equal with_attic, identity(dir)
   end
 
+  # -- canonical identity: declared materializations (Q59-a, ruled 2026-09-03) --
+
+  def test_declared_materialization_is_hashed_not_weak
+    dir = git_tree("corpus", "conllu.tar.gz" => "tracked archive bytes\n")
+    texts = File.join(dir, "texts")
+    FileUtils.mkdir_p(texts)
+    File.write(File.join(texts, "a.conllu"), "extracted\n")
+
+    assert_nil identity(dir), "undeclared untracked content stays weak — the honest default"
+
+    strong = identity(dir, materialized: %w[texts])
+    refute_nil strong, "a DECLARED materialization is tolerated — and hashed, never trusted blind"
+
+    File.write(File.join(texts, "a.conllu"), "extracted, changed\n")
+    refute_equal strong, identity(dir, materialized: %w[texts]),
+                 "declared bytes participate in the identity — a change must move it"
+  end
+
+  def test_declared_materialization_never_covers_other_dirt
+    dir = git_tree("corpus", "one.txt" => "alpha\n")
+    FileUtils.mkdir_p(File.join(dir, "texts"))
+    File.write(File.join(dir, "texts", "a.conllu"), "extracted\n")
+    File.write(File.join(dir, "stray.txt"), "untracked\n")
+    assert_nil identity(dir, materialized: %w[texts]),
+               "the declaration covers exactly its paths — a stray beside them is ordinary dirt"
+  end
+
+  def test_declaration_of_an_absent_path_is_inert
+    dir = git_tree("corpus", "one.txt" => "alpha\n")
+    assert_equal identity(dir), identity(dir, materialized: %w[texts]),
+                 "declaring a path the fetch has not materialized yet changes nothing"
+  end
+
+  def test_adapters_declare_their_canonical_materializations
+    assert_equal %w[texts], Nabu::Adapters::Digiliblt.materialized_paths,
+                 "digiliblt's fetch extracts the tracked conllu tarballs into texts/"
+    assert_equal %w[parallels], Nabu::Adapters::Suttacentral.materialized_paths,
+                 "suttacentral's fetch lands the sha-pinned parallels graph beside the tree"
+    assert_equal [], Nabu::Adapter.materialized_paths,
+                 "the default: an adapter materializes nothing into canonical"
+  end
+
   def test_nested_git_repos_are_each_identified_by_head
     parent = File.join(@canonical, "kanripo-style")
     repo_a = git_tree("kanripo-style/KR1a0001", "a.txt" => "one\n")
@@ -435,8 +477,8 @@ class DerivationFingerprintTest < Minitest::Test
     )
   end
 
-  def identity(dir)
-    Nabu::DerivationFingerprint.canonical_identity(dir)
+  def identity(dir, materialized: [])
+    Nabu::DerivationFingerprint.canonical_identity(dir, materialized: materialized)
   end
 
   # The module names (token prefixes) of the fold digest for +languages+.

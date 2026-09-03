@@ -90,6 +90,11 @@ module Nabu
         MANIFEST
       end
 
+      # Q59-a: fetch extracts the tracked conllu tarballs into texts/ —
+      # declared so the identity walker hashes it instead of reading the
+      # tree as weak (which cost a full re-parse every incremental rebuild).
+      def self.materialized_paths = [TEXTS_DIR]
+
       # One DocumentRef per texts/**/<dlt-id>.xml_linked.conllu, sorted by
       # urn. Only the extracted tree is ingestible — the tarballs are fetch
       # furniture, never documents. A pre-fetch workdir yields nothing.
