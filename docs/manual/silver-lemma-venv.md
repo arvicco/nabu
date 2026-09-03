@@ -1,35 +1,29 @@
-# The silver-lemma venv — one-time bootstrap (P84-1)
+# The silver-lemma tools — one-command bootstrap (P84-1)
 
-`nabu lemma-enrich` runs a local CPU lemmatizer (Stanza) inside a Python
-venv. The venv is a **tool, not data**: re-creatable from the network at
-any time, so it lives OUTSIDE the repo and outside the permanent folders
-(default `~/.nabu/venvs/stanza`), is never backed up, and is never
-touched by the test suite. This bootstrap is a one-time, owner-run,
-network step — everything after it runs offline.
+`nabu lemma-enrich` runs a local CPU lemmatizer (Stanza) inside a
+Python venv. The venv is a **tool, not data**: re-creatable from the
+network at any time, so it lives OUTSIDE the repo and the permanent
+folders (default `~/.nabu/venvs/stanza`), is never backed up, and is
+never touched by the test suite.
 
-## Bootstrap (once per box)
-
-```sh
-python3 -m venv ~/.nabu/venvs/stanza
-~/.nabu/venvs/stanza/bin/pip install stanza==1.14.0
-```
-
-Then pre-fetch the models for the wave's language(s) — the worker itself
-runs with downloads disabled, so a missing model fails loudly rather
-than fetching silently mid-campaign:
+## Setup — one command
 
 ```sh
-~/.nabu/venvs/stanza/bin/python - <<'PY'
-import stanza
-stanza.download("la", model_dir="/Users/YOU/.nabu/venvs/stanza/models",
-                processors="tokenize,pos,lemma")
-PY
+bundle exec rake tools:stanza[la]
 ```
 
-(Replace `/Users/YOU` — `stanza.download` wants an absolute path. The
-Latin default package resolves to `ittb_nocharlm`, the trial-verified
-model: P79-4 measured 72 passages/s single-process, ~99% folded-lemma
-accuracy in-domain, 75–89% cross-domain.)
+Idempotent, safe to re-run, announced step by step: the venv,
+`stanza==1.14.0`, and the language's models (tokenize,pos,lemma —
+pre-fetched, because the worker runs with downloads disabled and a
+missing model fails loudly rather than fetching mid-campaign). The
+executable truth is `Nabu::ToolBootstrap` (tested by
+`test/tool_bootstrap_test.rb`); `rake tools:status` shows the tool
+board. This is an owner-run network step — everything after it runs
+offline.
+
+(The Latin default package resolves to `ittb_nocharlm`, the
+trial-verified model: P79-4 measured 72 passages/s single-process,
+~99% folded-lemma accuracy in-domain, 75–89% cross-domain.)
 
 ## Verify
 

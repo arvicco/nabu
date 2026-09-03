@@ -35,7 +35,14 @@ bin/nabu --help
 bin/nabu sync <source> --parse-only   # re-parse without network
 bin/nabu rebuild --dry-run
 rake fixtures:refresh[source]           # re-snapshot upstream sample (network, manual only)
+rake tools:embed / tools:stanza[la] / tools:status   # external-tool bootstraps (owner-fired network)
 ```
+
+- **External tools install through `rake tools:*` only** (owner rule
+  2026-09-03): every venv/model/binary an enrichment lane needs gets ONE
+  tracked, idempotent, sha-pinned task in `Nabu::ToolBootstrap` — never a
+  list of shell incantations handed to a human. New tool = new step in the
+  bootstrap class + its test + the companion doc in `docs/manual/`.
 
 ## Ruby conventions
 
