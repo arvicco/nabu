@@ -72,7 +72,7 @@ nabu language zle-ort                 # decode an etymology cognate-list languag
 
 ## Ask your model
 
-With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+With the [MCP server]({{ '/tools/#ask-your-model' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
 
 - **“Walk прьстъ back as far as it goes.”** → `nabu_etym прьстъ (lang: chu)` — The full chain *pьrstъ → Proto-Balto-Slavic *pírštan → PIE *per- "before, in front", each shelf with glosses, licenses, and corpus-attested cognate counts (Sanskrit pára ×9,769, Latin prīmus ×1,345, Hittite peran, Greek πρίν with gold and silver counts listed separately).
 

@@ -371,7 +371,7 @@ module Nabu
         return "" unless entries && !entries.empty?
 
         lines = ["", "## Ask your model", "",
-                 "With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers " \
+                 "With the [MCP server]({{ '/tools/#ask-your-model' | relative_url }}) connected, this desk answers " \
                  "conversational research questions. Each example ran live against this library:", ""]
         entries.each do |entry|
           lines << "- **“#{entry.fetch('ask')}”** → `#{entry.fetch('call')}` — #{entry.fetch('answer').strip}"

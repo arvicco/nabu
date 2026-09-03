@@ -7,7 +7,7 @@ description: >-
 
 > The Germanicist — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches.
 
-Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Medieval Nordic manuscript archive (Menota), the Corpus of Middle English (CME), early-modern English at scale (EEBO-TCP), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), and the runic inscriptions (Rundata, dual-tagged epigraphy).
+Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Medieval Nordic manuscript archive (Menota), the Corpus of Middle English (CME), early-modern English at scale (EEBO-TCP), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), the German print era whole (DTA, 1473–1969), and the runic inscriptions (Rundata, dual-tagged epigraphy).
 
 The desk spans all three Germanic branches. **East** is Gothic (Wulfila,
 gold-lemmatized in PROIEL). **West** runs Old English (ASPR verse, ISWOC
@@ -26,7 +26,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these seventeen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these eighteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 September 2026)</span> |
 |---|---|---|---|---|
@@ -47,6 +47,7 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `fornsvenska` | texts | attribution | wired · manual | 155 docs / 170,872 passages |
 | `cme` | texts | open | wired · manual | 297 docs / 1,355,279 passages |
 | `eebo-tcp` | texts | open | wired · manual | 60,325 docs / 25,065,921 passages |
+| `dta` | texts | attribution | not yet wired | not synced yet |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 September 2026)</span>: `ang` 63,169 · `en` 59,433 · `non` 20,449 · `eng` 6,813 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 · `gml` 235 … and 42 more (`nabu axis germanic` lists all).
 
@@ -105,7 +106,7 @@ nabu formulas urn:nabu:aspr:A4.1      # the Old English poetic formulas of Beowu
 
 ## Ask your model
 
-With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+With the [MCP server]({{ '/tools/#ask-your-model' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
 
 - **“Where does Gothic guþ come from, and who are its cousins?”** → `nabu_etym guþ (lang: got)` — Proto-Germanic *gudą with 64 cognates (nine attested in this library, counts shown: Gothic 𐌲𐌿𐌸 ×914, Old Norse guð ×1,337, Middle High German got ×6,995 …) and the PIE ancestors *ǵʰutós "libated" / *gʷʰew- "to venerate" above it.
 
