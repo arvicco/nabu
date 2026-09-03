@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8"?><TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title type="work">Divan</title>
+                <title type="sub">Machine readable text</title>
+                <author n="Hafez">Khwāja Shams-ud-Dīn Muhammad Hāfez-e Shīrāzī</author>
+                <editor role="editor">H. Wilberforce Clarke</editor>
+                <sponsor>Perseus Project, Tufts University</sponsor>
+                <principal>Gregory Crane</principal>
+                <respStmt>
+                    <resp>Prepared under the supervision of</resp>
+                    <name>Maryam Foradi</name>
+                    <name>Saeed Majidi</name>
+                </respStmt>
+                <funder n="org:HUM">Humboldt Foundation</funder>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>Leipzig University</publisher>
+                <pubPlace>Leipzig, Germany</pubPlace>
+                <authority>Open Philology Project Project</authority>
+            </publicationStmt>
+            <sourceDesc>
+                <bibl>
+                    <author>Khwāja Shams-ud-Dīn Muhammad Hāfez-e Shīrāzī</author>
+               
+                    <title>Divan</title>
+                    <pubPlace>Calcutta</pubPlace>
+                    <publisher>Government of India Central Printing Office</publisher>
+                    <date>1891</date>
+                </bibl>
+            </sourceDesc>
+        </fileDesc>
+        <encodingDesc><refsDecl n="CTS">
+            <cRefPattern matchPattern="(\\w+).(\\w+).(\\w+).(\\w+)" replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n=\'$1\']/tei:div[@n=\'$2\']/tei:l[@n=\'$3\']/tei:seg[@n=\'$4\'])">
+                <p>This pointer pattern extracts letter and poem and line and seg</p>
+            </cRefPattern>
+            <cRefPattern matchPattern="(\\w+).(\\w+).(\\w+)" replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n=\'$1\']/tei:div[@n=\'$2\']/tei:l[@n=\'$3\'])">
+                <p>This pointer pattern extracts letter and poem and line</p>
+            </cRefPattern>
+            <cRefPattern matchPattern="(\\w+).(\\w+)" replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n=\'$1\']/tei:div[@n=\'$2\'])">
+                <p>This pointer pattern extracts letter and poem</p>
+            </cRefPattern>
+            <cRefPattern matchPattern="(\\w+)" replacementPattern="#xpath(/tei:TEI/tei:text/tei:body/tei:div/tei:div[@n=\'$1\'])">
+                <p>This pointer pattern extracts letter</p>
+            </cRefPattern>
+        </refsDecl>
+            <refsDecl>
+                <refState unit="letter" delim="."/>
+                <refState unit="poem" delim="."/>
+                <refState unit="line" delim="."/>
+                <refState unit="misra"/>
+            </refsDecl>
+        </encodingDesc>
+        <profileDesc>
+            <langUsage>
+                <language ident="en">English</language>
+                <language ident="fa">Farsi</language>
+            </langUsage>
+        </profileDesc>
+        <revisionDesc>
+            <change when="2014-10-25" who="Saeed Majidi">Automatically generated initial markup</change>
+        </revisionDesc>
+    </teiHeader>
+    <text xml:lang="en">
+        <body>
+            <div type="translation" n="urn:cts:farsiLit:hafez.divan.perseus-eng1" xml:lang="eng">
+                <div type="textpart" subtype="letter" n="1" xml:id="Alif">
+                    <div type="textpart" subtype="poem" n="1">
+                        <l n="1">
+                            <seg n="1">Ho ! Saki, pass around and offer the bowl (of love for God) : ### </seg>
+                            <seg n="2">For (the burden of) love (for God) at first (on the day of covenant) appeared easy, but (now) difficulties have occurred. *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">By reason of the perfume (hope) of the musk-pod, that, at the end (of night), the breeze displayeth from that (knotted) fore-lock, ### </seg>
+                            <seg n="2">From the twist of its musky (dark, fragrant) curl, what blood (of grief) befell the hearts (of the lovers of God)! *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">With wine, becolour the prayer-mat if the Pir of the magians (the perfect murshid) bid thee ; ### </seg>
+                            <seg n="2">For of the way and usage of the stages (to God) not without knowledge is the holy traveller (the perfect murshid). *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">In the stage (this world) of the (true) Beloved, mine what ease and pleasure, when momently, ### </seg>
+                            <seg n="2">The (loud) bell (of the call of death) giveth voice, saying : " Bind ye up the chattels of existence !" *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">The dark night (of the world), and the fear of the wave (of grief), and the whirlpool so fearful (the time of death). ### </seg>
+                            <seg n="2">The light-burdened ones of the shore (ancestors who have passed the flood of death), how know they our state? *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">By following my own fancy (in hastening to union with God), me (only) to ill fame all my work brought : ### </seg>
+                            <seg n="2">Secret, how remaineth that great mystery (of love) whereof (great) assemblies speak? *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">Hafiz ! if thou desire the presence (union with God Most High) from Him be not absent : ### </seg>
+                            <seg n="2">When thou visitest thy Beloved, abandon the world ; and let it go. *** </seg>
+                        </l>
+                    </div>
+                    <div type="textpart" subtype="poem" n="2">
+                        <l n="1">
+                            <seg n="1">The rectitude of work, where ? and, I ruined (wanting in rectitude) where ? ### </seg>
+                            <seg n="2">Behold the distance of the Path, from where (rectitude) to (ruin) where ? *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">With profligacy (the being severed from friend and stranger), what connection have rectitude and piety (hypocrisy) ? ### </seg>
+                            <seg n="2">The hearing of the exhortation (that affecteth not the heart) where? The melody of the stringed instrument (the murshid) where ? *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">My heart wearied of the cloister, and of the patched garment of hypocrisy : ### </seg>
+                            <seg n="2">The Magians' cloister (the circle of the murshid), where? the pure wine (of the love of God) where ? *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">He is gone ! To him (the true beloved ; or the murshid), be the time of union a pleasant memory. ### </seg>
+                            <seg n="2">Gone is that (tender) glance, where? and that reproof (to amend), where? *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">From the Friend's (luminous) face, what gaineth the dark heart of enemies? ### </seg>
+                            <seg n="2">The dead (extinguished) lamp, where ? The candle of the resplendent sun, where ? *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">The dust of Thy threshold is like the kuhl of our vision : ### </seg>
+                            <seg n="2">Where go we? Order. Hence, where? *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">Look not at the apple (dimple) of the chin ; for in the path is a (great) pit : ### </seg>
+                            <seg n="2">O heart ! where goest thou? With this haste, where ? *** </seg>
+                        </l>
+                        <l n="8">
+                            <seg n="1">O friend ! from Hafiz seek neither ease nor patience : ### </seg>
+                            <seg n="2">Ease, what? Patience, what? Sleep, where? *** </seg>
+                        </l>
+                    </div>
+                    <div type="textpart" subtype="poem" n="3">
+                        <l n="1">
+                            <seg n="1">If that Bold One (the true Beloved) of Shiraz gain our heart, ### </seg>
+                            <seg n="2">For His dark mole, I will give Samarkand and Bukhara (both worlds). *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">Saki ! give the wine (of divine love) remaining (from the people of religion) ; for, in Paradise, thou wilt not have ### </seg>
+                            <seg n="2">The bank of the water of the Ruknabad (the lover's weeping eye) nor the rose of the garden of Musalla (the lover's heart). *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">Alas ! These saucy dainty ones (lovely women) sweet of work, the torment of the city, ### </seg>
+                            <seg n="2">Take patience from the heart even as the men of Turkistan (take) the tray of plunder. *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">The beauty of the Beloved (God) is in no need of our imperfect love : ### </seg>
+                            <seg n="2">Of lustre, and colour, and mole and tricked line (of eyebrow), what need hath the lovely face ? *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">By reason of that beauty, daily increasing that Yusuf (the absolute Existence, the real Beloved, God) had, I (the first day) knew that Love for Him would bring ### </seg>
+                            <seg n="2">Zulaikha (us, things possible) forth from the screen of chastity (the pure existence of God). *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">The tale of minstrel and of wine (of Love) utter ; little seek the mystery of time ; ### </seg>
+                            <seg n="2">For this mystery, none solved by skill (thought and knowledge) ; and shall not solve. *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">O Soul ! Hear the counsel (of the Murshid). ### </seg>
+                            <seg n="2">For, dearer than the soul, hold happy youths the counsel of the wise old man. *** </seg>
+                        </l>
+                        <l n="8">
+                            <seg n="1">(O murshid !) thou (to amend my work) spakest ill of me ; and I am happy. God Most High forgive thee thou spakest well : ### </seg>
+                            <seg n="2">The bitter reply suiteth the ruddy lip, sugar-eating. *** </seg>
+                        </l>
+                        <l n="9">
+                            <seg n="1">Thou utteredest a ghazal; and threadedest pearls (of verse). Hafiz ! come and sweetly sing ### </seg>
+                            <seg n="2">That, on thy verse, the sky may scatter (in thanks) the cluster of the Pleiades. *** </seg>
+                        </l>
+                    </div>
+                    <div type="textpart" subtype="poem" n="4">
+                        <l n="1">
+                            <seg n="1">O breeze ! with softness speak to the beautiful fawn (the murshid), ### </seg>
+                            <seg n="2">Saying : Thou hast given to us desire for the mountain and the desert (the hardship and pain of separation). *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">The sugar-seller (the murshid, seller of the sugar of Divine knowledge), whose life be long ! why ### </seg>
+                            <seg n="2">Maketh he no inquiry of the welfare of the parrot (Hafiz, the disciple) sugar of divine knowledge) devouring? *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">(O murshid!) when thou sittest with the beloved (Muhammad); and drinkest wine (the acquisition of divine bounty), ### </seg>
+                            <seg n="2">Bring to mind the beloved ones, wind-measuring (astoniedand bewildered). *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">O rose (murshid, beautiful as the rose) ! perhaps the pride of beauty hath not given thee permission. ### </seg>
+                            <seg n="2">That thou makest no inquiry as to the state (full of grief, void of hypocrisy) of the distraught nightingale (Hafiz). *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">By beauty of disposition, people of vision one can captivate : ### </seg>
+                            <seg n="2">Not by snare and net, take they the wise bird. *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">I know not why the colour of constancy, they have not ### </seg>
+                            <seg n="2">Those straight of stature, dark of eye, moon of face (the prophets in the garden of the shar'). *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">Of defect in thy beauty, one cannot speak save to this degree ### </seg>
+                            <seg n="2">That the way of love and of constancy belongeth not to the lovely face. *** </seg>
+                        </l>
+                        <l n="8">
+                            <seg n="1">In thanks for the society of companions, and the friendship of fortune, ### </seg>
+                            <seg n="2">Bring to mind the wanderers of the plain and the desert. *** </seg>
+                        </l>
+                        <l n="9">
+                            <seg n="1">On the sky, what if, of Hafiz's utterances ### </seg>
+                            <seg n="2">Zuhra's singing should bring to dancing the Masiha (Christ). *** </seg>
+                        </l>
+                    </div>
+                    <div type="textpart" subtype="poem" n="5">
+                        <l n="1">
+                            <seg n="1">For God's sake (come to my cry (relief). O pious ones (murshids of the age) ! forth from the hand (of control), goeth my heart (in perturbation). For God's sake (come to my cry and aid me) : ### </seg>
+                            <seg n="2">O the pain that the hidden mystery (of love) should be disclosed. *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">We are boat-stranded ones ! O fair breeze (the murshid ; or divine love) ! arise : ### </seg>
+                            <seg n="2">It may be that, again, we may behold the face of the Beloved (God), *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">For the (short) space of ten days, the sphere's favour is magic and sorcery (entrancing) : ### </seg>
+                            <seg n="2">O friend ! regard as booty, goodness in friends (companions, disciples). *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">Last night in the assembly of the rose and of wine (the banquet of taste, of desire, of glories, of splendour, of love for God), 'the bulbul (murshid) sweetly sang : ### </seg>
+                            <seg n="2">O Saki ! give wine : O intoxicated ones ! come to life ! *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">The cup of wine (the heart filled with recollection of God) is Sikandar's mirror. Behold, ### </seg>
+                            <seg n="2">So that it may show thee the state of Dara's kingdom (the soul). *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">O generous one ! in thanks for thy own safety ### </seg>
+                            <seg n="2">One day, make inquiry of the welfare of the foodless darvlsh. *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">The ease of two worlds (this and the next) is the explanation of these two words : ### </seg>
+                            <seg n="2">With friends, kindness ; with enemies, courtesy. *** </seg>
+                        </l>
+                        <l n="8">
+                            <seg n="1">In the street of good name (outward rectitude), they (Fate and Destiny) gave us no admission : If thou approve not, change our Fate. ### </seg>
+                            <seg n="2">That (true wine of the love of God, which is like to thee) bitter wine, which the *** </seg>
+                        </l>
+                        <l n="9">
+                            <seg n="1">Sufi (Muhammad) called "The mother of iniquities," ### </seg>
+                            <seg n="2">To us, is more pleasant and more sweet than the kisses of virgins. *** </seg>
+                        </l>
+                        <l n="10">
+                            <seg n="1">In the time of straitedness, strive in pleasure and in intoxication : ### </seg>
+                            <seg n="2">For, this elixir of existence maketh the beggar (rich as) Karun. *** </seg>
+                        </l>
+                        <l n="11">
+                            <seg n="1">Be not arrogant ; for thee, like a candle, with wrath will consume, ### </seg>
+                            <seg n="2">The Heart-Ravisher (the true Beloved, God) in whose hand, the hard stone is (as) soft wax. *** </seg>
+                        </l>
+                        <l n="12">
+                            <seg n="1">Life-givers, are the lovely ones, Persian-prattling : ### </seg>
+                            <seg n="2">O Saki ! this news, give to the old men of Pars (Persia). *** </seg>
+                        </l>
+                        <l n="13">
+                            <seg n="1">If the minstrel call the companions (friends of the assembly) of this Persian ghazal, ### </seg>
+                            <seg n="2">To dancing, he will bring the pious old men. *** </seg>
+                        </l>
+                        <l n="14">
+                            <seg n="1">Of himself, Hafiz put not on this patched, wine-stained garment (of poverty) ### </seg>
+                            <seg n="2">O shaikh, pure of skirt ! hold us excused. *** </seg>
+                        </l>
+                    </div>
+                    <div type="textpart" subtype="poem" n="6">
+                        <l n="1">
+                            <seg n="1">To the Sultan's attendants, who will convey this prayer ### </seg>
+                            <seg n="2">" In thanks for sovereignty, away from sight drive not the beggar ?" *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">From the watcher (imperious lust), demon of nature,- I take shelter in my God ; ### </seg>
+                            <seg n="2">Perchance that gleaming light (God's bounty and grace) may, for God's sake, give a little aid. *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">When (by Thy splendour) Thou enkindlest thy face, Thou consumest a world ! ### </seg>
+                            <seg n="2">From this, what profit hast Thou that Thou doest no kindness *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">O (true) Beloved ! what is the tumult that to lovers thou displayedest ### </seg>
+                            <seg n="2">Thy face like the gleaming moon, Thy stature like the heart-ravishing cypress? *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">All night (all my life), in this hope I am that the breeze of dawn (the angel of death), ### </seg>
+                            <seg n="2">With the message of lovers (giving release by death from the world's tumult), will cherish (me) the lover. *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">If Thy dark eye-lash (arrow-like) made for our blood, ### </seg>
+                            <seg n="2">O Idol! think of its deceit (in blood-shedding); and, make no mistake (lest Thou suffer regret for my blood). *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">From the deceit of Thy eye of sorcery, blood became my sorrowful heart, ### </seg>
+                            <seg n="2">O my Beloved ! see how me, it (Thy eye) slew see. *** </seg>
+                        </l>
+                        <l n="8">
+                            <seg n="1">O murshid ! to the lover (Hafiz) morning-rising, give thou, for God's sake, a draught (of wine of love), ### </seg>
+                            <seg n="2">May his prayer of the morning-time avail thee ! *** </seg>
+                        </l>
+                        <l n="9">
+                            <seg n="1">Hafiz's sorrowful heart that through separation from Thee, is full of blood, ### </seg>
+                            <seg n="2">What would be (its state), if, awhile, it should attain union with the (true) Beloved ? *** </seg>
+                        </l>
+                    </div>
+                    <div type="textpart" subtype="poem" n="7">
+                        <l n="1">
+                            <seg n="1">O Sufi (outwardly pure, inwardly impure) ! come; for bright is the mirror of the cup (the heart of the perfect murshid) : ### </seg>
+                            <seg n="2">That thou mayest see the brightness of the wine of ruby hue (or experience the intoxication of the wine of the love of God). *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">The Anka (God's pure existence) is the prey of none. Up-pluck thy snare - ### </seg>
+                            <seg n="2">For, here ever, in the hand of the snare, is (only) wind (vain thought). *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">(Whilst thou art in the world) strive in the pleasure (of zikr va filer) of the present. As, when no water remained, ### </seg>
+                            <seg n="2">" Adam let go the garden of the house of safety (Paradise)." *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">At time's banquet, enjoy one or two cups (moments of union with the true Beloved); and go (to eternity) : ### </seg>
+                            <seg n="2">(Here) verily desire not perpetual union (for 'tis vain). *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">O heart ! youth's vigour hath departed ; and, from life, thou hast not plucked a single rose (of true love, or of divine grace) : ### </seg>
+                            <seg n="2">Elderly of head, show skill (in permanence) of name and fame (in supplication and lamentation to God). *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">Of profligates intoxicated (with excess of love for God) as the mystery (unutterable and hidden) within the veil ; ### </seg>
+                            <seg n="2">For, this state (wherein they utter mysteries) is not the zahid's, lofty of degree. *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">On our part, at thy threshold, many are thy rights of service. ### </seg>
+                            <seg n="2">O Sir ! again, in pity, look upon thy slave (who, at least, hath not quitted thy threshold). *** </seg>
+                        </l>
+                        <l n="8">
+                            <seg n="1">I gave up wish for ease at that time when ### </seg>
+                            <seg n="2">This heart placed its reins (of control) in the hand of Thy love. *** </seg>
+                        </l>
+                        <l n="9">
+                            <seg n="1">The disciple of the cup of Jamshld is Hafiz. O breeze, go : ### </seg>
+                            <seg n="2">And give salutation from the slave to the Shaikh of Jam. *** </seg>
+                        </l>
+                    </div>
+                    <div type="textpart" subtype="poem" n="8">
+                        <l n="1">
+                            <seg n="1">O Saki (murshid) ! arise; and give the cup (of wine of desired : ### </seg>
+                            <seg n="2">Strew dust on the head of the grief of time. *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">In my palm, place the cup of wine so that, from my breast, ### </seg>
+                            <seg n="2">I may pluck off this patched garment of blue colour. *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">Although in the opinion of the (apparently) wise, ill-fame is ours, ### </seg>
+                            <seg n="2">Not name nor fame, do we (distraught with love for God) desire. *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">Give wine ! with this wind of pride, how long, ### </seg>
+                            <seg n="2">Dust on the head of useless desire ? *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">The smoke of the sigh of my burning heart ### </seg>
+                            <seg n="2">Consumed these immature ones (hypocrites; fathers of lust). *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">Of the secret (of love) of my distraught heart, a friend, ### </seg>
+                            <seg n="2">Among high and low, none, I see. *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">Glad is my heart with a heart's ease (a lovely one), ### </seg>
+                            <seg n="2">Who, from my heart, once took ease. *** </seg>
+                        </l>
+                        <l n="8">
+                            <seg n="1">At the cypress in the sward, again looketh not ### </seg>
+                            <seg n="2">That one, who beheld that cypress of silvern limb. *** </seg>
+                        </l>
+                        <l n="9">
+                            <seg n="1">Hafiz ! day and night, be patient, in adversity: ### </seg>
+                            <seg n="2">So that, in the end, thou mayst, one day, gain thy desire. *** </seg>
+                        </l>
+                    </div>
+                    <div type="textpart" subtype="poem" n="9">
+                        <l n="1">
+                            <seg n="1">The splendour of youth's time (the murshid's assembly) again belongeth to the garden (the holy traveller's existence) ; ### </seg>
+                            <seg n="2">The glad tidings (of divine glories) of the rose (the Beloved) reacheth the bulbul (the lover) sweet of song. *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">O breeze ! if again thou reach the youths of the meadow (the murshid's disciples), ### </seg>
+                            <seg n="2">Convey our service (of prayer) to the cypress, the rose, and the sweet basil (the murshid's disciples). *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">If the young magian (the khalifa, showing the true Path), wine-seller, display such splendor (of explanation), ### </seg>
+                            <seg n="2">(In thanks) I will make myeye-lash the dust-sweeper of the door of the wine-house (his dwelling). *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">O thou that drawest, over the moon (of thy face), the chaugan of purest ambergris (the black tress), ### </seg>
+                            <seg n="2">(By concealing thy grace), make not distraught of state, me of revolving head. *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">This crowd that laugheth (and carpeth) at those (lovers of God) drinking the wine dregs (of the wine of the love of God), I fear ? ### </seg>
+                            <seg n="2">They will, in the end, ruin their Faith. *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">Be the friend of the men of God ; for, in Nuh's ark (the existence of the people of God), ### </seg>
+                            <seg n="2">Was a little dust (humbleness), that purchased not the deluge (the empire of the world) for a drop of water. *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">To him, whose last sleeping-place is with two handfuls of earth (the grave), ### </seg>
+                            <seg n="2">Say : "Thine what need, to exalt the turrets to the sky?" *** </seg>
+                        </l>
+                        <l n="8">
+                            <seg n="1">Forth from the house of the sphere, go ; and bread, seek not. ### </seg>
+                            <seg n="2">For, in the end, this dark cup (of avarice) slayeth the guest. *** </seg>
+                        </l>
+                        <l n="9">
+                            <seg n="1">My moon of Kan'an (my soul)! the throne of Egypt (the rank of perfection ; the world of souls) is thine : ### </seg>
+                            <seg n="2">The time is that (time) when thou shouldst bid farewell to the prison (of the body, or of the world). *** </seg>
+                        </l>
+                        <l n="10">
+                            <seg n="1">In thy tress-tip, I know not what designs thou hast that ### </seg>
+                            <seg n="2">Again the tress, musk-diffusing, thou hast dishevelled. *** </seg>
+                        </l>
+                        <l n="11">
+                            <seg n="1">Not (even) one mystery of the mysteries of the (Absolute) existence mayest thou know, ### </seg>
+                            <seg n="2">If head bewildered of the circle of possibility, thou be. *** </seg>
+                        </l>
+                        <l n="12">
+                            <seg n="1">The land of liberty, and the corner of contentment is a treasure, ### </seg>
+                            <seg n="2">That, by the sword, the Sultan cannot attain. *** </seg>
+                        </l>
+                        <l n="13">
+                            <seg n="1">Hafiz ! drink wine (of love) ; practise profligacy (the concealing of secrets) and be happy (grieve not, and grieved be not) ; but, ### </seg>
+                            <seg n="2">Like others, make not the Kuran the snare of deceit. *** </seg>
+                        </l>
+                    </div>
+                    <div type="textpart" subtype="poem" n="10">
+                        <l n="1">
+                            <seg n="1">Last night (the first day of Eternity without beginning) from the masjid (the place where the soul is separate from the body) towards the wine tavern (the stage of truth and love) our Pir (Muhammad) came : ### </seg>
+                            <seg n="2">O friends of the Path ! after this (lapse of time, and this departure), what is our plan? *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">How may we, disciples, turn to the Ka'ba (the Masjid), when ### </seg>
+                            <seg n="2">Our Pir (Muhammad) hath his face towards the house of the Vintner (the stage of Truth and Love). *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">In the Fire-worshipper's Tavern (the stage of Truth and Love) we also shall be lodging ; ### </seg>
+                            <seg n="2">For, in the Covenant of eternity without beginning, even so was our destiny. *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">In the bond of His (the Beloved's) tress, how happy is the Heart ! If Wisdom know, ### </seg>
+                            <seg n="2">In pursuit of our tress-chain, the wise will become distraught. *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">The prey of tranquillity had fallen into the snare of the bird of the heart ; ### </seg>
+                            <seg n="2">Thou loosedest thy tress ; and again went from the hand our prey. *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">By its grace, Thy beautiful face explained to us a verse of the Kuran : ### </seg>
+                            <seg n="2">For that reason, in our explanation, is naught save grace and beauty. *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">A single night, against Thy stony heart, ever effecteth aught ### </seg>
+                            <seg n="2">Our sigh, fire-raining (supplicating God) and the burning of our heart in the night-time? *** </seg>
+                        </l>
+                        <l n="8">
+                            <seg n="1">Upon Thy (black) tress, came the (dishevelling) wind ; the world (from seeing that dishevelling) became black to me : ### </seg>
+                            <seg n="2">Than the passion for Thy tress, more than this is not our honouring (that we fall into tumult). *** </seg>
+                        </l>
+                        <l n="9">
+                            <seg n="1">Beyond the "sphere passeth the arrow of our sigh. Hafiz ! silence. ### </seg>
+                            <seg n="2">Show compassion to thy soul ; avoid the arrow of ours. *** </seg>
+                        </l>
+                        <l n="10">
+                            <seg n="1">At the door of the wine-house, dweller I shall be like Hafiz, ### </seg>
+                            <seg n="2">Since a tavern-haunter became that friend of the Path, the Pir of ours. *** </seg>
+                        </l>
+                    </div>
+                    <div type="textpart" subtype="poem" n="11">
+                        <l n="1">
+                            <seg n="1">Saki (murshid) ! with the light of wine (divine love), up-kindle the cup (of the heart) of ours. ### </seg>
+                            <seg n="2">Minstrel (murshid) ! speak, saying : " The world's work hath gone (agreeably) to the desire of' ours." *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">In the cup (of the heart), we have beheld the reflection of the face of the Beloved (God) ### </seg>
+                            <seg n="2">O thou void of knowledge of the joy of the perpetual wine-drinking of ours. *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">The coy glance and the grace of those straight of stature (illusory beloved ones) (is only) till ### </seg>
+                            <seg n="2">With grace, moving like a lofty pine-tree, cometh the cypress (the true Beloved) of ours. *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">Never dieth that one, whose heart is alive with (true) love (to God) : ### </seg>
+                            <seg n="2">On the world's record, is written the everlasting existence of ours. *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">On the day of up-rising (the resurrection), I fear, a profit taketh not. ### </seg>
+                            <seg n="2">The lawful bread (piety) of the shaikh, more than the unlawful water (wine of love) of ours. *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">O breeze ! if thou pass by the rose-bed of beloved ones, ### </seg>
+                            <seg n="2">Take care ! present to the beloved (the murshid) the message of ours. *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">(O breeze !) from thy memory, our name why purposely takest thou ? ### </seg>
+                            <seg n="2">Itself (forgetfulness) cometh, when (after death) cometh no recollection of ours. *** </seg>
+                        </l>
+                        <l n="8">
+                            <seg n="1">To the eye of our heart-binding beloved (the murshid) pleasing is intoxication ### </seg>
+                            <seg n="2">For that reason, to intoxication they (Fate and Destiny) have given the rein of ours. *** </seg>
+                        </l>
+                        <l n="9">
+                            <seg n="1">The green (blue) sea of sky, and the bark of the new moon (the mysteries of the sphere), ### </seg>
+                            <seg n="2">Are immersed'in the favour of Haji Kivam (the murshid) of ours. *** </seg>
+                        </l>
+                        <l n="10">
+                            <seg n="1">Like the tulip, in the cold air (of love), my heart was caught (contracted) : ### </seg>
+                            <seg n="2">O bird of fortune (Beloved of the soul)! -when wilt thou go into the snare (drawings of love) of ours ? *** </seg>
+                        </l>
+                        <l n="11">
+                            <seg n="1">Hafiz ! from thy eye, keep shedding a tear-drop ; ### </seg>
+                            <seg n="2">It may be, that the bird of union may attempt the snare of ours. *** </seg>
+                        </l>
+                    </div>
+                    <div type="textpart" subtype="poem" n="12">
+                        <l n="1">
+                            <seg n="1">O (true Beloved)! the splendour of the moon-beauty (the illusory beloved is) from the illumined face of Thine ! ### </seg>
+                            <seg n="2">The lustre of beauteousness from the chin-dimple of Thine ! *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">O Lord ! when these desires (of union with Thee), that are our companions appear, ### </seg>
+                            <seg n="2">Collected will be the heart of ours ; and dishevelled the trees of Thine. *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">My soul at the lip (ready to depart in death) desireth the sight of Thee : ### </seg>
+                            <seg n="2">Back it goeth ; forth, it cometh ; what order is Thine ? *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">When by us, Thou passest, from dust (the illusory lover) and from blood (the true lover) keep far thy skirt : ### </seg>
+                            <seg n="2">For, on this Path (of love) many a one (a pretender) hath become a sacrifice of Thine. *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">My heart worketh desolation (being void of God's grace). Inform the heart-possessor (the murshid) : ### </seg>
+                            <seg n="2">Verily, O friends, I swear by soul of mine and soul of thine. *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">By the revolution of Thy eye, none obtained a portion of enjoyment : ### </seg>
+                            <seg n="2">Best, that they sell the veil of chastity to the intoxicated ones of Thine. *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">Our sleep-stained fortune will, perchance, become vigilant, ### </seg>
+                            <seg n="2">On that account that a little water on its eye, expressed that gleaming face of of Thine. *** </seg>
+                        </l>
+                        <l n="8">
+                            <seg n="1">Along with the wind (divine inspiration), send from Thy cheek a handful of roses (the viewing of God's glory) : ### </seg>
+                            <seg n="2">It may be that I may perceive a perfume (of comfort) from the dust of the rose garden (of propinquity) of Thine. *** </seg>
+                        </l>
+                        <l n="9">
+                            <seg n="1">O Sakis of the banquet of Jam, long be your life ; (that is our) desire., ### </seg>
+                            <seg n="2">Although our cup be not full of wine at the circulation (of the cup) of yours. *** </seg>
+                        </l>
+                        <l n="10">
+                            <seg n="1">O breeze (messenger of desire) ! from us, to the dwellers of Yazd (the people of God) say : ### </seg>
+                            <seg n="2">(Be) the head of those not recognising truths (the dwellers of Shlraz) the chaugan ball of yours. *** </seg>
+                        </l>
+                        <l n="11">
+                            <seg n="1">From the plain of propinquity, though we be far, not far is desire : ### </seg>
+                            <seg n="2">The slave of your King we are, and the praise-utterer of yours *** </seg>
+                        </l>
+                        <l n="12">
+                            <seg n="1">O King of Kings, lofty of star ! for God's sake, a blessing, ### </seg>
+                            <seg n="2">That, like the sky, I may kiss the dust of the court of yours. *** </seg>
+                        </l>
+                        <l n="13">
+                            <seg n="1">Hafiz uttereth a prayer. Listen : say an amin ! ### </seg>
+                            <seg n="2">Be my daily food the lips sugar-scattering of Thine. *** </seg>
+                        </l>
+                    </div>
+                </div>
+                <div type="textpart" subtype="letter" n="2" xml:id="Ba">
+                    <div type="textpart" subtype="poem" n="1">
+                        <l n="1">
+                            <seg n="1">The morning (of ecstatic state) blossometh; and the cloud bindeth a veil (obscuring the sun of truth): ### </seg>
+                            <seg n="2">O companions ! the morning cup ! the morning cup ! *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">(From the trickling cloud), the hail (of death) droppeth on the face of the tulip (people of the world): ### </seg>
+                            <seg n="2">O companions ! the wine (of love)! the wine (of love)! *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">From the sward (the society of the murshid) bloweth the breeze of Paradise (God's blessing) : ### </seg>
+                            <seg n="2">Then, ever drink pure wine (ask for God's blessing). *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">In the sward, the rose (the murshid) causing bounty to arrive) hath fixed its emerald throne : ### </seg>
+                            <seg n="2">Get wine (ruddy and fiery) like the fiery ruby ! *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">Again, they have closed the door (of manifestations) of the tavern (the heart and the brain): ### </seg>
+                            <seg n="2">O Opener of doors (God) ! open ! *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">At such a time, 'tis wonderful ### </seg>
+                            <seg n="2">That hastily they close the tavern. *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">Rights of salt, thy ruby lip ### </seg>
+                            <seg n="2">Hath against the wound of roast-hearts (that have gathered salt from thy lip). *** </seg>
+                        </l>
+                        <l n="8">
+                            <seg n="1">O zahid ! drink wine (of freedom from the work and care of the world) like the profligate : ### </seg>
+                            <seg n="2">O ye wise ones ! fear God. *** </seg>
+                        </l>
+                        <l n="9">
+                            <seg n="1">If thou seek the trace of the water of life, ### </seg>
+                            <seg n="2">Seek the sweet wine (of love) to the sound of the harp (for the lovers of God are ever living). *** </seg>
+                        </l>
+                        <l n="10">
+                            <seg n="1">If, like Sikandar, thou seek life (in ease and in joy), ### </seg>
+                            <seg n="2">Get the ruby lip (mysterious of utterance) of the true Beloved. *** </seg>
+                        </l>
+                        <l n="11">
+                            <seg n="1">To the cheek (memory) of the Saki of Par! form, ### </seg>
+                            <seg n="2">Drink the pure wine (of truth) in the season of the rose. *** </seg>
+                        </l>
+                        <l n="12">
+                            <seg n="1">Hafiz ! suffer no grief. For fortune, the beloved ### </seg>
+                            <seg n="2">Uplifteth in the end the veil (of hindrance to thy desire) from off his face. *** </seg>
+                        </l>
+                    </div>
+                    <div type="textpart" subtype="poem" n="2">
+                        <l n="1">
+                            <seg n="1">(To the true Beloved), I said : "O Sultan of lovely ones! show pity to this " poor stranger : " ### </seg>
+                            <seg n="2">He said : " In the desire of his own heart, loseth his way the wretched stranger." *** </seg>
+                        </l>
+                        <l n="2">
+                            <seg n="1">To Him, I said : " Pass awhile with me." He replied : " Hold me excused." ### </seg>
+                            <seg n="2">A home (delicately) nurtured one, what care beareth he for such griefs of the poor stranger ? *** </seg>
+                        </l>
+                        <l n="3">
+                            <seg n="1">To the gently nurtured one, asleep on the royal ermine, what grief, ### </seg>
+                            <seg n="2">If, should make the couch of thorn ; and, the pillow of the hard stone, the poor stranger. *** </seg>
+                        </l>
+                        <l n="4">
+                            <seg n="1">O thou in the chain of whose tress, are the souls of so many lovers, ### </seg>
+                            <seg n="2">Happily, fell that musky mole, on thy coloured cheek, so strange. *** </seg>
+                        </l>
+                        <l n="5">
+                            <seg n="1">Strangely hath fallen that ant-line (the down) around thy face : ### </seg>
+                            <seg n="2">Yet, in the picture gallery (of Arzhang) the musky line (of shading) is not strange. *** </seg>
+                        </l>
+                        <l n="6">
+                            <seg n="1">In the colour of the moon-like face, appeareth the reflection of wine (of love ; or of unity) : ### </seg>
+                            <seg n="2">Like the leaf of the (ruddy) Arghavan on the surface of the wild red rose, strange. *** </seg>
+                        </l>
+                        <l n="7">
+                            <seg n="1">I said : " O thou tress of night-hue (the attraction of grace), the evening (shelter) of the stranger ! ### </seg>
+                            <seg n="2">" In the morning time, beware, if his need bewail this stranger." *** </seg>
+                        </l>
+                        <l n="8">
+                            <seg n="1">Again, I said : " O my moon ! cover not that cheek of rose-hue : ### </seg>
+                            <seg n="2">" If not, thou wilt make us the shattered and wearied stranger." *** </seg>
+                        </l>
+                        <l n="9">
+                            <seg n="1">He said : " Hafiz ! (at my beauty), friends are in the stage of astonishment : ### </seg>
+                            <seg n="2">" Far (from wonder) it is not, if shattered and wretched sitteth the stranger." *** </seg>
+                        </l>
+                    </div>
+                </div>
+                </div>
+        </body>
+    </text>
+</TEI>

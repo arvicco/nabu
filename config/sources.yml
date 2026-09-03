@@ -4479,3 +4479,16 @@ diccas:   # P95-4
   # al-Dhahabī, Ibn al-Jawzī, al-Jāḥiẓ) of catastrophe accounts with
   # tagged disaster terminology. Embedded English translation glosses
   # ride annotations (gloss_en), never the Arabic text. FileFetch.
+
+perseus-farsilit:   # P95-4
+  adapter: Nabu::Adapters::PerseusFarsilit
+  axes: [iranian]
+  translations: true   # the aligned English rides as a parallel doc (ger1 stays out — eng-only house rule)
+  wired: false   # flip after the owner-fired first sync (checklist §6)
+  sync_policy: manual
+  # PerseusDL canonical-farsiLit — classical Persian: Hafez's Divan
+  # (495 ghazals in 32 alphabet chapters) with aligned English (+ an
+  # unserved German) translation. License read 2026-09-04: the standard
+  # PerseusDL repo grant, CC BY-SA 3.0 US → attribution. Proper CTS
+  # (4-deep chapter.poem.line.seg); slug family perseus-far<n>, house
+  # language code fas.
