@@ -9,9 +9,18 @@ require "tmpdir"
 # IDLE long-lived server releases a rebuilt file's disk (a deleted inode
 # held open pins its bytes) without waiting for its next tool call.
 class ReadonlyOpenerTest < Minitest::Test
-  # A fake connection that records disconnects (the Sequel contract).
-  FakeDb = Struct.new(:path, :disconnected) do
-    def disconnect = self.disconnected = true
+  # A fake connection that records disconnects (the Sequel contract) and
+  # HOLDS AN OPEN FD on its file — faithful to the incident (the stale
+  # connection's descriptor is what pinned the deleted catalog), and
+  # load-bearing on Linux: a freed inode is recycled by the very next
+  # create, so without a holder the delete+recreate in these tests can
+  # mint the SAME (dev, ino) and the identity check honestly sees no
+  # change (caught by CI 2026-09-03; APFS mints monotonically and hid it).
+  FakeDb = Struct.new(:path, :io, :disconnected) do
+    def disconnect
+      io.close unless io.closed?
+      self.disconnected = true
+    end
   end
 
   def setup
@@ -21,12 +30,13 @@ class ReadonlyOpenerTest < Minitest::Test
   end
 
   def teardown
+    @opened.each { |db| db.io.close unless db.io.closed? }
     FileUtils.remove_entry(@dir)
   end
 
   def opener
     @opener ||= Nabu::ReadonlyOpener.new(@path) do
-      FakeDb.new(@path, false).tap { |db| @opened << db }
+      FakeDb.new(@path, File.open(@path, "r"), false).tap { |db| @opened << db }
     end
   end
 
