@@ -4466,3 +4466,16 @@ perseus-anglit:   # P95-4
   # is a provenance-distinct SECOND EDITION beside the held ASPR witness
   # (the diorisis stance — never merged); no __cts__.xml upstream, so
   # titles fall back to the urn tail honestly.
+
+diccas:   # P95-4
+  adapter: Nabu::Adapters::Diccas
+  axes: [arabic]
+  wired: false   # flip after the owner-fired first sync (checklist §6)
+  sync_policy: manual
+  # DiCCAS — Disaster Corpus in Classical Arabic Sources (Cicola,
+  # Bologna 2025; CLARIN.SI hdl 11356/2097, CC BY-NC-SA 4.0 → nc, the
+  # in-file <licence> agreeing): one TEI file, ten classical books
+  # (Qurʾān, the Ṣaḥīḥayn, al-Ṭabarī ×2, Ibn Taghrībirdī, al-Maqrīzī,
+  # al-Dhahabī, Ibn al-Jawzī, al-Jāḥiẓ) of catastrophe accounts with
+  # tagged disaster terminology. Embedded English translation glosses
+  # ride annotations (gloss_en), never the Arabic text. FileFetch.
