@@ -1,0 +1,19 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+#
+# Three real DTA-Basisformat texts (period + genre spread; quirk census
+# in README.md).
+source: dta
+adapter_test: test/adapters/dta_test.rb
+retrieved: 2026-09-03
+files:
+  - path: luther_elltern_1524.xml
+    url: https://www.deutschestextarchiv.de/book/download_xml/luther_elltern_1524
+    whole: true
+  - path: kant_aufklaerung_1784.xml
+    url: https://www.deutschestextarchiv.de/book/download_xml/kant_aufklaerung_1784
+    whole: true
+  - path: fontane_stechlin_1899.xml
+    url: https://www.deutschestextarchiv.de/book/download_xml/fontane_stechlin_1899
+    whole: false
+    trim: front matter + body chapters 1-2 (one reinstated </div>) + complete back matter; everything kept byte-verbatim upstream

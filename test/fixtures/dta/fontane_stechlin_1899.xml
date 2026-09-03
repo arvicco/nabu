@@ -1,0 +1,1068 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.deutschestextarchiv.de/basisformat.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">       <teiHeader>
+<fileDesc>
+<titleStmt>
+<title type="main">Der Stechlin</title>
+<title type="sub">Roman</title>
+<author>
+<persName ref="http://d-nb.info/gnd/118534262">
+<surname>Fontane</surname>
+<forename>Theodor</forename>
+</persName>
+</author>
+<editor corresp="#DTACorpusPublisher">
+<persName ref="http://d-nb.info/gnd/115266127">
+<surname>Geyken</surname>
+<forename>Alexander</forename>
+</persName>
+</editor>
+<editor corresp="#DTACorpusPublisher">
+<persName ref="http://d-nb.info/gnd/1222198746">
+<surname>Haaf</surname>
+<forename>Susanne</forename>
+</persName>
+</editor>
+<editor corresp="#DTACorpusPublisher">
+<persName ref="http://d-nb.info/gnd/1019062681">
+<surname>Jurish</surname>
+<forename>Bryan</forename>
+</persName>
+</editor>
+<editor corresp="#DTACorpusPublisher">
+<persName>
+<surname>Boenig</surname>
+<forename>Matthias</forename>
+</persName>
+</editor>
+<editor corresp="#DTACorpusPublisher">
+<persName>
+<surname>Thomas</surname>
+<forename>Christian</forename>
+</persName>
+</editor>
+<editor corresp="#DTACorpusPublisher">
+<persName>
+<surname>Wiegand</surname>
+<forename>Frank</forename>
+</persName>
+</editor>
+<respStmt>
+<orgName ref="https://www.bbaw.de">Berlin-Brandenburgische Akademie der Wissenschaften (BBAW)</orgName>
+<resp>
+<note type="remarkResponsibility">Langfristige Bereitstellung der DTA-Ausgabe</note>
+<ref target="https://www.bbaw.de"/>
+</resp>
+</respStmt>
+</titleStmt>
+<editionStmt><edition>Vollständige digitalisierte Ausgabe.</edition></editionStmt>
+<extent>
+<measure type="images">533</measure>
+<measure type="tokens">125912</measure>
+<measure type="types">16320</measure>
+<measure type="characters">848662</measure>
+</extent>
+<publicationStmt>
+<publisher xml:id="DTACorpusPublisher">
+<email>dta@bbaw.de</email>
+<orgName role="project">Deutsches Textarchiv</orgName>
+<orgName role="hostingInstitution" xml:lang="en">Berlin-Brandenburg Academy of Sciences and Humanities (BBAW)</orgName>
+<orgName role="hostingInstitution" xml:lang="de">Berlin-Brandenburgische Akademie der Wissenschaften (BBAW)</orgName>
+<address>
+<addrLine>Jägerstr. 22/23, 10117 Berlin</addrLine>
+<country>Germany</country>
+</address>
+</publisher>
+<pubPlace>Berlin</pubPlace>
+<date type="publication">2025-02-28T14:58:03Z</date>
+<availability>
+<licence target="https://creativecommons.org/licenses/by-sa/4.0/deed.de">
+<p>Distributed under the Creative Commons Attribution-ShareAlike 4.0 License.</p>
+</licence>
+</availability>
+<idno>
+<idno type="URLWeb">https://www.deutschestextarchiv.de/fontane_stechlin_1899</idno>
+<idno type="URLXML">https://www.deutschestextarchiv.de/book/download_xml/fontane_stechlin_1899</idno>
+<idno type="URLHTML">https://www.deutschestextarchiv.de/book/download_html/fontane_stechlin_1899</idno>
+<idno type="URLText">https://www.deutschestextarchiv.de/book/download_text/fontane_stechlin_1899</idno>
+<idno type="DTADirName">fontane_stechlin_1899</idno>
+<idno type="DTAID">16276</idno>
+<idno type="URN">urn:nbn:de:kobv:b4-200905191340</idno>
+</idno>
+</publicationStmt>
+<sourceDesc>
+<bibl type="M">Fontane, Theodor: Der Stechlin. Berlin, 1899.</bibl>
+<biblFull>
+<titleStmt>
+<title level="m" type="main">Der Stechlin</title>
+<title level="m" type="sub">Roman</title>
+<author>
+<persName ref="http://d-nb.info/gnd/118534262">
+<surname>Fontane</surname>
+<forename>Theodor</forename>
+</persName>
+</author>
+</titleStmt>
+<editionStmt>
+<edition n="1"/>
+</editionStmt>
+<extent>
+<measure type="pages">2 Bl., 517 S.</measure>
+</extent>
+<publicationStmt>
+<publisher><name>Fontane</name></publisher>
+<pubPlace>Berlin</pubPlace>
+<date type="publication">1899</date>
+</publicationStmt>
+</biblFull>
+<msDesc>
+<msIdentifier>
+<repository>BBAW</repository>
+<idno>
+<idno type="shelfmark">DWB/B4</idno>
+</idno>
+</msIdentifier>
+<physDesc>
+<typeDesc>
+<p>Fraktur</p>
+</typeDesc>
+</physDesc>
+</msDesc>
+</sourceDesc>
+</fileDesc>
+<encodingDesc>
+<editorialDecl>
+<p>Dieses Werk wurde von OCR-Software automatisch erfasst und anschließend gemäß den
+<ref target="https://www.deutschestextarchiv.de/doku/richtlinien">DTA-Transkriptionsrichtlinien</ref>
+von Muttersprachlern nachkontrolliert. Es wurde gemäß dem
+<ref target="https://www.deutschestextarchiv.de/doku/basisformat">DTA-Basisformat</ref> in XML/TEI P5 kodiert.</p>
+<p/>
+</editorialDecl>
+<tagsDecl>
+<rendition scheme="css" xml:id="aq">font-family:sans-serif</rendition>
+<rendition scheme="css" xml:id="b">font-weight:bold</rendition>
+<rendition scheme="css" xml:id="blue">color:blue</rendition>
+<rendition scheme="css" xml:id="c">display:block; text-align:center</rendition>
+<rendition scheme="css" xml:id="et">display:block; margin-left:2em; text-indent:0</rendition>
+<rendition scheme="css" xml:id="et2">display:block; margin-left:4em; text-indent:0</rendition>
+<rendition scheme="css" xml:id="et3">display:block; margin-left:6em; text-indent:0</rendition>
+<rendition scheme="css" xml:id="f">border:1px dotted silver</rendition>
+<rendition scheme="css" xml:id="fr">border:1px dotted silver</rendition>
+<rendition scheme="css" xml:id="g">letter-spacing:0.125em</rendition>
+<rendition scheme="css" xml:id="i">font-style:italic</rendition>
+<rendition scheme="css" xml:id="in">font-size:150%</rendition>
+<rendition scheme="css" xml:id="k">font-variant:small-caps</rendition>
+<rendition scheme="css" xml:id="larger">font-size:larger</rendition>
+<rendition scheme="css" xml:id="red">color:red</rendition>
+<rendition scheme="css" xml:id="right">display:block; text-align:right</rendition>
+<rendition scheme="css" xml:id="s">text-decoration:line-through</rendition>
+<rendition scheme="css" xml:id="smaller">font-size:smaller</rendition>
+<rendition scheme="css" xml:id="sub">vertical-align:sub; font-size:.7em</rendition>
+<rendition scheme="css" xml:id="sup">vertical-align:super; font-size:.7em</rendition>
+<rendition scheme="css" xml:id="u">text-decoration:underline</rendition>
+<rendition scheme="css" xml:id="uu">border-bottom:double 3px #000</rendition>
+</tagsDecl>
+</encodingDesc>
+<profileDesc>
+<langUsage>
+<language ident="deu">(Früh-)Neuhochdeutsch</language>
+<language ident="deu">German</language>
+</langUsage>
+<textClass>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#dtamain">Belletristik</classCode>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#dtasub">Roman</classCode>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#dwds1main">Belletristik</classCode>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#dwds1sub">Roman</classCode>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#DTACorpus">core</classCode>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#DTACorpus">ready</classCode>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#DTACorpus">mts</classCode>
+</textClass>
+</profileDesc>
+</teiHeader>
+<text> <front>
+<pb facs="#f0001"/>
+<pb facs="#f0002"/>
+<pb facs="#f0003"/>
+<pb facs="#f0004"/>
+<titlePage type="halftitle"> <docTitle> <titlePart type="main"> <hi rendition="#b #g">Der Stechlin</hi><lb/>
+</titlePart> </docTitle> </titlePage>
+<pb facs="#f0005"/>
+<div type="advertisement"> <p rendition="#c">Von den Werken <hi rendition="#b #fr">Theodor Fontane's</hi> er&#x017F;chienen bisher<lb/>
+in un&#x017F;erm Verlage folgende Separat-Ausgaben:</p><lb/>
+<list>         <item><hi rendition="#b">L'Adultera.</hi> Roman aus der Berliner Ge&#x017F;ell&#x017F;chaft.</item><lb/>
+<item><hi rendition="#b">C</hi><hi rendition="#aq #b">é</hi><hi rendition="#b">cile.</hi> Roman.</item><lb/>
+<item><hi rendition="#b">Graf Petöfy.</hi> Roman.</item><lb/>
+<item><hi rendition="#b">Schach von Wuthenow.</hi> Erzählung aus der Zeit des<lb/>
+Regiments Gensdarmes.</item><lb/>
+<item><hi rendition="#b">Irrungen, Wirrungen.</hi> Roman.</item><lb/>
+<item><hi rendition="#b">Stine.</hi> Berliner Sitten-Roman.</item><lb/>
+<item><hi rendition="#b">Kriegsgefangen.</hi> Erlebtes 1870.</item><lb/>
+<item><hi rendition="#b">Frau Jenny Treibel.</hi> Roman.</item><lb/>
+<item><hi rendition="#b">Meine Kinderjahre.</hi> Autobiographi&#x017F;cher Roman.</item><lb/>
+<item><hi rendition="#b">Von vor und nach der Rei&#x017F;e.</hi> Plaudereien und kleine<lb/>
+Ge&#x017F;chichten.</item><lb/>
+<item><hi rendition="#b">Effi Brie&#x017F;t.</hi> Roman.</item><lb/>
+<item><hi rendition="#b">Die Poggenpuhls.</hi> Roman.</item><lb/>
+<item><hi rendition="#b">Von Zwanzig bis Dreißig.</hi> Autobiographi&#x017F;ches.</item>     </list> </div><lb/>
+<milestone unit="section" rendition="#hr"/>
+<pb facs="#f0006"/>
+<titlePage type="main"> <docTitle> <titlePart type="main"> <hi rendition="#g">Der Stechlin</hi></titlePart><lb/>
+<titlePart type="sub">Roman</titlePart> </docTitle><lb/>
+<byline>von<lb/>
+<docAuthor> <hi rendition="#b">Theodor Fontane</hi></docAuthor> </byline><lb/>
+<milestone unit="section" rendition="#hr"/><lb/>
+<figure/><lb/>
+<docImprint> <pubPlace>Berlin W</pubPlace><lb/>
+<publisher>F. <hi rendition="#g">Fontane &amp; Co</hi>.</publisher><lb/>
+<docDate>1899</docDate> </docImprint> </titlePage><lb/>
+<pb facs="#f0007"/>
+<div type="copyright"> <p rendition="#c">Alle Rechte<lb/>
+be&#x017F;onders das der Über&#x017F;etzung<lb/>
+vorbehalten</p> </div><lb/>
+</front> <body>
+<pb facs="#f0008" n="[1]"/>
+<div n="1"> <head> <hi rendition="#b">Schloß Stechlin.</hi><lb/>
+</head> <fw type="sig" place="bottom"> <hi rendition="#g">Fontane</hi>, Der Stechlin. 1<lb/>
+</fw>
+<pb facs="#f0009"/>
+<pb n="[3]" facs="#f0010"/>
+<div n="2"> <head> <hi rendition="#b #g">Er&#x017F;tes Kapitel.</hi><lb/>
+</head> <milestone unit="section" rendition="#hr"/> <p>Im Norden der Graf&#x017F;chaft Ruppin, hart an der<lb/>
+mecklenburgi&#x017F;chen Grenze, zieht &#x017F;ich von dem Städtchen<lb/>
+Gran&#x017F;ee bis nach Rheinsberg hin (und noch darüber<lb/>
+hinaus) eine mehrere Meilen lange Seeenkette durch<lb/>
+eine men&#x017F;chenarme, nur hie und da mit ein paar alten<lb/>
+Dörfern, &#x017F;on&#x017F;t aber aus&#x017F;chließlich mit För&#x017F;tereien, Glas-<lb/>
+und Teeröfen be&#x017F;etzte Waldung. Einer der Seeen, die<lb/>
+die&#x017F;e Seeenkette bilden, heißt &#x201E;der <hi rendition="#g">Stechlin</hi>&#x201C;.<lb/>
+Zwi&#x017F;chen flachen, nur an einer einzigen Stelle &#x017F;teil und<lb/>
+quaiartig an&#x017F;teigenden Ufern liegt er da, rundum von<lb/>
+alten Buchen eingefaßt, deren Zweige, von ihrer eignen<lb/>
+Schwere nach unten gezogen, den See mit ihrer Spitze<lb/>
+berühren. Hie und da wäch&#x017F;t ein weniges von Schilf<lb/>
+und Bin&#x017F;en auf, aber kein Kahn zieht &#x017F;eine Furchen,<lb/>
+kein Vogel &#x017F;ingt, und nur &#x017F;elten, daß ein Habicht<lb/>
+drüber hinfliegt und &#x017F;einen Schatten auf die Spiegel¬<lb/>
+fläche wirft. Alles &#x017F;till hier. Und doch, von Zeit zu<lb/>
+Zeit wird es an eben die&#x017F;er Stelle lebendig. Das i&#x017F;t,<lb/>
+wenn es weit draußen in der Welt, &#x017F;ei's auf Island,<lb/>
+&#x017F;ei's auf Java, zu rollen und zu grollen beginnt oder<lb/>
+gar der A&#x017F;chenregen der hawaii&#x017F;chen Vulkane bis weit<lb/>
+auf die Süd&#x017F;ee hinausgetrieben wird. Dann regt &#x017F;ich's<lb/>
+auch <hi rendition="#g">hier</hi>, und ein Wa&#x017F;&#x017F;er&#x017F;trahl &#x017F;pringt auf und &#x017F;inkt<lb/>
+wieder in die Tiefe. Das wi&#x017F;&#x017F;en alle, die den Stechlin<lb/>
+umwohnen, und wenn &#x017F;ie davon &#x017F;prechen, &#x017F;o &#x017F;etzen &#x017F;ie<lb/>
+<fw type="sig" place="bottom">1*<lb/>
+</fw>
+<pb n="4" facs="#f0011"/>
+wohl auch hinzu: &#x201E;Das mit dem Wa&#x017F;&#x017F;er&#x017F;trahl, das i&#x017F;t<lb/>
+nur das Kleine, das beinah Alltägliche; wenn's aber<lb/>
+draußen was Großes giebt, wie vor hundert Jahren in<lb/>
+Li&#x017F;&#x017F;abon, dann brodelt's hier nicht bloß und &#x017F;prudelt<lb/>
+und &#x017F;trudelt, dann &#x017F;teigt &#x017F;tatt des Wa&#x017F;&#x017F;er&#x017F;trahls ein<lb/>
+roter Hahn auf und kräht laut in die Lande hinein.&#x201C;</p><lb/>
+<milestone unit="section" rendition="#hr"/> <p>Das i&#x017F;t der Stechlin, der <hi rendition="#g">See</hi> Stechlin.</p><lb/>
+<p>Aber nicht nur der See führt die&#x017F;en Namen, auch<lb/>
+der Wald, der ihn um&#x017F;chließt. Und Stechlin heißt eben&#x017F;o<lb/>
+das langge&#x017F;treckte Dorf, das &#x017F;ich, den Windungen des<lb/>
+Sees folgend, um &#x017F;eine Süd&#x017F;pitze herumzieht. Etwa<lb/>
+hundert Häu&#x017F;er und Hütten bilden hier eine lange,<lb/>
+&#x017F;chmale Ga&#x017F;&#x017F;e, die &#x017F;ich nur da, wo eine von Klo&#x017F;ter<lb/>
+Wutz her heranführende Ka&#x017F;tanienallee die Ga&#x017F;&#x017F;e durch¬<lb/>
+&#x017F;chneidet, platzartig erweitert. An eben die&#x017F;er Stelle<lb/>
+findet &#x017F;ich denn auch die ganze Herrlichkeit von Dorf<lb/>
+Stechlin zu&#x017F;ammen; das Pfarrhaus, die Schule, das<lb/>
+Schulzenamt, der Krug, die&#x017F;er letztere zugleich ein Eck-<lb/>
+und Kramladen mit einem kleinen Mohren und einer<lb/>
+Guirlande von Schwefelfäden in &#x017F;einem Schaufen&#x017F;ter.<lb/>
+Die&#x017F;er Ecke &#x017F;chräg gegenüber, unmittelbar hinter dem<lb/>
+Pfarrhau&#x017F;e, &#x017F;teigt der Kirchhof lehnan, auf ihm, &#x017F;o<lb/>
+ziemlich in &#x017F;einer Mitte, die frühmittelalterliche Feld¬<lb/>
+&#x017F;teinkirche mit einem aus dem vorigen Jahrhundert<lb/>
+&#x017F;tammenden Dachreiter und einem zur Seite des alten<lb/>
+Rundbogenportals angebrachten Holzarm, dran eine<lb/>
+Glocke hängt. Neben die&#x017F;em Kirchhof &#x017F;amt Kirche &#x017F;etzt<lb/>
+&#x017F;ich dann die von Klo&#x017F;ter Wutz her heranführende<lb/>
+Ka&#x017F;tanienallee noch eine kleine Strecke weiter fort, bis<lb/>
+&#x017F;ie vor einer über einen &#x017F;umpfigen Graben &#x017F;ich hin¬<lb/>
+ziehenden und von zwei rie&#x017F;igen Findlingsblöcken<lb/>
+flankierten Bohlenbrücke Halt macht. Die&#x017F;e Brücke i&#x017F;t<lb/>
+&#x017F;ehr primitiv. Jen&#x017F;eits der&#x017F;elben aber &#x017F;teigt das<lb/>
+<pb n="5" facs="#f0012"/>
+Herrenhaus auf, ein gelbgetünchter Bau mit hohem<lb/>
+Dach und zwei Blitzableitern.</p><lb/>
+<p>Auch die&#x017F;es Herrenhaus heißt Stechlin, <hi rendition="#g">Schloß</hi><lb/>
+Stechlin.</p><lb/>
+<milestone unit="section" rendition="#hr"/> <p>Etliche hundert Jahre zurück &#x017F;tand hier ein wirk¬<lb/>
+liches Schloß, ein Back&#x017F;teinbau mit dicken Rundtürmen,<lb/>
+aus welcher Zeit her auch noch der Graben &#x017F;tammt,<lb/>
+der die von ihm durch&#x017F;chnittene, &#x017F;ich in den See hinein¬<lb/>
+er&#x017F;treckende Landzunge zu einer kleinen In&#x017F;el machte.<lb/>
+Das ging &#x017F;o bis in die Tage der Reformation.<lb/>
+Während der Schwedenzeit aber wurde das alte Schloß<lb/>
+niedergelegt, und man &#x017F;chien es &#x017F;einem gänzlichen Ver¬<lb/>
+fall überla&#x017F;&#x017F;en, auch nichts an &#x017F;eine Stelle &#x017F;etzen zu<lb/>
+wollen, bis kurz nach dem Regierungsantritt Friedrich<lb/>
+Wilhelms <hi rendition="#aq">I</hi>. die ganze Trümmerma&#x017F;&#x017F;e bei&#x017F;eite ge&#x017F;chafft<lb/>
+und ein Neubau beliebt wurde. Die&#x017F;er Neubau war<lb/>
+das Haus, das jetzt noch &#x017F;tand. Es hatte den&#x017F;elben<lb/>
+nüchternen Charakter wie fa&#x017F;t alles, was unter dem<lb/>
+Soldatenkönig ent&#x017F;tand, und war nichts weiter als ein<lb/>
+einfaches <hi rendition="#aq">Corps de logis</hi>, de&#x017F;&#x017F;en zwei vor&#x017F;pringende, bis<lb/>
+dicht an den Graben reichende Seitenflügel ein Hufei&#x017F;en<lb/>
+und innerhalb des&#x017F;elben einen kahlen Vorhof bildeten,<lb/>
+auf dem, als einziges Schmuck&#x017F;tück, eine große blanke<lb/>
+Glaskugel &#x017F;ich prä&#x017F;entierte. Son&#x017F;t &#x017F;ah man nichts als<lb/>
+eine vor dem Hau&#x017F;e &#x017F;ich hinziehende Rampe, von deren<lb/>
+dem Hofe zugekehrter Vorderwand der Kalk &#x017F;chon wieder<lb/>
+abfiel. Gleichzeitig war aber doch ein Be&#x017F;treben unver¬<lb/>
+kennbar, gerade die&#x017F;e Rampe zu was Be&#x017F;onderem zu<lb/>
+machen, und zwar mit Hilfe mehrerer Kübel mit<lb/>
+exoti&#x017F;chen Blattpflanzen, darunter zwei Aloes, von denen<lb/>
+die eine noch gut im Stande, die andre dagegen krank<lb/>
+war. Aber gerade die&#x017F;e kranke war der Liebling des<lb/>
+Schloßherrn, weil &#x017F;ie jeden Sommer in einer ihr<lb/>
+<pb n="6" facs="#f0013"/>
+freilich nicht zukommenden Blüte &#x017F;tand. Und das hing<lb/>
+&#x017F;o zu&#x017F;ammen. Aus dem &#x017F;umpfigen Schloßgraben hatte<lb/>
+der Wind vor langer Zeit ein fremdes Samenkorn in<lb/>
+den Kübel der kranken Aloe geweht, und alljährlich<lb/>
+&#x017F;cho&#x017F;&#x017F;en infolge davon aus der Mitte der &#x017F;chon ange¬<lb/>
+gelbten Aloeblätter die weiß und roten Dolden des<lb/>
+Wa&#x017F;&#x017F;erlie&#x017F;ch oder des <hi rendition="#aq">Butomus umbellatus</hi> auf. Jeder<lb/>
+Fremde der kam, wenn er nicht zufällig ein Kenner<lb/>
+war, nahm die&#x017F;e Dolden für richtige Aloeblüten, und<lb/>
+der Schloßherr hütete &#x017F;ich wohl, die&#x017F;en Glauben, der<lb/>
+eine Quelle der Erheiterung für ihn war, zu zer&#x017F;tören.</p><lb/>
+<p>Und wie denn alles hier herum den Namen<lb/>
+Stechlin führte, &#x017F;o natürlich auch der Schloßherr &#x017F;elb&#x017F;t.<lb/>
+Auch <hi rendition="#g">er</hi> war ein Stechlin.</p><lb/>
+<p>Dubslav von Stechlin, Major a. D. und &#x017F;chon<lb/>
+ein gut Stück über Sechzig hinaus, war der Typus<lb/>
+eines Märki&#x017F;chen von Adel, aber von der milderen<lb/>
+Ob&#x017F;ervanz, eines jener erquicklichen Originale, bei denen<lb/>
+&#x017F;ich &#x017F;elb&#x017F;t die Schwächen in Vorzüge verwandeln. Er<lb/>
+hatte noch ganz das eigentümlich &#x017F;ympathi&#x017F;ch berührende<lb/>
+Selb&#x017F;tgefühl all derer, die &#x201E;&#x017F;chon vor den Hohenzollern<lb/>
+da waren&#x201C;, aber er hegte die&#x017F;es Selb&#x017F;tgefühl nur ganz<lb/>
+im &#x017F;tillen, und wenn es dennoch zum Ausdruck kam,<lb/>
+&#x017F;o kleidete &#x017F;ich's in Humor, auch wohl in Selb&#x017F;tironie,<lb/>
+weil er &#x017F;einem ganzen We&#x017F;en nach überhaupt hinter<lb/>
+alles ein Fragezeichen machte. Sein &#x017F;chön&#x017F;ter Zug war<lb/>
+eine tiefe, &#x017F;o recht aus dem Herzen kommende Humanität,<lb/>
+und Dünkel und Überheblichkeit (während er &#x017F;on&#x017F;t eine<lb/>
+Neigung hatte, fünf gerade &#x017F;ein zu la&#x017F;&#x017F;en) waren &#x017F;o<lb/>
+ziemlich die einzigen Dinge, die ihn empörten. Er<lb/>
+hörte gern eine freie Meinung, je dra&#x017F;ti&#x017F;cher und<lb/>
+extremer, de&#x017F;to be&#x017F;&#x017F;er. Daß &#x017F;ich die&#x017F;e Meinung mit der<lb/>
+&#x017F;einigen deckte, lag ihm fern zu wün&#x017F;chen. Beinah das<lb/>
+Gegenteil. Paradoxen waren &#x017F;eine Pa&#x017F;&#x017F;ion. &#x201E;Ich bin<lb/>
+nicht klug genug, &#x017F;elber welche zu machen, aber ich<lb/>
+<pb n="7" facs="#f0014"/>
+freue mich, wenn's andre thun; es i&#x017F;t doch immer was<lb/>
+drin. Unanfechtbare Wahrheiten giebt es überhaupt<lb/>
+nicht, und wenn es welche giebt, &#x017F;o &#x017F;ind &#x017F;ie lang¬<lb/>
+weilig.&#x201C; Er ließ &#x017F;ich gern was vorplaudern und<lb/>
+plauderte &#x017F;elber gern.</p><lb/>
+<p>Des alten Schloßherrn Lebensgang war märki&#x017F;ch-<lb/>
+herkömmlich gewe&#x017F;en. Von jung an lieber im Sattel<lb/>
+als bei den Büchern, war er er&#x017F;t nach zweimaliger<lb/>
+Scheiterung &#x017F;iegreich durch das Fähnrichsexamen ge&#x017F;teuert<lb/>
+und gleich darnach bei den brandenburgi&#x017F;chen Küra&#x017F;&#x017F;ieren<lb/>
+eingetreten, bei denen &#x017F;elb&#x017F;tver&#x017F;tändlich auch &#x017F;chon &#x017F;ein<lb/>
+Vater ge&#x017F;tanden hatte. Die&#x017F;er &#x017F;ein Eintritt ins Regiment<lb/>
+fiel &#x017F;o ziemlich mit dem Regierungsantritt Friedrich Wil¬<lb/>
+helms <hi rendition="#aq">IV</hi>. zu&#x017F;ammen, und wenn er de&#x017F;&#x017F;en erwähnte, &#x017F;o<lb/>
+hob er, &#x017F;ich &#x017F;elb&#x017F;t per&#x017F;iflierend, gerne hervor, &#x201E;daß alles<lb/>
+Große &#x017F;eine Begleiter&#x017F;cheinungen habe.&#x201C; Seine Jahre<lb/>
+bei den Küra&#x017F;&#x017F;ieren waren im we&#x017F;entlichen Friedensjahre<lb/>
+gewe&#x017F;en; nur anno vierund&#x017F;echzig war er mit in Schleswig,<lb/>
+aber auch hier, ohne &#x201E;zur Aktion&#x201C; zu kommen. &#x201E;Es<lb/>
+kommt für einen Märki&#x017F;chen nur darauf an, überhaupt<lb/>
+mit dabei gewe&#x017F;en zu &#x017F;ein; das andre &#x017F;teht in Gottes<lb/>
+Hand.&#x201C; Und er &#x017F;chmunzelte, wenn er dergleichen &#x017F;agte,<lb/>
+&#x017F;eine Hörer jedesmal in Zweifel darüber la&#x017F;&#x017F;end, ob er's<lb/>
+ern&#x017F;thaft oder &#x017F;cherzhaft gemeint habe. Wenig mehr<lb/>
+als ein Jahr vor Ausbruch des vierund&#x017F;echziger Kriegs<lb/>
+war ihm ein Sohn geboren worden, und kaum wieder<lb/>
+in &#x017F;eine Garni&#x017F;on Brandenburg eingerückt, nahm er den<lb/>
+Ab&#x017F;chied, um &#x017F;ich auf &#x017F;ein &#x017F;eit dem Tode des Vaters<lb/>
+halb verödetes Schloß Stechlin zurückzuziehen. Hier<lb/>
+warteten &#x017F;einer glückliche Tage, &#x017F;eine glücklich&#x017F;ten, aber<lb/>
+&#x017F;ie waren von kurzer Dauer &#x2014; &#x017F;chon das Jahr darauf<lb/>
+&#x017F;tarb ihm die Frau. Sich eine neue zu nehmen, wider¬<lb/>
+&#x017F;tand ihm, halb aus Ordnungs&#x017F;inn und halb aus ä&#x017F;the¬<lb/>
+ti&#x017F;cher Rück&#x017F;icht. &#x201E;Wir glauben doch alle mehr oder<lb/>
+weniger an eine Aufer&#x017F;tehung&#x201C; (das heißt, er per&#x017F;önlich<lb/>
+<pb n="8" facs="#f0015"/>
+glaubte eigentlich nicht daran), &#x201E;und wenn ich dann oben<lb/>
+ankomme mit einer rechts und einer links, &#x017F;o is das<lb/>
+doch immer eine genierliche Sache.&#x201C; Die&#x017F;e Worte &#x2014;<lb/>
+wie denn der Eltern Thun nur allzu häufig der Miß¬<lb/>
+billigung der Kinder begegnet &#x2014; richteten &#x017F;ich in Wirk¬<lb/>
+lichkeit gegen &#x017F;einen dreimal verheiratet gewe&#x017F;enen Vater,<lb/>
+an dem er überhaupt allerlei Großes und Kleines aus¬<lb/>
+zu&#x017F;etzen hatte, &#x017F;o bei&#x017F;pielswei&#x017F;e auch, daß man ihm,<lb/>
+dem Sohne, den pommer&#x017F;chen Namen &#x201E;Dubslav&#x201C; bei¬<lb/>
+gelegt hatte. &#x201E;Gewiß, meine Mutter war eine Pommer&#x017F;che,<lb/>
+noch dazu von der In&#x017F;el U&#x017F;edom, und ihr Bruder, nun<lb/>
+ja, der hieß Dubslav. Und &#x017F;o war denn gegen den<lb/>
+Namen &#x017F;chon um des Onkels willen nicht viel einzu¬<lb/>
+wenden, und um &#x017F;o weniger, als er ein Erbonkel war.<lb/>
+(Daß er mich &#x017F;chließlich &#x017F;chändlich im Stich gela&#x017F;&#x017F;en, i&#x017F;t<lb/>
+eine Sache für &#x017F;ich.) Aber trotzdem bleib' ich dabei,<lb/>
+&#x017F;olche Namensman&#x017F;cherei verwirrt bloß. Was ein<lb/>
+Märki&#x017F;cher i&#x017F;t, der muß Joachim heißen oder Woldemar.<lb/>
+Bleib im Lande und taufe dich redlich. Wer aus Frie¬<lb/>
+&#x017F;ack is, darf nicht Raoul heißen.&#x201C;</p><lb/>
+<p>Dubslav von Stechlin blieb al&#x017F;o Witwer. Das<lb/>
+ging nun &#x017F;chon an die dreißig Jahre. Anfangs war's<lb/>
+ihm &#x017F;chwer geworden, aber jetzt lag alles hinter ihm,<lb/>
+und er lebte &#x201E;<hi rendition="#aq">comme philosophe</hi>&#x201C; nach dem Wort und<lb/>
+Vorbild des großen Königs, zu dem er jederzeit be¬<lb/>
+wundernd aufblickte. Das war &#x017F;ein Mann, mehr als<lb/>
+irgendwer, der &#x017F;ich &#x017F;eitdem einen Namen gemacht hatte.<lb/>
+Das zeigte &#x017F;ich jedesmal, wenn ihm ge&#x017F;agt wurde, daß<lb/>
+er einen Bismarckkopf habe. &#x201E;Nun ja, ja, den hab'<lb/>
+ich; ich &#x017F;oll ihm &#x017F;ogar ähnlich &#x017F;ehen. Aber die Leute<lb/>
+&#x017F;agen es immer &#x017F;o, als ob ich mich dafür bedanken<lb/>
+müßte. Wenn ich nur wüßte, bei wem; vielleicht beim<lb/>
+lieben Gott, oder am Ende gar bei Bismarck &#x017F;elb&#x017F;t.<lb/>
+Die Stechline &#x017F;ind aber auch nicht von &#x017F;chlechten Eltern.<lb/>
+Außerdem, ich für meine Per&#x017F;on, ich habe bei den<lb/>
+<pb n="9" facs="#f0016"/>
+&#x017F;ech&#x017F;ten Küra&#x017F;&#x017F;ieren ge&#x017F;tanden, und Bismarck bloß bei<lb/>
+den &#x017F;iebenten, und die kleinere Zahl i&#x017F;t in Preußen be¬<lb/>
+kanntlich immer die größere; &#x2014; ich bin ihm al&#x017F;o einen<lb/>
+über. Und Friedrichsruh, wo alles jetzt hinpilgert, &#x017F;oll<lb/>
+auch bloß 'ne Kate &#x017F;ein. Darin &#x017F;ind wir uns al&#x017F;o<lb/>
+gleich. Und &#x017F;olchen See, wie den &#x201E;Stechlin&#x201C;, nu, den<lb/>
+hat er &#x017F;chon ganz gewiß nicht. So was kommt über¬<lb/>
+haupt bloß &#x017F;elten vor.&#x201C;</p><lb/>
+<p>Ja, auf &#x017F;einen See war Dubslav &#x017F;tolz, aber de&#x017F;to¬<lb/>
+weniger &#x017F;tolz war er auf &#x017F;ein Schloß, weshalb es ihn<lb/>
+auch verdroß, wenn es überhaupt &#x017F;o genannt wurde.<lb/>
+Von den armen Leuten ließ er &#x017F;ich's gefallen: &#x201E;Für die<lb/>
+i&#x017F;t es ein &#x201E;Schloß&#x201C;, aber &#x017F;on&#x017F;t i&#x017F;t es ein alter Ka&#x017F;ten<lb/>
+und weiter nichts.&#x201C; Und &#x017F;o &#x017F;prach er denn lieber von<lb/>
+&#x017F;einem &#x201E;Haus&#x201C;, und wenn er einen Brief &#x017F;chrieb, &#x017F;o<lb/>
+&#x017F;tand darüber &#x201E;Haus Stechlin&#x201C;. Er war &#x017F;ich auch be¬<lb/>
+wußt, daß es kein Schloßleben war, das er führte. Vor¬<lb/>
+dem, als der alte Back&#x017F;teinbau noch &#x017F;tand, mit &#x017F;einen<lb/>
+dicken Türmen und &#x017F;einem Luginsland, von dem aus<lb/>
+man, über die Kronen der Bäume weg, weit ins Land<lb/>
+hinaus&#x017F;ah, ja, damals war hier ein Schloßleben gewe&#x017F;en,<lb/>
+und die derzeitigen alten Stechline hatten teilgenommen<lb/>
+an allen Fe&#x017F;tlichkeiten, wie &#x017F;ie die Ruppiner Grafen und<lb/>
+die mecklenburgi&#x017F;chen Herzöge gaben, und waren mit<lb/>
+den Boitzenburgern und den Ba&#x017F;&#x017F;ewitzens ver&#x017F;chwägert<lb/>
+gewe&#x017F;en. Aber heute waren die Stechline Leute von<lb/>
+&#x017F;chwachen Mitteln, die &#x017F;ich nur eben noch hielten und<lb/>
+be&#x017F;tändig bemüht waren, durch eine &#x201E;gute Partie&#x201C; &#x017F;ich<lb/>
+wieder leidlich in die Höhe zu bringen. Auch Dubslavs<lb/>
+Vater war auf die Wei&#x017F;e zu &#x017F;einen drei Frauen gekommen,<lb/>
+unter denen freilich nur die er&#x017F;te das in &#x017F;ie ge&#x017F;etzte Ver¬<lb/>
+trauen gerechtfertigt hatte. Für den jetzigen Schloß¬<lb/>
+herrn, der von der zweiten Frau &#x017F;tammte, hatte &#x017F;ich<lb/>
+daraus leider kein unmittelbarer Vorteil ergeben, und<lb/>
+Dubslav von Stechlin wäre kleiner und großer Sorgen<lb/>
+<pb n="10" facs="#f0017"/>
+und Verlegenheiten nie los und ledig geworden, wenn<lb/>
+er nicht in dem benachbarten Gran&#x017F;ee &#x017F;einen alten Freund<lb/>
+Baruch Hir&#x017F;chfeld gehabt hätte. Die&#x017F;er Alte, der den<lb/>
+großen Tuchladen am Markt und außerdem die Mode¬<lb/>
+&#x017F;achen und Damenhüte hatte, hin&#x017F;ichtlich deren es immer<lb/>
+hieß, &#x201E;Ger&#x017F;on &#x017F;chicke ihm alles zuer&#x017F;t&#x201C; &#x2014; die&#x017F;er alte<lb/>
+Baruch, ohne das &#x201E;Ge&#x017F;chäftliche&#x201C; darüber zu verge&#x017F;&#x017F;en,<lb/>
+hing in der That mit einer Art Zärtlichkeit an dem<lb/>
+Stechliner Schloßherrn, was, wenn es &#x017F;ich mal wieder<lb/>
+um eine neue Schuldver&#x017F;chreibung handelte, regelmäßig<lb/>
+zu heikeln Auseinander&#x017F;etzungen zwi&#x017F;chen Hir&#x017F;chfeld Vater<lb/>
+und Hir&#x017F;chfeld Sohn führte.</p><lb/>
+<p>&#x201E;Gott, I&#x017F;idor, ich weiß, du bi&#x017F;t fürs Neue. Aber<lb/>
+was i&#x017F;t das Neue? Das Neue ver&#x017F;ammelt &#x017F;ich immer<lb/>
+auf un&#x017F;erm Markt, und mal &#x017F;türmt es uns den Laden<lb/>
+und nimmt uns die Hüte, Stück für Stück, und die<lb/>
+Reiherfedern und die Straußenfedern. Ich bin fürs<lb/>
+Alte und für den guten alten Herrn von Stechlin. Is<lb/>
+doch der Vater von &#x017F;einem Großvater gefallen in der<lb/>
+großen Schlacht bei Prag und hat gezahlt mit &#x017F;einem<lb/>
+Leben.&#x201C;</p><lb/>
+<p>&#x201E;Ja, der hat gezahlt; wenig&#x017F;tens hat er gezahlt<lb/>
+mit &#x017F;einem Leben. Aber der von heute ...&#x201C;</p><lb/>
+<p>&#x201E;Der zahlt auch, wenn er kann und wenn er hat.<lb/>
+Und wenn er nicht hat, und ich &#x017F;age: &#x201E;Herr von Stech¬<lb/>
+lin, ich werde &#x017F;chreiben &#x017F;iebeneinhalb,&#x201C; dann feil&#x017F;cht er<lb/>
+nicht und dann zwackt er nicht. Und wenn er kippt,<lb/>
+nu, da haben wir das Objekt: Mittelboden und Wald<lb/>
+und Jagd und viel Fi&#x017F;chfang. Ich &#x017F;eh' es immer &#x017F;o<lb/>
+ganz klein in der Per&#x017F;pektiv', und ich &#x017F;eh' auch &#x017F;chon<lb/>
+den Kirchturm.&#x201C;</p><lb/>
+<p>&#x201E;Aber, Vaterleben, was &#x017F;ollen wir mit'm Kirch¬<lb/>
+turm?&#x201C;</p><lb/>
+<p>In die&#x017F;er Richtung gingen öfters die Ge&#x017F;präche<lb/>
+zwi&#x017F;chen Vater und Sohn, und was der Alte vorläufig<lb/>
+<pb n="11" facs="#f0018"/>
+noch in der &#x201E;Per&#x017F;pektive&#x201C; &#x017F;ah, das wäre vielleicht &#x017F;chon<lb/>
+Wirklichkeit geworden, wenn nicht des alten Dubslav um<lb/>
+zehn Jahre ältere Schwe&#x017F;ter mit ihrem von der Mutter her<lb/>
+ererbten Vermögen gewe&#x017F;en wäre: Schwe&#x017F;ter Adelheid,<lb/>
+Domina zu Klo&#x017F;ter Wutz. Die half und &#x017F;agte gut, wenn<lb/>
+es &#x017F;chlecht &#x017F;tand oder gar zum Äußer&#x017F;ten zu kommen<lb/>
+&#x017F;chien. Aber &#x017F;ie half nicht aus Liebe zu dem Bruder<lb/>
+&#x2014; gegen den &#x017F;ie, ganz im Gegenteil, viel einzuwenden<lb/>
+hatte &#x2014;, &#x017F;ondern lediglich aus einem allgemeinen Stech¬<lb/>
+lin&#x017F;chen Familiengefühl. Preußen war was und die<lb/>
+Mark Brandenburg auch; aber das Wichtig&#x017F;te waren<lb/>
+doch die Stechlins, und der Gedanke, das alte Schloß<lb/>
+in andern Be&#x017F;itz und nun gar in einen &#x017F;olchen über¬<lb/>
+gehen zu &#x017F;ehen, war ihr unerträglich. Und über all dies<lb/>
+hinaus war ja noch ihr Patenkind da, ihr Neffe Wolde¬<lb/>
+mar, für den &#x017F;ie all die Liebe hegte, die &#x017F;ie dem Bruder<lb/>
+ver&#x017F;agte.</p><lb/>
+<p>Ja, die Domina half, aber &#x017F;olcher Hilfen unerachtet<lb/>
+wuchs das Gefühl der Entfremdung zwi&#x017F;chen den Ge¬<lb/>
+&#x017F;chwi&#x017F;tern, und &#x017F;o kam es denn, daß der alte Dubslav,<lb/>
+der die Schwe&#x017F;ter in Klo&#x017F;ter Wutz weder gern be&#x017F;uchte<lb/>
+noch auch ihren Be&#x017F;uch gern empfing, nichts von Um¬<lb/>
+gang be&#x017F;aß als &#x017F;einen Pa&#x017F;tor Lorenzen (den früheren<lb/>
+Erzieher Woldemars) und &#x017F;einen Kü&#x017F;ter und Dorf&#x017F;chul¬<lb/>
+lehrer Krippen&#x017F;tapel, zu denen &#x017F;ich allenfalls noch Ober¬<lb/>
+för&#x017F;ter Katzler ge&#x017F;ellte, Katzler, der Feldjäger gewe&#x017F;en<lb/>
+war und ein gut Stück Welt ge&#x017F;ehen hatte. Doch auch<lb/>
+die&#x017F;e drei kamen nur, wenn &#x017F;ie gerufen wurden, und &#x017F;o<lb/>
+war eigentlich nur einer da, der in jedem Augenblicke<lb/>
+Red' und Antwort &#x017F;tand. Das war Engelke, &#x017F;ein alter<lb/>
+Diener, der &#x017F;eit beinahe fünfzig Jahren alles mit &#x017F;einem<lb/>
+Herrn durchlebt hatte, &#x017F;eine glücklichen Leutnantstage,<lb/>
+&#x017F;eine kurze Ehe und &#x017F;eine lange Ein&#x017F;amkeit. Engelke,<lb/>
+noch um ein Jahr älter als &#x017F;ein Herr, war de&#x017F;&#x017F;en Ver¬<lb/>
+trauter geworden, aber ohne Vertraulichkeit. Dubslav<lb/>
+<pb n="12" facs="#f0019"/>
+ver&#x017F;tand es, die Scheidewand zu ziehen. Übrigens wär'<lb/>
+es auch ohne die&#x017F;e Kun&#x017F;t gegangen. Denn Engelke war<lb/>
+einer von den guten Men&#x017F;chen, die nicht aus Berechnung<lb/>
+oder Klugheit, &#x017F;ondern von Natur hingebend und de¬<lb/>
+mütig &#x017F;ind und in einem treuen Dienen ihr Genüge<lb/>
+finden. Alltags war er, &#x017F;o Winter wie Sommer, in<lb/>
+ein Leinwandhabit gekleidet, und nur wenn es zu Ti&#x017F;ch<lb/>
+ging, trug er eine <choice><sic>richige</sic><corr>richtige</corr></choice> Livree von &#x017F;andfarbenem Tuch<lb/>
+mit großen Knöpfen dran. Es waren Knöpfe, die noch<lb/>
+die Zeiten des Rheinsberger Prinzen Heinrich ge&#x017F;ehen<lb/>
+hatten, weshalb Dubslav, als er mal wieder in Ver¬<lb/>
+legenheit war, zu dem jüng&#x017F;t ver&#x017F;torbenen alten Herrn<lb/>
+von Kort&#x017F;chädel ge&#x017F;agt hatte: &#x201E;Ja, Kort&#x017F;chädel, wenn<lb/>
+ich &#x017F;o meinen Engelke, wie er da geht und &#x017F;teht, ins<lb/>
+märki&#x017F;che Provinzialmu&#x017F;eum abliefern könnte, &#x017F;o kriegt'<lb/>
+ich ein Jahrgehalt und wäre 'raus.&#x201C;</p><lb/>
+<milestone unit="section" rendition="#hr"/> <p>Das war im Mai, daß der alte Stechlin die&#x017F;e<lb/>
+Worte zu &#x017F;einem Freunde Kort&#x017F;chädel ge&#x017F;prochen hatte.<lb/>
+Heute aber war dritter Oktober und ein wundervoller<lb/>
+Herb&#x017F;ttag dazu. Dubslav, &#x017F;on&#x017F;t empfindlich gegen Zug,<lb/>
+hatte die Thüren aufmachen la&#x017F;&#x017F;en, und von dem großen<lb/>
+Portal her zog ein erquicklicher Luft&#x017F;trom bis auf die<lb/>
+mit weiß und &#x017F;chwarzen Flie&#x017F;en gedeckte Veranda hin¬<lb/>
+aus. Eine große, etwas &#x017F;chadhafte Marqui&#x017F;e war hier<lb/>
+herabgela&#x017F;&#x017F;en und gab Schutz gegen die Sonne, deren<lb/>
+Lichter durch die &#x017F;chadhaften Stellen hindurch &#x017F;chienen<lb/>
+und auf den Flie&#x017F;en ein Schatten&#x017F;piel aufführten. Garten¬<lb/>
+&#x017F;tühle &#x017F;tanden umher, vor einer Bank aber, die &#x017F;ich an<lb/>
+die Hauswand lehnte, waren doppelte Strohmatten ge¬<lb/>
+legt. Auf eben die&#x017F;er Bank, ein Bild des Behagens,<lb/>
+&#x017F;aß der alte Stechlin in Joppe und breitkrempigem<lb/>
+Filzhut und &#x017F;ah, während er aus &#x017F;einem Meer&#x017F;chaum<lb/>
+allerlei Ringe blies, auf ein Rundell, in de&#x017F;&#x017F;en Mitte,<lb/>
+<pb n="13" facs="#f0020"/>
+von Blumen eingefaßt, eine kleine Fontäne plät&#x017F;cherte.<lb/>
+Rechts daneben lief ein &#x017F;ogenannter Poeten&#x017F;teig, an<lb/>
+de&#x017F;&#x017F;en Ausgang ein ziemlich hoher, aus allerlei Gebälk<lb/>
+zu&#x017F;ammengezimmerter Aus&#x017F;ichtsturm aufragte. Ganz<lb/>
+oben eine Plattform mit Fahnen&#x017F;tange, daran die<lb/>
+preußi&#x017F;che Flagge wehte, &#x017F;chwarz und weiß, alles &#x017F;chon<lb/>
+ziemlich ver&#x017F;chli&#x017F;&#x017F;en.</p><lb/>
+<p>Engelke hatte vor kurzem einen roten Streifen an¬<lb/>
+nähen wollen, war aber mit &#x017F;einem Vor&#x017F;chlag nicht<lb/>
+durchgedrungen. &#x201E;Laß. Ich bin nicht dafür. Das alte<lb/>
+Schwarz und Weiß hält gerade noch; aber wenn du<lb/>
+was rotes dran näh&#x017F;t, dann reißt es gewiß.&#x201C;</p><lb/>
+<p>Die Pfeife war ausgegangen, und Dubslav wollte<lb/>
+&#x017F;ich eben von &#x017F;einem Platz erheben und nach Engelke<lb/>
+rufen, als die&#x017F;er vom Garten&#x017F;aal her auf die Veranda<lb/>
+heraustrat.</p><lb/>
+<p>&#x201E;Das i&#x017F;t recht, Engelke, daß du komm&#x017F;t ...<lb/>
+Aber du ha&#x017F;t da ja was wie 'n Telegramm in der<lb/>
+Hand. Ich kann Telegramms nicht leiden. Immer is<lb/>
+einer dod, oder es kommt wer, der be&#x017F;&#x017F;er zu Hau&#x017F;e<lb/>
+geblieben wäre.&#x201C;</p><lb/>
+<p>Engelke griente. &#x201E;Der junge Herr kommt.&#x201C;</p><lb/>
+<p>&#x201E;Und das weißt du &#x017F;chon?&#x201C;</p><lb/>
+<p>&#x201E;Ja, Bro&#x017F;e hat es mir ge&#x017F;agt.&#x201C;</p><lb/>
+<p>&#x201E;So, &#x017F;o. Dien&#x017F;tgeheimnis. Na, gieb her.&#x201C;</p><lb/>
+<p>Und unter die&#x017F;en Worten brach er das Telegramm<lb/>
+auf und las: &#x201E;Lieber Papa. Bin &#x017F;echs Uhr bei dir.<lb/>
+Rex und von Czako begleiten mich. Dein Woldemar.&#x201C;</p><lb/>
+<p>Engelke &#x017F;tand und wartete.</p><lb/>
+<p>&#x201E;Ja, was da thun, Engelke?&#x201C; &#x017F;agte Dubslav und<lb/>
+drehte das Telegramm hin und her. &#x201E;Und aus Cremmen<lb/>
+und von heute früh,&#x201C; fuhr er fort. &#x201E;Da mü&#x017F;&#x017F;en &#x017F;ie<lb/>
+al&#x017F;o die Nacht über &#x017F;chon in Cremmen gewe&#x017F;en &#x017F;ein. Auch<lb/>
+kein Spaß.&#x201C;</p><lb/>
+<p>&#x201E;Aber Cremmen is doch &#x017F;o weit ganz gut.&#x201C;<lb/>
+</p>
+<pb n="14" facs="#f0021"/>
+<p>&#x201E;Nu, gewiß, gewiß. Bloß &#x017F;ie haben da &#x017F;o kurze<lb/>
+Betten ... Und wenn man, wie Woldemar, Kavalleri&#x017F;t<lb/>
+i&#x017F;t, kann man ja doch auch die acht Meilen von Berlin<lb/>
+bis Stechlin in einer Pace machen. Warum al&#x017F;o Nacht¬<lb/>
+quartier? Und Rex und von Czako begleiten mich. Ich<lb/>
+kenne Rex nicht und kenne von Czako nicht. Wahr¬<lb/>
+&#x017F;cheinlich Regimentskameraden. Haben wir denn was?&#x201C;</p><lb/>
+<p>&#x201E;Ich denk doch, gnäd'ger Herr. Und wovor haben<lb/>
+wir denn un&#x017F;re Mam&#x017F;ell? Die wird &#x017F;chon was finden.&#x201C;</p><lb/>
+<p>&#x201E;Nu gut. Al&#x017F;o wir haben was. Aber wen laden<lb/>
+wir dazu ein? So bloß ich, das geht nicht. Ich mag<lb/>
+mich keinem Men&#x017F;chen mehr vor&#x017F;etzen. Czako, das ginge<lb/>
+vielleicht noch. Aber Rex, wenn ich ihn auch nicht kenne,<lb/>
+zu &#x017F;o was Feinem wie Rex pa&#x017F;&#x017F;' ich nicht mehr; ich bin<lb/>
+zu altmodi&#x017F;ch geworden. Was mein&#x017F;t du, ob die Gunder¬<lb/>
+manns wohl können?&#x201C;</p><lb/>
+<p>&#x201E;Ach, die können &#x017F;chon. Er gewiß, und &#x017F;ie kluckt<lb/>
+auch bloß immer &#x017F;o rum.&#x201C;</p><lb/>
+<p>&#x201E;Al&#x017F;o Gundermanns. Gut. Und dann vielleicht<lb/>
+Oberför&#x017F;ters. Das älte&#x017F;te Kind hat freilich die Ma&#x017F;ern,<lb/>
+und die Frau, das heißt die Gemahlin (und Gemahlin<lb/>
+is eigentlich auch noch nicht das rechte Wort) die erwartet<lb/>
+wieder. Man weiß nie recht, wie man mit ihr dran<lb/>
+i&#x017F;t und wie man &#x017F;ie nennen &#x017F;oll, Oberför&#x017F;terin Katzler<lb/>
+oder Durchlaucht. Aber man kann's am Ende ver¬<lb/>
+&#x017F;uchen. Und dann un&#x017F;er Pa&#x017F;tor. Der hat doch wenig&#x017F;tens<lb/>
+die Bildung. Gundermann allein i&#x017F;t zu wenig und<lb/>
+eigentlich bloß ein Klutentreter. Und &#x017F;eitdem er die<lb/>
+Siebenmühlen hat, i&#x017F;t er noch weniger geworden.&#x201C;</p><lb/>
+<p>Engelke nickte.</p><lb/>
+<p>&#x201E;Na, dann &#x017F;chick al&#x017F;o Martin. Aber er &#x017F;oll &#x017F;ich<lb/>
+proper machen. Oder vielleicht i&#x017F;t Bro&#x017F;e noch da; der<lb/>
+kann ja auf &#x017F;einem Retourgang bei Gundermanns mit<lb/>
+'rangehn. Und &#x017F;oll ihnen &#x017F;agen &#x017F;ieben Uhr, aber nicht<lb/>
+früher; &#x017F;ie &#x017F;itzen &#x017F;on&#x017F;t &#x017F;o lange rum, und man weiß<lb/>
+<pb n="15" facs="#f0022"/>
+nicht, wovon man reden &#x017F;oll. Das heißt mit ihm;<lb/>
+&#x017F;ie red't immerzu ... Und gieb Bro&#x017F;en auch 'nen<lb/>
+Kornus und funfzig Pfennig.&#x201C;</p><lb/>
+<p>&#x201E;Ich werd' ihm dreißig geben.&#x201C;</p><lb/>
+<p>&#x201E;Nein, nein, funfzig. Er&#x017F;t hat er ja doch was<lb/>
+gebracht, und nu nimmt er wieder was mit. Das<lb/>
+is ja &#x017F;o gut wie doppelt. Also funfzig. Knap&#x017F;' ihm<lb/>
+nichts ab.&#x201C;</p><lb/>
+<milestone unit="section" rendition="#hr"/> </div>
+<pb n="[16]" facs="#f0023"/>
+<div n="2"> <head> <hi rendition="#b #g">Zweites Kapitel.</hi><lb/>
+</head> <milestone unit="section" rendition="#hr"/> <p>Ziemlich um die&#x017F;elbe Zeit, wo der Telegraphen¬<lb/>
+bote bei Gundermanns vor&#x017F;prach, um die Be&#x017F;tellung<lb/>
+des alten Herrn von Stechlin auszurichten, ritten Wol¬<lb/>
+demar, Rex und Czako, die &#x017F;ich für &#x017F;echs Uhr ange¬<lb/>
+meldet hatten, in breiter Front von Cremmen ab; Fritz,<lb/>
+Woldemars Reitknecht, folgte den dreien. Der Weg<lb/>
+ging über Wutz. Als &#x017F;ie bis in Nähe von Dorf und<lb/>
+Klo&#x017F;ter die&#x017F;es Namens gekommen waren, bog Woldemar<lb/>
+vor&#x017F;ichtig nach links hin aus, weil er der Möglichkeit<lb/>
+entgehen wollte, &#x017F;einer Tante Adelheid, der Domina des<lb/>
+Klo&#x017F;ters, zu begegnen. Er &#x017F;tand zwar gut mit die&#x017F;er<lb/>
+und hatte &#x017F;ogar vor, ihr, wie herkömmlich, auf dem<lb/>
+Rückwege nach Berlin &#x017F;einen Be&#x017F;uch zu machen, aber<lb/>
+in die&#x017F;em Augenblick paßte ihm &#x017F;olche Begegnung, die<lb/>
+&#x017F;ein pünktliches Eintreffen in Stechlin gehindert haben<lb/>
+würde, herzlich &#x017F;chlecht. So be&#x017F;chrieb er denn einen<lb/>
+weiten Halbkreis und hatte das Klo&#x017F;ter &#x017F;chon um eine<lb/>
+Viertel&#x017F;tunde hinter &#x017F;ich, als er &#x017F;ich wieder der Haupt¬<lb/>
+&#x017F;traße zuwandte. Die&#x017F;e, durch Moor- und Wie&#x017F;engründe<lb/>
+führend, war ein vorzüglicher Reitweg, der an vielen<lb/>
+Stellen noch eine Grasnarbe trug, weshalb es andert¬<lb/>
+halb Meilen lang in einem &#x017F;charfen Trabe vorwärts<lb/>
+ging, bis an eine Avenue heran, die geradlinig auf<lb/>
+Schloß Stechlin zuführte. Hier ließen alle drei die<lb/>
+Zügel fallen und ritten im Schritt weiter. Über ihnen<lb/>
+<pb n="17" facs="#f0024"/>
+wölbten &#x017F;ich die &#x017F;chönen alten Ka&#x017F;tanienbäume, was<lb/>
+ihrem Anritt etwas Anheimelndes und zugleich etwas<lb/>
+beinah Feierliches gab.</p><lb/>
+<p>&#x201E;Das i&#x017F;t ja wie ein Kirchen&#x017F;chiff,&#x201C; &#x017F;agte Rex,<lb/>
+der am linken Flügel ritt. &#x201E;Finden Sie nicht auch,<lb/>
+Czako?&#x201C;</p><lb/>
+<p>&#x201E;Wenn Sie wollen, ja. Aber Pardon, Rex, ich<lb/>
+finde die Wendung etwas trivial für einen Mini&#x017F;terial¬<lb/>
+a&#x017F;&#x017F;e&#x017F;&#x017F;or.&#x201C;</p><lb/>
+<p>&#x201E;Nun gut, dann &#x017F;agen Sie was Be&#x017F;&#x017F;eres.&#x201C;</p><lb/>
+<p>&#x201E;Ich werde mich hüten. Wer unter &#x017F;olchen Um¬<lb/>
+&#x017F;tänden was Be&#x017F;&#x017F;eres &#x017F;agen will, &#x017F;agt immer was<lb/>
+Schlechteres.&#x201C;</p><lb/>
+<p>Unter die&#x017F;em &#x017F;ich noch eine Weile fort&#x017F;etzenden<lb/>
+Ge&#x017F;präche waren &#x017F;ie bis an einem Punkt gekommen,<lb/>
+von dem aus man das am Ende der Avenue &#x017F;ich auf¬<lb/>
+bauende Bild in aller Klarheit überblicken konnte. Da¬<lb/>
+bei war das Bild nicht bloß klar, &#x017F;ondern auch &#x017F;o<lb/>
+frappierend, daß Rex und Czako unwillkürlich anhielten.</p><lb/>
+<p>&#x201E;Alle Wetter, Stechlin, das i&#x017F;t ja reizend,&#x201C; wandte<lb/>
+&#x017F;ich Czako zu dem am andern Flügel reitenden Wolde¬<lb/>
+mar. &#x201E;Ich find' es geradezu märchenhaft, Fata Mor¬<lb/>
+gana &#x2014; das heißt, ich habe noch keine ge&#x017F;ehn. Die<lb/>
+gelbe Wand, die da noch das letzte Tageslicht auffängt,<lb/>
+das i&#x017F;t wohl Ihr Zauber&#x017F;chloß? Und das Stückchen<lb/>
+Grau da links, das taxier' ich auf eine Kirchenecke.<lb/>
+Bleibt nur noch der Staketzaun an der andern Seite;<lb/>
+&#x2014; da wohnt natürlich der Schulmei&#x017F;ter. Ich verbürge<lb/>
+mich, daß ich's damit getroffen. Aber die zwei &#x017F;chwarzen<lb/>
+Rie&#x017F;en, die da grad' in der Mitte &#x017F;tehn und &#x017F;ich von<lb/>
+der gelben Wand abheben (&#x201E;abheben&#x201C; i&#x017F;t übrigens auch<lb/>
+trivial; ent&#x017F;chuldigen Sie, Rex), die &#x017F;tehen ja da wie<lb/>
+die Cherubim. Allerdings etwas zu &#x017F;chwarz. Was &#x017F;ind<lb/>
+das für Leute?&#x201C;</p><lb/>
+<p>&#x201E;Das &#x017F;ind Findlinge.&#x201C;<lb/>
+</p> <fw type="sig" place="bottom"> <hi rendition="#g">Fontane</hi>, Der Stechlin. 2<lb/>
+</fw>
+<pb n="18" facs="#f0025"/>
+<p>&#x201E;Findlinge?&#x201C;</p><lb/>
+<p>&#x201E;Ja, Findlinge,&#x201C; wiederholte Woldemar. &#x201E;Aber<lb/>
+wenn Ihnen das Wort an&#x017F;tößig i&#x017F;t, &#x017F;o können Sie &#x017F;ie<lb/>
+auch Monolithe nennen. Es i&#x017F;t merkwürdig, Czako, wie<lb/>
+hochgradig verwöhnt im Ausdruck Sie &#x017F;ind, wenn Sie<lb/>
+nicht gerade &#x017F;elber das Wort haben ... Aber nun, meine<lb/>
+Herren, mü&#x017F;&#x017F;en wir uns wieder in Trab &#x017F;etzen. Ich bin<lb/>
+überzeugt, mein Papa &#x017F;teht &#x017F;chon ungeduldig auf &#x017F;einer<lb/>
+Rampe, und wenn er uns &#x017F;o im Schritt ankommen &#x017F;ieht,<lb/>
+denkt er, wir bringen eine Trauernachricht oder einen<lb/>
+Verwundeten.&#x201C;</p><lb/>
+<milestone unit="section" rendition="#hr"/> <p>Wenige Minuten &#x017F;päter, und alle drei trabten denn<lb/>
+auch wirklich, von Fritz gefolgt, über die Bohlenbrücke<lb/>
+fort, er&#x017F;t in den Vorhof hinein und dann an der blanken<lb/>
+Glaskugel vorüber. Der Alte &#x017F;tand bereits auf der<lb/>
+Rampe, Engelke hinter ihm und hinter die&#x017F;em Martin,<lb/>
+der alte Kut&#x017F;cher. Im Nu waren alle drei Reiter aus<lb/>
+dem Sattel, und Martin und Fritz nahmen die Pferde.<lb/>
+So trat man in den Flur. &#x201E;Erlaube, lieber Papa, dir<lb/>
+zwei liebe Freunde von mir vorzu&#x017F;tellen: A&#x017F;&#x017F;e&#x017F;&#x017F;or von<lb/>
+Rex, Hauptmann von Czako.&#x201C;</p><lb/>
+<p>Der alte Stechlin &#x017F;chüttelte jedem die Hand und<lb/>
+&#x017F;prach ihnen aus, wie glücklich er über ihren Be&#x017F;uch &#x017F;ei.<lb/>
+&#x201E;Seien Sie mir herzlich willkommen, meine Herren. Sie<lb/>
+haben keine Ahnung, welche Freude Sie mir machen,<lb/>
+mir, einem vergrätzten alten Ein&#x017F;iedler. Man &#x017F;ieht nichts<lb/>
+mehr, man hört nichts mehr. Ich hoffe auf einen ganzen<lb/>
+Sack voll Neuigkeiten.&#x201C;</p><lb/>
+<p>&#x201E;Ach, Herr Major,&#x201C; &#x017F;agte Czako, &#x201E;wir &#x017F;ind ja &#x017F;chon<lb/>
+vierundzwanzig Stunden fort. Und, ganz abge&#x017F;ehen da¬<lb/>
+von, wer kann heutzutage noch mit den Zeitungen kon¬<lb/>
+<pb n="19" facs="#f0026"/>
+kurrieren! Ein Glück, daß manche prinzipiell einen Po&#x017F;t¬<lb/>
+tag zu &#x017F;pät kommen. Ich meine mit den neue&#x017F;ten Nach¬<lb/>
+richten. Vielleicht auch &#x017F;on&#x017F;t noch.&#x201C;</p><lb/>
+<p>&#x201E;Sehr wahr,&#x201C; lachte Dubslav. &#x201E;Der Kon&#x017F;erva¬<lb/>
+tismus &#x017F;oll übrigens, &#x017F;einem We&#x017F;en nach, eine Brem&#x017F;e<lb/>
+&#x017F;ein; damit muß man vieles ent&#x017F;chuldigen. Aber da<lb/>
+kommen Ihre Mantel&#x017F;äcke, meine Herren. Engelke, führe<lb/>
+die Herren auf ihr Zimmer. Wir haben jetzt &#x017F;echsein¬<lb/>
+viertel. Um &#x017F;ieben, wenn ich bitten darf.&#x201C;</p><lb/>
+<p>Engelke hatte mittlerweile die beiden von Dubslav<lb/>
+etwas altmodi&#x017F;ch als &#x201E;Mantel&#x017F;äcke&#x201C; bezeichneten Plaid¬<lb/>
+rollen in die Hand genommen und ging damit, den<lb/>
+beiden Herren voran, auf die doppelarmige Treppe zu,<lb/>
+die gerade da, wo die beiden Arme der&#x017F;elben &#x017F;ich kreuzten,<lb/>
+einen ziemlich geräumigen Pode&#x017F;t mit Säulchengalerie<lb/>
+bildete. Zwi&#x017F;chen den Säulchen aber, und zwar mit Blick<lb/>
+auf den Flur, war eine Rokoko-Uhr angebracht, mit<lb/>
+einem Zeitgott darüber, der eine Hippe führte. Czako<lb/>
+wies darauf hin und &#x017F;agte lei&#x017F;e zu Rex: &#x201E;Ein bißchen<lb/>
+graulich,&#x201C; &#x2014; ein Gefühl, drin er &#x017F;ich be&#x017F;tärkt &#x017F;ah, als<lb/>
+man bis auf den mit ungeheurer Raumver&#x017F;chwendung<lb/>
+angelegten Oberflur gekommen war. Über einer nach<lb/>
+hinten zu gelegenen Saalthür hing eine Holztafel mit der<lb/>
+In&#x017F;chrift: &#x201E;Mu&#x017F;eum&#x201C;, während hüben und drüben, an<lb/>
+den Flurwänden links und rechts, mächtige Birkenma&#x017F;er-<lb/>
+und Ebenholz&#x017F;chränke &#x017F;tanden, wahre Pracht&#x017F;tücke, mit<lb/>
+zwei großen Bildern dazwi&#x017F;chen, eines eine Burg mit<lb/>
+dicken Back&#x017F;teintürmen, das andre ein überlebensgroßer<lb/>
+Ritter, augen&#x017F;cheinlich aus der Frundsbergzeit, wo das<lb/>
+bunt Landsknechtliche &#x017F;chon die Rü&#x017F;tung zu drapieren<lb/>
+begann.</p><lb/>
+<p>&#x201E;Is wohl ein Ahn?&#x201C; fragte Czako.</p><lb/>
+<p>&#x201E;Ja, Herr Hauptmann. Und er i&#x017F;t auch unten in<lb/>
+der Kirche.&#x201C;</p><lb/>
+<p>&#x201E;Auch &#x017F;o wie hier?&#x201C;<lb/>
+</p> <fw type="sig" place="bottom">2 *<lb/>
+</fw>
+<pb n="20" facs="#f0027"/>
+<p>&#x201E;Nein, bloß Grab&#x017F;tein und &#x017F;chon etwas abgetreten.<lb/>
+Aber man &#x017F;ieht doch noch, daß es der&#x017F;elbe i&#x017F;t.&#x201C;</p><lb/>
+<p>Czako nickte. Dabei waren &#x017F;ie bis an ein Eck¬<lb/>
+zimmer gekommen, das mit der einen Seite nach dem<lb/>
+Flur, mit der andern Seite nach einem &#x017F;chmalen Gang<lb/>
+hin lag. Hier war auch die Thür. Engelke, voran¬<lb/>
+gehend, öffnete und hing die beiden Plaidrollen an die<lb/>
+Haken eines hier gleich an der Thür &#x017F;tehenden Kleider¬<lb/>
+&#x017F;tänders. Unmittelbar daneben war ein Klingelzug mit<lb/>
+einer grünen, etwas ausgefran&#x017F;ten Pu&#x017F;chel daran. Engelke<lb/>
+wies darauf hin und &#x017F;agte: &#x201E;Wenn die Herren noch<lb/>
+was wün&#x017F;chen ... Und um &#x017F;ieben ... Zweimal wird<lb/>
+ange&#x017F;chlagen.&#x201C;</p><lb/>
+<p>Und damit ging er, die beiden ihrer Bequemlich¬<lb/>
+keit überla&#x017F;&#x017F;end.</p><lb/>
+<p>Es waren zwei nebeneinander gelegene Zimmer, in<lb/>
+denen man Rex und Czako untergebracht hatte, das vordere<lb/>
+größer und mit etwas mehr Aufwand eingerichtet, mit<lb/>
+Steh&#x017F;piegel und Toilette, der Spiegel &#x017F;ogar zum Kippen.<lb/>
+Das Bett in die&#x017F;em vorderen Zimmer hatte einen kleinen<lb/>
+Himmel und daneben eine Etagere, auf deren oberem<lb/>
+Brettchen eine Meißner Figur &#x017F;tand, ihr ohnehin kurzes<lb/>
+Röckchen lüpfend, während auf dem unteren Brett ein<lb/>
+Neues Te&#x017F;tament lag, mit Kelch und Kreuz und einem<lb/>
+Palmenzweig auf dem Deckel.</p><lb/>
+<p>Czako nahm das Meißner Püppchen und &#x017F;agte:<lb/>
+&#x201E;Wenn nicht un&#x017F;er Freund Woldemar bei die&#x017F;em Arrange¬<lb/>
+ment &#x017F;eine Hand mit im Spiele gehabt hat, &#x017F;o haben wir hier<lb/>
+in Bezug auf Requi&#x017F;iten ein Ahnungsvermögen, wie's<lb/>
+nicht größer gedacht werden kann. Das Püppchen <hi rendition="#aq">pour<lb/>
+moi</hi>, das Te&#x017F;tament <hi rendition="#aq">pour vous</hi>.&#x201C;</p><lb/>
+<p>&#x201E;Czako, wenn Sie doch bloß das Necken la&#x017F;&#x017F;en<lb/>
+könnten!&#x201C;</p><lb/>
+<p>&#x201E;Ach, &#x017F;agen Sie doch &#x017F;o was nicht, Rex; Sie lieben<lb/>
+mich ja bloß um meiner Neckereien willen.&#x201C;<lb/>
+</p>
+<pb n="21" facs="#f0028"/>
+<p>Und nun traten &#x017F;ie, von dem Vorderzimmer her,<lb/>
+in den etwas kleineren Wohnraum, in dem Spiegel und<lb/>
+Toilette fehlten. Dafür aber war ein Rokoko&#x017F;ofa da,<lb/>
+mit hellblauem Atlas und weißen Blumen darauf.</p><lb/>
+<p>&#x201E;Ja, Rex,&#x201C; &#x017F;agte Czako, &#x201E;wie teilen wir nun?<lb/>
+Ich denke, Sie nehmen nebenan den Himmel, und ich<lb/>
+nehme das Rokoko&#x017F;ofa, noch dazu mit weißen Blumen,<lb/>
+vielleicht Lilien. Ich wette, das kleine Ding von Sofa<lb/>
+hat eine Ge&#x017F;chichte.&#x201C;</p><lb/>
+<p>&#x201E;Rokoko hat immer eine Ge&#x017F;chichte,&#x201C; be&#x017F;tätigte Rex.<lb/>
+&#x201E;Aber hundert Jahr zurück. Was jetzt hier hau&#x017F;t, &#x017F;ieht<lb/>
+mir, Gott &#x017F;ei Dank, nicht danach aus. Ein bißchen<lb/>
+Spuk trau' ich die&#x017F;em alten Ka&#x017F;ten allerdings &#x017F;chon zu;<lb/>
+aber keine Rokokoge&#x017F;chichte. Rokoko i&#x017F;t doch immer un¬<lb/>
+&#x017F;ittlich. Wie gefällt Ihnen übrigens der Alte?&#x201C;</p><lb/>
+<p>&#x201E;Vorzüglich. Ich hätte nicht gedacht, daß un&#x017F;er<lb/>
+Freund Woldemar &#x017F;olchen famo&#x017F;en Alten haben könnte.&#x201C;</p><lb/>
+<p>&#x201E;Das klingt ja beinah,&#x201C; &#x017F;agte Rex, &#x201E;wie wenn Sie<lb/>
+gegen un&#x017F;ern Stechlin etwas hätten.&#x201C;</p><lb/>
+<p>&#x201E;Was durchaus nicht der Fall i&#x017F;t. Un&#x017F;er Stechlin<lb/>
+i&#x017F;t der be&#x017F;te Kerl von der Welt, und wenn ich das ver¬<lb/>
+dammte Wort nicht haßte, würd' ich ihn &#x017F;ogar einen<lb/>
+&#x201E;perfekten Gentleman&#x201C; nennen mü&#x017F;&#x017F;en. Aber ...&#x201C;</p><lb/>
+<p>&#x201E;Nun ...&#x201C;</p><lb/>
+<p>&#x201E;Aber er paßt doch nicht recht an &#x017F;eine Stelle.&#x201C;</p><lb/>
+<p>&#x201E;An welche?&#x201C;</p><lb/>
+<p>&#x201E;In &#x017F;ein Regiment.&#x201C;</p><lb/>
+<p>&#x201E;Aber, Czako, ich ver&#x017F;tehe Sie nicht. Er i&#x017F;t ja<lb/>
+brillant ange&#x017F;chrieben. Liebling bei jedem. Der Ober&#x017F;t<lb/>
+hält große Stücke von ihm, und die Prinzen machen<lb/>
+ihm beinah den Hof ...&#x201C;</p><lb/>
+<p>&#x201E;Ja, das i&#x017F;t es ja eben. Die Prinzen, die Prinzen.&#x201C;</p><lb/>
+<p>&#x201E;Was denn, wie denn?&#x201C;</p><lb/>
+<p>&#x201E;Ach, das i&#x017F;t eine lange Ge&#x017F;chichte, viel zu lang,<lb/>
+um &#x017F;ie hier vor Ti&#x017F;ch noch auszukramen. Denn es i&#x017F;t<lb/>
+<pb n="22" facs="#f0029"/>
+bereits halb, und wir mü&#x017F;&#x017F;en uns eilen. Übrigens trifft<lb/>
+es viele, nicht bloß un&#x017F;ern Stechlin.&#x201C;</p><lb/>
+<p>&#x201E;Immer dunkler, immer rät&#x017F;elvoller,&#x201C; &#x017F;agte Rex.</p><lb/>
+<p>&#x201E;Nun, vielleicht daß ich Ihnen das Rät&#x017F;el lö&#x017F;e.<lb/>
+Schließlich kann man ja Toilette machen und noch &#x017F;einen<lb/>
+Diskurs daneben haben. &#x201E;Die Prinzen machen ihm den<lb/>
+Hof&#x201C;, &#x017F;o geruhten Sie zu bemerken, und ich antwortete:<lb/>
+&#x201E;Ja, das i&#x017F;t es eben&#x201C;. Und die&#x017F;e Worte kann ich Ihnen<lb/>
+nur wiederholen. Die Prinzen &#x2014; ja, damit hängt es<lb/>
+zu&#x017F;ammen und noch mehr damit, daß die feinen Regi¬<lb/>
+menter immer feiner werden. Kucken Sie &#x017F;ich mal die<lb/>
+alten Rangli&#x017F;ten an, das heißt wirklich alte, voriges Jahr¬<lb/>
+hundert und dann &#x017F;o bis Anno &#x017F;echs. Da finden Sie<lb/>
+bei Regiment Garde du Corps oder bei Regiment Gens¬<lb/>
+darmes un&#x017F;ere guten alten Namen: Marwitz, Wakenitz,<lb/>
+Kracht, Lö&#x017F;chebrand, Bredow, Rochow, höch&#x017F;tens daß<lb/>
+&#x017F;ich mal ein höher betitelter Schle&#x017F;i&#x017F;cher mit hinein ver¬<lb/>
+irrt. Natürlich gab es auch Prinzen damals, aber der<lb/>
+Adel gab den Ton an, und die paar Prinzen mußten<lb/>
+noch froh &#x017F;ein, wenn &#x017F;ie nicht &#x017F;törten. Damit i&#x017F;t es nun<lb/>
+aber, &#x017F;eit wir Kai&#x017F;er und Reich &#x017F;ind, total vorbei. Natür¬<lb/>
+lich &#x017F;prech' ich nicht von der Provinz, nicht von Litauen<lb/>
+und Ma&#x017F;uren, &#x017F;ondern von der Garde, von den Regi¬<lb/>
+mentern unter den Augen Seiner Maje&#x017F;tät. Und nun<lb/>
+gar er&#x017F;t die&#x017F;e Gardedragoner! Die waren immer piek,<lb/>
+aber &#x017F;eit &#x017F;ie, <hi rendition="#aq">pour combler le bonheur</hi>, auch noch &#x201E;Königin<lb/>
+von Großbritannien und Irland&#x201C; &#x017F;ind, wird es immer<lb/>
+mehr davon, und je pieker &#x017F;ie werden, de&#x017F;to mehr Prinzen<lb/>
+kommen hinein, von denen übrigens auch jetzt &#x017F;chon<lb/>
+mehr da &#x017F;ind, als es &#x017F;o obenhin aus&#x017F;ieht, denn manche<lb/>
+&#x017F;ind eigentlich welche und dürfen es bloß nicht &#x017F;agen.<lb/>
+Und wenn man dann gar noch die alten mitrechnet, die<lb/>
+bloß <hi rendition="#aq">à la suite</hi> &#x017F;tehn, aber doch immer noch mit dabei<lb/>
+&#x017F;ind, wenn irgend was los i&#x017F;t, &#x017F;o haben wir, wenn der<lb/>
+Kreis ge&#x017F;chlo&#x017F;&#x017F;en wird, zwar kein Parkett von Königen,<lb/>
+<pb n="23" facs="#f0030"/>
+aber doch einen Cirkus von Prinzen. Und da hinein<lb/>
+i&#x017F;t nun un&#x017F;er guter Stechlin ge&#x017F;tellt. Natürlich thut er,<lb/>
+was er kann, und macht &#x017F;o gewi&#x017F;&#x017F;e Luxu&#x017F;&#x017F;e mit, Gefühls¬<lb/>
+luxu&#x017F;&#x017F;e, Ge&#x017F;innungsluxu&#x017F;&#x017F;e und, wenn es &#x017F;ein muß, auch<lb/>
+Freiheitsluxu&#x017F;&#x017F;e. So 'nen Schimmer von Sozialdemokratie.<lb/>
+Das i&#x017F;t aber auf die Dauer &#x017F;chwierig. Richtige Prinzen<lb/>
+können &#x017F;ich das lei&#x017F;ten, die verbebeln nicht leicht. Aber<lb/>
+Stechlin! Stechlin i&#x017F;t ein reizender Kerl, aber er i&#x017F;t doch<lb/>
+bloß ein Men&#x017F;ch.&#x201C;</p><lb/>
+<p>&#x201E;Und das &#x017F;agen Sie, Czako, gerade Sie, der Sie<lb/>
+das Men&#x017F;chliche &#x017F;tets betonen?&#x201C;</p><lb/>
+<p>&#x201E;Ja, Rex, das thu' ich. Heut wie immer. Aber<lb/>
+eines &#x017F;chickt &#x017F;ich nicht für alle. Der eine darf's, der<lb/>
+andre nicht. Wenn un&#x017F;er Freund Stechlin &#x017F;ich in die&#x017F;e<lb/>
+&#x017F;eine alte Schloßkate zurückzieht, &#x017F;o darf er Men&#x017F;ch &#x017F;ein,<lb/>
+&#x017F;o viel er will, aber als Gardedragoner kommt er da¬<lb/>
+mit nicht aus. Vom alten Adam will ich nicht &#x017F;prechen,<lb/>
+das hat immer noch &#x017F;o 'ne Nebenbedeutung.&#x201C;</p><lb/>
+<milestone unit="section" rendition="#hr"/> <p>Während Rex und Czako Toilette machten und ab¬<lb/>
+wech&#x017F;elnd über den alten <choice><sic>uud</sic><corr>und</corr></choice> den jungen Stechlin ver¬<lb/>
+handelten, &#x017F;chritten die, die den Gegen&#x017F;tand die&#x017F;er Unter¬<lb/>
+haltung bildeten, Vater und Sohn, im Garten auf und<lb/>
+ab und hatten auch ihrer&#x017F;eits ihr Ge&#x017F;präch.</p><lb/>
+<p>&#x201E;Ich bin dir dankbar, daß du mir deine Freunde<lb/>
+mitgebracht ha&#x017F;t. Hoffentlich kommen &#x017F;ie auf ihre Ko&#x017F;ten.<lb/>
+Mein Leben verläuft ein bißchen zu ein&#x017F;am, und es<lb/>
+wird ohnehin gut &#x017F;ein, wenn ich mich wieder an Men&#x017F;chen<lb/>
+gewöhne. Du wir&#x017F;t gele&#x017F;en haben, daß un&#x017F;er guter<lb/>
+alter Kort&#x017F;chädel ge&#x017F;torben i&#x017F;t, und in etwa vierzehn<lb/>
+Tagen haben wir hier 'ne Neuwahl. Da muß ich dann<lb/>
+'ran und mich populär machen. Die Kon&#x017F;ervativen<lb/>
+wollen mich haben und keinen andern. Eigentlich mag<lb/>
+<pb n="24" facs="#f0031"/>
+ich nicht, aber ich &#x017F;oll, und da paßt es mir denn, daß<lb/>
+du mir Leute bring&#x017F;t, an denen ich mich für die Welt<lb/>
+&#x017F;ozu&#x017F;agen wieder wie einüben kann. Sind &#x017F;ie denn aus¬<lb/>
+giebig und plauderhaft?&#x201C;</p><lb/>
+<p>&#x201E;O &#x017F;ehr, Papa, vielleicht zu &#x017F;ehr. Wenig&#x017F;tens der<lb/>
+eine.&#x201C;</p><lb/>
+<p>&#x201E;Das is gewiß der Czako. Sonderbar, die von<lb/>
+Alexander reden alle gern. Aber ich bin &#x017F;ehr dafür;<lb/>
+Schweigen kleid't nicht jeden. Und dann &#x017F;ollen wir uns<lb/>
+ja auch durch die Sprache vom Tier unter&#x017F;cheiden. Al&#x017F;o<lb/>
+wer am mei&#x017F;ten red't, i&#x017F;t der rein&#x017F;te Men&#x017F;ch. Und die&#x017F;em<lb/>
+Czako, dem hab' ich es gleich ange&#x017F;ehn. Aber der Rex.<lb/>
+Du &#x017F;ag&#x017F;t Mini&#x017F;teriala&#x017F;&#x017F;e&#x017F;&#x017F;or. I&#x017F;t er denn von der<lb/>
+frommen Familie?&#x201C;</p><lb/>
+<p>&#x201E;Nein, Papa. Du mach&#x017F;t die&#x017F;elbe Verwechslung,<lb/>
+die beinah' alle machen. Die fromme Familie, das &#x017F;ind<lb/>
+die Reckes, gräflich und &#x017F;ehr vornehm. Die Rex natür¬<lb/>
+lich auch, aber doch nicht &#x017F;o hoch hinaus und auch nicht<lb/>
+&#x017F;o fromm. Allerdings nimmt mein Freund, der<lb/>
+Mini&#x017F;teriala&#x017F;&#x017F;e&#x017F;&#x017F;or, einen Anlauf dazu, die Reckes wo¬<lb/>
+möglich einzuholen.&#x201C;</p><lb/>
+<p>&#x201E;Dann hab' ich al&#x017F;o doch recht ge&#x017F;ehn. Er hat &#x017F;o<lb/>
+die Figur, die &#x017F;o was vermuten läßt, ein bißchen wenig<lb/>
+Flei&#x017F;ch und &#x017F;o glatt ra&#x017F;iert. Habt ihr denn beim Ra¬<lb/>
+&#x017F;ieren in Cremmen gleich einen gefunden?&#x201C;</p><lb/>
+<p>&#x201E;Er hat alles immer bei &#x017F;ich; lauter engli&#x017F;che. Von<lb/>
+Solingen oder Suhl will er nichts wi&#x017F;&#x017F;en.&#x201C;</p><lb/>
+<p>&#x201E;Und muß man ihn denn vor&#x017F;ichtig anfa&#x017F;&#x017F;en, wenn<lb/>
+das Ge&#x017F;präch auf kirchliche Dinge kommt? Ich bin ja,<lb/>
+wie du weißt, eigentlich kirchlich, wenig&#x017F;tens kirchlicher<lb/>
+als mein guter Pa&#x017F;tor (es wird immer &#x017F;chlimmer mit<lb/>
+ihm), aber ich bin &#x017F;o im Ausdruck mitunter ungenierter,<lb/>
+als man vielleicht &#x017F;ein &#x017F;oll, und bei &#x201E;niedergefahren zur<lb/>
+Hölle&#x201C; kann mir's pa&#x017F;&#x017F;ieren, daß ich <hi rendition="#aq">nolens volens</hi> ein<lb/>
+<pb n="25" facs="#f0032"/>
+bißchen tolles Zeug rede. Wie &#x017F;teht es denn da mit<lb/>
+ihm? Muß ich mich in acht nehmen? Oder macht er<lb/>
+bloß &#x017F;o mit?&#x201C;</p><lb/>
+<p>&#x201E;Das will ich nicht geradezu behaupten. Ich denke<lb/>
+mir, er &#x017F;teht &#x017F;o wie die mei&#x017F;ten &#x017F;tehn; das heißt, er<lb/>
+weiß es nicht recht.&#x201C;</p><lb/>
+<p>&#x201E;Ja, ja, den Zu&#x017F;tand kenn' ich.&#x201C;</p><lb/>
+<p>&#x201E;Und weil er es nicht recht weiß, hat er &#x017F;ozu&#x017F;agen<lb/>
+die Auswahl und wählt das, was gerade gilt und nach<lb/>
+oben hin empfiehlt. Ich kann das auch &#x017F;o &#x017F;chlimm<lb/>
+nicht finden. Einige nennen ihn einen &#x201E;Streber&#x201C;. Aber<lb/>
+wenn er es i&#x017F;t, i&#x017F;t er jedenfalls keiner von den &#x017F;chlimm&#x017F;ten.<lb/>
+Er hat eigentlich einen guten Charakter, und im <hi rendition="#aq">cercle<lb/>
+intime</hi> kann er reizend &#x017F;ein. Er verändert &#x017F;ich dann<lb/>
+nicht in dem, was er &#x017F;agt, oder doch nur ganz wenig, aber<lb/>
+ich möchte &#x017F;agen, er verändert &#x017F;ich in der Art, wie er<lb/>
+zuhört. Czako meint, un&#x017F;er Freund Rex halte &#x017F;ich mit<lb/>
+dem Ohr für das &#x017F;chadlos, was er mit dem Munde<lb/>
+ver&#x017F;äumt. Czako wird überhaupt am be&#x017F;ten mit ihm<lb/>
+fertig; er &#x017F;chraubt ihn be&#x017F;tändig, und Rex, was ich<lb/>
+reizend finde, läßt &#x017F;ich die&#x017F;e Schraubereien gefallen. Daran<lb/>
+&#x017F;ieh&#x017F;t du &#x017F;chon, daß &#x017F;ich mit ihm leben läßt. Seine<lb/>
+Frömmigkeit i&#x017F;t keine Lüge, bloß Erziehung, Angewohn¬<lb/>
+heit, und &#x017F;o &#x017F;chließlich &#x017F;eine zweite Natur geworden.&#x201C;</p><lb/>
+<p>&#x201E;Ich werde ihn bei Ti&#x017F;ch neben Lorenzen &#x017F;etzen;<lb/>
+die mögen dann beide &#x017F;ehn, wie &#x017F;ie miteinander fertig<lb/>
+werden. Vielleicht erleben wir 'ne Bekehrung. Das<lb/>
+heißt Rex den Pa&#x017F;tor. Aber da höre ich eine Kut&#x017F;che<lb/>
+die Dorf&#x017F;traße 'raufkommen. Das &#x017F;ind natürlich Gunder¬<lb/>
+manns; die kommen immer zu früh. Der arme Kerl<lb/>
+hat mal was von der Höflichkeit der Könige gehört und<lb/>
+macht jetzt einen zu weitgehenden Gebrauch davon.<lb/>
+Autodidakten übertreiben immer. Ich bin &#x017F;elber einer<lb/>
+und kann al&#x017F;o mitreden. Nun, wir &#x017F;prechen morgen<lb/>
+früh weiter; heute wird es nichts mehr. Du wir&#x017F;t dich<lb/>
+<pb n="26" facs="#f0033"/>
+auch noch ein bißchen &#x017F;triegeln mü&#x017F;&#x017F;en, und ich will<lb/>
+mir 'nen &#x017F;chwarzen Rock anziehn. Das bin ich der guten<lb/>
+Frau von Gundermann doch &#x017F;chuldig; &#x017F;ie putzt &#x017F;ich<lb/>
+übrigens nach wie vor wie 'n Schlittenpferd und hat<lb/>
+immer noch den merkwürdigen Federbu&#x017F;ch in ihrem Zopf<lb/>
+&#x2014; das heißt, wenn's ihrer i&#x017F;t.&#x201C;</p><lb/>
+<milestone unit="section" rendition="#hr"/> </div>
+</div>
+</body> <back>
+<pb facs="#f0525" n="[518]"/>
+<div type="imprint"> <milestone unit="section" rendition="#hr"/><lb/>
+<p rendition="#c">A. W. <hi rendition="#g">Hayn's Erben</hi>, Potsdam<lb/>
+</p> <milestone unit="section" rendition="#hr"/><lb/>
+</div>
+<pb facs="#f0526" n="[519]"/>
+<div type="advertisement"> <head>Verlag von <hi rendition="#b">Wilhelm Hertz</hi> in Berlin <hi rendition="#aq">W</hi>. 9.</head><lb/>
+<head><hi rendition="#b">Werke von Theodor Fontane.</hi></head><lb/>
+<milestone rendition="#hr" unit="section"/><lb/>
+<cb type="start"/>
+<p><hi rendition="#b">Gedichte. Grete Minde.</hi></p><lb/>
+<p>fünfte vermehrte Auflage. Nach einer altmärki&#x017F;chen Chronik.<lb/>
+Zweite Auflage.</p><lb/>
+<p><hi rendition="#g">Mit einem Bildniß</hi>.</p><lb/>
+<p>kl. 8° 154 Seiten.</p><lb/>
+<p>8° 462 Seiten. pr. bro&#x017F;ch. 3 M., geb. in Leinw. 4 M.</p><lb/>
+<p>pr. bro&#x017F;ch. 5 M., geb. in Leinw. 6 M.</p><lb/>
+<p><hi rendition="#b">Vor dem Sturm. Unwiederbringlich.</hi></p><lb/>
+<p>Roman</p><lb/>
+<p>Roman aus dem Winter 1812 Zweite Auflage.</p><lb/>
+<p>auf 1813. 8° 343 Seiten.</p><lb/>
+<p>pr bro&#x017F;ch. 6 M., geb. in Leinw. 7 M</p><lb/>
+<p>Wohlfeile Volks-Ausgabe in einem<lb/>
+Bande.<lb/>
+8° 773</p> <p>Seiten <hi rendition="#b">Chri&#x017F;tian Friedrich</hi></p><lb/>
+<p>pr. bro&#x017F;ch. 4 M., geb in Leinw. 5. M <hi rendition="#b">Scherenberg</hi></p><lb/>
+<p> <hi rendition="#b #g">Quitt.</hi> und das literari&#x017F;che Berlin</p><lb/>
+<p>Roman. von 1840 bis 1860.</p><lb/>
+<p>8° 260 Seiten.</p><lb/>
+<p>80 338 Seiten. pr. bro&#x017F;ch. 5 M., geb. in Leinwand</p><lb/>
+<p>pr. bio&#x017F;ch. 5 M., geb. in Leinw. 6 M. 6 M. 20 pfg.</p><lb/>
+<p> <hi rendition="#b">Wanderungen durch die Mark Brandenburg.</hi></p><lb/>
+<p>4 Bände.</p><lb/>
+<p>Wohlfeile Ausgabe. Jeder Band bro&#x017F;ch. 5 M., geb. in Leinw. 6 M.</p><lb/>
+<p> <hi rendition="#aq #b">I.</hi> <hi rendition="#b">Die Graf&#x017F;chaft Ruppin.</hi> (559 S.)<lb/>
+<hi rendition="#aq #b">II.</hi> <hi rendition="#b">Das Oderland.</hi> Barnim-Lebus. (506 Seiten).</p><lb/>
+<p> <hi rendition="#b">III. Havelland.</hi> Die Land&#x017F;chaft um Spandau, Potsdam,</p><lb/>
+<p>Brandenburg. (485 S.)</p><lb/>
+<p> <hi rendition="#aq #b">IV.</hi> <hi rendition="#b">Spreeland.</hi> Beeskow-Storkow und Barnim-Teltow.</p><lb/>
+<p>(459 S.)</p><lb/>
+<p> <hi rendition="#b">Fünf Schlö&#x017F;&#x017F;er.</hi></p><lb/>
+<p> <hi rendition="#g">Altes und Neues aus Mark Brandenburg.</hi></p><lb/>
+<p>80 468 Seiten.</p><lb/>
+<p>pr. bro&#x017F;ch. 7 M, geb. in Leinw. 8 M. 20 pf.<lb/>
+Inhalt: Quitzöwel. &#x2014; Plaue a. H. &#x2014; Hoppenrade. &#x2014; Liebenberg. &#x2014; Dreilinden.</p> </div><lb/>
+<pb facs="#f0527"/>
+<pb facs="#f0528"/>
+<pb facs="#f0529"/>
+<pb facs="#f0530"/>
+<pb facs="#f0531"/>
+<pb facs="#f0532"/>
+<pb facs="#f0533"/>
+</back> </text> </TEI>
