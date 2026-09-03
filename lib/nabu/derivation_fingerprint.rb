@@ -204,7 +204,10 @@ module Nabu
     # fold module (dirty-more, never dirty-less).
     def for_source(entry, languages: nil)
       Fingerprint.new(
-        canonical_identity: self.class.canonical_identity(@config.source_workdir(entry.slug)),
+        canonical_identity: self.class.canonical_identity(
+          @config.source_workdir(entry.slug),
+          materialized: self.class.adapter_materialized_paths(entry)
+        ),
         parser_digest: parser_digest(entry),
         fold_digest: self.class.fold_digest(languages),
         migration_level: self.class.migration_level,
@@ -235,12 +238,30 @@ module Nabu
     class << self
       # The canonical-bytes identity of +dir+, or nil (WEAK — never skip)
       # when the tree cannot honestly be named: missing dir, a git repo with
-      # non-attic local modifications, or a git failure.
-      def canonical_identity(dir)
+      # non-attic local modifications, or a git failure. +materialized:+ is
+      # the adapter's DECLARED canonical materializations (Q59-a, ruled
+      # 2026-09-03) — workdir-relative paths the fetch deliberately creates
+      # beside upstream's tree (digiliblt's tarball extraction, sutta-
+      # central's pinned parallels graph). Declared paths are tolerated as
+      # untracked AND their bytes hashed into the identity (the .attic
+      # discipline: never trusted blind) — so the tree stays strong and a
+      # changed materialization still moves the fingerprint. Undeclared
+      # dirt keeps poisoning: weak is the honest default.
+      def canonical_identity(dir, materialized: [])
         return nil unless Dir.exist?(dir)
 
-        tokens = identity_tokens(dir, dir)
+        tokens = identity_tokens(dir, dir, materialized: materialized)
         tokens && Digest::SHA256.hexdigest(tokens.sort.join("\n"))
+      end
+
+      # The adapter's declared canonical materializations for a registry
+      # +entry+ — [] when the class is unresolvable or predates the
+      # contract (older stamps just stay honestly weak).
+      def adapter_materialized_paths(entry)
+        klass = Object.const_get(entry.adapter_class_name)
+        klass.respond_to?(:materialized_paths) ? klass.materialized_paths : []
+      rescue NameError
+        []
       end
 
       # The language-scoped fold identity (P39-1): "name:sha" tokens, the
@@ -325,15 +346,19 @@ module Nabu
       # Walk +dir+: each embedded git repo contributes its HEAD (O(1) for
       # arbitrarily large corpora) plus its attic's file contents; every
       # file outside a repo contributes its content sha. nil poisons the
-      # whole walk (weak identity).
-      def identity_tokens(dir, root)
-        return repo_tokens(dir, root) if File.directory?(File.join(dir, ".git"))
+      # whole walk (weak identity). +materialized+ paths are root-relative
+      # (class note on canonical_identity); a plain-tree walk hashes
+      # everything anyway, so declarations only act inside git repos.
+      def identity_tokens(dir, root, materialized: [])
+        if File.directory?(File.join(dir, ".git"))
+          return repo_tokens(dir, root, materialized: repo_materialized(dir, root, materialized))
+        end
 
         tokens = []
         Dir.children(dir).sort.each do |name|
           full = File.join(dir, name)
           sub = if File.directory?(full)
-                  identity_tokens(full, root)
+                  identity_tokens(full, root, materialized: materialized)
                 else
                   ["file:#{relative(full, root)}:#{Digest::SHA256.file(full).hexdigest}"]
                 end
@@ -344,8 +369,16 @@ module Nabu
         tokens
       end
 
-      def repo_tokens(dir, root)
-        return nil unless porcelain_clean?(dir)
+      # The declared paths that live inside THIS repo, repo-relative.
+      def repo_materialized(dir, root, materialized)
+        return materialized if dir == root
+
+        prefix = "#{relative(dir, root)}/"
+        materialized.filter_map { |path| path.delete_prefix(prefix) if path.start_with?(prefix) }
+      end
+
+      def repo_tokens(dir, root, materialized: [])
+        return nil unless porcelain_clean?(dir, materialized: materialized)
 
         head = Shell.run("git", "-C", dir, "rev-parse", "HEAD").strip
         tokens = ["git:#{relative(dir, root)}:#{head}"]
@@ -353,6 +386,19 @@ module Nabu
         # excludes it via .git/info/exclude) — hash its bytes explicitly.
         attic = File.join(dir, ".attic")
         tokens.concat(identity_tokens(attic, root)) if File.directory?(attic)
+        # Declared materializations (Q59-a): the same discipline — the
+        # bytes the fetch deliberately created participate in the identity.
+        materialized.sort.each do |path|
+          full = File.join(dir, path)
+          if File.directory?(full)
+            sub = identity_tokens(full, root)
+            return nil if sub.nil?
+
+            tokens.concat(sub)
+          elsif File.file?(full)
+            tokens << "file:#{relative(full, root)}:#{Digest::SHA256.file(full).hexdigest}"
+          end
+        end
         tokens
       rescue Shell::Error
         nil
@@ -364,12 +410,25 @@ module Nabu
       # Q59): a ` M <path>` whose HEAD blob is a git-LFS POINTER naming
       # exactly the working file's sha256 and size is an LfsFetch
       # materialization — the bytes ARE what HEAD says, just smudged in
-      # place — so HEAD still names the tree. Every porcelain line must be
-      # such a vouched materialization; any other dirt poisons the whole.
-      def porcelain_clean?(dir)
+      # place — so HEAD still names the tree. A `?? <path>` under a DECLARED
+      # materialization (Q59-a) is the second vouched shape: tolerated here,
+      # and its bytes hashed by repo_tokens so the identity never trusts it
+      # blind. Every porcelain line must be one of the two vouched shapes;
+      # any other dirt poisons the whole.
+      def porcelain_clean?(dir, materialized: [])
         lines = Shell.run("git", "-C", dir, "status", "--porcelain")
                      .lines.map(&:chomp).reject(&:empty?)
-        lines.all? { |line| line.start_with?(" M ") && lfs_materialized?(dir, line[3..]) }
+        lines.all? do |line|
+          (line.start_with?(" M ") && lfs_materialized?(dir, line[3..])) ||
+            (line.start_with?("?? ") && declared_materialization?(line[3..], materialized))
+        end
+      end
+
+      # Is the porcelain path (a file, or a collapsed `dir/`) exactly a
+      # declared materialization or inside one?
+      def declared_materialization?(path, materialized)
+        bare = path.delete_suffix("/")
+        materialized.any? { |declared| bare == declared || bare.start_with?("#{declared}/") }
       end
 
       # Is +path+'s working copy the exact payload its HEAD-side LFS
