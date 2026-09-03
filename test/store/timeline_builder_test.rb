@@ -220,6 +220,11 @@ module Store
                         { "date" => "saec. XVI" })
       seed_metadata_doc("croala", "urn:nabu:croala:split-doc",
                         { "date" => "1490", "place" => "Split" })
+      # P94 (№R-59): dta rides the same :year_range shape — the sourceDesc
+      # print year is a clean "1784" string on every document, and the
+      # de:early staging depends on these envelopes existing.
+      seed_metadata_doc("dta", "urn:nabu:dta:kant_aufklaerung_1784",
+                        { "date" => "1784", "author" => "Kant, Immanuel" })
       summary = build!
       itant = timeline_for("urn:nabu:itant:oscan-9")
       assert_equal([-425, -375], [itant[:not_before], itant[:not_after]])
@@ -242,6 +247,9 @@ module Store
       assert_equal ["Split", 1490], [split[:place_name], split[:not_before]],
                    "croala's STRING place (the P44-i4 shape) IS the place name"
       assert_equal 2, summary.metadata_dates.fetch("croala")
+      kant = timeline_for("urn:nabu:dta:kant_aufklaerung_1784")
+      assert_equal([1784, 1784], [kant[:not_before], kant[:not_after]],
+                   "dta's print year mints a one-year envelope (№R-59's inference substrate)")
     end
 
     # P73-2 (the itant TM lift, ex-Q20): the geonames-labeled findspot lane
