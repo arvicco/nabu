@@ -395,3 +395,32 @@ namespace :site do
   desc "The one gate refresh: site:data + site:axes"
   task refresh: %i[data axes]
 end
+
+# External-tool bootstraps (owner rule 2026-09-03): every tool an
+# enrichment lane runs on installs through ONE tracked, idempotent task
+# — never a list of shell incantations handed to a human. Network-
+# capable, human-initiated only; the suite tests the logic with
+# injected shells/downloads (test/tool_bootstrap_test.rb) and never
+# runs these. Thin wrappers; all logic in Nabu::ToolBootstrap.
+namespace :tools do
+  desc "Install the WHOLE semantic-search stack (venv + model + sqlite-vec); idempotent"
+  task :embed do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    Nabu::ToolBootstrap.new.embed!
+  end
+
+  desc "Install the silver-lemma stack (venv + stanza + models); LANG defaults to la"
+  task :stanza, [:lang] do |_task, args|
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    Nabu::ToolBootstrap.new.stanza!(lang: args[:lang] || "la")
+  end
+
+  desc "Show the tool board: what is installed, where, and what isn't"
+  task :status do
+    $LOAD_PATH.unshift(File.expand_path("lib", __dir__))
+    require "nabu"
+    Nabu::ToolBootstrap.new.print_status
+  end
+end
