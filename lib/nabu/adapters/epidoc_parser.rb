@@ -406,6 +406,10 @@ module Nabu
 
           if name == "cRefPattern"
             record_pattern(node)
+          elsif name == "refsDecl"
+            @refs_decls_seen = (@refs_decls_seen || 0) + 1
+          elsif name == "refState" && @refs_decls_seen == 1
+            (@ref_states ||= []) << node.attribute("unit")
           elsif name == "div" && @division_types.include?(node.attribute("type"))
             enter_edition(node)
           elsif @structural
@@ -455,6 +459,8 @@ module Nabu
         end
 
         def build_scheme
+          return ref_state_scheme if usable_patterns.empty? && !(@ref_states || []).empty?
+
           deepest = deepest_pattern
           leaf = deepest.replacement.to_s.scan(/tei:([A-Za-z][\w.-]*)/).flatten.last
           unless leaf
@@ -480,7 +486,12 @@ module Nabu
           # Force refsDecl validation before any body work.
           @structural ? structural_scheme : scheme
           actual = node.attribute("n")
-          unless actual == @urn
+          # A PRESENT @n must match; a nil @n is the P4-era header shape
+          # (angLit's Klaeber Beowulf, P95-4) — the file's identity is the
+          # repo layout the caller already resolved, and legacy editions
+          # never stamped the urn on the div. Only a contradicting claim
+          # is damage.
+          if actual && actual != @urn
             raise ParseError, "#{@path}: edition urn mismatch: expected #{@urn.inspect}, " \
                               "div[@type=\"#{node.attribute('type')}\"]/@n is #{actual.inspect}"
           end
@@ -660,6 +671,20 @@ module Nabu
             end
           end
           [binds, predicates]
+        end
+
+        # The Klaeber rung (P95-4, angLit): Perseus P4-era headers declare
+        # citation with bare <refState> elements while the body is already
+        # P5 subtype-carded (div[@type=textpart][@subtype=card][@n]). The
+        # FIRST refsDecl's states mint the scheme (Beowulf's second,
+        # line-grain refsDecl describes a rendering the body does not
+        # card); the leaf is the citation div itself. Fires ONLY where the
+        # cRefPattern path had nothing — a previously-final ParseError —
+        # so no existing source's scheme can shift.
+        def ref_state_scheme
+          units = (@ref_states || []).compact
+          Scheme.new(depth: units.size, leaf_element: "div",
+                     unit_names: units, deepest_unit: units.last)
         end
 
         def usable_patterns
