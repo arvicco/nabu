@@ -34,7 +34,7 @@ slavic:
 
 germanic:
   persona: "The Germanicist — Gothic and Old English to the Norse sagas and the runestones, the word-hoard of all three branches."
-  desc: "Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Medieval Nordic manuscript archive (Menota), the Corpus of Middle English (CME), early-modern English at scale (EEBO-TCP), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), and the runic inscriptions (Rundata, dual-tagged epigraphy)."
+  desc: "Gothic on the proiel/ud treebanks beside the West and North Germanic branches: Old English verse (ASPR) and prose (ISWOC) with Bosworth-Toller, Old Icelandic (IcePaHC via ud), Old Norwegian and the Poetic Edda (Menotec), the Medieval Nordic manuscript archive (Menota), the Corpus of Middle English (CME), early-modern English at scale (EEBO-TCP), the Old Saxon Heliand (HeliPaD), Middle High German manuscripts (ReM), Middle Low German and Low Rhenish (ReN), the German print era whole (DTA, 1473–1969), and the runic inscriptions (Rundata, dual-tagged epigraphy)."
 
 celtic:
   persona: "The Celticist — from Lepontic stones to the Old Irish glossators."

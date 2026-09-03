@@ -58,6 +58,7 @@ rake tools:embed / tools:stanza[la] / tools:status   # external-tool bootstraps 
 
 - Test files mirror lib: `lib/nabu/adapters/perseus.rb` → `test/adapters/perseus_test.rb`.
 - **Fixtures are small, real upstream samples** (2–3 documents per source, trimmed but structurally intact), checked into git. Never hand-write fake TEI/CoNLL-U — trimmed real files only, so fixtures document actual upstream quirks.
+- **Skips are a failure on this box (owner rule 2026-09-03).** Restricted-source tests skip-when-absent so PUBLIC clones stay green — but on a box carrying `local/fixtures/` at all, every skip escalates to a failure (`test_helper`'s StrictSkips gate; `NABU_ALLOW_SKIPS=1` is the deliberate escape hatch). A skip here means missing coverage: re-cut the sample from the box's own `canonical/` asset (each `local/fixtures/<slug>/README.md` records the recipe), never shrug it off.
 - Every adapter must pass the **shared conformance suite** (`test/support/adapter_conformance.rb`): manifest validity, discover→parse round-trip, URN uniqueness and stability across two parses, NFC output, non-empty passages, license class present. New adapter = include conformance suite + source-specific tests.
 - Store tests run against in-memory SQLite (`sqlite::memory:`) with migrations applied fresh.
 - Idempotency is always tested: load fixture twice, assert row counts and revisions unchanged.

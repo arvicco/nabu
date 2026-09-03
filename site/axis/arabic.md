@@ -75,7 +75,7 @@ nabu search --from 1300 --to 1400 --axis arabic  # term-less browse of the 14th-
 
 ## Ask your model
 
-With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+With the [MCP server]({{ '/tools/#ask-your-model' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
 
 - **“Who reused this passage of Ibn Sīnā's Šifāʾ?”** → `nabu_links urn:nabu:openiti:0428IbnSina.ShifaAfcalWaInficalat.ALCorpus00001-ara2:1.223.4` — kind="reuse" edges from the KITAB pairwise data: the passage reappears in Faḫr al-Dīn al-Rāzī's Mulaḫḫaṣ (two centuries later) with character/word offsets riding the edge detail — upstream- computed alignments, distinct from nabu's own intertext detection.
 

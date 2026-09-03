@@ -3,15 +3,16 @@ title: Examples
 permalink: /examples/
 description: >-
   Worked examples of the Nabu library in use, by discipline: classics,
-  papyrology, Slavic philology, comparative linguistics, Assyriology, and
-  biblical studies.
+  papyrology, Slavic philology, comparative linguistics, Assyriology,
+  sinology, medieval Latin, Old English, and biblical studies.
 ---
 
 {% assign census = site.data.census -%}
-Ten short walk-throughs, one per discipline, using real commands and output
-from live runs of 11–12 July 2026. Nothing below is a mock-up; trims are
-marked with ellipses. Each discipline is also a **research desk** — one of
-the {{ census.desks }} [research axes]({{ '/axis/' | relative_url }}), where that
+Worked walk-throughs, one per discipline, using real commands and output
+from live runs between July and September 2026 (each section notes its
+date where it matters). Nothing below is a mock-up; trims are marked
+with ellipses. Each discipline is also a **research desk** — one of the
+{{ census.desks }} [research axes]({{ '/axis/' | relative_url }}), where that
 desk's shelves, instruments, CLI recipes and terminal setup live on one page.
 
 ## For the classicist
@@ -37,6 +38,49 @@ Oxyrhynchus quoting the opening of John — the kind of cross-shelf find
 (papyri beside literature in a single index) that motivated the library's
 design.
 
+## For the Latinist, across a millennium and three tiers
+
+*The [Classical]({{ '/axis/classical/' | relative_url }}) and
+[Romance]({{ '/axis/romance/' | relative_url }}) desks — live run of
+3 September 2026.*
+
+Latin in this library runs from archaic dedications to Migne's
+Patrologia, and lemma search answers across all of it — with every
+annotation honestly labelled by *who made it*. One dictionary form, three
+tiers in three hits:
+
+```
+$ bin/nabu search --lemma gratia --lang lat --limit 3
+urn:nabu:ceipom:88:97 [lat] [equivalence]  gratia → gratia  (Favor which one finds with others)
+  Orcevia Numeri [uxor] / nationu(s) gratia / Fortuna Diovo fileia / Primogenia / donom dedi
+urn:nabu:corph:0016:S0016-2 [lat]  gratia → gratias  (Favor which one finds with others)
+  Finit amen deo gratias ago oroit do dimmu . , . .
+urn:nabu:digiliblt:dlt000003:116 [lat] [silver]  gratia → gratia  (Favor which one finds with others)
+  gratia et bonae et malae rei causa;
+3 hits (exact lemma match; text is pristine) — 1 silver (automatic lemmatization; --gold-only excludes) — 1 equivalence (scholar-curated Classical-Latin equivalents; --gold-only excludes)
+```
+
+An archaic Praeneste dedication answering through a scholar-curated
+`[equivalence]`, an Insular colophon on gold annotation, a late-antique
+grammarian through machine (`[silver]`) lemmatization — and the summary
+line tells you exactly which is which. `--gold-only` restricts to the
+human-verified tier; the tier system itself ({{ census.gold_lemmas_m }}M
+gold, {{ census.silver_lemmas_m }}M labelled silver annotations) is
+written up in
+[lemma enrichment](https://github.com/arvicco/nabu/blob/main/docs/lemma-enrichment.md).
+
+Historical *stages* are a filter of their own — `--lect lat:med` keeps
+only shelves resolving to Medieval Latin, so a formula query stays inside
+its period:
+
+```
+$ bin/nabu search misericordia --lect lat:med --limit 2
+urn:nabu:corpus-corporum:8706:d15.p1 [lat]
+  …mino quoniam bonus: quoniam in aeternum [misericordia] ejus. Confitemini Deo deorum: quoniam i…
+urn:nabu:corpus-corporum:9349:d142.p1 [lat]
+  …mino quoniam bonus, quoniam in aeternum [misericordia] ejus. Confitemini Deo deorum, quoniam i…
+```
+
 ## For the papyrologist
 
 *The [Epigraphy desk]({{ '/axis/epigraphy/' | relative_url }}) — papyri, stones and sherds.*
@@ -60,6 +104,56 @@ carry HGV dating and provenance, chronological and geographic filters
 compose with any search: `search 'στρατηγ*' --from 101 --to 300 --place
 oxyrhynch%` scopes to the Oxyrhynchite strategoi of the second and third
 centuries.
+
+## For the sinologist
+
+*The [Sinitic desk]({{ '/axis/sinitic/' | relative_url }}) — live run of
+3 September 2026.*
+
+Classical Chinese writes without word boundaries, which defeats ordinary
+full-text engines; since September 2026 the library maintains a dedicated
+character-pair index over the Sinitic, Korean and Japanese shelves, so a
+Han query is exact, fast, and never depends on guessed segmentation. The
+six dragons of the *Yijing*'s first hexagram, across three corpora in one
+query:
+
+```
+$ bin/nabu search 六龍 --limit 3
+urn:nabu:classical-modern:汉书:志:礼乐志:298 [lzh]
+  吾知所乐，独乐[六龙]，六龙之调，使我心若。
+urn:nabu:cbeta:X37n0675:0802a05 [lzh]
+  槃如晝夕窹，遠離夢想也。倒正如[六龍]舞，以六龍
+urn:nabu:cbeta:X86n1600:0170a04 [lzh]
+  乘[六龍]以御天。知時之乘六龍，則知一句之具三
+3 hits (snippet shows the text as stored; matching is fold-aware)
+```
+
+— the *Book of Han*'s music treatise (in simplified-character
+transmission, found by the same fold-aware query) beside two Buddhist
+commentaries quoting the *Yijing* line 乘六龍以御天, "riding the six
+dragons to drive across the sky." The character itself then goes on the
+desk — one card from modern readings back to Old Chinese:
+
+```
+$ bin/nabu char 龍
+龍  U+9F8D  ·  16 strokes  ·  radical 212 龍 dragon
+…
+readings (ja, KANJIDIC2):
+  on: リュウ、リョウ、ロウ
+  kun: たつ、いせ
+…
+readings (sinoxenic, Unihan):
+  Mandarin: lóng
+  Korean (hangul): 룡:0E 용:0
+  Vietnamese: long
+…
+Old Chinese (Baxter-Sagart):
+  [baxter-sagart-oc] dragon
+    OC: *[mə]-roŋ
+    MC: ljowng (l- + -jowng A)
+    pinyin: lóng
+…
+```
 
 ## For the slavist
 
@@ -117,6 +211,35 @@ The whole Gothic × OCS New Testament yields roughly 300 such verses across
 мѣсѧць), and each hit is labelled with the dictionary shelf on which the
 two languages meet — a Proto-Germanic meet for a Slavic word reads as a
 likely borrowing, not common descent.
+
+## For the Old English scholar
+
+*The [Germanic desk]({{ '/axis/germanic/' | relative_url }}) — live run
+of 3 September 2026.*
+
+The Anglo-Saxon Poetic Records sit beside the prose, the Bosworth-Toller
+dictionary, and the runic and continental Germanic shelves. The formula
+miner reads oral-formulaic poetry the way its scholarship does — by
+finding the repeated building blocks and counting them:
+
+```
+$ bin/nabu formulas aspr --min-count 5
+formulas in aspr — 30550 passages / 175736 tokens
+13×  ic waes ond mid
+     e.g. urn:nabu:aspr:A3.11:59, urn:nabu:aspr:A3.11:60, urn:nabu:aspr:A3.11:61
+12×  ond thaet word acwaeth
+     e.g. urn:nabu:aspr:A2.6:1071, urn:nabu:aspr:A3.1:316, urn:nabu:aspr:A3.1:474
+12×  saga hwaet ic hatte
+     e.g. urn:nabu:aspr:A3.22.3:72, urn:nabu:aspr:A3.22.8:8, urn:nabu:aspr:A3.22.10:11
+…
+```
+
+*Saga hwæt ic hatte* — "say what I am called" — is the Exeter Book
+riddles' closing refrain, surfacing here with the exact riddles that use
+it; the speech formulas (*ond þæt word acwæð*) rank right beside it. The
+Germanic ladder is also growing downward in time: the Deutsches
+Textarchiv adapter (the German print corpus, 1473–1969) is built and
+awaiting its first sync.
 
 ## For the assyriologist
 
@@ -270,6 +393,52 @@ Temple corpora. Rabbinic literature proper — Mishnah, Talmud, midrash —
 is a planned campaign of its own; the Targum shelf and the Jastrow
 dictionary scans are its first bridgeheads.
 
+## For the southeast asianist
+
+*The [Southeast Asia desk]({{ '/axis/sea/' | relative_url }}) — the
+newest desk (September 2026); live run of 3 September 2026.*
+
+The Indic cosmopolis at its eastern edge: the DHARMA project's Old Khmer,
+Cham, Old Javanese, Pyu and Nusantara epigraphy, the Bagan inscriptions
+of Old Burmese, and the Old Javanese Wordnet as the desk's glossary. The
+shelf rewards a blind draw — every record carries its edition credit and
+resolved language stage:
+
+```
+$ bin/nabu show --random --source dharma-khmer
+urn:nabu:dharma-khmer:INSCIK00299-24:1 [okz-Latn]
+  .kṣuradhāraparvvata . qnak· ta lvac· tamrya qseḥ yāna . pāduka . cap· ta vrāhmaṇa nu jeṅ(·) …
+  document: urn:nabu:dharma-khmer:INSCIK00299-24 — K. 299-24. Eastern section of southern gallery of Angkor Wat (the hell and heaven gallery), 12th century
+  source: dharma-khmer   license: attribution   sequence: 0   revision: 1
+  credit: DHARMA — Corpus des inscriptions khmères (the Cœdès K-numbers) (ERC no. 809994, EFEO/CNRS; erc-dharma on GitHub). Cite the corpus and its editors wherever used.
+  lect: okz~latn (codemap)
+…
+```
+
+— the hell-and-heaven gallery of Angkor Wat, naming the razor-edged
+mountain Kṣuradhāraparvata and the sinners it awaits: elephant thieves,
+horse thieves, and those who show contempt for brahmins and pandits.
+
+## Searching by meaning
+
+*Built September 2026; the vector store's first overnight build is
+scheduled.*
+
+The newest search layer answers a question no word index can: *where
+else does the library say this?* — same thought, different words.
+`search --similar <urn>` anchors on any passage of the literary core and
+returns its nearest same-language neighbors — another edition's copy of
+the same line, a quotation drifted by memory, a paraphrase — ranked and
+banded *close / near / loose*, with the embedding model named on every
+page so a statistical match is never mistaken for a curated alignment.
+The same lane serves AI conversation through the MCP server's
+`similar_to` parameter. It runs on a local vector store the owner builds
+once with `nabu embed` and tops up incrementally after every sync; no
+text ever leaves the machine. The plain-language write-up is
+[embed.md](https://github.com/arvicco/nabu/blob/main/docs/embed.md) — and
+this page will gain the live walk-through once the first build lands
+(nothing here is ever pasted from imagination).
+
 ## Composing the layers
 
 *Added August 2026, live runs of 12 August — the place, script, sign, and
@@ -325,6 +494,6 @@ license classes, and lect filters above.
 
 These walk-throughs sample the disciplines the library serves; they are not
 the whole of it. The desk index at [Research axes]({{ '/axis/' | relative_url }})
-covers all {{ census.desks }} — the Germanicist, the Indologist and the Sinologist among
-those with no walk-through above — each with its own member shelves,
-instruments and CLI recipes.
+covers all {{ census.desks }} — the Indologist, the Koreanist and the
+Tibetologist among those with no walk-through above — each with its own
+member shelves, instruments and CLI recipes.

@@ -2,21 +2,24 @@
 title: Tools
 permalink: /tools/
 description: >-
-  The command-line instruments of the Nabu library, organized by scholarly
-  task: search, citation, alignment, lexicography, etymology, and intertext.
+  The instruments of the Nabu library, organized by scholarly task:
+  word search, lemma and semantic search, citation, alignment,
+  lexicography, etymology, intertext — and the same capabilities in
+  conversation through the built-in MCP server.
 ---
 
 {% assign census = site.data.census -%}
-Nabu is operated from the command line (`bin/nabu`), and the same
-capabilities are exposed to AI clients through a read-only
-[MCP server](https://github.com/arvicco/nabu/blob/main/docs/mcp.md). The
-commands below are grouped by scholarly task; every example is a real
-command with output pasted from live runs of 11–12 July 2026 (trims marked
-with …).
+Nabu is operated from the command line (`bin/nabu`), and everything the
+command line can do for a reader, a connected AI assistant can do in
+conversation through the built-in read-only MCP server — see
+[Ask your model](#ask-your-model) below. The commands are grouped by
+scholarly task; every pasted example is a real command with output from
+live runs (trims marked with …).
 
 ## Finding text
 
-**Full-text search** (`nabu search QUERY`) runs over the whole corpus with
+**Full-text search** (`nabu search QUERY`) runs over the whole corpus
+({{ census.passages_display }} passages, {{ census.as_of }}) with
 per-language orthographic folding: unaccented μηνιν finds μῆνιν; *iuvenis*,
 *juvenis*, and *iuuenis* all resolve; Old English æ/þ/ð and cuneiform
 determinatives are handled analogously. Results can be filtered by
@@ -41,6 +44,14 @@ $ bin/nabu search manibus --type epitaph --province Britannia
 draws on 256,518 facet rows recording inscription genre, province,
 material, and object type, with uncertain upstream attributions preserved
 as such.
+
+**Chinese, Japanese and Korean text** searches first-class (September
+2026): the classical Sinitic shelves — the Chinese canons, the Korean
+state records, the Japanese library — write without word boundaries, so
+the library maintains a dedicated character-pair index over those
+shelves (fifteen sources). A query in Han characters or kana
+(`nabu search 六龍`) matches exact character sequences at full speed,
+composing with every filter below; no segmentation is guessed, ever.
 
 **Stage-aware search** (`search --lect LECT-ID`, August 2026, with the
 optional [nabu-lects](https://arvicco.github.io/nabu-lects) registry
@@ -85,7 +96,7 @@ urn:nabu:riig:ahp-01-01:HRD-a:1 [xtg-Grek]
 ```
 
 **Sign search** (`search --sign GLYPH|NAME`, August 2026) is the inverse
-of the [sign desk]({{ '/tools/' | relative_url }}): one cuneiform sign
+of the [sign desk](#the-reference-desk): one cuneiform sign
 expands into an OR over its OSL reading values, each hit bracketing the
 value that matched:
 
@@ -101,25 +112,6 @@ documents whose recorded find-location falls inside a radius —
 `--within 59.86,17.64,30` walks the runestones raised within 30 km of
 Uppsala. All of these compose with each other and with the date, genre,
 license, and lect filters.
-
-**Lemma search** (`search --lemma FORM`) queries by dictionary form rather
-than surface string, over {{ census.gold_lemmas_m }} million gold lemma annotations in
-{{ census.gold_languages }} languages ({{ census.as_of }} census) — inflection and suppletion included:
-
-```
-$ bin/nabu search --lemma λέγω --limit 3
-urn:nabu:proiel:chron:108755 [grc]  λέγω → ῥηθέντος  (lay)
-  ὅ περ ἦν καὶ αἴτιον τοῦ μὴ ἐλθεῖν τὸν γενήσαντά με εἰς τὸν Μορέαν μετὰ τοῦ αὐθεντοπούλου κὺρ Θωμᾶ εἰ…
-urn:nabu:proiel:chron:121080 [grc]  λέγω → εἶπον, εἰπὲ  (lay)
-  Πολλῶν οὖν λόγων δαπανηθέντων, τέλος ἐστάλησαν πρὸς τὸν ἄνθρωπον δύο τῶν κελλιωτῶν καὶ συντρόφων μου…
-urn:nabu:proiel:chron:121083 [grc]  λέγω → εἴπω  (lay)
-  Ἐγὼ δὲ νὰ ἀκούω παρὰ μὲν τῶν, ὅτι καλή ἐστι, παρὰ δὲ τῶν, ὅτι οὐ καλή, διὰ τὶ νὰ μηδὲν εἴπω·
-3 hits (exact lemma match; text is pristine)
-```
-
-A morphology filter (`--morph case=gen,number=pl`, in Universal
-Dependencies vocabulary) restricts hits to attestations with the stated
-gold morphology.
 
 **Proximity search** (`search A --near B --window N`) keeps only passages
 where the second term occurs within *N* words of the first — collocation
@@ -163,6 +155,61 @@ $ bin/nabu concord --lemma virtus --width 30
 …b eam rem aut suae magnopere virtuti tribueret aut ipsos despicer…  urn:nabu:proiel:caes-gal:52636 [lat]
 …
 ```
+
+**The attic** (`search --withdrawn TERM`, September 2026) searches what
+the library no longer serves: passages upstream revised away and
+documents upstream withdrew, each hit labelled with *why* it was
+withdrawn (an upstream deletion, a revision that pruned it). The
+catalog never hard-deletes — text that once entered the library remains
+findable, honestly marked, in its own view.
+
+## Words and meanings
+
+Above the letter-for-letter layer sit two ways of searching by what a
+word *is* rather than how it is spelled.
+
+**Lemma search** (`search --lemma FORM`) queries by dictionary form
+rather than surface string — inflection and suppletion included, so one
+query finds a Latin noun in all its cases or a Greek verb across its
+stems:
+
+```
+$ bin/nabu search --lemma λέγω --limit 3
+urn:nabu:proiel:chron:108755 [grc]  λέγω → ῥηθέντος  (lay)
+  ὅ περ ἦν καὶ αἴτιον τοῦ μὴ ἐλθεῖν τὸν γενήσαντά με εἰς τὸν Μορέαν μετὰ τοῦ αὐθεντοπούλου κὺρ Θωμᾶ εἰ…
+urn:nabu:proiel:chron:121080 [grc]  λέγω → εἶπον, εἰπὲ  (lay)
+  Πολλῶν οὖν λόγων δαπανηθέντων, τέλος ἐστάλησαν πρὸς τὸν ἄνθρωπον δύο τῶν κελλιωτῶν καὶ συντρόφων μου…
+urn:nabu:proiel:chron:121083 [grc]  λέγω → εἴπω  (lay)
+  Ἐγὼ δὲ νὰ ἀκούω παρὰ μὲν τῶν, ὅτι καλή ἐστι, παρὰ δὲ τῶν, ὅτι οὐ καλή, διὰ τὶ νὰ μηδὲν εἴπω·
+3 hits (exact lemma match; text is pristine)
+```
+
+The coverage comes in two honestly separated tiers:
+**{{ census.gold_lemmas_m }} million gold annotations** in
+{{ census.gold_languages }} languages — human-verified, from the
+treebanks — and **{{ census.silver_lemmas_m }} million silver
+annotations** in {{ census.silver_languages }} languages, proposed by
+machines and *labelled* `[silver]` wherever they surface; `--gold-only`
+restricts any lemma query to the human-verified tier, and a machine
+guess is never blended into a gold count. The silver tier is grown by
+the library's own local lemmatization campaigns — the how and the
+honesty rules are written up in
+[lemma enrichment](https://github.com/arvicco/nabu/blob/main/docs/lemma-enrichment.md).
+A morphology filter (`--morph case=gen,number=pl`, in Universal
+Dependencies vocabulary) restricts hits to attestations with the stated
+gold morphology.
+
+**Semantic search** (`search --similar URN`, September 2026) finds
+passages by *meaning*: anchor on any passage of the literary core and
+get its nearest same-language neighbors — the same line in another held
+edition, a quotation drifted by memory, a paraphrase — ranked and
+banded *close / near / loose*, with the model named so a statistical
+match is never mistaken for a curated alignment. Behind it is a local
+vector store the owner builds once with `nabu embed` (fully on-box; no
+text leaves the machine) and tops up incrementally after every sync.
+The plain-language write-up — what embedding is, what it can and cannot
+answer — is
+[embed.md](https://github.com/arvicco/nabu/blob/main/docs/embed.md).
 
 ## Reading and citing
 
@@ -210,12 +257,13 @@ never captive to its own tooling.
 ## The reference desk
 
 **Dictionary lookup** (`nabu define LEMMA`) queries the reference shelf
-(fifty-six shelves as of 22 July 2026: LSJ, Lewis &amp; Short,
-Bosworth-Toller, Monier-Williams, the reconstruction dictionaries, the
-StarLing bases with Vasmer, the Slovenian historical dictionaries, the
-Hebrew and Egyptian lexica, and the Sino-Japanese desk), with the
-entry's citations resolved to live
-passages in the local catalog:
+({{ census.dictionary_shelves }} dictionary shelves,
+{{ census.dictionary_entries_display }} entries as of
+{{ census.as_of }}: LSJ, Lewis &amp; Short, Bosworth-Toller,
+Monier-Williams, the reconstruction dictionaries, the StarLing bases
+with Vasmer, the Slovenian historical dictionaries, the Hebrew and
+Egyptian lexica, the Sino-Japanese desk, and on), with the
+entry's citations resolved to live passages in the local catalog:
 
 ```
 $ bin/nabu define μῆνις
@@ -350,7 +398,11 @@ a Slavic word is flagged as a likely borrowing rather than common descent.
 discovery: point at one passage and find where the corpus quotes or reworks
 it, ranked by shared rare phrases, with elision folded across editions (so
 Matthew 4:4 finds Septuagint Deuteronomy 8:3). Gold-lemmatized anchors also
-surface re-inflected allusions through rare lemmas.
+surface re-inflected allusions through rare lemmas. Its statistical
+sibling is `search --similar` [above](#words-and-meanings) — parallels
+ranks shared *phrases* with evidence, semantic search ranks shared
+*meaning*; the two answer different questions and neither pretends to be
+the other.
 
 ```
 $ bin/nabu parallels urn:nabu:sblgnt:matt:4.4
@@ -371,8 +423,6 @@ graph: every batch-produced edge touching a URN — parallels, formulas,
 cognates — with its evidence and a provenance footer naming the producing
 run. Edges live in their own journal database and survive catalog rebuilds.
 
-## Profiling
-
 **Vocabulary profiling** (`nabu vocab URN`) computes a lemma-frequency
 profile of a document or range against the gold-lemma corpus: distinctive
 vocabulary by log-odds (Caesar surfaces *legio* and *proelium*; Cicero's
@@ -385,6 +435,51 @@ $ bin/nabu vocab --by-century 'στρατηγ*' --lang grc
 ```
 
 peaks in the second century CE.
+
+## Ask your model
+
+Everything above is also available *in conversation*: the library ships
+a read-only [MCP server](https://github.com/arvicco/nabu/blob/main/docs/mcp.md)
+(`bin/nabu mcp`) exposing thirteen tools — `nabu_search`, `nabu_show`,
+`nabu_define`, `nabu_etym`, `nabu_links`, `nabu_parallels`,
+`nabu_cognates`, `nabu_align`, `nabu_concord`, `nabu_place`,
+`nabu_char`, `nabu_signs`, and `nabu_status` — so an AI assistant wired
+to your library can search, cite, align, and etymologize over it
+mid-discussion. Registration for Claude Code and Claude Desktop is in
+the [server documentation](https://github.com/arvicco/nabu/blob/main/docs/mcp.md);
+restricted material is excluded by default, license classes ride every
+payload, and nothing is ever written. The command-line search modes
+travel with it: `nabu_search` takes the `lect` historical-stage filter
+and, since September 2026, a `similar_to` anchor — the
+[semantic-search lane](#words-and-meanings) in conversation, banded and
+model-named like its CLI twin.
+
+The point is composition: a research question is usually two or three
+tools, not one. Every example below — and every "Ask your model" block
+on the [axis pages]({{ '/axis/' | relative_url }}) — was run live
+against this library before it was written down; nothing is invented.
+
+- **“Who quotes the opening of the Iliad?”** — `nabu_parallels` on
+  Iliad 1.1 returns Galen, Aristotle's *Ars Rhetorica*, and Sextus
+  Empiricus (seven loci) sharing μῆνιν ἄειδε, each with the matched
+  phrase and a urn `nabu_show` opens in pristine text.
+- **“Show me MARK 2.3 in every witness.”** — `nabu_align` returns
+  fourteen columns at once: Greek, Latin, Gothic, Armenian, four Old
+  Church Slavonic codices, Old English, Sahidic Coptic, English.
+  `collate: true` turns them into an apparatus.
+- **“Where does Gothic *guþ* come from?”** — `nabu_etym` walks it to
+  Proto-Germanic *\*gudą* (64 cognates, nine attested here with counts)
+  and the PIE ancestors above it.
+- **“What survives from Segesta?”** — `nabu_place` resolves the
+  gazetteer card (Pleiades 462487) and counts the library's holdings
+  at that place, per source.
+- **“Attestations of *šarru* 'king'?”** — `nabu_search` by lemma
+  resolves the logogram LUGAL through ORACC's lemmatization; the first
+  hits are the Cyrus Cylinder.
+
+Each desk has its own examples — and its own conventions (Hittite is
+typed syllabified, Old Japanese romanized) — on its
+[axis page]({{ '/axis/' | relative_url }}) under **Ask your model**.
 
 ## Stewardship
 
@@ -415,6 +510,17 @@ $ bin/nabu lect infer-dates --source edh --dry-run
 $ bin/nabu lect check-dates
 ```
 
+**Enrichment campaigns** (`nabu embed`, `nabu lemma-enrich`) are the two
+owner-fired long runs that grow the layers above: `nabu embed` builds
+and incrementally maintains the semantic-vector store behind
+`search --similar`, and `nabu lemma-enrich` runs the local lemmatizer
+over a language's uncovered passages to grow the silver tier. Both are
+census-first (an honest count and time estimate before anything runs),
+resumable at fine grain, and fully on-box; their tool stacks install
+with one idempotent command each (`rake tools:embed`,
+`rake tools:stanza[la]`). The plain-language write-ups:
+[embed.md](https://github.com/arvicco/nabu/blob/main/docs/embed.md) ·
+[lemma-enrichment.md](https://github.com/arvicco/nabu/blob/main/docs/lemma-enrichment.md).
 
 **Ingest** (`nabu ingest FILE...`) files your own material — scanned
 grammars, offprints, reading notes — into the local library shelf: the

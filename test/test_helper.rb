@@ -46,5 +46,35 @@ module Nabu
       dir = local_fixtures(source)
       Dir.exist?(dir) && !Dir.empty?(dir)
     end
+
+    # The strict-skip gate (owner rule 2026-09-03: a local run with
+    # skips is a FAILURE, never "everything's just dandy"). Skips exist
+    # so PUBLIC clones without the restricted no-redistribution bytes
+    # stay green — never so the owner's box can silently under-test.
+    # On a box that carries the restricted-fixtures lane at all
+    # (local/fixtures/ present, non-empty) every skip escalates to a
+    # failure naming what was missing. NABU_ALLOW_SKIPS=1 is the
+    # deliberate escape hatch; NABU_STRICT_SKIPS=1 forces the gate on.
+    module StrictSkips
+      def self.enforce?
+        return false if ENV["NABU_ALLOW_SKIPS"] == "1"
+        return true if ENV["NABU_STRICT_SKIPS"] == "1"
+
+        Dir.exist?(LOCAL_FIXTURES_ROOT) && !Dir.empty?(LOCAL_FIXTURES_ROOT)
+      end
+
+      def skip(message = nil, _backtrace = caller)
+        unless StrictSkips.enforce?
+          super
+          return
+        end
+
+        flunk "skip escalated to FAILURE (this box carries local/fixtures/, so every skip " \
+              "is missing coverage — owner rule 2026-09-03; NABU_ALLOW_SKIPS=1 is the " \
+              "deliberate escape hatch): #{message}"
+      end
+    end
   end
 end
+
+Minitest::Test.prepend(Nabu::TestSupport::StrictSkips)

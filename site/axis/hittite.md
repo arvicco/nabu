@@ -53,7 +53,7 @@ nabu search ḫatti --axis hittite      # a query across TLHdig and the treebank
 
 ## Ask your model
 
-With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+With the [MCP server]({{ '/tools/#ask-your-model' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
 
 - **“Find nepišaš — 'of heaven' — in the tablets.”** → `nabu_search "ne-pi-ša-aš" (lang: hit)` — Mythological fragments (KBo 26.91, KBo 26.120) with damage brackets preserved. The desk's lesson: TLHdig stores the syllabified transliteration, so type it hyphenated — the diacritic fold maps pí to pi for you.
 

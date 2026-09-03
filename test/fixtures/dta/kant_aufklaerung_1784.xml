@@ -1,0 +1,798 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.deutschestextarchiv.de/basisformat.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">       <teiHeader>
+<fileDesc>
+<titleStmt>
+<title type="main">Beantwortung der Frage: Was ist Aufklärung?</title>
+<author>
+<persName ref="http://d-nb.info/gnd/118559796">
+<surname>Kant</surname>
+<forename>Immanuel</forename>
+</persName>
+</author>
+<editor corresp="#DTACorpusPublisher">
+<persName ref="http://d-nb.info/gnd/115266127">
+<surname>Geyken</surname>
+<forename>Alexander</forename>
+</persName>
+</editor>
+<editor corresp="#DTACorpusPublisher">
+<persName ref="http://d-nb.info/gnd/1222198746">
+<surname>Haaf</surname>
+<forename>Susanne</forename>
+</persName>
+</editor>
+<editor corresp="#DTACorpusPublisher">
+<persName ref="http://d-nb.info/gnd/1019062681">
+<surname>Jurish</surname>
+<forename>Bryan</forename>
+</persName>
+</editor>
+<editor corresp="#DTACorpusPublisher">
+<persName>
+<surname>Boenig</surname>
+<forename>Matthias</forename>
+</persName>
+</editor>
+<editor corresp="#DTACorpusPublisher">
+<persName>
+<surname>Thomas</surname>
+<forename>Christian</forename>
+</persName>
+</editor>
+<editor corresp="#DTACorpusPublisher">
+<persName>
+<surname>Wiegand</surname>
+<forename>Frank</forename>
+</persName>
+</editor>
+<respStmt>
+<orgName ref="https://www.bbaw.de">Berlin-Brandenburgische Akademie der Wissenschaften (BBAW)</orgName>
+<resp>
+<note type="remarkResponsibility">Langfristige Bereitstellung der DTA-Ausgabe</note>
+<ref target="https://www.bbaw.de"/>
+</resp>
+</respStmt>
+</titleStmt>
+<editionStmt><edition>Vollständige digitalisierte Ausgabe.</edition></editionStmt>
+<extent>
+<measure type="images">33</measure>
+<measure type="tokens">3375</measure>
+<measure type="types">1342</measure>
+<measure type="characters">24504</measure>
+</extent>
+<publicationStmt>
+<publisher xml:id="DTACorpusPublisher">
+<email>dta@bbaw.de</email>
+<orgName role="project">Deutsches Textarchiv</orgName>
+<orgName role="hostingInstitution" xml:lang="en">Berlin-Brandenburg Academy of Sciences and Humanities (BBAW)</orgName>
+<orgName role="hostingInstitution" xml:lang="de">Berlin-Brandenburgische Akademie der Wissenschaften (BBAW)</orgName>
+<address>
+<addrLine>Jägerstr. 22/23, 10117 Berlin</addrLine>
+<country>Germany</country>
+</address>
+</publisher>
+<pubPlace>Berlin</pubPlace>
+<date type="publication">2025-02-28T15:04:59Z</date>
+<availability>
+<licence target="https://creativecommons.org/licenses/by-sa/4.0/deed.de">
+<p>Distributed under the Creative Commons Attribution-ShareAlike 4.0 License.</p>
+</licence>
+</availability>
+<idno>
+<idno type="URLWeb">https://www.deutschestextarchiv.de/kant_aufklaerung_1784</idno>
+<idno type="URLXML">https://www.deutschestextarchiv.de/book/download_xml/kant_aufklaerung_1784</idno>
+<idno type="URLHTML">https://www.deutschestextarchiv.de/book/download_html/kant_aufklaerung_1784</idno>
+<idno type="URLText">https://www.deutschestextarchiv.de/book/download_text/kant_aufklaerung_1784</idno>
+<idno type="DTADirName">kant_aufklaerung_1784</idno>
+<idno type="DTAID">16167</idno>
+<idno type="URN">urn:nbn:de:kobv:b4-200905192971</idno>
+</idno>
+</publicationStmt>
+<sourceDesc>
+<bibl type="JA">Kant, Immanuel: Beantwortung der Frage: Was ist Aufklärung? In: Berlinische Monatsschrift, 1784, H. 12, S. 481-494.</bibl>
+<biblFull>
+<titleStmt>
+<title level="a" type="main">Beantwortung der Frage: Was ist Aufklärung?</title>
+<author>
+<persName ref="http://d-nb.info/gnd/118559796">
+<surname>Kant</surname>
+<forename>Immanuel</forename>
+</persName>
+</author>
+</titleStmt>
+<editionStmt>
+<edition n="1"/>
+</editionStmt>
+<extent>
+<measure type="pages">14 S.</measure>
+</extent>
+<publicationStmt>
+<publisher><name>Haude und Spener</name></publisher>
+<pubPlace>Berlin</pubPlace>
+<date type="publication">1784</date>
+</publicationStmt>
+<seriesStmt>
+<title level="j" type="main">Berlinische Monatsschrift</title>
+<biblScope unit="issue">12</biblScope>
+<biblScope unit="pages">481-494</biblScope>
+</seriesStmt>
+</biblFull>
+<msDesc>
+<msIdentifier>
+<repository>Zentral- und Landesbibliothek Berlin</repository>
+<idno>
+<idno type="shelfmark">Berlin ZLB, B 1/96:1784,2</idno>
+</idno>
+</msIdentifier>
+<physDesc>
+<typeDesc>
+<p>Fraktur</p>
+</typeDesc>
+</physDesc>
+</msDesc>
+</sourceDesc>
+</fileDesc>
+<encodingDesc>
+<editorialDecl>
+<p>Dieses Werk wurde von OCR-Software automatisch erfasst und anschließend gemäß den
+<ref target="https://www.deutschestextarchiv.de/doku/richtlinien">DTA-Transkriptionsrichtlinien</ref>
+von Muttersprachlern nachkontrolliert. Es wurde gemäß dem
+<ref target="https://www.deutschestextarchiv.de/doku/basisformat">DTA-Basisformat</ref> in XML/TEI P5 kodiert.</p>
+<p/>
+</editorialDecl>
+<tagsDecl>
+<rendition scheme="css" xml:id="aq">font-family:sans-serif</rendition>
+<rendition scheme="css" xml:id="b">font-weight:bold</rendition>
+<rendition scheme="css" xml:id="blue">color:blue</rendition>
+<rendition scheme="css" xml:id="c">display:block; text-align:center</rendition>
+<rendition scheme="css" xml:id="et">display:block; margin-left:2em; text-indent:0</rendition>
+<rendition scheme="css" xml:id="et2">display:block; margin-left:4em; text-indent:0</rendition>
+<rendition scheme="css" xml:id="et3">display:block; margin-left:6em; text-indent:0</rendition>
+<rendition scheme="css" xml:id="f">border:1px dotted silver</rendition>
+<rendition scheme="css" xml:id="fr">border:1px dotted silver</rendition>
+<rendition scheme="css" xml:id="g">letter-spacing:0.125em</rendition>
+<rendition scheme="css" xml:id="i">font-style:italic</rendition>
+<rendition scheme="css" xml:id="in">font-size:150%</rendition>
+<rendition scheme="css" xml:id="k">font-variant:small-caps</rendition>
+<rendition scheme="css" xml:id="larger">font-size:larger</rendition>
+<rendition scheme="css" xml:id="red">color:red</rendition>
+<rendition scheme="css" xml:id="right">display:block; text-align:right</rendition>
+<rendition scheme="css" xml:id="s">text-decoration:line-through</rendition>
+<rendition scheme="css" xml:id="smaller">font-size:smaller</rendition>
+<rendition scheme="css" xml:id="sub">vertical-align:sub; font-size:.7em</rendition>
+<rendition scheme="css" xml:id="sup">vertical-align:super; font-size:.7em</rendition>
+<rendition scheme="css" xml:id="u">text-decoration:underline</rendition>
+<rendition scheme="css" xml:id="uu">border-bottom:double 3px #000</rendition>
+</tagsDecl>
+</encodingDesc>
+<profileDesc>
+<langUsage>
+<language ident="deu">(Früh-)Neuhochdeutsch</language>
+<language ident="deu">German</language>
+</langUsage>
+<textClass>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#dtamain">Fachtext</classCode>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#dtasub">Philosophie</classCode>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#dwds1main">Wissenschaft</classCode>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#dwds1sub">Philosophie</classCode>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#DTACorpus">core</classCode>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#DTACorpus">ready</classCode>
+<classCode scheme="https://www.deutschestextarchiv.de/doku/klassifikation#DTACorpus">mts</classCode>
+</textClass>
+</profileDesc>
+</teiHeader>
+<text> <front>
+<pb facs="#f0001"/>
+<pb facs="#f0002"/>
+<pb facs="#f0003"/>
+<pb facs="#f0004"/>
+<pb facs="#f0005"/>
+<pb facs="#f0006"/>
+<pb facs="#f0007"/>
+<pb facs="#f0008"/>
+<figure/>
+<pb facs="#f0009"/>
+<titlePage type="main"> <docTitle> <titlePart type="main"> <hi rendition="#b #g">Berlini&#x017F;che<lb/>
+Monats&#x017F;chrift.</hi></titlePart> </docTitle><lb/>
+<milestone unit="section" rendition="#hr"/><lb/>
+<byline>Herausgegeben<lb/>
+von<lb/>
+<docAuthor> <hi rendition="#b">F. Gedike</hi> und <hi rendition="#b">J. E. Bie&#x017F;ter.</hi></docAuthor> </byline><lb/>
+<milestone unit="section" rendition="#hr"/><lb/>
+<titlePart type="volume"> <hi rendition="#g">Vierter Band</hi>.</titlePart><lb/>
+<titlePart type="volume"> <hi rendition="#g">Julius bis December</hi> 1784.</titlePart><lb/>
+<milestone unit="section" rendition="#hr"/><lb/>
+<docImprint> <pubPlace> <hi rendition="#g">Berlin</hi>,</pubPlace> <docDate> <hi rendition="#g">1784</hi>.</docDate><lb/>
+<publisher> <hi rendition="#g">Bei Haude und Spener</hi>. </publisher> </docImprint> </titlePage><lb/>
+<pb facs="#f0010"/>
+<pb facs="#f0011"/>
+<div type="contents"> <head> <hi rendition="#g">Inhalt<lb/>
+des vierten Bandes.</hi></head><lb/>
+<milestone rendition="#hr" unit="section"/><lb/>
+<div n="2">         <head><hi rendition="#g">Julius</hi>.</head><lb/>
+<list>             <item>1. An den Markus Lollius. Aus dem Horaz.<lb/>
+Vom Herrn Prof. <hi rendition="#fr">Rammler</hi>. <space dim="horizontal"/> <ref>Seite 1</ref></item><lb/>
+<item>2. Ge&#x017F;chichte der Streitigkeiten Pab&#x017F;t Paul<lb/>
+des Fünften, und der Republik Venedig.<lb/>
+Vom Herrn Prof. <hi rendition="#fr">Eberhard</hi>. <space dim="horizontal"/> <ref>13</ref></item><lb/>
+<item>3. Der Traum, ein Chor mit Flöten. Vom<lb/>
+Herrn Legations&#x017F;ekretär <hi rendition="#fr">Schönborn</hi>. <space dim="horizontal"/> <ref>37</ref></item><lb/>
+<item>4. Noch etwas über die a<hi rendition="#aq">ë</hi>ro&#x017F;tati&#x017F;chen Ma&#x017F;chi¬<lb/>
+nen, vorzüglich über deren Lenkung. Vom<lb/>
+Herrn Prof. <hi rendition="#fr">Prevo&#x017F;t</hi>. <space dim="horizontal"/> <ref>39</ref></item><lb/>
+<item>5. Heutige deut&#x017F;che Philo&#x017F;ophie. <space dim="horizontal"/> <ref>50</ref></item><lb/>
+<item>6. Ueber die neue preußi&#x017F;che Justizverfa&#x017F;&#x017F;ung. <space dim="horizontal"/> <ref>56</ref></item><lb/>
+<item>7. Schreiben eines Buchhändlers von der Leip¬<lb/>
+ziger O&#x017F;terme&#x017F;&#x017F;e. <space dim="horizontal"/> <ref>63</ref></item><lb/>
+<item>8. Etymologie des Worts <hi rendition="#fr">Wadel</hi>. Vom Hrn.<lb/>
+Hofprediger <hi rendition="#fr">Sto&#x017F;ch</hi>. <space dim="horizontal"/> <ref>74</ref></item><lb/>
+<item>9. Der Wein&#x017F;tok und die andern Bäume. Zwei<lb/>
+Fabeln. Vom Herrn <hi rendition="#fr">Meißner</hi>. <space dim="horizontal"/> <ref>77</ref></item><lb/>
+<item>10. Ueber Berlin. Von einem Fremden.<lb/>
+(Fort&#x017F;etzung.) <space dim="horizontal"/> <ref>79</ref></item><lb/>
+<item>11. Nachtrag zur Ge&#x017F;chichte des katholi&#x017F;chen<lb/>
+Gottesdien&#x017F;tes in prote&#x017F;tanti&#x017F;chen Kirchen. <space dim="horizontal"/> <ref>94</ref></item>         </list><lb/>
+</div>         <fw type="sig" place="bottom">* 2<lb/>
+</fw>         <fw type="catch" place="bottom">Augu&#x017F;t.<lb/>
+</fw>
+<pb facs="#f0012"/>
+<div n="2">         <head><hi rendition="#g">Augu&#x017F;t</hi>.</head><lb/>
+<list> <item>1. Cyrus und Ka&#x017F;&#x017F;andana. Ein Singe&#x017F;piel.<lb/>
+Vom Herrn Profe&#x017F;&#x017F;or <hi rendition="#fr">Ramler</hi>. <space dim="horizontal"/> <ref>Seite 97</ref></item><lb/>
+<item>2. Die Bild&#x017F;äule. Ein p&#x017F;ychologi&#x017F;ch&#x2013;allegori¬<lb/>
+&#x017F;ches Traumge&#x017F;icht. Vom Herrn <hi rendition="#fr">Mo&#x017F;es<lb/>
+Mendels&#x017F;ohn</hi>. <space dim="horizontal"/> <ref>130</ref></item><lb/>
+<item>3. Die Curmethoden. <space dim="horizontal"/> <ref>155</ref></item><lb/>
+<item>4. Ueber Berlin. Von einem Fremden. (Fort¬<lb/>
+&#x017F;etzung.) <space dim="horizontal"/> <ref>160</ref></item><lb/>
+<item>5. Ueber ißt und i&#x017F;t. Ein von <hi rendition="#fr">Friedr. Gedike</hi>. <space dim="horizontal"/> <ref>175</ref></item><lb/>
+<item>6. Ueber den Regenbogen: 1 B. Mo&#x017F;. <hi rendition="#aq">IX</hi>, 13<lb/>
+bis 17. Vom Herrn Prof. <hi rendition="#fr">Eberhard</hi>. <space dim="horizontal"/> <ref>180</ref></item><lb/>
+<item>7. Von der analogi&#x017F;chen Schlußart. Vom<lb/>
+Herrn Profe&#x017F;&#x017F;or <hi rendition="#fr">Selle</hi>. <space dim="horizontal"/> <ref>185</ref></item><lb/>
+<item>8. Ueber die Katholiken in Holland. <space dim="horizontal"/> <ref>187</ref></item><lb/>
+<item>9. Eine Schatzgräberge&#x017F;chichte. Vom Herrn<lb/>
+<hi rendition="#fr">K</hi>. <hi rendition="#fr">G</hi>. <hi rendition="#fr">Schröder</hi>. <space dim="horizontal"/> <ref>189</ref></item> </list><lb/>
+</div> <fw type="catch" place="bottom">September.<lb/>
+</fw>
+<pb facs="#f0013"/>
+<div n="2">         <head><hi rendition="#g">September.</hi></head><lb/>
+<list> <item>1. Ueber die Frage: Was heißt aufklären?<lb/>
+Vom Hrn. <hi rendition="#fr">Mo&#x017F;es Mendels&#x017F;ohn</hi>. <space dim="horizontal"/> <ref>Seite 193</ref></item><lb/>
+<item>2. <hi rendition="#fr">Xaverius Großinge</hi>r in Wien, an die<lb/>
+Herren Herausgeber der Berlini&#x017F;chen Mo¬<lb/>
+nats&#x017F;chrift. <space dim="horizontal"/> <ref>201</ref></item><lb/>
+<item>3. Eingabe an das Ober&#x017F;anitätskollegium in<lb/>
+Berlin von einem Mitgliede de&#x017F;&#x017F;elben. <space dim="horizontal"/> <ref>223</ref></item><lb/>
+<item>4. Ueber den wahren Gei&#x017F;t des reinen Deis¬<lb/>
+mus. <space dim="horizontal"/> <ref>231</ref></item><lb/>
+<item>5. Ueber ein paar Stellen in dem neue&#x017F;ten Stük<lb/>
+des Göttingi&#x017F;chen Magazins; neb&#x017F;t einem<lb/>
+Anhang über Wetterprophezeihungen.<lb/>
+Vom Herrn Profe&#x017F;&#x017F;or <hi rendition="#fr">Prevo&#x017F;t</hi>. <space dim="horizontal"/> <ref>238</ref></item><lb/>
+<item>6. Ueber die analogi&#x017F;che Schlußart. Vom<lb/>
+Herrn Doktor <hi rendition="#fr">Herz</hi>. <space dim="horizontal"/> <ref>246</ref></item><lb/>
+<item>7. Beitrag zur deut&#x017F;chen Kriminalge&#x017F;chichte. <space dim="horizontal"/> <ref>252</ref></item><lb/>
+<item>8. Einige Vor&#x017F;chläge zur Verhütung der De¬<lb/>
+&#x017F;ertion bei den Soldaten. <space dim="horizontal"/> <ref>256</ref></item><lb/>
+<item>9. Ueber eine räth&#x017F;elhafte Räth&#x017F;elge&#x017F;chichte in<lb/>
+un&#x017F;ern Tagen. Von <hi rendition="#fr">Friedr. Gedike</hi>. <space dim="horizontal"/> <ref>267</ref></item> </list><lb/>
+</div> <fw type="catch" place="bottom">Oktober.<lb/>
+</fw> <fw type="sig" place="bottom">* 3<lb/>
+</fw>
+<pb facs="#f0014"/>
+<div n="2">         <head><hi rendition="#g">Oktober</hi>.</head><lb/>
+<list> <item> <hi rendition="#aq">1</hi>. Lieb des alten Invaliden am Heck zu Schar¬<lb/>
+lottenburg, an die Herren und Damen in<lb/>
+Berlin. Seite <space dim="horizontal"/> <ref>289</ref></item><lb/>
+<item>2. Ueber das &#x017F;ittlich und phy&#x017F;i&#x017F;ch Gute. (Ein<lb/>
+Briefwech&#x017F;el zwi&#x017F;chen Herrn <hi rendition="#fr">Schwab</hi><lb/>
+und <hi rendition="#fr">Mendels&#x017F;ohn</hi> in Berlin:) <space dim="horizontal"/> <ref>293</ref></item><lb/>
+<item>3. Neue Theorie über den Flug der Vögel nach<lb/>
+den Grund&#x017F;ätzen der Aero&#x017F;tatik. Vom<lb/>
+Herrn Prof. <hi rendition="#fr">J. R. For&#x017F;ter</hi> in Halle. <space dim="horizontal"/> <ref>304</ref></item><lb/>
+<item>4. Ueber die vielen Rei&#x017F;ebe&#x017F;chreibungen in un¬<lb/>
+&#x017F;ern Tagen. <space dim="horizontal"/> <ref>319</ref></item><lb/>
+<item>5. Sulpicia an Cerinths Geburtstage. Aus<lb/>
+dem Tibull, (B. <hi rendition="#fr">IV</hi>. El. <hi rendition="#fr">V</hi>.) Vom Herrn<lb/>
+<hi rendition="#fr">Man&#x017F;o</hi>. <space dim="horizontal"/> <ref>333</ref></item><lb/>
+<item>6. Nähere Be&#x017F;timmung der analogi&#x017F;chen<lb/>
+Schlußart. Vom Herrn Prof. <hi rendition="#fr">Selle</hi>. <space dim="horizontal"/> <ref>334</ref></item><lb/>
+<item>7. Ueber Berlin. Von einem Fremden. (Fort¬<lb/>
+&#x017F;etzung.) <space dim="horizontal"/> <ref>337</ref></item><lb/>
+<item>8. Sonderbares Gebet für verheirathete<lb/>
+Frauen. <space dim="horizontal"/> <ref>351</ref></item><lb/>
+<item>9. Denkmal eines mathemati&#x017F;chen Leinwebers.<lb/>
+Vom Herrn Prof. <hi rendition="#fr">Wün&#x017F;ch</hi>. <space dim="horizontal"/> <ref>356</ref></item><lb/>
+<item>10. Ueber die 4te Ekloge Virgils. Vom Hrn.<lb/>
+Prof. <hi rendition="#fr">Bruns</hi>. <space dim="horizontal"/> <ref>379</ref></item><lb/>
+<item>11. Karun. Vom Herrn <hi rendition="#fr">Meißner</hi>. <space dim="horizontal"/> <ref>383</ref></item> </list><lb/>
+</div> <fw type="catch" place="bottom">November.<lb/>
+</fw>
+<pb facs="#f0015"/>
+<div n="2">         <head><hi rendition="#g">November</hi>.</head><lb/>
+<list> <item>1. Idee zu einer allgemeinen Ge&#x017F;chichte in<lb/>
+weltbürgerlichen Ab&#x017F;icht. Vom Herrn<lb/>
+Prof. <hi rendition="#fr">Kant</hi>. <space dim="horizontal"/> <ref>Seite 386</ref></item><lb/>
+<item>2. Liebes- und Freund&#x017F;chaftsge&#x017F;chichte. Eine<lb/>
+Romanze. Vom Herrn Hauptmann von<lb/>
+<hi rendition="#fr">Stamford</hi>. <space dim="horizontal"/> <ref>411</ref></item><lb/>
+<item>3. Schreiben einer Alchymi&#x017F;tenge&#x017F;ell&#x017F;chaft an<lb/>
+die Herausgeber und Mitarbeiter der Ber<lb/>
+lini&#x017F;chen Monats&#x017F;chrift. <space dim="horizontal"/> <ref>416</ref></item><lb/>
+<item>4. Anekdoten. <space dim="horizontal"/> <ref>428&#x2013;446</ref><lb/>
+<list> <item>1. Zwei &#x017F;chwärmeri&#x017F;che Selb&#x017F;tmörder. <space dim="horizontal"/> <ref>428</ref></item><lb/>
+<item>2. Volkstäu&#x017F;chung. <space dim="horizontal"/> <ref>428</ref></item><lb/>
+<item>3. Mährchen von der Kanzel. <space dim="horizontal"/> <ref>430</ref></item><lb/>
+<item>4. Bakchanalien in der Chri&#x017F;tnacht. <space dim="horizontal"/> <ref>431</ref></item><lb/>
+<item>5. Erinnerungskraft aus Wahn&#x017F;inn. <space dim="horizontal"/> <ref>434</ref></item><lb/>
+<item>6. Ein neuer Me&#x017F;&#x017F;ias. <space dim="horizontal"/> <ref>438</ref></item><lb/>
+<item>7. Ein neuer Wunderdoktor. <space dim="horizontal"/> <ref>441</ref></item> </list></item><lb/>
+<item>5. Ueber Berlin. Von einem Fremden. (Fort¬<lb/>
+&#x017F;etzung. <space dim="horizontal"/> <ref>447</ref></item><lb/>
+<item>6. Auszug aus einer märki&#x017F;chen Bußpredigt,<lb/>
+wegen zwei mon&#x017F;trö&#x017F;er Ferkel. <space dim="horizontal"/> <ref>471</ref></item><lb/>
+<item>7. Der Affe. Eine Fabel. <space dim="horizontal"/> <ref>480</ref></item> </list><lb/>
+</div> <fw type="catch" place="bottom">December.<lb/>
+</fw>
+<pb facs="#f0016"/>
+<div n="2">         <head><hi rendition="#g">December</hi>.</head><lb/>
+<list> <item>1. Beantwortung der Frage: was i&#x017F;t Aufklä¬<lb/>
+rung? Vom Herrn Prof. <hi rendition="#fr">Kant</hi>. Seite <space dim="horizontal"/> <ref>481</ref></item><lb/>
+<item>2. Schreiben über die Kempeli&#x017F;chen Schach¬<lb/>
+&#x017F;piel- und Redema&#x017F;chinen. <space dim="horizontal"/> <ref>495</ref></item><lb/>
+<item>Zu&#x017F;atz zu die&#x017F;em Schreiben. Von<lb/>
+<hi rendition="#fr">Bie&#x017F;ter</hi>. <space dim="horizontal"/> <ref>506</ref></item><lb/>
+<item>3. Fernere Nachricht von dem Fortgange der<lb/>
+allgemeinen Revi&#x017F;ion des ge&#x017F;ammten Schul-<lb/>
+und Erziehungswe&#x017F;ens, von einer Ge&#x017F;ell¬<lb/>
+&#x017F;chaft p<choice><sic>t</sic><corr>r</corr></choice>akti&#x017F;cher Erzieher. Vom Herrn<lb/>
+Edukationsrath <hi rendition="#fr">Campe</hi>. <space dim="horizontal"/> <ref>515</ref></item><lb/>
+<item>4. Anekdoten.<lb/>
+<list> <item>1. Der P&#x017F;eudo-Graf Caglio&#x017F;tro. <space dim="horizontal"/> <ref>536</ref></item><lb/>
+<item>2. Der P&#x017F;eudo-Freiherr von Mortczini. <space dim="horizontal"/> <ref>539</ref></item><lb/>
+<item>3. Der Berlini&#x017F;che Planetenle&#x017F;er. <space dim="horizontal"/> <ref>551</ref></item> </list></item><lb/>
+<item>5. Ueber Berlin. Von einem Fremden. (Fort¬<lb/>
+&#x017F;etzung.) <space dim="horizontal"/> <ref>556</ref></item><lb/>
+<item>6. Ver&#x017F;uch eines B<choice><sic>r</sic><corr>e</corr></choice>wei&#x017F;es, daß es keine reine<lb/>
+von der Erfahrung unabhängige Vernunft¬<lb/>
+begriffe gebe. Vom Herrn Prof. <hi rendition="#fr">Selle</hi>. <space dim="horizontal"/> <ref>565</ref></item><lb/>
+<item>7. Nachtrag zu Nr. 2. über Herrn von Kem¬<lb/>
+pelen's Ma&#x017F;chinen. <space dim="horizontal"/> <ref>576</ref></item> </list><lb/>
+</div></div> <milestone unit="section" rendition="#hr"/> <fw type="catch" place="bottom">Ber¬<lb/>
+</fw> </front> <body>
+<pb facs="#f0017"/>
+<div n="1"> <head> <hi rendition="#b">Berlini&#x017F;che Monats&#x017F;chrift.</hi><lb/>
+<hi rendition="#g">1784</hi>.<lb/>
+Zwölftes Stük. December.<lb/>
+</head> <div n="2"> <head> <hi rendition="#aq">I</hi>.<lb/>
+Beantwortung der Frage:<lb/>
+<hi rendition="#g">Was i&#x017F;t Aufklärung?</hi><lb/>
+(S. Decemb. 1783. S. 516.)<lb/>
+</head> <p> <hi rendition="#g #in">A</hi><hi rendition="#g">ufklärung</hi> i&#x017F;t der Ausgang des Men¬<lb/>
+&#x017F;chen aus &#x017F;einer &#x017F;elb&#x017F;t ver&#x017F;chuldeten Unmün¬<lb/>
+digkeit. <hi rendition="#fr">Unmündigkeit</hi> i&#x017F;t das Unvermögen,<lb/>
+&#x017F;ich &#x017F;eines Ver&#x017F;tandes ohne Leitung eines anderen<lb/>
+zu bedienen. <hi rendition="#fr">Selb&#x017F;tver&#x017F;chuldet</hi> i&#x017F;t die&#x017F;e Unmün¬<lb/>
+digkeit, wenn die Ur&#x017F;ache der&#x017F;elben nicht am Man¬<lb/>
+gel des Ver&#x017F;tandes, &#x017F;ondern der Ent&#x017F;chließung und<lb/>
+des Muthes liegt, &#x017F;ich &#x017F;einer ohne Leitung eines<lb/>
+andern zu bedienen. <hi rendition="#aq">Sapere aude!</hi> Habe Muth<lb/>
+dich deines eigenen Ver&#x017F;tandes zu bedienen! i&#x017F;t al¬<lb/>
+&#x017F;o der Wahl&#x017F;pruch der Aufklärung.</p><lb/>
+<p>Faulheit und Feigheit &#x017F;ind die Ur&#x017F;achen, warum<lb/>
+ein &#x017F;o großer Theil der Men&#x017F;chen, nachdem &#x017F;ie die<lb/>
+Natur läng&#x017F;t von fremder Leitung frei ge&#x017F;prochen<lb/>
+<fw type="sig" place="bottom">B. Monats&#x017F;chr. <hi rendition="#aq">IV</hi>. B. 6. St. Hh </fw> <fw type="catch" place="bottom">(na¬</fw><lb/>
+<pb n="482" facs="#f0018"/>
+<hi rendition="#aq">(naturaliter majorennes)</hi>, dennoch gerne Zeitlebens<lb/>
+unmündig bleiben; und warum es Anderen &#x017F;o leicht<lb/>
+wird, &#x017F;ich zu deren Vormündern aufzuwerfen. Es<lb/>
+i&#x017F;t &#x017F;o bequem, unmündig zu &#x017F;ein. Habe ich ein<lb/>
+Buch, das für mich Ver&#x017F;tand hat, einen Seel&#x017F;or¬<lb/>
+ger, der für mich Gewi&#x017F;&#x017F;en hat, einen Arzt der für<lb/>
+mich die Diät beurtheilt, u. &#x017F;. w. &#x017F;o brauche ich mich<lb/>
+ja nicht &#x017F;elb&#x017F;t zu bemühen. Ich habe nicht nöthig<lb/>
+zu denken, wenn ich nur bezahlen kann; andere<lb/>
+werden das verdrießliche Ge&#x017F;chäft &#x017F;chon für mich<lb/>
+übernehmen. Daß der bei weitem größte Theil der<lb/>
+Men&#x017F;chen (darunter das ganze &#x017F;chöne Ge&#x017F;chlecht)<lb/>
+den Schritt zur Mündigkeit, außer dem daß er be¬<lb/>
+&#x017F;chwerlich i&#x017F;t, auch für &#x017F;ehr gefährlich halte: dafür<lb/>
+&#x017F;orgen &#x017F;chon jene Vormünder, die die Oberauf&#x017F;icht<lb/>
+über &#x017F;ie gütig&#x017F;t auf &#x017F;ich genommen haben. Nach¬<lb/>
+dem &#x017F;ie ihr Hausvieh zuer&#x017F;t dumm gemacht haben,<lb/>
+und &#x017F;orgfältig verhüteten, daß die&#x017F;e ruhigen Ge¬<lb/>
+&#x017F;chöpfe ja keinen Schritt außer dem Gängelwagen,<lb/>
+darin &#x017F;ie &#x017F;ie ein&#x017F;perreten, wagen durften; &#x017F;o zeigen<lb/>
+&#x017F;ie ihnen nachher die Gefahr, die ihnen drohet,<lb/>
+wenn &#x017F;ie es ver&#x017F;uchen allein zu gehen. Nun i&#x017F;t die¬<lb/>
+&#x017F;e Gefahr zwar eben &#x017F;o groß nicht, denn &#x017F;ie würden<lb/>
+durch einigemahl Fallen wohl endlich gehen lernen;<lb/>
+allein ein Bei&#x017F;piel von der Art macht doch &#x017F;chüch¬<lb/>
+tern, und &#x017F;chrekt gemeiniglich von allen ferneren<lb/>
+Ver&#x017F;uchen ab.</p><lb/>
+<p>Es i&#x017F;t al&#x017F;o für jeden einzelnen Men&#x017F;chen &#x017F;chwer,<lb/>
+&#x017F;ich aus der ihm beinahe zur Natur, gewordenen Un¬<lb/>
+<fw type="catch" place="bottom">mün¬<lb/>
+</fw>
+<pb n="483" facs="#f0019"/>
+mündigkeit herauszuarbeiten. Er hat &#x017F;ie &#x017F;ogar lieb<lb/>
+gewonnen, und i&#x017F;t vor der Hand wirklich unfähig,<lb/>
+&#x017F;ich &#x017F;eines eigenen Ver&#x017F;tandes zu bedienen, weil<lb/>
+man ihn niemals den Ver&#x017F;uch davon machen ließ.<lb/>
+Satzungen und Formeln, die&#x017F;e mechani&#x017F;chen Werk¬<lb/>
+zeuge eines vernünftigen Gebrauchs oder vielmehr<lb/>
+Mißbrauchs &#x017F;einer Naturgaben, &#x017F;ind die Fuß&#x017F;chel¬<lb/>
+len einer immerwährenden Unmündigkeit. Wer &#x017F;ie<lb/>
+auch abwürfe, würde dennoch auch über den &#x017F;chma¬<lb/>
+le&#x017F;ten Graben einen nur un&#x017F;icheren Sprung thun,<lb/>
+weil er zu dergleichen freier Bewegung nicht ge¬<lb/>
+wöhnt i&#x017F;t. Daher giebt es nur Wenige, denen es<lb/>
+gelungen i&#x017F;t, durch eigene Bearbeitung ihres Gei¬<lb/>
+&#x017F;tes &#x017F;ich aus der Unmündigkeit heraus zu wikkeln,<lb/>
+und dennoch einen &#x017F;icheren Gang zu thun.</p><lb/>
+<p>Daß aber ein Publikum &#x017F;ich &#x017F;elb&#x017F;t aufkläre, i&#x017F;t<lb/>
+eher möglich; ja es i&#x017F;t, wenn man ihm nur Frei¬<lb/>
+heit läßt, beinahe unausbleiblich. Denn da werden<lb/>
+&#x017F;ich immer einige Selb&#x017F;tdenkende, &#x017F;ogar unter den<lb/>
+einge&#x017F;etzten Vormündern des großen Haufens, fin¬<lb/>
+den, welche, nachdem &#x017F;ie das Joch der Unmündig¬<lb/>
+keit &#x017F;elb&#x017F;t abgeworfen haben, den Gei&#x017F;t einer ver¬<lb/>
+nünftigen Schätzung des eigenen Werths und des<lb/>
+Berufs jedes Men&#x017F;chen &#x017F;elb&#x017F;t zu denken um &#x017F;ich ver¬<lb/>
+breiten werden. Be&#x017F;onders i&#x017F;t hiebei: daß das Pu¬<lb/>
+blikum, welches zuvor von ihnen unter die&#x017F;es Joch<lb/>
+gebracht worden, &#x017F;ie hernach &#x017F;elb&#x017F;t zwingt darunter<lb/>
+zu bleiben, wenn es von einigen &#x017F;einer Vormünder,<lb/>
+die &#x017F;elb&#x017F;t aller Aufklärung unfähig &#x017F;ind, dazu auf¬<lb/>
+<fw type="sig" place="bottom">H h 2<lb/>
+</fw> <fw type="catch" place="bottom">ge¬<lb/>
+</fw>
+<pb n="484" facs="#f0020"/>
+gewiegelt worden; &#x017F;o &#x017F;chädlich i&#x017F;t es Vorurtheile zu<lb/>
+pflanzen, weil &#x017F;ie &#x017F;ich zuletzt an denen &#x017F;elb&#x017F;t rächen,<lb/>
+die, oder deren Vorgänger, ihre Urheber gewe&#x017F;en<lb/>
+&#x017F;ind. Daher kann ein Publikum nur lang&#x017F;am zur<lb/>
+Aufklärung gelangen. Durch eine Revolution wird<lb/>
+vielleicht wohl ein Abfall von per&#x017F;önlichem Despo¬<lb/>
+tism und gewinn&#x017F;üchtiger oder herr&#x017F;ch&#x017F;üchtiger Be¬<lb/>
+drükkung, aber niemals wahre Reform der Den¬<lb/>
+kungsart zu Stande kommen; &#x017F;ondern neue Vor¬<lb/>
+urtheile werden, eben &#x017F;owohl als die alten, zum<lb/>
+Leitbande des gedankenlo&#x017F;en großen Haufens<lb/>
+dienen.</p><lb/>
+<p>Zu die&#x017F;er Aufklärung aber wird nichts erfordert<lb/>
+als <hi rendition="#fr #g">Freiheit</hi>; und zwar die un&#x017F;chädlich&#x017F;te unter<lb/>
+allem, was nur Freiheit heißen mag, nämlich die:<lb/>
+von &#x017F;einer Vernunft in allen Stükken <hi rendition="#fr">öffentlichen<lb/>
+Gebrauch</hi> zu machen. Nun höre ich aber von al¬<lb/>
+len Seiten rufen: <hi rendition="#fr">rä&#x017F;onnirt nicht</hi>! Der Offi¬<lb/>
+zier &#x017F;agt: rä&#x017F;onnirt nicht, &#x017F;ondern exercirt! Der<lb/>
+Finanzrath: rä&#x017F;onnirt nicht, &#x017F;ondern bezahlt! Der<lb/>
+Gei&#x017F;tliche: rä&#x017F;onnirt nicht, &#x017F;ondern glaubt! (Nur<lb/>
+ein einziger Herr in der Welt &#x017F;agt: <hi rendition="#fr">rä&#x017F;onnirt,</hi> &#x017F;o<lb/>
+viel ihr wollt, und worüber ihr wollt; aber <hi rendition="#fr">ge¬<lb/>
+horcht</hi>!) Hier i&#x017F;t überall Ein&#x017F;chränkung der Frei¬<lb/>
+heit. Welche Ein&#x017F;chränkung aber i&#x017F;t der Aufklä¬<lb/>
+rung hinderlich? welche nicht, &#x017F;ondern ihr wohl gar<lb/>
+beförderlich? &#x2014; Ich antworte: der <hi rendition="#fr">öffentliche</hi><lb/>
+Gebrauch &#x017F;einer Vernunft muß jederzeit frei &#x017F;ein,<lb/>
+und der allein kann Aufklärung unter Men&#x017F;chen zu<lb/>
+<fw type="catch" place="bottom">Stan¬<lb/>
+</fw>
+<pb n="485" facs="#f0021"/>
+Stande bringen; der <hi rendition="#fr">Privatgebrauch</hi> der&#x017F;elben<lb/>
+aber darf öfters &#x017F;ehr enge einge&#x017F;chränkt &#x017F;ein, ohne<lb/>
+doch darum den Fort&#x017F;chritt der Aufklärung &#x017F;onder¬<lb/>
+lich zu hindern. Ich ver&#x017F;tehe aber unter dem öffent¬<lb/>
+lichen Gebrauche &#x017F;einer eigenen Vernunft denjeni¬<lb/>
+gen, den jemand <hi rendition="#fr #g">als Gelehrter</hi> von ihr vor<lb/>
+dem ganzen Publikum der <hi rendition="#fr">Le&#x017F;erwelt</hi> macht. Den<lb/>
+Privatgebrauch nenne ich denjenigen, den er in ei¬<lb/>
+nem gewi&#x017F;&#x017F;en ihm anvertrauten bürgerlichen <hi rendition="#fr">Po¬<lb/>
+&#x017F;ten</hi>, oder Amte, von &#x017F;einer Vernunft machen darf.<lb/>
+Nun i&#x017F;t zu manchen Ge&#x017F;chäften, die in das Inte¬<lb/>
+re&#x017F;&#x017F;e des gemeinen We&#x017F;ens laufen, ein gewi&#x017F;&#x017F;er Me¬<lb/>
+chanism nothwendig, vermittel&#x017F;t de&#x017F;&#x017F;en einige Glie¬<lb/>
+der des gemeinen We&#x017F;ens &#x017F;ich bloß pa&#x017F;&#x017F;iv verhalten<lb/>
+mü&#x017F;&#x017F;en, um durch eine kün&#x017F;tliche Einhelligkeit von<lb/>
+der Regierung zu öffentlichen Zwekken gerichtet,<lb/>
+oder wenig&#x017F;tens von der Zer&#x017F;törung die&#x017F;er Zwekke<lb/>
+abgehalten zu werden. Hier i&#x017F;t es nun freilich nicht<lb/>
+erlaubt, zu rä&#x017F;onniren; &#x017F;ondern man muß gehor¬<lb/>
+chen. So fern &#x017F;ich aber die&#x017F;er Theil der Ma&#x017F;chine<lb/>
+zugleich als Glied eines ganzen gemeinen We&#x017F;ens,<lb/>
+ja &#x017F;ogar der Weltbürgerge&#x017F;ell&#x017F;chaft an&#x017F;ieht, mithin<lb/>
+in der Qualität eines Gelehrten, der &#x017F;ich an ein Pu¬<lb/>
+blikum im eigentlichen Ver&#x017F;tande durch Schriften<lb/>
+wendet; kann er allerdings rä&#x017F;onniren, ohne daß<lb/>
+dadurch die Ge&#x017F;chäfte leiden, zu denen er zum Thei¬<lb/>
+le als pa&#x017F;&#x017F;ives Glied ange&#x017F;etzt i&#x017F;t. So würde es<lb/>
+&#x017F;ehr verderblich &#x017F;ein, wenn ein Offizier, dem von<lb/>
+&#x017F;einen Oberen etwas anbefohlen wird, im Dien&#x017F;te<lb/>
+<fw type="sig" place="bottom">Hh 3.<lb/>
+</fw> <fw type="catch" place="bottom">über<lb/>
+</fw>
+<pb n="486" facs="#f0022"/>
+über die Zwekmäßigkeit oder Nützlichkeit die&#x017F;es Be¬<lb/>
+fehls laut vernünfteln wollte; er muß gehorchen.<lb/>
+Es kann ihm aber billigermaßen nicht verwehrt<lb/>
+werden, als Gelehrter, über die Fehler im Krieges¬<lb/>
+dien&#x017F;te Anmerkungen zu machen, und die&#x017F;e &#x017F;einem<lb/>
+Publikum zur Beurtheilung vorzulegen. Der Bür¬<lb/>
+ger kann &#x017F;ich nicht weigern, die ihm auferlegten<lb/>
+Abgaben zu lei&#x017F;ten; &#x017F;ogar kann ein vorwitziger Ta¬<lb/>
+del &#x017F;olcher Auflagen, wenn &#x017F;ie von ihm gelei&#x017F;tet<lb/>
+werden &#x017F;ollen, als ein Skandal (das allgemeine<lb/>
+Wider&#x017F;etzlichkeiten veranla&#x017F;&#x017F;en könnte) be&#x017F;traft wer¬<lb/>
+den. Eben der&#x017F;elbe handelt demohngeachtet der<lb/>
+Pflicht eines Bürgers nicht entgegen, wenn er, als<lb/>
+Gelehrter, wider die Un&#x017F;chiklichkeit oder auch Un¬<lb/>
+gerechtigkelt &#x017F;olcher Aus&#x017F;chreibungen öffentlich &#x017F;eine<lb/>
+Gedanken äußert. Eben &#x017F;o i&#x017F;t ein Gei&#x017F;tlicher ver¬<lb/>
+bunden, &#x017F;einen Katechismus&#x017F;chülern und &#x017F;einer Ge¬<lb/>
+meine nach dem Symbol der Kirche, der er dient,<lb/>
+&#x017F;einen Vortrag zu thun; denn er i&#x017F;t auf die&#x017F;e Be¬<lb/>
+dingung angenommen worden. Aber als Gelehr¬<lb/>
+ter hat er volle Freiheit, ja &#x017F;ogar den Beruf dazu,<lb/>
+alle &#x017F;eine &#x017F;orgfältig geprüften und wohlmeinenden<lb/>
+Gedanken über das Fehlerhafte in jenem Symbol,<lb/>
+und Vor&#x017F;chläge wegen be&#x017F;&#x017F;erer Einrichtung des Re¬<lb/>
+ligions- und Kirchenwe&#x017F;ens, dem Publikum mitzu¬<lb/>
+theilen. Es i&#x017F;t hiebei auch nichts, was dem Ge¬<lb/>
+wi&#x017F;&#x017F;en zur La&#x017F;t gelegt werden könnte. Denn, was<lb/>
+er zu Folge &#x017F;eines Amts, als Ge&#x017F;chäftträger der<lb/>
+Kirche, lehrt, das &#x017F;tellt er als etwas vor, in An&#x017F;e¬<lb/>
+<fw type="catch" place="bottom">hung<lb/>
+</fw>
+<pb n="487" facs="#f0023"/>
+hung de&#x017F;&#x017F;en er nicht freie Gewalt hat nach eigenem<lb/>
+Gutdünken zu lehren, &#x017F;ondern das er nach Vor¬<lb/>
+&#x017F;chrlft und im Namen eines andern vorzutragen<lb/>
+ange&#x017F;tellt i&#x017F;t. Er wird &#x017F;agen: un&#x017F;ere Kirche lehrt<lb/>
+die&#x017F;es oder jenes; das &#x017F;ind die Beweisgründe, deren<lb/>
+&#x017F;ie &#x017F;ich bedient. Er zieht alsdann allen prakti&#x017F;chen<lb/>
+Nutzen für &#x017F;eine Gemeinde aus Satzungen, die er<lb/>
+&#x017F;elb&#x017F;t nicht mit voller Ueberzeugung unter&#x017F;chreiben<lb/>
+würde, zu deren Vortrag er &#x017F;ich gleichwohl anhei¬<lb/>
+&#x017F;chig machen kann, weil es doch nicht ganz unmög¬<lb/>
+lich i&#x017F;t, daß darin Wahrheit verborgen läge, auf<lb/>
+alle Fälle aber wenig&#x017F;tens doch nichts der innern Re¬<lb/>
+ligion wider&#x017F;prechendes darin angetroffen wird.<lb/>
+Denn glaubte er das letztere darin zu finden, &#x017F;o<lb/>
+würde er &#x017F;ein Amt mit Gewi&#x017F;&#x017F;en nicht verwalten<lb/>
+können; er müßte es niederlegen. Der Gebrauch<lb/>
+al&#x017F;o, den ein ange&#x017F;tellter Lehrer von &#x017F;einer Ver¬<lb/>
+nunft vor &#x017F;einer Gemeinde macht, i&#x017F;t bloß ein <hi rendition="#fr">Pri¬<lb/>
+vatgebrauch</hi>; weil die&#x017F;e immer nur eine häusli¬<lb/>
+che, obzwar noch &#x017F;o große, Ver&#x017F;ammlung i&#x017F;t; und<lb/>
+in An&#x017F;ehung de&#x017F;&#x017F;en i&#x017F;t er, als Prie&#x017F;ter, nicht frei,<lb/>
+und darf es auch nicht &#x017F;ein, weil er einen fremden<lb/>
+Auftrag ausrichtet. Dagegen als Gelehrter, der<lb/>
+durch Schriften zum eigentlichen Publikum, näm¬<lb/>
+lich der Welt, &#x017F;pricht, mithin der Gei&#x017F;tliche im öf¬<lb/>
+fentlichen Gebrauche &#x017F;einer Vernunft, genießt<lb/>
+einer uneinge&#x017F;chränkten Freiheit, &#x017F;ich &#x017F;einer eigenen<lb/>
+Vernunft zu bedienen und in &#x017F;einer eigenen Per&#x017F;on<lb/>
+zu &#x017F;prechen. Denn daß die Vormünder des Volks<lb/>
+<fw type="catch" place="bottom">(in<lb/>
+</fw> <fw type="sig" place="bottom">Hh 4<lb/>
+</fw>
+<pb n="488" facs="#f0024"/>
+(in gei&#x017F;tlichen Dingen) &#x017F;elb&#x017F;t wieder unmündig &#x017F;ein<lb/>
+&#x017F;ollen, i&#x017F;t eine Ungereimtheit, die auf Verewigung<lb/>
+der Ungereimtheiten hinausläuft.</p><lb/>
+<p>Aber &#x017F;ollte nicht eine Ge&#x017F;ell&#x017F;chaft von Gei&#x017F;tli¬<lb/>
+chen, etwa eine Kirchenver&#x017F;ammlung, oder eine<lb/>
+ehrwürdige Kla&#x017F;&#x017F;is (wie &#x017F;ie &#x017F;ich unter den Hollän¬<lb/>
+dern &#x017F;elb&#x017F;t nennt) berechtigt &#x017F;ein, &#x017F;ich eidlich unter<lb/>
+einander auf ein gewi&#x017F;&#x017F;es unveränderliches Symbol<lb/>
+zu verpflichten, um &#x017F;o eine unaufhörliche Obervor¬<lb/>
+mund&#x017F;chaft über jedes ihrer Glieder und vermittel&#x017F;t<lb/>
+ihrer über das Volk zu führen, und die&#x017F;e &#x017F;o gar zu<lb/>
+verewigen? Ich &#x017F;age: das i&#x017F;t ganz unmöglich.<lb/>
+Ein &#x017F;olcher Kontrakt, der auf immer alle weitere<lb/>
+Aufklärung vom Men&#x017F;chenge&#x017F;chlechte abzuhalten ge¬<lb/>
+&#x017F;chlo&#x017F;&#x017F;en würde, i&#x017F;t &#x017F;chlechterdings null und nichtig;<lb/>
+und &#x017F;ollte er auch durch die ober&#x017F;te Gewalt, durch<lb/>
+Reichstäge und die feierlich&#x017F;ten Friedens&#x017F;chlü&#x017F;&#x017F;e be¬<lb/>
+&#x017F;tätigt &#x017F;ein. Ein Zeitalter kann &#x017F;ich nicht verbün¬<lb/>
+den und darauf ver&#x017F;chwören, das folgende in einen<lb/>
+Zu&#x017F;tand zu &#x017F;etzen, darin es ihm unmöglich werden<lb/>
+muß, &#x017F;eine (vornehmlich &#x017F;o &#x017F;ehr angelegentliche)<lb/>
+Erkenntni&#x017F;&#x017F;e zu erweitern, von Irrthümern zu rei¬<lb/>
+nigen, und überhaupt in der Aufklärung weiter zu<lb/>
+&#x017F;chreiten. Das wäre ein Verbrechen wider die<lb/>
+men&#x017F;chliche Natur, deren ur&#x017F;prüngliche Be&#x017F;tim¬<lb/>
+mung gerade in die&#x017F;em Fort&#x017F;chreiten be&#x017F;teht; und die<lb/>
+Nachkommen &#x017F;ind al&#x017F;o vollkommen dazu berechtigt,<lb/>
+jene Be&#x017F;chlü&#x017F;&#x017F;e, als unbefugter und frevelhafter<lb/>
+Wei&#x017F;e genommen, zu verwerfen. Der Probier&#x017F;tein<lb/>
+<fw type="catch" place="bottom">alles<lb/>
+</fw>
+<pb n="489" facs="#f0025"/>
+alles de&#x017F;&#x017F;en, was über ein Volk als Ge&#x017F;etz be&#x017F;chlo&#x017F;¬<lb/>
+&#x017F;en werden kann, liegt in der Frage: ob ein Volk<lb/>
+&#x017F;ich &#x017F;elb&#x017F;t wohl ein &#x017F;olches Ge&#x017F;etz auferlegen könnte?<lb/>
+Nun wäre die&#x017F;es wohl, gleich&#x017F;am in der Erwartung<lb/>
+eines be&#x017F;&#x017F;ern, auf eine be&#x017F;timmte kurze Zeit mög¬<lb/>
+lich, um eine gewi&#x017F;&#x017F;e Ordnung einzuführen; indem<lb/>
+man es zugleich jedem der Bürger, vornehmlich dem<lb/>
+Gei&#x017F;tlichen, frei ließe, in der Qualität eines Gelehr¬<lb/>
+ten öffentlich, d. i. durch Schriften, über das Feh¬<lb/>
+lerhafte der dermaligen Einrichtung &#x017F;eine Anmer¬<lb/>
+kungen zu machen, inde&#x017F;&#x017F;en die eingeführte Ord¬<lb/>
+nung noch immer fortdauerte, bis die Ein&#x017F;icht in<lb/>
+die Be&#x017F;chaffenheit die&#x017F;er Sachen öffentlich &#x017F;o weit<lb/>
+gekommen und bewähret worden, daß &#x017F;ie durch Ver¬<lb/>
+einigung ihrer Stimmen (wenn gleich nicht aller)<lb/>
+einen Vor&#x017F;chlag vor den Thron bringen könnte, um<lb/>
+diejenigen Gemeinden in Schutz zu nehmen, die<lb/>
+&#x017F;ich etwa nach ihren Begriffen der be&#x017F;&#x017F;eren Ein&#x017F;icht<lb/>
+zu einer veränderten Religionseinrichtung geeinigt<lb/>
+hätten, ohne doch diejenigen zu hindern, die es beim<lb/>
+Alten wollten bewenden la&#x017F;&#x017F;en. Aber auf eine be¬<lb/>
+harrliche, von Niemanden öffentlich zu bezweifelnde<lb/>
+Religionsverfa&#x017F;&#x017F;ung, auch nur binnen der Lebens¬<lb/>
+dauer eines Men&#x017F;chen, &#x017F;ich zu einigen, und dadurch<lb/>
+einen Zeitraum in dem Fortgange der Men&#x017F;chheit<lb/>
+zur Verbe&#x017F;&#x017F;erung gleich&#x017F;am zu vernichten, und<lb/>
+fruchtlos, dadurch aber wohl gar der Nachkommen¬<lb/>
+&#x017F;chaft nachtheilig, zu machen, i&#x017F;t &#x017F;chlechterdings un¬<lb/>
+erlaubt. Ein Men&#x017F;ch kann zwar für &#x017F;eine Per&#x017F;on,<lb/>
+<fw type="catch" place="bottom">und<lb/>
+</fw> <fw type="sig" place="bottom">Hh 5<lb/>
+</fw>
+<pb n="490" facs="#f0026"/>
+und auch alsdann nur auf einige Zeit, in dem was<lb/>
+ihm zu wi&#x017F;&#x017F;en obliegt die Aufklärung auf&#x017F;chieben;<lb/>
+aber auf &#x017F;ie Verzicht zu thun, es &#x017F;ei für &#x017F;eine Per¬<lb/>
+&#x017F;on, mehr aber noch für die Nachkommen&#x017F;chaft,<lb/>
+heißt die heiligen Rechte der Men&#x017F;chheit verletzen<lb/>
+und mit Füßen treten. Was aber nicht einmal ein<lb/>
+Volk über &#x017F;ich &#x017F;elb&#x017F;t be&#x017F;chließen darf, das darf noch<lb/>
+weniger ein Monarch über das Volk be&#x017F;chließen;<lb/>
+denn &#x017F;ein ge&#x017F;etzgebendes An&#x017F;ehen beruht eben dar¬<lb/>
+auf, daß er den ge&#x017F;ammten Volkswillen in dem &#x017F;ei¬<lb/>
+nigen vereinigt. Wenn er nur darauf &#x017F;ieht, daß<lb/>
+alle wahre oder vermeinte Verbe&#x017F;&#x017F;erung mit der bür¬<lb/>
+gerlichen Ordnung zu&#x017F;ammen be&#x017F;tehe; &#x017F;o kann er<lb/>
+&#x017F;eine Unterthanen übrigens nur &#x017F;elb&#x017F;t machen la&#x017F;&#x017F;en,<lb/>
+was &#x017F;ie um ihres Seelenheils willen zu thun nöthig<lb/>
+finden; das geht ihn nichts an, wohl aber zu ver¬<lb/>
+hüten, daß nicht einer den andern gewaltthätig hin¬<lb/>
+dere, an der Be&#x017F;timmung und Beförderung de&#x017F;&#x017F;el¬<lb/>
+ben nach allem &#x017F;einen Vermögen zu arbeiten. Es<lb/>
+thut &#x017F;elb&#x017F;t &#x017F;einer Maje&#x017F;tät Abbruch, wenn er &#x017F;ich<lb/>
+hierin mi&#x017F;cht, indem er die Schriften, wodurch<lb/>
+&#x017F;eine Unterthanen ihre Ein&#x017F;ichten ins Reine zu brin¬<lb/>
+gen &#x017F;uchen, &#x017F;einer Regierungsauf&#x017F;icht würdigt, &#x017F;o¬<lb/>
+wohl wenn er die&#x017F;es aus eigener höch&#x017F;ten Ein&#x017F;icht<lb/>
+thut, wo er &#x017F;ich dem Vorwurfe aus&#x017F;etzt: <hi rendition="#aq">Cae&#x017F;ar<lb/>
+non e&#x017F;t &#x017F;upra Grammaticos</hi>, als auch und noch weit<lb/>
+mehr, wenn er &#x017F;eine ober&#x017F;te Gewalt &#x017F;o weit ernie¬<lb/>
+drigt, den gei&#x017F;tlichen Despotism einiger Tyrannen<lb/>
+<fw type="catch" place="bottom">in<lb/>
+</fw>
+<pb n="491" facs="#f0027"/>
+in &#x017F;einem Staate gegen &#x017F;eine übrigen Unterthanen<lb/>
+zu unter&#x017F;tützen.</p><lb/>
+<p>Wenn denn nun gefragt wird: Leben wir jetzt<lb/>
+in einem <hi rendition="#fr">aufgeklärten</hi> Zeitalter? &#x017F;o i&#x017F;t die Ant¬<lb/>
+wort: Nein, aber wohl in einem Zeitalter der<lb/>
+<hi rendition="#fr">Aufklärung</hi>. Daß die Men&#x017F;chen, wie die Sa¬<lb/>
+chen jetzt &#x017F;tehen, im Ganzen genommen, &#x017F;chon im<lb/>
+Stande waren, oder darin auch nur ge&#x017F;etzt werden<lb/>
+könnten, in Religionsdingen &#x017F;ich ihres eigenen Ver¬<lb/>
+&#x017F;tandes ohne Leitung eines Andern &#x017F;icher und gut zu<lb/>
+bedienen, daran fehlt noch &#x017F;ehr viel. Allein, daß<lb/>
+jetzt ihnen doch das Feld geöffnet wird, &#x017F;ich dahin<lb/>
+frei zu bearbeiten, und die Hinderni&#x017F;&#x017F;e der allgemei¬<lb/>
+nen Aufklärung, oder des Ausganges aus ihrer<lb/>
+&#x017F;elb&#x017F;t ver&#x017F;chuldeten Unmündigkeit, allmälig weniger<lb/>
+werden, davon haben wir doch deutliche Anzeigen.<lb/>
+In die&#x017F;em Betracht i&#x017F;t die&#x017F;es Zeitalter das Zeital¬<lb/>
+ter der Aufklärung, oder das Jahrhundert <hi rendition="#fr #g">Frie¬</hi><lb/>
+<hi rendition="#g">derichs</hi>.</p><lb/>
+<p>Ein Für&#x017F;t, der es &#x017F;einer nicht unwürdig findet,<lb/>
+zu &#x017F;agen: daß er es für <hi rendition="#fr">Pflicht</hi> halte, in Religi¬<lb/>
+onsdingen den Men&#x017F;chen nichts vorzu&#x017F;chreiben, &#x017F;on¬<lb/>
+dern ihnen darin volle Freiheit zu la&#x017F;&#x017F;en, der al&#x017F;o<lb/>
+&#x017F;elb&#x017F;t den hochmüthigen Namen der <hi rendition="#fr">Toleranz</hi> von<lb/>
+&#x017F;ich ablehnt: i&#x017F;t &#x017F;elb&#x017F;t aufgeklärt, und verdient von<lb/>
+der dankbaren Welt und Nachwelt als derjenige ge¬<lb/>
+prie&#x017F;en zu werden, der zuer&#x017F;t das men&#x017F;chliche Ge¬<lb/>
+&#x017F;chlecht der Unmündigkeit, wenig&#x017F;tens von Seiten<lb/>
+der Regierung, ent&#x017F;chlug, und Jedem frei ließ, &#x017F;ich<lb/>
+<fw type="catch" place="bottom">in<lb/>
+</fw>
+<pb n="492" facs="#f0028"/>
+in allem, was Gewi&#x017F;&#x017F;ensangelegenheit i&#x017F;t, &#x017F;einer<lb/>
+eigenen Vernunft zu bedienen. Unter ihm dürfen<lb/>
+verehrungswürdige Gei&#x017F;tliche, unbe&#x017F;chadet ihrer<lb/>
+Amtspflicht, ihre vom angenommenen Symbol hier<lb/>
+oder da abweichenden Urtheile und Ein&#x017F;ichten, in<lb/>
+der Qualität der Gelehrten, frei und öffentlich der<lb/>
+der Welt zur Prüfung darlegen; noch mehr aber<lb/>
+jeder andere, der durch keine Amtspflicht einge¬<lb/>
+&#x017F;chränkt i&#x017F;t. Die&#x017F;er Gei&#x017F;t der Freiheit breitet &#x017F;ich<lb/>
+auch außerhalb aus, &#x017F;elb&#x017F;t da, wo er mit äußeren<lb/>
+Hinderni&#x017F;&#x017F;en einer &#x017F;ich &#x017F;elb&#x017F;t mißver&#x017F;tehenden Re¬<lb/>
+gierung zu ringen hat. Denn es leuchtet die&#x017F;er doch<lb/>
+ein Bei&#x017F;piel vor, daß bei Freiheit, für die öffentliche<lb/>
+Ruhe und Einigkeit des gemeinen We&#x017F;ens nicht das<lb/>
+minde&#x017F;te zu be&#x017F;orgen &#x017F;ei. Die Men&#x017F;chen arbeiten<lb/>
+&#x017F;ich von &#x017F;elb&#x017F;t nach und nach a<supplied>u</supplied>s der Rohigkeit her¬<lb/>
+aus, wenn man nur nicht ab&#x017F;ichtlich kün&#x017F;telt, um<lb/>
+&#x017F;ie darin zu erhalten.</p><lb/>
+<p>Ich habe den Hauptpunkt der Aufklärung, die<lb/>
+des Ausganges der Men&#x017F;chen aus ihrer &#x017F;elb&#x017F;t ver¬<lb/>
+&#x017F;chuldeten Unmündigkeit, vorzüglich in Religions¬<lb/>
+&#x017F;achen ge&#x017F;etzt: weil in An&#x017F;ehung der Kün&#x017F;te und<lb/>
+Wi&#x017F;&#x017F;en&#x017F;chaften un&#x017F;ere Beherr&#x017F;cher kein Intere&#x017F;&#x017F;e<lb/>
+haben, den Vormund über ihre Unterthanen zu<lb/>
+&#x017F;pielen; überdem auch jene Unmündigkeit, &#x017F;o wie<lb/>
+die &#x017F;chädlich&#x017F;te, al&#x017F;o auch die entehrend&#x017F;te unter al¬<lb/>
+len i&#x017F;t. Aber die Denkungsart eines Staatsober¬<lb/>
+haupts, der die er&#x017F;tere begün&#x017F;tigt, geht noch weiter,<lb/>
+und &#x017F;ieht ein: daß &#x017F;elb&#x017F;t in An&#x017F;ehung &#x017F;einer Ge¬<lb/>
+<fw type="catch" place="bottom">&#x017F;etzge¬<lb/>
+</fw>
+<pb n="493" facs="#f0029"/>
+&#x017F;etzgebung es ohne Gefahr &#x017F;ei, &#x017F;einen Unterthanen<lb/>
+zu erlauben, von ihrer eigenen Vernunft öffentli¬<lb/>
+chen Gebrauch zu machen, und ihre Gedanken<lb/>
+über eine be&#x017F;&#x017F;ere Abfa&#x017F;&#x017F;ung der&#x017F;elben, &#x017F;ogar mit ei¬<lb/>
+ner freimüthigen Kritik der &#x017F;chon gegebenen, der<lb/>
+Welt öffentlich vorzulegen; davon wir ein glänzen¬<lb/>
+des Bei&#x017F;piel haben, wodurch noch kein Monarch<lb/>
+demjenigen vorging, welchen wir verehren.</p><lb/>
+<p>Aber auch nur derjenige, der, &#x017F;elb&#x017F;t aufgeklärt,<lb/>
+&#x017F;ich nicht vor Schatten fürchtet, zugleich aber ein<lb/>
+wohldisciplinirtes zahlreiches Heer zum Bürgen<lb/>
+der öffentlichen Ruhe zur Hand hat, &#x2014; kann das<lb/>
+&#x017F;agen, was ein Frei&#x017F;taat nicht wagen darf: rä&#x017F;on¬<lb/>
+nirt &#x017F;o viel ihr wollt, und worüber ihr wollt;<lb/>
+nur gehorcht! So zeigt &#x017F;ich hier ein befremdli¬<lb/>
+cher nicht erwarteter Gang men&#x017F;chlicher Dinge; &#x017F;o<lb/>
+wie auch &#x017F;on&#x017F;t, wenn man ihn im Großen betrach¬<lb/>
+tet, darin fa&#x017F;t alles paradox i&#x017F;t. Ein größerer<lb/>
+Grad bürgerlicher Freiheit &#x017F;cheint der Freiheit des<lb/>
+Gei&#x017F;tes des Volks vortheilhaft, und &#x017F;etzt ihr doch<lb/>
+unüber&#x017F;teigliche Schranken; ein Grad weniger von<lb/>
+jener ver&#x017F;chaft hingegen die&#x017F;em Raum, &#x017F;ich nach al¬<lb/>
+lem &#x017F;einen Vermögen auszubreiten. Wenn denn<lb/>
+die Natur unter die&#x017F;er harten Hülle den Keim, für<lb/>
+den &#x017F;ie am zärtlich&#x017F;ten &#x017F;orgt, nämlich den Hang und<lb/>
+Beruf zum freien Denken, ausgewikkelt hat; &#x017F;o<lb/>
+wirkt die&#x017F;er allmählig zurük auf die Sinnesart des<lb/>
+Volks, (wodurch die&#x017F;es der Freiheit zu handeln<lb/>
+<fw type="catch" place="bottom">nach<lb/>
+</fw>
+<pb n="494" facs="#f0030"/>
+nach und nach fähiger wird), und endlich auch &#x017F;o¬<lb/>
+gar auf die Grund&#x017F;ätze der <hi rendition="#fr">Regierung</hi>, die es ihr<lb/>
+&#x017F;elb&#x017F;t zuträglich findet, den <hi rendition="#fr">Men&#x017F;chen</hi>, der nun<lb/>
+mehr als <hi rendition="#fr">Ma&#x017F;chine</hi> i&#x017F;t, &#x017F;einer <hi rendition="#fr">Würde</hi> gemäß zu<lb/>
+behandeln. <note place="foot" n="*)">In den <hi rendition="#fr">Bü&#x017F;ching'&#x017F;chen</hi> wöchentlichen Nachrichten<lb/>
+vom 13. Sept. le&#x017F;e ich heute den 30&#x017F;ten eben de&#x017F;&#x017F;. die<lb/>
+Anzeige der Berlini&#x017F;chen Monats&#x017F;chrift, von die&#x017F;em<lb/>
+Monat, worin des Herrn <hi rendition="#fr">Mendels&#x017F;ohn</hi> Beantwor¬<lb/>
+tung eben der&#x017F;elben Frage angeführt wird. Mir i&#x017F;t &#x017F;ie<lb/>
+noch nicht zu Händen gekommen; &#x017F;on&#x017F;t würde &#x017F;ie<lb/>
+die gegenwärtige zuükgehalten haben, die jetzt nur<lb/>
+zum Ver&#x017F;uche da &#x017F;tehen mag, wiefern der Zufall<lb/>
+Ein&#x017F;timmigkeit der Gedanken zuwege bringen<lb/>
+könne.<lb/>
+</note></p><lb/>
+<p rendition="#right"> <hi rendition="#fr">I. Kant.</hi></p><lb/>
+<p rendition="#c">Königsberg in Preußen, den 30.<lb/>
+Septemb. 1784.</p><lb/>
+<milestone unit="section" rendition="#hr"/> <fw type="catch" place="bottom">2. Schrei¬<lb/>
+</fw> </div> </div>
+<pb facs="#f0031"/>
+<pb facs="#f0032"/>
+<pb facs="#f0033"/>
+</body> </text> </TEI>
