@@ -73,7 +73,7 @@ nabu search --lemma miles --lang lat --axis romance  # lemma search on the desk'
 
 ## Ask your model
 
-With the [MCP server]({{ '/mcp/' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
+With the [MCP server]({{ '/tools/#ask-your-model' | relative_url }}) connected, this desk answers conversational research questions. Each example ran live against this library:
 
 - **“Who sang of Ragusa in Latin?”** → `nabu_search ragusa (lang: lat)` — Croatian Latin verse from the CroALa shelf (live-verified 2026-07-25): Filelfo's 1470 Ragusaeis (AFFECTUS RAGVSA TVAE CLARISSIMA LAVDI) and Palmotić's carmina — the medieval-Latin edge of the continuum, positionally cited (d1.d2.l198) for nabu_show.
 
