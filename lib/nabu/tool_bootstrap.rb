@@ -101,7 +101,9 @@ module Nabu
     end
 
     def print_status
-      status.each { |tool, state| say format("%-52s %s", tool, state) }
+      status.each do |tool, state|
+        say format("%<tool>-52s %<state>s", tool: tool, state: state)
+      end
     end
 
     private
