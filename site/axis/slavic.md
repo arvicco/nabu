@@ -7,13 +7,13 @@ description: >-
 
 > The Slavicist — Cyril and Methodius to the damaskini, canon to vernacular.
 
-Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane, Balkan damaskini, and the Church Slavonic dictionary shelves.
+Old Church Slavonic and its daughters: the OCS/Old Russian treebanks, the gospel and monument corpora, Freising, the Slovenian historical lane with PriLit's earliest narrative prose (1643–1866), Balkan damaskini, and the Church Slavonic dictionary shelves.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these ten answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these eleven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 September 2026)</span> |
 |---|---|---|---|---|
@@ -27,6 +27,7 @@ A source wears every desk it serves — these ten answer this desk. Holdings are
 | `wiktionary-cu` | dictionary | attribution | wired · manual | 4,615 entries |
 | `freising` | texts | research_private | wired · manual | 27 docs / 2,037 passages |
 | `sl-lexica` | dictionary | attribution | wired · manual | 139,405 entries |
+| `prilit` | texts | attribution | not yet wired | not synced yet |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 September 2026)</span>: `sl` 140,164 · `chu` 4,644 · `orv` 43 · `eng` 26 · `bul` 20 · `lat` 20 · `grc` 12 · `ota` 5 · `got` 4 · `lzh` 4 … and 16 more (`nabu axis slavic` lists all).
 
