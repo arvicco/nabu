@@ -1461,12 +1461,16 @@ module Query
       )
     SQL
 
-    # Rebuild passages_fts in its pre-P42-3 shape from the freshly built
-    # rows, preserving rowid (corpus) order.
+    # Rebuild passages_fts in its pre-P42-3 shape from the CATALOG — the
+    # fresh index is contentless (P93-1), so nothing can be read back from
+    # it — preserving passage-id (corpus) order.
     def downgrade_index!
-      rows = @fulltext[:passages_fts]
-             .order(:rowid)
-             .select_map(%i[text_normalized urn passage_id])
+      rows = @catalog[:passages]
+             .join(:documents, id: Sequel[:passages][:document_id])
+             .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+             .order(Sequel[:passages][:id])
+             .select_map([Sequel[:passages][:text_normalized], Sequel[:passages][:urn],
+                          Sequel[:passages][:id]])
              .map { |text, urn, id| { text_normalized: text, urn: urn, passage_id: id } }
       @fulltext.drop_table(:passages_fts)
       @fulltext.run(OLD_FTS_DDL)
@@ -1616,6 +1620,134 @@ module Query
       results = searcher.run_scan("arma", source: "nc", limit: 1)
       assert_equal %w[urn:d:grc:1], results.map(&:urn),
                    "--scan walks only the scoped source's postings on the new index"
+    end
+
+    # -- the CJK bigram lane (P93-3, №R-39 b) --------------------------------
+    # A pure-CJK query rides the contentless bigram lane over the
+    # cjk-flagged sources, so a substring INSIDE an unbroken Han run —
+    # which unicode61's one-token-per-run treatment can never match —
+    # finally answers. Out-of-scope sources keep their whole-run main-lane
+    # matches; mixed/Latin queries never engage the lane.
+
+    def cjk_seed!(slugs: %w[open])
+      doc = make_document(source: @open, urn: "urn:d:han", language: "lzh")
+      make_passage(doc, urn: "urn:d:han:1", text: "時乘六龍以御天", sequence: 0, language: "lzh")
+      make_passage(doc, urn: "urn:d:han:2", text: "飛天之外別有天", sequence: 1, language: "lzh")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: slugs)
+    end
+
+    def test_cjk_substring_inside_a_run_now_matches
+      cjk_seed!
+
+      assert_equal %w[urn:d:han:1], search("六龍").map(&:urn),
+                   "the №R-39 case: 六龍 sits mid-run and must match through the bigram lane"
+      assert_equal %w[urn:d:han:1], search("乘六龍以").map(&:urn),
+                   "longer substrings phrase across consecutive bigrams"
+    end
+
+    def test_cjk_snippet_brackets_the_substring_in_stored_text
+      cjk_seed!
+
+      hit = search("六龍").first
+      assert_includes hit.snippet, "[六龍]",
+                      "StoredSnippet locates the substring in the pristine text as usual"
+    end
+
+    def test_cjk_lane_composes_with_the_lang_filter
+      cjk_seed!
+      jpn_doc = make_document(source: @open, urn: "urn:d:jp", language: "jpn")
+      make_passage(jpn_doc, urn: "urn:d:jp:1", text: "六龍の話", sequence: 0, language: "jpn")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: %w[open])
+
+      assert_equal %w[urn:d:jp:1], search("六龍", lang: "jpn").map(&:urn),
+                   "the language sentinel filters inside the lane's MATCH"
+    end
+
+    def test_cjk_out_of_scope_source_still_answers_whole_run_matches
+      cjk_seed!(slugs: []) # nothing flagged — the lane is empty
+      whole = make_document(source: @nc, urn: "urn:d:whole", language: "lzh")
+      make_passage(whole, urn: "urn:d:whole:1", text: "六龍", sequence: 0, language: "lzh")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: [])
+
+      assert_equal %w[urn:d:whole:1], search("六龍").map(&:urn),
+                   "an un-flagged corpus keeps its whole-run main-lane matches — never fewer hits than before"
+    end
+
+    def test_cjk_scoped_and_main_lane_hits_merge_without_duplicates
+      cjk_seed!
+      whole = make_document(source: @nc, urn: "urn:d:whole", language: "lzh")
+      make_passage(whole, urn: "urn:d:whole:1", text: "六龍", sequence: 0, language: "lzh")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: %w[open])
+
+      urns = search("六龍").map(&:urn)
+      assert_equal %w[urn:d:han:1 urn:d:whole:1], urns.sort,
+                   "scoped substring hits and out-of-scope whole-run hits both serve, deduped"
+    end
+
+    def test_mixed_query_never_engages_the_cjk_lane
+      cjk_seed!
+      eng = make_document(source: @open, urn: "urn:d:eng", language: "eng")
+      make_passage(eng, urn: "urn:d:eng:1", text: "the 六龍 dragons", sequence: 0, language: "eng")
+      Nabu::Store::Indexer.rebuild!(catalog: @catalog, fulltext: @fulltext, cjk_slugs: %w[open])
+
+      assert_equal %w[urn:d:eng:1], search("六龍 dragons").map(&:urn),
+                   "a mixed query keeps plain main-lane semantics"
+    end
+
+    def test_cjk_lane_degrades_when_the_tables_are_absent
+      cjk_seed!
+      @fulltext.drop_table(Nabu::Store::Indexer::CJK_TABLE)
+      @fulltext.drop_table(Nabu::Store::Indexer::CJK_SCOPE_TABLE)
+
+      assert_equal [], search("六龍").map(&:urn),
+                   "a pre-P93 fulltext file serves main-lane semantics without erroring"
+    end
+
+    # -- the attic search (P93-2, №R-16 half 1) ------------------------------
+    # --withdrawn scans the withdrawn set — passages themselves withdrawn
+    # (revision-pruned) or under a swept document — as an on-request attic
+    # inspection: substring match over the folded text, every hit labeled
+    # with its reason. Default search never sees these rows (the two-level
+    # visibility rule, unchanged).
+
+    def test_withdrawn_search_scans_the_attic_with_reason_labels
+      live = make_document(source: @open, urn: "urn:d:live")
+      make_passage(live, urn: "urn:d:live:1", text: "μῆνιν ἄειδε θεά", sequence: 0)
+      swept = make_document(source: @open, urn: "urn:d:swept", withdrawn: true)
+      swept.update(withdrawn_reason: "upstream-gone", withdrawn_at: Time.utc(2026, 9, 1))
+      make_passage(swept, urn: "urn:d:swept:1", text: "μῆνιν οὐλομένην", sequence: 0)
+      pruned_doc = make_document(source: @open, urn: "urn:d:pruned")
+      make_passage(pruned_doc, urn: "urn:d:pruned:1", text: "μῆνιν παλαιά", sequence: 0,
+                               withdrawn: true)
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      hits = searcher.run_withdrawn("μῆνιν")
+      assert_equal %w[urn:d:pruned:1 urn:d:swept:1], hits.map(&:urn).sort
+      swept_hit = hits.find { |hit| hit.urn == "urn:d:swept:1" }
+      assert_equal "upstream-gone", swept_hit.reason
+      refute_nil swept_hit.withdrawn_at
+      assert_includes swept_hit.snippet, "[μῆνιν]", "the stored-text snippet brackets as usual"
+      pruned_hit = hits.find { |hit| hit.urn == "urn:d:pruned:1" }
+      assert_equal "revision-pruned", pruned_hit.reason,
+                   "a passage-grain withdrawal is definitionally revision pruning"
+
+      assert_equal %w[urn:d:live:1], search("μῆνιν").map(&:urn),
+                   "default search never serves the attic"
+    end
+
+    def test_withdrawn_search_matches_substrings_and_reports_unrecorded_reasons
+      legacy = make_document(source: @open, urn: "urn:d:legacy", withdrawn: true)
+      make_passage(legacy, urn: "urn:d:legacy:1", text: "στρατηγοῦ λόγος", sequence: 0)
+      rebuild!
+      searcher = Nabu::Query::Search.new(catalog: @catalog, fulltext: @fulltext)
+
+      hits = searcher.run_withdrawn("ρατηγ")
+      assert_equal %w[urn:d:legacy:1], hits.map(&:urn),
+                   "attic matching is substring over the folded text — the fragment idiom"
+      assert_nil hits.first.reason, "a pre-P93 withdrawal has no recorded reason — honest nil"
+
+      assert_empty searcher.run_withdrawn("οὐδαμοῦ"), "no match, empty page"
     end
 
     # -- term-less filtered browse (P42-6) -----------------------------------

@@ -383,6 +383,29 @@ module Query
       assert result.withdrawn, "withdrawn passage is shown, flagged withdrawn"
     end
 
+    # P93-2 (№R-16): a swept document's card carries WHY and WHEN it left;
+    # a pre-P93 withdrawal honestly carries nil.
+    def test_withdrawn_document_card_carries_the_reason
+      at = Time.utc(2026, 9, 1)
+      Nabu::Store::Document.create(
+        source_id: @source.id, urn: "urn:d:gone", title: "Gone", language: "grc",
+        content_sha256: "x", revision: 1, withdrawn: true,
+        withdrawn_reason: "upstream-gone", withdrawn_at: at
+      )
+      Nabu::Store::Document.create(
+        source_id: @source.id, urn: "urn:d:old", title: "Old", language: "grc",
+        content_sha256: "x", revision: 1, withdrawn: true
+      )
+
+      card = show("urn:d:gone")
+      assert card.withdrawn
+      assert_equal "upstream-gone", card.withdrawn_reason
+      refute_nil card.withdrawn_at
+      legacy = show("urn:d:old")
+      assert legacy.withdrawn
+      assert_nil legacy.withdrawn_reason, "pre-P93 withdrawal — honest nil, never invented"
+    end
+
     # -- the timeline (P15-2) -----------------------------------------
 
     def test_document_carries_its_timeline_when_present

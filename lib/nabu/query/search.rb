@@ -368,6 +368,39 @@ module Nabu
         page.map { |row| build_result(row, query, exact: exact, word: word) }
       end
 
+      # One attic hit (P93-2, №R-16 half 1): the withdrawn passage, its
+      # stored-text snippet, and WHY it left — the loader-stamped reason
+      # for a swept document, "revision-pruned" definitionally for a
+      # passage-grain withdrawal, nil (rendered "unrecorded") for rows
+      # withdrawn before the reason column existed.
+      WithdrawnResult = Data.define(:urn, :language, :snippet, :document_title, :reason,
+                                    :withdrawn_at)
+
+      # The attic search (P93-2): `search --withdrawn` scans the WITHDRAWN
+      # set — passages themselves withdrawn OR under a withdrawn document —
+      # matching every whitespace token of any fold variant as a SUBSTRING
+      # of the folded text (the fragment idiom: an attic inspection wants
+      # ]μηνιν too). Deliberately NOT an FTS lane: the set is tiny
+      # (measured 2026-09-02: 9,085 passages / 22 documents live) and
+      # indexing withdrawn rows would complicate the two-level visibility
+      # rule for an on-request question; the stream is bounded by the set,
+      # cut at +limit+, corpus (passage-id) order.
+      def run_withdrawn(query, limit: 20)
+        token_sets = Nabu::Normalize.query_forms(query.to_s)
+                                    .map(&:split).reject(&:empty?).uniq
+        return [] if token_sets.empty?
+
+        results = []
+        withdrawn_rows.each do |row|
+          text = row[:text_normalized].to_s
+          next unless token_sets.any? { |tokens| tokens.all? { |token| text.include?(token) } }
+
+          results << withdrawn_result(row, token_sets.first)
+          break if results.size >= limit
+        end
+        results
+      end
+
       # Term-less filtered browse (P42-6): a direct filtered page of the
       # catalog in CORPUS ORDER — passages.id ascending, the catalog's
       # insertion order. (A rank-skipped SEARCH page is, since P42-r3, a
@@ -592,7 +625,11 @@ module Nabu
         ranked = urn ? true : rank?(variants, ubiquity_threshold)
         @rank_note = ranked ? nil : RANK_SKIP_NOTE
         inner_limit = limit * INNER_LIMIT_FACTOR
-        hits = if ranked
+        cjk = ranked ? cjk_lane_expression(variants) : nil
+        hits = if cjk
+                 cjk_merged_hits(cjk, variants, inner_limit: inner_limit, urn: urn,
+                                                index_match: index_match)
+               elsif ranked
                  fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn,
                                                           ranked: true, index_match: index_match)
                else
@@ -897,7 +934,8 @@ module Nabu
         @fulltext[Store::Indexer::TABLE]
           .where(Sequel.lit("passages_fts MATCH ?", match))
           .where(Sequel.lit("rowid > ?", after_rowid))
-          .select(:passage_id, Sequel.lit("rowid").as(:scan_rowid))
+          .select(Store::Indexer.fts_passage_id_expression(@fulltext),
+                  Sequel.lit("rowid").as(:scan_rowid))
           .order(Sequel.lit("rowid"))
           .limit(page_size)
           .all
@@ -937,7 +975,8 @@ module Nabu
           row = @fulltext[Store::Indexer::TABLE]
                 .where(Sequel.lit("passages_fts MATCH ?", match))
                 .where(Sequel.lit("rowid >= ?", @rng.rand(1..max_rowid)))
-                .select(:passage_id).order(Sequel.lit("rowid")).limit(1).first
+                .select(Store::Indexer.fts_passage_id_expression(@fulltext))
+                .order(Sequel.lit("rowid")).limit(1).first
           seen[row[:passage_id]] ||= row if row
         end
         # DRAW order, not id order: the page assembly takes the first +limit+
@@ -982,13 +1021,103 @@ module Nabu
         match = "(#{match}) AND #{index_match}" if index_match
         dataset = @fulltext[Store::Indexer::TABLE]
                   .where(Sequel.lit("passages_fts MATCH ?", match))
-        dataset = dataset.where(urn: urn) if urn # urn rides UNINDEXED in the index row
+        dataset = fts_urn_scope(dataset, urn) if urn
         dataset
-          .select(:passage_id)
+          .select(Store::Indexer.fts_passage_id_expression(@fulltext))
           .order(ranked ? Sequel.lit(RANK_SQL) : :rowid)
           .limit(inner_limit)
           .offset(offset)
           .all
+      end
+
+      # -- the CJK bigram lane (P93-3, №R-39 b) ------------------------------
+      # A ranked pure-CJK query consults the bigram lane FIRST: its hits
+      # are true substring matches over the cjk-flagged sources — the
+      # thing unicode61's one-token-per-run treatment can never answer.
+      # The main lane then contributes what it alone can see (whole-run
+      # matches in out-of-scope sources; within scope its matches are a
+      # subset of the lane's). The guard-sampled path stays main-lane: a
+      # term common enough to trip the guard serves in corpus order as
+      # before, and character-frequency questions belong to `nabu char`.
+      # --exact/--word keep their glyph-literal main-lane semantics.
+
+      # The lane's MATCH expression for +variants+, or nil when the query
+      # leaves the lane (mixed/Latin — CjkBigrams declines) or the
+      # fulltext file predates it (degrade, never error).
+      def cjk_lane_expression(variants)
+        expression = Store::CjkBigrams.search_expression(variants)
+        return nil unless expression
+        return nil unless @fulltext.table_exists?(Store::Indexer::CJK_TABLE)
+
+        expression
+      rescue Sequel::DatabaseError
+        nil
+      end
+
+      # Lane hits first (bm25 within the lane), then the main lane's
+      # remainder, deduped by passage id, capped at the inner window.
+      def cjk_merged_hits(expression, variants, inner_limit:, urn:, index_match:)
+        lane = cjk_hits(expression, inner_limit: inner_limit, urn: urn, index_match: index_match)
+        seen = lane.to_h { |row| [row.fetch(:passage_id), true] }
+        main = fts_hits_with_literal_fallback(variants, inner_limit: inner_limit, urn: urn,
+                                                        ranked: true, index_match: index_match)
+        (lane + main.reject { |row| seen[row.fetch(:passage_id)] }).first(inner_limit)
+      end
+
+      # The lane query: contentless, so rowid (= passages.id) is the hit,
+      # aliased so the page assembly downstream stays lane-agnostic. The
+      # language/source sentinel conjuncts compose exactly as on the main
+      # table (the lane carries the same columns).
+      def cjk_hits(expression, inner_limit:, urn:, index_match:)
+        expression = "(#{expression}) AND #{index_match}" if index_match
+        dataset = @fulltext[Store::Indexer::CJK_TABLE]
+                  .where(Sequel.lit("passages_cjk MATCH ?", expression))
+        if urn
+          dataset = dataset.where(Sequel.lit("rowid") => @catalog[:passages].where(urn: urn)
+                                                                            .select_map(:id))
+        end
+        dataset.select(Sequel.lit("rowid").as(:passage_id))
+               .order(Sequel.lit("bm25(passages_cjk)"))
+               .limit(inner_limit)
+               .all
+      end
+
+      # The withdrawn set's row stream (run_withdrawn): the OR of the two
+      # withdrawal grains, with the document's reason columns riding along.
+      def withdrawn_rows
+        @catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .where(Sequel.|({ Sequel[:passages][:withdrawn] => true },
+                          { Sequel[:documents][:withdrawn] => true }))
+          .select(
+            Sequel[:passages][:urn], Sequel[:passages][:language],
+            Sequel[:passages][:text], Sequel[:passages][:text_normalized],
+            Sequel[:passages][:withdrawn].as(:passage_withdrawn),
+            Sequel[:documents][:title], Sequel[:documents][:withdrawn_reason],
+            Sequel[:documents][:withdrawn_at]
+          )
+          .order(Sequel[:passages][:id])
+      end
+
+      def withdrawn_result(row, terms)
+        reason = row[:passage_withdrawn] ? Store::Loader::REVISION_PRUNED : row[:withdrawn_reason]
+        WithdrawnResult.new(
+          urn: row[:urn], language: row[:language],
+          snippet: StoredSnippet.build(text: row[:text], language: row[:language], terms: terms),
+          document_title: row[:title], reason: reason, withdrawn_at: row[:withdrawn_at]
+        )
+      end
+
+      # The --urn scope against the index (P93-1): the contentless shape
+      # stores no urn column, so the urn(s) resolve to catalog passage ids
+      # and scope by rowid; a legacy contentful file keeps its stored-column
+      # equality. Either way the semantics stay exact-urn.
+      def fts_urn_scope(dataset, urn)
+        if Store::Indexer.fts_contentless?(@fulltext)
+          dataset.where(Sequel.lit("rowid") => @catalog[:passages].where(urn: urn).select_map(:id))
+        else
+          dataset.where(urn: urn)
+        end
       end
 
       # A hit's snippet is a window of its STORED text (StoredSnippet), never the

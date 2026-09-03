@@ -97,3 +97,5 @@ class):
 - [silver-lemma-venv.md](silver-lemma-venv.md) — the Python/Stanza
   venv `nabu lemma-enrich` needs (P84-1); a tool, re-creatable from
   the network, never data.
+- [embed-venv.md](embed-venv.md) — the Python/sentence-transformers
+  venv `nabu embed` needs (P93-4); same class, same rules.

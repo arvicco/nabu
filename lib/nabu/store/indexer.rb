@@ -110,6 +110,20 @@ module Nabu
       LEMMA_TABLE = :passage_lemmas
       TRIGRAM_TABLE = :passages_trigram
       TRIGRAM_SCOPE_TABLE = :passages_trigram_scope
+      # P93-3 (№R-39 b): the CJK bigram lane — a CONTENTLESS second lane
+      # over the cjk-flagged sources (sources.yml `cjk_index: true`,
+      # threaded in as +cjk_slugs+ — the fuzzy_index pattern). Each
+      # Han/kana run of the folded text indexes as its overlapping
+      # character pairs plus a trailing unigram (CjkBigrams — the mint
+      # AND the query grammar), so a mid-run substring matches as a
+      # phrase of consecutive bigrams — the thing unicode61's
+      # one-token-per-run treatment can never answer. rowid = passages.id
+      # (the P93-1 convention); language/source sentinel columns compose
+      # exactly like the main table's; the scope table records what THIS
+      # build actually indexed (the trigram honesty contract). Runless
+      # passages contribute no row.
+      CJK_TABLE = :passages_cjk
+      CJK_SCOPE_TABLE = :passages_cjk_scope
       # P65: per-(source, char, language) counts of live passages containing
       # each Han character — the `nabu char` corpus panel's precompiled
       # answer. Minted here because the desk-time alternative is a LIKE scan
@@ -252,13 +266,33 @@ module Nabu
       # detects), so a pre-P42-3/P81-3 index keeps taking syncs unchanged
       # until then, and Query::Search serves the old catalog-side path
       # against it.
+      #
+      # == The contentless shape (P93-1, №R-16) — the text lives ONCE
+      #
+      # MEASURED problem (2026-09-02): fulltext.sqlite3 stood at 87 GB
+      # beside a 118 GB catalog — passages_fts stored a full second copy of
+      # every passage's folded text, and nothing has READ it since P39-r3
+      # moved snippets onto the pristine catalog text (StoredSnippet). The
+      # fresh shape is `content='' , contentless_delete=1`: only the
+      # inverted index is stored, and — contentless semantics — NO column
+      # value is readable back (UNINDEXED payloads included), so the urn/
+      # passage_id columns are GONE and identity is the ROWID, minted as
+      # the catalog passage id (the passage_chars rowid convention). Every
+      # reader joins back to the catalog by rowid;
+      # fts_passage_id_expression is the shape-aware read seam.
+      # contentless_delete (SQLite ≥3.43; the box runs 3.53) makes per-row
+      # DELETE real, so the incremental slice refresh keeps working — by
+      # key now, no streaming scan (delete_fts_rows_by_rowid).
+      # Same arrival contract as the columns above: the shape appears at
+      # the next FULL rebuild; a legacy contentful file keeps taking syncs
+      # in its own shape, payload columns populated, until then.
       CREATE_TABLE = <<~SQL
         CREATE VIRTUAL TABLE passages_fts USING fts5(
           text_normalized,
           language,
           source,
-          urn UNINDEXED,
-          passage_id UNINDEXED,
+          content = '',
+          contentless_delete = 1,
           tokenize = 'unicode61 remove_diacritics 2'
         )
       SQL
@@ -280,6 +314,21 @@ module Nabu
           urn UNINDEXED,
           passage_id UNINDEXED,
           tokenize = 'trigram'
+        )
+      SQL
+
+      # The CJK lane's DDL (P93-3, CJK_TABLE note): contentless like the
+      # main table; plain unicode61 — the cjk column holds space-joined
+      # bigram tokens, already the token grain, and the sentinel columns
+      # tokenize as they always have.
+      CREATE_CJK_TABLE = <<~SQL
+        CREATE VIRTUAL TABLE passages_cjk USING fts5(
+          cjk,
+          language,
+          source,
+          content = '',
+          contentless_delete = 1,
+          tokenize = 'unicode61'
         )
       SQL
 
@@ -320,8 +369,8 @@ module Nabu
       # BEFORE the frequency census, so lemma_frequencies counts silver
       # rows wholesale. +lemma_filter_slugs+ names the sources under the
       # epigraphy dictionary filter (sources.yml `lemma_dictionary_filter`).
-      def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, lemma_tiers: nil, profile: nil,
-                   sign_list: nil, progress: nil, lemma_shelf: nil,
+      def rebuild!(catalog:, fulltext:, alignments: nil, fuzzy_slugs: nil, cjk_slugs: nil,
+                   lemma_tiers: nil, profile: nil, sign_list: nil, progress: nil, lemma_shelf: nil,
                    lemma_filter_slugs: nil) # rubocop:disable Lint/UnusedMethodArgument -- №R-51-B: the full path no longer projects (filter slugs ride the owner-fired apply); kept for caller stability
         fulltext.drop_table?(TABLE)
         fulltext.drop_table?(LEMMA_TABLE)
@@ -362,6 +411,11 @@ module Nabu
         end
         timed(profile, :trigram) do
           rebuild_trigram!(catalog: catalog, fulltext: fulltext, fuzzy_slugs: Array(fuzzy_slugs))
+        end
+        # P93-3: the CJK bigram lane — its own scoped streaming pass, the
+        # trigram precedent exactly.
+        timed(profile, :cjk) do
+          rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs))
         end
         # P72-1: the coverage index — its own streaming pass (the trigram
         # precedent), AFTER the postings exist (the rarity ranks read them).
@@ -404,16 +458,16 @@ module Nabu
       # produce from the same catalog (pinned by test).
       #
       # Mechanism, table by table:
-      # - passages_fts / passages_trigram are REGULAR (contentful) FTS5
-      #   tables, so per-row DELETE is real deletion (contentless/external-
-      #   content tables would need the special 'delete' insert — not our
-      #   shape). passage_id is UNINDEXED, so rather than one full-table scan
-      #   per IN-batch, ONE streaming scan collects the doomed rowids (every
-      #   row whose passage_id belongs to the source — withdrawn rows
-      #   included, since the loader never hard-deletes a passage row, every
-      #   indexed id resolves against the catalog forever) and the deletes go
-      #   by rowid. ~4.3M-row scan, seconds — against the minutes of a full
-      #   rebuild.
+      # - passages_fts in the P93-1 contentless shape deletes BY KEY: rowid
+      #   is the catalog passage id and contentless_delete=1 makes per-row
+      #   DELETE real, so the source's slice goes in indexed batches —
+      #   withdrawn rows included, since the loader never hard-deletes a
+      #   passage row, every indexed id resolves against the catalog
+      #   forever. A legacy contentful file (and passages_trigram, still
+      #   contentful) instead pays ONE streaming scan collecting the doomed
+      #   rowids by their stored passage_id (UNINDEXED — per-IN-batch scans
+      #   would each rescan the table), then deletes by rowid. ~4.3M-row
+      #   scan, seconds — against the minutes of a full rebuild.
       # - passage_lemmas deletes by urn IN-batches (B-tree indexed).
       # - trigram: only touched when the source is in scope — flagged now
       #   (fuzzy_slugs) or indexed by the last build (the scope table); a
@@ -431,11 +485,13 @@ module Nabu
       # lemma table predates the tier column falls back to the full rebuild!.
       # Returns the SOURCE's live passage count — never the corpus total.
       def refresh_source!(catalog:, fulltext:, slug:, alignments: nil, fuzzy_slugs: nil,
-                          lemma_tiers: nil, reflexes_changed: false, sign_list: nil, progress: nil,
+                          cjk_slugs: nil, lemma_tiers: nil, reflexes_changed: false,
+                          sign_list: nil, progress: nil,
                           ledger: nil, lemma_shelf: nil, lemma_filter_slugs: nil)
         unless incremental_ready?(fulltext)
           rebuild!(catalog: catalog, fulltext: fulltext, alignments: alignments,
-                   fuzzy_slugs: fuzzy_slugs, lemma_tiers: lemma_tiers, sign_list: sign_list,
+                   fuzzy_slugs: fuzzy_slugs, cjk_slugs: cjk_slugs, lemma_tiers: lemma_tiers,
+                   sign_list: sign_list,
                    progress: progress, lemma_shelf: lemma_shelf, lemma_filter_slugs: lemma_filter_slugs)
           return source_live_count(catalog, slug)
         end
@@ -466,7 +522,11 @@ module Nabu
             # table exists here; both snapshots are urn-scoped and B-tree bounded.
             before = LemmaFrequencies.snapshot(fulltext, urns)
             deleted = delete_source_lemma_rows(fulltext, urns)
-            delete_fts_rows(fulltext, TABLE, ids)
+            if fts_contentless?(fulltext)
+              delete_fts_rows_by_rowid(fulltext, TABLE, ids)
+            else
+              delete_fts_rows(fulltext, TABLE, ids)
+            end
             count, inserted, chars = insert_passage_batches(
               fulltext, live_passages(catalog).where(Sequel[:documents][:source_id] => source_id),
               source_tiers(catalog, lemma_tiers || {}), source_slugs(catalog)
@@ -488,6 +548,10 @@ module Nabu
             lemmas_changed = deleted.positive? || inserted.positive?
             LemmaFrequencies.apply_delta(fulltext, before: before, after: LemmaFrequencies.snapshot(fulltext, urns))
             refresh_trigram_slice(catalog, fulltext, slug, Array(fuzzy_slugs), ids)
+            # P93-3: the CJK lane's slice — same drift-honest contract as
+            # the trigram slice; a fulltext file predating the lane skips
+            # here and bootstraps below (flagged sources only).
+            refresh_cjk_slice(catalog, fulltext, slug, Array(cjk_slugs), ids)
             # P65: swap this source's char-postings slice; a pre-P65 fulltext
             # file (no table) gets the whole postings build below instead —
             # NEVER a full FTS rebuild for a missing derived sub-table.
@@ -534,6 +598,15 @@ module Nabu
           if SIGN_SOURCES.include?(slug) && !fulltext.table_exists?(PASSAGE_SIGNS_TABLE)
             rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
                                    progress: progress)
+          end
+          # P93-3 bootstrap: a fulltext file predating the CJK lane gains
+          # it when a FLAGGED source syncs (the sign-coverage gate: the
+          # CJK corpora pay their own indexing cost; an unrelated source's
+          # sync is never ambushed). Elsewhere it arrives at the next
+          # full rebuild.
+          if Array(cjk_slugs).include?(slug) && !fulltext.table_exists?(CJK_TABLE)
+            progress&.stage("cjk bigram lane: building (first flagged sync — scoped sources only)")
+            rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs))
           end
           refresh_alignment(catalog, fulltext, alignments, source_id)
         end
@@ -585,6 +658,29 @@ module Nabu
         count
       end
 
+      # Drop and rebuild the CJK bigram lane (CJK_TABLE note) over the live
+      # passages of the +cjk_slugs+ sources, and record that scope. Returns
+      # the number of passages indexed (runless passages contribute none).
+      def rebuild_cjk!(catalog:, fulltext:, cjk_slugs:)
+        fulltext.drop_table?(CJK_TABLE)
+        fulltext.drop_table?(CJK_SCOPE_TABLE)
+        fulltext.run(CREATE_CJK_TABLE)
+        fulltext.create_table(CJK_SCOPE_TABLE) do
+          String :slug, null: false
+        end
+
+        count = 0
+        fulltext.transaction do
+          fulltext[CJK_SCOPE_TABLE].multi_insert(cjk_slugs.map { |slug| { slug: slug } })
+          cjk_passages(catalog, cjk_slugs).each_slice(BATCH_SIZE) do |batch|
+            rows = batch.filter_map { |row| cjk_row(row) }
+            fulltext[CJK_TABLE].multi_insert(rows)
+            count += rows.size
+          end
+        end
+        count
+      end
+
       # -- refresh_source! internals (P26-5) ---------------------------------
 
       # Every table refresh_source! maintains must already exist in its
@@ -631,6 +727,21 @@ module Nabu
         fulltext[TABLE].columns.include?(:source)
       end
 
+      # Whether the LIVE fts table is the P93-1 contentless shape (no
+      # payload columns — every legacy generation carried passage_id).
+      # Same feature-detect contract, same next-full-rebuild arrival.
+      def fts_contentless?(fulltext)
+        !fulltext[TABLE].columns.include?(:passage_id)
+      end
+
+      # The shape-aware passage-id read (P93-1): contentless identity is
+      # the rowid (= passages.id), aliased so every reader keeps consuming
+      # row[:passage_id]; a legacy contentful table reads its stored
+      # column. The query layer's one seam onto the shape difference.
+      def fts_passage_id_expression(fulltext)
+        fts_contentless?(fulltext) ? Sequel.lit("rowid").as(:passage_id) : Sequel[:passage_id]
+      end
+
       # One streaming pass feeding the FTS and lemma tables (shared by
       # rebuild! and refresh_source!). Returns [passage count, lemma-row
       # count]. The fts row shape is detected ONCE from the live table
@@ -641,12 +752,16 @@ module Nabu
       def insert_passage_batches(fulltext, dataset, tiers, slugs = nil)
         with_language = fts_language_column?(fulltext)
         with_source = slugs && fts_source_column?(fulltext) ? slugs : nil
+        contentless = fts_contentless?(fulltext)
         count = 0
         lemma_count = 0
         chars = Hash.new(0)
         dataset.each_slice(BATCH_SIZE) do |batch|
           fulltext[TABLE].multi_insert(
-            batch.map { |row| fts_row(row, language: with_language, source_slugs: with_source) }
+            batch.map do |row|
+              fts_row(row, language: with_language, source_slugs: with_source,
+                           contentless: contentless)
+            end
           )
           rows = batch.flat_map { |row| lemma_rows(row, tiers: tiers) }
           fulltext[LEMMA_TABLE].multi_insert(rows)
@@ -689,6 +804,11 @@ module Nabu
         "fts_lemma" => "v1",
         "char_postings" => POSTINGS_CLASS,
         "trigram" => "v1",
+        # P93-3: the run class + mint grammar era. An index stamped before
+        # the lane existed reads stale here, so `--incremental` builds the
+        # lane standalone — the lane's arrival path beside the full
+        # rebuild and the flagged-sync bootstrap.
+        "cjk" => "v1-han-kana",
         "passage_chars" => "v1",
         "sign_coverage" => "v1-tokenize-once",
         "alignment" => "v1",
@@ -699,7 +819,7 @@ module Nabu
       # kept catalog. A stale stage OUTSIDE this set (fts_lemma — the
       # composite streaming pass; trigram — its scope memory) refuses
       # loudly: a full rebuild is the honest answer there.
-      RECONCILABLE_STAGES = %w[char_postings passage_chars sign_coverage alignment reflex].freeze
+      RECONCILABLE_STAGES = %w[char_postings cjk passage_chars sign_coverage alignment reflex].freeze
 
       def stamp_stages!(fulltext, versions: STAGE_VERSIONS)
         create_stage_stamps_table(fulltext)
@@ -737,7 +857,7 @@ module Nabu
       #   (the documented bridge for an index KNOWN built by current code);
       # - a stale stage in RECONCILABLE_STAGES re-derives corpus-wide and
       #   re-stamps; any other stale stage refuses — full rebuild required.
-      def reconcile_stages!(catalog:, fulltext:, sign_list: nil, alignments: nil,
+      def reconcile_stages!(catalog:, fulltext:, sign_list: nil, alignments: nil, cjk_slugs: nil,
                             versions: STAGE_VERSIONS, trust: false, progress: nil)
         unless fulltext.table_exists?(STAGE_STAMPS_TABLE)
           if trust
@@ -768,6 +888,7 @@ module Nabu
           progress&.stage("stage re-derive: #{stage} (derivation version moved)")
           case stage
           when "char_postings" then rebuild_char_postings!(catalog: catalog, fulltext: fulltext)
+          when "cjk" then rebuild_cjk!(catalog: catalog, fulltext: fulltext, cjk_slugs: Array(cjk_slugs))
           when "passage_chars" then rebuild_passage_chars!(catalog: catalog, fulltext: fulltext)
           when "sign_coverage"
             rebuild_sign_coverage!(catalog: catalog, fulltext: fulltext, sign_list: sign_list,
@@ -1117,10 +1238,22 @@ module Nabu
         [ids, urns]
       end
 
-      # Delete the source's rows from an FTS5 table: one streaming scan
-      # collects the rowids whose passage_id is in +ids+ (passage_id is
-      # UNINDEXED — per-batch IN deletes would each rescan the table), then
-      # targeted rowid deletes. Returns the number of rows deleted.
+      # The contentless shape's delete (P93-1): rowid IS the catalog
+      # passage id, so the source's rows delete by key — no streaming scan
+      # at all (the legacy path below pays a full-table pass per sync).
+      # contentless_delete=1 makes these real deletions. Returns the
+      # number of rows deleted.
+      def delete_fts_rows_by_rowid(fulltext, table, ids)
+        ids.to_a.each_slice(BATCH_SIZE).sum do |batch|
+          fulltext[table].where(rowid: batch).delete
+        end
+      end
+
+      # Delete the source's rows from a LEGACY contentful FTS5 table: one
+      # streaming scan collects the rowids whose passage_id is in +ids+
+      # (passage_id is UNINDEXED — per-batch IN deletes would each rescan
+      # the table), then targeted rowid deletes. Returns the number of
+      # rows deleted. (The trigram table still uses this shape.)
       def delete_fts_rows(fulltext, table, ids)
         return 0 if ids.empty?
 
@@ -1158,6 +1291,57 @@ module Nabu
         else
           fulltext[TRIGRAM_SCOPE_TABLE].where(slug: slug).delete
         end
+      end
+
+      # The CJK lane's slice (P93-3): the trigram slice contract — refresh
+      # when flagged, drop rows + scope row when de-flagged since the last
+      # build, hands-off otherwise. Deletes go by rowid (contentless — the
+      # ids ARE the rowids). A fulltext file without the lane skips
+      # (bootstrap is the flagged-sync gate in refresh_source!).
+      def refresh_cjk_slice(catalog, fulltext, slug, cjk_slugs, ids)
+        return unless fulltext.table_exists?(CJK_TABLE)
+
+        flagged = cjk_slugs.include?(slug)
+        in_scope = !fulltext[CJK_SCOPE_TABLE].where(slug: slug).empty?
+        return unless flagged || in_scope
+
+        delete_fts_rows_by_rowid(fulltext, CJK_TABLE, ids) if in_scope
+        if flagged
+          fulltext[CJK_SCOPE_TABLE].insert(slug: slug) unless in_scope
+          cjk_passages(catalog, [slug]).each_slice(BATCH_SIZE) do |batch|
+            fulltext[CJK_TABLE].multi_insert(batch.filter_map { |row| cjk_row(row) })
+          end
+        else
+          fulltext[CJK_SCOPE_TABLE].where(slug: slug).delete
+        end
+      end
+
+      # The CJK pass's slice of live_passages: the trigram_passages shape
+      # plus language and slug (both sentinel columns ride every row).
+      def cjk_passages(catalog, slugs)
+        return [] if slugs.empty?
+
+        catalog[:passages]
+          .join(:documents, id: Sequel[:passages][:document_id])
+          .join(:sources, id: Sequel[:documents][:source_id])
+          .where(Sequel[:passages][:withdrawn] => false, Sequel[:documents][:withdrawn] => false)
+          .where(Sequel[:sources][:slug] => slugs)
+          .select(
+            Sequel[:passages][:text_normalized],
+            Sequel[:passages][:id].as(:passage_id),
+            Sequel[:passages][:language],
+            Sequel[:sources][:slug].as(:source_slug)
+          )
+      end
+
+      # One passage's CJK-lane row, or nil when its text carries no run.
+      def cjk_row(row)
+        cjk = CjkBigrams.index_text(row.fetch(:text_normalized))
+        return nil unless cjk
+
+        { rowid: row.fetch(:passage_id), cjk: cjk,
+          language: language_token(row[:language]),
+          source: source_token(row.fetch(:source_slug)) }
       end
 
       # Full alignment rebuild, but ONLY when the source holds a document the
@@ -1312,13 +1496,19 @@ module Nabu
         }
       end
 
-      # The passages_fts row: index_row plus — when the live table carries
+      # The passages_fts row: the text plus — when the live table carries
       # them — the P42-3 language sentinel token and the P81-3 source one
       # (+source_slugs+ is the source_id → slug map, or nil against a
       # pre-P81-3 table). The bare branches keep incremental syncs into a
-      # pre-rebuild file unchanged.
-      def fts_row(row, language:, source_slugs: nil)
-        base = index_row(row)
+      # pre-rebuild file unchanged. +contentless:+ (P93-1) mints the fresh
+      # shape's row: rowid = the catalog passage id, no payload columns —
+      # the text feeds the tokenizer at INSERT and is never stored.
+      def fts_row(row, language:, source_slugs: nil, contentless: false)
+        base = if contentless
+                 { rowid: row.fetch(:passage_id), text_normalized: row.fetch(:text_normalized) }
+               else
+                 index_row(row)
+               end
         base = base.merge(language: language_token(row.fetch(:language))) if language
         base = base.merge(source: source_token(source_slugs.fetch(row.fetch(:source_id)))) if source_slugs
         base
