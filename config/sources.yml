@@ -4426,7 +4426,9 @@ ojw:   # P92-5
 dta:   # P94-1
   adapter: Nabu::Adapters::Dta
   axes: [germanic]
-  wired: false   # flip after the owner-fired first sync (checklist §6)
+  wired: true    # P94 gate: first sync owner-verified 2026-09-03 (5,478 docs /
+                 # 729,090 passages, 3 quarantined — announced, within tolerance;
+                 # №R-59 staging applied: 562 pre-1650 docs → de:early), owner-flipped
   sync_policy: manual
   # Deutsches Textarchiv (BBAW) — the reference corpus of German print:
   # 5,481 TEI/P5 (DTA-Basisformat) texts, 1473–1969 (Kernkorpus 1,478
