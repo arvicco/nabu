@@ -68,7 +68,7 @@ module Nabu
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
-        Dir.glob(File.join(workdir, "**", "*.xml")).sort
+        Dir.glob(File.join(workdir, "**", "*.xml"))
            .reject { |path| path.include?("/#{ATTIC_DIRNAME}/") }
            .each do |path|
           stem = File.basename(path, ".xml")
@@ -82,7 +82,7 @@ module Nabu
       end
 
       def parse(document_ref)
-        doc = Nokogiri::XML(File.read(document_ref.path)) { |cfg| cfg.strict }
+        doc = Nokogiri::XML(File.read(document_ref.path), &:strict)
         doc.remove_namespaces!
         stem = File.basename(document_ref.path, ".xml")
         build_document(doc, document_ref, stem)

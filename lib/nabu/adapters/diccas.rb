@@ -121,7 +121,7 @@ module Nabu
         key = [path, File.mtime(path)]
         return @corpus[1] if @corpus && @corpus[0] == key
 
-        doc = Nokogiri::XML(File.read(path)) { |cfg| cfg.strict }
+        doc = Nokogiri::XML(File.read(path), &:strict)
         doc.remove_namespaces!
         @corpus = [key, Extraction.new(doc).call]
         @corpus[1]

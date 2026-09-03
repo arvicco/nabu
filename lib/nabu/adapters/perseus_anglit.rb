@@ -33,7 +33,7 @@ module Nabu
         "&AEligmacr;" => "Ǣ",   # U+01E2 latin capital AE with macron
         "&ycirc;" => "ŷ",       # U+0177 latin small y with circumflex
         "&rmacr;" => "r̄", # r + combining macron (no precomposed form)
-        "&ecedil;" => "ȩ"       # U+0229 latin small e with cedilla
+        "&ecedil;" => "ȩ" # U+0229 latin small e with cedilla
       }.freeze
 
       # The parent's parse over a legacy-entity-decoded reading of the
