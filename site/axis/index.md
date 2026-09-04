@@ -130,7 +130,7 @@ The Ethiopic (Gǝʿǝz) desk in the Oriental-Christian neighborhood: the Beta ma
 
 > The Arabist — the Islamicate library whole, Quran and hadith to falsafa and adab.
 
-The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3) — and DiCCAS, disaster accounts excerpted from ten classical sources with catastrophe terminology tagged.
+The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3) — and DiCCAS, disaster accounts excerpted from ten classical sources with catastrophe terminology tagged — and, since P96, the KITAB text-reuse instrument: upstream-computed reuse edges joining the held OpenITI books pairwise on the intertext desk.
 
 [Open the arabic desk]({{ '/axis/arabic/' | relative_url }})
 
@@ -210,7 +210,7 @@ Epigraphy-first, opening on the DHARMA corpora: the Old Khmer inscriptions (the 
 
 > The Sinologist — the classical Chinese written world and its phonological deep past.
 
-Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — and, since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea).
+Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and, since P96, the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
 
 [Open the sinitic desk]({{ '/axis/sinitic/' | relative_url }})
 
