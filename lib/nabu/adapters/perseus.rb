@@ -56,7 +56,8 @@ module Nabu
       # Original-language edition slug per CTS namespace. Translations
       # (perseus-eng*) are skipped unless the adapter was built with
       # `translations: true`.
-      LANGUAGES = { "greekLit" => "grc", "latinLit" => "lat" }.freeze
+      LANGUAGES = { "greekLit" => "grc", "latinLit" => "lat", "angLit" => "ang",
+                    "farsiLit" => "fas" }.freeze
 
       # The language tag translation passages carry (BCP-47). English only:
       # that is what PerseusDL ships at scale (786 perseus-eng files in
@@ -86,6 +87,36 @@ module Nabu
           license: "CC BY-SA 4.0",
           license_class: "attribution",
           upstream_url: "https://github.com/PerseusDL/canonical-latinLit",
+          parser_family: "epidoc"
+        ),
+        # P95-4 (the long-tail sweep): one work — Beowulf, Klaeber 1922,
+        # with the aligned English translation (the parallel-doc case the
+        # repo exists for). License read 2026-09-04: the repo README
+        # carries the standard PerseusDL grant ("Unless otherwise
+        # indicated ... CC BY-SA 3.0 US"). No __cts__.xml upstream —
+        # titles fall back to the urn tail, honestly.
+        # P95-4: classical Persian — Hafez's Divan with aligned English
+        # (and an unserved German) translation. Same repo grant as angLit.
+        # Slug family perseus-far<n> vs house code "fas" — the subclass
+        # overrides edition_slug_pattern (the First1K seam).
+        "farsiLit" => Nabu::SourceManifest.new(
+          id: "perseus-farsilit",
+          name: "Perseus Digital Library — canonical Persian literature (Hafez)",
+          license: "CC BY-SA 3.0 US (repo README verbatim: \"Unless otherwise indicated, all " \
+                   "contents of this repository are licensed under a Creative Commons " \
+                   "Attribution-ShareAlike 3.0 United States License\")",
+          license_class: "attribution",
+          upstream_url: "https://github.com/PerseusDL/canonical-farsiLit",
+          parser_family: "epidoc"
+        ),
+        "angLit" => Nabu::SourceManifest.new(
+          id: "perseus-anglit",
+          name: "Perseus Digital Library — canonical Old English literature (Beowulf)",
+          license: "CC BY-SA 3.0 US (repo README verbatim: \"Unless otherwise indicated, all " \
+                   "contents of this repository are licensed under a Creative Commons " \
+                   "Attribution-ShareAlike 3.0 United States License\")",
+          license_class: "attribution",
+          upstream_url: "https://github.com/PerseusDL/canonical-angLit",
           parser_family: "epidoc"
         )
       }.freeze

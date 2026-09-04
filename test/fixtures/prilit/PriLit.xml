@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../schema/tei_clarin.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<teiCorpus xmlns="http://www.tei-c.org/ns/1.0"  xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="PriLit" xml:lang="sl">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="sl">Korpus starejše slovenske pripovedne proze PriLit</title>
+        <title xml:lang="en">The PriLit corpus of older Slovenian narrative prose</title>
+        <respStmt>
+          <name>Andrejka Žejn</name>
+          <resp xml:lang="sl">Izbira in priprava besedil</resp>
+          <resp xml:lang="en">Selection and preparation of the texts</resp>
+        </respStmt>
+        <respStmt>
+          <name>Tomaž Erjavec</name>
+          <resp xml:lang="sl">Kodiranje TEI</resp>
+          <resp xml:lang="en">TEI encoding</resp>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="texts" quantity="43" xml:lang="sl">43 besedil</measure>
+        <measure unit="texts" quantity="43" xml:lang="en">43 texts</measure>
+        <measure unit="words" quantity="1073001" xml:lang="sl">1.073.001 besed</measure>
+        <measure unit="words" quantity="1073001" xml:lang="en">1,073,001 words</measure>
+      </extent>
+      <editionStmt>
+        <edition>1.0</edition>
+      </editionStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName xml:lang="sl"><ref target="https://isllv.zrc-sazu.si/sl/predstavitev#v">Inštitut za slovensko literaturo in literarne vede ZRC SAZU</ref></orgName>
+          <orgName xml:lang="en"><ref target="https://isllv.zrc-sazu.si/en/predstavitev#v">Institute of Slovenian Literature and Literary Studies, Research Centre of the Slovenian Academy of Sciences and Arts</ref></orgName>
+        </publisher>
+        <distributor>CLARIN.SI</distributor>
+        <idno type="handle">http://hdl.handle.net/11356/1319</idno>
+        <date when="2021-02-19">19. februar 2021</date>
+        <availability status="free">
+          <licence>http://creativecommons.org/licenses/by/4.0/</licence>
+          <p xml:lang="sl">To delo je ponujeno pod <ref target="http://creativecommons.org/licenses/by/4.0/">Creative Commons Priznanje avtorstva 4.0 mednarodna licenca</ref>.</p>
+          <p xml:lang="en">This work is licensed under the <ref target="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</ref>.</p>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+	<p xml:lang="sl">Knjige v digitalni obliki, ki sestavljajo ta korpus, so bile nabrane iz raznih virov (dLib, Google books, Wikivir), kjer je bilo potrebno, so bili OCR tudi ročno popravljeni. Točen vir je podan v kolofonu vsakega posameznega besedila korpusa.</p>
+	<p xml:lang="en">The digital books comprising this corpus were collected from various sources (dLib, Google books, Wikisource). The exact digital source is given in the TEI header of each corpus text.</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p xml:lang="sl">Namen projekta <q><ref target="https://www.zrc-sazu.si/sl/programi-in-projekti/izhodisca-slovenske-pripovedne-proze">Izhodišča slovenske pripovedne proze</ref></q> je prevetritev in dopolnitev pogledov na razvoj slovenske pripovedne literature do prve (izvirne) slovenske pripovedi. Tradicionalno literanovedno raziskovanje je nadgrajeno z analizo z računalniškimi stilometričnimi orodij, zato smo oblikovali korpus pripovednih besedil od Adama Skalarja do Janeza Ciglerja.</p>
+        <p xml:lang="en">The project <q><ref target="https://www.zrc-sazu.si/en/programi-in-projekti/the-bases-of-slovenian-narrative-prose">The basis of Slovenian narrative prose</ref></q> examines and expands the currently established views on the developments of Slovenian narrative to the first (original) Slovenian narrative prose. Traditional literary research is upgraded with computer based stylometric analysis. In order to perform this analysis, we compiled this corpus of selected narrative texts in Slovene from Adam Skalar to Janez Cigler.</p>
+      </projectDesc>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language xml:lang="en" ident="en">English</language>
+        <language xml:lang="en" ident="sl">Slovenian</language>
+      </langUsage>
+    </profileDesc>
+  </teiHeader>
+  <xi:include href="Cigler_Deteljica1863.xml"/>
+  <xi:include href="Cigler_Hema1839.xml"/>
+  <xi:include href="Cigler_Kortonica1866.xml"/>
+  <xi:include href="Cigler_SrecaVNesreci1836.xml"/>
+  <xi:include href="Cigler_SrecaVNesreci1838_1840.xml"/>
+  <xi:include href="Cigler_SrecaVNesreci1882.xml"/>
+  <xi:include href="Cigler_SrecaVNesreci1936.xml"/>
+  <xi:include href="Cigler_SrecaVNesreci1974.xml"/>
+  <xi:include href="Cigler_SrecaVNesreci1984.xml"/>
+  <xi:include href="Cigler_SrecaVNesreci1991.xml"/>
+  <xi:include href="Cochem_DoberLegentTehSuetnikov1750.xml"/>
+  <xi:include href="Cochem_Genovefa1800.xml"/>
+  <xi:include href="Cochem_PoljanskiRokopis1800.xml"/>
+  <xi:include href="Franklin_PravaPot1812.xml"/>
+  <xi:include href="Masserano_Leonard1798.xml"/>
+  <xi:include href="Neznani_Izidor1824.xml"/>
+  <xi:include href="Neznani_Izidor1835.xml"/>
+  <xi:include href="Pohlin_Hagiografije1769.xml"/>
+  <xi:include href="Schmid_Evstahi1832.xml"/>
+  <xi:include href="Schmid_Genovefa1841.xml"/>
+  <xi:include href="Schmid_LeseniKriz1832.xml"/>
+  <xi:include href="Schmid_Martin1836.xml"/>
+  <xi:include href="Schmid_SrecaDobrigaUka1832.xml"/>
+  <xi:include href="Schmid_SvetiVecer1866.xml"/>
+  <xi:include href="Skalar_Eksemplar1643.xml"/>
+  <xi:include href="Skalar_SulaTigaPremisluvana1643.xml"/>
+  <xi:include href="Skalar_VsakdanjeSpomislane1643.xml"/>
+  <xi:include href="Skalar_VselajInuNikoli1843.xml"/>
+  <xi:include href="Svetokriski_DominicaIIIAdventus1707.xml"/>
+  <xi:include href="Svetokriski_NaDanSAgnes1696.xml"/>
+  <xi:include href="Svetokriski_NaDanSStefana1696.xml"/>
+  <xi:include href="Svetokriski_NaDanSvetigaRoka1696.xml"/>
+  <xi:include href="Svetokriski_NaNovigaLejtaDan1696.xml"/>
+  <xi:include href="Svetokriski_NaOsmoNedeljoPoSvetiTrojici1691.xml"/>
+  <xi:include href="Svetokriski_NaSedmoNedeljoPoSTrojici1691.xml"/>
+  <xi:include href="Svetokriski_NaTretjoNedeloPoVelikiNoci1691.xml"/>
+  <xi:include href="Svetokriski_NaVelikPetek1691.xml"/>
+  <xi:include href="Svetokriski_SermoNonusProInduendaMoniali1700.xml"/>
+  <xi:include href="Svetokriski_SermoXVObPartamDeTurcisVictoriam1700.xml"/>
+  <xi:include href="Svetokriski_SermoXXXIProDedicationeEcclesiae1700.xml"/>
+  <xi:include href="Veriti_Popotnik1828.xml"/>
+  <xi:include href="Veriti_SvetnikiI1828.xml"/>
+  <xi:include href="Waitzenegger_Ita1831.xml"/>
+</teiCorpus>

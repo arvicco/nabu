@@ -1,0 +1,24 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: prilit
+adapter_test: test/adapters/prilit_test.rb
+retrieved: 2026-09-04
+files:
+  - path: PriLit.xml
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1319/PriLit.TEI.zip
+    whole: true
+  - path: Svetokriski_NaNovigaLejtaDan1696.xml
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1319/PriLit.TEI.zip
+    whole: true
+  - path: Cigler_SrecaVNesreci1838_1840.xml
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1319/PriLit.TEI.zip
+    whole: true
+  - path: Cigler_SrecaVNesreci1984.xml
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1319/PriLit.TEI.zip
+    whole: true
+  - path: 00README.txt
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1319/PriLit.TEI.zip
+    whole: true
+  - path: schema/tei_clarin_schema.xml
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1319/PriLit.TEI.zip
+    whole: true

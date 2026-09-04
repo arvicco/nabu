@@ -152,8 +152,12 @@ languages (Hittite, Elamite, Old Persian, Urartian, Hurrian, Eblaite),
 the Semitic shelves (Biblical Hebrew, Aramaic and Targumic, Classical
 Syriac, Ugaritic, Geʿez), Coptic and Egyptian across their whole span,
 Old Church Slavonic and Old East Slavic, the Celtic and Germanic
-medieval corpora, Old Galician-Portuguese lyric, and the honest
-`und` rows where an upstream record could not determine a language.
+medieval corpora (with the German print era whole since the Deutsches
+Textarchiv landed), Old Galician-Portuguese lyric, the Southeast
+Asian family (Old Khmer, Old Mon, Old Malay, Old Javanese, Pyu, Old
+Burmese — most in their only machine-readable form), Classical Newar,
+and the honest `und` rows where an upstream record could not
+determine a language.
 
 ## Reference-shelf languages (dictionaries)
 

@@ -1,0 +1,10 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: diccas
+adapter_test: test/adapters/diccas_test.rb
+retrieved: 2026-09-04
+files:
+  - path: DiCCAS.tei.xml
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/2097/DiCCAS.tei.xml
+    whole: false
+    trim: complete teiHeader + books 1 and 10 whole; books 2-9 removed, kept bytes verbatim

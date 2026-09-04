@@ -1,0 +1,17 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: perseus-farsilit
+adapter_test: test/adapters/perseus_farsilit_test.rb
+retrieved: 2026-09-04
+files:
+  - path: data/hafez/divan/__cts__.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-farsiLit/master/data/hafez/divan/__cts__.xml
+    whole: true
+  - path: data/hafez/divan/hafez.divan.perseus-far1.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-farsiLit/master/data/hafez/divan/hafez.divan.perseus-far1.xml
+    whole: false
+    trim: alphabet chapters 1-2 whole; 3-32 removed, edition close reinstated
+  - path: data/hafez/divan/hafez.divan.perseus-eng1.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-farsiLit/master/data/hafez/divan/hafez.divan.perseus-eng1.xml
+    whole: false
+    trim: alphabet chapters 1-2 whole; 3-32 removed, edition close reinstated

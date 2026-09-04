@@ -1,0 +1,12 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: perseus-anglit
+adapter_test: test/adapters/perseus_anglit_test.rb
+retrieved: 2026-09-04
+files:
+  - path: data/anon/beowulf/anon.beowulf.perseus-ang1.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-angLit/master/data/anon/beowulf/anon.beowulf.perseus-ang1.xml
+    whole: true
+  - path: data/anon/beowulf/anon.beowulf.perseus-eng1.xml
+    url: https://raw.githubusercontent.com/PerseusDL/canonical-angLit/master/data/anon/beowulf/anon.beowulf.perseus-eng1.xml
+    whole: true

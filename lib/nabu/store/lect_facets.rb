@@ -28,13 +28,18 @@ module Nabu
       # breath — the write-time-census stance (source_stats/P42-0): reads
       # never aggregate the half-million-row facet, and the numbers cannot
       # drift from the facet they summarize.
-      def rebuild!(catalog:, registry:)
+      def rebuild!(catalog:, registry:, progress: nil)
         catalog[:document_facets].where(facet: FACET).delete
         unless registry
           derive_stats!(catalog)
           return 0
         end
 
+        # The no-silent-passes rule (owner, restated 2026-09-04 on this
+        # exact command): this walks EVERY language document — minutes at
+        # library scale — so it announces and ticks.
+        progress&.stage("lect facet: re-materializing every document's resolution " \
+                        "(minutes at library scale)")
         count = 0
         batch = []
         each_language_document(catalog) do |row|
@@ -46,9 +51,11 @@ module Nabu
 
           catalog[:document_facets].multi_insert(batch)
           count += batch.size
+          progress&.load_tick(count, 0)
           batch = []
         end
         catalog[:document_facets].multi_insert(batch)
+        progress&.stage("lect facet: deriving the census stats")
         derive_stats!(catalog)
         count + batch.size
       end

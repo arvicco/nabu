@@ -90,6 +90,15 @@ module Nabu
         }.freeze
       }.freeze
 
+      # P95-2 (the Franček crosswalk rider, hdl 11356/1472, CC BY 4.0):
+      # the portal's historical module — entry-id links Pleteršnik ↔ JSV
+      # plus 16th-c. Protestant first attestations. Fetched as the fourth
+      # artifact into <workdir>/francek/; consumed by SlLexicaFrancek
+      # (the reference-producer seam), never as a dictionary of its own.
+      FRANCEK_ZIP_URL = "https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1472/" \
+                        "FrancekPortalHistoricalModule.zip"
+      FRANCEK_SUBDIR = "francek"
+
       # The language-notes rider (P18-6 pattern): one witness note on sl,
       # accreted idempotently by the DictionaryLoader at every load.
       LANGUAGE_NOTES = [
@@ -104,6 +113,15 @@ module Nabu
          "Biblia, held as goo300k/IMP zrc_00001-1584). Headwords are modernized orthography and " \
          "join goo300k's gold lemmas through the conventions §9 sl fold."].freeze
       ].freeze
+
+      # P95-2: the Franček crosswalk producer refreshes after every load
+      # (the reference-producer seam) — Pleteršnik↔JSV kind=reference
+      # edges with 16th-c. first attestations riding the detail.
+      def self.reference_edges? = true
+
+      def self.reference_producer(catalog:, journal:)
+        Nabu::SlLexicaFrancek.new(catalog: catalog, journal: journal)
+      end
 
       def self.manifest
         MANIFEST
@@ -165,10 +183,12 @@ module Nabu
       # guard — each dictionary in its own subdir with its own state). No
       # network in tests: WebMock stubs.
       def fetch(workdir, progress: nil, force: false)
-        results = DICTIONARIES.to_h do |slug, config|
+        artifacts = DICTIONARIES.transform_values { |config| config.fetch(:zip_url) }
+                                .merge(FRANCEK_SUBDIR => FRANCEK_ZIP_URL)
+        results = artifacts.to_h do |slug, zip_url|
           dir = File.join(workdir, slug)
           [slug, Nabu::ZipFetch.sync!(
-            url: config.fetch(:zip_url), dir: dir,
+            url: zip_url, dir: dir,
             attic_dir: File.join(workdir, ATTIC_DIRNAME, slug), progress: progress,
             guard: ->(doomed) { guard_mass_deletion!(dir, doomed, force: force) }
           )]
@@ -184,9 +204,11 @@ module Nabu
         notes = results.map { |slug, result| "#{slug}=#{result.sha[0, 12]}" }.join(" ")
         atticked = results.values.sum { |result| result.atticked.size }
         notes = "#{notes} · #{attic_notes(atticked_list(results))}" if atticked.positive?
+        urls = DICTIONARIES.transform_values { |config| config.fetch(:zip_url) }
+                           .merge(FRANCEK_SUBDIR => FRANCEK_ZIP_URL)
         Nabu::FetchReport.new(
           sha: results.values.last.sha, fetched_at: Time.now, notes: notes,
-          repos: results.to_h { |slug, result| [DICTIONARIES.fetch(slug).fetch(:zip_url), result.sha] }
+          repos: results.to_h { |slug, result| [urls.fetch(slug), result.sha] }
         )
       end
 

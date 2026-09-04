@@ -153,7 +153,7 @@ class PosturesTest < Minitest::Test
   def test_the_lect_migration_kept_the_p59_4_census
     lect = postures.declarations.select { |d| d.layer == "lect" }
     by_posture = lect.group_by(&:posture).transform_values(&:size)
-    assert_equal 85, lect.size,
+    assert_equal 89, lect.size,
                  "the P59-4 declarations survive the move (61 at migration; itant retired P61-3," \
                  "oracc retired P62-2, etcsl/ccmh/freising/coptic-scriptorium retired P64-6, " \
                  "titus-avestan retired P66-1, osta+fornsvenska retired P77-r8, achemenet " \
@@ -196,7 +196,9 @@ class PosturesTest < Minitest::Test
                  "(the xum add-then-retire shape at family scale, twice in one gate); " \
                  "dta ADDED P94-2 — identity de (the print corpus; №R-59 stages its pre-1650 " \
                  "tail via date-band INFERENCE, the document grain — no facet rule, so the " \
-                 "declaration stays): 84→85"
+                 "declaration stays): 84→85; P95 ADDS FOUR — prilit (dates, the goo300k/imp " \
+                 "sl-bands mold), diccas (identity ara), perseus-anglit (identity ang, the aspr " \
+                 "mold), perseus-farsilit (identity fas, bare fa anchor): 85→89"
     # P64-6 (the №1-№10 rulings): 4 pendings retired to machine grains,
     # tla-hf/gretil/torot → identity, imp/goo300k → dates. P66-1: the LAST
     # pending (titus-avestan) retired. P77-6 briefly returned the pending
@@ -253,6 +255,9 @@ class PosturesTest < Minitest::Test
     # P94-2 ADDS dta as identity (de, the print corpus; №R-59's pre-1650
     # staging is date-band inference at document grain — the declaration
     # stays, unlike a facet-rule retirement): identity 61→62.
-    assert_equal({ "identity" => 62, "dates" => 10, "codemap" => 13 }, by_posture)
+    # P95 ADDS diccas + perseus-anglit + perseus-farsilit as identity
+    # (62→65) and prilit as dates (10→11) — the long-tail sweep plus the
+    # Slovenian anchor, all on existing molds.
+    assert_equal({ "identity" => 65, "dates" => 11, "codemap" => 13 }, by_posture)
   end
 end
