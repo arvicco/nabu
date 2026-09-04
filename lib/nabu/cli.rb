@@ -703,12 +703,12 @@ module Nabu
       def facet_progress
         tty = $stderr.tty?
         Nabu::ProgressReporter.new(
-          on_stage: ->(label, _eta = nil) { $stderr.puts(label) },
+          on_stage: ->(label, _eta = nil) { warn(label) },
           on_load_tick: lambda do |processed, _errored|
             if tty
               $stderr.print("\r  #{processed} rows…")
             elsif (processed % 100_000) < Nabu::Store::LectFacets::INSERT_BATCH
-              $stderr.puts("  #{processed} rows…")
+              warn("  #{processed} rows…")
             end
           end
         )
