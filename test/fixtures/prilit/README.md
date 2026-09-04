@@ -14,6 +14,12 @@ not ingested v1). Four members, whole and untrimmed:
   same work (Sreča v nesreči), the deposit's ready collation pair;
   note the segmentations differ across editions.
 
+Also included, verbatim from the zip: `00README.txt` and
+`schema/tei_clarin_schema.xml` — a TEI-ROOTED schema-documentation
+file (the zip ships three under schema/); the first live sync
+quarantined them, so the fixtures pin that discover never enters the
+schema/ subdir.
+
 Structure the trio documents: bodies are PURE `<ab xml:id="Doc.N">`
 text blocks (no inline markup censused); the print year lives in
 sourceDesc/bibl[@type=printSource]/date (@when + @cert), the digital

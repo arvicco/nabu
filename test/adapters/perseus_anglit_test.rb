@@ -45,6 +45,20 @@ class PerseusAnglitTest < Minitest::Test
     assert_equal [BEOWULF, BEOWULF_ENG], ids.sort
   end
 
+  def test_the_english_translation_parses_despite_reversed_refsdecl_order
+    # The eng twin declares its legacy refsDecls line-FIRST, card-second —
+    # the ang file's order reversed. The first live sync quarantined it
+    # under the first-refsDecl-wins rung; the rung now treats each legacy
+    # refsDecl as an alternative scheme.
+    adapter = Nabu::Adapters::PerseusAnglit.new(translations: true)
+    ref = adapter.discover(WORKDIR).find { |r| r.id == BEOWULF_ENG }
+    document = adapter.parse(ref)
+    assert_equal "eng", document.language
+    assert_operator document.count, :>=, 40, "the translation cards parse like the original's"
+    assert_includes document.first.text, "Scyld",
+                    "Child's 1904 prose rendering of the Prologue"
+  end
+
   def test_beowulf_parses_at_card_grain_with_old_english_text
     adapter = Nabu::Adapters::PerseusAnglit.new
     ref = adapter.discover(WORKDIR).find { |r| r.id == BEOWULF }
