@@ -28,7 +28,7 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these nineteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 September 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
@@ -48,9 +48,9 @@ A source wears every desk it serves — these nineteen answer this desk. Holding
 | `cme` | texts | open | wired · manual | 297 docs / 1,355,279 passages |
 | `eebo-tcp` | texts | open | wired · manual | 60,325 docs / 25,065,921 passages |
 | `dta` | texts | attribution | wired · manual | 5,478 docs / 729,090 passages |
-| `perseus-anglit` | texts | attribution | not yet wired | not synced yet |
+| `perseus-anglit` | texts | attribution | wired · manual | 2 docs / 86 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 September 2026)</span>: `ang` 63,169 · `en` 59,433 · `non` 20,449 · `eng` 6,813 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 … and 42 more (`nabu axis germanic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 September 2026)</span>: `ang` 63,170 · `en` 59,433 · `non` 20,449 · `eng` 6,814 · `de` 5,668 · `swe` 3,397 · `dum` 2,226 · `lat` 532 · `gmh` 406 · `enm` 297 … and 42 more (`nabu axis germanic` lists all).
 
 ## The desk's instruments
 
