@@ -4439,3 +4439,64 @@ dta:   # P94-1
   # page), class attribution. Page-grain passages, orthography AS
   # PRINTED (sic/abbr halves; DTA's corr/expan normalization layers are
   # deliberately not ingested v1 — corrections are enrichments).
+
+prilit:   # P95-1
+  adapter: Nabu::Adapters::Prilit
+  axes: [slavic]
+  wired: true    # P95 gate: first sync owner-verified 2026-09-04 (43 docs /
+                 # 8,526 passages, 0 quarantined after the schema-dir discover
+                 # fix; №5-mold staging applied: 29 → sl:emod + 8 → sl:mod),
+                 # owner-flipped
+  sync_policy: manual
+  # PriLit — older Slovenian narrative prose (ZRC SAZU/JSI; CLARIN.SI
+  # hdl 11356/1319, CC BY 4.0 → attribution): 43 texts / 37 works / 12
+  # authors, 1643–1866, the earliest Slovenian narrative prose — the sl
+  # axis's Early Modern narrative extension (Sreča v nesreči in multiple
+  # editions = a ready collation case, provenance-distinct documents).
+  # v1 = the plain TEI edition (pure <ab> blocks); the deposit's .ana
+  # silver layer deliberately not ingested (its schema is NOT imp-tei —
+  # a future silver wave needs its own family).
+
+perseus-anglit:   # P95-4
+  adapter: Nabu::Adapters::PerseusAnglit
+  axes: [germanic]
+  translations: true   # the point of the repo: Beowulf's aligned English rides as a parallel doc
+  wired: true    # P95 gate: first sync owner-verified 2026-09-04 (2 docs /
+                 # 86 passages after the refState-alternatives fix — the eng
+                 # translation card-aligned 43↔43, --parallel proven live),
+                 # owner-flipped
+  sync_policy: manual
+  # PerseusDL canonical-angLit — one work: Beowulf (Klaeber 1922) + the
+  # aligned English translation. License read 2026-09-04: the standard
+  # PerseusDL repo grant, CC BY-SA 3.0 US → attribution. The OE original
+  # is a provenance-distinct SECOND EDITION beside the held ASPR witness
+  # (the diorisis stance — never merged); no __cts__.xml upstream, so
+  # titles fall back to the urn tail honestly.
+
+diccas:   # P95-4
+  adapter: Nabu::Adapters::Diccas
+  axes: [arabic]
+  wired: true    # P95 gate: first sync owner-verified 2026-09-04 (10 docs /
+                 # 879 passages, 0 quarantined), owner-flipped
+  sync_policy: manual
+  # DiCCAS — Disaster Corpus in Classical Arabic Sources (Cicola,
+  # Bologna 2025; CLARIN.SI hdl 11356/2097, CC BY-NC-SA 4.0 → nc, the
+  # in-file <licence> agreeing): one TEI file, ten classical books
+  # (Qurʾān, the Ṣaḥīḥayn, al-Ṭabarī ×2, Ibn Taghrībirdī, al-Maqrīzī,
+  # al-Dhahabī, Ibn al-Jawzī, al-Jāḥiẓ) of catastrophe accounts with
+  # tagged disaster terminology. Embedded English translation glosses
+  # ride annotations (gloss_en), never the Arabic text. FileFetch.
+
+perseus-farsilit:   # P95-4
+  adapter: Nabu::Adapters::PerseusFarsilit
+  axes: [iranian]
+  translations: true   # the aligned English rides as a parallel doc (ger1 stays out — eng-only house rule)
+  wired: true    # P95 gate: first sync owner-verified 2026-09-04 (2 docs /
+                 # 17,637 seg-grain passages, 0 quarantined), owner-flipped
+  sync_policy: manual
+  # PerseusDL canonical-farsiLit — classical Persian: Hafez's Divan
+  # (495 ghazals in 32 alphabet chapters) with aligned English (+ an
+  # unserved German) translation. License read 2026-09-04: the standard
+  # PerseusDL repo grant, CC BY-SA 3.0 US → attribution. Proper CTS
+  # (4-deep chapter.poem.line.seg); slug family perseus-far<n>, house
+  # language code fas.

@@ -215,7 +215,8 @@ module Nabu
       # registry carries the journal overlay via load_default's :auto).
       progress&.stage("lect facets", eta: corpus_eta(ledger, "lect_facets"))
       profile.measure(scope: RebuildProfile::CORPUS, stage: :lect_facets) do
-        Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config))
+        Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config),
+                                   progress: progress)
       end
       # P61-3: the artifact-script lane — pure function of stored codes +
       # config/artifact_scripts.yml, re-derived wholesale like the stats.

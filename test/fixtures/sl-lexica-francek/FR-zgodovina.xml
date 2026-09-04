@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Naslov: Zgodovinski razdelek portala Franček -->
+<!-- Povezani slovarji: 
+            Maks Pleteršnik, Slovensko-nemški slovar (1894-1895) [http://hdl.handle.net/11356/1114]; 
+            Slovar jezika Janeza Svetokriškega [http://hdl.handle.net/11356/1092]; 
+            Slovensko-latinski slovar po Dictionarium Latino-Carniolicum (1680–1710) (1997) [N/A] -->
+<!-- Različica: 1.0 -->
+<!-- Datum objave: 21. 12. 2021 -->
+<!-- Projekt: Spletni portal Franček, Jezikovna svetovalnica za učitelje slovenščine in Šolski slovar slovenskega jezika -->
+<!-- Spletna stran: www.franček.si -->
+<!-- Izdajatelj: ZRC SAZU, Inštitut za slovenski jezik Frana Ramovša -->
+<FR-zgodovina>
+<FR-Z fr-sklic="e000252"><FR-Z-Prot><geslo-prot geslo-id="prot000475"><zapis><avtor>Primož Trubar</avtor><naslov>Katekizem</naslov><leto>1550</leto></zapis></geslo-prot></FR-Z-Prot><FR-Z-KV><geslo geslo-id="00142"/></FR-Z-KV><FR-Z-Svet><ge geslo-id="000393"/></FR-Z-Svet><FR-Z-Plet><rc geslo-id="000471"/></FR-Z-Plet></FR-Z>
+<FR-Z fr-sklic="e001104"><FR-Z-Svet><ge geslo-id="000044"/></FR-Z-Svet></FR-Z>
+<FR-Z fr-sklic="e001308"><FR-Z-Prot><geslo-prot geslo-id="prot000070"><zapis><avtor>Janž Tulščak</avtor><naslov>Lejpe molitve</naslov><leto>1579</leto></zapis></geslo-prot></FR-Z-Prot><FR-Z-Plet><rc geslo-id="000056"/></FR-Z-Plet></FR-Z>
+<FR-Z fr-sklic="e000305"><FR-Z-Plet><rc geslo-id="000005"/></FR-Z-Plet></FR-Z>
+<FR-Z fr-sklic="e003552"><FR-Z-Plet><rc geslo-id="000274"/></FR-Z-Plet></FR-Z>
+</FR-zgodovina>

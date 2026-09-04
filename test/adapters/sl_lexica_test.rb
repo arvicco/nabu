@@ -211,16 +211,35 @@ class SlLexicaTest < Minitest::Test
     end
   end
 
-  def test_fetch_downloads_all_three_zips_and_discovers_the_shelf
+  def test_fetch_downloads_all_four_artifacts_and_discovers_the_shelf
     ZIP_URLS.each { |slug, url| stub_request(:get, url).to_return(status: 200, body: zip_bodies[slug]) }
+    stub_request(:get, Nabu::Adapters::SlLexica::FRANCEK_ZIP_URL)
+      .to_return(status: 200, body: francek_zip_body)
     Dir.mktmpdir do |workdir|
       report = adapter.fetch(workdir)
       assert_instance_of Nabu::FetchReport, report
       assert_match(/\A\h{64}\z/, report.sha)
-      assert_equal ZIP_URLS.values.sort, report.repos.keys.sort, "per-zip shas ride the report"
+      expected_urls = ZIP_URLS.values + [Nabu::Adapters::SlLexica::FRANCEK_ZIP_URL]
+      assert_equal expected_urls.sort, report.repos.keys.sort, "per-artifact shas ride the report"
       refs = adapter.discover(workdir).to_a
       assert_equal ["pletersnik:Pletersnik.xml", "jsv:JSV.xml", "besedje16:besedje16.xml"], refs.map(&:id)
       assert_equal 7, adapter.parse(refs.first).size
+      assert File.file?(File.join(workdir, "francek", "FR-zgodovina.xml")),
+             "the Franček module (P95-2) lands beside the dictionaries for the producer"
+      refute(refs.any? { |ref| ref.id.include?("francek") },
+             "the crosswalk module is producer fuel, never a dictionary document")
+    end
+  end
+
+  # A real one-entry module zipped on the fly (the producer's own suite
+  # covers the semantics; here the fetch choreography only).
+  def francek_zip_body
+    Dir.mktmpdir do |dir|
+      FileUtils.cp(File.join(Nabu::TestSupport.fixtures("sl-lexica-francek"), "FR-zgodovina.xml"),
+                   File.join(dir, "FR-zgodovina.xml"))
+      zip = File.join(dir, "m.zip")
+      Dir.chdir(dir) { Nabu::Shell.run("zip", "-q", zip, "FR-zgodovina.xml") }
+      File.binread(zip)
     end
   end
 
