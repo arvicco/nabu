@@ -4532,3 +4532,16 @@ cbdb:   # P96-4
   # the download page 403s non-browsers, so the OWNER eyeballs the
   # verbatim terms at first sync. v1 = acquisition + verification only;
   # the persons-layer scout's №R decides any derived surface.
+
+kitab-reuse:   # P96-5
+  adapter: Nabu::Adapters::KitabReuse
+  kind: module   # machinery-only — the intertext instrument, zero document rows
+  axes: [arabic]
+  wired: false   # flip after the owner-fired first sync (checklist §6)
+  sync_policy: manual
+  # KITAB Text Reuse Data (Aga Khan University; zenodo 11501559
+  # v2023.1.8, CC BY-NC-SA 4.0 → nc): v1 fetches the 164 MB pairwise
+  # STATS TSV and derives document-grain kind=reuse edges over the held
+  # openiti corpus (version-id join; instances ≥ 2 floor, unheld rows
+  # censused). The 10 GB passage-grain pairwise archive on the same
+  # record is a deliberate v2, owner-fired if wanted.

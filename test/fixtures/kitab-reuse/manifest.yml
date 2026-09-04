@@ -1,0 +1,10 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: kitab-reuse
+adapter_test: test/kitab_reuse_test.rb
+retrieved: 2026-09-04
+files:
+  - path: KITAB-TextReuse-stats.csv.gz
+    url: https://zenodo.org/records/11501559/files/KITAB-TextReuse-stats_2023-1-8.csv.gz
+    whole: false
+    trim: real header + first four rows, re-gzipped verbatim
