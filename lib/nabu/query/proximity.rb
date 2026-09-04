@@ -88,7 +88,8 @@ module Nabu
       # back index-ordered), so results stay stable — and the clip is
       # ANNOUNCED (P35-6): reaching the cap sets incomplete_hint so a clipped
       # expansion never poses as the whole paradigm.
-      # census: 68408109, 2026-08-04, live fulltext (P57 full rebuild). The
+      # P96 audit re-stamp (mechanisms verified scale-safe at 106.9M).
+      # census: 106877441, 2026-09-04, live fulltext (P57 full rebuild). The
       # P42-era CAUTION came true: at the old cap of 400, five of the seven
       # heaviest Greek paradigms clipped — λέγω→605, γίγνομαι→588, ποιέω→563,
       # εἰμί→476, ἔχω→408 (φέρω→389, τίθημι→378 under). Raised to 1000 (P58-0

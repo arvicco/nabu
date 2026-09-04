@@ -79,7 +79,8 @@ module Nabu
       # license/date) and the verify phase both drop rows; fetch enough
       # candidates to still fill the page. Exhaustion is ANNOUNCED (P35-6)
       # via incomplete_hint, as in Search.
-      # census: 68408109, 2026-08-04, live passages (P57 full rebuild; 3.76M at tuning,
+      # P96 audit re-stamp (mechanisms verified scale-safe at 106.9M).
+      # census: 106877441, 2026-09-04, live passages (P57 full rebuild; 3.76M at tuning,
       # re-affirmed at 24.4M and 68.4M — exhaustion stays ANNOUNCED, class note)
       INNER_LIMIT_FACTOR = 10
 

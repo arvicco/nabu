@@ -6,11 +6,11 @@ documents_display: '2,274,289'
 passages: 106877441
 passages_display: '106,877,441'
 language_codes: 167
-registry_rows: 181
+registry_rows: 184
 corpus_sources: 156
 live_sources: 156
 local_shelves: 5
-feature_modules: 20
+feature_modules: 23
 top_languages:
 - code: ara
   passages: 33295579

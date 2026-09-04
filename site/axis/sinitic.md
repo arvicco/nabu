@@ -7,13 +7,13 @@ description: >-
 
 > The Sinologist — the classical Chinese written world and its phonological deep past.
 
-Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — and, since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea).
+Literary and classical Chinese with its reconstruction instruments: Kanripo and CBETA, TLS, Baxter-Sagart and the Qieyun-system database, Unihan, the Heian hanzi dictionaries, the UD lzh treebanks, SuttaCentral's Agamas, the kaikki zh extract riding wiktionary-recon — since P78-5, the Đại Việt classical shelf (the sinographic cosmopolis reaching Vietnam, as sillok reaches Korea) — and, since P96, the desk's instruments: the CHGIS historical gazetteer (TGAZ placenames, 221 BCE–1911) and the CBDB prosopography artifact (~658k persons, held for the persons-layer ruling).
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these seventeen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these nineteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 September 2026)</span> |
 |---|---|---|---|---|
@@ -34,6 +34,8 @@ A source wears every desk it serves — these seventeen answer this desk. Holdin
 | `kr-gaiji` | feature module | attribution | wired · manual | nothing held yet |
 | `tls` | dictionary | attribution | wired · manual | 23,179 entries |
 | `viet-wikisource` | texts | attribution | wired · manual | 32 docs / 7,674 passages |
+| `chgis` | feature module | open | not yet wired | not synced yet |
+| `cbdb` | feature module | nc | not yet wired | not synced yet |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 September 2026)</span>: `zho` 216,001 · `lzh` 80,220 · `ltc` 58,680 · `jpn` 32,607 · `och` 28,138 · `cmn` 7,304 · `pli` 7,288 · `sga` 6,566 · `gem-pro` 5,717 · `gmw-pro` 5,551 … and 29 more (`nabu axis sinitic` lists all).
 

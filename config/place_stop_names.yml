@@ -1,0 +1,7 @@
+# place-mine hand stop list (P96-3, Q9 v0). Names the DERIVED stop rule
+# does not catch but an owner ruling excludes from mining anyway — each
+# entry is a place-index name key that is really a common word in the
+# target corpora. The derived rule (a name hitting > 0.2% of a source's
+# scanned passages is excluded and reported) handles the flood cases;
+# this file holds the judgment tail. Every addition is an owner ruling.
+stop_names: []

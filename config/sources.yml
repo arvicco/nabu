@@ -4500,3 +4500,48 @@ perseus-farsilit:   # P95-4
   # PerseusDL repo grant, CC BY-SA 3.0 US → attribution. Proper CTS
   # (4-deep chapter.poem.line.seg); slug family perseus-far<n>, house
   # language code fas.
+
+chgis:   # P96-1
+  adapter: Nabu::Adapters::Chgis
+  kind: module   # machinery-only — a gazetteer instrument, zero document rows
+  axes: [sinitic]
+  wired: false   # flip after the owner-fired first sync (checklist §6)
+  sync_policy: manual
+  # CHGIS/TGAZ — the China Historical GIS Temporal Gazetteer (Harvard–
+  # Fudan; CC0 1.0 per the Dataverse dataset's own license field,
+  # doi:10.7910/DVN/H3OB28 — the legacy "V6 EULA" record covers official-
+  # distributor copies and is noted for transparency). One 21.6 MB zip →
+  # the 122 MB TGAZ SQL dump; the mv_pn_srch materialization derives the
+  # "chgis" place-index slice: 82,117 historical placenames, hanzi +
+  # pinyin name keys, year spans, WGS84 points — Q9's Sinitic legs and
+  # the place desk's China coverage. The nabu-places chgis: namespace
+  # mint rides as a sister PR.
+
+cbdb:   # P96-4
+  adapter: Nabu::Adapters::Cbdb
+  kind: module   # machinery-only — the prosopography instrument, zero document rows
+  axes: [sinitic]
+  wired: false   # flip after the owner-fired first sync (checklist §6)
+  sync_policy: manual
+  # CBDB — the China Biographical Database (Harvard/AS/Peking; ~658k
+  # persons, 7th–19th c.). Self-pinning channel: the project's
+  # latest.json (GitHub) carries filename + sha256 + the direct HF URL;
+  # fetch verifies the pin, a mismatch refuses. License: CC BY-NC-ND
+  # 4.0 per the project's JOHD 2022 paper (the pre-2018 BY-NC-SA grant
+  # is history; mainland commercial rights carved out to ChineseAll) —
+  # the download page 403s non-browsers, so the OWNER eyeballs the
+  # verbatim terms at first sync. v1 = acquisition + verification only;
+  # the persons-layer scout's №R decides any derived surface.
+
+kitab-reuse:   # P96-5
+  adapter: Nabu::Adapters::KitabReuse
+  kind: module   # machinery-only — the intertext instrument, zero document rows
+  axes: [arabic]
+  wired: false   # flip after the owner-fired first sync (checklist §6)
+  sync_policy: manual
+  # KITAB Text Reuse Data (Aga Khan University; zenodo 11501559
+  # v2023.1.8, CC BY-NC-SA 4.0 → nc): v1 fetches the 164 MB pairwise
+  # STATS TSV and derives document-grain kind=reuse edges over the held
+  # openiti corpus (version-id join; instances ≥ 2 floor, unheld rows
+  # censused). The 10 GB passage-grain pairwise archive on the same
+  # record is a deliberate v2, owner-fired if wanted.

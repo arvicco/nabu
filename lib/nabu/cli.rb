@@ -3581,9 +3581,12 @@ module Nabu
         nabu place https://pleiades.stoa.org/places/462281   # same
         nabu place tm:2788          # Pompeii through the TM gazetteer slice
         nabu place cigs:GIR         # Girsu through the CIGS slice
+        nabu place mine kanripo --dry-run   # Q9: census Han place-name hits (writes nothing)
+        nabu place mine kanripo             # mine place-candidate edges into the links journal
     HELP
     def place(*query_parts)
       return run_place_apply if query_parts == ["apply"]
+      return run_place_mine(query_parts[1..]) if query_parts.first == "mine"
 
       query = query_parts.join(" ").strip
       raise Thor::Error, "place: give a Pleiades numeric id or an exact place title" if query.empty?
@@ -3604,6 +3607,69 @@ module Nabu
     end
 
     no_commands do
+      # `nabu place mine SOURCE [GAZETTEER] [--dry-run]` (P96-3 — Q9 v0):
+      # mine the gazetteer's Han name keys against SOURCE's passage text
+      # into place-candidate edges (review fuel for the np: doctrine,
+      # never place_ref). --dry-run prints the census — per-name hit
+      # counts, the derived stop set, every filtered class — and writes
+      # nothing. Default gazetteer: chgis.
+      def run_place_mine(args)
+        args = Array(args)
+        dry = args.delete("--dry-run") ? true : false
+        source, gazetteer = args
+        raise Thor::Error, "usage: nabu place mine SOURCE [GAZETTEER] [--dry-run]" if source.to_s.empty?
+
+        gazetteer ||= "chgis"
+        config = Nabu::Config.load
+        Nabu::Store.assert_writable!(config.catalog_path) unless dry
+        catalog = Nabu::Store.connect(config.catalog_path)
+        unless Nabu::Store::PlaceIndex.populated?(catalog, gazetteer: gazetteer)
+          raise Thor::Error,
+                "place mine: the #{gazetteer.inspect} place-index slice is not derived — " \
+                "sync the gazetteer module first (nabu sync #{gazetteer})"
+        end
+
+        journal = if dry
+                    nil
+                  else
+                    Nabu::Store::LinksJournal.migrate!(
+                      Nabu::Store::LinksJournal.connect("sqlite://#{config.links_path}")
+                    )
+                  end
+        miner = Nabu::PlaceMine.new(catalog: catalog, journal: journal, gazetteer: gazetteer,
+                                    progress: progress_reporter)
+        if dry
+          print_mine_census(miner.census(source: source), applied: false)
+        else
+          result = miner.apply!(source: source)
+          print_mine_census(result.census, applied: true)
+          say "place mine: #{result.edges_written} candidate edges written " \
+              "(#{result.superseded_edges} superseded) — review fuel for np: decisions; " \
+              "read back with `nabu links <passage urn>`"
+        end
+      rescue Nabu::CatalogBusyError => e
+        raise Thor::Error, e.message
+      ensure
+        journal&.disconnect
+        catalog&.disconnect
+      end
+
+      def print_mine_census(census, applied:)
+        say "place mine: #{census.source} × #{census.gazetteer} — #{census.passages} passages " \
+            "scanned against #{census.names_loaded} Han name keys " \
+            "(#{census.names_non_han} non-Han filtered, #{census.names_ambiguous} ambiguous capped)"
+        census.name_hits.first(15).each do |name, count|
+          say format("  %<name>-12s %<count>d passages", name: name, count: count)
+        end
+        say "  … #{census.name_hits.size - 15} more attested names" if census.name_hits.size > 15
+        census.names_stopped.each do |name, count|
+          say "  STOPPED #{name} — #{count} passages (above the derived ceiling; " \
+              "a real exception is a config/place_stop_names.yml ruling)"
+        end
+        say "  candidate edges#{' (dry run — nothing written)' unless applied}: " \
+            "#{census.candidate_edges} across #{census.name_hits.size} attested names"
+      end
+
       # `nabu place apply` (P63-7): project the nabu-places registry into
       # document_axes.place_ref — NULL rows only (adapter-asserted refs
       # always win), idempotent, censused per source. Write-guarded by the
@@ -8117,11 +8183,63 @@ module Nabu
                      "give a dictionary form (search --lemma finds attestations)")
         end
 
+        crosswalk = define_crosswalk(results)
         results.each_with_index do |result, index|
           say "" if index.positive?
           print_define_entry(result)
+          print_define_crosswalk(result, crosswalk, catalog)
           print_notes_footer(catalog, result) if catalog
         end
+      end
+
+      # Q66 (P96 rider — the owner's 2026-09-04 challenge): the entry
+      # crosswalk's value surfaces ON the card, not behind `nabu links`.
+      # Per entry: a "first attested" line whenever a reference edge
+      # carries one, and a "=" crosslink ONLY when the counterpart's
+      # folded headword DIFFERS (the fold-invisible pairs — balzam↔bolzam
+      # — where the curated identity does what no string search can;
+      # same-headword pairs stay silent, define already shows them).
+      # Absent links db = absent section, never an error.
+      def define_crosswalk(results)
+        config = Nabu::Config.load
+        return {} unless File.exist?(config.links_path)
+
+        journal = Nabu::Store::LinksJournal.connect(config.links_path, readonly: true)
+        urns = results.map(&:urn)
+        edges = journal[:links]
+                .where(kind: "reference")
+                .where(Sequel.|({ from_urn: urns }, { to_urn: urns }))
+                .select(:from_urn, :to_urn, :detail).all
+        edges.group_by { |e| urns.include?(e[:from_urn]) ? e[:from_urn] : e[:to_urn] }
+      rescue Sequel::Error
+        {}
+      ensure
+        journal&.disconnect
+      end
+
+      def print_define_crosswalk(result, crosswalk, catalog)
+        own_folded = Nabu::Normalize.search_form(result.headword, language: result.language)
+        Array(crosswalk[result.urn]).each do |edge|
+          other = edge[:from_urn] == result.urn ? edge[:to_urn] : edge[:from_urn]
+          if (attested = edge[:detail].to_s[/first attested: (.+)\z/, 1])
+            say "  first attested: #{attested.strip}"
+          end
+          counterpart = dict_entry_headword(catalog, other)
+          next unless counterpart && counterpart[:headword_folded] != own_folded
+
+          say "  = #{counterpart[:headword]} — #{other} (the crosswalk joins spellings " \
+              "no string search connects)"
+        end
+      end
+
+      def dict_entry_headword(catalog, urn)
+        return nil unless catalog
+
+        @define_headwords ||= {}
+        return @define_headwords[urn] if @define_headwords.key?(urn)
+
+        @define_headwords[urn] =
+          catalog[:dictionary_entries].where(urn: urn).select(:headword, :headword_folded).first
       end
 
       # One entry, the define house format — shared verbatim by `show` on a
