@@ -408,7 +408,7 @@ module Nabu
             record_pattern(node)
           elsif name == "refsDecl"
             @refs_decls_seen = (@refs_decls_seen || 0) + 1
-          elsif name == "refState" && @refs_decls_seen == 1
+          elsif name == "refState"
             (@ref_states ||= []) << node.attribute("unit")
           elsif name == "div" && @division_types.include?(node.attribute("type"))
             enter_edition(node)
@@ -520,7 +520,13 @@ module Nabu
         end
 
         def leaf_div?(node)
-          scheme.leaf_element == "div" && node.attribute("subtype") == scheme.deepest_unit
+          return false unless scheme.leaf_element == "div"
+
+          subtype = node.attribute("subtype")
+          # deepest_unit nil is the refState rung's any-of marker (its
+          # alternative schemes are all depth-1); cRefPattern schemes
+          # always carry a concrete deepest unit.
+          scheme.deepest_unit.nil? ? scheme.unit_names.include?(subtype) : subtype == scheme.deepest_unit
         end
 
         def leaf_start?(name)
@@ -675,16 +681,20 @@ module Nabu
 
         # The Klaeber rung (P95-4, angLit): Perseus P4-era headers declare
         # citation with bare <refState> elements while the body is already
-        # P5 subtype-carded (div[@type=textpart][@subtype=card][@n]). The
-        # FIRST refsDecl's states mint the scheme (Beowulf's second,
-        # line-grain refsDecl describes a rendering the body does not
-        # card); the leaf is the citation div itself. Fires ONLY where the
-        # cRefPattern path had nothing — a previously-final ParseError —
-        # so no existing source's scheme can shift.
+        # P5 subtype-carded (div[@type=textpart][@subtype=card][@n]). Each
+        # legacy refsDecl is an ALTERNATIVE depth-1 scheme (Beowulf's ang
+        # file declares card then line; its eng twin declares line then
+        # card — the owner's first live sync caught the first-wins version
+        # quarantining the translation). So the rung accepts ANY declared
+        # unit as the citation div (deepest_unit nil = the any-of marker
+        # the leaf check honors, minted nowhere else); lines/segs that are
+        # not divs simply never match. Fires ONLY where the cRefPattern
+        # path had nothing — a previously-final ParseError — so no
+        # existing source's scheme can shift.
         def ref_state_scheme
-          units = (@ref_states || []).compact
-          Scheme.new(depth: units.size, leaf_element: "div",
-                     unit_names: units, deepest_unit: units.last)
+          units = (@ref_states || []).compact.uniq
+          Scheme.new(depth: 1, leaf_element: "div",
+                     unit_names: units, deepest_unit: nil)
         end
 
         def usable_patterns

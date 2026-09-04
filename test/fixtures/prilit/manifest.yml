@@ -16,3 +16,9 @@ files:
   - path: Cigler_SrecaVNesreci1984.xml
     url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1319/PriLit.TEI.zip
     whole: true
+  - path: 00README.txt
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1319/PriLit.TEI.zip
+    whole: true
+  - path: schema/tei_clarin_schema.xml
+    url: https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1319/PriLit.TEI.zip
+    whole: true

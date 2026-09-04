@@ -29,11 +29,15 @@ module Nabu
     # == Shape
     #
     # ZipFetch of the TEI zip (single top dir PriLit.TEI → tree root).
-    # discover: every *.xml in the workdir whose root is <TEI> — the
-    # corpus-level PriLit.xml (<teiCorpus>, header only) is skipped by
-    # ROOT ELEMENT, never by name. Document urn = urn:nabu:prilit:<stem>
-    # (the file stem IS upstream's xml:id). Passage citation = the ab
-    # xml:id's suffix after "<docid>." (upstream's own numbering).
+    # discover: every TOP-LEVEL *.xml whose root is <TEI> — the works
+    # live at the tree root; the corpus-level PriLit.xml (<teiCorpus>,
+    # header only) is skipped by ROOT ELEMENT, and the schema/ subdir
+    # (tei_clarin docs — three of them TEI-rooted schema documentation,
+    # the owner's live catch on the first sync: they quarantined) plus
+    # 00README.txt are outside the glob by LAYOUT, upstream's own
+    # separation. Document urn = urn:nabu:prilit:<stem> (the file stem
+    # IS upstream's xml:id). Passage citation = the ab xml:id's suffix
+    # after "<docid>." (upstream's own numbering).
     class Prilit < Nabu::Adapter
       ZIP_URL = "https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1319/" \
                 "PriLit.TEI.zip?sequence=6&isAllowed=y"
@@ -68,9 +72,7 @@ module Nabu
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block
 
-        Dir.glob(File.join(workdir, "**", "*.xml"))
-           .reject { |path| path.include?("/#{ATTIC_DIRNAME}/") }
-           .each do |path|
+        Dir.glob(File.join(workdir, "*.xml")).each do |path|
           stem = File.basename(path, ".xml")
           next unless tei_work?(path)
 

@@ -36,8 +36,10 @@ class PrilitTest < Minitest::Test
     end
   end
 
-  def test_discovers_works_and_skips_the_corpus_header
-    assert_equal [CIGLER_1838, CIGLER_1984, SVETOKRISKI], documents.keys.sort
+  def test_discovers_works_and_skips_the_corpus_header_and_schema_dir
+    assert_equal [CIGLER_1838, CIGLER_1984, SVETOKRISKI], documents.keys.sort,
+                 "PriLit.xml (teiCorpus root), 00README.txt and schema/*.xml (TEI-rooted " \
+                 "schema DOCUMENTATION — the first live sync quarantined them) never discover"
   end
 
   def test_header_metadata_rides_the_document
