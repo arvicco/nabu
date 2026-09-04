@@ -21,13 +21,13 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 A source wears every desk it serves — these three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 3 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 September 2026)</span> |
 |---|---|---|---|---|
 | `kitab` | feature module | nc | wired · manual | nothing held yet |
 | `openiti` | texts | nc | wired · manual | 9,079 docs / 34,631,499 passages |
-| `diccas` | texts | nc | not yet wired | not synced yet |
+| `diccas` | texts | nc | wired · manual | 10 docs / 879 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 3 September 2026)</span>: `ara` 8,728 · `fas` 351.
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 September 2026)</span>: `ara` 8,738 · `fas` 351.
 
 ## The desk's instruments
 

@@ -4443,7 +4443,10 @@ dta:   # P94-1
 prilit:   # P95-1
   adapter: Nabu::Adapters::Prilit
   axes: [slavic]
-  wired: false   # flip after the owner-fired first sync (checklist §6)
+  wired: true    # P95 gate: first sync owner-verified 2026-09-04 (43 docs /
+                 # 8,526 passages, 0 quarantined after the schema-dir discover
+                 # fix; №5-mold staging applied: 29 → sl:emod + 8 → sl:mod),
+                 # owner-flipped
   sync_policy: manual
   # PriLit — older Slovenian narrative prose (ZRC SAZU/JSI; CLARIN.SI
   # hdl 11356/1319, CC BY 4.0 → attribution): 43 texts / 37 works / 12
@@ -4458,7 +4461,10 @@ perseus-anglit:   # P95-4
   adapter: Nabu::Adapters::PerseusAnglit
   axes: [germanic]
   translations: true   # the point of the repo: Beowulf's aligned English rides as a parallel doc
-  wired: false   # flip after the owner-fired first sync (checklist §6)
+  wired: true    # P95 gate: first sync owner-verified 2026-09-04 (2 docs /
+                 # 86 passages after the refState-alternatives fix — the eng
+                 # translation card-aligned 43↔43, --parallel proven live),
+                 # owner-flipped
   sync_policy: manual
   # PerseusDL canonical-angLit — one work: Beowulf (Klaeber 1922) + the
   # aligned English translation. License read 2026-09-04: the standard
@@ -4470,7 +4476,8 @@ perseus-anglit:   # P95-4
 diccas:   # P95-4
   adapter: Nabu::Adapters::Diccas
   axes: [arabic]
-  wired: false   # flip after the owner-fired first sync (checklist §6)
+  wired: true    # P95 gate: first sync owner-verified 2026-09-04 (10 docs /
+                 # 879 passages, 0 quarantined), owner-flipped
   sync_policy: manual
   # DiCCAS — Disaster Corpus in Classical Arabic Sources (Cicola,
   # Bologna 2025; CLARIN.SI hdl 11356/2097, CC BY-NC-SA 4.0 → nc, the
@@ -4484,7 +4491,8 @@ perseus-farsilit:   # P95-4
   adapter: Nabu::Adapters::PerseusFarsilit
   axes: [iranian]
   translations: true   # the aligned English rides as a parallel doc (ger1 stays out — eng-only house rule)
-  wired: false   # flip after the owner-fired first sync (checklist §6)
+  wired: true    # P95 gate: first sync owner-verified 2026-09-04 (2 docs /
+                 # 17,637 seg-grain passages, 0 quarantined), owner-flipped
   sync_policy: manual
   # PerseusDL canonical-farsiLit — classical Persian: Hafez's Divan
   # (495 ghazals in 32 alphabet chapters) with aligned English (+ an
