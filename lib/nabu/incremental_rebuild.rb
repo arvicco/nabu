@@ -226,7 +226,8 @@ module Nabu
       link_failures = []
       if outcomes.any? || journal_changed
         progress&.stage("lect facets")
-        Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config))
+        Store::LectFacets.rebuild!(catalog: db, registry: Nabu::Lects.load_default(config: @config),
+                                   progress: progress)
       end
       if outcomes.any?
         progress&.stage("links")
