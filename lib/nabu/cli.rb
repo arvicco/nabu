@@ -8183,11 +8183,63 @@ module Nabu
                      "give a dictionary form (search --lemma finds attestations)")
         end
 
+        crosswalk = define_crosswalk(results)
         results.each_with_index do |result, index|
           say "" if index.positive?
           print_define_entry(result)
+          print_define_crosswalk(result, crosswalk, catalog)
           print_notes_footer(catalog, result) if catalog
         end
+      end
+
+      # Q66 (P96 rider — the owner's 2026-09-04 challenge): the entry
+      # crosswalk's value surfaces ON the card, not behind `nabu links`.
+      # Per entry: a "first attested" line whenever a reference edge
+      # carries one, and a "=" crosslink ONLY when the counterpart's
+      # folded headword DIFFERS (the fold-invisible pairs — balzam↔bolzam
+      # — where the curated identity does what no string search can;
+      # same-headword pairs stay silent, define already shows them).
+      # Absent links db = absent section, never an error.
+      def define_crosswalk(results)
+        config = Nabu::Config.load
+        return {} unless File.exist?(config.links_path)
+
+        journal = Nabu::Store::LinksJournal.connect(config.links_path, readonly: true)
+        urns = results.map(&:urn)
+        edges = journal[:links]
+                .where(kind: "reference")
+                .where(Sequel.|({ from_urn: urns }, { to_urn: urns }))
+                .select(:from_urn, :to_urn, :detail).all
+        edges.group_by { |e| urns.include?(e[:from_urn]) ? e[:from_urn] : e[:to_urn] }
+      rescue Sequel::Error
+        {}
+      ensure
+        journal&.disconnect
+      end
+
+      def print_define_crosswalk(result, crosswalk, catalog)
+        own_folded = Nabu::Normalize.search_form(result.headword, language: result.language)
+        Array(crosswalk[result.urn]).each do |edge|
+          other = edge[:from_urn] == result.urn ? edge[:to_urn] : edge[:from_urn]
+          if (attested = edge[:detail].to_s[/first attested: (.+)\z/, 1])
+            say "  first attested: #{attested.strip}"
+          end
+          counterpart = dict_entry_headword(catalog, other)
+          next unless counterpart && counterpart[:headword_folded] != own_folded
+
+          say "  = #{counterpart[:headword]} — #{other} (the crosswalk joins spellings " \
+              "no string search connects)"
+        end
+      end
+
+      def dict_entry_headword(catalog, urn)
+        return nil unless catalog
+
+        @define_headwords ||= {}
+        return @define_headwords[urn] if @define_headwords.key?(urn)
+
+        @define_headwords[urn] =
+          catalog[:dictionary_entries].where(urn: urn).select(:headword, :headword_folded).first
       end
 
       # One entry, the define house format — shared verbatim by `show` on a
