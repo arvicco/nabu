@@ -4500,3 +4500,19 @@ perseus-farsilit:   # P95-4
   # PerseusDL repo grant, CC BY-SA 3.0 US → attribution. Proper CTS
   # (4-deep chapter.poem.line.seg); slug family perseus-far<n>, house
   # language code fas.
+
+chgis:   # P96-1
+  adapter: Nabu::Adapters::Chgis
+  kind: module   # machinery-only — a gazetteer instrument, zero document rows
+  axes: [sinitic]
+  wired: false   # flip after the owner-fired first sync (checklist §6)
+  sync_policy: manual
+  # CHGIS/TGAZ — the China Historical GIS Temporal Gazetteer (Harvard–
+  # Fudan; CC0 1.0 per the Dataverse dataset's own license field,
+  # doi:10.7910/DVN/H3OB28 — the legacy "V6 EULA" record covers official-
+  # distributor copies and is noted for transparency). One 21.6 MB zip →
+  # the 122 MB TGAZ SQL dump; the mv_pn_srch materialization derives the
+  # "chgis" place-index slice: 82,117 historical placenames, hanzi +
+  # pinyin name keys, year spans, WGS84 points — Q9's Sinitic legs and
+  # the place desk's China coverage. The nabu-places chgis: namespace
+  # mint rides as a sister PR.
