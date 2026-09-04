@@ -332,6 +332,8 @@ module Nabu
 
       catalog = Nabu::Store.connect(config.catalog_path)
       dates = Nabu::LectDates.new(registry: registry)
+      scope = [options[:source], options[:lang]].compact
+      say "scanning dated documents#{scope.empty? ? ' (whole catalog)' : " (#{scope.join(', ')})"}…"
       report = dates.census(catalog: catalog, source: options[:source], lang: options[:lang])
       report.assignable.sort_by { |_key, count| -count }.each do |(source, code, lect_id), count|
         say format("  %<source>-16s %<code>-6s → %<lect>-10s %<count>d",
@@ -689,8 +691,27 @@ module Nabu
         registry = Nabu::Lects.load_default(config: config)
         catalog ||= Nabu::Store.connect(config.catalog_path)
         Nabu::Store.migrate!(catalog)
-        count = Nabu::Store::LectFacets.rebuild!(catalog: catalog, registry: registry)
+        count = Nabu::Store::LectFacets.rebuild!(catalog: catalog, registry: registry,
+                                                 progress: facet_progress)
         say "lect facet: #{count} rows materialized"
+      end
+
+      # A minimal announce-and-tick reporter for the facet rebuild (the
+      # no-silent-passes rule — this subcommand class has no loader
+      # plumbing to borrow): stages to stderr; on a tty a \r-updating
+      # counter, else one plain line per 100k rows.
+      def facet_progress
+        tty = $stderr.tty?
+        Nabu::ProgressReporter.new(
+          on_stage: ->(label, _eta = nil) { $stderr.puts(label) },
+          on_load_tick: lambda do |processed, _errored|
+            if tty
+              $stderr.print("\r  #{processed} rows…")
+            elsif (processed % 100_000) < Nabu::Store::LectFacets::INSERT_BATCH
+              $stderr.puts("  #{processed} rows…")
+            end
+          end
+        )
       end
 
       def parse_batch!(registry, path, config: nil)
