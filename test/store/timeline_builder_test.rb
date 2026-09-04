@@ -225,6 +225,14 @@ module Store
       # de:early staging depends on these envelopes existing.
       seed_metadata_doc("dta", "urn:nabu:dta:kant_aufklaerung_1784",
                         { "date" => "1784", "author" => "Kant, Immanuel" })
+      # P96 timeline hygiene: the two top-level-bounds Dutch corpora
+      # (dark lanes until now) and corpus-corporum's reversed envelope.
+      seed_metadata_doc("corpus-gysseling", "urn:nabu:corpus-gysseling:0001",
+                        { "not_before" => 1210, "not_after" => 1240,
+                          "date_raw" => "1210-1240", "place" => "Gent" })
+      seed_metadata_doc("corpus-corporum", "urn:nabu:corpus-corporum:rev",
+                        { "date" => { "not_before" => 430, "not_after" => 354,
+                                      "raw" => "430-354" } })
       summary = build!
       itant = timeline_for("urn:nabu:itant:oscan-9")
       assert_equal([-425, -375], [itant[:not_before], itant[:not_after]])
@@ -250,6 +258,12 @@ module Store
       kant = timeline_for("urn:nabu:dta:kant_aufklaerung_1784")
       assert_equal([1784, 1784], [kant[:not_before], kant[:not_after]],
                    "dta's print year mints a one-year envelope (№R-59's inference substrate)")
+      gys = timeline_for("urn:nabu:corpus-gysseling:0001")
+      assert_equal([1210, 1240, "Gent"], [gys[:not_before], gys[:not_after], gys[:place_name]],
+                   "the top-level-bounds shape lights the dark Dutch lane, place riding like croala")
+      rev = timeline_for("urn:nabu:corpus-corporum:rev")
+      assert_equal([354, 430], [rev[:not_before], rev[:not_after]],
+                   "corpus-corporum's reversed composition envelopes normalize (the health anomaly)")
     end
 
     # P73-2 (the itant TM lift, ex-Q20): the geonames-labeled findspot lane
