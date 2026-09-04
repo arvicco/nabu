@@ -4516,3 +4516,19 @@ chgis:   # P96-1
   # pinyin name keys, year spans, WGS84 points — Q9's Sinitic legs and
   # the place desk's China coverage. The nabu-places chgis: namespace
   # mint rides as a sister PR.
+
+cbdb:   # P96-4
+  adapter: Nabu::Adapters::Cbdb
+  kind: module   # machinery-only — the prosopography instrument, zero document rows
+  axes: [sinitic]
+  wired: false   # flip after the owner-fired first sync (checklist §6)
+  sync_policy: manual
+  # CBDB — the China Biographical Database (Harvard/AS/Peking; ~658k
+  # persons, 7th–19th c.). Self-pinning channel: the project's
+  # latest.json (GitHub) carries filename + sha256 + the direct HF URL;
+  # fetch verifies the pin, a mismatch refuses. License: CC BY-NC-ND
+  # 4.0 per the project's JOHD 2022 paper (the pre-2018 BY-NC-SA grant
+  # is history; mainland commercial rights carved out to ChineseAll) —
+  # the download page 403s non-browsers, so the OWNER eyeballs the
+  # verbatim terms at first sync. v1 = acquisition + verification only;
+  # the persons-layer scout's №R decides any derived surface.
