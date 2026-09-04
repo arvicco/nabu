@@ -7,7 +7,7 @@ description: >-
 
 > The Arabist — the Islamicate library whole, Quran and hadith to falsafa and adab.
 
-The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3) — and DiCCAS, disaster accounts excerpted from ten classical sources with catastrophe terminology tagged.
+The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Quran and hadith, history and biography, law and falsafa, the dīwāns and adab — with the Persian shelf (Ḥāfiẓ, Ibn Sīnā) riding the same Arabic-script fold that makes ara/fas cross-searchable (P41-3) — and DiCCAS, disaster accounts excerpted from ten classical sources with catastrophe terminology tagged — and, since P96, the KITAB text-reuse instrument: upstream-computed reuse edges joining the held OpenITI books pairwise on the intertext desk.
 
 The premodern Islamicate library is LIVE: OpenITI's ~9,079 primary
 texts (~1.12 B words, the 2026 release zip md5-pinned into canonical)
@@ -19,13 +19,14 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these three answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these four answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 4 September 2026)</span> |
 |---|---|---|---|---|
 | `kitab` | feature module | nc | wired · manual | nothing held yet |
 | `openiti` | texts | nc | wired · manual | 9,079 docs / 34,631,499 passages |
 | `diccas` | texts | nc | wired · manual | 10 docs / 879 passages |
+| `kitab-reuse` | feature module | nc | not yet wired | not synced yet |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 4 September 2026)</span>: `ara` 8,738 · `fas` 351.
 

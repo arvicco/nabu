@@ -102,7 +102,8 @@ module Nabu
       # The absolute floor AND the unavailable-count fallback: the tuning-era
       # cutoff, binding only for corpora below the tuning size (where the
       # relative cutoff would over-prune) and when the live count cannot be read.
-      # census: 68408109, 2026-08-04, live fulltext passages (P57 full rebuild);
+      # P96 audit re-stamp (mechanisms verified scale-safe at 106.9M).
+      # census: 106877441, 2026-09-04, live fulltext passages (P57 full rebuild);
       # tuned at 3.76M where 500 grams ≈ 133 ppm, re-affirmed at 24.4M and 68.4M
       # as an ABSOLUTE df floor (D36-a) — at today's scale 500 df ≈ 7.3 ppm, so
       # the floor binds ever more conservatively, never silently looser
@@ -110,7 +111,8 @@ module Nabu
 
       # Join+dedupe this many top-scored candidate passages to fill the page
       # (enough that document-grain grouping still yields `limit` documents).
-      # census: 68408109, 2026-08-04, live passages; page-fill overfetch (the
+      # P96 audit re-stamp (mechanisms verified scale-safe at 106.9M).
+      # census: 106877441, 2026-09-04, live passages; page-fill overfetch (the
       # INNER_LIMIT_FACTOR class — document grouping thins candidates)
       CANDIDATE_FACTOR = 30
       MIN_CANDIDATES = 300
@@ -125,7 +127,8 @@ module Nabu
       RARE_LEMMA_DF_RATIO = Rational(2_000, 3_760_000)
 
       # The absolute floor AND the unavailable-count fallback (tuning-era cutoff).
-      # census: 68408109, 2026-08-04, live fulltext passages (P57 full rebuild);
+      # P96 audit re-stamp (mechanisms verified scale-safe at 106.9M).
+      # census: 106877441, 2026-09-04, live fulltext passages (P57 full rebuild);
       # tuned at 3.76M where 2,000 lemmas ≈ 532 ppm, re-affirmed at 24.4M and
       # 68.4M as an ABSOLUTE df floor (D36-a) — see COMMON_GRAM_DF note
       RARE_LEMMA_DF = 2_000
