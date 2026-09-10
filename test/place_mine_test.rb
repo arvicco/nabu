@@ -26,7 +26,12 @@ class PlaceMineTest < Minitest::Test
   # first row), an ambiguous name resolving to four places, a
   # single-char name, and a Latin-script name.
   def derive_gazetteer
-    places = [
+    Nabu::Store::PlaceIndex.derive!(@catalog, gazetteer: "chgis", places: derive_places,
+                                              names_for: :name_keys.to_proc)
+  end
+
+  def derive_places
+    [
       Place.new(id: "hvd_1", title: "霸州", lat: 39.1, lon: 116.4,
                 place_types: ["zhou"], time_periods: ["1820"], name_keys: ["霸州", "ba zhou"]),
       Place.new(id: "hvd_2", title: "順天府", lat: 39.9, lon: 116.4,
@@ -42,8 +47,6 @@ class PlaceMineTest < Minitest::Test
       Place.new(id: "hvd_9", title: "東", lat: 5, lon: 5, place_types: [], time_periods: [],
                 name_keys: ["東"])
     ]
-    Nabu::Store::PlaceIndex.derive!(@catalog, gazetteer: "chgis", places: places,
-                                              names_for: :name_keys.to_proc)
   end
 
   def seed_passages
@@ -96,6 +99,35 @@ class PlaceMineTest < Minitest::Test
     second = miner.apply!(source: "kanripo")
     assert_equal 1, second.superseded_runs
     assert_equal 3, @journal[:links].count, "reruns supersede, never accrete"
+  end
+
+  # Pass 2 must exclude DERIVED stops from the scan itself — the first
+  # real kanripo apply crashed here (KeyError on 「君子」, 2026-09-10):
+  # apply! narrowed the name hash after the census but kept scanning
+  # with buckets built from the full name set.
+  def test_apply_survives_derived_stops_excluding_them_from_the_scan
+    gate = Place.new(id: "hvd_gate", title: "東門", lat: 6, lon: 6, place_types: [],
+                     time_periods: [], name_keys: ["東門"])
+    Nabu::Store::PlaceIndex.derive!(@catalog, gazetteer: "chgis",
+                                              places: derive_places + [gate],
+                                              names_for: :name_keys.to_proc)
+    doc = Nabu::Store::Document.create(source_id: @source.id, urn: "urn:nabu:kanripo:d2",
+                                       language: "lzh", title: "t2", canonical_path: "y",
+                                       content_sha256: "f" * 64)
+    22.times do |i|
+      Nabu::Store::Passage.create(document_id: doc.id, urn: "urn:nabu:kanripo:d2:#{i}",
+                                  language: "lzh", text: "出東門而去",
+                                  text_normalized: "出東門而去",
+                                  content_sha256: format("%064x", 1000 + i),
+                                  sequence: i, revision: 1)
+    end
+
+    result = miner.apply!(source: "kanripo")
+
+    assert_includes result.census.names_stopped.map(&:first), "東門",
+                    "22 hits over 25 passages exceeds the stop ceiling of 20"
+    assert_equal 3, result.edges_written, "the derived-stopped name mines nothing"
+    refute @journal[:links].where(Sequel.like(:to_urn, "%hvd_gate")).any?
   end
 
   def test_candidates_never_touch_place_ref

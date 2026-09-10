@@ -90,7 +90,7 @@ module Nabu
       edges = 0
       each_passage(source) do |row|
         passages += 1
-        hits = scan(row[:text], names)
+        hits = scan(row[:text], @buckets)
         hits.each { |name| tally[name] += 1 }
         edges += hits.sum { |name| names.fetch(name).size }
         @progress&.load_tick(passages, 0) if (passages % PAGE).zero?
@@ -111,6 +111,10 @@ module Nabu
       report = census(source: source)
       stopped = report.names_stopped.map(&:first) + @stop_names
       names = load_names.except(*stopped)
+      # The pass-2 scan gets its own buckets over the SURVIVING names —
+      # scanning with the full pass-1 buckets matches derived-stopped
+      # names the hash no longer holds (the 2026-09-10 kanripo KeyError).
+      buckets = build_buckets(names)
       @progress&.stage("place-mine: writing candidates for #{source} " \
                        "(pass 2 — #{names.size} names after stops)")
       counts = { inserted: 0, refreshed: 0 }
@@ -122,7 +126,7 @@ module Nabu
           @journal, producer: PRODUCER, scope: scope,
                     params: { kind: KIND, gazetteer: @gazetteer }, code_version: CODE_VERSION
         )
-        write_pass(source, names, run_id, counts)
+        write_pass(source, names, buckets, run_id, counts)
       end
       Result.new(census: report, run_id: run_id,
                  edges_written: counts[:inserted], edges_refreshed: counts[:refreshed],
@@ -170,13 +174,15 @@ module Nabu
     end
 
     # The distinct name keys attested in +text+ (each counted once per
-    # passage, overlaps allowed — attestations, not tokenization).
-    def scan(text, _names)
+    # passage, overlaps allowed — attestations, not tokenization),
+    # probing only +buckets+ — the scan set and the lookup hash must
+    # come from the same name set.
+    def scan(text, buckets)
       hits = nil
       i = 0
       len = text.length
       while i < len
-        bucket = @buckets[text[i]]
+        bucket = buckets[text[i]]
         bucket&.each do |name|
           next unless text[i, name.length] == name
 
@@ -214,10 +220,10 @@ module Nabu
       end
     end
 
-    def write_pass(source, names, run_id, counts)
+    def write_pass(source, names, buckets, run_id, counts)
       written = 0
       each_passage(source) do |row|
-        scan(row[:text], names).each do |name|
+        scan(row[:text], buckets).each do |name|
           names.fetch(name).each do |place_id|
             outcome = Store::LinksJournal.write_edge!(
               @journal, from_urn: row[:urn],
