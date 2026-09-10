@@ -15,8 +15,9 @@ module Nabu
   # The canonical asset is the CC0 TGAZ backup (Harvard Dataverse
   # doi:10.7910/DVN/H3OB28, tgaz_bak_2018.zip → tgaz_bak_2018.sql,
   # 122 MB, 38 tables). ONE table serves the index: `mv_pn_srch`, the
-  # dump's own search materialization — one flat row per placename
-  # (82,117 censused 2026-09-04) carrying the tgaz sys_id ("hvd_1"),
+  # dump's own search materialization — flat rows (82,117 censused
+  # 2026-09-04, coalescing to 81,292 places: the TBRC block is loaded
+  # 11× over, see .coalesce) carrying the tgaz sys_id ("hvd_1"),
   # the hanzi name, the pinyin transcription, begin/end years, WGS84
   # coordinates, the feature type in both scripts, and the parent unit.
   # The dump's INSERTs carry no column list (plain mysqldump), so the
@@ -69,6 +70,23 @@ module Nabu
       end
     end
 
+    # The 2018 dump loads its TBRC block 11× over (127 sys_ids × 11
+    # tuples identical but for the surrogate `id` — fixture README);
+    # the index keys (gazetteer, place_id), so rows sharing a sys_id
+    # coalesce to one place: first row wins the scalar fields, the
+    # name/type/period lists union. First-occurrence order is kept.
+    def coalesce(rows)
+      rows.group_by(&:id).map do |_, group|
+        next group.first if group.size == 1
+
+        group.first.with(
+          place_types: group.flat_map(&:place_types).uniq,
+          time_periods: group.flat_map(&:time_periods).uniq,
+          name_keys: group.flat_map(&:name_keys).uniq
+        )
+      end
+    end
+
     def build_row(record)
       name = record["name"].to_s.strip
       transcription = record["transcription"].to_s.strip
@@ -110,9 +128,9 @@ module Nabu
         return nil if path.nil?
 
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-        rows = ChgisIndex.each_row(path).to_a
+        places = ChgisIndex.coalesce(ChgisIndex.each_row(path).to_a)
         count = Store::PlaceIndex.derive!(
-          @catalog, gazetteer: GAZETTEER, places: rows, names_for: :name_keys.to_proc
+          @catalog, gazetteer: GAZETTEER, places: places, names_for: :name_keys.to_proc
         )
         return nil if count.nil?
 
