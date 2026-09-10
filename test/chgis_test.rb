@@ -61,10 +61,25 @@ class ChgisTest < Minitest::Test
     assert_equal "hvd_9513", ba.parent
   end
 
-  def test_all_ten_fixture_tuples_parse
-    assert_equal 10, rows.size
-    assert(rows.all? { |r| r.id.start_with?("hvd_") })
+  def test_all_twelve_fixture_tuples_parse
+    assert_equal 12, rows.size, "each_row is the raw walk — duplicates included"
     assert(rows.all? { |r| !r.name_keys.empty? })
+  end
+
+  # The real dump loads its TBRC block 11× over (fixture README) —
+  # rows sharing a sys_id must coalesce to ONE place or the derive
+  # blows the (gazetteer, place_id) unique key, as the first real
+  # sync did (2026-09-10).
+  def test_coalesce_merges_duplicated_sys_ids_preserving_order
+    places = Nabu::ChgisIndex.coalesce(rows)
+    assert_equal 11, places.size
+    tbrc_places = places.select { |p| p.id == "TBRC_G1KR100" }
+    assert_equal 1, tbrc_places.size
+    tbrc = tbrc_places.first
+    assert_equal "ཀྱོ་དགའ་དགོན", tbrc.title
+    assert_includes tbrc.name_keys, Nabu::Pleiades.name_key("kyo dga' dgon")
+    assert_equal places.map(&:id), places.map(&:id).uniq
+    assert_equal "TBRC_G1KR100", places.first.id, "first-occurrence order kept"
   end
 
   # --- the derive ----------------------------------------------------------
@@ -72,7 +87,9 @@ class ChgisTest < Minitest::Test
   def test_producer_derives_the_chgis_slice_resolvable_in_either_script
     db = store_test_db
     census = Nabu::ChgisIndex::Producer.new(catalog: db).run("chgis", workdir: FIXTURES)
-    assert_equal 10, census.places
+    assert_equal 11, census.places, "the duplicated TBRC sys_id derives as ONE place"
+    assert_equal "ཀྱོ་དགའ་དགོན",
+                 Nabu::Store::PlaceIndex.resolver(db, gazetteer: "chgis").place("TBRC_G1KR100").title
     resolver = Nabu::Store::PlaceIndex.resolver(db, gazetteer: "chgis")
     assert_equal "霸州", resolver.place("hvd_1").title
     assert_equal ["霸州"], resolver.titled("霸州").map(&:title),
