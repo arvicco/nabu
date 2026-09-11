@@ -4526,12 +4526,12 @@ cbdb:   # P96-4
   # CBDB — the China Biographical Database (Harvard/AS/Peking; ~658k
   # persons, 7th–19th c.). Self-pinning channel: the project's
   # latest.json (GitHub) carries filename + sha256 + the direct HF URL;
-  # fetch verifies the pin, a mismatch refuses. License: CC BY-NC-ND
-  # 4.0 per the project's JOHD 2022 paper (the pre-2018 BY-NC-SA grant
-  # is history; mainland commercial rights carved out to ChineseAll) —
-  # the download page 403s non-browsers, so the OWNER eyeballs the
-  # verbatim terms at first sync. v1 = acquisition + verification only;
-  # the persons-layer scout's №R decides any derived surface.
+  # fetch verifies the pin, a mismatch refuses. License: CC BY-NC-SA
+  # 4.0 — project site verbatim, owner-read at first sync 2026-09-11
+  # (the page 403s non-browsers); the HF dataset card concurs; the
+  # JOHD 2022 paper's BY-NC-ND is the outlier. Mainland commercial
+  # rights carved out to ChineseAll. v1 = acquisition + verification
+  # only; the persons-layer scout's №R decides any derived surface.
 
 kitab-reuse:   # P96-5
   adapter: Nabu::Adapters::KitabReuse
