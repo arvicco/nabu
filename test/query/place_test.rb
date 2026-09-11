@@ -243,6 +243,19 @@ module Query
                    "id-less findspot mentions count for a resolved ref card"
     end
 
+    def test_a_chgis_ref_resolves_through_its_derived_slice
+      Nabu::Store::PlaceIndex.derive!(
+        @catalog,
+        places: [Nabu::Pleiades::Place.new(id: "hvd_1", title: "霸州", lat: 39.1, lon: 116.4,
+                                           place_types: ["zhou"], time_periods: ["1820"])],
+        gazetteer: "chgis"
+      )
+      card = place_query.run("chgis:hvd_1").cards.first
+      assert_equal "chgis:hvd_1", card.ref
+      assert_equal "霸州", card.place.title,
+                   "the chgis mint routes like tm/cigs now the namespace is registry-minted"
+    end
+
     def test_a_ref_card_without_a_title_keeps_the_honest_empty_tail
       load_document(source: "ceipom", slug: "idless", place: { "ancient" => "near Girsu" })
       result = place_query.run("tm:2810")
