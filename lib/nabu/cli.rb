@@ -3583,6 +3583,7 @@ module Nabu
         nabu place cigs:GIR         # Girsu through the CIGS slice
         nabu place mine kanripo --dry-run   # Q9: census Han place-name hits (writes nothing)
         nabu place mine kanripo             # mine place-candidate edges into the links journal
+        nabu place mine report kanripo      # review the mined candidates, ranked by document spread
     HELP
     def place(*query_parts)
       return run_place_apply if query_parts == ["apply"]
@@ -3615,6 +3616,8 @@ module Nabu
       # nothing. Default gazetteer: chgis.
       def run_place_mine(args)
         args = Array(args)
+        return run_place_mine_report(args[1..]) if args.first == "report"
+
         dry = args.delete("--dry-run") ? true : false
         source, gazetteer = args
         raise Thor::Error, "usage: nabu place mine SOURCE [GAZETTEER] [--dry-run]" if source.to_s.empty?
@@ -3652,6 +3655,62 @@ module Nabu
       ensure
         journal&.disconnect
         catalog&.disconnect
+      end
+
+      # `nabu place mine report [SOURCE] [GAZETTEER] [--limit N]` (P97-1 —
+      # Q70): the aggregate review surface — mined candidates grouped by
+      # place, ranked by document spread, each row carrying its evidence
+      # and the two exits (stop-list line, place card).
+      def run_place_mine_report(args)
+        args = Array(args)
+        limit = Nabu::PlaceMineReport::DEFAULT_LIMIT
+        if (i = args.index("--limit"))
+          limit = begin
+            Integer(args[i + 1])
+          rescue TypeError, ArgumentError
+            raise Thor::Error, "place mine report: --limit needs a number"
+          end
+          args.slice!(i, 2)
+        end
+        source, gazetteer = args
+        config = Nabu::Config.load
+        journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+        if journal.nil?
+          raise Thor::Error, "place mine report: no links journal yet — run `nabu place mine SOURCE` first"
+        end
+
+        catalog = Nabu::Store.connect(config.catalog_path)
+        report = Nabu::PlaceMineReport.new(catalog: catalog, journal: journal)
+                                      .run(source: source, gazetteer: gazetteer, limit: limit)
+        print_mine_report(report)
+      rescue Nabu::CatalogBusyError => e
+        raise Thor::Error, e.message
+      ensure
+        journal&.disconnect
+        catalog&.disconnect
+      end
+
+      def print_mine_report(report)
+        scope = [report.source || "all sources", report.gazetteer || "all gazetteers"].join(" × ")
+        say "place-mine report: #{scope} — #{report.edges} candidate edges over " \
+            "#{report.total_places} places (#{format_duration(report.seconds)})"
+        if report.rows.empty?
+          say "  nothing mined in this scope — `nabu place mine SOURCE [GAZETTEER]` writes candidates"
+          return
+        end
+
+        say "  ranked by document spread; exact spread computed over the top #{report.prerank_window} by passages"
+        report.rows.each_with_index do |row, i|
+          names = row.names.map { |n, c| "「#{n}」×#{c}" }.join(" ")
+          say format("  %<rank>2d. %<title>s  %<ref>s — %<docs>d docs · %<passages>d passages · %<names>s",
+                     rank: i + 1, title: row.title || "(no title in slice)", ref: row.ref,
+                     docs: row.documents, passages: row.passages, names: names)
+          say "      sample: #{row.samples.join(' · ')}"
+          say "      exits: card `nabu place #{row.ref}` · stop-list (config/place_stop_names.yml): " \
+              "#{row.stop_lines.join(' ')}"
+        end
+        clipped = report.total_places - report.rows.size
+        say "  … #{clipped} more places below the cut (--limit raises the cap)" if clipped.positive?
       end
 
       def print_mine_census(census, applied:)
