@@ -184,6 +184,7 @@ module Nabu
       # while staying content-equivalent to a full rebuild (derive! is a
       # pure function of the unchanged canonical bytes).
       replay_place_index(db, dirty: outcomes.map(&:slug))
+      replay_person_index(db, dirty: outcomes.map(&:slug))
       # P42-0: the loader hooks maintained source_stats through each dirty
       # replay; re-deriving wholesale keeps the incremental run's stats
       # content-equivalent to a full rebuild's (the sacred invariant). A
