@@ -1,0 +1,10 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: cbdb
+adapter_test: test/cbdb_persons_test.rb
+retrieved: 2026-09-11
+files:
+  - path: person_sample.sql
+    url: https://huggingface.co/datasets/cbdb/cbdb-sqlite (cbdb_20260905.zip)
+    whole: false
+    trim: BIOG_MAIN/ALTNAME_DATA/DYNASTIES schemas verbatim + 3 real persons, 3 alt names, 1 dynasty row, exported as SQL from the held artifact

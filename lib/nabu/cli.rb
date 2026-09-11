@@ -3538,6 +3538,41 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "person NAME|REF", "The person desk card: the derived prosopography index (CBDB v1)"
+    long_desc <<~HELP, wrap: false
+      Look a person up in the derived person index (P97-2 — №R-62 option b:
+      the CBDB thin slice, ~658k persons of Chinese history). Input is an
+      authority ref (cbdb:1762) or a name in either script — hanzi, pinyin,
+      courtesy/studio names all key through the shared fold; matching is
+      exact under the fold, never fuzzy; homonyms print several cards.
+
+      `nabu person mine SOURCE` runs the CENSUS-ONLY name scan over a held
+      source's passages (the PlaceMine Han-lane shape). It writes nothing —
+      №R-62 keeps the apply gate closed until the owner reads the census.
+
+      Examples:
+        nabu person 王安石          # by name
+        nabu person "Wang Anshi"   # pinyin, same person
+        nabu person 介甫           # the courtesy name resolves too
+        nabu person cbdb:1762      # by authority ref
+        nabu person mine kanripo   # census the person-name attestations
+    HELP
+    def person(*query_parts)
+      return run_person_mine(query_parts[1..]) if query_parts.first == "mine"
+
+      query = query_parts.join(" ").strip
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+      result = Nabu::Query::Person.new(catalog: catalog).run(query)
+      result.cards.each { |card| print_person_card(card) }
+    rescue Nabu::Query::Person::Error => e
+      raise Thor::Error, e.message
+    ensure
+      catalog&.disconnect
+    end
+
     desc "place NAME|ID", "The place desk card: Pleiades gazetteer facts + the library's holdings there"
     long_desc <<~HELP, wrap: false
       The third dimension of the library (after language and time): one
@@ -3608,6 +3643,53 @@ module Nabu
     end
 
     no_commands do
+      # The person card renderer (P97-2): one line of identity, one of
+      # dates/dynasty — thin by design, like the slice.
+      def print_person_card(card)
+        years = [card.birth_year, card.death_year].compact.join("–")
+        dynasty = [card.dynasty_han, card.dynasty].compact.join(" ")
+        headline = [card.name_han, card.name].compact.join(" · ")
+        say "#{headline}  #{card.authority}:#{card.person_id}"
+        details = []
+        details << years unless years.empty?
+        details << dynasty unless dynasty.empty?
+        details << "female" if card.female
+        say "  #{details.join(' · ')}" unless details.empty?
+      end
+
+      # `nabu person mine SOURCE` (P97-2): the census-only scan; №R-62
+      # keeps the apply gate closed, so there is no --dry-run — dry is
+      # the only mode.
+      def run_person_mine(args)
+        source = Array(args).first
+        raise Thor::Error, "usage: nabu person mine SOURCE" if source.to_s.empty?
+
+        config = Nabu::Config.load
+        catalog = Nabu::Store.connect(config.catalog_path)
+        unless Nabu::Store::PersonIndex.populated?(catalog)
+          raise Thor::Error, "person mine: the person index is not derived — run `nabu sync cbdb` first"
+        end
+
+        census = Nabu::PersonMine.new(catalog: catalog, progress: progress_reporter)
+                                 .census(source: source)
+        say "person mine: #{census.source} × #{census.authority} — #{census.passages} passages " \
+            "scanned against #{census.names_loaded} Han name keys " \
+            "(#{census.names_non_han} non-Han filtered, #{census.names_ambiguous} ambiguous capped; " \
+            "#{format_duration(census.seconds)})"
+        census.name_hits.first(15).each do |name, count|
+          say format("  %<name>-12s %<count>d passages", name: name, count: count)
+        end
+        say "  … #{census.name_hits.size - 15} more attested names" if census.name_hits.size > 15
+        census.names_stopped.each do |name, count|
+          say "  STOPPED #{name} — #{count} passages (above the derived ceiling)"
+        end
+        say "  census only — №R-62 keeps the person apply gate closed until the owner rules on these numbers"
+      rescue Nabu::CatalogBusyError => e
+        raise Thor::Error, e.message
+      ensure
+        catalog&.disconnect
+      end
+
       # `nabu place mine SOURCE [GAZETTEER] [--dry-run]` (P96-3 — Q9 v0):
       # mine the gazetteer's Han name keys against SOURCE's passage text
       # into place-candidate edges (review fuel for the np: doctrine,
@@ -10778,7 +10860,8 @@ module Nabu
           "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored" \
           "#{format_collided(report)}" \
           "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}" \
-          "#{format_sync_enrichments(outcome.enrichments)}#{format_sync_place_index(outcome.place_index)}"
+          "#{format_sync_enrichments(outcome.enrichments)}#{format_sync_place_index(outcome.place_index)}" \
+          "#{format_sync_person_index(outcome.person_index)}"
       end
 
       # P39-4: the within-pass collision tail — silent at zero (house
@@ -10836,6 +10919,14 @@ module Nabu
         return "" if census.nil?
 
         "  place index #{census.places} places derived (#{format('%.1f', census.seconds)}s)"
+      end
+
+      # P97-2: the person-index tail — silent for every source deriving
+      # no persons. "person index 661351 persons derived (41.2s)".
+      def format_sync_person_index(census)
+        return "" if census.nil?
+
+        "  person index #{census.persons} persons derived (#{format('%.1f', census.seconds)}s)"
       end
 
       # The P44-i3b honesty tail: unreadable upstream files are named (the
