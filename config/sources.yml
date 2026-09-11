@@ -4505,7 +4505,7 @@ chgis:   # P96-1
   adapter: Nabu::Adapters::Chgis
   kind: module   # machinery-only — a gazetteer instrument, zero document rows
   axes: [sinitic]
-  wired: false   # flip after the owner-fired first sync (checklist §6)
+  wired: true    # first sync 2026-09-10: 81,292 places derived (TBRC dupes coalesced)
   sync_policy: manual
   # CHGIS/TGAZ — the China Historical GIS Temporal Gazetteer (Harvard–
   # Fudan; CC0 1.0 per the Dataverse dataset's own license field,
@@ -4521,7 +4521,7 @@ cbdb:   # P96-4
   adapter: Nabu::Adapters::Cbdb
   kind: module   # machinery-only — the prosopography instrument, zero document rows
   axes: [sinitic]
-  wired: false   # flip after the owner-fired first sync (checklist §6)
+  wired: true    # first sync 2026-09-10: cbdb_20260905.sqlite3 (559 MB) sha-verified against the pin
   sync_policy: manual
   # CBDB — the China Biographical Database (Harvard/AS/Peking; ~658k
   # persons, 7th–19th c.). Self-pinning channel: the project's
@@ -4537,7 +4537,7 @@ kitab-reuse:   # P96-5
   adapter: Nabu::Adapters::KitabReuse
   kind: module   # machinery-only — the intertext instrument, zero document rows
   axes: [arabic]
-  wired: false   # flip after the owner-fired first sync (checklist §6)
+  wired: true    # first sync 2026-09-11: 931,943 held∩held reuse edges from the stats TSV
   sync_policy: manual
   # KITAB Text Reuse Data (Aga Khan University; zenodo 11501559
   # v2023.1.8, CC BY-NC-SA 4.0 → nc): v1 fetches the 164 MB pairwise
