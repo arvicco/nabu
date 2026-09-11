@@ -96,7 +96,8 @@ module Nabu
       # keeps tiny gold corpora (uga: 125 passages) from judging everything
       # common. The ratio is corpus-RELATIVE by design; the absolute floor
       # binds only tiny gold corpora and LOOSENS (not tightens) as they grow.
-      # census: 68408109, 2026-08-04, live fulltext gold lemmas (P57 full
+      # P96 audit re-stamp (mechanisms verified scale-safe at 106.9M).
+      # census: 106877441, 2026-09-04, live fulltext gold lemmas (P57 full
       # rebuild): 37 gold languages (23 at the 24.4M census), counts spanning
       # sux 1,284,618 … down to the tiny floors — uga 125 (the calibration
       # example, STILL unchanged), elx 162, xhu 247, arc 268, and two new

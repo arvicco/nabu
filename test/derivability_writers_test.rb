@@ -71,7 +71,11 @@ class DerivabilityWritersTest < Minitest::Test
   # law kind. seal_fetch (P89-3) writes canonical/seal/texts/
   # (tmp+rename) + the search-index sidecars + attic copies + its state
   # ledger inside Adapter#fetch — the cantigas_fetch law kind, its
-  # fourth crawl sibling. ANY new file
+  # fourth crawl sibling. The P96-4 cbdb adapter writes
+  # canonical/cbdb/ inside Adapter#fetch — the downloaded zip
+  # (removed after unpack), the unpacked sqlite artifact, and the
+  # .cbdb-fetch.json sha pin — the zip_fetch/file_fetch law kind
+  # with a latest.json self-pinning channel. ANY new file
   # here is a deliberate allowlist decision, not a drive-by.
   WRITER_ALLOWLIST = %w[
     nabu/adapters/bfm.rb nabu/adapters/ctilc.rb
@@ -88,7 +92,7 @@ class DerivabilityWritersTest < Minitest::Test
     nabu/seal_fetch.rb
     nabu/sefaria_fetch.rb nabu/titus_fetch.rb nabu/url_download.rb
     nabu/wiki_fetch.rb nabu/zip_fetch.rb
-    nabu/adapters/burman_concordance.rb
+    nabu/adapters/burman_concordance.rb nabu/adapters/cbdb.rb
     nabu/adapters/ko_wikisource_mk.rb nabu/adapters/viet_wikisource.rb
     nabu/language_shelf.rb nabu/lemma_shelf.rb
     nabu/library_shelf.rb nabu/note_shelf.rb

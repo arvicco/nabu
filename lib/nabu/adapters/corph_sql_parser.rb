@@ -50,17 +50,22 @@ module Nabu
       # Yield one { column => value } hash per row of +table+, in dump order,
       # across every INSERT statement for that table (phpMyAdmin chunks large
       # tables into many). Without a block, returns an Enumerator.
-      def each_row(table, &block)
-        return enum_for(:each_row, table) unless block
+      # +columns:+ (P96-1, the TGAZ dump): plain-mysqldump INSERTs omit the
+      # column list ("INSERT INTO `t` VALUES …"); a caller that knows the
+      # schema supplies the names, keyed in CREATE TABLE order. A header
+      # WITH its own list still wins; neither present stays the loud error.
+      def each_row(table, columns: nil, &block)
+        return enum_for(:each_row, table, columns: columns) unless block
 
         prefix = "INSERT INTO `#{table}`"
+        declared = columns
         columns = nil
         buffer = +""
         File.foreach(@path) do |line|
           if columns.nil?
             next unless line.start_with?(prefix)
 
-            columns = statement_columns(line)
+            columns = statement_columns(line, fallback: declared)
             buffer = +(line[/VALUES\s*(.*)\z/m, 1] || "")
           else
             buffer << line
@@ -74,9 +79,13 @@ module Nabu
 
       private
 
-      def statement_columns(line)
+      def statement_columns(line, fallback: nil)
         list = line[/\AINSERT INTO `\w+` \(([^)]*)\) VALUES/, 1]
-        raise ParseError, "#{@path}: INSERT without a column list: #{line[0, 80].inspect}" if list.nil?
+        if list.nil?
+          return fallback if fallback
+
+          raise ParseError, "#{@path}: INSERT without a column list: #{line[0, 80].inspect}"
+        end
 
         list.split(",").map { |column| column.strip.delete("`") }
       end
