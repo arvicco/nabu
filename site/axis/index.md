@@ -74,7 +74,7 @@ Gothic on the proiel/ud treebanks beside the West and North Germanic branches: O
 
 > The Celticist — from Lepontic stones to the Old Irish glossators.
 
-Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogham Primitive Irish, CorPH's Early Irish, the UD Old Irish treebanks, and the kaikki attested-Celtic extracts riding wiktionary-recon.
+Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogham Primitive Irish, CorPH's Early Irish, the UD Old Irish treebanks, the kaikki attested-Celtic extracts riding wiktionary-recon, and the GPC open subset as the Welsh dictionary shelf.
 
 [Open the celtic desk]({{ '/axis/celtic/' | relative_url }})
 

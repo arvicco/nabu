@@ -1,0 +1,10 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: gpc
+adapter_test: test/adapters/gpc_test.rb
+retrieved: 2026-09-11
+files:
+  - path: gpc_sample.xlsx
+    url: supplied by the GPC editor by email, 2026-09-04 (CC BY 4.0 open subset; site publication announced upstream)
+    whole: false
+    trim: sheet1 cut to header + first six real rows verbatim; sharedStrings rebuilt/remapped to match; calcChain dropped

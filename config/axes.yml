@@ -38,7 +38,7 @@ germanic:
 
 celtic:
   persona: "The Celticist — from Lepontic stones to the Old Irish glossators."
-  desc: "Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogham Primitive Irish, CorPH's Early Irish, the UD Old Irish treebanks, and the kaikki attested-Celtic extracts riding wiktionary-recon."
+  desc: "Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogham Primitive Irish, CorPH's Early Irish, the UD Old Irish treebanks, the kaikki attested-Celtic extracts riding wiktionary-recon, and the GPC open subset as the Welsh dictionary shelf."
 
 italic:
   persona: "The Italicist — the languages of pre-Roman Italy, Oscan to Etruscan to Raetic."
