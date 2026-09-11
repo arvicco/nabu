@@ -4549,7 +4549,7 @@ kitab-reuse:   # P96-5
 gpc:   # P97-3
   adapter: Nabu::Adapters::Gpc
   axes: [celtic]
-  wired: false   # flip after the first drop-sync verifies
+  wired: true    # first drop-sync 2026-09-11: 89,386 entries loaded, 5 id-less rows skipped
   sync_policy: manual
   # Geiriadur Prifysgol Cymru — the OPEN-ACCESS SUBSET (CC BY 4.0,
   # grantor's terms by email 2026-09-04: no website-HTML scraping/

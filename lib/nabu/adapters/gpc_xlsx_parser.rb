@@ -128,7 +128,11 @@ module Nabu
 
       def gloss(english)
         first = split_segments(english).first
-        first.nil? || first.empty? ? nil : Nabu::Normalize.nfc(first)
+        return nil if first.nil? || first.empty?
+
+        # "@" separates near-synonym glosses inside one segment (the
+        # aberth shape); the short gloss is the first of them.
+        Nabu::Normalize.nfc(first.split("@").first.strip)
       end
 
       # The body as labelled plain lines, ending with the entry's GPC
@@ -138,8 +142,9 @@ module Nabu
         lines << "pos: #{cells['E']}" unless blank?(cells["E"])
         variants = split_segments(cells["D"])
         lines << "variants: #{variants.join('; ')}" unless variants.empty?
-        lines << "plural: #{cells['F']}" unless blank?(cells["F"])
-        english = split_segments(cells["G"])
+        plurals = split_segments(cells["F"])
+        lines << "plural: #{plurals.join('; ')}" unless plurals.empty?
+        english = split_segments(cells["G"]).map { |seg| seg.split("@").map(&:strip).join(", ") }
         lines << "en: #{english.join('; ')}" unless english.empty?
         lines << "GPC Online: https://www.geiriadur.ac.uk/gpc/gpc.html?#{id}"
         Nabu::Normalize.nfc(lines.join("\n"))

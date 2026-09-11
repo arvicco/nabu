@@ -49,7 +49,21 @@ class GpcTest < Minitest::Test
     assert_kind_of Nabu::DictionaryDocument, document
     assert_equal "gpc", document.slug
     assert_equal "cy", document.language
-    assert_equal 6, document.size, "six real rows, all id-bearing"
+    assert_equal 7, document.size, "seven real rows, all id-bearing"
+  end
+
+  # The first live card (aberth) exposed the other two upstream
+  # separators: "@" between sense glosses inside a G segment, and "_"
+  # in the plural column — both split honestly now.
+  def test_aberth_splits_the_at_and_underscore_separators
+    entry = document.entries.find { |e| e.entry_id == "gpc122248" }
+    assert_equal "aberth", entry.headword
+    assert_equal "a sacrificing or offering", entry.gloss,
+                 "the gloss is the first sense fragment, @-separators stripped"
+    assert_includes entry.body, "plural: aberthau; aberthoedd; ebyrth"
+    assert_includes entry.body, "a sacrificing or offering, victim, treasure, also fig."
+    refute_includes entry.body, "@"
+    refute_includes entry.body, "aberthau_"
   end
 
   def test_entries_carry_the_stable_gpc_id_and_both_homographs
