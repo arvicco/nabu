@@ -63,3 +63,11 @@ Egyptian) — SCRIPT subtags, while the stored passage surface is Latin
 transliteration. Nabu ingests both as `egy` with the stage as a document
 facet (`stage: demotic` / `late-egyptian`) — the damaskini Norm
 precedent; no invented subtags.
+
+2026-09-11 (Q68/P97-4): ONE real row appended to
+late-egyptian-v19/train.jsonl — the first upstream row whose
+`hieroglyphs` run carries `<g>N46</g>` (a standard Gardiner code in
+the inline no-codepoint escape) — so the char corpus panel's tla-hf
+lane pins BOTH counting shapes (glyph runs and `<g>` codes). The
+matching U+13EC7 (N46) lines were appended verbatim to
+test/fixtures/unikemet/Unikemet.txt the same day.

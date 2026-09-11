@@ -77,7 +77,7 @@ class HieroglyphsTest < Minitest::Test
   end
 
   def test_sign_count_and_glyph_rendering
-    assert_equal 6, signs.sign_count
+    assert_equal 7, signs.sign_count, "six original signs + N46 (added for the Q68 <g>-escape lane)"
     assert_equal "𓈖", signs.sign_for_code("N35").glyph
   end
 

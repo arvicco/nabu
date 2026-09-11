@@ -22,12 +22,17 @@ module Nabu
       # Gardiner-style code shape (kEH_JSesh: A1, G43, Aa27D, P8h, O29v…).
       CODE = /\A[A-Z][A-Za-z]?\d{1,3}[A-Za-z]{0,2}\z/
 
-      # census: aes, 2026-08-09 — the one held source whose token
-      # annotations carry Gardiner codes (hiero_inventar); a new
-      # hiero-annotated shelf joins this list. The scan is scoped to these
+      # census: P96 assumption audit (Q68, generalized P97-4) — each
+      # hiero-annotated shelf carries its OWN annotation key and counting
+      # shape; a new shelf adds a row here. The scan stays scoped to these
       # sources' documents so a desk card never walks the whole passages
       # table (8M+ rows; the unscoped LIKE scan measured in MINUTES).
-      HIERO_SOURCES = %w[aes].freeze
+      #   aes    — "hiero_inventar": semicolon-joined Gardiner codes
+      #            (measured 2026-08-09).
+      #   tla-hf — "hieroglyphs": rendered glyph runs with inline
+      #            <g>CODE</g> escapes for signs without codepoints
+      #            (3,606 annotated passages measured at the P96 audit).
+      HIERO_SOURCES = { "aes" => :inventar, "tla-hf" => :glyph_run }.freeze
 
       # +overlay+ (P72-6): the Nabu::EdubbaOverlay read seam, or nil when
       # the module is unsynced — the card degrades to no didactic section.
@@ -79,32 +84,63 @@ module Nabu
         entry && Nabu::Query::Char.serialize(entry).merge("attribution" => Nabu::EdubbaOverlay::ATTRIBUTION)
       end
 
-      # Passage + token counts of the sign's Gardiner code over held
-      # hiero_inventar annotations (aes). SQL LIKE prefilters the scoped
-      # scan; the count is semicolon-bounded in Ruby — N35 must never
-      # count N35A. No catalog / no passages table / no code → {}.
+      # Passage + token counts of the sign over every held hiero-annotated
+      # shelf, each counted by its own shape (HIERO_SOURCES): aes's
+      # semicolon-bounded Gardiner codes (N35 must never count N35A) and
+      # tla-hf's glyph runs (the rendered codepoint plus the <g>CODE</g>
+      # no-codepoint escape). SQL LIKE prefilters each scoped scan.
+      # No catalog / no passages table / no code → {}.
       def corpus_panel(sign)
         code = sign.jsesh
         return {} unless code && @catalog&.table_exists?(:passages)
 
         passages = 0
         tokens = 0
-        escaped = code.gsub(/[%_\\]/) { |c| "\\#{c}" }
-        source_ids = @catalog[:sources].where(slug: HIERO_SOURCES).select(:id)
+        HIERO_SOURCES.each do |slug, shape|
+          count_source(slug, shape, sign) do |passage_tokens|
+            passages += 1
+            tokens += passage_tokens
+          end
+        end
+        passages.zero? ? {} : { "passages" => passages, "signs" => tokens }
+      end
+
+      def count_source(slug, shape, sign)
+        code = sign.jsesh
+        key = shape == :inventar ? "hiero_inventar" : "hieroglyphs"
+        # The tla-hf prefilter must OR both spellings: a sign upstream
+        # lacked a codepoint for is written ONLY as its <g>CODE</g>
+        # escape, never as the glyph Unikemet later assigned.
+        needles = shape == :inventar ? [code] : [sign.glyph, "<g>#{code}</g>"].compact
+        spellings = needles.map do |needle|
+          escaped = needle.gsub(/[%_\\]/) { |c| "\\#{c}" }
+          Sequel.like(:annotations_json, "%#{escaped}%", escape: "\\")
+        end
+        source_ids = @catalog[:sources].where(slug: slug).select(:id)
         document_ids = @catalog[:documents].where(source_id: source_ids).select(:id)
         @catalog[:passages]
           .where(withdrawn: false, document_id: document_ids)
-          .where(Sequel.like(:annotations_json, "%hiero_inventar%", escape: "\\"))
-          .where(Sequel.like(:annotations_json, "%#{escaped}%", escape: "\\"))
+          .where(Sequel.like(:annotations_json, "%#{key}%", escape: "\\"))
+          .where(Sequel.|(*spellings))
           .select_map(:annotations_json).each do |json|
-          count = json.to_s.scan(/"hiero_inventar":\s*"([^"]*)"/)
-                      .sum { |(value)| value.split(";").count(code) }
-          next if count.zero?
-
-          passages += 1
-          tokens += count
+          count = count_in(json.to_s, shape, sign)
+          yield count unless count.zero?
         end
-        passages.zero? ? {} : { "passages" => passages, "signs" => tokens }
+      end
+
+      # One passage's token count under the source's shape.
+      def count_in(json, shape, sign)
+        code = sign.jsesh
+        if shape == :inventar
+          json.scan(/"hiero_inventar":\s*"([^"]*)"/)
+              .sum { |(value)| value.split(";").count(code) }
+        else
+          json.scan(/"hieroglyphs":\s*"((?:[^"\\]|\\.)*)"/).sum do |(value)|
+            run = value.gsub(/\\u([0-9a-fA-F]{4})/) { [Regexp.last_match(1).hex].pack("U") }
+            glyphs = sign.glyph ? run.scan(sign.glyph).size : 0
+            glyphs + run.scan("<g>#{code}</g>").size
+          end
+        end
       end
     end
   end

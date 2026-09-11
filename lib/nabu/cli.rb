@@ -19,7 +19,17 @@ module Nabu
   # builder and writes the dataset directory into the owner's nabu-data
   # working clone. The rail writes FILES there and never runs git operations —
   # publishing the data repo is the owner's explicit act.
+  # The one duration voice (Q69/P97-4): Xs under a minute, else XmYYs —
+  # shared by every Thor class that prints a timed summary line.
+  module DurationFormat
+    def format_duration(secs)
+      secs < 60 ? "#{secs.round(1)}s" : "#{(secs / 60).floor}m#{format('%02d', (secs % 60).round)}s"
+    end
+  end
+
   class DataCLI < Thor
+    include DurationFormat
+
     # Thor 1.5's inherited built-ins (`tree`) render under the class
     # auto-namespace ("data_c_l_i") without this — listed in help yet not
     # invocable. The explicit namespace keeps banners truthful.
@@ -105,8 +115,9 @@ module Nabu
                            "#{available_features_hint}"
       end
 
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       summary = build_runner.run(feature: feature, into: options[:into])
-      print_build_summary(summary)
+      print_build_summary(summary, seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
       say "No git operations were performed in #{options[:into]} — review, commit, and push there yourself."
     rescue Nabu::Error => e
       raise Thor::Error, "data build: #{e.message}"
@@ -126,8 +137,9 @@ module Nabu
         Nabu::DataBuild::Runner.new(config: config, registry: registry, catalog: catalog)
       end
 
-      def print_build_summary(summary)
-        say "Built #{summary.slug} → #{summary.out_dir}"
+      def print_build_summary(summary, seconds: nil)
+        elapsed = seconds ? " (#{format_duration(seconds)})" : ""
+        say "Built #{summary.slug} → #{summary.out_dir}#{elapsed}"
         summary.files.each do |path, rows|
           if rows.nil?
             say "  #{path}"
@@ -147,6 +159,7 @@ module Nabu
         built = 0
         failed = []
         skipped = []
+        all_started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         Nabu::DataBuild.features.each do |feature|
           if feature.planned?
             skipped << feature.slug
@@ -154,14 +167,18 @@ module Nabu
             next
           end
           begin
-            print_build_summary(runner.run(feature: feature, into: options[:into]))
+            started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+            summary = runner.run(feature: feature, into: options[:into])
+            print_build_summary(summary,
+                                seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
             built += 1
           rescue Nabu::Error => e
             failed << feature.slug
             say "FAILED #{feature.slug}: #{e.message}", :red
           end
         end
-        say "#{built} dataset(s) built, #{skipped.size} skipped (planned), #{failed.size} failed"
+        say "#{built} dataset(s) built, #{skipped.size} skipped (planned), #{failed.size} failed " \
+            "in #{format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - all_started)}"
         say "No git operations were performed in #{options[:into]} — review, commit, and push there yourself."
         raise Thor::Error, "data build --all: failed: #{failed.join(', ')}" unless failed.empty?
       end
@@ -811,8 +828,10 @@ module Nabu
       end
 
       catalog = Nabu::Store.connect(config.catalog_path)
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: slug)
-      say "metadata-dates lane (#{slug}): #{rows} rows projected"
+      say "metadata-dates lane (#{slug}): #{rows} rows projected " \
+          "(#{format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)})"
     ensure
       catalog&.disconnect
     end
@@ -849,6 +868,8 @@ module Nabu
   # ingest/query subcommands are stubs that report "not implemented" and exit 1
   # so scripts and CI can rely on the failure signal before the real work lands.
   class CLI < Thor
+    include DurationFormat
+
     # The DataCLI namespace note applies at the root too: without it Thor
     # 1.5's `tree` labels its root with the class auto-namespace ("nabu:c_l_i").
     namespace "nabu"
@@ -3821,6 +3842,7 @@ module Nabu
         Nabu::Store.assert_writable!(config.catalog_path)
         catalog = Nabu::Store.connect(config.catalog_path)
         Nabu::Store.migrate!(catalog)
+        apply_started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         census = Nabu::PlaceApply.run(catalog: catalog, canonical_dir: config.canonical_dir)
         if census.nil?
           say "place apply: no nabu-places registry under canonical/ — " \
@@ -3837,7 +3859,8 @@ module Nabu
                 "(#{Nabu::Certainty.gloss(:places_certainty, info[:certainty])})"
           end
         end
-        say "place apply: #{census[:total]} axis rows updated"
+        say "place apply: #{census[:total]} axis rows updated " \
+            "(#{format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - apply_started)})"
       rescue Nabu::CatalogBusyError => e
         raise Thor::Error, e.message
       ensure
@@ -9085,7 +9108,8 @@ module Nabu
         return if card.corpus.empty?
 
         say ""
-        say "in the wild (aes hiero_inventar): #{card.corpus['signs']} sign(s) across " \
+        say "in the wild (#{Nabu::Query::HieroCard::HIERO_SOURCES.keys.join(' + ')} annotations): " \
+            "#{card.corpus['signs']} sign(s) across " \
             "#{card.corpus['passages']} passage(s)"
       end
 
@@ -10027,8 +10051,7 @@ module Nabu
       end
 
       def format_elapsed(state)
-        secs = Process.clock_gettime(Process::CLOCK_MONOTONIC) - state[:started]
-        secs < 60 ? "#{secs.round(1)}s" : "#{(secs / 60).floor}m#{format('%02d', (secs % 60).round)}s"
+        format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - state[:started])
       end
 
       def load_tick(tty, state)
@@ -11066,11 +11089,6 @@ module Nabu
         say format("  %-#{width}s  %10s", "GRAND TOTAL", format_duration(profile.grand_total))
         say "  note: fts+lemma is one fused pass; parse/insert are per-document samples inside load."
         say "  note: text-normalization/fold (search_form) runs at Passage build, so it is inside parse."
-      end
-
-      # Seconds → the rebuild-progress voice (Xs under a minute, else XmYYs).
-      def format_duration(secs)
-        secs < 60 ? "#{secs.round(1)}s" : "#{(secs / 60).floor}m#{format('%02d', (secs % 60).round)}s"
       end
 
       def format_report(label, report)
