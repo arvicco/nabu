@@ -7525,6 +7525,58 @@ class CLITest < Minitest::Test
     end
   end
 
+  # P97 rider (owner ask 2026-09-11: "there needs to be a way to list
+  # wired/unwired, enabled/disabled, locked/unlocked sources"): the six
+  # STATE WORDS filter the registry — no catalog needed, so the view
+  # works on a fresh box before any sync.
+  def test_list_wired_and_unwired_filter_the_registry
+    with_states_registry do |config|
+      out, _err, status = with_config(config) { run_cli(%w[list wired]) }
+      assert_nil status
+      assert_includes out, "alpha"
+      assert_includes out, "gated"
+      refute_match(/^\s*beta\b/, out, "unwired sources stay out of the wired view")
+
+      out, = with_config(config) { run_cli(%w[list unwired]) }
+      assert_match(/^\s*beta\b/, out)
+      refute_match(/^\s*alpha\b/, out)
+    end
+  end
+
+  def test_list_enabled_and_disabled_read_the_box_profile
+    with_states_registry do |config|
+      out, = with_config(config) { run_cli(%w[list enabled]) }
+      assert_match(/^\s*alpha\b/, out)
+      refute_match(/^\s*beta\b/, out, "beta is not in the profile")
+
+      out, = with_config(config) { run_cli(%w[list disabled]) }
+      assert_match(/^\s*beta\b/, out)
+      refute_match(/^\s*alpha\b/, out)
+      assert_includes out, "nabu enable", "the disabled view carries its on-ramp"
+    end
+  end
+
+  def test_list_locked_and_unlocked_read_the_availability_posture
+    with_states_registry do |config|
+      out, = with_config(config) { run_cli(%w[list locked]) }
+      assert_match(/^\s*gated\b/, out)
+      assert_includes out, "grant", "a locked row says why (grant-gated)"
+      refute_match(/^\s*alpha\b/, out)
+
+      out, = with_config(config) { run_cli(%w[list unlocked]) }
+      assert_match(/^\s*alpha\b/, out)
+      refute_match(/^\s*gated\b/, out)
+    end
+  end
+
+  def test_list_state_views_need_no_catalog
+    with_states_registry do |config|
+      refute File.exist?(config.catalog_path)
+      _out, _err, status = with_config(config) { run_cli(%w[list wired]) }
+      assert_nil status, "state views read registry + profile only — a fresh box answers"
+    end
+  end
+
   private
 
   def with_env(pairs)
@@ -7752,6 +7804,35 @@ class CLITest < Minitest::Test
   # documents, a mixed license story and one dated document; a dictionary
   # shelf; and a manifest-collection shelf — everything `nabu list` renders,
   # seeded directly (no fulltext index needed: list reads only the catalog).
+
+  def with_states_registry
+    Dir.mktmpdir("nabu-cli-states") do |root|
+      sources = File.join(root, "sources.yml")
+      File.write(sources, <<~YAML)
+        alpha:
+          adapter: TestAdapter
+          wired: true
+          sync_policy: manual
+        beta:
+          adapter: TestAdapter
+          wired: false
+          sync_policy: manual
+        gated:
+          adapter: TestAdapter
+          wired: true
+          availability: blocked
+          sync_policy: manual
+      YAML
+      config = Nabu::Config.new(
+        canonical_dir: File.join(root, "canonical"), db_dir: File.join(root, "db"),
+        sources_path: sources,
+        config_path: File.join(File.dirname(sources), "config", "nabu.yml")
+      )
+      Nabu::Profile.new(%w[alpha gated]).save(config.profile_path)
+      yield config
+    end
+  end
+
   def with_list_corpus
     Dir.mktmpdir("nabu-cli-list") do |root|
       sources = File.join(root, "sources.yml")

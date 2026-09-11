@@ -1402,6 +1402,13 @@ module Nabu
       ledger&.disconnect
     end
 
+    # `nabu list wired|unwired|enabled|disabled|locked|unlocked` (P97
+    # rider, owner ask 2026-09-11): the three state axes as filters —
+    # wired (registry: first sync verified) · enabled (this box's
+    # profile) · locked (availability: blocked — grant-gated rows).
+    # Registry + profile only, no catalog: a fresh box answers.
+    LIST_STATE_WORDS = %w[wired unwired enabled disabled locked unlocked].freeze
+
     desc "list [SOURCE]", "What the library holds: the shelf census, or one source's card " \
                           "(`nabu status` shows sync state)"
     long_desc <<~HELP, wrap: false
@@ -1437,6 +1444,12 @@ module Nabu
       derivation. Disabled sources stay visible with an (off) tag; a source
       without a dossier description shows the honest stub hint. Composes
       with nothing — it IS the whole-library view.
+
+      `nabu list wired|unwired|enabled|disabled|locked|unlocked` filters
+      the registry by one state axis and shows each row's full posture —
+      wired (first sync verified) · enabled (this box's profile) · locked
+      (grant-gated availability). Registry + profile only, no catalog
+      needed: a fresh box answers.
 
       `nabu list --axis` groups the census under the research axes (the
       owner's desks, config/axes.yml): each axis leads with its persona
@@ -1548,6 +1561,8 @@ module Nabu
     def list(slug = nil)
       refuse_all_with_disabled!("list")
       slug = slug.to_s.strip
+      return list_by_state(slug) if LIST_STATE_WORDS.include?(slug)
+
       validate_list_flags!(slug)
       validate_license!(options[:license])
       from, to = date_window
@@ -5345,6 +5360,47 @@ module Nabu
           profile: effective_profile(config, registry, catalog: catalog),
           registry: registry, all: options[:all], disabled: options[:disabled] || false
         )
+      end
+
+      def list_by_state(state)
+        config = Nabu::Config.load
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        profile = Nabu::Profile.exist?(config.profile_path) ? Nabu::Profile.load(config.profile_path) : nil
+        enabled = enabled_slugs(profile, registry)
+        rows = registry.each_source.select do |entry|
+          case state
+          when "wired" then entry.wired
+          when "unwired" then !entry.wired
+          when "enabled" then enabled.include?(entry.slug)
+          when "disabled" then !enabled.include?(entry.slug)
+          when "locked" then entry.blocked?
+          when "unlocked" then !entry.blocked?
+          end
+        end
+        say "#{state} sources (#{rows.size} of #{registry.slugs.size} registered):"
+        rows.sort_by(&:slug).each { |entry| say "  #{entry.slug}  #{state_chips(entry, enabled)}" }
+        say "  (none)" if rows.empty?
+        say "  enable with `nabu enable <axis|source>`" if state == "disabled" && rows.any?
+      end
+
+      # The box's effective enabled set: the stored profile resolved
+      # against the registry (modules pre-enabled by nature); no profile
+      # file = the fresh-box default entries.
+      def enabled_slugs(profile, registry)
+        profile ||= Nabu::Profile.new(Nabu::Profile.default_entries(registry))
+        view = Nabu::Focus.view(profile: profile, registry: registry, all: false)
+        registry.slugs.select { |slug| view.visible?(slug) }.to_set
+      end
+
+      # The OTHER two axes as compact chips, so any state view shows the
+      # full posture of each row.
+      def state_chips(entry, enabled)
+        chips = []
+        chips << (entry.wired ? "wired" : "unwired")
+        chips << (enabled.include?(entry.slug) ? "enabled" : "disabled")
+        chips << "locked (grant-gated)" if entry.blocked?
+        chips << entry.kind if entry.kind != "source"
+        chips.join(" · ")
       end
 
       # --all is everything, --disabled the not-yet-enabled complement —

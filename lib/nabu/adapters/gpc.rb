@@ -44,7 +44,10 @@ module Nabu
         parser_family: "gpc-xlsx"
       )
 
-      XLSX_GLOB = "*GPC*.xlsx"
+      # Any .xlsx in the workdir is the workbook (one artifact per
+      # drop; the vintage-dated filename changes on refresh). A named
+      # *GPC* glob bit CI: macOS matches case-insensitively, Linux not.
+      XLSX_GLOB = "*.xlsx"
       DICTIONARY_SLUG = "gpc"
       LANGUAGE = "cy"
       TITLE = "Geiriadur Prifysgol Cymru (open subset)"
