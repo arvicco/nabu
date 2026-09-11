@@ -80,3 +80,58 @@ off the same `document_axes` row. The health invariants hold the layer:
 `unresolvable_place_refs` (per-namespace, both URL and mint spellings)
 and `registry_orphan_names` (era-bound census discipline on the
 registry itself).
+
+## The mining loop (Q9 v0, P96–P97) — the documented script
+
+Text-mined place candidates for metadata-less corpora, the Han lane
+first (kanripo × chgis is the flagship). Candidates are **review
+fuel**: they live as `kind=place-candidate` edges in the links
+journal, they never touch `place_ref` directly, and a re-run
+supersedes cleanly — so the whole loop below is safely repeatable.
+The precision rules (all censused, never silent): names under 2
+characters never match; a name resolving to more than 3 places is
+dropped as ambiguous; a name hitting more than 0.2% of scanned
+passages is derived-stopped as a common word wearing a place's
+clothes; `config/place_stop_names.yml` is the standing hand list.
+
+The script, in order:
+
+```
+# 0 · Prerequisite: the gazetteer slice must be derived.
+bin/nabu sync chgis                       # (or any place_index gazetteer)
+
+# 1 · CENSUS (writes nothing) — read the derived stop list before
+#     any real run. ~46 min per 4.5M-passage source; announced + ticked.
+bin/nabu place mine kanripo chgis --dry-run
+
+# 2 · MINE — census + write in one command (two full scans; ~92 min
+#     at kanripo scale; the summary reports both counts and elapsed).
+bin/nabu place mine kanripo chgis
+
+# 3 · REVIEW — the aggregate report: candidates grouped by place,
+#     ranked by document spread, ~1 min over 3.8M edges.
+bin/nabu place mine report kanripo chgis --limit 30
+#     Expect the HEAD to be common-compound false positives first
+#     (和平, 空中, 雨露…) — each row prints its ready-to-paste
+#     stop-list line and its place-card ref.
+
+# 4 · RULE — paste the stop lines the head hands you (owner ruling):
+#     config/place_stop_names.yml, under stop_names:.
+#     A real place instead earns its np: decision through the
+#     nabu-places registry (see rule 5 above), then `nabu place apply`.
+
+# 5 · RE-MINE — the rerun supersedes the whole scope; stopped names
+#     vanish, the report re-ranks, repeat 3–5 until the head is
+#     places, not particles.
+bin/nabu place mine kanripo chgis
+bin/nabu place mine report kanripo chgis
+
+# Spot-reads at any point:
+bin/nabu links <passage-urn>        # the candidates on one passage
+bin/nabu place chgis:hvd_<n>        # the place behind a candidate
+```
+
+Grain honesty: the report's exact document spread is computed over
+the top 5×limit places by passage count (announced in its header) —
+review works the head of the distribution, and the head is exactly
+where the rulings are.
