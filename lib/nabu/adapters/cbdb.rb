@@ -23,27 +23,25 @@ module Nabu
     # artifact refuses loudly; a re-fetch of an unchanged release is a
     # no-op by sha.
     #
-    # == License (the drift the P96-0 read caught)
+    # == License (settled at first sync, 2026-09-11)
     #
-    # Q63's 2026-09-02 note recorded the PRE-2018 license (BY-NC-SA).
-    # The project's current statements (the JOHD 2022 paper and the
-    # project handbook records) say **CC BY-NC-ND 4.0**, with a
-    # mainland-China exclusive commercial license carved out to
-    # ChineseAll. The primary download page answers 403 to
-    # non-browsers, so the owner EYEBALLS the page's verbatim terms at
-    # first sync. ND-honest posture: the artifact is held verbatim for
-    # local research (ND restricts sharing adaptations, not making
-    # them privately); class nc — and nothing here is served as text
-    # anyway (a module mints no documents).
+    # **CC BY-NC-SA 4.0** — the owner read the project site's verbatim
+    # terms at first sync (the page 403s non-browser clients), and the
+    # Hugging Face dataset card (cbdb/cbdb-sqlite) declares the same.
+    # The JOHD 2022 paper's BY-NC-ND wording is the outlier and does
+    # not govern the distribution channel we fetch. A mainland-China
+    # exclusive commercial license is carved out to ChineseAll. Class
+    # nc; the artifact is held verbatim for local research — a module
+    # mints no documents.
     class Cbdb < Nabu::Adapter
       LATEST_JSON_URL = "https://raw.githubusercontent.com/cbdb-project/cbdb_sqlite/master/latest.json"
 
       MANIFEST = Nabu::SourceManifest.new(
         id: "cbdb",
         name: "CBDB — China Biographical Database (prosopography instrument)",
-        license: "CC BY-NC-ND 4.0 (per the project's JOHD 2022 paper; the pre-2018 grant was " \
-                 "BY-NC-SA — owner eyeballs the download page's verbatim terms at first sync; " \
-                 "mainland-China exclusive commercial license carved out to ChineseAll)",
+        license: "CC BY-NC-SA 4.0 (project site verbatim, owner-read at first sync 2026-09-11; " \
+                 "the Hugging Face dataset card concurs; the JOHD 2022 paper's BY-NC-ND is the " \
+                 "outlier; mainland-China exclusive commercial license carved out to ChineseAll)",
         license_class: "nc",
         upstream_url: "https://github.com/cbdb-project/cbdb_sqlite",
         parser_family: "cbdb-sqlite"

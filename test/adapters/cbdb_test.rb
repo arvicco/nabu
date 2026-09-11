@@ -72,10 +72,11 @@ class CbdbTest < Minitest::Test
     end
   end
 
-  def test_manifest_is_nc_with_the_nd_drift_recorded
+  def test_manifest_is_nc_with_the_settled_license
     manifest = Nabu::Adapters::Cbdb.manifest
     assert_equal "nc", manifest.license_class
-    assert_includes manifest.license, "CC BY-NC-ND 4.0"
-    assert_includes manifest.license, "owner eyeballs", "the 403-gated primary read is honest"
+    assert_includes manifest.license, "CC BY-NC-SA 4.0"
+    assert_includes manifest.license, "owner-read at first sync 2026-09-11",
+                    "the license string records its provenance — the settled site read"
   end
 end
