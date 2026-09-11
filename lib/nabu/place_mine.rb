@@ -58,10 +58,14 @@ module Nabu
 
     STOP_NAMES_PATH = File.expand_path("../../config/place_stop_names.yml", __dir__)
 
+    # Both summary values carry their elapsed +seconds+ (owner rule
+    # 2026-09-11: time elapsed is part of all summary reporting);
+    # Result's covers both passes.
     Census = Data.define(:source, :gazetteer, :passages, :name_hits, :candidate_edges,
-                         :names_loaded, :names_non_han, :names_ambiguous, :names_stopped)
+                         :names_loaded, :names_non_han, :names_ambiguous, :names_stopped,
+                         :seconds)
     Result = Data.define(:census, :run_id, :edges_written, :edges_refreshed,
-                         :superseded_runs, :superseded_edges)
+                         :superseded_runs, :superseded_edges, :seconds)
 
     def initialize(catalog:, journal:, gazetteer:, progress: nil, stop_names: nil)
       @catalog = catalog
@@ -82,6 +86,7 @@ module Nabu
     # the gazetteer's Han name keys, tally hits per name, derive the
     # stop set. Writes nothing.
     def census(source:)
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       names = load_names
       @progress&.stage("place-mine: scanning #{source} against #{names.size} #{@gazetteer} " \
                        "Han name keys (pass 1 — census, nothing written)")
@@ -101,13 +106,15 @@ module Nabu
         name_hits: tally.sort_by { |_n, c| -c },
         candidate_edges: edges,
         names_loaded: names.size, names_non_han: @non_han, names_ambiguous: @ambiguous,
-        names_stopped: stopped
+        names_stopped: stopped,
+        seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
       )
     end
 
     # Pass 1 + pass 2: census, then write every surviving candidate edge
     # under the producer discipline.
     def apply!(source:)
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       report = census(source: source)
       stopped = report.names_stopped.map(&:first) + @stop_names
       names = load_names.except(*stopped)
@@ -130,7 +137,8 @@ module Nabu
       end
       Result.new(census: report, run_id: run_id,
                  edges_written: counts[:inserted], edges_refreshed: counts[:refreshed],
-                 superseded_runs: superseded[0], superseded_edges: superseded[1])
+                 superseded_runs: superseded[0], superseded_edges: superseded[1],
+                 seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
     end
 
     private

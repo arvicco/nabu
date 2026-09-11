@@ -74,6 +74,7 @@ class PlaceMineTest < Minitest::Test
   def test_census_counts_hits_and_applies_the_precision_rules
     report = miner.census(source: "kanripo")
     assert_equal 3, report.passages
+    assert_operator report.seconds, :>, 0, "summary reporting carries elapsed time (owner rule 2026-09-11)"
     hits = report.name_hits.to_h
     assert_equal 2, hits["霸州"], "substring attestation, once per passage"
     assert_equal 1, hits["順天府"]
@@ -86,6 +87,8 @@ class PlaceMineTest < Minitest::Test
   def test_apply_writes_candidate_edges_with_the_mined_name_riding_detail
     result = miner.apply!(source: "kanripo")
     assert_equal 3, result.edges_written, "霸州 ×2 passages + 順天府 ×1"
+    assert_operator result.seconds, :>=, result.census.seconds,
+                    "apply elapsed covers both passes (owner rule 2026-09-11)"
     edge = @journal[:links].first(to_urn: "urn:nabu:place:chgis:hvd_2")
     assert_equal "place-candidate", edge[:kind]
     assert_equal "urn:nabu:kanripo:d1:1", edge[:from_urn]
