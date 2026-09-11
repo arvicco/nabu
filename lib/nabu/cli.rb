@@ -3644,8 +3644,8 @@ module Nabu
           result = miner.apply!(source: source)
           print_mine_census(result.census, applied: true)
           say "place mine: #{result.edges_written} candidate edges written " \
-              "(#{result.superseded_edges} superseded) — review fuel for np: decisions; " \
-              "read back with `nabu links <passage urn>`"
+              "(#{result.superseded_edges} superseded) in #{format_duration(result.seconds)} " \
+              "— review fuel for np: decisions; read back with `nabu links <passage urn>`"
         end
       rescue Nabu::CatalogBusyError => e
         raise Thor::Error, e.message
@@ -3667,7 +3667,8 @@ module Nabu
               "a real exception is a config/place_stop_names.yml ruling)"
         end
         say "  candidate edges#{' (dry run — nothing written)' unless applied}: " \
-            "#{census.candidate_edges} across #{census.name_hits.size} attested names"
+            "#{census.candidate_edges} across #{census.name_hits.size} attested names " \
+            "(census pass: #{format_duration(census.seconds)})"
       end
 
       # `nabu place apply` (P63-7): project the nabu-places registry into
