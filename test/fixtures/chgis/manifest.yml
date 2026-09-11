@@ -1,0 +1,10 @@
+# Nabu fixture manifest (P5-4). Schema documented in
+# test/fixtures/perseus/manifest.yml. Built from this directory's README.md.
+source: chgis
+adapter_test: test/chgis_test.rb
+retrieved: 2026-09-04
+files:
+  - path: tgaz_bak_2018.sql
+    url: https://dataverse.harvard.edu/api/access/datafile/3370559
+    whole: false
+    trim: mv_pn_srch CREATE block + first ten INSERT tuples verbatim; statement close reinstated

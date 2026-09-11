@@ -23,6 +23,8 @@ class PlaceRefsTest < Minitest::Test
     assert_equal [%w[pleiades 433078]], Nabu::PlaceRefs.ids("pleiades:433078")
     assert_equal [%w[cigs GIR], %w[pleiades 912855]], Nabu::PlaceRefs.ids("cigs:GIR pleiades:912855"),
                  "cigs mints parse despite having no URL spelling"
+    assert_equal [%w[chgis hvd_167661]], Nabu::PlaceRefs.ids("chgis:hvd_167661"),
+                 "chgis joined the mint namespaces when nabu-places minted it (2026-09-11)"
   end
 
   def test_an_unknown_mint_namespace_yields_nothing_never_guessed

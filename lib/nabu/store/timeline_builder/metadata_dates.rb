@@ -69,6 +69,14 @@ module Nabu
           #                            uncertainty stays raw-only — no bounds invented
           "dacon" => :structured, # P88-A4: the deposit's own century attributions
           #                         (cnew<cc> stems) as per-document envelopes
+          "ko-wikisource-mk" => :structured, # P96 hygiene: the per-work year envelope was
+          #                                      minted at parse but never projected (the
+          #                                      health timeline-dark anomaly, cleared)
+          "viet-wikisource" => :structured, # P96 hygiene: same shape, same clearing
+          "corpus-gysseling" => :bounds_keys, # P96 hygiene: TOP-LEVEL integer not_before/
+          #                                     not_after + date_raw (+ a string place —
+          #                                     the croala mold); dark until now
+          "corpus-oudnederlands" => :bounds_keys, # P96 hygiene: same top-level bounds shape
           "okhc" => :year_key, # P92-6 (Q64): the per-record integer year — projected
           #                      from the CATALOG's stored metadata, no re-parse of the
           #                      1.2M documents (the whole point of the lane)
@@ -90,7 +98,11 @@ module Nabu
         # negation + a nested-TEI fallback) needs the origDate nodes and
         # lives in ElephantineTeiParser — a blind swap here would mint
         # "399-550 CE" out of an unsigned BCE pair.
-        REORDER = %w[edr bfm itant croala].freeze
+        # corpus-corporum joined P96 (the health reversed-bounds anomaly: 23
+        # rows where the composition-envelope ladder minted "later-earlier";
+        # signs are upstream-explicit CE years, so the swap is safe).
+        REORDER = %w[edr bfm itant croala corpus-corporum corpus-gysseling
+                     corpus-oudnederlands].freeze
 
         BATCH = 2_000
 
@@ -263,6 +275,14 @@ module Nabu
         def iso_year(value)
           match = value.to_s.match(/\A(-?\d{1,4})-\d{2}-\d{2}\z/)
           match && Integer(match[1], 10)
+        end
+
+        # Top-level integer bounds (corpus-gysseling / corpus-oudnederlands):
+        # not_before/not_after ride the metadata root beside date_raw; a
+        # string "place" (the Gysseling atlas resolution) rides place_name
+        # exactly like croala's.
+        def bounds_keys(meta)
+          [meta["not_before"], meta["not_after"], meta["date_raw"]]
         end
 
         def year_range(meta)

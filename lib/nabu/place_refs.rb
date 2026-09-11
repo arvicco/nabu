@@ -21,9 +21,11 @@ module Nabu
     MINT_PATTERN = /\A([a-z][a-z0-9-]*):([A-Za-z0-9_.-]+)\z/
 
     # Namespaces a mint may cite — the URL-bearing three plus cigs (site
-    # mnemonics, no per-place URL) and np (nabu-places' OWN minted records,
-    # places.yml — the P63 native lane: not only glue).
-    MINT_NAMESPACES = (URL_PATTERNS.keys + %w[cigs np]).freeze
+    # mnemonics, no per-place URL), np (nabu-places' OWN minted records,
+    # places.yml — the P63 native lane: not only glue), and chgis (TGAZ
+    # sys_ids, URL-less; entered the registry's namespaces.yml 2026-09-11
+    # via the nabu-places mint — the P96-1 module's unblock).
+    MINT_NAMESPACES = (URL_PATTERNS.keys + %w[cigs np chgis]).freeze
 
     module_function
 
