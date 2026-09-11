@@ -7,4 +7,4 @@ files:
   - path: gpc_sample.xlsx
     url: supplied by the GPC editor by email, 2026-09-04 (CC BY 4.0 open subset; site publication announced upstream)
     whole: false
-    trim: sheet1 cut to header + first six real rows verbatim; sharedStrings rebuilt/remapped to match; calcChain dropped
+    trim: sheet1 cut to header + first six real rows + the aberth row verbatim; sharedStrings rebuilt/remapped to match; calcChain dropped

@@ -8,7 +8,7 @@ passages_display: '106,877,441'
 language_codes: 167
 registry_rows: 185
 corpus_sources: 157
-live_sources: 156
+live_sources: 157
 local_shelves: 5
 feature_modules: 23
 top_languages:
@@ -60,9 +60,9 @@ top_languages:
 - code: eng
   passages: 789812
   millions: '0.8'
-dictionary_entries: 1907374
-dictionary_entries_display: '1,907,374'
-dictionary_shelves: 111
+dictionary_entries: 1996760
+dictionary_entries_display: '1,996,760'
+dictionary_shelves: 112
 gold_lemmas: 21896589
 gold_lemmas_display: '21,896,589'
 gold_lemmas_m: '21.9'

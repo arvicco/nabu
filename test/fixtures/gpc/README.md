@@ -5,7 +5,7 @@
 email under CC BY 4.0 (grant 2026-09-04; conditions: no HTML
 scraping/republication, link users to GPC Online): the original
 workbook members verbatim EXCEPT `xl/worksheets/sheet1.xml` trimmed to
-the header row + the first SIX real data rows (cells byte-verbatim,
+the header row + the first SIX real data rows + the aberth row (gpc122248 — the '@' sense-gloss and '_' plural separators) (cells byte-verbatim,
 including the two "a" homographs and a row with variants "ai_y"),
 `xl/sharedStrings.xml` rebuilt to only the strings those rows
 reference with `<v>` indices remapped accordingly, and `calcChain.xml`
