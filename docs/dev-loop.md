@@ -165,6 +165,55 @@ live corpus does. Standing rules:
    definition and state live outside the public tree by design
    (public-surface hygiene, 2026-08-30).
 
+## 6c. The phase slate — full-board candidacy (owner-ruled 2026-09-12)
+
+The failure mode this section exists to kill: a slate assembled from
+session memory over-weights whatever the last phase touched, and
+everything older — parked rulings, ruled-but-unscheduled queue items,
+month-old gap reviews — decays silently until it is folklore. (The
+specimen that forced the rule: the 2026-08-10 gap review named layer
+composition "the largest single gap this review found"; no slate in
+the following month surfaced it.) A slate is a **read product, never a
+recall product**. Standing rules:
+
+1. **The board census comes first.** Before any candidate is written,
+   read in full: the work queue (`.docs/work-queue.md`, every entry),
+   the decision register (`.docs/decision-register.md` — open rulings,
+   the slate-matters line, the calendar), the closing phase plan doc's
+   carried items, `.docs/inbox/` (unhandled intake verified against
+   the tree), the most recent gap/archaeology review, the live board
+   (`nabu health`), and two-way sister staleness (each sister's last
+   commit date against the catalog's growth since). The untracked
+   local gate duties (§6b item 6) run in the same sitting.
+2. **Every open item gets an explicit disposition** in the slate:
+   ADOPT (candidate or rider), HOLD (with the reason re-argued in
+   today's terms, never copy-pasted), or KILL (propose closing to the
+   owner). Silent omission is the defect this section bans.
+3. **Age is a signal, not a discount.** Every item carries its minted
+   date; the slate names the oldest open item and answers why it is
+   still open. An item HELD at three consecutive slates must be
+   promoted, owner-ruled dormant, or proposed for the kill — it may
+   not be silently carried a fourth time.
+4. **Gaps before candidates.** Score the library along the standing
+   axes — corpus breadth · enrichment depth · reader surfaces ·
+   publication/outward · operational hygiene · structural layers —
+   from measured state (counts, dates, the health board), and name
+   the weakest axis. Every candidate states which gap it closes. At
+   most ONE candidate may be a continuation of the just-merged arc,
+   and it is labeled as such.
+5. **Periodic archaeology.** Roughly every ten phases (or on owner
+   ask), refresh the plans-vs-shipped audit (the 2026-08-10 gap
+   review is the pattern): re-verify its OPEN tables against the
+   tree, close what shipped, re-mint what still stands as board
+   items. A deferral that lives only in an old plan doc is not on
+   the board and will be lost.
+6. **The slate format:** (i) the board census — every open item with
+   minted date, age, disposition, one-line reason; (ii) the gap read;
+   (iii) two to four candidates, each with value, cost, the gap it
+   closes, and its board line; (iv) ONE recommendation argued from
+   the board, never from the freshness of the last diff. The owner
+   names the phase; the slate never self-adopts.
+
 ## 7. Phase & packet breakdown
 
 Build order follows `docs/02-sources.md` synthesis (1 → 2 → 4 → 3/5 → 10 …). Packet lists below are the plan; each phase's packets get their full Goal/Acceptance elaboration at the previous phase's gate.
