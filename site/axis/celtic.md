@@ -7,13 +7,13 @@ description: >-
 
 > The Celticist — from Lepontic stones to the Old Irish glossators.
 
-Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogham Primitive Irish, CorPH's Early Irish, the UD Old Irish treebanks, and the kaikki attested-Celtic extracts riding wiktionary-recon.
+Continental Celtic epigraphy (RIIG, Lexicon Leponticum and its word shelf), ogham Primitive Irish, CorPH's Early Irish, the UD Old Irish treebanks, the kaikki attested-Celtic extracts riding wiktionary-recon, and the GPC open subset as the Welsh dictionary shelf.
 
 New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the library in minutes.
 
 ## The shelves
 
-A source wears every desk it serves — these seven answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these eight answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 11 September 2026)</span> |
 |---|---|---|---|---|
@@ -24,8 +24,9 @@ A source wears every desk it serves — these seven answer this desk. Holdings a
 | `corph` | texts | attribution | wired · manual | 76 docs / 17,942 passages |
 | `lexlep` | inscriptions | nc | wired · manual | 494 docs / 570 passages |
 | `lexlep-words` | dictionary | nc | wired · manual | 627 entries |
+| `gpc` | dictionary | attribution | wired · manual | 89,386 entries |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 September 2026)</span>: `sga` 6,672 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `ine-pro` 1,905 · `iir-pro` 799 · `mga` 770 · `wlm` 766 · `itc-pro` 745 · `xlp` 633 … and 44 more (`nabu axis celtic` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 11 September 2026)</span>: `cy` 89,386 · `sga` 6,672 · `gem-pro` 5,717 · `gmw-pro` 5,551 · `sla-pro` 5,431 · `ine-pro` 1,905 · `iir-pro` 799 · `mga` 770 · `wlm` 766 · `itc-pro` 745 … and 45 more (`nabu axis celtic` lists all).
 
 ## The desk's instruments
 

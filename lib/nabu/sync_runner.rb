@@ -93,9 +93,11 @@ module Nabu
     # nil when the load was sub-threshold (the common re-sync) or on an aborted
     # run — the CLI's report line stays silent then.
     Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings,
-                          :discovery, :references, :enrichments, :place_index, :analyzed) do
+                          :discovery, :references, :enrichments, :place_index, :person_index,
+                          :analyzed) do
       def initialize(slug:, fetch_report:, load_report:, breaker:, indexed:, warnings:,
-                     discovery:, references: nil, enrichments: nil, place_index: nil, analyzed: nil)
+                     discovery:, references: nil, enrichments: nil, place_index: nil,
+                     person_index: nil, analyzed: nil)
         super
       end
 
@@ -224,6 +226,7 @@ module Nabu
                   references: refresh_references(entry),
                   enrichments: refresh_enrichments(entry),
                   place_index: refresh_place_index(entry),
+                  person_index: refresh_person_index(entry),
                   analyzed: analyze_after_load(load_report, adapter))
     end
 
@@ -328,6 +331,16 @@ module Nabu
       return nil unless entry.adapter_class.place_index_producer?
 
       entry.adapter_class.place_index_producer(catalog: @db)
+           .run(entry.slug, workdir: workdir_for(entry.slug))
+    end
+
+    # P97-2: the person_index sibling of the place seam — after a
+    # person_index_producer? source syncs, re-derive its authority's
+    # person-index slice from the artifact it just landed.
+    def refresh_person_index(entry)
+      return nil unless entry.adapter_class.person_index_producer?
+
+      entry.adapter_class.person_index_producer(catalog: @db)
            .run(entry.slug, workdir: workdir_for(entry.slug))
     end
 

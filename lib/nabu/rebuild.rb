@@ -165,6 +165,7 @@ module Nabu
       end
       replay_enrichments(db)
       replay_place_index(db)
+      replay_person_index(db)
       # P36-2: the bulk insert is done — build the deferred secondary indexes in
       # one pass BEFORE the query-side stages (timeline/facets/indexer) that join
       # on passages.document_id.
@@ -454,6 +455,18 @@ module Nabu
         next if dirty && !dirty.include?(entry.slug) && Store::PlaceIndex.populated?(db)
 
         entry.adapter_class.place_index_producer(catalog: db)
+             .run(entry.slug, workdir: workdir_for(entry.slug))
+      end
+    end
+
+    # P97-2: the person_index replay — same contract as places.
+    def replay_person_index(db, dirty: nil)
+      @registry.each_source do |entry|
+        next unless entry.adapter_class.person_index_producer?
+        next unless replayable?(entry)
+        next if dirty && !dirty.include?(entry.slug) && Store::PersonIndex.populated?(db)
+
+        entry.adapter_class.person_index_producer(catalog: db)
              .run(entry.slug, workdir: workdir_for(entry.slug))
       end
     end

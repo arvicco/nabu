@@ -209,6 +209,12 @@ module Nabu
     # rows. Default nil — no place index.
     def self.place_index_producer(catalog:) = nil # rubocop:disable Lint/UnusedMethodArgument
 
+    # P97-2: the person-index sibling — a prosopography module declares
+    # its derive producer here; SyncRunner and Rebuild both run it.
+    def self.person_index_producer? = false
+
+    def self.person_index_producer(catalog:) = nil # rubocop:disable Lint/UnusedMethodArgument
+
     # Remote-health probe strategy (P11-2). Default :git — the probe
     # ls-remotes each upstream_repo_urls. The HTTP-zip fetch path (ORACC,
     # Nabu::ZipFetch) has NO git repo to ls-remote, so it overrides to

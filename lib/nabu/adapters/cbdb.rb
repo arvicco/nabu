@@ -62,6 +62,14 @@ module Nabu
 
       STATE_FILE = ".cbdb-fetch.json"
 
+      # P97-2 (№R-62 option b): the acquisition-only module grows its
+      # first derived surface — the "cbdb" person-index slice.
+      def self.person_index_producer? = true
+
+      def self.person_index_producer(catalog:)
+        Nabu::CbdbPersons::Producer.new(catalog: catalog)
+      end
+
       # A feature module mints no documents (the cigs/chgis shape).
       def discover(workdir, &block)
         return enum_for(:discover, workdir) unless block

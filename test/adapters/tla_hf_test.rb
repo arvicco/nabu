@@ -246,14 +246,15 @@ class TlaHfTest < Minitest::Test
                                .load_from(adapter, workdir: FIXTURES, full: true)
     assert_equal 4, first.added
     assert_equal 0, first.errored
-    assert_equal 14, catalog[:passages].count, "(4 + 3) originals + (4 + 3) -de siblings"
+    assert_equal 16, catalog[:passages].count,
+                 "(4 + 4) originals + (4 + 4) -de siblings (the late-egyptian fixture gained the Q68 <g>N46</g> row)"
 
     second = Nabu::Store::Loader.new(db: catalog, source: source)
                                 .load_from(adapter, workdir: FIXTURES, full: true)
     assert_equal 0, second.errored
     assert_equal 4, second.skipped, "a byte-identical reload skips every document"
     assert_equal 4, catalog[:documents].count
-    assert_equal 14, catalog[:passages].count
+    assert_equal 16, catalog[:passages].count
     assert_equal [1], catalog[:passages].distinct.select_map(:revision),
                  "a byte-identical reload bumps no revisions"
   end

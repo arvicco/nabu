@@ -78,6 +78,40 @@ module Query
       db&.disconnect
     end
 
+    # Q68 (P97-4): tla-hf's hieroglyph annotations ride a DIFFERENT key
+    # ("hieroglyphs": glyph runs + inline <g>CODE</g> escapes) than
+    # aes's semicolon-bounded hiero_inventar — the panel counts both.
+    def test_the_corpus_panel_counts_tla_hf_glyph_runs
+      db = store_test_db
+      load_tla_hf_fixture(db)
+      corpus = card_for("N35", catalog: db).card.corpus
+      assert_equal 13, corpus["signs"],
+                   "𓈖 occurrences across the 4 fixture rows (counted from raw JSON 2026-09-11)"
+      assert_equal 4, corpus["passages"]
+    ensure
+      db&.disconnect
+    end
+
+    def test_the_corpus_panel_counts_tla_hf_inline_g_codes
+      db = store_test_db
+      load_tla_hf_fixture(db)
+      corpus = card_for("N46", catalog: db).card.corpus
+      assert_equal 1, corpus["signs"], "the <g>N46</g> no-codepoint escape counts as the sign"
+      assert_equal 1, corpus["passages"]
+    ensure
+      db&.disconnect
+    end
+
+    def test_the_corpus_panel_sums_across_both_sources
+      db = store_test_db
+      load_aes_fixture(db)
+      load_tla_hf_fixture(db)
+      corpus = card_for("N35", catalog: db).card.corpus
+      assert_equal 31, corpus["signs"], "18 aes hiero_inventar tokens + 13 tla-hf glyphs"
+    ensure
+      db&.disconnect
+    end
+
     def test_the_json_payload_carries_the_card_and_absent_fields_as_null
       payload = Nabu::Query::HieroCard.json_payload(card_for("𓅃"))
       card = payload["card"]
@@ -90,6 +124,18 @@ module Query
     end
 
     private
+
+    def load_tla_hf_fixture(catalog)
+      source = Nabu::Store::Source.create(
+        slug: "tla-hf", name: "TLA HF", adapter_class: "Nabu::Adapters::TlaHf",
+        license_class: "attribution"
+      )
+      adapter = Nabu::Adapters::TlaHf.new
+      loader = Nabu::Store::Loader.new(db: catalog, source: source)
+      adapter.discover(Nabu::TestSupport.fixtures("tla-hf")).each do |ref|
+        loader.load([adapter.parse(ref)], full: false)
+      end
+    end
 
     def load_aes_fixture(catalog)
       source = Nabu::Store::Source.create(

@@ -1,5 +1,9 @@
 # Maintenance, Extension & Source Adoption
 
+> The administrator's process map — every recurring operating
+> process with its commands and detail links — is
+> [operating-library.md](operating-library.md).
+
 How this stays a living system rather than a one-off scrape. The design premise: upstream corpora change slowly but *do* change (new editions, restructured repos, dead projects), models improve yearly, and the owner's attention is intermittent. Everything below optimizes for "pick it back up after three months and nothing has rotted."
 
 ## 0. Where truth lives
