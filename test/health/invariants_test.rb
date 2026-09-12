@@ -513,8 +513,8 @@ class InvariantsTest < Minitest::Test
     Dir.mktmpdir do |dir|
       path = File.join(dir, "place_ref_errata.yml")
       File.write(path, { "pleiades" => { "9249509021" => {
-                   "verdict" => "nonexistent", "checked" => "2026-09-12"
-                 } } }.to_yaml)
+        "verdict" => "nonexistent", "checked" => "2026-09-12"
+      } } }.to_yaml)
 
       assert_nil global_finding(:unresolvable_place_refs, errata_path: path),
                  "the one dangling ref is reviewed — no loud finding"
