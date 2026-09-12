@@ -52,7 +52,15 @@ What each command does and its exit contract:
   migrations), plus a live golden-query replay. **Exit 1** on a loud finding
   (spike, >15% creep, a lost golden query, a failed last run, a broken
   flag-vs-artifact promise); soft warnings (collapse, 5–15% creep, stale,
-  pending migrations) stay **exit 0**.
+  pending migrations) stay **exit 0**. The default view prints FINDINGS
+  ONLY: ok rows and by-design notes (feature modules' no-rows note, empty
+  owner shelves) fold into one rollup line; `--all` restores the full
+  board. Collapse and stale judge only the live-cadence population (wired,
+  `sync_policy: auto`, kind `source`) — frozen/manual upstreams, shelves,
+  and modules read 0-added as healthy. Dangling place refs verified
+  against live Pleiades are recorded in `config/place_ref_errata.yml` and
+  report as one info rollup; unreviewed ones stay loud. One summary line,
+  with elapsed.
 - **`nabu health --remote`** — no-clone upstream probe. The strategy is keyed
   per source off the adapter: **git** sources use `git ls-remote` (liveness,
   HEAD-vs-`last_sync_sha` drift, best-effort license-drift via
