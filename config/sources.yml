@@ -4545,3 +4545,18 @@ kitab-reuse:   # P96-5
   # openiti corpus (version-id join; instances ≥ 2 floor, unheld rows
   # censused). The 10 GB passage-grain pairwise archive on the same
   # record is a deliberate v2, owner-fired if wanted.
+
+gpc:   # P97-3
+  adapter: Nabu::Adapters::Gpc
+  axes: [celtic]
+  wired: true    # first drop-sync 2026-09-11: 89,386 entries loaded, 5 id-less rows skipped
+  sync_policy: manual
+  # Geiriadur Prifysgol Cymru — the OPEN-ACCESS SUBSET (CC BY 4.0,
+  # grantor's terms by email 2026-09-04: no website-HTML scraping/
+  # republication; link users to GPC Online — every entry body carries
+  # its permanent gpc.html?gpcNNNNNN URL). ~89k Welsh headwords +
+  # variants + POS + plural forms + English first-sense openings; the
+  # full GPC stays upstream's (UW/UWTSD copyright, living dictionary).
+  # ManualDrop acquisition (docs/manual/gpc.md) — the subset arrives by
+  # email; upstream announced a future site publication of the same
+  # artifact. Dictionary-shaped (content_kind :dictionary, cy).

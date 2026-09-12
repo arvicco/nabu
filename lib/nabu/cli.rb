@@ -19,7 +19,17 @@ module Nabu
   # builder and writes the dataset directory into the owner's nabu-data
   # working clone. The rail writes FILES there and never runs git operations —
   # publishing the data repo is the owner's explicit act.
+  # The one duration voice (Q69/P97-4): Xs under a minute, else XmYYs —
+  # shared by every Thor class that prints a timed summary line.
+  module DurationFormat
+    def format_duration(secs)
+      secs < 60 ? "#{secs.round(1)}s" : "#{(secs / 60).floor}m#{format('%02d', (secs % 60).round)}s"
+    end
+  end
+
   class DataCLI < Thor
+    include DurationFormat
+
     # Thor 1.5's inherited built-ins (`tree`) render under the class
     # auto-namespace ("data_c_l_i") without this — listed in help yet not
     # invocable. The explicit namespace keeps banners truthful.
@@ -105,8 +115,9 @@ module Nabu
                            "#{available_features_hint}"
       end
 
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       summary = build_runner.run(feature: feature, into: options[:into])
-      print_build_summary(summary)
+      print_build_summary(summary, seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
       say "No git operations were performed in #{options[:into]} — review, commit, and push there yourself."
     rescue Nabu::Error => e
       raise Thor::Error, "data build: #{e.message}"
@@ -126,8 +137,9 @@ module Nabu
         Nabu::DataBuild::Runner.new(config: config, registry: registry, catalog: catalog)
       end
 
-      def print_build_summary(summary)
-        say "Built #{summary.slug} → #{summary.out_dir}"
+      def print_build_summary(summary, seconds: nil)
+        elapsed = seconds ? " (#{format_duration(seconds)})" : ""
+        say "Built #{summary.slug} → #{summary.out_dir}#{elapsed}"
         summary.files.each do |path, rows|
           if rows.nil?
             say "  #{path}"
@@ -147,6 +159,7 @@ module Nabu
         built = 0
         failed = []
         skipped = []
+        all_started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         Nabu::DataBuild.features.each do |feature|
           if feature.planned?
             skipped << feature.slug
@@ -154,14 +167,18 @@ module Nabu
             next
           end
           begin
-            print_build_summary(runner.run(feature: feature, into: options[:into]))
+            started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+            summary = runner.run(feature: feature, into: options[:into])
+            print_build_summary(summary,
+                                seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)
             built += 1
           rescue Nabu::Error => e
             failed << feature.slug
             say "FAILED #{feature.slug}: #{e.message}", :red
           end
         end
-        say "#{built} dataset(s) built, #{skipped.size} skipped (planned), #{failed.size} failed"
+        say "#{built} dataset(s) built, #{skipped.size} skipped (planned), #{failed.size} failed " \
+            "in #{format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - all_started)}"
         say "No git operations were performed in #{options[:into]} — review, commit, and push there yourself."
         raise Thor::Error, "data build --all: failed: #{failed.join(', ')}" unless failed.empty?
       end
@@ -811,8 +828,10 @@ module Nabu
       end
 
       catalog = Nabu::Store.connect(config.catalog_path)
+      started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       rows = Nabu::Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: catalog, slug: slug)
-      say "metadata-dates lane (#{slug}): #{rows} rows projected"
+      say "metadata-dates lane (#{slug}): #{rows} rows projected " \
+          "(#{format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)})"
     ensure
       catalog&.disconnect
     end
@@ -849,6 +868,8 @@ module Nabu
   # ingest/query subcommands are stubs that report "not implemented" and exit 1
   # so scripts and CI can rely on the failure signal before the real work lands.
   class CLI < Thor
+    include DurationFormat
+
     # The DataCLI namespace note applies at the root too: without it Thor
     # 1.5's `tree` labels its root with the class auto-namespace ("nabu:c_l_i").
     namespace "nabu"
@@ -1381,6 +1402,13 @@ module Nabu
       ledger&.disconnect
     end
 
+    # `nabu list wired|unwired|enabled|disabled|locked|unlocked` (P97
+    # rider, owner ask 2026-09-11): the three state axes as filters —
+    # wired (registry: first sync verified) · enabled (this box's
+    # profile) · locked (availability: blocked — grant-gated rows).
+    # Registry + profile only, no catalog: a fresh box answers.
+    LIST_STATE_WORDS = %w[wired unwired enabled disabled locked unlocked].freeze
+
     desc "list [SOURCE]", "What the library holds: the shelf census, or one source's card " \
                           "(`nabu status` shows sync state)"
     long_desc <<~HELP, wrap: false
@@ -1416,6 +1444,12 @@ module Nabu
       derivation. Disabled sources stay visible with an (off) tag; a source
       without a dossier description shows the honest stub hint. Composes
       with nothing — it IS the whole-library view.
+
+      `nabu list wired|unwired|enabled|disabled|locked|unlocked` filters
+      the registry by one state axis and shows each row's full posture —
+      wired (first sync verified) · enabled (this box's profile) · locked
+      (grant-gated availability). Registry + profile only, no catalog
+      needed: a fresh box answers.
 
       `nabu list --axis` groups the census under the research axes (the
       owner's desks, config/axes.yml): each axis leads with its persona
@@ -1527,6 +1561,8 @@ module Nabu
     def list(slug = nil)
       refuse_all_with_disabled!("list")
       slug = slug.to_s.strip
+      return list_by_state(slug) if LIST_STATE_WORDS.include?(slug)
+
       validate_list_flags!(slug)
       validate_license!(options[:license])
       from, to = date_window
@@ -3538,6 +3574,41 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "person NAME|REF", "The person desk card: the derived prosopography index (CBDB v1)"
+    long_desc <<~HELP, wrap: false
+      Look a person up in the derived person index (P97-2 — №R-62 option b:
+      the CBDB thin slice, ~658k persons of Chinese history). Input is an
+      authority ref (cbdb:1762) or a name in either script — hanzi, pinyin,
+      courtesy/studio names all key through the shared fold; matching is
+      exact under the fold, never fuzzy; homonyms print several cards.
+
+      `nabu person mine SOURCE` runs the CENSUS-ONLY name scan over a held
+      source's passages (the PlaceMine Han-lane shape). It writes nothing —
+      №R-62 keeps the apply gate closed until the owner reads the census.
+
+      Examples:
+        nabu person 王安石          # by name
+        nabu person "Wang Anshi"   # pinyin, same person
+        nabu person 介甫           # the courtesy name resolves too
+        nabu person cbdb:1762      # by authority ref
+        nabu person mine kanripo   # census the person-name attestations
+    HELP
+    def person(*query_parts)
+      return run_person_mine(query_parts[1..]) if query_parts.first == "mine"
+
+      query = query_parts.join(" ").strip
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "no catalog — run nabu sync or nabu rebuild" unless catalog
+
+      result = Nabu::Query::Person.new(catalog: catalog).run(query)
+      result.cards.each { |card| print_person_card(card) }
+    rescue Nabu::Query::Person::Error => e
+      raise Thor::Error, e.message
+    ensure
+      catalog&.disconnect
+    end
+
     desc "place NAME|ID", "The place desk card: Pleiades gazetteer facts + the library's holdings there"
     long_desc <<~HELP, wrap: false
       The third dimension of the library (after language and time): one
@@ -3583,6 +3654,7 @@ module Nabu
         nabu place cigs:GIR         # Girsu through the CIGS slice
         nabu place mine kanripo --dry-run   # Q9: census Han place-name hits (writes nothing)
         nabu place mine kanripo             # mine place-candidate edges into the links journal
+        nabu place mine report kanripo      # review the mined candidates, ranked by document spread
     HELP
     def place(*query_parts)
       return run_place_apply if query_parts == ["apply"]
@@ -3607,6 +3679,53 @@ module Nabu
     end
 
     no_commands do
+      # The person card renderer (P97-2): one line of identity, one of
+      # dates/dynasty — thin by design, like the slice.
+      def print_person_card(card)
+        years = [card.birth_year, card.death_year].compact.join("–")
+        dynasty = [card.dynasty_han, card.dynasty].compact.join(" ")
+        headline = [card.name_han, card.name].compact.join(" · ")
+        say "#{headline}  #{card.authority}:#{card.person_id}"
+        details = []
+        details << years unless years.empty?
+        details << dynasty unless dynasty.empty?
+        details << "female" if card.female
+        say "  #{details.join(' · ')}" unless details.empty?
+      end
+
+      # `nabu person mine SOURCE` (P97-2): the census-only scan; №R-62
+      # keeps the apply gate closed, so there is no --dry-run — dry is
+      # the only mode.
+      def run_person_mine(args)
+        source = Array(args).first
+        raise Thor::Error, "usage: nabu person mine SOURCE" if source.to_s.empty?
+
+        config = Nabu::Config.load
+        catalog = Nabu::Store.connect(config.catalog_path)
+        unless Nabu::Store::PersonIndex.populated?(catalog)
+          raise Thor::Error, "person mine: the person index is not derived — run `nabu sync cbdb` first"
+        end
+
+        census = Nabu::PersonMine.new(catalog: catalog, progress: progress_reporter)
+                                 .census(source: source)
+        say "person mine: #{census.source} × #{census.authority} — #{census.passages} passages " \
+            "scanned against #{census.names_loaded} Han name keys " \
+            "(#{census.names_non_han} non-Han filtered, #{census.names_ambiguous} ambiguous capped; " \
+            "#{format_duration(census.seconds)})"
+        census.name_hits.first(15).each do |name, count|
+          say format("  %<name>-12s %<count>d passages", name: name, count: count)
+        end
+        say "  … #{census.name_hits.size - 15} more attested names" if census.name_hits.size > 15
+        census.names_stopped.each do |name, count|
+          say "  STOPPED #{name} — #{count} passages (above the derived ceiling)"
+        end
+        say "  census only — №R-62 keeps the person apply gate closed until the owner rules on these numbers"
+      rescue Nabu::CatalogBusyError => e
+        raise Thor::Error, e.message
+      ensure
+        catalog&.disconnect
+      end
+
       # `nabu place mine SOURCE [GAZETTEER] [--dry-run]` (P96-3 — Q9 v0):
       # mine the gazetteer's Han name keys against SOURCE's passage text
       # into place-candidate edges (review fuel for the np: doctrine,
@@ -3615,6 +3734,8 @@ module Nabu
       # nothing. Default gazetteer: chgis.
       def run_place_mine(args)
         args = Array(args)
+        return run_place_mine_report(args[1..]) if args.first == "report"
+
         dry = args.delete("--dry-run") ? true : false
         source, gazetteer = args
         raise Thor::Error, "usage: nabu place mine SOURCE [GAZETTEER] [--dry-run]" if source.to_s.empty?
@@ -3654,6 +3775,62 @@ module Nabu
         catalog&.disconnect
       end
 
+      # `nabu place mine report [SOURCE] [GAZETTEER] [--limit N]` (P97-1 —
+      # Q70): the aggregate review surface — mined candidates grouped by
+      # place, ranked by document spread, each row carrying its evidence
+      # and the two exits (stop-list line, place card).
+      def run_place_mine_report(args)
+        args = Array(args)
+        limit = Nabu::PlaceMineReport::DEFAULT_LIMIT
+        if (i = args.index("--limit"))
+          limit = begin
+            Integer(args[i + 1])
+          rescue TypeError, ArgumentError
+            raise Thor::Error, "place mine report: --limit needs a number"
+          end
+          args.slice!(i, 2)
+        end
+        source, gazetteer = args
+        config = Nabu::Config.load
+        journal = Nabu::Store::LinksJournal.open_readonly(config.links_path)
+        if journal.nil?
+          raise Thor::Error, "place mine report: no links journal yet — run `nabu place mine SOURCE` first"
+        end
+
+        catalog = Nabu::Store.connect(config.catalog_path)
+        report = Nabu::PlaceMineReport.new(catalog: catalog, journal: journal)
+                                      .run(source: source, gazetteer: gazetteer, limit: limit)
+        print_mine_report(report)
+      rescue Nabu::CatalogBusyError => e
+        raise Thor::Error, e.message
+      ensure
+        journal&.disconnect
+        catalog&.disconnect
+      end
+
+      def print_mine_report(report)
+        scope = [report.source || "all sources", report.gazetteer || "all gazetteers"].join(" × ")
+        say "place-mine report: #{scope} — #{report.edges} candidate edges over " \
+            "#{report.total_places} places (#{format_duration(report.seconds)})"
+        if report.rows.empty?
+          say "  nothing mined in this scope — `nabu place mine SOURCE [GAZETTEER]` writes candidates"
+          return
+        end
+
+        say "  ranked by document spread; exact spread computed over the top #{report.prerank_window} by passages"
+        report.rows.each_with_index do |row, i|
+          names = row.names.map { |n, c| "「#{n}」×#{c}" }.join(" ")
+          say format("  %<rank>2d. %<title>s  %<ref>s — %<docs>d docs · %<passages>d passages · %<names>s",
+                     rank: i + 1, title: row.title || "(no title in slice)", ref: row.ref,
+                     docs: row.documents, passages: row.passages, names: names)
+          say "      sample: #{row.samples.join(' · ')}"
+          say "      exits: card `nabu place #{row.ref}` · stop-list (config/place_stop_names.yml): " \
+              "#{row.stop_lines.join(' ')}"
+        end
+        clipped = report.total_places - report.rows.size
+        say "  … #{clipped} more places below the cut (--limit raises the cap)" if clipped.positive?
+      end
+
       def print_mine_census(census, applied:)
         say "place mine: #{census.source} × #{census.gazetteer} — #{census.passages} passages " \
             "scanned against #{census.names_loaded} Han name keys " \
@@ -3680,6 +3857,7 @@ module Nabu
         Nabu::Store.assert_writable!(config.catalog_path)
         catalog = Nabu::Store.connect(config.catalog_path)
         Nabu::Store.migrate!(catalog)
+        apply_started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         census = Nabu::PlaceApply.run(catalog: catalog, canonical_dir: config.canonical_dir)
         if census.nil?
           say "place apply: no nabu-places registry under canonical/ — " \
@@ -3696,7 +3874,8 @@ module Nabu
                 "(#{Nabu::Certainty.gloss(:places_certainty, info[:certainty])})"
           end
         end
-        say "place apply: #{census[:total]} axis rows updated"
+        say "place apply: #{census[:total]} axis rows updated " \
+            "(#{format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - apply_started)})"
       rescue Nabu::CatalogBusyError => e
         raise Thor::Error, e.message
       ensure
@@ -5181,6 +5360,47 @@ module Nabu
           profile: effective_profile(config, registry, catalog: catalog),
           registry: registry, all: options[:all], disabled: options[:disabled] || false
         )
+      end
+
+      def list_by_state(state)
+        config = Nabu::Config.load
+        registry = Nabu::SourceRegistry.load(config.sources_path)
+        profile = Nabu::Profile.exist?(config.profile_path) ? Nabu::Profile.load(config.profile_path) : nil
+        enabled = enabled_slugs(profile, registry)
+        rows = registry.each_source.select do |entry|
+          case state
+          when "wired" then entry.wired
+          when "unwired" then !entry.wired
+          when "enabled" then enabled.include?(entry.slug)
+          when "disabled" then !enabled.include?(entry.slug)
+          when "locked" then entry.blocked?
+          when "unlocked" then !entry.blocked?
+          end
+        end
+        say "#{state} sources (#{rows.size} of #{registry.slugs.size} registered):"
+        rows.sort_by(&:slug).each { |entry| say "  #{entry.slug}  #{state_chips(entry, enabled)}" }
+        say "  (none)" if rows.empty?
+        say "  enable with `nabu enable <axis|source>`" if state == "disabled" && rows.any?
+      end
+
+      # The box's effective enabled set: the stored profile resolved
+      # against the registry (modules pre-enabled by nature); no profile
+      # file = the fresh-box default entries.
+      def enabled_slugs(profile, registry)
+        profile ||= Nabu::Profile.new(Nabu::Profile.default_entries(registry))
+        view = Nabu::Focus.view(profile: profile, registry: registry, all: false)
+        registry.slugs.select { |slug| view.visible?(slug) }.to_set
+      end
+
+      # The OTHER two axes as compact chips, so any state view shows the
+      # full posture of each row.
+      def state_chips(entry, enabled)
+        chips = []
+        chips << (entry.wired ? "wired" : "unwired")
+        chips << (enabled.include?(entry.slug) ? "enabled" : "disabled")
+        chips << "locked (grant-gated)" if entry.blocked?
+        chips << entry.kind if entry.kind != "source"
+        chips.join(" · ")
       end
 
       # --all is everything, --disabled the not-yet-enabled complement —
@@ -8944,7 +9164,8 @@ module Nabu
         return if card.corpus.empty?
 
         say ""
-        say "in the wild (aes hiero_inventar): #{card.corpus['signs']} sign(s) across " \
+        say "in the wild (#{Nabu::Query::HieroCard::HIERO_SOURCES.keys.join(' + ')} annotations): " \
+            "#{card.corpus['signs']} sign(s) across " \
             "#{card.corpus['passages']} passage(s)"
       end
 
@@ -9886,8 +10107,7 @@ module Nabu
       end
 
       def format_elapsed(state)
-        secs = Process.clock_gettime(Process::CLOCK_MONOTONIC) - state[:started]
-        secs < 60 ? "#{secs.round(1)}s" : "#{(secs / 60).floor}m#{format('%02d', (secs % 60).round)}s"
+        format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - state[:started])
       end
 
       def load_tick(tty, state)
@@ -10719,7 +10939,8 @@ module Nabu
           "=#{report.skipped} skipped  -#{report.withdrawn} withdrawn  !#{report.errored} errored" \
           "#{format_collided(report)}" \
           "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}" \
-          "#{format_sync_enrichments(outcome.enrichments)}#{format_sync_place_index(outcome.place_index)}"
+          "#{format_sync_enrichments(outcome.enrichments)}#{format_sync_place_index(outcome.place_index)}" \
+          "#{format_sync_person_index(outcome.person_index)}"
       end
 
       # P39-4: the within-pass collision tail — silent at zero (house
@@ -10777,6 +10998,14 @@ module Nabu
         return "" if census.nil?
 
         "  place index #{census.places} places derived (#{format('%.1f', census.seconds)}s)"
+      end
+
+      # P97-2: the person-index tail — silent for every source deriving
+      # no persons. "person index 661351 persons derived (41.2s)".
+      def format_sync_person_index(census)
+        return "" if census.nil?
+
+        "  person index #{census.persons} persons derived (#{format('%.1f', census.seconds)}s)"
       end
 
       # The P44-i3b honesty tail: unreadable upstream files are named (the
@@ -10916,11 +11145,6 @@ module Nabu
         say format("  %-#{width}s  %10s", "GRAND TOTAL", format_duration(profile.grand_total))
         say "  note: fts+lemma is one fused pass; parse/insert are per-document samples inside load."
         say "  note: text-normalization/fold (search_form) runs at Passage build, so it is inside parse."
-      end
-
-      # Seconds → the rebuild-progress voice (Xs under a minute, else XmYYs).
-      def format_duration(secs)
-        secs < 60 ? "#{secs.round(1)}s" : "#{(secs / 60).floor}m#{format('%02d', (secs % 60).round)}s"
       end
 
       def format_report(label, report)

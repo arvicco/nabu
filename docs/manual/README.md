@@ -56,6 +56,9 @@ this project has already observed such drift, the doc says so.
 
 Live sources whose acquisition is manual today:
 
+- [gpc.md](gpc.md) — the GPC open subset: supplied by the GPC editors
+  by email (gpc@geiriadur.ac.uk); a site publication of the subset is
+  upstream's announced future channel.
 - [trismegistos-geo.md](trismegistos-geo.md) — Trismegistos Geo table
   dump (captcha + POST form; the one true ManualDrop adapter).
 

@@ -74,3 +74,12 @@ U+13460	kEH_Cat	A-01-002
 U+13460	kEH_Desc	Man, seated, right knee raised, right arm raised, left arm behind body.
 U+13460	kEH_Func	Classifier human being
 U+13460	kEH_UniK	A001F
+U+13EC7	kEH_Cat	N-01-011
+U+13EC7	kEH_Core	C
+U+13EC7	kEH_Desc	The sky with a star below it, connected with a vertical line.
+U+13EC7	kEH_Func	Classifier dark/darkness
+U+13EC7	kEH_FVal	snk
+U+13EC7	kEH_UniK	HJ N046
+U+13EC7	kEH_JSesh	N46
+U+13EC7	kEH_HG	N46
+U+13EC7	kEH_IFAO	261,6
