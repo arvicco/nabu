@@ -1,0 +1,26 @@
+# Reviewed dangling place refs (P98-2). Each id below is asserted
+# verbatim by an upstream source in document_axes.place_ref but does NOT
+# resolve in the local Pleiades gazetteer index — and was verified
+# against live Pleiades (the /places/<id>/json endpoint, status codes
+# recorded) before being recorded here. The health invariant reports
+# these as one informational rollup; any dangling ref NOT listed here
+# still raises the loud unresolvable-refs anomaly, so this file can
+# never silence a fresh regression.
+#
+# Verdicts: nonexistent (clean 404 — the upstream pasted a defective
+# id), superseded (301 to a successor place), erratum (301 to a
+# Pleiades erratum — the place was deleted), tombstone (a live redirect
+# record for an erroneous duplicate).
+pleiades:
+  "9249509021": { verdict: nonexistent, checked: "2026-09-12", asserted_by: oracc }
+  "90032637": { verdict: superseded, target: "924247288", checked: "2026-09-12", asserted_by: oracc }
+  "000002": { verdict: nonexistent, checked: "2026-09-12", asserted_by: oracc }
+  "87556001": { verdict: nonexistent, checked: "2026-09-12", asserted_by: oracc }
+  "237391810": { verdict: nonexistent, checked: "2026-09-12", asserted_by: oracc }
+  "876821910": { verdict: nonexistent, checked: "2026-09-12", asserted_by: edh }
+  "1975558": { verdict: nonexistent, checked: "2026-09-12", asserted_by: edh }
+  "3048817": { verdict: nonexistent, checked: "2026-09-12", asserted_by: edh }
+  "3050409": { verdict: nonexistent, checked: "2026-09-12", asserted_by: edh }
+  "785993": { verdict: erratum, checked: "2026-09-12", asserted_by: edh }
+  "427224440": { verdict: tombstone, note: "duplicate-redirect record (Egra/Mada'in Salih)", checked: "2026-09-12", asserted_by: edh }
+  "3187815": { verdict: nonexistent, checked: "2026-09-12", asserted_by: edh }

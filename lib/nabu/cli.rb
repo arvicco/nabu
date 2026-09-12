@@ -11300,7 +11300,8 @@ module Nabu
           golden_queries: Nabu::Health::LocalCheck.golden_queries,
           canonical_dir: config.canonical_dir,
           creep_acceptances_path: config.creep_acceptances_path,
-          workdir_resolver: config.method(:source_workdir)
+          workdir_resolver: config.method(:source_workdir),
+          place_ref_errata_path: File.join(config.config_dir, "place_ref_errata.yml")
         ).run
         seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
         print_local_health(report, all: options[:all], seconds: seconds)

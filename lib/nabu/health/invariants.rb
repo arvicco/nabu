@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "digest"
+require "yaml"
+require "set"
 require_relative "trend_rules"
 require_relative "quarantine_baseline"
 
@@ -77,7 +79,7 @@ module Nabu
       # config.method(:source_workdir) so the local-* shelves resolve to
       # their local/shelves/ home. Defaults to the plain canonical join.
       def initialize(registry:, catalog:, fulltext:, ledger:, canonical_dir: nil, now: Time.now,
-                     creep_acceptances_path: nil, workdir_resolver: nil)
+                     creep_acceptances_path: nil, workdir_resolver: nil, place_ref_errata_path: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
@@ -89,6 +91,8 @@ module Nabu
         # P70: config/creep_acceptances.yml governs accepted creep (the
         # ledger covers pre-P70 rows).
         @creep_acceptances_path = creep_acceptances_path
+        # P98-2: config/place_ref_errata.yml — reviewed dangling refs.
+        @place_ref_errata_path = place_ref_errata_path
       end
 
       # All invariant findings for one registry entry, in a stable order.
@@ -117,7 +121,7 @@ module Nabu
           timeline_lane_drift,
           reversed_axis_bounds,
           script_surface_mismatch,
-          unresolvable_place_refs,
+          *place_ref_findings,
           registry_orphan_names
         ].compact
       end
@@ -541,7 +545,24 @@ module Nabu
       # place, or the ref was minted defective). Non-pleiades refs
       # (trismegistos, geonames) are outside the local index's scope by
       # design; an EMPTY index is the feature-off posture, never a flood.
-      def unresolvable_place_refs
+      # P98-2 (Q71 triage): dangling refs partition into REVIEWED — recorded
+      # in config/place_ref_errata.yml after verification against live
+      # Pleiades (nonexistent ids, superseded/erratum tombstones) — and NEW.
+      # New ones keep the loud alarm; reviewed ones fold into one info
+      # rollup, so a verified upstream defect stops shouting without the
+      # errata file ever being able to silence a fresh regression.
+      def place_ref_findings
+        dangling = dangling_place_refs
+        return [] if dangling.nil?
+
+        reviewed_ids = errata_ids("pleiades")
+        fresh, reviewed = dangling.partition do |ref|
+          Nabu::PlaceRefs.ids_in(ref, "pleiades").none? { |id| reviewed_ids.include?(id) }
+        end
+        [unresolvable_place_refs(fresh), reviewed_place_refs(reviewed)]
+      end
+
+      def dangling_place_refs
         return nil unless table?(@catalog, :document_axes) && table?(@catalog, :place_index)
 
         pleiades_rows = @catalog[:place_index].where(gazetteer: "pleiades")
@@ -555,17 +576,41 @@ module Nabu
                .where(Sequel.like(:place_ref, "%pleiades.stoa.org/places/%") |
                       Sequel.like(:place_ref, "pleiades:%"))
                .distinct.select_map(:place_ref)
-        dangling = refs.reject do |ref|
+        refs.reject do |ref|
           Nabu::PlaceRefs.ids_in(ref, "pleiades").any? { |id| known.include?(id) }
         end
+      end
+
+      def unresolvable_place_refs(dangling)
         return nil if dangling.empty?
 
         Finding.new(
           kind: :unresolvable_place_refs, severity: :loud,
           message: "#{dangling.size} unresolvable pleiades ref#{'s' unless dangling.size == 1} in " \
                    "document_axes (ids absent from the gazetteer index) — e.g. " \
-                   "#{dangling.first(3).join(' · ')}; re-derive the place index or repair the lane"
+                   "#{dangling.first(3).join(' · ')}; re-derive the place index, repair the lane, " \
+                   "or record a verified defect in config/place_ref_errata.yml"
         )
+      end
+
+      def reviewed_place_refs(reviewed)
+        return nil if reviewed.empty?
+
+        Finding.new(
+          kind: :reviewed_place_refs, severity: :info,
+          message: "#{reviewed.size} reviewed dangling pleiades ref#{'s' unless reviewed.size == 1} " \
+                   "excluded (config/place_ref_errata.yml — verified upstream defects/tombstones)"
+        )
+      end
+
+      def errata_ids(gazetteer)
+        @errata_ids ||= {}
+        @errata_ids[gazetteer] ||=
+          if @place_ref_errata_path && File.exist?(@place_ref_errata_path)
+            ((YAML.safe_load_file(@place_ref_errata_path) || {})[gazetteer] || {}).keys.map(&:to_s).to_set
+          else
+            Set.new
+          end
       end
 
       # P63-7: the era-bound-census discipline applied to nabu-places — a
