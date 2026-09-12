@@ -2,7 +2,6 @@
 
 require "digest"
 require "yaml"
-require "set"
 require_relative "trend_rules"
 require_relative "quarantine_baseline"
 
@@ -607,7 +606,7 @@ module Nabu
         @errata_ids ||= {}
         @errata_ids[gazetteer] ||=
           if @place_ref_errata_path && File.exist?(@place_ref_errata_path)
-            ((YAML.safe_load_file(@place_ref_errata_path) || {})[gazetteer] || {}).keys.map(&:to_s).to_set
+            ((YAML.safe_load_file(@place_ref_errata_path) || {})[gazetteer] || {}).keys.to_set(&:to_s)
           else
             Set.new
           end
