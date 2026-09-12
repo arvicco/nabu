@@ -221,6 +221,7 @@ module Nabu
         return nil unless @catalog && latest_run(entry.slug)&.fetch(:status) == "succeeded"
         return nil if populated?(entry)
         return module_holds_no_rows if entry.feature_module?
+        return shelf_holds_no_rows if entry.shelf?
 
         Finding.new(
           kind: :synced_unpopulated, severity: :loud,
@@ -237,6 +238,18 @@ module Nabu
           kind: :module_no_rows, severity: :info,
           message: "feature module (kind: module) holds no catalog rows — fetches reference data, " \
                    "mints none by design; nothing to re-sync"
+        )
+      end
+
+      # The empty-shelf note (P98-1 — Q71 item 4, owner-directed): an owner
+      # shelf may be legitimately empty — zero rows after a succeeded local
+      # fetch is a state, not the half-loaded signature. Informational,
+      # never affects exit; rows arriving retire it via populated?.
+      def shelf_holds_no_rows
+        Finding.new(
+          kind: :shelf_empty, severity: :info,
+          message: "owner shelf holds no rows — a shelf may be empty by nature; " \
+                   "rows land when the owner shelves material"
         )
       end
 
