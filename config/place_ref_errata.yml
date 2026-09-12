@@ -12,11 +12,19 @@
 # Pleiades erratum — the place was deleted), tombstone (a live redirect
 # record for an erroneous duplicate).
 pleiades:
-  "9249509021": { verdict: nonexistent, checked: "2026-09-12", asserted_by: oracc }
-  "90032637": { verdict: superseded, target: "924247288", checked: "2026-09-12", asserted_by: oracc }
-  "000002": { verdict: nonexistent, checked: "2026-09-12", asserted_by: oracc }
-  "87556001": { verdict: nonexistent, checked: "2026-09-12", asserted_by: oracc }
-  "237391810": { verdict: nonexistent, checked: "2026-09-12", asserted_by: oracc }
+  # The five oracc ids were reported upstream and their intended places
+  # confirmed by email, 2026-08-17 (they heal at the next oracc re-sync
+  # once the corrected catalogues ship; prune the row then).
+  "9249509021": { verdict: nonexistent, intended: "249509021", checked: "2026-09-12", asserted_by: oracc,
+                  note: "Huzirina — spurious leading 9" }
+  "90032637": { verdict: superseded, intended: "924247288", checked: "2026-09-12", asserted_by: oracc,
+                note: "Imgur-Enlil (Balawat)" }
+  "000002": { verdict: nonexistent, intended: "894161", checked: "2026-09-12", asserted_by: oracc,
+              note: "Tulul Abu Jawan — placeholder slip" }
+  "87556001": { verdict: nonexistent, intended: "887556001", checked: "2026-09-12", asserted_by: oracc,
+                note: "Habıbuşağı (İzoli) — lost leading 8" }
+  "237391810": { verdict: nonexistent, intended: "722596019", checked: "2026-09-12", asserted_by: oracc,
+                 note: "Ayanis (Rusaḫinili Eidurukai) — original id deleted pre-publication as duplicate" }
   "876821910": { verdict: nonexistent, checked: "2026-09-12", asserted_by: edh }
   "1975558": { verdict: nonexistent, checked: "2026-09-12", asserted_by: edh }
   "3048817": { verdict: nonexistent, checked: "2026-09-12", asserted_by: edh }
