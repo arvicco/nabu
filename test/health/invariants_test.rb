@@ -153,16 +153,27 @@ class InvariantsTest < Minitest::Test
     def self.content_kind = :notes
   end
 
-  def test_urn_notes_count_as_populated_for_the_notes_shelf
+  # P24-1 grain + the P98-1 shelf stance (Q71 item 4, owner-directed): an
+  # owner shelf may be legitimately empty — zero rows after a succeeded
+  # local fetch is a state, not the half-loaded signature. It downgrades to
+  # an :info note (kind-gated on shelf?, so a plain source's hollow
+  # signature stays loud); rows arriving retire the note through the
+  # populated? test at the shelf's own grain (urn_notes here).
+  def test_empty_owner_shelf_is_a_note_never_the_hollow_anomaly
     source = seed_source("local-notes")
     seed_run(source, status: "succeeded")
+    shelf = entry("local-notes", adapter: "InvariantsTest::NotesKindAdapter").with(kind: "shelf")
 
-    finding = find(:synced_unpopulated, entry("local-notes", adapter: "InvariantsTest::NotesKindAdapter"))
-    assert_predicate finding, :loud?, "a succeeded run over an empty notes shelf is the hollow signature"
+    assert_nil find(:synced_unpopulated, shelf),
+               "an empty shelf must not raise the loud zero-rows anomaly"
+    note = find(:shelf_empty, shelf)
+    refute_nil note, "the by-design empty-shelf note replaces the anomaly"
+    assert_equal :info, note.severity
 
     @db[:urn_notes].insert(urn: "urn:t:1", note: "n", topic: "notes",
                            added: "2026-07-16", provenance: "local-notes/notes.yml")
-    assert_nil find(:synced_unpopulated, entry("local-notes", adapter: "InvariantsTest::NotesKindAdapter"))
+    assert_nil find(:shelf_empty, shelf.with(kind: "shelf")),
+               "urn_notes rows count as populated and retire the note"
   end
 
   # -- flag-vs-artifact: fuzzy_index vs trigram ------------------------------

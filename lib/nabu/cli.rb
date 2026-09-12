@@ -3,6 +3,7 @@
 require "thor"
 require_relative "version"
 require_relative "display"
+require_relative "duration_format"
 
 # CLI flag conventions (P90-3 standing rules, applied whenever a command is
 # next touched — never as a sweep):
@@ -19,14 +20,6 @@ module Nabu
   # builder and writes the dataset directory into the owner's nabu-data
   # working clone. The rail writes FILES there and never runs git operations —
   # publishing the data repo is the owner's explicit act.
-  # The one duration voice (Q69/P97-4): Xs under a minute, else XmYYs —
-  # shared by every Thor class that prints a timed summary line.
-  module DurationFormat
-    def format_duration(secs)
-      secs < 60 ? "#{secs.round(1)}s" : "#{(secs / 60).floor}m#{format('%02d', (secs % 60).round)}s"
-    end
-  end
-
   class DataCLI < Thor
     include DurationFormat
 
@@ -1734,7 +1727,8 @@ module Nabu
     option :backfill_pins, type: :boolean, default: false,
                            desc: "Record ledger pins for pre-ledger sources from local clones / state files; no network"
     option :all, type: :boolean, default: false,
-                 desc: "Ignore the focus profile: check every source (modules + unfocused sources included)"
+                 desc: "The full board: check every source (modules + unfocused included) AND show every " \
+                       "row (the default view prints findings only; ok/by-design rows fold into a rollup)"
     option :accept_creep, type: :string, banner: "SLUG",
                           desc: "Record owner acceptance of SLUG's current quarantine baseline " \
                                 "(quiets the creep alarm; it re-arms past the accepted level)"
@@ -11293,6 +11287,7 @@ module Nabu
       # on any loud finding (quarantine spike, >15% creep, a lost golden query);
       # soft warnings (collapse, 5–15% creep, stale) stay exit 0.
       def run_local_health
+        started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         config = Nabu::Config.load
         registry = Nabu::SourceRegistry.load(config.sources_path)
         catalog = open_catalog(config)
@@ -11307,32 +11302,38 @@ module Nabu
           creep_acceptances_path: config.creep_acceptances_path,
           workdir_resolver: config.method(:source_workdir)
         ).run
-        print_local_health(report)
+        seconds = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+        print_local_health(report, all: options[:all], seconds: seconds)
         print_focus_note(view, view.registry_hidden_slugs)
-        raise Thor::Error, local_health_failure(report) if report.any_loud?
+        # The ONE loud summary (P98-1 — Q71 item 5): the quiet path said its
+        # verdict inside print_local_health; the loud path raises it instead,
+        # so exactly one summary line prints either way.
+        raise Thor::Error, Nabu::Health::BoardView.verdict(report, seconds: seconds) if report.any_loud?
       ensure
         catalog&.disconnect
         fulltext&.disconnect
         ledger&.disconnect
       end
 
-      # Per-source trend rows, then the golden-replay section, then the verdict
-      # and a hint toward the upstream probe.
-      def print_local_health(report)
-        print_source_health(report.sources)
+      # Per-source trend rows (BoardView-filtered; --all = full board), then
+      # the golden-replay section, then the single verdict (quiet path only —
+      # the loud verdict rides the Thor::Error) and the probe hint.
+      def print_local_health(report, all:, seconds:)
+        print_source_health(report.sources, all: all)
         # Library-wide invariant findings (P18-7: pending migrations) — printed
         # only when present, so a green library shows nothing new here.
         report.global.each { |finding| say "#{finding_tag(finding)} #{finding.message}" }
         print_golden_health(report)
-        say local_health_verdict(report)
+        say Nabu::Health::BoardView.verdict(report, seconds: seconds) unless report.any_loud?
         say "Hint: run `nabu health --remote` for the no-clone upstream probe."
       end
 
-      def print_source_health(sources)
+      def print_source_health(sources, all:)
         return say("No sources registered.") if sources.empty?
 
         width = sources.map { |source| source.slug.length }.max
-        sources.each { |source| print_source_row(source, width) }
+        Nabu::Health::BoardView.visible(sources, all: all).each { |source| print_source_row(source, width) }
+        say Nabu::Health::BoardView.rollup(sources) unless all
       end
 
       # A healthy source is one "ok" line; a flagged one repeats its slug column
@@ -11363,17 +11364,6 @@ module Nabu
         found = report.golden.count { |result| result.status == :found }
         skipped = report.golden.count { |result| result.status == :skipped }
         say "golden replay: #{found} found, #{lost.size} lost, #{skipped} skipped (source not in this corpus)"
-      end
-
-      def local_health_verdict(report)
-        return "health: #{report.loud_count} anomaly finding(s) — see above (exit 1)" if report.any_loud?
-        return "health: OK, #{pluralize(report.soft_count, 'warning')}" if report.soft_count.positive?
-
-        "health: OK"
-      end
-
-      def local_health_failure(report)
-        "health: #{report.loud_count} loud finding(s) — see the report above"
       end
 
       # Render the remote probe: one aligned row per source (slug, liveness,
