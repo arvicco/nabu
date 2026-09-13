@@ -23,6 +23,9 @@ module Nabu
                            :classified_documents, :unclassified_documents,
                            :unclassified_sources, :seconds)
 
+      # const: the two honesty buckets are STRUCTURAL, not a census —
+      # "unknown" is the one ruled non-class claim (№R-63), "unmapped"
+      # the machine bucket; a third bucket would be a scheme change.
       BUCKETS = %w[unmapped unknown].freeze
       FACET = Store::KindBuilder::FACET
 
