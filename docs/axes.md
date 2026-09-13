@@ -163,7 +163,7 @@ The OpenITI lane: premodern Arabic and Persian literature at corpus scale — Qu
 
 The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — its lines also carry Akkadian, Sumerian, Luwian, Hattic, Hurrian) and the UD Hittite treebank.
 
-**Members** (2): `ud`, `tlhdig`
+**Members** (3): `ud`, `wiktionary-hit`, `tlhdig`
 
 ### cuneiform
 
@@ -171,7 +171,7 @@ The Hittite desk: TLHdig's tablet corpus (dual-tagged cuneiform by ruling — it
 
 The cuneiform-culture shelves: Oracc and CDLI, ETCSL's Sumerian literature, eBL's fragments, the Copenhagen Ugaritic Corpus (alphabetic cuneiform), and TLHdig shared with the Hittitologist.
 
-**Members** (14): `ud`, `oracc`, `wiktionary-sux`, `cigs`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`, `rsti`, `osl`, `edubba-overlay`, `achemenet`, `seal`
+**Members** (16): `ud`, `oracc`, `wiktionary-sux`, `wiktionary-akk`, `wiktionary-hit`, `cigs`, `tlhdig`, `etcsl`, `cdli`, `ebl`, `cuc`, `rsti`, `osl`, `edubba-overlay`, `achemenet`, `seal`
 
 ### egyptian
 

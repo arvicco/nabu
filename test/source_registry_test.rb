@@ -869,7 +869,7 @@ class SourceRegistryTest < Minitest::Test
     # identity spines; the sources carry the Han card's shelves, the
     # reading lanes, and the Wiktionary sense lane.
     assert_equal %w[babelstone-ids baxter-sagart edrdg edubba-overlay hdic kradfile osl tls
-                    tshet-uinh unihan unikemet wiktionary-sux],
+                    tshet-uinh unihan unikemet wiktionary-akk wiktionary-hit wiktionary-sux],
                  registry.group_members("signs").sort
     modules = registry.group_members("signs").select { |s| registry[s].feature_module? }
     assert_equal %w[edubba-overlay osl unikemet], modules.sort,
