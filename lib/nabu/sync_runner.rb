@@ -243,6 +243,10 @@ module Nabu
       return if load_report.nil? || (load_report.added.zero? && load_report.updated.zero?)
 
       Store::FacetBuilder.refresh_source!(catalog: @db, slug: entry.slug)
+      # Kind rows project from the facet rows just refreshed (P99-2) —
+      # same lesson (P47-r3): no lane may lag a sync.
+      Store::KindBuilder.refresh_source!(catalog: @db, slug: entry.slug,
+                                         kinds: Nabu::Kinds.load_default(config: @config))
       Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: entry.slug)
       Store::TimelineBuilder::NikhEntryDates.refresh_source!(catalog: @db, slug: entry.slug)
     end
