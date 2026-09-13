@@ -1138,6 +1138,34 @@ module Query
       assert_equal %w[urn:e:2:1], search("manibus", facets: { "genre" => "votive%" }).map(&:urn)
     end
 
+    # P99-3 (№R-63): the kind facet filters by FAMILY — a head matches
+    # itself and every sub under it (funerary ⊇ funerary/epitaph), a
+    # head/sub narrows exactly, and the honesty buckets (unmapped,
+    # unknown) are first-class filters. Identity semantics: kind
+    # matching reads value only, never raw (--type keeps the raw lane).
+    def test_kind_filter_matches_the_head_family
+      faceted("urn:k:1", "dis manibus", { "kind" => ["funerary/epitaph", "sepulcralis"] })
+      faceted("urn:k:2", "dis manibus", { "kind" => %w[funerary tombstone] })
+      faceted("urn:k:3", "dis manibus", { "kind" => %w[legal Legal] })
+      rebuild!
+      assert_equal %w[urn:k:1:1 urn:k:2:1],
+                   search("manibus", facets: { "kind" => "funerary" }).map(&:urn).sort,
+                   "a head matches itself AND its subs"
+      assert_equal %w[urn:k:1:1],
+                   search("manibus", facets: { "kind" => "funerary/epitaph" }).map(&:urn),
+                   "a head/sub narrows exactly"
+      assert_empty search("manibus", facets: { "kind" => "sepulcralis" }),
+                   "kind matches value identity, never the raw column"
+    end
+
+    def test_kind_filter_serves_the_honesty_buckets
+      faceted("urn:k:4", "dis manibus", { "kind" => %w[unmapped cetera] })
+      rebuild!
+      assert_equal %w[urn:k:4:1],
+                   search("manibus", facets: { "kind" => "unmapped" }).map(&:urn),
+                   "the curation worklist is a first-class query"
+    end
+
     def test_facet_filter_matches_the_raw_code_too
       faceted("urn:e:1", "dis manibus", { "genre" => ["epitaph", "titsep?"] })
       rebuild!
