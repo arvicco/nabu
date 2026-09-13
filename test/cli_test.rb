@@ -4089,6 +4089,14 @@ class CLITest < Minitest::Test
                                 value: "poetry", raw: "sepulcralis, carmen")
     db[:document_facets].insert(document_id: doc_ids[1], facet: "kind",
                                 value: "unmapped", raw: "cetera")
+    # The precompiled census the board reads (KindBuilder's shape).
+    source_id = db[:documents].where(id: doc_ids[0]).get(:source_id)
+    db[:kind_stats].multi_insert([
+                                   { source_id: source_id, head: "funerary", documents: 1 },
+                                   { source_id: source_id, head: "poetry", documents: 1 },
+                                   { source_id: source_id, head: "unmapped", documents: 1 },
+                                   { source_id: source_id, head: nil, documents: 2 }
+                                 ])
     db.disconnect
   end
 

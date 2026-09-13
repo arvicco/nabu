@@ -74,7 +74,7 @@ module Store
 
     def kind_rows
       @db[:document_facets].where(facet: "kind").order(:document_id, :value)
-        .select_map(%i[document_id value raw])
+                           .select_map(%i[document_id value raw])
     end
 
     def rebuild!
@@ -122,6 +122,29 @@ module Store
       assert_equal 0, Nabu::Store::KindBuilder.refresh_source!(
         catalog: @db, kinds: @kinds, slug: "perseus"
       )
+    end
+
+    # P99-3: the precompiled census (migration 032) — per (source, head)
+    # distinct docs + a NULL-head per-source total, written in the same
+    # projection pass so the census never groups the millions.
+    def test_stats_precompile_per_source_head_with_null_total
+      rebuild!
+      stats = @db[:kind_stats].order(:source_id, :head).select_map(%i[source_id head documents])
+      assert_includes stats, [@edr.id, "funerary", 1]
+      assert_includes stats, [@edr.id, "unknown", 1]
+      assert_includes stats, [@edr.id, "unmapped", 1]
+      assert_includes stats, [@edr.id, nil, 2], "the NULL-head row is edr's distinct-doc total"
+      assert_includes stats, [@okhc.id, "historiography", 1]
+      assert_includes stats, [@okhc.id, nil, 1]
+    end
+
+    def test_refresh_source_replaces_only_that_sources_stats
+      rebuild!
+      Nabu::Store::KindBuilder.refresh_source!(catalog: @db, kinds: @kinds, slug: "edr")
+      assert_equal 1, @db[:kind_stats].where(source_id: @okhc.id, head: "historiography").count,
+                   "okhc stats survive an edr refresh"
+      assert_equal 1, @db[:kind_stats].where(source_id: @edr.id, head: nil).count,
+                   "edr's total row re-minted once, not duplicated"
     end
 
     def test_nil_kinds_is_the_lane_off_posture

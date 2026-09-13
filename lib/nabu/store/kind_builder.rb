@@ -27,6 +27,7 @@ module Nabu
 
       def rebuild!(catalog:, kinds:, progress: nil)
         catalog[:document_facets].where(facet: FACET).delete
+        catalog[:kind_stats].delete if catalog.table_exists?(:kind_stats)
         return Summary.new(documents: 0, rows: 0) if kinds.nil?
 
         documents = 0
@@ -44,10 +45,10 @@ module Nabu
       # post-load seam). Returns the row count; an unruled slug just
       # clears any stale rows and reports zero.
       def refresh_source!(catalog:, kinds:, slug:)
-        doc_ids = catalog[:documents]
-                  .where(source_id: catalog[:sources].where(slug: slug).select(:id))
-                  .select(:id)
+        source_id = catalog[:sources].where(slug: slug).get(:id)
+        doc_ids = catalog[:documents].where(source_id: source_id).select(:id)
         catalog[:document_facets].where(facet: FACET, document_id: doc_ids).delete
+        catalog[:kind_stats].where(source_id: source_id).delete if source_id && catalog.table_exists?(:kind_stats)
         return 0 if kinds.nil? || !kinds.sources.include?(slug)
 
         project_source(catalog, kinds, slug).last
@@ -57,9 +58,33 @@ module Nabu
         source_id = catalog[:sources].where(slug: slug).get(:id)
         return [0, 0] if source_id.nil?
 
-        rows = kinds.source_kind(slug) ? declaration_rows(catalog, kinds, slug, source_id) : mapped_rows(catalog, kinds, slug, source_id)
+        rows = if kinds.source_kind(slug)
+                 declaration_rows(catalog, kinds, slug,
+                                  source_id)
+               else
+                 mapped_rows(catalog, kinds, slug, source_id)
+               end
         rows.each_slice(INSERT_SLICE) { |slice| catalog[:document_facets].multi_insert(slice) }
+        write_stats(catalog, source_id, rows)
         [rows.map { |row| row[:document_id] }.uniq.size, rows.size]
+      end
+
+      # The precompiled census (migration 032): per (source, head)
+      # distinct docs + one NULL-head total row per source, aggregated
+      # from the rows just projected — so `nabu kind census` never
+      # groups the millions (the desk-commands law).
+      def write_stats(catalog, source_id, rows)
+        return unless catalog.table_exists?(:kind_stats)
+
+        heads = Hash.new { |hash, key| hash[key] = {} }
+        total = {}
+        rows.each do |row|
+          heads[row[:value].split("/", 2).first][row[:document_id]] = true
+          total[row[:document_id]] = true
+        end
+        stats = heads.map { |head, docs| { source_id: source_id, head: head, documents: docs.size } }
+        stats << { source_id: source_id, head: nil, documents: total.size } unless total.empty?
+        catalog[:kind_stats].multi_insert(stats)
       end
 
       # source_kind: one row per live document — the whole-source claim
