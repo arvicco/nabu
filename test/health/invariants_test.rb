@@ -153,16 +153,27 @@ class InvariantsTest < Minitest::Test
     def self.content_kind = :notes
   end
 
-  def test_urn_notes_count_as_populated_for_the_notes_shelf
+  # P24-1 grain + the P98-1 shelf stance (Q71 item 4, owner-directed): an
+  # owner shelf may be legitimately empty — zero rows after a succeeded
+  # local fetch is a state, not the half-loaded signature. It downgrades to
+  # an :info note (kind-gated on shelf?, so a plain source's hollow
+  # signature stays loud); rows arriving retire the note through the
+  # populated? test at the shelf's own grain (urn_notes here).
+  def test_empty_owner_shelf_is_a_note_never_the_hollow_anomaly
     source = seed_source("local-notes")
     seed_run(source, status: "succeeded")
+    shelf = entry("local-notes", adapter: "InvariantsTest::NotesKindAdapter").with(kind: "shelf")
 
-    finding = find(:synced_unpopulated, entry("local-notes", adapter: "InvariantsTest::NotesKindAdapter"))
-    assert_predicate finding, :loud?, "a succeeded run over an empty notes shelf is the hollow signature"
+    assert_nil find(:synced_unpopulated, shelf),
+               "an empty shelf must not raise the loud zero-rows anomaly"
+    note = find(:shelf_empty, shelf)
+    refute_nil note, "the by-design empty-shelf note replaces the anomaly"
+    assert_equal :info, note.severity
 
     @db[:urn_notes].insert(urn: "urn:t:1", note: "n", topic: "notes",
                            added: "2026-07-16", provenance: "local-notes/notes.yml")
-    assert_nil find(:synced_unpopulated, entry("local-notes", adapter: "InvariantsTest::NotesKindAdapter"))
+    assert_nil find(:shelf_empty, shelf.with(kind: "shelf")),
+               "urn_notes rows count as populated and retire the note"
   end
 
   # -- flag-vs-artifact: fuzzy_index vs trigram ------------------------------
@@ -486,6 +497,40 @@ class InvariantsTest < Minitest::Test
                  "doc_a resolves, doc_c is out of pleiades scope — exactly one defect")
   end
 
+  # P98-2 (Q71 triage): a REVIEWED dangling ref — recorded in
+  # config/place_ref_errata.yml after verification against live Pleiades
+  # (nonexistent id, superseded/erratum tombstone) — folds into one info
+  # rollup; an UNREVIEWED dangling ref still alarms loud, so the errata
+  # file can never silence a fresh regression.
+  def test_reviewed_dangling_refs_fold_into_the_errata_note
+    doc_ok = seed_lane_doc("newsource", "urn:nabu:newsource:e1", "{}")
+    doc_rev = seed_lane_doc("newsource", "urn:nabu:newsource:e2", "{}")
+    @db[:document_axes].insert(document_id: doc_ok, axis_source: "t", place_ref: "pleiades:111")
+    @db[:document_axes].insert(document_id: doc_rev, axis_source: "t",
+                               place_ref: "https://pleiades.stoa.org/places/9249509021")
+    @db[:place_index].insert(gazetteer: "pleiades", place_id: "111", title: "Resolved", position: 0)
+
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "place_ref_errata.yml")
+      File.write(path, { "pleiades" => { "9249509021" => {
+        "verdict" => "nonexistent", "checked" => "2026-09-12"
+      } } }.to_yaml)
+
+      assert_nil global_finding(:unresolvable_place_refs, errata_path: path),
+                 "the one dangling ref is reviewed — no loud finding"
+      note = global_finding(:reviewed_place_refs, errata_path: path)
+      refute_nil note, "reviewed refs fold into the info rollup"
+      assert_equal :info, note.severity
+      assert_match(/1 reviewed dangling/, note.message)
+
+      doc_new = seed_lane_doc("newsource", "urn:nabu:newsource:e3", "{}")
+      @db[:document_axes].insert(document_id: doc_new, axis_source: "t", place_ref: "pleiades:999")
+      loud = global_finding(:unresolvable_place_refs, errata_path: path)
+      refute_nil loud, "an unreviewed newcomer still alarms"
+      assert_match(/1 unresolvable/, loud.message)
+    end
+  end
+
   # P63-7: a registry row whose verbatim string vanished from its source's
   # axes is stale knowledge — announced softly; a live string is silent.
   def test_registry_orphan_names_fire_only_for_vanished_strings
@@ -604,13 +649,13 @@ class InvariantsTest < Minitest::Test
     assert_empty(findings.select { |f| %i[dossiers_vanished dossiers_stale dossiers_unindexed].include?(f.kind) })
   end
 
-  def invariants(catalog: @db, fulltext: @fulltext, ledger: @ledger)
+  def invariants(catalog: @db, fulltext: @fulltext, ledger: @ledger, errata_path: nil)
     Nabu::Health::Invariants.new(registry: nil, catalog: catalog, fulltext: fulltext, ledger: ledger,
-                                 now: @now)
+                                 now: @now, place_ref_errata_path: errata_path)
   end
 
-  def global_finding(kind)
-    invariants.global.find { |finding| finding.kind == kind }
+  def global_finding(kind, errata_path: nil)
+    invariants(errata_path: errata_path).global.find { |finding| finding.kind == kind }
   end
 
   def find(kind, entry)

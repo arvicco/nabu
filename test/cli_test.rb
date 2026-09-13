@@ -4071,17 +4071,23 @@ class CLITest < Minitest::Test
 
   # -- health (P5-3 remote, P5-5 local) ------------------------------------
 
-  # Bare `health` over a freshly synced, healthy corpus: source row "ok", golden
-  # queries all skipped (the TestAdapter corpus holds none of the golden urns),
-  # exit 0.
+  # Bare `health` over a freshly synced, healthy corpus (P98-1 default view):
+  # the ok row folds into the rollup line, golden queries all skipped (the
+  # TestAdapter corpus holds none of the golden urns), exit 0; `--all`
+  # restores the per-source row.
   def test_health_local_healthy_corpus_exits_zero
     with_indexed_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[health]) }
       assert_nil status, "a healthy corpus is exit 0"
-      assert_match(/corpus\s+ok/, out)
+      assert_match(/1 ok · 0 warning · 0 anomaly/, out, "ok rows fold into the rollup")
+      refute_match(/corpus\s+ok/, out, "the default view prints findings only")
       assert_match(/golden replay:/, out)
-      assert_match(/health: OK/, out)
+      assert_match(/health: OK \(/, out, "one verdict line, with elapsed")
       assert_match(/health --remote/, out, "bare health hints at the upstream probe")
+
+      all_out, _err, all_status = with_config(config) { run_cli(%w[health --all]) }
+      assert_nil all_status
+      assert_match(/corpus\s+ok/, all_out, "--all restores the full board rows")
     end
   end
 
@@ -4093,7 +4099,8 @@ class CLITest < Minitest::Test
       assert_equal 1, status, "a quarantine spike fails health"
       assert_match(/ANOMALY/, out)
       assert_match(/quarantine spike/i, out)
-      assert_match(/loud finding/i, err)
+      assert_match(/anomaly finding/i, err)
+      refute_match(/anomaly finding/i, out, "ONE summary line — the loud verdict rides stderr only")
     end
   end
 
@@ -4194,7 +4201,7 @@ class CLITest < Minitest::Test
 
       _out, err, status = with_config(config) { run_cli(%w[health]) }
       assert_equal 1, status, "unaccepted creep is a loud finding"
-      assert_match(/loud finding/i, err)
+      assert_match(/anomaly finding/i, err)
 
       out, _err, status = with_config(config) { run_cli(%w[health --accept-creep corpus --note reviewed]) }
       assert_nil status

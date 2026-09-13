@@ -88,7 +88,8 @@ module Nabu
       # (dossier files vs derived records, pinned files vs the tree); nil
       # skips them honestly.
       def initialize(registry:, catalog:, fulltext:, ledger:, golden_queries:, now: Time.now,
-                     canonical_dir: nil, creep_acceptances_path: nil, workdir_resolver: nil)
+                     canonical_dir: nil, creep_acceptances_path: nil, workdir_resolver: nil,
+                     place_ref_errata_path: nil)
         @registry = registry
         @catalog = catalog
         @fulltext = fulltext
@@ -101,7 +102,8 @@ module Nabu
         @invariants = Invariants.new(registry: registry, catalog: catalog, fulltext: fulltext,
                                      ledger: ledger, canonical_dir: canonical_dir, now: now,
                                      creep_acceptances_path: creep_acceptances_path,
-                                     workdir_resolver: workdir_resolver)
+                                     workdir_resolver: workdir_resolver,
+                                     place_ref_errata_path: place_ref_errata_path)
       end
 
       def run
@@ -143,10 +145,19 @@ module Nabu
         prior = runs.drop(1).first(TrendRules::SPIKE_WINDOW).map { |run| run[:errored] }
         [
           TrendRules.quarantine_spike(latest_errored: latest[:errored], prior_errored: prior),
-          TrendRules.added_collapse(successful_runs: runs),
+          (TrendRules.added_collapse(successful_runs: runs) if live_cadence?(entry)),
           creep_finding(entry),
           stale_finding(entry, latest[:finished_at])
         ].compact
+      end
+
+      # The live-cadence population (P98-1 — Q71 item 3): only a wired,
+      # auto-cadence, kind: source row is EXPECTED to keep adding. A frozen
+      # or manual upstream, an owner shelf, or a feature module reads
+      # 0-added as its healthy steady state — collapse and stale (which
+      # always had most of this gate) never fire there.
+      def live_cadence?(entry)
+        entry.source? && entry.wired && entry.sync_policy == "auto"
       end
 
       # Cumulative shed needs the catalog's document counts; without a catalog
@@ -164,7 +175,7 @@ module Nabu
       # sources.last_sync_at it survives rebuilds, so a rebuild neither hides
       # nor causes staleness.
       def stale_finding(entry, finished_at)
-        return nil unless entry.wired && entry.sync_policy == "auto"
+        return nil unless live_cadence?(entry)
 
         TrendRules.stale_source(last_sync_at: finished_at, now: @now)
       end
