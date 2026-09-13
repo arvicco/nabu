@@ -189,6 +189,14 @@ module Nabu
       facets = profile.measure(scope: RebuildProfile::CORPUS, stage: :facets) do
         Store::FacetBuilder.rebuild!(catalog: db)
       end
+      # The kind axis (P99-2 — №R-63) projects FROM the facet rows just
+      # re-minted, so it rides directly behind FacetBuilder; nil config
+      # files = lane off, zero rows.
+      progress&.stage("kind axis")
+      profile.measure(scope: RebuildProfile::CORPUS, stage: :kind_axis) do
+        Store::KindBuilder.rebuild!(catalog: db, kinds: Nabu::Kinds.load_default(config: @config),
+                                    progress: progress)
+      end
       # P89-1 (№R-54 (c)): the corpus builders just ran against the current
       # code — mint their sentinel so an incremental run can skip them
       # honestly until a builder file actually changes.
