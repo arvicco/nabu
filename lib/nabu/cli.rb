@@ -11030,7 +11030,18 @@ module Nabu
           "#{format_collided(report)}" \
           "#{format_sync_indexed(outcome)}#{format_sync_references(outcome.references)}" \
           "#{format_sync_enrichments(outcome.enrichments)}#{format_sync_place_index(outcome.place_index)}" \
-          "#{format_sync_person_index(outcome.person_index)}"
+          "#{format_sync_person_index(outcome.person_index)}#{format_sync_lect_staging(outcome.lect_staging)}"
+      end
+
+      # P99-5 (the P59-4 front-door bullet): the synced source's
+      # unstaged share — visible at exactly the moment new documents
+      # arrive. Silent when nil (no registry / nothing stageable) or
+      # fully staged (the compact-zero rule).
+      def format_sync_lect_staging(census)
+        return "" if census.nil? || census.unstaged.zero?
+
+        "  lect: #{commafy(census.unstaged)}/#{commafy(census.stageable)} " \
+          "unstaged (#{census.codes.join(', ')})"
       end
 
       # P39-4: the within-pass collision tail — silent at zero (house
