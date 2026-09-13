@@ -530,7 +530,9 @@ hittite:
     - **The Hittite desk:** TLHdig's tablet corpus (KBo and KUB by tablet and
       line — dual-tagged cuneiform, its lines also carrying Akkadian, Sumerian,
       Luwian, Hattic and Hurrian) and the UD Hittite treebank (gold `hit`).
-    - No dictionary shelf or alignment work rides this desk yet.
+    - The dictionary shelf is registered and awaits its first sync: the
+      Wiktionary Hittite kaikki extract (sense glosses by cuneiform headword,
+      hit→akk borrowing chains). No alignment work rides this desk yet.
   recipes:
     - cmd: 'nabu search --lemma kuiš --lang hit --axis hittite'
       note: the gold UD Hittite morphology (kuiš "who", clause by clause)

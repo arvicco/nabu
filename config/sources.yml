@@ -631,6 +631,38 @@ wiktionary-sux:
   # CC BY-SA + GFDL → attribution, FileFetch, re-syncs owner-fired.
   sync_policy: manual
 
+wiktionary-akk:
+  adapter: Nabu::Adapters::WiktionaryAkk
+  group: signs  # the wiktionary-sux precedent — the cuneiform card's sense lane
+  axes: [cuneiform]
+  wired: false   # P99-7: registered; first real sync is owner-fired verification
+  # The kaikki Akkadian extraction (1,348 records / "1236 distinct words"
+  # censused 2026-09-13; 540 pure-cuneiform Sumerogram headwords — the
+  # P65 sign card's sense join; descendant chains → reflexes, ṭuppum →
+  # Elamite 𒁾 and the Aramaic/Arabic loan lanes; the sux shelf's 43
+  # sux→akk edges point into this headword space). The wiktionary-sux
+  # mold on the shared WiktionaryKaikki base: per-language JSONL
+  # (deprecated upstream — fallback = filter the full extract by
+  # lang_code akk), CC BY-SA + GFDL → attribution, FileFetch, re-syncs
+  # owner-fired.
+  sync_policy: manual
+
+wiktionary-hit:
+  adapter: Nabu::Adapters::WiktionaryHit
+  group: signs  # the wiktionary-sux precedent — the cuneiform card's sense lane
+  axes: [hittite, cuneiform]
+  wired: false   # P99-7: registered; first real sync is owner-fired verification
+  # The kaikki Hittite extraction (481 records / "466 distinct words"
+  # censused 2026-09-13; 414 pure-cuneiform headwords — 𒉿𒀀𒋻 wātar —
+  # the P65 sign card's sense join beside TLHdig; descendant chains →
+  # reflexes incl. the hit→akk lane 𒋻𒌑𒍣 → 𒅴𒁄; ~100 romanization
+  # pointer entries keep the fold's romanized reach). The wiktionary-sux
+  # mold on the shared WiktionaryKaikki base: per-language JSONL
+  # (deprecated upstream — fallback = filter the full extract by
+  # lang_code hit), CC BY-SA + GFDL → attribution, FileFetch, re-syncs
+  # owner-fired.
+  sync_policy: manual
+
 wiktionary-recon:
   adapter: Nabu::Adapters::WiktionaryRecon
   # P35-0 vs the D35 draft: +celtic/italic/sinitic/japonic — the manifest's own attested extracts
