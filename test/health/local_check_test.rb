@@ -76,6 +76,38 @@ class LocalCheckTest < Minitest::Test
     assert_operator report.soft_count, :>=, 1
   end
 
+  # P98-1 (Q71 item 3): 0-added is the HEALTHY steady state for a frozen or
+  # manual upstream, a shelf, or a feature module — collapse fires only on
+  # the live-cadence population (wired, auto, kind: source), exactly the
+  # stale rule's. The live specimens: proiel (frozen), unihan (module),
+  # local-notes (shelf) — all false-alarmed on the P97 board.
+  def test_added_collapse_exempts_frozen_and_manual_sources
+    %w[frozen manual].each do |policy|
+      slug = "still-#{policy}"
+      source = seed_source(slug: slug, wired: true)
+      seed_run(source, added: 9, updated: 2, errored: 0)
+      3.times { seed_run(source, added: 0, updated: 0, errored: 0) }
+      seed_docs(source, live: 11)
+
+      report = check(registry_of([slug, { wired: true, sync_policy: policy }]))
+      refute_includes report.sources.first.findings.map(&:kind), :added_collapse,
+                      "#{policy}: 0-added after activity is the expected steady state"
+    end
+  end
+
+  def test_added_collapse_exempts_shelves_and_modules
+    { "own-shelf" => "shelf", "ref-module" => "module" }.each do |slug, kind|
+      source = seed_source(slug: slug, wired: true)
+      seed_run(source, added: 9, updated: 2, errored: 0)
+      3.times { seed_run(source, added: 0, updated: 0, errored: 0) }
+      seed_docs(source, live: 11)
+
+      report = check(registry_of([slug, { wired: true, kind: kind }]))
+      refute_includes report.sources.first.findings.map(&:kind), :added_collapse,
+                      "#{kind}: an unchanged local/reference row never collapses"
+    end
+  end
+
   def test_withdrawal_creep_soft_then_loud
     soft = seed_source(slug: "shedding", wired: true)
     seed_run(soft, added: 100, updated: 0, errored: 0)
@@ -330,7 +362,8 @@ class LocalCheckTest < Minitest::Test
       opts ||= {}
       Nabu::SourceRegistry::Entry.new(
         slug: slug, adapter_class_name: "TestAdapter",
-        wired: opts.fetch(:enabled, true), sync_policy: opts.fetch(:sync_policy, "auto")
+        wired: opts.fetch(:enabled, true), sync_policy: opts.fetch(:sync_policy, "auto"),
+        kind: opts.fetch(:kind, Nabu::SourceRegistry::DEFAULT_KIND)
       )
     end
     Nabu::SourceRegistry.new(entries)
