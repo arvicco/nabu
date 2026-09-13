@@ -4,4 +4,32 @@
 # target corpora. The derived rule (a name hitting > 0.2% of a source's
 # scanned passages is excluded and reported) handles the flood cases;
 # this file holds the judgment tail. Every addition is an owner ruling.
-stop_names: []
+stop_names:
+  # kanripo × chgis review round 2 (report 2026-09-12, top-30 sweep;
+  # owner-ratified 2026-09-13). Generic classical-Chinese words/phrases
+  # that happen to be CHGIS place names.
+  - "以古"   # "taking the ancient…"
+  - "和平"   # peace
+  - "前所"   # "the aforementioned…"
+  - "空中"   # in the air
+  - "其源"   # its source
+  - "雨露"   # rain and dew
+  - "三家"   # the three houses/schools
+  - "下莫"   # compound crossing 下 + 莫
+  - "朝天"   # facing heaven / audience with the emperor
+  - "天成"   # naturally formed (also an era name)
+  - "地所"   # "…the place where"
+  - "化成"   # to transform into
+  - "利其"   # "profit its…"
+  - "立者"   # "the one who establishes…"
+  - "安居"   # to dwell in peace
+  - "王文"   # Wang Wen- (person-name prefix)
+  - "大川"   # great rivers (名山大川)
+  - "雨雪"   # rain and snow
+  - "其宗"   # its lineage
+  - "中元"   # the Zhongyuan festival / mid-period
+  - "南渡"   # the southern crossing (Song history phrase)
+  - "月照"   # the moon shines
+  - "都城"   # capital city
+  - "下安"   # compound crossing
+  - "平安"   # peace, safety
