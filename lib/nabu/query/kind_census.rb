@@ -3,12 +3,19 @@
 module Nabu
   module Query
     # The kind axis' browse view (P99-3 — №R-63): head-grain class
-    # counts over the derived facet="kind" rows, the honesty buckets
-    # (unmapped / unknown) counted beside — never inside — the classes,
-    # and the unclassified remainder announced (sources carrying nothing
-    # genre-shaped speak through their postures, not through silence).
-    # Indexed GROUP BY over document_facets + one join to documents for
-    # the source spread — quasi-instant per the desk-commands law.
+    # counts, the honesty buckets (unmapped / unknown) counted beside —
+    # never inside — the classes, and the unclassified remainder
+    # announced (sources carrying nothing genre-shaped speak through
+    # their postures, not through silence).
+    #
+    # Reads PRECOMPILED data only (the desk-commands law): the board
+    # comes from kind_stats (per-source per-head distinct-doc counts,
+    # written by KindBuilder in the projection pass — migration 032) and
+    # the library totals from source_stats; grouping the millions of
+    # kind facet rows at ask time is exactly what this design refuses.
+    # The one exception is the --unmapped worklist, which needs raw-value
+    # detail and queries only the unmapped subset. A catalog predating
+    # migration 032 returns nil — the CLI renders the honest hint.
     class KindCensus
       ClassRow = Data.define(:head, :documents, :sources)
       UnmappedRow = Data.define(:slug, :raw, :documents)
@@ -17,33 +24,37 @@ module Nabu
                            :unclassified_sources, :seconds)
 
       BUCKETS = %w[unmapped unknown].freeze
+      FACET = Store::KindBuilder::FACET
 
       def initialize(catalog:)
         @catalog = catalog
       end
 
       def run
+        return nil unless @catalog.table_exists?(:kind_stats)
+
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-        rows = head_rows
-        buckets, classes = rows.partition { |row| BUCKETS.include?(row.head) }
-        classified = kind_facets.select(:document_id).distinct.count
-        live = @catalog[:documents].where(withdrawn: false)
+        buckets, classes = head_rows.partition { |row| BUCKETS.include?(row.head) }
+        classified = @catalog[:kind_stats].where(head: nil).sum(:documents) || 0
+        live = live_documents
+        classified_source_ids = @catalog[:kind_stats].distinct.select_map(:source_id)
         Report.new(
           classes: classes,
           unmapped_documents: buckets.find { |b| b.head == "unmapped" }&.documents || 0,
           unknown_documents: buckets.find { |b| b.head == "unknown" }&.documents || 0,
           classified_documents: classified,
-          unclassified_documents: live.count - classified,
-          unclassified_sources: unclassified_sources(live),
+          unclassified_documents: [live - classified, 0].max,
+          unclassified_sources: unclassified_sources(classified_source_ids),
           seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
         )
       end
 
       # The curation worklist: every raw value that fell into the
       # unmapped bucket, by document count per source, largest first.
+      # Queries the unmapped subset only — bounded by the bucket size.
       def unmapped_worklist
         dataset = @catalog[:document_facets]
-                  .where(facet: KindHead::FACET, value: "unmapped")
+                  .where(facet: FACET, value: "unmapped")
                   .join(:documents, id: :document_id)
                   .join(:sources, id: Sequel[:documents][:source_id])
                   .group(Sequel[:sources][:slug], Sequel[:document_facets][:raw])
@@ -56,48 +67,39 @@ module Nabu
 
       private
 
-      def kind_facets
-        @catalog[:document_facets].where(facet: KindHead::FACET)
-      end
-
-      # Head grain: "funerary/epitaph" and "funerary" fold into one
-      # family row; distinct documents and sources counted in SQL so
-      # multi-sub documents never double-count.
+      # Head families over the precompiled stats: per-source distinct
+      # counts are additive across sources (a document has one source),
+      # and the source spread is the row count per head.
       def head_rows
-        dataset = kind_facets
-                  .join(:documents, id: :document_id)
-                  .group(KindHead.expr)
-                  .select(KindHead.expr.as(:head),
-                          distinct_count(Sequel[:document_facets][:document_id]).as(:docs),
-                          distinct_count(Sequel[:documents][:source_id]).as(:sources))
+        dataset = @catalog[:kind_stats]
+                  .exclude(head: nil)
+                  .group(:head)
+                  .select(:head,
+                          Sequel.function(:sum, :documents).as(:docs),
+                          Sequel.function(:count, :source_id).as(:sources))
                   .order(Sequel.desc(:docs), :head)
         dataset.map { |row| ClassRow.new(head: row[:head], documents: row[:docs], sources: row[:sources]) }
       end
 
-      # COUNT(DISTINCT column) as a plain expression (SQLite accepts the
-      # parenthesized-DISTINCT rendering).
+      # Library-wide live-document total from source_stats (precompiled
+      # at every sync/rebuild — the stats_drift invariant watches it).
+      def live_documents
+        return 0 unless @catalog.table_exists?(:source_stats)
+
+        @catalog[:source_stats].sum(:live_documents) || 0
+      end
+
+      def unclassified_sources(classified_source_ids)
+        return 0 unless @catalog.table_exists?(:source_stats)
+
+        @catalog[:source_stats]
+          .where(Sequel[:live_documents] > 0) # rubocop:disable Style/NumericPredicate -- SQL expression, not Ruby arithmetic
+          .exclude(source_id: classified_source_ids)
+          .count
+      end
+
       def distinct_count(column)
         Sequel.function(:count, Sequel.function(:distinct, column))
-      end
-
-      def unclassified_sources(live)
-        classified_sources = kind_facets.join(:documents, id: :document_id)
-                                        .distinct.select(Sequel[:documents][:source_id])
-        live.exclude(source_id: classified_sources).select(:source_id).distinct.count
-      end
-    end
-
-    # The one head-extraction expression, shared by census and any
-    # future kind surface: everything before the first "/" (SQLite
-    # instr over value || '/').
-    module KindHead
-      FACET = "kind"
-
-      def self.expr
-        value = Sequel[:document_facets][:value]
-        Sequel.function(:substr, value,
-                        1,
-                        Sequel.function(:instr, Sequel.join([value, "/"]), "/") - 1)
       end
     end
   end

@@ -3596,7 +3596,17 @@ module Nabu
       raise Thor::Error, "kind census: no catalog — run nabu sync or nabu rebuild" if catalog.nil?
 
       census = Nabu::Query::KindCensus.new(catalog: catalog)
-      options[:unmapped] ? print_kind_unmapped(census) : print_kind_census(census.run)
+      if options[:unmapped]
+        print_kind_unmapped(census)
+      else
+        report = census.run
+        if report.nil?
+          raise Thor::Error,
+                "kind census: the kind_stats table is not built yet — run nabu sync or nabu rebuild"
+        end
+
+        print_kind_census(report)
+      end
     ensure
       catalog&.disconnect
     end
