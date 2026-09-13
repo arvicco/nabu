@@ -215,7 +215,18 @@ document_facets(document_id, facet, value, ...)
    -- P17-2 (migration 009): categorical document facts — genre,
    -- province, material, object type — an OPEN facet vocabulary (a new
    -- facet is new rows, never a migration), behind
-   -- `search --type/--province/--material`.
+   -- `search --type/--province/--material`. The `kind` facet (P99,
+   -- №R-63) rides the same rows: Store::KindBuilder normalizes each
+   -- ruled source's genre-shaped facet (or applies its whole-source
+   -- declaration) onto the ruled cross-corpus class list
+   -- (config/kind_classes.yml + kind_map.yml), multi-label, raw
+   -- upstream value preserved per row; behind `search --kind` (family
+   -- prefix matching) and the show card's kind line.
+kind_stats(source_id, head, documents)
+   -- P99 (migration 032): the kind axis' precomputed census — per
+   -- (source, class head) distinct documents + a NULL-head per-source
+   -- total, written by KindBuilder in the projection pass (the P42-0
+   -- write-time-census stance), read by `nabu kind census`.
 lect_stats(kind, key, documents, ...)
    -- P58 rider (migration 023): the precomputed lect census behind the
    -- language card's stage ladder — derived by Store::LectFacets in the
