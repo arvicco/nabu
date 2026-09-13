@@ -115,7 +115,9 @@ module Nabu
         dataset = dataset.where(timeline_exists(from: from, to: to, place: place)) if from || to || place
         dataset = dataset.where(script_exists(script)) if script
         dataset = dataset.where(within_exists(*within)) if within
-        (facets || {}).each { |facet, pattern| dataset = dataset.where(facet_exists(facet, pattern)) }
+        (facets || {}).each do |facet, pattern|
+          dataset = dataset.where(facet == "kind" ? kind_exists(pattern) : facet_exists(facet, pattern))
+        end
         dataset = dataset.where(loans_exists(loans)) if loans
         dataset = dataset.where(lect_pairs_expr(lect_pairs)) if lect_pairs
         dataset = dataset.where(lect_target_expr(lect_target)) if lect_target
@@ -251,6 +253,26 @@ module Nabu
         @catalog[:document_facets]
           .where(facets[:document_id] => Sequel[:documents][:id], facets[:facet] => facet.to_s)
           .where(Sequel.ilike(facets[:value], pattern) | Sequel.ilike(facets[:raw], pattern))
+          .exists
+      end
+
+      # The kind facet's family semantics (P99-3 — №R-63): a head matches
+      # itself AND every sub under it (`--kind divination` ⊇
+      # divination/extispicy); a head/sub — or any explicit % pattern —
+      # matches as given. Identity semantics: value only, never raw
+      # (--type keeps the raw-vocabulary lane; kind values are OUR ruled
+      # paths, so raw-matching would blur the two vocabularies).
+      def kind_exists(pattern)
+        facets = Sequel[:document_facets]
+        match = if pattern.to_s.match?(%r{[%_/]})
+                  Sequel.ilike(facets[:value], pattern)
+                else
+                  Sequel.ilike(facets[:value], pattern) |
+                    Sequel.ilike(facets[:value], "#{pattern}/%")
+                end
+        @catalog[:document_facets]
+          .where(facets[:document_id] => Sequel[:documents][:id], facets[:facet] => "kind")
+          .where(match)
           .exists
       end
 

@@ -1984,6 +1984,10 @@ module Nabu
                         "a common term + a selective filter); needs a term AND a filter"
     option :type, type: :string, banner: "PATTERN",
                   desc: "Inscription-type facet filter (epitaph, votive%, or the raw titsep code)"
+    option :kind, type: :string, banner: "CLASS[/SUB]",
+                  desc: "Document-kind filter over the ruled cross-corpus classes: a head matches " \
+                        "its whole family (funerary ⊇ funerary/epitaph), head/sub narrows; " \
+                        "unmapped and unknown are first-class (`nabu kind census` lists all)"
     option :province, type: :string, banner: "PATTERN",
                       desc: "Roman-province facet filter (Germania inferior, pannonia%)"
     option :material, type: :string, banner: "PATTERN",
@@ -3568,6 +3572,35 @@ module Nabu
       fulltext&.disconnect
     end
 
+    desc "kind census", "The document-kind axis: cross-corpus class counts (№R-63)"
+    option :unmapped, type: :boolean, default: false,
+                      desc: "List the unmapped raw values by count per source — the curation worklist"
+    long_desc <<~HELP, wrap: false
+      The fourth document axis: what KIND of document is this? Upstream
+      genre vocabularies fold onto the ruled cross-corpus classes
+      (config/kind_classes.yml; the per-source folds live in
+      config/kind_map.yml). `census` shows every class family with its
+      document and source spread, the honesty buckets (unknown = upstream's
+      own "cannot determine"; unmapped = values awaiting a fold rule), and
+      the unclassified remainder. Filter the corpus with `nabu search
+      --kind CLASS[/SUB]`.
+
+        nabu kind census              # the class board
+        nabu kind census --unmapped   # raw values awaiting a rule
+    HELP
+    def kind(subcommand = "census")
+      raise Thor::Error, "usage: nabu kind census [--unmapped]" unless subcommand == "census"
+
+      config = Nabu::Config.load
+      catalog = open_catalog(config)
+      raise Thor::Error, "kind census: no catalog — run nabu sync or nabu rebuild" if catalog.nil?
+
+      census = Nabu::Query::KindCensus.new(catalog: catalog)
+      options[:unmapped] ? print_kind_unmapped(census) : print_kind_census(census.run)
+    ensure
+      catalog&.disconnect
+    end
+
     desc "person NAME|REF", "The person desk card: the derived prosopography index (CBDB v1)"
     long_desc <<~HELP, wrap: false
       Look a person up in the derived person index (P97-2 — №R-62 option b:
@@ -4830,6 +4863,7 @@ module Nabu
       def facet_filters
         filters = {}
         filters["genre"] = options[:type] if options[:type]
+        filters["kind"] = options[:kind] if options[:kind]
         filters["province"] = options[:province] if options[:province]
         filters["material"] = options[:material] if options[:material]
         filters.empty? ? nil : filters
@@ -6609,7 +6643,8 @@ module Nabu
       def print_facets(facets, language: nil)
         return if facets.nil? || facets.empty?
 
-        rendered = facets.map do |facet|
+        kind_rows, rest = facets.partition { |facet| facet.facet == "kind" }
+        rendered = rest.map do |facet|
           if facet.facet == "lect"
             "lect=#{facet.value}#{lect_facet_note(facet.raw, code: language)}"
           else
@@ -6617,7 +6652,58 @@ module Nabu
             "#{facet.facet}=#{facet.value}#{raw}"
           end
         end
-        say "  facets: #{rendered.join(' · ')}"
+        say "  facets: #{rendered.join(' · ')}" unless rest.empty?
+        print_kind_line(kind_rows)
+      end
+
+      # The kind census board (P99-3): class families ranked by document
+      # spread, the honesty buckets rendered apart from the classes, the
+      # unclassified remainder announced, one summary line with elapsed.
+      def print_kind_census(report)
+        width = (report.classes.map { |row| row.head.length } + [10]).max
+        report.classes.each do |row|
+          say "  #{row.head.ljust(width)}  #{commafy(row.documents).rjust(9)} docs · " \
+              "#{pluralize(row.sources, 'source')}"
+        end
+        say "  #{'unknown'.ljust(width)}  #{commafy(report.unknown_documents).rjust(9)} docs " \
+            "(upstream's own \"cannot determine\")"
+        say "  #{'unmapped'.ljust(width)}  #{commafy(report.unmapped_documents).rjust(9)} docs " \
+            "(values awaiting a fold rule — `nabu kind census --unmapped`)"
+        say "no classification: #{pluralize(report.unclassified_sources, 'source')} · " \
+            "#{commafy(report.unclassified_documents)} docs (their postures speak)"
+        total = report.classified_documents + report.unclassified_documents
+        share = total.zero? ? 0 : (100.0 * report.classified_documents / total).round(1)
+        say "kind census: #{report.classes.size} class families · " \
+            "#{commafy(report.classified_documents)} classified docs (#{share}%) " \
+            "(#{format_duration(report.seconds)})"
+      end
+
+      # The curation worklist: unmapped raw values by count per source —
+      # each line is a candidate kind_map.yml entry.
+      def print_kind_unmapped(census)
+        started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        rows = census.unmapped_worklist
+        return say("kind census: nothing unmapped — every held value has a fold rule") if rows.empty?
+
+        rows.each do |row|
+          say "  #{row.slug.ljust(14)}  #{row.raw.inspect}  ×#{commafy(row.documents)}"
+        end
+        say "kind census: #{pluralize(rows.size, 'unmapped value')} — each line is a " \
+            "candidate config/kind_map.yml entry " \
+            "(#{format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)})"
+      end
+
+      # The kind axis' card line (P99-3 — №R-63): every class the
+      # document carries on ONE line, multi-label joined with " + ",
+      # the upstream claim(s) visible verbatim. A declaration-born row
+      # (raw nil — okhc's source_kind) shows no upstream tail.
+      def print_kind_line(kind_rows)
+        return if kind_rows.empty?
+
+        classes = kind_rows.map(&:value).uniq.join(" + ")
+        raws = kind_rows.map(&:raw).compact.uniq
+        upstream = raws.empty? ? "" : " — upstream: #{raws.map(&:inspect).join(', ')}"
+        say "  kind: #{classes}#{upstream}"
       end
 
       # Print practice: the document urn appears once in the header, each
