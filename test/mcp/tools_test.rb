@@ -685,6 +685,58 @@ module MCP
                    "the lane note rides the free-text note, additive")
     end
 
+    # -- nabu_search: the kind facet (P100-5, CLI parity with P99's --kind) ----
+
+    # Three documents sharing one term, classified apart: a bare head must
+    # match its whole family (funerary ⊇ funerary/epitaph), head/sub must
+    # narrow to the sub, and the unclassified document falls out under
+    # either — the CatalogJoin#kind_exists semantics, threaded verbatim.
+    def seed_kind_corpus!
+      @epitaph = make_document(urn: "urn:k:epitaph")
+      make_passage(@epitaph, urn: "urn:k:epitaph:1", text: "στρατηγος", sequence: 0)
+      @catalog[:document_facets].insert(document_id: @epitaph.id, facet: "kind",
+                                        value: "funerary/epitaph", raw: "epitaph")
+      @funerary = make_document(urn: "urn:k:funerary")
+      make_passage(@funerary, urn: "urn:k:funerary:1", text: "στρατηγος", sequence: 0)
+      @catalog[:document_facets].insert(document_id: @funerary.id, facet: "kind",
+                                        value: "funerary")
+      @letter = make_document(urn: "urn:k:letter")
+      make_passage(@letter, urn: "urn:k:letter:1", text: "στρατηγος", sequence: 0)
+      rebuild!
+    end
+
+    def test_search_kind_bare_head_matches_the_whole_family
+      seed_kind_corpus!
+      urns = payload(call("nabu_search", { "query" => "στρατηγος", "kind" => "funerary" }))
+             .fetch("matches").map { |h| h.fetch("urn") }
+      assert_equal %w[urn:k:epitaph:1 urn:k:funerary:1], urns.sort
+    end
+
+    def test_search_kind_head_slash_sub_narrows_to_the_sub
+      seed_kind_corpus!
+      urns = payload(call("nabu_search", { "query" => "στρατηγος", "kind" => "funerary/epitaph" }))
+             .fetch("matches").map { |h| h.fetch("urn") }
+      assert_equal %w[urn:k:epitaph:1], urns
+    end
+
+    def test_search_kind_does_not_compose_with_lemma_or_near
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "lemma" => "λέγω", "kind" => "funerary" })
+      end
+      assert_raises(Nabu::MCP::Tools::InvalidArguments) do
+        call("nabu_search", { "query" => "arma", "near" => "cano", "kind" => "funerary" })
+      end
+    end
+
+    def test_search_schema_documents_the_kind_param
+      properties = Nabu::MCP::Tools::SEARCH_SCHEMA.fetch(:properties)
+      assert properties.key?(:kind), "the kind param is schema-documented (additive to the frozen contract)"
+      description = properties.fetch(:kind).fetch(:description)
+      assert_match(/family/i, description, "the schema teaches the family-prefix matching")
+      assert_match(/unmapped/i, description, "the schema names the honesty buckets")
+      assert_match(/unknown/i, description)
+    end
+
     def test_search_year_zero_is_invalid
       error = assert_raises(Nabu::MCP::Tools::InvalidArguments) do
         call("nabu_search", { "query" => "x", "from" => 0 })
@@ -1397,6 +1449,28 @@ module MCP
         assert_equal "open", line.fetch("license_class")
         assert line.fetch("urn").start_with?(@grc.urn)
       end
+    end
+
+    # -- nabu_show: the kind field (P100-5, the P44-3 additive-key idiom) ------
+
+    def test_show_document_carries_its_kind_facet_rows
+      seed_corpus
+      @catalog[:document_facets].insert(document_id: @grc.id, facet: "kind",
+                                        value: "narrative/epic", raw: "epic poetry")
+      @catalog[:document_facets].insert(document_id: @grc.id, facet: "kind", value: "hymn")
+      body = payload(call("nabu_show", { "urn" => @grc.urn }))
+      assert_equal [{ "value" => "narrative/epic", "raw" => "epic poetry" },
+                    { "value" => "hymn" }],
+                   body.fetch("kind"),
+                   "multi-label kind rows ride as {value, raw}, raw absent when upstream gave none"
+    end
+
+    def test_show_document_without_kind_facets_has_no_kind_key
+      seed_corpus
+      # A non-kind facet must not surface through the kind key either.
+      @catalog[:document_facets].insert(document_id: @grc.id, facet: "genre", value: "epitaph")
+      body = payload(call("nabu_show", { "urn" => @grc.urn }))
+      refute body.key?("kind"), "an unclassified document's payload is byte-identical (additive key)"
     end
 
     def test_show_document_truncates_with_an_honest_note
