@@ -33,13 +33,20 @@ module Nabu
     KindClass = Data.define(:name, :desc, :subs, :crosswalk)
 
     # One source's fold rule. Exactly one of +facet+ (map facet rows),
-    # +metadata+ (map documents.metadata_json fields — P100-1), or
-    # +source_kind+ (whole-source declaration) is live — validated at
-    # load. +regex_map+ (P100-1) collects EVERY matching pattern's
-    # targets (aozora's "NDC 911 913" is multi-label by design), unlike
-    # the first-hit exact/prefix/range chain.
-    Rule = Data.define(:slug, :facet, :metadata, :map, :fold_map, :prefix_map, :regex_map,
+    # +metadata+ (map documents.metadata_json fields — P100-1),
+    # +walk+ (a named canonical-tree walker in KindBuilder — P100-3:
+    # papyri's HGV keywords live in sidecar files no facet or metadata
+    # field carries), or +source_kind+ (whole-source declaration) is
+    # live — validated at load. +regex_map+ (P100-1) collects EVERY
+    # matching pattern's targets (aozora's "NDC 911 913" is
+    # multi-label by design), unlike the first-hit exact/prefix/range
+    # chain.
+    Rule = Data.define(:slug, :facet, :metadata, :walk, :map, :fold_map, :prefix_map, :regex_map,
                        :range_map, :source_kind)
+
+    # The canonical-tree walkers KindBuilder implements; a walk: value
+    # outside this set is a config error, not a silent no-op.
+    WALKERS = %w[hgv-keywords].freeze
 
     attr_reader :classes, :split, :strip
 
@@ -69,6 +76,7 @@ module Nabu
     def rule_for(slug) = @rules[slug]
     def facet_for(slug) = @rules[slug]&.facet
     def metadata_for(slug) = @rules[slug]&.metadata
+    def walk_for(slug) = @rules[slug]&.walk
     def source_kind(slug) = @rules[slug]&.source_kind
 
     # +value+ (one upstream facet or metadata value) → 0..n class paths
@@ -128,15 +136,20 @@ module Nabu
         spec ||= {}
         facet = spec["facet"]
         metadata = spec.key?("metadata") ? Array(spec["metadata"]).map(&:to_s) : nil
+        walk = spec["walk"]
         source_kind = spec["source_kind"]
-        if [facet, metadata, source_kind].compact.size != 1
+        if [facet, metadata, walk, source_kind].compact.size != 1
           raise ConfigError,
-                "kind_map: #{slug} must declare exactly one of facet:/metadata:/source_kind:"
+                "kind_map: #{slug} must declare exactly one of facet:/metadata:/walk:/source_kind:"
+        end
+        if walk && !WALKERS.include?(walk)
+          raise ConfigError,
+                "kind_map: #{slug} walk #{walk.inspect} is not a known walker (#{WALKERS.join(', ')})"
         end
 
         validate_target(slug, source_kind) if source_kind
         map = targets_of(slug, spec["map"])
-        [slug, Rule.new(slug: slug, facet: facet, metadata: metadata, map: map,
+        [slug, Rule.new(slug: slug, facet: facet, metadata: metadata, walk: walk, map: map,
                         fold_map: map.transform_keys(&:downcase),
                         prefix_map: targets_of(slug, spec["prefix_map"]),
                         regex_map: regexes_of(slug, spec["regex_map"]),

@@ -86,6 +86,10 @@ class KindsTest < Minitest::Test
         metadata: categories
         map:
           "Talmud": exegesis
+      papyri-ddbdp:
+        walk: hgv-keywords
+        map:
+          "Quittung": legal
   YAML
 
   def load_kinds(classes: CLASSES, map: MAP)
@@ -107,7 +111,8 @@ class KindsTest < Minitest::Test
     assert_includes kinds.class_names, "unknown"
     assert_equal %w[epitaph mummy-label], kinds.classes["funerary"].subs
     assert_equal "gf2014026316", kinds.classes["funerary"].crosswalk["lcgft"]
-    assert_equal %w[aozora cdli dta ebl edr kanripo okhc sefaria tlhdig], kinds.sources.sort
+    assert_equal %w[aozora cdli dta ebl edr kanripo okhc papyri-ddbdp sefaria tlhdig],
+                 kinds.sources.sort
     assert_equal "genre", kinds.facet_for("edr")
     assert_equal "historiography/annals", kinds.source_kind("okhc")
     assert_nil kinds.source_kind("edr")
@@ -211,6 +216,13 @@ class KindsTest < Minitest::Test
       "#{Regexp.last_match(1)}metadata: class\n#{Regexp.last_match(1)}facet: genre\n"
     end
     assert_raises(Nabu::Kinds::ConfigError) { load_kinds(map: bad) }
+  end
+
+  def test_walk_rules_declare_a_known_walker
+    assert_equal "hgv-keywords", kinds.rule_for("papyri-ddbdp").walk
+    bad = MAP.sub("walk: hgv-keywords", "walk: no-such-walker")
+    error = assert_raises(Nabu::Kinds::ConfigError) { load_kinds(map: bad) }
+    assert_match(/no-such-walker/, error.message)
   end
 
   def test_a_malformed_regex_is_a_config_error

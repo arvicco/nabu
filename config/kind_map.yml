@@ -7,7 +7,7 @@
 # .docs/surveys/document-classification-survey.md §2/§4a + the live
 # document_facets census 2026-09-13.
 split: ["|", ";"]     # elephantine pipes, cdli/oracc semicolons
-strip: ["?"]          # cataloguer uncertainty (edh "epitaph?", cdli "Administrative ?")
+strip: ["?", "(?)"]   # cataloguer uncertainty (edh "epitaph?", cdli "Administrative ?", HGV "Quittung (?)")
 sources:
   cdli:               # 288,629 docs — the largest vocabulary by rows
     facet: genre
@@ -152,6 +152,38 @@ sources:
       # e.g. 832: 4,238 · 791: 276) — honest until a Laroche-tail ruling.
   okhc:               # 1,198,779 docs — the Korean dynastic-history family
     source_kind: historiography/annals   # whole-source declaration (ruled 2026-09-13)
+  papyri-ddbdp:       # HGV text types (P100-3): the LEADING <keywords scheme="hgv">
+    walk: hgv-keywords   # term per record, walked from canonical (~66,700 typed docs;
+    map:                 # first-term census 2026-09-14, 25% sample)
+      "Quittung": administrative/receipt         # 3,953 (+ "Quittungen", "Quittung (?)")
+      "Quittungen": administrative/receipt
+      "Vertrag": legal/contract                  # 1,375
+      "Liste": administrative/list               # 1,073
+      "Aufstellung": administrative/list         # 115
+      "Register": administrative/list            # 155
+      "Brief (privat)": letter/private           # 933
+      "Brief (amtlich)": letter/official         # 331
+      "Schreiben (amtlich)": letter/official     # 132
+      "Brief (geschäftlich)": letter             # 199
+      "Abrechnung": administrative/account       # 840
+      "Rechnung": administrative/account         # 74
+      "Mumienetikett": funerary/mummy-label      # 577
+      "Anweisung": administrative                # 482 — payment orders
+      "Eingabe": legal/petition                  # 419
+      "unbestimmbar": unknown                    # 357
+      "Deklaration": legal                       # 195
+      "Fragment": unknown                        # 176 — too damaged to type
+      "Bericht": administrative                  # 125
+      "Graffito": mark/graffito                  # 80
+      "Auftrag": administrative                  # 74
+      "Protokoll": legal/court                   # 71
+      "Erklärung": legal                         # 66
+      "Bescheinigung": legal                     # 64
+    prefix_map:
+      "Brief": letter                            # 668 bare + Lettre variants ride exact/fold
+      "Lettre": letter                           # 154
+      # left unmapped: "Notiz" (240) · "Namen"/"Name" (379 — onomastic
+      # material, fold decision) · the long tail (worklist-visible).
   oracc:              # catalogue genre (P100-2 emission; 115,263 bearing entries,
     facet: genre      # CDLI-drifted vocabulary; case-insensitive fold covers lexical/letter)
     map:
