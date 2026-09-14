@@ -100,7 +100,15 @@ pattern stays the name lane, and the response note names the lane that
 answered; `script` (P75) — an ISO 15924-style registry tag (`latn`,
 `xsux`) over the held text's `~script` lect axis or the artifact-script
 axis; `lect` (P57-4) — a nabu-lects id with prefix semantics (errors when
-the module is not synced).
+the module is not synced); `kind` (P99/P100) — the ruled cross-corpus
+document-classification classes (`config/kind_classes.yml`), with **family**
+matching: a bare head matches its whole family (`funerary` ⊇
+`funerary/epitaph`), `head/sub` narrows to the sub, an explicit `%` pattern
+matches as given. The honesty buckets are first-class values — `unknown`
+(upstream's own "cannot determine") and `unmapped` (a raw value awaiting a
+fold rule) — and only classified documents can match: most of the corpus
+carries no kind facet and falls out under the filter (`nabu kind census`
+lists the classes).
 
 Hits are
 relevance-ranked and bounded, with an honest "showing k of N"
@@ -133,7 +141,11 @@ fact exists (P44-3): `meter` — a scanned passage's metrical code, foot pattern
 and producer (the Pedecerto/Hypotactic enrichments, P44-6/7) — and `findspot` —
 an epigraphic document's parse-captured Pleiades id resolved through the local
 gazetteer dump (id, title, place types; absent dump, absent id, or unknown id
-all leave the payload unchanged, exactly the CLI's degradation).
+all leave the payload unchanged, exactly the CLI's degradation). A document
+classified on the kind axis (P99/P100) carries `kind` the same way: an array
+of `{value, raw}` rows — `value` the ruled class path (multi-label documents
+list several), `raw` the upstream vocabulary verbatim, absent when the
+mapping had none — and an unclassified document's payload is unchanged.
 
 `segmented: true` (P54-2) adds the Tibetan word-segmentation lane — the
 consumed-back nabu-data `xct/segmentation` dataset read through
