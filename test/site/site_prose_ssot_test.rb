@@ -26,7 +26,7 @@ module Site
     # Every page that states a library-wide headline figure must read the
     # census SSOT rather than carry the number in prose.
     SSOT_PAGES = %w[
-      index languages library faq tools sources examples about quickstart places
+      index languages library faq tools sources examples about quickstart places kinds
     ].freeze
 
     # The pre-SSOT values (and the spelled-out desk phrasings) this migration
@@ -49,7 +49,7 @@ module Site
     # Pure-headline pages whose only million-scale totals ARE the SSOT
     # figures — so a comma-grouped 7-plus-digit literal outside a fenced
     # code block means a total was hardcoded instead of rendered.
-    STRICT_PAGES = %w[index languages about quickstart].freeze
+    STRICT_PAGES = %w[index languages about quickstart kinds].freeze
     MILLION_LITERAL = /\b\d{1,3}(?:,\d{3}){2,}\b/
 
     def page(name) = File.read(File.join(SITE, "#{name}.md"))
