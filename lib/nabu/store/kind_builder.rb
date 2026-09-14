@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+
 module Nabu
   module Store
     # The kind-axis projection (P99-2 — №R-63): a derived pass beside
@@ -25,7 +27,7 @@ module Nabu
 
       module_function
 
-      def rebuild!(catalog:, kinds:, progress: nil)
+      def rebuild!(catalog:, kinds:, progress: nil, canonical_dir: nil)
         catalog[:document_facets].where(facet: FACET).delete
         catalog[:kind_stats].delete if catalog.table_exists?(:kind_stats)
         return Summary.new(documents: 0, rows: 0) if kinds.nil?
@@ -33,7 +35,7 @@ module Nabu
         documents = 0
         rows = 0
         kinds.sources.each do |slug|
-          slug_docs, slug_rows = project_source(catalog, kinds, slug)
+          slug_docs, slug_rows = project_source(catalog, kinds, slug, canonical_dir)
           documents += slug_docs
           rows += slug_rows
           progress&.load_tick("kind: #{slug} — #{slug_rows} rows")
@@ -44,23 +46,26 @@ module Nabu
       # Drop and re-project ONE source's kind rows (SyncRunner's
       # post-load seam). Returns the row count; an unruled slug just
       # clears any stale rows and reports zero.
-      def refresh_source!(catalog:, kinds:, slug:)
+      def refresh_source!(catalog:, kinds:, slug:, canonical_dir: nil)
         source_id = catalog[:sources].where(slug: slug).get(:id)
         doc_ids = catalog[:documents].where(source_id: source_id).select(:id)
         catalog[:document_facets].where(facet: FACET, document_id: doc_ids).delete
         catalog[:kind_stats].where(source_id: source_id).delete if source_id && catalog.table_exists?(:kind_stats)
         return 0 if kinds.nil? || !kinds.sources.include?(slug)
 
-        project_source(catalog, kinds, slug).last
+        project_source(catalog, kinds, slug, canonical_dir).last
       end
 
-      def project_source(catalog, kinds, slug)
+      def project_source(catalog, kinds, slug, canonical_dir = nil)
         source_id = catalog[:sources].where(slug: slug).get(:id)
         return [0, 0] if source_id.nil?
 
         rows = if kinds.source_kind(slug)
-                 declaration_rows(catalog, kinds, slug,
-                                  source_id)
+                 declaration_rows(catalog, kinds, slug, source_id)
+               elsif kinds.metadata_for(slug)
+                 metadata_rows(catalog, kinds, slug, source_id)
+               elsif kinds.walk_for(slug)
+                 walk_rows(catalog, kinds, slug, source_id, canonical_dir)
                else
                  mapped_rows(catalog, kinds, slug, source_id)
                end
@@ -96,6 +101,87 @@ module Nabu
           .where(source_id: source_id, withdrawn: false)
           .select_map(:id)
           .map { |id| { document_id: id, facet: FACET, value: path, raw: nil } }
+      end
+
+      # Metadata-mapped (P100-1): the declared metadata_json fields read
+      # per live document — an ARRAY value takes its FIRST element (a
+      # category path is a hierarchy, not a multi-label), each declared
+      # field maps independently, a document without the field
+      # contributes nothing (absence, never "unmapped"). metadata_json
+      # is our own canonical_json output, so a parse failure is real
+      # corruption and honestly raises (the FacetBuilder stance).
+      def metadata_rows(catalog, kinds, slug, source_id)
+        fields = kinds.metadata_for(slug)
+        rows = []
+        seen = Hash.new { |hash, key| hash[key] = {} }
+        catalog[:documents]
+          .where(source_id: source_id, withdrawn: false)
+          .exclude(metadata_json: nil)
+          .select_map(%i[id metadata_json]).each do |document_id, json|
+            parsed = JSON.parse(json)
+            fields.each do |field|
+              value = parsed[field]
+              value = value.first if value.is_a?(Array)
+              next if value.nil? || value.to_s.empty?
+
+              kinds.normalize(slug, value.to_s).each do |path|
+                next if seen[document_id].key?(path)
+
+                seen[document_id][path] = true
+                rows << { document_id: document_id, facet: FACET, value: path, raw: value.to_s }
+              end
+            end
+          end
+        rows
+      end
+
+      # Canonical-tree walkers (P100-3): sidecar files no facet or
+      # metadata field carries. Without canonical_dir the walk skips to
+      # zero rows honestly (a caller that cannot name the corpus root).
+      def walk_rows(catalog, kinds, slug, _source_id, canonical_dir)
+        return [] if canonical_dir.nil?
+
+        case kinds.walk_for(slug)
+        when "hgv-keywords" then hgv_keyword_rows(catalog, kinds, slug, canonical_dir)
+        else []
+        end
+      end
+
+      # The papyri HGV text types (the TimelineBuilder walk precedent):
+      # each HGV_meta_EpiDoc record's LEADING `<keywords scheme="hgv">`
+      # term is the text type (later terms are subjects — never read),
+      # joined ddb-hybrid → urn → document like the timeline lane.
+      def hgv_keyword_rows(catalog, kinds, slug, canonical_dir)
+        hgv_dir = File.join(canonical_dir, TimelineBuilder::HGV_SLUG, TimelineBuilder::HGV_SUBDIR)
+        return [] unless Dir.exist?(hgv_dir)
+
+        ddbdp = catalog[:documents]
+                .where(Sequel.like(:urn, "#{TimelineBuilder::DDBDP_PREFIX}%"))
+                .where(withdrawn: false)
+                .select_hash(:urn, :id)
+        rows = []
+        seen = Hash.new { |hash, key| hash[key] = {} }
+        Dir.glob(File.join(hgv_dir, "**", "*.xml")).each do |path|
+          hybrid, term = hgv_leading_term(File.read(path))
+          next if hybrid.nil? || term.nil?
+
+          document_id = ddbdp["#{TimelineBuilder::DDBDP_PREFIX}#{hybrid.tr(';', ':')}"] or next
+          kinds.normalize(slug, term).each do |kind_path|
+            next if seen[document_id].key?(kind_path)
+
+            seen[document_id][kind_path] = true
+            rows << { document_id: document_id, facet: FACET, value: kind_path, raw: term }
+          end
+        end
+        rows
+      end
+
+      def hgv_leading_term(xml)
+        doc = Nokogiri::XML(xml)
+        doc.remove_namespaces!
+        hybrid = doc.at_xpath("//idno[@type='ddb-hybrid']")&.text&.strip
+        term = doc.at_xpath("//keywords[@scheme='hgv']/term")&.text&.strip
+        [hybrid, (term unless term.to_s.empty?)]
       end
 
       # Facet-mapped: each (document, value) of the source's declared

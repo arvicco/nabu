@@ -32,9 +32,21 @@ module Nabu
 
     KindClass = Data.define(:name, :desc, :subs, :crosswalk)
 
-    # One source's fold rule. Exactly one of +facet+ (with maps) or
-    # +source_kind+ is live — validated at load.
-    Rule = Data.define(:slug, :facet, :map, :fold_map, :prefix_map, :range_map, :source_kind)
+    # One source's fold rule. Exactly one of +facet+ (map facet rows),
+    # +metadata+ (map documents.metadata_json fields — P100-1),
+    # +walk+ (a named canonical-tree walker in KindBuilder — P100-3:
+    # papyri's HGV keywords live in sidecar files no facet or metadata
+    # field carries), or +source_kind+ (whole-source declaration) is
+    # live — validated at load. +regex_map+ (P100-1) collects EVERY
+    # matching pattern's targets (aozora's "NDC 911 913" is
+    # multi-label by design), unlike the first-hit exact/prefix/range
+    # chain.
+    Rule = Data.define(:slug, :facet, :metadata, :walk, :map, :fold_map, :prefix_map, :regex_map,
+                       :range_map, :source_kind)
+
+    # The canonical-tree walkers KindBuilder implements; a walk: value
+    # outside this set is a config error, not a silent no-op.
+    WALKERS = %w[hgv-keywords].freeze
 
     attr_reader :classes, :split, :strip
 
@@ -63,14 +75,16 @@ module Nabu
     def sources = @rules.keys
     def rule_for(slug) = @rules[slug]
     def facet_for(slug) = @rules[slug]&.facet
+    def metadata_for(slug) = @rules[slug]&.metadata
+    def walk_for(slug) = @rules[slug]&.walk
     def source_kind(slug) = @rules[slug]&.source_kind
 
-    # +value+ (one upstream facet value) → 0..n class paths for +slug+,
-    # deduped, "unmapped" per uncovered fragment. A source with no rule
-    # returns [] — nothing to claim.
+    # +value+ (one upstream facet or metadata value) → 0..n class paths
+    # for +slug+, deduped, "unmapped" per uncovered fragment. A source
+    # with no rule (or a pure declaration) returns [] — nothing to map.
     def normalize(slug, value)
       rule = @rules[slug]
-      return [] if rule.nil? || rule.facet.nil?
+      return [] if rule.nil? || rule.source_kind
 
       fragments(value).flat_map { |fragment| lookup(rule, fragment) }.uniq
     end
@@ -97,6 +111,9 @@ module Nabu
       prefix = rule.prefix_map.find { |head, _| fragment.start_with?(head) }
       return prefix[1] if prefix
 
+      regex_hits = rule.regex_map.select { |pattern, _| fragment.match?(pattern) }.flat_map { |_, t| t }
+      return regex_hits unless regex_hits.empty?
+
       range = (rule.range_map.find { |span, _| span.cover?(fragment.to_i) } if fragment.match?(/\A\d+\z/))
       return range[1] if range
 
@@ -118,18 +135,39 @@ module Nabu
       sources_doc.to_h do |slug, spec|
         spec ||= {}
         facet = spec["facet"]
+        metadata = spec.key?("metadata") ? Array(spec["metadata"]).map(&:to_s) : nil
+        walk = spec["walk"]
         source_kind = spec["source_kind"]
-        if (facet && source_kind) || (!facet && !source_kind)
-          raise ConfigError, "kind_map: #{slug} must declare exactly one of facet:/source_kind:"
+        if [facet, metadata, walk, source_kind].compact.size != 1
+          raise ConfigError,
+                "kind_map: #{slug} must declare exactly one of facet:/metadata:/walk:/source_kind:"
+        end
+        if walk && !WALKERS.include?(walk)
+          raise ConfigError,
+                "kind_map: #{slug} walk #{walk.inspect} is not a known walker (#{WALKERS.join(', ')})"
         end
 
         validate_target(slug, source_kind) if source_kind
         map = targets_of(slug, spec["map"])
-        [slug, Rule.new(slug: slug, facet: facet, map: map,
+        [slug, Rule.new(slug: slug, facet: facet, metadata: metadata, walk: walk, map: map,
                         fold_map: map.transform_keys(&:downcase),
                         prefix_map: targets_of(slug, spec["prefix_map"]),
+                        regex_map: regexes_of(slug, spec["regex_map"]),
                         range_map: ranges_of(slug, spec["range_map"]),
                         source_kind: source_kind)]
+      end
+    end
+
+    def regexes_of(slug, doc)
+      (doc || {}).to_h do |pattern, target|
+        compiled = begin
+          Regexp.new(pattern.to_s)
+        rescue RegexpError => e
+          raise ConfigError, "kind_map: #{slug} regex #{pattern.inspect} — #{e.message}"
+        end
+        paths = Array(target).map(&:to_s)
+        paths.each { |path| validate_target(slug, path) }
+        [compiled, paths]
       end
     end
 
