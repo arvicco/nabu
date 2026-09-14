@@ -41,6 +41,8 @@ nav:
     url: /places/
   - title: Dates
     url: /dates/
+  - title: Kinds
+    url: /kinds/
   - title: Sources
     url: /sources/
   # Tail order is fixed as: Sources, FAQ, News, About — alphabetical
