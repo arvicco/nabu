@@ -41,6 +41,10 @@ module Store
           map:
             "Drama": funerary
             "Wissenschaft": legal
+        papyri-ddbdp:
+          walk: hgv-keywords
+          map:
+            "Quittung": legal
     YAML
 
     def setup
@@ -160,6 +164,32 @@ module Store
       summary = Nabu::Store::KindBuilder.rebuild!(catalog: @db, kinds: nil)
       assert_equal 0, summary.rows
       assert_empty kind_rows
+    end
+
+    # P100-3: the hgv-keywords walker reads the HGV sidecar files from
+    # the canonical tree (the TimelineBuilder precedent) — the LEADING
+    # keywords term is the text type, joined ddb-hybrid → urn; without
+    # canonical_dir the walk skips honestly to zero rows.
+    def test_hgv_keywords_walk_projects_the_leading_term
+      papyri = Nabu::Store::Source.create(slug: "papyri-ddbdp", name: "P", adapter_class: "X",
+                                          license_class: "open")
+      receipt = doc(papyri, "urn:nabu:ddbdp:p.ryl:2:249")     # fixture 134.xml, "Quittung"
+      copy = doc(papyri, "urn:nabu:ddbdp:p.adl::G2")          # fixture 1.xml, "Kopie" — unmapped
+      Nabu::Store::KindBuilder.rebuild!(catalog: @db, kinds: @kinds,
+                                        canonical_dir: Nabu::TestSupport.fixtures("timeline"))
+      assert_includes kind_rows, [receipt.id, "legal", "Quittung"]
+      assert_includes kind_rows, [copy.id, "unmapped", "Kopie"],
+                      "an unmapped leading term keeps the honest bucket"
+      refute(kind_rows.any? { |row| row[2] == "Geld" }, "subject tails never emit")
+    end
+
+    def test_walk_without_canonical_dir_skips_honestly
+      papyri = Nabu::Store::Source.create(slug: "papyri-ddbdp", name: "P", adapter_class: "X",
+                                          license_class: "open")
+      doc(papyri, "urn:nabu:ddbdp:p.ryl:2:249")
+      Nabu::Store::KindBuilder.rebuild!(catalog: @db, kinds: @kinds)
+      refute(kind_rows.any? { |row| row[1] == "legal" && row[2] == "Quittung" },
+             "no canonical_dir → the walk contributes nothing, never an error")
     end
 
     # P100-1: metadata rules read documents.metadata_json directly —

@@ -52,3 +52,12 @@ divs at ≤2 sentences each for `TimelineBuilder::ChronicleAnnals`: `Introductio
 title), bare `6361`, and the AM range `6369–6370: The Varangians …`.
 Annotation block and `<source>` header are intact, so the file stays
 structurally real PROIEL 2.0 export XML.
+
+## The kind-axis keywords pair (P100-3, cut 2026-09-14)
+
+`HGV1/1.xml` (p.adl;;G2, first term "Kopie" — an unmapped-vocabulary
+specimen) and `HGV1/134.xml` (p.ryl;2;249, first term "Quittung" — the
+head of the live vocabulary, 3,953 in a 25% census) — WHOLE files
+verbatim from the same canonical clone, keywords blocks intact, for
+the KindBuilder `hgv-keywords` walk tests (the leading `<keywords
+scheme="hgv">` term is the text type; later terms are subjects).

@@ -195,7 +195,7 @@ module Nabu
       progress&.stage("kind axis")
       profile.measure(scope: RebuildProfile::CORPUS, stage: :kind_axis) do
         Store::KindBuilder.rebuild!(catalog: db, kinds: Nabu::Kinds.load_default(config: @config),
-                                    progress: progress)
+                                    progress: progress, canonical_dir: @config.canonical_dir)
       end
       # P89-1 (№R-54 (c)): the corpus builders just ran against the current
       # code — mint their sentinel so an incremental run can skip them
