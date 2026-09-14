@@ -17,8 +17,8 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 14 September 2026)</span> |
 |---|---|---|---|---|
-| `perseus-greek` | texts | attribution | wired · auto | 1,418 docs / 394,706 passages |
-| `perseus-latin` | texts | attribution | wired · auto | 541 docs / 393,921 passages |
+| `perseus-greek` | texts | attribution | wired · auto | 1,418 docs / 394,705 passages |
+| `perseus-latin` | texts | attribution | wired · auto | 548 docs / 398,684 passages |
 | `first1k-greek` | texts | attribution | wired · auto | 1,129 docs / 256,480 passages |
 | `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `proiel` | treebank | nc | wired · frozen | 12 docs / 51,321 passages |
@@ -34,7 +34,7 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `openmgh` | texts | attribution | wired · manual | 153 docs / 36,143 passages |
 | `corpus-corporum` | texts | nc | wired · manual | 5,248 docs / 896,770 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 14 September 2026)</span>: `grc` 120,553 · `lat` 58,418 · `eng` 872 · `gmh` 11 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 … and 12 more (`nabu axis classical` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 14 September 2026)</span>: `grc` 120,553 · `lat` 58,424 · `eng` 873 · `gmh` 11 · `orv` 9 · `ota` 5 · `got` 4 · `lzh` 4 · `xcl` 4 · `cop` 3 … and 12 more (`nabu axis classical` lists all).
 
 ## The desk's instruments
 

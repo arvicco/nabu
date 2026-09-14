@@ -38,6 +38,24 @@ files:
     copied: 2026-07-12
     whole: false
     trim: teiHeader idno + history/origin only — undated ("unbekannt"), placed
+  - path: papyri-ddbdp/HGV_meta_EpiDoc/HGV1/1.xml
+    refetchable: false
+    provenance: local-trim
+    reason: whole real record with keywords intact (the P100-3 kind-axis walk tests); re-acquiring = full idp.data corpus sync
+    canonical: canonical/papyri-ddbdp/HGV_meta_EpiDoc/HGV1/1.xml
+    upstream: https://github.com/papyri/idp.data
+    copied: 2026-09-14
+    whole: true
+    trim: none — whole file verbatim, keywords scheme="hgv" block intact (first term "Kopie")
+  - path: papyri-ddbdp/HGV_meta_EpiDoc/HGV1/134.xml
+    refetchable: false
+    provenance: local-trim
+    reason: whole real record with keywords intact (the P100-3 kind-axis walk tests); re-acquiring = full idp.data corpus sync
+    canonical: canonical/papyri-ddbdp/HGV_meta_EpiDoc/HGV1/134.xml
+    upstream: https://github.com/papyri/idp.data
+    copied: 2026-09-14
+    whole: true
+    trim: none — whole file verbatim, keywords scheme="hgv" block intact (first term "Quittung")
   - path: papyri-ddbdp/HGV_meta_EpiDoc/HGV1/997.xml
     refetchable: false
     provenance: local-trim

@@ -438,6 +438,17 @@ module Nabu
                                  "xsux, egyd): keeps documents whose held text carries the " \
                                  "~script lect axis OR whose artifact-script axis claims the tag " \
                                  "(\"Latin-script Gaulish\"). Text search only." },
+          kind: { type: "string",
+                  description: "Document-kind filter (P99, text search only): the ruled " \
+                               "cross-corpus classification classes (config/kind_classes.yml — " \
+                               "funerary, letter, divination, …). FAMILY matching: a bare head " \
+                               "matches its whole family (funerary ⊇ funerary/epitaph), " \
+                               "head/sub narrows to the sub, an explicit % pattern matches as " \
+                               "given. The honesty buckets are first-class values: `unknown` " \
+                               "(upstream's own \"cannot determine\") and `unmapped` (a raw " \
+                               "value awaiting a fold rule). Only classified documents can " \
+                               "match — most of the corpus carries no kind facet and falls " \
+                               "out under the filter (`nabu kind census` lists the classes)." },
           meter: { type: "string",
                    description: "Meter facet (P45-5): only passages carrying a meter enrichment " \
                                 "(the pedecerto/hypotactic scansion layer) whose meter code/name " \
@@ -913,6 +924,7 @@ module Nabu
         end
 
         from, to, place = search_date(args, mode, near)
+        kind = search_kind(args, mode, near)
         meter, meter_pattern = search_meter(args, mode, near)
         words = search_words?(args, mode, near)
         lect, lects = search_lect(args, mode, near)
@@ -926,7 +938,7 @@ module Nabu
           run_search(mode, term, catalog: catalog, fulltext: fulltext, near: near,
                                  window: window, lang: args["lang"], license: license,
                                  limit: limit + 1, morph: morph, from: from, to: to, place: place,
-                                 meter: meter, meter_pattern: meter_pattern, words: words,
+                                 kind: kind, meter: meter, meter_pattern: meter_pattern, words: words,
                                  lect: lect, lects: lects, script: script)
         results = results.reject { |r| EXCLUDED_LICENSE_CLASSES.include?(r.license_class) } unless include_restricted
         render_search(results, limit: limit, catalog: catalog, incomplete: incomplete, rank_note: rank_note,
@@ -1376,6 +1388,18 @@ module Nabu
         [from, to, place]
       end
 
+      # The kind facet arg (P100-5, the P99 CLI --kind's exact semantics) —
+      # text search only, refusal parity with the meter facet. Threaded as
+      # the facets hash entry the CLI's facet_filters builds, so the family
+      # matching lives once, in CatalogJoin#kind_exists.
+      def search_kind(args, mode, near)
+        kind = string_arg(args, "kind")
+        return nil if kind.nil?
+        raise InvalidArguments, "kind composes with text search only, not lemma/near" if mode == :lemma || near
+
+        kind
+      end
+
       # The script filter arg (P75 C-2) — text search only, like the
       # timeline; tag shape/fold is enforced once in Search#script_code.
       def search_script(args, mode, near)
@@ -1392,7 +1416,7 @@ module Nabu
       # was too common to rank (plain text mode only — the other searchers
       # never guard, so theirs is always nil).
       def run_search(mode, term, catalog:, fulltext:, lang:, license:, limit:, near: nil, window: nil, morph: nil,
-                     from: nil, to: nil, place: nil, meter: nil, meter_pattern: nil, words: false,
+                     from: nil, to: nil, place: nil, kind: nil, meter: nil, meter_pattern: nil, words: false,
                      lect: nil, lects: nil, script: nil)
         results, searcher =
           if near
@@ -1408,6 +1432,7 @@ module Nabu
                                          lects: lects || :auto)
             [searcher.run(term, lang: lang, license: license, limit: limit,
                                 from: from, to: to, place: place, script: script,
+                                facets: kind ? { "kind" => kind } : nil,
                                 meter: meter, meter_pattern: meter_pattern, words: words, lect: lect), searcher]
           end
         rank_note = searcher.respond_to?(:rank_note) ? searcher.rank_note : nil
@@ -2177,6 +2202,22 @@ module Nabu
           revision: result.revision, withdrawn: result.withdrawn,
           retired_upstream: result.retired_upstream
         }.merge(credit_field(result)).merge(findspot_field(result)).merge(timeline_field(result))
+          .merge(kind_field(result))
+      end
+
+      # The kind axis (P100-5, mirroring the CLI's P99 kind line): merged only
+      # when the document carries facet="kind" rows — an unclassified
+      # document's payload stays byte-identical and the key never appears
+      # empty (the meter/findspot idiom). Each row is {value, raw}: value the
+      # ruled class path (multi-label documents list several), raw the
+      # upstream vocabulary verbatim, absent when the mapping had none.
+      def kind_field(result)
+        return {} unless result.respond_to?(:facets)
+
+        rows = result.facets.select { |facet| facet.facet == "kind" }
+        return {} if rows.empty?
+
+        { kind: rows.map { |facet| { value: facet.value, raw: facet.raw }.compact } }
       end
 
       # Owner notes (P24-1), served BY DEFAULT on show/define payloads:

@@ -681,17 +681,25 @@ module Nabu
         members.filter_map do |id, member|
           next unless member.is_a?(Hash)
 
-          [id, { title: member["designation"], period: member["period"] }]
+          [id, { title: member["designation"], period: member["period"], genre: member["genre"] }]
         end.to_h
       rescue JSON::ParserError
         {}
       end
 
       # The facets hash for one catalogue member (the ebl metadata shape
-      # FacetBuilder reads), or nil when the member carries no period.
+      # FacetBuilder reads), or nil when the member carries neither a
+      # period nor a genre. +genre+ (P100-2, the kind axis' oracc
+      # emission): the catalogue's own text-type label — 115,263
+      # genre-bearing entries censused 2026-09-14 — rides beside the
+      # P62-2 period through the same seam.
       def member_facets(member)
+        facets = {}
         period = member&.dig(:period).to_s.strip
-        period.empty? ? nil : { "period" => { "value" => period } }
+        facets["period"] = { "value" => period } unless period.empty?
+        genre = member&.dig(:genre).to_s.strip
+        facets["genre"] = { "value" => genre } unless genre.empty?
+        facets.empty? ? nil : facets
       end
     end
   end

@@ -26,7 +26,13 @@ module Nabu
       "lect" => %w[identity pending dates codemap],
       "dating" => %w[dated partial undatable pending],
       "places" => %w[linked named unplaced pending],
-      "script" => %w[implied qualified mixed]
+      "script" => %w[implied qualified mixed],
+      # P100-4 (№R-63): the kind axis joins the core layers.
+      # `unclassified` = honest nothing-genre-shaped-upstream;
+      # `pending` names its ingestion candidate. `classified` is
+      # NEVER declared — a config/kind_map.yml rule or source_kind IS
+      # the machine posture (the lect rules/overrides doctrine).
+      "kind" => %w[unclassified pending]
     }.freeze
 
     Declaration = Data.define(:slug, :layer, :posture, :note)
@@ -95,6 +101,22 @@ module Nabu
     def shadowing(rules:, overrides:)
       machine = (overrides || {}).keys + (rules&.rules || []).flat_map(&:sources)
       declarations.select { |declaration| declaration.layer == "lect" }.map(&:slug) & machine
+    end
+
+    # The kind layer's {slug => posture label} (P100-4): the kind_map's
+    # ruled sources are machine-postured "classified" (the fold rule or
+    # source_kind declaration IS the posture); declared rows fill the
+    # judgment remainder.
+    def kind_coverage(ruled_slugs:)
+      map = layer_coverage("kind")
+      Array(ruled_slugs).each { |slug| map[slug] = "classified" }
+      map
+    end
+
+    # Declared KIND rows for kind_map-ruled sources — the same
+    # shadow-is-a-mistake rule as lect.
+    def kind_shadowing(ruled_slugs:)
+      declarations.select { |declaration| declaration.layer == "kind" }.map(&:slug) & Array(ruled_slugs)
     end
   end
 end

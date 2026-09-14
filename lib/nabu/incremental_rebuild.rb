@@ -390,7 +390,7 @@ module Nabu
       # so it always rides directly behind FacetBuilder.
       progress&.stage("kind axis")
       Store::KindBuilder.rebuild!(catalog: db, kinds: Nabu::Kinds.load_default(config: @config),
-                                  progress: progress)
+                                  progress: progress, canonical_dir: @config.canonical_dir)
       [axes, facets]
     end
 
