@@ -384,7 +384,7 @@ module Store
     def test_summary_counts_files_and_rows
       make_document("urn:nabu:ddbdp:bgu:3:994")
       summary = build!
-      assert_equal 5, summary.hgv_files # five fixture files scanned
+      assert_equal 7, summary.hgv_files # five date-shape fixtures + the two P100-3 keywords records
       assert_equal 1, summary.hgv       # one joined to a catalog document
     end
 
