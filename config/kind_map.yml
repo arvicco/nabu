@@ -152,3 +152,63 @@ sources:
       # e.g. 832: 4,238 · 791: 276) — honest until a Laroche-tail ruling.
   okhc:               # 1,198,779 docs — the Korean dynastic-history family
     source_kind: historiography/annals   # whole-source declaration (ruled 2026-09-13)
+  # -- metadata graduations (P100-1): fields read from metadata_json ------
+  sefaria:            # categories[0] = the top-level category (hierarchy head)
+    metadata: categories
+    map:
+      "Tanakh": scripture                        # 103
+      "Mishnah": scripture                       # 336
+      "Tosefta": scripture                       # 100
+      "Talmud": exegesis                         # 300
+      "Midrash": exegesis                        # 82
+      "Halakhah": legal/law                      # codes of Jewish law
+      "Responsa": legal                          # legal opinions
+      "Liturgy": ritual/liturgy                  # siddurim
+      "Musar": wisdom                            # ethical instruction
+      "Reference": scholarly
+      # left unmapped (genuinely mixed/ambiguous, the decision list):
+      # Kabbalah · Chasidut · Jewish Thought · Second Temple
+  kanripo:            # the sibu 四部 class (KR1–KR5)
+    metadata: class
+    map:
+      "KR1": scripture                           # 經部 — the canonical classics (715)
+      "KR2": historiography                      # 史部 — the histories (578)
+      "KR3": wisdom                              # 子部 — the Masters (864; coarse fold, gate-flagged)
+      "KR5": scripture                           # 道部 — the Daoist canon (1,621)
+      # left unmapped: KR4 集部 (1,344 — mixed belles-lettres collections;
+      # the finer `cat` field is the future refinement path).
+  cbeta:              # the whole source IS the Buddhist canon (Taishō + Xuzangjing)
+    source_kind: scripture
+  aozora:             # NDC codes ("NDC 913", children's "NDC K913", multi "NDC 913 914")
+    metadata: ndc
+    regex_map:
+      '\bK?9\d1\b': poetry                       # 911 ×1,355 + K911 ×172 …
+      '\bK?9\d2\b': drama                        # 912 ×199
+      '\bK?9\d3\b': narrative/novel              # 913 ×4,728 + K913 ×1,222 …
+      '\bK?9\d4\b': essay                        # 914 ×3,450
+      '\bK?9\d5\b': diary                        # 915 ×488
+      # non-9x1..5 codes (910 studies · 916 reportage · 289 biography ·
+      # 596 · 367 …) stay unmapped pending a subject-fold ruling.
+  dta:                # the subgenre carries the signal; genre alone is too coarse
+    metadata: subgenre
+    map:
+      "Roman": narrative/novel                   # 163
+      "Prosa": narrative                         # 128
+      "Lyrik": poetry                            # 114
+      "Drama": drama                             # 82
+      "Leichenpredigt": funerary                 # 330 — funeral sermons
+      "Philosophie": essay                       # 75
+      "Recht": legal                             # 75
+      "Historiographie": historiography          # 46
+      "Medizin": scholarly/medicine              # 46
+      "Technik": scholarly                       # 41
+  seal:               # genre = "Head, subject" — prefix rules ride past the subject tails
+    metadata: genre
+    prefix_map:
+      "Incantations": magic/incantation          # 16 + subject-tailed rows
+      "Epics": narrative/epic
+      "Love Literature": poetry/love
+      "Hymns and Prayers": hymn-prayer
+      "Wisdom Literature": wisdom
+      "Lamentations": hymn-prayer/lament
+      "Literary Letters": letter/literary

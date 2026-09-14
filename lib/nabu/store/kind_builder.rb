@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+
 module Nabu
   module Store
     # The kind-axis projection (P99-2 — №R-63): a derived pass beside
@@ -59,8 +61,9 @@ module Nabu
         return [0, 0] if source_id.nil?
 
         rows = if kinds.source_kind(slug)
-                 declaration_rows(catalog, kinds, slug,
-                                  source_id)
+                 declaration_rows(catalog, kinds, slug, source_id)
+               elsif kinds.metadata_for(slug)
+                 metadata_rows(catalog, kinds, slug, source_id)
                else
                  mapped_rows(catalog, kinds, slug, source_id)
                end
@@ -96,6 +99,38 @@ module Nabu
           .where(source_id: source_id, withdrawn: false)
           .select_map(:id)
           .map { |id| { document_id: id, facet: FACET, value: path, raw: nil } }
+      end
+
+      # Metadata-mapped (P100-1): the declared metadata_json fields read
+      # per live document — an ARRAY value takes its FIRST element (a
+      # category path is a hierarchy, not a multi-label), each declared
+      # field maps independently, a document without the field
+      # contributes nothing (absence, never "unmapped"). metadata_json
+      # is our own canonical_json output, so a parse failure is real
+      # corruption and honestly raises (the FacetBuilder stance).
+      def metadata_rows(catalog, kinds, slug, source_id)
+        fields = kinds.metadata_for(slug)
+        rows = []
+        seen = Hash.new { |hash, key| hash[key] = {} }
+        catalog[:documents]
+          .where(source_id: source_id, withdrawn: false)
+          .exclude(metadata_json: nil)
+          .select_map(%i[id metadata_json]).each do |document_id, json|
+            parsed = JSON.parse(json)
+            fields.each do |field|
+              value = parsed[field]
+              value = value.first if value.is_a?(Array)
+              next if value.nil? || value.to_s.empty?
+
+              kinds.normalize(slug, value.to_s).each do |path|
+                next if seen[document_id].key?(path)
+
+                seen[document_id][path] = true
+                rows << { document_id: document_id, facet: FACET, value: path, raw: value.to_s }
+              end
+            end
+          end
+        rows
       end
 
       # Facet-mapped: each (document, value) of the source's declared
