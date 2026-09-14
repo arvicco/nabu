@@ -635,7 +635,7 @@ wiktionary-akk:
   adapter: Nabu::Adapters::WiktionaryAkk
   group: signs  # the wiktionary-sux precedent — the cuneiform card's sense lane
   axes: [cuneiform]
-  wired: false   # P99-7: registered; first real sync is owner-fired verification
+  wired: true   # P99-7; first sync verified 2026-09-14 (1,348 entries; define šarrum → "king")
   # The kaikki Akkadian extraction (1,348 records / "1236 distinct words"
   # censused 2026-09-13; 540 pure-cuneiform Sumerogram headwords — the
   # P65 sign card's sense join; descendant chains → reflexes, ṭuppum →
@@ -651,7 +651,7 @@ wiktionary-hit:
   adapter: Nabu::Adapters::WiktionaryHit
   group: signs  # the wiktionary-sux precedent — the cuneiform card's sense lane
   axes: [hittite, cuneiform]
-  wired: false   # P99-7: registered; first real sync is owner-fired verification
+  wired: true   # P99-7; first sync verified 2026-09-14 (481 entries; define 𒉿𒀀𒋻 → "water")
   # The kaikki Hittite extraction (481 records / "466 distinct words"
   # censused 2026-09-13; 414 pure-cuneiform headwords — 𒉿𒀀𒋻 wātar —
   # the P65 sign card's sense join beside TLHdig; descendant chains →
