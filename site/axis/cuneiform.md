@@ -13,13 +13,15 @@ New here? The [Quickstart]({{ '/quickstart/' | relative_url }}) sets up the libr
 
 ## The shelves
 
-A source wears every desk it serves — these fourteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
+A source wears every desk it serves — these sixteen answer this desk. Holdings are read live from the catalog and dated; a shelf with nothing synced yet says so.
 
-| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 13 September 2026)</span> |
+| Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 14 September 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `oracc` | tablets | open | wired · manual | 118,367 docs / 1,800,218 passages |
 | `wiktionary-sux` | dictionary | attribution | wired · manual | 2,499 entries |
+| `wiktionary-akk` | dictionary | attribution | not yet wired | not synced yet |
+| `wiktionary-hit` | dictionary | attribution | not yet wired | not synced yet |
 | `cigs` | feature module | attribution | wired · manual | nothing held yet |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 | `etcsl` | texts | nc | wired · frozen | 775 docs / 42,577 passages |
@@ -32,7 +34,7 @@ A source wears every desk it serves — these fourteen answer this desk. Holding
 | `achemenet` | texts | attribution | wired · manual | 2,774 docs / 2,774 passages |
 | `seal` | texts | research_private | wired · manual | 408 docs / 14,953 passages |
 
-**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 13 September 2026)</span>: `sux` 245,387 · `akk` 132,779 · `und` 75,034 · `hit` 35,899 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 · `uga` 3,270 · `elx` 2,723 · `xhu` 832 … and 32 more (`nabu axis cuneiform` lists all).
+**Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 14 September 2026)</span>: `sux` 245,387 · `akk` 132,779 · `und` 75,034 · `hit` 35,899 · `eng` 15,798 · `qpc` 8,931 · `xeb` 6,844 · `uga` 3,270 · `elx` 2,723 · `xhu` 832 … and 32 more (`nabu axis cuneiform` lists all).
 
 ## The desk's instruments
 

@@ -1,0 +1,117 @@
+# The kind axis — the RULED class list (№R-63, owner 2026-09-13).
+# 26 heads + `unknown`. The heads are the ruled set; `subs` are
+# suggested sub-grain vocabulary, extensible without re-ruling.
+# Crosswalks point to external vocabularies that recognize the class
+# (EAGLE/FAIR typeins URIs, Library of Congress LCGFT ids, Getty AAT
+# ids) — pointers, never anchors: no external standard spans all our
+# domains (survey: .docs/surveys/document-classification-survey.md).
+version: 1
+classes:
+  # -- epigraphic function (the EAGLE/FAIR half) --------------------------
+  funerary:
+    desc: "Texts for and about the dead: epitaphs, tomb and mummy labels."
+    subs: [epitaph, mummy-label]
+    crosswalk:
+      eagle: "https://www.eagle-network.eu/voc/typeins/lod/92"
+      lcgft: gf2014026316
+      aat: "300028729"
+  dedicatory:
+    desc: "Offerings to gods and dedications of objects: votives, vows."
+    subs: [votive, vow]
+    crosswalk:
+      eagle: "https://www.eagle-network.eu/voc/typeins/lod/88"
+  honorific:
+    desc: "Public honors for persons: statue bases, honorific decrees."
+    subs: []
+    crosswalk:
+      eagle: "https://www.eagle-network.eu/voc/typeins/lod/69"
+  building:
+    desc: "Construction and restoration records on the built thing itself."
+    subs: []
+    crosswalk:
+      eagle: "https://www.eagle-network.eu/voc/typeins/lod/3"
+  boundary:
+    desc: "Marking edges and distances: boundary stones, milestones."
+    subs: [milestone, terminus]
+    crosswalk:
+      eagle: "https://www.eagle-network.eu/voc/typeins/lod/35"
+  mark:
+    desc: "Identifying marks on things: ownership, maker, stamp, label, seal, graffito."
+    subs: [ownership, maker, stamp, label, seal, graffito]
+  royal:
+    desc: "Rulers speaking as rulers: royal and monumental inscriptions."
+    subs: []
+  # -- documentary practice ----------------------------------------------
+  administrative:
+    desc: "The paperwork of institutions: accounts, receipts, lists, registers."
+    subs: [account, receipt, list, register]
+  legal:
+    desc: "Law and its instruments: contracts, laws, court records, petitions, treaties."
+    subs: [contract, law, court, petition, treaty]
+    crosswalk: {aat: "300027590"}
+  letter:
+    desc: "Correspondence, private or official."
+    subs: [private, official, literary]
+    crosswalk: {lcgft: gf2014026141, aat: "300026879"}
+  # -- knowledge and school ----------------------------------------------
+  lexical:
+    desc: "Words about words: sign lists, word lists, glossaries."
+    subs: [sign-list, word-list, glossary]
+  scholarly:
+    desc: "The learned disciplines: mathematics, astronomy, medicine, commentary, recipes."
+    subs: [mathematics, astronomy, medicine, commentary, recipe]
+  school:
+    desc: "Exercises and the schoolroom's own products."
+    subs: []
+  # -- religion and ritual -------------------------------------------------
+  scripture:
+    desc: "Canonical religious text: Tanakh, tripiṭaka, canons."
+    subs: []
+  exegesis:
+    desc: "Commentary on scripture and the classics."
+    subs: []
+  hymn-prayer:
+    desc: "Addressing the divine: hymns, prayers, laments."
+    subs: [hymn, prayer, lament]
+  ritual:
+    desc: "How rites are performed: festivals, cult inventories, liturgies."
+    subs: [festival, cult-inventory, liturgy]
+  magic:
+    desc: "Operative power in words: incantations, curses, amulets."
+    subs: [incantation, curse, amulet]
+    crosswalk:
+      eagle: "https://www.eagle-network.eu/voc/typeins/lod/76"
+  divination:
+    desc: "Reading the future: omens, extispicy, astrology, oracles, hemerologies."
+    subs: [omen, extispicy, astrology, oracle, hemerology]
+  # -- literature -----------------------------------------------------------
+  narrative:
+    desc: "Told stories: epics, myths, tales, novels, fables."
+    subs: [epic, myth, tale, novel, fable]
+  poetry:
+    desc: "Verse as verse: lyric, love poetry, praise poetry."
+    subs: [lyric, love, praise]
+    crosswalk: {aat: "300055931"}
+  drama:
+    desc: "Text written for performance."
+    subs: []
+    crosswalk: {aat: "300020966"}
+  essay:
+    desc: "Prose of ideas: essays, criticism."
+    subs: [criticism]
+  diary:
+    desc: "First-person records of days: diaries, memoirs, travelogues."
+    subs: [memoir, travelogue]
+    crosswalk: {lcgft: gf2014026085}
+  wisdom:
+    desc: "Instruction and insight: proverbs, dialogues, riddles."
+    subs: [proverbs, dialogue, riddle]
+  # -- history ---------------------------------------------------------------
+  historiography:
+    desc: "Writing the past: annals, chronicles, king-lists."
+    subs: [annals, chronicle, king-list]
+    crosswalk: {aat: "300026361"}
+  # -- the honest class ------------------------------------------------------
+  unknown:
+    desc: "Upstream's own 'cannot determine' — a claim, not a gap."
+    subs: []

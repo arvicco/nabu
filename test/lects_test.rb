@@ -543,9 +543,13 @@ class LectsTest < Minitest::Test
     # config + rules + infer-dates, and infer-dates needs the registry —
     # and incremental_rebuild.rb: a dirty incremental re-derives the
     # journal + lect facets exactly as the full rebuild does.
+    # P99-5 adds sync_runner.rb deliberately: the post-sync
+    # unstaged-share line (LectStaging) needs the registry's stageable
+    # anchors at exactly the moment a source's documents arrive.
     allowlist = %w[nabu/cli.rb nabu/query/etym.rb nabu/query/search.rb nabu/mcp/tools.rb
                    nabu/rebuild.rb nabu/query/define.rb nabu/query/lect_filter.rb
-                   nabu/store/lect_journal.rb nabu/incremental_rebuild.rb]
+                   nabu/store/lect_journal.rb nabu/incremental_rebuild.rb
+                   nabu/sync_runner.rb]
                 .map { |rel| File.join(lib_root, rel) }
 
     offenders = Dir[File.join(lib_root, "**", "*.rb")]
