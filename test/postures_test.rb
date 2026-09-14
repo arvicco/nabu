@@ -107,6 +107,32 @@ class PosturesTest < Minitest::Test
     end
   end
 
+  # P100-4 (№R-63): the kind axis joins the armed sweep — every
+  # passage-serving source is either kind_map-ruled (machine
+  # "classified") or declares its judgment (unclassified is an honest
+  # answer; pending names its candidate).
+  def test_every_passage_serving_source_has_a_kind_posture
+    kinds = Nabu::Kinds.load(
+      classes_path: File.expand_path("../config/kind_classes.yml", __dir__),
+      map_path: File.expand_path("../config/kind_map.yml", __dir__)
+    )
+    coverage = postures.kind_coverage(ruled_slugs: kinds.sources)
+    missing = passage_slugs.reject { |slug| coverage.key?(slug) }
+    assert_empty missing,
+                 "sources with NO kind posture (machine or declared): #{missing.join(', ')} — " \
+                 "add a config/kind_map.yml rule or declare kind: {posture: unclassified} " \
+                 "(honest) / pending (naming its candidate) in config/postures.yml"
+  end
+
+  def test_kind_declarations_never_shadow_kind_map_rules
+    kinds = Nabu::Kinds.load(
+      classes_path: File.expand_path("../config/kind_classes.yml", __dir__),
+      map_path: File.expand_path("../config/kind_map.yml", __dir__)
+    )
+    assert_empty postures.kind_shadowing(ruled_slugs: kinds.sources),
+                 "a declared kind row duplicates a kind_map rule — delete the declaration"
+  end
+
   def test_lect_declarations_never_shadow_machine_postures
     assert_empty postures.shadowing(rules: rules, overrides: overrides),
                  "a declared lect row duplicates a rules/overrides posture — delete the " \

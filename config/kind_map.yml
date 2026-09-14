@@ -236,6 +236,38 @@ sources:
       # the finer `cat` field is the future refinement path).
   cbeta:              # the whole source IS the Buddhist canon (Taishō + Xuzangjing)
     source_kind: scripture
+  # -- whole-source canon declarations (P100-4; the cbeta/okhc precedent:
+  # the source IS a canon or a dynastic record — one ruled line each) ---
+  vulgate:
+    source_kind: scripture
+  eng-web:
+    source_kind: scripture
+  sblgnt:
+    source_kind: scripture
+  oshb:
+    source_kind: scripture
+  bhsa:
+    source_kind: scripture
+  peshitta:
+    source_kind: scripture
+  titus-avestan:
+    source_kind: scripture   # the Avesta
+  e84000:
+    source_kind: scripture   # Tibetan canon in translation
+  derge-kangyur:
+    source_kind: scripture
+  derge-tengyur:
+    source_kind: scripture
+  sillok:                    # the okhc dynastic-record family
+    source_kind: historiography/annals
+  sjw:
+    source_kind: historiography/annals
+  bibyeonsa:
+    source_kind: historiography/annals
+  goryeosa:
+    source_kind: historiography
+  goryeosa-jeoryo:
+    source_kind: historiography/chronicle
   aozora:             # NDC codes ("NDC 913", children's "NDC K913", multi "NDC 913 914")
     metadata: ndc
     regex_map:

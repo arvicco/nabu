@@ -22,16 +22,19 @@
 sources:
   # ── dates: the dating-inferred epigraphic/documentary corpora ──────────
   ceipom:
+    kind: {posture: unclassified}
     lect: {posture: dates}
     dating: {posture: dated}
     places: {posture: linked, note: "refs on 27% — names reach 100%"}
     script: {posture: implied}
   corph:
+    kind: {posture: unclassified}
     lect: {posture: dates}
     dating: {posture: partial}
     places: {posture: unplaced}
     script: {posture: implied}
   croala:
+    kind: {posture: unclassified}
     lect:
       posture: dates
       note: ruled DELIBERATELY unstaged at source grain (D57-f — genuinely
@@ -109,6 +112,7 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   viet-wikisource:
+    kind: {posture: unclassified}
     lect:
       posture: codemap
       note: lzh → zho/lit (the kanripo/sillok precedent — Literary Chinese as
@@ -147,11 +151,13 @@ sources:
     places: {posture: unplaced, note: "지명 index refs exist upstream — a future linked revisit, not a claim"}
     script: {posture: implied}
   itkc:
+    kind: {posture: unclassified}
     lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent; upstream's 언어 "coc" is ITKC-internal, P78-7)}
     dating: {posture: dated, note: "per-work 원문간행년 original print year via MetadataDates :structured"}
     places: {posture: unplaced}
     script: {posture: implied}
   classical-modern:
+    kind: {posture: unclassified}
     lect: {posture: codemap, note: lzh → zho/lit (the kanripo precedent; the
         cmn translation siblings are modern-Chinese apparatus, no lect claim)}
     dating: {posture: undatable, note: "the chapter units carry no dates —
@@ -176,6 +182,7 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   ud:
+    kind: {posture: unclassified}
     lect:
       posture: codemap
       note: the lzh treebanks → zho/lit; the rest ruled DELIBERATELY
@@ -187,36 +194,43 @@ sources:
   # ── identity: the bare code IS the claim ───────────────────────────────
   # Stage-specific ISO codes (the code already names the historical stage):
   oncoj:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: ojp IS Old Japanese}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   rem:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: gmh IS Middle High German}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   ren:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: gml IS Middle Low German}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   bfm:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: fro IS Old French}
     dating: {posture: dated}
     places: {posture: unplaced}
     script: {posture: implied}
   helipad:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: osx IS Old Saxon}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   menotec:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: non IS Old Norse}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   menota:
+    kind: {posture: unclassified}
     # lect: machine-postured (№R-42 ruled 2026-08-24, nabu-lects v1.1.0
     # minted no/no:old + da/da:old + the nor/dan/gmq-oda codemap rows) —
     # the pending row retired, the ref add-then-retire shape. Coverage:
@@ -237,11 +251,13 @@ sources:
         extensions (many PUA); the menota-rune Corpuscle sibling corpus
         is deliberately out of v1 scope"}
   aspr:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: ang IS Old English}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   cme:
+    kind: {posture: unclassified}
     lect:
       posture: identity
       note: "enm IS Middle English (registry band 1100–1500, parent ang;
@@ -261,6 +277,7 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   eebo-tcp:
+    kind: {posture: unclassified}
     lect:
       posture: identity
       note: "en IS the claim and it is TRUE today (P83-1): 97.6% of the
@@ -289,6 +306,7 @@ sources:
         place claim minted"}
     script: {posture: implied}
   iswoc:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: ang/fro — both stage-coded}
     dating: {posture: undatable}
     places: {posture: unplaced}
@@ -305,21 +323,25 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   cantigas:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: roa-opt IS medieval Galician-Portuguese}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   otdo:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: otb IS Old Tibetan}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   old-tibetan:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: otb}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   soas-tibetan:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: xct IS Classical Tibetan}
     dating: {posture: undatable}
     places: {posture: unplaced}
@@ -335,6 +357,7 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   ko-wikisource-mk:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: okm IS Middle Korean (the MK layer; the hanmun
         ruby passages ride lzh, sillok's codemap precedent, no separate claim)}
     dating: {posture: dated, note: "P78-4: 머리말 연도 = 1447 (the print year, upstream's
@@ -348,11 +371,13 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   rsti:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: catalog records across nine codes; uga has no stages}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   cuc:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: uga}
     dating: {posture: undatable}
     places: {posture: unplaced}
@@ -369,16 +394,19 @@ sources:
         rides document metadata verbatim in v1"}
     script: {posture: qualified, note: romanized transliteration (Latn)}
   betamasaheft-works:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: gez/amh — no minted stages}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   traces:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: gez}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   syriac-corpus:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: syc IS Classical Syriac}
     dating: {posture: undatable}
     places: {posture: unplaced}
@@ -399,11 +427,13 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   open-etruscan:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: ett — no minted stages}
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: implied}
   tir:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: xrr Raetic}
     dating: {posture: partial}
     places: {posture: named}
@@ -434,16 +464,19 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   sarit:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: classical Sanskrit editions; no school tags like DCS's}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: qualified}
   damaskini:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: early-modern Bulgarian damaskini + chu apparatus}
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: implied}
   diccas:   # P95-4
+    kind: {posture: unclassified}
     lect: {posture: identity, note: "ara IS Arabic — Qurʾān/ḥadīth/chronicle
         excerpts; an ara:cla whole-source staging is a future ruling, not a
         default"}
@@ -463,21 +496,25 @@ sources:
     script: {posture: implied}
   # Ruled deliberately unstaged (D57-f): mixed corpora, bare-anchor honesty.
   first1k-greek:
+    kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   diorisis:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   glaux:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: ruled deliberately unstaged (D57-f)}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   corpus-corporum:
+    kind: {posture: unclassified}
     lect:
       posture: identity
       note: genuinely mixed Latin at source grain (PL authors 105-1847,
@@ -496,11 +533,13 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   proiel:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: mixed treebank collection — the ud/D57-f stance}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   local-library:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: the owner's own shelf — codes as curated}
     dating: {posture: undatable}
     places: {posture: unplaced}
@@ -508,18 +547,21 @@ sources:
 
   # ── pending: a real refinement candidate, not yet ruled ────────────────
   etcsl:
+    kind: {posture: unclassified}
     # lect declaration retired P64-6 (№1 ruled): the etcsl sux→sux:post
     # override machine-postures it now (the shadowing rule).
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   coptic-scriptorium:
+    kind: {posture: unclassified}
     # lect declaration retired P64-6 (№2 ruled): cop/sah+boh minted and the
     # cop-dialect rule machine-postures it now (the shadowing rule).
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: mixed, note: "Greek loans inside Coptic text"}
   dharma-khmer:
+    kind: {posture: unclassified}
     # P92 gate: v1.6.0 AND the v1.6.1 census mint both merged and
     # reached canonical 2026-09-02 — pending retired same-phase (the
     # xum shape, twice over).
@@ -532,6 +574,7 @@ sources:
     script: {posture: qualified, note: "romanized editions (okz-Latn/san-Latn); the stones'
         Khmer script is the artifact fact, not the held surface"}
   dharma-campa:
+    kind: {posture: unclassified}
     # P92 gate: the v1.6.0 SEA mint merged and reached canonical
     # 2026-09-02 — pending retired to identity (the xum shape).
     lect: {posture: identity, note: "ocm-Latn/san-Latn — both resolve on the
@@ -541,6 +584,7 @@ sources:
     script: {posture: qualified, note: "romanized (ocm-Latn/san-Latn); the Cham script is
         the artifact fact"}
   dharma-nusantara:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: "kaw/omy/osn/san -Latn — all resolve on the
         canonical v1.6.0 rows (pending retired at the P92 gate)"}
     dating: {posture: undatable, note: "no machine date field; Śaka years live in the
@@ -549,6 +593,7 @@ sources:
     script: {posture: qualified, note: "romanized; Kawi and Old Sundanese scripts are the
         artifact facts"}
   dharma-pyu:
+    kind: {posture: unclassified}
     # P92 gate: v1.6.1 (omx/pli anchors + the -Latn rows) on canonical
     # — pending retired; the corpus's six lanes all resolve, Old Mon's
     # first digital text among them.
@@ -559,6 +604,7 @@ sources:
     script: {posture: qualified, note: "romanized (pyx-Latn); the Pyu script is the
         artifact fact"}
   obi-burmese:
+    kind: {posture: unclassified}
     # P92 gate: obr minted in v1.6.0, on canonical — identity (the
     # bare code needs no codemap row).
     lect: {posture: identity, note: "obr — the v1.6.0 anchor; the bare code is the claim"}
@@ -570,6 +616,7 @@ sources:
     script: {posture: qualified, note: "Myanmar-script Unicode surface (~mymr) with a
         Latin transliteration lane riding annotations"}
   dharma-javanese-texts:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: "kaw/osn/san -Latn — all resolve on the
         canonical v1.6.0 rows (pending retired at the P92 gate)"}
     dating: {posture: undatable, note: "no machine date field; composition dates are
@@ -585,6 +632,7 @@ sources:
     places: {posture: unplaced}
     script: {posture: qualified, note: "romanized headwords (the OJED transliteration)"}
   titus-osco-umbrian:
+    kind: {posture: unclassified}
     # P90-2: `osc` and `xum` are both real nabu-lects anchors (xum minted
     # upstream 2026-08-31 and synced to canonical the same day — the
     # pending retired at the gate, the add-then-retire shape within one
@@ -612,6 +660,7 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   torot:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: "№4 ruled 2026-08-09: all six chu mss
         (Kiev Missal, Psalterium Sinaiticum, Suprasliensis, both Vitae,
         Zographensis) ARE the canonical corpus the registry's bare anchor
@@ -620,30 +669,35 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   ccmh:
+    kind: {posture: unclassified}
     # lect declaration retired P64-6 (№4 ruled): the ccmh chu→chu/cro
     # override machine-postures it now (the shadowing rule).
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   imp:
+    kind: {posture: unclassified}
     lect: {posture: dates, note: "№5 ruled 2026-08-09: sl stage bands minted
         (old/emod/mod) — infer-dates stages the 100%-dated corpus"}
     dating: {posture: dated}
     places: {posture: unplaced}
     script: {posture: implied}
   goo300k:
+    kind: {posture: unclassified}
     lect: {posture: dates, note: "№5 ruled 2026-08-09: as imp — the sl bands
         stage the dated corpus"}
     dating: {posture: dated}
     places: {posture: unplaced}
     script: {posture: implied}
   freising:
+    kind: {posture: unclassified}
     # lect declaration retired P64-6 (№5 ruled): the freising sl→sl:old
     # override machine-postures it now (the shadowing rule).
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   corpus-oudnederlands:
+    kind: {posture: unclassified}
     # P84-7 (Q48): odt is a real nabu-lects anchor (Old Dutch), so identity is
     # the honest claim — no machine rule/override covers odt, no shadowing.
     lect: {posture: identity, note: "odt — Old Dutch anchor (nabu-lects); bare code is the claim"}
@@ -651,24 +705,28 @@ sources:
     places: {posture: named, note: "witnessLocalization place names ride in metadata; not gazetteer-linked"}
     script: {posture: implied}
   corpus-gysseling:
+    kind: {posture: unclassified}
     # dum is a real nabu-lects anchor (Middle Dutch); identity, no shadowing.
     lect: {posture: identity, note: "dum — Middle Dutch anchor (nabu-lects); bare code is the claim"}
     dating: {posture: dated, note: "each doc carries <datering jaar_van jaar_tot>; span = min..max"}
     places: {posture: named, note: "atlas plaats_1/regio_1 codes resolved to names via plaats.txt/regio.txt"}
     script: {posture: implied}
   gretil:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: "№6 ruled 2026-08-09: the census found NO
         content facets (nothing DCS-veda-like) — bare san~latn stands"}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: qualified}
   tla-hf:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: "№7 ruled 2026-08-09: 4 docs total — the
         pending cost more than the corpus; bare egy/deu are the honest claim"}
     dating: {posture: partial}
     places: {posture: unplaced}
     script: {posture: implied}
   fornsvenska:
+    kind: {posture: unclassified}
     # lect declaration retired P77-r8: the fsv-old rule (№R-32, the sv:old
     # whole-source claim) machine-postures fornsvenska now (the shadowing
     # rule; nabu-lects PR #4 minted the target).
@@ -678,6 +736,7 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   ref:
+    kind: {posture: unclassified}
     # lect: machine-postured by the ref-enhg rule (Q39, nabu-lects PR #5
     # merged 2026-08-19) — the pending row retired, the fornsvenska
     # add-then-retire shape.
@@ -691,6 +750,7 @@ sources:
         place, a genuine origin claim, not a holding library)"}
     script: {posture: implied}
   disco:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: "P77-4: bare spa is the honest one-tag claim
         across the 15th-20th c. span — the period band rides document metadata;
         a stage split (Golden Age Spanish) would need a ruled rule"}
@@ -701,6 +761,7 @@ sources:
         composition place — rides metadata verbatim"}
     script: {posture: implied}
   ctilc:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: "P80-8: bare cat is the honest one-tag claim
         for 19th-20th c. printed Catalan (no Catalan node in nabu-lects yet —
         identity-default bare anchor); the CLASSIFICACIÓ_TEXTUAL variant=
@@ -714,6 +775,7 @@ sources:
         verbatim — never a composition-place claim"}
     script: {posture: implied}
   osta:
+    kind: {posture: unclassified}
     # lect declaration retired P77-r8: the osta-leones/osta-aragones lengua
     # rules machine-posture osta now (the shadowing rule; nabu-lects PR #3
     # minted ast:old/an:old). The castellano/gallego/latín majority rides
@@ -733,6 +795,7 @@ sources:
   # rule; the three new layers still declare (coverage-derived, the
   # sweep of 2026-08-07). ────────────────────────────────────────────
   achemenet:
+    kind: {posture: unclassified}
     # lect row RETIRED 2026-08-18: №R-34 ruled the blanket akk:nb rule
     # (achemenet-nb, the archive-facet total map) — the machine grain
     # machine-postures achemenet now (the shadowing rule; same-phase
@@ -748,6 +811,7 @@ sources:
         Murashu=Nippur, YOS7=Uruk) from the archive facet"
     script: {posture: implied}
   aes:
+    kind: {posture: unclassified}
     dating: {posture: partial}
     places: {posture: named}
     script: {posture: implied}
@@ -756,6 +820,7 @@ sources:
     places: {posture: named}
     script: {posture: implied}
   dacon:
+    kind: {posture: unclassified}
     # P88-A4: minted as pending on the nwc anchor (censused absent
     # 2026-08-29); the P88-B3 aggregated mint (nabu-lects PR #11, v1.4.0)
     # merged and reached canonical 2026-08-30 — nwc + new now anchor the
@@ -768,14 +833,17 @@ sources:
     script: {posture: qualified, note: "IAST romanization (Latn) throughout —
         the deposit carries no native Newa/Devanagari surface"}
   dcs:
+    kind: {posture: unclassified}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   digiliblt:
+    kind: {posture: unclassified}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   dss:
+    kind: {posture: unclassified}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
@@ -796,6 +864,7 @@ sources:
     places: {posture: named}
     script: {posture: qualified}
   prilit:   # P95-1
+    kind: {posture: unclassified}
     lect: {posture: dates, note: "as goo300k/imp — the sl stage bands stage
         the dated corpus via infer-dates (print years on every work)"}
     dating: {posture: dated, note: "sourceDesc printSource date @when on
@@ -803,10 +872,12 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   openiti:
+    kind: {posture: unclassified}
     dating: {posture: dated}
     places: {posture: unplaced}
     script: {posture: implied}
   openmgh:
+    kind: {posture: unclassified}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
@@ -815,6 +886,7 @@ sources:
     places: {posture: linked}
     script: {posture: qualified}
   perseus-anglit:   # P95-4
+    kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     lect: {posture: identity, note: "ang IS Old English (the aspr mold);
         Klaeber's Beowulf beside the held ASPR witness — second edition,
         never merged; the eng lane is the aligned translation"}
@@ -822,6 +894,7 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   perseus-farsilit:   # P95-4
+    kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     lect: {posture: identity, note: "fas IS Persian (codemap → the bare fa
         anchor) — Hafez; the registry holds no Persian stages yet, so the
         bare code is the honest claim"}
@@ -829,14 +902,17 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   perseus-greek:
+    kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   perseus-latin:
+    kind: {posture: pending, note: "candidate: TEI textClass ingestion (unruled)"}
     dating: {posture: undatable}
     places: {posture: unplaced}
     script: {posture: implied}
   rundata:
+    kind: {posture: unclassified}
     dating: {posture: dated, note: "P62-3: lane siblings inherit their stone's band via signum —
         30,647 rows, 0 undated (the P40-6 exclusion reversed)"}
     places: {posture: named}
@@ -856,6 +932,7 @@ sources:
 
   # ── P80-6: the small-languages pack (modern-text corpora) ──────────────
   lo-congres:
+    kind: {posture: unclassified}
     # lect: machine-postured by the oci-dialect rule (№R-41 ruled
     # 2026-08-21, nabu-lects PR #6 minted the oc dialect varieties +
     # the oci→oc alias) — the identity row retired, the ref
@@ -865,12 +942,14 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   cv-sardinian:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: bare srd — the registry's own identity example;
         modern Sardinian sentence text}
     dating: {posture: undatable, note: crowd-collected modern sentences, no per-item dates}
     places: {posture: unplaced}
     script: {posture: implied}
   salom:
+    kind: {posture: unclassified}
     lect: {posture: identity, note: bare lad — modern Judeo-Spanish press,
         Latin-script Turkish-style orthography}
     dating: {posture: undatable, note: sentences segmented and shuffled upstream —
@@ -878,6 +957,7 @@ sources:
     places: {posture: unplaced}
     script: {posture: implied}
   aranese:
+    kind: {posture: unclassified}
     # lect: machine-postured by the aranese override (oci → oc/aranes,
     # №R-41 ruled 2026-08-21, nabu-lects PR #6 minted oc/aranes) — the
     # identity row retired. The synthetic-corpus caveat stays on the
