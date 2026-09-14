@@ -113,11 +113,27 @@ module Adapters
     def test_discover_and_parse_thread_the_catalogue_period_as_a_facet
       refs = conformance_adapter.discover(FIXTURES).to_h { |ref| [ref.id, ref] }
       ref = refs["urn:nabu:oracc:rimanum:P405134"]
-      assert_equal({ "period" => { "value" => "Old Babylonian" } }, ref.metadata["facets"])
+      assert_equal({ "period" => { "value" => "Old Babylonian" } }, ref.metadata["facets"],
+                   "a genre-less member emits the period facet alone")
 
       document = conformance_adapter.parse(ref)
       assert_equal({ "period" => { "value" => "Old Babylonian" } }, document.metadata["facets"],
                    "the parser passes the facet through to the persisted document metadata")
+    end
+
+    # P100-2: the catalogue GENRE rides the same seam (the kind axis'
+    # oracc emission — 115,263 genre-bearing catalogue entries censused
+    # 2026-09-14): {"genre" => {"value" => …}} beside the period,
+    # absent when the member carries none.
+    def test_discover_threads_the_catalogue_genre_as_a_facet
+      refs = conformance_adapter.discover(FIXTURES).to_h { |ref| [ref.id, ref] }
+      etcsri = refs["urn:nabu:oracc:etcsri:Q001299"]
+      assert_equal "Royal Inscription", etcsri.metadata.dig("facets", "genre", "value")
+      assert_equal "Early Dynastic", etcsri.metadata.dig("facets", "period", "value"),
+                   "genre joins the period facet, never replaces it"
+
+      document = conformance_adapter.parse(etcsri)
+      assert_equal "Royal Inscription", document.metadata.dig("facets", "genre", "value")
     end
 
     # -- P11-7 fix 1: subproject NESTED-ROOT discovery ------------------------
