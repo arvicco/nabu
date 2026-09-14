@@ -76,8 +76,8 @@ sources:
       "term. non sep.": boundary/terminus        # 904
       "sepulcralis, carmen": [funerary/epitaph, poetry]   # 660 — verse epitaphs
       "tit. in artis operib. inscr.": mark/maker # 498
-      # left unmapped: "cetera" (7,839 — upstream's own catch-all; a
-      # round-2 ruling decides whether it folds to unknown).
+      "cetera": unknown                          # 7,839 — upstream's own catch-all
+      #   (ruled 2026-09-14: an explicit "the rest" is a non-classification claim)
   elephantine:        # 9,034 docs; pipes split upstream composites
     facet: genre
     map:
@@ -97,7 +97,7 @@ sources:
       "text_unknown": unknown                    # 398
       "graffiti": mark/graffito                  # 295
       "legal.receipt": administrative/receipt    # 207
-      # left unmapped: "text_other" (327 — upstream's other-bucket).
+      "text_other": unknown                      # 327 — upstream's other-bucket (ruled 2026-09-14)
   isicily:
     facet: genre
     map:
