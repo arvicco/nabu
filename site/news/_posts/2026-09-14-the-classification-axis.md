@@ -1,6 +1,6 @@
 ---
 title: "The classification axis: what kind of document is this?"
-date: 2026-09-14 12:00:00 +0000
+date: 2026-09-14 06:00:00 +0000
 description: >-
   The library gains its fourth axis. Beside when, where, and in what
   language variety, every document can now answer what KIND of text it
