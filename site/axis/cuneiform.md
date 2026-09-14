@@ -20,8 +20,8 @@ A source wears every desk it serves — these sixteen answer this desk. Holdings
 | `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
 | `oracc` | tablets | open | wired · manual | 118,367 docs / 1,800,218 passages |
 | `wiktionary-sux` | dictionary | attribution | wired · manual | 2,499 entries |
-| `wiktionary-akk` | dictionary | attribution | not yet wired | 1,348 entries |
-| `wiktionary-hit` | dictionary | attribution | not yet wired | 481 entries |
+| `wiktionary-akk` | dictionary | attribution | wired · manual | 1,348 entries |
+| `wiktionary-hit` | dictionary | attribution | wired · manual | 481 entries |
 | `cigs` | feature module | attribution | wired · manual | nothing held yet |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 | `etcsl` | texts | nc | wired · frozen | 775 docs / 42,577 passages |

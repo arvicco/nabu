@@ -3,97 +3,113 @@
 as_of: 14 September 2026
 classes:
 - head: historiography
-  documents: 1200670
-  documents_display: '1,200,670'
-  sources: 3
+  documents: 1202781
+  documents_display: '1,202,781'
+  sources: 10
 - head: administrative
-  documents: 205036
-  documents_display: '205,036'
-  sources: 5
-- head: funerary
-  documents: 112408
-  documents_display: '112,408'
+  documents: 314701
+  documents_display: '314,701'
   sources: 7
+- head: funerary
+  documents: 114657
+  documents_display: '114,657'
+  sources: 9
+- head: legal
+  documents: 32614
+  documents_display: '32,614'
+  sources: 8
+- head: letter
+  documents: 32251
+  documents_display: '32,251'
+  sources: 6
+- head: royal
+  documents: 29616
+  documents_display: '29,616'
+  sources: 3
 - head: dedicatory
   documents: 22717
   documents_display: '22,717'
   sources: 5
-- head: royal
-  documents: 22572
-  documents_display: '22,572'
-  sources: 2
-- head: legal
-  documents: 18886
-  documents_display: '18,886'
-  sources: 5
-- head: letter
-  documents: 17131
-  documents_display: '17,131'
+- head: scripture
+  documents: 19659
+  documents_display: '19,659'
+  sources: 14
+- head: lexical
+  documents: 15254
+  documents_display: '15,254'
   sources: 3
 - head: ritual
-  documents: 11824
-  documents_display: '11,824'
-  sources: 2
+  documents: 12579
+  documents_display: '12,579'
+  sources: 3
 - head: honorific
   documents: 11203
   documents_display: '11,203'
   sources: 3
 - head: mark
-  documents: 10561
-  documents_display: '10,561'
-  sources: 5
-- head: lexical
-  documents: 9264
-  documents_display: '9,264'
-  sources: 2
+  documents: 11129
+  documents_display: '11,129'
+  sources: 7
 - head: divination
-  documents: 8227
-  documents_display: '8,227'
-  sources: 3
+  documents: 10179
+  documents_display: '10,179'
+  sources: 4
 - head: building
   documents: 7863
   documents_display: '7,863'
   sources: 2
-- head: scripture
-  documents: 7582
-  documents_display: '7,582'
-  sources: 1
+- head: narrative
+  documents: 7633
+  documents_display: '7,633'
+  sources: 5
 - head: scholarly
-  documents: 4940
-  documents_display: '4,940'
-  sources: 2
+  documents: 6343
+  documents_display: '6,343'
+  sources: 4
 - head: school
-  documents: 3969
-  documents_display: '3,969'
-  sources: 1
+  documents: 4967
+  documents_display: '4,967'
+  sources: 2
+- head: essay
+  documents: 4370
+  documents_display: '4,370'
+  sources: 2
+- head: magic
+  documents: 3200
+  documents_display: '3,200'
+  sources: 5
 - head: boundary
   documents: 2924
   documents_display: '2,924'
   sources: 2
-- head: hymn-prayer
-  documents: 2404
-  documents_display: '2,404'
-  sources: 3
-- head: magic
-  documents: 2273
-  documents_display: '2,273'
-  sources: 3
 - head: poetry
-  documents: 681
-  documents_display: '681'
-  sources: 1
-- head: narrative
-  documents: 662
-  documents_display: '662'
+  documents: 2671
+  documents_display: '2,671'
+  sources: 4
+- head: hymn-prayer
+  documents: 2528
+  documents_display: '2,528'
+  sources: 5
+- head: wisdom
+  documents: 884
+  documents_display: '884'
   sources: 2
-- head: drama
-  documents: 11
-  documents_display: '11'
+- head: diary
+  documents: 650
+  documents_display: '650'
   sources: 1
-unclassified_sources: 103
-unknown_documents: 31388
-unknown_documents_display: '31,388'
-unmapped_documents: 36529
-unmapped_documents_display: '36,529'
-unclassified_documents: 526395
-unclassified_documents_display: '526,395'
+- head: exegesis
+  documents: 382
+  documents_display: '382'
+  sources: 1
+- head: drama
+  documents: 359
+  documents_display: '359'
+  sources: 3
+unclassified_sources: 80
+unknown_documents: 41492
+unknown_documents_display: '41,492'
+unmapped_documents: 49012
+unmapped_documents_display: '49,012'
+unclassified_documents: 319698
+unclassified_documents_display: '319,698'

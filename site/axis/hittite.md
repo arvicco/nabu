@@ -18,7 +18,7 @@ A source wears every desk it serves — these three answer this desk. Holdings a
 | Source | Holds | License | Status | Holdings <span title="read live from the catalog">(as of 14 September 2026)</span> |
 |---|---|---|---|---|
 | `ud` | treebank | nc | wired · manual | 76 docs / 325,533 passages |
-| `wiktionary-hit` | dictionary | attribution | not yet wired | 481 entries |
+| `wiktionary-hit` | dictionary | attribution | wired · manual | 481 entries |
 | `tlhdig` | tablets | attribution | wired · manual | 23,486 docs / 402,195 passages |
 
 **Languages on this desk** <span title="read live from the catalog">(live doc-or-entry counts as of 14 September 2026)</span>: `hit` 21,691 · `akk` 936 · `xhu` 698 · `xht` 326 · `xlu` 206 · `sux` 80 · `plq` 30 · `lat` 11 · `grc` 9 · `orv` 9 … and 15 more (`nabu axis hittite` lists all).
