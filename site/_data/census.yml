@@ -8,7 +8,7 @@ passages_display: '106,902,485'
 language_codes: 167
 registry_rows: 187
 corpus_sources: 159
-live_sources: 157
+live_sources: 159
 local_shelves: 5
 feature_modules: 23
 top_languages:
@@ -72,7 +72,7 @@ silver_lemmas_display: '35,945,917'
 silver_lemmas_m: '35.9'
 silver_languages: 15
 desks: 25
-kind_class_count: 22
-kind_documents: 1747901
-kind_documents_display: '1,747,901'
-kind_coverage_pct: 76
+kind_class_count: 26
+kind_documents: 1954598
+kind_documents_display: '1,954,598'
+kind_coverage_pct: 85
