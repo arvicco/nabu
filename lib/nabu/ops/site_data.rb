@@ -3,6 +3,7 @@
 require "yaml"
 require "date"
 
+require_relative "../query/kind_census"
 require_relative "../query/list"
 
 module Nabu
@@ -31,6 +32,9 @@ module Nabu
       # P81-1 (C-6): the chronological census behind /dates/ — the same
       # Query::List#by_date_census the CLI's `list --by-date` renders.
       DATES_FILE = "dates.yml"
+      # P100-6: the kind-axis class board behind /kinds/ — the same
+      # Query::KindCensus the CLI's `nabu kind census` renders.
+      KINDS_FILE = "kinds.yml"
 
       # Century rows name at most this many sources (+n more) — the CLI cap.
       DATES_SOURCES = 4
@@ -82,6 +86,7 @@ module Nabu
         passages = catalog[:passages].where(withdrawn: false).count
         entries = catalog[:dictionary_entries].where(withdrawn: false).count
         reg = registry_breakdown
+        kind = kind_headline(catalog)
         {
           # Liquid cannot comma- or million-format, so every number the
           # prose cites ships BOTH raw and display-ready. This hash is the
@@ -111,7 +116,14 @@ module Nabu
           "silver_lemmas" => silver, "silver_lemmas_display" => self.class.commas(silver),
           "silver_lemmas_m" => self.class.millions(silver),
           "silver_languages" => silver_langs,
-          "desks" => @registry.axes.size
+          "desks" => @registry.axes.size,
+          # The kind axis' headline (P100-6): class families attested,
+          # classified-document total, and the classified share of the
+          # kind-eligible library (classified + unclassified live docs).
+          "kind_class_count" => kind[:classes],
+          "kind_documents" => kind[:documents],
+          "kind_documents_display" => self.class.commas(kind[:documents]),
+          "kind_coverage_pct" => kind[:coverage]
         }
       ensure
         catalog&.disconnect
@@ -151,6 +163,20 @@ module Nabu
         catalog&.disconnect
       end
 
+      # The kinds page's data (P100-6): the kind-axis class board as
+      # Liquid-ready rows — head-grain classes ranked by document spread,
+      # the honesty buckets (unknown / unmapped) beside — never inside —
+      # the classes, the unclassified remainder announced. A catalog
+      # predating migration 032 (no kind_stats) yields the honest empty
+      # board.
+      def kinds
+        catalog = Store.connect(@catalog_path, readonly: true)
+        report = Query::KindCensus.new(catalog: catalog).run
+        { "as_of" => @as_of.strftime("%-d %B %Y") }.merge(kind_board(report))
+      ensure
+        catalog&.disconnect
+      end
+
       def self.commas(number)
         number.to_s.gsub(/(\d)(?=(\d{3})+\z)/, '\1,')
       end
@@ -159,10 +185,11 @@ module Nabu
         (number / 1_000_000.0).round(1).to_s
       end
 
-      # Write the three files. Returns the paths written.
+      # Write the four files. Returns the paths written.
       def generate!
         FileUtils.mkdir_p(@data_dir)
-        [write(DESKS_FILE, desks), write(CENSUS_FILE, census), write(DATES_FILE, dates)]
+        [write(DESKS_FILE, desks), write(CENSUS_FILE, census),
+         write(DATES_FILE, dates), write(KINDS_FILE, kinds)]
       end
 
       def self.split_persona(persona)
@@ -186,6 +213,40 @@ module Nabu
         { "label" => bucket.label, "documents" => bucket.documents,
           "documents_display" => self.class.commas(bucket.documents),
           "sources" => shown.join(" · ") }
+      end
+
+      # The census' kind headline off the same open catalog handle: class
+      # families attested, classified-doc total, and the classified share
+      # (integer percent, the dates-coverage convention). Degrades to
+      # zeros on a catalog without kind_stats.
+      def kind_headline(catalog)
+        report = Query::KindCensus.new(catalog: catalog).run
+        documents = report&.classified_documents.to_i
+        total = documents + report&.unclassified_documents.to_i
+        { classes: report&.classes&.size.to_i,
+          documents: documents,
+          coverage: total.positive? ? (documents * 100) / total : 0 }
+      end
+
+      def kind_board(report)
+        return { "classes" => [] }.merge(kind_buckets(nil)) if report.nil?
+
+        classes = report.classes.map do |row|
+          { "head" => row.head, "documents" => row.documents,
+            "documents_display" => self.class.commas(row.documents),
+            "sources" => row.sources }
+        end
+        { "classes" => classes }.merge(kind_buckets(report))
+      end
+
+      def kind_buckets(report)
+        %w[unknown unmapped unclassified].each_with_object(
+          "unclassified_sources" => report&.unclassified_sources.to_i
+        ) do |bucket, hash|
+          count = report&.public_send(:"#{bucket}_documents").to_i
+          hash["#{bucket}_documents"] = count
+          hash["#{bucket}_documents_display"] = self.class.commas(count)
+        end
       end
 
       def write(name, data)
