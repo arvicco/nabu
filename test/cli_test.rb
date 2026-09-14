@@ -4075,6 +4075,68 @@ class CLITest < Minitest::Test
   # the ok row folds into the rollup line, golden queries all skipped (the
   # TestAdapter corpus holds none of the golden urns), exit 0; `--all`
   # restores the per-source row.
+  # -- kind (P99-3 — №R-63): the fourth axis' CLI surfaces -------------------
+
+  # Seed kind rows the way KindBuilder writes them, straight into the
+  # synced catalog — the census, the search filter, and the card line
+  # all read the same derived facet rows.
+  def seed_kind_rows(config)
+    db = Sequel.sqlite(config.catalog_path)
+    doc_ids = db[:documents].order(:id).select_map(:id)
+    db[:document_facets].insert(document_id: doc_ids[0], facet: "kind",
+                                value: "funerary/epitaph", raw: "sepulcralis")
+    db[:document_facets].insert(document_id: doc_ids[0], facet: "kind",
+                                value: "poetry", raw: "sepulcralis, carmen")
+    db[:document_facets].insert(document_id: doc_ids[1], facet: "kind",
+                                value: "unmapped", raw: "cetera")
+    # The precompiled census the board reads (KindBuilder's shape).
+    source_id = db[:documents].where(id: doc_ids[0]).get(:source_id)
+    db[:kind_stats].multi_insert([
+                                   { source_id: source_id, head: "funerary", documents: 1 },
+                                   { source_id: source_id, head: "poetry", documents: 1 },
+                                   { source_id: source_id, head: "unmapped", documents: 1 },
+                                   { source_id: source_id, head: nil, documents: 2 }
+                                 ])
+    db.disconnect
+  end
+
+  def test_kind_census_board_buckets_and_summary
+    with_indexed_corpus do |config|
+      seed_kind_rows(config)
+      out, _err, status = with_config(config) { run_cli(%w[kind census]) }
+      assert_nil status
+      assert_match(/funerary\s+1 docs · 1 source/, out)
+      assert_match(/poetry\s+1 docs/, out)
+      assert_match(/unmapped\s+1 docs/, out, "the bucket renders apart from the classes")
+      assert_match(/no classification:/, out)
+      assert_match(/kind census: 2 class families · 2 classified docs .*\(\d/, out,
+                   "one summary line with elapsed")
+    end
+  end
+
+  def test_kind_census_unmapped_is_the_curation_worklist
+    with_indexed_corpus do |config|
+      seed_kind_rows(config)
+      out, _err, status = with_config(config) { run_cli(%w[kind census --unmapped]) }
+      assert_nil status
+      assert_match(/"cetera"\s+×1/, out)
+      assert_match(%r{candidate config/kind_map\.yml entry}, out)
+    end
+  end
+
+  def test_show_renders_the_kind_line_multi_label_with_upstream
+    with_indexed_corpus do |config|
+      seed_kind_rows(config)
+      db = Sequel.sqlite(config.catalog_path)
+      urn = db[:documents].order(:id).get(:urn)
+      db.disconnect
+      out, _err, status = with_config(config) { run_cli(["show", urn]) }
+      assert_nil status
+      assert_match(%r{kind: funerary/epitaph \+ poetry — upstream: "sepulcralis", "sepulcralis, carmen"},
+                   out)
+    end
+  end
+
   def test_health_local_healthy_corpus_exits_zero
     with_indexed_corpus do |config|
       out, _err, status = with_config(config) { run_cli(%w[health]) }

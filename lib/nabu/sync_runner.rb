@@ -94,10 +94,10 @@ module Nabu
     # run — the CLI's report line stays silent then.
     Outcome = Data.define(:slug, :fetch_report, :load_report, :breaker, :indexed, :warnings,
                           :discovery, :references, :enrichments, :place_index, :person_index,
-                          :analyzed) do
+                          :analyzed, :lect_staging) do
       def initialize(slug:, fetch_report:, load_report:, breaker:, indexed:, warnings:,
                      discovery:, references: nil, enrichments: nil, place_index: nil,
-                     person_index: nil, analyzed: nil)
+                     person_index: nil, analyzed: nil, lect_staging: nil)
         super
       end
 
@@ -227,7 +227,16 @@ module Nabu
                   enrichments: refresh_enrichments(entry),
                   place_index: refresh_place_index(entry),
                   person_index: refresh_person_index(entry),
-                  analyzed: analyze_after_load(load_report, adapter))
+                  analyzed: analyze_after_load(load_report, adapter),
+                  lect_staging: lect_staging_census(entry))
+    end
+
+    # P99-5 (the P59-4 front-door bullet): the synced source's
+    # unstaged-share census — one report line's worth of data; nil (no
+    # registry, nothing stageable held) prints nothing.
+    def lect_staging_census(entry)
+      LectStaging.census(catalog: @db, lects: Nabu::Lects.load_default(config: @config),
+                         slug: entry.slug)
     end
 
     # P47-r3 (the lane-drift audit — owner: "generalize and find out what
@@ -243,6 +252,10 @@ module Nabu
       return if load_report.nil? || (load_report.added.zero? && load_report.updated.zero?)
 
       Store::FacetBuilder.refresh_source!(catalog: @db, slug: entry.slug)
+      # Kind rows project from the facet rows just refreshed (P99-2) —
+      # same lesson (P47-r3): no lane may lag a sync.
+      Store::KindBuilder.refresh_source!(catalog: @db, slug: entry.slug,
+                                         kinds: Nabu::Kinds.load_default(config: @config))
       Store::TimelineBuilder::MetadataDates.refresh_source!(catalog: @db, slug: entry.slug)
       Store::TimelineBuilder::NikhEntryDates.refresh_source!(catalog: @db, slug: entry.slug)
     end

@@ -1,0 +1,154 @@
+# The kind axis — per-source folds (P99-4, under №R-63). Every entry
+# is rule curation like a lect rule: upstream's own vocabulary on the
+# left, a ruled class path (head or head/sub from kind_classes.yml) on
+# the right. Values the map does not cover surface as the counted
+# `unmapped` bucket (`nabu kind census --unmapped` is the worklist) —
+# deliberately-left values are noted per source. Census evidence:
+# .docs/surveys/document-classification-survey.md §2/§4a + the live
+# document_facets census 2026-09-13.
+split: ["|", ";"]     # elephantine pipes, cdli/oracc semicolons
+strip: ["?"]          # cataloguer uncertainty (edh "epitaph?", cdli "Administrative ?")
+sources:
+  cdli:               # 288,629 docs — the largest vocabulary by rows
+    facet: genre
+    map:
+      "Administrative": administrative           # 194,477 (+3,985 "?")
+      "Royal/Monumental": royal                  # 22,261
+      "Legal": legal                             # 16,553
+      "Letter": letter                           # 15,844
+      "Lexical": lexical                         # 8,144 (+287 "?")
+      "School": school                           # 3,894
+      "Omen": divination/omen                    # 3,042
+      "uncertain": unknown                       # 2,793
+      "Mathematical": scholarly/mathematics      # 1,947
+      "Astronomical": scholarly/astronomy        # 1,628
+      "Prayer/Incantation": [hymn-prayer, magic/incantation]   # 971 — ruled split
+      "Scientific": scholarly                    # 763
+      "Ritual": ritual                           # 420
+      # left unmapped for a round-2 ruling: "Literary" (9,657 — spans
+      # epic/hymn/wisdom; needs a fold decision), "fake (modern)" (230).
+  ebl:                # slash-path vocabulary — prefix rules, most-specific first
+    facet: genre
+    prefix_map:
+      "CANONICAL/Literature/Lamentations": hymn-prayer/lament    # 582
+      "CANONICAL/Literature/Hymns": hymn-prayer/hymn             # 318+
+      "CANONICAL/Technical/Medicine": scholarly/medicine         # 260+
+      "CANONICAL/Divination/Extispicy": divination/extispicy     # 747
+      "CANONICAL/Divination/Celestial": divination/astrology     # 1,076
+      "CANONICAL/Divination": divination                         # 472+ remainder
+      "CANONICAL/Magic": magic                                   # 539
+      "CANONICAL/Lexicography": lexical
+      "ARCHIVAL/Letter": letter                                  # 470
+      "ARCHIVAL/Administrative": administrative                  # 273
+      "ARCHIVAL/Legal": legal
+      "MONUMENTAL": royal                                        # 213
+      "OTHER/Uncertain": unknown                                 # 394
+      # left unmapped: bare "CANONICAL" (576) and "CANONICAL/Literature"
+      # remainder, bare "ARCHIVAL" (348) — need the finer path or a ruling.
+  edh:                # 81,881 docs, English vocabulary
+    facet: genre
+    map:
+      "epitaph": funerary/epitaph                # 26,706 (+1,376 "?")
+      "unknown": unknown                         # 20,632
+      "votive inscription": dedicatory/votive    # 13,335 (+858 "?")
+      "owner/artist inscription": mark/ownership # 4,725 (+611 "?")
+      "honorific inscription": honorific         # 3,383 (+621 "?")
+      "building/dedicatory inscription": building # 2,677 (+646 "?")
+      "mile-/leaguestone": boundary/milestone    # 1,701
+      "identification inscription": mark/label   # 1,369 (+201 "?")
+      "military diploma": legal                  # 500
+      "acclamation": honorific                   # 497
+      "list": administrative/list                # 314
+      "defixio": magic/curse                     # 294
+      "label": mark/label                        # 235
+      "boundary inscription": boundary           # 220
+      "public legal inscription": legal/law      # 209
+  edr:                # 115,590 docs, Latin vocabulary
+    facet: genre
+    map:
+      "sepulcralis": funerary/epitaph            # 75,279 (+2,721 "?")
+      "sacer": dedicatory/votive                 # 6,542 (+536 "?")
+      "ignoratur": unknown                       # 6,407
+      "honorarius": honorific                    # 5,111 (+1,269 "?")
+      "oper. publ. priv.que": building           # 3,855 (+674 "?")
+      "inscr. parietariae": mark/graffito        # 1,327
+      "fasti, leges, acta": legal/law            # 975
+      "term. non sep.": boundary/terminus        # 904
+      "sepulcralis, carmen": [funerary/epitaph, poetry]   # 660 — verse epitaphs
+      "tit. in artis operib. inscr.": mark/maker # 498
+      # left unmapped: "cetera" (7,839 — upstream's own catch-all; a
+      # round-2 ruling decides whether it folds to unknown).
+  elephantine:        # 9,034 docs; pipes split upstream composites
+    facet: genre
+    map:
+      "tax receipt": administrative/receipt      # 955 + 901 composite
+      "documentary": administrative              # 556 + composites
+      "tombstone": funerary                      # 744
+      "letter": letter                           # 208 + 268 composite
+      "account": administrative/account          # 207
+      # left unmapped: "note" (2,048 — too vague; round-2 ruling).
+  iip:
+    facet: genre
+    map:
+      "funerary.epitaph": funerary/epitaph       # 1,005
+      "funerary": funerary                       # 839
+      "dedicatory": dedicatory                   # 932
+      "label": mark/label                        # 461
+      "text_unknown": unknown                    # 398
+      "graffiti": mark/graffito                  # 295
+      "legal.receipt": administrative/receipt    # 207
+      # left unmapped: "text_other" (327 — upstream's other-bucket).
+  isicily:
+    facet: genre
+    map:
+      "funerary": funerary                       # 2,379
+      "unknown": unknown                         # 743
+      "dedication": dedicatory                   # 290
+      "honorific": honorific                     # 256
+  itant:
+    facet: genre
+    map:
+      "tile stamp": mark/stamp                   # 190
+      "inscription on vase": mark                # 150
+      "inscription on tile": mark                # 87
+  lexlep:
+    facet: genre
+    map:
+      "funerary": funerary                       # 49
+  ogham:
+    facet: genre
+    map:
+      "Commemorative": funerary                  # 423 — memorial stones
+  riig:
+    facet: genre
+    map:
+      "Marque de propriété": mark/ownership      # 312
+  bdcamoes:
+    facet: genre
+    map:
+      "Tale": narrative/tale                     # 41
+      "Novel": narrative/novel
+      "Chronicle": historiography/chronicle      # 21
+      "Drama": drama
+  suttacentral:       # the basket facet IS the canon division
+    facet: basket
+    map:
+      "sutta": scripture                         # 5,991
+      "vinaya": scripture                        # 422
+      "abhidhamma": scripture                    # 1,169
+  tlhdig:             # Laroche CTH ranges ARE the genres (23,486 docs)
+    facet: cth
+    range_map:
+      "1-220": historiography                    # historical texts (215: 345)
+      "291-298": legal/law                       # the Hittite laws
+      "321-370": narrative/myth                  # mythological texts
+      "371-389": hymn-prayer                     # hymns and prayers
+      "390-500": ritual                          # rituals (470: 1,926 · 500: 479)
+      "501-530": ritual/cult-inventory           # cult inventories (530: 290)
+      "531-582": divination                      # oracles and omina (582: 395)
+      "583-590": dedicatory/vow                  # vows
+      "591-724": ritual/festival                 # festival texts (670: 3,513 · 628: 308)
+      # left unmapped: 725+ (varia and non-Hittite-genre catalog numbers,
+      # e.g. 832: 4,238 · 791: 276) — honest until a Laroche-tail ruling.
+  okhc:               # 1,198,779 docs — the Korean dynastic-history family
+    source_kind: historiography/annals   # whole-source declaration (ruled 2026-09-13)
