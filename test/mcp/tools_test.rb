@@ -719,6 +719,23 @@ module MCP
       assert_equal %w[urn:k:epitaph:1], urns
     end
 
+    # №R-66's deeper tree (P101): family matching is any-prefix, not
+    # head-only — `literary/narrative` must find `literary/narrative/epic`.
+    def test_search_kind_mid_level_prefix_matches_deeper_subs
+      seed_kind_corpus!
+      epic = make_document(urn: "urn:k:epic")
+      make_passage(epic, urn: "urn:k:epic:1", text: "στρατηγος", sequence: 0)
+      @catalog[:document_facets].insert(document_id: epic.id, facet: "kind",
+                                        value: "literary/narrative/epic", raw: "Epics")
+      rebuild!
+      urns = payload(call("nabu_search", { "query" => "στρατηγος", "kind" => "literary/narrative" }))
+             .fetch("matches").map { |h| h.fetch("urn") }
+      assert_equal %w[urn:k:epic:1], urns
+      family = payload(call("nabu_search", { "query" => "στρατηγος", "kind" => "literary" }))
+               .fetch("matches").map { |h| h.fetch("urn") }
+      assert_equal %w[urn:k:epic:1], family, "the bare head reaches three segments down"
+    end
+
     def test_search_kind_does_not_compose_with_lemma_or_near
       assert_raises(Nabu::MCP::Tools::InvalidArguments) do
         call("nabu_search", { "lemma" => "λέγω", "kind" => "funerary" })

@@ -256,15 +256,17 @@ module Nabu
           .exists
       end
 
-      # The kind facet's family semantics (P99-3 — №R-63): a head matches
-      # itself AND every sub under it (`--kind divination` ⊇
-      # divination/extispicy); a head/sub — or any explicit % pattern —
-      # matches as given. Identity semantics: value only, never raw
-      # (--type keeps the raw-vocabulary lane; kind values are OUR ruled
-      # paths, so raw-matching would blur the two vocabularies).
+      # The kind facet's family semantics (P99-3 — №R-63; deepened P101
+      # under №R-66's tree): any path PREFIX matches itself AND every
+      # sub under it (`--kind literary` ⊇ literary/poetry;
+      # `--kind literary/narrative` ⊇ literary/narrative/epic); an
+      # explicit % or _ pattern matches as given. Identity semantics:
+      # value only, never raw (--type keeps the raw-vocabulary lane;
+      # kind values are OUR ruled paths, so raw-matching would blur the
+      # two vocabularies).
       def kind_exists(pattern)
         facets = Sequel[:document_facets]
-        match = if pattern.to_s.match?(%r{[%_/]})
+        match = if pattern.to_s.match?(/[%_]/)
                   Sequel.ilike(facets[:value], pattern)
                 else
                   Sequel.ilike(facets[:value], pattern) |

@@ -1984,9 +1984,10 @@ module Nabu
                         "a common term + a selective filter); needs a term AND a filter"
     option :type, type: :string, banner: "PATTERN",
                   desc: "Inscription-type facet filter (epitaph, votive%, or the raw titsep code)"
-    option :kind, type: :string, banner: "CLASS[/SUB]",
-                  desc: "Document-kind filter over the ruled cross-corpus classes: a head matches " \
-                        "its whole family (funerary ⊇ funerary/epitaph), head/sub narrows; " \
+    option :kind, type: :string, banner: "CLASS[/SUB[/SUB]]",
+                  desc: "Document-kind filter over the ruled cross-corpus classes: any path " \
+                        "prefix matches its whole family (funerary ⊇ funerary/epitaph, " \
+                        "literary/narrative ⊇ literary/narrative/epic), a full path narrows; " \
                         "unmapped and unknown are first-class (`nabu kind census` lists all)"
     option :province, type: :string, banner: "PATTERN",
                       desc: "Roman-province facet filter (Germania inferior, pannonia%)"
@@ -3597,7 +3598,7 @@ module Nabu
 
       census = Nabu::Query::KindCensus.new(catalog: catalog)
       if options[:unmapped]
-        print_kind_unmapped(census)
+        print_kind_unmapped(census, Nabu::Kinds.load_default(config: config))
       else
         report = census.run
         if report.nil?
@@ -6688,19 +6689,43 @@ module Nabu
             "(#{format_duration(report.seconds)})"
       end
 
-      # The curation worklist: unmapped raw values by count per source —
-      # each line is a candidate kind_map.yml entry.
-      def print_kind_unmapped(census)
+      # The curation worklist (reworked P101/Q75 after the owner read the
+      # bare dump and could not tell what it was saying): LEAD with what
+      # the list is and what to do with a line, list the TODO tail, then
+      # the reviewed not-genre declarations as their own section.
+      def print_kind_unmapped(census, kinds)
         started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         rows = census.unmapped_worklist
+        print_kind_worklist(rows, census)
+        print_kind_deliberate(kinds)
+        say "kind census: #{pluralize(rows.size, 'unmapped value')} " \
+            "(#{format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)})"
+      end
+
+      def print_kind_worklist(rows, census)
         return say("kind census: nothing unmapped — every held value has a fold rule") if rows.empty?
 
+        docs = census.run&.unmapped_documents
+        say "kind census: #{pluralize(rows.size, 'upstream value')} with no fold rule" \
+            "#{" (#{commafy(docs)} documents)" if docs} — each line is a candidate " \
+            "config/kind_map.yml entry: fold it to a class, to `unknown` (upstream's " \
+            "own cannot-determine), or declare it not-genre under `deliberate:`."
         rows.each do |row|
           say "  #{row.slug.ljust(14)}  #{row.raw.inspect}  ×#{commafy(row.documents)}"
         end
-        say "kind census: #{pluralize(rows.size, 'unmapped value')} — each line is a " \
-            "candidate config/kind_map.yml entry " \
-            "(#{format_duration(Process.clock_gettime(Process::CLOCK_MONOTONIC) - started)})"
+      end
+
+      # The reviewed non-claims: values config declares NOT genre at all
+      # (physical layout, cult context, copy markers) — folded to
+      # nothing, listed here so the review stays visible, never noise.
+      def print_kind_deliberate(kinds)
+        declarations = kinds&.deliberate_declarations || []
+        return if declarations.empty?
+
+        say "declared not-genre (config/kind_map.yml `deliberate:` — reviewed, fold to nothing):"
+        declarations.each do |slug, value, reason|
+          say "  #{slug.ljust(14)}  #{value.inspect} — #{reason}"
+        end
       end
 
       # The kind axis' card line (P99-3 — №R-63): every class the

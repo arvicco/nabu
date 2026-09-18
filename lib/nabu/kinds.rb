@@ -5,7 +5,8 @@ require "yaml"
 module Nabu
   # The kind axis' config seam (P99-1 — №R-63, ruled 2026-09-13): the
   # fourth document axis, "what KIND of document is this?", as one
-  # multi-label facet over a RULED 26-head class list. Two files:
+  # multi-label facet over a RULED class list (21 heads + unknown since
+  # №R-66's literary-family restructure, 2026-09-18). Two files:
   #
   # - config/kind_classes.yml — the ruled heads (+ `unknown`, upstream's
   #   own "cannot determine" as a claim, not a gap), each with a one-line
@@ -13,12 +14,21 @@ module Nabu
   #   crosswalks to the external vocabularies that recognize it
   #   (EAGLE/FAIR, LCGFT, AAT) — pointers, never anchors: the survey
   #   verified no external standard spans cuneiform, papyri, stone,
-  #   scripture, and novels at once.
+  #   scripture, and novels at once. A slash-keyed entry
+  #   (`literary/poetry`) is a named SUB-CLASS carrying its own desc and
+  #   crosswalks under a declared head (№R-66, owner 2026-09-18: the
+  #   literature families live under the `literary` head; the bare head
+  #   is upstream's own "literary, unspecified").
   # - config/kind_map.yml — per-source folds, owner-ruled like lect
   #   rules: `map` (exact value, case-insensitive fallback), `prefix_map`
   #   (slash-path vocabularies like eBL's), `range_map` (numeric facets
   #   like tlhdig's CTH numbers), or `source_kind` (a whole-source
   #   declaration — okhc's 1.2M dynastic-history docs in one line).
+  #   A source may also carry `deliberate:` — upstream values DECLARED
+  #   not to be genre claims at all (physical layout, cult context, a
+  #   bare copy marker), each with its one-line reason. A deliberate
+  #   fragment folds to nothing: it is a reviewed non-claim, rendered as
+  #   its own census section, never `unmapped` noise (P101, Q75).
   #
   # Normalization (survey §4b): strip trailing uncertainty markers →
   # split composites → per-fragment lookup → 0..n class paths; a fragment
@@ -40,9 +50,11 @@ module Nabu
     # live — validated at load. +regex_map+ (P100-1) collects EVERY
     # matching pattern's targets (aozora's "NDC 911 913" is
     # multi-label by design), unlike the first-hit exact/prefix/range
-    # chain.
+    # chain. +deliberate+ (P101) is the reviewed not-genre set: a
+    # fragment in it folds to NOTHING (value → reason, case-insensitive
+    # like the exact map).
     Rule = Data.define(:slug, :facet, :metadata, :walk, :map, :fold_map, :prefix_map, :regex_map,
-                       :range_map, :source_kind)
+                       :range_map, :source_kind, :deliberate, :deliberate_fold)
 
     # The canonical-tree walkers KindBuilder implements; a walk: value
     # outside this set is a config error, not a silent no-op.
@@ -72,7 +84,17 @@ module Nabu
     end
 
     def class_names = @classes.keys
+    def heads = @classes.keys.map { |name| name.split("/", 2).first }.uniq
     def sources = @rules.keys
+
+    # Every declared not-genre value, for the census' own section:
+    # [slug, value, reason] rows in config order.
+    def deliberate_declarations
+      @rules.flat_map do |slug, rule|
+        rule.deliberate.map { |value, reason| [slug, value, reason] }
+      end
+    end
+
     def rule_for(slug) = @rules[slug]
     def facet_for(slug) = @rules[slug]&.facet
     def metadata_for(slug) = @rules[slug]&.metadata
@@ -105,6 +127,8 @@ module Nabu
     end
 
     def lookup(rule, fragment)
+      return [] if rule.deliberate.key?(fragment) || rule.deliberate_fold.key?(fragment.downcase)
+
       exact = rule.map[fragment] || rule.fold_map[fragment.downcase]
       return exact if exact
 
@@ -123,12 +147,20 @@ module Nabu
     # -- parsing + validation ----------------------------------------------
 
     def parse_classes(doc)
-      (doc["classes"] || {}).to_h do |name, spec|
+      classes = (doc["classes"] || {}).to_h do |name, spec|
         spec ||= {}
         [name, KindClass.new(name: name, desc: spec["desc"].to_s,
                              subs: Array(spec["subs"]).map(&:to_s),
                              crosswalk: spec["crosswalk"] || {})]
       end
+      classes.each_key do |name|
+        head = name.split("/", 2).first
+        next if classes.key?(head)
+
+        raise ConfigError,
+              "kind_classes: #{name.inspect} is a sub-class of #{head.inspect}, which is not declared"
+      end
+      classes
     end
 
     def parse_rules(sources_doc)
@@ -149,12 +181,14 @@ module Nabu
 
         validate_target(slug, source_kind) if source_kind
         map = targets_of(slug, spec["map"])
+        deliberate = (spec["deliberate"] || {}).to_h { |value, reason| [value.to_s, reason.to_s] }
         [slug, Rule.new(slug: slug, facet: facet, metadata: metadata, walk: walk, map: map,
                         fold_map: map.transform_keys(&:downcase),
                         prefix_map: targets_of(slug, spec["prefix_map"]),
                         regex_map: regexes_of(slug, spec["regex_map"]),
                         range_map: ranges_of(slug, spec["range_map"]),
-                        source_kind: source_kind)]
+                        source_kind: source_kind, deliberate: deliberate,
+                        deliberate_fold: deliberate.transform_keys(&:downcase))]
       end
     end
 
