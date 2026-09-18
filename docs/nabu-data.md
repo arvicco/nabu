@@ -191,6 +191,7 @@ no page update is a red suite, and vice versa.
 | `xct/actib-anchors` | available | gold-derived | CC-BY-4.0 | xct | derge-kangyur, actib |
 | `roa-opt/cantigas` | available | gold | CC-BY-4.0 | roa-opt | cantigas |
 | `mul/lect-assignments` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `mul/kind-classifications` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `mul/place-refs` | available | gold-derived | CC-BY-SA-4.0 | mul | nabu-places |
 | `mul/places-lpf` | available | gold-derived | CC-BY-SA-4.0 | mul | pleiades, trismegistos, cigs |
 | `mul/document-dates` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
@@ -312,6 +313,14 @@ The first full-corpus re-publication: the complete secular lyric of medieval Gal
 Publishes the per-document journal behind Nabu's lect facet — ~482K (URN, language-code) → historical-stage assignments (Old vs Neo-Babylonian, Ur III vs OB Sumerian, Vedic vs Classical Sanskrit, ...) with the basis and note in-band per row — the corpus-scale stage stratification no other project publishes; the id grammar and registry are public in nabu-lects (cited). License classes open+attribution only (nc/odbl/research_private slices excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out dataset carrying the share-alike lanes (edh, aes, ...).
 
 **Maintenance**: re-derive after journal-moving events (a sync wave re-running lect rules, new owner rulings, a rebuild) — the published-slice digest makes an unchanged journal a fingerprint no-op
+
+### `mul/kind-classifications` — Per-document kind classifications (the fourth axis) across the multilingual catalog
+
+**Status**: available · **Tier**: gold-derived · **Anchoring**: document-urn · **Inputs**: —
+
+Publishes the classification layer behind Nabu's kind axis (№R-63/№R-66) — per-document ruled class paths (a 21-family cross-corpus list with named sub-classes: funerary/epitaph, literary/poetry, divination/extispicy, ...), multi-label as multiple rows, the VERBATIM upstream genre label riding every row so each fold is checkable against its source. The honest `unknown` class publishes; the `unmapped` curation bucket does not (a TODO marker is not a classification). License classes open+attribution only (nc slices excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out carrying the share-alike lanes.
+
+**Maintenance**: re-derive after classification-moving events (new kind_map folds, a class tree change, a re-projection) — the published-slice digest makes an unchanged projection a fingerprint no-op
 
 ### `mul/place-refs` — Per-document place references across the multilingual catalog, gazetteer-ready
 
