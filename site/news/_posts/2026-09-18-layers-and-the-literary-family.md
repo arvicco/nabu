@@ -1,5 +1,6 @@
 ---
 title: "Layers, and the literary family"
+date: 2026-09-18 06:00:00 +0000
 description: >-
   The classification tree learns depth — literature becomes one family
   with poetry, narrative, drama and their siblings inside it — the
