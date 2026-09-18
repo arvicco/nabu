@@ -180,7 +180,7 @@ machinery that fetches reference data but mints no documents of its own.
 | `lila` | The [LiLa](https://lila-erc.eu/) Latin lemma bank behind `nabu define`'s variant-spelling fallback | CC BY-SA 4.0 |
 | `nabu-data` | The library's own [published datasets](https://github.com/arvicco/nabu-data), consumed back as a source — e.g. the Sanskrit form→lemma table behind `nabu define`'s inflected-form expansion; the reproducibility loop closed in public | CC BY 4.0 |
 | `nabu-lects` | The [lect registry](https://arvicco.github.io/nabu-lects) sister project — the stage ladders, stage-aware search and reconstruction honesty on the [Languages]({{ '/languages/' | relative_url }}) page | CC BY 4.0 |
-| `nabu-places` | The [place-decisions registry](https://arvicco.github.io/nabu-places) sister project — which gazetteer identity each source's verbatim place name denotes; see [Places]({{ '/places/' | relative_url }}) | CC BY 4.0 |
+| `nabu-places` | The [place-decisions registry](https://arvicco.github.io/nabu-places) sister project — which gazetteer identity each source's verbatim place name denotes; see [Places]({{ '/layers/' | relative_url }}#places) | CC BY 4.0 |
 | `osl` | The Oracc Sign List behind `nabu signs` | CC0 |
 | `pedecerto` | Latin metrical scansion ([Pedecerto](https://www.pedecerto.eu/), digital metrical analyses) | CC BY-NC-ND 4.0 |
 | `pleiades` | The [Pleiades](https://pleiades.stoa.org/) ancient-world gazetteer behind `nabu place` and the findspot line | CC BY 3.0 |

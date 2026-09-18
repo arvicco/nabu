@@ -367,7 +367,7 @@ findspot resolution too. Since the places program (August 2026) the
 holdings side reads a **multi-gazetteer index** (Pleiades, Trismegistos
 Geo, CIGS) and `nabu place apply` projects the
 [nabu-places](https://arvicco.github.io/nabu-places/) registry's matching
-decisions into the catalog — see [Places]({{ '/places/' | relative_url }})
+decisions into the catalog — see [Places]({{ '/layers/' | relative_url }}#places)
 for the system and the coverage census.
 
 ```
