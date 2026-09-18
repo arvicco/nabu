@@ -3879,7 +3879,12 @@ module Nabu
         say "  … #{census.name_hits.size - 15} more attested names" if census.name_hits.size > 15
         census.names_stopped.each do |name, count|
           say "  STOPPED #{name} — #{count} passages (above the derived ceiling; " \
-              "a real exception is a config/place_stop_names.yml ruling)"
+              "a genuinely geographic name lost here is an allow_names: ruling " \
+              "in config/place_stop_names.yml — №R-67)"
+        end
+        census.names_allowed.each do |name, count|
+          say "  ALLOWED #{name} — #{count} passages (over the ceiling, mined anyway " \
+              "by allow_names: ruling)"
         end
         say "  candidate edges#{' (dry run — nothing written)' unless applied}: " \
             "#{census.candidate_edges} across #{census.name_hits.size} attested names " \
