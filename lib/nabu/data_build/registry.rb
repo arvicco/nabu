@@ -10,6 +10,7 @@ require_relative "form_lemma"
 require_relative "hani_fold_builder"
 require_relative "hiero_frequency_builder"
 require_relative "kanripo_gaiji_builder"
+require_relative "kind_classifications_builder"
 require_relative "kyujitai_fold_builder"
 require_relative "language_dossiers_builder"
 require_relative "lect_assignments_builder"
@@ -325,6 +326,32 @@ module Nabu
         maintenance: "re-derive after journal-moving events (a sync wave re-running lect rules, " \
                      "new owner rulings, a rebuild) — the published-slice digest makes an " \
                      "unchanged journal a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/kind-classifications", language: LANGUAGES.fetch("mul"),
+        title: "Per-document kind classifications (the fourth axis) across the multilingual catalog",
+        # gold-DERIVED about the fold; the verbatim upstream label per
+        # row IS the tier honesty — every fold is checkable against the
+        # genre claim it was made from (№R-63's preservation invariant).
+        status: :available, tier: "gold-derived", license: "CC-BY-SA-4.0",
+        anchoring: "document-urn",
+        # The catalog kind projection is the source of truth at URN grain
+        # (the lect-assignments posture); the ruled class list and the
+        # per-source folds are Nabu config, cited by the recipe; the
+        # recipe embeds the published-slice sha256.
+        inputs: [], canonical_cones: [], builder: KindClassificationsBuilder,
+        rationale: "Publishes the classification layer behind Nabu's kind axis (№R-63/№R-66) — " \
+                   "per-document ruled class paths (a 21-family cross-corpus list with named " \
+                   "sub-classes: funerary/epitaph, literary/poetry, divination/extispicy, ...), " \
+                   "multi-label as multiple rows, the VERBATIM upstream genre label riding every " \
+                   "row so each fold is checkable against its source. The honest `unknown` class " \
+                   "publishes; the `unmapped` curation bucket does not (a TODO marker is not a " \
+                   "classification). License classes open+attribution only (nc slices excluded " \
+                   "row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out " \
+                   "carrying the share-alike lanes.",
+        maintenance: "re-derive after classification-moving events (new kind_map folds, a class " \
+                     "tree change, a re-projection) — the published-slice digest makes an " \
+                     "unchanged projection a fingerprint no-op"
       ),
       Feature.new(
         slug: "mul/place-refs", language: LANGUAGES.fetch("mul"),
