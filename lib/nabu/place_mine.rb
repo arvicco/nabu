@@ -31,8 +31,11 @@ module Nabu
   # 3. THE DERIVED STOP RULE: pass 1 counts each name's passage hits;
   #    a name hitting more than STOP_SHARE of scanned passages is a
   #    common word wearing a place's clothes (州, 東… would flood) —
-  #    excluded from apply, reported with its count so the owner can
-  #    ruling-list real exceptions in config/place_stop_names.yml.
+  #    excluded from apply, reported with its count. A genuinely
+  #    geographic name lost to the ceiling gets an `allow_names:`
+  #    ruling (№R-67, 2026-09-18 — the 吐蕃/Tibet case): allow exempts
+  #    the DERIVED stop only, is itself censused, and never overrides
+  #    the floor, the cap, or the hand stop list.
   # 4. The hand stop list (config/place_stop_names.yml) always applies.
   #
   # == Shape
@@ -63,23 +66,34 @@ module Nabu
     # Result's covers both passes.
     Census = Data.define(:source, :gazetteer, :passages, :name_hits, :candidate_edges,
                          :names_loaded, :names_non_han, :names_ambiguous, :names_stopped,
-                         :seconds)
+                         :names_allowed, :seconds)
     Result = Data.define(:census, :run_id, :edges_written, :edges_refreshed,
                          :superseded_runs, :superseded_edges, :seconds)
 
-    def initialize(catalog:, journal:, gazetteer:, progress: nil, stop_names: nil)
+    def initialize(catalog:, journal:, gazetteer:, progress: nil, stop_names: nil,
+                   allow_names: nil)
       @catalog = catalog
       @journal = journal
       @gazetteer = gazetteer
       @progress = progress
       @stop_names = stop_names || self.class.hand_stop_names
+      @allow_names = allow_names || self.class.hand_allow_names
     end
 
     def self.hand_stop_names
-      return [] unless File.file?(STOP_NAMES_PATH)
+      Array(hand_rulings["stop_names"]).map(&:to_s)
+    end
 
-      loaded = YAML.safe_load_file(STOP_NAMES_PATH)
-      Array(loaded && loaded["stop_names"]).map(&:to_s)
+    # The ceiling exemptions (№R-67): ruled genuinely-geographic names
+    # the derived stop must not swallow.
+    def self.hand_allow_names
+      Array(hand_rulings["allow_names"]).map(&:to_s)
+    end
+
+    def self.hand_rulings
+      return {} unless File.file?(STOP_NAMES_PATH)
+
+      YAML.safe_load_file(STOP_NAMES_PATH) || {}
     end
 
     # Pass 1 — the honest count: scan +source+'s live passages against
@@ -100,13 +114,13 @@ module Nabu
         edges += hits.sum { |name| names.fetch(name).size }
         @progress&.load_tick(passages, 0) if (passages % PAGE).zero?
       end
-      stopped = derive_stops(tally, passages)
+      stopped, allowed = derive_stops(tally, passages)
       Census.new(
         source: source, gazetteer: @gazetteer, passages: passages,
         name_hits: tally.sort_by { |_n, c| -c },
         candidate_edges: edges,
         names_loaded: names.size, names_non_han: @non_han, names_ambiguous: @ambiguous,
-        names_stopped: stopped,
+        names_stopped: stopped, names_allowed: allowed,
         seconds: Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
       )
     end
@@ -201,9 +215,13 @@ module Nabu
       hits ? hits.keys : []
     end
 
+    # → [stopped, allowed]: names over the ceiling, minus the ruled
+    # allow-list — the exemptions reported beside the stops, never
+    # silently un-stopped.
     def derive_stops(tally, passages)
       ceiling = [(passages * STOP_SHARE).ceil, 20].max
-      tally.select { |_name, count| count > ceiling }.sort_by { |_n, c| -c }
+      over = tally.select { |_name, count| count > ceiling }.sort_by { |_n, c| -c }
+      over.partition { |name, _count| !@allow_names.include?(name) }
     end
 
     def each_passage(source, &block)
