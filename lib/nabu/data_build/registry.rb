@@ -4,6 +4,7 @@ require_relative "feature"
 require_relative "actib_anchors_builder"
 require_relative "aozora_gaiji_builder"
 require_relative "cantigas_builder"
+require_relative "cuneiform_senses_builder"
 require_relative "char_postings_builder"
 require_relative "document_dates_builder"
 require_relative "form_lemma"
@@ -352,6 +353,29 @@ module Nabu
         maintenance: "re-derive after classification-moving events (new kind_map folds, a class " \
                      "tree change, a re-projection) — the published-slice digest makes an " \
                      "unchanged projection a fingerprint no-op"
+      ),
+      Feature.new(
+        slug: "mul/cuneiform-senses", language: LANGUAGES.fetch("mul"),
+        title: "Cuneiform sense glosses from Wiktionary (Sumerian, Akkadian, Hittite)",
+        # gold: verbatim upstream republication (the aozora-gaiji
+        # posture) — every gloss is Wiktionary's own text, anchored by
+        # the shelf entry URN it was published from.
+        status: :available, tier: "gold", license: "CC-BY-SA-4.0",
+        anchoring: "entry-urn",
+        # Declared inputs WITH cones (unlike the catalog-projection mul/
+        # datasets): the rows republish upstream shelf content, so the
+        # stale-ingest guard is load-bearing.
+        inputs: %w[wiktionary-sux wiktionary-akk wiktionary-hit],
+        canonical_cones: %w[wiktionary-sux wiktionary-akk wiktionary-hit],
+        builder: CuneiformSensesBuilder,
+        rationale: "The BY-SA sense-lane sidecar the P73 sign-table deliberately deferred so " \
+                   "its core could stay CC-BY: Wiktionary's sense glosses for the cuneiform " \
+                   "languages (via the kaikki.org extraction), one row per sense — headword, " \
+                   "language, POS, verbatim gloss, entry URN. Sign lists and attestation " \
+                   "counts live in sux/sign-table (CC-BY); the share-alike senses live here, " \
+                   "so neither license contaminates the other.",
+        maintenance: "re-derive after a kaikki shelf re-sync (owner-fired upstream refreshes; " \
+                     "the stale-ingest guard enforces freshness)"
       ),
       Feature.new(
         slug: "mul/place-refs", language: LANGUAGES.fetch("mul"),

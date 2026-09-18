@@ -192,6 +192,7 @@ no page update is a red suite, and vice versa.
 | `roa-opt/cantigas` | available | gold | CC-BY-4.0 | roa-opt | cantigas |
 | `mul/lect-assignments` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
 | `mul/kind-classifications` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
+| `mul/cuneiform-senses` | available | gold | CC-BY-SA-4.0 | mul | wiktionary-sux, wiktionary-akk, wiktionary-hit |
 | `mul/place-refs` | available | gold-derived | CC-BY-SA-4.0 | mul | nabu-places |
 | `mul/places-lpf` | available | gold-derived | CC-BY-SA-4.0 | mul | pleiades, trismegistos, cigs |
 | `mul/document-dates` | available | gold-derived | CC-BY-SA-4.0 | mul | — |
@@ -321,6 +322,14 @@ Publishes the per-document journal behind Nabu's lect facet — ~482K (URN, lang
 Publishes the classification layer behind Nabu's kind axis (№R-63/№R-66) — per-document ruled class paths (a 21-family cross-corpus list with named sub-classes: funerary/epitaph, literary/poetry, divination/extispicy, ...), multi-label as multiple rows, the VERBATIM upstream genre label riding every row so each fold is checkable against its source. The honest `unknown` class publishes; the `unmapped` curation bucket does not (a TODO marker is not a classification). License classes open+attribution only (nc slices excluded row-by-row, censused in nabu.eval); CC BY-SA 4.0 — the №R-24 carve-out carrying the share-alike lanes.
 
 **Maintenance**: re-derive after classification-moving events (new kind_map folds, a class tree change, a re-projection) — the published-slice digest makes an unchanged projection a fingerprint no-op
+
+### `mul/cuneiform-senses` — Cuneiform sense glosses from Wiktionary (Sumerian, Akkadian, Hittite)
+
+**Status**: available · **Tier**: gold · **Anchoring**: entry-urn · **Inputs**: wiktionary-sux, wiktionary-akk, wiktionary-hit
+
+The BY-SA sense-lane sidecar the P73 sign-table deliberately deferred so its core could stay CC-BY: Wiktionary's sense glosses for the cuneiform languages (via the kaikki.org extraction), one row per sense — headword, language, POS, verbatim gloss, entry URN. Sign lists and attestation counts live in sux/sign-table (CC-BY); the share-alike senses live here, so neither license contaminates the other.
+
+**Maintenance**: re-derive after a kaikki shelf re-sync (owner-fired upstream refreshes; the stale-ingest guard enforces freshness)
 
 ### `mul/place-refs` — Per-document place references across the multilingual catalog, gazetteer-ready
 
