@@ -248,6 +248,13 @@ module Nabu
       instance_path("creep_acceptances.yml")
     end
 
+    # Withdrawal-shed acceptances (P102-1 — Q74): the owner's
+    # --accept-shed rulings; config-file only (shed is measured live
+    # from the catalog, no ledger mirror needed).
+    def shed_acceptances_path
+      instance_path("shed_acceptances.yml")
+    end
+
     # Batch-mined link scopes (P70-3b; local since P71): the durable
     # record of the parameterized miners' scopes; rebuild's links stage
     # replays them.
