@@ -5,8 +5,8 @@ description: >-
   The library gains its fourth axis. Beside when, where, and in what
   language variety, every document can now answer what KIND of text it
   is — funerary, administrative, letter, divination, historiography —
-  across {{ site.data.census.kind_documents_display }} classified
-  documents, one vocabulary over thirteen upstream jargons.
+  one ruled vocabulary folded over every upstream jargon, with the
+  original label preserved verbatim beside the fold.
 ---
 
 A gravestone inscription is *sepulcralis* in one collection, *epitaph*

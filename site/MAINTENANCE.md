@@ -93,6 +93,17 @@ At **every phase gate**, alongside the README/library.md truthfulness pass
    artifacts, deployed only on a push to `site/**`. New per-axis prose (a
    fresh CLI recipe, a display note) is a `_fragments.yml` edit followed by
    a regeneration.
+8. **Rendered read-back** (owner rule 2026-09-18 — a raw `{{ … }}` shipped
+   live in a post's front matter and a baseurl-less link sat broken for
+   weeks; "even one leak should have been caught"): after any site edit,
+   BUILD and read the OUTPUT, not just the source — `bundle exec jekyll
+   build` in `site/`, then grep `_site/**/*.html` for literal `{{` / `{%`
+   and click-check any page you touched (or `rake site:preview`). Two suite
+   guards hold the mechanical half permanently: front matter must be
+   Liquid-free (Jekyll never renders it there) and internal links must
+   ride `relative_url` (both in `test/site/site_prose_ssot_test.rb`) —
+   but prose sanity ("does the page read correctly as rendered?") is the
+   review, every time.
 
 ## Hard rules
 

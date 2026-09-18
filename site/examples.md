@@ -462,7 +462,7 @@ note: place: "Girsu" → cigs:GIR = pleiades:912855 = cdli-provenience:88 = geon
 ```
 
 The note is the point: "Girsu" resolved to the place's *identities*
-across four gazetteers (the crosswalk the [Places]({{ '/places/' |
+across four gazetteers (the crosswalk the [Places]({{ '/layers/' |
 relative_url }}) page describes), so tablets citing any of those refs —
 in any spelling — answer, alongside plain name matches. The place card
 shows the same equivalences:

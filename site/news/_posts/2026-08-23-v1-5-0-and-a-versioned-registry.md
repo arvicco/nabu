@@ -22,7 +22,7 @@ catalog's "1487/88" and its century-half grid, the Patrologia's
 author life bands, the Joseon annals' per-day entry dates, even
 exact Seleucid-era arithmetic for Babylonian scholarship — and turns
 all of it into honest machine bounds: **821,916 documents dated**,
-with a new [chronological browse](/dates/) spanning 55 centuries.
+with a new [chronological browse]({{ '/dates/' | relative_url }}) spanning 55 centuries.
 And because dates compose with the language registry's period bands,
 the closing pass placed 128,051 documents onto their language's own
 timeline — sixty-three thousand classical Latin inscriptions among
