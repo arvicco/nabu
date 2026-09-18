@@ -4086,14 +4086,14 @@ class CLITest < Minitest::Test
     db[:document_facets].insert(document_id: doc_ids[0], facet: "kind",
                                 value: "funerary/epitaph", raw: "sepulcralis")
     db[:document_facets].insert(document_id: doc_ids[0], facet: "kind",
-                                value: "poetry", raw: "sepulcralis, carmen")
+                                value: "literary/poetry", raw: "sepulcralis, carmen")
     db[:document_facets].insert(document_id: doc_ids[1], facet: "kind",
                                 value: "unmapped", raw: "cetera")
     # The precompiled census the board reads (KindBuilder's shape).
     source_id = db[:documents].where(id: doc_ids[0]).get(:source_id)
     db[:kind_stats].multi_insert([
                                    { source_id: source_id, head: "funerary", documents: 1 },
-                                   { source_id: source_id, head: "poetry", documents: 1 },
+                                   { source_id: source_id, head: "literary", documents: 1 },
                                    { source_id: source_id, head: "unmapped", documents: 1 },
                                    { source_id: source_id, head: nil, documents: 2 }
                                  ])
@@ -4106,7 +4106,7 @@ class CLITest < Minitest::Test
       out, _err, status = with_config(config) { run_cli(%w[kind census]) }
       assert_nil status
       assert_match(/funerary\s+1 docs · 1 source/, out)
-      assert_match(/poetry\s+1 docs/, out)
+      assert_match(/literary\s+1 docs/, out)
       assert_match(/unmapped\s+1 docs/, out, "the bucket renders apart from the classes")
       assert_match(/no classification:/, out)
       assert_match(/kind census: 2 class families · 2 classified docs .*\(\d/, out,
@@ -4119,8 +4119,29 @@ class CLITest < Minitest::Test
       seed_kind_rows(config)
       out, _err, status = with_config(config) { run_cli(%w[kind census --unmapped]) }
       assert_nil status
+      assert_match(/upstream value with no fold rule/, out,
+                   "the worklist LEADS with what the list is (P101/Q75)")
       assert_match(/"cetera"\s+×1/, out)
       assert_match(%r{candidate config/kind_map\.yml entry}, out)
+    end
+  end
+
+  # The deliberate: section (P101/Q75): reviewed not-genre values render
+  # as their own labelled block with reasons, apart from the TODO tail.
+  def test_kind_census_unmapped_renders_the_deliberate_section
+    with_indexed_corpus do |config|
+      seed_kind_rows(config)
+      FileUtils.mkdir_p(config.config_dir)
+      File.write(File.join(config.config_dir, "kind_classes.yml"),
+                 "classes:\n  funerary:\n    desc: x\n")
+      File.write(File.join(config.config_dir, "kind_map.yml"),
+                 "sources:\n  edr:\n    facet: genre\n    map:\n      " \
+                 "\"sepulcralis\": funerary\n    deliberate:\n      " \
+                 "\"vertical format\": \"physical layout, not a genre\"\n")
+      out, _err, status = with_config(config) { run_cli(%w[kind census --unmapped]) }
+      assert_nil status
+      assert_match(/declared not-genre .*deliberate/, out)
+      assert_match(/"vertical format" — physical layout, not a genre/, out)
     end
   end
 
@@ -4132,8 +4153,10 @@ class CLITest < Minitest::Test
       db.disconnect
       out, _err, status = with_config(config) { run_cli(["show", urn]) }
       assert_nil status
-      assert_match(%r{kind: funerary/epitaph \+ poetry — upstream: "sepulcralis", "sepulcralis, carmen"},
-                   out)
+      assert_match(
+        %r{kind: funerary/epitaph \+ literary/poetry — upstream: "sepulcralis", "sepulcralis, carmen"},
+        out
+      )
     end
   end
 

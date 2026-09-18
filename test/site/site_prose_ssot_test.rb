@@ -18,7 +18,9 @@ module Site
   # single corpus's counts in a table row, one dictionary's entry count, the
   # place-program's own census) are page-local facts, out of this guard's
   # scope; the news archive (site/news/_posts) is a dated historical record
-  # and is never scanned.
+  # and is exempt from the FIGURE guards — but NOT from the two
+  # rendering-layer guards below (front-matter Liquid, relative_url),
+  # which scan every page including posts.
   class SiteProseSsotTest < Minitest::Test
     ROOT = Nabu::Config::PROJECT_ROOT
     SITE = File.join(ROOT, "site")
@@ -26,7 +28,7 @@ module Site
     # Every page that states a library-wide headline figure must read the
     # census SSOT rather than carry the number in prose.
     SSOT_PAGES = %w[
-      index languages library faq tools sources examples about quickstart places kinds
+      index languages library faq tools sources examples about quickstart layers
     ].freeze
 
     # The pre-SSOT values (and the spelled-out desk phrasings) this migration
@@ -49,10 +51,49 @@ module Site
     # Pure-headline pages whose only million-scale totals ARE the SSOT
     # figures — so a comma-grouped 7-plus-digit literal outside a fenced
     # code block means a total was hardcoded instead of rendered.
-    STRICT_PAGES = %w[index languages about quickstart kinds].freeze
+    STRICT_PAGES = %w[index languages about quickstart].freeze
     MILLION_LITERAL = /\b\d{1,3}(?:,\d{3}){2,}\b/
 
     def page(name) = File.read(File.join(SITE, "#{name}.md"))
+
+    # The rendered-output guard the 2026-09-18 leak demanded (owner: "even
+    # one leak should have been caught — and it wasn't"): Jekyll does NOT
+    # run Liquid on front matter, so a {{ ... }} in a title/description
+    # renders as literal braces on the live site (the classification news
+    # post shipped exactly that). Front matter must be Liquid-free —
+    # EVERYWHERE, news posts included.
+    def test_front_matter_never_carries_liquid
+      Dir.glob(File.join(SITE, "**", "*.md")).each do |path|
+        next if path.include?("/vendor/") || path.include?("/_site/")
+
+        lines = File.read(path).lines
+        next unless lines.first&.strip == "---"
+
+        front = lines.drop(1).take_while { |line| line.strip != "---" }
+        offenders = front.grep(/\{\{|\{%/)
+        assert_empty offenders,
+                     "#{path.delete_prefix(SITE)} carries Liquid in its FRONT MATTER — Jekyll " \
+                     "never renders it there, so the braces ship as literal text on the live " \
+                     "page. Move the figure into the body, or state it Liquid-free."
+      end
+    end
+
+    # Companion rendered-output guard (same 2026-09-18 sweep): the site
+    # lives under a baseurl (/nabu), so an internal markdown link written
+    # as a bare root path — `](/dates/)` — renders as a BROKEN link on
+    # the live site. Internal links must ride `relative_url`. (The
+    # v1.5.0 news post shipped exactly that, live-broken for weeks.)
+    def test_internal_links_ride_relative_url
+      Dir.glob(File.join(SITE, "**", "*.md")).each do |path|
+        next if path.include?("/vendor/") || path.include?("/_site/")
+
+        offenders = File.read(path).lines.grep(%r{\]\(/(?!/)})
+        assert_empty offenders,
+                     "#{path.delete_prefix(SITE)} links an internal path without relative_url — " \
+                     "under the /nabu baseurl that renders as a broken link on the live site; " \
+                     "write it as ]({{ '/path/' | relative_url }})."
+      end
+    end
 
     def test_headline_pages_read_the_census_ssot
       SSOT_PAGES.each do |name|

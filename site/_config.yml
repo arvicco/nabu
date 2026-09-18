@@ -37,12 +37,8 @@ nav:
     url: /examples/
   - title: Languages
     url: /languages/
-  - title: Places
-    url: /places/
-  - title: Dates
-    url: /dates/
-  - title: Kinds
-    url: /kinds/
+  - title: Layers
+    url: /layers/
   - title: Sources
     url: /sources/
   # Tail order is fixed as: Sources, FAQ, News, About — alphabetical
