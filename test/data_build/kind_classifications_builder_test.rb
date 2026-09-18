@@ -31,10 +31,10 @@ class KindClassificationsBuilderTest < Minitest::Test
     rows = [
       ["urn:nabu:alpha:d1", @alpha, [["funerary/epitaph", "sepulcralis"],
                                      ["literary/poetry", "sepulcralis, carmen"]]],
-      ["urn:nabu:alpha:d2", @alpha, [["unknown", "ignoratur"]]],
-      ["urn:nabu:alpha:d3", @alpha, [["unmapped", "cetera"]]],
+      ["urn:nabu:alpha:d2", @alpha, [%w[unknown ignoratur]]],
+      ["urn:nabu:alpha:d3", @alpha, [%w[unmapped cetera]]],
       ["urn:nabu:alpha:d4", @alpha, [["historiography/annals", nil]]], # source_kind row: no raw
-      ["urn:nabu:closed:d5", @closed, [["administrative", "Administrative"]]]
+      ["urn:nabu:closed:d5", @closed, [%w[administrative Administrative]]]
     ]
     rows.each do |urn, source, kind_rows|
       doc = Nabu::Store::Document.create(source_id: source.id, urn: urn, title: urn,

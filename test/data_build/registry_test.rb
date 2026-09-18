@@ -13,7 +13,8 @@ class DataBuildRegistryTest < Minitest::Test
                       zho/hani-fold jpn/aozora-gaiji lat/sabellic-loans grc/meter
                       jpn/kyujitai-fold lzh/kanripo-gaiji sux/value-signs
                       xct/actib-anchors roa-opt/cantigas mul/lect-assignments
-                      mul/kind-classifications mul/place-refs mul/places-lpf mul/document-dates
+                      mul/kind-classifications mul/cuneiform-senses
+                      mul/place-refs mul/places-lpf mul/document-dates
                       mul/char-postings mul/language-dossiers mul/script-dossiers sux/sign-table
                       egy/unikemet-signs egy/hiero-frequency].freeze
 
@@ -406,6 +407,8 @@ class DataBuildRegistryTest < Minitest::Test
       "mul/lect-assignments" => "CC-BY-SA-4.0",
       # P102-2: the kind axis' share-alike lanes (edh, aes, elephantine, ...).
       "mul/kind-classifications" => "CC-BY-SA-4.0",
+      # P102-3: Wiktionary's own share-alike license, carried whole.
+      "mul/cuneiform-senses" => "CC-BY-SA-4.0",
       "mul/place-refs" => "CC-BY-SA-4.0",
       # P73-5: the TM lane's share-alike inheritance.
       "mul/places-lpf" => "CC-BY-SA-4.0",
