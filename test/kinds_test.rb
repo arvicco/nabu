@@ -30,15 +30,18 @@ class KindsTest < Minitest::Test
         desc: "Omens and their sciences."
       historiography:
         desc: "Annals, chronicles, king-lists."
-      poetry:
+      literary:
+        desc: "Literature as literature; the bare head is upstream's own unspecified claim."
+        subs: [narrative, poetry, drama]
+      literary/poetry:
         desc: "Verse as verse."
-      narrative:
+      literary/narrative:
         desc: "Told stories."
         subs: [novel]
+      literary/drama:
+        desc: "Text written for performance."
       exegesis:
         desc: "Commentary on scripture."
-      drama:
-        desc: "Text written for performance."
       unknown:
         desc: "Upstream's own 'cannot determine'."
   YAML
@@ -76,12 +79,18 @@ class KindsTest < Minitest::Test
       aozora:
         metadata: ndc
         regex_map:
-          '\bK?9\d1\b': poetry
-          '\bK?9\d3\b': narrative/novel
+          '\bK?9\d1\b': literary/poetry
+          '\bK?9\d3\b': literary/narrative/novel
       dta:
         metadata: subgenre
         map:
-          "Drama": drama
+          "Drama": literary/drama
+      elephantine:
+        facet: genre
+        map:
+          "note": legal
+        deliberate:
+          "vertical format": "physical layout, not a genre"
       sefaria:
         metadata: categories
         map:
@@ -111,11 +120,47 @@ class KindsTest < Minitest::Test
     assert_includes kinds.class_names, "unknown"
     assert_equal %w[epitaph mummy-label], kinds.classes["funerary"].subs
     assert_equal "gf2014026316", kinds.classes["funerary"].crosswalk["lcgft"]
-    assert_equal %w[aozora cdli dta ebl edr kanripo okhc papyri-ddbdp sefaria tlhdig],
+    assert_equal %w[aozora cdli dta ebl edr elephantine kanripo okhc papyri-ddbdp sefaria tlhdig],
                  kinds.sources.sort
     assert_equal "genre", kinds.facet_for("edr")
     assert_equal "historiography/annals", kinds.source_kind("okhc")
     assert_nil kinds.source_kind("edr")
+  end
+
+  # -- the №R-66 tree: slash-keyed sub-classes + head extraction ------------
+
+  def test_slash_keyed_sub_classes_carry_their_own_desc_under_a_declared_head
+    assert_includes kinds.class_names, "literary/narrative"
+    assert_equal %w[novel], kinds.classes["literary/narrative"].subs
+    refute_includes kinds.heads, "literary/narrative", "heads collapse to first segments"
+    assert_includes kinds.heads, "literary"
+  end
+
+  def test_a_sub_class_without_its_head_is_a_config_error
+    bad = CLASSES.sub(/^  literary:\n    desc:[^\n]*\n    subs: \[narrative, poetry, drama\]\n/, "")
+    error = assert_raises(Nabu::Kinds::ConfigError) { load_kinds(classes: bad) }
+    assert_match(%r{literary/}, error.message)
+  end
+
+  def test_a_three_segment_target_validates_against_its_head
+    assert_equal ["literary/narrative/novel"], kinds.normalize("aozora", "NDC 913"),
+                 "the tree is optionally deeper than two — the head still validates"
+  end
+
+  # -- deliberate not-genre declarations (P101 / Q75) ------------------------
+
+  def test_a_deliberate_value_folds_to_nothing
+    assert_empty kinds.normalize("elephantine", "vertical format"),
+                 "a reviewed not-genre value is a non-claim, never unmapped noise"
+    assert_empty kinds.normalize("elephantine", "Vertical Format"),
+                 "deliberate matching folds case like the exact map"
+    assert_equal %w[legal], kinds.normalize("elephantine", "note | vertical format"),
+                 "a composite keeps its genre fragments and drops the declared one"
+  end
+
+  def test_deliberate_declarations_surface_for_the_census
+    rows = kinds.deliberate_declarations
+    assert_includes rows, ["elephantine", "vertical format", "physical layout, not a genre"]
   end
 
   def test_a_map_target_with_an_undeclared_head_is_a_config_error
@@ -202,11 +247,12 @@ class KindsTest < Minitest::Test
   end
 
   def test_regex_map_collects_every_matching_pattern
-    assert_equal ["poetry"], kinds.normalize("aozora", "NDC 911")
-    assert_equal ["poetry"], kinds.normalize("aozora", "NDC K921"),
+    assert_equal ["literary/poetry"], kinds.normalize("aozora", "NDC 911")
+    assert_equal ["literary/poetry"], kinds.normalize("aozora", "NDC K921"),
                  "the children's-literature K prefix and any middle digit both ride the pattern"
-    assert_equal ["narrative/novel"], kinds.normalize("aozora", "NDC 913")
-    assert_equal %w[poetry narrative/novel], kinds.normalize("aozora", "NDC 911 913"),
+    assert_equal ["literary/narrative/novel"], kinds.normalize("aozora", "NDC 913")
+    assert_equal %w[literary/poetry literary/narrative/novel],
+                 kinds.normalize("aozora", "NDC 911 913"),
                  "a value matching several patterns is multi-label"
     assert_equal ["unmapped"], kinds.normalize("aozora", "NDC 596")
   end
@@ -232,22 +278,33 @@ class KindsTest < Minitest::Test
 
   # -- the shipped config ----------------------------------------------------
 
-  def test_the_shipped_config_loads_and_carries_the_ruled_26_heads
+  def test_the_shipped_config_loads_and_carries_the_ruled_21_heads
     shipped = Nabu::Kinds.load(
       classes_path: File.expand_path("../config/kind_classes.yml", __dir__),
       map_path: File.expand_path("../config/kind_map.yml", __dir__)
     )
-    heads = shipped.class_names - ["unknown"]
-    assert_equal 26, heads.size, "№R-63 ruled exactly 26 heads + unknown"
+    heads = shipped.heads - ["unknown"]
+    assert_equal 21, heads.size,
+                 "№R-63's 26 heads restructured under №R-66: the six literature " \
+                 "families live under `literary` — 21 heads + unknown"
     %w[funerary dedicatory honorific building boundary mark royal
        administrative legal letter lexical scholarly school
        scripture exegesis hymn-prayer ritual magic divination
-       narrative poetry drama essay diary wisdom historiography].each do |head|
+       literary historiography].each do |head|
       assert_includes heads, head
+    end
+    %w[literary/narrative literary/poetry literary/drama
+       literary/essay literary/diary literary/wisdom].each do |sub|
+      assert_includes shipped.class_names, sub,
+                      "the demoted families keep their names, descs and crosswalks as sub-classes"
     end
     assert_includes shipped.class_names, "unknown"
     assert_operator shipped.sources.size, :>=, 10,
                     "the initial map covers the genre-bearing census sources"
     assert_equal "historiography/annals", shipped.source_kind("okhc")
+    assert_equal ["literary"], shipped.normalize("cdli", "Literary"),
+                 "№R-66: upstream's own literature catch-all folds to the bare head"
+    assert_equal ["administrative/note"], shipped.normalize("elephantine", "note")
+    assert_equal ["unknown"], shipped.normalize("cdli", "fake (modern)")
   end
 end

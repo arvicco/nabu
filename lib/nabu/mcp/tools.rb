@@ -441,9 +441,10 @@ module Nabu
           kind: { type: "string",
                   description: "Document-kind filter (P99, text search only): the ruled " \
                                "cross-corpus classification classes (config/kind_classes.yml — " \
-                               "funerary, letter, divination, …). FAMILY matching: a bare head " \
-                               "matches its whole family (funerary ⊇ funerary/epitaph), " \
-                               "head/sub narrows to the sub, an explicit % pattern matches as " \
+                               "funerary, letter, literary, divination, …). FAMILY matching at " \
+                               "any depth: a path prefix matches its whole family (funerary ⊇ " \
+                               "funerary/epitaph; literary/narrative ⊇ literary/narrative/epic), " \
+                               "a full path narrows, an explicit % pattern matches as " \
                                "given. The honesty buckets are first-class values: `unknown` " \
                                "(upstream's own \"cannot determine\") and `unmapped` (a raw " \
                                "value awaiting a fold rule). Only classified documents can " \

@@ -1,11 +1,15 @@
-# The kind axis — per-source folds (P99-4, under №R-63). Every entry
-# is rule curation like a lect rule: upstream's own vocabulary on the
-# left, a ruled class path (head or head/sub from kind_classes.yml) on
-# the right. Values the map does not cover surface as the counted
-# `unmapped` bucket (`nabu kind census --unmapped` is the worklist) —
-# deliberately-left values are noted per source. Census evidence:
+# The kind axis — per-source folds (P99-4, under №R-63; tail drained
+# P101 under №R-66 + Q75). Every entry is rule curation like a lect
+# rule: upstream's own vocabulary on the left, a ruled class path
+# (head or head/sub from kind_classes.yml) on the right. Values the
+# map does not cover surface as the counted `unmapped` bucket
+# (`nabu kind census --unmapped` is the worklist); a `deliberate:`
+# block declares reviewed NOT-genre values (layout, cult, copy
+# markers) that fold to nothing and render as their own census
+# section. Census evidence:
 # .docs/surveys/document-classification-survey.md §2/§4a + the live
-# document_facets census 2026-09-13.
+# document_facets census 2026-09-13 + the full-worklist audit
+# 2026-09-18 (4,409 values read; folds below carry their counts).
 split: ["|", ";"]     # elephantine pipes, cdli/oracc semicolons
 strip: ["?", "(?)"]   # cataloguer uncertainty (edh "epitaph?", cdli "Administrative ?", HGV "Quittung (?)")
 sources:
@@ -25,26 +29,39 @@ sources:
       "Prayer/Incantation": [hymn-prayer, magic/incantation]   # 971 — ruled split
       "Scientific": scholarly                    # 763
       "Ritual": ritual                           # 420
-      # left unmapped for a round-2 ruling: "Literary" (9,657 — spans
-      # epic/hymn/wisdom; needs a fold decision), "fake (modern)" (230).
+      "Literary": literary                       # 9,657 (+98 "?") — №R-66: upstream's own
+      #   literature catch-all folds to the bare literary head
+      "Historical": historiography               # 55
+      "Private/Votive": dedicatory/votive        # 54
+      "fake (modern)": unknown                   # 230 — №R-66: authenticity claim, not a
+      #   genre; the verbatim label stays on every card
   ebl:                # slash-path vocabulary — prefix rules, most-specific first
     facet: genre
     prefix_map:
       "CANONICAL/Literature/Lamentations": hymn-prayer/lament    # 582
       "CANONICAL/Literature/Hymns": hymn-prayer/hymn             # 318+
+      "CANONICAL/Literature/Narrative": literary/narrative       # 68
+      "CANONICAL/Literature": literary                           # 181 remainder
       "CANONICAL/Technical/Medicine": scholarly/medicine         # 260+
+      "CANONICAL/Technical/Astronomy": scholarly/astronomy       # 88 + Astronomical Diaries 80
+      "CANONICAL/Technical/Commentary": scholarly/commentary     # 69
+      "CANONICAL/Technical/Ritual texts": ritual                 # 170
+      "CANONICAL/Technical": scholarly                           # remainder
       "CANONICAL/Divination/Extispicy": divination/extispicy     # 747
       "CANONICAL/Divination/Celestial": divination/astrology     # 1,076
       "CANONICAL/Divination": divination                         # 472+ remainder
       "CANONICAL/Magic": magic                                   # 539
       "CANONICAL/Lexicography": lexical
+      "CANONICAL/School Tablet": school                          # 58
+      "CANONICAL": literary                      # 576 bare — №R-66: eBL's canonical series
+      #   ARE the Babylonian literary canon; the bare tag says no more than "Literary"
       "ARCHIVAL/Letter": letter                                  # 470
       "ARCHIVAL/Administrative": administrative                  # 273
       "ARCHIVAL/Legal": legal
+      "ARCHIVAL": administrative                 # 348 bare — the archival half IS the
+      #   documentary record (letters/admin/legal are its own sub-paths)
       "MONUMENTAL": royal                                        # 213
       "OTHER/Uncertain": unknown                                 # 394
-      # left unmapped: bare "CANONICAL" (576) and "CANONICAL/Literature"
-      # remainder, bare "ARCHIVAL" (348) — need the finer path or a ruling.
   edh:                # 81,881 docs, English vocabulary
     facet: genre
     map:
@@ -63,6 +80,9 @@ sources:
       "label": mark/label                        # 235
       "boundary inscription": boundary           # 220
       "public legal inscription": legal/law      # 209
+      "letter": letter                           # 116
+      "elogium": honorific                       # 84 (+59 "?") — praise inscriptions for persons
+      "seat inscription": mark/ownership         # 75 — reserved-seat marks
   edr:                # 115,590 docs, Latin vocabulary
     facet: genre
     map:
@@ -74,10 +94,11 @@ sources:
       "inscr. parietariae": mark/graffito        # 1,327
       "fasti, leges, acta": legal/law            # 975
       "term. non sep.": boundary/terminus        # 904
-      "sepulcralis, carmen": [funerary/epitaph, poetry]   # 660 — verse epitaphs
+      "sepulcralis, carmen": [funerary/epitaph, literary/poetry]   # 660 — verse epitaphs
       "tit. in artis operib. inscr.": mark/maker # 498
       "cetera": unknown                          # 7,839 — upstream's own catch-all
       #   (ruled 2026-09-14: an explicit "the rest" is a non-classification claim)
+      "cetera loca": unknown                     # 165 — the same catch-all's variant
   elephantine:        # 9,034 docs; pipes split upstream composites
     facet: genre
     map:
@@ -86,7 +107,29 @@ sources:
       "tombstone": funerary                      # 744
       "letter": letter                           # 208 + 268 composite
       "account": administrative/account          # 207
-      # left unmapped: "note" (2,048 — too vague; round-2 ruling).
+      "note": administrative/note                # 2,048 — №R-66 ruled 2026-09-18
+      "receipt": administrative/receipt          # 116 + composites
+      "list": administrative/list                # 57 + composites
+      "name list": administrative/list           # 97 + composites
+      "order to arrest": legal                   # 159 composite-borne
+      "medicine": scholarly/medicine             # 56
+      "scientific": scholarly                    # composite-borne
+      "writing exercise": school                 # 15 + composites
+      "Jar Label": mark/label                    # ~160 composite-borne (case fold covers "jar label")
+      "(other)": unknown                         # 124 — upstream's other-bucket (the ruled shape)
+      "(unclear)": unknown                       # 54 — upstream's own cannot-determine
+      "literary": literary                       # composite-borne literature tags
+      "prose": literary
+      "narrative": literary/narrative
+      "poetry": literary/poetry
+      "wisdom": literary/wisdom
+      "instruction": literary/wisdom
+      "historic": historiography
+      "biography": historiography
+    deliberate:
+      "vertical format": "physical layout, not a genre"      # 176
+      "horizontal format": "physical layout, not a genre"    # 88
+      "polytheistic Egyptian": "cult context, not a genre"   # 196
   iip:
     facet: genre
     map:
@@ -98,6 +141,14 @@ sources:
       "graffiti": mark/graffito                  # 295
       "legal.receipt": administrative/receipt    # 207
       "text_other": unknown                      # 327 — upstream's other-bucket (ruled 2026-09-14)
+      "commodity_chit": administrative           # 180
+      "document": unknown                        # 152 — says nothing more than "a document"
+      "label.ownership": mark/ownership          # 136
+      "prayer": hymn-prayer/prayer               # 91
+      "invocation": hymn-prayer                  # 59
+      "financial": administrative                # 61
+      "verse": literary/poetry                   # 57 — metrical inscriptions
+      "building": building                       # 52
   isicily:
     facet: genre
     map:
@@ -105,6 +156,14 @@ sources:
       "unknown": unknown                         # 743
       "dedication": dedicatory                   # 290
       "honorific": honorific                     # 256
+      "votive": dedicatory/votive                # 75
+      "defixio": magic/curse                     # 70
+      "list": administrative/list                # 14
+      "building": building                       # 96
+      "ownership": mark/ownership                # 96 (+77 "(?)")
+      "production or ownership": mark            # 67 — either way an object mark
+      "tessera (civic allotment)": administrative # 164 — allotment tokens
+      "accounts": administrative/account         # 18
   itant:
     facet: genre
     map:
@@ -126,10 +185,10 @@ sources:
   bdcamoes:
     facet: genre
     map:
-      "Tale": narrative/tale                     # 41
-      "Novel": narrative/novel
+      "Tale": literary/narrative/tale            # 41
+      "Novel": literary/narrative/novel
       "Chronicle": historiography/chronicle      # 21
-      "Drama": drama
+      "Drama": literary/drama
   suttacentral:       # the basket facet IS the canon division
     facet: basket
     map:
@@ -140,50 +199,112 @@ sources:
     facet: cth
     range_map:
       "1-220": historiography                    # historical texts (215: 345)
+      "240-250": administrative                  # palace/temple administration — upstream's
+      #   own PTAC sub-corpus tag sits exactly on this range (P101 audit)
       "291-298": legal/law                       # the Hittite laws
-      "321-370": narrative/myth                  # mythological texts
+      "321-370": literary/narrative/myth         # mythological texts
       "371-389": hymn-prayer                     # hymns and prayers
       "390-500": ritual                          # rituals (470: 1,926 · 500: 479)
       "501-530": ritual/cult-inventory           # cult inventories (530: 290)
       "531-582": divination                      # oracles and omina (582: 395)
       "583-590": dedicatory/vow                  # vows
       "591-724": ritual/festival                 # festival texts (670: 3,513 · 628: 308)
-      # left unmapped: 725+ (varia and non-Hittite-genre catalog numbers,
-      # e.g. 832: 4,238 · 791: 276) — honest until a Laroche-tail ruling.
+      "725-757": ritual                          # rituals in other Anatolian languages —
+      #   upstream's HFR (festival) + BESRIT (incantation-ritual) tags dominate the range
+      "830-833": unknown                         # the catalog's own fragments bucket (832:
+      #   4,238 — carries THREE conflicting sub-corpus tags upstream; nothing to claim)
+      # left unmapped: 221-239 / 251-290 / 299-320 / 758-829 (generic
+      # TLH sub-corpus tag, genre-mixed; no in-tree evidence to fold on
+      # — the honest remainder, worklist-visible).
   okhc:               # 1,198,779 docs — the Korean dynastic-history family
     source_kind: historiography/annals   # whole-source declaration (ruled 2026-09-13)
   papyri-ddbdp:       # HGV text types (P100-3): the LEADING <keywords scheme="hgv">
     walk: hgv-keywords   # term per record, walked from canonical (~66,700 typed docs;
-    map:                 # first-term census 2026-09-14, 25% sample)
+    map:                 # first-term census 2026-09-14, 25% sample + the 2026-09-18 tail audit)
       "Quittung": administrative/receipt         # 3,953 (+ "Quittungen", "Quittung (?)")
       "Quittungen": administrative/receipt
+      "Sammelquittung": administrative/receipt   # 65
       "Vertrag": legal/contract                  # 1,375
       "Liste": administrative/list               # 1,073
       "Aufstellung": administrative/list         # 115
       "Register": administrative/list            # 155
+      "Verzeichnis": administrative/list         # 98
       "Brief (privat)": letter/private           # 933
       "Brief (amtlich)": letter/official         # 331
       "Schreiben (amtlich)": letter/official     # 132
       "Brief (geschäftlich)": letter             # 199
+      "Korrespondenz (amtlich)": letter/official # 74
+      "Schreiben": letter                        # 73
       "Abrechnung": administrative/account       # 840
+      "Abrechnungen": administrative/account     # 71
       "Rechnung": administrative/account         # 74
+      "Berechnung": administrative/account       # 20
+      "Konto": administrative/account            # 8
       "Mumienetikett": funerary/mummy-label      # 577
+      "Mumientäfelchen": funerary/mummy-label    # 100
       "Anweisung": administrative                # 482 — payment orders
+      "Zahlung": administrative                  # 149
+      "Lieferung": administrative                # 145
+      "Transport": administrative                # 94
+      "Steuern": administrative                  # 25
+      "Steuer": administrative                   # 8
+      "Bestätigung": administrative              # 109
+      "Passierschein": administrative            # 53
+      "Bericht (amtlich)": administrative        # 65
+      "Meldung (Tag)": administrative            # 62
+      "Notiz": administrative/note               # 885 — the elephantine "note" ruling's shape
+      "Name": administrative/list                # 621 — onomastic lists
+      "Namen": administrative/list               # 692
       "Eingabe": legal/petition                  # 419
+      "Petition": legal/petition                 # 179
+      "Antrag": legal/petition                   # 122
+      "Anzeige": legal                           # 243 — notifications to authorities
+      "Eid": legal                               # 90 (+ variants ride the strip rule)
+      "Edikt": legal/law                         # 21
+      "Gesetz": legal/law                        # 5
+      "Dekret": legal/law                        # 4
+      "Urkunde": legal                           # 76
+      "Testament": legal                         # 100
+      "Schuldschein": legal/contract             # 113
+      "Darlehen": legal/contract                 # 102
+      "Bürgschaft": legal/contract               # 136
+      "Kauf": legal/contract                     # 59
+      "Verkauf": legal/contract                  # 58
+      "Pacht": legal/contract                    # 83 — leases
+      "Miete": legal/contract                    # 9
+      "Akte": administrative                     # 53
+      "Akten": administrative
+      "Akten (Gericht)": legal/court             # 53
       "unbestimmbar": unknown                    # 357
       "Deklaration": legal                       # 195
       "Fragment": unknown                        # 176 — too damaged to type
+      "Fragmente": unknown                       # 67
+      "Dokument": unknown                        # 90 — says nothing more than "a document"
+      "Document": unknown                        # 115
       "Bericht": administrative                  # 125
       "Graffito": mark/graffito                  # 80
+      "Aufschrift auf Gefäßrest": mark           # 211 — vessel-sherd inscriptions
       "Auftrag": administrative                  # 74
       "Protokoll": legal/court                   # 71
       "Erklärung": legal                         # 66
       "Bescheinigung": legal                     # 64
+      "Orakel": divination/oracle                # 16
+      "Orakelfrage": divination/oracle           # 2
+      "Frage (Orakel)": divination/oracle        # 12
+      "Schreibübung": school                     # 41 (+9 "(?)")
+      "Schreibübungen": school                   # 6
+      "Übung": school                            # 9
+      "Übung (Schreiben)": school                # 7
     prefix_map:
       "Brief": letter                            # 668 bare + Lettre variants ride exact/fold
       "Lettre": letter                           # 154
-      # left unmapped: "Notiz" (240) · "Namen"/"Name" (379 — onomastic
-      # material, fold decision) · the long tail (worklist-visible).
+      # remaining unmapped: the singleton German long tail (~2,800
+      # one-to-few-doc phrases — worklist-visible, prefix rules would
+      # over-claim them).
+    deliberate:
+      "Abschrift": "a copy marker, not a genre"            # 74
+      "Auszug": "an excerpt marker, not a genre"           # 57
+      "Datierung": "a bare dating formula, not a genre"    # 172
   oracc:              # catalogue genre (P100-2 emission; 115,263 bearing entries,
     facet: genre      # CDLI-drifted vocabulary; case-insensitive fold covers lexical/letter)
     map:
@@ -191,6 +312,7 @@ sources:
       "Lexical": lexical                         # 8,884 + 1,009 lowercase
       "Royal Inscription": royal                 # 7,484
       "Royal stone inscription": royal           # 613
+      "Royal metal inscription": royal           # 266
       "Administrative Letter": [administrative, letter]   # 2,099
       "Administrative Record": administrative    # 913
       "Legal Transaction": legal                 # 2,023
@@ -200,15 +322,28 @@ sources:
       "School": school                           # 1,028
       "Mathematical": scholarly/mathematics      # 919 + 446
       "Letter": letter                           # 739 + 347
+      "Priestly Letter": letter                  # 420
       "Omen": divination/omen                    # 648
       "Incantation-Ritual": [magic/incantation, ritual]   # 621
       "Astrological Report": divination/astrology # 567
+      "Astrological": divination/astrology       # 33
+      "Hemerological": divination/hemerology     # 34
       "Scholarly Letter": [letter, scholarly]    # 389
       "Ritual": ritual                           # 373
+      "Royal Ritual": ritual                     # 116
       "Extispicy Query": divination/extispicy    # 278
+      "Extispicy Report": divination/extispicy   # 148
+      "Prophecy": divination                     # 22
+      "Treaty": legal/treaty                     # 30
+      "Grant": legal                             # 137 — royal land grants
+      "Eponym List": historiography              # 14
+      "Eponym Chronicle": historiography/chronicle # 12
+      "Medical": scholarly/medicine              # 89
       "Uncertain": unknown                       # 260
       "Clay pithos inscription": mark            # 240 — jar inscriptions
-      # left unmapped: "Literary" (1,771 — the cdli-shared fold decision).
+      "Clay bulla inscription": mark             # 126
+      "Literary": literary                       # 1,389 — №R-66 (the cdli-shared fold)
+      "Literary Work": literary                  # 112
   # -- metadata graduations (P100-1): fields read from metadata_json ------
   sefaria:            # categories[0] = the top-level category (hierarchy head)
     metadata: categories
@@ -221,7 +356,7 @@ sources:
       "Halakhah": legal/law                      # codes of Jewish law
       "Responsa": legal                          # legal opinions
       "Liturgy": ritual/liturgy                  # siddurim
-      "Musar": wisdom                            # ethical instruction
+      "Musar": literary/wisdom                   # ethical instruction
       "Reference": scholarly
       # left unmapped (genuinely mixed/ambiguous, the decision list):
       # Kabbalah · Chasidut · Jewish Thought · Second Temple
@@ -230,10 +365,9 @@ sources:
     map:
       "KR1": scripture                           # 經部 — the canonical classics (715)
       "KR2": historiography                      # 史部 — the histories (578)
-      "KR3": wisdom                              # 子部 — the Masters (864; coarse fold, gate-flagged)
+      "KR3": literary/wisdom                     # 子部 — the Masters (864; coarse fold, gate-flagged)
+      "KR4": literary                            # 集部 — belles-lettres collections (1,344; №R-66)
       "KR5": scripture                           # 道部 — the Daoist canon (1,621)
-      # left unmapped: KR4 集部 (1,344 — mixed belles-lettres collections;
-      # the finer `cat` field is the future refinement path).
   cbeta:              # the whole source IS the Buddhist canon (Taishō + Xuzangjing)
     source_kind: scripture
   # -- whole-source canon declarations (P100-4; the cbeta/okhc precedent:
@@ -271,33 +405,51 @@ sources:
   aozora:             # NDC codes ("NDC 913", children's "NDC K913", multi "NDC 913 914")
     metadata: ndc
     regex_map:
-      '\bK?9\d1\b': poetry                       # 911 ×1,355 + K911 ×172 …
-      '\bK?9\d2\b': drama                        # 912 ×199
-      '\bK?9\d3\b': narrative/novel              # 913 ×4,728 + K913 ×1,222 …
-      '\bK?9\d4\b': essay                        # 914 ×3,450
-      '\bK?9\d5\b': diary                        # 915 ×488
-      # non-9x1..5 codes (910 studies · 916 reportage · 289 biography ·
-      # 596 · 367 …) stay unmapped pending a subject-fold ruling.
+      '\bK?9\d1\b': literary/poetry              # 911 ×1,355 + K911 ×172 …
+      '\bK?9\d2\b': literary/drama               # 912 ×199
+      '\bK?9\d3\b': literary/narrative/novel     # 913 ×4,728 + K913 ×1,222 …
+      '\bK?9\d4\b': literary/essay               # 914 ×3,450
+      '\bK?9\d5\b': literary/diary               # 915 ×488
+      '\bK?9\d0\b': scholarly                    # 910 ×169 — literature studies/criticism
+      '\bK?9\d6\b': literary                     # 916 ×74 — reportage/records: literature,
+      #   not further classified
+      '\bK?289\b': historiography                # 289 ×214 — individual biography
+      '\bK?21\d\b': historiography               # 210s ×~90 — Japanese history
+      '\bK?121\b': literary/essay                # 121 ×94 — Japanese philosophy (the dta
+      #   Philosophie precedent)
+      # other non-9xx subject codes (367 · 596 · 7xx arts …) stay
+      # unmapped: modern nonfiction subject shelving, not genre — the
+      # named residue pending a subject-fold ruling.
   dta:                # the subgenre carries the signal; genre alone is too coarse
     metadata: subgenre
     map:
-      "Roman": narrative/novel                   # 163
-      "Prosa": narrative                         # 128
-      "Lyrik": poetry                            # 114
-      "Drama": drama                             # 82
+      "Roman": literary/narrative/novel          # 163
+      "Prosa": literary/narrative                # 128
+      "Lyrik": literary/poetry                   # 114
+      "Drama": literary/drama                    # 82
       "Leichenpredigt": funerary                 # 330 — funeral sermons
-      "Philosophie": essay                       # 75
+      "Philosophie": literary/essay              # 75
       "Recht": legal                             # 75
       "Historiographie": historiography          # 46
       "Medizin": scholarly/medicine              # 46
       "Technik": scholarly                       # 41
+      "Sprachwissenschaft": scholarly            # 27
+      "Gesellschaftswissenschaften": scholarly   # 26
+      "Mathematik": scholarly/mathematics        # 23
+      "Geographie": scholarly                    # 39
+      "Musik": scholarly                         # 6 — writings about music
+      "Musikwissenschaft": scholarly             # 2
+      "(Auto)biographie": historiography         # 22
+      "Autobiographie": historiography           # 5
+      "Biographie": historiography               # 2
+      "Reiseliteratur": literary/diary           # 17 — travelogues
   seal:               # genre = "Head, subject" — prefix rules ride past the subject tails
     metadata: genre
     prefix_map:
       "Incantations": magic/incantation          # 16 + subject-tailed rows
-      "Epics": narrative/epic
-      "Love Literature": poetry/love
+      "Epics": literary/narrative/epic
+      "Love Literature": literary/poetry/love
       "Hymns and Prayers": hymn-prayer
-      "Wisdom Literature": wisdom
+      "Wisdom Literature": literary/wisdom
       "Lamentations": hymn-prayer/lament
       "Literary Letters": letter/literary

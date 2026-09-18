@@ -100,11 +100,11 @@ pattern stays the name lane, and the response note names the lane that
 answered; `script` (P75) — an ISO 15924-style registry tag (`latn`,
 `xsux`) over the held text's `~script` lect axis or the artifact-script
 axis; `lect` (P57-4) — a nabu-lects id with prefix semantics (errors when
-the module is not synced); `kind` (P99/P100) — the ruled cross-corpus
+the module is not synced); `kind` (P99/P100; tree deepened P101) — the ruled cross-corpus
 document-classification classes (`config/kind_classes.yml`), with **family**
-matching: a bare head matches its whole family (`funerary` ⊇
-`funerary/epitaph`), `head/sub` narrows to the sub, an explicit `%` pattern
-matches as given. The honesty buckets are first-class values — `unknown`
+matching at any depth: a path prefix matches its whole family (`funerary` ⊇
+`funerary/epitaph`, `literary/narrative` ⊇ `literary/narrative/epic`), a
+full path narrows, an explicit `%` pattern matches as given. The honesty buckets are first-class values — `unknown`
 (upstream's own "cannot determine") and `unmapped` (a raw value awaiting a
 fold rule) — and only classified documents can match: most of the corpus
 carries no kind facet and falls out under the filter (`nabu kind census`

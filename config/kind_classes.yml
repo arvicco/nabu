@@ -1,6 +1,11 @@
-# The kind axis — the RULED class list (№R-63, owner 2026-09-13).
-# 26 heads + `unknown`. The heads are the ruled set; `subs` are
-# suggested sub-grain vocabulary, extensible without re-ruling.
+# The kind axis — the RULED class list (№R-63, owner 2026-09-13;
+# restructured under №R-66, owner 2026-09-18: the literature families
+# live under ONE `literary` head — "optionally two-level", so upstream's
+# own bare "Literary" folds to the plain head while `literary/poetry`
+# etc. carry the grain). 21 heads + `unknown`. The heads are the ruled
+# set; a slash-keyed entry is a NAMED sub-class carrying its own desc
+# and crosswalks; `subs` are further suggested sub-grain vocabulary,
+# extensible without re-ruling.
 # Crosswalks point to external vocabularies that recognize the class
 # (EAGLE/FAIR typeins URIs, Library of Congress LCGFT ids, Getty AAT
 # ids) — pointers, never anchors: no external standard spans all our
@@ -84,26 +89,31 @@ classes:
   divination:
     desc: "Reading the future: omens, extispicy, astrology, oracles, hemerologies."
     subs: [omen, extispicy, astrology, oracle, hemerology]
-  # -- literature -----------------------------------------------------------
-  narrative:
+  # -- literature (№R-66: one family; the bare head is upstream's own
+  # "literary, unspecified" — cdli/oracc "Literary", kanripo KR4 集部,
+  # eBL bare CANONICAL) --------------------------------------------------
+  literary:
+    desc: "Literature as literature; the bare head is upstream's own 'literary, not further classified'."
+    subs: [narrative, poetry, drama, essay, diary, wisdom]
+  literary/narrative:
     desc: "Told stories: epics, myths, tales, novels, fables."
     subs: [epic, myth, tale, novel, fable]
-  poetry:
+  literary/poetry:
     desc: "Verse as verse: lyric, love poetry, praise poetry."
     subs: [lyric, love, praise]
     crosswalk: {aat: "300055931"}
-  drama:
+  literary/drama:
     desc: "Text written for performance."
     subs: []
     crosswalk: {aat: "300020966"}
-  essay:
+  literary/essay:
     desc: "Prose of ideas: essays, criticism."
     subs: [criticism]
-  diary:
+  literary/diary:
     desc: "First-person records of days: diaries, memoirs, travelogues."
     subs: [memoir, travelogue]
     crosswalk: {lcgft: gf2014026085}
-  wisdom:
+  literary/wisdom:
     desc: "Instruction and insight: proverbs, dialogues, riddles."
     subs: [proverbs, dialogue, riddle]
   # -- history ---------------------------------------------------------------
