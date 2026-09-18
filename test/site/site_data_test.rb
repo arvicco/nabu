@@ -96,9 +96,11 @@ module Site
       end
     end
 
-    def test_the_dates_page_reads_the_dates_data_through_liquid
-      page = File.read(File.join(ROOT, "site", "dates.md"))
-      assert_includes page, "site.data.dates", "the dates page must loop over site.data.dates"
+    def test_the_layers_page_reads_the_dates_data_through_liquid
+      page = File.read(File.join(ROOT, "site", "layers.md"))
+      assert_includes page, "site.data.dates",
+                      "the Layers page's dates section must loop over site.data.dates " \
+                      "(dates.md is a redirect stub since P101)"
     end
 
     # -- the kinds page (P100-6) -----------------------------------------------
@@ -166,10 +168,12 @@ module Site
       end
     end
 
-    def test_the_kinds_page_reads_the_kinds_data_through_liquid
-      page = File.read(File.join(ROOT, "site", "kinds.md"))
-      assert_includes page, "site.data.kinds", "the kinds page must loop over site.data.kinds"
-      assert_includes page, "site.data.census.kind", "the headline kind figures come from the census SSOT"
+    def test_the_layers_page_reads_the_kinds_data_through_liquid
+      page = File.read(File.join(ROOT, "site", "layers.md"))
+      assert_includes page, "site.data.kinds",
+                      "the Layers page's kinds section must loop over site.data.kinds " \
+                      "(kinds.md is a redirect stub since P101)"
+      assert_includes page, "census.kind", "the headline kind figures come from the census SSOT"
     end
 
     # The home page must READ the data, not carry a hand list — the exact
