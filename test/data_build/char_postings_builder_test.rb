@@ -33,7 +33,12 @@ class CharPostingsBuilderTest < Minitest::Test
       Integer :docs
     end
     [[@kanripo.id, "顏", "lzh", 135], [@kanripo.id, "子", "lzh", 2900],
-     [@cbeta.id, "顏", "lzh", 77]].each do |source_id, char, language, docs|
+     [@cbeta.id, "顏", "lzh", 77],
+     # The indexer's class-stamp sentinel (source_id −1, empty char,
+     # POSTINGS_CLASS in the language column — indexer.rb): metadata,
+     # never a posting; the builder must skip it (the 2026-09-19 live
+     # crash: String#ord on the empty char).
+     [-1, "", "non-ascii-v1", 0]].each do |source_id, char, language, docs|
       @fulltext[:char_postings].insert(source_id: source_id, char: char,
                                        language: language, docs: docs)
     end

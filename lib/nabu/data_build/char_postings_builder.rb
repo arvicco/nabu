@@ -97,9 +97,13 @@ module Nabu
       end
 
       # Deterministic export order: by source id then codepoint. The table
-      # is small (~62K rows) — sorted in memory.
+      # is small (~62K rows) — sorted in memory. The indexer's class-stamp
+      # sentinel (source_id −1, empty char — Store::Indexer::POSTINGS_CLASS)
+      # is index metadata, not a posting: skipped here, never published.
       def ordered_postings(fulltext)
-        fulltext[:char_postings].all.sort_by { |row| [row[:source_id], row[:char].ord] }
+        fulltext[:char_postings]
+          .exclude(source_id: Store::Indexer::POSTINGS_CLASS_SOURCE)
+          .all.sort_by { |row| [row[:source_id], row[:char].ord] }
       end
 
       def publish(state, row, slug)
