@@ -132,12 +132,16 @@ module Nabu
       end
 
       # Deterministic order: Gardiner code, then `all` first, then
-      # subcorpora alphabetically.
+      # subcorpora alphabetically. IDs mint through the fold+minter (the
+      # 2026-09-19 live catch: upstream spellings carry non-Gardiner
+      # marker tokens like "!", illegal in a CLDF identifier verbatim —
+      # the verbatim code stays in the Gardiner column).
       def frequency_rows(tallies)
+        minter = IdMinter.new
         tallies.keys.sort.flat_map do |code|
           subs = tallies[code]
           ([ALL] + (subs.keys - [ALL]).sort).map do |sub|
-            { "ID" => "#{code}-#{sub}", "Gardiner" => code, "Subcorpus" => sub,
+            { "ID" => minter.mint(code, sub), "Gardiner" => code, "Subcorpus" => sub,
               "Tokens" => subs[sub][:tokens], "Docs" => subs[sub][:docs], "Source" => SOURCE_SLUG }
           end
         end
