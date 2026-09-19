@@ -33,6 +33,10 @@ class CharPostingsBuilderTest < Minitest::Test
       Integer :docs
     end
     [[@kanripo.id, "顏", "lzh", 135], [@kanripo.id, "子", "lzh", 2900],
+     # One source, one char, TWO languages (the P93 widening's live
+     # shape — « posted under xcl/it/lat/... on one Perseus source):
+     # the language must join the ID.
+     [@kanripo.id, "«", "lzh", 4], [@kanripo.id, "«", "lat", 3],
      [@cbeta.id, "顏", "lzh", 77],
      # The indexer's class-stamp sentinel (source_id −1, empty char,
      # POSTINGS_CLASS in the language column — indexer.rb): metadata,
@@ -57,20 +61,23 @@ class CharPostingsBuilderTest < Minitest::Test
       result = build!(dir)
       table = CSV.read(File.join(dir, "char-postings.csv"), headers: true)
       assert_equal %w[ID Char Language_ID Count Source], table.headers
-      assert_equal [%w[kanripo-U5B50 子 lzh 2900 kanripo], %w[kanripo-U984F 顏 lzh 135 kanripo]],
+      assert_equal [["kanripo-lat-U00AB", "«", "lat", "3", "kanripo"],
+                    ["kanripo-lzh-U00AB", "«", "lzh", "4", "kanripo"],
+                    %w[kanripo-lzh-U5B50 子 lzh 2900 kanripo],
+                    %w[kanripo-lzh-U984F 顏 lzh 135 kanripo]],
                    table.map(&:fields),
                    "publishable rows only, codepoint-minted IDs, (source, codepoint) order"
-      assert_equal 2, result.resources.first.rows
+      assert_equal 4, result.resources.first.rows
     end
   end
 
   def test_the_census_rides_in_band
     Dir.mktmpdir do |dir|
       evaluation = build!(dir).evaluation
-      assert_equal 3, evaluation["postings_rows"]
-      assert_equal 2, evaluation["published_rows"]
+      assert_equal 5, evaluation["postings_rows"]
+      assert_equal 4, evaluation["published_rows"]
       assert_equal({ "nc" => 1 }, evaluation["excluded_rows"])
-      assert_equal 2, evaluation["distinct_chars"]
+      assert_equal 3, evaluation["distinct_chars"]
     end
   end
 

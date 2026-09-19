@@ -79,7 +79,7 @@ module Nabu
       def published_rows(fulltext, catalog)
         sources = catalog[:sources].select_hash(:id, %i[slug license_class])
         state = { rows: [], excluded: Hash.new(0), slugs: {}, chars: {}, total: 0,
-                  sha: Digest::SHA256.new }
+                  minter: IdMinter.new, sha: Digest::SHA256.new }
         ordered_postings(fulltext).each do |row|
           state[:total] += 1
           slug, license_class = sources[row[:source_id]]
@@ -103,14 +103,19 @@ module Nabu
       def ordered_postings(fulltext)
         fulltext[:char_postings]
           .exclude(source_id: Store::Indexer::POSTINGS_CLASS_SOURCE)
-          .all.sort_by { |row| [row[:source_id], row[:char].ord] }
+          .all.sort_by { |row| [row[:source_id], row[:char].ord, row[:language].to_s] }
       end
 
+      # (slug, codepoint) stopped being unique when the P93 widening let
+      # one source post a char under SEVERAL languages (« rides xcl, it,
+      # lat, ... on one Perseus source) — the language joins the ID, and
+      # the IdMinter catches any residual fold collision.
       def publish(state, row, slug)
         state[:slugs][slug] = true
         state[:chars][row[:char]] = true
         state[:sha] << [slug, row[:char], row[:language], row[:docs]].join("\x1f") << "\n"
-        state[:rows] << { "ID" => "#{slug}-U#{format('%04X', row[:char].ord)}",
+        state[:rows] << { "ID" => state[:minter].mint(slug, row[:language],
+                                                      "U#{format('%04X', row[:char].ord)}"),
                           "Char" => row[:char], "Language_ID" => row[:language],
                           "Count" => row[:docs], "Source" => slug }
       end
